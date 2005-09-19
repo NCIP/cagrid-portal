@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="Janus"
+    targetNamespace="http://cagrid.nci.nih.gov/janus"
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:tns="http://cagrid.nci.nih.gov/janus"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd"
+    xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
+    xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+<wsdl:import 
+    namespace=
+    "http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
+    location="../../wsrf/properties/WS-ResourceProperties.wsdl" />
+
+
+<!--============================================================
+
+                      T Y P E S
+                      
+  ============================================================-->
+<types>
+<xsd:schema targetNamespace="http://cagrid.nci.nih.gov/janus"
+    xmlns:tns="http://cagrid.nci.nih.gov/janus"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    
+
+	<!-- REQUESTS AND RESPONSES -->
+	
+	<xsd:element name="createProxy" type="xsd:string"/>
+	<xsd:element name="createProxyResponse" type="xsd:string"/>
+	
+
+
+	<!-- RESOURCE PROPERTIES -->
+   
+	<xsd:element name="description" type="xsd:string"/>
+
+	<xsd:element name="JanusResourceProperties">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element ref="tns:description" minOccurs="1" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	</xsd:element>
+	
+        
+</xsd:schema>
+</types>
+
+
+<!--============================================================
+
+                       M E S S A G E S
+                      
+  ============================================================-->
+<message name="CreateProxyInputMessage">
+	<part name="parameters" element="tns:createProxy"/>
+</message>
+<message name="CreateProxyOutputMessage">
+	<part name="parameters" element="tns:createProxyResponse"/>
+</message>
+
+
+
+
+
+<!--============================================================
+
+                       P O R T T Y P E
+                      
+  ============================================================-->
+<portType name="JanusPortType" 
+    wsdlpp:extends="wsrpw:GetResourceProperty"
+    wsrp:ResourceProperties="tns:JanusResourceProperties">
+
+	<operation name="createProxy">
+		<input message="tns:CreateProxyInputMessage"/>
+		<output message="tns:CreateProxyOutputMessage"/>
+	</operation>
+        
+
+
+</portType>
+
+</definitions>
