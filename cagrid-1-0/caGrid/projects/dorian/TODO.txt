@@ -1,0 +1,8 @@
+1) Add utilities for reading private key, cert requests, and certificates.
+2) Add utilities for having passphrases on private keys.  (See chapter)
+
+
+Things to Test
+
+1) Reading Certificates, globus and for steve, others?.
+1) Reading Keys, globus and for steve.
