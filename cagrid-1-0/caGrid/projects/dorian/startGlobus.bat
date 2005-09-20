@@ -1,0 +1,1 @@
+C:\projects\ws-core-4.0.1\bin\globus-start-container.bat -nosec
