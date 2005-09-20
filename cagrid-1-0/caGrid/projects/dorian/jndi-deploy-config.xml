@@ -2,7 +2,7 @@
 <jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
 
 <service name="cagrid/janus">
-	<resource name="home" type="gov.nih.nci.cagrid.janus.wsrf.impl.JanusResourceHome">
+	<resource name="home" type="gov.nih.nci.cagrid.janus.wsrf.JanusResourceHome">
 	<resourceParams>
 
 		<parameter>
