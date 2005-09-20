@@ -124,7 +124,7 @@ schema.local:   Directory where our schema files are located.
 	<!-- Directory where stub source and class files are placed -->
 	<property name="stubs.dir" location="${build.dir}/stubs-${gar.filename}" />
 	<!-- Stub source files -->
-	<property name="stubs.src" location="${stubs.dir}/src" />
+	<property name="stubs.src" location="${src.dir}" />
 	<!-- Compiled stub classes -->
 	<property name="stubs.dest" location="${stubs.dir}/classes" />
 
