@@ -192,6 +192,12 @@ schema.local:   Directory where our schema files are located.
 		<delete dir="${build.lib.dir}" />
 		<!-- Delete build lib dir to avoid JARs from previous builds from getting into our GAR file -->
 		<mkdir dir="${build.lib.dir}" />
+		
+		<copy toDir="${build.lib.dir}">
+			<fileset dir="lib/">
+				<include name="*.jar"/>
+			</fileset>
+		</copy>
 
 		<mkdir dir="${stubs.dir}" />
 		<mkdir dir="${stubs.src}" />
@@ -307,6 +313,11 @@ schema.local:   Directory where our schema files are located.
 			<include name="**/*.java" />
 			<classpath>
 				<fileset dir="${globus.location}/lib">
+					<include name="*.jar" />
+					<exclude name="${stubs.jar.name}" />
+					<exclude name="${jar.name}" />
+				</fileset>
+				<fileset dir="${build.lib.dir}">
 					<include name="*.jar" />
 					<exclude name="${stubs.jar.name}" />
 					<exclude name="${jar.name}" />

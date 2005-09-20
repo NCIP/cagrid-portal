@@ -5,7 +5,7 @@
     xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
     <service name="cagrid/janus" provider="Handler" use="literal" style="document">
-        <parameter name="className" value="gov.nih.nci.cagrid.janus.wsrf.JanusService"/>
+        <parameter name="className" value="gov.nih.nci.cagrid.janus.wsrf.impl.JanusService"/>
         <wsdlFile>share/schema/cagrid/janus/Janus_service.wsdl</wsdlFile>
         <parameter name="allowedMethods" value="*"/>
         <parameter name="handlerClass" value="org.globus.axis.providers.RPCProvider"/>

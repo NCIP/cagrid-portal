@@ -13,7 +13,7 @@
     namespace=
     "http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
     location="../../wsrf/properties/WS-ResourceProperties.wsdl" />
-
+<import location="janus.xsd" namespace="http://cagrid.nci.nih.gov/janus/bean"/>
 
 <!--============================================================
 
@@ -23,12 +23,26 @@
 <types>
 <xsd:schema targetNamespace="http://cagrid.nci.nih.gov/janus"
     xmlns:tns="http://cagrid.nci.nih.gov/janus"
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+    xmlns:janus="http://cagrid.nci.nih.gov/janus/bean">
     
 
 	<!-- REQUESTS AND RESPONSES -->
 	
-	<xsd:element name="createProxy" type="xsd:string"/>
+	<xsd:element name="requiredUserAttributes">
+		<xsd:complexType/>
+	</xsd:element>
+	
+	<xsd:element name="requiredUserAttributesResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="attributeDescriptors" minOccurs="0" maxOccurs="unbounded" type="janus:attributeDescriptor"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	
+	
+	<xsd:element name="createProxy" type="janus:createProxyRequest"/>
 	<xsd:element name="createProxyResponse" type="xsd:string"/>
 	
 
@@ -62,6 +76,13 @@
 	<part name="parameters" element="tns:createProxyResponse"/>
 </message>
 
+<message name="GetRequiredUserAttributesInputMessage">
+	<part name="parameters" element="tns:requiredUserAttributes"/>
+</message>
+<message name="GetRequiredUserAttributesOutputMessage">
+	<part name="parameters" element="tns:requiredUserAttributesResponse"/>
+</message>
+
 
 
 
@@ -74,6 +95,11 @@
 <portType name="JanusPortType" 
     wsdlpp:extends="wsrpw:GetResourceProperty"
     wsrp:ResourceProperties="tns:JanusResourceProperties">
+    
+    <operation name="getRequiredUserAttributes">
+		<input message="tns:GetRequiredUserAttributesInputMessage"/>
+		<output message="tns:GetRequiredUserAttributesOutputMessage"/>
+	</operation>
 
 	<operation name="createProxy">
 		<input message="tns:CreateProxyInputMessage"/>
