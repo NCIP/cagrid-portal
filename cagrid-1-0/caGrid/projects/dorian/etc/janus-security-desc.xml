@@ -1,0 +1,28 @@
+<securityConfig xmlns="http://www.globus.org" xmlns:janus="http://cagrid.nci.nih.gov/janus">
+
+<authz value="none"/>
+<!--<authz value="selfAuthz:org.globus.wsrf.impl.security.authorization.SelfAuthorization"/>-->
+<!--<authz value="gridmap:org.globus.wsrf.impl.security.authorization.GridMapAuthorization"/>
+<gridmap value="/etc/grid-security/grid-mapfile"/>-->
+<!--<authz value="samlAuthz:org.globus.wsrf.impl.security.authorization.SAMLAuthorizationCallout"/>-->
+  <auth-method>
+   <GSISecureMessage>
+      <protection-level>
+        <privacy/>
+      </protection-level>
+   </GSISecureMessage>
+  </auth-method>
+    <!--
+<method name="hello:createResource">
+  <auth-method>
+     <GSISecureMessage>
+      <protection-level>
+        <privacy/>
+      </protection-level>
+     </GSISecureMessage>
+  </auth-method>
+</method>
+-->
+
+
+</securityConfig>
