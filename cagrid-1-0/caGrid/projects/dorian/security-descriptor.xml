@@ -1,0 +1,6 @@
+<securityConfig xmlns="http://www.globus.org">
+   <credential>
+      <key-file value="c:/certificates/putty-key.pem"/>
+      <cert-file value="c:/certificates/putty-cert.pem"/>
+   </credential>
+</securityConfig>
