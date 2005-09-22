@@ -1,12 +1,12 @@
 <securityConfig xmlns="http://www.globus.org" xmlns:janus="http://cagrid.nci.nih.gov/janus">
 
    <credential>
-      <key-file value="c:/certificates/putty-key.pem"/>
-      <cert-file value="c:/certificates/putty-cert.pem"/>
+      <key-file value="c:/certificates/janus-key.pem"/>
+      <cert-file value="c:/certificates/janus-cert.pem"/>
    </credential>
 
 <authz value="none"/>
- <!--
+<!--
   <auth-method>
    <GSISecureConversation>
       <protection-level>
@@ -14,6 +14,9 @@
       </protection-level>
    </GSISecureConversation>
   </auth-method>
--->
+  -->
+   <run-as> 
+      <service-identity/>
+   </run-as>
 
 </securityConfig>

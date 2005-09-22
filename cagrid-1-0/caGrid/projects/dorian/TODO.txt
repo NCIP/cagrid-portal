@@ -10,15 +10,51 @@ General Tasks
 
 Security Test For Globus 4
 ---------------------------
+1) Container Transport Security On (PASSED WITH PROBLEM)
+    PROBLEM -> Credentials Presented to the Client -> The Containers
+     Caller Identity Received By Service: /O=Ohio State University/OU=BMI/OU=MSCL/CN=Stephen Langella
 
-1) Container Security On, Secure Conversation (PASSED)
-2) Container Security Off, Secure Conversation (PASSED)
-3) Container Security Off, Secure Conversation, Anonymous (PASSED)
-4) Container Security On, GSI Transport (PASSED)
-5) Container Security On, GSI Transport, Anonymous (PASSED)
-6) Container Security Off, GSI Transport (FAILED)
-	It seems that transport needs to be enabled for the container.
-7) Test Security with Proxy Util
+2) Container Transport Security On, Anonymous (PASSED WITH PROBLEM)
+    PROBLEM -> Credentials Presented to the Client -> The Containers
+    Caller Identity Received By Service: <anonymous>
+
+3) Container Secure Conversation On (NOT SUPPORTED)
+
+4) Container Secure Conversation On, Anonymous (NOT SUPPORTED)
+
+5) No Container Security, GSI Transport (FAILED)
+	PROBLEM -> GSI Transport (encryption only) authentication required for &quot;{http://cagrid.nci.nih.gov/janus}createProxy
+
+6) Container Transport Security On, GSI Transport (PASSED WITH PROBLEM)
+    PROBLEM -> Credentials Presented to the Client -> The Containers
+     Caller Identity Received By Service: /O=Ohio State University/OU=BMI/OU=MSCL/CN=Stephen Langella
+
+7) Container Transport Security On, GSI Transport, Anonymous (PASSED WITH PROBLEM)
+	PROBLEM -> Credentials Presented to the Client -> The Containers
+	Caller Identity Received By Service: <anonymous>
+	
+8) No Container Security, Secure Conversation (PASSED)
+	Credentials Presented to the Client -> The Services
+	Caller Identity Received By Service: /O=Ohio State University/OU=BMI/OU=MSCL/CN=Stephen Langella
+
+9) No Container Security, Secure Conversation, Anonymous (PASSED)
+	Credentials Presented to the Client -> The Services
+	Caller Identity Received By Service: null
+   
+10) Container Transport Security On, Secure Conversation (PASSED WITH PROBLEM)
+    PROBLEM -> Credentials Presented to the Client -> The Containers
+    Caller Identity Received By Service: /O=Ohio State University/OU=BMI/OU=MSCL/CN=Stephen Langella
+
+11) Container Transport Security On, Secure Conversation, Anonymous (FAILED)
+	PROBLEM -> Client dies looking for the proxy, this seems to be a bug since the client should not
+	need a proxy.  When i create a proxy and try an anonymous connection is does work correctly.
+	Caller Identity Received By Service: <anonymous>
+
+12) Test Security with Proxy Util
+
+The caller is: <anonymous>
+The caller is: null
+/O=Ohio State University/OU=BMI/OU=MSCL/CN=Stephen Langella
 
 
 Things to Write Tests For
@@ -45,3 +81,9 @@ Security Notes
 
 	A) Supports Anonymous
 	B) Supports Delegtation
+	
+	
+Questions
+----------
+
+1) Why do things work without a signing policy?	
