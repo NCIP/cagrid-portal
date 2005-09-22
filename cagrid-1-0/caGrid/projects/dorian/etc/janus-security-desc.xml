@@ -6,7 +6,7 @@
    </credential>
 
 <authz value="none"/>
-
+ <!--
   <auth-method>
    <GSISecureConversation>
       <protection-level>
@@ -14,6 +14,6 @@
       </protection-level>
    </GSISecureConversation>
   </auth-method>
-
+-->
 
 </securityConfig>

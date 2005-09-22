@@ -1,8 +1,47 @@
-1) Add utilities for reading private key, cert requests, and certificates.
-2) Add utilities for having passphrases on private keys.  (See chapter)
+General Tasks
+--------------
+
+1) Add utilities for reading private key, cert requests, and certificates. (DONE)
+2) Add utilities for having passphrases on private keys.  (DONE)
+3) Test different security mechanisms in globus 4
+4) Port Proxy Util
+5) Fix Certificate Timing Problem
 
 
-Things to Test
+Security Test For Globus 4
+---------------------------
 
-1) Reading Certificates, globus and for steve, others?.
-1) Reading Keys, globus and for steve.
+1) Container Security On, Secure Conversation (PASSED)
+2) Container Security Off, Secure Conversation (PASSED)
+3) Container Security Off, Secure Conversation, Anonymous (PASSED)
+4) Container Security On, GSI Transport (PASSED)
+5) Container Security On, GSI Transport, Anonymous (PASSED)
+6) Container Security Off, GSI Transport (FAILED)
+	It seems that transport needs to be enabled for the container.
+7) Test Security with Proxy Util
+
+
+Things to Write Tests For
+--------------------------
+
+1) Reading Certificates, globus and for steve, others?. (DONE)
+2) Reading Keys, globus and for steve. (DONE)
+3) Write Test for Proxy Util
+
+Security Notes
+---------------
+
+1) GSI_TRANSPORT
+
+	A) Supports Anonymous 
+	B) Does NOT Support Delegation
+	
+2) GSI SECURE MESSAGE
+
+	A) Does NOT Support Anonymous
+	B) Does NOT Support Delegation
+	
+3) GSI SECURE Conversation
+
+	A) Supports Anonymous
+	B) Supports Delegtation
