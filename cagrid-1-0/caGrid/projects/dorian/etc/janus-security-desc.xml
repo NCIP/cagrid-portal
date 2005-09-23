@@ -6,7 +6,7 @@
    </credential>
 
 <authz value="none"/>
-<!--
+
   <auth-method>
    <GSISecureConversation>
       <protection-level>
@@ -14,7 +14,7 @@
       </protection-level>
    </GSISecureConversation>
   </auth-method>
-  -->
+  
    <run-as> 
       <service-identity/>
    </run-as>
