@@ -3,9 +3,12 @@ General Tasks
 
 1) Add utilities for reading private key, cert requests, and certificates. (DONE)
 2) Add utilities for having passphrases on private keys.  (DONE)
-3) Test different security mechanisms in globus 4
-4) Port Proxy Util
-5) Fix Certificate Timing Problem
+3) Test different security mechanisms in globus 4 (DONE)
+4) Port Proxy Util (DONE)
+5) Fix Certificate Timing Problem (DONE)
+6) Write Test for Proxy Util
+7) Explore MD5WithRSAEncryption
+8) Cleanup Proxy Util
 
 
 Security Test For Globus 4
@@ -52,9 +55,7 @@ Security Test For Globus 4
 
 12) Test Security with Proxy Util
 
-The caller is: <anonymous>
-The caller is: null
-/O=Ohio State University/OU=BMI/OU=MSCL/CN=Stephen Langella
+
 
 
 Things to Write Tests For
