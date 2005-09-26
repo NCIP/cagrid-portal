@@ -65,8 +65,10 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xalan.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
-	<classpathentry kind="lib" path="lib/mobius_common_client-1.1.jar"/>
+	<classpathentry sourcepath="C:/projects/mobius" kind="lib" path="lib/mobius_common_client-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/mobius_common_server-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/mobius_tools-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
