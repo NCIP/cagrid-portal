@@ -1,0 +1,17 @@
+<janus>
+	<resource name="JanusConfiguration" class="gov.nih.nci.cagrid.janus.service.JanusConfiguration">
+		<janus-config>
+		   <janus-internal-id>TEST_JANUS</janus-internal-id>
+		    <database>
+			<name/>
+			<driver>com.mysql.jdbc.Driver</driver>
+            <urlPrefix>jdbc:mysql:</urlPrefix>
+			<host>localhost</host>
+			<port>3306</port>
+			<username>root</username>
+			<password>gomets123</password>
+			<pool>1</pool>
+		</database>
+        </janus-config>
+	</resource>	
+</janus>
