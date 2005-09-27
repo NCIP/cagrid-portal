@@ -1,0 +1,60 @@
+<grid-portal>
+	<resource name="GridPortalConfig" class="org.projectmobius.portal.GridPortalConfig">
+	 <grid-portal-config>
+	  <application>
+	  	<name>GUMS Portal</name>
+	  	<icon>/caBIGWorld.jpg</icon>
+	  	<logo-bar-image>/caBIGLogo.jpg</logo-bar-image>
+	  	<about>
+	  	     <![CDATA[<html><h2>GUMS Portal</h2><h3>Authors:</h3><a href="mailto:hastings@bmi.osu.edu">Shannon Hastings</a> and <a href="mailto:langella@bmi.osu.edu">Stephen Langella</a> and <a href="mailto:oster@bmi.osu.edu">Scott Oster</a>]]>	
+	  	</about>
+	  	<dimensions>
+	  		<width>800</width>
+	  		<height>600</height>
+	  	</dimensions>
+	  </application>
+	  <components>
+	  		<component>
+	  		<title>Registration</title>
+	  		<description>Apply for a GUMS account.</description>
+	  		<class>gov.nih.nci.cagrid.gums.portal.registration.RegistrationViewer</class>
+	  		<icon>/DocumentDraw.gif</icon>
+	  	</component>
+	  	<!--
+	  	<component>
+	  		<title>Credential Management</title>
+	  		<description>Manage Grid Credentials</description>
+	  		<class>gov.nih.nci.cagrid.gums.portal.credentials.CredentialManagementMenu</class>
+	  		<icon>/Key.gif</icon>
+	  		<dimensions>
+	  			<width>300</width>
+	  			<height>300</height>
+	  		</dimensions>
+	  	</component>
+	  	<component>
+	  		<title>GUMS Administration</title>
+	  		<description>Administer the GUMS Service</description>
+	  		<class>gov.nih.nci.cagrid.gums.portal.administration.AdministrativeMenu</class>
+	  		<icon>/timeseriesMagnify.gif</icon>
+	  		<dimensions>
+	  			<width>300</width>
+	  			<height>250</height>
+	  		</dimensions>
+	  	</component>
+	  	-->
+	  </components>
+	  </grid-portal-config>
+	</resource>	
+	<resource name="GumsPortalConf" class="gov.nih.nci.cagrid.gums.portal.GumsPortalConf">
+		<gums-portal-config>
+		<gums-service>http://localhost:8080/wsrf/services/cagrid/gums</gums-service>
+        <attribute-viewers>
+        	<attribute-viewer>
+        		<namespace>cagrid.nci.nih.gov/1/person</namespace>
+        		<name>person</name>
+        		<class>gov.nih.nci.cagrid.gums.portal.attributes.PersonAttributeViewer</class>
+        	</attribute-viewer>
+        </attribute-viewers>
+        </gums-portal-config>
+	</resource>
+</grid-portal>

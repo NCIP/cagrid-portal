@@ -6,7 +6,7 @@ import gov.nih.nci.cagrid.gums.bean.AttributeDescriptor;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: Client.java,v 1.1 2005-09-27 18:31:18 langella Exp $
+ * @version $Id: Client.java,v 1.2 2005-09-27 20:09:50 langella Exp $
  */
 public class Client {
 
@@ -21,10 +21,7 @@ public class Client {
 			 for(int i=0; i<des.length; i++){
 				System.out.println(des[i].getNamespace()+" - "+des[i].getName());
 			 }
-		
-			 
-			
-			
+	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

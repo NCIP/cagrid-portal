@@ -70,5 +70,7 @@
 	<classpathentry kind="lib" path="lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
+	<classpathentry kind="lib" path="resources/portal/common"/>
+	<classpathentry kind="lib" path="resources/portal/gums"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

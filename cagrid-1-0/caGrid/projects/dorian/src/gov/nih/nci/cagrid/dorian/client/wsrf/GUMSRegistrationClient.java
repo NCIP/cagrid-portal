@@ -1,12 +1,12 @@
 package gov.nih.nci.cagrid.gums.client.wsrf;
 
-import gov.nih.cagrid.security.commstyle.SecureConversationWithEncryption;
 import gov.nih.nci.cagrid.gums.Registration;
 import gov.nih.nci.cagrid.gums.bean.AttributeDescriptor;
 import gov.nih.nci.cagrid.gums.common.GUMSException;
 import gov.nih.nci.cagrid.gums.common.GUMSInternalException;
 import gov.nih.nci.cagrid.gums.wsrf.GUMSPortType;
 import gov.nih.nci.cagrid.gums.wsrf.RequiredUserAttributes;
+import gov.nih.nci.cagrid.security.commstyle.AnonymousSecureConversationWithEncryption;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
@@ -27,7 +27,7 @@ public class GUMSRegistrationClient extends GUMSBaseClient implements
 		GUMSPortType port = null;
 		try {
 			port = this
-					.getPort(new SecureConversationWithEncryption());
+					.getPort(new AnonymousSecureConversationWithEncryption());
 
 		} catch (Exception e) {
 			e.printStackTrace();
