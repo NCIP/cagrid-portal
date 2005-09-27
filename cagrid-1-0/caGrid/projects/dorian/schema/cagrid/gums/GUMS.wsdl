@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions name="Janus"
-    targetNamespace="http://cagrid.nci.nih.gov/janus"
+<definitions name="GUMS"
+    targetNamespace="http://cagrid.nci.nih.gov/gums"
     xmlns="http://schemas.xmlsoap.org/wsdl/"
-    xmlns:tns="http://cagrid.nci.nih.gov/janus"
+    xmlns:tns="http://cagrid.nci.nih.gov/gums"
     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
     xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd"
     xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
@@ -13,7 +13,7 @@
     namespace=
     "http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
     location="../../wsrf/properties/WS-ResourceProperties.wsdl" />
-<import location="janus.xsd" namespace="http://cagrid.nci.nih.gov/janus/bean"/>
+<import location="gums.xsd" namespace="http://cagrid.nci.nih.gov/gums/bean"/>
 
 <!--============================================================
 
@@ -21,10 +21,10 @@
                       
   ============================================================-->
 <types>
-<xsd:schema targetNamespace="http://cagrid.nci.nih.gov/janus"
-    xmlns:tns="http://cagrid.nci.nih.gov/janus"
+<xsd:schema targetNamespace="http://cagrid.nci.nih.gov/gums"
+    xmlns:tns="http://cagrid.nci.nih.gov/gums"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-    xmlns:janus="http://cagrid.nci.nih.gov/janus/bean">
+    xmlns:gums="http://cagrid.nci.nih.gov/gums/bean">
     
 
 	<!-- REQUESTS AND RESPONSES -->
@@ -36,13 +36,13 @@
 	<xsd:element name="requiredUserAttributesResponse">
 		<xsd:complexType>
 			<xsd:sequence>
-				<xsd:element name="attributeDescriptors" minOccurs="0" maxOccurs="unbounded" type="janus:attributeDescriptor"/>
+				<xsd:element name="attributeDescriptors" minOccurs="0" maxOccurs="unbounded" type="gums:attributeDescriptor"/>
 			</xsd:sequence>
 		</xsd:complexType>
 	</xsd:element>
 	
 	
-	<xsd:element name="createProxy" type="janus:createProxyRequest"/>
+	<xsd:element name="createProxy" type="gums:createProxyRequest"/>
 	<xsd:element name="createProxyResponse" type="xsd:string"/>
 	
 
@@ -51,7 +51,7 @@
    
 	<xsd:element name="description" type="xsd:string"/>
 
-	<xsd:element name="JanusResourceProperties">
+	<xsd:element name="GUMSResourceProperties">
 	<xsd:complexType>
 		<xsd:sequence>
 			<xsd:element ref="tns:description" minOccurs="1" maxOccurs="1"/>
@@ -92,9 +92,9 @@
                        P O R T T Y P E
                       
   ============================================================-->
-<portType name="JanusPortType" 
+<portType name="GUMSPortType" 
     wsdlpp:extends="wsrpw:GetResourceProperty"
-    wsrp:ResourceProperties="tns:JanusResourceProperties">
+    wsrp:ResourceProperties="tns:GUMSResourceProperties">
     
     <operation name="getRequiredUserAttributes">
 		<input message="tns:GetRequiredUserAttributesInputMessage"/>

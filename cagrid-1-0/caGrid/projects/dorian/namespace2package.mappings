@@ -1,3 +1,3 @@
-http\://cagrid.nci.nih.gov/janus=gov.nih.nci.cagrid.janus.wsrf
-http\://cagrid.nci.nih.gov/janus/bindings=gov.nih.nci.cagrid.janus.wsrf.bindings
-http\://cagrid.nci.nih.gov/janus/service=gov.nih.nci.cagrid.janus.wsrf.service
+http\://cagrid.nci.nih.gov/gums=gov.nih.nci.cagrid.gums.wsrf
+http\://cagrid.nci.nih.gov/gums/bindings=gov.nih.nci.cagrid.gums.wsrf.bindings
+http\://cagrid.nci.nih.gov/gums/service=gov.nih.nci.cagrid.gums.wsrf.service

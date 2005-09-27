@@ -1,7 +1,7 @@
-<janus>
-	<resource name="JanusConfiguration" class="gov.nih.nci.cagrid.janus.service.JanusConfiguration">
-		<janus-config>
-			<janus-internal-id>JANUS</janus-internal-id>
+<gums>
+	<resource name="GUMSConfiguration" class="gov.nih.nci.cagrid.gums.service.GUMSConfiguration">
+		<gums-config>
+		   <gums-internal-id>TEST_GUMS</gums-internal-id>
 		    <database>
 			<name/>
 			<driver>com.mysql.jdbc.Driver</driver>
@@ -12,6 +12,6 @@
 			<password>gomets123</password>
 			<pool>1</pool>
 		</database>
-        </janus-config>
+        </gums-config>
 	</resource>	
-</janus>
+</gums>

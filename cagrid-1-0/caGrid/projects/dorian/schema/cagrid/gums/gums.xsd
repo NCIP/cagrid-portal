@@ -1,7 +1,7 @@
-<xsd:schema targetNamespace="http://cagrid.nci.nih.gov/janus/bean"
+<xsd:schema targetNamespace="http://cagrid.nci.nih.gov/gums/bean"
 	attributeFormDefault="qualified"
 	elementFormDefault="qualified"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:janus="http://cagrid.nci.nih.gov/janus/bean">
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:gums="http://cagrid.nci.nih.gov/gums/bean">
 	
 	
 	    <xsd:complexType name="attributeDescriptor">
@@ -13,7 +13,7 @@
 	
 		<xsd:complexType name="createProxyRequest">
 			<xsd:sequence>
-				<xsd:element name="basicAuthenticationCredential" minOccurs="1" maxOccurs="1" type="janus:basicAuthCredential"/>
+				<xsd:element name="basicAuthenticationCredential" minOccurs="1" maxOccurs="1" type="gums:basicAuthCredential"/>
 				<xsd:element name="hours" minOccurs="1" maxOccurs="1" type="xsd:integer"/>
 			</xsd:sequence>
 		</xsd:complexType>

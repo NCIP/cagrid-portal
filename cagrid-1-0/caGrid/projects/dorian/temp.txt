@@ -1,0 +1,2 @@
+c:/certificates/bmi-cakey.pem
+c:/certificates/bmi-cacert.pem

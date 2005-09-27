@@ -1,8 +1,8 @@
-<securityConfig xmlns="http://www.globus.org" xmlns:janus="http://cagrid.nci.nih.gov/janus">
+<securityConfig xmlns="http://www.globus.org" xmlns:gums="http://cagrid.nci.nih.gov/gums">
 
    <credential>
-      <key-file value="c:/certificates/janus-key.pem"/>
-      <cert-file value="c:/certificates/janus-cert.pem"/>
+      <key-file value="c:/certificates/gums-key.pem"/>
+      <cert-file value="c:/certificates/gums-cert.pem"/>
    </credential>
 
 <authz value="none"/>
