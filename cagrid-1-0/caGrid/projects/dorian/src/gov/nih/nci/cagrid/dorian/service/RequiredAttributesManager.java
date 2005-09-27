@@ -41,6 +41,7 @@ public class RequiredAttributesManager extends GUMSObject {
 				db.update(reqAtts);
 				dbBuilt = true;
 			}
+			
 		}
 	}
 
