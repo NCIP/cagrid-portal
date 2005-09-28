@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.gums.ca.test;
 
 import gov.nih.nci.cagrid.gums.ca.KeyUtil;
+import gov.nih.nci.cagrid.gums.common.FaultUtil;
 
 import java.io.File;
 import java.security.KeyPair;
@@ -11,7 +12,7 @@ import junit.framework.TestCase;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: KeyTest.java,v 1.1 2005-09-27 18:31:18 langella Exp $
+ * @version $Id: KeyTest.java,v 1.2 2005-09-28 20:19:09 langella Exp $
  */
 public class KeyTest extends TestCase {
 	public static String RESOURCES_DIR="resources"+File.separator+"ca-test";
@@ -30,7 +31,7 @@ public class KeyTest extends TestCase {
 		    File f = new File(keyFile);
 		    f.delete();
 		}catch (Exception e) {
-			e.printStackTrace();
+			FaultUtil.printFault(e);;
 			assertTrue(false);
 		}	
 	}
@@ -68,7 +69,7 @@ public class KeyTest extends TestCase {
 		    File f = new File(keyFile);
 		    f.delete();
 		}catch (Exception e) {
-			e.printStackTrace();
+			FaultUtil.printFault(e);;
 			assertTrue(false);
 		}	
 	}
@@ -78,7 +79,7 @@ public class KeyTest extends TestCase {
 			PrivateKey key=KeyUtil.loadPrivateKey(RESOURCES_DIR+File.separator+"simpleca-cakey.pem","gomets123");
 		    assertNotNull(key);
 		}catch (Exception e) {
-			e.printStackTrace();
+			FaultUtil.printFault(e);;
 			assertTrue(false);
 		}	
 	}
@@ -88,7 +89,7 @@ public class KeyTest extends TestCase {
 			PrivateKey key=KeyUtil.loadPrivateKey(RESOURCES_DIR+File.separator+"bmi-cakey.pem",null);
 		    assertNotNull(key);
 		}catch (Exception e) {
-			e.printStackTrace();
+			FaultUtil.printFault(e);
 			assertTrue(false);
 		}	
 		
@@ -96,7 +97,7 @@ public class KeyTest extends TestCase {
 			PrivateKey key=KeyUtil.loadPrivateKey(RESOURCES_DIR+File.separator+"gums-key.pem",null);
 		    assertNotNull(key);
 		}catch (Exception e) {
-			e.printStackTrace();
+			FaultUtil.printFault(e);
 			assertTrue(false);
 		}	
 	}

@@ -151,6 +151,7 @@ public class ServiceSelector extends GridPortalBaseFrame {
 			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new RegistrationViewer(info));
 		    dispose();
 		}catch(Exception e){
+			e.printStackTrace();
 			PortalUtils.showErrorMessage(e);
 			dispose();
 		}

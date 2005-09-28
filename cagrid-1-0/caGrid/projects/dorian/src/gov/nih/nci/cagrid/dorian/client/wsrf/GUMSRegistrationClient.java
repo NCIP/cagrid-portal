@@ -1,16 +1,16 @@
 package gov.nih.nci.cagrid.gums.client.wsrf;
 
-import java.rmi.RemoteException;
-
-import org.apache.axis.AxisFault;
-
 import gov.nih.nci.cagrid.gums.Registration;
 import gov.nih.nci.cagrid.gums.bean.AttributeDescriptor;
+import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
 import gov.nih.nci.cagrid.gums.common.GUMSException;
-import gov.nih.nci.cagrid.gums.common.GUMSInternalException;
 import gov.nih.nci.cagrid.gums.wsrf.GUMSPortType;
 import gov.nih.nci.cagrid.gums.wsrf.RequiredUserAttributes;
 import gov.nih.nci.cagrid.security.commstyle.AnonymousSecureConversationWithEncryption;
+
+import java.rmi.RemoteException;
+
+import org.apache.axis.AxisFault;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
@@ -27,7 +27,7 @@ public class GUMSRegistrationClient extends GUMSBaseClient implements
 	}
 
 	public AttributeDescriptor[] getRequiredUserAttributes()
-			throws GUMSInternalException, GUMSException {
+			throws GUMSInternalFault, GUMSException {
 		GUMSPortType port = null;
 		try {
 			port = this
@@ -40,12 +40,14 @@ public class GUMSRegistrationClient extends GUMSBaseClient implements
 		try {
 			return port.getRequiredUserAttributes(new RequiredUserAttributes())
 					.getAttributeDescriptors();
-		} catch(AxisFault fault){
+		} catch(GUMSInternalFault gie){
+			throw gie;
+		}catch(AxisFault fault){
 			fault.printStackTrace();
 			throw new GUMSException(simplifyMessage(fault.getFaultString()));
 		}catch (RemoteException e) {
 			e.printStackTrace();
-			throw new GUMSException(simplifyMessage(parseRemoteException(e)));
+			throw new GUMSException(simplifyMessage(e.getMessage()));
 		}
 	}
 

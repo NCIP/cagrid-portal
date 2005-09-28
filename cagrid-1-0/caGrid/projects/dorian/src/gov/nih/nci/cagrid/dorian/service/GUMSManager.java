@@ -1,8 +1,9 @@
 package gov.nih.nci.cagrid.gums.service;
 
 import gov.nih.nci.cagrid.gums.bean.AttributeDescriptor;
-import gov.nih.nci.cagrid.gums.common.GUMSInternalException;
+import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
 
+import org.globus.wsrf.utils.FaultHelper;
 import org.projectmobius.common.MobiusConfigurator;
 import org.projectmobius.common.MobiusResourceManager;
 
@@ -23,12 +24,16 @@ public class GUMSManager extends MobiusResourceManager{
 	public static final String REQUIRED_USER_ATTRIBUTES = "REQUIRED_USER_ATTRIBUTES";
 	private static GUMSManager instance;
 	
-	private GUMSManager() throws GUMSInternalException{
+	private GUMSManager() throws GUMSInternalFault{
 		try{
 		MobiusConfigurator.parseMobiusConfiguration(GUMS_CONFIGURATION_FILE,this);
 		}catch(Exception e){
-			e.printStackTrace();
-			throw new GUMSInternalException("An unexpected error occurred in configuring the service.");
+			GUMSInternalFault fault = new GUMSInternalFault();
+			fault.setFaultString("An unexpected error occurred in configuring the service.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GUMSInternalFault)helper.getFault();
+			throw fault;
 		}	
 		this.db = new Database(getJanusConfiguration().getConnectionManager(),getJanusConfiguration().getGUMSInternalId());
 		this.db.createDatabaseIfNeeded();
@@ -43,7 +48,7 @@ public class GUMSManager extends MobiusResourceManager{
 		return (GUMSConfiguration)this.getResource(GUMS_CONFIGURATION_RESOURCE);
 	}
 	
-	public static GUMSManager getInstance() throws GUMSInternalException{
+	public static GUMSManager getInstance() throws GUMSInternalFault{
 		if(instance == null){
 			instance = new GUMSManager();
 		}

@@ -6,6 +6,8 @@
     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
     xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd"
     xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
+    	xmlns:wsbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd"
+	xmlns:wsbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl"
     xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
@@ -13,6 +15,10 @@
     namespace=
     "http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
     location="../../wsrf/properties/WS-ResourceProperties.wsdl" />
+    <wsdl:import
+		namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl"
+		location="../../wsrf/faults/WS-BaseFaults.wsdl" />
+    
 <import location="gums.xsd" namespace="http://cagrid.nci.nih.gov/gums/bean"/>
 
 <!--============================================================
@@ -44,9 +50,10 @@
 	
 	<xsd:element name="createProxy" type="gums:createProxyRequest"/>
 	<xsd:element name="createProxyResponse" type="xsd:string"/>
-	
 
 
+	<xsd:element name="gumsInternalFault" type="gums:GUMSInternalFault"/>
+			
 	<!-- RESOURCE PROPERTIES -->
    
 	<xsd:element name="description" type="xsd:string"/>
@@ -84,6 +91,9 @@
 </message>
 
 
+	<message name="GUMSInternalFaultMessage">
+		<part name="fault" element="tns:gumsInternalFault" />
+	</message>
 
 
 
@@ -99,6 +109,7 @@
     <operation name="getRequiredUserAttributes">
 		<input message="tns:GetRequiredUserAttributesInputMessage"/>
 		<output message="tns:GetRequiredUserAttributesOutputMessage"/>
+		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFaultMessage"/>
 	</operation>
 
 	<operation name="createProxy">

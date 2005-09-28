@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.gums.ca.test;
 import gov.nih.nci.cagrid.gums.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.ca.KeyUtil;
 import gov.nih.nci.cagrid.gums.ca.ProxyUtil;
+import gov.nih.nci.cagrid.gums.common.FaultUtil;
 
 import java.io.File;
 import java.security.KeyPair;
@@ -18,7 +19,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ProxyTest.java,v 1.1 2005-09-27 18:31:18 langella Exp $
+ * @version $Id: ProxyTest.java,v 1.2 2005-09-28 20:19:09 langella Exp $
  */
 public class ProxyTest extends TestCase {
 	public static String RESOURCES_DIR = "resources" + File.separator
@@ -27,7 +28,6 @@ public class ProxyTest extends TestCase {
 	private String identityToSubject(String identity){
 		String s = identity.substring(1);
 		return s.replace('/',',');
-		
 	}
 
 	public void testCreateProxy() {
@@ -63,7 +63,7 @@ public class ProxyTest extends TestCase {
 				}
 				
 		} catch (Exception e) {
-			e.printStackTrace();
+			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
 	}

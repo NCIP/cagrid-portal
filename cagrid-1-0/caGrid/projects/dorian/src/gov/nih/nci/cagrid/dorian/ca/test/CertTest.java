@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.gums.ca.test;
 
 import gov.nih.nci.cagrid.gums.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.ca.KeyUtil;
+import gov.nih.nci.cagrid.gums.common.FaultUtil;
 
 import java.io.File;
 import java.security.KeyPair;
@@ -17,7 +18,7 @@ import org.bouncycastle.jce.PKCS10CertificationRequest;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: CertTest.java,v 1.1 2005-09-27 18:31:18 langella Exp $
+ * @version $Id: CertTest.java,v 1.2 2005-09-28 20:19:09 langella Exp $
  */
 public class CertTest extends TestCase {
 	public static String RESOURCES_DIR = "resources" + File.separator
@@ -43,7 +44,7 @@ public class CertTest extends TestCase {
 			checkWriteReadCertificate(rootCert);
 			checkWriteReadCertificate(issuedCert);
 		} catch (Exception e) {
-			e.printStackTrace();
+			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
 	}
@@ -68,7 +69,7 @@ public class CertTest extends TestCase {
 			checkWriteReadCertificate(rootCert);
 			checkWriteReadCertificate(issuedCert);
 		} catch (Exception e) {
-			e.printStackTrace();
+			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
 	}
@@ -105,7 +106,7 @@ public class CertTest extends TestCase {
 			checkWriteReadCertificate(rootCert);
 			checkWriteReadCertificate(issuedCert);
 		} catch (Exception e) {
-			e.printStackTrace();
+			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
 	}
@@ -143,7 +144,7 @@ public class CertTest extends TestCase {
 			f2.delete();
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			FaultUtil.printFault(e);
 			assertTrue(false);
 		} 
 	}
@@ -180,7 +181,7 @@ public class CertTest extends TestCase {
 			f2.delete();
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			FaultUtil.printFault(e);
 			assertTrue(false);
 		} 
 	}

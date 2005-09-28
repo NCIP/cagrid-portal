@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.common.portal;
 
 import javax.swing.JOptionPane;
 
+import org.apache.axis.AxisFault;
 import org.projectmobius.portal.PortalResourceManager;
 
 /**
@@ -35,8 +36,12 @@ public class PortalUtils {
 	}
 	
 	public static void showErrorMessage(String title,Exception e) {
+		String mess = e.getMessage();
+		if(e instanceof AxisFault){
+			mess = ((AxisFault)e).getFaultString();
+		}
 		JOptionPane.showMessageDialog(PortalResourceManager.getInstance()
-				.getGridPortal(), e.getMessage(), title, JOptionPane.ERROR_MESSAGE);
+				.getGridPortal(), mess, title, JOptionPane.ERROR_MESSAGE);
 	}
 
 	public static void showErrorMessage(String title, String msg) {

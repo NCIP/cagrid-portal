@@ -1,12 +1,13 @@
 package gov.nih.nci.cagrid.gums.service;
 
-import gov.nih.nci.cagrid.gums.common.GUMSInternalException;
+import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 
+import org.globus.wsrf.utils.FaultHelper;
 import org.projectmobius.db.ConnectionManager;
 import org.projectmobius.db.Query;
 
@@ -15,7 +16,7 @@ import org.projectmobius.db.Query;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: Database.java,v 1.2 2005-09-27 19:16:38 langella Exp $
+ * @version $Id: Database.java,v 1.3 2005-09-28 20:19:09 langella Exp $
  */
 public class Database extends GUMSObject {
 
@@ -25,18 +26,12 @@ public class Database extends GUMSObject {
 	private boolean dbBuilt = false;
 
 
-	public Database(ConnectionManager rootConnectionManager,String database) throws GUMSInternalException {
-		try {
+	public Database(ConnectionManager rootConnectionManager,String database){
 			this.database = database;
 			this.root = rootConnectionManager;
-		} catch (Exception e) {
-			logError(e.getMessage(), e);
-			throw new GUMSInternalException("Error initializing the Janus Database Manager.");
-		}
-
 	}
 	
-	public void createDatabaseIfNeeded() throws GUMSInternalException {
+	public void createDatabaseIfNeeded() throws GUMSInternalFault{
 		try {
 			if(!dbBuilt){
 			if (!databaseExists(database)) {
@@ -48,11 +43,16 @@ public class Database extends GUMSObject {
 			}
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
-			throw new GUMSInternalException("Error creating the Janus Database.");
+			GUMSInternalFault fault = new GUMSInternalFault();
+			fault.setFaultString("An error occured while trying to create the GUMS database ("+database+")");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GUMSInternalFault)helper.getFault();
+			throw fault;
 		}
 	}
 	
-	public void destroyDatabase() throws GUMSInternalException {
+	public void destroyDatabase() throws GUMSInternalFault {
 		try {
 			if (databaseExists(database)) {
 				Query.update(this.root, "drop database if exists " +database);
@@ -61,14 +61,19 @@ public class Database extends GUMSObject {
 			dbBuilt = false;
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
-			throw new GUMSInternalException("Error destroying the Janus Database.");
+			GUMSInternalFault fault = new GUMSInternalFault();
+			fault.setFaultString("An error occured while trying to destroy the GUMS database ("+database+")");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GUMSInternalFault)helper.getFault();
+			throw fault;
 		}
 	}
 	
 	
 
 
-	public boolean tableExists(String tableName) throws GUMSInternalException {
+	public boolean tableExists(String tableName) throws GUMSInternalFault {
 		boolean exists = false;
 		Connection c = null;
 		try {
@@ -85,18 +90,27 @@ public class Database extends GUMSObject {
 		} catch (Exception e) {
 			gums.releaseConnection(c);
 			logError(e.getMessage(), e);
-			throw new GUMSInternalException("Error determining if the table " + tableName + " exists:" + e.getMessage(), e);
+			GUMSInternalFault fault = new GUMSInternalFault();
+			fault.setFaultString("Unexpected Database Error");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GUMSInternalFault)helper.getFault();
+			throw fault;
 		}
 		return exists;
 	}
 
 
-	public void update(String sql) throws GUMSInternalException {
+	public void update(String sql) throws GUMSInternalFault {
 		try {
-			Query.update(gums, sql);
+			Query.update(gums, "yoyoyoyo"+sql);
 		} catch (Exception e) {
-			logError(e.getMessage(), e);
-			throw new GUMSInternalException(e.getMessage(), e);
+			//logError(e.getMessage(), e);
+			GUMSInternalFault fault = new GUMSInternalFault();
+			fault.setFaultString("Unexpected Database Error");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);	
+			throw (GUMSInternalFault)helper.getFault();
 		}
 	}
 
@@ -106,7 +120,7 @@ public class Database extends GUMSObject {
 	}
 
 
-	public boolean databaseExists(String db) throws GUMSInternalException {
+	public boolean databaseExists(String db) throws GUMSInternalFault {
 		boolean exists = false;
 		Connection c = null;
 		try {
@@ -122,9 +136,12 @@ public class Database extends GUMSObject {
 			dbs.close();
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
-			this.root.releaseConnection(c);
-			logError(e.getMessage(), e);
-			throw new GUMSInternalException("Error determining if the database " + db + " exists.");
+			GUMSInternalFault fault = new GUMSInternalFault();
+			fault.setFaultString("Unexpected Database Error");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GUMSInternalFault)helper.getFault();
+			throw fault;
 		}
 		this.root.releaseConnection(c);
 		return exists;

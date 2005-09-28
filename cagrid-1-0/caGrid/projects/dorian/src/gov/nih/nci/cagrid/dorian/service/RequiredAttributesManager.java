@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.gums.service;
 
 import gov.nih.nci.cagrid.gums.bean.AttributeDescriptor;
-import gov.nih.nci.cagrid.gums.common.GUMSInternalException;
+import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
 
 import java.sql.Connection;
@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.globus.wsrf.utils.FaultHelper;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
@@ -25,13 +27,12 @@ public class RequiredAttributesManager extends GUMSObject {
 
 	private boolean dbBuilt = false;
 
-	public RequiredAttributesManager(Database db, String table)
-			throws GUMSInternalException {
+	public RequiredAttributesManager(Database db, String table){
 		this.db = db;
 		this.table = table;
 	}
 
-	private void buildDatabase() throws GUMSInternalException {
+	private void buildDatabase() throws GUMSInternalFault {
 		if (!dbBuilt) {
 			if (!this.db.tableExists(table)) {
 				String reqAtts = "CREATE TABLE " + table + " ("
@@ -46,7 +47,7 @@ public class RequiredAttributesManager extends GUMSObject {
 	}
 
 	public boolean attributeExists(AttributeDescriptor des)
-			throws GUMSInternalException {
+			throws GUMSInternalFault {
 		buildDatabase();
 		Connection c = null;
 		boolean exists = false;
@@ -66,9 +67,12 @@ public class RequiredAttributesManager extends GUMSObject {
 			s.close();
 
 		} catch (Exception e) {
-			logError(e.getMessage(), e);
-			throw new GUMSInternalException(
-					"Error determining if the required attribute exists.");
+			GUMSInternalFault fault = new GUMSInternalFault();
+			fault.setFaultString("Unexpected Database Error");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GUMSInternalFault)helper.getFault();
+			throw fault;
 		} finally {
 			db.getConnectionManager().releaseConnection(c);
 		}
@@ -76,7 +80,7 @@ public class RequiredAttributesManager extends GUMSObject {
 	}
 
 	public AttributeDescriptor[] getRequiredAttributes()
-			throws GUMSInternalException {
+			throws GUMSInternalFault {
 		buildDatabase();
 		Connection c = null;
 		try {
@@ -101,16 +105,19 @@ public class RequiredAttributesManager extends GUMSObject {
 			return attributes;
 
 		} catch (Exception e) {
-			logError(e.getMessage(), e);
-			throw new GUMSInternalException(
-					"Error determining obtaining the required attributes.");
+			GUMSInternalFault fault = new GUMSInternalFault();
+			fault.setFaultString("Unexpected Database Error");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GUMSInternalFault)helper.getFault();
+			throw fault;
 		} finally {
 			db.getConnectionManager().releaseConnection(c);
 		}
 	}
 
 	public void insertRequiredAttribute(AttributeDescriptor des)
-			throws GUMSInternalException {
+			throws GUMSInternalFault {
 		buildDatabase();
 		if (!attributeExists(des)) {
 			db.update("INSERT INTO " + table + " SET NAMESPACE='"
@@ -119,7 +126,7 @@ public class RequiredAttributesManager extends GUMSObject {
 	}
 
 	public void removeRequiredAttribute(AttributeDescriptor des)
-			throws GUMSInternalException {
+			throws GUMSInternalFault {
 		buildDatabase();
 		if (attributeExists(des)) {
 			db.update("delete from " + table + " WHERE NAMESPACE='"
@@ -127,12 +134,12 @@ public class RequiredAttributesManager extends GUMSObject {
 		}
 	}
 
-	public void removeAllAttributes() throws GUMSInternalException {
+	public void removeAllAttributes() throws GUMSInternalFault {
 		buildDatabase();
 		db.update("delete from " + table);
 	}
 
-	public void destroyTable() throws GUMSInternalException {
+	public void destroyTable() throws GUMSInternalFault {
 		db.update("DROP TABLE IF EXISTS " + table);
 		dbBuilt = false;
 	}
