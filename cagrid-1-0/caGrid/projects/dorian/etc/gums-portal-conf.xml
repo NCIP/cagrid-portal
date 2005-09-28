@@ -17,8 +17,12 @@
 	  		<component>
 	  		<title>Registration</title>
 	  		<description>Apply for a GUMS account.</description>
-	  		<class>gov.nih.nci.cagrid.gums.portal.registration.RegistrationViewer</class>
+	  		<class>gov.nih.nci.cagrid.gums.portal.registration.ServiceSelector</class>
 	  		<icon>/DocumentDraw.gif</icon>
+	  		<dimensions>
+	  			<width>400</width>
+	  			<height>200</height>
+	  		</dimensions>
 	  	</component>
 	  	<!--
 	  	<component>
@@ -47,7 +51,10 @@
 	</resource>	
 	<resource name="GumsPortalConf" class="gov.nih.nci.cagrid.gums.portal.GumsPortalConf">
 		<gums-portal-config>
-		<gums-service>http://localhost:8080/wsrf/services/cagrid/gums</gums-service>
+		<gums-services>
+			<gums-service>http://localhost:8080/wsrf/services/cagrid/gums</gums-service>
+			<gums-service>http:/dc01.bmi.ohio-state.edu:8080/wsrf/services/cagrid/gums</gums-service>
+		</gums-services>
         <attribute-viewers>
         	<attribute-viewer>
         		<namespace>cagrid.nci.nih.gov/1/person</namespace>

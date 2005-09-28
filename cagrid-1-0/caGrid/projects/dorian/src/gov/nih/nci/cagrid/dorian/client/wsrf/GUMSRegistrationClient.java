@@ -1,5 +1,9 @@
 package gov.nih.nci.cagrid.gums.client.wsrf;
 
+import java.rmi.RemoteException;
+
+import org.apache.axis.AxisFault;
+
 import gov.nih.nci.cagrid.gums.Registration;
 import gov.nih.nci.cagrid.gums.bean.AttributeDescriptor;
 import gov.nih.nci.cagrid.gums.common.GUMSException;
@@ -29,16 +33,19 @@ public class GUMSRegistrationClient extends GUMSBaseClient implements
 			port = this
 					.getPort(new AnonymousSecureConversationWithEncryption());
 
-		} catch (Exception e) {
+		}catch (Exception e) {
 			e.printStackTrace();
 			throw new GUMSException(e.getMessage());
 		}
 		try {
 			return port.getRequiredUserAttributes(new RequiredUserAttributes())
 					.getAttributeDescriptors();
-		} catch (Exception e) {
+		} catch(AxisFault fault){
+			fault.printStackTrace();
+			throw new GUMSException(simplifyMessage(fault.getFaultString()));
+		}catch (RemoteException e) {
 			e.printStackTrace();
-			throw new GUMSException(e.getMessage());
+			throw new GUMSException(simplifyMessage(parseRemoteException(e)));
 		}
 	}
 

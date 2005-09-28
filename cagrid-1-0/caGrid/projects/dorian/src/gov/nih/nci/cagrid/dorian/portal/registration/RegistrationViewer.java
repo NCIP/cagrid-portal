@@ -1,9 +1,7 @@
 package gov.nih.nci.cagrid.gums.portal.registration;
 
 import gov.nih.nci.cagrid.gums.bean.AttributeDescriptor;
-import gov.nih.nci.cagrid.gums.client.wsrf.GUMSRegistrationClient;
 import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
-import gov.nih.nci.cagrid.gums.portal.GumsPortalConf;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -21,7 +19,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: RegistrationViewer.java,v 1.1 2005-09-27 20:09:50 langella Exp $
+ * @version $Id: RegistrationViewer.java,v 1.2 2005-09-28 15:30:01 langella Exp $
  */
 public class RegistrationViewer extends GridPortalBaseFrame {
 
@@ -54,9 +52,12 @@ public class RegistrationViewer extends GridPortalBaseFrame {
 	private JButton jButton = null;
 
 	private int lastSelectedRow=-1;
+	
+	private AttributeDescriptor[] requiredAtts;
 
-	public RegistrationViewer() {
+	public RegistrationViewer(AttributeDescriptor[] requiredAtts) {
 		super();
+		this.requiredAtts = requiredAtts;
 		initialize();
 	}
 
@@ -321,15 +322,12 @@ public class RegistrationViewer extends GridPortalBaseFrame {
 		if (requiredInformationTable == null) {
 			requiredInformationTable = new RequiredInformationTable();
 			try {
-				GumsPortalConf conf = (GumsPortalConf) PortalResourceManager
-						.getInstance().getResource(GumsPortalConf.RESOURCE);
-				
-				GUMSRegistrationClient client = new GUMSRegistrationClient(conf.getGumsService());
-				AttributeDescriptor[] info = client.getRequiredUserAttributes();
-				for (int i = 0; i < info.length; i++) {
+			
+		
+				for (int i = 0; i < requiredAtts.length; i++) {
 					try {
 						this.requiredInformationTable
-								.addRequiredInformation(info[i]);
+								.addRequiredInformation(requiredAtts[i]);
 					} catch (Exception ex) {
 						JOptionPane.showMessageDialog(this, ex.getMessage(),
 								"Error", JOptionPane.ERROR_MESSAGE);

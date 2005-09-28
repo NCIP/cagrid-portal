@@ -13,7 +13,7 @@ import org.globus.wsrf.security.Constants;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: GUMSBaseClient.java,v 1.2 2005-09-27 20:09:50 langella Exp $
+ * @version $Id: GUMSBaseClient.java,v 1.3 2005-09-28 15:30:01 langella Exp $
  */
 public class GUMSBaseClient {
 	protected String serviceURI;
@@ -32,5 +32,28 @@ public class GUMSBaseClient {
 		return port;
 
 	}
+	
+	public static String parseRemoteException(Exception e){
+		String err = e.getMessage();
+		String ex = "java.rmi.RemoteException:";
+		int index = err.indexOf(ex);
+		if (index >= 0) {
+			err = err.substring(index + ex.length());
+		}	
+		return err;
+	}
+	
+	public static String simplifyMessage(String m){
+		if((m == null) || (m.equalsIgnoreCase("null"))){ 
+		  m = "Unknown Error";
+		}else if (m.indexOf("Connection refused") >= 0) {
+		
+			m = "Could not connect to the service, the service may not exist or may be down.";
+		} else if (m.indexOf("Unknown CA") >= 0) {
+			m = "Could establish a connection with the service, Unknown CA.";
+		}	
+		return m;	
+	}
+
 
 }

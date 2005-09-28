@@ -4,9 +4,6 @@ import javax.swing.JOptionPane;
 
 import org.projectmobius.portal.PortalResourceManager;
 
-
-
-
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -15,39 +12,35 @@ import org.projectmobius.portal.PortalResourceManager;
  *          Exp $
  */
 
-public class PortalUtils{
-	
-	public static String parseGlobusErrorMessage(Exception e){
-		String err = e.getMessage();
-		String ex = "java.rmi.RemoteException:";
-		if(err!=null){
-		int index = err.indexOf(ex);
-		if(index>=0){
-			err = err.substring(index+ex.length());
-		}
-		}else{
-			err = "Unknown Error";
-		}
-		return err;
+public class PortalUtils {
+
+	public static void showErrorMessage(String msg) {
+		showErrorMessage("Portal Error", msg);
+	}
+	public static void showErrorMessage(Exception e) {
+		showErrorMessage("Portal Error", e);
+	}
+
+	public static void showConfigurationErrorMessage(String msg) {
+		showErrorMessage("Portal Configuration Error", msg);
+	}
+
+	public static void showMessage(String msg) {
+		showMessage("Information", msg);
+	}
+
+	public static void showMessage(String title, String msg) {
+		JOptionPane.showMessageDialog(PortalResourceManager.getInstance()
+				.getGridPortal(), msg, title, JOptionPane.INFORMATION_MESSAGE);
 	}
 	
-	public static void showErrorMessage(String msg){
-		showErrorMessage("Portal Error",msg);
+	public static void showErrorMessage(String title,Exception e) {
+		JOptionPane.showMessageDialog(PortalResourceManager.getInstance()
+				.getGridPortal(), e.getMessage(), title, JOptionPane.ERROR_MESSAGE);
 	}
-	
-	public static void showConfigurationErrorMessage(String msg){
-		showErrorMessage("Portal Configuration Error",msg);
-	}
-	
-	public static void showMessage(String msg){
-		showMessage("Information",msg);
-	}
-	
-	public static void showMessage(String title, String msg){
-		JOptionPane.showMessageDialog(PortalResourceManager.getInstance().getGridPortal(),msg,title,JOptionPane.INFORMATION_MESSAGE);
-	}
-	
-	public static void showErrorMessage(String title, String msg){
-		JOptionPane.showMessageDialog(PortalResourceManager.getInstance().getGridPortal(),msg,title,JOptionPane.ERROR_MESSAGE);
+
+	public static void showErrorMessage(String title, String msg) {
+		JOptionPane.showMessageDialog(PortalResourceManager.getInstance()
+				.getGridPortal(), msg, title, JOptionPane.ERROR_MESSAGE);
 	}
 }
