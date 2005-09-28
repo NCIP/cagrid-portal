@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.gums.service;
 import gov.nih.nci.cagrid.gums.Registration;
 import gov.nih.nci.cagrid.gums.bean.AttributeDescriptor;
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
+import gov.nih.nci.cagrid.gums.common.FaultUtil;
 
 public class GUMS implements Registration{
 	
@@ -17,10 +18,9 @@ public class GUMS implements Registration{
 	public AttributeDescriptor[] getRequiredUserAttributes() throws GUMSInternalFault {
 		try{
 		return jm.getUserAttributeManager().getRequiredAttributes();
-		}catch(Exception e){
-			GUMSInternalFault fault = new GUMSInternalFault();
-			fault.setFaultString(e.getMessage());
-			throw fault;
+		}catch(GUMSInternalFault e){
+			FaultUtil.printFault(e);
+			throw e;
 		}
 	}
 
