@@ -1,12 +1,12 @@
 package gov.nih.nci.cagrid.gums.client.wsrf;
 
-import gov.nih.nci.cagrid.gums.bean.AttributeDescriptor;
+import gov.nih.nci.cagrid.gums.bean.UserApplication;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: Client.java,v 1.2 2005-09-27 20:09:50 langella Exp $
+ * @version $Id: Client.java,v 1.3 2005-09-28 21:14:13 langella Exp $
  */
 public class Client {
 
@@ -14,14 +14,8 @@ public class Client {
 		try {
 			//String serviceURI = "https://localhost:8443/wsrf/services/cagrid/gums";
 			String serviceURI = "http://localhost:8080/wsrf/services/cagrid/gums";
-		
-			GUMSRegistrationClient client = new GUMSRegistrationClient(serviceURI);
-			
-			AttributeDescriptor[] des = client.getRequiredUserAttributes();
-			 for(int i=0; i<des.length; i++){
-				System.out.println(des[i].getNamespace()+" - "+des[i].getName());
-			 }
-	
+			GUMSRegistrationClient client = new GUMSRegistrationClient(serviceURI);	
+			System.out.println("OUT"+client.registerUser(new UserApplication()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

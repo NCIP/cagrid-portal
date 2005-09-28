@@ -47,12 +47,26 @@
 		</xsd:complexType>
 	</xsd:element>
 	
+	<xsd:element name="registerUser" minOccurs="1" maxOccurs="1" type="gums:userApplication"/>
+	
+	<!--
+	<xsd:element name="registerUser">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="application" minOccurs="1" maxOccurs="1" type="gums:userApplication"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	-->
+	<xsd:element name="registerUserResponse" type="xsd:string"/>
+	
 	
 	<xsd:element name="createProxy" type="gums:createProxyRequest"/>
 	<xsd:element name="createProxyResponse" type="xsd:string"/>
 
 
 	<xsd:element name="gumsInternalFault" type="gums:GUMSInternalFault"/>
+	<xsd:element name="invalidApplicationFault" type="gums:InvalidApplicationFault"/>
 			
 	<!-- RESOURCE PROPERTIES -->
    
@@ -90,9 +104,20 @@
 	<part name="parameters" element="tns:requiredUserAttributesResponse"/>
 </message>
 
+<message name="RegisterUserInputMessage">
+	<part name="parameters" element="tns:registerUser"/>
+</message>
+<message name="RegisterUserOutputMessage">
+	<part name="parameters" element="tns:registerUserResponse"/>
+</message>
+
 
 	<message name="GUMSInternalFaultMessage">
 		<part name="fault" element="tns:gumsInternalFault" />
+	</message>
+	
+	<message name="InvalidApplicationFaultMessage">
+		<part name="fault" element="tns:invalidApplicationFault" />
 	</message>
 
 
@@ -110,6 +135,13 @@
 		<input message="tns:GetRequiredUserAttributesInputMessage"/>
 		<output message="tns:GetRequiredUserAttributesOutputMessage"/>
 		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFaultMessage"/>
+	</operation>
+	
+	  <operation name="registerUser">
+		<input message="tns:RegisterUserInputMessage"/>
+		<output message="tns:RegisterUserOutputMessage"/>
+		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
+	    <fault message="tns:InvalidApplicationFaultMessage" name="InvalidApplicationFault"/>
 	</operation>
 
 	<operation name="createProxy">

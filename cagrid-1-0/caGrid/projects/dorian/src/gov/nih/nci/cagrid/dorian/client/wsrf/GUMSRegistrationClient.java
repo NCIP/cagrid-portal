@@ -3,6 +3,8 @@ package gov.nih.nci.cagrid.gums.client.wsrf;
 import gov.nih.nci.cagrid.gums.Registration;
 import gov.nih.nci.cagrid.gums.bean.AttributeDescriptor;
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
+import gov.nih.nci.cagrid.gums.bean.InvalidApplicationFault;
+import gov.nih.nci.cagrid.gums.bean.UserApplication;
 import gov.nih.nci.cagrid.gums.common.GUMSException;
 import gov.nih.nci.cagrid.gums.wsrf.GUMSPortType;
 import gov.nih.nci.cagrid.gums.wsrf.RequiredUserAttributes;
@@ -50,5 +52,30 @@ public class GUMSRegistrationClient extends GUMSBaseClient implements
 			throw new GUMSException(simplifyMessage(e.getMessage()));
 		}
 	}
+
+	public String registerUser(UserApplication application) throws InvalidApplicationFault, GUMSInternalFault,GUMSException {
+		GUMSPortType port = null;
+		try {
+			port = this
+					.getPort(new AnonymousSecureConversationWithEncryption());
+
+		}catch (Exception e) {
+			e.printStackTrace();
+			throw new GUMSException(e.getMessage());
+		}
+		try {
+			return port.registerUser(application);
+		} catch(GUMSInternalFault gie){
+			throw gie;
+		}catch(AxisFault fault){
+			fault.printStackTrace();
+			throw new GUMSException(simplifyMessage(fault.getFaultString()));
+		}catch (RemoteException e) {
+			e.printStackTrace();
+			throw new GUMSException(simplifyMessage(e.getMessage()));
+		}
+	}
+	
+	
 
 }
