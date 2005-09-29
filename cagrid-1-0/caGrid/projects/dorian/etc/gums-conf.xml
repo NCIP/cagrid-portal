@@ -12,6 +12,9 @@
 			<password>gomets123</password>
 			<pool>1</pool>
 		</database>
-        </gums-config>
+		<username-length min="4" max="20"/>
+		<password-length min="6" max="10"/>
+		<default-proxy-time hours="12"/>
+		<outgoing-email host="columbus.bmi.ohio-state.edu" port="25" protocol="smtp"/>
 	</resource>	
 </gums>

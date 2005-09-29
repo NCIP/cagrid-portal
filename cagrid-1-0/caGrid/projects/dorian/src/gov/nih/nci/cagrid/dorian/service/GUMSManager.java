@@ -19,6 +19,7 @@ public class GUMSManager extends MobiusResourceManager{
 	
 	private Database db;
 	private RequiredAttributesManager userAttributeManager;
+	private ApplicationManager applicationManager;
 	public static String GUMS_CONFIGURATION_FILE="etc/gums-conf.xml";
 	public static final String GUMS_CONFIGURATION_RESOURCE="GUMSConfiguration";
 	public static final String REQUIRED_USER_ATTRIBUTES = "REQUIRED_USER_ATTRIBUTES";
@@ -35,16 +36,21 @@ public class GUMSManager extends MobiusResourceManager{
 			fault = (GUMSInternalFault)helper.getFault();
 			throw fault;
 		}	
-		this.db = new Database(getJanusConfiguration().getConnectionManager(),getJanusConfiguration().getGUMSInternalId());
+		this.db = new Database(getGUMSConfiguration().getConnectionManager(),getGUMSConfiguration().getGUMSInternalId());
 		this.db.createDatabaseIfNeeded();
+		
 		this.userAttributeManager = new RequiredAttributesManager(this.db,REQUIRED_USER_ATTRIBUTES);
 		AttributeDescriptor des = new AttributeDescriptor();
 		des.setNamespace("cagrid.nci.nih.gov/1/person");
 		des.setName("person");
 		this.userAttributeManager.insertRequiredAttribute(des);
+		
+		
+		
+		
 	}
 	
-	public GUMSConfiguration getJanusConfiguration(){
+	public GUMSConfiguration getGUMSConfiguration(){
 		return (GUMSConfiguration)this.getResource(GUMS_CONFIGURATION_RESOURCE);
 	}
 	

@@ -1,7 +1,7 @@
 <gums>
 	<resource name="GUMSConfiguration" class="gov.nih.nci.cagrid.gums.service.GUMSConfiguration">
 		<gums-config>
-		   <gums-internal-id>TEST_GUMS</gums-internal-id>
+			<gums-internal-id>TEST_GUMS</gums-internal-id>
 		    <database>
 			<name/>
 			<driver>com.mysql.jdbc.Driver</driver>
@@ -12,6 +12,10 @@
 			<password>gomets123</password>
 			<pool>1</pool>
 		</database>
+		<username-length min="4" max="20"/>
+		<password-length min="6" max="10"/>
+		<default-proxy-time hours="12"/>
+		<outgoing-email host="columbus.bmi.ohio-state.edu" port="25" protocol="smtp"/>
         </gums-config>
 	</resource>	
 </gums>

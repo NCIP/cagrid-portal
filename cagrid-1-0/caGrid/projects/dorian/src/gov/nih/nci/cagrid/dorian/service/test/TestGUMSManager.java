@@ -12,7 +12,7 @@ import junit.framework.TestCase;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TestGUMSManager.java,v 1.3 2005-09-28 20:19:09 langella Exp $
+ * @version $Id: TestGUMSManager.java,v 1.4 2005-09-29 18:21:25 langella Exp $
  */
 public class TestGUMSManager extends TestCase{
 	public static String RESOURCES_DIR = "resources" + File.separator
@@ -22,7 +22,7 @@ public class TestGUMSManager extends TestCase{
     	try{
     		GUMSManager.GUMS_CONFIGURATION_FILE = RESOURCES_DIR+File.separator+"gums-conf.xml";
     		GUMSManager jm = GUMSManager.getInstance();
-    		assertNotNull(jm.getJanusConfiguration());
+    		assertNotNull(jm.getGUMSConfiguration());
     		assertNotNull(jm.getDatabase());
     		RequiredAttributesManager atts = jm.getUserAttributeManager();
     		assertNotNull(atts);

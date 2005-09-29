@@ -6,9 +6,15 @@ General Tasks
 3) Test different security mechanisms in globus 4 (DONE)
 4) Port Proxy Util (DONE)
 5) Fix Certificate Timing Problem (DONE)
-6) Write Test for Proxy Util
-7) Explore MD5WithRSAEncryption
-8) Cleanup Proxy Util
+6) Write Test for Proxy Util (DONE)
+7) Explore MD5WithRSAEncryption (DONE)
+8) Cleanup Proxy Util (DONE)
+
+Implementation Issues
+----------------------
+
+1) Once user management system is in place, edit the Application Manager registerUser method
+such that it checks for already existing users.
 
 
 Security Test For Globus 4
