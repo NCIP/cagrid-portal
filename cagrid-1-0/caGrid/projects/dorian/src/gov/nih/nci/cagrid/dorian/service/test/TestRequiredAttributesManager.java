@@ -1,8 +1,8 @@
 package gov.nih.nci.cagrid.gums.service.test;
 
 import gov.nih.nci.cagrid.gums.bean.AttributeDescriptor;
+import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
-import gov.nih.nci.cagrid.gums.service.Database;
 import gov.nih.nci.cagrid.gums.service.RequiredAttributesManager;
 
 import java.io.File;

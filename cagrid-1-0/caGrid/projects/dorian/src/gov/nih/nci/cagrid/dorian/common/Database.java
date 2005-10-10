@@ -1,7 +1,6 @@
-package gov.nih.nci.cagrid.gums.service;
+package gov.nih.nci.cagrid.gums.common;
 
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.common.GUMSObject;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -16,7 +15,7 @@ import org.projectmobius.db.Query;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: Database.java,v 1.4 2005-09-28 20:40:10 langella Exp $
+ * @version $Id: Database.java,v 1.1 2005-10-10 19:13:17 langella Exp $
  */
 public class Database extends GUMSObject {
 

@@ -21,7 +21,7 @@ import org.bouncycastle.jce.PKCS10CertificationRequest;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: CreateUserCertificate.java,v 1.1 2005-09-27 18:31:18 langella Exp $
+ * @version $Id: CreateUserCertificate.java,v 1.2 2005-10-10 19:13:17 langella Exp $
  */
 public class CreateUserCertificate {
 
@@ -34,7 +34,7 @@ public class CreateUserCertificate {
 			PrivateKey cakey = null;
 			while(true){
 				try{
-					String key = IOUtils.readLineUntilEntered("Enter CA key location");
+					String key = IOUtils.readLine("Enter CA key location",true);
 					String password = IOUtils.readLine("Enter CA key password.");
 					cakey = KeyUtil.loadPrivateKey(key,password);
 					break;
@@ -47,14 +47,14 @@ public class CreateUserCertificate {
 			
 			while(true){
 				try{
-					String cert = IOUtils.readLineUntilEntered("Enter CA certificate location");
+					String cert = IOUtils.readLine("Enter CA certificate location",true);
 					cacert = CertUtil.loadCertificate(cert);
 					break;
 				}catch(Exception e){
 					e.printStackTrace();		
 				}
 			}
-			String cn = IOUtils.readLineUntilEntered("Enter Common Name (CN)");
+			String cn = IOUtils.readLine("Enter Common Name (CN)",true);
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			String rootSub = cacert.getSubjectDN().toString();
 			int index = rootSub.lastIndexOf(",");

@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.gums.service;
 
 import gov.nih.nci.cagrid.gums.bean.AttributeDescriptor;
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
+import gov.nih.nci.cagrid.gums.common.Database;
 
 import org.globus.wsrf.utils.FaultHelper;
 import org.projectmobius.common.MobiusConfigurator;
@@ -19,11 +20,11 @@ public class GUMSManager extends MobiusResourceManager{
 	
 	private Database db;
 	private RequiredAttributesManager userAttributeManager;
-	private ApplicationManager applicationManager;
 	public static String GUMS_CONFIGURATION_FILE="etc/gums-conf.xml";
 	public static final String GUMS_CONFIGURATION_RESOURCE="GUMSConfiguration";
 	public static final String REQUIRED_USER_ATTRIBUTES = "REQUIRED_USER_ATTRIBUTES";
 	private static GUMSManager instance;
+	private CredentialsManager credentialsManager;
 	
 	private GUMSManager() throws GUMSInternalFault{
 		try{
@@ -45,7 +46,7 @@ public class GUMSManager extends MobiusResourceManager{
 		des.setName("person");
 		this.userAttributeManager.insertRequiredAttribute(des);
 		
-		
+		this.credentialsManager = new CredentialsManager(db);
 		
 		
 	}
@@ -69,6 +70,10 @@ public class GUMSManager extends MobiusResourceManager{
 
 	public RequiredAttributesManager getUserAttributeManager() {
 		return userAttributeManager;
+	}
+
+	public CredentialsManager getCredentialsManager() {
+		return credentialsManager;
 	}
 
 	
