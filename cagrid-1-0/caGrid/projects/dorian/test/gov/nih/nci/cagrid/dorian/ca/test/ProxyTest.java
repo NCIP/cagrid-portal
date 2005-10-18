@@ -19,7 +19,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ProxyTest.java,v 1.2 2005-09-28 20:19:09 langella Exp $
+ * @version $Id: ProxyTest.java,v 1.1 2005-10-18 18:10:04 langella Exp $
  */
 public class ProxyTest extends TestCase {
 	public static String RESOURCES_DIR = "resources" + File.separator

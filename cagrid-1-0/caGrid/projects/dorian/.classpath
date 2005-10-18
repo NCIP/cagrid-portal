@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/junit.jar"/>
 	<classpathentry kind="lib" path="lib/junit-addons-1.4.jar"/>
@@ -72,5 +73,6 @@
 	<classpathentry kind="lib" path="lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
 	<classpathentry kind="lib" path="resources/portal/common"/>
 	<classpathentry kind="lib" path="resources/portal/gums"/>
+	<classpathentry kind="lib" path="lib/jdepend-2.7-patched.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: IOUtils.java,v 1.2 2005-10-10 19:13:17 langella Exp $
+ * @version $Id: IOUtils.java,v 1.3 2005-10-18 18:10:04 langella Exp $
  */
 public class IOUtils {
 	
@@ -51,6 +51,8 @@ public class IOUtils {
 		String s = null;
 
 		try {
+			System.out.print(prompt + ":");
+			s = br.readLine();
 			while (force&&((s == null) || (s.trim().length() == 0))) {
 				System.out.print(prompt + ":");
 				s = br.readLine();

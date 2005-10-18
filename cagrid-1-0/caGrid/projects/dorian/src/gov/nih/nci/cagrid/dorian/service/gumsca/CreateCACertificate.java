@@ -26,7 +26,7 @@ import org.bouncycastle.asn1.x509.X509Name;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: CreateCACertificate.java,v 1.1 2005-10-10 19:13:17 langella Exp $
+ * @version $Id: CreateCACertificate.java,v 1.2 2005-10-18 18:10:04 langella Exp $
  */
 public class CreateCACertificate {
 
@@ -96,7 +96,7 @@ public class CreateCACertificate {
 				GUMSCertificateAuthority ca = new GUMSCertificateAuthority(jm
 						.getDatabase(), conf);
 				boolean interactive = false;
-				if (line.getOptionValue(INTERACTIVE_MODE_OPT) != null) {
+				if (line.hasOption(INTERACTIVE_MODE_OPT)) {
 					interactive = true;
 				}
 				String sub = null;
