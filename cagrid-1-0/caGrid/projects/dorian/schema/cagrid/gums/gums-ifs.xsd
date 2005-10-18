@@ -1,0 +1,72 @@
+<xsd:schema targetNamespace="http://cagrid.nci.nih.gov/gums/ifs/bean"
+	attributeFormDefault="qualified"
+	elementFormDefault="qualified"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	xmlns:ifs="http://cagrid.nci.nih.gov/gums/ifs/bean" xmlns:wsbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd">
+	
+	
+	    <xsd:complexType name="attributeDescriptor">
+			<xsd:sequence>
+				<xsd:element name="namespace" type="xsd:string"/>
+				<xsd:element name="name" type="xsd:string"/>
+			</xsd:sequence>
+	    </xsd:complexType>
+	    
+	   	<xsd:complexType name="attribute">
+	    	<xsd:sequence>
+			    <xsd:element name="attributeDesc" minOccurs="1" maxOccurs="1" type="ifs:attributeDescriptor"/>
+				<xsd:element name="attributeXML" minOccurs="1" maxOccurs="1" type="xsd:string"/>			
+			</xsd:sequence>
+		</xsd:complexType>
+	
+		<xsd:complexType name="userApplication">
+			<xsd:sequence>
+				<xsd:element name="username" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+				<xsd:element name="password" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+				<xsd:element name="status" minOccurs="0" maxOccurs="1" type="xsd:string"/>
+				<xsd:element name="email" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+				<xsd:element name="userAttributes" minOccurs="1" maxOccurs="unbounded" type="ifs:attribute"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	
+		<xsd:complexType name="createProxyRequest">
+			<xsd:sequence>
+				<xsd:element name="basicAuthenticationCredential" minOccurs="1" maxOccurs="1" type="ifs:basicAuthCredential"/>
+				<xsd:element name="hours" minOccurs="1" maxOccurs="1" type="xsd:integer"/>
+			</xsd:sequence>
+		</xsd:complexType>
+		
+
+
+	<xsd:complexType name="basicAuthCredential">
+			<xsd:sequence>
+				<xsd:element name="username" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+				<xsd:element name="password" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+			</xsd:sequence>
+	</xsd:complexType>
+	
+	 <xsd:complexType name="GUMSInternalFault">
+				<xsd:complexContent>
+					<xsd:extension base="wsbf:BaseFaultType" />
+				</xsd:complexContent>
+	 </xsd:complexType>
+	 
+	  <xsd:complexType name="InvalidApplicationFault">
+				<xsd:complexContent>
+					<xsd:extension base="wsbf:BaseFaultType" />
+				</xsd:complexContent>
+	 </xsd:complexType>
+	 
+	 <xsd:complexType name="ApplicationNotFoundFault">
+				<xsd:complexContent>
+					<xsd:extension base="wsbf:BaseFaultType" />
+				</xsd:complexContent>
+	 </xsd:complexType>
+	 
+	  <xsd:complexType name="InvalidPasswordFault">
+				<xsd:complexContent>
+					<xsd:extension base="wsbf:BaseFaultType" />
+				</xsd:complexContent>
+	 </xsd:complexType>
+		
+</xsd:schema>

@@ -1,9 +1,9 @@
 package gov.nih.nci.cagrid.gums.service;
 
-import gov.nih.nci.cagrid.gums.bean.AttributeDescriptor;
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
+import gov.nih.nci.cagrid.gums.ifs.bean.AttributeDescriptor;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

@@ -1,15 +1,14 @@
 package gov.nih.nci.cagrid.gums.service.test;
 
-import gov.nih.nci.cagrid.gums.bean.AttributeDescriptor;
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
+import gov.nih.nci.cagrid.gums.ifs.bean.AttributeDescriptor;
 import gov.nih.nci.cagrid.gums.service.RequiredAttributesManager;
 
 import java.io.File;
 
 import junit.framework.TestCase;
 
-import org.globus.wsrf.utils.FaultHelper;
 import org.jdom.Document;
 import org.projectmobius.common.XMLUtilities;
 import org.projectmobius.db.ConnectionManager;

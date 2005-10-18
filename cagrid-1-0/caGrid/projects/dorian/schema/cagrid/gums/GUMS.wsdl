@@ -20,6 +20,8 @@
 		location="../../wsrf/faults/WS-BaseFaults.wsdl" />
     
 <import location="gums.xsd" namespace="http://cagrid.nci.nih.gov/gums/bean"/>
+<import location="gums-idp.xsd" namespace="http://cagrid.nci.nih.gov/gums/idp/bean"/>
+<import location="gums-ifs.xsd" namespace="http://cagrid.nci.nih.gov/gums/ifs/bean"/>
 
 <!--============================================================
 
@@ -30,7 +32,10 @@
 <xsd:schema targetNamespace="http://cagrid.nci.nih.gov/gums"
     xmlns:tns="http://cagrid.nci.nih.gov/gums"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-    xmlns:gums="http://cagrid.nci.nih.gov/gums/bean">
+    xmlns:gums="http://cagrid.nci.nih.gov/gums/bean"
+    xmlns:ifs="http://cagrid.nci.nih.gov/gums/ifs/bean"
+    xmlns:idp="http://cagrid.nci.nih.gov/gums/idp/bean"
+    >
     
 
 	<!-- REQUESTS AND RESPONSES -->
@@ -42,18 +47,18 @@
 	<xsd:element name="requiredUserAttributesResponse">
 		<xsd:complexType>
 			<xsd:sequence>
-				<xsd:element name="attributeDescriptors" minOccurs="0" maxOccurs="unbounded" type="gums:attributeDescriptor"/>
+				<xsd:element name="attributeDescriptors" minOccurs="0" maxOccurs="unbounded" type="ifs:attributeDescriptor"/>
 			</xsd:sequence>
 		</xsd:complexType>
 	</xsd:element>
 	
-	<xsd:element name="registerUser" minOccurs="1" maxOccurs="1" type="gums:userApplication"/>
+	<xsd:element name="registerUser" minOccurs="1" maxOccurs="1" type="ifs:userApplication"/>
 	
 	<!--
 	<xsd:element name="registerUser">
 		<xsd:complexType>
 			<xsd:sequence>
-				<xsd:element name="application" minOccurs="1" maxOccurs="1" type="gums:userApplication"/>
+				<xsd:element name="application" minOccurs="1" maxOccurs="1" type="ifs:userApplication"/>
 			</xsd:sequence>
 		</xsd:complexType>
 	</xsd:element>
@@ -61,12 +66,12 @@
 	<xsd:element name="registerUserResponse" type="xsd:string"/>
 	
 	
-	<xsd:element name="createProxy" type="gums:createProxyRequest"/>
+	<xsd:element name="createProxy" type="ifs:createProxyRequest"/>
 	<xsd:element name="createProxyResponse" type="xsd:string"/>
 
 
 	<xsd:element name="gumsInternalFault" type="gums:GUMSInternalFault"/>
-	<xsd:element name="invalidApplicationFault" type="gums:InvalidApplicationFault"/>
+	<xsd:element name="invalidApplicationFault" type="ifs:InvalidApplicationFault"/>
 			
 	<!-- RESOURCE PROPERTIES -->
    

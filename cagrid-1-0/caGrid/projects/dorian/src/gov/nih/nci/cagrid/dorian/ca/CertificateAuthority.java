@@ -1,8 +1,7 @@
 package gov.nih.nci.cagrid.gums.ca;
 
-import java.util.Date;
-
 import java.security.cert.X509Certificate;
+import java.util.Date;
 
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 

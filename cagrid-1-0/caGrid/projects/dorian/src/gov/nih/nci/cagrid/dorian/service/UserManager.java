@@ -1,28 +1,14 @@
 package gov.nih.nci.cagrid.gums.service;
 
-import gov.nih.nci.cagrid.gums.bean.ApplicationNotFoundFault;
-import gov.nih.nci.cagrid.gums.bean.Attribute;
-import gov.nih.nci.cagrid.gums.bean.AttributeDescriptor;
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.bean.InvalidApplicationFault;
-import gov.nih.nci.cagrid.gums.bean.UserApplication;
 import gov.nih.nci.cagrid.gums.common.Database;
-import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
-
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.globus.wsrf.utils.FaultHelper;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManager.java,v 1.2 2005-10-18 14:55:05 langella Exp $
+ * @version $Id: UserManager.java,v 1.3 2005-10-18 23:23:48 langella Exp $
  */
 public class UserManager extends GUMSObject {
 

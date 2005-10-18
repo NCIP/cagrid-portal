@@ -1,20 +1,12 @@
-package gov.nih.nci.cagrid.gums.service;
+package gov.nih.nci.cagrid.gums.idm;
 
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
 import gov.nih.nci.cagrid.gums.common.Database;
-import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
-import gov.nih.nci.cagrid.gums.ifs.bean.ApplicationNotFoundFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.Attribute;
-import gov.nih.nci.cagrid.gums.ifs.bean.AttributeDescriptor;
-import gov.nih.nci.cagrid.gums.ifs.bean.InvalidApplicationFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.UserApplication;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.globus.wsrf.utils.FaultHelper;
 
@@ -22,9 +14,9 @@ import org.globus.wsrf.utils.FaultHelper;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ApplicationManager.java,v 1.3 2005-10-18 23:23:48 langella Exp $
+ * @version $Id: IdentityManager.java,v 1.1 2005-10-18 23:23:48 langella Exp $
  */
-public class ApplicationManager extends GUMSObject {
+public class IdentityManager extends GUMSObject {
 
 	public static final String ALL_APPLICATIONS = "*";
 
@@ -34,9 +26,8 @@ public class ApplicationManager extends GUMSObject {
 
 	public static final String PENDING_REVIEW = "P";
 
-	private static final String APPLICATIONS_TABLE = "USER_APPLICATIONS";
+	private static final String IDM_USERS_TABLE = "IDM_USERS";
 
-	private static final String USER_APPLICATION_ATTRIBUTES = "USER_APPLICATION_ATTRIBUTES";
 
 	private static final String REGISTRATION_MESSAGE = "Thank you for your applicaiton, after your application is reviewed you will be contacted via email with the result.";
 	
@@ -44,7 +35,7 @@ public class ApplicationManager extends GUMSObject {
 
 	private boolean dbBuilt = false;
 
-	public ApplicationManager(Database db){
+	public IdentityManager(Database db){
 		this.db = db;
 	}
 
@@ -56,7 +47,7 @@ public class ApplicationManager extends GUMSObject {
 			c = db.getConnectionManager().getConnection();
 			Statement s = c.createStatement();
 			ResultSet rs = s
-					.executeQuery("select count(*) from " + APPLICATIONS_TABLE
+					.executeQuery("select count(*) from " + IDM_USERS_TABLE
 							+ " where username='" + username + "'");
 			if (rs.next()) {
 				int count = rs.getInt(1);
@@ -82,177 +73,42 @@ public class ApplicationManager extends GUMSObject {
 		return exists;
 	}
 
-	public UserApplication getApplication(String username)
-			throws GUMSInternalFault,ApplicationNotFoundFault {
-		this.buildDatabase();
-		UserApplication app = new UserApplication();
-		app.setUsername(username);
-		Connection c = null;
-		try {
-			c = db.getConnectionManager().getConnection();
-			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery("select * from " + APPLICATIONS_TABLE
-					+ " where username='" + username + "'");
-			if (rs.next()) {
-				app.setPassword(rs.getString("PASSWORD"));
-				app.setEmail(rs.getString("EMAIL"));
-				app.setStatus(rs.getString("STATUS"));
-			} else {
-				app = null;
-			}
+	
 
-			rs.close();
-			s.close();
-
-		} catch (Exception e) {
-			logError(e.getMessage(), e);
-			GUMSInternalFault fault = new GUMSInternalFault();
-			fault.setFaultString("Unexpected Database Error, could not obtain the application for the user "
-							+ username + ".");
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (GUMSInternalFault)helper.getFault();
-			throw fault;
-		} finally {
-			db.getConnectionManager().releaseConnection(c);
-		}
-		if (app == null) {
-			ApplicationNotFoundFault fault = new ApplicationNotFoundFault();
-			fault.setFaultString("The application for the user " + username
-					+ " does not exist.");
-			throw fault;
-		}
-		List info = getUserInformation(username);
-		Attribute[] atts = new Attribute[info.size()];
-		for (int i = 0; i < info.size(); i++) {
-			atts[i] = (Attribute) info.get(i);
-		}
-		app.setUserAttributes(atts);
-		return app;
-	}
-
-	private List getUserInformation(String username) throws GUMSInternalFault {
-		this.buildDatabase();
-		List l = new ArrayList();
-		Connection c = null;
-		try {
-			c = db.getConnectionManager().getConnection();
-			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery("select * from "
-					+ USER_APPLICATION_ATTRIBUTES + " where username='" + username
-					+ "'");
-			while (rs.next()) {
-				Attribute att = new Attribute();
-				AttributeDescriptor des = new AttributeDescriptor(rs.getString("NAMESPACE"),rs.getString("NAME"));
-				att.setAttributeDesc(des);
-				att.setAttributeXML(rs.getString("XML"));
-				l.add(att);
-			}
-
-			rs.close();
-			s.close();
-
-		} catch (Exception e) {
-			logError(e.getMessage(), e);
-			GUMSInternalFault fault = new GUMSInternalFault();
-			fault.setFaultString("Unexpected Database Error, could not obtain the attributes for the user "
-							+ username + ".");
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (GUMSInternalFault)helper.getFault();
-			throw fault;
-		} finally {
-			db.getConnectionManager().releaseConnection(c);
-		}
-
-		return l;
-	}
-
-	public UserApplication[] getApplications(String status)
-			throws GUMSInternalFault {
-		this.buildDatabase();
-		StringBuffer sql = new StringBuffer();
-		sql.append("select USERNAME from " + APPLICATIONS_TABLE);
-		if (!status.equals(ALL_APPLICATIONS)) {
-			sql.append(" where STATUS='" + status + "'");
-		}
-
-		Connection c = null;
-		List l = new ArrayList();
-		try {
-			c = db.getConnectionManager().getConnection();
-			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery(sql.toString());
-			while (rs.next()) {
-				l.add(rs.getString(1));
-			}
-			rs.close();
-			s.close();
-
-		} catch (Exception e) {
-			logError(e.getMessage(), e);
-			GUMSInternalFault fault = new GUMSInternalFault();
-			fault.setFaultString("Unexpected Database Error, could not obtain the applications.");
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (GUMSInternalFault)helper.getFault();
-			throw fault;
-		} finally {
-			db.getConnectionManager().releaseConnection(c);
-		}
-
-		UserApplication[] apps = new UserApplication[l.size()];
-		for (int i = 0; i < l.size(); i++) {
-			try{
-			apps[i] = getApplication((String) l.get(i));
-			}catch (ApplicationNotFoundFault e) {
-				FaultUtil.printFault(e);
-			}
-		}
-		return apps;
-	}
-
-	private void insertApplication(UserApplication app)
+	private void insertUser(String email, String password,String firstName, String lastName, String organization, String address, String address2, String city, String state, String zipcode,boolean admin, String status)
 	throws GUMSInternalFault{
 		this.buildDatabase();
-		db.update("INSERT INTO " + APPLICATIONS_TABLE + " VALUES('"
+		/*
+		
+		db.update("INSERT INTO " + IDM_USERS_TABLE + " VALUES('"
 				+ app.getUsername() + "','" + app.getPassword() + "','"
 				+ PENDING_REVIEW + "','" + app.getEmail() + "')");
 		Attribute[] atts = app.getUserAttributes();
 		for (int i = 0; i < atts.length; i++) {
 			this.insertUserAttribute(app.getUsername(), atts[i]);
 		}
+		*/
 	}
 
-	private void insertUserAttribute(String username, Attribute att)
-			throws GUMSInternalFault{
-		this.buildDatabase();
-		db.update("INSERT INTO " + USER_APPLICATION_ATTRIBUTES + " VALUES('"
-				+ username + "','" + att.getAttributeDesc().getNamespace() + "','"
-				+ att.getAttributeDesc().getName() + "','" + att.getAttributeXML()
-				+ "')");
-
-	}
 
 	private void buildDatabase() throws GUMSInternalFault {
 		if (!dbBuilt) {
-			if (!this.db.tableExists(APPLICATIONS_TABLE)) {
-				String applications = "CREATE TABLE " + APPLICATIONS_TABLE
-						+ " (" + "USERNAME VARCHAR(255) NOT NULL PRIMARY KEY,"
+			if (!this.db.tableExists(IDM_USERS_TABLE)) {
+				String applications = "CREATE TABLE " + IDM_USERS_TABLE
+						+ " (" + "EMAIL VARCHAR(255) NOT NULL PRIMARY KEY,"
 						+ "PASSWORD VARCHAR(255) NOT NULL,"
+						+ "FIRST_NAME VARCHAR(255) NOT NULL,"
+						+ "LAST_NAME VARCHAR(255) NOT NULL,"
+						+ "ORGANIZATION VARCHAR(255) NOT NULL,"
+						+ "ADDRESS VARCHAR(255) NOT NULL,"
+						+ "ADDRESS2 VARCHAR(255) NOT NULL,"
+						+ "CITY VARCHAR(255) NOT NULL,"
+						+ "STATE VARCHAR(255) NOT NULL,"
+						+ "ZIP_CODE VARCHAR(255) NOT NULL,"
 						+ "STATUS VARCHAR(1) NOT NULL,"
-						+ "EMAIL VARCHAR(255) NOT NULL, "
-						+ "INDEX document_index (USERNAME));";
+						+ "ADMIN VARCHAR(5) NOT NULL,"
+						+ "INDEX document_index (EMAIL));";
 				db.update(applications);
-			}
-			if (!this.db.tableExists(USER_APPLICATION_ATTRIBUTES)) {
-				String info = "CREATE TABLE " + USER_APPLICATION_ATTRIBUTES + " ("
-						+ "USERNAME VARCHAR(255) NOT NULL,"
-						+ "NAMESPACE VARCHAR(255) NOT NULL,"
-						+ "NAME VARCHAR(255) NOT NULL, "
-						+ "XML TEXT NOT NULL, "
-						+ "INDEX document_index (USERNAME));";
-				db.update(info);
 			}
 			this.dbBuilt = true;
 		}
@@ -261,57 +117,12 @@ public class ApplicationManager extends GUMSObject {
 	private void changeApplicationStatus(String username, String status)
 			throws GUMSInternalFault {
 		this.buildDatabase();
-		db.update("update " + APPLICATIONS_TABLE + " SET STATUS='" + status
+		db.update("update " + IDM_USERS_TABLE + " SET STATUS='" + status
 				+ "' where USERNAME='" + username + "'");
 	}
 
 
-	public String registerUser(UserApplication app) throws GUMSInternalFault,InvalidApplicationFault {
-		this.buildDatabase();
-		/*
-		if (userManager.userExists(app.getUsername())) {
-			InvalidApplicationFault fault = new InvalidApplicationFault();
-			fault.setFaultString("Cannot register the user "
-					+ app.getUsername() + " the username already exists.");
-			throw fault;
-		}
-		*/
-		if (applicationExists(app.getUsername())) {
-			InvalidApplicationFault fault = new InvalidApplicationFault();
-			fault.setFaultString("Cannot register the user "
-					+ app.getUsername()
-					+ ", an application for that username has already been received.");
-			throw fault;
-		} 
-			int ulen = app.getUsername().length();
-			if ((ulen < GUMSManager.getInstance().getGUMSConfiguration().getMinimumUsernameLength())
-					|| (ulen > GUMSManager.getInstance().getGUMSConfiguration().getMaximumUsernameLength())) {
-				InvalidApplicationFault fault = new InvalidApplicationFault();
-				fault.setFaultString("Cannot register the user "
-						+ app.getUsername() + " the username must be between "
-						+ GUMSManager.getInstance().getGUMSConfiguration().getMinimumUsernameLength()
-						+ " and "
-						+ GUMSManager.getInstance().getGUMSConfiguration().getMaximumUsernameLength()
-						+ " characters.");
-				throw fault;
-			}
-
-			int plen = app.getPassword().length();
-			if ((plen < GUMSManager.getInstance().getGUMSConfiguration().getMinimumPasswordLength())
-					|| (plen > GUMSManager.getInstance().getGUMSConfiguration().getMaximumPasswordLength())) {
-				InvalidApplicationFault fault = new InvalidApplicationFault();
-				fault.setFaultString("Cannot register the user "
-						+ app.getUsername() + " the password must be between "
-						+ GUMSManager.getInstance().getGUMSConfiguration().getMinimumPasswordLength()
-						+ " and "
-						+ GUMSManager.getInstance().getGUMSConfiguration().getMaximumPasswordLength()
-						+ " characters.");
-				throw fault;
-			}
-			insertApplication(app);
-
-		return REGISTRATION_MESSAGE;
-	}
+	
 /*
 	public void approveApplication(String approver, ApplicationReview review)
 			throws GumsException {

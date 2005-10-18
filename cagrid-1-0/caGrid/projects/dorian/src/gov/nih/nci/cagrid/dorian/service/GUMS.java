@@ -1,11 +1,11 @@
 package gov.nih.nci.cagrid.gums.service;
 
 import gov.nih.nci.cagrid.gums.Registration;
-import gov.nih.nci.cagrid.gums.bean.AttributeDescriptor;
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.bean.InvalidApplicationFault;
-import gov.nih.nci.cagrid.gums.bean.UserApplication;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
+import gov.nih.nci.cagrid.gums.ifs.bean.AttributeDescriptor;
+import gov.nih.nci.cagrid.gums.ifs.bean.InvalidApplicationFault;
+import gov.nih.nci.cagrid.gums.ifs.bean.UserApplication;
 
 public class GUMS implements Registration{
 	

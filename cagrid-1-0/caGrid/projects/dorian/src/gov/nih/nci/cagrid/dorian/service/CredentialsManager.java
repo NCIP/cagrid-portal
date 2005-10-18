@@ -1,11 +1,11 @@
 package gov.nih.nci.cagrid.gums.service;
 
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.bean.InvalidPasswordFault;
 import gov.nih.nci.cagrid.gums.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.ca.KeyUtil;
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
+import gov.nih.nci.cagrid.gums.ifs.bean.InvalidPasswordFault;
 
 import java.io.ByteArrayInputStream;
 import java.io.StringReader;
@@ -21,7 +21,7 @@ import org.globus.wsrf.utils.FaultHelper;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: CredentialsManager.java,v 1.1 2005-10-10 19:13:17 langella Exp $
+ * @version $Id: CredentialsManager.java,v 1.2 2005-10-18 23:23:48 langella Exp $
  */
 public class CredentialsManager extends GUMSObject {
 

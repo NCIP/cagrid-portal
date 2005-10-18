@@ -1,8 +1,5 @@
 package gov.nih.nci.cagrid.gums.common;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
 import org.globus.wsrf.utils.FaultHelper;
 import org.oasis.wsrf.faults.BaseFaultType;
 

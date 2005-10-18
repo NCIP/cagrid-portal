@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.gums.portal.registration;
 
-import gov.nih.nci.cagrid.gums.bean.AttributeDescriptor;
+import gov.nih.nci.cagrid.gums.ifs.bean.AttributeDescriptor;
 import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
 
 import java.awt.GridBagConstraints;
@@ -19,7 +19,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: RegistrationViewer.java,v 1.2 2005-09-28 15:30:01 langella Exp $
+ * @version $Id: RegistrationViewer.java,v 1.3 2005-10-18 23:23:48 langella Exp $
  */
 public class RegistrationViewer extends GridPortalBaseFrame {
 
