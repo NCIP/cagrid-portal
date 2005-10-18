@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.gums.idm;
+package gov.nih.nci.cagrid.gums.idp;
 
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
 import gov.nih.nci.cagrid.gums.common.Database;
@@ -14,7 +14,7 @@ import org.globus.wsrf.utils.FaultHelper;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: IdentityManager.java,v 1.1 2005-10-18 23:23:48 langella Exp $
+ * @version $Id: IdentityManager.java,v 1.1 2005-10-18 23:33:52 langella Exp $
  */
 public class IdentityManager extends GUMSObject {
 
