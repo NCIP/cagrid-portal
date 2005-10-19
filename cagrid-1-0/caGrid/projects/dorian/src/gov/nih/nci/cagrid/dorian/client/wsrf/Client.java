@@ -3,10 +3,11 @@ package gov.nih.nci.cagrid.gums.client.wsrf;
 import gov.nih.nci.cagrid.gums.ifs.bean.UserApplication;
 
 /**
- * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
- * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
- * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: Client.java,v 1.4 2005-10-18 23:23:48 langella Exp $
+ * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
+ * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
+ * @author <A href="mailto:hastings@bmi.osu.edu">Shannon Hastings </A>
+ * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
+ *          Exp $
  */
 public class Client {
 

@@ -12,10 +12,10 @@ import org.projectmobius.portal.GridPortalBaseFrame;
 
 
 /**
- * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
- * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
- * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: GumsPortalSimpleFrame.java,v 1.5 2005/05/26 15:17:23 langells
+ * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
+ * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
+ * @author <A href="mailto:hastings@bmi.osu.edu">Shannon Hastings </A>
+ * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
 public abstract class GumsPortalSimpleFrame extends GridPortalBaseFrame {

@@ -10,10 +10,11 @@ import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.globus.wsrf.impl.security.authorization.NoAuthorization;
 import org.globus.wsrf.security.Constants;
 /**
- * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
- * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
- * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: GUMSBaseClient.java,v 1.3 2005-09-28 15:30:01 langella Exp $
+ * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
+ * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
+ * @author <A href="mailto:hastings@bmi.osu.edu">Shannon Hastings </A>
+ * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
+ *          Exp $
  */
 public class GUMSBaseClient {
 	protected String serviceURI;

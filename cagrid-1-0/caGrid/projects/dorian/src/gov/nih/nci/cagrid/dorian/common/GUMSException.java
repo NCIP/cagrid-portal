@@ -1,10 +1,11 @@
 package gov.nih.nci.cagrid.gums.common;
 
 /**
- * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
- * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
- * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: GUMSException.java,v 1.1 2005-09-27 18:31:18 langella Exp $
+ * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
+ * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
+ * @author <A href="mailto:hastings@bmi.osu.edu">Shannon Hastings </A>
+ * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
+ *          Exp $
  */
 public class GUMSException extends Exception {
 	public GUMSException() {

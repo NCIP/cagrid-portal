@@ -50,12 +50,11 @@ import org.projectmobius.common.MobiusResourceManager;
 import org.projectmobius.db.ConnectionManager;
 
 /**
- * Configuration for GUMS
- * 
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
- * @author <A href="mailto:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
- * @version $Id: GUMSConfiguration.java,v 1.2 2005-09-29 18:21:25 langella Exp $
+ * @author <A href="mailto:hastings@bmi.osu.edu">Shannon Hastings </A>
+ * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
+ *          Exp $
  */
 public class GUMSConfiguration implements AbstractMobiusConfiguration {
 	public static final String DATABASE = "database";

@@ -14,11 +14,11 @@ import java.util.List;
 import org.globus.wsrf.utils.FaultHelper;
 
 /**
- * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
- * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
- * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: RequiredAttributesManager.java,v 1.2 2005/09/26 16:36:20
- *          langella Exp $
+ * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
+ * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
+ * @author <A href="mailto:hastings@bmi.osu.edu">Shannon Hastings </A>
+ * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
+ *          Exp $
  */
 public class RequiredAttributesManager extends GUMSObject {
 
