@@ -176,6 +176,96 @@ public class TestUserManager extends TestCase {
 			}
 		}
 	}
+	
+	public void testChangeStatus() {
+		try {
+			UserManager um = new UserManager(db);
+			User u1 = makeActiveUser();
+			um.addUser(u1);
+			assertTrue(um.userExists(u1.getEmail()));
+			User u2 = um.getUser(u1.getEmail());
+			assertEquals(u1, u2);
+			um.changeUserStatus(u1.getEmail(),UserManager.SUSPENDED);
+			u2=null;
+			u2= um.getUser(u1.getEmail());
+			if(u1.equals(u2)){
+				assertTrue(false);
+			}
+			u1.setStatus(UserManager.SUSPENDED);
+			assertEquals(u1,u2);
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			try {
+				db.destroyDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+	}
+	
+	public void testChangeRole() {
+		try {
+			UserManager um = new UserManager(db);
+			User u1 = makeActiveUser();
+			um.addUser(u1);
+			assertTrue(um.userExists(u1.getEmail()));
+			User u2 = um.getUser(u1.getEmail());
+			assertEquals(u1, u2);
+			um.changeUserRole(u1.getEmail(),UserManager.ADMINISTRATOR);
+			u2=null;
+			u2= um.getUser(u1.getEmail());
+			if(u1.equals(u2)){
+				assertTrue(false);
+			}
+			u1.setRole(UserManager.ADMINISTRATOR);
+			assertEquals(u1,u2);
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			try {
+				db.destroyDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+	}
+	
+	public void testChangePassword() {
+		try {
+			UserManager um = new UserManager(db);
+			User u1 = makeActiveUser();
+			um.addUser(u1);
+			assertTrue(um.userExists(u1.getEmail()));
+			User u2 = um.getUser(u1.getEmail());
+			assertEquals(u1, u2);
+			um.changeUserPassword(u1.getEmail(),"newpassword");
+			u2=null;
+			u2= um.getUser(u1.getEmail());
+			if(u1.equals(u2)){
+				assertTrue(false);
+			}
+			u1.setPassword("newpassword");
+			assertEquals(u1,u2);
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			try {
+				db.destroyDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+	}
 
 	public void testSingleUser() {
 		try {
