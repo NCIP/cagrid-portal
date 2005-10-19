@@ -1,3 +1,2 @@
 cd c:\projects\gums
-ant clean
-ant all
+ant clean all
