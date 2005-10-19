@@ -3,8 +3,6 @@ package gov.nih.nci.cagrid.gums.idp;
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
-import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
-import gov.nih.nci.cagrid.gums.idp.bean.User;
 
 import org.globus.wsrf.utils.FaultHelper;
 
@@ -24,7 +22,7 @@ public class IdentityManagerProvider extends GUMSObject{
 	public IdentityManagerProvider(Database db) throws GUMSInternalFault {
 		try {
 			this.properties = new IdPProperties(db);
-			this.userManager = new UserManager(db);
+			this.userManager = new UserManager(db,this.properties);
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			GUMSInternalFault fault = new GUMSInternalFault();
@@ -36,15 +34,4 @@ public class IdentityManagerProvider extends GUMSObject{
 			throw fault;
 		}
 	}
-	
-	private void validateUser(User user) throws GUMSInternalFault,InvalidUserPropertyFault {
-		String password = user.getPassword();
-		if((password==null)||(properties.getMinimumPasswordLength()>password.length())||
-			(properties.getMaximumPasswordLength()<password.length())){
-			GUMSInternalFault fault = new GUMSInternalFault();
-			fault.setFaultString("Unacceptable password, the length of the password must be between "+properties.getMinimumPasswordLength()+" and "+properties.getMaximumPasswordLength());
-			throw fault;
-		}		
-	}
-
 }

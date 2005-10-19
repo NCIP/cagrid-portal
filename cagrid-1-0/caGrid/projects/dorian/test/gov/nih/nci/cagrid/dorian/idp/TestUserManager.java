@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.gums.idp;
 
+import gov.nih.nci.cagrid.gums.common.Crypt;
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
@@ -31,6 +32,8 @@ public class TestUserManager extends TestCase {
 	private Database db;
 
 	private int count = 0;
+	
+	private IdPProperties properties;
 
 	public void testMultipleUsers() {
 		try {
@@ -47,7 +50,7 @@ public class TestUserManager extends TestCase {
 			int suspendedA = 0;
 
 			User[] users = new User[userCount];
-			UserManager um = new UserManager(db);
+			UserManager um = new UserManager(db,properties);
 
 			for (int i = 0; i < users.length; i++) {
 				if ((i % 8) == 0) {
@@ -85,6 +88,7 @@ public class TestUserManager extends TestCase {
 				}
 
 				um.addUser(users[i]);
+				users[i].setPassword(Crypt.crypt(users[i].getPassword()));
 				assertTrue(um.userExists(users[i].getEmail()));
 				User u = um.getUser(users[i].getEmail());
 				assertEquals(users[i], u);
@@ -179,9 +183,10 @@ public class TestUserManager extends TestCase {
 	
 	public void testChangeStatus() {
 		try {
-			UserManager um = new UserManager(db);
+			UserManager um = new UserManager(db,properties);
 			User u1 = makeActiveUser();
 			um.addUser(u1);
+			u1.setPassword(Crypt.crypt(u1.getPassword()));
 			assertTrue(um.userExists(u1.getEmail()));
 			User u2 = um.getUser(u1.getEmail());
 			assertEquals(u1, u2);
@@ -209,9 +214,10 @@ public class TestUserManager extends TestCase {
 	
 	public void testChangeRole() {
 		try {
-			UserManager um = new UserManager(db);
+			UserManager um = new UserManager(db,properties);
 			User u1 = makeActiveUser();
 			um.addUser(u1);
+			u1.setPassword(Crypt.crypt(u1.getPassword()));
 			assertTrue(um.userExists(u1.getEmail()));
 			User u2 = um.getUser(u1.getEmail());
 			assertEquals(u1, u2);
@@ -239,9 +245,10 @@ public class TestUserManager extends TestCase {
 	
 	public void testChangePassword() {
 		try {
-			UserManager um = new UserManager(db);
+			UserManager um = new UserManager(db,properties);
 			User u1 = makeActiveUser();
 			um.addUser(u1);
+			u1.setPassword(Crypt.crypt(u1.getPassword()));
 			assertTrue(um.userExists(u1.getEmail()));
 			User u2 = um.getUser(u1.getEmail());
 			assertEquals(u1, u2);
@@ -251,7 +258,7 @@ public class TestUserManager extends TestCase {
 			if(u1.equals(u2)){
 				assertTrue(false);
 			}
-			u1.setPassword("newpassword");
+			u1.setPassword(Crypt.crypt("newpassword"));
 			assertEquals(u1,u2);
 
 		} catch (Exception e) {
@@ -269,9 +276,10 @@ public class TestUserManager extends TestCase {
 
 	public void testSingleUser() {
 		try {
-			UserManager um = new UserManager(db);
+			UserManager um = new UserManager(db,properties);
 			User u1 = makeActiveUser();
 			um.addUser(u1);
+			u1.setPassword(Crypt.crypt(u1.getPassword()));
 			assertTrue(um.userExists(u1.getEmail()));
 			User u2 = um.getUser(u1.getEmail());
 			assertEquals(u1, u2);
@@ -352,6 +360,7 @@ public class TestUserManager extends TestCase {
 			db = new Database(cm, DB);
 			db.destroyDatabase();
 			db.createDatabaseIfNeeded();
+			properties = new IdPProperties(db);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

@@ -1,8 +1,10 @@
 package gov.nih.nci.cagrid.gums.idp;
 
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
+import gov.nih.nci.cagrid.gums.common.Crypt;
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
+import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
 import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
 import gov.nih.nci.cagrid.gums.idp.bean.User;
 import gov.nih.nci.cagrid.gums.idp.bean.UserRole;
@@ -45,15 +47,30 @@ public class UserManager extends GUMSObject {
 	private Database db;
 
 	private boolean dbBuilt = false;
+	
+	private IdPProperties properties;
 
-	public UserManager(Database db) throws GUMSInternalFault {
+	public UserManager(Database db,IdPProperties properties) throws GUMSInternalFault {
 		this.db = db;
+		this.properties = properties;
 	}
+	
+	private void validateUser(User user) throws GUMSInternalFault,InvalidUserPropertyFault {
+		String password = user.getPassword();
+		if((password==null)||(properties.getMinimumPasswordLength()>password.length())||
+			(properties.getMaximumPasswordLength()<password.length())){
+			GUMSInternalFault fault = new GUMSInternalFault();
+			fault.setFaultString("Unacceptable password, the length of the password must be between "+properties.getMinimumPasswordLength()+" and "+properties.getMaximumPasswordLength());
+			throw fault;
+		}
+	}
+	
+	
 
 	public synchronized void addUser(User user) throws GUMSInternalFault {
 		this.buildDatabase();
 		db.update("INSERT INTO " + IDP_USERS_TABLE + " VALUES('"
-				+ user.getEmail() + "','" + user.getPassword() + "','"
+				+ user.getEmail() + "','" + Crypt.crypt(user.getPassword()) + "','"
 				+ user.getFirstName() + "','" + user.getLastName() + "','"
 				+ user.getOrganization() + "','" + user.getAddress() + "','"
 				+ user.getAddress2() + "','" + user.getCity() + "','"
@@ -264,7 +281,7 @@ public class UserManager extends GUMSObject {
 		this.buildDatabase();
 		if (userExists(email)) {
 			db.update("update " + IDP_USERS_TABLE + " SET PASSWORD='"
-					+ password + "' where EMAIL='" + email + "'");
+					+ Crypt.crypt(password) + "' where EMAIL='" + email + "'");
 		} else {
 			NoSuchUserFault fault = new NoSuchUserFault();
 			fault.setFaultString("The user " + email + " does not exist.");

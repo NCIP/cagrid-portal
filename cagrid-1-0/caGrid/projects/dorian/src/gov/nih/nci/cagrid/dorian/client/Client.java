@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.gums.client.wsrf;
+package gov.nih.nci.cagrid.gums.client;
 
 import gov.nih.nci.cagrid.gums.ifs.bean.UserApplication;
 

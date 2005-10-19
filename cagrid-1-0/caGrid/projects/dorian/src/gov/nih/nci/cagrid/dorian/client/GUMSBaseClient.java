@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.gums.client.wsrf;
+package gov.nih.nci.cagrid.gums.client;
 
 import gov.nih.nci.cagrid.gums.wsrf.GUMSPortType;
 import gov.nih.nci.cagrid.gums.wsrf.service.GUMSServiceAddressingLocator;
