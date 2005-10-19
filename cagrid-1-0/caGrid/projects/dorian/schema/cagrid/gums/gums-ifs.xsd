@@ -45,11 +45,6 @@
 			</xsd:sequence>
 	</xsd:complexType>
 	
-	 <xsd:complexType name="GUMSInternalFault">
-				<xsd:complexContent>
-					<xsd:extension base="wsbf:BaseFaultType" />
-				</xsd:complexContent>
-	 </xsd:complexType>
 	 
 	  <xsd:complexType name="InvalidApplicationFault">
 				<xsd:complexContent>

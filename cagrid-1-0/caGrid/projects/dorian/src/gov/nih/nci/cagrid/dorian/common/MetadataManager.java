@@ -143,7 +143,7 @@ public class MetadataManager extends GUMSObject {
 			if (!this.db.tableExists(table)) {
 				String applications = "CREATE TABLE " + table + " ("
 						+ "NAME VARCHAR(255) NOT NULL PRIMARY KEY,"
-						+ "DESCRIPTION VARCHAR(255) NOT NULL,"
+						+ "DESCRIPTION TEXT,"
 						+ "VALUE VARCHAR(255) NOT NULL,"
 						+ "INDEX document_index (NAME));";
 				db.update(applications);
