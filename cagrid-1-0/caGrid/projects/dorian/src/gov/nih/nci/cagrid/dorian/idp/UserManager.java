@@ -27,6 +27,21 @@ public class UserManager extends GUMSObject {
 
 	private static final String IDP_USERS_TABLE = "GUMS_IDP_USERS";
 
+	public static final UserStatus ACTIVE = UserStatus.fromValue("Active");
+
+	public static final UserStatus SUSPENDED = UserStatus
+			.fromValue("Suspended");
+
+	public static final UserStatus REJECTED = UserStatus.fromValue("Rejected");
+
+	public static final UserStatus PENDING = UserStatus.fromValue("Pending");
+
+	public static final UserRole ADMINISTRATOR = UserRole
+			.fromValue("Administrator");
+
+	public static final UserRole NON_ADMINISTRATOR = UserRole
+			.fromValue("Non Administrator");
+
 	private Database db;
 
 	private boolean dbBuilt = false;
@@ -42,9 +57,9 @@ public class UserManager extends GUMSObject {
 				+ user.getFirstName() + "','" + user.getLastName() + "','"
 				+ user.getOrganization() + "','" + user.getAddress() + "','"
 				+ user.getAddress2() + "','" + user.getCity() + "','"
-				+ user.getState() + "','" + user.getPhoneNumber() + "','"
-				+ user.getStatus().getValue() + "','"
-				+ user.getRole().getValue() + "')");
+				+ user.getState() + "','" + user.getZipcode() + "','"
+				+ user.getPhoneNumber() + "','" + user.getStatus().getValue()
+				+ "','" + user.getRole().getValue() + "')");
 	}
 
 	public synchronized void removeUser(String email) throws GUMSInternalFault {
@@ -147,7 +162,6 @@ public class UserManager extends GUMSObject {
 	public User getUser(String email) throws GUMSInternalFault, NoSuchUserFault {
 		this.buildDatabase();
 		User user = new User();
-		this.buildDatabase();
 		Connection c = null;
 
 		try {
@@ -177,7 +191,10 @@ public class UserManager extends GUMSObject {
 			rs.close();
 			s.close();
 
+		} catch (NoSuchUserFault f) {
+			throw f;
 		} catch (Exception e) {
+
 			logError(e.getMessage(), e);
 			GUMSInternalFault fault = new GUMSInternalFault();
 			fault.setFaultString("Unexpected Error, could not obtain the user "
@@ -208,7 +225,7 @@ public class UserManager extends GUMSObject {
 						+ "ZIP_CODE VARCHAR(20) NOT NULL,"
 						+ "PHONE_NUMBER VARCHAR(20) NOT NULL,"
 						+ "STATUS VARCHAR(20) NOT NULL,"
-						+ "ADMIN VARCHAR(20) NOT NULL,"
+						+ "ROLE VARCHAR(20) NOT NULL,"
 						+ "INDEX document_index (EMAIL));";
 				db.update(applications);
 			}
@@ -288,7 +305,7 @@ public class UserManager extends GUMSObject {
 		}
 		return exists;
 	}
-	
+
 	public void destroy() throws GUMSInternalFault {
 		db.update("DROP TABLE IF EXISTS " + IDP_USERS_TABLE);
 		dbBuilt = false;
