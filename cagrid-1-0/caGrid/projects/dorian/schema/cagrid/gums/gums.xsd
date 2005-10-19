@@ -11,6 +11,7 @@
 	   <xsd:complexType name="metadata">
 			<xsd:sequence>
 				<xsd:element name="name" type="xsd:string"/>
+				<xsd:element name="description" type="xsd:string"/>
 				<xsd:element name="value" type="xsd:string"/>
 			</xsd:sequence>
 	    </xsd:complexType>

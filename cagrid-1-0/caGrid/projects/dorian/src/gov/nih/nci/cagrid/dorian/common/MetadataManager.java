@@ -66,7 +66,7 @@ public class MetadataManager extends GUMSObject {
 		this.buildDatabase();
 		if (!exists(metadata.getName())) {
 			db.update("INSERT INTO " + table + " VALUES('" + metadata.getName()
-					+ "','" + metadata.getValue() + "')");
+					+ "','"+metadata.getDescription()+ "','" + metadata.getValue() + "')");
 		} else {
 			GUMSInternalFault fault = new GUMSInternalFault();
 			fault.setFaultString("Could not insert the metadata "
@@ -78,7 +78,7 @@ public class MetadataManager extends GUMSObject {
 	public synchronized void update(Metadata metadata) throws GUMSInternalFault {
 		this.buildDatabase();
 		if (exists(metadata.getName())) {
-			db.update("update " + table + " SET VALUE='" + metadata.getValue()
+			db.update("update " + table + " SET DESCRIPTION='"+metadata.getDescription()+"',VALUE='" + metadata.getValue()
 					+ "' WHERE NAME='" + metadata.getName() + "'");
 		} else {
 			insert(metadata);
@@ -95,13 +95,15 @@ public class MetadataManager extends GUMSObject {
 		Connection c = null;
 
 		String value = null;
+		String description = null;
 		try {
 			c = db.getConnectionManager().getConnection();
 			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery("select VALUE from " + table
+			ResultSet rs = s.executeQuery("select DESCRIPTION,VALUE from " + table
 					+ " where name='" + name + "'");
 			if (rs.next()) {
 				value = rs.getString("VALUE");
+				description = rs.getString("DESCRIPTION");
 			}
 			rs.close();
 			s.close();
@@ -126,6 +128,7 @@ public class MetadataManager extends GUMSObject {
 			Metadata metadata = new Metadata();
 			metadata.setName(name);
 			metadata.setValue(value);
+			metadata.setDescription(description);
 			return metadata;
 		}
 	}
@@ -140,6 +143,7 @@ public class MetadataManager extends GUMSObject {
 			if (!this.db.tableExists(table)) {
 				String applications = "CREATE TABLE " + table + " ("
 						+ "NAME VARCHAR(255) NOT NULL PRIMARY KEY,"
+						+ "DESCRIPTION VARCHAR(255) NOT NULL,"
 						+ "VALUE VARCHAR(255) NOT NULL,"
 						+ "INDEX document_index (NAME));";
 				db.update(applications);

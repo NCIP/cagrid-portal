@@ -36,7 +36,10 @@ public class TestMetadataManager extends TestCase {
 
 			// Test Insert;
 			for (int i = 0; i < count; i++) {
-				Metadata data = new Metadata("name" + i, "value" + i);
+				Metadata data = new Metadata();
+				data.setName("name" + i);
+				data.setValue("value" + i);
+				data.setDescription("description"+i);
 				mm.insert(data);
 				Metadata out = mm.get(data.getName());
 				assertNotNull(out);
@@ -70,7 +73,10 @@ public class TestMetadataManager extends TestCase {
 
 			// Test Insert;
 			for (int i = 0; i < count; i++) {
-				Metadata data = new Metadata("name" + i, "value" + i);
+				Metadata data = new Metadata();
+				data.setName("name" + i);
+				data.setValue("value" + i);
+				data.setDescription("description"+i);
 				mm.insert(data);
 				Metadata out = mm.get(data.getName());
 				assertNotNull(out);
@@ -78,8 +84,10 @@ public class TestMetadataManager extends TestCase {
 			}
 			// Test update
 			for (int i = 0; i < count; i++) {
-				Metadata data = new Metadata("name" + i, "changedvalue"
-						+ i);
+				Metadata data = new Metadata();
+				data.setName("name" + i);
+				data.setValue("changedvalue" + i);
+				data.setDescription("description"+i);
 				mm.update(data);
 				Metadata out = mm.get(data.getName());
 				assertNotNull(out);
@@ -106,7 +114,10 @@ public class TestMetadataManager extends TestCase {
 
 			// Test Insert;
 			for (int i = 0; i < count; i++) {
-				Metadata data = new Metadata("name" + i, "value" + i);
+				Metadata data = new Metadata();
+				data.setName("name" + i);
+				data.setValue("value" + i);
+				data.setDescription("description"+i);
 				mm.insert(data);
 				Metadata out = mm.get(data.getName());
 				assertNotNull(out);

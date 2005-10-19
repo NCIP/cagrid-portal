@@ -17,7 +17,7 @@ import org.globus.wsrf.utils.FaultHelper;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class IdentityManager extends GUMSObject {
+public class IdentityManagerProvider extends GUMSObject {
 
 	public static final String ALL_APPLICATIONS = "*";
 
@@ -36,7 +36,7 @@ public class IdentityManager extends GUMSObject {
 
 	private boolean dbBuilt = false;
 
-	public IdentityManager(Database db){
+	public IdentityManagerProvider(Database db){
 		this.db = db;
 	}
 
