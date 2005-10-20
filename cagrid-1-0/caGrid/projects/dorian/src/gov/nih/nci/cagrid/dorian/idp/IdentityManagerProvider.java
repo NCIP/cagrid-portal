@@ -3,6 +3,9 @@ package gov.nih.nci.cagrid.gums.idp;
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
+import gov.nih.nci.cagrid.gums.idp.bean.Application;
+import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
+import gov.nih.nci.cagrid.gums.idp.bean.User;
 
 import org.globus.wsrf.utils.FaultHelper;
 
@@ -33,5 +36,22 @@ public class IdentityManagerProvider extends GUMSObject{
 			fault = (GUMSInternalFault) helper.getFault();
 			throw fault;
 		}
+	}
+	
+	public String register(Application application)throws GUMSInternalFault, InvalidUserPropertyFault{
+		IdPRegistrationPolicy policy = properties.getRegistrationPolicy();
+		User u = policy.register(application);
+		userManager.addUser(u);
+		if(u.getStatus().equals(UserManager.PENDING)){
+			return "Your application will be reviewed by an administrator and you will be contacted at "+u.getEmail()+" upon a decision.";
+		}else{
+			return "Your account was approved, your current account status is "+u.getStatus().getValue()+" you mail use "+u.getEmail()+" to access your account";
+		}
+	}
+	
+	
+
+	public IdPProperties getProperties() {
+		return properties;
 	}
 }

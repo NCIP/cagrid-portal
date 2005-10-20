@@ -18,7 +18,8 @@ import org.projectmobius.db.ConnectionManager;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class TestIdPProperties extends TestCase {
+public class TestIdentityManagementProvider extends TestCase {
+
 	private static final String DB = "TEST_GUMS";
 
 	public static String DB_CONFIG = "resources" + File.separator
@@ -26,14 +27,10 @@ public class TestIdPProperties extends TestCase {
 
 	private Database db;
 
-	public void testDefaultProperties() {
+	public void testManualRegistration() {
 		try {
-			IdPProperties props = new IdPProperties(db);
-			assertEquals(IdPProperties.DEFAULT_MIN_PASSWORD_LENGTH, props
-					.getMinimumPasswordLength());
-			assertEquals(IdPProperties.DEFAULT_MAX_PASSWORD_LENGTH, props
-					.getMaximumPasswordLength());
-			assertEquals(ManualRegistrationPolicy.class.getName(), props.getRegistrationPolicy().getClass().getName());
+			//IdentityManagerProvider imp = new IdentityManagerProvider();
+			
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -59,5 +56,4 @@ public class TestIdPProperties extends TestCase {
 			assertTrue(false);
 		}
 	}
-
 }

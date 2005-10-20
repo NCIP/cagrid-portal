@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
 import gov.nih.nci.cagrid.gums.idp.bean.User;
+import gov.nih.nci.cagrid.gums.idp.bean.UserFilter;
 import gov.nih.nci.cagrid.gums.idp.bean.UserRole;
 import gov.nih.nci.cagrid.gums.idp.bean.UserStatus;
 
@@ -95,22 +96,38 @@ public class TestUserManager extends TestCase {
 
 				User[] list = um.getUsers();
 				assertEquals(i+1, list.length);
-				assertEquals(activeNA, um.getUsers(UserManager.ACTIVE,
-						UserManager.NON_ADMINISTRATOR).length);
-				assertEquals(pendingNA, um.getUsers(UserManager.PENDING,
-						UserManager.NON_ADMINISTRATOR).length);
-				assertEquals(rejectedNA, um.getUsers(UserManager.REJECTED,
-						UserManager.NON_ADMINISTRATOR).length);
-				assertEquals(suspendedNA, um.getUsers(UserManager.SUSPENDED,
-						UserManager.NON_ADMINISTRATOR).length);
-				assertEquals(activeA, um.getUsers(UserManager.ACTIVE,
-						UserManager.ADMINISTRATOR).length);
-				assertEquals(pendingA, um.getUsers(UserManager.PENDING,
-						UserManager.ADMINISTRATOR).length);
-				assertEquals(rejectedA, um.getUsers(UserManager.REJECTED,
-						UserManager.ADMINISTRATOR).length);
-				assertEquals(suspendedA, um.getUsers(UserManager.SUSPENDED,
-						UserManager.ADMINISTRATOR).length);
+				UserFilter f= new UserFilter();
+				f.setStatus(UserManager.ACTIVE);
+				f.setRole(UserManager.NON_ADMINISTRATOR);
+				assertEquals(activeNA, um.getUsers(f).length);
+				
+				
+				f.setStatus(UserManager.PENDING);
+				assertEquals(pendingNA, um.getUsers(f).length);
+				
+				
+				f.setStatus(UserManager.REJECTED);
+				assertEquals(rejectedNA, um.getUsers(f).length);
+				
+				f.setStatus(UserManager.SUSPENDED);
+				assertEquals(suspendedNA, um.getUsers(f).length);
+				
+				f.setStatus(UserManager.ACTIVE);
+				f.setRole(UserManager.ADMINISTRATOR);
+				assertEquals(activeA, um.getUsers(f).length);
+				
+				
+				f.setStatus(UserManager.PENDING);
+				assertEquals(pendingA, um.getUsers(f).length);
+				
+				
+				f.setStatus(UserManager.REJECTED);
+				assertEquals(rejectedA, um.getUsers(f).length);
+				
+				f.setStatus(UserManager.SUSPENDED);
+				assertEquals(suspendedA, um.getUsers(f).length);
+				
+				
 
 			}
 			
@@ -148,24 +165,38 @@ public class TestUserManager extends TestCase {
 				}
 				assertFalse(um.userExists(users[i].getEmail()));
 
-				User[] list = um.getUsers();
+				User[] list = um.getUsers(null);
 				assertEquals(numberOfUsers, list.length);
-				assertEquals(activeNA, um.getUsers(UserManager.ACTIVE,
-						UserManager.NON_ADMINISTRATOR).length);
-				assertEquals(pendingNA, um.getUsers(UserManager.PENDING,
-						UserManager.NON_ADMINISTRATOR).length);
-				assertEquals(rejectedNA, um.getUsers(UserManager.REJECTED,
-						UserManager.NON_ADMINISTRATOR).length);
-				assertEquals(suspendedNA, um.getUsers(UserManager.SUSPENDED,
-						UserManager.NON_ADMINISTRATOR).length);
-				assertEquals(activeA, um.getUsers(UserManager.ACTIVE,
-						UserManager.ADMINISTRATOR).length);
-				assertEquals(pendingA, um.getUsers(UserManager.PENDING,
-						UserManager.ADMINISTRATOR).length);
-				assertEquals(rejectedA, um.getUsers(UserManager.REJECTED,
-						UserManager.ADMINISTRATOR).length);
-				assertEquals(suspendedA, um.getUsers(UserManager.SUSPENDED,
-						UserManager.ADMINISTRATOR).length);
+				UserFilter f= new UserFilter();
+				f.setStatus(UserManager.ACTIVE);
+				f.setRole(UserManager.NON_ADMINISTRATOR);
+				assertEquals(activeNA, um.getUsers(f).length);
+				
+				
+				f.setStatus(UserManager.PENDING);
+				assertEquals(pendingNA, um.getUsers(f).length);
+				
+				
+				f.setStatus(UserManager.REJECTED);
+				assertEquals(rejectedNA, um.getUsers(f).length);
+				
+				f.setStatus(UserManager.SUSPENDED);
+				assertEquals(suspendedNA, um.getUsers(f).length);
+				
+				f.setStatus(UserManager.ACTIVE);
+				f.setRole(UserManager.ADMINISTRATOR);
+				assertEquals(activeA, um.getUsers(f).length);
+				
+				
+				f.setStatus(UserManager.PENDING);
+				assertEquals(pendingA, um.getUsers(f).length);
+				
+				
+				f.setStatus(UserManager.REJECTED);
+				assertEquals(rejectedA, um.getUsers(f).length);
+				
+				f.setStatus(UserManager.SUSPENDED);
+				assertEquals(suspendedA, um.getUsers(f).length);
 
 			}
 
@@ -287,30 +318,32 @@ public class TestUserManager extends TestCase {
 			User[] list = um.getUsers();
 			assertEquals(1, list.length);
 			assertEquals(u1, list[0]);
-			assertEquals(1, um.getUsers(UserManager.ACTIVE,
-					UserManager.NON_ADMINISTRATOR).length);
-			assertEquals(0, um.getUsers(UserManager.PENDING,
-					UserManager.NON_ADMINISTRATOR).length);
-			assertEquals(0, um.getUsers(UserManager.REJECTED,
-					UserManager.NON_ADMINISTRATOR).length);
-			assertEquals(0, um.getUsers(UserManager.SUSPENDED,
-					UserManager.NON_ADMINISTRATOR).length);
-			assertEquals(0, um.getUsers(UserManager.ACTIVE,
-					UserManager.ADMINISTRATOR).length);
-			assertEquals(0, um.getUsers(UserManager.PENDING,
-					UserManager.ADMINISTRATOR).length);
-			assertEquals(0, um.getUsers(UserManager.REJECTED,
-					UserManager.ADMINISTRATOR).length);
-			assertEquals(0, um.getUsers(UserManager.SUSPENDED,
-					UserManager.ADMINISTRATOR).length);
-
+			UserFilter f= new UserFilter();
+			f.setStatus(UserManager.ACTIVE);
+			f.setRole(UserManager.NON_ADMINISTRATOR);
+			assertEquals(1, um.getUsers(f).length);
+			f.setStatus(UserManager.PENDING);
+			assertEquals(0, um.getUsers(f).length);
+			f.setStatus(UserManager.REJECTED);
+			assertEquals(0, um.getUsers(f).length);
+			f.setStatus(UserManager.SUSPENDED);
+			assertEquals(0, um.getUsers(f).length);
+			f.setStatus(UserManager.ACTIVE);
+			f.setRole(UserManager.ADMINISTRATOR);
+			assertEquals(0, um.getUsers(f).length);
+			f.setStatus(UserManager.PENDING);
+			assertEquals(0, um.getUsers(f).length);
+			f.setStatus(UserManager.REJECTED);
+			assertEquals(0, um.getUsers(f).length);
+			f.setStatus(UserManager.SUSPENDED);
+			assertEquals(0, um.getUsers(f).length);
 			um.removeUser(u1.getEmail());
 			assertFalse(um.userExists(u1.getEmail()));
 
 			try {
 				um.getUser(u1.getEmail());
 				assertTrue(false);
-			} catch (NoSuchUserFault f) {
+			} catch (NoSuchUserFault fs) {
 
 			}
 

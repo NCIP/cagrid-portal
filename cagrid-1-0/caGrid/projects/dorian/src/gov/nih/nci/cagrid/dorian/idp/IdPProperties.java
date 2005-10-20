@@ -29,9 +29,16 @@ public class IdPProperties extends GUMSObject {
 
 	public final static int DEFAULT_MAX_PASSWORD_LENGTH = 10;
 
+	private final static String REGISTRATION_POLICY = "Registration Policy";
+
+	private final static String REGISTRATION_POLICY_DESCRIPTION = "The registration to apply to users when they register.";
+
+	private final static String DEFAULT_REGISTRATION_POLICY = ManualRegistrationPolicy.class
+			.getName();
+
 	private MetadataManager mm;
 
-	public IdPProperties(Database db) throws GUMSInternalFault {
+public IdPProperties(Database db) throws GUMSInternalFault {
 		try {
 			mm = new MetadataManager(db, "IDP_PROPERTIES");
 			if (!mm.exists(MIN_PASSWORD_LENGTH)) {
@@ -48,6 +55,14 @@ public class IdPProperties extends GUMSObject {
 				maxPass.setDescription(MAX_PASSWORD_LENGTH_DESCRIPTION);
 				mm.insert(maxPass);
 			}
+			
+			if (!mm.exists(REGISTRATION_POLICY)) {
+				Metadata maxPass = new Metadata();
+				maxPass.setName(REGISTRATION_POLICY);
+				maxPass.setValue(DEFAULT_REGISTRATION_POLICY);
+				maxPass.setDescription(REGISTRATION_POLICY_DESCRIPTION);
+				mm.insert(maxPass);
+			}
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			GUMSInternalFault fault = new GUMSInternalFault();
@@ -57,9 +72,7 @@ public class IdPProperties extends GUMSObject {
 			fault = (GUMSInternalFault) helper.getFault();
 			throw fault;
 		}
-	}
-
-	public int getMinimumPasswordLength() throws GUMSInternalFault {
+	}	public int getMinimumPasswordLength() throws GUMSInternalFault {
 		try {
 			return Integer.valueOf(mm.get(MIN_PASSWORD_LENGTH).getValue())
 					.intValue();
@@ -74,7 +87,7 @@ public class IdPProperties extends GUMSObject {
 			throw fault;
 		}
 	}
-	
+
 	public int getMaximumPasswordLength() throws GUMSInternalFault {
 		try {
 			return Integer.valueOf(mm.get(MAX_PASSWORD_LENGTH).getValue())
@@ -84,6 +97,22 @@ public class IdPProperties extends GUMSObject {
 			GUMSInternalFault fault = new GUMSInternalFault();
 			fault.setFaultString("Error obtaining the IDP Property, "
 					+ MAX_PASSWORD_LENGTH + ".");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GUMSInternalFault) helper.getFault();
+			throw fault;
+		}
+	}
+	
+	public IdPRegistrationPolicy getRegistrationPolicy() throws GUMSInternalFault {
+		try {
+			Metadata regPolicy = mm.get(REGISTRATION_POLICY);
+			IdPRegistrationPolicy policy = (IdPRegistrationPolicy)Class.forName(regPolicy.getValue()).newInstance();
+			return policy;
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			GUMSInternalFault fault = new GUMSInternalFault();
+			fault.setFaultString("Error obtaining the IDP Registration Policy.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (GUMSInternalFault) helper.getFault();

@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.gums.common.GUMSObject;
 import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
 import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
 import gov.nih.nci.cagrid.gums.idp.bean.User;
+import gov.nih.nci.cagrid.gums.idp.bean.UserFilter;
 import gov.nih.nci.cagrid.gums.idp.bean.UserRole;
 import gov.nih.nci.cagrid.gums.idp.bean.UserStatus;
 
@@ -66,7 +67,7 @@ public class UserManager extends GUMSObject {
 		}
 	}
 
-private void validateUser(User user) throws GUMSInternalFault,
+	private void validateUser(User user) throws GUMSInternalFault,
 			InvalidUserPropertyFault {
 		String password = user.getPassword();
 		if ((password == null)
@@ -80,13 +81,13 @@ private void validateUser(User user) throws GUMSInternalFault,
 							+ properties.getMaximumPasswordLength());
 			throw fault;
 		}
-		
-		validateSpecifiedField("First Name",user.getFirstName());
-		validateSpecifiedField("Last Name",user.getLastName());
-		validateSpecifiedField("Address",user.getAddress());
-		validateSpecifiedField("City",user.getCity());
-		validateSpecifiedField("Organization",user.getOrganization());
-		
+
+		validateSpecifiedField("First Name", user.getFirstName());
+		validateSpecifiedField("Last Name", user.getLastName());
+		validateSpecifiedField("Address", user.getAddress());
+		validateSpecifiedField("City", user.getCity());
+		validateSpecifiedField("Organization", user.getOrganization());
+
 		try {
 			AddressValidator.validatePhone(user.getPhoneNumber());
 			AddressValidator.validateEmail(user.getEmail());
@@ -97,7 +98,9 @@ private void validateUser(User user) throws GUMSInternalFault,
 			fault.setFaultString(e.getMessage());
 			throw fault;
 		}
-	}	public synchronized void addUser(User user) throws GUMSInternalFault,
+	}
+
+	public synchronized void addUser(User user) throws GUMSInternalFault,
 			InvalidUserPropertyFault {
 		this.buildDatabase();
 		this.validateUser(user);
@@ -128,22 +131,12 @@ private void validateUser(User user) throws GUMSInternalFault,
 	}
 
 	public User[] getUsers() throws GUMSInternalFault, NoSuchUserFault {
-		return getUsers(null, null);
+		return getUsers(null);
 	}
 
-	public User[] getUsers(UserStatus status) throws GUMSInternalFault,
+
+	public User[] getUsers(UserFilter filter) throws GUMSInternalFault,
 			NoSuchUserFault {
-		return getUsers(status, null);
-	}
-
-	public User[] getUsers(UserRole role) throws GUMSInternalFault,
-			NoSuchUserFault {
-		return getUsers(null, role);
-	}
-
-	public User[] getUsers(UserStatus status, UserRole role)
-			throws GUMSInternalFault, NoSuchUserFault {
-		this.buildDatabase();
 
 		this.buildDatabase();
 		Connection c = null;
@@ -154,17 +147,80 @@ private void validateUser(User user) throws GUMSInternalFault,
 
 			StringBuffer sql = new StringBuffer();
 			sql.append("select * from " + IDP_USERS_TABLE);
+			if(filter!=null){
 			boolean firstAppended = false;
-			if (status != null) {
+			
+			if (filter.getEmail() != null) {
 				sql = appendWhereOrAnd(firstAppended, sql);
 				firstAppended = true;
-				sql.append(" STATUS='" + status.getValue() + "'");
+				sql.append(" EMAIL LIKE '%" + filter.getStatus() + "%'");
+			}
+			
+			if (filter.getFirstName() != null) {
+				sql = appendWhereOrAnd(firstAppended, sql);
+				firstAppended = true;
+				sql.append(" EMAIL LIKE '%" + filter.getFirstName() + "%'");
+			}
+			
+			if (filter.getLastName() != null) {
+				sql = appendWhereOrAnd(firstAppended, sql);
+				firstAppended = true;
+				sql.append(" EMAIL LIKE '%" + filter.getLastName() + "%'");
+			}
+			
+			if (filter.getOrganization() != null) {
+				sql = appendWhereOrAnd(firstAppended, sql);
+				firstAppended = true;
+				sql.append(" EMAIL LIKE '%" + filter.getOrganization() + "%'");
+			}
+			
+			if (filter.getAddress() != null) {
+				sql = appendWhereOrAnd(firstAppended, sql);
+				firstAppended = true;
+				sql.append(" EMAIL LIKE '%" + filter.getAddress() + "%'");
+			}
+			
+			if (filter.getAddress2() != null) {
+				sql = appendWhereOrAnd(firstAppended, sql);
+				firstAppended = true;
+				sql.append(" EMAIL LIKE '%" + filter.getAddress2() + "%'");
+			}
+			
+			if (filter.getCity() != null) {
+				sql = appendWhereOrAnd(firstAppended, sql);
+				firstAppended = true;
+				sql.append(" EMAIL LIKE '%" + filter.getCity() + "%'");
+			}
+			
+			if (filter.getState() != null) {
+				sql = appendWhereOrAnd(firstAppended, sql);
+				firstAppended = true;
+				sql.append(" EMAIL LIKE '%" + filter.getState() + "%'");
+			}
+			
+			if (filter.getZipcode() != null) {
+				sql = appendWhereOrAnd(firstAppended, sql);
+				firstAppended = true;
+				sql.append(" EMAIL LIKE '%" + filter.getZipcode() + "%'");
+			}
+			
+			if (filter.getEmail() != null) {
+				sql = appendWhereOrAnd(firstAppended, sql);
+				firstAppended = true;
+				sql.append(" EMAIL LIKE '%" + filter.getEmail() + "%'");
 			}
 
-			if (role != null) {
+			if (filter.getStatus() != null) {
 				sql = appendWhereOrAnd(firstAppended, sql);
 				firstAppended = true;
-				sql.append(" ROLE='" + role.getValue() + "'");
+				sql.append(" STATUS='" + filter.getStatus() + "'");
+			}
+
+			if (filter.getRole() != null) {
+				sql = appendWhereOrAnd(firstAppended, sql);
+				firstAppended = true;
+				sql.append(" ROLE='" + filter.getRole() + "'");
+			}
 			}
 
 			ResultSet rs = s.executeQuery(sql.toString());
