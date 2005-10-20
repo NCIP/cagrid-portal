@@ -130,13 +130,12 @@ public class UserManager extends GUMSObject {
 		return sql;
 	}
 
-	public User[] getUsers() throws GUMSInternalFault, NoSuchUserFault {
-		return getUsers(null);
+	public User[] getUsers(UserFilter filter) throws GUMSInternalFault {
+		return getUsers(filter, true);
 	}
 
-
-	public User[] getUsers(UserFilter filter) throws GUMSInternalFault,
-			NoSuchUserFault {
+	public User[] getUsers(UserFilter filter, boolean includePassword)
+			throws GUMSInternalFault {
 
 		this.buildDatabase();
 		Connection c = null;
@@ -147,87 +146,96 @@ public class UserManager extends GUMSObject {
 
 			StringBuffer sql = new StringBuffer();
 			sql.append("select * from " + IDP_USERS_TABLE);
-			if(filter!=null){
-			boolean firstAppended = false;
-			
-			if (filter.getFirstName() != null) {
-				sql = appendWhereOrAnd(firstAppended, sql);
-				firstAppended = true;
-				sql.append(" FIRST_NAME LIKE '%" + filter.getFirstName() + "%'");
-			}
-			
-			if (filter.getLastName() != null) {
-				sql = appendWhereOrAnd(firstAppended, sql);
-				firstAppended = true;
-				sql.append(" LAST_NAME LIKE '%" + filter.getLastName() + "%'");
-			}
-			
-			if (filter.getOrganization() != null) {
-				sql = appendWhereOrAnd(firstAppended, sql);
-				firstAppended = true;
-				sql.append(" ORGANIZATION LIKE '%" + filter.getOrganization() + "%'");
-			}
-			
-			if (filter.getAddress() != null) {
-				sql = appendWhereOrAnd(firstAppended, sql);
-				firstAppended = true;
-				sql.append(" ADDRESS LIKE '%" + filter.getAddress() + "%'");
-			}
-			
-			if (filter.getAddress2() != null) {
-				sql = appendWhereOrAnd(firstAppended, sql);
-				firstAppended = true;
-				sql.append(" ADDRESS2 LIKE '%" + filter.getAddress2() + "%'");
-			}
-			
-			if (filter.getCity() != null) {
-				sql = appendWhereOrAnd(firstAppended, sql);
-				firstAppended = true;
-				sql.append(" CITY LIKE '%" + filter.getCity() + "%'");
-			}
-			
-			if (filter.getState() != null) {
-				sql = appendWhereOrAnd(firstAppended, sql);
-				firstAppended = true;
-				sql.append(" STATE LIKE '%" + filter.getState() + "%'");
-			}
-			
-			if (filter.getZipcode() != null) {
-				sql = appendWhereOrAnd(firstAppended, sql);
-				firstAppended = true;
-				sql.append(" ZIP_CODE LIKE '%" + filter.getZipcode() + "%'");
-			}
-			
-			if (filter.getEmail() != null) {
-				sql = appendWhereOrAnd(firstAppended, sql);
-				firstAppended = true;
-				sql.append(" EMAIL LIKE '%" + filter.getEmail() + "%'");
-			}
-			
-			if (filter.getPhoneNumber() != null) {
-				sql = appendWhereOrAnd(firstAppended, sql);
-				firstAppended = true;
-				sql.append(" PHONE_NUMBER LIKE '%" + filter.getPhoneNumber() + "%'");
-			}
+			if (filter != null) {
+				boolean firstAppended = false;
 
-			if (filter.getStatus() != null) {
-				sql = appendWhereOrAnd(firstAppended, sql);
-				firstAppended = true;
-				sql.append(" STATUS='" + filter.getStatus() + "'");
-			}
+				if (filter.getFirstName() != null) {
+					sql = appendWhereOrAnd(firstAppended, sql);
+					firstAppended = true;
+					sql.append(" FIRST_NAME LIKE '%" + filter.getFirstName()
+							+ "%'");
+				}
 
-			if (filter.getRole() != null) {
-				sql = appendWhereOrAnd(firstAppended, sql);
-				firstAppended = true;
-				sql.append(" ROLE='" + filter.getRole() + "'");
-			}
+				if (filter.getLastName() != null) {
+					sql = appendWhereOrAnd(firstAppended, sql);
+					firstAppended = true;
+					sql.append(" LAST_NAME LIKE '%" + filter.getLastName()
+							+ "%'");
+				}
+
+				if (filter.getOrganization() != null) {
+					sql = appendWhereOrAnd(firstAppended, sql);
+					firstAppended = true;
+					sql.append(" ORGANIZATION LIKE '%"
+							+ filter.getOrganization() + "%'");
+				}
+
+				if (filter.getAddress() != null) {
+					sql = appendWhereOrAnd(firstAppended, sql);
+					firstAppended = true;
+					sql.append(" ADDRESS LIKE '%" + filter.getAddress() + "%'");
+				}
+
+				if (filter.getAddress2() != null) {
+					sql = appendWhereOrAnd(firstAppended, sql);
+					firstAppended = true;
+					sql.append(" ADDRESS2 LIKE '%" + filter.getAddress2()
+							+ "%'");
+				}
+
+				if (filter.getCity() != null) {
+					sql = appendWhereOrAnd(firstAppended, sql);
+					firstAppended = true;
+					sql.append(" CITY LIKE '%" + filter.getCity() + "%'");
+				}
+
+				if (filter.getState() != null) {
+					sql = appendWhereOrAnd(firstAppended, sql);
+					firstAppended = true;
+					sql.append(" STATE LIKE '%" + filter.getState() + "%'");
+				}
+
+				if (filter.getZipcode() != null) {
+					sql = appendWhereOrAnd(firstAppended, sql);
+					firstAppended = true;
+					sql
+							.append(" ZIP_CODE LIKE '%" + filter.getZipcode()
+									+ "%'");
+				}
+
+				if (filter.getEmail() != null) {
+					sql = appendWhereOrAnd(firstAppended, sql);
+					firstAppended = true;
+					sql.append(" EMAIL LIKE '%" + filter.getEmail() + "%'");
+				}
+
+				if (filter.getPhoneNumber() != null) {
+					sql = appendWhereOrAnd(firstAppended, sql);
+					firstAppended = true;
+					sql.append(" PHONE_NUMBER LIKE '%"
+							+ filter.getPhoneNumber() + "%'");
+				}
+
+				if (filter.getStatus() != null) {
+					sql = appendWhereOrAnd(firstAppended, sql);
+					firstAppended = true;
+					sql.append(" STATUS='" + filter.getStatus() + "'");
+				}
+
+				if (filter.getRole() != null) {
+					sql = appendWhereOrAnd(firstAppended, sql);
+					firstAppended = true;
+					sql.append(" ROLE='" + filter.getRole() + "'");
+				}
 			}
 
 			ResultSet rs = s.executeQuery(sql.toString());
 			while (rs.next()) {
 				User user = new User();
 				user.setEmail(rs.getString("EMAIL"));
-				user.setPassword(rs.getString("PASSWORD"));
+				if (includePassword) {
+					user.setPassword(rs.getString("PASSWORD"));
+				}
 				user.setFirstName(rs.getString("FIRST_NAME"));
 				user.setLastName(rs.getString("LAST_NAME"));
 				user.setOrganization(rs.getString("ORGANIZATION"));
@@ -265,6 +273,11 @@ public class UserManager extends GUMSObject {
 	}
 
 	public User getUser(String email) throws GUMSInternalFault, NoSuchUserFault {
+		return this.getUser(email, true);
+	}
+
+	public User getUser(String email, boolean includePassword)
+			throws GUMSInternalFault, NoSuchUserFault {
 		this.buildDatabase();
 		User user = new User();
 		Connection c = null;
@@ -276,7 +289,9 @@ public class UserManager extends GUMSObject {
 					+ " where EMAIL='" + email + "'");
 			if (rs.next()) {
 				user.setEmail(email);
-				user.setPassword(rs.getString("PASSWORD"));
+				if (includePassword) {
+					user.setPassword(rs.getString("PASSWORD"));
+				}
 				user.setFirstName(rs.getString("FIRST_NAME"));
 				user.setLastName(rs.getString("LAST_NAME"));
 				user.setOrganization(rs.getString("ORGANIZATION"));
@@ -338,41 +353,135 @@ public class UserManager extends GUMSObject {
 		}
 	}
 
-	public synchronized void changeUserStatus(String email, UserStatus status)
-			throws GUMSInternalFault, NoSuchUserFault {
-		this.buildDatabase();
-		if (userExists(email)) {
-			db.update("update " + IDP_USERS_TABLE + " SET STATUS='"
-					+ status.getValue() + "' where EMAIL='" + email + "'");
-		} else {
-			NoSuchUserFault fault = new NoSuchUserFault();
-			fault.setFaultString("The user " + email + " does not exist.");
-			throw fault;
-		}
-	}
+	
 
-	public synchronized void changeUserRole(String email, UserRole role)
-			throws GUMSInternalFault, NoSuchUserFault {
+	public synchronized void updateUser(User u) throws GUMSInternalFault,
+			NoSuchUserFault {
 		this.buildDatabase();
-		if (userExists(email)) {
-			db.update("update " + IDP_USERS_TABLE + " SET ROLE='"
-					+ role.getValue() + "' where EMAIL='" + email + "'");
-		} else {
+		if (u.getEmail() == null) {
 			NoSuchUserFault fault = new NoSuchUserFault();
-			fault.setFaultString("The user " + email + " does not exist.");
+			fault.setFaultString("Could not update user, the user "
+					+ u.getEmail() + " does not exist.");
 			throw fault;
-		}
-	}
+		} else if (userExists(u.getEmail())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("update " + IDP_USERS_TABLE + " SET ");
+			int changes = 0;
+			User curr = this.getUser(u.getEmail());
+			if (u.getPassword() != null) {
+				String newPass = Crypt.crypt(u.getPassword());
+				if (!newPass.equals(curr.getPassword())) {
+					if (changes > 0) {
+						sb.append(",");
+					}
+					sb.append("PASSWORD='" + newPass + "'");
+					changes = changes + 1;
+				}
+			}
 
-	public synchronized void changeUserPassword(String email, String password)
-			throws GUMSInternalFault, NoSuchUserFault {
-		this.buildDatabase();
-		if (userExists(email)) {
-			db.update("update " + IDP_USERS_TABLE + " SET PASSWORD='"
-					+ Crypt.crypt(password) + "' where EMAIL='" + email + "'");
+			if ((u.getFirstName() != null)
+					&& (!u.getFirstName().equals(curr.getFirstName()))) {
+				if (changes > 0) {
+					sb.append(",");
+				}
+				sb.append("FIRST_NAME='" + u.getFirstName() + "'");
+				changes = changes + 1;
+			}
+
+			if ((u.getLastName() != null)
+					&& (!u.getLastName().equals(curr.getLastName()))) {
+				if (changes > 0) {
+					sb.append(",");
+				}
+				sb.append("LAST_NAME='" + u.getLastName() + "'");
+				changes = changes + 1;
+			}
+
+			if ((u.getOrganization() != null)
+					&& (!u.getOrganization().equals(curr.getOrganization()))) {
+				if (changes > 0) {
+					sb.append(",");
+				}
+				sb.append("ORGANIZATION='" + u.getOrganization() + "'");
+				changes = changes + 1;
+			}
+
+			if ((u.getAddress() != null)
+					&& (!u.getAddress().equals(curr.getAddress()))) {
+				if (changes > 0) {
+					sb.append(",");
+				}
+				sb.append("ADDRESS='" + u.getAddress() + "'");
+				changes = changes + 1;
+			}
+
+			if ((u.getAddress2() != null)
+					&& (!u.getAddress2().equals(curr.getAddress2()))) {
+				if (changes > 0) {
+					sb.append(",");
+				}
+				sb.append("ADDRESS2='" + u.getAddress2() + "'");
+				changes = changes + 1;
+			}
+
+			if ((u.getCity() != null) && (!u.getCity().equals(curr.getCity()))) {
+				if (changes > 0) {
+					sb.append(",");
+				}
+				sb.append("CITY='" + u.getCity() + "'");
+				changes = changes + 1;
+			}
+
+			if ((u.getState() != null)
+					&& (!u.getState().equals(curr.getState()))) {
+				if (changes > 0) {
+					sb.append(",");
+				}
+				sb.append("STATE='" + u.getState() + "'");
+				changes = changes + 1;
+			}
+
+			if ((u.getZipcode() != null)
+					&& (!u.getZipcode().equals(curr.getZipcode()))) {
+				if (changes > 0) {
+					sb.append(",");
+				}
+				sb.append("ZIP_CODE='" + u.getZipcode() + "'");
+				changes = changes + 1;
+			}
+
+			if ((u.getPhoneNumber() != null) && (!u.getPhoneNumber().equals(curr.getPhoneNumber()))) {
+				if (changes > 0) {
+					sb.append(",");
+				}
+				sb.append("PHONE_NUMBER='" + u.getPhoneNumber() + "'");
+				changes = changes + 1;
+			}
+
+			if ((u.getStatus() != null) && (!u.getStatus().equals(curr.getStatus()))) {
+				if (changes > 0) {
+					sb.append(",");
+				}
+				sb.append("STATUS='" + u.getStatus().getValue() + "'");
+				changes = changes + 1;
+			}
+
+			if ((u.getRole() != null)&& (!u.getRole().equals(curr.getRole()))) {
+				if (changes > 0) {
+					sb.append(",");
+				}
+				sb.append("ROLE='" + u.getRole().getValue() + "'");
+				changes = changes + 1;
+			}
+            sb.append(" where EMAIL='" + u.getEmail() + "'");
+			if(changes>0){
+				db.update(sb.toString());
+			}
+
 		} else {
 			NoSuchUserFault fault = new NoSuchUserFault();
-			fault.setFaultString("The user " + email + " does not exist.");
+			fault.setFaultString("Could not update user, the user "
+					+ u.getEmail() + " does not exist.");
 			throw fault;
 		}
 	}

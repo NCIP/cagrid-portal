@@ -39,7 +39,7 @@ public class TestUserManager extends TestCase {
 	public void testMultipleUsers() {
 		try {
 
-			int userCount = 80;
+			int userCount = 20;
 			int activeNA = 0;
 			int pendingNA = 0;
 			int rejectedNA = 0;
@@ -94,7 +94,7 @@ public class TestUserManager extends TestCase {
 				User u = um.getUser(users[i].getEmail());
 				assertEquals(users[i], u);
 
-				User[] list = um.getUsers();
+				User[] list = um.getUsers(null);
 				assertEquals(i + 1, list.length);
 				UserFilter f = new UserFilter();
 				f.setStatus(UserManager.ACTIVE);
@@ -217,17 +217,11 @@ public class TestUserManager extends TestCase {
 			UserManager um = new UserManager(db, properties);
 			User u1 = makeActiveUser();
 			um.addUser(u1);
-			u1.setPassword(Crypt.crypt(u1.getPassword()));
 			assertTrue(um.userExists(u1.getEmail()));
-			User u2 = um.getUser(u1.getEmail());
-			assertEquals(u1, u2);
-			um.changeUserStatus(u1.getEmail(), UserManager.SUSPENDED);
-			u2 = null;
-			u2 = um.getUser(u1.getEmail());
-			if (u1.equals(u2)) {
-				assertTrue(false);
-			}
 			u1.setStatus(UserManager.SUSPENDED);
+			um.updateUser(u1);
+			u1.setPassword(Crypt.crypt(u1.getPassword()));
+			User u2 = um.getUser(u1.getEmail());
 			assertEquals(u1, u2);
 
 		} catch (Exception e) {
@@ -248,19 +242,12 @@ public class TestUserManager extends TestCase {
 			UserManager um = new UserManager(db, properties);
 			User u1 = makeActiveUser();
 			um.addUser(u1);
-			u1.setPassword(Crypt.crypt(u1.getPassword()));
 			assertTrue(um.userExists(u1.getEmail()));
+			u1.setRole(UserManager.ADMINISTRATOR);
+			um.updateUser(u1);
+			u1.setPassword(Crypt.crypt(u1.getPassword()));
 			User u2 = um.getUser(u1.getEmail());
 			assertEquals(u1, u2);
-			um.changeUserRole(u1.getEmail(), UserManager.ADMINISTRATOR);
-			u2 = null;
-			u2 = um.getUser(u1.getEmail());
-			if (u1.equals(u2)) {
-				assertTrue(false);
-			}
-			u1.setRole(UserManager.ADMINISTRATOR);
-			assertEquals(u1, u2);
-
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -279,17 +266,11 @@ public class TestUserManager extends TestCase {
 			UserManager um = new UserManager(db, properties);
 			User u1 = makeActiveUser();
 			um.addUser(u1);
-			u1.setPassword(Crypt.crypt(u1.getPassword()));
 			assertTrue(um.userExists(u1.getEmail()));
+			u1.setPassword("newpassword");
+			um.updateUser(u1);
 			User u2 = um.getUser(u1.getEmail());
-			assertEquals(u1, u2);
-			um.changeUserPassword(u1.getEmail(), "newpassword");
-			u2 = null;
-			u2 = um.getUser(u1.getEmail());
-			if (u1.equals(u2)) {
-				assertTrue(false);
-			}
-			u1.setPassword(Crypt.crypt("newpassword"));
+			u1.setPassword(Crypt.crypt(u1.getPassword()));
 			assertEquals(u1, u2);
 
 		} catch (Exception e) {
@@ -304,6 +285,43 @@ public class TestUserManager extends TestCase {
 		}
 
 	}
+	
+	public void testUpdateUser() {
+		try {
+			UserManager um = new UserManager(db, properties);
+			User u1 = makeActiveUser();
+			um.addUser(u1);
+			assertTrue(um.userExists(u1.getEmail()));
+			u1.setPassword("changedpassword");
+			u1.setFirstName("changedfirst");
+			u1.setLastName("changedlast");
+			u1.setAddress("changedaddress");
+			u1.setAddress2("changedaddress2");
+			u1.setCity("New York");
+			u1.setState("NY");
+			u1.setZipcode("11776");
+			u1.setPhoneNumber("718-555-5555");
+			u1.setOrganization("changedorganization");
+			u1.setStatus(UserManager.SUSPENDED);
+			u1.setRole(UserManager.ADMINISTRATOR);
+			um.updateUser(u1);
+			User u2 = um.getUser(u1.getEmail());
+			u1.setPassword(Crypt.crypt(u1.getPassword()));
+			assertEquals(u1, u2);
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			try {
+				db.destroyDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+	
 
 	public void testSingleUser() {
 		try {
@@ -315,7 +333,7 @@ public class TestUserManager extends TestCase {
 			User u2 = um.getUser(u1.getEmail());
 			assertEquals(u1, u2);
 
-			User[] list = um.getUsers();
+			User[] list = um.getUsers(null);
 			assertEquals(1, list.length);
 			assertEquals(u1, list[0]);
 			UserFilter f = new UserFilter();
@@ -347,7 +365,7 @@ public class TestUserManager extends TestCase {
 
 			}
 
-			assertEquals(0, um.getUsers().length);
+			assertEquals(0, um.getUsers(null).length);
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
