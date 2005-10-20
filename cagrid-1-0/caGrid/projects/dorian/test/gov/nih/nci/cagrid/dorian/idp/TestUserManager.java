@@ -341,9 +341,9 @@ public class TestUserManager extends TestCase {
 		u.setAddress("address" + count);
 		u.setAddress2("address2" + count);
 		u.setCity("Columbus");
-		u.setState("Ohio");
+		u.setState("OH");
 		u.setZipcode("43210");
-		u.setPhoneNumber("(614) 555-5555");
+		u.setPhoneNumber("614-555-5555");
 		u.setOrganization("organization" + count);
 		u.setStatus(status);
 		u.setRole(role);

@@ -57,7 +57,7 @@ public class USStates {
 		abrToState.put("NE", "Nebraska");
 		abrToState.put("NH", "New Hampshire");
 		abrToState.put("NJ", "New Jersey");
-		abrToState.put(" NM", "New Mexico");
+		abrToState.put("NM", "New Mexico");
 		abrToState.put("NV", "Nevada");
 		abrToState.put("NY", "New York");
 		abrToState.put("OH", "Ohio");

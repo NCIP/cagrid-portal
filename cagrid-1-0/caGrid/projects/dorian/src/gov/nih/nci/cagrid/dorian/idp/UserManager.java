@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.gums.idp;
 
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
+import gov.nih.nci.cagrid.gums.common.AddressValidator;
 import gov.nih.nci.cagrid.gums.common.Crypt;
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
@@ -47,33 +48,64 @@ public class UserManager extends GUMSObject {
 	private Database db;
 
 	private boolean dbBuilt = false;
-	
+
 	private IdPProperties properties;
 
-	public UserManager(Database db,IdPProperties properties) throws GUMSInternalFault {
+	public UserManager(Database db, IdPProperties properties)
+			throws GUMSInternalFault {
 		this.db = db;
 		this.properties = properties;
 	}
-	
-	private void validateUser(User user) throws GUMSInternalFault,InvalidUserPropertyFault {
-		String password = user.getPassword();
-		if((password==null)||(properties.getMinimumPasswordLength()>password.length())||
-			(properties.getMaximumPasswordLength()<password.length())){
+
+	private void validateSpecifiedField(String fieldName, String name)
+			throws GUMSInternalFault {
+		if ((name == null) || (name.length() == 0)) {
 			GUMSInternalFault fault = new GUMSInternalFault();
-			fault.setFaultString("Unacceptable password, the length of the password must be between "+properties.getMinimumPasswordLength()+" and "+properties.getMaximumPasswordLength());
+			fault.setFaultString("No " + fieldName + " specified.");
 			throw fault;
 		}
 	}
-	
-	
 
-	public synchronized void addUser(User user) throws GUMSInternalFault {
+private void validateUser(User user) throws GUMSInternalFault,
+			InvalidUserPropertyFault {
+		String password = user.getPassword();
+		if ((password == null)
+				|| (properties.getMinimumPasswordLength() > password.length())
+				|| (properties.getMaximumPasswordLength() < password.length())) {
+			GUMSInternalFault fault = new GUMSInternalFault();
+			fault
+					.setFaultString("Unacceptable password, the length of the password must be between "
+							+ properties.getMinimumPasswordLength()
+							+ " and "
+							+ properties.getMaximumPasswordLength());
+			throw fault;
+		}
+		
+		validateSpecifiedField("First Name",user.getFirstName());
+		validateSpecifiedField("Last Name",user.getLastName());
+		validateSpecifiedField("Address",user.getAddress());
+		validateSpecifiedField("City",user.getCity());
+		validateSpecifiedField("Organization",user.getOrganization());
+		
+		try {
+			AddressValidator.validatePhone(user.getPhoneNumber());
+			AddressValidator.validateEmail(user.getEmail());
+			AddressValidator.validateZipCode(user.getZipcode());
+			AddressValidator.validateState(user.getState());
+		} catch (IllegalArgumentException e) {
+			GUMSInternalFault fault = new GUMSInternalFault();
+			fault.setFaultString(e.getMessage());
+			throw fault;
+		}
+	}	public synchronized void addUser(User user) throws GUMSInternalFault,
+			InvalidUserPropertyFault {
 		this.buildDatabase();
+		this.validateUser(user);
 		db.update("INSERT INTO " + IDP_USERS_TABLE + " VALUES('"
-				+ user.getEmail() + "','" + Crypt.crypt(user.getPassword()) + "','"
-				+ user.getFirstName() + "','" + user.getLastName() + "','"
-				+ user.getOrganization() + "','" + user.getAddress() + "','"
-				+ user.getAddress2() + "','" + user.getCity() + "','"
+				+ user.getEmail() + "','" + Crypt.crypt(user.getPassword())
+				+ "','" + user.getFirstName() + "','" + user.getLastName()
+				+ "','" + user.getOrganization() + "','" + user.getAddress()
+				+ "','" + user.getAddress2() + "','" + user.getCity() + "','"
 				+ user.getState() + "','" + user.getZipcode() + "','"
 				+ user.getPhoneNumber() + "','" + user.getStatus().getValue()
 				+ "','" + user.getRole().getValue() + "')");
