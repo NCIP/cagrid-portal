@@ -150,64 +150,64 @@ public class UserManager extends GUMSObject {
 			if(filter!=null){
 			boolean firstAppended = false;
 			
-			if (filter.getEmail() != null) {
-				sql = appendWhereOrAnd(firstAppended, sql);
-				firstAppended = true;
-				sql.append(" EMAIL LIKE '%" + filter.getStatus() + "%'");
-			}
-			
 			if (filter.getFirstName() != null) {
 				sql = appendWhereOrAnd(firstAppended, sql);
 				firstAppended = true;
-				sql.append(" EMAIL LIKE '%" + filter.getFirstName() + "%'");
+				sql.append(" FIRST_NAME LIKE '%" + filter.getFirstName() + "%'");
 			}
 			
 			if (filter.getLastName() != null) {
 				sql = appendWhereOrAnd(firstAppended, sql);
 				firstAppended = true;
-				sql.append(" EMAIL LIKE '%" + filter.getLastName() + "%'");
+				sql.append(" LAST_NAME LIKE '%" + filter.getLastName() + "%'");
 			}
 			
 			if (filter.getOrganization() != null) {
 				sql = appendWhereOrAnd(firstAppended, sql);
 				firstAppended = true;
-				sql.append(" EMAIL LIKE '%" + filter.getOrganization() + "%'");
+				sql.append(" ORGANIZATION LIKE '%" + filter.getOrganization() + "%'");
 			}
 			
 			if (filter.getAddress() != null) {
 				sql = appendWhereOrAnd(firstAppended, sql);
 				firstAppended = true;
-				sql.append(" EMAIL LIKE '%" + filter.getAddress() + "%'");
+				sql.append(" ADDRESS LIKE '%" + filter.getAddress() + "%'");
 			}
 			
 			if (filter.getAddress2() != null) {
 				sql = appendWhereOrAnd(firstAppended, sql);
 				firstAppended = true;
-				sql.append(" EMAIL LIKE '%" + filter.getAddress2() + "%'");
+				sql.append(" ADDRESS2 LIKE '%" + filter.getAddress2() + "%'");
 			}
 			
 			if (filter.getCity() != null) {
 				sql = appendWhereOrAnd(firstAppended, sql);
 				firstAppended = true;
-				sql.append(" EMAIL LIKE '%" + filter.getCity() + "%'");
+				sql.append(" CITY LIKE '%" + filter.getCity() + "%'");
 			}
 			
 			if (filter.getState() != null) {
 				sql = appendWhereOrAnd(firstAppended, sql);
 				firstAppended = true;
-				sql.append(" EMAIL LIKE '%" + filter.getState() + "%'");
+				sql.append(" STATE LIKE '%" + filter.getState() + "%'");
 			}
 			
 			if (filter.getZipcode() != null) {
 				sql = appendWhereOrAnd(firstAppended, sql);
 				firstAppended = true;
-				sql.append(" EMAIL LIKE '%" + filter.getZipcode() + "%'");
+				sql.append(" ZIP_CODE LIKE '%" + filter.getZipcode() + "%'");
 			}
 			
 			if (filter.getEmail() != null) {
 				sql = appendWhereOrAnd(firstAppended, sql);
 				firstAppended = true;
 				sql.append(" EMAIL LIKE '%" + filter.getEmail() + "%'");
+			}
+			
+			if (filter.getPhoneNumber() != null) {
+				sql = appendWhereOrAnd(firstAppended, sql);
+				firstAppended = true;
+				sql.append(" PHONE_NUMBER LIKE '%" + filter.getPhoneNumber() + "%'");
 			}
 
 			if (filter.getStatus() != null) {
