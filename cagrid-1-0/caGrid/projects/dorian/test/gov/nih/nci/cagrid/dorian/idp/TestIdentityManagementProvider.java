@@ -30,22 +30,26 @@ public class TestIdentityManagementProvider extends TestCase {
 			+ "general-test" + File.separator + "db-config.xml";
 
 	private Database db;
-	private int count =0;
-	
+
+	private int count = 0;
+
 	public void testAutomaticRegistration() {
 		try {
 			IdentityManagerProvider imp = new IdentityManagerProvider(db);
-			imp.getProperties().setRegistrationPolicy(new AutomaticRegistrationPolicy());
-			assertEquals(AutomaticRegistrationPolicy.class.getName(), imp.getProperties().getRegistrationPolicy().getClass().getName());
+			imp.getProperties().setRegistrationPolicy(
+					new AutomaticRegistrationPolicy());
+			assertEquals(AutomaticRegistrationPolicy.class.getName(), imp
+					.getProperties().getRegistrationPolicy().getClass()
+					.getName());
 			Application a = createApplication();
 			imp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
 			UserFilter uf = new UserFilter();
 			uf.setUserId(a.getUserId());
-			User[] users = imp.findUsers(cred,uf);
-			assertEquals(1,users.length);
-			assertEquals(UserManager.ACTIVE,users[0].getStatus());
-			assertEquals(UserManager.NON_ADMINISTRATOR,users[0].getRole());
+			User[] users = imp.findUsers(cred, uf);
+			assertEquals(1, users.length);
+			assertEquals(UserManager.ACTIVE, users[0].getStatus());
+			assertEquals(UserManager.NON_ADMINISTRATOR, users[0].getRole());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -61,22 +65,25 @@ public class TestIdentityManagementProvider extends TestCase {
 	public void testManualRegistration() {
 		try {
 			IdentityManagerProvider imp = new IdentityManagerProvider(db);
-			imp.getProperties().setRegistrationPolicy(new ManualRegistrationPolicy());
-			assertEquals(ManualRegistrationPolicy.class.getName(), imp.getProperties().getRegistrationPolicy().getClass().getName());
+			imp.getProperties().setRegistrationPolicy(
+					new ManualRegistrationPolicy());
+			assertEquals(ManualRegistrationPolicy.class.getName(), imp
+					.getProperties().getRegistrationPolicy().getClass()
+					.getName());
 			Application a = createApplication();
 			imp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
 			UserFilter uf = new UserFilter();
 			uf.setUserId(a.getUserId());
-			User[] users = imp.findUsers(cred,uf);
-			assertEquals(1,users.length);
-			assertEquals(UserManager.PENDING,users[0].getStatus());
-			assertEquals(UserManager.NON_ADMINISTRATOR,users[0].getRole());
+			User[] users = imp.findUsers(cred, uf);
+			assertEquals(1, users.length);
+			assertEquals(UserManager.PENDING, users[0].getStatus());
+			assertEquals(UserManager.NON_ADMINISTRATOR, users[0].getRole());
 			users[0].setStatus(UserManager.ACTIVE);
-			imp.updateUser(cred,users[0]);
-			users = imp.findUsers(cred,uf);
-			assertEquals(1,users.length);
-			assertEquals(UserManager.ACTIVE,users[0].getStatus());
+			imp.updateUser(cred, users[0]);
+			users = imp.findUsers(cred, uf);
+			assertEquals(1, users.length);
+			assertEquals(UserManager.ACTIVE, users[0].getStatus());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -88,28 +95,88 @@ public class TestIdentityManagementProvider extends TestCase {
 			}
 		}
 	}
-	
-	private BasicAuthCredential getAdminCreds(){
+
+	public void testMultipleUsers() {
+		try {
+			IdentityManagerProvider imp = new IdentityManagerProvider(db);
+			imp.getProperties().setRegistrationPolicy(
+					new ManualRegistrationPolicy());
+			assertEquals(ManualRegistrationPolicy.class.getName(), imp
+					.getProperties().getRegistrationPolicy().getClass()
+					.getName());
+			BasicAuthCredential cred = getAdminCreds();
+			for (int i = 0; i < 10; i++) {
+				Application a = createApplication();
+				imp.register(a);
+				
+				UserFilter uf = new UserFilter();
+				uf.setUserId(a.getUserId());
+				User[] users = imp.findUsers(cred, uf);
+				assertEquals(1, users.length);
+				assertEquals(UserManager.PENDING, users[0].getStatus());
+				assertEquals(UserManager.NON_ADMINISTRATOR, users[0].getRole());
+				users[0].setStatus(UserManager.ACTIVE);
+				imp.updateUser(cred, users[0]);
+				users = imp.findUsers(cred, uf);
+				assertEquals(1, users.length);
+				assertEquals(UserManager.ACTIVE, users[0].getStatus());
+				uf.setUserId("user");
+				users = imp.findUsers(cred, uf);
+				assertEquals(i + 1, users.length);
+			}
+			
+			UserFilter uf = new UserFilter();
+			User[] users = imp.findUsers(cred, uf);
+			assertEquals(11, users.length);
+			for (int i = 0; i < 10; i++) {
+				UserFilter f = new UserFilter();
+				f.setUserId(users[i].getUserId());
+				User[] us = imp.findUsers(cred,f);
+				assertEquals(1, us.length);
+				us[0].setFirstName("NEW NAME");
+				imp.updateUser(cred,us[0]);
+				User[] us2 = imp.findUsers(cred,f);
+				assertEquals(1, us2.length);
+				assertEquals(us[0], us2[0]);
+				imp.removeUser(cred,users[i].getUserId());
+				us = imp.findUsers(cred,f);
+				assertEquals(0, us.length);
+			}
+			users = imp.findUsers(cred, uf);
+			assertEquals(1, users.length);
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			try {
+				db.destroyDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private BasicAuthCredential getAdminCreds() {
 		BasicAuthCredential cred = new BasicAuthCredential();
 		cred.setUserId(IdentityManagerProvider.ADMIN_USER_ID);
 		cred.setPassword(IdentityManagerProvider.ADMIN_PASSWORD);
 		return cred;
 	}
-	
+
 	private Application createApplication() {
 		Application u = new Application();
-		u.setUserId(count+"user");
-		u.setEmail(count+"user@mail.com");
-		u.setPassword(count+"password");
-		u.setFirstName(count+"first");
-		u.setLastName(count+"last");
-		u.setAddress(count+"address");
-		u.setAddress2(count+"address2");
+		u.setUserId(count + "user");
+		u.setEmail(count + "user@mail.com");
+		u.setPassword(count + "password");
+		u.setFirstName(count + "first");
+		u.setLastName(count + "last");
+		u.setAddress(count + "address");
+		u.setAddress2(count + "address2");
 		u.setCity("Columbus");
 		u.setState("OH");
 		u.setZipcode("43210");
 		u.setPhoneNumber("614-555-5555");
-		u.setOrganization(count+"organization");
+		u.setOrganization(count + "organization");
 		count = count + 1;
 		return u;
 	}
@@ -117,7 +184,7 @@ public class TestIdentityManagementProvider extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
-			count =0;
+			count = 0;
 			Document doc = XMLUtilities.fileNameToDocument(DB_CONFIG);
 			ConnectionManager cm = new ConnectionManager(doc.getRootElement());
 			db = new Database(cm, DB);

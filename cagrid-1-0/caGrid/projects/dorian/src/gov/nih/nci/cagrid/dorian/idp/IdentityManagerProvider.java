@@ -33,8 +33,9 @@ public class IdentityManagerProvider extends GUMSObject {
 	private UserManager userManager;
 
 	public static final String ADMIN_USER_ID = "gums";
+
 	public static final String ADMIN_PASSWORD = "password";
-	
+
 	public IdentityManagerProvider(Database db) throws GUMSInternalFault {
 		try {
 			this.properties = new IdPProperties(db);
@@ -171,6 +172,14 @@ public class IdentityManagerProvider extends GUMSObject {
 			throw fault;
 		}
 
+	}
+
+	public void removeUser(BasicAuthCredential credential, String userId)
+			throws GUMSInternalFault, InvalidLoginFault, PermissionDeniedFault,
+			NoSuchUserFault, InvalidUserPropertyFault {
+		User requestor = verifyUser(credential);
+		verifyAdministrator(requestor);
+		userManager.removeUser(userId);
 	}
 
 	public IdPProperties getProperties() {
