@@ -33,6 +33,10 @@ public class TestIdPProperties extends TestCase {
 					.getMinimumPasswordLength());
 			assertEquals(IdPProperties.DEFAULT_MAX_PASSWORD_LENGTH, props
 					.getMaximumPasswordLength());
+			assertEquals(IdPProperties.DEFAULT_MIN_UID_LENGTH, props
+					.getMinimumUIDLength());
+			assertEquals(IdPProperties.DEFAULT_MAX_UID_LENGTH, props
+					.getMaximumUIDLength());
 			assertEquals(ManualRegistrationPolicy.class.getName(), props.getRegistrationPolicy().getClass().getName());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);

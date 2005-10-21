@@ -13,6 +13,8 @@ import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
 import gov.nih.nci.cagrid.gums.idp.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gums.idp.bean.User;
 import gov.nih.nci.cagrid.gums.idp.bean.UserFilter;
+import gov.nih.nci.cagrid.gums.idp.bean.UserRole;
+import gov.nih.nci.cagrid.gums.idp.bean.UserStatus;
 
 import org.globus.wsrf.utils.FaultHelper;
 
@@ -50,7 +52,22 @@ public class IdentityManagerProvider extends GUMSObject {
 			InvalidUserPropertyFault {
 		IdPRegistrationPolicy policy = properties.getRegistrationPolicy();
 		ApplicationReview ar = policy.register(a);
+		UserStatus status = ar.getStatus();
+		UserRole role = ar.getRole();
+		String message = ar.getMessage();
+		if(status==null){
+			status = UserManager.PENDING;
+		}
+		
+		if(role == null){
+			role = UserManager.NON_ADMINISTRATOR;
+		}
+		if(message == null){
+			message = "None";
+		}
+		
 		User u = new User();
+		u.setUid(a.getUid());
 		u.setEmail(a.getEmail());
 		u.setPassword(a.getPassword());
 		u.setFirstName(a.getFirstName());
@@ -62,10 +79,10 @@ public class IdentityManagerProvider extends GUMSObject {
 		u.setState(a.getState());
 		u.setZipcode(a.getZipcode());
 		u.setPhoneNumber(a.getPhoneNumber());
-		u.setRole(ar.getRole());
-		u.setStatus(ar.getStatus());
+		u.setRole(role);
+		u.setStatus(status);
 		userManager.addUser(u);
-		return ar.getMessage();
+		return message;
 }
 
 
@@ -73,11 +90,11 @@ public class IdentityManagerProvider extends GUMSObject {
 			throws GUMSInternalFault, InvalidLoginFault, PermissionDeniedFault {
 		User requestor = verifyUser(credential);
 		verifyAdministrator(requestor);
-		return this.userManager.getUsers(filter, true);
+		return this.userManager.getUsers(filter, false);
 	}
 
 	public void updateUser(BasicAuthCredential credential, User u)
-			throws GUMSInternalFault, InvalidLoginFault, PermissionDeniedFault, NoSuchUserFault {
+			throws GUMSInternalFault, InvalidLoginFault, PermissionDeniedFault, NoSuchUserFault,InvalidUserPropertyFault {
 		User requestor = verifyUser(credential);
 		verifyAdministrator(requestor);
 		this.userManager.updateUser(u);
@@ -94,11 +111,11 @@ public class IdentityManagerProvider extends GUMSObject {
 	private User verifyUser(BasicAuthCredential credential)
 			throws GUMSInternalFault, InvalidLoginFault {
 		try {
-			User u = this.userManager.getUser(credential.getEmail());
+			User u = this.userManager.getUser(credential.getUid());
 			if (!u.getPassword().equals(Crypt.crypt(credential.getPassword()))) {
 				InvalidLoginFault fault = new InvalidLoginFault();
 				fault
-						.setFaultString("The mmail address or password is incorrect.");
+						.setFaultString("The uid or password is incorrect.");
 				throw fault;
 			}
 			if (!u.getStatus().equals(UserManager.ACTIVE)) {

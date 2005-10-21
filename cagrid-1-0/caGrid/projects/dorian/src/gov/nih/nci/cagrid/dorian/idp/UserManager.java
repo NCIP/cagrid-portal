@@ -69,6 +69,18 @@ public class UserManager extends GUMSObject {
 
 	private void validateUser(User user) throws GUMSInternalFault,
 			InvalidUserPropertyFault {
+		String uid = user.getUid();
+		if ((uid == null) || (properties.getMinimumUIDLength() > uid.length())
+				|| (properties.getMaximumUIDLength() < uid.length())) {
+			GUMSInternalFault fault = new GUMSInternalFault();
+			fault
+					.setFaultString("Unacceptable User ID, the length of the password must be between "
+							+ properties.getMinimumUIDLength()
+							+ " and "
+							+ properties.getMaximumUIDLength());
+			throw fault;
+		}
+
 		String password = user.getPassword();
 		if ((password == null)
 				|| (properties.getMinimumPasswordLength() > password.length())
@@ -105,19 +117,21 @@ public class UserManager extends GUMSObject {
 		this.buildDatabase();
 		this.validateUser(user);
 		db.update("INSERT INTO " + IDP_USERS_TABLE + " VALUES('"
-				+ user.getEmail() + "','" + Crypt.crypt(user.getPassword())
-				+ "','" + user.getFirstName() + "','" + user.getLastName()
-				+ "','" + user.getOrganization() + "','" + user.getAddress()
-				+ "','" + user.getAddress2() + "','" + user.getCity() + "','"
-				+ user.getState() + "','" + user.getZipcode() + "','"
-				+ user.getPhoneNumber() + "','" + user.getStatus().getValue()
-				+ "','" + user.getRole().getValue() + "')");
+				+ user.getUid() + "','" + user.getEmail() + "','"
+				+ Crypt.crypt(user.getPassword()) + "','" + user.getFirstName()
+				+ "','" + user.getLastName() + "','" + user.getOrganization()
+				+ "','" + user.getAddress() + "','" + user.getAddress2()
+				+ "','" + user.getCity() + "','" + user.getState() + "','"
+				+ user.getZipcode() + "','" + user.getPhoneNumber() + "','"
+				+ user.getStatus().getValue() + "','"
+				+ user.getRole().getValue() + "')");
 	}
 
-	public synchronized void removeUser(String email) throws GUMSInternalFault {
+	public synchronized void removeUser(String uid) throws GUMSInternalFault {
 		this.buildDatabase();
-		db.update("DELETE FROM " + IDP_USERS_TABLE + " WHERE EMAIL='" + email
-				+ "'");
+		db
+				.update("DELETE FROM " + IDP_USERS_TABLE + " WHERE UID='" + uid
+						+ "'");
 	}
 
 	private StringBuffer appendWhereOrAnd(boolean firstAppended,
@@ -148,6 +162,12 @@ public class UserManager extends GUMSObject {
 			sql.append("select * from " + IDP_USERS_TABLE);
 			if (filter != null) {
 				boolean firstAppended = false;
+
+				if (filter.getUid() != null) {
+					sql = appendWhereOrAnd(firstAppended, sql);
+					firstAppended = true;
+					sql.append(" UID LIKE '%" + filter.getUid() + "%'");
+				}
 
 				if (filter.getFirstName() != null) {
 					sql = appendWhereOrAnd(firstAppended, sql);
@@ -232,6 +252,7 @@ public class UserManager extends GUMSObject {
 			ResultSet rs = s.executeQuery(sql.toString());
 			while (rs.next()) {
 				User user = new User();
+				user.setUid(rs.getString("UID"));
 				user.setEmail(rs.getString("EMAIL"));
 				if (includePassword) {
 					user.setPassword(rs.getString("PASSWORD"));
@@ -272,11 +293,11 @@ public class UserManager extends GUMSObject {
 		}
 	}
 
-	public User getUser(String email) throws GUMSInternalFault, NoSuchUserFault {
-		return this.getUser(email, true);
+	public User getUser(String uid) throws GUMSInternalFault, NoSuchUserFault {
+		return this.getUser(uid, true);
 	}
 
-	public User getUser(String email, boolean includePassword)
+	public User getUser(String uid, boolean includePassword)
 			throws GUMSInternalFault, NoSuchUserFault {
 		this.buildDatabase();
 		User user = new User();
@@ -286,9 +307,10 @@ public class UserManager extends GUMSObject {
 			c = db.getConnectionManager().getConnection();
 			Statement s = c.createStatement();
 			ResultSet rs = s.executeQuery("select * from " + IDP_USERS_TABLE
-					+ " where EMAIL='" + email + "'");
+					+ " where UID='" + uid + "'");
 			if (rs.next()) {
-				user.setEmail(email);
+				user.setUid(uid);
+				user.setEmail(rs.getString("EMAIL"));
 				if (includePassword) {
 					user.setPassword(rs.getString("PASSWORD"));
 				}
@@ -305,7 +327,7 @@ public class UserManager extends GUMSObject {
 				user.setRole(UserRole.fromValue(rs.getString("ROLE")));
 			} else {
 				NoSuchUserFault fault = new NoSuchUserFault();
-				fault.setFaultString("The user " + email + " does not exist.");
+				fault.setFaultString("The user " + uid + " does not exist.");
 				throw fault;
 			}
 			rs.close();
@@ -318,7 +340,7 @@ public class UserManager extends GUMSObject {
 			logError(e.getMessage(), e);
 			GUMSInternalFault fault = new GUMSInternalFault();
 			fault.setFaultString("Unexpected Error, could not obtain the user "
-					+ email + ".");
+					+ uid + ".");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (GUMSInternalFault) helper.getFault();
@@ -333,7 +355,8 @@ public class UserManager extends GUMSObject {
 		if (!dbBuilt) {
 			if (!this.db.tableExists(IDP_USERS_TABLE)) {
 				String applications = "CREATE TABLE " + IDP_USERS_TABLE + " ("
-						+ "EMAIL VARCHAR(255) NOT NULL PRIMARY KEY,"
+						+ "UID VARCHAR(255) NOT NULL PRIMARY KEY,"
+						+ "EMAIL VARCHAR(255) NOT NULL,"
 						+ "PASSWORD VARCHAR(255) NOT NULL,"
 						+ "FIRST_NAME VARCHAR(255) NOT NULL,"
 						+ "LAST_NAME VARCHAR(255) NOT NULL,"
@@ -353,21 +376,20 @@ public class UserManager extends GUMSObject {
 		}
 	}
 
-	
-
 	public synchronized void updateUser(User u) throws GUMSInternalFault,
-			NoSuchUserFault {
+			NoSuchUserFault, InvalidUserPropertyFault {
 		this.buildDatabase();
-		if (u.getEmail() == null) {
+		if (u.getUid() == null) {
 			NoSuchUserFault fault = new NoSuchUserFault();
 			fault.setFaultString("Could not update user, the user "
-					+ u.getEmail() + " does not exist.");
+					+ u.getUid() + " does not exist.");
 			throw fault;
-		} else if (userExists(u.getEmail())) {
+		} else if (userExists(u.getUid())) {
+			this.validateUser(u);
 			StringBuffer sb = new StringBuffer();
 			sb.append("update " + IDP_USERS_TABLE + " SET ");
 			int changes = 0;
-			User curr = this.getUser(u.getEmail());
+			User curr = this.getUser(u.getUid());
 			if (u.getPassword() != null) {
 				String newPass = Crypt.crypt(u.getPassword());
 				if (!newPass.equals(curr.getPassword())) {
@@ -377,6 +399,15 @@ public class UserManager extends GUMSObject {
 					sb.append("PASSWORD='" + newPass + "'");
 					changes = changes + 1;
 				}
+			}
+
+			if ((u.getEmail() != null)
+					&& (!u.getEmail().equals(curr.getEmail()))) {
+				if (changes > 0) {
+					sb.append(",");
+				}
+				sb.append("EMAIL='" + u.getEmail() + "'");
+				changes = changes + 1;
 			}
 
 			if ((u.getFirstName() != null)
@@ -450,7 +481,8 @@ public class UserManager extends GUMSObject {
 				changes = changes + 1;
 			}
 
-			if ((u.getPhoneNumber() != null) && (!u.getPhoneNumber().equals(curr.getPhoneNumber()))) {
+			if ((u.getPhoneNumber() != null)
+					&& (!u.getPhoneNumber().equals(curr.getPhoneNumber()))) {
 				if (changes > 0) {
 					sb.append(",");
 				}
@@ -458,35 +490,58 @@ public class UserManager extends GUMSObject {
 				changes = changes + 1;
 			}
 
-			if ((u.getStatus() != null) && (!u.getStatus().equals(curr.getStatus()))) {
+			if ((u.getStatus() != null)
+					&& (!u.getStatus().equals(curr.getStatus()))) {
 				if (changes > 0) {
 					sb.append(",");
 				}
+
+				if (accountCreated(curr.getStatus())
+						&& !accountCreated(u.getStatus())) {
+					InvalidUserPropertyFault fault = new InvalidUserPropertyFault();
+					fault.setFaultString("Error, cannot change " + u.getUid()
+							+ "'s status from a post-created account status ("
+							+ curr.getStatus()
+							+ ") to a pre-created account status ("
+							+ u.getStatus() + ").");
+					throw fault;
+				}
+
 				sb.append("STATUS='" + u.getStatus().getValue() + "'");
 				changes = changes + 1;
 			}
 
-			if ((u.getRole() != null)&& (!u.getRole().equals(curr.getRole()))) {
+			if ((u.getRole() != null) && (!u.getRole().equals(curr.getRole()))) {
 				if (changes > 0) {
 					sb.append(",");
 				}
 				sb.append("ROLE='" + u.getRole().getValue() + "'");
 				changes = changes + 1;
 			}
-            sb.append(" where EMAIL='" + u.getEmail() + "'");
-			if(changes>0){
+			sb.append(" where UID='" + u.getUid() + "'");
+			if (changes > 0) {
 				db.update(sb.toString());
 			}
 
 		} else {
 			NoSuchUserFault fault = new NoSuchUserFault();
 			fault.setFaultString("Could not update user, the user "
-					+ u.getEmail() + " does not exist.");
+					+ u.getUid() + " does not exist.");
 			throw fault;
 		}
 	}
 
-	public boolean userExists(String email) throws GUMSInternalFault {
+	private boolean accountCreated(UserStatus status) {
+		if (status.equals(SUSPENDED)) {
+			return true;
+		} else if (status.equals(ACTIVE)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean userExists(String uid) throws GUMSInternalFault {
 		this.buildDatabase();
 		Connection c = null;
 		boolean exists = false;
@@ -494,7 +549,7 @@ public class UserManager extends GUMSObject {
 			c = db.getConnectionManager().getConnection();
 			Statement s = c.createStatement();
 			ResultSet rs = s.executeQuery("select count(*) from "
-					+ IDP_USERS_TABLE + " where EMAIL='" + email + "'");
+					+ IDP_USERS_TABLE + " where UID='" + uid + "'");
 			if (rs.next()) {
 				int count = rs.getInt(1);
 				if (count > 0) {
@@ -509,7 +564,7 @@ public class UserManager extends GUMSObject {
 			GUMSInternalFault fault = new GUMSInternalFault();
 			fault
 					.setFaultString("Unexpected Database Error, could not determine if the user "
-							+ email + " exists.");
+							+ uid + " exists.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (GUMSInternalFault) helper.getFault();
