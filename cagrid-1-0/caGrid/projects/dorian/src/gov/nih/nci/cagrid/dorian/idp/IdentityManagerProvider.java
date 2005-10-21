@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.gums.common.Crypt;
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
 import gov.nih.nci.cagrid.gums.idp.bean.Application;
+import gov.nih.nci.cagrid.gums.idp.bean.ApplicationReview;
 import gov.nih.nci.cagrid.gums.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.gums.idp.bean.InvalidLoginFault;
 import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
@@ -45,23 +46,26 @@ public class IdentityManagerProvider extends GUMSObject {
 		}
 	}
 
-	public String register(Application application) throws GUMSInternalFault,
+	public String register(Application a) throws GUMSInternalFault,
 			InvalidUserPropertyFault {
 		IdPRegistrationPolicy policy = properties.getRegistrationPolicy();
-		User u = policy.register(application);
+		ApplicationReview ar = policy.register(a);
+		User u = new User();
+		u.setEmail(a.getEmail());
+		u.setPassword(a.getPassword());
+		u.setFirstName(a.getFirstName());
+		u.setLastName(a.getLastName());
+		u.setOrganization(a.getOrganization());
+		u.setAddress(a.getAddress());
+		u.setAddress2(a.getAddress2());
+		u.setCity(a.getCity());
+		u.setState(a.getState());
+		u.setZipcode(a.getZipcode());
+		u.setPhoneNumber(a.getPhoneNumber());
+		u.setRole(ar.getRole());
+		u.setStatus(ar.getStatus());
 		userManager.addUser(u);
-		if (u.getStatus().equals(UserManager.PENDING)) {
-			return "Your application will be reviewed by an administrator and you will be contacted at "
-					+ u.getEmail() + " upon a decision.";
-		} else if (u.getStatus().equals(UserManager.ACTIVE)) {
-			return "Your account was approved, your current account status is "
-					+ u.getStatus().getValue() + " you mail use "
-					+ u.getEmail() + " to access your account";
-		}else if (u.getStatus().equals(UserManager.REJECTED)) {
-			return "Your account was rejected.";
-		}else{
-			return "Contact an administrator for the status of your account.";
-		}
+		return ar.getMessage();
 }
 
 

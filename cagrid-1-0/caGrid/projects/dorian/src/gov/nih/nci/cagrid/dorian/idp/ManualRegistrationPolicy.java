@@ -2,8 +2,8 @@ package gov.nih.nci.cagrid.gums.idp;
 
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
 import gov.nih.nci.cagrid.gums.idp.bean.Application;
+import gov.nih.nci.cagrid.gums.idp.bean.ApplicationReview;
 import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
-import gov.nih.nci.cagrid.gums.idp.bean.User;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -12,7 +12,7 @@ import gov.nih.nci.cagrid.gums.idp.bean.User;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class ManualRegistrationPolicy implements IdPRegistrationPolicy{
+public class ManualRegistrationPolicy implements IdPRegistrationPolicy {
 
 	public String getDescription() {
 		return "This policy requires registering users, to be manually approved my an administrator";
@@ -22,22 +22,15 @@ public class ManualRegistrationPolicy implements IdPRegistrationPolicy{
 		return "Manual Registration";
 	}
 
-	public User register(Application a) throws GUMSInternalFault, InvalidUserPropertyFault {
-		User u = new User();
-		u.setEmail(a.getEmail());
-		u.setPassword(a.getPassword());
-		u.setFirstName(a.getFirstName());
-		u.setLastName(a.getLastName());
-		u.setOrganization(a.getOrganization());
-		u.setAddress(a.getAddress());
-		u.setAddress2(a.getAddress2());
-		u.setCity(a.getCity());
-		u.setState(a.getState());
-		u.setZipcode(a.getZipcode());
-		u.setPhoneNumber(a.getPhoneNumber());
-		u.setRole(UserManager.NON_ADMINISTRATOR);
-		u.setStatus(UserManager.PENDING);
-		return u;
+	public ApplicationReview register(Application a) throws GUMSInternalFault,
+			InvalidUserPropertyFault {
+		ApplicationReview ar = new ApplicationReview();
+		ar.setStatus(UserManager.PENDING);
+		ar.setRole(UserManager.NON_ADMINISTRATOR);
+		ar
+				.setMessage("Your application will be reviewed by an administrator and you will be contacted at "
+						+ a.getEmail() + " upon a decision.");
+		return ar;
 	}
 
 }
