@@ -31,6 +31,32 @@ public class TestIdentityManagementProvider extends TestCase {
 
 	private Database db;
 	private int count =0;
+	
+	public void testAutomaticRegistration() {
+		try {
+			IdentityManagerProvider imp = new IdentityManagerProvider(db);
+			imp.getProperties().setRegistrationPolicy(new AutomaticRegistrationPolicy());
+			assertEquals(AutomaticRegistrationPolicy.class.getName(), imp.getProperties().getRegistrationPolicy().getClass().getName());
+			Application a = createApplication();
+			imp.register(a);
+			BasicAuthCredential cred = getAdminCreds();
+			UserFilter uf = new UserFilter();
+			uf.setUserId(a.getUserId());
+			User[] users = imp.findUsers(cred,uf);
+			assertEquals(1,users.length);
+			assertEquals(UserManager.ACTIVE,users[0].getStatus());
+			assertEquals(UserManager.NON_ADMINISTRATOR,users[0].getRole());
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			try {
+				db.destroyDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	public void testManualRegistration() {
 		try {
@@ -45,6 +71,7 @@ public class TestIdentityManagementProvider extends TestCase {
 			User[] users = imp.findUsers(cred,uf);
 			assertEquals(1,users.length);
 			assertEquals(UserManager.PENDING,users[0].getStatus());
+			assertEquals(UserManager.NON_ADMINISTRATOR,users[0].getRole());
 			users[0].setStatus(UserManager.ACTIVE);
 			imp.updateUser(cred,users[0]);
 			users = imp.findUsers(cred,uf);
