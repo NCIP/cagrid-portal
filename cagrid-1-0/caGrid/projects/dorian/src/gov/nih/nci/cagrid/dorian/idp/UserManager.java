@@ -67,20 +67,8 @@ public class UserManager extends GUMSObject {
 		}
 	}
 
-	private void validateUser(User user) throws GUMSInternalFault,
+	private void validatePassword(User user) throws GUMSInternalFault,
 			InvalidUserPropertyFault {
-		String uid = user.getUserId();
-		if ((uid == null) || (properties.getMinimumUIDLength() > uid.length())
-				|| (properties.getMaximumUIDLength() < uid.length())) {
-			GUMSInternalFault fault = new GUMSInternalFault();
-			fault
-					.setFaultString("Unacceptable User ID, the length of the password must be between "
-							+ properties.getMinimumUIDLength()
-							+ " and "
-							+ properties.getMaximumUIDLength());
-			throw fault;
-		}
-
 		String password = user.getPassword();
 		if ((password == null)
 				|| (properties.getMinimumPasswordLength() > password.length())
@@ -93,7 +81,27 @@ public class UserManager extends GUMSObject {
 							+ properties.getMaximumPasswordLength());
 			throw fault;
 		}
+	}
 
+	private void validateUserId(User user) throws GUMSInternalFault,
+			InvalidUserPropertyFault {
+		String uid = user.getUserId();
+		if ((uid == null) || (properties.getMinimumUIDLength() > uid.length())
+				|| (properties.getMaximumUIDLength() < uid.length())) {
+			GUMSInternalFault fault = new GUMSInternalFault();
+			fault
+					.setFaultString("Unacceptable User ID, the length of the password must be between "
+							+ properties.getMinimumUIDLength()
+							+ " and "
+							+ properties.getMaximumUIDLength());
+			throw fault;
+		}
+	}
+
+	private void validateUser(User user) throws GUMSInternalFault,
+			InvalidUserPropertyFault {
+		validateUserId(user);
+		validatePassword(user);
 		validateSpecifiedField("First Name", user.getFirstName());
 		validateSpecifiedField("Last Name", user.getLastName());
 		validateSpecifiedField("Address", user.getAddress());
@@ -385,12 +393,12 @@ public class UserManager extends GUMSObject {
 					+ u.getUserId() + " does not exist.");
 			throw fault;
 		} else if (userExists(u.getUserId())) {
-			this.validateUser(u);
 			StringBuffer sb = new StringBuffer();
 			sb.append("update " + IDP_USERS_TABLE + " SET ");
 			int changes = 0;
 			User curr = this.getUser(u.getUserId());
 			if (u.getPassword() != null) {
+				validatePassword(u);
 				String newPass = Crypt.crypt(u.getPassword());
 				if (!newPass.equals(curr.getPassword())) {
 					if (changes > 0) {
@@ -403,6 +411,13 @@ public class UserManager extends GUMSObject {
 
 			if ((u.getEmail() != null)
 					&& (!u.getEmail().equals(curr.getEmail()))) {
+				try{
+				AddressValidator.validateEmail(u.getEmail());
+				} catch (IllegalArgumentException e) {
+					GUMSInternalFault fault = new GUMSInternalFault();
+					fault.setFaultString(e.getMessage());
+					throw fault;
+				}
 				if (changes > 0) {
 					sb.append(",");
 				}
@@ -415,6 +430,7 @@ public class UserManager extends GUMSObject {
 				if (changes > 0) {
 					sb.append(",");
 				}
+				validateSpecifiedField("First Name",u.getFirstName());
 				sb.append("FIRST_NAME='" + u.getFirstName() + "'");
 				changes = changes + 1;
 			}
@@ -424,6 +440,7 @@ public class UserManager extends GUMSObject {
 				if (changes > 0) {
 					sb.append(",");
 				}
+				validateSpecifiedField("Last Name",u.getLastName());
 				sb.append("LAST_NAME='" + u.getLastName() + "'");
 				changes = changes + 1;
 			}
@@ -433,6 +450,7 @@ public class UserManager extends GUMSObject {
 				if (changes > 0) {
 					sb.append(",");
 				}
+				validateSpecifiedField("Organization",u.getOrganization());
 				sb.append("ORGANIZATION='" + u.getOrganization() + "'");
 				changes = changes + 1;
 			}
@@ -442,6 +460,7 @@ public class UserManager extends GUMSObject {
 				if (changes > 0) {
 					sb.append(",");
 				}
+				validateSpecifiedField("Address",u.getAddress());
 				sb.append("ADDRESS='" + u.getAddress() + "'");
 				changes = changes + 1;
 			}
@@ -459,6 +478,7 @@ public class UserManager extends GUMSObject {
 				if (changes > 0) {
 					sb.append(",");
 				}
+				validateSpecifiedField("City",u.getCity());
 				sb.append("CITY='" + u.getCity() + "'");
 				changes = changes + 1;
 			}
@@ -468,6 +488,13 @@ public class UserManager extends GUMSObject {
 				if (changes > 0) {
 					sb.append(",");
 				}
+				try{
+					AddressValidator.validateState(u.getState());
+					} catch (IllegalArgumentException e) {
+						GUMSInternalFault fault = new GUMSInternalFault();
+						fault.setFaultString(e.getMessage());
+						throw fault;
+					}
 				sb.append("STATE='" + u.getState() + "'");
 				changes = changes + 1;
 			}
@@ -477,6 +504,13 @@ public class UserManager extends GUMSObject {
 				if (changes > 0) {
 					sb.append(",");
 				}
+				try{
+					AddressValidator.validateZipCode(u.getZipcode());
+					} catch (IllegalArgumentException e) {
+						GUMSInternalFault fault = new GUMSInternalFault();
+						fault.setFaultString(e.getMessage());
+						throw fault;
+					}
 				sb.append("ZIP_CODE='" + u.getZipcode() + "'");
 				changes = changes + 1;
 			}
@@ -486,6 +520,13 @@ public class UserManager extends GUMSObject {
 				if (changes > 0) {
 					sb.append(",");
 				}
+				try{
+					AddressValidator.validatePhone(u.getPhoneNumber());
+					} catch (IllegalArgumentException e) {
+						GUMSInternalFault fault = new GUMSInternalFault();
+						fault.setFaultString(e.getMessage());
+						throw fault;
+					}
 				sb.append("PHONE_NUMBER='" + u.getPhoneNumber() + "'");
 				changes = changes + 1;
 			}
@@ -499,7 +540,8 @@ public class UserManager extends GUMSObject {
 				if (accountCreated(curr.getStatus())
 						&& !accountCreated(u.getStatus())) {
 					InvalidUserPropertyFault fault = new InvalidUserPropertyFault();
-					fault.setFaultString("Error, cannot change " + u.getUserId()
+					fault.setFaultString("Error, cannot change "
+							+ u.getUserId()
 							+ "'s status from a post-created account status ("
 							+ curr.getStatus()
 							+ ") to a pre-created account status ("

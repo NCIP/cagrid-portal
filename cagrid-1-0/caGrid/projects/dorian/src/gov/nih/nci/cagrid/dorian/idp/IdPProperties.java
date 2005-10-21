@@ -85,11 +85,11 @@ public class IdPProperties extends GUMSObject {
 			}
 
 			if (!mm.exists(REGISTRATION_POLICY)) {
-				Metadata maxPass = new Metadata();
-				maxPass.setName(REGISTRATION_POLICY);
-				maxPass.setValue(DEFAULT_REGISTRATION_POLICY);
-				maxPass.setDescription(REGISTRATION_POLICY_DESCRIPTION);
-				mm.insert(maxPass);
+				Metadata regPolicy = new Metadata();
+				regPolicy.setName(REGISTRATION_POLICY);
+				regPolicy.setValue(DEFAULT_REGISTRATION_POLICY);
+				regPolicy.setDescription(REGISTRATION_POLICY_DESCRIPTION);
+				mm.insert(regPolicy);
 			}
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
@@ -185,5 +185,26 @@ public class IdPProperties extends GUMSObject {
 			throw fault;
 		}
 	}
+	
+	public void setRegistrationPolicy(IdPRegistrationPolicy policy)
+	throws GUMSInternalFault {
+try {
+	Metadata regPolicy = new Metadata();
+	regPolicy.setName(REGISTRATION_POLICY);
+	regPolicy.setValue(policy.getClass().getName());
+	regPolicy.setDescription(REGISTRATION_POLICY_DESCRIPTION);
+	mm.update(regPolicy);
+	
+} catch (Exception e) {
+	logError(e.getMessage(), e);
+	GUMSInternalFault fault = new GUMSInternalFault();
+	fault
+			.setFaultString("Error setting the IDP Registration Policy.");
+	FaultHelper helper = new FaultHelper(fault);
+	helper.addFaultCause(e);
+	fault = (GUMSInternalFault) helper.getFault();
+	throw fault;
+}
+}
 
 }

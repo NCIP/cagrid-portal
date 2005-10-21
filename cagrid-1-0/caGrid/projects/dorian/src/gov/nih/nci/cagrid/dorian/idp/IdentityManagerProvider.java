@@ -32,10 +32,33 @@ public class IdentityManagerProvider extends GUMSObject {
 
 	private UserManager userManager;
 
+	public static final String ADMIN_USER_ID = "gums";
+	public static final String ADMIN_PASSWORD = "password";
+	
 	public IdentityManagerProvider(Database db) throws GUMSInternalFault {
 		try {
 			this.properties = new IdPProperties(db);
 			this.userManager = new UserManager(db, this.properties);
+
+			if (!this.userManager.userExists(ADMIN_USER_ID)) {
+				User u = new User();
+				u.setUserId(ADMIN_USER_ID);
+				u.setPassword(ADMIN_PASSWORD);
+				u.setEmail("gums@gums.org");
+				u.setFirstName("Mr.");
+				u.setLastName("Administrator");
+				u.setOrganization("caBIG");
+				u.setAddress("3184 Graves Hall");
+				u.setAddress2("333 W. Tenth Avenue");
+				u.setCity("Columbus");
+				u.setState("OH");
+				u.setZipcode("43210");
+				u.setPhoneNumber("555-555-5555");
+				u.setStatus(UserManager.ACTIVE);
+				u.setRole(UserManager.ADMINISTRATOR);
+				this.userManager.addUser(u);
+			}
+
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			GUMSInternalFault fault = new GUMSInternalFault();
@@ -55,17 +78,17 @@ public class IdentityManagerProvider extends GUMSObject {
 		UserStatus status = ar.getStatus();
 		UserRole role = ar.getRole();
 		String message = ar.getMessage();
-		if(status==null){
+		if (status == null) {
 			status = UserManager.PENDING;
 		}
-		
-		if(role == null){
+
+		if (role == null) {
 			role = UserManager.NON_ADMINISTRATOR;
 		}
-		if(message == null){
+		if (message == null) {
 			message = "None";
 		}
-		
+
 		User u = new User();
 		u.setUserId(a.getUserId());
 		u.setEmail(a.getEmail());
@@ -83,8 +106,7 @@ public class IdentityManagerProvider extends GUMSObject {
 		u.setStatus(status);
 		userManager.addUser(u);
 		return message;
-}
-
+	}
 
 	public User[] findUsers(BasicAuthCredential credential, UserFilter filter)
 			throws GUMSInternalFault, InvalidLoginFault, PermissionDeniedFault {
@@ -94,7 +116,8 @@ public class IdentityManagerProvider extends GUMSObject {
 	}
 
 	public void updateUser(BasicAuthCredential credential, User u)
-			throws GUMSInternalFault, InvalidLoginFault, PermissionDeniedFault, NoSuchUserFault,InvalidUserPropertyFault {
+			throws GUMSInternalFault, InvalidLoginFault, PermissionDeniedFault,
+			NoSuchUserFault, InvalidUserPropertyFault {
 		User requestor = verifyUser(credential);
 		verifyAdministrator(requestor);
 		this.userManager.updateUser(u);
@@ -114,8 +137,7 @@ public class IdentityManagerProvider extends GUMSObject {
 			User u = this.userManager.getUser(credential.getUserId());
 			if (!u.getPassword().equals(Crypt.crypt(credential.getPassword()))) {
 				InvalidLoginFault fault = new InvalidLoginFault();
-				fault
-						.setFaultString("The uid or password is incorrect.");
+				fault.setFaultString("The uid or password is incorrect.");
 				throw fault;
 			}
 			if (!u.getStatus().equals(UserManager.ACTIVE)) {
@@ -145,7 +167,7 @@ public class IdentityManagerProvider extends GUMSObject {
 			return u;
 		} catch (NoSuchUserFault e) {
 			InvalidLoginFault fault = new InvalidLoginFault();
-			fault.setFaultString("Email address or password is incorrect");
+			fault.setFaultString("User Id or password is incorrect");
 			throw fault;
 		}
 
