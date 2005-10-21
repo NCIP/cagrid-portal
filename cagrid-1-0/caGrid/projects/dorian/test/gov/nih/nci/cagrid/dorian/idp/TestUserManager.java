@@ -90,8 +90,8 @@ public class TestUserManager extends TestCase {
 
 				um.addUser(users[i]);
 				users[i].setPassword(Crypt.crypt(users[i].getPassword()));
-				assertTrue(um.userExists(users[i].getUid()));
-				User u = um.getUser(users[i].getUid());
+				assertTrue(um.userExists(users[i].getUserId()));
+				User u = um.getUser(users[i].getUserId());
 				assertEquals(users[i], u);
 
 				User[] list = um.getUsers(null);
@@ -128,7 +128,7 @@ public class TestUserManager extends TestCase {
 			int numberOfUsers = users.length;
 
 			for (int i = 0; i < users.length; i++) {
-				um.removeUser(users[i].getUid());
+				um.removeUser(users[i].getUserId());
 				numberOfUsers = numberOfUsers - 1;
 				if ((users[i].getStatus().equals(UserManager.ACTIVE))
 						&& (users[i].getRole()
@@ -217,11 +217,11 @@ public class TestUserManager extends TestCase {
 			UserManager um = new UserManager(db, properties);
 			User u1 = makeActiveUser();
 			um.addUser(u1);
-			assertTrue(um.userExists(u1.getUid()));
+			assertTrue(um.userExists(u1.getUserId()));
 			u1.setStatus(UserManager.SUSPENDED);
 			um.updateUser(u1);
 			u1.setPassword(Crypt.crypt(u1.getPassword()));
-			User u2 = um.getUser(u1.getUid());
+			User u2 = um.getUser(u1.getUserId());
 			assertEquals(u1, u2);
 
 		} catch (Exception e) {
@@ -242,11 +242,11 @@ public class TestUserManager extends TestCase {
 			UserManager um = new UserManager(db, properties);
 			User u1 = makeActiveUser();
 			um.addUser(u1);
-			assertTrue(um.userExists(u1.getUid()));
+			assertTrue(um.userExists(u1.getUserId()));
 			u1.setRole(UserManager.ADMINISTRATOR);
 			um.updateUser(u1);
 			u1.setPassword(Crypt.crypt(u1.getPassword()));
-			User u2 = um.getUser(u1.getUid());
+			User u2 = um.getUser(u1.getUserId());
 			assertEquals(u1, u2);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -266,10 +266,10 @@ public class TestUserManager extends TestCase {
 			UserManager um = new UserManager(db, properties);
 			User u1 = makeActiveUser();
 			um.addUser(u1);
-			assertTrue(um.userExists(u1.getUid()));
+			assertTrue(um.userExists(u1.getUserId()));
 			u1.setPassword("npassword");
 			um.updateUser(u1);
-			User u2 = um.getUser(u1.getUid());
+			User u2 = um.getUser(u1.getUserId());
 			u1.setPassword(Crypt.crypt(u1.getPassword()));
 			assertEquals(u1, u2);
 
@@ -291,7 +291,7 @@ public class TestUserManager extends TestCase {
 			UserManager um = new UserManager(db, properties);
 			User u1 = makeActiveUser();
 			um.addUser(u1);
-			assertTrue(um.userExists(u1.getUid()));
+			assertTrue(um.userExists(u1.getUserId()));
 			u1.setPassword("cpassword");
 			u1.setFirstName("changedfirst");
 			u1.setLastName("changedlast");
@@ -305,7 +305,7 @@ public class TestUserManager extends TestCase {
 			u1.setStatus(UserManager.SUSPENDED);
 			u1.setRole(UserManager.ADMINISTRATOR);
 			um.updateUser(u1);
-			User u2 = um.getUser(u1.getUid());
+			User u2 = um.getUser(u1.getUserId());
 			u1.setPassword(Crypt.crypt(u1.getPassword()));
 			assertEquals(u1, u2);
 
@@ -329,8 +329,8 @@ public class TestUserManager extends TestCase {
 			User u1 = makeActiveUser();
 			um.addUser(u1);
 			u1.setPassword(Crypt.crypt(u1.getPassword()));
-			assertTrue(um.userExists(u1.getUid()));
-			User u2 = um.getUser(u1.getUid());
+			assertTrue(um.userExists(u1.getUserId()));
+			User u2 = um.getUser(u1.getUserId());
 			assertEquals(u1, u2);
 
 			User[] list = um.getUsers(null);
@@ -355,7 +355,7 @@ public class TestUserManager extends TestCase {
 			assertEquals(0, um.getUsers(f).length);
 			f.setStatus(UserManager.SUSPENDED);
 			assertEquals(0, um.getUsers(f).length);
-			um.removeUser(u1.getUid());
+			um.removeUser(u1.getUserId());
 			assertFalse(um.userExists(u1.getEmail()));
 
 			try {
@@ -390,9 +390,9 @@ public class TestUserManager extends TestCase {
 			
 //			test email address
 			UserFilter fid = getActiveUserFilter();
-			fid.setUid("user");
+			fid.setUserId("user");
 			assertEquals(size, um.getUsers(fid).length);
-			fid.setUid("XX");
+			fid.setUserId("XX");
 			assertEquals(0, um.getUsers(fid).length);
 			
 			
@@ -473,8 +473,8 @@ public class TestUserManager extends TestCase {
 				UserFilter all = getActiveUserFilter();
 				
 				UserFilter uid = getActiveUserFilter();
-				uid.setUid(i+"user");
-				all.setUid(i+"user");
+				uid.setUserId(i+"user");
+				all.setUserId(i+"user");
 				assertEquals(1, um.getUsers(uid).length);
 				assertEquals(1, um.getUsers(all).length);
 				
@@ -552,7 +552,7 @@ public class TestUserManager extends TestCase {
 
 	private User makeUser(UserRole role, UserStatus status) {
 		User u = new User();
-		u.setUid(count+"user");
+		u.setUserId(count+"user");
 		u.setEmail(count+"user@mail.com");
 		u.setPassword(count+"password");
 		u.setFirstName(count+"first");

@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.gums.common;
 
-import java.util.regex.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>

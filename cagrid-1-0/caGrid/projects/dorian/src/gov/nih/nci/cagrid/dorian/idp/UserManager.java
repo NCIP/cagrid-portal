@@ -69,7 +69,7 @@ public class UserManager extends GUMSObject {
 
 	private void validateUser(User user) throws GUMSInternalFault,
 			InvalidUserPropertyFault {
-		String uid = user.getUid();
+		String uid = user.getUserId();
 		if ((uid == null) || (properties.getMinimumUIDLength() > uid.length())
 				|| (properties.getMaximumUIDLength() < uid.length())) {
 			GUMSInternalFault fault = new GUMSInternalFault();
@@ -117,7 +117,7 @@ public class UserManager extends GUMSObject {
 		this.buildDatabase();
 		this.validateUser(user);
 		db.update("INSERT INTO " + IDP_USERS_TABLE + " VALUES('"
-				+ user.getUid() + "','" + user.getEmail() + "','"
+				+ user.getUserId() + "','" + user.getEmail() + "','"
 				+ Crypt.crypt(user.getPassword()) + "','" + user.getFirstName()
 				+ "','" + user.getLastName() + "','" + user.getOrganization()
 				+ "','" + user.getAddress() + "','" + user.getAddress2()
@@ -163,10 +163,10 @@ public class UserManager extends GUMSObject {
 			if (filter != null) {
 				boolean firstAppended = false;
 
-				if (filter.getUid() != null) {
+				if (filter.getUserId() != null) {
 					sql = appendWhereOrAnd(firstAppended, sql);
 					firstAppended = true;
-					sql.append(" UID LIKE '%" + filter.getUid() + "%'");
+					sql.append(" UID LIKE '%" + filter.getUserId() + "%'");
 				}
 
 				if (filter.getFirstName() != null) {
@@ -252,7 +252,7 @@ public class UserManager extends GUMSObject {
 			ResultSet rs = s.executeQuery(sql.toString());
 			while (rs.next()) {
 				User user = new User();
-				user.setUid(rs.getString("UID"));
+				user.setUserId(rs.getString("UID"));
 				user.setEmail(rs.getString("EMAIL"));
 				if (includePassword) {
 					user.setPassword(rs.getString("PASSWORD"));
@@ -309,7 +309,7 @@ public class UserManager extends GUMSObject {
 			ResultSet rs = s.executeQuery("select * from " + IDP_USERS_TABLE
 					+ " where UID='" + uid + "'");
 			if (rs.next()) {
-				user.setUid(uid);
+				user.setUserId(uid);
 				user.setEmail(rs.getString("EMAIL"));
 				if (includePassword) {
 					user.setPassword(rs.getString("PASSWORD"));
@@ -379,17 +379,17 @@ public class UserManager extends GUMSObject {
 	public synchronized void updateUser(User u) throws GUMSInternalFault,
 			NoSuchUserFault, InvalidUserPropertyFault {
 		this.buildDatabase();
-		if (u.getUid() == null) {
+		if (u.getUserId() == null) {
 			NoSuchUserFault fault = new NoSuchUserFault();
 			fault.setFaultString("Could not update user, the user "
-					+ u.getUid() + " does not exist.");
+					+ u.getUserId() + " does not exist.");
 			throw fault;
-		} else if (userExists(u.getUid())) {
+		} else if (userExists(u.getUserId())) {
 			this.validateUser(u);
 			StringBuffer sb = new StringBuffer();
 			sb.append("update " + IDP_USERS_TABLE + " SET ");
 			int changes = 0;
-			User curr = this.getUser(u.getUid());
+			User curr = this.getUser(u.getUserId());
 			if (u.getPassword() != null) {
 				String newPass = Crypt.crypt(u.getPassword());
 				if (!newPass.equals(curr.getPassword())) {
@@ -499,7 +499,7 @@ public class UserManager extends GUMSObject {
 				if (accountCreated(curr.getStatus())
 						&& !accountCreated(u.getStatus())) {
 					InvalidUserPropertyFault fault = new InvalidUserPropertyFault();
-					fault.setFaultString("Error, cannot change " + u.getUid()
+					fault.setFaultString("Error, cannot change " + u.getUserId()
 							+ "'s status from a post-created account status ("
 							+ curr.getStatus()
 							+ ") to a pre-created account status ("
@@ -518,7 +518,7 @@ public class UserManager extends GUMSObject {
 				sb.append("ROLE='" + u.getRole().getValue() + "'");
 				changes = changes + 1;
 			}
-			sb.append(" where UID='" + u.getUid() + "'");
+			sb.append(" where UID='" + u.getUserId() + "'");
 			if (changes > 0) {
 				db.update(sb.toString());
 			}
@@ -526,7 +526,7 @@ public class UserManager extends GUMSObject {
 		} else {
 			NoSuchUserFault fault = new NoSuchUserFault();
 			fault.setFaultString("Could not update user, the user "
-					+ u.getUid() + " does not exist.");
+					+ u.getUserId() + " does not exist.");
 			throw fault;
 		}
 	}

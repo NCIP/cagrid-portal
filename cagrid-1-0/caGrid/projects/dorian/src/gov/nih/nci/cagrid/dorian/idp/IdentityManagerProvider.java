@@ -67,7 +67,7 @@ public class IdentityManagerProvider extends GUMSObject {
 		}
 		
 		User u = new User();
-		u.setUid(a.getUid());
+		u.setUserId(a.getUserId());
 		u.setEmail(a.getEmail());
 		u.setPassword(a.getPassword());
 		u.setFirstName(a.getFirstName());
@@ -111,7 +111,7 @@ public class IdentityManagerProvider extends GUMSObject {
 	private User verifyUser(BasicAuthCredential credential)
 			throws GUMSInternalFault, InvalidLoginFault {
 		try {
-			User u = this.userManager.getUser(credential.getUid());
+			User u = this.userManager.getUser(credential.getUserId());
 			if (!u.getPassword().equals(Crypt.crypt(credential.getPassword()))) {
 				InvalidLoginFault fault = new InvalidLoginFault();
 				fault
