@@ -36,42 +36,68 @@
     xmlns:ifs="http://cagrid.nci.nih.gov/gums/ifs/bean"
     xmlns:idp="http://cagrid.nci.nih.gov/gums/idp/bean"
     >
-    
 
-	<!-- REQUESTS AND RESPONSES -->
+	<!-- COMMON TYPES -->    
+
+	<xsd:element name="gumsInternalFault" type="gums:GUMSInternalFault"/>
+
+   <!-- IDP TYPES -->
+ 
+	<xsd:element name="idpRegister" type="idp:application"/>
+
+	<xsd:element name="idpRegisterResponse" type="xsd:string"/>
 	
-	<xsd:element name="requiredUserAttributes">
+	<xsd:element name="idpFindUsers">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="basicAuthentication" minOccurs="1" maxOccurs="1" type="idp:basicAuthCredential"/>
+				<xsd:element name="userFilter" minOccurs="1" maxOccurs="1" type="idp:userFilter"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="idpFindUsersResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="idpUser" minOccurs="0" maxOccurs="unbounded" type="idp:user"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	
+		<xsd:element name="idpUpdateUser">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="basicAuthentication" minOccurs="1" maxOccurs="1" type="idp:basicAuthCredential"/>
+				<xsd:element name="idpUser" minOccurs="1" maxOccurs="1" type="idp:user"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="idpUpdateUserResponse">
 		<xsd:complexType/>
 	</xsd:element>
 	
-	<xsd:element name="requiredUserAttributesResponse">
+		<xsd:element name="idpRemoveUser">
 		<xsd:complexType>
 			<xsd:sequence>
-				<xsd:element name="attributeDescriptors" minOccurs="0" maxOccurs="unbounded" type="ifs:attributeDescriptor"/>
+				<xsd:element name="basicAuthentication" minOccurs="1" maxOccurs="1" type="idp:basicAuthCredential"/>
+				<xsd:element name="idpUserId" minOccurs="1" maxOccurs="1" type="xsd:string"/>
 			</xsd:sequence>
 		</xsd:complexType>
 	</xsd:element>
 	
-	<xsd:element name="registerUser" minOccurs="1" maxOccurs="1" type="ifs:userApplication"/>
-	
-	<!--
-	<xsd:element name="registerUser">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="application" minOccurs="1" maxOccurs="1" type="ifs:userApplication"/>
-			</xsd:sequence>
-		</xsd:complexType>
+	<xsd:element name="idpRemoveUserResponse">
+		<xsd:complexType/>
 	</xsd:element>
-	-->
-	<xsd:element name="registerUserResponse" type="xsd:string"/>
 	
+	<xsd:element name="invalidUserPropertyFault" type="idp:InvalidUserPropertyFault"/>
+	<xsd:element name="invalidLoginFault" type="idp:InvalidLoginFault"/>
+	<xsd:element name="noSuchUserFault" type="idp:NoSuchUserFault"/>
+	<xsd:element name="permissionDeniedFault" type="idp:PermissionDeniedFault"/>
+   
+   
+	<!-- IFS TYPES -->
 	
-	<xsd:element name="createProxy" type="ifs:createProxyRequest"/>
-	<xsd:element name="createProxyResponse" type="xsd:string"/>
-
-
-	<xsd:element name="gumsInternalFault" type="gums:GUMSInternalFault"/>
-	<xsd:element name="invalidApplicationFault" type="ifs:InvalidApplicationFault"/>
 			
 	<!-- RESOURCE PROPERTIES -->
    
@@ -95,35 +121,60 @@
                        M E S S A G E S
                       
   ============================================================-->
-<message name="CreateProxyInputMessage">
-	<part name="parameters" element="tns:createProxy"/>
+
+
+<message name="RegisterWithIdPInputMessage">
+	<part name="parameters" element="tns:idpRegister"/>
 </message>
-<message name="CreateProxyOutputMessage">
-	<part name="parameters" element="tns:createProxyResponse"/>
+<message name="RegisterWithIdPOutputMessage">
+	<part name="parameters" element="tns:idpRegisterResponse"/>
 </message>
 
-<message name="GetRequiredUserAttributesInputMessage">
-	<part name="parameters" element="tns:requiredUserAttributes"/>
+<message name="IdPFindUsersInputMessage">
+	<part name="parameters" element="tns:idpFindUsers"/>
 </message>
-<message name="GetRequiredUserAttributesOutputMessage">
-	<part name="parameters" element="tns:requiredUserAttributesResponse"/>
+<message name="IdPFindUsersOutputMessage">
+	<part name="parameters" element="tns:idpFindUsersResponse"/>
 </message>
 
-<message name="RegisterUserInputMessage">
-	<part name="parameters" element="tns:registerUser"/>
+<message name="IdPUpdateUserInputMessage">
+	<part name="parameters" element="tns:idpUpdateUser"/>
 </message>
-<message name="RegisterUserOutputMessage">
-	<part name="parameters" element="tns:registerUserResponse"/>
+<message name="IdPUpdateUserOutputMessage">
+	<part name="parameters" element="tns:idpUpdateUserResponse"/>
 </message>
+
+<message name="IdPRemoveUserInputMessage">
+	<part name="parameters" element="tns:idpRemoveUser"/>
+</message>
+<message name="IdPRemoveUserOutputMessage">
+	<part name="parameters" element="tns:idpRemoveUserResponse"/>
+</message>
+
+
 
 
 	<message name="GUMSInternalFaultMessage">
 		<part name="fault" element="tns:gumsInternalFault" />
 	</message>
 	
-	<message name="InvalidApplicationFaultMessage">
-		<part name="fault" element="tns:invalidApplicationFault" />
+	<message name="InvalidUserPropertyFaultMessage">
+		<part name="fault" element="tns:invalidUserPropertyFault" />
 	</message>
+	
+		<message name="InvalidLoginFaultMessage">
+		<part name="fault" element="tns:invalidLoginFault" />
+	</message>
+	
+		<message name="PermissionDeniedFaultMessage">
+		<part name="fault" element="tns:permissionDeniedFault" />
+	</message>
+	
+		<message name="NoSuchUserFaultMessage">
+		<part name="fault" element="tns:noSuchUserFault" />
+	</message>
+	
+
 
 
 
@@ -136,24 +187,38 @@
     wsdlpp:extends="wsrpw:GetResourceProperty"
     wsrp:ResourceProperties="tns:GUMSResourceProperties">
     
-    <operation name="getRequiredUserAttributes">
-		<input message="tns:GetRequiredUserAttributesInputMessage"/>
-		<output message="tns:GetRequiredUserAttributesOutputMessage"/>
-		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFaultMessage"/>
+	
+	<operation name="registerWithIdP">
+		<input message="tns:RegisterWithIdPInputMessage"/>
+		<output message="tns:RegisterWithIdPOutputMessage"/>
+		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
+	    <fault message="tns:InvalidUserPropertyFaultMessage" name="InvalidUserPropertyFault"/>
 	</operation>
 	
-	  <operation name="registerUser">
-		<input message="tns:RegisterUserInputMessage"/>
-		<output message="tns:RegisterUserOutputMessage"/>
+	<operation name="idpFindUsers">
+		<input message="tns:IdPFindUsersInputMessage"/>
+		<output message="tns:IdPFindUsersOutputMessage"/>
 		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
-	    <fault message="tns:InvalidApplicationFaultMessage" name="InvalidApplicationFault"/>
+	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
+	    <fault message="tns:InvalidLoginFaultMessage" name="InvalidLoginFault"/>
 	</operation>
-
-	<operation name="createProxy">
-		<input message="tns:CreateProxyInputMessage"/>
-		<output message="tns:CreateProxyOutputMessage"/>
+	
+	<operation name="idpUpdateUser">
+		<input message="tns:IdPUpdateUserInputMessage"/>
+		<output message="tns:IdPUpdateUserOutputMessage"/>
+		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
+	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
+	    <fault message="tns:InvalidLoginFaultMessage" name="InvalidLoginFault"/>
+	    <fault message="tns:NoSuchUserFaultMessage" name="NoSuchUserFault"/>
+	    <fault message="tns:InvalidUserPropertyFaultMessage" name="InvalidUserPropertyFault"/>
 	</operation>
-        
+		<operation name="idpRemoveUser">
+		<input message="tns:IdPRemoveUserInputMessage"/>
+		<output message="tns:IdPRemoveUserOutputMessage"/>
+		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
+	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
+	    <fault message="tns:InvalidLoginFaultMessage" name="InvalidLoginFault"/>
+	</operation>
 
 
 </portType>

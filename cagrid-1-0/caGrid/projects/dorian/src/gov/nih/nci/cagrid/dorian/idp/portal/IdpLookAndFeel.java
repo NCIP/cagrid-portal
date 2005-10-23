@@ -1,5 +1,5 @@
 
-package gov.nih.nci.cagrid.gums.portal;
+package gov.nih.nci.cagrid.gums.idp.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 
@@ -12,8 +12,8 @@ import javax.swing.ImageIcon;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class GumsLookAndFeel extends PortalLookAndFeel{	 
+public class IdpLookAndFeel extends PortalLookAndFeel{	 
 	 public final static ImageIcon getIdpIcon(){
-	 	return new javax.swing.ImageIcon(GumsLookAndFeel.class.getResource("/LuggageCounter.gif"));
+	 	return new javax.swing.ImageIcon(IdpLookAndFeel.class.getResource("/LuggageCounter.gif"));
 	 }
 }

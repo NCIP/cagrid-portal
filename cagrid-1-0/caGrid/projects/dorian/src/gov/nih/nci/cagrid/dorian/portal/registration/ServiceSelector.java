@@ -1,9 +1,7 @@
 package gov.nih.nci.cagrid.gums.portal.registration;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.gums.client.GUMSRegistrationClient;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
-import gov.nih.nci.cagrid.gums.ifs.bean.AttributeDescriptor;
 import gov.nih.nci.cagrid.gums.portal.GUMSServiceListComboBox;
 import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
 
@@ -15,7 +13,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import org.projectmobius.portal.GridPortalBaseFrame;
-import org.projectmobius.portal.PortalResourceManager;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -49,7 +46,7 @@ public class ServiceSelector extends GridPortalBaseFrame {
 	private void initialize() {
 		this.setSize(300, 200);
 		this.setContentPane(getJContentPane());
-		this.setFrameIcon(GumsLookAndFeel.getRegistrationIcon());
+		//this.setFrameIcon(GumsLookAndFeel.getRegistrationIcon());
 		this.setTitle("GUMS Registration");
 	}
 
@@ -142,7 +139,7 @@ public class ServiceSelector extends GridPortalBaseFrame {
 		if (registerButton == null) {
 			registerButton = new JButton();
 			registerButton.setText("Register");
-			registerButton.setIcon(GumsLookAndFeel.getApplyIcon());
+			//registerButton.setIcon(GumsLookAndFeel.getApplyIcon());
 			registerButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					getRegistrationInfo();
@@ -154,10 +151,12 @@ public class ServiceSelector extends GridPortalBaseFrame {
 	
 	private void getRegistrationInfo(){
 		try{
+			/*
 			GUMSRegistrationClient client = new GUMSRegistrationClient(serviceSelector.getSelectedService());
 			AttributeDescriptor[] info = client.getRequiredUserAttributes();
 			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new RegistrationViewer(info));
 		    dispose();
+		    */
 		}catch(Exception e){
 			FaultUtil.printFault(e);
 			PortalUtils.showErrorMessage(e);

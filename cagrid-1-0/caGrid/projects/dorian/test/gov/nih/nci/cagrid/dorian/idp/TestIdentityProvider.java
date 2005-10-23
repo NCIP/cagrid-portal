@@ -22,7 +22,7 @@ import org.projectmobius.db.ConnectionManager;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class TestIdentityManagementProvider extends TestCase {
+public class TestIdentityProvider extends TestCase {
 
 	private static final String DB = "TEST_GUMS";
 
@@ -35,7 +35,7 @@ public class TestIdentityManagementProvider extends TestCase {
 
 	public void testAutomaticRegistration() {
 		try {
-			IdentityManagerProvider imp = new IdentityManagerProvider(db);
+			IdentityProvider imp = new IdentityProvider(db);
 			imp.getProperties().setRegistrationPolicy(
 					new AutomaticRegistrationPolicy());
 			assertEquals(AutomaticRegistrationPolicy.class.getName(), imp
@@ -64,7 +64,7 @@ public class TestIdentityManagementProvider extends TestCase {
 
 	public void testManualRegistration() {
 		try {
-			IdentityManagerProvider imp = new IdentityManagerProvider(db);
+			IdentityProvider imp = new IdentityProvider(db);
 			imp.getProperties().setRegistrationPolicy(
 					new ManualRegistrationPolicy());
 			assertEquals(ManualRegistrationPolicy.class.getName(), imp
@@ -98,7 +98,7 @@ public class TestIdentityManagementProvider extends TestCase {
 
 	public void testMultipleUsers() {
 		try {
-			IdentityManagerProvider imp = new IdentityManagerProvider(db);
+			IdentityProvider imp = new IdentityProvider(db);
 			imp.getProperties().setRegistrationPolicy(
 					new ManualRegistrationPolicy());
 			assertEquals(ManualRegistrationPolicy.class.getName(), imp
@@ -158,8 +158,8 @@ public class TestIdentityManagementProvider extends TestCase {
 
 	private BasicAuthCredential getAdminCreds() {
 		BasicAuthCredential cred = new BasicAuthCredential();
-		cred.setUserId(IdentityManagerProvider.ADMIN_USER_ID);
-		cred.setPassword(IdentityManagerProvider.ADMIN_PASSWORD);
+		cred.setUserId(IdentityProvider.ADMIN_USER_ID);
+		cred.setPassword(IdentityProvider.ADMIN_PASSWORD);
 		return cred;
 	}
 

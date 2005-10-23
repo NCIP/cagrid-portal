@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.gums;
 
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.common.GUMSException;
+import gov.nih.nci.cagrid.gums.common.GUMSFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.AttributeDescriptor;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidApplicationFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.UserApplication;
@@ -14,6 +14,6 @@ import gov.nih.nci.cagrid.gums.ifs.bean.UserApplication;
  *          Exp $
  */
 public interface Registration {
-	public AttributeDescriptor[] getRequiredUserAttributes() throws GUMSInternalFault,GUMSException;
-	public String registerUser(UserApplication application) throws InvalidApplicationFault, GUMSInternalFault,GUMSException;
+	public AttributeDescriptor[] getRequiredUserAttributes() throws GUMSInternalFault,GUMSFault;
+	public String registerUser(UserApplication application) throws InvalidApplicationFault, GUMSInternalFault,GUMSFault;
 }

@@ -14,38 +14,17 @@
 	  	</dimensions>
 	  </application>
 	  <components>
-	  		<component>
-	  		<title>Registration</title>
-	  		<description>Apply for a GUMS account.</description>
-	  		<class>gov.nih.nci.cagrid.gums.portal.registration.ServiceSelector</class>
-	  		<icon>/DocumentDraw.gif</icon>
+	  	<component>
+	  		<title>Identity Provider</title>
+	  		<description>Identity Provider (IdP) Menu</description>
+	  		<class>gov.nih.nci.cagrid.gums.idp.portal.IdPMenu</class>
+	  		<icon>/LuggageCounter.gif</icon>
 	  		<dimensions>
-	  			<width>400</width>
+	  			<width>250</width>
 	  			<height>200</height>
 	  		</dimensions>
 	  	</component>
-	  	<!--
-	  	<component>
-	  		<title>Credential Management</title>
-	  		<description>Manage Grid Credentials</description>
-	  		<class>gov.nih.nci.cagrid.gums.portal.credentials.CredentialManagementMenu</class>
-	  		<icon>/Key.gif</icon>
-	  		<dimensions>
-	  			<width>300</width>
-	  			<height>300</height>
-	  		</dimensions>
-	  	</component>
-	  	<component>
-	  		<title>GUMS Administration</title>
-	  		<description>Administer the GUMS Service</description>
-	  		<class>gov.nih.nci.cagrid.gums.portal.administration.AdministrativeMenu</class>
-	  		<icon>/timeseriesMagnify.gif</icon>
-	  		<dimensions>
-	  			<width>300</width>
-	  			<height>250</height>
-	  		</dimensions>
-	  	</component>
-	  	-->
+	  
 	  </components>
 	  </grid-portal-config>
 	</resource>	
@@ -55,13 +34,6 @@
 			<gums-service>http://localhost:8080/wsrf/services/cagrid/gums</gums-service>
 			<gums-service>http:/dc01.bmi.ohio-state.edu:8080/wsrf/services/cagrid/gums</gums-service>
 		</gums-services>
-        <attribute-viewers>
-        	<attribute-viewer>
-        		<namespace>cagrid.nci.nih.gov/1/person</namespace>
-        		<name>person</name>
-        		<class>gov.nih.nci.cagrid.gums.portal.attributes.PersonAttributeViewer</class>
-        	</attribute-viewer>
-        </attribute-viewers>
         </gums-portal-config>
 	</resource>
 </grid-portal>

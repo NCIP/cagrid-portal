@@ -26,7 +26,7 @@ import org.globus.wsrf.utils.FaultHelper;
  *          Exp $
  */
 
-public class IdentityManagerProvider extends GUMSObject {
+public class IdentityProvider extends GUMSObject {
 
 	private IdPProperties properties;
 
@@ -36,7 +36,7 @@ public class IdentityManagerProvider extends GUMSObject {
 
 	public static final String ADMIN_PASSWORD = "password";
 
-	public IdentityManagerProvider(Database db) throws GUMSInternalFault {
+	public IdentityProvider(Database db) throws GUMSInternalFault {
 		try {
 			this.properties = new IdPProperties(db);
 			this.userManager = new UserManager(db, this.properties);
@@ -175,8 +175,7 @@ public class IdentityManagerProvider extends GUMSObject {
 	}
 
 	public void removeUser(BasicAuthCredential credential, String userId)
-			throws GUMSInternalFault, InvalidLoginFault, PermissionDeniedFault,
-			NoSuchUserFault, InvalidUserPropertyFault {
+			throws GUMSInternalFault, InvalidLoginFault, PermissionDeniedFault{
 		User requestor = verifyUser(credential);
 		verifyAdministrator(requestor);
 		userManager.removeUser(userId);
