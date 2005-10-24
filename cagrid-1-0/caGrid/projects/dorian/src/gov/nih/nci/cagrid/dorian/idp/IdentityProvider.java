@@ -77,11 +77,7 @@ public class IdentityProvider extends GUMSObject {
 
 	public String register(Application a) throws GUMSInternalFault,
 			InvalidUserPropertyFault {
-		if(this.userManager.userExists(a.getUserId())){
-			InvalidUserPropertyFault fault = new InvalidUserPropertyFault();
-			fault.setFaultString("The user "+this.userManager+" already exists.");
-			throw fault;
-		}
+	
 		IdPRegistrationPolicy policy = properties.getRegistrationPolicy();
 		ApplicationReview ar = policy.register(a);
 		UserStatus status = ar.getStatus();

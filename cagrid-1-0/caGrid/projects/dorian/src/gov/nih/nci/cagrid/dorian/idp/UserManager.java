@@ -110,6 +110,12 @@ public class UserManager extends GUMSObject {
 			InvalidUserPropertyFault {
 		this.buildDatabase();
 		this.validateUser(user);
+		if (userExists(user.getUserId())) {
+			InvalidUserPropertyFault fault = new InvalidUserPropertyFault();
+			fault.setFaultString("The user " + user.getUserId()
+					+ " already exists.");
+			throw fault;
+		}
 		db.update("INSERT INTO " + IDP_USERS_TABLE + " VALUES('"
 				+ user.getUserId() + "','" + user.getEmail() + "','"
 				+ Crypt.crypt(user.getPassword()) + "','" + user.getFirstName()
