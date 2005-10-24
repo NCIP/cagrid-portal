@@ -1,12 +1,14 @@
 package gov.nih.nci.cagrid.gums.idp.portal;
 
 import gov.nih.nci.cagrid.gums.common.USStates;
+import gov.nih.nci.cagrid.gums.portal.GUMSServiceListComboBox;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -44,6 +46,16 @@ public class ApplicationWindow extends GridPortalComponent {
 	private JTextField city = null;
 	private JLabel stateLabel = null;
 	private JComboBox state = null;
+	private JLabel zipcodeLabel = null;
+	private JTextField zipcode = null;
+	private JLabel phoneNumberLabel = null;
+	private JTextField phoneNumber = null;
+	private JLabel emailLabel = null;
+	private JTextField email = null;
+	private JButton apply = null;
+	private JButton cancel = null;
+	private JLabel countryLabel = null;
+	private JTextField country = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -58,9 +70,10 @@ public class ApplicationWindow extends GridPortalComponent {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(500, 400);
+		//this.setSize(500, 500);
 		this.setContentPane(getJContentPane());
-		this.setTitle("JFrame");
+		this.setTitle("IdP User Application");
+		this.setFrameIcon(IdPLookAndFeel.getApplicationIcon());
 	}
 
 	/**
@@ -85,21 +98,21 @@ public class ApplicationWindow extends GridPortalComponent {
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-			gridBagConstraints2.insets = new java.awt.Insets(10,10,10,10);
+			gridBagConstraints2.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints2.gridy = 2;
 			gridBagConstraints2.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints2.weightx = 1.0D;
 			gridBagConstraints2.gridx = 0;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.insets = new java.awt.Insets(10,10,10,10);
+			gridBagConstraints1.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints1.gridy = 1;
 			gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints1.weightx = 1.0D;
 			gridBagConstraints1.gridx = 0;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.insets = new java.awt.Insets(10,10,10,10);
+			gridBagConstraints.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints.gridy = 0;
 			gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -206,6 +219,60 @@ public class ApplicationWindow extends GridPortalComponent {
 	 */    
 	private JPanel getInfoPanel() {
 		if (infoPanel == null) {
+			GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
+			gridBagConstraints32.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints32.gridy = 8;
+			gridBagConstraints32.weightx = 1.0;
+			gridBagConstraints32.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints32.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints32.gridx = 1;
+			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
+			gridBagConstraints31.gridx = 0;
+			gridBagConstraints31.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints31.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints31.gridy = 8;
+			countryLabel = new JLabel();
+			countryLabel.setText("Country");
+			GridBagConstraints gridBagConstraints30 = new GridBagConstraints();
+			gridBagConstraints30.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints30.gridy = 10;
+			gridBagConstraints30.weightx = 1.0;
+			gridBagConstraints30.gridx = 1;
+			GridBagConstraints gridBagConstraints29 = new GridBagConstraints();
+			gridBagConstraints29.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints29.gridy = 10;
+			gridBagConstraints29.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints29.gridx = 0;
+			emailLabel = new JLabel();
+			emailLabel.setText("Email");
+			GridBagConstraints gridBagConstraints28 = new GridBagConstraints();
+			gridBagConstraints28.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints28.gridy = 9;
+			gridBagConstraints28.weightx = 1.0;
+			gridBagConstraints28.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints28.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints28.gridx = 1;
+			GridBagConstraints gridBagConstraints27 = new GridBagConstraints();
+			gridBagConstraints27.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints27.gridy = 9;
+			gridBagConstraints27.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints27.gridx = 0;
+			phoneNumberLabel = new JLabel();
+			phoneNumberLabel.setText("Phone Number");
+			GridBagConstraints gridBagConstraints26 = new GridBagConstraints();
+			gridBagConstraints26.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints26.gridy = 7;
+			gridBagConstraints26.weightx = 1.0;
+			gridBagConstraints26.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints26.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints26.gridx = 1;
+			GridBagConstraints gridBagConstraints25 = new GridBagConstraints();
+			gridBagConstraints25.gridx = 0;
+			gridBagConstraints25.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints25.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints25.gridy = 7;
+			zipcodeLabel = new JLabel();
+			zipcodeLabel.setText("Zipcode");
 			GridBagConstraints gridBagConstraints24 = new GridBagConstraints();
 			gridBagConstraints24.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints24.gridy = 6;
@@ -328,6 +395,14 @@ public class ApplicationWindow extends GridPortalComponent {
 			infoPanel.add(getCity(), gridBagConstraints22);
 			infoPanel.add(stateLabel, gridBagConstraints23);
 			infoPanel.add(getState(), gridBagConstraints24);
+			infoPanel.add(zipcodeLabel, gridBagConstraints25);
+			infoPanel.add(getZipcode(), gridBagConstraints26);
+			infoPanel.add(phoneNumberLabel, gridBagConstraints27);
+			infoPanel.add(getPhoneNumber(), gridBagConstraints28);
+			infoPanel.add(emailLabel, gridBagConstraints29);
+			infoPanel.add(getEmail(), gridBagConstraints30);
+			infoPanel.add(countryLabel, gridBagConstraints31);
+			infoPanel.add(getCountry(), gridBagConstraints32);
 		}
 		return infoPanel;
 	}
@@ -340,6 +415,8 @@ public class ApplicationWindow extends GridPortalComponent {
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
+			buttonPanel.add(getApply(), null);
+			buttonPanel.add(getCancel(), null);
 		}
 		return buttonPanel;
 	}
@@ -351,7 +428,7 @@ public class ApplicationWindow extends GridPortalComponent {
 	 */    
 	private JComboBox getService() {
 		if (service == null) {
-			service = new JComboBox();
+			service = new GUMSServiceListComboBox();
 		}
 		return service;
 	}
@@ -472,12 +549,91 @@ public class ApplicationWindow extends GridPortalComponent {
 	private JComboBox getState() {
 		if (state == null) {
 			state = new JComboBox();
-			List l = USStates.getStateAbbreviations();
+			List l = USStates.getStates();
+			state.addItem("");
 			for(int i=0; i<l.size(); i++){
 				state.addItem(l.get(i));
 			}
 		}
 		return state;
+	}
+
+	/**
+	 * This method initializes zipcode	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */    
+	private JTextField getZipcode() {
+		if (zipcode == null) {
+			zipcode = new JTextField();
+		}
+		return zipcode;
+	}
+
+	/**
+	 * This method initializes phoneNumber	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */    
+	private JTextField getPhoneNumber() {
+		if (phoneNumber == null) {
+			phoneNumber = new JTextField();
+			phoneNumber.setText("xxx-xxx-xxxx");
+		}
+		return phoneNumber;
+	}
+
+	/**
+	 * This method initializes email	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */    
+	private JTextField getEmail() {
+		if (email == null) {
+			email = new JTextField();
+		}
+		return email;
+	}
+
+	/**
+	 * This method initializes applyButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */    
+	private JButton getApply() {
+		if (apply == null) {
+			apply = new JButton();
+			apply.setText("Apply");
+			apply.setIcon(IdPLookAndFeel.getSelectIcon());
+		}
+		return apply;
+	}
+
+	/**
+	 * This method initializes cancel	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */    
+	private JButton getCancel() {
+		if (cancel == null) {
+			cancel = new JButton();
+			cancel.setText("Cancel");
+			cancel.setIcon(IdPLookAndFeel.getCloseIcon());
+		}
+		return cancel;
+	}
+
+	/**
+	 * This method initializes country	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */    
+	private JTextField getCountry() {
+		if (country == null) {
+			country = new JTextField();
+			country.setText("US");
+		}
+		return country;
 	}
 
 }

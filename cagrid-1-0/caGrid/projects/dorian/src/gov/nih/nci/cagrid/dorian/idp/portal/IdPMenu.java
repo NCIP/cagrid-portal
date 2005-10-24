@@ -3,7 +3,6 @@ package gov.nih.nci.cagrid.gums.idp.portal;
 
 
 
-import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -15,12 +14,13 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import org.projectmobius.portal.GridPortalComponent;
+import org.projectmobius.portal.PortalResourceManager;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: IdPMenu.java,v 1.2 2005-10-24 03:13:57 langella Exp $
+ * @version $Id: IdPMenu.java,v 1.3 2005-10-24 05:06:36 langella Exp $
  */
 public class IdPMenu extends GridPortalComponent {
 
@@ -173,7 +173,7 @@ public class IdPMenu extends GridPortalComponent {
 		if (perform == null) {
 			perform = new JButton();
 			perform.setText("Select");
-			perform.setIcon(GumsLookAndFeel.getSelectIcon());
+			perform.setIcon(IdPLookAndFeel.getSelectIcon());
 			perform.addActionListener(new java.awt.event.ActionListener() { 
 				public void actionPerformed(java.awt.event.ActionEvent e) {    
 					perform();
@@ -185,6 +185,11 @@ public class IdPMenu extends GridPortalComponent {
 	
 	
 	private void perform(){
+		if(register.isSelected()){
+			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new ApplicationWindow(),400,500);
+		}else if(userManagement.isSelected()){
+			//PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new UserManagerViewer());
+		}
 		
 	}
 	
@@ -199,7 +204,7 @@ public class IdPMenu extends GridPortalComponent {
 		if (close == null) {
 			close = new JButton();
 			close.setText("Close");
-			close.setIcon(GumsLookAndFeel.getCloseIcon());
+			close.setIcon(IdPLookAndFeel.getCloseIcon());
 			close.addActionListener(new java.awt.event.ActionListener() { 
 				public void actionPerformed(java.awt.event.ActionEvent e) {    
 					dispose();
