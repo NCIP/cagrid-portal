@@ -16,7 +16,9 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.GridPortalComponent;
+import org.projectmobius.portal.PortalResourceManager;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -605,6 +607,12 @@ public class ApplicationWindow extends GridPortalComponent {
 		if (apply == null) {
 			apply = new JButton();
 			apply.setText("Apply");
+			apply.addActionListener(new java.awt.event.ActionListener() { 
+				public void actionPerformed(java.awt.event.ActionEvent e) {    
+					apply();
+					
+				}
+			});
 			apply.setIcon(IdPLookAndFeel.getSelectIcon());
 		}
 		return apply;
@@ -643,8 +651,8 @@ public class ApplicationWindow extends GridPortalComponent {
 		if(!pass.equals(vpass)){
 			PortalUtils.showErrorMessage("Registration Error", "Password don't match!!!");	
 		}
-		try{
-		Application a = new Application();
+
+		final Application a = new Application();
 		a.setUserId(this.getUsername().getText());
 		a.setPassword(pass);
 		a.setFirstName(this.getFirstName().getText());
@@ -658,13 +666,26 @@ public class ApplicationWindow extends GridPortalComponent {
 		a.setCountry(((CountryListComboBox)this.getCountry()).getSelectedCountry());
 		a.setPhoneNumber(this.getPhoneNumber().getText());
 		a.setEmail(this.getEmail().getText());
-		String service = ((GUMSServiceListComboBox)this.getService()).getSelectedService();
-		IdPRegistrationClient client = new IdPRegistrationClient(service);
-		client.register(a);
-		}catch(Exception e){
-			e.printStackTrace();
-			PortalUtils.showErrorMessage("Registration Error", e);	
-		}
+		final String service = ((GUMSServiceListComboBox)this.getService()).getSelectedService();
+		
+		MobiusRunnable runner = new MobiusRunnable() {
+			public void execute() {
+				try{
+				IdPRegistrationClient client = new IdPRegistrationClient(service);
+				PortalUtils.showMessage(client.register(a));
+				dispose();
+				}catch(Exception e){
+					e.printStackTrace();
+					PortalUtils.showErrorMessage("Registration Error", e);	
+				}
+
+			}
+		};
+		try {
+			PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
+		} catch (Exception t) {
+			t.getMessage();
+		}			
 	}
 
 }
