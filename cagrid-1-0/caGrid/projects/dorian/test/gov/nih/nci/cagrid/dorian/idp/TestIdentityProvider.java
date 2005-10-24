@@ -4,8 +4,12 @@ import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.idp.bean.Application;
 import gov.nih.nci.cagrid.gums.idp.bean.BasicAuthCredential;
+import gov.nih.nci.cagrid.gums.idp.bean.CountryCode;
+import gov.nih.nci.cagrid.gums.idp.bean.StateCode;
 import gov.nih.nci.cagrid.gums.idp.bean.User;
 import gov.nih.nci.cagrid.gums.idp.bean.UserFilter;
+import gov.nih.nci.cagrid.gums.idp.bean.UserRole;
+import gov.nih.nci.cagrid.gums.idp.bean.UserStatus;
 
 import java.io.File;
 
@@ -48,8 +52,8 @@ public class TestIdentityProvider extends TestCase {
 			uf.setUserId(a.getUserId());
 			User[] users = imp.findUsers(cred, uf);
 			assertEquals(1, users.length);
-			assertEquals(UserManager.ACTIVE, users[0].getStatus());
-			assertEquals(UserManager.NON_ADMINISTRATOR, users[0].getRole());
+			assertEquals(UserStatus.Active, users[0].getStatus());
+			assertEquals(UserRole.Non_Administrator, users[0].getRole());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -77,13 +81,13 @@ public class TestIdentityProvider extends TestCase {
 			uf.setUserId(a.getUserId());
 			User[] users = imp.findUsers(cred, uf);
 			assertEquals(1, users.length);
-			assertEquals(UserManager.PENDING, users[0].getStatus());
-			assertEquals(UserManager.NON_ADMINISTRATOR, users[0].getRole());
-			users[0].setStatus(UserManager.ACTIVE);
+			assertEquals(UserStatus.Pending, users[0].getStatus());
+			assertEquals(UserRole.Non_Administrator, users[0].getRole());
+			users[0].setStatus(UserStatus.Active);
 			imp.updateUser(cred, users[0]);
 			users = imp.findUsers(cred, uf);
 			assertEquals(1, users.length);
-			assertEquals(UserManager.ACTIVE, users[0].getStatus());
+			assertEquals(UserStatus.Active, users[0].getStatus());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -113,13 +117,13 @@ public class TestIdentityProvider extends TestCase {
 				uf.setUserId(a.getUserId());
 				User[] users = imp.findUsers(cred, uf);
 				assertEquals(1, users.length);
-				assertEquals(UserManager.PENDING, users[0].getStatus());
-				assertEquals(UserManager.NON_ADMINISTRATOR, users[0].getRole());
-				users[0].setStatus(UserManager.ACTIVE);
+				assertEquals(UserStatus.Pending, users[0].getStatus());
+				assertEquals(UserRole.Non_Administrator, users[0].getRole());
+				users[0].setStatus(UserStatus.Active);
 				imp.updateUser(cred, users[0]);
 				users = imp.findUsers(cred, uf);
 				assertEquals(1, users.length);
-				assertEquals(UserManager.ACTIVE, users[0].getStatus());
+				assertEquals(UserStatus.Active, users[0].getStatus());
 				uf.setUserId("user");
 				users = imp.findUsers(cred, uf);
 				assertEquals(i + 1, users.length);
@@ -173,7 +177,8 @@ public class TestIdentityProvider extends TestCase {
 		u.setAddress(count + "address");
 		u.setAddress2(count + "address2");
 		u.setCity("Columbus");
-		u.setState("OH");
+		u.setState(StateCode.OH);
+		u.setCountry(CountryCode.US);
 		u.setZipcode("43210");
 		u.setPhoneNumber("614-555-5555");
 		u.setOrganization(count + "organization");

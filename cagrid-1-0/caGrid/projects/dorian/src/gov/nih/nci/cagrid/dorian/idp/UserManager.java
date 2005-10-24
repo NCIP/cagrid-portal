@@ -5,8 +5,10 @@ import gov.nih.nci.cagrid.gums.common.AddressValidator;
 import gov.nih.nci.cagrid.gums.common.Crypt;
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
+import gov.nih.nci.cagrid.gums.idp.bean.CountryCode;
 import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
 import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
+import gov.nih.nci.cagrid.gums.idp.bean.StateCode;
 import gov.nih.nci.cagrid.gums.idp.bean.User;
 import gov.nih.nci.cagrid.gums.idp.bean.UserFilter;
 import gov.nih.nci.cagrid.gums.idp.bean.UserRole;
@@ -30,21 +32,6 @@ import org.globus.wsrf.utils.FaultHelper;
 public class UserManager extends GUMSObject {
 
 	private static final String IDP_USERS_TABLE = "GUMS_IDP_USERS";
-
-	public static final UserStatus ACTIVE = UserStatus.fromValue("Active");
-
-	public static final UserStatus SUSPENDED = UserStatus
-			.fromValue("Suspended");
-
-	public static final UserStatus REJECTED = UserStatus.fromValue("Rejected");
-
-	public static final UserStatus PENDING = UserStatus.fromValue("Pending");
-
-	public static final UserRole ADMINISTRATOR = UserRole
-			.fromValue("Administrator");
-
-	public static final UserRole NON_ADMINISTRATOR = UserRole
-			.fromValue("Non Administrator");
 
 	private Database db;
 
@@ -112,7 +99,6 @@ public class UserManager extends GUMSObject {
 			AddressValidator.validatePhone(user.getPhoneNumber());
 			AddressValidator.validateEmail(user.getEmail());
 			AddressValidator.validateZipCode(user.getZipcode());
-			AddressValidator.validateState(user.getState());
 		} catch (IllegalArgumentException e) {
 			GUMSInternalFault fault = new GUMSInternalFault();
 			fault.setFaultString(e.getMessage());
@@ -129,9 +115,10 @@ public class UserManager extends GUMSObject {
 				+ Crypt.crypt(user.getPassword()) + "','" + user.getFirstName()
 				+ "','" + user.getLastName() + "','" + user.getOrganization()
 				+ "','" + user.getAddress() + "','" + user.getAddress2()
-				+ "','" + user.getCity() + "','" + user.getState() + "','"
-				+ user.getZipcode() + "','" + user.getPhoneNumber() + "','"
-				+ user.getStatus().getValue() + "','"
+				+ "','" + user.getCity() + "','" + user.getState().getValue()
+				+ "','" + user.getZipcode() + "','"
+				+ user.getCountry().getValue() + "','" + user.getPhoneNumber()
+				+ "','" + user.getStatus().getValue() + "','"
 				+ user.getRole().getValue() + "')");
 	}
 
@@ -220,7 +207,15 @@ public class UserManager extends GUMSObject {
 				if (filter.getState() != null) {
 					sql = appendWhereOrAnd(firstAppended, sql);
 					firstAppended = true;
-					sql.append(" STATE LIKE '%" + filter.getState() + "%'");
+					sql.append(" STATE LIKE '%" + filter.getState().getValue()
+							+ "%'");
+				}
+
+				if (filter.getCountry() != null) {
+					sql = appendWhereOrAnd(firstAppended, sql);
+					firstAppended = true;
+					sql.append(" COUNTRY LIKE '%"
+							+ filter.getCountry().getValue() + "%'");
 				}
 
 				if (filter.getZipcode() != null) {
@@ -271,8 +266,9 @@ public class UserManager extends GUMSObject {
 				user.setAddress(rs.getString("ADDRESS"));
 				user.setAddress2(rs.getString("ADDRESS2"));
 				user.setCity(rs.getString("CITY"));
-				user.setState(rs.getString("STATE"));
+				user.setState(StateCode.fromValue(rs.getString("STATE")));
 				user.setZipcode(rs.getString("ZIP_CODE"));
+				user.setCountry(CountryCode.fromValue(rs.getString("COUNTRY")));
 				user.setPhoneNumber(rs.getString("PHONE_NUMBER"));
 				user.setStatus(UserStatus.fromValue(rs.getString("STATUS")));
 				user.setRole(UserRole.fromValue(rs.getString("ROLE")));
@@ -328,8 +324,9 @@ public class UserManager extends GUMSObject {
 				user.setAddress(rs.getString("ADDRESS"));
 				user.setAddress2(rs.getString("ADDRESS2"));
 				user.setCity(rs.getString("CITY"));
-				user.setState(rs.getString("STATE"));
+				user.setState(StateCode.fromValue(rs.getString("STATE")));
 				user.setZipcode(rs.getString("ZIP_CODE"));
+				user.setCountry(CountryCode.fromValue(rs.getString("COUNTRY")));
 				user.setPhoneNumber(rs.getString("PHONE_NUMBER"));
 				user.setStatus(UserStatus.fromValue(rs.getString("STATUS")));
 				user.setRole(UserRole.fromValue(rs.getString("ROLE")));
@@ -372,8 +369,9 @@ public class UserManager extends GUMSObject {
 						+ "ADDRESS VARCHAR(255) NOT NULL,"
 						+ "ADDRESS2 VARCHAR(255) NOT NULL,"
 						+ "CITY VARCHAR(255) NOT NULL,"
-						+ "STATE VARCHAR(20) NOT NULL,"
+						+ "STATE VARCHAR(2) NOT NULL,"
 						+ "ZIP_CODE VARCHAR(20) NOT NULL,"
+						+ "COUNTRY VARCHAR(2) NOT NULL,"
 						+ "PHONE_NUMBER VARCHAR(20) NOT NULL,"
 						+ "STATUS VARCHAR(20) NOT NULL,"
 						+ "ROLE VARCHAR(20) NOT NULL,"
@@ -411,8 +409,8 @@ public class UserManager extends GUMSObject {
 
 			if ((u.getEmail() != null)
 					&& (!u.getEmail().equals(curr.getEmail()))) {
-				try{
-				AddressValidator.validateEmail(u.getEmail());
+				try {
+					AddressValidator.validateEmail(u.getEmail());
 				} catch (IllegalArgumentException e) {
 					GUMSInternalFault fault = new GUMSInternalFault();
 					fault.setFaultString(e.getMessage());
@@ -430,7 +428,7 @@ public class UserManager extends GUMSObject {
 				if (changes > 0) {
 					sb.append(",");
 				}
-				validateSpecifiedField("First Name",u.getFirstName());
+				validateSpecifiedField("First Name", u.getFirstName());
 				sb.append("FIRST_NAME='" + u.getFirstName() + "'");
 				changes = changes + 1;
 			}
@@ -440,7 +438,7 @@ public class UserManager extends GUMSObject {
 				if (changes > 0) {
 					sb.append(",");
 				}
-				validateSpecifiedField("Last Name",u.getLastName());
+				validateSpecifiedField("Last Name", u.getLastName());
 				sb.append("LAST_NAME='" + u.getLastName() + "'");
 				changes = changes + 1;
 			}
@@ -450,7 +448,7 @@ public class UserManager extends GUMSObject {
 				if (changes > 0) {
 					sb.append(",");
 				}
-				validateSpecifiedField("Organization",u.getOrganization());
+				validateSpecifiedField("Organization", u.getOrganization());
 				sb.append("ORGANIZATION='" + u.getOrganization() + "'");
 				changes = changes + 1;
 			}
@@ -460,7 +458,7 @@ public class UserManager extends GUMSObject {
 				if (changes > 0) {
 					sb.append(",");
 				}
-				validateSpecifiedField("Address",u.getAddress());
+				validateSpecifiedField("Address", u.getAddress());
 				sb.append("ADDRESS='" + u.getAddress() + "'");
 				changes = changes + 1;
 			}
@@ -478,7 +476,7 @@ public class UserManager extends GUMSObject {
 				if (changes > 0) {
 					sb.append(",");
 				}
-				validateSpecifiedField("City",u.getCity());
+				validateSpecifiedField("City", u.getCity());
 				sb.append("CITY='" + u.getCity() + "'");
 				changes = changes + 1;
 			}
@@ -488,14 +486,16 @@ public class UserManager extends GUMSObject {
 				if (changes > 0) {
 					sb.append(",");
 				}
-				try{
-					AddressValidator.validateState(u.getState());
-					} catch (IllegalArgumentException e) {
-						GUMSInternalFault fault = new GUMSInternalFault();
-						fault.setFaultString(e.getMessage());
-						throw fault;
-					}
-				sb.append("STATE='" + u.getState() + "'");
+				sb.append("STATE='" + u.getState().getValue() + "'");
+				changes = changes + 1;
+			}
+
+			if ((u.getCountry() != null)
+					&& (!u.getCountry().equals(curr.getCountry()))) {
+				if (changes > 0) {
+					sb.append(",");
+				}
+				sb.append("COUNTRY='" + u.getCountry().getValue() + "'");
 				changes = changes + 1;
 			}
 
@@ -504,13 +504,13 @@ public class UserManager extends GUMSObject {
 				if (changes > 0) {
 					sb.append(",");
 				}
-				try{
+				try {
 					AddressValidator.validateZipCode(u.getZipcode());
-					} catch (IllegalArgumentException e) {
-						GUMSInternalFault fault = new GUMSInternalFault();
-						fault.setFaultString(e.getMessage());
-						throw fault;
-					}
+				} catch (IllegalArgumentException e) {
+					GUMSInternalFault fault = new GUMSInternalFault();
+					fault.setFaultString(e.getMessage());
+					throw fault;
+				}
 				sb.append("ZIP_CODE='" + u.getZipcode() + "'");
 				changes = changes + 1;
 			}
@@ -520,13 +520,13 @@ public class UserManager extends GUMSObject {
 				if (changes > 0) {
 					sb.append(",");
 				}
-				try{
+				try {
 					AddressValidator.validatePhone(u.getPhoneNumber());
-					} catch (IllegalArgumentException e) {
-						GUMSInternalFault fault = new GUMSInternalFault();
-						fault.setFaultString(e.getMessage());
-						throw fault;
-					}
+				} catch (IllegalArgumentException e) {
+					GUMSInternalFault fault = new GUMSInternalFault();
+					fault.setFaultString(e.getMessage());
+					throw fault;
+				}
 				sb.append("PHONE_NUMBER='" + u.getPhoneNumber() + "'");
 				changes = changes + 1;
 			}
@@ -574,9 +574,9 @@ public class UserManager extends GUMSObject {
 	}
 
 	private boolean accountCreated(UserStatus status) {
-		if (status.equals(SUSPENDED)) {
+		if (status.equals(UserStatus.Suspended)) {
 			return true;
-		} else if (status.equals(ACTIVE)) {
+		} else if (status.equals(UserStatus.Active)) {
 			return true;
 		} else {
 			return false;

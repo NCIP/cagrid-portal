@@ -7,10 +7,12 @@ import gov.nih.nci.cagrid.gums.common.GUMSObject;
 import gov.nih.nci.cagrid.gums.idp.bean.Application;
 import gov.nih.nci.cagrid.gums.idp.bean.ApplicationReview;
 import gov.nih.nci.cagrid.gums.idp.bean.BasicAuthCredential;
+import gov.nih.nci.cagrid.gums.idp.bean.CountryCode;
 import gov.nih.nci.cagrid.gums.idp.bean.InvalidLoginFault;
 import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
 import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
 import gov.nih.nci.cagrid.gums.idp.bean.PermissionDeniedFault;
+import gov.nih.nci.cagrid.gums.idp.bean.StateCode;
 import gov.nih.nci.cagrid.gums.idp.bean.User;
 import gov.nih.nci.cagrid.gums.idp.bean.UserFilter;
 import gov.nih.nci.cagrid.gums.idp.bean.UserRole;
@@ -52,11 +54,12 @@ public class IdentityProvider extends GUMSObject {
 				u.setAddress("3184 Graves Hall");
 				u.setAddress2("333 W. Tenth Avenue");
 				u.setCity("Columbus");
-				u.setState("OH");
+				u.setState(StateCode.OH);
 				u.setZipcode("43210");
+				u.setCountry(CountryCode.US);
 				u.setPhoneNumber("555-555-5555");
-				u.setStatus(UserManager.ACTIVE);
-				u.setRole(UserManager.ADMINISTRATOR);
+				u.setStatus(UserStatus.Active);
+				u.setRole(UserRole.Administrator);
 				this.userManager.addUser(u);
 			}
 
@@ -80,11 +83,11 @@ public class IdentityProvider extends GUMSObject {
 		UserRole role = ar.getRole();
 		String message = ar.getMessage();
 		if (status == null) {
-			status = UserManager.PENDING;
+			status = UserStatus.Pending;
 		}
 
 		if (role == null) {
-			role = UserManager.NON_ADMINISTRATOR;
+			role = UserRole.Non_Administrator;
 		}
 		if (message == null) {
 			message = "None";
@@ -102,6 +105,7 @@ public class IdentityProvider extends GUMSObject {
 		u.setCity(a.getCity());
 		u.setState(a.getState());
 		u.setZipcode(a.getZipcode());
+		u.setCountry(a.getCountry());
 		u.setPhoneNumber(a.getPhoneNumber());
 		u.setRole(role);
 		u.setStatus(status);
@@ -125,7 +129,7 @@ public class IdentityProvider extends GUMSObject {
 	}
 
 	private void verifyAdministrator(User u) throws PermissionDeniedFault {
-		if (!u.getRole().equals(UserManager.ADMINISTRATOR)) {
+		if (!u.getRole().equals(UserRole.Administrator)) {
 			PermissionDeniedFault fault = new PermissionDeniedFault();
 			fault.setFaultString("You are NOT an administrator.");
 			throw fault;
@@ -141,19 +145,19 @@ public class IdentityProvider extends GUMSObject {
 				fault.setFaultString("The uid or password is incorrect.");
 				throw fault;
 			}
-			if (!u.getStatus().equals(UserManager.ACTIVE)) {
-				if (u.getStatus().equals(UserManager.SUSPENDED)) {
+			if (!u.getStatus().equals(UserStatus.Active)) {
+				if (u.getStatus().equals(UserStatus.Suspended)) {
 					InvalidLoginFault fault = new InvalidLoginFault();
 					fault.setFaultString("The account has been suspended.");
 					throw fault;
 
-				} else if (u.getStatus().equals(UserManager.REJECTED)) {
+				} else if (u.getStatus().equals(UserStatus.Rejected)) {
 					InvalidLoginFault fault = new InvalidLoginFault();
 					fault
 							.setFaultString("The application for the account was rejected.");
 					throw fault;
 
-				} else if (u.getStatus().equals(UserManager.PENDING)) {
+				} else if (u.getStatus().equals(UserStatus.Pending)) {
 					InvalidLoginFault fault = new InvalidLoginFault();
 					fault
 							.setFaultString("The application for this account has not yet been reviewed.");

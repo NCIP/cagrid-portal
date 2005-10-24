@@ -4,6 +4,8 @@ import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
 import gov.nih.nci.cagrid.gums.idp.bean.Application;
 import gov.nih.nci.cagrid.gums.idp.bean.ApplicationReview;
 import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
+import gov.nih.nci.cagrid.gums.idp.bean.UserRole;
+import gov.nih.nci.cagrid.gums.idp.bean.UserStatus;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -24,11 +26,11 @@ public class AutomaticRegistrationPolicy implements IdPRegistrationPolicy{
 
 	public ApplicationReview register(Application a) throws GUMSInternalFault, InvalidUserPropertyFault {
 		ApplicationReview ar = new ApplicationReview();
-		ar.setStatus(UserManager.ACTIVE);
-		ar.setRole(UserManager.NON_ADMINISTRATOR);
+		ar.setStatus(UserStatus.Active);
+		ar.setRole(UserRole.Non_Administrator);
 		ar
 				.setMessage("Your account was approved, your current account status is "
-						+ UserManager.ACTIVE + " you mail use "
+						+ UserStatus.Active + " you mail use "
 						+ a.getEmail() + " to access your account");
 		return ar;
 	}

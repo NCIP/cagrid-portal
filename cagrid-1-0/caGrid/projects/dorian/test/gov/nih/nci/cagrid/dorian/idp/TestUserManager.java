@@ -3,7 +3,9 @@ package gov.nih.nci.cagrid.gums.idp;
 import gov.nih.nci.cagrid.gums.common.Crypt;
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
+import gov.nih.nci.cagrid.gums.idp.bean.CountryCode;
 import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
+import gov.nih.nci.cagrid.gums.idp.bean.StateCode;
 import gov.nih.nci.cagrid.gums.idp.bean.User;
 import gov.nih.nci.cagrid.gums.idp.bean.UserFilter;
 import gov.nih.nci.cagrid.gums.idp.bean.UserRole;
@@ -55,36 +57,36 @@ public class TestUserManager extends TestCase {
 
 			for (int i = 0; i < users.length; i++) {
 				if ((i % 8) == 0) {
-					users[i] = makeUser(UserManager.NON_ADMINISTRATOR,
-							UserManager.ACTIVE);
+					users[i] = makeUser(UserRole.Non_Administrator,
+							UserStatus.Active);
 					activeNA = activeNA + 1;
 				} else if ((i % 8) == 1) {
-					users[i] = makeUser(UserManager.NON_ADMINISTRATOR,
-							UserManager.PENDING);
+					users[i] = makeUser(UserRole.Non_Administrator,
+							UserStatus.Pending);
 					pendingNA = pendingNA + 1;
 				} else if ((i % 8) == 2) {
-					users[i] = makeUser(UserManager.NON_ADMINISTRATOR,
-							UserManager.REJECTED);
+					users[i] = makeUser(UserRole.Non_Administrator,
+							UserStatus.Rejected);
 					rejectedNA = rejectedNA + 1;
 				} else if ((i % 8) == 3) {
-					users[i] = makeUser(UserManager.NON_ADMINISTRATOR,
-							UserManager.SUSPENDED);
+					users[i] = makeUser(UserRole.Non_Administrator,
+							UserStatus.Suspended);
 					suspendedNA = suspendedNA + 1;
 				} else if ((i % 8) == 4) {
-					users[i] = makeUser(UserManager.ADMINISTRATOR,
-							UserManager.ACTIVE);
+					users[i] = makeUser(UserRole.Administrator,
+							UserStatus.Active);
 					activeA = activeA + 1;
 				} else if ((i % 8) == 5) {
-					users[i] = makeUser(UserManager.ADMINISTRATOR,
-							UserManager.PENDING);
+					users[i] = makeUser(UserRole.Administrator,
+							UserStatus.Pending);
 					pendingA = pendingA + 1;
 				} else if ((i % 8) == 6) {
-					users[i] = makeUser(UserManager.ADMINISTRATOR,
-							UserManager.REJECTED);
+					users[i] = makeUser(UserRole.Administrator,
+							UserStatus.Rejected);
 					rejectedA = rejectedA + 1;
 				} else if ((i % 8) == 7) {
-					users[i] = makeUser(UserManager.ADMINISTRATOR,
-							UserManager.SUSPENDED);
+					users[i] = makeUser(UserRole.Administrator,
+							UserStatus.Suspended);
 					suspendedA = suspendedA + 1;
 				}
 
@@ -97,30 +99,30 @@ public class TestUserManager extends TestCase {
 				User[] list = um.getUsers(null);
 				assertEquals(i + 1, list.length);
 				UserFilter f = new UserFilter();
-				f.setStatus(UserManager.ACTIVE);
-				f.setRole(UserManager.NON_ADMINISTRATOR);
+				f.setStatus(UserStatus.Active);
+				f.setRole(UserRole.Non_Administrator);
 				assertEquals(activeNA, um.getUsers(f).length);
 
-				f.setStatus(UserManager.PENDING);
+				f.setStatus(UserStatus.Pending);
 				assertEquals(pendingNA, um.getUsers(f).length);
 
-				f.setStatus(UserManager.REJECTED);
+				f.setStatus(UserStatus.Rejected);
 				assertEquals(rejectedNA, um.getUsers(f).length);
 
-				f.setStatus(UserManager.SUSPENDED);
+				f.setStatus(UserStatus.Suspended);
 				assertEquals(suspendedNA, um.getUsers(f).length);
 
-				f.setStatus(UserManager.ACTIVE);
-				f.setRole(UserManager.ADMINISTRATOR);
+				f.setStatus(UserStatus.Active);
+				f.setRole(UserRole.Administrator);
 				assertEquals(activeA, um.getUsers(f).length);
 
-				f.setStatus(UserManager.PENDING);
+				f.setStatus(UserStatus.Pending);
 				assertEquals(pendingA, um.getUsers(f).length);
 
-				f.setStatus(UserManager.REJECTED);
+				f.setStatus(UserStatus.Rejected);
 				assertEquals(rejectedA, um.getUsers(f).length);
 
-				f.setStatus(UserManager.SUSPENDED);
+				f.setStatus(UserStatus.Suspended);
 				assertEquals(suspendedA, um.getUsers(f).length);
 
 			}
@@ -130,41 +132,41 @@ public class TestUserManager extends TestCase {
 			for (int i = 0; i < users.length; i++) {
 				um.removeUser(users[i].getUserId());
 				numberOfUsers = numberOfUsers - 1;
-				if ((users[i].getStatus().equals(UserManager.ACTIVE))
+				if ((users[i].getStatus().equals(UserStatus.Active))
 						&& (users[i].getRole()
-								.equals(UserManager.NON_ADMINISTRATOR))) {
+								.equals(UserRole.Non_Administrator))) {
 					activeNA = activeNA - 1;
-				} else if ((users[i].getStatus().equals(UserManager.PENDING))
+				} else if ((users[i].getStatus().equals(UserStatus.Pending))
 						&& (users[i].getRole()
-								.equals(UserManager.NON_ADMINISTRATOR))) {
+								.equals(UserRole.Non_Administrator))) {
 					pendingNA = pendingNA - 1;
 				}
-				if ((users[i].getStatus().equals(UserManager.REJECTED))
+				if ((users[i].getStatus().equals(UserStatus.Rejected))
 						&& (users[i].getRole()
-								.equals(UserManager.NON_ADMINISTRATOR))) {
+								.equals(UserRole.Non_Administrator))) {
 					rejectedNA = rejectedNA - 1;
 				}
-				if ((users[i].getStatus().equals(UserManager.SUSPENDED))
+				if ((users[i].getStatus().equals(UserStatus.Suspended))
 						&& (users[i].getRole()
-								.equals(UserManager.NON_ADMINISTRATOR))) {
-					users[i] = makeUser(UserManager.NON_ADMINISTRATOR,
-							UserManager.SUSPENDED);
+								.equals(UserRole.Non_Administrator))) {
+					users[i] = makeUser(UserRole.Non_Administrator,
+							UserStatus.Suspended);
 					suspendedNA = suspendedNA - 1;
-				} else if ((users[i].getStatus().equals(UserManager.ACTIVE))
+				} else if ((users[i].getStatus().equals(UserStatus.Active))
 						&& (users[i].getRole()
-								.equals(UserManager.ADMINISTRATOR))) {
+								.equals(UserRole.Administrator))) {
 					activeA = activeA - 1;
-				} else if ((users[i].getStatus().equals(UserManager.PENDING))
+				} else if ((users[i].getStatus().equals(UserStatus.Pending))
 						&& (users[i].getRole()
-								.equals(UserManager.ADMINISTRATOR))) {
+								.equals(UserRole.Administrator))) {
 					pendingA = pendingA - 1;
-				} else if ((users[i].getStatus().equals(UserManager.REJECTED))
+				} else if ((users[i].getStatus().equals(UserStatus.Rejected))
 						&& (users[i].getRole()
-								.equals(UserManager.ADMINISTRATOR))) {
+								.equals(UserRole.Administrator))) {
 					rejectedA = rejectedA - 1;
-				} else if ((users[i].getStatus().equals(UserManager.SUSPENDED))
+				} else if ((users[i].getStatus().equals(UserStatus.Suspended))
 						&& (users[i].getRole()
-								.equals(UserManager.ADMINISTRATOR))) {
+								.equals(UserRole.Administrator))) {
 					suspendedA = suspendedA - 1;
 				}
 				assertFalse(um.userExists(users[i].getEmail()));
@@ -172,30 +174,30 @@ public class TestUserManager extends TestCase {
 				User[] list = um.getUsers(null);
 				assertEquals(numberOfUsers, list.length);
 				UserFilter f = new UserFilter();
-				f.setStatus(UserManager.ACTIVE);
-				f.setRole(UserManager.NON_ADMINISTRATOR);
+				f.setStatus(UserStatus.Active);
+				f.setRole(UserRole.Non_Administrator);
 				assertEquals(activeNA, um.getUsers(f).length);
 
-				f.setStatus(UserManager.PENDING);
+				f.setStatus(UserStatus.Pending);
 				assertEquals(pendingNA, um.getUsers(f).length);
 
-				f.setStatus(UserManager.REJECTED);
+				f.setStatus(UserStatus.Rejected);
 				assertEquals(rejectedNA, um.getUsers(f).length);
 
-				f.setStatus(UserManager.SUSPENDED);
+				f.setStatus(UserStatus.Suspended);
 				assertEquals(suspendedNA, um.getUsers(f).length);
 
-				f.setStatus(UserManager.ACTIVE);
-				f.setRole(UserManager.ADMINISTRATOR);
+				f.setStatus(UserStatus.Active);
+				f.setRole(UserRole.Administrator);
 				assertEquals(activeA, um.getUsers(f).length);
 
-				f.setStatus(UserManager.PENDING);
+				f.setStatus(UserStatus.Pending);
 				assertEquals(pendingA, um.getUsers(f).length);
 
-				f.setStatus(UserManager.REJECTED);
+				f.setStatus(UserStatus.Rejected);
 				assertEquals(rejectedA, um.getUsers(f).length);
 
-				f.setStatus(UserManager.SUSPENDED);
+				f.setStatus(UserStatus.Suspended);
 				assertEquals(suspendedA, um.getUsers(f).length);
 
 			}
@@ -218,7 +220,7 @@ public class TestUserManager extends TestCase {
 			User u1 = makeActiveUser();
 			um.addUser(u1);
 			assertTrue(um.userExists(u1.getUserId()));
-			u1.setStatus(UserManager.SUSPENDED);
+			u1.setStatus(UserStatus.Suspended);
 			um.updateUser(u1);
 			u1.setPassword(Crypt.crypt(u1.getPassword()));
 			User u2 = um.getUser(u1.getUserId());
@@ -243,7 +245,7 @@ public class TestUserManager extends TestCase {
 			User u1 = makeActiveUser();
 			um.addUser(u1);
 			assertTrue(um.userExists(u1.getUserId()));
-			u1.setRole(UserManager.ADMINISTRATOR);
+			u1.setRole(UserRole.Administrator);
 			um.updateUser(u1);
 			u1.setPassword(Crypt.crypt(u1.getPassword()));
 			User u2 = um.getUser(u1.getUserId());
@@ -298,12 +300,13 @@ public class TestUserManager extends TestCase {
 			u1.setAddress("changedaddress");
 			u1.setAddress2("changedaddress2");
 			u1.setCity("New York");
-			u1.setState("NY");
+			u1.setState(StateCode.NY);
+			u1.setCountry(CountryCode.AG);
 			u1.setZipcode("11776");
 			u1.setPhoneNumber("718-555-5555");
 			u1.setOrganization("changedorganization");
-			u1.setStatus(UserManager.SUSPENDED);
-			u1.setRole(UserManager.ADMINISTRATOR);
+			u1.setStatus(UserStatus.Suspended);
+			u1.setRole(UserRole.Administrator);
 			um.updateUser(u1);
 			User u2 = um.getUser(u1.getUserId());
 			u1.setPassword(Crypt.crypt(u1.getPassword()));
@@ -337,23 +340,23 @@ public class TestUserManager extends TestCase {
 			assertEquals(1, list.length);
 			assertEquals(u1, list[0]);
 			UserFilter f = new UserFilter();
-			f.setStatus(UserManager.ACTIVE);
-			f.setRole(UserManager.NON_ADMINISTRATOR);
+			f.setStatus(UserStatus.Active);
+			f.setRole(UserRole.Non_Administrator);
 			assertEquals(1, um.getUsers(f).length);
-			f.setStatus(UserManager.PENDING);
+			f.setStatus(UserStatus.Pending);
 			assertEquals(0, um.getUsers(f).length);
-			f.setStatus(UserManager.REJECTED);
+			f.setStatus(UserStatus.Rejected);
 			assertEquals(0, um.getUsers(f).length);
-			f.setStatus(UserManager.SUSPENDED);
+			f.setStatus(UserStatus.Suspended);
 			assertEquals(0, um.getUsers(f).length);
-			f.setStatus(UserManager.ACTIVE);
-			f.setRole(UserManager.ADMINISTRATOR);
+			f.setStatus(UserStatus.Active);
+			f.setRole(UserRole.Administrator);
 			assertEquals(0, um.getUsers(f).length);
-			f.setStatus(UserManager.PENDING);
+			f.setStatus(UserStatus.Pending);
 			assertEquals(0, um.getUsers(f).length);
-			f.setStatus(UserManager.REJECTED);
+			f.setStatus(UserStatus.Rejected);
 			assertEquals(0, um.getUsers(f).length);
-			f.setStatus(UserManager.SUSPENDED);
+			f.setStatus(UserStatus.Suspended);
 			assertEquals(0, um.getUsers(f).length);
 			um.removeUser(u1.getUserId());
 			assertFalse(um.userExists(u1.getEmail()));
@@ -384,7 +387,7 @@ public class TestUserManager extends TestCase {
 			int size = 10;
 			UserManager um = new UserManager(db, properties);
 			for (int i = 0; i < size; i++) {
-				um.addUser(makeUser(UserManager.NON_ADMINISTRATOR, UserManager.ACTIVE));
+				um.addUser(makeUser(UserRole.Non_Administrator, UserStatus.Active));
 			}
 			assertEquals(size, um.getUsers(getActiveUserFilter()).length);
 			
@@ -443,12 +446,12 @@ public class TestUserManager extends TestCase {
 			UserFilter f5 = getActiveUserFilter();
 			f5.setCity("Columbus");
 			assertEquals(size, um.getUsers(f5).length);
-			f5.setState("OH");
+			f5.setState(StateCode.OH);
 			assertEquals(size, um.getUsers(f5).length);
 			f5.setCity(null);
 			assertEquals(size, um.getUsers(f5).length);
-			f5.setState("XX");
-			assertEquals(0, um.getUsers(f5).length);
+			f5.setState(null);
+			assertEquals(size, um.getUsers(f5).length);
 			
 			//Test Zip Code
 			UserFilter f6 = getActiveUserFilter();
@@ -456,6 +459,14 @@ public class TestUserManager extends TestCase {
 			assertEquals(size, um.getUsers(f6).length);
 			f6.setZipcode("XX");
 			assertEquals(0, um.getUsers(f6).length);
+			
+//			Test country
+			UserFilter cf = getActiveUserFilter();
+			cf.setCountry(CountryCode.US);
+			assertEquals(size, um.getUsers(cf).length);
+		
+			
+			
 			
 			//Test Phone Number
 			UserFilter f7 = getActiveUserFilter();
@@ -521,7 +532,8 @@ public class TestUserManager extends TestCase {
 				assertEquals(1, um.getUsers(all).length);
 				
 				all.setCity("Columbus");
-				all.setState("OH");
+				all.setState(StateCode.OH);
+				all.setCountry(CountryCode.US);
 				all.setZipcode("43210");
 				all.setPhoneNumber("614-555-5555");
 				assertEquals(1, um.getUsers(all).length);
@@ -541,13 +553,13 @@ public class TestUserManager extends TestCase {
 
 	private UserFilter getActiveUserFilter() {
 		UserFilter filter = new UserFilter();
-		filter.setStatus(UserManager.ACTIVE);
-		filter.setRole(UserManager.NON_ADMINISTRATOR);
+		filter.setStatus(UserStatus.Active);
+		filter.setRole(UserRole.Non_Administrator);
 		return filter;
 	}
 
 	private User makeActiveUser() {
-		return makeUser(UserManager.NON_ADMINISTRATOR, UserManager.ACTIVE);
+		return makeUser(UserRole.Non_Administrator, UserStatus.Active);
 	}
 
 	private User makeUser(UserRole role, UserStatus status) {
@@ -560,8 +572,9 @@ public class TestUserManager extends TestCase {
 		u.setAddress(count+"address");
 		u.setAddress2(count+"address2");
 		u.setCity("Columbus");
-		u.setState("OH");
+		u.setState(StateCode.OH);
 		u.setZipcode("43210");
+		u.setCountry(CountryCode.US);
 		u.setPhoneNumber("614-555-5555");
 		u.setOrganization(count+"organization");
 		u.setStatus(status);
