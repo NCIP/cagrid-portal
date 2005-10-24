@@ -12,8 +12,8 @@ import javax.swing.ImageIcon;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class IdpLookAndFeel extends PortalLookAndFeel{	 
+public class IdPLookAndFeel extends PortalLookAndFeel{	 
 	 public final static ImageIcon getIdpIcon(){
-	 	return new javax.swing.ImageIcon(IdpLookAndFeel.class.getResource("/LuggageCounter.gif"));
+	 	return new javax.swing.ImageIcon(IdPLookAndFeel.class.getResource("/LuggageCounter.gif"));
 	 }
 }

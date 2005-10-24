@@ -5,14 +5,15 @@ import gov.nih.nci.cagrid.gums.common.USStates;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.List;
 
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 import org.projectmobius.portal.GridPortalComponent;
-import javax.swing.JLabel;
-import javax.swing.JComboBox;
-import javax.swing.JTextField;
-import javax.swing.JPasswordField;
 
 public class ApplicationWindow extends GridPortalComponent {
 
@@ -471,7 +472,10 @@ public class ApplicationWindow extends GridPortalComponent {
 	private JComboBox getState() {
 		if (state == null) {
 			state = new JComboBox();
-			USStates.isValidStateAbbreviation("");
+			List l = USStates.getStateAbbreviations();
+			for(int i=0; i<l.size(); i++){
+				state.addItem(l.get(i));
+			}
 		}
 		return state;
 	}

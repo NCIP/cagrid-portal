@@ -20,7 +20,7 @@ import org.projectmobius.portal.GridPortalComponent;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: IdPMenu.java,v 1.1 2005-10-23 04:57:41 langella Exp $
+ * @version $Id: IdPMenu.java,v 1.2 2005-10-24 03:13:57 langella Exp $
  */
 public class IdPMenu extends GridPortalComponent {
 
@@ -48,7 +48,7 @@ public class IdPMenu extends GridPortalComponent {
 	private void initialize() {
 		this.setSize(400,200);
 		this.setContentPane(getJContentPane());
-		this.setFrameIcon(IdpLookAndFeel.getIdpIcon());
+		this.setFrameIcon(IdPLookAndFeel.getIdpIcon());
 		this.setTitle("Identity Provider Menu");
 	}
 	/**
@@ -126,7 +126,7 @@ public class IdPMenu extends GridPortalComponent {
 			menuPanel.add(userManagementLabel, gridBagConstraints4);
 			menuPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Identity Provider Options",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IdpLookAndFeel.getPanelLabelColor()));	
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IdPLookAndFeel.getPanelLabelColor()));	
 			
 		}
 		return menuPanel;

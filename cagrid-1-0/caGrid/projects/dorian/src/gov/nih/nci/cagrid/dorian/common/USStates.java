@@ -1,6 +1,9 @@
 package gov.nih.nci.cagrid.gums.common;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -78,6 +81,15 @@ public class USStates {
 		abrToState.put("WI", "Wisconsin");
 		abrToState.put("WV", "West Virginia");
 		abrToState.put("WY", "Wyoming");
+	}
+	
+	public static List getStateAbbreviations(){
+		List l = new ArrayList();
+		Iterator itr = abrToState.keySet().iterator();
+		while(itr.hasNext()){
+			l.add(itr);
+		}
+		return l;
 	}
 
 
