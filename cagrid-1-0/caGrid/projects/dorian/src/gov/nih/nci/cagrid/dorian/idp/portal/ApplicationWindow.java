@@ -1,12 +1,13 @@
 package gov.nih.nci.cagrid.gums.idp.portal;
 
-import gov.nih.nci.cagrid.gums.common.USStates;
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.gums.client.IdPRegistrationClient;
+import gov.nih.nci.cagrid.gums.idp.bean.Application;
 import gov.nih.nci.cagrid.gums.portal.GUMSServiceListComboBox;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -17,6 +18,13 @@ import javax.swing.JTextField;
 
 import org.projectmobius.portal.GridPortalComponent;
 
+/**
+ * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
+ * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
+ * @author <A href="mailto:hastings@bmi.osu.edu">Shannon Hastings </A>
+ * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
+ *          Exp $
+ */
 public class ApplicationWindow extends GridPortalComponent {
 
 	private JPanel jContentPane = null;
@@ -55,7 +63,7 @@ public class ApplicationWindow extends GridPortalComponent {
 	private JButton apply = null;
 	private JButton cancel = null;
 	private JLabel countryLabel = null;
-	private JTextField country = null;
+	private JComboBox country = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -223,8 +231,6 @@ public class ApplicationWindow extends GridPortalComponent {
 			gridBagConstraints32.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints32.gridy = 8;
 			gridBagConstraints32.weightx = 1.0;
-			gridBagConstraints32.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints32.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints32.gridx = 1;
 			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
 			gridBagConstraints31.gridx = 0;
@@ -548,12 +554,7 @@ public class ApplicationWindow extends GridPortalComponent {
 	 */    
 	private JComboBox getState() {
 		if (state == null) {
-			state = new JComboBox();
-			List l = USStates.getStates();
-			state.addItem("");
-			for(int i=0; i<l.size(); i++){
-				state.addItem(l.get(i));
-			}
+			state = new StateListComboBox();
 		}
 		return state;
 	}
@@ -626,14 +627,44 @@ public class ApplicationWindow extends GridPortalComponent {
 	/**
 	 * This method initializes country	
 	 * 	
-	 * @return javax.swing.JTextField	
+	 * @return javax.swing.JComboBox	
 	 */    
-	private JTextField getCountry() {
+	private JComboBox getCountry() {
 		if (country == null) {
-			country = new JTextField();
-			country.setText("US");
+			country = new CountryListComboBox();
 		}
 		return country;
+	}
+	
+	public void apply(){
+		
+		String pass = new String(this.getPassword().getPassword());
+		String vpass = new String(this.getPassword().getPassword());
+		if(!pass.equals(vpass)){
+			PortalUtils.showErrorMessage("Registration Error", "Password don't match!!!");	
+		}
+		try{
+		Application a = new Application();
+		a.setUserId(this.getUsername().getText());
+		a.setPassword(pass);
+		a.setFirstName(this.getFirstName().getText());
+		a.setLastName(this.getLastName().getText());
+		a.setOrganization(this.getOrganization().getText());
+		a.setAddress(this.getAddress().getText());
+		a.setAddress2(this.getAddress2().getText());
+		a.setCity(this.getCity().getText());
+		a.setState(((StateListComboBox)this.getState()).getSelectedState());
+		a.setZipcode(this.getZipcode().getText());
+		a.setCountry(((CountryListComboBox)this.getCountry()).getSelectedCountry());
+		a.setPhoneNumber(this.getPhoneNumber().getText());
+		a.setEmail(this.getEmail().getText());
+		String service = ((GUMSServiceListComboBox)this.getService()).getSelectedService();
+		IdPRegistrationClient client = new IdPRegistrationClient(service);
+		client.register(a);
+		}catch(Exception e){
+			e.printStackTrace();
+			PortalUtils.showErrorMessage("Registration Error", e);	
+		}
 	}
 
 }
