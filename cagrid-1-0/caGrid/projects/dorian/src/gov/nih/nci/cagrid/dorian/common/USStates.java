@@ -16,9 +16,12 @@ import java.util.Map;
 public class USStates {
 
 	private static Map abrToState = new HashMap();
+	private static List states = new ArrayList();
+	
+
 
 	
-	public static  boolean isValidStateAbbreviation(String s){
+	public static boolean isValidStateAbbreviation(String s){
 		if(abrToState.containsKey(s)){
 			return true;
 		}else{
@@ -81,15 +84,65 @@ public class USStates {
 		abrToState.put("WI", "Wisconsin");
 		abrToState.put("WV", "West Virginia");
 		abrToState.put("WY", "Wyoming");
+		
+		states.add("Alaska");
+		states.add("Alabama");
+		states.add("Arkansas");
+		states.add("Arizona");
+		states.add("California");
+		states.add("Colorado");
+		states.add("Connecticut");
+		states.add("Dist of Columbia");
+		states.add("Delaware");
+		states.add("Florida");
+		states.add("Georgia");
+		states.add("Guam");
+		states.add("Hawaii");
+		states.add("Iowa");
+		states.add("Idaho");
+		states.add("Illinois");
+		states.add("Indiana");
+		states.add("Kansas");
+		states.add("Kentucky");
+		states.add("Louisiana");
+		states.add("Massachusetts");
+		states.add("Maryland");
+		states.add("Maine");
+		states.add("Michigan");
+		states.add("Minnesota");
+		states.add("Missouri");
+		states.add("Mississippi");
+		states.add("Montana");
+		states.add("North Carolina");
+		states.add("North Dakota");
+		states.add("Nebraska");
+		states.add("New Hampshire");
+		states.add("New Jersey");
+		states.add("New Mexico");
+		states.add("Nevada");
+		states.add("New York");
+		states.add("Ohio");
+		states.add("Oklahoma");
+		states.add("Oregon");
+		states.add("Pennsylvania");
+		states.add("Puerto Rico");
+		states.add("Rhode Island");
+		states.add("South Carolina");
+		states.add("South Dakota");
+		states.add("Tennessee");
+		states.add("Texas");
+		states.add("Utah");
+		states.add("Virginia");
+		states.add("Virgin Islands");
+		states.add("Vermont");
+		states.add("Washington");
+		states.add("Wisconsin");
+		states.add("West Virginia");
+		states.add("Wyoming");
 	}
 	
-	public static List getStateAbbreviations(){
-		List l = new ArrayList();
-		Iterator itr = abrToState.keySet().iterator();
-		while(itr.hasNext()){
-			l.add(itr);
-		}
-		return l;
+	public static List getStates(){
+		return states;
 	}
 
 
