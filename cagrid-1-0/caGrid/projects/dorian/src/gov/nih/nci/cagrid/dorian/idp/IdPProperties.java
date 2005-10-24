@@ -133,7 +133,7 @@ public class IdPProperties extends GUMSObject {
 			throw fault;
 		}
 	}
-	
+
 	public int getMinimumUIDLength() throws GUMSInternalFault {
 		try {
 			return Integer.valueOf(mm.get(MIN_UID_LENGTH).getValue())
@@ -166,7 +166,6 @@ public class IdPProperties extends GUMSObject {
 		}
 	}
 
-
 	public IdPRegistrationPolicy getRegistrationPolicy()
 			throws GUMSInternalFault {
 		try {
@@ -185,26 +184,25 @@ public class IdPProperties extends GUMSObject {
 			throw fault;
 		}
 	}
-	
+
 	public void setRegistrationPolicy(IdPRegistrationPolicy policy)
-	throws GUMSInternalFault {
-try {
-	Metadata regPolicy = new Metadata();
-	regPolicy.setName(REGISTRATION_POLICY);
-	regPolicy.setValue(policy.getClass().getName());
-	regPolicy.setDescription(REGISTRATION_POLICY_DESCRIPTION);
-	mm.update(regPolicy);
-	
-} catch (Exception e) {
-	logError(e.getMessage(), e);
-	GUMSInternalFault fault = new GUMSInternalFault();
-	fault
-			.setFaultString("Error setting the IDP Registration Policy.");
-	FaultHelper helper = new FaultHelper(fault);
-	helper.addFaultCause(e);
-	fault = (GUMSInternalFault) helper.getFault();
-	throw fault;
-}
-}
+			throws GUMSInternalFault {
+		try {
+			Metadata regPolicy = new Metadata();
+			regPolicy.setName(REGISTRATION_POLICY);
+			regPolicy.setValue(policy.getClass().getName());
+			regPolicy.setDescription(REGISTRATION_POLICY_DESCRIPTION);
+			mm.update(regPolicy);
+
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			GUMSInternalFault fault = new GUMSInternalFault();
+			fault.setFaultString("Error setting the IDP Registration Policy.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GUMSInternalFault) helper.getFault();
+			throw fault;
+		}
+	}
 
 }
