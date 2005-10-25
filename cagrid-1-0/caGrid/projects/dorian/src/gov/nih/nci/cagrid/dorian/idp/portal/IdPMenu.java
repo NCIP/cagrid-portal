@@ -20,7 +20,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: IdPMenu.java,v 1.3 2005-10-24 05:06:36 langella Exp $
+ * @version $Id: IdPMenu.java,v 1.4 2005-10-25 20:21:49 langella Exp $
  */
 public class IdPMenu extends GridPortalComponent {
 
@@ -188,7 +188,7 @@ public class IdPMenu extends GridPortalComponent {
 		if(register.isSelected()){
 			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new ApplicationWindow(),400,500);
 		}else if(userManagement.isSelected()){
-			//PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new UserManagerViewer());
+			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new UserManagerViewer(),600,500);
 		}
 		
 	}
