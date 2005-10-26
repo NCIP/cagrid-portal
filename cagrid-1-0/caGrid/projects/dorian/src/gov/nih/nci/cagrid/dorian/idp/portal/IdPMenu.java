@@ -4,6 +4,8 @@ package gov.nih.nci.cagrid.gums.idp.portal;
 
 
 
+import gov.nih.nci.cagrid.gums.portal.GumsPortalConf;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
@@ -20,7 +22,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: IdPMenu.java,v 1.5 2005-10-26 01:14:16 langella Exp $
+ * @version $Id: IdPMenu.java,v 1.6 2005-10-26 17:31:21 langella Exp $
  */
 public class IdPMenu extends GridPortalComponent {
 
@@ -36,6 +38,10 @@ public class IdPMenu extends GridPortalComponent {
 	private JPanel buttonPanel = null;
 	private JButton perform = null;
 	private JButton close = null;
+
+	private JRadioButton manageSession = null;
+
+	private JLabel sessionLabel = null;
 	public IdPMenu() {
 		super();
 		initialize();
@@ -93,6 +99,18 @@ public class IdPMenu extends GridPortalComponent {
 
 	private JPanel getMenuPanel() {
 		if (menuPanel == null) {
+			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+			gridBagConstraints5.gridx = 1;
+			gridBagConstraints5.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints5.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints5.gridy = 2;
+			sessionLabel = new JLabel();
+			sessionLabel.setText("Manage Session");
+			GridBagConstraints gridBagConstraints = new GridBagConstraints();
+			gridBagConstraints.gridx = 0;
+			gridBagConstraints.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints.gridy = 2;
 			registerLabel = new JLabel();
 			userManagementLabel = new JLabel();
 			menuPanel = new JPanel();
@@ -127,6 +145,8 @@ public class IdPMenu extends GridPortalComponent {
 			menuPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Identity Provider Options",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IdPLookAndFeel.getPanelLabelColor()));	
+			menuPanel.add(getManageSession(), gridBagConstraints);
+			menuPanel.add(sessionLabel, gridBagConstraints5);
 			
 		}
 		return menuPanel;
@@ -189,6 +209,10 @@ public class IdPMenu extends GridPortalComponent {
 			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new ApplicationWindow(),400,500);
 		}else if(userManagement.isSelected()){
 			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new UserManagerWindow(),600,500);
+		}if(manageSession.isSelected()){
+			GumsPortalConf conf = (GumsPortalConf) PortalResourceManager
+			.getInstance().getResource(GumsPortalConf.RESOURCE);
+			conf.getIdPLogin().edit();
 		}
 		
 	}
@@ -212,5 +236,17 @@ public class IdPMenu extends GridPortalComponent {
 			});
 		}
 		return close;
+	}
+	/**
+	 * This method initializes manageSession	
+	 * 	
+	 * @return javax.swing.JRadioButton	
+	 */    
+	private JRadioButton getManageSession() {
+		if (manageSession == null) {
+			manageSession = new JRadioButton();
+			group.add(manageSession);
+		}
+		return manageSession;
 	}
      }

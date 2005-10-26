@@ -2,6 +2,7 @@
 package gov.nih.nci.cagrid.gums.idp.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
 
 import javax.swing.ImageIcon;
 
@@ -27,5 +28,9 @@ public class IdPLookAndFeel extends PortalLookAndFeel{
 	 
 	 public final static ImageIcon getApplicationIcon(){
 		 	return new javax.swing.ImageIcon(IdPLookAndFeel.class.getResource("/Paste.gif"));
+		 }
+	 
+	 public final static ImageIcon getLoginIcon(){
+		 	return new javax.swing.ImageIcon(GumsLookAndFeel.class.getResource("/Lock.gif"));
 		 }
 }

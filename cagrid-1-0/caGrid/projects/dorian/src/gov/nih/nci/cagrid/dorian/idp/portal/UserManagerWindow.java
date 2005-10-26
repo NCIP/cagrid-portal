@@ -3,10 +3,13 @@ package gov.nih.nci.cagrid.gums.idp.portal;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gums.client.IdPAdministrationClient;
 import gov.nih.nci.cagrid.gums.idp.bean.BasicAuthCredential;
+import gov.nih.nci.cagrid.gums.idp.bean.InvalidLoginFault;
+import gov.nih.nci.cagrid.gums.idp.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gums.idp.bean.User;
 import gov.nih.nci.cagrid.gums.idp.bean.UserFilter;
 import gov.nih.nci.cagrid.gums.portal.GUMSServiceListComboBox;
 import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
+import gov.nih.nci.cagrid.gums.portal.GumsPortalConf;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -14,10 +17,10 @@ import java.awt.Insets;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
@@ -31,7 +34,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.3 2005-10-26 16:11:48 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.4 2005-10-26 17:31:21 langella Exp $
  */
 public class UserManagerWindow extends GridPortalBaseFrame {
 
@@ -113,21 +116,11 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 
 	private JPanel jPanel2 = null;
 
-	private JLabel jLabel12 = null;
-
-	private JTextField userId = null;
-
-	private JLabel jLabel13 = null;
-
 	private JLabel jLabel14 = null;
-
-	private JPasswordField password = null;
 
 	private JPanel queryPanel = null;
 
 	private JButton query = null;
-
-	private GUMSServiceListComboBox service = null;
 
 	private JPanel role = null;
 
@@ -140,6 +133,8 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 	private JLabel statusLabel = null;
 
 	private UserStatusComboBox userStatus = null;
+
+	private JComboBox service = null;
 
 	/**
 	 * This is the default constructor
@@ -747,19 +742,13 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 	 */
 	private JPanel getJPanel2() {
 		if (jPanel2 == null) {
-			GridBagConstraints gridBagConstraints36 = new GridBagConstraints();
-			gridBagConstraints36.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints36.gridy = 0;
-			gridBagConstraints36.weightx = 1.0;
-			gridBagConstraints36.gridwidth = 3;
-			gridBagConstraints36.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints36.gridx = 1;
-			GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
-			gridBagConstraints32.anchor = GridBagConstraints.WEST;
-			gridBagConstraints32.gridx = 3;
-			gridBagConstraints32.gridy = 1;
-			gridBagConstraints32.weightx = 1.0;
-			gridBagConstraints32.fill = GridBagConstraints.HORIZONTAL;
+			GridBagConstraints gridBagConstraints28 = new GridBagConstraints();
+			gridBagConstraints28.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints28.gridx = 1;
+			gridBagConstraints28.gridy = 0;
+			gridBagConstraints28.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints28.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints28.weightx = 1.0;
 			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
 			gridBagConstraints31.anchor = GridBagConstraints.WEST;
 			gridBagConstraints31.gridwidth = 1;
@@ -768,65 +757,16 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			gridBagConstraints31.insets = new Insets(2, 2, 2, 2);
 			jLabel14 = new JLabel();
 			jLabel14.setText("Service");
-			GridBagConstraints gridBagConstraints30 = new GridBagConstraints();
-			gridBagConstraints30.anchor = GridBagConstraints.WEST;
-			gridBagConstraints30.gridx = 2;
-			gridBagConstraints30.gridy = 1;
-			gridBagConstraints30.insets = new Insets(2, 2, 2, 2);
-			jLabel13 = new JLabel();
-			jLabel13.setText("Password");
-			GridBagConstraints gridBagConstraints29 = new GridBagConstraints();
-			gridBagConstraints29.anchor = GridBagConstraints.WEST;
-			gridBagConstraints29.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints29.gridx = 1;
-			gridBagConstraints29.gridy = 1;
-			gridBagConstraints29.weightx = 1.0;
-			gridBagConstraints29.fill = GridBagConstraints.HORIZONTAL;
-			GridBagConstraints gridBagConstraints28 = new GridBagConstraints();
-			gridBagConstraints28.anchor = GridBagConstraints.WEST;
-			gridBagConstraints28.gridx = 0;
-			gridBagConstraints28.gridy = 1;
-			gridBagConstraints28.insets = new Insets(2, 2, 2, 2);
-			jLabel12 = new JLabel();
-			jLabel12.setText("Username");
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
 			jPanel2.setBorder(BorderFactory.createTitledBorder(null,
 					"Login Information", TitledBorder.DEFAULT_JUSTIFICATION,
 					TitledBorder.DEFAULT_POSITION, null, IdPLookAndFeel
 							.getPanelLabelColor()));
-			jPanel2.add(jLabel12, gridBagConstraints28);
-			jPanel2.add(getUserId(), gridBagConstraints29);
-			jPanel2.add(jLabel13, gridBagConstraints30);
 			jPanel2.add(jLabel14, gridBagConstraints31);
-			jPanel2.add(getPassword(), gridBagConstraints32);
-			jPanel2.add(getService(), gridBagConstraints36);
+			jPanel2.add(getService(), gridBagConstraints28);
 		}
 		return jPanel2;
-	}
-
-	/**
-	 * This method initializes jTextField10
-	 * 
-	 * @return javax.swing.JTextField
-	 */
-	private JTextField getUserId() {
-		if (userId == null) {
-			userId = new JTextField();
-		}
-		return userId;
-	}
-
-	/**
-	 * This method initializes jPasswordField
-	 * 
-	 * @return javax.swing.JPasswordField
-	 */
-	private JPasswordField getPassword() {
-		if (password == null) {
-			password = new JPasswordField();
-		}
-		return password;
 	}
 
 	/**
@@ -897,17 +837,33 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		}
 
 		try {
-			String service = getService().getSelectedService();
-			BasicAuthCredential cred = new BasicAuthCredential();
-			cred.setUserId(getUserId().getText());
-			cred.setPassword(new String(getPassword().getPassword()));
-			IdPAdministrationClient client = new IdPAdministrationClient(
-					service, cred);
-			User[] users = client.findUsers(f);
-			for (int i = 0; i < users.length; i++) {
-				this.getUsersTable().addUser(users[i]);
+			String service = ((GUMSServiceListComboBox) getService())
+					.getSelectedService();
+			GumsPortalConf conf = (GumsPortalConf) PortalResourceManager
+					.getInstance().getResource(GumsPortalConf.RESOURCE);
+			BasicAuthCredential cred = conf.getIdPLogin().login();
+			if (cred == null) {
+				PortalUtils
+						.showErrorMessage("No Username and Password specified.");
+			} else {
+				IdPAdministrationClient client = new IdPAdministrationClient(
+						service, cred);
+				User[] users = client.findUsers(f);
+				for (int i = 0; i < users.length; i++) {
+					this.getUsersTable().addUser(users[i]);
+				}
+				PortalUtils.showMessage("Query Completed.");
 			}
-			PortalUtils.showMessage("Query Completed.");
+		} catch (InvalidLoginFault ilf) {
+			PortalUtils.showErrorMessage(ilf);
+			GumsPortalConf conf = (GumsPortalConf) PortalResourceManager
+			.getInstance().getResource(GumsPortalConf.RESOURCE);
+			conf.getIdPLogin().resetSession();		
+		} catch (PermissionDeniedFault pdf) {
+			PortalUtils.showErrorMessage(pdf);
+			GumsPortalConf conf = (GumsPortalConf) PortalResourceManager
+			.getInstance().getResource(GumsPortalConf.RESOURCE);
+			conf.getIdPLogin().resetSession();		
 		} catch (Exception e) {
 			e.printStackTrace();
 			PortalUtils.showErrorMessage(e);
@@ -920,18 +876,6 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		} else {
 			return s;
 		}
-	}
-
-	/**
-	 * This method initializes service
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private GUMSServiceListComboBox getService() {
-		if (service == null) {
-			service = new GUMSServiceListComboBox();
-		}
-		return service;
 	}
 
 	/**
@@ -990,6 +934,18 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			userStatus = new UserStatusComboBox(true);
 		}
 		return userStatus;
+	}
+
+	/**
+	 * This method initializes service
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
+	private JComboBox getService() {
+		if (service == null) {
+			service = new GUMSServiceListComboBox();
+		}
+		return service;
 	}
 
 }

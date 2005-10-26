@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.gums.portal;
 
-import gov.nih.nci.cagrid.gums.ifs.bean.AttributeDescriptor;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,11 +21,10 @@ public class GumsPortalConf implements AbstractMobiusConfiguration {
 
 
 	public List gumsServices;
+	private Login idpLogin;
 
 	public GumsPortalConf() {
-		AttributeDescriptor rid = new AttributeDescriptor();
-		rid.setNamespace("cagrid.nci.nih.gov/1/person");
-		rid.setName("person");
+		
 	}
 
 	public List getGumsServiceList() {
@@ -40,7 +37,15 @@ public class GumsPortalConf implements AbstractMobiusConfiguration {
 
 	private static String SERVICE_ELEMENT = "gums-service";
 
+	
 
+
+	public Login getIdPLogin() {
+		if(idpLogin == null){
+			idpLogin = new Login();
+		}
+		return idpLogin;
+	}
 
 	public void parse(MobiusResourceManager resourceManager, Element config)
 			throws MobiusException {
