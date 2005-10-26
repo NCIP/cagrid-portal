@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.gums.idp.portal;
 
-import gov.nih.nci.cagrid.gums.idp.bean.StateCode;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;

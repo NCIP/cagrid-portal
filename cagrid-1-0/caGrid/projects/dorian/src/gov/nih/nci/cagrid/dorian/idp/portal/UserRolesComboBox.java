@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.gums.idp.portal;
 
-import gov.nih.nci.cagrid.gums.idp.bean.StateCode;
+import gov.nih.nci.cagrid.gums.idp.bean.UserRole;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -9,18 +9,18 @@ import gov.nih.nci.cagrid.gums.idp.bean.StateCode;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class StateListComboBox extends AxisTypeComboBox {
+public class UserRolesComboBox extends AxisTypeComboBox {
 
-	public StateListComboBox() {
+	public UserRolesComboBox() {
 		this(false);
 	}
 
-	public StateListComboBox(boolean anyState) {
-		super(StateCode.class, anyState);
+	public UserRolesComboBox(boolean anyState) {
+		super(UserRole.class, anyState);
 	}
 
-	public StateCode getSelectedState() {
-		return (StateCode) getSelectedObject();
+	public UserRole getSelectedUserRole() {
+		return (UserRole) getSelectedObject();
 	}
 
 }
