@@ -17,32 +17,42 @@ import javax.swing.JComboBox;
  */
 public class StateListComboBox extends JComboBox {
 
-	private static List states;
-
+	private List states;
 
 	public StateListComboBox() {
-		if(states == null){
-			states = new ArrayList();
-			Field[] fields = StateCode.class.getFields();
+		this(false);
+	}
 
-			for (int i = 0; i < fields.length; i++) {
-				if (StateCode.class.isAssignableFrom(fields[i].getType())) {
-						try {
-							StateCode code = (StateCode) fields[i].get(null);
-							states.add(code);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
+	public StateListComboBox(boolean anyState) {
+		states = new ArrayList();
+
+		if (anyState) {
+			states.add("Any");
+		}
+
+		Field[] fields = StateCode.class.getFields();
+
+		for (int i = 0; i < fields.length; i++) {
+			if (StateCode.class.isAssignableFrom(fields[i].getType())) {
+				try {
+					StateCode code = (StateCode) fields[i].get(null);
+					states.add(code);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		}
-		for(int i=0; i<states.size(); i++){
+		for (int i = 0; i < states.size(); i++) {
 			this.addItem(states.get(i));
 		}
 	}
 
 	public StateCode getSelectedState() {
-		return (StateCode) getSelectedItem();
+		if (getSelectedItem() instanceof StateCode) {
+			return (StateCode) getSelectedItem();
+		} else {
+			return null;
+		}
 	}
 
 	public static void main(String[] args) {

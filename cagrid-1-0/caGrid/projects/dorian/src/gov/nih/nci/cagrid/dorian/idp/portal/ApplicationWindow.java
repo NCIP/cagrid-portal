@@ -662,6 +662,11 @@ public class ApplicationWindow extends GridPortalComponent {
 		if (cancel == null) {
 			cancel = new JButton();
 			cancel.setText("Cancel");
+			cancel.addActionListener(new java.awt.event.ActionListener() { 
+				public void actionPerformed(java.awt.event.ActionEvent e) {    
+					dispose();
+				}
+			});
 			cancel.setIcon(IdPLookAndFeel.getCloseIcon());
 		}
 		return cancel;

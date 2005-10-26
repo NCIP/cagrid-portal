@@ -17,34 +17,46 @@ import javax.swing.JComboBox;
  */
 public class CountryListComboBox extends JComboBox {
 
-	private static List countries = null;
+	private List countries = null;
 
 	public CountryListComboBox() {
-	
-		if(countries == null) {
-			countries = new ArrayList();
-			Field[] fields = CountryCode.class.getFields();
+		this(false);
+	}
 
-			for (int i = 0; i < fields.length; i++) {
-				if (CountryCode.class.isAssignableFrom(fields[i].getType())) {
-						try {
-							CountryCode code = (CountryCode) fields[i].get(null);
-							countries.add(code);
-						} catch (Exception e) {
-							e.getMessage();
-						}
+	public CountryListComboBox(boolean anyCountry) {
+
+		countries = new ArrayList();
+
+		if (anyCountry) {
+			countries.add("Any");
+		}
+		Field[] fields = CountryCode.class.getFields();
+
+		for (int i = 0; i < fields.length; i++) {
+			if (CountryCode.class.isAssignableFrom(fields[i].getType())) {
+				try {
+					CountryCode code = (CountryCode) fields[i].get(null);
+					countries.add(code);
+				} catch (Exception e) {
+					e.getMessage();
 				}
 			}
 		}
-		
-		for(int i=0; i<countries.size(); i++){
+
+		for (int i = 0; i < countries.size(); i++) {
 			this.addItem(countries.get(i));
 		}
-		setSelectedItem(CountryCode.US);
+		if (!anyCountry) {
+			setSelectedItem(CountryCode.US);
+		}
 	}
 
 	public CountryCode getSelectedCountry() {
-		return (CountryCode) getSelectedItem();
+		if (getSelectedItem() instanceof CountryCode) {
+			return (CountryCode) getSelectedItem();
+		} else {
+			return null;
+		}
 	}
 
 	public static void main(String[] args) {

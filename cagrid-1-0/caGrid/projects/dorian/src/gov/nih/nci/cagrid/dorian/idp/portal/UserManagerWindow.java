@@ -1,47 +1,39 @@
 package gov.nih.nci.cagrid.gums.idp.portal;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gums.idp.bean.User;
-import gov.nih.nci.cagrid.gums.idp.bean.UserFilter;
-import gov.nih.nci.cagrid.gums.idp.bean.UserRole;
-import gov.nih.nci.cagrid.gums.idp.bean.UserStatus;
+import gov.nih.nci.cagrid.gums.portal.GUMSServiceListComboBox;
 import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
-import gov.nih.nci.cagrid.gums.portal.GumsPortalConf;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.io.File;
-import java.io.FileInputStream;
-import java.net.URL;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
 
-import org.globus.gsi.GlobusCredential;
 import org.globus.util.ConfigUtil;
 import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
-import javax.swing.JTabbedPane;
-import javax.swing.BorderFactory;
-import javax.swing.border.TitledBorder;
-import java.awt.Insets;
-import javax.swing.JPasswordField;
-import gov.nih.nci.cagrid.gums.portal.GUMSServiceListComboBox;
 
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerViewer.java,v 1.1 2005-10-25 20:21:49 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.1 2005-10-26 01:14:16 langella Exp $
  */
-public class UserManagerViewer extends GridPortalBaseFrame {
+public class UserManagerWindow extends GridPortalBaseFrame {
 
 	private javax.swing.JPanel jContentPane = null;
 	private JPanel mainPanel = null;
@@ -87,10 +79,11 @@ public class UserManagerViewer extends GridPortalBaseFrame {
 	private JPanel queryPanel = null;
 	private JButton query = null;
 	private JComboBox service = null;
+	private JPanel role = null;
 	/**
 	 * This is the default constructor
 	 */
-	public UserManagerViewer() {
+	public UserManagerWindow() {
 		super();
 		initialize();
 	}
@@ -262,7 +255,7 @@ public class UserManagerViewer extends GridPortalBaseFrame {
 				JOptionPane.ERROR_MESSAGE);
 		} else {
 			this.resetUserTable();
-			final UserManagerViewer view = this;
+			final UserManagerWindow view = this;
 			MobiusRunnable runner = new MobiusRunnable() {
 				public void execute() {
 			
@@ -348,6 +341,7 @@ public class UserManagerViewer extends GridPortalBaseFrame {
 			jTabbedPane = new JTabbedPane();
 			jTabbedPane.setBorder(BorderFactory.createTitledBorder(null, "Search Criteria", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, IdPLookAndFeel.getPanelLabelColor()));
 			jTabbedPane.addTab("Personal Information", null, getJPanel1(), null);
+			jTabbedPane.addTab("Role", null, getRole(), null);
 		}
 		return jTabbedPane;
 	}
@@ -661,7 +655,7 @@ public class UserManagerViewer extends GridPortalBaseFrame {
 	 */    
 	private StateListComboBox getState() {
 		if (state == null) {
-			state = new StateListComboBox();
+			state = new StateListComboBox(true);
 		}
 		return state;
 	}
@@ -713,7 +707,7 @@ public class UserManagerViewer extends GridPortalBaseFrame {
 	 */    
 	private CountryListComboBox getCountry() {
 		if (country == null) {
-			country = new CountryListComboBox();
+			country = new CountryListComboBox(true);
 		}
 		return country;
 	}
@@ -859,6 +853,19 @@ public class UserManagerViewer extends GridPortalBaseFrame {
 			service = new GUMSServiceListComboBox();
 		}
 		return service;
+	}
+
+
+	/**
+	 * This method initializes allUsers	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */    
+	private JPanel getRole() {
+		if (role == null) {
+			role = new JPanel();
+		}
+		return role;
 	}
 
 }
