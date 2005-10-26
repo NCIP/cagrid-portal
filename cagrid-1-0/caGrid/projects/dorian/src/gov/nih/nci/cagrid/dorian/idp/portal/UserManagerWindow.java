@@ -31,7 +31,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.1 2005-10-26 01:14:16 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.2 2005-10-26 01:15:38 langella Exp $
  */
 public class UserManagerWindow extends GridPortalBaseFrame {
 
@@ -241,36 +241,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 	}
 
 
-	private void resetUserTable() {
-		this.getUsersTable().clearTable();
-
-		//usersTable = new UsersTable();
-	}
-
-
-	private void filterUsers() {
-		final File f = new File(ConfigUtil.discoverProxyLocation());
-		if (!f.exists()) {
-			JOptionPane.showMessageDialog(this, "No Grid Proxy found, you must first obtain\na grid proxy!!!", "Error",
-				JOptionPane.ERROR_MESSAGE);
-		} else {
-			this.resetUserTable();
-			final UserManagerWindow view = this;
-			MobiusRunnable runner = new MobiusRunnable() {
-				public void execute() {
-			
-				}
-			};
-			try {
-				PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
-			} catch (Exception t) {
-				t.getMessage();
-			}
-
-		}
-
-	}
-
+	
 
 	/**
 	 * This method initializes manageUser	
