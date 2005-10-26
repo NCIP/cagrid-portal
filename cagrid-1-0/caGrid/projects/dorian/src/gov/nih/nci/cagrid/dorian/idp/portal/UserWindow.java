@@ -1,35 +1,49 @@
 package gov.nih.nci.cagrid.gums.idp.portal;
 
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.gums.client.IdPAdministrationClient;
+import gov.nih.nci.cagrid.gums.idp.bean.BasicAuthCredential;
+import gov.nih.nci.cagrid.gums.idp.bean.InvalidLoginFault;
+import gov.nih.nci.cagrid.gums.idp.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gums.idp.bean.User;
+import gov.nih.nci.cagrid.gums.idp.bean.UserFilter;
+import gov.nih.nci.cagrid.gums.portal.GUMSServiceListComboBox;
 import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
+import gov.nih.nci.cagrid.gums.portal.GumsPortalConf;
 
+import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.GridPortalBaseFrame;
+import org.projectmobius.portal.PortalResourceManager;
+
+import javax.swing.JPasswordField;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.1 2005-10-26 18:21:19 langella Exp $
+ * @version $Id: UserWindow.java,v 1.2 2005-10-26 19:23:15 langella Exp $
  */
 public class UserWindow extends GridPortalBaseFrame {
 
-	private final static String ROLE_PANEL = "Role";
-
-	private final static String STATUS_PANEL = "Status";
+	private final static String ACCOUNT_PANEL = "Account Information";
 
 	private final static String INFO_PANEL = "User Information";
+
+	private final static String PASSWORD_PANEL = "Change Password";
 
 	private javax.swing.JPanel jContentPane = null;
 
@@ -39,7 +53,7 @@ public class UserWindow extends GridPortalBaseFrame {
 
 	private JButton cancel = null;
 
-	private JButton manageUser = null;
+	private JButton updateUser = null;
 
 	private JTabbedPane jTabbedPane = null;
 
@@ -97,23 +111,33 @@ public class UserWindow extends GridPortalBaseFrame {
 
 	private JLabel jLabel14 = null;
 
-	private JPanel role = null;
-
-	private JLabel userRoleLabel = null;
-
-	private UserRolesComboBox userRole = null;
-
-	private JPanel status = null;
-
-	private JLabel statusLabel = null;
-
-	private UserStatusComboBox userStatus = null;
-
-	
 	private String serviceId;
+
 	private User user;
 
 	private JTextField service = null;
+
+	private JPanel infoPanel = null;
+
+	private JPanel accountPanel = null;
+
+	private JLabel statusLabel = null;
+
+	private JComboBox userStatus = null;
+
+	private JLabel roleLabel = null;
+
+	private JComboBox userRole = null;
+
+	private JPanel passwordPanel = null;
+
+	private JLabel passwordLabel = null;
+
+	private JLabel verifyLabel = null;
+
+	private JPasswordField password = null;
+
+	private JPasswordField verifyPassword = null;
 
 	/**
 	 * This is the default constructor
@@ -123,7 +147,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		this.serviceId = serviceId;
 		this.user = u;
 		initialize();
-		this.setFrameIcon(IdPLookAndFeel.getUsersIcon());
+		this.setFrameIcon(IdPLookAndFeel.getUserMagnifyIcon());
 	}
 
 	/**
@@ -134,7 +158,7 @@ public class UserWindow extends GridPortalBaseFrame {
 	private void initialize() {
 		this.setSize(500, 500);
 		this.setContentPane(getJContentPane());
-		this.setTitle("Manage Users");
+		this.setTitle("Manage User [" + user.getUserId() + "]");
 
 	}
 
@@ -194,7 +218,7 @@ public class UserWindow extends GridPortalBaseFrame {
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
-			buttonPanel.add(getManageUser(), null);
+			buttonPanel.add(getUpdateUser(), null);
 			buttonPanel.add(getCancel(), null);
 		}
 		return buttonPanel;
@@ -224,20 +248,109 @@ public class UserWindow extends GridPortalBaseFrame {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getManageUser() {
-		if (manageUser == null) {
-			manageUser = new JButton();
-			manageUser.setText("Manage User");
-			manageUser.setIcon(IdPLookAndFeel.getUserMagnifyIcon());
+	private JButton getUpdateUser() {
+		if (updateUser == null) {
+			updateUser = new JButton();
+			updateUser.setText("Update User");
+			updateUser.addActionListener(new java.awt.event.ActionListener() { 
+				public void actionPerformed(java.awt.event.ActionEvent e) {    
+					MobiusRunnable runner = new MobiusRunnable() {
+						public void execute() {
+							updateUser();
+						}
+					};
+					try {
+						PortalResourceManager.getInstance().getThreadManager()
+								.executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+
+				}
+			});
+			updateUser.setIcon(IdPLookAndFeel.getUpdateUserIcon());
 		}
-		return manageUser;
+		return updateUser;
 	}
 
-	/**
-	 * This method initializes jTabbedPane
-	 * 
-	 * @return javax.swing.JTabbedPane
-	 */
+	private String format(char[] array) {
+		if (array == null) {
+			return "";
+		} else {
+			String s = new String(array);
+			if ((s == null) || (s.trim().length() == 0)) {
+				return "";
+			} else {
+				return s.trim();
+			}
+		}
+	}
+
+private synchronized void updateUser() {
+		
+		    String pass = format(this.getPassword().getPassword());
+            String verify = format(this.getVerifyPassword().getPassword());
+            
+            if((pass.length()>0)&&(verify.length()>0)){
+            	if(pass.equals(verify)){
+            		user.setPassword(pass);
+            	}else{
+            		PortalUtils.showErrorMessage("Cannot update the user "+user.getUserId()+", password don't match.");
+            	}
+            }
+		
+			user.setRole(((UserRolesComboBox)this.getUserRole()).getSelectedUserRole());
+			user.setStatus(((UserStatusComboBox)this.getUserStatus()).getSelectedUserStatus());
+		
+			user.setUserId(getUsername().getText());
+			user.setFirstName(getFirstName().getText());
+			user.setLastName(getLastName().getText());
+			user.setOrganization(getOrganization().getText());
+			user.setAddress(getAddress().getText());
+			user.setAddress2(getAddress2().getText());
+			user.setCity(getCity().getText());
+			user.setState(getState().getSelectedState());
+			user.setZipcode(getZipcode().getText());
+			user.setCountry(getCountry().getSelectedCountry());
+			user.setPhoneNumber(getPhoneNumber().getText());
+			user.setEmail(getEmail().getText());
+			
+		
+
+		try {
+			String service = getService().getText();
+			GumsPortalConf conf = (GumsPortalConf) PortalResourceManager
+					.getInstance().getResource(GumsPortalConf.RESOURCE);
+			BasicAuthCredential cred = conf.getIdPLogin().login();
+			if (cred == null) {
+				PortalUtils
+						.showErrorMessage("No Username and Password specified.");
+			} else {
+				IdPAdministrationClient client = new IdPAdministrationClient(
+						service, cred);
+				client.updateUser(user);
+				
+				PortalUtils.showMessage("User "+user.getUserId()+" update successfully.");
+			}
+		} catch (InvalidLoginFault ilf) {
+			PortalUtils.showErrorMessage(ilf);
+			GumsPortalConf conf = (GumsPortalConf) PortalResourceManager
+			.getInstance().getResource(GumsPortalConf.RESOURCE);
+			conf.getIdPLogin().resetSession();		
+		} catch (PermissionDeniedFault pdf) {
+			PortalUtils.showErrorMessage(pdf);
+			GumsPortalConf conf = (GumsPortalConf) PortalResourceManager
+			.getInstance().getResource(GumsPortalConf.RESOURCE);
+			conf.getIdPLogin().resetSession();		
+		} catch (Exception e) {
+			e.printStackTrace();
+			PortalUtils.showErrorMessage(e);
+		}
+	}	/**
+		 * This method initializes jTabbedPane
+		 * 
+		 * @return javax.swing.JTabbedPane
+		 */
 	private JTabbedPane getJTabbedPane() {
 		if (jTabbedPane == null) {
 			jTabbedPane = new JTabbedPane();
@@ -245,10 +358,9 @@ public class UserWindow extends GridPortalBaseFrame {
 					"Search Criteria", TitledBorder.DEFAULT_JUSTIFICATION,
 					TitledBorder.DEFAULT_POSITION, null, IdPLookAndFeel
 							.getPanelLabelColor()));
-			
-			jTabbedPane.addTab(INFO_PANEL, null, getJPanel1(), null);
-			jTabbedPane.addTab(STATUS_PANEL, null, getStatus(), null);
-			jTabbedPane.addTab(ROLE_PANEL, null, getRole(), null);
+			jTabbedPane.addTab(INFO_PANEL, null, getInfoPanel(), null);
+			jTabbedPane.addTab(ACCOUNT_PANEL, null, getAccountPanel(), null);
+			jTabbedPane.addTab(PASSWORD_PANEL, null, getPasswordPanel(), null);
 		}
 		return jTabbedPane;
 	}
@@ -669,82 +781,11 @@ public class UserWindow extends GridPortalBaseFrame {
 		return jPanel2;
 	}
 
-	
-
-
-	private String format(String s) {
-		if ((s == null) || (s.trim().length() == 0)) {
-			return null;
-		} else {
-			return s;
-		}
-	}
-
 	/**
-	 * This method initializes allUsers
+	 * This method initializes service1
 	 * 
-	 * @return javax.swing.JPanel
+	 * @return javax.swing.JTextField
 	 */
-	private JPanel getRole() {
-		if (role == null) {
-			userRoleLabel = new JLabel();
-			userRoleLabel.setText("User Role");
-			role = new JPanel();
-			role.setName(ROLE_PANEL);
-			role.add(userRoleLabel, null);
-			role.add(getUserRole(), null);
-		}
-		return role;
-	}
-
-	/**
-	 * This method initializes userRole
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private UserRolesComboBox getUserRole() {
-		if (userRole == null) {
-			userRole = new UserRolesComboBox(false);
-			userRole.setSelectedItem(user.getRole());
-		}
-		return userRole;
-	}
-
-	/**
-	 * This method initializes status
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getStatus() {
-		if (status == null) {
-			statusLabel = new JLabel();
-			statusLabel.setText("User Status");
-			status = new JPanel();
-			status.setName(STATUS_PANEL);
-			status.add(statusLabel, null);
-			status.add(getUserStatus(), null);
-		}
-		return status;
-	}
-
-	/**
-	 * This method initializes userStatus
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private UserStatusComboBox getUserStatus() {
-		if (userStatus == null) {
-			userStatus = new UserStatusComboBox(false);
-			userStatus.setSelectedItem(user.getStatus());	
-		}
-		return userStatus;
-	}
-
-	/**
-	 * This method initializes service1	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
 	private JTextField getService() {
 		if (service == null) {
 			service = new JTextField();
@@ -752,6 +793,160 @@ public class UserWindow extends GridPortalBaseFrame {
 			service.setEditable(false);
 		}
 		return service;
+	}
+
+	/**
+	 * This method initializes infoPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getInfoPanel() {
+		if (infoPanel == null) {
+			infoPanel = new JPanel();
+			infoPanel.setLayout(new BorderLayout());
+			infoPanel.add(getJPanel1(), java.awt.BorderLayout.NORTH);
+		}
+		return infoPanel;
+	}
+
+	/**
+	 * This method initializes accountPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getAccountPanel() {
+		if (accountPanel == null) {
+			GridBagConstraints gridBagConstraints33 = new GridBagConstraints();
+			gridBagConstraints33.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints33.gridy = 1;
+			gridBagConstraints33.weightx = 1.0;
+			gridBagConstraints33.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints33.insets = new java.awt.Insets(5, 5, 5, 5);
+			gridBagConstraints33.gridx = 1;
+			GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
+			gridBagConstraints32.gridx = 0;
+			gridBagConstraints32.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints32.insets = new java.awt.Insets(5, 5, 5, 5);
+			gridBagConstraints32.gridy = 1;
+			roleLabel = new JLabel();
+			roleLabel.setText("User Role");
+			GridBagConstraints gridBagConstraints30 = new GridBagConstraints();
+			gridBagConstraints30.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints30.gridx = 1;
+			gridBagConstraints30.gridy = 0;
+			gridBagConstraints30.anchor = java.awt.GridBagConstraints.NORTHWEST;
+			gridBagConstraints30.insets = new java.awt.Insets(5, 5, 5, 5);
+			gridBagConstraints30.weightx = 1.0;
+			GridBagConstraints gridBagConstraints29 = new GridBagConstraints();
+			gridBagConstraints29.insets = new java.awt.Insets(5, 5, 5, 5);
+			gridBagConstraints29.gridy = 0;
+			gridBagConstraints29.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints29.gridx = 0;
+			statusLabel = new JLabel();
+			statusLabel.setText("User Status");
+			accountPanel = new JPanel();
+			accountPanel.setLayout(new GridBagLayout());
+			accountPanel.add(statusLabel, gridBagConstraints29);
+			accountPanel.add(getUserStatus(), gridBagConstraints30);
+			accountPanel.add(roleLabel, gridBagConstraints32);
+			accountPanel.add(getUserRole(), gridBagConstraints33);
+		}
+		return accountPanel;
+	}
+
+	/**
+	 * This method initializes userStatus
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
+	private JComboBox getUserStatus() {
+		if (userStatus == null) {
+			userStatus = new UserStatusComboBox();
+			userStatus.setSelectedItem(user.getStatus());
+		}
+		return userStatus;
+	}
+
+	/**
+	 * This method initializes userRole
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
+	private JComboBox getUserRole() {
+		if (userRole == null) {
+			userRole = new UserRolesComboBox();
+			userRole.setSelectedItem(user.getRole());
+		}
+		return userRole;
+	}
+
+	/**
+	 * This method initializes passwordPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getPasswordPanel() {
+		if (passwordPanel == null) {
+			GridBagConstraints gridBagConstraints37 = new GridBagConstraints();
+			gridBagConstraints37.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints37.gridy = 1;
+			gridBagConstraints37.weightx = 1.0;
+			gridBagConstraints37.insets = new java.awt.Insets(5, 5, 5, 5);
+			gridBagConstraints37.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints37.gridx = 1;
+			GridBagConstraints gridBagConstraints35 = new GridBagConstraints();
+			gridBagConstraints35.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints35.gridy = 0;
+			gridBagConstraints35.weightx = 1.0;
+			gridBagConstraints35.insets = new java.awt.Insets(5, 5, 5, 5);
+			gridBagConstraints35.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints35.gridx = 1;
+			GridBagConstraints gridBagConstraints36 = new GridBagConstraints();
+			gridBagConstraints36.gridx = 0;
+			gridBagConstraints36.insets = new java.awt.Insets(5, 5, 5, 5);
+			gridBagConstraints36.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints36.gridy = 1;
+			verifyLabel = new JLabel();
+			verifyLabel.setText("Verify Password");
+			GridBagConstraints gridBagConstraints34 = new GridBagConstraints();
+			gridBagConstraints34.insets = new java.awt.Insets(5, 5, 5, 5);
+			gridBagConstraints34.gridy = 0;
+			gridBagConstraints34.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints34.gridx = 0;
+			passwordLabel = new JLabel();
+			passwordLabel.setText("Password");
+			passwordPanel = new JPanel();
+			passwordPanel.setLayout(new GridBagLayout());
+			passwordPanel.add(passwordLabel, gridBagConstraints34);
+			passwordPanel.add(verifyLabel, gridBagConstraints36);
+			passwordPanel.add(getPassword(), gridBagConstraints35);
+			passwordPanel.add(getVerifyPassword(), gridBagConstraints37);
+		}
+		return passwordPanel;
+	}
+
+	/**
+	 * This method initializes password
+	 * 
+	 * @return javax.swing.JPasswordField
+	 */
+	private JPasswordField getPassword() {
+		if (password == null) {
+			password = new JPasswordField();
+		}
+		return password;
+	}
+
+	/**
+	 * This method initializes verifyPassword
+	 * 
+	 * @return javax.swing.JPasswordField
+	 */
+	private JPasswordField getVerifyPassword() {
+		if (verifyPassword == null) {
+			verifyPassword = new JPasswordField();
+		}
+		return verifyPassword;
 	}
 
 }

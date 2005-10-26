@@ -22,6 +22,10 @@ public class IdPLookAndFeel extends PortalLookAndFeel{
 		 	return new javax.swing.ImageIcon(IdPLookAndFeel.class.getResource("/Users.gif"));
 		 }
 	 
+	 public final static ImageIcon getUpdateUserIcon(){
+		 	return new javax.swing.ImageIcon(IdPLookAndFeel.class.getResource("/Reply.gif"));
+		 }
+	 
 	 public final static ImageIcon getUserMagnifyIcon(){
 		 	return new javax.swing.ImageIcon(IdPLookAndFeel.class.getResource("/UserMagnify.gif"));
 		 }
