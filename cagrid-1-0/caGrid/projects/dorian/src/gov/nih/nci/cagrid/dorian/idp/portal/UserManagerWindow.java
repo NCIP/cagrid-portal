@@ -34,7 +34,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.5 2005-10-26 18:21:19 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.6 2005-10-26 19:45:51 langella Exp $
  */
 public class UserManagerWindow extends GridPortalBaseFrame {
 
@@ -311,19 +311,23 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 					if ((row >= 0) && (row < getUsersTable().getRowCount())) {
 						MobiusRunnable runner = new MobiusRunnable() {
 							public void execute() {
-								User user = (User) getUsersTable().getValueAt(row, 0);
+								User user = (User) getUsersTable().getValueAt(
+										row, 0);
 								String service = ((GUMSServiceListComboBox) getService())
-								.getSelectedService();
-								PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new UserWindow(service,user));
+										.getSelectedService();
+								PortalResourceManager.getInstance()
+										.getGridPortal()
+										.addGridPortalComponent(
+												new UserWindow(service, user));
 							}
 						};
 						try {
-							PortalResourceManager.getInstance().getThreadManager()
-									.executeInBackground(runner);
+							PortalResourceManager.getInstance()
+									.getThreadManager().executeInBackground(
+											runner);
 						} catch (Exception t) {
 							t.getMessage();
 						}
-						
 
 					} else {
 						JOptionPane.showMessageDialog(PortalResourceManager
@@ -862,21 +866,23 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 				IdPAdministrationClient client = new IdPAdministrationClient(
 						service, cred);
 				User[] users = client.findUsers(f);
-				for (int i = 0; i < users.length; i++) {
-					this.getUsersTable().addUser(users[i]);
+				if (users != null) {
+					for (int i = 0; i < users.length; i++) {
+						this.getUsersTable().addUser(users[i]);
+					}
 				}
 				PortalUtils.showMessage("Query Completed.");
 			}
 		} catch (InvalidLoginFault ilf) {
 			PortalUtils.showErrorMessage(ilf);
 			GumsPortalConf conf = (GumsPortalConf) PortalResourceManager
-			.getInstance().getResource(GumsPortalConf.RESOURCE);
-			conf.getIdPLogin().resetSession();		
+					.getInstance().getResource(GumsPortalConf.RESOURCE);
+			conf.getIdPLogin().resetSession();
 		} catch (PermissionDeniedFault pdf) {
 			PortalUtils.showErrorMessage(pdf);
 			GumsPortalConf conf = (GumsPortalConf) PortalResourceManager
-			.getInstance().getResource(GumsPortalConf.RESOURCE);
-			conf.getIdPLogin().resetSession();		
+					.getInstance().getResource(GumsPortalConf.RESOURCE);
+			conf.getIdPLogin().resetSession();
 		} catch (Exception e) {
 			e.printStackTrace();
 			PortalUtils.showErrorMessage(e);
