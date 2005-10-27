@@ -1,9 +1,9 @@
 package gov.nih.nci.cagrid.gums.util.ca;
 
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
-import gov.nih.nci.cagrid.gums.util.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.util.ca.KeyUtil;
-import gov.nih.nci.cagrid.gums.util.ca.ProxyUtil;
+import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
+import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
+import gov.nih.nci.cagrid.gums.common.ca.ProxyUtil;
 
 import java.io.File;
 import java.security.KeyPair;

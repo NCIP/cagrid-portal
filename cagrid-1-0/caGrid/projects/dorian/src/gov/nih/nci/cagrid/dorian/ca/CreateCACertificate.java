@@ -1,9 +1,9 @@
 package gov.nih.nci.cagrid.gums.ca;
 
 import gov.nih.nci.cagrid.gums.common.IOUtils;
+import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
+import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
 import gov.nih.nci.cagrid.gums.service.GUMSManager;
-import gov.nih.nci.cagrid.gums.util.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.util.ca.KeyUtil;
 
 import java.security.KeyPair;
 import java.security.Security;

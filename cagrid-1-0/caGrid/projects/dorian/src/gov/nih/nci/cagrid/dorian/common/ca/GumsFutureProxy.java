@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.gums.util.ca;
+package gov.nih.nci.cagrid.gums.common.ca;
 
 import java.io.FileOutputStream;
 import java.security.KeyPair;
@@ -33,7 +33,7 @@ public class GumsFutureProxy {
 			// for user.
 
 			// Load user certificate
-			X509Certificate cert = gov.nih.nci.cagrid.gums.util.ca.CertUtil.loadCertificate("c:/certificates/langella-cert.pem");
+			X509Certificate cert = gov.nih.nci.cagrid.gums.common.ca.CertUtil.loadCertificate("c:/certificates/langella-cert.pem");
 			PrivateKey key = KeyUtil.loadPrivateKey("c:/certificates/langella-key.pem", "gomets123");
 			X509Certificate[] certs = ProxyUtil
 					.createProxyCertificate(new X509Certificate[] { cert },

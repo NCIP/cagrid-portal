@@ -5,7 +5,7 @@
  * by the Apache Axis 1.2RC2 Jun 16, 2005 (10:54:53 EDT) WSDL2Java emitter.
  */
 
-package gov.nih.nci.cagrid.gums.util.ca;
+package gov.nih.nci.cagrid.gums.ca;
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>

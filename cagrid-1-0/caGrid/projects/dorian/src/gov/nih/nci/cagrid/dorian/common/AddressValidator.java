@@ -40,14 +40,6 @@ public class AddressValidator {
 		}
 	}
 
-	public static void validateState(String state)
-			throws IllegalArgumentException {
-		if (!USStates.isValidStateAbbreviation(state)) {
-			throw new IllegalArgumentException(
-					"Invalid state specified, use state abbreviations.");
-		}
-	}
-
 	public static void validateZipCode(String zip)
 			throws IllegalArgumentException {
 		if (zip == null) {

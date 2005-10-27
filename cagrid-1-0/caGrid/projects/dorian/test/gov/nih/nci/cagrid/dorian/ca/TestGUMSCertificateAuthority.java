@@ -5,9 +5,8 @@ import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthority;
 import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthorityConf;
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
-import gov.nih.nci.cagrid.gums.util.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.util.ca.KeyUtil;
-import gov.nih.nci.cagrid.gums.util.ca.NoCACredentialsFault;
+import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
+import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
 
 import java.io.File;
 import java.security.KeyPair;

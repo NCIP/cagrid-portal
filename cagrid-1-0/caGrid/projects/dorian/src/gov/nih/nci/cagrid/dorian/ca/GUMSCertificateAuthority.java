@@ -2,9 +2,8 @@ package gov.nih.nci.cagrid.gums.ca;
 
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
-import gov.nih.nci.cagrid.gums.util.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.util.ca.KeyUtil;
-import gov.nih.nci.cagrid.gums.util.ca.NoCACredentialsFault;
+import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
+import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.StringReader;
