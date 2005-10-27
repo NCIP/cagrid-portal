@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.gums.ca;
 
+import gov.nih.nci.cagrid.gums.util.ca.NoCACredentialsFault;
+
 import java.security.cert.X509Certificate;
 import java.util.Date;
 

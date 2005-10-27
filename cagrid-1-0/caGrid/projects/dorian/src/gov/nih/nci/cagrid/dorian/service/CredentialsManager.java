@@ -1,11 +1,11 @@
 package gov.nih.nci.cagrid.gums.service;
 
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.ca.KeyUtil;
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidPasswordFault;
+import gov.nih.nci.cagrid.gums.util.ca.CertUtil;
+import gov.nih.nci.cagrid.gums.util.ca.KeyUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.StringReader;

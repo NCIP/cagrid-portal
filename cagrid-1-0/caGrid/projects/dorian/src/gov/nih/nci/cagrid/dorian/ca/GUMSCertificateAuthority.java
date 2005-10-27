@@ -1,12 +1,10 @@
-package gov.nih.nci.cagrid.gums.service.gumsca;
+package gov.nih.nci.cagrid.gums.ca;
 
-import gov.nih.nci.cagrid.gums.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
-import gov.nih.nci.cagrid.gums.ca.CertificateAuthorityFault;
-import gov.nih.nci.cagrid.gums.ca.KeyUtil;
-import gov.nih.nci.cagrid.gums.ca.NoCACredentialsFault;
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
+import gov.nih.nci.cagrid.gums.util.ca.CertUtil;
+import gov.nih.nci.cagrid.gums.util.ca.KeyUtil;
+import gov.nih.nci.cagrid.gums.util.ca.NoCACredentialsFault;
 
 import java.io.ByteArrayInputStream;
 import java.io.StringReader;

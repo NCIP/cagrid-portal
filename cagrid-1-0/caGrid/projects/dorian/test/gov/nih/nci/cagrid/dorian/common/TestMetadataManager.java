@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.gums.common;
 
 import gov.nih.nci.cagrid.gums.bean.Metadata;
-import gov.nih.nci.cagrid.gums.service.gumsca.GUMSCertificateAuthority;
+import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthority;
 
 import java.io.File;
 

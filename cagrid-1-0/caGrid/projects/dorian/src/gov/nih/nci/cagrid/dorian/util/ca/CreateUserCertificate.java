@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.gums.ca;
+package gov.nih.nci.cagrid.gums.util.ca;
 
 import gov.nih.nci.cagrid.gums.common.IOUtils;
 

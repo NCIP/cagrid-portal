@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.gums.ca;
+package gov.nih.nci.cagrid.gums.util.ca;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

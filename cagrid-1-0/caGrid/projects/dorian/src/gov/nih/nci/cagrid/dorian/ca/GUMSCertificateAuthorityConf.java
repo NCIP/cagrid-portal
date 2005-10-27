@@ -41,7 +41,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *---------------------------------------------------------------------------*/
 
-package gov.nih.nci.cagrid.gums.service.gumsca;
+package gov.nih.nci.cagrid.gums.ca;
 
 import java.util.Calendar;
 import java.util.Date;
