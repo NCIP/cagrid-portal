@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+
+<!-- ================================================================= -->
+<!-- caGrid Master build file                                          -->
+<!-- ================================================================= -->
+
+<project name="Master" default="compile" basedir=".">
+    <property file="build.properties" />
+
+    <property name="tmp.dir" value="tmp" />
+
+    <!-- =============================================================== -->
+    <!-- Prepares the build directory                                    -->
+    <!-- =============================================================== -->
+    <target name="prepare">
+        <tstamp />
+        <mkdir dir="${tmp.dir}" />
+    </target>
+
+
+    <target name="build-core" depends="prepare" description="Builds the core">
+	  <ant inheritall="false" antfile="projects/core/build.xml" target="jar"/>
+    </target>
+
+
+    <target name="build-metadata" depends="build-core" description="Builds the common metadata">
+	<!-- copy dependant artifacts into current target's lib dir -->
+	<copy todir="projects/metadata/lib">
+    	    <fileset dir="projects/core/build/jars">
+	            <include name="*.jar"/>
+	    </fileset>
+	</copy>
+	<ant inheritall="false" antfile="projects/metadata/build.xml" target="jar"/>
+    </target>
+
+
+    <target name="build-gums" depends="build-core, build-metadata" description="Builds GUMS">
+
+    </target>
+
+
+    <target name="build-portal" depends="build-core, build-metadata" description="Builds the portal">
+
+    </target>
+
+
+    <!-- ============================================================== -->
+    <!-- Cleans up generated stuff                                      -->
+    <!-- ============================================================== -->
+    <target name="clean" depends="" description="Removes generated files.">
+        <delete dir="${tmp.dir}" />
+    </target>
+
+
+    <!-- ============================================================== -->
+    <!-- Builds from scratch                                                -->
+    <!-- ============================================================== -->
+    <target name="all" description="Builds the entire application" depends="clean" />
+</project>
+
