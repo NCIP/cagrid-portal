@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="SERVICE-TYPE-NAME"
+    targetNamespace="NAMESPACE-DOMAIN/SERVICE-TYPE-NAME"
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:tns="NAMESPACE-DOMAIN/SERVICE-TYPE-NAME"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd"
+    xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
+    xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd"
+    xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl"
+    xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+<wsdl:import 
+    namespace=
+    "http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
+    location="../../wsrf/properties/WS-ResourceProperties.wsdl" />
+<wsdl:import 
+    namespace=
+    "http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl"
+    location="../../wsrf/faults/WS-BaseFaults.wsdl" />
+
+
+<!--============================================================
+
+                      T Y P E S
+                      
+  ============================================================-->
+<types>
+<xsd:schema targetNamespace="NAMESPACE-DOMAIN/SERVICE-TYPE-NAME"
+    xmlns:tns="NAMESPACE-DOMAIN/SERVICE-TYPE-NAME"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<!-- REQUESTS AND RESPONSES -->
+        
+</xsd:schema>
+</types>
+
+
+
+
+<!--============================================================
+
+                       P O R T T Y P E
+                      
+  ============================================================-->
+<portType name="SERVICE-TYPE-NAMEPortType" 
+    wsdlpp:extends="wsrpw:GetResourceProperty"
+    wsrp:ResourceProperties="tns:MathResourceProperties">
+
+
+</portType>
+
+</definitions>

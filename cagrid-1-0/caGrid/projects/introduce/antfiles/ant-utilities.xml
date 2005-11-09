@@ -1,0 +1,147 @@
+<!-- ======================================================================= -->
+<!-- caGRID General Utilities build file                                     -->
+<!-- ======================================================================= -->
+<project name="cagrid_utilities" basedir="." default="usage">
+
+	<property name="globus.location" location="${env.GLOBUS_LOCATION}" />
+	<property name="schema.src" location="${globus.location}/share/schema" />
+	<property name="build.stubs" location="${globus.location}/share/globus_wsrf_tools/build-stubs.xml" />
+
+	<target name="usage">
+		<echo message="Not to be called directly.  This file contains utilities to be used in other build files." />
+	</target>
+
+	<!-- Allows you define a new property with a value of ${${a}.${b}} which can't be done by the Property task alone.  -->
+	<macrodef name="compose-property">
+		<attribute name="name" />
+		<attribute name="stem" />
+		<attribute name="selector" />
+		<sequential>
+			<property name="@{name}" value="${@{stem}.@{selector}}" />
+		</sequential>
+	</macrodef>
+
+	<!-- generateSubprojectBeans: should be called for each type that has SDEs or objects based on XSDs
+        PARAMS:
+            name = the type (e.g. DataServices, Common, etc)
+            packages = a comma or space separated list of regexs that make EXACTLY the generated type package,
+                        this is used to delete and to identify generated classes
+                        (you'll want to make this as specific as possible)
+    -->
+
+	<macrodef name="generateSubprojectBeans">
+		<attribute name="name" />
+		<attribute name="packages" />
+		<attribute name="tempDir" />
+
+		<sequential>
+			<echo message="Generating beans for @{name}" />
+
+			<mkdir dir="@{tempDir}_@{name}" />
+
+			<copy toDir="@{tempDir}_@{name}/schema">
+				<fileset dir="${sde.schema.dir}/@{name}" casesensitive="yes">
+					<include name="**" />
+				</fileset>
+			</copy>
+
+			<delete>
+				<fileset dir="${src.dir}/@{name}" includes="@{packages}" />
+			</delete>
+
+			<ant antfile="${build.stubs}" target="generateStubs">
+				<property name="mapping.file" location="@{tempDir}_@{name}/namespace2package.mappings" />
+				<property name="source.stubs.dir" location="@{tempDir}_@{name}/schema" />
+				<property name="target.stubs.dir" location="@{tempDir}_@{name}/stubs" />
+				<property name="wsdl.file" value="@{name}.wsdl" />
+			</ant>
+
+			<!-- copy the appropriate files to the right place -->
+			<copy todir="${src.dir}/@{name}">
+				<fileset dir="@{tempDir}_@{name}/stubs" includes="@{packages}" />
+			</copy>
+
+			<delete dir="@{tempDir}_@{name}" />
+
+		</sequential>
+	</macrodef>
+
+
+	<macrodef name="generateSkeletonStubs">
+		<attribute name="name" />
+		<attribute name="packages" />
+		<attribute name="tempDir" />
+
+		<sequential>
+			<echo message="Generating stubs for @{name}" />
+
+			<mkdir dir="@{tempDir}_@{name}" />
+
+			<copy toDir="@{tempDir}_@{name}/schema">
+				<fileset dir="${schema.src}" casesensitive="yes">
+					<include name="wsrf/**/*" />
+					<include name="ws/**/*" />
+				</fileset>
+				<fileset dir="${basedir}/schema" casesensitive="yes">
+					<include name="**" />
+				</fileset>
+				<fileset dir="${basedir}/skeleton/@{name}/schema" casesensitive="yes">
+					<include name="**" />
+				</fileset>
+			</copy>
+
+			<!-- Merge our namespace mappings file with the GT4 mappins file -->
+			<ant antfile="${build.stubs}" target="mergePackageMapping">
+				<property name="mapping.src" location="${basedir}/skeleton/@{name}/namespace2package.mappings" />
+				<property name="mapping.dst" location="@{tempDir}_@{name}/namespace2package.mappings" />
+			</ant>
+
+			<delete>
+				<fileset dir="${src.dir}/@{name}" includes="@{packages}" />
+			</delete>
+
+			<ant antfile="${build.stubs}" target="flatten">
+				<property name="source.flatten.dir" location="@{tempDir}_@{name}/schema/cagrid/@{name}" />
+				<property name="target.flatten.dir" location="@{tempDir}_@{name}/schema/cagrid/@{name}" />
+				<property name="wsdl.source" value="@{name}.wsdl" />
+				<property name="wsdl.target" value="@{name}_flattened.wsdl" />
+				<property name="wsdl.porttype" value="@{name}PortType" />
+			</ant>
+
+			<ant antfile="${build.stubs}" target="generateBinding">
+				<property name="source.binding.dir" value="@{tempDir}_@{name}/schema/cagrid/@{name}" />
+				<property name="target.binding.dir" value="@{tempDir}_@{name}/schema/cagrid/@{name}" />
+				<property name="porttype.wsdl" value="@{name}_flattened.wsdl" />
+				<property name="binding.root" value="@{name}" />
+			</ant>
+
+			<ant antfile="${build.stubs}" target="generateStubs">
+				<property name="mapping.file" location="@{tempDir}_@{name}/namespace2package.mappings" />
+				<property name="source.stubs.dir" location="@{tempDir}_@{name}/schema/cagrid/@{name}" />
+				<property name="target.stubs.dir" location="@{tempDir}_@{name}/stubs" />
+				<property name="wsdl.file" value="@{name}_service.wsdl" />
+			</ant>
+
+			<!-- copy the appropriate files to the right place -->
+			<copy todir="${src.dir}/@{name}">
+				<fileset dir="@{tempDir}_@{name}/stubs" includes="@{packages}" />
+			</copy>
+
+			<delete dir="@{tempDir}_@{name}" />
+
+		</sequential>
+	</macrodef>
+
+
+
+	<target name="antdoc" depends="prepare">
+		<echo message="If this fails, and you are sure you need to run this target, you need to install AntDoc.  See: http://antdoc.free.fr/" />
+		<taskdef name="AntDoc" classname="org.ed.pack.ant.AntDoc" />
+		<AntDoc destination="${build.dir}/antdoc">
+			<fileset dir="${basedir}">
+				<include name="build.xml" />
+				<include name="antfiles/*.xml" />
+			</fileset>
+		</AntDoc>
+	</target>
+</project>

@@ -1,0 +1,268 @@
+<!-- ======================================================================= -->
+<!-- caGRID Analytical Utilities build file                                  -->
+<!-- ======================================================================= -->
+<project name="introduce_utilities" basedir="." default="usage">
+
+	<property name="introduce.skeleton.dir" value="${basedir}/skeleton" />
+	<property name="introduce.skeleton.destination.dir.default" value="${basedir}/serviceSkeleton" />
+	<property name="introduce.skeleton.service.name.default" value="Service" />
+	<property name="introduce.skeleton.package.default" value="gov.nih.nci.cagrid" />
+	<property name="introduce.skeleton.package.dir.default" value="gov/nih/nci/cagrid" />
+	<property name="introduce.skeleton.namespace.domain.default" value="http://cagrid.nci.nih.gov" />
+	<property name="gme.service.default" value="http://malibu.bmi.ohio-state.edu:8080/ogsa/services/cagrid/gme" />
+	<property name="conf.dir" location="conf" />
+	<property name="introduce.portal.conf" location="${conf.dir}/introduce/introduce-portal-conf.xml" />
+	
+	<target name="usage">
+		<echo message="Not to be called directly.  This file contains utilities to be used in other build files." />
+	</target>
+
+	<target name="createService" description="Will create an anaytical skeleton deployment" depends=" checkInputProps, copySkeleton,copyCaGRIDJars,serviceCopySchemaFiles,serviceCopyPortalFiles,setActivePath">
+	</target>
+
+	<target name="setActivePath">
+		<property name="active.skeleton.destination.dir" value="${introduce.skeleton.destination.dir}" />
+	</target>
+
+	<target name="copySkeleton" depends="prepareSkeleton">
+		<copy todir="${introduce.skeleton.destination.dir}">
+			<fileset dir="${introduce.skeleton.dir}">
+				<include name="**\*" />
+			</fileset>
+		</copy>
+		
+		<copy todir="${introduce.skeleton.destination.dir}/resources">
+			<fileset dir="${resources.dir}">
+				<include name="**\*" />
+			</fileset>
+		</copy>
+
+		<!-- do replacements on the basic service files -->
+		<replace file="${introduce.skeleton.destination.dir}/namespace2package.mappings">
+			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
+			<replacefilter token="PACKAGE-NAME" value="${introduce.skeleton.package}" />
+			<replacefilter token="NAMESPACE-DOMAIN" value="${introduce.skeleton.namespace.domain}" />
+		</replace>
+		<replace file="${introduce.skeleton.destination.dir}/namespace2package.mappings" token=":" value="\:" />
+		<replace file="${introduce.skeleton.destination.dir}/namespace2package.mappings" token="\\:" value="\:" />
+		<replace file="${introduce.skeleton.destination.dir}/build.xml">
+			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
+			<replacefilter token="PACKAGE-NAME" value="${introduce.skeleton.package}" />
+			<replacefilter token="PACKAGE-DIR" value="${introduce.skeleton.package.dir}" />
+		</replace>
+		<replace file="${introduce.skeleton.destination.dir}/deploy.properties">
+			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
+			<replacefilter token="PACKAGE-NAME" value="${introduce.skeleton.package}" />
+			<replacefilter token="PACKAGE-DIR" value="${introduce.skeleton.package.dir}" />
+		</replace>
+		<replace file="${introduce.skeleton.destination.dir}/.project">
+			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
+			<replacefilter token="PACKAGE-NAME" value="${introduce.skeleton.package}" />
+		</replace>
+		<replace file="${introduce.skeleton.destination.dir}/config/undeploy.wsdd">
+			<replacefilter token="SERVICE-PATH" value="cagrid/${introduce.skeleton.service.name}" />
+		</replace>
+		<replace file="${introduce.skeleton.destination.dir}/docs/api/Doxyfile">
+			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
+		</replace>
+
+		<!-- move and rename the schema files -->
+		<move todir="${introduce.skeleton.destination.dir}/schema/cagrid/${introduce.skeleton.service.name}">
+			<fileset dir="${introduce.skeleton.destination.dir}/schema/cagrid/Service" />
+		</move>
+		<move tofile="${introduce.skeleton.destination.dir}/schema/cagrid/${introduce.skeleton.service.name}/${introduce.skeleton.service.name}.wsdl">
+			<fileset file="${introduce.skeleton.destination.dir}/schema/cagrid/${introduce.skeleton.service.name}/Service.wsdl" />
+		</move>
+
+		<replace file="${introduce.skeleton.destination.dir}/schema/cagrid/${introduce.skeleton.service.name}/${introduce.skeleton.service.name}.wsdl">
+			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
+			<replacefilter token="PACKAGE-NAME" value="${introduce.skeleton.package}" />
+			<replacefilter token="NAMESPACE-DOMAIN" value="${introduce.skeleton.namespace.domain}" />
+		</replace>
+
+
+		<!-- move and rename the common files -->
+		<move tofile="${introduce.skeleton.destination.dir}/src/common/${introduce.skeleton.service.name}I.java">
+			<fileset file="${introduce.skeleton.destination.dir}/src/common/ServiceI.java" />
+		</move>
+		<move todir="${introduce.skeleton.destination.dir}/src/${introduce.skeleton.package.dir}/common">
+			<fileset dir="${introduce.skeleton.destination.dir}/src/common/" />
+		</move>
+
+		<replace file="${introduce.skeleton.destination.dir}/src/${introduce.skeleton.package.dir}/common/${introduce.skeleton.service.name}I.java">
+			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
+			<replacefilter token="PACKAGE-NAME" value="${introduce.skeleton.package}" />
+			<replacefilter token="NAMESPACE-DOMAIN" value="${introduce.skeleton.namespace.domain}" />
+		</replace>
+
+		<!-- move and rename the service files -->
+		<move tofile="${introduce.skeleton.destination.dir}/src/service/globus/${introduce.skeleton.service.name}ProviderImpl.java">
+			<fileset file="${introduce.skeleton.destination.dir}/src/service/globus/ServiceProviderImpl.java" />
+		</move>
+		<move tofile="${introduce.skeleton.destination.dir}/src/service/${introduce.skeleton.service.name}Impl.java">
+			<fileset file="${introduce.skeleton.destination.dir}/src/service/ServiceImpl.java" />
+		</move>
+		<move todir="${introduce.skeleton.destination.dir}/src/${introduce.skeleton.package.dir}/service">
+			<fileset dir="${introduce.skeleton.destination.dir}/src/service/" />
+		</move>
+
+		<replace file="${introduce.skeleton.destination.dir}/src/${introduce.skeleton.package.dir}/service/globus/${introduce.skeleton.service.name}ProviderImpl.java">
+			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
+			<replacefilter token="PACKAGE-NAME" value="${introduce.skeleton.package}" />
+			<replacefilter token="NAMESPACE-DOMAIN" value="${introduce.skeleton.namespace.domain}" />
+		</replace>
+		<replace file="${introduce.skeleton.destination.dir}/src/${introduce.skeleton.package.dir}/service/${introduce.skeleton.service.name}Impl.java">
+			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
+			<replacefilter token="PACKAGE-NAME" value="${introduce.skeleton.package}" />
+			<replacefilter token="NAMESPACE-DOMAIN" value="${introduce.skeleton.namespace.domain}" />
+		</replace>
+		<replace file="${introduce.skeleton.destination.dir}/src/${introduce.skeleton.package.dir}/service/globus/default-security-config.xml">
+			<replacefilter token="NAMESPACE-DOMAIN" value="${introduce.skeleton.namespace.domain}" />
+			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
+		</replace>
+		<replace file="${introduce.skeleton.destination.dir}/src/${introduce.skeleton.package.dir}/service/globus/custom-security-config.xml">
+			<replacefilter token="NAMESPACE-DOMAIN" value="${introduce.skeleton.namespace.domain}" />
+			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
+		</replace>
+
+		<!-- move and rename the client files -->
+		<move tofile="${introduce.skeleton.destination.dir}/src/client/${introduce.skeleton.service.name}Client.java">
+			<fileset file="${introduce.skeleton.destination.dir}/src/client/ServiceClient.java" />
+		</move>
+		<move todir="${introduce.skeleton.destination.dir}/src/${introduce.skeleton.package.dir}/client">
+			<fileset dir="${introduce.skeleton.destination.dir}/src/client/" />
+		</move>
+
+		<replace file="${introduce.skeleton.destination.dir}/src/${introduce.skeleton.package.dir}/client/${introduce.skeleton.service.name}Client.java">
+			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
+			<replacefilter token="PACKAGE-NAME" value="${introduce.skeleton.package}" />
+			<replacefilter token="NAMESPACE-DOMAIN" value="${introduce.skeleton.namespace.domain}" />
+		</replace>
+
+		<!-- create the propertites files for this project-->
+		<propertyfile file="${introduce.skeleton.destination.dir}/introduce.properties" comment="Service introdue properties">
+			<entry key="introduce.skeleton.service.name" value="${introduce.skeleton.service.name}" />
+			<entry key="introduce.skeleton.destination.dir" value="${introduce.skeleton.destination.dir}" />
+			<entry key="introduce.skeleton.package" value="${introduce.skeleton.package}" />
+			<entry key="introduce.skeleton.package.dir" value="${introduce.skeleton.package.dir}" />
+			<entry key="introduce.skeleton.namespace.domain" value="${introduce.skeleton.namespace.domain}" />
+		</propertyfile>
+		<!-- create the propertites files for build of this project-->
+		<propertyfile file="${introduce.skeleton.destination.dir}/build.properties" comment="Service build properties">
+			<entry key="schema.path" value="cagrid/${introduce.skeleton.service.name}" />
+			<entry key="interface.name" value="${introduce.skeleton.service.name}" />
+			<entry key="package" value="${introduce.skeleton.package}" />
+			<entry key="package.dir" value="${introduce.skeleton.package.dir}" />
+			<entry key="gar.filename" value="${introduce.skeleton.service.name}" />
+		</propertyfile>
+
+	</target>
+
+
+	<target name="serviceCopySchemaFiles" depends="prepareSkeleton">
+		<!-- THESE WILL NEED TO BE ADDED AFTER THE REFACTOR IS COMPLETE
+		<copy toDir="${introduce.skeleton.destination.dir}/schema/cagrid/types">
+			<fileset dir="${basedir}/schema/types">
+				<include name="**/*.xsd" />
+			</fileset>
+		</copy>
+		-->
+	</target>
+
+	<target name="serviceCopyPortalFiles">
+		<!-- THESE WILL NEED TO BE ADDED AFTER THE REFACTOR IS COMPLETE
+		<copy toDir="${introduce.skeleton.destination.dir}/resources/portal">
+			<fileset dir="${basedir}/resources/common/portal">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+		<copy toDir="${introduce.skeleton.destination.dir}/resources/portal">
+			<fileset dir="${basedir}/resources/introduce/portal">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+		<copy toDir="${introduce.skeleton.destination.dir}/resources/portal">
+			<fileset dir="${basedir}/resources/security/portal/gums">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+		-->
+	</target>
+
+	<target name="checkLoadPropertiesFile" if="introduce.properties">
+		<property file="${introduce.properties}" />
+	</target>
+
+	<target name="checkInputProps" depends="checkLoadPropertiesFile">
+		<condition property="noInputNeeded">
+			<and>
+				<and>
+					<and>
+						<and>
+							<isset property="introduce.skeleton.service.name" />
+							<isset property="introduce.skeleton.destination.dir" />
+						</and>
+						<isset property="introduce.skeleton.package" />
+					</and>
+					<isset property="introduce.skeleton.package.dir" />
+				</and>
+				<isset property="introduce.skeleton.namespace.domain" />
+			</and>
+		</condition>
+	</target>
+
+	<target name="prepareSkeleton" unless="noInputNeeded">
+		<input message="Please enter the destination for your service skeleton [${introduce.skeleton.destination.dir.default}]:" addproperty="introduce.skeleton.destination.dir" defaultvalue="${introduce.skeleton.destination.dir.default}" />
+		<input message="Please enter the name for this service (no spaces) [${introduce.skeleton.service.name.default}]:" addproperty="introduce.skeleton.service.name" defaultvalue="${introduce.skeleton.service.name.default}" />
+		<input message="Please enter the package you would like to use for this service's source. [${introduce.skeleton.package.default}]:" addproperty="introduce.skeleton.package" defaultvalue="${introduce.skeleton.package.default}" />
+		<input message="Please enter the package directory you would like to use for this service's source. (this should match the package name above) [${introduce.skeleton.package.dir.default}]:" addproperty="introduce.skeleton.package.dir" defaultvalue="${introduce.skeleton.package.dir.default}" />
+		<input message="Please enter the namespace domain of the introduce. [${introduce.skeleton.namespace.domain.default}]:" addproperty="introduce.skeleton.namespace.domain" defaultvalue="${introduce.skeleton.namespace.domain.default}" />
+	</target>
+
+	<target name="copyCaGRIDJars" depends="prepareSkeleton,copySkeleton">
+		<copy todir="${introduce.skeleton.destination.dir}/lib">
+			<fileset dir="${lib.dir}">
+				<include name="**\*" />
+			</fileset>
+		</copy>
+		<copy todir="${introduce.skeleton.destination.dir}/lib">
+			<fileset dir="${jars.dir}">
+				<include name="*" />
+			</fileset>
+		</copy>
+	</target>
+	
+    <target name="introducePortal" depends="build" description="Execute the Introduce Portal">
+        <runPortal configfile="${introduce.portal.conf}" />
+    </target>
+	
+	 <macrodef name="runPortal">
+	        <attribute name="configFile" />
+	        <sequential>
+	            <echo message="Running portal with @{configFile}" />
+	            <java classname="org.projectmobius.portal.GridPortal" fork="yes">
+	                <arg value="@{configFile}" />
+	                <classpath>
+	                    <fileset dir="${jars.dir}">
+	                        <include name="*.jar" />
+	                    </fileset>
+	                    <fileset dir="${lib.dir}">
+	                        <include name="*.jar" />
+	                    </fileset>
+	                    <fileset dir="${lib.dir}/mobius">
+	                        <include name="*.jar" />
+	                    </fileset>
+	                    <fileset dir="${ext.globus.dir}/lib">
+	                        <include name="*.jar" />
+	                    </fileset>
+	                    <fileset dir="${ext.ogsadai.dir}/lib">
+	                        <include name="*.jar" />
+	                    </fileset>
+	                    <pathelement location="${basedir}/resources/introduce/portal" />
+	                    <pathelement location="${basedir}/resources/common/portal" />
+	                </classpath>
+	            </java>
+	        </sequential>
+	    </macrodef>
+
+</project>

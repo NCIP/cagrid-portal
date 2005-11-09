@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2005 rel. 3 U (http://www.altova.com) by Shannon Hastings  -->
+<xs:schema xmlns="http://gov.nih.nci.cagrid.introduce/1/Methods" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://gov.nih.nci.cagrid.introduce/1/Methods" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="methods" type="methodsType">
+		<xs:annotation>
+			<xs:documentation>List of methods for this interface.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="methodsType">
+		<xs:sequence>
+			<xs:element name="method" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="methodType">
+							<xs:attribute name="secure" type="secureValueType" use="optional"/>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="methodType">
+		<xs:sequence>
+			<xs:element name="inputs" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="input" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="className" type="xs:string" use="required"/>
+								<xs:attribute name="name" type="xs:string" use="required"/>
+								<xs:attribute name="namespace" type="xs:string" use="required"/>
+								<xs:attribute name="type" type="xs:string" use="required"/>
+								<xs:attribute name="location" type="xs:string" use="optional"/>
+								<xs:attribute name="minOccurs" type="xs:string" use="optional"/>
+								<xs:attribute name="maxOccurs" type="xs:string" use="optional"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="output">
+				<xs:complexType>
+					<xs:attribute name="className" type="xs:string" use="required"/>
+					<xs:attribute name="namespace" type="xs:string" use="required"/>
+					<xs:attribute name="type" type="xs:string" use="required"/>
+					<xs:attribute name="location" type="xs:string" use="optional"/>
+					<xs:attribute name="minOccurs" type="xs:string" use="optional"/>
+					<xs:attribute name="maxOccurs" type="xs:string" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="exceptions" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="exception" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="className" type="xs:string" use="required"/>
+								<xs:attribute name="namespace" type="xs:string" use="required"/>
+								<xs:attribute name="type" type="xs:string" use="required"/>
+								<xs:attribute name="location" type="xs:string" use="optional"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:simpleType name="secureValueType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="NONE"/>
+			<xs:enumeration value="INTEGRITY"/>
+			<xs:enumeration value="PRIVACY"/>
+			<xs:enumeration value="EITHER"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

@@ -1,0 +1,27 @@
+<project name="cagrid_portal" basedir="." default="usage">
+	<target name="usage">
+		<echo message="Not to be called directly." />
+	</target>
+
+	<!-- put stuff in here needed for building introduce-->
+	<target name="preparePortal">
+		<path id="Portal.classpath">
+			<path refid="Common.classpath" />
+			<fileset dir="${lib.dir}">
+				<include name="ant.jar" />
+				<include name="ant-launcher.jar" />
+				<include name="jaxmejs.jar" />
+				<include name="commons-cli-1.0.jar" />
+				<include name="antlr.jar" />
+				<include name="jdom-1.0.jar" />
+				<include name="caGrid-0.5.jar" />
+			</fileset>
+			<fileset dir="${lib.dir}/mobius">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+		<path id="Poratal.test.classpath">
+			<path refid="Common.test.classpath" />
+		</path>
+	</target>
+</project>

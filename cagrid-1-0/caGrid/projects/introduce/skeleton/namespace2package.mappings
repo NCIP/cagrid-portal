@@ -1,0 +1,5 @@
+NAMESPACE-DOMAIN/SERVICE-TYPE-NAME=PACKAGE-NAME.stubs
+NAMESPACE-DOMAIN/SERVICE-TYPE-NAME/bindings=PACKAGE-NAME.stubs.bindings
+NAMESPACE-DOMAIN/SERVICE-TYPE-NAME/service=PACKAGE-NAME.stubs.service
+http\://cagrid.nci.nih.gov/1/CommonServiceMetadata=gov.nih.nci.cagrid.common.servicedata
+http\://cagrid.nci.nih.gov/1/caDSRMetadata=gov.nih.nci.cagrid.common.servicedata

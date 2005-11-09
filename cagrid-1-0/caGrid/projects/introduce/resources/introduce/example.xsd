@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="analysis.cabig.nci.nih.gov/1/example" xmlns:mobius="analysis.cabig.nci.nih.gov/1/example" targetNamespace="analysis.cabig.nci.nih.gov/1/example" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:simpleType name="exampleStringType">
+		<xs:annotation>
+			<xs:documentation>An Example String</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+</xs:schema>
