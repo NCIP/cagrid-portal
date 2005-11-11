@@ -34,7 +34,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.6 2005-10-26 19:45:51 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.7 2005-11-11 21:47:38 langella Exp $
  */
 public class UserManagerWindow extends GridPortalBaseFrame {
 
@@ -135,6 +135,10 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 	private UserStatusComboBox userStatus = null;
 
 	private JComboBox service = null;
+	
+	 private boolean isQuerying = false;
+
+	    private Object mutex = new Object();
 
 	/**
 	 * This is the default constructor
@@ -829,7 +833,18 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		return query;
 	}
 
-	private synchronized void findUsers() {
+	private void findUsers() {
+		
+		  synchronized (mutex) {
+	            if (isQuerying) {
+	                PortalUtils.showErrorMessage("Query Already in Progress",
+	                    "Please wait until the current query is finished before executing another.");
+	           return;
+	            } else {
+	                isQuerying = true;
+	            }
+	        }
+
 
 		this.getUsersTable().clearTable();
 		UserFilter f = new UserFilter();
@@ -887,6 +902,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			e.printStackTrace();
 			PortalUtils.showErrorMessage(e);
 		}
+		isQuerying = false;
 	}
 
 	private String format(String s) {
