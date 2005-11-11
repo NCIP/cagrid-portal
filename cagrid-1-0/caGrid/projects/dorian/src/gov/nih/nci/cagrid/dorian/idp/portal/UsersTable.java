@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.gums.idp.portal;
 
 import gov.nih.nci.cagrid.gums.idp.bean.User;
-import gov.nih.nci.cagrid.gums.portal.BaseTable;
+import gov.nih.nci.cagrid.gums.portal.PortalBaseTable;
 
 import java.util.Vector;
 
@@ -12,9 +12,9 @@ import javax.swing.table.TableColumn;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: UsersTable.java,v 1.2 2005-11-11 22:17:11 langella Exp $
+ * @version $Id: UsersTable.java,v 1.3 2005-11-11 22:18:00 langella Exp $
  */
-public class UsersTable extends BaseTable {
+public class UsersTable extends PortalBaseTable {
 	public static String USER = "user";
 
 	public static String USERNAME = "Username";

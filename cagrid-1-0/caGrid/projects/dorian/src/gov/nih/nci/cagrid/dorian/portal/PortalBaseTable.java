@@ -11,8 +11,8 @@ import javax.swing.table.DefaultTableModel;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public abstract class BaseTable extends PortalTable{
-	public BaseTable(DefaultTableModel model){
+public abstract class PortalBaseTable extends PortalTable{
+	public PortalBaseTable(DefaultTableModel model){
 		super(model,Color.WHITE,Color.BLACK,GumsLookAndFeel.getTableRowColor(),Color.BLACK,GumsLookAndFeel.getTableSelectColor(),GumsLookAndFeel.getTableSelectTextColor());
 	}
 
