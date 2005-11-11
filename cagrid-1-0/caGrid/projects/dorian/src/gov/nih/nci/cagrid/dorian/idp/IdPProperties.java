@@ -47,6 +47,8 @@ public class IdPProperties extends GUMSObject {
 
 	private final static String DEFAULT_REGISTRATION_POLICY = ManualRegistrationPolicy.class
 			.getName();
+	
+	
 
 	private MetadataManager mm;
 

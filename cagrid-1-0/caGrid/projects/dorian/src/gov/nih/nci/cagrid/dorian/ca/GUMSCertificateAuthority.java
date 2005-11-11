@@ -29,7 +29,6 @@ import org.globus.wsrf.utils.FaultHelper;
 public class GUMSCertificateAuthority extends GUMSObject implements
 		CertificateAuthority {
 
-	
 	public static String CA_TABLE = "CERTIFICATE_AUTHORITY";
 
 	private Database db;
@@ -37,22 +36,22 @@ public class GUMSCertificateAuthority extends GUMSObject implements
 	private final static String CA_USER = "CA";
 
 	private boolean dbBuilt = false;
-	
+
 	private GUMSCertificateAuthorityConf conf;
 
-	public GUMSCertificateAuthority(Database db, GUMSCertificateAuthorityConf conf) {
+	public GUMSCertificateAuthority(Database db,
+			GUMSCertificateAuthorityConf conf) {
 		this.db = db;
 		this.conf = conf;
 	}
-
-
 
 	public void setCACredentials(X509Certificate cert, PrivateKey key)
 			throws CertificateAuthorityFault {
 		this.buildDatabase();
 		try {
 			this.deleteCACredentials();
-			String keyStr = KeyUtil.writePrivateKeyToString(key, conf.getCaPassword());
+			String keyStr = KeyUtil.writePrivateKeyToString(key, conf
+					.getCaPassword());
 			String certStr = CertUtil.writeCertificateToString(cert);
 			db.update("INSERT INTO " + CA_TABLE + " VALUES('" + CA_USER + "','"
 					+ certStr + "','" + keyStr + "')");
@@ -222,8 +221,9 @@ public class GUMSCertificateAuthority extends GUMSObject implements
 			if (now.before(cert.getNotBefore())
 					|| (now.after(cert.getNotAfter()))) {
 				if (conf.isAutoRenewal()) {
-					return renewCertifcateAuthorityCredentials(conf.getRenewalDate());
-					
+					return renewCertifcateAuthorityCredentials(conf
+							.getRenewalDate());
+
 				} else {
 					NoCACredentialsFault fault = new NoCACredentialsFault();
 					fault
@@ -235,15 +235,18 @@ public class GUMSCertificateAuthority extends GUMSObject implements
 		return cert;
 	}
 
-	public X509Certificate renewCertifcateAuthorityCredentials(Date expirationDate)
-			throws CertificateAuthorityFault, NoCACredentialsFault {
-		try{
-		X509Certificate oldcert = getCACertificate(false);
-		KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-		X509Certificate cacert = CertUtil.generateCACertificate(new X509Name(oldcert.getSubjectDN().getName()),new Date(),expirationDate,pair);
-	    deleteCACredentials();
-	    this.setCACredentials(cacert,pair.getPrivate());
-	    return cacert;
+	public X509Certificate renewCertifcateAuthorityCredentials(
+			Date expirationDate) throws CertificateAuthorityFault,
+			NoCACredentialsFault {
+		try {
+			X509Certificate oldcert = getCACertificate(false);
+			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+			X509Certificate cacert = CertUtil.generateCACertificate(
+					new X509Name(oldcert.getSubjectDN().getName()), new Date(),
+					expirationDate, pair);
+			deleteCACredentials();
+			this.setCACredentials(cacert, pair.getPrivate());
+			return cacert;
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			CertificateAuthorityFault fault = new CertificateAuthorityFault();
@@ -256,14 +259,14 @@ public class GUMSCertificateAuthority extends GUMSObject implements
 		}
 	}
 
-
 	public X509Certificate requestCertificate(
 			PKCS10CertificationRequest request, Date startDate,
 			Date expirationDate) throws CertificateAuthorityFault,
 			NoCACredentialsFault {
 
-		X509Certificate cacert = getCACertificate();
 		PrivateKey cakey = getCAPrivateKey();
+		X509Certificate cacert = getCACertificate();
+
 		Date caDate = cacert.getNotAfter();
 		if (startDate.after(caDate)) {
 			CertificateAuthorityFault fault = new CertificateAuthorityFault();
@@ -308,13 +311,14 @@ public class GUMSCertificateAuthority extends GUMSObject implements
 			throw fault;
 		}
 	}
-	
+
 	private void deleteCACredentials() throws CertificateAuthorityFault {
 		this.buildDatabase();
-		try{
-		db.update("delete from " + CA_TABLE + " where ID='"
-				+ CA_USER + "'");
-		}catch (Exception e) {
+		try {
+			db
+					.update("delete from " + CA_TABLE + " where ID='" + CA_USER
+							+ "'");
+		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			CertificateAuthorityFault fault = new CertificateAuthorityFault();
 			fault
