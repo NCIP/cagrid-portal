@@ -34,7 +34,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.7 2005-11-11 21:47:38 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.8 2005-11-11 22:17:11 langella Exp $
  */
 public class UserManagerWindow extends GridPortalBaseFrame {
 
@@ -280,7 +280,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 	 */
 	private UsersTable getUsersTable() {
 		if (usersTable == null) {
-			usersTable = new UsersTable();
+			usersTable = new UsersTable(this);
 		}
 		return usersTable;
 	}
@@ -310,39 +310,43 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			manageUser.setIcon(IdPLookAndFeel.getUserMagnifyIcon());
 			manageUser.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					final int row = getUsersTable().getSelectedRow();
-
-					if ((row >= 0) && (row < getUsersTable().getRowCount())) {
-						MobiusRunnable runner = new MobiusRunnable() {
-							public void execute() {
-								User user = (User) getUsersTable().getValueAt(
-										row, 0);
-								String service = ((GUMSServiceListComboBox) getService())
-										.getSelectedService();
-								PortalResourceManager.getInstance()
-										.getGridPortal()
-										.addGridPortalComponent(
-												new UserWindow(service, user));
-							}
-						};
-						try {
-							PortalResourceManager.getInstance()
-									.getThreadManager().executeInBackground(
-											runner);
-						} catch (Exception t) {
-							t.getMessage();
-						}
-
-					} else {
-						JOptionPane.showMessageDialog(PortalResourceManager
-								.getInstance().getGridPortal(),
-								"Please select a user to manage!!!");
-					}
+					showUser();
 				}
 
 			});
 		}
 		return manageUser;
+	}
+	
+	public void showUser(){
+		final int row = getUsersTable().getSelectedRow();
+
+		if ((row >= 0) && (row < getUsersTable().getRowCount())) {
+			MobiusRunnable runner = new MobiusRunnable() {
+				public void execute() {
+					User user = (User) getUsersTable().getValueAt(
+							row, 0);
+					String service = ((GUMSServiceListComboBox) getService())
+							.getSelectedService();
+					PortalResourceManager.getInstance()
+							.getGridPortal()
+							.addGridPortalComponent(
+									new UserWindow(service, user));
+				}
+			};
+			try {
+				PortalResourceManager.getInstance()
+						.getThreadManager().executeInBackground(
+								runner);
+			} catch (Exception t) {
+				t.getMessage();
+			}
+
+		} else {
+			JOptionPane.showMessageDialog(PortalResourceManager
+					.getInstance().getGridPortal(),
+					"Please select a user to manage!!!");
+		}
 	}
 
 	/**

@@ -1,21 +1,20 @@
 package gov.nih.nci.cagrid.gums.idp.portal;
 
 import gov.nih.nci.cagrid.gums.idp.bean.User;
+import gov.nih.nci.cagrid.gums.portal.BaseTable;
 
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
-import org.projectmobius.portal.PortalTable;
-
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: UsersTable.java,v 1.1 2005-10-25 20:21:49 langella Exp $
+ * @version $Id: UsersTable.java,v 1.2 2005-11-11 22:17:11 langella Exp $
  */
-public class UsersTable extends PortalTable {
+public class UsersTable extends BaseTable {
 	public static String USER = "user";
 
 	public static String USERNAME = "Username";
@@ -31,9 +30,12 @@ public class UsersTable extends PortalTable {
 	public static String STATUS = "Status";
 
 	public static String ROLE = "Role";
+	
+	UserManagerWindow window;
 
-	public UsersTable() {
+	public UsersTable(UserManagerWindow window) {
 		super(createTableModel());
+		this.window = window;
 		TableColumn c = this.getColumn(USER);
 		c.setMaxWidth(0);
 		c.setMinWidth(0);
@@ -69,5 +71,32 @@ public class UsersTable extends PortalTable {
 		v.add(u.getRole().getValue());
 		addRow(v);
 	}
+
+	public synchronized User getSelectedUser() {
+		int row = getSelectedRow();
+		if ((row >= 0) && (row < getRowCount())) {
+			return (User) getValueAt(row, 0);
+		} else {
+			return null;
+		}
+	}
+
+	public void doubleClick() throws Exception {
+		int row = getSelectedRow();
+		if ((row >= 0) && (row < getRowCount())) {
+			window.showUser();
+		} else {
+			throw new Exception(
+					"No user selected, please select a user!!!");
+		}
+
+	}
+
+	public void singleClick() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
 
 }
