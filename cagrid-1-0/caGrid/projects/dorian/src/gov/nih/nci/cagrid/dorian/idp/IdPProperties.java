@@ -56,19 +56,25 @@ public class IdPProperties extends GUMSObject {
 
 	private final static String DEFAULT_REGISTRATION_POLICY = ManualRegistrationPolicy.class
 			.getName();
-	
+
 	private final static String IDP_PRIVATE_KEY = "IdP Private Key";
-	
+
 	private final static String IDP_CERTIFICATE = "IdP Certificate";
+
+	private final static String IDP_PRIVATE_KEY_DESCRIPTION = "Private key used by IdP to sign authentication assersions.";
+
+	private final static String IDP_CERTIFICATE_DESCRIPTION = "Certificate corresponding to the private key used by IdP to sign authentication assersions.";
+
+	private final static String CA_SUBJECT = "IdP Authentication Asserter";
 	
-	private final static String CA_SUBJECT="IdP Authentication Asserter";
-	
-	
+	private final static String KEY_ENCRYPTOR = "key4idp";
 
 	private MetadataManager mm;
+
 	private CertificateAuthority ca;
 
-	public IdPProperties(CertificateAuthority ca, Database db) throws GUMSInternalFault {
+	public IdPProperties(CertificateAuthority ca, Database db)
+			throws GUMSInternalFault {
 		try {
 			mm = new MetadataManager(db, "IDP_PROPERTIES");
 			this.ca = ca;
@@ -110,29 +116,36 @@ public class IdPProperties extends GUMSObject {
 				regPolicy.setDescription(REGISTRATION_POLICY_DESCRIPTION);
 				mm.insert(regPolicy);
 			}
-			
-			if ((!mm.exists(IDP_PRIVATE_KEY))||(!mm.exists(IDP_CERTIFICATE))){
-				
+
+			if ((!mm.exists(IDP_PRIVATE_KEY)) || (!mm.exists(IDP_CERTIFICATE))) {
+
 				// VALIDATE DN
 				X509Certificate cacert = ca.getCACertificate();
 				String caSubject = cacert.getSubjectDN().getName();
 				int caindex = caSubject.lastIndexOf(",");
 				String caPreSub = caSubject.substring(0, caindex);
-			
-				String subject = caPreSub+",CN="+CA_SUBJECT;
+
+				String subject = caPreSub + ",CN=" + CA_SUBJECT;
 				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-				PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(
-						subject, pair);
+				PKCS10CertificationRequest req = CertUtil
+						.generateCertficateRequest(subject, pair);
 				GregorianCalendar cal = new GregorianCalendar();
 				Date start = cal.getTime();
+
+				X509Certificate cert = ca.requestCertificate(req, start, cacert
+						.getNotAfter());
+
+				Metadata key = new Metadata();
+				key.setName(IDP_PRIVATE_KEY);
+				key.setValue(KeyUtil.writePrivateKeyToString(pair.getPrivate(),KEY_ENCRYPTOR));
+				key.setDescription(IDP_PRIVATE_KEY_DESCRIPTION);
+				mm.insert(key);
 				
-				X509Certificate cert = ca.requestCertificate(req, start,  cacert.getNotAfter());
-			  
-				Metadata regPolicy = new Metadata();
-				regPolicy.setName(IDP_PRIVATE_KEY);
-				regPolicy.setValue(DEFAULT_REGISTRATION_POLICY);
-				regPolicy.setDescription(REGISTRATION_POLICY_DESCRIPTION);
-				mm.insert(regPolicy);
+				Metadata certificate = new Metadata();
+				certificate.setName(IDP_CERTIFICATE);
+				certificate.setValue(CertUtil.writeCertificateToString(cert));
+				certificate.setDescription(IDP_CERTIFICATE_DESCRIPTION);
+				mm.insert(certificate);
 			}
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
@@ -144,7 +157,6 @@ public class IdPProperties extends GUMSObject {
 			throw fault;
 		}
 	}
-	
 
 	public int getMinimumPasswordLength() throws GUMSInternalFault {
 		try {
