@@ -84,7 +84,7 @@ public class ProxyTest extends TestCase {
 				assertNotNull(proxyPublicKey);
 				X509Certificate cert = CertUtil.loadCertificate(certLocation);
 				assertNotNull(cert);
-				X509Certificate[] certs = ProxyUtil.createProxyCertificate(cert,key, proxyPublicKey,hours);
+			    ProxyUtil.createProxyCertificate(cert,key, proxyPublicKey,hours);
 				assertTrue(false);
 		} catch (Exception e) {
 			assertEquals("Cannot create a proxy that expires after issuing certificate.",e.getMessage());	

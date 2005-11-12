@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.gums.idp;
 
 import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
-import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthorityConf;
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.idp.bean.Application;
@@ -62,8 +61,6 @@ public class TestIdentityProvider extends TestCase {
 
 	public void testManualRegistration() {
 		try {
-			GUMSCertificateAuthorityConf conf = this
-			.getGumsCAConf();
 			IdPProperties props = new IdPProperties(ca,db);
 			IdentityProvider imp = new IdentityProvider(props,db);
 			imp.getProperties().setRegistrationPolicy(
@@ -184,12 +181,7 @@ public class TestIdentityProvider extends TestCase {
 		count = count + 1;
 		return u;
 	}
-	private GUMSCertificateAuthorityConf getGumsCAConf() {
-		GUMSCertificateAuthorityConf conf = new GUMSCertificateAuthorityConf();
-		conf.setCaPassword("password");
-		conf.setAutoRenewal(false);
-		return conf;
-	}
+
 
 
 	protected void setUp() throws Exception {

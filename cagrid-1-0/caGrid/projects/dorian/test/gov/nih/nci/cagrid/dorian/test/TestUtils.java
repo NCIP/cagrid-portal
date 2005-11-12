@@ -56,7 +56,6 @@ public static CertificateAuthority getCA(Database db) throws Exception{
 		X509Certificate root = CertUtil.generateCACertificate(rootSubject,
 				start, end, rootPair);
 		ca.setCACredentials(root, rootPair.getPrivate());
-		X509Certificate r = ca.getCACertificate();
 		return ca;
 		
 	}
