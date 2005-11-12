@@ -2,14 +2,8 @@ package gov.nih.nci.cagrid.gums.common;
 
 import gov.nih.nci.cagrid.gums.bean.Metadata;
 import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthority;
-
-import java.io.File;
-
+import gov.nih.nci.cagrid.gums.test.TestUtils;
 import junit.framework.TestCase;
-
-import org.jdom.Document;
-import org.projectmobius.common.XMLUtilities;
-import org.projectmobius.db.ConnectionManager;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -19,12 +13,8 @@ import org.projectmobius.db.ConnectionManager;
  *          Exp $
  */
 public class TestMetadataManager extends TestCase {
-	private static final String DB = "TEST_GUMS";
 
 	private static final String TABLE = "TEST_METADATA";
-
-	public static String DB_CONFIG = "resources" + File.separator
-			+ "general-test" + File.separator + "db-config.xml";
 
 	private Database db;
 
@@ -139,11 +129,7 @@ public class TestMetadataManager extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
-			Document doc = XMLUtilities.fileNameToDocument(DB_CONFIG);
-			ConnectionManager cm = new ConnectionManager(doc.getRootElement());
-			db = new Database(cm, DB);
-			db.destroyDatabase();
-			db.createDatabaseIfNeeded();
+			db=TestUtils.getDB();
 			GUMSCertificateAuthority.CA_TABLE = TABLE;
 		} catch (Exception e) {
 			FaultUtil.printFault(e);

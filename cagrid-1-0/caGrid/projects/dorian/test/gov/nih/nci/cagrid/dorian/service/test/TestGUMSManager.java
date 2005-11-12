@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.gums.service.test;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.service.GUMSManager;
 import gov.nih.nci.cagrid.gums.service.RequiredAttributesManager;
+import gov.nih.nci.cagrid.gums.test.TestUtils;
 
 import java.io.File;
 
@@ -19,8 +20,9 @@ public class TestGUMSManager extends TestCase{
 	public static String RESOURCES_DIR = "resources" + File.separator
 	+ "general-test";
 	
-    public void testJanusManager(){
+    public void testGUMSManager(){
     	try{
+    		TestUtils.getCA();
     		GUMSManager.GUMS_CONFIGURATION_FILE = RESOURCES_DIR+File.separator+"gums-conf.xml";
     		GUMSManager jm = GUMSManager.getInstance();
     		assertNotNull(jm.getGUMSConfiguration());

@@ -1,8 +1,5 @@
 package gov.nih.nci.cagrid.gums.ca;
 
-import gov.nih.nci.cagrid.gums.ca.CertificateAuthorityFault;
-import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthority;
-import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthorityConf;
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;

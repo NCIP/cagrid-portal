@@ -38,9 +38,9 @@ public class IdentityProvider extends GUMSObject {
 
 	public static final String ADMIN_PASSWORD = "password";
 
-	public IdentityProvider(Database db) throws GUMSInternalFault {
+	public IdentityProvider(IdPProperties props, Database db) throws GUMSInternalFault {
 		try {
-			this.properties = new IdPProperties(db);
+			this.properties = props;
 			this.userManager = new UserManager(db, this.properties);
 
 			if (!this.userManager.userExists(ADMIN_USER_ID)) {

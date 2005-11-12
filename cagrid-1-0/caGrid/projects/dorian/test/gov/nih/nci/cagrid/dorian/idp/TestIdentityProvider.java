@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.gums.idp;
 
+import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
+import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthorityConf;
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.idp.bean.Application;
@@ -10,14 +12,8 @@ import gov.nih.nci.cagrid.gums.idp.bean.User;
 import gov.nih.nci.cagrid.gums.idp.bean.UserFilter;
 import gov.nih.nci.cagrid.gums.idp.bean.UserRole;
 import gov.nih.nci.cagrid.gums.idp.bean.UserStatus;
-
-import java.io.File;
-
+import gov.nih.nci.cagrid.gums.test.TestUtils;
 import junit.framework.TestCase;
-
-import org.jdom.Document;
-import org.projectmobius.common.XMLUtilities;
-import org.projectmobius.db.ConnectionManager;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -28,18 +24,16 @@ import org.projectmobius.db.ConnectionManager;
  */
 public class TestIdentityProvider extends TestCase {
 
-	private static final String DB = "TEST_GUMS";
-
-	public static String DB_CONFIG = "resources" + File.separator
-			+ "general-test" + File.separator + "db-config.xml";
-
 	private Database db;
+	private CertificateAuthority ca;
 
 	private int count = 0;
 
 	public void testAutomaticRegistration() {
 		try {
-			IdentityProvider imp = new IdentityProvider(db);
+			
+			IdPProperties props = new IdPProperties(ca,db);
+			IdentityProvider imp = new IdentityProvider(props,db);
 			imp.getProperties().setRegistrationPolicy(
 					new AutomaticRegistrationPolicy());
 			assertEquals(AutomaticRegistrationPolicy.class.getName(), imp
@@ -68,7 +62,10 @@ public class TestIdentityProvider extends TestCase {
 
 	public void testManualRegistration() {
 		try {
-			IdentityProvider imp = new IdentityProvider(db);
+			GUMSCertificateAuthorityConf conf = this
+			.getGumsCAConf();
+			IdPProperties props = new IdPProperties(ca,db);
+			IdentityProvider imp = new IdentityProvider(props,db);
 			imp.getProperties().setRegistrationPolicy(
 					new ManualRegistrationPolicy());
 			assertEquals(ManualRegistrationPolicy.class.getName(), imp
@@ -102,7 +99,9 @@ public class TestIdentityProvider extends TestCase {
 
 	public void testMultipleUsers() {
 		try {
-			IdentityProvider imp = new IdentityProvider(db);
+
+			IdPProperties props = new IdPProperties(ca,db);
+			IdentityProvider imp = new IdentityProvider(props,db);
 			imp.getProperties().setRegistrationPolicy(
 					new ManualRegistrationPolicy());
 			assertEquals(ManualRegistrationPolicy.class.getName(), imp
@@ -185,19 +184,24 @@ public class TestIdentityProvider extends TestCase {
 		count = count + 1;
 		return u;
 	}
+	private GUMSCertificateAuthorityConf getGumsCAConf() {
+		GUMSCertificateAuthorityConf conf = new GUMSCertificateAuthorityConf();
+		conf.setCaPassword("password");
+		conf.setAutoRenewal(false);
+		return conf;
+	}
+
 
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
 			count = 0;
-			Document doc = XMLUtilities.fileNameToDocument(DB_CONFIG);
-			ConnectionManager cm = new ConnectionManager(doc.getRootElement());
-			db = new Database(cm, DB);
-			db.destroyDatabase();
-			db.createDatabaseIfNeeded();
+		    db = TestUtils.getDB();
+		    ca = TestUtils.getCA();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
 	}
+	
 }

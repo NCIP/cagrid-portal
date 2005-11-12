@@ -10,14 +10,8 @@ import gov.nih.nci.cagrid.gums.idp.bean.User;
 import gov.nih.nci.cagrid.gums.idp.bean.UserFilter;
 import gov.nih.nci.cagrid.gums.idp.bean.UserRole;
 import gov.nih.nci.cagrid.gums.idp.bean.UserStatus;
-
-import java.io.File;
-
+import gov.nih.nci.cagrid.gums.test.TestUtils;
 import junit.framework.TestCase;
-
-import org.jdom.Document;
-import org.projectmobius.common.XMLUtilities;
-import org.projectmobius.db.ConnectionManager;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -27,10 +21,6 @@ import org.projectmobius.db.ConnectionManager;
  *          Exp $
  */
 public class TestUserManager extends TestCase {
-	private static final String DB = "TEST_GUMS";
-
-	public static String DB_CONFIG = "resources" + File.separator
-			+ "general-test" + File.separator + "db-config.xml";
 
 	private Database db;
 
@@ -587,16 +577,13 @@ public class TestUserManager extends TestCase {
 		super.setUp();
 		try {
 			count = 0;
-			Document doc = XMLUtilities.fileNameToDocument(DB_CONFIG);
-			ConnectionManager cm = new ConnectionManager(doc.getRootElement());
-			db = new Database(cm, DB);
-			db.destroyDatabase();
-			db.createDatabaseIfNeeded();
-			properties = new IdPProperties(db);
+		    db = TestUtils.getDB();
+			properties = new IdPProperties(TestUtils.getCA(),db);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
 	}
+
 
 }
