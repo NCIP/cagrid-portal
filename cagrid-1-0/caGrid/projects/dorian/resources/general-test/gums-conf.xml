@@ -18,7 +18,17 @@
 		<outgoing-email host="columbus.bmi.ohio-state.edu" port="25" protocol="smtp"/>
         </gums-config>
 	</resource>	
-		<resource name="GUMSCertificateAuthorityConf" class="gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthorityConf">
+	
+	<resource name="IdPConfiguration" class="gov.nih.nci.cagrid.gums.idp.IdpConfiguration">
+		<idp-config>
+			<uid-length min="4" max="20"/>
+		    <password-length min="6" max="10"/>
+		    <registration-policy class=""/>
+		    <asserting-credentials auto="true" renew="true"/>
+		</idp-config>
+	</resource>	
+		
+	<resource name="GUMSCertificateAuthorityConf" class="gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthorityConf">
 		<gums-ca-config>
 		    <ca-password value="password"/>
 		  	<auto-renewal enabled="true" years="0" months="60" days="0" hours="0" minutes="0" seconds="0"/>

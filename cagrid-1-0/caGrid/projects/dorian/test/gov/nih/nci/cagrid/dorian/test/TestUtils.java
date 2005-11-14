@@ -27,6 +27,8 @@ public class TestUtils {
 			+ "general-test" + File.separator + "db-config.xml";
 	
 	
+	
+	
 	public static Database getDB() throws Exception{
 		Document doc = XMLUtilities.fileNameToDocument(DB_CONFIG);
 		ConnectionManager cm = new ConnectionManager(doc.getRootElement());
@@ -35,6 +37,8 @@ public class TestUtils {
 		db.createDatabaseIfNeeded();	
 		return db;
 	}
+	
+	
 	
 	public static CertificateAuthority getCA() throws Exception{	
 		return getCA(getDB());

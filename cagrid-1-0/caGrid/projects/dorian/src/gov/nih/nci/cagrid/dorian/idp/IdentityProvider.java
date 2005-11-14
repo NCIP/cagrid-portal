@@ -30,18 +30,19 @@ import org.globus.wsrf.utils.FaultHelper;
 
 public class IdentityProvider extends GUMSObject {
 
-	private IdPProperties properties;
-
+	
 	private UserManager userManager;
 
 	public static final String ADMIN_USER_ID = "gums";
 
 	public static final String ADMIN_PASSWORD = "password";
+	
+	public IdPConfiguration conf;
 
-	public IdentityProvider(IdPProperties props, Database db) throws GUMSInternalFault {
+	public IdentityProvider(IdPConfiguration conf, Database db, AssertingManager am) throws GUMSInternalFault {
 		try {
-			this.properties = props;
-			this.userManager = new UserManager(db, this.properties);
+		    this.conf = conf;
+			this.userManager = new UserManager(db, conf);
 
 			if (!this.userManager.userExists(ADMIN_USER_ID)) {
 				User u = new User();
@@ -78,7 +79,7 @@ public class IdentityProvider extends GUMSObject {
 	public String register(Application a) throws GUMSInternalFault,
 			InvalidUserPropertyFault {
 	
-		IdPRegistrationPolicy policy = properties.getRegistrationPolicy();
+		IdPRegistrationPolicy policy = conf.getRegistrationPolicy();
 		ApplicationReview ar = policy.register(a);
 		UserStatus status = ar.getStatus();
 		UserRole role = ar.getRole();
@@ -186,7 +187,4 @@ public class IdentityProvider extends GUMSObject {
 		userManager.removeUser(userId);
 	}
 
-	public IdPProperties getProperties() {
-		return properties;
-	}
 }

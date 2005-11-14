@@ -10,7 +10,11 @@ import gov.nih.nci.cagrid.gums.idp.bean.User;
 import gov.nih.nci.cagrid.gums.idp.bean.UserFilter;
 import gov.nih.nci.cagrid.gums.idp.bean.UserRole;
 import gov.nih.nci.cagrid.gums.idp.bean.UserStatus;
+import gov.nih.nci.cagrid.gums.test.TestResourceManager;
 import gov.nih.nci.cagrid.gums.test.TestUtils;
+
+import java.io.File;
+
 import junit.framework.TestCase;
 
 /**
@@ -21,12 +25,17 @@ import junit.framework.TestCase;
  *          Exp $
  */
 public class TestUserManager extends TestCase {
+	
+	public static String IDP_CONFIG = "resources" + File.separator
+	+ "general-test" + File.separator + "idp-config.xml";
 
 	private Database db;
 
 	private int count = 0;
 
-	private IdPProperties properties;
+	private AssertingManager properties;
+	
+	private IdPConfiguration conf;
 
 	public void testMultipleUsers() {
 		try {
@@ -43,7 +52,7 @@ public class TestUserManager extends TestCase {
 			int suspendedA = 0;
 
 			User[] users = new User[userCount];
-			UserManager um = new UserManager(db, properties);
+			UserManager um = new UserManager(db, conf);
 
 			for (int i = 0; i < users.length; i++) {
 				if ((i % 8) == 0) {
@@ -206,7 +215,7 @@ public class TestUserManager extends TestCase {
 
 	public void testChangeStatus() {
 		try {
-			UserManager um = new UserManager(db, properties);
+			UserManager um = new UserManager(db, conf);
 			User u1 = makeActiveUser();
 			um.addUser(u1);
 			assertTrue(um.userExists(u1.getUserId()));
@@ -231,7 +240,7 @@ public class TestUserManager extends TestCase {
 
 	public void testChangeRole() {
 		try {
-			UserManager um = new UserManager(db, properties);
+			UserManager um = new UserManager(db, conf);
 			User u1 = makeActiveUser();
 			um.addUser(u1);
 			assertTrue(um.userExists(u1.getUserId()));
@@ -255,7 +264,7 @@ public class TestUserManager extends TestCase {
 
 	public void testChangePassword() {
 		try {
-			UserManager um = new UserManager(db, properties);
+			UserManager um = new UserManager(db, conf);
 			User u1 = makeActiveUser();
 			um.addUser(u1);
 			assertTrue(um.userExists(u1.getUserId()));
@@ -280,7 +289,7 @@ public class TestUserManager extends TestCase {
 	
 	public void testUpdateUser() {
 		try {
-			UserManager um = new UserManager(db, properties);
+			UserManager um = new UserManager(db, conf);
 			User u1 = makeActiveUser();
 			um.addUser(u1);
 			assertTrue(um.userExists(u1.getUserId()));
@@ -318,7 +327,7 @@ public class TestUserManager extends TestCase {
 
 	public void testSingleUser() {
 		try {
-			UserManager um = new UserManager(db, properties);
+			UserManager um = new UserManager(db, conf);
 			User u1 = makeActiveUser();
 			um.addUser(u1);
 			u1.setPassword(Crypt.crypt(u1.getPassword()));
@@ -375,7 +384,7 @@ public class TestUserManager extends TestCase {
 	public void testFindUsers() {
 		try {
 			int size = 10;
-			UserManager um = new UserManager(db, properties);
+			UserManager um = new UserManager(db, conf);
 			for (int i = 0; i < size; i++) {
 				um.addUser(makeUser(UserRole.Non_Administrator, UserStatus.Active));
 			}
@@ -578,7 +587,8 @@ public class TestUserManager extends TestCase {
 		try {
 			count = 0;
 		    db = TestUtils.getDB();
-			properties = new IdPProperties(TestUtils.getCA(),db);
+		    TestResourceManager trm = new TestResourceManager(IDP_CONFIG);
+		    this.conf = (IdPConfiguration)trm.getResource(IdPConfiguration.RESOURCE);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

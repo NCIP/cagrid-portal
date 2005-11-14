@@ -18,6 +18,15 @@
 		<outgoing-email host="columbus.bmi.ohio-state.edu" port="25" protocol="smtp"/>
 		</gums-config>
 	</resource>	
+	<resource name="IdPConfiguration" class="gov.nih.nci.cagrid.gums.idp.IdpConfiguration">
+		<idp-config>
+			<uid-length min="4" max="20"/>
+		    <password-length min="6" max="10"/>
+		    <registration-policy class="gov.nih.nci.cagrid.gums.idp.ManualRegistrationPolicy"/>
+		    <asserting-credentials auto="true" renew="true"/>
+		    <!-- <asserting-credentials auto="false" renew="false" cert="" key="" key-password=""/> -->
+		</idp-config>
+	</resource>	
 	<resource name="GUMSCertificateAuthorityConf" class="gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthorityConf">
 		<gums-ca-config>
 		    <ca-password value="admin"/>

@@ -5,7 +5,9 @@ import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthority;
 import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthorityConf;
 import gov.nih.nci.cagrid.gums.common.Database;
-import gov.nih.nci.cagrid.gums.idp.IdPProperties;
+import gov.nih.nci.cagrid.gums.idp.IdPConfiguration;
+import gov.nih.nci.cagrid.gums.idp.IdPManager;
+import gov.nih.nci.cagrid.gums.idp.AssertingManager;
 import gov.nih.nci.cagrid.gums.idp.IdentityProvider;
 import gov.nih.nci.cagrid.gums.ifs.bean.AttributeDescriptor;
 
@@ -29,8 +31,8 @@ public class GUMSManager extends MobiusResourceManager{
 	public static final String REQUIRED_USER_ATTRIBUTES = "REQUIRED_USER_ATTRIBUTES";
 	private static GUMSManager instance;
 	private CredentialsManager credentialsManager;
-	private IdentityProvider idp;
 	private CertificateAuthority ca;
+	private IdPManager idp;
 	
 	private GUMSManager() throws GUMSInternalFault{
 		try{
@@ -48,8 +50,8 @@ public class GUMSManager extends MobiusResourceManager{
 		GUMSCertificateAuthorityConf caconf = (GUMSCertificateAuthorityConf)getResource(GUMSCertificateAuthorityConf.RESOURCE);
 		this.ca = new GUMSCertificateAuthority(db,caconf);
 		
-		IdPProperties properties = new IdPProperties(ca,db);
-		this.idp = new IdentityProvider(properties,db);
+		this.idp = IdPManager.getInstance();
+		this.idp.configure(db,(IdPConfiguration)getResource(IdPConfiguration.RESOURCE),ca);
 		
 		this.userAttributeManager = new RequiredAttributesManager(this.db,REQUIRED_USER_ATTRIBUTES);
 		AttributeDescriptor des = new AttributeDescriptor();
@@ -87,8 +89,8 @@ public class GUMSManager extends MobiusResourceManager{
 		return credentialsManager;
 	}
 
-	public IdentityProvider getIdentityProvider() {
-		return idp;
+	public IdentityProvider getIdentityProvider() throws GUMSInternalFault{
+		return idp.getIdentityProvider();
 	}
 
 	

@@ -37,12 +37,12 @@ public class UserManager extends GUMSObject {
 
 	private boolean dbBuilt = false;
 
-	private IdPProperties properties;
+	private IdPConfiguration conf;
 
-	public UserManager(Database db, IdPProperties properties)
+	public UserManager(Database db, IdPConfiguration conf)
 			throws GUMSInternalFault {
 		this.db = db;
-		this.properties = properties;
+		this.conf = conf;
 	}
 
 	private void validateSpecifiedField(String fieldName, String name)
@@ -58,14 +58,14 @@ public class UserManager extends GUMSObject {
 			InvalidUserPropertyFault {
 		String password = user.getPassword();
 		if ((password == null)
-				|| (properties.getMinimumPasswordLength() > password.length())
-				|| (properties.getMaximumPasswordLength() < password.length())) {
+				|| (conf.getMinimumPasswordLength() > password.length())
+				|| (conf.getMaximumPasswordLength() < password.length())) {
 			GUMSInternalFault fault = new GUMSInternalFault();
 			fault
 					.setFaultString("Unacceptable password, the length of the password must be between "
-							+ properties.getMinimumPasswordLength()
+							+ conf.getMinimumPasswordLength()
 							+ " and "
-							+ properties.getMaximumPasswordLength());
+							+ conf.getMaximumPasswordLength());
 			throw fault;
 		}
 	}
@@ -73,14 +73,14 @@ public class UserManager extends GUMSObject {
 	private void validateUserId(User user) throws GUMSInternalFault,
 			InvalidUserPropertyFault {
 		String uid = user.getUserId();
-		if ((uid == null) || (properties.getMinimumUIDLength() > uid.length())
-				|| (properties.getMaximumUIDLength() < uid.length())) {
+		if ((uid == null) || (conf.getMinimumUIDLength() > uid.length())
+				|| (conf.getMaximumUIDLength() < uid.length())) {
 			GUMSInternalFault fault = new GUMSInternalFault();
 			fault
 					.setFaultString("Unacceptable User ID, the length of the password must be between "
-							+ properties.getMinimumUIDLength()
+							+ conf.getMinimumUIDLength()
 							+ " and "
-							+ properties.getMaximumUIDLength());
+							+ conf.getMaximumUIDLength());
 			throw fault;
 		}
 	}

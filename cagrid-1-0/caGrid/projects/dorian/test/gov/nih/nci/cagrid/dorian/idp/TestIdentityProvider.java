@@ -11,7 +11,11 @@ import gov.nih.nci.cagrid.gums.idp.bean.User;
 import gov.nih.nci.cagrid.gums.idp.bean.UserFilter;
 import gov.nih.nci.cagrid.gums.idp.bean.UserRole;
 import gov.nih.nci.cagrid.gums.idp.bean.UserStatus;
+import gov.nih.nci.cagrid.gums.test.TestResourceManager;
 import gov.nih.nci.cagrid.gums.test.TestUtils;
+
+import java.io.File;
+
 import junit.framework.TestCase;
 
 /**
@@ -23,27 +27,31 @@ import junit.framework.TestCase;
  */
 public class TestIdentityProvider extends TestCase {
 
+	private IdPConfiguration conf;
 	private Database db;
 	private CertificateAuthority ca;
+	
+	public static String IDP_CONFIG = "resources" + File.separator
+	+ "general-test" + File.separator + "idp-config.xml";
 
 	private int count = 0;
+	
 
 	public void testAutomaticRegistration() {
 		try {
 			
-			IdPProperties props = new IdPProperties(ca,db);
-			IdentityProvider imp = new IdentityProvider(props,db);
-			imp.getProperties().setRegistrationPolicy(
+			AssertingManager am = new AssertingManager(conf,ca,db);
+			IdentityProvider idp = new IdentityProvider(conf,db,am);
+			conf.setRegistrationPolicy(
 					new AutomaticRegistrationPolicy());
-			assertEquals(AutomaticRegistrationPolicy.class.getName(), imp
-					.getProperties().getRegistrationPolicy().getClass()
+			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy().getClass()
 					.getName());
 			Application a = createApplication();
-			imp.register(a);
+			idp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
 			UserFilter uf = new UserFilter();
 			uf.setUserId(a.getUserId());
-			User[] users = imp.findUsers(cred, uf);
+			User[] users = idp.findUsers(cred, uf);
 			assertEquals(1, users.length);
 			assertEquals(UserStatus.Active, users[0].getStatus());
 			assertEquals(UserRole.Non_Administrator, users[0].getRole());
@@ -61,25 +69,25 @@ public class TestIdentityProvider extends TestCase {
 
 	public void testManualRegistration() {
 		try {
-			IdPProperties props = new IdPProperties(ca,db);
-			IdentityProvider imp = new IdentityProvider(props,db);
-			imp.getProperties().setRegistrationPolicy(
+			AssertingManager am = new AssertingManager(conf,ca,db);
+			IdentityProvider idp = new IdentityProvider(conf,db,am);
+			conf.setRegistrationPolicy(
 					new ManualRegistrationPolicy());
-			assertEquals(ManualRegistrationPolicy.class.getName(), imp
-					.getProperties().getRegistrationPolicy().getClass()
+			assertEquals(ManualRegistrationPolicy.class.getName(), conf
+					.getRegistrationPolicy().getClass()
 					.getName());
 			Application a = createApplication();
-			imp.register(a);
+			idp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
 			UserFilter uf = new UserFilter();
 			uf.setUserId(a.getUserId());
-			User[] users = imp.findUsers(cred, uf);
+			User[] users = idp.findUsers(cred, uf);
 			assertEquals(1, users.length);
 			assertEquals(UserStatus.Pending, users[0].getStatus());
 			assertEquals(UserRole.Non_Administrator, users[0].getRole());
 			users[0].setStatus(UserStatus.Active);
-			imp.updateUser(cred, users[0]);
-			users = imp.findUsers(cred, uf);
+			idp.updateUser(cred, users[0]);
+			users = idp.findUsers(cred, uf);
 			assertEquals(1, users.length);
 			assertEquals(UserStatus.Active, users[0].getStatus());
 		} catch (Exception e) {
@@ -97,52 +105,51 @@ public class TestIdentityProvider extends TestCase {
 	public void testMultipleUsers() {
 		try {
 
-			IdPProperties props = new IdPProperties(ca,db);
-			IdentityProvider imp = new IdentityProvider(props,db);
-			imp.getProperties().setRegistrationPolicy(
+			AssertingManager am = new AssertingManager(conf,ca,db);
+			IdentityProvider idp = new IdentityProvider(conf,db,am);
+			conf.setRegistrationPolicy(
 					new ManualRegistrationPolicy());
-			assertEquals(ManualRegistrationPolicy.class.getName(), imp
-					.getProperties().getRegistrationPolicy().getClass()
+			assertEquals(ManualRegistrationPolicy.class.getName(), conf.getRegistrationPolicy().getClass()
 					.getName());
 			BasicAuthCredential cred = getAdminCreds();
 			for (int i = 0; i < 10; i++) {
 				Application a = createApplication();
-				imp.register(a);
+				idp.register(a);
 				
 				UserFilter uf = new UserFilter();
 				uf.setUserId(a.getUserId());
-				User[] users = imp.findUsers(cred, uf);
+				User[] users = idp.findUsers(cred, uf);
 				assertEquals(1, users.length);
 				assertEquals(UserStatus.Pending, users[0].getStatus());
 				assertEquals(UserRole.Non_Administrator, users[0].getRole());
 				users[0].setStatus(UserStatus.Active);
-				imp.updateUser(cred, users[0]);
-				users = imp.findUsers(cred, uf);
+				idp.updateUser(cred, users[0]);
+				users = idp.findUsers(cred, uf);
 				assertEquals(1, users.length);
 				assertEquals(UserStatus.Active, users[0].getStatus());
 				uf.setUserId("user");
-				users = imp.findUsers(cred, uf);
+				users = idp.findUsers(cred, uf);
 				assertEquals(i + 1, users.length);
 			}
 			
 			UserFilter uf = new UserFilter();
-			User[] users = imp.findUsers(cred, uf);
+			User[] users = idp.findUsers(cred, uf);
 			assertEquals(11, users.length);
 			for (int i = 0; i < 10; i++) {
 				UserFilter f = new UserFilter();
 				f.setUserId(users[i].getUserId());
-				User[] us = imp.findUsers(cred,f);
+				User[] us = idp.findUsers(cred,f);
 				assertEquals(1, us.length);
 				us[0].setFirstName("NEW NAME");
-				imp.updateUser(cred,us[0]);
-				User[] us2 = imp.findUsers(cred,f);
+				idp.updateUser(cred,us[0]);
+				User[] us2 = idp.findUsers(cred,f);
 				assertEquals(1, us2.length);
 				assertEquals(us[0], us2[0]);
-				imp.removeUser(cred,users[i].getUserId());
-				us = imp.findUsers(cred,f);
+				idp.removeUser(cred,users[i].getUserId());
+				us = idp.findUsers(cred,f);
 				assertEquals(0, us.length);
 			}
-			users = imp.findUsers(cred, uf);
+			users = idp.findUsers(cred, uf);
 			assertEquals(1, users.length);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -190,10 +197,13 @@ public class TestIdentityProvider extends TestCase {
 			count = 0;
 		    db = TestUtils.getDB();
 		    ca = TestUtils.getCA();
+		    TestResourceManager trm = new TestResourceManager(IDP_CONFIG);
+		    this.conf = (IdPConfiguration)trm.getResource(IdPConfiguration.RESOURCE);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
 	}
+	
 	
 }
