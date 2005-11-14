@@ -16,9 +16,6 @@
 				<include name="jdom-1.0.jar" />
 				<include name="caGrid-0.5.jar" />
 			</fileset>
-			<fileset dir="${lib.dir}/mobius">
-				<include name="*.jar" />
-			</fileset>
 		</path>
 		<path id="Introduce.test.classpath">
 			<path refid="Common.test.classpath" />
