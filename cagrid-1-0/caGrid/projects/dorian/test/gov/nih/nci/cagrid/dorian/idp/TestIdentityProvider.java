@@ -40,7 +40,7 @@ public class TestIdentityProvider extends TestCase {
 	public void testAutomaticRegistration() {
 		try {
 			
-			AssertingManager am = new AssertingManager(conf,ca,db);
+			AssertionCredentialsManager am = new AssertionCredentialsManager(conf,ca,db);
 			IdentityProvider idp = new IdentityProvider(conf,db,am);
 			conf.setRegistrationPolicy(
 					new AutomaticRegistrationPolicy());
@@ -69,7 +69,7 @@ public class TestIdentityProvider extends TestCase {
 
 	public void testManualRegistration() {
 		try {
-			AssertingManager am = new AssertingManager(conf,ca,db);
+			AssertionCredentialsManager am = new AssertionCredentialsManager(conf,ca,db);
 			IdentityProvider idp = new IdentityProvider(conf,db,am);
 			conf.setRegistrationPolicy(
 					new ManualRegistrationPolicy());
@@ -105,7 +105,7 @@ public class TestIdentityProvider extends TestCase {
 	public void testMultipleUsers() {
 		try {
 
-			AssertingManager am = new AssertingManager(conf,ca,db);
+			AssertionCredentialsManager am = new AssertionCredentialsManager(conf,ca,db);
 			IdentityProvider idp = new IdentityProvider(conf,db,am);
 			conf.setRegistrationPolicy(
 					new ManualRegistrationPolicy());

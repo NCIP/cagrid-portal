@@ -33,7 +33,7 @@ public class TestUserManager extends TestCase {
 
 	private int count = 0;
 
-	private AssertingManager properties;
+	private AssertionCredentialsManager properties;
 	
 	private IdPConfiguration conf;
 

@@ -39,7 +39,7 @@ public class IdentityProvider extends GUMSObject {
 	
 	public IdPConfiguration conf;
 
-	public IdentityProvider(IdPConfiguration conf, Database db, AssertingManager am) throws GUMSInternalFault {
+	public IdentityProvider(IdPConfiguration conf, Database db, AssertionCredentialsManager am) throws GUMSInternalFault {
 		try {
 		    this.conf = conf;
 			this.userManager = new UserManager(db, conf);

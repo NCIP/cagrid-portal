@@ -308,6 +308,28 @@ public class IdPConfiguration implements AbstractMobiusConfiguration {
 	public void setRegistrationPolicy(IdPRegistrationPolicy registrationPolicy) {
 		this.registrationPolicy = registrationPolicy;
 	}
+
+	public void setAssertingCertificate(X509Certificate assertingCertificate) {
+		this.assertingCertificate = assertingCertificate;
+	}
+
+	public void setAssertingKey(PrivateKey assertingKey) {
+		this.assertingKey = assertingKey;
+	}
+
+	public void setAutoCreateAssertingCredentials(
+			boolean autoCreateAssertingCredentials) {
+		this.autoCreateAssertingCredentials = autoCreateAssertingCredentials;
+	}
+
+	public void setAutoRenewAssertingCredentials(
+			boolean autoRenewAssertingCredentials) {
+		this.autoRenewAssertingCredentials = autoRenewAssertingCredentials;
+	}
+
+	public void setKeyPassword(String keyPassword) {
+		this.keyPassword = keyPassword;
+	}
 	
 	
 

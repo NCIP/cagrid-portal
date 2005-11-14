@@ -133,4 +133,14 @@ public class CertUtil {
 		PEMReader reader = new PEMReader(in, null, "BC");
 		return (X509Certificate) reader.readObject();
 	}
+	
+	public static boolean isExpired(X509Certificate cert){
+		Date now = new Date();
+		if (now.before(cert.getNotBefore())
+				|| (now.after(cert.getNotAfter()))) {
+			return true;
+		}else{
+			return false;
+		}
+	}
 }

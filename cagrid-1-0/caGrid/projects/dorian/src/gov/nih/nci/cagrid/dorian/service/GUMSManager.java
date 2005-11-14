@@ -7,7 +7,7 @@ import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthorityConf;
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.idp.IdPConfiguration;
 import gov.nih.nci.cagrid.gums.idp.IdPManager;
-import gov.nih.nci.cagrid.gums.idp.AssertingManager;
+import gov.nih.nci.cagrid.gums.idp.AssertionCredentialsManager;
 import gov.nih.nci.cagrid.gums.idp.IdentityProvider;
 import gov.nih.nci.cagrid.gums.ifs.bean.AttributeDescriptor;
 

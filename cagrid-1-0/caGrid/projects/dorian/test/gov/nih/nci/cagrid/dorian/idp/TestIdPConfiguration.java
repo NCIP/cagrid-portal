@@ -67,7 +67,7 @@ public class TestIdPConfiguration extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} 
+		}
 	}
 	public void testConfiguration() {
 		try {

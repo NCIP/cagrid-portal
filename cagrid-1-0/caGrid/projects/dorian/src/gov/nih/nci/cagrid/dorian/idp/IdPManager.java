@@ -18,7 +18,7 @@ public class IdPManager{
 	private IdentityProvider idp;
 	private CertificateAuthority ca;
 	private IdPConfiguration configuration;
-	private AssertingManager assertingManager;
+	private AssertionCredentialsManager assertingManager;
 	
 	
 	
@@ -56,11 +56,11 @@ public class IdPManager{
 		return this.db;
 	}
 	
-	public AssertingManager getAssertingManager() throws GUMSInternalFault{
+	public AssertionCredentialsManager getAssertingManager() throws GUMSInternalFault{
 		if(idp == null){
 			if(this.configured){
 				
-			this.assertingManager = new AssertingManager(configuration,getCertificateAuthority(),db);
+			this.assertingManager = new AssertionCredentialsManager(configuration,getCertificateAuthority(),db);
 			}else{
 				GUMSInternalFault fault = new GUMSInternalFault();
 				fault.setFaultString("Cannot create IdP, the IdPManager hase not been configured.");

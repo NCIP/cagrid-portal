@@ -27,7 +27,8 @@ public class TestUtils {
 			+ "general-test" + File.separator + "db-config.xml";
 	
 	
-	
+	public static String CA_SUBJECT_PREFIX =  "O=Ohio State University,OU=BMI,OU=TEST";
+	public static String CA_SUBJECT_DN= "Temp Certificate Authority";
 	
 	public static Database getDB() throws Exception{
 		Document doc = XMLUtilities.fileNameToDocument(DB_CONFIG);
@@ -44,6 +45,11 @@ public class TestUtils {
 		return getCA(getDB());
 	}
 
+	
+	public static String getCASubject(){
+		return CA_SUBJECT_PREFIX+",CN="+CA_SUBJECT_DN;
+	}
+	
 public static CertificateAuthority getCA(Database db) throws Exception{	
 		GUMSCertificateAuthorityConf conf = new GUMSCertificateAuthorityConf();
 		conf.setCaPassword("password");
@@ -51,7 +57,7 @@ public static CertificateAuthority getCA(Database db) throws Exception{
 		GUMSCertificateAuthority ca = new GUMSCertificateAuthority(db, conf);
 		KeyPair rootPair = KeyUtil.generateRSAKeyPair1024();
 		
-		String rootSub = "O=Ohio State University,OU=BMI,OU=TEST,CN=Temp Certificate Authority";
+		String rootSub = getCASubject();
 		X509Name rootSubject = new X509Name(rootSub);
 		GregorianCalendar cal = new GregorianCalendar();
 		Date start = cal.getTime();
