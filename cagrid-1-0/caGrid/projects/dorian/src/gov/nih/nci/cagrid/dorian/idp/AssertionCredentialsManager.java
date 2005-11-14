@@ -14,11 +14,18 @@ import java.io.StringReader;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
+import org.apache.xml.security.signature.XMLSignature;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.globus.wsrf.utils.FaultHelper;
+import org.opensaml.SAMLAssertion;
+import org.opensaml.SAMLAuthenticationStatement;
+import org.opensaml.SAMLSubject;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -135,6 +142,50 @@ public class AssertionCredentialsManager extends GUMSObject {
 	public X509Certificate getIdPCertificate()
 	throws GUMSInternalFault {
 		return getIdPCertificate(true);
+	}
+	
+	public SAMLAssertion getAuthenticationAssertion(String email) throws GUMSInternalFault {
+		try{
+			org.apache.xml.security.Init.init();
+		X509Certificate cert = getIdPCertificate();
+		PrivateKey key = getIdPKey();
+		GregorianCalendar cal = new GregorianCalendar();
+		Date start = cal.getTime();
+		cal.add(Calendar.MINUTE, 2);
+		Date end = cal.getTime();
+		String issuer = cert.getSubjectDN().toString();
+		String federation = cert.getSubjectDN().toString();
+		String ipAddress=null;
+		String subjectDNS=null;
+		
+		//SAMLNameIdentifier nid = new SAMLNameIdentifier(email, "BMI",SAMLNameIdentifier.FORMAT_EMAIL);
+		SAMLSubject sub = new SAMLSubject(email,federation,"urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress",null,null,null);
+		
+		SAMLAuthenticationStatement auth = new SAMLAuthenticationStatement(sub,"urn:oasis:names:tc:SAML:1.0:am:password",new Date(),ipAddress,subjectDNS,null);
+	
+		List l = new ArrayList();
+		l.add(auth);
+		
+		SAMLAssertion saml = new SAMLAssertion(issuer, start, end, null,
+				null, l);
+		List a = new ArrayList();
+		a.add(cert);
+		saml.sign(XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA1,
+				key ,a,false);
+		
+		return saml;
+		}catch(Exception e){
+			logError(e.getMessage(), e);
+			GUMSInternalFault fault = new GUMSInternalFault();
+			fault
+					.setFaultString("Error creating SAML Assertion.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GUMSInternalFault) helper.getFault();
+			throw fault;
+			
+		}
+
 	}
 
 	private X509Certificate getIdPCertificate(boolean firstTime)

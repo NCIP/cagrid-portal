@@ -75,7 +75,13 @@ public class IdentityProvider extends GUMSObject {
 			throw fault;
 		}
 	}
-
+	
+	/*
+	public SAMLAssertion authenticate(BasicAuthCredential credential) throws GUMSInternalFault, InvalidLoginFault{
+		User requestor = verifyUser(credential);
+		return 
+	}
+*/
 	public String register(Application a) throws GUMSInternalFault,
 			InvalidUserPropertyFault {
 	

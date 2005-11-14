@@ -74,5 +74,6 @@
 	<classpathentry kind="lib" path="resources/portal/common"/>
 	<classpathentry kind="lib" path="resources/portal/gums"/>
 	<classpathentry kind="lib" path="lib/jdepend-2.7-patched.jar"/>
+	<classpathentry kind="lib" path="lib/ogsadai.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

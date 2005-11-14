@@ -19,6 +19,10 @@ import java.util.GregorianCalendar;
 import junit.framework.TestCase;
 
 import org.bouncycastle.jce.PKCS10CertificationRequest;
+import org.opensaml.SAMLAssertion;
+import org.w3c.dom.Element;
+
+import uk.org.ogsadai.common.XMLUtilities;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -35,6 +39,7 @@ public class TestAssertionCredentialsManager extends TestCase {
 	+ "ca-test";
 	private Database db;
 	private CertificateAuthority ca;
+	private static String TEST_EMAIL = "test@test.com";
 
 	public void testAutoCredentialCreation() {
 		try {
@@ -52,6 +57,12 @@ public class TestAssertionCredentialsManager extends TestCase {
 			String expectedSub = TestUtils.CA_SUBJECT_PREFIX + ",CN="
 					+ AssertionCredentialsManager.CA_SUBJECT;
 			assertEquals(expectedSub, cert.getSubjectDN().toString());
+			SAMLAssertion saml = cm.getAuthenticationAssertion(TEST_EMAIL);
+			saml.verify(cm.getIdPCertificate(),false);
+			System.out.println("SAML:");
+			System.out.println(XMLUtilities.xmlDOMToString((Element) saml
+					.toDOM()));
+	        
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
