@@ -41,8 +41,9 @@ public class InputParametersTable extends PortalTable {
 		
 		initialize();
 	}
+	
 	public boolean isCellEditable(int row, int column) {
-		return true;
+		return false;
 	}
 
 
