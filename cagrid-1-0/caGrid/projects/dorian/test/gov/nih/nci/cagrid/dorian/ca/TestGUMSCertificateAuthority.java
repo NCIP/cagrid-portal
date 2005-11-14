@@ -225,7 +225,7 @@ public class TestGUMSCertificateAuthority extends TestCase {
 			GUMSCertificateAuthority ca = new GUMSCertificateAuthority(db, conf);
 			ca.destroyTable();
 			X509Certificate origRoot = createAndStoreCAShort(ca);
-			Thread.sleep(2000);
+			Thread.sleep(2500);
 			GregorianCalendar cal = new GregorianCalendar();
 			Date start = cal.getTime();
 			cal.add(Calendar.DAY_OF_MONTH, 5);
@@ -250,7 +250,7 @@ public class TestGUMSCertificateAuthority extends TestCase {
 			GUMSCertificateAuthority ca = new GUMSCertificateAuthority(db, conf);
 			ca.destroyTable();
 			createAndStoreCAShort(ca);
-			Thread.sleep(2000);
+			Thread.sleep(2500);
 			try {
 				ca.getCACertificate();
 				assertTrue(false);
@@ -326,7 +326,7 @@ public class TestGUMSCertificateAuthority extends TestCase {
 		X509Name rootSubject = new X509Name(rootSub);
 		GregorianCalendar cal = new GregorianCalendar();
 		Date start = cal.getTime();
-		cal.add(Calendar.SECOND, 1);
+		cal.add(Calendar.SECOND, 2);
 		Date end = cal.getTime();
 		X509Certificate root = CertUtil.generateCACertificate(rootSubject,
 				start, end, rootPair);
