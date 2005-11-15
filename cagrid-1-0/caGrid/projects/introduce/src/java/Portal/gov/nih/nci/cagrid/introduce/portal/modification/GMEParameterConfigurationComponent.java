@@ -36,6 +36,7 @@ import org.projectmobius.gme.XMLDataModelService;
 import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.protocol.gme.SchemaNode;
+import javax.swing.JCheckBox;
 
 
 /**
@@ -81,9 +82,9 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
 	private JLabel classLabel = null;
 	private JTextField className = null;
 	private JLabel arrayLabel = null;
-	private JComboBox arrayCombo = null;
 	private JLabel paramNameLabel = null;
 	private JTextField paramName = null;
+	private JCheckBox isArrayCheckBox = null;
 	public GMEParameterConfigurationComponent(Vector typeInfo, File schemaDir, boolean handleParameterName) {
 		this.typeInfo = typeInfo;
 		this.schemaDir = schemaDir;
@@ -197,6 +198,10 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
 	 */
 	private JPanel getTypesPanel() {
 		if (typesPanel == null) {
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.gridx = 1;
+			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints11.gridy = 2;
 			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
 			gridBagConstraints19.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints19.gridy = 3;
@@ -214,14 +219,6 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
 			paramNameLabel.setText("Parameter Name");
 			arrayLabel = new JLabel();
 			arrayLabel.setText("Is Array");
-			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
-			gridBagConstraints17.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints17.gridy = 2;
-			gridBagConstraints17.weightx = 1.0;
-			gridBagConstraints17.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints17.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints17.weighty = 1.0D;
-			gridBagConstraints17.gridx = 1;
 			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
 			gridBagConstraints16.gridx = 0;
 			gridBagConstraints16.anchor = java.awt.GridBagConstraints.WEST;
@@ -267,10 +264,10 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
 			typesPanel.add(classLabel, gridBagConstraints15);
 			typesPanel.add(getClassName(), gridBagConstraints14);
 			typesPanel.add(arrayLabel, gridBagConstraints16);
-			typesPanel.add(getArrayCombo(), gridBagConstraints17);
 			if (this.handleParameterName) {
 				typesPanel.add(paramNameLabel, gridBagConstraints19);
 				typesPanel.add(getParamName(), gridBagConstraints18);
+				typesPanel.add(getIsArrayCheckBox(), gridBagConstraints11);
 			}
 		}
 		return typesPanel;
@@ -648,28 +645,8 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
 	}
 
 
-	/**
-	 * This method initializes arrayCombo	
-	 * 	
-	 * @return javax.swing.JComboBox	
-	 */    
-	private JComboBox getArrayCombo() {
-		if (arrayCombo == null) {
-			arrayCombo = new JComboBox();
-			arrayCombo.addItemListener(new java.awt.event.ItemListener() { 
-				public void itemStateChanged(java.awt.event.ItemEvent e) {    
-					toggleArray();
-				}
-			});
-			arrayCombo.addItem(ARRAY_NO);
-			arrayCombo.addItem(ARRAY_YES);
-			
-		}
-		return arrayCombo;
-	}
-	
 	private void toggleArray(){
-		if (((String)arrayCombo.getSelectedItem()).equals(ARRAY_YES)) {
+		if (this.isArrayCheckBox.isSelected()) {
 			if(!className.getText().endsWith("[]")){
 				String newClassName = className.getText() + "[]";
 			   className.setText(newClassName);
@@ -680,7 +657,6 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
 						className.getText().length() - 2));
 		   }
 		}
-		
 	}
 
 
@@ -694,5 +670,24 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
 			paramName = new JTextField();
 		}
 		return paramName;
+	}
+
+
+	/**
+	 * This method initializes isArrayCheckBox	
+	 * 	
+	 * @return javax.swing.JCheckBox	
+	 */
+	private JCheckBox getIsArrayCheckBox() {
+		if (isArrayCheckBox == null) {
+			isArrayCheckBox = new JCheckBox();
+			isArrayCheckBox.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					System.out.println("actionPerformed()"); 
+					toggleArray();
+				}
+			});
+		}
+		return isArrayCheckBox;
 	}
 } //  @jve:decl-index=0:visual-constraint="10,10"

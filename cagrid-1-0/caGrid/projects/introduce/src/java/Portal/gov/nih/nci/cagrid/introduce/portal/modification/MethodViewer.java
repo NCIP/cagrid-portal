@@ -110,7 +110,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.gridx = 0;
 			gridBagConstraints3.weightx = 1.0D;
-			gridBagConstraints3.weighty = 3.0D;
+			gridBagConstraints3.weighty = 2.0D;
 			gridBagConstraints3.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints3.gridy = 3;
@@ -125,12 +125,12 @@ public class MethodViewer extends GridPortalBaseFrame {
 			gridBagConstraints6.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints6.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints6.weightx = 1.0D;
-			gridBagConstraints6.weighty = 3.0D;
+			gridBagConstraints6.weighty = 2.0D;
 			gridBagConstraints7.gridx = 0;
 			gridBagConstraints7.gridy = 2;
 			gridBagConstraints7.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints7.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints7.weighty = 1.0D;
+			gridBagConstraints7.weighty = 2.0D;
 			gridBagConstraints7.weightx = 1.0D;
 			gridBagConstraints10.gridx = 0;
 			gridBagConstraints10.gridy = 4;
@@ -256,14 +256,13 @@ public class MethodViewer extends GridPortalBaseFrame {
 									javax.swing.border.TitledBorder.DEFAULT_POSITION,
 									null, AnalyticalLookAndFeel
 											.getPanelLabelColor()));
+			outputTypePanel.add(getOutputTypejScrollPane(), gridBagConstraints9);
 			gridBagConstraints9.gridx = 0;
 			gridBagConstraints9.gridy = 0;
 			gridBagConstraints9.weightx = 1.0;
-			gridBagConstraints9.weighty = 1.0;
+			gridBagConstraints9.weighty = 2.0D;
 			gridBagConstraints9.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints9.insets = new java.awt.Insets(0, 0, 0, 0);
-			outputTypePanel
-					.add(getOutputTypejScrollPane(), gridBagConstraints9);
 		}
 		return outputTypePanel;
 	}
@@ -687,17 +686,21 @@ public class MethodViewer extends GridPortalBaseFrame {
 			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
 			gridBagConstraints15.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints15.gridy = 1;
+			gridBagConstraints15.weightx = 1.0D;
+			gridBagConstraints15.weighty = 1.0D;
+			gridBagConstraints15.fill = java.awt.GridBagConstraints.NONE;
 			gridBagConstraints15.gridx = 0;
 			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
 			gridBagConstraints13.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints13.gridy = 0;
+			gridBagConstraints13.weightx = 1.0D;
+			gridBagConstraints13.weighty = 1.0D;
+			gridBagConstraints13.fill = java.awt.GridBagConstraints.NONE;
 			gridBagConstraints13.gridx = 0;
 			exceptionInputPanel = new JPanel();
 			exceptionInputPanel.setLayout(new GridBagLayout());
-			exceptionInputPanel.add(getAddExceptionButton(),
-					gridBagConstraints13);
-			exceptionInputPanel.add(getRemoveExceptionButton(),
-					gridBagConstraints15);
+			exceptionInputPanel.add(getAddExceptionButton(), gridBagConstraints13);
+			exceptionInputPanel.add(getRemoveExceptionButton(), gridBagConstraints15);
 		}
 		return exceptionInputPanel;
 	}

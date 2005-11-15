@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.SyncTools;
 import gov.nih.nci.cagrid.introduce.portal.AnalyticalLookAndFeel;
 
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
@@ -16,9 +17,11 @@ import java.util.Properties;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -29,14 +32,11 @@ import org.jdom.output.XMLOutputter;
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
 
-import com.sun.rsasign.t;
-
-
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.1 2005-11-09 19:30:12 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.2 2005-11-15 14:52:01 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -55,12 +55,12 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	private JButton saveButton = null;
 	private JComponent me;
 
-	private static File defaultMethodsDir = new File(System.getProperty("user.dir"));
+	private static File defaultMethodsDir = new File(System
+			.getProperty("user.dir"));
 
 	private JButton removeButton = null;
-	private JButton modifyButton = null; //  @jve:decl-index=0:
+	private JButton modifyButton = null; // @jve:decl-index=0:
 	private JPanel contentButtonPanel = null;
-
 
 	/**
 	 * This is the default constructor
@@ -70,7 +70,6 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		this.me = this;
 		initialize();
 	}
-
 
 	/**
 	 * This method initializes this
@@ -95,20 +94,56 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		if (this.methodsDirectory != null) {
 			SAXBuilder builder = new SAXBuilder(false);
 			try {
-				methodsDocument = builder.build(this.methodsDirectory.getAbsolutePath() + File.separator
-					+ "introduceMethods.xml");
+				methodsDocument = builder.build(this.methodsDirectory
+						.getAbsolutePath()
+						+ File.separator + "introduceMethods.xml");
 				serviceProperties = new Properties();
-				serviceProperties.load(new FileInputStream(this.methodsDirectory.getAbsolutePath() + File.separator
-					+ "introduce.properties"));
-				this.addTextField(this.getSelectPanel(), "Service Name", serviceProperties
-					.getProperty("introduce.skeleton.service.name"), 1, false);
-				this.addTextField(this.getSelectPanel(), "Destination Dir", methodsDirectory.getAbsolutePath(), 2, false);
-				this.addTextField(this.getSelectPanel(), "Package", serviceProperties
-					.getProperty("introduce.skeleton.package"), 4, false);
-				this.addTextField(this.getSelectPanel(), "Package Dir", serviceProperties
-					.getProperty("introduce.skeleton.package.dir"), 5, false);
-				this.addTextField(this.getSelectPanel(), "Namespace Domain", serviceProperties
-					.getProperty("introduce.skeleton.namespace.domain"), 6, false);
+				serviceProperties.load(new FileInputStream(
+						this.methodsDirectory.getAbsolutePath()
+								+ File.separator + "introduce.properties"));
+				
+				JLabel label = new JLabel();
+				Font f1 = label.getFont();
+				f1 = f1.deriveFont(f1.getStyle() ^ Font.BOLD);
+				JTextField field = new JTextField();
+				Font f2 = field.getFont();
+				f2 = f2.deriveFont(f2.getStyle() ^ Font.ITALIC);
+				
+				this
+						.addTextField(
+								this.getSelectPanel(),
+								"Service Name",
+								serviceProperties
+										.getProperty("introduce.skeleton.service.name"),
+								1, false);
+				this.getLabel("Service Name").setFont(f1);
+				this.getTextField("Service Name").setFont(f2);
+				
+				this.addTextField(this.getSelectPanel(), "Destination Dir",
+						methodsDirectory.getAbsolutePath(), 2, false);
+				this.getLabel("Destination Dir").setFont(f1);
+				this.getTextField("Destination Dir").setFont(f2);
+				this.addTextField(this.getSelectPanel(), "Package",
+						serviceProperties
+								.getProperty("introduce.skeleton.package"), 4,
+						false);
+				this.getLabel("Package").setFont(f1);
+				this.getTextField("Package").setFont(f2);
+				this.addTextField(this.getSelectPanel(), "Package Dir",
+						serviceProperties
+								.getProperty("introduce.skeleton.package.dir"),
+						5, false);
+				this.getLabel("Package Dir").setFont(f1);
+				this.getTextField("Package Dir").setFont(f2);
+				this
+						.addTextField(
+								this.getSelectPanel(),
+								"Namespace Domain",
+								serviceProperties
+										.getProperty("introduce.skeleton.namespace.domain"),
+								6, false);
+				this.getLabel("Namespace Domain").setFont(f1);
+				this.getTextField("Namespace Domain").setFont(f2);
 				// this.getServiceName().setText(serviceProperties.getProperty("introduce.skeleton.service.name"));
 				// this.getServiceName().setEnabled(false);
 			} catch (JDOMException e1) {
@@ -125,7 +160,6 @@ public class ModificationViewer extends GridPortalBaseFrame {
 
 	}
 
-
 	/**
 	 * This method initializes jContentPane
 	 * 
@@ -139,7 +173,6 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		}
 		return jContentPane;
 	}
-
 
 	/**
 	 * This method initializes jPanel
@@ -159,7 +192,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints1.weightx = 1.0D;
 			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints1.weighty = 1.0D;
+			gridBagConstraints1.weighty = 3.0D;
 			gridBagConstraints2.gridx = 0;
 			gridBagConstraints2.gridy = 2;
 			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -177,7 +210,6 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		return mainPanel;
 	}
 
-
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -193,9 +225,16 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			contentPanel = new JPanel();
 			contentPanel.setLayout(new GridBagLayout());
-			contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Methods",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, AnalyticalLookAndFeel.getPanelLabelColor()));
+			contentPanel
+					.setBorder(javax.swing.BorderFactory
+							.createTitledBorder(
+									null,
+									"Operations",
+									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+									javax.swing.border.TitledBorder.DEFAULT_POSITION,
+									new java.awt.Font("Dialog",
+											java.awt.Font.BOLD, 12),
+									new java.awt.Color(62, 109, 181)));
 			gridBagConstraints4.weightx = 1.0;
 			gridBagConstraints4.weighty = 1.0;
 			gridBagConstraints4.fill = java.awt.GridBagConstraints.BOTH;
@@ -207,7 +246,6 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		}
 		return contentPanel;
 	}
-
 
 	/**
 	 * This method initializes jPanel
@@ -222,7 +260,6 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		}
 		return buttonPanel;
 	}
-
 
 	/**
 	 * This method initializes jButton1
@@ -243,7 +280,6 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		return cancel;
 	}
 
-
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -253,13 +289,14 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		if (selectPanel == null) {
 			selectPanel = new JPanel();
 			selectPanel.setLayout(new GridBagLayout());
-			selectPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service Properties",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, AnalyticalLookAndFeel.getPanelLabelColor()));
+			selectPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+					null, "Service Properties",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					AnalyticalLookAndFeel.getPanelLabelColor()));
 		}
 		return selectPanel;
 	}
-
 
 	/**
 	 * This method initializes jTable
@@ -268,11 +305,11 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	 */
 	private MethodsTable getMethodsTable() {
 		if (methodsTable == null) {
-			methodsTable = new MethodsTable(this.methodsDocument);
+			methodsTable = new MethodsTable(this.methodsDocument,
+					this.methodsDirectory, this.serviceProperties);
 		}
 		return methodsTable;
 	}
-
 
 	/**
 	 * This method initializes jScrollPane
@@ -287,7 +324,6 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		return jScrollPane;
 	}
 
-
 	/**
 	 * This method initializes jButton
 	 * 
@@ -297,30 +333,38 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		if (addMethodButton == null) {
 			addMethodButton = new JButton(AnalyticalLookAndFeel.getAddIcon());
 			addMethodButton.setText("Add");
-			addMethodButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO
-					// Auto-generated
-					// Event stub
-					// actionPerformed()
-					Element method = new Element("method", methodsDocument.getRootElement().getNamespace());
-					method.setAttribute("name", "newMethod");
-					Element inputs = new Element("inputs", methodsDocument.getRootElement().getNamespace());
-					Element output = new Element("output", methodsDocument.getRootElement().getNamespace());
-					output.setAttribute("className", "void");
-					Element exceptions = new Element("exceptions", methodsDocument.getRootElement().getNamespace());
-					method.addContent(inputs);
-					method.addContent(output);
-					method.addContent(exceptions);
-					methodsDocument.getRootElement().addContent(method);
-					getMethodsTable().addRow(method);
-					performModify(e);
-				}
-			});
+			addMethodButton
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							System.out.println("actionPerformed()"); // TODO
+							// Auto-generated
+							// Event stub
+							// actionPerformed()
+							Element method = new Element("method",
+									methodsDocument.getRootElement()
+											.getNamespace());
+							method.setAttribute("name", "newMethod");
+							Element inputs = new Element("inputs",
+									methodsDocument.getRootElement()
+											.getNamespace());
+							Element output = new Element("output",
+									methodsDocument.getRootElement()
+											.getNamespace());
+							output.setAttribute("className", "void");
+							Element exceptions = new Element("exceptions",
+									methodsDocument.getRootElement()
+											.getNamespace());
+							method.addContent(inputs);
+							method.addContent(output);
+							method.addContent(exceptions);
+							methodsDocument.getRootElement().addContent(method);
+							getMethodsTable().addRow(method);
+							performModify(e);
+						}
+					});
 		}
 		return addMethodButton;
 	}
-
 
 	/**
 	 * This method initializes jButton
@@ -334,20 +378,25 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			saveButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
-						int confirmed = JOptionPane.showConfirmDialog(me,
-							"Are you sure you want to save, this may modify any current work you may have.");
+						int confirmed = JOptionPane
+								.showConfirmDialog(me,
+										"Are you sure you want to save, this may modify any current work you may have.");
 						if (confirmed == JOptionPane.OK_OPTION) {
-							System.out.println("Writting service.methods file.");
-							FileWriter fw = new FileWriter(new File(methodsDirectory.getAbsolutePath() + File.separator
-								+ "introduceMethods.xml"));
-							XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
+							System.out
+									.println("Writting service.methods file.");
+							FileWriter fw = new FileWriter(new File(
+									methodsDirectory.getAbsolutePath()
+											+ File.separator
+											+ "introduceMethods.xml"));
+							XMLOutputter out = new XMLOutputter(Format
+									.getPrettyFormat());
 							out.output(methodsDocument, fw);
-							
-							//call the sync tools
+
+							// call the sync tools
 							SyncTools sync = new SyncTools(methodsDirectory);
 							sync.sync();
 							runAnt();
-							
+
 						}
 					} catch (Exception e1) {
 						e1.printStackTrace();
@@ -357,25 +406,25 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		}
 		return saveButton;
 	}
-	
+
 	private void runAnt() throws Exception {
 		File f = new File(getTextFieldValue("Destination Dir"));
 		String path = f.getAbsolutePath();
 		String os = System.getProperty("os.name");
 		if ((os.indexOf("Windows") >= 0) || (os.indexOf("windows") >= 0)) {
-			String cmd= "rundll32 SHELL32.DLL,ShellExec_RunDLL cmd /K cd " + path
-					+ "&ant resync&ant all";
+			String cmd = "rundll32 SHELL32.DLL,ShellExec_RunDLL cmd /K cd "
+					+ path + "&ant resync&ant all";
 			System.out.println(cmd);
 			Process p = Runtime.getRuntime().exec(cmd);
 			p.waitFor();
 		} else if ((os.indexOf("Linux") >= 0) || (os.indexOf("linux") >= 0)) {
-			String[] cmd= new String[6];
+			String[] cmd = new String[6];
 			cmd[0] = "xterm";
 			cmd[1] = "-hold";
 			cmd[2] = "-e";
 			cmd[3] = "/bin/sh";
 			cmd[4] = "-c";
-			cmd[5] = "cd "+path+";ant resync;ant clean all";
+			cmd[5] = "cd " + path + ";ant resync;ant clean all";
 			Process p = Runtime.getRuntime().exec(cmd);
 			p.waitFor();
 		} else {
@@ -383,12 +432,11 @@ public class ModificationViewer extends GridPortalBaseFrame {
 					"Cannot create grid service, your operating system, " + os
 							+ " is not supported.");
 		}
-		
+
 		dispose();
 
-		
 	}
-	
+
 	/**
 	 * This method initializes jButton
 	 * 
@@ -399,45 +447,62 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			removeButton = new JButton(AnalyticalLookAndFeel.getRemoveIcon());
 			removeButton.setText("Remove");
 			removeButton.addActionListener(new java.awt.event.ActionListener() {
-				
+
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					int row = getMethodsTable().getSelectedRow();
-					if((row<0)||(row>=getMethodsTable().getRowCount())){
-						PortalUtils.showErrorMessage("Please select a method to remove.");
+					if ((row < 0) || (row >= getMethodsTable().getRowCount())) {
+						PortalUtils
+								.showErrorMessage("Please select a method to remove.");
 						return;
 					}
-					String methodName = getMethodsTable().getMethodName(getMethodsTable().getSelectedRow());
-					List methods = methodsDocument.getRootElement().getChildren();
-				    for(int i = 0; i < methods.size(); i++){
-				    	Element method = (Element)methods.get(i);
-				    	if(method.getAttributeValue("name").equals(methodName)){
-				    		methodsDocument.getRootElement().removeContent(method);
-				    		break;
-				    	}
-				    }
-					getMethodsTable().removeRow(getMethodsTable().getSelectedRow());
+					String methodName = getMethodsTable().getMethodName(
+							getMethodsTable().getSelectedRow());
+					List methods = methodsDocument.getRootElement()
+							.getChildren();
+					for (int i = 0; i < methods.size(); i++) {
+						Element method = (Element) methods.get(i);
+						if (method.getAttributeValue("name").equals(methodName)) {
+							methodsDocument.getRootElement().removeContent(
+									method);
+							break;
+						}
+					}
+					getMethodsTable().removeRow(
+							getMethodsTable().getSelectedRow());
 				}
 			});
 		}
 		return removeButton;
 	}
-	
-	
+
 	public void performModify(java.awt.event.ActionEvent e) {
-		
+
 		int row = getMethodsTable().getSelectedRow();
-		if((row<0)||(row>=getMethodsTable().getRowCount())){
+		if ((row < 0) || (row >= getMethodsTable().getRowCount())) {
 			PortalUtils.showErrorMessage("Please select a method to modify.");
 			return;
 		}
-		
-		Element method = (Element) getMethodsTable().getValueAt(getMethodsTable().getSelectedRow(), 1);
-		PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-			new MethodViewer(method, new File(methodsDirectory.getAbsolutePath() + File.separator
-				+ "schema" + File.separator + "cagrid" + File.separator
-				+ serviceProperties.getProperty("introduce.skeleton.service.name")), getMethodsTable(),getMethodsTable().getSelectedRow()));
-	}
 
+		Element method = (Element) getMethodsTable().getValueAt(
+				getMethodsTable().getSelectedRow(), 1);
+		PortalResourceManager
+				.getInstance()
+				.getGridPortal()
+				.addGridPortalComponent(
+						new MethodViewer(
+								method,
+								new File(
+										methodsDirectory.getAbsolutePath()
+												+ File.separator
+												+ "schema"
+												+ File.separator
+												+ "cagrid"
+												+ File.separator
+												+ serviceProperties
+														.getProperty("introduce.skeleton.service.name")),
+								getMethodsTable(), getMethodsTable()
+										.getSelectedRow()));
+	}
 
 	/**
 	 * This method initializes jButton
@@ -457,12 +522,11 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		return modifyButton;
 	}
 
-
 	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private JPanel getContentButtonPanel() {
 		if (contentButtonPanel == null) {
 			contentButtonPanel = new JPanel();
@@ -472,4 +536,4 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		}
 		return contentButtonPanel;
 	}
-}  //  @jve:decl-index=0:visual-constraint="6,9"
+} // @jve:decl-index=0:visual-constraint="6,9"

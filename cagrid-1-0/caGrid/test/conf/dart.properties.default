@@ -1,0 +1,95 @@
+# DART CONFIGURATION PARAMETERS, SEE Dart.conf.in FOR DETAILS
+
+##########################################
+# Y O U    M U S T    S E T    T H E S E #
+##########################################
+
+#Where your dart checkout is
+DART_ROOT=
+#Set to your host name
+SITE=
+# set to the name of your build  (i.e. osname-revision-compiler, e.g. Linux-2.4.2-2smp-c++)
+BUILDNAME=
+
+# need this to set the dart test file scripts path for service tests to run....
+SERVICE_STARTUP_PREFIX=/bin/sh -c ../../scripts
+
+
+
+
+
+
+
+
+##########################################
+# C O M M A N D S (may need to modify)   #
+##########################################
+CONFIGURE_COMMAND=ant prepare
+MAKECOMMAND=ant all
+
+CVSCOMMAND=/usr/bin/cvs
+#cygwin
+#TCL_TCLSH=/bin/tclsh.exe
+#linux
+TCL_TCLSH=/usr/bin/tclsh
+SCPCOMMAND=/usr/bin/scp
+JAVACOMMAND=java
+
+## THE REST ARE CURRENTLY NOT USED
+CMAKE_COMMAND=
+PURIFYCOMMAND=
+VALGRIND_COMMAND=
+VALGRIND_COMMAND_OPTIONS=
+GUNZIPCOMMAND=
+COMPRESSIONCOMMAND=
+COMPRESSIONCOMMAND=
+
+
+##########################################
+# D E F A U L T S  (you may modify)      #
+##########################################
+#Set both to where your caGrid checkout is (done by ant for you, if you leave commented out)
+#PROJECT_SOURCE_DIR=
+#PROJECT_BINARY_DIR=
+PROJECT_URL= www.projectcaGrid.org
+CVS_UPDATE_OPTIONS= -d -A -P
+VERBOSE_BUILD= OFF
+DETECT_REPEATED_ERRORS=
+BUILD_ERROR_REPORT_LIMIT=
+BUILD_WARNING_REPORT_LIMIT=
+DROP_SITE=marion.bmi.ohio-state.edu 
+DROP_LOCATION=/projects/caGrid/quality/incoming 
+DROP_SITE_USER=bmi
+DROP_SITE_PASSWORD=
+DROP_SITE_MODE=
+DROP_METHOD=scp
+TRIGGER_SITE=http://marion.bmi.ohio-state.edu/cgi-bin/Submit-caGrid-TestingResults.pl
+NIGHTLY_START_TIME=1:00:00 EDT
+ROLLUP_URL=http://marion.bmi.ohio-state.edu/cgi-bin/Rollup-caGrid-Dashboard.pl 
+CVS_WEB_URL=http://marion.bmi.ohio-state.edu/cgi-bin/viewcvs.cgi/caGrid/
+CVS_WEB_CVSROOT=caGrid
+USE_DOXYGEN=ON
+DOXYGEN_URL=http://marion.bmi.ohio-state.edu:8080/anvil/projects/caGrid/doc
+BUILD_DOXYGEN=OFF
+DOXYGEN_CONFIG=
+USE_GNATS=
+GNATS_WEB_URL=
+DELIVER_BROKEN_BUILD_EMAIL=
+EMAIL_FROM=
+DARTBOARD_BASE_URL=
+EMAIL_PROJECT_NAME=
+BUILD_MONITORS=
+CVS_IDENT_TO_EMAIL=
+DELIVER_BROKEN_BUILD_EMAIL_WITH_CONFIGURE_FAILURES=
+DELIVER_BROKEN_BUILD_EMAIL_WITH_BUILD_ERRORS=
+DELIVER_BROKEN_BUILD_EMAIL_WITH_BUILD_WARNINGS=
+DELIVER_BROKEN_BUILD_EMAIL_WITH_TEST_NOT_RUNS=
+DELIVER_BROKEN_BUILD_EMAIL_WITH_TEST_FAILURES=
+DELIVER_CONTINUOUS_EMAIL=
+CONTINUOUS_FROM=
+DEFAULT_CONTINUOUS_DOMAIN=
+SMTP_MAILHOST=
+CONTINUOUS_MONITOR_LIST=
+CONTINUOUS_BASE_URL=
+PROJECT_NAME=
+DART_TESTING_TIMEOUT=180

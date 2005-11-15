@@ -8,6 +8,10 @@
     <property file="build.properties" />
 
     <property name="tmp.dir" value="tmp" />
+	<property name="test.dir" value="${basedir}/test" />
+	
+	 <!-- IMPORT THE UTILITIES TARGETS -->
+	<import file="antfiles/ant-utilities.xml" />
 
     <!-- =============================================================== -->
     <!-- Prepares the build directory                                    -->
