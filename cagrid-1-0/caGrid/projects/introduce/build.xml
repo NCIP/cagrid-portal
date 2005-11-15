@@ -176,6 +176,13 @@
         <compileSubproject name="Introduce" />
     	<compileSubproject name="Portal" />
     </target>
+    
+    <target name="compile-tests" depends="compile" description="Compiles all the test source files.">
+        <javac srcdir="${test.src.dir}" destdir="${classes.dir}" debug="on" deprecation="off" optimize="off">
+            <classpath refid="@{name}.classpath" />
+        </javac>
+    </target>
+    
 
     <macrodef name="compileSubproject">
         <attribute name="name" />

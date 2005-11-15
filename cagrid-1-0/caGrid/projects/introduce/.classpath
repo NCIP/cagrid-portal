@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/java/Introduce"/>
+	<classpathentry kind="src" path="test/src/java/Introduce"/>
+	<classpathentry kind="src" path="test/src/java/Portal"/>
 	<classpathentry kind="src" path="resources/common/portal"/>
 	<classpathentry kind="src" path="resources/introduce/portal"/>
 	<classpathentry kind="src" path="src/java/Portal"/>
