@@ -401,6 +401,12 @@
 		  <xsd:enumeration value="ZW" /> 
 		</xsd:restriction>
 	</xsd:simpleType>
+	
+	 <xsd:complexType name="SAMLAssertion">
+			<xsd:sequence>
+				<xsd:element name="xml" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+			</xsd:sequence>
+		</xsd:complexType>
  		 
  		  <xsd:complexType name="InvalidUserPropertyFault">
 				<xsd:complexContent>

@@ -19,6 +19,7 @@ import gov.nih.nci.cagrid.gums.idp.bean.UserRole;
 import gov.nih.nci.cagrid.gums.idp.bean.UserStatus;
 
 import org.globus.wsrf.utils.FaultHelper;
+import org.opensaml.SAMLAssertion;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -37,12 +38,15 @@ public class IdentityProvider extends GUMSObject {
 
 	public static final String ADMIN_PASSWORD = "password";
 	
-	public IdPConfiguration conf;
+	private IdPConfiguration conf;
+	
+	private AssertionCredentialsManager assertionManager;
 
 	public IdentityProvider(IdPConfiguration conf, Database db, AssertionCredentialsManager am) throws GUMSInternalFault {
 		try {
 		    this.conf = conf;
 			this.userManager = new UserManager(db, conf);
+			this.assertionManager = am;
 
 			if (!this.userManager.userExists(ADMIN_USER_ID)) {
 				User u = new User();
@@ -76,12 +80,12 @@ public class IdentityProvider extends GUMSObject {
 		}
 	}
 	
-	/*
+	
 	public SAMLAssertion authenticate(BasicAuthCredential credential) throws GUMSInternalFault, InvalidLoginFault{
 		User requestor = verifyUser(credential);
-		return 
+		return assertionManager.getAuthenticationAssertion(requestor.getEmail());
 	}
-*/
+
 	public String register(Application a) throws GUMSInternalFault,
 			InvalidUserPropertyFault {
 	

@@ -5,6 +5,34 @@
 	xmlns:ifs="http://cagrid.nci.nih.gov/gums/ifs/bean" xmlns:wsbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd">
 	
 	
+	   <xsd:complexType name="authenticationPolicy">
+			<xsd:sequence>
+				<xsd:element name="method" type="ifs:authenticationMethod"/>
+				<xsd:element name="policyClass" type="xsd:string"/>
+			</xsd:sequence>
+	    </xsd:complexType>
+	
+
+	  <xsd:simpleType name="authenticationMethod">
+  			<xsd:restriction base="xsd:string">
+   				<xsd:enumeration value="urn:oasis:names:tc:SAML:1.0:am:password"/>
+   				<xsd:enumeration value="urn:ietf:rfc:1510"/>
+   				<xsd:enumeration value="urn:ietf:rfc:2945"/>
+   				<xsd:enumeration value="urn:oasis:names:tc:SAML:1.0:am:HardwareToken"/>
+   				<xsd:enumeration value="urn:ietf:rfc:2246"/>
+   				<xsd:enumeration value="urn:oasis:names:tc:SAML:1.0:am:X509-PKI"/>
+   				<xsd:enumeration value="urn:oasis:names:tc:SAML:1.0:am:PGP"/>
+   				<xsd:enumeration value="urn:oasis:names:tc:SAML:1.0:am:SPKI"/>			
+   				<xsd:enumeration value="urn:oasis:names:tc:SAML:1.0:am:XKMS"/>
+   				<xsd:enumeration value="urn:ietf:rfc:3075"/>
+   				<xsd:enumeration value="urn:oasis:names:tc:SAML:1.0:am:unspecified"/>				
+  			</xsd:restriction>
+ 	  </xsd:simpleType>
+	
+	
+	
+	<!- =================================================================-->
+	
 	    <xsd:complexType name="attributeDescriptor">
 			<xsd:sequence>
 				<xsd:element name="namespace" type="xsd:string"/>

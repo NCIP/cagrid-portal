@@ -90,6 +90,13 @@
 		<xsd:complexType/>
 	</xsd:element>
 	
+	
+	
+	
+	<xsd:element name="idpAuthenticate" type="idp:basicAuthCredential"/>	
+	<xsd:element name="idpAuthenticateResponse" type="idp:SAMLAssertion"/>
+
+	
 	<xsd:element name="invalidUserPropertyFault" type="idp:InvalidUserPropertyFault"/>
 	<xsd:element name="invalidLoginFault" type="idp:InvalidLoginFault"/>
 	<xsd:element name="noSuchUserFault" type="idp:NoSuchUserFault"/>
@@ -149,6 +156,13 @@
 </message>
 <message name="IdPRemoveUserOutputMessage">
 	<part name="parameters" element="tns:idpRemoveUserResponse"/>
+</message>
+
+<message name="IdPAuthenticateInputMessage">
+	<part name="parameters" element="tns:idpAuthenticate"/>
+</message>
+<message name="IdPAuthenticateOutputMessage">
+	<part name="parameters" element="tns:idpAuthenticateResponse"/>
 </message>
 
 
@@ -217,6 +231,13 @@
 		<output message="tns:IdPRemoveUserOutputMessage"/>
 		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
 	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
+	    <fault message="tns:InvalidLoginFaultMessage" name="InvalidLoginFault"/>
+	</operation>
+	
+		<operation name="idpAuthenticate">
+		<input message="tns:IdPAuthenticateInputMessage"/>
+		<output message="tns:IdPAuthenticateOutputMessage"/>
+		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
 	    <fault message="tns:InvalidLoginFaultMessage" name="InvalidLoginFault"/>
 	</operation>
 

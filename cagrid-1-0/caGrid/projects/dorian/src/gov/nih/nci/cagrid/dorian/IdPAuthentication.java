@@ -2,8 +2,9 @@ package gov.nih.nci.cagrid.gums;
 
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
 import gov.nih.nci.cagrid.gums.common.GUMSFault;
-import gov.nih.nci.cagrid.gums.idp.bean.Application;
-import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
+import gov.nih.nci.cagrid.gums.idp.bean.InvalidLoginFault;
+
+import org.opensaml.SAMLAssertion;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -12,7 +13,7 @@ import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public interface IdPRegistration {
-	public String register(Application a) throws GUMSFault,GUMSInternalFault,InvalidUserPropertyFault;
+public interface IdPAuthentication {
+	public SAMLAssertion authenticate() throws GUMSFault,GUMSInternalFault, InvalidLoginFault;
 	
 }
