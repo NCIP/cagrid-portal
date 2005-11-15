@@ -4,7 +4,7 @@
 <!-- caGrid Master build file                                          -->
 <!-- ================================================================= -->
 
-<project name="Master" default="compile" basedir=".">
+<project name="Master" default="all" basedir=".">
 	<property file="build.properties" />
 
 	<property name="tmp.dir" value="tmp" />
