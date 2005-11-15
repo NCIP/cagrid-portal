@@ -42,7 +42,7 @@
 
 	</target>
 
-	<target name="build-introduce" depends="" description="Builds Introduce">
+	<target name="build-introduce" depends="build-core, build-metadata" description="Builds Introduce">
 		<ant inheritall="false" antfile="projects/introduce/build.xml" target="all" />
 	</target>
 

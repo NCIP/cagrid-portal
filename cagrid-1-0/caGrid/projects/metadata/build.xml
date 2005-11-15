@@ -89,8 +89,10 @@
             <fileset dir="${stubs.src}" />
         </jar>
     </target>
-
-
+    
+    <target name="jar" depends="">
+    </target>
+    
     <target name="clean">
         <delete dir="tmp" />
         <delete dir="${build.dir}" />

@@ -87,7 +87,6 @@
 	<classpathentry kind="lib" path="lib/mobius_registrar_client-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/mobius-castor-0.9.4.3-xml.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/globalModelExchange"/>
 	<classpathentry kind="lib" path="lib/GlobalModelExchange_stubs.jar"/>
 	<classpathentry kind="lib" path="lib/GlobalModelExchange.jar"/>
 	<classpathentry kind="output" path="bin"/>
