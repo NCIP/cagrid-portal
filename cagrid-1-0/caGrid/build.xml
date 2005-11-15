@@ -12,6 +12,7 @@
 
 	<!-- IMPORT THE UTILITIES TARGETS -->
 	<import file="antfiles/ant-utilities.xml" />
+	<import file="antfiles/test-utilities.xml" />
 
 	<!-- =============================================================== -->
 	<!-- Prepares the build directory                                    -->
