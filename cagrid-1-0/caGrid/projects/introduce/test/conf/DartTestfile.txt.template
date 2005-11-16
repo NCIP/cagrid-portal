@@ -1,2 +1,2 @@
 ###################    STARTING INTRODUCE TESTS ( introduce tests )
-#ADD_TEST(6000_introduce_SimpleTest	@JAVACOMMAND@ -classpath @classpath@  gov.nih.nci.cabig.introduce.SimpleTest)
+ADD_TEST(6000_introduce_SimpleTest	@JAVACOMMAND@ -classpath @introduce.classpath@  gov.nih.nci.cabig.introduce.SimpleTest)

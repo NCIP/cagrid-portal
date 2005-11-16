@@ -1,227 +1,278 @@
 <!-- ======================================================================= -->
 <!-- caGRID build file                                                       -->
 <!-- ======================================================================= -->
-<project name="cagrid" default="prepare" basedir=".">
-    <!-- Environment -->
-    <property environment="env" />
-    <property file="${basedir}/build.properties" />
-    <property file="${user.dir}/build.properties" />
+<project name="introduce" default="prepare" basedir=".">
+	<!-- Environment -->
+	<property environment="env" />
+	<property file="${basedir}/build.properties" />
+	<property file="${user.dir}/build.properties" />
 
-    <!-- Information -->
-    <property name="project.name" value="caGrid" />
-    <property name="project.version" value="1.0" />
+	<!-- Information -->
+	<property name="project.name" value="introduce" />
+	<property name="project.version" value="1.0" />
 
-    <!-- Source, Config, and Libraries -->
-    <property name="src.dir" location="${basedir}/src/java" />
-    <property name="lib.dir" location="${basedir}/lib" />
-    <property name="schema.dir" location="${basedir}/schema" />
-    <property name="sde.schema.dir" location="${schema.dir}/types" />
+	<!-- Source, Config, and Libraries -->
+	<property name="src.dir" location="${basedir}/src/java" />
+	<property name="lib.dir" location="${basedir}/lib" />
+	<property name="schema.dir" location="${basedir}/schema" />
+	<property name="sde.schema.dir" location="${schema.dir}/types" />
 	<property name="resources.dir" location="${basedir}/resources" />
 
-    <!-- Generated stuff -->
-    <property name="build.dir" location="${basedir}/build" />
-    <property name="classes.dir" location="${build.dir}/classes" />
-    <property name="jars.dir" location="${build.dir}/jars" />
-    <property name="project.jar" location="${jars.dir}/${project.name}-${project.version}.jar" />
-    <property name="junit.results.dir" value="${build.dir}/junit" />
-    <property name="javadoc.dir" value="${build.dir}/javadoc" />
+	<!-- Generated stuff -->
+	<property name="build.dir" location="${basedir}/build" />
+	<property name="build.lib.dir" location="${build.dir}/jars" />
+	<property name="classes.dir" location="${build.dir}/classes" />
+	<property name="jars.dir" location="${build.dir}/jars" />
+	<property name="project.jar" location="${jars.dir}/${project.name}-${project.version}.jar" />
+	<property name="junit.results.dir" value="${build.dir}/junit" />
+	<property name="javadoc.dir" value="${build.dir}/javadoc" />
+
+	<!-- testing stuff -->
+	<property name="test.dir" location="${basedir}/test" />
+	<property name="test.src.dir" location="${test.dir}/src/java" />
+	<property name="test.classes.dir" location="${classes.dir}/test" />
+	<property name="test.lib.dir" location="${test.dir}/lib" />
+	<property name="test.project.jar" location="${jars.dir}/${project.name}-tests-${project.version}.jar" />
 
 
-    <!-- testing stuff -->
-    <property name="test.dir" location="${basedir}/test" />
-    <property name="test.src.dir" location="${test.dir}/java" />
-    <property name="test.lib.dir" location="${test.dir}/lib" />
+	<!-- Load common util path -->
+	<import file="../../antfiles/ant-utilities.xml" />
+	<import file="../../antfiles/test-utilities.xml" />
 
-
-    <!-- Load util files -->
-    <property name="antfiles.dir" value="${basedir}/antfiles" />
-	<import file="${antfiles.dir}/ant-utilities.xml" />
+	<!-- Load util files -->
+	<property name="antfiles.dir" value="${basedir}/antfiles" />
 	<import file="${antfiles.dir}/ant-properties-targets.xml" />
 	<import file="${antfiles.dir}/build-introduce.xml" />
 	<import file="${antfiles.dir}/build-portal.xml" />
-    <import file="${antfiles.dir}/introduce-utils.xml" />
-
-    <!-- =================================================================== -->
-    <!-- Cleans up generated stuff                                           -->
-    <!-- =================================================================== -->
-    <target name="clean">
-        <delete dir="${build.dir}" />
-    </target>
+	<import file="${antfiles.dir}/introduce-utils.xml" />
 
 
-    <!-- =================================================================== -->
-    <!-- Prepares the build directory and classpaths                         -->
-    <!-- =================================================================== -->
-    <target name="prepare" depends="init">
-        <tstamp />
-    </target>
+	<!-- =================================================================== -->
+	<!-- Cleans up generated stuff                                           -->
+	<!-- =================================================================== -->
+	<target name="clean">
+		<delete dir="${build.dir}" />
+	</target>
 
-    <target name="init" depends="checkGlobus,checkOGSADAI">
-        <mkdir dir="${build.dir}" />
-        <mkdir dir="${classes.dir}" />
-        <mkdir dir="${jars.dir}" />
-        <mkdir dir="${junit.results.dir}" />
-        <mkdir dir="${javadoc.dir}" />
 
-        <path id="Common.classpath">
-            <!--<fileset dir="${lib.dir}/caCORE">
+	<!-- =================================================================== -->
+	<!-- Prepares the build directory and classpaths                         -->
+	<!-- =================================================================== -->
+	<target name="prepare" depends="init">
+		<tstamp />
+	</target>
+
+	<target name="init" depends="checkGlobus,checkOGSADAI">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${classes.dir}" />
+		<mkdir dir="${test.classes.dir}" />
+		<mkdir dir="${jars.dir}" />
+		<mkdir dir="${junit.results.dir}" />
+		<mkdir dir="${javadoc.dir}" />
+
+		<path id="Common.classpath">
+			<!--<fileset dir="${lib.dir}/caCORE">
                 <include name="caCOREClient.jar" />
                 <include name="alteredHibernate2.jar" />
             </fileset>
             -->
-            <fileset dir="${ext.globus.dir}/lib">
-                <include name="cog-jglobus.jar" />
-                <include name="cog-axis.jar" />
-                <include name="ogsa.jar" />
-                <include name="jaxrpc.jar" />
-                <include name="axis.jar" />
-                <include name="log4j-1.2.8.jar" />
-                <include name="commons-logging.jar" />
-                <include name="commons-discovery.jar" />
-                <include name="wsdl4j.jar" />
-                <include name="saaj.jar" />
-                <include name="xmlParserAPIs.jar" />
-            	 <include name="jce-jdk13-120.jar"/>
-                <!--<include name="*.jar" />-->
-            </fileset>
-        </path>
-        <path id="Common.test.classpath">
-            <path refid="Common.classpath" />
-            <fileset dir="${test.lib.dir}">
-                <include name="junit.jar" />
-                <include name="junit-addons-1.4.jar" />
-                <include name="jdepend-2.7-patched.jar" />
-            </fileset>
-        </path>
-    </target>
+			<fileset dir="${ext.globus.dir}/lib">
+				<include name="cog-jglobus.jar" />
+				<include name="cog-axis.jar" />
+				<include name="ogsa.jar" />
+				<include name="jaxrpc.jar" />
+				<include name="axis.jar" />
+				<include name="log4j-1.2.8.jar" />
+				<include name="commons-logging.jar" />
+				<include name="commons-discovery.jar" />
+				<include name="wsdl4j.jar" />
+				<include name="saaj.jar" />
+				<include name="xmlParserAPIs.jar" />
+				<include name="jce-jdk13-120.jar" />
+				<!--<include name="*.jar" />-->
+			</fileset>
+		</path>
+		<path id="Common.test.classpath">
+			<path refid="Common.classpath" />
+			<fileset dir="${test.lib.dir}">
+				<include name="junit.jar" />
+				<include name="junit-addons-1.4.jar" />
+				<include name="jdepend-2.7-patched.jar" />
+			</fileset>
+		</path>
+	</target>
 
 
-    <!-- =================================================================== -->
-    <!-- Prints information about the build                                  -->
-    <!-- =================================================================== -->
-    <target name="help">
-        <echo message="To see the list of targets avaiable type 'ant -p'" />
-        <echo message="For an overview of the process, see docs/buildProcess.txt" />
-    </target>
+	<!-- =================================================================== -->
+	<!-- Prints information about the build                                  -->
+	<!-- =================================================================== -->
+	<target name="help">
+		<echo message="To see the list of targets avaiable type 'ant -p'" />
+		<echo message="For an overview of the process, see docs/buildProcess.txt" />
+	</target>
 
 
-    <!-- =================================================================== -->
-    <!-- Builds Code Docuementation                                          -->
-    <!-- =================================================================== -->
-    <target name="javadoc" depends="compile" description="Creates the API documentation.">
-        <javadoc packagenames="*" destdir="${javadoc.dir}" author="true" version="true" use="true" windowtitle="${project.name}-${project.version} API">
-            <sourcepath>
-                <pathelement path="${src.dir}/Common" />
-                <pathelement path="${src.dir}/GME" />
-                <pathelement path="${src.dir}/DataServices" />
-                <pathelement path="${src.dir}/AnalyticalServices" />
-                <pathelement path="${src.dir}/Security" />
-                <pathelement path="${src.dir}/Portal" />
-            </sourcepath>
-            <classpath>
-                <path refid="Common.classpath" />
-                <path refid="GME.classpath" />
-                <path refid="DataServices.classpath" />
-                <path refid="AnalyticalServices.classpath" />
-                <path refid="Security.classpath" />
-                <path refid="Portal.classpath" />
-            </classpath>
+	<!-- =================================================================== -->
+	<!-- Builds Code Docuementation                                          -->
+	<!-- =================================================================== -->
+	<target name="javadoc" depends="compile" description="Creates the API documentation.">
+		<javadoc packagenames="*" destdir="${javadoc.dir}" author="true" version="true" use="true" windowtitle="${project.name}-${project.version} API">
+			<sourcepath>
+				<pathelement path="${src.dir}/Common" />
+				<pathelement path="${src.dir}/GME" />
+				<pathelement path="${src.dir}/DataServices" />
+				<pathelement path="${src.dir}/AnalyticalServices" />
+				<pathelement path="${src.dir}/Security" />
+				<pathelement path="${src.dir}/Portal" />
+			</sourcepath>
+			<classpath>
+				<path refid="Common.classpath" />
+				<path refid="GME.classpath" />
+				<path refid="DataServices.classpath" />
+				<path refid="AnalyticalServices.classpath" />
+				<path refid="Security.classpath" />
+				<path refid="Portal.classpath" />
+			</classpath>
 
-            <tag name="todo" scope="all" description="To do:" />
-            <tag name="created" scope="all" description="Creation Date:" />
-            <group title="Common Packages" packages="gov.nih.nci.cagrid.common*" />
-            <group title="Data Service Packages" packages="gov.nih.nci.cagrid.data*" />
-            <group title="Analytical Service Packages" packages="gov.nih.nci.cagrid.analytical*" />
-            <group title="GME Packages" packages="gov.nih.nci.cagrid.gme*:gov.nih.nci.cagrid.client.gme*:gov.nih.nci.cagrid.server.gme*:gov.nih.nci.cagrid.stubs.gme*:gov.nih.nci.cagrid.security.gme*" />
-            <group title="Security Packages" packages="gov.nih.nci.cagrid.security*:gov.nih.nci.cagrid.cams*:gov.nih.nci.cagrid.gums*" />
-        </javadoc>
-    </target>
-
-
-    <!-- =================================================================== -->
-    <!--  Generate Java Beans from XSD                                       -->
-    <!-- =================================================================== -->
-    <target name="generateStubs" depends="prepare" description="Deletes the generated Java Beans and recreates them.">
-        <mkdir dir="${build.dir}/stubs" />
-
-        <!--<generateSubprojectBeans name="Common" packages="gov/nih/nci/cagrid/common/servicedata/**" />-->
-        <!--<generateSubprojectBeans name="DataServices" />-->
-        <!--<generateSubprojectBeans name="AnalyticalServices" packages="gov/nih/nci/cagrid/analytical/servicedata/**" />-->
-        <!--<generateSubprojectBeans name="Security" packages="gov/nih/nci/cagrid/cams/bean/**,gov/nih/nci/cagrid/gums/bean/**" />-->
-
-        <!-- core security services need the bindings/interfaces generated -->
-
-        <!-- CAMS -->
-        <!-- make a temporary dir, and copy the gwsdl over -->
-        <!--<mkdir dir="${build.dir}/wsdlCAMS" />-->
-        <!-- generate the wsdl in it-->
-        <!--<generateWSDL name="Security" interfaceName="CaGridAttributeManagement" wsdlDir="${build.dir}/wsdlCAMS" schemaRoot="${basedir}/skeletons/security/cams/schema" gwsdlPath="cagrid/cams" />-->
-        <!--<generateStubs name="Security" interfaceName="CaGridAttributeManagement" gswdlDir="${build.dir}/wsdlCAMS/cagrid/cams" packages="gov/nih/nci/cagrid/cams/ogsi/stubs/**" nsMappingFile="${basedir}/skeletons/security/cams/namespace2package.mappings" />-->
-        <!--<delete dir="${build.dir}/wsdlCAMS" />-->
-
-        <!-- GUMS -->
-        <!--<mkdir dir="${build.dir}/wsdlGUMS" />-->
-        <!--<generateWSDL name="Security" interfaceName="GridUserManagement" wsdlDir="${build.dir}/wsdlGUMS" schemaRoot="${basedir}/skeletons/security/gums/schema" gwsdlPath="cagrid/gums" />-->
-        <!--<generateStubs name="Security" interfaceName="GridUserManagement" gswdlDir="${build.dir}/wsdlGUMS/cagrid/gums" packages="gov/nih/nci/cagrid/gums/ogsi/stubs/**" nsMappingFile="${basedir}/skeletons/security/gums/namespace2package.mappings" />-->
-        <!--<delete dir="${build.dir}/wsdlGUMS" />-->
-
-        <delete dir="${build.dir}/stubs" />
-    </target>
+			<tag name="todo" scope="all" description="To do:" />
+			<tag name="created" scope="all" description="Creation Date:" />
+			<group title="Common Packages" packages="gov.nih.nci.cagrid.common*" />
+			<group title="Data Service Packages" packages="gov.nih.nci.cagrid.data*" />
+			<group title="Analytical Service Packages" packages="gov.nih.nci.cagrid.analytical*" />
+			<group title="GME Packages" packages="gov.nih.nci.cagrid.gme*:gov.nih.nci.cagrid.client.gme*:gov.nih.nci.cagrid.server.gme*:gov.nih.nci.cagrid.stubs.gme*:gov.nih.nci.cagrid.security.gme*" />
+			<group title="Security Packages" packages="gov.nih.nci.cagrid.security*:gov.nih.nci.cagrid.cams*:gov.nih.nci.cagrid.gums*" />
+		</javadoc>
+	</target>
 
 
-    <!-- =================================================================== -->
-    <!-- Compiles the source code                                            -->
-    <!-- =================================================================== -->
-    <target name="compile" depends="prepare" description="Compiles all the source files.">
-        <compileSubproject name="Introduce" />
-    	<compileSubproject name="Portal" />
-    </target>
-    
-    <target name="compile-tests" depends="compile" description="Compiles all the test source files.">
-        <javac srcdir="${test.src.dir}" destdir="${classes.dir}" debug="on" deprecation="off" optimize="off">
-            <classpath refid="@{name}.classpath" />
-        </javac>
-    </target>
-    
+	<!-- =================================================================== -->
+	<!--  Generate Java Beans from XSD                                       -->
+	<!-- =================================================================== -->
+	<target name="generateStubs" depends="prepare" description="Deletes the generated Java Beans and recreates them.">
+		<mkdir dir="${build.dir}/stubs" />
 
-    <macrodef name="compileSubproject">
-        <attribute name="name" />
-        <sequential>
-            <echo message="Compiling subproject @{name}" />
-            <javac srcdir="${src.dir}/@{name}" destdir="${classes.dir}" debug="on" deprecation="off" optimize="off">
-                <classpath refid="@{name}.classpath" />
-            </javac>
-            <copy todir="${classes.dir}" overwrite="true">
-                <fileset dir="${src.dir}/@{name}">
-                    <include name="**/*.xml" />
-                </fileset>
-            </copy>
-        </sequential>
-    </macrodef>
+		<!--<generateSubprojectBeans name="Common" packages="gov/nih/nci/cagrid/common/servicedata/**" />-->
+		<!--<generateSubprojectBeans name="DataServices" />-->
+		<!--<generateSubprojectBeans name="AnalyticalServices" packages="gov/nih/nci/cagrid/analytical/servicedata/**" />-->
+		<!--<generateSubprojectBeans name="Security" packages="gov/nih/nci/cagrid/cams/bean/**,gov/nih/nci/cagrid/gums/bean/**" />-->
 
+		<!-- core security services need the bindings/interfaces generated -->
 
-    <!-- =================================================================== -->
-    <!-- Create Jars                                                         -->
-    <!-- =================================================================== -->
-    <target name="jar" depends="compile" description="Builds the Jar Files">
-        <jar jarfile="${project.jar}" basedir="${classes.dir}" defaultExcludes="false" update="no">
-            <manifest>
-                <attribute name="Created-By" value="${user.name}" />
-            </manifest>
-        </jar>
-    </target>
+		<!-- CAMS -->
+		<!-- make a temporary dir, and copy the gwsdl over -->
+		<!--<mkdir dir="${build.dir}/wsdlCAMS" />-->
+		<!-- generate the wsdl in it-->
+		<!--<generateWSDL name="Security" interfaceName="CaGridAttributeManagement" wsdlDir="${build.dir}/wsdlCAMS" schemaRoot="${basedir}/skeletons/security/cams/schema" gwsdlPath="cagrid/cams" />-->
+		<!--<generateStubs name="Security" interfaceName="CaGridAttributeManagement" gswdlDir="${build.dir}/wsdlCAMS/cagrid/cams" packages="gov/nih/nci/cagrid/cams/ogsi/stubs/**" nsMappingFile="${basedir}/skeletons/security/cams/namespace2package.mappings" />-->
+		<!--<delete dir="${build.dir}/wsdlCAMS" />-->
+
+		<!-- GUMS -->
+		<!--<mkdir dir="${build.dir}/wsdlGUMS" />-->
+		<!--<generateWSDL name="Security" interfaceName="GridUserManagement" wsdlDir="${build.dir}/wsdlGUMS" schemaRoot="${basedir}/skeletons/security/gums/schema" gwsdlPath="cagrid/gums" />-->
+		<!--<generateStubs name="Security" interfaceName="GridUserManagement" gswdlDir="${build.dir}/wsdlGUMS/cagrid/gums" packages="gov/nih/nci/cagrid/gums/ogsi/stubs/**" nsMappingFile="${basedir}/skeletons/security/gums/namespace2package.mappings" />-->
+		<!--<delete dir="${build.dir}/wsdlGUMS" />-->
+
+		<delete dir="${build.dir}/stubs" />
+	</target>
 
 
-    <!-- =================================================================== -->
-    <!-- Builds the project                                                  -->
-    <!-- =================================================================== -->
-    <target name="build" description="Builds the entire application" depends="compile, jar" />
+	<!-- =================================================================== -->
+	<!-- Compiles the source code                                            -->
+	<!-- =================================================================== -->
+	<target name="compile" depends="prepare" description="Compiles all the source files.">
+		<compileSubproject name="Introduce" />
+		<compileSubproject name="Portal" />
+	</target>
+
+	<target name="compile-tests" depends="compile" description="Compiles all the test source files.">
+		<compileSubprojectTests name="Introduce" />
+		<compileSubprojectTests name="Portal" />
+	</target>
 
 
-    <!-- =================================================================== -->
-    <!-- Builds the project from a clean start                               -->
-    <!-- =================================================================== -->
-    <target name="all" description="Cleans and build the entire application" depends="clean, generateStubs, build" />
+	<macrodef name="compileSubproject">
+		<attribute name="name" />
+		<sequential>
+			<echo message="Compiling subproject @{name}" />
+			<javac srcdir="${src.dir}/@{name}" destdir="${classes.dir}" debug="on" deprecation="off" optimize="off">
+				<classpath refid="@{name}.classpath" />
+			</javac>
+			<copy todir="${classes.dir}" overwrite="true">
+				<fileset dir="${src.dir}/@{name}">
+					<include name="**/*.xml" />
+				</fileset>
+			</copy>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="compileSubprojectTests">
+		<attribute name="name" />
+		<sequential>
+			<echo message="Compiling subproject tests @{name}" />
+			<javac srcdir="${test.src.dir}/@{name}" destdir="${test.classes.dir}" debug="on" deprecation="off" optimize="off">
+				<classpath refid="@{name}.classpath" />
+			</javac>
+		</sequential>
+	</macrodef>
+
+
+	<!-- =================================================================== -->
+	<!-- Create Jars                                                         -->
+	<!-- =================================================================== -->
+	<target name="jar" depends="compile" description="Builds the Jar Files">
+		<jar jarfile="${project.jar}" basedir="${classes.dir}" defaultExcludes="false" update="no">
+			<manifest>
+				<attribute name="Created-By" value="${user.name}" />
+			</manifest>
+		</jar>
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- Create Jars                                                         -->
+	<!-- =================================================================== -->
+	<target name="jar-tests" depends="compile-tests" description="Builds the Test Jar Files">
+		<jar jarfile="${test.project.jar}" basedir="${test.classes.dir}" defaultExcludes="false" update="no">
+			<manifest>
+				<attribute name="Created-By" value="${user.name}" />
+			</manifest>
+		</jar>
+	</target>
+
+
+
+	<!-- =================================================================== -->
+	<!-- Builds the project                                                  -->
+	<!-- =================================================================== -->
+	<target name="build" description="Builds the entire application" depends="jar, jar-tests" />
+
+
+	<!-- =================================================================== -->
+	<!-- Builds the project from a clean start                               -->
+	<!-- =================================================================== -->
+	<target name="all" description="Cleans and build the entire application" depends="clean, generateStubs, build, configure" />
+
+	<target name="build-my-filters" depends="platformCheck">
+		<property name="my.classpath" refid="Introduce.test.classpath" />
+		<filter token="introduce.classpath" value="${my.classpath}" />
+		<filter token="file.separator" value="${file.separator}" />
+		<filter token="base.dir" value="${basedir}" />
+		<filter token="test.dir" value="${test.dir}" />
+		<filter token="src.dir" value="${src.dir}" />
+		<filter token="lib.dir" value="${lib.dir}" />
+		<filter token="log.dir" value="${log.dir}" />
+		<filter token="scripts.dir" value="${scripts.dir}" />
+		<filter token="build.dir" value="${build.dir}" />
+		<filter token="classes.dir" value="${classes.dir}" />
+		<filter token="doc.dir" value="${doc.dir}" />
+		<filter token="logger.arg" value="-Djava.util.logging.config.file=${basedir}${file.separator}logging.properties" />
+		<filter token="attributeMarker" value="${attributeMarker}" />
+		<filter token="platformScriptSuffix" value="${platformScriptSuffix}" />
+		<filter token="pause.command" value="${pause.command}" />
+	</target>
+
+
+	<target name="configure" depends="platformCheck,build-common-filters,build-my-filters,configure-dart-templates" description="Generates all the system files based off templates">
+	</target>
 
 
 </project>

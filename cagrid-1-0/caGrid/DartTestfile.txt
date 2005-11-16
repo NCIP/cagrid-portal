@@ -1,1 +1,1 @@
-SUBDIRS(test/conf)
+SUBDIRS(projects/introduce/test/conf)

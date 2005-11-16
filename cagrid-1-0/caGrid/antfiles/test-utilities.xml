@@ -4,7 +4,8 @@
 <project name="caGrid_test_utilities" basedir="." default="usage">
 	
 	<property name="dart.props" location="${test.dir}/conf/dart.properties"/>
-    
+	
+	<import file="ant-utilities.xml" />
     
     <target name="usage">
         <echo message="Not to be called directly.  This file contains utilities to be used in other build files." />
@@ -14,7 +15,6 @@
     <!-- Create a Dependancy Report (requires jdepend.jar in ant/lib         -->
     <!-- =================================================================== -->
     <target name="jdepend"
-            depends="clean"
             if="jdepend.available"
             description="Create a dependancy report (requires jdepend.jar in ant/lib)">
         <jdepend format="xml" outputfile="${doc.dir}/jdepend-report.xml">
@@ -49,6 +49,7 @@
             </chmod>
         </sequential>
     </macrodef>
+	
     <macrodef name="configure-windows-scripts">
         <attribute name="scriptdir" />
         <attribute name="logdir" default="${log.dir}" />
@@ -72,6 +73,7 @@
             <configure-scripts scriptdir="@{scriptdir}" scriptsuffix="bat" />
         </sequential>
     </macrodef>
+	
     <macrodef name="configure-unix-scripts">
         <attribute name="scriptdir" />
         <attribute name="logdir" default="${log.dir}" />
@@ -128,15 +130,20 @@
             <available file="${basedir}/build.properties" />
         </condition>
     </target>
+	
     <target name="load_filters_file"
             depends="check_build_properties"
             if="build.props.present">
         <filter filtersfile="${basedir}/build.properties" />
     </target>
+	
     <target name="default_filters">
         <filter token="java.command" value="java" />
     </target>
-    <target name="build-filters" depends="default_filters,load_filters_file" />
+	
+    <target name="build-common-filters" depends="default_filters,load_filters_file" >
+    	<filter filtersfile="${dart.props}"/>
+    </target>
 
     <!-- ============================================================== -->
     <!-- Creates conf files from examples                               -->
@@ -148,6 +155,7 @@
             </not>
         </condition>
     </target>
+	
     <target name="configure_example"
             depends="check_config"
             if="configuration.needed"
@@ -171,6 +179,7 @@
               overwrite="true" />
         <echo message="Successfully configured ${basedir}/DartConfiguration.tcl you may further configure Dart by editing this file." />
     </target>
+	
     <target name="check_dart_config">
         <condition property="dart.configuration.needed">
             <not>
@@ -178,12 +187,14 @@
             </not>
         </condition>
     </target>
+	
     <target name="copy_dart_properties"
             depends="check_dart_config"
             if="dart.configuration.needed">
         <echo message="You have not configured dart.properties  Creating from defaults..." />
         <copy file="${dart.props}.default" tofile="${dart.props}" />
     </target>
+	
     <target name="configure_dart_properties"
             depends="copy_dart_properties,platformCheck">
         <!-- DEFAULTS -->
@@ -283,5 +294,5 @@
             </fileset>
         </chmod>
     </target>
-
+	
 </project>

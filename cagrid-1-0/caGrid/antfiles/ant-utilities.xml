@@ -2,128 +2,204 @@
 <!-- caGrid Utilities build file                                             -->
 <!-- ======================================================================= -->
 <project name="caGrid_utilities" basedir="." default="usage">
-	
-	<property name="dart.props" location="${test.dir}/conf/dart.properties"/>
-    
-    <!-- Allows you define a new property with a value of ${${a}.${b}} which can't be done by the Property task alone.  -->
-    <macrodef name="compose-property">
-        <attribute name="name" />
-        <attribute name="stem" />
-        <attribute name="selector" />
-        <sequential>
-            <property name="@{name}" value="${@{stem}.@{selector}}" />
-        </sequential>
-    </macrodef>
 
-    <macrodef name="make-relative-path-property">
-        <attribute name="os" />
-        <attribute name="relativeroot" default="${basedir}" />
-        <attribute name="pathreplacement" />
-        <attribute name="fullpath" />
-        <attribute name="property" />
-        <sequential>
-            <pathconvert targetos="@{os}" property="@{property}">
-                <path>
-                    <pathelement path="@{fullpath}" />
-                </path>
-                <map from="@{relativeroot}" to="@{pathreplacement}" />
-            </pathconvert>
-            <echo message="Converted @{fullpath} to ${@{property}}" />
-        </sequential>
-    </macrodef>
-    <macrodef name="load-filters">
-        <attribute name="os" />
-        <attribute name="fileseparator" />
-        <attribute name="pathseparator" />
-        <attribute name="attributemarker" />
-        <attribute name="scriptsuffix" />
+	<property name="globus.location" location="${env.GLOBUS_LOCATION}" />
+	<property name="schema.src" location="${globus.location}/share/schema" />
+	<property name="build.stubs" location="${globus.location}/share/globus_wsrf_tools/build-stubs.xml" />
 
-        <attribute name="logdir" default="${log.dir}" />
-        <attribute name="libdir" default="${lib.dir}" />
-        <attribute name="serverclasspath" />
-        <attribute name="clientclasspath" />
-        <attribute name="relativeroot" default="${basedir}" />
-        <attribute name="pathreplacement" default="..${file.separator}.." />
+	<!-- Allows you define a new property with a value of ${${a}.${b}} which can't be done by the Property task alone.  -->
+	<macrodef name="compose-property">
+		<attribute name="name" />
+		<attribute name="stem" />
+		<attribute name="selector" />
+		<sequential>
+			<property name="@{name}" value="${@{stem}.@{selector}}" />
+		</sequential>
+	</macrodef>
 
-        <sequential>
-            <!-- until ant lets us have scoped properties, i need to fake some uniqueness
+	<macrodef name="make-relative-path-property">
+		<attribute name="os" />
+		<attribute name="relativeroot" default="${basedir}" />
+		<attribute name="pathreplacement" />
+		<attribute name="fullpath" />
+		<attribute name="property" />
+		<sequential>
+			<pathconvert targetos="@{os}" property="@{property}">
+				<path>
+					<pathelement path="@{fullpath}" />
+				</path>
+				<map from="@{relativeroot}" to="@{pathreplacement}" />
+			</pathconvert>
+			<echo message="Converted @{fullpath} to ${@{property}}" />
+		</sequential>
+	</macrodef>
+	<macrodef name="load-filters">
+		<attribute name="os" />
+		<attribute name="fileseparator" />
+		<attribute name="pathseparator" />
+		<attribute name="attributemarker" />
+		<attribute name="scriptsuffix" />
+
+		<attribute name="logdir" default="${log.dir}" />
+		<attribute name="libdir" default="${lib.dir}" />
+		<attribute name="serverclasspath" />
+		<attribute name="clientclasspath" />
+		<attribute name="relativeroot" default="${basedir}" />
+		<attribute name="pathreplacement" default="..${file.separator}.." />
+
+		<sequential>
+			<!-- until ant lets us have scoped properties, i need to fake some uniqueness
             of these properties so i can make filters from them 
             I'm assuming this triple is unique (@{os}-@{relativeroot}-@{pathreplacement}), if its not for you, you will have problems
             on successive calls to this macro-->
-            <make-relative-path-property os="@{os}"
-                                         relativeroot="@{relativeroot}"
-                                         property="@{os}-@{relativeroot}-@{pathreplacement}.client.classpath.relative"
-                                         fullpath="@{clientclasspath}"
-                                         pathreplacement="@{pathreplacement}" />
+			<make-relative-path-property os="@{os}" relativeroot="@{relativeroot}" property="@{os}-@{relativeroot}-@{pathreplacement}.client.classpath.relative" fullpath="@{clientclasspath}" pathreplacement="@{pathreplacement}" />
 
-            <make-relative-path-property os="@{os}"
-                                         relativeroot="@{relativeroot}"
-                                         property="@{os}-@{relativeroot}-@{pathreplacement}.server.classpath.relative"
-                                         fullpath="@{serverclasspath}"
-                                         pathreplacement="@{pathreplacement}" />
+			<make-relative-path-property os="@{os}" relativeroot="@{relativeroot}" property="@{os}-@{relativeroot}-@{pathreplacement}.server.classpath.relative" fullpath="@{serverclasspath}" pathreplacement="@{pathreplacement}" />
 
-            <make-relative-path-property os="@{os}"
-                                         relativeroot="@{relativeroot}"
-                                         property="@{os}-@{relativeroot}-@{pathreplacement}.lib.dir.relative"
-                                         fullpath="@{libdir}"
-                                         pathreplacement="@{pathreplacement}" />
+			<make-relative-path-property os="@{os}" relativeroot="@{relativeroot}" property="@{os}-@{relativeroot}-@{pathreplacement}.lib.dir.relative" fullpath="@{libdir}" pathreplacement="@{pathreplacement}" />
 
-            <make-relative-path-property os="@{os}"
-                                         relativeroot="@{relativeroot}"
-                                         property="@{os}-@{relativeroot}-@{pathreplacement}.log.dir.relative"
-                                         fullpath="@{logdir}"
-                                         pathreplacement="@{pathreplacement}" />
+			<make-relative-path-property os="@{os}" relativeroot="@{relativeroot}" property="@{os}-@{relativeroot}-@{pathreplacement}.log.dir.relative" fullpath="@{logdir}" pathreplacement="@{pathreplacement}" />
 
-            <make-relative-path-property os="@{os}"
-                                         relativeroot="@{relativeroot}"
-                                         property="@{os}-@{relativeroot}-@{pathreplacement}.common.dir.relative"
-                                         fullpath="@{relativeroot}"
-                                         pathreplacement="@{pathreplacement}" />
+			<make-relative-path-property os="@{os}" relativeroot="@{relativeroot}" property="@{os}-@{relativeroot}-@{pathreplacement}.common.dir.relative" fullpath="@{relativeroot}" pathreplacement="@{pathreplacement}" />
 
-            <filter token="path.separator" value="@{pathseparator}" />
-            <filter token="file.separator" value="@{fileseparator}" />
-            <filter token="client.classpath"
-                    value="${@{os}-@{relativeroot}-@{pathreplacement}.client.classpath.relative}" />
-            <filter token="server.classpath"
-                    value="${@{os}-@{relativeroot}-@{pathreplacement}.server.classpath.relative}" />
-            <filter token="lib.dir"
-                    value="${@{os}-@{relativeroot}-@{pathreplacement}.lib.dir.relative}" />
-            <filter token="log.dir"
-                    value="${@{os}-@{relativeroot}-@{pathreplacement}.log.dir.relative}" />
-            <filter token="logger.arg"
-                    value="-Djava.util.logging.config.file=${@{os}-@{relativeroot}-@{pathreplacement}.common.dir.relative}@{fileseparator}logging.properties" />
-            <filter token="attributeMarker" value="@{attributemarker}" />
-            <filter token="platformScriptSuffix" value="@{scriptsuffix}" />
-        </sequential>
-    </macrodef>
+			<filter token="path.separator" value="@{pathseparator}" />
+			<filter token="file.separator" value="@{fileseparator}" />
+			<filter token="client.classpath" value="${@{os}-@{relativeroot}-@{pathreplacement}.client.classpath.relative}" />
+			<filter token="server.classpath" value="${@{os}-@{relativeroot}-@{pathreplacement}.server.classpath.relative}" />
+			<filter token="lib.dir" value="${@{os}-@{relativeroot}-@{pathreplacement}.lib.dir.relative}" />
+			<filter token="log.dir" value="${@{os}-@{relativeroot}-@{pathreplacement}.log.dir.relative}" />
+			<filter token="logger.arg" value="-Djava.util.logging.config.file=${@{os}-@{relativeroot}-@{pathreplacement}.common.dir.relative}@{fileseparator}logging.properties" />
+			<filter token="attributeMarker" value="@{attributemarker}" />
+			<filter token="platformScriptSuffix" value="@{scriptsuffix}" />
+		</sequential>
+	</macrodef>
 
-    <target name="usage">
-        <echo message="Not to be called directly.  This file contains utilities to be used in other build files." />
-    </target>
+	<target name="usage">
+		<echo message="Not to be called directly.  This file contains utilities to be used in other build files." />
+	</target>
 
 
-    <target name="platformCheck"
-            depends="cond-if-isWindows,cond-else-isWindows" />
-    <target name="check-cond-isWindows">
-        <condition property="isWindows">
-            <os family="windows" />
-        </condition>
-    </target>
-    <target name="cond-if-isWindows"
-            depends="check-cond-isWindows"
-            if="isWindows">
-        <property name="platformScriptSuffix" value="bat" />
-        <property name="attributeMarker" value="%" />
-        <property name="platformPrefix" value="windows" />
-        <property name="pause.command" value="pause" />
-    </target>
-    <target name="cond-else-isWindows"
-            depends="check-cond-isWindows"
-            unless="isWindows">
-        <property name="platformScriptSuffix" value="sh" />
-        <property name="attributeMarker" value="$" />
-        <property name="platformPrefix" value="unix" />
-        <property name="pause.command" value="read" />
-    </target>
+	<target name="platformCheck" depends="cond-if-isWindows,cond-else-isWindows" />
+	<target name="check-cond-isWindows">
+		<condition property="isWindows">
+			<os family="windows" />
+		</condition>
+	</target>
+	<target name="cond-if-isWindows" depends="check-cond-isWindows" if="isWindows">
+		<property name="platformScriptSuffix" value="bat" />
+		<property name="attributeMarker" value="%" />
+		<property name="platformPrefix" value="windows" />
+		<property name="pause.command" value="pause" />
+	</target>
+	<target name="cond-else-isWindows" depends="check-cond-isWindows" unless="isWindows">
+		<property name="platformScriptSuffix" value="sh" />
+		<property name="attributeMarker" value="$" />
+		<property name="platformPrefix" value="unix" />
+		<property name="pause.command" value="read" />
+	</target>
+
+	<macrodef name="generateSubprojectBeans">
+		<attribute name="name" />
+		<attribute name="packages" />
+		<attribute name="tempDir" />
+
+		<sequential>
+			<echo message="Generating beans for @{name}" />
+
+			<mkdir dir="@{tempDir}_@{name}" />
+
+			<copy toDir="@{tempDir}_@{name}/schema">
+				<fileset dir="${sde.schema.dir}/@{name}" casesensitive="yes">
+					<include name="**" />
+				</fileset>
+			</copy>
+
+			<delete>
+				<fileset dir="${src.dir}/@{name}" includes="@{packages}" />
+			</delete>
+
+			<ant antfile="${build.stubs}" target="generateStubs">
+				<property name="mapping.file" location="@{tempDir}_@{name}/namespace2package.mappings" />
+				<property name="source.stubs.dir" location="@{tempDir}_@{name}/schema" />
+				<property name="target.stubs.dir" location="@{tempDir}_@{name}/stubs" />
+				<property name="wsdl.file" value="@{name}.wsdl" />
+			</ant>
+
+			<!-- copy the appropriate files to the right place -->
+			<copy todir="${src.dir}/@{name}">
+				<fileset dir="@{tempDir}_@{name}/stubs" includes="@{packages}" />
+			</copy>
+
+			<delete dir="@{tempDir}_@{name}" />
+
+		</sequential>
+	</macrodef>
+
+
+	<macrodef name="generateSkeletonStubs">
+		<attribute name="name" />
+		<attribute name="packages" />
+		<attribute name="tempDir" />
+
+		<sequential>
+			<echo message="Generating stubs for @{name}" />
+
+			<mkdir dir="@{tempDir}_@{name}" />
+
+			<copy toDir="@{tempDir}_@{name}/schema">
+				<fileset dir="${schema.src}" casesensitive="yes">
+					<include name="wsrf/**/*" />
+					<include name="ws/**/*" />
+				</fileset>
+				<fileset dir="${basedir}/schema" casesensitive="yes">
+					<include name="**" />
+				</fileset>
+				<fileset dir="${basedir}/skeleton/@{name}/schema" casesensitive="yes">
+					<include name="**" />
+				</fileset>
+			</copy>
+
+			<!-- Merge our namespace mappings file with the GT4 mappins file -->
+			<ant antfile="${build.stubs}" target="mergePackageMapping">
+				<property name="mapping.src" location="${basedir}/skeleton/@{name}/namespace2package.mappings" />
+				<property name="mapping.dst" location="@{tempDir}_@{name}/namespace2package.mappings" />
+			</ant>
+
+			<delete>
+				<fileset dir="${src.dir}/@{name}" includes="@{packages}" />
+			</delete>
+
+			<ant antfile="${build.stubs}" target="flatten">
+				<property name="source.flatten.dir" location="@{tempDir}_@{name}/schema/cagrid/@{name}" />
+				<property name="target.flatten.dir" location="@{tempDir}_@{name}/schema/cagrid/@{name}" />
+				<property name="wsdl.source" value="@{name}.wsdl" />
+				<property name="wsdl.target" value="@{name}_flattened.wsdl" />
+				<property name="wsdl.porttype" value="@{name}PortType" />
+			</ant>
+
+			<ant antfile="${build.stubs}" target="generateBinding">
+				<property name="source.binding.dir" value="@{tempDir}_@{name}/schema/cagrid/@{name}" />
+				<property name="target.binding.dir" value="@{tempDir}_@{name}/schema/cagrid/@{name}" />
+				<property name="porttype.wsdl" value="@{name}_flattened.wsdl" />
+				<property name="binding.root" value="@{name}" />
+			</ant>
+
+			<ant antfile="${build.stubs}" target="generateStubs">
+				<property name="mapping.file" location="@{tempDir}_@{name}/namespace2package.mappings" />
+				<property name="source.stubs.dir" location="@{tempDir}_@{name}/schema/cagrid/@{name}" />
+				<property name="target.stubs.dir" location="@{tempDir}_@{name}/stubs" />
+				<property name="wsdl.file" value="@{name}_service.wsdl" />
+			</ant>
+
+			<!-- copy the appropriate files to the right place -->
+			<copy todir="${src.dir}/@{name}">
+				<fileset dir="@{tempDir}_@{name}/stubs" includes="@{packages}" />
+			</copy>
+
+			<delete dir="@{tempDir}_@{name}" />
+
+		</sequential>
+	</macrodef>
+
 
 </project>

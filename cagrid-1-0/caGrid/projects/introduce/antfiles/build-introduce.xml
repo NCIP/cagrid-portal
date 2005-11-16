@@ -8,17 +8,18 @@
 		<path id="Introduce.classpath">
 			<path refid="Common.classpath" />
 			<fileset dir="${lib.dir}">
-				<include name="ant.jar" />
-				<include name="ant-launcher.jar" />
-				<include name="jaxmejs.jar" />
-				<include name="commons-cli-1.0.jar" />
-				<include name="antlr.jar" />
-				<include name="jdom-1.0.jar" />
-				<include name="caGrid-0.5.jar" />
+				<include name="*.jar" />
 			</fileset>
 		</path>
 		<path id="Introduce.test.classpath">
 			<path refid="Common.test.classpath" />
+			<fileset dir="${lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${build.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
 		</path>
+		
 	</target>
 </project>
