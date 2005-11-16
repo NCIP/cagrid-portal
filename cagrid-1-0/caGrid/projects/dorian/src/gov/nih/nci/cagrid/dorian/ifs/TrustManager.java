@@ -4,7 +4,6 @@ import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.ifs.bean.AttributeDescriptor;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidTrustedIdPFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
