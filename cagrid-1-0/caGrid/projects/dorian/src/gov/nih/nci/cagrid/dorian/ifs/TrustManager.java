@@ -77,7 +77,7 @@ public class TrustManager extends GUMSObject {
 				+ "'");
 	}
 
-	private SAMLAuthenticationMethod[] getAuthenticationMethods(
+	public SAMLAuthenticationMethod[] getAuthenticationMethods(
 			String trustedIdPName) throws GUMSInternalFault {
 		buildDatabase();
 		Connection c = null;
@@ -128,7 +128,7 @@ public class TrustManager extends GUMSObject {
 				TrustedIdP idp = new TrustedIdP();
 				idp.setName(rs.getString("NAME"));
 				idp.setIdPCertificate(rs.getString("IDP_CERTIFICATE"));
-				idp.setPolicyClass("POLICY_CLASS");
+				idp.setPolicyClass(rs.getString("POLICY_CLASS"));
 				idps.add(idp);
 			}
 			rs.close();
@@ -239,7 +239,7 @@ public class TrustManager extends GUMSObject {
 
 	private synchronized void addAuthenticationMethod(String idpName,
 			SAMLAuthenticationMethod method) throws GUMSInternalFault {
-		db.update("INSERT INTO " + TRUST_MANAGER_TABLE + " SET NAME='"
+		db.update("INSERT INTO " + AUTH_METHODS_TABLE + " SET NAME='"
 				+ idpName + "',METHOD='" + method.getValue() + "'");
 	}
 

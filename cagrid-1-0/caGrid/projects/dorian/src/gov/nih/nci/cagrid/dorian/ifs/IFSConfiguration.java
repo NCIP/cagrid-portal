@@ -73,6 +73,14 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 	
 	
 
+	public void setMaximumIdPNameLength(int maximumIdPNameLength) {
+		this.maximumIdPNameLength = maximumIdPNameLength;
+	}
+
+	public void setMinimumIdPNameLength(int minimumIdPNameLength) {
+		this.minimumIdPNameLength = minimumIdPNameLength;
+	}
+
 	public void parse(MobiusResourceManager resourceManager, Element config)
 			throws MobiusException {
 
