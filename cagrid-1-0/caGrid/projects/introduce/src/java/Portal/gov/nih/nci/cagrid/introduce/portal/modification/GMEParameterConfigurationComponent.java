@@ -50,644 +50,638 @@ import javax.swing.JCheckBox;
  *          Exp $
  */
 public class GMEParameterConfigurationComponent extends GridPortalComponent {
-	
-	private static String ARRAY_YES = "Yes";
-	private static String ARRAY_NO = "No";
+    private JPanel mainPanel = null;
+    private JPanel queryPanel = null;
+    private JPanel typesPanel = null;
+    private JPanel buttonPanel = null;
 
-	private JPanel mainPanel = null;
-	private JPanel queryPanel = null;
-	private JPanel typesPanel = null;
-	private JPanel buttonPanel = null;
+    private JButton queryButton = null;
+    private JButton doneButton = null;
+    private JComboBox typesComboBox = null;
+    Namespace currentNamespace = null;
+    String currentType = null;
 
-	private JButton queryButton = null;
-	private JButton doneButton = null;
-	private JComboBox typesComboBox = null;
-	Namespace currentNamespace = null;
-	String currentType = null;
+    Vector typeInfo;
+    File schemaDir;
 
-	Vector typeInfo;
-	File schemaDir;
+    private JComboBox namespaceComboBox = null;
+    private JComboBox schemaComboBox = null;
+    private JComponent me;
 
-	private JComboBox namespaceComboBox = null;
-	private JComboBox schemaComboBox = null;
-	private JComponent me;
-
-	private boolean handleParameterName = false;
-	private JPanel schemaPanel = null;
-	private JLabel namespaceLabel = null;
-	private JLabel nameLabel = null;
-	private JLabel jLabel = null;
-	private JTextField gme = null;
-	private JLabel typeLabel = null;
-	private JLabel classLabel = null;
-	private JTextField className = null;
-	private JLabel arrayLabel = null;
-	private JLabel paramNameLabel = null;
-	private JTextField paramName = null;
-	private JCheckBox isArrayCheckBox = null;
-	public GMEParameterConfigurationComponent(Vector typeInfo, File schemaDir, boolean handleParameterName) {
-		this.typeInfo = typeInfo;
-		this.schemaDir = schemaDir;
-		this.handleParameterName = handleParameterName;
-		this.me = this;
-		initialize();
-	}
+    private boolean handleParameterName = false;
+    private JPanel schemaPanel = null;
+    private JLabel namespaceLabel = null;
+    private JLabel nameLabel = null;
+    private JLabel jLabel = null;
+    private JTextField gme = null;
+    private JLabel typeLabel = null;
+    private JLabel classLabel = null;
+    private JTextField className = null;
+    private JLabel arrayLabel = null;
+    private JLabel paramNameLabel = null;
+    private JTextField paramName = null;
+    private JCheckBox isArrayCheckBox = null;
 
 
-	/**
-	 * This method initializes this
-	 * 
-	 * @return void
-	 */
-	private void initialize() {
-		this.setContentPane(getMainPanel());
-		this.setTitle("Configure Parameter with GME");
-		this.setFrameIcon(AnalyticalLookAndFeel.getMobiusIcon());
-		this.setSize(409, 400);
-
-	}
+    public GMEParameterConfigurationComponent(Vector typeInfo, File schemaDir, boolean handleParameterName) {
+        this.typeInfo = typeInfo;
+        this.schemaDir = schemaDir;
+        this.handleParameterName = handleParameterName;
+        this.me = this;
+        initialize();
+    }
 
 
-	/**
-	 * This method initializes jPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getMainPanel() {
-		if (mainPanel == null) {
-			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.gridx = 0;
-			gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints.weightx = 1.0D;
-			gridBagConstraints.weighty = 1.0D;
-			gridBagConstraints.gridy = 1;
-			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			mainPanel = new JPanel();
-			mainPanel.setLayout(new GridBagLayout());
-			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.gridy = 0;
-			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints1.weightx = 0.0D;
-			gridBagConstraints1.weighty = 0.0D;
-			gridBagConstraints2.gridx = 0;
-			gridBagConstraints2.gridy = 3;
-			gridBagConstraints2.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints2.weightx = 0.0D;
-			gridBagConstraints2.weighty = 0.0D;
-			gridBagConstraints3.gridx = 0;
-			gridBagConstraints3.gridy = 2;
-			gridBagConstraints3.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints3.weightx = 4.0D;
-			gridBagConstraints3.weighty = 4.0D;
-			mainPanel.add(getQueryPanel(), gridBagConstraints1);
-			mainPanel.add(getTypesPanel(), gridBagConstraints3);
-			mainPanel.add(getButtonPanel(), gridBagConstraints2);
-			mainPanel.add(getSchemaPanel(), gridBagConstraints);
-		}
-		return mainPanel;
-	}
+    /**
+     * This method initializes this
+     * 
+     * @return void
+     */
+    private void initialize() {
+        this.setContentPane(getMainPanel());
+        this.setTitle("Configure Parameter with GME");
+        this.setFrameIcon(AnalyticalLookAndFeel.getMobiusIcon());
+        this.setSize(409, 400);
+
+    }
 
 
-	/**
-	 * This method initializes jPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getQueryPanel() {
-		if (queryPanel == null) {
-			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-			gridBagConstraints6.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints6.gridy = 0;
-			gridBagConstraints6.gridx = 0;
-			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints5.gridx = 1;
-			gridBagConstraints5.gridy = 0;
-			gridBagConstraints5.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints5.weightx = 1.0;
-			jLabel = new JLabel();
-			jLabel.setText("GME");
-			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-			gridBagConstraints4.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints4.gridy = 1;
-			gridBagConstraints4.anchor = java.awt.GridBagConstraints.CENTER;
-			gridBagConstraints4.gridwidth = 2;
-			gridBagConstraints4.gridx = 0;
-			queryPanel = new JPanel();
-			queryPanel.setLayout(new GridBagLayout());
-			queryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Discover Schemas",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, AnalyticalLookAndFeel.getPanelLabelColor()));
-			queryPanel.add(getQueryButton(), gridBagConstraints4);
-			queryPanel.add(jLabel, gridBagConstraints6);
-			queryPanel.add(getGme(), gridBagConstraints5);
-		}
-		return queryPanel;
-	}
+    /**
+     * This method initializes jPanel
+     * 
+     * @return javax.swing.JPanel
+     */
+    private JPanel getMainPanel() {
+        if (mainPanel == null) {
+            GridBagConstraints gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.weightx = 1.0D;
+            gridBagConstraints.weighty = 1.0D;
+            gridBagConstraints.gridy = 1;
+            GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+            GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+            GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+            mainPanel = new JPanel();
+            mainPanel.setLayout(new GridBagLayout());
+            gridBagConstraints1.gridx = 0;
+            gridBagConstraints1.gridy = 0;
+            gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints1.weightx = 0.0D;
+            gridBagConstraints1.weighty = 0.0D;
+            gridBagConstraints2.gridx = 0;
+            gridBagConstraints2.gridy = 3;
+            gridBagConstraints2.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints2.weightx = 0.0D;
+            gridBagConstraints2.weighty = 0.0D;
+            gridBagConstraints3.gridx = 0;
+            gridBagConstraints3.gridy = 2;
+            gridBagConstraints3.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints3.weightx = 4.0D;
+            gridBagConstraints3.weighty = 4.0D;
+            mainPanel.add(getQueryPanel(), gridBagConstraints1);
+            mainPanel.add(getTypesPanel(), gridBagConstraints3);
+            mainPanel.add(getButtonPanel(), gridBagConstraints2);
+            mainPanel.add(getSchemaPanel(), gridBagConstraints);
+        }
+        return mainPanel;
+    }
 
 
-	/**
-	 * This method initializes jPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getTypesPanel() {
-		if (typesPanel == null) {
-			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-			gridBagConstraints11.gridx = 1;
-			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints11.gridy = 2;
-			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
-			gridBagConstraints19.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints19.gridy = 3;
-			gridBagConstraints19.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints19.gridx = 0;
-			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
-			gridBagConstraints18.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints18.gridx = 1;
-			gridBagConstraints18.gridy = 3;
-			gridBagConstraints18.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints18.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints18.weighty = 1.0D;
-			gridBagConstraints18.weightx = 1.0;
-			paramNameLabel = new JLabel();
-			paramNameLabel.setText("Parameter Name");
-			arrayLabel = new JLabel();
-			arrayLabel.setText("Is Array");
-			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
-			gridBagConstraints16.gridx = 0;
-			gridBagConstraints16.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints16.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints16.gridy = 2;
-			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
-			gridBagConstraints15.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints15.gridy = 1;
-			gridBagConstraints15.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints15.gridx = 0;
-			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
-			gridBagConstraints14.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints14.gridx = 1;
-			gridBagConstraints14.gridy = 1;
-			gridBagConstraints14.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints14.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints14.weighty = 1.0D;
-			gridBagConstraints14.weightx = 1.0;
-			classLabel = new JLabel();
-			classLabel.setText("Class Name");
-			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
-			gridBagConstraints13.gridx = 0;
-			gridBagConstraints13.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints13.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints13.gridy = 0;
-			typeLabel = new JLabel();
-			typeLabel.setText("Element Type");
-			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
-			gridBagConstraints12.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints12.gridx = 1;
-			gridBagConstraints12.gridy = 0;
-			gridBagConstraints12.weightx = 1.0;
-			gridBagConstraints12.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints12.weighty = 1.0D;
-			gridBagConstraints12.insets = new Insets(2, 2, 2, 2);
-			typesPanel = new JPanel();
-			typesPanel.setLayout(new GridBagLayout());
-			typesPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Configure Parameter",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, AnalyticalLookAndFeel.getPanelLabelColor()));
-			typesPanel.add(getTypesComboBox(), gridBagConstraints12);
-			typesPanel.add(typeLabel, gridBagConstraints13);
-			typesPanel.add(classLabel, gridBagConstraints15);
-			typesPanel.add(getClassName(), gridBagConstraints14);
-			typesPanel.add(arrayLabel, gridBagConstraints16);
-			if (this.handleParameterName) {
-				typesPanel.add(paramNameLabel, gridBagConstraints19);
-				typesPanel.add(getParamName(), gridBagConstraints18);
-				typesPanel.add(getIsArrayCheckBox(), gridBagConstraints11);
-			}
-		}
-		return typesPanel;
-	}
+    /**
+     * This method initializes jPanel
+     * 
+     * @return javax.swing.JPanel
+     */
+    private JPanel getQueryPanel() {
+        if (queryPanel == null) {
+            GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+            gridBagConstraints6.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints6.gridy = 0;
+            gridBagConstraints6.gridx = 0;
+            GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+            gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints5.gridx = 1;
+            gridBagConstraints5.gridy = 0;
+            gridBagConstraints5.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints5.weightx = 1.0;
+            jLabel = new JLabel();
+            jLabel.setText("GME");
+            GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+            gridBagConstraints4.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints4.gridy = 1;
+            gridBagConstraints4.anchor = java.awt.GridBagConstraints.CENTER;
+            gridBagConstraints4.gridwidth = 2;
+            gridBagConstraints4.gridx = 0;
+            queryPanel = new JPanel();
+            queryPanel.setLayout(new GridBagLayout());
+            queryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Discover Schemas",
+                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+                javax.swing.border.TitledBorder.DEFAULT_POSITION, null, AnalyticalLookAndFeel.getPanelLabelColor()));
+            queryPanel.add(getQueryButton(), gridBagConstraints4);
+            queryPanel.add(jLabel, gridBagConstraints6);
+            queryPanel.add(getGme(), gridBagConstraints5);
+        }
+        return queryPanel;
+    }
 
 
-	/**
-	 * This method initializes jPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getButtonPanel() {
-		if (buttonPanel == null) {
-			buttonPanel = new JPanel();
-			buttonPanel.add(getDoneButton(), null);
-		}
-		return buttonPanel;
-	}
+    /**
+     * This method initializes jPanel
+     * 
+     * @return javax.swing.JPanel
+     */
+    private JPanel getTypesPanel() {
+        if (typesPanel == null) {
+            GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+            gridBagConstraints11.gridx = 1;
+            gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints11.gridy = 2;
+            GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
+            gridBagConstraints19.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints19.gridy = 3;
+            gridBagConstraints19.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints19.gridx = 0;
+            GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
+            gridBagConstraints18.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints18.gridx = 1;
+            gridBagConstraints18.gridy = 3;
+            gridBagConstraints18.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints18.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints18.weighty = 1.0D;
+            gridBagConstraints18.weightx = 1.0;
+            paramNameLabel = new JLabel();
+            paramNameLabel.setText("Parameter Name");
+            arrayLabel = new JLabel();
+            arrayLabel.setText("Is Array");
+            GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
+            gridBagConstraints16.gridx = 0;
+            gridBagConstraints16.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints16.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints16.gridy = 2;
+            GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
+            gridBagConstraints15.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints15.gridy = 1;
+            gridBagConstraints15.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints15.gridx = 0;
+            GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
+            gridBagConstraints14.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints14.gridx = 1;
+            gridBagConstraints14.gridy = 1;
+            gridBagConstraints14.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints14.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints14.weighty = 1.0D;
+            gridBagConstraints14.weightx = 1.0;
+            classLabel = new JLabel();
+            classLabel.setText("Class Name");
+            GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
+            gridBagConstraints13.gridx = 0;
+            gridBagConstraints13.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints13.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints13.gridy = 0;
+            typeLabel = new JLabel();
+            typeLabel.setText("Element Type");
+            GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+            gridBagConstraints12.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints12.gridx = 1;
+            gridBagConstraints12.gridy = 0;
+            gridBagConstraints12.weightx = 1.0;
+            gridBagConstraints12.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints12.weighty = 1.0D;
+            gridBagConstraints12.insets = new Insets(2, 2, 2, 2);
+            typesPanel = new JPanel();
+            typesPanel.setLayout(new GridBagLayout());
+            typesPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Configure Parameter",
+                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+                javax.swing.border.TitledBorder.DEFAULT_POSITION, null, AnalyticalLookAndFeel.getPanelLabelColor()));
+            typesPanel.add(getTypesComboBox(), gridBagConstraints12);
+            typesPanel.add(typeLabel, gridBagConstraints13);
+            typesPanel.add(classLabel, gridBagConstraints15);
+            typesPanel.add(getClassName(), gridBagConstraints14);
+            typesPanel.add(arrayLabel, gridBagConstraints16);
+            if (this.handleParameterName) {
+                typesPanel.add(paramNameLabel, gridBagConstraints19);
+                typesPanel.add(getParamName(), gridBagConstraints18);
+                typesPanel.add(getIsArrayCheckBox(), gridBagConstraints11);
+            }
+        }
+        return typesPanel;
+    }
 
 
-	
+    /**
+     * This method initializes jPanel
+     * 
+     * @return javax.swing.JPanel
+     */
+    private JPanel getButtonPanel() {
+        if (buttonPanel == null) {
+            buttonPanel = new JPanel();
+            buttonPanel.add(getDoneButton(), null);
+        }
+        return buttonPanel;
+    }
 
 
-	/**
-	 * This method initializes jButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getQueryButton() {
-		if (queryButton == null) {
-			queryButton = new JButton("Discover Schemas", AnalyticalLookAndFeel.getMobiusIcon());
-			queryButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
-					List namespaces = null;
-					try {
-						XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
-							.getGridService(gme.getText());
-						namespaces = handle.getNamespacesList();
+    /**
+     * This method initializes jButton
+     * 
+     * @return javax.swing.JButton
+     */
+    private JButton getQueryButton() {
+        if (queryButton == null) {
+            queryButton = new JButton("Discover Schemas", AnalyticalLookAndFeel.getMobiusIcon());
+            queryButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
+                    List namespaces = null;
+                    try {
+                        XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
+                            .getGridService(gme.getText());
+                        namespaces = handle.getNamespaceDomainList();
 
-						getNamespaceComboBox().removeAllItems();
-						for (int i = 0; i < namespaces.size(); i++) {
-							getNamespaceComboBox().addItem(namespaces.get(i));
-						}
+                        getNamespaceComboBox().removeAllItems();
+                        for (int i = 0; i < namespaces.size(); i++) {
+                            getNamespaceComboBox().addItem(namespaces.get(i));
+                        }
 
-					} catch (MobiusException e1) {
-						e1.printStackTrace();
-						JOptionPane.showMessageDialog(me,
-							"Please check the GME URL and make sure that you have the appropriate credentials!");
-					}
-				}
-			});
-		}
-		return queryButton;
-	}
-
-
-	private void initializeTypes(SchemaNode node) {
-		try {
-			Document doc = XMLUtilities.stringToDocument(node.getSchemaContents());
-			List complexTypes = doc.getRootElement().getChildren("complexType", doc.getRootElement().getNamespace());
-			List simpleTypes = doc.getRootElement().getChildren("simpleType", doc.getRootElement().getNamespace());
-			JComboBox typesBox = this.getTypesComboBox();
-			typesBox.removeAllItems();
-			for (int i = 0; i < complexTypes.size(); i++) {
-				Element element = (Element) complexTypes.get(i);
-				String name = element.getAttributeValue("name");
-				typesBox.addItem(name);
-			}
-			for (int i = 0; i < simpleTypes.size(); i++) {
-				Element element = (Element) simpleTypes.get(i);
-				String name = element.getAttributeValue("name");
-				typesBox.addItem(name);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+                    } catch (MobiusException e1) {
+                        e1.printStackTrace();
+                        JOptionPane.showMessageDialog(me,
+                            "Please check the GME URL and make sure that you have the appropriate credentials!");
+                    }
+                }
+            });
+        }
+        return queryButton;
+    }
 
 
-	/**
-	 * This method initializes jButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getDoneButton() {
-		if (doneButton == null) {
-			doneButton = new JButton(AnalyticalLookAndFeel.getSelectIcon());
-			doneButton.setText("Done");
-			doneButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
-					List writtenNamespaces = null;
-					try {
-						XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
-							.getGridService(gme.getText());
-						if (currentNamespace != null) {
-							writtenNamespaces = handle.cacheSchema(currentNamespace.getRaw(), schemaDir);
-						}
-					} catch (MobiusException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-						JOptionPane.showMessageDialog(me,
-							"Please check the GME URL and make sure that you have the appropriate credentials!");
-					}
-
-					File namespace2Mappings = new File(schemaDir.getAbsolutePath() + File.separator + ".."
-						+ File.separator + ".." + File.separator + ".." + File.separator + "namespace2package.mappings");
-
-					List mappings = new ArrayList();
-					if (namespace2Mappings.exists()) {
-						try {
-							BufferedReader reader = new BufferedReader(new FileReader(namespace2Mappings));
-							String line;
-							try {
-								line = reader.readLine();
-								while (line != null) {
-									mappings.add(line);
-									line = reader.readLine();
-								}
-							} catch (IOException e3) {
-								// TODO Auto-generated catch block
-								e3.printStackTrace();
-							}
-
-						} catch (FileNotFoundException e2) {
-							e2.printStackTrace();
-						}
-					}
-					if (writtenNamespaces != null) {
-						for (int i = 0; i < writtenNamespaces.size(); i++) {
-							Namespace namespace;
-							try {
-								namespace = new Namespace((String) writtenNamespaces.get(i));
-								StringTokenizer tokenizer = new StringTokenizer(namespace.getDomain(), ".", true);
-								StringBuffer packageName = new StringBuffer();
-								while (tokenizer.hasMoreElements()) {
-									packageName.insert(0, tokenizer.nextToken());
-								}
-								String newLine = namespace.getRaw() + "=" + packageName.toString() + ".bean";
-								//turns http: into http\: 
-								String newnewLine = newLine.replaceFirst(":","\\\\:");
-								newnewLine = newnewLine.replaceFirst("\\Q\\\\\\\\:\\E","\\\\:");
-								if (!mappings.contains(newnewLine)) {
-									mappings.add(newnewLine);
-								}
-							} catch (MalformedNamespaceException e1) {
-								e1.printStackTrace();
-							}
-						}
-					}
-
-					try {
-						FileWriter fw = new FileWriter(namespace2Mappings);
-						Iterator it = mappings.iterator();
-						while (it.hasNext()) {
-							String next = (String) it.next();
-							fw.write(next + "\n");
-						}
-						fw.close();
-					} catch (IOException e2) {
-						e2.printStackTrace();
-					}
-
-					//populate the data vector from the prior screen now......
-					int index = 0;
-					typeInfo.set(index++, className.getText());
-					if (handleParameterName) {
-						typeInfo.set(index++, paramName.getText());
-					}
-					if (currentNamespace != null) {
-						typeInfo.set(index++, "gme://" + currentNamespace.getRaw());
-					} else {
-						typeInfo.set(index++, null);
-					}
-					typeInfo.set(index++, currentType);
-					if (currentNamespace != null) {
-						typeInfo.set(index++, "./" + currentNamespace.getName() + ".xsd");
-					} else {
-						typeInfo.set(index++, null);
-					}
-
-					dispose();
-				}
-			});
-		}
-		return doneButton;
-	}
+    private void initializeTypes(SchemaNode node) {
+        try {
+            Document doc = XMLUtilities.stringToDocument(node.getSchemaContents());
+            List complexTypes = doc.getRootElement().getChildren("complexType", doc.getRootElement().getNamespace());
+            List simpleTypes = doc.getRootElement().getChildren("simpleType", doc.getRootElement().getNamespace());
+            JComboBox typesBox = this.getTypesComboBox();
+            typesBox.removeAllItems();
+            for (int i = 0; i < complexTypes.size(); i++) {
+                Element element = (Element) complexTypes.get(i);
+                String name = element.getAttributeValue("name");
+                typesBox.addItem(name);
+            }
+            for (int i = 0; i < simpleTypes.size(); i++) {
+                Element element = (Element) simpleTypes.get(i);
+                String name = element.getAttributeValue("name");
+                typesBox.addItem(name);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
-	/**
-	 * This method initializes jComboBox
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getTypesComboBox() {
-		if (typesComboBox == null) {
-			typesComboBox = new JComboBox();
-			typesComboBox.addItemListener(new java.awt.event.ItemListener() {
-				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					currentType = (String) typesComboBox.getSelectedItem();
-					if (currentType != null) {
+    /**
+     * This method initializes jButton
+     * 
+     * @return javax.swing.JButton
+     */
+    private JButton getDoneButton() {
+        if (doneButton == null) {
+            doneButton = new JButton(AnalyticalLookAndFeel.getSelectIcon());
+            doneButton.setText("Done");
+            doneButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
+                    List writtenNamespaces = null;
+                    try {
+                        XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
+                            .getGridService(gme.getText());
+                        if (currentNamespace != null) {
+                            writtenNamespaces = handle.cacheSchema(currentNamespace, schemaDir);
+                        }
+                    } catch (MobiusException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                        JOptionPane.showMessageDialog(me,
+                            "Please check the GME URL and make sure that you have the appropriate credentials!");
+                    }
 
-						currentNamespace = null;
-						try {
-							currentNamespace = new Namespace((String) getNamespaceComboBox().getSelectedItem()
-								+ (String) getSchemaComboBox().getSelectedItem());
-						} catch (MalformedNamespaceException e1) {
-							e1.printStackTrace();
-						}
-						StringTokenizer tokenizer = new StringTokenizer(currentNamespace.getDomain(), ".", true);
-						StringBuffer packageName = new StringBuffer();
-						while (tokenizer.hasMoreElements()) {
-							packageName.insert(0, tokenizer.nextToken());
-						}
+                    File namespace2Mappings = new File(schemaDir.getAbsolutePath() + File.separator + ".."
+                        + File.separator + ".." + File.separator + ".." + File.separator + "namespace2package.mappings");
 
-						char[] typeChars = currentType.toCharArray();
-						typeChars[0] = currentType.toUpperCase().charAt(0);
-						String type = new String(typeChars);
+                    List mappings = new ArrayList();
+                    if (namespace2Mappings.exists()) {
+                        try {
+                            BufferedReader reader = new BufferedReader(new FileReader(namespace2Mappings));
+                            String line;
+                            try {
+                                line = reader.readLine();
+                                while (line != null) {
+                                    mappings.add(line);
+                                    line = reader.readLine();
+                                }
+                            } catch (IOException e3) {
+                                // TODO Auto-generated catch block
+                                e3.printStackTrace();
+                            }
 
-						className.setText(packageName + ".bean." + type);
-						toggleArray();
-					}
+                        } catch (FileNotFoundException e2) {
+                            e2.printStackTrace();
+                        }
+                    }
+                    if (writtenNamespaces != null) {
+                        for (int i = 0; i < writtenNamespaces.size(); i++) {
 
-				}
-			});
-		}
-		return typesComboBox;
-	}
+                            Namespace namespace = (Namespace) writtenNamespaces.get(i);
+                            StringTokenizer tokenizer = new StringTokenizer(namespace.getDomain(), ".", true);
+                            StringBuffer packageName = new StringBuffer();
+                            while (tokenizer.hasMoreElements()) {
+                                packageName.insert(0, tokenizer.nextToken());
+                            }
+                            String newLine = namespace.getRaw() + "=" + packageName.toString() + ".bean";
+                            // turns http: into http\:
+                            String newnewLine = newLine.replaceFirst(":", "\\\\:");
+                            newnewLine = newnewLine.replaceFirst("\\Q\\\\\\\\:\\E", "\\\\:");
+                            if (!mappings.contains(newnewLine)) {
+                                mappings.add(newnewLine);
+                            }
 
+                        }
+                    }
 
-	/**
-	 * This method initializes jComboBox
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getNamespaceComboBox() {
-		if (namespaceComboBox == null) {
-			namespaceComboBox = new JComboBox();
-			namespaceComboBox.addItemListener(new java.awt.event.ItemListener() {
-				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
-					try {
+                    try {
+                        FileWriter fw = new FileWriter(namespace2Mappings);
+                        Iterator it = mappings.iterator();
+                        while (it.hasNext()) {
+                            String next = (String) it.next();
+                            fw.write(next + "\n");
+                        }
+                        fw.close();
+                    } catch (IOException e2) {
+                        e2.printStackTrace();
+                    }
 
-						XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
-							.getGridService(gme.getText());
-						List schemas = handle.getSchemaListForNamespace((String) namespaceComboBox.getSelectedItem());
+                    // populate the data vector from the prior screen now......
+                    int index = 0;
+                    typeInfo.set(index++, className.getText());
+                    if (handleParameterName) {
+                        typeInfo.set(index++, paramName.getText());
+                    }
+                    if (currentNamespace != null) {
+                        typeInfo.set(index++, "gme://" + currentNamespace.getRaw());
+                    } else {
+                        typeInfo.set(index++, null);
+                    }
+                    typeInfo.set(index++, currentType);
+                    if (currentNamespace != null) {
+                        typeInfo.set(index++, "./" + currentNamespace.getName() + ".xsd");
+                    } else {
+                        typeInfo.set(index++, null);
+                    }
 
-						getSchemaComboBox().removeAllItems();
-						for (int i = 0; i < schemas.size(); i++) {
-							getSchemaComboBox().addItem(schemas.get(i));
-						}
-					} catch (MobiusException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-						JOptionPane.showMessageDialog(me,
-							"Please check the GME URL and make sure that you have the appropriate credentials!");
-					}
-				}
-			});
-		}
-		return namespaceComboBox;
-	}
-
-
-	/**
-	 * This method initializes jComboBox
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getSchemaComboBox() {
-		if (schemaComboBox == null) {
-			schemaComboBox = new JComboBox();
-			schemaComboBox.addItemListener(new java.awt.event.ItemListener() {
-				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
-					try {
-						XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
-							.getGridService(gme.getText());
-						if (schemaComboBox.getSelectedItem() != null) {
-							SchemaNode node = handle.getSchema((String) namespaceComboBox.getSelectedItem()
-								+ (String) schemaComboBox.getSelectedItem(), false);
-							initializeTypes(node);
-						}
-					} catch (MobiusException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-						JOptionPane.showMessageDialog(me,
-							"Please check the GME URL and make sure that you have the appropriate credentials!");
-					}
-				}
-			});
-		}
-		return schemaComboBox;
-	}
-
-
-	/**
-	 * This method initializes schemaPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
-	private JPanel getSchemaPanel() {
-		if (schemaPanel == null) {
-			nameLabel = new JLabel();
-			nameLabel.setText("Name");
-			
-			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
-			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints10.gridy = 1;
-			gridBagConstraints10.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints10.gridx = 0;
-			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
-			gridBagConstraints9.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints9.gridy = 0;
-			gridBagConstraints9.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints9.gridx = 0;
-			namespaceLabel = new JLabel();
-			namespaceLabel.setText("Namespace");
-			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
-			gridBagConstraints8.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints8.gridy = 1;
-			gridBagConstraints8.weightx = 1.0;
-			gridBagConstraints8.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints8.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints8.weighty = 1.0D;
-			gridBagConstraints8.gridx = 1;
-			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-			gridBagConstraints7.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints7.gridy = 0;
-			gridBagConstraints7.weightx = 1.0;
-			gridBagConstraints7.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints7.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints7.weighty = 1.0D;
-			gridBagConstraints7.gridx = 1;
-			schemaPanel = new JPanel();
-			schemaPanel.setLayout(new GridBagLayout());
-			schemaPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Schema",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, AnalyticalLookAndFeel.getPanelLabelColor()));
-			schemaPanel.add(getNamespaceComboBox(), gridBagConstraints7);
-			schemaPanel.add(namespaceLabel, gridBagConstraints9);
-			schemaPanel.add(getSchemaComboBox(), gridBagConstraints8);
-			schemaPanel.add(nameLabel, gridBagConstraints10);
-		}
-		return schemaPanel;
-	}
+                    dispose();
+                }
+            });
+        }
+        return doneButton;
+    }
 
 
-	/**
-	 * This method initializes gme	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
-	private JTextField getGme() {
-		if (gme == null) {
-			gme = new JTextField();
-			gme.setText("http://localhost:8080/wsrf/services/GlobalModelExchange");
-		}
-		return gme;
-	}
+    /**
+     * This method initializes jComboBox
+     * 
+     * @return javax.swing.JComboBox
+     */
+    private JComboBox getTypesComboBox() {
+        if (typesComboBox == null) {
+            typesComboBox = new JComboBox();
+            typesComboBox.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                    currentType = (String) typesComboBox.getSelectedItem();
+                    if (currentType != null) {
+
+                        currentNamespace = null;
+                        try {
+                            currentNamespace = new Namespace((String) getNamespaceComboBox().getSelectedItem()
+                                + (String) getSchemaComboBox().getSelectedItem());
+                        } catch (MalformedNamespaceException e1) {
+                            e1.printStackTrace();
+                        }
+                        StringTokenizer tokenizer = new StringTokenizer(currentNamespace.getDomain(), ".", true);
+                        StringBuffer packageName = new StringBuffer();
+                        while (tokenizer.hasMoreElements()) {
+                            packageName.insert(0, tokenizer.nextToken());
+                        }
+
+                        char[] typeChars = currentType.toCharArray();
+                        typeChars[0] = currentType.toUpperCase().charAt(0);
+                        String type = new String(typeChars);
+
+                        className.setText(packageName + ".bean." + type);
+                        toggleArray();
+                    }
+
+                }
+            });
+        }
+        return typesComboBox;
+    }
 
 
-	/**
-	 * This method initializes jTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
-	private JTextField getClassName() {
-		if (className == null) {
-			className = new JTextField();
-			className.setEditable(false);
-		}
-		return className;
-	}
+    /**
+     * This method initializes jComboBox
+     * 
+     * @return javax.swing.JComboBox
+     */
+    private JComboBox getNamespaceComboBox() {
+        if (namespaceComboBox == null) {
+            namespaceComboBox = new JComboBox();
+            namespaceComboBox.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                    GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
+                    try {
+
+                        XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
+                            .getGridService(gme.getText());
+                        List schemas = handle.getSchemaListForNamespaceDomain((String) namespaceComboBox
+                            .getSelectedItem());
+
+                        getSchemaComboBox().removeAllItems();
+                        for (int i = 0; i < schemas.size(); i++) {
+                            Namespace schemaNS = (Namespace) schemas.get(i);
+                            getSchemaComboBox().addItem("/" + schemaNS.getVersion() + "/" + schemaNS.getName());
+                        }
+                    } catch (MobiusException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                        JOptionPane.showMessageDialog(me,
+                            "Please check the GME URL and make sure that you have the appropriate credentials!");
+                    }
+                }
+            });
+        }
+        return namespaceComboBox;
+    }
 
 
-	private void toggleArray(){
-		if (this.isArrayCheckBox.isSelected()) {
-			if(!className.getText().endsWith("[]")){
-				String newClassName = className.getText() + "[]";
-			   className.setText(newClassName);
-			}
-		} else {
-		   if(className.getText().endsWith("[]")){
-				className.setText(className.getText().substring(0,
-						className.getText().length() - 2));
-		   }
-		}
-	}
+    /**
+     * This method initializes jComboBox
+     * 
+     * @return javax.swing.JComboBox
+     */
+    private JComboBox getSchemaComboBox() {
+        if (schemaComboBox == null) {
+            schemaComboBox = new JComboBox();
+            schemaComboBox.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                    GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
+                    try {
+                        XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
+                            .getGridService(gme.getText());
+                        if (schemaComboBox.getSelectedItem() != null) {
+                            SchemaNode node = handle.getSchema(new Namespace((String) namespaceComboBox
+                                .getSelectedItem()
+                                + (String) schemaComboBox.getSelectedItem()), false);
+                            initializeTypes(node);
+                        }
+                    } catch (MobiusException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                        JOptionPane.showMessageDialog(me,
+                            "Please check the GME URL and make sure that you have the appropriate credentials!");
+                    }
+                }
+            });
+        }
+        return schemaComboBox;
+    }
 
 
-	/**
-	 * This method initializes paramName	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
-	private JTextField getParamName() {
-		if (paramName == null) {
-			paramName = new JTextField();
-		}
-		return paramName;
-	}
+    /**
+     * This method initializes schemaPanel
+     * 
+     * @return javax.swing.JPanel
+     */
+    private JPanel getSchemaPanel() {
+        if (schemaPanel == null) {
+            nameLabel = new JLabel();
+            nameLabel.setText("Name");
+
+            GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+            gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints10.gridy = 1;
+            gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints10.gridx = 0;
+            GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
+            gridBagConstraints9.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints9.gridy = 0;
+            gridBagConstraints9.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints9.gridx = 0;
+            namespaceLabel = new JLabel();
+            namespaceLabel.setText("Namespace");
+            GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+            gridBagConstraints8.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints8.gridy = 1;
+            gridBagConstraints8.weightx = 1.0;
+            gridBagConstraints8.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints8.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints8.weighty = 1.0D;
+            gridBagConstraints8.gridx = 1;
+            GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+            gridBagConstraints7.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints7.gridy = 0;
+            gridBagConstraints7.weightx = 1.0;
+            gridBagConstraints7.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints7.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints7.weighty = 1.0D;
+            gridBagConstraints7.gridx = 1;
+            schemaPanel = new JPanel();
+            schemaPanel.setLayout(new GridBagLayout());
+            schemaPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Schema",
+                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+                javax.swing.border.TitledBorder.DEFAULT_POSITION, null, AnalyticalLookAndFeel.getPanelLabelColor()));
+            schemaPanel.add(getNamespaceComboBox(), gridBagConstraints7);
+            schemaPanel.add(namespaceLabel, gridBagConstraints9);
+            schemaPanel.add(getSchemaComboBox(), gridBagConstraints8);
+            schemaPanel.add(nameLabel, gridBagConstraints10);
+        }
+        return schemaPanel;
+    }
 
 
-	/**
-	 * This method initializes isArrayCheckBox	
-	 * 	
-	 * @return javax.swing.JCheckBox	
-	 */
-	private JCheckBox getIsArrayCheckBox() {
-		if (isArrayCheckBox == null) {
-			isArrayCheckBox = new JCheckBox();
-			isArrayCheckBox.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); 
-					toggleArray();
-				}
-			});
-		}
-		return isArrayCheckBox;
-	}
-} //  @jve:decl-index=0:visual-constraint="10,10"
+    /**
+     * This method initializes gme
+     * 
+     * @return javax.swing.JTextField
+     */
+    private JTextField getGme() {
+        if (gme == null) {
+            gme = new JTextField();
+            gme.setText("http://localhost:8080/wsrf/services/GlobalModelExchange");
+        }
+        return gme;
+    }
+
+
+    /**
+     * This method initializes jTextField
+     * 
+     * @return javax.swing.JTextField
+     */
+    private JTextField getClassName() {
+        if (className == null) {
+            className = new JTextField();
+            className.setEditable(false);
+        }
+        return className;
+    }
+
+
+    private void toggleArray() {
+        if (this.isArrayCheckBox.isSelected()) {
+            if (!className.getText().endsWith("[]")) {
+                String newClassName = className.getText() + "[]";
+                className.setText(newClassName);
+            }
+        } else {
+            if (className.getText().endsWith("[]")) {
+                className.setText(className.getText().substring(0, className.getText().length() - 2));
+            }
+        }
+    }
+
+
+    /**
+     * This method initializes paramName
+     * 
+     * @return javax.swing.JTextField
+     */
+    private JTextField getParamName() {
+        if (paramName == null) {
+            paramName = new JTextField();
+        }
+        return paramName;
+    }
+
+
+    /**
+     * This method initializes isArrayCheckBox
+     * 
+     * @return javax.swing.JCheckBox
+     */
+    private JCheckBox getIsArrayCheckBox() {
+        if (isArrayCheckBox == null) {
+            isArrayCheckBox = new JCheckBox();
+            isArrayCheckBox.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    System.out.println("actionPerformed()");
+                    toggleArray();
+                }
+            });
+        }
+        return isArrayCheckBox;
+    }
+} // @jve:decl-index=0:visual-constraint="10,10"
