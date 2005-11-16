@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidPasswordFault;
 import gov.nih.nci.cagrid.gums.service.CredentialsManager;
+import gov.nih.nci.cagrid.gums.test.TestUtils;
 
 import java.io.File;
 import java.security.KeyPair;
@@ -18,9 +19,6 @@ import junit.framework.TestCase;
 
 import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.jdom.Document;
-import org.projectmobius.common.XMLUtilities;
-import org.projectmobius.db.ConnectionManager;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -30,7 +28,6 @@ import org.projectmobius.db.ConnectionManager;
  *          Exp $
  */
 public class TestCredentialsManager extends TestCase {
-	private static final String DB = "TEST_GUMS";
 
 	private static final String TABLE = "TEST_CREDENTIALS";
 
@@ -51,13 +48,7 @@ public class TestCredentialsManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		} 
 	}
 
 	public void testInsertObtainUserCredentials() {
@@ -67,13 +58,7 @@ public class TestCredentialsManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		} 
 	}
 	
 	public void testDeleteUserCredentials() {
@@ -99,13 +84,7 @@ public class TestCredentialsManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		} 
 	}
 	
 	public void testInsertObtainManyUserCredentials() {
@@ -117,12 +96,6 @@ public class TestCredentialsManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
 	
@@ -152,12 +125,6 @@ public class TestCredentialsManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
 
@@ -172,13 +139,7 @@ public class TestCredentialsManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		} 
 	}
 
 	private void createAndStoreCA() throws Exception {
@@ -252,14 +213,22 @@ public class TestCredentialsManager extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
-			Document doc = XMLUtilities.fileNameToDocument(DB_CONFIG);
-			ConnectionManager cm = new ConnectionManager(doc.getRootElement());
-			db = new Database(cm, DB);
-			db.destroyDatabase();
-			db.createDatabaseIfNeeded();
+			db = TestUtils.getDB();
+			assertEquals(0,db.getUsedConnectionCount());
 			CredentialsManager.CREDENTIALS_TABLE = TABLE;
 			cred = new CredentialsManager(db);
 			cred.destroyTable();
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+	}
+	
+	protected void tearDown() throws Exception {
+		super.setUp();
+		try {
+			assertEquals(0,db.getUsedConnectionCount());
+			db.destroyDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

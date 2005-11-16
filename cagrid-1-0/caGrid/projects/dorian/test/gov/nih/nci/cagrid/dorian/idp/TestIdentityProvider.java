@@ -58,12 +58,6 @@ public class TestIdentityProvider extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
 
@@ -93,12 +87,6 @@ public class TestIdentityProvider extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
 
@@ -154,13 +142,7 @@ public class TestIdentityProvider extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		} 
 	}
 
 	private BasicAuthCredential getAdminCreds() {
@@ -196,9 +178,21 @@ public class TestIdentityProvider extends TestCase {
 		try {
 			count = 0;
 		    db = TestUtils.getDB();
+		    assertEquals(0,db.getUsedConnectionCount());
 		    ca = TestUtils.getCA();
 		    TestResourceManager trm = new TestResourceManager(IDP_CONFIG);
 		    this.conf = (IdPConfiguration)trm.getResource(IdPConfiguration.RESOURCE);
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+	}
+	
+	protected void tearDown() throws Exception {
+		super.setUp();
+		try {
+			assertEquals(0,db.getUsedConnectionCount());
+			db.destroyDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

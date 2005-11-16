@@ -64,12 +64,6 @@ public class TestGUMSCertificateAuthority extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
 
@@ -98,12 +92,6 @@ public class TestGUMSCertificateAuthority extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
 
@@ -117,12 +105,6 @@ public class TestGUMSCertificateAuthority extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
 
@@ -141,12 +123,6 @@ public class TestGUMSCertificateAuthority extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
 
@@ -175,12 +151,6 @@ public class TestGUMSCertificateAuthority extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
 	
@@ -209,12 +179,6 @@ public class TestGUMSCertificateAuthority extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
 	
@@ -235,13 +199,7 @@ public class TestGUMSCertificateAuthority extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		} 
 	}
 	
 	public void testExpiredCACredentialsNoRenewal() {
@@ -270,13 +228,7 @@ public class TestGUMSCertificateAuthority extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		} 
 	}
 
 	private GUMSCertificateAuthorityConf getGumsCAConfAutoRenewalLong() {
@@ -357,7 +309,20 @@ public class TestGUMSCertificateAuthority extends TestCase {
 			db = new Database(cm, DB);
 			db.destroyDatabase();
 			db.createDatabaseIfNeeded();
+			assertEquals(0,db.getUsedConnectionCount());
 			GUMSCertificateAuthority.CA_TABLE = TABLE;
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+	}
+	
+	
+	protected void tearDown() throws Exception {
+		super.setUp();
+		try {
+			assertEquals(0,db.getUsedConnectionCount());
+			db.destroyDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

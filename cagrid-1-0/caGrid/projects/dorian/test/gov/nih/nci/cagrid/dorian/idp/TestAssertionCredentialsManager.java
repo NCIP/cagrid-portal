@@ -21,9 +21,6 @@ import junit.framework.TestCase;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.opensaml.InvalidCryptoException;
 import org.opensaml.SAMLAssertion;
-import org.w3c.dom.Element;
-
-import uk.org.ogsadai.common.XMLUtilities;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -76,13 +73,7 @@ public class TestAssertionCredentialsManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		} 
 	}
 
 	public void testAutoCredentialCreationRenew() {
@@ -150,12 +141,6 @@ public class TestAssertionCredentialsManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
 
@@ -204,13 +189,7 @@ public class TestAssertionCredentialsManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		} 
 	}
 
 	public void testProvidedCredentials() {
@@ -285,8 +264,20 @@ public class TestAssertionCredentialsManager extends TestCase {
 		super.setUp();
 		try {
 			db = TestUtils.getDB();
+			assertEquals(0,db.getUsedConnectionCount());
 			ca = TestUtils.getCA();
 
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+	}
+	
+	protected void tearDown() throws Exception {
+		super.setUp();
+		try {
+			assertEquals(0,db.getUsedConnectionCount());
+			db.destroyDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

@@ -75,13 +75,7 @@ public class TestTrustManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		} 
 	}
 	
 	private TrustedIdP getTrustedIdp(String name) throws Exception{
@@ -109,6 +103,7 @@ public class TestTrustManager extends TestCase {
 		super.setUp();
 		try {
 			db = TestUtils.getDB();
+			assertEquals(0,db.getUsedConnectionCount());
 			IFSConfiguration conf = new IFSConfiguration();
 			conf.setMinimumIdPNameLength(MIN_NAME_LENGTH);
 			conf.setMaximumIdPNameLength(MAX_NAME_LENGTH);
@@ -120,7 +115,18 @@ public class TestTrustManager extends TestCase {
 		}
 	}
 	
-	public SAMLAuthenticationMethod[] getRandomMethodList(){
+	protected void tearDown() throws Exception {
+		super.setUp();
+		try {
+			assertEquals(0,db.getUsedConnectionCount());
+			db.destroyDatabase();
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+	}
+	
+	private SAMLAuthenticationMethod[] getRandomMethodList(){
 		double val = Math.random();	
 		int size = getAuthenticationMethods().size()+1;
 		double num = 1/((double)size);

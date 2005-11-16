@@ -30,11 +30,14 @@ public class TestGUMSManager extends TestCase{
     		RequiredAttributesManager atts = jm.getUserAttributeManager();
     		assertNotNull(atts);
     		atts.getRequiredAttributes();
+    		assertEquals(0,jm.getDatabase().getUsedConnectionCount());
     		jm.getDatabase().destroyDatabase();
     	}catch (Exception e) {
     		FaultUtil.printFault(e);
 			assertTrue(false);
 		}
     }
+    
+
 
 }

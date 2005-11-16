@@ -46,13 +46,7 @@ public class TestMetadataManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		} 
 	}
 
 	public void testUpdate() {
@@ -87,12 +81,6 @@ public class TestMetadataManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
 
@@ -117,20 +105,26 @@ public class TestMetadataManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		} 
 	}
 
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
 			db=TestUtils.getDB();
+			assertEquals(0,db.getUsedConnectionCount());
 			GUMSCertificateAuthority.CA_TABLE = TABLE;
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+	}
+	
+	protected void tearDown() throws Exception {
+		super.setUp();
+		try {
+			assertEquals(0,db.getUsedConnectionCount());
+			db.destroyDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

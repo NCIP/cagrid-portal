@@ -4,14 +4,11 @@ import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.ifs.bean.AttributeDescriptor;
 import gov.nih.nci.cagrid.gums.service.RequiredAttributesManager;
+import gov.nih.nci.cagrid.gums.test.TestUtils;
 
 import java.io.File;
 
 import junit.framework.TestCase;
-
-import org.jdom.Document;
-import org.projectmobius.common.XMLUtilities;
-import org.projectmobius.db.ConnectionManager;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -21,7 +18,6 @@ import org.projectmobius.db.ConnectionManager;
  *          Exp $
  */
 public class TestRequiredAttributesManager extends TestCase {
-	private static final String DB = "TEST_GUMS";
 
 	private static final String TABLE = "TEST_ATTRIBUTES";
 
@@ -51,12 +47,6 @@ public class TestRequiredAttributesManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception ex) {
-				FaultUtil.printFault(ex);
-			}
 		}
 	}
 
@@ -81,12 +71,6 @@ public class TestRequiredAttributesManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception ex) {
-				FaultUtil.printFault(ex);
-			}
 		}
 	}
 
@@ -109,13 +93,7 @@ public class TestRequiredAttributesManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception ex) {
-				FaultUtil.printFault(ex);
-			}
-		}
+		} 
 	}
 
 	private void compareAttributes(AttributeDescriptor[] gold, int goldSize,
@@ -146,14 +124,21 @@ public class TestRequiredAttributesManager extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
-			Document doc = XMLUtilities.fileNameToDocument(RESOURCES_DIR
-					+ File.separator + "db-config.xml");
-			ConnectionManager cm = new ConnectionManager(doc.getRootElement());
-			db = new Database(cm, DB);
-			db.destroyDatabase();
-			db.createDatabaseIfNeeded();
+			db = TestUtils.getDB();
+			assertEquals(0,db.getUsedConnectionCount());
 			ram = new RequiredAttributesManager(db, TABLE);
 			ram.destroyTable();
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+	}
+	
+	protected void tearDown() throws Exception {
+		super.setUp();
+		try {
+			assertEquals(0,db.getUsedConnectionCount());
+			db.destroyDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

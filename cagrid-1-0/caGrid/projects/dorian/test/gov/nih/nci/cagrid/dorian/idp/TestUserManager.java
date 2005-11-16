@@ -204,13 +204,7 @@ public class TestUserManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		} 
 	}
 
 	public void testChangeStatus() {
@@ -228,12 +222,6 @@ public class TestUserManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 
 	}
@@ -252,14 +240,7 @@ public class TestUserManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
+		} 
 	}
 
 	public void testChangePassword() {
@@ -277,13 +258,7 @@ public class TestUserManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		} 
 
 	}
 	
@@ -314,13 +289,7 @@ public class TestUserManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		} 
 
 	}
 	
@@ -372,13 +341,7 @@ public class TestUserManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		} 
 	}
 
 	public void testFindUsers() {
@@ -541,12 +504,6 @@ public class TestUserManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} finally {
-			try {
-				db.destroyDatabase();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
 
@@ -587,6 +544,7 @@ public class TestUserManager extends TestCase {
 		try {
 			count = 0;
 		    db = TestUtils.getDB();
+		    assertEquals(0,db.getUsedConnectionCount());
 		    TestResourceManager trm = new TestResourceManager(IDP_CONFIG);
 		    this.conf = (IdPConfiguration)trm.getResource(IdPConfiguration.RESOURCE);
 		} catch (Exception e) {
@@ -594,6 +552,15 @@ public class TestUserManager extends TestCase {
 			assertTrue(false);
 		}
 	}
-
-
+	
+	protected void tearDown() throws Exception {
+		super.setUp();
+		try {
+			assertEquals(0,db.getUsedConnectionCount());
+			db.destroyDatabase();
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+	}
 }
