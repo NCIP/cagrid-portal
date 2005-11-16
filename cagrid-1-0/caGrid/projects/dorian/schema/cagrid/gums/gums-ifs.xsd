@@ -4,16 +4,17 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
 	xmlns:ifs="http://cagrid.nci.nih.gov/gums/ifs/bean" xmlns:wsbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd">
 	
-	
-	   <xsd:complexType name="authenticationPolicy">
+	  <xsd:complexType name="trustedIdP">
 			<xsd:sequence>
-				<xsd:element name="method" type="ifs:authenticationMethod"/>
-				<xsd:element name="policyClass" type="xsd:string"/>
+			    <xsd:element name="name" type="xsd:string"/>
+				<xsd:element name="PolicyClass" type="xsd:string"/>
+				<xsd:element name="IdPCertificate" type="xsd:string"/>
+			    <xsd:element name="AuthenticationMethod" minOccurs="0" maxOccurs="unbounded" type="ifs:SAMLAuthenticationMethod"/>	
 			</xsd:sequence>
 	    </xsd:complexType>
-	
+	    
 
-	  <xsd:simpleType name="authenticationMethod">
+	  <xsd:simpleType name="SAMLAuthenticationMethod">
   			<xsd:restriction base="xsd:string">
    				<xsd:enumeration value="urn:oasis:names:tc:SAML:1.0:am:password"/>
    				<xsd:enumeration value="urn:ietf:rfc:1510"/>
@@ -28,10 +29,16 @@
    				<xsd:enumeration value="urn:oasis:names:tc:SAML:1.0:am:unspecified"/>				
   			</xsd:restriction>
  	  </xsd:simpleType>
+ 	  
+ 	  	  <xsd:complexType name="InvalidTrustedIdPFault">
+				<xsd:complexContent>
+					<xsd:extension base="wsbf:BaseFaultType" />
+				</xsd:complexContent>
+	 </xsd:complexType>
 	
 	
 	
-	<!- =================================================================-->
+	<!-- =================================================================-->
 	
 	    <xsd:complexType name="attributeDescriptor">
 			<xsd:sequence>
