@@ -15,7 +15,7 @@ import org.projectmobius.db.Query;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: Database.java,v 1.3 2005-11-16 20:32:38 langella Exp $
+ * @version $Id: Database.java,v 1.4 2005-11-16 21:25:49 langella Exp $
  */
 public class Database extends GUMSObject {
 
@@ -103,6 +103,19 @@ public class Database extends GUMSObject {
 	public void update(String sql) throws GUMSInternalFault {
 		try {
 			Query.update(gums, sql);
+		} catch (Exception e) {
+			//logError(e.getMessage(), e);
+			GUMSInternalFault fault = new GUMSInternalFault();
+			fault.setFaultString("Unexpected Database Error");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);	
+			throw (GUMSInternalFault)helper.getFault();
+		}
+	}
+	
+	public long insertGetId(String sql) throws GUMSInternalFault {
+		try {
+			return Query.insertGetId(gums, sql);
 		} catch (Exception e) {
 			//logError(e.getMessage(), e);
 			GUMSInternalFault fault = new GUMSInternalFault();

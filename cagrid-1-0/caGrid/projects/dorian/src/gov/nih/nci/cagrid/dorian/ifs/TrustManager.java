@@ -46,6 +46,7 @@ public class TrustManager extends GUMSObject {
 		if (!dbBuilt) {
 			if (!this.db.tableExists(TRUST_MANAGER_TABLE)) {
 				String trust = "CREATE TABLE " + TRUST_MANAGER_TABLE + " ("
+				        + "ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
 						+ "NAME VARCHAR(255) NOT NULL,"
 						+ "IDP_SUBJECT VARCHAR(255) NOT NULL,"
 						+ "POLICY_CLASS VARCHAR(255) NOT NULL,"
@@ -54,38 +55,36 @@ public class TrustManager extends GUMSObject {
 				db.update(trust);
 
 				String methods = "CREATE TABLE " + AUTH_METHODS_TABLE + " ("
-						+ "NAME VARCHAR(255) NOT NULL,"
+						+ "ID INT NOT NULL,"
 						+ "METHOD VARCHAR(255) NOT NULL,"
-						+ "INDEX document_index (NAME));";
+						+ "INDEX document_index (ID));";
 				db.update(methods);
 			}
 			dbBuilt = true;
 		}
 	}
 
-	public void removeTrustedIdP(String name) throws GUMSInternalFault {
+	public void removeTrustedIdP(long id) throws GUMSInternalFault {
 		buildDatabase();
-		db.update("delete from " + TRUST_MANAGER_TABLE + " WHERE NAME='" + name
-				+ "'");
-		removeAuthenticationMethodsForTrustedIdP(name);
+		db.update("delete from " + TRUST_MANAGER_TABLE + " WHERE ID=" + id);
+		removeAuthenticationMethodsForTrustedIdP(id);
 	}
 
-	private void removeAuthenticationMethodsForTrustedIdP(String name)
+	private void removeAuthenticationMethodsForTrustedIdP(long id)
 			throws GUMSInternalFault {
 		buildDatabase();
-		db.update("delete from " + AUTH_METHODS_TABLE + " WHERE NAME='" + name
-				+ "'");
+		db.update("delete from " + AUTH_METHODS_TABLE + " WHERE ID=" +id);
 	}
 
 	public SAMLAuthenticationMethod[] getAuthenticationMethods(
-			String trustedIdPName) throws GUMSInternalFault {
+			long id) throws GUMSInternalFault {
 		buildDatabase();
 		Connection c = null;
 		try {
 			c = db.getConnectionManager().getConnection();
 			Statement s = c.createStatement();
 			ResultSet rs = s.executeQuery("select * from " + AUTH_METHODS_TABLE
-					+ " where NAME='" + trustedIdPName + "'");
+					+ " where ID=" + id);
 			List methods = new ArrayList();
 			while (rs.next()) {
 				SAMLAuthenticationMethod method = SAMLAuthenticationMethod
@@ -126,6 +125,7 @@ public class TrustManager extends GUMSObject {
 			List idps = new ArrayList();
 			while (rs.next()) {
 				TrustedIdP idp = new TrustedIdP();
+				idp.setId(rs.getLong("ID"));
 				idp.setName(rs.getString("NAME"));
 				idp.setIdPCertificate(rs.getString("IDP_CERTIFICATE"));
 				idp.setPolicyClass(rs.getString("POLICY_CLASS"));
@@ -139,7 +139,7 @@ public class TrustManager extends GUMSObject {
 				list[i] = (TrustedIdP) idps.get(i);
 				list[i]
 						.setAuthenticationMethod(getAuthenticationMethods(list[i]
-								.getName()));
+								.getId()));
 			}
 			return list;
 
@@ -170,6 +170,7 @@ public class TrustManager extends GUMSObject {
 			TrustedIdP idp = null;
 			if (rs.next()) {
 				idp = new TrustedIdP();
+				idp.setId(rs.getLong("ID"));
 				idp.setName(rs.getString("NAME"));
 				idp.setIdPCertificate(rs.getString("IDP_CERTIFICATE"));
 				idp.setPolicyClass(rs.getString("POLICY_CLASS"));
@@ -181,7 +182,7 @@ public class TrustManager extends GUMSObject {
 			}
 			rs.close();
 			s.close();
-			idp.setAuthenticationMethod(getAuthenticationMethods(idp.getName()));
+			idp.setAuthenticationMethod(getAuthenticationMethods(idp.getId()));
 			return idp;
 		} catch(InvalidTrustedIdPFault f){
 			throw f;
@@ -211,6 +212,7 @@ try {
 	TrustedIdP idp = null;
 	if (rs.next()) {
 		idp = new TrustedIdP();
+		idp.setId(rs.getLong("ID"));
 		idp.setName(rs.getString("NAME"));
 		idp.setIdPCertificate(rs.getString("IDP_CERTIFICATE"));
 		idp.setPolicyClass(rs.getString("POLICY_CLASS"));
@@ -222,7 +224,7 @@ try {
 	}
 	rs.close();
 	s.close();
-	idp.setAuthenticationMethod(getAuthenticationMethods(idp.getName()));
+	idp.setAuthenticationMethod(getAuthenticationMethods(idp.getId()));
 	return idp;
 } catch(InvalidTrustedIdPFault f){
 	throw f;
@@ -284,19 +286,20 @@ try {
 			String policyClass = idp.getPolicyClass();
 
 			try {
-				db.update("INSERT INTO " + TRUST_MANAGER_TABLE + " SET NAME='"
+				long id = db.insertGetId("INSERT INTO " + TRUST_MANAGER_TABLE + " SET NAME='"
 						+ name + "',IDP_SUBJECT='"
 						+ cert.getSubjectDN().toString() + "', POLICY_CLASS='"
 						+ policyClass + "',IDP_CERTIFICATE='"
 						+ idp.getIdPCertificate() + "'");
+				idp.setId(id);
 				for (int i = 0; i < idp.getAuthenticationMethod().length; i++) {
-					this.addAuthenticationMethod(name, idp
+					this.addAuthenticationMethod(idp.getId(), idp
 							.getAuthenticationMethod(i));
 				}
 
 			} catch (Exception e) {
 				try {
-					this.removeTrustedIdP(name);
+					this.removeTrustedIdP(idp.getId());
 				} catch (Exception ex) {
 					logError(ex.getMessage(), ex);
 				}
@@ -319,10 +322,10 @@ try {
 
 	}
 
-	private synchronized void addAuthenticationMethod(String idpName,
+	private synchronized void addAuthenticationMethod(long id,
 			SAMLAuthenticationMethod method) throws GUMSInternalFault {
-		db.update("INSERT INTO " + AUTH_METHODS_TABLE + " SET NAME='" + idpName
-				+ "',METHOD='" + method.getValue() + "'");
+		db.update("INSERT INTO " + AUTH_METHODS_TABLE + " SET ID=" +id
+				+ ",METHOD='" + method.getValue() + "'");
 	}
 
 	public boolean determineTrustedIdPExistsByDN(String subject)
@@ -357,6 +360,7 @@ try {
 		}
 		return exists;
 	}
+	
 
 	public boolean determineTrustedIdPExistsByName(String name)
 			throws GUMSInternalFault {

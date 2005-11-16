@@ -58,7 +58,7 @@ public class TestTrustManager extends TestCase {
 			TrustedIdP idp = getTrustedIdp(name);
 			tm.addTrustedIdP(idp);
 			assertEquals(1, tm.getTrustedIdPs().length);
-			assertEquals(idp.getAuthenticationMethod().length,tm.getAuthenticationMethods(idp.getName()).length);
+			assertEquals(idp.getAuthenticationMethod().length,tm.getAuthenticationMethods(idp.getId()).length);
 			TrustedIdP[] list =tm.getTrustedIdPs();
 			assertEquals(idp,list[0]);
 			assertTrue(tm.determineTrustedIdPExistsByName(name));
@@ -70,9 +70,9 @@ public class TestTrustManager extends TestCase {
 			assertTrue(tm.determineTrustedIdPExistsByDN(cert.getSubjectDN().toString()));
 			assertEquals(idp,tm.getTrustedIdPByDN(cert.getSubjectDN().toString()));
 			
-			tm.removeTrustedIdP(idp.getName());
+			tm.removeTrustedIdP(idp.getId());
 			assertEquals(0, tm.getTrustedIdPs().length);
-			assertEquals(0,tm.getAuthenticationMethods(idp.getName()).length);
+			assertEquals(0,tm.getAuthenticationMethods(idp.getId()).length);
 			}		
 
 		} catch (Exception e) {
