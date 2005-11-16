@@ -26,7 +26,7 @@
     <property name="test.src.dir" location="${test.dir}/src/java" />
     <property name="test.classes.dir" location="${classes.dir}/test" />
     <property name="test.lib.dir" location="${test.dir}/lib" />
-    <property name="test.project.jar" location="${jars.dir}/${project.name}-tests-${project.version}.jar" />
+    <property name="test.project.jar" location="${jar.dir}/${project.name}-tests-${project.version}.jar" />
     
     <!-- Load common util path -->
     <import file="../../antfiles/ant-utilities.xml" />
@@ -97,7 +97,7 @@
     <!-- ============================================================== -->
     <!-- Creates the jar files                                          -->
     <!-- ============================================================== -->
-    <target name="jarTests" depends="compile" description="Builds the Jar Files">
+    <target name="jar-tests" depends="compile-tests" description="Builds the Jar Files">
         <mkdir dir="${jar.dir}" />
         <jar jarfile="${test.project.jar}" basedir="${test.classes.dir}">
             <manifest>
@@ -134,6 +134,6 @@
     <!-- ============================================================== -->
     <!-- Builds from scratch                                                -->
     <!-- ============================================================== -->
-    <target name="all" description="Builds the entire application" depends="clean,jar,jarTests" />
+    <target name="all" description="Builds the entire application" depends="clean,jar,jar-tests" />
 </project>
 
