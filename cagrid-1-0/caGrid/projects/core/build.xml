@@ -20,6 +20,17 @@
     <property name="jar.dir" value="${build.dir}/jars" />
     <property name="project.jarfile" value="${jar.dir}/${project.name}-${project.version}.jar" />
     <property name="lib.dir" value="${basedir}/lib" />
+    
+    <!-- testing stuff -->
+    <property name="test.dir" location="${basedir}/test" />
+    <property name="test.src.dir" location="${test.dir}/src/java" />
+    <property name="test.classes.dir" location="${classes.dir}/test" />
+    <property name="test.lib.dir" location="${test.dir}/lib" />
+    <property name="test.project.jar" location="${jars.dir}/${project.name}-tests-${project.version}.jar" />
+    
+    <!-- Load common util path -->
+    <import file="../../antfiles/ant-utilities.xml" />
+    <import file="../../antfiles/test-utilities.xml" />
 
 
     <!-- =============================================================== -->
@@ -35,7 +46,7 @@
     <!-- =============================================================== -->
     <!-- Prepares the build directory                                    -->
     <!-- =============================================================== -->
-    <target name="prepare">
+    <target name="prepare" depends="configure">
         <tstamp />
         <mkdir dir="${build.dir}" />
     </target>
@@ -50,6 +61,16 @@
             <classpath refid="build.classpath" />
         </javac>
     </target>
+    
+    <!-- =============================================================== -->
+    <!-- Compiles the test source code                                        -->
+    <!-- =============================================================== -->
+    <target name="compile-tests" depends="prepare" description="compiles.">
+        <mkdir dir="${test.classes.dir}" />
+        <javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" source="1.3" target="1.1" debug="on" deprecation="off" optimize="off">
+            <classpath refid="build.classpath" />
+        </javac>
+    </target>
 
 
     <!-- ============================================================== -->
@@ -61,7 +82,7 @@
 
 
     <!-- ============================================================== -->
-    <!-- Creates the jar files                                          -->
+    <!-- Creates the test jar files                                          -->
     <!-- ============================================================== -->
     <target name="jar" depends="compile" description="Builds the Jar Files">
         <mkdir dir="${jar.dir}" />
@@ -72,11 +93,47 @@
             </manifest>
         </jar>
     </target>
+    
+    <!-- ============================================================== -->
+    <!-- Creates the jar files                                          -->
+    <!-- ============================================================== -->
+    <target name="jarTests" depends="compile" description="Builds the Jar Files">
+        <mkdir dir="${jar.dir}" />
+        <jar jarfile="${test.project.jar}" basedir="${test.classes.dir}">
+            <manifest>
+                <attribute name="Built-By" value="${user.name}" />
+            </manifest>
+        </jar>
+    </target>
+    
+    <target name="build-my-filters" depends="platformCheck">
+        <property name="my.classpath" refid="build.classpath" />
+        <filter token="classpath" value="${my.classpath}" />
+        <filter token="file.separator" value="${file.separator}" />
+        <filter token="base.dir" value="${basedir}" />
+        <filter token="test.dir" value="${test.dir}" />
+        <filter token="src.dir" value="${src.dir}" />
+        <filter token="lib.dir" value="${lib.dir}" />
+        <filter token="log.dir" value="${log.dir}" />
+        <filter token="scripts.dir" value="${scripts.dir}" />
+        <filter token="build.dir" value="${build.dir}" />
+        <filter token="classes.dir" value="${classes.dir}" />
+        <filter token="doc.dir" value="${doc.dir}" />
+        <filter token="logger.arg" value="-Djava.util.logging.config.file=${basedir}${file.separator}logging.properties" />
+        <filter token="attributeMarker" value="${attributeMarker}" />
+        <filter token="platformScriptSuffix" value="${platformScriptSuffix}" />
+        <filter token="pause.command" value="${pause.command}" />
+    </target>
+    
+    
+    <target name="configure" depends="platformCheck,build-common-filters,build-my-filters,configure-dart-templates" description="Generates all the system files based off templates">
+    </target>
+    
 
 
     <!-- ============================================================== -->
     <!-- Builds from scratch                                                -->
     <!-- ============================================================== -->
-    <target name="all" description="Builds the entire application" depends="clean,compile,jar" />
+    <target name="all" description="Builds the entire application" depends="clean,jar,jarTests" />
 </project>
 
