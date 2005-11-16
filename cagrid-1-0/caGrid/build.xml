@@ -23,7 +23,6 @@
 		<mkdir dir="${tmp.dir}" />
 	</target>
 
-
 	<target name="build-core" depends="prepare" description="Builds the core">
 		<ant inheritall="false" antfile="projects/core/build.xml" target="jar" />
 	</target>
