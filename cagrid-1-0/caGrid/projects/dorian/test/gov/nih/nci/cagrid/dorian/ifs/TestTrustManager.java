@@ -54,7 +54,7 @@ public class TestTrustManager extends TestCase {
 			for(int i=0; i<times; i++){
 			assertNotNull(tm);
 			assertEquals(0, tm.getTrustedIdPs().length);
-			String name = "Test Idp";
+			String name = "Test IdP";
 			TrustedIdP idp = getTrustedIdp(name);
 			tm.addTrustedIdP(idp);
 			assertEquals(1, tm.getTrustedIdPs().length);
@@ -62,11 +62,14 @@ public class TestTrustManager extends TestCase {
 			TrustedIdP[] list =tm.getTrustedIdPs();
 			assertEquals(idp,list[0]);
 			assertTrue(tm.determineTrustedIdPExistsByName(name));
+			TrustedIdP temp = tm.getTrustedIdPByName(list[0].getName());
+			assertEquals(idp,temp);
 			
 			StringReader reader = new StringReader(idp.getIdPCertificate());
 			X509Certificate cert = CertUtil.loadCertificate(reader);
-			assertTrue(tm.determineTrustedIdPExistsBySubject(cert.getSubjectDN().toString()));
-	
+			assertTrue(tm.determineTrustedIdPExistsByDN(cert.getSubjectDN().toString()));
+			assertEquals(idp,tm.getTrustedIdPByDN(cert.getSubjectDN().toString()));
+			
 			tm.removeTrustedIdP(idp.getName());
 			assertEquals(0, tm.getTrustedIdPs().length);
 			assertEquals(0,tm.getAuthenticationMethods(idp.getName()).length);
