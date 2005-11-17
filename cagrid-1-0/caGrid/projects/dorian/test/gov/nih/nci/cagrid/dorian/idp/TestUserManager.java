@@ -32,8 +32,6 @@ public class TestUserManager extends TestCase {
 	private Database db;
 
 	private int count = 0;
-
-	private AssertionCredentialsManager properties;
 	
 	private IdPConfiguration conf;
 
