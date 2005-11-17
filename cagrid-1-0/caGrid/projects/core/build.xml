@@ -12,7 +12,7 @@
     <property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
 
     <!-- Information -->
-    <property name="project.name" value="caGrid-metadata" />
+    <property name="project.name" value="caGrid-core" />
     <property name="project.version" value="1.0" />
 
     <property name="src.dir" value="${basedir}/src" />
