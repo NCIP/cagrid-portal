@@ -9,10 +9,14 @@
 
 	<property name="tmp.dir" value="tmp" />
 	<property name="test.dir" value="${basedir}/test" />
+	<property name="test.logs.dir" value="${test.dir}/logs" />
 
 	<!-- IMPORT THE UTILITIES TARGETS -->
 	<import file="antfiles/ant-utilities.xml" />
 	<import file="antfiles/test-utilities.xml" />
+	
+	<!-- IMPORT THE TEST TARGET -->
+	<import file="test/test.xml" />
 
 	<!-- =============================================================== -->
 	<!-- Prepares the build directory                                    -->

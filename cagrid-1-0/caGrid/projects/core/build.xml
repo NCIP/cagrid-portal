@@ -26,18 +26,45 @@
     <property name="test.src.dir" location="${test.dir}/src/java" />
     <property name="test.classes.dir" location="${classes.dir}/test" />
     <property name="test.lib.dir" location="${test.dir}/lib" />
+    <property name="test.logs.dir" location="${test.dir}/logs" />
     <property name="test.project.jar" location="${jar.dir}/${project.name}-tests-${project.version}.jar" />
     
     <!-- Load common util path -->
     <import file="../../antfiles/ant-utilities.xml" />
     <import file="../../antfiles/test-utilities.xml" />
+    
+    <import file="test/test.xml" />
 
 
     <!-- =============================================================== -->
-    <!-- The Classpath                                                   -->
+    <!-- The Build Classpath                                                   -->
     <!-- =============================================================== -->
     <path id="build.classpath">
         <fileset dir="${lib.dir}">
+            <include name="**/*.jar" />
+        </fileset>
+    </path>
+    
+    
+    <!-- =============================================================== -->
+    <!-- The Run Classpath                                                   -->
+    <!-- =============================================================== -->
+    <path id="run.classpath">
+        <fileset dir="${lib.dir}">
+            <include name="**/*.jar" />
+        </fileset>
+    </path>
+    
+    <!-- =============================================================== -->
+    <!-- The Test Classpath                                                   -->
+    <!-- =============================================================== -->
+    <path id="test.classpath">
+        <pathelement path="${classes.dir}" />
+        <pathelement path="${test.classes.dir}" />
+        <fileset dir="${lib.dir}">
+            <include name="**/*.jar" />
+        </fileset>
+        <fileset dir="${test.lib.dir}">
             <include name="**/*.jar" />
         </fileset>
     </path>

@@ -1,0 +1,16 @@
+<!-- ======================================================================= -->
+<!-- caGrid Utilities build file                                             -->
+<!-- ======================================================================= -->
+<project name="caGrid_tests_harness" basedir=".">
+
+	<property name="junit.results.dir" value="${test.logs.dir}/junit" />
+	
+	<!-- call the test target for each project and aggregates the log resutls  -->
+    <target name="test">
+        <sequential>
+        	<ant inheritall="false" antfile="projects/core/build.xml" target="test" >
+        	  <property name="junit.results.dir" value="${junit.results.dir}" />
+        	</ant>
+        </sequential>
+    </target>	
+</project>
