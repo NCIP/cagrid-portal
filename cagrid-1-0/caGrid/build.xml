@@ -13,10 +13,10 @@
 
 	<!-- IMPORT THE UTILITIES TARGETS -->
 	<import file="antfiles/ant-utilities.xml" />
-	<import file="antfiles/test-utilities.xml" />
+	<import file="antfiles/test-utilities.xml" /> 
 	
 	<!-- IMPORT THE TEST TARGET -->
-	<import file="test/test.xml" />
+	<import file="test/test.xml" /> 
 
 	<!-- =============================================================== -->
 	<!-- Prepares the build directory                                    -->
@@ -27,7 +27,7 @@
 	</target>
 
 	<target name="build-core" depends="prepare" description="Builds the core">
-		<ant inheritall="false" antfile="projects/core/build.xml" target="all" />
+		<ant dir="projects/core" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
 	<target name="build-metadata" depends="build-core" description="Builds the common metadata">
@@ -37,7 +37,7 @@
 				<include name="*.jar" />
 			</fileset>
 		</copy>
-		<ant inheritall="false" antfile="projects/metadata/build.xml" target="jar" />
+		<ant dir="projects/metadata" inheritAll="false" antfile="build.xml" target="jar" />
 	</target>
 
 
@@ -46,7 +46,7 @@
 	</target>
 
 	<target name="build-introduce" depends="build-core, build-metadata" description="Builds Introduce">
-		<ant inheritall="false" antfile="projects/introduce/build.xml" target="all" />
+		<ant dir="projects/introduce" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
 
