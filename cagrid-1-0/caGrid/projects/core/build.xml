@@ -46,7 +46,7 @@
     <!-- =============================================================== -->
     <!-- Prepares the build directory                                    -->
     <!-- =============================================================== -->
-    <target name="prepare" depends="configure">
+    <target name="prepare">
         <tstamp />
         <mkdir dir="${build.dir}" />
     </target>
@@ -105,30 +105,6 @@
             </manifest>
         </jar>
     </target>
-    
-    <target name="build-my-filters" depends="platformCheck">
-        <property name="my.classpath" refid="build.classpath" />
-        <filter token="classpath" value="${my.classpath}" />
-        <filter token="file.separator" value="${file.separator}" />
-        <filter token="base.dir" value="${basedir}" />
-        <filter token="test.dir" value="${test.dir}" />
-        <filter token="src.dir" value="${src.dir}" />
-        <filter token="lib.dir" value="${lib.dir}" />
-        <filter token="log.dir" value="${log.dir}" />
-        <filter token="scripts.dir" value="${scripts.dir}" />
-        <filter token="build.dir" value="${build.dir}" />
-        <filter token="classes.dir" value="${classes.dir}" />
-        <filter token="doc.dir" value="${doc.dir}" />
-        <filter token="logger.arg" value="-Djava.util.logging.config.file=${basedir}${file.separator}logging.properties" />
-        <filter token="attributeMarker" value="${attributeMarker}" />
-        <filter token="platformScriptSuffix" value="${platformScriptSuffix}" />
-        <filter token="pause.command" value="${pause.command}" />
-    </target>
-    
-    
-    <target name="configure" depends="platformCheck,build-common-filters,build-my-filters,configure-dart-templates" description="Generates all the system files based off templates">
-    </target>
-    
 
 
     <!-- ============================================================== -->
