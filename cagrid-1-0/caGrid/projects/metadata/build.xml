@@ -1,7 +1,7 @@
 <!-- ======================================================================= -->
 <!-- caGrid 1.0 Common Metadata build file                                   -->
 <!-- ======================================================================= -->
-<project name="metadata" default="jarStubs" basedir=".">
+<project name="metadata" default="jar" basedir=".">
     <!-- Environment -->
     <property environment="env" />
     <property file="${basedir}/build.properties" />
@@ -83,7 +83,7 @@
     </target>
 
 
-    <target name="jarStubs" depends="compileStubs">
+    <target name="jar" depends="compileStubs">
         <jar destfile="${build.jars.dir}/${stubs.jar.name}">
             <fileset dir="${stubs.dest}" />
             <fileset dir="${stubs.src}" />
@@ -96,6 +96,6 @@
     </target>
 
 
-    <target name="all" depends="clean,jarStubs" />
+    <target name="all" depends="clean,jar" />
 
 </project>
