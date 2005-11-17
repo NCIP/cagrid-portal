@@ -30,7 +30,6 @@
 		<ant inheritall="false" antfile="projects/core/build.xml" target="all" />
 	</target>
 
-
 	<target name="build-metadata" depends="build-core" description="Builds the common metadata">
 		<!-- copy dependant artifacts into current target's lib dir -->
 		<copy todir="projects/metadata/lib">
