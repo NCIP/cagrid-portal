@@ -16,6 +16,7 @@
         	<ant inheritall="false" antfile="projects/introduce/build.xml" target="test" >
         	   <property name="junit.results.dir" value="${junit.results.dir}" />
         	</ant>
+        	
         </sequential>
     </target>	
 </project>
