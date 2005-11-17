@@ -15,7 +15,6 @@
 	<classpathentry kind="lib" path="lib/expectj.jar"/>
 	<classpathentry kind="lib" path="lib/jaxmejs.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/mail.jar"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="lib/xstream-1.0.2.jar"/>
@@ -84,7 +83,6 @@
 	<classpathentry kind="lib" path="lib/mobius_factories-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/mobius_gme_client-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/mobius_gme_server-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/mobius_registrar_client-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/mobius-castor-0.9.4.3-xml.jar"/>
 	<classpathentry kind="lib" path="lib/GlobalModelExchange_stubs.jar"/>
