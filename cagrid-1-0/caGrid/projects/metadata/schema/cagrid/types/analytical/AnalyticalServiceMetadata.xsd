@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2005 rel. 3 U (http://www.altova.com) by Shannon Hastings (OSU Biomedical Informatics) -->
+<schema targetNamespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.analytical" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.analytical" xmlns:cadsr="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.cadsr" xmlns="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="qualified">
+	<import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.cadsr" schemaLocation="../cadsr/caDSRMetadata.xsd"/>
+	<complexType name="AnalyticalType">
+		<sequence>
+			<element name="domainObjects">
+				<complexType>
+					<sequence>
+						<element name="domainObject" type="cadsr:domain-objectType" minOccurs="0" maxOccurs="unbounded"/>
+					</sequence>
+				</complexType>
+			</element>
+			<element name="operation" maxOccurs="unbounded">
+				<complexType>
+					<sequence>
+						<element name="inputs">
+							<complexType>
+								<sequence>
+									<element name="input" minOccurs="0" maxOccurs="unbounded">
+										<complexType>
+											<attribute name="refId" type="nonNegativeInteger"/>
+										</complexType>
+									</element>
+								</sequence>
+							</complexType>
+						</element>
+						<element name="output" minOccurs="0">
+							<complexType>
+								<attribute name="refId" type="nonNegativeInteger"/>
+							</complexType>
+						</element>
+					</sequence>
+					<attribute name="name" type="string" use="required"/>
+				</complexType>
+			</element>
+		</sequence>
+		<attribute name="type" type="string" use="required"/>
+	</complexType>
+	<element name="AnalyticalServiceMetadata" type="ns1:AnalyticalType"/>
+</schema>
