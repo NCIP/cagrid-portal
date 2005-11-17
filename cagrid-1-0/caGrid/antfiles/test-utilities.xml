@@ -2,8 +2,6 @@
 <!-- caGrid Utilities build file                                             -->
 <!-- ======================================================================= -->
 <project name="caGrid_test_utilities" basedir="." default="usage">
-	
-	<import file="ant-utilities.xml" />
     
     <target name="usage">
         <echo message="Not to be called directly.  This file contains utilities to be used in other build files." />
