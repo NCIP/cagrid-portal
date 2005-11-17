@@ -5,9 +5,6 @@
 
 <project name="core" default="compile" basedir=".">
     
-    <echo message="MY BASEDIR ${basedir}" />
-    
-    
     <!-- Environment -->
     <property environment="env" />
     <property file="${basedir}/build.properties" />
