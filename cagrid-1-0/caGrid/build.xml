@@ -66,6 +66,6 @@
 	<!-- ============================================================== -->
 	<!-- Builds from scratch                                                -->
 	<!-- ============================================================== -->
-	<target name="all" description="Builds the entire application" depends="clean, build-introduce" />
+	<target name="all" description="Builds the entire application" depends="clean, build-core, build-metadata, build-gums, build-portal, build-introduce" />
 </project>
 
