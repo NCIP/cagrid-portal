@@ -96,7 +96,7 @@
     <!-- ONLY to be called from cruise control's antpublisher (it passes some properties) -->
     <target name="ccpublish">
         <property name="dart.logfile" value="${logdir}/${logfile}"/>
-        <ant target="publish">
+        <ant target="publish"/>
     </target>
 
 </project>
