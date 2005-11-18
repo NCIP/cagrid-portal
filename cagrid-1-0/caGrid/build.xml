@@ -5,6 +5,7 @@
 <!-- ================================================================= -->
 
 <project name="Master" default="all" basedir=".">
+    <property environment="env"/>
 	<property file="build.properties" />
 
 	<property name="tmp.dir" value="tmp" />
