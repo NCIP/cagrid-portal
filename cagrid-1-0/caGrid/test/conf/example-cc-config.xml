@@ -19,7 +19,7 @@
         
         <!-- Configures the actual build loop, how often and which
             build file/target --> 
-        <schedule interval="150">
+        <schedule interval="60">
             <ant antscript="ant"
                 buildfile="build-caGrid-1.0-continuous.xml"
                 target="test"
