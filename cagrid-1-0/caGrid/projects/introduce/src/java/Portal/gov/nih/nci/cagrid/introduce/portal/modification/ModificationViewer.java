@@ -36,7 +36,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.2 2005-11-15 14:52:01 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.3 2005-11-18 19:47:54 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -424,7 +424,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			cmd[2] = "-e";
 			cmd[3] = "/bin/sh";
 			cmd[4] = "-c";
-			cmd[5] = "cd " + path + ";ant resync;ant clean all";
+			cmd[5] = "cd " + path + ";ant clean all";
 			Process p = Runtime.getRuntime().exec(cmd);
 			p.waitFor();
 		} else {

@@ -128,9 +128,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 			gridBagConstraints6.weighty = 2.0D;
 			gridBagConstraints7.gridx = 0;
 			gridBagConstraints7.gridy = 2;
-			gridBagConstraints7.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints7.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints7.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints7.weighty = 2.0D;
+			gridBagConstraints7.weighty = 0.0D;
 			gridBagConstraints7.weightx = 1.0D;
 			gridBagConstraints10.gridx = 0;
 			gridBagConstraints10.gridy = 4;
@@ -186,6 +186,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JScrollPane getOutputTypejScrollPane() {
 		if (outputTypejScrollPane == null) {
 			outputTypejScrollPane = new JScrollPane();
+			outputTypejScrollPane.setVerticalScrollBarPolicy(javax.swing.JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 			outputTypejScrollPane.setViewportView(getOutputTypeTable());
 		}
 		return outputTypejScrollPane;
@@ -214,6 +215,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 			gridBagConstraints14.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints14.gridy = 1;
 			gridBagConstraints14.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints14.weightx = 0.0D;
+			gridBagConstraints14.weighty = 0.0D;
 			gridBagConstraints14.gridx = 0;
 			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 			inputPanel = new JPanel();
@@ -225,10 +228,10 @@ public class MethodViewer extends GridPortalBaseFrame {
 					AnalyticalLookAndFeel.getPanelLabelColor()));
 			gridBagConstraints8.gridx = 0;
 			gridBagConstraints8.gridy = 0;
-			gridBagConstraints8.weightx = 1.0;
-			gridBagConstraints8.weighty = 1.0;
+			gridBagConstraints8.weightx = 1.0D;
+			gridBagConstraints8.weighty = 1.0D;
 			gridBagConstraints8.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints8.ipadx = 423;
+			gridBagConstraints8.ipadx = 0;
 			gridBagConstraints8.insets = new java.awt.Insets(0, 0, 0, 0);
 			gridBagConstraints8.gridwidth = 1;
 			inputPanel.add(getInputParamScrollPanel(), gridBagConstraints8);
@@ -244,7 +247,13 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getOutputTypePanel() {
 		if (outputTypePanel == null) {
-			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
+			GridBagConstraints gridBagContraints9 = new GridBagConstraints();
+			gridBagContraints9.gridx = 0;
+			gridBagContraints9.weightx = 1.0D;
+			gridBagContraints9.weighty = 0.0D;
+			gridBagContraints9.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagContraints9.gridheight = 1;
+			gridBagContraints9.gridy = 0;
 			outputTypePanel = new JPanel();
 			outputTypePanel.setLayout(new GridBagLayout());
 			outputTypePanel
@@ -256,13 +265,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 									javax.swing.border.TitledBorder.DEFAULT_POSITION,
 									null, AnalyticalLookAndFeel
 											.getPanelLabelColor()));
-			outputTypePanel.add(getOutputTypejScrollPane(), gridBagConstraints9);
-			gridBagConstraints9.gridx = 0;
-			gridBagConstraints9.gridy = 0;
-			gridBagConstraints9.weightx = 1.0;
-			gridBagConstraints9.weighty = 2.0D;
-			gridBagConstraints9.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints9.insets = new java.awt.Insets(0, 0, 0, 0);
+			outputTypePanel.add(getOutputTypejScrollPane(), gridBagContraints9);
 		}
 		return outputTypePanel;
 	}
