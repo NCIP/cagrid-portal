@@ -41,12 +41,12 @@
         <filter token="Dart.Track" value="Continuous" />
         <copy file="${test.dir}/BuildNameTemplate.xml"
               tofile="${test.logs.dir}/BuildNameContinuous.xml"
-              filtering="true" />
+              filtering="true" overwrite="true"/>
 
         <filter token="Dart.Track" value="Nightly" />
         <copy file="${test.dir}/BuildNameTemplate.xml"
               tofile="${test.logs.dir}/BuildNameNightly.xml"
-              filtering="true" />
+              filtering="true" overwrite="true"/>
     </target>
     
     
