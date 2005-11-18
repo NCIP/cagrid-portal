@@ -31,22 +31,7 @@
 
 
     <!-- =============================================================== -->
-    <!-- Call test for each project and aggregates the log resutls       -->
-    <!-- =============================================================== -->
-    <target name="test">
-        <sequential>
-            <ant inheritall="false" dir="projects/core" antfile="build.xml" target="test">
-                <property name="junit.results.dir" value="${junit.results.dir}" />
-            </ant>
-            <ant inheritall="false" dir="projects/introduce" antfile="build.xml" target="test">
-                <property name="junit.results.dir" value="${junit.results.dir}" />
-            </ant>
-        </sequential>
-    </target>
-
-
-    <!-- =============================================================== -->
-    <!-- Configure dart, set the proxy, and publish the results to dart  -->
+    <!-- Configure dart                                                  -->
     <!-- =============================================================== -->
     <target name="createDartTestFiles">
         <!-- Create the BuildName info, if necessary -->
@@ -63,6 +48,26 @@
               tofile="${test.logs.dir}/BuildNameNightly.xml"
               filtering="true" />
     </target>
+    
+    
+    <!-- =============================================================== -->
+    <!-- Call test for each project and aggregates the log resutls       -->
+    <!-- =============================================================== -->
+    <target name="test" depends="createDartTestFiles">
+        <sequential>
+            <ant inheritall="false" dir="projects/core" antfile="build.xml" target="test">
+                <property name="junit.results.dir" value="${junit.results.dir}" />
+            </ant>
+            <ant inheritall="false" dir="projects/introduce" antfile="build.xml" target="test">
+                <property name="junit.results.dir" value="${junit.results.dir}" />
+            </ant>
+        </sequential>
+    </target>
+    
+    
+    <!-- =============================================================== -->
+    <!-- Set the proxy, and publish the results to dart                  -->
+    <!-- =============================================================== -->
     <target name="setproxy1" if="env.HTTP_PROXY_PORT">
         <property name="proxyhost" value="${env.HTTP_PROXY}" />
         <property name="proxyport" value="${env.HTTP_PROXY_PORT}" />
@@ -74,7 +79,7 @@
         <setproxy proxyhost="${proxyhost}" proxyport="${proxyport}" />
     </target>
     <target name="publish"
-            depends="setproxy1, setproxy2, createDartTestFiles"
+            depends="setproxy1, setproxy2"
             description="Call to publish test results to dart, doesn't do any building or testing.">
         <fail unless="dart.logfile"
               message="Before you attempt to publish to dart, you must set the property [dart.logfile] to the location of the log to be sent to dart." />
