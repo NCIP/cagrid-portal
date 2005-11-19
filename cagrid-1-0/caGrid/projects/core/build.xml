@@ -4,7 +4,6 @@
 <!-- ================================================================= -->
 
 <project name="core" default="compile" basedir=".">
-    
     <!-- Environment -->
     <property environment="env" />
     <property file="${basedir}/build.properties" />
