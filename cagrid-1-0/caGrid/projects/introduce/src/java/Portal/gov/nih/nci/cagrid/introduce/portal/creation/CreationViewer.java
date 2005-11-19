@@ -8,7 +8,6 @@ import java.awt.GridBagLayout;
 import java.io.File;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -16,8 +15,9 @@ import javax.swing.JTextField;
 
 import org.projectmobius.portal.GridPortalComponent;
 
+
 /**
- * CreationViewer TODO:DOCUMENT ME
+ * CreationViewer
  * 
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -62,6 +62,7 @@ public class CreationViewer extends GridPortalComponent {
 
 	private JButton closeButton = null;
 
+
 	/**
 	 * This method initializes
 	 */
@@ -69,6 +70,7 @@ public class CreationViewer extends GridPortalComponent {
 		super();
 		initialize();
 	}
+
 
 	/**
 	 * This method initializes this
@@ -82,6 +84,7 @@ public class CreationViewer extends GridPortalComponent {
 		this.setTitle("Create Grid Service");
 
 	}
+
 
 	/**
 	 * This method initializes jPanel
@@ -117,11 +120,9 @@ public class CreationViewer extends GridPortalComponent {
 			gridBagConstraints10.gridx = 1;
 			inputPanel = new JPanel();
 			inputPanel.setLayout(new GridBagLayout());
-			inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, "Create Grid Service",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					AnalyticalLookAndFeel.getPanelLabelColor()));
+			inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Create Grid Service",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, AnalyticalLookAndFeel.getPanelLabelColor()));
 			packageLabel = new JLabel();
 			packageLabel.setText("Package");
 			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
@@ -194,6 +195,7 @@ public class CreationViewer extends GridPortalComponent {
 		return inputPanel;
 	}
 
+
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -224,6 +226,7 @@ public class CreationViewer extends GridPortalComponent {
 		return mainPanel;
 	}
 
+
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -237,6 +240,7 @@ public class CreationViewer extends GridPortalComponent {
 		}
 		return buttonPanel;
 	}
+
 
 	/**
 	 * This method initializes jButton
@@ -270,6 +274,7 @@ public class CreationViewer extends GridPortalComponent {
 		return createButton;
 	}
 
+
 	/**
 	 * This method initializes service
 	 * 
@@ -283,6 +288,7 @@ public class CreationViewer extends GridPortalComponent {
 		return service;
 	}
 
+
 	/**
 	 * This method initializes jTextField
 	 * 
@@ -295,6 +301,7 @@ public class CreationViewer extends GridPortalComponent {
 		}
 		return dir;
 	}
+
 
 	/**
 	 * This method initializes jButton
@@ -314,6 +321,7 @@ public class CreationViewer extends GridPortalComponent {
 		return dirButton;
 	}
 
+
 	/**
 	 * This method initializes servicePackage
 	 * 
@@ -322,11 +330,11 @@ public class CreationViewer extends GridPortalComponent {
 	private JTextField getServicePackage() {
 		if (servicePackage == null) {
 			servicePackage = new JTextField();
-			servicePackage.setText((DEFAULT_JAVA_PACKAGE + "." + DEFAULT_NAME)
-					.toLowerCase());
+			servicePackage.setText((DEFAULT_JAVA_PACKAGE + "." + DEFAULT_NAME).toLowerCase());
 		}
 		return servicePackage;
 	}
+
 
 	/**
 	 * This method initializes namespaceDomain
@@ -341,6 +349,7 @@ public class CreationViewer extends GridPortalComponent {
 		return namespaceDomain;
 	}
 
+
 	private void promptDir() {
 		JFileChooser chooser = new JFileChooser();
 		chooser.setDialogTitle("Select Attribute File");
@@ -352,6 +361,7 @@ public class CreationViewer extends GridPortalComponent {
 			this.dir.setText(chooser.getSelectedFile().getAbsolutePath());
 		}
 	}
+
 
 	/**
 	 * This method initializes closeButton
@@ -373,28 +383,24 @@ public class CreationViewer extends GridPortalComponent {
 		return closeButton;
 	}
 
+
 	private String getAntCommand() throws Exception {
 		String os = System.getProperty("os.name");
-		String cmd = " -Dintroduce.skeleton.destination.dir=" + dir.getText()
-				+ " -Dintroduce.skeleton.service.name=" + service.getText()
-				+ " -Dintroduce.skeleton.package=" + servicePackage.getText()
-				+ " -Dintroduce.skeleton.package.dir="
-				+ servicePackage.getText().replace('.', File.separatorChar)
-				+ " -Dintroduce.skeleton.namespace.domain="
-				+ namespaceDomain.getText() + " createService";
+		String cmd = " -Dintroduce.skeleton.destination.dir=" + dir.getText() + " -Dintroduce.skeleton.service.name="
+			+ service.getText() + " -Dintroduce.skeleton.package=" + servicePackage.getText()
+			+ " -Dintroduce.skeleton.package.dir=" + servicePackage.getText().replace('.', File.separatorChar)
+			+ " -Dintroduce.skeleton.namespace.domain=" + namespaceDomain.getText() + " createService";
 		if ((os.indexOf("Windows") >= 0) || (os.indexOf("windows") >= 0)) {
 			String path = (new File("")).getAbsolutePath();
-			return "rundll32 SHELL32.DLL,ShellExec_RunDLL cmd /K cd " + path
-					+ "&ant" + cmd;
+			return "rundll32 SHELL32.DLL,ShellExec_RunDLL cmd /K cd " + path + "&ant" + cmd;
 		} else if ((os.indexOf("Linux") >= 0) || (os.indexOf("linux") >= 0)) {
 			return "xterm -hold -geometry 50x10 -e ant" + cmd;
 		} else {
-			throw new Exception(
-					"Cannot create grid service, your operating system, " + os
-							+ " is not supported.");
+			throw new Exception("Cannot create grid service, your operating system, " + os + " is not supported.");
 		}
 
 	}
+
 
 	public static void main(String[] args) {
 		System.out.println();
