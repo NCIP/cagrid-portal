@@ -74,7 +74,7 @@
             build file/target --> 
         <schedule interval="300">
             <ant antscript="ant"
-                buildfile="build-caGrid-1.0-nightly"
+                buildfile="build-caGrid-1.0-nightly.xml"
                 target="test"
                 uselogger="true"
                 usedebug="false"
