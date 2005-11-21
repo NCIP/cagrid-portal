@@ -2,6 +2,7 @@
 <!-- caGRID build file                                                       -->
 <!-- ======================================================================= -->
 <project name="introduce" default="prepare" basedir=".">
+	
 	<!-- Environment -->
 	<property environment="env" />
 	<property file="${basedir}/build.properties" />
@@ -152,7 +153,7 @@
 	<!-- =================================================================== -->
 	<target name="generateStubs" depends="prepare" description="Deletes the generated Java Beans and recreates them.">
 		<mkdir dir="${build.dir}/stubs" />
-
+		
 		<!--<generateSubprojectBeans name="Common" packages="gov/nih/nci/cagrid/common/servicedata/**" />-->
 		<!--<generateSubprojectBeans name="DataServices" />-->
 		<!--<generateSubprojectBeans name="AnalyticalServices" packages="gov/nih/nci/cagrid/analytical/servicedata/**" />-->
