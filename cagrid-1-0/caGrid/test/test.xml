@@ -47,6 +47,11 @@
         <copy file="${test.dir}/BuildNameTemplate.xml"
               tofile="${test.logs.dir}/BuildNameNightly.xml"
               filtering="true" overwrite="true"/>
+        
+        <filter token="Dart.Track" value="Experimental" />
+        <copy file="${test.dir}/BuildNameTemplate.xml"
+              tofile="${test.logs.dir}/BuildNameExperimental.xml"
+              filtering="true" overwrite="true"/>
     </target>
     
     
