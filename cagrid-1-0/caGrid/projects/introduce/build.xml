@@ -1,5 +1,5 @@
 <!-- ======================================================================= -->
-<!-- caGRID build file                                                       -->
+<!-- caGrid build file                                                       -->
 <!-- ======================================================================= -->
 <project name="introduce" default="prepare" basedir=".">
 	
@@ -65,7 +65,7 @@
 		<tstamp />
 	</target>
 
-	<target name="init" depends="checkGlobus,checkOGSADAI">
+	<target name="init" depends="checkGlobus">
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${classes.dir}" />
 		<mkdir dir="${test.classes.dir}" />

@@ -92,7 +92,7 @@
     <!-- ============================================================== -->
     <!-- OGSA-DAI properties                                              -->
     <!-- ============================================================== -->
-    <target name="checkOGSADAI" depends="setOGSADAI">
+    <!--<target name="checkOGSADAI" depends="setOGSADAI">
         <condition property="ogsadai.not.found">
             <or>
                 <not><isset property="ext.ogsadai.dir"/></not>
@@ -104,7 +104,7 @@
     </target>
     <target name="setOGSADAI" if="env.OGSADAI_LOCATION">
         <property name="ext.ogsadai.dir" value="${env.OGSADAI_LOCATION}"/>
-    </target>
+    </target>-->
     
     
     <!-- ============================================================== -->
