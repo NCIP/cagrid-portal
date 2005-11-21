@@ -59,6 +59,10 @@
 			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
 			<replacefilter token="PACKAGE-NAME" value="${introduce.skeleton.package}" />
 		</replace>
+		<replace file="${introduce.skeleton.destination.dir}/.classpath">
+			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
+			<replacefilter token="PACKAGE-NAME" value="${introduce.skeleton.package}" />
+		</replace>
 		<replace file="${introduce.skeleton.destination.dir}/config/undeploy.wsdd">
 			<replacefilter token="SERVICE-PATH" value="cagrid/${introduce.skeleton.service.name}" />
 		</replace>
