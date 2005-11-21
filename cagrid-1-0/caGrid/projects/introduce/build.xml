@@ -3,7 +3,6 @@
 <!-- ======================================================================= -->
 <project name="introduce" default="prepare" basedir=".">
 	<!-- Environment -->
-	
 	<property environment="env" />
 	<property file="${basedir}/build.properties" />
 	<property file="${user.dir}/build.properties" />
