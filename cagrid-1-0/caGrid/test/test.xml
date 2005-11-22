@@ -2,9 +2,11 @@
 <!-- caGrid Utilities build file                                             -->
 <!-- ======================================================================= -->
 <project name="caGrid_tests_harness" basedir=".">
-
-	<property name="junit.results.dir" value="${test.logs.dir}/junit" />
+		
 	<property name="test.lib.dir" value="${test.dir}/lib" />
+	<property name="test.logs.dir" value="${test.dir}/logs" />
+	<property name="junit.results.dir" value="${test.logs.dir}/junit" />
+	
 
 	<!-- Get the HOSTNAME in an os independant way -->
 	<property name="env.HOSTNAME" value="${env.COMPUTERNAME}" />
@@ -51,7 +53,7 @@
 	<!-- =============================================================== -->
 	<!-- Call test for each project and aggregates the log resutls       -->
 	<!-- =============================================================== -->
-	<target name="test" depends="createDartTestFiles">
+	<target name="test" depends="createDartTestFiles" description="Test all the projects.">
 		<sequential>
 			<ant inheritall="false" dir="projects/core" antfile="build.xml" target="test">
 				<property name="junit.results.dir" value="${junit.results.dir}" />
@@ -91,9 +93,9 @@
 
 
 	<!-- =============================================================== -->
-	<!-- Run a dart experimental                                         -->
+	<!-- Run a dart experimental (currently only submits test results)   -->
 	<!-- =============================================================== -->
-	<target name="experimental" depends="all,test">
+	<target name="experimental" depends="all,test" description="Test the projects and publish results to dart board.">
 		<tstamp>
 			<format property="BUILDSTAMP" pattern="yyyy-MM-dd'T'HH:mm:ss.SZ" locale="en" />
 			<format property="BUILDFILE" pattern="yyyy-MM-dd'T'HH.mm.ss.SZ" locale="en" />
