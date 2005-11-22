@@ -25,8 +25,6 @@ public class TestUserManager extends TestCase {
 
 	private Database db;
 
-	private UserManager um;
-
 	public void testSingleUser() {
 		try {
 			UserManager um = new UserManager(db, getOneYearConf(), TestUtils
