@@ -70,6 +70,12 @@
 					<xsd:extension base="wsbf:BaseFaultType" />
 				</xsd:complexContent>
 	 </xsd:complexType>
+	 
+	  <xsd:complexType name="InvalidUserFault">
+				<xsd:complexContent>
+					<xsd:extension base="wsbf:BaseFaultType" />
+				</xsd:complexContent>
+	 </xsd:complexType>
 	
 	
 	<!-- =================================================================-->

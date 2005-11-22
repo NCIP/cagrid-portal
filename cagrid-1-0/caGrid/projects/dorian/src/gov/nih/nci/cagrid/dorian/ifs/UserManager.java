@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserRole;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
+import gov.nih.nci.cagrid.gums.ifs.bean.InvalidUserFault;
 
 import java.security.KeyPair;
 import java.security.cert.X509Certificate;
@@ -95,7 +96,12 @@ public class UserManager extends GUMSObject {
 		return "[IdPId=" + idpId + ", UID=" + uid + "]";
 	}
 
-	public synchronized X509Certificate createUserCredentials(long idpId,
+	public synchronized void renewUserCredentials(IFSUser user)
+			throws GUMSInternalFault, CredentialsFault {
+
+	}
+
+	private synchronized X509Certificate createUserCredentials(long idpId,
 			String uid) throws GUMSInternalFault, CredentialsFault {
 		try {
 
@@ -140,6 +146,62 @@ public class UserManager extends GUMSObject {
 			sql.append(" WHERE");
 		}
 		return sql;
+	}
+
+	public IFSUser getUser(long idpId, String uid) throws GUMSInternalFault,
+			InvalidUserFault {
+		this.buildDatabase();
+		IFSUser user = new IFSUser();
+		Connection c = null;
+		try {
+			c = db.getConnectionManager().getConnection();
+			Statement s = c.createStatement();
+
+			StringBuffer sql = new StringBuffer();
+			sql.append("select * from " + USERS_TABLE + " WHERE IDP_ID="
+					+ idpId + " AND UID='" + uid + "'");
+			ResultSet rs = s.executeQuery(sql.toString());
+			if (rs.next()) {
+				user.setIdPId(rs.getLong("IDP_ID"));
+				user.setUID(rs.getString("UID"));
+				user.setGridId(rs.getString("GID"));
+				String email = rs.getString("EMAIL");
+				if ((email != null) && (!email.equals("null"))) {
+					user.setEmail(email);
+				}
+				user.setUserStatus(IFSUserStatus.fromValue(rs
+						.getString("STATUS")));
+				String role = rs.getString("ROLE");
+				user.setUserRole(IFSUserRole.fromValue(role));
+				X509Certificate cert = credentialsManager
+						.getCertificate(getCredentialsManagerUID(user
+								.getIdPId(), user.getUID()));
+				user.setCertificate(CertUtil.writeCertificateToString(cert));
+			} else {
+				InvalidUserFault fault = new InvalidUserFault();
+				fault.setFaultString("No such user "
+						+ getCredentialsManagerUID(user.getIdPId(), user
+								.getUID()));
+				throw fault;
+
+			}
+			rs.close();
+			s.close();
+		} catch (InvalidUserFault iuf) {
+			throw iuf;
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			GUMSInternalFault fault = new GUMSInternalFault();
+			fault.setFaultString("Unexpected Error, could not obtain the user "
+					+ getCredentialsManagerUID(user.getIdPId(), user.getUID()));
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GUMSInternalFault) helper.getFault();
+			throw fault;
+		} finally {
+			db.getConnectionManager().releaseConnection(c);
+		}
+		return user;
 	}
 
 	public IFSUser[] getUsers(IFSUserFilter filter) throws GUMSInternalFault {

@@ -47,6 +47,8 @@ public class TestUserManager extends TestCase {
 			X509Certificate cert = CertUtil.loadCertificate(ureader);
 			assertEquals(user.getGridId(),cert.getSubjectDN().getName());
 			
+			assertEquals(user,um.getUser(user.getIdPId(),user.getUID()));
+			
 			//Test Querying for users
 			IFSUserFilter f1 = new IFSUserFilter();
 			IFSUser[] l1 = um.getUsers(f1);
