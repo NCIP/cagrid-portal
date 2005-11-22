@@ -51,7 +51,7 @@
 		<xsd:complexType>
 			<xsd:sequence>
 				<xsd:element name="basicAuthentication" minOccurs="1" maxOccurs="1" type="idp:basicAuthCredential"/>
-				<xsd:element name="userFilter" minOccurs="1" maxOccurs="1" type="idp:userFilter"/>
+				<xsd:element name="userFilter" minOccurs="1" maxOccurs="1" type="idp:IdPUserFilter"/>
 			</xsd:sequence>
 		</xsd:complexType>
 	</xsd:element>
@@ -59,7 +59,7 @@
 	<xsd:element name="idpFindUsersResponse">
 		<xsd:complexType>
 			<xsd:sequence>
-				<xsd:element name="idpUser" minOccurs="0" maxOccurs="unbounded" type="idp:user"/>
+				<xsd:element name="idpUser" minOccurs="0" maxOccurs="unbounded" type="idp:IdPUser"/>
 			</xsd:sequence>
 		</xsd:complexType>
 	</xsd:element>
@@ -68,7 +68,7 @@
 		<xsd:complexType>
 			<xsd:sequence>
 				<xsd:element name="basicAuthentication" minOccurs="1" maxOccurs="1" type="idp:basicAuthCredential"/>
-				<xsd:element name="idpUser" minOccurs="1" maxOccurs="1" type="idp:user"/>
+				<xsd:element name="idpUser" minOccurs="1" maxOccurs="1" type="idp:IdPUser"/>
 			</xsd:sequence>
 		</xsd:complexType>
 	</xsd:element>

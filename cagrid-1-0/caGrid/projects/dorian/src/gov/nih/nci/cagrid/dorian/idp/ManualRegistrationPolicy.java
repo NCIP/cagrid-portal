@@ -4,8 +4,8 @@ import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
 import gov.nih.nci.cagrid.gums.idp.bean.Application;
 import gov.nih.nci.cagrid.gums.idp.bean.ApplicationReview;
 import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
-import gov.nih.nci.cagrid.gums.idp.bean.UserRole;
-import gov.nih.nci.cagrid.gums.idp.bean.UserStatus;
+import gov.nih.nci.cagrid.gums.idp.bean.IdPUserRole;
+import gov.nih.nci.cagrid.gums.idp.bean.IdPUserStatus;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -27,8 +27,8 @@ public class ManualRegistrationPolicy implements IdPRegistrationPolicy {
 	public ApplicationReview register(Application a) throws GUMSInternalFault,
 			InvalidUserPropertyFault {
 		ApplicationReview ar = new ApplicationReview();
-		ar.setStatus(UserStatus.Pending);
-		ar.setRole(UserRole.Non_Administrator);
+		ar.setStatus(IdPUserStatus.Pending);
+		ar.setRole(IdPUserRole.Non_Administrator);
 		ar
 				.setMessage("Your application will be reviewed by an administrator and you will be contacted at "
 						+ a.getEmail() + " upon a decision.");

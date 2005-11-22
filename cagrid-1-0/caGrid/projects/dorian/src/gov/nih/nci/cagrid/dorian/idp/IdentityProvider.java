@@ -13,10 +13,10 @@ import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
 import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
 import gov.nih.nci.cagrid.gums.idp.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gums.idp.bean.StateCode;
-import gov.nih.nci.cagrid.gums.idp.bean.User;
-import gov.nih.nci.cagrid.gums.idp.bean.UserFilter;
-import gov.nih.nci.cagrid.gums.idp.bean.UserRole;
-import gov.nih.nci.cagrid.gums.idp.bean.UserStatus;
+import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
+import gov.nih.nci.cagrid.gums.idp.bean.IdPUserFilter;
+import gov.nih.nci.cagrid.gums.idp.bean.IdPUserRole;
+import gov.nih.nci.cagrid.gums.idp.bean.IdPUserStatus;
 
 import org.globus.wsrf.utils.FaultHelper;
 import org.opensaml.SAMLAssertion;
@@ -49,7 +49,7 @@ public class IdentityProvider extends GUMSObject {
 			this.assertionManager = am;
 
 			if (!this.userManager.userExists(ADMIN_USER_ID)) {
-				User u = new User();
+				IdPUser u = new IdPUser();
 				u.setUserId(ADMIN_USER_ID);
 				u.setPassword(ADMIN_PASSWORD);
 				u.setEmail("gums@gums.org");
@@ -63,8 +63,8 @@ public class IdentityProvider extends GUMSObject {
 				u.setZipcode("43210");
 				u.setCountry(CountryCode.US);
 				u.setPhoneNumber("555-555-5555");
-				u.setStatus(UserStatus.Active);
-				u.setRole(UserRole.Administrator);
+				u.setStatus(IdPUserStatus.Active);
+				u.setRole(IdPUserRole.Administrator);
 				this.userManager.addUser(u);
 			}
 
@@ -82,8 +82,8 @@ public class IdentityProvider extends GUMSObject {
 	
 	
 	public SAMLAssertion authenticate(BasicAuthCredential credential) throws GUMSInternalFault, InvalidLoginFault{
-		User requestor = verifyUser(credential);
-		return assertionManager.getAuthenticationAssertion(requestor.getEmail());
+		IdPUser requestor = verifyUser(credential);
+		return assertionManager.getAuthenticationAssertion(requestor.getUserId(),requestor.getEmail());
 	}
 
 	public String register(Application a) throws GUMSInternalFault,
@@ -91,21 +91,21 @@ public class IdentityProvider extends GUMSObject {
 	
 		IdPRegistrationPolicy policy = conf.getRegistrationPolicy();
 		ApplicationReview ar = policy.register(a);
-		UserStatus status = ar.getStatus();
-		UserRole role = ar.getRole();
+		IdPUserStatus status = ar.getStatus();
+		IdPUserRole role = ar.getRole();
 		String message = ar.getMessage();
 		if (status == null) {
-			status = UserStatus.Pending;
+			status = IdPUserStatus.Pending;
 		}
 
 		if (role == null) {
-			role = UserRole.Non_Administrator;
+			role = IdPUserRole.Non_Administrator;
 		}
 		if (message == null) {
 			message = "None";
 		}
 
-		User u = new User();
+		IdPUser u = new IdPUser();
 		u.setUserId(a.getUserId());
 		u.setEmail(a.getEmail());
 		u.setPassword(a.getPassword());
@@ -125,51 +125,51 @@ public class IdentityProvider extends GUMSObject {
 		return message;
 	}
 
-	public User[] findUsers(BasicAuthCredential credential, UserFilter filter)
+	public IdPUser[] findUsers(BasicAuthCredential credential, IdPUserFilter filter)
 			throws GUMSInternalFault, InvalidLoginFault, PermissionDeniedFault {
-		User requestor = verifyUser(credential);
+		IdPUser requestor = verifyUser(credential);
 		verifyAdministrator(requestor);
 		return this.userManager.getUsers(filter, false);
 	}
 
-	public void updateUser(BasicAuthCredential credential, User u)
+	public void updateUser(BasicAuthCredential credential, IdPUser u)
 			throws GUMSInternalFault, InvalidLoginFault, PermissionDeniedFault,
 			NoSuchUserFault, InvalidUserPropertyFault {
-		User requestor = verifyUser(credential);
+		IdPUser requestor = verifyUser(credential);
 		verifyAdministrator(requestor);
 		this.userManager.updateUser(u);
 	}
 
-	private void verifyAdministrator(User u) throws PermissionDeniedFault {
-		if (!u.getRole().equals(UserRole.Administrator)) {
+	private void verifyAdministrator(IdPUser u) throws PermissionDeniedFault {
+		if (!u.getRole().equals(IdPUserRole.Administrator)) {
 			PermissionDeniedFault fault = new PermissionDeniedFault();
 			fault.setFaultString("You are NOT an administrator.");
 			throw fault;
 		}
 	}
 
-	private User verifyUser(BasicAuthCredential credential)
+	private IdPUser verifyUser(BasicAuthCredential credential)
 			throws GUMSInternalFault, InvalidLoginFault {
 		try {
-			User u = this.userManager.getUser(credential.getUserId());
+			IdPUser u = this.userManager.getUser(credential.getUserId());
 			if (!u.getPassword().equals(Crypt.crypt(credential.getPassword()))) {
 				InvalidLoginFault fault = new InvalidLoginFault();
 				fault.setFaultString("The uid or password is incorrect.");
 				throw fault;
 			}
-			if (!u.getStatus().equals(UserStatus.Active)) {
-				if (u.getStatus().equals(UserStatus.Suspended)) {
+			if (!u.getStatus().equals(IdPUserStatus.Active)) {
+				if (u.getStatus().equals(IdPUserStatus.Suspended)) {
 					InvalidLoginFault fault = new InvalidLoginFault();
 					fault.setFaultString("The account has been suspended.");
 					throw fault;
 
-				} else if (u.getStatus().equals(UserStatus.Rejected)) {
+				} else if (u.getStatus().equals(IdPUserStatus.Rejected)) {
 					InvalidLoginFault fault = new InvalidLoginFault();
 					fault
 							.setFaultString("The application for the account was rejected.");
 					throw fault;
 
-				} else if (u.getStatus().equals(UserStatus.Pending)) {
+				} else if (u.getStatus().equals(IdPUserStatus.Pending)) {
 					InvalidLoginFault fault = new InvalidLoginFault();
 					fault
 							.setFaultString("The application for this account has not yet been reviewed.");
@@ -192,7 +192,7 @@ public class IdentityProvider extends GUMSObject {
 
 	public void removeUser(BasicAuthCredential credential, String userId)
 			throws GUMSInternalFault, InvalidLoginFault, PermissionDeniedFault{
-		User requestor = verifyUser(credential);
+		IdPUser requestor = verifyUser(credential);
 		verifyAdministrator(requestor);
 		userManager.removeUser(userId);
 	}

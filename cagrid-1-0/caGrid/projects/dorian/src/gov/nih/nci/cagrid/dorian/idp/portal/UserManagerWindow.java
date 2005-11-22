@@ -5,8 +5,8 @@ import gov.nih.nci.cagrid.gums.client.IdPAdministrationClient;
 import gov.nih.nci.cagrid.gums.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.gums.idp.bean.InvalidLoginFault;
 import gov.nih.nci.cagrid.gums.idp.bean.PermissionDeniedFault;
-import gov.nih.nci.cagrid.gums.idp.bean.User;
-import gov.nih.nci.cagrid.gums.idp.bean.UserFilter;
+import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
+import gov.nih.nci.cagrid.gums.idp.bean.IdPUserFilter;
 import gov.nih.nci.cagrid.gums.portal.GUMSServiceListComboBox;
 import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
 import gov.nih.nci.cagrid.gums.portal.GumsPortalConf;
@@ -34,7 +34,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.8 2005-11-11 22:17:11 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.9 2005-11-22 17:45:38 langella Exp $
  */
 public class UserManagerWindow extends GridPortalBaseFrame {
 
@@ -324,7 +324,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		if ((row >= 0) && (row < getUsersTable().getRowCount())) {
 			MobiusRunnable runner = new MobiusRunnable() {
 				public void execute() {
-					User user = (User) getUsersTable().getValueAt(
+					IdPUser user = (IdPUser) getUsersTable().getValueAt(
 							row, 0);
 					String service = ((GUMSServiceListComboBox) getService())
 							.getSelectedService();
@@ -851,7 +851,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 
 
 		this.getUsersTable().clearTable();
-		UserFilter f = new UserFilter();
+		IdPUserFilter f = new IdPUserFilter();
 		JPanel panel = (JPanel) this.getJTabbedPane().getSelectedComponent();
 		if (panel.getName().equals(ROLE_PANEL)) {
 			f.setRole(this.getUserRole().getSelectedUserRole());
@@ -884,7 +884,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			} else {
 				IdPAdministrationClient client = new IdPAdministrationClient(
 						service, cred);
-				User[] users = client.findUsers(f);
+				IdPUser[] users = client.findUsers(f);
 				if (users != null) {
 					for (int i = 0; i < users.length; i++) {
 						this.getUsersTable().addUser(users[i]);

@@ -9,10 +9,10 @@ import gov.nih.nci.cagrid.gums.idp.bean.CountryCode;
 import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
 import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
 import gov.nih.nci.cagrid.gums.idp.bean.StateCode;
-import gov.nih.nci.cagrid.gums.idp.bean.User;
-import gov.nih.nci.cagrid.gums.idp.bean.UserFilter;
-import gov.nih.nci.cagrid.gums.idp.bean.UserRole;
-import gov.nih.nci.cagrid.gums.idp.bean.UserStatus;
+import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
+import gov.nih.nci.cagrid.gums.idp.bean.IdPUserFilter;
+import gov.nih.nci.cagrid.gums.idp.bean.IdPUserRole;
+import gov.nih.nci.cagrid.gums.idp.bean.IdPUserStatus;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -54,7 +54,7 @@ public class UserManager extends GUMSObject {
 		}
 	}
 
-	private void validatePassword(User user) throws GUMSInternalFault,
+	private void validatePassword(IdPUser user) throws GUMSInternalFault,
 			InvalidUserPropertyFault {
 		String password = user.getPassword();
 		if ((password == null)
@@ -70,7 +70,7 @@ public class UserManager extends GUMSObject {
 		}
 	}
 
-	private void validateUserId(User user) throws GUMSInternalFault,
+	private void validateUserId(IdPUser user) throws GUMSInternalFault,
 			InvalidUserPropertyFault {
 		String uid = user.getUserId();
 		if ((uid == null) || (conf.getMinimumUIDLength() > uid.length())
@@ -85,7 +85,7 @@ public class UserManager extends GUMSObject {
 		}
 	}
 
-	private void validateUser(User user) throws GUMSInternalFault,
+	private void validateUser(IdPUser user) throws GUMSInternalFault,
 			InvalidUserPropertyFault {
 		validateUserId(user);
 		validatePassword(user);
@@ -106,7 +106,7 @@ public class UserManager extends GUMSObject {
 		}
 	}
 
-	public synchronized void addUser(User user) throws GUMSInternalFault,
+	public synchronized void addUser(IdPUser user) throws GUMSInternalFault,
 			InvalidUserPropertyFault {
 		this.buildDatabase();
 		this.validateUser(user);
@@ -145,11 +145,11 @@ public class UserManager extends GUMSObject {
 		return sql;
 	}
 
-	public User[] getUsers(UserFilter filter) throws GUMSInternalFault {
+	public IdPUser[] getUsers(IdPUserFilter filter) throws GUMSInternalFault {
 		return getUsers(filter, true);
 	}
 
-	public User[] getUsers(UserFilter filter, boolean includePassword)
+	public IdPUser[] getUsers(IdPUserFilter filter, boolean includePassword)
 			throws GUMSInternalFault {
 
 		this.buildDatabase();
@@ -260,7 +260,7 @@ public class UserManager extends GUMSObject {
 
 			ResultSet rs = s.executeQuery(sql.toString());
 			while (rs.next()) {
-				User user = new User();
+				IdPUser user = new IdPUser();
 				user.setUserId(rs.getString("UID"));
 				user.setEmail(rs.getString("EMAIL"));
 				if (includePassword) {
@@ -276,16 +276,16 @@ public class UserManager extends GUMSObject {
 				user.setZipcode(rs.getString("ZIP_CODE"));
 				user.setCountry(CountryCode.fromValue(rs.getString("COUNTRY")));
 				user.setPhoneNumber(rs.getString("PHONE_NUMBER"));
-				user.setStatus(UserStatus.fromValue(rs.getString("STATUS")));
-				user.setRole(UserRole.fromValue(rs.getString("ROLE")));
+				user.setStatus(IdPUserStatus.fromValue(rs.getString("STATUS")));
+				user.setRole(IdPUserRole.fromValue(rs.getString("ROLE")));
 				users.add(user);
 			}
 			rs.close();
 			s.close();
 
-			User[] list = new User[users.size()];
+			IdPUser[] list = new IdPUser[users.size()];
 			for (int i = 0; i < list.length; i++) {
-				list[i] = (User) users.get(i);
+				list[i] = (IdPUser) users.get(i);
 			}
 			return list;
 
@@ -303,14 +303,14 @@ public class UserManager extends GUMSObject {
 		}
 	}
 
-	public User getUser(String uid) throws GUMSInternalFault, NoSuchUserFault {
+	public IdPUser getUser(String uid) throws GUMSInternalFault, NoSuchUserFault {
 		return this.getUser(uid, true);
 	}
 
-	public User getUser(String uid, boolean includePassword)
+	public IdPUser getUser(String uid, boolean includePassword)
 			throws GUMSInternalFault, NoSuchUserFault {
 		this.buildDatabase();
-		User user = new User();
+		IdPUser user = new IdPUser();
 		Connection c = null;
 
 		try {
@@ -334,8 +334,8 @@ public class UserManager extends GUMSObject {
 				user.setZipcode(rs.getString("ZIP_CODE"));
 				user.setCountry(CountryCode.fromValue(rs.getString("COUNTRY")));
 				user.setPhoneNumber(rs.getString("PHONE_NUMBER"));
-				user.setStatus(UserStatus.fromValue(rs.getString("STATUS")));
-				user.setRole(UserRole.fromValue(rs.getString("ROLE")));
+				user.setStatus(IdPUserStatus.fromValue(rs.getString("STATUS")));
+				user.setRole(IdPUserRole.fromValue(rs.getString("ROLE")));
 			} else {
 				NoSuchUserFault fault = new NoSuchUserFault();
 				fault.setFaultString("The user " + uid + " does not exist.");
@@ -388,7 +388,7 @@ public class UserManager extends GUMSObject {
 		}
 	}
 
-	public synchronized void updateUser(User u) throws GUMSInternalFault,
+	public synchronized void updateUser(IdPUser u) throws GUMSInternalFault,
 			NoSuchUserFault, InvalidUserPropertyFault {
 		this.buildDatabase();
 		if (u.getUserId() == null) {
@@ -400,7 +400,7 @@ public class UserManager extends GUMSObject {
 			StringBuffer sb = new StringBuffer();
 			sb.append("update " + IDP_USERS_TABLE + " SET ");
 			int changes = 0;
-			User curr = this.getUser(u.getUserId());
+			IdPUser curr = this.getUser(u.getUserId());
 			if (u.getPassword() != null) {
 				validatePassword(u);
 				String newPass = Crypt.crypt(u.getPassword());
@@ -579,10 +579,10 @@ public class UserManager extends GUMSObject {
 		}
 	}
 
-	private boolean accountCreated(UserStatus status) {
-		if (status.equals(UserStatus.Suspended)) {
+	private boolean accountCreated(IdPUserStatus status) {
+		if (status.equals(IdPUserStatus.Suspended)) {
 			return true;
-		} else if (status.equals(UserStatus.Active)) {
+		} else if (status.equals(IdPUserStatus.Active)) {
 			return true;
 		} else {
 			return false;

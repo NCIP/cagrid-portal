@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.gums.idp.portal;
 
-import gov.nih.nci.cagrid.gums.idp.bean.UserStatus;
+import gov.nih.nci.cagrid.gums.idp.bean.IdPUserStatus;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -16,11 +16,11 @@ public class UserStatusComboBox extends AxisTypeComboBox {
 	}
 
 	public UserStatusComboBox(boolean anyState) {
-		super(UserStatus.class, anyState);
+		super(IdPUserStatus.class, anyState);
 	}
 
-	public UserStatus getSelectedUserStatus() {
-		return (UserStatus) getSelectedObject();
+	public IdPUserStatus getSelectedUserStatus() {
+		return (IdPUserStatus) getSelectedObject();
 	}
 
 }

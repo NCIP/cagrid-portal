@@ -15,12 +15,18 @@ import java.security.cert.X509Certificate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 
 import junit.framework.TestCase;
 
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.opensaml.InvalidCryptoException;
 import org.opensaml.SAMLAssertion;
+import org.opensaml.SAMLAttribute;
+import org.opensaml.SAMLAttributeDesignator;
+import org.opensaml.SAMLAttributeStatement;
+import org.opensaml.SAMLAuthenticationStatement;
+import org.opensaml.SAMLStatement;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -39,6 +45,68 @@ public class TestAssertionCredentialsManager extends TestCase {
 	private CertificateAuthority ca;
 
 	private static String TEST_EMAIL = "test@test.com";
+	private static String TEST_UID = "test";
+	
+	public void verifySAMLAssertion(SAMLAssertion saml, AssertionCredentialsManager cm)
+	throws Exception{
+		assertNotNull(saml);
+		saml.verify(cm.getIdPCertificate(), false);
+			
+		try {
+			// Test against a bad certificate
+			saml.verify(CertUtil.loadCertificate(CA_RESOURCES_DIR
+					+ "/bmi-cacert.pem"), false);
+			assertTrue(false);
+		} catch (InvalidCryptoException ex) {
+
+		}
+		assertEquals(cm.getIdPCertificate().getSubjectDN().toString(),saml.getIssuer());
+		Iterator itr = saml.getStatements();
+		int count = 0;
+		boolean emailFound = false;
+		boolean authFound = false;
+		while(itr.hasNext()){
+			count = count+1;
+			SAMLStatement stmt = (SAMLStatement) itr.next();
+			if(stmt instanceof SAMLAuthenticationStatement){
+				if(authFound){
+					assertTrue(false);
+				}else{
+					authFound = true;
+				}
+				SAMLAuthenticationStatement auth = (SAMLAuthenticationStatement)stmt;
+				assertEquals(TEST_UID,auth.getSubject().getName());
+				assertEquals("urn:oasis:names:tc:SAML:1.0:am:password",auth.getAuthMethod());
+			}
+			
+			if(stmt instanceof SAMLAttributeStatement){
+				if(emailFound){
+					assertTrue(false);
+				}else{
+					emailFound = true;
+				}
+				SAMLAttributeStatement att = (SAMLAttributeStatement)stmt;
+				assertEquals(TEST_UID,att.getSubject().getName());
+				Iterator i = att.getAttributes();
+				assertTrue(i.hasNext());
+				SAMLAttribute a = (SAMLAttribute)i.next();
+				assertEquals(AssertionCredentialsManager.EMAIL_NAMESPACE,a.getNamespace());
+				assertEquals(AssertionCredentialsManager.EMAIL_NAME,a.getName());
+				Iterator vals = a.getValues();
+				assertTrue(vals.hasNext());
+				String val = (String)vals.next();
+				assertEquals(TEST_EMAIL,val);
+				assertTrue(!vals.hasNext());
+				assertTrue(!i.hasNext());
+			}
+			
+		}
+		
+		assertEquals(2,count);
+		assertTrue(authFound);
+		assertTrue(emailFound);
+	}
+		
 
 	public void testAutoCredentialCreation() {
 		try {
@@ -56,19 +124,10 @@ public class TestAssertionCredentialsManager extends TestCase {
 			String expectedSub = TestUtils.CA_SUBJECT_PREFIX + ",CN="
 					+ AssertionCredentialsManager.CA_SUBJECT;
 			assertEquals(expectedSub, cert.getSubjectDN().toString());
-			SAMLAssertion saml = cm.getAuthenticationAssertion(TEST_EMAIL);
-			assertNotNull(saml);
-			saml.verify(cm.getIdPCertificate(), false);
+			SAMLAssertion saml = cm.getAuthenticationAssertion(TEST_UID,TEST_EMAIL);
+			verifySAMLAssertion(saml,cm);
 			
 			
-			try {
-				// Test against a bad certificate
-				saml.verify(CertUtil.loadCertificate(CA_RESOURCES_DIR
-						+ "/bmi-cacert.pem"), false);
-				assertTrue(false);
-			} catch (InvalidCryptoException ex) {
-
-			}
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -126,17 +185,8 @@ public class TestAssertionCredentialsManager extends TestCase {
 				assertTrue(false);
 			}
 
-			SAMLAssertion saml = cm.getAuthenticationAssertion(TEST_EMAIL);
-			saml.verify(renewedCert, false);
-			
-			try {
-				// Test against a bad certificate
-				saml.verify(CertUtil.loadCertificate(CA_RESOURCES_DIR
-						+ "/bmi-cacert.pem"), false);
-				assertTrue(false);
-			} catch (InvalidCryptoException ex) {
-
-			}
+			SAMLAssertion saml = cm.getAuthenticationAssertion(TEST_UID,TEST_EMAIL);
+			verifySAMLAssertion(saml,cm);
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -215,17 +265,8 @@ public class TestAssertionCredentialsManager extends TestCase {
 			PrivateKey key = cm.getIdPKey();
 			assertNotNull(key);
 			assertEquals(conf.getAssertingKey(), key);
-			SAMLAssertion saml = cm.getAuthenticationAssertion(TEST_EMAIL);
-			saml.verify(conf.getAssertingCertificate(), false);
-
-			try {
-				// Test against a bad certificate
-				saml.verify(CertUtil.loadCertificate(CA_RESOURCES_DIR
-						+ "/bmi-cacert.pem"), false);
-				assertTrue(false);
-			} catch (InvalidCryptoException ex) {
-
-			}
+			SAMLAssertion saml = cm.getAuthenticationAssertion(TEST_UID,TEST_EMAIL);
+			verifySAMLAssertion(saml,cm);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

@@ -23,7 +23,10 @@ import java.util.List;
 import org.apache.xml.security.signature.XMLSignature;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.globus.wsrf.utils.FaultHelper;
+import org.opensaml.QName;
 import org.opensaml.SAMLAssertion;
+import org.opensaml.SAMLAttribute;
+import org.opensaml.SAMLAttributeStatement;
 import org.opensaml.SAMLAuthenticationStatement;
 import org.opensaml.SAMLSubject;
 
@@ -46,6 +49,10 @@ public class AssertionCredentialsManager extends GUMSObject {
 
 	public final static String CA_SUBJECT = "IdP Authentication Asserter";
 
+	public final static String EMAIL_NAMESPACE="http://cagrid.nci.nih.gov/email";
+	
+	public final static String EMAIL_NAME="email";
+	
 	private MetadataManager mm;
 
 	private CertificateAuthority ca;
@@ -144,7 +151,7 @@ public class AssertionCredentialsManager extends GUMSObject {
 		return getIdPCertificate(true);
 	}
 	
-	public SAMLAssertion getAuthenticationAssertion(String email) throws GUMSInternalFault {
+	public SAMLAssertion getAuthenticationAssertion(String id, String email) throws GUMSInternalFault {
 		try{
 			org.apache.xml.security.Init.init();
 		X509Certificate cert = getIdPCertificate();
@@ -158,13 +165,21 @@ public class AssertionCredentialsManager extends GUMSObject {
 		String ipAddress=null;
 		String subjectDNS=null;
 		
-		//SAMLNameIdentifier nid = new SAMLNameIdentifier(email, "BMI",SAMLNameIdentifier.FORMAT_EMAIL);
-		SAMLSubject sub = new SAMLSubject(email,federation,"urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress",null,null,null);
-		
+		SAMLSubject sub = new SAMLSubject(id,federation,"urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",null,null,null);	
 		SAMLAuthenticationStatement auth = new SAMLAuthenticationStatement(sub,"urn:oasis:names:tc:SAML:1.0:am:password",new Date(),ipAddress,subjectDNS,null);
-	
-		List l = new ArrayList();
+	    QName name = new QName(EMAIL_NAMESPACE,EMAIL_NAME);
+	    List vals = new ArrayList();
+	    vals.add(email);
+		SAMLAttribute att = new SAMLAttribute(name.getLocalName(),name.getNamespaceURI(),name,(long)0,vals);
+		
+		List atts = new ArrayList();
+		atts.add(att);
+		SAMLAttributeStatement attState = new SAMLAttributeStatement(sub,atts);
+		
+	    
+	    List l = new ArrayList();
 		l.add(auth);
+		l.add(attState);
 		
 		SAMLAssertion saml = new SAMLAssertion(issuer, start, end, null,
 				null, l);

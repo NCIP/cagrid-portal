@@ -6,10 +6,10 @@ import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.idp.bean.CountryCode;
 import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
 import gov.nih.nci.cagrid.gums.idp.bean.StateCode;
-import gov.nih.nci.cagrid.gums.idp.bean.User;
-import gov.nih.nci.cagrid.gums.idp.bean.UserFilter;
-import gov.nih.nci.cagrid.gums.idp.bean.UserRole;
-import gov.nih.nci.cagrid.gums.idp.bean.UserStatus;
+import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
+import gov.nih.nci.cagrid.gums.idp.bean.IdPUserFilter;
+import gov.nih.nci.cagrid.gums.idp.bean.IdPUserRole;
+import gov.nih.nci.cagrid.gums.idp.bean.IdPUserStatus;
 import gov.nih.nci.cagrid.gums.test.TestResourceManager;
 import gov.nih.nci.cagrid.gums.test.TestUtils;
 
@@ -49,77 +49,77 @@ public class TestUserManager extends TestCase {
 			int rejectedA = 0;
 			int suspendedA = 0;
 
-			User[] users = new User[userCount];
+			IdPUser[] users = new IdPUser[userCount];
 			UserManager um = new UserManager(db, conf);
 
 			for (int i = 0; i < users.length; i++) {
 				if ((i % 8) == 0) {
-					users[i] = makeUser(UserRole.Non_Administrator,
-							UserStatus.Active);
+					users[i] = makeUser(IdPUserRole.Non_Administrator,
+							IdPUserStatus.Active);
 					activeNA = activeNA + 1;
 				} else if ((i % 8) == 1) {
-					users[i] = makeUser(UserRole.Non_Administrator,
-							UserStatus.Pending);
+					users[i] = makeUser(IdPUserRole.Non_Administrator,
+							IdPUserStatus.Pending);
 					pendingNA = pendingNA + 1;
 				} else if ((i % 8) == 2) {
-					users[i] = makeUser(UserRole.Non_Administrator,
-							UserStatus.Rejected);
+					users[i] = makeUser(IdPUserRole.Non_Administrator,
+							IdPUserStatus.Rejected);
 					rejectedNA = rejectedNA + 1;
 				} else if ((i % 8) == 3) {
-					users[i] = makeUser(UserRole.Non_Administrator,
-							UserStatus.Suspended);
+					users[i] = makeUser(IdPUserRole.Non_Administrator,
+							IdPUserStatus.Suspended);
 					suspendedNA = suspendedNA + 1;
 				} else if ((i % 8) == 4) {
-					users[i] = makeUser(UserRole.Administrator,
-							UserStatus.Active);
+					users[i] = makeUser(IdPUserRole.Administrator,
+							IdPUserStatus.Active);
 					activeA = activeA + 1;
 				} else if ((i % 8) == 5) {
-					users[i] = makeUser(UserRole.Administrator,
-							UserStatus.Pending);
+					users[i] = makeUser(IdPUserRole.Administrator,
+							IdPUserStatus.Pending);
 					pendingA = pendingA + 1;
 				} else if ((i % 8) == 6) {
-					users[i] = makeUser(UserRole.Administrator,
-							UserStatus.Rejected);
+					users[i] = makeUser(IdPUserRole.Administrator,
+							IdPUserStatus.Rejected);
 					rejectedA = rejectedA + 1;
 				} else if ((i % 8) == 7) {
-					users[i] = makeUser(UserRole.Administrator,
-							UserStatus.Suspended);
+					users[i] = makeUser(IdPUserRole.Administrator,
+							IdPUserStatus.Suspended);
 					suspendedA = suspendedA + 1;
 				}
 
 				um.addUser(users[i]);
 				users[i].setPassword(Crypt.crypt(users[i].getPassword()));
 				assertTrue(um.userExists(users[i].getUserId()));
-				User u = um.getUser(users[i].getUserId());
+				IdPUser u = um.getUser(users[i].getUserId());
 				assertEquals(users[i], u);
 
-				User[] list = um.getUsers(null);
+				IdPUser[] list = um.getUsers(null);
 				assertEquals(i + 1, list.length);
-				UserFilter f = new UserFilter();
-				f.setStatus(UserStatus.Active);
-				f.setRole(UserRole.Non_Administrator);
+				IdPUserFilter f = new IdPUserFilter();
+				f.setStatus(IdPUserStatus.Active);
+				f.setRole(IdPUserRole.Non_Administrator);
 				assertEquals(activeNA, um.getUsers(f).length);
 
-				f.setStatus(UserStatus.Pending);
+				f.setStatus(IdPUserStatus.Pending);
 				assertEquals(pendingNA, um.getUsers(f).length);
 
-				f.setStatus(UserStatus.Rejected);
+				f.setStatus(IdPUserStatus.Rejected);
 				assertEquals(rejectedNA, um.getUsers(f).length);
 
-				f.setStatus(UserStatus.Suspended);
+				f.setStatus(IdPUserStatus.Suspended);
 				assertEquals(suspendedNA, um.getUsers(f).length);
 
-				f.setStatus(UserStatus.Active);
-				f.setRole(UserRole.Administrator);
+				f.setStatus(IdPUserStatus.Active);
+				f.setRole(IdPUserRole.Administrator);
 				assertEquals(activeA, um.getUsers(f).length);
 
-				f.setStatus(UserStatus.Pending);
+				f.setStatus(IdPUserStatus.Pending);
 				assertEquals(pendingA, um.getUsers(f).length);
 
-				f.setStatus(UserStatus.Rejected);
+				f.setStatus(IdPUserStatus.Rejected);
 				assertEquals(rejectedA, um.getUsers(f).length);
 
-				f.setStatus(UserStatus.Suspended);
+				f.setStatus(IdPUserStatus.Suspended);
 				assertEquals(suspendedA, um.getUsers(f).length);
 
 			}
@@ -129,72 +129,72 @@ public class TestUserManager extends TestCase {
 			for (int i = 0; i < users.length; i++) {
 				um.removeUser(users[i].getUserId());
 				numberOfUsers = numberOfUsers - 1;
-				if ((users[i].getStatus().equals(UserStatus.Active))
+				if ((users[i].getStatus().equals(IdPUserStatus.Active))
 						&& (users[i].getRole()
-								.equals(UserRole.Non_Administrator))) {
+								.equals(IdPUserRole.Non_Administrator))) {
 					activeNA = activeNA - 1;
-				} else if ((users[i].getStatus().equals(UserStatus.Pending))
+				} else if ((users[i].getStatus().equals(IdPUserStatus.Pending))
 						&& (users[i].getRole()
-								.equals(UserRole.Non_Administrator))) {
+								.equals(IdPUserRole.Non_Administrator))) {
 					pendingNA = pendingNA - 1;
 				}
-				if ((users[i].getStatus().equals(UserStatus.Rejected))
+				if ((users[i].getStatus().equals(IdPUserStatus.Rejected))
 						&& (users[i].getRole()
-								.equals(UserRole.Non_Administrator))) {
+								.equals(IdPUserRole.Non_Administrator))) {
 					rejectedNA = rejectedNA - 1;
 				}
-				if ((users[i].getStatus().equals(UserStatus.Suspended))
+				if ((users[i].getStatus().equals(IdPUserStatus.Suspended))
 						&& (users[i].getRole()
-								.equals(UserRole.Non_Administrator))) {
-					users[i] = makeUser(UserRole.Non_Administrator,
-							UserStatus.Suspended);
+								.equals(IdPUserRole.Non_Administrator))) {
+					users[i] = makeUser(IdPUserRole.Non_Administrator,
+							IdPUserStatus.Suspended);
 					suspendedNA = suspendedNA - 1;
-				} else if ((users[i].getStatus().equals(UserStatus.Active))
+				} else if ((users[i].getStatus().equals(IdPUserStatus.Active))
 						&& (users[i].getRole()
-								.equals(UserRole.Administrator))) {
+								.equals(IdPUserRole.Administrator))) {
 					activeA = activeA - 1;
-				} else if ((users[i].getStatus().equals(UserStatus.Pending))
+				} else if ((users[i].getStatus().equals(IdPUserStatus.Pending))
 						&& (users[i].getRole()
-								.equals(UserRole.Administrator))) {
+								.equals(IdPUserRole.Administrator))) {
 					pendingA = pendingA - 1;
-				} else if ((users[i].getStatus().equals(UserStatus.Rejected))
+				} else if ((users[i].getStatus().equals(IdPUserStatus.Rejected))
 						&& (users[i].getRole()
-								.equals(UserRole.Administrator))) {
+								.equals(IdPUserRole.Administrator))) {
 					rejectedA = rejectedA - 1;
-				} else if ((users[i].getStatus().equals(UserStatus.Suspended))
+				} else if ((users[i].getStatus().equals(IdPUserStatus.Suspended))
 						&& (users[i].getRole()
-								.equals(UserRole.Administrator))) {
+								.equals(IdPUserRole.Administrator))) {
 					suspendedA = suspendedA - 1;
 				}
 				assertFalse(um.userExists(users[i].getEmail()));
 
-				User[] list = um.getUsers(null);
+				IdPUser[] list = um.getUsers(null);
 				assertEquals(numberOfUsers, list.length);
-				UserFilter f = new UserFilter();
-				f.setStatus(UserStatus.Active);
-				f.setRole(UserRole.Non_Administrator);
+				IdPUserFilter f = new IdPUserFilter();
+				f.setStatus(IdPUserStatus.Active);
+				f.setRole(IdPUserRole.Non_Administrator);
 				assertEquals(activeNA, um.getUsers(f).length);
 
-				f.setStatus(UserStatus.Pending);
+				f.setStatus(IdPUserStatus.Pending);
 				assertEquals(pendingNA, um.getUsers(f).length);
 
-				f.setStatus(UserStatus.Rejected);
+				f.setStatus(IdPUserStatus.Rejected);
 				assertEquals(rejectedNA, um.getUsers(f).length);
 
-				f.setStatus(UserStatus.Suspended);
+				f.setStatus(IdPUserStatus.Suspended);
 				assertEquals(suspendedNA, um.getUsers(f).length);
 
-				f.setStatus(UserStatus.Active);
-				f.setRole(UserRole.Administrator);
+				f.setStatus(IdPUserStatus.Active);
+				f.setRole(IdPUserRole.Administrator);
 				assertEquals(activeA, um.getUsers(f).length);
 
-				f.setStatus(UserStatus.Pending);
+				f.setStatus(IdPUserStatus.Pending);
 				assertEquals(pendingA, um.getUsers(f).length);
 
-				f.setStatus(UserStatus.Rejected);
+				f.setStatus(IdPUserStatus.Rejected);
 				assertEquals(rejectedA, um.getUsers(f).length);
 
-				f.setStatus(UserStatus.Suspended);
+				f.setStatus(IdPUserStatus.Suspended);
 				assertEquals(suspendedA, um.getUsers(f).length);
 
 			}
@@ -208,13 +208,13 @@ public class TestUserManager extends TestCase {
 	public void testChangeStatus() {
 		try {
 			UserManager um = new UserManager(db, conf);
-			User u1 = makeActiveUser();
+			IdPUser u1 = makeActiveUser();
 			um.addUser(u1);
 			assertTrue(um.userExists(u1.getUserId()));
-			u1.setStatus(UserStatus.Suspended);
+			u1.setStatus(IdPUserStatus.Suspended);
 			um.updateUser(u1);
 			u1.setPassword(Crypt.crypt(u1.getPassword()));
-			User u2 = um.getUser(u1.getUserId());
+			IdPUser u2 = um.getUser(u1.getUserId());
 			assertEquals(u1, u2);
 
 		} catch (Exception e) {
@@ -227,13 +227,13 @@ public class TestUserManager extends TestCase {
 	public void testChangeRole() {
 		try {
 			UserManager um = new UserManager(db, conf);
-			User u1 = makeActiveUser();
+			IdPUser u1 = makeActiveUser();
 			um.addUser(u1);
 			assertTrue(um.userExists(u1.getUserId()));
-			u1.setRole(UserRole.Administrator);
+			u1.setRole(IdPUserRole.Administrator);
 			um.updateUser(u1);
 			u1.setPassword(Crypt.crypt(u1.getPassword()));
-			User u2 = um.getUser(u1.getUserId());
+			IdPUser u2 = um.getUser(u1.getUserId());
 			assertEquals(u1, u2);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -244,12 +244,12 @@ public class TestUserManager extends TestCase {
 	public void testChangePassword() {
 		try {
 			UserManager um = new UserManager(db, conf);
-			User u1 = makeActiveUser();
+			IdPUser u1 = makeActiveUser();
 			um.addUser(u1);
 			assertTrue(um.userExists(u1.getUserId()));
 			u1.setPassword("npassword");
 			um.updateUser(u1);
-			User u2 = um.getUser(u1.getUserId());
+			IdPUser u2 = um.getUser(u1.getUserId());
 			u1.setPassword(Crypt.crypt(u1.getPassword()));
 			assertEquals(u1, u2);
 
@@ -263,7 +263,7 @@ public class TestUserManager extends TestCase {
 	public void testUpdateUser() {
 		try {
 			UserManager um = new UserManager(db, conf);
-			User u1 = makeActiveUser();
+			IdPUser u1 = makeActiveUser();
 			um.addUser(u1);
 			assertTrue(um.userExists(u1.getUserId()));
 			u1.setPassword("cpassword");
@@ -277,10 +277,10 @@ public class TestUserManager extends TestCase {
 			u1.setZipcode("11776");
 			u1.setPhoneNumber("718-555-5555");
 			u1.setOrganization("changedorganization");
-			u1.setStatus(UserStatus.Suspended);
-			u1.setRole(UserRole.Administrator);
+			u1.setStatus(IdPUserStatus.Suspended);
+			u1.setRole(IdPUserRole.Administrator);
 			um.updateUser(u1);
-			User u2 = um.getUser(u1.getUserId());
+			IdPUser u2 = um.getUser(u1.getUserId());
 			u1.setPassword(Crypt.crypt(u1.getPassword()));
 			assertEquals(u1, u2);
 
@@ -295,34 +295,34 @@ public class TestUserManager extends TestCase {
 	public void testSingleUser() {
 		try {
 			UserManager um = new UserManager(db, conf);
-			User u1 = makeActiveUser();
+			IdPUser u1 = makeActiveUser();
 			um.addUser(u1);
 			u1.setPassword(Crypt.crypt(u1.getPassword()));
 			assertTrue(um.userExists(u1.getUserId()));
-			User u2 = um.getUser(u1.getUserId());
+			IdPUser u2 = um.getUser(u1.getUserId());
 			assertEquals(u1, u2);
 
-			User[] list = um.getUsers(null);
+			IdPUser[] list = um.getUsers(null);
 			assertEquals(1, list.length);
 			assertEquals(u1, list[0]);
-			UserFilter f = new UserFilter();
-			f.setStatus(UserStatus.Active);
-			f.setRole(UserRole.Non_Administrator);
+			IdPUserFilter f = new IdPUserFilter();
+			f.setStatus(IdPUserStatus.Active);
+			f.setRole(IdPUserRole.Non_Administrator);
 			assertEquals(1, um.getUsers(f).length);
-			f.setStatus(UserStatus.Pending);
+			f.setStatus(IdPUserStatus.Pending);
 			assertEquals(0, um.getUsers(f).length);
-			f.setStatus(UserStatus.Rejected);
+			f.setStatus(IdPUserStatus.Rejected);
 			assertEquals(0, um.getUsers(f).length);
-			f.setStatus(UserStatus.Suspended);
+			f.setStatus(IdPUserStatus.Suspended);
 			assertEquals(0, um.getUsers(f).length);
-			f.setStatus(UserStatus.Active);
-			f.setRole(UserRole.Administrator);
+			f.setStatus(IdPUserStatus.Active);
+			f.setRole(IdPUserRole.Administrator);
 			assertEquals(0, um.getUsers(f).length);
-			f.setStatus(UserStatus.Pending);
+			f.setStatus(IdPUserStatus.Pending);
 			assertEquals(0, um.getUsers(f).length);
-			f.setStatus(UserStatus.Rejected);
+			f.setStatus(IdPUserStatus.Rejected);
 			assertEquals(0, um.getUsers(f).length);
-			f.setStatus(UserStatus.Suspended);
+			f.setStatus(IdPUserStatus.Suspended);
 			assertEquals(0, um.getUsers(f).length);
 			um.removeUser(u1.getUserId());
 			assertFalse(um.userExists(u1.getEmail()));
@@ -347,12 +347,12 @@ public class TestUserManager extends TestCase {
 			int size = 10;
 			UserManager um = new UserManager(db, conf);
 			for (int i = 0; i < size; i++) {
-				um.addUser(makeUser(UserRole.Non_Administrator, UserStatus.Active));
+				um.addUser(makeUser(IdPUserRole.Non_Administrator, IdPUserStatus.Active));
 			}
 			assertEquals(size, um.getUsers(getActiveUserFilter()).length);
 			
 //			test email address
-			UserFilter fid = getActiveUserFilter();
+			IdPUserFilter fid = getActiveUserFilter();
 			fid.setUserId("user");
 			assertEquals(size, um.getUsers(fid).length);
 			fid.setUserId("XX");
@@ -360,7 +360,7 @@ public class TestUserManager extends TestCase {
 			
 			
 			//test email address
-			UserFilter f1 = getActiveUserFilter();
+			IdPUserFilter f1 = getActiveUserFilter();
 			f1.setEmail("@mail.com");
 			assertEquals(size, um.getUsers(f1).length);
 			f1.setEmail("@mail.");
@@ -369,7 +369,7 @@ public class TestUserManager extends TestCase {
 			assertEquals(0, um.getUsers(f1).length);
 			
 			//Test First Name and Last Name
-			UserFilter f2 = getActiveUserFilter();
+			IdPUserFilter f2 = getActiveUserFilter();
 			f2.setFirstName("firs");
 			assertEquals(size, um.getUsers(f2).length);
 			f2.setLastName("ast");
@@ -381,7 +381,7 @@ public class TestUserManager extends TestCase {
 			
 
 			//Test Organization
-			UserFilter f0 = getActiveUserFilter();
+			IdPUserFilter f0 = getActiveUserFilter();
 			f0.setOrganization("org");
 			assertEquals(size, um.getUsers(f0).length);
 			f0.setOrganization("XX");
@@ -389,21 +389,21 @@ public class TestUserManager extends TestCase {
 
 			
 			//Test Address
-			UserFilter f3 = getActiveUserFilter();
+			IdPUserFilter f3 = getActiveUserFilter();
 			f3.setAddress("address");
 			assertEquals(size, um.getUsers(f3).length);
 			f3.setAddress("XX");
 			assertEquals(0, um.getUsers(f3).length);
 			
 			//Test Address 2
-			UserFilter f4 = getActiveUserFilter();
+			IdPUserFilter f4 = getActiveUserFilter();
 			f4.setAddress2("address2");
 			assertEquals(size, um.getUsers(f4).length);
 			f4.setAddress2("XX");
 			assertEquals(0, um.getUsers(f4).length);
 			
 			//Test City and State
-			UserFilter f5 = getActiveUserFilter();
+			IdPUserFilter f5 = getActiveUserFilter();
 			f5.setCity("Columbus");
 			assertEquals(size, um.getUsers(f5).length);
 			f5.setState(StateCode.OH);
@@ -414,14 +414,14 @@ public class TestUserManager extends TestCase {
 			assertEquals(size, um.getUsers(f5).length);
 			
 			//Test Zip Code
-			UserFilter f6 = getActiveUserFilter();
+			IdPUserFilter f6 = getActiveUserFilter();
 			f6.setZipcode("43210");
 			assertEquals(size, um.getUsers(f6).length);
 			f6.setZipcode("XX");
 			assertEquals(0, um.getUsers(f6).length);
 			
 //			Test country
-			UserFilter cf = getActiveUserFilter();
+			IdPUserFilter cf = getActiveUserFilter();
 			cf.setCountry(CountryCode.US);
 			assertEquals(size, um.getUsers(cf).length);
 		
@@ -429,7 +429,7 @@ public class TestUserManager extends TestCase {
 			
 			
 			//Test Phone Number
-			UserFilter f7 = getActiveUserFilter();
+			IdPUserFilter f7 = getActiveUserFilter();
 			f7.setPhoneNumber("614-555-5555");
 			assertEquals(size, um.getUsers(f7).length);
 			f7.setPhoneNumber("XX");
@@ -441,51 +441,51 @@ public class TestUserManager extends TestCase {
 				
 				
 //				test email address
-				UserFilter all = getActiveUserFilter();
+				IdPUserFilter all = getActiveUserFilter();
 				
-				UserFilter uid = getActiveUserFilter();
+				IdPUserFilter uid = getActiveUserFilter();
 				uid.setUserId(i+"user");
 				all.setUserId(i+"user");
 				assertEquals(1, um.getUsers(uid).length);
 				assertEquals(1, um.getUsers(all).length);
 				
 				
-				UserFilter u1 = getActiveUserFilter();
+				IdPUserFilter u1 = getActiveUserFilter();
 				u1.setEmail(i+"user@mail.com");
 				all.setEmail(i+"user@mail.com");
 				assertEquals(1, um.getUsers(u1).length);
 				assertEquals(1, um.getUsers(all).length);
 				
 				//Test First Name
-				UserFilter u2 = getActiveUserFilter();
+				IdPUserFilter u2 = getActiveUserFilter();
 				u2.setFirstName(i+"first");
 				all.setFirstName(i+"first");
 				assertEquals(1, um.getUsers(u2).length);
 				assertEquals(1, um.getUsers(all).length);
 				
 				//Test Last Name
-				UserFilter u3 = getActiveUserFilter();
+				IdPUserFilter u3 = getActiveUserFilter();
 				u3.setLastName(i+"last");
 				all.setLastName(i+"last");
 				assertEquals(1, um.getUsers(u3).length);
 				assertEquals(1, um.getUsers(all).length);
 
 				//Test Organization
-				UserFilter u4 = getActiveUserFilter();
+				IdPUserFilter u4 = getActiveUserFilter();
 				u4.setOrganization(i+"organization");
 				all.setOrganization(i+"organization");
 				assertEquals(1, um.getUsers(u4).length);
 				assertEquals(1, um.getUsers(all).length);
 				
 				//Test Address
-				UserFilter u5 = getActiveUserFilter();
+				IdPUserFilter u5 = getActiveUserFilter();
 				u5.setAddress(i+"address");
 				all.setAddress(i+"address");
 				assertEquals(1, um.getUsers(u5).length);
 				assertEquals(1, um.getUsers(all).length);
 				
 				//Test Address 2
-				UserFilter u6 = getActiveUserFilter();
+				IdPUserFilter u6 = getActiveUserFilter();
 				u6.setAddress2(i+"address2");
 				all.setAddress2(i+"address2");
 				assertEquals(1, um.getUsers(u6).length);
@@ -505,19 +505,19 @@ public class TestUserManager extends TestCase {
 		}
 	}
 
-	private UserFilter getActiveUserFilter() {
-		UserFilter filter = new UserFilter();
-		filter.setStatus(UserStatus.Active);
-		filter.setRole(UserRole.Non_Administrator);
+	private IdPUserFilter getActiveUserFilter() {
+		IdPUserFilter filter = new IdPUserFilter();
+		filter.setStatus(IdPUserStatus.Active);
+		filter.setRole(IdPUserRole.Non_Administrator);
 		return filter;
 	}
 
-	private User makeActiveUser() {
-		return makeUser(UserRole.Non_Administrator, UserStatus.Active);
+	private IdPUser makeActiveUser() {
+		return makeUser(IdPUserRole.Non_Administrator, IdPUserStatus.Active);
 	}
 
-	private User makeUser(UserRole role, UserStatus status) {
-		User u = new User();
+	private IdPUser makeUser(IdPUserRole role, IdPUserStatus status) {
+		IdPUser u = new IdPUser();
 		u.setUserId(count+"user");
 		u.setEmail(count+"user@mail.com");
 		u.setPassword(count+"password");

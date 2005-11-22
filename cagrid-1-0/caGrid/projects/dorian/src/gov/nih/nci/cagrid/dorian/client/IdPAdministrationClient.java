@@ -8,8 +8,8 @@ import gov.nih.nci.cagrid.gums.idp.bean.InvalidLoginFault;
 import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
 import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
 import gov.nih.nci.cagrid.gums.idp.bean.PermissionDeniedFault;
-import gov.nih.nci.cagrid.gums.idp.bean.User;
-import gov.nih.nci.cagrid.gums.idp.bean.UserFilter;
+import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
+import gov.nih.nci.cagrid.gums.idp.bean.IdPUserFilter;
 import gov.nih.nci.cagrid.gums.wsrf.GUMSPortType;
 import gov.nih.nci.cagrid.gums.wsrf.IdpFindUsers;
 import gov.nih.nci.cagrid.gums.wsrf.IdpRemoveUser;
@@ -36,7 +36,7 @@ public class IdPAdministrationClient extends GUMSBaseClient implements
 	}
 	
 	
-	public User[] findUsers(UserFilter filter) throws GUMSFault, GUMSInternalFault, InvalidLoginFault, PermissionDeniedFault {
+	public IdPUser[] findUsers(IdPUserFilter filter) throws GUMSFault, GUMSInternalFault, InvalidLoginFault, PermissionDeniedFault {
 		GUMSPortType port = null;
 		try {
 			port = this.getPort(new AnonymousSecureConversationWithEncryption());
@@ -104,7 +104,7 @@ public class IdPAdministrationClient extends GUMSBaseClient implements
 
 
 
-	public void updateUser(User u) throws GUMSFault, GUMSInternalFault, InvalidLoginFault, PermissionDeniedFault, NoSuchUserFault, InvalidUserPropertyFault {
+	public void updateUser(IdPUser u) throws GUMSFault, GUMSInternalFault, InvalidLoginFault, PermissionDeniedFault, NoSuchUserFault, InvalidUserPropertyFault {
 		GUMSPortType port = null;
 		try {
 			port = this.getPort(new AnonymousSecureConversationWithEncryption());

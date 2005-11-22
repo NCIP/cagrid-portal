@@ -7,10 +7,10 @@ import gov.nih.nci.cagrid.gums.idp.bean.Application;
 import gov.nih.nci.cagrid.gums.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.gums.idp.bean.CountryCode;
 import gov.nih.nci.cagrid.gums.idp.bean.StateCode;
-import gov.nih.nci.cagrid.gums.idp.bean.User;
-import gov.nih.nci.cagrid.gums.idp.bean.UserFilter;
-import gov.nih.nci.cagrid.gums.idp.bean.UserRole;
-import gov.nih.nci.cagrid.gums.idp.bean.UserStatus;
+import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
+import gov.nih.nci.cagrid.gums.idp.bean.IdPUserFilter;
+import gov.nih.nci.cagrid.gums.idp.bean.IdPUserRole;
+import gov.nih.nci.cagrid.gums.idp.bean.IdPUserStatus;
 import gov.nih.nci.cagrid.gums.test.TestResourceManager;
 import gov.nih.nci.cagrid.gums.test.TestUtils;
 
@@ -49,12 +49,12 @@ public class TestIdentityProvider extends TestCase {
 			Application a = createApplication();
 			idp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
-			UserFilter uf = new UserFilter();
+			IdPUserFilter uf = new IdPUserFilter();
 			uf.setUserId(a.getUserId());
-			User[] users = idp.findUsers(cred, uf);
+			IdPUser[] users = idp.findUsers(cred, uf);
 			assertEquals(1, users.length);
-			assertEquals(UserStatus.Active, users[0].getStatus());
-			assertEquals(UserRole.Non_Administrator, users[0].getRole());
+			assertEquals(IdPUserStatus.Active, users[0].getStatus());
+			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -73,17 +73,17 @@ public class TestIdentityProvider extends TestCase {
 			Application a = createApplication();
 			idp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
-			UserFilter uf = new UserFilter();
+			IdPUserFilter uf = new IdPUserFilter();
 			uf.setUserId(a.getUserId());
-			User[] users = idp.findUsers(cred, uf);
+			IdPUser[] users = idp.findUsers(cred, uf);
 			assertEquals(1, users.length);
-			assertEquals(UserStatus.Pending, users[0].getStatus());
-			assertEquals(UserRole.Non_Administrator, users[0].getRole());
-			users[0].setStatus(UserStatus.Active);
+			assertEquals(IdPUserStatus.Pending, users[0].getStatus());
+			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+			users[0].setStatus(IdPUserStatus.Active);
 			idp.updateUser(cred, users[0]);
 			users = idp.findUsers(cred, uf);
 			assertEquals(1, users.length);
-			assertEquals(UserStatus.Active, users[0].getStatus());
+			assertEquals(IdPUserStatus.Active, users[0].getStatus());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -104,33 +104,33 @@ public class TestIdentityProvider extends TestCase {
 				Application a = createApplication();
 				idp.register(a);
 				
-				UserFilter uf = new UserFilter();
+				IdPUserFilter uf = new IdPUserFilter();
 				uf.setUserId(a.getUserId());
-				User[] users = idp.findUsers(cred, uf);
+				IdPUser[] users = idp.findUsers(cred, uf);
 				assertEquals(1, users.length);
-				assertEquals(UserStatus.Pending, users[0].getStatus());
-				assertEquals(UserRole.Non_Administrator, users[0].getRole());
-				users[0].setStatus(UserStatus.Active);
+				assertEquals(IdPUserStatus.Pending, users[0].getStatus());
+				assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+				users[0].setStatus(IdPUserStatus.Active);
 				idp.updateUser(cred, users[0]);
 				users = idp.findUsers(cred, uf);
 				assertEquals(1, users.length);
-				assertEquals(UserStatus.Active, users[0].getStatus());
+				assertEquals(IdPUserStatus.Active, users[0].getStatus());
 				uf.setUserId("user");
 				users = idp.findUsers(cred, uf);
 				assertEquals(i + 1, users.length);
 			}
 			
-			UserFilter uf = new UserFilter();
-			User[] users = idp.findUsers(cred, uf);
+			IdPUserFilter uf = new IdPUserFilter();
+			IdPUser[] users = idp.findUsers(cred, uf);
 			assertEquals(11, users.length);
 			for (int i = 0; i < 10; i++) {
-				UserFilter f = new UserFilter();
+				IdPUserFilter f = new IdPUserFilter();
 				f.setUserId(users[i].getUserId());
-				User[] us = idp.findUsers(cred,f);
+				IdPUser[] us = idp.findUsers(cred,f);
 				assertEquals(1, us.length);
 				us[0].setFirstName("NEW NAME");
 				idp.updateUser(cred,us[0]);
-				User[] us2 = idp.findUsers(cred,f);
+				IdPUser[] us2 = idp.findUsers(cred,f);
 				assertEquals(1, us2.length);
 				assertEquals(us[0], us2[0]);
 				idp.removeUser(cred,users[i].getUserId());

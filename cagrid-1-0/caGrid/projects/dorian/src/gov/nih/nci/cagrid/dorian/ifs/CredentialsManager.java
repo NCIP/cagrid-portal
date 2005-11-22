@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.gums.service;
+package gov.nih.nci.cagrid.gums.ifs;
 
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
 import gov.nih.nci.cagrid.gums.common.Database;

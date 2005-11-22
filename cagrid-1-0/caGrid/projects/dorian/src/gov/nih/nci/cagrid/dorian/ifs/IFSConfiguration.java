@@ -56,22 +56,32 @@ import org.projectmobius.common.MobiusResourceManager;
  *          Exp $
  */
 public class IFSConfiguration implements AbstractMobiusConfiguration {
-	
-	public static final String RESOURCE="IFSConfiguration";
+
+	public static final String RESOURCE = "IFSConfiguration";
 
 	public static final String IDP_NAME_LENGTH = "idp-name-length";
 
 	public static final String MIN_LENGTH = "min";
 
 	public static final String MAX_LENGTH = "max";
-	
+
+	public static final String CREDENTIALS_VALID = "credentials-valid";
+
+	public static final String CREDENTIALS_VALID_YEARS = "years";
+
+	public static final String CREDENTIALS_VALID_MONTHS = "months";
+
+	public static final String CREDENTIALS_VALID_DAYS = "days";
 
 	private int minimumIdPNameLength;
 
 	private int maximumIdPNameLength;
 
-	
-	
+	private int credentialsValidYears;
+
+	private int credentialsValidMonths;
+
+	private int credentialsValidDays;
 
 	public void setMaximumIdPNameLength(int maximumIdPNameLength) {
 		this.maximumIdPNameLength = maximumIdPNameLength;
@@ -80,10 +90,23 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 	public void setMinimumIdPNameLength(int minimumIdPNameLength) {
 		this.minimumIdPNameLength = minimumIdPNameLength;
 	}
+	
+	
+
+	public int getCredentialsValidDays() {
+		return credentialsValidDays;
+	}
+
+	public int getCredentialsValidMonths() {
+		return credentialsValidMonths;
+	}
+
+	public int getCredentialsValidYears() {
+		return credentialsValidYears;
+	}
 
 	public void parse(MobiusResourceManager resourceManager, Element config)
 			throws MobiusException {
-
 
 		Element idpLength = config.getChild(IDP_NAME_LENGTH, config
 				.getNamespace());
@@ -91,10 +114,10 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 			throw new MobiusException(
 					"Error configuring IFS, no IdP name length specified.");
 		} else {
-			String min = idpLength.getAttributeValue(MIN_LENGTH,
-					idpLength.getNamespace());
-			String max = idpLength.getAttributeValue(MAX_LENGTH,
-					idpLength.getNamespace());
+			String min = idpLength.getAttributeValue(MIN_LENGTH, idpLength
+					.getNamespace());
+			String max = idpLength.getAttributeValue(MAX_LENGTH, idpLength
+					.getNamespace());
 			if ((min == null) && (max == null)) {
 				throw new MobiusException(
 						"Error configuring IFS, no min or max IdP name length specified.");
@@ -125,20 +148,76 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 
 			}
 		}
-
+		Element valid = config.getChild(CREDENTIALS_VALID, config
+				.getNamespace());
+		if (valid == null) {
+			throw new MobiusException("Error configuring IFS, "
+					+ CREDENTIALS_VALID
+					+ " element specified in the configuration file.");
+		} else {
+			
+			String sdays = valid.getAttributeValue(CREDENTIALS_VALID_DAYS);
+			if (sdays == null) {
+				throw new MobiusException(
+						"Error configuring IFS, no "+CREDENTIALS_VALID_DAYS+" attribute specified for the element "
+								+ CREDENTIALS_VALID
+								+ " in the configuration file.");
+			} else {
+				try {
+					this.credentialsValidDays= Integer.valueOf(sdays)
+							.intValue();
+				} catch (Exception n) {
+					throw new MobiusException(
+							"Error configuring IFS, the "+CREDENTIALS_VALID_DAYS+" attribute for the element "
+								+ CREDENTIALS_VALID
+								+ " must be an integer.");
+				}
+			}
+			
+			String smonths = valid.getAttributeValue(CREDENTIALS_VALID_MONTHS);
+			if (smonths == null) {
+				throw new MobiusException(
+						"Error configuring IFS, no "+CREDENTIALS_VALID_MONTHS+" attribute specified for the element "
+								+ CREDENTIALS_VALID
+								+ " in the configuration file.");
+			} else {
+				try {
+					this.credentialsValidMonths = Integer.valueOf(smonths)
+							.intValue();
+				} catch (Exception n) {
+					throw new MobiusException(
+							"Error configuring IFS, the "+CREDENTIALS_VALID_MONTHS+" attribute for the element "
+								+ CREDENTIALS_VALID
+								+ " must be an integer.");
+				}
+			}
+			
+			String syears = valid.getAttributeValue(CREDENTIALS_VALID_YEARS);
+			if (syears == null) {
+				throw new MobiusException(
+						"Error configuring IFS, no "+CREDENTIALS_VALID_YEARS+" attribute specified for the element "
+								+ CREDENTIALS_VALID
+								+ " in the configuration file.");
+			} else {
+				try {
+					this.credentialsValidYears = Integer.valueOf(syears)
+							.intValue();
+				} catch (Exception n) {
+					throw new MobiusException(
+							"Error configuring IFS, the "+CREDENTIALS_VALID_YEARS+" attribute for the element "
+								+ CREDENTIALS_VALID
+								+ " must be an integer.");
+				}
+			}
+		}
 	}
 
 	public int getMaximumIdPNameLength() {
 		return maximumIdPNameLength;
 	}
 
-
-
-
 	public int getMinimumIdPNameLength() {
 		return minimumIdPNameLength;
 	}
-
-	
 
 }

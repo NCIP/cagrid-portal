@@ -6,8 +6,8 @@ import gov.nih.nci.cagrid.gums.idp.bean.InvalidLoginFault;
 import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
 import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
 import gov.nih.nci.cagrid.gums.idp.bean.PermissionDeniedFault;
-import gov.nih.nci.cagrid.gums.idp.bean.User;
-import gov.nih.nci.cagrid.gums.idp.bean.UserFilter;
+import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
+import gov.nih.nci.cagrid.gums.idp.bean.IdPUserFilter;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -17,10 +17,10 @@ import gov.nih.nci.cagrid.gums.idp.bean.UserFilter;
  *          Exp $
  */
 public interface IdPAdministration {
-	public User[] findUsers(UserFilter filter)
+	public IdPUser[] findUsers(IdPUserFilter filter)
 			throws GUMSFault, GUMSInternalFault, InvalidLoginFault, PermissionDeniedFault;
 
-	public void updateUser(User u)
+	public void updateUser(IdPUser u)
 			throws GUMSFault,GUMSInternalFault, InvalidLoginFault, PermissionDeniedFault,
 			NoSuchUserFault, InvalidUserPropertyFault;
 	

@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.gums.idp.portal;
 
-import gov.nih.nci.cagrid.gums.idp.bean.UserRole;
+import gov.nih.nci.cagrid.gums.idp.bean.IdPUserRole;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -16,11 +16,11 @@ public class UserRolesComboBox extends AxisTypeComboBox {
 	}
 
 	public UserRolesComboBox(boolean anyState) {
-		super(UserRole.class, anyState);
+		super(IdPUserRole.class, anyState);
 	}
 
-	public UserRole getSelectedUserRole() {
-		return (UserRole) getSelectedObject();
+	public IdPUserRole getSelectedUserRole() {
+		return (IdPUserRole) getSelectedObject();
 	}
 
 }
