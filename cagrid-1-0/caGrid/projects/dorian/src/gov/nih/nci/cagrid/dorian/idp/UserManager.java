@@ -46,21 +46,21 @@ public class UserManager extends GUMSObject {
 	}
 
 	private void validateSpecifiedField(String fieldName, String name)
-			throws GUMSInternalFault {
+			throws InvalidUserPropertyFault {
 		if ((name == null) || (name.length() == 0)) {
-			GUMSInternalFault fault = new GUMSInternalFault();
+			InvalidUserPropertyFault fault = new InvalidUserPropertyFault();
 			fault.setFaultString("No " + fieldName + " specified.");
 			throw fault;
 		}
 	}
 
-	private void validatePassword(IdPUser user) throws GUMSInternalFault,
+	private void validatePassword(IdPUser user) throws
 			InvalidUserPropertyFault {
 		String password = user.getPassword();
 		if ((password == null)
 				|| (conf.getMinimumPasswordLength() > password.length())
 				|| (conf.getMaximumPasswordLength() < password.length())) {
-			GUMSInternalFault fault = new GUMSInternalFault();
+			InvalidUserPropertyFault fault = new InvalidUserPropertyFault();
 			fault
 					.setFaultString("Unacceptable password, the length of the password must be between "
 							+ conf.getMinimumPasswordLength()
@@ -70,12 +70,12 @@ public class UserManager extends GUMSObject {
 		}
 	}
 
-	private void validateUserId(IdPUser user) throws GUMSInternalFault,
+	private void validateUserId(IdPUser user) throws
 			InvalidUserPropertyFault {
 		String uid = user.getUserId();
 		if ((uid == null) || (conf.getMinimumUIDLength() > uid.length())
 				|| (conf.getMaximumUIDLength() < uid.length())) {
-			GUMSInternalFault fault = new GUMSInternalFault();
+			InvalidUserPropertyFault fault = new InvalidUserPropertyFault();
 			fault
 					.setFaultString("Unacceptable User ID, the length of the password must be between "
 							+ conf.getMinimumUIDLength()
@@ -85,7 +85,7 @@ public class UserManager extends GUMSObject {
 		}
 	}
 
-	private void validateUser(IdPUser user) throws GUMSInternalFault,
+	private void validateUser(IdPUser user) throws
 			InvalidUserPropertyFault {
 		validateUserId(user);
 		validatePassword(user);
@@ -100,7 +100,7 @@ public class UserManager extends GUMSObject {
 			AddressValidator.validateEmail(user.getEmail());
 			AddressValidator.validateZipCode(user.getZipcode());
 		} catch (IllegalArgumentException e) {
-			GUMSInternalFault fault = new GUMSInternalFault();
+			InvalidUserPropertyFault fault = new InvalidUserPropertyFault();
 			fault.setFaultString(e.getMessage());
 			throw fault;
 		}

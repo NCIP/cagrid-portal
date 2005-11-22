@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.gums.ifs;
 
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
 import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
+import gov.nih.nci.cagrid.gums.common.AddressValidator;
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
@@ -54,10 +55,6 @@ public class UserManager extends GUMSObject {
 		this.credentialsManager = new CredentialsManager(db);
 		this.conf = conf;
 		this.ca = ca;
-	}
-
-	public CredentialsManager getCredentialsManager() {
-		return credentialsManager;
 	}
 
 	public synchronized boolean determineIfUserExists(long idpId, String uid)
@@ -204,6 +201,62 @@ public class UserManager extends GUMSObject {
 		return user;
 	}
 
+	public IFSUser getUser(String gridId) throws GUMSInternalFault,
+			InvalidUserFault {
+		this.buildDatabase();
+		IFSUser user = new IFSUser();
+		Connection c = null;
+		try {
+			c = db.getConnectionManager().getConnection();
+			Statement s = c.createStatement();
+
+			StringBuffer sql = new StringBuffer();
+			sql.append("select * from " + USERS_TABLE + " WHERE GID='" + gridId
+					+ "'");
+			ResultSet rs = s.executeQuery(sql.toString());
+			if (rs.next()) {
+				user.setIdPId(rs.getLong("IDP_ID"));
+				user.setUID(rs.getString("UID"));
+				user.setGridId(rs.getString("GID"));
+				String email = rs.getString("EMAIL");
+				if ((email != null) && (!email.equals("null"))) {
+					user.setEmail(email);
+				}
+				user.setUserStatus(IFSUserStatus.fromValue(rs
+						.getString("STATUS")));
+				String role = rs.getString("ROLE");
+				user.setUserRole(IFSUserRole.fromValue(role));
+				X509Certificate cert = credentialsManager
+						.getCertificate(getCredentialsManagerUID(user
+								.getIdPId(), user.getUID()));
+				user.setCertificate(CertUtil.writeCertificateToString(cert));
+			} else {
+				InvalidUserFault fault = new InvalidUserFault();
+				fault.setFaultString("No such user "
+						+ getCredentialsManagerUID(user.getIdPId(), user
+								.getUID()));
+				throw fault;
+
+			}
+			rs.close();
+			s.close();
+		} catch (InvalidUserFault iuf) {
+			throw iuf;
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			GUMSInternalFault fault = new GUMSInternalFault();
+			fault.setFaultString("Unexpected Error, could not obtain the user "
+					+ getCredentialsManagerUID(user.getIdPId(), user.getUID()));
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GUMSInternalFault) helper.getFault();
+			throw fault;
+		} finally {
+			db.getConnectionManager().releaseConnection(c);
+		}
+		return user;
+	}
+
 	public IFSUser[] getUsers(IFSUserFilter filter) throws GUMSInternalFault {
 
 		this.buildDatabase();
@@ -299,7 +352,7 @@ public class UserManager extends GUMSObject {
 	}
 
 	public synchronized IFSUser addUser(IFSUser user) throws GUMSInternalFault,
-			CredentialsFault {
+			CredentialsFault, InvalidUserFault {
 		this.buildDatabase();
 		if (!determineIfUserExists(user.getIdPId(), user.getUID())) {
 			X509Certificate cert = createUserCredentials(user.getIdPId(), user
@@ -310,12 +363,26 @@ public class UserManager extends GUMSObject {
 				user.setGridId(cert.getSubjectDN().toString());
 				user.setUserRole(IFSUserRole.Non_Administrator);
 				user.setUserStatus(IFSUserStatus.Pending);
+				if (user.getEmail() != null) {
+					try {
+						AddressValidator.validateEmail(user.getEmail());
+					} catch (IllegalArgumentException e) {
+						InvalidUserFault fault = new InvalidUserFault();
+						fault.setFaultString(e.getMessage());
+						throw fault;
+					}
+				}
+				validateSpecifiedField("UID",user.getUID());
+				validateSpecifiedField("Grid Id",user.getGridId());
+				
 				db.update("INSERT INTO " + USERS_TABLE + " SET IDP_ID='"
 						+ user.getIdPId() + "',UID='" + user.getUID()
 						+ "', GID='" + user.getGridId() + "',STATUS='"
 						+ user.getUserStatus().toString() + "',ROLE='"
 						+ user.getUserRole().toString() + "',EMAIL='"
 						+ user.getEmail() + "'");
+			} catch (InvalidUserFault iuf) {
+				throw iuf;
 			} catch (Exception e) {
 				try {
 					this.removeUser(user.getIdPId(), user.getUID());
@@ -354,11 +421,108 @@ public class UserManager extends GUMSObject {
 		return user;
 	}
 
+	public synchronized void updateUser(IFSUser u) throws GUMSInternalFault,
+			InvalidUserFault {
+		this.buildDatabase();
+		String credId = getCredentialsManagerUID(u.getIdPId(),u.getUID()); 
+		if (determineIfUserExists(u.getIdPId(), u.getUID())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("update " + USERS_TABLE + " SET ");
+			int changes = 0;
+			IFSUser curr = this.getUser(u.getIdPId(), u.getUID());
+			
+
+			if ((u.getEmail() != null)
+					&& (!u.getEmail().equals(curr.getEmail()))) {
+				try {
+					AddressValidator.validateEmail(u.getEmail());
+				} catch (IllegalArgumentException e) {
+					InvalidUserFault fault = new InvalidUserFault();
+					fault.setFaultString(e.getMessage());
+					throw fault;
+				}
+				if (changes > 0) {
+					sb.append(",");
+				}
+				sb.append("EMAIL='" + u.getEmail() + "'");
+				changes = changes + 1;
+			}
+
+			if ((u.getGridId() != null)
+					&& (!u.getGridId().equals(curr.getGridId()))) {
+				if (changes > 0) {
+					sb.append(",");
+				}
+				validateSpecifiedField("Grid Id", u.getGridId());
+				sb.append("GID='" + u.getGridId() + "'");
+				changes = changes + 1;
+			}
+
+
+			if ((u.getUserStatus() != null)
+					&& (!u.getUserStatus().equals(curr.getUserStatus()))) {
+				if (changes > 0) {
+					sb.append(",");
+				}
+
+				if (accountCreated(curr.getUserStatus())
+						&& !accountCreated(u.getUserStatus())) {
+					InvalidUserFault fault = new InvalidUserFault();
+					fault.setFaultString("Error, cannot change "
+							+ credId
+							+ "'s status from a post-created account status ("
+							+ curr.getUserStatus()
+							+ ") to a pre-created account status ("
+							+ u.getUserStatus() + ").");
+					throw fault;
+				}
+
+				sb.append("STATUS='" + u.getUserStatus().getValue() + "'");
+				changes = changes + 1;
+			}
+
+			if ((u.getUserRole() != null) && (!u.getUserRole().equals(curr.getUserRole()))) {
+				if (changes > 0) {
+					sb.append(",");
+				}
+				sb.append("ROLE='" + u.getUserRole().getValue() + "'");
+				changes = changes + 1;
+			}
+			sb.append(" where IDP_ID="+u.getIdPId()+" AND UID='" + u.getUID() + "'");
+			if (changes > 0) {
+				db.update(sb.toString());
+			}
+
+		} else {
+			InvalidUserFault fault = new InvalidUserFault();
+			fault.setFaultString("Could not update user, the user "
+					+ credId + " does not exist.");
+			throw fault;
+		}
+	}
+	
+	private boolean accountCreated(IFSUserStatus status) {
+		if (status.equals(IFSUserStatus.Pending)) {
+			return false;
+		} else {
+			return true;
+		} 
+	}
+
 	public synchronized void removeUser(long idpId, String uid)
 			throws GUMSInternalFault {
 		this.buildDatabase();
 		db.update("delete from " + USERS_TABLE + " WHERE IDP_ID=" + idpId
 				+ " AND UID='" + uid + "'");
+	}
+
+	private void validateSpecifiedField(String fieldName, String name)
+			throws InvalidUserFault {
+		if ((name == null) || (name.length() == 0)) {
+			InvalidUserFault fault = new InvalidUserFault();
+			fault.setFaultString("No " + fieldName + " specified.");
+			throw fault;
+		}
 	}
 
 	private void buildDatabase() throws GUMSInternalFault {
