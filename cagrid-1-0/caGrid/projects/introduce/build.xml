@@ -2,8 +2,6 @@
 <!-- caGrid build file                                                       -->
 <!-- ======================================================================= -->
 <project name="introduce" default="prepare" basedir=".">
-	
-	
 	<!-- Environment -->
 	<property environment="env" />
 	<property file="${basedir}/build.properties" />
