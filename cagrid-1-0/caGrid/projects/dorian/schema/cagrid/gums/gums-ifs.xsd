@@ -18,11 +18,11 @@
 			<xsd:sequence>
 			    <xsd:element name="IdPId" type="xsd:long"/>
 			    <xsd:element name="UID" type="xsd:string"/>
-				<xsd:element name="GID" type="xsd:string"/>
+				<xsd:element name="gridId" type="xsd:string"/>
 				<xsd:element name="email" type="xsd:string"/>
 			    <xsd:element name="userStatus" type="ifs:IFSUserStatus"/>
 			    <xsd:element name="userRole" type="ifs:IFSUserRole"/>
-			    <xsd:element name="certificate" type="ifs:IFSUserRole"/>	
+			    <xsd:element name="certificate" type="xsd:string"/>	
 			</xsd:sequence>
 	    </xsd:complexType>
 	    
@@ -67,6 +67,12 @@
 	 </xsd:complexType>
 	 
 	 <xsd:complexType name="CredentialsFault">
+				<xsd:complexContent>
+					<xsd:extension base="wsbf:BaseFaultType" />
+				</xsd:complexContent>
+	 </xsd:complexType>
+	 
+	  <xsd:complexType name="InvalidUserFault">
 				<xsd:complexContent>
 					<xsd:extension base="wsbf:BaseFaultType" />
 				</xsd:complexContent>

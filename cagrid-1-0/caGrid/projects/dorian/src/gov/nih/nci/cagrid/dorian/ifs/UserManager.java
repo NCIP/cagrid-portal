@@ -6,8 +6,12 @@ import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
+import gov.nih.nci.cagrid.gums.idp.portal.UserRolesComboBox;
 import gov.nih.nci.cagrid.gums.ifs.bean.CredentialsFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
+import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserRole;
+import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
+import gov.nih.nci.cagrid.gums.ifs.bean.InvalidUserFault;
 
 import java.security.KeyPair;
 import java.security.cert.X509Certificate;
@@ -40,10 +44,13 @@ public class UserManager extends GUMSObject {
 	
 	private IFSConfiguration conf;
 	
-	public UserManager(Database db,IFSConfiguration conf) {
+	private CertificateAuthority ca;
+	
+	public UserManager(Database db,IFSConfiguration conf,CertificateAuthority ca) {
 		this.db = db;
 		this.credentialsManager = new CredentialsManager(db);
 		this.conf = conf;
+		this.ca = ca;
 	}
 
 	public CredentialsManager getCredentialsManager() {
@@ -91,8 +98,7 @@ public class UserManager extends GUMSObject {
 	public synchronized X509Certificate createUserCredentials(long idpId, String uid)
 			throws GUMSInternalFault, CredentialsFault {
 		try {
-			CertificateAuthority ca = IFSManager.getInstance()
-					.getCertificateAuthority();
+			
 			String caSubject = ca.getCACertificate().getSubjectDN().getName();
 			int caindex = caSubject.lastIndexOf(",");
 			String caPreSub = caSubject.substring(0, caindex);
@@ -125,23 +131,40 @@ public class UserManager extends GUMSObject {
 		}
 	}
 
-	public synchronized IFSUser addUser(IFSUser user) throws GUMSInternalFault {
+	public synchronized IFSUser addUser(IFSUser user) throws GUMSInternalFault, CredentialsFault {
 		this.buildDatabase();
-		if (determineIfUserExists(user.getIdPId(), user.getUID())) {
+		if (!determineIfUserExists(user.getIdPId(), user.getUID())) {
+			X509Certificate cert = createUserCredentials(user.getIdPId(),user.getUID());
 			try {
 				// Write method for creating and setting a users credentials
-
+				user.setCertificate(CertUtil.writeCertificateToString(cert));
+				user.setGridId(cert.getSubjectDN().toString());
+				user.setUserRole(IFSUserRole.Non_Administrator);
+				user.setUserStatus(IFSUserStatus.Pending);
+				db.update("INSERT INTO " + USERS_TABLE
+						+ " SET IDP_ID='" + user.getIdPId() + "',UID='"
+						+ user.getUID() + "', GID='"
+						+ user.getGridId() + "',STATUS='"
+						+ user.getUserStatus().toString() + "',ADMIN='"
+						+ user.getUserRole().toString() + "',EMAIL='"
+						+ user.getEmail() + "'");
 			} catch (Exception e) {
 				try {
 					this.removeUser(user.getIdPId(), user.getUID());
 				} catch (Exception ex) {
-					logError(ex.getMessage(), ex);
+					
+				}
+				
+				try {
+					this.credentialsManager.deleteCredentials(getCredentialsManagerUID(user.getIdPId(),user.getUID()));
+				} catch (Exception ex) {
+					
 				}
 				logError(e.getMessage(), e);
 				GUMSInternalFault fault = new GUMSInternalFault();
 				fault
 						.setFaultString("Error adding the user "
-								+ user.getUID()
+								+ getCredentialsManagerUID(user.getIdPId(),user.getUID())
 								+ " to the IFS, an unexpected database error occurred.");
 				FaultHelper helper = new FaultHelper(fault);
 				helper.addFaultCause(e);
@@ -150,11 +173,13 @@ public class UserManager extends GUMSObject {
 			}
 
 		} else {
-			/*
-			 * InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
-			 * fault.setFaultString("Cannot add the Trusted IdP, " +
-			 * idp.getName() + " because it already exists."); throw fault;
-			 */
+			GUMSInternalFault fault = new GUMSInternalFault();
+			fault
+					.setFaultString("Error adding the user, "
+							+ getCredentialsManagerUID(user.getIdPId(),user.getUID())
+							+ ", the user already exists!!!");
+			throw fault;
+			
 		}
 		return user;
 	}

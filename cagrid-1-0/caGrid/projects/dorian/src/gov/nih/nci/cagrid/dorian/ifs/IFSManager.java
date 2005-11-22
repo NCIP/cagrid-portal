@@ -36,8 +36,8 @@ public class IFSManager{
 	public void configure(Database db, IFSConfiguration config, CertificateAuthority ca){
 		this.db = db;
 		this.configuration = config;
-		this.userManager = new UserManager(db,configuration);
 		this.ca = ca;
+		this.userManager = new UserManager(db,configuration,this.ca);
 		configured = true;
 	}
 

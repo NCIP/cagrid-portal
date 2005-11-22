@@ -220,4 +220,18 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 		return minimumIdPNameLength;
 	}
 
+	public void setCredentialsValidDays(int credentialsValidDays) {
+		this.credentialsValidDays = credentialsValidDays;
+	}
+
+	public void setCredentialsValidMonths(int credentialsValidMonths) {
+		this.credentialsValidMonths = credentialsValidMonths;
+	}
+
+	public void setCredentialsValidYears(int credentialsValidYears) {
+		this.credentialsValidYears = credentialsValidYears;
+	}
+	
+	
+
 }
