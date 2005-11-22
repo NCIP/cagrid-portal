@@ -14,6 +14,7 @@ import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserRole;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidUserFault;
 
+import java.io.IOException;
 import java.security.KeyPair;
 import java.security.cert.X509Certificate;
 import java.sql.Connection;
@@ -94,8 +95,34 @@ public class UserManager extends GUMSObject {
 	}
 
 	public synchronized void renewUserCredentials(IFSUser user)
-			throws GUMSInternalFault, CredentialsFault {
+			throws GUMSInternalFault, CredentialsFault, InvalidUserFault {
+		X509Certificate cert = createUserCredentials(user.getIdPId(), user
+				.getUID());
+		user.setGridId(cert.getSubjectDN().getName());
+		try {
+			this.updateUser(user);
+		} catch (InvalidUserFault iuf) {
+			this.credentialsManager.deleteCredentials(getCredentialsManagerUID(
+					user.getIdPId(), user.getUID()));
+			throw iuf;
+		} catch (GUMSInternalFault gif) {
+			this.credentialsManager.deleteCredentials(getCredentialsManagerUID(
+					user.getIdPId(), user.getUID()));
+			throw gif;
+		}
+		try {
+			user.setCertificate(CertUtil.writeCertificateToString(cert));
+		} catch (IOException ioe) {
+			this.credentialsManager.deleteCredentials(getCredentialsManagerUID(
+					user.getIdPId(), user.getUID()));
+			CredentialsFault fault = new CredentialsFault();
+			fault.setFaultString("Error renewing credentials.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(ioe);
+			fault = (CredentialsFault) helper.getFault();
+			throw fault;
 
+		}
 	}
 
 	private synchronized X509Certificate createUserCredentials(long idpId,
@@ -121,6 +148,8 @@ public class UserManager extends GUMSObject {
 			PKCS10CertificationRequest req = CertUtil
 					.generateCertficateRequest(sub, pair);
 			X509Certificate cert = ca.requestCertificate(req, start, end);
+			this.credentialsManager.deleteCredentials(getCredentialsManagerUID(
+					idpId, uid));
 			this.credentialsManager.addCredentials(getCredentialsManagerUID(
 					idpId, uid), null, cert, pair.getPrivate());
 			return cert;
@@ -145,7 +174,7 @@ public class UserManager extends GUMSObject {
 		return sql;
 	}
 
-	public IFSUser getUser(long idpId, String uid) throws GUMSInternalFault,
+	public synchronized IFSUser getUser(long idpId, String uid) throws GUMSInternalFault,
 			InvalidUserFault {
 		this.buildDatabase();
 		IFSUser user = new IFSUser();
@@ -201,7 +230,7 @@ public class UserManager extends GUMSObject {
 		return user;
 	}
 
-	public IFSUser getUser(String gridId) throws GUMSInternalFault,
+	public synchronized IFSUser getUser(String gridId) throws GUMSInternalFault,
 			InvalidUserFault {
 		this.buildDatabase();
 		IFSUser user = new IFSUser();
@@ -257,7 +286,7 @@ public class UserManager extends GUMSObject {
 		return user;
 	}
 
-	public IFSUser[] getUsers(IFSUserFilter filter) throws GUMSInternalFault {
+	public synchronized IFSUser[] getUsers(IFSUserFilter filter) throws GUMSInternalFault {
 
 		this.buildDatabase();
 		Connection c = null;
@@ -372,9 +401,9 @@ public class UserManager extends GUMSObject {
 						throw fault;
 					}
 				}
-				validateSpecifiedField("UID",user.getUID());
-				validateSpecifiedField("Grid Id",user.getGridId());
-				
+				validateSpecifiedField("UID", user.getUID());
+				validateSpecifiedField("Grid Id", user.getGridId());
+
 				db.update("INSERT INTO " + USERS_TABLE + " SET IDP_ID='"
 						+ user.getIdPId() + "',UID='" + user.getUID()
 						+ "', GID='" + user.getGridId() + "',STATUS='"
@@ -424,13 +453,12 @@ public class UserManager extends GUMSObject {
 	public synchronized void updateUser(IFSUser u) throws GUMSInternalFault,
 			InvalidUserFault {
 		this.buildDatabase();
-		String credId = getCredentialsManagerUID(u.getIdPId(),u.getUID()); 
+		String credId = getCredentialsManagerUID(u.getIdPId(), u.getUID());
 		if (determineIfUserExists(u.getIdPId(), u.getUID())) {
 			StringBuffer sb = new StringBuffer();
 			sb.append("update " + USERS_TABLE + " SET ");
 			int changes = 0;
 			IFSUser curr = this.getUser(u.getIdPId(), u.getUID());
-			
 
 			if ((u.getEmail() != null)
 					&& (!u.getEmail().equals(curr.getEmail()))) {
@@ -458,7 +486,6 @@ public class UserManager extends GUMSObject {
 				changes = changes + 1;
 			}
 
-
 			if ((u.getUserStatus() != null)
 					&& (!u.getUserStatus().equals(curr.getUserStatus()))) {
 				if (changes > 0) {
@@ -468,8 +495,7 @@ public class UserManager extends GUMSObject {
 				if (accountCreated(curr.getUserStatus())
 						&& !accountCreated(u.getUserStatus())) {
 					InvalidUserFault fault = new InvalidUserFault();
-					fault.setFaultString("Error, cannot change "
-							+ credId
+					fault.setFaultString("Error, cannot change " + credId
 							+ "'s status from a post-created account status ("
 							+ curr.getUserStatus()
 							+ ") to a pre-created account status ("
@@ -481,32 +507,34 @@ public class UserManager extends GUMSObject {
 				changes = changes + 1;
 			}
 
-			if ((u.getUserRole() != null) && (!u.getUserRole().equals(curr.getUserRole()))) {
+			if ((u.getUserRole() != null)
+					&& (!u.getUserRole().equals(curr.getUserRole()))) {
 				if (changes > 0) {
 					sb.append(",");
 				}
 				sb.append("ROLE='" + u.getUserRole().getValue() + "'");
 				changes = changes + 1;
 			}
-			sb.append(" where IDP_ID="+u.getIdPId()+" AND UID='" + u.getUID() + "'");
+			sb.append(" where IDP_ID=" + u.getIdPId() + " AND UID='"
+					+ u.getUID() + "'");
 			if (changes > 0) {
 				db.update(sb.toString());
 			}
 
 		} else {
 			InvalidUserFault fault = new InvalidUserFault();
-			fault.setFaultString("Could not update user, the user "
-					+ credId + " does not exist.");
+			fault.setFaultString("Could not update user, the user " + credId
+					+ " does not exist.");
 			throw fault;
 		}
 	}
-	
+
 	private boolean accountCreated(IFSUserStatus status) {
 		if (status.equals(IFSUserStatus.Pending)) {
 			return false;
 		} else {
 			return true;
-		} 
+		}
 	}
 
 	public synchronized void removeUser(long idpId, String uid)
