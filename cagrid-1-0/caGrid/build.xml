@@ -66,9 +66,12 @@
 	<!-- Cleans up generated stuff                                      -->
 	<!-- ============================================================== -->
 	<target name="clean" description="Cleans all projects.">
-		<subant target="clean">
+		<!--<subant target="clean"  >
 			<fileset dir="${projects.dir}" includes="*/build.xml" />
-		</subant>
+		</subant>-->
+		<ant dir="${projects.dir}/core" inheritAll="false" antfile="build.xml" target="clean" />
+		<ant dir="${projects.dir}/metadata" inheritAll="false" antfile="build.xml" target="clean" />
+		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="clean" />
 	</target>
 
 
