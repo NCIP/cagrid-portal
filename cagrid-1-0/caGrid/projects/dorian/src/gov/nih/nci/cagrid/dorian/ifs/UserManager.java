@@ -174,8 +174,8 @@ public class UserManager extends GUMSObject {
 		return sql;
 	}
 
-	public synchronized IFSUser getUser(long idpId, String uid) throws GUMSInternalFault,
-			InvalidUserFault {
+	public synchronized IFSUser getUser(long idpId, String uid)
+			throws GUMSInternalFault, InvalidUserFault {
 		this.buildDatabase();
 		IFSUser user = new IFSUser();
 		Connection c = null;
@@ -230,8 +230,8 @@ public class UserManager extends GUMSObject {
 		return user;
 	}
 
-	public synchronized IFSUser getUser(String gridId) throws GUMSInternalFault,
-			InvalidUserFault {
+	public synchronized IFSUser getUser(String gridId)
+			throws GUMSInternalFault, InvalidUserFault {
 		this.buildDatabase();
 		IFSUser user = new IFSUser();
 		Connection c = null;
@@ -286,7 +286,8 @@ public class UserManager extends GUMSObject {
 		return user;
 	}
 
-	public synchronized IFSUser[] getUsers(IFSUserFilter filter) throws GUMSInternalFault {
+	public synchronized IFSUser[] getUsers(IFSUserFilter filter)
+			throws GUMSInternalFault {
 
 		this.buildDatabase();
 		Connection c = null;
@@ -535,6 +536,12 @@ public class UserManager extends GUMSObject {
 		} else {
 			return true;
 		}
+	}
+
+	public synchronized void removeUser(IFSUser user)
+			throws GUMSInternalFault {
+		this.buildDatabase();
+		this.removeUser(user.getIdPId(),user.getUID());
 	}
 
 	public synchronized void removeUser(long idpId, String uid)

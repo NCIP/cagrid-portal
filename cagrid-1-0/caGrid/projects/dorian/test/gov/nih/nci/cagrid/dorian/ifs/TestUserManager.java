@@ -47,6 +47,7 @@ public class TestUserManager extends TestCase {
 			X509Certificate cert = CertUtil.loadCertificate(ureader);
 			assertEquals(user.getGridId(),cert.getSubjectDN().getName());	
 			assertEquals(user,um.getUser(user.getIdPId(),user.getUID()));
+			assertEquals(user,um.getUser(user.getGridId()));
 			
 			//Test Querying for users
 			IFSUserFilter f1 = new IFSUserFilter();
@@ -125,7 +126,45 @@ public class TestUserManager extends TestCase {
 			IFSUser[] l8 = um.getUsers(f8);
 			assertEquals(1,l8.length);
 			
-		
+			//Test Update
+			IFSUser u1 = um.getUser(user.getGridId());
+			u1.setEmail("newemail@example.com");
+			um.updateUser(u1);
+			assertEquals(u1,um.getUser(u1.getGridId()));
+			
+			IFSUser u2 = um.getUser(user.getGridId());
+			u2.setUserRole(IFSUserRole.Administrator);
+			um.updateUser(u2);
+			assertEquals(u2,um.getUser(u2.getGridId()));
+			
+			IFSUser u3 = um.getUser(user.getGridId());
+			u3.setUserStatus(IFSUserStatus.Active);
+			um.updateUser(u3);
+			assertEquals(u3,um.getUser(u3.getGridId()));
+			
+			IFSUser u4 = um.getUser(user.getGridId());
+			u4.setUserRole(IFSUserRole.Non_Administrator);
+			u4.setUserStatus(IFSUserStatus.Suspended);
+			u4.setEmail("newemail2@example.com");
+			um.updateUser(u4);
+			assertEquals(u4,um.getUser(u4.getGridId()));
+			
+			IFSUser u5 = um.getUser(user.getGridId());
+			u5.setGridId("changed grid id");
+			um.updateUser(u5);
+			assertEquals(u5,um.getUser(u5.getGridId()));
+			
+			//Now we test updating credentials
+			um.renewUserCredentials(u5);
+			assertEquals(u5,um.getUser(u5.getGridId()));
+			StringReader r = new StringReader(u5.getCertificate());
+			X509Certificate newCert = CertUtil.loadCertificate(r);
+			if(cert.equals(newCert)){
+				assertTrue(false);
+			}
+			
+			um.removeUser(u5);
+			assertEquals(0,um.getUsers(new IFSUserFilter()).length);	
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
