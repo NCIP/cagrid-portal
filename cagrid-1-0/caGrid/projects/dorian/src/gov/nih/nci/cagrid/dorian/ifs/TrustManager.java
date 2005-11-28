@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidTrustedIdPFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
+import gov.nih.nci.cagrid.gums.ifs.bean.UntrustedAssertionFault;
 
 import java.io.StringReader;
 import java.security.cert.X509Certificate;
@@ -199,7 +200,7 @@ public class TrustManager extends GUMSObject {
 	}
 
 	public TrustedIdP getTrustedIdP(SAMLAssertion saml)
-			throws GUMSInternalFault,InvalidTrustedIdPFault {
+			throws GUMSInternalFault,UntrustedAssertionFault {
 		TrustedIdP[] idps = getTrustedIdPs();
 		for (int i = 0; i < idps.length; i++) {
 			try {
@@ -213,7 +214,7 @@ public class TrustManager extends GUMSObject {
 				logError(e.getMessage(), e);
 			}
 		}
-		InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
+		UntrustedAssertionFault fault = new UntrustedAssertionFault();
 		fault.setFaultString("The assertion specified, is not signed by a trusted IdP and therefore is not trusted.");
 		throw fault;
 	}

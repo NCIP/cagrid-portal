@@ -59,6 +59,24 @@
   			</xsd:restriction>
  	  </xsd:simpleType>
  	  
+ 	   <xsd:complexType name="UntrustedAssertionFault">
+				<xsd:complexContent>
+					<xsd:extension base="wsbf:BaseFaultType" />
+				</xsd:complexContent>
+	 </xsd:complexType>
+	 
+	  <xsd:complexType name="InvalidAssertionFault">
+				<xsd:complexContent>
+					<xsd:extension base="wsbf:BaseFaultType" />
+				</xsd:complexContent>
+	 </xsd:complexType>
+	 
+	  <xsd:complexType name="ExpiredAssertionFault">
+				<xsd:complexContent>
+					<xsd:extension base="wsbf:BaseFaultType" />
+				</xsd:complexContent>
+	 </xsd:complexType>
+ 	  
  	  	 <xsd:complexType name="InvalidTrustedIdPFault">
 				<xsd:complexContent>
 					<xsd:extension base="wsbf:BaseFaultType" />
