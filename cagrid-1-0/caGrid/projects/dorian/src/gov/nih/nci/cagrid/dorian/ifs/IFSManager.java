@@ -19,6 +19,7 @@ public class IFSManager{
 	private boolean configured = false;
 	private CertificateAuthority ca;
 	private UserManager userManager;
+	private TrustManager trustManager;
 	
 	
 	
@@ -38,6 +39,7 @@ public class IFSManager{
 		this.configuration = config;
 		this.ca = ca;
 		this.userManager = new UserManager(db,configuration,this.ca);
+		this.trustManager = new TrustManager(this.configuration,db);
 		configured = true;
 	}
 
@@ -74,6 +76,18 @@ public class IFSManager{
 			throw fault;
 		}
 		
+	}
+	
+	
+
+	public TrustManager getTrustManager() throws GUMSInternalFault{
+		if(this.configured){
+			return trustManager;
+		}else{
+			GUMSInternalFault fault = new GUMSInternalFault();
+			fault.setFaultString("Error, IFSManager has not been configured.");
+			throw fault;
+		}	
 	}
 
 	public Database getDatabase() throws GUMSInternalFault{

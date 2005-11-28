@@ -8,7 +8,6 @@ import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidPasswordFault;
 
 import java.io.ByteArrayInputStream;
-import java.io.StringReader;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.sql.Connection;
@@ -166,8 +165,7 @@ public class CredentialsManager extends GUMSObject {
 					+ CREDENTIALS_TABLE + " where username='" + username + "'");
 			if (rs.next()) {
 				String certStr = rs.getString("CERTIFICATE");
-				StringReader reader = new StringReader(certStr);
-				cert = CertUtil.loadCertificate(reader);
+				cert = CertUtil.loadCertificateFromString(certStr);
 			}
 			rs.close();
 			s.close();

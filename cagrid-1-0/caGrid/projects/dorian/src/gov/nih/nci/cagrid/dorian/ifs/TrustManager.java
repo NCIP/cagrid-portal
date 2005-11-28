@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.globus.wsrf.utils.FaultHelper;
+import org.opensaml.SAMLAssertion;
+import org.opensaml.SAMLException;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -174,7 +176,7 @@ public class TrustManager extends GUMSObject {
 		try {
 			if (!idp.equals(curr)) {
 				if (needsUpdate) {
-					sql.append(" WHERE ID="+idp.getId());
+					sql.append(" WHERE ID=" + idp.getId());
 					db.update(sql.toString());
 				}
 				removeAuthenticationMethodsForTrustedIdP(idp.getId());
@@ -194,6 +196,26 @@ public class TrustManager extends GUMSObject {
 			fault = (GUMSInternalFault) helper.getFault();
 			throw fault;
 		}
+	}
+
+	public TrustedIdP getTrustedIdP(SAMLAssertion saml)
+			throws GUMSInternalFault,InvalidTrustedIdPFault {
+		TrustedIdP[] idps = getTrustedIdPs();
+		for (int i = 0; i < idps.length; i++) {
+			try {
+				X509Certificate cert = CertUtil
+						.loadCertificateFromString(idps[i].getIdPCertificate());
+				saml.verify(cert,false);
+				return idps[i];
+			} catch(SAMLException se){
+				
+			}catch (Exception e) {
+				logError(e.getMessage(), e);
+			}
+		}
+		InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
+		fault.setFaultString("The assertion specified, is not signed by a trusted IdP and therefore is not trusted.");
+		throw fault;
 	}
 
 	public synchronized TrustedIdP[] getTrustedIdPs() throws GUMSInternalFault {

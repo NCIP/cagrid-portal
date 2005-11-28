@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
@@ -127,19 +128,25 @@ public class CertUtil {
 		return loadCertificate(new FileReader(new File(certLocation)));
 	}
 
+	public static X509Certificate loadCertificateFromString(String str)
+			throws IOException, GeneralSecurityException {
+		StringReader reader = new StringReader(str);
+		return CertUtil.loadCertificate(reader);
+
+	}
+
 	public static X509Certificate loadCertificate(Reader in)
 			throws IOException, GeneralSecurityException {
 		SecurityUtil.init();
 		PEMReader reader = new PEMReader(in, null, "BC");
 		return (X509Certificate) reader.readObject();
 	}
-	
-	public static boolean isExpired(X509Certificate cert){
+
+	public static boolean isExpired(X509Certificate cert) {
 		Date now = new Date();
-		if (now.before(cert.getNotBefore())
-				|| (now.after(cert.getNotAfter()))) {
+		if (now.before(cert.getNotBefore()) || (now.after(cert.getNotAfter()))) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
