@@ -287,7 +287,7 @@ public class TestTrustManager extends TestCase {
 
 		List l = new ArrayList();
 		l.add(auth);
-		SAMLAssertion saml = new SAMLAssertion(issuer, start, end, null, null,
+		SAMLAssertion saml = new SAMLAssertion(issuer, start2, end2, null, null,
 				l);
 		List a = new ArrayList();
 		a.add(cert);
