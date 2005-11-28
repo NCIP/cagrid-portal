@@ -43,6 +43,10 @@
 
 package gov.nih.nci.cagrid.gums.ifs;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 import org.jdom.Element;
 import org.projectmobius.common.AbstractMobiusConfiguration;
 import org.projectmobius.common.MobiusException;
@@ -73,6 +77,14 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 
 	public static final String CREDENTIALS_VALID_DAYS = "days";
 
+	public static final String MAX_PROXY_VALID = "max-proxy-valid";
+
+	public static final String MAX_PROXY_VALID_HOURS = "hours";
+
+	public static final String MAX_PROXY_VALID_MINUTES = "minutes";
+
+	public static final String MAX_PROXY_VALID_SECONDS = "seconds";
+
 	private int minimumIdPNameLength;
 
 	private int maximumIdPNameLength;
@@ -83,6 +95,12 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 
 	private int credentialsValidDays;
 
+	private int maxProxyValidHours;
+
+	private int maxProxyValidMinutes;
+
+	private int maxProxyValidSeconds;
+
 	public void setMaximumIdPNameLength(int maximumIdPNameLength) {
 		this.maximumIdPNameLength = maximumIdPNameLength;
 	}
@@ -90,8 +108,6 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 	public void setMinimumIdPNameLength(int minimumIdPNameLength) {
 		this.minimumIdPNameLength = minimumIdPNameLength;
 	}
-	
-	
 
 	public int getCredentialsValidDays() {
 		return credentialsValidDays;
@@ -148,6 +164,69 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 
 			}
 		}
+
+		Element proxy = config.getChild(MAX_PROXY_VALID, config.getNamespace());
+		if (proxy == null) {
+			throw new MobiusException("Error configuring IFS, "
+					+ MAX_PROXY_VALID
+					+ " element specified in the configuration file.");
+		} else {
+
+			String shours = proxy.getAttributeValue(MAX_PROXY_VALID_HOURS);
+			if (shours == null) {
+				throw new MobiusException("Error configuring IFS, no "
+						+ MAX_PROXY_VALID_HOURS
+						+ " attribute specified for the element "
+						+ MAX_PROXY_VALID + " in the configuration file.");
+			} else {
+				try {
+					this.maxProxyValidHours = Integer.valueOf(shours)
+							.intValue();
+				} catch (Exception n) {
+					throw new MobiusException("Error configuring IFS, the "
+							+ MAX_PROXY_VALID_HOURS
+							+ " attribute for the element " + MAX_PROXY_VALID
+							+ " must be an integer.");
+				}
+			}
+
+			String sminutes = proxy.getAttributeValue(MAX_PROXY_VALID_MINUTES);
+			if (sminutes == null) {
+				throw new MobiusException("Error configuring IFS, no "
+						+ MAX_PROXY_VALID_MINUTES
+						+ " attribute specified for the element "
+						+ MAX_PROXY_VALID + " in the configuration file.");
+			} else {
+				try {
+					this.maxProxyValidMinutes = Integer.valueOf(sminutes)
+							.intValue();
+				} catch (Exception n) {
+					throw new MobiusException("Error configuring IFS, the "
+							+ MAX_PROXY_VALID_MINUTES
+							+ " attribute for the element " + MAX_PROXY_VALID
+							+ " must be an integer.");
+				}
+			}
+
+			String sseconds = proxy.getAttributeValue(MAX_PROXY_VALID_SECONDS);
+			if (sseconds == null) {
+				throw new MobiusException("Error configuring IFS, no "
+						+ MAX_PROXY_VALID_SECONDS
+						+ " attribute specified for the element "
+						+ MAX_PROXY_VALID + " in the configuration file.");
+			} else {
+				try {
+					this.maxProxyValidSeconds = Integer.valueOf(sseconds)
+							.intValue();
+				} catch (Exception n) {
+					throw new MobiusException("Error configuring IFS, the "
+							+ MAX_PROXY_VALID_SECONDS
+							+ " attribute for the element " + MAX_PROXY_VALID
+							+ " must be an integer.");
+				}
+			}
+		}
+
 		Element valid = config.getChild(CREDENTIALS_VALID, config
 				.getNamespace());
 		if (valid == null) {
@@ -155,61 +234,93 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 					+ CREDENTIALS_VALID
 					+ " element specified in the configuration file.");
 		} else {
-			
+
 			String sdays = valid.getAttributeValue(CREDENTIALS_VALID_DAYS);
 			if (sdays == null) {
-				throw new MobiusException(
-						"Error configuring IFS, no "+CREDENTIALS_VALID_DAYS+" attribute specified for the element "
-								+ CREDENTIALS_VALID
-								+ " in the configuration file.");
+				throw new MobiusException("Error configuring IFS, no "
+						+ CREDENTIALS_VALID_DAYS
+						+ " attribute specified for the element "
+						+ CREDENTIALS_VALID + " in the configuration file.");
 			} else {
 				try {
-					this.credentialsValidDays= Integer.valueOf(sdays)
+					this.credentialsValidDays = Integer.valueOf(sdays)
 							.intValue();
 				} catch (Exception n) {
-					throw new MobiusException(
-							"Error configuring IFS, the "+CREDENTIALS_VALID_DAYS+" attribute for the element "
-								+ CREDENTIALS_VALID
-								+ " must be an integer.");
+					throw new MobiusException("Error configuring IFS, the "
+							+ CREDENTIALS_VALID_DAYS
+							+ " attribute for the element " + CREDENTIALS_VALID
+							+ " must be an integer.");
 				}
 			}
-			
+
 			String smonths = valid.getAttributeValue(CREDENTIALS_VALID_MONTHS);
 			if (smonths == null) {
-				throw new MobiusException(
-						"Error configuring IFS, no "+CREDENTIALS_VALID_MONTHS+" attribute specified for the element "
-								+ CREDENTIALS_VALID
-								+ " in the configuration file.");
+				throw new MobiusException("Error configuring IFS, no "
+						+ CREDENTIALS_VALID_MONTHS
+						+ " attribute specified for the element "
+						+ CREDENTIALS_VALID + " in the configuration file.");
 			} else {
 				try {
 					this.credentialsValidMonths = Integer.valueOf(smonths)
 							.intValue();
 				} catch (Exception n) {
-					throw new MobiusException(
-							"Error configuring IFS, the "+CREDENTIALS_VALID_MONTHS+" attribute for the element "
-								+ CREDENTIALS_VALID
-								+ " must be an integer.");
+					throw new MobiusException("Error configuring IFS, the "
+							+ CREDENTIALS_VALID_MONTHS
+							+ " attribute for the element " + CREDENTIALS_VALID
+							+ " must be an integer.");
 				}
 			}
-			
+
 			String syears = valid.getAttributeValue(CREDENTIALS_VALID_YEARS);
 			if (syears == null) {
-				throw new MobiusException(
-						"Error configuring IFS, no "+CREDENTIALS_VALID_YEARS+" attribute specified for the element "
-								+ CREDENTIALS_VALID
-								+ " in the configuration file.");
+				throw new MobiusException("Error configuring IFS, no "
+						+ CREDENTIALS_VALID_YEARS
+						+ " attribute specified for the element "
+						+ CREDENTIALS_VALID + " in the configuration file.");
 			} else {
 				try {
 					this.credentialsValidYears = Integer.valueOf(syears)
 							.intValue();
 				} catch (Exception n) {
-					throw new MobiusException(
-							"Error configuring IFS, the "+CREDENTIALS_VALID_YEARS+" attribute for the element "
-								+ CREDENTIALS_VALID
-								+ " must be an integer.");
+					throw new MobiusException("Error configuring IFS, the "
+							+ CREDENTIALS_VALID_YEARS
+							+ " attribute for the element " + CREDENTIALS_VALID
+							+ " must be an integer.");
 				}
 			}
 		}
+	}
+
+	public Date getMaxProxyValid() {
+		Calendar c = new GregorianCalendar();
+		c.add(Calendar.HOUR_OF_DAY, getMaxProxyValidHours());
+		c.add(Calendar.MINUTE, getMaxProxyValidMinutes());
+		c.add(Calendar.SECOND, getMaxProxyValidSeconds());
+		return c.getTime();
+	}
+
+	public int getMaxProxyValidHours() {
+		return maxProxyValidHours;
+	}
+
+	public void setMaxProxyValidHours(int maxProxyValidHours) {
+		this.maxProxyValidHours = maxProxyValidHours;
+	}
+
+	public int getMaxProxyValidMinutes() {
+		return maxProxyValidMinutes;
+	}
+
+	public void setMaxProxyValidMinutes(int maxProxyValidMinutes) {
+		this.maxProxyValidMinutes = maxProxyValidMinutes;
+	}
+
+	public int getMaxProxyValidSeconds() {
+		return maxProxyValidSeconds;
+	}
+
+	public void setMaxProxyValidSeconds(int maxProxyValidSeconds) {
+		this.maxProxyValidSeconds = maxProxyValidSeconds;
 	}
 
 	public int getMaximumIdPNameLength() {
@@ -231,7 +342,5 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 	public void setCredentialsValidYears(int credentialsValidYears) {
 		this.credentialsValidYears = credentialsValidYears;
 	}
-	
-	
 
 }

@@ -33,6 +33,7 @@
 		<ifs-config>
 			<idp-name-length min="4" max="10"/>
 			<credentials-valid years="12" months="0" days="0"/>
+			<max-proxy-valid hours="0" minutes="0" seconds="0"/>
 		</ifs-config>
 	</resource>	
 	

@@ -25,6 +25,14 @@
 			</xsd:sequence>
 	    </xsd:complexType>
 	    
+	    <xsd:complexType name="ProxyValid">
+			<xsd:sequence>
+			    <xsd:element name="hours" type="xsd:int"/>
+			    <xsd:element name="minutes" type="xsd:int"/>
+			    <xsd:element name="seconds" type="xsd:int"/>
+			</xsd:sequence>
+	    </xsd:complexType>
+	    
 	    <xsd:simpleType name="IFSUserRole">
   			<xsd:restriction base="xsd:string">
    				<xsd:enumeration value="Administrator"/>
@@ -41,6 +49,7 @@
    				<xsd:enumeration value="Rejected"/>
   			</xsd:restriction>
  		 </xsd:simpleType>
+ 		 
 	    
 
 	  <xsd:simpleType name="SAMLAuthenticationMethod">
@@ -90,6 +99,12 @@
 	 </xsd:complexType>
 	 
 	  <xsd:complexType name="InvalidUserFault">
+				<xsd:complexContent>
+					<xsd:extension base="wsbf:BaseFaultType" />
+				</xsd:complexContent>
+	 </xsd:complexType>
+	 
+	  <xsd:complexType name="InvalidProxyFault">
 				<xsd:complexContent>
 					<xsd:extension base="wsbf:BaseFaultType" />
 				</xsd:complexContent>

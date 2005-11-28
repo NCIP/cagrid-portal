@@ -8,6 +8,8 @@ import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
 import gov.nih.nci.cagrid.gums.ifs.bean.ExpiredAssertionFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
+import gov.nih.nci.cagrid.gums.ifs.bean.InvalidProxyFault;
+import gov.nih.nci.cagrid.gums.ifs.bean.ProxyValid;
 import gov.nih.nci.cagrid.gums.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.gums.ifs.bean.UntrustedAssertionFault;
@@ -54,16 +56,53 @@ public class TestIFS extends TestCase {
 	private Database db;
 
 	private CertificateAuthority ca;
-
-	public void testCreateProxyInvalidAuthenticationMethod() {
+	
+	public void testCreateProxy() {
 		try {
-			IFSManager.getInstance().configure(db, getOneYearConf(), ca);
+			IFSManager.getInstance().configure(db, getConf(), ca);
+			IFS ifs = new IFS();
+			IdPContainer idp = this.getTrustedIdp("My IdP");
+			ifs.addTrustedIdP(idp.getIdp());
+			ifs.createProxy(getSAMLAssertion("user", idp),getProxyValid());
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+	}
+	
+	public void testCreateProxyInvalidProxyValid() {
+		try {
+			IFSManager.getInstance().configure(db, getConf(), ca);
 			IFS ifs = new IFS();
 			IdPContainer idp = this.getTrustedIdp("My IdP");
 			ifs.addTrustedIdP(idp.getIdp());
 			Thread.sleep(500);
 			try {
-				ifs.createProxy(getSAMLAssertionUnspecifiedMethod("user", idp));
+				ProxyValid valid = new ProxyValid();
+				valid.setHours(12);
+				valid.setMinutes(0);
+				valid.setSeconds(1);
+				ifs.createProxy(getSAMLAssertion("user", idp),valid);
+				assertTrue(false);
+			} catch (InvalidProxyFault f) {
+
+			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+	}
+
+	public void testCreateProxyInvalidAuthenticationMethod() {
+		try {
+			IFSManager.getInstance().configure(db, getConf(), ca);
+			IFS ifs = new IFS();
+			IdPContainer idp = this.getTrustedIdp("My IdP");
+			ifs.addTrustedIdP(idp.getIdp());
+			Thread.sleep(500);
+			try {
+				ifs.createProxy(getSAMLAssertionUnspecifiedMethod("user", idp),getProxyValid());
 				assertTrue(false);
 			} catch (InvalidAssertionFault f) {
 
@@ -76,14 +115,14 @@ public class TestIFS extends TestCase {
 
 	public void testCreateProxyUntrustedIdP() {
 		try {
-			IFSManager.getInstance().configure(db, getOneYearConf(), ca);
+			IFSManager.getInstance().configure(db, getConf(), ca);
 			IFS ifs = new IFS();
 			IdPContainer idp = this.getTrustedIdp("My IdP");
 			IdPContainer idp2 = this.getTrustedIdp("My IdP 2");
 			ifs.addTrustedIdP(idp.getIdp());
 			Thread.sleep(500);
 			try {
-				ifs.createProxy(getSAMLAssertion("user", idp2));
+				ifs.createProxy(getSAMLAssertion("user", idp2),getProxyValid());
 				assertTrue(false);
 			} catch (UntrustedAssertionFault f) {
 
@@ -96,13 +135,13 @@ public class TestIFS extends TestCase {
 
 	public void testCreateProxyExpiredAssertion() {
 		try {
-			IFSManager.getInstance().configure(db, getOneYearConf(), ca);
+			IFSManager.getInstance().configure(db, getConf(), ca);
 			IFS ifs = new IFS();
 			IdPContainer idp = this.getTrustedIdp("My IdP");
 			ifs.addTrustedIdP(idp.getIdp());
 			Thread.sleep(500);
 			try {
-				ifs.createProxy(getExpiredSAMLAssertion("user", idp));
+				ifs.createProxy(getExpiredSAMLAssertion("user", idp),getProxyValid());
 				assertTrue(false);
 			} catch (ExpiredAssertionFault f) {
 
@@ -113,27 +152,18 @@ public class TestIFS extends TestCase {
 		}
 	}
 
-	public void testCreateProxy() {
-		try {
-			IFSManager.getInstance().configure(db, getOneYearConf(), ca);
-			IFS ifs = new IFS();
-			IdPContainer idp = this.getTrustedIdp("My IdP");
-			ifs.addTrustedIdP(idp.getIdp());
-			ifs.createProxy(getSAMLAssertion("user", idp));
 
-		} catch (Exception e) {
-			FaultUtil.printFault(e);
-			assertTrue(false);
-		}
-	}
 
-	private IFSConfiguration getOneYearConf() {
+	private IFSConfiguration getConf() {
 		IFSConfiguration conf = new IFSConfiguration();
 		conf.setCredentialsValidYears(1);
 		conf.setCredentialsValidMonths(0);
 		conf.setCredentialsValidDays(0);
 		conf.setMinimumIdPNameLength(MIN_NAME_LENGTH);
 		conf.setMaximumIdPNameLength(MAX_NAME_LENGTH);
+		conf.setMaxProxyValidHours(12);
+		conf.setMaxProxyValidMinutes(0);
+		conf.setMaxProxyValidSeconds(0);
 		return conf;
 	}
 
@@ -264,6 +294,14 @@ public class TestIFS extends TestCase {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
+	}
+	
+	private ProxyValid getProxyValid(){
+		ProxyValid valid = new ProxyValid();
+		valid.setHours(12);
+		valid.setMinutes(0);
+		valid.setSeconds(0);
+		return valid;
 	}
 
 	public class IdPContainer {
