@@ -15,6 +15,7 @@ import gov.nih.nci.cagrid.gums.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.gums.test.TestUtils;
 
+import java.io.FileOutputStream;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -29,6 +30,8 @@ import junit.framework.TestCase;
 
 import org.apache.xml.security.signature.XMLSignature;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
+import org.globus.gsi.GlobusCredential;
+import org.globus.util.ConfigUtil;
 import org.globus.wsrf.utils.FaultHelper;
 import org.opensaml.QName;
 import org.opensaml.SAMLAssertion;
@@ -67,8 +70,15 @@ public class TestIFS extends TestCase {
 
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			PublicKey publicKey = pair.getPublic();
-			ifs.createProxy(getSAMLAssertion("user", idp), publicKey,
+			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion("user", idp), publicKey,
 					getProxyLifetime());
+			
+			GlobusCredential cred = new GlobusCredential(pair.getPrivate(),
+					certs);
+			FileOutputStream fos = new FileOutputStream(ConfigUtil
+					.discoverProxyLocation());
+			cred.save(fos);
+			fos.close();
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
