@@ -200,22 +200,23 @@ public class TrustManager extends GUMSObject {
 	}
 
 	public TrustedIdP getTrustedIdP(SAMLAssertion saml)
-			throws GUMSInternalFault,InvalidAssertionFault {
+			throws GUMSInternalFault, InvalidAssertionFault {
 		TrustedIdP[] idps = getTrustedIdPs();
 		for (int i = 0; i < idps.length; i++) {
 			try {
 				X509Certificate cert = CertUtil
 						.loadCertificateFromString(idps[i].getIdPCertificate());
-				saml.verify(cert,false);
+				saml.verify(cert, false);
 				return idps[i];
-			} catch(SAMLException se){
-				
-			}catch (Exception e) {
+			} catch (SAMLException se) {
+
+			} catch (Exception e) {
 				logError(e.getMessage(), e);
 			}
 		}
 		InvalidAssertionFault fault = new InvalidAssertionFault();
-		fault.setFaultString("The assertion specified, is not signed by a trusted IdP and therefore is not trusted.");
+		fault
+				.setFaultString("The assertion specified, is not signed by a trusted IdP and therefore is not trusted.");
 		throw fault;
 	}
 
@@ -408,6 +409,19 @@ public class TrustManager extends GUMSObject {
 	private String validateAndGetPolicy(TrustedIdP idp)
 			throws GUMSInternalFault, InvalidTrustedIdPFault {
 		// TODO: Validate IdP
+		try {
+			Class c = Class.forName(idp.getPolicyClass());
+			if (!IFSUserPolicy.class.isAssignableFrom(c)) {
+				InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
+				fault.setFaultString("Invalid policy class ("+idp.getPolicyClass()+") specified.");
+				throw fault;
+			}
+
+		} catch (ClassNotFoundException e) {
+			InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
+			fault.setFaultString("Invalid policy class ("+idp.getPolicyClass()+") specified.");
+			throw fault;
+		}
 		return idp.getPolicyClass();
 	}
 

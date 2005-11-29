@@ -252,7 +252,7 @@ public class TestTrustManager extends TestCase {
 	private IdPContainer getTrustedIdp(String name) throws Exception {
 		TrustedIdP idp = new TrustedIdP();
 		idp.setName(name);
-		idp.setPolicyClass("policy");
+		idp.setPolicyClass(AutoApprovalPolicy.class.getName());
 		idp.setAuthenticationMethod(getRandomMethodList());
 
 		KeyPair pair = KeyUtil.generateRSAKeyPair1024();

@@ -244,11 +244,14 @@ public class TestIFS extends TestCase {
 
 		}
 	}
-
 	private IdPContainer getTrustedIdp(String name) throws Exception {
+		return this.getTrustedIdp(name,AutoApprovalAutoRenewPolicy.class.getName());
+	}
+
+	private IdPContainer getTrustedIdp(String name, String policyClass) throws Exception {
 		TrustedIdP idp = new TrustedIdP();
 		idp.setName(name);
-		idp.setPolicyClass("policy");
+		idp.setPolicyClass(policyClass);
 
 		SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
 		methods[0] = SAMLAuthenticationMethod
