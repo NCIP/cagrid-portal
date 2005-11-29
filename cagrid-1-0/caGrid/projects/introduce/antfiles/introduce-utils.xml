@@ -256,9 +256,6 @@
 	                    <fileset dir="${ext.globus.dir}/lib">
 	                        <include name="*.jar" />
 	                    </fileset>
-	                    <fileset dir="${ext.ogsadai.dir}/lib">
-	                        <include name="*.jar" />
-	                    </fileset>
 	                    <pathelement location="${basedir}/resources/introduce/portal" />
 	                    <pathelement location="${basedir}/resources/common/portal" />
 	                </classpath>
