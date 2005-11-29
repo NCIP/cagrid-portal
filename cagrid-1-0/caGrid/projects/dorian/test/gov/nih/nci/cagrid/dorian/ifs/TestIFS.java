@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
+import gov.nih.nci.cagrid.gums.idp.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidProxyFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.ProxyValid;
@@ -71,11 +72,19 @@ public class TestIFS extends TestCase {
 	
 	public void testCreateProxyAutoApproval(){
 		try {
-			IFSManager.getInstance().configure(db, getConf(), ca);
+			IFSManager.getInstance().configure(db, getExpiringCredentialsConf(), ca);
 			IFS ifs = new IFS();
-			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
+			IdPContainer idp = this.getTrustedIdpAutoApprove("My IdP");
 			ifs.addTrustedIdP(idp.getIdp());
 			ifs.createProxy(getSAMLAssertion("user", idp),getProxyValid());
+			
+			Thread.sleep(2100);
+			try{
+				ifs.createProxy(getSAMLAssertion("user", idp),getProxyValid());
+				assertTrue(false);
+			}catch (PermissionDeniedFault e) {
+				// TODO: handle exception
+			}
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -171,6 +180,9 @@ public class TestIFS extends TestCase {
 		conf.setCredentialsValidYears(1);
 		conf.setCredentialsValidMonths(0);
 		conf.setCredentialsValidDays(0);
+		conf.setCredentialsValidHours(0);
+		conf.setCredentialsValidMinutes(0);
+		conf.setCredentialsValidSeconds(0);
 		conf.setMinimumIdPNameLength(MIN_NAME_LENGTH);
 		conf.setMaximumIdPNameLength(MAX_NAME_LENGTH);
 		conf.setMaxProxyValidHours(12);
@@ -181,9 +193,12 @@ public class TestIFS extends TestCase {
 	
 	private IFSConfiguration getExpiringCredentialsConf() {
 		IFSConfiguration conf = new IFSConfiguration();
-		conf.setCredentialsValidYears(1);
+		conf.setCredentialsValidYears(0);
 		conf.setCredentialsValidMonths(0);
 		conf.setCredentialsValidDays(0);
+		conf.setCredentialsValidHours(0);
+		conf.setCredentialsValidMinutes(0);
+		conf.setCredentialsValidSeconds(2);
 		conf.setMinimumIdPNameLength(MIN_NAME_LENGTH);
 		conf.setMaximumIdPNameLength(MAX_NAME_LENGTH);
 		conf.setMaxProxyValidHours(12);

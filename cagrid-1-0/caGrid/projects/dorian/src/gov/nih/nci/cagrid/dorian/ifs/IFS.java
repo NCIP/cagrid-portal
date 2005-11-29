@@ -232,12 +232,7 @@ public class IFS extends GUMSObject {
 		} else if (getProxyValid(valid).after(cert.getNotAfter())) {
 			InvalidProxyFault fault = new InvalidProxyFault();
 			fault
-					.setFaultString("The proxy valid length exceeds the expiration date of the user's certificate."
-							+ conf.getMaxProxyValidHours()
-							+ ", mins="
-							+ conf.getMaxProxyValidMinutes()
-							+ ", sec="
-							+ conf.getMaxProxyValidSeconds() + ")");
+					.setFaultString("The proxy valid length exceeds the expiration date of the user's certificate.");
 			throw fault;
 		}
 

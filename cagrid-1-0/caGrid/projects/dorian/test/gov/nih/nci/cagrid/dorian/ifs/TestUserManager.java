@@ -350,6 +350,9 @@ public class TestUserManager extends TestCase {
 		conf.setCredentialsValidYears(1);
 		conf.setCredentialsValidMonths(0);
 		conf.setCredentialsValidDays(0);
+		conf.setCredentialsValidHours(0);
+		conf.setCredentialsValidMinutes(0);
+		conf.setCredentialsValidSeconds(0);
 		return conf;
 	}
 
