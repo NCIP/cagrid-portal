@@ -94,7 +94,7 @@
 	
 	
 	<xsd:element name="idpAuthenticate" type="idp:basicAuthCredential"/>	
-	<xsd:element name="idpAuthenticateResponse" type="idp:SAMLAssertion"/>
+	<xsd:element name="idpAuthenticateResponse" type="gums:SAMLAssertion"/>
 
 	
 	<xsd:element name="invalidUserPropertyFault" type="idp:InvalidUserPropertyFault"/>
@@ -105,6 +105,23 @@
    
 	<!-- IFS TYPES -->
 	
+	<xsd:element name="IFSCreateProxy">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="SAMLAssertion" minOccurs="1" maxOccurs="1" type="gums:SAMLAssertion"/>
+				<xsd:element name="PublicKey" minOccurs="1" maxOccurs="1" type="ifs:PublicKey"/>
+				<xsd:element name="ProxyLifetime" minOccurs="1" maxOccurs="1" type="ifs:ProxyLifetime"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="IFSCreateProxyResponse" type="ifs:X509Certificate" minOccurs="0" maxOccurs="unbounded"/>
+
+	
+	<xsd:element name="invalidAssertionFault" type="ifs:InvalidAssertionFault"/>
+	<xsd:element name="invalidProxyFault" type="ifs:InvalidProxyFault"/>
+	<xsd:element name="userPolicyFault" type="ifs:UserPolicyFault"/>
+	<xsd:element name="permissionDeniedFault" type="ifs:PermissionDeniedFault"/>
 			
 	<!-- RESOURCE PROPERTIES -->
    
@@ -129,6 +146,7 @@
                       
   ============================================================-->
 
+<!-- IDP Messages -->
 
 <message name="RegisterWithIdPInputMessage">
 	<part name="parameters" element="tns:idpRegister"/>
@@ -166,8 +184,6 @@
 </message>
 
 
-
-
 	<message name="GUMSInternalFaultMessage">
 		<part name="fault" element="tns:gumsInternalFault" />
 	</message>
@@ -188,7 +204,33 @@
 		<part name="fault" element="tns:noSuchUserFault" />
 	</message>
 	
+	
+<!-- IFS Messages -->
+	
+	<message name="IFSCreateProxyInputMessage">
+		<part name="parameters" element="tns:IFSCreateProxy"/>
+	</message>
+	
+	<message name="IFSCreateProxyOutputMessage">
+		<part name="parameters" element="tns:IFSCreateProxyResponse"/>
+	</message>
 
+	<message name="InvalidAssertionFaultMessage">
+		<part name="fault" element="tns:invalidAssertionFault" />
+	</message>
+	
+	<message name="InvalidProxyFaultMessage">
+		<part name="fault" element="tns:invalidProxyFault" />
+	</message>
+	
+	<message name="UserPolicyFaultMessage">
+		<part name="fault" element="tns:userPolicyFault" />
+	</message>
+	
+	<message name="PermissionDeniedFaultMessage">
+		<part name="fault" element="tns:permissionDeniedFault" />
+	</message>
+	
 
 
 
@@ -239,6 +281,16 @@
 		<output message="tns:IdPAuthenticateOutputMessage"/>
 		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
 	    <fault message="tns:InvalidLoginFaultMessage" name="InvalidLoginFault"/>
+	</operation>
+	
+	<operation name="ifsCreateProxy">
+		<input message="tns:IFSCreateProxyInputMessage"/>
+		<output message="tns:IFSCreateProxyOutputMessage"/>
+		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
+	    <fault message="tns:InvalidAssertionFaultMessage" name="InvalidAssertionFault"/>
+	    <fault message="tns:InvalidProxyFaultMessage" name="InvalidProxyFault"/>
+	    <fault message="tns:UserPolicyFaultMessage" name="UserPolicyFault"/>
+	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
 	</operation>
 
 
