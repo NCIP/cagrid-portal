@@ -1,19 +1,17 @@
 package gov.nih.nci.cagrid.gums.ifs;
 
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
+import gov.nih.nci.cagrid.gums.common.AddressValidator;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
-import gov.nih.nci.cagrid.gums.ifs.bean.CredentialsFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.ExpiredAssertionFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserRole;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidProxyFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidTrustedIdPFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.InvalidUserFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.ProxyValid;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
-import gov.nih.nci.cagrid.gums.ifs.bean.UntrustedAssertionFault;
+import gov.nih.nci.cagrid.gums.ifs.bean.UserPolicyFault;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -40,7 +38,7 @@ public class IFS extends GUMSObject {
 	public final static String EMAIL_NAME = "email";
 
 	public IFS() {
-	
+
 	}
 
 	public synchronized TrustedIdP addTrustedIdP(TrustedIdP idp)
@@ -49,11 +47,11 @@ public class IFS extends GUMSObject {
 		return IFSManager.getInstance().getTrustManager().addTrustedIdP(idp);
 	}
 
-	public void createProxy(SAMLAssertion saml, ProxyValid valid) throws GUMSInternalFault,
-			ExpiredAssertionFault, InvalidAssertionFault,
-			UntrustedAssertionFault, CredentialsFault,InvalidProxyFault {
+	public void createProxy(SAMLAssertion saml, ProxyValid valid)
+			throws GUMSInternalFault, InvalidAssertionFault, InvalidProxyFault, UserPolicyFault {
+
 		if (!saml.isSigned()) {
-			UntrustedAssertionFault fault = new UntrustedAssertionFault();
+			InvalidAssertionFault fault = new InvalidAssertionFault();
 			fault
 					.setFaultString("The assertion specified is invalid, it MUST be signed by a trusted IdP");
 			throw fault;
@@ -64,7 +62,7 @@ public class IFS extends GUMSObject {
 		Date now = cal.getTime();
 		if ((now.before(saml.getNotBefore()))
 				|| (now.after(saml.getNotOnOrAfter()))) {
-			ExpiredAssertionFault fault = new ExpiredAssertionFault();
+			InvalidAssertionFault fault = new InvalidAssertionFault();
 			fault.setFaultString("The Assertion is not valid at " + now
 					+ ", the assertion is valid from " + saml.getNotBefore()
 					+ " to " + saml.getNotOnOrAfter());
@@ -97,17 +95,30 @@ public class IFS extends GUMSObject {
 
 		// If the user does not exist, add them
 		String email = this.getEmail(saml);
+
+		boolean emailIsValid = true;
+
+		try {
+			AddressValidator.validateEmail(email);
+		} catch (Exception e) {
+			emailIsValid = false;
+			logWarning("The email address, " + email + " supplied by the IdP "
+					+ idp.getName() + " (" + idp.getId() + ") is invalid.");
+		}
+
 		IFSUser usr = null;
 		if (!um.determineIfUserExists(idp.getId(), auth.getSubject().getName())) {
 			try {
 				usr = new IFSUser();
 				usr.setIdPId(idp.getId());
 				usr.setUID(auth.getSubject().getName());
-				usr.setEmail(email);
+				if (emailIsValid) {
+					usr.setEmail(email);
+				}
 				usr.setUserRole(IFSUserRole.Non_Administrator);
 				usr.setUserStatus(IFSUserStatus.Pending);
 				usr = um.addUser(usr);
-			} catch (InvalidUserFault e) {
+			} catch (Exception e) {
 				logError(e.getMessage(), e);
 				GUMSInternalFault fault = new GUMSInternalFault();
 				fault
@@ -123,9 +134,11 @@ public class IFS extends GUMSObject {
 		} else {
 			try {
 				usr = um.getUser(idp.getId(), auth.getSubject().getName());
-				if (!usr.getEmail().equals(email)) {
-					usr.setEmail(email);
-					um.updateUser(usr);
+				if (emailIsValid) {
+					if (!usr.getEmail().equals(email)) {
+						usr.setEmail(email);
+						um.updateUser(usr);
+					}
 				}
 			} catch (Exception e) {
 				logError(e.getMessage(), e);
@@ -141,17 +154,20 @@ public class IFS extends GUMSObject {
 				throw fault;
 			}
 		}
-		
+
 		IFSConfiguration conf = IFSManager.getInstance().getConfiguration();
-		//Validate that the proxy is of valid length
-		if(getProxyValid(valid).after(conf.getMaxProxyValid())){
+		// Validate that the proxy is of valid length
+		if (getProxyValid(valid).after(conf.getMaxProxyValid())) {
 			InvalidProxyFault fault = new InvalidProxyFault();
-			fault.setFaultString("The proxy valid length exceeds the maximum proxy valid length (hrs="+conf.getMaxProxyValidHours()+", mins="+conf.getMaxProxyValidMinutes()+", sec="+conf.getMaxProxyValidSeconds()+")");
+			fault
+					.setFaultString("The proxy valid length exceeds the maximum proxy valid length (hrs="
+							+ conf.getMaxProxyValidHours()
+							+ ", mins="
+							+ conf.getMaxProxyValidMinutes()
+							+ ", sec="
+							+ conf.getMaxProxyValidSeconds() + ")");
 			throw fault;
 		}
-		
-		
-		
 
 		// Run the policy
 
@@ -166,8 +182,8 @@ public class IFS extends GUMSObject {
 
 		// create the proxy
 	}
-	
-	private Date getProxyValid(ProxyValid valid){
+
+	private Date getProxyValid(ProxyValid valid) {
 		Calendar c = new GregorianCalendar();
 		c.add(Calendar.HOUR_OF_DAY, valid.getHours());
 		c.add(Calendar.MINUTE, valid.getMinutes());

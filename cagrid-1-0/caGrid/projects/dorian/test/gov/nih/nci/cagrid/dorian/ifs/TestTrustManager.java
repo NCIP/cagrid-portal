@@ -5,9 +5,9 @@ import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
+import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
-import gov.nih.nci.cagrid.gums.ifs.bean.UntrustedAssertionFault;
 import gov.nih.nci.cagrid.gums.test.TestUtils;
 
 import java.io.File;
@@ -82,7 +82,7 @@ public class TestTrustManager extends TestCase {
 				try{
 					tm.getTrustedIdP(bad.getSAMLAssertion());
 					assertTrue(false);
-				}catch(UntrustedAssertionFault f){
+				}catch(InvalidAssertionFault f){
 					
 				}
 
@@ -163,7 +163,7 @@ public class TestTrustManager extends TestCase {
 				try{
 					tm.getTrustedIdP(bad.getSAMLAssertion());
 					assertTrue(false);
-				}catch(UntrustedAssertionFault f){
+				}catch(InvalidAssertionFault f){
 					
 				}
 

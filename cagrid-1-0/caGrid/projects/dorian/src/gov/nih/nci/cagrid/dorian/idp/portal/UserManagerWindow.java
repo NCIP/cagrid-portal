@@ -3,10 +3,10 @@ package gov.nih.nci.cagrid.gums.idp.portal;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gums.client.IdPAdministrationClient;
 import gov.nih.nci.cagrid.gums.idp.bean.BasicAuthCredential;
-import gov.nih.nci.cagrid.gums.idp.bean.InvalidLoginFault;
-import gov.nih.nci.cagrid.gums.idp.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUserFilter;
+import gov.nih.nci.cagrid.gums.idp.bean.InvalidLoginFault;
+import gov.nih.nci.cagrid.gums.idp.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gums.portal.GUMSServiceListComboBox;
 import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
 import gov.nih.nci.cagrid.gums.portal.GumsPortalConf;
@@ -34,7 +34,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.9 2005-11-22 17:45:38 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.10 2005-11-29 04:05:11 langella Exp $
  */
 public class UserManagerWindow extends GridPortalBaseFrame {
 

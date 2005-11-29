@@ -6,13 +6,13 @@ import gov.nih.nci.cagrid.gums.common.Crypt;
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
 import gov.nih.nci.cagrid.gums.idp.bean.CountryCode;
-import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
-import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
-import gov.nih.nci.cagrid.gums.idp.bean.StateCode;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUserFilter;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUserRole;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUserStatus;
+import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
+import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
+import gov.nih.nci.cagrid.gums.idp.bean.StateCode;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

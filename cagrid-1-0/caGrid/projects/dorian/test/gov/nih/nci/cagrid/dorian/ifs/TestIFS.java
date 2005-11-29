@@ -6,13 +6,11 @@ import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
-import gov.nih.nci.cagrid.gums.ifs.bean.ExpiredAssertionFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidProxyFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.ProxyValid;
 import gov.nih.nci.cagrid.gums.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
-import gov.nih.nci.cagrid.gums.ifs.bean.UntrustedAssertionFault;
 import gov.nih.nci.cagrid.gums.test.TestUtils;
 
 import java.security.KeyPair;
@@ -124,7 +122,7 @@ public class TestIFS extends TestCase {
 			try {
 				ifs.createProxy(getSAMLAssertion("user", idp2),getProxyValid());
 				assertTrue(false);
-			} catch (UntrustedAssertionFault f) {
+			} catch (InvalidAssertionFault f) {
 
 			}
 		} catch (Exception e) {
@@ -143,7 +141,7 @@ public class TestIFS extends TestCase {
 			try {
 				ifs.createProxy(getExpiredSAMLAssertion("user", idp),getProxyValid());
 				assertTrue(false);
-			} catch (ExpiredAssertionFault f) {
+			} catch (InvalidAssertionFault f) {
 
 			}
 		} catch (Exception e) {
