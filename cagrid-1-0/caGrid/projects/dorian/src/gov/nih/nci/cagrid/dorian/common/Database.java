@@ -15,7 +15,7 @@ import org.projectmobius.db.Query;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: Database.java,v 1.5 2005-11-29 04:31:57 langella Exp $
+ * @version $Id: Database.java,v 1.6 2005-11-29 14:37:46 langella Exp $
  */
 public class Database extends GUMSObject {
 
@@ -57,7 +57,7 @@ public class Database extends GUMSObject {
 				Query.update(this.root, "drop database if exists " +database);
 			}
 			if(gums!=null){
-			gums.closeAllUnusedConnections();
+			gums.destroy();
 			}
 			gums = null;
 			dbBuilt = false;

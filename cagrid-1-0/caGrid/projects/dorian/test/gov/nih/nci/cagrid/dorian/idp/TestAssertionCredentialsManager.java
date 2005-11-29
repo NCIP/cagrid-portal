@@ -23,7 +23,6 @@ import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.opensaml.InvalidCryptoException;
 import org.opensaml.SAMLAssertion;
 import org.opensaml.SAMLAttribute;
-import org.opensaml.SAMLAttributeDesignator;
 import org.opensaml.SAMLAttributeStatement;
 import org.opensaml.SAMLAuthenticationStatement;
 import org.opensaml.SAMLStatement;
