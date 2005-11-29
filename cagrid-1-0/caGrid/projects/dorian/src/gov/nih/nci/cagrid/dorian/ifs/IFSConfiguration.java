@@ -77,6 +77,12 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 
 	public static final String CREDENTIALS_VALID_DAYS = "days";
 
+	public static final String CREDENTIALS_VALID_HOURS = "hours";
+
+	public static final String CREDENTIALS_VALID_MINUTES = "minutes";
+
+	public static final String CREDENTIALS_VALID_SECONDS = "seconds";
+
 	public static final String MAX_PROXY_VALID = "max-proxy-valid";
 
 	public static final String MAX_PROXY_VALID_HOURS = "hours";
@@ -94,6 +100,12 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 	private int credentialsValidMonths;
 
 	private int credentialsValidDays;
+
+	private int credentialsValidHours;
+
+	private int credentialsValidMinutes;
+
+	private int credentialsValidSeconds;
 
 	private int maxProxyValidHours;
 
@@ -119,6 +131,30 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 
 	public int getCredentialsValidYears() {
 		return credentialsValidYears;
+	}
+
+	public int getCredentialsValidHours() {
+		return credentialsValidHours;
+	}
+
+	public void setCredentialsValidHours(int credentialsValidHours) {
+		this.credentialsValidHours = credentialsValidHours;
+	}
+
+	public int getCredentialsValidMinutes() {
+		return credentialsValidMinutes;
+	}
+
+	public void setCredentialsValidMinutes(int credentialsValidMinutes) {
+		this.credentialsValidMinutes = credentialsValidMinutes;
+	}
+
+	public int getCredentialsValidSeconds() {
+		return credentialsValidSeconds;
+	}
+
+	public void setCredentialsValidSeconds(int credentialsValidSeconds) {
+		this.credentialsValidSeconds = credentialsValidSeconds;
 	}
 
 	public void parse(MobiusResourceManager resourceManager, Element config)
@@ -162,68 +198,6 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 							"Error configuring IFS, the max IdP name length must be greater than or equal to the min username length.");
 				}
 
-			}
-		}
-
-		Element proxy = config.getChild(MAX_PROXY_VALID, config.getNamespace());
-		if (proxy == null) {
-			throw new MobiusException("Error configuring IFS, "
-					+ MAX_PROXY_VALID
-					+ " element specified in the configuration file.");
-		} else {
-
-			String shours = proxy.getAttributeValue(MAX_PROXY_VALID_HOURS);
-			if (shours == null) {
-				throw new MobiusException("Error configuring IFS, no "
-						+ MAX_PROXY_VALID_HOURS
-						+ " attribute specified for the element "
-						+ MAX_PROXY_VALID + " in the configuration file.");
-			} else {
-				try {
-					this.maxProxyValidHours = Integer.valueOf(shours)
-							.intValue();
-				} catch (Exception n) {
-					throw new MobiusException("Error configuring IFS, the "
-							+ MAX_PROXY_VALID_HOURS
-							+ " attribute for the element " + MAX_PROXY_VALID
-							+ " must be an integer.");
-				}
-			}
-
-			String sminutes = proxy.getAttributeValue(MAX_PROXY_VALID_MINUTES);
-			if (sminutes == null) {
-				throw new MobiusException("Error configuring IFS, no "
-						+ MAX_PROXY_VALID_MINUTES
-						+ " attribute specified for the element "
-						+ MAX_PROXY_VALID + " in the configuration file.");
-			} else {
-				try {
-					this.maxProxyValidMinutes = Integer.valueOf(sminutes)
-							.intValue();
-				} catch (Exception n) {
-					throw new MobiusException("Error configuring IFS, the "
-							+ MAX_PROXY_VALID_MINUTES
-							+ " attribute for the element " + MAX_PROXY_VALID
-							+ " must be an integer.");
-				}
-			}
-
-			String sseconds = proxy.getAttributeValue(MAX_PROXY_VALID_SECONDS);
-			if (sseconds == null) {
-				throw new MobiusException("Error configuring IFS, no "
-						+ MAX_PROXY_VALID_SECONDS
-						+ " attribute specified for the element "
-						+ MAX_PROXY_VALID + " in the configuration file.");
-			} else {
-				try {
-					this.maxProxyValidSeconds = Integer.valueOf(sseconds)
-							.intValue();
-				} catch (Exception n) {
-					throw new MobiusException("Error configuring IFS, the "
-							+ MAX_PROXY_VALID_SECONDS
-							+ " attribute for the element " + MAX_PROXY_VALID
-							+ " must be an integer.");
-				}
 			}
 		}
 
@@ -288,7 +262,127 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 							+ " must be an integer.");
 				}
 			}
+
+			String shours = valid.getAttributeValue(CREDENTIALS_VALID_HOURS);
+			if (shours == null) {
+				throw new MobiusException("Error configuring IFS, no "
+						+ CREDENTIALS_VALID_HOURS
+						+ " attribute specified for the element "
+						+ CREDENTIALS_VALID + " in the configuration file.");
+			} else {
+				try {
+					this.credentialsValidHours = Integer.valueOf(shours)
+							.intValue();
+				} catch (Exception n) {
+					throw new MobiusException("Error configuring IFS, the "
+							+ CREDENTIALS_VALID_HOURS
+							+ " attribute for the element " + CREDENTIALS_VALID
+							+ " must be an integer.");
+				}
+			}
+
+			String sminutes = valid
+					.getAttributeValue(CREDENTIALS_VALID_MINUTES);
+			if (sminutes == null) {
+				throw new MobiusException("Error configuring IFS, no "
+						+ CREDENTIALS_VALID_MINUTES
+						+ " attribute specified for the element "
+						+ CREDENTIALS_VALID + " in the configuration file.");
+			} else {
+				try {
+					this.credentialsValidMinutes = Integer.valueOf(sminutes)
+							.intValue();
+				} catch (Exception n) {
+					throw new MobiusException("Error configuring IFS, the "
+							+ CREDENTIALS_VALID_MINUTES
+							+ " attribute for the element " + CREDENTIALS_VALID
+							+ " must be an integer.");
+				}
+			}
+
+			String sseconds = valid
+					.getAttributeValue(CREDENTIALS_VALID_SECONDS);
+			if (sseconds == null) {
+				throw new MobiusException("Error configuring IFS, no "
+						+ CREDENTIALS_VALID_SECONDS
+						+ " attribute specified for the element "
+						+ CREDENTIALS_VALID + " in the configuration file.");
+			} else {
+				try {
+					this.credentialsValidSeconds = Integer.valueOf(sseconds)
+							.intValue();
+				} catch (Exception n) {
+					throw new MobiusException("Error configuring IFS, the "
+							+ CREDENTIALS_VALID_SECONDS
+							+ " attribute for the element " + CREDENTIALS_VALID
+							+ " must be an integer.");
+				}
+			}
+
 		}
+
+		Element proxy = config.getChild(MAX_PROXY_VALID, config.getNamespace());
+		if (proxy == null) {
+			throw new MobiusException("Error configuring IFS, "
+					+ MAX_PROXY_VALID
+					+ " element specified in the configuration file.");
+		} else {
+
+			String shours = proxy.getAttributeValue(MAX_PROXY_VALID_HOURS);
+			if (shours == null) {
+				throw new MobiusException("Error configuring IFS, no "
+						+ MAX_PROXY_VALID_HOURS
+						+ " attribute specified for the element "
+						+ MAX_PROXY_VALID + " in the configuration file.");
+			} else {
+				try {
+					this.maxProxyValidHours = Integer.valueOf(shours)
+							.intValue();
+				} catch (Exception n) {
+					throw new MobiusException("Error configuring IFS, the "
+							+ MAX_PROXY_VALID_HOURS
+							+ " attribute for the element " + MAX_PROXY_VALID
+							+ " must be an integer.");
+				}
+			}
+
+			String sminutes = proxy.getAttributeValue(MAX_PROXY_VALID_MINUTES);
+			if (sminutes == null) {
+				throw new MobiusException("Error configuring IFS, no "
+						+ MAX_PROXY_VALID_MINUTES
+						+ " attribute specified for the element "
+						+ MAX_PROXY_VALID + " in the configuration file.");
+			} else {
+				try {
+					this.maxProxyValidMinutes = Integer.valueOf(sminutes)
+							.intValue();
+				} catch (Exception n) {
+					throw new MobiusException("Error configuring IFS, the "
+							+ MAX_PROXY_VALID_MINUTES
+							+ " attribute for the element " + MAX_PROXY_VALID
+							+ " must be an integer.");
+				}
+			}
+
+			String sseconds = proxy.getAttributeValue(MAX_PROXY_VALID_SECONDS);
+			if (sseconds == null) {
+				throw new MobiusException("Error configuring IFS, no "
+						+ MAX_PROXY_VALID_SECONDS
+						+ " attribute specified for the element "
+						+ MAX_PROXY_VALID + " in the configuration file.");
+			} else {
+				try {
+					this.maxProxyValidSeconds = Integer.valueOf(sseconds)
+							.intValue();
+				} catch (Exception n) {
+					throw new MobiusException("Error configuring IFS, the "
+							+ MAX_PROXY_VALID_SECONDS
+							+ " attribute for the element " + MAX_PROXY_VALID
+							+ " must be an integer.");
+				}
+			}
+		}
+
 	}
 
 	public Date getMaxProxyValid() {
@@ -296,6 +390,17 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 		c.add(Calendar.HOUR_OF_DAY, getMaxProxyValidHours());
 		c.add(Calendar.MINUTE, getMaxProxyValidMinutes());
 		c.add(Calendar.SECOND, getMaxProxyValidSeconds());
+		return c.getTime();
+	}
+	
+	public Date getCredentialsValid() {
+		Calendar c = new GregorianCalendar();
+		c.add(Calendar.YEAR, getCredentialsValidYears());
+		c.add(Calendar.MONTH, getCredentialsValidMonths());
+		c.add(Calendar.DAY_OF_MONTH, getCredentialsValidDays());
+		c.add(Calendar.HOUR_OF_DAY, getCredentialsValidHours());
+		c.add(Calendar.MINUTE, getCredentialsValidMinutes());
+		c.add(Calendar.SECOND, getCredentialsValidSeconds());
 		return c.getTime();
 	}
 

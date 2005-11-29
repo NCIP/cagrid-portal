@@ -17,9 +17,10 @@ import org.globus.wsrf.utils.FaultHelper;
  *          Exp $
  */
 
-public class ManualApprovalAutoRenewPolicy implements IFSUserPolicy {
+public class AutoApprovalAutoRenewalPolicy extends AutoApprovalPolicy implements IFSUserPolicy {
 	public void applyPolicy(IFSUser user) throws GUMSInternalFault,
 			UserPolicyFault {
+		super.applyPolicy(user);
 		UserManager um = IFSManager.getInstance().getUserManager();
 		IFSConfiguration conf = IFSManager.getInstance().getConfiguration();
 		

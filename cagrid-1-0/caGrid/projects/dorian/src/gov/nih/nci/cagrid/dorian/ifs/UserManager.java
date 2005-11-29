@@ -135,10 +135,7 @@ public class UserManager extends GUMSObject {
 			String sub = caPreSub + ",OU=IdP [" + idpId + "],CN=" + uid;
 			Calendar c = new GregorianCalendar();
 			Date start = c.getTime();
-			c.roll(Calendar.YEAR, conf.getCredentialsValidYears());
-			c.roll(Calendar.MONTH, conf.getCredentialsValidMonths());
-			c.roll(Calendar.DAY_OF_MONTH, conf.getCredentialsValidDays());
-			Date end = c.getTime();
+			Date end = conf.getCredentialsValid();
 			if (end.after(ca.getCACertificate().getNotAfter())) {
 				end = ca.getCACertificate().getNotAfter();
 			}

@@ -59,7 +59,21 @@ public class TestIFS extends TestCase {
 		try {
 			IFSManager.getInstance().configure(db, getConf(), ca);
 			IFS ifs = new IFS();
-			IdPContainer idp = this.getTrustedIdp("My IdP");
+			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
+			ifs.addTrustedIdP(idp.getIdp());
+			ifs.createProxy(getSAMLAssertion("user", idp),getProxyValid());
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+	}
+	
+	public void testCreateProxyAutoApproval(){
+		try {
+			IFSManager.getInstance().configure(db, getConf(), ca);
+			IFS ifs = new IFS();
+			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
 			ifs.addTrustedIdP(idp.getIdp());
 			ifs.createProxy(getSAMLAssertion("user", idp),getProxyValid());
 
@@ -73,7 +87,7 @@ public class TestIFS extends TestCase {
 		try {
 			IFSManager.getInstance().configure(db, getConf(), ca);
 			IFS ifs = new IFS();
-			IdPContainer idp = this.getTrustedIdp("My IdP");
+			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
 			ifs.addTrustedIdP(idp.getIdp());
 			Thread.sleep(500);
 			try {
@@ -96,7 +110,7 @@ public class TestIFS extends TestCase {
 		try {
 			IFSManager.getInstance().configure(db, getConf(), ca);
 			IFS ifs = new IFS();
-			IdPContainer idp = this.getTrustedIdp("My IdP");
+			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
 			ifs.addTrustedIdP(idp.getIdp());
 			Thread.sleep(500);
 			try {
@@ -115,8 +129,8 @@ public class TestIFS extends TestCase {
 		try {
 			IFSManager.getInstance().configure(db, getConf(), ca);
 			IFS ifs = new IFS();
-			IdPContainer idp = this.getTrustedIdp("My IdP");
-			IdPContainer idp2 = this.getTrustedIdp("My IdP 2");
+			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
+			IdPContainer idp2 = this.getTrustedIdpAutoApproveAutoRenew("My IdP 2");
 			ifs.addTrustedIdP(idp.getIdp());
 			Thread.sleep(500);
 			try {
@@ -135,7 +149,7 @@ public class TestIFS extends TestCase {
 		try {
 			IFSManager.getInstance().configure(db, getConf(), ca);
 			IFS ifs = new IFS();
-			IdPContainer idp = this.getTrustedIdp("My IdP");
+			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
 			ifs.addTrustedIdP(idp.getIdp());
 			Thread.sleep(500);
 			try {
@@ -164,6 +178,20 @@ public class TestIFS extends TestCase {
 		conf.setMaxProxyValidSeconds(0);
 		return conf;
 	}
+	
+	private IFSConfiguration getExpiringCredentialsConf() {
+		IFSConfiguration conf = new IFSConfiguration();
+		conf.setCredentialsValidYears(1);
+		conf.setCredentialsValidMonths(0);
+		conf.setCredentialsValidDays(0);
+		conf.setMinimumIdPNameLength(MIN_NAME_LENGTH);
+		conf.setMaximumIdPNameLength(MAX_NAME_LENGTH);
+		conf.setMaxProxyValidHours(12);
+		conf.setMaxProxyValidMinutes(0);
+		conf.setMaxProxyValidSeconds(0);
+		return conf;
+	}
+	
 
 	private SAMLAssertion getSAMLAssertion(String id, IdPContainer idp)
 			throws Exception {
@@ -244,8 +272,12 @@ public class TestIFS extends TestCase {
 
 		}
 	}
-	private IdPContainer getTrustedIdp(String name) throws Exception {
-		return this.getTrustedIdp(name,AutoApprovalAutoRenewPolicy.class.getName());
+	private IdPContainer getTrustedIdpAutoApproveAutoRenew(String name) throws Exception {
+		return this.getTrustedIdp(name,AutoApprovalAutoRenewalPolicy.class.getName());
+	}
+	
+	private IdPContainer getTrustedIdpAutoApprove(String name) throws Exception {
+		return this.getTrustedIdp(name,AutoApprovalPolicy.class.getName());
 	}
 
 	private IdPContainer getTrustedIdp(String name, String policyClass) throws Exception {

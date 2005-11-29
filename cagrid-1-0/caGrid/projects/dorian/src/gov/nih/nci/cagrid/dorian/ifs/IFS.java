@@ -3,16 +3,19 @@ package gov.nih.nci.cagrid.gums.ifs;
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
 import gov.nih.nci.cagrid.gums.common.AddressValidator;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
+import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserRole;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidProxyFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidTrustedIdPFault;
+import gov.nih.nci.cagrid.gums.ifs.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.ProxyValid;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.gums.ifs.bean.UserPolicyFault;
 
+import java.security.cert.X509Certificate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -41,14 +44,15 @@ public class IFS extends GUMSObject {
 
 	}
 
-	public synchronized TrustedIdP addTrustedIdP(TrustedIdP idp)
+	public TrustedIdP addTrustedIdP(TrustedIdP idp)
 			throws GUMSInternalFault, InvalidTrustedIdPFault {
 		// TODO: Verify User is an administrator etc.
 		return IFSManager.getInstance().getTrustManager().addTrustedIdP(idp);
 	}
 
 	public void createProxy(SAMLAssertion saml, ProxyValid valid)
-			throws GUMSInternalFault, InvalidAssertionFault, InvalidProxyFault, UserPolicyFault {
+			throws GUMSInternalFault, InvalidAssertionFault, InvalidProxyFault,
+			UserPolicyFault, PermissionDeniedFault {
 
 		if (!saml.isSigned()) {
 			InvalidAssertionFault fault = new InvalidAssertionFault();
@@ -170,17 +174,108 @@ public class IFS extends GUMSObject {
 		}
 
 		// Run the policy
+		IFSUserPolicy policy = null;
+		try {
+			Class c = Class.forName(idp.getPolicyClass());
+			policy = (IFSUserPolicy) c.newInstance();
 
-		// Auto renew policy should renew credentials if they are not valid
-		// until the max proxy time frame
+		} catch (Exception e) {
+			GUMSInternalFault fault = new GUMSInternalFault();
+			fault
+					.setFaultString("An unexpected error occurred in creating an instance of the user policy "
+							+ idp.getPolicyClass());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GUMSInternalFault) helper.getFault();
+			throw fault;
+		}
+
+		policy.applyPolicy(usr);
 
 		// Check to see if authorized
+		this.verifyActiveUser(usr);
 
 		// Check to see if the user's credentials are ok, includes checking if
 		// the credentials are expired and if the proxy time is ok in regards to
 		// the credentials time
 
+		X509Certificate cert = null;
+
+		try {
+			cert = CertUtil.loadCertificateFromString(usr.getCertificate());
+
+		} catch (Exception e) {
+			GUMSInternalFault fault = new GUMSInternalFault();
+			fault.setFaultString("Error loading the user's credentials.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GUMSInternalFault) helper.getFault();
+		}
+
+		if (CertUtil.isExpired(cert)) {
+			usr.setUserStatus(IFSUserStatus.Expired);
+			try {
+				um.updateUser(usr);
+			} catch (Exception e) {
+				GUMSInternalFault fault = new GUMSInternalFault();
+				fault
+						.setFaultString("Unexpected Error, updating the user's status");
+				FaultHelper helper = new FaultHelper(fault);
+				helper.addFaultCause(e);
+				fault = (GUMSInternalFault) helper.getFault();
+			}
+			PermissionDeniedFault fault = new PermissionDeniedFault();
+			fault
+					.setFaultString("The credentials for this account have expired.");
+			throw fault;
+
+		} else if (getProxyValid(valid).after(cert.getNotAfter())) {
+			InvalidProxyFault fault = new InvalidProxyFault();
+			fault
+					.setFaultString("The proxy valid length exceeds the expiration date of the user's certificate."
+							+ conf.getMaxProxyValidHours()
+							+ ", mins="
+							+ conf.getMaxProxyValidMinutes()
+							+ ", sec="
+							+ conf.getMaxProxyValidSeconds() + ")");
+			throw fault;
+		}
+
 		// create the proxy
+	}
+
+	private void verifyActiveUser(IFSUser usr) throws GUMSInternalFault,
+			PermissionDeniedFault {
+
+		if (!usr.getUserStatus().equals(IFSUserStatus.Active)) {
+			if (usr.getUserStatus().equals(IFSUserStatus.Suspended)) {
+				PermissionDeniedFault fault = new PermissionDeniedFault();
+				fault.setFaultString("The account has been suspended.");
+				throw fault;
+
+			} else if (usr.getUserStatus().equals(IFSUserStatus.Rejected)) {
+				PermissionDeniedFault fault = new PermissionDeniedFault();
+				fault
+						.setFaultString("The application for the account was rejected.");
+				throw fault;
+
+			} else if (usr.getUserStatus().equals(IFSUserStatus.Pending)) {
+				PermissionDeniedFault fault = new PermissionDeniedFault();
+				fault
+						.setFaultString("The application for this account has not yet been reviewed.");
+				throw fault;
+			} else if (usr.getUserStatus().equals(IFSUserStatus.Expired)) {
+				PermissionDeniedFault fault = new PermissionDeniedFault();
+				fault
+						.setFaultString("The credentials for this account have expired.");
+				throw fault;
+			} else {
+				PermissionDeniedFault fault = new PermissionDeniedFault();
+				fault.setFaultString("Unknown Reason");
+				throw fault;
+			}
+		}
+
 	}
 
 	private Date getProxyValid(ProxyValid valid) {

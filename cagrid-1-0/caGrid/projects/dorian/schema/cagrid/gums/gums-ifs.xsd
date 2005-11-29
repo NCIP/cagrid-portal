@@ -103,6 +103,12 @@
 					<xsd:extension base="wsbf:BaseFaultType" />
 				</xsd:complexContent>
 	 </xsd:complexType>
+	 
+	  <xsd:complexType name="PermissionDeniedFault">
+				<xsd:complexContent>
+					<xsd:extension base="wsbf:BaseFaultType" />
+				</xsd:complexContent>
+	 </xsd:complexType>
 	
 	
 	<!-- =================================================================-->

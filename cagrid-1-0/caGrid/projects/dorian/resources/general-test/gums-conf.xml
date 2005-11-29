@@ -19,13 +19,12 @@
         </gums-config>
 	</resource>	
 	
-	<resource name="IdPConfiguration" class="gov.nih.nci.cagrid.gums.idp.IdPConfiguration">
-		<idp-config>
-			<uid-length min="4" max="10"/>
-		    <password-length min="6" max="10"/>
-		    <registration-policy class="gov.nih.nci.cagrid.gums.idp.ManualRegistrationPolicy"/>
-		    <asserting-credentials auto="true" renew="true" key-password="idpkey"/>
-		</idp-config>
+	<resource name="IFSConfiguration" class="gov.nih.nci.cagrid.gums.ifs.IFSConfiguration">
+		<ifs-config>
+			<idp-name-length min="4" max="10"/>
+			<credentials-valid years="12" months="0" days="0" hours="0" minutes="0" seconds="0"/>
+			<max-proxy-valid hours="0" minutes="0" seconds="0"/>
+		</ifs-config>
 	</resource>	
 		
 	<resource name="GUMSCertificateAuthorityConf" class="gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthorityConf">
