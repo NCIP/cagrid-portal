@@ -6,9 +6,10 @@ import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
-import gov.nih.nci.cagrid.gums.idp.bean.PermissionDeniedFault;
+import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidProxyFault;
+import gov.nih.nci.cagrid.gums.ifs.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.ProxyValid;
 import gov.nih.nci.cagrid.gums.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
@@ -74,17 +75,20 @@ public class TestIFS extends TestCase {
 		try {
 			IFSManager.getInstance().configure(db, getExpiringCredentialsConf(), ca);
 			IFS ifs = new IFS();
+			String username = "user";
 			IdPContainer idp = this.getTrustedIdpAutoApprove("My IdP");
-			ifs.addTrustedIdP(idp.getIdp());
-			ifs.createProxy(getSAMLAssertion("user", idp),getProxyValid());
 			
-			Thread.sleep(2100);
+			ifs.addTrustedIdP(idp.getIdp());
+			ifs.createProxy(getSAMLAssertion(username, idp),getProxyValidShort());
+			assertEquals(ifs.getUser(idp.getIdp().getId(),username).getUserStatus(),IFSUserStatus.Active);
+			Thread.sleep(3100);
 			try{
-				ifs.createProxy(getSAMLAssertion("user", idp),getProxyValid());
+				ifs.createProxy(getSAMLAssertion(username, idp),getProxyValidShort());
 				assertTrue(false);
-			}catch (PermissionDeniedFault e) {
-				// TODO: handle exception
+			}catch (PermissionDeniedFault fault) {
+			
 			}
+		    assertEquals(ifs.getUser(idp.getIdp().getId(),username).getUserStatus(),IFSUserStatus.Expired);
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -198,7 +202,7 @@ public class TestIFS extends TestCase {
 		conf.setCredentialsValidDays(0);
 		conf.setCredentialsValidHours(0);
 		conf.setCredentialsValidMinutes(0);
-		conf.setCredentialsValidSeconds(2);
+		conf.setCredentialsValidSeconds(3);
 		conf.setMinimumIdPNameLength(MIN_NAME_LENGTH);
 		conf.setMaximumIdPNameLength(MAX_NAME_LENGTH);
 		conf.setMaxProxyValidHours(12);
@@ -343,6 +347,15 @@ public class TestIFS extends TestCase {
 			assertTrue(false);
 		}
 	}
+	
+	private ProxyValid getProxyValidShort(){
+		ProxyValid valid = new ProxyValid();
+		valid.setHours(0);
+		valid.setMinutes(0);
+		valid.setSeconds(1);
+		return valid;
+	}
+
 	
 	private ProxyValid getProxyValid(){
 		ProxyValid valid = new ProxyValid();

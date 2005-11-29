@@ -10,6 +10,7 @@ import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidProxyFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidTrustedIdPFault;
+import gov.nih.nci.cagrid.gums.ifs.bean.InvalidUserFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.ProxyValid;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
@@ -44,10 +45,16 @@ public class IFS extends GUMSObject {
 
 	}
 
-	public TrustedIdP addTrustedIdP(TrustedIdP idp)
-			throws GUMSInternalFault, InvalidTrustedIdPFault {
+	public TrustedIdP addTrustedIdP(TrustedIdP idp) throws GUMSInternalFault,
+			InvalidTrustedIdPFault {
 		// TODO: Verify User is an administrator etc.
 		return IFSManager.getInstance().getTrustManager().addTrustedIdP(idp);
+	}
+
+	public IFSUser getUser(long idpId, String uid) throws GUMSInternalFault, InvalidUserFault{
+//		 TODO: Verify User is an administrator etc.
+		UserManager um = IFSManager.getInstance().getUserManager();
+		return um.getUser(idpId,uid);
 	}
 
 	public void createProxy(SAMLAssertion saml, ProxyValid valid)
