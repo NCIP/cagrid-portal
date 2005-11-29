@@ -178,12 +178,12 @@ public class TestUserManager extends TestCase {
 
 			String prefix = "user";
 			
-			int userCount = 50;
+			int userCount = 9;
 			
 			for (int i = 0; i < userCount; i++) {
 				// Test adding user
-				long idpId = (i%5)+1;
-				long idpCount = (i / 5)+1;
+				long idpId = (i%3)+1;
+				long idpCount = (i / 3)+1;
 			
 				String uname = prefix+i;
 				

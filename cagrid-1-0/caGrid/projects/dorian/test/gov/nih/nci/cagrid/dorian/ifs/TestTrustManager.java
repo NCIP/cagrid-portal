@@ -53,10 +53,10 @@ public class TestTrustManager extends TestCase {
 
 	private CertificateAuthority ca;
 
-	public void testSingleUser() {
+	public void testSingleIdP() {
 		try {
 			// We want to run this multiple times
-			int times = getAuthenticationMethods().size() * 2;
+			int times = getAuthenticationMethods().size();
 			for (int i = 0; i < times; i++) {
 				assertNotNull(tm);
 				assertEquals(0, tm.getTrustedIdPs().length);
@@ -133,10 +133,10 @@ public class TestTrustManager extends TestCase {
 		}
 	}
 
-	public void testMultipleUsers() {
+	public void testMultipleIdPs() {
 		try {
 			// We want to run this multiple times
-			int times = getAuthenticationMethods().size() * 2;
+			int times = getAuthenticationMethods().size();
 			String baseName = "Test IdP";
 			String baseUpdateName = "Updated IdP";
 			for (int i = 0; i < times; i++) {
