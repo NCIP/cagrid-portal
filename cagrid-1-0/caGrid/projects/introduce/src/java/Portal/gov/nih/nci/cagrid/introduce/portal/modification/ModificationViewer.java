@@ -36,7 +36,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.3 2005-11-18 19:47:54 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.4 2005-11-29 17:22:32 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -495,8 +495,6 @@ public class ModificationViewer extends GridPortalBaseFrame {
 										methodsDirectory.getAbsolutePath()
 												+ File.separator
 												+ "schema"
-												+ File.separator
-												+ "cagrid"
 												+ File.separator
 												+ serviceProperties
 														.getProperty("introduce.skeleton.service.name")),

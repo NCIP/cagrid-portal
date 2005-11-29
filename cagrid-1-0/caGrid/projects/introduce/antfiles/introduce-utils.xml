@@ -55,6 +55,11 @@
 			<replacefilter token="PACKAGE-NAME" value="${introduce.skeleton.package}" />
 			<replacefilter token="PACKAGE-DIR" value="${introduce.skeleton.package.dir}" />
 		</replace>
+		<replace file="${introduce.skeleton.destination.dir}/server-config.wsdd">
+			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
+			<replacefilter token="PACKAGE-NAME" value="${introduce.skeleton.package}" />
+			<replacefilter token="PACKAGE-DIR" value="${introduce.skeleton.package.dir}" />
+		</replace>
 		<replace file="${introduce.skeleton.destination.dir}/.project">
 			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
 			<replacefilter token="PACKAGE-NAME" value="${introduce.skeleton.package}" />
@@ -71,14 +76,14 @@
 		</replace>
 
 		<!-- move and rename the schema files -->
-		<move todir="${introduce.skeleton.destination.dir}/schema/cagrid/${introduce.skeleton.service.name}">
-			<fileset dir="${introduce.skeleton.destination.dir}/schema/cagrid/Service" />
+		<move todir="${introduce.skeleton.destination.dir}/schema/${introduce.skeleton.service.name}">
+			<fileset dir="${introduce.skeleton.destination.dir}/schema/Service" />
 		</move>
-		<move tofile="${introduce.skeleton.destination.dir}/schema/cagrid/${introduce.skeleton.service.name}/${introduce.skeleton.service.name}.wsdl">
-			<fileset file="${introduce.skeleton.destination.dir}/schema/cagrid/${introduce.skeleton.service.name}/Service.wsdl" />
+		<move tofile="${introduce.skeleton.destination.dir}/schema/${introduce.skeleton.service.name}/${introduce.skeleton.service.name}.wsdl">
+			<fileset file="${introduce.skeleton.destination.dir}/schema/${introduce.skeleton.service.name}/Service.wsdl" />
 		</move>
 
-		<replace file="${introduce.skeleton.destination.dir}/schema/cagrid/${introduce.skeleton.service.name}/${introduce.skeleton.service.name}.wsdl">
+		<replace file="${introduce.skeleton.destination.dir}/schema/${introduce.skeleton.service.name}/${introduce.skeleton.service.name}.wsdl">
 			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
 			<replacefilter token="PACKAGE-NAME" value="${introduce.skeleton.package}" />
 			<replacefilter token="NAMESPACE-DOMAIN" value="${introduce.skeleton.namespace.domain}" />
@@ -153,7 +158,7 @@
 		</propertyfile>
 		<!-- create the propertites files for build of this project-->
 		<propertyfile file="${introduce.skeleton.destination.dir}/build.properties" comment="Service build properties">
-			<entry key="schema.path" value="cagrid/${introduce.skeleton.service.name}" />
+			<entry key="schema.path" value="${introduce.skeleton.service.name}" />
 			<entry key="interface.name" value="${introduce.skeleton.service.name}" />
 			<entry key="package" value="${introduce.skeleton.package}" />
 			<entry key="package.dir" value="${introduce.skeleton.package.dir}" />
