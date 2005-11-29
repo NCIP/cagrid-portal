@@ -14,4 +14,11 @@ public class IFSUtils {
 		c.add(Calendar.SECOND, valid.getSeconds());
 		return c.getTime();
 	}
+	
+	public static long getTimeInSeconds(ProxyLifetime lifetime){
+		long seconds=lifetime.getSeconds();
+		seconds = seconds + (lifetime.getMinutes()*60);
+		seconds = seconds + (lifetime.getHours()*60*60);
+		return seconds;
+	}
 }

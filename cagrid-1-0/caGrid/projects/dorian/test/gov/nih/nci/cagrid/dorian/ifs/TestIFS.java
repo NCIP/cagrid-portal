@@ -15,7 +15,6 @@ import gov.nih.nci.cagrid.gums.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.gums.test.TestUtils;
 
-import java.io.FileOutputStream;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -31,7 +30,6 @@ import junit.framework.TestCase;
 import org.apache.xml.security.signature.XMLSignature;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.globus.gsi.GlobusCredential;
-import org.globus.util.ConfigUtil;
 import org.globus.wsrf.utils.FaultHelper;
 import org.opensaml.QName;
 import org.opensaml.SAMLAssertion;
@@ -52,6 +50,10 @@ public class TestIFS extends TestCase {
 	private static final int MIN_NAME_LENGTH = 4;
 
 	private static final int MAX_NAME_LENGTH = 50;
+	
+	private static final int SHORT_PROXY_VALID = 2;
+	
+	private static final int SHORT_CREDENTIALS_VALID = 4;
 
 	public final static String EMAIL_NAMESPACE = "http://cagrid.nci.nih.gov/email";
 
@@ -70,20 +72,16 @@ public class TestIFS extends TestCase {
 
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			PublicKey publicKey = pair.getPublic();
-			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion("user", idp), publicKey,
-					getProxyLifetime());
-			
-			GlobusCredential cred = new GlobusCredential(pair.getPrivate(),
-					certs);
-			FileOutputStream fos = new FileOutputStream(ConfigUtil
-					.discoverProxyLocation());
-			cred.save(fos);
-			fos.close();
+			ProxyLifetime lifetime = getProxyLifetime();
+			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion("user",
+					idp), publicKey, lifetime);
+			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
+
 	}
 
 	public void testCreateProxyAutoApproval() {
@@ -96,17 +94,18 @@ public class TestIFS extends TestCase {
 
 			ifs.addTrustedIdP(idp.getIdp());
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-			PublicKey publicKey = pair.getPublic();
-			ifs.createProxy(getSAMLAssertion(username, idp), publicKey,
-					getProxyValidShort());
+			ProxyLifetime lifetime = getProxyLifetimeShort();
+			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion(username,
+					idp), pair.getPublic(), lifetime);
+			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
 			assertEquals(ifs.getUser(idp.getIdp().getId(), username)
 					.getUserStatus(), IFSUserStatus.Active);
-			Thread.sleep(3100);
+			Thread.sleep((SHORT_CREDENTIALS_VALID*1000)+500);
 			try {
 				KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
 				PublicKey publicKey2 = pair2.getPublic();
 				ifs.createProxy(getSAMLAssertion(username, idp), publicKey2,
-						getProxyValidShort());
+						getProxyLifetimeShort());
 				assertTrue(false);
 			} catch (PermissionDeniedFault fault) {
 
@@ -119,6 +118,39 @@ public class TestIFS extends TestCase {
 			assertTrue(false);
 		}
 	}
+
+	
+	public void testCreateProxyAutoApprovalAutoRenewal() {
+		try {
+			IFSManager.getInstance().configure(db,
+					getExpiringCredentialsConf(), ca);
+			IFS ifs = new IFS();
+			String username = "user";
+			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
+
+			ifs.addTrustedIdP(idp.getIdp());
+			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+			ProxyLifetime lifetime = getProxyLifetimeShort();
+			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion(username,
+					idp), pair.getPublic(), lifetime);
+			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
+			assertEquals(ifs.getUser(idp.getIdp().getId(), username)
+					.getUserStatus(), IFSUserStatus.Active);
+			Thread.sleep((SHORT_CREDENTIALS_VALID*1000)+500);
+			KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
+			PublicKey publicKey2 = pair2.getPublic();
+			certs = ifs.createProxy(getSAMLAssertion(username, idp), publicKey2,
+					getProxyLifetimeShort());
+			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
+			assertEquals(ifs.getUser(idp.getIdp().getId(), username)
+					.getUserStatus(), IFSUserStatus.Active);
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+	}
+	
 
 	public void testCreateProxyInvalidProxyValid() {
 		try {
@@ -238,7 +270,7 @@ public class TestIFS extends TestCase {
 		conf.setCredentialsValidDays(0);
 		conf.setCredentialsValidHours(0);
 		conf.setCredentialsValidMinutes(0);
-		conf.setCredentialsValidSeconds(3);
+		conf.setCredentialsValidSeconds(SHORT_CREDENTIALS_VALID);
 		conf.setMinimumIdPNameLength(MIN_NAME_LENGTH);
 		conf.setMaximumIdPNameLength(MAX_NAME_LENGTH);
 		conf.setMaxProxyLifetimeHours(12);
@@ -333,6 +365,11 @@ public class TestIFS extends TestCase {
 				.getName());
 	}
 
+	private String identityToSubject(String identity) {
+		String s = identity.substring(1);
+		return s.replace('/', ',');
+	}
+
 	private IdPContainer getTrustedIdpAutoApprove(String name) throws Exception {
 		return this.getTrustedIdp(name, AutoApprovalPolicy.class.getName());
 	}
@@ -387,11 +424,11 @@ public class TestIFS extends TestCase {
 		}
 	}
 
-	private ProxyLifetime getProxyValidShort() {
+	private ProxyLifetime getProxyLifetimeShort() {
 		ProxyLifetime valid = new ProxyLifetime();
 		valid.setHours(0);
 		valid.setMinutes(0);
-		valid.setSeconds(1);
+		valid.setSeconds(SHORT_PROXY_VALID);
 		return valid;
 	}
 
@@ -401,6 +438,24 @@ public class TestIFS extends TestCase {
 		valid.setMinutes(0);
 		valid.setSeconds(0);
 		return valid;
+	}
+
+	private void createAndCheckProxyLifetime(ProxyLifetime lifetime,
+			PrivateKey key, X509Certificate[] certs) throws Exception {
+		assertNotNull(certs);
+		assertEquals(2, certs.length);
+		GlobusCredential cred = new GlobusCredential(key, certs);
+		assertNotNull(cred);
+		long max = IFSUtils.getTimeInSeconds(lifetime);
+		long min = max - 3;
+		long timeLeft = cred.getTimeLeft();
+		if ((min > timeLeft) || (timeLeft > max)) {
+			assertTrue(false);
+		}
+		assertEquals(certs[1].getSubjectDN().toString(), identityToSubject(cred
+				.getIdentity()));
+		assertEquals(cred.getIssuer(), identityToSubject(cred.getIdentity()));
+		cred.verify();
 	}
 
 	public class IdPContainer {
