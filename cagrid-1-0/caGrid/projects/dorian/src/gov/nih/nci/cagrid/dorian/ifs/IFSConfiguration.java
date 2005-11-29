@@ -83,13 +83,13 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 
 	public static final String CREDENTIALS_VALID_SECONDS = "seconds";
 
-	public static final String MAX_PROXY_VALID = "max-proxy-valid";
+	public static final String MAX_PROXY_LIFETIME = "max-proxy-lifetime";
 
-	public static final String MAX_PROXY_VALID_HOURS = "hours";
+	public static final String MAX_PROXY_LIFETIME_HOURS = "hours";
 
-	public static final String MAX_PROXY_VALID_MINUTES = "minutes";
+	public static final String MAX_PROXY_LIFETIME_MINUTES = "minutes";
 
-	public static final String MAX_PROXY_VALID_SECONDS = "seconds";
+	public static final String MAX_PROXY_LIFETIME_SECONDS = "seconds";
 
 	private int minimumIdPNameLength;
 
@@ -107,11 +107,11 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 
 	private int credentialsValidSeconds;
 
-	private int maxProxyValidHours;
+	private int maxProxyLifetimeHours;
 
-	private int maxProxyValidMinutes;
+	private int maxProxyLifetimeMinutes;
 
-	private int maxProxyValidSeconds;
+	private int maxProxyLifetimeSeconds;
 
 	public void setMaximumIdPNameLength(int maximumIdPNameLength) {
 		this.maximumIdPNameLength = maximumIdPNameLength;
@@ -321,63 +321,63 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 
 		}
 
-		Element proxy = config.getChild(MAX_PROXY_VALID, config.getNamespace());
+		Element proxy = config.getChild(MAX_PROXY_LIFETIME, config.getNamespace());
 		if (proxy == null) {
 			throw new MobiusException("Error configuring IFS, "
-					+ MAX_PROXY_VALID
+					+ MAX_PROXY_LIFETIME
 					+ " element specified in the configuration file.");
 		} else {
 
-			String shours = proxy.getAttributeValue(MAX_PROXY_VALID_HOURS);
+			String shours = proxy.getAttributeValue(MAX_PROXY_LIFETIME_HOURS);
 			if (shours == null) {
 				throw new MobiusException("Error configuring IFS, no "
-						+ MAX_PROXY_VALID_HOURS
+						+ MAX_PROXY_LIFETIME_HOURS
 						+ " attribute specified for the element "
-						+ MAX_PROXY_VALID + " in the configuration file.");
+						+ MAX_PROXY_LIFETIME + " in the configuration file.");
 			} else {
 				try {
-					this.maxProxyValidHours = Integer.valueOf(shours)
+					this.maxProxyLifetimeHours = Integer.valueOf(shours)
 							.intValue();
 				} catch (Exception n) {
 					throw new MobiusException("Error configuring IFS, the "
-							+ MAX_PROXY_VALID_HOURS
-							+ " attribute for the element " + MAX_PROXY_VALID
+							+ MAX_PROXY_LIFETIME_HOURS
+							+ " attribute for the element " + MAX_PROXY_LIFETIME
 							+ " must be an integer.");
 				}
 			}
 
-			String sminutes = proxy.getAttributeValue(MAX_PROXY_VALID_MINUTES);
+			String sminutes = proxy.getAttributeValue(MAX_PROXY_LIFETIME_MINUTES);
 			if (sminutes == null) {
 				throw new MobiusException("Error configuring IFS, no "
-						+ MAX_PROXY_VALID_MINUTES
+						+ MAX_PROXY_LIFETIME_MINUTES
 						+ " attribute specified for the element "
-						+ MAX_PROXY_VALID + " in the configuration file.");
+						+ MAX_PROXY_LIFETIME + " in the configuration file.");
 			} else {
 				try {
-					this.maxProxyValidMinutes = Integer.valueOf(sminutes)
+					this.maxProxyLifetimeMinutes = Integer.valueOf(sminutes)
 							.intValue();
 				} catch (Exception n) {
 					throw new MobiusException("Error configuring IFS, the "
-							+ MAX_PROXY_VALID_MINUTES
-							+ " attribute for the element " + MAX_PROXY_VALID
+							+ MAX_PROXY_LIFETIME_MINUTES
+							+ " attribute for the element " + MAX_PROXY_LIFETIME
 							+ " must be an integer.");
 				}
 			}
 
-			String sseconds = proxy.getAttributeValue(MAX_PROXY_VALID_SECONDS);
+			String sseconds = proxy.getAttributeValue(MAX_PROXY_LIFETIME_SECONDS);
 			if (sseconds == null) {
 				throw new MobiusException("Error configuring IFS, no "
-						+ MAX_PROXY_VALID_SECONDS
+						+ MAX_PROXY_LIFETIME_SECONDS
 						+ " attribute specified for the element "
-						+ MAX_PROXY_VALID + " in the configuration file.");
+						+ MAX_PROXY_LIFETIME + " in the configuration file.");
 			} else {
 				try {
-					this.maxProxyValidSeconds = Integer.valueOf(sseconds)
+					this.maxProxyLifetimeSeconds = Integer.valueOf(sseconds)
 							.intValue();
 				} catch (Exception n) {
 					throw new MobiusException("Error configuring IFS, the "
-							+ MAX_PROXY_VALID_SECONDS
-							+ " attribute for the element " + MAX_PROXY_VALID
+							+ MAX_PROXY_LIFETIME_SECONDS
+							+ " attribute for the element " + MAX_PROXY_LIFETIME
 							+ " must be an integer.");
 				}
 			}
@@ -385,11 +385,11 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 
 	}
 
-	public Date getMaxProxyValid() {
+	public Date getMaxProxyLifetime() {
 		Calendar c = new GregorianCalendar();
-		c.add(Calendar.HOUR_OF_DAY, getMaxProxyValidHours());
-		c.add(Calendar.MINUTE, getMaxProxyValidMinutes());
-		c.add(Calendar.SECOND, getMaxProxyValidSeconds());
+		c.add(Calendar.HOUR_OF_DAY, getMaxProxyLifetimeHours());
+		c.add(Calendar.MINUTE, getMaxProxyLifetimeMinutes());
+		c.add(Calendar.SECOND, getMaxProxyLifetimeSeconds());
 		return c.getTime();
 	}
 	
@@ -404,28 +404,28 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 		return c.getTime();
 	}
 
-	public int getMaxProxyValidHours() {
-		return maxProxyValidHours;
+	public int getMaxProxyLifetimeHours() {
+		return maxProxyLifetimeHours;
 	}
 
-	public void setMaxProxyValidHours(int maxProxyValidHours) {
-		this.maxProxyValidHours = maxProxyValidHours;
+	public void setMaxProxyLifetimeHours(int maxProxyValidHours) {
+		this.maxProxyLifetimeHours = maxProxyValidHours;
 	}
 
-	public int getMaxProxyValidMinutes() {
-		return maxProxyValidMinutes;
+	public int getMaxProxyLifetimeMinutes() {
+		return maxProxyLifetimeMinutes;
 	}
 
-	public void setMaxProxyValidMinutes(int maxProxyValidMinutes) {
-		this.maxProxyValidMinutes = maxProxyValidMinutes;
+	public void setMaxProxyLifetimeMinutes(int maxProxyValidMinutes) {
+		this.maxProxyLifetimeMinutes = maxProxyValidMinutes;
 	}
 
-	public int getMaxProxyValidSeconds() {
-		return maxProxyValidSeconds;
+	public int getMaxProxyLifetimeSeconds() {
+		return maxProxyLifetimeSeconds;
 	}
 
-	public void setMaxProxyValidSeconds(int maxProxyValidSeconds) {
-		this.maxProxyValidSeconds = maxProxyValidSeconds;
+	public void setMaxProxyLifetimeSeconds(int maxProxyValidSeconds) {
+		this.maxProxyLifetimeSeconds = maxProxyValidSeconds;
 	}
 
 	public int getMaximumIdPNameLength() {

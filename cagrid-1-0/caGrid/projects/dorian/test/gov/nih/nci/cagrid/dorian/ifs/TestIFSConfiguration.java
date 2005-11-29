@@ -64,11 +64,11 @@ public class TestIFSConfiguration extends TestCase {
 			assertEquals(DEFAULT_CREDENTIALS_VALID_SECONDS, conf
 					.getCredentialsValidSeconds());
 			assertEquals(DEFAULT_MAX_PROXY_VALID_HOURS, conf
-					.getMaxProxyValidHours());
+					.getMaxProxyLifetimeHours());
 			assertEquals(DEFAULT_MAX_PROXY_VALID_MINUTES, conf
-					.getMaxProxyValidMinutes());
+					.getMaxProxyLifetimeMinutes());
 			assertEquals(DEFAULT_MAX_PROXY_VALID_SECONDS, conf
-					.getMaxProxyValidSeconds());	
+					.getMaxProxyLifetimeSeconds());	
 		
 		} catch (Exception e) {
 			FaultUtil.printFault(e);

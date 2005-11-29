@@ -10,7 +10,7 @@ import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidProxyFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.PermissionDeniedFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.ProxyValid;
+import gov.nih.nci.cagrid.gums.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.gums.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.gums.test.TestUtils;
@@ -128,7 +128,7 @@ public class TestIFS extends TestCase {
 			ifs.addTrustedIdP(idp.getIdp());
 			Thread.sleep(500);
 			try {
-				ProxyValid valid = new ProxyValid();
+				ProxyLifetime valid = new ProxyLifetime();
 				valid.setHours(12);
 				valid.setMinutes(0);
 				valid.setSeconds(1);
@@ -225,9 +225,9 @@ public class TestIFS extends TestCase {
 		conf.setCredentialsValidSeconds(0);
 		conf.setMinimumIdPNameLength(MIN_NAME_LENGTH);
 		conf.setMaximumIdPNameLength(MAX_NAME_LENGTH);
-		conf.setMaxProxyValidHours(12);
-		conf.setMaxProxyValidMinutes(0);
-		conf.setMaxProxyValidSeconds(0);
+		conf.setMaxProxyLifetimeHours(12);
+		conf.setMaxProxyLifetimeMinutes(0);
+		conf.setMaxProxyLifetimeSeconds(0);
 		return conf;
 	}
 
@@ -241,9 +241,9 @@ public class TestIFS extends TestCase {
 		conf.setCredentialsValidSeconds(3);
 		conf.setMinimumIdPNameLength(MIN_NAME_LENGTH);
 		conf.setMaximumIdPNameLength(MAX_NAME_LENGTH);
-		conf.setMaxProxyValidHours(12);
-		conf.setMaxProxyValidMinutes(0);
-		conf.setMaxProxyValidSeconds(0);
+		conf.setMaxProxyLifetimeHours(12);
+		conf.setMaxProxyLifetimeMinutes(0);
+		conf.setMaxProxyLifetimeSeconds(0);
 		return conf;
 	}
 
@@ -387,16 +387,16 @@ public class TestIFS extends TestCase {
 		}
 	}
 
-	private ProxyValid getProxyValidShort() {
-		ProxyValid valid = new ProxyValid();
+	private ProxyLifetime getProxyValidShort() {
+		ProxyLifetime valid = new ProxyLifetime();
 		valid.setHours(0);
 		valid.setMinutes(0);
 		valid.setSeconds(1);
 		return valid;
 	}
 
-	private ProxyValid getProxyLifetime() {
-		ProxyValid valid = new ProxyValid();
+	private ProxyLifetime getProxyLifetime() {
+		ProxyLifetime valid = new ProxyLifetime();
 		valid.setHours(12);
 		valid.setMinutes(0);
 		valid.setSeconds(0);

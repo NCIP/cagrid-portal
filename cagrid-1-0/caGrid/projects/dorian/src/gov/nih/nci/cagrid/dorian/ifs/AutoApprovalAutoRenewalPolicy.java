@@ -30,7 +30,7 @@ public class AutoApprovalAutoRenewalPolicy extends AutoApprovalPolicy implements
 					.getCertificate());
 			if (CertUtil.isExpired(cert)) {
 				um.renewUserCredentials(user);
-			} else if (conf.getMaxProxyValid().after(cert.getNotAfter())) {
+			} else if (conf.getMaxProxyLifetime().after(cert.getNotAfter())) {
 				um.renewUserCredentials(user);
 			}
 		} catch (Exception e) {

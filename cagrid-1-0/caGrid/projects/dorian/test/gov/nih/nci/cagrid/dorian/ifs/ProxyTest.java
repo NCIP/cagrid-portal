@@ -4,7 +4,7 @@ import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
 import gov.nih.nci.cagrid.gums.ifs.ProxyUtil;
-import gov.nih.nci.cagrid.gums.ifs.bean.ProxyValid;
+import gov.nih.nci.cagrid.gums.ifs.bean.ProxyLifetime;
 
 import java.io.File;
 import java.security.KeyPair;
@@ -39,7 +39,7 @@ public class ProxyTest extends TestCase {
 				String keyLocation = RESOURCES_DIR + File.separator
 						+ "gums-key.pem";
 		
-				ProxyValid lifetime = new ProxyValid();
+				ProxyLifetime lifetime = new ProxyLifetime();
 				lifetime.setHours(2);
 				lifetime.setMinutes(0);
 				lifetime.setSeconds(0);
@@ -80,7 +80,7 @@ public class ProxyTest extends TestCase {
 						+ "gums-cert.pem";
 				String keyLocation = RESOURCES_DIR + File.separator
 						+ "gums-key.pem";
-				ProxyValid lifetime = new ProxyValid();
+				ProxyLifetime lifetime = new ProxyLifetime();
 				lifetime.setHours(50000);
 				lifetime.setMinutes(0);
 				lifetime.setSeconds(0);

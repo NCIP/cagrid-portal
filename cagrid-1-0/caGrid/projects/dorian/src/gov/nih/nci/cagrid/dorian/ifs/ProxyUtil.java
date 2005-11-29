@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.gums.ifs;
 
 import gov.nih.nci.cagrid.gums.common.ca.SecurityUtil;
-import gov.nih.nci.cagrid.gums.ifs.bean.ProxyValid;
+import gov.nih.nci.cagrid.gums.ifs.bean.ProxyLifetime;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -40,14 +40,14 @@ public class ProxyUtil {
 	
 	public static X509Certificate[] createProxyCertificate(X509Certificate cert,
 			PrivateKey privateKey, PublicKey proxyPublicKey,
-			ProxyValid lifetime)
+			ProxyLifetime lifetime)
 			throws GeneralSecurityException {
 			return createProxyCertificate(new X509Certificate[] { cert },privateKey,proxyPublicKey,lifetime,GSIConstants.GSI_3_IMPERSONATION_PROXY,null);
 	}
 
 	public static X509Certificate[] createProxyCertificate(X509Certificate[] certs,
 			PrivateKey privateKey, PublicKey proxyPublicKey,
-			ProxyValid lifetime)
+			ProxyLifetime lifetime)
 			throws GeneralSecurityException {
 			return createProxyCertificate(certs,privateKey,proxyPublicKey,lifetime,GSIConstants.GSI_3_IMPERSONATION_PROXY,null);
 	}
@@ -55,7 +55,7 @@ public class ProxyUtil {
 
 	public static X509Certificate[] createProxyCertificate(X509Certificate[] certs,
 			PrivateKey privateKey, PublicKey proxyPublicKey,
-			ProxyValid lifetime,
+			ProxyLifetime lifetime,
 			int delegationMode, ProxyCertInfo proxyCertInfoExt)
 			throws GeneralSecurityException {
 		SecurityUtil.init();
@@ -130,7 +130,7 @@ public class ProxyUtil {
 	 */
 	protected static X509Certificate createProxyCertificate(
 			X509Certificate issuerCert, PrivateKey issuerKey,
-			PublicKey publicKey, ProxyValid lifetime, int proxyType,
+			PublicKey publicKey, ProxyLifetime lifetime, int proxyType,
 			ProxyCertInfo proxyCertInfo) throws GeneralSecurityException {
 		SecurityUtil.init();
 		if (proxyType == GSIConstants.DELEGATION_LIMITED) {

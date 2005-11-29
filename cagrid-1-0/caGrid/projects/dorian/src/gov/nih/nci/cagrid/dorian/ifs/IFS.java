@@ -12,7 +12,7 @@ import gov.nih.nci.cagrid.gums.ifs.bean.InvalidProxyFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidTrustedIdPFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidUserFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.PermissionDeniedFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.ProxyValid;
+import gov.nih.nci.cagrid.gums.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.gums.ifs.bean.UserPolicyFault;
 
@@ -61,7 +61,7 @@ public class IFS extends GUMSObject {
 	}
 
 	public X509Certificate[] createProxy(SAMLAssertion saml, PublicKey publicKey,
-			ProxyValid lifetime) throws GUMSInternalFault, InvalidAssertionFault,
+			ProxyLifetime lifetime) throws GUMSInternalFault, InvalidAssertionFault,
 			InvalidProxyFault, UserPolicyFault, PermissionDeniedFault {
 
 		if (!saml.isSigned()) {
@@ -171,15 +171,15 @@ public class IFS extends GUMSObject {
 
 		IFSConfiguration conf = IFSManager.getInstance().getConfiguration();
 		// Validate that the proxy is of valid length
-		if (IFSUtils.getProxyValid(lifetime).after(conf.getMaxProxyValid())) {
+		if (IFSUtils.getProxyValid(lifetime).after(conf.getMaxProxyLifetime())) {
 			InvalidProxyFault fault = new InvalidProxyFault();
 			fault
 					.setFaultString("The proxy valid length exceeds the maximum proxy valid length (hrs="
-							+ conf.getMaxProxyValidHours()
+							+ conf.getMaxProxyLifetimeHours()
 							+ ", mins="
-							+ conf.getMaxProxyValidMinutes()
+							+ conf.getMaxProxyLifetimeMinutes()
 							+ ", sec="
-							+ conf.getMaxProxyValidSeconds() + ")");
+							+ conf.getMaxProxyLifetimeSeconds() + ")");
 			throw fault;
 		}
 
