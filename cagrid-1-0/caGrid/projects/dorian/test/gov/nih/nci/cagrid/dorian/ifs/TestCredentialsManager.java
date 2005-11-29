@@ -5,7 +5,6 @@ import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
-import gov.nih.nci.cagrid.gums.ifs.CredentialsManager;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidPasswordFault;
 import gov.nih.nci.cagrid.gums.test.TestUtils;
 

@@ -22,7 +22,7 @@ import org.globus.gsi.GlobusCredential;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class ProxyTest extends TestCase {
+public class TestProxyUtil extends TestCase {
 	public static String RESOURCES_DIR = "resources" + File.separator
 			+ "ca-test";
 	

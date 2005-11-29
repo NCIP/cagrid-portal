@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.gums.ifs;
 
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
-
 import gov.nih.nci.cagrid.gums.test.TestResourceManager;
 
 import java.io.File;
