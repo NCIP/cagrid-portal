@@ -17,6 +17,7 @@ import gov.nih.nci.cagrid.gums.test.TestUtils;
 
 import java.security.KeyPair;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -56,46 +57,59 @@ public class TestIFS extends TestCase {
 	private Database db;
 
 	private CertificateAuthority ca;
-	
+
 	public void testCreateProxy() {
 		try {
 			IFSManager.getInstance().configure(db, getConf(), ca);
 			IFS ifs = new IFS();
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
 			ifs.addTrustedIdP(idp.getIdp());
-			ifs.createProxy(getSAMLAssertion("user", idp),getProxyValid());
+
+			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+			PublicKey publicKey = pair.getPublic();
+			ifs.createProxy(getSAMLAssertion("user", idp), publicKey,
+					getProxyLifetime());
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
 	}
-	
-	public void testCreateProxyAutoApproval(){
+
+	public void testCreateProxyAutoApproval() {
 		try {
-			IFSManager.getInstance().configure(db, getExpiringCredentialsConf(), ca);
+			IFSManager.getInstance().configure(db,
+					getExpiringCredentialsConf(), ca);
 			IFS ifs = new IFS();
 			String username = "user";
 			IdPContainer idp = this.getTrustedIdpAutoApprove("My IdP");
-			
+
 			ifs.addTrustedIdP(idp.getIdp());
-			ifs.createProxy(getSAMLAssertion(username, idp),getProxyValidShort());
-			assertEquals(ifs.getUser(idp.getIdp().getId(),username).getUserStatus(),IFSUserStatus.Active);
+			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+			PublicKey publicKey = pair.getPublic();
+			ifs.createProxy(getSAMLAssertion(username, idp), publicKey,
+					getProxyValidShort());
+			assertEquals(ifs.getUser(idp.getIdp().getId(), username)
+					.getUserStatus(), IFSUserStatus.Active);
 			Thread.sleep(3100);
-			try{
-				ifs.createProxy(getSAMLAssertion(username, idp),getProxyValidShort());
+			try {
+				KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
+				PublicKey publicKey2 = pair2.getPublic();
+				ifs.createProxy(getSAMLAssertion(username, idp), publicKey2,
+						getProxyValidShort());
 				assertTrue(false);
-			}catch (PermissionDeniedFault fault) {
-			
+			} catch (PermissionDeniedFault fault) {
+
 			}
-		    assertEquals(ifs.getUser(idp.getIdp().getId(),username).getUserStatus(),IFSUserStatus.Expired);
+			assertEquals(ifs.getUser(idp.getIdp().getId(), username)
+					.getUserStatus(), IFSUserStatus.Expired);
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
 	}
-	
+
 	public void testCreateProxyInvalidProxyValid() {
 		try {
 			IFSManager.getInstance().configure(db, getConf(), ca);
@@ -108,7 +122,11 @@ public class TestIFS extends TestCase {
 				valid.setHours(12);
 				valid.setMinutes(0);
 				valid.setSeconds(1);
-				ifs.createProxy(getSAMLAssertion("user", idp),valid);
+				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+				PublicKey publicKey = pair.getPublic();
+				ifs
+						.createProxy(getSAMLAssertion("user", idp), publicKey,
+								valid);
 				assertTrue(false);
 			} catch (InvalidProxyFault f) {
 
@@ -127,7 +145,10 @@ public class TestIFS extends TestCase {
 			ifs.addTrustedIdP(idp.getIdp());
 			Thread.sleep(500);
 			try {
-				ifs.createProxy(getSAMLAssertionUnspecifiedMethod("user", idp),getProxyValid());
+				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+				PublicKey publicKey = pair.getPublic();
+				ifs.createProxy(getSAMLAssertionUnspecifiedMethod("user", idp),
+						publicKey, getProxyLifetime());
 				assertTrue(false);
 			} catch (InvalidAssertionFault f) {
 
@@ -143,11 +164,15 @@ public class TestIFS extends TestCase {
 			IFSManager.getInstance().configure(db, getConf(), ca);
 			IFS ifs = new IFS();
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IdPContainer idp2 = this.getTrustedIdpAutoApproveAutoRenew("My IdP 2");
+			IdPContainer idp2 = this
+					.getTrustedIdpAutoApproveAutoRenew("My IdP 2");
 			ifs.addTrustedIdP(idp.getIdp());
 			Thread.sleep(500);
 			try {
-				ifs.createProxy(getSAMLAssertion("user", idp2),getProxyValid());
+				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+				PublicKey publicKey = pair.getPublic();
+				ifs.createProxy(getSAMLAssertion("user", idp2), publicKey,
+						getProxyLifetime());
 				assertTrue(false);
 			} catch (InvalidAssertionFault f) {
 
@@ -166,7 +191,10 @@ public class TestIFS extends TestCase {
 			ifs.addTrustedIdP(idp.getIdp());
 			Thread.sleep(500);
 			try {
-				ifs.createProxy(getExpiredSAMLAssertion("user", idp),getProxyValid());
+				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+				PublicKey publicKey = pair.getPublic();
+				ifs.createProxy(getExpiredSAMLAssertion("user", idp),
+						publicKey, getProxyLifetime());
 				assertTrue(false);
 			} catch (InvalidAssertionFault f) {
 
@@ -176,8 +204,6 @@ public class TestIFS extends TestCase {
 			assertTrue(false);
 		}
 	}
-
-
 
 	private IFSConfiguration getConf() {
 		IFSConfiguration conf = new IFSConfiguration();
@@ -194,7 +220,7 @@ public class TestIFS extends TestCase {
 		conf.setMaxProxyValidSeconds(0);
 		return conf;
 	}
-	
+
 	private IFSConfiguration getExpiringCredentialsConf() {
 		IFSConfiguration conf = new IFSConfiguration();
 		conf.setCredentialsValidYears(0);
@@ -210,7 +236,6 @@ public class TestIFS extends TestCase {
 		conf.setMaxProxyValidSeconds(0);
 		return conf;
 	}
-	
 
 	private SAMLAssertion getSAMLAssertion(String id, IdPContainer idp)
 			throws Exception {
@@ -291,15 +316,19 @@ public class TestIFS extends TestCase {
 
 		}
 	}
-	private IdPContainer getTrustedIdpAutoApproveAutoRenew(String name) throws Exception {
-		return this.getTrustedIdp(name,AutoApprovalAutoRenewalPolicy.class.getName());
-	}
-	
-	private IdPContainer getTrustedIdpAutoApprove(String name) throws Exception {
-		return this.getTrustedIdp(name,AutoApprovalPolicy.class.getName());
+
+	private IdPContainer getTrustedIdpAutoApproveAutoRenew(String name)
+			throws Exception {
+		return this.getTrustedIdp(name, AutoApprovalAutoRenewalPolicy.class
+				.getName());
 	}
 
-	private IdPContainer getTrustedIdp(String name, String policyClass) throws Exception {
+	private IdPContainer getTrustedIdpAutoApprove(String name) throws Exception {
+		return this.getTrustedIdp(name, AutoApprovalPolicy.class.getName());
+	}
+
+	private IdPContainer getTrustedIdp(String name, String policyClass)
+			throws Exception {
 		TrustedIdP idp = new TrustedIdP();
 		idp.setName(name);
 		idp.setPolicyClass(policyClass);
@@ -347,8 +376,8 @@ public class TestIFS extends TestCase {
 			assertTrue(false);
 		}
 	}
-	
-	private ProxyValid getProxyValidShort(){
+
+	private ProxyValid getProxyValidShort() {
 		ProxyValid valid = new ProxyValid();
 		valid.setHours(0);
 		valid.setMinutes(0);
@@ -356,8 +385,7 @@ public class TestIFS extends TestCase {
 		return valid;
 	}
 
-	
-	private ProxyValid getProxyValid(){
+	private ProxyValid getProxyLifetime() {
 		ProxyValid valid = new ProxyValid();
 		valid.setHours(12);
 		valid.setMinutes(0);

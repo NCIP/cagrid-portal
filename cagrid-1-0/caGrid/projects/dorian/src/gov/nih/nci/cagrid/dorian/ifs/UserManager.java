@@ -12,10 +12,12 @@ import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserRole;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
+import gov.nih.nci.cagrid.gums.ifs.bean.InvalidPasswordFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidUserFault;
 
 import java.io.IOException;
 import java.security.KeyPair;
+import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -92,6 +94,22 @@ public class UserManager extends GUMSObject {
 
 	private String getCredentialsManagerUID(long idpId, String uid) {
 		return "[IdPId=" + idpId + ", UID=" + uid + "]";
+	}
+
+	public PrivateKey getUsersPrivateKey(IFSUser user) throws GUMSInternalFault {
+		try {
+			return this.credentialsManager.getPrivateKey(
+					getCredentialsManagerUID(user.getIdPId(), user.getUID()),
+					null);
+		} catch (InvalidPasswordFault e) {
+			GUMSInternalFault fault = new GUMSInternalFault();
+			fault.setFaultString("Error loading the user " + user.getGridId()
+					+ "'s private key.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GUMSInternalFault) helper.getFault();
+			throw fault;
+		}
 	}
 
 	public synchronized void renewUserCredentials(IFSUser user)
@@ -535,10 +553,9 @@ public class UserManager extends GUMSObject {
 		}
 	}
 
-	public synchronized void removeUser(IFSUser user)
-			throws GUMSInternalFault {
+	public synchronized void removeUser(IFSUser user) throws GUMSInternalFault {
 		this.buildDatabase();
-		this.removeUser(user.getIdPId(),user.getUID());
+		this.removeUser(user.getIdPId(), user.getUID());
 	}
 
 	public synchronized void removeUser(long idpId, String uid)

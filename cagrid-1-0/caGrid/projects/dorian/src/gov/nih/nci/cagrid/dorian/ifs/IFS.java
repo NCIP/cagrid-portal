@@ -16,6 +16,8 @@ import gov.nih.nci.cagrid.gums.ifs.bean.ProxyValid;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.gums.ifs.bean.UserPolicyFault;
 
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.util.Calendar;
 import java.util.Date;
@@ -51,15 +53,16 @@ public class IFS extends GUMSObject {
 		return IFSManager.getInstance().getTrustManager().addTrustedIdP(idp);
 	}
 
-	public IFSUser getUser(long idpId, String uid) throws GUMSInternalFault, InvalidUserFault{
-//		 TODO: Verify User is an administrator etc.
+	public IFSUser getUser(long idpId, String uid) throws GUMSInternalFault,
+			InvalidUserFault {
+		// TODO: Verify User is an administrator etc.
 		UserManager um = IFSManager.getInstance().getUserManager();
-		return um.getUser(idpId,uid);
+		return um.getUser(idpId, uid);
 	}
 
-	public void createProxy(SAMLAssertion saml, ProxyValid valid)
-			throws GUMSInternalFault, InvalidAssertionFault, InvalidProxyFault,
-			UserPolicyFault, PermissionDeniedFault {
+	public X509Certificate[] createProxy(SAMLAssertion saml, PublicKey publicKey,
+			ProxyValid lifetime) throws GUMSInternalFault, InvalidAssertionFault,
+			InvalidProxyFault, UserPolicyFault, PermissionDeniedFault {
 
 		if (!saml.isSigned()) {
 			InvalidAssertionFault fault = new InvalidAssertionFault();
@@ -168,7 +171,7 @@ public class IFS extends GUMSObject {
 
 		IFSConfiguration conf = IFSManager.getInstance().getConfiguration();
 		// Validate that the proxy is of valid length
-		if (getProxyValid(valid).after(conf.getMaxProxyValid())) {
+		if (IFSUtils.getProxyValid(lifetime).after(conf.getMaxProxyValid())) {
 			InvalidProxyFault fault = new InvalidProxyFault();
 			fault
 					.setFaultString("The proxy valid length exceeds the maximum proxy valid length (hrs="
@@ -236,7 +239,7 @@ public class IFS extends GUMSObject {
 					.setFaultString("The credentials for this account have expired.");
 			throw fault;
 
-		} else if (getProxyValid(valid).after(cert.getNotAfter())) {
+		} else if (IFSUtils.getProxyValid(lifetime).after(cert.getNotAfter())) {
 			InvalidProxyFault fault = new InvalidProxyFault();
 			fault
 					.setFaultString("The proxy valid length exceeds the expiration date of the user's certificate.");
@@ -244,6 +247,23 @@ public class IFS extends GUMSObject {
 		}
 
 		// create the proxy
+
+		try {
+			PrivateKey key = um.getUsersPrivateKey(usr);
+			X509Certificate[] certs = ProxyUtil.createProxyCertificate(
+					new X509Certificate[] { cert }, key, publicKey, lifetime);
+			return certs;
+		} catch (Exception e) {
+			InvalidProxyFault fault = new InvalidProxyFault();
+			fault
+					.setFaultString("An unexpected error occurred in creating the user "
+							+ usr.getGridId() + "'s proxy.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (InvalidProxyFault) helper.getFault();
+			throw fault;
+		}
+
 	}
 
 	private void verifyActiveUser(IFSUser usr) throws GUMSInternalFault,
@@ -280,13 +300,7 @@ public class IFS extends GUMSObject {
 
 	}
 
-	private Date getProxyValid(ProxyValid valid) {
-		Calendar c = new GregorianCalendar();
-		c.add(Calendar.HOUR_OF_DAY, valid.getHours());
-		c.add(Calendar.MINUTE, valid.getMinutes());
-		c.add(Calendar.SECOND, valid.getSeconds());
-		return c.getTime();
-	}
+	
 
 	private String getEmail(SAMLAssertion saml) {
 		Iterator itr = saml.getStatements();

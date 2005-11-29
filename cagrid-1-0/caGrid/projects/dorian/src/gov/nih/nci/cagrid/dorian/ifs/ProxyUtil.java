@@ -1,4 +1,7 @@
-package gov.nih.nci.cagrid.gums.common.ca;
+package gov.nih.nci.cagrid.gums.ifs;
+
+import gov.nih.nci.cagrid.gums.common.ca.SecurityUtil;
+import gov.nih.nci.cagrid.gums.ifs.bean.ProxyValid;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -37,14 +40,14 @@ public class ProxyUtil {
 	
 	public static X509Certificate[] createProxyCertificate(X509Certificate cert,
 			PrivateKey privateKey, PublicKey proxyPublicKey,
-			int lifetime)
+			ProxyValid lifetime)
 			throws GeneralSecurityException {
 			return createProxyCertificate(new X509Certificate[] { cert },privateKey,proxyPublicKey,lifetime,GSIConstants.GSI_3_IMPERSONATION_PROXY,null);
 	}
 
 	public static X509Certificate[] createProxyCertificate(X509Certificate[] certs,
 			PrivateKey privateKey, PublicKey proxyPublicKey,
-			int lifetime)
+			ProxyValid lifetime)
 			throws GeneralSecurityException {
 			return createProxyCertificate(certs,privateKey,proxyPublicKey,lifetime,GSIConstants.GSI_3_IMPERSONATION_PROXY,null);
 	}
@@ -52,7 +55,7 @@ public class ProxyUtil {
 
 	public static X509Certificate[] createProxyCertificate(X509Certificate[] certs,
 			PrivateKey privateKey, PublicKey proxyPublicKey,
-			int lifetime,
+			ProxyValid lifetime,
 			int delegationMode, ProxyCertInfo proxyCertInfoExt)
 			throws GeneralSecurityException {
 		SecurityUtil.init();
@@ -127,7 +130,7 @@ public class ProxyUtil {
 	 */
 	protected static X509Certificate createProxyCertificate(
 			X509Certificate issuerCert, PrivateKey issuerKey,
-			PublicKey publicKey, int lifetime, int proxyType,
+			PublicKey publicKey, ProxyValid lifetime, int proxyType,
 			ProxyCertInfo proxyCertInfo) throws GeneralSecurityException {
 		SecurityUtil.init();
 		if (proxyType == GSIConstants.DELEGATION_LIMITED) {
@@ -246,12 +249,10 @@ public class ProxyUtil {
 		certGen.setNotBefore(date.getTime());
 
 		/* If hours = 0, then cert lifetime is set to user cert */
-		if (lifetime <= 0) {
+		if (lifetime == null) {
 			certGen.setNotAfter(issuerCert.getNotAfter());
 		} else {
-			date.add(Calendar.MINUTE, 5);
-			date.add(Calendar.HOUR_OF_DAY, lifetime);
-			Date d = new Date(date.getTimeInMillis());
+			Date d = IFSUtils.getProxyValid(lifetime);
 			if(issuerCert.getNotAfter().before(d)){
 				throw new GeneralSecurityException("Cannot create a proxy that expires after issuing certificate.");
 			}
