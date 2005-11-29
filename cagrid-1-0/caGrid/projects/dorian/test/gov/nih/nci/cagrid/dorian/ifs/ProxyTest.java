@@ -3,7 +3,6 @@ package gov.nih.nci.cagrid.gums.ifs;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
-import gov.nih.nci.cagrid.gums.ifs.ProxyUtil;
 import gov.nih.nci.cagrid.gums.ifs.bean.ProxyLifetime;
 
 import java.io.File;

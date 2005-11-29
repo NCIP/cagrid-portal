@@ -60,9 +60,17 @@ public class IFS extends GUMSObject {
 		return um.getUser(idpId, uid);
 	}
 
-	public X509Certificate[] createProxy(SAMLAssertion saml, PublicKey publicKey,
-			ProxyLifetime lifetime) throws GUMSInternalFault, InvalidAssertionFault,
-			InvalidProxyFault, UserPolicyFault, PermissionDeniedFault {
+	public void updateUser(IFSUser usr) throws GUMSInternalFault,
+			InvalidUserFault {
+		// TODO: Verify User is an administrator etc.
+		UserManager um = IFSManager.getInstance().getUserManager();
+		um.updateUser(usr);
+	}
+
+	public X509Certificate[] createProxy(SAMLAssertion saml,
+			PublicKey publicKey, ProxyLifetime lifetime)
+			throws GUMSInternalFault, InvalidAssertionFault, InvalidProxyFault,
+			UserPolicyFault, PermissionDeniedFault {
 
 		if (!saml.isSigned()) {
 			InvalidAssertionFault fault = new InvalidAssertionFault();
@@ -299,8 +307,6 @@ public class IFS extends GUMSObject {
 		}
 
 	}
-
-	
 
 	private String getEmail(SAMLAssertion saml) {
 		Iterator itr = saml.getStatements();

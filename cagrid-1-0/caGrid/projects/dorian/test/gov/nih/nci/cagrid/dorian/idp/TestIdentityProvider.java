@@ -6,11 +6,11 @@ import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.idp.bean.Application;
 import gov.nih.nci.cagrid.gums.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.gums.idp.bean.CountryCode;
-import gov.nih.nci.cagrid.gums.idp.bean.StateCode;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUserFilter;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUserRole;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUserStatus;
+import gov.nih.nci.cagrid.gums.idp.bean.StateCode;
 import gov.nih.nci.cagrid.gums.test.TestResourceManager;
 import gov.nih.nci.cagrid.gums.test.TestUtils;
 
