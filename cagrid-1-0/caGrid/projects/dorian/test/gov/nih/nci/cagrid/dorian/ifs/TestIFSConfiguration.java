@@ -17,27 +17,27 @@ import junit.framework.TestCase;
  */
 public class TestIFSConfiguration extends TestCase {
 	
-	public static final int DEFAULT_MIN_LENGTH = 4;
+	public static final int DEFAULT_MIN_LENGTH = 1;
 
-	public static final int DEFAULT_MAX_LENGTH = 10;
+	public static final int DEFAULT_MAX_LENGTH = 2;
 
-	public static final int DEFAULT_CREDENTIALS_VALID_YEARS = 12;
+	public static final int DEFAULT_CREDENTIALS_VALID_YEARS = 3;
 
-	public static final int DEFAULT_CREDENTIALS_VALID_MONTHS = 0;
+	public static final int DEFAULT_CREDENTIALS_VALID_MONTHS = 4;
 
-	public static final int DEFAULT_CREDENTIALS_VALID_DAYS = 0;
+	public static final int DEFAULT_CREDENTIALS_VALID_DAYS = 5;
 
-	public static final int DEFAULT_CREDENTIALS_VALID_HOURS = 0;
+	public static final int DEFAULT_CREDENTIALS_VALID_HOURS = 6;
 
-	public static final int DEFAULT_CREDENTIALS_VALID_MINUTES = 0;
+	public static final int DEFAULT_CREDENTIALS_VALID_MINUTES = 7;
 
-	public static final int DEFAULT_CREDENTIALS_VALID_SECONDS = 0;
+	public static final int DEFAULT_CREDENTIALS_VALID_SECONDS = 8;
 	
-	public static final int DEFAULT_MAX_PROXY_VALID_HOURS = 0;
+	public static final int DEFAULT_MAX_PROXY_LIFETIME_HOURS = 9;
 
-	public static final int DEFAULT_MAX_PROXY_VALID_MINUTES = 0;
+	public static final int DEFAULT_MAX_PROXY_LIFETIME_MINUTES = 10;
 
-	public static final int DEFAULT_MAX_PROXY_VALID_SECONDS = 0;
+	public static final int DEFAULT_MAX_PROXY_LIFETIME_SECONDS = 11;
 
 	
 	public static String IFS_CONF = "resources" + File.separator
@@ -63,11 +63,11 @@ public class TestIFSConfiguration extends TestCase {
 					.getCredentialsValidMinutes());
 			assertEquals(DEFAULT_CREDENTIALS_VALID_SECONDS, conf
 					.getCredentialsValidSeconds());
-			assertEquals(DEFAULT_MAX_PROXY_VALID_HOURS, conf
+			assertEquals(DEFAULT_MAX_PROXY_LIFETIME_HOURS, conf
 					.getMaxProxyLifetimeHours());
-			assertEquals(DEFAULT_MAX_PROXY_VALID_MINUTES, conf
+			assertEquals(DEFAULT_MAX_PROXY_LIFETIME_MINUTES, conf
 					.getMaxProxyLifetimeMinutes());
-			assertEquals(DEFAULT_MAX_PROXY_VALID_SECONDS, conf
+			assertEquals(DEFAULT_MAX_PROXY_LIFETIME_SECONDS, conf
 					.getMaxProxyLifetimeSeconds());	
 		
 		} catch (Exception e) {
