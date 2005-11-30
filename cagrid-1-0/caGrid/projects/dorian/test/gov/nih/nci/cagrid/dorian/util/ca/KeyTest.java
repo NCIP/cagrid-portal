@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
 import java.io.File;
 import java.security.KeyPair;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 
 import junit.framework.TestCase;
 /**
@@ -31,6 +32,23 @@ public class KeyTest extends TestCase {
 		    assertEquals(key,pkey);
 		    File f = new File(keyFile);
 		    f.delete();
+		}catch (Exception e) {
+			FaultUtil.printFault(e);;
+			assertTrue(false);
+		}	
+	}
+	
+	public void testReadWritePublicKeyToString(){
+		try{
+			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+			assertNotNull(pair);
+			PublicKey pkey = pair.getPublic();
+			assertNotNull(pkey);
+			String str = KeyUtil.writePublicKeyToString(pkey);
+			assertNotNull(str);
+			PublicKey key=KeyUtil.loadPublicKeyFromString(str);
+		    assertNotNull(key);
+		    assertEquals(key,pkey);
 		}catch (Exception e) {
 			FaultUtil.printFault(e);;
 			assertTrue(false);

@@ -2,13 +2,16 @@ package gov.nih.nci.cagrid.gums.common.ca;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.SecureRandom;
 
+import org.bouncycastle.openssl.PEMReader;
 import org.globus.gsi.OpenSSLKey;
 import org.globus.gsi.bc.BouncyCastleOpenSSLKey;
 
@@ -77,8 +80,26 @@ public class KeyUtil {
 		SecurityUtil.init();
 		OpenSSLKey key = new BouncyCastleOpenSSLKey(in);
 		if (key.isEncrypted()) {
-			key.decrypt(password);	
+			key.decrypt(password);
 		}
 		return key.getPrivateKey();
+	}
+
+	public static PublicKey loadPublicKeyFromString(String key)
+			throws IOException, GeneralSecurityException {
+		SecurityUtil.init();
+		StringReader in = new StringReader(key);
+		PEMReader reader = new PEMReader(in, null, "BC");
+		return (PublicKey) reader.readObject();
+	}
+
+	public static String writePublicKeyToString(PublicKey key)
+			throws IOException {
+		SecurityUtil.init();
+		StringWriter sw = new StringWriter();
+		PEMWriter pem = new PEMWriter(sw);
+		pem.writeObject(key);
+		pem.close();
+		return sw.toString();
 	}
 }

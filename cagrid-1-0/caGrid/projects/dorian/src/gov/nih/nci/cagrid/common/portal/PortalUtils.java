@@ -4,7 +4,6 @@ import gov.nih.nci.cagrid.gums.common.IOUtils;
 
 import javax.swing.JOptionPane;
 
-import org.apache.axis.AxisFault;
 import org.projectmobius.portal.PortalResourceManager;
 
 /**
