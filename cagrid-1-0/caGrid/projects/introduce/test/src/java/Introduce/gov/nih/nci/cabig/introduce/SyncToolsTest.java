@@ -34,6 +34,8 @@ public class SyncToolsTest extends Story {
 
 	}
 
+	// used to make sure that if we are going to use a junit testsuite to test this 
+	// that the test suite will not error out looking for a single test......
 	public void testDummy() throws Throwable {
 	}
 

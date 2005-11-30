@@ -19,6 +19,28 @@
 			<fileset dir="${build.lib.dir}">
 				<include name="*.jar" />
 			</fileset>
+			<fileset dir="${test.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+		
+		<path id="Portal.classpath">
+			<path refid="Common.classpath" />
+			<fileset dir="${lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+		<path id="Portal.test.classpath">
+			<path refid="Common.test.classpath" />
+			<fileset dir="${lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${build.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${test.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
 		</path>
 		
 	</target>
