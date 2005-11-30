@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.gums.service.test;
+package gov.nih.nci.cagrid.gums.service;
 
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.service.GUMSManager;

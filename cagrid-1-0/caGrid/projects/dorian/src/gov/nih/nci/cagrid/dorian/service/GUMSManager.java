@@ -136,5 +136,8 @@ public class GUMSManager extends MobiusResourceManager {
 	public IFSConfiguration getIFSConfiguration() {
 		return ifsConfiguration;
 	}
+	
+	
+	
 
 }
