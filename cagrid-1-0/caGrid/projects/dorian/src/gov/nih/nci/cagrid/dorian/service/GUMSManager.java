@@ -9,7 +9,6 @@ import gov.nih.nci.cagrid.gums.idp.IdPConfiguration;
 import gov.nih.nci.cagrid.gums.idp.IdPManager;
 import gov.nih.nci.cagrid.gums.idp.IdentityProvider;
 import gov.nih.nci.cagrid.gums.ifs.CredentialsManager;
-import gov.nih.nci.cagrid.gums.ifs.bean.AttributeDescriptor;
 
 import org.globus.wsrf.utils.FaultHelper;
 import org.projectmobius.common.MobiusConfigurator;
@@ -25,10 +24,8 @@ import org.projectmobius.common.MobiusResourceManager;
 public class GUMSManager extends MobiusResourceManager{
 	
 	private Database db;
-	private RequiredAttributesManager userAttributeManager;
 	public static String GUMS_CONFIGURATION_FILE="etc/gums-conf.xml";
 	public static final String GUMS_CONFIGURATION_RESOURCE="GUMSConfiguration";
-	public static final String REQUIRED_USER_ATTRIBUTES = "REQUIRED_USER_ATTRIBUTES";
 	private static GUMSManager instance;
 	private CredentialsManager credentialsManager;
 	private CertificateAuthority ca;
@@ -53,11 +50,7 @@ public class GUMSManager extends MobiusResourceManager{
 		this.idp = IdPManager.getInstance();
 		this.idp.configure(db,(IdPConfiguration)getResource(IdPConfiguration.RESOURCE),ca);
 		
-		this.userAttributeManager = new RequiredAttributesManager(this.db,REQUIRED_USER_ATTRIBUTES);
-		AttributeDescriptor des = new AttributeDescriptor();
-		des.setNamespace("cagrid.nci.nih.gov/1/person");
-		des.setName("person");
-		this.userAttributeManager.insertRequiredAttribute(des);
+		
 		
 		this.credentialsManager = new CredentialsManager(db);
 		
@@ -79,10 +72,6 @@ public class GUMSManager extends MobiusResourceManager{
 
 	public Database getDatabase() {
 		return this.db;
-	}
-
-	public RequiredAttributesManager getUserAttributeManager() {
-		return userAttributeManager;
 	}
 
 	public CredentialsManager getCredentialsManager() {
