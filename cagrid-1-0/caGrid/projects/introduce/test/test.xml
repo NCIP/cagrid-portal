@@ -11,6 +11,7 @@
 		<mkdir dir="${junit.results.dir}"/>
 		
 		<junit dir="${basedir}" printsummary="yes" haltonfailure="yes" showoutput="true">
+			<sysproperty key="basedir" value="${basedir}"/>
 			<jvmarg value="-Dbuild.dir=${build.dir}"/>
 			<classpath>
 				<path refid="Introduce.test.classpath"/>
@@ -23,6 +24,7 @@
 			</batchtest>
 		</junit>
 		<junit dir="${basedir}" printsummary="yes" haltonfailure="yes" showoutput="true">
+			<sysproperty key="basedir" value="${basedir}"/>
 			<jvmarg value="-Dbuild.dir=${build.dir}"/>
 			<classpath>
 				<path refid="Portal.test.classpath"/>

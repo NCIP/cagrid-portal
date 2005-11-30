@@ -14,7 +14,16 @@ public class RemoveSkeletonStep extends Step {
 
 	public void runStep() throws Throwable {
 		System.out.println("Removing the service skeleton");
-		assertTrue(deleteDir(new File(TestCaseInfo.dir)));
+		File f = new File(".");
+		System.out.println(f.getAbsolutePath());
+
+		String pathtobasedir = System.getProperty("basedir");
+		System.out.println(pathtobasedir);
+		if(pathtobasedir == null){
+			System.out.println("pathtobasedir system property not set");
+			throw new Exception("pathtobasedir system property not set");
+		}
+		assertTrue(deleteDir(new File(pathtobasedir + File.separator + TestCaseInfo.dir)));
 	}
 
     // Deletes all files and subdirectories under dir.

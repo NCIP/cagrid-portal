@@ -5,8 +5,9 @@ import java.util.StringTokenizer;
 
 public class CommonTools {
 
-	public static String getAntSkeletonCreationCommand(String name, String dir,
-			String packagename, String namespacedomain) throws Exception {
+	public static String getAntSkeletonCreationCommand(String buildFileDir,
+			String name, String dir, String packagename, String namespacedomain)
+			throws Exception {
 		String os = System.getProperty("os.name");
 		String cmd = " -Dintroduce.skeleton.destination.dir=" + dir
 				+ " -Dintroduce.skeleton.service.name=" + name
@@ -20,16 +21,16 @@ public class CommonTools {
 					+ CommonTools.getAntLauncherJarLocation(System
 							.getProperty("java.class.path"), true)
 					+ " org.apache.tools.ant.launch.Launcher -lib "
-					+ System.getProperty("java.class.path")
-					+ " -buildfile build.xml " + cmd;
+					+ System.getProperty("java.class.path") + " -buildfile "
+					+ buildFileDir + File.separator + "build.xml" + cmd;
 			cmd = "java.exe " + cmd;
 		} else if ((os.indexOf("Linux") >= 0) || (os.indexOf("linux") >= 0)) {
 			cmd = "-classpath "
 					+ CommonTools.getAntLauncherJarLocation(System
 							.getProperty("java.class.path"), false)
 					+ " org.apache.tools.ant.launch.Launcher -lib "
-					+ System.getProperty("java.class.path")
-					+ " -buildfile build.xml " + cmd;
+					+ System.getProperty("java.class.path") + " -buildfile "
+					+ buildFileDir + File.separator + "build.xml" + cmd;
 			cmd = "java " + cmd;
 		} else {
 			throw new Exception(

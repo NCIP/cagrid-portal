@@ -13,8 +13,18 @@ public class CreateSkeletonStep extends Step {
 	
 	public void runStep() throws Throwable {
 		System.out.println("Creating the service skeleton");
+		
+		File f = new File(".");
+		System.out.println(f.getAbsolutePath());
 
-		String cmd = CommonTools.getAntSkeletonCreationCommand(
+		String pathtobasedir = System.getProperty("basedir");
+		System.out.println(pathtobasedir);
+		if(pathtobasedir == null){
+			System.out.println("pathtobasedir system property not set");
+			throw new Exception("pathtobasedir system property not set");
+		}
+		
+		String cmd = CommonTools.getAntSkeletonCreationCommand(pathtobasedir,
 				TestCaseInfo.name, TestCaseInfo.dir, TestCaseInfo.packageName,
 				TestCaseInfo.namespaceDomain);
 		System.out.println(cmd);

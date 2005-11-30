@@ -258,7 +258,7 @@ public class CreationViewer extends GridPortalComponent {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 
 					try {
-						String cmd = CommonTools.getAntSkeletonCreationCommand(service.getText(),dir.getText(),servicePackage.getText(),namespaceDomain.getText());
+						String cmd = CommonTools.getAntSkeletonCreationCommand(".",service.getText(),dir.getText(),servicePackage.getText(),namespaceDomain.getText());
 
 						System.out.println(cmd);
 						final Process p = Runtime.getRuntime().exec(cmd);
