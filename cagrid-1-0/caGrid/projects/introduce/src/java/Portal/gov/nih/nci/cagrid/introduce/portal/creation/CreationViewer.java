@@ -6,7 +6,6 @@ import gov.nih.nci.cagrid.introduce.portal.AnalyticalLookAndFeel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -14,6 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.projectmobius.common.MobiusException;
+import org.projectmobius.common.XMLUtilities;
 import org.projectmobius.portal.GridPortalComponent;
 
 
@@ -260,7 +261,34 @@ public class CreationViewer extends GridPortalComponent {
 						String cmd = CommonTools.getAntSkeletonCreationCommand(service.getText(),dir.getText(),servicePackage.getText(),namespaceDomain.getText());
 
 						System.out.println(cmd);
-						Process p = Runtime.getRuntime().exec(cmd);
+						final Process p = Runtime.getRuntime().exec(cmd);
+						
+						Thread thread1 = new Thread(new Runnable() {
+							public void run() {
+								try {
+									
+									System.out.println(XMLUtilities.streamToString(p
+											.getInputStream()));
+								} catch (MobiusException e) {
+									e.printStackTrace();
+								}
+							}
+						});
+						thread1.start();
+
+						Thread thread2 = new Thread(new Runnable() {
+							public void run() {
+								try {
+									System.err.println(XMLUtilities.streamToString(p
+											.getErrorStream()));
+								} catch (MobiusException e) {
+									e.printStackTrace();
+								}
+							}
+						});
+						thread2.start();
+						
+						p.waitFor();
 						p.waitFor();
 						dispose();
 
