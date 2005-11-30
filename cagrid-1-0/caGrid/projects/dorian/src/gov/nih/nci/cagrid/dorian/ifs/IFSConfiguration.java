@@ -43,6 +43,9 @@
 
 package gov.nih.nci.cagrid.gums.ifs;
 
+import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
+import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -112,6 +115,10 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 	private int maxProxyLifetimeMinutes;
 
 	private int maxProxyLifetimeSeconds;
+	
+	private TrustedIdP initalTrustedIdP;
+	
+	private IFSUser initialUser;
 
 	public void setMaximumIdPNameLength(int maximumIdPNameLength) {
 		this.maximumIdPNameLength = maximumIdPNameLength;
@@ -447,5 +454,23 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 	public void setCredentialsValidYears(int credentialsValidYears) {
 		this.credentialsValidYears = credentialsValidYears;
 	}
+
+	public TrustedIdP getInitalTrustedIdP() {
+		return initalTrustedIdP;
+	}
+
+	public void setInitalTrustedIdP(TrustedIdP initalTrustedIdP) {
+		this.initalTrustedIdP = initalTrustedIdP;
+	}
+
+	public IFSUser getInitialUser() {
+		return initialUser;
+	}
+
+	public void setInitialUser(IFSUser initialUser) {
+		this.initialUser = initialUser;
+	}
+	
+	
 
 }

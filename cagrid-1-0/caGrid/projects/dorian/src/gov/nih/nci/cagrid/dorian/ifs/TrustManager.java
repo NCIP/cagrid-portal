@@ -413,13 +413,15 @@ public class TrustManager extends GUMSObject {
 			Class c = Class.forName(idp.getPolicyClass());
 			if (!IFSUserPolicy.class.isAssignableFrom(c)) {
 				InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
-				fault.setFaultString("Invalid policy class ("+idp.getPolicyClass()+") specified.");
+				fault.setFaultString("Invalid policy class ("
+						+ idp.getPolicyClass() + ") specified.");
 				throw fault;
 			}
 
 		} catch (ClassNotFoundException e) {
 			InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
-			fault.setFaultString("Invalid policy class ("+idp.getPolicyClass()+") specified.");
+			fault.setFaultString("Invalid policy class ("
+					+ idp.getPolicyClass() + ") specified.");
 			throw fault;
 		}
 		return idp.getPolicyClass();

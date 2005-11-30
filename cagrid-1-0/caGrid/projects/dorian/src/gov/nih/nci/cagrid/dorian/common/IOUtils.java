@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import org.apache.axis.AxisFault;
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -67,6 +69,14 @@ public class IOUtils {
 
 	public static String readLine(String prompt) {
 		return readLine(prompt,false);
+	}
+	
+	public static String getExceptionMessage(Exception e){
+		String mess = e.getMessage();
+		if(e instanceof AxisFault){
+			mess = ((AxisFault)e).getFaultString();
+		}
+		return mess;
 	}
 
 }

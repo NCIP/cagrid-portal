@@ -14,6 +14,7 @@ import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserRole;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidPasswordFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidUserFault;
+import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
 
 import java.io.IOException;
 import java.security.KeyPair;
@@ -52,9 +53,12 @@ public class UserManager extends GUMSObject {
 
 	private CertificateAuthority ca;
 
+	private TrustManager tm;
+
 	public UserManager(Database db, IFSConfiguration conf,
-			CertificateAuthority ca) {
+			CertificateAuthority ca, TrustManager tm) {
 		this.db = db;
+		this.tm = tm;
 		this.credentialsManager = new CredentialsManager(db);
 		this.conf = conf;
 		this.ca = ca;
@@ -585,6 +589,46 @@ public class UserManager extends GUMSObject {
 						+ "EMAIL VARCHAR(255) NOT NULL, "
 						+ "INDEX document_index (UID));";
 				db.update(users);
+
+				try {
+
+					if (conf.getInitalTrustedIdP() != null) {
+						TrustedIdP idp = tm.addTrustedIdP(conf
+								.getInitalTrustedIdP());
+						IFSUser usr = conf.getInitialUser();
+						usr.setIdPId(idp.getId());
+						if (usr != null) {
+							this.addUser(usr);
+							usr.setUserRole(IFSUserRole.Administrator);
+							usr.setUserStatus(IFSUserStatus.Active);
+							this.updateUser(usr);
+						} else {
+							GUMSInternalFault fault = new GUMSInternalFault();
+							fault
+									.setFaultString("Unexpected error initializing the User Manager, No initial IFS user specified.");
+							throw fault;
+						}
+					} else {
+						GUMSInternalFault fault = new GUMSInternalFault();
+						fault
+								.setFaultString("Unexpected error initializing the User Manager, No initial trusted IdP specified.");
+						throw fault;
+					}
+
+				} catch (GUMSInternalFault e) {
+					throw e;
+
+				} catch (Exception e) {
+					GUMSInternalFault fault = new GUMSInternalFault();
+					fault
+							.setFaultString("Unexpected error initializing the User Manager.");
+					FaultHelper helper = new FaultHelper(fault);
+					helper.addFaultCause(e);
+					fault = (GUMSInternalFault) helper.getFault();
+					throw fault;
+
+				}
+
 			}
 			this.dbBuilt = true;
 		}

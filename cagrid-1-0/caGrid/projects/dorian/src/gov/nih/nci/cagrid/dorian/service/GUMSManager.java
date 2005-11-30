@@ -5,10 +5,19 @@ import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthority;
 import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthorityConf;
 import gov.nih.nci.cagrid.gums.common.Database;
+import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.idp.IdPConfiguration;
 import gov.nih.nci.cagrid.gums.idp.IdentityProvider;
+import gov.nih.nci.cagrid.gums.idp.bean.BasicAuthCredential;
+import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
+import gov.nih.nci.cagrid.gums.ifs.AutoApprovalAutoRenewalPolicy;
 import gov.nih.nci.cagrid.gums.ifs.IFS;
 import gov.nih.nci.cagrid.gums.ifs.IFSConfiguration;
+import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
+import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserRole;
+import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
+import gov.nih.nci.cagrid.gums.ifs.bean.SAMLAuthenticationMethod;
+import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
 
 import org.globus.wsrf.utils.FaultHelper;
 import org.projectmobius.common.MobiusConfigurator;
@@ -29,6 +38,12 @@ public class GUMSManager extends MobiusResourceManager {
 
 	public static final String GUMS_CONFIGURATION_RESOURCE = "GUMSConfiguration";
 
+	public static final String IDP_ADMIN_USER_ID = "gums";
+
+	public static final String IDP_ADMIN_PASSWORD = "password";
+
+	public static String SERVICE_ID = "localhost";
+
 	private static GUMSManager instance;
 
 	private CertificateAuthority ca;
@@ -36,13 +51,53 @@ public class GUMSManager extends MobiusResourceManager {
 	private IdentityProvider identityProvider;
 
 	private IFS ifs;
-	
+
 	private IFSConfiguration ifsConfiguration;
 
 	private GUMSManager() throws GUMSInternalFault {
 		try {
 			MobiusConfigurator.parseMobiusConfiguration(
 					GUMS_CONFIGURATION_FILE, this);
+
+			IdentityProvider.ADMIN_USER_ID = IDP_ADMIN_USER_ID;
+			IdentityProvider.ADMIN_PASSWORD = IDP_ADMIN_PASSWORD;
+
+			this.db = new Database(getGUMSConfiguration()
+					.getConnectionManager(), getGUMSConfiguration()
+					.getGUMSInternalId());
+			this.db.createDatabaseIfNeeded();
+			GUMSCertificateAuthorityConf caconf = (GUMSCertificateAuthorityConf) getResource(GUMSCertificateAuthorityConf.RESOURCE);
+			this.ca = new GUMSCertificateAuthority(db, caconf);
+
+			IdPConfiguration idpConf = (IdPConfiguration) getResource(IdPConfiguration.RESOURCE);
+			this.identityProvider = new IdentityProvider(idpConf, db, ca);
+
+			TrustedIdP idp = new TrustedIdP();
+			idp.setName(SERVICE_ID);
+			SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
+			methods[0] = SAMLAuthenticationMethod
+					.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
+			idp.setAuthenticationMethod(methods);
+			idp.setPolicyClass(AutoApprovalAutoRenewalPolicy.class.getName());
+			idp.setIdPCertificate(CertUtil
+					.writeCertificateToString(this.identityProvider
+							.getIdpCertificate()));
+			
+			BasicAuthCredential cred = new BasicAuthCredential();
+			cred.setUserId(IDP_ADMIN_USER_ID);
+			cred.setPassword(IDP_ADMIN_PASSWORD);
+			IdPUser idpUser = this.identityProvider.getUser(cred,IDP_ADMIN_USER_ID);		
+			IFSUser usr = new IFSUser();
+			usr.setUID(idpUser.getUserId());
+			usr.setEmail(idpUser.getEmail());
+			usr.setUserStatus(IFSUserStatus.Active);
+			usr.setUserRole(IFSUserRole.Administrator);
+			
+			ifsConfiguration = (IFSConfiguration) getResource(IFSConfiguration.RESOURCE);
+			ifsConfiguration.setInitalTrustedIdP(idp);
+			ifsConfiguration.setInitialUser(usr);
+			this.ifs = new IFS(ifsConfiguration, db, ca);
+
 		} catch (Exception e) {
 			GUMSInternalFault fault = new GUMSInternalFault();
 			fault
@@ -52,16 +107,6 @@ public class GUMSManager extends MobiusResourceManager {
 			fault = (GUMSInternalFault) helper.getFault();
 			throw fault;
 		}
-		this.db = new Database(getGUMSConfiguration().getConnectionManager(),
-				getGUMSConfiguration().getGUMSInternalId());
-		this.db.createDatabaseIfNeeded();
-		GUMSCertificateAuthorityConf caconf = (GUMSCertificateAuthorityConf) getResource(GUMSCertificateAuthorityConf.RESOURCE);
-		this.ca = new GUMSCertificateAuthority(db, caconf);
-
-		IdPConfiguration idpConf = (IdPConfiguration) getResource(IdPConfiguration.RESOURCE);
-		this.identityProvider = new IdentityProvider(idpConf, db, ca);
-		ifsConfiguration = (IFSConfiguration) getResource(IFSConfiguration.RESOURCE);
-		this.ifs = new IFS(ifsConfiguration, db, ca);
 	}
 
 	public GUMSConfiguration getGUMSConfiguration() {
@@ -91,7 +136,5 @@ public class GUMSManager extends MobiusResourceManager {
 	public IFSConfiguration getIFSConfiguration() {
 		return ifsConfiguration;
 	}
-	
-	
 
 }

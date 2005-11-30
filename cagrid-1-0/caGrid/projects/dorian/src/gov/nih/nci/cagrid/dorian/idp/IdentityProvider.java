@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.gums.idp;
 
+import java.security.cert.X509Certificate;
+
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
 import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.gums.common.Crypt;
@@ -32,22 +34,23 @@ import org.opensaml.SAMLAssertion;
 
 public class IdentityProvider extends GUMSObject {
 
-	
 	private UserManager userManager;
 
-	public static final String ADMIN_USER_ID = "gums";
+	public static String ADMIN_USER_ID = "gums";
 
-	public static final String ADMIN_PASSWORD = "password";
-	
+	public static String ADMIN_PASSWORD = "password";
+
 	private IdPConfiguration conf;
-	
+
 	private AssertionCredentialsManager assertionManager;
 
-	public IdentityProvider(IdPConfiguration conf, Database db, CertificateAuthority ca) throws GUMSInternalFault {
+	public IdentityProvider(IdPConfiguration conf, Database db,
+			CertificateAuthority ca) throws GUMSInternalFault {
 		try {
-		    this.conf = conf;
+			this.conf = conf;
 			this.userManager = new UserManager(db, conf);
-			this.assertionManager = new AssertionCredentialsManager(conf,ca,db);
+			this.assertionManager = new AssertionCredentialsManager(conf, ca,
+					db);
 
 			if (!this.userManager.userExists(ADMIN_USER_ID)) {
 				IdPUser u = new IdPUser();
@@ -80,16 +83,21 @@ public class IdentityProvider extends GUMSObject {
 			throw fault;
 		}
 	}
-	
-	
-	public SAMLAssertion authenticate(BasicAuthCredential credential) throws GUMSInternalFault, InvalidLoginFault{
+
+	public SAMLAssertion authenticate(BasicAuthCredential credential)
+			throws GUMSInternalFault, InvalidLoginFault {
 		IdPUser requestor = verifyUser(credential);
-		return assertionManager.getAuthenticationAssertion(requestor.getUserId(),requestor.getEmail());
+		return assertionManager.getAuthenticationAssertion(requestor
+				.getUserId(), requestor.getEmail());
+	}
+
+	public X509Certificate getIdpCertificate() throws GUMSInternalFault {
+		return assertionManager.getIdPCertificate();
 	}
 
 	public String register(Application a) throws GUMSInternalFault,
 			InvalidUserPropertyFault {
-	
+
 		IdPRegistrationPolicy policy = conf.getRegistrationPolicy();
 		ApplicationReview ar = policy.register(a);
 		IdPUserStatus status = ar.getStatus();
@@ -126,8 +134,16 @@ public class IdentityProvider extends GUMSObject {
 		return message;
 	}
 
-	public IdPUser[] findUsers(BasicAuthCredential credential, IdPUserFilter filter)
-			throws GUMSInternalFault, InvalidLoginFault, PermissionDeniedFault {
+	public IdPUser getUser(BasicAuthCredential credential, String uid)
+			throws GUMSInternalFault, InvalidLoginFault, PermissionDeniedFault, NoSuchUserFault {
+		IdPUser requestor = verifyUser(credential);
+		verifyAdministrator(requestor);
+		return this.userManager.getUser(uid);
+	}
+
+	public IdPUser[] findUsers(BasicAuthCredential credential,
+			IdPUserFilter filter) throws GUMSInternalFault, InvalidLoginFault,
+			PermissionDeniedFault {
 		IdPUser requestor = verifyUser(credential);
 		verifyAdministrator(requestor);
 		return this.userManager.getUsers(filter, false);
@@ -192,7 +208,7 @@ public class IdentityProvider extends GUMSObject {
 	}
 
 	public void removeUser(BasicAuthCredential credential, String userId)
-			throws GUMSInternalFault, InvalidLoginFault, PermissionDeniedFault{
+			throws GUMSInternalFault, InvalidLoginFault, PermissionDeniedFault {
 		IdPUser requestor = verifyUser(credential);
 		verifyAdministrator(requestor);
 		userManager.removeUser(userId);

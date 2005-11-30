@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
+import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserRole;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidProxyFault;
@@ -309,7 +310,7 @@ public class TestIFS extends TestCase {
 		}
 	}
 
-	private IFSConfiguration getConf() {
+	private IFSConfiguration getConf() throws Exception{
 		IFSConfiguration conf = new IFSConfiguration();
 		conf.setCredentialsValidYears(1);
 		conf.setCredentialsValidMonths(0);
@@ -322,10 +323,18 @@ public class TestIFS extends TestCase {
 		conf.setMaxProxyLifetimeHours(12);
 		conf.setMaxProxyLifetimeMinutes(0);
 		conf.setMaxProxyLifetimeSeconds(0);
+		TrustedIdP idp = this.getTrustedIdpAutoApproveAutoRenew("Initial IdP").getIdp();
+		IFSUser usr = new IFSUser();
+		usr.setUID("inital_admin");
+		usr.setEmail("inital_admin@test.com");
+		usr.setUserStatus(IFSUserStatus.Active);
+		usr.setUserRole(IFSUserRole.Administrator);
+		conf.setInitalTrustedIdP(idp);
+		conf.setInitialUser(usr);
 		return conf;
 	}
 
-	private IFSConfiguration getExpiringCredentialsConf() {
+	private IFSConfiguration getExpiringCredentialsConf() throws Exception{
 		IFSConfiguration conf = new IFSConfiguration();
 		conf.setCredentialsValidYears(0);
 		conf.setCredentialsValidMonths(0);
@@ -338,6 +347,14 @@ public class TestIFS extends TestCase {
 		conf.setMaxProxyLifetimeHours(12);
 		conf.setMaxProxyLifetimeMinutes(0);
 		conf.setMaxProxyLifetimeSeconds(0);
+		TrustedIdP idp = this.getTrustedIdpAutoApproveAutoRenew("Initial IdP").getIdp();
+		IFSUser usr = new IFSUser();
+		usr.setUID("inital_admin");
+		usr.setEmail("inital_admin@test.com");
+		usr.setUserStatus(IFSUserStatus.Active);
+		usr.setUserRole(IFSUserRole.Administrator);
+		conf.setInitalTrustedIdP(idp);
+		conf.setInitialUser(usr);
 		return conf;
 	}
 
