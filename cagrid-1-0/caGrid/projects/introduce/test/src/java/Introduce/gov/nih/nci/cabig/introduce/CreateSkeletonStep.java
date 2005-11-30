@@ -48,7 +48,7 @@ public class CreateSkeletonStep extends Step {
 		thread2.start();
 		
 		p.waitFor();
-		assertEquals(p.exitValue(),0);
+		assertEquals(0,p.exitValue());
 	}
 
 }

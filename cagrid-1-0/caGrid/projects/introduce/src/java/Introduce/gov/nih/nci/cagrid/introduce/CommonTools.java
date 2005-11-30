@@ -15,15 +15,21 @@ public class CommonTools {
 				+ packagename.replace('.', File.separatorChar)
 				+ " -Dintroduce.skeleton.namespace.domain=" + namespacedomain
 				+ " createService";
-		cmd = "-classpath "
-				+ CommonTools.getAntLauncherJarLocation(System
-						.getProperty("java.class.path"), true)
-				+ " org.apache.tools.ant.launch.Launcher -lib "
-				+ System.getProperty("java.class.path")
-				+ " -buildfile build.xml " + cmd;
 		if ((os.indexOf("Windows") >= 0) || (os.indexOf("windows") >= 0)) {
+			cmd = "-classpath "
+					+ CommonTools.getAntLauncherJarLocation(System
+							.getProperty("java.class.path"), true)
+					+ " org.apache.tools.ant.launch.Launcher -lib "
+					+ System.getProperty("java.class.path")
+					+ " -buildfile build.xml " + cmd;
 			cmd = "java.exe " + cmd;
 		} else if ((os.indexOf("Linux") >= 0) || (os.indexOf("linux") >= 0)) {
+			cmd = "-classpath "
+					+ CommonTools.getAntLauncherJarLocation(System
+							.getProperty("java.class.path"), false)
+					+ " org.apache.tools.ant.launch.Launcher -lib "
+					+ System.getProperty("java.class.path")
+					+ " -buildfile build.xml " + cmd;
 			cmd = "java " + cmd;
 		} else {
 			throw new Exception(
