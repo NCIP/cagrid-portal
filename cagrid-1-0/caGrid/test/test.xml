@@ -55,10 +55,10 @@
 	<!-- =============================================================== -->
 	<target name="test" depends="createDartTestFiles" description="Test all the projects.">
 		<sequential>
-			<ant inheritall="false" dir="projects/core" antfile="build.xml" target="test">
+			<ant inheritall="false" antfile="projects/core/build.xml" target="test">
 				<property name="junit.results.dir" value="${junit.results.dir}" />
 			</ant>
-			<ant inheritall="false" dir="projects/introduce" antfile="build.xml" target="test">
+			<ant inheritall="false" antfile="projects/introduce/build.xml" target="test">
 				<property name="junit.results.dir" value="${junit.results.dir}" />
 			</ant>
 		</sequential>
