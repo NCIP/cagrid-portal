@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.creation;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.introduce.CommonTools;
 import gov.nih.nci.cagrid.introduce.portal.AnalyticalLookAndFeel;
 
 import java.awt.GridBagConstraints;
@@ -256,7 +257,7 @@ public class CreationViewer extends GridPortalComponent {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 
 					try {
-						String cmd = getAntCommand();
+						String cmd = CommonTools.getAntSkeletonCreationCommand(service.getText(),dir.getText(),servicePackage.getText(),namespaceDomain.getText());
 
 						System.out.println(cmd);
 						Process p = Runtime.getRuntime().exec(cmd);
@@ -378,27 +379,8 @@ public class CreationViewer extends GridPortalComponent {
 					dispose();
 				}
 			});
-
 		}
 		return closeButton;
-	}
-
-
-	private String getAntCommand() throws Exception {
-		String os = System.getProperty("os.name");
-		String cmd = " -Dintroduce.skeleton.destination.dir=" + dir.getText() + " -Dintroduce.skeleton.service.name="
-			+ service.getText() + " -Dintroduce.skeleton.package=" + servicePackage.getText()
-			+ " -Dintroduce.skeleton.package.dir=" + servicePackage.getText().replace('.', File.separatorChar)
-			+ " -Dintroduce.skeleton.namespace.domain=" + namespaceDomain.getText() + " createService";
-		if ((os.indexOf("Windows") >= 0) || (os.indexOf("windows") >= 0)) {
-			String path = (new File("")).getAbsolutePath();
-			return "rundll32 SHELL32.DLL,ShellExec_RunDLL cmd /K cd " + path + "&ant" + cmd;
-		} else if ((os.indexOf("Linux") >= 0) || (os.indexOf("linux") >= 0)) {
-			return "xterm -hold -geometry 50x10 -e ant" + cmd;
-		} else {
-			throw new Exception("Cannot create grid service, your operating system, " + os + " is not supported.");
-		}
-
 	}
 
 
