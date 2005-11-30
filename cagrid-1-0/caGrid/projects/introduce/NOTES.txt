@@ -1,0 +1,12 @@
+To Do:
+Make sure that skeleton names entered in the GUI are acceptable.
+	i.e. No Service in the name
+		 No non-acceptable characters for java class names
+
+Enable service to back up old service skeleton before altering and then provide rollback capabilities.
+	i.e. Enable "undu" in the gui.
+	
+Security configuration
+
+Metadata and registration configuration
+
