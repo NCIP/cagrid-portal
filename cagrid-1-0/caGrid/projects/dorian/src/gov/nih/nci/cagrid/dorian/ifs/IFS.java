@@ -312,6 +312,10 @@ public class IFS extends GUMSObject {
 		}
 
 	}
+	
+	protected UserManager getUserManager(){
+		return um;
+	}
 
 	private String getEmail(SAMLAssertion saml) {
 		Iterator itr = saml.getStatements();

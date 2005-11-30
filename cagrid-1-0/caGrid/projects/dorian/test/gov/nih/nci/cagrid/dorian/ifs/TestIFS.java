@@ -77,7 +77,6 @@ public class TestIFS extends TestCase {
 			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion("user",
 					idp), publicKey, lifetime);
 			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
-
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

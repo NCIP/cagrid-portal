@@ -7,6 +7,8 @@ import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthorityConf;
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.idp.IdPConfiguration;
 import gov.nih.nci.cagrid.gums.idp.IdentityProvider;
+import gov.nih.nci.cagrid.gums.ifs.IFS;
+import gov.nih.nci.cagrid.gums.ifs.IFSConfiguration;
 
 import org.globus.wsrf.utils.FaultHelper;
 import org.projectmobius.common.MobiusConfigurator;
@@ -33,6 +35,10 @@ public class GUMSManager extends MobiusResourceManager {
 
 	private IdentityProvider identityProvider;
 
+	private IFS ifs;
+	
+	private IFSConfiguration ifsConfiguration;
+
 	private GUMSManager() throws GUMSInternalFault {
 		try {
 			MobiusConfigurator.parseMobiusConfiguration(
@@ -54,7 +60,8 @@ public class GUMSManager extends MobiusResourceManager {
 
 		IdPConfiguration idpConf = (IdPConfiguration) getResource(IdPConfiguration.RESOURCE);
 		this.identityProvider = new IdentityProvider(idpConf, db, ca);
-
+		ifsConfiguration = (IFSConfiguration) getResource(IFSConfiguration.RESOURCE);
+		this.ifs = new IFS(ifsConfiguration, db, ca);
 	}
 
 	public GUMSConfiguration getGUMSConfiguration() {
@@ -76,5 +83,15 @@ public class GUMSManager extends MobiusResourceManager {
 	public IdentityProvider getIdentityProvider() {
 		return identityProvider;
 	}
+
+	public IFS getIFS() {
+		return ifs;
+	}
+
+	public IFSConfiguration getIFSConfiguration() {
+		return ifsConfiguration;
+	}
+	
+	
 
 }
