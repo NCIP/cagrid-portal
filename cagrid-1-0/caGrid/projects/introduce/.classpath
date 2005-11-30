@@ -87,5 +87,16 @@
 	<classpathentry kind="lib" path="lib/mobius-castor-0.9.4.3-xml.jar"/>
 	<classpathentry kind="lib" path="lib/GlobalModelExchange_stubs.jar"/>
 	<classpathentry kind="lib" path="lib/GlobalModelExchange.jar"/>
+	<classpathentry kind="lib" path="test/lib/abbot.jar"/>
+	<classpathentry kind="lib" path="test/lib/ao-util.jar"/>
+	<classpathentry kind="lib" path="test/lib/DartClient-0.6.jar"/>
+	<classpathentry kind="lib" path="test/lib/docall.jar"/>
+	<classpathentry kind="lib" path="test/lib/gnu-regexp-110.jar"/>
+	<classpathentry sourcepath="C:/Documents and Settings/hastings/My Documents/haste-1.0.3/haste-1.0.3/source.zip" kind="lib" path="test/lib/haste.jar"/>
+	<classpathentry kind="lib" path="test/lib/jdepend-2.7-patched.jar"/>
+	<classpathentry kind="lib" path="test/lib/jdom-1.0b8.jar"/>
+	<classpathentry kind="lib" path="test/lib/junit.jar"/>
+	<classpathentry kind="lib" path="test/lib/junit-addons-1.4.jar"/>
+	<classpathentry kind="lib" path="test/lib/xmlunit1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
