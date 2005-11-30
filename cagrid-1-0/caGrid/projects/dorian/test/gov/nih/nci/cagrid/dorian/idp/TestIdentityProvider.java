@@ -39,9 +39,8 @@ public class TestIdentityProvider extends TestCase {
 
 	public void testAutomaticRegistration() {
 		try {
-			
-			AssertionCredentialsManager am = new AssertionCredentialsManager(conf,ca,db);
-			IdentityProvider idp = new IdentityProvider(conf,db,am);
+		
+			IdentityProvider idp = new IdentityProvider(conf,db,ca);
 			conf.setRegistrationPolicy(
 					new AutomaticRegistrationPolicy());
 			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy().getClass()
@@ -63,8 +62,7 @@ public class TestIdentityProvider extends TestCase {
 
 	public void testManualRegistration() {
 		try {
-			AssertionCredentialsManager am = new AssertionCredentialsManager(conf,ca,db);
-			IdentityProvider idp = new IdentityProvider(conf,db,am);
+			IdentityProvider idp = new IdentityProvider(conf,db,ca);
 			conf.setRegistrationPolicy(
 					new ManualRegistrationPolicy());
 			assertEquals(ManualRegistrationPolicy.class.getName(), conf
@@ -92,9 +90,7 @@ public class TestIdentityProvider extends TestCase {
 
 	public void testMultipleUsers() {
 		try {
-
-			AssertionCredentialsManager am = new AssertionCredentialsManager(conf,ca,db);
-			IdentityProvider idp = new IdentityProvider(conf,db,am);
+			IdentityProvider idp = new IdentityProvider(conf,db,ca);
 			conf.setRegistrationPolicy(
 					new ManualRegistrationPolicy());
 			assertEquals(ManualRegistrationPolicy.class.getName(), conf.getRegistrationPolicy().getClass()

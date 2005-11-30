@@ -12,7 +12,7 @@ import gov.nih.nci.cagrid.gums.ifs.bean.UserPolicyFault;
  *          Exp $
  */
 
-public class ManualApprovalPolicy implements IFSUserPolicy {
+public class ManualApprovalPolicy extends IFSUserPolicy {
 	public void applyPolicy(IFSUser user) throws GUMSInternalFault,
 			UserPolicyFault {
 	

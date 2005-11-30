@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.gums.idp;
 
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
+import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.gums.common.Crypt;
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
@@ -42,11 +43,11 @@ public class IdentityProvider extends GUMSObject {
 	
 	private AssertionCredentialsManager assertionManager;
 
-	public IdentityProvider(IdPConfiguration conf, Database db, AssertionCredentialsManager am) throws GUMSInternalFault {
+	public IdentityProvider(IdPConfiguration conf, Database db, CertificateAuthority ca) throws GUMSInternalFault {
 		try {
 		    this.conf = conf;
 			this.userManager = new UserManager(db, conf);
-			this.assertionManager = am;
+			this.assertionManager = new AssertionCredentialsManager(conf,ca,db);
 
 			if (!this.userManager.userExists(ADMIN_USER_ID)) {
 				IdPUser u = new IdPUser();

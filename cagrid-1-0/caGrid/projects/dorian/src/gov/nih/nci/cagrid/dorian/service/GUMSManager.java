@@ -6,9 +6,7 @@ import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthority;
 import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthorityConf;
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.idp.IdPConfiguration;
-import gov.nih.nci.cagrid.gums.idp.IdPManager;
 import gov.nih.nci.cagrid.gums.idp.IdentityProvider;
-import gov.nih.nci.cagrid.gums.ifs.CredentialsManager;
 
 import org.globus.wsrf.utils.FaultHelper;
 import org.projectmobius.common.MobiusConfigurator;
@@ -21,67 +19,62 @@ import org.projectmobius.common.MobiusResourceManager;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class GUMSManager extends MobiusResourceManager{
-	
+public class GUMSManager extends MobiusResourceManager {
+
 	private Database db;
-	public static String GUMS_CONFIGURATION_FILE="etc/gums-conf.xml";
-	public static final String GUMS_CONFIGURATION_RESOURCE="GUMSConfiguration";
+
+	public static String GUMS_CONFIGURATION_FILE = "etc/gums-conf.xml";
+
+	public static final String GUMS_CONFIGURATION_RESOURCE = "GUMSConfiguration";
+
 	private static GUMSManager instance;
-	private CredentialsManager credentialsManager;
+
 	private CertificateAuthority ca;
-	private IdPManager idp;
-	
-	private GUMSManager() throws GUMSInternalFault{
-		try{
-		MobiusConfigurator.parseMobiusConfiguration(GUMS_CONFIGURATION_FILE,this);
-		}catch(Exception e){
+
+	private IdentityProvider identityProvider;
+
+	private GUMSManager() throws GUMSInternalFault {
+		try {
+			MobiusConfigurator.parseMobiusConfiguration(
+					GUMS_CONFIGURATION_FILE, this);
+		} catch (Exception e) {
 			GUMSInternalFault fault = new GUMSInternalFault();
-			fault.setFaultString("An unexpected error occurred in configuring the service.");
+			fault
+					.setFaultString("An unexpected error occurred in configuring the service.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault)helper.getFault();
+			fault = (GUMSInternalFault) helper.getFault();
 			throw fault;
-		}	
-		this.db = new Database(getGUMSConfiguration().getConnectionManager(),getGUMSConfiguration().getGUMSInternalId());
+		}
+		this.db = new Database(getGUMSConfiguration().getConnectionManager(),
+				getGUMSConfiguration().getGUMSInternalId());
 		this.db.createDatabaseIfNeeded();
-		GUMSCertificateAuthorityConf caconf = (GUMSCertificateAuthorityConf)getResource(GUMSCertificateAuthorityConf.RESOURCE);
-		this.ca = new GUMSCertificateAuthority(db,caconf);
-		
-		this.idp = IdPManager.getInstance();
-		this.idp.configure(db,(IdPConfiguration)getResource(IdPConfiguration.RESOURCE),ca);
-		
-		
-		
-		this.credentialsManager = new CredentialsManager(db);
-		
-		
+		GUMSCertificateAuthorityConf caconf = (GUMSCertificateAuthorityConf) getResource(GUMSCertificateAuthorityConf.RESOURCE);
+		this.ca = new GUMSCertificateAuthority(db, caconf);
+
+		IdPConfiguration idpConf = (IdPConfiguration) getResource(IdPConfiguration.RESOURCE);
+		this.identityProvider = new IdentityProvider(idpConf, db, ca);
+
 	}
-	
-	public GUMSConfiguration getGUMSConfiguration(){
-		return (GUMSConfiguration)this.getResource(GUMS_CONFIGURATION_RESOURCE);
+
+	public GUMSConfiguration getGUMSConfiguration() {
+		return (GUMSConfiguration) this
+				.getResource(GUMS_CONFIGURATION_RESOURCE);
 	}
-	
-	public static GUMSManager getInstance() throws GUMSInternalFault{
-		if(instance == null){
+
+	public static GUMSManager getInstance() throws GUMSInternalFault {
+		if (instance == null) {
 			instance = new GUMSManager();
 		}
 		return instance;
 	}
-	
-	
 
 	public Database getDatabase() {
 		return this.db;
 	}
 
-	public CredentialsManager getCredentialsManager() {
-		return credentialsManager;
+	public IdentityProvider getIdentityProvider() {
+		return identityProvider;
 	}
 
-	public IdentityProvider getIdentityProvider() throws GUMSInternalFault{
-		return idp.getIdentityProvider();
-	}
-
-	
-	
 }

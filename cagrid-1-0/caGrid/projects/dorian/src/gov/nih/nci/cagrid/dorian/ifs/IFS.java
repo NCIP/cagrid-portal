@@ -1,7 +1,9 @@
 package gov.nih.nci.cagrid.gums.ifs;
 
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
+import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.gums.common.AddressValidator;
+import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
@@ -43,27 +45,33 @@ public class IFS extends GUMSObject {
 
 	public final static String EMAIL_NAME = "email";
 
-	public IFS() {
+	private UserManager um;
 
+	private TrustManager tm;
+
+	private IFSConfiguration conf;
+
+	public IFS(IFSConfiguration conf, Database db, CertificateAuthority ca) {
+		this.conf = conf;
+		um = new UserManager(db, conf, ca);
+		tm = new TrustManager(conf, db);
 	}
 
 	public TrustedIdP addTrustedIdP(TrustedIdP idp) throws GUMSInternalFault,
 			InvalidTrustedIdPFault {
 		// TODO: Verify User is an administrator etc.
-		return IFSManager.getInstance().getTrustManager().addTrustedIdP(idp);
+		return tm.addTrustedIdP(idp);
 	}
 
 	public IFSUser getUser(long idpId, String uid) throws GUMSInternalFault,
 			InvalidUserFault {
 		// TODO: Verify User is an administrator etc.
-		UserManager um = IFSManager.getInstance().getUserManager();
 		return um.getUser(idpId, uid);
 	}
 
 	public void updateUser(IFSUser usr) throws GUMSInternalFault,
 			InvalidUserFault {
 		// TODO: Verify User is an administrator etc.
-		UserManager um = IFSManager.getInstance().getUserManager();
 		um.updateUser(usr);
 	}
 
@@ -92,8 +100,7 @@ public class IFS extends GUMSObject {
 		}
 
 		// Make sure the assertion is trusted
-		TrustedIdP idp = IFSManager.getInstance().getTrustManager()
-				.getTrustedIdP(saml);
+		TrustedIdP idp = tm.getTrustedIdP(saml);
 
 		SAMLAuthenticationStatement auth = getAuthenticationStatement(saml);
 
@@ -112,8 +119,6 @@ public class IFS extends GUMSObject {
 					+ idp.getName());
 			throw fault;
 		}
-
-		UserManager um = IFSManager.getInstance().getUserManager();
 
 		// If the user does not exist, add them
 		String email = this.getEmail(saml);
@@ -177,7 +182,6 @@ public class IFS extends GUMSObject {
 			}
 		}
 
-		IFSConfiguration conf = IFSManager.getInstance().getConfiguration();
 		// Validate that the proxy is of valid length
 		if (IFSUtils.getProxyValid(lifetime).after(conf.getMaxProxyLifetime())) {
 			InvalidProxyFault fault = new InvalidProxyFault();
@@ -196,6 +200,7 @@ public class IFS extends GUMSObject {
 		try {
 			Class c = Class.forName(idp.getPolicyClass());
 			policy = (IFSUserPolicy) c.newInstance();
+			policy.configure(conf, um);
 
 		} catch (Exception e) {
 			GUMSInternalFault fault = new GUMSInternalFault();

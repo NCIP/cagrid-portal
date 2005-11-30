@@ -15,10 +15,10 @@ import org.globus.wsrf.utils.FaultHelper;
  *          Exp $
  */
 
-public class AutoApprovalPolicy implements IFSUserPolicy {
+public class AutoApprovalPolicy extends IFSUserPolicy {
 	public void applyPolicy(IFSUser user) throws GUMSInternalFault,
 			UserPolicyFault {
-		UserManager um = IFSManager.getInstance().getUserManager();
+		UserManager um = getUserManager();
 		// First we approve if the user has not been approved.
 		if (user.getUserStatus().equals(IFSUserStatus.Pending)) {
 			user.setUserStatus(IFSUserStatus.Active);

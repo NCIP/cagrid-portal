@@ -11,6 +11,27 @@ import gov.nih.nci.cagrid.gums.ifs.bean.UserPolicyFault;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public interface IFSUserPolicy {
-	public void applyPolicy(IFSUser user) throws GUMSInternalFault, UserPolicyFault;
+public abstract class IFSUserPolicy {
+
+	private IFSConfiguration configuration;
+
+	private UserManager userManager;
+
+	public void configure(IFSConfiguration conf, UserManager um) {
+		this.configuration = conf;
+		this.userManager = um;
+	}
+
+	public abstract void applyPolicy(IFSUser user) throws GUMSInternalFault,
+			UserPolicyFault;
+
+	public IFSConfiguration getConfiguration() {
+		return configuration;
+	}
+
+	public UserManager getUserManager() {
+		return userManager;
+	}
+	
+	
 }

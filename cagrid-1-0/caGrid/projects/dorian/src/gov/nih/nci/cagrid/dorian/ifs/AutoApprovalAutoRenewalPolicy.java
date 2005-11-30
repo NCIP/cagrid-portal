@@ -17,13 +17,13 @@ import org.globus.wsrf.utils.FaultHelper;
  *          Exp $
  */
 
-public class AutoApprovalAutoRenewalPolicy extends AutoApprovalPolicy implements IFSUserPolicy {
+public class AutoApprovalAutoRenewalPolicy extends AutoApprovalPolicy {
 	public void applyPolicy(IFSUser user) throws GUMSInternalFault,
 			UserPolicyFault {
 		super.applyPolicy(user);
-		UserManager um = IFSManager.getInstance().getUserManager();
-		IFSConfiguration conf = IFSManager.getInstance().getConfiguration();
-		
+		UserManager um = getUserManager();
+		IFSConfiguration conf = getConfiguration();
+
 		try {
 			// Next we check if the user's credentials have expired
 			X509Certificate cert = CertUtil.loadCertificateFromString(user
