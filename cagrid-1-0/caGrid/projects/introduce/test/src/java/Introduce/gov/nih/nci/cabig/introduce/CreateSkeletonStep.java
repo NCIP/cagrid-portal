@@ -1,14 +1,16 @@
 package gov.nih.nci.cabig.introduce;
 
+import gov.nih.nci.cagrid.introduce.CommonTools;
+
+import java.io.File;
+
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.XMLUtilities;
-
-import gov.nih.nci.cagrid.introduce.CommonTools;
 
 import com.atomicobject.haste.framework.Step;
 
 public class CreateSkeletonStep extends Step {
-
+	
 	public void runStep() throws Throwable {
 		System.out.println("Creating the service skeleton");
 
@@ -48,4 +50,5 @@ public class CreateSkeletonStep extends Step {
 		p.waitFor();
 		assertEquals(p.exitValue(),0);
 	}
+
 }
