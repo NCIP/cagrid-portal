@@ -81,7 +81,7 @@ public class GUMSManager extends MobiusResourceManager {
 			idp.setPolicyClass(AutoApprovalAutoRenewalPolicy.class.getName());
 			idp.setIdPCertificate(CertUtil
 					.writeCertificateToString(this.identityProvider
-							.getIdpCertificate()));
+							.getIdPCertificate()));
 			
 			BasicAuthCredential cred = new BasicAuthCredential();
 			cred.setUserId(IDP_ADMIN_USER_ID);

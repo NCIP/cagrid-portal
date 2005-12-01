@@ -91,7 +91,7 @@ public class IdentityProvider extends GUMSObject {
 				.getUserId(), requestor.getEmail());
 	}
 
-	public X509Certificate getIdpCertificate() throws GUMSInternalFault {
+	public X509Certificate getIdPCertificate() throws GUMSInternalFault {
 		return assertionManager.getIdPCertificate();
 	}
 

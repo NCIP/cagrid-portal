@@ -15,8 +15,15 @@ import gov.nih.nci.cagrid.gums.test.TestResourceManager;
 import gov.nih.nci.cagrid.gums.test.TestUtils;
 
 import java.io.File;
+import java.util.Iterator;
 
 import junit.framework.TestCase;
+
+import org.opensaml.SAMLAssertion;
+import org.opensaml.SAMLAttribute;
+import org.opensaml.SAMLAttributeStatement;
+import org.opensaml.SAMLAuthenticationStatement;
+import org.opensaml.SAMLStatement;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -28,23 +35,23 @@ import junit.framework.TestCase;
 public class TestIdentityProvider extends TestCase {
 
 	private IdPConfiguration conf;
+
 	private Database db;
+
 	private CertificateAuthority ca;
-	
+
 	public static String IDP_CONFIG = "resources" + File.separator
-	+ "general-test" + File.separator + "idp-config.xml";
+			+ "general-test" + File.separator + "idp-config.xml";
 
 	private int count = 0;
-	
 
 	public void testAutomaticRegistration() {
 		try {
-		
-			IdentityProvider idp = new IdentityProvider(conf,db,ca);
-			conf.setRegistrationPolicy(
-					new AutomaticRegistrationPolicy());
-			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy().getClass()
-					.getName());
+
+			IdentityProvider idp = new IdentityProvider(conf, db, ca);
+			conf.setRegistrationPolicy(new AutomaticRegistrationPolicy());
+			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf
+					.getRegistrationPolicy().getClass().getName());
 			Application a = createApplication();
 			idp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
@@ -62,12 +69,10 @@ public class TestIdentityProvider extends TestCase {
 
 	public void testManualRegistration() {
 		try {
-			IdentityProvider idp = new IdentityProvider(conf,db,ca);
-			conf.setRegistrationPolicy(
-					new ManualRegistrationPolicy());
+			IdentityProvider idp = new IdentityProvider(conf, db, ca);
+			conf.setRegistrationPolicy(new ManualRegistrationPolicy());
 			assertEquals(ManualRegistrationPolicy.class.getName(), conf
-					.getRegistrationPolicy().getClass()
-					.getName());
+					.getRegistrationPolicy().getClass().getName());
 			Application a = createApplication();
 			idp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
@@ -90,16 +95,15 @@ public class TestIdentityProvider extends TestCase {
 
 	public void testMultipleUsers() {
 		try {
-			IdentityProvider idp = new IdentityProvider(conf,db,ca);
-			conf.setRegistrationPolicy(
-					new ManualRegistrationPolicy());
-			assertEquals(ManualRegistrationPolicy.class.getName(), conf.getRegistrationPolicy().getClass()
-					.getName());
+			IdentityProvider idp = new IdentityProvider(conf, db, ca);
+			conf.setRegistrationPolicy(new ManualRegistrationPolicy());
+			assertEquals(ManualRegistrationPolicy.class.getName(), conf
+					.getRegistrationPolicy().getClass().getName());
 			BasicAuthCredential cred = getAdminCreds();
 			for (int i = 0; i < 10; i++) {
 				Application a = createApplication();
 				idp.register(a);
-				
+
 				IdPUserFilter uf = new IdPUserFilter();
 				uf.setUserId(a.getUserId());
 				IdPUser[] users = idp.findUsers(cred, uf);
@@ -114,23 +118,30 @@ public class TestIdentityProvider extends TestCase {
 				uf.setUserId("user");
 				users = idp.findUsers(cred, uf);
 				assertEquals(i + 1, users.length);
+				BasicAuthCredential auth = new BasicAuthCredential();
+				auth.setUserId(a.getUserId());
+				auth.setPassword(a.getPassword());
+				org.opensaml.SAMLAssertion saml = idp.authenticate(auth);
+				assertNotNull(saml);
+				this.verifySAMLAssertion(saml,idp,a);
+
 			}
-			
+
 			IdPUserFilter uf = new IdPUserFilter();
 			IdPUser[] users = idp.findUsers(cred, uf);
 			assertEquals(11, users.length);
 			for (int i = 0; i < 10; i++) {
 				IdPUserFilter f = new IdPUserFilter();
 				f.setUserId(users[i].getUserId());
-				IdPUser[] us = idp.findUsers(cred,f);
+				IdPUser[] us = idp.findUsers(cred, f);
 				assertEquals(1, us.length);
 				us[0].setFirstName("NEW NAME");
-				idp.updateUser(cred,us[0]);
-				IdPUser[] us2 = idp.findUsers(cred,f);
+				idp.updateUser(cred, us[0]);
+				IdPUser[] us2 = idp.findUsers(cred, f);
 				assertEquals(1, us2.length);
 				assertEquals(us[0], us2[0]);
-				idp.removeUser(cred,users[i].getUserId());
-				us = idp.findUsers(cred,f);
+				idp.removeUser(cred, users[i].getUserId());
+				us = idp.findUsers(cred, f);
 				assertEquals(0, us.length);
 			}
 			users = idp.findUsers(cred, uf);
@@ -138,7 +149,63 @@ public class TestIdentityProvider extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} 
+		}
+	}
+
+	public void verifySAMLAssertion(SAMLAssertion saml, IdentityProvider idp,
+			Application app) throws Exception {
+		assertNotNull(saml);
+		saml.verify(idp.getIdPCertificate(), false);
+
+		assertEquals(idp.getIdPCertificate().getSubjectDN().toString(), saml
+				.getIssuer());
+		Iterator itr = saml.getStatements();
+		int count = 0;
+		boolean emailFound = false;
+		boolean authFound = false;
+		while (itr.hasNext()) {
+			count = count + 1;
+			SAMLStatement stmt = (SAMLStatement) itr.next();
+			if (stmt instanceof SAMLAuthenticationStatement) {
+				if (authFound) {
+					assertTrue(false);
+				} else {
+					authFound = true;
+				}
+				SAMLAuthenticationStatement auth = (SAMLAuthenticationStatement) stmt;
+				assertEquals(app.getUserId(), auth.getSubject().getName());
+				assertEquals("urn:oasis:names:tc:SAML:1.0:am:password", auth
+						.getAuthMethod());
+			}
+
+			if (stmt instanceof SAMLAttributeStatement) {
+				if (emailFound) {
+					assertTrue(false);
+				} else {
+					emailFound = true;
+				}
+				SAMLAttributeStatement att = (SAMLAttributeStatement) stmt;
+				assertEquals(app.getUserId(), att.getSubject().getName());
+				Iterator i = att.getAttributes();
+				assertTrue(i.hasNext());
+				SAMLAttribute a = (SAMLAttribute) i.next();
+				assertEquals(AssertionCredentialsManager.EMAIL_NAMESPACE, a
+						.getNamespace());
+				assertEquals(AssertionCredentialsManager.EMAIL_NAME, a
+						.getName());
+				Iterator vals = a.getValues();
+				assertTrue(vals.hasNext());
+				String val = (String) vals.next();
+				assertEquals(app.getEmail(), val);
+				assertTrue(!vals.hasNext());
+				assertTrue(!i.hasNext());
+			}
+
+		}
+
+		assertEquals(2, count);
+		assertTrue(authFound);
+		assertTrue(emailFound);
 	}
 
 	private BasicAuthCredential getAdminCreds() {
@@ -167,33 +234,31 @@ public class TestIdentityProvider extends TestCase {
 		return u;
 	}
 
-
-
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
 			count = 0;
-		    db = TestUtils.getDB();
-		    assertEquals(0,db.getUsedConnectionCount());
-		    ca = TestUtils.getCA();
-		    TestResourceManager trm = new TestResourceManager(IDP_CONFIG);
-		    this.conf = (IdPConfiguration)trm.getResource(IdPConfiguration.RESOURCE);
+			db = TestUtils.getDB();
+			assertEquals(0, db.getUsedConnectionCount());
+			ca = TestUtils.getCA();
+			TestResourceManager trm = new TestResourceManager(IDP_CONFIG);
+			this.conf = (IdPConfiguration) trm
+					.getResource(IdPConfiguration.RESOURCE);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
 	}
-	
+
 	protected void tearDown() throws Exception {
 		super.setUp();
 		try {
-			assertEquals(0,db.getUsedConnectionCount());
+			assertEquals(0, db.getUsedConnectionCount());
 			db.destroyDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
 	}
-	
-	
+
 }
