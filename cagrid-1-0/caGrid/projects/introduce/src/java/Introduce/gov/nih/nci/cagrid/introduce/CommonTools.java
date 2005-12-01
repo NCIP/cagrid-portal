@@ -3,7 +3,73 @@ package gov.nih.nci.cagrid.introduce;
 import java.io.File;
 import java.util.StringTokenizer;
 
+import org.projectmobius.common.MobiusException;
+import org.projectmobius.common.XMLUtilities;
+
 public class CommonTools {
+	
+	public static Process createAndOutputProcess(String cmd) throws Exception {
+		final Process p;
+		
+		p = Runtime.getRuntime().exec(cmd);
+		
+		Thread thread1 = new Thread(new Runnable() {
+			public void run() {
+				try {
+					
+					System.out.println(XMLUtilities.streamToString(p
+							.getInputStream()));
+				} catch (MobiusException e) {
+					e.printStackTrace();
+				}
+
+			}
+		});
+		thread1.start();
+
+		Thread thread2 = new Thread(new Runnable() {
+			public void run() {
+				try {
+					System.err.println(XMLUtilities.streamToString(p
+							.getErrorStream()));
+				} catch (MobiusException e) {
+					e.printStackTrace();
+				}
+
+			}
+		});
+		thread2.start();
+		
+		return p;
+	}
+	
+	public static String getAntSkeletonResyncCommand(String buildFileDir)
+			throws Exception {
+		String os = System.getProperty("os.name");
+		String cmd = " resync";
+		if ((os.indexOf("Windows") >= 0) || (os.indexOf("windows") >= 0)) {
+			cmd = "-classpath "
+					+ CommonTools.getAntLauncherJarLocation(System
+							.getProperty("java.class.path"), true)
+					+ " org.apache.tools.ant.launch.Launcher -lib "
+					+ System.getProperty("java.class.path") + " -buildfile "
+					+ buildFileDir + File.separator + "build.xml" + cmd;
+			cmd = "java.exe " + cmd;
+		} else if ((os.indexOf("Linux") >= 0) || (os.indexOf("linux") >= 0)) {
+			cmd = "-classpath "
+					+ CommonTools.getAntLauncherJarLocation(System
+							.getProperty("java.class.path"), false)
+					+ " org.apache.tools.ant.launch.Launcher -lib "
+					+ System.getProperty("java.class.path") + " -buildfile "
+					+ buildFileDir + File.separator + "build.xml" + cmd;
+			cmd = "java " + cmd;
+		} else {
+			throw new Exception(
+					"Cannot create grid service, your operatingsystem, " + os
+							+ " is not supported.");
+		}
+		return cmd;
+	}
 
 	public static String getAntSkeletonCreationCommand(String buildFileDir,
 			String name, String dir, String packagename, String namespacedomain)

@@ -10,6 +10,9 @@
 			<fileset dir="${lib.dir}">
 				<include name="*.jar" />
 			</fileset>
+			<fileset dir="${ext.ant.home}/lib">
+				<include name="*.jar" />
+			</fileset>
 		</path>
 		<path id="Introduce.test.classpath">
 			<path refid="Common.test.classpath" />
@@ -22,11 +25,17 @@
 			<fileset dir="${test.lib.dir}">
 				<include name="*.jar" />
 			</fileset>
+			<fileset dir="${ext.ant.home}/lib">
+				<include name="*.jar" />
+			</fileset>
 		</path>
 		
 		<path id="Portal.classpath">
 			<path refid="Common.classpath" />
 			<fileset dir="${lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${ext.ant.home}/lib">
 				<include name="*.jar" />
 			</fileset>
 		</path>
@@ -39,6 +48,9 @@
 				<include name="*.jar" />
 			</fileset>
 			<fileset dir="${test.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${ext.ant.home}/lib">
 				<include name="*.jar" />
 			</fileset>
 		</path>

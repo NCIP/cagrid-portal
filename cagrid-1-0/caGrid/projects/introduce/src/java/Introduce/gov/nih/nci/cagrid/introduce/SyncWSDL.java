@@ -29,19 +29,31 @@ import org.jdom.output.XMLOutputter;
 public class SyncWSDL {
 
 	public static final String XMLSCHEMA_NAMESPACE = "http://www.w3.org/2001/XMLSchema";
+
 	public static final String WSDL_NAMESPACE = "http://schemas.xmlsoap.org/wsdl/";
+
 	public static final String XMLSCHEMA_NAMESPACE_PREFIX = "xsd";
+
 	public static final String WSDL_NAMESPACE_PREFIX = "wsdl";
+
 	public static final String WSDL_FAULT_NAMESPACE_PREFIX = "wsbfw";
+
 	public static final String FAULT_NAMESPACE_PREFIX = "wsbf";
 
 	Document wsdl;
+
 	Properties deploymentProperties;
+
 	Element schema;
+
 	Element definitions;
+
 	Element portType;
+
 	Element types;
+
 	File baseDir;
+
 	int namespaceCount;
 
 	public SyncWSDL(File baseDir, Properties deploymentProperties) {
@@ -95,117 +107,126 @@ public class SyncWSDL {
 		Element cType = new Element("complexType", definitions
 				.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE_PREFIX));
 		inputType.setAttribute("name", method.getAttributeValue("name"));
-		List params = method.getChild("inputs", method.getNamespace())
-				.getChildren();
-		for (int i = 0; i < params.size(); i++) {
-			Element param = (Element) params.get(i);
-			Element sequence = new Element("sequence", definitions
-					.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE_PREFIX));
-			Element element = new Element("element", definitions
-					.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE_PREFIX));
-			element.setAttribute("name", param.getAttributeValue("name"));
-			Namespace thisNamespace = null;
-			// get the right namespace prefix for the type.....
-			List namespaces = definitions.getAdditionalNamespaces();
-			for (int nameIndex = 0; nameIndex < namespaces.size(); nameIndex++) {
-				Namespace tempNS = (Namespace) namespaces.get(nameIndex);
-				if (tempNS.getURI()
-						.equals(param.getAttributeValue("namespace"))) {
-					thisNamespace = tempNS;
-				}
-			}
 
-			Namespace ns = null;
-			if (thisNamespace == null) {
-				// need to add this import and namespace to the
-				// list.....
-				ns = Namespace.getNamespace("ns"
-						+ String.valueOf(this.namespaceCount++), param
-						.getAttributeValue("namespace"));
-				this.definitions.addNamespaceDeclaration(ns);
-				Element importEl = new Element("import", this.definitions
-						.getNamespace());
-				if (param.getAttribute("location") != null) {
-					importEl.setAttribute("location", param
-							.getAttributeValue("location"));
-				}
-				importEl.setAttribute("namespace", param
-						.getAttributeValue("namespace"));
-				this.definitions.addContent(0, importEl);
-			}
+		if (method.getChild("inputs", method.getNamespace()) != null) {
 
-			try {
-				if ((param.getAttributeValue("maxOccurs") != null)
-						&& (param.getAttributeValue("maxOccurs").equals(
-								"unbounded") || param.getAttribute("maxOccurs")
-								.getIntValue() > 1)) {
-					// need to create an element array wrapper for gwsdl to
-					// accept an array as input to a client
-					element.setAttribute("minOccurs", "1");
-					element.setAttribute("maxOccurs", "1");
-					Element acType = new Element("complexType", definitions
-							.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE_PREFIX));
-					Element acContent = new Element(
-							"complexContent",
-							definitions
-									.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE_PREFIX));
-					Element aRestriction = new Element(
-							"restriction",
-							definitions
-									.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE_PREFIX));
-					aRestriction.setAttribute("base", "soapenc:Array");
-					Element aAttribute = new Element("attribute", definitions
-							.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE_PREFIX));
-					aAttribute.setAttribute("ref", "soapenc:arrayType");
-					if (thisNamespace == null) {
-						aAttribute
-								.setAttribute(
-										"arrayType",
-										ns.getPrefix()
-												+ ":"
-												+ param
-														.getAttributeValue("type")
-												+ "[]",
-										definitions
-												.getNamespace(SyncWSDL.WSDL_NAMESPACE_PREFIX));
-					} else {
-						aAttribute
-								.setAttribute(
-										"arrayType",
-										thisNamespace.getPrefix()
-												+ ":"
-												+ param
-														.getAttributeValue("type")
-												+ "[]",
-										definitions
-												.getNamespace(SyncWSDL.WSDL_NAMESPACE_PREFIX));
-					}
-					aRestriction.setContent(aAttribute);
-					acContent.setContent(aRestriction);
-					acType.setContent(acContent);
-					element.setContent(acType);
-				} else {
-					if (thisNamespace == null) {
-						element.setAttribute("type", ns.getPrefix() + ":"
-								+ param.getAttributeValue("type"));
-					} else {
-						element.setAttribute("type", thisNamespace.getPrefix()
-								+ ":" + param.getAttributeValue("type"));
-					}
-					if (param.getAttributeValue("minOccurs") != null) {
-						element.setAttribute("minOccurs", param
-								.getAttributeValue("minOccurs"));
-					}
-					if (param.getAttributeValue("maxOccurs") != null) {
-						element.setAttribute("maxOccurs", param
-								.getAttributeValue("maxOccurs"));
+			List params = method.getChild("inputs", method.getNamespace())
+					.getChildren();
+			for (int i = 0; i < params.size(); i++) {
+				Element param = (Element) params.get(i);
+				Element sequence = new Element("sequence", definitions
+						.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE_PREFIX));
+				Element element = new Element("element", definitions
+						.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE_PREFIX));
+				element.setAttribute("name", param.getAttributeValue("name"));
+				Namespace thisNamespace = null;
+				// get the right namespace prefix for the type.....
+				List namespaces = definitions.getAdditionalNamespaces();
+				for (int nameIndex = 0; nameIndex < namespaces.size(); nameIndex++) {
+					Namespace tempNS = (Namespace) namespaces.get(nameIndex);
+					if (tempNS.getURI().equals(
+							param.getAttributeValue("namespace"))) {
+						thisNamespace = tempNS;
 					}
 				}
-			} catch (DataConversionException e) {
-				e.printStackTrace();
+
+				Namespace ns = null;
+				if (thisNamespace == null) {
+					// need to add this import and namespace to the
+					// list.....
+					ns = Namespace.getNamespace("ns"
+							+ String.valueOf(this.namespaceCount++), param
+							.getAttributeValue("namespace"));
+					this.definitions.addNamespaceDeclaration(ns);
+					Element importEl = new Element("import", this.definitions
+							.getNamespace());
+					if (param.getAttribute("location") != null) {
+						importEl.setAttribute("location", param
+								.getAttributeValue("location"));
+					}
+					importEl.setAttribute("namespace", param
+							.getAttributeValue("namespace"));
+					this.definitions.addContent(0, importEl);
+				}
+
+				try {
+					if ((param.getAttributeValue("maxOccurs") != null)
+							&& (param.getAttributeValue("maxOccurs").equals(
+									"unbounded") || param.getAttribute(
+									"maxOccurs").getIntValue() > 1)) {
+						// need to create an element array wrapper for gwsdl to
+						// accept an array as input to a client
+						element.setAttribute("minOccurs", "1");
+						element.setAttribute("maxOccurs", "1");
+						Element acType = new Element(
+								"complexType",
+								definitions
+										.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE_PREFIX));
+						Element acContent = new Element(
+								"complexContent",
+								definitions
+										.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE_PREFIX));
+						Element aRestriction = new Element(
+								"restriction",
+								definitions
+										.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE_PREFIX));
+						aRestriction.setAttribute("base", "soapenc:Array");
+						Element aAttribute = new Element(
+								"attribute",
+								definitions
+										.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE_PREFIX));
+						aAttribute.setAttribute("ref", "soapenc:arrayType");
+						if (thisNamespace == null) {
+							aAttribute
+									.setAttribute(
+											"arrayType",
+											ns.getPrefix()
+													+ ":"
+													+ param
+															.getAttributeValue("type")
+													+ "[]",
+											definitions
+													.getNamespace(SyncWSDL.WSDL_NAMESPACE_PREFIX));
+						} else {
+							aAttribute
+									.setAttribute(
+											"arrayType",
+											thisNamespace.getPrefix()
+													+ ":"
+													+ param
+															.getAttributeValue("type")
+													+ "[]",
+											definitions
+													.getNamespace(SyncWSDL.WSDL_NAMESPACE_PREFIX));
+						}
+						aRestriction.setContent(aAttribute);
+						acContent.setContent(aRestriction);
+						acType.setContent(acContent);
+						element.setContent(acType);
+					} else {
+						if (thisNamespace == null) {
+							element.setAttribute("type", ns.getPrefix() + ":"
+									+ param.getAttributeValue("type"));
+						} else {
+							element.setAttribute("type", thisNamespace
+									.getPrefix()
+									+ ":" + param.getAttributeValue("type"));
+						}
+						if (param.getAttributeValue("minOccurs") != null) {
+							element.setAttribute("minOccurs", param
+									.getAttributeValue("minOccurs"));
+						}
+						if (param.getAttributeValue("maxOccurs") != null) {
+							element.setAttribute("maxOccurs", param
+									.getAttributeValue("maxOccurs"));
+						}
+					}
+				} catch (DataConversionException e) {
+					e.printStackTrace();
+				}
+				sequence.addContent(element);
+				cType.addContent(sequence);
 			}
-			sequence.addContent(element);
-			cType.addContent(sequence);
 		}
 		inputType.addContent(cType);
 		return inputType;
@@ -366,14 +387,12 @@ public class SyncWSDL {
 	}
 
 	public void sync(List additions, List removals) {
-		
+
 		SAXBuilder builder = new SAXBuilder(false);
 		try {
 			wsdl = builder.build(new File(baseDir.getAbsolutePath()
 					+ File.separator
 					+ "schema"
-					+ File.separator
-					+ "cagrid"
 					+ File.separator
 					+ this.deploymentProperties
 							.get("introduce.skeleton.service.name")
@@ -387,7 +406,7 @@ public class SyncWSDL {
 					.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
 			this.portType = this.definitions.getChild("portType", Namespace
 					.getNamespace(SyncWSDL.WSDL_NAMESPACE));
-			
+
 			this.namespaceCount = definitions.getAdditionalNamespaces().size() + 1;
 
 		} catch (JDOMException e1) {
@@ -403,8 +422,6 @@ public class SyncWSDL {
 			FileWriter fw = new FileWriter(new File(baseDir.getAbsolutePath()
 					+ File.separator
 					+ "schema"
-					+ File.separator
-					+ "cagrid"
 					+ File.separator
 					+ this.deploymentProperties
 							.get("introduce.skeleton.service.name")
