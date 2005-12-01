@@ -124,7 +124,6 @@ public class TestIdentityProvider extends TestCase {
 				org.opensaml.SAMLAssertion saml = idp.authenticate(auth);
 				assertNotNull(saml);
 				this.verifySAMLAssertion(saml,idp,a);
-
 			}
 
 			IdPUserFilter uf = new IdPUserFilter();
