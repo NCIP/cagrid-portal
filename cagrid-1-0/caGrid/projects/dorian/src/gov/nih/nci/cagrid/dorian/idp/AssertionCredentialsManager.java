@@ -166,17 +166,18 @@ public class AssertionCredentialsManager extends GUMSObject {
 		String subjectDNS=null;
 		
 		SAMLSubject sub = new SAMLSubject(id,federation,"urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",null,null,null);	
+		SAMLSubject sub2 = new SAMLSubject(id,federation,"urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",null,null,null);	
 		SAMLAuthenticationStatement auth = new SAMLAuthenticationStatement(sub,"urn:oasis:names:tc:SAML:1.0:am:password",new Date(),ipAddress,subjectDNS,null);
-	    QName name = new QName(EMAIL_NAMESPACE,EMAIL_NAME);
+	   
+		QName name = new QName(EMAIL_NAMESPACE,EMAIL_NAME);
 	    List vals = new ArrayList();
 	    vals.add(email);
-		SAMLAttribute att = new SAMLAttribute(name.getLocalName(),name.getNamespaceURI(),name,(long)0,vals);
+		SAMLAttribute att = new SAMLAttribute(name.getLocalName(),name.getNamespaceURI(),null,(long)0,vals);
 		
 		List atts = new ArrayList();
 		atts.add(att);
-		SAMLAttributeStatement attState = new SAMLAttributeStatement(sub,atts);
+		SAMLAttributeStatement attState = new SAMLAttributeStatement(sub2,atts);
 		
-	    
 	    List l = new ArrayList();
 		l.add(auth);
 		l.add(attState);

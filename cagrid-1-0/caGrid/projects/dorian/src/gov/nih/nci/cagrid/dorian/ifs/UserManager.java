@@ -4,7 +4,9 @@ import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
 import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.gums.common.AddressValidator;
 import gov.nih.nci.cagrid.gums.common.Database;
+import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
+import gov.nih.nci.cagrid.gums.common.IOUtils;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
 import gov.nih.nci.cagrid.gums.ifs.bean.CredentialsFault;
@@ -578,7 +580,7 @@ public class UserManager extends GUMSObject {
 		}
 	}
 
-	private void buildDatabase() throws GUMSInternalFault {
+	public void buildDatabase() throws GUMSInternalFault {
 		if (!dbBuilt) {
 			if (!this.db.tableExists(USERS_TABLE)) {
 				String users = "CREATE TABLE " + USERS_TABLE + " ("
@@ -623,6 +625,7 @@ public class UserManager extends GUMSObject {
 					fault
 							.setFaultString("Unexpected error initializing the User Manager.");
 					FaultHelper helper = new FaultHelper(fault);
+					helper.addDescription(IOUtils.getExceptionMessage(e));
 					helper.addFaultCause(e);
 					fault = (GUMSInternalFault) helper.getFault();
 					throw fault;

@@ -5,6 +5,7 @@ package gov.nih.nci.cagrid.gums.client;
 import gov.nih.nci.cagrid.gums.IdPAuthentication;
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
 import gov.nih.nci.cagrid.gums.common.GUMSFault;
+import gov.nih.nci.cagrid.gums.common.IOUtils;
 import gov.nih.nci.cagrid.gums.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.gums.idp.bean.InvalidLoginFault;
 import gov.nih.nci.cagrid.gums.wsrf.GUMSPortType;
@@ -12,7 +13,6 @@ import gov.nih.nci.cagrid.security.commstyle.AnonymousSecureConversationWithEncr
 
 import org.globus.wsrf.utils.FaultHelper;
 import org.opensaml.SAMLAssertion;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import uk.org.ogsadai.common.XMLUtilities;
@@ -51,8 +51,8 @@ public class IdPAuthenticationClient extends GUMSBaseClient implements
 		}
 		try {
 			String xml = port.idpAuthenticate(cred).getXml();
-			Document doc =XMLUtilities.xmlStringToDOM(xml,false);
-			return new SAMLAssertion(doc.getDocumentElement());
+			System.out.println(org.projectmobius.common.XMLUtilities.formatXML(xml));
+			return IOUtils.stringToSAMLAssertion(xml);
 		}catch(GUMSInternalFault gie){
 			throw gie;
 		}catch (InvalidLoginFault ilf){

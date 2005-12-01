@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
 import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
+import gov.nih.nci.cagrid.gums.common.IOUtils;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
 import gov.nih.nci.cagrid.gums.test.TestUtils;
@@ -125,9 +126,11 @@ public class TestAssertionCredentialsManager extends TestCase {
 			assertEquals(expectedSub, cert.getSubjectDN().toString());
 			SAMLAssertion saml = cm.getAuthenticationAssertion(TEST_UID,TEST_EMAIL);
 			verifySAMLAssertion(saml,cm);
+			String xml = IOUtils.samlAssertionToString(saml);
+			SAMLAssertion saml2 = IOUtils.stringToSAMLAssertion(xml);
+			verifySAMLAssertion(saml2,cm);
 			
 			
-
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -186,6 +189,10 @@ public class TestAssertionCredentialsManager extends TestCase {
 
 			SAMLAssertion saml = cm.getAuthenticationAssertion(TEST_UID,TEST_EMAIL);
 			verifySAMLAssertion(saml,cm);
+			String xml = IOUtils.samlAssertionToString(saml);
+			SAMLAssertion saml2 = IOUtils.stringToSAMLAssertion(xml);
+			System.out.println(IOUtils.samlAssertionToString(saml2));
+			verifySAMLAssertion(saml2,cm);
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);

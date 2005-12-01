@@ -51,10 +51,11 @@ public class IFS extends GUMSObject {
 
 	private IFSConfiguration conf;
 
-	public IFS(IFSConfiguration conf, Database db, CertificateAuthority ca) {
+	public IFS(IFSConfiguration conf, Database db, CertificateAuthority ca) throws GUMSInternalFault{
 		this.conf = conf;
 		tm = new TrustManager(conf, db);
 		um = new UserManager(db, conf, ca, tm);
+		um.buildDatabase();
 	}
 
 	public TrustedIdP addTrustedIdP(TrustedIdP idp) throws GUMSInternalFault,

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Assertion AssertionID="27f94e30-6295-11da-acac-bb81a95914d9" IssueInstant="2005-12-01T18:06:12Z" Issuer="O=Ohio State University,OU=BMI,OU=TEST,CN=IdP Authentication Asserter" MajorVersion="1" MinorVersion="0" xmlns="urn:oasis:names:tc:SAML:1.0:assertion">
+    <Conditions NotBefore="2005-12-01T18:06:12Z" NotOnOrAfter="2005-12-01T18:08:12Z" xmlns="urn:oasis:names:tc:SAML:1.0:assertion"/>
+    <AuthenticationStatement AuthenticationInstant="2005-12-01T18:06:12Z" AuthenticationMethod="urn:oasis:names:tc:SAML:1.0:am:password" xmlns="urn:oasis:names:tc:SAML:1.0:assertion">
+        <Subject xmlns="urn:oasis:names:tc:SAML:1.0:assertion">
+            <NameIdentifier Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" NameQualifier="O=Ohio State University,OU=BMI,OU=TEST,CN=IdP Authentication Asserter" xmlns="urn:oasis:names:tc:SAML:1.0:assertion">test</NameIdentifier>
+        </Subject>
+    </AuthenticationStatement>
+    <AttributeStatement xmlns="urn:oasis:names:tc:SAML:1.0:assertion" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <Subject xmlns="urn:oasis:names:tc:SAML:1.0:assertion" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <NameIdentifier Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" NameQualifier="O=Ohio State University,OU=BMI,OU=TEST,CN=IdP Authentication Asserter" xmlns="urn:oasis:names:tc:SAML:1.0:assertion" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">test</NameIdentifier>
+        </Subject>
+        <Attribute AttributeName="email" AttributeNamespace="http://cagrid.nci.nih.gov/email" xmlns="urn:oasis:names:tc:SAML:1.0:assertion" xmlns:typens="http://cagrid.nci.nih.gov/email" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <AttributeValue xmlns="urn:oasis:names:tc:SAML:1.0:assertion" xmlns:typens="http://cagrid.nci.nih.gov/email" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="typens:email">test@test.com</AttributeValue>
+        </Attribute>
+    </AttributeStatement>
+    <ds:Signature xmlns="urn:oasis:names:tc:SAML:1.0:assertion" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+        <ds:SignedInfo xmlns="urn:oasis:names:tc:SAML:1.0:assertion" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+            <ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" xmlns="urn:oasis:names:tc:SAML:1.0:assertion" xmlns:ds="http://www.w3.org/2000/09/xmldsig#"/>
+            <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" xmlns="urn:oasis:names:tc:SAML:1.0:assertion" xmlns:ds="http://www.w3.org/2000/09/xmldsig#"/>
+            <ds:Reference URI="" xmlns="urn:oasis:names:tc:SAML:1.0:assertion" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                <ds:Transforms xmlns="urn:oasis:names:tc:SAML:1.0:assertion" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:signs="urn:oasis:names:tc:SAML:1.0:assertion">
+                    <ds:Transform Algorithm="http://www.w3.org/2002/06/xmldsig-filter2" xmlns="urn:oasis:names:tc:SAML:1.0:assertion" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:signs="urn:oasis:names:tc:SAML:1.0:assertion">
+                        <dsig-xpath:XPath Filter="intersect" xmlns="urn:oasis:names:tc:SAML:1.0:assertion" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:dsig-xpath="http://www.w3.org/2002/06/xmldsig-filter2" xmlns:signs="urn:oasis:names:tc:SAML:1.0:assertion">here()/ancestor::signs:Assertion[1]</dsig-xpath:XPath>
+                        <dsig-xpath:XPath Filter="subtract" xmlns="urn:oasis:names:tc:SAML:1.0:assertion" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:dsig-xpath="http://www.w3.org/2002/06/xmldsig-filter2" xmlns:signs="urn:oasis:names:tc:SAML:1.0:assertion">here()/ancestor::ds:Signature[1]</dsig-xpath:XPath>
+                    </ds:Transform>
+                    <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" xmlns="urn:oasis:names:tc:SAML:1.0:assertion" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:signs="urn:oasis:names:tc:SAML:1.0:assertion">
+                        <ec:InclusiveNamespaces PrefixList="code ds kind rw saml samlp signs #default xsd xsi" xmlns="urn:oasis:names:tc:SAML:1.0:assertion" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:ec="http://www.w3.org/2001/10/xml-exc-c14n#" xmlns:signs="urn:oasis:names:tc:SAML:1.0:assertion"/>
+                    </ds:Transform>
+                </ds:Transforms>
+                <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" xmlns="urn:oasis:names:tc:SAML:1.0:assertion" xmlns:ds="http://www.w3.org/2000/09/xmldsig#"/>
+                <ds:DigestValue xmlns="urn:oasis:names:tc:SAML:1.0:assertion" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">00lHSAHJ9lkVMlsFycw21OweSLY=</ds:DigestValue>
+            </ds:Reference>
+        </ds:SignedInfo>
+        <ds:SignatureValue xmlns="urn:oasis:names:tc:SAML:1.0:assertion" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+iNdC/ZyNnZi3/tZaYQqdNuerfIts7W31eNatP579p0FlGLKMhsoKa1yWrRl0y+wrJr5wP+aIhcZC
+s/XtE7o+AAvoVwbndFL6k1Jh4N5rHT5r9koo9P1JYl6tO9Pd03SaaD5ClcMFbRfFLNq5DsgN5FFp
+oMr6lByeco8XVDT9m2Y=
+</ds:SignatureValue>
+        <ds:KeyInfo xmlns="urn:oasis:names:tc:SAML:1.0:assertion" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+            <ds:X509Data xmlns="urn:oasis:names:tc:SAML:1.0:assertion" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                <ds:X509Certificate xmlns="urn:oasis:names:tc:SAML:1.0:assertion" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+MIICYDCCAcmgAwIBAgIGAQfngLioMA0GCSqGSIb3DQEBBAUAMGIxHjAcBgNVBAoTFU9oaW8gU3Rh
+dGUgVW5pdmVyc2l0eTEMMAoGA1UECxMDQk1JMQ0wCwYDVQQLEwRURVNUMSMwIQYDVQQDExpUZW1w
+IENlcnRpZmljYXRlIEF1dGhvcml0eTAeFw0wNTEyMDExODA2MTFaFw0wNjEyMDExODA2MTBaMGMx
+HjAcBgNVBAoTFU9oaW8gU3RhdGUgVW5pdmVyc2l0eTEMMAoGA1UECxMDQk1JMQ0wCwYDVQQLEwRU
+RVNUMSQwIgYDVQQDExtJZFAgQXV0aGVudGljYXRpb24gQXNzZXJ0ZXIwgZ8wDQYJKoZIhvcNAQEB
+BQADgY0AMIGJAoGBAJ+ticFsgtFnW42IzvMzOZtEuwqoaE7OGSkNMVZyUBtVHcRnG0+pj1R4RY4B
+ZAtp0aeGfMD7Y3X14iw1P23wZg2uz+oBuM+IArKOUKwEQSZBCWWnn9YpV999ZrbiuR9nZLXY94D9
+t/bNwHU47rry0uUmYEDLCWJGBXrqe+fqTFHZAgMBAAGjIDAeMAwGA1UdEwEB/wQCMAAwDgYDVR0P
+AQH/BAQDAgWgMA0GCSqGSIb3DQEBBAUAA4GBAGalPfKKbwwzqWWWb7dLuewLaKKc2DXZ0arJc1sy
+QKMa4fg2v+hhrfEG7W72/zIEOHLPwdn6OU2zaunTj4aT1VQ7WdH5TIXqjagZ4g+oeUZGaLk0KyxK
+8GLHi1eszVqNpU59lF1IBX1igqr37Vmat9rChBdxqHDSSmyh+8agtH90
+</ds:X509Certificate>
+            </ds:X509Data>
+        </ds:KeyInfo>
+    </ds:Signature>
+</Assertion>

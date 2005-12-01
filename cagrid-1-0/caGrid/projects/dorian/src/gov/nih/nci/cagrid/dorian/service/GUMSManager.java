@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthority;
 import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthorityConf;
 import gov.nih.nci.cagrid.gums.common.Database;
+import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.idp.IdPConfiguration;
 import gov.nih.nci.cagrid.gums.idp.IdentityProvider;
@@ -22,6 +23,8 @@ import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
 import org.globus.wsrf.utils.FaultHelper;
 import org.projectmobius.common.MobiusConfigurator;
 import org.projectmobius.common.MobiusResourceManager;
+
+import com.ibm.wsdl.util.IOUtils;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -82,14 +85,15 @@ public class GUMSManager extends MobiusResourceManager {
 			idp.setIdPCertificate(CertUtil
 					.writeCertificateToString(this.identityProvider
 							.getIdPCertificate()));
-			
+			/*
 			BasicAuthCredential cred = new BasicAuthCredential();
 			cred.setUserId(IDP_ADMIN_USER_ID);
 			cred.setPassword(IDP_ADMIN_PASSWORD);
-			IdPUser idpUser = this.identityProvider.getUser(cred,IDP_ADMIN_USER_ID);		
+			IdPUser idpUser = this.identityProvider.getUser(cred,IDP_ADMIN_USER_ID);	
+			*/	
 			IFSUser usr = new IFSUser();
-			usr.setUID(idpUser.getUserId());
-			usr.setEmail(idpUser.getEmail());
+			usr.setUID(IDP_ADMIN_USER_ID);
+			//usr.setEmail(idpUser.getEmail());
 			usr.setUserStatus(IFSUserStatus.Active);
 			usr.setUserRole(IFSUserRole.Administrator);
 			

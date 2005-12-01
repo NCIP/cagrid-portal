@@ -115,8 +115,13 @@
 		</xsd:complexType>
 	</xsd:element>
 	
-	<xsd:element name="IFSCreateProxyResponse" type="ifs:X509Certificate" minOccurs="0" maxOccurs="unbounded"/>
-
+	<xsd:element name="IFSCreateProxyResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="certificates" minOccurs="0" maxOccurs="unbounded" type="ifs:X509Certificate"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
 	
 	<xsd:element name="invalidAssertionFault" type="ifs:InvalidAssertionFault"/>
 	<xsd:element name="invalidProxyFault" type="ifs:InvalidProxyFault"/>
