@@ -41,8 +41,8 @@
 			<xs:element name="output">
 				<xs:complexType>
 					<xs:attribute name="className" type="xs:string" use="required"/>
-					<xs:attribute name="namespace" type="xs:string" use="required"/>
-					<xs:attribute name="type" type="xs:string" use="required"/>
+					<xs:attribute name="namespace" type="xs:string" use="optional"/>
+					<xs:attribute name="type" type="xs:string" use="optional"/>
 					<xs:attribute name="location" type="xs:string" use="optional"/>
 					<xs:attribute name="minOccurs" type="xs:string" use="optional"/>
 					<xs:attribute name="maxOccurs" type="xs:string" use="optional"/>

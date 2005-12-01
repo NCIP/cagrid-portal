@@ -445,11 +445,13 @@ src.dir:        Directory where source files are located.
 	<target name="all" depends="dist" />
 	
 	<target name="resync" description="Uses the introduceMethods.xml to add and remove methods to this service skeleton">
-		<java classname="gov.nih.nci.cagrid.introduce.tools.SyncTools" fork="yes">
+		<java classname="gov.nih.nci.cagrid.introduce.SyncTools" fork="yes">
 			<arg value="-d" />
 			<arg value="${basedir}" />
 			<classpath>
-				<path refid="classpath" />
+				<fileset dir="${basedir}/lib">
+					<include name="*.jar" />
+				</fileset>
 			</classpath>
 		</java>
 	</target>
