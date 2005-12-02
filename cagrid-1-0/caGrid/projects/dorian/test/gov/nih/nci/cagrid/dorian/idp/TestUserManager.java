@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.gums.idp;
 import gov.nih.nci.cagrid.gums.common.Crypt;
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
+import gov.nih.nci.cagrid.gums.common.SimpleResourceManager;
 import gov.nih.nci.cagrid.gums.idp.bean.CountryCode;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUserFilter;
@@ -10,7 +11,6 @@ import gov.nih.nci.cagrid.gums.idp.bean.IdPUserRole;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUserStatus;
 import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
 import gov.nih.nci.cagrid.gums.idp.bean.StateCode;
-import gov.nih.nci.cagrid.gums.test.TestResourceManager;
 import gov.nih.nci.cagrid.gums.test.TestUtils;
 
 import java.io.File;
@@ -543,7 +543,7 @@ public class TestUserManager extends TestCase {
 			count = 0;
 		    db = TestUtils.getDB();
 		    assertEquals(0,db.getUsedConnectionCount());
-		    TestResourceManager trm = new TestResourceManager(IDP_CONFIG);
+		    SimpleResourceManager trm = new SimpleResourceManager(IDP_CONFIG);
 		    this.conf = (IdPConfiguration)trm.getResource(IdPConfiguration.RESOURCE);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);

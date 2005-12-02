@@ -1,9 +1,9 @@
 package gov.nih.nci.cagrid.gums.idp;
 
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
+import gov.nih.nci.cagrid.gums.common.SimpleResourceManager;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
-import gov.nih.nci.cagrid.gums.test.TestResourceManager;
 
 import java.io.File;
 
@@ -44,7 +44,7 @@ public class TestIdPConfiguration extends TestCase {
 
 	public void testAutoConfiguration() {
 		try {
-			 TestResourceManager trm = new TestResourceManager(IDP_CONFIG);
+			 SimpleResourceManager trm = new SimpleResourceManager(IDP_CONFIG);
 			 IdPConfiguration conf = (IdPConfiguration)trm.getResource(IdPConfiguration.RESOURCE);
 		
 			assertEquals(DEFAULT_MIN_PASSWORD_LENGTH, conf
@@ -71,7 +71,7 @@ public class TestIdPConfiguration extends TestCase {
 	}
 	public void testConfiguration() {
 		try {
-			 TestResourceManager trm = new TestResourceManager(IDP_CONFIG2);
+			 SimpleResourceManager trm = new SimpleResourceManager(IDP_CONFIG2);
 			 IdPConfiguration conf = (IdPConfiguration)trm.getResource(IdPConfiguration.RESOURCE);
 		
 			assertEquals(DEFAULT_MIN_PASSWORD_LENGTH, conf

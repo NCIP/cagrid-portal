@@ -1,5 +1,7 @@
-package gov.nih.nci.cagrid.gums.ca;
+package gov.nih.nci.cagrid.gums.ca.tools;
 
+import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthority;
+import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthorityConf;
 import gov.nih.nci.cagrid.gums.common.IOUtils;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;

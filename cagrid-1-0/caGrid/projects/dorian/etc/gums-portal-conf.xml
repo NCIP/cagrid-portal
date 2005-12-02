@@ -32,8 +32,10 @@
 		<gums-portal-config>
 		<gums-services>
 			<gums-service>http://localhost:8080/wsrf/services/cagrid/gums</gums-service>
-			<gums-service>http:/dc01.bmi.ohio-state.edu:8080/wsrf/services/cagrid/gums</gums-service>
 		</gums-services>
+		<idps>
+			<idp name="http://localhost:8080/wsrf/services/cagrid/gums" authPanelClass="gov.nih.nci.cagrid.gums.ifs.portal.GUMSIdPAuthenticationPanel"/>
+		</idps>
         </gums-portal-config>
 	</resource>
 </grid-portal>

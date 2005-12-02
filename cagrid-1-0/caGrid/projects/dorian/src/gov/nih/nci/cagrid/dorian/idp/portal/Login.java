@@ -1,7 +1,7 @@
-package gov.nih.nci.cagrid.gums.portal;
+package gov.nih.nci.cagrid.gums.idp.portal;
 
 import gov.nih.nci.cagrid.gums.idp.bean.BasicAuthCredential;
-import gov.nih.nci.cagrid.gums.idp.portal.IdPLookAndFeel;
+import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -21,7 +21,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: Login.java,v 1.1 2005-10-26 17:31:21 langella Exp $
+ * @version $Id: Login.java,v 1.1 2005-12-02 22:23:21 langella Exp $
  */
 public class Login extends JDialog {
 

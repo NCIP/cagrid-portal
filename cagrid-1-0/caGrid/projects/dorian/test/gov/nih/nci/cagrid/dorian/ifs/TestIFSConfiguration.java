@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.gums.ifs;
 
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
-import gov.nih.nci.cagrid.gums.test.TestResourceManager;
+import gov.nih.nci.cagrid.gums.common.SimpleResourceManager;
 
 import java.io.File;
 
@@ -45,7 +45,7 @@ public class TestIFSConfiguration extends TestCase {
 
 	public void testConfiguration() {
 		try {
-			 TestResourceManager trm = new TestResourceManager(IFS_CONF);
+			 SimpleResourceManager trm = new SimpleResourceManager(IFS_CONF);
 			 IFSConfiguration conf = (IFSConfiguration)trm.getResource(IFSConfiguration.RESOURCE);
 		
 			assertEquals(DEFAULT_MIN_LENGTH, conf
