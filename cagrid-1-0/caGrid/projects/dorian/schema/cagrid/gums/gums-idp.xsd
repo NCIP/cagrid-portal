@@ -402,23 +402,18 @@
 		</xsd:restriction>
 	</xsd:simpleType>
 	
-	
- 		 
- 		  <xsd:complexType name="InvalidUserPropertyFault">
+      <xsd:complexType name="InvalidUserPropertyFault">
 				<xsd:complexContent>
 					<xsd:extension base="wsbf:BaseFaultType" />
 				</xsd:complexContent>
 	 </xsd:complexType>	 
+	 
 	 <xsd:complexType name="NoSuchUserFault">
 				<xsd:complexContent>
 					<xsd:extension base="wsbf:BaseFaultType" />
 				</xsd:complexContent>
 	 </xsd:complexType>	 
-	 <xsd:complexType name="PermissionDeniedFault">
-				<xsd:complexContent>
-					<xsd:extension base="wsbf:BaseFaultType" />
-				</xsd:complexContent>
-	 </xsd:complexType>
+	 
 	 <xsd:complexType name="InvalidLoginFault">
 				<xsd:complexContent>
 					<xsd:extension base="wsbf:BaseFaultType" />

@@ -41,6 +41,8 @@
 
 	<xsd:element name="gumsInternalFault" type="gums:GUMSInternalFault"/>
 
+	<xsd:element name="permissionDeniedFault" type="gums:PermissionDeniedFault"/>
+
    <!-- IDP TYPES -->
  
 	<xsd:element name="idpRegister" type="idp:application"/>
@@ -100,7 +102,7 @@
 	<xsd:element name="invalidUserPropertyFault" type="idp:InvalidUserPropertyFault"/>
 	<xsd:element name="invalidLoginFault" type="idp:InvalidLoginFault"/>
 	<xsd:element name="noSuchUserFault" type="idp:NoSuchUserFault"/>
-	<xsd:element name="permissionDeniedFault" type="idp:PermissionDeniedFault"/>
+	
    
    
 	<!-- IFS TYPES -->
@@ -126,7 +128,7 @@
 	<xsd:element name="invalidAssertionFault" type="ifs:InvalidAssertionFault"/>
 	<xsd:element name="invalidProxyFault" type="ifs:InvalidProxyFault"/>
 	<xsd:element name="userPolicyFault" type="ifs:UserPolicyFault"/>
-	<xsd:element name="permissionDeniedFault" type="ifs:PermissionDeniedFault"/>
+
 			
 	<!-- RESOURCE PROPERTIES -->
    
@@ -273,7 +275,8 @@
 	    <fault message="tns:NoSuchUserFaultMessage" name="NoSuchUserFault"/>
 	    <fault message="tns:InvalidUserPropertyFaultMessage" name="InvalidUserPropertyFault"/>
 	</operation>
-		<operation name="idpRemoveUser">
+	
+	<operation name="idpRemoveUser">
 		<input message="tns:IdPRemoveUserInputMessage"/>
 		<output message="tns:IdPRemoveUserOutputMessage"/>
 		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
@@ -281,14 +284,14 @@
 	    <fault message="tns:InvalidLoginFaultMessage" name="InvalidLoginFault"/>
 	</operation>
 	
-		<operation name="idpAuthenticate">
+	<operation name="authenticate">
 		<input message="tns:IdPAuthenticateInputMessage"/>
 		<output message="tns:IdPAuthenticateOutputMessage"/>
 		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
 	    <fault message="tns:InvalidLoginFaultMessage" name="InvalidLoginFault"/>
 	</operation>
 	
-	<operation name="ifsCreateProxy">
+	<operation name="createProxy">
 		<input message="tns:IFSCreateProxyInputMessage"/>
 		<output message="tns:IFSCreateProxyOutputMessage"/>
 		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>

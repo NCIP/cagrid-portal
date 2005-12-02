@@ -14,15 +14,14 @@ import junit.framework.TestCase;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class TestGUMSManager extends TestCase{
+public class TestGUMS extends TestCase{
 	public static String RESOURCES_DIR = "resources" + File.separator
 	+ "general-test";
 	
     public void testGUMSManager(){
     	try{
     		TestUtils.getCA();
-    		GUMSManager.GUMS_CONFIGURATION_FILE = RESOURCES_DIR+File.separator+"gums-conf.xml";
-    		GUMSManager jm = GUMSManager.getInstance();
+    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
     		assertNotNull(jm.getGUMSConfiguration());
     		assertNotNull(jm.getDatabase());
     		assertEquals(0,jm.getDatabase().getUsedConnectionCount());

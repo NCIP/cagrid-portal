@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.gums.client;
 
 import gov.nih.nci.cagrid.gums.IFSUserAccess;
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
+import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gums.common.FaultHelper;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.common.GUMSFault;
@@ -11,7 +12,6 @@ import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
 import gov.nih.nci.cagrid.gums.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidProxyFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.gums.ifs.bean.UserPolicyFault;
 import gov.nih.nci.cagrid.gums.wsrf.GUMSPortType;
@@ -59,7 +59,7 @@ public class IFSUserClient extends GUMSBaseClient implements IFSUserAccess {
 			gov.nih.nci.cagrid.gums.bean.SAMLAssertion s = new gov.nih.nci.cagrid.gums.bean.SAMLAssertion(IOUtils.samlAssertionToString(saml));
 			params.setSAMLAssertion(s);	
 			gov.nih.nci.cagrid.gums.ifs.bean.X509Certificate list[] = port
-					.ifsCreateProxy(params).getCertificates();
+					.createProxy(params).getCertificates();
 			X509Certificate[] certs = new X509Certificate[list.length];
 			for(int i=0; i<list.length; i++){
 				certs[i] = CertUtil.loadCertificateFromString(list[i].getCertificateAsString());

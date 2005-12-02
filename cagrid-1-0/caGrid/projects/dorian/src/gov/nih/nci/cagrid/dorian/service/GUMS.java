@@ -6,12 +6,9 @@ import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthority;
 import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthorityConf;
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.FaultHelper;
-import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.idp.IdPConfiguration;
 import gov.nih.nci.cagrid.gums.idp.IdentityProvider;
-import gov.nih.nci.cagrid.gums.idp.bean.BasicAuthCredential;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
 import gov.nih.nci.cagrid.gums.ifs.AutoApprovalAutoRenewalPolicy;
 import gov.nih.nci.cagrid.gums.ifs.IFS;
 import gov.nih.nci.cagrid.gums.ifs.IFSConfiguration;
@@ -24,8 +21,6 @@ import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
 import org.projectmobius.common.MobiusConfigurator;
 import org.projectmobius.common.MobiusResourceManager;
 
-import com.ibm.wsdl.util.IOUtils;
-
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -33,11 +28,9 @@ import com.ibm.wsdl.util.IOUtils;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class GUMSManager extends MobiusResourceManager {
+public class GUMS extends MobiusResourceManager {
 
 	private Database db;
-
-	public static String GUMS_CONFIGURATION_FILE = "etc/gums-conf.xml";
 
 	public static final String GUMS_CONFIGURATION_RESOURCE = "GUMSConfiguration";
 
@@ -45,9 +38,7 @@ public class GUMSManager extends MobiusResourceManager {
 
 	public static final String IDP_ADMIN_PASSWORD = "password";
 
-	public static String SERVICE_ID = "localhost";
-
-	private static GUMSManager instance;
+	public static String serviceId;
 
 	private CertificateAuthority ca;
 
@@ -57,10 +48,11 @@ public class GUMSManager extends MobiusResourceManager {
 
 	private IFSConfiguration ifsConfiguration;
 
-	private GUMSManager() throws GUMSInternalFault {
+	public GUMS(String confFile, String serviceId) throws GUMSInternalFault {
 		try {
+			this.serviceId = serviceId;
 			MobiusConfigurator.parseMobiusConfiguration(
-					GUMS_CONFIGURATION_FILE, this);
+					confFile, this);
 
 			IdentityProvider.ADMIN_USER_ID = IDP_ADMIN_USER_ID;
 			IdentityProvider.ADMIN_PASSWORD = IDP_ADMIN_PASSWORD;
@@ -76,7 +68,7 @@ public class GUMSManager extends MobiusResourceManager {
 			this.identityProvider = new IdentityProvider(idpConf, db, ca);
 
 			TrustedIdP idp = new TrustedIdP();
-			idp.setName(SERVICE_ID);
+			idp.setName(serviceId);
 			SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
 			methods[0] = SAMLAuthenticationMethod
 					.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
@@ -118,12 +110,6 @@ public class GUMSManager extends MobiusResourceManager {
 				.getResource(GUMS_CONFIGURATION_RESOURCE);
 	}
 
-	public static GUMSManager getInstance() throws GUMSInternalFault {
-		if (instance == null) {
-			instance = new GUMSManager();
-		}
-		return instance;
-	}
 
 	public Database getDatabase() {
 		return this.db;

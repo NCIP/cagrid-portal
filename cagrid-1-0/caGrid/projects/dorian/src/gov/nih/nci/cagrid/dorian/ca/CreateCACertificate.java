@@ -3,7 +3,7 @@ package gov.nih.nci.cagrid.gums.ca;
 import gov.nih.nci.cagrid.gums.common.IOUtils;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
-import gov.nih.nci.cagrid.gums.service.GUMSManager;
+import gov.nih.nci.cagrid.gums.service.GUMS;
 
 import java.security.KeyPair;
 import java.security.Security;
@@ -90,8 +90,7 @@ public class CreateCACertificate {
 				System.exit(0);
 			} else {
 				String configFile = line.getOptionValue(CONFIG_FILE_OPT);
-				GUMSManager.GUMS_CONFIGURATION_FILE = configFile;
-				GUMSManager jm = GUMSManager.getInstance();
+				GUMS jm = new GUMS(configFile, "localhost");
 				GUMSCertificateAuthorityConf conf = (GUMSCertificateAuthorityConf) jm
 						.getResource(GUMSCertificateAuthorityConf.RESOURCE);
 				GUMSCertificateAuthority ca = new GUMSCertificateAuthority(jm
