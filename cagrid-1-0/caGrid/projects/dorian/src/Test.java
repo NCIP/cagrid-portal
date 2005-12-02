@@ -1,7 +1,7 @@
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
+import gov.nih.nci.cagrid.gums.common.FaultHelper;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
 
-import org.globus.wsrf.utils.FaultHelper;
 
 public class Test {
 

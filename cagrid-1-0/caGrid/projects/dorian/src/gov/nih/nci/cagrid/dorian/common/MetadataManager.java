@@ -7,7 +7,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import org.globus.wsrf.utils.FaultHelper;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>

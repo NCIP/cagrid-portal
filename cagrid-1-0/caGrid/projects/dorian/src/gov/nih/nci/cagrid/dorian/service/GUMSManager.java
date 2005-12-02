@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthority;
 import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthorityConf;
 import gov.nih.nci.cagrid.gums.common.Database;
+import gov.nih.nci.cagrid.gums.common.FaultHelper;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.idp.IdPConfiguration;
@@ -20,7 +21,6 @@ import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.gums.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
 
-import org.globus.wsrf.utils.FaultHelper;
 import org.projectmobius.common.MobiusConfigurator;
 import org.projectmobius.common.MobiusResourceManager;
 

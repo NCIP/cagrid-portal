@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
 import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.gums.common.AddressValidator;
 import gov.nih.nci.cagrid.gums.common.Database;
+import gov.nih.nci.cagrid.gums.common.FaultHelper;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
@@ -26,7 +27,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 
-import org.globus.wsrf.utils.FaultHelper;
 import org.opensaml.SAMLAssertion;
 import org.opensaml.SAMLAttribute;
 import org.opensaml.SAMLAttributeStatement;

@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.gums.client;
 
 import gov.nih.nci.cagrid.gums.IFSUserAccess;
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
+import gov.nih.nci.cagrid.gums.common.FaultHelper;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.common.GUMSFault;
 import gov.nih.nci.cagrid.gums.common.IOUtils;
@@ -23,7 +24,6 @@ import java.security.cert.X509Certificate;
 
 import org.globus.gsi.GlobusCredential;
 import org.globus.util.ConfigUtil;
-import org.globus.wsrf.utils.FaultHelper;
 import org.opensaml.SAMLAssertion;
 
 public class IFSUserClient extends GUMSBaseClient implements IFSUserAccess {

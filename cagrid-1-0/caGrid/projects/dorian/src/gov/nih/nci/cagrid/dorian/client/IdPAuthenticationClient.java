@@ -4,6 +4,7 @@ package gov.nih.nci.cagrid.gums.client;
 
 import gov.nih.nci.cagrid.gums.IdPAuthentication;
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
+import gov.nih.nci.cagrid.gums.common.FaultHelper;
 import gov.nih.nci.cagrid.gums.common.GUMSFault;
 import gov.nih.nci.cagrid.gums.common.IOUtils;
 import gov.nih.nci.cagrid.gums.idp.bean.BasicAuthCredential;
@@ -11,7 +12,6 @@ import gov.nih.nci.cagrid.gums.idp.bean.InvalidLoginFault;
 import gov.nih.nci.cagrid.gums.wsrf.GUMSPortType;
 import gov.nih.nci.cagrid.security.commstyle.AnonymousSecureConversationWithEncryption;
 
-import org.globus.wsrf.utils.FaultHelper;
 import org.opensaml.SAMLAssertion;
 import org.w3c.dom.Element;
 

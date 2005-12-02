@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
 import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.gums.common.Crypt;
 import gov.nih.nci.cagrid.gums.common.Database;
+import gov.nih.nci.cagrid.gums.common.FaultHelper;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
 import gov.nih.nci.cagrid.gums.idp.bean.Application;
 import gov.nih.nci.cagrid.gums.idp.bean.ApplicationReview;
@@ -21,7 +22,6 @@ import gov.nih.nci.cagrid.gums.idp.bean.StateCode;
 
 import java.security.cert.X509Certificate;
 
-import org.globus.wsrf.utils.FaultHelper;
 import org.opensaml.SAMLAssertion;
 
 /**

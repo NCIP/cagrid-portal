@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
 import gov.nih.nci.cagrid.gums.bean.Metadata;
 import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.gums.common.Database;
+import gov.nih.nci.cagrid.gums.common.FaultHelper;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
 import gov.nih.nci.cagrid.gums.common.MetadataManager;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
@@ -22,7 +23,6 @@ import java.util.List;
 
 import org.apache.xml.security.signature.XMLSignature;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.globus.wsrf.utils.FaultHelper;
 import org.opensaml.QName;
 import org.opensaml.SAMLAssertion;
 import org.opensaml.SAMLAttribute;

@@ -6,7 +6,6 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 
-import org.globus.wsrf.utils.FaultHelper;
 import org.projectmobius.db.ConnectionManager;
 import org.projectmobius.db.Query;
 
@@ -15,7 +14,7 @@ import org.projectmobius.db.Query;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: Database.java,v 1.6 2005-11-29 14:37:46 langella Exp $
+ * @version $Id: Database.java,v 1.7 2005-12-02 18:02:24 langella Exp $
  */
 public class Database extends GUMSObject {
 

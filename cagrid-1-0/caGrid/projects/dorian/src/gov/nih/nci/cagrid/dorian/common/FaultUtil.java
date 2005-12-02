@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.gums.common;
 
-import org.globus.wsrf.utils.FaultHelper;
 import org.oasis.wsrf.faults.BaseFaultType;
 
 /**

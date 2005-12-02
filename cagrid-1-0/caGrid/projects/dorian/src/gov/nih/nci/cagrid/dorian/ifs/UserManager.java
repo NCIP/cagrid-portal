@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
 import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.gums.common.AddressValidator;
 import gov.nih.nci.cagrid.gums.common.Database;
+import gov.nih.nci.cagrid.gums.common.FaultHelper;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
 import gov.nih.nci.cagrid.gums.common.IOUtils;
@@ -32,7 +33,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.globus.wsrf.utils.FaultHelper;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>

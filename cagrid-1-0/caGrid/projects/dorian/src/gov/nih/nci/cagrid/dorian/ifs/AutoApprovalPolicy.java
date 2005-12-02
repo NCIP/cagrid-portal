@@ -1,11 +1,11 @@
 package gov.nih.nci.cagrid.gums.ifs;
 
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
+import gov.nih.nci.cagrid.gums.common.FaultHelper;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.gums.ifs.bean.UserPolicyFault;
 
-import org.globus.wsrf.utils.FaultHelper;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>

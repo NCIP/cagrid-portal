@@ -2,13 +2,13 @@ package gov.nih.nci.cagrid.gums.client;
 
 import gov.nih.nci.cagrid.gums.IdPRegistration;
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
+import gov.nih.nci.cagrid.gums.common.FaultHelper;
 import gov.nih.nci.cagrid.gums.common.GUMSFault;
 import gov.nih.nci.cagrid.gums.idp.bean.Application;
 import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
 import gov.nih.nci.cagrid.gums.wsrf.GUMSPortType;
 import gov.nih.nci.cagrid.security.commstyle.AnonymousSecureConversationWithEncryption;
 
-import org.globus.wsrf.utils.FaultHelper;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>

@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.gums.ifs;
 
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
 import gov.nih.nci.cagrid.gums.common.Database;
+import gov.nih.nci.cagrid.gums.common.FaultHelper;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
@@ -17,7 +18,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.globus.wsrf.utils.FaultHelper;
 import org.opensaml.SAMLAssertion;
 import org.opensaml.SAMLException;
 

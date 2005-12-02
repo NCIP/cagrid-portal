@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.gums.ifs;
 
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
 import gov.nih.nci.cagrid.gums.common.Database;
+import gov.nih.nci.cagrid.gums.common.FaultHelper;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
@@ -14,7 +15,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import org.globus.wsrf.utils.FaultHelper;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
