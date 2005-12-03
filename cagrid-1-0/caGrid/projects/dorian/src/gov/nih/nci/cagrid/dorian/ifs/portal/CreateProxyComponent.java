@@ -42,9 +42,15 @@ public class CreateProxyComponent extends GridPortalComponent {
 	private JComboBox ifs = null;
 	private JButton authenticateButton = null;
 	private JButton close = null;
-	private IdPAuthenticationPanel selected;
 	private Map authPanels;
-
+	private JLabel lifetimeLabel = null;
+	private JPanel lifetimePanel = null;
+	private JComboBox hours = null;
+	private JLabel hourLabel = null;
+	private JComboBox minutes = null;
+	private JLabel minutesLabel = null;
+	private JComboBox seconds = null;
+	private JLabel secondsLabel = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -80,7 +86,7 @@ public class CreateProxyComponent extends GridPortalComponent {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(300, 200);
+		this.setSize(400, 400);
 		this.setContentPane(getJContentPane());
 		this.setFrameIcon(IFSLookAndFeel.getProxyIcon());
 		this.setTitle("Create Proxy");
@@ -135,6 +141,21 @@ public class CreateProxyComponent extends GridPortalComponent {
 	 */    
 	private JPanel getIdpPanel() {
 		if (idpPanel == null) {
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.gridx = 1;
+			gridBagConstraints8.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints8.weighty = 0.0D;
+			gridBagConstraints8.weightx = 1.0D;
+			gridBagConstraints8.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints8.insets = new java.awt.Insets(0,0,0,0);
+			gridBagConstraints8.gridy = 1;
+			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.gridx = 0;
+			gridBagConstraints7.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints7.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints7.gridy = 1;
+			lifetimeLabel = new JLabel();
+			lifetimeLabel.setText("Lifetime");
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 			gridBagConstraints6.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints6.gridy = 0;
@@ -156,17 +177,17 @@ public class CreateProxyComponent extends GridPortalComponent {
 			gridBagConstraints4.weightx = 1.0D;
 			gridBagConstraints4.weighty = 1.0D;
 			gridBagConstraints4.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints4.gridy = 2;
+			gridBagConstraints4.gridy = 3;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints2.gridx = 1;
-			gridBagConstraints2.gridy = 1;
+			gridBagConstraints2.gridy = 2;
 			gridBagConstraints2.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints2.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints2.weightx = 1.0;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints1.gridy = 1;
+			gridBagConstraints1.gridy = 2;
 			gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints1.gridx = 0;
 			idpLabel = new JLabel();
@@ -178,6 +199,8 @@ public class CreateProxyComponent extends GridPortalComponent {
 			idpPanel.add(getCardPanel(), gridBagConstraints4);
 			idpPanel.add(ifsLabel, gridBagConstraints5);
 			idpPanel.add(getIfs(), gridBagConstraints6);
+			idpPanel.add(lifetimeLabel, gridBagConstraints7);
+			idpPanel.add(getLifetimePanel(), gridBagConstraints8);
 		}
 		return idpPanel;
 	}
@@ -265,16 +288,21 @@ public class CreateProxyComponent extends GridPortalComponent {
 		return authenticateButton;
 	}
 	
+	
+	
 	private void authenticate(){
 		String ifsService =((GUMSServiceListComboBox)this.getIfs()).getSelectedService();
 		String idpService = ((IdPConf)getIdentityProvider().getSelectedItem()).getName();
 	    IdPAuthenticationPanel panel = (IdPAuthenticationPanel)authPanels.get(idpService);
-	   
-	    try{
+	     try{
+	     
+	    
 	    	SAMLAssertion saml = panel.authenticate();
 	    	IFSUserClient c2 = new IFSUserClient(ifsService);
 			ProxyLifetime lifetime = new ProxyLifetime();
-			lifetime.setSeconds(500);
+			lifetime.setHours(Integer.valueOf((String)getHours().getSelectedItem()).intValue());
+			lifetime.setMinutes(Integer.valueOf((String)getMinutes().getSelectedItem()).intValue());
+			lifetime.setSeconds(Integer.valueOf((String)getSeconds().getSelectedItem()).intValue());
 			GlobusCredential cred = c2.createProxy(saml,lifetime);
 			FileOutputStream fos = new FileOutputStream(ConfigUtil
 					.discoverProxyLocation());
@@ -298,6 +326,113 @@ public class CreateProxyComponent extends GridPortalComponent {
 			});
 		}
 		return close;
+	}
+
+	/**
+	 * This method initializes lifetimePanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */    
+	private JPanel getLifetimePanel() {
+		if (lifetimePanel == null) {
+			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
+			gridBagConstraints14.gridx = 5;
+			gridBagConstraints14.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints14.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints14.gridy = 0;
+			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
+			gridBagConstraints13.gridx = 3;
+			gridBagConstraints13.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints13.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints13.gridy = 0;
+			secondsLabel = new JLabel();
+			secondsLabel.setText("sec");
+			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+			gridBagConstraints12.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints12.gridx = 4;
+			gridBagConstraints12.gridy = 0;
+			gridBagConstraints12.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints12.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints12.weightx = 1.0;
+			minutesLabel = new JLabel();
+			minutesLabel.setText("min");
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints11.gridx = 2;
+			gridBagConstraints11.gridy = 0;
+			gridBagConstraints11.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints11.weightx = 1.0;
+			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+			gridBagConstraints10.gridx = 1;
+			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints10.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints10.gridy = 0;
+			hourLabel = new JLabel();
+			hourLabel.setText("hrs");
+			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
+			gridBagConstraints9.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints9.gridx = 0;
+			gridBagConstraints9.gridy = 0;
+			gridBagConstraints9.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints9.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints9.weightx = 1.0;
+			lifetimePanel = new JPanel();
+			lifetimePanel.setLayout(new GridBagLayout());
+			lifetimePanel.add(getHours(), gridBagConstraints9);
+			lifetimePanel.add(hourLabel, gridBagConstraints10);
+			lifetimePanel.add(getMinutes(), gridBagConstraints11);
+			lifetimePanel.add(minutesLabel, gridBagConstraints13);
+			lifetimePanel.add(getSeconds(), gridBagConstraints12);
+			lifetimePanel.add(secondsLabel, gridBagConstraints14);
+		}
+		return lifetimePanel;
+	}
+
+	/**
+	 * This method initializes hours	
+	 * 	
+	 * @return javax.swing.JComboBox	
+	 */    
+	private JComboBox getHours() {
+		if (hours == null) {
+			hours = new JComboBox();
+			for(int i=0; i<23; i++){
+				hours.addItem(String.valueOf(i));
+			}
+			hours.setSelectedItem("12");
+		}
+		return hours;
+	}
+
+	/**
+	 * This method initializes minutes	
+	 * 	
+	 * @return javax.swing.JComboBox	
+	 */    
+	private JComboBox getMinutes() {
+		if (minutes == null) {
+			minutes = new JComboBox();
+			for(int i=0; i<59; i++){
+				minutes.addItem(String.valueOf(i));
+			}
+		}
+		return minutes;
+	}
+
+	/**
+	 * This method initializes seconds	
+	 * 	
+	 * @return javax.swing.JComboBox	
+	 */    
+	private JComboBox getSeconds() {
+		if (seconds == null) {
+			seconds = new JComboBox();
+			for(int i=0; i<59; i++){
+				seconds.addItem(String.valueOf(i));
+			}
+		}
+		return seconds;
 	}
 
 }
