@@ -40,7 +40,7 @@ public class GUMSIdPAuthenticationPanel extends IdPAuthenticationPanel {
 		BasicAuthCredential cred = new BasicAuthCredential();
 		cred.setUserId(userId.getText());
 		cred.setPassword(new String(password.getPassword()));
-		IdPAuthenticationClient client = new IdPAuthenticationClient(getName(),cred);
+		IdPAuthenticationClient client = new IdPAuthenticationClient(getIdPInfo().getName(),cred);
 		return client.authenticate();
 	}
 
@@ -52,7 +52,7 @@ public class GUMSIdPAuthenticationPanel extends IdPAuthenticationPanel {
 	private void initialize() {
 		this.setLayout(new BorderLayout());
 		this.setSize(300, 200);
-		this.add(getLoginPanel(), java.awt.BorderLayout.NORTH);
+		this.add(getLoginPanel(), java.awt.BorderLayout.CENTER);
 	}
 
 	/**
@@ -68,6 +68,7 @@ public class GUMSIdPAuthenticationPanel extends IdPAuthenticationPanel {
 			gridBagConstraints3.weightx = 1.0;
 			gridBagConstraints3.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints3.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints3.weighty = 0.0D;
 			gridBagConstraints3.gridx = 1;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.anchor = java.awt.GridBagConstraints.WEST;
@@ -87,6 +88,7 @@ public class GUMSIdPAuthenticationPanel extends IdPAuthenticationPanel {
 			gridBagConstraints.gridy = 0;
 			gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints.weighty = 0.0D;
 			gridBagConstraints.weightx = 1.0;
 			userIdLabel = new JLabel();
 			userIdLabel.setText("User Id");

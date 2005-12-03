@@ -27,6 +27,7 @@ public class IdPConf {
 	private String authenticationPanelClass;
 
 	private Map parameters = new HashMap();
+	
 
 	public IdPConf(Element e) throws Exception {
 		this.name = e.getAttributeValue(NAME);
@@ -106,5 +107,9 @@ public class IdPConf {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String toString(){
+		return getName();
 	}
 }

@@ -15,8 +15,15 @@ import org.opensaml.SAMLAssertion;
  */
 
 public abstract class IdPAuthenticationPanel extends JPanel{
+	
+	private IdPConf idp;
 	public IdPAuthenticationPanel(IdPConf conf){
+		this.idp = conf;
 		
+	}
+	
+	public IdPConf getIdPInfo(){
+		return idp;
 	}
 	
 	public abstract SAMLAssertion authenticate() throws Exception;
