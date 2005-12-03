@@ -350,7 +350,7 @@ public class CreateProxyComponent extends GridPortalComponent {
 			cred.save(fos);
 			fos.close();
 			 this.updateProgress(false,"Proxy Created!!!");	 
-			 PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new ProxyInformationComponent(cred),500,300);		 
+			 PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new ProxyInformationComponent(cred),600,350);		 
 			 dispose();
 	     }catch(Exception e){
 	    	e.printStackTrace();

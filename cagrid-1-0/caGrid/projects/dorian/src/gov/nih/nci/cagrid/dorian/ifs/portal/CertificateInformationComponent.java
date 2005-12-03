@@ -20,9 +20,9 @@ import javax.swing.JTable;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: ProxyInformationComponent.java,v 1.2 2005-12-03 07:18:14 langella Exp $
+ * @version $Id: CertificateInformationComponent.java,v 1.1 2005-12-03 07:18:14 langella Exp $
  */
-public class ProxyInformationComponent extends GridPortalComponent {
+public class CertificateInformationComponent extends GridPortalComponent {
 
 	private javax.swing.JPanel jContentPane = null;
 	private JPanel mainPanel = null;
@@ -33,22 +33,25 @@ public class ProxyInformationComponent extends GridPortalComponent {
 	private JButton jButton = null;
 	private JLabel issuerLabel = null;
 	private JTextField issuer = null;
-	private JLabel identityLabel = null;
-	private JTextField identity = null;
-	private JLabel strengthLabel = null;
-	private JTextField strength = null;
+	private JLabel serialLabel = null;
+	private JTextField serialNumber = null;
+	private JLabel createdLabel = null;
+	private JTextField created = null;
 	private JLabel timeLeftLabel = null;
 	private JTextField timeLeft = null;
-	private GlobusCredential cred;
-	private JPanel certificateChain = null;
-	private JScrollPane jScrollPane = null;
-	private CertificateTable certificates = null;
+	private X509Certificate cert;
+	private JLabel typeLabel = null;
+	private JLabel versionLabel = null;
+	private JLabel algorithLabel = null;
+	private JTextField algorithm = null;
+	private JTextField type = null;
+	private JTextField version = null;
 	/**
 	 * This is the default constructor
 	 */
-	public ProxyInformationComponent(GlobusCredential cred) {
+	public CertificateInformationComponent(X509Certificate cert) {
 		super();
-		this.cred = cred;
+		this.cert = cert;
 		initialize();
 	}
 	/**
@@ -60,7 +63,7 @@ public class ProxyInformationComponent extends GridPortalComponent {
 		this.setSize(300,300);
 		this.setContentPane(getJContentPane());
 		this.setFrameIcon(IFSLookAndFeel.getProxyManagerIcon());
-		this.setTitle("Proxy Information");
+		this.setTitle("Certificate Viewer");
 	}
 	/**
 	 * This method initializes jContentPane
@@ -109,21 +112,56 @@ public class ProxyInformationComponent extends GridPortalComponent {
 	 */    
 	private JPanel getProxyInformation() {
 		if (proxyInformation == null) {
+			createdLabel = new JLabel();
+			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+			gridBagConstraints21.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints21.gridy = 8;
+			gridBagConstraints21.weightx = 1.0;
+			gridBagConstraints21.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints21.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints21.gridx = 1;
+			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
+			gridBagConstraints16.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints16.gridy = 7;
+			gridBagConstraints16.weightx = 1.0;
+			gridBagConstraints16.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints16.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints16.gridx = 1;
+			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
+			gridBagConstraints15.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints15.gridy = 6;
+			gridBagConstraints15.weightx = 1.0;
+			gridBagConstraints15.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints15.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints15.gridx = 1;
+			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
+			gridBagConstraints14.gridx = 0;
+			gridBagConstraints14.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints14.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints14.gridy = 6;
+			algorithLabel = new JLabel();
+			algorithLabel.setText("Signature Algorithm");
+			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
+			gridBagConstraints13.gridx = 0;
+			gridBagConstraints13.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints13.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints13.gridy = 8;
+			versionLabel = new JLabel();
+			versionLabel.setText("Version");
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
-			gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints.weightx = 1.0D;
-			gridBagConstraints.weighty = 1.0D;
-			gridBagConstraints.gridwidth = 2;
-			gridBagConstraints.gridy = 6;
-			strengthLabel = new JLabel();
+			gridBagConstraints.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints.gridy = 7;
+			typeLabel = new JLabel();
+			typeLabel.setText("Type");
 			timeLeftLabel = new JLabel();
 			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
 			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
 			issuerLabel = new JLabel();
-			identityLabel = new JLabel();
+			serialLabel = new JLabel();
 			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
@@ -159,7 +197,7 @@ public class ProxyInformationComponent extends GridPortalComponent {
 			gridBagConstraints5.gridy = 1;
 			gridBagConstraints5.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints5.anchor = java.awt.GridBagConstraints.WEST;
-			identityLabel.setText("Identity");
+			serialLabel.setText("Serial Number");
 			gridBagConstraints8.gridx = 0;
 			gridBagConstraints8.gridy = 2;
 			gridBagConstraints8.anchor = java.awt.GridBagConstraints.WEST;
@@ -168,13 +206,13 @@ public class ProxyInformationComponent extends GridPortalComponent {
 			gridBagConstraints7.gridy = 2;
 			gridBagConstraints7.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints7.insets = new java.awt.Insets(2,2,2,2);
-			proxyInformation.add(identityLabel, gridBagConstraints8);
+			proxyInformation.add(serialLabel, gridBagConstraints8);
 			gridBagConstraints7.weightx = 1.0D;
 			gridBagConstraints7.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			proxyInformation.add(issuerLabel, gridBagConstraints6);
 			gridBagConstraints5.weightx = 1.0D;
 			gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			strengthLabel.setText("Strength");
+			createdLabel.setText("Created");
 			gridBagConstraints10.gridx = 0;
 			gridBagConstraints10.gridy = 4;
 			gridBagConstraints10.insets = new java.awt.Insets(2,2,2,2);
@@ -201,17 +239,22 @@ public class ProxyInformationComponent extends GridPortalComponent {
 			gridBagConstraints7.weighty = 0.0D;
 			gridBagConstraints5.weighty = 0.0D;
 			proxyInformation.add(timeLeftLabel, gridBagConstraints11);
-			proxyInformation.add(strengthLabel, gridBagConstraints10);
+			proxyInformation.add(createdLabel, gridBagConstraints10);
+			proxyInformation.add(typeLabel, gridBagConstraints);
+			proxyInformation.add(versionLabel, gridBagConstraints13);
+			proxyInformation.add(algorithLabel, gridBagConstraints14);
+			proxyInformation.add(getAlgorithm(), gridBagConstraints15);
+			proxyInformation.add(getType(), gridBagConstraints16);
+			proxyInformation.add(getVersion(), gridBagConstraints21);
 			
-			proxyInformation.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Proxy Information",
+			proxyInformation.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Certificate Information",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IFSLookAndFeel.getPanelLabelColor()));	
-			proxyInformation.add(getIdentity(), gridBagConstraints7);
+			proxyInformation.add(getSerialNumber(), gridBagConstraints7);
 			proxyInformation.add(getIssuer(), gridBagConstraints5);
 			proxyInformation.add(getTimeLeft(), gridBagConstraints12);
-			proxyInformation.add(getStrength(), gridBagConstraints9);
+			proxyInformation.add(getCreated(), gridBagConstraints9);
 			proxyInformation.add(getSubjectField(), gridBagConstraints3);
-			proxyInformation.add(getCertificateChain(), gridBagConstraints);
 		}
 		return proxyInformation;
 	}
@@ -223,7 +266,7 @@ public class ProxyInformationComponent extends GridPortalComponent {
 	private JTextField getSubjectField() {
 		if (subjectField == null) {
 			subjectField = new JTextField();
-			subjectField.setText(cred.getSubject());
+			subjectField.setText(cert.getSubjectDN().getName());
 			subjectField.setEditable(false);
 		}
 		return subjectField;
@@ -266,7 +309,7 @@ public class ProxyInformationComponent extends GridPortalComponent {
 	private JTextField getIssuer() {
 		if (issuer == null) {
 			issuer = new JTextField();
-			issuer.setText(cred.getIssuer());
+			issuer.setText(cert.getIssuerDN().getName());
 			issuer.setEditable(false);
 		}
 		return issuer;
@@ -276,26 +319,26 @@ public class ProxyInformationComponent extends GridPortalComponent {
 	 * 	
 	 * @return javax.swing.JTextField	
 	 */    
-	private JTextField getIdentity() {
-		if (identity == null) {
-			identity = new JTextField();
-			identity.setText(cred.getIdentity());
-			identity.setEditable(false);
+	private JTextField getSerialNumber() {
+		if (serialNumber == null) {
+			serialNumber = new JTextField();
+			serialNumber.setText(cert.getSerialNumber().toString());
+			serialNumber.setEditable(false);
 		}
-		return identity;
+		return serialNumber;
 	}
 	/**
 	 * This method initializes jTextField	
 	 * 	
 	 * @return javax.swing.JTextField	
 	 */    
-	private JTextField getStrength() {
-		if (strength == null) {
-			strength = new JTextField();
-			strength.setText(cred.getStrength()+" bits");
-			strength.setEditable(false);
+	private JTextField getCreated() {
+		if (created == null) {
+			created = new JTextField();
+			created.setText(cert.getNotBefore().toString());
+			created.setEditable(false);
 		}
-		return strength;
+		return created;
 	}
 	/**
 	 * This method initializes jTextField	
@@ -305,62 +348,48 @@ public class ProxyInformationComponent extends GridPortalComponent {
 	private JTextField getTimeLeft() {
 		if (timeLeft == null) {
 			timeLeft = new JTextField();
-			cred.getTimeLeft();
-			GregorianCalendar c = new GregorianCalendar();
-			c.add(Calendar.SECOND,(int)cred.getTimeLeft());
-			timeLeft.setText(c.getTime().toString());
+			timeLeft.setText(cert.getNotAfter().toString());
 			timeLeft.setEditable(false);
 		}
 		return timeLeft;
 	}
 	/**
-	 * This method initializes jPanel	
+	 * This method initializes algorithm	
 	 * 	
-	 * @return javax.swing.JPanel	
+	 * @return javax.swing.JTextField	
 	 */    
-	private JPanel getCertificateChain() {
-		if (certificateChain == null) {
-			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
-			gridBagConstraints13.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints13.weighty = 1.0;
-			gridBagConstraints13.gridx = 0;
-			gridBagConstraints13.gridy = 0;
-			gridBagConstraints13.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints13.weightx = 1.0;
-			certificateChain = new JPanel();
-			certificateChain.setLayout(new GridBagLayout());
-			certificateChain.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Certificate Chain",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IFSLookAndFeel.getPanelLabelColor()));
-			certificateChain.add(getJScrollPane(), gridBagConstraints13);
+	private JTextField getAlgorithm() {
+		if (algorithm == null) {
+			algorithm = new JTextField();
+			algorithm.setEditable(false);
+			algorithm.setText(cert.getSigAlgName());
 		}
-		return certificateChain;
+		return algorithm;
 	}
 	/**
-	 * This method initializes jScrollPane	
+	 * This method initializes type	
 	 * 	
-	 * @return javax.swing.JScrollPane	
+	 * @return javax.swing.JTextField	
 	 */    
-	private JScrollPane getJScrollPane() {
-		if (jScrollPane == null) {
-			jScrollPane = new JScrollPane();
-			jScrollPane.setViewportView(getCertificates());
+	private JTextField getType() {
+		if (type == null) {
+			type = new JTextField();
+			type.setEditable(false);
+			type.setText(cert.getType());
 		}
-		return jScrollPane;
+		return type;
 	}
 	/**
-	 * This method initializes certificates	
+	 * This method initializes version	
 	 * 	
-	 * @return javax.swing.JTable	
+	 * @return javax.swing.JTextField	
 	 */    
-	private CertificateTable getCertificates() {
-		if (certificates == null) {
-			certificates = new CertificateTable();
-			X509Certificate[] certs = cred.getCertificateChain();
-			for(int i=0; i<certs.length; i++){
-				certificates.addCertificate(certs[i]);
-			}
+	private JTextField getVersion() {
+		if (version == null) {
+			version = new JTextField();
+			version.setEditable(false);
+			version.setText(String.valueOf(cert.getVersion()));
 		}
-		return certificates;
+		return version;
 	}
          }
