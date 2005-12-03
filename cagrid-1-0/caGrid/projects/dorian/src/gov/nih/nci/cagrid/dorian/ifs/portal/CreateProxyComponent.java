@@ -349,8 +349,10 @@ public class CreateProxyComponent extends GridPortalComponent {
 					.discoverProxyLocation());
 			cred.save(fos);
 			fos.close();
-			 this.updateProgress(false,"Proxy Created!!!");
-	    }catch(Exception e){
+			 this.updateProgress(false,"Proxy Created!!!");	 
+			 PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new ProxyInformationComponent(cred),500,300);		 
+			 dispose();
+	     }catch(Exception e){
 	    	e.printStackTrace();
 	    	this.updateProgress(false,"Error");
 	    	PortalUtils.showErrorMessage("Error Creating Proxy", e);

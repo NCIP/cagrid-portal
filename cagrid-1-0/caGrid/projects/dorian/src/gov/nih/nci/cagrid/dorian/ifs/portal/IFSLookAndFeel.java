@@ -22,6 +22,10 @@ public class IFSLookAndFeel extends PortalLookAndFeel{
 		 	return new javax.swing.ImageIcon(IFSLookAndFeel.class.getResource("/Envelope.gif"));
 		 }
 	 
+	 public final static ImageIcon getProxyManagerIcon(){
+		 	return new javax.swing.ImageIcon(IFSLookAndFeel.class.getResource("/EnvelopeOpen.gif"));
+		 }
+	 
 	 public final static ImageIcon getAuthenticateIcon(){
 		 	return new javax.swing.ImageIcon(GumsLookAndFeel.class.getResource("/Lock.gif"));
 		 }
