@@ -3,24 +3,19 @@ package gov.nih.nci.cagrid.gums.ifs.portal;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.security.cert.X509Certificate;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.globus.gsi.GlobusCredential;
 import org.projectmobius.portal.GridPortalComponent;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CertificateInformationComponent.java,v 1.1 2005-12-03 07:18:14 langella Exp $
+ * @version $Id: CertificateInformationComponent.java,v 1.2 2005-12-03 07:18:56 langella Exp $
  */
 public class CertificateInformationComponent extends GridPortalComponent {
 

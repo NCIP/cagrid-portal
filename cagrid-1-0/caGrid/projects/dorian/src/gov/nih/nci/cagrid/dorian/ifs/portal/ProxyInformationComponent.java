@@ -9,18 +9,17 @@ import java.util.GregorianCalendar;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.portal.GridPortalComponent;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: ProxyInformationComponent.java,v 1.2 2005-12-03 07:18:14 langella Exp $
+ * @version $Id: ProxyInformationComponent.java,v 1.3 2005-12-03 07:18:56 langella Exp $
  */
 public class ProxyInformationComponent extends GridPortalComponent {
 
