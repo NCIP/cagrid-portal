@@ -51,7 +51,6 @@ public class IdPAuthenticationClient extends GUMSBaseClient implements
 		}
 		try {
 			String xml = port.authenticate(cred).getXml();
-			System.out.println(org.projectmobius.common.XMLUtilities.formatXML(xml));
 			return IOUtils.stringToSAMLAssertion(xml);
 		}catch(GUMSInternalFault gie){
 			throw gie;

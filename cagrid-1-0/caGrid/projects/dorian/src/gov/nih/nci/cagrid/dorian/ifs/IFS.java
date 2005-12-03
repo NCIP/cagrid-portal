@@ -163,7 +163,7 @@ public class IFS extends GUMSObject {
 			try {
 				usr = um.getUser(idp.getId(), auth.getSubject().getName());
 				if (emailIsValid) {
-					if (!usr.getEmail().equals(email)) {
+					if ((usr.getEmail()==null)||(!usr.getEmail().equals(email)) ){
 						usr.setEmail(email);
 						um.updateUser(usr);
 					}
