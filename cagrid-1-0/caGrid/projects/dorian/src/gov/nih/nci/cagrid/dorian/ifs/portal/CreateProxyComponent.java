@@ -22,10 +22,13 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.SwingUtilities;
 
 import org.globus.gsi.GlobusCredential;
 import org.globus.util.ConfigUtil;
 import org.opensaml.SAMLAssertion;
+import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
 
@@ -51,6 +54,12 @@ public class CreateProxyComponent extends GridPortalComponent {
 	private JLabel minutesLabel = null;
 	private JComboBox seconds = null;
 	private JLabel secondsLabel = null;
+	private JPanel progressPanel = null;
+	private JProgressBar progress = null;
+	
+	 private boolean isCreating = false;
+
+	    private Object mutex = new Object();
 	/**
 	 * This is the default constructor
 	 */
@@ -116,7 +125,7 @@ public class CreateProxyComponent extends GridPortalComponent {
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.gridx = 0;
 			gridBagConstraints3.anchor = java.awt.GridBagConstraints.SOUTH;
-			gridBagConstraints3.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints3.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints3.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints3.gridy = 1;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
@@ -141,6 +150,13 @@ public class CreateProxyComponent extends GridPortalComponent {
 	 */    
 	private JPanel getIdpPanel() {
 		if (idpPanel == null) {
+			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
+			gridBagConstraints15.gridx = 0;
+			gridBagConstraints15.insets = new java.awt.Insets(3,20,3,20);
+			gridBagConstraints15.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints15.gridwidth = 2;
+			gridBagConstraints15.weightx = 1.0D;
+			gridBagConstraints15.gridy = 4;
 			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 			gridBagConstraints8.gridx = 1;
 			gridBagConstraints8.anchor = java.awt.GridBagConstraints.WEST;
@@ -194,6 +210,10 @@ public class CreateProxyComponent extends GridPortalComponent {
 			idpLabel.setText("Identity Provider");
 			idpPanel = new JPanel();
 			idpPanel.setLayout(new GridBagLayout());
+			idpPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Create Proxy",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IFSLookAndFeel.getPanelLabelColor()));
+			idpPanel.add(getProgressPanel(), gridBagConstraints15);
 			idpPanel.add(idpLabel, gridBagConstraints1);
 			idpPanel.add(getIdentityProvider(), gridBagConstraints2);
 			idpPanel.add(getCardPanel(), gridBagConstraints4);
@@ -280,7 +300,16 @@ public class CreateProxyComponent extends GridPortalComponent {
 			authenticateButton.setText("Authenticate");
 			authenticateButton.addActionListener(new java.awt.event.ActionListener() { 
 				public void actionPerformed(java.awt.event.ActionEvent e) {    
-					authenticate();
+					MobiusRunnable runner = new MobiusRunnable() {
+                        public void execute() {
+                           authenticate();
+                        }
+                    };
+                    try {
+                        PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
+                    } catch (Exception t) {
+                        t.getMessage();
+                    }
 				}
 			});
 			authenticateButton.setIcon(IFSLookAndFeel.getAuthenticateIcon());
@@ -291,13 +320,25 @@ public class CreateProxyComponent extends GridPortalComponent {
 	
 	
 	private void authenticate(){
+		
+		 synchronized (mutex) {
+	            if (isCreating) {
+	            	PortalUtils.showErrorMessage("Already trying to create a proxy, please wait!!!");
+	                return;
+	            } else {
+	                isCreating = true;
+	            }
+	        }
+		
 		String ifsService =((GUMSServiceListComboBox)this.getIfs()).getSelectedService();
 		String idpService = ((IdPConf)getIdentityProvider().getSelectedItem()).getName();
-	    IdPAuthenticationPanel panel = (IdPAuthenticationPanel)authPanels.get(idpService);
+		this.updateProgress(true,"Authenticating with IdP...");
+		IdPAuthenticationPanel panel = (IdPAuthenticationPanel)authPanels.get(idpService);
 	     try{
 	     
 	    
 	    	SAMLAssertion saml = panel.authenticate();
+	    	this.updateProgress(true,"Creating Proxy...");
 	    	IFSUserClient c2 = new IFSUserClient(ifsService);
 			ProxyLifetime lifetime = new ProxyLifetime();
 			lifetime.setHours(Integer.valueOf((String)getHours().getSelectedItem()).intValue());
@@ -308,10 +349,14 @@ public class CreateProxyComponent extends GridPortalComponent {
 					.discoverProxyLocation());
 			cred.save(fos);
 			fos.close();
+			 this.updateProgress(false,"Proxy Created!!!");
 	    }catch(Exception e){
 	    	e.printStackTrace();
+	    	this.updateProgress(false,"Error");
 	    	PortalUtils.showErrorMessage("Error Creating Proxy", e);
 	    }
+	   
+	    isCreating = false;
 	}
 
 	private JButton getClose() {
@@ -433,6 +478,51 @@ public class CreateProxyComponent extends GridPortalComponent {
 			}
 		}
 		return seconds;
+	}
+
+	/**
+	 * This method initializes progressPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */    
+	private JPanel getProgressPanel() {
+		if (progressPanel == null) {
+			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
+			gridBagConstraints16.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints16.gridy = 0;
+			gridBagConstraints16.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints16.weightx = 1.0D;
+			gridBagConstraints16.gridx = 0;
+			progressPanel = new JPanel();
+			progressPanel.setLayout(new GridBagLayout());
+			progressPanel.add(getProgress(), gridBagConstraints16);
+		}
+		return progressPanel;
+	}
+
+	/**
+	 * This method initializes progress	
+	 * 	
+	 * @return javax.swing.JProgressBar	
+	 */    
+	private JProgressBar getProgress() {
+		if (progress == null) {
+			progress = new JProgressBar();
+			 progress.setForeground(IFSLookAndFeel.getPanelLabelColor());
+	         progress.setString("");
+	         progress.setStringPainted(true);
+		}
+		return progress;
+	}
+	
+	public void updateProgress(final boolean working, final String s) {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				getProgress().setString(s);
+				getProgress().setIndeterminate(working);
+			}
+		});
+
 	}
 
 }
