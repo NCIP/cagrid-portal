@@ -30,4 +30,12 @@ public class IFSLookAndFeel extends PortalLookAndFeel{
 		 	return new javax.swing.ImageIcon(GumsLookAndFeel.class.getResource("/Lock.gif"));
 		 }
 	
+	 
+	 public final static ImageIcon getSaveIcon(){
+		 	return new javax.swing.ImageIcon(GumsLookAndFeel.class.getResource("/Save.gif"));
+		 }
+	 
+	 public final static ImageIcon getGreenFlagIcon(){
+		 	return new javax.swing.ImageIcon(GumsLookAndFeel.class.getResource("/GreenFlag.gif"));
+		 }
 }

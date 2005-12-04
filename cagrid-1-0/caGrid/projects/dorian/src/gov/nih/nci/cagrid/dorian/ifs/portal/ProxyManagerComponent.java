@@ -1,5 +1,8 @@
 package gov.nih.nci.cagrid.gums.ifs.portal;
 
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.gums.common.ProxyUtil;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.security.cert.X509Certificate;
@@ -8,6 +11,8 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -15,7 +20,6 @@ import javax.swing.JTextField;
 
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.portal.GridPortalComponent;
-import javax.swing.JComboBox;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
@@ -66,6 +70,14 @@ public class ProxyManagerComponent extends GridPortalComponent {
 
 	private JComboBox proxy = null;
 
+	private JButton viewCertificate = null;
+
+	private JButton saveProxy = null;
+
+	private JButton setDefaultProxy = null;
+
+	private static final String DEFAULT_PROXY = "Globus Default Proxy";
+
 	/**
 	 * This is the default constructor
 	 */
@@ -73,6 +85,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		super();
 		initialize();
 		List creds = ProxyManager.getInstance().getProxies();
+		getProxy().addItem(new ProxyCaddy(DEFAULT_PROXY, null));
 		for (int i = 0; i < creds.size(); i++) {
 			getProxy().addItem(new ProxyCaddy((GlobusCredential) creds.get(i)));
 		}
@@ -93,6 +106,23 @@ public class ProxyManagerComponent extends GridPortalComponent {
 			this.proxy = cred;
 		}
 
+		public ProxyCaddy(String identity, GlobusCredential cred) {
+			this.identity = identity;
+			this.proxy = cred;
+		}
+
+		public void setIdentity(String identity) {
+			this.identity = identity;
+		}
+
+		public void setProxy(GlobusCredential proxy) {
+			this.proxy = proxy;
+		}
+
+		public String getIdentity() {
+			return identity;
+		}
+
 		public GlobusCredential getProxy() {
 			return proxy;
 		}
@@ -100,15 +130,22 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		public String toString() {
 			return identity;
 		}
-		
-		public boolean equals(ProxyCaddy caddy){
-			if(this.identity.equals(caddy.getProxy().getIdentity())){
+
+		public boolean equals(Object obj) {
+			if (obj == null) {
+				return false;
+			}
+			ProxyCaddy caddy = (ProxyCaddy) obj;
+			if (caddy.getProxy() == null) {
+				return false;
+			}
+			if (this.identity.equals(caddy.getIdentity())) {
 				return true;
-			}else{
+			} else {
 				return false;
 			}
 		}
-	
+
 	}
 
 	/**
@@ -117,7 +154,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(300, 300);
+		this.setSize(500, 400);
 		this.setContentPane(getJContentPane());
 		this.setFrameIcon(IFSLookAndFeel.getProxyManagerIcon());
 		this.setTitle("Proxy Manager");
@@ -337,6 +374,9 @@ public class ProxyManagerComponent extends GridPortalComponent {
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
+			buttonPanel.add(getViewCertificate(), null);
+			buttonPanel.add(getSaveProxy(), null);
+			buttonPanel.add(getSetDefaultProxy(), null);
 			buttonPanel.add(getJButton(), null);
 		}
 		return buttonPanel;
@@ -500,14 +540,116 @@ public class ProxyManagerComponent extends GridPortalComponent {
 	private JComboBox getProxy() {
 		if (proxy == null) {
 			proxy = new JComboBox();
-			proxy.addItemListener(new java.awt.event.ItemListener() {
-				public void itemStateChanged(java.awt.event.ItemEvent e) {
+			/*
+			 * proxy.addItemListener(new java.awt.event.ItemListener() { public
+			 * void itemStateChanged(java.awt.event.ItemEvent e) { } });
+			 */
+			proxy.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
 					ProxyCaddy caddy = (ProxyCaddy) getProxy()
 							.getSelectedItem();
+					if (caddy.getIdentity() == DEFAULT_PROXY) {
+						try {
+							caddy.setProxy(ProxyUtil.getDefaultProxy());
+							clearProxy();
+						} catch (Exception ex) {
+							PortalUtils
+									.showMessage("No Default Proxy Found!!!");
+							return;
+						}
+					}
 					showProxy(caddy.getProxy());
 				}
 			});
 		}
 		return proxy;
+	}
+
+	/**
+	 * This method initializes jButton1
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getViewCertificate() {
+		if (viewCertificate == null) {
+			viewCertificate = new JButton();
+			viewCertificate.setText("View Certificate");
+			viewCertificate.setIcon(IFSLookAndFeel.getProxyManagerIcon());
+			viewCertificate
+					.addActionListener(new java.awt.event.ActionListener() {
+
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							try {
+								getCertificates().doubleClick();
+							} catch (Exception ex) {
+								PortalUtils.showErrorMessage(ex);
+							}
+						}
+					});
+		}
+		return viewCertificate;
+	}
+
+	/**
+	 * This method initializes saveProxy
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getSaveProxy() {
+		if (saveProxy == null) {
+			saveProxy = new JButton();
+			saveProxy.setText("Save Proxy");
+			saveProxy.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					saveProxyNow();
+
+				}
+			});
+			saveProxy.setIcon(IFSLookAndFeel.getSaveIcon());
+		}
+		return saveProxy;
+	}
+
+	private void saveProxyNow() {
+		try {
+			JFileChooser fc = new JFileChooser();
+			fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			fc.showSaveDialog(this);
+			ProxyCaddy caddy = (ProxyCaddy) getProxy().getSelectedItem();
+			ProxyUtil.saveProxy(caddy.getProxy(), fc.getSelectedFile()
+					.getAbsolutePath());
+		} catch (Exception e) {
+			e.printStackTrace();
+			PortalUtils
+					.showErrorMessage("An unexpected error occurred in saving the currently selected proxy!!!");
+		}
+	}
+
+	/**
+	 * This method initializes setDefaultProxy
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getSetDefaultProxy() {
+		if (setDefaultProxy == null) {
+			setDefaultProxy = new JButton();
+			setDefaultProxy.setText("Set Default");
+			setDefaultProxy
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							try {
+								ProxyCaddy caddy = (ProxyCaddy) getProxy()
+										.getSelectedItem();
+								ProxyUtil.saveProxyAsDefault(caddy.getProxy());
+							} catch (Exception ex) {
+								ex.printStackTrace();
+								PortalUtils
+										.showErrorMessage("An unexpected error occurred in setting the default proxy!!!");
+							}
+						}
+					});
+			setDefaultProxy.setIcon(IFSLookAndFeel.getGreenFlagIcon());
+		}
+		return setDefaultProxy;
 	}
 }

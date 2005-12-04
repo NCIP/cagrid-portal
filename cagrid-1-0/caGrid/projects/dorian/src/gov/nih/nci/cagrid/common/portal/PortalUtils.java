@@ -47,4 +47,6 @@ public class PortalUtils {
 		JOptionPane.showMessageDialog(PortalResourceManager.getInstance()
 				.getGridPortal(), msg, title, JOptionPane.ERROR_MESSAGE);
 	}
+	
+
 }
