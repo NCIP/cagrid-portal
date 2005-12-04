@@ -4,11 +4,11 @@ package gov.nih.nci.cagrid.gums.client;
 
 import gov.nih.nci.cagrid.gums.IdPAuthentication;
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
+import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gums.common.FaultHelper;
 import gov.nih.nci.cagrid.gums.common.GUMSFault;
 import gov.nih.nci.cagrid.gums.common.IOUtils;
 import gov.nih.nci.cagrid.gums.idp.bean.BasicAuthCredential;
-import gov.nih.nci.cagrid.gums.idp.bean.InvalidLoginFault;
 import gov.nih.nci.cagrid.gums.wsrf.GUMSPortType;
 import gov.nih.nci.cagrid.security.commstyle.AnonymousSecureConversationWithEncryption;
 
@@ -36,7 +36,7 @@ public class IdPAuthenticationClient extends GUMSBaseClient implements
 	
 	
 
-	public SAMLAssertion authenticate() throws GUMSFault,GUMSInternalFault, InvalidLoginFault {
+	public SAMLAssertion authenticate() throws GUMSFault,GUMSInternalFault, PermissionDeniedFault {
 		// TODO Auto-generated method stub
 		GUMSPortType port = null;
 		try {
@@ -50,11 +50,11 @@ public class IdPAuthenticationClient extends GUMSBaseClient implements
 			throw fault;
 		}
 		try {
-			String xml = port.authenticate(cred).getXml();
+			String xml = port.authenticateWithIdP(cred).getXml();
 			return IOUtils.stringToSAMLAssertion(xml);
 		}catch(GUMSInternalFault gie){
 			throw gie;
-		}catch (InvalidLoginFault ilf){
+		}catch (PermissionDeniedFault ilf){
 			throw ilf;
 		}catch (Exception e) {
 			GUMSFault fault = new GUMSFault();

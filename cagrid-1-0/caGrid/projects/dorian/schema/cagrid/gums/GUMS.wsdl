@@ -49,14 +49,7 @@
 
 	<xsd:element name="idpRegisterResponse" type="xsd:string"/>
 	
-	<xsd:element name="idpFindUsers">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="basicAuthentication" minOccurs="1" maxOccurs="1" type="idp:basicAuthCredential"/>
-				<xsd:element name="userFilter" minOccurs="1" maxOccurs="1" type="idp:IdPUserFilter"/>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
+	<xsd:element name="idpFindUsers" type="idp:IdPUserFilter"/>
 	
 	<xsd:element name="idpFindUsersResponse">
 		<xsd:complexType>
@@ -66,27 +59,14 @@
 		</xsd:complexType>
 	</xsd:element>
 	
-		<xsd:element name="idpUpdateUser">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="basicAuthentication" minOccurs="1" maxOccurs="1" type="idp:basicAuthCredential"/>
-				<xsd:element name="idpUser" minOccurs="1" maxOccurs="1" type="idp:IdPUser"/>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
+	  <xsd:element name="idpUpdateUser" type="idp:IdPUser"/>
+	
 	
 	<xsd:element name="idpUpdateUserResponse">
 		<xsd:complexType/>
 	</xsd:element>
 	
-		<xsd:element name="idpRemoveUser">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="basicAuthentication" minOccurs="1" maxOccurs="1" type="idp:basicAuthCredential"/>
-				<xsd:element name="idpUserId" minOccurs="1" maxOccurs="1" type="xsd:string"/>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
+	<xsd:element name="idpRemoveUser" type="xsd:string"/>
 	
 	<xsd:element name="idpRemoveUserResponse">
 		<xsd:complexType/>
@@ -100,7 +80,6 @@
 
 	
 	<xsd:element name="invalidUserPropertyFault" type="idp:InvalidUserPropertyFault"/>
-	<xsd:element name="invalidLoginFault" type="idp:InvalidLoginFault"/>
 	<xsd:element name="noSuchUserFault" type="idp:NoSuchUserFault"/>
 	
    
@@ -199,9 +178,6 @@
 		<part name="fault" element="tns:invalidUserPropertyFault" />
 	</message>
 	
-		<message name="InvalidLoginFaultMessage">
-		<part name="fault" element="tns:invalidLoginFault" />
-	</message>
 	
 		<message name="PermissionDeniedFaultMessage">
 		<part name="fault" element="tns:permissionDeniedFault" />
@@ -258,37 +234,34 @@
 	    <fault message="tns:InvalidUserPropertyFaultMessage" name="InvalidUserPropertyFault"/>
 	</operation>
 	
-	<operation name="idpFindUsers">
+	<operation name="findIdPUsers">
 		<input message="tns:IdPFindUsersInputMessage"/>
 		<output message="tns:IdPFindUsersOutputMessage"/>
 		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
 	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
-	    <fault message="tns:InvalidLoginFaultMessage" name="InvalidLoginFault"/>
 	</operation>
 	
-	<operation name="idpUpdateUser">
+	<operation name="updateIdPUser">
 		<input message="tns:IdPUpdateUserInputMessage"/>
 		<output message="tns:IdPUpdateUserOutputMessage"/>
 		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
 	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
-	    <fault message="tns:InvalidLoginFaultMessage" name="InvalidLoginFault"/>
 	    <fault message="tns:NoSuchUserFaultMessage" name="NoSuchUserFault"/>
 	    <fault message="tns:InvalidUserPropertyFaultMessage" name="InvalidUserPropertyFault"/>
 	</operation>
 	
-	<operation name="idpRemoveUser">
+	<operation name="removeIdPUser">
 		<input message="tns:IdPRemoveUserInputMessage"/>
 		<output message="tns:IdPRemoveUserOutputMessage"/>
 		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
 	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
-	    <fault message="tns:InvalidLoginFaultMessage" name="InvalidLoginFault"/>
 	</operation>
 	
-	<operation name="authenticate">
+	<operation name="authenticateWithIdP">
 		<input message="tns:IdPAuthenticateInputMessage"/>
 		<output message="tns:IdPAuthenticateOutputMessage"/>
 		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
-	    <fault message="tns:InvalidLoginFaultMessage" name="InvalidLoginFault"/>
+	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
 	</operation>
 	
 	<operation name="createProxy">

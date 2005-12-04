@@ -57,7 +57,7 @@ public class TestIdentityProvider extends TestCase {
 			BasicAuthCredential cred = getAdminCreds();
 			IdPUserFilter uf = new IdPUserFilter();
 			uf.setUserId(a.getUserId());
-			IdPUser[] users = idp.findUsers(cred, uf);
+			IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
 			assertEquals(1, users.length);
 			assertEquals(IdPUserStatus.Active, users[0].getStatus());
 			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
@@ -78,13 +78,13 @@ public class TestIdentityProvider extends TestCase {
 			BasicAuthCredential cred = getAdminCreds();
 			IdPUserFilter uf = new IdPUserFilter();
 			uf.setUserId(a.getUserId());
-			IdPUser[] users = idp.findUsers(cred, uf);
+			IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
 			assertEquals(1, users.length);
 			assertEquals(IdPUserStatus.Pending, users[0].getStatus());
 			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
 			users[0].setStatus(IdPUserStatus.Active);
-			idp.updateUser(cred, users[0]);
-			users = idp.findUsers(cred, uf);
+			idp.updateUser(cred.getUserId(), users[0]);
+			users = idp.findUsers(cred.getUserId(), uf);
 			assertEquals(1, users.length);
 			assertEquals(IdPUserStatus.Active, users[0].getStatus());
 		} catch (Exception e) {
@@ -106,17 +106,17 @@ public class TestIdentityProvider extends TestCase {
 
 				IdPUserFilter uf = new IdPUserFilter();
 				uf.setUserId(a.getUserId());
-				IdPUser[] users = idp.findUsers(cred, uf);
+				IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
 				assertEquals(1, users.length);
 				assertEquals(IdPUserStatus.Pending, users[0].getStatus());
 				assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
 				users[0].setStatus(IdPUserStatus.Active);
-				idp.updateUser(cred, users[0]);
-				users = idp.findUsers(cred, uf);
+				idp.updateUser(cred.getUserId(), users[0]);
+				users = idp.findUsers(cred.getUserId(), uf);
 				assertEquals(1, users.length);
 				assertEquals(IdPUserStatus.Active, users[0].getStatus());
 				uf.setUserId("user");
-				users = idp.findUsers(cred, uf);
+				users = idp.findUsers(cred.getUserId(), uf);
 				assertEquals(i + 1, users.length);
 				BasicAuthCredential auth = new BasicAuthCredential();
 				auth.setUserId(a.getUserId());
@@ -127,23 +127,23 @@ public class TestIdentityProvider extends TestCase {
 			}
 
 			IdPUserFilter uf = new IdPUserFilter();
-			IdPUser[] users = idp.findUsers(cred, uf);
+			IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
 			assertEquals(11, users.length);
 			for (int i = 0; i < 10; i++) {
 				IdPUserFilter f = new IdPUserFilter();
 				f.setUserId(users[i].getUserId());
-				IdPUser[] us = idp.findUsers(cred, f);
+				IdPUser[] us = idp.findUsers(cred.getUserId(), f);
 				assertEquals(1, us.length);
 				us[0].setFirstName("NEW NAME");
-				idp.updateUser(cred, us[0]);
-				IdPUser[] us2 = idp.findUsers(cred, f);
+				idp.updateUser(cred.getUserId(), us[0]);
+				IdPUser[] us2 = idp.findUsers(cred.getUserId(), f);
 				assertEquals(1, us2.length);
 				assertEquals(us[0], us2[0]);
-				idp.removeUser(cred, users[i].getUserId());
-				us = idp.findUsers(cred, f);
+				idp.removeUser(cred.getUserId(), users[i].getUserId());
+				us = idp.findUsers(cred.getUserId(), f);
 				assertEquals(0, us.length);
 			}
-			users = idp.findUsers(cred, uf);
+			users = idp.findUsers(cred.getUserId(), uf);
 			assertEquals(1, users.length);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);

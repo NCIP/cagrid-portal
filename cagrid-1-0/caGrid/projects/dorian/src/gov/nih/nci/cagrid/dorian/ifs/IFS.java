@@ -51,11 +51,38 @@ public class IFS extends GUMSObject {
 
 	private IFSConfiguration conf;
 
-	public IFS(IFSConfiguration conf, Database db, CertificateAuthority ca) throws GUMSInternalFault{
+	public IFS(IFSConfiguration conf, Database db, CertificateAuthority ca)
+			throws GUMSInternalFault {
 		this.conf = conf;
 		tm = new TrustManager(conf, db);
 		um = new UserManager(db, conf, ca, tm);
 		um.buildDatabase();
+	}
+
+	public String getUserIdVerifyTrustedIdP(X509Certificate idpCert,
+			String identity) throws GUMSInternalFault, InvalidUserFault,
+			InvalidTrustedIdPFault, PermissionDeniedFault {
+		if(identity == null){
+			PermissionDeniedFault fault = new PermissionDeniedFault();
+			fault
+					.setFaultString("No credentials specified.");
+			throw fault;
+		}
+		TrustedIdP idp = tm.getTrustedIdPByDN(idpCert.getSubjectDN().getName());
+		IFSUser usr = um.getUser(identityToSubject(identity));
+		if (usr.getIdPId() != idp.getId()) {
+			PermissionDeniedFault fault = new PermissionDeniedFault();
+			fault
+					.setFaultString("Not a valid user of the IdP "
+							+ idp.getName());
+			throw fault;
+		}
+		return usr.getUID();
+	}
+	
+	private String identityToSubject(String identity){
+		String s = identity.substring(1);
+		return s.replace('/',',');
 	}
 
 	public TrustedIdP addTrustedIdP(TrustedIdP idp) throws GUMSInternalFault,
@@ -163,7 +190,8 @@ public class IFS extends GUMSObject {
 			try {
 				usr = um.getUser(idp.getId(), auth.getSubject().getName());
 				if (emailIsValid) {
-					if ((usr.getEmail()==null)||(!usr.getEmail().equals(email)) ){
+					if ((usr.getEmail() == null)
+							|| (!usr.getEmail().equals(email))) {
 						usr.setEmail(email);
 						um.updateUser(usr);
 					}
@@ -313,8 +341,8 @@ public class IFS extends GUMSObject {
 		}
 
 	}
-	
-	protected UserManager getUserManager(){
+
+	protected UserManager getUserManager() {
 		return um;
 	}
 

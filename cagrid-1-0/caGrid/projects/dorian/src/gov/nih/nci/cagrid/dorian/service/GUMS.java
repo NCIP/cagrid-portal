@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.gums.service;
 
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
+import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthority;
 import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthorityConf;
@@ -9,6 +10,12 @@ import gov.nih.nci.cagrid.gums.common.FaultHelper;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.idp.IdPConfiguration;
 import gov.nih.nci.cagrid.gums.idp.IdentityProvider;
+import gov.nih.nci.cagrid.gums.idp.bean.Application;
+import gov.nih.nci.cagrid.gums.idp.bean.BasicAuthCredential;
+import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
+import gov.nih.nci.cagrid.gums.idp.bean.IdPUserFilter;
+import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
+import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
 import gov.nih.nci.cagrid.gums.ifs.AutoApprovalAutoRenewalPolicy;
 import gov.nih.nci.cagrid.gums.ifs.IFS;
 import gov.nih.nci.cagrid.gums.ifs.IFSConfiguration;
@@ -18,6 +25,7 @@ import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.gums.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
 
+import org.opensaml.SAMLAssertion;
 import org.projectmobius.common.MobiusConfigurator;
 import org.projectmobius.common.MobiusResourceManager;
 
@@ -38,7 +46,7 @@ public class GUMS extends MobiusResourceManager {
 
 	public static final String IDP_ADMIN_PASSWORD = "password";
 
-	public static String serviceId;
+	private String serviceId;
 
 	private CertificateAuthority ca;
 
@@ -51,8 +59,7 @@ public class GUMS extends MobiusResourceManager {
 	public GUMS(String confFile, String serviceId) throws GUMSInternalFault {
 		try {
 			this.serviceId = serviceId;
-			MobiusConfigurator.parseMobiusConfiguration(
-					confFile, this);
+			MobiusConfigurator.parseMobiusConfiguration(confFile, this);
 
 			IdentityProvider.ADMIN_USER_ID = IDP_ADMIN_USER_ID;
 			IdentityProvider.ADMIN_PASSWORD = IDP_ADMIN_PASSWORD;
@@ -77,18 +84,13 @@ public class GUMS extends MobiusResourceManager {
 			idp.setIdPCertificate(CertUtil
 					.writeCertificateToString(this.identityProvider
 							.getIdPCertificate()));
-			/*
-			BasicAuthCredential cred = new BasicAuthCredential();
-			cred.setUserId(IDP_ADMIN_USER_ID);
-			cred.setPassword(IDP_ADMIN_PASSWORD);
-			IdPUser idpUser = this.identityProvider.getUser(cred,IDP_ADMIN_USER_ID);	
-			*/	
+
 			IFSUser usr = new IFSUser();
 			usr.setUID(IDP_ADMIN_USER_ID);
-			//usr.setEmail(idpUser.getEmail());
+			// usr.setEmail(idpUser.getEmail());
 			usr.setUserStatus(IFSUserStatus.Active);
 			usr.setUserRole(IFSUserRole.Administrator);
-			
+
 			ifsConfiguration = (IFSConfiguration) getResource(IFSConfiguration.RESOURCE);
 			ifsConfiguration.setInitalTrustedIdP(idp);
 			ifsConfiguration.setInitialUser(usr);
@@ -110,13 +112,8 @@ public class GUMS extends MobiusResourceManager {
 				.getResource(GUMS_CONFIGURATION_RESOURCE);
 	}
 
-
 	public Database getDatabase() {
 		return this.db;
-	}
-
-	public IdentityProvider getIdentityProvider() {
-		return identityProvider;
 	}
 
 	public IFS getIFS() {
@@ -126,8 +123,83 @@ public class GUMS extends MobiusResourceManager {
 	public IFSConfiguration getIFSConfiguration() {
 		return ifsConfiguration;
 	}
-	
-	
-	
+
+	// //////////////////////////////////////////////////////////////////////////////
+	/*
+	 * DONT FORGET THAT TO MAKE SURE THAT TWO TRUSTED IDPS OF SAME DN CANT
+	 * EXISTS
+	 */
+	// //////////////////////////////////////////////////////////////////////////////
+	// //////////////////////////////////////////////////////////////////////////////
+	/*
+	 * DONT FORGET THAT TO MAKE SURE THAT TWO TRUSTED IDPS OF SAME DN CANT
+	 * EXISTS
+	 */
+	// //////////////////////////////////////////////////////////////////////////////
+	// //////////////////////////////////////////////////////////////////////////////
+	/*
+	 * DONT FORGET THAT TO MAKE SURE THAT TWO TRUSTED IDPS OF SAME DN CANT
+	 * EXISTS
+	 */
+	// //////////////////////////////////////////////////////////////////////////////
+	// //////////////////////////////////////////////////////////////////////////////
+	/*
+	 * DONT FORGET THAT TO MAKE SURE THAT TWO TRUSTED IDPS OF SAME DN CANT
+	 * EXISTS
+	 */
+	// //////////////////////////////////////////////////////////////////////////////
+	public IdPUser[] findIdPUsers(String gridIdentity, IdPUserFilter filter)
+			throws GUMSInternalFault, PermissionDeniedFault {
+		String uid = null;
+		try {
+			uid = ifs.getUserIdVerifyTrustedIdP(identityProvider
+					.getIdPCertificate(), gridIdentity);
+		} catch (Exception e) {
+			PermissionDeniedFault fault = new PermissionDeniedFault();
+			fault.setFaultString("Invalid IdP User.");
+			throw fault;
+		}
+		return this.identityProvider.findUsers(uid, filter);
+	}
+
+	public void updateIdPUser(String gridIdentity, IdPUser u)
+			throws GUMSInternalFault, PermissionDeniedFault, NoSuchUserFault,
+			InvalidUserPropertyFault {
+		String uid = null;
+		try {
+			uid = ifs.getUserIdVerifyTrustedIdP(identityProvider
+					.getIdPCertificate(), gridIdentity);
+		} catch (Exception e) {
+			PermissionDeniedFault fault = new PermissionDeniedFault();
+			fault.setFaultString("Invalid IdP User.");
+			throw fault;
+		}
+		this.identityProvider.updateUser(uid, u);
+	}
+
+	public void removeIdPUser(String gridIdentity, String userId)
+			throws GUMSInternalFault, PermissionDeniedFault {
+		String uid = null;
+		try {
+			uid = ifs.getUserIdVerifyTrustedIdP(identityProvider
+					.getIdPCertificate(), gridIdentity);
+		} catch (Exception e) {
+			PermissionDeniedFault fault = new PermissionDeniedFault();
+			fault.setFaultString("Invalid IdP User.");
+			throw fault;
+		}
+		this.identityProvider.removeUser(uid, userId);
+
+	}
+
+	public SAMLAssertion authenticate(BasicAuthCredential credential)
+			throws GUMSInternalFault, PermissionDeniedFault {
+		return this.identityProvider.authenticate(credential);
+	}
+
+	public String registerWithIdP(Application a) throws GUMSInternalFault,
+			InvalidUserPropertyFault {
+		return this.identityProvider.register(a);
+	}
 
 }

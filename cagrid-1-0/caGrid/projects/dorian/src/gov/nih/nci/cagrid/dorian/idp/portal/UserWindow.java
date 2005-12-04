@@ -3,9 +3,7 @@ package gov.nih.nci.cagrid.gums.idp.portal;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gums.client.IdPAdministrationClient;
-import gov.nih.nci.cagrid.gums.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
-import gov.nih.nci.cagrid.gums.idp.bean.InvalidLoginFault;
 import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
 import gov.nih.nci.cagrid.gums.portal.GumsPortalConf;
 
@@ -32,7 +30,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.6 2005-12-02 21:01:43 langella Exp $
+ * @version $Id: UserWindow.java,v 1.7 2005-12-04 05:34:01 langella Exp $
  */
 public class UserWindow extends GridPortalBaseFrame {
 
@@ -249,8 +247,8 @@ public class UserWindow extends GridPortalBaseFrame {
 		if (updateUser == null) {
 			updateUser = new JButton();
 			updateUser.setText("Update User");
-			updateUser.addActionListener(new java.awt.event.ActionListener() { 
-				public void actionPerformed(java.awt.event.ActionEvent e) {    
+			updateUser.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
 							updateUser();
@@ -283,71 +281,64 @@ public class UserWindow extends GridPortalBaseFrame {
 		}
 	}
 
-private synchronized void updateUser() {
-		
-		    String pass = format(this.getPassword().getPassword());
-            String verify = format(this.getVerifyPassword().getPassword());
-            
-            if((pass.length()>0)&&(verify.length()>0)){
-            	if(pass.equals(verify)){
-            		user.setPassword(pass);
-            	}else{
-            		PortalUtils.showErrorMessage("Cannot update the user "+user.getUserId()+", password don't match.");
-            	}
-            }
-		
-			user.setRole(((UserRolesComboBox)this.getUserRole()).getSelectedUserRole());
-			user.setStatus(((UserStatusComboBox)this.getUserStatus()).getSelectedUserStatus());
-		
-			user.setUserId(getUsername().getText());
-			user.setFirstName(getFirstName().getText());
-			user.setLastName(getLastName().getText());
-			user.setOrganization(getOrganization().getText());
-			user.setAddress(getAddress().getText());
-			user.setAddress2(getAddress2().getText());
-			user.setCity(getCity().getText());
-			user.setState(getState().getSelectedState());
-			user.setZipcode(getZipcode().getText());
-			user.setCountry(getCountry().getSelectedCountry());
-			user.setPhoneNumber(getPhoneNumber().getText());
-			user.setEmail(getEmail().getText());
-			
-		
+	private synchronized void updateUser() {
+
+		String pass = format(this.getPassword().getPassword());
+		String verify = format(this.getVerifyPassword().getPassword());
+
+		if ((pass.length() > 0) && (verify.length() > 0)) {
+			if (pass.equals(verify)) {
+				user.setPassword(pass);
+			} else {
+				PortalUtils.showErrorMessage("Cannot update the user "
+						+ user.getUserId() + ", password don't match.");
+			}
+		}
+
+		user.setRole(((UserRolesComboBox) this.getUserRole())
+				.getSelectedUserRole());
+		user.setStatus(((UserStatusComboBox) this.getUserStatus())
+				.getSelectedUserStatus());
+
+		user.setUserId(getUsername().getText());
+		user.setFirstName(getFirstName().getText());
+		user.setLastName(getLastName().getText());
+		user.setOrganization(getOrganization().getText());
+		user.setAddress(getAddress().getText());
+		user.setAddress2(getAddress2().getText());
+		user.setCity(getCity().getText());
+		user.setState(getState().getSelectedState());
+		user.setZipcode(getZipcode().getText());
+		user.setCountry(getCountry().getSelectedCountry());
+		user.setPhoneNumber(getPhoneNumber().getText());
+		user.setEmail(getEmail().getText());
 
 		try {
 			String service = getService().getText();
-			GumsPortalConf conf = (GumsPortalConf) PortalResourceManager
-					.getInstance().getResource(GumsPortalConf.RESOURCE);
-			BasicAuthCredential cred = conf.getIdPLogin().login();
-			if (cred == null) {
-				PortalUtils
-						.showErrorMessage("No Username and Password specified.");
-			} else {
-				IdPAdministrationClient client = new IdPAdministrationClient(
-						service, cred);
-				client.updateUser(user);
-				
-				PortalUtils.showMessage("User "+user.getUserId()+" update successfully.");
-			}
-		} catch (InvalidLoginFault ilf) {
-			PortalUtils.showErrorMessage(ilf);
-			GumsPortalConf conf = (GumsPortalConf) PortalResourceManager
-			.getInstance().getResource(GumsPortalConf.RESOURCE);
-			conf.getIdPLogin().resetSession();		
+
+			IdPAdministrationClient client = new IdPAdministrationClient(
+					service);
+			client.updateUser(user);
+
+			PortalUtils.showMessage("User " + user.getUserId()
+					+ " update successfully.");
+
 		} catch (PermissionDeniedFault pdf) {
 			PortalUtils.showErrorMessage(pdf);
 			GumsPortalConf conf = (GumsPortalConf) PortalResourceManager
-			.getInstance().getResource(GumsPortalConf.RESOURCE);
-			conf.getIdPLogin().resetSession();		
+					.getInstance().getResource(GumsPortalConf.RESOURCE);
+			conf.getIdPLogin().resetSession();
 		} catch (Exception e) {
 			e.printStackTrace();
 			PortalUtils.showErrorMessage(e);
 		}
-	}	/**
-		 * This method initializes jTabbedPane
-		 * 
-		 * @return javax.swing.JTabbedPane
-		 */
+	}
+
+	/**
+	 * This method initializes jTabbedPane
+	 * 
+	 * @return javax.swing.JTabbedPane
+	 */
 	private JTabbedPane getJTabbedPane() {
 		if (jTabbedPane == null) {
 			jTabbedPane = new JTabbedPane();

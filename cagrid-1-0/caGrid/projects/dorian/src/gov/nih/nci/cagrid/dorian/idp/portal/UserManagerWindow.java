@@ -3,10 +3,8 @@ package gov.nih.nci.cagrid.gums.idp.portal;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gums.client.IdPAdministrationClient;
-import gov.nih.nci.cagrid.gums.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUserFilter;
-import gov.nih.nci.cagrid.gums.idp.bean.InvalidLoginFault;
 import gov.nih.nci.cagrid.gums.portal.GUMSServiceListComboBox;
 import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
 import gov.nih.nci.cagrid.gums.portal.GumsPortalConf;
@@ -34,7 +32,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.11 2005-12-02 21:01:43 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.12 2005-12-04 05:34:01 langella Exp $
  */
 public class UserManagerWindow extends GridPortalBaseFrame {
 
@@ -875,15 +873,9 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		try {
 			String service = ((GUMSServiceListComboBox) getService())
 					.getSelectedService();
-			GumsPortalConf conf = (GumsPortalConf) PortalResourceManager
-					.getInstance().getResource(GumsPortalConf.RESOURCE);
-			BasicAuthCredential cred = conf.getIdPLogin().login();
-			if (cred == null) {
-				PortalUtils
-						.showErrorMessage("No Username and Password specified.");
-			} else {
+	
 				IdPAdministrationClient client = new IdPAdministrationClient(
-						service, cred);
+						service);
 				IdPUser[] users = client.findUsers(f);
 				if (users != null) {
 					for (int i = 0; i < users.length; i++) {
@@ -891,13 +883,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 					}
 				}
 				PortalUtils.showMessage("Query Completed.");
-			}
-		} catch (InvalidLoginFault ilf) {
-			PortalUtils.showErrorMessage(ilf);
-			GumsPortalConf conf = (GumsPortalConf) PortalResourceManager
-					.getInstance().getResource(GumsPortalConf.RESOURCE);
-			conf.getIdPLogin().resetSession();
-		} catch (PermissionDeniedFault pdf) {
+		}catch (PermissionDeniedFault pdf) {
 			PortalUtils.showErrorMessage(pdf);
 			GumsPortalConf conf = (GumsPortalConf) PortalResourceManager
 					.getInstance().getResource(GumsPortalConf.RESOURCE);

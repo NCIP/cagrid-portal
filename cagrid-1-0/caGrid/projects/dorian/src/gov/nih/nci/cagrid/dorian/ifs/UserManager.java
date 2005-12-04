@@ -155,7 +155,7 @@ public class UserManager extends GUMSObject {
 			String caSubject = ca.getCACertificate().getSubjectDN().getName();
 			int caindex = caSubject.lastIndexOf(",");
 			String caPreSub = caSubject.substring(0, caindex);
-			String sub = caPreSub + ",OU=IdP [" + idpId + "],CN=" + uid;
+			String sub = caPreSub + ",OU=IdP " + idpId + ",CN=" + uid;
 			Calendar c = new GregorianCalendar();
 			Date start = c.getTime();
 			Date end = conf.getCredentialsValid();

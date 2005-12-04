@@ -5,7 +5,6 @@ import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gums.common.GUMSFault;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUserFilter;
-import gov.nih.nci.cagrid.gums.idp.bean.InvalidLoginFault;
 import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
 import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
 
@@ -18,13 +17,13 @@ import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
  */
 public interface IdPAdministration {
 	public IdPUser[] findUsers(IdPUserFilter filter)
-			throws GUMSFault, GUMSInternalFault, InvalidLoginFault, PermissionDeniedFault;
+			throws GUMSFault, GUMSInternalFault, PermissionDeniedFault;
 
 	public void updateUser(IdPUser u)
-			throws GUMSFault,GUMSInternalFault, InvalidLoginFault, PermissionDeniedFault,
+			throws GUMSFault,GUMSInternalFault, PermissionDeniedFault,
 			NoSuchUserFault, InvalidUserPropertyFault;
 	
 	public void removeUser(String userId)
-	throws GUMSFault,GUMSInternalFault, InvalidLoginFault, PermissionDeniedFault;
+	throws GUMSFault,GUMSInternalFault, PermissionDeniedFault;
 
 }

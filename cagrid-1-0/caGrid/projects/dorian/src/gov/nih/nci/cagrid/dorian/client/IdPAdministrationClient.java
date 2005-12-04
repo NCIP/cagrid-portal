@@ -4,18 +4,14 @@ import gov.nih.nci.cagrid.gums.IdPAdministration;
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
 import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gums.common.FaultHelper;
+import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.common.GUMSFault;
-import gov.nih.nci.cagrid.gums.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUserFilter;
-import gov.nih.nci.cagrid.gums.idp.bean.InvalidLoginFault;
 import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
 import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
 import gov.nih.nci.cagrid.gums.wsrf.GUMSPortType;
-import gov.nih.nci.cagrid.gums.wsrf.IdpFindUsers;
-import gov.nih.nci.cagrid.gums.wsrf.IdpRemoveUser;
-import gov.nih.nci.cagrid.gums.wsrf.IdpUpdateUser;
-import gov.nih.nci.cagrid.security.commstyle.AnonymousSecureConversationWithEncryption;
+import gov.nih.nci.cagrid.security.commstyle.SecureConversationWithEncryption;
 
 
 /**
@@ -27,19 +23,16 @@ import gov.nih.nci.cagrid.security.commstyle.AnonymousSecureConversationWithEncr
  */
 public class IdPAdministrationClient extends GUMSBaseClient implements
 		IdPAdministration {
-	
-	private BasicAuthCredential cred;
 
-	public IdPAdministrationClient(String serviceURI, BasicAuthCredential cred) {
+	public IdPAdministrationClient(String serviceURI) {
 		super(serviceURI);
-		this.cred = cred;
 	}
 	
 	
-	public IdPUser[] findUsers(IdPUserFilter filter) throws GUMSFault, GUMSInternalFault, InvalidLoginFault, PermissionDeniedFault {
+	public IdPUser[] findUsers(IdPUserFilter filter) throws GUMSFault, GUMSInternalFault, PermissionDeniedFault {
 		GUMSPortType port = null;
 		try {
-			port = this.getPort(new AnonymousSecureConversationWithEncryption());
+			port = this.getPort(new SecureConversationWithEncryption());
 		}catch (Exception e) {
 			GUMSFault fault = new GUMSFault();
 			fault.setFaultString(e.getMessage());
@@ -49,14 +42,13 @@ public class IdPAdministrationClient extends GUMSBaseClient implements
 			throw fault;
 		}
 		try {
-			return port.idpFindUsers(new IdpFindUsers(cred,filter)).getIdpUser();
+			return port.findIdPUsers(filter).getIdpUser();
 		}catch(GUMSInternalFault gie){
 			throw gie;
-		}catch(InvalidLoginFault f){
-			throw f;
 		}catch(PermissionDeniedFault f){
 			throw f;
 		}catch (Exception e) {
+			FaultUtil.printFault(e);
 			GUMSFault fault = new GUMSFault();
 			fault.setFaultString(e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
@@ -70,10 +62,10 @@ public class IdPAdministrationClient extends GUMSBaseClient implements
 
 
 
-	public void removeUser(String userId) throws GUMSFault, GUMSInternalFault, InvalidLoginFault, PermissionDeniedFault {
+	public void removeUser(String userId) throws GUMSFault, GUMSInternalFault, PermissionDeniedFault {
 		GUMSPortType port = null;
 		try {
-			port = this.getPort(new AnonymousSecureConversationWithEncryption());
+			port = this.getPort(new SecureConversationWithEncryption());
 		}catch (Exception e) {
 			GUMSFault fault = new GUMSFault();
 			fault.setFaultString(e.getMessage());
@@ -83,11 +75,9 @@ public class IdPAdministrationClient extends GUMSBaseClient implements
 			throw fault;
 		}
 		try {
-			port.idpRemoveUser(new IdpRemoveUser(cred,userId));
+			port.removeIdPUser(userId);
 		}catch(GUMSInternalFault gie){
 			throw gie;
-		}catch(InvalidLoginFault f){
-			throw f;
 		}catch(PermissionDeniedFault f){
 			throw f;
 		}catch (Exception e) {
@@ -104,10 +94,10 @@ public class IdPAdministrationClient extends GUMSBaseClient implements
 
 
 
-	public void updateUser(IdPUser u) throws GUMSFault, GUMSInternalFault, InvalidLoginFault, PermissionDeniedFault, NoSuchUserFault, InvalidUserPropertyFault {
+	public void updateUser(IdPUser u) throws GUMSFault, GUMSInternalFault, PermissionDeniedFault, NoSuchUserFault, InvalidUserPropertyFault {
 		GUMSPortType port = null;
 		try {
-			port = this.getPort(new AnonymousSecureConversationWithEncryption());
+			port = this.getPort(new SecureConversationWithEncryption());
 		}catch (Exception e) {
 			GUMSFault fault = new GUMSFault();
 			fault.setFaultString(e.getMessage());
@@ -117,11 +107,9 @@ public class IdPAdministrationClient extends GUMSBaseClient implements
 			throw fault;
 		}
 		try {
-			port.idpUpdateUser(new IdpUpdateUser(cred,u));
+			port.updateIdPUser(u);
 		}catch(GUMSInternalFault gie){
 			throw gie;
-		}catch(InvalidLoginFault f){
-			throw f;
 		}catch(PermissionDeniedFault f){
 			throw f;
 		}catch(NoSuchUserFault f){
