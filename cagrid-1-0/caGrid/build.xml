@@ -64,7 +64,7 @@
 	<target name="build-introduce" depends="build-core, build-metadata" description="Builds Introduce">
 		<!-- copy dependant artifacts into current target's lib dir -->
 		<copy todir="${projects.dir}/introduce/lib">
-			<fileset refid="artifact.core.metadata.jars" />
+			<fileset refid="artifact.metadata.main.jars" />
 		</copy>
 		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
