@@ -261,9 +261,6 @@
 	                    <fileset dir="${ext.globus.dir}/lib">
 	                        <include name="*.jar" />
 	                    </fileset>
-	                	<fileset dir="${ext.ant.home}/lib">
-	                		<include name="*.jar" />
-	                	</fileset>
 	                	<fileset dir="${ant.library.dir}">
 	                		<include name="ant.jar" />
 	                		<include name="ant-launcher.jar" />
