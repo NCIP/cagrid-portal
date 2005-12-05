@@ -35,7 +35,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.13 2005-12-05 03:32:25 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.14 2005-12-05 17:02:59 langella Exp $
  */
 public class UserManagerWindow extends GridPortalBaseFrame {
 
@@ -136,14 +136,14 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 	private UserStatusComboBox userStatus = null;
 
 	private JComboBox service = null;
-	
-	 private boolean isQuerying = false;
 
-	    private Object mutex = new Object();
+	private boolean isQuerying = false;
 
-		private JLabel proxyLabel = null;
+	private Object mutex = new Object();
 
-		private JComboBox proxy = null;
+	private JLabel proxyLabel = null;
+
+	private JComboBox proxy = null;
 
 	/**
 	 * This is the default constructor
@@ -322,36 +322,38 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		}
 		return manageUser;
 	}
-	
-	public void showUser(){
+
+	public void showUser() {
 		final int row = getUsersTable().getSelectedRow();
 
 		if ((row >= 0) && (row < getUsersTable().getRowCount())) {
 			MobiusRunnable runner = new MobiusRunnable() {
 				public void execute() {
-					IdPUser user = (IdPUser) getUsersTable().getValueAt(
-							row, 0);
+					IdPUser user = (IdPUser) getUsersTable().getValueAt(row, 0);
 					String service = ((GUMSServiceListComboBox) getService())
 							.getSelectedService();
-					GlobusCredential proxy = ((ProxyComboBox)getProxy()).getSelectedProxy();
-					PortalResourceManager.getInstance()
-							.getGridPortal()
-							.addGridPortalComponent(
-									new UserWindow(service, proxy,user));
+					try {
+						GlobusCredential proxy = ((ProxyComboBox) getProxy())
+								.getSelectedProxy();
+
+						PortalResourceManager.getInstance().getGridPortal()
+								.addGridPortalComponent(
+										new UserWindow(service, proxy, user));
+					} catch (Exception e) {
+						PortalUtils.showErrorMessage(e);
+					}
 				}
 			};
 			try {
-				PortalResourceManager.getInstance()
-						.getThreadManager().executeInBackground(
-								runner);
+				PortalResourceManager.getInstance().getThreadManager()
+						.executeInBackground(runner);
 			} catch (Exception t) {
 				t.getMessage();
 			}
 
 		} else {
-			JOptionPane.showMessageDialog(PortalResourceManager
-					.getInstance().getGridPortal(),
-					"Please select a user to manage!!!");
+			JOptionPane.showMessageDialog(PortalResourceManager.getInstance()
+					.getGridPortal(), "Please select a user to manage!!!");
 		}
 	}
 
@@ -778,12 +780,12 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			gridBagConstraints30.gridx = 1;
 			gridBagConstraints30.gridy = 1;
 			gridBagConstraints30.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints30.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints30.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints30.weightx = 1.0;
 			GridBagConstraints gridBagConstraints29 = new GridBagConstraints();
 			gridBagConstraints29.gridx = 0;
 			gridBagConstraints29.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints29.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints29.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints29.gridy = 1;
 			proxyLabel = new JLabel();
 			proxyLabel.setText("Proxy");
@@ -860,20 +862,23 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 	}
 
 	private void findUsers() {
-		
-		  synchronized (mutex) {
-	            if (isQuerying) {
-	                PortalUtils.showErrorMessage("Query Already in Progress",
-	                    "Please wait until the current query is finished before executing another.");
-	           return;
-	            } else {
-	                isQuerying = true;
-	            }
-	        }
 
+		synchronized (mutex) {
+			if (isQuerying) {
+				PortalUtils
+						.showErrorMessage("Query Already in Progress",
+								"Please wait until the current query is finished before executing another.");
+				return;
+			} else {
+				isQuerying = true;
+			}
+		}
 
 		this.getUsersTable().clearTable();
-		GlobusCredential proxy = ((ProxyComboBox)getProxy()).getSelectedProxy();
+
+		try {
+		GlobusCredential proxy = ((ProxyComboBox) getProxy())
+				.getSelectedProxy();
 		IdPUserFilter f = new IdPUserFilter();
 		JPanel panel = (JPanel) this.getJTabbedPane().getSelectedComponent();
 		if (panel.getName().equals(ROLE_PANEL)) {
@@ -895,19 +900,20 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			f.setEmail(format(getEmail().getText()));
 		}
 
-		try {
 			String service = ((GUMSServiceListComboBox) getService())
 					.getSelectedService();
-	            CommunicationStyle style = new SecureConversationWithEncryption(proxy);
-				IdPAdministrationClient client = new IdPAdministrationClient(service,style);
-				IdPUser[] users = client.findUsers(f);
-				if (users != null) {
-					for (int i = 0; i < users.length; i++) {
-						this.getUsersTable().addUser(users[i]);
-					}
+			CommunicationStyle style = new SecureConversationWithEncryption(
+					proxy);
+			IdPAdministrationClient client = new IdPAdministrationClient(
+					service, style);
+			IdPUser[] users = client.findUsers(f);
+			if (users != null) {
+				for (int i = 0; i < users.length; i++) {
+					this.getUsersTable().addUser(users[i]);
 				}
-				PortalUtils.showMessage("Query Completed.");
-		}catch (PermissionDeniedFault pdf) {
+			}
+			PortalUtils.showMessage("Query Completed.");
+		} catch (PermissionDeniedFault pdf) {
 			PortalUtils.showErrorMessage(pdf);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -995,10 +1001,10 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 	}
 
 	/**
-	 * This method initializes proxy	
-	 * 	
-	 * @return javax.swing.JComboBox	
-	 */    
+	 * This method initializes proxy
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
 	private JComboBox getProxy() {
 		if (proxy == null) {
 			proxy = new ProxyComboBox();

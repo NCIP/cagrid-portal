@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.gums.portal;
 
+import gov.nih.nci.cagrid.gums.common.ProxyUtil;
+
 import java.util.List;
 
 import javax.swing.JComboBox;
@@ -25,8 +27,19 @@ public class ProxyComboBox extends JComboBox {
 		}
 	}
 	
-	public GlobusCredential getSelectedProxy(){
-		return ((ProxyCaddy)this.getSelectedItem()).getProxy();
+	public GlobusCredential getSelectedProxy() throws Exception{
+		ProxyCaddy caddy =  ((ProxyCaddy)this.getSelectedItem());
+		if(caddy.getIdentity().equals(DEFAULT_PROXY)){
+			try{
+			caddy.setProxy(ProxyUtil.getDefaultProxy());
+			}catch(Exception e){
+				throw new Exception("No default proxy found!!!");
+			}
+			if(caddy.getProxy().getTimeLeft()==0){
+				throw new Exception("The default proxy has expired!!!");
+			}
+		}
+		return caddy.getProxy();
 	}
 
 }
