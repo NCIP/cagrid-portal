@@ -28,6 +28,11 @@
 
 	<!-- =============================================================== -->
 	<!-- Define the build artifacts (created/used by projects) here      -->
+	<!--                                                                 -->
+	<!-- NOTE:  These should be all of the files necessary to "depend" on-->
+	<!-- the project (not just the built files).  Make a separate        -->
+	<!-- artifact for groups of files that will probably be copied to    -->
+	<!-- separate directoris (e.g. jars and conf files)                  -->
 	<!-- =============================================================== -->
 	<fileset dir="${projects.dir}/core/build/jars" id="artifact.core.main.jars">
 		<include name="*.jar" />
@@ -42,18 +47,19 @@
 	</fileset>
 
 
-
-
 	<!-- =============================================================== -->
-	<!-- CORE: this cannot have any dependencies on other projects       -->
+	<!-- CORE: This cannot have any dependencies on other projects       -->
 	<!-- =============================================================== -->
 	<target name="build-core" description="Builds the core">
 		<ant dir="${projects.dir}/core" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
 
+	<!-- =============================================================== -->
+	<!-- METADATA: This may only depend on core                          -->
+	<!-- =============================================================== -->
 	<target name="build-metadata" depends="build-core" description="Builds the common metadata">
-		<!-- copy dependant artifacts into current target's lib dir -->
+		<!-- copy dependent artifacts into current target's lib dir -->
 		<copy todir="${projects.dir}/metadata/lib">
 			<fileset refid="artifact.core.main.jars" />
 		</copy>
@@ -61,8 +67,11 @@
 	</target>
 
 
+	<!-- =============================================================== -->
+	<!-- INTRODUCE:                                                      -->
+	<!-- =============================================================== -->
 	<target name="build-introduce" depends="build-core, build-metadata" description="Builds Introduce">
-		<!-- copy dependant artifacts into current target's lib dir -->
+		<!-- copy dependent artifacts into current target's lib dir -->
 		<copy todir="${projects.dir}/introduce/lib">
 			<fileset refid="artifact.metadata.main.jars" />
 		</copy>
