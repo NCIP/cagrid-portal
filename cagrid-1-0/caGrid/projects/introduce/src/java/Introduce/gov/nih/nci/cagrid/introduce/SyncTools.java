@@ -160,7 +160,6 @@ public class SyncTools {
 			parser.setQuiet(true);
 			parser.setImports(true);
 			parser.setNStoPkg(baseDirectory.getAbsolutePath() + File.separator + "namespace2package.mappings");
-			parser.setOutputDir(baseDirectory.getAbsolutePath() + File.separator + "tmp");
 			parser.run(new File(baseDirectory.getAbsolutePath()
 					+ File.separator
 					+ "build"
@@ -171,10 +170,9 @@ public class SyncTools {
 							.get("introduce.skeleton.service.name")
 					+ File.separator
 					+ this.deploymentProperties
-							.get("introduce.skeleton.service.name") + ".wsdl")
+							.get("introduce.skeleton.service.name") +  "_flattened" + ".wsdl")
 					.getAbsolutePath());
 			table = parser.getSymbolTable();
-			table.dump(System.out);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
