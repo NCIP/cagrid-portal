@@ -36,7 +36,7 @@
 	<fileset dir="${projects.dir}/core/build/jars" id="artifact.core.test.jars">
 		<include name="*test*.jar" />
 	</fileset>
-	<fileset dir="${projects.dir}/metadata/build/jars" id="artifact.metadata.main.jars">
+	<fileset dir="${projects.dir}/metadata/build/lib" id="artifact.metadata.main.jars">
 		<include name="*.jar" />
 		<exclude name="*test*.jar" />
 	</fileset>
