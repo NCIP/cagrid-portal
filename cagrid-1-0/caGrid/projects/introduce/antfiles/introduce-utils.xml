@@ -9,7 +9,7 @@
 	<property name="introduce.skeleton.package.default" value="gov.nih.nci.cagrid" />
 	<property name="introduce.skeleton.package.dir.default" value="gov/nih/nci/cagrid" />
 	<property name="introduce.skeleton.namespace.domain.default" value="http://cagrid.nci.nih.gov" />
-	<property name="gme.service.default" value="http://malibu.bmi.ohio-state.edu:8080/wsrf/services/cagrid/GlobalModelExchange />
+	<property name="gme.service.default" value="http://malibu.bmi.ohio-state.edu:8080/wsrf/services/cagrid/GlobalModelExchange" />
 	<property name="conf.dir" location="conf" />
 	<property name="introduce.portal.conf" location="${conf.dir}/introduce/introduce-portal-conf.xml" />
 	
