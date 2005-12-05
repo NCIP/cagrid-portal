@@ -6,7 +6,6 @@
 	<!-- put stuff in here needed for building introduce-->
 	<target name="prepareIntroduce">
 		<path id="Introduce.classpath">
-			<path refid="Common.classpath" />
 			<fileset dir="${lib.dir}">
 				<include name="*.jar" />
 			</fileset>
@@ -15,7 +14,6 @@
 			</fileset>
 		</path>
 		<path id="Introduce.test.classpath">
-			<path refid="Common.test.classpath" />
 			<fileset dir="${lib.dir}">
 				<include name="*.jar" />
 			</fileset>
@@ -31,7 +29,6 @@
 		</path>
 		
 		<path id="Portal.classpath">
-			<path refid="Common.classpath" />
 			<fileset dir="${lib.dir}">
 				<include name="*.jar" />
 			</fileset>
@@ -40,7 +37,6 @@
 			</fileset>
 		</path>
 		<path id="Portal.test.classpath">
-			<path refid="Common.test.classpath" />
 			<fileset dir="${lib.dir}">
 				<include name="*.jar" />
 			</fileset>
