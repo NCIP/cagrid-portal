@@ -31,7 +31,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.8 2005-12-05 03:32:25 langella Exp $
+ * @version $Id: UserWindow.java,v 1.9 2005-12-05 17:49:20 langella Exp $
  */
 public class UserWindow extends GridPortalBaseFrame {
 
@@ -146,7 +146,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		this.proxy = proxy;
 		this.user = u;
 		initialize();
-		this.setFrameIcon(IdPLookAndFeel.getUserMagnifyIcon());
+		this.setFrameIcon(GumsLookAndFeel.getUserMagnifyIcon());
 	}
 
 	/**
@@ -267,7 +267,7 @@ public class UserWindow extends GridPortalBaseFrame {
 
 				}
 			});
-			updateUser.setIcon(IdPLookAndFeel.getUpdateUserIcon());
+			updateUser.setIcon(GumsLookAndFeel.getUpdateUserIcon());
 		}
 		return updateUser;
 	}
@@ -345,7 +345,7 @@ public class UserWindow extends GridPortalBaseFrame {
 			jTabbedPane = new JTabbedPane();
 			jTabbedPane.setBorder(BorderFactory.createTitledBorder(null,
 					"Search Criteria", TitledBorder.DEFAULT_JUSTIFICATION,
-					TitledBorder.DEFAULT_POSITION, null, IdPLookAndFeel
+					TitledBorder.DEFAULT_POSITION, null, GumsLookAndFeel
 							.getPanelLabelColor()));
 			jTabbedPane.addTab(INFO_PANEL, null, getInfoPanel(), null);
 			jTabbedPane.addTab(ACCOUNT_PANEL, null, getAccountPanel(), null);
@@ -762,7 +762,7 @@ public class UserWindow extends GridPortalBaseFrame {
 			jPanel2.setLayout(new GridBagLayout());
 			jPanel2.setBorder(BorderFactory.createTitledBorder(null,
 					"Login Information", TitledBorder.DEFAULT_JUSTIFICATION,
-					TitledBorder.DEFAULT_POSITION, null, IdPLookAndFeel
+					TitledBorder.DEFAULT_POSITION, null, GumsLookAndFeel
 							.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints27);

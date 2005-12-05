@@ -1,8 +1,6 @@
 package gov.nih.nci.cagrid.gums.ifs.portal;
 
-
-
-
+import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -20,43 +18,56 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: IFSMenu.java,v 1.2 2005-12-03 06:12:19 langella Exp $
+ * @version $Id: IFSMenu.java,v 1.3 2005-12-05 17:49:20 langella Exp $
  */
 public class IFSMenu extends GridPortalComponent {
 
 	private javax.swing.JPanel jContentPane = null;
-	
+
 	private JPanel mainPanel = null;
+
 	private JPanel menuPanel = null;
+
 	private JRadioButton createProxy = null;
+
 	private JLabel createProxyLabel = null;
+
 	private ButtonGroup group;
+
 	private JPanel buttonPanel = null;
+
 	private JButton perform = null;
+
 	private JButton close = null;
+
+	private JRadioButton manageProxies = null;
+
+	private JLabel manageProxiesLabel = null;
 
 	public IFSMenu() {
 		super();
 		initialize();
 	}
+
 	/**
 	 * This method initializes this
 	 * 
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(400,200);
+		this.setSize(400, 200);
 		this.setContentPane(getJContentPane());
-		this.setFrameIcon(IFSLookAndFeel.getIFSIcon());
+		this.setFrameIcon(GumsLookAndFeel.getIFSIcon());
 		this.setTitle("Identity Federation Menu");
 	}
+
 	/**
 	 * This method initializes jContentPane
 	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private javax.swing.JPanel getJContentPane() {
-		if(jContentPane == null) {
+		if (jContentPane == null) {
 			group = new ButtonGroup();
 			jContentPane = new javax.swing.JPanel();
 			jContentPane.setLayout(new java.awt.BorderLayout());
@@ -64,11 +75,12 @@ public class IFSMenu extends GridPortalComponent {
 		}
 		return jContentPane;
 	}
+
 	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
 			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
@@ -83,7 +95,7 @@ public class IFSMenu extends GridPortalComponent {
 			gridBagConstraints9.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints15.gridx = 0;
 			gridBagConstraints15.gridy = 1;
-			gridBagConstraints15.insets = new java.awt.Insets(10,10,10,10);
+			gridBagConstraints15.insets = new java.awt.Insets(10, 10, 10, 10);
 			mainPanel.add(getMenuPanel(), gridBagConstraints9);
 			mainPanel.add(getButtonPanel(), gridBagConstraints15);
 		}
@@ -92,32 +104,47 @@ public class IFSMenu extends GridPortalComponent {
 
 	private JPanel getMenuPanel() {
 		if (menuPanel == null) {
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.gridx = 1;
+			gridBagConstraints11.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints11.gridy = 1;
+			manageProxiesLabel = new JLabel();
+			manageProxiesLabel.setText("Manage Proxies");
+			GridBagConstraints gridBagConstraints = new GridBagConstraints();
+			gridBagConstraints.gridx = 0;
+			gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+			gridBagConstraints.gridy = 1;
 			createProxyLabel = new JLabel();
 			menuPanel = new JPanel();
 			menuPanel.setLayout(new GridBagLayout());
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-		
+
 			createProxyLabel.setText("Create Proxy");
 			gridBagConstraints1.gridx = 0;
 			gridBagConstraints1.gridy = 0;
-			gridBagConstraints1.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints1.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints2.gridx = 1;
 			gridBagConstraints2.gridy = 0;
-			gridBagConstraints2.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints2.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints2.anchor = java.awt.GridBagConstraints.WEST;
 			menuPanel.add(getRegister(), gridBagConstraints1);
 			menuPanel.add(createProxyLabel, gridBagConstraints2);
-			menuPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Identity Federation Options",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IFSLookAndFeel.getPanelLabelColor()));	
-			
+			menuPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+					null, "Identity Federation Options",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					GumsLookAndFeel.getPanelLabelColor()));
+			menuPanel.add(getManageProxies(), gridBagConstraints);
+
+			menuPanel.add(manageProxiesLabel, gridBagConstraints11);
 		}
 		return menuPanel;
 	}
 
-	
 	private JRadioButton getRegister() {
 		if (createProxy == null) {
 			createProxy = new JRadioButton();
@@ -126,12 +153,11 @@ public class IFSMenu extends GridPortalComponent {
 		return createProxy;
 	}
 
-	
 	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
@@ -140,51 +166,68 @@ public class IFSMenu extends GridPortalComponent {
 		}
 		return buttonPanel;
 	}
+
 	/**
-	 * This method initializes jButton	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */    
+	 * This method initializes jButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
 	private JButton getPerform() {
 		if (perform == null) {
 			perform = new JButton();
 			perform.setText("Select");
-			perform.setIcon(IFSLookAndFeel.getSelectIcon());
-			perform.addActionListener(new java.awt.event.ActionListener() { 
-				public void actionPerformed(java.awt.event.ActionEvent e) {    
+			perform.setIcon(GumsLookAndFeel.getSelectIcon());
+			perform.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
 					perform();
 				}
 			});
 		}
 		return perform;
 	}
-	
-	
-	private void perform(){
-		if(createProxy.isSelected()){
-			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new CreateProxyComponent(),450,300);
+
+	private void perform() {
+		if (createProxy.isSelected()) {
+			PortalResourceManager.getInstance().getGridPortal()
+					.addGridPortalComponent(new CreateProxyComponent(), 450,
+							300);
+		} else if (manageProxies.isSelected()) {
+			PortalResourceManager.getInstance().getGridPortal()
+					.addGridPortalComponent(new ProxyManagerComponent(), 600,
+							400);
 		}
-		
+		dispose();
 	}
-	
-	
-	
+
 	/**
-	 * This method initializes jButton1	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */    
+	 * This method initializes jButton1
+	 * 
+	 * @return javax.swing.JButton
+	 */
 	private JButton getClose() {
 		if (close == null) {
 			close = new JButton();
 			close.setText("Close");
-			close.setIcon(IFSLookAndFeel.getCloseIcon());
-			close.addActionListener(new java.awt.event.ActionListener() { 
-				public void actionPerformed(java.awt.event.ActionEvent e) {    
+			close.setIcon(GumsLookAndFeel.getCloseIcon());
+			close.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();
 				}
 			});
 		}
 		return close;
 	}
-     }
+
+	/**
+	 * This method initializes manageProxies
+	 * 
+	 * @return javax.swing.JRadioButton
+	 */
+	private JRadioButton getManageProxies() {
+		if (manageProxies == null) {
+			manageProxies = new JRadioButton();
+			group.add(manageProxies);
+		}
+		return manageProxies;
+	}
+}

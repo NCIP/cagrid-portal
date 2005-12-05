@@ -1,4 +1,3 @@
-
 package gov.nih.nci.cagrid.gums.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
@@ -12,8 +11,70 @@ import javax.swing.ImageIcon;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class GumsLookAndFeel extends PortalLookAndFeel{	 
-	 public final static ImageIcon getIdpIcon(){
-	 	return new javax.swing.ImageIcon(GumsLookAndFeel.class.getResource("/LuggageCounter.gif"));
-	 }
+public class GumsLookAndFeel extends PortalLookAndFeel {
+	public final static ImageIcon getIdpIcon() {
+		return new javax.swing.ImageIcon(GumsLookAndFeel.class
+				.getResource("/LuggageCounter.gif"));
+	}
+
+	public final static ImageIcon getIFSIcon() {
+		return new javax.swing.ImageIcon(GumsLookAndFeel.class
+				.getResource("/FlowGraph.gif"));
+	}
+
+	public final static ImageIcon getProxyIcon() {
+		return new javax.swing.ImageIcon(GumsLookAndFeel.class
+				.getResource("/Envelope.gif"));
+	}
+
+	public final static ImageIcon getProxyManagerIcon() {
+		return new javax.swing.ImageIcon(GumsLookAndFeel.class
+				.getResource("/EnvelopeOpen.gif"));
+	}
+	
+	public final static ImageIcon getDeleteProxyIcon() {
+		return new javax.swing.ImageIcon(GumsLookAndFeel.class
+				.getResource("/DeleteEnvelope.gif"));
+	}
+
+
+	public final static ImageIcon getAuthenticateIcon() {
+		return new javax.swing.ImageIcon(GumsLookAndFeel.class
+				.getResource("/Lock.gif"));
+	}
+
+	public final static ImageIcon getSaveIcon() {
+		return new javax.swing.ImageIcon(GumsLookAndFeel.class
+				.getResource("/Save.gif"));
+	}
+
+	public final static ImageIcon getGreenFlagIcon() {
+		return new javax.swing.ImageIcon(GumsLookAndFeel.class
+				.getResource("/GreenFlag.gif"));
+	}
+
+	public final static ImageIcon getUsersIcon() {
+		return new javax.swing.ImageIcon(GumsLookAndFeel.class
+				.getResource("/Users.gif"));
+	}
+
+	public final static ImageIcon getUpdateUserIcon() {
+		return new javax.swing.ImageIcon(GumsLookAndFeel.class
+				.getResource("/Reply.gif"));
+	}
+
+	public final static ImageIcon getUserMagnifyIcon() {
+		return new javax.swing.ImageIcon(GumsLookAndFeel.class
+				.getResource("/UserMagnify.gif"));
+	}
+
+	public final static ImageIcon getApplicationIcon() {
+		return new javax.swing.ImageIcon(GumsLookAndFeel.class
+				.getResource("/Paste.gif"));
+	}
+
+	public final static ImageIcon getLoginIcon() {
+		return new javax.swing.ImageIcon(GumsLookAndFeel.class
+				.getResource("/Lock.gif"));
+	}
 }

@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gums.client.IFSUserClient;
 import gov.nih.nci.cagrid.gums.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.gums.portal.GUMSServiceListComboBox;
+import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
 import gov.nih.nci.cagrid.gums.portal.GumsPortalConf;
 import gov.nih.nci.cagrid.gums.portal.IdPConf;
 import gov.nih.nci.cagrid.gums.portal.ProxyManager;
@@ -13,7 +14,6 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.io.FileOutputStream;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +27,6 @@ import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 
 import org.globus.gsi.GlobusCredential;
-import org.globus.util.ConfigUtil;
 import org.opensaml.SAMLAssertion;
 import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.GridPortalComponent;
@@ -98,7 +97,7 @@ public class CreateProxyComponent extends GridPortalComponent {
 	private void initialize() {
 		this.setSize(400, 400);
 		this.setContentPane(getJContentPane());
-		this.setFrameIcon(IFSLookAndFeel.getProxyIcon());
+		this.setFrameIcon(GumsLookAndFeel.getProxyIcon());
 		this.setTitle("Create Proxy");
 	}
 
@@ -213,7 +212,7 @@ public class CreateProxyComponent extends GridPortalComponent {
 			idpPanel.setLayout(new GridBagLayout());
 			idpPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Create Proxy",
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IFSLookAndFeel.getPanelLabelColor()));
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GumsLookAndFeel.getPanelLabelColor()));
 			idpPanel.add(getProgressPanel(), gridBagConstraints15);
 			idpPanel.add(idpLabel, gridBagConstraints1);
 			idpPanel.add(getIdentityProvider(), gridBagConstraints2);
@@ -273,7 +272,7 @@ public class CreateProxyComponent extends GridPortalComponent {
 			cardPanel.setLayout(new CardLayout());
 			cardPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "IdP Authentication Information",
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IFSLookAndFeel.getPanelLabelColor()));	
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GumsLookAndFeel.getPanelLabelColor()));	
 		}
 		return cardPanel;
 	}
@@ -313,7 +312,7 @@ public class CreateProxyComponent extends GridPortalComponent {
                     }
 				}
 			});
-			authenticateButton.setIcon(IFSLookAndFeel.getAuthenticateIcon());
+			authenticateButton.setIcon(GumsLookAndFeel.getAuthenticateIcon());
 		}
 		return authenticateButton;
 	}
@@ -346,10 +345,6 @@ public class CreateProxyComponent extends GridPortalComponent {
 			lifetime.setMinutes(Integer.valueOf((String)getMinutes().getSelectedItem()).intValue());
 			lifetime.setSeconds(Integer.valueOf((String)getSeconds().getSelectedItem()).intValue());
 			GlobusCredential cred = c2.createProxy(saml,lifetime);
-			FileOutputStream fos = new FileOutputStream(ConfigUtil
-					.discoverProxyLocation());
-			cred.save(fos);
-			fos.close();
 			 this.updateProgress(false,"Proxy Created!!!");	 
 			 ProxyManager.getInstance().addProxy(cred);
 			 PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new ProxyManagerComponent(cred),600,400);		 
@@ -367,7 +362,7 @@ public class CreateProxyComponent extends GridPortalComponent {
 		if (close == null) {
 			close = new JButton();
 			close.setText("Close");
-			close.setIcon(IFSLookAndFeel.getCloseIcon());
+			close.setIcon(GumsLookAndFeel.getCloseIcon());
 			close.addActionListener(new java.awt.event.ActionListener() { 
 				public void actionPerformed(java.awt.event.ActionEvent e) {    
 					dispose();
@@ -512,7 +507,7 @@ public class CreateProxyComponent extends GridPortalComponent {
 	private JProgressBar getProgress() {
 		if (progress == null) {
 			progress = new JProgressBar();
-			 progress.setForeground(IFSLookAndFeel.getPanelLabelColor());
+			 progress.setForeground(GumsLookAndFeel.getPanelLabelColor());
 	         progress.setString("");
 	         progress.setStringPainted(true);
 		}

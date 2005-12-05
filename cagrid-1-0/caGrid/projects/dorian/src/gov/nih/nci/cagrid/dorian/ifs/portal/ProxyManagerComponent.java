@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.gums.ifs.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gums.common.ProxyUtil;
+import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
 import gov.nih.nci.cagrid.gums.portal.ProxyCaddy;
 import gov.nih.nci.cagrid.gums.portal.ProxyManager;
 
@@ -80,6 +81,8 @@ public class ProxyManagerComponent extends GridPortalComponent {
 
 	private static final String DEFAULT_PROXY = "Globus Default Proxy";
 
+	private JButton deleteProxy = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -98,8 +101,6 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		getProxy().setSelectedItem(new ProxyCaddy(cred));
 	}
 
-	
-
 	/**
 	 * This method initializes this
 	 * 
@@ -108,7 +109,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 	private void initialize() {
 		this.setSize(500, 400);
 		this.setContentPane(getJContentPane());
-		this.setFrameIcon(IFSLookAndFeel.getProxyManagerIcon());
+		this.setFrameIcon(GumsLookAndFeel.getProxyManagerIcon());
 		this.setTitle("Proxy Manager");
 	}
 
@@ -294,7 +295,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 									"Proxy Information",
 									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, IFSLookAndFeel.getPanelLabelColor()));
+									null, GumsLookAndFeel.getPanelLabelColor()));
 			proxyInformation.add(getIdentity(), gridBagConstraints7);
 			proxyInformation.add(getIssuer(), gridBagConstraints5);
 			proxyInformation.add(getTimeLeft(), gridBagConstraints12);
@@ -328,6 +329,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 			buttonPanel = new JPanel();
 			buttonPanel.add(getViewCertificate(), null);
 			buttonPanel.add(getSaveProxy(), null);
+			buttonPanel.add(getDeleteProxy(), null);
 			buttonPanel.add(getSetDefaultProxy(), null);
 			buttonPanel.add(getJButton(), null);
 		}
@@ -343,7 +345,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		if (jButton == null) {
 			jButton = new JButton();
 			jButton.setText("Close");
-			jButton.setIcon(IFSLookAndFeel.getCloseIcon());
+			jButton.setIcon(GumsLookAndFeel.getCloseIcon());
 			jButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();
@@ -428,7 +430,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 									"Certificate Chain",
 									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, IFSLookAndFeel.getPanelLabelColor()));
+									null, GumsLookAndFeel.getPanelLabelColor()));
 			certificateChain.add(getJScrollPane(), gridBagConstraints13);
 		}
 		return certificateChain;
@@ -477,7 +479,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 					null, "Select Proxy",
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					IFSLookAndFeel.getPanelLabelColor()));
+					GumsLookAndFeel.getPanelLabelColor()));
 			proxyPanel.setLayout(new GridBagLayout());
 			proxyPanel.add(getProxy(), gridBagConstraints15);
 		}
@@ -500,17 +502,19 @@ public class ProxyManagerComponent extends GridPortalComponent {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					ProxyCaddy caddy = (ProxyCaddy) getProxy()
 							.getSelectedItem();
-					if (caddy.getIdentity() == DEFAULT_PROXY) {
-						try {
-							caddy.setProxy(ProxyUtil.getDefaultProxy());
-							clearProxy();
-						} catch (Exception ex) {
-							PortalUtils
-									.showMessage("No Default Proxy Found!!!");
-							return;
+					if (caddy != null) {
+						if (caddy.getIdentity() == DEFAULT_PROXY) {
+							try {
+								caddy.setProxy(ProxyUtil.getDefaultProxy());
+								clearProxy();
+							} catch (Exception ex) {
+								PortalUtils
+										.showMessage("No Default Proxy Found!!!");
+								return;
+							}
 						}
+						showProxy(caddy.getProxy());
 					}
-					showProxy(caddy.getProxy());
 				}
 			});
 		}
@@ -526,7 +530,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		if (viewCertificate == null) {
 			viewCertificate = new JButton();
 			viewCertificate.setText("View Certificate");
-			viewCertificate.setIcon(IFSLookAndFeel.getProxyManagerIcon());
+			viewCertificate.setIcon(GumsLookAndFeel.getProxyManagerIcon());
 			viewCertificate
 					.addActionListener(new java.awt.event.ActionListener() {
 
@@ -557,7 +561,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 
 				}
 			});
-			saveProxy.setIcon(IFSLookAndFeel.getSaveIcon());
+			saveProxy.setIcon(GumsLookAndFeel.getSaveIcon());
 		}
 		return saveProxy;
 	}
@@ -600,8 +604,37 @@ public class ProxyManagerComponent extends GridPortalComponent {
 							}
 						}
 					});
-			setDefaultProxy.setIcon(IFSLookAndFeel.getGreenFlagIcon());
+			setDefaultProxy.setIcon(GumsLookAndFeel.getGreenFlagIcon());
 		}
 		return setDefaultProxy;
+	}
+
+	/**
+	 * This method initializes deleteProxy
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getDeleteProxy() {
+		if (deleteProxy == null) {
+			deleteProxy = new JButton();
+			deleteProxy.setText("Delete Proxy");
+			deleteProxy.setIcon(GumsLookAndFeel.getDeleteProxyIcon());
+			deleteProxy.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					ProxyCaddy caddy = (ProxyCaddy) getProxy()
+							.getSelectedItem();
+					clearProxy();
+					getProxy().removeItemAt(getProxy().getSelectedIndex());
+					if (caddy.getIdentity() == DEFAULT_PROXY) {
+						ProxyUtil.destroyDefaultProxy();
+					}else{
+						ProxyManager.getInstance()
+						.deleteProxy(caddy.getProxy());
+						
+					}
+				}
+			});
+		}
+		return deleteProxy;
 	}
 }

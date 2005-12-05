@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.gums.common;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
@@ -23,6 +24,11 @@ public class ProxyUtil {
 
 	public static GlobusCredential getDefaultProxy() throws Exception {
 		return loadProxy(ConfigUtil.discoverProxyLocation());
+	}
+	
+	public static void destroyDefaultProxy(){
+		File f = new File(ConfigUtil.discoverProxyLocation());
+		f.delete();
 	}
 
 	public static GlobusCredential loadProxy(String location) throws Exception {

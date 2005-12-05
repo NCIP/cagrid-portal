@@ -35,7 +35,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.14 2005-12-05 17:02:59 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.15 2005-12-05 17:49:20 langella Exp $
  */
 public class UserManagerWindow extends GridPortalBaseFrame {
 
@@ -151,7 +151,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 	public UserManagerWindow() {
 		super();
 		initialize();
-		this.setFrameIcon(IdPLookAndFeel.getUsersIcon());
+		this.setFrameIcon(GumsLookAndFeel.getUsersIcon());
 	}
 
 	/**
@@ -312,7 +312,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		if (manageUser == null) {
 			manageUser = new JButton();
 			manageUser.setText("Manage User");
-			manageUser.setIcon(IdPLookAndFeel.getUserMagnifyIcon());
+			manageUser.setIcon(GumsLookAndFeel.getUserMagnifyIcon());
 			manageUser.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					showUser();
@@ -393,7 +393,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			jTabbedPane = new JTabbedPane();
 			jTabbedPane.setBorder(BorderFactory.createTitledBorder(null,
 					"Search Criteria", TitledBorder.DEFAULT_JUSTIFICATION,
-					TitledBorder.DEFAULT_POSITION, null, IdPLookAndFeel
+					TitledBorder.DEFAULT_POSITION, null, GumsLookAndFeel
 							.getPanelLabelColor()));
 			jTabbedPane.addTab(STATUS_PANEL, null, getStatus(), null);
 			jTabbedPane.addTab(INFO_PANEL, null, getJPanel1(), null);
@@ -808,7 +808,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			jPanel2.setLayout(new GridBagLayout());
 			jPanel2.setBorder(BorderFactory.createTitledBorder(null,
 					"Login Information", TitledBorder.DEFAULT_JUSTIFICATION,
-					TitledBorder.DEFAULT_POSITION, null, IdPLookAndFeel
+					TitledBorder.DEFAULT_POSITION, null, GumsLookAndFeel
 							.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints28);
@@ -840,7 +840,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		if (query == null) {
 			query = new JButton();
 			query.setText("Find Users");
-			query.setIcon(IdPLookAndFeel.getQueryIcon());
+			query.setIcon(GumsLookAndFeel.getQueryIcon());
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
