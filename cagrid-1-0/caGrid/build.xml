@@ -36,6 +36,10 @@
 	<fileset dir="${projects.dir}/core/build/jars" id="artifact.core.test.jars">
 		<include name="*test*.jar" />
 	</fileset>
+	<fileset dir="${projects.dir}/metadata/build/jars" id="artifact.metadata.main.jars">
+		<include name="*.jar" />
+		<exclude name="*test*.jar" />
+	</fileset>
 
 
 
@@ -58,6 +62,10 @@
 
 
 	<target name="build-introduce" depends="build-core, build-metadata" description="Builds Introduce">
+		<!-- copy dependant artifacts into current target's lib dir -->
+		<copy todir="${projects.dir}/introduce/lib">
+			<fileset refid="artifact.core.metadata.jars" />
+		</copy>
 		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
