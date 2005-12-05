@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.gums.ifs.portal;
+package gov.nih.nci.cagrid.gums.portal;
 
 import java.util.ArrayList;
 import java.util.HashMap;

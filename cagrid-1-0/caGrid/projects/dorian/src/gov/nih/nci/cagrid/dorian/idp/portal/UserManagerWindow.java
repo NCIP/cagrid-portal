@@ -7,7 +7,9 @@ import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUserFilter;
 import gov.nih.nci.cagrid.gums.portal.GUMSServiceListComboBox;
 import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
-import gov.nih.nci.cagrid.gums.portal.GumsPortalConf;
+import gov.nih.nci.cagrid.gums.portal.ProxyComboBox;
+import gov.nih.nci.cagrid.security.commstyle.CommunicationStyle;
+import gov.nih.nci.cagrid.security.commstyle.SecureConversationWithEncryption;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -24,6 +26,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
@@ -32,7 +35,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.12 2005-12-04 05:34:01 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.13 2005-12-05 03:32:25 langella Exp $
  */
 public class UserManagerWindow extends GridPortalBaseFrame {
 
@@ -137,6 +140,10 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 	 private boolean isQuerying = false;
 
 	    private Object mutex = new Object();
+
+		private JLabel proxyLabel = null;
+
+		private JComboBox proxy = null;
 
 	/**
 	 * This is the default constructor
@@ -326,10 +333,11 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 							row, 0);
 					String service = ((GUMSServiceListComboBox) getService())
 							.getSelectedService();
+					GlobusCredential proxy = ((ProxyComboBox)getProxy()).getSelectedProxy();
 					PortalResourceManager.getInstance()
 							.getGridPortal()
 							.addGridPortalComponent(
-									new UserWindow(service, user));
+									new UserWindow(service, proxy,user));
 				}
 			};
 			try {
@@ -765,6 +773,20 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 	 */
 	private JPanel getJPanel2() {
 		if (jPanel2 == null) {
+			GridBagConstraints gridBagConstraints30 = new GridBagConstraints();
+			gridBagConstraints30.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints30.gridx = 1;
+			gridBagConstraints30.gridy = 1;
+			gridBagConstraints30.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints30.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints30.weightx = 1.0;
+			GridBagConstraints gridBagConstraints29 = new GridBagConstraints();
+			gridBagConstraints29.gridx = 0;
+			gridBagConstraints29.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints29.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints29.gridy = 1;
+			proxyLabel = new JLabel();
+			proxyLabel.setText("Proxy");
 			GridBagConstraints gridBagConstraints28 = new GridBagConstraints();
 			gridBagConstraints28.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints28.gridx = 1;
@@ -788,6 +810,8 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 							.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints28);
+			jPanel2.add(proxyLabel, gridBagConstraints29);
+			jPanel2.add(getProxy(), gridBagConstraints30);
 		}
 		return jPanel2;
 	}
@@ -849,6 +873,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 
 
 		this.getUsersTable().clearTable();
+		GlobusCredential proxy = ((ProxyComboBox)getProxy()).getSelectedProxy();
 		IdPUserFilter f = new IdPUserFilter();
 		JPanel panel = (JPanel) this.getJTabbedPane().getSelectedComponent();
 		if (panel.getName().equals(ROLE_PANEL)) {
@@ -873,9 +898,8 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		try {
 			String service = ((GUMSServiceListComboBox) getService())
 					.getSelectedService();
-	
-				IdPAdministrationClient client = new IdPAdministrationClient(
-						service);
+	            CommunicationStyle style = new SecureConversationWithEncryption(proxy);
+				IdPAdministrationClient client = new IdPAdministrationClient(service,style);
 				IdPUser[] users = client.findUsers(f);
 				if (users != null) {
 					for (int i = 0; i < users.length; i++) {
@@ -885,9 +909,6 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 				PortalUtils.showMessage("Query Completed.");
 		}catch (PermissionDeniedFault pdf) {
 			PortalUtils.showErrorMessage(pdf);
-			GumsPortalConf conf = (GumsPortalConf) PortalResourceManager
-					.getInstance().getResource(GumsPortalConf.RESOURCE);
-			conf.getIdPLogin().resetSession();
 		} catch (Exception e) {
 			e.printStackTrace();
 			PortalUtils.showErrorMessage(e);
@@ -971,6 +992,18 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			service = new GUMSServiceListComboBox();
 		}
 		return service;
+	}
+
+	/**
+	 * This method initializes proxy	
+	 * 	
+	 * @return javax.swing.JComboBox	
+	 */    
+	private JComboBox getProxy() {
+		if (proxy == null) {
+			proxy = new ProxyComboBox();
+		}
+		return proxy;
 	}
 
 }

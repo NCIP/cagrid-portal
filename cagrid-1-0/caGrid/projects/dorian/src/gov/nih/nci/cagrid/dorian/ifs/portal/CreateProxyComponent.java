@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.gums.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.gums.portal.GUMSServiceListComboBox;
 import gov.nih.nci.cagrid.gums.portal.GumsPortalConf;
 import gov.nih.nci.cagrid.gums.portal.IdPConf;
+import gov.nih.nci.cagrid.gums.portal.ProxyManager;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;

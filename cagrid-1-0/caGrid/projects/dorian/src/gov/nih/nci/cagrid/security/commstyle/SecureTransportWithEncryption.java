@@ -14,14 +14,14 @@ import org.ietf.jgss.GSSCredential;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class TransportWithEncryption implements CommunicationStyle{
+public class SecureTransportWithEncryption implements CommunicationStyle{
 	private GlobusCredential credential;
 	
-	public TransportWithEncryption(){	
+	public SecureTransportWithEncryption(){	
 	
 	}
 	
-	public TransportWithEncryption(GlobusCredential credential){	
+	public SecureTransportWithEncryption(GlobusCredential credential){	
 		this.credential = credential;
 	}
 	

@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.gums.portal;
 
-import gov.nih.nci.cagrid.gums.idp.portal.Login;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,8 +21,6 @@ public class GumsPortalConf implements AbstractMobiusConfiguration {
 
 	public List gumsServices;
 
-	private Login idpLogin;
-
 	private List idps;
 
 	public GumsPortalConf() {
@@ -42,13 +38,6 @@ public class GumsPortalConf implements AbstractMobiusConfiguration {
 	private static String IDPS_ELEMENT = "idps";
 
 	private static String IDP_ELEMENT = "idp";
-
-	public Login getIdPLogin() {
-		if (idpLogin == null) {
-			idpLogin = new Login();
-		}
-		return idpLogin;
-	}
 
 	public void parse(MobiusResourceManager resourceManager, Element config)
 			throws MobiusException {

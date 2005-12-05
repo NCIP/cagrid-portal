@@ -5,7 +5,7 @@ import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gums.client.IdPAdministrationClient;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
 import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
-import gov.nih.nci.cagrid.gums.portal.GumsPortalConf;
+import gov.nih.nci.cagrid.security.commstyle.SecureConversationWithEncryption;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -22,6 +22,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
@@ -30,7 +31,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.7 2005-12-04 05:34:01 langella Exp $
+ * @version $Id: UserWindow.java,v 1.8 2005-12-05 03:32:25 langella Exp $
  */
 public class UserWindow extends GridPortalBaseFrame {
 
@@ -133,13 +134,16 @@ public class UserWindow extends GridPortalBaseFrame {
 	private JPasswordField password = null;
 
 	private JPasswordField verifyPassword = null;
+	
+	private GlobusCredential proxy;
 
 	/**
 	 * This is the default constructor
 	 */
-	public UserWindow(String serviceId, IdPUser u) {
+	public UserWindow(String serviceId, GlobusCredential proxy, IdPUser u) {
 		super();
 		this.serviceId = serviceId;
+		this.proxy = proxy;
 		this.user = u;
 		initialize();
 		this.setFrameIcon(IdPLookAndFeel.getUserMagnifyIcon());
@@ -315,9 +319,9 @@ public class UserWindow extends GridPortalBaseFrame {
 
 		try {
 			String service = getService().getText();
-
+ 
 			IdPAdministrationClient client = new IdPAdministrationClient(
-					service);
+					service, new SecureConversationWithEncryption(proxy));
 			client.updateUser(user);
 
 			PortalUtils.showMessage("User " + user.getUserId()
@@ -325,9 +329,6 @@ public class UserWindow extends GridPortalBaseFrame {
 
 		} catch (PermissionDeniedFault pdf) {
 			PortalUtils.showErrorMessage(pdf);
-			GumsPortalConf conf = (GumsPortalConf) PortalResourceManager
-					.getInstance().getResource(GumsPortalConf.RESOURCE);
-			conf.getIdPLogin().resetSession();
 		} catch (Exception e) {
 			e.printStackTrace();
 			PortalUtils.showErrorMessage(e);

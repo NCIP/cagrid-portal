@@ -2,6 +2,8 @@ package gov.nih.nci.cagrid.gums.ifs.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gums.common.ProxyUtil;
+import gov.nih.nci.cagrid.gums.portal.ProxyCaddy;
+import gov.nih.nci.cagrid.gums.portal.ProxyManager;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -96,57 +98,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		getProxy().setSelectedItem(new ProxyCaddy(cred));
 	}
 
-	public class ProxyCaddy {
-		private GlobusCredential proxy;
-
-		private String identity;
-
-		public ProxyCaddy(GlobusCredential cred) {
-			this.identity = cred.getIdentity();
-			this.proxy = cred;
-		}
-
-		public ProxyCaddy(String identity, GlobusCredential cred) {
-			this.identity = identity;
-			this.proxy = cred;
-		}
-
-		public void setIdentity(String identity) {
-			this.identity = identity;
-		}
-
-		public void setProxy(GlobusCredential proxy) {
-			this.proxy = proxy;
-		}
-
-		public String getIdentity() {
-			return identity;
-		}
-
-		public GlobusCredential getProxy() {
-			return proxy;
-		}
-
-		public String toString() {
-			return identity;
-		}
-
-		public boolean equals(Object obj) {
-			if (obj == null) {
-				return false;
-			}
-			ProxyCaddy caddy = (ProxyCaddy) obj;
-			if (caddy.getProxy() == null) {
-				return false;
-			}
-			if (this.identity.equals(caddy.getIdentity())) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-
-	}
+	
 
 	/**
 	 * This method initializes this
