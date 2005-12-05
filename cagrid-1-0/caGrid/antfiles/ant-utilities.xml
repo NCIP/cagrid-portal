@@ -3,7 +3,7 @@
 <!-- ======================================================================= -->
 <project name="caGrid_utilities" basedir="." default="usage">
 	<property environment="env" />
-	<property name="globus.location" location="${env.GLOBUS_LOCATION}" />
+	<property name="ext.globus.dir" location="${env.GLOBUS_LOCATION}" />
 	<property name="schema.src" location="${globus.location}/share/schema" />
 	<property name="build.stubs" location="${globus.location}/share/globus_wsrf_tools/build-stubs.xml" />
 

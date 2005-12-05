@@ -6,6 +6,9 @@
 	<!-- put stuff in here needed for building introduce-->
 	<target name="prepareIntroduce">
 		<path id="Introduce.classpath">
+			<fileset dir="${ext.globus.dir}">
+				<include name="*.jar" />
+			</fileset>
 			<fileset dir="${lib.dir}">
 				<include name="*.jar" />
 			</fileset>
@@ -14,6 +17,9 @@
 			</fileset>
 		</path>
 		<path id="Introduce.test.classpath">
+			<fileset dir="${ext.globus.dir}">
+				<include name="*.jar" />
+			</fileset>
 			<fileset dir="${lib.dir}">
 				<include name="*.jar" />
 			</fileset>
@@ -29,6 +35,9 @@
 		</path>
 		
 		<path id="Portal.classpath">
+			<fileset dir="${ext.globus.dir}">
+				<include name="*.jar" />
+			</fileset>
 			<fileset dir="${lib.dir}">
 				<include name="*.jar" />
 			</fileset>
@@ -37,6 +46,9 @@
 			</fileset>
 		</path>
 		<path id="Portal.test.classpath">
+			<fileset dir="${ext.globus.dir}">
+				<include name="*.jar" />
+			</fileset>
 			<fileset dir="${lib.dir}">
 				<include name="*.jar" />
 			</fileset>
