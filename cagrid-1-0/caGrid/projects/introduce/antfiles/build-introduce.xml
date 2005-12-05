@@ -6,7 +6,7 @@
 	<!-- put stuff in here needed for building introduce-->
 	<target name="prepareIntroduce">
 		<path id="Introduce.classpath">
-			<fileset dir="${ext.globus.dir}">
+			<fileset dir="${ext.globus.dir}/lib">
 				<include name="*.jar" />
 			</fileset>
 			<fileset dir="${lib.dir}">
@@ -17,7 +17,7 @@
 			</fileset>
 		</path>
 		<path id="Introduce.test.classpath">
-			<fileset dir="${ext.globus.dir}">
+			<fileset dir="${ext.globus.dir}/lib">
 				<include name="*.jar" />
 			</fileset>
 			<fileset dir="${lib.dir}">
@@ -33,35 +33,5 @@
 				<include name="*.jar" />
 			</fileset>
 		</path>
-		
-		<path id="Portal.classpath">
-			<fileset dir="${ext.globus.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${ant.library.dir}">
-				<include name="*.jar" />
-			</fileset>
-		</path>
-		<path id="Portal.test.classpath">
-			<fileset dir="${ext.globus.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${build.lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${test.lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${ant.library.dir}">
-				<include name="*.jar" />
-			</fileset>
-		</path>
-		
 	</target>
 </project>
