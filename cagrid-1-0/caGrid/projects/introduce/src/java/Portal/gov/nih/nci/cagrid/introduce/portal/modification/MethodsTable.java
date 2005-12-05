@@ -19,7 +19,7 @@ import org.projectmobius.portal.PortalTable;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: MethodsTable.java,v 1.2 2005-11-15 14:52:01 hastings Exp $
+ * @version $Id: MethodsTable.java,v 1.3 2005-12-05 18:01:01 hastings Exp $
  */
 public class MethodsTable extends PortalTable {
 
@@ -45,7 +45,7 @@ public class MethodsTable extends PortalTable {
 	
 
 	public boolean isCellEditable(int row, int column) {
-		return false;
+		return true;
 	}
 	
 	

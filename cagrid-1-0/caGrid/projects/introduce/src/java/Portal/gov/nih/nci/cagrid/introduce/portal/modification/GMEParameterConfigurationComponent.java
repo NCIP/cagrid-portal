@@ -370,7 +370,7 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
                     }
 
                     File namespace2Mappings = new File(schemaDir.getAbsolutePath() + File.separator + ".."
-                        + File.separator + ".." + File.separator + ".." + File.separator + "namespace2package.mappings");
+                        + File.separator + ".." + File.separator + "namespace2package.mappings");
 
                     List mappings = new ArrayList();
                     if (namespace2Mappings.exists()) {

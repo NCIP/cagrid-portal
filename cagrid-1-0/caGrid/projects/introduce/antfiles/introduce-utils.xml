@@ -55,7 +55,7 @@
 			<replacefilter token="PACKAGE-NAME" value="${introduce.skeleton.package}" />
 			<replacefilter token="PACKAGE-DIR" value="${introduce.skeleton.package.dir}" />
 		</replace>
-		<replace file="${introduce.skeleton.destination.dir}/server-config.wsdd">
+		<replace file="${introduce.skeleton.destination.dir}/server-deploy.wsdd">
 			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
 			<replacefilter token="PACKAGE-NAME" value="${introduce.skeleton.package}" />
 			<replacefilter token="PACKAGE-DIR" value="${introduce.skeleton.package.dir}" />
@@ -261,6 +261,9 @@
 	                    <fileset dir="${ext.globus.dir}/lib">
 	                        <include name="*.jar" />
 	                    </fileset>
+	                	<fileset dir="${ext.ant.home}/lib">
+	                		<include name="*.jar" />
+	                	</fileset>
 	                	<fileset dir="${ant.library.dir}">
 	                		<include name="ant.jar" />
 	                		<include name="ant-launcher.jar" />

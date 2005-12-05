@@ -449,6 +449,9 @@ src.dir:        Directory where source files are located.
 			<arg value="-d" />
 			<arg value="${basedir}" />
 			<classpath>
+				<fileset dir="${globus.location}/lib">
+					<include name="*.jar" />
+				</fileset>
 				<fileset dir="${ant.library.dir}">
 					<include name="*.jar" />
 				</fileset>

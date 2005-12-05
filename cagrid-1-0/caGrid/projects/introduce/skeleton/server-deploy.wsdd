@@ -4,7 +4,7 @@
     xmlns:java="http://xml.apache.org/axis/wsdd/providers/java" 
     xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
-    <service name="SERVICE-INSTANCE-PATH" provider="Handler" use="literal" style="document">
+    <service name="SERVICE-INSTANCE-NAME" provider="Handler" use="literal" style="document">
         <parameter name="className" value="PACKAGE-NAME.service.globus.SERVICE-TYPE-NAMEProviderImpl"/>
         <wsdlFile>share/schema/SERVICE-INSTANCE-PATH/SERVICE-TYPE-NAME_service.wsdl</wsdlFile>
         <parameter name="allowedMethods" value="*"/>

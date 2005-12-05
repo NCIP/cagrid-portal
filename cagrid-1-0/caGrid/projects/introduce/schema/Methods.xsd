@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2005 rel. 3 U (http://www.altova.com) by Shannon Hastings  -->
-<xs:schema xmlns="http://gov.nih.nci.cagrid.introduce/1/Methods" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://gov.nih.nci.cagrid.introduce/1/Methods" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns="gme://gov.nih.nci.cagrid.introduce/1/Methods" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="gme://gov.nih.nci.cagrid.introduce/1/Methods" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:element name="methods" type="methodsType">
 		<xs:annotation>
 			<xs:documentation>List of methods for this interface.</xs:documentation>

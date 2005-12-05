@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.introduce.CommonTools;
 import gov.nih.nci.cagrid.introduce.SyncTools;
 import gov.nih.nci.cagrid.introduce.portal.AnalyticalLookAndFeel;
 
@@ -32,11 +33,13 @@ import org.jdom.output.XMLOutputter;
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
 
+import antlr.CommonToken;
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.4 2005-11-29 17:22:32 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.5 2005-12-05 18:01:01 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -395,8 +398,9 @@ public class ModificationViewer extends GridPortalBaseFrame {
 							// call the sync tools
 							SyncTools sync = new SyncTools(methodsDirectory);
 							sync.sync();
-							runAnt();
-
+							String cmd = CommonTools.getAntCommand("clean all",methodsDirectory.getAbsolutePath());
+							Process p = CommonTools.createAndOutputProcess(cmd);
+							p.waitFor();
 						}
 					} catch (Exception e1) {
 						e1.printStackTrace();
@@ -405,36 +409,6 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			});
 		}
 		return saveButton;
-	}
-
-	private void runAnt() throws Exception {
-		File f = new File(getTextFieldValue("Destination Dir"));
-		String path = f.getAbsolutePath();
-		String os = System.getProperty("os.name");
-		if ((os.indexOf("Windows") >= 0) || (os.indexOf("windows") >= 0)) {
-			String cmd = "rundll32 SHELL32.DLL,ShellExec_RunDLL cmd /K cd "
-					+ path + "&ant resync&ant all";
-			System.out.println(cmd);
-			Process p = Runtime.getRuntime().exec(cmd);
-			p.waitFor();
-		} else if ((os.indexOf("Linux") >= 0) || (os.indexOf("linux") >= 0)) {
-			String[] cmd = new String[6];
-			cmd[0] = "xterm";
-			cmd[1] = "-hold";
-			cmd[2] = "-e";
-			cmd[3] = "/bin/sh";
-			cmd[4] = "-c";
-			cmd[5] = "cd " + path + ";ant clean all";
-			Process p = Runtime.getRuntime().exec(cmd);
-			p.waitFor();
-		} else {
-			throw new Exception(
-					"Cannot create grid service, your operating system, " + os
-							+ " is not supported.");
-		}
-
-		dispose();
-
 	}
 
 	/**
