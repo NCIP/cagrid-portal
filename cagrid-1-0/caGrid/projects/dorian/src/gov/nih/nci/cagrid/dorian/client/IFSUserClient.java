@@ -75,9 +75,10 @@ public class IFSUserClient extends GUMSBaseClient implements IFSUserAccess {
 			throw f;
 		} catch (PermissionDeniedFault f) {
 			throw f;
-		} catch (Exception e) {
+		}catch (Exception e) {
+			FaultUtil.printFault(e);
 			GUMSFault fault = new GUMSFault();
-			fault.setFaultString(e.getMessage());
+			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (GUMSFault) helper.getFault();

@@ -1,8 +1,5 @@
 package gov.nih.nci.cagrid.gums.service;
 
-import java.security.PublicKey;
-import java.security.cert.X509Certificate;
-
 import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
 import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
@@ -31,6 +28,9 @@ import gov.nih.nci.cagrid.gums.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.gums.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.gums.ifs.bean.UserPolicyFault;
+
+import java.security.PublicKey;
+import java.security.cert.X509Certificate;
 
 import org.opensaml.SAMLAssertion;
 import org.projectmobius.common.MobiusConfigurator;

@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gums.common.FaultHelper;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.common.GUMSFault;
+import gov.nih.nci.cagrid.gums.common.IOUtils;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUserFilter;
 import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
@@ -48,10 +49,10 @@ public class IdPAdministrationClient extends GUMSBaseClient implements
 			throw gie;
 		} catch (PermissionDeniedFault f) {
 			throw f;
-		} catch (Exception e) {
+		}catch (Exception e) {
 			FaultUtil.printFault(e);
 			GUMSFault fault = new GUMSFault();
-			fault.setFaultString(e.getMessage());
+			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (GUMSFault) helper.getFault();
@@ -78,9 +79,10 @@ public class IdPAdministrationClient extends GUMSBaseClient implements
 			throw gie;
 		} catch (PermissionDeniedFault f) {
 			throw f;
-		} catch (Exception e) {
+		}catch (Exception e) {
+			FaultUtil.printFault(e);
 			GUMSFault fault = new GUMSFault();
-			fault.setFaultString(e.getMessage());
+			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (GUMSFault) helper.getFault();
@@ -112,9 +114,10 @@ public class IdPAdministrationClient extends GUMSBaseClient implements
 			throw f;
 		} catch (InvalidUserPropertyFault f) {
 			throw f;
-		} catch (Exception e) {
+		}catch (Exception e) {
+			FaultUtil.printFault(e);
 			GUMSFault fault = new GUMSFault();
-			fault.setFaultString(e.getMessage());
+			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (GUMSFault) helper.getFault();

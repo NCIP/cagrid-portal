@@ -78,9 +78,6 @@ public class IOUtils {
 			mess = ((AxisFault) e).getFaultString();
 			// Handle Special Messages
 			AxisFault f = (AxisFault) e;
-			if (f.getFaultString().indexOf("Connection Refused:") == -1) {
-				mess = "Could not connect to the specified service, the service may be down or the service you specified may be incorrect.";
-			}
 
 		}
 		return mess;
