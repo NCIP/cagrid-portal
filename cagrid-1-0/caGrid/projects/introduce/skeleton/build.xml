@@ -68,7 +68,6 @@ src.dir:        Directory where source files are located.
 
 	<!-- Define the environment variable -->
 	<property environment="env" />
-	<property name="ext.ant.home" value="${env.ANT_HOME}" />
 
 	<!-- 
 	Properties in these files will override the properties defined in this file.
@@ -450,7 +449,7 @@ src.dir:        Directory where source files are located.
 			<arg value="-d" />
 			<arg value="${basedir}" />
 			<classpath>
-				<fileset dir="${ext.ant.home}/lib">
+				<fileset dir="${ant.library.dir}">
 					<include name="*.jar" />
 				</fileset>
 				<fileset dir="${basedir}/lib">

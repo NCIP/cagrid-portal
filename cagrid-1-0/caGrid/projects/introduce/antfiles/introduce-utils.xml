@@ -125,14 +125,14 @@
 			<replacefilter token="PACKAGE-NAME" value="${introduce.skeleton.package}" />
 			<replacefilter token="NAMESPACE-DOMAIN" value="${introduce.skeleton.namespace.domain}" />
 		</replace>
-		<replace file="${introduce.skeleton.destination.dir}/src/${introduce.skeleton.package.dir}/service/globus/default-security-config.xml">
+		<!--<replace file="${introduce.skeleton.destination.dir}/src/${introduce.skeleton.package.dir}/service/globus/default-security-config.xml">
 			<replacefilter token="NAMESPACE-DOMAIN" value="${introduce.skeleton.namespace.domain}" />
 			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
 		</replace>
 		<replace file="${introduce.skeleton.destination.dir}/src/${introduce.skeleton.package.dir}/service/globus/custom-security-config.xml">
 			<replacefilter token="NAMESPACE-DOMAIN" value="${introduce.skeleton.namespace.domain}" />
 			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
-		</replace>
+		</replace>-->
 
 		<!-- move and rename the client files -->
 		<move tofile="${introduce.skeleton.destination.dir}/src/client/${introduce.skeleton.service.name}Client.java">
@@ -261,6 +261,10 @@
 	                    <fileset dir="${ext.globus.dir}/lib">
 	                        <include name="*.jar" />
 	                    </fileset>
+	                	<fileset dir="${ant.library.dir}">
+	                		<include name="ant.jar" />
+	                		<include name="ant-launcher.jar" />
+	                	</fileset>
 	                    <pathelement location="${basedir}/resources/introduce/portal" />
 	                    <pathelement location="${basedir}/resources/common/portal" />
 	                </classpath>

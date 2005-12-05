@@ -15,7 +15,6 @@
 	
 	<!-- Globus Location -->
 	<property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
-	<property name="ext.ant.home" value="${env.ANT_HOME}" />
 
 	<!-- Source, Config, and Libraries -->
 	<property name="src.dir" location="${basedir}/src/java" />
