@@ -7,19 +7,6 @@
             build files."/>
     </target>
     <!-- =================================================================== -->
-    <!-- Create a Dependancy Report (requires jdepend.jar in ant/lib         -->
-    <!-- =================================================================== -->
-    <target name="jdepend" if="jdepend.available" description="Create a dependancy report (requires
-        jdepend.jar in ant/lib)">
-        <jdepend format="xml" outputfile="${doc.dir}/jdepend-report.xml">
-            <classespath>
-                <pathelement location="${classes.dir}"/>
-            </classespath>
-        </jdepend>
-        <style basedir="docs" destdir="docs" includes="jdepend-report.xml"
-            style="${ant.home}/etc/jdepend.xsl"/>
-    </target>
-    <!-- =================================================================== -->
     <!-- Generates all the system files based off templates for a particular platform     -->
     <!-- =================================================================== -->
     <macrodef name="configure-scripts">
