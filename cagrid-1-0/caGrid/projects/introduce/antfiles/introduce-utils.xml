@@ -3,9 +3,9 @@
 <!-- ======================================================================= -->
 <project name="introduce_utilities" basedir="." default="usage">
 
-	<property name="introduce.skeleton.dir" value="${basedir}/skeleton" />
-	<property name="introduce.skeleton.destination.dir.default" value="${basedir}/serviceSkeleton" />
-	<property name="introduce.skeleton.service.name.default" value="Service" />
+	<property name="introduce.skeleton.dir" location="${basedir}/skeleton" />
+	<property name="introduce.skeleton.destination.dir.default" location="${user.home}/caGridServiceSkeleton" />
+	<property name="introduce.skeleton.service.name.default" value="ExampleService" />
 	<property name="introduce.skeleton.package.default" value="gov.nih.nci.cagrid" />
 	<property name="introduce.skeleton.package.dir.default" value="gov/nih/nci/cagrid" />
 	<property name="introduce.skeleton.namespace.domain.default" value="http://cagrid.nci.nih.gov" />
@@ -98,12 +98,6 @@
 			<fileset dir="${introduce.skeleton.destination.dir}/src/common/" />
 		</move>
 
-		<replace file="${introduce.skeleton.destination.dir}/src/${introduce.skeleton.package.dir}/common/${introduce.skeleton.service.name}I.java">
-			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
-			<replacefilter token="PACKAGE-NAME" value="${introduce.skeleton.package}" />
-			<replacefilter token="NAMESPACE-DOMAIN" value="${introduce.skeleton.namespace.domain}" />
-		</replace>
-
 		<!-- move and rename the service files -->
 		<move tofile="${introduce.skeleton.destination.dir}/src/service/globus/${introduce.skeleton.service.name}ProviderImpl.java">
 			<fileset file="${introduce.skeleton.destination.dir}/src/service/globus/ServiceProviderImpl.java" />
@@ -115,25 +109,6 @@
 			<fileset dir="${introduce.skeleton.destination.dir}/src/service/" />
 		</move>
 
-		<replace file="${introduce.skeleton.destination.dir}/src/${introduce.skeleton.package.dir}/service/globus/${introduce.skeleton.service.name}ProviderImpl.java">
-			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
-			<replacefilter token="PACKAGE-NAME" value="${introduce.skeleton.package}" />
-			<replacefilter token="NAMESPACE-DOMAIN" value="${introduce.skeleton.namespace.domain}" />
-		</replace>
-		<replace file="${introduce.skeleton.destination.dir}/src/${introduce.skeleton.package.dir}/service/${introduce.skeleton.service.name}Impl.java">
-			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
-			<replacefilter token="PACKAGE-NAME" value="${introduce.skeleton.package}" />
-			<replacefilter token="NAMESPACE-DOMAIN" value="${introduce.skeleton.namespace.domain}" />
-		</replace>
-		<!--<replace file="${introduce.skeleton.destination.dir}/src/${introduce.skeleton.package.dir}/service/globus/default-security-config.xml">
-			<replacefilter token="NAMESPACE-DOMAIN" value="${introduce.skeleton.namespace.domain}" />
-			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
-		</replace>
-		<replace file="${introduce.skeleton.destination.dir}/src/${introduce.skeleton.package.dir}/service/globus/custom-security-config.xml">
-			<replacefilter token="NAMESPACE-DOMAIN" value="${introduce.skeleton.namespace.domain}" />
-			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
-		</replace>-->
-
 		<!-- move and rename the client files -->
 		<move tofile="${introduce.skeleton.destination.dir}/src/client/${introduce.skeleton.service.name}Client.java">
 			<fileset file="${introduce.skeleton.destination.dir}/src/client/ServiceClient.java" />
@@ -142,11 +117,15 @@
 			<fileset dir="${introduce.skeleton.destination.dir}/src/client/" />
 		</move>
 
-		<replace file="${introduce.skeleton.destination.dir}/src/${introduce.skeleton.package.dir}/client/${introduce.skeleton.service.name}Client.java">
+
+		<!-- replace template variables -->
+		<replace dir="${introduce.skeleton.destination.dir}/src">
+			<include name="**/*.java"/>
 			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
 			<replacefilter token="PACKAGE-NAME" value="${introduce.skeleton.package}" />
 			<replacefilter token="NAMESPACE-DOMAIN" value="${introduce.skeleton.namespace.domain}" />
 		</replace>
+
 
 		<!-- create the propertites files for this project-->
 		<propertyfile file="${introduce.skeleton.destination.dir}/introduce.properties" comment="Service introdue properties">
