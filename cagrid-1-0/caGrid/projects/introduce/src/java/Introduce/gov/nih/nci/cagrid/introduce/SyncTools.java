@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.axis.wsdl.WSDL2Java;
-import org.apache.axis.wsdl.gen.Parser;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.axis.wsdl.toJava.Emitter;
 import org.apache.commons.cli.CommandLine;
@@ -30,6 +28,7 @@ import org.jdom.input.SAXBuilder;
 
 import antlr.RecognitionException;
 import antlr.TokenStreamException;
+
 
 /**
  * SyncMethodsOnDeployment TODO:DOCUMENT ME
@@ -63,24 +62,20 @@ public class SyncTools {
 
 	JavaParser jp;
 
-	
-	
-
 	SyncSecurity secureSync;
 
 	File baseDirectory;
+
 
 	public SyncTools(File baseDirectory) {
 
 		this.baseDirectory = baseDirectory;
 
-		File deploymentPropertiesFile = new File(baseDirectory
-				.getAbsolutePath()
-				+ File.separator + "introduce.properties");
+		File deploymentPropertiesFile = new File(baseDirectory.getAbsolutePath() + File.separator
+			+ "introduce.properties");
 		SAXBuilder builder = new SAXBuilder(false);
 		try {
-			methodsDocument = builder.build(baseDirectory.getAbsolutePath()
-					+ File.separator + "introduceMethods.xml");
+			methodsDocument = builder.build(baseDirectory.getAbsolutePath() + File.separator + "introduceMethods.xml");
 		} catch (JDOMException e1) {
 			e1.printStackTrace();
 		} catch (IOException e1) {
@@ -89,12 +84,9 @@ public class SyncTools {
 
 		try {
 			deploymentProperties = new Properties();
-			deploymentProperties.load(new FileInputStream(
-					deploymentPropertiesFile));
-			
-			
-			secureSync = new SyncSecurity(baseDirectory,
-					this.deploymentProperties);
+			deploymentProperties.load(new FileInputStream(deploymentPropertiesFile));
+
+			secureSync = new SyncSecurity(baseDirectory, this.deploymentProperties);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -104,19 +96,14 @@ public class SyncTools {
 		this.removals = new ArrayList();
 	}
 
+
 	public void sync() {
 		jsf = new JavaSourceFactory();
 		jp = new JavaParser(jsf);
 
-		serviceInterface = baseDirectory.getAbsolutePath()
-				+ File.separator
-				+ "src"
-				+ File.separator
-				+ this.deploymentProperties
-						.get("introduce.skeleton.package.dir")
-				+ "/common/"
-				+ this.deploymentProperties
-						.get("introduce.skeleton.service.name") + "I.java";
+		serviceInterface = baseDirectory.getAbsolutePath() + File.separator + "src" + File.separator
+			+ this.deploymentProperties.get("introduce.skeleton.package.dir") + "/common/"
+			+ this.deploymentProperties.get("introduce.skeleton.service.name") + "I.java";
 
 		try {
 			jp.parse(new File(serviceInterface));
@@ -135,14 +122,13 @@ public class SyncTools {
 
 		// check the interface for it's current list of methods
 		this.lookForUpdates();
-		
-		//sync the gwsdl
+
+		// sync the gwsdl
 		SyncWSDL wsdlSync = new SyncWSDL(baseDirectory, this.deploymentProperties);
 		wsdlSync.sync(additions, removals);
 
 		try {
-			String cmd = CommonTools.getAntFlattenCommand(baseDirectory
-					.getAbsolutePath());
+			String cmd = CommonTools.getAntFlattenCommand(baseDirectory.getAbsolutePath());
 			Process p = CommonTools.createAndOutputProcess(cmd);
 			p.waitFor();
 			if (p.exitValue() != 0) {
@@ -160,28 +146,19 @@ public class SyncTools {
 			parser.setQuiet(true);
 			parser.setImports(true);
 			parser.setNStoPkg(baseDirectory.getAbsolutePath() + File.separator + "namespace2package.mappings");
-			parser.run(new File(baseDirectory.getAbsolutePath()
-					+ File.separator
-					+ "build"
-					+ File.separator
-					+ "schema"
-					+ File.separator
-					+ this.deploymentProperties
-							.get("introduce.skeleton.service.name")
-					+ File.separator
-					+ this.deploymentProperties
-							.get("introduce.skeleton.service.name") +  "_flattened" + ".wsdl")
-					.getAbsolutePath());
+			parser.run(new File(baseDirectory.getAbsolutePath() + File.separator + "build" + File.separator + "schema"
+				+ File.separator + this.deploymentProperties.get("introduce.skeleton.service.name") + File.separator
+				+ this.deploymentProperties.get("introduce.skeleton.service.name") + "_flattened" + ".wsdl")
+				.getAbsolutePath());
 			table = parser.getSymbolTable();
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		//sync the methods fiels
-		SyncMethods methodSync = new SyncMethods(table, baseDirectory,
-				this.deploymentProperties);
+
+		// sync the methods fiels
+		SyncMethods methodSync = new SyncMethods(table, baseDirectory, this.deploymentProperties);
 		// remove methods
 		methodSync.removeMethods(this.removals);
 		// add new methods
@@ -194,11 +171,11 @@ public class SyncTools {
 		// secureSync.sync(methodsFromDoc);
 	}
 
+
 	public void lookForUpdates() {
 
 		JavaMethod[] methods = sourceI.getMethods();
-		List methodsFromDoc = this.methodsDocument.getRootElement()
-				.getChildren();
+		List methodsFromDoc = this.methodsDocument.getRootElement().getChildren();
 
 		// look at doc and compare to interface
 		for (int methodIndex = 0; methodIndex < methodsFromDoc.size(); methodIndex++) {
@@ -207,31 +184,22 @@ public class SyncTools {
 			for (int i = 0; i < methods.length; i++) {
 				String methodName = methods[i].getName();
 				if (mel.getAttributeValue("name").equals(methodName)) {
-					List inputParamEls = mel.getChild(
-							"inputs",
-							this.methodsDocument.getRootElement()
-									.getNamespace()).getChildren();
+					List inputParamEls = mel.getChild("inputs", this.methodsDocument.getRootElement().getNamespace())
+						.getChildren();
 					Parameter[] classes = methods[i].getParams();
 					boolean paramsOk = true;
 					if (inputParamEls.size() == classes.length) {
-						for (int paramIndex = 0; paramIndex < inputParamEls
-								.size(); paramIndex++) {
-							Element param = (Element) inputParamEls
-									.get(paramIndex);
+						for (int paramIndex = 0; paramIndex < inputParamEls.size(); paramIndex++) {
+							Element param = (Element) inputParamEls.get(paramIndex);
 							String classTypeString = "";
-							if (classes[paramIndex].getType().getPackageName()
-									.length() > 0) {
-								classTypeString += classes[paramIndex]
-										.getType().getPackageName()
-										+ ".";
+							if (classes[paramIndex].getType().getPackageName().length() > 0) {
+								classTypeString += classes[paramIndex].getType().getPackageName() + ".";
 							}
-							classTypeString += classes[paramIndex].getType()
-									.getClassName();
+							classTypeString += classes[paramIndex].getType().getClassName();
 							if (classes[paramIndex].getType().isArray()) {
 								classTypeString += "[]";
 							}
-							if (!param.getAttributeValue("className").equals(
-									classTypeString)) {
+							if (!param.getAttributeValue("className").equals(classTypeString)) {
 								paramsOk = false;
 							}
 						}
@@ -239,20 +207,16 @@ public class SyncTools {
 						paramsOk = false;
 					}
 					boolean returnOk = true;
-					Element returnTypeEl = mel.getChild("output",
-							this.methodsDocument.getRootElement()
-									.getNamespace());
+					Element returnTypeEl = mel.getChild("output", this.methodsDocument.getRootElement().getNamespace());
 					String returnClass = "";
 					if (methods[i].getType().getPackageName().length() > 0) {
-						returnClass += methods[i].getType().getPackageName()
-								+ ".";
+						returnClass += methods[i].getType().getPackageName() + ".";
 					}
 					returnClass += methods[i].getType().getClassName();
 					if (methods[i].getType().isArray()) {
 						returnClass += "[]";
 					}
-					if (!returnTypeEl.getAttributeValue("className").equals(
-							returnClass)) {
+					if (!returnTypeEl.getAttributeValue("className").equals(returnClass)) {
 						returnOk = false;
 					}
 					if (paramsOk && returnOk) {
@@ -262,8 +226,7 @@ public class SyncTools {
 				}
 			}
 			if (!found) {
-				System.out.println("Found a method for addition: "
-						+ mel.getAttributeValue("name"));
+				System.out.println("Found a method for addition: " + mel.getAttributeValue("name"));
 				this.additions.add(mel);
 			}
 		}
@@ -275,31 +238,22 @@ public class SyncTools {
 			for (int methodIndex = 0; methodIndex < methodsFromDoc.size(); methodIndex++) {
 				Element mel = (Element) methodsFromDoc.get(methodIndex);
 				if (mel.getAttributeValue("name").equals(methodName)) {
-					List inputParamEls = mel.getChild(
-							"inputs",
-							this.methodsDocument.getRootElement()
-									.getNamespace()).getChildren();
+					List inputParamEls = mel.getChild("inputs", this.methodsDocument.getRootElement().getNamespace())
+						.getChildren();
 					Parameter[] classes = methods[i].getParams();
 					boolean paramsOk = true;
 					if (inputParamEls.size() == classes.length) {
-						for (int paramIndex = 0; paramIndex < inputParamEls
-								.size(); paramIndex++) {
-							Element param = (Element) inputParamEls
-									.get(paramIndex);
+						for (int paramIndex = 0; paramIndex < inputParamEls.size(); paramIndex++) {
+							Element param = (Element) inputParamEls.get(paramIndex);
 							String classTypeString = "";
-							if (classes[paramIndex].getType().getPackageName()
-									.length() > 0) {
-								classTypeString += classes[paramIndex]
-										.getType().getPackageName()
-										+ ".";
+							if (classes[paramIndex].getType().getPackageName().length() > 0) {
+								classTypeString += classes[paramIndex].getType().getPackageName() + ".";
 							}
-							classTypeString += classes[paramIndex].getType()
-									.getClassName();
+							classTypeString += classes[paramIndex].getType().getClassName();
 							if (classes[paramIndex].getType().isArray()) {
 								classTypeString += "[]";
 							}
-							if (!param.getAttributeValue("className").equals(
-									classTypeString)) {
+							if (!param.getAttributeValue("className").equals(classTypeString)) {
 								paramsOk = false;
 							}
 						}
@@ -307,20 +261,16 @@ public class SyncTools {
 						paramsOk = false;
 					}
 					boolean returnOk = true;
-					Element returnTypeEl = mel.getChild("output",
-							this.methodsDocument.getRootElement()
-									.getNamespace());
+					Element returnTypeEl = mel.getChild("output", this.methodsDocument.getRootElement().getNamespace());
 					String returnClass = "";
 					if (methods[i].getType().getPackageName().length() > 0) {
-						returnClass += methods[i].getType().getPackageName()
-								+ ".";
+						returnClass += methods[i].getType().getPackageName() + ".";
 					}
 					returnClass += methods[i].getType().getClassName();
 					if (methods[i].getType().isArray()) {
 						returnClass += "[]";
 					}
-					if (!returnTypeEl.getAttributeValue("className").equals(
-							returnClass)) {
+					if (!returnTypeEl.getAttributeValue("className").equals(returnClass)) {
 						returnOk = false;
 					}
 					if (paramsOk && returnOk) {
@@ -336,10 +286,10 @@ public class SyncTools {
 		}
 	}
 
+
 	public static void main(String[] args) {
 		Options options = new Options();
-		Option directoryOpt = new Option(DIR_OPT, DIR_OPT_FULL, true,
-				"The include tool directory");
+		Option directoryOpt = new Option(DIR_OPT, DIR_OPT_FULL, true, "The include tool directory");
 		options.addOption(directoryOpt);
 
 		CommandLineParser parser = new PosixParser();

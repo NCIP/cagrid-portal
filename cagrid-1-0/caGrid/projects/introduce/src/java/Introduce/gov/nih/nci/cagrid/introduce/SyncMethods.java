@@ -12,10 +12,10 @@ import javax.xml.namespace.QName;
 
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.axis.wsdl.symbolTable.Type;
-import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.ws.jaxme.js.JavaMethod;
 import org.apache.ws.jaxme.js.Parameter;
 import org.jdom.Element;
+
 
 /**
  * SyncMethodsOnDeployment TODO:DOCUMENT ME
@@ -40,81 +40,47 @@ public class SyncMethods {
 	private Properties deploymentProperties;
 
 	private String packageName;
-	
+
 	private SymbolTable table;
 
 	private File baseDir;
+
 
 	public SyncMethods(SymbolTable table, File baseDir, Properties deploymentProperties) {
 		this.table = table;
 		this.baseDir = baseDir;
 		this.deploymentProperties = deploymentProperties;
-		this.packageName = (String) this.deploymentProperties
-				.get("introduce.skeleton.package")
-				+ ".stubs";
-		serviceClient = baseDir.getAbsolutePath()
-				+ File.separator
-				+ "src"
-				+ File.separator
-				+ this.deploymentProperties
-						.get("introduce.skeleton.package.dir")
-				+ File.separator
-				+ "client"
-				+ File.separator
-				+ this.deploymentProperties
-						.get("introduce.skeleton.service.name") + "Client.java";
-		serviceInterface = baseDir.getAbsolutePath()
-				+ File.separator
-				+ "src"
-				+ File.separator
-				+ this.deploymentProperties
-						.get("introduce.skeleton.package.dir")
-				+ File.separator
-				+ "common"
-				+ File.separator
-				+ this.deploymentProperties
-						.get("introduce.skeleton.service.name") + "I.java";
-		serviceImpl = baseDir.getAbsolutePath()
-				+ File.separator
-				+ "src"
-				+ File.separator
-				+ this.deploymentProperties
-						.get("introduce.skeleton.package.dir")
-				+ File.separator
-				+ "service"
-				+ File.separator
-				+ this.deploymentProperties
-						.get("introduce.skeleton.service.name") + "Impl.java";
-		serviceProviderImpl = baseDir.getAbsolutePath()
-				+ File.separator
-				+ "src"
-				+ File.separator
-				+ this.deploymentProperties
-						.get("introduce.skeleton.package.dir")
-				+ File.separator
-				+ "service"
-				+ File.separator
-				+ "globus"
-				+ File.separator
-				+ this.deploymentProperties
-						.get("introduce.skeleton.service.name")
-				+ "ProviderImpl.java";
+		this.packageName = (String) this.deploymentProperties.get("introduce.skeleton.package") + ".stubs";
+		serviceClient = baseDir.getAbsolutePath() + File.separator + "src" + File.separator
+			+ this.deploymentProperties.get("introduce.skeleton.package.dir") + File.separator + "client"
+			+ File.separator + this.deploymentProperties.get("introduce.skeleton.service.name") + "Client.java";
+		serviceInterface = baseDir.getAbsolutePath() + File.separator + "src" + File.separator
+			+ this.deploymentProperties.get("introduce.skeleton.package.dir") + File.separator + "common"
+			+ File.separator + this.deploymentProperties.get("introduce.skeleton.service.name") + "I.java";
+		serviceImpl = baseDir.getAbsolutePath() + File.separator + "src" + File.separator
+			+ this.deploymentProperties.get("introduce.skeleton.package.dir") + File.separator + "service"
+			+ File.separator + this.deploymentProperties.get("introduce.skeleton.service.name") + "Impl.java";
+		serviceProviderImpl = baseDir.getAbsolutePath() + File.separator + "src" + File.separator
+			+ this.deploymentProperties.get("introduce.skeleton.package.dir") + File.separator + "service"
+			+ File.separator + "globus" + File.separator
+			+ this.deploymentProperties.get("introduce.skeleton.service.name") + "ProviderImpl.java";
 	}
-	
-	private String getClassNameFromElement(Element method){
-		if(method.getAttributeValue("className").equals("void")){
+
+
+	private String getClassNameFromElement(Element method) {
+		if (method.getAttributeValue("className").equals("void")) {
 			return "void";
 		}
 		table.dump(System.out);
-		Type type = table.getType(new QName(method.getAttributeValue("namespace"),method.getAttributeValue("type")));
+		Type type = table.getType(new QName(method.getAttributeValue("namespace"), method.getAttributeValue("type")));
 		return type.getName();
 	}
+
 
 	private String createExceptions(Element method) {
 		String exceptions = "";
 		// process the faults for this method...
-		Element exceptionsEl = method.getChild("exceptions", method
-				.getNamespace());
+		Element exceptionsEl = method.getChild("exceptions", method.getNamespace());
 		exceptions += "RemoteException";
 		if (exceptionsEl != null) {
 			List children = exceptionsEl.getChildren();
@@ -125,8 +91,7 @@ public class SyncMethods {
 				Element fault = (Element) children.get(i);
 				// hack for now, should look at the namespace in the
 				// element.....
-				exceptions += this.packageName + "."
-						+ capatilzeFirstLetter(fault.getAttributeValue("name"));
+				exceptions += this.packageName + "." + capatilzeFirstLetter(fault.getAttributeValue("name"));
 				if (i < children.size() - 1) {
 					exceptions += ", ";
 				}
@@ -138,6 +103,7 @@ public class SyncMethods {
 		return exceptions;
 	}
 
+
 	private String createUnBoxedSignatureStringFromMethod(Element method) {
 		String methodString = "";
 		Element returnTypeEl = method.getChild("output", method.getNamespace());
@@ -145,12 +111,10 @@ public class SyncMethods {
 		String returnType = getClassNameFromElement(returnTypeEl);
 		methodString += "\tpublic " + returnType + " " + methodName + "(";
 		if (method.getChild("inputs", method.getNamespace()) != null) {
-			List inputs = method.getChild("inputs", method.getNamespace())
-					.getChildren();
+			List inputs = method.getChild("inputs", method.getNamespace()).getChildren();
 			for (int j = 0; j < inputs.size(); j++) {
 				String classType = getClassNameFromElement((Element) inputs.get(j));
-				String paramName = ((Element) inputs.get(j))
-						.getAttributeValue("name");
+				String paramName = ((Element) inputs.get(j)).getAttributeValue("name");
 				methodString += classType + " " + paramName;
 				if (j < inputs.size() - 1) {
 					methodString += ",";
@@ -161,6 +125,7 @@ public class SyncMethods {
 
 		return methodString;
 	}
+
 
 	private String createUnBoxedSignatureStringFromMethod(JavaMethod method) {
 		String methodString = "";
@@ -176,8 +141,7 @@ public class SyncMethods {
 		methodString += "\tpublic " + returnType + " " + methodName + "(";
 		Parameter[] inputs = method.getParams();
 		for (int j = 0; j < inputs.length; j++) {
-			String classType = inputs[j].getType().getPackageName() + "."
-					+ inputs[j].getType().getClassName();
+			String classType = inputs[j].getType().getPackageName() + "." + inputs[j].getType().getClassName();
 			if (inputs[j].getType().isArray()) {
 				classType += "[]";
 			}
@@ -191,16 +155,18 @@ public class SyncMethods {
 		return methodString;
 	}
 
+
 	private String getBoxedOutputTypeName(String input) {
 		String returnType = capatilzeFirstLetter(input) + "Response";
 		return returnType;
 	}
 
+
 	private String capatilzeFirstLetter(String input) {
-		String returnType = input.toUpperCase().toCharArray()[0]
-				+ input.substring(1, input.length());
+		String returnType = input.toUpperCase().toCharArray()[0] + input.substring(1, input.length());
 		return returnType;
 	}
+
 
 	private String createBoxedSignatureStringFromMethod(Element method) {
 		String methodString = "";
@@ -208,18 +174,17 @@ public class SyncMethods {
 		String methodName = method.getAttributeValue("name");
 		String returnType = getClassNameFromElement(returnTypeEl);
 
-		returnType = this.packageName + "."
-				+ getBoxedOutputTypeName(methodName);
+		returnType = this.packageName + "." + getBoxedOutputTypeName(methodName);
 
 		methodString += "\tpublic " + returnType + " " + methodName + "(";
 
 		// boxed
-		methodString += this.packageName + "."
-				+ capatilzeFirstLetter(methodName) + " params";
+		methodString += this.packageName + "." + capatilzeFirstLetter(methodName) + " params";
 
 		methodString += ")";
 		return methodString;
 	}
+
 
 	private String createBoxedSignatureStringFromMethod(JavaMethod method) {
 		String methodString = "";
@@ -227,8 +192,7 @@ public class SyncMethods {
 		String returnType = "";
 
 		// need to box the output type
-		returnType = this.packageName + "."
-				+ getBoxedOutputTypeName(method.getName());
+		returnType = this.packageName + "." + getBoxedOutputTypeName(method.getName());
 
 		methodString += "\tpublic " + returnType + " " + methodName + "(";
 		Parameter[] inputs = method.getParams();
@@ -236,27 +200,25 @@ public class SyncMethods {
 		// if (inputs.length > 1 || inputs.length == 0) {
 
 		// boxed
-		methodString += this.packageName + "."
-				+ capatilzeFirstLetter(methodName) + " params";
+		methodString += this.packageName + "." + capatilzeFirstLetter(methodName) + " params";
 
 		methodString += ")";
 		return methodString;
 	}
 
+
 	private boolean isPrimitive(String type) {
-		if (type.equals("int") || type.equals("double") || type.equals("float")
-				|| type.equals("boolean") || type.equals("short")
-				|| type.equals("byte") || type.equals("char")
-				|| type.equals("long")) {
+		if (type.equals("int") || type.equals("double") || type.equals("float") || type.equals("boolean")
+			|| type.equals("short") || type.equals("byte") || type.equals("char") || type.equals("long")) {
 			return true;
 		}
 		return false;
 	}
 
+
 	private String createPrimitiveReturn(String type) {
-		if (type.equals("int") || type.equals("double") || type.equals("float")
-				|| type.equals("short") || type.equals("byte")
-				|| type.equals("char") || type.equals("long")) {
+		if (type.equals("int") || type.equals("double") || type.equals("float") || type.equals("short")
+			|| type.equals("byte") || type.equals("char") || type.equals("long")) {
 			return "0";
 		} else if (type.equals("boolean")) {
 			return "false";
@@ -265,6 +227,7 @@ public class SyncMethods {
 		}
 	}
 
+
 	public void addMethods(List additions) {
 		for (int i = 0; i < additions.size(); i++) {
 			// add it to the interface
@@ -272,16 +235,14 @@ public class SyncMethods {
 
 			StringBuffer fileContent = null;
 			try {
-				fileContent = Utilities.fileToStringBuffer(new File(
-						this.serviceInterface));
+				fileContent = Utilities.fileToStringBuffer(new File(this.serviceInterface));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
 			// insert the new client method
 			int endOfClass = fileContent.lastIndexOf("}");
-			String clientMethod = createUnBoxedSignatureStringFromMethod(method)
-					+ " " + createExceptions(method);
+			String clientMethod = createUnBoxedSignatureStringFromMethod(method) + " " + createExceptions(method);
 			clientMethod += ";\n";
 
 			fileContent.insert(endOfClass - 1, clientMethod);
@@ -302,34 +263,31 @@ public class SyncMethods {
 		}
 	}
 
+
 	private void addClientImpl(Element method) {
 		StringBuffer fileContent = null;
 		String methodName = method.getAttributeValue("name");
 		try {
-			fileContent = Utilities.fileToStringBuffer(new File(
-					this.serviceClient));
+			fileContent = Utilities.fileToStringBuffer(new File(this.serviceClient));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		// insert the new client method
 		int endOfClass = fileContent.lastIndexOf("}");
-		String clientMethod = createUnBoxedSignatureStringFromMethod(method)
-				+ " " + createExceptions(method);
+		String clientMethod = createUnBoxedSignatureStringFromMethod(method) + " " + createExceptions(method);
 		clientMethod += "{\n\t\t";
 		// clientMethod += "try{\n";
 		clientMethod += "\t\t\t";
 
 		String secureValue = "SECURITY_PROPERTY_NONE";
 		if (method.getAttribute("secure") != null) {
-			secureValue = "SECURITY_PROPERTY_"
-					+ method.getAttributeValue("secure");
+			secureValue = "SECURITY_PROPERTY_" + method.getAttributeValue("secure");
 		}
 		// get the port
 		// TODO: handle security here
-		clientMethod += this.deploymentProperties
-				.get("introduce.skeleton.service.name")
-				+ "PortType port = this.getPortType();\n";
+		clientMethod += this.deploymentProperties.get("introduce.skeleton.service.name")
+			+ "PortType port = this.getPortType();\n";
 
 		clientMethod += "";
 
@@ -344,20 +302,15 @@ public class SyncMethods {
 
 		// always a boxed call now becuase using complex types in the wsdl
 		// create handle for the boxed wrapper
-		methodString += this.packageName + "."
-				+ capatilzeFirstLetter(methodName) + " params = new "
-				+ this.packageName + "." + capatilzeFirstLetter(methodName)
-				+ "();\n";
+		methodString += this.packageName + "." + capatilzeFirstLetter(methodName) + " params = new " + this.packageName
+			+ "." + capatilzeFirstLetter(methodName) + "();\n";
 		// set the values fo the boxed wrapper
 		if (method.getChild("inputs", method.getNamespace()) != null) {
-			List inputs = method.getChild("inputs", method.getNamespace())
-					.getChildren();
+			List inputs = method.getChild("inputs", method.getNamespace()).getChildren();
 			for (int j = 0; j < inputs.size(); j++) {
-				String paramName = ((Element) inputs.get(j))
-						.getAttributeValue("name");
+				String paramName = ((Element) inputs.get(j)).getAttributeValue("name");
 				methodString += lineStart;
-				methodString += "params.set" + capatilzeFirstLetter(paramName)
-						+ "(" + paramName + ");\n";
+				methodString += "params.set" + capatilzeFirstLetter(paramName) + "(" + paramName + ");\n";
 			}
 		}
 		// make the call
@@ -365,8 +318,8 @@ public class SyncMethods {
 
 		// always boxed returns now because of complex types in wsdl
 		String returnTypeBoxed = getBoxedOutputTypeName(methodName);
-		methodString += this.packageName + "." + returnTypeBoxed
-				+ " boxedResult = " + var + "." + methodName + "(params);\n";
+		methodString += this.packageName + "." + returnTypeBoxed + " boxedResult = " + var + "." + methodName
+			+ "(params);\n";
 		methodString += lineStart;
 		if (!returnType.equals("void")) {
 			methodString += "return boxedResult.getValue();\n";
@@ -401,29 +354,27 @@ public class SyncMethods {
 
 	}
 
+
 	private void addImpl(Element method) {
 		StringBuffer fileContent = null;
 		try {
-			fileContent = Utilities.fileToStringBuffer(new File(
-					this.serviceImpl));
+			fileContent = Utilities.fileToStringBuffer(new File(this.serviceImpl));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		// insert the new client method
 		int endOfClass = fileContent.lastIndexOf("}");
-		String clientMethod = createUnBoxedSignatureStringFromMethod(method)
-				+ " " + createExceptions(method);
+		String clientMethod = createUnBoxedSignatureStringFromMethod(method) + " " + createExceptions(method);
 
 		clientMethod += "{\n";
 		clientMethod += "\t\t//TODO: Implement this autogenerated method\n";
 		Element methodReturn = method.getChild("output", method.getNamespace());
 		if (!getClassNameFromElement(methodReturn).equals("void")
-				&& !isPrimitive(getClassNameFromElement(methodReturn))) {
+			&& !isPrimitive(getClassNameFromElement(methodReturn))) {
 			clientMethod += "\t\treturn null;\n";
 		} else if (isPrimitive(getClassNameFromElement(methodReturn))) {
-			clientMethod += "\t\treturn "
-					+ createPrimitiveReturn(getClassNameFromElement(methodReturn)) + ";\n";
+			clientMethod += "\t\treturn " + createPrimitiveReturn(getClassNameFromElement(methodReturn)) + ";\n";
 		}
 		clientMethod += "\t}\n";
 
@@ -437,11 +388,11 @@ public class SyncMethods {
 		}
 	}
 
+
 	private void addProviderImpl(Element method) {
 		StringBuffer fileContent = null;
 		try {
-			fileContent = Utilities.fileToStringBuffer(new File(
-					this.serviceProviderImpl));
+			fileContent = Utilities.fileToStringBuffer(new File(this.serviceProviderImpl));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -450,8 +401,7 @@ public class SyncMethods {
 		int endOfClass = fileContent.lastIndexOf("}");
 		// slh -- in migration to globus 4 we need to check here for autoboxing
 		// and get appropriate
-		String clientMethod = createBoxedSignatureStringFromMethod(method)
-				+ " " + createExceptions(method);
+		String clientMethod = createBoxedSignatureStringFromMethod(method) + " " + createExceptions(method);
 
 		// clientMethod += " throws RemoteException";
 		clientMethod += "{\n";
@@ -469,16 +419,13 @@ public class SyncMethods {
 		String params = "";
 
 		if (method.getChild("inputs", method.getNamespace()) != null) {
-			List inputs = method.getChild("inputs", method.getNamespace())
-					.getChildren();
+			List inputs = method.getChild("inputs", method.getNamespace()).getChildren();
 			// always unbox now
 			if (inputs.size() >= 1) {
 				// inputs were boxed and need to be unboxed
 				for (int j = 0; j < inputs.size(); j++) {
-					String paramName = ((Element) inputs.get(j))
-							.getAttributeValue("name");
-					params += "params.get" + capatilzeFirstLetter(paramName)
-							+ "()";
+					String paramName = ((Element) inputs.get(j)).getAttributeValue("name");
+					params += "params.get" + capatilzeFirstLetter(paramName) + "()";
 					if (j < inputs.size() - 1) {
 						params += ",";
 					}
@@ -486,8 +433,7 @@ public class SyncMethods {
 			} else {
 				// inputs are not boxed and can just be passed through
 				for (int j = 0; j < inputs.size(); j++) {
-					String paramName = ((Element) inputs.get(j))
-							.getAttributeValue("name");
+					String paramName = ((Element) inputs.get(j)).getAttributeValue("name");
 					params += paramName;
 					if (j < inputs.size() - 1) {
 						params += ",";
@@ -503,17 +449,14 @@ public class SyncMethods {
 			methodString += lineStart;
 			methodString += var + "." + methodName + "(" + params + ");\n";
 			methodString += lineStart;
-			methodString += "return new " + this.packageName + "."
-					+ returnTypeBoxed + "();\n";
+			methodString += "return new " + this.packageName + "." + returnTypeBoxed + "();\n";
 		} else {
 			// need to unbox on the way out
 			methodString += lineStart;
-			methodString += this.packageName + "." + returnTypeBoxed
-					+ " boxedResult = new " + this.packageName + "."
-					+ returnTypeBoxed + "();\n";
+			methodString += this.packageName + "." + returnTypeBoxed + " boxedResult = new " + this.packageName + "."
+				+ returnTypeBoxed + "();\n";
 			methodString += lineStart;
-			methodString += "boxedResult.setValue(" + var + "." + methodName
-					+ "(" + params + "));\n";
+			methodString += "boxedResult.setValue(" + var + "." + methodName + "(" + params + "));\n";
 			methodString += lineStart;
 			methodString += "return boxedResult;\n";
 		}
@@ -532,14 +475,14 @@ public class SyncMethods {
 
 	}
 
+
 	public void removeMethods(List removals) {
 		for (int i = 0; i < removals.size(); i++) {
 			JavaMethod method = (JavaMethod) removals.get(i);
 
 			StringBuffer fileContent = null;
 			try {
-				fileContent = Utilities.fileToStringBuffer(new File(
-						this.serviceInterface));
+				fileContent = Utilities.fileToStringBuffer(new File(this.serviceInterface));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -551,8 +494,7 @@ public class SyncMethods {
 			int endOfMethod = startOfMethod + clientMethod.length();
 
 			if (startOfMethod == -1 || endOfMethod == -1) {
-				System.err.println("WARNING: Unable to locate method in I : "
-						+ method.getName());
+				System.err.println("WARNING: Unable to locate method in I : " + method.getName());
 				return;
 			}
 
@@ -575,11 +517,11 @@ public class SyncMethods {
 		}
 	}
 
+
 	private void removeClientImpl(JavaMethod method) {
 		StringBuffer fileContent = null;
 		try {
-			fileContent = Utilities.fileToStringBuffer(new File(
-					this.serviceClient));
+			fileContent = Utilities.fileToStringBuffer(new File(this.serviceClient));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -587,13 +529,10 @@ public class SyncMethods {
 		// remove the method
 		String clientMethod = createUnBoxedSignatureStringFromMethod(method);
 		int startOfMethod = fileContent.indexOf(clientMethod);
-		int endOfMethod = parenMatch(fileContent, startOfMethod
-				+ clientMethod.length());
+		int endOfMethod = parenMatch(fileContent, startOfMethod + clientMethod.length());
 
 		if (startOfMethod == -1 || endOfMethod == -1) {
-			System.err
-					.println("WARNING: Unable to locate method in clientImpl : "
-							+ method.getName());
+			System.err.println("WARNING: Unable to locate method in clientImpl : " + method.getName());
 			return;
 		}
 
@@ -608,11 +547,11 @@ public class SyncMethods {
 		}
 	}
 
+
 	private void removeProviderImpl(JavaMethod method) {
 		StringBuffer fileContent = null;
 		try {
-			fileContent = Utilities.fileToStringBuffer(new File(
-					this.serviceProviderImpl));
+			fileContent = Utilities.fileToStringBuffer(new File(this.serviceProviderImpl));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -620,13 +559,10 @@ public class SyncMethods {
 		// remove the method
 		String clientMethod = createBoxedSignatureStringFromMethod(method);
 		int startOfMethod = fileContent.indexOf(clientMethod);
-		int endOfMethod = parenMatch(fileContent, startOfMethod
-				+ clientMethod.length());
+		int endOfMethod = parenMatch(fileContent, startOfMethod + clientMethod.length());
 
 		if (startOfMethod == -1 || endOfMethod == -1) {
-			System.err
-					.println("WARNING: Unable to locate method in providerImpl : "
-							+ method.getName());
+			System.err.println("WARNING: Unable to locate method in providerImpl : " + method.getName());
 			return;
 		}
 
@@ -642,11 +578,11 @@ public class SyncMethods {
 
 	}
 
+
 	private void removeImpl(JavaMethod method) {
 		StringBuffer fileContent = null;
 		try {
-			fileContent = Utilities.fileToStringBuffer(new File(
-					this.serviceImpl));
+			fileContent = Utilities.fileToStringBuffer(new File(this.serviceImpl));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -654,12 +590,10 @@ public class SyncMethods {
 		// remove the method
 		String clientMethod = createUnBoxedSignatureStringFromMethod(method);
 		int startOfMethod = fileContent.indexOf(clientMethod);
-		int endOfMethod = parenMatch(fileContent, startOfMethod
-				+ clientMethod.length());
+		int endOfMethod = parenMatch(fileContent, startOfMethod + clientMethod.length());
 
 		if (startOfMethod == -1 || endOfMethod == -1) {
-			System.err.println("WARNING: Unable to locate method in Impl : "
-					+ method.getName());
+			System.err.println("WARNING: Unable to locate method in Impl : " + method.getName());
 			return;
 		}
 
@@ -674,6 +608,7 @@ public class SyncMethods {
 		}
 
 	}
+
 
 	private int parenMatch(StringBuffer sb, int startingIndex) {
 		int parenCount = 0;
