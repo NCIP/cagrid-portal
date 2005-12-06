@@ -42,9 +42,6 @@ public class ProxyCaddy {
 			return false;
 		}
 		ProxyCaddy caddy = (ProxyCaddy) obj;
-		if (caddy.getProxy() == null) {
-			return false;
-		}
 		if (this.identity.equals(caddy.getIdentity())) {
 			return true;
 		} else {

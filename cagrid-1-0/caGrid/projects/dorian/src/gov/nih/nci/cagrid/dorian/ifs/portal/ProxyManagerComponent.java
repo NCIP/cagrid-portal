@@ -83,6 +83,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 
 	private JButton deleteProxy = null;
 
+	private ProxyCaddy defaultProxy;
 	/**
 	 * This is the default constructor
 	 */
@@ -90,7 +91,8 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		super();
 		initialize();
 		List creds = ProxyManager.getInstance().getProxies();
-		getProxy().addItem(new ProxyCaddy(DEFAULT_PROXY, null));
+		defaultProxy = new ProxyCaddy(DEFAULT_PROXY, null);
+		getProxy().addItem(defaultProxy);
 		for (int i = 0; i < creds.size(); i++) {
 			getProxy().addItem(new ProxyCaddy((GlobusCredential) creds.get(i)));
 		}
@@ -505,8 +507,8 @@ public class ProxyManagerComponent extends GridPortalComponent {
 					if (caddy != null) {
 						if (caddy.getIdentity() == DEFAULT_PROXY) {
 							try {
-								caddy.setProxy(ProxyUtil.getDefaultProxy());
 								clearProxy();
+								caddy.setProxy(ProxyUtil.getDefaultProxy());	
 							} catch (Exception ex) {
 								return;
 							}
