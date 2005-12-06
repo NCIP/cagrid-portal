@@ -508,8 +508,6 @@ public class ProxyManagerComponent extends GridPortalComponent {
 								caddy.setProxy(ProxyUtil.getDefaultProxy());
 								clearProxy();
 							} catch (Exception ex) {
-								PortalUtils
-										.showMessage("No Default Proxy Found!!!");
 								return;
 							}
 						}

@@ -24,18 +24,20 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
+import javax.swing.JProgressBar;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.15 2005-12-05 17:49:20 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.16 2005-12-06 04:18:33 langella Exp $
  */
 public class UserManagerWindow extends GridPortalBaseFrame {
 
@@ -145,6 +147,10 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 
 	private JComboBox proxy = null;
 
+	private JPanel progressPanel = null;
+
+	private JProgressBar progress = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -187,6 +193,12 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
+			gridBagConstraints32.gridx = 0;
+			gridBagConstraints32.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints32.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints32.weightx = 1.0D;
+			gridBagConstraints32.gridy = 2;
 			GridBagConstraints gridBagConstraints33 = new GridBagConstraints();
 			gridBagConstraints33.gridx = 0;
 			gridBagConstraints33.gridy = 1;
@@ -200,14 +212,14 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
 			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.gridy = 2;
+			gridBagConstraints1.gridy = 3;
 			gridBagConstraints1.ipadx = 0;
 			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints1.weightx = 1.0D;
 			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints1.weighty = 1.0D;
 			gridBagConstraints2.gridx = 0;
-			gridBagConstraints2.gridy = 3;
+			gridBagConstraints2.gridy = 4;
 			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints2.anchor = java.awt.GridBagConstraints.SOUTH;
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -215,6 +227,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			mainPanel.add(getButtonPanel(), gridBagConstraints2);
 			mainPanel.add(getJPanel(), gridBagConstraints35);
 			mainPanel.add(getQueryPanel(), gridBagConstraints33);
+			mainPanel.add(getProgressPanel(), gridBagConstraints32);
 		}
 		return mainPanel;
 	}
@@ -873,8 +886,9 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 				isQuerying = true;
 			}
 		}
-
+		
 		this.getUsersTable().clearTable();
+		this.updateProgress(true,"Querying...");
 
 		try {
 		GlobusCredential proxy = ((ProxyComboBox) getProxy())
@@ -912,12 +926,14 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 					this.getUsersTable().addUser(users[i]);
 				}
 			}
-			PortalUtils.showMessage("Query Completed.");
+			this.updateProgress(false,"Querying Completed ["+users.length+" users found]");
 		} catch (PermissionDeniedFault pdf) {
 			PortalUtils.showErrorMessage(pdf);
+			this.updateProgress(false,"Error");
 		} catch (Exception e) {
 			e.printStackTrace();
 			PortalUtils.showErrorMessage(e);
+			this.updateProgress(false,"Error");
 		}
 		isQuerying = false;
 	}
@@ -1010,6 +1026,51 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			proxy = new ProxyComboBox();
 		}
 		return proxy;
+	}
+
+	/**
+	 * This method initializes progressPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */    
+	private JPanel getProgressPanel() {
+		if (progressPanel == null) {
+			GridBagConstraints gridBagConstraints36 = new GridBagConstraints();
+			gridBagConstraints36.insets = new java.awt.Insets(2,20,2,20);
+			gridBagConstraints36.gridy = 0;
+			gridBagConstraints36.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints36.weightx = 1.0D;
+			gridBagConstraints36.gridx = 0;
+			progressPanel = new JPanel();
+			progressPanel.setLayout(new GridBagLayout());
+			progressPanel.add(getProgress(), gridBagConstraints36);
+		}
+		return progressPanel;
+	}
+
+	/**
+	 * This method initializes progress	
+	 * 	
+	 * @return javax.swing.JProgressBar	
+	 */    
+	private JProgressBar getProgress() {
+		if (progress == null) {
+			progress = new JProgressBar();
+			 progress.setForeground(GumsLookAndFeel.getPanelLabelColor());
+	         progress.setString("");
+	         progress.setStringPainted(true);
+		}
+		return progress;
+	}
+	
+	public void updateProgress(final boolean working, final String s) {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				getProgress().setString(s);
+				getProgress().setIndeterminate(working);
+			}
+		});
+
 	}
 
 }
