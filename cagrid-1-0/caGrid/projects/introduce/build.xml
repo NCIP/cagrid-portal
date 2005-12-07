@@ -14,9 +14,12 @@
 	<property name="project.version" value="1.0" />
 
 	<!-- Source, Config, and Libraries -->
+	<property name="ext.dir" location="${basedir}/ext" />
 	<property name="src.dir" location="${basedir}/src/java" />
 	<property name="lib.dir" location="${basedir}/lib" />
+	<property name="ext.lib.dir" location="${ext.dir}/lib" />
 	<property name="schema.dir" location="${basedir}/schema" />
+	<property name="ext.schema.dir" location="${ext.dir}/schema" />
 	<property name="sde.schema.dir" location="${schema.dir}/types" />
 	<property name="resources.dir" location="${basedir}/resources" />
 
@@ -109,7 +112,6 @@
 	<!-- =================================================================== -->
 	<target name="generateStubs" depends="prepare" description="Deletes the generated Java Beans and recreates them.">
 		<mkdir dir="${build.dir}/stubs" />
-
 		<delete dir="${build.dir}/stubs" />
 	</target>
 
@@ -131,7 +133,6 @@
 		</classpath>
 	</taskdef>
 	<target name="generateJETClasses">
-
 		<jetc destdir="${src.dir}/Introduce" template="templates/src/client/ServiceClient.javajet" />
 		<jetc destdir="${src.dir}/Introduce" template="templates/src/common/ServiceI.javajet" />
 		<jetc destdir="${src.dir}/Introduce" template="templates/src/service/ServiceImpl.javajet" />
@@ -140,10 +141,7 @@
 		<jetc destdir="${src.dir}/Introduce" template="templates/src/service/globus/resource/BaseResourceHome.javajet" />
 		<jetc destdir="${src.dir}/Introduce" template="templates/src/service/globus/resource/MetadataConfiguration.javajet" />
 		<jetc destdir="${src.dir}/Introduce" template="templates/src/service/globus/resource/ResourceConstants.javajet" />
-
 	</target>
-
-
 
 
 	<!-- =================================================================== -->
