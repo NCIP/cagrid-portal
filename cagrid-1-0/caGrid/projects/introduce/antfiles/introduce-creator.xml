@@ -9,19 +9,19 @@
 	<property name="introduce.skeleton.package.default" value="gov.nih.nci.cagrid" />
 	<property name="introduce.skeleton.package.dir.default" value="gov/nih/nci/cagrid" />
 	<property name="introduce.skeleton.namespace.domain.default" value="http://cagrid.nci.nih.gov" />
-	
+
 	<target name="usage">
 		<echo message="Not to be called directly.  This file contains utilities to be used in other build files." />
 	</target>
 
 	<target name="createService" description="Will create an anaytical skeleton deployment" depends=" checkInputProps, copySkeleton,copyCaGRIDJars,serviceCopySchemaFiles,serviceCopyPortalFiles,setActivePath">
-		<createSkeleton/>
+		<createSkeleton />
 	</target>
-	
+
 	<taskdef name="createSkeleton" classname="gov.nih.nci.cagrid.introduce.SkeletonCreator">
 		<classpath>
 			<fileset dir="${build.lib.dir}">
-				<include name="*.jar"/>
+				<include name="*.jar" />
 			</fileset>
 		</classpath>
 	</taskdef>
@@ -36,7 +36,7 @@
 				<include name="**\*" />
 			</fileset>
 		</copy>
-		
+
 		<copy todir="${introduce.skeleton.destination.dir}/resources">
 			<fileset dir="${resources.dir}">
 				<include name="**\*" />
@@ -176,13 +176,18 @@
 	</target>
 
 	<target name="copyCaGRIDJars" depends="prepareSkeleton,copySkeleton">
-		<copy todir="${introduce.skeleton.destination.dir}/lib">
+		<copy todir="${introduce.skeleton.destination.dir}/lib" flatten="true">
 			<fileset dir="${lib.dir}">
-				<include name="**\*" />
+				<include name="**/*" />
 			</fileset>
 		</copy>
-		<copy todir="${introduce.skeleton.destination.dir}/lib">
+		<copy todir="${introduce.skeleton.destination.dir}/lib" flatten="true">
 			<fileset dir="${build.lib.dir}">
+				<include name="*" />
+			</fileset>
+		</copy>
+		<copy todir="${introduce.skeleton.destination.dir}/lib" flatten="true">
+			<fileset dir="${ext.lib.dir}">
 				<include name="*" />
 			</fileset>
 		</copy>

@@ -6,22 +6,24 @@ import java.util.Properties;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
+
 public class SkeletonCreator extends Task {
-	
-	public SkeletonCreator(){
+
+	public SkeletonCreator() {
 	}
+
 
 	public void execute() throws BuildException {
 		super.execute();
 		Properties properties = new Properties();
 		properties.putAll(this.getProject().getProperties());
 		SkeletonSourceCreator sc = new SkeletonSourceCreator();
-		
-		//Create the overall skeleton
+
+		// Create the overall skeleton
 		File baseDirectory = new File(properties.getProperty("introduce.skeleton.destination.dir"));
 		baseDirectory.mkdirs();
-		
-		//Generate the source
+
+		// Generate the source
 		try {
 			sc.createSkeleton(properties);
 		} catch (Exception e) {
@@ -30,7 +32,4 @@ public class SkeletonCreator extends Task {
 			throw be;
 		}
 	}
-	
-	
-
 }
