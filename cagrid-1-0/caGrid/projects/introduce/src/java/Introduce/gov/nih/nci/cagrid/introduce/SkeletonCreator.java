@@ -22,7 +22,13 @@ public class SkeletonCreator extends Task {
 		baseDirectory.mkdirs();
 		
 		//Generate the source
-		sc.createSkeleton(properties);
+		try {
+			sc.createSkeleton(properties);
+		} catch (Exception e) {
+			BuildException be = new BuildException(e.getMessage());
+			be.setStackTrace(e.getStackTrace());
+			throw be;
+		}
 	}
 	
 	

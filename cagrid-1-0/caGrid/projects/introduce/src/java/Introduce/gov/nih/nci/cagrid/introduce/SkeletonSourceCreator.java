@@ -15,62 +15,80 @@ public class SkeletonSourceCreator {
 	public SkeletonSourceCreator() {
 	}
 
-	public void createSkeleton(Properties properties) {
-		File baseDirectory = new File(properties.getProperty("introduce.skeleton.destination.dir"));
-		
-		File srcDir = new File(baseDirectory.getAbsolutePath() + File.separator + "src");
+	public void createSkeleton(Properties properties) throws Exception {
+		File baseDirectory = new File(properties
+				.getProperty("introduce.skeleton.destination.dir"));
+
+		File srcDir = new File(baseDirectory.getAbsolutePath() + File.separator
+				+ "src");
 		srcDir.mkdir();
-		
-		new File(srcDir.getAbsolutePath() + File.separator + properties.getProperty("introduce.skeleton.package.dir")).mkdirs();
-		new File(srcDir.getAbsolutePath() + File.separator + properties.getProperty("introduce.skeleton.package.dir")+ File.separator + "client").mkdirs();
-		new File(srcDir.getAbsolutePath() + File.separator + properties.getProperty("introduce.skeleton.package.dir") + File.separator + "common").mkdirs();
-		new File(srcDir.getAbsolutePath() + File.separator + properties.getProperty("introduce.skeleton.package.dir") + File.separator + "service").mkdirs();
-		new File(srcDir.getAbsolutePath() + File.separator + properties.getProperty("introduce.skeleton.package.dir") + File.separator + "service" + File.separator + "globus").mkdirs();
-		
+
+		new File(srcDir.getAbsolutePath() + File.separator
+				+ properties.getProperty("introduce.skeleton.package.dir"))
+				.mkdirs();
+		new File(srcDir.getAbsolutePath() + File.separator
+				+ properties.getProperty("introduce.skeleton.package.dir")
+				+ File.separator + "client").mkdirs();
+		new File(srcDir.getAbsolutePath() + File.separator
+				+ properties.getProperty("introduce.skeleton.package.dir")
+				+ File.separator + "common").mkdirs();
+		new File(srcDir.getAbsolutePath() + File.separator
+				+ properties.getProperty("introduce.skeleton.package.dir")
+				+ File.separator + "service").mkdirs();
+		new File(srcDir.getAbsolutePath() + File.separator
+				+ properties.getProperty("introduce.skeleton.package.dir")
+				+ File.separator + "service" + File.separator + "globus")
+				.mkdirs();
+
 		ServiceClientTemplate clientT = new ServiceClientTemplate();
 		String clientS = clientT.generate(properties);
-		File clientF = new File(srcDir.getAbsolutePath() + File.separator + properties.getProperty("introduce.skeleton.package.dir") + File.separator + "client" + File.separator + properties.getProperty("introduce.skeleton.service.name") + "Client.java");
-		try {
-			FileWriter clientFW = new FileWriter(clientF);
-			clientFW.write(clientS);
-			clientFW.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
+		File clientF = new File(srcDir.getAbsolutePath() + File.separator
+				+ properties.getProperty("introduce.skeleton.package.dir")
+				+ File.separator + "client" + File.separator
+				+ properties.getProperty("introduce.skeleton.service.name")
+				+ "Client.java");
+
+		FileWriter clientFW = new FileWriter(clientF);
+		clientFW.write(clientS);
+		clientFW.close();
+
 		ServiceITemplate iT = new ServiceITemplate();
 		String iS = iT.generate(properties);
-		File iF = new File(srcDir.getAbsolutePath() + File.separator + properties.getProperty("introduce.skeleton.package.dir") + File.separator + "common" + File.separator + properties.getProperty("introduce.skeleton.service.name") + "I.java");
-		try {
-			FileWriter iFW = new FileWriter(iF);
-			iFW.write(iS);
-			iFW.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
+		File iF = new File(srcDir.getAbsolutePath() + File.separator
+				+ properties.getProperty("introduce.skeleton.package.dir")
+				+ File.separator + "common" + File.separator
+				+ properties.getProperty("introduce.skeleton.service.name")
+				+ "I.java");
+
+		FileWriter iFW = new FileWriter(iF);
+		iFW.write(iS);
+		iFW.close();
+
 		ServiceImplTemplate implT = new ServiceImplTemplate();
 		String implS = implT.generate(properties);
-		File implF = new File(srcDir.getAbsolutePath() + File.separator + properties.getProperty("introduce.skeleton.package.dir") + File.separator + "service" + File.separator + properties.getProperty("introduce.skeleton.service.name") + "Impl.java");
-		try {
-			FileWriter implFW = new FileWriter(implF);
-			implFW.write(implS);
-			implFW.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
+		File implF = new File(srcDir.getAbsolutePath() + File.separator
+				+ properties.getProperty("introduce.skeleton.package.dir")
+				+ File.separator + "service" + File.separator
+				+ properties.getProperty("introduce.skeleton.service.name")
+				+ "Impl.java");
+
+		FileWriter implFW = new FileWriter(implF);
+		implFW.write(implS);
+		implFW.close();
+
 		ServiceProviderImplTemplate providerImplT = new ServiceProviderImplTemplate();
 		String providerImplS = providerImplT.generate(properties);
-		File providerImplF = new File(srcDir.getAbsolutePath() + File.separator + properties.getProperty("introduce.skeleton.package.dir") + File.separator + "service" + File.separator + "globus" + File.separator + properties.getProperty("introduce.skeleton.service.name") + "ProviderImpl.java");
-		try {
-			FileWriter providerImplFW = new FileWriter(providerImplF);
-			providerImplFW.write(providerImplS);
-			providerImplFW.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+		File providerImplF = new File(srcDir.getAbsolutePath() + File.separator
+				+ properties.getProperty("introduce.skeleton.package.dir")
+				+ File.separator + "service" + File.separator + "globus"
+				+ File.separator
+				+ properties.getProperty("introduce.skeleton.service.name")
+				+ "ProviderImpl.java");
 
+		FileWriter providerImplFW = new FileWriter(providerImplF);
+		providerImplFW.write(providerImplS);
+		providerImplFW.close();
+
+	}
 
 }

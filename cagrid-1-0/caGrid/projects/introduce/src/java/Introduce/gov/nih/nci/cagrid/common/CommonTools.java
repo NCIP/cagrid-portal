@@ -1,6 +1,9 @@
 package gov.nih.nci.cagrid.common;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.StringTokenizer;
 
 import org.projectmobius.common.MobiusException;
@@ -112,6 +115,26 @@ public class CommonTools {
 			}
 		}
 		return null;
+	}
+	
+	public static StringBuffer fileToStringBuffer(File file) throws Exception {
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new FileReader(file));
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		}
+		StringBuffer sb = new StringBuffer();
+		try {
+			String s = null;
+			while ((s = br.readLine()) != null) {
+				sb.append(s + "\n");
+			}
+		} catch (Exception e) {
+			throw new Exception("Error reading the buffer: " + e.getMessage());
+		}
+
+		return sb;
 	}
 
 }
