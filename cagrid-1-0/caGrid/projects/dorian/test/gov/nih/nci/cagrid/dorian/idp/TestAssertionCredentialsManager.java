@@ -193,7 +193,6 @@ public class TestAssertionCredentialsManager extends TestCase {
 			verifySAMLAssertion(saml,cm);
 			String xml = IOUtils.samlAssertionToString(saml);
 			SAMLAssertion saml2 = IOUtils.stringToSAMLAssertion(xml);
-			System.out.println(IOUtils.samlAssertionToString(saml2));
 			verifySAMLAssertion(saml2,cm);
 
 		} catch (Exception e) {
