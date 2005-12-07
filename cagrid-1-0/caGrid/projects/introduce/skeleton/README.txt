@@ -11,7 +11,7 @@ service provider class in the src/ directory.
 
 Prerequisits:
 =======================================
-Globus 3.2 installed and GLOBUS_LOCATION env defined
+Globus 4.0 installed and GLOBUS_LOCATION env defined
 Tomcat > 4.0 installed and "CATALINA_HOME" env defined
 
 To Build:

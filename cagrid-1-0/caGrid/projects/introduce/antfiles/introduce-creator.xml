@@ -1,5 +1,5 @@
 <!-- ======================================================================= -->
-<!-- caGRID Analytical Utilities build file                                  -->
+<!-- caGrid Analytical Utilities build file                                  -->
 <!-- ======================================================================= -->
 <project name="introduce_creator" basedir="." default="usage">
 
@@ -14,7 +14,7 @@
 		<echo message="Not to be called directly.  This file contains utilities to be used in other build files." />
 	</target>
 
-	<target name="createService" description="Will create an anaytical skeleton deployment" depends=" checkInputProps, copySkeleton,copyCaGRIDJars,serviceCopySchemaFiles,serviceCopyPortalFiles,setActivePath">
+	<target name="createService" description="Will create an anaytical skeleton deployment" depends=" checkInputProps, copySkeleton, copyCaGridJars, serviceCopySchemaFiles, serviceCopyPortalFiles, setActivePath">
 		<createSkeleton />
 	</target>
 
@@ -175,18 +175,18 @@
 		<input message="Please enter the namespace domain of the introduce. [${introduce.skeleton.namespace.domain.default}]:" addproperty="introduce.skeleton.namespace.domain" defaultvalue="${introduce.skeleton.namespace.domain.default}" />
 	</target>
 
-	<target name="copyCaGRIDJars" depends="prepareSkeleton,copySkeleton">
-		<copy todir="${introduce.skeleton.destination.dir}/lib" flatten="true">
+	<target name="copyCaGridJars" depends="prepareSkeleton,copySkeleton">
+		<copy todir="${introduce.skeleton.destination.dir}/lib" flatten="true" includeemptydirs="false">
 			<fileset dir="${lib.dir}">
 				<include name="**/*" />
 			</fileset>
 		</copy>
-		<copy todir="${introduce.skeleton.destination.dir}/lib" flatten="true">
+		<copy todir="${introduce.skeleton.destination.dir}/lib" flatten="true" includeemptydirs="false">
 			<fileset dir="${build.lib.dir}">
 				<include name="*" />
 			</fileset>
 		</copy>
-		<copy todir="${introduce.skeleton.destination.dir}/lib" flatten="true">
+		<copy todir="${introduce.skeleton.destination.dir}/lib" flatten="true" includeemptydirs="false">
 			<fileset dir="${ext.lib.dir}">
 				<include name="*" />
 			</fileset>
