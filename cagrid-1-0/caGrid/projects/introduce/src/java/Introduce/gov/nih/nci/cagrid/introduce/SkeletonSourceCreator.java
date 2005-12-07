@@ -7,7 +7,6 @@ import gov.nih.nci.cagrid.introduce.templates.ServiceProviderImplTemplate;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Properties;
 
 public class SkeletonSourceCreator {
@@ -16,8 +15,7 @@ public class SkeletonSourceCreator {
 	}
 
 	public void createSkeleton(Properties properties) throws Exception {
-		File baseDirectory = new File(properties
-				.getProperty("introduce.skeleton.destination.dir"));
+		File baseDirectory = new File(properties.getProperty("introduce.skeleton.destination.dir"));
 
 		File srcDir = new File(baseDirectory.getAbsolutePath() + File.separator
 				+ "src");
