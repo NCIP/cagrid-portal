@@ -1,4 +1,4 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="ServiceClientTemplate" %>
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus.resource" class="ResourceConstantsTemplate" %>
 <% java.util.Properties properties = (java.util.Properties) argument; 
    String packageName = properties.getProperty("introduce.skeleton.package");
    String serviceName = properties.getProperty("introduce.skeleton.service.name");

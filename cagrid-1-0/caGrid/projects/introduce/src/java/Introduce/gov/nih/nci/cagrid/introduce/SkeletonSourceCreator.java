@@ -1,9 +1,9 @@
 package gov.nih.nci.cagrid.introduce;
 
-import gov.nih.nci.cagrid.introduce.templates.ServiceClientTemplate;
-import gov.nih.nci.cagrid.introduce.templates.ServiceITemplate;
-import gov.nih.nci.cagrid.introduce.templates.ServiceImplTemplate;
-import gov.nih.nci.cagrid.introduce.templates.ServiceProviderImplTemplate;
+import gov.nih.nci.cagrid.introduce.templates.client.ServiceClientTemplate;
+import gov.nih.nci.cagrid.introduce.templates.common.ServiceITemplate;
+import gov.nih.nci.cagrid.introduce.templates.service.ServiceImplTemplate;
+import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceProviderImplTemplate;
 
 import java.io.File;
 import java.io.FileWriter;
