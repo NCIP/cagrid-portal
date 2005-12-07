@@ -165,12 +165,14 @@ public class TestAssertionCredentialsManager extends TestCase {
 			X509Certificate shortCert = ca.requestCertificate(req, start, end);
 			cm.storeCredentials(shortCert, pair.getPrivate(), conf
 					.getKeyPassword());
-			if (cert.equals(shortCert)) {
+			X509Certificate idpShortCert = cm.getIdPCertificate();
+			assertEquals(shortCert,idpShortCert);
+			if (cert.equals(idpShortCert)) {
 				assertTrue(false);
 			}
 
 			Thread.sleep(2500);
-			assertTrue(CertUtil.isExpired(shortCert));
+			assertTrue(CertUtil.isExpired(idpShortCert));
 			X509Certificate renewedCert = cm.getIdPCertificate();
 			assertNotNull(renewedCert);
 
@@ -179,7 +181,7 @@ public class TestAssertionCredentialsManager extends TestCase {
 
 			assertTrue(!CertUtil.isExpired(renewedCert));
 
-			if (renewedCert.equals(shortCert)) {
+			if (renewedCert.equals(idpShortCert)) {
 				assertTrue(false);
 			}
 
