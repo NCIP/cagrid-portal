@@ -6,8 +6,7 @@ import java.io.File;
 public class Archive {
 
 	public static synchronized void create(String baseDir) {
-		File baseDir = new File();
-		
+		File baseDirF = new File(baseDir);
 		
 	}
 
