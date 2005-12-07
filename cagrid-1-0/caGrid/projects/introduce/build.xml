@@ -117,7 +117,7 @@
 	<!-- =================================================================== -->
 	<!-- Compiles the source code                                            -->
 	<!-- =================================================================== -->
-	<target name="compile" depends="prepare" description="Compiles all the source files.">
+	<target name="compile" depends="prepare, generateJETClasses" description="Compiles all the source files.">
 		<compileSubproject name="Introduce" />
 		<compileSubproject name="Portal" />
 	</target>
