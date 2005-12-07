@@ -2,8 +2,8 @@
 <!-- caGrid build file                                                       -->
 <!-- ======================================================================= -->
 <project name="introduce" default="prepare" basedir=".">
-	
-	
+
+
 	<!-- Environment -->
 	<property environment="env" />
 	<property file="${basedir}/build.properties" />
@@ -47,7 +47,7 @@
 	<import file="${antfiles.dir}/build-introduce.xml" />
 	<import file="${antfiles.dir}/build-portal.xml" />
 	<import file="${antfiles.dir}/introduce-utils.xml" />
-	
+
 	<!-- Load test files -->
 	<import file="test/test.xml" />
 
@@ -112,6 +112,31 @@
 
 		<delete dir="${build.dir}/stubs" />
 	</target>
+	
+	<!-- =================================================================== -->
+	<!--  Generate JET template classes                                      -->
+	<!-- =================================================================== -->
+	<taskdef name="jetc" classname="ch.paranor.epla.structure.JETCTask">
+		<classpath>
+			<pathelement location="${lib.dir}/jet/jetc-task.jar"/>
+			<fileset dir="${lib.dir}/jet">
+				<include name="boot.jar" /> 
+				<include name="osgi.jar" /> 
+				<include name="resources.jar" /> 
+				<include name="runtime.jar" /> 
+				<include name="codegen.jar" /> 
+				<include name="jdtcore.jar" /> 
+			</fileset>
+		</classpath>
+	</taskdef>
+	<target name="generateJETClasses">
+		<jetc destdir="${src.dir}/Introduce" template="templates/ServiceClient.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="templates/ServiceI.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="templates/ServiceImpl.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="templates/ServiceProviderImpl.javajet" />
+	</target>
+	
+			
 
 
 	<!-- =================================================================== -->
@@ -174,6 +199,13 @@
 				<attribute name="Created-By" value="${user.name}" />
 			</manifest>
 		</jar>
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- Create new service                                                  -->
+	<!-- =================================================================== -->
+	<target name="createService" description="Create new service">
+		<ant dir="${basedir}" antfile="antfiles/introduce-creator.xml" target="createService" inheritall="true" />
 	</target>
 
 

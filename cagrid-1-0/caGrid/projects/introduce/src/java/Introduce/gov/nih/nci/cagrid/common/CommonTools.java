@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce;
+package gov.nih.nci.cagrid.common;
 
 import java.io.File;
 import java.util.StringTokenizer;

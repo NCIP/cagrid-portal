@@ -1,6 +1,6 @@
 package gov.nih.nci.cabig.introduce;
 
-import gov.nih.nci.cagrid.introduce.CommonTools;
+import gov.nih.nci.cagrid.common.CommonTools;
 
 import java.io.File;
 import java.io.FileWriter;

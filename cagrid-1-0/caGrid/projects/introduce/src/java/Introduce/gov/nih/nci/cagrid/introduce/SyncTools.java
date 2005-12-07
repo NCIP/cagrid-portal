@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.introduce;
 
+import gov.nih.nci.cagrid.common.CommonTools;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

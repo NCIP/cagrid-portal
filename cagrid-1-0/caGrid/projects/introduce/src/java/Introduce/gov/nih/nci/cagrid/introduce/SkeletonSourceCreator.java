@@ -17,10 +17,16 @@ public class SkeletonSourceCreator {
 
 	public void createSkeleton(Properties properties) {
 		File baseDirectory = new File(properties.getProperty("introduce.skeleton.destination.dir"));
-		baseDirectory.mkdirs();
+		
 		File srcDir = new File(baseDirectory.getAbsolutePath() + File.separator + "src");
 		srcDir.mkdir();
-
+		
+		new File(srcDir.getAbsolutePath() + File.separator + properties.getProperty("introduce.skeleton.package.dir")).mkdirs();
+		new File(srcDir.getAbsolutePath() + File.separator + properties.getProperty("introduce.skeleton.package.dir")+ File.separator + "client").mkdirs();
+		new File(srcDir.getAbsolutePath() + File.separator + properties.getProperty("introduce.skeleton.package.dir") + File.separator + "common").mkdirs();
+		new File(srcDir.getAbsolutePath() + File.separator + properties.getProperty("introduce.skeleton.package.dir") + File.separator + "service").mkdirs();
+		new File(srcDir.getAbsolutePath() + File.separator + properties.getProperty("introduce.skeleton.package.dir") + File.separator + "service" + File.separator + "globus").mkdirs();
+		
 		ServiceClientTemplate clientT = new ServiceClientTemplate();
 		String clientS = clientT.generate(properties);
 		File clientF = new File(srcDir.getAbsolutePath() + File.separator + properties.getProperty("introduce.skeleton.package.dir") + File.separator + "client" + File.separator + properties.getProperty("introduce.skeleton.service.name") + "Client.java");
@@ -66,8 +72,5 @@ public class SkeletonSourceCreator {
 		}
 	}
 
-	public static void main(String[] args) {
-		SkeletonSourceCreator sc = new SkeletonSourceCreator();
-	}
 
 }
