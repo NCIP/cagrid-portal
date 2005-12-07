@@ -57,6 +57,9 @@ import org.projectmobius.db.ConnectionManager;
  *          Exp $
  */
 public class GUMSConfiguration implements AbstractMobiusConfiguration {
+	
+	public static final String RESOURCE = "GUMSConfiguration";
+	
 	public static final String DATABASE = "database";
 
 	public static final String GUMS_ID = "gums-internal-id";

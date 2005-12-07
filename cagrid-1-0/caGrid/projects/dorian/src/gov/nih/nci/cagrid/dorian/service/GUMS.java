@@ -47,7 +47,6 @@ public class GUMS extends MobiusResourceManager {
 
 	private Database db;
 
-	public static final String GUMS_CONFIGURATION_RESOURCE = "GUMSConfiguration";
 
 	public static final String IDP_ADMIN_USER_ID = "gums";
 
@@ -116,7 +115,7 @@ public class GUMS extends MobiusResourceManager {
 
 	public GUMSConfiguration getGUMSConfiguration() {
 		return (GUMSConfiguration) this
-				.getResource(GUMS_CONFIGURATION_RESOURCE);
+				.getResource(GUMSConfiguration.RESOURCE);
 	}
 
 	public Database getDatabase() {

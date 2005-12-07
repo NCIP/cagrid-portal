@@ -5,7 +5,6 @@ import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthorityConf;
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.SimpleResourceManager;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.service.GUMS;
 import gov.nih.nci.cagrid.gums.service.GUMSConfiguration;
 
 /**
