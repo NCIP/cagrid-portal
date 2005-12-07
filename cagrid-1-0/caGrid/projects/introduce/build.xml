@@ -112,31 +112,38 @@
 
 		<delete dir="${build.dir}/stubs" />
 	</target>
-	
+
 	<!-- =================================================================== -->
 	<!--  Generate JET template classes                                      -->
 	<!-- =================================================================== -->
 	<taskdef name="jetc" classname="ch.paranor.epla.structure.JETCTask">
 		<classpath>
-			<pathelement location="${lib.dir}/jet/jetc-task.jar"/>
+			<pathelement location="${lib.dir}/jet/jetc-task.jar" />
 			<fileset dir="${lib.dir}/jet">
-				<include name="boot.jar" /> 
-				<include name="osgi.jar" /> 
-				<include name="resources.jar" /> 
-				<include name="runtime.jar" /> 
-				<include name="codegen.jar" /> 
-				<include name="jdtcore.jar" /> 
+				<include name="boot.jar" />
+				<include name="osgi.jar" />
+				<include name="resources.jar" />
+				<include name="runtime.jar" />
+				<include name="codegen.jar" />
+				<include name="jdtcore.jar" />
+				<include name="*.jar" />
 			</fileset>
 		</classpath>
 	</taskdef>
 	<target name="generateJETClasses">
-		<jetc destdir="${src.dir}/Introduce" template="templates/ServiceClient.javajet" />
-		<jetc destdir="${src.dir}/Introduce" template="templates/ServiceI.javajet" />
-		<jetc destdir="${src.dir}/Introduce" template="templates/ServiceImpl.javajet" />
-		<jetc destdir="${src.dir}/Introduce" template="templates/ServiceProviderImpl.javajet" />
+
+		<jetc destdir="${src.dir}/Introduce" template="templates/src/client/ServiceClient.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="templates/src/common/ServiceI.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="templates/src/service/ServiceImpl.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="templates/src/service/globus/ServiceProviderImpl.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="templates/src/service/globus/resource/BaseResource.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="templates/src/service/globus/resource/BaseResourceHome.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="templates/src/service/globus/resource/MetadataConfiguration.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="templates/src/service/globus/resource/ResourceConstants.javajet" />
+
 	</target>
-	
-			
+
+
 
 
 	<!-- =================================================================== -->
