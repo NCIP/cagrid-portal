@@ -43,7 +43,7 @@
 		
 		<!-- prepare the server-config file -->
 		<mkdir dir="tmp" />
-		<copy overwrite="true" toFile="tmp/server-config.wsdd" file="server-deploy.wsdd" />
+		<copy overwrite="true" todir="tmp" file="server-config.wsdd" />
 		<!-- replace the config paths in the server deploy file -->
 		<replace file="tmp/server-config.wsdd" value="${service.deployment.dir.name}" token="SERVICE-INSTANCE-PATH" />
 		<replace file="tmp/server-config.wsdd" value="${service.deployment.path}" token="SERVICE-INSTANCE-NAME" />
@@ -55,7 +55,7 @@
 		</copy>
 		
 		<!-- prepare the jndi file -->
-		<copy overwrite="true" todir="tmp" file="jndi-deploy-config.xml" />
+		<copy overwrite="true" todir="tmp" file="jndi-config.xml" />
 		<!-- replace the config paths in the server deploy file -->
 		<replace file="tmp/jndi-deploy-config.xml" value="${service.deployment.dir.name}" token="SERVICE-INSTANCE-PATH" />
 		<replace file="tmp/jndi-deploy-config.xml" value="${service.deployment.path}" token="SERVICE-INSTANCE-NAME" />

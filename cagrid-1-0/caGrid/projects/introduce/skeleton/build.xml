@@ -369,10 +369,10 @@ src.dir:        Directory where source files are located.
 		</copy>
 
 		<ant antfile="${build.packages}" target="makeGar">
-			<property name="garserverdeployment.file" value="${basedir}/server-deploy.wsdd" />
-			<property name="garclientdeployment.file" value="${basedir}/client-deploy.wsdd" />
-			<property name="garclientserverdeployment.file" value="${basedir}/client-deploy-server.wsdd" />
-			<property name="garjndiconfigdeployment.file" value="${basedir}/jndi-deploy-config.xml" />
+			<property name="garserverdeployment.file" value="${basedir}/server-config.wsdd" />
+			<property name="garclientdeployment.file" value="${basedir}/client-config.wsdd" />
+			<property name="garclientserverdeployment.file" value="${basedir}/client-server.wsdd" />
+			<property name="garjndiconfigdeployment.file" value="${basedir}/jndi-config.xml" />
 			<reference refid="${garjars.id}" />
 			<reference refid="${garschema.id}" />
 			<reference refid="${garetc.id}" />
