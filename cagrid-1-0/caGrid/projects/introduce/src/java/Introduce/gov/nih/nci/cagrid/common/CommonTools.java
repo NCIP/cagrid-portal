@@ -66,6 +66,11 @@ public class CommonTools {
 	public static String getAntSkeletonCreationCommand(String buildFileDir,
 			String name, String dir, String packagename, String namespacedomain)
 			throws Exception {
+		// fix dir path if it relative......
+		File dirF = new File(dir);
+		if (!dirF.isAbsolute()) {
+			dir = buildFileDir + File.separator + dir;
+		}
 		String cmd = " -Dintroduce.skeleton.destination.dir=" + dir
 				+ " -Dintroduce.skeleton.service.name=" + name
 				+ " -Dintroduce.skeleton.package=" + packagename
@@ -116,7 +121,7 @@ public class CommonTools {
 		}
 		return null;
 	}
-	
+
 	public static StringBuffer fileToStringBuffer(File file) throws Exception {
 		BufferedReader br = null;
 		try {

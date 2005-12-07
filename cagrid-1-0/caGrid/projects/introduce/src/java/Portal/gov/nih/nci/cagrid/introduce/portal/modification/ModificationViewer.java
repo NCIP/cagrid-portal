@@ -39,7 +39,7 @@ import antlr.CommonToken;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.6 2005-12-07 15:31:28 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.7 2005-12-07 17:15:40 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -404,6 +404,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 						}
 					} catch (Exception e1) {
 						e1.printStackTrace();
+						PortalUtils.showMessage(e1.getMessage());
 					}
 				}
 			});

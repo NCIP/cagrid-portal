@@ -28,9 +28,6 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
-import antlr.RecognitionException;
-import antlr.TokenStreamException;
-
 /**
  * SyncMethodsOnDeployment TODO:DOCUMENT ME
  * 
@@ -324,7 +321,6 @@ public class SyncTools {
 		CommandLineParser parser = new PosixParser();
 
 		File directory = null;
-		Document methodsDocument = null;
 
 		try {
 			CommandLine line = parser.parse(options, args);
@@ -334,7 +330,12 @@ public class SyncTools {
 		}
 
 		SyncTools sync = new SyncTools(directory);
-		sync.sync();
+		try {
+			sync.sync();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
 	}
 
 }

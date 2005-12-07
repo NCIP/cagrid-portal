@@ -15,7 +15,10 @@ public class SkeletonSourceCreator {
 	}
 
 	public void createSkeleton(Properties properties) throws Exception {
-		File baseDirectory = new File(properties.getProperty("introduce.skeleton.destination.dir"));
+		File baseDirectory = new File(properties
+				.getProperty("introduce.skeleton.destination.dir"));
+		System.out.println("Creating new source code in : "
+				+ properties.getProperty("introduce.skeleton.destination.dir"));
 
 		File srcDir = new File(baseDirectory.getAbsolutePath() + File.separator
 				+ "src");
