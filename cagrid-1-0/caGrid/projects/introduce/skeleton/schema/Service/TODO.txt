@@ -1,0 +1,2 @@
+the common xsd needs to be copied to a share folder during master build and put in the skeleton at some point
+it will also need to be deployed to some common location such as share/schemas/cagrid/types/common 

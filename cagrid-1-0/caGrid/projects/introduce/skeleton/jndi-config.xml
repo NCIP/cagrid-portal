@@ -1,18 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
-
-<service name="SERVICE-INSTANCE-PATH">
-	<resource name="home" type="org.globus.wsrf.impl.ServiceResourceHome">
-	<resourceParams>
-
-		<parameter>
-			<name>factory</name>
-			<value>org.globus.wsrf.jndi.BeanFactory</value>
-		</parameter>
-
-	</resourceParams>
-		
-	</resource>
-</service>
-
+	<service name="SERVICE-INSTANCE-NAME">
+		<resource name="home" type="PACKAGE-NAME.resource.BaseResourceHome">
+			<resourceParams>
+				<parameter>
+					<name>factory</name>
+					<value>org.globus.wsrf.jndi.BeanFactory</value>
+				</parameter>
+			</resourceParams>
+		</resource>
+		<resource name="configuration" type="PACKAGE-NAME.resource.MetadataConfiguration">
+			<resourceParams>
+				<parameter>
+					<name>factory</name>
+					<value>org.globus.wsrf.jndi.BeanFactory</value>
+				</parameter>
+				<parameter>
+					<name>performRegistration</name>
+					<!-- Set this to false to skip ServiceGroup registration -->
+					<value>true</value>
+				</parameter>
+				<parameter>
+					<name>commonMetadataFile</name>
+					<!-- Set this to the full path of the common metadata extract -->
+					<value>FULL-ETC-PATH/commonMetadata.xml</value>
+				</parameter>
+				<parameter>
+					<name>registrationTemplateFile</name>
+					<!-- Set this to the full path of the registration parameters template file (ignored if performRegistration is false) -->
+					<value>FULL-ETC-PATH/registration.xml</value>
+				</parameter>
+			</resourceParams>
+		</resource>
+	</service>
 </jndiConfig>
