@@ -33,13 +33,11 @@ import org.jdom.output.XMLOutputter;
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
 
-import antlr.CommonToken;
-
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.7 2005-12-07 17:15:40 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.8 2005-12-07 18:05:24 oster Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
