@@ -2,8 +2,11 @@ package gov.nih.nci.cagrid.gums.ca.tools;
 
 import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthority;
 import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthorityConf;
+import gov.nih.nci.cagrid.gums.common.Database;
+import gov.nih.nci.cagrid.gums.common.SimpleResourceManager;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.service.GUMS;
+import gov.nih.nci.cagrid.gums.service.GUMSConfiguration;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -21,11 +24,16 @@ public class WriteCACertificate {
 		try {
 		
 				String configFile = "etc/gums-conf.xml";
-				GUMS jm = new GUMS(configFile, "localhost");
-				GUMSCertificateAuthorityConf conf = (GUMSCertificateAuthorityConf) jm
+				SimpleResourceManager rm = new SimpleResourceManager(configFile);
+				GUMSCertificateAuthorityConf conf = (GUMSCertificateAuthorityConf) rm
 						.getResource(GUMSCertificateAuthorityConf.RESOURCE);
-				GUMSCertificateAuthority ca = new GUMSCertificateAuthority(jm
-						.getDatabase(), conf);
+				GUMSConfiguration c = (GUMSConfiguration) rm
+				.getResource(GUMSConfiguration.RESOURCE);
+				Database db = new Database(c
+						.getConnectionManager(), c
+						.getGUMSInternalId());
+				db.createDatabaseIfNeeded();
+				GUMSCertificateAuthority ca = new GUMSCertificateAuthority(db, conf);
 				CertUtil.writeCertificate(ca.getCACertificate(), "cacert.pem");
 				
 		} catch (Exception e) {

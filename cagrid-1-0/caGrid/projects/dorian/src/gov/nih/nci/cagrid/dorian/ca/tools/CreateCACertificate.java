@@ -2,10 +2,12 @@ package gov.nih.nci.cagrid.gums.ca.tools;
 
 import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthority;
 import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthorityConf;
+import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.IOUtils;
+import gov.nih.nci.cagrid.gums.common.SimpleResourceManager;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
-import gov.nih.nci.cagrid.gums.service.GUMS;
+import gov.nih.nci.cagrid.gums.service.GUMSConfiguration;
 
 import java.security.KeyPair;
 import java.security.Security;
@@ -92,11 +94,16 @@ public class CreateCACertificate {
 				System.exit(0);
 			} else {
 				String configFile = line.getOptionValue(CONFIG_FILE_OPT);
-				GUMS jm = new GUMS(configFile, "localhost");
-				GUMSCertificateAuthorityConf conf = (GUMSCertificateAuthorityConf) jm
+				SimpleResourceManager rm = new SimpleResourceManager(configFile);
+				GUMSCertificateAuthorityConf conf = (GUMSCertificateAuthorityConf) rm
 						.getResource(GUMSCertificateAuthorityConf.RESOURCE);
-				GUMSCertificateAuthority ca = new GUMSCertificateAuthority(jm
-						.getDatabase(), conf);
+				GUMSConfiguration c = (GUMSConfiguration) rm
+				.getResource(GUMSConfiguration.RESOURCE);
+				Database db = new Database(c
+						.getConnectionManager(), c
+						.getGUMSInternalId());
+				db.createDatabaseIfNeeded();
+				GUMSCertificateAuthority ca = new GUMSCertificateAuthority(db, conf);
 				boolean interactive = false;
 				if (line.hasOption(INTERACTIVE_MODE_OPT)) {
 					interactive = true;
