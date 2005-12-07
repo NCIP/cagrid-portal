@@ -5,7 +5,7 @@
 	<property name="junit.results.dir" value="${test.log.dir}/junit"/>
 	<mkdir dir="${test.log.dir}"/>
 	<!-- call the test target for each project and aggregates the log resutls  -->
-	<target name="test">
+	<target name="test" depends="checkGlobus">
 		
 		<echo message="Test results dir: ${junit.results.dir}" />
 		<mkdir dir="${junit.results.dir}"/>

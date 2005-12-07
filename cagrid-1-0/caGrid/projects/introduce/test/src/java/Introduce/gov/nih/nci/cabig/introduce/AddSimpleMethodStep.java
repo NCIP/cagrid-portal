@@ -43,7 +43,6 @@ public class AddSimpleMethodStep extends Step {
 
 		String cmd = CommonTools.getAntSkeletonResyncCommand(pathtobasedir
 				+ File.separator + TestCaseInfo.dir);
-		System.out.println(cmd);
 
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
