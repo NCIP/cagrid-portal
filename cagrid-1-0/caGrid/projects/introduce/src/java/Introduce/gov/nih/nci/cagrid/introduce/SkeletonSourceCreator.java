@@ -4,6 +4,10 @@ import gov.nih.nci.cagrid.introduce.templates.client.ServiceClientTemplate;
 import gov.nih.nci.cagrid.introduce.templates.common.ServiceITemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.ServiceImplTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceProviderImplTemplate;
+import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.BaseResourceHomeTemplate;
+import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.BaseResourceTemplate;
+import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.MetadataConfigurationTemplate;
+import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceConstantsTemplate;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -39,6 +43,10 @@ public class SkeletonSourceCreator {
 		new File(srcDir.getAbsolutePath() + File.separator
 				+ properties.getProperty("introduce.skeleton.package.dir")
 				+ File.separator + "service" + File.separator + "globus")
+				.mkdirs();
+		new File(srcDir.getAbsolutePath() + File.separator
+				+ properties.getProperty("introduce.skeleton.package.dir")
+				+ File.separator + "service" + File.separator + "globus" + File.separator + "resource")
 				.mkdirs();
 
 		ServiceClientTemplate clientT = new ServiceClientTemplate();
@@ -89,7 +97,55 @@ public class SkeletonSourceCreator {
 		FileWriter providerImplFW = new FileWriter(providerImplF);
 		providerImplFW.write(providerImplS);
 		providerImplFW.close();
+		
+		BaseResourceTemplate baseResourceT = new BaseResourceTemplate();
+		String baseResourceS = baseResourceT.generate(properties);
+		File baseResourceF = new File(srcDir.getAbsolutePath() + File.separator
+				+ properties.getProperty("introduce.skeleton.package.dir")
+				+ File.separator + "service" + File.separator + "globus"
+				+ File.separator + "resource" + File.separator
+				+ "BaseResource.java");
 
+		FileWriter baseResourceFW = new FileWriter(baseResourceF);
+		baseResourceFW.write(baseResourceS);
+		baseResourceFW.close();
+		
+		BaseResourceHomeTemplate baseResourceHomeT = new BaseResourceHomeTemplate();
+		String baseResourceHomeS = baseResourceHomeT.generate(properties);
+		File baseResourceHomeF = new File(srcDir.getAbsolutePath() + File.separator
+				+ properties.getProperty("introduce.skeleton.package.dir")
+				+ File.separator + "service" + File.separator + "globus"
+				+ File.separator + "resource" + File.separator
+				+ "BaseResourceHome.java");
+
+		FileWriter baseResourceHomeFW = new FileWriter(baseResourceHomeF);
+		baseResourceHomeFW.write(baseResourceHomeS);
+		baseResourceHomeFW.close();
+		
+		MetadataConfigurationTemplate metadataConfigurationT = new MetadataConfigurationTemplate();
+		String metadataConfigurationS = metadataConfigurationT.generate(properties);
+		File metadataConfigurationF = new File(srcDir.getAbsolutePath() + File.separator
+				+ properties.getProperty("introduce.skeleton.package.dir")
+				+ File.separator + "service" + File.separator + "globus"
+				+ File.separator + "resource" + File.separator
+				+ "MetadataConfiguration.java");
+
+		FileWriter metadataConfigurationFW = new FileWriter(metadataConfigurationF);
+		metadataConfigurationFW.write(metadataConfigurationS);
+		metadataConfigurationFW.close();
+		
+		ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
+		String resourceContanstsS = resourceContanstsT.generate(properties);
+		File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
+				+ properties.getProperty("introduce.skeleton.package.dir")
+				+ File.separator + "service" + File.separator + "globus"
+				+ File.separator + "resource" + File.separator
+				+ "ResourceConstants.java");
+
+		FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
+		resourceContanstsFW.write(resourceContanstsS);
+		resourceContanstsFW.close();
+		
 	}
 
 }
