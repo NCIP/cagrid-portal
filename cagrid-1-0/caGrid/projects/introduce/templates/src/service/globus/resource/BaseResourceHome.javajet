@@ -1,0 +1,38 @@
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="ServiceClientTemplate" %>
+<% java.util.Properties properties = (java.util.Properties) argument; 
+   String packageName = properties.getProperty("introduce.skeleton.package");
+   String serviceName = properties.getProperty("introduce.skeleton.service.name");
+   String modifiedServiceName = serviceName;
+   if(serviceName.endsWith("Service")){
+   	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
+   }
+%>
+package <%=packageName%>.service.globus.resource;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.globus.wsrf.Resource;
+import org.globus.wsrf.impl.SingletonResourceHome;
+
+
+/**
+ * This class implements a resource home
+ */
+
+public class BaseResourceHome extends SingletonResourceHome {
+
+	static final Log logger = LogFactory.getLog(BaseResourceHome.class);
+
+
+	public Resource findSingleton() {
+		logger.info("Creating a single resource.");
+		try {
+			BaseResource resource = new BaseResource();
+			resource.initialize();
+			return resource;
+		} catch (Exception e) {
+			logger.error("Exception when creating the resource: " + e);
+			return null;
+		}
+	}
+}

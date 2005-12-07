@@ -1,0 +1,206 @@
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="ServiceClientTemplate" %>
+<% java.util.Properties properties = (java.util.Properties) argument; 
+   String packageName = properties.getProperty("introduce.skeleton.package");
+   String serviceName = properties.getProperty("introduce.skeleton.service.name");
+   String modifiedServiceName = serviceName;
+   if(serviceName.endsWith("Service")){
+   	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
+   }
+%>
+package <%=packageName%>.service.globus.resource;
+
+import gov.nih.nci.cagrid.metadata.common.CommonServiceMetadataType;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Calendar;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+
+import org.apache.axis.MessageContext;
+import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.apache.axis.utils.XMLUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.globus.mds.servicegroup.client.ServiceGroupRegistrationParameters;
+import org.globus.wsrf.Constants;
+import org.globus.wsrf.Resource;
+import org.globus.wsrf.ResourceContext;
+import org.globus.wsrf.ResourceContextException;
+import org.globus.wsrf.ResourceIdentifier;
+import org.globus.wsrf.ResourceKey;
+import org.globus.wsrf.ResourceLifetime;
+import org.globus.wsrf.ResourceProperties;
+import org.globus.wsrf.ResourceProperty;
+import org.globus.wsrf.ResourcePropertySet;
+import org.globus.wsrf.config.ContainerConfig;
+import org.globus.wsrf.encoding.ObjectDeserializer;
+import org.globus.wsrf.impl.ReflectionResourceProperty;
+import org.globus.wsrf.impl.SimpleResourceKey;
+import org.globus.wsrf.impl.SimpleResourceProperty;
+import org.globus.wsrf.impl.SimpleResourcePropertyMetaData;
+import org.globus.wsrf.impl.SimpleResourcePropertySet;
+import org.globus.wsrf.impl.servicegroup.client.ServiceGroupRegistrationClient;
+import org.globus.wsrf.utils.AddressingUtils;
+import org.w3c.dom.Document;
+
+
+public class BaseResource implements Resource, ResourceProperties, ResourceLifetime, ResourceIdentifier {
+
+	static final Log logger = LogFactory.getLog(BaseResource.class);
+
+	/** the identifier of this resource */
+	private Object id;
+
+	/** Stores the ResourceProperties of this sticky note */
+	private ResourcePropertySet propSet;
+
+	private Calendar terminationTime;
+
+	// TODO: how to add the proper metadata files here?
+	private ResourceProperty commonRP;
+	private CommonServiceMetadataType commonMD;
+	private MetadataConfiguration configuration;
+
+
+	// initializes the resource
+	public void initialize() throws Exception {
+		// choose an ID
+		this.id = new Integer(hashCode());
+
+		// create the resource property set
+		this.propSet = new SimpleResourcePropertySet(ResourceConstants.RESOURCE_PROPERY_SET);
+
+		// these are the RPs necessary for resource lifetime management
+		ResourceProperty prop = new ReflectionResourceProperty(SimpleResourcePropertyMetaData.TERMINATION_TIME, this);
+		this.propSet.add(prop); // this property exposes the currenttime, as
+		// believed by the local system
+		prop = new ReflectionResourceProperty(SimpleResourcePropertyMetaData.CURRENT_TIME, this);
+		this.propSet.add(prop);
+
+		// this loads the metadata from XML files
+		populateMetadata();
+		// now add the metadata as resource properties
+		this.commonRP = new SimpleResourceProperty(ResourceConstants.COMMON_MD_RP);
+		this.commonRP.add(this.commonMD);
+		this.propSet.add(this.commonRP);
+
+		// register the service to the index sevice
+		performRegistration();
+
+	}
+
+
+	private void performRegistration() {
+		if (getConfiguration().shouldPerformRegistration()) {
+			logger.info("Attempting registration.");
+			ResourceKey key = new SimpleResourceKey(ResourceConstants.RESOURCE_KEY, this.id);
+
+			// register with the index service
+			ResourceContext ctx;
+			try {
+				ctx = ResourceContext.getResourceContext();
+			} catch (ResourceContextException e) {
+				logger.error("Could not get ResourceContext: " + e);
+				return;
+			}
+
+			EndpointReferenceType epr;
+			try {
+				epr = AddressingUtils.createEndpointReference(ctx, key);
+			} catch (Exception e) {
+				logger.error("Could not form EPR: " + e);
+				return;
+			}
+
+			// TODO: what is the right path to use here?
+			String regPath = ContainerConfig.getGlobusLocation() + "/etc/globus_tutorial_stickynote/registration.xml";
+			try {
+				// THIS IS HOW THE PARAMS ARE SET
+				ServiceGroupRegistrationParameters params = ServiceGroupRegistrationClient.readParams(regPath);
+				params.setRegistrantEPR(epr);
+
+				// THIS WOULD BE REPLACED WITH A LOCATOR CALL TO THE INDEX
+				// SERVICE
+				ServiceGroupRegistrationClient client = ServiceGroupRegistrationClient.getContainerClient();
+				// THIS IS HOW THE PARAMS ARE APPLIED
+				client.register(params);
+			} catch (Exception e) {
+				logger.error("Exception when trying to register this StickyNote: " + e);
+			}
+		} else {
+			logger.info("Skipping registration.");
+		}
+	}
+
+
+	private void populateMetadata() {
+		InputStream inputStream = null;
+
+		try {
+			inputStream = new FileInputStream(getConfiguration().getCommonMetadataFile());
+			Document doc = XMLUtils.newDocument(inputStream);
+
+			this.commonMD = (CommonServiceMetadataType) ObjectDeserializer.toObject(doc.getDocumentElement(),
+				CommonServiceMetadataType.class);
+		} catch (Exception e) {
+			logger.error("ERROR: problem populating metadata from file: " + e.getMessage(), e);
+		} finally {
+			if (inputStream != null) {
+				try {
+					inputStream.close();
+				} catch (IOException e) {
+				}
+			}
+		}
+
+	}
+
+
+	public MetadataConfiguration getConfiguration() {
+		if (this.configuration != null) {
+			return this.configuration;
+		}
+		MessageContext ctx = MessageContext.getCurrentContext();
+
+		String servicePath = ctx.getTargetService();
+
+		String jndiName = Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/configuration";
+		logger.debug("Will read configuration from jndi name: " + jndiName);
+		try {
+			Context initialContext = new InitialContext();
+			this.configuration = (MetadataConfiguration) initialContext.lookup(jndiName);
+		} catch (Exception e) {
+			logger.error("when performing JNDI lookup for " + jndiName + ": " + e);
+		}
+
+		return this.configuration;
+	}
+
+
+	public ResourcePropertySet getResourcePropertySet() {
+		return propSet;
+	}
+
+
+	public Object getID() {
+		return id;
+	}
+
+
+	public void setTerminationTime(Calendar time) {
+		this.terminationTime = time;
+	}
+
+
+	public Calendar getTerminationTime() {
+		return this.terminationTime;
+	}
+
+
+	public Calendar getCurrentTime() {
+		return Calendar.getInstance();
+	}
+}

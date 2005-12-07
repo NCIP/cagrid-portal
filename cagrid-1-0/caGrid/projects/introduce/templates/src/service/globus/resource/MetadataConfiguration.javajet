@@ -1,0 +1,46 @@
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="ServiceClientTemplate" %>
+<% java.util.Properties properties = (java.util.Properties) argument; 
+   String packageName = properties.getProperty("introduce.skeleton.package");
+   String serviceName = properties.getProperty("introduce.skeleton.service.name");
+   String modifiedServiceName = serviceName;
+   if(serviceName.endsWith("Service")){
+   	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
+   }
+%>
+package <%=packageName%>.service.globus.resource;
+
+public class MetadataConfiguration {
+	private String commonMetadataFile;
+	private String registrationTemplateFile;
+	private boolean performRegistration;
+
+
+	public boolean shouldPerformRegistration() {
+		return performRegistration;
+	}
+
+
+	public void setPerformRegistration(boolean performRegistration) {
+		this.performRegistration = performRegistration;
+	}
+
+
+	public String getCommonMetadataFile() {
+		return commonMetadataFile;
+	}
+
+
+	public void setCommonMetadataFile(String commonMetadataFile) {
+		this.commonMetadataFile = commonMetadataFile;
+	}
+
+
+	public String getRegistrationTemplateFile() {
+		return registrationTemplateFile;
+	}
+
+
+	public void setRegistrationTemplateFile(String registrationTemplateFile) {
+		this.registrationTemplateFile = registrationTemplateFile;
+	}
+}
