@@ -4,7 +4,7 @@ Make sure that skeleton names entered in the GUI are acceptable.
 		 No non-acceptable characters for java class names
 
 Enable service to back up old service skeleton before altering and then provide rollback capabilities.
-	i.e. Enable "undu" in the gui.
+	i.e. Enable "undo" in the gui.
 	
 Security configuration
 
