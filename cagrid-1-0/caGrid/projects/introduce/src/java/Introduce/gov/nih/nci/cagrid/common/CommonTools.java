@@ -89,8 +89,8 @@ public class CommonTools {
 			cmd = "-classpath \""
 					+ CommonTools.getAntLauncherJarLocation(System
 							.getProperty("java.class.path"), true)
-					+ "\" org.apache.tools.ant.launch.Launcher -lib "
-					+ System.getProperty("java.class.path") + " -buildfile "
+					+ "\" org.apache.tools.ant.launch.Launcher -lib \""
+					+ System.getProperty("java.class.path") + "\" -buildfile "
 					+ buildFileDir + File.separator + "build.xml" + cmd;
 			cmd = "java.exe " + cmd;
 		} else if ((os.indexOf("Linux") >= 0) || (os.indexOf("linux") >= 0)) {
