@@ -17,6 +17,8 @@ public class SkeletonCreator extends Task {
 		properties.putAll(this.getProject().getProperties());
 		SkeletonBaseCreator sbc = new SkeletonBaseCreator();
 		SkeletonSourceCreator ssc = new SkeletonSourceCreator();
+		SkeletonSchemaCreator sscc = new SkeletonSchemaCreator();
+		SkeletonEtcCreator sec = new SkeletonEtcCreator();
 
 		// Create the overall skeleton
 		File baseDirectory = new File(properties
@@ -27,6 +29,8 @@ public class SkeletonCreator extends Task {
 		try {
 			sbc.createSkeleton(properties);
 			ssc.createSkeleton(properties);
+			sscc.createSkeleton(properties);
+			sec.createSkeleton(properties);
 		} catch (Exception e) {
 			BuildException be = new BuildException(e.getMessage());
 			be.setStackTrace(e.getStackTrace());
