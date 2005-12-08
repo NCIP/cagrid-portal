@@ -3,17 +3,16 @@ package gov.nih.nci.cagrid.introduce;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+
 public class Archive {
 
-	public static synchronized void getDirectoryListing(List names, File dir,
-			String parentPath) {
+	public static synchronized void getDirectoryListing(List names, File dir, String parentPath) {
 
 		System.out.println("Looking at dir: " + dir.getAbsolutePath());
 		System.out.println("Parent path is : " + parentPath);
@@ -32,15 +31,13 @@ public class Archive {
 			// Either dir does not exist or is empty
 		} else {
 			for (int i = 0; i < children.length; i++) {
-				File child = new File(dir.getAbsolutePath() + File.separator
-						+ children[i]);
+				File child = new File(dir.getAbsolutePath() + File.separator + children[i]);
 				System.out.println("check file: " + child.getAbsolutePath());
 				if (child.isDirectory()) {
 					if (parentPath.equals("")) {
 						getDirectoryListing(names, child, child.getName());
 					} else {
-						getDirectoryListing(names, child, parentPath
-								+ File.separator + child.getName());
+						getDirectoryListing(names, child, parentPath + File.separator + child.getName());
 					}
 
 				} else {
@@ -48,11 +45,8 @@ public class Archive {
 						System.out.println("Adding file: " + child.getName());
 						names.add(child.getName());
 					} else {
-						System.out.println("Adding file: " + parentPath
-								+ File.separator + child.getName());
-						names
-								.add(parentPath + File.separator
-										+ child.getName());
+						System.out.println("Adding file: " + parentPath + File.separator + child.getName());
+						names.add(parentPath + File.separator + child.getName());
 					}
 
 				}
@@ -60,25 +54,25 @@ public class Archive {
 		}
 	}
 
+
 	public static synchronized void create(String baseDir) {
 		File dir = new File(baseDir);
 
 		List filenames = new ArrayList();
 		getDirectoryListing(filenames, dir, "");
 
-		 // Create a buffer for reading the files
+		// Create a buffer for reading the files
 		byte[] buf = new byte[1024];
 
 		try {
 			// Create the ZIP file
 			String outFilename = "c:\\outfile.zip";
-			ZipOutputStream out = new ZipOutputStream(new FileOutputStream(
-					outFilename));
+			ZipOutputStream out = new ZipOutputStream(new FileOutputStream(outFilename));
 
 			// Compress the files
 			for (int i = 0; i < filenames.size(); i++) {
-				FileInputStream in = new FileInputStream(dir.getAbsolutePath() + File.separator + (String) filenames
-						.get(i));
+				FileInputStream in = new FileInputStream(dir.getAbsolutePath() + File.separator
+					+ (String) filenames.get(i));
 
 				// Add ZIP entry to output stream.
 				out.putNextEntry(new ZipEntry((String) filenames.get(i)));
@@ -102,9 +96,11 @@ public class Archive {
 
 	}
 
+
 	public static synchronized void restoreFromLast(String baseDir) {
 
 	}
+
 
 	public static void main(String[] args) {
 		Archive.create("c:\\HelloWorld");
