@@ -1,13 +1,6 @@
 package gov.nih.nci.cagrid.introduce;
 
-import gov.nih.nci.cagrid.introduce.templates.client.ServiceClientTemplate;
-import gov.nih.nci.cagrid.introduce.templates.common.ServiceITemplate;
-import gov.nih.nci.cagrid.introduce.templates.service.ServiceImplTemplate;
-import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceProviderImplTemplate;
-import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.BaseResourceHomeTemplate;
-import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.BaseResourceTemplate;
-import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.MetadataConfigurationTemplate;
-import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceConstantsTemplate;
+import gov.nih.nci.cagrid.introduce.templates.etc.RegistationTemplate;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -26,7 +19,7 @@ public class SkeletonEtcCreator {
 		File etcDir = new File(baseDirectory.getAbsolutePath() + File.separator + "etc");
 		etcDir.mkdir();
 		
-		ServiceClientTemplate registrationT = new ServiceClientTemplate();
+		RegistationTemplate registrationT = new RegistationTemplate();
 		String registrationS = registrationT.generate(properties);
 		File registrationF = new File(etcDir.getAbsolutePath() + File.separator + "registration.xml");
 

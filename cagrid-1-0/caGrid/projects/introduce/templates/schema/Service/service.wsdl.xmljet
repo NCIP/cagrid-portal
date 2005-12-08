@@ -1,6 +1,16 @@
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.schema.service" class="ServiceWSDLTemplate" %>
+<% java.util.Properties properties = (java.util.Properties) argument; 
+   String packageName = properties.getProperty("introduce.skeleton.package");
+   String serviceName = properties.getProperty("introduce.skeleton.service.name");
+   String namespaceDomain = properties.getProperty("introduce.skeleton.namespace.domain");
+   String modifiedServiceName = serviceName;
+   if(serviceName.endsWith("Service")){
+   modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
+   }
+%>
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions name="SERVICE-TYPE-NAME" targetNamespace="NAMESPACE-DOMAIN/SERVICE-TYPE-NAME"
-    xmlns:tns="NAMESPACE-DOMAIN/SERVICE-TYPE-NAME"
+<definitions name="<%=namespaceDomain%>" targetNamespace="<%=namespaceDomain%>/<%=serviceName%>"
+    xmlns:tns="<%=namespaceDomain%>/<%=serviceName%>"
     xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd"
     xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl"
     xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor"
@@ -20,13 +30,13 @@
                       
   ============================================================-->
     <types>
-        <schema targetNamespace="NAMESPACE-DOMAIN/SERVICE-TYPE-NAME"
-            xmlns:tns="NAMESPACE-DOMAIN/SERVICE-TYPE-NAME"
+        <schema targetNamespace="<%=namespaceDomain%>/<%=serviceName%>"
+            xmlns:tns="<%=namespaceDomain%>/<%=serviceName%>"
             xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"
             xmlns="http://www.w3.org/2001/XMLSchema">
             <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"
-                schemaLocation="./CommonServiceMetadata.xsd"/>
-            <element name="SERVICE-TYPE-NAMEResourceProperties">
+                schemaLocation="../cagrid/types/CommonServiceMetadata.xsd"/>
+            <element name="<%=serviceName%>ResourceProperties">
                 <complexType>
                     <sequence>
                         <element ref="com:CommonServiceMetadata"/>
@@ -41,7 +51,7 @@
                        P O R T T Y P E
                       
   ============================================================-->
-    <portType name="SERVICE-TYPE-NAMEPortType" wsrp:ResourceProperties="tns:SERVICE-TYPE-NAMEResourceProperties">
+    <portType name="<%=serviceName%>PortType" wsrp:ResourceProperties="tns:<%=serviceName%>ResourceProperties">
         <operation name="GetResourceProperty">
             <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest"
                 wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty"/>

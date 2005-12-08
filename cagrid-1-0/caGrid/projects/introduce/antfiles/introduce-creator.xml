@@ -14,8 +14,7 @@
 		<echo message="Not to be called directly.  This file contains utilities to be used in other build files." />
 	</target>
 
-	<target name="createService" description="Will create an anaytical skeleton deployment" depends=" checkInputProps, copySkeleton, copyCaGridJars, serviceCopySchemaFiles, serviceCopyPortalFiles, setActivePath">
-		<createSkeleton />
+	<target name="createService" description="Will create an anaytical skeleton deployment" depends="checkInputProps, copySkeleton, copyCaGridJars, serviceCopySchemaFiles, serviceCopyPortalFiles, setActivePath">
 	</target>
 
 	<taskdef name="createSkeleton" classname="gov.nih.nci.cagrid.introduce.SkeletonCreator">
@@ -36,19 +35,24 @@
 				<include name="**\*" />
 			</fileset>
 		</copy>
+		
+		<!-- call our creation ant task -->
+		<createSkeleton />
 
 		<copy todir="${introduce.skeleton.destination.dir}/resources">
 			<fileset dir="${resources.dir}">
 				<include name="**\*" />
 			</fileset>
 		</copy>
+		
+		<!-- copy in common service metadata file etc. -->
+		<copy todir="${introduce.skeleton.destination.dir}/schema">
+			<fileset dir="${basedir}/ext/schema">
+				<include name="**\*" />
+			</fileset>
+		</copy>
 
 		<!-- do replacements on the basic service files -->
-		<replace file="${introduce.skeleton.destination.dir}/namespace2package.mappings">
-			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
-			<replacefilter token="PACKAGE-NAME" value="${introduce.skeleton.package}" />
-			<replacefilter token="NAMESPACE-DOMAIN" value="${introduce.skeleton.namespace.domain}" />
-		</replace>
 		<replace file="${introduce.skeleton.destination.dir}/namespace2package.mappings" token=":" value="\:" />
 		<replace file="${introduce.skeleton.destination.dir}/namespace2package.mappings" token="\\:" value="\:" />
 		<replace file="${introduce.skeleton.destination.dir}/build.xml">
@@ -69,25 +73,8 @@
 			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
 			<replacefilter token="PACKAGE-NAME" value="${introduce.skeleton.package}" />
 		</replace>
-		<replace file="${introduce.skeleton.destination.dir}/config/undeploy.wsdd">
-			<replacefilter token="SERVICE-PATH" value="cagrid/${introduce.skeleton.service.name}" />
-		</replace>
 		<replace file="${introduce.skeleton.destination.dir}/docs/api/Doxyfile">
 			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
-		</replace>
-
-		<!-- move and rename the schema files -->
-		<move todir="${introduce.skeleton.destination.dir}/schema/${introduce.skeleton.service.name}">
-			<fileset dir="${introduce.skeleton.destination.dir}/schema/Service" />
-		</move>
-		<move tofile="${introduce.skeleton.destination.dir}/schema/${introduce.skeleton.service.name}/${introduce.skeleton.service.name}.wsdl">
-			<fileset file="${introduce.skeleton.destination.dir}/schema/${introduce.skeleton.service.name}/Service.wsdl" />
-		</move>
-
-		<replace file="${introduce.skeleton.destination.dir}/schema/${introduce.skeleton.service.name}/${introduce.skeleton.service.name}.wsdl">
-			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
-			<replacefilter token="PACKAGE-NAME" value="${introduce.skeleton.package}" />
-			<replacefilter token="NAMESPACE-DOMAIN" value="${introduce.skeleton.namespace.domain}" />
 		</replace>
 
 		<!-- create the propertites files for this project-->

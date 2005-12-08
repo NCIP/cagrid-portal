@@ -1,3 +1,12 @@
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.etc" class="RegistationTemplate" %>
+<% java.util.Properties properties = (java.util.Properties) argument; 
+   String packageName = properties.getProperty("introduce.skeleton.package");
+   String serviceName = properties.getProperty("introduce.skeleton.service.name");
+   String modifiedServiceName = serviceName;
+   if(serviceName.endsWith("Service")){
+   modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
+   }
+%>
 <?xml version="1.0" encoding="UTF-8" ?>
 <ServiceGroupRegistrationParameters xmlns:sgc="http://mds.globus.org/servicegroup/client"
   xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
