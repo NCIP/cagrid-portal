@@ -138,7 +138,7 @@
 		<jetc destdir="${src.dir}/Introduce" template="templates/deploy.properties.txtjet" />
 		<jetc destdir="${src.dir}/Introduce" template="templates/namespace2package.mappings.txtjet" />
 		<jetc destdir="${src.dir}/Introduce" template="templates/etc/registration.xmljet" />
-		<jetc destdir="${src.dir}/Introduce" template="templates/schema/service/service.wsdl.xmljet" />
+		<jetc destdir="${src.dir}/Introduce" template="templates/schema/Service/service.wsdl.xmljet" />
 		<jetc destdir="${src.dir}/Introduce" template="templates/src/client/ServiceClient.javajet" />
 		<jetc destdir="${src.dir}/Introduce" template="templates/src/common/ServiceI.javajet" />
 		<jetc destdir="${src.dir}/Introduce" template="templates/src/service/ServiceImpl.javajet" />
