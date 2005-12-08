@@ -65,6 +65,8 @@ public class UserManager extends GUMSObject {
 		this.ca = ca;
 	}
 
+	
+
 	public synchronized boolean determineIfUserExists(long idpId, String uid)
 			throws GUMSInternalFault {
 		buildDatabase();
@@ -147,8 +149,8 @@ public class UserManager extends GUMSObject {
 
 		}
 	}
-	
-	public static String getUserSubject(String caSubject,long idpId, String uid){
+
+	public static String getUserSubject(String caSubject, long idpId, String uid) {
 		int caindex = caSubject.lastIndexOf(",");
 		String caPreSub = caSubject.substring(0, caindex);
 		String sub = caPreSub + ",OU=IdP [" + idpId + "],CN=" + uid;
@@ -160,7 +162,7 @@ public class UserManager extends GUMSObject {
 		try {
 
 			String caSubject = ca.getCACertificate().getSubjectDN().getName();
-			String sub = getUserSubject(caSubject,idpId,uid);
+			String sub = getUserSubject(caSubject, idpId, uid);
 			Calendar c = new GregorianCalendar();
 			Date start = c.getTime();
 			Date end = conf.getCredentialsValid();
@@ -415,7 +417,9 @@ public class UserManager extends GUMSObject {
 			try {
 				// Write method for creating and setting a users credentials
 				user.setCertificate(CertUtil.writeCertificateToString(cert));
-				user.setGridId(subjectToIdentity(cert.getSubjectDN().toString()));
+				user
+						.setGridId(subjectToIdentity(cert.getSubjectDN()
+								.toString()));
 				user.setUserRole(IFSUserRole.Non_Administrator);
 				user.setUserStatus(IFSUserStatus.Pending);
 				if (user.getEmail() != null) {
@@ -640,15 +644,15 @@ public class UserManager extends GUMSObject {
 			this.dbBuilt = true;
 		}
 	}
+
 	public static String identityToSubject(String identity) {
 		String s = identity.substring(1);
 		return s.replace('/', ',');
 	}
-	
+
 	public static String subjectToIdentity(String subject) {
 		String s = subject.substring(0);
 		return s.replace(',', '/');
 	}
-
 
 }

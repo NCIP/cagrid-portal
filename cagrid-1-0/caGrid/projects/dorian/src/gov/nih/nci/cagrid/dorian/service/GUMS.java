@@ -20,10 +20,12 @@ import gov.nih.nci.cagrid.gums.ifs.AutoApprovalAutoRenewalPolicy;
 import gov.nih.nci.cagrid.gums.ifs.IFS;
 import gov.nih.nci.cagrid.gums.ifs.IFSConfiguration;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
+import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserRole;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidProxyFault;
+import gov.nih.nci.cagrid.gums.ifs.bean.InvalidUserFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.gums.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
@@ -46,7 +48,6 @@ import org.projectmobius.common.MobiusResourceManager;
 public class GUMS extends MobiusResourceManager {
 
 	private Database db;
-
 
 	public static final String IDP_ADMIN_USER_ID = "gums";
 
@@ -114,15 +115,26 @@ public class GUMS extends MobiusResourceManager {
 	}
 
 	public GUMSConfiguration getGUMSConfiguration() {
-		return (GUMSConfiguration) this
-				.getResource(GUMSConfiguration.RESOURCE);
+		return (GUMSConfiguration) this.getResource(GUMSConfiguration.RESOURCE);
 	}
 
 	public Database getDatabase() {
 		return this.db;
 	}
 
-	
+	public X509Certificate getCACertificate() throws GUMSInternalFault {
+		try {
+			return this.ca.getCACertificate();
+		} catch (Exception e) {
+			GUMSInternalFault fault = new GUMSInternalFault();
+			fault
+					.setFaultString("An unexpected error occurred, in obtaining the CA certificate.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GUMSInternalFault) helper.getFault();
+			throw fault;
+		}
+	}
 
 	// //////////////////////////////////////////////////////////////////////////////
 	/*
@@ -201,15 +213,30 @@ public class GUMS extends MobiusResourceManager {
 			InvalidUserPropertyFault {
 		return this.identityProvider.register(a);
 	}
-	
-	/***************** IFS FUNCTIONS ***********************/
-	
-	
+
+	/** *************** IFS FUNCTIONS ********************** */
+
 	public X509Certificate[] createProxy(SAMLAssertion saml,
 			PublicKey publicKey, ProxyLifetime lifetime)
 			throws GUMSInternalFault, InvalidAssertionFault, InvalidProxyFault,
 			UserPolicyFault, PermissionDeniedFault {
-		return this.ifs.createProxy(saml,publicKey,lifetime);
+		return this.ifs.createProxy(saml, publicKey, lifetime);
+	}
+
+	public TrustedIdP[] getTrustedIdPs(String callerGridIdentity)
+			throws GUMSInternalFault, InvalidUserFault, PermissionDeniedFault {
+		return ifs.getTrustedIdPs(callerGridIdentity);
+	}
+
+	public IFSUser[] findIFSUsers(String callerGridIdentity,
+			IFSUserFilter filter) throws GUMSInternalFault, InvalidUserFault,
+			PermissionDeniedFault {
+		return ifs.findUsers(callerGridIdentity, filter);
+	}
+
+	public void updateIFSUser(String callerGridIdentity, IFSUser usr)
+			throws GUMSInternalFault, InvalidUserFault, PermissionDeniedFault {
+		ifs.updateUser(callerGridIdentity, usr);
 	}
 
 }

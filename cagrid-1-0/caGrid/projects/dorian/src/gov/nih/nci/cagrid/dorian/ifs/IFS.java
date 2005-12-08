@@ -9,6 +9,7 @@ import gov.nih.nci.cagrid.gums.common.FaultHelper;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
+import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserRole;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
@@ -51,6 +52,7 @@ public class IFS extends GUMSObject {
 
 	private IFSConfiguration conf;
 
+
 	public IFS(IFSConfiguration conf, Database db, CertificateAuthority ca)
 			throws GUMSInternalFault {
 		this.conf = conf;
@@ -58,6 +60,8 @@ public class IFS extends GUMSObject {
 		um = new UserManager(db, conf, ca, tm);
 		um.buildDatabase();
 	}
+
+	
 
 	public String getUserIdVerifyTrustedIdP(X509Certificate idpCert,
 			String identity) throws GUMSInternalFault, InvalidUserFault,
@@ -106,7 +110,7 @@ public class IFS extends GUMSObject {
 		tm.removeTrustedIdP(idpId);
 	}
 
-	public synchronized TrustedIdP[] getTrustedIdPs(String callerGridIdentity)
+	public TrustedIdP[] getTrustedIdPs(String callerGridIdentity)
 			throws GUMSInternalFault, InvalidUserFault, PermissionDeniedFault {
 		IFSUser caller = um.getUser(callerGridIdentity);
 		verifyActiveUser(caller);
@@ -121,6 +125,14 @@ public class IFS extends GUMSObject {
 		verifyAdminUser(caller);
 
 		return um.getUser(idpId, uid);
+	}
+
+	public IFSUser[] findUsers(String callerGridIdentity, IFSUserFilter filter)
+			throws GUMSInternalFault, InvalidUserFault, PermissionDeniedFault {
+		IFSUser caller = um.getUser(callerGridIdentity);
+		verifyActiveUser(caller);
+		verifyAdminUser(caller);
+		return um.getUsers(filter);
 	}
 
 	public void updateUser(String callerGridIdentity, IFSUser usr)
