@@ -45,6 +45,9 @@
 		<include name="*.jar" />
 		<exclude name="*test*.jar" />
 	</fileset>
+	<fileset dir="${projects.dir}/metadata/schema" id="artifact.metadata.main.schemas">
+		<include name="**/*.xsd" />
+	</fileset>
 
 
 	<!-- =============================================================== -->
@@ -74,6 +77,9 @@
 		<!-- copy dependent artifacts into current target's ext lib dir -->
 		<copy todir="${projects.dir}/introduce/ext/lib">
 			<fileset refid="artifact.metadata.main.jars" />
+		</copy>
+		<copy todir="${projects.dir}/introduce/ext/schema">
+			<fileset refid="artifact.metadata.main.schemas" />
 		</copy>
 		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
