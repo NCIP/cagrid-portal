@@ -86,10 +86,10 @@ public class CommonTools {
 		String os = System.getProperty("os.name");
 		String cmd = "";
 		if ((os.indexOf("Windows") >= 0) || (os.indexOf("windows") >= 0)) {
-			cmd = "-classpath "
+			cmd = "-classpath \""
 					+ CommonTools.getAntLauncherJarLocation(System
 							.getProperty("java.class.path"), true)
-					+ " org.apache.tools.ant.launch.Launcher -lib "
+					+ "\" org.apache.tools.ant.launch.Launcher -lib "
 					+ System.getProperty("java.class.path") + " -buildfile "
 					+ buildFileDir + File.separator + "build.xml" + cmd;
 			cmd = "java.exe " + cmd;

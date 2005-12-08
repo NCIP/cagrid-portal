@@ -1,6 +1,6 @@
 To Do:
 Make sure that skeleton names entered in the GUI are acceptable.
-	i.e. No Service in the name
+	i.e. No Service in the name (fixed 12/7/05)
 		 No non-acceptable characters for java class names
 
 Enable service to back up old service skeleton before altering and then provide rollback capabilities.
