@@ -18,7 +18,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: IFSMenu.java,v 1.3 2005-12-05 17:49:20 langella Exp $
+ * @version $Id: IFSMenu.java,v 1.4 2005-12-08 19:08:56 langella Exp $
  */
 public class IFSMenu extends GridPortalComponent {
 
@@ -43,6 +43,10 @@ public class IFSMenu extends GridPortalComponent {
 	private JRadioButton manageProxies = null;
 
 	private JLabel manageProxiesLabel = null;
+
+	private JRadioButton manageUsers = null;
+
+	private JLabel manageUsersLabel = null;
 
 	public IFSMenu() {
 		super();
@@ -104,13 +108,25 @@ public class IFSMenu extends GridPortalComponent {
 
 	private JPanel getMenuPanel() {
 		if (menuPanel == null) {
+			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.gridx = 1;
+			gridBagConstraints3.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints3.insets = new java.awt.Insets(5, 5, 5, 5);
+			gridBagConstraints3.gridy = 2;
+			manageUsersLabel = new JLabel();
+			manageUsersLabel.setText("User Management");
+			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+			gridBagConstraints21.gridx = 0;
+			gridBagConstraints21.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints21.insets = new java.awt.Insets(5, 5, 5, 5);
+			gridBagConstraints21.gridy = 2;
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			gridBagConstraints11.gridx = 1;
-			gridBagConstraints11.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints11.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints11.gridy = 1;
 			manageProxiesLabel = new JLabel();
-			manageProxiesLabel.setText("Manage Proxies");
+			manageProxiesLabel.setText("Proxy Management");
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -141,6 +157,8 @@ public class IFSMenu extends GridPortalComponent {
 			menuPanel.add(getManageProxies(), gridBagConstraints);
 
 			menuPanel.add(manageProxiesLabel, gridBagConstraints11);
+			menuPanel.add(getManageUsers(), gridBagConstraints21);
+			menuPanel.add(manageUsersLabel, gridBagConstraints3);
 		}
 		return menuPanel;
 	}
@@ -195,6 +213,9 @@ public class IFSMenu extends GridPortalComponent {
 			PortalResourceManager.getInstance().getGridPortal()
 					.addGridPortalComponent(new ProxyManagerComponent(), 600,
 							400);
+		} else if (manageUsers.isSelected()) {
+			PortalResourceManager.getInstance().getGridPortal()
+					.addGridPortalComponent(new UserManagerWindow());
 		}
 		dispose();
 	}
@@ -229,5 +250,18 @@ public class IFSMenu extends GridPortalComponent {
 			group.add(manageProxies);
 		}
 		return manageProxies;
+	}
+
+	/**
+	 * This method initializes manageUsers
+	 * 
+	 * @return javax.swing.JRadioButton
+	 */
+	private JRadioButton getManageUsers() {
+		if (manageUsers == null) {
+			manageUsers = new JRadioButton();
+			group.add(manageUsers);
+		}
+		return manageUsers;
 	}
 }

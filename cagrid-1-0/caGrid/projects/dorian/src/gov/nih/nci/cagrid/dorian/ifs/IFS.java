@@ -62,14 +62,13 @@ public class IFS extends GUMSObject {
 	public String getUserIdVerifyTrustedIdP(X509Certificate idpCert,
 			String identity) throws GUMSInternalFault, InvalidUserFault,
 			InvalidTrustedIdPFault, PermissionDeniedFault {
-		if(identity == null){
+		if (identity == null) {
 			PermissionDeniedFault fault = new PermissionDeniedFault();
-			fault
-					.setFaultString("No credentials specified.");
+			fault.setFaultString("No credentials specified.");
 			throw fault;
 		}
 		TrustedIdP idp = tm.getTrustedIdPByDN(idpCert.getSubjectDN().getName());
-		IFSUser usr = um.getUser(identityToSubject(identity));
+		IFSUser usr = um.getUser(identity);
 		if (usr.getIdPId() != idp.getId()) {
 			PermissionDeniedFault fault = new PermissionDeniedFault();
 			fault
@@ -79,27 +78,39 @@ public class IFS extends GUMSObject {
 		}
 		return usr.getUID();
 	}
-	
-	private String identityToSubject(String identity){
-		String s = identity.substring(1);
-		return s.replace('/',',');
-	}
 
-	public TrustedIdP addTrustedIdP(TrustedIdP idp) throws GUMSInternalFault,
-			InvalidTrustedIdPFault {
-		// TODO: Verify User is an administrator etc.
+	public TrustedIdP addTrustedIdP(String callerGridIdentity, TrustedIdP idp)
+			throws GUMSInternalFault, InvalidTrustedIdPFault, InvalidUserFault,
+			PermissionDeniedFault {
+		IFSUser caller = um.getUser(callerGridIdentity);
+		verifyActiveUser(caller);
+		verifyAdminUser(caller);
 		return tm.addTrustedIdP(idp);
 	}
 
-	public IFSUser getUser(long idpId, String uid) throws GUMSInternalFault,
-			InvalidUserFault {
-		// TODO: Verify User is an administrator etc.
+	public synchronized TrustedIdP[] getTrustedIdPs(String callerGridIdentity)
+			throws GUMSInternalFault, InvalidUserFault, PermissionDeniedFault {
+		IFSUser caller = um.getUser(callerGridIdentity);
+		verifyActiveUser(caller);
+		verifyAdminUser(caller);
+		return tm.getTrustedIdPs();
+	}
+
+	public IFSUser getUser(String callerGridIdentity, long idpId, String uid)
+			throws GUMSInternalFault, InvalidUserFault, PermissionDeniedFault {
+		IFSUser caller = um.getUser(callerGridIdentity);
+		verifyActiveUser(caller);
+		verifyAdminUser(caller);
+
 		return um.getUser(idpId, uid);
 	}
 
-	public void updateUser(IFSUser usr) throws GUMSInternalFault,
-			InvalidUserFault {
-		// TODO: Verify User is an administrator etc.
+	public void updateUser(String callerGridIdentity, IFSUser usr)
+			throws GUMSInternalFault, InvalidUserFault, PermissionDeniedFault {
+		IFSUser caller = um.getUser(callerGridIdentity);
+		verifyActiveUser(caller);
+		verifyAdminUser(caller);
+
 		um.updateUser(usr);
 	}
 
@@ -306,6 +317,17 @@ public class IFS extends GUMSObject {
 			throw fault;
 		}
 
+	}
+
+	private void verifyAdminUser(IFSUser usr) throws GUMSInternalFault,
+			PermissionDeniedFault {
+		if (usr.getUserRole().equals(IFSUserRole.Administrator)) {
+			return;
+		} else {
+			PermissionDeniedFault fault = new PermissionDeniedFault();
+			fault.setFaultString("You are NOT and Administrator!!!");
+			throw fault;
+		}
 	}
 
 	private void verifyActiveUser(IFSUser usr) throws GUMSInternalFault,

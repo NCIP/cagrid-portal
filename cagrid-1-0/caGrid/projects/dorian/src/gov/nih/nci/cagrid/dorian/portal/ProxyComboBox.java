@@ -27,6 +27,11 @@ public class ProxyComboBox extends JComboBox {
 		}
 	}
 	
+	public ProxyCaddy getSelectedProxyCaddy(){
+		ProxyCaddy caddy =  ((ProxyCaddy)this.getSelectedItem());
+		return caddy;
+	}
+	
 	public GlobusCredential getSelectedProxy() throws Exception{
 		ProxyCaddy caddy =  ((ProxyCaddy)this.getSelectedItem());
 		if(caddy.getIdentity().equals(DEFAULT_PROXY)){

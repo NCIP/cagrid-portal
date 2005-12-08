@@ -63,7 +63,7 @@ public class TestUserManager extends TestCase {
 			assertEquals(IFSUserStatus.Pending, user.getUserStatus());
 			StringReader ureader = new StringReader(user.getCertificate());
 			X509Certificate cert = CertUtil.loadCertificate(ureader);
-			assertEquals(user.getGridId(), cert.getSubjectDN().getName());
+			assertEquals(user.getGridId(), UserManager.subjectToIdentity(cert.getSubjectDN().getName()));
 			assertEquals(user, um.getUser(user.getIdPId(), user.getUID()));
 			assertEquals(user, um.getUser(user.getGridId()));
 
@@ -216,7 +216,7 @@ public class TestUserManager extends TestCase {
 				assertEquals(IFSUserStatus.Pending, user.getUserStatus());
 				StringReader ureader = new StringReader(user.getCertificate());
 				X509Certificate cert = CertUtil.loadCertificate(ureader);
-				assertEquals(user.getGridId(), cert.getSubjectDN().getName());
+				assertEquals(user.getGridId(), UserManager.subjectToIdentity(cert.getSubjectDN().getName()));
 				assertEquals(user, um.getUser(user.getIdPId(), user.getUID()));
 				assertEquals(user, um.getUser(user.getGridId()));
 
@@ -254,7 +254,7 @@ public class TestUserManager extends TestCase {
 				assertEquals(0, l4.length);
 
 				String temp = user.getGridId();
-				int index = temp.lastIndexOf(",");
+				int index = temp.lastIndexOf("/");
 				temp = temp.substring(0, index);
 				f4.setGridId(temp);
 				l4 = um.getUsers(f4);

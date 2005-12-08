@@ -202,6 +202,9 @@ public class GUMS extends MobiusResourceManager {
 		return this.identityProvider.register(a);
 	}
 	
+	/***************** IFS FUNCTIONS ***********************/
+	
+	
 	public X509Certificate[] createProxy(SAMLAssertion saml,
 			PublicKey publicKey, ProxyLifetime lifetime)
 			throws GUMSInternalFault, InvalidAssertionFault, InvalidProxyFault,

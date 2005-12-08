@@ -121,7 +121,7 @@ public class UserManager extends GUMSObject {
 			throws GUMSInternalFault, CredentialsFault, InvalidUserFault {
 		X509Certificate cert = createUserCredentials(user.getIdPId(), user
 				.getUID());
-		user.setGridId(cert.getSubjectDN().getName());
+		user.setGridId(subjectToIdentity(cert.getSubjectDN().getName()));
 		try {
 			this.updateUser(user);
 		} catch (InvalidUserFault iuf) {
@@ -147,15 +147,20 @@ public class UserManager extends GUMSObject {
 
 		}
 	}
+	
+	public static String getUserSubject(String caSubject,long idpId, String uid){
+		int caindex = caSubject.lastIndexOf(",");
+		String caPreSub = caSubject.substring(0, caindex);
+		String sub = caPreSub + ",OU=IdP [" + idpId + "],CN=" + uid;
+		return sub;
+	}
 
 	private synchronized X509Certificate createUserCredentials(long idpId,
 			String uid) throws GUMSInternalFault, CredentialsFault {
 		try {
 
 			String caSubject = ca.getCACertificate().getSubjectDN().getName();
-			int caindex = caSubject.lastIndexOf(",");
-			String caPreSub = caSubject.substring(0, caindex);
-			String sub = caPreSub + ",OU=IdP " + idpId + ",CN=" + uid;
+			String sub = getUserSubject(caSubject,idpId,uid);
 			Calendar c = new GregorianCalendar();
 			Date start = c.getTime();
 			Date end = conf.getCredentialsValid();
@@ -410,7 +415,7 @@ public class UserManager extends GUMSObject {
 			try {
 				// Write method for creating and setting a users credentials
 				user.setCertificate(CertUtil.writeCertificateToString(cert));
-				user.setGridId(cert.getSubjectDN().toString());
+				user.setGridId(subjectToIdentity(cert.getSubjectDN().toString()));
 				user.setUserRole(IFSUserRole.Non_Administrator);
 				user.setUserStatus(IFSUserStatus.Pending);
 				if (user.getEmail() != null) {
@@ -635,5 +640,15 @@ public class UserManager extends GUMSObject {
 			this.dbBuilt = true;
 		}
 	}
+	public static String identityToSubject(String identity) {
+		String s = identity.substring(1);
+		return s.replace('/', ',');
+	}
+	
+	public static String subjectToIdentity(String subject) {
+		String s = subject.substring(0);
+		return s.replace(',', '/');
+	}
+
 
 }
