@@ -133,6 +133,8 @@
 		</classpath>
 	</taskdef>
 	<target name="generateJETClasses">
+		<jetc destdir="${src.dir}/Introduce" template="templates/server-config.wsdd.xmljet" />
+		<jetc destdir="${src.dir}/Introduce" template="templates/jndi-config.xmljet" />
 		<jetc destdir="${src.dir}/Introduce" template="templates/src/client/ServiceClient.javajet" />
 		<jetc destdir="${src.dir}/Introduce" template="templates/src/common/ServiceI.javajet" />
 		<jetc destdir="${src.dir}/Introduce" template="templates/src/service/ServiceImpl.javajet" />

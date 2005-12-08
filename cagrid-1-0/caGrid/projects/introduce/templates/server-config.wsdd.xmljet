@@ -1,3 +1,12 @@
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="ServerConfigTemplate" %>
+<% java.util.Properties properties = (java.util.Properties) argument; 
+   String packageName = properties.getProperty("introduce.skeleton.package");
+   String serviceName = properties.getProperty("introduce.skeleton.service.name");
+   String modifiedServiceName = serviceName;
+   if(serviceName.endsWith("Service")){
+   	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
+   }
+%>
 <?xml version="1.0" encoding="UTF-8"?>
 <deployment name="defaultServerConfig" 
     xmlns="http://xml.apache.org/axis/wsdd/" 
@@ -5,8 +14,8 @@
     xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
     <service name="SERVICE-INSTANCE-NAME" provider="Handler" use="literal" style="document">
-        <parameter name="className" value="PACKAGE-NAME.service.globus.SERVICE-TYPE-NAMEProviderImpl"/>
-        <wsdlFile>share/schema/SERVICE-INSTANCE-PATH/SERVICE-TYPE-NAME_service.wsdl</wsdlFile>
+        <parameter name="className" value="<%=packageName%>.service.globus.<%=serviceName%>ProviderImpl"/>
+        <wsdlFile>share/schema/SERVICE-INSTANCE-PATH/<%=serviceName%>_service.wsdl</wsdlFile>
         <parameter name="allowedMethods" value="*"/>
         <parameter name="handlerClass" value="org.globus.axis.providers.RPCProvider"/>
         <parameter name="scope" value="Application"/>

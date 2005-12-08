@@ -61,11 +61,6 @@
 			<replacefilter token="PACKAGE-NAME" value="${introduce.skeleton.package}" />
 			<replacefilter token="PACKAGE-DIR" value="${introduce.skeleton.package.dir}" />
 		</replace>
-		<replace file="${introduce.skeleton.destination.dir}/server-config.wsdd">
-			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
-			<replacefilter token="PACKAGE-NAME" value="${introduce.skeleton.package}" />
-			<replacefilter token="PACKAGE-DIR" value="${introduce.skeleton.package.dir}" />
-		</replace>
 		<replace file="${introduce.skeleton.destination.dir}/.project">
 			<replacefilter token="SERVICE-TYPE-NAME" value="${introduce.skeleton.service.name}" />
 			<replacefilter token="PACKAGE-NAME" value="${introduce.skeleton.package}" />

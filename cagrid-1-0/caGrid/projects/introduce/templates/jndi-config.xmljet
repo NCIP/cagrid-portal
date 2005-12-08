@@ -1,7 +1,16 @@
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="JNDIConfigTemplate" %>
+<% java.util.Properties properties = (java.util.Properties) argument; 
+   String packageName = properties.getProperty("introduce.skeleton.package");
+   String serviceName = properties.getProperty("introduce.skeleton.service.name");
+   String modifiedServiceName = serviceName;
+   if(serviceName.endsWith("Service")){
+   	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
+   }
+%>
 <?xml version="1.0" encoding="UTF-8"?>
 <jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
 	<service name="SERVICE-INSTANCE-NAME">
-		<resource name="home" type="PACKAGE-NAME.resource.BaseResourceHome">
+		<resource name="home" type="<%=packageName%>.service.globus.resource.BaseResourceHome">
 			<resourceParams>
 				<parameter>
 					<name>factory</name>
@@ -9,7 +18,7 @@
 				</parameter>
 			</resourceParams>
 		</resource>
-		<resource name="configuration" type="PACKAGE-NAME.resource.MetadataConfiguration">
+		<resource name="configuration" type="<%=packageName%>.service.globus.resource.MetadataConfiguration">
 			<resourceParams>
 				<parameter>
 					<name>factory</name>
