@@ -88,6 +88,24 @@ public class IFS extends GUMSObject {
 		return tm.addTrustedIdP(idp);
 	}
 
+	public void updatedTrustedIdP(String callerGridIdentity, TrustedIdP idp)
+			throws GUMSInternalFault, InvalidTrustedIdPFault, InvalidUserFault,
+			PermissionDeniedFault {
+		IFSUser caller = um.getUser(callerGridIdentity);
+		verifyActiveUser(caller);
+		verifyAdminUser(caller);
+		tm.updateIdP(idp);
+	}
+
+	public void removeTrustedIdP(String callerGridIdentity, long idpId)
+			throws GUMSInternalFault, InvalidTrustedIdPFault, InvalidUserFault,
+			PermissionDeniedFault {
+		IFSUser caller = um.getUser(callerGridIdentity);
+		verifyActiveUser(caller);
+		verifyAdminUser(caller);
+		tm.removeTrustedIdP(idpId);
+	}
+
 	public synchronized TrustedIdP[] getTrustedIdPs(String callerGridIdentity)
 			throws GUMSInternalFault, InvalidUserFault, PermissionDeniedFault {
 		IFSUser caller = um.getUser(callerGridIdentity);

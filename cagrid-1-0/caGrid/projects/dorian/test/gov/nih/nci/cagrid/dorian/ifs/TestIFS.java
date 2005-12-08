@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.gums.common.FaultHelper;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
+import gov.nih.nci.cagrid.gums.ifs.TestTrustManager.IdPContainer;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserRole;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
@@ -18,6 +19,7 @@ import gov.nih.nci.cagrid.gums.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.gums.test.TestUtils;
 
+import java.io.StringReader;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -330,6 +332,57 @@ public class TestIFS extends TestCase {
 			} catch (InvalidAssertionFault f) {
 
 			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+	}
+
+	public void testGetTrustedIdPs() {
+		try {
+			IdPContainer idp0 = this
+					.getTrustedIdpAutoApproveAutoRenew("My IdP");
+			String username = "user";
+			IFSConfiguration conf = getExpiringCredentialsConf();
+			conf.setInitalTrustedIdP(idp0.getIdp());
+			IFS ifs = new IFS(conf, db, ca);
+			String gridId = UserManager.subjectToIdentity(UserManager
+					.getUserSubject(ca.getCACertificate().getSubjectDN()
+							.getName(), idp0.getIdp().getId(), conf
+							.getInitialUser().getUID()));
+			int times = 5;
+			String baseName = "Test IdP";
+			String baseUpdateName = "Updated IdP";
+			int count = 1;
+			for (int i = 0; i < times; i++) {
+				assertEquals(count, ifs.getTrustedIdPs(gridId).length);
+				count = count + 1;
+				String name = baseName + " " + count;
+				IdPContainer cont = getTrustedIdpAutoApproveAutoRenew(name);
+				TrustedIdP idp = cont.getIdp();
+				idp = ifs.addTrustedIdP(gridId, idp);
+				assertEquals(count, ifs.getTrustedIdPs(gridId).length);
+
+				// Test Updates
+				String updatedName = baseUpdateName + " " + i;
+				IdPContainer updateCont = getTrustedIdpManualApproveAutoRenew(updatedName);
+				TrustedIdP updateIdp = updateCont.getIdp();
+				updateIdp.setId(idp.getId());
+				ifs.updatedTrustedIdP(gridId, updateIdp);
+				assertEquals(count, ifs.getTrustedIdPs(gridId).length);
+			}
+
+			TrustedIdP[] idps = ifs.getTrustedIdPs(gridId);
+			assertEquals(times + 1, idps.length);
+			count = times + 1;
+			for (int i = 0; i < idps.length; i++) {
+				count = count - 1;
+				ifs.removeTrustedIdP(gridId, idps[i].getId());
+				assertEquals(count, ifs.getTrustedIdPs(gridId).length);
+			}
+
+			assertEquals(count, ifs.getTrustedIdPs(gridId).length);
+
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
