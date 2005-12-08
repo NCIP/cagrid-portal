@@ -102,10 +102,8 @@ public class SyncWSDL {
 	}
 
 	private Element createInputType(Element method) {
-		Element inputType = new Element("element", definitions
-				.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE_PREFIX));
-		Element cType = new Element("complexType", definitions
-				.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE_PREFIX));
+		Element inputType = new Element("element", Namespace.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
+		Element cType = new Element("complexType", Namespace.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
 		inputType.setAttribute("name", method.getAttributeValue("name"));
 
 		if (method.getChild("inputs", method.getNamespace()) != null) {
@@ -114,10 +112,8 @@ public class SyncWSDL {
 					.getChildren();
 			for (int i = 0; i < params.size(); i++) {
 				Element param = (Element) params.get(i);
-				Element sequence = new Element("sequence", definitions
-						.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE_PREFIX));
-				Element element = new Element("element", definitions
-						.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE_PREFIX));
+				Element sequence = new Element("sequence", Namespace.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
+				Element element = new Element("element", Namespace.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
 				element.setAttribute("name", param.getAttributeValue("name"));
 				Namespace thisNamespace = null;
 				// get the right namespace prefix for the type.....
@@ -160,21 +156,17 @@ public class SyncWSDL {
 						element.setAttribute("maxOccurs", "1");
 						Element acType = new Element(
 								"complexType",
-								definitions
-										.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE_PREFIX));
+								Namespace.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
 						Element acContent = new Element(
 								"complexContent",
-								definitions
-										.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE_PREFIX));
+								Namespace.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
 						Element aRestriction = new Element(
 								"restriction",
-								definitions
-										.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE_PREFIX));
+								Namespace.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
 						aRestriction.setAttribute("base", "soapenc:Array");
 						Element aAttribute = new Element(
 								"attribute",
-								definitions
-										.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE_PREFIX));
+								Namespace.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
 						aAttribute.setAttribute("ref", "soapenc:arrayType");
 						if (thisNamespace == null) {
 							aAttribute
@@ -233,20 +225,16 @@ public class SyncWSDL {
 	}
 
 	private Element createOutputType(Element method) {
-		Element outputType = new Element("element", definitions
-				.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE_PREFIX));
+		Element outputType = new Element("element", Namespace.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
 		outputType.setAttribute("name", method.getAttributeValue("name")
 				+ "Response");
-		Element cType = new Element("complexType", definitions
-				.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE_PREFIX));
-		Element sequence = new Element("sequence", definitions
-				.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE_PREFIX));
+		Element cType = new Element("complexType", Namespace.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
+		Element sequence = new Element("sequence", Namespace.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
 		Element output = method.getChild("output", method.getNamespace());
 
 		// if this methods return has a namespace and type
 		if (!output.getAttributeValue("className").equals("void")) {
-			Element element = new Element("element", definitions
-					.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE_PREFIX));
+			Element element = new Element("element", Namespace.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
 			element.setAttribute("name", "value");
 			Namespace thisNamespace = null;
 			// get the right namespace prefix for the type.....
