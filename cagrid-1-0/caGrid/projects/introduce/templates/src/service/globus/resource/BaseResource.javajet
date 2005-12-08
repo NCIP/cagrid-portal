@@ -114,21 +114,19 @@ public class BaseResource implements Resource, ResourceProperties, ResourceLifet
 				logger.error("Could not form EPR: " + e);
 				return;
 			}
-
-			// TODO: what is the right path to use here?
-			String regPath = ContainerConfig.getGlobusLocation() + "/etc/globus_tutorial_stickynote/registration.xml";
 			try {
-				// THIS IS HOW THE PARAMS ARE SET
-				ServiceGroupRegistrationParameters params = ServiceGroupRegistrationClient.readParams(regPath);
+				// This is how registration parameters are set (read from
+				// template)
+				ServiceGroupRegistrationParameters params = ServiceGroupRegistrationClient
+					.readParams(getConfiguration().getRegistrationTemplateFile());
+				// set our service's EPR as the registrant
 				params.setRegistrantEPR(epr);
 
-				// THIS WOULD BE REPLACED WITH A LOCATOR CALL TO THE INDEX
-				// SERVICE
-				ServiceGroupRegistrationClient client = ServiceGroupRegistrationClient.getContainerClient();
-				// THIS IS HOW THE PARAMS ARE APPLIED
+				ServiceGroupRegistrationClient client = new ServiceGroupRegistrationClient();
+				// apply the registration params to the client
 				client.register(params);
 			} catch (Exception e) {
-				logger.error("Exception when trying to register this StickyNote: " + e);
+				logger.error("Exception when trying to register service (" + epr + "): " + e);
 			}
 		} else {
 			logger.info("Skipping registration.");
