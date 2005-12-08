@@ -289,8 +289,7 @@ public class UserManager extends GUMSObject {
 			} else {
 				InvalidUserFault fault = new InvalidUserFault();
 				fault.setFaultString("No such user "
-						+ getCredentialsManagerUID(user.getIdPId(), user
-								.getUID()));
+						+ gridId);
 				throw fault;
 
 			}
@@ -302,7 +301,7 @@ public class UserManager extends GUMSObject {
 			logError(e.getMessage(), e);
 			GUMSInternalFault fault = new GUMSInternalFault();
 			fault.setFaultString("Unexpected Error, could not obtain the user "
-					+ getCredentialsManagerUID(user.getIdPId(), user.getUID()));
+					+ gridId);
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (GUMSInternalFault) helper.getFault();
@@ -652,7 +651,7 @@ public class UserManager extends GUMSObject {
 
 	public static String subjectToIdentity(String subject) {
 		String s = subject.substring(0);
-		return s.replace(',', '/');
+		return "/"+s.replace(',', '/');
 	}
 
 }

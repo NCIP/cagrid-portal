@@ -1,9 +1,15 @@
 package gov.nih.nci.cagrid.gums.ifs.portal;
 
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.gums.client.IFSAdministrationClient;
+import gov.nih.nci.cagrid.gums.common.FaultUtil;
+import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.gums.portal.GUMSServiceListComboBox;
 import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
 import gov.nih.nci.cagrid.gums.portal.ProxyCaddy;
 import gov.nih.nci.cagrid.gums.portal.ProxyComboBox;
+import gov.nih.nci.cagrid.security.commstyle.CommunicationStyle;
+import gov.nih.nci.cagrid.security.commstyle.SecureConversationWithEncryption;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -30,7 +36,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.1 2005-12-08 19:08:56 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.2 2005-12-08 20:53:42 langella Exp $
  */
 public class UserManagerWindow extends GridPortalBaseFrame {
 
@@ -677,11 +683,26 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 				&& (caddy.getIdentity().equals(this.lastGridIdentity))) {
 			return;
 		} else {
-			System.out.println("Loading IdPs " + service + " - "
-					+ caddy.getIdentity());
-			this.lastService = service;
-			this.lastGridIdentity = caddy.getIdentity();
-			
+			try {
+				this.updateProgress(true, "Seaching for Trusted IdPs");
+				this.lastService = service;
+				this.lastGridIdentity = caddy.getIdentity();
+				this.getIdp().removeAllItems();
+				CommunicationStyle style = new SecureConversationWithEncryption(
+						caddy.getProxy());
+				IFSAdministrationClient client = new IFSAdministrationClient(
+						service, style);
+				TrustedIdP[] idps = client.getTrustedIdPs();
+				for (int i = 0; i < idps.length; i++) {
+					getIdp().addItem(new TrustedIdPCaddy(idps[0]));
+				}
+				this.updateProgress(false, "Found "+idps.length+" IdP(s)");
+			} catch (Exception e) {
+				FaultUtil.printFault(e);
+				this.updateProgress(false, "Error");
+				PortalUtils.showErrorMessage(e);
+			}
+
 		}
 	}
 
@@ -731,6 +752,23 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			userRole = new UserRolesComboBox(true);
 		}
 		return userRole;
+	}
+
+	public class TrustedIdPCaddy {
+		private TrustedIdP idp;
+
+		public TrustedIdPCaddy(TrustedIdP idp) {
+			this.idp = idp;
+		}
+
+		public TrustedIdP getTrustedIdP() {
+			return idp;
+		}
+
+		public String toString() {
+			return idp.getName() + " [IdP Id: " + idp.getId() + "]";
+		}
+
 	}
 
 }
