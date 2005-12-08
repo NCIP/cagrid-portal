@@ -139,6 +139,7 @@ public class SyncTools {
 
 		parser.setQuiet(true);
 		parser.setImports(true);
+		parser.setOutputDir(baseDirectory.getAbsolutePath() + File.separator + "tmp");
 		parser.setNStoPkg(baseDirectory.getAbsolutePath() + File.separator
 				+ "namespace2package.mappings");
 		parser.run(new File(baseDirectory.getAbsolutePath()
@@ -154,6 +155,7 @@ public class SyncTools {
 						.get("introduce.skeleton.service.name") + "_flattened"
 				+ ".wsdl").getAbsolutePath());
 		table = parser.getSymbolTable();
+		CommonTools.deleteDir(new File(baseDirectory.getAbsolutePath() + File.separator + "tmp"));
 
 		// sync the methods fiels
 		SyncMethods methodSync = new SyncMethods(table, baseDirectory,
