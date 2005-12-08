@@ -104,8 +104,21 @@
 		</xsd:complexType>
 	</xsd:element>
 	
+	<xsd:element name="IFSFindTrustedIdPs">
+			<xsd:complexType/>
+	</xsd:element>
+	
+	<xsd:element name="IFSFindTrustedIdPsResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="idps" minOccurs="0" maxOccurs="unbounded" type="ifs:TrustedIdP"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	
 	<xsd:element name="invalidAssertionFault" type="ifs:InvalidAssertionFault"/>
 	<xsd:element name="invalidProxyFault" type="ifs:InvalidProxyFault"/>
+	<xsd:element name="invalidUserFault" type="ifs:InvalidUserFault"/>
 	<xsd:element name="userPolicyFault" type="ifs:UserPolicyFault"/>
 
 			
@@ -197,6 +210,14 @@
 	<message name="IFSCreateProxyOutputMessage">
 		<part name="parameters" element="tns:IFSCreateProxyResponse"/>
 	</message>
+	
+	<message name="IFSFindTrustedIdPsInputMessage">
+		<part name="parameters" element="tns:IFSFindTrustedIdPs"/>
+	</message>
+	
+	<message name="IFSFindTrustedIdPsOutputMessage">
+		<part name="parameters" element="tns:IFSFindTrustedIdPsResponse"/>
+	</message>
 
 	<message name="InvalidAssertionFaultMessage">
 		<part name="fault" element="tns:invalidAssertionFault" />
@@ -204,6 +225,10 @@
 	
 	<message name="InvalidProxyFaultMessage">
 		<part name="fault" element="tns:invalidProxyFault" />
+	</message>
+	
+	<message name="InvalidUserFaultMessage">
+		<part name="fault" element="tns:invalidUserFault" />
 	</message>
 	
 	<message name="UserPolicyFaultMessage">
@@ -214,7 +239,6 @@
 		<part name="fault" element="tns:permissionDeniedFault" />
 	</message>
 	
-
 
 
 <!--============================================================
@@ -271,6 +295,14 @@
 	    <fault message="tns:InvalidAssertionFaultMessage" name="InvalidAssertionFault"/>
 	    <fault message="tns:InvalidProxyFaultMessage" name="InvalidProxyFault"/>
 	    <fault message="tns:UserPolicyFaultMessage" name="UserPolicyFault"/>
+	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
+	</operation>
+	
+	<operation name="getTrustedIdPs">
+		<input message="tns:IFSFindTrustedIdPsInputMessage"/>
+		<output message="tns:IFSFindTrustedIdPsOutputMessage"/>
+		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
+	    <fault message="tns:InvalidUserFaultMessage" name="InvalidUserFault"/>
 	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
 	</operation>
 

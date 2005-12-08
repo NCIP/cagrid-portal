@@ -4,7 +4,7 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
 	xmlns:ifs="http://cagrid.nci.nih.gov/gums/ifs/bean" xmlns:wsbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd">
 	
-	  <xsd:complexType name="trustedIdP">
+	  <xsd:complexType name="TrustedIdP">
 			<xsd:sequence>
 			    <xsd:element name="id" type="xsd:long"/>
 			    <xsd:element name="name" type="xsd:string"/>
