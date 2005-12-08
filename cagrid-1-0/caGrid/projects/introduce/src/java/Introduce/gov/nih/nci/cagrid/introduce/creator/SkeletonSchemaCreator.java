@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce;
+package gov.nih.nci.cagrid.introduce.creator;
 
 import gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate;
 

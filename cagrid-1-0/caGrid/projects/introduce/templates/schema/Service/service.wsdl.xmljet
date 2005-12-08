@@ -35,7 +35,7 @@
             xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"
             xmlns="http://www.w3.org/2001/XMLSchema">
             <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"
-                schemaLocation="../cagrid/types/CommonServiceMetadata.xsd"/>
+                schemaLocation="../cagrid/types/common/CommonServiceMetadata.xsd"/>
             <element name="<%=serviceName%>ResourceProperties">
                 <complexType>
                     <sequence>

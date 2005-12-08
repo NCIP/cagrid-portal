@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce;
+package gov.nih.nci.cagrid.introduce.creator;
 
 import gov.nih.nci.cagrid.introduce.templates.etc.RegistationTemplate;
 
@@ -7,22 +7,24 @@ import java.io.FileWriter;
 import java.util.Properties;
 
 
-public class SkeletonEtcCreator {
+public class SkeletonDocsCreator {
 
-	public SkeletonEtcCreator() {
+	public SkeletonDocsCreator() {
 	}
 
 
 	public void createSkeleton(Properties properties) throws Exception {
 		File baseDirectory = new File(properties.getProperty("introduce.skeleton.destination.dir"));
 
-		File etcDir = new File(baseDirectory.getAbsolutePath() + File.separator + "etc");
-		etcDir.mkdir();
+		File docsDir = new File(baseDirectory.getAbsolutePath() + File.separator + "docs");
+		docsDir.mkdir();
+		
+		File apiDir = new File(docsDir.getAbsolutePath() + File.separator + "api");
+		apiDir.mkdir();
 		
 		RegistationTemplate registrationT = new RegistationTemplate();
 		String registrationS = registrationT.generate(properties);
-		File registrationF = new File(etcDir.getAbsolutePath() + File.separator + "registration.xml");
-
+		File registrationF = new File(apiDir.getAbsolutePath() + File.separator + "Doxyfile");
 		FileWriter registrationFW = new FileWriter(registrationF);
 		registrationFW.write(registrationS);
 		registrationFW.close();

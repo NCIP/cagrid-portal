@@ -1,5 +1,11 @@
 package gov.nih.nci.cagrid.introduce;
 
+import gov.nih.nci.cagrid.introduce.creator.SkeletonBaseCreator;
+import gov.nih.nci.cagrid.introduce.creator.SkeletonDocsCreator;
+import gov.nih.nci.cagrid.introduce.creator.SkeletonEtcCreator;
+import gov.nih.nci.cagrid.introduce.creator.SkeletonSchemaCreator;
+import gov.nih.nci.cagrid.introduce.creator.SkeletonSourceCreator;
+
 import java.io.File;
 import java.util.Properties;
 
@@ -19,6 +25,7 @@ public class SkeletonCreator extends Task {
 		SkeletonSourceCreator ssc = new SkeletonSourceCreator();
 		SkeletonSchemaCreator sscc = new SkeletonSchemaCreator();
 		SkeletonEtcCreator sec = new SkeletonEtcCreator();
+		SkeletonDocsCreator sdc = new SkeletonDocsCreator();
 
 		// Create the overall skeleton
 		File baseDirectory = new File(properties
@@ -31,6 +38,7 @@ public class SkeletonCreator extends Task {
 			ssc.createSkeleton(properties);
 			sscc.createSkeleton(properties);
 			sec.createSkeleton(properties);
+			sdc.createSkeleton(properties);
 		} catch (Exception e) {
 			BuildException be = new BuildException(e.getMessage());
 			be.setStackTrace(e.getStackTrace());

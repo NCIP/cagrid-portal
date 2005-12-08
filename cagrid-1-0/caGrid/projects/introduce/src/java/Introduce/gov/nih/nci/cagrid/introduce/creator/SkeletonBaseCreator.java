@@ -1,8 +1,10 @@
-package gov.nih.nci.cagrid.introduce;
+package gov.nih.nci.cagrid.introduce.creator;
 
+import gov.nih.nci.cagrid.introduce.templates.ClasspathTemplate;
 import gov.nih.nci.cagrid.introduce.templates.DeployPropertiesTemplate;
 import gov.nih.nci.cagrid.introduce.templates.JNDIConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.NamespaceMappingsTemplate;
+import gov.nih.nci.cagrid.introduce.templates.ProjectTemplate;
 import gov.nih.nci.cagrid.introduce.templates.ServerConfigTemplate;
 
 import java.io.File;
@@ -46,6 +48,20 @@ public class SkeletonBaseCreator {
 		FileWriter namespaceMappingsFW = new FileWriter(namespaceMappingsF);
 		namespaceMappingsFW.write(namespaceMappingsS);
 		namespaceMappingsFW.close();
+		
+		ClasspathTemplate classpathT = new ClasspathTemplate();
+		String classpathS = classpathT.generate(properties);
+		File classpathF = new File(baseDirectory.getAbsolutePath() + File.separator + ".classpath");
+		FileWriter classpathFW = new FileWriter(classpathF);
+		classpathFW.write(classpathS);
+		classpathFW.close();
+		
+		ProjectTemplate projectT = new ProjectTemplate();
+		String projectS = projectT.generate(properties);
+		File projectF = new File(baseDirectory.getAbsolutePath() + File.separator + ".project");
+		FileWriter projectFW = new FileWriter(projectF);
+		projectFW.write(projectS);
+		projectFW.close();
 	}
 
 }

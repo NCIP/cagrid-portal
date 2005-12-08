@@ -1,8 +1,17 @@
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="ClasspathTemplate" %>
+<% java.util.Properties properties = (java.util.Properties) argument; 
+   String packageName = properties.getProperty("introduce.skeleton.package");
+   String serviceName = properties.getProperty("introduce.skeleton.service.name");
+   String modifiedServiceName = serviceName;
+   if(serviceName.endsWith("Service")){
+   	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
+   }
+%>
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="build/stubs-SERVICE-TYPE-NAME/src"/>
+	<classpathentry kind="src" path="build/stubs-<%=serviceName%>/src"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
