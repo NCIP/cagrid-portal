@@ -28,6 +28,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
+import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
@@ -36,7 +37,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.2 2005-12-08 20:53:42 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.3 2005-12-08 21:13:56 langella Exp $
  */
 public class UserManagerWindow extends GridPortalBaseFrame {
 
@@ -660,12 +661,11 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		if (idp == null) {
 			idp = new JComboBox();
 			idp.addFocusListener(new FocusListener() {
-				public void focusGained(FocusEvent e) {
-					updateIdPs();
-
+				public void focusGained(FocusEvent ev) {
+					checkUpdateIdPs();
 				}
 
-				public void focusLost(FocusEvent e) {
+				public void focusLost(FocusEvent ev) {
 					// TODO Auto-generated method stub
 
 				}
@@ -675,32 +675,49 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		return idp;
 	}
 
-	private void updateIdPs() {
-		String service = ((GUMSServiceListComboBox) getService())
+	private void updateIdPs(String service, GlobusCredential cred) {
+		try {
+			this.updateProgress(true, "Seaching for Trusted IdPs");
+			this.getIdp().removeAllItems();
+			CommunicationStyle style = new SecureConversationWithEncryption(
+					cred);
+			IFSAdministrationClient client = new IFSAdministrationClient(
+					service, style);
+			TrustedIdP[] idps = client.getTrustedIdPs();
+			for (int i = 0; i < idps.length; i++) {
+				getIdp().addItem(new TrustedIdPCaddy(idps[0]));
+			}
+			this.updateProgress(false, "Found " + idps.length + " IdP(s)");
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			this.updateProgress(false, "Error");
+			PortalUtils.showErrorMessage(e);
+		}
+	}
+
+	private void checkUpdateIdPs() {
+
+		final String service = ((GUMSServiceListComboBox) getService())
 				.getSelectedService();
-		ProxyCaddy caddy = ((ProxyComboBox) getProxy()).getSelectedProxyCaddy();
+		final ProxyCaddy caddy = ((ProxyComboBox) getProxy())
+				.getSelectedProxyCaddy();
 		if ((service.equals(this.lastService))
 				&& (caddy.getIdentity().equals(this.lastGridIdentity))) {
 			return;
 		} else {
-			try {
-				this.updateProgress(true, "Seaching for Trusted IdPs");
-				this.lastService = service;
-				this.lastGridIdentity = caddy.getIdentity();
-				this.getIdp().removeAllItems();
-				CommunicationStyle style = new SecureConversationWithEncryption(
-						caddy.getProxy());
-				IFSAdministrationClient client = new IFSAdministrationClient(
-						service, style);
-				TrustedIdP[] idps = client.getTrustedIdPs();
-				for (int i = 0; i < idps.length; i++) {
-					getIdp().addItem(new TrustedIdPCaddy(idps[0]));
+			this.lastService = service;
+			this.lastGridIdentity = caddy.getIdentity();
+
+			MobiusRunnable runner = new MobiusRunnable() {
+				public void execute() {
+					updateIdPs(service, caddy.getProxy());
 				}
-				this.updateProgress(false, "Found "+idps.length+" IdP(s)");
-			} catch (Exception e) {
-				FaultUtil.printFault(e);
-				this.updateProgress(false, "Error");
-				PortalUtils.showErrorMessage(e);
+			};
+			try {
+				PortalResourceManager.getInstance().getThreadManager()
+						.executeInBackground(runner);
+			} catch (Exception t) {
+				t.getMessage();
 			}
 
 		}
@@ -766,7 +783,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		}
 
 		public String toString() {
-			return idp.getName() + " [IdP Id: " + idp.getId() + "]";
+			return "[IdP Id: " + idp.getId() + "] " + idp.getName();
 		}
 
 	}
