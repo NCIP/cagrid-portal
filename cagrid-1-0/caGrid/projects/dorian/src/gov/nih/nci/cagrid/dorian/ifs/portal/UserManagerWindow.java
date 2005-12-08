@@ -37,7 +37,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.3 2005-12-08 21:13:56 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.4 2005-12-08 21:24:42 langella Exp $
  */
 public class UserManagerWindow extends GridPortalBaseFrame {
 
@@ -124,7 +124,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 	private void initialize() {
 		this.setSize(500, 500);
 		this.setContentPane(getJContentPane());
-		this.setTitle("Manage Users");
+		this.setTitle("Identity Federation User Management");
 
 	}
 
@@ -638,6 +638,10 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			idpLabel.setText("Identity Provider");
 			filterPanel = new JPanel();
 			filterPanel.setLayout(new GridBagLayout());
+			filterPanel.setBorder(BorderFactory.createTitledBorder(null,
+					"Search Criteria", TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, null, GumsLookAndFeel
+							.getPanelLabelColor()));
 			filterPanel.add(idpLabel, gridBagConstraints3);
 			filterPanel.add(getIdp(), gridBagConstraints5);
 			filterPanel.add(gidLabel, gridBagConstraints6);
@@ -688,26 +692,28 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 				getIdp().addItem(new TrustedIdPCaddy(idps[0]));
 			}
 			this.updateProgress(false, "Found " + idps.length + " IdP(s)");
+			getIdp().showPopup();
 		} catch (Exception e) {
-			FaultUtil.printFault(e);
+			//FaultUtil.printFault(e);
 			this.updateProgress(false, "Error");
 			PortalUtils.showErrorMessage(e);
 		}
 	}
 
 	private void checkUpdateIdPs() {
-
+		getIdp().hidePopup();
 		final String service = ((GUMSServiceListComboBox) getService())
 				.getSelectedService();
 		final ProxyCaddy caddy = ((ProxyComboBox) getProxy())
 				.getSelectedProxyCaddy();
 		if ((service.equals(this.lastService))
 				&& (caddy.getIdentity().equals(this.lastGridIdentity))) {
+			getIdp().showPopup();
 			return;
 		} else {
 			this.lastService = service;
 			this.lastGridIdentity = caddy.getIdentity();
-
+			
 			MobiusRunnable runner = new MobiusRunnable() {
 				public void execute() {
 					updateIdPs(service, caddy.getProxy());
