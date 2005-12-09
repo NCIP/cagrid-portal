@@ -28,6 +28,9 @@
 			<fileset dir="${test.lib.dir}">
 				<include name="*.jar"/>
 			</fileset>
+			<fileset dir="${ext.test.lib.dir}">
+				<include name="*.jar"/>
+			</fileset>
 			<fileset dir="${ant.library.dir}">
 				<include name="*.jar"/>
 			</fileset>

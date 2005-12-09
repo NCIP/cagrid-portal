@@ -23,7 +23,6 @@ public class ResolveDependencies extends Task {
 
 	public ResolveDependencies() {
 		this.artifactList = new ArrayList();
-
 	}
 
 
@@ -75,10 +74,11 @@ public class ResolveDependencies extends Task {
 			}
 			// figure out where to copy artifacts
 			if (getTargetDir() == null) {
+				String track = artifact.getTrack().equals(Artifact.TEST_TRACK) ? (File.separator + "test") : "";
 				if (artifact.getType().equals(Artifact.JAR_TYPE)) {
-					copyTask.setTodir(new File(getExtDir().getAbsolutePath() + File.separator + "lib"));
+					copyTask.setTodir(new File(getExtDir().getAbsolutePath() + track + File.separator + "lib"));
 				} else if (artifact.getType().equals(Artifact.SCHEMAS_TYPE)) {
-					copyTask.setTodir(new File(getExtDir().getAbsolutePath() + File.separator + "schema"));
+					copyTask.setTodir(new File(getExtDir().getAbsolutePath() + track + File.separator + "schema"));
 				} else if (artifact.getType().equals(Artifact.MAPPINGS_TYPE)) {
 					copyTask.setTodir(new File(getExtDir().getAbsolutePath()));
 				}

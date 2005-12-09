@@ -16,8 +16,9 @@ public class Artifact extends DataType {
 	public static final String JAR_TYPE = "jars";
 	public static final String SCHEMAS_TYPE = "schemas";
 	public static final String MAPPINGS_TYPE = "mappings";
-	
-	private String projectName;
+	public static final String TEST_TRACK = "test";
+	public static final String MAIN_TRACK = "main";
+
 	private String track;
 	private String type;
 	private List fileSetList;
@@ -32,22 +33,6 @@ public class Artifact extends DataType {
 	protected Artifact getReferencedArtifact() {
 		Object o = getRefid().getReferencedObject(this.getProject());
 		return (Artifact) o;
-	}
-
-
-	public String getProjectName() {
-		if (isReference()) {
-			return getReferencedArtifact().getProjectName();
-		}
-		return this.projectName;
-	}
-
-
-	public void setProjectName(String project) {
-		if (isReference()) {
-			throw new BuildException("Cannont use other attributes and refid.");
-		}
-		this.projectName = project;
 	}
 
 
