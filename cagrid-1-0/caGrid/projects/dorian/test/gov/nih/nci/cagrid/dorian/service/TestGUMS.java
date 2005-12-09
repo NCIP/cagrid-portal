@@ -16,6 +16,7 @@ import gov.nih.nci.cagrid.gums.idp.bean.IdPUserFilter;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUserRole;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUserStatus;
 import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
+import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
 import gov.nih.nci.cagrid.gums.idp.bean.StateCode;
 import gov.nih.nci.cagrid.gums.ifs.IFSConfiguration;
 import gov.nih.nci.cagrid.gums.ifs.UserManager;
@@ -210,6 +211,13 @@ public class TestGUMS extends TestCase{
     		}
     		users = jm.findIdPUsers(gridId, uf);
 			assertEquals(0, users.length);
+			
+			//test there is no such user
+			try {
+				IdPUser u = new IdPUser();
+    			jm.updateIdPUser(gridId, u);
+    		}catch (NoSuchUserFault nsuf) {
+    		}
     		
     		assertEquals(0,jm.getDatabase().getUsedConnectionCount());
     		jm.getDatabase().destroyDatabase();
