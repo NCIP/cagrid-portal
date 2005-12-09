@@ -1,10 +1,5 @@
-package gov.nih.nci.cagrid.introduce;
+package gov.nih.nci.cagrid.introduce.creator;
 
-import gov.nih.nci.cagrid.introduce.creator.SkeletonBaseCreator;
-import gov.nih.nci.cagrid.introduce.creator.SkeletonDocsCreator;
-import gov.nih.nci.cagrid.introduce.creator.SkeletonEtcCreator;
-import gov.nih.nci.cagrid.introduce.creator.SkeletonSchemaCreator;
-import gov.nih.nci.cagrid.introduce.creator.SkeletonSourceCreator;
 
 import java.io.File;
 import java.util.Properties;
