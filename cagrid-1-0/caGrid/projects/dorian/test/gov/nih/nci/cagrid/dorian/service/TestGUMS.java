@@ -160,68 +160,90 @@ public class TestGUMS extends TestCase{
 		}
     }
     
-    public void testInvalidIdpUser(){
+    public void testInvalidIdpUserPasswordTooLong(){
     	try{
     		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
     		assertNotNull(jm.getGUMSConfiguration());
     		assertNotNull(jm.getDatabase());
-    		
+			
+    		//test the password length too long
+			Application a = createTooLongPasswordApplication();
+			jm.registerWithIdP(a);	
+			assertTrue(false);
+    	}catch (InvalidUserPropertyFault iupf) {
+		}catch (Exception e) {
+    		FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+    }
+    
+    public void testInvalidIdpUserPasswordTooShort(){
+    	try{
+    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
+    		assertNotNull(jm.getGUMSConfiguration());
+    		assertNotNull(jm.getDatabase());
+			
+    		//test the password length too short
+			Application a = createTooShortPasswordApplication();
+			jm.registerWithIdP(a);	
+			assertTrue(false);
+    	}catch (InvalidUserPropertyFault iupf) {
+		}catch (Exception e) {
+    		FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+    }
+    
+    public void testInvalidIdpUserIdTooLong(){
+    	try{
+    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
+    		assertNotNull(jm.getGUMSConfiguration());
+    		assertNotNull(jm.getDatabase());
+			
+    		//test the UserId too long
+			Application a = createTooLongUserIdApplication();
+			jm.registerWithIdP(a);	
+			assertTrue(false);
+    	}catch (InvalidUserPropertyFault iupf) {
+		}catch (Exception e) {
+    		FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+    }
+    
+    public void testInvalidIdpUserIdTooShort(){
+    	try{
+    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
+    		assertNotNull(jm.getGUMSConfiguration());
+    		assertNotNull(jm.getDatabase());
+			
+    		//test the UserId too long
+			Application a = createTooShortUserIdApplication();
+			jm.registerWithIdP(a);	
+			assertTrue(false);
+    	}catch (InvalidUserPropertyFault iupf) {
+		}catch (Exception e) {
+    		FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+    }
+    
+    public void testInvalidIdpNoSuchUser(){
+    	try{
+    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
+    		assertNotNull(jm.getGUMSConfiguration());
+    		assertNotNull(jm.getDatabase());
+			
     		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,GUMS.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 			
-			IdPUserFilter uf = new IdPUserFilter();
-			IdPUser[] users;
-			
-    		//test the password length too long
-    		try {
-    			Application a = createTooLongPasswordApplication();
-        		uf.setUserId(a.getUserId());
-    			jm.registerWithIdP(a);
-    		}catch (InvalidUserPropertyFault iupf) {
-    		}
-    		users = jm.findIdPUsers(gridId, uf);
-			assertEquals(0, users.length);
-			
-    		//test the password length too short
-    		try {
-    			Application a = createTooShortPasswordApplication();
-    			uf.setUserId(a.getUserId());
-    			jm.registerWithIdP(a);
-    		}catch (InvalidUserPropertyFault iupf) {
-    		}
-    		users = jm.findIdPUsers(gridId, uf);
-			assertEquals(0, users.length);
-    		
-    		//test the userId length too long
-    		try {
-    			Application a = createTooLongUserIdApplication();
-    			uf.setUserId(a.getUserId());
-    			jm.registerWithIdP(a);
-    		}catch (InvalidUserPropertyFault iupf) {
-    		}
-    		users = jm.findIdPUsers(gridId, uf);
-			assertEquals(0, users.length);
-    		
-    		//test the userId length too short
-    		try {
-    			Application a = createTooShortUserIdApplication();
-    			uf.setUserId(a.getUserId());
-    			jm.registerWithIdP(a);
-    		}catch (InvalidUserPropertyFault iupf) {
-    		}
-    		users = jm.findIdPUsers(gridId, uf);
-			assertEquals(0, users.length);
-			
-			//test there is no such user
-			try {
-				IdPUser u = new IdPUser();
-    			jm.updateIdPUser(gridId, u);
-    		}catch (NoSuchUserFault nsuf) {
-    		}
-    		
-    		assertEquals(0,jm.getDatabase().getUsedConnectionCount());
-    		jm.getDatabase().destroyDatabase();
-    	}catch (Exception e) {
+    		//test the UserId too long
+    		IdPUser u = new IdPUser();
+			u.setUserId("No_SUCH_USER");
+			jm.updateIdPUser(gridId, u);
+			assertTrue(false);
+    	}catch (NoSuchUserFault nsuf) {
+		}catch (Exception e) {
     		FaultUtil.printFault(e);
 			assertTrue(false);
 		}
