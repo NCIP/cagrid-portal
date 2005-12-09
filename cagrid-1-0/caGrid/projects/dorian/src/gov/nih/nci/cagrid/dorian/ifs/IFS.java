@@ -52,7 +52,6 @@ public class IFS extends GUMSObject {
 
 	private IFSConfiguration conf;
 
-
 	public IFS(IFSConfiguration conf, Database db, CertificateAuthority ca)
 			throws GUMSInternalFault {
 		this.conf = conf;
@@ -60,8 +59,6 @@ public class IFS extends GUMSObject {
 		um = new UserManager(db, conf, ca, tm);
 		um.buildDatabase();
 	}
-
-	
 
 	public String getUserIdVerifyTrustedIdP(X509Certificate idpCert,
 			String identity) throws GUMSInternalFault, InvalidUserFault,
@@ -142,6 +139,14 @@ public class IFS extends GUMSObject {
 		verifyAdminUser(caller);
 
 		um.updateUser(usr);
+	}
+
+	public void removeUser(String callerGridIdentity, IFSUser usr)
+			throws GUMSInternalFault, InvalidUserFault, PermissionDeniedFault {
+		IFSUser caller = um.getUser(callerGridIdentity);
+		verifyActiveUser(caller);
+		verifyAdminUser(caller);
+		um.removeUser(usr);
 	}
 
 	public X509Certificate[] createProxy(SAMLAssertion saml,

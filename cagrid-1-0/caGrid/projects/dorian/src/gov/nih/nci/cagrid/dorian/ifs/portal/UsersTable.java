@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.gums.ifs.portal;
 
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
+import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.gums.portal.PortalBaseTable;
 
 import java.util.Vector;
@@ -12,18 +12,14 @@ import javax.swing.table.TableColumn;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: UsersTable.java,v 1.1 2005-12-08 19:08:56 langella Exp $
+ * @version $Id: UsersTable.java,v 1.2 2005-12-09 17:51:32 langella Exp $
  */
 public class UsersTable extends PortalBaseTable {
 	public static String USER = "user";
 
-	public static String USERNAME = "Username";
+	public static String IDP = "IdP Id";
 
-	public static String FIRST_NAME = "First Name";
-
-	public static String LAST_NAME = "Last Name";
-
-	public static String ORGANIZATION = "Organization";
+	public static String GRID_IDENTITY = "Grid Identity";
 
 	public static String EMAIL = "Email";
 
@@ -48,10 +44,8 @@ public class UsersTable extends PortalBaseTable {
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn(USER);
-		model.addColumn(USERNAME);
-		model.addColumn(FIRST_NAME);
-		model.addColumn(LAST_NAME);
-		model.addColumn(ORGANIZATION);
+		model.addColumn(IDP);
+		model.addColumn(GRID_IDENTITY);
 		model.addColumn(EMAIL);
 		model.addColumn(STATUS);
 		model.addColumn(ROLE);
@@ -59,23 +53,21 @@ public class UsersTable extends PortalBaseTable {
 
 	}
 
-	public void addUser(final IdPUser u) {
+	public void addUser(final IFSUser u) {
 		Vector v = new Vector();
 		v.add(u);
-		v.add(u.getUserId());
-		v.add(u.getFirstName());
-		v.add(u.getLastName());
-		v.add(u.getOrganization());
+		v.add(String.valueOf(u.getIdPId()));
+		v.add(u.getGridId());
 		v.add(u.getEmail());
-		v.add(u.getStatus().getValue());
-		v.add(u.getRole().getValue());
+		v.add(u.getUserStatus().getValue());
+		v.add(u.getUserRole().getValue());
 		addRow(v);
 	}
 
-	public synchronized IdPUser getSelectedUser() {
+	public synchronized IFSUser getSelectedUser() {
 		int row = getSelectedRow();
 		if ((row >= 0) && (row < getRowCount())) {
-			return (IdPUser) getValueAt(row, 0);
+			return (IFSUser) getValueAt(row, 0);
 		} else {
 			return null;
 		}

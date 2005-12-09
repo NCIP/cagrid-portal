@@ -21,6 +21,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
@@ -31,13 +32,12 @@ import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
-import javax.swing.JProgressBar;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.16 2005-12-06 04:18:33 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.17 2005-12-09 17:51:32 langella Exp $
  */
 public class UserManagerWindow extends GridPortalBaseFrame {
 

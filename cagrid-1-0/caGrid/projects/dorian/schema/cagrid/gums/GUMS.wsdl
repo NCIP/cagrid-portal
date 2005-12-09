@@ -116,6 +116,29 @@
 		</xsd:complexType>
 	</xsd:element>
 	
+	<xsd:element name="IFSFindUsers" type="ifs:IFSUserFilter"/>
+	
+	<xsd:element name="IFSFindUsersResponse">
+			<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="users" minOccurs="0" maxOccurs="unbounded" type="ifs:IFSUser"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="IFSUpdateUser" type="ifs:IFSUser"/>
+	
+	<xsd:element name="IFSUpdateUserResponse">
+			<xsd:complexType/>
+	</xsd:element>
+	
+    <xsd:element name="IFSRemoveUser" type="ifs:IFSUser"/>
+	
+	<xsd:element name="IFSRemoveUserResponse">
+			<xsd:complexType/>
+	</xsd:element>
+	
+	
 	<xsd:element name="invalidAssertionFault" type="ifs:InvalidAssertionFault"/>
 	<xsd:element name="invalidProxyFault" type="ifs:InvalidProxyFault"/>
 	<xsd:element name="invalidUserFault" type="ifs:InvalidUserFault"/>
@@ -218,6 +241,30 @@
 	<message name="IFSFindTrustedIdPsOutputMessage">
 		<part name="parameters" element="tns:IFSFindTrustedIdPsResponse"/>
 	</message>
+	
+	<message name="IFSFindUsersInputMessage">
+		<part name="parameters" element="tns:IFSFindUsers"/>
+	</message>
+	
+	<message name="IFSFindUsersOutputMessage">
+		<part name="parameters" element="tns:IFSFindUsersResponse"/>
+	</message>
+	
+	<message name="IFSUpdateUserInputMessage">
+		<part name="parameters" element="tns:IFSUpdateUser"/>
+	</message>
+	
+	<message name="IFSUpdateUserOutputMessage">
+		<part name="parameters" element="tns:IFSUpdateUserResponse"/>
+	</message>
+	
+	<message name="IFSRemoveUserInputMessage">
+		<part name="parameters" element="tns:IFSRemoveUser"/>
+	</message>
+	
+	<message name="IFSRemoveUserOutputMessage">
+		<part name="parameters" element="tns:IFSRemoveUserResponse"/>
+	</message>
 
 	<message name="InvalidAssertionFaultMessage">
 		<part name="fault" element="tns:invalidAssertionFault" />
@@ -301,6 +348,30 @@
 	<operation name="getTrustedIdPs">
 		<input message="tns:IFSFindTrustedIdPsInputMessage"/>
 		<output message="tns:IFSFindTrustedIdPsOutputMessage"/>
+		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
+	    <fault message="tns:InvalidUserFaultMessage" name="InvalidUserFault"/>
+	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
+	</operation>
+	
+	<operation name="findIFSUsers">
+		<input message="tns:IFSFindUsersInputMessage"/>
+		<output message="tns:IFSFindUsersOutputMessage"/>
+		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
+	    <fault message="tns:InvalidUserFaultMessage" name="InvalidUserFault"/>
+	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
+	</operation>
+	
+		<operation name="updateIFSUser">
+		<input message="tns:IFSUpdateUserInputMessage"/>
+		<output message="tns:IFSUpdateUserOutputMessage"/>
+		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
+	    <fault message="tns:InvalidUserFaultMessage" name="InvalidUserFault"/>
+	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
+	</operation>
+	
+	<operation name="removeIFSUser">
+		<input message="tns:IFSRemoveUserInputMessage"/>
+		<output message="tns:IFSRemoveUserOutputMessage"/>
 		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
 	    <fault message="tns:InvalidUserFaultMessage" name="InvalidUserFault"/>
 	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>

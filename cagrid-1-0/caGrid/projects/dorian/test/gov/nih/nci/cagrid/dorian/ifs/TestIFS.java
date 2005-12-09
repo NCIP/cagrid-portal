@@ -8,8 +8,8 @@ import gov.nih.nci.cagrid.gums.common.FaultHelper;
 import gov.nih.nci.cagrid.gums.common.FaultUtil;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
-import gov.nih.nci.cagrid.gums.ifs.TestTrustManager.IdPContainer;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
+import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserRole;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
@@ -19,7 +19,6 @@ import gov.nih.nci.cagrid.gums.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.gums.test.TestUtils;
 
-import java.io.StringReader;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -63,9 +62,58 @@ public class TestIFS extends TestCase {
 
 	public final static String EMAIL_NAME = "email";
 
+	public final static String INITIAL_ADMIN = "admin";
+
 	private Database db;
 
 	private CertificateAuthority ca;
+
+	public void testFindRemoveUpdateUsers() {
+		try {
+			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
+			IFSConfiguration conf = getConf();
+			conf.setInitalTrustedIdP(idp.getIdp());
+			IFS ifs = new IFS(conf, db, ca);
+			String uidPrefix = "user";
+			String adminSubject = UserManager.getUserSubject(ca
+					.getCACertificate().getSubjectDN().getName(), idp.getIdp()
+					.getId(), INITIAL_ADMIN);
+			String adminGridId = UserManager.subjectToIdentity(adminSubject);
+			int ucount = 1;
+			for (int i = 0; i < 5; i++) {
+				String uid = uidPrefix + i;
+				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+				PublicKey publicKey = pair.getPublic();
+				ProxyLifetime lifetime = getProxyLifetime();
+				X509Certificate[] certs = ifs.createProxy(getSAMLAssertion(uid,
+						idp), publicKey, lifetime);
+				createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
+				ucount = ucount+1;		
+				assertEquals(ucount, ifs.findUsers(adminGridId,
+						new IFSUserFilter()).length);
+				IFSUserFilter f1 = new IFSUserFilter();
+				f1.setIdPId(idp.getIdp().getId());
+				f1.setUID(uid);
+				IFSUser[] usr = ifs.findUsers(adminGridId,f1);
+				assertEquals(1,usr.length);
+				
+				try{
+					ifs.findUsers(usr[0].getGridId(),new IFSUserFilter());
+					assertTrue(false);
+				}catch(PermissionDeniedFault f){
+					
+				}
+				usr[0].setUserRole(IFSUserRole.Administrator);
+				ifs.updateUser(adminGridId,usr[0]);
+				assertEquals(ucount,ifs.findUsers(usr[0].getGridId(),new IFSUserFilter()).length);
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+
+	}
 
 	public void testCreateProxy() {
 		try {
@@ -405,8 +453,8 @@ public class TestIFS extends TestCase {
 		TrustedIdP idp = this.getTrustedIdpAutoApproveAutoRenew("Initial IdP")
 				.getIdp();
 		IFSUser usr = new IFSUser();
-		usr.setUID("inital_admin");
-		usr.setEmail("inital_admin@test.com");
+		usr.setUID(INITIAL_ADMIN);
+		usr.setEmail(INITIAL_ADMIN + "@test.com");
 		usr.setUserStatus(IFSUserStatus.Active);
 		usr.setUserRole(IFSUserRole.Administrator);
 		conf.setInitalTrustedIdP(idp);

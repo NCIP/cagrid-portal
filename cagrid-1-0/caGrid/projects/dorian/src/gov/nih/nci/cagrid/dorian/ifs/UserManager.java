@@ -65,8 +65,6 @@ public class UserManager extends GUMSObject {
 		this.ca = ca;
 	}
 
-	
-
 	public synchronized boolean determineIfUserExists(long idpId, String uid)
 			throws GUMSInternalFault {
 		buildDatabase();
@@ -288,8 +286,7 @@ public class UserManager extends GUMSObject {
 				user.setCertificate(CertUtil.writeCertificateToString(cert));
 			} else {
 				InvalidUserFault fault = new InvalidUserFault();
-				fault.setFaultString("No such user "
-						+ gridId);
+				fault.setFaultString("No such user " + gridId);
 				throw fault;
 
 			}
@@ -566,9 +563,15 @@ public class UserManager extends GUMSObject {
 		}
 	}
 
-	public synchronized void removeUser(IFSUser user) throws GUMSInternalFault {
+	public synchronized void removeUser(IFSUser user) throws GUMSInternalFault,InvalidUserFault {
 		this.buildDatabase();
-		this.removeUser(user.getIdPId(), user.getUID());
+		if (determineIfUserExists(user.getIdPId(), user.getUID())) {
+			this.removeUser(user.getIdPId(), user.getUID());
+		}else{
+			InvalidUserFault fault = new InvalidUserFault();
+			fault.setFaultString("Could not remove user, the specified user does not exist.");
+			throw fault;
+		}
 	}
 
 	public synchronized void removeUser(long idpId, String uid)
@@ -651,7 +654,7 @@ public class UserManager extends GUMSObject {
 
 	public static String subjectToIdentity(String subject) {
 		String s = subject.substring(0);
-		return "/"+s.replace(',', '/');
+		return "/" + s.replace(',', '/');
 	}
 
 }

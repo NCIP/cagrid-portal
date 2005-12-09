@@ -122,19 +122,7 @@ public class GUMS extends MobiusResourceManager {
 		return this.db;
 	}
 
-	public X509Certificate getCACertificate() throws GUMSInternalFault {
-		try {
-			return this.ca.getCACertificate();
-		} catch (Exception e) {
-			GUMSInternalFault fault = new GUMSInternalFault();
-			fault
-					.setFaultString("An unexpected error occurred, in obtaining the CA certificate.");
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
-			throw fault;
-		}
-	}
+	
 
 	// //////////////////////////////////////////////////////////////////////////////
 	/*
@@ -160,6 +148,26 @@ public class GUMS extends MobiusResourceManager {
 	 * EXISTS
 	 */
 	// //////////////////////////////////////////////////////////////////////////////
+	
+	public X509Certificate getCACertificate() throws GUMSInternalFault {
+		try {
+			return this.ca.getCACertificate();
+		} catch (Exception e) {
+			GUMSInternalFault fault = new GUMSInternalFault();
+			fault
+					.setFaultString("An unexpected error occurred, in obtaining the CA certificate.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GUMSInternalFault) helper.getFault();
+			throw fault;
+		}
+	}
+	
+	public X509Certificate getIdPCertificate() throws GUMSInternalFault {
+		return identityProvider.getIdPCertificate();
+	}
+	
+	
 	public IdPUser[] findIdPUsers(String gridIdentity, IdPUserFilter filter)
 			throws GUMSInternalFault, PermissionDeniedFault {
 		String uid = null;
@@ -237,6 +245,11 @@ public class GUMS extends MobiusResourceManager {
 	public void updateIFSUser(String callerGridIdentity, IFSUser usr)
 			throws GUMSInternalFault, InvalidUserFault, PermissionDeniedFault {
 		ifs.updateUser(callerGridIdentity, usr);
+	}
+
+	public void removeIFSUser(String callerGridIdentity, IFSUser usr)
+			throws GUMSInternalFault, InvalidUserFault, PermissionDeniedFault {
+		ifs.removeUser(callerGridIdentity, usr);
 	}
 
 }

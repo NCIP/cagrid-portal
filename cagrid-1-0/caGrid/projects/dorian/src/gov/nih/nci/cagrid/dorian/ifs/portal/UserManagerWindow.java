@@ -1,8 +1,9 @@
 package gov.nih.nci.cagrid.gums.ifs.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gums.client.IFSAdministrationClient;
-import gov.nih.nci.cagrid.gums.common.FaultUtil;
+import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.gums.portal.GUMSServiceListComboBox;
 import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
@@ -37,7 +38,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.4 2005-12-08 21:24:42 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.5 2005-12-09 17:51:32 langella Exp $
  */
 public class UserManagerWindow extends GridPortalBaseFrame {
 
@@ -106,6 +107,10 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 	private String lastService = null;
 
 	private String lastGridIdentity = null;
+
+	private JLabel uidLabel = null;
+
+	private JTextField userId = null;
 
 	/**
 	 * This is the default constructor
@@ -436,50 +441,65 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 	}
 
 	private void findUsers() {
-		/*
-		 * 
-		 * synchronized (mutex) { if (isQuerying) { PortalUtils
-		 * .showErrorMessage("Query Already in Progress", "Please wait until the
-		 * current query is finished before executing another."); return; } else {
-		 * isQuerying = true; } }
-		 * 
-		 * this.getUsersTable().clearTable();
-		 * this.updateProgress(true,"Querying...");
-		 * 
-		 * try { GlobusCredential proxy = ((ProxyComboBox) getProxy())
-		 * .getSelectedProxy(); IdPUserFilter f = new IdPUserFilter(); JPanel
-		 * panel = (JPanel) this.getJTabbedPane().getSelectedComponent(); if
-		 * (panel.getName().equals(ROLE_PANEL)) {
-		 * f.setRole(this.getUserRole().getSelectedUserRole()); } else if
-		 * (panel.getName().equals(STATUS_PANEL)) {
-		 * f.setStatus(this.getUserStatus().getSelectedUserStatus()); } else if
-		 * (panel.getName().equals(INFO_PANEL)) {
-		 * f.setUserId(format(getUsername().getText()));
-		 * f.setFirstName(format(getFirstName().getText()));
-		 * f.setLastName(format(getLastName().getText()));
-		 * f.setOrganization(format(getOrganization().getText()));
-		 * f.setAddress(format(getAddress().getText()));
-		 * f.setAddress2(format(getAddress2().getText()));
-		 * f.setCity(format(getCity().getText()));
-		 * f.setState(getState().getSelectedState());
-		 * f.setZipcode(format(getZipcode().getText()));
-		 * f.setCountry(getCountry().getSelectedCountry());
-		 * f.setPhoneNumber(format(getPhoneNumber().getText()));
-		 * f.setEmail(format(getEmail().getText())); }
-		 * 
-		 * String service = ((GUMSServiceListComboBox) getService())
-		 * .getSelectedService(); CommunicationStyle style = new
-		 * SecureConversationWithEncryption( proxy); IdPAdministrationClient
-		 * client = new IdPAdministrationClient( service, style); IdPUser[]
-		 * users = client.findUsers(f); if (users != null) { for (int i = 0; i <
-		 * users.length; i++) { this.getUsersTable().addUser(users[i]); } }
-		 * this.updateProgress(false,"Querying Completed ["+users.length+" users
-		 * found]"); } catch (PermissionDeniedFault pdf) {
-		 * PortalUtils.showErrorMessage(pdf);
-		 * this.updateProgress(false,"Error"); } catch (Exception e) {
-		 * e.printStackTrace(); PortalUtils.showErrorMessage(e);
-		 * this.updateProgress(false,"Error"); } isQuerying = false;
-		 */
+
+		synchronized (mutex) {
+			if (isQuerying) {
+				PortalUtils
+						.showErrorMessage("Query Already in Progress",
+								"Please wait until the current query is finished before executing another.");
+				return;
+			} else {
+				isQuerying = true;
+			}
+		}
+
+		this.getUsersTable().clearTable();
+		this.updateProgress(true, "Querying...");
+
+		try {
+			GlobusCredential proxy = ((ProxyComboBox) getProxy())
+					.getSelectedProxy();
+			IFSUserFilter f = new IFSUserFilter();
+
+			Object o = getIdp().getSelectedItem();
+			if (o instanceof TrustedIdPCaddy) {
+				TrustedIdPCaddy caddy = (TrustedIdPCaddy) getIdp()
+						.getSelectedItem();
+				f.setIdPId(caddy.getTrustedIdP().getId());
+			}
+			f.setUID(format(getUserId().getText()));
+			f.setGridId(format(getGridIdentity().getText()));
+			f.setEmail(format(getEmail().getText()));	
+			f.setUserRole(((UserRolesComboBox) this.getUserRole())
+					.getSelectedUserRole());
+			f.setUserStatus(((UserStatusComboBox) this.getUserStatus())
+					.getSelectedUserStatus());
+
+			String service = ((GUMSServiceListComboBox) getService())
+					.getSelectedService();
+			CommunicationStyle style = new SecureConversationWithEncryption(
+					proxy);
+			
+			
+			/*
+			 * IdPAdministrationClient client = new IdPAdministrationClient(
+			 * service, style); IdPUser[] users = client.findUsers(f); if (users !=
+			 * null) { for (int i = 0; i < users.length; i++) {
+			 * this.getUsersTable().addUser(users[i]); } }
+			 * 
+			 * this.updateProgress(false, "Querying Completed [" + users.length + "
+			 * users found]");
+			 */
+		} catch (PermissionDeniedFault pdf) {
+			PortalUtils.showErrorMessage(pdf);
+			this.updateProgress(false, "Error");
+		} catch (Exception e) {
+			e.printStackTrace();
+			PortalUtils.showErrorMessage(e);
+			this.updateProgress(false, "Error");
+		}
+		isQuerying = false;
+
 	}
 
 	private String format(String s) {
@@ -566,9 +586,23 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 	 */
 	private JPanel getFilterPanel() {
 		if (filterPanel == null) {
+			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
+			gridBagConstraints15.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints15.gridy = 1;
+			gridBagConstraints15.weightx = 1.0;
+			gridBagConstraints15.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints15.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints15.gridx = 1;
+			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
+			gridBagConstraints14.gridx = 0;
+			gridBagConstraints14.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints14.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints14.gridy = 1;
+			uidLabel = new JLabel();
+			uidLabel.setText("User Id");
 			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
 			gridBagConstraints13.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints13.gridy = 4;
+			gridBagConstraints13.gridy = 5;
 			gridBagConstraints13.weightx = 1.0;
 			gridBagConstraints13.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints13.anchor = java.awt.GridBagConstraints.WEST;
@@ -577,12 +611,12 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			gridBagConstraints12.gridx = 0;
 			gridBagConstraints12.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints12.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints12.gridy = 4;
+			gridBagConstraints12.gridy = 5;
 			roleLabel = new JLabel();
 			roleLabel.setText("User Role");
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints11.gridy = 3;
+			gridBagConstraints11.gridy = 4;
 			gridBagConstraints11.weightx = 1.0;
 			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -591,12 +625,12 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			gridBagConstraints10.gridx = 0;
 			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints10.gridy = 3;
+			gridBagConstraints10.gridy = 4;
 			statusLabel = new JLabel();
 			statusLabel.setText("User Status");
 			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
 			gridBagConstraints9.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints9.gridy = 2;
+			gridBagConstraints9.gridy = 3;
 			gridBagConstraints9.weightx = 1.0;
 			gridBagConstraints9.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints9.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -605,12 +639,12 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			gridBagConstraints8.gridx = 0;
 			gridBagConstraints8.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints8.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints8.gridy = 2;
+			gridBagConstraints8.gridy = 3;
 			emailLabel = new JLabel();
 			emailLabel.setText("Email");
 			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
 			gridBagConstraints7.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints7.gridy = 1;
+			gridBagConstraints7.gridy = 2;
 			gridBagConstraints7.weightx = 1.0;
 			gridBagConstraints7.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints7.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -619,7 +653,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			gridBagConstraints6.gridx = 0;
 			gridBagConstraints6.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints6.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints6.gridy = 1;
+			gridBagConstraints6.gridy = 2;
 			gidLabel = new JLabel();
 			gidLabel.setText("Grid Identity");
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
@@ -652,6 +686,8 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			filterPanel.add(getUserStatus(), gridBagConstraints11);
 			filterPanel.add(roleLabel, gridBagConstraints12);
 			filterPanel.add(getUserRole(), gridBagConstraints13);
+			filterPanel.add(uidLabel, gridBagConstraints14);
+			filterPanel.add(getUserId(), gridBagConstraints15);
 		}
 		return filterPanel;
 	}
@@ -688,13 +724,14 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			IFSAdministrationClient client = new IFSAdministrationClient(
 					service, style);
 			TrustedIdP[] idps = client.getTrustedIdPs();
+			this.getIdp().removeAllItems();
 			for (int i = 0; i < idps.length; i++) {
 				getIdp().addItem(new TrustedIdPCaddy(idps[0]));
 			}
 			this.updateProgress(false, "Found " + idps.length + " IdP(s)");
 			getIdp().showPopup();
 		} catch (Exception e) {
-			//FaultUtil.printFault(e);
+			// FaultUtil.printFault(e);
 			this.updateProgress(false, "Error");
 			PortalUtils.showErrorMessage(e);
 		}
@@ -713,7 +750,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		} else {
 			this.lastService = service;
 			this.lastGridIdentity = caddy.getIdentity();
-			
+
 			MobiusRunnable runner = new MobiusRunnable() {
 				public void execute() {
 					updateIdPs(service, caddy.getProxy());
@@ -792,6 +829,18 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			return "[IdP Id: " + idp.getId() + "] " + idp.getName();
 		}
 
+	}
+
+	/**
+	 * This method initializes userId	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */    
+	private JTextField getUserId() {
+		if (userId == null) {
+			userId = new JTextField();
+		}
+		return userId;
 	}
 
 }
