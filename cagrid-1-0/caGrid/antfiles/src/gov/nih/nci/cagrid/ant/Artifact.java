@@ -1,0 +1,116 @@
+package gov.nih.nci.cagrid.ant;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.taskdefs.CallTarget;
+import org.apache.tools.ant.types.DataType;
+import org.apache.tools.ant.types.FileSet;
+
+
+/**
+ * @author oster
+ */
+public class Artifact extends DataType {
+	public static final String JAR_TYPE = "jars";
+	public static final String SCHEMAS_TYPE = "schemas";
+	public static final String MAPPINGS_TYPE = "mappings";
+	
+	private String projectName;
+	private String track;
+	private String type;
+	private List fileSetList;
+	private CallTarget antcall;
+
+
+	public Artifact() {
+		this.fileSetList = new ArrayList();
+	}
+
+
+	protected Artifact getReferencedArtifact() {
+		Object o = getRefid().getReferencedObject(this.getProject());
+		return (Artifact) o;
+	}
+
+
+	public String getProjectName() {
+		if (isReference()) {
+			return getReferencedArtifact().getProjectName();
+		}
+		return this.projectName;
+	}
+
+
+	public void setProjectName(String project) {
+		if (isReference()) {
+			throw new BuildException("Cannont use other attributes and refid.");
+		}
+		this.projectName = project;
+	}
+
+
+	public String getTrack() {
+		if (isReference()) {
+			return getReferencedArtifact().getTrack();
+		}
+		return track;
+	}
+
+
+	public void setTrack(String track) {
+		if (isReference()) {
+			throw new BuildException("Cannont use other attributes and refid.");
+		}
+		this.track = track;
+	}
+
+
+	public String getType() {
+		if (isReference()) {
+			return getReferencedArtifact().getType();
+		}
+		return type;
+	}
+
+
+	public void setType(String type) {
+		if (isReference()) {
+			throw new BuildException("Cannont use other attributes and refid.");
+		}
+		this.type = type;
+	}
+
+
+	public List getFileSetList() {
+		if (isReference()) {
+			return getReferencedArtifact().getFileSetList();
+		}
+		return this.fileSetList;
+	}
+
+
+	public void addConfiguredFileSet(FileSet s) {
+		if (isReference()) {
+			throw new BuildException("Cannont use other attributes and refid.");
+		}
+		this.fileSetList.add(s);
+	}
+
+
+	public CallTarget getAntCall() {
+		if (isReference()) {
+			return getReferencedArtifact().getAntCall();
+		}
+		return this.antcall;
+	}
+
+
+	public void addConfiguredAntCall(CallTarget antcall) {
+		if (isReference()) {
+			throw new BuildException("Cannont use other attributes and refid.");
+		}
+		this.antcall = antcall;
+	}
+}

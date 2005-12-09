@@ -14,16 +14,40 @@
 	<property name="test.dir" location="${basedir}/test" />
 
 	<!-- IMPORT THE UTILITIES TARGETS -->
-	<import file="antfiles/ant-utilities.xml" />
-	<import file="antfiles/test-utilities.xml" />
+	<property name="antfiles.dir" location="${basedir}/antfiles" />
+	<import file="${antfiles.dir}/ant-utilities.xml" />
+	<import file="${antfiles.dir}/test-utilities.xml" />
 
 	<!-- IMPORT THE TEST TARGET -->
 	<import file="${test.dir}/test.xml" />
 
+
 	<!-- =============================================================== -->
-	<!-- You can do your "prepare" outside of targets in ant now, so do that here-->
-	<!-- =============================================================== -->
-	<tstamp />
+	<!-- Bootstrap the build by setting up the structure and building    -->
+	<!-- our custom ant tasks.                                           -->
+	<target name="prepare">
+		<tstamp />
+		<delete dir="${antfiles.dir}/build" />
+		<mkdir dir="${antfiles.dir}/build" />
+		<javac srcdir="${antfiles.dir}/src" destdir="${antfiles.dir}/build" debug="on" deprecation="off" optimize="off">
+			<classpath>
+				<fileset dir="${ant.library.dir}">
+					<include name="ant.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+
+		<typedef name="artifact" classname="gov.nih.nci.cagrid.ant.Artifact" loaderref="artifact">
+			<classpath>
+				<pathelement location="${antfiles.dir}/build" />
+			</classpath>
+		</typedef>
+		<taskdef name="resolveDependencies" classname="gov.nih.nci.cagrid.ant.ResolveDependencies" loaderref="artifact">
+			<classpath>
+				<pathelement location="${antfiles.dir}/build" />
+			</classpath>
+		</taskdef>
+	</target>
 
 
 	<!-- =============================================================== -->
@@ -34,26 +58,44 @@
 	<!-- artifact for groups of files that will probably be copied to    -->
 	<!-- separate directoris (e.g. jars and conf files)                  -->
 	<!-- =============================================================== -->
-	<fileset dir="${projects.dir}/core/build/jars" id="artifact.core.main.jars">
-		<include name="*.jar" />
-		<exclude name="*test*.jar" />
-	</fileset>
-	<fileset dir="${projects.dir}/core/build/jars" id="artifact.core.test.jars">
-		<include name="*test*.jar" />
-	</fileset>
-	<fileset dir="${projects.dir}/metadata/build/lib" id="artifact.metadata.main.jars">
-		<include name="*.jar" />
-		<exclude name="*test*.jar" />
-	</fileset>
-	<fileset dir="${projects.dir}/metadata/schema" id="artifact.metadata.main.schemas">
-		<include name="**/*.xsd" />
-	</fileset>
+	<target name="defineArtifacts" depends="prepare">
+		<artifact projectName="core" track="main" type="jars" id="core.jars">
+			<antcall target="build-core" />
+			<fileset dir="${projects.dir}/core/build/jars">
+				<include name="*.jar" />
+				<exclude name="*test*.jar" />
+			</fileset>
+		</artifact>
+		<artifact projectName="core" track="test" type="jars" id="core.test.jars">
+			<antcall target="build-core" />
+			<fileset dir="${projects.dir}/core/build/jars" id="artifact.core.test.jars">
+				<include name="*test*.jar" />
+			</fileset>
+		</artifact>
+		<artifact projectName="metadata" track="main" type="jars" id="metadata.jars">
+			<antcall target="build-metadata" />
+			<fileset dir="${projects.dir}/metadata/build/lib" id="artifact.metadata.main.jars">
+				<include name="*.jar" />
+				<exclude name="*test*.jar" />
+			</fileset>
+		</artifact>
+		<artifact projectName="metadata" track="main" type="schemas" id="metadata.schemas">
+			<fileset dir="${projects.dir}/metadata/schema" id="artifact.metadata.main.schemas">
+				<include name="**/*.xsd" />
+			</fileset>
+		</artifact>
+		<artifact projectName="metadata" track="main" type="mappings" id="metadata.mappings">
+			<fileset dir="${projects.dir}/metadata" id="artifact.metadata.main.mappings">
+				<include name="NStoPkg.properties" />
+			</fileset>
+		</artifact>
+	</target>
 
 
 	<!-- =============================================================== -->
 	<!-- CORE: This cannot have any dependencies on other projects       -->
 	<!-- =============================================================== -->
-	<target name="build-core" description="Builds the core">
+	<target name="build-core" depends="prepare" description="Builds the core">
 		<ant dir="${projects.dir}/core" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
@@ -61,11 +103,10 @@
 	<!-- =============================================================== -->
 	<!-- METADATA: This may only depend on core                          -->
 	<!-- =============================================================== -->
-	<target name="build-metadata" depends="build-core" description="Builds the common metadata">
-		<!-- copy dependent artifacts into current target's ext lib dir -->
-		<copy todir="${projects.dir}/metadata/ext/lib">
-			<fileset refid="artifact.core.main.jars" />
-		</copy>
+	<target name="build-metadata" depends="prepare" description="Builds the common metadata">
+		<resolveDependencies extdir="${projects.dir}/metadata/ext">
+			<artifact refid="core.jars" />
+		</resolveDependencies>
 		<ant dir="${projects.dir}/metadata" inheritAll="false" antfile="build.xml" target="jar" />
 	</target>
 
@@ -73,14 +114,13 @@
 	<!-- =============================================================== -->
 	<!-- INTRODUCE:                                                      -->
 	<!-- =============================================================== -->
-	<target name="build-introduce" depends="build-core, build-metadata" description="Builds Introduce">
-		<!-- copy dependent artifacts into current target's ext lib dir -->
-		<copy todir="${projects.dir}/introduce/ext/lib">
-			<fileset refid="artifact.metadata.main.jars" />
-		</copy>
-		<copy todir="${projects.dir}/introduce/ext/schema">
-			<fileset refid="artifact.metadata.main.schemas" />
-		</copy>
+	<target name="build-introduce" depends="prepare" description="Builds Introduce">
+		<resolveDependencies extdir="${projects.dir}/introduce/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="metadata.jars" />
+			<artifact refid="metadata.schemas" />
+			<artifact refid="metadata.mappings" />
+		</resolveDependencies>
 		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
@@ -92,8 +132,11 @@
 		<!--<subant target="clean"  >
 			<fileset dir="${projects.dir}" includes="*/build.xml" />
 		</subant>-->
+		<delete dir="${projects.dir}/core/ext"/>
 		<ant dir="${projects.dir}/core" inheritAll="false" antfile="build.xml" target="clean" />
+		<delete dir="${projects.dir}/metadata/ext"/>
 		<ant dir="${projects.dir}/metadata" inheritAll="false" antfile="build.xml" target="clean" />
+		<delete dir="${projects.dir}/introduce/ext"/>
 		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="clean" />
 	</target>
 
