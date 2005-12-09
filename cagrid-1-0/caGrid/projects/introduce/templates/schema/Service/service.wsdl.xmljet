@@ -9,7 +9,7 @@
    }
 %>
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions name="<%=namespaceDomain%>" targetNamespace="<%=namespaceDomain%>/<%=serviceName%>"
+<definitions name="<%=serviceName%>" targetNamespace="<%=namespaceDomain%>/<%=serviceName%>"
     xmlns:tns="<%=namespaceDomain%>/<%=serviceName%>"
     xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd"
     xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl"

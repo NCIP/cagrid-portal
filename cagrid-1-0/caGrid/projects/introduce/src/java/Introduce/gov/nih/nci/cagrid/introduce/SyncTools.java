@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.common.CommonTools;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -98,6 +99,21 @@ public class SyncTools {
 	}
 
 	public void sync() throws Exception {
+		// create the archive
+		long id = System.currentTimeMillis();
+		deploymentProperties.setProperty("introduce.skeleton.timestamp", String
+				.valueOf(id));
+		deploymentProperties.store(new FileOutputStream(baseDirectory
+				.getAbsolutePath()
+				+ File.separator + "introduce.properties"),
+				"Introduce Properties");
+		
+		Archive.createArchive(String.valueOf(id),deploymentProperties
+				.getProperty("introduce.skeleton.service.name"), baseDirectory
+				.getAbsolutePath());
+		
+
+
 		jsf = new JavaSourceFactory();
 		jp = new JavaParser(jsf);
 
@@ -139,7 +155,8 @@ public class SyncTools {
 
 		parser.setQuiet(true);
 		parser.setImports(true);
-		parser.setOutputDir(baseDirectory.getAbsolutePath() + File.separator + "tmp");
+		parser.setOutputDir(baseDirectory.getAbsolutePath() + File.separator
+				+ "tmp");
 		parser.setNStoPkg(baseDirectory.getAbsolutePath() + File.separator
 				+ "namespace2package.mappings");
 		parser.run(new File(baseDirectory.getAbsolutePath()
@@ -155,7 +172,8 @@ public class SyncTools {
 						.get("introduce.skeleton.service.name") + "_flattened"
 				+ ".wsdl").getAbsolutePath());
 		table = parser.getSymbolTable();
-		CommonTools.deleteDir(new File(baseDirectory.getAbsolutePath() + File.separator + "tmp"));
+		CommonTools.deleteDir(new File(baseDirectory.getAbsolutePath()
+				+ File.separator + "tmp"));
 
 		// sync the methods fiels
 		SyncMethods methodSync = new SyncMethods(table, baseDirectory,
