@@ -28,7 +28,6 @@ public class SyncToolsTest extends Story {
 	}
 
 	protected boolean storySetUp() throws Throwable {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
