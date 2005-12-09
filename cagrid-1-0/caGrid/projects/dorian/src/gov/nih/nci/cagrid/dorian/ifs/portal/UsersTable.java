@@ -12,12 +12,14 @@ import javax.swing.table.TableColumn;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: UsersTable.java,v 1.2 2005-12-09 17:51:32 langella Exp $
+ * @version $Id: UsersTable.java,v 1.3 2005-12-09 18:41:01 langella Exp $
  */
 public class UsersTable extends PortalBaseTable {
 	public static String USER = "user";
 
 	public static String IDP = "IdP Id";
+	
+	public static String UID = "User Id";
 
 	public static String GRID_IDENTITY = "Grid Identity";
 
@@ -37,6 +39,16 @@ public class UsersTable extends PortalBaseTable {
 		c.setMinWidth(0);
 		c.setPreferredWidth(0);
 		c.setResizable(false);
+		
+		c = this.getColumn(IDP);
+		c.setMaxWidth(35);
+		c.setMinWidth(35);
+		c.setPreferredWidth(0);
+		
+		c = this.getColumn(GRID_IDENTITY);
+		c.setMinWidth(350);
+		c.setPreferredWidth(0);
+
 		this.clearTable();
 
 	}
@@ -45,6 +57,7 @@ public class UsersTable extends PortalBaseTable {
 		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn(USER);
 		model.addColumn(IDP);
+		model.addColumn(UID);
 		model.addColumn(GRID_IDENTITY);
 		model.addColumn(EMAIL);
 		model.addColumn(STATUS);
@@ -57,6 +70,7 @@ public class UsersTable extends PortalBaseTable {
 		Vector v = new Vector();
 		v.add(u);
 		v.add(String.valueOf(u.getIdPId()));
+		v.add(String.valueOf(u.getUID()));
 		v.add(u.getGridId());
 		v.add(u.getEmail());
 		v.add(u.getUserStatus().getValue());
