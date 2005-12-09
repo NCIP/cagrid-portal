@@ -460,7 +460,5 @@ src.dir:        Directory where source files are located.
 				</fileset>
 			</classpath>
 		</java>
-			
-		<antcall target="all"/>
 	</target>
 </project>
