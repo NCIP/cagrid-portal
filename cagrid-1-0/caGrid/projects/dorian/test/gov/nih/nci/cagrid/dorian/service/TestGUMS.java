@@ -57,6 +57,8 @@ public class TestGUMS extends TestCase{
 	
 	private int count = 0;
 	
+	private CertificateAuthority ca;
+	
     public void testGUMSManager(){
     	try{
     		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
@@ -125,7 +127,7 @@ public class TestGUMS extends TestCase{
 				org.opensaml.SAMLAssertion saml = jm.authenticate(auth);
 				assertNotNull(saml);
 			//	use the helper function to get the idp certificate and use that to verify the saml assertion
-			//	this.verifySAMLAssertion(saml,idp,a);
+				this.verifySAMLAssertion(saml,jm.getIdPCertificate(),a);
     		}
     		
     		IdPUserFilter uf = new IdPUserFilter();
@@ -237,7 +239,13 @@ public class TestGUMS extends TestCase{
     
    protected void setUp() throws Exception {
 		super.setUp();
-		count = 0;
+		try {
+			count = 0;
+			ca = TestUtils.getCA();
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
 	}
     
     protected void tearDown() throws Exception {
