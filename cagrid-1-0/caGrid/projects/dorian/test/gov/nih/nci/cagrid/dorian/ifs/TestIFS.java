@@ -70,6 +70,7 @@ public class TestIFS extends TestCase {
 
 	public void testFindRemoveUpdateUsers() {
 		try {
+			int times = 5;
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
 			IFSConfiguration conf = getConf();
 			conf.setInitalTrustedIdP(idp.getIdp());
@@ -80,7 +81,7 @@ public class TestIFS extends TestCase {
 					.getId(), INITIAL_ADMIN);
 			String adminGridId = UserManager.subjectToIdentity(adminSubject);
 			int ucount = 1;
-			for (int i = 0; i < 5; i++) {
+			for (int i = 0; i < times; i++) {
 				String uid = uidPrefix + i;
 				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 				PublicKey publicKey = pair.getPublic();
@@ -107,6 +108,21 @@ public class TestIFS extends TestCase {
 				ifs.updateUser(adminGridId,usr[0]);
 				assertEquals(ucount,ifs.findUsers(usr[0].getGridId(),new IFSUserFilter()).length);
 			}
+			
+			int rcount = ucount;
+			
+			for(int i=0; i<times; i++){
+				String uid = uidPrefix + i;
+				IFSUserFilter f1 = new IFSUserFilter();
+				f1.setIdPId(idp.getIdp().getId());
+				f1.setUID(uid);
+				IFSUser[] usr = ifs.findUsers(adminGridId,f1);
+				assertEquals(1,usr.length);
+				ifs.removeUser(adminGridId,usr[0]);
+				rcount = rcount-1;
+				assertEquals(rcount,ifs.findUsers(adminGridId,new IFSUserFilter()).length);
+			}
+			
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -390,7 +406,6 @@ public class TestIFS extends TestCase {
 		try {
 			IdPContainer idp0 = this
 					.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			String username = "user";
 			IFSConfiguration conf = getExpiringCredentialsConf();
 			conf.setInitalTrustedIdP(idp0.getIdp());
 			IFS ifs = new IFS(conf, db, ca);
