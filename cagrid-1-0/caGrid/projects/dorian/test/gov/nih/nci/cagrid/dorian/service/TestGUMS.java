@@ -217,7 +217,7 @@ public class TestGUMS extends TestCase{
     		assertNotNull(jm.getGUMSConfiguration());
     		assertNotNull(jm.getDatabase());
 			
-    		//test the UserId too long
+    		//test the UserId too short
 			Application a = createTooShortUserIdApplication();
 			jm.registerWithIdP(a);	
 			assertTrue(false);
@@ -237,7 +237,7 @@ public class TestGUMS extends TestCase{
     		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,GUMS.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 			
-    		//test the UserId too long
+    		//test for no such user
     		IdPUser u = new IdPUser();
 			u.setUserId("No_SUCH_USER");
 			jm.updateIdPUser(gridId, u);
