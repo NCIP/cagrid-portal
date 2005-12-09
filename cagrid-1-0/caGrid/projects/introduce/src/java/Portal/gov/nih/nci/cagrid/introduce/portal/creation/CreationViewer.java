@@ -13,8 +13,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.projectmobius.common.MobiusException;
-import org.projectmobius.common.XMLUtilities;
 import org.projectmobius.portal.GridPortalComponent;
 
 
@@ -258,7 +256,8 @@ public class CreationViewer extends GridPortalComponent {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 
 					try {
-						String cmd = CommonTools.getAntSkeletonCreationCommand(".",service.getText(),dir.getText(),servicePackage.getText(),namespaceDomain.getText());
+						String cmd = CommonTools.getAntSkeletonCreationCommand(".", service.getText(), dir.getText(),
+							servicePackage.getText(), namespaceDomain.getText());
 						Process p = CommonTools.createAndOutputProcess(cmd);
 						p.waitFor();
 						cmd = CommonTools.getAntAllCommand(dir.getText());
