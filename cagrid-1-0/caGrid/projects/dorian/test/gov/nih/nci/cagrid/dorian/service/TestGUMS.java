@@ -17,6 +17,10 @@ import gov.nih.nci.cagrid.gums.idp.bean.IdPUserRole;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUserStatus;
 import gov.nih.nci.cagrid.gums.idp.bean.StateCode;
 import gov.nih.nci.cagrid.gums.ifs.IFSConfiguration;
+import gov.nih.nci.cagrid.gums.ifs.UserManager;
+import gov.nih.nci.cagrid.gums.ifs.IFS;
+import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
+import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.gums.test.TestUtils;
 import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthority;
@@ -52,8 +56,6 @@ public class TestGUMS extends TestCase{
 	+ "general-test";
 	
 	private int count = 0;
-	
-	private CertificateAuthority ca;
 	
     public void testGUMSManager(){
     	try{
@@ -93,53 +95,58 @@ public class TestGUMS extends TestCase{
     		assertNotNull(jm.getGUMSConfiguration());
     		assertNotNull(jm.getDatabase());
     		
-    		//add in code to test findIdPUsers
  
-    		BasicAuthCredential cred = getAdminCreds();
+    		//get the gridId
+			String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,GUMS.IDP_ADMIN_USER_ID);
+			String gridId = UserManager.subjectToIdentity(gridSubject);
+			
+			
     		for (int i = 0; i < 10; i++) {
 				Application a = createApplication();
 				jm.registerWithIdP(a);
 				
 				IdPUserFilter uf = new IdPUserFilter();
 				uf.setUserId(a.getUserId());
-				IdPUser[] users = jm.findIdPUsers(cred.getUserId(), uf);
+				
+				IdPUser[] users = jm.findIdPUsers(gridId, uf);
 				assertEquals(1, users.length);
 				assertEquals(IdPUserStatus.Pending, users[0].getStatus());
 				assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
 				users[0].setStatus(IdPUserStatus.Active);
-				jm.updateIdPUser(cred.getUserId(), users[0]);
-				users = jm.findIdPUsers(cred.getUserId(), uf);
+				jm.updateIdPUser(gridId, users[0]);
+				users = jm.findIdPUsers(gridId, uf);
 				assertEquals(1, users.length);
 				assertEquals(IdPUserStatus.Active, users[0].getStatus());
 				uf.setUserId("user");
-				users = jm.findIdPUsers(cred.getUserId(), uf);
+				users = jm.findIdPUsers(gridId, uf);
 				assertEquals(i + 1, users.length);
 				BasicAuthCredential auth = new BasicAuthCredential();
 				auth.setUserId(a.getUserId());
 				auth.setPassword(a.getPassword());
 				org.opensaml.SAMLAssertion saml = jm.authenticate(auth);
 				assertNotNull(saml);
+			//	use the helper function to get the idp certificate and use that in the call in the next line
 			//	this.verifySAMLAssertion(saml,idp,a);
     		}
     		
     		IdPUserFilter uf = new IdPUserFilter();
-			IdPUser[] users = jm.findIdPUsers(cred.getUserId(), uf);
+			IdPUser[] users = jm.findIdPUsers(gridId, uf);
 			assertEquals(11, users.length);
 			for (int i = 0; i < 10; i++) {
 				IdPUserFilter f = new IdPUserFilter();
 				f.setUserId(users[i].getUserId());
-				IdPUser[] us = jm.findIdPUsers(cred.getUserId(), f);
+				IdPUser[] us = jm.findIdPUsers(gridId, f);
 				assertEquals(1, us.length);
 				us[0].setFirstName("NEW NAME");
-				jm.updateIdPUser(cred.getUserId(), us[0]);
-				IdPUser[] us2 = jm.findIdPUsers(cred.getUserId(), f);
+				jm.updateIdPUser(gridId, us[0]);
+				IdPUser[] us2 = jm.findIdPUsers(gridId, f);
 				assertEquals(1, us2.length);
 				assertEquals(us[0], us2[0]);
-				jm.removeIdPUser(cred.getUserId(), users[i].getUserId());
-				us = jm.findIdPUsers(cred.getUserId(), f);
+				jm.removeIdPUser(gridId, users[i].getUserId());
+				us = jm.findIdPUsers(gridId, f);
 				assertEquals(0, us.length);
 			}
-			users = jm.findIdPUsers(cred.getUserId(), uf);
+			users = jm.findIdPUsers(gridId, uf);
 			assertEquals(1, users.length);
     		
     		assertEquals(0,jm.getDatabase().getUsedConnectionCount());
@@ -150,22 +157,64 @@ public class TestGUMS extends TestCase{
 		}
     }
       
-   
-   protected void setUp() throws Exception {
-		super.setUp();
-		count = 0;
-	}
-    
-    protected void tearDown() throws Exception {
-		super.setUp();
-	}
+    /*
+     * Remember to talk to Steve about the helper function that will get my the IdPCertificate
+     * and then replace the IdentityProvider in the verifySAMLAssertion with that certificate
+     */
+    public void verifySAMLAssertion(SAMLAssertion saml, IdentityProvider idp,
+			Application app) throws Exception {
+		assertNotNull(saml);
+		saml.verify(idp.getIdPCertificate(), false);
 
-    
-    private BasicAuthCredential getAdminCreds() {
-		BasicAuthCredential cred = new BasicAuthCredential();
-		cred.setUserId(IdentityProvider.ADMIN_USER_ID);
-		cred.setPassword(IdentityProvider.ADMIN_PASSWORD);
-		return cred;
+		assertEquals(idp.getIdPCertificate().getSubjectDN().toString(), saml
+				.getIssuer());
+		Iterator itr = saml.getStatements();
+		int count = 0;
+		boolean emailFound = false;
+		boolean authFound = false;
+		while (itr.hasNext()) {
+			count = count + 1;
+			SAMLStatement stmt = (SAMLStatement) itr.next();
+			if (stmt instanceof SAMLAuthenticationStatement) {
+				if (authFound) {
+					assertTrue(false);
+				} else {
+					authFound = true;
+				}
+				SAMLAuthenticationStatement auth = (SAMLAuthenticationStatement) stmt;
+				assertEquals(app.getUserId(), auth.getSubject().getName());
+				assertEquals("urn:oasis:names:tc:SAML:1.0:am:password", auth
+						.getAuthMethod());
+			}
+
+			if (stmt instanceof SAMLAttributeStatement) {
+				if (emailFound) {
+					assertTrue(false);
+				} else {
+					emailFound = true;
+				}
+				SAMLAttributeStatement att = (SAMLAttributeStatement) stmt;
+				assertEquals(app.getUserId(), att.getSubject().getName());
+				Iterator i = att.getAttributes();
+				assertTrue(i.hasNext());
+				SAMLAttribute a = (SAMLAttribute) i.next();
+				assertEquals(AssertionCredentialsManager.EMAIL_NAMESPACE, a
+						.getNamespace());
+				assertEquals(AssertionCredentialsManager.EMAIL_NAME, a
+						.getName());
+				Iterator vals = a.getValues();
+				assertTrue(vals.hasNext());
+				String val = (String) vals.next();
+				assertEquals(app.getEmail(), val);
+				assertTrue(!vals.hasNext());
+				assertTrue(!i.hasNext());
+			}
+
+		}
+
+		assertEquals(2, count);
+		assertTrue(authFound);
+		assertTrue(emailFound);
 	}
     
     private Application createApplication() {
@@ -185,6 +234,15 @@ public class TestGUMS extends TestCase{
 		u.setOrganization(count + "organization");
 		count = count + 1;
 		return u;
+	}
+    
+   protected void setUp() throws Exception {
+		super.setUp();
+		count = 0;
+	}
+    
+    protected void tearDown() throws Exception {
+		super.setUp();
 	}
     
 }
