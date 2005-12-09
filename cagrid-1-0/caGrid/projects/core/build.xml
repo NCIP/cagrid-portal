@@ -43,9 +43,6 @@
 		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
-		<fileset dir="${ant.library.dir}">
-			<include name="ant.jar" />
-		</fileset>
 	</path>
 
 
