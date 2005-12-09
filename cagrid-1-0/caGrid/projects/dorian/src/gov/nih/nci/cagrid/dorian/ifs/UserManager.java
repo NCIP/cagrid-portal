@@ -134,7 +134,7 @@ public class UserManager extends GUMSObject {
 			throw gif;
 		}
 		try {
-			user.setCertificate(CertUtil.writeCertificateToString(cert));
+			user.setCertificate(new gov.nih.nci.cagrid.gums.ifs.bean.X509Certificate(CertUtil.writeCertificateToString(cert)));
 		} catch (IOException ioe) {
 			this.credentialsManager.deleteCredentials(getCredentialsManagerUID(
 					user.getIdPId(), user.getUID()));
@@ -227,7 +227,7 @@ public class UserManager extends GUMSObject {
 				X509Certificate cert = credentialsManager
 						.getCertificate(getCredentialsManagerUID(user
 								.getIdPId(), user.getUID()));
-				user.setCertificate(CertUtil.writeCertificateToString(cert));
+				user.setCertificate(new gov.nih.nci.cagrid.gums.ifs.bean.X509Certificate(CertUtil.writeCertificateToString(cert)));
 			} else {
 				InvalidUserFault fault = new InvalidUserFault();
 				fault.setFaultString("No such user "
@@ -283,7 +283,7 @@ public class UserManager extends GUMSObject {
 				X509Certificate cert = credentialsManager
 						.getCertificate(getCredentialsManagerUID(user
 								.getIdPId(), user.getUID()));
-				user.setCertificate(CertUtil.writeCertificateToString(cert));
+				user.setCertificate(new gov.nih.nci.cagrid.gums.ifs.bean.X509Certificate(CertUtil.writeCertificateToString(cert)));
 			} else {
 				InvalidUserFault fault = new InvalidUserFault();
 				fault.setFaultString("No such user " + gridId);
@@ -378,7 +378,7 @@ public class UserManager extends GUMSObject {
 				X509Certificate cert = credentialsManager
 						.getCertificate(getCredentialsManagerUID(user
 								.getIdPId(), user.getUID()));
-				user.setCertificate(CertUtil.writeCertificateToString(cert));
+				user.setCertificate(new gov.nih.nci.cagrid.gums.ifs.bean.X509Certificate(CertUtil.writeCertificateToString(cert)));
 				users.add(user);
 			}
 			rs.close();
@@ -412,7 +412,7 @@ public class UserManager extends GUMSObject {
 					.getUID());
 			try {
 				// Write method for creating and setting a users credentials
-				user.setCertificate(CertUtil.writeCertificateToString(cert));
+				user.setCertificate(new gov.nih.nci.cagrid.gums.ifs.bean.X509Certificate(CertUtil.writeCertificateToString(cert)));
 				user
 						.setGridId(subjectToIdentity(cert.getSubjectDN()
 								.toString()));

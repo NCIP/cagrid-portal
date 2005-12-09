@@ -22,7 +22,7 @@
 				<xsd:element name="email" type="xsd:string"/>
 			    <xsd:element name="userStatus" type="ifs:IFSUserStatus"/>
 			    <xsd:element name="userRole" type="ifs:IFSUserRole"/>
-			    <xsd:element name="certificate" type="xsd:string"/>	
+			    <xsd:element name="certificate" type="ifs:X509Certificate"/>	
 			</xsd:sequence>
 	    </xsd:complexType>
 	    

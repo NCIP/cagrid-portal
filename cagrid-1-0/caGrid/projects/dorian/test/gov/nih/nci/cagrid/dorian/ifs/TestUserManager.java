@@ -61,7 +61,7 @@ public class TestUserManager extends TestCase {
 			assertNotNull(user.getUserStatus());
 			assertEquals(IFSUserRole.Non_Administrator, user.getUserRole());
 			assertEquals(IFSUserStatus.Pending, user.getUserStatus());
-			StringReader ureader = new StringReader(user.getCertificate());
+			StringReader ureader = new StringReader(user.getCertificate().getCertificateAsString());
 			X509Certificate cert = CertUtil.loadCertificate(ureader);
 			assertEquals(user.getGridId(), UserManager.subjectToIdentity(cert.getSubjectDN().getName()));
 			assertEquals(user, um.getUser(user.getIdPId(), user.getUID()));
@@ -174,7 +174,7 @@ public class TestUserManager extends TestCase {
 			// Now we test updating credentials
 			um.renewUserCredentials(u5);
 			assertEquals(u5, um.getUser(u5.getGridId()));
-			StringReader r = new StringReader(u5.getCertificate());
+			StringReader r = new StringReader(u5.getCertificate().getCertificateAsString());
 			X509Certificate newCert = CertUtil.loadCertificate(r);
 			if (cert.equals(newCert)) {
 				assertTrue(false);
@@ -214,7 +214,7 @@ public class TestUserManager extends TestCase {
 				assertNotNull(user.getUserStatus());
 				assertEquals(IFSUserRole.Non_Administrator, user.getUserRole());
 				assertEquals(IFSUserStatus.Pending, user.getUserStatus());
-				StringReader ureader = new StringReader(user.getCertificate());
+				StringReader ureader = new StringReader(user.getCertificate().getCertificateAsString());
 				X509Certificate cert = CertUtil.loadCertificate(ureader);
 				assertEquals(user.getGridId(), UserManager.subjectToIdentity(cert.getSubjectDN().getName()));
 				assertEquals(user, um.getUser(user.getIdPId(), user.getUID()));
@@ -335,7 +335,7 @@ public class TestUserManager extends TestCase {
 				// Now we test updating credentials
 				um.renewUserCredentials(u5);
 				assertEquals(u5, um.getUser(u5.getGridId()));
-				StringReader r = new StringReader(u5.getCertificate());
+				StringReader r = new StringReader(u5.getCertificate().getCertificateAsString());
 				X509Certificate newCert = CertUtil.loadCertificate(r);
 				if (cert.equals(newCert)) {
 					assertTrue(false);

@@ -300,7 +300,7 @@ public class IFS extends GUMSObject {
 		X509Certificate cert = null;
 
 		try {
-			cert = CertUtil.loadCertificateFromString(usr.getCertificate());
+			cert = CertUtil.loadCertificateFromString(usr.getCertificate().getCertificateAsString());
 
 		} catch (Exception e) {
 			GUMSInternalFault fault = new GUMSInternalFault();

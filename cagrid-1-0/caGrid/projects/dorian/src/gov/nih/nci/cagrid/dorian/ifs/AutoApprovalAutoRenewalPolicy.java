@@ -27,7 +27,7 @@ public class AutoApprovalAutoRenewalPolicy extends AutoApprovalPolicy {
 		try {
 			// Next we check if the user's credentials have expired
 			X509Certificate cert = CertUtil.loadCertificateFromString(user
-					.getCertificate());
+					.getCertificate().getCertificateAsString());
 			if (CertUtil.isExpired(cert)) {
 				um.renewUserCredentials(user);
 			} else if (conf.getMaxProxyLifetime().after(cert.getNotAfter())) {
