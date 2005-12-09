@@ -15,12 +15,14 @@ import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUserFilter;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUserRole;
 import gov.nih.nci.cagrid.gums.idp.bean.IdPUserStatus;
+import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
 import gov.nih.nci.cagrid.gums.idp.bean.StateCode;
 import gov.nih.nci.cagrid.gums.ifs.IFSConfiguration;
 import gov.nih.nci.cagrid.gums.ifs.UserManager;
 import gov.nih.nci.cagrid.gums.ifs.IFS;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserFilter;
+import gov.nih.nci.cagrid.gums.ifs.bean.InvalidPasswordFault;
 import gov.nih.nci.cagrid.gums.test.TestUtils;
 import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthority;
@@ -126,7 +128,6 @@ public class TestGUMS extends TestCase{
 				auth.setPassword(a.getPassword());
 				org.opensaml.SAMLAssertion saml = jm.authenticate(auth);
 				assertNotNull(saml);
-			//	use the helper function to get the idp certificate and use that to verify the saml assertion
 				this.verifySAMLAssertion(saml,jm.getIdPCertificate(),a);
     		}
     		
@@ -157,11 +158,67 @@ public class TestGUMS extends TestCase{
 			assertTrue(false);
 		}
     }
-      
-    /*
-     * Remember to talk to Steve about the helper function that will get my the IdPCertificate
-     * and then replace the IdentityProvider in the verifySAMLAssertion with that certificate
-     */
+    
+    public void testInvalidIdpUser(){
+    	try{
+    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
+    		assertNotNull(jm.getGUMSConfiguration());
+    		assertNotNull(jm.getDatabase());
+    		
+    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,GUMS.IDP_ADMIN_USER_ID);
+			String gridId = UserManager.subjectToIdentity(gridSubject);
+			
+			IdPUserFilter uf = new IdPUserFilter();
+			IdPUser[] users;
+			
+    		//test the password length too long
+    		try {
+    			Application a = createTooLongPasswordApplication();
+        		uf.setUserId(a.getUserId());
+    			jm.registerWithIdP(a);
+    		}catch (InvalidUserPropertyFault iupf) {
+    		}
+    		users = jm.findIdPUsers(gridId, uf);
+			assertEquals(0, users.length);
+			
+    		//test the password length too short
+    		try {
+    			Application a = createTooShortPasswordApplication();
+    			uf.setUserId(a.getUserId());
+    			jm.registerWithIdP(a);
+    		}catch (InvalidUserPropertyFault iupf) {
+    		}
+    		users = jm.findIdPUsers(gridId, uf);
+			assertEquals(0, users.length);
+    		
+    		//test the userId length too long
+    		try {
+    			Application a = createTooLongUserIdApplication();
+    			uf.setUserId(a.getUserId());
+    			jm.registerWithIdP(a);
+    		}catch (InvalidUserPropertyFault iupf) {
+    		}
+    		users = jm.findIdPUsers(gridId, uf);
+			assertEquals(0, users.length);
+    		
+    		//test the userId length too short
+    		try {
+    			Application a = createTooShortUserIdApplication();
+    			uf.setUserId(a.getUserId());
+    			jm.registerWithIdP(a);
+    		}catch (InvalidUserPropertyFault iupf) {
+    		}
+    		users = jm.findIdPUsers(gridId, uf);
+			assertEquals(0, users.length);
+    		
+    		assertEquals(0,jm.getDatabase().getUsedConnectionCount());
+    		jm.getDatabase().destroyDatabase();
+    	}catch (Exception e) {
+    		FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+    }
+    
     public void verifySAMLAssertion(SAMLAssertion saml, X509Certificate idpCert,
 			Application app) throws Exception {
 		assertNotNull(saml);
@@ -237,6 +294,81 @@ public class TestGUMS extends TestCase{
 		return u;
 	}
     
+    private Application createTooLongPasswordApplication() {
+		Application u = new Application();
+		u.setUserId(count + "user");
+		u.setEmail(count + "user@mail.com");
+		u.setPassword(count + "thispasswordiswaytoolong");
+		u.setFirstName(count + "first");
+		u.setLastName(count + "last");
+		u.setAddress(count + "address");
+		u.setAddress2(count + "address2");
+		u.setCity("Columbus");
+		u.setState(StateCode.OH);
+		u.setCountry(CountryCode.US);
+		u.setZipcode("43210");
+		u.setPhoneNumber("614-555-5555");
+		u.setOrganization(count + "organization");
+		count = count + 1;
+		return u;
+	}
+    
+    private Application createTooShortPasswordApplication() {
+		Application u = new Application();
+		u.setUserId(count + "user");
+		u.setEmail(count + "user@mail.com");
+		u.setPassword(count + "p");
+		u.setFirstName(count + "first");
+		u.setLastName(count + "last");
+		u.setAddress(count + "address");
+		u.setAddress2(count + "address2");
+		u.setCity("Columbus");
+		u.setState(StateCode.OH);
+		u.setCountry(CountryCode.US);
+		u.setZipcode("43210");
+		u.setPhoneNumber("614-555-5555");
+		u.setOrganization(count + "organization");
+		count = count + 1;
+		return u;
+	}
+    
+    private Application createTooLongUserIdApplication() {
+		Application u = new Application();
+		u.setUserId(count + "thisuseridiswaytoolong");
+		u.setEmail(count + "user@mail.com");
+		u.setPassword(count + "password");
+		u.setFirstName(count + "first");
+		u.setLastName(count + "last");
+		u.setAddress(count + "address");
+		u.setAddress2(count + "address2");
+		u.setCity("Columbus");
+		u.setState(StateCode.OH);
+		u.setCountry(CountryCode.US);
+		u.setZipcode("43210");
+		u.setPhoneNumber("614-555-5555");
+		u.setOrganization(count + "organization");
+		count = count + 1;
+		return u;
+	}
+    
+    private Application createTooShortUserIdApplication() {
+		Application u = new Application();
+		u.setUserId(count + "u");
+		u.setEmail(count + "user@mail.com");
+		u.setPassword(count + "password");
+		u.setFirstName(count + "first");
+		u.setLastName(count + "last");
+		u.setAddress(count + "address");
+		u.setAddress2(count + "address2");
+		u.setCity("Columbus");
+		u.setState(StateCode.OH);
+		u.setCountry(CountryCode.US);
+		u.setZipcode("43210");
+		u.setPhoneNumber("614-555-5555");
+		u.setOrganization(count + "organization");
+		count = count + 1;
+		return u;
+	}
    protected void setUp() throws Exception {
 		super.setUp();
 		try {
