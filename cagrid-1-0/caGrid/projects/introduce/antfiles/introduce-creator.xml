@@ -78,13 +78,11 @@
 
 
 	<target name="serviceCopySchemaFiles" depends="prepareSkeleton">
-		<!-- THESE WILL NEED TO BE ADDED AFTER THE REFACTOR IS COMPLETE
 		<copy toDir="${introduce.skeleton.destination.dir}/schema/cagrid/types">
-			<fileset dir="${basedir}/schema/types">
+			<fileset dir="${ext.schema.dir}/types">
 				<include name="**/*.xsd" />
 			</fileset>
 		</copy>
-		-->
 	</target>
 
 	<target name="serviceCopyPortalFiles">

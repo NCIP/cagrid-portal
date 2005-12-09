@@ -18,9 +18,6 @@ public class Archive {
 	private static synchronized void getDirectoryListing(List names, File dir,
 			String parentPath) {
 
-		System.out.println("Looking at dir: " + dir.getAbsolutePath());
-		System.out.println("Parent path is : " + parentPath);
-
 		String[] children = dir.list();
 
 		if (children == null) {
@@ -29,7 +26,6 @@ public class Archive {
 			for (int i = 0; i < children.length; i++) {
 				File child = new File(dir.getAbsolutePath() + File.separator
 						+ children[i]);
-				System.out.println("check file: " + child.getAbsolutePath());
 				if (child.isDirectory()) {
 					if (parentPath.equals("")) {
 						getDirectoryListing(names, child, child.getName());
@@ -40,11 +36,8 @@ public class Archive {
 
 				} else {
 					if (parentPath.equals("")) {
-						System.out.println("Adding file: " + child.getName());
 						names.add(child.getName());
 					} else {
-						System.out.println("Adding file: " + parentPath
-								+ File.separator + child.getName());
 						names
 								.add(parentPath + File.separator
 										+ child.getName());
@@ -55,8 +48,8 @@ public class Archive {
 		}
 	}
 
-	public static synchronized void createArchive(String id, String serviceName,
-			String baseDir) throws Exception {
+	public static synchronized void createArchive(String id,
+			String serviceName, String baseDir) throws Exception {
 		File dir = new File(baseDir);
 
 		String userHome = System.getProperty("user.home");
@@ -107,7 +100,6 @@ public class Archive {
 
 	private static void unzip(String baseDir, ZipInputStream zin, String s)
 			throws IOException {
-		System.out.println("unzipping " + s);
 		File file = new File(new File(baseDir).getAbsolutePath()
 				+ File.separator + s);
 		file.getParentFile().mkdirs();
@@ -149,9 +141,6 @@ public class Archive {
 				+ File.separator + serviceName + "_" + String.valueOf(lastTime)
 				+ "_backup.zip");
 
-		System.out.println("Restoring from file: "
-				+ cachedFile.getAbsoluteFile());
-
 		InputStream in = new BufferedInputStream(
 				new FileInputStream(cachedFile));
 		ZipInputStream zin = new ZipInputStream(in);
@@ -166,7 +155,8 @@ public class Archive {
 
 	public static void main(String[] args) {
 		try {
-			Archive.createArchive(String.valueOf(System.currentTimeMillis()),"HelloWorld", "c:\\HelloWorld");
+			Archive.createArchive(String.valueOf(System.currentTimeMillis()),
+					"HelloWorld", "c:\\HelloWorld");
 
 			Thread.sleep(5000);
 
