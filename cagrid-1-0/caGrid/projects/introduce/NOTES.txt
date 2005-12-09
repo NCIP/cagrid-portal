@@ -5,6 +5,8 @@ Make sure that skeleton names entered in the GUI are acceptable.
 
 Enable service to back up old service skeleton before altering and then provide rollback capabilities.
 	i.e. Enable "undo" in the gui.
+
+Map the ext/NStoPkg.mappings with those in the skeleton (right now they are copied into the skeleton's file)
 	
 Security configuration
 
