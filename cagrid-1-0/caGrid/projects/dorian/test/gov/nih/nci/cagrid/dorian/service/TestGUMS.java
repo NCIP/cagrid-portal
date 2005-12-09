@@ -95,7 +95,6 @@ public class TestGUMS extends TestCase{
     		assertNotNull(jm.getGUMSConfiguration());
     		assertNotNull(jm.getDatabase());
     		
- 
     		//get the gridId
 			String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,GUMS.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
@@ -107,7 +106,7 @@ public class TestGUMS extends TestCase{
 				
 				IdPUserFilter uf = new IdPUserFilter();
 				uf.setUserId(a.getUserId());
-				
+		
 				IdPUser[] users = jm.findIdPUsers(gridId, uf);
 				assertEquals(1, users.length);
 				assertEquals(IdPUserStatus.Pending, users[0].getStatus());
@@ -125,7 +124,7 @@ public class TestGUMS extends TestCase{
 				auth.setPassword(a.getPassword());
 				org.opensaml.SAMLAssertion saml = jm.authenticate(auth);
 				assertNotNull(saml);
-			//	use the helper function to get the idp certificate and use that in the call in the next line
+			//	use the helper function to get the idp certificate and use that to verify the saml assertion
 			//	this.verifySAMLAssertion(saml,idp,a);
     		}
     		
@@ -161,12 +160,12 @@ public class TestGUMS extends TestCase{
      * Remember to talk to Steve about the helper function that will get my the IdPCertificate
      * and then replace the IdentityProvider in the verifySAMLAssertion with that certificate
      */
-    public void verifySAMLAssertion(SAMLAssertion saml, IdentityProvider idp,
+    public void verifySAMLAssertion(SAMLAssertion saml, X509Certificate idpCert,
 			Application app) throws Exception {
 		assertNotNull(saml);
-		saml.verify(idp.getIdPCertificate(), false);
+		saml.verify(idpCert, false);
 
-		assertEquals(idp.getIdPCertificate().getSubjectDN().toString(), saml
+		assertEquals(idpCert.getSubjectDN().toString(), saml
 				.getIssuer());
 		Iterator itr = saml.getStatements();
 		int count = 0;
