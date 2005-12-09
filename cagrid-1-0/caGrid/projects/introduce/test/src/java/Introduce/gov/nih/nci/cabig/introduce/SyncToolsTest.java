@@ -14,9 +14,11 @@ public class SyncToolsTest extends Story {
 		Vector steps = new Vector();
 
 		steps.add(new CreateSkeletonStep());
+		steps.add(new BuildSkeletonStep());
 		steps.add(new AddSimpleMethodStep());
+		steps.add(new BuildSkeletonStep());
 		steps.add(new RemoveSimpleMethodStep());
-		//steps.add(new RemoveSkeletonStep());
+		steps.add(new BuildSkeletonStep());
 
 		return steps;
 	}

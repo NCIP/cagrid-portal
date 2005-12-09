@@ -53,6 +53,11 @@ public class CommonTools {
 		return cmd;
 	}
 
+	public static String getAntAllCommand(String buildFileDir)
+			throws Exception {
+		return getAntCommand("all", buildFileDir);
+	}
+
 	public static String getAntFlattenCommand(String buildFileDir)
 			throws Exception {
 		return getAntCommand("flatten", buildFileDir);
