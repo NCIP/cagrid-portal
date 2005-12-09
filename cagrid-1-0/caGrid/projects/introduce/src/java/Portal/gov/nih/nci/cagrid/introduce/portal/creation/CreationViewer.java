@@ -259,39 +259,12 @@ public class CreationViewer extends GridPortalComponent {
 
 					try {
 						String cmd = CommonTools.getAntSkeletonCreationCommand(".",service.getText(),dir.getText(),servicePackage.getText(),namespaceDomain.getText());
-
-						System.out.println(cmd);
-						final Process p = Runtime.getRuntime().exec(cmd);
-						
-						Thread thread1 = new Thread(new Runnable() {
-							public void run() {
-								try {
-									
-									System.out.println(XMLUtilities.streamToString(p
-											.getInputStream()));
-								} catch (MobiusException e) {
-									e.printStackTrace();
-								}
-							}
-						});
-						thread1.start();
-
-						Thread thread2 = new Thread(new Runnable() {
-							public void run() {
-								try {
-									System.err.println(XMLUtilities.streamToString(p
-											.getErrorStream()));
-								} catch (MobiusException e) {
-									e.printStackTrace();
-								}
-							}
-						});
-						thread2.start();
-						
+						Process p = CommonTools.createAndOutputProcess(cmd);
 						p.waitFor();
+						cmd = CommonTools.getAntAllCommand(dir.getText());
+						p = CommonTools.createAndOutputProcess(cmd);
 						p.waitFor();
 						dispose();
-
 					} catch (Exception ex) {
 						ex.printStackTrace();
 						PortalUtils.showErrorMessage(ex.getMessage());
