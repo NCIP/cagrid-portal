@@ -32,7 +32,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.1 2005-12-09 21:26:29 langella Exp $
+ * @version $Id: UserWindow.java,v 1.2 2005-12-09 21:27:42 langella Exp $
  */
 public class UserWindow extends GridPortalBaseFrame {
 
@@ -232,18 +232,6 @@ public class UserWindow extends GridPortalBaseFrame {
 		return updateUser;
 	}
 
-	private String format(char[] array) {
-		if (array == null) {
-			return "";
-		} else {
-			String s = new String(array);
-			if ((s == null) || (s.trim().length() == 0)) {
-				return "";
-			} else {
-				return s.trim();
-			}
-		}
-	}
 
 	private synchronized void updateUser() {
 		

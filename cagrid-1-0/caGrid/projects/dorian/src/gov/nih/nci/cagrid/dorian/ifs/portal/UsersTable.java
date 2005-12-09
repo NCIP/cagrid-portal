@@ -12,7 +12,7 @@ import javax.swing.table.TableColumn;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: UsersTable.java,v 1.3 2005-12-09 18:41:01 langella Exp $
+ * @version $Id: UsersTable.java,v 1.4 2005-12-09 21:26:29 langella Exp $
  */
 public class UsersTable extends PortalBaseTable {
 	public static String USER = "user";
@@ -78,12 +78,21 @@ public class UsersTable extends PortalBaseTable {
 		addRow(v);
 	}
 
-	public synchronized IFSUser getSelectedUser() {
+	public synchronized IFSUser getSelectedUser() throws Exception{
 		int row = getSelectedRow();
 		if ((row >= 0) && (row < getRowCount())) {
 			return (IFSUser) getValueAt(row, 0);
 		} else {
-			return null;
+			throw new Exception("Please select a user!!!");
+		}
+	}
+	
+	public synchronized void removeSelectedUser() throws Exception{
+		int row = getSelectedRow();
+		if ((row >= 0) && (row < getRowCount())) {
+			removeRow(row);
+		} else {
+			throw new Exception("Please select a user!!!");
 		}
 	}
 

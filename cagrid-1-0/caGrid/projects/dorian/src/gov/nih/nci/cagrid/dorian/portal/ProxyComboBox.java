@@ -27,6 +27,11 @@ public class ProxyComboBox extends JComboBox {
 		}
 	}
 	
+	public ProxyComboBox(GlobusCredential cred) {
+		this();
+		this.setSelectedItem(new ProxyCaddy(cred));
+	}
+	
 	public ProxyCaddy getSelectedProxyCaddy(){
 		ProxyCaddy caddy =  ((ProxyCaddy)this.getSelectedItem());
 		return caddy;

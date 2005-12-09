@@ -57,6 +57,11 @@ public class GumsLookAndFeel extends PortalLookAndFeel {
 		return new javax.swing.ImageIcon(GumsLookAndFeel.class
 				.getResource("/Users.gif"));
 	}
+	
+	public final static ImageIcon getRemoveUserIcon() {
+		return new javax.swing.ImageIcon(GumsLookAndFeel.class
+				.getResource("/DeleteUser.gif"));
+	}
 
 	public final static ImageIcon getUpdateUserIcon() {
 		return new javax.swing.ImageIcon(GumsLookAndFeel.class
