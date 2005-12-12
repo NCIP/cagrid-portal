@@ -3,9 +3,11 @@ package gov.nih.nci.cagrid.introduce.portal.creation;
 import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.portal.AnalyticalLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.modification.ModificationViewer;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -14,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.projectmobius.portal.GridPortalComponent;
+import org.projectmobius.portal.PortalResourceManager;
 
 /**
  * CreationViewer
@@ -252,9 +255,10 @@ public class CreationViewer extends GridPortalComponent {
 
 					try {
 						if (service.getText().length() > 0) {
-							if(!service.getText().matches("[A-Z]++[A-Za-z0-9\\_\\$]*")){
+							if (!service.getText().matches(
+									"[A-Z]++[A-Za-z0-9\\_\\$]*")) {
 								PortalUtils
-								.showMessage("Service Name can only contain [A-Z]++[A-Za-z0-9\\_\\$]*");
+										.showMessage("Service Name can only contain [A-Z]++[A-Za-z0-9\\_\\$]*");
 								return;
 							}
 							if (service.getText().substring(0, 1).toLowerCase()
@@ -262,13 +266,13 @@ public class CreationViewer extends GridPortalComponent {
 								PortalUtils
 										.showMessage("Service Name cannnot start with lower case letters.");
 								return;
-							} 
+							}
 						} else {
 							PortalUtils
-							.showMessage("Service Name cannot be empty.");
+									.showMessage("Service Name cannot be empty.");
 							return;
 						}
-						
+
 						String cmd = CommonTools.getAntSkeletonCreationCommand(
 								".", service.getText(), dir.getText(),
 								servicePackage.getText(), namespaceDomain
@@ -279,6 +283,14 @@ public class CreationViewer extends GridPortalComponent {
 						p = CommonTools.createAndOutputProcess(cmd);
 						p.waitFor();
 						dispose();
+						if (p.exitValue() == 0) {
+							PortalResourceManager.getInstance().getGridPortal()
+									.addGridPortalComponent(
+											new ModificationViewer(new File(dir
+													.getText())));
+						} else {
+							PortalUtils.showErrorMessage("Error creating new service!");
+						}
 					} catch (Exception ex) {
 						ex.printStackTrace();
 						PortalUtils.showErrorMessage(ex.getMessage());
