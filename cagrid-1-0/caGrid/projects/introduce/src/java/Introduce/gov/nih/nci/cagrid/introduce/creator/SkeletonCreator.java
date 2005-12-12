@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.introduce.creator;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
-
 import java.io.File;
 import java.util.Properties;
 
