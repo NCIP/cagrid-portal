@@ -37,7 +37,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.9 2005-12-09 19:53:12 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.10 2005-12-12 19:34:41 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -69,15 +69,19 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	public ModificationViewer() {
 		super();
 		this.me = this;
+		chooseService();
 		initialize();
 	}
-
-	/**
-	 * This method initializes this
-	 * 
-	 * @return void
-	 */
-	private void initialize() {
+	
+	public ModificationViewer(File methodsDirectory) {
+		super();
+		this.me = this;
+		this.methodsDirectory = methodsDirectory;
+		initialize();
+	}
+	
+	
+	private void chooseService(){
 		JFileChooser chooser = new JFileChooser(defaultMethodsDir);
 		chooser.setDialogTitle("Select Service Skeleton Directory");
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
@@ -91,7 +95,14 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		} else {
 			return;
 		}
+	}
 
+	/**
+	 * This method initializes this
+	 * 
+	 * @return void
+	 */
+	private void initialize() {
 		if (this.methodsDirectory != null) {
 			SAXBuilder builder = new SAXBuilder(false);
 			try {

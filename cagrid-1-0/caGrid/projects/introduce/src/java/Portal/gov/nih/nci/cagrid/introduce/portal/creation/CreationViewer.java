@@ -282,12 +282,12 @@ public class CreationViewer extends GridPortalComponent {
 						cmd = CommonTools.getAntAllCommand(dir.getText());
 						p = CommonTools.createAndOutputProcess(cmd);
 						p.waitFor();
-						dispose();
 						if (p.exitValue() == 0) {
 							PortalResourceManager.getInstance().getGridPortal()
 									.addGridPortalComponent(
 											new ModificationViewer(new File(dir
 													.getText())));
+							dispose();
 						} else {
 							PortalUtils.showErrorMessage("Error creating new service!");
 						}
