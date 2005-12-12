@@ -11,6 +11,3 @@
 <%=namespaceDomain%>/<%=serviceName%>=<%=packageName%>.stubs
 <%=namespaceDomain%>/<%=serviceName%>/bindings=<%=packageName%>.stubs.bindings
 <%=namespaceDomain%>/<%=serviceName%>/service=<%=packageName%>.stubs.service
-gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common=gov.nih.nci.cagrid.metadata.common
-gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.cadsr=gov.nih.nci.cagrid.metadata.cadsr
-gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.analytical=gov.nih.nci.cagrid.metadata.analytical

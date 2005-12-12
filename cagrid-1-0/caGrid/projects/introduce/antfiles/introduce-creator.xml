@@ -2,6 +2,12 @@
 <!-- caGrid Analytical Utilities build file                                  -->
 <!-- ======================================================================= -->
 <project name="introduce_creator" basedir="." default="usage">
+	<!-- Define the environment variable -->
+	<property environment="env" />
+	<property name="ext.globus.location" location="${env.GLOBUS_LOCATION}" />
+	<echo message="GLOBUS LOCATION = ${env.GLOBUS_LOCATION}" />
+	<echo message="GLOBUS LOCATION = ${ext.globus.location}" />
+
 
 	<property name="introduce.skeleton.dir" location="${basedir}/skeleton" />
 	<property name="introduce.skeleton.destination.dir.default" location="${user.home}/caGridServiceSkeleton" />
@@ -35,7 +41,7 @@
 				<include name="**\*" />
 			</fileset>
 		</copy>
-		
+
 		<!-- call our creation ant task -->
 		<createSkeleton />
 
@@ -44,7 +50,7 @@
 				<include name="**\*" />
 			</fileset>
 		</copy>
-		
+
 		<!-- copy in common service metadata file etc. -->
 		<copy todir="${introduce.skeleton.destination.dir}/schema">
 			<fileset dir="${basedir}/ext/schema">
@@ -78,6 +84,9 @@
 
 
 	<target name="serviceCopySchemaFiles" depends="prepareSkeleton">
+		<concat destfile="${introduce.skeleton.destination.dir}/namespace2package.mappings" append="yes">
+			<filelist dir="${ext.dir}" files="NStoPkg.properties" />
+		</concat>
 		<copy toDir="${introduce.skeleton.destination.dir}/schema/cagrid/types">
 			<fileset dir="${ext.schema.dir}/types">
 				<include name="**/*.xsd" />
