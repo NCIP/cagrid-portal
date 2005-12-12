@@ -33,6 +33,7 @@ import org.opensaml.SAMLAttribute;
 import org.opensaml.SAMLAttributeStatement;
 import org.opensaml.SAMLAuthenticationStatement;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -52,17 +53,17 @@ public class IFS extends GUMSObject {
 
 	private IFSConfiguration conf;
 
-	public IFS(IFSConfiguration conf, Database db, CertificateAuthority ca)
-			throws GUMSInternalFault {
+
+	public IFS(IFSConfiguration conf, Database db, CertificateAuthority ca) throws GUMSInternalFault {
 		this.conf = conf;
 		tm = new TrustManager(conf, db);
 		um = new UserManager(db, conf, ca, tm);
 		um.buildDatabase();
 	}
 
-	public String getUserIdVerifyTrustedIdP(X509Certificate idpCert,
-			String identity) throws GUMSInternalFault, InvalidUserFault,
-			InvalidTrustedIdPFault, PermissionDeniedFault {
+
+	public String getUserIdVerifyTrustedIdP(X509Certificate idpCert, String identity) throws GUMSInternalFault,
+		InvalidUserFault, InvalidTrustedIdPFault, PermissionDeniedFault {
 		if (identity == null) {
 			PermissionDeniedFault fault = new PermissionDeniedFault();
 			fault.setFaultString("No credentials specified.");
@@ -72,51 +73,51 @@ public class IFS extends GUMSObject {
 		IFSUser usr = um.getUser(identity);
 		if (usr.getIdPId() != idp.getId()) {
 			PermissionDeniedFault fault = new PermissionDeniedFault();
-			fault
-					.setFaultString("Not a valid user of the IdP "
-							+ idp.getName());
+			fault.setFaultString("Not a valid user of the IdP " + idp.getName());
 			throw fault;
 		}
 		return usr.getUID();
 	}
 
-	public TrustedIdP addTrustedIdP(String callerGridIdentity, TrustedIdP idp)
-			throws GUMSInternalFault, InvalidTrustedIdPFault, InvalidUserFault,
-			PermissionDeniedFault {
+
+	public TrustedIdP addTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws GUMSInternalFault,
+		InvalidTrustedIdPFault, InvalidUserFault, PermissionDeniedFault {
 		IFSUser caller = um.getUser(callerGridIdentity);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
 		return tm.addTrustedIdP(idp);
 	}
 
-	public void updatedTrustedIdP(String callerGridIdentity, TrustedIdP idp)
-			throws GUMSInternalFault, InvalidTrustedIdPFault, InvalidUserFault,
-			PermissionDeniedFault {
+
+	public void updatedTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws GUMSInternalFault,
+		InvalidTrustedIdPFault, InvalidUserFault, PermissionDeniedFault {
 		IFSUser caller = um.getUser(callerGridIdentity);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
 		tm.updateIdP(idp);
 	}
 
-	public void removeTrustedIdP(String callerGridIdentity, long idpId)
-			throws GUMSInternalFault, InvalidTrustedIdPFault, InvalidUserFault,
-			PermissionDeniedFault {
+
+	public void removeTrustedIdP(String callerGridIdentity, long idpId) throws GUMSInternalFault,
+		InvalidTrustedIdPFault, InvalidUserFault, PermissionDeniedFault {
 		IFSUser caller = um.getUser(callerGridIdentity);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
 		tm.removeTrustedIdP(idpId);
 	}
 
-	public TrustedIdP[] getTrustedIdPs(String callerGridIdentity)
-			throws GUMSInternalFault, InvalidUserFault, PermissionDeniedFault {
+
+	public TrustedIdP[] getTrustedIdPs(String callerGridIdentity) throws GUMSInternalFault, InvalidUserFault,
+		PermissionDeniedFault {
 		IFSUser caller = um.getUser(callerGridIdentity);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
 		return tm.getTrustedIdPs();
 	}
 
-	public IFSUser getUser(String callerGridIdentity, long idpId, String uid)
-			throws GUMSInternalFault, InvalidUserFault, PermissionDeniedFault {
+
+	public IFSUser getUser(String callerGridIdentity, long idpId, String uid) throws GUMSInternalFault,
+		InvalidUserFault, PermissionDeniedFault {
 		IFSUser caller = um.getUser(callerGridIdentity);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
@@ -124,16 +125,18 @@ public class IFS extends GUMSObject {
 		return um.getUser(idpId, uid);
 	}
 
-	public IFSUser[] findUsers(String callerGridIdentity, IFSUserFilter filter)
-			throws GUMSInternalFault, InvalidUserFault, PermissionDeniedFault {
+
+	public IFSUser[] findUsers(String callerGridIdentity, IFSUserFilter filter) throws GUMSInternalFault,
+		InvalidUserFault, PermissionDeniedFault {
 		IFSUser caller = um.getUser(callerGridIdentity);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
 		return um.getUsers(filter);
 	}
 
-	public void updateUser(String callerGridIdentity, IFSUser usr)
-			throws GUMSInternalFault, InvalidUserFault, PermissionDeniedFault {
+
+	public void updateUser(String callerGridIdentity, IFSUser usr) throws GUMSInternalFault, InvalidUserFault,
+		PermissionDeniedFault {
 		IFSUser caller = um.getUser(callerGridIdentity);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
@@ -141,35 +144,41 @@ public class IFS extends GUMSObject {
 		um.updateUser(usr);
 	}
 
-	public void removeUser(String callerGridIdentity, IFSUser usr)
-			throws GUMSInternalFault, InvalidUserFault, PermissionDeniedFault {
+
+	public void removeUser(String callerGridIdentity, IFSUser usr) throws GUMSInternalFault, InvalidUserFault,
+		PermissionDeniedFault {
 		IFSUser caller = um.getUser(callerGridIdentity);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
 		um.removeUser(usr);
 	}
 
-	public X509Certificate[] createProxy(SAMLAssertion saml,
-			PublicKey publicKey, ProxyLifetime lifetime)
-			throws GUMSInternalFault, InvalidAssertionFault, InvalidProxyFault,
-			UserPolicyFault, PermissionDeniedFault {
+
+	public IFSUser renewUserCredentials(String callerGridIdentity, IFSUser usr) throws GUMSInternalFault,
+		InvalidUserFault, PermissionDeniedFault {
+		IFSUser caller = um.getUser(callerGridIdentity);
+		verifyActiveUser(caller);
+		verifyAdminUser(caller);
+	    return um.renewUserCredentials(usr);
+	}
+
+
+	public X509Certificate[] createProxy(SAMLAssertion saml, PublicKey publicKey, ProxyLifetime lifetime)
+		throws GUMSInternalFault, InvalidAssertionFault, InvalidProxyFault, UserPolicyFault, PermissionDeniedFault {
 
 		if (!saml.isSigned()) {
 			InvalidAssertionFault fault = new InvalidAssertionFault();
-			fault
-					.setFaultString("The assertion specified is invalid, it MUST be signed by a trusted IdP");
+			fault.setFaultString("The assertion specified is invalid, it MUST be signed by a trusted IdP");
 			throw fault;
 		}
 
 		// Determine whether or not the assertion is expired
 		Calendar cal = new GregorianCalendar();
 		Date now = cal.getTime();
-		if ((now.before(saml.getNotBefore()))
-				|| (now.after(saml.getNotOnOrAfter()))) {
+		if ((now.before(saml.getNotBefore())) || (now.after(saml.getNotOnOrAfter()))) {
 			InvalidAssertionFault fault = new InvalidAssertionFault();
-			fault.setFaultString("The Assertion is not valid at " + now
-					+ ", the assertion is valid from " + saml.getNotBefore()
-					+ " to " + saml.getNotOnOrAfter());
+			fault.setFaultString("The Assertion is not valid at " + now + ", the assertion is valid from "
+				+ saml.getNotBefore() + " to " + saml.getNotOnOrAfter());
 			throw fault;
 		}
 
@@ -181,16 +190,14 @@ public class IFS extends GUMSObject {
 		// We need to verify the authentication method now
 		boolean allowed = false;
 		for (int i = 0; i < idp.getAuthenticationMethod().length; i++) {
-			if (idp.getAuthenticationMethod(i).getValue().equals(
-					auth.getAuthMethod())) {
+			if (idp.getAuthenticationMethod(i).getValue().equals(auth.getAuthMethod())) {
 				allowed = true;
 			}
 		}
 		if (!allowed) {
 			InvalidAssertionFault fault = new InvalidAssertionFault();
-			fault.setFaultString("The authentication method "
-					+ auth.getAuthMethod() + " is not acceptable for the IdP "
-					+ idp.getName());
+			fault.setFaultString("The authentication method " + auth.getAuthMethod()
+				+ " is not acceptable for the IdP " + idp.getName());
 			throw fault;
 		}
 
@@ -203,8 +210,8 @@ public class IFS extends GUMSObject {
 			AddressValidator.validateEmail(email);
 		} catch (Exception e) {
 			emailIsValid = false;
-			logWarning("The email address, " + email + " supplied by the IdP "
-					+ idp.getName() + " (" + idp.getId() + ") is invalid.");
+			logWarning("The email address, " + email + " supplied by the IdP " + idp.getName() + " (" + idp.getId()
+				+ ") is invalid.");
 		}
 
 		IFSUser usr = null;
@@ -222,11 +229,8 @@ public class IFS extends GUMSObject {
 			} catch (Exception e) {
 				logError(e.getMessage(), e);
 				GUMSInternalFault fault = new GUMSInternalFault();
-				fault
-						.setFaultString("An unexpected error occurred in adding the user "
-								+ usr.getUID()
-								+ " from the IdP "
-								+ idp.getName());
+				fault.setFaultString("An unexpected error occurred in adding the user " + usr.getUID()
+					+ " from the IdP " + idp.getName());
 				FaultHelper helper = new FaultHelper(fault);
 				helper.addFaultCause(e);
 				fault = (GUMSInternalFault) helper.getFault();
@@ -236,8 +240,7 @@ public class IFS extends GUMSObject {
 			try {
 				usr = um.getUser(idp.getId(), auth.getSubject().getName());
 				if (emailIsValid) {
-					if ((usr.getEmail() == null)
-							|| (!usr.getEmail().equals(email))) {
+					if ((usr.getEmail() == null) || (!usr.getEmail().equals(email))) {
 						usr.setEmail(email);
 						um.updateUser(usr);
 					}
@@ -245,11 +248,8 @@ public class IFS extends GUMSObject {
 			} catch (Exception e) {
 				logError(e.getMessage(), e);
 				GUMSInternalFault fault = new GUMSInternalFault();
-				fault
-						.setFaultString("An unexpected error occurred in obtaining the user "
-								+ usr.getUID()
-								+ " from the IdP "
-								+ idp.getName());
+				fault.setFaultString("An unexpected error occurred in obtaining the user " + usr.getUID()
+					+ " from the IdP " + idp.getName());
 				FaultHelper helper = new FaultHelper(fault);
 				helper.addFaultCause(e);
 				fault = (GUMSInternalFault) helper.getFault();
@@ -260,13 +260,9 @@ public class IFS extends GUMSObject {
 		// Validate that the proxy is of valid length
 		if (IFSUtils.getProxyValid(lifetime).after(conf.getMaxProxyLifetime())) {
 			InvalidProxyFault fault = new InvalidProxyFault();
-			fault
-					.setFaultString("The proxy valid length exceeds the maximum proxy valid length (hrs="
-							+ conf.getMaxProxyLifetimeHours()
-							+ ", mins="
-							+ conf.getMaxProxyLifetimeMinutes()
-							+ ", sec="
-							+ conf.getMaxProxyLifetimeSeconds() + ")");
+			fault.setFaultString("The proxy valid length exceeds the maximum proxy valid length (hrs="
+				+ conf.getMaxProxyLifetimeHours() + ", mins=" + conf.getMaxProxyLifetimeMinutes() + ", sec="
+				+ conf.getMaxProxyLifetimeSeconds() + ")");
 			throw fault;
 		}
 
@@ -279,9 +275,8 @@ public class IFS extends GUMSObject {
 
 		} catch (Exception e) {
 			GUMSInternalFault fault = new GUMSInternalFault();
-			fault
-					.setFaultString("An unexpected error occurred in creating an instance of the user policy "
-							+ idp.getPolicyClass());
+			fault.setFaultString("An unexpected error occurred in creating an instance of the user policy "
+				+ idp.getPolicyClass());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (GUMSInternalFault) helper.getFault();
@@ -316,21 +311,18 @@ public class IFS extends GUMSObject {
 				um.updateUser(usr);
 			} catch (Exception e) {
 				GUMSInternalFault fault = new GUMSInternalFault();
-				fault
-						.setFaultString("Unexpected Error, updating the user's status");
+				fault.setFaultString("Unexpected Error, updating the user's status");
 				FaultHelper helper = new FaultHelper(fault);
 				helper.addFaultCause(e);
 				fault = (GUMSInternalFault) helper.getFault();
 			}
 			PermissionDeniedFault fault = new PermissionDeniedFault();
-			fault
-					.setFaultString("The credentials for this account have expired.");
+			fault.setFaultString("The credentials for this account have expired.");
 			throw fault;
 
 		} else if (IFSUtils.getProxyValid(lifetime).after(cert.getNotAfter())) {
 			InvalidProxyFault fault = new InvalidProxyFault();
-			fault
-					.setFaultString("The proxy valid length exceeds the expiration date of the user's certificate.");
+			fault.setFaultString("The proxy valid length exceeds the expiration date of the user's certificate.");
 			throw fault;
 		}
 
@@ -338,14 +330,12 @@ public class IFS extends GUMSObject {
 
 		try {
 			PrivateKey key = um.getUsersPrivateKey(usr);
-			X509Certificate[] certs = ProxyUtil.createProxyCertificate(
-					new X509Certificate[] { cert }, key, publicKey, lifetime);
+			X509Certificate[] certs = ProxyUtil.createProxyCertificate(new X509Certificate[]{cert}, key, publicKey,
+				lifetime);
 			return certs;
 		} catch (Exception e) {
 			InvalidProxyFault fault = new InvalidProxyFault();
-			fault
-					.setFaultString("An unexpected error occurred in creating the user "
-							+ usr.getGridId() + "'s proxy.");
+			fault.setFaultString("An unexpected error occurred in creating the user " + usr.getGridId() + "'s proxy.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (InvalidProxyFault) helper.getFault();
@@ -354,8 +344,8 @@ public class IFS extends GUMSObject {
 
 	}
 
-	private void verifyAdminUser(IFSUser usr) throws GUMSInternalFault,
-			PermissionDeniedFault {
+
+	private void verifyAdminUser(IFSUser usr) throws GUMSInternalFault, PermissionDeniedFault {
 		if (usr.getUserRole().equals(IFSUserRole.Administrator)) {
 			return;
 		} else {
@@ -365,8 +355,8 @@ public class IFS extends GUMSObject {
 		}
 	}
 
-	private void verifyActiveUser(IFSUser usr) throws GUMSInternalFault,
-			PermissionDeniedFault {
+
+	private void verifyActiveUser(IFSUser usr) throws GUMSInternalFault, PermissionDeniedFault {
 
 		if (!usr.getUserStatus().equals(IFSUserStatus.Active)) {
 			if (usr.getUserStatus().equals(IFSUserStatus.Suspended)) {
@@ -376,19 +366,16 @@ public class IFS extends GUMSObject {
 
 			} else if (usr.getUserStatus().equals(IFSUserStatus.Rejected)) {
 				PermissionDeniedFault fault = new PermissionDeniedFault();
-				fault
-						.setFaultString("The application for the account was rejected.");
+				fault.setFaultString("The application for the account was rejected.");
 				throw fault;
 
 			} else if (usr.getUserStatus().equals(IFSUserStatus.Pending)) {
 				PermissionDeniedFault fault = new PermissionDeniedFault();
-				fault
-						.setFaultString("The application for this account has not yet been reviewed.");
+				fault.setFaultString("The application for this account has not yet been reviewed.");
 				throw fault;
 			} else if (usr.getUserStatus().equals(IFSUserStatus.Expired)) {
 				PermissionDeniedFault fault = new PermissionDeniedFault();
-				fault
-						.setFaultString("The credentials for this account have expired.");
+				fault.setFaultString("The credentials for this account have expired.");
 				throw fault;
 			} else {
 				PermissionDeniedFault fault = new PermissionDeniedFault();
@@ -399,9 +386,11 @@ public class IFS extends GUMSObject {
 
 	}
 
+
 	protected UserManager getUserManager() {
 		return um;
 	}
+
 
 	private String getEmail(SAMLAssertion saml) {
 		Iterator itr = saml.getStatements();
@@ -412,8 +401,7 @@ public class IFS extends GUMSObject {
 				Iterator attItr = att.getAttributes();
 				while (attItr.hasNext()) {
 					SAMLAttribute a = (SAMLAttribute) attItr.next();
-					if ((a.getNamespace().equals(EMAIL_NAMESPACE))
-							&& (a.getName().equals(EMAIL_NAME))) {
+					if ((a.getNamespace().equals(EMAIL_NAMESPACE)) && (a.getName().equals(EMAIL_NAME))) {
 						Iterator vals = a.getValues();
 						while (vals.hasNext()) {
 							return (String) vals.next();
@@ -426,8 +414,8 @@ public class IFS extends GUMSObject {
 		return null;
 	}
 
-	private SAMLAuthenticationStatement getAuthenticationStatement(
-			SAMLAssertion saml) throws InvalidAssertionFault {
+
+	private SAMLAuthenticationStatement getAuthenticationStatement(SAMLAssertion saml) throws InvalidAssertionFault {
 		Iterator itr = saml.getStatements();
 		SAMLAuthenticationStatement auth = null;
 		while (itr.hasNext()) {
@@ -435,8 +423,7 @@ public class IFS extends GUMSObject {
 			if (o instanceof SAMLAuthenticationStatement) {
 				if (auth != null) {
 					InvalidAssertionFault fault = new InvalidAssertionFault();
-					fault
-							.setFaultString("The assertion specified contained more that one authentication statement.");
+					fault.setFaultString("The assertion specified contained more that one authentication statement.");
 					throw fault;
 				}
 				auth = (SAMLAuthenticationStatement) o;
@@ -444,8 +431,7 @@ public class IFS extends GUMSObject {
 		}
 		if (auth == null) {
 			InvalidAssertionFault fault = new InvalidAssertionFault();
-			fault
-					.setFaultString("No authentication statement specified in the assertion provided.");
+			fault.setFaultString("No authentication statement specified in the assertion provided.");
 			throw fault;
 		}
 		return auth;

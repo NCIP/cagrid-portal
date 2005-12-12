@@ -117,8 +117,8 @@ public class UserManager extends GUMSObject {
 		}
 	}
 
-	public synchronized void renewUserCredentials(IFSUser user)
-			throws GUMSInternalFault, CredentialsFault, InvalidUserFault {
+	public synchronized IFSUser renewUserCredentials(IFSUser user)
+			throws GUMSInternalFault, InvalidUserFault {
 		X509Certificate cert = createUserCredentials(user.getIdPId(), user
 				.getUID());
 		user.setGridId(subjectToIdentity(cert.getSubjectDN().getName()));
@@ -138,14 +138,15 @@ public class UserManager extends GUMSObject {
 		} catch (IOException ioe) {
 			this.credentialsManager.deleteCredentials(getCredentialsManagerUID(
 					user.getIdPId(), user.getUID()));
-			CredentialsFault fault = new CredentialsFault();
+			GUMSInternalFault fault = new GUMSInternalFault();
 			fault.setFaultString("Error renewing credentials.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(ioe);
-			fault = (CredentialsFault) helper.getFault();
+			fault = (GUMSInternalFault) helper.getFault();
 			throw fault;
 
 		}
+		return user;
 	}
 
 	public static String getUserSubject(String caSubject, long idpId, String uid) {
@@ -156,7 +157,7 @@ public class UserManager extends GUMSObject {
 	}
 
 	private synchronized X509Certificate createUserCredentials(long idpId,
-			String uid) throws GUMSInternalFault, CredentialsFault {
+			String uid) throws GUMSInternalFault {
 		try {
 
 			String caSubject = ca.getCACertificate().getSubjectDN().getName();
@@ -180,11 +181,11 @@ public class UserManager extends GUMSObject {
 			return cert;
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
-			CredentialsFault fault = new CredentialsFault();
+			GUMSInternalFault fault = new GUMSInternalFault();
 			fault.setFaultString("Error creating credentials.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (CredentialsFault) helper.getFault();
+			fault = (GUMSInternalFault) helper.getFault();
 			throw fault;
 		}
 	}

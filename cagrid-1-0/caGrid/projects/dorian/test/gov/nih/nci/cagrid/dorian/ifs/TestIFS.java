@@ -41,6 +41,7 @@ import org.opensaml.SAMLAttributeStatement;
 import org.opensaml.SAMLAuthenticationStatement;
 import org.opensaml.SAMLSubject;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -68,6 +69,50 @@ public class TestIFS extends TestCase {
 
 	private CertificateAuthority ca;
 
+
+	public void testRenewUserCredentials() {
+		try {
+			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
+			IFSConfiguration conf = getConf();
+			conf.setInitalTrustedIdP(idp.getIdp());
+			IFS ifs = new IFS(conf, db, ca);
+			String uid = "user";
+			String adminSubject = UserManager.getUserSubject(ca.getCACertificate().getSubjectDN().getName(), idp
+				.getIdp().getId(), INITIAL_ADMIN);
+			String adminGridId = UserManager.subjectToIdentity(adminSubject);
+			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+			PublicKey publicKey = pair.getPublic();
+			ProxyLifetime lifetime = getProxyLifetime();
+			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion(uid, idp), publicKey, lifetime);
+			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
+			IFSUserFilter f1 = new IFSUserFilter();
+			f1.setIdPId(idp.getIdp().getId());
+			f1.setUID(uid);
+			IFSUser[] users = ifs.findUsers(adminGridId, f1);
+			assertEquals(1, users.length);
+			IFSUser usr1 = users[0];
+			String certStr = usr1.getCertificate().getCertificateAsString();
+			X509Certificate cert1 = CertUtil.loadCertificateFromString(certStr);
+			IFSUser usr2 = ifs.renewUserCredentials(adminGridId,usr1);
+			assertEquals(usr1.getGridId(),usr2.getGridId());
+			
+			if(certStr.equals(usr2.getCertificate().getCertificateAsString())){
+				assertTrue(false);
+			}
+			
+			
+			X509Certificate cert2 = CertUtil.loadCertificateFromString(usr2.getCertificate().getCertificateAsString());
+			
+			assertTrue(cert2.getNotBefore().after(cert1.getNotBefore()));
+			
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+
+	}
+
+
 	public void testFindRemoveUpdateUsers() {
 		try {
 			int times = 5;
@@ -76,9 +121,8 @@ public class TestIFS extends TestCase {
 			conf.setInitalTrustedIdP(idp.getIdp());
 			IFS ifs = new IFS(conf, db, ca);
 			String uidPrefix = "user";
-			String adminSubject = UserManager.getUserSubject(ca
-					.getCACertificate().getSubjectDN().getName(), idp.getIdp()
-					.getId(), INITIAL_ADMIN);
+			String adminSubject = UserManager.getUserSubject(ca.getCACertificate().getSubjectDN().getName(), idp
+				.getIdp().getId(), INITIAL_ADMIN);
 			String adminGridId = UserManager.subjectToIdentity(adminSubject);
 			int ucount = 1;
 			for (int i = 0; i < times; i++) {
@@ -86,43 +130,40 @@ public class TestIFS extends TestCase {
 				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 				PublicKey publicKey = pair.getPublic();
 				ProxyLifetime lifetime = getProxyLifetime();
-				X509Certificate[] certs = ifs.createProxy(getSAMLAssertion(uid,
-						idp), publicKey, lifetime);
+				X509Certificate[] certs = ifs.createProxy(getSAMLAssertion(uid, idp), publicKey, lifetime);
 				createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
-				ucount = ucount+1;		
-				assertEquals(ucount, ifs.findUsers(adminGridId,
-						new IFSUserFilter()).length);
+				ucount = ucount + 1;
+				assertEquals(ucount, ifs.findUsers(adminGridId, new IFSUserFilter()).length);
 				IFSUserFilter f1 = new IFSUserFilter();
 				f1.setIdPId(idp.getIdp().getId());
 				f1.setUID(uid);
-				IFSUser[] usr = ifs.findUsers(adminGridId,f1);
-				assertEquals(1,usr.length);
-				
-				try{
-					ifs.findUsers(usr[0].getGridId(),new IFSUserFilter());
+				IFSUser[] usr = ifs.findUsers(adminGridId, f1);
+				assertEquals(1, usr.length);
+
+				try {
+					ifs.findUsers(usr[0].getGridId(), new IFSUserFilter());
 					assertTrue(false);
-				}catch(PermissionDeniedFault f){
-					
+				} catch (PermissionDeniedFault f) {
+
 				}
 				usr[0].setUserRole(IFSUserRole.Administrator);
-				ifs.updateUser(adminGridId,usr[0]);
-				assertEquals(ucount,ifs.findUsers(usr[0].getGridId(),new IFSUserFilter()).length);
+				ifs.updateUser(adminGridId, usr[0]);
+				assertEquals(ucount, ifs.findUsers(usr[0].getGridId(), new IFSUserFilter()).length);
 			}
-			
+
 			int rcount = ucount;
-			
-			for(int i=0; i<times; i++){
+
+			for (int i = 0; i < times; i++) {
 				String uid = uidPrefix + i;
 				IFSUserFilter f1 = new IFSUserFilter();
 				f1.setIdPId(idp.getIdp().getId());
 				f1.setUID(uid);
-				IFSUser[] usr = ifs.findUsers(adminGridId,f1);
-				assertEquals(1,usr.length);
-				ifs.removeUser(adminGridId,usr[0]);
-				rcount = rcount-1;
-				assertEquals(rcount,ifs.findUsers(adminGridId,new IFSUserFilter()).length);
+				IFSUser[] usr = ifs.findUsers(adminGridId, f1);
+				assertEquals(1, usr.length);
+				ifs.removeUser(adminGridId, usr[0]);
+				rcount = rcount - 1;
+				assertEquals(rcount, ifs.findUsers(adminGridId, new IFSUserFilter()).length);
 			}
-			
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -130,6 +171,7 @@ public class TestIFS extends TestCase {
 		}
 
 	}
+
 
 	public void testCreateProxy() {
 		try {
@@ -141,8 +183,7 @@ public class TestIFS extends TestCase {
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			PublicKey publicKey = pair.getPublic();
 			ProxyLifetime lifetime = getProxyLifetime();
-			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion("user",
-					idp), publicKey, lifetime);
+			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion("user", idp), publicKey, lifetime);
 			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -150,6 +191,7 @@ public class TestIFS extends TestCase {
 		}
 
 	}
+
 
 	public void testCreateProxyAutoApproval() {
 		try {
@@ -158,35 +200,30 @@ public class TestIFS extends TestCase {
 			IFSConfiguration conf = getExpiringCredentialsConf();
 			conf.setInitalTrustedIdP(idp.getIdp());
 			IFS ifs = new IFS(conf, db, ca);
-			String gridId = UserManager.subjectToIdentity(UserManager
-					.getUserSubject(ca.getCACertificate().getSubjectDN()
-							.getName(), idp.getIdp().getId(), conf
-							.getInitialUser().getUID()));
+			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(ca.getCACertificate()
+				.getSubjectDN().getName(), idp.getIdp().getId(), conf.getInitialUser().getUID()));
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
-			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion(
-					username, idp), pair.getPublic(), lifetime);
+			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
 			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
-			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username)
-					.getUserStatus(), IFSUserStatus.Active);
+			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username).getUserStatus(), IFSUserStatus.Active);
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
 			try {
 				KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
 				PublicKey publicKey2 = pair2.getPublic();
-				ifs.createProxy(getSAMLAssertion(username, idp), publicKey2,
-						getProxyLifetimeShort());
+				ifs.createProxy(getSAMLAssertion(username, idp), publicKey2, getProxyLifetimeShort());
 				assertTrue(false);
 			} catch (PermissionDeniedFault fault) {
 
 			}
-			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username)
-					.getUserStatus(), IFSUserStatus.Expired);
+			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username).getUserStatus(), IFSUserStatus.Expired);
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
 	}
+
 
 	public void testCreateProxyManualApproval() {
 		try {
@@ -195,27 +232,24 @@ public class TestIFS extends TestCase {
 			IFSConfiguration conf = getExpiringCredentialsConf();
 			conf.setInitalTrustedIdP(idp.getIdp());
 			IFS ifs = new IFS(conf, db, ca);
-			String gridId = UserManager.subjectToIdentity(UserManager
-					.getUserSubject(ca.getCACertificate().getSubjectDN()
-							.getName(), idp.getIdp().getId(), conf
-							.getInitialUser().getUID()));
+			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(ca.getCACertificate()
+				.getSubjectDN().getName(), idp.getIdp().getId(), conf.getInitialUser().getUID()));
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
 			try {
-				ifs.createProxy(getSAMLAssertion(username, idp), pair
-						.getPublic(), lifetime);
+				ifs.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
 				assertTrue(false);
 			} catch (PermissionDeniedFault fault) {
 
 			}
-			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username)
-					.getUserStatus(), IFSUserStatus.Pending);
+			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username).getUserStatus(), IFSUserStatus.Pending);
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
 	}
+
 
 	public void testCreateProxyAutoApprovalAutoRenewal() {
 		try {
@@ -225,27 +259,20 @@ public class TestIFS extends TestCase {
 			IFSConfiguration conf = getExpiringCredentialsConf();
 			conf.setInitalTrustedIdP(idp.getIdp());
 			IFS ifs = new IFS(conf, db, ca);
-			String gridId = UserManager.subjectToIdentity(UserManager
-					.getUserSubject(ca.getCACertificate().getSubjectDN()
-							.getName(), idp.getIdp().getId(), conf
-							.getInitialUser().getUID()));
+			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(ca.getCACertificate()
+				.getSubjectDN().getName(), idp.getIdp().getId(), conf.getInitialUser().getUID()));
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
-			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion(
-					username, idp), pair.getPublic(), lifetime);
+			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
 			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
-			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username)
-					.getUserStatus(), IFSUserStatus.Active);
-			IFSUser before = ifs
-					.getUser(gridId, idp.getIdp().getId(), username);
+			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username).getUserStatus(), IFSUserStatus.Active);
+			IFSUser before = ifs.getUser(gridId, idp.getIdp().getId(), username);
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
 			KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
 			PublicKey publicKey2 = pair2.getPublic();
-			certs = ifs.createProxy(getSAMLAssertion(username, idp),
-					publicKey2, getProxyLifetimeShort());
+			certs = ifs.createProxy(getSAMLAssertion(username, idp), publicKey2, getProxyLifetimeShort());
 			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
-			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username)
-					.getUserStatus(), IFSUserStatus.Active);
+			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username).getUserStatus(), IFSUserStatus.Active);
 			IFSUser after = ifs.getUser(gridId, idp.getIdp().getId(), username);
 			if (before.getCertificate().equals(after.getCertificate())) {
 				assertTrue(false);
@@ -257,23 +284,20 @@ public class TestIFS extends TestCase {
 		}
 	}
 
+
 	public void testCreateProxyManualApprovalAutoRenewal() {
 		try {
 			String username = "user";
-			IdPContainer idp = this
-					.getTrustedIdpManualApproveAutoRenew("My IdP");
+			IdPContainer idp = this.getTrustedIdpManualApproveAutoRenew("My IdP");
 			IFSConfiguration conf = getExpiringCredentialsConf();
 			conf.setInitalTrustedIdP(idp.getIdp());
 			IFS ifs = new IFS(conf, db, ca);
-			String gridId = UserManager.subjectToIdentity(UserManager
-					.getUserSubject(ca.getCACertificate().getSubjectDN()
-							.getName(), idp.getIdp().getId(), conf
-							.getInitialUser().getUID()));
+			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(ca.getCACertificate()
+				.getSubjectDN().getName(), idp.getIdp().getId(), conf.getInitialUser().getUID()));
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 
 			try {
-				ifs.createProxy(getSAMLAssertion(username, idp), pair
-						.getPublic(), getProxyLifetimeShort());
+				ifs.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort());
 				assertTrue(false);
 			} catch (PermissionDeniedFault f) {
 
@@ -282,22 +306,17 @@ public class TestIFS extends TestCase {
 			usr.setUserStatus(IFSUserStatus.Active);
 			ifs.updateUser(gridId, usr);
 			ProxyLifetime lifetime = getProxyLifetimeShort();
-			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion(
-					username, idp), pair.getPublic(), lifetime);
+			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
 
 			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
-			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username)
-					.getUserStatus(), IFSUserStatus.Active);
-			IFSUser before = ifs
-					.getUser(gridId, idp.getIdp().getId(), username);
+			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username).getUserStatus(), IFSUserStatus.Active);
+			IFSUser before = ifs.getUser(gridId, idp.getIdp().getId(), username);
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
 			KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
 			PublicKey publicKey2 = pair2.getPublic();
-			certs = ifs.createProxy(getSAMLAssertion(username, idp),
-					publicKey2, getProxyLifetimeShort());
+			certs = ifs.createProxy(getSAMLAssertion(username, idp), publicKey2, getProxyLifetimeShort());
 			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
-			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username)
-					.getUserStatus(), IFSUserStatus.Active);
+			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username).getUserStatus(), IFSUserStatus.Active);
 			IFSUser after = ifs.getUser(gridId, idp.getIdp().getId(), username);
 			if (before.getCertificate().equals(after.getCertificate())) {
 				assertTrue(false);
@@ -308,6 +327,7 @@ public class TestIFS extends TestCase {
 			assertTrue(false);
 		}
 	}
+
 
 	public void testCreateProxyInvalidProxyValid() {
 		try {
@@ -323,9 +343,7 @@ public class TestIFS extends TestCase {
 				valid.setSeconds(1);
 				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 				PublicKey publicKey = pair.getPublic();
-				ifs
-						.createProxy(getSAMLAssertion("user", idp), publicKey,
-								valid);
+				ifs.createProxy(getSAMLAssertion("user", idp), publicKey, valid);
 				assertTrue(false);
 			} catch (InvalidProxyFault f) {
 
@@ -336,6 +354,7 @@ public class TestIFS extends TestCase {
 		}
 	}
 
+
 	public void testCreateProxyInvalidAuthenticationMethod() {
 		try {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
@@ -345,8 +364,7 @@ public class TestIFS extends TestCase {
 			try {
 				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 				PublicKey publicKey = pair.getPublic();
-				ifs.createProxy(getSAMLAssertionUnspecifiedMethod("user", idp),
-						publicKey, getProxyLifetime());
+				ifs.createProxy(getSAMLAssertionUnspecifiedMethod("user", idp), publicKey, getProxyLifetime());
 				assertTrue(false);
 			} catch (InvalidAssertionFault f) {
 
@@ -357,11 +375,11 @@ public class TestIFS extends TestCase {
 		}
 	}
 
+
 	public void testCreateProxyUntrustedIdP() {
 		try {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IdPContainer idp2 = this
-					.getTrustedIdpAutoApproveAutoRenew("My IdP 2");
+			IdPContainer idp2 = this.getTrustedIdpAutoApproveAutoRenew("My IdP 2");
 
 			IFSConfiguration conf = getConf();
 			conf.setInitalTrustedIdP(idp.getIdp());
@@ -369,8 +387,7 @@ public class TestIFS extends TestCase {
 			try {
 				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 				PublicKey publicKey = pair.getPublic();
-				ifs.createProxy(getSAMLAssertion("user", idp2), publicKey,
-						getProxyLifetime());
+				ifs.createProxy(getSAMLAssertion("user", idp2), publicKey, getProxyLifetime());
 				assertTrue(false);
 			} catch (InvalidAssertionFault f) {
 
@@ -380,6 +397,7 @@ public class TestIFS extends TestCase {
 			assertTrue(false);
 		}
 	}
+
 
 	public void testCreateProxyExpiredAssertion() {
 		try {
@@ -390,8 +408,7 @@ public class TestIFS extends TestCase {
 			try {
 				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 				PublicKey publicKey = pair.getPublic();
-				ifs.createProxy(getExpiredSAMLAssertion("user", idp),
-						publicKey, getProxyLifetime());
+				ifs.createProxy(getExpiredSAMLAssertion("user", idp), publicKey, getProxyLifetime());
 				assertTrue(false);
 			} catch (InvalidAssertionFault f) {
 
@@ -402,17 +419,15 @@ public class TestIFS extends TestCase {
 		}
 	}
 
+
 	public void testGetTrustedIdPs() {
 		try {
-			IdPContainer idp0 = this
-					.getTrustedIdpAutoApproveAutoRenew("My IdP");
+			IdPContainer idp0 = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
 			IFSConfiguration conf = getExpiringCredentialsConf();
 			conf.setInitalTrustedIdP(idp0.getIdp());
 			IFS ifs = new IFS(conf, db, ca);
-			String gridId = UserManager.subjectToIdentity(UserManager
-					.getUserSubject(ca.getCACertificate().getSubjectDN()
-							.getName(), idp0.getIdp().getId(), conf
-							.getInitialUser().getUID()));
+			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(ca.getCACertificate()
+				.getSubjectDN().getName(), idp0.getIdp().getId(), conf.getInitialUser().getUID()));
 			int times = 5;
 			String baseName = "Test IdP";
 			String baseUpdateName = "Updated IdP";
@@ -452,6 +467,7 @@ public class TestIFS extends TestCase {
 		}
 	}
 
+
 	private IFSConfiguration getConf() throws Exception {
 		IFSConfiguration conf = new IFSConfiguration();
 		conf.setCredentialsValidYears(1);
@@ -465,8 +481,7 @@ public class TestIFS extends TestCase {
 		conf.setMaxProxyLifetimeHours(12);
 		conf.setMaxProxyLifetimeMinutes(0);
 		conf.setMaxProxyLifetimeSeconds(0);
-		TrustedIdP idp = this.getTrustedIdpAutoApproveAutoRenew("Initial IdP")
-				.getIdp();
+		TrustedIdP idp = this.getTrustedIdpAutoApproveAutoRenew("Initial IdP").getIdp();
 		IFSUser usr = new IFSUser();
 		usr.setUID(INITIAL_ADMIN);
 		usr.setEmail(INITIAL_ADMIN + "@test.com");
@@ -476,6 +491,7 @@ public class TestIFS extends TestCase {
 		conf.setInitialUser(usr);
 		return conf;
 	}
+
 
 	private IFSConfiguration getExpiringCredentialsConf() throws Exception {
 		IFSConfiguration conf = new IFSConfiguration();
@@ -490,8 +506,7 @@ public class TestIFS extends TestCase {
 		conf.setMaxProxyLifetimeHours(12);
 		conf.setMaxProxyLifetimeMinutes(0);
 		conf.setMaxProxyLifetimeSeconds(0);
-		TrustedIdP idp = this.getTrustedIdpAutoApproveAutoRenew("Initial IdP")
-				.getIdp();
+		TrustedIdP idp = this.getTrustedIdpAutoApproveAutoRenew("Initial IdP").getIdp();
 		IFSUser usr = new IFSUser();
 		usr.setUID("inital_admin");
 		usr.setEmail("inital_admin@test.com");
@@ -502,37 +517,35 @@ public class TestIFS extends TestCase {
 		return conf;
 	}
 
-	private SAMLAssertion getSAMLAssertion(String id, IdPContainer idp)
-			throws Exception {
+
+	private SAMLAssertion getSAMLAssertion(String id, IdPContainer idp) throws Exception {
 		GregorianCalendar cal = new GregorianCalendar();
 		Date start = cal.getTime();
 		cal.add(Calendar.MINUTE, 2);
 		Date end = cal.getTime();
-		return this.getSAMLAssertion(id, idp, start, end,
-				"urn:oasis:names:tc:SAML:1.0:am:password");
+		return this.getSAMLAssertion(id, idp, start, end, "urn:oasis:names:tc:SAML:1.0:am:password");
 	}
 
-	private SAMLAssertion getSAMLAssertionUnspecifiedMethod(String id,
-			IdPContainer idp) throws Exception {
+
+	private SAMLAssertion getSAMLAssertionUnspecifiedMethod(String id, IdPContainer idp) throws Exception {
 		GregorianCalendar cal = new GregorianCalendar();
 		Date start = cal.getTime();
 		cal.add(Calendar.MINUTE, 2);
 		Date end = cal.getTime();
-		return this.getSAMLAssertion(id, idp, start, end,
-				"urn:oasis:names:tc:SAML:1.0:am:unspecified");
+		return this.getSAMLAssertion(id, idp, start, end, "urn:oasis:names:tc:SAML:1.0:am:unspecified");
 	}
 
-	private SAMLAssertion getExpiredSAMLAssertion(String id, IdPContainer idp)
-			throws Exception {
+
+	private SAMLAssertion getExpiredSAMLAssertion(String id, IdPContainer idp) throws Exception {
 		GregorianCalendar cal = new GregorianCalendar();
 		Date start = cal.getTime();
 		Date end = cal.getTime();
-		return this.getSAMLAssertion(id, idp, start, end,
-				"urn:oasis:names:tc:SAML:1.0:am:password");
+		return this.getSAMLAssertion(id, idp, start, end, "urn:oasis:names:tc:SAML:1.0:am:password");
 	}
 
-	private SAMLAssertion getSAMLAssertion(String id, IdPContainer idp,
-			Date start, Date end, String method) throws Exception {
+
+	private SAMLAssertion getSAMLAssertion(String id, IdPContainer idp, Date start, Date end, String method)
+		throws Exception {
 		try {
 			org.apache.xml.security.Init.init();
 			X509Certificate cert = idp.getCert();
@@ -544,28 +557,24 @@ public class TestIFS extends TestCase {
 			String ipAddress = null;
 			String subjectDNS = null;
 
-			SAMLSubject sub = new SAMLSubject(id, federation,
-					"urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
-					null, null, null);
-			SAMLAuthenticationStatement auth = new SAMLAuthenticationStatement(
-					sub, method, new Date(), ipAddress, subjectDNS, null);
+			SAMLSubject sub = new SAMLSubject(id, federation, "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+				null, null, null);
+			SAMLAuthenticationStatement auth = new SAMLAuthenticationStatement(sub, method, new Date(), ipAddress,
+				subjectDNS, null);
 			QName name = new QName(EMAIL_NAMESPACE, EMAIL_NAME);
 			List vals = new ArrayList();
 			vals.add(email);
-			SAMLAttribute att = new SAMLAttribute(name.getLocalName(), name
-					.getNamespaceURI(), name, (long) 0, vals);
+			SAMLAttribute att = new SAMLAttribute(name.getLocalName(), name.getNamespaceURI(), name, (long) 0, vals);
 
 			List atts = new ArrayList();
 			atts.add(att);
-			SAMLAttributeStatement attState = new SAMLAttributeStatement(sub,
-					atts);
+			SAMLAttributeStatement attState = new SAMLAttributeStatement(sub, atts);
 
 			List l = new ArrayList();
 			l.add(auth);
 			l.add(attState);
 
-			SAMLAssertion saml = new SAMLAssertion(issuer, start, end, null,
-					null, l);
+			SAMLAssertion saml = new SAMLAssertion(issuer, start, end, null, null, l);
 			List a = new ArrayList();
 			a.add(cert);
 			saml.sign(XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA1, key, a, false);
@@ -582,47 +591,45 @@ public class TestIFS extends TestCase {
 		}
 	}
 
-	private IdPContainer getTrustedIdpAutoApproveAutoRenew(String name)
-			throws Exception {
-		return this.getTrustedIdp(name, AutoApprovalAutoRenewalPolicy.class
-				.getName());
+
+	private IdPContainer getTrustedIdpAutoApproveAutoRenew(String name) throws Exception {
+		return this.getTrustedIdp(name, AutoApprovalAutoRenewalPolicy.class.getName());
 	}
+
 
 	private String identityToSubject(String identity) {
 		String s = identity.substring(1);
 		return s.replace('/', ',');
 	}
 
+
 	private IdPContainer getTrustedIdpAutoApprove(String name) throws Exception {
 		return this.getTrustedIdp(name, AutoApprovalPolicy.class.getName());
 	}
 
-	private IdPContainer getTrustedIdpManualApprove(String name)
-			throws Exception {
+
+	private IdPContainer getTrustedIdpManualApprove(String name) throws Exception {
 		return this.getTrustedIdp(name, ManualApprovalPolicy.class.getName());
 	}
 
-	private IdPContainer getTrustedIdpManualApproveAutoRenew(String name)
-			throws Exception {
-		return this.getTrustedIdp(name, ManualApprovalAutoRenewalPolicy.class
-				.getName());
+
+	private IdPContainer getTrustedIdpManualApproveAutoRenew(String name) throws Exception {
+		return this.getTrustedIdp(name, ManualApprovalAutoRenewalPolicy.class.getName());
 	}
 
-	private IdPContainer getTrustedIdp(String name, String policyClass)
-			throws Exception {
+
+	private IdPContainer getTrustedIdp(String name, String policyClass) throws Exception {
 		TrustedIdP idp = new TrustedIdP();
 		idp.setName(name);
 		idp.setPolicyClass(policyClass);
 
 		SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
-		methods[0] = SAMLAuthenticationMethod
-				.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
+		methods[0] = SAMLAuthenticationMethod.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
 		idp.setAuthenticationMethod(methods);
 
 		KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 		String subject = TestUtils.CA_SUBJECT_PREFIX + ",CN=" + name;
-		PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(
-				subject, pair);
+		PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(subject, pair);
 		assertNotNull(req);
 		GregorianCalendar cal = new GregorianCalendar();
 		Date start = cal.getTime();
@@ -634,6 +641,7 @@ public class TestIFS extends TestCase {
 		idp.setIdPCertificate(CertUtil.writeCertificateToString(cert));
 		return new IdPContainer(idp, cert, pair.getPrivate());
 	}
+
 
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -647,6 +655,7 @@ public class TestIFS extends TestCase {
 		}
 	}
 
+
 	protected void tearDown() throws Exception {
 		super.setUp();
 		try {
@@ -658,6 +667,7 @@ public class TestIFS extends TestCase {
 		}
 	}
 
+
 	private ProxyLifetime getProxyLifetimeShort() {
 		ProxyLifetime valid = new ProxyLifetime();
 		valid.setHours(0);
@@ -665,6 +675,7 @@ public class TestIFS extends TestCase {
 		valid.setSeconds(SHORT_PROXY_VALID);
 		return valid;
 	}
+
 
 	private ProxyLifetime getProxyLifetime() {
 		ProxyLifetime valid = new ProxyLifetime();
@@ -674,8 +685,9 @@ public class TestIFS extends TestCase {
 		return valid;
 	}
 
-	private void createAndCheckProxyLifetime(ProxyLifetime lifetime,
-			PrivateKey key, X509Certificate[] certs) throws Exception {
+
+	private void createAndCheckProxyLifetime(ProxyLifetime lifetime, PrivateKey key, X509Certificate[] certs)
+		throws Exception {
 		assertNotNull(certs);
 		assertEquals(2, certs.length);
 		GlobusCredential cred = new GlobusCredential(key, certs);
@@ -686,11 +698,11 @@ public class TestIFS extends TestCase {
 		if ((min > timeLeft) || (timeLeft > max)) {
 			assertTrue(false);
 		}
-		assertEquals(certs[1].getSubjectDN().toString(), identityToSubject(cred
-				.getIdentity()));
+		assertEquals(certs[1].getSubjectDN().toString(), identityToSubject(cred.getIdentity()));
 		assertEquals(cred.getIssuer(), identityToSubject(cred.getIdentity()));
 		cred.verify();
 	}
+
 
 	public class IdPContainer {
 
@@ -700,19 +712,23 @@ public class TestIFS extends TestCase {
 
 		PrivateKey key;
 
+
 		public IdPContainer(TrustedIdP idp, X509Certificate cert, PrivateKey key) {
 			this.idp = idp;
 			this.cert = cert;
 			this.key = key;
 		}
 
+
 		public X509Certificate getCert() {
 			return cert;
 		}
 
+
 		public TrustedIdP getIdp() {
 			return idp;
 		}
+
 
 		public PrivateKey getKey() {
 			return key;

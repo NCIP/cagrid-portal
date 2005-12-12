@@ -38,6 +38,7 @@ import org.opensaml.SAMLAssertion;
 import org.projectmobius.common.MobiusConfigurator;
 import org.projectmobius.common.MobiusResourceManager;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -63,6 +64,7 @@ public class GUMS extends MobiusResourceManager {
 
 	private IFSConfiguration ifsConfiguration;
 
+
 	public GUMS(String confFile, String serviceId) throws GUMSInternalFault {
 		try {
 			this.serviceId = serviceId;
@@ -71,9 +73,8 @@ public class GUMS extends MobiusResourceManager {
 			IdentityProvider.ADMIN_USER_ID = IDP_ADMIN_USER_ID;
 			IdentityProvider.ADMIN_PASSWORD = IDP_ADMIN_PASSWORD;
 
-			this.db = new Database(getGUMSConfiguration()
-					.getConnectionManager(), getGUMSConfiguration()
-					.getGUMSInternalId());
+			this.db = new Database(getGUMSConfiguration().getConnectionManager(), getGUMSConfiguration()
+				.getGUMSInternalId());
 			this.db.createDatabaseIfNeeded();
 			GUMSCertificateAuthorityConf caconf = (GUMSCertificateAuthorityConf) getResource(GUMSCertificateAuthorityConf.RESOURCE);
 			this.ca = new GUMSCertificateAuthority(db, caconf);
@@ -84,13 +85,10 @@ public class GUMS extends MobiusResourceManager {
 			TrustedIdP idp = new TrustedIdP();
 			idp.setName(serviceId);
 			SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
-			methods[0] = SAMLAuthenticationMethod
-					.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
+			methods[0] = SAMLAuthenticationMethod.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
 			idp.setAuthenticationMethod(methods);
 			idp.setPolicyClass(AutoApprovalAutoRenewalPolicy.class.getName());
-			idp.setIdPCertificate(CertUtil
-					.writeCertificateToString(this.identityProvider
-							.getIdPCertificate()));
+			idp.setIdPCertificate(CertUtil.writeCertificateToString(this.identityProvider.getIdPCertificate()));
 
 			IFSUser usr = new IFSUser();
 			usr.setUID(IDP_ADMIN_USER_ID);
@@ -105,24 +103,24 @@ public class GUMS extends MobiusResourceManager {
 
 		} catch (Exception e) {
 			GUMSInternalFault fault = new GUMSInternalFault();
-			fault
-					.setFaultString("An unexpected error occurred in configuring the service.");
+			fault.setFaultString("An unexpected error occurred in configuring the service.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (GUMSInternalFault) helper.getFault();
 			throw fault;
 		}
 	}
+
 
 	public GUMSConfiguration getGUMSConfiguration() {
 		return (GUMSConfiguration) this.getResource(GUMSConfiguration.RESOURCE);
 	}
 
+
 	public Database getDatabase() {
 		return this.db;
 	}
 
-	
 
 	// //////////////////////////////////////////////////////////////////////////////
 	/*
@@ -148,32 +146,30 @@ public class GUMS extends MobiusResourceManager {
 	 * EXISTS
 	 */
 	// //////////////////////////////////////////////////////////////////////////////
-	
 	public X509Certificate getCACertificate() throws GUMSInternalFault {
 		try {
 			return this.ca.getCACertificate();
 		} catch (Exception e) {
 			GUMSInternalFault fault = new GUMSInternalFault();
-			fault
-					.setFaultString("An unexpected error occurred, in obtaining the CA certificate.");
+			fault.setFaultString("An unexpected error occurred, in obtaining the CA certificate.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (GUMSInternalFault) helper.getFault();
 			throw fault;
 		}
 	}
-	
+
+
 	public X509Certificate getIdPCertificate() throws GUMSInternalFault {
 		return identityProvider.getIdPCertificate();
 	}
-	
-	
-	public IdPUser[] findIdPUsers(String gridIdentity, IdPUserFilter filter)
-			throws GUMSInternalFault, PermissionDeniedFault {
+
+
+	public IdPUser[] findIdPUsers(String gridIdentity, IdPUserFilter filter) throws GUMSInternalFault,
+		PermissionDeniedFault {
 		String uid = null;
 		try {
-			uid = ifs.getUserIdVerifyTrustedIdP(identityProvider
-					.getIdPCertificate(), gridIdentity);
+			uid = ifs.getUserIdVerifyTrustedIdP(identityProvider.getIdPCertificate(), gridIdentity);
 		} catch (Exception e) {
 			PermissionDeniedFault fault = new PermissionDeniedFault();
 			fault.setFaultString("Invalid IdP User.");
@@ -182,13 +178,12 @@ public class GUMS extends MobiusResourceManager {
 		return this.identityProvider.findUsers(uid, filter);
 	}
 
-	public void updateIdPUser(String gridIdentity, IdPUser u)
-			throws GUMSInternalFault, PermissionDeniedFault, NoSuchUserFault,
-			InvalidUserPropertyFault {
+
+	public void updateIdPUser(String gridIdentity, IdPUser u) throws GUMSInternalFault, PermissionDeniedFault,
+		NoSuchUserFault, InvalidUserPropertyFault {
 		String uid = null;
 		try {
-			uid = ifs.getUserIdVerifyTrustedIdP(identityProvider
-					.getIdPCertificate(), gridIdentity);
+			uid = ifs.getUserIdVerifyTrustedIdP(identityProvider.getIdPCertificate(), gridIdentity);
 		} catch (Exception e) {
 			PermissionDeniedFault fault = new PermissionDeniedFault();
 			fault.setFaultString("Invalid IdP User.");
@@ -197,12 +192,11 @@ public class GUMS extends MobiusResourceManager {
 		this.identityProvider.updateUser(uid, u);
 	}
 
-	public void removeIdPUser(String gridIdentity, String userId)
-			throws GUMSInternalFault, PermissionDeniedFault {
+
+	public void removeIdPUser(String gridIdentity, String userId) throws GUMSInternalFault, PermissionDeniedFault {
 		String uid = null;
 		try {
-			uid = ifs.getUserIdVerifyTrustedIdP(identityProvider
-					.getIdPCertificate(), gridIdentity);
+			uid = ifs.getUserIdVerifyTrustedIdP(identityProvider.getIdPCertificate(), gridIdentity);
 		} catch (Exception e) {
 			PermissionDeniedFault fault = new PermissionDeniedFault();
 			fault.setFaultString("Invalid IdP User.");
@@ -212,44 +206,52 @@ public class GUMS extends MobiusResourceManager {
 
 	}
 
-	public SAMLAssertion authenticate(BasicAuthCredential credential)
-			throws GUMSInternalFault, PermissionDeniedFault {
+
+	public SAMLAssertion authenticate(BasicAuthCredential credential) throws GUMSInternalFault, PermissionDeniedFault {
 		return this.identityProvider.authenticate(credential);
 	}
 
-	public String registerWithIdP(Application a) throws GUMSInternalFault,
-			InvalidUserPropertyFault {
+
+	public String registerWithIdP(Application a) throws GUMSInternalFault, InvalidUserPropertyFault {
 		return this.identityProvider.register(a);
 	}
 
+
 	/** *************** IFS FUNCTIONS ********************** */
 
-	public X509Certificate[] createProxy(SAMLAssertion saml,
-			PublicKey publicKey, ProxyLifetime lifetime)
-			throws GUMSInternalFault, InvalidAssertionFault, InvalidProxyFault,
-			UserPolicyFault, PermissionDeniedFault {
+	public X509Certificate[] createProxy(SAMLAssertion saml, PublicKey publicKey, ProxyLifetime lifetime)
+		throws GUMSInternalFault, InvalidAssertionFault, InvalidProxyFault, UserPolicyFault, PermissionDeniedFault {
 		return this.ifs.createProxy(saml, publicKey, lifetime);
 	}
 
-	public TrustedIdP[] getTrustedIdPs(String callerGridIdentity)
-			throws GUMSInternalFault, InvalidUserFault, PermissionDeniedFault {
+
+	public TrustedIdP[] getTrustedIdPs(String callerGridIdentity) throws GUMSInternalFault, InvalidUserFault,
+		PermissionDeniedFault {
 		return ifs.getTrustedIdPs(callerGridIdentity);
 	}
 
-	public IFSUser[] findIFSUsers(String callerGridIdentity,
-			IFSUserFilter filter) throws GUMSInternalFault, InvalidUserFault,
-			PermissionDeniedFault {
+
+	public IFSUser[] findIFSUsers(String callerGridIdentity, IFSUserFilter filter) throws GUMSInternalFault,
+		InvalidUserFault, PermissionDeniedFault {
 		return ifs.findUsers(callerGridIdentity, filter);
 	}
 
-	public void updateIFSUser(String callerGridIdentity, IFSUser usr)
-			throws GUMSInternalFault, InvalidUserFault, PermissionDeniedFault {
+
+	public void updateIFSUser(String callerGridIdentity, IFSUser usr) throws GUMSInternalFault, InvalidUserFault,
+		PermissionDeniedFault {
 		ifs.updateUser(callerGridIdentity, usr);
 	}
 
-	public void removeIFSUser(String callerGridIdentity, IFSUser usr)
-			throws GUMSInternalFault, InvalidUserFault, PermissionDeniedFault {
+
+	public void removeIFSUser(String callerGridIdentity, IFSUser usr) throws GUMSInternalFault, InvalidUserFault,
+		PermissionDeniedFault {
 		ifs.removeUser(callerGridIdentity, usr);
+	}
+
+
+	public IFSUser renewIFSUserCredentials(String callerGridIdentity, IFSUser usr) throws GUMSInternalFault, InvalidUserFault,
+		PermissionDeniedFault {
+		return ifs.renewUserCredentials(callerGridIdentity, usr);
 	}
 
 }
