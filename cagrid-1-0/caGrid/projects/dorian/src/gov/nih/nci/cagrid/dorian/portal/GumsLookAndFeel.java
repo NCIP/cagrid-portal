@@ -26,6 +26,11 @@ public class GumsLookAndFeel extends PortalLookAndFeel {
 		return new javax.swing.ImageIcon(GumsLookAndFeel.class
 				.getResource("/Envelope.gif"));
 	}
+	
+	public final static ImageIcon getRenewCredentialsIcon() {
+		return new javax.swing.ImageIcon(GumsLookAndFeel.class
+				.getResource("/EnvelopeOut.gif"));
+	}
 
 	public final static ImageIcon getProxyManagerIcon() {
 		return new javax.swing.ImageIcon(GumsLookAndFeel.class
@@ -56,6 +61,11 @@ public class GumsLookAndFeel extends PortalLookAndFeel {
 	public final static ImageIcon getUsersIcon() {
 		return new javax.swing.ImageIcon(GumsLookAndFeel.class
 				.getResource("/Users.gif"));
+	}
+	
+	public final static ImageIcon getUserIcon() {
+		return new javax.swing.ImageIcon(GumsLookAndFeel.class
+				.getResource("/User.gif"));
 	}
 	
 	public final static ImageIcon getRemoveUserIcon() {

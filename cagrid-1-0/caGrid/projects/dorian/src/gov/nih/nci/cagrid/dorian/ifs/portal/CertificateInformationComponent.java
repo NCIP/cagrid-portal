@@ -17,7 +17,7 @@ import org.projectmobius.portal.GridPortalComponent;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CertificateInformationComponent.java,v 1.3 2005-12-05 17:49:20 langella Exp $
+ * @version $Id: CertificateInformationComponent.java,v 1.4 2005-12-12 16:50:35 langella Exp $
  */
 public class CertificateInformationComponent extends GridPortalComponent {
 
@@ -51,6 +51,10 @@ public class CertificateInformationComponent extends GridPortalComponent {
 		this.cert = cert;
 		initialize();
 	}
+	
+	
+	
+	
 	/**
 	 * This method initializes this
 	 * 
