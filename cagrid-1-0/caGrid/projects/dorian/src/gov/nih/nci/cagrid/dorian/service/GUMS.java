@@ -249,8 +249,8 @@ public class GUMS extends MobiusResourceManager {
 	}
 
 
-	public IFSUser renewIFSUserCredentials(String callerGridIdentity, IFSUser usr) throws GUMSInternalFault, InvalidUserFault,
-		PermissionDeniedFault {
+	public IFSUser renewIFSUserCredentials(String callerGridIdentity, IFSUser usr) throws GUMSInternalFault,
+		InvalidUserFault, PermissionDeniedFault {
 		return ifs.renewUserCredentials(callerGridIdentity, usr);
 	}
 

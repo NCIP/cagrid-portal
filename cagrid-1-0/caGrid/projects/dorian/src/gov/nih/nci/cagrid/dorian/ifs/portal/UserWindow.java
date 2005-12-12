@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
+import gov.nih.nci.cagrid.gums.portal.ProxyCaddy;
 import gov.nih.nci.cagrid.gums.portal.ProxyComboBox;
 import gov.nih.nci.cagrid.security.commstyle.SecureConversationWithEncryption;
 
@@ -35,7 +36,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.3 2005-12-12 16:50:35 langella Exp $
+ * @version $Id: UserWindow.java,v 1.4 2005-12-12 18:17:34 langella Exp $
  */
 public class UserWindow extends GridPortalBaseFrame {
 
@@ -103,7 +104,7 @@ public class UserWindow extends GridPortalBaseFrame {
 
 	private JPanel certificatePanel = null;
 
-	private JPanel jPanel = null;
+	private CertificatePanel credPanel = null;
 
 	private JButton renewCredentials = null;
 
@@ -258,13 +259,33 @@ public class UserWindow extends GridPortalBaseFrame {
 
 		try {
 			String service = getService().getText();
-
+			GlobusCredential c = ((ProxyCaddy) getProxy().getSelectedItem()).getProxy();
 			IFSAdministrationClient client = new IFSAdministrationClient(service, new SecureConversationWithEncryption(
-				cred));
+				c));
 			client.updateUser(user);
 
 			PortalUtils.showMessage("User " + user.getGridId() + " update successfully.");
 
+		} catch (PermissionDeniedFault pdf) {
+			PortalUtils.showErrorMessage(pdf);
+		} catch (Exception e) {
+			e.printStackTrace();
+			PortalUtils.showErrorMessage(e);
+		}
+
+	}
+
+
+	private void renewCredentials() {
+		try {
+			String service = getService().getText();
+			GlobusCredential c = ((ProxyCaddy) getProxy().getSelectedItem()).getProxy();
+			IFSAdministrationClient client = new IFSAdministrationClient(service, new SecureConversationWithEncryption(
+				c));
+			user = client.renewUserCredentials(user);
+			X509Certificate cert = CertUtil.loadCertificateFromString(user.getCertificate().getCertificateAsString());
+			this.getCredPanel().setCertificate(cert);
+			PortalUtils.showMessage("Successfully renewed the credentials for the user " + user.getGridId() + ".");
 		} catch (PermissionDeniedFault pdf) {
 			PortalUtils.showErrorMessage(pdf);
 		} catch (Exception e) {
@@ -603,7 +624,7 @@ public class UserWindow extends GridPortalBaseFrame {
 			gridBagConstraints36.gridx = 0;
 			certificatePanel = new JPanel();
 			certificatePanel.setLayout(new BorderLayout());
-			certificatePanel.add(getJPanel(), java.awt.BorderLayout.NORTH);
+			certificatePanel.add(getCredPanel(), java.awt.BorderLayout.NORTH);
 		}
 		return certificatePanel;
 	}
@@ -614,16 +635,16 @@ public class UserWindow extends GridPortalBaseFrame {
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getJPanel() {
-		if (jPanel == null) {
+	private CertificatePanel getCredPanel() {
+		if (credPanel == null) {
 			try {
-				jPanel = new CertificatePanel(CertUtil.loadCertificateFromString(user.getCertificate()
+				credPanel = new CertificatePanel(CertUtil.loadCertificateFromString(user.getCertificate()
 					.getCertificateAsString()));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		return jPanel;
+		return credPanel;
 	}
 
 
@@ -636,6 +657,11 @@ public class UserWindow extends GridPortalBaseFrame {
 		if (renewCredentials == null) {
 			renewCredentials = new JButton();
 			renewCredentials.setText("Renew Credentials");
+			renewCredentials.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					renewCredentials();
+				}
+			});
 			renewCredentials.setIcon(GumsLookAndFeel.getRenewCredentialsIcon());
 		}
 		return renewCredentials;

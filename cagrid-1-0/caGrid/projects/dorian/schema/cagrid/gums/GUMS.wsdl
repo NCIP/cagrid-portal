@@ -138,6 +138,10 @@
 			<xsd:complexType/>
 	</xsd:element>
 	
+	 <xsd:element name="IFSRenewUserCredentials" type="ifs:IFSUser"/>
+	
+	<xsd:element name="IFSRenewUserCredentialsResponse" type="ifs:IFSUser"/>
+	
 	
 	<xsd:element name="invalidAssertionFault" type="ifs:InvalidAssertionFault"/>
 	<xsd:element name="invalidProxyFault" type="ifs:InvalidProxyFault"/>
@@ -265,6 +269,14 @@
 	<message name="IFSRemoveUserOutputMessage">
 		<part name="parameters" element="tns:IFSRemoveUserResponse"/>
 	</message>
+	
+	<message name="IFSRenewUserCredentialsInputMessage">
+		<part name="parameters" element="tns:IFSRenewUserCredentials"/>
+	</message>
+	
+	<message name="IFSRenewUserCredentialsOutputMessage">
+		<part name="parameters" element="tns:IFSRenewUserCredentialsResponse"/>
+	</message>
 
 	<message name="InvalidAssertionFaultMessage">
 		<part name="fault" element="tns:invalidAssertionFault" />
@@ -372,6 +384,16 @@
 	<operation name="removeIFSUser">
 		<input message="tns:IFSRemoveUserInputMessage"/>
 		<output message="tns:IFSRemoveUserOutputMessage"/>
+		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
+	    <fault message="tns:InvalidUserFaultMessage" name="InvalidUserFault"/>
+	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
+	</operation>
+	
+	
+	
+	<operation name="renewIFSUserCredentials">
+		<input message="tns:IFSRenewUserCredentialsInputMessage"/>
+		<output message="tns:IFSRenewUserCredentialsOutputMessage"/>
 		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
 	    <fault message="tns:InvalidUserFaultMessage" name="InvalidUserFault"/>
 	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>

@@ -27,5 +27,8 @@ public interface IFSAdministration {
 
 	public void removeUser(IFSUser usr) throws GUMSFault,
 			PermissionDeniedFault, InvalidUserFault, GUMSInternalFault;
+	
+	public IFSUser renewUserCredentials(IFSUser usr) throws GUMSFault,
+	PermissionDeniedFault, InvalidUserFault, GUMSInternalFault;
 
 }
