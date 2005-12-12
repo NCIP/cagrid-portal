@@ -4,7 +4,7 @@
    String serviceName = properties.getProperty("introduce.skeleton.service.name");
    String modifiedServiceName = serviceName;
    if(serviceName.endsWith("Service")){
-   	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
+   	modifiedServiceName = serviceName.substring(0,serviceName.length()-"Service".length());
    }
 %>
 package <%=packageName%>.service.globus.resource;
@@ -35,7 +35,6 @@ import org.globus.wsrf.ResourceLifetime;
 import org.globus.wsrf.ResourceProperties;
 import org.globus.wsrf.ResourceProperty;
 import org.globus.wsrf.ResourcePropertySet;
-import org.globus.wsrf.config.ContainerConfig;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.globus.wsrf.impl.ReflectionResourceProperty;
 import org.globus.wsrf.impl.SimpleResourceKey;
