@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.creator;
 
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
 
 import java.io.File;
 import java.util.Properties;
@@ -22,6 +23,19 @@ public class SkeletonCreator extends Task {
 		SkeletonEtcCreator sec = new SkeletonEtcCreator();
 		SkeletonDocsCreator sdc = new SkeletonDocsCreator();
 
+		String service = properties
+				.getProperty("introduce.skeleton.service.name");
+		if (!service.matches("[A-Z]++[A-Za-z0-9\\_\\$]*")) {
+			System.err
+					.println("Service Name can only contain [A-Z]++[A-Za-z0-9\\_\\$]*");
+			return;
+		}
+		if (service.substring(0, 1).toLowerCase().equals(
+				service.substring(0, 1))) {
+			System.err
+					.println("Service Name cannnot start with lower case letters.");
+			return;
+		}
 		// Create the overall skeleton
 		File baseDirectory = new File(properties
 				.getProperty("introduce.skeleton.destination.dir"));

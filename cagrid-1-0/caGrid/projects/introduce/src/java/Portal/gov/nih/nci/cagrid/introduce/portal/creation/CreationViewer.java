@@ -15,7 +15,6 @@ import javax.swing.JTextField;
 
 import org.projectmobius.portal.GridPortalComponent;
 
-
 /**
  * CreationViewer
  * 
@@ -62,7 +61,6 @@ public class CreationViewer extends GridPortalComponent {
 
 	private JButton closeButton = null;
 
-
 	/**
 	 * This method initializes
 	 */
@@ -70,7 +68,6 @@ public class CreationViewer extends GridPortalComponent {
 		super();
 		initialize();
 	}
-
 
 	/**
 	 * This method initializes this
@@ -84,7 +81,6 @@ public class CreationViewer extends GridPortalComponent {
 		this.setTitle("Create Grid Service");
 
 	}
-
 
 	/**
 	 * This method initializes jPanel
@@ -120,9 +116,11 @@ public class CreationViewer extends GridPortalComponent {
 			gridBagConstraints10.gridx = 1;
 			inputPanel = new JPanel();
 			inputPanel.setLayout(new GridBagLayout());
-			inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Create Grid Service",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, AnalyticalLookAndFeel.getPanelLabelColor()));
+			inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+					null, "Create Grid Service",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					AnalyticalLookAndFeel.getPanelLabelColor()));
 			packageLabel = new JLabel();
 			packageLabel.setText("Package");
 			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
@@ -195,7 +193,6 @@ public class CreationViewer extends GridPortalComponent {
 		return inputPanel;
 	}
 
-
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -226,7 +223,6 @@ public class CreationViewer extends GridPortalComponent {
 		return mainPanel;
 	}
 
-
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -240,7 +236,6 @@ public class CreationViewer extends GridPortalComponent {
 		}
 		return buttonPanel;
 	}
-
 
 	/**
 	 * This method initializes jButton
@@ -256,8 +251,28 @@ public class CreationViewer extends GridPortalComponent {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 
 					try {
-						String cmd = CommonTools.getAntSkeletonCreationCommand(".", service.getText(), dir.getText(),
-							servicePackage.getText(), namespaceDomain.getText());
+						if (service.getText().length() > 0) {
+							if(!service.getText().matches("[A-Z]++[A-Za-z0-9\\_\\$]*")){
+								PortalUtils
+								.showMessage("Service Name can only contain [A-Z]++[A-Za-z0-9\\_\\$]*");
+								return;
+							}
+							if (service.getText().substring(0, 1).toLowerCase()
+									.equals(service.getText().substring(0, 1))) {
+								PortalUtils
+										.showMessage("Service Name cannnot start with lower case letters.");
+								return;
+							} 
+						} else {
+							PortalUtils
+							.showMessage("Service Name cannot be empty.");
+							return;
+						}
+						
+						String cmd = CommonTools.getAntSkeletonCreationCommand(
+								".", service.getText(), dir.getText(),
+								servicePackage.getText(), namespaceDomain
+										.getText());
 						Process p = CommonTools.createAndOutputProcess(cmd);
 						p.waitFor();
 						cmd = CommonTools.getAntAllCommand(dir.getText());
@@ -275,7 +290,6 @@ public class CreationViewer extends GridPortalComponent {
 		return createButton;
 	}
 
-
 	/**
 	 * This method initializes service
 	 * 
@@ -289,7 +303,6 @@ public class CreationViewer extends GridPortalComponent {
 		return service;
 	}
 
-
 	/**
 	 * This method initializes jTextField
 	 * 
@@ -302,7 +315,6 @@ public class CreationViewer extends GridPortalComponent {
 		}
 		return dir;
 	}
-
 
 	/**
 	 * This method initializes jButton
@@ -322,7 +334,6 @@ public class CreationViewer extends GridPortalComponent {
 		return dirButton;
 	}
 
-
 	/**
 	 * This method initializes servicePackage
 	 * 
@@ -331,11 +342,11 @@ public class CreationViewer extends GridPortalComponent {
 	private JTextField getServicePackage() {
 		if (servicePackage == null) {
 			servicePackage = new JTextField();
-			servicePackage.setText((DEFAULT_JAVA_PACKAGE + "." + DEFAULT_NAME).toLowerCase());
+			servicePackage.setText((DEFAULT_JAVA_PACKAGE + "." + DEFAULT_NAME)
+					.toLowerCase());
 		}
 		return servicePackage;
 	}
-
 
 	/**
 	 * This method initializes namespaceDomain
@@ -350,7 +361,6 @@ public class CreationViewer extends GridPortalComponent {
 		return namespaceDomain;
 	}
 
-
 	private void promptDir() {
 		JFileChooser chooser = new JFileChooser();
 		chooser.setDialogTitle("Select Attribute File");
@@ -362,7 +372,6 @@ public class CreationViewer extends GridPortalComponent {
 			this.dir.setText(chooser.getSelectedFile().getAbsolutePath());
 		}
 	}
-
 
 	/**
 	 * This method initializes closeButton
@@ -382,7 +391,6 @@ public class CreationViewer extends GridPortalComponent {
 		}
 		return closeButton;
 	}
-
 
 	public static void main(String[] args) {
 		System.out.println();
