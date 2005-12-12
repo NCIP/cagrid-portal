@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.portal.modification;
 
 import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.introduce.Archive;
 import gov.nih.nci.cagrid.introduce.SyncTools;
 import gov.nih.nci.cagrid.introduce.portal.AnalyticalLookAndFeel;
 
@@ -10,6 +11,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
@@ -37,31 +39,48 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.10 2005-12-12 19:34:41 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.11 2005-12-12 21:33:08 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
 	private javax.swing.JPanel jContentPane = null;
+
 	private JPanel mainPanel = null;
+
 	private JPanel contentPanel = null;
+
 	private JPanel buttonPanel = null;
+
 	private JButton cancel = null;
+
 	private JPanel selectPanel = null;
+
 	private MethodsTable methodsTable = null;
+
 	private JScrollPane jScrollPane = null;
+
 	private File methodsDirectory = null;
+
 	private Document methodsDocument = null;
+
 	private Properties serviceProperties = null;
+
 	private JButton addMethodButton = null;
+
 	private JButton saveButton = null;
+
 	private JComponent me;
 
 	private static File defaultMethodsDir = new File(System
 			.getProperty("user.dir"));
 
 	private JButton removeButton = null;
+
 	private JButton modifyButton = null; // @jve:decl-index=0:
+
 	private JPanel contentButtonPanel = null;
+
+	private JButton undoButton = null;
 
 	/**
 	 * This is the default constructor
@@ -72,16 +91,69 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		chooseService();
 		initialize();
 	}
-	
+
 	public ModificationViewer(File methodsDirectory) {
 		super();
 		this.me = this;
 		this.methodsDirectory = methodsDirectory;
 		initialize();
 	}
-	
-	
-	private void chooseService(){
+
+	private void loadServiceProps() {
+		try {
+			serviceProperties = new Properties();
+			serviceProperties.load(new FileInputStream(this.methodsDirectory
+					.getAbsolutePath()
+					+ File.separator + "introduce.properties"));
+			serviceProperties.setProperty("introduce.skeleton.destination.dir",
+					methodsDirectory.getAbsolutePath());
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		JLabel label = new JLabel();
+		Font f1 = label.getFont();
+		f1 = f1.deriveFont(f1.getStyle() ^ Font.BOLD);
+		JTextField field = new JTextField();
+		Font f2 = field.getFont();
+		f2 = f2.deriveFont(f2.getStyle() ^ Font.ITALIC);
+
+		this.addTextField(this.getSelectPanel(), "Timestamp", serviceProperties
+				.getProperty("introduce.skeleton.timestamp"), 1, false);
+		this.getLabel("Timestamp").setFont(f1);
+		this.getTextField("Timestamp").setFont(f2);
+		this.addTextField(this.getSelectPanel(), "Service Name",
+				serviceProperties
+						.getProperty("introduce.skeleton.service.name"), 2,
+				false);
+		this.getLabel("Service Name").setFont(f1);
+		this.getTextField("Service Name").setFont(f2);
+
+		this.addTextField(this.getSelectPanel(), "Destination Dir",
+				methodsDirectory.getAbsolutePath(), 3, false);
+		this.getLabel("Destination Dir").setFont(f1);
+		this.getTextField("Destination Dir").setFont(f2);
+		this.addTextField(this.getSelectPanel(), "Package", serviceProperties
+				.getProperty("introduce.skeleton.package"), 4, false);
+		this.getLabel("Package").setFont(f1);
+		this.getTextField("Package").setFont(f2);
+		this
+				.addTextField(this.getSelectPanel(), "Package Dir",
+						serviceProperties
+								.getProperty("introduce.skeleton.package.dir"),
+						5, false);
+		this.getLabel("Package Dir").setFont(f1);
+		this.getTextField("Package Dir").setFont(f2);
+		this.addTextField(this.getSelectPanel(), "Namespace Domain",
+				serviceProperties
+						.getProperty("introduce.skeleton.namespace.domain"), 6,
+				false);
+		this.getLabel("Namespace Domain").setFont(f1);
+		this.getTextField("Namespace Domain").setFont(f2);
+	}
+
+	private void chooseService() {
 		JFileChooser chooser = new JFileChooser(defaultMethodsDir);
 		chooser.setDialogTitle("Select Service Skeleton Directory");
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
@@ -109,53 +181,9 @@ public class ModificationViewer extends GridPortalBaseFrame {
 				methodsDocument = builder.build(this.methodsDirectory
 						.getAbsolutePath()
 						+ File.separator + "introduceMethods.xml");
-				serviceProperties = new Properties();
-				serviceProperties.load(new FileInputStream(
-						this.methodsDirectory.getAbsolutePath()
-								+ File.separator + "introduce.properties"));
-				
-				JLabel label = new JLabel();
-				Font f1 = label.getFont();
-				f1 = f1.deriveFont(f1.getStyle() ^ Font.BOLD);
-				JTextField field = new JTextField();
-				Font f2 = field.getFont();
-				f2 = f2.deriveFont(f2.getStyle() ^ Font.ITALIC);
-				
-				this
-						.addTextField(
-								this.getSelectPanel(),
-								"Service Name",
-								serviceProperties
-										.getProperty("introduce.skeleton.service.name"),
-								1, false);
-				this.getLabel("Service Name").setFont(f1);
-				this.getTextField("Service Name").setFont(f2);
-				
-				this.addTextField(this.getSelectPanel(), "Destination Dir",
-						methodsDirectory.getAbsolutePath(), 2, false);
-				this.getLabel("Destination Dir").setFont(f1);
-				this.getTextField("Destination Dir").setFont(f2);
-				this.addTextField(this.getSelectPanel(), "Package",
-						serviceProperties
-								.getProperty("introduce.skeleton.package"), 4,
-						false);
-				this.getLabel("Package").setFont(f1);
-				this.getTextField("Package").setFont(f2);
-				this.addTextField(this.getSelectPanel(), "Package Dir",
-						serviceProperties
-								.getProperty("introduce.skeleton.package.dir"),
-						5, false);
-				this.getLabel("Package Dir").setFont(f1);
-				this.getTextField("Package Dir").setFont(f2);
-				this
-						.addTextField(
-								this.getSelectPanel(),
-								"Namespace Domain",
-								serviceProperties
-										.getProperty("introduce.skeleton.namespace.domain"),
-								6, false);
-				this.getLabel("Namespace Domain").setFont(f1);
-				this.getTextField("Namespace Domain").setFont(f2);
+
+				loadServiceProps();
+
 				// this.getServiceName().setText(serviceProperties.getProperty("introduce.skeleton.service.name"));
 				// this.getServiceName().setEnabled(false);
 			} catch (JDOMException e1) {
@@ -267,6 +295,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
+			buttonPanel.add(getUndoButton(), null);
 			buttonPanel.add(getSaveButton(), null);
 			buttonPanel.add(getCancel(), null);
 		}
@@ -407,12 +436,15 @@ public class ModificationViewer extends GridPortalBaseFrame {
 							// call the sync tools
 							SyncTools sync = new SyncTools(methodsDirectory);
 							sync.sync();
-							String cmd = CommonTools.getAntCommand("clean all",methodsDirectory.getAbsolutePath());
+							String cmd = CommonTools.getAntCommand("clean all",
+									methodsDirectory.getAbsolutePath());
 							Process p = CommonTools.createAndOutputProcess(cmd);
 							p.waitFor();
-							cmd = CommonTools.getAntAllCommand(methodsDirectory.getAbsolutePath());
+							cmd = CommonTools.getAntAllCommand(methodsDirectory
+									.getAbsolutePath());
 							p = CommonTools.createAndOutputProcess(cmd);
 							p.waitFor();
+							loadServiceProps();
 						}
 					} catch (Exception e1) {
 						e1.printStackTrace();
@@ -520,5 +552,42 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			contentButtonPanel.add(getRemoveButton(), null);
 		}
 		return contentButtonPanel;
+	}
+
+	/**
+	 * This method initializes undoButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getUndoButton() {
+		if (undoButton == null) {
+			undoButton = new JButton(AnalyticalLookAndFeel.getUndoIcon());
+			undoButton.setText("Undo");
+			undoButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					System.out
+							.println("Loading in last known save for this project");
+					try {
+						Archive
+								.restoreLatest(
+										serviceProperties
+												.getProperty("introduce.skeleton.timestamp"),
+										serviceProperties
+												.getProperty("introduce.skeleton.service.name"),
+										serviceProperties
+												.getProperty("introduce.skeleton.destination.dir"));
+						dispose();
+						PortalResourceManager
+								.getInstance()
+								.getGridPortal()
+								.addGridPortalComponent(
+										new ModificationViewer(methodsDirectory));
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+			});
+		}
+		return undoButton;
 	}
 } // @jve:decl-index=0:visual-constraint="6,9"

@@ -65,7 +65,6 @@
 		<!-- create the propertites files for this project-->
 		<propertyfile file="${introduce.skeleton.destination.dir}/introduce.properties" comment="Service introdue properties">
 			<entry key="introduce.skeleton.service.name" value="${introduce.skeleton.service.name}" />
-			<entry key="introduce.skeleton.destination.dir" value="${introduce.skeleton.destination.dir}" />
 			<entry key="introduce.skeleton.timestamp" value="0" />
 			<entry key="introduce.skeleton.package" value="${introduce.skeleton.package}" />
 			<entry key="introduce.skeleton.package.dir" value="${introduce.skeleton.package.dir}" />
@@ -81,7 +80,6 @@
 		</propertyfile>
 
 	</target>
-
 
 	<target name="serviceCopySchemaFiles" depends="prepareSkeleton">
 		<concat destfile="${introduce.skeleton.destination.dir}/namespace2package.mappings" append="yes">

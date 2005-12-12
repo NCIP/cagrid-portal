@@ -112,7 +112,7 @@ public class Archive {
 		out.close();
 	}
 
-	public static synchronized void restoreLatest(String serviceName,
+	public static synchronized void restoreLatest(String currentId, String serviceName,
 			String baseDir) throws Exception {
 
 		String userHome = System.getProperty("user.home");
@@ -125,6 +125,7 @@ public class Archive {
 		introduceCache.mkdir();
 
 		String[] cacheFiles = introduceCache.list();
+		long thisTime = Long.parseLong(currentId);
 		long lastTime = 0;
 		for (int i = 0; i < cacheFiles.length; i++) {
 			StringTokenizer strtok = new StringTokenizer(cacheFiles[i], "_",
@@ -132,7 +133,7 @@ public class Archive {
 			strtok.nextToken();
 			String timeS = strtok.nextToken();
 			long time = Long.parseLong(timeS);
-			if (time > lastTime) {
+			if (time > lastTime && time < thisTime) {
 				lastTime = time;
 			}
 		}
@@ -160,7 +161,7 @@ public class Archive {
 
 			Thread.sleep(5000);
 
-			Archive.restoreLatest("HelloWorld", "c:\\HelloWorld");
+			//Archive.restoreLatest("HelloWorld", "c:\\HelloWorld");
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
