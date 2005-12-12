@@ -21,14 +21,19 @@ import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
 import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
 import gov.nih.nci.cagrid.gums.idp.bean.StateCode;
 import gov.nih.nci.cagrid.gums.ifs.AutoApprovalAutoRenewalPolicy;
+import gov.nih.nci.cagrid.gums.ifs.AutoApprovalPolicy;
 import gov.nih.nci.cagrid.gums.ifs.IFS;
 import gov.nih.nci.cagrid.gums.ifs.IFSConfiguration;
 import gov.nih.nci.cagrid.gums.ifs.IFSUtils;
+import gov.nih.nci.cagrid.gums.ifs.ManualApprovalAutoRenewalPolicy;
 import gov.nih.nci.cagrid.gums.ifs.UserManager;
 import gov.nih.nci.cagrid.gums.ifs.TestIFS.IdPContainer;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserRole;
+import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
+import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
+import gov.nih.nci.cagrid.gums.ifs.bean.InvalidProxyFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.gums.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
@@ -70,12 +75,6 @@ public class TestGUMS extends TestCase{
 	public static String RESOURCES_DIR = "resources" + File.separator
 	+ "general-test";
 	
-	public final static String INITIAL_ADMIN = "gums";
-	
-	public final static String EMAIL_NAMESPACE = "http://cagrid.nci.nih.gov/email";
-
-	public final static String EMAIL_NAME = "email";
-	
 	private static final int SHORT_PROXY_VALID = 2;
 	
 	private int count = 0;
@@ -115,8 +114,8 @@ public class TestGUMS extends TestCase{
     }
  
     /** *************** IdP TEST FUNCTIONS ********************** */
-    
-    public void testMultipleIdPUsers(){
+   
+    public void testRegisterWithIdP(){
     	try{
     		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
     		assertNotNull(jm.getGUMSConfiguration());
@@ -125,53 +124,58 @@ public class TestGUMS extends TestCase{
     		//get the gridId
 			String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,GUMS.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
-			
-			
-    		for (int i = 0; i < 10; i++) {
-				Application a = createApplication();
-				jm.registerWithIdP(a);
-				
-				IdPUserFilter uf = new IdPUserFilter();
-				uf.setUserId(a.getUserId());
-		
-				IdPUser[] users = jm.findIdPUsers(gridId, uf);
-				assertEquals(1, users.length);
-				assertEquals(IdPUserStatus.Pending, users[0].getStatus());
-				assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
-				users[0].setStatus(IdPUserStatus.Active);
-				jm.updateIdPUser(gridId, users[0]);
-				users = jm.findIdPUsers(gridId, uf);
-				assertEquals(1, users.length);
-				assertEquals(IdPUserStatus.Active, users[0].getStatus());
-				uf.setUserId("user");
-				users = jm.findIdPUsers(gridId, uf);
-				assertEquals(i + 1, users.length);
+			//create an application and register
+			Application a = createApplication();
+			jm.registerWithIdP(a);	
+			IdPUserFilter uf = new IdPUserFilter();
+			uf.setUserId(a.getUserId());
+			IdPUser[] users = jm.findIdPUsers(gridId, uf);
+			assertEquals(1, users.length);
+			assertEquals(IdPUserStatus.Pending, users[0].getStatus());
+			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+			//try to authenticate the IdPUser that has a pending status
+			try{
 				BasicAuthCredential auth = new BasicAuthCredential();
 				auth.setUserId(a.getUserId());
 				auth.setPassword(a.getPassword());
 				org.opensaml.SAMLAssertion saml = jm.authenticate(auth);
-				assertNotNull(saml);
-				this.verifySAMLAssertion(saml,jm.getIdPCertificate(),a);
-    		}
-    		
-    		IdPUserFilter uf = new IdPUserFilter();
-			IdPUser[] users = jm.findIdPUsers(gridId, uf);
-			assertEquals(11, users.length);
-			for (int i = 0; i < 10; i++) {
-				IdPUserFilter f = new IdPUserFilter();
-				f.setUserId(users[i].getUserId());
-				IdPUser[] us = jm.findIdPUsers(gridId, f);
-				assertEquals(1, us.length);
-				us[0].setFirstName("NEW NAME");
-				jm.updateIdPUser(gridId, us[0]);
-				IdPUser[] us2 = jm.findIdPUsers(gridId, f);
-				assertEquals(1, us2.length);
-				assertEquals(us[0], us2[0]);
-				jm.removeIdPUser(gridId, users[i].getUserId());
-				us = jm.findIdPUsers(gridId, f);
-				assertEquals(0, us.length);
+				assertTrue(false);
+			}catch (PermissionDeniedFault pdf){
 			}
+			
+			users[0].setStatus(IdPUserStatus.Active);
+			jm.updateIdPUser(gridId, users[0]);
 			users = jm.findIdPUsers(gridId, uf);
+			assertEquals(1, users.length);
+			assertEquals(IdPUserStatus.Active, users[0].getStatus());
+			uf.setUserId("user");
+			users = jm.findIdPUsers(gridId, uf);
+			assertEquals(1, users.length);
+			BasicAuthCredential auth = new BasicAuthCredential();
+			auth.setUserId(a.getUserId());
+			auth.setPassword(a.getPassword());
+			org.opensaml.SAMLAssertion saml = jm.authenticate(auth);
+			assertNotNull(saml);
+			this.verifySAMLAssertion(saml,jm.getIdPCertificate(),a);
+    		
+			IdPUserFilter uf2 = new IdPUserFilter();
+			users = jm.findIdPUsers(gridId, uf2);
+			assertEquals(2, users.length);
+			
+			IdPUserFilter f = new IdPUserFilter();
+			f.setUserId(users[0].getUserId());
+			IdPUser[] us = jm.findIdPUsers(gridId, f);
+			assertEquals(1, us.length);
+			us[0].setFirstName("NEW NAME");
+			jm.updateIdPUser(gridId, us[0]);
+			IdPUser[] us2 = jm.findIdPUsers(gridId, f);
+			assertEquals(1, us2.length);
+			assertEquals(us[0], us2[0]);
+			jm.removeIdPUser(gridId, users[0].getUserId());
+			us = jm.findIdPUsers(gridId, f);
+			assertEquals(0, us.length);
+			
+			users = jm.findIdPUsers(gridId, uf2);
 			assertEquals(1, users.length);
     		
     		assertEquals(0,jm.getDatabase().getUsedConnectionCount());
@@ -215,7 +219,6 @@ public class TestGUMS extends TestCase{
 			assertTrue(false);
 		}
     }
-    
     public void testInvalidIdpUserIdTooLong(){
     	try{
     		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
@@ -318,98 +321,18 @@ public class TestGUMS extends TestCase{
     
     /** *************** IFS TEST FUNCTIONS ********************** */
     
-    public void testFindRemoveUpdateUsers() {
-		try {
-			GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
-    		assertNotNull(jm.getGUMSConfiguration());
-    		assertNotNull(jm.getDatabase());
-    		
-    		
-			int times = 5;
-			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IFSConfiguration conf = (IFSConfiguration)jm.getResource(IFSConfiguration.RESOURCE);
-			conf.setInitalTrustedIdP(idp.getIdp());
-			IFS ifs = new IFS(conf, jm.getDatabase(), ca);
-			String uidPrefix = "user";
-			
-			String adminSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,GUMS.IDP_ADMIN_USER_ID);
-			String adminGridId = UserManager.subjectToIdentity(adminSubject);
-			ifs.addTrustedIdP(adminGridId, idp.getIdp());
-			int ucount = 1;
-			for (int i = 0; i < times; i++) {
-				String uid = uidPrefix + i;
-				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-				PublicKey publicKey = pair.getPublic();
-				ProxyLifetime lifetime = getProxyLifetime();
-				X509Certificate[] certs = jm.createProxy(getSAMLAssertion(uid,
-						idp), publicKey, lifetime);
-				createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
-				ucount = ucount+1;		
-				assertEquals(ucount, jm.findIFSUsers(adminGridId,
-						new IFSUserFilter()).length);
-				IFSUserFilter f1 = new IFSUserFilter();
-				f1.setIdPId(idp.getIdp().getId());
-				f1.setUID(uid);
-				IFSUser[] usr = jm.findIFSUsers(adminGridId,f1);
-				assertEquals(1,usr.length);
-				
-				try{
-					jm.findIFSUsers(usr[0].getGridId(),new IFSUserFilter());
-					assertTrue(false);
-				}catch(PermissionDeniedFault f){
-					
-				}
-				usr[0].setUserRole(IFSUserRole.Administrator);
-				jm.updateIFSUser(adminGridId,usr[0]);
-				assertEquals(ucount,jm.findIFSUsers(usr[0].getGridId(),new IFSUserFilter()).length);
-			}
-			
-			int rcount = ucount;
-			
-			for(int i=0; i<times; i++){
-				String uid = uidPrefix + i;
-				IFSUserFilter f1 = new IFSUserFilter();
-				f1.setIdPId(idp.getIdp().getId());
-				f1.setUID(uid);
-				IFSUser[] usr = jm.findIFSUsers(adminGridId,f1);
-				assertEquals(1,usr.length);
-				jm.removeIFSUser(adminGridId,usr[0]);
-				rcount = rcount-1;
-				assertEquals(rcount,jm.findIFSUsers(adminGridId,new IFSUserFilter()).length);
-			}
-			
-			assertEquals(0,jm.getDatabase().getUsedConnectionCount());
-    		jm.getDatabase().destroyDatabase();
-    		
-		} catch (Exception e) {
-			FaultUtil.printFault(e);
-			assertTrue(false);
-		}
-
-	}
-    
     public void testCreateProxy() {
 		try {
 			GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
-    		assertNotNull(jm.getGUMSConfiguration());
-    		assertNotNull(jm.getDatabase());
-    		
-			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IFSConfiguration conf = (IFSConfiguration)jm.getResource(IFSConfiguration.RESOURCE);
-			conf.setInitalTrustedIdP(idp.getIdp());
-			IFS ifs = new IFS(conf, jm.getDatabase(), ca);
-			
-			String adminSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,GUMS.IDP_ADMIN_USER_ID);
-			String adminGridId = UserManager.subjectToIdentity(adminSubject);
-			ifs.addTrustedIdP(adminGridId, idp.getIdp());
-			
+			BasicAuthCredential auth = new BasicAuthCredential();
+			auth.setUserId(GUMS.IDP_ADMIN_USER_ID);
+			auth.setPassword(GUMS.IDP_ADMIN_PASSWORD);
+			SAMLAssertion saml = jm.authenticate(auth);
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			PublicKey publicKey = pair.getPublic();
 			ProxyLifetime lifetime = getProxyLifetime();
-			X509Certificate[] certs = jm.createProxy(getSAMLAssertion("user",
-					idp), publicKey, lifetime);
+			X509Certificate[] certs = jm.createProxy(saml, publicKey, lifetime);
 			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
-			
 			assertEquals(0,jm.getDatabase().getUsedConnectionCount());
     		jm.getDatabase().destroyDatabase();
     		
@@ -419,8 +342,7 @@ public class TestGUMS extends TestCase{
 		}
 
 	}
-    
-    
+ 
     /** *************** HELPER FUNCTIONS ********************** */
     
     public void verifySAMLAssertion(SAMLAssertion saml, X509Certificate idpCert,
@@ -477,67 +399,6 @@ public class TestGUMS extends TestCase{
 		assertEquals(2, count);
 		assertTrue(authFound);
 		assertTrue(emailFound);
-	}
-    
-    private SAMLAssertion getSAMLAssertion(String id, IdPContainer idp)
-		throws Exception {
-    	GregorianCalendar cal = new GregorianCalendar();
-    	Date start = cal.getTime();
-    	cal.add(Calendar.MINUTE, 2);
-    	Date end = cal.getTime();
-    	return this.getSAMLAssertion(id, idp, start, end,
-			"urn:oasis:names:tc:SAML:1.0:am:password");
-    }
-    
-    private SAMLAssertion getSAMLAssertion(String id, IdPContainer idp,
-			Date start, Date end, String method) throws Exception {
-		try {
-			org.apache.xml.security.Init.init();
-			X509Certificate cert = idp.getCert();
-			PrivateKey key = idp.getKey();
-			String email = id + "@test.com";
-
-			String issuer = cert.getSubjectDN().toString();
-			String federation = cert.getSubjectDN().toString();
-			String ipAddress = null;
-			String subjectDNS = null;
-
-			SAMLSubject sub = new SAMLSubject(id, federation,
-					"urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
-					null, null, null);
-			SAMLAuthenticationStatement auth = new SAMLAuthenticationStatement(
-					sub, method, new Date(), ipAddress, subjectDNS, null);
-			QName name = new QName(EMAIL_NAMESPACE, EMAIL_NAME);
-			List vals = new ArrayList();
-			vals.add(email);
-			SAMLAttribute att = new SAMLAttribute(name.getLocalName(), name
-					.getNamespaceURI(), name, (long) 0, vals);
-
-			List atts = new ArrayList();
-			atts.add(att);
-			SAMLAttributeStatement attState = new SAMLAttributeStatement(sub,
-					atts);
-
-			List l = new ArrayList();
-			l.add(auth);
-			l.add(attState);
-
-			SAMLAssertion saml = new SAMLAssertion(issuer, start, end, null,
-					null, l);
-			List a = new ArrayList();
-			a.add(cert);
-			saml.sign(XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA1, key, a, false);
-
-			return saml;
-		} catch (Exception e) {
-			GUMSInternalFault fault = new GUMSInternalFault();
-			fault.setFaultString("Error creating SAML Assertion.");
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
-			throw fault;
-
-		}
 	}
     
     private Application createApplication() {
@@ -639,46 +500,6 @@ public class TestGUMS extends TestCase{
 		String s = identity.substring(1);
 		return s.replace('/', ',');
 	}
-    
-    private IdPContainer getTrustedIdp(String name, String policyClass)
-    throws Exception {
-    	TrustedIdP idp = new TrustedIdP();
-    	idp.setName(name);
-    	idp.setPolicyClass(policyClass);
-
-    	SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
-    	methods[0] = SAMLAuthenticationMethod
-								.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
-    	idp.setAuthenticationMethod(methods);
-
-    	KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-    	String subject = TestUtils.CA_SUBJECT_PREFIX + ",CN=" + name;
-    	PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(subject, pair);
-    	assertNotNull(req);
-    	GregorianCalendar cal = new GregorianCalendar();
-    	Date start = cal.getTime();
-    	cal.add(Calendar.MONTH, 10);
-    	Date end = cal.getTime();
-    	X509Certificate cert = ca.requestCertificate(req, start, end);
-    	assertNotNull(cert);
-    	assertEquals(cert.getSubjectDN().getName(), subject);
-    	idp.setIdPCertificate(CertUtil.writeCertificateToString(cert));
-    	return new IdPContainer(idp, cert, pair.getPrivate());
-    }
-    
-    private IdPContainer getTrustedIdpAutoApproveAutoRenew(String name)
-	throws Exception {
-    	return this.getTrustedIdp(name, AutoApprovalAutoRenewalPolicy.class
-		.getName());
-    }
-    
-    private ProxyLifetime getProxyLifetimeShort() {
-		ProxyLifetime valid = new ProxyLifetime();
-		valid.setHours(0);
-		valid.setMinutes(0);
-		valid.setSeconds(SHORT_PROXY_VALID);
-		return valid;
-	}
 
 	private ProxyLifetime getProxyLifetime() {
 		ProxyLifetime valid = new ProxyLifetime();
@@ -706,33 +527,6 @@ public class TestGUMS extends TestCase{
 		cred.verify();
 	}
 
-	public class IdPContainer {
-
-		TrustedIdP idp;
-
-		X509Certificate cert;
-
-		PrivateKey key;
-
-		public IdPContainer(TrustedIdP idp, X509Certificate cert, PrivateKey key) {
-			this.idp = idp;
-			this.cert = cert;
-			this.key = key;
-		}
-
-		public X509Certificate getCert() {
-			return cert;
-		}
-
-		public TrustedIdP getIdp() {
-			return idp;
-		}
-
-		public PrivateKey getKey() {
-			return key;
-		}
-	}
-	
    protected void setUp() throws Exception {
 		super.setUp();
 		try {
