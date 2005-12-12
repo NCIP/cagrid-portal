@@ -18,6 +18,7 @@ import gov.nih.nci.cagrid.gums.ifs.bean.InvalidTrustedIdPFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidUserFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
+import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdPStatus;
 import gov.nih.nci.cagrid.gums.ifs.bean.UserPolicyFault;
 
 import java.security.PrivateKey;
@@ -184,6 +185,14 @@ public class IFS extends GUMSObject {
 
 		// Make sure the assertion is trusted
 		TrustedIdP idp = tm.getTrustedIdP(saml);
+		
+		//Verfiy the the idp is ACTIVE
+		
+		if(!idp.getStatus().equals(TrustedIdPStatus.Active)){
+			PermissionDeniedFault fault = new PermissionDeniedFault();
+			fault.setFaultString("The Trusted IdP is NOT Active!!!");
+			throw fault;
+		}
 
 		SAMLAuthenticationStatement auth = getAuthenticationStatement(saml);
 
@@ -366,12 +375,12 @@ public class IFS extends GUMSObject {
 
 			} else if (usr.getUserStatus().equals(IFSUserStatus.Rejected)) {
 				PermissionDeniedFault fault = new PermissionDeniedFault();
-				fault.setFaultString("The application for the account was rejected.");
+				fault.setFaultString("The request for an account was rejected.");
 				throw fault;
 
 			} else if (usr.getUserStatus().equals(IFSUserStatus.Pending)) {
 				PermissionDeniedFault fault = new PermissionDeniedFault();
-				fault.setFaultString("The application for this account has not yet been reviewed.");
+				fault.setFaultString("The request for an account has not been reviewed.");
 				throw fault;
 			} else if (usr.getUserStatus().equals(IFSUserStatus.Expired)) {
 				PermissionDeniedFault fault = new PermissionDeniedFault();

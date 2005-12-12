@@ -18,7 +18,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: IFSMenu.java,v 1.5 2005-12-09 18:41:01 langella Exp $
+ * @version $Id: IFSMenu.java,v 1.6 2005-12-12 21:00:41 langella Exp $
  */
 public class IFSMenu extends GridPortalComponent {
 
@@ -47,6 +47,10 @@ public class IFSMenu extends GridPortalComponent {
 	private JRadioButton manageUsers = null;
 
 	private JLabel manageUsersLabel = null;
+
+	private JRadioButton trustedIdP = null;
+
+	private JLabel idpLabel = null;
 
 	public IFSMenu() {
 		super();
@@ -108,6 +112,18 @@ public class IFSMenu extends GridPortalComponent {
 
 	private JPanel getMenuPanel() {
 		if (menuPanel == null) {
+			GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
+			gridBagConstraints22.gridx = 1;
+			gridBagConstraints22.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints22.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints22.gridy = 3;
+			idpLabel = new JLabel();
+			idpLabel.setText("Manage Trusted IdPs");
+			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+			gridBagConstraints12.gridx = 0;
+			gridBagConstraints12.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints12.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints12.gridy = 3;
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.gridx = 1;
 			gridBagConstraints3.anchor = java.awt.GridBagConstraints.WEST;
@@ -159,6 +175,8 @@ public class IFSMenu extends GridPortalComponent {
 			menuPanel.add(manageProxiesLabel, gridBagConstraints11);
 			menuPanel.add(getManageUsers(), gridBagConstraints21);
 			menuPanel.add(manageUsersLabel, gridBagConstraints3);
+			menuPanel.add(getTrustedIdP(), gridBagConstraints12);
+			menuPanel.add(idpLabel, gridBagConstraints22);
 		}
 		return menuPanel;
 	}
@@ -216,7 +234,10 @@ public class IFSMenu extends GridPortalComponent {
 		} else if (manageUsers.isSelected()) {
 			PortalResourceManager.getInstance().getGridPortal()
 					.addGridPortalComponent(new UserManagerWindow(),700,500);
-		}
+		}else if (trustedIdP.isSelected()) {
+			PortalResourceManager.getInstance().getGridPortal()
+			.addGridPortalComponent(new TrustedIdPsWindow(),400,300);
+}
 		dispose();
 	}
 
@@ -263,5 +284,18 @@ public class IFSMenu extends GridPortalComponent {
 			group.add(manageUsers);
 		}
 		return manageUsers;
+	}
+
+	/**
+	 * This method initializes trustedIdP	
+	 * 	
+	 * @return javax.swing.JRadioButton	
+	 */    
+	private JRadioButton getTrustedIdP() {
+		if (trustedIdP == null) {
+			trustedIdP = new JRadioButton();
+			group.add(trustedIdP);
+		}
+		return trustedIdP;
 	}
 }

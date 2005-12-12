@@ -9,6 +9,7 @@ import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidTrustedIdPFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
+import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdPStatus;
 
 import java.io.StringReader;
 import java.security.cert.X509Certificate;
@@ -20,6 +21,7 @@ import java.util.List;
 
 import org.opensaml.SAMLAssertion;
 import org.opensaml.SAMLException;
+
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -40,31 +42,31 @@ public class TrustManager extends GUMSObject {
 
 	private IFSConfiguration conf;
 
+
 	public TrustManager(IFSConfiguration conf, Database db) {
 		this.db = db;
 		this.conf = conf;
 	}
 
+
 	private void buildDatabase() throws GUMSInternalFault {
 		if (!dbBuilt) {
 			if (!this.db.tableExists(TRUST_MANAGER_TABLE)) {
 				String trust = "CREATE TABLE " + TRUST_MANAGER_TABLE + " ("
-						+ "ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
-						+ "NAME VARCHAR(255) NOT NULL,"
-						+ "IDP_SUBJECT VARCHAR(255) NOT NULL,"
-						+ "POLICY_CLASS VARCHAR(255) NOT NULL,"
-						+ "IDP_CERTIFICATE TEXT NOT NULL,"
-						+ "INDEX document_index (NAME));";
+					+ "ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY," + "NAME VARCHAR(255) NOT NULL,"
+					+ "IDP_SUBJECT VARCHAR(255) NOT NULL," + "STATUS VARCHAR(50) NOT NULL,"
+					+ "POLICY_CLASS VARCHAR(255) NOT NULL," + "IDP_CERTIFICATE TEXT NOT NULL,"
+					+ "INDEX document_index (NAME));";
 				db.update(trust);
 
-				String methods = "CREATE TABLE " + AUTH_METHODS_TABLE + " ("
-						+ "ID INT NOT NULL," + "METHOD VARCHAR(255) NOT NULL,"
-						+ "INDEX document_index (ID));";
+				String methods = "CREATE TABLE " + AUTH_METHODS_TABLE + " (" + "ID INT NOT NULL,"
+					+ "METHOD VARCHAR(255) NOT NULL," + "INDEX document_index (ID));";
 				db.update(methods);
 			}
 			dbBuilt = true;
 		}
 	}
+
 
 	public synchronized void removeTrustedIdP(long id) throws GUMSInternalFault {
 		buildDatabase();
@@ -72,32 +74,29 @@ public class TrustManager extends GUMSObject {
 		removeAuthenticationMethodsForTrustedIdP(id);
 	}
 
-	private void removeAuthenticationMethodsForTrustedIdP(long id)
-			throws GUMSInternalFault {
+
+	private void removeAuthenticationMethodsForTrustedIdP(long id) throws GUMSInternalFault {
 		buildDatabase();
 		db.update("delete from " + AUTH_METHODS_TABLE + " WHERE ID=" + id);
 	}
 
-	public synchronized SAMLAuthenticationMethod[] getAuthenticationMethods(
-			long id) throws GUMSInternalFault {
+
+	public synchronized SAMLAuthenticationMethod[] getAuthenticationMethods(long id) throws GUMSInternalFault {
 		buildDatabase();
 		Connection c = null;
 		try {
 			c = db.getConnectionManager().getConnection();
 			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery("select * from " + AUTH_METHODS_TABLE
-					+ " where ID=" + id);
+			ResultSet rs = s.executeQuery("select * from " + AUTH_METHODS_TABLE + " where ID=" + id);
 			List methods = new ArrayList();
 			while (rs.next()) {
-				SAMLAuthenticationMethod method = SAMLAuthenticationMethod
-						.fromString(rs.getString("METHOD"));
+				SAMLAuthenticationMethod method = SAMLAuthenticationMethod.fromString(rs.getString("METHOD"));
 				methods.add(method);
 			}
 			rs.close();
 			s.close();
 
-			SAMLAuthenticationMethod[] list = new SAMLAuthenticationMethod[methods
-					.size()];
+			SAMLAuthenticationMethod[] list = new SAMLAuthenticationMethod[methods.size()];
 			for (int i = 0; i < methods.size(); i++) {
 				list[i] = (SAMLAuthenticationMethod) methods.get(i);
 			}
@@ -116,6 +115,7 @@ public class TrustManager extends GUMSObject {
 
 	}
 
+
 	private String clean(String s) {
 		if ((s == null) || (s.trim().length() == 0)) {
 			return null;
@@ -124,11 +124,10 @@ public class TrustManager extends GUMSObject {
 		}
 	}
 
-	private void buildUpdate(boolean needsUpdate, StringBuffer sql,
-			String field, String value) {
+
+	private void buildUpdate(boolean needsUpdate, StringBuffer sql, String field, String value) {
 		if (needsUpdate) {
-			sql.append(",").append(field).append("='").append(value)
-					.append("'");
+			sql.append(",").append(field).append("='").append(value).append("'");
 		} else {
 			sql.append("UPDATE " + TRUST_MANAGER_TABLE + " SET ");
 			sql.append(field).append("='").append(value).append("'");
@@ -136,42 +135,39 @@ public class TrustManager extends GUMSObject {
 
 	}
 
-	public synchronized void updateIdP(TrustedIdP idp)
-			throws GUMSInternalFault, InvalidTrustedIdPFault {
+
+	public synchronized void updateIdP(TrustedIdP idp) throws GUMSInternalFault, InvalidTrustedIdPFault {
 
 		TrustedIdP curr = this.getTrustedIdPById(idp.getId());
 		StringBuffer sql = new StringBuffer();
 		boolean needsUpdate = false;
 
-		if ((clean(idp.getName()) != null)
-				&& (!idp.getName().equals(curr.getName()))) {
+		if ((clean(idp.getName()) != null) && (!idp.getName().equals(curr.getName()))) {
 			if (determineTrustedIdPExistsByName(idp.getName())) {
 				InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
-				fault.setFaultString("The name of Trusted IdP "
-						+ curr.getName() + " cannot be changed to "
-						+ idp.getName()
-						+ " and IdP with that name already exists");
+				fault.setFaultString("The name of Trusted IdP " + curr.getName() + " cannot be changed to "
+					+ idp.getName() + " and IdP with that name already exists");
 				throw fault;
 			}
 			buildUpdate(needsUpdate, sql, "NAME", validateAndGetName(idp));
 			needsUpdate = true;
 		}
 
-		if ((clean(idp.getPolicyClass()) != null)
-				&& (!idp.getPolicyClass().equals(curr.getPolicyClass()))) {
-			buildUpdate(needsUpdate, sql, "POLICY_CLASS",
-					validateAndGetPolicy(idp));
+		if ((clean(idp.getPolicyClass()) != null) && (!idp.getPolicyClass().equals(curr.getPolicyClass()))) {
+			buildUpdate(needsUpdate, sql, "POLICY_CLASS", validateAndGetPolicy(idp));
 			needsUpdate = true;
 		}
 
-		if ((clean(idp.getIdPCertificate()) != null)
-				&& (!idp.getIdPCertificate().equals(curr.getIdPCertificate()))) {
-			X509Certificate cert = validateAndGetCertificate(idp);
-			buildUpdate(needsUpdate, sql, "IDP_SUBJECT", cert.getSubjectDN()
-					.getName());
+		if ((idp.getStatus() != null) && (!idp.getStatus().equals(curr.getStatus()))) {
+			buildUpdate(needsUpdate, sql, "STATUS", idp.getStatus().getValue());
 			needsUpdate = true;
-			buildUpdate(needsUpdate, sql, "IDP_CERTIFICATE", idp
-					.getIdPCertificate());
+		}
+
+		if ((clean(idp.getIdPCertificate()) != null) && (!idp.getIdPCertificate().equals(curr.getIdPCertificate()))) {
+			X509Certificate cert = validateAndGetCertificate(idp);
+			buildUpdate(needsUpdate, sql, "IDP_SUBJECT", cert.getSubjectDN().getName());
+			needsUpdate = true;
+			buildUpdate(needsUpdate, sql, "IDP_CERTIFICATE", idp.getIdPCertificate());
 		}
 
 		try {
@@ -182,16 +178,14 @@ public class TrustManager extends GUMSObject {
 				}
 				removeAuthenticationMethodsForTrustedIdP(idp.getId());
 				for (int i = 0; i < idp.getAuthenticationMethod().length; i++) {
-					this.addAuthenticationMethod(idp.getId(), idp
-							.getAuthenticationMethod(i));
+					this.addAuthenticationMethod(idp.getId(), idp.getAuthenticationMethod(i));
 				}
 			}
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			GUMSInternalFault fault = new GUMSInternalFault();
-			fault.setFaultString("Error updating the Trusted IdP "
-					+ idp.getName()
-					+ ", an unexpected database error occurred.");
+			fault.setFaultString("Error updating the Trusted IdP " + idp.getName()
+				+ ", an unexpected database error occurred.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (GUMSInternalFault) helper.getFault();
@@ -199,13 +193,12 @@ public class TrustManager extends GUMSObject {
 		}
 	}
 
-	public TrustedIdP getTrustedIdP(SAMLAssertion saml)
-			throws GUMSInternalFault, InvalidAssertionFault {
+
+	public TrustedIdP getTrustedIdP(SAMLAssertion saml) throws GUMSInternalFault, InvalidAssertionFault {
 		TrustedIdP[] idps = getTrustedIdPs();
 		for (int i = 0; i < idps.length; i++) {
 			try {
-				X509Certificate cert = CertUtil
-						.loadCertificateFromString(idps[i].getIdPCertificate());
+				X509Certificate cert = CertUtil.loadCertificateFromString(idps[i].getIdPCertificate());
 				saml.verify(cert, false);
 				return idps[i];
 			} catch (SAMLException se) {
@@ -215,10 +208,10 @@ public class TrustManager extends GUMSObject {
 			}
 		}
 		InvalidAssertionFault fault = new InvalidAssertionFault();
-		fault
-				.setFaultString("The assertion specified, is not signed by a trusted IdP and therefore is not trusted.");
+		fault.setFaultString("The assertion specified, is not signed by a trusted IdP and therefore is not trusted.");
 		throw fault;
 	}
+
 
 	public synchronized TrustedIdP[] getTrustedIdPs() throws GUMSInternalFault {
 		buildDatabase();
@@ -226,13 +219,13 @@ public class TrustManager extends GUMSObject {
 		try {
 			c = db.getConnectionManager().getConnection();
 			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery("select * from "
-					+ TRUST_MANAGER_TABLE);
+			ResultSet rs = s.executeQuery("select * from " + TRUST_MANAGER_TABLE);
 			List idps = new ArrayList();
 			while (rs.next()) {
 				TrustedIdP idp = new TrustedIdP();
 				idp.setId(rs.getLong("ID"));
 				idp.setName(rs.getString("NAME"));
+				idp.setStatus(TrustedIdPStatus.fromValue(rs.getString("STATUS")));
 				idp.setIdPCertificate(rs.getString("IDP_CERTIFICATE"));
 				idp.setPolicyClass(rs.getString("POLICY_CLASS"));
 				idps.add(idp);
@@ -243,16 +236,13 @@ public class TrustManager extends GUMSObject {
 			TrustedIdP[] list = new TrustedIdP[idps.size()];
 			for (int i = 0; i < idps.size(); i++) {
 				list[i] = (TrustedIdP) idps.get(i);
-				list[i]
-						.setAuthenticationMethod(getAuthenticationMethods(list[i]
-								.getId()));
+				list[i].setAuthenticationMethod(getAuthenticationMethods(list[i].getId()));
 			}
 			return list;
 
 		} catch (Exception e) {
 			GUMSInternalFault fault = new GUMSInternalFault();
-			fault
-					.setFaultString("Error obtaining a list of trusted IdPs, unexpected database error");
+			fault.setFaultString("Error obtaining a list of trusted IdPs, unexpected database error");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (GUMSInternalFault) helper.getFault();
@@ -263,27 +253,26 @@ public class TrustManager extends GUMSObject {
 
 	}
 
-	public synchronized TrustedIdP getTrustedIdPById(long id)
-			throws GUMSInternalFault, InvalidTrustedIdPFault {
+
+	public synchronized TrustedIdP getTrustedIdPById(long id) throws GUMSInternalFault, InvalidTrustedIdPFault {
 		buildDatabase();
 		Connection c = null;
 
 		try {
 			c = db.getConnectionManager().getConnection();
 			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery("select * from "
-					+ TRUST_MANAGER_TABLE + " WHERE ID=" + id);
+			ResultSet rs = s.executeQuery("select * from " + TRUST_MANAGER_TABLE + " WHERE ID=" + id);
 			TrustedIdP idp = null;
 			if (rs.next()) {
 				idp = new TrustedIdP();
 				idp.setId(rs.getLong("ID"));
 				idp.setName(rs.getString("NAME"));
+				idp.setStatus(TrustedIdPStatus.fromValue(rs.getString("STATUS")));
 				idp.setIdPCertificate(rs.getString("IDP_CERTIFICATE"));
 				idp.setPolicyClass(rs.getString("POLICY_CLASS"));
 			} else {
 				InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
-				fault.setFaultString("The Trusted IdP " + id
-						+ " does not exist.");
+				fault.setFaultString("The Trusted IdP " + id + " does not exist.");
 				throw fault;
 			}
 			rs.close();
@@ -294,8 +283,7 @@ public class TrustManager extends GUMSObject {
 			throw f;
 		} catch (Exception e) {
 			GUMSInternalFault fault = new GUMSInternalFault();
-			fault.setFaultString("Error obtaining the Trusted IdP " + id
-					+ ", unexpected database error");
+			fault.setFaultString("Error obtaining the Trusted IdP " + id + ", unexpected database error");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (GUMSInternalFault) helper.getFault();
@@ -305,27 +293,26 @@ public class TrustManager extends GUMSObject {
 		}
 	}
 
-	public synchronized TrustedIdP getTrustedIdPByName(String name)
-			throws GUMSInternalFault, InvalidTrustedIdPFault {
+
+	public synchronized TrustedIdP getTrustedIdPByName(String name) throws GUMSInternalFault, InvalidTrustedIdPFault {
 		buildDatabase();
 		Connection c = null;
 
 		try {
 			c = db.getConnectionManager().getConnection();
 			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery("select * from "
-					+ TRUST_MANAGER_TABLE + " WHERE NAME='" + name + "'");
+			ResultSet rs = s.executeQuery("select * from " + TRUST_MANAGER_TABLE + " WHERE NAME='" + name + "'");
 			TrustedIdP idp = null;
 			if (rs.next()) {
 				idp = new TrustedIdP();
 				idp.setId(rs.getLong("ID"));
 				idp.setName(rs.getString("NAME"));
+				idp.setStatus(TrustedIdPStatus.fromValue(rs.getString("STATUS")));
 				idp.setIdPCertificate(rs.getString("IDP_CERTIFICATE"));
 				idp.setPolicyClass(rs.getString("POLICY_CLASS"));
 			} else {
 				InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
-				fault.setFaultString("The Trusted IdP " + name
-						+ " does not exist.");
+				fault.setFaultString("The Trusted IdP " + name + " does not exist.");
 				throw fault;
 			}
 			rs.close();
@@ -336,8 +323,7 @@ public class TrustManager extends GUMSObject {
 			throw f;
 		} catch (Exception e) {
 			GUMSInternalFault fault = new GUMSInternalFault();
-			fault.setFaultString("Error obtaining the Trusted IdP " + name
-					+ ", unexpected database error");
+			fault.setFaultString("Error obtaining the Trusted IdP " + name + ", unexpected database error");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (GUMSInternalFault) helper.getFault();
@@ -347,27 +333,26 @@ public class TrustManager extends GUMSObject {
 		}
 	}
 
-	public synchronized TrustedIdP getTrustedIdPByDN(String dn)
-			throws GUMSInternalFault, InvalidTrustedIdPFault {
+
+	public synchronized TrustedIdP getTrustedIdPByDN(String dn) throws GUMSInternalFault, InvalidTrustedIdPFault {
 		buildDatabase();
 		Connection c = null;
 
 		try {
 			c = db.getConnectionManager().getConnection();
 			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery("select * from "
-					+ TRUST_MANAGER_TABLE + " WHERE IDP_SUBJECT='" + dn + "'");
+			ResultSet rs = s.executeQuery("select * from " + TRUST_MANAGER_TABLE + " WHERE IDP_SUBJECT='" + dn + "'");
 			TrustedIdP idp = null;
 			if (rs.next()) {
 				idp = new TrustedIdP();
 				idp.setId(rs.getLong("ID"));
 				idp.setName(rs.getString("NAME"));
+				idp.setStatus(TrustedIdPStatus.fromValue(rs.getString("STATUS")));
 				idp.setIdPCertificate(rs.getString("IDP_CERTIFICATE"));
 				idp.setPolicyClass(rs.getString("POLICY_CLASS"));
 			} else {
 				InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
-				fault.setFaultString("The Trusted IdP " + dn
-						+ " does not exist.");
+				fault.setFaultString("The Trusted IdP " + dn + " does not exist.");
 				throw fault;
 			}
 			rs.close();
@@ -378,8 +363,7 @@ public class TrustManager extends GUMSObject {
 			throw f;
 		} catch (Exception e) {
 			GUMSInternalFault fault = new GUMSInternalFault();
-			fault.setFaultString("Error obtaining the Trusted IdP " + dn
-					+ ", unexpected database error");
+			fault.setFaultString("Error obtaining the Trusted IdP " + dn + ", unexpected database error");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (GUMSInternalFault) helper.getFault();
@@ -389,46 +373,40 @@ public class TrustManager extends GUMSObject {
 		}
 	}
 
-	private String validateAndGetName(TrustedIdP idp) throws GUMSInternalFault,
-			InvalidTrustedIdPFault {
+
+	private String validateAndGetName(TrustedIdP idp) throws GUMSInternalFault, InvalidTrustedIdPFault {
 		String name = idp.getName();
-		if ((name == null)
-				|| (name.trim().length() <= conf.getMinimumIdPNameLength())
-				|| (name.trim().length() >= conf.getMaximumIdPNameLength())) {
+		if ((name == null) || (name.trim().length() <= conf.getMinimumIdPNameLength())
+			|| (name.trim().length() >= conf.getMaximumIdPNameLength())) {
 			InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
-			fault
-					.setFaultString("Invalid IdP name specified, the IdP name must be between "
-							+ conf.getMinimumIdPNameLength()
-							+ " and "
-							+ conf.getMaximumIdPNameLength() + " in length.");
+			fault.setFaultString("Invalid IdP name specified, the IdP name must be between "
+				+ conf.getMinimumIdPNameLength() + " and " + conf.getMaximumIdPNameLength() + " in length.");
 			throw fault;
 		}
 		return name.trim();
 	}
 
-	private String validateAndGetPolicy(TrustedIdP idp)
-			throws GUMSInternalFault, InvalidTrustedIdPFault {
+
+	private String validateAndGetPolicy(TrustedIdP idp) throws GUMSInternalFault, InvalidTrustedIdPFault {
 		// TODO: Validate IdP
 		try {
 			Class c = Class.forName(idp.getPolicyClass());
 			if (!IFSUserPolicy.class.isAssignableFrom(c)) {
 				InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
-				fault.setFaultString("Invalid policy class ("
-						+ idp.getPolicyClass() + ") specified.");
+				fault.setFaultString("Invalid policy class (" + idp.getPolicyClass() + ") specified.");
 				throw fault;
 			}
 
 		} catch (ClassNotFoundException e) {
 			InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
-			fault.setFaultString("Invalid policy class ("
-					+ idp.getPolicyClass() + ") specified.");
+			fault.setFaultString("Invalid policy class (" + idp.getPolicyClass() + ") specified.");
 			throw fault;
 		}
 		return idp.getPolicyClass();
 	}
 
-	private X509Certificate validateAndGetCertificate(TrustedIdP idp)
-			throws GUMSInternalFault, InvalidTrustedIdPFault {
+
+	private X509Certificate validateAndGetCertificate(TrustedIdP idp) throws GUMSInternalFault, InvalidTrustedIdPFault {
 
 		StringReader reader = new StringReader(idp.getIdPCertificate());
 		X509Certificate cert = null;
@@ -454,8 +432,8 @@ public class TrustManager extends GUMSObject {
 
 	}
 
-	public synchronized TrustedIdP addTrustedIdP(TrustedIdP idp)
-			throws GUMSInternalFault, InvalidTrustedIdPFault {
+
+	public synchronized TrustedIdP addTrustedIdP(TrustedIdP idp) throws GUMSInternalFault, InvalidTrustedIdPFault {
 		buildDatabase();
 		if (!determineTrustedIdPExistsByName(idp.getName())) {
 			String name = validateAndGetName(idp);
@@ -463,15 +441,12 @@ public class TrustManager extends GUMSObject {
 			String policyClass = validateAndGetPolicy(idp);
 
 			try {
-				long id = db.insertGetId("INSERT INTO " + TRUST_MANAGER_TABLE
-						+ " SET NAME='" + name + "',IDP_SUBJECT='"
-						+ cert.getSubjectDN().toString() + "', POLICY_CLASS='"
-						+ policyClass + "',IDP_CERTIFICATE='"
-						+ idp.getIdPCertificate() + "'");
+				long id = db.insertGetId("INSERT INTO " + TRUST_MANAGER_TABLE + " SET NAME='" + name
+					+ "',IDP_SUBJECT='" + cert.getSubjectDN().toString() + "', STATUS='" + idp.getStatus().getValue()
+					+ "', POLICY_CLASS='" + policyClass + "',IDP_CERTIFICATE='" + idp.getIdPCertificate() + "'");
 				idp.setId(id);
 				for (int i = 0; i < idp.getAuthenticationMethod().length; i++) {
-					this.addAuthenticationMethod(idp.getId(), idp
-							.getAuthenticationMethod(i));
+					this.addAuthenticationMethod(idp.getId(), idp.getAuthenticationMethod(i));
 				}
 
 			} catch (Exception e) {
@@ -483,7 +458,7 @@ public class TrustManager extends GUMSObject {
 				logError(e.getMessage(), e);
 				GUMSInternalFault fault = new GUMSInternalFault();
 				fault.setFaultString("Error adding the Trusted IdP " + name
-						+ ", an unexpected database error occurred.");
+					+ ", an unexpected database error occurred.");
 				FaultHelper helper = new FaultHelper(fault);
 				helper.addFaultCause(e);
 				fault = (GUMSInternalFault) helper.getFault();
@@ -492,31 +467,29 @@ public class TrustManager extends GUMSObject {
 
 		} else {
 			InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
-			fault.setFaultString("Cannot add the Trusted IdP, " + idp.getName()
-					+ " because it already exists.");
+			fault.setFaultString("Cannot add the Trusted IdP, " + idp.getName() + " because it already exists.");
 			throw fault;
 		}
 		return idp;
 
 	}
 
-	private synchronized void addAuthenticationMethod(long id,
-			SAMLAuthenticationMethod method) throws GUMSInternalFault {
-		db.update("INSERT INTO " + AUTH_METHODS_TABLE + " SET ID=" + id
-				+ ",METHOD='" + method.getValue() + "'");
+
+	private synchronized void addAuthenticationMethod(long id, SAMLAuthenticationMethod method)
+		throws GUMSInternalFault {
+		db.update("INSERT INTO " + AUTH_METHODS_TABLE + " SET ID=" + id + ",METHOD='" + method.getValue() + "'");
 	}
 
-	public synchronized boolean determineTrustedIdPExistsByDN(String subject)
-			throws GUMSInternalFault {
+
+	public synchronized boolean determineTrustedIdPExistsByDN(String subject) throws GUMSInternalFault {
 		buildDatabase();
 		Connection c = null;
 		boolean exists = false;
 		try {
 			c = db.getConnectionManager().getConnection();
 			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery("select count(*) from "
-					+ TRUST_MANAGER_TABLE + " where IDP_SUBJECT='" + subject
-					+ "'");
+			ResultSet rs = s.executeQuery("select count(*) from " + TRUST_MANAGER_TABLE + " where IDP_SUBJECT='"
+				+ subject + "'");
 			if (rs.next()) {
 				int count = rs.getInt(1);
 				if (count > 0) {
@@ -539,16 +512,15 @@ public class TrustManager extends GUMSObject {
 		return exists;
 	}
 
-	public synchronized boolean determineTrustedIdPExistsByName(String name)
-			throws GUMSInternalFault {
+
+	public synchronized boolean determineTrustedIdPExistsByName(String name) throws GUMSInternalFault {
 		buildDatabase();
 		Connection c = null;
 		boolean exists = false;
 		try {
 			c = db.getConnectionManager().getConnection();
 			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery("select count(*) from "
-					+ TRUST_MANAGER_TABLE + " where NAME='" + name + "'");
+			ResultSet rs = s.executeQuery("select count(*) from " + TRUST_MANAGER_TABLE + " where NAME='" + name + "'");
 			if (rs.next()) {
 				int count = rs.getInt(1);
 				if (count > 0) {
@@ -570,12 +542,14 @@ public class TrustManager extends GUMSObject {
 		}
 		return exists;
 	}
+
 
 	public synchronized void removeAllTrustedIdPs() throws GUMSInternalFault {
 		buildDatabase();
 		db.update("delete from " + TRUST_MANAGER_TABLE);
 		db.update("delete from " + AUTH_METHODS_TABLE);
 	}
+
 
 	public void destroyTable() throws GUMSInternalFault {
 		db.update("DROP TABLE IF EXISTS " + TRUST_MANAGER_TABLE);

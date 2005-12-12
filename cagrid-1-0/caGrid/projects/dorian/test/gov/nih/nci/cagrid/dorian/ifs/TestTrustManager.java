@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
+import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdPStatus;
 import gov.nih.nci.cagrid.gums.test.TestUtils;
 
 import java.io.File;
@@ -98,11 +99,13 @@ public class TestTrustManager extends TestCase {
 				IdPContainer updatedCont = getTrustedIdp(updatedName);
 				TrustedIdP updateIdp = updatedCont.getIdp();
 				updateIdp.setId(idp.getId());
+				updateIdp.setStatus(TrustedIdPStatus.Suspended);
 				tm.updateIdP(updateIdp);
 
 				TrustedIdP[] ulist = tm.getTrustedIdPs();
 				assertEquals(1, ulist.length);
 				assertEquals(updateIdp, ulist[0]);
+				assertEquals(TrustedIdPStatus.Suspended,ulist[0].getStatus());
 				assertTrue(!tm.determineTrustedIdPExistsByName(name));
 				assertTrue(tm.determineTrustedIdPExistsByName(updatedName));
 				TrustedIdP utemp = tm.getTrustedIdPByName(updateIdp.getName());
@@ -178,13 +181,18 @@ public class TestTrustManager extends TestCase {
 				String updatedName = baseUpdateName + " " + i;
 				IdPContainer updateCont = getTrustedIdp(updatedName);
 				TrustedIdP updateIdp = updateCont.getIdp();
-				updateIdp.setId(idp.getId());
+				updateIdp.setId(idp.getId());				
+				updateIdp.setStatus(TrustedIdPStatus.Suspended);
 				tm.updateIdP(updateIdp);
+
+
+				
 				assertEquals((i + 1), tm.getTrustedIdPs().length);
 				assertTrue(!tm.determineTrustedIdPExistsByName(name));
 				assertTrue(tm.determineTrustedIdPExistsByName(updatedName));
 				TrustedIdP utemp = tm.getTrustedIdPByName(updateIdp.getName());
 				assertEquals(updateIdp, utemp);
+				assertEquals(TrustedIdPStatus.Suspended,utemp.getStatus());
 				TrustedIdP utemp2 = tm.getTrustedIdPById(updateIdp.getId());
 				assertEquals(updateIdp, utemp2);
 				TrustedIdP utemp3 = tm.getTrustedIdP(updateCont.getSAMLAssertion());
@@ -252,6 +260,7 @@ public class TestTrustManager extends TestCase {
 	private IdPContainer getTrustedIdp(String name) throws Exception {
 		TrustedIdP idp = new TrustedIdP();
 		idp.setName(name);
+		idp.setStatus(TrustedIdPStatus.Active);
 		idp.setPolicyClass(AutoApprovalPolicy.class.getName());
 		idp.setAuthenticationMethod(getRandomMethodList());
 
