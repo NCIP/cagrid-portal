@@ -86,7 +86,7 @@
 			<filelist dir="${ext.dir}" files="NStoPkg.properties" />
 		</concat>
 		<copy toDir="${introduce.skeleton.destination.dir}/schema/cagrid/types">
-			<fileset dir="${ext.schema.dir}/types">
+			<fileset dir="${ext.schema.dir}/cagrid/types">
 				<include name="**/*.xsd" />
 			</fileset>
 		</copy>
