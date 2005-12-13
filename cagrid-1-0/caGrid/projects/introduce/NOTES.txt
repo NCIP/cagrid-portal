@@ -20,4 +20,16 @@ Need to programatically be able to
 	-add/remove state variables
 	
 
-
+Metadata xmlfile:
+=====
+schematype AttGroup
+populateFromFile (boolean)
+register (boolean)
+Qname of RP
+(derive instance filename from QName?)
+what to template:
+=====
+type goes into serviceRPs in wsdl
+qname goes into registration.xml if registerType is true
+if loadFromFile is true derived instance path goes into jndi config
+if loadFromFile is true add getter/setter to MDconfig.java
