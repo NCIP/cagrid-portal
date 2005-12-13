@@ -530,7 +530,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		if (viewCertificate == null) {
 			viewCertificate = new JButton();
 			viewCertificate.setText("View Certificate");
-			viewCertificate.setIcon(GumsLookAndFeel.getProxyManagerIcon());
+			viewCertificate.setIcon(GumsLookAndFeel.getProxyIcon());
 			viewCertificate
 					.addActionListener(new java.awt.event.ActionListener() {
 

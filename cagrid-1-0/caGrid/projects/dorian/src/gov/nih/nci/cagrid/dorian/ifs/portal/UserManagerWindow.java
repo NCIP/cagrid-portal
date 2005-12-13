@@ -41,7 +41,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.7 2005-12-09 21:26:29 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.8 2005-12-13 19:53:22 langella Exp $
  */
 public class UserManagerWindow extends GridPortalBaseFrame {
 
@@ -502,8 +502,10 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 
 			IFSAdministration client = new IFSAdministrationClient(service, style);
 			IFSUser[] users = client.findUsers(f);
+			if(users != null){
 			for (int i = 0; i < users.length; i++) {
 				this.getUsersTable().addUser(users[i]);
+			}
 			}
 			this.updateProgress(false, "Querying Completed [" + users.length + " users found]");
 

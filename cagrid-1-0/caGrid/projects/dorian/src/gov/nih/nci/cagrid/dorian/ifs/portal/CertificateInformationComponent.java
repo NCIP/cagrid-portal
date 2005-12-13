@@ -17,7 +17,7 @@ import org.projectmobius.portal.GridPortalComponent;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CertificateInformationComponent.java,v 1.4 2005-12-12 16:50:35 langella Exp $
+ * @version $Id: CertificateInformationComponent.java,v 1.5 2005-12-13 19:53:22 langella Exp $
  */
 public class CertificateInformationComponent extends GridPortalComponent {
 
@@ -63,7 +63,7 @@ public class CertificateInformationComponent extends GridPortalComponent {
 	private void initialize() {
 		this.setSize(300,300);
 		this.setContentPane(getJContentPane());
-		this.setFrameIcon(GumsLookAndFeel.getProxyManagerIcon());
+		this.setFrameIcon(GumsLookAndFeel.getProxyIcon());
 		this.setTitle("Certificate Viewer");
 	}
 	/**

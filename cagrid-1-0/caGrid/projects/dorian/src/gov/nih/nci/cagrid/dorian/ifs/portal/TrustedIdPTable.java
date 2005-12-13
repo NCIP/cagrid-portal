@@ -12,7 +12,7 @@ import javax.swing.table.TableColumn;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: TrustedIdPTable.java,v 1.1 2005-12-12 21:00:41 langella Exp $
+ * @version $Id: TrustedIdPTable.java,v 1.2 2005-12-13 19:53:22 langella Exp $
  */
 public class TrustedIdPTable extends PortalBaseTable {
 	public static String IDP = "idp";
@@ -20,6 +20,8 @@ public class TrustedIdPTable extends PortalBaseTable {
 	public static String IDP_ID = "IdP Id";
 	
 	public static String NAME = "Identity Provider Name";
+	
+	public static String STATUS = "Status";
 
 	
 	TrustedIdPsWindow window;
@@ -36,7 +38,12 @@ public class TrustedIdPTable extends PortalBaseTable {
 		c = this.getColumn(IDP_ID);
 		c.setMaxWidth(35);
 		c.setMinWidth(35);
-		c.setPreferredWidth(0);
+	
+		
+		c = this.getColumn(STATUS);
+		c.setMaxWidth(100);
+		c.setMinWidth(100);
+	
 
 		this.clearTable();
 
@@ -47,6 +54,7 @@ public class TrustedIdPTable extends PortalBaseTable {
 		model.addColumn(IDP);
 		model.addColumn(IDP_ID);
 		model.addColumn(NAME);
+		model.addColumn(STATUS);
 		return model;
 
 	}
@@ -56,6 +64,7 @@ public class TrustedIdPTable extends PortalBaseTable {
 		v.add(idp);
 		v.add(String.valueOf(idp.getId()));
 		v.add(idp.getName());
+		v.add(idp.getStatus().getValue());
 		addRow(v);
 	}
 

@@ -21,25 +21,35 @@ public class GumsLookAndFeel extends PortalLookAndFeel {
 		return new javax.swing.ImageIcon(GumsLookAndFeel.class
 				.getResource("/FlowGraph.gif"));
 	}
+	
+	public final static ImageIcon getTrustedIdPIcon() {
+		return new javax.swing.ImageIcon(GumsLookAndFeel.class
+				.getResource("/Chain.gif"));
+	}
+	
+	public final static ImageIcon getAddTrustedIdPIcon() {
+		return new javax.swing.ImageIcon(GumsLookAndFeel.class
+				.getResource("/NewPlug.gif"));
+	}
 
 	public final static ImageIcon getProxyIcon() {
 		return new javax.swing.ImageIcon(GumsLookAndFeel.class
-				.getResource("/Envelope.gif"));
+				.getResource("/BCard.gif"));
 	}
 	
 	public final static ImageIcon getRenewCredentialsIcon() {
 		return new javax.swing.ImageIcon(GumsLookAndFeel.class
-				.getResource("/EnvelopeOut.gif"));
+				.getResource("/EditBCard.gif"));
 	}
 
 	public final static ImageIcon getProxyManagerIcon() {
 		return new javax.swing.ImageIcon(GumsLookAndFeel.class
-				.getResource("/EnvelopeOpen.gif"));
+				.getResource("/EditBCard.gif"));
 	}
 	
 	public final static ImageIcon getDeleteProxyIcon() {
 		return new javax.swing.ImageIcon(GumsLookAndFeel.class
-				.getResource("/DeleteEnvelope.gif"));
+				.getResource("/DeleteBCard.gif"));
 	}
 
 

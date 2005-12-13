@@ -9,11 +9,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CertificatePanel.java,v 1.1 2005-12-12 16:50:35 langella Exp $
+ * @version $Id: CertificatePanel.java,v 1.2 2005-12-13 19:53:22 langella Exp $
  */
 public class CertificatePanel extends JPanel {
 
@@ -39,13 +40,20 @@ public class CertificatePanel extends JPanel {
 	/**
 	 * This is the default constructor
 	 */
+	public CertificatePanel() {
+		super();
+		initialize();
+	}
+
+
 	public CertificatePanel(X509Certificate cert) {
 		super();
 		initialize();
 		setCertificate(cert);
 	}
-	
-	public void setCertificate(X509Certificate cert){
+
+
+	public void setCertificate(X509Certificate cert) {
 		this.getCertificateCreated().setText(cert.getNotBefore().toString());
 		this.getCertificateExpires().setText(cert.getNotAfter().toString());
 		this.getCertificateIssuer().setText(cert.getIssuerDN().getName());
@@ -53,7 +61,7 @@ public class CertificatePanel extends JPanel {
 		this.getCertificateSubject().setText(cert.getSubjectDN().getName());
 		this.getCertificateSignatureAlgorithm().setText(cert.getSigAlgName());
 		this.getCertificateType().setText(cert.getType());
-		this.getCertificateVersion().setText(String.valueOf(cert.getVersion()));	
+		this.getCertificateVersion().setText(String.valueOf(cert.getVersion()));
 	}
 
 
@@ -66,7 +74,7 @@ public class CertificatePanel extends JPanel {
 		GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
 		gridBagConstraints16.gridx = 0;
 		gridBagConstraints16.anchor = java.awt.GridBagConstraints.NORTH;
-		gridBagConstraints16.insets = new java.awt.Insets(2,2,2,2);
+		gridBagConstraints16.insets = new java.awt.Insets(2, 2, 2, 2);
 		gridBagConstraints16.fill = java.awt.GridBagConstraints.BOTH;
 		gridBagConstraints16.weightx = 1.0D;
 		gridBagConstraints16.weighty = 1.0D;
@@ -78,10 +86,10 @@ public class CertificatePanel extends JPanel {
 
 
 	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private JPanel getJPanel() {
 		if (jPanel == null) {
 			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
@@ -227,10 +235,10 @@ public class CertificatePanel extends JPanel {
 
 
 	/**
-	 * This method initializes jTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
+	 * This method initializes jTextField
+	 * 
+	 * @return javax.swing.JTextField
+	 */
 	private JTextField getCertificateSignatureAlgorithm() {
 		if (certficateSignatureAlgorithm == null) {
 			certficateSignatureAlgorithm = new JTextField();
@@ -241,10 +249,10 @@ public class CertificatePanel extends JPanel {
 
 
 	/**
-	 * This method initializes jTextField1	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
+	 * This method initializes jTextField1
+	 * 
+	 * @return javax.swing.JTextField
+	 */
 	private JTextField getCertificateType() {
 		if (certificateType == null) {
 			certificateType = new JTextField();
@@ -255,10 +263,10 @@ public class CertificatePanel extends JPanel {
 
 
 	/**
-	 * This method initializes jTextField2	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
+	 * This method initializes jTextField2
+	 * 
+	 * @return javax.swing.JTextField
+	 */
 	private JTextField getCertificateVersion() {
 		if (certificateVersion == null) {
 			certificateVersion = new JTextField();
@@ -269,10 +277,10 @@ public class CertificatePanel extends JPanel {
 
 
 	/**
-	 * This method initializes jTextField3	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
+	 * This method initializes jTextField3
+	 * 
+	 * @return javax.swing.JTextField
+	 */
 	private JTextField getCertificateSerialNumber() {
 		if (certificateSerialNumber == null) {
 			certificateSerialNumber = new JTextField();
@@ -283,10 +291,10 @@ public class CertificatePanel extends JPanel {
 
 
 	/**
-	 * This method initializes jTextField4	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
+	 * This method initializes jTextField4
+	 * 
+	 * @return javax.swing.JTextField
+	 */
 	private JTextField getCertificateIssuer() {
 		if (certificateIssuer == null) {
 			certificateIssuer = new JTextField();
@@ -297,10 +305,10 @@ public class CertificatePanel extends JPanel {
 
 
 	/**
-	 * This method initializes jTextField5	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
+	 * This method initializes jTextField5
+	 * 
+	 * @return javax.swing.JTextField
+	 */
 	private JTextField getCertificateExpires() {
 		if (certificateExpires == null) {
 			certificateExpires = new JTextField();
@@ -311,10 +319,10 @@ public class CertificatePanel extends JPanel {
 
 
 	/**
-	 * This method initializes jTextField6	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
+	 * This method initializes jTextField6
+	 * 
+	 * @return javax.swing.JTextField
+	 */
 	private JTextField getCertificateCreated() {
 		if (certificateCreated == null) {
 			certificateCreated = new JTextField();
@@ -325,10 +333,10 @@ public class CertificatePanel extends JPanel {
 
 
 	/**
-	 * This method initializes jTextField7	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
+	 * This method initializes jTextField7
+	 * 
+	 * @return javax.swing.JTextField
+	 */
 	private JTextField getCertificateSubject() {
 		if (certificateSubject == null) {
 			certificateSubject = new JTextField();

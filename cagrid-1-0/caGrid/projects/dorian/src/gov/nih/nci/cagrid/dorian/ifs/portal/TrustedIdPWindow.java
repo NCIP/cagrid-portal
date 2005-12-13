@@ -4,7 +4,6 @@ import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gums.client.IFSAdministrationClient;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
 import gov.nih.nci.cagrid.gums.portal.ProxyCaddy;
@@ -15,7 +14,6 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.security.cert.X509Certificate;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -36,11 +34,11 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.5 2005-12-13 19:53:22 langella Exp $
+ * @version $Id: TrustedIdPWindow.java,v 1.1 2005-12-13 19:53:22 langella Exp $
  */
-public class UserWindow extends GridPortalBaseFrame {
+public class TrustedIdPWindow extends GridPortalBaseFrame {
 
-	private final static String INFO_PANEL = "User Information";
+	private final static String INFO_PANEL = "IdP Information";
 
 	private final static String CERTIFICATE_PANEL = "Certificate";
 
@@ -50,9 +48,7 @@ public class UserWindow extends GridPortalBaseFrame {
 
 	private JPanel buttonPanel = null;
 
-	private JButton cancel = null;
-
-	private JButton updateUser = null;
+	private JButton updateTrustedIdP = null;
 
 	private JTabbedPane jTabbedPane = null;
 
@@ -64,8 +60,6 @@ public class UserWindow extends GridPortalBaseFrame {
 
 	private String serviceId;
 
-	private IFSUser user;
-
 	private JTextField service = null;
 
 	private JPanel infoPanel = null;
@@ -76,50 +70,47 @@ public class UserWindow extends GridPortalBaseFrame {
 
 	private JComboBox proxy = null;
 
-	private JLabel gridIdLabel = null;
-
-	private JTextField gridIdentity = null;
-
 	private TrustedIdP idp;
-
-	private JLabel idpLabel = null;
-
-	private JTextField trustedIdP = null;
-
-	private JLabel uidLabel = null;
-
-	private JTextField userId = null;
-
-	private JLabel emailLabel = null;
-
-	private JTextField email = null;
-
-	private JLabel statusLabel = null;
-
-	private JLabel roleStatus = null;
-
-	private JComboBox userStatus = null;
-
-	private JComboBox userRole = null;
 
 	private JPanel certificatePanel = null;
 
 	private CertificatePanel credPanel = null;
 
-	private JButton renewCredentials = null;
+	private boolean newTrustedIdP;
+
+	private JLabel idLabel = null;
+
+	private JTextField idpId = null;
+
+	private JLabel nameLabel = null;
+
+	private JTextField idpName = null;
+
+	private JLabel statusLabel = null;
+
+	private TrustedIdPStatusComboBox status = null;
+
+	public TrustedIdPWindow(String serviceId, GlobusCredential proxy) {
+		super();
+		this.serviceId = serviceId;
+		this.cred = proxy;
+		this.idp = new TrustedIdP();
+		this.newTrustedIdP = true;
+		initialize();
+
+	}
 
 
 	/**
 	 * This is the default constructor
 	 */
-	public UserWindow(String serviceId, GlobusCredential proxy, IFSUser u, TrustedIdP idp) throws Exception {
+	public TrustedIdPWindow(String serviceId, GlobusCredential proxy, TrustedIdP idp) throws Exception {
 		super();
 		this.serviceId = serviceId;
 		this.cred = proxy;
-		this.user = u;
 		this.idp = idp;
+		this.newTrustedIdP = false;
 		initialize();
-		this.setFrameIcon(GumsLookAndFeel.getUserMagnifyIcon());
 	}
 
 
@@ -131,7 +122,12 @@ public class UserWindow extends GridPortalBaseFrame {
 	private void initialize() {
 		this.setSize(500, 500);
 		this.setContentPane(getJContentPane());
-		this.setTitle("Manage User [" + user.getGridId() + "]");
+		if(this.newTrustedIdP){
+			this.setTitle("Add Trusted IdP");
+		}else{
+		this.setTitle("Trusted IdP [" + idp.getName() + "]");
+		}
+		this.setFrameIcon(GumsLookAndFeel.getTrustedIdPIcon());
 
 	}
 
@@ -194,31 +190,9 @@ public class UserWindow extends GridPortalBaseFrame {
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
-			buttonPanel.add(getUpdateUser(), null);
-			buttonPanel.add(getRenewCredentials(), null);
-			buttonPanel.add(getCancel(), null);
+			buttonPanel.add(getUpdateTrustedIdP(), null);
 		}
 		return buttonPanel;
-	}
-
-
-	/**
-	 * This method initializes jButton1
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getCancel() {
-		if (cancel == null) {
-			cancel = new JButton();
-			cancel.setText("Close");
-			cancel.setIcon(GumsLookAndFeel.getCloseIcon());
-			cancel.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					dispose();
-				}
-			});
-		}
-		return cancel;
 	}
 
 
@@ -227,15 +201,21 @@ public class UserWindow extends GridPortalBaseFrame {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getUpdateUser() {
-		if (updateUser == null) {
-			updateUser = new JButton();
-			updateUser.setText("Update User");
-			updateUser.addActionListener(new java.awt.event.ActionListener() {
+	private JButton getUpdateTrustedIdP() {
+		if (updateTrustedIdP == null) {
+			updateTrustedIdP = new JButton();
+			
+			if(this.newTrustedIdP){
+				updateTrustedIdP.setText("Add");
+			}else{
+				updateTrustedIdP.setText("Update");
+			}
+			
+			updateTrustedIdP.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
-							updateUser();
+							updateTrustedIdP();
 						}
 					};
 					try {
@@ -246,46 +226,22 @@ public class UserWindow extends GridPortalBaseFrame {
 
 				}
 			});
-			updateUser.setIcon(GumsLookAndFeel.getUpdateUserIcon());
+			updateTrustedIdP.setIcon(GumsLookAndFeel.getTrustedIdPIcon());
 		}
-		return updateUser;
+		return updateTrustedIdP;
 	}
 
 
-	private synchronized void updateUser() {
-
-		user.setUserRole(((UserRolesComboBox) this.getUserRole()).getSelectedUserRole());
-		user.setUserStatus(((UserStatusComboBox) this.getUserStatus()).getSelectedUserStatus());
+	private synchronized void updateTrustedIdP() {
 
 		try {
 			String service = getService().getText();
 			GlobusCredential c = ((ProxyCaddy) getProxy().getSelectedItem()).getProxy();
 			IFSAdministrationClient client = new IFSAdministrationClient(service, new SecureConversationWithEncryption(
 				c));
-			client.updateUser(user);
+			client.updateUser(null);
+			PortalUtils.showMessage("The Trusted IdP was updated successfully.");
 
-			PortalUtils.showMessage("User " + user.getGridId() + " update successfully.");
-
-		} catch (PermissionDeniedFault pdf) {
-			PortalUtils.showErrorMessage(pdf);
-		} catch (Exception e) {
-			e.printStackTrace();
-			PortalUtils.showErrorMessage(e);
-		}
-
-	}
-
-
-	private void renewCredentials() {
-		try {
-			String service = getService().getText();
-			GlobusCredential c = ((ProxyCaddy) getProxy().getSelectedItem()).getProxy();
-			IFSAdministrationClient client = new IFSAdministrationClient(service, new SecureConversationWithEncryption(
-				c));
-			user = client.renewUserCredentials(user);
-			X509Certificate cert = CertUtil.loadCertificateFromString(user.getCertificate().getCertificateAsString());
-			this.getCredPanel().setCertificate(cert);
-			PortalUtils.showMessage("Successfully renewed the credentials for the user " + user.getGridId() + ".");
 		} catch (PermissionDeniedFault pdf) {
 			PortalUtils.showErrorMessage(pdf);
 		} catch (Exception e) {
@@ -304,10 +260,10 @@ public class UserWindow extends GridPortalBaseFrame {
 	private JTabbedPane getJTabbedPane() {
 		if (jTabbedPane == null) {
 			jTabbedPane = new JTabbedPane();
-			jTabbedPane.setBorder(BorderFactory.createTitledBorder(null, "Grid User",
+			jTabbedPane.setBorder(BorderFactory.createTitledBorder(null, "Trusted Identity Provider",
 				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GumsLookAndFeel
 					.getPanelLabelColor()));
-			jTabbedPane.addTab(INFO_PANEL, GumsLookAndFeel.getUserIcon(), getInfoPanel(), null);
+			jTabbedPane.addTab(INFO_PANEL, GumsLookAndFeel.getTrustedIdPIcon(), getInfoPanel(), null);
 			jTabbedPane.addTab(CERTIFICATE_PANEL, GumsLookAndFeel.getProxyIcon(), getCertificatePanel(), null);
 		}
 		return jTabbedPane;
@@ -321,105 +277,60 @@ public class UserWindow extends GridPortalBaseFrame {
 	 */
 	private JPanel getJPanel1() {
 		if (jPanel1 == null) {
-			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
-			gridBagConstraints16.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints16.gridy = 5;
-			gridBagConstraints16.weightx = 1.0;
-			gridBagConstraints16.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints16.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints16.gridx = 1;
-			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
-			gridBagConstraints15.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints15.gridy = 4;
-			gridBagConstraints15.weightx = 1.0;
-			gridBagConstraints15.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints15.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints15.gridx = 1;
-			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
-			gridBagConstraints14.gridx = 0;
-			gridBagConstraints14.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints14.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints14.gridy = 5;
-			roleStatus = new JLabel();
-			roleStatus.setText("User Role");
-			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
-			gridBagConstraints13.gridx = 0;
-			gridBagConstraints13.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints13.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints13.gridy = 4;
-			statusLabel = new JLabel();
-			statusLabel.setText("User Status");
-			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
-			gridBagConstraints12.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints12.gridy = 3;
-			gridBagConstraints12.weightx = 1.0;
-			gridBagConstraints12.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints12.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints12.gridx = 1;
-			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-			gridBagConstraints11.gridx = 0;
-			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints11.gridy = 3;
-			emailLabel = new JLabel();
-			emailLabel.setText("Email");
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
 			gridBagConstraints10.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints10.gridy = 2;
 			gridBagConstraints10.weightx = 1.0;
-			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints10.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints10.gridx = 1;
 			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
 			gridBagConstraints9.gridx = 0;
-			gridBagConstraints9.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints9.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints9.gridy = 2;
-			uidLabel = new JLabel();
-			uidLabel.setText("User Id");
+			statusLabel = new JLabel();
+			statusLabel.setText("Status");
 			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 			gridBagConstraints8.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints8.gridy = 1;
 			gridBagConstraints8.weightx = 1.0;
-			gridBagConstraints8.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints8.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints8.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints8.gridx = 1;
 			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-			gridBagConstraints7.gridx = 0;
 			gridBagConstraints7.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints7.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints7.gridy = 1;
-			idpLabel = new JLabel();
-			idpLabel.setText("Identity Provider");
+			gridBagConstraints7.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints7.gridx = 0;
+			nameLabel = new JLabel();
+			nameLabel.setText("Name");
+			nameLabel.setName("Name");
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 			gridBagConstraints6.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints6.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints6.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints6.gridx = 1;
 			gridBagConstraints6.gridy = 0;
+			gridBagConstraints6.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints6.weightx = 1.0;
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints5.gridy = 0;
-			gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints5.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints5.gridx = 0;
-			gridIdLabel = new JLabel();
-			gridIdLabel.setText("Grid Identity");
+			idLabel = new JLabel();
+			idLabel.setText("IdP Id:");
+			if(newTrustedIdP){
+				
+			}
 			jPanel1 = new JPanel();
-			jPanel1.setName(INFO_PANEL);
 			jPanel1.setLayout(new GridBagLayout());
-			jPanel1.add(gridIdLabel, gridBagConstraints5);
-			jPanel1.add(getGridIdentity(), gridBagConstraints6);
-			jPanel1.add(idpLabel, gridBagConstraints7);
-			jPanel1.add(getTrustedIdP(), gridBagConstraints8);
-			jPanel1.add(uidLabel, gridBagConstraints9);
-			jPanel1.add(getUserId(), gridBagConstraints10);
-			jPanel1.add(emailLabel, gridBagConstraints11);
-			jPanel1.add(getEmail(), gridBagConstraints12);
-			jPanel1.add(statusLabel, gridBagConstraints13);
-			jPanel1.add(roleStatus, gridBagConstraints14);
-			jPanel1.add(getUserStatus(), gridBagConstraints15);
-			jPanel1.add(getUserRole(), gridBagConstraints16);
+			jPanel1.add(statusLabel, gridBagConstraints9);
+			jPanel1.add(getStatus(), gridBagConstraints10);
+			jPanel1.setName(INFO_PANEL);
+			jPanel1.add(idLabel, gridBagConstraints5);
+			jPanel1.add(getIdpId(), gridBagConstraints6);
+			jPanel1.add(nameLabel, gridBagConstraints7);
+			jPanel1.add(getIdPName(), gridBagConstraints8);
+			
 		}
 		return jPanel1;
 	}
@@ -520,94 +431,6 @@ public class UserWindow extends GridPortalBaseFrame {
 
 
 	/**
-	 * This method initializes gridIdentity
-	 * 
-	 * @return javax.swing.JTextField
-	 */
-	private JTextField getGridIdentity() {
-		if (gridIdentity == null) {
-			gridIdentity = new JTextField();
-			gridIdentity.setText(user.getGridId());
-			gridIdentity.setEditable(false);
-		}
-		return gridIdentity;
-	}
-
-
-	/**
-	 * This method initializes trustedIdP
-	 * 
-	 * @return javax.swing.JTextField
-	 */
-	private JTextField getTrustedIdP() {
-		if (trustedIdP == null) {
-			trustedIdP = new JTextField();
-			trustedIdP.setEditable(false);
-			trustedIdP.setText("[IdP Id:" + idp.getId() + "] " + idp.getName());
-		}
-		return trustedIdP;
-	}
-
-
-	/**
-	 * This method initializes userId
-	 * 
-	 * @return javax.swing.JTextField
-	 */
-	private JTextField getUserId() {
-		if (userId == null) {
-			userId = new JTextField();
-			userId.setEditable(false);
-			userId.setText(user.getUID());
-		}
-		return userId;
-	}
-
-
-	/**
-	 * This method initializes email
-	 * 
-	 * @return javax.swing.JTextField
-	 */
-	private JTextField getEmail() {
-		if (email == null) {
-			email = new JTextField();
-			email.setEditable(false);
-			email.setText(user.getEmail());
-		}
-		return email;
-	}
-
-
-	/**
-	 * This method initializes userStatus
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getUserStatus() {
-		if (userStatus == null) {
-			userStatus = new UserStatusComboBox();
-			userStatus.setSelectedItem(user.getUserStatus());
-		}
-		return userStatus;
-	}
-
-
-	/**
-	 * This method initializes userRole
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getUserRole() {
-		if (userRole == null) {
-			userRole = new UserRolesComboBox();
-			userRole.setSelectedItem(user.getUserRole());
-		}
-		return userRole;
-	}
-
-
-	/**
 	 * This method initializes certificatePanel
 	 * 
 	 * @return javax.swing.JPanel
@@ -638,8 +461,10 @@ public class UserWindow extends GridPortalBaseFrame {
 	private CertificatePanel getCredPanel() {
 		if (credPanel == null) {
 			try {
-				credPanel = new CertificatePanel(CertUtil.loadCertificateFromString(user.getCertificate()
-					.getCertificateAsString()));
+				credPanel = new CertificatePanel();
+				if (idp.getIdPCertificate() != null) {
+					credPanel.setCertificate(CertUtil.loadCertificateFromString(idp.getIdPCertificate()));
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -649,22 +474,51 @@ public class UserWindow extends GridPortalBaseFrame {
 
 
 	/**
-	 * This method initializes renewCredentials
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getRenewCredentials() {
-		if (renewCredentials == null) {
-			renewCredentials = new JButton();
-			renewCredentials.setText("Renew Credentials");
-			renewCredentials.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					renewCredentials();
-				}
-			});
-			renewCredentials.setIcon(GumsLookAndFeel.getRenewCredentialsIcon());
+	 * This method initializes idpId	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */    
+	private JTextField getIdpId() {
+		if (idpId == null) {
+			idpId = new JTextField();
+			idpId.setEditable(false);
+			if(!newTrustedIdP){
+				idpId.setText(String.valueOf(idp.getId()));
+			}
 		}
-		return renewCredentials;
+		return idpId;
+	}
+
+
+	/**
+	 * This method initializes idPName	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */    
+	private JTextField getIdPName() {
+		if (idpName == null) {
+			idpName = new JTextField();
+			if(!newTrustedIdP){
+				idpName.setText(idp.getName());
+			}
+		}
+		return idpName;
+	}
+
+
+	/**
+	 * This method initializes status	
+	 * 	
+	 * @return javax.swing.JComboBox	
+	 */    
+	private TrustedIdPStatusComboBox getStatus() {
+		if (status == null) {
+			status = new TrustedIdPStatusComboBox();
+			if(!newTrustedIdP){
+				status.setSelectedItem(idp.getStatus());
+			}
+		}
+		return status;
 	}
 
 }

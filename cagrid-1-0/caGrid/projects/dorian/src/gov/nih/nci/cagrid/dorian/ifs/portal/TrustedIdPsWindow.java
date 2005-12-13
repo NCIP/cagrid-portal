@@ -35,7 +35,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPsWindow.java,v 1.1 2005-12-12 21:00:41 langella Exp $
+ * @version $Id: TrustedIdPsWindow.java,v 1.2 2005-12-13 19:53:22 langella Exp $
  */
 public class TrustedIdPsWindow extends GridPortalBaseFrame {
 
@@ -46,8 +46,6 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 	private JPanel contentPanel = null;
 
 	private JPanel buttonPanel = null;
-
-	private JButton cancel = null;
 
 	private TrustedIdPTable trustedIdPTable = null;
 
@@ -85,6 +83,8 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 
 	private JButton removeUser = null;
 
+	private JButton addUser = null;
+
 
 	/**
 	 * This is the default constructor
@@ -92,7 +92,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 	public TrustedIdPsWindow() {
 		super();
 		initialize();
-		this.setFrameIcon(GumsLookAndFeel.getUsersIcon());
+		this.setFrameIcon(GumsLookAndFeel.getTrustedIdPIcon());
 	}
 
 
@@ -104,7 +104,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 	private void initialize() {
 		this.setSize(500, 500);
 		this.setContentPane(getJContentPane());
-		this.setTitle("Identity Federation User Management");
+		this.setTitle("Trusted Identity Provider Management");
 
 	}
 
@@ -186,6 +186,8 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GumsLookAndFeel.getPanelLabelColor()));
 			gridBagConstraints4.weightx = 1.0;
+			gridBagConstraints4.gridy = 0;
+			gridBagConstraints4.gridx = 0;
 			gridBagConstraints4.weighty = 1.0;
 			gridBagConstraints4.fill = java.awt.GridBagConstraints.BOTH;
 			contentPanel.add(getJScrollPane(), gridBagConstraints4);
@@ -202,31 +204,11 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
+			buttonPanel.add(getAddUser(), null);
 			buttonPanel.add(getManageUser(), null);
 			buttonPanel.add(getRemoveUser(), null);
-			buttonPanel.add(getCancel(), null);
 		}
 		return buttonPanel;
-	}
-
-
-	/**
-	 * This method initializes jButton1
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getCancel() {
-		if (cancel == null) {
-			cancel = new JButton();
-			cancel.setText("Close");
-			cancel.setIcon(GumsLookAndFeel.getCloseIcon());
-			cancel.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					dispose();
-				}
-			});
-		}
-		return cancel;
 	}
 
 
@@ -265,8 +247,8 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 	private JButton getManageUser() {
 		if (manageUser == null) {
 			manageUser = new JButton();
-			manageUser.setText("Manage User");
-			manageUser.setIcon(GumsLookAndFeel.getUserMagnifyIcon());
+			manageUser.setText("View/Edit Trusted IdP");
+			manageUser.setIcon(GumsLookAndFeel.getTrustedIdPIcon());
 			manageUser.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					showTrustedIdP();
@@ -280,38 +262,23 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 
 
 	public void showTrustedIdP() {
-/*
-		MobiusRunnable runner = new MobiusRunnable() {
-			public void execute() {
-				try {
-					IFSUser user = (IFSUser) getTrustedIdPTable().getSelectedUser();
-					String service = ((GUMSServiceListComboBox) getService()).getSelectedService();
-
-					GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-					CommunicationStyle style = new SecureConversationWithEncryption(proxy);
-					IFSAdministrationClient client = new IFSAdministrationClient(service, style);
-					;
-					TrustedIdP[] idps = client.getTrustedIdPs();
-					TrustedIdP tidp = null;
-					for (int i = 0; i < idps.length; i++) {
-						if (idps[i].getId() == user.getIdPId()) {
-							tidp = idps[i];
-							break;
-						}
-					}
-					PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-						new UserWindow(service, proxy, user, tidp));
-				} catch (Exception e) {
-					PortalUtils.showErrorMessage(e);
-				}
-			}
-		};
 		try {
-			PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
-		} catch (Exception t) {
-			t.getMessage();
+			String service = ((GUMSServiceListComboBox) getService()).getSelectedService();
+			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new TrustedIdPWindow(service,proxy,getTrustedIdPTable().getSelectedTrustedIdP()));
+		} catch (Exception e) {
+			PortalUtils.showErrorMessage(e);
 		}
-		*/
+	}
+	
+	public void addTrustedIdP() {
+		try {
+			String service = ((GUMSServiceListComboBox) getService()).getSelectedService();
+			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new TrustedIdPWindow(service,proxy));
+		} catch (Exception e) {
+			PortalUtils.showErrorMessage(e);
+		}
 	}
 
 
@@ -449,8 +416,6 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 			String service = ((GUMSServiceListComboBox) getService()).getSelectedService();
 			CommunicationStyle style = new SecureConversationWithEncryption(proxy);
 
-			
-			
 			IFSAdministration client = new IFSAdministrationClient(service, style);
 			TrustedIdP[] idps = client.getTrustedIdPs();
 			for (int i = 0; i < idps.length; i++) {
@@ -469,7 +434,6 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 		isQuerying = false;
 
 	}
-
 
 
 	/**
@@ -546,11 +510,6 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 	}
 
 
-	
-
-
-
-
 	/**
 	 * This method initializes removeUser
 	 * 
@@ -564,7 +523,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
-							 removeUser();
+							removeUser();
 						}
 					};
 					try {
@@ -582,19 +541,36 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 
 	private void removeUser() {
 		/*
-		String service = ((GUMSServiceListComboBox) getService()).getSelectedService();
-		try {
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			CommunicationStyle style = new SecureConversationWithEncryption(proxy);
-			IFSAdministrationClient client = new IFSAdministrationClient(service, style);
-			;
-			IFSUser usr = this.getTrustedIdPTable().getSelectedUser();
-			client.removeUser(usr);
-			this.getTrustedIdPTable().removeSelectedUser();
-		} catch (Exception e) {
-			PortalUtils.showErrorMessage(e);
+		 * String service = ((GUMSServiceListComboBox)
+		 * getService()).getSelectedService(); try { GlobusCredential proxy =
+		 * ((ProxyComboBox) getProxy()).getSelectedProxy(); CommunicationStyle
+		 * style = new SecureConversationWithEncryption(proxy);
+		 * IFSAdministrationClient client = new IFSAdministrationClient(service,
+		 * style); ; IFSUser usr = this.getTrustedIdPTable().getSelectedUser();
+		 * client.removeUser(usr);
+		 * this.getTrustedIdPTable().removeSelectedUser(); } catch (Exception e) {
+		 * PortalUtils.showErrorMessage(e); }
+		 */
+	}
+
+
+	/**
+	 * This method initializes addUser	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */    
+	private JButton getAddUser() {
+		if (addUser == null) {
+			addUser = new JButton();
+			addUser.setText("Add Trusted IdP");
+			addUser.addActionListener(new java.awt.event.ActionListener() { 
+				public void actionPerformed(java.awt.event.ActionEvent e) {    
+					addTrustedIdP();
+				}
+			});
+			addUser.setIcon(GumsLookAndFeel.getAddTrustedIdPIcon());
 		}
-      */
+		return addUser;
 	}
 
 }
