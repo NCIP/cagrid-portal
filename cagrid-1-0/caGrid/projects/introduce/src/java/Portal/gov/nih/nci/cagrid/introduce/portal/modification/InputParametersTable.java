@@ -59,6 +59,7 @@ public class InputParametersTable extends PortalTable {
 		v.add(v);
 
 		((DefaultTableModel) this.getModel()).addRow(v);
+		 this.setRowSelectionInterval(this.getModel().getRowCount()-1, this.getModel().getRowCount()-1);
 	}
 
 
