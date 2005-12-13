@@ -1,0 +1,33 @@
+package gov.nih.nci.cagrid.introduce.portal.modification;
+
+import javax.swing.JFrame;
+
+public abstract class BusyDialogRunnable implements Runnable {
+	
+	final private BusyDialog dialog;
+	
+	public BusyDialogRunnable(JFrame owner, String title){
+		dialog = new BusyDialog(owner, title, this);
+	}
+	
+	public void setProgressText(String text){
+		dialog.getProgress().setString(text);
+	}
+	
+
+	public void run() {
+		Thread thread = new Thread(new Runnable() {
+			public void run() {
+				dialog.show();
+			}
+		});
+		thread.start();
+		dialog.getProgress().setIndeterminate(true);
+		process();
+		dialog.getProgress().setIndeterminate(false);
+		dialog.dispose();
+	}
+	
+    public abstract void process(); 
+
+}

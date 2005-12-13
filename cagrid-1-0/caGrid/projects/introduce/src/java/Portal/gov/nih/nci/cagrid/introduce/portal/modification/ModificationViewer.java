@@ -21,6 +21,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -34,14 +35,12 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
-import javax.swing.JProgressBar;
-import javax.swing.JMenuBar;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.13 2005-12-13 14:21:41 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.14 2005-12-13 18:33:49 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -85,8 +84,6 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	private JButton undoButton = null;
 
 	private boolean dirty = false;
-
-	private JProgressBar progress = null;
 
 	private JPanel progressPanel = null;
 
@@ -169,7 +166,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		chooser.setMultiSelectionEnabled(false);
-		int returnVal = chooser.showOpenDialog(jContentPane);
+		int returnVal = chooser.showOpenDialog(me);
 
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			this.methodsDirectory = chooser.getSelectedFile();
@@ -239,7 +236,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			gridBagConstraints12.gridy = 3;
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			gridBagConstraints11.anchor = java.awt.GridBagConstraints.SOUTH;
-			gridBagConstraints11.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints11.gridheight = 0;
 			gridBagConstraints11.gridwidth = 0;
 			gridBagConstraints11.gridx = 0;
@@ -457,15 +454,16 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			saveButton.setToolTipText("modify and rebuild service");
 			saveButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					progress.setIndeterminate(true);
-					Thread myThread = new Thread(new Runnable() {
-					
-						public void run() {
+					final int confirmed = JOptionPane.showConfirmDialog(me,
+							"Are you sure you want to save?");
+					BusyDialogRunnable r = new BusyDialogRunnable(
+							PortalResourceManager.getInstance().getGridPortal(),
+							"Save") {
+
+						public void process() {
 							try {
-								progress.setString("writting methods document");
-								int confirmed = JOptionPane
-										.showConfirmDialog(me,
-												"Are you sure you want to save, this may modify any current work you may have.");
+								setProgressText("writting methods document");
+
 								if (confirmed == JOptionPane.OK_OPTION) {
 									System.out
 											.println("Writting service.methods file.");
@@ -477,35 +475,32 @@ public class ModificationViewer extends GridPortalBaseFrame {
 											.getPrettyFormat());
 									out.output(methodsDocument, fw);
 
-									progress.setString("sychronizing skeleton");
+									setProgressText("sychronizing skeleton");
 									// call the sync tools
-									SyncTools sync = new SyncTools(methodsDirectory);
+									SyncTools sync = new SyncTools(
+											methodsDirectory);
 									sync.sync();
-									progress.setString("rebuilding skeleton");
-									String cmd = CommonTools.getAntCommand("clean all",
-											methodsDirectory.getAbsolutePath());
-									Process p = CommonTools.createAndOutputProcess(cmd);
+									setProgressText("rebuilding skeleton");
+									String cmd = CommonTools.getAntCommand(
+											"clean all", methodsDirectory
+													.getAbsolutePath());
+									Process p = CommonTools
+											.createAndOutputProcess(cmd);
 									p.waitFor();
 									dirty = false;
-									progress.setString("loading service properties");
+									setProgressText("loading service properties");
 									loadServiceProps();
-									progress.setString("");
+									setProgressText("");
 								}
 							} catch (Exception e1) {
 								e1.printStackTrace();
-								PortalUtils.showMessage(e1.getMessage());
 							}
-					
 						}
-					
-					});
-					myThread.start();
-					try {
-						myThread.wait();
-					} catch (InterruptedException e1) {
-						e1.printStackTrace();
-					}
-					progress.setIndeterminate(false);
+
+					};
+					Thread th = new Thread(r);
+					th.start();
+
 				}
 			});
 		}
@@ -642,15 +637,16 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			undoButton.setToolTipText("roll back to last save state");
 			undoButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					progress.setIndeterminate(true);
-					Thread myThread = new Thread(new Runnable() {
+					BusyDialogRunnable r = new BusyDialogRunnable(
+							PortalResourceManager.getInstance().getGridPortal(),
+							"Undo") {
 
-						public void run() {
+						public void process() {
 							System.out
 									.println("Loading in last known save for this project");
 							try {
 								if (!dirty) {
-									progress.setString("restoring from local cache");
+									setProgressText("restoring from local cache");
 									Archive
 											.restoreLatest(
 													serviceProperties
@@ -672,14 +668,9 @@ public class ModificationViewer extends GridPortalBaseFrame {
 
 						}
 
-					});
-					myThread.start();
-					try {
-						myThread.wait();
-					} catch (InterruptedException e1) {
-						e1.printStackTrace();
-					}
-					progress.setIndeterminate(false);
+					};
+					Thread th = new Thread(r);
+					th.start();
 				}
 			});
 		}
@@ -687,45 +678,22 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	}
 
 	/**
-	 * This method initializes progress
+	 * This method initializes progressPanel
 	 * 
-	 * @return javax.swing.JProgressBar
-	 */
-	private JProgressBar getProgress() {
-		if (progress == null) {
-			progress = new JProgressBar();
-			progress.setString("");
-			progress.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 10));
-			progress.setStringPainted(true);
-		}
-		return progress;
-	}
-
-	/**
-	 * This method initializes progressPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getProgressPanel() {
 		if (progressPanel == null) {
-			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
-			gridBagConstraints13.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints13.gridy = 0;
-			gridBagConstraints13.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints13.weighty = 0.0D;
-			gridBagConstraints13.weightx = 1.0D;
-			gridBagConstraints13.gridx = 0;
 			progressPanel = new JPanel();
 			progressPanel.setLayout(new GridBagLayout());
-			progressPanel.add(getProgress(), gridBagConstraints13);
 		}
 		return progressPanel;
 	}
 
 	/**
-	 * This method initializes menu	
-	 * 	
-	 * @return javax.swing.JMenuBar	
+	 * This method initializes menu
+	 * 
+	 * @return javax.swing.JMenuBar
 	 */
 	private JMenuBar getMenu() {
 		if (menu == null) {
