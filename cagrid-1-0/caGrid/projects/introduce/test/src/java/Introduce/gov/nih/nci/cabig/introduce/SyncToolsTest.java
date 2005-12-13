@@ -16,12 +16,9 @@ import com.atomicobject.haste.framework.Story;
 
 public class SyncToolsTest extends Story {
 	private TestCaseInfo tci;
-	
-	public SyncToolsTest(){
-		this.tci = new TestCaseInfo();
-	}
 
 	protected Vector steps() {
+		this.tci = new TestCaseInfo();
 		Vector steps = new Vector();
 
 		steps.add(new CreateSkeletonStep(tci));
@@ -30,6 +27,7 @@ public class SyncToolsTest extends Story {
 		steps.add(new BuildSkeletonStep(tci));
 		steps.add(new RemoveSimpleMethodStep(tci));
 		steps.add(new BuildSkeletonStep(tci));
+		steps.add(new RemoveSkeletonStep(tci));
 
 		return steps;
 	}
@@ -43,9 +41,6 @@ public class SyncToolsTest extends Story {
 	}
 
 	protected void storyTearDown() throws Throwable {
-		RemoveSkeletonStep step = new RemoveSkeletonStep(tci);
-		step.runStep();
-
 	}
 
 	// used to make sure that if we are going to use a junit testsuite to test this 

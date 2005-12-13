@@ -23,8 +23,11 @@ public class RemoveSkeletonStep extends Step {
 			System.out.println("pathtobasedir system property not set");
 			throw new Exception("pathtobasedir system property not set");
 		}
-		assertTrue(CommonTools.deleteDir(new File(pathtobasedir
-				+ File.separator + tci.getDir())));
+		boolean results = CommonTools.deleteDir(new File(pathtobasedir
+				+ File.separator + tci.getDir()));
+		System.out.println("__________________________" + results);
+		assertTrue(results);
+	
 	}
 
 }
