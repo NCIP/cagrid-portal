@@ -1,5 +1,6 @@
-package gov.nih.nci.cabig.introduce;
+package gov.nih.nci.cabig.introduce.steps;
 
+import gov.nih.nci.cabig.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.common.CommonTools;
 
 import java.io.File;
@@ -12,6 +13,11 @@ import org.projectmobius.common.XMLUtilities;
 import com.atomicobject.haste.framework.Step;
 
 public class AddSimpleMethodStep extends Step {
+	private TestCaseInfo tci;
+	
+	public AddSimpleMethodStep(TestCaseInfo tci){
+		this.tci = tci;
+	}
 
 	public void runStep() throws Throwable {
 		System.out.println("Adding a simple method.");
@@ -24,7 +30,7 @@ public class AddSimpleMethodStep extends Step {
 		}
 
 		Document methodsDoc = XMLUtilities.fileNameToDocument(pathtobasedir
-				+ File.separator + TestCaseInfo.dir + File.separator
+				+ File.separator + tci.getDir() + File.separator
 				+ "introduceMethods.xml");
 
 		Element root = methodsDoc.getRootElement();
@@ -36,13 +42,13 @@ public class AddSimpleMethodStep extends Step {
 		method.addContent(output);
 
 		FileWriter fw = new FileWriter(pathtobasedir + File.separator
-				+ TestCaseInfo.dir + File.separator + "introduceMethods.xml");
+				+ tci.getDir() + File.separator + "introduceMethods.xml");
 		fw.write(XMLUtilities.formatXML(XMLUtilities
 				.documentToString(methodsDoc)));
 		fw.close();
 
 		String cmd = CommonTools.getAntSkeletonResyncCommand(pathtobasedir
-				+ File.separator + TestCaseInfo.dir);
+				+ File.separator + tci.getDir());
 
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();

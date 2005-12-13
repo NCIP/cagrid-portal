@@ -1,4 +1,4 @@
-package gov.nih.nci.cabig.introduce;
+package gov.nih.nci.cabig.introduce.steps;
 
 import com.atomicobject.haste.framework.Step;
 

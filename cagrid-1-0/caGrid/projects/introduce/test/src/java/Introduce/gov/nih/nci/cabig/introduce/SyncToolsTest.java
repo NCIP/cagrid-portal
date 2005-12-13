@@ -1,5 +1,11 @@
 package gov.nih.nci.cabig.introduce;
 
+import gov.nih.nci.cabig.introduce.steps.AddSimpleMethodStep;
+import gov.nih.nci.cabig.introduce.steps.BuildSkeletonStep;
+import gov.nih.nci.cabig.introduce.steps.CreateSkeletonStep;
+import gov.nih.nci.cabig.introduce.steps.RemoveSimpleMethodStep;
+import gov.nih.nci.cabig.introduce.steps.RemoveSkeletonStep;
+
 import java.util.Vector;
 
 import junit.framework.TestResult;
@@ -9,16 +15,21 @@ import junit.textui.TestRunner;
 import com.atomicobject.haste.framework.Story;
 
 public class SyncToolsTest extends Story {
+	private TestCaseInfo tci;
+	
+	public SyncToolsTest(){
+		this.tci = new TestCaseInfo();
+	}
 
 	protected Vector steps() {
 		Vector steps = new Vector();
 
-		steps.add(new CreateSkeletonStep());
-		steps.add(new BuildSkeletonStep());
-		steps.add(new AddSimpleMethodStep());
-		steps.add(new BuildSkeletonStep());
-		steps.add(new RemoveSimpleMethodStep());
-		steps.add(new BuildSkeletonStep());
+		steps.add(new CreateSkeletonStep(tci));
+		steps.add(new BuildSkeletonStep(tci));
+		steps.add(new AddSimpleMethodStep(tci));
+		steps.add(new BuildSkeletonStep(tci));
+		steps.add(new RemoveSimpleMethodStep(tci));
+		steps.add(new BuildSkeletonStep(tci));
 
 		return steps;
 	}
@@ -32,7 +43,7 @@ public class SyncToolsTest extends Story {
 	}
 
 	protected void storyTearDown() throws Throwable {
-		RemoveSkeletonStep step = new RemoveSkeletonStep();
+		RemoveSkeletonStep step = new RemoveSkeletonStep(tci);
 		step.runStep();
 
 	}

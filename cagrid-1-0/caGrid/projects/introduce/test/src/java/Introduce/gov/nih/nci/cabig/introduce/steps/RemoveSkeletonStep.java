@@ -1,5 +1,6 @@
-package gov.nih.nci.cabig.introduce;
+package gov.nih.nci.cabig.introduce.steps;
 
+import gov.nih.nci.cabig.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.common.CommonTools;
 
 import java.io.File;
@@ -7,6 +8,11 @@ import java.io.File;
 import com.atomicobject.haste.framework.Step;
 
 public class RemoveSkeletonStep extends Step {
+	private TestCaseInfo tci;
+	
+	public RemoveSkeletonStep(TestCaseInfo tci){
+		this.tci = tci;
+	}
 
 	public void runStep() throws Throwable {
 		System.out.println("Removing the service skeleton");
@@ -18,7 +24,7 @@ public class RemoveSkeletonStep extends Step {
 			throw new Exception("pathtobasedir system property not set");
 		}
 		assertTrue(CommonTools.deleteDir(new File(pathtobasedir
-				+ File.separator + TestCaseInfo.dir)));
+				+ File.separator + tci.getDir())));
 	}
 
 }

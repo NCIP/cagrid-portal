@@ -1,10 +1,16 @@
-package gov.nih.nci.cabig.introduce;
+package gov.nih.nci.cabig.introduce.steps;
 
+import gov.nih.nci.cabig.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.common.CommonTools;
 
 import com.atomicobject.haste.framework.Step;
 
 public class CreateSkeletonStep extends Step {
+	private TestCaseInfo tci;
+	
+	public CreateSkeletonStep(TestCaseInfo tci){
+		this.tci = tci;
+	}
 	
 	public void runStep() throws Throwable {
 		System.out.println("Creating the service skeleton");
@@ -17,8 +23,8 @@ public class CreateSkeletonStep extends Step {
 		}
 		
 		String cmd = CommonTools.getAntSkeletonCreationCommand(pathtobasedir,
-				TestCaseInfo.name, TestCaseInfo.dir, TestCaseInfo.packageName,
-				TestCaseInfo.namespaceDomain);
+				tci.getName(), tci.getDir(), tci.getPackageName(),
+				tci.getNamespaceDomain());
 
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();

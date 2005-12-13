@@ -3,7 +3,7 @@ To Do:
 	i.e. No Service in the name (fixed 12/7/05)
 		 No non-acceptable characters for java class names
 
-Enable service to back up old service skeleton before altering and then provide rollback capabilities.
+(DONE) Enable service to back up old service skeleton before altering and then provide rollback capabilities.
 	i.e. Enable "undo" in the gui.
 
 (DONE) Map the ext/NStoPkg.mappings with those in the skeleton (right now they are copied into the skeleton's file)
@@ -16,8 +16,8 @@ Make notes on how to add a new template.
 
 Need to programatically be able to 
 	-create service from a pre-defined service template
-	-add new metadata to the service
-	-add state variables
+	-add/remove new metadata to the service
+	-add/remove state variables
 	
 
 
