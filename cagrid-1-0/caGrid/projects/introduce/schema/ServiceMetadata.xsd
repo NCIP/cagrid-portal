@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="gme://gov.nih.nci.cagrid.introduce/1/Metadata"
+	xmlns="gme://gov.nih.nci.cagrid.introduce/1/Metadata"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+	<xs:attributeGroup name="SchemaDervivedType">
+		<xs:attribute name="className" type="xs:string" use="optional">
+			<xs:annotation>
+				<xs:documentation>Used to specify the class name of an existing object that can
+					serialize to, and deserialize from, the document defined by the namespace:type
+					attributes. If it is omitted, it is assumed it is to be created using the
+					schema.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="namespace" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>Used to specify the namespace of the schema which defines the
+					type.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="type" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>Used to specify the name of the type in the schema which defines
+					the type.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="location" type="xs:string" use="optional">
+			<xs:annotation>
+				<xs:documentation>Used to specify the location schema on the local filesystem. If it
+					is omitted, it is assumed it can be retrieved from a GME.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:element name="ServiceMetadataList" type="ServiceMetadataListType"/>
+	<xs:complexType name="ServiceMetadataListType">
+		<xs:sequence>
+			<xs:element name="Metadata" type="ServiceMetadataType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ServiceMetadataType">
+		<xs:attributeGroup ref="SchemaDervivedType"/>
+		<xs:attribute name="populateFromFile" type="xs:boolean" use="required">
+			<xs:annotation>
+				<xs:documentation>Indicates whether the value of the metadata should be loaded from
+					a file or will be populated by the implementation.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="register" type="xs:boolean" use="required">
+			<xs:annotation>
+				<xs:documentation>Indicates whether this metadata should be registered if the
+					service performs registration.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="QName" type="xs:QName" use="required">
+			<xs:annotation>
+				<xs:documentation>Indicates the QName of the metadata.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+</xs:schema>
