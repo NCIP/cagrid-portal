@@ -27,7 +27,7 @@ public class SyncToolsTest extends Story {
 		steps.add(new BuildSkeletonStep(tci));
 		steps.add(new RemoveSimpleMethodStep(tci));
 		steps.add(new BuildSkeletonStep(tci));
-		steps.add(new RemoveSkeletonStep(tci));
+		
 
 		return steps;
 	}
@@ -36,11 +36,9 @@ public class SyncToolsTest extends Story {
 		return "Tests the code generation tools";
 	}
 
-	protected boolean storySetUp() throws Throwable {
-		return true;
-	}
-
 	protected void storyTearDown() throws Throwable {
+		RemoveSkeletonStep step = new RemoveSkeletonStep(tci);
+		step.runStep();
 	}
 
 	// used to make sure that if we are going to use a junit testsuite to test this 

@@ -92,12 +92,12 @@
 	<classpathentry kind="lib" path="test/lib/DartClient-0.6.jar"/>
 	<classpathentry kind="lib" path="test/lib/docall.jar"/>
 	<classpathentry kind="lib" path="test/lib/gnu-regexp-110.jar"/>
-	<classpathentry kind="lib" path="test/lib/haste.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/jdepend-2.7-patched.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/junit.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/junit-addons-1.4.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/xmlunit1.0.jar"/>
 	<classpathentry kind="var" path="ANT_HOME/lib/ant.jar"/>
 	<classpathentry kind="var" path="ANT_HOME/lib/ant-launcher.jar"/>
+	<classpathentry kind="lib" path="test/lib/shaste-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
