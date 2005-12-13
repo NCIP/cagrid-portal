@@ -34,12 +34,13 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
+import javax.swing.JProgressBar;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.11 2005-12-12 21:33:08 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.12 2005-12-13 02:58:13 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -81,6 +82,10 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	private JPanel contentButtonPanel = null;
 
 	private JButton undoButton = null;
+
+	private boolean dirty = false;
+
+	private JProgressBar progress = null;
 
 	/**
 	 * This is the default constructor
@@ -130,10 +135,10 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		this.getLabel("Service Name").setFont(f1);
 		this.getTextField("Service Name").setFont(f2);
 
-		this.addTextField(this.getSelectPanel(), "Destination Dir",
-				methodsDirectory.getAbsolutePath(), 3, false);
-		this.getLabel("Destination Dir").setFont(f1);
-		this.getTextField("Destination Dir").setFont(f2);
+		this.addTextField(this.getSelectPanel(), "Location", methodsDirectory
+				.getAbsolutePath(), 3, false);
+		this.getLabel("Location").setFont(f1);
+		this.getTextField("Location").setFont(f2);
 		this.addTextField(this.getSelectPanel(), "Package", serviceProperties
 				.getProperty("introduce.skeleton.package"), 4, false);
 		this.getLabel("Package").setFont(f1);
@@ -258,10 +263,10 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	private JPanel getContentPanel() {
 		if (contentPanel == null) {
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.gridx = 1;
+			gridBagConstraints.gridx = 3;
 			gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints.gridwidth = 3;
-			gridBagConstraints.gridy = 1;
+			gridBagConstraints.gridwidth = 1;
+			gridBagConstraints.gridy = 0;
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			contentPanel = new JPanel();
 			contentPanel.setLayout(new GridBagLayout());
@@ -278,7 +283,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			gridBagConstraints4.weightx = 1.0;
 			gridBagConstraints4.weighty = 1.0;
 			gridBagConstraints4.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints4.gridwidth = 3;
+			gridBagConstraints4.gridwidth = 2;
 			gridBagConstraints4.gridx = 0;
 			gridBagConstraints4.gridy = 0;
 			contentPanel.add(getJScrollPane(), gridBagConstraints4);
@@ -294,10 +299,34 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints11.gridy = 1;
+			gridBagConstraints11.gridwidth = 0;
+			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints11.weighty = 1.0D;
+			gridBagConstraints11.gridheight = 0;
+			gridBagConstraints11.anchor = java.awt.GridBagConstraints.SOUTH;
+			gridBagConstraints11.gridx = 0;
+			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+			gridBagConstraints10.insets = new java.awt.Insets(5, 5, 5, 5);
+			gridBagConstraints10.gridy = 0;
+			gridBagConstraints10.fill = java.awt.GridBagConstraints.NONE;
+			gridBagConstraints10.gridx = 2;
+			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
+			gridBagConstraints9.insets = new java.awt.Insets(5, 5, 5, 5);
+			gridBagConstraints9.gridy = 0;
+			gridBagConstraints9.gridx = 1;
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.insets = new java.awt.Insets(5, 5, 5, 5);
+			gridBagConstraints8.gridy = 0;
+			gridBagConstraints8.gridx = 0;
 			buttonPanel = new JPanel();
-			buttonPanel.add(getUndoButton(), null);
-			buttonPanel.add(getSaveButton(), null);
-			buttonPanel.add(getCancel(), null);
+			buttonPanel.setLayout(new GridBagLayout());
+			buttonPanel.add(getUndoButton(), gridBagConstraints8);
+			buttonPanel.add(getSaveButton(), gridBagConstraints9);
+			buttonPanel.add(getCancel(), gridBagConstraints10);
+			buttonPanel.add(getProgress(), gridBagConstraints11);
 		}
 		return buttonPanel;
 	}
@@ -377,10 +406,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			addMethodButton
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
-							System.out.println("actionPerformed()"); // TODO
-							// Auto-generated
-							// Event stub
-							// actionPerformed()
+							dirty = true;
 							Element method = new Element("method",
 									methodsDocument.getRootElement()
 											.getNamespace());
@@ -418,38 +444,55 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			saveButton.setText("Save");
 			saveButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					try {
-						int confirmed = JOptionPane
-								.showConfirmDialog(me,
-										"Are you sure you want to save, this may modify any current work you may have.");
-						if (confirmed == JOptionPane.OK_OPTION) {
-							System.out
-									.println("Writting service.methods file.");
-							FileWriter fw = new FileWriter(new File(
-									methodsDirectory.getAbsolutePath()
-											+ File.separator
-											+ "introduceMethods.xml"));
-							XMLOutputter out = new XMLOutputter(Format
-									.getPrettyFormat());
-							out.output(methodsDocument, fw);
+					progress.setIndeterminate(true);
+					Thread myThread = new Thread(new Runnable() {
+					
+						public void run() {
+							try {
+								progress.setString("writting methods document");
+								int confirmed = JOptionPane
+										.showConfirmDialog(me,
+												"Are you sure you want to save, this may modify any current work you may have.");
+								if (confirmed == JOptionPane.OK_OPTION) {
+									System.out
+											.println("Writting service.methods file.");
+									FileWriter fw = new FileWriter(new File(
+											methodsDirectory.getAbsolutePath()
+													+ File.separator
+													+ "introduceMethods.xml"));
+									XMLOutputter out = new XMLOutputter(Format
+											.getPrettyFormat());
+									out.output(methodsDocument, fw);
 
-							// call the sync tools
-							SyncTools sync = new SyncTools(methodsDirectory);
-							sync.sync();
-							String cmd = CommonTools.getAntCommand("clean all",
-									methodsDirectory.getAbsolutePath());
-							Process p = CommonTools.createAndOutputProcess(cmd);
-							p.waitFor();
-							cmd = CommonTools.getAntAllCommand(methodsDirectory
-									.getAbsolutePath());
-							p = CommonTools.createAndOutputProcess(cmd);
-							p.waitFor();
-							loadServiceProps();
+									progress.setString("sychronizing skeleton");
+									// call the sync tools
+									SyncTools sync = new SyncTools(methodsDirectory);
+									sync.sync();
+									progress.setString("rebuilding skeleton");
+									String cmd = CommonTools.getAntCommand("clean all",
+											methodsDirectory.getAbsolutePath());
+									Process p = CommonTools.createAndOutputProcess(cmd);
+									p.waitFor();
+									dirty = false;
+									progress.setString("loading service properties");
+									loadServiceProps();
+									progress.setString("");
+								}
+							} catch (Exception e1) {
+								e1.printStackTrace();
+								PortalUtils.showMessage(e1.getMessage());
+							}
+					
 						}
-					} catch (Exception e1) {
+					
+					});
+					myThread.start();
+					try {
+						myThread.wait();
+					} catch (InterruptedException e1) {
 						e1.printStackTrace();
-						PortalUtils.showMessage(e1.getMessage());
 					}
+					progress.setIndeterminate(false);
 				}
 			});
 		}
@@ -468,6 +511,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			removeButton.addActionListener(new java.awt.event.ActionListener() {
 
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					dirty = true;
 					int row = getMethodsTable().getSelectedRow();
 					if ((row < 0) || (row >= getMethodsTable().getRowCount())) {
 						PortalUtils
@@ -532,6 +576,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			modifyButton.setText("Modify");
 			modifyButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					dirty = true;
 					performModify(e);
 				}
 			});
@@ -546,10 +591,23 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getContentButtonPanel() {
 		if (contentButtonPanel == null) {
+			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints7.gridy = 2;
+			gridBagConstraints7.gridx = 0;
+			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+			gridBagConstraints6.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints6.gridy = 1;
+			gridBagConstraints6.gridx = 0;
+			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+			gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints5.gridy = 0;
+			gridBagConstraints5.gridx = 0;
 			contentButtonPanel = new JPanel();
-			contentButtonPanel.add(getAddMethodButton(), null);
-			contentButtonPanel.add(getModifyButton(), null);
-			contentButtonPanel.add(getRemoveButton(), null);
+			contentButtonPanel.setLayout(new GridBagLayout());
+			contentButtonPanel.add(getAddMethodButton(), gridBagConstraints5);
+			contentButtonPanel.add(getModifyButton(), gridBagConstraints6);
+			contentButtonPanel.add(getRemoveButton(), gridBagConstraints7);
 		}
 		return contentButtonPanel;
 	}
@@ -565,29 +623,62 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			undoButton.setText("Undo");
 			undoButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out
-							.println("Loading in last known save for this project");
+					progress.setIndeterminate(true);
+					Thread myThread = new Thread(new Runnable() {
+
+						public void run() {
+							System.out
+									.println("Loading in last known save for this project");
+							try {
+								if (!dirty) {
+									progress.setString("restoring from local cache");
+									Archive
+											.restoreLatest(
+													serviceProperties
+															.getProperty("introduce.skeleton.timestamp"),
+													serviceProperties
+															.getProperty("introduce.skeleton.service.name"),
+													serviceProperties
+															.getProperty("introduce.skeleton.destination.dir"));
+								}
+								dispose();
+								PortalResourceManager.getInstance()
+										.getGridPortal()
+										.addGridPortalComponent(
+												new ModificationViewer(
+														methodsDirectory));
+							} catch (Exception e1) {
+								e1.printStackTrace();
+							}
+
+						}
+
+					});
+					myThread.start();
 					try {
-						Archive
-								.restoreLatest(
-										serviceProperties
-												.getProperty("introduce.skeleton.timestamp"),
-										serviceProperties
-												.getProperty("introduce.skeleton.service.name"),
-										serviceProperties
-												.getProperty("introduce.skeleton.destination.dir"));
-						dispose();
-						PortalResourceManager
-								.getInstance()
-								.getGridPortal()
-								.addGridPortalComponent(
-										new ModificationViewer(methodsDirectory));
-					} catch (Exception e1) {
+						myThread.wait();
+					} catch (InterruptedException e1) {
 						e1.printStackTrace();
 					}
+					progress.setIndeterminate(false);
 				}
 			});
 		}
 		return undoButton;
+	}
+
+	/**
+	 * This method initializes progress
+	 * 
+	 * @return javax.swing.JProgressBar
+	 */
+	private JProgressBar getProgress() {
+		if (progress == null) {
+			progress = new JProgressBar();
+			progress.setString("");
+			progress.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 10));
+			progress.setStringPainted(true);
+		}
+		return progress;
 	}
 } // @jve:decl-index=0:visual-constraint="6,9"

@@ -14,4 +14,10 @@ Metadata and registration configuration
 
 Make notes on how to add a new template.
 
+Need to programatically be able to 
+	-create service from a pre-defined service template
+	-add new metadata to the service
+	-add state variables
+	
+
 
