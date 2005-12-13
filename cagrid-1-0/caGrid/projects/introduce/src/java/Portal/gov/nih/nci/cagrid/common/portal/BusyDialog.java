@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.portal.modification;
+package gov.nih.nci.cagrid.common.portal;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -7,14 +7,22 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
 
 public class BusyDialog extends JDialog {
 
 	private JPanel mainPanel = null;
 
+	private Runnable r;
+
+	private JPanel progressPanel = null;
+
+	private JPanel detailsPanel = null;
+
 	private JProgressBar progress = null;
 
-	private Runnable r;
+	private JScrollPane detailScoll = null;
 
 	/**
 	 * This method initializes
@@ -43,30 +51,53 @@ public class BusyDialog extends JDialog {
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-			gridBagConstraints.gridy = 0;
+			gridBagConstraints.gridx = 0;
 			gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints.weightx = 1.0D;
-			gridBagConstraints.gridx = 0;
+			gridBagConstraints.weighty = 1.0D;
+			gridBagConstraints.gridy = 0;
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
-			mainPanel.add(getProgress(), gridBagConstraints);
+			mainPanel.add(getProgressPanel(), gridBagConstraints);
+			//mainPanel.add(getDetailsPanel(), gridBagConstraints2);
 		}
 		return mainPanel;
 	}
 
+
+
 	/**
-	 * This method initializes progress
-	 * 
-	 * @return javax.swing.JProgressBar
+	 * This method initializes progressPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getProgressPanel() {
+		if (progressPanel == null) {
+			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+			gridBagConstraints4.gridx = 0;
+			gridBagConstraints4.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints4.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints4.weightx = 1.0D;
+			gridBagConstraints4.gridy = 0;
+			progressPanel = new JPanel();
+			progressPanel.setLayout(new GridBagLayout());
+			progressPanel.add(getProgress(), gridBagConstraints4);
+		}
+		return progressPanel;
+	}
+
+
+	/**
+	 * This method initializes progress	
+	 * 	
+	 * @return javax.swing.JProgressBar	
 	 */
 	public JProgressBar getProgress() {
 		if (progress == null) {
 			progress = new JProgressBar();
-			progress.setString("");
-			progress.setStringPainted(true);
 		}
 		return progress;
 	}
+
 
 } // @jve:decl-index=0:visual-constraint="10,10"
