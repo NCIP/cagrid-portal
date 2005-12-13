@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserRole;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.gums.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
+import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdPStatus;
 import gov.nih.nci.cagrid.gums.test.TestUtils;
 
 import java.io.StringReader;
@@ -391,6 +392,7 @@ public class TestUserManager extends TestCase {
 		assertNotNull(cert);
 		assertEquals(cert.getSubjectDN().getName(), subject);
 		idp.setIdPCertificate(CertUtil.writeCertificateToString(cert));
+		idp.setStatus(TrustedIdPStatus.Active);
 		IFSUser usr = new IFSUser();
 		usr.setUID("inital_admin");
 		usr.setEmail("inital_admin@test.com");

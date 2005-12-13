@@ -164,6 +164,12 @@ public class TrustManager extends GUMSObject {
 		}
 
 		if ((clean(idp.getIdPCertificate()) != null) && (!idp.getIdPCertificate().equals(curr.getIdPCertificate()))) {
+			if (!isCertificateUnique(idp.getIdPCertificate())) {
+				InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
+				fault.setFaultString("Cannot update the Trusted IdP, " + idp.getName()
+					+ " it does not contain a unique certificate.");
+				throw fault;
+			}
 			X509Certificate cert = validateAndGetCertificate(idp);
 			buildUpdate(needsUpdate, sql, "IDP_SUBJECT", cert.getSubjectDN().getName());
 			needsUpdate = true;
@@ -433,12 +439,51 @@ public class TrustManager extends GUMSObject {
 	}
 
 
+	private boolean isCertificateUnique(String certAsString) throws GUMSInternalFault {
+		buildDatabase();
+		Connection c = null;
+		boolean exists = true;
+		try {
+			c = db.getConnectionManager().getConnection();
+			Statement s = c.createStatement();
+			ResultSet rs = s.executeQuery("select count(*) from " + TRUST_MANAGER_TABLE + " where IDP_CERTIFICATE='"
+				+ certAsString + "'");
+			if (rs.next()) {
+				int count = rs.getInt(1);
+				if (count > 0) {
+					exists = false;
+				}
+			}
+			rs.close();
+			s.close();
+
+		} catch (Exception e) {
+			GUMSInternalFault fault = new GUMSInternalFault();
+			fault.setFaultString("Unexpected Database Error");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GUMSInternalFault) helper.getFault();
+			throw fault;
+		} finally {
+			db.getConnectionManager().releaseConnection(c);
+		}
+		return exists;
+	}
+
+
 	public synchronized TrustedIdP addTrustedIdP(TrustedIdP idp) throws GUMSInternalFault, InvalidTrustedIdPFault {
 		buildDatabase();
 		if (!determineTrustedIdPExistsByName(idp.getName())) {
 			String name = validateAndGetName(idp);
 			X509Certificate cert = validateAndGetCertificate(idp);
 			String policyClass = validateAndGetPolicy(idp);
+
+			if (!isCertificateUnique(idp.getIdPCertificate())) {
+				InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
+				fault.setFaultString("Cannot add the Trusted IdP, " + idp.getName()
+					+ " it does not contain a unique certificate.");
+				throw fault;
+			}
 
 			try {
 				long id = db.insertGetId("INSERT INTO " + TRUST_MANAGER_TABLE + " SET NAME='" + name

@@ -29,6 +29,7 @@ import gov.nih.nci.cagrid.gums.ifs.bean.InvalidUserFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.gums.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
+import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdPStatus;
 import gov.nih.nci.cagrid.gums.ifs.bean.UserPolicyFault;
 
 import java.security.PublicKey;
@@ -89,7 +90,7 @@ public class GUMS extends MobiusResourceManager {
 			idp.setAuthenticationMethod(methods);
 			idp.setPolicyClass(AutoApprovalAutoRenewalPolicy.class.getName());
 			idp.setIdPCertificate(CertUtil.writeCertificateToString(this.identityProvider.getIdPCertificate()));
-
+			idp.setStatus(TrustedIdPStatus.Active);
 			IFSUser usr = new IFSUser();
 			usr.setUID(IDP_ADMIN_USER_ID);
 			// usr.setEmail(idpUser.getEmail());

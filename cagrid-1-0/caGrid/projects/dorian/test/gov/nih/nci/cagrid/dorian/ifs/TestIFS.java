@@ -17,6 +17,7 @@ import gov.nih.nci.cagrid.gums.ifs.bean.InvalidProxyFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.gums.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
+import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdPStatus;
 import gov.nih.nci.cagrid.gums.test.TestUtils;
 
 import java.security.KeyPair;
@@ -93,18 +94,17 @@ public class TestIFS extends TestCase {
 			IFSUser usr1 = users[0];
 			String certStr = usr1.getCertificate().getCertificateAsString();
 			X509Certificate cert1 = CertUtil.loadCertificateFromString(certStr);
-			IFSUser usr2 = ifs.renewUserCredentials(adminGridId,usr1);
-			assertEquals(usr1.getGridId(),usr2.getGridId());
-			
-			if(certStr.equals(usr2.getCertificate().getCertificateAsString())){
+			IFSUser usr2 = ifs.renewUserCredentials(adminGridId, usr1);
+			assertEquals(usr1.getGridId(), usr2.getGridId());
+
+			if (certStr.equals(usr2.getCertificate().getCertificateAsString())) {
 				assertTrue(false);
 			}
-			
-			
+
 			X509Certificate cert2 = CertUtil.loadCertificateFromString(usr2.getCertificate().getCertificateAsString());
-			
+
 			assertTrue(cert2.getNotBefore().after(cert1.getNotBefore()));
-			
+
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -185,6 +185,31 @@ public class TestIFS extends TestCase {
 			ProxyLifetime lifetime = getProxyLifetime();
 			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion("user", idp), publicKey, lifetime);
 			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+
+	}
+
+
+	public void testCreateProxySuspendedIdP() {
+		try {
+
+			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
+			idp.getIdp().setStatus(TrustedIdPStatus.Suspended);
+			IFSConfiguration conf = getConf();
+			conf.setInitalTrustedIdP(idp.getIdp());
+			IFS ifs = new IFS(conf, db, ca);
+			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+			PublicKey publicKey = pair.getPublic();
+			ProxyLifetime lifetime = getProxyLifetime();
+			try {
+				ifs.createProxy(getSAMLAssertion("user", idp), publicKey, lifetime);
+				assertTrue(false);
+			} catch (PermissionDeniedFault f) {
+
+			}
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -622,6 +647,7 @@ public class TestIFS extends TestCase {
 		TrustedIdP idp = new TrustedIdP();
 		idp.setName(name);
 		idp.setPolicyClass(policyClass);
+		idp.setStatus(TrustedIdPStatus.Active);
 
 		SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
 		methods[0] = SAMLAuthenticationMethod.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
