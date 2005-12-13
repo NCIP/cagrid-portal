@@ -9,7 +9,7 @@
 	<target name="test">
 		<mkdir dir="${junit.results.dir}" />
 		<sequential>
-			<junit dir="${basedir}" printsummary="yes" haltonfailure="no" showoutput="true">
+			<junit dir="${basedir}" printsummary="yes" haltonfailure="true" showoutput="true">
 				<jvmarg value="-Dbuild.dir=${build.dir}" />
 				<classpath>
 					<path refid="test.classpath" />
