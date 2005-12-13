@@ -15,7 +15,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: OutputTypeTable.java,v 1.5 2005-11-19 05:46:25 oster Exp $
+ * @version $Id: OutputTypeTable.java,v 1.6 2005-12-13 14:21:41 hastings Exp $
  */
 public class OutputTypeTable extends JComponentTable {
 
@@ -38,11 +38,12 @@ public class OutputTypeTable extends JComponentTable {
 
 
 	public boolean isCellEditable(int row, int column) {
-		if (column == 4) {
-			return true;
-		} else {
-			return false;
-		}
+		return true;
+//		if (column == 4) {
+//			return true;
+//		} else {
+//			return false;
+//		}
 	}
 
 

@@ -35,12 +35,13 @@ import org.jdom.output.XMLOutputter;
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
 import javax.swing.JProgressBar;
+import javax.swing.JMenuBar;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.12 2005-12-13 02:58:13 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.13 2005-12-13 14:21:41 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -86,6 +87,10 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	private boolean dirty = false;
 
 	private JProgressBar progress = null;
+
+	private JPanel progressPanel = null;
+
+	private JMenuBar menu = null;
 
 	/**
 	 * This is the default constructor
@@ -199,6 +204,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		}
 
 		this.setSize(500, 400);
+		this.setJMenuBar(getMenu());
 		this.setContentPane(getJContentPane());
 		this.setTitle("Modify Service Interface");
 		this.setFrameIcon(AnalyticalLookAndFeel.getModifyIcon());
@@ -226,6 +232,20 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+			gridBagConstraints12.gridx = 0;
+			gridBagConstraints12.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints12.weightx = 1.0D;
+			gridBagConstraints12.gridy = 3;
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.anchor = java.awt.GridBagConstraints.SOUTH;
+			gridBagConstraints11.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints11.gridheight = 0;
+			gridBagConstraints11.gridwidth = 0;
+			gridBagConstraints11.gridx = 0;
+			gridBagConstraints11.gridy = 3;
+			gridBagConstraints11.weighty = 1.0D;
+			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
@@ -251,6 +271,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			mainPanel.add(getContentPanel(), gridBagConstraints1);
 			mainPanel.add(getButtonPanel(), gridBagConstraints2);
 			mainPanel.add(getSelectPanel(), gridBagConstraints3);
+			mainPanel.add(getProgressPanel(), gridBagConstraints12);
 		}
 		return mainPanel;
 	}
@@ -299,15 +320,6 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
-			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-			gridBagConstraints11.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints11.gridy = 1;
-			gridBagConstraints11.gridwidth = 0;
-			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints11.weighty = 1.0D;
-			gridBagConstraints11.gridheight = 0;
-			gridBagConstraints11.anchor = java.awt.GridBagConstraints.SOUTH;
-			gridBagConstraints11.gridx = 0;
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
 			gridBagConstraints10.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints10.gridy = 0;
@@ -326,7 +338,6 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			buttonPanel.add(getUndoButton(), gridBagConstraints8);
 			buttonPanel.add(getSaveButton(), gridBagConstraints9);
 			buttonPanel.add(getCancel(), gridBagConstraints10);
-			buttonPanel.add(getProgress(), gridBagConstraints11);
 		}
 		return buttonPanel;
 	}
@@ -403,6 +414,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		if (addMethodButton == null) {
 			addMethodButton = new JButton(AnalyticalLookAndFeel.getAddIcon());
 			addMethodButton.setText("Add");
+			addMethodButton.setToolTipText("add new operation");
 			addMethodButton
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -442,6 +454,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		if (saveButton == null) {
 			saveButton = new JButton(AnalyticalLookAndFeel.getSelectIcon());
 			saveButton.setText("Save");
+			saveButton.setToolTipText("modify and rebuild service");
 			saveButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					progress.setIndeterminate(true);
@@ -508,6 +521,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		if (removeButton == null) {
 			removeButton = new JButton(AnalyticalLookAndFeel.getRemoveIcon());
 			removeButton.setText("Remove");
+			removeButton.setToolTipText("remove selected operation");
 			removeButton.addActionListener(new java.awt.event.ActionListener() {
 
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -574,6 +588,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		if (modifyButton == null) {
 			modifyButton = new JButton(AnalyticalLookAndFeel.getModifyIcon());
 			modifyButton.setText("Modify");
+			modifyButton.setToolTipText("modify seleted operation");
 			modifyButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dirty = true;
@@ -593,15 +608,18 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		if (contentButtonPanel == null) {
 			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
 			gridBagConstraints7.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints7.gridy = 2;
+			gridBagConstraints7.gridy = 1;
+			gridBagConstraints7.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints7.gridx = 0;
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 			gridBagConstraints6.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints6.gridy = 1;
+			gridBagConstraints6.gridy = 2;
+			gridBagConstraints6.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints6.gridx = 0;
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints5.gridy = 0;
+			gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints5.gridx = 0;
 			contentButtonPanel = new JPanel();
 			contentButtonPanel.setLayout(new GridBagLayout());
@@ -621,6 +639,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		if (undoButton == null) {
 			undoButton = new JButton(AnalyticalLookAndFeel.getUndoIcon());
 			undoButton.setText("Undo");
+			undoButton.setToolTipText("roll back to last save state");
 			undoButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					progress.setIndeterminate(true);
@@ -680,5 +699,38 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			progress.setStringPainted(true);
 		}
 		return progress;
+	}
+
+	/**
+	 * This method initializes progressPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getProgressPanel() {
+		if (progressPanel == null) {
+			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
+			gridBagConstraints13.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints13.gridy = 0;
+			gridBagConstraints13.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints13.weighty = 0.0D;
+			gridBagConstraints13.weightx = 1.0D;
+			gridBagConstraints13.gridx = 0;
+			progressPanel = new JPanel();
+			progressPanel.setLayout(new GridBagLayout());
+			progressPanel.add(getProgress(), gridBagConstraints13);
+		}
+		return progressPanel;
+	}
+
+	/**
+	 * This method initializes menu	
+	 * 	
+	 * @return javax.swing.JMenuBar	
+	 */
+	private JMenuBar getMenu() {
+		if (menu == null) {
+			menu = new ModificationMenu();
+		}
+		return menu;
 	}
 } // @jve:decl-index=0:visual-constraint="6,9"

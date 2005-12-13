@@ -19,11 +19,11 @@ import org.projectmobius.portal.PortalTable;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: MethodsTable.java,v 1.3 2005-12-05 18:01:01 hastings Exp $
+ * @version $Id: MethodsTable.java,v 1.4 2005-12-13 14:21:40 hastings Exp $
  */
 public class MethodsTable extends PortalTable {
 
-	public static String NAME = "Name";
+	public static String NAME = "Operation Name";
 	public static String DATA = "Data";
 
 	private Document methodsDocument;
