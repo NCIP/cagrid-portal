@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.introduce.portal.creation;
 
 import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.introduce.portal.AnalyticalLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.modification.ModificationViewer;
 
 import java.awt.GridBagConstraints;
@@ -80,7 +80,7 @@ public class CreationViewer extends GridPortalComponent {
 	private void initialize() {
 		this.setContentPane(getMainPanel());
 		this.setSize(422, 318);
-		this.setFrameIcon(AnalyticalLookAndFeel.getCreateIcon());
+		this.setFrameIcon(IntroduceLookAndFeel.getCreateIcon());
 		this.setTitle("Create Grid Service");
 
 	}
@@ -123,7 +123,7 @@ public class CreationViewer extends GridPortalComponent {
 					null, "Create Grid Service",
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					AnalyticalLookAndFeel.getPanelLabelColor()));
+					IntroduceLookAndFeel.getPanelLabelColor()));
 			packageLabel = new JLabel();
 			packageLabel.setText("Package");
 			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
@@ -249,7 +249,7 @@ public class CreationViewer extends GridPortalComponent {
 		if (createButton == null) {
 			createButton = new JButton();
 			createButton.setText("Create");
-			createButton.setIcon(AnalyticalLookAndFeel.getCreateIcon());
+			createButton.setIcon(IntroduceLookAndFeel.getCreateIcon());
 			createButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 
@@ -393,7 +393,7 @@ public class CreationViewer extends GridPortalComponent {
 	private JButton getCloseButton() {
 		if (closeButton == null) {
 			closeButton = new JButton();
-			closeButton.setIcon(AnalyticalLookAndFeel.getCloseIcon());
+			closeButton.setIcon(IntroduceLookAndFeel.getCloseIcon());
 			closeButton.setText("Cancel");
 			closeButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {

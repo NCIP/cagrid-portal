@@ -5,7 +5,7 @@ import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.Archive;
 import gov.nih.nci.cagrid.introduce.SyncTools;
-import gov.nih.nci.cagrid.introduce.portal.AnalyticalLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -41,7 +41,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.15 2005-12-13 19:13:08 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.16 2005-12-13 20:33:30 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -205,7 +205,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		this.setJMenuBar(getMenu());
 		this.setContentPane(getJContentPane());
 		this.setTitle("Modify Service Interface");
-		this.setFrameIcon(AnalyticalLookAndFeel.getModifyIcon());
+		this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
 
 	}
 
@@ -347,7 +347,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	 */
 	private JButton getCancel() {
 		if (cancel == null) {
-			cancel = new JButton(AnalyticalLookAndFeel.getCloseIcon());
+			cancel = new JButton(IntroduceLookAndFeel.getCloseIcon());
 			cancel.setText("Cancel");
 			// cancel.setIcon(GumsLookAndFeel.getCloseIcon());
 			cancel.addActionListener(new java.awt.event.ActionListener() {
@@ -372,7 +372,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 					null, "Service Properties",
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					AnalyticalLookAndFeel.getPanelLabelColor()));
+					IntroduceLookAndFeel.getPanelLabelColor()));
 		}
 		return selectPanel;
 	}
@@ -410,7 +410,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	 */
 	private JButton getAddMethodButton() {
 		if (addMethodButton == null) {
-			addMethodButton = new JButton(AnalyticalLookAndFeel.getAddIcon());
+			addMethodButton = new JButton(IntroduceLookAndFeel.getAddIcon());
 			addMethodButton.setText("Add");
 			addMethodButton.setToolTipText("add new operation");
 			addMethodButton
@@ -450,7 +450,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	 */
 	private JButton getSaveButton() {
 		if (saveButton == null) {
-			saveButton = new JButton(AnalyticalLookAndFeel.getSelectIcon());
+			saveButton = new JButton(IntroduceLookAndFeel.getSelectIcon());
 			saveButton.setText("Save");
 			saveButton.setToolTipText("modify and rebuild service");
 			saveButton.addActionListener(new java.awt.event.ActionListener() {
@@ -515,7 +515,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	 */
 	private JButton getRemoveButton() {
 		if (removeButton == null) {
-			removeButton = new JButton(AnalyticalLookAndFeel.getRemoveIcon());
+			removeButton = new JButton(IntroduceLookAndFeel.getRemoveIcon());
 			removeButton.setText("Remove");
 			removeButton.setToolTipText("remove selected operation");
 			removeButton.addActionListener(new java.awt.event.ActionListener() {
@@ -582,7 +582,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	 */
 	private JButton getModifyButton() {
 		if (modifyButton == null) {
-			modifyButton = new JButton(AnalyticalLookAndFeel.getModifyIcon());
+			modifyButton = new JButton(IntroduceLookAndFeel.getModifyIcon());
 			modifyButton.setText("Modify");
 			modifyButton.setToolTipText("modify seleted operation");
 			modifyButton.addActionListener(new java.awt.event.ActionListener() {
@@ -633,7 +633,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	 */
 	private JButton getUndoButton() {
 		if (undoButton == null) {
-			undoButton = new JButton(AnalyticalLookAndFeel.getUndoIcon());
+			undoButton = new JButton(IntroduceLookAndFeel.getUndoIcon());
 			undoButton.setText("Undo");
 			undoButton.setToolTipText("roll back to last save state");
 			undoButton.addActionListener(new java.awt.event.ActionListener() {

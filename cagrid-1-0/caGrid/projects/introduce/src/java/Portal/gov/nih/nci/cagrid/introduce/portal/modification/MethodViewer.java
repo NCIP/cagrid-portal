@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.introduce.portal.AnalyticalLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -22,6 +22,8 @@ import org.jdom.Attribute;
 import org.jdom.Element;
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
+import javax.swing.JTabbedPane;
+import java.awt.Insets;
 
 /**
  * MethodViewer TODO:DOCUMENT ME
@@ -60,8 +62,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JLabel methodLabel = null;
 
-	private JLabel securityLabel = null;
-
 	private JComboBox security = null;
 
 	private JPanel inputButtonPanel = null;
@@ -83,6 +83,12 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JButton removeExceptionButton = null;
 
+	private JTabbedPane tabbedPanel = null;
+
+	private JPanel methodPanel = null;
+
+	private JPanel securityPanel = null;
+
 	public MethodViewer(Element method, File schemaDir, MethodsTable table,
 			int selectedRow) {
 		this.method = method;
@@ -95,9 +101,10 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private void initialize() {
 		// TODO Auto-generated method stub
+		this.setSize(687, 622);
+		this.setTitle("Build/Modify Operation");
 		this.setContentPane(getMainPanel());
-		this.setSize(450, 431);
-		this.setFrameIcon(AnalyticalLookAndFeel.getModifyIcon());
+		this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
 	}
 
 	/**
@@ -107,48 +114,21 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
-			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.gridx = 0;
-			gridBagConstraints3.weightx = 1.0D;
-			gridBagConstraints3.weighty = 2.0D;
-			gridBagConstraints3.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints3.gridy = 3;
-			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
+			gridBagConstraints9.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints9.weighty = 1.0;
+			gridBagConstraints9.weightx = 1.0;
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
-			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
-			gridBagConstraints6.gridx = 0;
-			gridBagConstraints6.gridy = 1;
-			gridBagConstraints6.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints6.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints6.weightx = 1.0D;
-			gridBagConstraints6.weighty = 2.0D;
-			gridBagConstraints7.gridx = 0;
-			gridBagConstraints7.gridy = 2;
-			gridBagConstraints7.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints7.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints7.weighty = 0.0D;
-			gridBagConstraints7.weightx = 1.0D;
 			gridBagConstraints10.gridx = 0;
 			gridBagConstraints10.gridy = 4;
 			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints10.weightx = 0.0D;
 			gridBagConstraints10.weighty = 0.0D;
 			gridBagConstraints10.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints1.weightx = 1.0D;
-			gridBagConstraints1.weighty = 1.0D;
-			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.gridy = 0;
-			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
-			mainPanel.add(getInputPanel(), gridBagConstraints6);
-			mainPanel.add(getOutputTypePanel(), gridBagConstraints7);
 			mainPanel.add(getButtonPanel(), gridBagConstraints10);
-			mainPanel.add(getNamePanel(), gridBagConstraints1);
-			mainPanel.add(getExceptionsPanel(), gridBagConstraints3);
+			mainPanel.add(getTabbedPanel(), gridBagConstraints9);
 		}
 		return mainPanel;
 	}
@@ -187,6 +167,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 		if (outputTypejScrollPane == null) {
 			outputTypejScrollPane = new JScrollPane();
 			outputTypejScrollPane.setVerticalScrollBarPolicy(javax.swing.JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+			outputTypejScrollPane.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 			outputTypejScrollPane.setViewportView(getOutputTypeTable());
 		}
 		return outputTypejScrollPane;
@@ -211,6 +192,13 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getInputPanel() {
 		if (inputPanel == null) {
+			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints7.gridx = 0;
+			gridBagConstraints7.gridy = 2;
+			gridBagConstraints7.weightx = 0.0D;
+			gridBagConstraints7.weighty = 0.0D;
+			gridBagConstraints7.insets = new Insets(2, 2, 2, 2);
 			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
 			gridBagConstraints14.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints14.gridy = 1;
@@ -225,7 +213,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 					null, "Input Parameters",
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					AnalyticalLookAndFeel.getPanelLabelColor()));
+					IntroduceLookAndFeel.getPanelLabelColor()));
 			gridBagConstraints8.gridx = 0;
 			gridBagConstraints8.gridy = 0;
 			gridBagConstraints8.weightx = 1.0D;
@@ -250,21 +238,13 @@ public class MethodViewer extends GridPortalBaseFrame {
 			GridBagConstraints gridBagContraints9 = new GridBagConstraints();
 			gridBagContraints9.gridx = 0;
 			gridBagContraints9.weightx = 1.0D;
-			gridBagContraints9.weighty = 0.0D;
-			gridBagContraints9.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagContraints9.weighty = 1.0D;
+			gridBagContraints9.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagContraints9.gridheight = 1;
 			gridBagContraints9.gridy = 0;
 			outputTypePanel = new JPanel();
 			outputTypePanel.setLayout(new GridBagLayout());
-			outputTypePanel
-					.setBorder(javax.swing.BorderFactory
-							.createTitledBorder(
-									null,
-									"Output Type",
-									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, AnalyticalLookAndFeel
-											.getPanelLabelColor()));
+			outputTypePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Output Type", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
 			outputTypePanel.add(getOutputTypejScrollPane(), gridBagContraints9);
 		}
 		return outputTypePanel;
@@ -292,7 +272,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JButton getDoneButton() {
 		if (doneButton == null) {
-			doneButton = new JButton(AnalyticalLookAndFeel.getSelectIcon());
+			doneButton = new JButton(IntroduceLookAndFeel.getSelectIcon());
 			doneButton.setText("Done");
 			doneButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -429,7 +409,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JButton getAddInputParamButton() {
 		if (addInputParamButton == null) {
-			addInputParamButton = new JButton(AnalyticalLookAndFeel
+			addInputParamButton = new JButton(IntroduceLookAndFeel
 					.getAddIcon());
 			addInputParamButton.setText("Add");
 			addInputParamButton
@@ -444,6 +424,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 													.getChildren().size(),
 											input);
 							getInputParamTable().addRow(input);
+							
 						}
 					});
 		}
@@ -460,19 +441,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 			methodLabel = new JLabel();
 			methodLabel.setText("Method Name");
 
-			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints5.gridx = 1;
-			gridBagConstraints5.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints5.weightx = 1.0;
-			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-			gridBagConstraints4.gridx = 0;
-			gridBagConstraints4.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints4.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints4.gridy = 1;
-			securityLabel = new JLabel();
-			securityLabel.setText("Security");
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -485,17 +453,15 @@ public class MethodViewer extends GridPortalBaseFrame {
 					null, "Method Properties",
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					AnalyticalLookAndFeel.getPanelLabelColor()));
+					IntroduceLookAndFeel.getPanelLabelColor()));
 			gridBagConstraints2.gridx = 1;
-			gridBagConstraints2.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints2.anchor = java.awt.GridBagConstraints.CENTER;
 			gridBagConstraints2.gridy = 0;
-			gridBagConstraints2.weightx = 1.0;
-			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints2.weightx = 1.0D;
+			gridBagConstraints2.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
 			namePanel.add(getNameField(), gridBagConstraints2);
 			namePanel.add(methodLabel, gridBagConstraints);
-			namePanel.add(securityLabel, gridBagConstraints4);
-			namePanel.add(getSecurity(), gridBagConstraints5);
 		}
 		return namePanel;
 	}
@@ -520,7 +486,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JButton getRemoveButton() {
 		if (removeButton == null) {
-			removeButton = new JButton(AnalyticalLookAndFeel.getRemoveIcon());
+			removeButton = new JButton(IntroduceLookAndFeel.getRemoveIcon());
 			removeButton.setText("Remove");
 			removeButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -548,7 +514,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 		if (gmeButton == null) {
 			gmeButton = new JButton();
 			gmeButton.setText("Edit With GME");
-			gmeButton.setIcon(AnalyticalLookAndFeel.getMobiusIcon());
+			gmeButton.setIcon(IntroduceLookAndFeel.getMobiusIcon());
 			gmeButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					int row = getInputParamTable().getSelectedRow();
@@ -622,7 +588,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 					dispose();
 				}
 			});
-			cancelButton.setIcon(AnalyticalLookAndFeel.getCloseIcon());
+			cancelButton.setIcon(IntroduceLookAndFeel.getCloseIcon());
 		}
 		return cancelButton;
 	}
@@ -658,7 +624,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 									"Faults",
 									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, AnalyticalLookAndFeel
+									null, IntroduceLookAndFeel
 											.getPanelLabelColor()));
 			exceptionsPanel.add(getExceptionScrollPane(), gridBagConstraints11);
 			exceptionsPanel.add(getExceptionInputPanel(), gridBagConstraints12);
@@ -727,7 +693,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JButton getAddExceptionButton() {
 		if (addExceptionButton == null) {
-			addExceptionButton = new JButton(AnalyticalLookAndFeel.getAddIcon());
+			addExceptionButton = new JButton(IntroduceLookAndFeel.getAddIcon());
 			addExceptionButton.setText("Add");
 			addExceptionButton
 					.addActionListener(new java.awt.event.ActionListener() {
@@ -756,7 +722,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JButton getRemoveExceptionButton() {
 		if (removeExceptionButton == null) {
-			removeExceptionButton = new JButton(AnalyticalLookAndFeel
+			removeExceptionButton = new JButton(IntroduceLookAndFeel
 					.getRemoveIcon());
 			removeExceptionButton.setText("Remove");
 			removeExceptionButton
@@ -779,6 +745,72 @@ public class MethodViewer extends GridPortalBaseFrame {
 					});
 		}
 		return removeExceptionButton;
+	}
+
+	/**
+	 * This method initializes tabbedPanel	
+	 * 	
+	 * @return javax.swing.JTabbedPane	
+	 */
+	private JTabbedPane getTabbedPanel() {
+		if (tabbedPanel == null) {
+			tabbedPanel = new JTabbedPane();
+			tabbedPanel.addTab("Input/Output", null, getMethodPanel(), null);
+			tabbedPanel.addTab("Faults", null, getExceptionsPanel(), null);
+			tabbedPanel.addTab("Security", null, getSecurityPanel(), null);
+		}
+		return tabbedPanel;
+	}
+
+	/**
+	 * This method initializes methodPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getMethodPanel() {
+		if (methodPanel == null) {
+			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+			gridBagConstraints1.fill = GridBagConstraints.BOTH;
+			gridBagConstraints1.gridx = 0;
+			gridBagConstraints1.gridy = 0;
+			gridBagConstraints1.weightx = 0.0D;
+			gridBagConstraints1.weighty = 0.0D;
+			gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
+			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+			gridBagConstraints6.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints6.gridy = 1;
+			gridBagConstraints6.weightx = 1.0D;
+			gridBagConstraints6.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints6.weighty = 1.0D;
+			gridBagConstraints6.gridx = 0;
+			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints7.gridy = 2;
+			gridBagConstraints7.weightx = 0.0D;
+			gridBagConstraints7.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints7.weighty = 0.0D;
+			gridBagConstraints7.ipady = 10;
+			gridBagConstraints7.gridx = 0;
+			methodPanel = new JPanel();
+			methodPanel.setLayout(new GridBagLayout());
+			methodPanel.add(getInputPanel(), gridBagConstraints6);
+			methodPanel.add(getOutputTypePanel(), gridBagConstraints7);
+			methodPanel.add(getNamePanel(), gridBagConstraints1);
+		}
+		return methodPanel;
+	}
+
+	/**
+	 * This method initializes securityPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getSecurityPanel() {
+		if (securityPanel == null) {
+			securityPanel = new JPanel();
+			securityPanel.add(getSecurity(), null);
+		}
+		return securityPanel;
 	}
 } // @jve:decl-index=0:visual-constraint="10,10"
 

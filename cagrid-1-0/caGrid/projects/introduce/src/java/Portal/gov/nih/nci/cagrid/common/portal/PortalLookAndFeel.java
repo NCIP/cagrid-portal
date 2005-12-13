@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.common.portal;
 
-import gov.nih.nci.cagrid.introduce.portal.AnalyticalLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
 import java.awt.Color;
 
@@ -27,18 +27,18 @@ public class PortalLookAndFeel {
 		 }
 
 	 public final static ImageIcon getInformIcon(){
-	 	return new javax.swing.ImageIcon(AnalyticalLookAndFeel.class.getResource("/Inform.gif"));
+	 	return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/Inform.gif"));
 	 }
 	 
 	 public final static ImageIcon getAddIcon(){
-	 	return new javax.swing.ImageIcon(AnalyticalLookAndFeel.class.getResource("/Plus20X20.gif"));
+	 	return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/Plus20X20.gif"));
 	 }
 	 
 	 public final static ImageIcon getRemoveIcon(){
-	 	return new javax.swing.ImageIcon(AnalyticalLookAndFeel.class.getResource("/Minus.gif"));
+	 	return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/Minus.gif"));
 	 }
 	 
 	 public final static ImageIcon getQueryIcon(){
-	 	return new javax.swing.ImageIcon(AnalyticalLookAndFeel.class.getResource("/Magnify.gif"));
+	 	return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/Magnify.gif"));
 	 }
 }

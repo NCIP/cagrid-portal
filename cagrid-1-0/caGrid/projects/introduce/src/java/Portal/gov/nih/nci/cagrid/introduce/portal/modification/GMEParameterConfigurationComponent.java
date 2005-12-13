@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
-import gov.nih.nci.cagrid.introduce.portal.AnalyticalLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -100,7 +100,7 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
     private void initialize() {
         this.setContentPane(getMainPanel());
         this.setTitle("Configure Parameter with GME");
-        this.setFrameIcon(AnalyticalLookAndFeel.getMobiusIcon());
+        this.setFrameIcon(IntroduceLookAndFeel.getMobiusIcon());
         this.setSize(409, 400);
 
     }
@@ -180,7 +180,7 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
             queryPanel.setLayout(new GridBagLayout());
             queryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Discover Schemas",
                 javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                javax.swing.border.TitledBorder.DEFAULT_POSITION, null, AnalyticalLookAndFeel.getPanelLabelColor()));
+                javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
             queryPanel.add(getQueryButton(), gridBagConstraints4);
             queryPanel.add(jLabel, gridBagConstraints6);
             queryPanel.add(getGme(), gridBagConstraints5);
@@ -256,7 +256,7 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
             typesPanel.setLayout(new GridBagLayout());
             typesPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Configure Parameter",
                 javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                javax.swing.border.TitledBorder.DEFAULT_POSITION, null, AnalyticalLookAndFeel.getPanelLabelColor()));
+                javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
             typesPanel.add(getTypesComboBox(), gridBagConstraints12);
             typesPanel.add(typeLabel, gridBagConstraints13);
             typesPanel.add(classLabel, gridBagConstraints15);
@@ -293,7 +293,7 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
      */
     private JButton getQueryButton() {
         if (queryButton == null) {
-            queryButton = new JButton("Discover Schemas", AnalyticalLookAndFeel.getMobiusIcon());
+            queryButton = new JButton("Discover Schemas", IntroduceLookAndFeel.getMobiusIcon());
             queryButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
@@ -350,7 +350,7 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
      */
     private JButton getDoneButton() {
         if (doneButton == null) {
-            doneButton = new JButton(AnalyticalLookAndFeel.getSelectIcon());
+            doneButton = new JButton(IntroduceLookAndFeel.getSelectIcon());
             doneButton.setText("Done");
             doneButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -602,7 +602,7 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
             schemaPanel.setLayout(new GridBagLayout());
             schemaPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Schema",
                 javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                javax.swing.border.TitledBorder.DEFAULT_POSITION, null, AnalyticalLookAndFeel.getPanelLabelColor()));
+                javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
             schemaPanel.add(getNamespaceComboBox(), gridBagConstraints7);
             schemaPanel.add(namespaceLabel, gridBagConstraints9);
             schemaPanel.add(getSchemaComboBox(), gridBagConstraints8);
