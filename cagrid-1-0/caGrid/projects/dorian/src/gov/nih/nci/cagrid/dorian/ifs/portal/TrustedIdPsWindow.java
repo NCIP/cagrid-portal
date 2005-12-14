@@ -36,9 +36,10 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPsWindow.java,v 1.3 2005-12-14 17:41:29 langella Exp $
+ * @version $Id: TrustedIdPsWindow.java,v 1.4 2005-12-14 21:36:25 langella Exp $
  */
 public class TrustedIdPsWindow extends GridPortalBaseFrame {
+	
 
 	private javax.swing.JPanel jContentPane = null;
 
@@ -224,6 +225,10 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 		}
 		return trustedIdPTable;
 	}
+	
+	public void addTrustedIdP(TrustedIdP idp){
+		getTrustedIdPTable().addTrustedIdP(idp);
+	}
 
 
 	/**
@@ -288,7 +293,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 			String service = ((GUMSServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-				new TrustedIdPWindow(service, proxy, getUserPolicies()));
+				new TrustedIdPWindow(this,service, proxy, getUserPolicies()));
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
 		}

@@ -32,6 +32,7 @@ import org.opensaml.SAMLException;
  *          Exp $
  */
 public class TrustManager extends GUMSObject {
+	
 
 	private Database db;
 
@@ -383,8 +384,8 @@ public class TrustManager extends GUMSObject {
 
 	private String validateAndGetName(TrustedIdP idp) throws GUMSInternalFault, InvalidTrustedIdPFault {
 		String name = idp.getName();
-		if ((name == null) || (name.trim().length() <= conf.getMinimumIdPNameLength())
-			|| (name.trim().length() >= conf.getMaximumIdPNameLength())) {
+		if ((name == null) || (name.trim().length() < conf.getMinimumIdPNameLength())
+			|| (name.trim().length() > conf.getMaximumIdPNameLength())) {
 			InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
 			fault.setFaultString("Invalid IdP name specified, the IdP name must be between "
 				+ conf.getMinimumIdPNameLength() + " and " + conf.getMaximumIdPNameLength() + " in length.");
@@ -408,7 +409,12 @@ public class TrustManager extends GUMSObject {
 
 
 	private X509Certificate validateAndGetCertificate(TrustedIdP idp) throws GUMSInternalFault, InvalidTrustedIdPFault {
-
+  
+		if(idp.getIdPCertificate() == null){
+			InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
+			fault.setFaultString("Invalid Trusted IdP, no IdP certificate specified.");
+			throw fault;
+		}
 		StringReader reader = new StringReader(idp.getIdPCertificate());
 		X509Certificate cert = null;
 		try {

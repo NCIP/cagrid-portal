@@ -155,11 +155,28 @@
 		</xsd:complexType>
 	</xsd:element>
 	
+	<xsd:element name="IFSAddTrustedIdP" type="ifs:TrustedIdP"/>
+	
+	<xsd:element name="IFSAddTrustedIdPResponse" type="ifs:TrustedIdP"/>
+	
+	<xsd:element name="IFSUpdateTrustedIdP" type="ifs:TrustedIdP"/>
+	
+	<xsd:element name="IFSUpdateTrustedIdPResponse">
+			<xsd:complexType/>
+	</xsd:element>
+	
+	<xsd:element name="IFSRemoveTrustedIdP" type="ifs:TrustedIdP"/>
+	
+	<xsd:element name="IFSRemoveTrustedIdPResponse">
+			<xsd:complexType/>
+	</xsd:element>
+	
 	
 	<xsd:element name="invalidAssertionFault" type="ifs:InvalidAssertionFault"/>
 	<xsd:element name="invalidProxyFault" type="ifs:InvalidProxyFault"/>
 	<xsd:element name="invalidUserFault" type="ifs:InvalidUserFault"/>
 	<xsd:element name="userPolicyFault" type="ifs:UserPolicyFault"/>
+	<xsd:element name="invalidTrustedIdPFault" type="ifs:InvalidTrustedIdPFault"/>
 
 			
 	<!-- RESOURCE PROPERTIES -->
@@ -298,6 +315,30 @@
 	<message name="IFSGetUserPoliciesOutputMessage">
 		<part name="parameters" element="tns:IFSGetUserPoliciesResponse"/>
 	</message>
+	
+	<message name="IFSAddTrustedIdPInputMessage">
+		<part name="parameters" element="tns:IFSAddTrustedIdP"/>
+	</message>
+	
+	<message name="IFSAddTrustedIdPOutputMessage">
+		<part name="parameters" element="tns:IFSAddTrustedIdPResponse"/>
+	</message>
+	
+	<message name="IFSUpdateTrustedIdPInputMessage">
+		<part name="parameters" element="tns:IFSUpdateTrustedIdP"/>
+	</message>
+	
+	<message name="IFSUpdateTrustedIdPOutputMessage">
+		<part name="parameters" element="tns:IFSUpdateTrustedIdPResponse"/>
+	</message>
+	
+	<message name="IFSRemoveTrustedIdPInputMessage">
+		<part name="parameters" element="tns:IFSRemoveTrustedIdP"/>
+	</message>
+	
+	<message name="IFSRemoveTrustedIdPOutputMessage">
+		<part name="parameters" element="tns:IFSRemoveTrustedIdPResponse"/>
+	</message>
 
 	<message name="InvalidAssertionFaultMessage">
 		<part name="fault" element="tns:invalidAssertionFault" />
@@ -317,6 +358,10 @@
 	
 	<message name="PermissionDeniedFaultMessage">
 		<part name="fault" element="tns:permissionDeniedFault" />
+	</message>
+	
+	<message name="InvalidTrustedIdPFaultMessage">
+		<part name="fault" element="tns:invalidTrustedIdPFault" />
 	</message>
 	
 
@@ -385,6 +430,36 @@
 	    <fault message="tns:InvalidUserFaultMessage" name="InvalidUserFault"/>
 	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
 	</operation>
+	
+	<operation name="addTrustedIdP">
+		<input message="tns:IFSAddTrustedIdPInputMessage"/>
+		<output message="tns:IFSAddTrustedIdPOutputMessage"/>
+		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
+	    <fault message="tns:InvalidUserFaultMessage" name="InvalidUserFault"/>
+	    <fault message="tns:InvalidTrustedIdPFaultMessage" name="InvalidTrustedIdPFault"/>
+	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
+	</operation>
+	
+	<operation name="updateTrustedIdP">
+		<input message="tns:IFSUpdateTrustedIdPInputMessage"/>
+		<output message="tns:IFSUpdateTrustedIdPOutputMessage"/>
+		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
+	    <fault message="tns:InvalidUserFaultMessage" name="InvalidUserFault"/>
+	    <fault message="tns:InvalidTrustedIdPFaultMessage" name="InvalidTrustedIdPFault"/>
+	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
+	</operation>
+	
+	<operation name="removeTrustedIdP">
+		<input message="tns:IFSRemoveTrustedIdPInputMessage"/>
+		<output message="tns:IFSRemoveTrustedIdPOutputMessage"/>
+		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
+	    <fault message="tns:InvalidUserFaultMessage" name="InvalidUserFault"/>
+	    <fault message="tns:InvalidTrustedIdPFaultMessage" name="InvalidTrustedIdPFault"/>
+	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
+	</operation>
+	
+	
+	
 	
 	<operation name="findIFSUsers">
 		<input message="tns:IFSFindUsersInputMessage"/>

@@ -26,6 +26,7 @@ import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserRole;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidProxyFault;
+import gov.nih.nci.cagrid.gums.ifs.bean.InvalidTrustedIdPFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidUserFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.gums.ifs.bean.SAMLAuthenticationMethod;
@@ -197,8 +198,8 @@ public class GUMS extends MobiusResourceManager {
 
 	/** *************** IFS FUNCTIONS ********************** */
 
-	public IFSUserPolicy[] getIFSUserPolicies(String callerGridIdentity) throws GUMSInternalFault,
-		InvalidUserFault, PermissionDeniedFault {
+	public IFSUserPolicy[] getIFSUserPolicies(String callerGridIdentity) throws GUMSInternalFault, InvalidUserFault,
+		PermissionDeniedFault {
 		return ifs.getUserPolicies(callerGridIdentity);
 	}
 
@@ -212,6 +213,24 @@ public class GUMS extends MobiusResourceManager {
 	public TrustedIdP[] getTrustedIdPs(String callerGridIdentity) throws GUMSInternalFault, InvalidUserFault,
 		PermissionDeniedFault {
 		return ifs.getTrustedIdPs(callerGridIdentity);
+	}
+
+
+	public TrustedIdP addTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws GUMSInternalFault,
+		InvalidTrustedIdPFault, InvalidUserFault, PermissionDeniedFault {
+		return ifs.addTrustedIdP(callerGridIdentity, idp);
+	}
+
+
+	public void updatedTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws GUMSInternalFault,
+		InvalidTrustedIdPFault, InvalidUserFault, PermissionDeniedFault {
+		ifs.updatedTrustedIdP(callerGridIdentity, idp);
+	}
+
+
+	public void removeTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws GUMSInternalFault,
+		InvalidTrustedIdPFault, InvalidUserFault, PermissionDeniedFault {
+		ifs.removeTrustedIdP(callerGridIdentity, idp.getId());
 	}
 
 

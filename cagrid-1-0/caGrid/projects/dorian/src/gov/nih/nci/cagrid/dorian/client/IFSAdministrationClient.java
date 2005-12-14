@@ -10,6 +10,7 @@ import gov.nih.nci.cagrid.gums.common.IOUtils;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserPolicy;
+import gov.nih.nci.cagrid.gums.ifs.bean.InvalidTrustedIdPFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidUserFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.gums.wsrf.GUMSPortType;
@@ -32,6 +33,113 @@ public class IFSAdministrationClient extends GUMSBaseClient implements IFSAdmini
 	public IFSAdministrationClient(String serviceURI, CommunicationStyle style) {
 		super(serviceURI);
 		this.style = style;
+	}
+
+
+	public TrustedIdP addTrustedIdP(TrustedIdP idp) throws GUMSFault, PermissionDeniedFault, InvalidUserFault,
+		InvalidTrustedIdPFault, GUMSInternalFault {
+		GUMSPortType port = null;
+		try {
+			port = this.getPort(style);
+		} catch (Exception e) {
+			GUMSFault fault = new GUMSFault();
+			fault.setFaultString(e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GUMSFault) helper.getFault();
+			throw fault;
+		}
+		try {
+			return port.addTrustedIdP(idp);
+		} catch (GUMSInternalFault gie) {
+			throw gie;
+		} catch (PermissionDeniedFault f) {
+			throw f;
+		} catch (InvalidUserFault f) {
+			throw f;
+		} catch (InvalidTrustedIdPFault f) {
+			throw f;
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			GUMSFault fault = new GUMSFault();
+			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GUMSFault) helper.getFault();
+			throw fault;
+		}
+	}
+
+
+	public void removeTrustedIdP(TrustedIdP idp) throws GUMSFault, PermissionDeniedFault, InvalidUserFault,
+		InvalidTrustedIdPFault, GUMSInternalFault {
+		GUMSPortType port = null;
+		try {
+			port = this.getPort(style);
+		} catch (Exception e) {
+			GUMSFault fault = new GUMSFault();
+			fault.setFaultString(e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GUMSFault) helper.getFault();
+			throw fault;
+		}
+		try {
+			port.removeTrustedIdP(idp);
+		} catch (GUMSInternalFault gie) {
+			throw gie;
+		} catch (PermissionDeniedFault f) {
+			throw f;
+		} catch (InvalidUserFault f) {
+			throw f;
+		} catch (InvalidTrustedIdPFault f) {
+			throw f;
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			GUMSFault fault = new GUMSFault();
+			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GUMSFault) helper.getFault();
+			throw fault;
+		}
+
+	}
+
+
+	public void updateTrustedIdP(TrustedIdP idp) throws GUMSFault, PermissionDeniedFault, InvalidUserFault,
+		InvalidTrustedIdPFault, GUMSInternalFault {
+		GUMSPortType port = null;
+		try {
+			port = this.getPort(style);
+		} catch (Exception e) {
+			GUMSFault fault = new GUMSFault();
+			fault.setFaultString(e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GUMSFault) helper.getFault();
+			throw fault;
+		}
+		try {
+			port.updateTrustedIdP(idp);
+		} catch (GUMSInternalFault gie) {
+			throw gie;
+		} catch (PermissionDeniedFault f) {
+			throw f;
+		} catch (InvalidUserFault f) {
+			throw f;
+		} catch (InvalidTrustedIdPFault f) {
+			throw f;
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			GUMSFault fault = new GUMSFault();
+			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GUMSFault) helper.getFault();
+			throw fault;
+		}
+
 	}
 
 

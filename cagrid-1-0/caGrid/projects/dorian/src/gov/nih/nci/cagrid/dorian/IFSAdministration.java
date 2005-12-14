@@ -6,8 +6,10 @@ import gov.nih.nci.cagrid.gums.common.GUMSFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserPolicy;
+import gov.nih.nci.cagrid.gums.ifs.bean.InvalidTrustedIdPFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidUserFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
+
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -17,22 +19,36 @@ import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
  *          Exp $
  */
 public interface IFSAdministration {
-	public TrustedIdP[] getTrustedIdPs() throws GUMSFault,
-			PermissionDeniedFault, InvalidUserFault, GUMSInternalFault;
+	public TrustedIdP[] getTrustedIdPs() throws GUMSFault, PermissionDeniedFault, InvalidUserFault, GUMSInternalFault;
 
-	public IFSUser[] findUsers(IFSUserFilter filter) throws GUMSFault,
-			PermissionDeniedFault, InvalidUserFault, GUMSInternalFault;
 
-	public void updateUser(IFSUser usr) throws GUMSFault,
-			PermissionDeniedFault, InvalidUserFault, GUMSInternalFault;
+	public IFSUser[] findUsers(IFSUserFilter filter) throws GUMSFault, PermissionDeniedFault, InvalidUserFault,
+		GUMSInternalFault;
 
-	public void removeUser(IFSUser usr) throws GUMSFault,
-			PermissionDeniedFault, InvalidUserFault, GUMSInternalFault;
-	
-	public IFSUser renewUserCredentials(IFSUser usr) throws GUMSFault,
-	PermissionDeniedFault, InvalidUserFault, GUMSInternalFault;
-	
-	public IFSUserPolicy[] getUserPolicies() throws GUMSFault,
-	PermissionDeniedFault, InvalidUserFault, GUMSInternalFault;
+
+	public void updateUser(IFSUser usr) throws GUMSFault, PermissionDeniedFault, InvalidUserFault, GUMSInternalFault;
+
+
+	public void removeUser(IFSUser usr) throws GUMSFault, PermissionDeniedFault, InvalidUserFault, GUMSInternalFault;
+
+
+	public IFSUser renewUserCredentials(IFSUser usr) throws GUMSFault, PermissionDeniedFault, InvalidUserFault,
+		GUMSInternalFault;
+
+
+	public IFSUserPolicy[] getUserPolicies() throws GUMSFault, PermissionDeniedFault, InvalidUserFault,
+		GUMSInternalFault;
+
+
+	public TrustedIdP addTrustedIdP(TrustedIdP idp) throws GUMSFault, PermissionDeniedFault, InvalidUserFault,
+		InvalidTrustedIdPFault, GUMSInternalFault;
+
+
+	public void updateTrustedIdP(TrustedIdP idp) throws GUMSFault, PermissionDeniedFault, InvalidUserFault,
+		InvalidTrustedIdPFault, GUMSInternalFault;
+
+
+	public void removeTrustedIdP(TrustedIdP idp) throws GUMSFault, PermissionDeniedFault, InvalidUserFault,
+		InvalidTrustedIdPFault, GUMSInternalFault;
 
 }
