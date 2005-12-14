@@ -3,10 +3,6 @@
 <!-- ======================================================================= -->
 <project name="caGrid_utilities" basedir="." default="usage">
 	<property environment="env" />
-	<property name="ext.globus.dir" location="${env.GLOBUS_LOCATION}" />
-	<property name="schema.src" location="${globus.location}/share/schema" />
-	<property name="build.stubs" location="${globus.location}/share/globus_wsrf_tools/build-stubs.xml" />
-
 	
 	<!-- ============================================================== -->
 	<!-- Tomcat properties                                              -->
@@ -41,6 +37,8 @@
 	</target>
 	<target name="setGlobus" if="env.GLOBUS_LOCATION">
 		<property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}"/>
+		<property name="build.stubs" location="${ext.globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
+		<property name="schema.src" location="${ext.globus.dir}/share/schema" />
 	</target>
 	
 	<!-- Allows you define a new property with a value of ${${a}.${b}} which can't be done by the Property task alone.  -->
