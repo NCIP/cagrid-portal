@@ -24,6 +24,7 @@ Need to programatically be able to
 
 Need to be able to not only use Axis for the classnames but also use the users classnames if they provide there own beans or api.
 
+(DONE) moved the sync tools over to use beans instead of using DOM.  Much cleaner an easier to maintain.
 	
 
 Metadata xmlfile:
