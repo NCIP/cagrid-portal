@@ -2,8 +2,6 @@ package gov.nih.nci.cagrid.introduce;
 
 import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 
 import java.io.File;
@@ -28,13 +26,8 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.ws.jaxme.js.JavaMethod;
 import org.apache.ws.jaxme.js.JavaSource;
 import org.apache.ws.jaxme.js.JavaSourceFactory;
-import org.apache.ws.jaxme.js.Parameter;
 import org.apache.ws.jaxme.js.util.JavaParser;
 import org.globus.wsrf.encoding.ObjectDeserializer;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
 
 /**
  * SyncMethodsOnDeployment
@@ -222,57 +215,9 @@ public class SyncTools {
 			boolean found = false;
 			for (int i = 0; i < methods.length; i++) {
 				String methodName = methods[i].getName();
-				boolean paramsOk = true;
 				if (mel.getName().equals(methodName)) {
-
-					Parameter[] classes = methods[i].getParams();
-					if (mel.getInputs() != null) {
-						if (mel.getInputs().getInput().length == classes.length) {
-							for (int paramIndex = 0; paramIndex < mel
-									.getInputs().getInput().length; paramIndex++) {
-								MethodTypeInputsInput param = mel.getInputs()
-										.getInput(paramIndex);
-								String classTypeString = "";
-								if (classes[paramIndex].getType()
-										.getPackageName().length() > 0) {
-									classTypeString += classes[paramIndex]
-											.getType().getPackageName()
-											+ ".";
-								}
-								classTypeString += classes[paramIndex]
-										.getType().getClassName();
-								if (classes[paramIndex].getType().isArray()) {
-									classTypeString += "[]";
-								}
-								if (!param.getClassName().equals(
-										classTypeString)) {
-									paramsOk = false;
-								}
-							}
-						} else {
-							paramsOk = false;
-						}
-					}
-
-					boolean returnOk = true;
-
-					MethodTypeOutput returnTypeEl = mel.getOutput();
-					String returnClass = "";
-					if (methods[i].getType().getPackageName().length() > 0) {
-						returnClass += methods[i].getType().getPackageName()
-								+ ".";
-					}
-					returnClass += methods[i].getType().getClassName();
-					if (methods[i].getType().isArray()) {
-						returnClass += "[]";
-					}
-					if (!returnTypeEl.getClassName().equals(returnClass)) {
-						returnOk = false;
-					}
-					if (paramsOk && returnOk) {
-						found = true;
-						break;
-					}
+					found = true;
+					break;
 				}
 			}
 			if (!found) {
@@ -289,54 +234,9 @@ public class SyncTools {
 			for (int methodIndex = 0; methodIndex < this.methodsType
 					.getMethod().length; methodIndex++) {
 				MethodType mel = this.methodsType.getMethod(methodIndex);
-				boolean paramsOk = true;
 				if (mel.getName().equals(methodName)) {
-					Parameter[] classes = methods[i].getParams();
-					if (mel.getInputs() != null) {
-						if (mel.getInputs().getInput().length == classes.length) {
-							for (int paramIndex = 0; paramIndex < mel
-									.getInputs().getInput().length; paramIndex++) {
-								MethodTypeInputsInput param = mel.getInputs()
-										.getInput(paramIndex);
-								String classTypeString = "";
-								if (classes[paramIndex].getType()
-										.getPackageName().length() > 0) {
-									classTypeString += classes[paramIndex]
-											.getType().getPackageName()
-											+ ".";
-								}
-								classTypeString += classes[paramIndex]
-										.getType().getClassName();
-								if (classes[paramIndex].getType().isArray()) {
-									classTypeString += "[]";
-								}
-								if (!param.getClassName().equals(
-										classTypeString)) {
-									paramsOk = false;
-								}
-							}
-						} else {
-							paramsOk = false;
-						}
-					}
-					boolean returnOk = true;
-					MethodTypeOutput returnTypeEl = mel.getOutput();
-					String returnClass = "";
-					if (methods[i].getType().getPackageName().length() > 0) {
-						returnClass += methods[i].getType().getPackageName()
-								+ ".";
-					}
-					returnClass += methods[i].getType().getClassName();
-					if (methods[i].getType().isArray()) {
-						returnClass += "[]";
-					}
-					if (!returnTypeEl.getClassName().equals(returnClass)) {
-						returnOk = false;
-					}
-					if (paramsOk && returnOk) {
-						found = true;
-						break;
-					}
+					found = true;
+					break;
 				}
 			}
 			if (!found) {
