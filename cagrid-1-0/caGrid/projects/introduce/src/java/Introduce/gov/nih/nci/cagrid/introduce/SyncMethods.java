@@ -1,6 +1,11 @@
 package gov.nih.nci.cagrid.introduce;
 
 import gov.nih.nci.cagrid.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -101,35 +106,43 @@ public class SyncMethods {
 				+ "ProviderImpl.java";
 	}
 
-	private String getClassNameFromElement(Element method) {
-		if (method.getAttributeValue("className").equals("void")) {
+	private String getClassNameFromElement(MethodTypeInputsInput method) {
+		if (method.getClassName().equals("void")) {
 			return "void";
 		}
 		table.dump(System.out);
-		Type type = table.getType(new QName(method
-				.getAttributeValue("namespace"), method
-				.getAttributeValue("type")));
+		Type type = table.getType(new QName(method.getNamespace(), method
+				.getType()));
 		return type.getName();
 	}
 
-	private String createExceptions(Element method) {
+	private String getClassNameFromElement(MethodTypeOutput method) {
+		if (method.getClassName().equals("void")) {
+			return "void";
+		}
+		table.dump(System.out);
+		Type type = table.getType(new QName(method.getNamespace(), method
+				.getType()));
+		return type.getName();
+	}
+
+	private String createExceptions(MethodType method) {
 		String exceptions = "";
 		// process the faults for this method...
-		Element exceptionsEl = method.getChild("exceptions", method
-				.getNamespace());
+		MethodTypeExceptions exceptionsEl = method.getExceptions();
 		exceptions += "RemoteException";
 		if (exceptionsEl != null) {
-			List children = exceptionsEl.getChildren();
-			if (children.size() > 0) {
+			if (exceptionsEl.getException().length > 0) {
 				exceptions += ", ";
 			}
-			for (int i = 0; i < children.size(); i++) {
-				Element fault = (Element) children.get(i);
+			for (int i = 0; i < exceptionsEl.getException().length; i++) {
+				MethodTypeExceptionsException fault = exceptionsEl
+						.getException(i);
 				// hack for now, should look at the namespace in the
 				// element.....
 				exceptions += this.packageName + "."
-						+ capatilzeFirstLetter(fault.getAttributeValue("name"));
-				if (i < children.size() - 1) {
+						+ capatilzeFirstLetter(fault.getName());
+				if (i < exceptionsEl.getException().length - 1) {
 					exceptions += ", ";
 				}
 			}
@@ -140,22 +153,19 @@ public class SyncMethods {
 		return exceptions;
 	}
 
-	private String createUnBoxedSignatureStringFromMethod(Element method) {
+	private String createUnBoxedSignatureStringFromMethod(MethodType method) {
 		String methodString = "";
-		Element returnTypeEl = method.getChild("output", method.getNamespace());
-		String methodName = method.getAttributeValue("name");
+		MethodTypeOutput returnTypeEl = method.getOutput();
+		String methodName = method.getName();
 		String returnType = getClassNameFromElement(returnTypeEl);
 		methodString += "\tpublic " + returnType + " " + methodName + "(";
-		if (method.getChild("inputs", method.getNamespace()) != null) {
-			List inputs = method.getChild("inputs", method.getNamespace())
-					.getChildren();
-			for (int j = 0; j < inputs.size(); j++) {
-				String classType = getClassNameFromElement((Element) inputs
-						.get(j));
-				String paramName = ((Element) inputs.get(j))
-						.getAttributeValue("name");
+		if (method.getInputs() != null) {
+			for (int j = 0; j < method.getInputs().getInput().length; j++) {
+				String classType = getClassNameFromElement(method.getInputs()
+						.getInput(j));
+				String paramName = method.getInputs().getInput(j).getName();
 				methodString += classType + " " + paramName;
-				if (j < inputs.size() - 1) {
+				if (j < method.getInputs().getInput().length - 1) {
 					methodString += ",";
 				}
 			}
@@ -205,10 +215,10 @@ public class SyncMethods {
 		return returnType;
 	}
 
-	private String createBoxedSignatureStringFromMethod(Element method) {
+	private String createBoxedSignatureStringFromMethod(MethodType method) {
 		String methodString = "";
-		Element returnTypeEl = method.getChild("output", method.getNamespace());
-		String methodName = method.getAttributeValue("name");
+		MethodTypeOutput returnTypeEl = method.getOutput();
+		String methodName = method.getName();
 		String returnType = getClassNameFromElement(returnTypeEl);
 
 		returnType = this.packageName + "."
@@ -271,7 +281,7 @@ public class SyncMethods {
 	public void addMethods(List additions) {
 		for (int i = 0; i < additions.size(); i++) {
 			// add it to the interface
-			Element method = (Element) additions.get(i);
+			MethodType method = (MethodType) additions.get(i);
 
 			StringBuffer fileContent = null;
 			try {
@@ -305,9 +315,9 @@ public class SyncMethods {
 		}
 	}
 
-	private void addClientImpl(Element method) {
+	private void addClientImpl(MethodType method) {
 		StringBuffer fileContent = null;
-		String methodName = method.getAttributeValue("name");
+		String methodName = method.getName();
 		try {
 			fileContent = CommonTools.fileToStringBuffer(new File(
 					this.serviceClient));
@@ -323,11 +333,6 @@ public class SyncMethods {
 		// clientMethod += "try{\n";
 		clientMethod += "\t\t\t";
 
-		String secureValue = "SECURITY_PROPERTY_NONE";
-		if (method.getAttribute("secure") != null) {
-			secureValue = "SECURITY_PROPERTY_"
-					+ method.getAttributeValue("secure");
-		}
 		// get the port
 		// TODO: handle security here
 		clientMethod += this.deploymentProperties
@@ -342,7 +347,7 @@ public class SyncMethods {
 		String lineStart = "\t\t\t";
 
 		String methodString = lineStart;
-		Element returnTypeEl = method.getChild("output", method.getNamespace());
+		MethodTypeOutput returnTypeEl = method.getOutput();
 		String returnType = getClassNameFromElement(returnTypeEl);
 
 		// always a boxed call now becuase using complex types in the wsdl
@@ -352,12 +357,9 @@ public class SyncMethods {
 				+ this.packageName + "." + capatilzeFirstLetter(methodName)
 				+ "();\n";
 		// set the values fo the boxed wrapper
-		if (method.getChild("inputs", method.getNamespace()) != null) {
-			List inputs = method.getChild("inputs", method.getNamespace())
-					.getChildren();
-			for (int j = 0; j < inputs.size(); j++) {
-				String paramName = ((Element) inputs.get(j))
-						.getAttributeValue("name");
+		if (method.getInputs() != null) {
+			for (int j = 0; j < method.getInputs().getInput().length; j++) {
+				String paramName = method.getInputs().getInput(j).getName();
 				methodString += lineStart;
 				methodString += "params.set" + capatilzeFirstLetter(paramName)
 						+ "(" + paramName + ");\n";
@@ -404,7 +406,7 @@ public class SyncMethods {
 
 	}
 
-	private void addImpl(Element method) {
+	private void addImpl(MethodType method) {
 		StringBuffer fileContent = null;
 		try {
 			fileContent = CommonTools.fileToStringBuffer(new File(
@@ -420,7 +422,7 @@ public class SyncMethods {
 
 		clientMethod += "{\n";
 		clientMethod += "\t\t//TODO: Implement this autogenerated method\n";
-		Element methodReturn = method.getChild("output", method.getNamespace());
+		MethodTypeOutput methodReturn = method.getOutput();
 		if (!getClassNameFromElement(methodReturn).equals("void")
 				&& !isPrimitive(getClassNameFromElement(methodReturn))) {
 			clientMethod += "\t\treturn null;\n";
@@ -441,7 +443,7 @@ public class SyncMethods {
 		}
 	}
 
-	private void addProviderImpl(Element method) {
+	private void addProviderImpl(MethodType method) {
 		StringBuffer fileContent = null;
 		try {
 			fileContent = CommonTools.fileToStringBuffer(new File(
@@ -464,36 +466,32 @@ public class SyncMethods {
 		String var = "impl";
 		String lineStart = "\t\t";
 
-		String methodName = method.getAttributeValue("name");
+		String methodName = method.getName();
 		String methodString = "";
-		Element returnTypeEl = method.getChild("output", method.getNamespace());
+		MethodTypeOutput returnTypeEl = method.getOutput();
 		String returnType = getClassNameFromElement(returnTypeEl);
 
 		// unbox the params
 		String params = "";
 
-		if (method.getChild("inputs", method.getNamespace()) != null) {
-			List inputs = method.getChild("inputs", method.getNamespace())
-					.getChildren();
+		if (method.getInputs() != null) {
 			// always unbox now
-			if (inputs.size() >= 1) {
+			if (method.getInputs().getInput().length >= 1) {
 				// inputs were boxed and need to be unboxed
-				for (int j = 0; j < inputs.size(); j++) {
-					String paramName = ((Element) inputs.get(j))
-							.getAttributeValue("name");
+				for (int j = 0; j < method.getInputs().getInput().length; j++) {
+					String paramName = method.getInputs().getInput(j).getName();
 					params += "params.get" + capatilzeFirstLetter(paramName)
 							+ "()";
-					if (j < inputs.size() - 1) {
+					if (j < method.getInputs().getInput().length - 1) {
 						params += ",";
 					}
 				}
 			} else {
 				// inputs are not boxed and can just be passed through
-				for (int j = 0; j < inputs.size(); j++) {
-					String paramName = ((Element) inputs.get(j))
-							.getAttributeValue("name");
+				for (int j = 0; j < method.getInputs().getInput().length; j++) {
+					String paramName = method.getInputs().getInput(j).getName();
 					params += paramName;
-					if (j < inputs.size() - 1) {
+					if (j < method.getInputs().getInput().length - 1) {
 						params += ",";
 					}
 				}

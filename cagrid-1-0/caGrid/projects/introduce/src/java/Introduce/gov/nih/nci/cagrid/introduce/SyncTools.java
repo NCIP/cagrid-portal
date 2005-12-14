@@ -1,16 +1,22 @@
 package gov.nih.nci.cagrid.introduce;
 
 import gov.nih.nci.cagrid.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.axis.utils.XMLUtils;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.axis.wsdl.toJava.Emitter;
 import org.apache.commons.cli.CommandLine;
@@ -24,6 +30,7 @@ import org.apache.ws.jaxme.js.JavaSource;
 import org.apache.ws.jaxme.js.JavaSourceFactory;
 import org.apache.ws.jaxme.js.Parameter;
 import org.apache.ws.jaxme.js.util.JavaParser;
+import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -49,8 +56,6 @@ public class SyncTools {
 
 	Properties deploymentProperties;
 
-	Document methodsDocument;
-
 	List additions;
 
 	List removals;
@@ -65,23 +70,17 @@ public class SyncTools {
 
 	File baseDirectory;
 
+	MethodsType methodsType;
+
 	public SyncTools(File baseDirectory) {
 
 		this.baseDirectory = baseDirectory;
 
+		populateMetadata();
+
 		File deploymentPropertiesFile = new File(baseDirectory
 				.getAbsolutePath()
 				+ File.separator + "introduce.properties");
-		SAXBuilder builder = new SAXBuilder(false);
-		try {
-			methodsDocument = builder.build(baseDirectory.getAbsolutePath()
-					+ File.separator + "introduceMethods.xml");
-		} catch (JDOMException e1) {
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-
 		try {
 			deploymentProperties = new Properties();
 			deploymentProperties.load(new FileInputStream(
@@ -96,6 +95,30 @@ public class SyncTools {
 		}
 		this.additions = new ArrayList();
 		this.removals = new ArrayList();
+	}
+
+	private void populateMetadata() {
+		InputStream inputStream = null;
+
+		try {
+			inputStream = new FileInputStream(this.baseDirectory
+					+ File.separator + "introduceMethods.xml");
+			org.w3c.dom.Document doc = XMLUtils.newDocument(inputStream);
+
+			this.methodsType = (MethodsType) ObjectDeserializer.toObject(doc
+					.getDocumentElement(), MethodsType.class);
+		} catch (Exception e) {
+			System.err.println("ERROR: problem populating metadata from file: "
+					+ e.getMessage());
+		} finally {
+			if (inputStream != null) {
+				try {
+					inputStream.close();
+				} catch (IOException e) {
+				}
+			}
+		}
+
 	}
 
 	public void sync() throws Exception {
@@ -183,6 +206,7 @@ public class SyncTools {
 
 		// sync the security config
 		// TODO: turning off this until we get a gt4 solution
+		// this will need to be refactored to use the bean...
 		// List methodsFromDoc =
 		// this.methodsDocument.getRootElement().getChildren();
 		// secureSync.sync(methodsFromDoc);
@@ -191,31 +215,23 @@ public class SyncTools {
 	public void lookForUpdates() {
 
 		JavaMethod[] methods = sourceI.getMethods();
-		List methodsFromDoc = this.methodsDocument.getRootElement()
-				.getChildren();
 
 		// look at doc and compare to interface
-		for (int methodIndex = 0; methodIndex < methodsFromDoc.size(); methodIndex++) {
-			Element mel = (Element) methodsFromDoc.get(methodIndex);
+		for (int methodIndex = 0; methodIndex < this.methodsType.getMethod().length; methodIndex++) {
+			MethodType mel = this.methodsType.getMethod(methodIndex);
 			boolean found = false;
 			for (int i = 0; i < methods.length; i++) {
 				String methodName = methods[i].getName();
 				boolean paramsOk = true;
-				if (mel.getAttributeValue("name").equals(methodName)) {
-					if (mel.getChild("inputs", this.methodsDocument
-							.getRootElement().getNamespace()) != null) {
-						List inputParamEls = mel.getChild(
-								"inputs",
-								this.methodsDocument.getRootElement()
-										.getNamespace()).getChildren();
+				if (mel.getName().equals(methodName)) {
 
-						Parameter[] classes = methods[i].getParams();
-
-						if (inputParamEls.size() == classes.length) {
-							for (int paramIndex = 0; paramIndex < inputParamEls
-									.size(); paramIndex++) {
-								Element param = (Element) inputParamEls
-										.get(paramIndex);
+					Parameter[] classes = methods[i].getParams();
+					if (mel.getInputs() != null) {
+						if (mel.getInputs().getInput().length == classes.length) {
+							for (int paramIndex = 0; paramIndex < mel
+									.getInputs().getInput().length; paramIndex++) {
+								MethodTypeInputsInput param = mel.getInputs()
+										.getInput(paramIndex);
 								String classTypeString = "";
 								if (classes[paramIndex].getType()
 										.getPackageName().length() > 0) {
@@ -228,8 +244,8 @@ public class SyncTools {
 								if (classes[paramIndex].getType().isArray()) {
 									classTypeString += "[]";
 								}
-								if (!param.getAttributeValue("className")
-										.equals(classTypeString)) {
+								if (!param.getClassName().equals(
+										classTypeString)) {
 									paramsOk = false;
 								}
 							}
@@ -237,10 +253,10 @@ public class SyncTools {
 							paramsOk = false;
 						}
 					}
+
 					boolean returnOk = true;
-					Element returnTypeEl = mel.getChild("output",
-							this.methodsDocument.getRootElement()
-									.getNamespace());
+
+					MethodTypeOutput returnTypeEl = mel.getOutput();
 					String returnClass = "";
 					if (methods[i].getType().getPackageName().length() > 0) {
 						returnClass += methods[i].getType().getPackageName()
@@ -250,8 +266,7 @@ public class SyncTools {
 					if (methods[i].getType().isArray()) {
 						returnClass += "[]";
 					}
-					if (!returnTypeEl.getAttributeValue("className").equals(
-							returnClass)) {
+					if (!returnTypeEl.getClassName().equals(returnClass)) {
 						returnOk = false;
 					}
 					if (paramsOk && returnOk) {
@@ -262,7 +277,7 @@ public class SyncTools {
 			}
 			if (!found) {
 				System.out.println("Found a method for addition: "
-						+ mel.getAttributeValue("name"));
+						+ mel.getName());
 				this.additions.add(mel);
 			}
 		}
@@ -271,22 +286,18 @@ public class SyncTools {
 		for (int i = 0; i < methods.length; i++) {
 			String methodName = methods[i].getName();
 			boolean found = false;
-			for (int methodIndex = 0; methodIndex < methodsFromDoc.size(); methodIndex++) {
-				Element mel = (Element) methodsFromDoc.get(methodIndex);
+			for (int methodIndex = 0; methodIndex < this.methodsType
+					.getMethod().length; methodIndex++) {
+				MethodType mel = this.methodsType.getMethod(methodIndex);
 				boolean paramsOk = true;
-				if (mel.getAttributeValue("name").equals(methodName)) {
-					if (mel.getChild("inputs", this.methodsDocument
-							.getRootElement().getNamespace()) != null) {
-						List inputParamEls = mel.getChild(
-								"inputs",
-								this.methodsDocument.getRootElement()
-										.getNamespace()).getChildren();
-						Parameter[] classes = methods[i].getParams();
-						if (inputParamEls.size() == classes.length) {
-							for (int paramIndex = 0; paramIndex < inputParamEls
-									.size(); paramIndex++) {
-								Element param = (Element) inputParamEls
-										.get(paramIndex);
+				if (mel.getName().equals(methodName)) {
+					Parameter[] classes = methods[i].getParams();
+					if (mel.getInputs() != null) {
+						if (mel.getInputs().getInput().length == classes.length) {
+							for (int paramIndex = 0; paramIndex < mel
+									.getInputs().getInput().length; paramIndex++) {
+								MethodTypeInputsInput param = mel.getInputs()
+										.getInput(paramIndex);
 								String classTypeString = "";
 								if (classes[paramIndex].getType()
 										.getPackageName().length() > 0) {
@@ -299,8 +310,8 @@ public class SyncTools {
 								if (classes[paramIndex].getType().isArray()) {
 									classTypeString += "[]";
 								}
-								if (!param.getAttributeValue("className")
-										.equals(classTypeString)) {
+								if (!param.getClassName().equals(
+										classTypeString)) {
 									paramsOk = false;
 								}
 							}
@@ -309,9 +320,7 @@ public class SyncTools {
 						}
 					}
 					boolean returnOk = true;
-					Element returnTypeEl = mel.getChild("output",
-							this.methodsDocument.getRootElement()
-									.getNamespace());
+					MethodTypeOutput returnTypeEl = mel.getOutput();
 					String returnClass = "";
 					if (methods[i].getType().getPackageName().length() > 0) {
 						returnClass += methods[i].getType().getPackageName()
@@ -321,8 +330,7 @@ public class SyncTools {
 					if (methods[i].getType().isArray()) {
 						returnClass += "[]";
 					}
-					if (!returnTypeEl.getAttributeValue("className").equals(
-							returnClass)) {
+					if (!returnTypeEl.getClassName().equals(returnClass)) {
 						returnOk = false;
 					}
 					if (paramsOk && returnOk) {
