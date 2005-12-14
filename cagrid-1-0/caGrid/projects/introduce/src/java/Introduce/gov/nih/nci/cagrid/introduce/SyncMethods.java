@@ -1,11 +1,11 @@
 package gov.nih.nci.cagrid.introduce;
 
 import gov.nih.nci.cagrid.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -19,7 +19,6 @@ import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.axis.wsdl.symbolTable.Type;
 import org.apache.ws.jaxme.js.JavaMethod;
 import org.apache.ws.jaxme.js.Parameter;
-import org.jdom.Element;
 
 /**
  * SyncMethodsOnDeployment TODO:DOCUMENT ME
@@ -126,7 +125,7 @@ public class SyncMethods {
 		return type.getName();
 	}
 
-	private String createExceptions(MethodType method) {
+	private String createExceptions(MethodsTypeMethod method) {
 		String exceptions = "";
 		// process the faults for this method...
 		MethodTypeExceptions exceptionsEl = method.getExceptions();
@@ -153,7 +152,7 @@ public class SyncMethods {
 		return exceptions;
 	}
 
-	private String createUnBoxedSignatureStringFromMethod(MethodType method) {
+	private String createUnBoxedSignatureStringFromMethod(MethodsTypeMethod method) {
 		String methodString = "";
 		MethodTypeOutput returnTypeEl = method.getOutput();
 		String methodName = method.getName();
@@ -215,7 +214,7 @@ public class SyncMethods {
 		return returnType;
 	}
 
-	private String createBoxedSignatureStringFromMethod(MethodType method) {
+	private String createBoxedSignatureStringFromMethod(MethodsTypeMethod method) {
 		String methodString = "";
 		MethodTypeOutput returnTypeEl = method.getOutput();
 		String methodName = method.getName();
@@ -281,7 +280,7 @@ public class SyncMethods {
 	public void addMethods(List additions) {
 		for (int i = 0; i < additions.size(); i++) {
 			// add it to the interface
-			MethodType method = (MethodType) additions.get(i);
+			MethodsTypeMethod method = (MethodsTypeMethod) additions.get(i);
 
 			StringBuffer fileContent = null;
 			try {
@@ -315,7 +314,7 @@ public class SyncMethods {
 		}
 	}
 
-	private void addClientImpl(MethodType method) {
+	private void addClientImpl(MethodsTypeMethod method) {
 		StringBuffer fileContent = null;
 		String methodName = method.getName();
 		try {
@@ -332,7 +331,13 @@ public class SyncMethods {
 		clientMethod += "{\n\t\t";
 		// clientMethod += "try{\n";
 		clientMethod += "\t\t\t";
-
+		
+		String secureValue = "SECURITY_PROPERTY_NONE";
+		if (method.getSecure() != null) {
+			secureValue = "SECURITY_PROPERTY_"
+					+ method.getSecure();
+		}
+		
 		// get the port
 		// TODO: handle security here
 		clientMethod += this.deploymentProperties
@@ -406,7 +411,7 @@ public class SyncMethods {
 
 	}
 
-	private void addImpl(MethodType method) {
+	private void addImpl(MethodsTypeMethod method) {
 		StringBuffer fileContent = null;
 		try {
 			fileContent = CommonTools.fileToStringBuffer(new File(
@@ -443,7 +448,7 @@ public class SyncMethods {
 		}
 	}
 
-	private void addProviderImpl(MethodType method) {
+	private void addProviderImpl(MethodsTypeMethod method) {
 		StringBuffer fileContent = null;
 		try {
 			fileContent = CommonTools.fileToStringBuffer(new File(

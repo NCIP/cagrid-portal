@@ -1,8 +1,8 @@
 package gov.nih.nci.cagrid.introduce;
 
 import gov.nih.nci.cagrid.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -211,7 +211,7 @@ public class SyncTools {
 
 		// look at doc and compare to interface
 		for (int methodIndex = 0; methodIndex < this.methodsType.getMethod().length; methodIndex++) {
-			MethodType mel = this.methodsType.getMethod(methodIndex);
+			MethodsTypeMethod mel = this.methodsType.getMethod(methodIndex);
 			boolean found = false;
 			for (int i = 0; i < methods.length; i++) {
 				String methodName = methods[i].getName();
@@ -233,7 +233,7 @@ public class SyncTools {
 			boolean found = false;
 			for (int methodIndex = 0; methodIndex < this.methodsType
 					.getMethod().length; methodIndex++) {
-				MethodType mel = this.methodsType.getMethod(methodIndex);
+				MethodsTypeMethod mel = this.methodsType.getMethod(methodIndex);
 				if (mel.getName().equals(methodName)) {
 					found = true;
 					break;

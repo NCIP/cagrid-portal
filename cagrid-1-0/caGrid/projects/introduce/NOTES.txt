@@ -19,8 +19,8 @@ Need to programatically be able to
 	-add/remove new metadata to the service
 	-add/remove state variables
 
-*********	
 Because we are now using axis to generate the class names we will not be able to use synctool to always find out which methods are different.  We will need a better method.
+(DONE) we do not need to know them upfront because we dont need to analyze the signatures, only look at the method names.
 
 
 

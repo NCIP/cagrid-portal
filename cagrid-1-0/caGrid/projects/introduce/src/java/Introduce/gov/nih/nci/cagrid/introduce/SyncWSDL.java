@@ -1,10 +1,10 @@
 package gov.nih.nci.cagrid.introduce;
 
-import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.ws.jaxme.js.JavaMethod;
-import org.jdom.DataConversionException;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -67,7 +66,7 @@ public class SyncWSDL {
 		this.deploymentProperties = deploymentProperties;
 	}
 
-	private Element createInputMessage(MethodType method) {
+	private Element createInputMessage(MethodsTypeMethod method) {
 		Element inputMessage = new Element("message", Namespace
 				.getNamespace(SyncWSDL.WSDL_NAMESPACE));
 		inputMessage.setAttribute("name", method.getName()
@@ -80,7 +79,7 @@ public class SyncWSDL {
 		return inputMessage;
 	}
 
-	private Element createOutputMessage(MethodType method) {
+	private Element createOutputMessage(MethodsTypeMethod method) {
 		Element outputMessage = new Element("message", Namespace
 				.getNamespace(SyncWSDL.WSDL_NAMESPACE));
 		outputMessage.setAttribute("name", method.getName()
@@ -107,7 +106,7 @@ public class SyncWSDL {
 		return faultMessage;
 	}
 
-	private Element createInputType(MethodType method) {
+	private Element createInputType(MethodsTypeMethod method) {
 		Element inputType = new Element("element", Namespace.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
 		Element cType = new Element("complexType", Namespace.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
 		inputType.setAttribute("name", method.getName());
@@ -224,7 +223,7 @@ public class SyncWSDL {
 		return inputType;
 	}
 
-	private Element createOutputType(MethodType method) {
+	private Element createOutputType(MethodsTypeMethod method) {
 		Element outputType = new Element("element", Namespace.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
 		outputType.setAttribute("name", method.getName()
 				+ "Response");
@@ -306,7 +305,7 @@ public class SyncWSDL {
 		return faultType;
 	}
 
-	private Element createOperation(MethodType method) {
+	private Element createOperation(MethodsTypeMethod method) {
 		Element operation = new Element("operation", this.definitions
 				.getNamespace());
 		operation.setAttribute("name", method.getName());
@@ -338,12 +337,12 @@ public class SyncWSDL {
 
 	private void addMethods(List additions) {
 		for (int i = 0; i < additions.size(); i++) {
-			MethodType method = (MethodType) additions.get(i);
+			MethodsTypeMethod method = (MethodsTypeMethod) additions.get(i);
 			this.addMethod(method);
 		}
 	}
 
-	private void addMethod(MethodType method) {
+	private void addMethod(MethodsTypeMethod method) {
 		// process the faults for this method...
 		MethodTypeExceptions exceptionsEl = method.getExceptions();
 		if (exceptionsEl != null) {
