@@ -19,7 +19,7 @@ import org.projectmobius.portal.PortalTable;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: MethodsTable.java,v 1.4 2005-12-13 14:21:40 hastings Exp $
+ * @version $Id: MethodsTable.java,v 1.5 2005-12-14 02:06:27 hastings Exp $
  */
 public class MethodsTable extends PortalTable {
 
@@ -45,7 +45,7 @@ public class MethodsTable extends PortalTable {
 	
 
 	public boolean isCellEditable(int row, int column) {
-		return true;
+		return false;
 	}
 	
 	
@@ -64,7 +64,9 @@ public class MethodsTable extends PortalTable {
 		
 		addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent e) {
+				System.out.print("CLICKED");
 				if (e.getClickCount() == 2) {
+					System.out.print("TWICE");
 					try {
 						int row = getSelectedRow();
 						if((row<0)||(row>=getRowCount())){

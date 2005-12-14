@@ -10,6 +10,8 @@ import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -41,7 +43,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.16 2005-12-13 20:33:30 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.17 2005-12-14 02:06:28 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -436,7 +438,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 							method.addContent(exceptions);
 							methodsDocument.getRootElement().addContent(method);
 							getMethodsTable().addRow(method);
-							performModify(e);
+							performModify();
 						}
 					});
 		}
@@ -548,7 +550,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		return removeButton;
 	}
 
-	public void performModify(java.awt.event.ActionEvent e) {
+	public void performModify() {
 
 		int row = getMethodsTable().getSelectedRow();
 		if ((row < 0) || (row >= getMethodsTable().getRowCount())) {
@@ -588,7 +590,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			modifyButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dirty = true;
-					performModify(e);
+					performModify();
 				}
 			});
 		}
