@@ -21,7 +21,7 @@ import gov.nih.nci.cagrid.gums.ifs.IFS;
 import gov.nih.nci.cagrid.gums.ifs.IFSConfiguration;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserFilter;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserPolicyClass;
+import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserPolicy;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserRole;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
@@ -89,7 +89,7 @@ public class GUMS extends MobiusResourceManager {
 			SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
 			methods[0] = SAMLAuthenticationMethod.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
 			idp.setAuthenticationMethod(methods);
-			idp.setPolicyClass(AutoApprovalAutoRenewalPolicy.class.getName());
+			idp.setUserPolicyClass(AutoApprovalAutoRenewalPolicy.class.getName());
 			idp.setIdPCertificate(CertUtil.writeCertificateToString(this.identityProvider.getIdPCertificate()));
 			idp.setStatus(TrustedIdPStatus.Active);
 			IFSUser usr = new IFSUser();
@@ -197,7 +197,7 @@ public class GUMS extends MobiusResourceManager {
 
 	/** *************** IFS FUNCTIONS ********************** */
 
-	public IFSUserPolicyClass[] getIFSUserPolicies(String callerGridIdentity) throws GUMSInternalFault,
+	public IFSUserPolicy[] getIFSUserPolicies(String callerGridIdentity) throws GUMSInternalFault,
 		InvalidUserFault, PermissionDeniedFault {
 		return ifs.getUserPolicies(callerGridIdentity);
 	}

@@ -15,7 +15,7 @@ import gov.nih.nci.cagrid.gums.ifs.bean.UserPolicyFault;
  *          Exp $
  */
 
-public class AutoApprovalPolicy extends IFSUserPolicy {
+public class AutoApprovalPolicy extends UserPolicy {
 	public void applyPolicy(IFSUser user) throws GUMSInternalFault,
 			UserPolicyFault {
 		UserManager um = getUserManager();

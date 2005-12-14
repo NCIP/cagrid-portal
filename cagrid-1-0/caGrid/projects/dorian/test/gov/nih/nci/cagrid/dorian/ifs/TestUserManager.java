@@ -370,14 +370,14 @@ public class TestUserManager extends TestCase {
 		conf.setCredentialsValidSeconds(0);
 		conf.setMinimumIdPNameLength(MIN_NAME_LENGTH);
 		conf.setMaximumIdPNameLength(MAX_NAME_LENGTH);
-
+		conf.setUserPolicies(TestUtils.getUserPolicies());
 		TrustedIdP idp = new TrustedIdP();
 		idp.setName("Initial IdP");
 		SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
 		methods[0] = SAMLAuthenticationMethod
 				.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
 		idp.setAuthenticationMethod(methods);
-		idp.setPolicyClass(AutoApprovalAutoRenewalPolicy.class.getName());
+		idp.setUserPolicyClass(AutoApprovalAutoRenewalPolicy.class.getName());
 
 		KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 		String subject = TestUtils.CA_SUBJECT_PREFIX + ",CN=" + idp.getName();

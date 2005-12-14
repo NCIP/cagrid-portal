@@ -6,6 +6,11 @@ import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthorityConf;
 import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
+import gov.nih.nci.cagrid.gums.ifs.AutoApprovalAutoRenewalPolicy;
+import gov.nih.nci.cagrid.gums.ifs.AutoApprovalPolicy;
+import gov.nih.nci.cagrid.gums.ifs.ManualApprovalAutoRenewalPolicy;
+import gov.nih.nci.cagrid.gums.ifs.ManualApprovalPolicy;
+import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserPolicy;
 
 import java.io.File;
 import java.security.KeyPair;
@@ -37,6 +42,15 @@ public class TestUtils {
 		db.destroyDatabase();
 		db.createDatabaseIfNeeded();	
 		return db;
+	}
+	
+	public static IFSUserPolicy[] getUserPolicies(){
+		IFSUserPolicy[] policies = new IFSUserPolicy[4];
+		policies[0] = new IFSUserPolicy(ManualApprovalAutoRenewalPolicy.class.getName(),"");
+		policies[1] = new IFSUserPolicy(AutoApprovalAutoRenewalPolicy.class.getName(),"");
+		policies[2] = new IFSUserPolicy(ManualApprovalPolicy.class.getName(),"");
+		policies[3] = new IFSUserPolicy(AutoApprovalPolicy.class.getName(),"");
+	    return policies;
 	}
 	
 	

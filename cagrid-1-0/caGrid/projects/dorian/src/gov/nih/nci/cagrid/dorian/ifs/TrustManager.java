@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.gums.common.Database;
 import gov.nih.nci.cagrid.gums.common.FaultHelper;
 import gov.nih.nci.cagrid.gums.common.GUMSObject;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
+import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserPolicy;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidTrustedIdPFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.SAMLAuthenticationMethod;
@@ -153,8 +154,8 @@ public class TrustManager extends GUMSObject {
 			needsUpdate = true;
 		}
 
-		if ((clean(idp.getPolicyClass()) != null) && (!idp.getPolicyClass().equals(curr.getPolicyClass()))) {
-			buildUpdate(needsUpdate, sql, "POLICY_CLASS", validateAndGetPolicy(idp));
+		if ((clean(idp.getUserPolicyClass()) != null) && (!idp.getUserPolicyClass().equals(curr.getUserPolicyClass()))) {
+			buildUpdate(needsUpdate, sql, "POLICY_CLASS", validateAndGetPolicy(idp.getUserPolicyClass()).getClassName());
 			needsUpdate = true;
 		}
 
@@ -233,7 +234,7 @@ public class TrustManager extends GUMSObject {
 				idp.setName(rs.getString("NAME"));
 				idp.setStatus(TrustedIdPStatus.fromValue(rs.getString("STATUS")));
 				idp.setIdPCertificate(rs.getString("IDP_CERTIFICATE"));
-				idp.setPolicyClass(rs.getString("POLICY_CLASS"));
+				idp.setUserPolicyClass(rs.getString("POLICY_CLASS"));
 				idps.add(idp);
 			}
 			rs.close();
@@ -275,7 +276,7 @@ public class TrustManager extends GUMSObject {
 				idp.setName(rs.getString("NAME"));
 				idp.setStatus(TrustedIdPStatus.fromValue(rs.getString("STATUS")));
 				idp.setIdPCertificate(rs.getString("IDP_CERTIFICATE"));
-				idp.setPolicyClass(rs.getString("POLICY_CLASS"));
+				idp.setUserPolicyClass(rs.getString("POLICY_CLASS"));
 			} else {
 				InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
 				fault.setFaultString("The Trusted IdP " + id + " does not exist.");
@@ -315,7 +316,7 @@ public class TrustManager extends GUMSObject {
 				idp.setName(rs.getString("NAME"));
 				idp.setStatus(TrustedIdPStatus.fromValue(rs.getString("STATUS")));
 				idp.setIdPCertificate(rs.getString("IDP_CERTIFICATE"));
-				idp.setPolicyClass(rs.getString("POLICY_CLASS"));
+				idp.setUserPolicyClass(rs.getString("POLICY_CLASS"));
 			} else {
 				InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
 				fault.setFaultString("The Trusted IdP " + name + " does not exist.");
@@ -355,7 +356,7 @@ public class TrustManager extends GUMSObject {
 				idp.setName(rs.getString("NAME"));
 				idp.setStatus(TrustedIdPStatus.fromValue(rs.getString("STATUS")));
 				idp.setIdPCertificate(rs.getString("IDP_CERTIFICATE"));
-				idp.setPolicyClass(rs.getString("POLICY_CLASS"));
+				idp.setUserPolicyClass(rs.getString("POLICY_CLASS"));
 			} else {
 				InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
 				fault.setFaultString("The Trusted IdP " + dn + " does not exist.");
@@ -393,22 +394,16 @@ public class TrustManager extends GUMSObject {
 	}
 
 
-	private String validateAndGetPolicy(TrustedIdP idp) throws GUMSInternalFault, InvalidTrustedIdPFault {
-		// TODO: Validate IdP
-		try {
-			Class c = Class.forName(idp.getPolicyClass());
-			if (!IFSUserPolicy.class.isAssignableFrom(c)) {
-				InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
-				fault.setFaultString("Invalid policy class (" + idp.getPolicyClass() + ") specified.");
-				throw fault;
+	private IFSUserPolicy validateAndGetPolicy(String className) throws GUMSInternalFault, InvalidTrustedIdPFault {
+		IFSUserPolicy[] policies = conf.getUserPolicies();
+		for (int i = 0; i < policies.length; i++) {
+			if (policies[i].getClassName().equals(className)) {
+				return policies[i];
 			}
-
-		} catch (ClassNotFoundException e) {
-			InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
-			fault.setFaultString("Invalid policy class (" + idp.getPolicyClass() + ") specified.");
-			throw fault;
 		}
-		return idp.getPolicyClass();
+		InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
+		fault.setFaultString("Invalid User Policy Class Specified.");
+		throw fault;
 	}
 
 
@@ -476,7 +471,7 @@ public class TrustManager extends GUMSObject {
 		if (!determineTrustedIdPExistsByName(idp.getName())) {
 			String name = validateAndGetName(idp);
 			X509Certificate cert = validateAndGetCertificate(idp);
-			String policyClass = validateAndGetPolicy(idp);
+			String policyClass = validateAndGetPolicy(idp.getUserPolicyClass()).getClassName();
 
 			if (!isCertificateUnique(idp.getIdPCertificate())) {
 				InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();

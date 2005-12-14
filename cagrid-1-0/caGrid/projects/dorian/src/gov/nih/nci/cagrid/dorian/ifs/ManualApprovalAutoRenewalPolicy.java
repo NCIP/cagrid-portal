@@ -17,7 +17,7 @@ import java.security.cert.X509Certificate;
  *          Exp $
  */
 
-public class ManualApprovalAutoRenewalPolicy extends IFSUserPolicy {
+public class ManualApprovalAutoRenewalPolicy extends UserPolicy {
 	public void applyPolicy(IFSUser user) throws GUMSInternalFault,
 			UserPolicyFault {
 		UserManager um = getUserManager();

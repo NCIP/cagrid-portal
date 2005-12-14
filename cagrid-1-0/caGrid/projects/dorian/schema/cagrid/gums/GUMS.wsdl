@@ -143,6 +143,19 @@
 	<xsd:element name="IFSRenewUserCredentialsResponse" type="ifs:IFSUser"/>
 	
 	
+	<xsd:element name="IFSGetUserPolicies">
+			<xsd:complexType/>
+	</xsd:element>
+	
+	<xsd:element name="IFSGetUserPoliciesResponse">
+			<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="policies" minOccurs="0" maxOccurs="unbounded" type="ifs:IFSUserPolicy"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	
+	
 	<xsd:element name="invalidAssertionFault" type="ifs:InvalidAssertionFault"/>
 	<xsd:element name="invalidProxyFault" type="ifs:InvalidProxyFault"/>
 	<xsd:element name="invalidUserFault" type="ifs:InvalidUserFault"/>
@@ -277,6 +290,14 @@
 	<message name="IFSRenewUserCredentialsOutputMessage">
 		<part name="parameters" element="tns:IFSRenewUserCredentialsResponse"/>
 	</message>
+	
+	<message name="IFSGetUserPoliciesInputMessage">
+		<part name="parameters" element="tns:IFSGetUserPolicies"/>
+	</message>
+	
+	<message name="IFSGetUserPoliciesOutputMessage">
+		<part name="parameters" element="tns:IFSGetUserPoliciesResponse"/>
+	</message>
 
 	<message name="InvalidAssertionFaultMessage">
 		<part name="fault" element="tns:invalidAssertionFault" />
@@ -394,6 +415,15 @@
 	<operation name="renewIFSUserCredentials">
 		<input message="tns:IFSRenewUserCredentialsInputMessage"/>
 		<output message="tns:IFSRenewUserCredentialsOutputMessage"/>
+		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
+	    <fault message="tns:InvalidUserFaultMessage" name="InvalidUserFault"/>
+	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
+	</operation>
+	
+	
+	<operation name="getIFSUserPolicies">
+		<input message="tns:IFSGetUserPoliciesInputMessage"/>
+		<output message="tns:IFSGetUserPoliciesOutputMessage"/>
 		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
 	    <fault message="tns:InvalidUserFaultMessage" name="InvalidUserFault"/>
 	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>

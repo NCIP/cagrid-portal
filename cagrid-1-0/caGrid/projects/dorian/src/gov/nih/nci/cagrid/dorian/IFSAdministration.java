@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gums.common.GUMSFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserFilter;
+import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserPolicy;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidUserFault;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
 
@@ -29,6 +30,9 @@ public interface IFSAdministration {
 			PermissionDeniedFault, InvalidUserFault, GUMSInternalFault;
 	
 	public IFSUser renewUserCredentials(IFSUser usr) throws GUMSFault,
+	PermissionDeniedFault, InvalidUserFault, GUMSInternalFault;
+	
+	public IFSUserPolicy[] getUserPolicies() throws GUMSFault,
 	PermissionDeniedFault, InvalidUserFault, GUMSInternalFault;
 
 }

@@ -279,7 +279,7 @@ public class TestTrustManager extends TestCase {
 		TrustedIdP idp = new TrustedIdP();
 		idp.setName(name);
 		idp.setStatus(TrustedIdPStatus.Active);
-		idp.setPolicyClass(AutoApprovalPolicy.class.getName());
+		idp.setUserPolicyClass(AutoApprovalPolicy.class.getName());
 		idp.setAuthenticationMethod(getRandomMethodList());
 
 		KeyPair pair = KeyUtil.generateRSAKeyPair1024();
@@ -329,6 +329,7 @@ public class TestTrustManager extends TestCase {
 			IFSConfiguration conf = new IFSConfiguration();
 			conf.setMinimumIdPNameLength(MIN_NAME_LENGTH);
 			conf.setMaximumIdPNameLength(MAX_NAME_LENGTH);
+			conf.setUserPolicies(TestUtils.getUserPolicies());
 			ca = TestUtils.getCA(db);
 			tm = new TrustManager(conf, db);
 		} catch (Exception e) {

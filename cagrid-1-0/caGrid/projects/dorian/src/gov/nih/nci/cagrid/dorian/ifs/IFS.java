@@ -10,7 +10,7 @@ import gov.nih.nci.cagrid.gums.common.GUMSObject;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserFilter;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserPolicyClass;
+import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserPolicy;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserRole;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
@@ -64,7 +64,7 @@ public class IFS extends GUMSObject {
 	}
 
 
-	public IFSUserPolicyClass[] getUserPolicies(String callerGridIdentity) throws GUMSInternalFault,
+	public IFSUserPolicy[] getUserPolicies(String callerGridIdentity) throws GUMSInternalFault,
 		InvalidUserFault, PermissionDeniedFault {
 		IFSUser caller = um.getUser(callerGridIdentity);
 		verifyActiveUser(caller);
@@ -286,16 +286,16 @@ public class IFS extends GUMSObject {
 		}
 
 		// Run the policy
-		IFSUserPolicy policy = null;
+		UserPolicy policy = null;
 		try {
-			Class c = Class.forName(idp.getPolicyClass());
-			policy = (IFSUserPolicy) c.newInstance();
+			Class c = Class.forName(idp.getUserPolicyClass());
+			policy = (UserPolicy) c.newInstance();
 			policy.configure(conf, um);
 
 		} catch (Exception e) {
 			GUMSInternalFault fault = new GUMSInternalFault();
 			fault.setFaultString("An unexpected error occurred in creating an instance of the user policy "
-				+ idp.getPolicyClass());
+				+ idp.getUserPolicyClass());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (GUMSInternalFault) helper.getFault();

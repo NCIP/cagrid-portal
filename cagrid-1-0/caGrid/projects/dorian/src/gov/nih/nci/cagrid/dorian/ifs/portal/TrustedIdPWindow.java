@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gums.client.IFSAdministrationClient;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
+import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserPolicy;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
 import gov.nih.nci.cagrid.gums.portal.ProxyCaddy;
@@ -34,7 +35,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPWindow.java,v 1.1 2005-12-13 19:53:22 langella Exp $
+ * @version $Id: TrustedIdPWindow.java,v 1.2 2005-12-14 17:41:29 langella Exp $
  */
 public class TrustedIdPWindow extends GridPortalBaseFrame {
 
@@ -89,28 +90,50 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 	private JLabel statusLabel = null;
 
 	private TrustedIdPStatusComboBox status = null;
+	
+	private IFSUserPolicy[] policies;
 
-	public TrustedIdPWindow(String serviceId, GlobusCredential proxy) {
+	private JLabel policyLabel = null;
+
+	private JComboBox userPolicy = null;
+	
+	public TrustedIdPWindow(String serviceId, GlobusCredential proxy,IFSUserPolicy[] policies) {
 		super();
 		this.serviceId = serviceId;
 		this.cred = proxy;
 		this.idp = new TrustedIdP();
 		this.newTrustedIdP = true;
+		this.policies = policies;
 		initialize();
-
 	}
 
 
 	/**
 	 * This is the default constructor
 	 */
-	public TrustedIdPWindow(String serviceId, GlobusCredential proxy, TrustedIdP idp) throws Exception {
+	public TrustedIdPWindow(String serviceId, GlobusCredential proxy, TrustedIdP idp,IFSUserPolicy[] policies) throws Exception {
 		super();
 		this.serviceId = serviceId;
 		this.cred = proxy;
 		this.idp = idp;
 		this.newTrustedIdP = false;
+		this.policies = policies;
 		initialize();
+	}
+	
+	public class UserPolicyCaddy{
+		private IFSUserPolicy policy;
+		public UserPolicyCaddy(IFSUserPolicy policy){
+			this.policy = policy;
+		}
+		
+		public IFSUserPolicy getPolicy(){
+			return policy;
+		}
+		
+		public String toString(){
+			return policy.getName();
+		}
 	}
 
 
@@ -277,6 +300,20 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 	 */
 	private JPanel getJPanel1() {
 		if (jPanel1 == null) {
+			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+			gridBagConstraints12.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints12.gridy = 3;
+			gridBagConstraints12.weightx = 1.0;
+			gridBagConstraints12.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints12.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints12.gridx = 1;
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.gridx = 0;
+			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints11.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints11.gridy = 3;
+			policyLabel = new JLabel();
+			policyLabel.setText("User Policy");
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
 			gridBagConstraints10.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints10.gridy = 2;
@@ -286,6 +323,8 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 			gridBagConstraints10.gridx = 1;
 			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
 			gridBagConstraints9.gridx = 0;
+			gridBagConstraints9.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints9.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints9.gridy = 2;
 			statusLabel = new JLabel();
 			statusLabel.setText("Status");
@@ -317,19 +356,21 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 			gridBagConstraints5.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints5.gridx = 0;
 			idLabel = new JLabel();
-			idLabel.setText("IdP Id:");
+			idLabel.setText("IdP Id");
 			if(newTrustedIdP){
 				
 			}
 			jPanel1 = new JPanel();
 			jPanel1.setLayout(new GridBagLayout());
-			jPanel1.add(statusLabel, gridBagConstraints9);
 			jPanel1.add(getStatus(), gridBagConstraints10);
 			jPanel1.setName(INFO_PANEL);
+			jPanel1.add(statusLabel, gridBagConstraints9);
 			jPanel1.add(idLabel, gridBagConstraints5);
 			jPanel1.add(getIdpId(), gridBagConstraints6);
 			jPanel1.add(nameLabel, gridBagConstraints7);
 			jPanel1.add(getIdPName(), gridBagConstraints8);
+			jPanel1.add(policyLabel, gridBagConstraints11);
+			jPanel1.add(getUserPolicy(), gridBagConstraints12);
 			
 		}
 		return jPanel1;
@@ -519,6 +560,19 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 			}
 		}
 		return status;
+	}
+
+
+	/**
+	 * This method initializes userPolicy	
+	 * 	
+	 * @return javax.swing.JComboBox	
+	 */    
+	private JComboBox getUserPolicy() {
+		if (userPolicy == null) {
+			userPolicy = new JComboBox();
+		}
+		return userPolicy;
 	}
 
 }

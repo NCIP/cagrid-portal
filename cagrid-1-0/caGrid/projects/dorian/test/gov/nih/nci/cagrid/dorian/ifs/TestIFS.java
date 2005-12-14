@@ -507,6 +507,7 @@ public class TestIFS extends TestCase {
 		conf.setMaxProxyLifetimeHours(12);
 		conf.setMaxProxyLifetimeMinutes(0);
 		conf.setMaxProxyLifetimeSeconds(0);
+		conf.setUserPolicies(TestUtils.getUserPolicies());
 		TrustedIdP idp = this.getTrustedIdpAutoApproveAutoRenew("Initial IdP").getIdp();
 		IFSUser usr = new IFSUser();
 		usr.setUID(INITIAL_ADMIN);
@@ -532,6 +533,7 @@ public class TestIFS extends TestCase {
 		conf.setMaxProxyLifetimeHours(12);
 		conf.setMaxProxyLifetimeMinutes(0);
 		conf.setMaxProxyLifetimeSeconds(0);
+		conf.setUserPolicies(TestUtils.getUserPolicies());
 		TrustedIdP idp = this.getTrustedIdpAutoApproveAutoRenew("Initial IdP").getIdp();
 		IFSUser usr = new IFSUser();
 		usr.setUID("inital_admin");
@@ -647,7 +649,7 @@ public class TestIFS extends TestCase {
 	private IdPContainer getTrustedIdp(String name, String policyClass) throws Exception {
 		TrustedIdP idp = new TrustedIdP();
 		idp.setName(name);
-		idp.setPolicyClass(policyClass);
+		idp.setUserPolicyClass(policyClass);
 		idp.setStatus(TrustedIdPStatus.Active);
 
 		SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];

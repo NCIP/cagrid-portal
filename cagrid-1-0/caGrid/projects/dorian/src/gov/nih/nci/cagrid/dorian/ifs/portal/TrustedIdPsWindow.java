@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gums.IFSAdministration;
 import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gums.client.IFSAdministrationClient;
+import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserPolicy;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.gums.portal.GUMSServiceListComboBox;
 import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
@@ -35,7 +36,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPsWindow.java,v 1.2 2005-12-13 19:53:22 langella Exp $
+ * @version $Id: TrustedIdPsWindow.java,v 1.3 2005-12-14 17:41:29 langella Exp $
  */
 public class TrustedIdPsWindow extends GridPortalBaseFrame {
 
@@ -51,7 +52,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 
 	private JScrollPane jScrollPane = null;
 
-	private JButton manageUser = null;
+	private JButton viewTrustedIdP = null;
 
 	private JPanel jPanel = null;
 
@@ -205,7 +206,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
 			buttonPanel.add(getAddUser(), null);
-			buttonPanel.add(getManageUser(), null);
+			buttonPanel.add(getViewTrustedIdP(), null);
 			buttonPanel.add(getRemoveUser(), null);
 		}
 		return buttonPanel;
@@ -244,20 +245,29 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getManageUser() {
-		if (manageUser == null) {
-			manageUser = new JButton();
-			manageUser.setText("View/Edit Trusted IdP");
-			manageUser.setIcon(GumsLookAndFeel.getTrustedIdPIcon());
-			manageUser.addActionListener(new java.awt.event.ActionListener() {
+	private JButton getViewTrustedIdP() {
+		if (viewTrustedIdP == null) {
+			viewTrustedIdP = new JButton();
+			viewTrustedIdP.setText("View/Edit Trusted IdP");
+			viewTrustedIdP.setIcon(GumsLookAndFeel.getTrustedIdPIcon());
+			viewTrustedIdP.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					showTrustedIdP();
+					MobiusRunnable runner = new MobiusRunnable() {
+						public void execute() {
+							showTrustedIdP();
+						}
+					};
+					try {
+						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
 				}
 
 			});
 		}
 
-		return manageUser;
+		return viewTrustedIdP;
 	}
 
 
@@ -265,17 +275,20 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 		try {
 			String service = ((GUMSServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new TrustedIdPWindow(service,proxy,getTrustedIdPTable().getSelectedTrustedIdP()));
+			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+				new TrustedIdPWindow(service, proxy, getTrustedIdPTable().getSelectedTrustedIdP(), getUserPolicies()));
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
 		}
 	}
-	
+
+
 	public void addTrustedIdP() {
 		try {
 			String service = ((GUMSServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new TrustedIdPWindow(service,proxy));
+			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+				new TrustedIdPWindow(service, proxy, getUserPolicies()));
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
 		}
@@ -436,6 +449,15 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 	}
 
 
+	private IFSUserPolicy[] getUserPolicies() throws Exception {
+		GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+		String service = ((GUMSServiceListComboBox) getService()).getSelectedService();
+		CommunicationStyle style = new SecureConversationWithEncryption(proxy);
+		IFSAdministration client = new IFSAdministrationClient(service, style);
+		return client.getUserPolicies();
+	}
+
+
 	/**
 	 * This method initializes service
 	 * 
@@ -555,17 +577,27 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 
 
 	/**
-	 * This method initializes addUser	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */    
+	 * This method initializes addUser
+	 * 
+	 * @return javax.swing.JButton
+	 */
 	private JButton getAddUser() {
 		if (addUser == null) {
 			addUser = new JButton();
 			addUser.setText("Add Trusted IdP");
-			addUser.addActionListener(new java.awt.event.ActionListener() { 
-				public void actionPerformed(java.awt.event.ActionEvent e) {    
-					addTrustedIdP();
+			addUser.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					MobiusRunnable runner = new MobiusRunnable() {
+						public void execute() {
+							addTrustedIdP();
+						}
+					};
+					try {
+						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+
 				}
 			});
 			addUser.setIcon(GumsLookAndFeel.getAddTrustedIdPIcon());

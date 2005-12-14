@@ -44,7 +44,7 @@
 package gov.nih.nci.cagrid.gums.ifs;
 
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserPolicyClass;
+import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserPolicy;
 import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
 
 import java.util.Calendar;
@@ -130,8 +130,8 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 	private TrustedIdP initalTrustedIdP;
 
 	private IFSUser initialUser;
-	
-	private IFSUserPolicyClass[] userPolicies;
+
+	private IFSUserPolicy[] userPolicies;
 
 
 	public void setMaximumIdPNameLength(int maximumIdPNameLength) {
@@ -355,43 +355,55 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 						+ " attribute for the element " + MAX_PROXY_LIFETIME + " must be an integer.");
 				}
 			}
-			Element policyElement = config.getChild(POLICIES,config.getNamespace());
+			Element policyElement = config.getChild(POLICIES, config.getNamespace());
 			if (policyElement == null) {
 				throw new MobiusException("Error configuring IFS, no " + POLICIES + " element specified.");
-			}else{
-				List policies = policyElement.getChildren(POLICY,policyElement.getNamespace());
-				if(policies.size()==0){
-					throw new MobiusException("Error configuring IFS, at least one " + POLICY + " element must be specified.");
-				}else{
-					this.userPolicies = new IFSUserPolicyClass[policies.size()];
-					for(int i=0; i<policies.size(); i++){
+			} else {
+				List policies = policyElement.getChildren(POLICY, policyElement.getNamespace());
+				if (policies.size() == 0) {
+					throw new MobiusException("Error configuring IFS, at least one " + POLICY
+						+ " element must be specified.");
+				} else {
+					this.userPolicies = new IFSUserPolicy[policies.size()];
+					for (int i = 0; i < policies.size(); i++) {
 						Element pol = (Element) policies.get(i);
 						String name = pol.getAttributeValue(POLICY_NAME);
 						String className = pol.getAttributeValue(POLICY_CLASS);
-						if(name == null){
+						if (name == null) {
 							throw new MobiusException("Error configuring IFS, no " + POLICY_NAME
 								+ " attribute specified for the element " + POLICY + " in the configuration file.");
 						}
-						
-						if(className == null){
+
+						if (className == null) {
 							throw new MobiusException("Error configuring IFS, no " + POLICY_CLASS
 								+ " attribute specified for the element " + POLICY + " in the configuration file.");
 						}
-						userPolicies[i] = new IFSUserPolicyClass();
+
+						try {
+							Class c = Class.forName(className);
+							if (!UserPolicy.class.isAssignableFrom(c)) {
+								throw new MobiusException("Error configuring IFS, Invalid policy class (" + className
+									+ ") specified.");
+							}
+
+						} catch (ClassNotFoundException e) {
+							throw new MobiusException("Error configuring IFS, Invalid policy class (" + className
+								+ ") specified.");
+						}
+
+						userPolicies[i] = new IFSUserPolicy();
 						userPolicies[i].setName(name);
 						userPolicies[i].setClassName(className);
 					}
 				}
 			}
-			
+
 		}
 
 	}
 
 
-	
-	
-	public IFSUserPolicyClass[] getUserPolicies() {
+	public IFSUserPolicy[] getUserPolicies() {
 		return userPolicies;
 	}
 
@@ -489,6 +501,11 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 
 	public void setInitialUser(IFSUser initialUser) {
 		this.initialUser = initialUser;
+	}
+
+
+	public void setUserPolicies(IFSUserPolicy[] userPolicies) {
+		this.userPolicies = userPolicies;
 	}
 
 }
