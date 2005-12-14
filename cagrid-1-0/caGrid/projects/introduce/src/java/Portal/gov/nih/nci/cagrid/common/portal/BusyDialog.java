@@ -7,8 +7,6 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
 
 public class BusyDialog extends JDialog {
 
@@ -18,11 +16,7 @@ public class BusyDialog extends JDialog {
 
 	private JPanel progressPanel = null;
 
-	private JPanel detailsPanel = null;
-
 	private JProgressBar progress = null;
-
-	private JScrollPane detailScoll = null;
 
 	/**
 	 * This method initializes
@@ -59,17 +53,15 @@ public class BusyDialog extends JDialog {
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
 			mainPanel.add(getProgressPanel(), gridBagConstraints);
-			//mainPanel.add(getDetailsPanel(), gridBagConstraints2);
+			// mainPanel.add(getDetailsPanel(), gridBagConstraints2);
 		}
 		return mainPanel;
 	}
 
-
-
 	/**
-	 * This method initializes progressPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes progressPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getProgressPanel() {
 		if (progressPanel == null) {
@@ -86,18 +78,18 @@ public class BusyDialog extends JDialog {
 		return progressPanel;
 	}
 
-
 	/**
-	 * This method initializes progress	
-	 * 	
-	 * @return javax.swing.JProgressBar	
+	 * This method initializes progress
+	 * 
+	 * @return javax.swing.JProgressBar
 	 */
 	public JProgressBar getProgress() {
 		if (progress == null) {
 			progress = new JProgressBar();
+			progress.setStringPainted(true);
+			progress.setString("");
 		}
 		return progress;
 	}
-
 
 } // @jve:decl-index=0:visual-constraint="10,10"

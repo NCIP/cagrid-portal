@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.creation;
 
 import gov.nih.nci.cagrid.common.CommonTools;
+import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.modification.ModificationViewer;
@@ -64,6 +65,18 @@ public class CreationViewer extends GridPortalComponent {
 
 	private JButton closeButton = null;
 
+	private JLabel methodsTemplateLabel = null;
+
+	private JTextField methodsTemplate = null;
+
+	private JButton methodsTemplateButton = null;
+
+	private JLabel metadataTemplateLabel = null;
+
+	private JTextField metadataTemplate = null;
+
+	private JButton metadataTemplateButton = null;
+
 	/**
 	 * This method initializes
 	 */
@@ -79,7 +92,7 @@ public class CreationViewer extends GridPortalComponent {
 	 */
 	private void initialize() {
 		this.setContentPane(getMainPanel());
-		this.setSize(422, 318);
+		this.setSize(445, 408);
 		this.setFrameIcon(IntroduceLookAndFeel.getCreateIcon());
 		this.setTitle("Create Grid Service");
 
@@ -92,19 +105,55 @@ public class CreationViewer extends GridPortalComponent {
 	 */
 	private JPanel getInputPanel() {
 		if (inputPanel == null) {
+			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
+			gridBagConstraints18.gridx = 2;
+			gridBagConstraints18.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints18.gridy = 6;
+			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
+			gridBagConstraints17.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints17.gridy = 6;
+			gridBagConstraints17.weightx = 1.0;
+			gridBagConstraints17.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints17.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints17.gridx = 1;
+			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
+			gridBagConstraints16.gridx = 0;
+			gridBagConstraints16.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints16.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints16.gridy = 6;
+			metadataTemplateLabel = new JLabel();
+			metadataTemplateLabel.setText("Metadata Template File");
+			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
+			gridBagConstraints15.gridx = 2;
+			gridBagConstraints15.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints15.gridy = 5;
+			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
+			gridBagConstraints14.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints14.gridy = 5;
+			gridBagConstraints14.weightx = 1.0;
+			gridBagConstraints14.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints14.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints14.gridx = 1;
+			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
+			gridBagConstraints13.gridx = 0;
+			gridBagConstraints13.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints13.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints13.gridy = 5;
+			methodsTemplateLabel = new JLabel();
+			methodsTemplateLabel.setText("Methods Template File");
 			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
 			gridBagConstraints12.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints12.gridy = 4;
 			gridBagConstraints12.weightx = 1.0;
 			gridBagConstraints12.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints12.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints12.insets = new java.awt.Insets(0, 0, 0, 0);
 			gridBagConstraints12.gridwidth = 2;
 			gridBagConstraints12.weighty = 1.0D;
 			gridBagConstraints12.gridx = 1;
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints11.gridy = 4;
-			gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints11.insets = new java.awt.Insets(0, 0, 0, 0);
 			gridBagConstraints11.gridx = 0;
 			namespaceLabel = new JLabel();
 			namespaceLabel.setText("Namespace Domain");
@@ -192,6 +241,12 @@ public class CreationViewer extends GridPortalComponent {
 			inputPanel.add(getNamespaceDomain(), gridBagConstraints12);
 			inputPanel.add(serviceLabel, gridBagConstraints4);
 			inputPanel.add(namespaceLabel, gridBagConstraints11);
+			inputPanel.add(methodsTemplateLabel, gridBagConstraints13);
+			inputPanel.add(getMethodsTemplateFile(), gridBagConstraints14);
+			inputPanel.add(getMethodsTemplateButton(), gridBagConstraints15);
+			inputPanel.add(metadataTemplateLabel, gridBagConstraints16);
+			inputPanel.add(getMetadataTemplate(), gridBagConstraints17);
+			inputPanel.add(getMetadataTemplateButton(), gridBagConstraints18);
 		}
 		return inputPanel;
 	}
@@ -253,48 +308,96 @@ public class CreationViewer extends GridPortalComponent {
 			createButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 
-					try {
-						if (service.getText().length() > 0) {
-							if (!service.getText().matches(
-									"[A-Z]++[A-Za-z0-9\\_\\$]*")) {
-								PortalUtils
-										.showMessage("Service Name can only contain [A-Z]++[A-Za-z0-9\\_\\$]*");
-								return;
+					BusyDialogRunnable r = new BusyDialogRunnable(null,
+							"Creating") {
+
+						public void process() {
+							try {
+								setProgressText("validating");
+								if (service.getText().length() > 0) {
+									if (!service.getText().matches(
+											"[A-Z]++[A-Za-z0-9\\_\\$]*")) {
+										PortalUtils
+												.showMessage("Service Name can only contain [A-Z]++[A-Za-z0-9\\_\\$]*");
+										return;
+									}
+									if (service.getText().substring(0, 1)
+											.toLowerCase().equals(
+													service.getText()
+															.substring(0, 1))) {
+										PortalUtils
+												.showMessage("Service Name cannnot start with lower case letters.");
+										return;
+									}
+								} else {
+									PortalUtils
+											.showMessage("Service Name cannot be empty.");
+									return;
+								}
+								setProgressText("creating");
+								String cmd = CommonTools
+										.getAntSkeletonCreationCommand(".",
+												service.getText(), dir
+														.getText(),
+												servicePackage.getText(),
+												namespaceDomain.getText());
+								Process p = CommonTools
+										.createAndOutputProcess(cmd);
+								p.waitFor();
+								if (p.exitValue() != 0) {
+									PortalUtils
+											.showErrorMessage("Error creating new service!");
+								}
+								if (methodsTemplate.getText().length() > 0
+										|| metadataTemplate.getText().length() > 0) {
+									if (methodsTemplate.getText().length() > 0) {
+										// TODO: NEED TO COPY THE FILE TO X
+										// LOCATION
+									}
+									if (metadataTemplate.getText().length() > 0) {
+										// TODO: NEED TO COPY THE FILE TO X
+										// LOCATION
+									}
+									setProgressText("resynchronizing using templates");
+									cmd = CommonTools
+											.getAntSkeletonResyncCommand(dir
+													.getText());
+									p = CommonTools.createAndOutputProcess(cmd);
+									p.waitFor();
+									if (p.exitValue() != 0) {
+										PortalUtils
+												.showErrorMessage("Error templating new service!");
+									}
+								}
+								setProgressText("building");
+								cmd = CommonTools.getAntAllCommand(dir
+										.getText());
+								p = CommonTools.createAndOutputProcess(cmd);
+								p.waitFor();
+								if (p.exitValue() == 0) {
+									PortalResourceManager
+											.getInstance()
+											.getGridPortal()
+											.addGridPortalComponent(
+													new ModificationViewer(
+															new File(dir
+																	.getText())));
+									dispose();
+								} else {
+									PortalUtils
+											.showErrorMessage("Error creating new service!");
+								}
+							} catch (Exception ex) {
+								ex.printStackTrace();
+								PortalUtils.showErrorMessage(ex.getMessage());
 							}
-							if (service.getText().substring(0, 1).toLowerCase()
-									.equals(service.getText().substring(0, 1))) {
-								PortalUtils
-										.showMessage("Service Name cannnot start with lower case letters.");
-								return;
-							}
-						} else {
-							PortalUtils
-									.showMessage("Service Name cannot be empty.");
-							return;
+
 						}
 
-						String cmd = CommonTools.getAntSkeletonCreationCommand(
-								".", service.getText(), dir.getText(),
-								servicePackage.getText(), namespaceDomain
-										.getText());
-						Process p = CommonTools.createAndOutputProcess(cmd);
-						p.waitFor();
-						cmd = CommonTools.getAntAllCommand(dir.getText());
-						p = CommonTools.createAndOutputProcess(cmd);
-						p.waitFor();
-						if (p.exitValue() == 0) {
-							PortalResourceManager.getInstance().getGridPortal()
-									.addGridPortalComponent(
-											new ModificationViewer(new File(dir
-													.getText())));
-							dispose();
-						} else {
-							PortalUtils.showErrorMessage("Error creating new service!");
-						}
-					} catch (Exception ex) {
-						ex.printStackTrace();
-						PortalUtils.showErrorMessage(ex.getMessage());
-					}
+					};
+
+					Thread th = new Thread(r);
+					th.start();
 				}
 			});
 		}
@@ -402,6 +505,60 @@ public class CreationViewer extends GridPortalComponent {
 			});
 		}
 		return closeButton;
+	}
+
+	/**
+	 * This method initializes methodsTemplateFile
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getMethodsTemplateFile() {
+		if (methodsTemplate == null) {
+			methodsTemplate = new JTextField();
+			methodsTemplate.setEditable(false);
+			methodsTemplate.setEnabled(false);
+		}
+		return methodsTemplate;
+	}
+
+	/**
+	 * This method initializes methodsTemplateButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getMethodsTemplateButton() {
+		if (methodsTemplateButton == null) {
+			methodsTemplateButton = new JButton();
+			methodsTemplateButton.setText("Browse");
+		}
+		return methodsTemplateButton;
+	}
+
+	/**
+	 * This method initializes metadataTemplate
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getMetadataTemplate() {
+		if (metadataTemplate == null) {
+			metadataTemplate = new JTextField();
+			metadataTemplate.setEditable(false);
+			metadataTemplate.setEnabled(false);
+		}
+		return metadataTemplate;
+	}
+
+	/**
+	 * This method initializes metadataTemplateButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getMetadataTemplateButton() {
+		if (metadataTemplateButton == null) {
+			metadataTemplateButton = new JButton();
+			metadataTemplateButton.setText("Browse");
+		}
+		return metadataTemplateButton;
 	}
 
 	public static void main(String[] args) {

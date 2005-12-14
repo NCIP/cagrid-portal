@@ -7,7 +7,7 @@ public abstract class BusyDialogRunnable implements Runnable {
 	final private BusyDialog dialog;
 	
 	public BusyDialogRunnable(JFrame owner, String title){
-		dialog = new BusyDialog(owner, title, this);
+		dialog = new BusyDialog(owner, "Progress (" + title + ")", this);
 	}
 	
 	public void setProgressText(String text){
