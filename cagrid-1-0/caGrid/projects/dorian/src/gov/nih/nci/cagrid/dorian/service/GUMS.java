@@ -21,6 +21,7 @@ import gov.nih.nci.cagrid.gums.ifs.IFS;
 import gov.nih.nci.cagrid.gums.ifs.IFSConfiguration;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserFilter;
+import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserPolicyClass;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserRole;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
@@ -123,30 +124,6 @@ public class GUMS extends MobiusResourceManager {
 	}
 
 
-	// //////////////////////////////////////////////////////////////////////////////
-	/*
-	 * DONT FORGET THAT TO MAKE SURE THAT TWO TRUSTED IDPS OF SAME DN CANT
-	 * EXISTS
-	 */
-	// //////////////////////////////////////////////////////////////////////////////
-	// //////////////////////////////////////////////////////////////////////////////
-	/*
-	 * DONT FORGET THAT TO MAKE SURE THAT TWO TRUSTED IDPS OF SAME DN CANT
-	 * EXISTS
-	 */
-	// //////////////////////////////////////////////////////////////////////////////
-	// //////////////////////////////////////////////////////////////////////////////
-	/*
-	 * DONT FORGET THAT TO MAKE SURE THAT TWO TRUSTED IDPS OF SAME DN CANT
-	 * EXISTS
-	 */
-	// //////////////////////////////////////////////////////////////////////////////
-	// //////////////////////////////////////////////////////////////////////////////
-	/*
-	 * DONT FORGET THAT TO MAKE SURE THAT TWO TRUSTED IDPS OF SAME DN CANT
-	 * EXISTS
-	 */
-	// //////////////////////////////////////////////////////////////////////////////
 	public X509Certificate getCACertificate() throws GUMSInternalFault {
 		try {
 			return this.ca.getCACertificate();
@@ -219,6 +196,12 @@ public class GUMS extends MobiusResourceManager {
 
 
 	/** *************** IFS FUNCTIONS ********************** */
+
+	public IFSUserPolicyClass[] getIFSUserPolicies(String callerGridIdentity) throws GUMSInternalFault,
+		InvalidUserFault, PermissionDeniedFault {
+		return ifs.getUserPolicies(callerGridIdentity);
+	}
+
 
 	public X509Certificate[] createProxy(SAMLAssertion saml, PublicKey publicKey, ProxyLifetime lifetime)
 		throws GUMSInternalFault, InvalidAssertionFault, InvalidProxyFault, UserPolicyFault, PermissionDeniedFault {

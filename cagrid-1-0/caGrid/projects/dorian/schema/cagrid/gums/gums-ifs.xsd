@@ -100,6 +100,13 @@
 			</xsd:sequence>
 	</xsd:complexType>
 	
+		<xsd:complexType name="IFSUserPolicyClass">
+			<xsd:sequence>
+				<xsd:element name="name" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+				<xsd:element name="className" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+			</xsd:sequence>
+	</xsd:complexType>
+	
  	  
 	  <xsd:complexType name="InvalidAssertionFault">
 				<xsd:complexContent>

@@ -31,7 +31,5 @@ public abstract class IFSUserPolicy {
 
 	public UserManager getUserManager() {
 		return userManager;
-	}
-	
-	
+	}	
 }

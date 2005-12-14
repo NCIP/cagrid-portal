@@ -10,6 +10,7 @@ import gov.nih.nci.cagrid.gums.common.GUMSObject;
 import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserFilter;
+import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserPolicyClass;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserRole;
 import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
@@ -60,6 +61,15 @@ public class IFS extends GUMSObject {
 		tm = new TrustManager(conf, db);
 		um = new UserManager(db, conf, ca, tm);
 		um.buildDatabase();
+	}
+
+
+	public IFSUserPolicyClass[] getUserPolicies(String callerGridIdentity) throws GUMSInternalFault,
+		InvalidUserFault, PermissionDeniedFault {
+		IFSUser caller = um.getUser(callerGridIdentity);
+		verifyActiveUser(caller);
+		verifyAdminUser(caller);
+		return conf.getUserPolicies();
 	}
 
 
@@ -160,7 +170,7 @@ public class IFS extends GUMSObject {
 		IFSUser caller = um.getUser(callerGridIdentity);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
-	    return um.renewUserCredentials(usr);
+		return um.renewUserCredentials(usr);
 	}
 
 
@@ -185,10 +195,10 @@ public class IFS extends GUMSObject {
 
 		// Make sure the assertion is trusted
 		TrustedIdP idp = tm.getTrustedIdP(saml);
-		
-		//Verfiy the the idp is ACTIVE
-		
-		if(!idp.getStatus().equals(TrustedIdPStatus.Active)){
+
+		// Verfiy the the idp is ACTIVE
+
+		if (!idp.getStatus().equals(TrustedIdPStatus.Active)) {
 			PermissionDeniedFault fault = new PermissionDeniedFault();
 			fault.setFaultString("The Trusted IdP is NOT Active!!!");
 			throw fault;
