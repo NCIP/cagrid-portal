@@ -112,8 +112,12 @@
 	<!--  Generate Java Beans from XSD                                       -->
 	<!-- =================================================================== -->
 	<target name="generateStubs" depends="prepare" description="Deletes the generated Java Beans and recreates them.">
-		<mkdir dir="${build.dir}/stubs" />
-		<delete dir="${build.dir}/stubs" />
+		<ant antfile="${build.stubs}" target="generateStubs">
+			<property name="mapping.file" location="${basedir}/schema/namespace2package.mappings" />
+			<property name="source.stubs.dir" location="${basedir}/schema" />
+			<property name="target.stubs.dir" location="${src.dir}/Introduce" />
+			<property name="wsdl.file" value="beans.wsdl" />
+		</ant>
 	</target>
 
 	<!-- =================================================================== -->

@@ -37,8 +37,6 @@ public class InputParametersTable extends PortalTable {
 		this.setColumnSelectionAllowed(false);
 		this.setRowSelectionAllowed(true);
 		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
-		
 		initialize();
 	}
 	

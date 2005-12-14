@@ -43,7 +43,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.19 2005-12-14 02:26:32 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.20 2005-12-14 17:18:24 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -508,7 +508,6 @@ public class ModificationViewer extends GridPortalBaseFrame {
 					};
 					Thread th = new Thread(r);
 					th.start();
-
 				}
 			});
 		}
