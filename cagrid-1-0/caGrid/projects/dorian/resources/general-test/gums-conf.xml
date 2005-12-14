@@ -9,7 +9,7 @@
 			<host>localhost</host>
 			<port>3306</port>
 			<username>root</username>
-			<password>gomets123</password>
+			<password>test</password>
 			<pool>1</pool>
 		</database>
 		<outgoing-email host="columbus.bmi.ohio-state.edu" port="25" protocol="smtp"/>
@@ -30,7 +30,7 @@
 		<ifs-config>
 			<idp-name-length min="4" max="10"/>
 			<credentials-valid years="12" months="0" days="0" hours="0" minutes="0" seconds="0"/>
-			<max-proxy-lifetime hours="0" minutes="0" seconds="0"/>
+			<max-proxy-lifetime hours="12" minutes="0" seconds="0"/>
 		</ifs-config>
 	</resource>	
 		
