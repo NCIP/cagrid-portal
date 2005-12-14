@@ -35,7 +35,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPWindow.java,v 1.2 2005-12-14 17:41:29 langella Exp $
+ * @version $Id: TrustedIdPWindow.java,v 1.3 2005-12-14 18:12:11 langella Exp $
  */
 public class TrustedIdPWindow extends GridPortalBaseFrame {
 
@@ -123,6 +123,11 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 	
 	public class UserPolicyCaddy{
 		private IFSUserPolicy policy;
+		
+		public UserPolicyCaddy(String className){
+			this.policy = new IFSUserPolicy(className,"");
+		}
+		
 		public UserPolicyCaddy(IFSUserPolicy policy){
 			this.policy = policy;
 		}
@@ -133,6 +138,15 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 		
 		public String toString(){
 			return policy.getName();
+		}
+		
+		public boolean equals(Object o){
+			UserPolicyCaddy up = (UserPolicyCaddy)o;
+			if(this.getPolicy().getClassName().equals(up.getPolicy().getClassName())){
+				return true;
+			}else{
+				return false;
+			}
 		}
 	}
 
@@ -571,6 +585,18 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 	private JComboBox getUserPolicy() {
 		if (userPolicy == null) {
 			userPolicy = new JComboBox();
+			for(int i=0; i<policies.length; i++){
+				userPolicy.addItem(new UserPolicyCaddy(policies[i]));
+				
+				if(!newTrustedIdP){
+					
+					if(idp.getUserPolicyClass().equals(policies[i].getClassName())){
+						int count = userPolicy.getItemCount();
+						userPolicy.setSelectedIndex((count-1));
+					}
+				}
+			}
+			
 		}
 		return userPolicy;
 	}
