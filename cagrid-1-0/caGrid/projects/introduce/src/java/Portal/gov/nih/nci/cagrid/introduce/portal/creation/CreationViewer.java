@@ -308,7 +308,7 @@ public class CreationViewer extends GridPortalComponent {
 			createButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 
-					BusyDialogRunnable r = new BusyDialogRunnable(null,
+					BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance().getGridPortal(),
 							"Creating") {
 
 						public void process() {
