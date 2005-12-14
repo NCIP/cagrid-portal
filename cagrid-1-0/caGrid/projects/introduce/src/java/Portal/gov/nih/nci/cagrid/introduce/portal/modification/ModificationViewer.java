@@ -43,7 +43,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.17 2005-12-14 02:06:28 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.18 2005-12-14 02:23:08 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -89,8 +89,6 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	private boolean dirty = false;
 
 	private JPanel progressPanel = null;
-
-	private JMenuBar menu = null;
 
 	/**
 	 * This is the default constructor
@@ -204,7 +202,6 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		}
 
 		this.setSize(500, 400);
-		this.setJMenuBar(getMenu());
 		this.setContentPane(getJContentPane());
 		this.setTitle("Modify Service Interface");
 		this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
@@ -691,17 +688,5 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			progressPanel.setLayout(new GridBagLayout());
 		}
 		return progressPanel;
-	}
-
-	/**
-	 * This method initializes menu
-	 * 
-	 * @return javax.swing.JMenuBar
-	 */
-	private JMenuBar getMenu() {
-		if (menu == null) {
-			menu = new ModificationMenu();
-		}
-		return menu;
 	}
 } // @jve:decl-index=0:visual-constraint="6,9"
