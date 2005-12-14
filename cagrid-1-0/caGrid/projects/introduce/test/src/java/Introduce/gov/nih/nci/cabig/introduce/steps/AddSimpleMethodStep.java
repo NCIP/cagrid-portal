@@ -34,10 +34,10 @@ public class AddSimpleMethodStep extends Step {
 				+ "introduceMethods.xml");
 
 		Element root = methodsDoc.getRootElement();
-		Element method = new Element("method");
+		Element method = new Element("method",root.getNamespace());
 		method.setAttribute("name", "simpleMethod");
 		root.addContent(method);
-		Element output = new Element("output");
+		Element output = new Element("output",root.getNamespace());
 		output.setAttribute("className","void");
 		method.addContent(output);
 
