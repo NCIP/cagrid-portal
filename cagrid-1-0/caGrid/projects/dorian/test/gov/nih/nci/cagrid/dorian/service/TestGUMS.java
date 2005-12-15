@@ -75,8 +75,6 @@ public class TestGUMS extends TestCase{
 	public static String RESOURCES_DIR = "resources" + File.separator
 	+ "general-test";
 	
-	private static final int SHORT_PROXY_VALID = 2;
-	
 	private int count = 0;
 	
 	private CertificateAuthority ca;
@@ -114,17 +112,17 @@ public class TestGUMS extends TestCase{
     }
  
     /** *************** IdP TEST FUNCTIONS ********************** */
-   
-    public void testRegisterWithIdP(){
+    /** ********************************************************* */
+    /** ********************************************************* */
+    /** ********************************************************* */
+
+    public void testAuthenticate(){
     	try{
     		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
     		assertNotNull(jm.getGUMSConfiguration());
     		assertNotNull(jm.getDatabase());
-    		
-    		//get the gridId
 			String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,GUMS.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
-			//create an application and register
 			Application a = createApplication();
 			jm.registerWithIdP(a);	
 			IdPUserFilter uf = new IdPUserFilter();
@@ -133,16 +131,6 @@ public class TestGUMS extends TestCase{
 			assertEquals(1, users.length);
 			assertEquals(IdPUserStatus.Pending, users[0].getStatus());
 			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
-			//try to authenticate the IdPUser that has a pending status
-			try{
-				BasicAuthCredential auth = new BasicAuthCredential();
-				auth.setUserId(a.getUserId());
-				auth.setPassword(a.getPassword());
-				org.opensaml.SAMLAssertion saml = jm.authenticate(auth);
-				assertTrue(false);
-			}catch (PermissionDeniedFault pdf){
-			}
-			
 			users[0].setStatus(IdPUserStatus.Active);
 			jm.updateIdPUser(gridId, users[0]);
 			users = jm.findIdPUsers(gridId, uf);
@@ -157,124 +145,122 @@ public class TestGUMS extends TestCase{
 			org.opensaml.SAMLAssertion saml = jm.authenticate(auth);
 			assertNotNull(saml);
 			this.verifySAMLAssertion(saml,jm.getIdPCertificate(),a);
-    		
-			IdPUserFilter uf2 = new IdPUserFilter();
-			users = jm.findIdPUsers(gridId, uf2);
-			assertEquals(2, users.length);
-			
-			IdPUserFilter f = new IdPUserFilter();
-			f.setUserId(users[0].getUserId());
-			IdPUser[] us = jm.findIdPUsers(gridId, f);
-			assertEquals(1, us.length);
-			us[0].setFirstName("NEW NAME");
-			jm.updateIdPUser(gridId, us[0]);
-			IdPUser[] us2 = jm.findIdPUsers(gridId, f);
-			assertEquals(1, us2.length);
-			assertEquals(us[0], us2[0]);
-			jm.removeIdPUser(gridId, users[0].getUserId());
-			us = jm.findIdPUsers(gridId, f);
-			assertEquals(0, us.length);
-			
-			users = jm.findIdPUsers(gridId, uf2);
-			assertEquals(1, users.length);
-    		
-    		assertEquals(0,jm.getDatabase().getUsedConnectionCount());
+			assertEquals(0,jm.getDatabase().getUsedConnectionCount());
     		jm.getDatabase().destroyDatabase();
-    	}catch (Exception e) {
-    		FaultUtil.printFault(e);
-			assertTrue(false);
-		}
-    }
-    
-    public void testInvalidIdpUserPasswordTooLong(){
-    	try{
-    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
-    		assertNotNull(jm.getGUMSConfiguration());
-    		assertNotNull(jm.getDatabase());
-			
-    		//test the password length too long
-			Application a = createTooLongPasswordApplication();
-			jm.registerWithIdP(a);	
-			assertTrue(false);
-    	}catch (InvalidUserPropertyFault iupf) {
 		}catch (Exception e) {
     		FaultUtil.printFault(e);
 			assertTrue(false);
 		}
     }
     
-    public void testInvalidIdpUserPasswordTooShort(){
+    public void testBadAuthenticateStatusPendingUser(){
     	try{
     		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
     		assertNotNull(jm.getGUMSConfiguration());
     		assertNotNull(jm.getDatabase());
-			
-    		//test the password length too short
-			Application a = createTooShortPasswordApplication();
-			jm.registerWithIdP(a);	
-			assertTrue(false);
-    	}catch (InvalidUserPropertyFault iupf) {
-		}catch (Exception e) {
-    		FaultUtil.printFault(e);
-			assertTrue(false);
-		}
-    }
-    public void testInvalidIdpUserIdTooLong(){
-    	try{
-    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
-    		assertNotNull(jm.getGUMSConfiguration());
-    		assertNotNull(jm.getDatabase());
-			
-    		//test the UserId too long
-			Application a = createTooLongUserIdApplication();
-			jm.registerWithIdP(a);	
-			assertTrue(false);
-    	}catch (InvalidUserPropertyFault iupf) {
-		}catch (Exception e) {
-    		FaultUtil.printFault(e);
-			assertTrue(false);
-		}
-    }
-    
-    public void testInvalidIdpUserIdTooShort(){
-    	try{
-    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
-    		assertNotNull(jm.getGUMSConfiguration());
-    		assertNotNull(jm.getDatabase());
-			
-    		//test the UserId too short
-			Application a = createTooShortUserIdApplication();
-			jm.registerWithIdP(a);	
-			assertTrue(false);
-    	}catch (InvalidUserPropertyFault iupf) {
-		}catch (Exception e) {
-    		FaultUtil.printFault(e);
-			assertTrue(false);
-		}
-    }
-    
-    public void testInvalidIdpNoSuchUser(){
-    	try{
-    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
-    		assertNotNull(jm.getGUMSConfiguration());
-    		assertNotNull(jm.getDatabase());
-			
     		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,GUMS.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
-			
-    		//test for no such user
-    		IdPUser u = new IdPUser();
-			u.setUserId("No_SUCH_USER");
-			jm.updateIdPUser(gridId, u);
+			Application a = createApplication();
+			jm.registerWithIdP(a);	
+			IdPUserFilter uf = new IdPUserFilter();
+			uf.setUserId(a.getUserId());
+			IdPUser[] users = jm.findIdPUsers(gridId, uf);
+			assertEquals(1, users.length);
+			assertEquals(IdPUserStatus.Pending, users[0].getStatus());
+			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+			BasicAuthCredential auth = new BasicAuthCredential();
+			auth.setUserId(a.getUserId());
+			auth.setPassword(a.getPassword());
+			SAMLAssertion saml = jm.authenticate(auth);
 			assertTrue(false);
-    	}catch (NoSuchUserFault nsuf) {
+    	}catch (PermissionDeniedFault pdf) {	
 		}catch (Exception e) {
     		FaultUtil.printFault(e);
 			assertTrue(false);
 		}
     }
     
-    public void testInvalidGridIdFindIdPUsers(){
+    public void testBadAuthenticateStatusRejectedUser(){
+    	try{
+    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
+    		assertNotNull(jm.getGUMSConfiguration());
+    		assertNotNull(jm.getDatabase());
+    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,GUMS.IDP_ADMIN_USER_ID);
+			String gridId = UserManager.subjectToIdentity(gridSubject);
+			Application a = createApplication();
+			jm.registerWithIdP(a);	
+			IdPUserFilter uf = new IdPUserFilter();
+			uf.setUserId(a.getUserId());
+			IdPUser[] users = jm.findIdPUsers(gridId, uf);
+			assertEquals(1, users.length);
+			assertEquals(IdPUserStatus.Pending, users[0].getStatus());
+			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+			users[0].setStatus(IdPUserStatus.Rejected);
+			jm.updateIdPUser(gridId, users[0]);
+			BasicAuthCredential auth = new BasicAuthCredential();
+			auth.setUserId(a.getUserId());
+			auth.setPassword(a.getPassword());
+			SAMLAssertion saml = jm.authenticate(auth);
+			assertTrue(false);
+    	}catch (PermissionDeniedFault pdf) {	
+		}catch (Exception e) {
+    		FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+    }
+    
+    public void testBadAuthenticateStatusSuspendedUser(){
+    	try{
+    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
+    		assertNotNull(jm.getGUMSConfiguration());
+    		assertNotNull(jm.getDatabase());
+    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,GUMS.IDP_ADMIN_USER_ID);
+			String gridId = UserManager.subjectToIdentity(gridSubject);
+			Application a = createApplication();
+			jm.registerWithIdP(a);	
+			IdPUserFilter uf = new IdPUserFilter();
+			uf.setUserId(a.getUserId());
+			IdPUser[] users = jm.findIdPUsers(gridId, uf);
+			assertEquals(1, users.length);
+			assertEquals(IdPUserStatus.Pending, users[0].getStatus());
+			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+			users[0].setStatus(IdPUserStatus.Suspended);
+			jm.updateIdPUser(gridId, users[0]);
+			BasicAuthCredential auth = new BasicAuthCredential();
+			auth.setUserId(a.getUserId());
+			auth.setPassword(a.getPassword());
+			SAMLAssertion saml = jm.authenticate(auth);
+			assertTrue(false);
+    	}catch (PermissionDeniedFault pdf) {	
+		}catch (Exception e) {
+    		FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+    }
+    
+    public void testFindIdPUsers(){
+    	try{
+    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
+    		assertNotNull(jm.getGUMSConfiguration());
+    		assertNotNull(jm.getDatabase());
+    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,GUMS.IDP_ADMIN_USER_ID);
+			String gridId = UserManager.subjectToIdentity(gridSubject);
+			Application a = createApplication();
+			jm.registerWithIdP(a);
+			IdPUserFilter uf = new IdPUserFilter();
+			uf.setUserId(a.getUserId());
+			IdPUser[] users = jm.findIdPUsers(gridId, uf);
+			assertEquals(1, users.length);	
+			
+			assertEquals(0,jm.getDatabase().getUsedConnectionCount());
+    		jm.getDatabase().destroyDatabase();
+		}catch (Exception e) {
+    		FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+    }
+    
+    public void testBadFindIdPUsersInvalidGridId(){
     	try{
     		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
     		assertNotNull(jm.getGUMSConfiguration());
@@ -297,7 +283,256 @@ public class TestGUMS extends TestCase{
 		}
     }
     
-    public void testInvalidGridIdRemoveIdPUser(){
+    public void testBadFindIdPUsersUserNotAdmin(){
+    	try{
+    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
+    		assertNotNull(jm.getGUMSConfiguration());
+    		assertNotNull(jm.getDatabase());
+    		
+			//create a valid IdP User
+			Application a = createApplication();
+			jm.registerWithIdP(a);
+			IdPUserFilter f = new IdPUserFilter();
+			f.setUserId(a.getUserId());
+			
+    		//create an invalid Grid Id and try to findIdPUsers()
+    		String invalidGridId = "ThisIsInvalid";
+    		IdPUser[] us = jm.findIdPUsers(invalidGridId, f);
+			assertTrue(false);
+    	}catch (PermissionDeniedFault pdf) {
+		}catch (Exception e) {
+    		FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+    }
+    
+    public void testRegisterWithIdP(){
+    	try{
+    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
+    		assertNotNull(jm.getGUMSConfiguration());
+    		assertNotNull(jm.getDatabase());
+    		
+    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,GUMS.IDP_ADMIN_USER_ID);
+			String gridId = UserManager.subjectToIdentity(gridSubject);
+			
+			Application a = createApplication();
+			jm.registerWithIdP(a);
+			IdPUserFilter uf = new IdPUserFilter();
+			uf.setUserId(a.getUserId());
+			IdPUser[] users = jm.findIdPUsers(gridId, uf);
+			assertEquals(1, users.length);
+			assertEquals(IdPUserStatus.Pending, users[0].getStatus());
+			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+			users[0].setStatus(IdPUserStatus.Active);
+			jm.updateIdPUser(gridId, users[0]);
+			BasicAuthCredential auth = new BasicAuthCredential();
+			auth.setUserId(a.getUserId());
+			auth.setPassword(a.getPassword());
+			SAMLAssertion saml = jm.authenticate(auth);
+			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+			PublicKey publicKey = pair.getPublic();
+			ProxyLifetime lifetime = getProxyLifetime();
+			X509Certificate[] certs = jm.createProxy(saml, publicKey, lifetime);
+			String newGridId = UserManager.subjectToIdentity(certs[0].getIssuerDN().getName());
+			//try to execute a findIdPUsers with a Non_Administrator	
+			users = jm.findIdPUsers(newGridId, uf);		
+			assertTrue(false);
+    	}catch (PermissionDeniedFault pdf) {
+		}catch (Exception e) {
+    		FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+    }
+    
+    public void testBadRegisterWithIdPTwoIdenticalUsers(){
+    	try{
+    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
+    		assertNotNull(jm.getGUMSConfiguration());
+    		assertNotNull(jm.getDatabase());
+    		
+			Application a = createApplication();
+			Application b = a;
+			jm.registerWithIdP(a);
+			
+			jm.registerWithIdP(b);
+			assertTrue(false);
+    	}catch (InvalidUserPropertyFault iupf) {
+		}catch (Exception e) {
+    		FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+    }
+    
+    public void testBadRegisterWithIdPPasswordTooLong(){
+    	try{
+    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
+    		assertNotNull(jm.getGUMSConfiguration());
+    		assertNotNull(jm.getDatabase());
+			
+    		//test the password length too long
+			Application a = createTooLongPasswordApplication();
+			jm.registerWithIdP(a);	
+			assertTrue(false);
+    	}catch (InvalidUserPropertyFault iupf) {
+		}catch (Exception e) {
+    		FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+    }
+    
+    public void testBadRegisterWithIdPPasswordTooShort(){
+    	try{
+    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
+    		assertNotNull(jm.getGUMSConfiguration());
+    		assertNotNull(jm.getDatabase());
+			
+    		//test the password length too short
+			Application a = createTooShortPasswordApplication();
+			jm.registerWithIdP(a);	
+			assertTrue(false);
+    	}catch (InvalidUserPropertyFault iupf) {
+		}catch (Exception e) {
+    		FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+    }
+    
+    public void testBadRegisterWithIdPUserIdTooLong(){
+    	try{
+    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
+    		assertNotNull(jm.getGUMSConfiguration());
+    		assertNotNull(jm.getDatabase());
+			
+    		//test the UserId too long
+			Application a = createTooLongUserIdApplication();
+			jm.registerWithIdP(a);	
+			assertTrue(false);
+    	}catch (InvalidUserPropertyFault iupf) {
+		}catch (Exception e) {
+    		FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+    }
+    
+    public void testBadRegisterWithIdpUserIdTooShort(){
+    	try{
+    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
+    		assertNotNull(jm.getGUMSConfiguration());
+    		assertNotNull(jm.getDatabase());
+			
+    		//test the UserId too short
+			Application a = createTooShortUserIdApplication();
+			jm.registerWithIdP(a);	
+			assertTrue(false);
+    	}catch (InvalidUserPropertyFault iupf) {
+		}catch (Exception e) {
+    		FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+    }
+    
+    public void testUpdateIdPUser(){
+    	try{
+    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
+    		assertNotNull(jm.getGUMSConfiguration());
+    		assertNotNull(jm.getDatabase());
+    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,GUMS.IDP_ADMIN_USER_ID);
+			String gridId = UserManager.subjectToIdentity(gridSubject);
+			Application a = createApplication();
+			jm.registerWithIdP(a);
+			IdPUserFilter uf = new IdPUserFilter();
+			uf.setUserId(a.getUserId());
+    		IdPUser[] us = jm.findIdPUsers(gridId, uf);
+    		assertEquals(1, us.length);
+    		us[0].setAddress("New_Address");
+    		us[0].setAddress2("New_Address2");
+    		us[0].setCity("New_City");
+    		us[0].setCountry(CountryCode.AD);
+    		us[0].setEmail("NewUser@mail.com");
+    		us[0].setFirstName("New_First_Name");
+    		us[0].setLastName("New_Last_Name");
+    		us[0].setOrganization("New_Organization");
+    		us[0].setPassword("PASSWORD");
+    		us[0].setPhoneNumber("012-345-6789");
+    		us[0].setRole(IdPUserRole.Non_Administrator);
+    		us[0].setState(StateCode.AK);
+    		us[0].setStatus(IdPUserStatus.Active);
+    		us[0].setZipcode("11111");
+    		jm.updateIdPUser(gridId, us[0]);
+    		us = jm.findIdPUsers(gridId, uf);
+    		assertEquals(1, us.length);
+    		assertEquals("New_Address", us[0].getAddress());
+    		assertEquals("New_Address2", us[0].getAddress2());
+    		assertEquals("New_City", us[0].getCity());
+    		assertEquals(CountryCode.AD, us[0].getCountry());
+    		assertEquals("NewUser@mail.com", us[0].getEmail());
+    		assertEquals("New_First_Name", us[0].getFirstName());
+    		assertEquals("New_Last_Name", us[0].getLastName());
+    		assertEquals("New_Organization", us[0].getOrganization());
+    		assertEquals("012-345-6789", us[0].getPhoneNumber());
+    		assertEquals(IdPUserRole.Non_Administrator, us[0].getRole());
+    		assertEquals(StateCode.AK, us[0].getState());
+    		assertEquals(IdPUserStatus.Active, us[0].getStatus());
+    		assertEquals("11111", us[0].getZipcode());
+    		assertEquals(0,jm.getDatabase().getUsedConnectionCount());
+    		jm.getDatabase().destroyDatabase();
+		}catch (Exception e) {
+    		FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+    }
+    
+    public void testBadUpdateIdPUserNoSuchUser(){
+    	try{
+    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
+    		assertNotNull(jm.getGUMSConfiguration());
+    		assertNotNull(jm.getDatabase());
+			
+    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,GUMS.IDP_ADMIN_USER_ID);
+			String gridId = UserManager.subjectToIdentity(gridSubject);
+			
+    		//test for no such user
+    		IdPUser u = new IdPUser();
+			u.setUserId("No_SUCH_USER");
+			jm.updateIdPUser(gridId, u);
+			assertTrue(false);
+    	}catch (NoSuchUserFault nsuf) {
+		}catch (Exception e) {
+    		FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+    }
+    
+    public void testRemoveIdPUser(){
+    	try{
+    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
+    		assertNotNull(jm.getGUMSConfiguration());
+    		assertNotNull(jm.getDatabase());
+    		
+    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,GUMS.IDP_ADMIN_USER_ID);
+			String gridId = UserManager.subjectToIdentity(gridSubject);
+			Application a = createApplication();
+			jm.registerWithIdP(a);
+			IdPUserFilter uf = new IdPUserFilter();
+			uf.setUserId(a.getUserId());
+    		IdPUser[] us = jm.findIdPUsers(gridId, uf);
+    		assertEquals(1, us.length);
+			
+    		//remove the user
+    		jm.removeIdPUser(gridId, us[0].getUserId());
+    		us = jm.findIdPUsers(gridId, uf);
+    		assertEquals(0, us.length);
+    		
+    		assertEquals(0,jm.getDatabase().getUsedConnectionCount());
+    		jm.getDatabase().destroyDatabase();
+    	}catch (PermissionDeniedFault pdf) {
+		}catch (Exception e) {
+    		FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+    }
+    
+    public void testBadRemoveIdPUserInvalidGridId(){
     	try{
     		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
     		assertNotNull(jm.getGUMSConfiguration());
@@ -319,7 +554,40 @@ public class TestGUMS extends TestCase{
 		}
     }
     
+    public void testBadRemoveIdPUserNoSuchUser(){
+    	try{
+    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
+    		assertNotNull(jm.getGUMSConfiguration());
+    		assertNotNull(jm.getDatabase());
+    		
+    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,GUMS.IDP_ADMIN_USER_ID);
+			String gridId = UserManager.subjectToIdentity(gridSubject);
+			Application a = createApplication();
+			jm.registerWithIdP(a);
+			IdPUserFilter uf = new IdPUserFilter();
+    		IdPUser[] us = jm.findIdPUsers(gridId, uf);
+    		assertEquals(2, us.length);
+			
+    		//create a userId that does not exist
+    		String userId = "No_SUCH_USER";
+    		jm.removeIdPUser(gridId, userId);
+    		IdPUserFilter f = new IdPUserFilter();
+    		IdPUser[] users = jm.findIdPUsers(gridId, f);
+    		assertEquals(2, users.length);
+    		
+    		assertEquals(0,jm.getDatabase().getUsedConnectionCount());
+    		jm.getDatabase().destroyDatabase();
+    	}catch (PermissionDeniedFault pdf) {
+		}catch (Exception e) {
+    		FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+    }
+    
     /** *************** IFS TEST FUNCTIONS ********************** */
+    /** ********************************************************* */
+    /** ********************************************************* */
+    /** ********************************************************* */
     
     public void testCreateProxy() {
 		try {
@@ -343,7 +611,10 @@ public class TestGUMS extends TestCase{
 
 	}
  
-    /** *************** HELPER FUNCTIONS ********************** */
+    /** *************** HELPER FUNCTIONS ************************ */
+    /** ********************************************************* */
+    /** ********************************************************* */
+    /** ********************************************************* */
     
     public void verifySAMLAssertion(SAMLAssertion saml, X509Certificate idpCert,
 			Application app) throws Exception {
