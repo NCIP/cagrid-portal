@@ -72,6 +72,8 @@
 	<classpathentry kind="lib" path="lib/jdepend-2.7-patched.jar"/>
 	<classpathentry kind="lib" path="lib/ogsadai.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/opensaml.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/mobius"/>
+	<classpathentry kind="lib" path="lib/mobius_common_client-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/mobius_common_server-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

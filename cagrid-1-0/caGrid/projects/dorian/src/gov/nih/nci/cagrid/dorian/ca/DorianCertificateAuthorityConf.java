@@ -71,6 +71,18 @@ public class DorianCertificateAuthorityConf implements AbstractMobiusConfigurati
 	private static final String AUTO_RENEWAL_HOURS = "hours";
 	private static final String AUTO_RENEWAL_MINUTES = "minutes";
 	private static final String AUTO_RENEWAL_SECONDS = "seconds";
+	
+	
+	private static final String AUTO_CREATE = "auto-create";
+	private static final String AUTO_CREATE_ENABLED = "enabled";
+	private static final String AUTO_CREATE_TIME_YEARS = "years";
+	private static final String AUTO_CREATE_TIME_MONTHS = "months";
+	private static final String AUTO_CREATE_TIME_DAYS = "days";
+	private static final String AUTO_CREATE_TIME_HOURS = "hours";
+	private static final String AUTO_CREATE_TIME_MINUTES = "minutes";
+	private static final String AUTO_CREATE_TIME_SECONDS = "seconds";
+	private static final String AUTO_CREATE_CA_SUBJECT = "ca-subject";
+	private static final String AUTO_CREATE_CA_DN = "dn";
 
 	private String caPassword;
 	private boolean autoRenewal;
@@ -81,8 +93,19 @@ public class DorianCertificateAuthorityConf implements AbstractMobiusConfigurati
 	private int autoRenewalMinutes;
 	private int autoRenewalSeconds;
 	
+	private boolean autoCreate;
+	private int autoCreateYears;
+	private int autoCreateMonths;
+	private int autoCreateDays;
+	private int autoCreateHours;
+	private int autoCreateMinutes;
+	private int autoCreateSeconds;
+	private int autoCreateSubject;
+	
    
 	public void parse(MobiusResourceManager resourceManager, Element config) throws MobiusException {		
+		
+		
 		Element pass = config.getChild(CA_PASSWORD,config.getNamespace());
 		if(pass==null){
 			throw new MobiusException("Error configuring the Dorian Certificate Authority, no "+CA_PASSWORD+" specified.");
@@ -92,6 +115,11 @@ public class DorianCertificateAuthorityConf implements AbstractMobiusConfigurati
 			if(caPassword==null){
 				throw new MobiusException("Error configuring the Dorian Certificate Authority, no "+CA_PASSWORD+" specified, the attribute "+CA_PASSWORD_ATT+" is missing.");
 			}
+		}
+		
+		Element autoC = config.getChild(AUTO_CREATE,config.getNamespace());
+		if(autoC != null){
+			
 		}
 		
 		Element auto = config.getChild(AUTO_RENEWAL,config.getNamespace());

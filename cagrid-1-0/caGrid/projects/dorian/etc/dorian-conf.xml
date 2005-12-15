@@ -1,7 +1,7 @@
 <dorian>
 	<resource name="DorianConfiguration" class="gov.nih.nci.cagrid.dorian.service.DorianConfiguration">
 		<dorian-config>
-			<dorian-internal-id>GUMS</dorian-internal-id>
+			<dorian-internal-id>DORIAN</dorian-internal-id>
 		    <database>
 			<name/>
 			<driver>com.mysql.jdbc.Driver</driver>
@@ -42,7 +42,11 @@
 	<resource name="DorianCertificateAuthorityConf" class="gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthorityConf">
 		<dorian-ca-config>
 		    <ca-password value="admin"/>
-		  	<auto-renewal enabled="true" years="0" months="60" days="0" hours="0" minutes="0" seconds="0"/>
+		    <auto-create enabled="true">
+		       <time-valid years="5" months="0" days="0" hours="0" minutes="0" seconds="0"/>
+		       <ca-subject dn="O=Ohio State University,OU=BMI,OU=MSCL,OU=Putty,CN=Dorian Certificate Authority"/> 
+		    </auto-create>
+		  	<auto-renewal enabled="true" years="5" months="0" days="0" hours="0" minutes="0" seconds="0"/>
 		</dorian-ca-config>
 	</resource>	
 </dorian>
