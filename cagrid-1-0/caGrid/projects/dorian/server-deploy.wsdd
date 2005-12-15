@@ -5,7 +5,7 @@
     xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
     <service name="cagrid/gums" provider="Handler" use="literal" style="document">
-        <parameter name="className" value="gov.nih.nci.cagrid.gums.wsrf.GUMSService"/>
+        <parameter name="className" value="gov.nih.nci.cagrid.gums.wsrf.impl.GUMSService"/>
         <wsdlFile>share/schema/cagrid/gums/GUMS_service.wsdl</wsdlFile>
         <parameter name="securityDescriptor" value="etc/gums/gums-security-desc.xml"/>
         <parameter name="allowedMethods" value="*"/>

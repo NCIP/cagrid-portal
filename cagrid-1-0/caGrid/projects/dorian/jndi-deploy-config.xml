@@ -2,7 +2,7 @@
 <jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
 
 <service name="cagrid/gums">
-	<resource name="home" type="gov.nih.nci.cagrid.gums.wsrf.GUMSResourceHome">
+	<resource name="home" type="gov.nih.nci.cagrid.gums.wsrf.impl.GUMSResourceHome">
 	<resourceParams>
 
 		<parameter>
