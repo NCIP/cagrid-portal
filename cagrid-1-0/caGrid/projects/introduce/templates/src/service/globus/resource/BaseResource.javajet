@@ -11,9 +11,7 @@ package <%=packageName%>.service.globus.resource;
 
 import gov.nih.nci.cagrid.metadata.common.CommonServiceMetadataType;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Calendar;
 
 import javax.naming.Context;
@@ -35,7 +33,6 @@ import org.globus.wsrf.ResourceLifetime;
 import org.globus.wsrf.ResourceProperties;
 import org.globus.wsrf.ResourceProperty;
 import org.globus.wsrf.ResourcePropertySet;
-import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.globus.wsrf.impl.ReflectionResourceProperty;
 import org.globus.wsrf.impl.SimpleResourceKey;
 import org.globus.wsrf.impl.SimpleResourceProperty;
@@ -43,7 +40,7 @@ import org.globus.wsrf.impl.SimpleResourcePropertyMetaData;
 import org.globus.wsrf.impl.SimpleResourcePropertySet;
 import org.globus.wsrf.impl.servicegroup.client.ServiceGroupRegistrationClient;
 import org.globus.wsrf.utils.AddressingUtils;
-import org.w3c.dom.Document;
+import gov.nih.nci.cagrid.common.CommonTools;
 
 
 public class BaseResource implements Resource, ResourceProperties, ResourceLifetime, ResourceIdentifier {
@@ -134,25 +131,13 @@ public class BaseResource implements Resource, ResourceProperties, ResourceLifet
 
 
 	private void populateMetadata() {
-		InputStream inputStream = null;
 
 		try {
-			inputStream = new FileInputStream(getConfiguration().getCommonMetadataFile());
-			Document doc = XMLUtils.newDocument(inputStream);
-
-			this.commonMD = (CommonServiceMetadataType) ObjectDeserializer.toObject(doc.getDocumentElement(),
+			this.commonMD = (CommonServiceMetadataType) CommonTools.deserializeDocument(getConfiguration().getCommonMetadataFile(),
 				CommonServiceMetadataType.class);
 		} catch (Exception e) {
 			logger.error("ERROR: problem populating metadata from file: " + e.getMessage(), e);
-		} finally {
-			if (inputStream != null) {
-				try {
-					inputStream.close();
-				} catch (IOException e) {
-				}
-			}
-		}
-
+		} 
 	}
 
 

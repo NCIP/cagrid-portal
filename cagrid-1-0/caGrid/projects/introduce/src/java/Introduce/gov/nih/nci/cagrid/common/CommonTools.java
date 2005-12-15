@@ -1,11 +1,18 @@
 package gov.nih.nci.cagrid.common;
 
+import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
+
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.StringTokenizer;
 
+import org.apache.axis.utils.XMLUtils;
+import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.XMLUtilities;
 
@@ -159,5 +166,26 @@ public class CommonTools {
 		}
 		return dir.delete();
 	}
+	
+	public static Object deserializeDocument(String fileName, Class objectType) throws Exception {
+		InputStream inputStream = null;
+
+		try {
+			inputStream = new FileInputStream(fileName);
+			org.w3c.dom.Document doc = XMLUtils.newDocument(inputStream);
+
+			return ObjectDeserializer.toObject(doc
+					.getDocumentElement(), objectType);
+		} finally {
+			if (inputStream != null) {
+				try {
+					inputStream.close();
+				} catch (IOException e) {
+				}
+			}
+		}
+
+	}
+
 
 }

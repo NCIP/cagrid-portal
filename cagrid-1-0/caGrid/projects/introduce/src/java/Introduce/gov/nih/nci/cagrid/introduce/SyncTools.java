@@ -9,12 +9,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.axis.utils.XMLUtils;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.axis.wsdl.toJava.Emitter;
 import org.apache.commons.cli.CommandLine;
@@ -27,7 +25,6 @@ import org.apache.ws.jaxme.js.JavaMethod;
 import org.apache.ws.jaxme.js.JavaSource;
 import org.apache.ws.jaxme.js.JavaSourceFactory;
 import org.apache.ws.jaxme.js.util.JavaParser;
-import org.globus.wsrf.encoding.ObjectDeserializer;
 
 /**
  * SyncMethodsOnDeployment
@@ -91,27 +88,13 @@ public class SyncTools {
 	}
 
 	private void populateMetadata() {
-		InputStream inputStream = null;
-
 		try {
-			inputStream = new FileInputStream(this.baseDirectory
-					+ File.separator + "introduceMethods.xml");
-			org.w3c.dom.Document doc = XMLUtils.newDocument(inputStream);
-
-			this.methodsType = (MethodsType) ObjectDeserializer.toObject(doc
-					.getDocumentElement(), MethodsType.class);
+			this.methodsType = (MethodsType) CommonTools.deserializeDocument(this.baseDirectory
+					+ File.separator + "introduceMethods.xml", MethodsType.class);
 		} catch (Exception e) {
 			System.err.println("ERROR: problem populating metadata from file: "
 					+ e.getMessage());
-		} finally {
-			if (inputStream != null) {
-				try {
-					inputStream.close();
-				} catch (IOException e) {
-				}
-			}
 		}
-
 	}
 
 	public void sync() throws Exception {
