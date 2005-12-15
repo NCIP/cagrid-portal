@@ -1,8 +1,8 @@
-<xsd:schema targetNamespace="http://cagrid.nci.nih.gov/gums/ifs/bean"
+<xsd:schema targetNamespace="http://cagrid.nci.nih.gov/dorian/ifs/bean"
 	attributeFormDefault="qualified"
 	elementFormDefault="qualified"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-	xmlns:ifs="http://cagrid.nci.nih.gov/gums/ifs/bean" xmlns:wsbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd">
+	xmlns:ifs="http://cagrid.nci.nih.gov/dorian/ifs/bean" xmlns:wsbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd">
 	
 	  <xsd:complexType name="TrustedIdP">
 			<xsd:sequence>

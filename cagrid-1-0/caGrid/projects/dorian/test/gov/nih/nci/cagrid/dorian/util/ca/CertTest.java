@@ -1,8 +1,8 @@
-package gov.nih.nci.cagrid.gums.util.ca;
+package gov.nih.nci.cagrid.dorian.util.ca;
 
-import gov.nih.nci.cagrid.gums.common.FaultUtil;
-import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
+import gov.nih.nci.cagrid.dorian.common.FaultUtil;
+import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
+import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
 
 import java.io.File;
 import java.security.KeyPair;
@@ -50,7 +50,7 @@ public class CertTest extends TestCase {
 		}
 	}
 
-	public void testCreateCertificateGUMSCARoot() {
+	public void testCreateCertificateDorianCARoot() {
 		try {
 			String certLocation = RESOURCES_DIR + File.separator
 					+ "bmi-cacert.pem";
@@ -75,7 +75,7 @@ public class CertTest extends TestCase {
 		}
 	}
 
-	public void testCreateCertificateNewGUMSCARootCert() {
+	public void testCreateCertificateNewDorianCARootCert() {
 		try {
 			KeyPair rootPair = KeyUtil.generateRSAKeyPair1024();
 			assertNotNull(rootPair);

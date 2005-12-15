@@ -1,6 +1,6 @@
-package gov.nih.nci.cagrid.gums.portal;
+package gov.nih.nci.cagrid.dorian.portal;
 
-import gov.nih.nci.cagrid.gums.ifs.portal.IdPAuthenticationPanel;
+import gov.nih.nci.cagrid.dorian.ifs.portal.IdPAuthenticationPanel;
 
 import java.util.HashMap;
 import java.util.List;

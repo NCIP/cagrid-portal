@@ -1,6 +1,6 @@
-package gov.nih.nci.cagrid.gums.portal;
+package gov.nih.nci.cagrid.dorian.portal;
 
-import gov.nih.nci.cagrid.gums.common.ProxyUtil;
+import gov.nih.nci.cagrid.dorian.common.ProxyUtil;
 
 import java.io.File;
 import java.io.FileFilter;

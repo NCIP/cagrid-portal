@@ -41,7 +41,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *---------------------------------------------------------------------------*/
 
-package gov.nih.nci.cagrid.gums.ca;
+package gov.nih.nci.cagrid.dorian.ca;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -59,8 +59,8 @@ import org.projectmobius.common.MobiusResourceManager;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class GUMSCertificateAuthorityConf implements AbstractMobiusConfiguration {
-	public static final String RESOURCE = "GUMSCertificateAuthorityConf";
+public class DorianCertificateAuthorityConf implements AbstractMobiusConfiguration {
+	public static final String RESOURCE = "DorianCertificateAuthorityConf";
 	private static final String CA_PASSWORD = "ca-password";
 	private static final String CA_PASSWORD_ATT = "value";
 	private static final String AUTO_RENEWAL = "auto-renewal";
@@ -85,12 +85,12 @@ public class GUMSCertificateAuthorityConf implements AbstractMobiusConfiguration
 	public void parse(MobiusResourceManager resourceManager, Element config) throws MobiusException {		
 		Element pass = config.getChild(CA_PASSWORD,config.getNamespace());
 		if(pass==null){
-			throw new MobiusException("Error configuring the GUMS Certificate Authority, no "+CA_PASSWORD+" specified.");
+			throw new MobiusException("Error configuring the Dorian Certificate Authority, no "+CA_PASSWORD+" specified.");
 			
 		}else{
 			caPassword=pass.getAttributeValue(CA_PASSWORD_ATT);
 			if(caPassword==null){
-				throw new MobiusException("Error configuring the GUMS Certificate Authority, no "+CA_PASSWORD+" specified, the attribute "+CA_PASSWORD_ATT+" is missing.");
+				throw new MobiusException("Error configuring the Dorian Certificate Authority, no "+CA_PASSWORD+" specified, the attribute "+CA_PASSWORD_ATT+" is missing.");
 			}
 		}
 		

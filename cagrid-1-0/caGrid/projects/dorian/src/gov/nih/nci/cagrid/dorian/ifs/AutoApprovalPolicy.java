@@ -1,10 +1,10 @@
-package gov.nih.nci.cagrid.gums.ifs;
+package gov.nih.nci.cagrid.dorian.ifs;
 
-import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.common.FaultHelper;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
-import gov.nih.nci.cagrid.gums.ifs.bean.UserPolicyFault;
+import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.common.FaultHelper;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserStatus;
+import gov.nih.nci.cagrid.dorian.ifs.bean.UserPolicyFault;
 
 
 /**
@@ -16,7 +16,7 @@ import gov.nih.nci.cagrid.gums.ifs.bean.UserPolicyFault;
  */
 
 public class AutoApprovalPolicy extends UserPolicy {
-	public void applyPolicy(IFSUser user) throws GUMSInternalFault,
+	public void applyPolicy(IFSUser user) throws DorianInternalFault,
 			UserPolicyFault {
 		UserManager um = getUserManager();
 		// First we approve if the user has not been approved.
@@ -25,12 +25,12 @@ public class AutoApprovalPolicy extends UserPolicy {
 			try {
 				um.updateUser(user);
 			} catch (Exception e) {
-				GUMSInternalFault fault = new GUMSInternalFault();
+				DorianInternalFault fault = new DorianInternalFault();
 				fault.setFaultString("Error updating the status of the user "
 						+ user.getGridId());
 				FaultHelper helper = new FaultHelper(fault);
 				helper.addFaultCause(e);
-				fault = (GUMSInternalFault) helper.getFault();
+				fault = (DorianInternalFault) helper.getFault();
 				throw fault;
 			}
 		}

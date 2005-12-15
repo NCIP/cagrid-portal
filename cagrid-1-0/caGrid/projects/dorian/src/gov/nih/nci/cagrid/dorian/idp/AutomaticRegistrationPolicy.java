@@ -1,11 +1,12 @@
-package gov.nih.nci.cagrid.gums.idp;
+package gov.nih.nci.cagrid.dorian.idp;
 
-import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.idp.bean.Application;
-import gov.nih.nci.cagrid.gums.idp.bean.ApplicationReview;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUserRole;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUserStatus;
-import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
+import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.idp.bean.Application;
+import gov.nih.nci.cagrid.dorian.idp.bean.ApplicationReview;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserRole;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserStatus;
+import gov.nih.nci.cagrid.dorian.idp.bean.InvalidUserPropertyFault;
+
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -24,7 +25,7 @@ public class AutomaticRegistrationPolicy implements IdPRegistrationPolicy{
 		return "Automatic Registration";
 	}	
 
-	public ApplicationReview register(Application a) throws GUMSInternalFault, InvalidUserPropertyFault {
+	public ApplicationReview register(Application a) throws DorianInternalFault, InvalidUserPropertyFault {
 		ApplicationReview ar = new ApplicationReview();
 		ar.setStatus(IdPUserStatus.Active);
 		ar.setRole(IdPUserRole.Non_Administrator);

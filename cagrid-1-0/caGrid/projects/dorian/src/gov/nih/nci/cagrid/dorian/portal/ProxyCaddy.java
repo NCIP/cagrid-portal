@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.gums.portal;
+package gov.nih.nci.cagrid.dorian.portal;
 
 import org.globus.gsi.GlobusCredential;
 

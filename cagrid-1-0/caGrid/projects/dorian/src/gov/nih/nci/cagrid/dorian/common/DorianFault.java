@@ -1,6 +1,7 @@
-package gov.nih.nci.cagrid.gums.common;
+package gov.nih.nci.cagrid.dorian.common;
 
-import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
+import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
+
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -9,11 +10,11 @@ import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class GUMSFault extends org.oasis.wsrf.faults.BaseFaultType  implements java.io.Serializable {
-	public GUMSFault() {
+public class DorianFault extends org.oasis.wsrf.faults.BaseFaultType  implements java.io.Serializable {
+	public DorianFault() {
     }
 
-    public GUMSFault(
+    public DorianFault(
            java.util.Calendar timestamp,
            org.apache.axis.message.addressing.EndpointReferenceType originator,
            org.oasis.wsrf.faults.BaseFaultTypeErrorCode errorCode,
@@ -29,8 +30,8 @@ public class GUMSFault extends org.oasis.wsrf.faults.BaseFaultType  implements j
 
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
-        if (!(obj instanceof GUMSInternalFault)) return false;
-        GUMSInternalFault other = (GUMSInternalFault) obj;
+        if (!(obj instanceof DorianInternalFault)) return false;
+        DorianInternalFault other = (DorianInternalFault) obj;
         if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {
@@ -56,10 +57,10 @@ public class GUMSFault extends org.oasis.wsrf.faults.BaseFaultType  implements j
 
     // Type metadata
     private static org.apache.axis.description.TypeDesc typeDesc =
-        new org.apache.axis.description.TypeDesc(GUMSInternalFault.class, true);
+        new org.apache.axis.description.TypeDesc(DorianInternalFault.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("http://cagrid.nci.nih.gov/gums/bean", "GUMSInternalFault"));
+        typeDesc.setXmlType(new javax.xml.namespace.QName("http://cagrid.nci.nih.gov/dorian/bean", "DorianFault"));
     }
 
     /**

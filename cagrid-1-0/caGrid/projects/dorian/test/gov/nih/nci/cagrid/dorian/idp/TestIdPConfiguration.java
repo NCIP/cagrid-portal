@@ -1,9 +1,9 @@
-package gov.nih.nci.cagrid.gums.idp;
+package gov.nih.nci.cagrid.dorian.idp;
 
-import gov.nih.nci.cagrid.gums.common.FaultUtil;
-import gov.nih.nci.cagrid.gums.common.SimpleResourceManager;
-import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
+import gov.nih.nci.cagrid.dorian.common.FaultUtil;
+import gov.nih.nci.cagrid.dorian.common.SimpleResourceManager;
+import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
+import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
 
 import java.io.File;
 
@@ -87,8 +87,8 @@ public class TestIdPConfiguration extends TestCase {
 		
 			assertEquals(false,conf.isAutoCreateAssertingCredentials());
 			assertEquals(false,conf.isAutoRenewAssertingCredentials());
-			assertEquals(CertUtil.loadCertificate("resources/ca-test/gums-cert.pem"),conf.getAssertingCertificate());
-			assertEquals(KeyUtil.loadPrivateKey("resources/ca-test/gums-key.pem",conf.getKeyPassword()),conf.getAssertingKey());
+			assertEquals(CertUtil.loadCertificate("resources/ca-test/dorian-cert.pem"),conf.getAssertingCertificate());
+			assertEquals(KeyUtil.loadPrivateKey("resources/ca-test/dorian-key.pem",conf.getKeyPassword()),conf.getAssertingKey());
 			
 		
 		} catch (Exception e) {

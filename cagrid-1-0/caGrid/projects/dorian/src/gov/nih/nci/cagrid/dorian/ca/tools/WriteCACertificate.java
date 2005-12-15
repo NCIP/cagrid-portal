@@ -1,11 +1,11 @@
-package gov.nih.nci.cagrid.gums.ca.tools;
+package gov.nih.nci.cagrid.dorian.ca.tools;
 
-import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthority;
-import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthorityConf;
-import gov.nih.nci.cagrid.gums.common.Database;
-import gov.nih.nci.cagrid.gums.common.SimpleResourceManager;
-import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.service.GUMSConfiguration;
+import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthority;
+import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthorityConf;
+import gov.nih.nci.cagrid.dorian.common.Database;
+import gov.nih.nci.cagrid.dorian.common.SimpleResourceManager;
+import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
+import gov.nih.nci.cagrid.dorian.service.DorianConfiguration;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -22,17 +22,17 @@ public class WriteCACertificate {
 
 		try {
 		
-				String configFile = "etc/gums-conf.xml";
+				String configFile = "etc/dorianconf.xml";
 				SimpleResourceManager rm = new SimpleResourceManager(configFile);
-				GUMSCertificateAuthorityConf conf = (GUMSCertificateAuthorityConf) rm
-						.getResource(GUMSCertificateAuthorityConf.RESOURCE);
-				GUMSConfiguration c = (GUMSConfiguration) rm
-				.getResource(GUMSConfiguration.RESOURCE);
+				DorianCertificateAuthorityConf conf = (DorianCertificateAuthorityConf) rm
+						.getResource(DorianCertificateAuthorityConf.RESOURCE);
+				DorianConfiguration c = (DorianConfiguration) rm
+				.getResource(DorianConfiguration.RESOURCE);
 				Database db = new Database(c
 						.getConnectionManager(), c
-						.getGUMSInternalId());
+						.getDorianInternalId());
 				db.createDatabaseIfNeeded();
-				GUMSCertificateAuthority ca = new GUMSCertificateAuthority(db, conf);
+				DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
 				CertUtil.writeCertificate(ca.getCACertificate(), "cacert.pem");
 				
 		} catch (Exception e) {

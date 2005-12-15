@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.gums.portal;
+package gov.nih.nci.cagrid.dorian.portal;
 
 
 
@@ -18,7 +18,7 @@ import org.projectmobius.portal.GridPortalBaseFrame;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public abstract class GumsPortalSimpleFrame extends GridPortalBaseFrame {
+public abstract class DorianPortalSimpleFrame extends GridPortalBaseFrame {
 
 	private javax.swing.JPanel jContentPane = null;
 	private JPanel mainPanel = null;
@@ -31,13 +31,13 @@ public abstract class GumsPortalSimpleFrame extends GridPortalBaseFrame {
 	/**
 	 * This is the default constructor
 	 */
-	public GumsPortalSimpleFrame(String actionText, String contentPanelLabel) {
+	public DorianPortalSimpleFrame(String actionText, String contentPanelLabel) {
 		super();
 		initialize();
 		this.getAction().setText(actionText);
 		contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, contentPanelLabel,
 			javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
-			null, GumsLookAndFeel.getPanelLabelColor()));
+			null, DorianLookAndFeel.getPanelLabelColor()));
 	}
 
 
@@ -136,7 +136,7 @@ public abstract class GumsPortalSimpleFrame extends GridPortalBaseFrame {
 		if (action == null) {
 			action = new JButton();
 			action.setText("Perform");
-			action.setIcon(GumsLookAndFeel.getSelectIcon());
+			action.setIcon(DorianLookAndFeel.getSelectIcon());
 			action.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					perform();
@@ -156,7 +156,7 @@ public abstract class GumsPortalSimpleFrame extends GridPortalBaseFrame {
 		if (cancel == null) {
 			cancel = new JButton();
 			cancel.setText("Cancel");
-			cancel.setIcon(GumsLookAndFeel.getCloseIcon());
+			cancel.setIcon(DorianLookAndFeel.getCloseIcon());
 			cancel.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();

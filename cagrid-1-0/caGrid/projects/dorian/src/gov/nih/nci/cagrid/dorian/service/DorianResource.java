@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.gums.service;
+package gov.nih.nci.cagrid.dorian.service;
 
 import org.globus.wsrf.Resource;
 import org.globus.wsrf.ResourceProperties;
@@ -10,9 +10,9 @@ import org.globus.wsrf.impl.SimpleResourcePropertySet;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: GUMSResource.java,v 1.1 2005-12-15 15:06:46 langella Exp $
+ * @version $Id: DorianResource.java,v 1.1 2005-12-15 19:29:33 langella Exp $
  */
-public class GUMSResource implements Resource, ResourceProperties {
+public class DorianResource implements Resource, ResourceProperties {
 
 	/* Resource Property set */
 	private ResourcePropertySet propSet;
@@ -25,11 +25,11 @@ public class GUMSResource implements Resource, ResourceProperties {
 	/* Initializes RPs */
 	public void initialize() throws Exception {
 		this.propSet = new SimpleResourcePropertySet(
-				GUMSQNames.RESOURCE_PROPERTIES);
+				DorianQNames.RESOURCE_PROPERTIES);
 
 		try {
 			ResourceProperty valueRP = new ReflectionResourceProperty(
-					GUMSQNames.RP_DESCRIPTION, "Description", this);
+					DorianQNames.RP_DESCRIPTION, "Description", this);
 			this.propSet.add(valueRP);
 			setDescription("Start");
 		} catch (Exception e) {

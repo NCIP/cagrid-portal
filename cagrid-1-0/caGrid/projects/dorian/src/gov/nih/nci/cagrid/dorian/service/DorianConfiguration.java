@@ -41,7 +41,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *---------------------------------------------------------------------------*/
 
-package gov.nih.nci.cagrid.gums.service;
+package gov.nih.nci.cagrid.dorian.service;
 
 import org.jdom.Element;
 import org.projectmobius.common.AbstractMobiusConfiguration;
@@ -56,13 +56,13 @@ import org.projectmobius.db.ConnectionManager;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class GUMSConfiguration implements AbstractMobiusConfiguration {
+public class DorianConfiguration implements AbstractMobiusConfiguration {
 	
-	public static final String RESOURCE = "GUMSConfiguration";
+	public static final String RESOURCE = "DorianConfiguration";
 	
 	public static final String DATABASE = "database";
 
-	public static final String GUMS_ID = "gums-internal-id";
+	public static final String DORIAN_ID = "dorian-internal-id";
 
 	public static final String EMAIL_ELEMENT = "outgoing-email";
 
@@ -74,7 +74,7 @@ public class GUMSConfiguration implements AbstractMobiusConfiguration {
 
 	private ConnectionManager rootConnectionManager;
 
-	private String gumsInternalId;
+	private String dorianInternalId;
 
 	private String outgoingEmailHost;
 
@@ -92,21 +92,21 @@ public class GUMSConfiguration implements AbstractMobiusConfiguration {
 			throw new MobiusException(
 					"No database defined in the Janus Configuration.");
 		}
-		this.gumsInternalId = config.getChildText(GUMS_ID);
-		if (gumsInternalId == null) {
+		this.dorianInternalId = config.getChildText(DORIAN_ID);
+		if (dorianInternalId == null) {
 			throw new MobiusException("No internal id specified.");
 		}
 
 		Element email = config.getChild(EMAIL_ELEMENT, config.getNamespace());
 		if (email == null) {
 			throw new MobiusException(
-					"Error configuring GUMS, no outgoing email configuration specified.");
+					"Error configuring Dorian, no outgoing email configuration specified.");
 		} else {
 			String server = email.getAttributeValue(EMAIL_SERVER_ATT, email
 					.getNamespace());
 			if (server == null) {
 				throw new MobiusException(
-						"Error configuring GUMS, no outgoing email server specified.");
+						"Error configuring , no outgoing email server specified.");
 			} else {
 				this.outgoingEmailHost = server;
 			}
@@ -115,28 +115,28 @@ public class GUMSConfiguration implements AbstractMobiusConfiguration {
 					.getNamespace());
 			if (port == null) {
 				throw new MobiusException(
-						"Error configuring GUMS, no outgoing email server port specified.");
+						"Error configuring Dorian, no outgoing email server port specified.");
 			} else {
 				try {
 					this.outgoingEmailPort = Integer.valueOf(port).intValue();
 				} catch (Exception ex) {
 					throw new MobiusException(
-							"Error configuring GUMS, the outgoing email server port specified was not an integer.");
+							"Error configuring Dorian, the outgoing email server port specified was not an integer.");
 				}
 			}
 			String protocol = email.getAttributeValue(EMAIL_PROTOCOL_ATT, email
 					.getNamespace());
 			if (protocol == null) {
 				throw new MobiusException(
-						"Error configuring GUMS, no outgoing email protocol specified.");
+						"Error configuring Dorian, no outgoing email protocol specified.");
 			} else {
 				this.outgoingEmailProtocol = protocol;
 			}
 		}
 	}
 
-	public String getGUMSInternalId() {
-		return gumsInternalId;
+	public String getDorianInternalId() {
+		return dorianInternalId;
 	}
 
 	/**

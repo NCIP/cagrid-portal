@@ -1,14 +1,14 @@
-package gov.nih.nci.cagrid.gums;
+package gov.nih.nci.cagrid.dorian;
 
-import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
-import gov.nih.nci.cagrid.gums.common.GUMSFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserFilter;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserPolicy;
-import gov.nih.nci.cagrid.gums.ifs.bean.InvalidTrustedIdPFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.InvalidUserFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
+import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
+import gov.nih.nci.cagrid.dorian.common.DorianFault;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
+import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidTrustedIdPFault;
+import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidUserFault;
+import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 
 
 /**
@@ -19,36 +19,36 @@ import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
  *          Exp $
  */
 public interface IFSAdministration {
-	public TrustedIdP[] getTrustedIdPs() throws GUMSFault, PermissionDeniedFault, InvalidUserFault, GUMSInternalFault;
+	public TrustedIdP[] getTrustedIdPs() throws DorianFault, PermissionDeniedFault, InvalidUserFault, DorianInternalFault;
 
 
-	public IFSUser[] findUsers(IFSUserFilter filter) throws GUMSFault, PermissionDeniedFault, InvalidUserFault,
-		GUMSInternalFault;
+	public IFSUser[] findUsers(IFSUserFilter filter) throws DorianFault, PermissionDeniedFault, InvalidUserFault,
+		DorianInternalFault;
 
 
-	public void updateUser(IFSUser usr) throws GUMSFault, PermissionDeniedFault, InvalidUserFault, GUMSInternalFault;
+	public void updateUser(IFSUser usr) throws DorianFault, PermissionDeniedFault, InvalidUserFault, DorianInternalFault;
 
 
-	public void removeUser(IFSUser usr) throws GUMSFault, PermissionDeniedFault, InvalidUserFault, GUMSInternalFault;
+	public void removeUser(IFSUser usr) throws DorianFault, PermissionDeniedFault, InvalidUserFault, DorianInternalFault;
 
 
-	public IFSUser renewUserCredentials(IFSUser usr) throws GUMSFault, PermissionDeniedFault, InvalidUserFault,
-		GUMSInternalFault;
+	public IFSUser renewUserCredentials(IFSUser usr) throws DorianFault, PermissionDeniedFault, InvalidUserFault,
+		DorianInternalFault;
 
 
-	public IFSUserPolicy[] getUserPolicies() throws GUMSFault, PermissionDeniedFault, InvalidUserFault,
-		GUMSInternalFault;
+	public IFSUserPolicy[] getUserPolicies() throws DorianFault, PermissionDeniedFault, InvalidUserFault,
+		DorianInternalFault;
 
 
-	public TrustedIdP addTrustedIdP(TrustedIdP idp) throws GUMSFault, PermissionDeniedFault, InvalidUserFault,
-		InvalidTrustedIdPFault, GUMSInternalFault;
+	public TrustedIdP addTrustedIdP(TrustedIdP idp) throws DorianFault, PermissionDeniedFault, InvalidUserFault,
+		InvalidTrustedIdPFault, DorianInternalFault;
 
 
-	public void updateTrustedIdP(TrustedIdP idp) throws GUMSFault, PermissionDeniedFault, InvalidUserFault,
-		InvalidTrustedIdPFault, GUMSInternalFault;
+	public void updateTrustedIdP(TrustedIdP idp) throws DorianFault, PermissionDeniedFault, InvalidUserFault,
+		InvalidTrustedIdPFault, DorianInternalFault;
 
 
-	public void removeTrustedIdP(TrustedIdP idp) throws GUMSFault, PermissionDeniedFault, InvalidUserFault,
-		InvalidTrustedIdPFault, GUMSInternalFault;
+	public void removeTrustedIdP(TrustedIdP idp) throws DorianFault, PermissionDeniedFault, InvalidUserFault,
+		InvalidTrustedIdPFault, DorianInternalFault;
 
 }

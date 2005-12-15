@@ -1,14 +1,14 @@
-package gov.nih.nci.cagrid.gums.ifs.portal;
+package gov.nih.nci.cagrid.dorian.ifs.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.gums.IFSAdministration;
-import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
-import gov.nih.nci.cagrid.gums.client.IFSAdministrationClient;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserPolicy;
-import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
-import gov.nih.nci.cagrid.gums.portal.GUMSServiceListComboBox;
-import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
-import gov.nih.nci.cagrid.gums.portal.ProxyComboBox;
+import gov.nih.nci.cagrid.dorian.IFSAdministration;
+import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
+import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
+import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
+import gov.nih.nci.cagrid.dorian.portal.DorianServiceListComboBox;
+import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
+import gov.nih.nci.cagrid.dorian.portal.ProxyComboBox;
 import gov.nih.nci.cagrid.security.commstyle.CommunicationStyle;
 import gov.nih.nci.cagrid.security.commstyle.SecureConversationWithEncryption;
 
@@ -36,7 +36,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPsWindow.java,v 1.4 2005-12-14 21:36:25 langella Exp $
+ * @version $Id: TrustedIdPsWindow.java,v 1.5 2005-12-15 19:29:33 langella Exp $
  */
 public class TrustedIdPsWindow extends GridPortalBaseFrame {
 	
@@ -94,7 +94,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 	public TrustedIdPsWindow() {
 		super();
 		initialize();
-		this.setFrameIcon(GumsLookAndFeel.getTrustedIdPIcon());
+		this.setFrameIcon(DorianLookAndFeel.getTrustedIdPIcon());
 	}
 
 
@@ -186,7 +186,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 			contentPanel.setLayout(new GridBagLayout());
 			contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Trusted IdPs",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GumsLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel.getPanelLabelColor()));
 			gridBagConstraints4.weightx = 1.0;
 			gridBagConstraints4.gridy = 0;
 			gridBagConstraints4.gridx = 0;
@@ -254,7 +254,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 		if (viewTrustedIdP == null) {
 			viewTrustedIdP = new JButton();
 			viewTrustedIdP.setText("View/Edit Trusted IdP");
-			viewTrustedIdP.setIcon(GumsLookAndFeel.getTrustedIdPIcon());
+			viewTrustedIdP.setIcon(DorianLookAndFeel.getTrustedIdPIcon());
 			viewTrustedIdP.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
@@ -278,7 +278,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 
 	public void showTrustedIdP() {
 		try {
-			String service = ((GUMSServiceListComboBox) getService()).getSelectedService();
+			String service = ((DorianServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
 				new TrustedIdPWindow(service, proxy, getTrustedIdPTable().getSelectedTrustedIdP(), getUserPolicies()));
@@ -290,7 +290,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 
 	public void addTrustedIdP() {
 		try {
-			String service = ((GUMSServiceListComboBox) getService()).getSelectedService();
+			String service = ((DorianServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
 				new TrustedIdPWindow(this,service, proxy, getUserPolicies()));
@@ -359,7 +359,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
 			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "Login Information",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GumsLookAndFeel
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
 					.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints28);
@@ -393,7 +393,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 		if (query == null) {
 			query = new JButton();
 			query.setText("Find Trusted Identity Providers");
-			query.setIcon(GumsLookAndFeel.getQueryIcon());
+			query.setIcon(DorianLookAndFeel.getQueryIcon());
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
@@ -431,7 +431,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 
 		try {
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			String service = ((GUMSServiceListComboBox) getService()).getSelectedService();
+			String service = ((DorianServiceListComboBox) getService()).getSelectedService();
 			CommunicationStyle style = new SecureConversationWithEncryption(proxy);
 
 			IFSAdministration client = new IFSAdministrationClient(service, style);
@@ -456,7 +456,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 
 	private IFSUserPolicy[] getUserPolicies() throws Exception {
 		GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-		String service = ((GUMSServiceListComboBox) getService()).getSelectedService();
+		String service = ((DorianServiceListComboBox) getService()).getSelectedService();
 		CommunicationStyle style = new SecureConversationWithEncryption(proxy);
 		IFSAdministration client = new IFSAdministrationClient(service, style);
 		return client.getUserPolicies();
@@ -470,7 +470,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 	 */
 	private JComboBox getService() {
 		if (service == null) {
-			service = new GUMSServiceListComboBox();
+			service = new DorianServiceListComboBox();
 		}
 		return service;
 	}
@@ -518,7 +518,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 	private JProgressBar getProgress() {
 		if (progress == null) {
 			progress = new JProgressBar();
-			progress.setForeground(GumsLookAndFeel.getPanelLabelColor());
+			progress.setForeground(DorianLookAndFeel.getPanelLabelColor());
 			progress.setString("");
 			progress.setStringPainted(true);
 		}
@@ -560,24 +560,14 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 					}
 				}
 			});
-			removeUser.setIcon(GumsLookAndFeel.getRemoveUserIcon());
+			removeUser.setIcon(DorianLookAndFeel.getRemoveUserIcon());
 		}
 		return removeUser;
 	}
 
 
 	private void removeUser() {
-		/*
-		 * String service = ((GUMSServiceListComboBox)
-		 * getService()).getSelectedService(); try { GlobusCredential proxy =
-		 * ((ProxyComboBox) getProxy()).getSelectedProxy(); CommunicationStyle
-		 * style = new SecureConversationWithEncryption(proxy);
-		 * IFSAdministrationClient client = new IFSAdministrationClient(service,
-		 * style); ; IFSUser usr = this.getTrustedIdPTable().getSelectedUser();
-		 * client.removeUser(usr);
-		 * this.getTrustedIdPTable().removeSelectedUser(); } catch (Exception e) {
-		 * PortalUtils.showErrorMessage(e); }
-		 */
+		
 	}
 
 
@@ -605,7 +595,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 
 				}
 			});
-			addUser.setIcon(GumsLookAndFeel.getAddTrustedIdPIcon());
+			addUser.setIcon(DorianLookAndFeel.getAddTrustedIdPIcon());
 		}
 		return addUser;
 	}

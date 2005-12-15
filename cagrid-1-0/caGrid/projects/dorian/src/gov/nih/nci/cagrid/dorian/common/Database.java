@@ -1,6 +1,6 @@
-package gov.nih.nci.cagrid.gums.common;
+package gov.nih.nci.cagrid.dorian.common;
 
-import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
+import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -14,12 +14,12 @@ import org.projectmobius.db.Query;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: Database.java,v 1.7 2005-12-02 18:02:24 langella Exp $
+ * @version $Id: Database.java,v 1.8 2005-12-15 19:29:32 langella Exp $
  */
-public class Database extends GUMSObject {
+public class Database extends DorianObject {
 
 	private ConnectionManager root;
-	private ConnectionManager gums;
+	private ConnectionManager dorian;
 	private String database;
 	private boolean dbBuilt = false;
 
@@ -29,44 +29,47 @@ public class Database extends GUMSObject {
 			this.root = rootConnectionManager;
 	}
 	
-	public void createDatabaseIfNeeded() throws GUMSInternalFault{
+	public void createDatabaseIfNeeded() throws DorianInternalFault{
 		try {
 			if(!dbBuilt){
 			if (!databaseExists(database)) {
 				Query.update(this.root, "create database " +database);
 			}
-			gums = new ConnectionManager(database, root.getUrlPrefix(), root.getDriver(), root.getHost(), root
+			dorian = new ConnectionManager(database, root.getUrlPrefix(), root.getDriver(), root.getHost(), root
 				.getPort(), root.getUsername(), root.getPassword());
 			dbBuilt = true;
 			}
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
-			GUMSInternalFault fault = new GUMSInternalFault();
-			fault.setFaultString("An error occured while trying to create the GUMS database ("+database+")");
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("An error occured while trying to create the Dorian database ("+database+")");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault)helper.getFault();
+			fault = (DorianInternalFault)helper.getFault();
 			throw fault;
 		}
 	}
 	
-	public void destroyDatabase() throws GUMSInternalFault {
+	public void destroyDatabase() throws DorianInternalFault {
 		try {
 			if (databaseExists(database)) {
 				Query.update(this.root, "drop database if exists " +database);
 			}
-			if(gums!=null){
-			gums.destroy();
+			if(dorian!=null){
+			dorian.destroy();
 			}
-			gums = null;
+			if(root!=null){
+				root.closeAllUnusedConnections();
+			}
+			dorian = null;
 			dbBuilt = false;
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
-			GUMSInternalFault fault = new GUMSInternalFault();
-			fault.setFaultString("An error occured while trying to destroy the GUMS database ("+database+")");
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("An error occured while trying to destroy the Dorian database ("+database+")");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault)helper.getFault();
+			fault = (DorianInternalFault)helper.getFault();
 			throw fault;
 		}
 	}
@@ -74,11 +77,11 @@ public class Database extends GUMSObject {
 	
 
 
-	public boolean tableExists(String tableName) throws GUMSInternalFault {
+	public boolean tableExists(String tableName) throws DorianInternalFault {
 		boolean exists = false;
 		Connection c = null;
 		try {
-			c = gums.getConnection();
+			c = dorian.getConnection();
 			DatabaseMetaData dbMetadata = c.getMetaData();
 			String[] names = {"TABLE"};
 			names[0] = tableName;
@@ -87,54 +90,54 @@ public class Database extends GUMSObject {
 				exists = true;
 			}
 			tables.close();
-			gums.releaseConnection(c);
+			dorian.releaseConnection(c);
 		} catch (Exception e) {
-			gums.releaseConnection(c);
+			dorian.releaseConnection(c);
 			logError(e.getMessage(), e);
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Unexpected Database Error");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault)helper.getFault();
+			fault = (DorianInternalFault)helper.getFault();
 			throw fault;
 		}
 		return exists;
 	}
 
 
-	public void update(String sql) throws GUMSInternalFault {
+	public void update(String sql) throws DorianInternalFault {
 		try {
-			Query.update(gums, sql);
+			Query.update(dorian, sql);
 		} catch (Exception e) {
 			//logError(e.getMessage(), e);
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Unexpected Database Error");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);	
-			throw (GUMSInternalFault)helper.getFault();
+			throw (DorianInternalFault)helper.getFault();
 		}
 	}
 	
-	public long insertGetId(String sql) throws GUMSInternalFault {
+	public long insertGetId(String sql) throws DorianInternalFault {
 		try {
-			return Query.insertGetId(gums, sql);
+			return Query.insertGetId(dorian, sql);
 		} catch (Exception e) {
 			//logError(e.getMessage(), e);
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Unexpected Database Error");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);	
-			throw (GUMSInternalFault)helper.getFault();
+			throw (DorianInternalFault)helper.getFault();
 		}
 	}
 
 
 	public ConnectionManager getConnectionManager() {
-		return this.gums;
+		return this.dorian;
 	}
 
 
-	public boolean databaseExists(String db) throws GUMSInternalFault {
+	public boolean databaseExists(String db) throws DorianInternalFault {
 		boolean exists = false;
 		Connection c = null;
 		try {
@@ -149,12 +152,13 @@ public class Database extends GUMSObject {
 			}
 			dbs.close();
 		} catch (Exception e) {
+			this.root.releaseConnection(c);
 			logError(e.getMessage(), e);
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Unexpected Database Error");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault)helper.getFault();
+			fault = (DorianInternalFault)helper.getFault();
 			throw fault;
 		}
 		this.root.releaseConnection(c);
@@ -162,7 +166,11 @@ public class Database extends GUMSObject {
 	}
 	
 	public int getUsedConnectionCount(){
-		return this.gums.getUsedConnectionCount();
+		return this.dorian.getUsedConnectionCount();
+	}
+	
+	public int getRootUsedConnectionCount(){
+		return this.root.getUsedConnectionCount();
 	}
 
 }

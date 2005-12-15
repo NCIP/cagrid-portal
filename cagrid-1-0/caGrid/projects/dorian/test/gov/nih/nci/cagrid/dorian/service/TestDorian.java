@@ -1,68 +1,45 @@
-package gov.nih.nci.cagrid.gums.service;
+package gov.nih.nci.cagrid.dorian.service;
 
-import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
-import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
-import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthorityConf;
-import gov.nih.nci.cagrid.gums.common.FaultHelper;
-import gov.nih.nci.cagrid.gums.common.FaultUtil;
-import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
-import gov.nih.nci.cagrid.gums.idp.AssertionCredentialsManager;
-import gov.nih.nci.cagrid.gums.idp.IdPConfiguration;
-import gov.nih.nci.cagrid.gums.idp.bean.Application;
-import gov.nih.nci.cagrid.gums.idp.bean.BasicAuthCredential;
-import gov.nih.nci.cagrid.gums.idp.bean.CountryCode;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUserFilter;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUserRole;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUserStatus;
-import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
-import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
-import gov.nih.nci.cagrid.gums.idp.bean.StateCode;
-import gov.nih.nci.cagrid.gums.ifs.AutoApprovalAutoRenewalPolicy;
-import gov.nih.nci.cagrid.gums.ifs.AutoApprovalPolicy;
-import gov.nih.nci.cagrid.gums.ifs.IFS;
-import gov.nih.nci.cagrid.gums.ifs.IFSConfiguration;
-import gov.nih.nci.cagrid.gums.ifs.IFSUtils;
-import gov.nih.nci.cagrid.gums.ifs.ManualApprovalAutoRenewalPolicy;
-import gov.nih.nci.cagrid.gums.ifs.UserManager;
-import gov.nih.nci.cagrid.gums.ifs.TestIFS.IdPContainer;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserFilter;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserRole;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
-import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.InvalidProxyFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.ProxyLifetime;
-import gov.nih.nci.cagrid.gums.ifs.bean.SAMLAuthenticationMethod;
-import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
-import gov.nih.nci.cagrid.gums.test.TestUtils;
+
+import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
+import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
+import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthorityConf;
+import gov.nih.nci.cagrid.dorian.common.FaultUtil;
+import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
+import gov.nih.nci.cagrid.dorian.idp.AssertionCredentialsManager;
+import gov.nih.nci.cagrid.dorian.idp.IdPConfiguration;
+import gov.nih.nci.cagrid.dorian.idp.bean.Application;
+import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
+import gov.nih.nci.cagrid.dorian.idp.bean.CountryCode;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserRole;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserStatus;
+import gov.nih.nci.cagrid.dorian.idp.bean.InvalidUserPropertyFault;
+import gov.nih.nci.cagrid.dorian.idp.bean.NoSuchUserFault;
+import gov.nih.nci.cagrid.dorian.idp.bean.StateCode;
+import gov.nih.nci.cagrid.dorian.ifs.IFSConfiguration;
+import gov.nih.nci.cagrid.dorian.ifs.IFSUtils;
+import gov.nih.nci.cagrid.dorian.ifs.UserManager;
+import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
+import gov.nih.nci.cagrid.dorian.service.Dorian;
+import gov.nih.nci.cagrid.dorian.test.TestUtils;
 
 import java.io.File;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Iterator;
-import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.apache.xml.security.signature.XMLSignature;
-import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.globus.gsi.GlobusCredential;
-import org.opensaml.QName;
 import org.opensaml.SAMLAssertion;
 import org.opensaml.SAMLAttribute;
 import org.opensaml.SAMLAttributeStatement;
 import org.opensaml.SAMLAuthenticationStatement;
 import org.opensaml.SAMLStatement;
-import org.opensaml.SAMLSubject;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -71,7 +48,7 @@ import org.opensaml.SAMLSubject;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class TestGUMS extends TestCase{
+public class TestDorian extends TestCase{
 	public static String RESOURCES_DIR = "resources" + File.separator
 	+ "general-test";
 	
@@ -79,10 +56,10 @@ public class TestGUMS extends TestCase{
 	
 	private CertificateAuthority ca;
 	
-    public void testGUMSManager(){
+    public void testDorian(){
     	try{
-    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
-    		assertNotNull(jm.getGUMSConfiguration());
+    		Dorian jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     	
     		assertEquals(0,jm.getDatabase().getUsedConnectionCount());
@@ -95,13 +72,13 @@ public class TestGUMS extends TestCase{
     
     public void testGetResource(){
     	try{
-    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
-    		assertNotNull(jm.getGUMSConfiguration());
+    		Dorian jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		
     		assertNotNull(jm.getResource(IdPConfiguration.RESOURCE));
     		assertNotNull(jm.getResource(IFSConfiguration.RESOURCE));
-    		assertNotNull(jm.getResource(GUMSCertificateAuthorityConf.RESOURCE));
+    		assertNotNull(jm.getResource(DorianCertificateAuthorityConf.RESOURCE));
     		
     		assertEquals(0,jm.getDatabase().getUsedConnectionCount());
     		jm.getDatabase().destroyDatabase();
@@ -118,10 +95,10 @@ public class TestGUMS extends TestCase{
 
     public void testAuthenticate(){
     	try{
-    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
-    		assertNotNull(jm.getGUMSConfiguration());
+    		Dorian jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
-			String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,GUMS.IDP_ADMIN_USER_ID);
+			String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 			Application a = createApplication();
 			jm.registerWithIdP(a);	
@@ -155,10 +132,10 @@ public class TestGUMS extends TestCase{
     
     public void testBadAuthenticateStatusPendingUser(){
     	try{
-    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
-    		assertNotNull(jm.getGUMSConfiguration());
+    		Dorian jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
-    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,GUMS.IDP_ADMIN_USER_ID);
+    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 			Application a = createApplication();
 			jm.registerWithIdP(a);	
@@ -182,10 +159,10 @@ public class TestGUMS extends TestCase{
     
     public void testBadAuthenticateStatusRejectedUser(){
     	try{
-    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
-    		assertNotNull(jm.getGUMSConfiguration());
+    		Dorian jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
-    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,GUMS.IDP_ADMIN_USER_ID);
+    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 			Application a = createApplication();
 			jm.registerWithIdP(a);	
@@ -211,10 +188,10 @@ public class TestGUMS extends TestCase{
     
     public void testBadAuthenticateStatusSuspendedUser(){
     	try{
-    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
-    		assertNotNull(jm.getGUMSConfiguration());
+    		Dorian jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
-    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,GUMS.IDP_ADMIN_USER_ID);
+    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 			Application a = createApplication();
 			jm.registerWithIdP(a);	
@@ -240,10 +217,10 @@ public class TestGUMS extends TestCase{
     
     public void testFindIdPUsers(){
     	try{
-    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
-    		assertNotNull(jm.getGUMSConfiguration());
+    		Dorian jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
-    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,GUMS.IDP_ADMIN_USER_ID);
+    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 			Application a = createApplication();
 			jm.registerWithIdP(a);
@@ -262,8 +239,8 @@ public class TestGUMS extends TestCase{
     
     public void testBadFindIdPUsersInvalidGridId(){
     	try{
-    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
-    		assertNotNull(jm.getGUMSConfiguration());
+    		Dorian jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		
 			//create a valid IdP User
@@ -285,8 +262,8 @@ public class TestGUMS extends TestCase{
     
     public void testBadFindIdPUsersUserNotAdmin(){
     	try{
-    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
-    		assertNotNull(jm.getGUMSConfiguration());
+    		Dorian jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		
 			//create a valid IdP User
@@ -308,11 +285,11 @@ public class TestGUMS extends TestCase{
     
     public void testRegisterWithIdP(){
     	try{
-    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
-    		assertNotNull(jm.getGUMSConfiguration());
+    		Dorian jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		
-    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,GUMS.IDP_ADMIN_USER_ID);
+    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 			
 			Application a = createApplication();
@@ -346,8 +323,8 @@ public class TestGUMS extends TestCase{
     
     public void testBadRegisterWithIdPTwoIdenticalUsers(){
     	try{
-    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
-    		assertNotNull(jm.getGUMSConfiguration());
+    		Dorian jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		
 			Application a = createApplication();
@@ -365,8 +342,8 @@ public class TestGUMS extends TestCase{
     
     public void testBadRegisterWithIdPPasswordTooLong(){
     	try{
-    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
-    		assertNotNull(jm.getGUMSConfiguration());
+    		Dorian jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
 			
     		//test the password length too long
@@ -382,8 +359,8 @@ public class TestGUMS extends TestCase{
     
     public void testBadRegisterWithIdPPasswordTooShort(){
     	try{
-    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
-    		assertNotNull(jm.getGUMSConfiguration());
+    		Dorian jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
 			
     		//test the password length too short
@@ -399,8 +376,8 @@ public class TestGUMS extends TestCase{
     
     public void testBadRegisterWithIdPUserIdTooLong(){
     	try{
-    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
-    		assertNotNull(jm.getGUMSConfiguration());
+    		Dorian jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
 			
     		//test the UserId too long
@@ -416,8 +393,8 @@ public class TestGUMS extends TestCase{
     
     public void testBadRegisterWithIdpUserIdTooShort(){
     	try{
-    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
-    		assertNotNull(jm.getGUMSConfiguration());
+    		Dorian jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
 			
     		//test the UserId too short
@@ -433,10 +410,10 @@ public class TestGUMS extends TestCase{
     
     public void testUpdateIdPUser(){
     	try{
-    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
-    		assertNotNull(jm.getGUMSConfiguration());
+    		Dorian jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
-    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,GUMS.IDP_ADMIN_USER_ID);
+    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 			Application a = createApplication();
 			jm.registerWithIdP(a);
@@ -484,11 +461,11 @@ public class TestGUMS extends TestCase{
     
     public void testBadUpdateIdPUserNoSuchUser(){
     	try{
-    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
-    		assertNotNull(jm.getGUMSConfiguration());
+    		Dorian jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
 			
-    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,GUMS.IDP_ADMIN_USER_ID);
+    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 			
     		//test for no such user
@@ -505,11 +482,11 @@ public class TestGUMS extends TestCase{
     
     public void testRemoveIdPUser(){
     	try{
-    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
-    		assertNotNull(jm.getGUMSConfiguration());
+    		Dorian jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		
-    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,GUMS.IDP_ADMIN_USER_ID);
+    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 			Application a = createApplication();
 			jm.registerWithIdP(a);
@@ -534,8 +511,8 @@ public class TestGUMS extends TestCase{
     
     public void testBadRemoveIdPUserInvalidGridId(){
     	try{
-    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
-    		assertNotNull(jm.getGUMSConfiguration());
+    		Dorian jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		
 			//create a valid IdP User
@@ -556,11 +533,11 @@ public class TestGUMS extends TestCase{
     
     public void testBadRemoveIdPUserNoSuchUser(){
     	try{
-    		GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
-    		assertNotNull(jm.getGUMSConfiguration());
+    		Dorian jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		
-    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,GUMS.IDP_ADMIN_USER_ID);
+    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 			Application a = createApplication();
 			jm.registerWithIdP(a);
@@ -591,10 +568,10 @@ public class TestGUMS extends TestCase{
     
     public void testCreateProxy() {
 		try {
-			GUMS jm = new GUMS(RESOURCES_DIR+File.separator+"gums-conf.xml","localhost");
+			Dorian jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
 			BasicAuthCredential auth = new BasicAuthCredential();
-			auth.setUserId(GUMS.IDP_ADMIN_USER_ID);
-			auth.setPassword(GUMS.IDP_ADMIN_PASSWORD);
+			auth.setUserId(Dorian.IDP_ADMIN_USER_ID);
+			auth.setPassword(Dorian.IDP_ADMIN_PASSWORD);
 			SAMLAssertion saml = jm.authenticate(auth);
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			PublicKey publicKey = pair.getPublic();

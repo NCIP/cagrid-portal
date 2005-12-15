@@ -1,19 +1,19 @@
-package gov.nih.nci.cagrid.gums.idp;
+package gov.nih.nci.cagrid.dorian.idp;
 
-import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.common.AddressValidator;
-import gov.nih.nci.cagrid.gums.common.Crypt;
-import gov.nih.nci.cagrid.gums.common.Database;
-import gov.nih.nci.cagrid.gums.common.FaultHelper;
-import gov.nih.nci.cagrid.gums.common.GUMSObject;
-import gov.nih.nci.cagrid.gums.idp.bean.CountryCode;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUserFilter;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUserRole;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUserStatus;
-import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
-import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
-import gov.nih.nci.cagrid.gums.idp.bean.StateCode;
+import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.common.AddressValidator;
+import gov.nih.nci.cagrid.dorian.common.Crypt;
+import gov.nih.nci.cagrid.dorian.common.Database;
+import gov.nih.nci.cagrid.dorian.common.DorianObject;
+import gov.nih.nci.cagrid.dorian.common.FaultHelper;
+import gov.nih.nci.cagrid.dorian.idp.bean.CountryCode;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserRole;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserStatus;
+import gov.nih.nci.cagrid.dorian.idp.bean.InvalidUserPropertyFault;
+import gov.nih.nci.cagrid.dorian.idp.bean.NoSuchUserFault;
+import gov.nih.nci.cagrid.dorian.idp.bean.StateCode;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -29,9 +29,9 @@ import java.util.List;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class UserManager extends GUMSObject {
+public class UserManager extends DorianObject {
 
-	private static final String IDP_USERS_TABLE = "GUMS_IDP_USERS";
+	private static final String IDP_USERS_TABLE = "IDP_USERS";
 
 	private Database db;
 
@@ -40,7 +40,7 @@ public class UserManager extends GUMSObject {
 	private IdPConfiguration conf;
 
 	public UserManager(Database db, IdPConfiguration conf)
-			throws GUMSInternalFault {
+			throws DorianInternalFault {
 		this.db = db;
 		this.conf = conf;
 	}
@@ -106,7 +106,7 @@ public class UserManager extends GUMSObject {
 		}
 	}
 
-	public synchronized void addUser(IdPUser user) throws GUMSInternalFault,
+	public synchronized void addUser(IdPUser user) throws DorianInternalFault,
 			InvalidUserPropertyFault {
 		this.buildDatabase();
 		this.validateUser(user);
@@ -128,7 +128,7 @@ public class UserManager extends GUMSObject {
 				+ user.getRole().getValue() + "')");
 	}
 
-	public synchronized void removeUser(String uid) throws GUMSInternalFault {
+	public synchronized void removeUser(String uid) throws DorianInternalFault {
 		this.buildDatabase();
 		db
 				.update("DELETE FROM " + IDP_USERS_TABLE + " WHERE UID='" + uid
@@ -145,12 +145,12 @@ public class UserManager extends GUMSObject {
 		return sql;
 	}
 
-	public IdPUser[] getUsers(IdPUserFilter filter) throws GUMSInternalFault {
+	public IdPUser[] getUsers(IdPUserFilter filter) throws DorianInternalFault {
 		return getUsers(filter, true);
 	}
 
 	public IdPUser[] getUsers(IdPUserFilter filter, boolean includePassword)
-			throws GUMSInternalFault {
+			throws DorianInternalFault {
 
 		this.buildDatabase();
 		Connection c = null;
@@ -291,24 +291,24 @@ public class UserManager extends GUMSObject {
 
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault
 					.setFaultString("Unexpected Error, could not obtain a list of users");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
 			db.getConnectionManager().releaseConnection(c);
 		}
 	}
 
-	public IdPUser getUser(String uid) throws GUMSInternalFault, NoSuchUserFault {
+	public IdPUser getUser(String uid) throws DorianInternalFault, NoSuchUserFault {
 		return this.getUser(uid, true);
 	}
 
 	public IdPUser getUser(String uid, boolean includePassword)
-			throws GUMSInternalFault, NoSuchUserFault {
+			throws DorianInternalFault, NoSuchUserFault {
 		this.buildDatabase();
 		IdPUser user = new IdPUser();
 		Connection c = null;
@@ -349,12 +349,12 @@ public class UserManager extends GUMSObject {
 		} catch (Exception e) {
 
 			logError(e.getMessage(), e);
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Unexpected Error, could not obtain the user "
 					+ uid + ".");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
 			db.getConnectionManager().releaseConnection(c);
@@ -362,7 +362,7 @@ public class UserManager extends GUMSObject {
 		return user;
 	}
 
-	private void buildDatabase() throws GUMSInternalFault {
+	private void buildDatabase() throws DorianInternalFault {
 		if (!dbBuilt) {
 			if (!this.db.tableExists(IDP_USERS_TABLE)) {
 				String applications = "CREATE TABLE " + IDP_USERS_TABLE + " ("
@@ -388,7 +388,7 @@ public class UserManager extends GUMSObject {
 		}
 	}
 
-	public synchronized void updateUser(IdPUser u) throws GUMSInternalFault,
+	public synchronized void updateUser(IdPUser u) throws DorianInternalFault,
 			NoSuchUserFault, InvalidUserPropertyFault {
 		this.buildDatabase();
 		if (u.getUserId() == null) {
@@ -418,7 +418,7 @@ public class UserManager extends GUMSObject {
 				try {
 					AddressValidator.validateEmail(u.getEmail());
 				} catch (IllegalArgumentException e) {
-					GUMSInternalFault fault = new GUMSInternalFault();
+					DorianInternalFault fault = new DorianInternalFault();
 					fault.setFaultString(e.getMessage());
 					throw fault;
 				}
@@ -513,7 +513,7 @@ public class UserManager extends GUMSObject {
 				try {
 					AddressValidator.validateZipCode(u.getZipcode());
 				} catch (IllegalArgumentException e) {
-					GUMSInternalFault fault = new GUMSInternalFault();
+					DorianInternalFault fault = new DorianInternalFault();
 					fault.setFaultString(e.getMessage());
 					throw fault;
 				}
@@ -529,7 +529,7 @@ public class UserManager extends GUMSObject {
 				try {
 					AddressValidator.validatePhone(u.getPhoneNumber());
 				} catch (IllegalArgumentException e) {
-					GUMSInternalFault fault = new GUMSInternalFault();
+					DorianInternalFault fault = new DorianInternalFault();
 					fault.setFaultString(e.getMessage());
 					throw fault;
 				}
@@ -589,7 +589,7 @@ public class UserManager extends GUMSObject {
 		}
 	}
 
-	public boolean userExists(String uid) throws GUMSInternalFault {
+	public boolean userExists(String uid) throws DorianInternalFault {
 		this.buildDatabase();
 		Connection c = null;
 		boolean exists = false;
@@ -609,13 +609,13 @@ public class UserManager extends GUMSObject {
 
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault
 					.setFaultString("Unexpected Database Error, could not determine if the user "
 							+ uid + " exists.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
 			db.getConnectionManager().releaseConnection(c);
@@ -623,7 +623,7 @@ public class UserManager extends GUMSObject {
 		return exists;
 	}
 
-	public void destroy() throws GUMSInternalFault {
+	public void destroy() throws DorianInternalFault {
 		db.update("DROP TABLE IF EXISTS " + IDP_USERS_TABLE);
 		dbBuilt = false;
 	}

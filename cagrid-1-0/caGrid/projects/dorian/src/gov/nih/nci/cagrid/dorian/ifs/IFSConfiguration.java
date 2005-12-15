@@ -41,11 +41,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *---------------------------------------------------------------------------*/
 
-package gov.nih.nci.cagrid.gums.ifs;
+package gov.nih.nci.cagrid.dorian.ifs;
 
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserPolicy;
-import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
+import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 
 import java.util.Calendar;
 import java.util.Date;

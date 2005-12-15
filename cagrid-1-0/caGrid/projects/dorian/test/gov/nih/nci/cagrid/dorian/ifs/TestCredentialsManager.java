@@ -1,12 +1,12 @@
-package gov.nih.nci.cagrid.gums.ifs;
+package gov.nih.nci.cagrid.dorian.ifs;
 
-import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.common.Database;
-import gov.nih.nci.cagrid.gums.common.FaultUtil;
-import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
-import gov.nih.nci.cagrid.gums.ifs.bean.InvalidPasswordFault;
-import gov.nih.nci.cagrid.gums.test.TestUtils;
+import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.common.Database;
+import gov.nih.nci.cagrid.dorian.common.FaultUtil;
+import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
+import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
+import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidPasswordFault;
+import gov.nih.nci.cagrid.dorian.test.TestUtils;
 
 import java.io.File;
 import java.security.KeyPair;
@@ -71,13 +71,13 @@ public class TestCredentialsManager extends TestCase {
 			try{
 				cred.getPrivateKey(user,password);
 				assertTrue(false);
-			}catch (GUMSInternalFault gie) {
+			}catch (DorianInternalFault gie) {
 				
 			}
 			try{
 				cred.getCertificate(user);
 				assertTrue(false);
-			}catch (GUMSInternalFault gie) {
+			}catch (DorianInternalFault gie) {
 				
 			}
 		} catch (Exception e) {
@@ -111,13 +111,13 @@ public class TestCredentialsManager extends TestCase {
 				try{
 					cred.getPrivateKey("user"+i, "password"+i);
 					assertTrue(false);
-				}catch (GUMSInternalFault gie) {
+				}catch (DorianInternalFault gie) {
 					
 				}
 				try{
 					cred.getCertificate("user"+i);
 					assertTrue(false);
-				}catch (GUMSInternalFault gie) {
+				}catch (DorianInternalFault gie) {
 					
 				}
 			}

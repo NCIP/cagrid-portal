@@ -1,10 +1,10 @@
-package gov.nih.nci.cagrid.gums.ifs;
+package gov.nih.nci.cagrid.dorian.ifs;
 
-import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.common.FaultHelper;
-import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
-import gov.nih.nci.cagrid.gums.ifs.bean.UserPolicyFault;
+import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.common.FaultHelper;
+import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
+import gov.nih.nci.cagrid.dorian.ifs.bean.UserPolicyFault;
 
 import java.security.cert.X509Certificate;
 
@@ -18,7 +18,7 @@ import java.security.cert.X509Certificate;
  */
 
 public class AutoApprovalAutoRenewalPolicy extends AutoApprovalPolicy {
-	public void applyPolicy(IFSUser user) throws GUMSInternalFault,
+	public void applyPolicy(IFSUser user) throws DorianInternalFault,
 			UserPolicyFault {
 		super.applyPolicy(user);
 		UserManager um = getUserManager();
@@ -34,12 +34,12 @@ public class AutoApprovalAutoRenewalPolicy extends AutoApprovalPolicy {
 				um.renewUserCredentials(user);
 			}
 		} catch (Exception e) {
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Error renewing the credentials of the user "
 					+ user.getGridId());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		}
 	}

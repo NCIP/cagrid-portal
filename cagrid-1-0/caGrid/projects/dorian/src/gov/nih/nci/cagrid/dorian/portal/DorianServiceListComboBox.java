@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.gums.portal;
+package gov.nih.nci.cagrid.dorian.portal;
 
 import java.util.List;
 
@@ -12,14 +12,14 @@ import org.projectmobius.portal.PortalResourceManager;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class GUMSServiceListComboBox extends JComboBox {
+public class DorianServiceListComboBox extends JComboBox {
 
 	private static String lastSelectedService;
 
-	public GUMSServiceListComboBox() {
-		GumsPortalConf conf = (GumsPortalConf) PortalResourceManager
-				.getInstance().getResource(GumsPortalConf.RESOURCE);
-		List services = conf.getGumsServiceList();
+	public DorianServiceListComboBox() {
+		DorianPortalConf conf = (DorianPortalConf) PortalResourceManager
+				.getInstance().getResource(DorianPortalConf.RESOURCE);
+		List services = conf.getDorianServiceList();
 		for (int i = 0; i < services.size(); i++) {
 			this.addItem(services.get(i));
 		}

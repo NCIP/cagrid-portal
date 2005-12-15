@@ -1,4 +1,4 @@
-<securityConfig xmlns="http://www.globus.org" xmlns:gums="http://cagrid.nci.nih.gov/gums">
+<securityConfig xmlns="http://www.globus.org" xmlns:dorian="http://cagrid.nci.nih.gov/dorian">
 
    <credential>
       <key-file value="c:/certificates/gums-key.pem"/>

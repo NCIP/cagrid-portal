@@ -1,13 +1,13 @@
-package gov.nih.nci.cagrid.gums.idp.portal;
+package gov.nih.nci.cagrid.dorian.idp.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
-import gov.nih.nci.cagrid.gums.client.IdPAdministrationClient;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUserFilter;
-import gov.nih.nci.cagrid.gums.portal.GUMSServiceListComboBox;
-import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
-import gov.nih.nci.cagrid.gums.portal.ProxyComboBox;
+import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
+import gov.nih.nci.cagrid.dorian.client.IdPAdministrationClient;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
+import gov.nih.nci.cagrid.dorian.portal.DorianServiceListComboBox;
+import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
+import gov.nih.nci.cagrid.dorian.portal.ProxyComboBox;
 import gov.nih.nci.cagrid.security.commstyle.CommunicationStyle;
 import gov.nih.nci.cagrid.security.commstyle.SecureConversationWithEncryption;
 
@@ -37,7 +37,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.17 2005-12-09 17:51:32 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.18 2005-12-15 19:29:33 langella Exp $
  */
 public class UserManagerWindow extends GridPortalBaseFrame {
 
@@ -157,7 +157,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 	public UserManagerWindow() {
 		super();
 		initialize();
-		this.setFrameIcon(GumsLookAndFeel.getUsersIcon());
+		this.setFrameIcon(DorianLookAndFeel.getUsersIcon());
 	}
 
 	/**
@@ -249,7 +249,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 									"Users",
 									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, GumsLookAndFeel.getPanelLabelColor()));
+									null, DorianLookAndFeel.getPanelLabelColor()));
 			gridBagConstraints4.weightx = 1.0;
 			gridBagConstraints4.weighty = 1.0;
 			gridBagConstraints4.fill = java.awt.GridBagConstraints.BOTH;
@@ -281,7 +281,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		if (cancel == null) {
 			cancel = new JButton();
 			cancel.setText("Close");
-			cancel.setIcon(GumsLookAndFeel.getCloseIcon());
+			cancel.setIcon(DorianLookAndFeel.getCloseIcon());
 			cancel.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();
@@ -325,7 +325,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		if (manageUser == null) {
 			manageUser = new JButton();
 			manageUser.setText("Manage User");
-			manageUser.setIcon(GumsLookAndFeel.getUserMagnifyIcon());
+			manageUser.setIcon(DorianLookAndFeel.getUserMagnifyIcon());
 			manageUser.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					showUser();
@@ -343,7 +343,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			MobiusRunnable runner = new MobiusRunnable() {
 				public void execute() {
 					IdPUser user = (IdPUser) getUsersTable().getValueAt(row, 0);
-					String service = ((GUMSServiceListComboBox) getService())
+					String service = ((DorianServiceListComboBox) getService())
 							.getSelectedService();
 					try {
 						GlobusCredential proxy = ((ProxyComboBox) getProxy())
@@ -406,7 +406,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			jTabbedPane = new JTabbedPane();
 			jTabbedPane.setBorder(BorderFactory.createTitledBorder(null,
 					"Search Criteria", TitledBorder.DEFAULT_JUSTIFICATION,
-					TitledBorder.DEFAULT_POSITION, null, GumsLookAndFeel
+					TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
 							.getPanelLabelColor()));
 			jTabbedPane.addTab(STATUS_PANEL, null, getStatus(), null);
 			jTabbedPane.addTab(INFO_PANEL, null, getJPanel1(), null);
@@ -709,11 +709,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		return city;
 	}
 
-	/**
-	 * This method initializes stateListComboBox
-	 * 
-	 * @return gov.nih.nci.cagrid.gums.idp.portal.StateListComboBox
-	 */
+
 	private StateListComboBox getState() {
 		if (state == null) {
 			state = new StateListComboBox(true);
@@ -757,11 +753,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		return email;
 	}
 
-	/**
-	 * This method initializes countryListComboBox
-	 * 
-	 * @return gov.nih.nci.cagrid.gums.idp.portal.CountryListComboBox
-	 */
+
 	private CountryListComboBox getCountry() {
 		if (country == null) {
 			country = new CountryListComboBox(true);
@@ -821,7 +813,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			jPanel2.setLayout(new GridBagLayout());
 			jPanel2.setBorder(BorderFactory.createTitledBorder(null,
 					"Login Information", TitledBorder.DEFAULT_JUSTIFICATION,
-					TitledBorder.DEFAULT_POSITION, null, GumsLookAndFeel
+					TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
 							.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints28);
@@ -853,7 +845,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		if (query == null) {
 			query = new JButton();
 			query.setText("Find Users");
-			query.setIcon(GumsLookAndFeel.getQueryIcon());
+			query.setIcon(DorianLookAndFeel.getQueryIcon());
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
@@ -914,7 +906,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			f.setEmail(format(getEmail().getText()));
 		}
 
-			String service = ((GUMSServiceListComboBox) getService())
+			String service = ((DorianServiceListComboBox) getService())
 					.getSelectedService();
 			CommunicationStyle style = new SecureConversationWithEncryption(
 					proxy);
@@ -1011,7 +1003,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 	 */
 	private JComboBox getService() {
 		if (service == null) {
-			service = new GUMSServiceListComboBox();
+			service = new DorianServiceListComboBox();
 		}
 		return service;
 	}
@@ -1056,7 +1048,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 	private JProgressBar getProgress() {
 		if (progress == null) {
 			progress = new JProgressBar();
-			 progress.setForeground(GumsLookAndFeel.getPanelLabelColor());
+			 progress.setForeground(DorianLookAndFeel.getPanelLabelColor());
 	         progress.setString("");
 	         progress.setStringPainted(true);
 		}

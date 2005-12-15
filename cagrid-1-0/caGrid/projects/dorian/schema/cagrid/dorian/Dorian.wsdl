@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions name="GUMS"
-    targetNamespace="http://cagrid.nci.nih.gov/gums"
+<definitions name="Dorian"
+    targetNamespace="http://cagrid.nci.nih.gov/dorian"
     xmlns="http://schemas.xmlsoap.org/wsdl/"
-    xmlns:tns="http://cagrid.nci.nih.gov/gums"
+    xmlns:tns="http://cagrid.nci.nih.gov/dorian"
     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
     xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd"
     xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
@@ -19,9 +19,9 @@
 		namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl"
 		location="../../wsrf/faults/WS-BaseFaults.wsdl" />
     
-<import location="gums.xsd" namespace="http://cagrid.nci.nih.gov/gums/bean"/>
-<import location="gums-idp.xsd" namespace="http://cagrid.nci.nih.gov/gums/idp/bean"/>
-<import location="gums-ifs.xsd" namespace="http://cagrid.nci.nih.gov/gums/ifs/bean"/>
+<import location="dorian.xsd" namespace="http://cagrid.nci.nih.gov/dorian/bean"/>
+<import location="dorian-idp.xsd" namespace="http://cagrid.nci.nih.gov/dorian/idp/bean"/>
+<import location="dorian-ifs.xsd" namespace="http://cagrid.nci.nih.gov/dorian/ifs/bean"/>
 
 <!--============================================================
 
@@ -29,19 +29,19 @@
                       
   ============================================================-->
 <types>
-<xsd:schema targetNamespace="http://cagrid.nci.nih.gov/gums"
-    xmlns:tns="http://cagrid.nci.nih.gov/gums"
+<xsd:schema targetNamespace="http://cagrid.nci.nih.gov/dorian"
+    xmlns:tns="http://cagrid.nci.nih.gov/dorian"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-    xmlns:gums="http://cagrid.nci.nih.gov/gums/bean"
-    xmlns:ifs="http://cagrid.nci.nih.gov/gums/ifs/bean"
-    xmlns:idp="http://cagrid.nci.nih.gov/gums/idp/bean"
+    xmlns:dorian="http://cagrid.nci.nih.gov/dorian/bean"
+    xmlns:ifs="http://cagrid.nci.nih.gov/dorian/ifs/bean"
+    xmlns:idp="http://cagrid.nci.nih.gov/dorian/idp/bean"
     >
 
 	<!-- COMMON TYPES -->    
 
-	<xsd:element name="gumsInternalFault" type="gums:GUMSInternalFault"/>
+	<xsd:element name="dorianInternalFault" type="dorian:DorianInternalFault"/>
 
-	<xsd:element name="permissionDeniedFault" type="gums:PermissionDeniedFault"/>
+	<xsd:element name="permissionDeniedFault" type="dorian:PermissionDeniedFault"/>
 
    <!-- IDP TYPES -->
  
@@ -76,7 +76,7 @@
 	
 	
 	<xsd:element name="idpAuthenticate" type="idp:basicAuthCredential"/>	
-	<xsd:element name="idpAuthenticateResponse" type="gums:SAMLAssertion"/>
+	<xsd:element name="idpAuthenticateResponse" type="dorian:SAMLAssertion"/>
 
 	
 	<xsd:element name="invalidUserPropertyFault" type="idp:InvalidUserPropertyFault"/>
@@ -89,7 +89,7 @@
 	<xsd:element name="IFSCreateProxy">
 		<xsd:complexType>
 			<xsd:sequence>
-				<xsd:element name="SAMLAssertion" minOccurs="1" maxOccurs="1" type="gums:SAMLAssertion"/>
+				<xsd:element name="SAMLAssertion" minOccurs="1" maxOccurs="1" type="dorian:SAMLAssertion"/>
 				<xsd:element name="PublicKey" minOccurs="1" maxOccurs="1" type="ifs:PublicKey"/>
 				<xsd:element name="ProxyLifetime" minOccurs="1" maxOccurs="1" type="ifs:ProxyLifetime"/>
 			</xsd:sequence>
@@ -183,7 +183,7 @@
    
 	<xsd:element name="description" type="xsd:string"/>
 
-	<xsd:element name="GUMSResourceProperties">
+	<xsd:element name="DorianResourceProperties">
 	<xsd:complexType>
 		<xsd:sequence>
 			<xsd:element ref="tns:description" minOccurs="1" maxOccurs="1"/>
@@ -240,8 +240,8 @@
 </message>
 
 
-	<message name="GUMSInternalFaultMessage">
-		<part name="fault" element="tns:gumsInternalFault" />
+	<message name="DorianInternalFaultMessage">
+		<part name="fault" element="tns:dorianInternalFault" />
 	</message>
 	
 	<message name="InvalidUserPropertyFaultMessage">
@@ -371,29 +371,29 @@
                        P O R T T Y P E
                       
   ============================================================-->
-<portType name="GUMSPortType" 
+<portType name="DorianPortType" 
     wsdlpp:extends="wsrpw:GetResourceProperty"
-    wsrp:ResourceProperties="tns:GUMSResourceProperties">
+    wsrp:ResourceProperties="tns:DorianResourceProperties">
     
 	
 	<operation name="registerWithIdP">
 		<input message="tns:RegisterWithIdPInputMessage"/>
 		<output message="tns:RegisterWithIdPOutputMessage"/>
-		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
+		<fault message="tns:DorianInternalFaultMessage" name="DorianInternalFault"/>
 	    <fault message="tns:InvalidUserPropertyFaultMessage" name="InvalidUserPropertyFault"/>
 	</operation>
 	
 	<operation name="findIdPUsers">
 		<input message="tns:IdPFindUsersInputMessage"/>
 		<output message="tns:IdPFindUsersOutputMessage"/>
-		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
+		<fault message="tns:DorianInternalFaultMessage" name="DorianInternalFault"/>
 	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
 	</operation>
 	
 	<operation name="updateIdPUser">
 		<input message="tns:IdPUpdateUserInputMessage"/>
 		<output message="tns:IdPUpdateUserOutputMessage"/>
-		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
+		<fault message="tns:DorianInternalFaultMessage" name="DorianInternalFault"/>
 	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
 	    <fault message="tns:NoSuchUserFaultMessage" name="NoSuchUserFault"/>
 	    <fault message="tns:InvalidUserPropertyFaultMessage" name="InvalidUserPropertyFault"/>
@@ -402,21 +402,21 @@
 	<operation name="removeIdPUser">
 		<input message="tns:IdPRemoveUserInputMessage"/>
 		<output message="tns:IdPRemoveUserOutputMessage"/>
-		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
+		<fault message="tns:DorianInternalFaultMessage" name="DorianInternalFault"/>
 	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
 	</operation>
 	
 	<operation name="authenticateWithIdP">
 		<input message="tns:IdPAuthenticateInputMessage"/>
 		<output message="tns:IdPAuthenticateOutputMessage"/>
-		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
+		<fault message="tns:DorianInternalFaultMessage" name="DorianInternalFault"/>
 	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
 	</operation>
 	
 	<operation name="createProxy">
 		<input message="tns:IFSCreateProxyInputMessage"/>
 		<output message="tns:IFSCreateProxyOutputMessage"/>
-		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
+		<fault message="tns:DorianInternalFaultMessage" name="DorianInternalFault"/>
 	    <fault message="tns:InvalidAssertionFaultMessage" name="InvalidAssertionFault"/>
 	    <fault message="tns:InvalidProxyFaultMessage" name="InvalidProxyFault"/>
 	    <fault message="tns:UserPolicyFaultMessage" name="UserPolicyFault"/>
@@ -426,7 +426,7 @@
 	<operation name="getTrustedIdPs">
 		<input message="tns:IFSFindTrustedIdPsInputMessage"/>
 		<output message="tns:IFSFindTrustedIdPsOutputMessage"/>
-		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
+		<fault message="tns:DorianInternalFaultMessage" name="DorianInternalFault"/>
 	    <fault message="tns:InvalidUserFaultMessage" name="InvalidUserFault"/>
 	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
 	</operation>
@@ -434,7 +434,7 @@
 	<operation name="addTrustedIdP">
 		<input message="tns:IFSAddTrustedIdPInputMessage"/>
 		<output message="tns:IFSAddTrustedIdPOutputMessage"/>
-		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
+		<fault message="tns:DorianInternalFaultMessage" name="DorianInternalFault"/>
 	    <fault message="tns:InvalidUserFaultMessage" name="InvalidUserFault"/>
 	    <fault message="tns:InvalidTrustedIdPFaultMessage" name="InvalidTrustedIdPFault"/>
 	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
@@ -443,7 +443,7 @@
 	<operation name="updateTrustedIdP">
 		<input message="tns:IFSUpdateTrustedIdPInputMessage"/>
 		<output message="tns:IFSUpdateTrustedIdPOutputMessage"/>
-		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
+		<fault message="tns:DorianInternalFaultMessage" name="DorianInternalFault"/>
 	    <fault message="tns:InvalidUserFaultMessage" name="InvalidUserFault"/>
 	    <fault message="tns:InvalidTrustedIdPFaultMessage" name="InvalidTrustedIdPFault"/>
 	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
@@ -452,7 +452,7 @@
 	<operation name="removeTrustedIdP">
 		<input message="tns:IFSRemoveTrustedIdPInputMessage"/>
 		<output message="tns:IFSRemoveTrustedIdPOutputMessage"/>
-		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
+		<fault message="tns:DorianInternalFaultMessage" name="DorianInternalFault"/>
 	    <fault message="tns:InvalidUserFaultMessage" name="InvalidUserFault"/>
 	    <fault message="tns:InvalidTrustedIdPFaultMessage" name="InvalidTrustedIdPFault"/>
 	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
@@ -464,7 +464,7 @@
 	<operation name="findIFSUsers">
 		<input message="tns:IFSFindUsersInputMessage"/>
 		<output message="tns:IFSFindUsersOutputMessage"/>
-		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
+		<fault message="tns:DorianInternalFaultMessage" name="DorianInternalFault"/>
 	    <fault message="tns:InvalidUserFaultMessage" name="InvalidUserFault"/>
 	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
 	</operation>
@@ -472,7 +472,7 @@
 		<operation name="updateIFSUser">
 		<input message="tns:IFSUpdateUserInputMessage"/>
 		<output message="tns:IFSUpdateUserOutputMessage"/>
-		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
+		<fault message="tns:DorianInternalFaultMessage" name="DorianInternalFault"/>
 	    <fault message="tns:InvalidUserFaultMessage" name="InvalidUserFault"/>
 	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
 	</operation>
@@ -480,7 +480,7 @@
 	<operation name="removeIFSUser">
 		<input message="tns:IFSRemoveUserInputMessage"/>
 		<output message="tns:IFSRemoveUserOutputMessage"/>
-		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
+		<fault message="tns:DorianInternalFaultMessage" name="DorianInternalFault"/>
 	    <fault message="tns:InvalidUserFaultMessage" name="InvalidUserFault"/>
 	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
 	</operation>
@@ -490,7 +490,7 @@
 	<operation name="renewIFSUserCredentials">
 		<input message="tns:IFSRenewUserCredentialsInputMessage"/>
 		<output message="tns:IFSRenewUserCredentialsOutputMessage"/>
-		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
+		<fault message="tns:DorianInternalFaultMessage" name="DorianInternalFault"/>
 	    <fault message="tns:InvalidUserFaultMessage" name="InvalidUserFault"/>
 	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
 	</operation>
@@ -499,7 +499,7 @@
 	<operation name="getIFSUserPolicies">
 		<input message="tns:IFSGetUserPoliciesInputMessage"/>
 		<output message="tns:IFSGetUserPoliciesOutputMessage"/>
-		<fault message="tns:GUMSInternalFaultMessage" name="GUMSInternalFault"/>
+		<fault message="tns:DorianInternalFaultMessage" name="DorianInternalFault"/>
 	    <fault message="tns:InvalidUserFaultMessage" name="InvalidUserFault"/>
 	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
 	</operation>

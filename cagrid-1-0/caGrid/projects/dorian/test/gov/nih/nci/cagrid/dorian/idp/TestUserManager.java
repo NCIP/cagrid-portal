@@ -1,17 +1,17 @@
-package gov.nih.nci.cagrid.gums.idp;
+package gov.nih.nci.cagrid.dorian.idp;
 
-import gov.nih.nci.cagrid.gums.common.Crypt;
-import gov.nih.nci.cagrid.gums.common.Database;
-import gov.nih.nci.cagrid.gums.common.FaultUtil;
-import gov.nih.nci.cagrid.gums.common.SimpleResourceManager;
-import gov.nih.nci.cagrid.gums.idp.bean.CountryCode;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUserFilter;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUserRole;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUserStatus;
-import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
-import gov.nih.nci.cagrid.gums.idp.bean.StateCode;
-import gov.nih.nci.cagrid.gums.test.TestUtils;
+import gov.nih.nci.cagrid.dorian.common.Crypt;
+import gov.nih.nci.cagrid.dorian.common.Database;
+import gov.nih.nci.cagrid.dorian.common.FaultUtil;
+import gov.nih.nci.cagrid.dorian.common.SimpleResourceManager;
+import gov.nih.nci.cagrid.dorian.idp.bean.CountryCode;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserRole;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserStatus;
+import gov.nih.nci.cagrid.dorian.idp.bean.NoSuchUserFault;
+import gov.nih.nci.cagrid.dorian.idp.bean.StateCode;
+import gov.nih.nci.cagrid.dorian.test.TestUtils;
 
 import java.io.File;
 

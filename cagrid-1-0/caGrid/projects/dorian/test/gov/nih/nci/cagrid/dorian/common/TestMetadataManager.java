@@ -1,8 +1,8 @@
-package gov.nih.nci.cagrid.gums.common;
+package gov.nih.nci.cagrid.dorian.common;
 
-import gov.nih.nci.cagrid.gums.bean.Metadata;
-import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthority;
-import gov.nih.nci.cagrid.gums.test.TestUtils;
+import gov.nih.nci.cagrid.dorian.bean.Metadata;
+import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthority;
+import gov.nih.nci.cagrid.dorian.test.TestUtils;
 import junit.framework.TestCase;
 
 /**
@@ -113,7 +113,7 @@ public class TestMetadataManager extends TestCase {
 		try {
 			db=TestUtils.getDB();
 			assertEquals(0,db.getUsedConnectionCount());
-			GUMSCertificateAuthority.CA_TABLE = TABLE;
+			DorianCertificateAuthority.CA_TABLE = TABLE;
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

@@ -1,22 +1,22 @@
-package gov.nih.nci.cagrid.gums.ifs;
+package gov.nih.nci.cagrid.dorian.ifs;
 
-import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
-import gov.nih.nci.cagrid.gums.common.AddressValidator;
-import gov.nih.nci.cagrid.gums.common.Database;
-import gov.nih.nci.cagrid.gums.common.FaultHelper;
-import gov.nih.nci.cagrid.gums.common.GUMSObject;
-import gov.nih.nci.cagrid.gums.common.IOUtils;
-import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
-import gov.nih.nci.cagrid.gums.ifs.bean.CredentialsFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserFilter;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserRole;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
-import gov.nih.nci.cagrid.gums.ifs.bean.InvalidPasswordFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.InvalidUserFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
+import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
+import gov.nih.nci.cagrid.dorian.common.AddressValidator;
+import gov.nih.nci.cagrid.dorian.common.Database;
+import gov.nih.nci.cagrid.dorian.common.DorianObject;
+import gov.nih.nci.cagrid.dorian.common.FaultHelper;
+import gov.nih.nci.cagrid.dorian.common.IOUtils;
+import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
+import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
+import gov.nih.nci.cagrid.dorian.ifs.bean.CredentialsFault;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserRole;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserStatus;
+import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidPasswordFault;
+import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidUserFault;
+import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 
 import java.io.IOException;
 import java.security.KeyPair;
@@ -40,7 +40,7 @@ import org.bouncycastle.jce.PKCS10CertificationRequest;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class UserManager extends GUMSObject {
+public class UserManager extends DorianObject {
 
 	private static final String USERS_TABLE = "IFS_USERS";
 
@@ -66,7 +66,7 @@ public class UserManager extends GUMSObject {
 	}
 
 	public synchronized boolean determineIfUserExists(long idpId, String uid)
-			throws GUMSInternalFault {
+			throws DorianInternalFault {
 		buildDatabase();
 		Connection c = null;
 		boolean exists = false;
@@ -85,11 +85,11 @@ public class UserManager extends GUMSObject {
 			s.close();
 
 		} catch (Exception e) {
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Unexpected Database Error");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
 			db.getConnectionManager().releaseConnection(c);
@@ -101,24 +101,24 @@ public class UserManager extends GUMSObject {
 		return "[IdPId=" + idpId + ", UID=" + uid + "]";
 	}
 
-	public PrivateKey getUsersPrivateKey(IFSUser user) throws GUMSInternalFault {
+	public PrivateKey getUsersPrivateKey(IFSUser user) throws DorianInternalFault {
 		try {
 			return this.credentialsManager.getPrivateKey(
 					getCredentialsManagerUID(user.getIdPId(), user.getUID()),
 					null);
 		} catch (InvalidPasswordFault e) {
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Error loading the user " + user.getGridId()
 					+ "'s private key.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		}
 	}
 
 	public synchronized IFSUser renewUserCredentials(IFSUser user)
-			throws GUMSInternalFault, InvalidUserFault {
+			throws DorianInternalFault, InvalidUserFault {
 		X509Certificate cert = createUserCredentials(user.getIdPId(), user
 				.getUID());
 		user.setGridId(subjectToIdentity(cert.getSubjectDN().getName()));
@@ -128,21 +128,21 @@ public class UserManager extends GUMSObject {
 			this.credentialsManager.deleteCredentials(getCredentialsManagerUID(
 					user.getIdPId(), user.getUID()));
 			throw iuf;
-		} catch (GUMSInternalFault gif) {
+		} catch (DorianInternalFault gif) {
 			this.credentialsManager.deleteCredentials(getCredentialsManagerUID(
 					user.getIdPId(), user.getUID()));
 			throw gif;
 		}
 		try {
-			user.setCertificate(new gov.nih.nci.cagrid.gums.ifs.bean.X509Certificate(CertUtil.writeCertificateToString(cert)));
+			user.setCertificate(new gov.nih.nci.cagrid.dorian.ifs.bean.X509Certificate(CertUtil.writeCertificateToString(cert)));
 		} catch (IOException ioe) {
 			this.credentialsManager.deleteCredentials(getCredentialsManagerUID(
 					user.getIdPId(), user.getUID()));
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Error renewing credentials.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(ioe);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 
 		}
@@ -157,7 +157,7 @@ public class UserManager extends GUMSObject {
 	}
 
 	private synchronized X509Certificate createUserCredentials(long idpId,
-			String uid) throws GUMSInternalFault {
+			String uid) throws DorianInternalFault {
 		try {
 
 			String caSubject = ca.getCACertificate().getSubjectDN().getName();
@@ -181,11 +181,11 @@ public class UserManager extends GUMSObject {
 			return cert;
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Error creating credentials.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		}
 	}
@@ -201,7 +201,7 @@ public class UserManager extends GUMSObject {
 	}
 
 	public synchronized IFSUser getUser(long idpId, String uid)
-			throws GUMSInternalFault, InvalidUserFault {
+			throws DorianInternalFault, InvalidUserFault {
 		this.buildDatabase();
 		IFSUser user = new IFSUser();
 		Connection c = null;
@@ -228,7 +228,7 @@ public class UserManager extends GUMSObject {
 				X509Certificate cert = credentialsManager
 						.getCertificate(getCredentialsManagerUID(user
 								.getIdPId(), user.getUID()));
-				user.setCertificate(new gov.nih.nci.cagrid.gums.ifs.bean.X509Certificate(CertUtil.writeCertificateToString(cert)));
+				user.setCertificate(new gov.nih.nci.cagrid.dorian.ifs.bean.X509Certificate(CertUtil.writeCertificateToString(cert)));
 			} else {
 				InvalidUserFault fault = new InvalidUserFault();
 				fault.setFaultString("No such user "
@@ -243,12 +243,12 @@ public class UserManager extends GUMSObject {
 			throw iuf;
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Unexpected Error, could not obtain the user "
 					+ getCredentialsManagerUID(user.getIdPId(), user.getUID()));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
 			db.getConnectionManager().releaseConnection(c);
@@ -257,7 +257,7 @@ public class UserManager extends GUMSObject {
 	}
 
 	public synchronized IFSUser getUser(String gridId)
-			throws GUMSInternalFault, InvalidUserFault {
+			throws DorianInternalFault, InvalidUserFault {
 		this.buildDatabase();
 		IFSUser user = new IFSUser();
 		Connection c = null;
@@ -284,7 +284,7 @@ public class UserManager extends GUMSObject {
 				X509Certificate cert = credentialsManager
 						.getCertificate(getCredentialsManagerUID(user
 								.getIdPId(), user.getUID()));
-				user.setCertificate(new gov.nih.nci.cagrid.gums.ifs.bean.X509Certificate(CertUtil.writeCertificateToString(cert)));
+				user.setCertificate(new gov.nih.nci.cagrid.dorian.ifs.bean.X509Certificate(CertUtil.writeCertificateToString(cert)));
 			} else {
 				InvalidUserFault fault = new InvalidUserFault();
 				fault.setFaultString("No such user " + gridId);
@@ -297,12 +297,12 @@ public class UserManager extends GUMSObject {
 			throw iuf;
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Unexpected Error, could not obtain the user "
 					+ gridId);
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
 			db.getConnectionManager().releaseConnection(c);
@@ -311,7 +311,7 @@ public class UserManager extends GUMSObject {
 	}
 
 	public synchronized IFSUser[] getUsers(IFSUserFilter filter)
-			throws GUMSInternalFault {
+			throws DorianInternalFault {
 
 		this.buildDatabase();
 		Connection c = null;
@@ -379,7 +379,7 @@ public class UserManager extends GUMSObject {
 				X509Certificate cert = credentialsManager
 						.getCertificate(getCredentialsManagerUID(user
 								.getIdPId(), user.getUID()));
-				user.setCertificate(new gov.nih.nci.cagrid.gums.ifs.bean.X509Certificate(CertUtil.writeCertificateToString(cert)));
+				user.setCertificate(new gov.nih.nci.cagrid.dorian.ifs.bean.X509Certificate(CertUtil.writeCertificateToString(cert)));
 				users.add(user);
 			}
 			rs.close();
@@ -393,19 +393,19 @@ public class UserManager extends GUMSObject {
 
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault
 					.setFaultString("Unexpected Error, could not obtain a list of users");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
 			db.getConnectionManager().releaseConnection(c);
 		}
 	}
 
-	public synchronized IFSUser addUser(IFSUser user) throws GUMSInternalFault,
+	public synchronized IFSUser addUser(IFSUser user) throws DorianInternalFault,
 			CredentialsFault, InvalidUserFault {
 		this.buildDatabase();
 		if (!determineIfUserExists(user.getIdPId(), user.getUID())) {
@@ -413,7 +413,7 @@ public class UserManager extends GUMSObject {
 					.getUID());
 			try {
 				// Write method for creating and setting a users credentials
-				user.setCertificate(new gov.nih.nci.cagrid.gums.ifs.bean.X509Certificate(CertUtil.writeCertificateToString(cert)));
+				user.setCertificate(new gov.nih.nci.cagrid.dorian.ifs.bean.X509Certificate(CertUtil.writeCertificateToString(cert)));
 				user
 						.setGridId(subjectToIdentity(cert.getSubjectDN()
 								.toString()));
@@ -454,7 +454,7 @@ public class UserManager extends GUMSObject {
 
 				}
 				logError(e.getMessage(), e);
-				GUMSInternalFault fault = new GUMSInternalFault();
+				DorianInternalFault fault = new DorianInternalFault();
 				fault
 						.setFaultString("Error adding the user "
 								+ getCredentialsManagerUID(user.getIdPId(),
@@ -462,12 +462,12 @@ public class UserManager extends GUMSObject {
 								+ " to the IFS, an unexpected database error occurred.");
 				FaultHelper helper = new FaultHelper(fault);
 				helper.addFaultCause(e);
-				fault = (GUMSInternalFault) helper.getFault();
+				fault = (DorianInternalFault) helper.getFault();
 				throw fault;
 			}
 
 		} else {
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Error adding the user, "
 					+ getCredentialsManagerUID(user.getIdPId(), user.getUID())
 					+ ", the user already exists!!!");
@@ -477,7 +477,7 @@ public class UserManager extends GUMSObject {
 		return user;
 	}
 
-	public synchronized void updateUser(IFSUser u) throws GUMSInternalFault,
+	public synchronized void updateUser(IFSUser u) throws DorianInternalFault,
 			InvalidUserFault {
 		this.buildDatabase();
 		String credId = getCredentialsManagerUID(u.getIdPId(), u.getUID());
@@ -564,7 +564,7 @@ public class UserManager extends GUMSObject {
 		}
 	}
 
-	public synchronized void removeUser(IFSUser user) throws GUMSInternalFault,InvalidUserFault {
+	public synchronized void removeUser(IFSUser user) throws DorianInternalFault,InvalidUserFault {
 		this.buildDatabase();
 		if (determineIfUserExists(user.getIdPId(), user.getUID())) {
 			this.removeUser(user.getIdPId(), user.getUID());
@@ -576,7 +576,7 @@ public class UserManager extends GUMSObject {
 	}
 
 	public synchronized void removeUser(long idpId, String uid)
-			throws GUMSInternalFault {
+			throws DorianInternalFault {
 		this.buildDatabase();
 		db.update("delete from " + USERS_TABLE + " WHERE IDP_ID=" + idpId
 				+ " AND UID='" + uid + "'");
@@ -591,7 +591,7 @@ public class UserManager extends GUMSObject {
 		}
 	}
 
-	public void buildDatabase() throws GUMSInternalFault {
+	public void buildDatabase() throws DorianInternalFault {
 		if (!dbBuilt) {
 			if (!this.db.tableExists(USERS_TABLE)) {
 				String users = "CREATE TABLE " + USERS_TABLE + " ("
@@ -616,29 +616,29 @@ public class UserManager extends GUMSObject {
 							usr.setUserStatus(IFSUserStatus.Active);
 							this.updateUser(usr);
 						} else {
-							GUMSInternalFault fault = new GUMSInternalFault();
+							DorianInternalFault fault = new DorianInternalFault();
 							fault
 									.setFaultString("Unexpected error initializing the User Manager, No initial IFS user specified.");
 							throw fault;
 						}
 					} else {
-						GUMSInternalFault fault = new GUMSInternalFault();
+						DorianInternalFault fault = new DorianInternalFault();
 						fault
 								.setFaultString("Unexpected error initializing the User Manager, No initial trusted IdP specified.");
 						throw fault;
 					}
 
-				} catch (GUMSInternalFault e) {
+				} catch (DorianInternalFault e) {
 					throw e;
 
 				} catch (Exception e) {
-					GUMSInternalFault fault = new GUMSInternalFault();
+					DorianInternalFault fault = new DorianInternalFault();
 					fault
 							.setFaultString("Unexpected error initializing the User Manager.");
 					FaultHelper helper = new FaultHelper(fault);
 					helper.addDescription(IOUtils.getExceptionMessage(e));
 					helper.addFaultCause(e);
-					fault = (GUMSInternalFault) helper.getFault();
+					fault = (DorianInternalFault) helper.getFault();
 					throw fault;
 
 				}

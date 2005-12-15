@@ -1,11 +1,6 @@
-/**
- * GUMSInternalFault.java
- *
- * This file was auto-generated from WSDL
- * by the Apache Axis 1.2RC2 Jun 16, 2005 (10:54:53 EDT) WSDL2Java emitter.
- */
 
-package gov.nih.nci.cagrid.gums.ca;
+
+package gov.nih.nci.cagrid.dorian.ca;
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -64,7 +59,7 @@ public class NoCACredentialsFault  extends org.oasis.wsrf.faults.BaseFaultType  
         new org.apache.axis.description.TypeDesc(NoCACredentialsFault.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("http://cagrid.nci.nih.gov/gums/bean", "GUMSInternalFault"));
+        typeDesc.setXmlType(new javax.xml.namespace.QName("http://cagrid.nci.nih.gov/dorian/bean", "NoCACredentialsFault"));
     }
 
     /**

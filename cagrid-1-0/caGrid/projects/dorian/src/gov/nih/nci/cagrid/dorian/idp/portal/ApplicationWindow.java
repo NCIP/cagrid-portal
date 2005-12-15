@@ -1,10 +1,10 @@
-package gov.nih.nci.cagrid.gums.idp.portal;
+package gov.nih.nci.cagrid.dorian.idp.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.gums.client.IdPRegistrationClient;
-import gov.nih.nci.cagrid.gums.idp.bean.Application;
-import gov.nih.nci.cagrid.gums.portal.GUMSServiceListComboBox;
-import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
+import gov.nih.nci.cagrid.dorian.client.IdPRegistrationClient;
+import gov.nih.nci.cagrid.dorian.idp.bean.Application;
+import gov.nih.nci.cagrid.dorian.portal.DorianServiceListComboBox;
+import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -123,7 +123,7 @@ public class ApplicationWindow extends GridPortalComponent {
 		// this.setSize(500, 500);
 		this.setContentPane(getJContentPane());
 		this.setTitle("IdP User Application");
-		this.setFrameIcon(GumsLookAndFeel.getApplicationIcon());
+		this.setFrameIcon(DorianLookAndFeel.getApplicationIcon());
 	}
 
 	/**
@@ -247,7 +247,7 @@ public class ApplicationWindow extends GridPortalComponent {
 					null, "Login Information",
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					GumsLookAndFeel.getPanelLabelColor()));
+					DorianLookAndFeel.getPanelLabelColor()));
 			authPanel.add(serviceLabel, gridBagConstraints3);
 			authPanel.add(getService(), gridBagConstraints4);
 			authPanel.add(usernameLabel, gridBagConstraints5);
@@ -424,7 +424,7 @@ public class ApplicationWindow extends GridPortalComponent {
 					null, "Personal Information",
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					GumsLookAndFeel.getPanelLabelColor()));
+					DorianLookAndFeel.getPanelLabelColor()));
 			infoPanel.add(firstNameLabel, gridBagConstraints11);
 			infoPanel.add(getFirstName(), gridBagConstraints12);
 			infoPanel.add(lastNameLabel, gridBagConstraints13);
@@ -472,7 +472,7 @@ public class ApplicationWindow extends GridPortalComponent {
 	 */
 	private JComboBox getService() {
 		if (service == null) {
-			service = new GUMSServiceListComboBox();
+			service = new DorianServiceListComboBox();
 		}
 		return service;
 	}
@@ -649,7 +649,7 @@ public class ApplicationWindow extends GridPortalComponent {
 
 				}
 			});
-			apply.setIcon(GumsLookAndFeel.getSelectIcon());
+			apply.setIcon(DorianLookAndFeel.getSelectIcon());
 		}
 		return apply;
 	}
@@ -668,7 +668,7 @@ public class ApplicationWindow extends GridPortalComponent {
 					dispose();
 				}
 			});
-			cancel.setIcon(GumsLookAndFeel.getCloseIcon());
+			cancel.setIcon(DorianLookAndFeel.getCloseIcon());
 		}
 		return cancel;
 	}
@@ -713,7 +713,7 @@ public class ApplicationWindow extends GridPortalComponent {
 					.getSelectedCountry());
 			a.setPhoneNumber(this.getPhoneNumber().getText());
 			a.setEmail(this.getEmail().getText());
-			final String service = ((GUMSServiceListComboBox) this.getService())
+			final String service = ((DorianServiceListComboBox) this.getService())
 					.getSelectedService();
 
 			MobiusRunnable runner = new MobiusRunnable() {

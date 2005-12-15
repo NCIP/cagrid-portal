@@ -1,10 +1,10 @@
-package gov.nih.nci.cagrid.gums.ca;
+package gov.nih.nci.cagrid.dorian.ca;
 
-import gov.nih.nci.cagrid.gums.common.Database;
-import gov.nih.nci.cagrid.gums.common.FaultHelper;
-import gov.nih.nci.cagrid.gums.common.GUMSObject;
-import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
+import gov.nih.nci.cagrid.dorian.common.Database;
+import gov.nih.nci.cagrid.dorian.common.FaultHelper;
+import gov.nih.nci.cagrid.dorian.common.DorianObject;
+import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
+import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.StringReader;
@@ -26,7 +26,7 @@ import org.bouncycastle.jce.PKCS10CertificationRequest;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class GUMSCertificateAuthority extends GUMSObject implements
+public class DorianCertificateAuthority extends DorianObject implements
 		CertificateAuthority {
 
 	public static String CA_TABLE = "CERTIFICATE_AUTHORITY";
@@ -37,10 +37,10 @@ public class GUMSCertificateAuthority extends GUMSObject implements
 
 	private boolean dbBuilt = false;
 
-	private GUMSCertificateAuthorityConf conf;
+	private DorianCertificateAuthorityConf conf;
 
-	public GUMSCertificateAuthority(Database db,
-			GUMSCertificateAuthorityConf conf) {
+	public DorianCertificateAuthority(Database db,
+			DorianCertificateAuthorityConf conf) {
 		this.db = db;
 		this.conf = conf;
 	}
@@ -84,7 +84,7 @@ public class GUMSCertificateAuthority extends GUMSObject implements
 			logError(e.getMessage(), e);
 			CertificateAuthorityFault fault = new CertificateAuthorityFault();
 			fault
-					.setFaultString("Unexpected Error, could not initialize the GUMS Certificate Authority.");
+					.setFaultString("Unexpected Error, could not initialize the Dorian Certificate Authority.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (CertificateAuthorityFault) helper.getFault();
@@ -100,7 +100,7 @@ public class GUMSCertificateAuthority extends GUMSObject implements
 			logError(e.getMessage(), e);
 			CertificateAuthorityFault fault = new CertificateAuthorityFault();
 			fault
-					.setFaultString("Unexpected Error, could not destroy GUMS Certificate Authority.");
+					.setFaultString("Unexpected Error, could not destroy Dorian Certificate Authority.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (CertificateAuthorityFault) helper.getFault();

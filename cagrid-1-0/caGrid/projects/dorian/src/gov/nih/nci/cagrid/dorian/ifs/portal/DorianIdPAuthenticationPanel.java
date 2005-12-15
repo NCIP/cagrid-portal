@@ -1,8 +1,8 @@
-package gov.nih.nci.cagrid.gums.ifs.portal;
+package gov.nih.nci.cagrid.dorian.ifs.portal;
 
-import gov.nih.nci.cagrid.gums.client.IdPAuthenticationClient;
-import gov.nih.nci.cagrid.gums.idp.bean.BasicAuthCredential;
-import gov.nih.nci.cagrid.gums.portal.IdPConf;
+import gov.nih.nci.cagrid.dorian.client.IdPAuthenticationClient;
+import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
+import gov.nih.nci.cagrid.dorian.portal.IdPConf;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 
 import org.opensaml.SAMLAssertion;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -23,7 +24,7 @@ import org.opensaml.SAMLAssertion;
  *          Exp $
  */
 
-public class GUMSIdPAuthenticationPanel extends IdPAuthenticationPanel {
+public class DorianIdPAuthenticationPanel extends IdPAuthenticationPanel {
 
 	private JPanel loginPanel = null;
 	private JLabel userIdLabel = null;
@@ -31,7 +32,7 @@ public class GUMSIdPAuthenticationPanel extends IdPAuthenticationPanel {
 	private JLabel passwordLabel = null;
 	private JPasswordField password = null;
 
-	public GUMSIdPAuthenticationPanel(IdPConf conf) {
+	public DorianIdPAuthenticationPanel(IdPConf conf) {
 		super(conf);
 		initialize();
 	}

@@ -1,10 +1,10 @@
-package gov.nih.nci.cagrid.gums.ifs.portal;
+package gov.nih.nci.cagrid.dorian.ifs.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.gums.common.ProxyUtil;
-import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
-import gov.nih.nci.cagrid.gums.portal.ProxyCaddy;
-import gov.nih.nci.cagrid.gums.portal.ProxyManager;
+import gov.nih.nci.cagrid.dorian.common.ProxyUtil;
+import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
+import gov.nih.nci.cagrid.dorian.portal.ProxyCaddy;
+import gov.nih.nci.cagrid.dorian.portal.ProxyManager;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -111,7 +111,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 	private void initialize() {
 		this.setSize(500, 400);
 		this.setContentPane(getJContentPane());
-		this.setFrameIcon(GumsLookAndFeel.getProxyManagerIcon());
+		this.setFrameIcon(DorianLookAndFeel.getProxyManagerIcon());
 		this.setTitle("Proxy Manager");
 	}
 
@@ -297,7 +297,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 									"Proxy Information",
 									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, GumsLookAndFeel.getPanelLabelColor()));
+									null, DorianLookAndFeel.getPanelLabelColor()));
 			proxyInformation.add(getIdentity(), gridBagConstraints7);
 			proxyInformation.add(getIssuer(), gridBagConstraints5);
 			proxyInformation.add(getTimeLeft(), gridBagConstraints12);
@@ -347,7 +347,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		if (jButton == null) {
 			jButton = new JButton();
 			jButton.setText("Close");
-			jButton.setIcon(GumsLookAndFeel.getCloseIcon());
+			jButton.setIcon(DorianLookAndFeel.getCloseIcon());
 			jButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();
@@ -432,7 +432,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 									"Certificate Chain",
 									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, GumsLookAndFeel.getPanelLabelColor()));
+									null, DorianLookAndFeel.getPanelLabelColor()));
 			certificateChain.add(getJScrollPane(), gridBagConstraints13);
 		}
 		return certificateChain;
@@ -481,7 +481,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 					null, "Select Proxy",
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					GumsLookAndFeel.getPanelLabelColor()));
+					DorianLookAndFeel.getPanelLabelColor()));
 			proxyPanel.setLayout(new GridBagLayout());
 			proxyPanel.add(getProxy(), gridBagConstraints15);
 		}
@@ -530,7 +530,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		if (viewCertificate == null) {
 			viewCertificate = new JButton();
 			viewCertificate.setText("View Certificate");
-			viewCertificate.setIcon(GumsLookAndFeel.getProxyIcon());
+			viewCertificate.setIcon(DorianLookAndFeel.getProxyIcon());
 			viewCertificate
 					.addActionListener(new java.awt.event.ActionListener() {
 
@@ -561,7 +561,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 
 				}
 			});
-			saveProxy.setIcon(GumsLookAndFeel.getSaveIcon());
+			saveProxy.setIcon(DorianLookAndFeel.getSaveIcon());
 		}
 		return saveProxy;
 	}
@@ -604,7 +604,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 							}
 						}
 					});
-			setDefaultProxy.setIcon(GumsLookAndFeel.getGreenFlagIcon());
+			setDefaultProxy.setIcon(DorianLookAndFeel.getGreenFlagIcon());
 		}
 		return setDefaultProxy;
 	}
@@ -618,7 +618,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		if (deleteProxy == null) {
 			deleteProxy = new JButton();
 			deleteProxy.setText("Delete Proxy");
-			deleteProxy.setIcon(GumsLookAndFeel.getDeleteProxyIcon());
+			deleteProxy.setIcon(DorianLookAndFeel.getDeleteProxyIcon());
 			deleteProxy.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					ProxyCaddy caddy = (ProxyCaddy) getProxy()

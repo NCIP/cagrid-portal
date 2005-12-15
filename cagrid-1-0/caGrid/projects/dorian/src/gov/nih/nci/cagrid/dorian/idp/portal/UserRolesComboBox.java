@@ -1,6 +1,7 @@
-package gov.nih.nci.cagrid.gums.idp.portal;
+package gov.nih.nci.cagrid.dorian.idp.portal;
 
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUserRole;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserRole;
+
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>

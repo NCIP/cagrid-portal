@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.gums.ca;
+package gov.nih.nci.cagrid.dorian.ca;
 
 
 import java.security.cert.X509Certificate;

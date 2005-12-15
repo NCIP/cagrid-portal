@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.gums.portal;
+package gov.nih.nci.cagrid.dorian.portal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,25 +15,25 @@ import org.projectmobius.common.MobiusResourceManager;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class GumsPortalConf implements AbstractMobiusConfiguration {
+public class DorianPortalConf implements AbstractMobiusConfiguration {
 
-	public static String RESOURCE = "GumsPortalConf";
+	public static String RESOURCE = "DorianPortalConf";
 
-	public List gumsServices;
+	public List dorianServices;
 
 	private List idps;
 
-	public GumsPortalConf() {
+	public DorianPortalConf() {
 		this.idps = new ArrayList();
 	}
 
-	public List getGumsServiceList() {
-		return gumsServices;
+	public List getDorianServiceList() {
+		return dorianServices;
 	}
 
-	private static String SERVICES_ELEMENT = "gums-services";
+	private static String SERVICES_ELEMENT = "dorian-services";
 
-	private static String SERVICE_ELEMENT = "gums-service";
+	private static String SERVICE_ELEMENT = "dorian-service";
 
 	private static String IDPS_ELEMENT = "idps";
 
@@ -41,7 +41,7 @@ public class GumsPortalConf implements AbstractMobiusConfiguration {
 
 	public void parse(MobiusResourceManager resourceManager, Element config)
 			throws MobiusException {
-		this.gumsServices = new ArrayList();
+		this.dorianServices = new ArrayList();
 
 		Element idpsDOM = config.getChild(IDPS_ELEMENT, config.getNamespace());
 		List idpList = idpsDOM.getChildren(IDP_ELEMENT, config.getNamespace());
@@ -61,7 +61,7 @@ public class GumsPortalConf implements AbstractMobiusConfiguration {
 		for (int i = 0; i < serviceList.size(); i++) {
 			String service = ((Element) serviceList.get(i)).getText();
 			if (service != null) {
-				gumsServices.add(service);
+				dorianServices.add(service);
 			}
 		}
 

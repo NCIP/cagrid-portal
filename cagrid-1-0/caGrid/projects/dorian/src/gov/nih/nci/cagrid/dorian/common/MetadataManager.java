@@ -1,7 +1,7 @@
-package gov.nih.nci.cagrid.gums.common;
+package gov.nih.nci.cagrid.dorian.common;
 
-import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.bean.Metadata;
+import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.bean.Metadata;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -15,7 +15,7 @@ import java.sql.Statement;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class MetadataManager extends GUMSObject {
+public class MetadataManager extends DorianObject {
 	private Database db;
 
 	private boolean dbBuilt = false;
@@ -27,7 +27,7 @@ public class MetadataManager extends GUMSObject {
 		this.table = table;
 	}
 
-	public boolean exists(String name) throws GUMSInternalFault {
+	public boolean exists(String name) throws DorianInternalFault {
 		this.buildDatabase();
 		Connection c = null;
 		boolean exists = false;
@@ -47,13 +47,13 @@ public class MetadataManager extends GUMSObject {
 
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault
 					.setFaultString("Unexpected Database Error, could not determine if the metadata "
 							+ name + " exists.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
 			db.getConnectionManager().releaseConnection(c);
@@ -61,20 +61,20 @@ public class MetadataManager extends GUMSObject {
 		return exists;
 	}
 
-	public synchronized void insert(Metadata metadata) throws GUMSInternalFault {
+	public synchronized void insert(Metadata metadata) throws DorianInternalFault {
 		this.buildDatabase();
 		if (!exists(metadata.getName())) {
 			db.update("INSERT INTO " + table + " VALUES('" + metadata.getName()
 					+ "','"+metadata.getDescription()+ "','" + metadata.getValue() + "')");
 		} else {
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Could not insert the metadata "
 					+ metadata.getName() + " because it already exists.");
 			throw fault;
 		}
 	}
 
-	public synchronized void update(Metadata metadata) throws GUMSInternalFault {
+	public synchronized void update(Metadata metadata) throws DorianInternalFault {
 		this.buildDatabase();
 		if (exists(metadata.getName())) {
 			db.update("update " + table + " SET DESCRIPTION='"+metadata.getDescription()+"',VALUE='" + metadata.getValue()
@@ -84,12 +84,12 @@ public class MetadataManager extends GUMSObject {
 		}
 	}
 
-	public synchronized void remove(String name) throws GUMSInternalFault {
+	public synchronized void remove(String name) throws DorianInternalFault {
 		this.buildDatabase();
 		db.update("DELETE FROM " + table + " WHERE NAME='" + name + "'");
 	}
 
-	public Metadata get(String name) throws GUMSInternalFault {
+	public Metadata get(String name) throws DorianInternalFault {
 		this.buildDatabase();
 		Connection c = null;
 
@@ -109,13 +109,13 @@ public class MetadataManager extends GUMSObject {
 
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault
 					.setFaultString("Unexpected Database Error, obtain the metadata "
 							+ name + ".");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
 			db.getConnectionManager().releaseConnection(c);
@@ -132,12 +132,12 @@ public class MetadataManager extends GUMSObject {
 		}
 	}
 
-	public void destroy() throws GUMSInternalFault {
+	public void destroy() throws DorianInternalFault {
 		db.update("DROP TABLE IF EXISTS " + table);
 		dbBuilt = false;
 	}
 
-	private void buildDatabase() throws GUMSInternalFault {
+	private void buildDatabase() throws DorianInternalFault {
 		if (!dbBuilt) {
 			if (!this.db.tableExists(table)) {
 				String applications = "CREATE TABLE " + table + " ("

@@ -1,9 +1,9 @@
-package gov.nih.nci.cagrid.gums.ca;
+package gov.nih.nci.cagrid.dorian.ca;
 
-import gov.nih.nci.cagrid.gums.common.Database;
-import gov.nih.nci.cagrid.gums.common.FaultUtil;
-import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
+import gov.nih.nci.cagrid.dorian.common.Database;
+import gov.nih.nci.cagrid.dorian.common.FaultUtil;
+import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
+import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
 
 import java.io.File;
 import java.security.KeyPair;
@@ -27,10 +27,10 @@ import org.projectmobius.db.ConnectionManager;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class TestGUMSCertificateAuthority extends TestCase {
-	private static final String DB = "TEST_GUMS";
+public class TestDorianCertificateAuthority extends TestCase {
+	private static final String DB = "TEST_DORIAN";
 
-	private static final String TABLE = "TEST_GUMS_CA";
+	private static final String TABLE = "TEST_DORIAN_CA";
 
 	private static final String SUBJECT_PREFIX = "O=Ohio State University,OU=BMI,OU=MSCL,CN=";
 
@@ -41,9 +41,9 @@ public class TestGUMSCertificateAuthority extends TestCase {
 
 	public void testNoCACredentials() {
 		try {
-			GUMSCertificateAuthorityConf conf = this
-					.getGumsCAConfNoAutoRenewalLong();
-			GUMSCertificateAuthority ca = new GUMSCertificateAuthority(db, conf);
+			DorianCertificateAuthorityConf conf = this
+					.getDorianCAConfNoAutoRenewalLong();
+			DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
 			ca.destroyTable();
 			try {
 				ca.getCACertificate();
@@ -69,9 +69,9 @@ public class TestGUMSCertificateAuthority extends TestCase {
 
 	public void testNoCACredentialsWithAutoRenew() {
 		try {
-			GUMSCertificateAuthorityConf conf = this
-					.getGumsCAConfAutoRenewalLong();
-			GUMSCertificateAuthority ca = new GUMSCertificateAuthority(db, conf);
+			DorianCertificateAuthorityConf conf = this
+					.getDorianCAConfAutoRenewalLong();
+			DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
 			ca.destroyTable();
 			try {
 				ca.getCACertificate();
@@ -97,9 +97,9 @@ public class TestGUMSCertificateAuthority extends TestCase {
 
 	public void testSetCACredentials() {
 		try {
-			GUMSCertificateAuthorityConf conf = this
-					.getGumsCAConfAutoRenewalLong();
-			GUMSCertificateAuthority ca = new GUMSCertificateAuthority(db, conf);
+			DorianCertificateAuthorityConf conf = this
+					.getDorianCAConfAutoRenewalLong();
+			DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
 			ca.destroyTable();
 			createAndStoreCA(ca);
 		} catch (Exception e) {
@@ -110,9 +110,9 @@ public class TestGUMSCertificateAuthority extends TestCase {
 
 	public void testRequestCertificate() {
 		try {
-			GUMSCertificateAuthorityConf conf = this
-					.getGumsCAConfAutoRenewalLong();
-			GUMSCertificateAuthority ca = new GUMSCertificateAuthority(db, conf);
+			DorianCertificateAuthorityConf conf = this
+					.getDorianCAConfAutoRenewalLong();
+			DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
 			ca.destroyTable();
 			createAndStoreCA(ca);
 			GregorianCalendar cal = new GregorianCalendar();
@@ -128,9 +128,9 @@ public class TestGUMSCertificateAuthority extends TestCase {
 
 	public void testRequestCertificateBadDate() {
 		try {
-			GUMSCertificateAuthorityConf conf = this
-					.getGumsCAConfAutoRenewalLong();
-			GUMSCertificateAuthority ca = new GUMSCertificateAuthority(db, conf);
+			DorianCertificateAuthorityConf conf = this
+					.getDorianCAConfAutoRenewalLong();
+			DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
 			ca.destroyTable();
 			createAndStoreCA(ca);
 			GregorianCalendar cal = new GregorianCalendar();
@@ -156,9 +156,9 @@ public class TestGUMSCertificateAuthority extends TestCase {
 	
 	public void testRequestCertificateBadSubject() {
 		try {
-			GUMSCertificateAuthorityConf conf = this
-					.getGumsCAConfAutoRenewalLong();
-			GUMSCertificateAuthority ca = new GUMSCertificateAuthority(db, conf);
+			DorianCertificateAuthorityConf conf = this
+					.getDorianCAConfAutoRenewalLong();
+			DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
 			ca.destroyTable();
 			createAndStoreCA(ca);
 			GregorianCalendar cal = new GregorianCalendar();
@@ -184,9 +184,9 @@ public class TestGUMSCertificateAuthority extends TestCase {
 	
 	public void testExpiredCACredentialsWithRenewal() {
 		try {
-			GUMSCertificateAuthorityConf conf = this
-					.getGumsCAConfAutoRenewalLong();
-			GUMSCertificateAuthority ca = new GUMSCertificateAuthority(db, conf);
+			DorianCertificateAuthorityConf conf = this
+					.getDorianCAConfAutoRenewalLong();
+			DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
 			ca.destroyTable();
 			X509Certificate origRoot = createAndStoreCAShort(ca);
 			Thread.sleep(2500);
@@ -204,8 +204,8 @@ public class TestGUMSCertificateAuthority extends TestCase {
 	
 	public void testExpiredCACredentialsNoRenewal() {
 		try {
-			GUMSCertificateAuthorityConf conf = getGumsCAConfNoAutoRenewalLong();
-			GUMSCertificateAuthority ca = new GUMSCertificateAuthority(db, conf);
+			DorianCertificateAuthorityConf conf = getDorianCAConfNoAutoRenewalLong();
+			DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
 			ca.destroyTable();
 			createAndStoreCAShort(ca);
 			Thread.sleep(2500);
@@ -231,8 +231,8 @@ public class TestGUMSCertificateAuthority extends TestCase {
 		} 
 	}
 
-	private GUMSCertificateAuthorityConf getGumsCAConfAutoRenewalLong() {
-		GUMSCertificateAuthorityConf conf = new GUMSCertificateAuthorityConf();
+	private DorianCertificateAuthorityConf getDorianCAConfAutoRenewalLong() {
+		DorianCertificateAuthorityConf conf = new DorianCertificateAuthorityConf();
 		conf.setCaPassword("password");
 		conf.setAutoRenewal(true);
 		conf.setAutoRenewalYears(5);
@@ -246,14 +246,14 @@ public class TestGUMSCertificateAuthority extends TestCase {
 	
 
 
-	private GUMSCertificateAuthorityConf getGumsCAConfNoAutoRenewalLong() {
-		GUMSCertificateAuthorityConf conf = new GUMSCertificateAuthorityConf();
+	private DorianCertificateAuthorityConf getDorianCAConfNoAutoRenewalLong() {
+		DorianCertificateAuthorityConf conf = new DorianCertificateAuthorityConf();
 		conf.setCaPassword("password");
 		conf.setAutoRenewal(false);
 		return conf;
 	}
 
-	private void createAndStoreCA(GUMSCertificateAuthority ca) throws Exception {
+	private void createAndStoreCA(DorianCertificateAuthority ca) throws Exception {
 		KeyPair rootPair = KeyUtil.generateRSAKeyPair1024();
 		assertNotNull(rootPair);
 		String rootSub = SUBJECT_PREFIX + "Temp Certificate Authority";
@@ -271,7 +271,7 @@ public class TestGUMSCertificateAuthority extends TestCase {
 		assertEquals(r, root);
 	}
 	
-	private X509Certificate createAndStoreCAShort(GUMSCertificateAuthority ca) throws Exception {
+	private X509Certificate createAndStoreCAShort(DorianCertificateAuthority ca) throws Exception {
 		KeyPair rootPair = KeyUtil.generateRSAKeyPair1024();
 		assertNotNull(rootPair);
 		String rootSub = SUBJECT_PREFIX + "Temp Certificate Authority";
@@ -290,7 +290,7 @@ public class TestGUMSCertificateAuthority extends TestCase {
 		return r;
 	}
 
-	private void submitCertificateRequest(GUMSCertificateAuthority ca, String prefix,
+	private void submitCertificateRequest(DorianCertificateAuthority ca, String prefix,
 			Date start, Date end) throws Exception {
 		String subject = prefix + "User";
 		PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(
@@ -310,7 +310,7 @@ public class TestGUMSCertificateAuthority extends TestCase {
 			db.destroyDatabase();
 			db.createDatabaseIfNeeded();
 			assertEquals(0,db.getUsedConnectionCount());
-			GUMSCertificateAuthority.CA_TABLE = TABLE;
+			DorianCertificateAuthority.CA_TABLE = TABLE;
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

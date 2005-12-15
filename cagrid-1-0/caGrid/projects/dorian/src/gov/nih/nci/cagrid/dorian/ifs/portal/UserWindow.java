@@ -1,14 +1,14 @@
-package gov.nih.nci.cagrid.gums.ifs.portal;
+package gov.nih.nci.cagrid.dorian.ifs.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
-import gov.nih.nci.cagrid.gums.client.IFSAdministrationClient;
-import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
-import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
-import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
-import gov.nih.nci.cagrid.gums.portal.ProxyCaddy;
-import gov.nih.nci.cagrid.gums.portal.ProxyComboBox;
+import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
+import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
+import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
+import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
+import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
+import gov.nih.nci.cagrid.dorian.portal.ProxyCaddy;
+import gov.nih.nci.cagrid.dorian.portal.ProxyComboBox;
 import gov.nih.nci.cagrid.security.commstyle.SecureConversationWithEncryption;
 
 import java.awt.BorderLayout;
@@ -36,7 +36,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.5 2005-12-13 19:53:22 langella Exp $
+ * @version $Id: UserWindow.java,v 1.6 2005-12-15 19:29:33 langella Exp $
  */
 public class UserWindow extends GridPortalBaseFrame {
 
@@ -119,7 +119,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		this.user = u;
 		this.idp = idp;
 		initialize();
-		this.setFrameIcon(GumsLookAndFeel.getUserMagnifyIcon());
+		this.setFrameIcon(DorianLookAndFeel.getUserMagnifyIcon());
 	}
 
 
@@ -211,7 +211,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		if (cancel == null) {
 			cancel = new JButton();
 			cancel.setText("Close");
-			cancel.setIcon(GumsLookAndFeel.getCloseIcon());
+			cancel.setIcon(DorianLookAndFeel.getCloseIcon());
 			cancel.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();
@@ -246,7 +246,7 @@ public class UserWindow extends GridPortalBaseFrame {
 
 				}
 			});
-			updateUser.setIcon(GumsLookAndFeel.getUpdateUserIcon());
+			updateUser.setIcon(DorianLookAndFeel.getUpdateUserIcon());
 		}
 		return updateUser;
 	}
@@ -305,10 +305,10 @@ public class UserWindow extends GridPortalBaseFrame {
 		if (jTabbedPane == null) {
 			jTabbedPane = new JTabbedPane();
 			jTabbedPane.setBorder(BorderFactory.createTitledBorder(null, "Grid User",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GumsLookAndFeel
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
 					.getPanelLabelColor()));
-			jTabbedPane.addTab(INFO_PANEL, GumsLookAndFeel.getUserIcon(), getInfoPanel(), null);
-			jTabbedPane.addTab(CERTIFICATE_PANEL, GumsLookAndFeel.getProxyIcon(), getCertificatePanel(), null);
+			jTabbedPane.addTab(INFO_PANEL, DorianLookAndFeel.getUserIcon(), getInfoPanel(), null);
+			jTabbedPane.addTab(CERTIFICATE_PANEL, DorianLookAndFeel.getProxyIcon(), getCertificatePanel(), null);
 		}
 		return jTabbedPane;
 	}
@@ -465,7 +465,7 @@ public class UserWindow extends GridPortalBaseFrame {
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
 			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "Login Information",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GumsLookAndFeel
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
 					.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints27);
@@ -662,7 +662,7 @@ public class UserWindow extends GridPortalBaseFrame {
 					renewCredentials();
 				}
 			});
-			renewCredentials.setIcon(GumsLookAndFeel.getRenewCredentialsIcon());
+			renewCredentials.setIcon(DorianLookAndFeel.getRenewCredentialsIcon());
 		}
 		return renewCredentials;
 	}

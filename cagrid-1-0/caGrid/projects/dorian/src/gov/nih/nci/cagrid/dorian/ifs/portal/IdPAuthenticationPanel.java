@@ -1,6 +1,6 @@
-package gov.nih.nci.cagrid.gums.ifs.portal;
+package gov.nih.nci.cagrid.dorian.ifs.portal;
 
-import gov.nih.nci.cagrid.gums.portal.IdPConf;
+import gov.nih.nci.cagrid.dorian.portal.IdPConf;
 
 import javax.swing.JPanel;
 

@@ -1,14 +1,14 @@
-package gov.nih.nci.cagrid.gums.ifs.portal;
+package gov.nih.nci.cagrid.dorian.ifs.portal;
 
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.gums.client.IFSUserClient;
-import gov.nih.nci.cagrid.gums.ifs.bean.ProxyLifetime;
-import gov.nih.nci.cagrid.gums.portal.GUMSServiceListComboBox;
-import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
-import gov.nih.nci.cagrid.gums.portal.GumsPortalConf;
-import gov.nih.nci.cagrid.gums.portal.IdPConf;
-import gov.nih.nci.cagrid.gums.portal.ProxyManager;
+import gov.nih.nci.cagrid.dorian.client.IFSUserClient;
+import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
+import gov.nih.nci.cagrid.dorian.portal.DorianServiceListComboBox;
+import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
+import gov.nih.nci.cagrid.dorian.portal.DorianPortalConf;
+import gov.nih.nci.cagrid.dorian.portal.IdPConf;
+import gov.nih.nci.cagrid.dorian.portal.ProxyManager;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -66,8 +66,8 @@ public class CreateProxyComponent extends GridPortalComponent {
 	public CreateProxyComponent() {
 		super();
 		initialize();
-		GumsPortalConf conf = (GumsPortalConf) PortalResourceManager
-		.getInstance().getResource(GumsPortalConf.RESOURCE);
+		DorianPortalConf conf = (DorianPortalConf) PortalResourceManager
+		.getInstance().getResource(DorianPortalConf.RESOURCE);
 		authPanels = new HashMap();
 		List idps = conf.getIdPs();
 		for(int i=0; i<idps.size(); i++){
@@ -97,7 +97,7 @@ public class CreateProxyComponent extends GridPortalComponent {
 	private void initialize() {
 		this.setSize(400, 400);
 		this.setContentPane(getJContentPane());
-		this.setFrameIcon(GumsLookAndFeel.getProxyIcon());
+		this.setFrameIcon(DorianLookAndFeel.getProxyIcon());
 		this.setTitle("Create Proxy");
 	}
 
@@ -212,7 +212,7 @@ public class CreateProxyComponent extends GridPortalComponent {
 			idpPanel.setLayout(new GridBagLayout());
 			idpPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Create Proxy",
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GumsLookAndFeel.getPanelLabelColor()));
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel.getPanelLabelColor()));
 			idpPanel.add(getProgressPanel(), gridBagConstraints15);
 			idpPanel.add(idpLabel, gridBagConstraints1);
 			idpPanel.add(getIdentityProvider(), gridBagConstraints2);
@@ -272,7 +272,7 @@ public class CreateProxyComponent extends GridPortalComponent {
 			cardPanel.setLayout(new CardLayout());
 			cardPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "IdP Authentication Information",
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GumsLookAndFeel.getPanelLabelColor()));	
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel.getPanelLabelColor()));	
 		}
 		return cardPanel;
 	}
@@ -284,7 +284,7 @@ public class CreateProxyComponent extends GridPortalComponent {
 	 */    
 	private JComboBox getIfs() {
 		if (ifs == null) {
-			ifs = new GUMSServiceListComboBox();
+			ifs = new DorianServiceListComboBox();
 		}
 		return ifs;
 	}
@@ -312,7 +312,7 @@ public class CreateProxyComponent extends GridPortalComponent {
                     }
 				}
 			});
-			authenticateButton.setIcon(GumsLookAndFeel.getAuthenticateIcon());
+			authenticateButton.setIcon(DorianLookAndFeel.getAuthenticateIcon());
 		}
 		return authenticateButton;
 	}
@@ -330,7 +330,7 @@ public class CreateProxyComponent extends GridPortalComponent {
 	            }
 	        }
 		
-		String ifsService =((GUMSServiceListComboBox)this.getIfs()).getSelectedService();
+		String ifsService =((DorianServiceListComboBox)this.getIfs()).getSelectedService();
 		String idpService = ((IdPConf)getIdentityProvider().getSelectedItem()).getName();
 		this.updateProgress(true,"Authenticating with IdP...");
 		IdPAuthenticationPanel panel = (IdPAuthenticationPanel)authPanels.get(idpService);
@@ -362,7 +362,7 @@ public class CreateProxyComponent extends GridPortalComponent {
 		if (close == null) {
 			close = new JButton();
 			close.setText("Close");
-			close.setIcon(GumsLookAndFeel.getCloseIcon());
+			close.setIcon(DorianLookAndFeel.getCloseIcon());
 			close.addActionListener(new java.awt.event.ActionListener() { 
 				public void actionPerformed(java.awt.event.ActionEvent e) {    
 					dispose();
@@ -507,7 +507,7 @@ public class CreateProxyComponent extends GridPortalComponent {
 	private JProgressBar getProgress() {
 		if (progress == null) {
 			progress = new JProgressBar();
-			 progress.setForeground(GumsLookAndFeel.getPanelLabelColor());
+			 progress.setForeground(DorianLookAndFeel.getPanelLabelColor());
 	         progress.setString("");
 	         progress.setStringPainted(true);
 		}

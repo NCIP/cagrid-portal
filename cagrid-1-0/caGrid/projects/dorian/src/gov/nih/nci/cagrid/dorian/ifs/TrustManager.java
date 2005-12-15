@@ -1,16 +1,16 @@
-package gov.nih.nci.cagrid.gums.ifs;
+package gov.nih.nci.cagrid.dorian.ifs;
 
-import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.common.Database;
-import gov.nih.nci.cagrid.gums.common.FaultHelper;
-import gov.nih.nci.cagrid.gums.common.GUMSObject;
-import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserPolicy;
-import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.InvalidTrustedIdPFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.SAMLAuthenticationMethod;
-import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
-import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdPStatus;
+import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.common.Database;
+import gov.nih.nci.cagrid.dorian.common.DorianObject;
+import gov.nih.nci.cagrid.dorian.common.FaultHelper;
+import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
+import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidAssertionFault;
+import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidTrustedIdPFault;
+import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
+import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
+import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
 
 import java.io.StringReader;
 import java.security.cert.X509Certificate;
@@ -31,7 +31,7 @@ import org.opensaml.SAMLException;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class TrustManager extends GUMSObject {
+public class TrustManager extends DorianObject {
 	
 
 	private Database db;
@@ -51,7 +51,7 @@ public class TrustManager extends GUMSObject {
 	}
 
 
-	private void buildDatabase() throws GUMSInternalFault {
+	private void buildDatabase() throws DorianInternalFault {
 		if (!dbBuilt) {
 			if (!this.db.tableExists(TRUST_MANAGER_TABLE)) {
 				String trust = "CREATE TABLE " + TRUST_MANAGER_TABLE + " ("
@@ -70,20 +70,20 @@ public class TrustManager extends GUMSObject {
 	}
 
 
-	public synchronized void removeTrustedIdP(long id) throws GUMSInternalFault {
+	public synchronized void removeTrustedIdP(long id) throws DorianInternalFault {
 		buildDatabase();
 		db.update("delete from " + TRUST_MANAGER_TABLE + " WHERE ID=" + id);
 		removeAuthenticationMethodsForTrustedIdP(id);
 	}
 
 
-	private void removeAuthenticationMethodsForTrustedIdP(long id) throws GUMSInternalFault {
+	private void removeAuthenticationMethodsForTrustedIdP(long id) throws DorianInternalFault {
 		buildDatabase();
 		db.update("delete from " + AUTH_METHODS_TABLE + " WHERE ID=" + id);
 	}
 
 
-	public synchronized SAMLAuthenticationMethod[] getAuthenticationMethods(long id) throws GUMSInternalFault {
+	public synchronized SAMLAuthenticationMethod[] getAuthenticationMethods(long id) throws DorianInternalFault {
 		buildDatabase();
 		Connection c = null;
 		try {
@@ -105,11 +105,11 @@ public class TrustManager extends GUMSObject {
 			return list;
 
 		} catch (Exception e) {
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Unexpected Database Error");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
 			db.getConnectionManager().releaseConnection(c);
@@ -138,7 +138,7 @@ public class TrustManager extends GUMSObject {
 	}
 
 
-	public synchronized void updateIdP(TrustedIdP idp) throws GUMSInternalFault, InvalidTrustedIdPFault {
+	public synchronized void updateIdP(TrustedIdP idp) throws DorianInternalFault, InvalidTrustedIdPFault {
 
 		TrustedIdP curr = this.getTrustedIdPById(idp.getId());
 		StringBuffer sql = new StringBuffer();
@@ -191,18 +191,18 @@ public class TrustManager extends GUMSObject {
 			}
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Error updating the Trusted IdP " + idp.getName()
 				+ ", an unexpected database error occurred.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		}
 	}
 
 
-	public TrustedIdP getTrustedIdP(SAMLAssertion saml) throws GUMSInternalFault, InvalidAssertionFault {
+	public TrustedIdP getTrustedIdP(SAMLAssertion saml) throws DorianInternalFault, InvalidAssertionFault {
 		TrustedIdP[] idps = getTrustedIdPs();
 		for (int i = 0; i < idps.length; i++) {
 			try {
@@ -221,7 +221,7 @@ public class TrustManager extends GUMSObject {
 	}
 
 
-	public synchronized TrustedIdP[] getTrustedIdPs() throws GUMSInternalFault {
+	public synchronized TrustedIdP[] getTrustedIdPs() throws DorianInternalFault {
 		buildDatabase();
 		Connection c = null;
 		try {
@@ -249,11 +249,11 @@ public class TrustManager extends GUMSObject {
 			return list;
 
 		} catch (Exception e) {
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Error obtaining a list of trusted IdPs, unexpected database error");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
 			db.getConnectionManager().releaseConnection(c);
@@ -262,7 +262,7 @@ public class TrustManager extends GUMSObject {
 	}
 
 
-	public synchronized TrustedIdP getTrustedIdPById(long id) throws GUMSInternalFault, InvalidTrustedIdPFault {
+	public synchronized TrustedIdP getTrustedIdPById(long id) throws DorianInternalFault, InvalidTrustedIdPFault {
 		buildDatabase();
 		Connection c = null;
 
@@ -290,11 +290,11 @@ public class TrustManager extends GUMSObject {
 		} catch (InvalidTrustedIdPFault f) {
 			throw f;
 		} catch (Exception e) {
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Error obtaining the Trusted IdP " + id + ", unexpected database error");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
 			db.getConnectionManager().releaseConnection(c);
@@ -302,7 +302,7 @@ public class TrustManager extends GUMSObject {
 	}
 
 
-	public synchronized TrustedIdP getTrustedIdPByName(String name) throws GUMSInternalFault, InvalidTrustedIdPFault {
+	public synchronized TrustedIdP getTrustedIdPByName(String name) throws DorianInternalFault, InvalidTrustedIdPFault {
 		buildDatabase();
 		Connection c = null;
 
@@ -330,11 +330,11 @@ public class TrustManager extends GUMSObject {
 		} catch (InvalidTrustedIdPFault f) {
 			throw f;
 		} catch (Exception e) {
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Error obtaining the Trusted IdP " + name + ", unexpected database error");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
 			db.getConnectionManager().releaseConnection(c);
@@ -342,7 +342,7 @@ public class TrustManager extends GUMSObject {
 	}
 
 
-	public synchronized TrustedIdP getTrustedIdPByDN(String dn) throws GUMSInternalFault, InvalidTrustedIdPFault {
+	public synchronized TrustedIdP getTrustedIdPByDN(String dn) throws DorianInternalFault, InvalidTrustedIdPFault {
 		buildDatabase();
 		Connection c = null;
 
@@ -370,11 +370,11 @@ public class TrustManager extends GUMSObject {
 		} catch (InvalidTrustedIdPFault f) {
 			throw f;
 		} catch (Exception e) {
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Error obtaining the Trusted IdP " + dn + ", unexpected database error");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
 			db.getConnectionManager().releaseConnection(c);
@@ -382,7 +382,7 @@ public class TrustManager extends GUMSObject {
 	}
 
 
-	private String validateAndGetName(TrustedIdP idp) throws GUMSInternalFault, InvalidTrustedIdPFault {
+	private String validateAndGetName(TrustedIdP idp) throws DorianInternalFault, InvalidTrustedIdPFault {
 		String name = idp.getName();
 		if ((name == null) || (name.trim().length() < conf.getMinimumIdPNameLength())
 			|| (name.trim().length() > conf.getMaximumIdPNameLength())) {
@@ -395,7 +395,7 @@ public class TrustManager extends GUMSObject {
 	}
 
 
-	private IFSUserPolicy validateAndGetPolicy(String className) throws GUMSInternalFault, InvalidTrustedIdPFault {
+	private IFSUserPolicy validateAndGetPolicy(String className) throws DorianInternalFault, InvalidTrustedIdPFault {
 		IFSUserPolicy[] policies = conf.getUserPolicies();
 		for (int i = 0; i < policies.length; i++) {
 			if (policies[i].getClassName().equals(className)) {
@@ -408,7 +408,7 @@ public class TrustManager extends GUMSObject {
 	}
 
 
-	private X509Certificate validateAndGetCertificate(TrustedIdP idp) throws GUMSInternalFault, InvalidTrustedIdPFault {
+	private X509Certificate validateAndGetCertificate(TrustedIdP idp) throws DorianInternalFault, InvalidTrustedIdPFault {
   
 		if(idp.getIdPCertificate() == null){
 			InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
@@ -440,7 +440,7 @@ public class TrustManager extends GUMSObject {
 	}
 
 
-	private boolean isCertificateUnique(String certAsString) throws GUMSInternalFault {
+	private boolean isCertificateUnique(String certAsString) throws DorianInternalFault {
 		buildDatabase();
 		Connection c = null;
 		boolean exists = true;
@@ -459,11 +459,11 @@ public class TrustManager extends GUMSObject {
 			s.close();
 
 		} catch (Exception e) {
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Unexpected Database Error");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
 			db.getConnectionManager().releaseConnection(c);
@@ -472,7 +472,7 @@ public class TrustManager extends GUMSObject {
 	}
 
 
-	public synchronized TrustedIdP addTrustedIdP(TrustedIdP idp) throws GUMSInternalFault, InvalidTrustedIdPFault {
+	public synchronized TrustedIdP addTrustedIdP(TrustedIdP idp) throws DorianInternalFault, InvalidTrustedIdPFault {
 		buildDatabase();
 		if (!determineTrustedIdPExistsByName(idp.getName())) {
 			String name = validateAndGetName(idp);
@@ -502,12 +502,12 @@ public class TrustManager extends GUMSObject {
 					logError(ex.getMessage(), ex);
 				}
 				logError(e.getMessage(), e);
-				GUMSInternalFault fault = new GUMSInternalFault();
+				DorianInternalFault fault = new DorianInternalFault();
 				fault.setFaultString("Error adding the Trusted IdP " + name
 					+ ", an unexpected database error occurred.");
 				FaultHelper helper = new FaultHelper(fault);
 				helper.addFaultCause(e);
-				fault = (GUMSInternalFault) helper.getFault();
+				fault = (DorianInternalFault) helper.getFault();
 				throw fault;
 			}
 
@@ -522,12 +522,12 @@ public class TrustManager extends GUMSObject {
 
 
 	private synchronized void addAuthenticationMethod(long id, SAMLAuthenticationMethod method)
-		throws GUMSInternalFault {
+		throws DorianInternalFault {
 		db.update("INSERT INTO " + AUTH_METHODS_TABLE + " SET ID=" + id + ",METHOD='" + method.getValue() + "'");
 	}
 
 
-	public synchronized boolean determineTrustedIdPExistsByDN(String subject) throws GUMSInternalFault {
+	public synchronized boolean determineTrustedIdPExistsByDN(String subject) throws DorianInternalFault {
 		buildDatabase();
 		Connection c = null;
 		boolean exists = false;
@@ -546,11 +546,11 @@ public class TrustManager extends GUMSObject {
 			s.close();
 
 		} catch (Exception e) {
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Unexpected Database Error");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
 			db.getConnectionManager().releaseConnection(c);
@@ -559,7 +559,7 @@ public class TrustManager extends GUMSObject {
 	}
 
 
-	public synchronized boolean determineTrustedIdPExistsByName(String name) throws GUMSInternalFault {
+	public synchronized boolean determineTrustedIdPExistsByName(String name) throws DorianInternalFault {
 		buildDatabase();
 		Connection c = null;
 		boolean exists = false;
@@ -577,11 +577,11 @@ public class TrustManager extends GUMSObject {
 			s.close();
 
 		} catch (Exception e) {
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Unexpected Database Error");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
 			db.getConnectionManager().releaseConnection(c);
@@ -590,14 +590,14 @@ public class TrustManager extends GUMSObject {
 	}
 
 
-	public synchronized void removeAllTrustedIdPs() throws GUMSInternalFault {
+	public synchronized void removeAllTrustedIdPs() throws DorianInternalFault {
 		buildDatabase();
 		db.update("delete from " + TRUST_MANAGER_TABLE);
 		db.update("delete from " + AUTH_METHODS_TABLE);
 	}
 
 
-	public void destroyTable() throws GUMSInternalFault {
+	public void destroyTable() throws DorianInternalFault {
 		db.update("DROP TABLE IF EXISTS " + TRUST_MANAGER_TABLE);
 		dbBuilt = false;
 	}

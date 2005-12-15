@@ -1,13 +1,13 @@
-package gov.nih.nci.cagrid.gums.ca.tools;
+package gov.nih.nci.cagrid.dorian.ca.tools;
 
-import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthority;
-import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthorityConf;
-import gov.nih.nci.cagrid.gums.common.Database;
-import gov.nih.nci.cagrid.gums.common.IOUtils;
-import gov.nih.nci.cagrid.gums.common.SimpleResourceManager;
-import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
-import gov.nih.nci.cagrid.gums.service.GUMSConfiguration;
+import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthority;
+import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthorityConf;
+import gov.nih.nci.cagrid.dorian.common.Database;
+import gov.nih.nci.cagrid.dorian.common.IOUtils;
+import gov.nih.nci.cagrid.dorian.common.SimpleResourceManager;
+import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
+import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
+import gov.nih.nci.cagrid.dorian.service.DorianConfiguration;
 
 import java.security.KeyPair;
 import java.security.Security;
@@ -61,7 +61,7 @@ public class CreateCACertificate {
 		Option help = new Option(HELP_OPT, HELP_OPT_FULL, false,
 				"Prints this message.");
 		Option service = new Option(CONFIG_FILE_OPT, CONFIG_FILE_FULL, true,
-				"The config file for the GUMS CA.");
+				"The config file for the Dorian CA.");
 		service.setRequired(true);
 		Option im = new Option(INTERACTIVE_MODE_OPT, INTERACTIVE_MODE_FULL,
 				false, "Specifies the use of interactive mode.");
@@ -95,15 +95,15 @@ public class CreateCACertificate {
 			} else {
 				String configFile = line.getOptionValue(CONFIG_FILE_OPT);
 				SimpleResourceManager rm = new SimpleResourceManager(configFile);
-				GUMSCertificateAuthorityConf conf = (GUMSCertificateAuthorityConf) rm
-						.getResource(GUMSCertificateAuthorityConf.RESOURCE);
-				GUMSConfiguration c = (GUMSConfiguration) rm
-				.getResource(GUMSConfiguration.RESOURCE);
+				DorianCertificateAuthorityConf conf = (DorianCertificateAuthorityConf) rm
+						.getResource(DorianCertificateAuthorityConf.RESOURCE);
+				DorianConfiguration c = (DorianConfiguration) rm
+				.getResource(DorianConfiguration.RESOURCE);
 				Database db = new Database(c
 						.getConnectionManager(), c
-						.getGUMSInternalId());
+						.getDorianInternalId());
 				db.createDatabaseIfNeeded();
-				GUMSCertificateAuthority ca = new GUMSCertificateAuthority(db, conf);
+				DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
 				boolean interactive = false;
 				if (line.hasOption(INTERACTIVE_MODE_OPT)) {
 					interactive = true;

@@ -1,17 +1,17 @@
-package gov.nih.nci.cagrid.gums.client;
+package gov.nih.nci.cagrid.dorian.client;
 
-import gov.nih.nci.cagrid.gums.IdPAdministration;
-import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
-import gov.nih.nci.cagrid.gums.common.FaultHelper;
-import gov.nih.nci.cagrid.gums.common.FaultUtil;
-import gov.nih.nci.cagrid.gums.common.GUMSFault;
-import gov.nih.nci.cagrid.gums.common.IOUtils;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUserFilter;
-import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
-import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
-import gov.nih.nci.cagrid.gums.wsrf.GUMSPortType;
+import gov.nih.nci.cagrid.dorian.IdPAdministration;
+import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
+import gov.nih.nci.cagrid.dorian.common.FaultHelper;
+import gov.nih.nci.cagrid.dorian.common.FaultUtil;
+import gov.nih.nci.cagrid.dorian.common.DorianFault;
+import gov.nih.nci.cagrid.dorian.common.IOUtils;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
+import gov.nih.nci.cagrid.dorian.idp.bean.InvalidUserPropertyFault;
+import gov.nih.nci.cagrid.dorian.idp.bean.NoSuchUserFault;
+import gov.nih.nci.cagrid.dorian.wsrf.DorianPortType;
 import gov.nih.nci.cagrid.security.commstyle.CommunicationStyle;
 
 /**
@@ -21,7 +21,7 @@ import gov.nih.nci.cagrid.security.commstyle.CommunicationStyle;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class IdPAdministrationClient extends GUMSBaseClient implements
+public class IdPAdministrationClient extends DorianBaseClient implements
 		IdPAdministration {
 
 	CommunicationStyle style;
@@ -30,83 +30,83 @@ public class IdPAdministrationClient extends GUMSBaseClient implements
 		this.style = style;
 	}
 
-	public IdPUser[] findUsers(IdPUserFilter filter) throws GUMSFault,
-			GUMSInternalFault, PermissionDeniedFault {
-		GUMSPortType port = null;
+	public IdPUser[] findUsers(IdPUserFilter filter) throws DorianFault,
+			DorianInternalFault, PermissionDeniedFault {
+		DorianPortType port = null;
 		try {
 			port = this.getPort(style);
 		} catch (Exception e) {
-			GUMSFault fault = new GUMSFault();
+			DorianFault fault = new DorianFault();
 			fault.setFaultString(e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSFault) helper.getFault();
+			fault = (DorianFault) helper.getFault();
 			throw fault;
 		}
 		try {
 			return port.findIdPUsers(filter).getIdpUser();
-		} catch (GUMSInternalFault gie) {
+		} catch (DorianInternalFault gie) {
 			throw gie;
 		} catch (PermissionDeniedFault f) {
 			throw f;
 		}catch (Exception e) {
 			FaultUtil.printFault(e);
-			GUMSFault fault = new GUMSFault();
+			DorianFault fault = new DorianFault();
 			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSFault) helper.getFault();
+			fault = (DorianFault) helper.getFault();
 			throw fault;
 		}
 	}
 
-	public void removeUser(String userId) throws GUMSFault, GUMSInternalFault,
+	public void removeUser(String userId) throws DorianFault, DorianInternalFault,
 			PermissionDeniedFault {
-		GUMSPortType port = null;
+		DorianPortType port = null;
 		try {
 			port = this.getPort(style);
 		} catch (Exception e) {
-			GUMSFault fault = new GUMSFault();
+			DorianFault fault = new DorianFault();
 			fault.setFaultString(e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSFault) helper.getFault();
+			fault = (DorianFault) helper.getFault();
 			throw fault;
 		}
 		try {
 			port.removeIdPUser(userId);
-		} catch (GUMSInternalFault gie) {
+		} catch (DorianInternalFault gie) {
 			throw gie;
 		} catch (PermissionDeniedFault f) {
 			throw f;
 		}catch (Exception e) {
 			FaultUtil.printFault(e);
-			GUMSFault fault = new GUMSFault();
+			DorianFault fault = new DorianFault();
 			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSFault) helper.getFault();
+			fault = (DorianFault) helper.getFault();
 			throw fault;
 		}
 
 	}
 
-	public void updateUser(IdPUser u) throws GUMSFault, GUMSInternalFault,
+	public void updateUser(IdPUser u) throws DorianFault, DorianInternalFault,
 			PermissionDeniedFault, NoSuchUserFault, InvalidUserPropertyFault {
-		GUMSPortType port = null;
+		DorianPortType port = null;
 		try {
 			port = this.getPort(style);
 		} catch (Exception e) {
-			GUMSFault fault = new GUMSFault();
+			DorianFault fault = new DorianFault();
 			fault.setFaultString(e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSFault) helper.getFault();
+			fault = (DorianFault) helper.getFault();
 			throw fault;
 		}
 		try {
 			port.updateIdPUser(u);
-		} catch (GUMSInternalFault gie) {
+		} catch (DorianInternalFault gie) {
 			throw gie;
 		} catch (PermissionDeniedFault f) {
 			throw f;
@@ -116,11 +116,11 @@ public class IdPAdministrationClient extends GUMSBaseClient implements
 			throw f;
 		}catch (Exception e) {
 			FaultUtil.printFault(e);
-			GUMSFault fault = new GUMSFault();
+			DorianFault fault = new DorianFault();
 			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSFault) helper.getFault();
+			fault = (DorianFault) helper.getFault();
 			throw fault;
 		}
 

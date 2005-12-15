@@ -1,7 +1,7 @@
-package gov.nih.nci.cagrid.gums.ifs.portal;
+package gov.nih.nci.cagrid.dorian.ifs.portal;
 
-import gov.nih.nci.cagrid.gums.idp.portal.AxisTypeComboBox;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserRole;
+import gov.nih.nci.cagrid.dorian.idp.portal.AxisTypeComboBox;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserRole;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>

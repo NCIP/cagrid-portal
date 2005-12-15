@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.gums.common;
+package gov.nih.nci.cagrid.dorian.common;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>

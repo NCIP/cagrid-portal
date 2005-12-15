@@ -1,21 +1,21 @@
-package gov.nih.nci.cagrid.gums.client;
+package gov.nih.nci.cagrid.dorian.client;
 
-import gov.nih.nci.cagrid.gums.IFSAdministration;
-import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
-import gov.nih.nci.cagrid.gums.common.FaultHelper;
-import gov.nih.nci.cagrid.gums.common.FaultUtil;
-import gov.nih.nci.cagrid.gums.common.GUMSFault;
-import gov.nih.nci.cagrid.gums.common.IOUtils;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserFilter;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserPolicy;
-import gov.nih.nci.cagrid.gums.ifs.bean.InvalidTrustedIdPFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.InvalidUserFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
-import gov.nih.nci.cagrid.gums.wsrf.GUMSPortType;
-import gov.nih.nci.cagrid.gums.wsrf.IFSFindTrustedIdPs;
-import gov.nih.nci.cagrid.gums.wsrf.IFSGetUserPolicies;
+import gov.nih.nci.cagrid.dorian.IFSAdministration;
+import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
+import gov.nih.nci.cagrid.dorian.common.FaultHelper;
+import gov.nih.nci.cagrid.dorian.common.FaultUtil;
+import gov.nih.nci.cagrid.dorian.common.DorianFault;
+import gov.nih.nci.cagrid.dorian.common.IOUtils;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
+import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidTrustedIdPFault;
+import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidUserFault;
+import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
+import gov.nih.nci.cagrid.dorian.wsrf.DorianPortType;
+import gov.nih.nci.cagrid.dorian.wsrf.IFSFindTrustedIdPs;
+import gov.nih.nci.cagrid.dorian.wsrf.IFSGetUserPolicies;
 import gov.nih.nci.cagrid.security.commstyle.CommunicationStyle;
 
 
@@ -26,7 +26,7 @@ import gov.nih.nci.cagrid.security.commstyle.CommunicationStyle;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class IFSAdministrationClient extends GUMSBaseClient implements IFSAdministration {
+public class IFSAdministrationClient extends DorianBaseClient implements IFSAdministration {
 	CommunicationStyle style;
 
 
@@ -36,22 +36,22 @@ public class IFSAdministrationClient extends GUMSBaseClient implements IFSAdmini
 	}
 
 
-	public TrustedIdP addTrustedIdP(TrustedIdP idp) throws GUMSFault, PermissionDeniedFault, InvalidUserFault,
-		InvalidTrustedIdPFault, GUMSInternalFault {
-		GUMSPortType port = null;
+	public TrustedIdP addTrustedIdP(TrustedIdP idp) throws DorianFault, PermissionDeniedFault, InvalidUserFault,
+		InvalidTrustedIdPFault, DorianInternalFault {
+		DorianPortType port = null;
 		try {
 			port = this.getPort(style);
 		} catch (Exception e) {
-			GUMSFault fault = new GUMSFault();
+			DorianFault fault = new DorianFault();
 			fault.setFaultString(e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSFault) helper.getFault();
+			fault = (DorianFault) helper.getFault();
 			throw fault;
 		}
 		try {
 			return port.addTrustedIdP(idp);
-		} catch (GUMSInternalFault gie) {
+		} catch (DorianInternalFault gie) {
 			throw gie;
 		} catch (PermissionDeniedFault f) {
 			throw f;
@@ -61,32 +61,32 @@ public class IFSAdministrationClient extends GUMSBaseClient implements IFSAdmini
 			throw f;
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
-			GUMSFault fault = new GUMSFault();
+			DorianFault fault = new DorianFault();
 			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSFault) helper.getFault();
+			fault = (DorianFault) helper.getFault();
 			throw fault;
 		}
 	}
 
 
-	public void removeTrustedIdP(TrustedIdP idp) throws GUMSFault, PermissionDeniedFault, InvalidUserFault,
-		InvalidTrustedIdPFault, GUMSInternalFault {
-		GUMSPortType port = null;
+	public void removeTrustedIdP(TrustedIdP idp) throws DorianFault, PermissionDeniedFault, InvalidUserFault,
+		InvalidTrustedIdPFault, DorianInternalFault {
+		DorianPortType port = null;
 		try {
 			port = this.getPort(style);
 		} catch (Exception e) {
-			GUMSFault fault = new GUMSFault();
+			DorianFault fault = new DorianFault();
 			fault.setFaultString(e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSFault) helper.getFault();
+			fault = (DorianFault) helper.getFault();
 			throw fault;
 		}
 		try {
 			port.removeTrustedIdP(idp);
-		} catch (GUMSInternalFault gie) {
+		} catch (DorianInternalFault gie) {
 			throw gie;
 		} catch (PermissionDeniedFault f) {
 			throw f;
@@ -96,33 +96,33 @@ public class IFSAdministrationClient extends GUMSBaseClient implements IFSAdmini
 			throw f;
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
-			GUMSFault fault = new GUMSFault();
+			DorianFault fault = new DorianFault();
 			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSFault) helper.getFault();
+			fault = (DorianFault) helper.getFault();
 			throw fault;
 		}
 
 	}
 
 
-	public void updateTrustedIdP(TrustedIdP idp) throws GUMSFault, PermissionDeniedFault, InvalidUserFault,
-		InvalidTrustedIdPFault, GUMSInternalFault {
-		GUMSPortType port = null;
+	public void updateTrustedIdP(TrustedIdP idp) throws DorianFault, PermissionDeniedFault, InvalidUserFault,
+		InvalidTrustedIdPFault, DorianInternalFault {
+		DorianPortType port = null;
 		try {
 			port = this.getPort(style);
 		} catch (Exception e) {
-			GUMSFault fault = new GUMSFault();
+			DorianFault fault = new DorianFault();
 			fault.setFaultString(e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSFault) helper.getFault();
+			fault = (DorianFault) helper.getFault();
 			throw fault;
 		}
 		try {
 			port.updateTrustedIdP(idp);
-		} catch (GUMSInternalFault gie) {
+		} catch (DorianInternalFault gie) {
 			throw gie;
 		} catch (PermissionDeniedFault f) {
 			throw f;
@@ -132,33 +132,33 @@ public class IFSAdministrationClient extends GUMSBaseClient implements IFSAdmini
 			throw f;
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
-			GUMSFault fault = new GUMSFault();
+			DorianFault fault = new DorianFault();
 			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSFault) helper.getFault();
+			fault = (DorianFault) helper.getFault();
 			throw fault;
 		}
 
 	}
 
 
-	public IFSUserPolicy[] getUserPolicies() throws GUMSFault, PermissionDeniedFault, InvalidUserFault,
-		GUMSInternalFault {
-		GUMSPortType port = null;
+	public IFSUserPolicy[] getUserPolicies() throws DorianFault, PermissionDeniedFault, InvalidUserFault,
+		DorianInternalFault {
+		DorianPortType port = null;
 		try {
 			port = this.getPort(style);
 		} catch (Exception e) {
-			GUMSFault fault = new GUMSFault();
+			DorianFault fault = new DorianFault();
 			fault.setFaultString(e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSFault) helper.getFault();
+			fault = (DorianFault) helper.getFault();
 			throw fault;
 		}
 		try {
 			return port.getIFSUserPolicies(new IFSGetUserPolicies()).getPolicies();
-		} catch (GUMSInternalFault gie) {
+		} catch (DorianInternalFault gie) {
 			throw gie;
 		} catch (PermissionDeniedFault f) {
 			throw f;
@@ -166,32 +166,32 @@ public class IFSAdministrationClient extends GUMSBaseClient implements IFSAdmini
 			throw f;
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
-			GUMSFault fault = new GUMSFault();
+			DorianFault fault = new DorianFault();
 			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSFault) helper.getFault();
+			fault = (DorianFault) helper.getFault();
 			throw fault;
 		}
 	}
 
 
-	public IFSUser renewUserCredentials(IFSUser usr) throws GUMSFault, PermissionDeniedFault, InvalidUserFault,
-		GUMSInternalFault {
-		GUMSPortType port = null;
+	public IFSUser renewUserCredentials(IFSUser usr) throws DorianFault, PermissionDeniedFault, InvalidUserFault,
+		DorianInternalFault {
+		DorianPortType port = null;
 		try {
 			port = this.getPort(style);
 		} catch (Exception e) {
-			GUMSFault fault = new GUMSFault();
+			DorianFault fault = new DorianFault();
 			fault.setFaultString(e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSFault) helper.getFault();
+			fault = (DorianFault) helper.getFault();
 			throw fault;
 		}
 		try {
 			return port.renewIFSUserCredentials(usr);
-		} catch (GUMSInternalFault gie) {
+		} catch (DorianInternalFault gie) {
 			throw gie;
 		} catch (PermissionDeniedFault f) {
 			throw f;
@@ -199,32 +199,32 @@ public class IFSAdministrationClient extends GUMSBaseClient implements IFSAdmini
 			throw f;
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
-			GUMSFault fault = new GUMSFault();
+			DorianFault fault = new DorianFault();
 			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSFault) helper.getFault();
+			fault = (DorianFault) helper.getFault();
 			throw fault;
 		}
 	}
 
 
-	public TrustedIdP[] getTrustedIdPs() throws GUMSFault, PermissionDeniedFault, InvalidUserFault, GUMSInternalFault {
+	public TrustedIdP[] getTrustedIdPs() throws DorianFault, PermissionDeniedFault, InvalidUserFault, DorianInternalFault {
 
-		GUMSPortType port = null;
+		DorianPortType port = null;
 		try {
 			port = this.getPort(style);
 		} catch (Exception e) {
-			GUMSFault fault = new GUMSFault();
+			DorianFault fault = new DorianFault();
 			fault.setFaultString(e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSFault) helper.getFault();
+			fault = (DorianFault) helper.getFault();
 			throw fault;
 		}
 		try {
 			return port.getTrustedIdPs(new IFSFindTrustedIdPs()).getIdps();
-		} catch (GUMSInternalFault gie) {
+		} catch (DorianInternalFault gie) {
 			throw gie;
 		} catch (PermissionDeniedFault f) {
 			throw f;
@@ -232,33 +232,33 @@ public class IFSAdministrationClient extends GUMSBaseClient implements IFSAdmini
 			throw f;
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
-			GUMSFault fault = new GUMSFault();
+			DorianFault fault = new DorianFault();
 			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSFault) helper.getFault();
+			fault = (DorianFault) helper.getFault();
 			throw fault;
 		}
 	}
 
 
-	public IFSUser[] findUsers(IFSUserFilter filter) throws GUMSFault, PermissionDeniedFault, InvalidUserFault,
-		GUMSInternalFault {
+	public IFSUser[] findUsers(IFSUserFilter filter) throws DorianFault, PermissionDeniedFault, InvalidUserFault,
+		DorianInternalFault {
 
-		GUMSPortType port = null;
+		DorianPortType port = null;
 		try {
 			port = this.getPort(style);
 		} catch (Exception e) {
-			GUMSFault fault = new GUMSFault();
+			DorianFault fault = new DorianFault();
 			fault.setFaultString(e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSFault) helper.getFault();
+			fault = (DorianFault) helper.getFault();
 			throw fault;
 		}
 		try {
 			return port.findIFSUsers(filter).getUsers();
-		} catch (GUMSInternalFault gie) {
+		} catch (DorianInternalFault gie) {
 			throw gie;
 		} catch (PermissionDeniedFault f) {
 			throw f;
@@ -266,32 +266,32 @@ public class IFSAdministrationClient extends GUMSBaseClient implements IFSAdmini
 			throw f;
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
-			GUMSFault fault = new GUMSFault();
+			DorianFault fault = new DorianFault();
 			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSFault) helper.getFault();
+			fault = (DorianFault) helper.getFault();
 			throw fault;
 		}
 	}
 
 
-	public void removeUser(IFSUser usr) throws GUMSFault, PermissionDeniedFault, InvalidUserFault, GUMSInternalFault {
+	public void removeUser(IFSUser usr) throws DorianFault, PermissionDeniedFault, InvalidUserFault, DorianInternalFault {
 
-		GUMSPortType port = null;
+		DorianPortType port = null;
 		try {
 			port = this.getPort(style);
 		} catch (Exception e) {
-			GUMSFault fault = new GUMSFault();
+			DorianFault fault = new DorianFault();
 			fault.setFaultString(e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSFault) helper.getFault();
+			fault = (DorianFault) helper.getFault();
 			throw fault;
 		}
 		try {
 			port.removeIFSUser(usr);
-		} catch (GUMSInternalFault gie) {
+		} catch (DorianInternalFault gie) {
 			throw gie;
 		} catch (PermissionDeniedFault f) {
 			throw f;
@@ -299,32 +299,32 @@ public class IFSAdministrationClient extends GUMSBaseClient implements IFSAdmini
 			throw f;
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
-			GUMSFault fault = new GUMSFault();
+			DorianFault fault = new DorianFault();
 			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSFault) helper.getFault();
+			fault = (DorianFault) helper.getFault();
 			throw fault;
 		}
 
 	}
 
 
-	public void updateUser(IFSUser usr) throws GUMSFault, PermissionDeniedFault, InvalidUserFault, GUMSInternalFault {
-		GUMSPortType port = null;
+	public void updateUser(IFSUser usr) throws DorianFault, PermissionDeniedFault, InvalidUserFault, DorianInternalFault {
+		DorianPortType port = null;
 		try {
 			port = this.getPort(style);
 		} catch (Exception e) {
-			GUMSFault fault = new GUMSFault();
+			DorianFault fault = new DorianFault();
 			fault.setFaultString(e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSFault) helper.getFault();
+			fault = (DorianFault) helper.getFault();
 			throw fault;
 		}
 		try {
 			port.updateIFSUser(usr);
-		} catch (GUMSInternalFault gie) {
+		} catch (DorianInternalFault gie) {
 			throw gie;
 		} catch (PermissionDeniedFault f) {
 			throw f;
@@ -332,11 +332,11 @@ public class IFSAdministrationClient extends GUMSBaseClient implements IFSAdmini
 			throw f;
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
-			GUMSFault fault = new GUMSFault();
+			DorianFault fault = new DorianFault();
 			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSFault) helper.getFault();
+			fault = (DorianFault) helper.getFault();
 			throw fault;
 		}
 

@@ -2,11 +2,11 @@
 	<resource name="GridPortalConfig" class="org.projectmobius.portal.GridPortalConfig">
 	 <grid-portal-config>
 	  <application>
-	  	<name>GUMS Portal</name>
+	  	<name>Dorian</name>
 	  	<icon>/caBIGWorld.jpg</icon>
 	  	<logo-bar-image>/caBIGLogo.jpg</logo-bar-image>
 	  	<about>
-	  	     <![CDATA[<html><h2>GUMS Portal</h2><h3>Authors:</h3><a href="mailto:hastings@bmi.osu.edu">Shannon Hastings</a> and <a href="mailto:langella@bmi.osu.edu">Stephen Langella</a> and <a href="mailto:oster@bmi.osu.edu">Scott Oster</a>]]>	
+	  	     <![CDATA[<html><h2>Dorian</h2><h3>Authors:</h3><a href="mailto:hastings@bmi.osu.edu">Shannon Hastings</a> and <a href="mailto:langella@bmi.osu.edu">Stephen Langella</a> and <a href="mailto:oster@bmi.osu.edu">Scott Oster</a>]]>	
 	  	</about>
 	  	<dimensions>
 	  		<width>800</width>
@@ -17,7 +17,7 @@
 	    	<component>
 	  		<title>Identity Federation</title>
 	  		<description>Identity Provider (IdP) Menu</description>
-	  		<class>gov.nih.nci.cagrid.gums.ifs.portal.IFSMenu</class>
+	  		<class>gov.nih.nci.cagrid.dorian.ifs.portal.IFSMenu</class>
 	  		<icon>/FlowGraph.gif</icon>
 	  		<dimensions>
 	  			<width>275</width>
@@ -27,7 +27,7 @@
 	  	<component>
 	  		<title>Identity Provider</title>
 	  		<description>Identity Provider (IdP) Menu</description>
-	  		<class>gov.nih.nci.cagrid.gums.idp.portal.IdPMenu</class>
+	  		<class>gov.nih.nci.cagrid.dorian.idp.portal.IdPMenu</class>
 	  		<icon>/LuggageCounter.gif</icon>
 	  		<dimensions>
 	  			<width>250</width>
@@ -38,14 +38,14 @@
 	  </components>
 	  </grid-portal-config>
 	</resource>	
-	<resource name="GumsPortalConf" class="gov.nih.nci.cagrid.gums.portal.GumsPortalConf">
-		<gums-portal-config>
-		<gums-services>
-			<gums-service>http://localhost:8080/wsrf/services/cagrid/gums</gums-service>
-		</gums-services>
+	<resource name="DorianPortalConf" class="gov.nih.nci.cagrid.dorian.portal.DorianPortalConf">
+		<dorian-portal-config>
+		<dorian-services>
+			<dorian-service>http://localhost:8080/wsrf/services/cagrid/dorian</dorian-service>
+		</dorian-services>
 		<idps>
-			<idp name="http://localhost:8080/wsrf/services/cagrid/gums" authPanelClass="gov.nih.nci.cagrid.gums.ifs.portal.GUMSIdPAuthenticationPanel"/>
+			<idp name="http://localhost:8080/wsrf/services/cagrid/dorian" authPanelClass="gov.nih.nci.cagrid.dorian.ifs.portal.DorianIdPAuthenticationPanel"/>
 		</idps>
-        </gums-portal-config>
+        </dorian-portal-config>
 	</resource>
 </grid-portal>

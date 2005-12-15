@@ -1,12 +1,12 @@
-package gov.nih.nci.cagrid.gums.ifs;
+package gov.nih.nci.cagrid.dorian.ifs;
 
-import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.common.Database;
-import gov.nih.nci.cagrid.gums.common.FaultHelper;
-import gov.nih.nci.cagrid.gums.common.GUMSObject;
-import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
-import gov.nih.nci.cagrid.gums.ifs.bean.InvalidPasswordFault;
+import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.common.Database;
+import gov.nih.nci.cagrid.dorian.common.DorianObject;
+import gov.nih.nci.cagrid.dorian.common.FaultHelper;
+import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
+import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
+import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidPasswordFault;
 
 import java.io.ByteArrayInputStream;
 import java.security.PrivateKey;
@@ -23,7 +23,7 @@ import java.sql.Statement;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class CredentialsManager extends GUMSObject {
+public class CredentialsManager extends DorianObject {
 
 	public static String CREDENTIALS_TABLE = "CREDENTIALS";
 
@@ -35,7 +35,7 @@ public class CredentialsManager extends GUMSObject {
 		this.db = db;
 	}
 
-	public boolean hasCredentials(String username) throws GUMSInternalFault {
+	public boolean hasCredentials(String username) throws DorianInternalFault {
 		this.buildDatabase();
 		Connection c = null;
 		boolean exists = false;
@@ -54,13 +54,13 @@ public class CredentialsManager extends GUMSObject {
 			s.close();
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault
 					.setFaultString("Unexpected Database Error, Error determining if the user "
 							+ username + " has credentials.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
 			db.getConnectionManager().releaseConnection(c);
@@ -68,14 +68,14 @@ public class CredentialsManager extends GUMSObject {
 		return exists;
 	}
 
-	public void deleteCredentials(String username) throws GUMSInternalFault {
+	public void deleteCredentials(String username) throws DorianInternalFault {
 		this.buildDatabase();
 		db.update("delete from " + CREDENTIALS_TABLE + " where username='"
 				+ username + "'");
 	}
 
 	public void addCredentials(String username, String password,
-			X509Certificate cert, PrivateKey key) throws GUMSInternalFault {
+			X509Certificate cert, PrivateKey key) throws DorianInternalFault {
 		this.buildDatabase();
 		try {
 
@@ -87,18 +87,18 @@ public class CredentialsManager extends GUMSObject {
 			}
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault
 					.setFaultString("Unexpected Error, could not add credentials to the credentials database.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		}
 	}
 
 	public PrivateKey getPrivateKey(String username, String password)
-			throws GUMSInternalFault, InvalidPasswordFault {
+			throws DorianInternalFault, InvalidPasswordFault {
 		this.buildDatabase();
 		Connection c = null;
 		PrivateKey key = null;
@@ -115,19 +115,19 @@ public class CredentialsManager extends GUMSObject {
 			s.close();
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault
 					.setFaultString("Unexpected Database Error, Error obtaining the private key for the user "
 							+ username + ".");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
 			db.getConnectionManager().releaseConnection(c);
 		}
 		if (keyStr == null) {
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("No PrivateKey exists for the user "
 					+ username + ".");
 			throw fault;
@@ -141,20 +141,20 @@ public class CredentialsManager extends GUMSObject {
 			throw fault;
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault
 					.setFaultString("Unexpected Database Error, Error obtaining the private key for the user "
 							+ username + ".");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		}
 		return key;
 	}
 
 	public X509Certificate getCertificate(String username)
-			throws GUMSInternalFault {
+			throws DorianInternalFault {
 		this.buildDatabase();
 		Connection c = null;
 		X509Certificate cert = null;
@@ -171,18 +171,18 @@ public class CredentialsManager extends GUMSObject {
 			s.close();
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault
 					.setFaultString("Unexpected Database Error, Error obtaining the certificate for the user "+username+".");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
 			db.getConnectionManager().releaseConnection(c);
 		}
 		if (cert == null) {
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("No Certificate exists for the user "
 					+ username + ".");
 			throw fault;
@@ -190,7 +190,7 @@ public class CredentialsManager extends GUMSObject {
 		return cert;
 	}
 
-	private void buildDatabase() throws GUMSInternalFault {
+	private void buildDatabase() throws DorianInternalFault {
 		if (!dbBuilt) {
 			if (!this.db.tableExists(CREDENTIALS_TABLE)) {
 				String users = "CREATE TABLE " + CREDENTIALS_TABLE + " ("
@@ -204,7 +204,7 @@ public class CredentialsManager extends GUMSObject {
 		}
 	}
 
-	public void destroyTable() throws GUMSInternalFault {
+	public void destroyTable() throws DorianInternalFault {
 		db.update("DROP TABLE IF EXISTS " + CREDENTIALS_TABLE);
 		dbBuilt = false;
 	}

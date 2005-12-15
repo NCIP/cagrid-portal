@@ -1,16 +1,16 @@
-package gov.nih.nci.cagrid.gums.ifs;
+package gov.nih.nci.cagrid.dorian.ifs;
 
-import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
-import gov.nih.nci.cagrid.gums.common.Database;
-import gov.nih.nci.cagrid.gums.common.FaultUtil;
-import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
-import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.InvalidTrustedIdPFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.SAMLAuthenticationMethod;
-import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
-import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdPStatus;
-import gov.nih.nci.cagrid.gums.test.TestUtils;
+import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
+import gov.nih.nci.cagrid.dorian.common.Database;
+import gov.nih.nci.cagrid.dorian.common.FaultUtil;
+import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
+import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
+import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidAssertionFault;
+import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidTrustedIdPFault;
+import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
+import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
+import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
+import gov.nih.nci.cagrid.dorian.test.TestUtils;
 
 import java.io.File;
 import java.io.StringReader;

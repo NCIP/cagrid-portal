@@ -1,38 +1,38 @@
-package gov.nih.nci.cagrid.gums.service;
+package gov.nih.nci.cagrid.dorian.service;
 
-import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
-import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
-import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthority;
-import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthorityConf;
-import gov.nih.nci.cagrid.gums.common.Database;
-import gov.nih.nci.cagrid.gums.common.FaultHelper;
-import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.idp.IdPConfiguration;
-import gov.nih.nci.cagrid.gums.idp.IdentityProvider;
-import gov.nih.nci.cagrid.gums.idp.bean.Application;
-import gov.nih.nci.cagrid.gums.idp.bean.BasicAuthCredential;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUserFilter;
-import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
-import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
-import gov.nih.nci.cagrid.gums.ifs.AutoApprovalAutoRenewalPolicy;
-import gov.nih.nci.cagrid.gums.ifs.IFS;
-import gov.nih.nci.cagrid.gums.ifs.IFSConfiguration;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserFilter;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserPolicy;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserRole;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
-import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.InvalidProxyFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.InvalidTrustedIdPFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.InvalidUserFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.ProxyLifetime;
-import gov.nih.nci.cagrid.gums.ifs.bean.SAMLAuthenticationMethod;
-import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
-import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdPStatus;
-import gov.nih.nci.cagrid.gums.ifs.bean.UserPolicyFault;
+import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
+import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
+import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthority;
+import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthorityConf;
+import gov.nih.nci.cagrid.dorian.common.Database;
+import gov.nih.nci.cagrid.dorian.common.FaultHelper;
+import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
+import gov.nih.nci.cagrid.dorian.idp.IdPConfiguration;
+import gov.nih.nci.cagrid.dorian.idp.IdentityProvider;
+import gov.nih.nci.cagrid.dorian.idp.bean.Application;
+import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
+import gov.nih.nci.cagrid.dorian.idp.bean.InvalidUserPropertyFault;
+import gov.nih.nci.cagrid.dorian.idp.bean.NoSuchUserFault;
+import gov.nih.nci.cagrid.dorian.ifs.AutoApprovalAutoRenewalPolicy;
+import gov.nih.nci.cagrid.dorian.ifs.IFS;
+import gov.nih.nci.cagrid.dorian.ifs.IFSConfiguration;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserRole;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserStatus;
+import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidAssertionFault;
+import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidProxyFault;
+import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidTrustedIdPFault;
+import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidUserFault;
+import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
+import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
+import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
+import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
+import gov.nih.nci.cagrid.dorian.ifs.bean.UserPolicyFault;
 
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
@@ -42,6 +42,7 @@ import org.projectmobius.common.MobiusConfigurator;
 import org.projectmobius.common.MobiusResourceManager;
 
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -49,15 +50,13 @@ import org.projectmobius.common.MobiusResourceManager;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class GUMS extends MobiusResourceManager {
+public class Dorian extends MobiusResourceManager {
 
 	private Database db;
 
-	public static final String IDP_ADMIN_USER_ID = "gums";
+	public static final String IDP_ADMIN_USER_ID = "dorian";
 
 	public static final String IDP_ADMIN_PASSWORD = "password";
-
-	private String serviceId;
 
 	private CertificateAuthority ca;
 
@@ -68,19 +67,18 @@ public class GUMS extends MobiusResourceManager {
 	private IFSConfiguration ifsConfiguration;
 
 
-	public GUMS(String confFile, String serviceId) throws GUMSInternalFault {
+	public Dorian(String confFile, String serviceId) throws DorianInternalFault {
 		try {
-			this.serviceId = serviceId;
 			MobiusConfigurator.parseMobiusConfiguration(confFile, this);
 
 			IdentityProvider.ADMIN_USER_ID = IDP_ADMIN_USER_ID;
 			IdentityProvider.ADMIN_PASSWORD = IDP_ADMIN_PASSWORD;
 
-			this.db = new Database(getGUMSConfiguration().getConnectionManager(), getGUMSConfiguration()
-				.getGUMSInternalId());
+			this.db = new Database(getConfiguration().getConnectionManager(), getConfiguration()
+				.getDorianInternalId());
 			this.db.createDatabaseIfNeeded();
-			GUMSCertificateAuthorityConf caconf = (GUMSCertificateAuthorityConf) getResource(GUMSCertificateAuthorityConf.RESOURCE);
-			this.ca = new GUMSCertificateAuthority(db, caconf);
+			DorianCertificateAuthorityConf caconf = (DorianCertificateAuthorityConf) getResource(DorianCertificateAuthorityConf.RESOURCE);
+			this.ca = new DorianCertificateAuthority(db, caconf);
 
 			IdPConfiguration idpConf = (IdPConfiguration) getResource(IdPConfiguration.RESOURCE);
 			this.identityProvider = new IdentityProvider(idpConf, db, ca);
@@ -105,18 +103,18 @@ public class GUMS extends MobiusResourceManager {
 			this.ifs = new IFS(ifsConfiguration, db, ca);
 
 		} catch (Exception e) {
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("An unexpected error occurred in configuring the service.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		}
 	}
 
 
-	public GUMSConfiguration getGUMSConfiguration() {
-		return (GUMSConfiguration) this.getResource(GUMSConfiguration.RESOURCE);
+	public DorianConfiguration getConfiguration() {
+		return (DorianConfiguration) this.getResource(DorianConfiguration.RESOURCE);
 	}
 
 
@@ -125,26 +123,26 @@ public class GUMS extends MobiusResourceManager {
 	}
 
 
-	public X509Certificate getCACertificate() throws GUMSInternalFault {
+	public X509Certificate getCACertificate() throws DorianInternalFault {
 		try {
 			return this.ca.getCACertificate();
 		} catch (Exception e) {
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("An unexpected error occurred, in obtaining the CA certificate.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		}
 	}
 
 
-	public X509Certificate getIdPCertificate() throws GUMSInternalFault {
+	public X509Certificate getIdPCertificate() throws DorianInternalFault {
 		return identityProvider.getIdPCertificate();
 	}
 
 
-	public IdPUser[] findIdPUsers(String gridIdentity, IdPUserFilter filter) throws GUMSInternalFault,
+	public IdPUser[] findIdPUsers(String gridIdentity, IdPUserFilter filter) throws DorianInternalFault,
 		PermissionDeniedFault {
 		String uid = null;
 		try {
@@ -158,7 +156,7 @@ public class GUMS extends MobiusResourceManager {
 	}
 
 
-	public void updateIdPUser(String gridIdentity, IdPUser u) throws GUMSInternalFault, PermissionDeniedFault,
+	public void updateIdPUser(String gridIdentity, IdPUser u) throws DorianInternalFault, PermissionDeniedFault,
 		NoSuchUserFault, InvalidUserPropertyFault {
 		String uid = null;
 		try {
@@ -172,7 +170,7 @@ public class GUMS extends MobiusResourceManager {
 	}
 
 
-	public void removeIdPUser(String gridIdentity, String userId) throws GUMSInternalFault, PermissionDeniedFault {
+	public void removeIdPUser(String gridIdentity, String userId) throws DorianInternalFault, PermissionDeniedFault {
 		String uid = null;
 		try {
 			uid = ifs.getUserIdVerifyTrustedIdP(identityProvider.getIdPCertificate(), gridIdentity);
@@ -186,73 +184,73 @@ public class GUMS extends MobiusResourceManager {
 	}
 
 
-	public SAMLAssertion authenticate(BasicAuthCredential credential) throws GUMSInternalFault, PermissionDeniedFault {
+	public SAMLAssertion authenticate(BasicAuthCredential credential) throws DorianInternalFault, PermissionDeniedFault {
 		return this.identityProvider.authenticate(credential);
 	}
 
 
-	public String registerWithIdP(Application a) throws GUMSInternalFault, InvalidUserPropertyFault {
+	public String registerWithIdP(Application a) throws DorianInternalFault, InvalidUserPropertyFault {
 		return this.identityProvider.register(a);
 	}
 
 
 	/** *************** IFS FUNCTIONS ********************** */
 
-	public IFSUserPolicy[] getIFSUserPolicies(String callerGridIdentity) throws GUMSInternalFault, InvalidUserFault,
+	public IFSUserPolicy[] getIFSUserPolicies(String callerGridIdentity) throws DorianInternalFault, InvalidUserFault,
 		PermissionDeniedFault {
 		return ifs.getUserPolicies(callerGridIdentity);
 	}
 
 
 	public X509Certificate[] createProxy(SAMLAssertion saml, PublicKey publicKey, ProxyLifetime lifetime)
-		throws GUMSInternalFault, InvalidAssertionFault, InvalidProxyFault, UserPolicyFault, PermissionDeniedFault {
+		throws DorianInternalFault, InvalidAssertionFault, InvalidProxyFault, UserPolicyFault, PermissionDeniedFault {
 		return this.ifs.createProxy(saml, publicKey, lifetime);
 	}
 
 
-	public TrustedIdP[] getTrustedIdPs(String callerGridIdentity) throws GUMSInternalFault, InvalidUserFault,
+	public TrustedIdP[] getTrustedIdPs(String callerGridIdentity) throws DorianInternalFault, InvalidUserFault,
 		PermissionDeniedFault {
 		return ifs.getTrustedIdPs(callerGridIdentity);
 	}
 
 
-	public TrustedIdP addTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws GUMSInternalFault,
+	public TrustedIdP addTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws DorianInternalFault,
 		InvalidTrustedIdPFault, InvalidUserFault, PermissionDeniedFault {
 		return ifs.addTrustedIdP(callerGridIdentity, idp);
 	}
 
 
-	public void updatedTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws GUMSInternalFault,
+	public void updatedTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws DorianInternalFault,
 		InvalidTrustedIdPFault, InvalidUserFault, PermissionDeniedFault {
 		ifs.updatedTrustedIdP(callerGridIdentity, idp);
 	}
 
 
-	public void removeTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws GUMSInternalFault,
+	public void removeTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws DorianInternalFault,
 		InvalidTrustedIdPFault, InvalidUserFault, PermissionDeniedFault {
 		ifs.removeTrustedIdP(callerGridIdentity, idp.getId());
 	}
 
 
-	public IFSUser[] findIFSUsers(String callerGridIdentity, IFSUserFilter filter) throws GUMSInternalFault,
+	public IFSUser[] findIFSUsers(String callerGridIdentity, IFSUserFilter filter) throws DorianInternalFault,
 		InvalidUserFault, PermissionDeniedFault {
 		return ifs.findUsers(callerGridIdentity, filter);
 	}
 
 
-	public void updateIFSUser(String callerGridIdentity, IFSUser usr) throws GUMSInternalFault, InvalidUserFault,
+	public void updateIFSUser(String callerGridIdentity, IFSUser usr) throws DorianInternalFault, InvalidUserFault,
 		PermissionDeniedFault {
 		ifs.updateUser(callerGridIdentity, usr);
 	}
 
 
-	public void removeIFSUser(String callerGridIdentity, IFSUser usr) throws GUMSInternalFault, InvalidUserFault,
+	public void removeIFSUser(String callerGridIdentity, IFSUser usr) throws DorianInternalFault, InvalidUserFault,
 		PermissionDeniedFault {
 		ifs.removeUser(callerGridIdentity, usr);
 	}
 
 
-	public IFSUser renewIFSUserCredentials(String callerGridIdentity, IFSUser usr) throws GUMSInternalFault,
+	public IFSUser renewIFSUserCredentials(String callerGridIdentity, IFSUser usr) throws DorianInternalFault,
 		InvalidUserFault, PermissionDeniedFault {
 		return ifs.renewUserCredentials(callerGridIdentity, usr);
 	}

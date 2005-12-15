@@ -1,12 +1,12 @@
-package gov.nih.nci.cagrid.gums;
+package gov.nih.nci.cagrid.dorian;
 
-import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
-import gov.nih.nci.cagrid.gums.common.GUMSFault;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUserFilter;
-import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
-import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
+import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
+import gov.nih.nci.cagrid.dorian.common.DorianFault;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
+import gov.nih.nci.cagrid.dorian.idp.bean.InvalidUserPropertyFault;
+import gov.nih.nci.cagrid.dorian.idp.bean.NoSuchUserFault;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -17,13 +17,13 @@ import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
  */
 public interface IdPAdministration {
 	public IdPUser[] findUsers(IdPUserFilter filter)
-			throws GUMSFault, GUMSInternalFault, PermissionDeniedFault;
+			throws DorianFault, DorianInternalFault, PermissionDeniedFault;
 
 	public void updateUser(IdPUser u)
-			throws GUMSFault,GUMSInternalFault, PermissionDeniedFault,
+			throws DorianFault,DorianInternalFault, PermissionDeniedFault,
 			NoSuchUserFault, InvalidUserPropertyFault;
 	
 	public void removeUser(String userId)
-	throws GUMSFault,GUMSInternalFault, PermissionDeniedFault;
+	throws DorianFault,DorianInternalFault, PermissionDeniedFault;
 
 }

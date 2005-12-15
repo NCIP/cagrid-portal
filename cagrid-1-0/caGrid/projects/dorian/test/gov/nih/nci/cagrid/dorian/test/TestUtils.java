@@ -1,16 +1,16 @@
-package gov.nih.nci.cagrid.gums.test;
+package gov.nih.nci.cagrid.dorian.test;
 
-import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
-import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthority;
-import gov.nih.nci.cagrid.gums.ca.GUMSCertificateAuthorityConf;
-import gov.nih.nci.cagrid.gums.common.Database;
-import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
-import gov.nih.nci.cagrid.gums.ifs.AutoApprovalAutoRenewalPolicy;
-import gov.nih.nci.cagrid.gums.ifs.AutoApprovalPolicy;
-import gov.nih.nci.cagrid.gums.ifs.ManualApprovalAutoRenewalPolicy;
-import gov.nih.nci.cagrid.gums.ifs.ManualApprovalPolicy;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserPolicy;
+import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
+import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthority;
+import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthorityConf;
+import gov.nih.nci.cagrid.dorian.common.Database;
+import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
+import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
+import gov.nih.nci.cagrid.dorian.ifs.AutoApprovalAutoRenewalPolicy;
+import gov.nih.nci.cagrid.dorian.ifs.AutoApprovalPolicy;
+import gov.nih.nci.cagrid.dorian.ifs.ManualApprovalAutoRenewalPolicy;
+import gov.nih.nci.cagrid.dorian.ifs.ManualApprovalPolicy;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
 
 import java.io.File;
 import java.security.KeyPair;
@@ -26,7 +26,7 @@ import org.projectmobius.db.ConnectionManager;
 
 public class TestUtils {
 	
-	private static final String DB = "TEST_GUMS";
+	private static final String DB = "TEST_DORIAN";
 
 	public static String DB_CONFIG = "resources" + File.separator
 			+ "general-test" + File.separator + "db-config.xml";
@@ -65,10 +65,10 @@ public class TestUtils {
 	}
 	
 public static CertificateAuthority getCA(Database db) throws Exception{	
-		GUMSCertificateAuthorityConf conf = new GUMSCertificateAuthorityConf();
+		DorianCertificateAuthorityConf conf = new DorianCertificateAuthorityConf();
 		conf.setCaPassword("password");
 		conf.setAutoRenewal(false);
-		GUMSCertificateAuthority ca = new GUMSCertificateAuthority(db, conf);
+		DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
 		KeyPair rootPair = KeyUtil.generateRSAKeyPair1024();
 		
 		String rootSub = getCASubject();

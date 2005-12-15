@@ -1,16 +1,16 @@
-package gov.nih.nci.cagrid.gums.ifs.portal;
+package gov.nih.nci.cagrid.dorian.ifs.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.gums.IFSAdministration;
-import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
-import gov.nih.nci.cagrid.gums.client.IFSAdministrationClient;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserFilter;
-import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
-import gov.nih.nci.cagrid.gums.portal.GUMSServiceListComboBox;
-import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
-import gov.nih.nci.cagrid.gums.portal.ProxyCaddy;
-import gov.nih.nci.cagrid.gums.portal.ProxyComboBox;
+import gov.nih.nci.cagrid.dorian.IFSAdministration;
+import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
+import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
+import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
+import gov.nih.nci.cagrid.dorian.portal.DorianServiceListComboBox;
+import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
+import gov.nih.nci.cagrid.dorian.portal.ProxyCaddy;
+import gov.nih.nci.cagrid.dorian.portal.ProxyComboBox;
 import gov.nih.nci.cagrid.security.commstyle.CommunicationStyle;
 import gov.nih.nci.cagrid.security.commstyle.SecureConversationWithEncryption;
 
@@ -41,7 +41,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.8 2005-12-13 19:53:22 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.9 2005-12-15 19:29:33 langella Exp $
  */
 public class UserManagerWindow extends GridPortalBaseFrame {
 
@@ -124,7 +124,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 	public UserManagerWindow() {
 		super();
 		initialize();
-		this.setFrameIcon(GumsLookAndFeel.getUsersIcon());
+		this.setFrameIcon(DorianLookAndFeel.getUsersIcon());
 	}
 
 
@@ -223,7 +223,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			contentPanel.setLayout(new GridBagLayout());
 			contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Users",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GumsLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel.getPanelLabelColor()));
 			gridBagConstraints4.weightx = 1.0;
 			gridBagConstraints4.weighty = 1.0;
 			gridBagConstraints4.fill = java.awt.GridBagConstraints.BOTH;
@@ -258,7 +258,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		if (cancel == null) {
 			cancel = new JButton();
 			cancel.setText("Close");
-			cancel.setIcon(GumsLookAndFeel.getCloseIcon());
+			cancel.setIcon(DorianLookAndFeel.getCloseIcon());
 			cancel.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();
@@ -305,7 +305,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		if (manageUser == null) {
 			manageUser = new JButton();
 			manageUser.setText("Manage User");
-			manageUser.setIcon(GumsLookAndFeel.getUserMagnifyIcon());
+			manageUser.setIcon(DorianLookAndFeel.getUserMagnifyIcon());
 			manageUser.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					showUser();
@@ -324,7 +324,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			public void execute() {
 				try {
 					IFSUser user = (IFSUser) getUsersTable().getSelectedUser();
-					String service = ((GUMSServiceListComboBox) getService()).getSelectedService();
+					String service = ((DorianServiceListComboBox) getService()).getSelectedService();
 
 					GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 					CommunicationStyle style = new SecureConversationWithEncryption(proxy);
@@ -412,7 +412,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
 			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "Login Information",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GumsLookAndFeel
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
 					.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints28);
@@ -446,7 +446,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		if (query == null) {
 			query = new JButton();
 			query.setText("Find Users");
-			query.setIcon(GumsLookAndFeel.getQueryIcon());
+			query.setIcon(DorianLookAndFeel.getQueryIcon());
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
@@ -497,7 +497,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			f.setUserRole(((UserRolesComboBox) this.getUserRole()).getSelectedUserRole());
 			f.setUserStatus(((UserStatusComboBox) this.getUserStatus()).getSelectedUserStatus());
 
-			String service = ((GUMSServiceListComboBox) getService()).getSelectedService();
+			String service = ((DorianServiceListComboBox) getService()).getSelectedService();
 			CommunicationStyle style = new SecureConversationWithEncryption(proxy);
 
 			IFSAdministration client = new IFSAdministrationClient(service, style);
@@ -538,7 +538,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 	 */
 	private JComboBox getService() {
 		if (service == null) {
-			service = new GUMSServiceListComboBox();
+			service = new DorianServiceListComboBox();
 		}
 		return service;
 	}
@@ -586,7 +586,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 	private JProgressBar getProgress() {
 		if (progress == null) {
 			progress = new JProgressBar();
-			progress.setForeground(GumsLookAndFeel.getPanelLabelColor());
+			progress.setForeground(DorianLookAndFeel.getPanelLabelColor());
 			progress.setString("");
 			progress.setStringPainted(true);
 		}
@@ -699,7 +699,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			filterPanel = new JPanel();
 			filterPanel.setLayout(new GridBagLayout());
 			filterPanel.setBorder(BorderFactory.createTitledBorder(null, "Search Criteria",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GumsLookAndFeel
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
 					.getPanelLabelColor()));
 			filterPanel.add(getUserRole(), gridBagConstraints11);
 			filterPanel.add(idpLabel, gridBagConstraints3);
@@ -766,7 +766,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 
 	private void checkUpdateIdPs() {
 		getIdp().hidePopup();
-		final String service = ((GUMSServiceListComboBox) getService()).getSelectedService();
+		final String service = ((DorianServiceListComboBox) getService()).getSelectedService();
 		final ProxyCaddy caddy = ((ProxyComboBox) getProxy()).getSelectedProxyCaddy();
 		if ((service.equals(this.lastService)) && (caddy.getIdentity().equals(this.lastGridIdentity))) {
 			getIdp().showPopup();
@@ -899,14 +899,14 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 					}
 				}
 			});
-			removeUser.setIcon(GumsLookAndFeel.getRemoveUserIcon());
+			removeUser.setIcon(DorianLookAndFeel.getRemoveUserIcon());
 		}
 		return removeUser;
 	}
 
 
 	private void removeUser() {
-		String service = ((GUMSServiceListComboBox) getService()).getSelectedService();
+		String service = ((DorianServiceListComboBox) getService()).getSelectedService();
 		try {
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			CommunicationStyle style = new SecureConversationWithEncryption(proxy);

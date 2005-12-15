@@ -1,10 +1,10 @@
-package gov.nih.nci.cagrid.gums.idp.portal;
+package gov.nih.nci.cagrid.dorian.idp.portal;
 
 
 
 
 
-import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
+import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -22,7 +22,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: IdPMenu.java,v 1.8 2005-12-05 17:49:20 langella Exp $
+ * @version $Id: IdPMenu.java,v 1.9 2005-12-15 19:29:33 langella Exp $
  */
 public class IdPMenu extends GridPortalComponent {
 
@@ -51,7 +51,7 @@ public class IdPMenu extends GridPortalComponent {
 	private void initialize() {
 		this.setSize(400,200);
 		this.setContentPane(getJContentPane());
-		this.setFrameIcon(GumsLookAndFeel.getIdpIcon());
+		this.setFrameIcon(DorianLookAndFeel.getIdpIcon());
 		this.setTitle("Identity Provider Menu");
 	}
 	/**
@@ -129,7 +129,7 @@ public class IdPMenu extends GridPortalComponent {
 			menuPanel.add(userManagementLabel, gridBagConstraints4);
 			menuPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Identity Provider Options",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GumsLookAndFeel.getPanelLabelColor()));	
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel.getPanelLabelColor()));	
 			
 		}
 		return menuPanel;
@@ -176,7 +176,7 @@ public class IdPMenu extends GridPortalComponent {
 		if (perform == null) {
 			perform = new JButton();
 			perform.setText("Select");
-			perform.setIcon(GumsLookAndFeel.getSelectIcon());
+			perform.setIcon(DorianLookAndFeel.getSelectIcon());
 			perform.addActionListener(new java.awt.event.ActionListener() { 
 				public void actionPerformed(java.awt.event.ActionEvent e) {    
 					perform();
@@ -207,7 +207,7 @@ public class IdPMenu extends GridPortalComponent {
 		if (close == null) {
 			close = new JButton();
 			close.setText("Close");
-			close.setIcon(GumsLookAndFeel.getCloseIcon());
+			close.setIcon(DorianLookAndFeel.getCloseIcon());
 			close.addActionListener(new java.awt.event.ActionListener() { 
 				public void actionPerformed(java.awt.event.ActionEvent e) {    
 					dispose();

@@ -1,7 +1,7 @@
-package gov.nih.nci.cagrid.gums.idp.portal;
+package gov.nih.nci.cagrid.dorian.idp.portal;
 
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
-import gov.nih.nci.cagrid.gums.portal.PortalBaseTable;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
+import gov.nih.nci.cagrid.dorian.portal.PortalBaseTable;
 
 import java.util.Vector;
 
@@ -12,7 +12,7 @@ import javax.swing.table.TableColumn;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: UsersTable.java,v 1.4 2005-11-22 17:45:38 langella Exp $
+ * @version $Id: UsersTable.java,v 1.5 2005-12-15 19:29:33 langella Exp $
  */
 public class UsersTable extends PortalBaseTable {
 	public static String USER = "user";

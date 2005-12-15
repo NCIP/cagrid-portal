@@ -1,10 +1,10 @@
-package gov.nih.nci.cagrid.gums.idp.portal;
+package gov.nih.nci.cagrid.dorian.idp.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
-import gov.nih.nci.cagrid.gums.client.IdPAdministrationClient;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
-import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
+import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
+import gov.nih.nci.cagrid.dorian.client.IdPAdministrationClient;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
+import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
 import gov.nih.nci.cagrid.security.commstyle.SecureConversationWithEncryption;
 
 import java.awt.BorderLayout;
@@ -31,7 +31,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.10 2005-12-09 21:26:29 langella Exp $
+ * @version $Id: UserWindow.java,v 1.11 2005-12-15 19:29:33 langella Exp $
  */
 public class UserWindow extends GridPortalBaseFrame {
 
@@ -146,7 +146,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		this.proxy = proxy;
 		this.user = u;
 		initialize();
-		this.setFrameIcon(GumsLookAndFeel.getUserMagnifyIcon());
+		this.setFrameIcon(DorianLookAndFeel.getUserMagnifyIcon());
 	}
 
 	/**
@@ -232,7 +232,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		if (cancel == null) {
 			cancel = new JButton();
 			cancel.setText("Close");
-			cancel.setIcon(GumsLookAndFeel.getCloseIcon());
+			cancel.setIcon(DorianLookAndFeel.getCloseIcon());
 			cancel.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();
@@ -267,7 +267,7 @@ public class UserWindow extends GridPortalBaseFrame {
 
 				}
 			});
-			updateUser.setIcon(GumsLookAndFeel.getUpdateUserIcon());
+			updateUser.setIcon(DorianLookAndFeel.getUpdateUserIcon());
 		}
 		return updateUser;
 	}
@@ -345,7 +345,7 @@ public class UserWindow extends GridPortalBaseFrame {
 			jTabbedPane = new JTabbedPane();
 			jTabbedPane.setBorder(BorderFactory.createTitledBorder(null,
 					"Information", TitledBorder.DEFAULT_JUSTIFICATION,
-					TitledBorder.DEFAULT_POSITION, null, GumsLookAndFeel
+					TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
 							.getPanelLabelColor()));
 			jTabbedPane.addTab(INFO_PANEL, null, getInfoPanel(), null);
 			jTabbedPane.addTab(ACCOUNT_PANEL, null, getAccountPanel(), null);
@@ -654,11 +654,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		return city;
 	}
 
-	/**
-	 * This method initializes stateListComboBox
-	 * 
-	 * @return gov.nih.nci.cagrid.gums.idp.portal.StateListComboBox
-	 */
+
 	private StateListComboBox getState() {
 		if (state == null) {
 			state = new StateListComboBox(false);
@@ -667,11 +663,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		return state;
 	}
 
-	/**
-	 * This method initializes jTextField6
-	 * 
-	 * @return javax.swing.JTextField
-	 */
+
 	private JTextField getZipcode() {
 		if (zipcode == null) {
 			zipcode = new JTextField();
@@ -706,11 +698,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		return email;
 	}
 
-	/**
-	 * This method initializes countryListComboBox
-	 * 
-	 * @return gov.nih.nci.cagrid.gums.idp.portal.CountryListComboBox
-	 */
+	
 	private CountryListComboBox getCountry() {
 		if (country == null) {
 			country = new CountryListComboBox(false);
@@ -762,7 +750,7 @@ public class UserWindow extends GridPortalBaseFrame {
 			jPanel2.setLayout(new GridBagLayout());
 			jPanel2.setBorder(BorderFactory.createTitledBorder(null,
 					"Login Information", TitledBorder.DEFAULT_JUSTIFICATION,
-					TitledBorder.DEFAULT_POSITION, null, GumsLookAndFeel
+					TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
 							.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints27);

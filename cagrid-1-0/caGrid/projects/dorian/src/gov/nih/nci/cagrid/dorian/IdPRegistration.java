@@ -1,9 +1,9 @@
-package gov.nih.nci.cagrid.gums;
+package gov.nih.nci.cagrid.dorian;
 
-import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.common.GUMSFault;
-import gov.nih.nci.cagrid.gums.idp.bean.Application;
-import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
+import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.common.DorianFault;
+import gov.nih.nci.cagrid.dorian.idp.bean.Application;
+import gov.nih.nci.cagrid.dorian.idp.bean.InvalidUserPropertyFault;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -13,6 +13,6 @@ import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
  *          Exp $
  */
 public interface IdPRegistration {
-	public String register(Application a) throws GUMSFault,GUMSInternalFault,InvalidUserPropertyFault;
+	public String register(Application a) throws DorianFault,DorianInternalFault,InvalidUserPropertyFault;
 	
 }

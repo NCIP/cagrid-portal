@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
 
-<service name="cagrid/gums">
-	<resource name="home" type="gov.nih.nci.cagrid.gums.service.GUMSResourceHome">
+<service name="cagrid/dorian">
+	<resource name="home" type="gov.nih.nci.cagrid.dorian.service.DorianResourceHome">
 	<resourceParams>
 
 		<parameter>

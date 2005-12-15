@@ -1,14 +1,14 @@
-package gov.nih.nci.cagrid.gums.client;
+package gov.nih.nci.cagrid.dorian.client;
 
-import gov.nih.nci.cagrid.gums.IdPRegistration;
-import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.common.FaultHelper;
-import gov.nih.nci.cagrid.gums.common.FaultUtil;
-import gov.nih.nci.cagrid.gums.common.GUMSFault;
-import gov.nih.nci.cagrid.gums.common.IOUtils;
-import gov.nih.nci.cagrid.gums.idp.bean.Application;
-import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
-import gov.nih.nci.cagrid.gums.wsrf.GUMSPortType;
+import gov.nih.nci.cagrid.dorian.IdPRegistration;
+import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.common.FaultHelper;
+import gov.nih.nci.cagrid.dorian.common.FaultUtil;
+import gov.nih.nci.cagrid.dorian.common.DorianFault;
+import gov.nih.nci.cagrid.dorian.common.IOUtils;
+import gov.nih.nci.cagrid.dorian.idp.bean.Application;
+import gov.nih.nci.cagrid.dorian.idp.bean.InvalidUserPropertyFault;
+import gov.nih.nci.cagrid.dorian.wsrf.DorianPortType;
 import gov.nih.nci.cagrid.security.commstyle.AnonymousSecureConversationWithEncryption;
 
 
@@ -19,38 +19,38 @@ import gov.nih.nci.cagrid.security.commstyle.AnonymousSecureConversationWithEncr
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class IdPRegistrationClient extends GUMSBaseClient implements
+public class IdPRegistrationClient extends DorianBaseClient implements
 		IdPRegistration {
 
 	public IdPRegistrationClient(String serviceURI) {
 		super(serviceURI);
 	}
 
-	public String register(Application a) throws GUMSFault,GUMSInternalFault,InvalidUserPropertyFault{
-		GUMSPortType port = null;
+	public String register(Application a) throws DorianFault,DorianInternalFault,InvalidUserPropertyFault{
+		DorianPortType port = null;
 		try {
 			port = this.getPort(new AnonymousSecureConversationWithEncryption());
 		}catch (Exception e) {
-			GUMSFault fault = new GUMSFault();
+			DorianFault fault = new DorianFault();
 			fault.setFaultString(e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSFault) helper.getFault();
+			fault = (DorianFault) helper.getFault();
 			throw fault;
 		}
 		try {
 			return port.registerWithIdP(a);
-		}catch(GUMSInternalFault gie){
+		}catch(DorianInternalFault gie){
 			throw gie;
 		}catch(InvalidUserPropertyFault f){
 			throw f;
 		}catch (Exception e) {
 			FaultUtil.printFault(e);
-			GUMSFault fault = new GUMSFault();
+			DorianFault fault = new DorianFault();
 			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSFault) helper.getFault();
+			fault = (DorianFault) helper.getFault();
 			throw fault;
 		}
 	}

@@ -1,6 +1,6 @@
-package gov.nih.nci.cagrid.gums.ifs;
+package gov.nih.nci.cagrid.dorian.ifs;
 
-import gov.nih.nci.cagrid.gums.ifs.bean.ProxyLifetime;
+import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 
 import java.util.Calendar;
 import java.util.Date;

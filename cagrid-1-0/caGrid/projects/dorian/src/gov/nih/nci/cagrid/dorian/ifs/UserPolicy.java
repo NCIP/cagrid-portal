@@ -1,8 +1,9 @@
-package gov.nih.nci.cagrid.gums.ifs;
+package gov.nih.nci.cagrid.dorian.ifs;
 
-import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
-import gov.nih.nci.cagrid.gums.ifs.bean.UserPolicyFault;
+import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
+import gov.nih.nci.cagrid.dorian.ifs.bean.UserPolicyFault;
+
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -22,7 +23,7 @@ public abstract class UserPolicy {
 		this.userManager = um;
 	}
 
-	public abstract void applyPolicy(IFSUser user) throws GUMSInternalFault,
+	public abstract void applyPolicy(IFSUser user) throws DorianInternalFault,
 			UserPolicyFault;
 
 	public IFSConfiguration getConfiguration() {

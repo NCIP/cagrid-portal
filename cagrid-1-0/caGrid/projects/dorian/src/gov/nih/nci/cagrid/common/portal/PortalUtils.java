@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.common.portal;
 
-import gov.nih.nci.cagrid.gums.common.IOUtils;
+import gov.nih.nci.cagrid.dorian.common.IOUtils;
 
 import javax.swing.JOptionPane;
 

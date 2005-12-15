@@ -40,7 +40,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *---------------------------------------------------------------------------*/
-package gov.nih.nci.cagrid.gums.common;
+package gov.nih.nci.cagrid.dorian.common;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -60,7 +60,7 @@ import java.util.zip.ZipEntry;
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin </A>
  * @created Sep 20, 2004
- * @version $Id: ClassSelector.java,v 1.1 2005-12-14 16:12:12 langella Exp $
+ * @version $Id: ClassSelector.java,v 1.2 2005-12-15 19:29:32 langella Exp $
  */
 public class ClassSelector {
 	private List ignores;

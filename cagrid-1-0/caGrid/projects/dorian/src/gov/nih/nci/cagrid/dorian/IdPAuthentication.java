@@ -1,8 +1,8 @@
-package gov.nih.nci.cagrid.gums;
+package gov.nih.nci.cagrid.dorian;
 
-import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
-import gov.nih.nci.cagrid.gums.common.GUMSFault;
+import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
+import gov.nih.nci.cagrid.dorian.common.DorianFault;
 
 import org.opensaml.SAMLAssertion;
 
@@ -14,6 +14,6 @@ import org.opensaml.SAMLAssertion;
  *          Exp $
  */
 public interface IdPAuthentication {
-	public SAMLAssertion authenticate() throws GUMSFault,GUMSInternalFault, PermissionDeniedFault;
+	public SAMLAssertion authenticate() throws DorianFault,DorianInternalFault, PermissionDeniedFault;
 	
 }

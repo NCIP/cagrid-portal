@@ -1,18 +1,18 @@
-package gov.nih.nci.cagrid.gums.idp;
+package gov.nih.nci.cagrid.dorian.idp;
 
-import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
-import gov.nih.nci.cagrid.gums.common.Database;
-import gov.nih.nci.cagrid.gums.common.FaultUtil;
-import gov.nih.nci.cagrid.gums.common.SimpleResourceManager;
-import gov.nih.nci.cagrid.gums.idp.bean.Application;
-import gov.nih.nci.cagrid.gums.idp.bean.BasicAuthCredential;
-import gov.nih.nci.cagrid.gums.idp.bean.CountryCode;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUserFilter;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUserRole;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUserStatus;
-import gov.nih.nci.cagrid.gums.idp.bean.StateCode;
-import gov.nih.nci.cagrid.gums.test.TestUtils;
+import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
+import gov.nih.nci.cagrid.dorian.common.Database;
+import gov.nih.nci.cagrid.dorian.common.FaultUtil;
+import gov.nih.nci.cagrid.dorian.common.SimpleResourceManager;
+import gov.nih.nci.cagrid.dorian.idp.bean.Application;
+import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
+import gov.nih.nci.cagrid.dorian.idp.bean.CountryCode;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserRole;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserStatus;
+import gov.nih.nci.cagrid.dorian.idp.bean.StateCode;
+import gov.nih.nci.cagrid.dorian.test.TestUtils;
 
 import java.io.File;
 import java.util.Iterator;
@@ -24,6 +24,7 @@ import org.opensaml.SAMLAttribute;
 import org.opensaml.SAMLAttributeStatement;
 import org.opensaml.SAMLAuthenticationStatement;
 import org.opensaml.SAMLStatement;
+
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>

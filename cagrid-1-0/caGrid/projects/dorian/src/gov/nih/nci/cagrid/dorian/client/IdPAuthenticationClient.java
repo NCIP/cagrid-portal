@@ -1,16 +1,16 @@
-package gov.nih.nci.cagrid.gums.client;
+package gov.nih.nci.cagrid.dorian.client;
 
 
 
-import gov.nih.nci.cagrid.gums.IdPAuthentication;
-import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
-import gov.nih.nci.cagrid.gums.common.FaultHelper;
-import gov.nih.nci.cagrid.gums.common.FaultUtil;
-import gov.nih.nci.cagrid.gums.common.GUMSFault;
-import gov.nih.nci.cagrid.gums.common.IOUtils;
-import gov.nih.nci.cagrid.gums.idp.bean.BasicAuthCredential;
-import gov.nih.nci.cagrid.gums.wsrf.GUMSPortType;
+import gov.nih.nci.cagrid.dorian.IdPAuthentication;
+import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
+import gov.nih.nci.cagrid.dorian.common.FaultHelper;
+import gov.nih.nci.cagrid.dorian.common.FaultUtil;
+import gov.nih.nci.cagrid.dorian.common.DorianFault;
+import gov.nih.nci.cagrid.dorian.common.IOUtils;
+import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
+import gov.nih.nci.cagrid.dorian.wsrf.DorianPortType;
 import gov.nih.nci.cagrid.security.commstyle.AnonymousSecureConversationWithEncryption;
 
 import org.opensaml.SAMLAssertion;
@@ -25,7 +25,7 @@ import uk.org.ogsadai.common.XMLUtilities;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class IdPAuthenticationClient extends GUMSBaseClient implements
+public class IdPAuthenticationClient extends DorianBaseClient implements
 		IdPAuthentication {
 
 	private BasicAuthCredential cred;
@@ -37,47 +37,34 @@ public class IdPAuthenticationClient extends GUMSBaseClient implements
 	
 	
 
-	public SAMLAssertion authenticate() throws GUMSFault,GUMSInternalFault, PermissionDeniedFault {
+	public SAMLAssertion authenticate() throws DorianFault,DorianInternalFault, PermissionDeniedFault {
 		// TODO Auto-generated method stub
-		GUMSPortType port = null;
+		DorianPortType port = null;
 		try {
 			port = this.getPort(new AnonymousSecureConversationWithEncryption());
 		}catch (Exception e) {
-			GUMSFault fault = new GUMSFault();
+			DorianFault fault = new DorianFault();
 			fault.setFaultString(e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSFault) helper.getFault();
+			fault = (DorianFault) helper.getFault();
 			throw fault;
 		}
 		try {
 			String xml = port.authenticateWithIdP(cred).getXml();
 			return IOUtils.stringToSAMLAssertion(xml);
-		}catch(GUMSInternalFault gie){
+		}catch(DorianInternalFault gie){
 			throw gie;
 		}catch (PermissionDeniedFault ilf){
 			throw ilf;
 		}catch (Exception e) {
 			FaultUtil.printFault(e);
-			GUMSFault fault = new GUMSFault();
+			DorianFault fault = new DorianFault();
 			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSFault) helper.getFault();
+			fault = (DorianFault) helper.getFault();
 			throw fault;
-		}
-	}
-	
-	public static void main(String[] args){
-		try{
-			BasicAuthCredential cred = new BasicAuthCredential("gomets123","langella");
-			IdPAuthenticationClient client = new IdPAuthenticationClient("http://localhost:8080/wsrf/services/cagrid/gums",cred);
-			SAMLAssertion saml = client.authenticate();
-			System.out.println("SAML:");
-			System.out.println(XMLUtilities.xmlDOMToString((Element) saml
-					.toDOM()));
-		}catch(Exception e){
-			e.printStackTrace();
 		}
 	}
 }

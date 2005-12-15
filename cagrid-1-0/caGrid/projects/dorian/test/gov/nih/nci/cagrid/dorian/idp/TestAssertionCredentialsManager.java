@@ -1,13 +1,13 @@
-package gov.nih.nci.cagrid.gums.idp;
+package gov.nih.nci.cagrid.dorian.idp;
 
-import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
-import gov.nih.nci.cagrid.gums.common.Database;
-import gov.nih.nci.cagrid.gums.common.FaultUtil;
-import gov.nih.nci.cagrid.gums.common.IOUtils;
-import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
-import gov.nih.nci.cagrid.gums.test.TestUtils;
+import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
+import gov.nih.nci.cagrid.dorian.common.Database;
+import gov.nih.nci.cagrid.dorian.common.FaultUtil;
+import gov.nih.nci.cagrid.dorian.common.IOUtils;
+import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
+import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
+import gov.nih.nci.cagrid.dorian.test.TestUtils;
 
 import java.io.File;
 import java.security.KeyPair;
@@ -239,7 +239,7 @@ public class TestAssertionCredentialsManager extends TestCase {
 			try {
 				cm.getIdPCertificate();
 				assertTrue(false);
-			} catch (GUMSInternalFault fault) {
+			} catch (DorianInternalFault fault) {
 
 			}
 
@@ -257,11 +257,11 @@ public class TestAssertionCredentialsManager extends TestCase {
 			assertEquals(false, conf.isAutoCreateAssertingCredentials());
 			assertEquals(false, conf.isAutoRenewAssertingCredentials());
 			X509Certificate providedCert = CertUtil
-					.loadCertificate(CA_RESOURCES_DIR + "/gums-cert.pem");
+					.loadCertificate(CA_RESOURCES_DIR + "/dorian-cert.pem");
 			assertTrue(!CertUtil.isExpired(providedCert));
 			assertEquals(providedCert, conf.getAssertingCertificate());
 			assertEquals(KeyUtil.loadPrivateKey(CA_RESOURCES_DIR
-					+ "/gums-key.pem", conf.getKeyPassword()), conf
+					+ "/dorian-key.pem", conf.getKeyPassword()), conf
 					.getAssertingKey());
 
 			AssertionCredentialsManager cm = new AssertionCredentialsManager(
@@ -302,9 +302,9 @@ public class TestAssertionCredentialsManager extends TestCase {
 		config.setAutoRenewAssertingCredentials(false);
 
 		config.setAssertingCertificate(CertUtil
-				.loadCertificate(CA_RESOURCES_DIR + "/gums-cert.pem"));
+				.loadCertificate(CA_RESOURCES_DIR + "/dorian-cert.pem"));
 		config.setAssertingKey(KeyUtil.loadPrivateKey(CA_RESOURCES_DIR
-				+ "/gums-key.pem", config.getKeyPassword()));
+				+ "/dorian-key.pem", config.getKeyPassword()));
 		return config;
 	}
 

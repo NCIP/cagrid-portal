@@ -1,7 +1,7 @@
-package gov.nih.nci.cagrid.gums.util.ca;
+package gov.nih.nci.cagrid.dorian.util.ca;
 
-import gov.nih.nci.cagrid.gums.common.FaultUtil;
-import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
+import gov.nih.nci.cagrid.dorian.common.FaultUtil;
+import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
 
 import java.io.File;
 import java.security.KeyPair;
@@ -113,7 +113,7 @@ public class KeyTest extends TestCase {
 		}	
 		
 		try{
-			PrivateKey key=KeyUtil.loadPrivateKey(RESOURCES_DIR+File.separator+"gums-key.pem",null);
+			PrivateKey key=KeyUtil.loadPrivateKey(RESOURCES_DIR+File.separator+"dorian-key.pem",null);
 		    assertNotNull(key);
 		}catch (Exception e) {
 			FaultUtil.printFault(e);

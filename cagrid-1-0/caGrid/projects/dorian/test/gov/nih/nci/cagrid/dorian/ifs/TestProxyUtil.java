@@ -1,9 +1,9 @@
-package gov.nih.nci.cagrid.gums.ifs;
+package gov.nih.nci.cagrid.dorian.ifs;
 
-import gov.nih.nci.cagrid.gums.common.FaultUtil;
-import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
-import gov.nih.nci.cagrid.gums.ifs.bean.ProxyLifetime;
+import gov.nih.nci.cagrid.dorian.common.FaultUtil;
+import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
+import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
+import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 
 import java.io.File;
 import java.security.KeyPair;
@@ -34,9 +34,9 @@ public class TestProxyUtil extends TestCase {
 	public void testCreateProxy() {
 		try {
 				String certLocation = RESOURCES_DIR + File.separator
-						+ "gums-cert.pem";
+						+ "dorian-cert.pem";
 				String keyLocation = RESOURCES_DIR + File.separator
-						+ "gums-key.pem";
+						+ "dorian-key.pem";
 		
 				ProxyLifetime lifetime = new ProxyLifetime();
 				lifetime.setHours(2);
@@ -76,9 +76,9 @@ public class TestProxyUtil extends TestCase {
 	public void testInvalidProxyTimeToGreat() {
 		try {
 				String certLocation = RESOURCES_DIR + File.separator
-						+ "gums-cert.pem";
+						+ "dorian-cert.pem";
 				String keyLocation = RESOURCES_DIR + File.separator
-						+ "gums-key.pem";
+						+ "dorian-key.pem";
 				ProxyLifetime lifetime = new ProxyLifetime();
 				lifetime.setHours(50000);
 				lifetime.setMinutes(0);

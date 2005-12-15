@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.gums.common;
+package gov.nih.nci.cagrid.dorian.common;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

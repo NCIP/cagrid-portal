@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.gums.ifs.portal;
+package gov.nih.nci.cagrid.dorian.ifs.portal;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -14,7 +14,7 @@ import javax.swing.JTextField;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CertificatePanel.java,v 1.2 2005-12-13 19:53:22 langella Exp $
+ * @version $Id: CertificatePanel.java,v 1.3 2005-12-15 19:29:33 langella Exp $
  */
 public class CertificatePanel extends JPanel {
 

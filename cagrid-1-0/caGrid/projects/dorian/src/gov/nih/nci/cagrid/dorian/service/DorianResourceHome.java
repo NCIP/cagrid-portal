@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.gums.service;
+package gov.nih.nci.cagrid.dorian.service;
 
 import org.globus.wsrf.Resource;
 import org.globus.wsrf.impl.SingletonResourceHome;
@@ -10,12 +10,12 @@ import org.globus.wsrf.impl.SingletonResourceHome;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class GUMSResourceHome extends SingletonResourceHome {
+public class DorianResourceHome extends SingletonResourceHome {
 
 	public Resource findSingleton() {
 		try {
 			// Create a resource and initialize it.
-			GUMSResource mathResource = new GUMSResource();
+			DorianResource mathResource = new DorianResource();
 			mathResource.initialize();
 			return mathResource;
 		} catch (Exception e) {

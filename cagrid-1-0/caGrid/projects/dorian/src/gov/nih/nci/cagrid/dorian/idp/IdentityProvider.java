@@ -1,23 +1,23 @@
-package gov.nih.nci.cagrid.gums.idp;
+package gov.nih.nci.cagrid.dorian.idp;
 
-import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
-import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
-import gov.nih.nci.cagrid.gums.common.Crypt;
-import gov.nih.nci.cagrid.gums.common.Database;
-import gov.nih.nci.cagrid.gums.common.FaultHelper;
-import gov.nih.nci.cagrid.gums.common.GUMSObject;
-import gov.nih.nci.cagrid.gums.idp.bean.Application;
-import gov.nih.nci.cagrid.gums.idp.bean.ApplicationReview;
-import gov.nih.nci.cagrid.gums.idp.bean.BasicAuthCredential;
-import gov.nih.nci.cagrid.gums.idp.bean.CountryCode;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUser;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUserFilter;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUserRole;
-import gov.nih.nci.cagrid.gums.idp.bean.IdPUserStatus;
-import gov.nih.nci.cagrid.gums.idp.bean.InvalidUserPropertyFault;
-import gov.nih.nci.cagrid.gums.idp.bean.NoSuchUserFault;
-import gov.nih.nci.cagrid.gums.idp.bean.StateCode;
+import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
+import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
+import gov.nih.nci.cagrid.dorian.common.Crypt;
+import gov.nih.nci.cagrid.dorian.common.Database;
+import gov.nih.nci.cagrid.dorian.common.DorianObject;
+import gov.nih.nci.cagrid.dorian.common.FaultHelper;
+import gov.nih.nci.cagrid.dorian.idp.bean.Application;
+import gov.nih.nci.cagrid.dorian.idp.bean.ApplicationReview;
+import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
+import gov.nih.nci.cagrid.dorian.idp.bean.CountryCode;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserRole;
+import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserStatus;
+import gov.nih.nci.cagrid.dorian.idp.bean.InvalidUserPropertyFault;
+import gov.nih.nci.cagrid.dorian.idp.bean.NoSuchUserFault;
+import gov.nih.nci.cagrid.dorian.idp.bean.StateCode;
 
 import java.security.cert.X509Certificate;
 
@@ -31,11 +31,11 @@ import org.opensaml.SAMLAssertion;
  *          Exp $
  */
 
-public class IdentityProvider extends GUMSObject {
+public class IdentityProvider extends DorianObject {
 
 	private UserManager userManager;
 
-	public static String ADMIN_USER_ID = "gums";
+	public static String ADMIN_USER_ID = "dorian";
 
 	public static String ADMIN_PASSWORD = "password";
 
@@ -44,7 +44,7 @@ public class IdentityProvider extends GUMSObject {
 	private AssertionCredentialsManager assertionManager;
 
 	public IdentityProvider(IdPConfiguration conf, Database db,
-			CertificateAuthority ca) throws GUMSInternalFault {
+			CertificateAuthority ca) throws DorianInternalFault {
 		try {
 			this.conf = conf;
 			this.userManager = new UserManager(db, conf);
@@ -55,7 +55,7 @@ public class IdentityProvider extends GUMSObject {
 				IdPUser u = new IdPUser();
 				u.setUserId(ADMIN_USER_ID);
 				u.setPassword(ADMIN_PASSWORD);
-				u.setEmail("gums@gums.org");
+				u.setEmail("dorian@dorian.org");
 				u.setFirstName("Mr.");
 				u.setLastName("Administrator");
 				u.setOrganization("caBIG");
@@ -73,28 +73,28 @@ public class IdentityProvider extends GUMSObject {
 
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault
 					.setFaultString("Error initializing the Identity Manager Provider.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		}
 	}
 
 	public SAMLAssertion authenticate(BasicAuthCredential credential)
-			throws GUMSInternalFault, PermissionDeniedFault {
+			throws DorianInternalFault, PermissionDeniedFault {
 		IdPUser requestor = authenticateAndVerifyUser(credential);
 		return assertionManager.getAuthenticationAssertion(requestor
 				.getUserId(), requestor.getEmail());
 	}
 
-	public X509Certificate getIdPCertificate() throws GUMSInternalFault {
+	public X509Certificate getIdPCertificate() throws DorianInternalFault {
 		return assertionManager.getIdPCertificate();
 	}
 
-	public String register(Application a) throws GUMSInternalFault,
+	public String register(Application a) throws DorianInternalFault,
 			InvalidUserPropertyFault {
 
 		IdPRegistrationPolicy policy = conf.getRegistrationPolicy();
@@ -134,7 +134,7 @@ public class IdentityProvider extends GUMSObject {
 	}
 
 	public IdPUser getUser(String requestorUID, String uid)
-			throws GUMSInternalFault, PermissionDeniedFault,
+			throws DorianInternalFault, PermissionDeniedFault,
 			NoSuchUserFault {
 		IdPUser requestor = verifyUser(requestorUID);
 		verifyAdministrator(requestor);
@@ -142,7 +142,7 @@ public class IdentityProvider extends GUMSObject {
 	}
 
 	public IdPUser[] findUsers(String requestorUID,
-			IdPUserFilter filter) throws GUMSInternalFault,
+			IdPUserFilter filter) throws DorianInternalFault,
 			PermissionDeniedFault {
 		IdPUser requestor = verifyUser(requestorUID);
 		verifyAdministrator(requestor);
@@ -150,7 +150,7 @@ public class IdentityProvider extends GUMSObject {
 	}
 
 	public void updateUser(String requestorUID, IdPUser u)
-			throws GUMSInternalFault, PermissionDeniedFault,
+			throws DorianInternalFault, PermissionDeniedFault,
 			NoSuchUserFault, InvalidUserPropertyFault {
 		IdPUser requestor = verifyUser(requestorUID);
 		verifyAdministrator(requestor);
@@ -165,7 +165,7 @@ public class IdentityProvider extends GUMSObject {
 		}
 	}
 
-	private IdPUser verifyUser(String uid) throws GUMSInternalFault,
+	private IdPUser verifyUser(String uid) throws DorianInternalFault,
 			PermissionDeniedFault {
 		try {
 			IdPUser u = this.userManager.getUser(uid);
@@ -178,7 +178,7 @@ public class IdentityProvider extends GUMSObject {
 		}
 	}
 
-	private void verifyUser(IdPUser u) throws GUMSInternalFault,
+	private void verifyUser(IdPUser u) throws DorianInternalFault,
 			PermissionDeniedFault {
 
 		if (!u.getStatus().equals(IdPUserStatus.Active)) {
@@ -208,7 +208,7 @@ public class IdentityProvider extends GUMSObject {
 	}
 
 	private IdPUser authenticateAndVerifyUser(BasicAuthCredential credential)
-			throws GUMSInternalFault, PermissionDeniedFault {
+			throws DorianInternalFault, PermissionDeniedFault {
 		try {
 			IdPUser u = this.userManager.getUser(credential.getUserId());
 			if (!u.getPassword().equals(Crypt.crypt(credential.getPassword()))) {
@@ -227,7 +227,7 @@ public class IdentityProvider extends GUMSObject {
 	}
 
 	public void removeUser(String requestorUID, String userId)
-			throws GUMSInternalFault, PermissionDeniedFault {
+			throws DorianInternalFault, PermissionDeniedFault {
 		IdPUser requestor = verifyUser(requestorUID);
 		verifyAdministrator(requestor);
 		userManager.removeUser(userId);

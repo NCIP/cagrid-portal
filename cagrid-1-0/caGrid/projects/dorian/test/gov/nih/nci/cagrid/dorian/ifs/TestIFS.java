@@ -1,24 +1,24 @@
-package gov.nih.nci.cagrid.gums.ifs;
+package gov.nih.nci.cagrid.dorian.ifs;
 
-import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
-import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
-import gov.nih.nci.cagrid.gums.common.Database;
-import gov.nih.nci.cagrid.gums.common.FaultHelper;
-import gov.nih.nci.cagrid.gums.common.FaultUtil;
-import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserFilter;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserRole;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
-import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.InvalidProxyFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.ProxyLifetime;
-import gov.nih.nci.cagrid.gums.ifs.bean.SAMLAuthenticationMethod;
-import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
-import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdPStatus;
-import gov.nih.nci.cagrid.gums.test.TestUtils;
+import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
+import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
+import gov.nih.nci.cagrid.dorian.common.Database;
+import gov.nih.nci.cagrid.dorian.common.FaultHelper;
+import gov.nih.nci.cagrid.dorian.common.FaultUtil;
+import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
+import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserRole;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserStatus;
+import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidAssertionFault;
+import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidProxyFault;
+import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
+import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
+import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
+import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
+import gov.nih.nci.cagrid.dorian.test.TestUtils;
 
 import java.security.KeyPair;
 import java.security.PrivateKey;
@@ -609,11 +609,11 @@ public class TestIFS extends TestCase {
 
 			return saml;
 		} catch (Exception e) {
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Error creating SAML Assertion.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 
 		}
@@ -689,6 +689,7 @@ public class TestIFS extends TestCase {
 		super.setUp();
 		try {
 			assertEquals(0, db.getUsedConnectionCount());
+			assertEquals(0, db.getRootUsedConnectionCount());
 			db.destroyDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);

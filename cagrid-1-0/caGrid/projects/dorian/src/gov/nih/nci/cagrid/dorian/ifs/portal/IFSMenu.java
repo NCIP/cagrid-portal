@@ -1,6 +1,6 @@
-package gov.nih.nci.cagrid.gums.ifs.portal;
+package gov.nih.nci.cagrid.dorian.ifs.portal;
 
-import gov.nih.nci.cagrid.gums.portal.GumsLookAndFeel;
+import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -18,7 +18,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: IFSMenu.java,v 1.8 2005-12-14 18:12:11 langella Exp $
+ * @version $Id: IFSMenu.java,v 1.9 2005-12-15 19:29:33 langella Exp $
  */
 public class IFSMenu extends GridPortalComponent {
 
@@ -65,7 +65,7 @@ public class IFSMenu extends GridPortalComponent {
 	private void initialize() {
 		this.setSize(400, 200);
 		this.setContentPane(getJContentPane());
-		this.setFrameIcon(GumsLookAndFeel.getIFSIcon());
+		this.setFrameIcon(DorianLookAndFeel.getIFSIcon());
 		this.setTitle("Identity Federation Menu");
 	}
 
@@ -169,7 +169,7 @@ public class IFSMenu extends GridPortalComponent {
 					null, "Identity Federation Options",
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					GumsLookAndFeel.getPanelLabelColor()));
+					DorianLookAndFeel.getPanelLabelColor()));
 			menuPanel.add(getManageProxies(), gridBagConstraints);
 
 			menuPanel.add(manageProxiesLabel, gridBagConstraints11);
@@ -212,7 +212,7 @@ public class IFSMenu extends GridPortalComponent {
 		if (perform == null) {
 			perform = new JButton();
 			perform.setText("Select");
-			perform.setIcon(GumsLookAndFeel.getSelectIcon());
+			perform.setIcon(DorianLookAndFeel.getSelectIcon());
 			perform.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					perform();
@@ -250,7 +250,7 @@ public class IFSMenu extends GridPortalComponent {
 		if (close == null) {
 			close = new JButton();
 			close.setText("Close");
-			close.setIcon(GumsLookAndFeel.getCloseIcon());
+			close.setIcon(DorianLookAndFeel.getCloseIcon());
 			close.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();

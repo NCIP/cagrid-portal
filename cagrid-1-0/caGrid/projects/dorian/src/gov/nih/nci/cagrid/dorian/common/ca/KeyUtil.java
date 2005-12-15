@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.gums.common.ca;
+package gov.nih.nci.cagrid.dorian.common.ca;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,26 +1,26 @@
-package gov.nih.nci.cagrid.gums.ifs;
+package gov.nih.nci.cagrid.dorian.ifs;
 
-import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.bean.PermissionDeniedFault;
-import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
-import gov.nih.nci.cagrid.gums.common.AddressValidator;
-import gov.nih.nci.cagrid.gums.common.Database;
-import gov.nih.nci.cagrid.gums.common.FaultHelper;
-import gov.nih.nci.cagrid.gums.common.GUMSObject;
-import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUser;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserFilter;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserPolicy;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserRole;
-import gov.nih.nci.cagrid.gums.ifs.bean.IFSUserStatus;
-import gov.nih.nci.cagrid.gums.ifs.bean.InvalidAssertionFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.InvalidProxyFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.InvalidTrustedIdPFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.InvalidUserFault;
-import gov.nih.nci.cagrid.gums.ifs.bean.ProxyLifetime;
-import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdP;
-import gov.nih.nci.cagrid.gums.ifs.bean.TrustedIdPStatus;
-import gov.nih.nci.cagrid.gums.ifs.bean.UserPolicyFault;
+import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
+import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
+import gov.nih.nci.cagrid.dorian.common.AddressValidator;
+import gov.nih.nci.cagrid.dorian.common.Database;
+import gov.nih.nci.cagrid.dorian.common.DorianObject;
+import gov.nih.nci.cagrid.dorian.common.FaultHelper;
+import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserRole;
+import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserStatus;
+import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidAssertionFault;
+import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidProxyFault;
+import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidTrustedIdPFault;
+import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidUserFault;
+import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
+import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
+import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
+import gov.nih.nci.cagrid.dorian.ifs.bean.UserPolicyFault;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -43,7 +43,7 @@ import org.opensaml.SAMLAuthenticationStatement;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class IFS extends GUMSObject {
+public class IFS extends DorianObject {
 
 	public final static String EMAIL_NAMESPACE = "http://cagrid.nci.nih.gov/email";
 
@@ -56,7 +56,7 @@ public class IFS extends GUMSObject {
 	private IFSConfiguration conf;
 
 
-	public IFS(IFSConfiguration conf, Database db, CertificateAuthority ca) throws GUMSInternalFault {
+	public IFS(IFSConfiguration conf, Database db, CertificateAuthority ca) throws DorianInternalFault {
 		this.conf = conf;
 		tm = new TrustManager(conf, db);
 		um = new UserManager(db, conf, ca, tm);
@@ -64,7 +64,7 @@ public class IFS extends GUMSObject {
 	}
 
 
-	public IFSUserPolicy[] getUserPolicies(String callerGridIdentity) throws GUMSInternalFault,
+	public IFSUserPolicy[] getUserPolicies(String callerGridIdentity) throws DorianInternalFault,
 		InvalidUserFault, PermissionDeniedFault {
 		IFSUser caller = um.getUser(callerGridIdentity);
 		verifyActiveUser(caller);
@@ -73,7 +73,7 @@ public class IFS extends GUMSObject {
 	}
 
 
-	public String getUserIdVerifyTrustedIdP(X509Certificate idpCert, String identity) throws GUMSInternalFault,
+	public String getUserIdVerifyTrustedIdP(X509Certificate idpCert, String identity) throws DorianInternalFault,
 		InvalidUserFault, InvalidTrustedIdPFault, PermissionDeniedFault {
 		if (identity == null) {
 			PermissionDeniedFault fault = new PermissionDeniedFault();
@@ -91,7 +91,7 @@ public class IFS extends GUMSObject {
 	}
 
 
-	public TrustedIdP addTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws GUMSInternalFault,
+	public TrustedIdP addTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws DorianInternalFault,
 		InvalidTrustedIdPFault, InvalidUserFault, PermissionDeniedFault {
 		IFSUser caller = um.getUser(callerGridIdentity);
 		verifyActiveUser(caller);
@@ -100,7 +100,7 @@ public class IFS extends GUMSObject {
 	}
 
 
-	public void updatedTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws GUMSInternalFault,
+	public void updatedTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws DorianInternalFault,
 		InvalidTrustedIdPFault, InvalidUserFault, PermissionDeniedFault {
 		IFSUser caller = um.getUser(callerGridIdentity);
 		verifyActiveUser(caller);
@@ -109,7 +109,7 @@ public class IFS extends GUMSObject {
 	}
 
 
-	public void removeTrustedIdP(String callerGridIdentity, long idpId) throws GUMSInternalFault,
+	public void removeTrustedIdP(String callerGridIdentity, long idpId) throws DorianInternalFault,
 		InvalidTrustedIdPFault, InvalidUserFault, PermissionDeniedFault {
 		IFSUser caller = um.getUser(callerGridIdentity);
 		verifyActiveUser(caller);
@@ -118,7 +118,7 @@ public class IFS extends GUMSObject {
 	}
 
 
-	public TrustedIdP[] getTrustedIdPs(String callerGridIdentity) throws GUMSInternalFault, InvalidUserFault,
+	public TrustedIdP[] getTrustedIdPs(String callerGridIdentity) throws DorianInternalFault, InvalidUserFault,
 		PermissionDeniedFault {
 		IFSUser caller = um.getUser(callerGridIdentity);
 		verifyActiveUser(caller);
@@ -127,7 +127,7 @@ public class IFS extends GUMSObject {
 	}
 
 
-	public IFSUser getUser(String callerGridIdentity, long idpId, String uid) throws GUMSInternalFault,
+	public IFSUser getUser(String callerGridIdentity, long idpId, String uid) throws DorianInternalFault,
 		InvalidUserFault, PermissionDeniedFault {
 		IFSUser caller = um.getUser(callerGridIdentity);
 		verifyActiveUser(caller);
@@ -137,7 +137,7 @@ public class IFS extends GUMSObject {
 	}
 
 
-	public IFSUser[] findUsers(String callerGridIdentity, IFSUserFilter filter) throws GUMSInternalFault,
+	public IFSUser[] findUsers(String callerGridIdentity, IFSUserFilter filter) throws DorianInternalFault,
 		InvalidUserFault, PermissionDeniedFault {
 		IFSUser caller = um.getUser(callerGridIdentity);
 		verifyActiveUser(caller);
@@ -146,7 +146,7 @@ public class IFS extends GUMSObject {
 	}
 
 
-	public void updateUser(String callerGridIdentity, IFSUser usr) throws GUMSInternalFault, InvalidUserFault,
+	public void updateUser(String callerGridIdentity, IFSUser usr) throws DorianInternalFault, InvalidUserFault,
 		PermissionDeniedFault {
 		IFSUser caller = um.getUser(callerGridIdentity);
 		verifyActiveUser(caller);
@@ -156,7 +156,7 @@ public class IFS extends GUMSObject {
 	}
 
 
-	public void removeUser(String callerGridIdentity, IFSUser usr) throws GUMSInternalFault, InvalidUserFault,
+	public void removeUser(String callerGridIdentity, IFSUser usr) throws DorianInternalFault, InvalidUserFault,
 		PermissionDeniedFault {
 		IFSUser caller = um.getUser(callerGridIdentity);
 		verifyActiveUser(caller);
@@ -165,7 +165,7 @@ public class IFS extends GUMSObject {
 	}
 
 
-	public IFSUser renewUserCredentials(String callerGridIdentity, IFSUser usr) throws GUMSInternalFault,
+	public IFSUser renewUserCredentials(String callerGridIdentity, IFSUser usr) throws DorianInternalFault,
 		InvalidUserFault, PermissionDeniedFault {
 		IFSUser caller = um.getUser(callerGridIdentity);
 		verifyActiveUser(caller);
@@ -175,7 +175,7 @@ public class IFS extends GUMSObject {
 
 
 	public X509Certificate[] createProxy(SAMLAssertion saml, PublicKey publicKey, ProxyLifetime lifetime)
-		throws GUMSInternalFault, InvalidAssertionFault, InvalidProxyFault, UserPolicyFault, PermissionDeniedFault {
+		throws DorianInternalFault, InvalidAssertionFault, InvalidProxyFault, UserPolicyFault, PermissionDeniedFault {
 
 		if (!saml.isSigned()) {
 			InvalidAssertionFault fault = new InvalidAssertionFault();
@@ -247,12 +247,12 @@ public class IFS extends GUMSObject {
 				usr = um.addUser(usr);
 			} catch (Exception e) {
 				logError(e.getMessage(), e);
-				GUMSInternalFault fault = new GUMSInternalFault();
+				DorianInternalFault fault = new DorianInternalFault();
 				fault.setFaultString("An unexpected error occurred in adding the user " + usr.getUID()
 					+ " from the IdP " + idp.getName());
 				FaultHelper helper = new FaultHelper(fault);
 				helper.addFaultCause(e);
-				fault = (GUMSInternalFault) helper.getFault();
+				fault = (DorianInternalFault) helper.getFault();
 				throw fault;
 			}
 		} else {
@@ -266,12 +266,12 @@ public class IFS extends GUMSObject {
 				}
 			} catch (Exception e) {
 				logError(e.getMessage(), e);
-				GUMSInternalFault fault = new GUMSInternalFault();
+				DorianInternalFault fault = new DorianInternalFault();
 				fault.setFaultString("An unexpected error occurred in obtaining the user " + usr.getUID()
 					+ " from the IdP " + idp.getName());
 				FaultHelper helper = new FaultHelper(fault);
 				helper.addFaultCause(e);
-				fault = (GUMSInternalFault) helper.getFault();
+				fault = (DorianInternalFault) helper.getFault();
 				throw fault;
 			}
 		}
@@ -293,12 +293,12 @@ public class IFS extends GUMSObject {
 			policy.configure(conf, um);
 
 		} catch (Exception e) {
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("An unexpected error occurred in creating an instance of the user policy "
 				+ idp.getUserPolicyClass());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		}
 
@@ -317,11 +317,11 @@ public class IFS extends GUMSObject {
 			cert = CertUtil.loadCertificateFromString(usr.getCertificate().getCertificateAsString());
 
 		} catch (Exception e) {
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Error loading the user's credentials.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 		}
 
 		if (CertUtil.isExpired(cert)) {
@@ -329,11 +329,11 @@ public class IFS extends GUMSObject {
 			try {
 				um.updateUser(usr);
 			} catch (Exception e) {
-				GUMSInternalFault fault = new GUMSInternalFault();
+				DorianInternalFault fault = new DorianInternalFault();
 				fault.setFaultString("Unexpected Error, updating the user's status");
 				FaultHelper helper = new FaultHelper(fault);
 				helper.addFaultCause(e);
-				fault = (GUMSInternalFault) helper.getFault();
+				fault = (DorianInternalFault) helper.getFault();
 			}
 			PermissionDeniedFault fault = new PermissionDeniedFault();
 			fault.setFaultString("The credentials for this account have expired.");
@@ -364,7 +364,7 @@ public class IFS extends GUMSObject {
 	}
 
 
-	private void verifyAdminUser(IFSUser usr) throws GUMSInternalFault, PermissionDeniedFault {
+	private void verifyAdminUser(IFSUser usr) throws DorianInternalFault, PermissionDeniedFault {
 		if (usr.getUserRole().equals(IFSUserRole.Administrator)) {
 			return;
 		} else {
@@ -375,7 +375,7 @@ public class IFS extends GUMSObject {
 	}
 
 
-	private void verifyActiveUser(IFSUser usr) throws GUMSInternalFault, PermissionDeniedFault {
+	private void verifyActiveUser(IFSUser usr) throws DorianInternalFault, PermissionDeniedFault {
 
 		if (!usr.getUserStatus().equals(IFSUserStatus.Active)) {
 			if (usr.getUserStatus().equals(IFSUserStatus.Suspended)) {

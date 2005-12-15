@@ -1,14 +1,14 @@
-package gov.nih.nci.cagrid.gums.idp;
+package gov.nih.nci.cagrid.dorian.idp;
 
-import gov.nih.nci.cagrid.gums.bean.GUMSInternalFault;
-import gov.nih.nci.cagrid.gums.bean.Metadata;
-import gov.nih.nci.cagrid.gums.ca.CertificateAuthority;
-import gov.nih.nci.cagrid.gums.common.Database;
-import gov.nih.nci.cagrid.gums.common.FaultHelper;
-import gov.nih.nci.cagrid.gums.common.GUMSObject;
-import gov.nih.nci.cagrid.gums.common.MetadataManager;
-import gov.nih.nci.cagrid.gums.common.ca.CertUtil;
-import gov.nih.nci.cagrid.gums.common.ca.KeyUtil;
+import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.bean.Metadata;
+import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
+import gov.nih.nci.cagrid.dorian.common.Database;
+import gov.nih.nci.cagrid.dorian.common.FaultHelper;
+import gov.nih.nci.cagrid.dorian.common.DorianObject;
+import gov.nih.nci.cagrid.dorian.common.MetadataManager;
+import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
+import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.StringReader;
@@ -37,7 +37,7 @@ import org.opensaml.SAMLSubject;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class AssertionCredentialsManager extends GUMSObject {
+public class AssertionCredentialsManager extends DorianObject {
 
 	private final static String IDP_PRIVATE_KEY = "IdP Private Key";
 
@@ -60,7 +60,7 @@ public class AssertionCredentialsManager extends GUMSObject {
 	private IdPConfiguration conf;
 
 	public AssertionCredentialsManager(IdPConfiguration conf,
-			CertificateAuthority ca, Database db) throws GUMSInternalFault {
+			CertificateAuthority ca, Database db) throws DorianInternalFault {
 		try {
 			mm = new MetadataManager(db, "IDP_ASSERTER");
 			this.ca = ca;
@@ -76,12 +76,12 @@ public class AssertionCredentialsManager extends GUMSObject {
 			}
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault
 					.setFaultString("Error initializing the IDP Asserting Manager.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		}
 	}
@@ -125,7 +125,7 @@ public class AssertionCredentialsManager extends GUMSObject {
 	
 
 	public PrivateKey getIdPKey()
-			throws GUMSInternalFault {
+			throws DorianInternalFault {
 		try {
 			//force updating expiring credentials
 			getIdPCertificate();
@@ -135,23 +135,23 @@ public class AssertionCredentialsManager extends GUMSObject {
 		
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault
 					.setFaultString("Error obtaining the IDP Asserting Key.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		}
 
 	}
 	
 	public X509Certificate getIdPCertificate()
-	throws GUMSInternalFault {
+	throws DorianInternalFault {
 		return getIdPCertificate(true);
 	}
 	
-	public SAMLAssertion getAuthenticationAssertion(String id, String email) throws GUMSInternalFault {
+	public SAMLAssertion getAuthenticationAssertion(String id, String email) throws DorianInternalFault {
 		try{
 			org.apache.xml.security.Init.init();
 		X509Certificate cert = getIdPCertificate();
@@ -192,12 +192,12 @@ public class AssertionCredentialsManager extends GUMSObject {
 		return saml;
 		}catch(Exception e){
 			logError(e.getMessage(), e);
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault
 					.setFaultString("Error creating SAML Assertion.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 			
 		}
@@ -205,7 +205,7 @@ public class AssertionCredentialsManager extends GUMSObject {
 	}
 
 	private X509Certificate getIdPCertificate(boolean firstTime)
-			throws GUMSInternalFault {
+			throws DorianInternalFault {
 		try {
 			Metadata mcert = mm.get(IDP_CERTIFICATE);
 			StringReader reader = new StringReader(mcert.getValue());
@@ -217,7 +217,7 @@ public class AssertionCredentialsManager extends GUMSObject {
 					createNewCredentials();
 					return getIdPCertificate(false);
 				} else {
-					GUMSInternalFault fault = new GUMSInternalFault();
+					DorianInternalFault fault = new DorianInternalFault();
 					fault.setFaultString("IDP Asserting Certificate expired.");
 					throw fault;
 				}
@@ -227,12 +227,12 @@ public class AssertionCredentialsManager extends GUMSObject {
 
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
-			GUMSInternalFault fault = new GUMSInternalFault();
+			DorianInternalFault fault = new DorianInternalFault();
 			fault
 					.setFaultString("Error obtaining the IDP Asserting Certificate.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (GUMSInternalFault) helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		}
 
