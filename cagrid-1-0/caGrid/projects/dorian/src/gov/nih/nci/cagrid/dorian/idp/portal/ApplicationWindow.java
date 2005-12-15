@@ -3,8 +3,8 @@ package gov.nih.nci.cagrid.dorian.idp.portal;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.dorian.client.IdPRegistrationClient;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
-import gov.nih.nci.cagrid.dorian.portal.DorianServiceListComboBox;
 import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
+import gov.nih.nci.cagrid.dorian.portal.DorianServiceListComboBox;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;

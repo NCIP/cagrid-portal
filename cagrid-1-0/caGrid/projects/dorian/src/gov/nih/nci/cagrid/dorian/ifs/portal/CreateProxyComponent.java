@@ -4,9 +4,9 @@ package gov.nih.nci.cagrid.dorian.ifs.portal;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.dorian.client.IFSUserClient;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
-import gov.nih.nci.cagrid.dorian.portal.DorianServiceListComboBox;
 import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
 import gov.nih.nci.cagrid.dorian.portal.DorianPortalConf;
+import gov.nih.nci.cagrid.dorian.portal.DorianServiceListComboBox;
 import gov.nih.nci.cagrid.dorian.portal.IdPConf;
 import gov.nih.nci.cagrid.dorian.portal.ProxyManager;
 

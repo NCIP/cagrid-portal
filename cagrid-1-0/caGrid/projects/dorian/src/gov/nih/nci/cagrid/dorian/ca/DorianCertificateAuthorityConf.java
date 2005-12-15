@@ -52,6 +52,7 @@ import org.projectmobius.common.AbstractMobiusConfiguration;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.MobiusResourceManager;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -71,16 +72,16 @@ public class DorianCertificateAuthorityConf implements AbstractMobiusConfigurati
 	private static final String AUTO_RENEWAL_HOURS = "hours";
 	private static final String AUTO_RENEWAL_MINUTES = "minutes";
 	private static final String AUTO_RENEWAL_SECONDS = "seconds";
-	
-	
+
 	private static final String AUTO_CREATE = "auto-create";
 	private static final String AUTO_CREATE_ENABLED = "enabled";
-	private static final String AUTO_CREATE_TIME_YEARS = "years";
-	private static final String AUTO_CREATE_TIME_MONTHS = "months";
-	private static final String AUTO_CREATE_TIME_DAYS = "days";
-	private static final String AUTO_CREATE_TIME_HOURS = "hours";
-	private static final String AUTO_CREATE_TIME_MINUTES = "minutes";
-	private static final String AUTO_CREATE_TIME_SECONDS = "seconds";
+	private static final String AUTO_CREATE_VALID = "time-valid";
+	private static final String AUTO_CREATE_VALID_YEARS = "years";
+	private static final String AUTO_CREATE_VALID_MONTHS = "months";
+	private static final String AUTO_CREATE_VALID_DAYS = "days";
+	private static final String AUTO_CREATE_VALID_HOURS = "hours";
+	private static final String AUTO_CREATE_VALID_MINUTES = "minutes";
+	private static final String AUTO_CREATE_VALID_SECONDS = "seconds";
 	private static final String AUTO_CREATE_CA_SUBJECT = "ca-subject";
 	private static final String AUTO_CREATE_CA_DN = "dn";
 
@@ -92,7 +93,7 @@ public class DorianCertificateAuthorityConf implements AbstractMobiusConfigurati
 	private int autoRenewalHours;
 	private int autoRenewalMinutes;
 	private int autoRenewalSeconds;
-	
+
 	private boolean autoCreate;
 	private int autoCreateYears;
 	private int autoCreateMonths;
@@ -100,54 +101,103 @@ public class DorianCertificateAuthorityConf implements AbstractMobiusConfigurati
 	private int autoCreateHours;
 	private int autoCreateMinutes;
 	private int autoCreateSeconds;
-	private int autoCreateSubject;
-	
-   
-	public void parse(MobiusResourceManager resourceManager, Element config) throws MobiusException {		
-		
-		
-		Element pass = config.getChild(CA_PASSWORD,config.getNamespace());
-		if(pass==null){
-			throw new MobiusException("Error configuring the Dorian Certificate Authority, no "+CA_PASSWORD+" specified.");
-			
-		}else{
-			caPassword=pass.getAttributeValue(CA_PASSWORD_ATT);
-			if(caPassword==null){
-				throw new MobiusException("Error configuring the Dorian Certificate Authority, no "+CA_PASSWORD+" specified, the attribute "+CA_PASSWORD_ATT+" is missing.");
+	private String autoCreateSubject;
+
+
+	public void parse(MobiusResourceManager resourceManager, Element config) throws MobiusException {
+
+		Element pass = config.getChild(CA_PASSWORD, config.getNamespace());
+		if (pass == null) {
+			throw new MobiusException("Error configuring the Dorian Certificate Authority, no " + CA_PASSWORD
+				+ " specified.");
+
+		} else {
+			caPassword = pass.getAttributeValue(CA_PASSWORD_ATT);
+			if (caPassword == null) {
+				throw new MobiusException("Error configuring the Dorian Certificate Authority, no " + CA_PASSWORD
+					+ " specified, the attribute " + CA_PASSWORD_ATT + " is missing.");
 			}
 		}
-		
-		Element autoC = config.getChild(AUTO_CREATE,config.getNamespace());
-		if(autoC != null){
-			
+
+		Element autoC = config.getChild(AUTO_CREATE, config.getNamespace());
+		if (autoC != null) {
+			String flag = autoC.getAttributeValue(AUTO_CREATE_ENABLED);
+			if ((flag != null) && (flag.equalsIgnoreCase("true"))) {
+				this.autoCreate = true;
+				Element time = autoC.getChild(AUTO_CREATE_VALID, autoC.getNamespace());
+				if (time == null) {
+					throw new MobiusException(
+						"Error configuring the Dorian Certificate Authority, auto creation requires the specification of a "
+							+ AUTO_CREATE_VALID + " element.");
+				} else {
+					this.autoCreateYears = getAutoRenewalInteger(time, AUTO_CREATE_VALID_YEARS);
+					this.autoCreateMonths = getAutoRenewalInteger(time, AUTO_CREATE_VALID_MONTHS);
+					this.autoCreateDays = getAutoRenewalInteger(time, AUTO_CREATE_VALID_DAYS);
+					this.autoCreateHours = getAutoRenewalInteger(time, AUTO_CREATE_VALID_HOURS);
+					this.autoCreateMinutes = getAutoRenewalInteger(time, AUTO_CREATE_VALID_MINUTES);
+					this.autoCreateSeconds = getAutoRenewalInteger(time, AUTO_CREATE_VALID_SECONDS);
+				}
+				Element sub = autoC.getChild(AUTO_CREATE_CA_SUBJECT, autoC.getNamespace());
+				if (sub == null) {
+					throw new MobiusException(
+						"Error configuring the Dorian Certificate Authority, auto creation requires the specification of a "
+							+ AUTO_CREATE_CA_SUBJECT + " element.");
+				} else {
+					this.autoCreateSubject = sub.getAttributeValue(AUTO_CREATE_CA_DN);
+					if (autoCreateSubject == null) {
+						throw new MobiusException("Error configuring the Dorian Certificate Authority, the "
+							+ AUTO_CREATE_CA_SUBJECT + " attribute, " + AUTO_CREATE_CA_DN + " must be specified.");
+					}
+				}
+
+			}
 		}
-		
-		Element auto = config.getChild(AUTO_RENEWAL,config.getNamespace());
-		if(auto == null){
+
+		Element auto = config.getChild(AUTO_RENEWAL, config.getNamespace());
+		if (auto == null) {
 			autoRenewal = false;
-		}else{
+		} else {
 			String s = auto.getAttributeValue(AUTO_RENEWAL_ENABLED);
-			if((s!=null )&&(s.equalsIgnoreCase("true"))){
-				this.autoRenewalYears = getAutoRenewalInteger(auto,AUTO_RENEWAL_YEARS);
-				this.autoRenewalMonths = getAutoRenewalInteger(auto,AUTO_RENEWAL_MONTHS);
-				this.autoRenewalDays = getAutoRenewalInteger(auto,AUTO_RENEWAL_DAYS);
-				this.autoRenewalHours = getAutoRenewalInteger(auto,AUTO_RENEWAL_HOURS);
-				this.autoRenewalMinutes = getAutoRenewalInteger(auto,AUTO_RENEWAL_MINUTES);
-				this.autoRenewalSeconds = getAutoRenewalInteger(auto,AUTO_RENEWAL_SECONDS);
+			if ((s != null) && (s.equalsIgnoreCase("true"))) {
+				this.autoRenewalYears = getAutoRenewalInteger(auto, AUTO_RENEWAL_YEARS);
+				this.autoRenewalMonths = getAutoRenewalInteger(auto, AUTO_RENEWAL_MONTHS);
+				this.autoRenewalDays = getAutoRenewalInteger(auto, AUTO_RENEWAL_DAYS);
+				this.autoRenewalHours = getAutoRenewalInteger(auto, AUTO_RENEWAL_HOURS);
+				this.autoRenewalMinutes = getAutoRenewalInteger(auto, AUTO_RENEWAL_MINUTES);
+				this.autoRenewalSeconds = getAutoRenewalInteger(auto, AUTO_RENEWAL_SECONDS);
 			}
 		}
-		
+
 	}
-	
-	private int getAutoRenewalInteger(Element e, String att) throws MobiusException{
+
+
+	private int getAutoCreatelInteger(Element e, String att) throws MobiusException {
 		String s = e.getAttributeValue(att);
-		if(s==null){
-			throw new MobiusException("The "+AUTO_RENEWAL+" attribute, "+att+" must be specified.");
-		}else{
-			try{
+		if (s == null) {
+			throw new MobiusException("Error configuring the Dorian Certificate Authority, the " + AUTO_CREATE_VALID
+				+ " attribute, " + att + " must be specified.");
+		} else {
+			try {
 				return Integer.valueOf(s).intValue();
-			}catch (Exception ex) {
-				throw new MobiusException("The "+AUTO_RENEWAL+" attribute, "+att+" must be an integer.");
+			} catch (Exception ex) {
+				throw new MobiusException("Error configuring the Dorian Certificate Authority, the "
+					+ AUTO_CREATE_VALID + " attribute, " + att + " must be an integer.");
+			}
+		}
+	}
+
+
+	private int getAutoRenewalInteger(Element e, String att) throws MobiusException {
+		String s = e.getAttributeValue(att);
+		if (s == null) {
+			throw new MobiusException("Error configuring the Dorian Certificate Authority, the " + AUTO_RENEWAL
+				+ " attribute, " + att + " must be specified.");
+		} else {
+			try {
+				return Integer.valueOf(s).intValue();
+			} catch (Exception ex) {
+				throw new MobiusException("Error configuring the Dorian Certificate Authority, the " + AUTO_RENEWAL
+					+ " attribute, " + att + " must be an integer.");
 			}
 		}
 	}
@@ -231,16 +281,69 @@ public class DorianCertificateAuthorityConf implements AbstractMobiusConfigurati
 	public void setCaPassword(String caPassword) {
 		this.caPassword = caPassword;
 	}
-	
+
+
 	public Date getRenewalDate() {
 		GregorianCalendar cal = new GregorianCalendar();
-		cal.add(Calendar.YEAR,getAutoRenewalYears());
+		cal.add(Calendar.YEAR, getAutoRenewalYears());
 		cal.add(Calendar.MONTH, this.getAutoRenewalMonths());
 		cal.add(Calendar.DAY_OF_MONTH, this.getAutoRenewalDays());
 		cal.add(Calendar.HOUR_OF_DAY, this.getAutoRenewalHours());
 		cal.add(Calendar.MINUTE, this.getAutoRenewalMinutes());
 		cal.add(Calendar.SECOND, this.getAutoRenewalSeconds());
 		return cal.getTime();
+	}
+
+
+	public Date getAutoCreateDate() {
+		GregorianCalendar cal = new GregorianCalendar();
+		cal.add(Calendar.YEAR, getAutoCreateYears());
+		cal.add(Calendar.MONTH, this.getAutoCreateMonths());
+		cal.add(Calendar.DAY_OF_MONTH, this.getAutoCreateDays());
+		cal.add(Calendar.HOUR_OF_DAY, this.getAutoCreateHours());
+		cal.add(Calendar.MINUTE, this.getAutoCreateMinutes());
+		cal.add(Calendar.SECOND, this.getAutoCreateSeconds());
+		return cal.getTime();
+	}
+
+
+	public boolean isAutoCreate() {
+		return autoCreate;
+	}
+
+
+	public int getAutoCreateDays() {
+		return autoCreateDays;
+	}
+
+
+	public int getAutoCreateHours() {
+		return autoCreateHours;
+	}
+
+
+	public int getAutoCreateMinutes() {
+		return autoCreateMinutes;
+	}
+
+
+	public int getAutoCreateMonths() {
+		return autoCreateMonths;
+	}
+
+
+	public int getAutoCreateSeconds() {
+		return autoCreateSeconds;
+	}
+
+
+	public String getAutoCreateSubject() {
+		return autoCreateSubject;
+	}
+
+
+	public int getAutoCreateYears() {
+		return autoCreateYears;
 	}
 
 }

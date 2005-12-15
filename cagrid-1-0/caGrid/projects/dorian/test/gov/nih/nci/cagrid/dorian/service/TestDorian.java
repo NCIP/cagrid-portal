@@ -22,7 +22,6 @@ import gov.nih.nci.cagrid.dorian.ifs.IFSConfiguration;
 import gov.nih.nci.cagrid.dorian.ifs.IFSUtils;
 import gov.nih.nci.cagrid.dorian.ifs.UserManager;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
-import gov.nih.nci.cagrid.dorian.service.Dorian;
 import gov.nih.nci.cagrid.dorian.test.TestUtils;
 
 import java.io.File;

@@ -22,7 +22,7 @@ public class WriteCACertificate {
 
 		try {
 		
-				String configFile = "etc/dorianconf.xml";
+				String configFile = "etc/dorian-conf.xml";
 				SimpleResourceManager rm = new SimpleResourceManager(configFile);
 				DorianCertificateAuthorityConf conf = (DorianCertificateAuthorityConf) rm
 						.getResource(DorianCertificateAuthorityConf.RESOURCE);

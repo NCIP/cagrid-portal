@@ -2,9 +2,9 @@ package gov.nih.nci.cagrid.dorian.client;
 
 import gov.nih.nci.cagrid.dorian.IdPRegistration;
 import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.common.DorianFault;
 import gov.nih.nci.cagrid.dorian.common.FaultHelper;
 import gov.nih.nci.cagrid.dorian.common.FaultUtil;
-import gov.nih.nci.cagrid.dorian.common.DorianFault;
 import gov.nih.nci.cagrid.dorian.common.IOUtils;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 import gov.nih.nci.cagrid.dorian.idp.bean.InvalidUserPropertyFault;
