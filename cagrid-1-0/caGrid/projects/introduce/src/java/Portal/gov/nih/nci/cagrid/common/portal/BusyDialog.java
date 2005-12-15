@@ -33,7 +33,7 @@ public class BusyDialog extends JDialog {
 	 * 
 	 */
 	private void initialize() {
-		this.setSize(new java.awt.Dimension(362, 127));
+		this.setSize(new java.awt.Dimension(362,85));
 		this.setContentPane(getMainPanel());
 	}
 
@@ -87,6 +87,8 @@ public class BusyDialog extends JDialog {
 		if (progress == null) {
 			progress = new JProgressBar();
 			progress.setStringPainted(true);
+			progress.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12));
+			progress.setForeground(new java.awt.Color(153,153,255));
 			progress.setString("");
 		}
 		return progress;
