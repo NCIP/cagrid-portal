@@ -369,7 +369,7 @@ public class IFS extends GUMSObject {
 			return;
 		} else {
 			PermissionDeniedFault fault = new PermissionDeniedFault();
-			fault.setFaultString("You are NOT and Administrator!!!");
+			fault.setFaultString("You are NOT an Administrator!!!");
 			throw fault;
 		}
 	}
