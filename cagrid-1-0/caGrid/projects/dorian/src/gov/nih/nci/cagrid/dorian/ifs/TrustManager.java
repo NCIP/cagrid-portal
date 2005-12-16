@@ -169,7 +169,7 @@ public class TrustManager extends DorianObject {
 			if (!isCertificateUnique(idp.getIdPCertificate())) {
 				InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
 				fault.setFaultString("Cannot update the Trusted IdP, " + idp.getName()
-					+ " it does not contain a unique certificate.");
+					+ ", it does not contain a unique certificate.");
 				throw fault;
 			}
 			X509Certificate cert = validateAndGetCertificate(idp);
@@ -482,7 +482,7 @@ public class TrustManager extends DorianObject {
 			if (!isCertificateUnique(idp.getIdPCertificate())) {
 				InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
 				fault.setFaultString("Cannot add the Trusted IdP, " + idp.getName()
-					+ " it does not contain a unique certificate.");
+					+ ", it does not contain a unique certificate.");
 				throw fault;
 			}
 

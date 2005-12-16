@@ -47,7 +47,7 @@ public class AssertionCredentialsManager extends DorianObject {
 
 	private final static String IDP_CERTIFICATE_DESCRIPTION = "Certificate corresponding to the private key used by IdP to sign authentication assersions.";
 
-	public final static String CA_SUBJECT = "IdP Authentication Asserter";
+	public final static String CA_SUBJECT = "Dorian IdP Authentication Asserter";
 
 	public final static String EMAIL_NAMESPACE="http://cagrid.nci.nih.gov/email";
 	

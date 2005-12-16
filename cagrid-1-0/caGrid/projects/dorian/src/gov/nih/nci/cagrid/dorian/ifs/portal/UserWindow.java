@@ -36,7 +36,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.6 2005-12-15 19:29:33 langella Exp $
+ * @version $Id: UserWindow.java,v 1.7 2005-12-16 14:49:26 langella Exp $
  */
 public class UserWindow extends GridPortalBaseFrame {
 
@@ -308,7 +308,7 @@ public class UserWindow extends GridPortalBaseFrame {
 				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
 					.getPanelLabelColor()));
 			jTabbedPane.addTab(INFO_PANEL, DorianLookAndFeel.getUserIcon(), getInfoPanel(), null);
-			jTabbedPane.addTab(CERTIFICATE_PANEL, DorianLookAndFeel.getProxyIcon(), getCertificatePanel(), null);
+			jTabbedPane.addTab(CERTIFICATE_PANEL, DorianLookAndFeel.getCertificateIcon(), getCertificatePanel(), null);
 		}
 		return jTabbedPane;
 	}
@@ -640,6 +640,7 @@ public class UserWindow extends GridPortalBaseFrame {
 			try {
 				credPanel = new CertificatePanel(CertUtil.loadCertificateFromString(user.getCertificate()
 					.getCertificateAsString()));
+				credPanel.setAllowImport(false);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -662,7 +663,7 @@ public class UserWindow extends GridPortalBaseFrame {
 					renewCredentials();
 				}
 			});
-			renewCredentials.setIcon(DorianLookAndFeel.getRenewCredentialsIcon());
+			renewCredentials.setIcon(DorianLookAndFeel.getCertificateActionIcon());
 		}
 		return renewCredentials;
 	}

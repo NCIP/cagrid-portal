@@ -32,12 +32,17 @@ public class DorianLookAndFeel extends PortalLookAndFeel {
 				.getResource("/NewPlug.gif"));
 	}
 
-	public final static ImageIcon getProxyIcon() {
+	public final static ImageIcon getCertificateIcon() {
 		return new javax.swing.ImageIcon(DorianLookAndFeel.class
 				.getResource("/BCard.gif"));
 	}
 	
-	public final static ImageIcon getRenewCredentialsIcon() {
+	public final static ImageIcon getImportIcon() {
+		return new javax.swing.ImageIcon(DorianLookAndFeel.class
+				.getResource("/Door.gif"));
+	}
+	
+	public final static ImageIcon getCertificateActionIcon() {
 		return new javax.swing.ImageIcon(DorianLookAndFeel.class
 				.getResource("/EditBCard.gif"));
 	}

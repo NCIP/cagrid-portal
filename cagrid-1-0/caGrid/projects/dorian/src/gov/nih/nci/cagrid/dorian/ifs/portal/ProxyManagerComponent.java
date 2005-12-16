@@ -24,6 +24,7 @@ import javax.swing.JTextField;
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.portal.GridPortalComponent;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -84,6 +85,8 @@ public class ProxyManagerComponent extends GridPortalComponent {
 	private JButton deleteProxy = null;
 
 	private ProxyCaddy defaultProxy;
+
+
 	/**
 	 * This is the default constructor
 	 */
@@ -98,10 +101,12 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		}
 	}
 
+
 	public ProxyManagerComponent(GlobusCredential cred) {
 		this();
 		getProxy().setSelectedItem(new ProxyCaddy(cred));
 	}
+
 
 	/**
 	 * This method initializes this
@@ -114,6 +119,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		this.setFrameIcon(DorianLookAndFeel.getProxyManagerIcon());
 		this.setTitle("Proxy Manager");
 	}
+
 
 	/**
 	 * This method initializes jContentPane
@@ -129,6 +135,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		return jContentPane;
 	}
 
+
 	private void clearProxy() {
 		subjectField.setText("");
 		issuer.setText("");
@@ -137,6 +144,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		timeLeft.setText("");
 		certificates.clearTable();
 	}
+
 
 	private void showProxy(GlobusCredential cred) {
 		clearProxy();
@@ -153,6 +161,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 			certificates.addCertificate(certs[i]);
 		}
 	}
+
 
 	/**
 	 * This method initializes jPanel
@@ -188,6 +197,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		}
 		return mainPanel;
 	}
+
 
 	/**
 	 * This method initializes jPanel
@@ -290,14 +300,9 @@ public class ProxyManagerComponent extends GridPortalComponent {
 			proxyInformation.add(timeLeftLabel, gridBagConstraints11);
 			proxyInformation.add(strengthLabel, gridBagConstraints10);
 
-			proxyInformation
-					.setBorder(javax.swing.BorderFactory
-							.createTitledBorder(
-									null,
-									"Proxy Information",
-									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, DorianLookAndFeel.getPanelLabelColor()));
+			proxyInformation.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Proxy Information",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel.getPanelLabelColor()));
 			proxyInformation.add(getIdentity(), gridBagConstraints7);
 			proxyInformation.add(getIssuer(), gridBagConstraints5);
 			proxyInformation.add(getTimeLeft(), gridBagConstraints12);
@@ -307,6 +312,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		}
 		return proxyInformation;
 	}
+
 
 	/**
 	 * This method initializes jTextField
@@ -320,6 +326,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		}
 		return subjectField;
 	}
+
 
 	/**
 	 * This method initializes jPanel
@@ -337,6 +344,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		}
 		return buttonPanel;
 	}
+
 
 	/**
 	 * This method initializes jButton
@@ -357,6 +365,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		return jButton;
 	}
 
+
 	/**
 	 * This method initializes jTextField
 	 * 
@@ -369,6 +378,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		}
 		return issuer;
 	}
+
 
 	/**
 	 * This method initializes jTextField
@@ -383,6 +393,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		return identity;
 	}
 
+
 	/**
 	 * This method initializes jTextField
 	 * 
@@ -396,6 +407,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		return strength;
 	}
 
+
 	/**
 	 * This method initializes jTextField
 	 * 
@@ -408,6 +420,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		}
 		return timeLeft;
 	}
+
 
 	/**
 	 * This method initializes jPanel
@@ -425,18 +438,14 @@ public class ProxyManagerComponent extends GridPortalComponent {
 			gridBagConstraints13.weightx = 1.0;
 			certificateChain = new JPanel();
 			certificateChain.setLayout(new GridBagLayout());
-			certificateChain
-					.setBorder(javax.swing.BorderFactory
-							.createTitledBorder(
-									null,
-									"Certificate Chain",
-									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, DorianLookAndFeel.getPanelLabelColor()));
+			certificateChain.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Certificate Chain",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel.getPanelLabelColor()));
 			certificateChain.add(getJScrollPane(), gridBagConstraints13);
 		}
 		return certificateChain;
 	}
+
 
 	/**
 	 * This method initializes jScrollPane
@@ -451,6 +460,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		return jScrollPane;
 	}
 
+
 	/**
 	 * This method initializes certificates
 	 * 
@@ -462,6 +472,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		}
 		return certificates;
 	}
+
 
 	/**
 	 * This method initializes proxyPanel
@@ -477,16 +488,15 @@ public class ProxyManagerComponent extends GridPortalComponent {
 			gridBagConstraints15.weightx = 1.0;
 			gridBagConstraints15.insets = new java.awt.Insets(2, 2, 2, 2);
 			proxyPanel = new JPanel();
-			proxyPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, "Select Proxy",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					DorianLookAndFeel.getPanelLabelColor()));
+			proxyPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Proxy",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel.getPanelLabelColor()));
 			proxyPanel.setLayout(new GridBagLayout());
 			proxyPanel.add(getProxy(), gridBagConstraints15);
 		}
 		return proxyPanel;
 	}
+
 
 	/**
 	 * This method initializes proxy
@@ -502,13 +512,12 @@ public class ProxyManagerComponent extends GridPortalComponent {
 			 */
 			proxy.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					ProxyCaddy caddy = (ProxyCaddy) getProxy()
-							.getSelectedItem();
+					ProxyCaddy caddy = (ProxyCaddy) getProxy().getSelectedItem();
 					if (caddy != null) {
 						if (caddy.getIdentity() == DEFAULT_PROXY) {
 							try {
 								clearProxy();
-								caddy.setProxy(ProxyUtil.getDefaultProxy());	
+								caddy.setProxy(ProxyUtil.getDefaultProxy());
 							} catch (Exception ex) {
 								return;
 							}
@@ -521,6 +530,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		return proxy;
 	}
 
+
 	/**
 	 * This method initializes jButton1
 	 * 
@@ -530,21 +540,21 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		if (viewCertificate == null) {
 			viewCertificate = new JButton();
 			viewCertificate.setText("View Certificate");
-			viewCertificate.setIcon(DorianLookAndFeel.getProxyIcon());
-			viewCertificate
-					.addActionListener(new java.awt.event.ActionListener() {
+			viewCertificate.setIcon(DorianLookAndFeel.getCertificateIcon());
+			viewCertificate.addActionListener(new java.awt.event.ActionListener() {
 
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							try {
-								getCertificates().doubleClick();
-							} catch (Exception ex) {
-								PortalUtils.showErrorMessage(ex);
-							}
-						}
-					});
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					try {
+						getCertificates().doubleClick();
+					} catch (Exception ex) {
+						PortalUtils.showErrorMessage(ex);
+					}
+				}
+			});
 		}
 		return viewCertificate;
 	}
+
 
 	/**
 	 * This method initializes saveProxy
@@ -566,20 +576,22 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		return saveProxy;
 	}
 
+
 	private void saveProxyNow() {
 		try {
 			JFileChooser fc = new JFileChooser();
 			fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			fc.showSaveDialog(this);
-			ProxyCaddy caddy = (ProxyCaddy) getProxy().getSelectedItem();
-			ProxyUtil.saveProxy(caddy.getProxy(), fc.getSelectedFile()
-					.getAbsolutePath());
+			int returnVal = fc.showSaveDialog(this);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				ProxyCaddy caddy = (ProxyCaddy) getProxy().getSelectedItem();
+				ProxyUtil.saveProxy(caddy.getProxy(), fc.getSelectedFile().getAbsolutePath());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			PortalUtils
-					.showErrorMessage("An unexpected error occurred in saving the currently selected proxy!!!");
+			PortalUtils.showErrorMessage("An unexpected error occurred in saving the currently selected proxy!!!");
 		}
 	}
+
 
 	/**
 	 * This method initializes setDefaultProxy
@@ -590,24 +602,22 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		if (setDefaultProxy == null) {
 			setDefaultProxy = new JButton();
 			setDefaultProxy.setText("Set Default");
-			setDefaultProxy
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							try {
-								ProxyCaddy caddy = (ProxyCaddy) getProxy()
-										.getSelectedItem();
-								ProxyUtil.saveProxyAsDefault(caddy.getProxy());
-							} catch (Exception ex) {
-								ex.printStackTrace();
-								PortalUtils
-										.showErrorMessage("An unexpected error occurred in setting the default proxy!!!");
-							}
-						}
-					});
+			setDefaultProxy.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					try {
+						ProxyCaddy caddy = (ProxyCaddy) getProxy().getSelectedItem();
+						ProxyUtil.saveProxyAsDefault(caddy.getProxy());
+					} catch (Exception ex) {
+						ex.printStackTrace();
+						PortalUtils.showErrorMessage("An unexpected error occurred in setting the default proxy!!!");
+					}
+				}
+			});
 			setDefaultProxy.setIcon(DorianLookAndFeel.getGreenFlagIcon());
 		}
 		return setDefaultProxy;
 	}
+
 
 	/**
 	 * This method initializes deleteProxy
@@ -621,16 +631,14 @@ public class ProxyManagerComponent extends GridPortalComponent {
 			deleteProxy.setIcon(DorianLookAndFeel.getDeleteProxyIcon());
 			deleteProxy.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					ProxyCaddy caddy = (ProxyCaddy) getProxy()
-							.getSelectedItem();
+					ProxyCaddy caddy = (ProxyCaddy) getProxy().getSelectedItem();
 					clearProxy();
 					getProxy().removeItemAt(getProxy().getSelectedIndex());
 					if (caddy.getIdentity() == DEFAULT_PROXY) {
 						ProxyUtil.destroyDefaultProxy();
-					}else{
-						ProxyManager.getInstance()
-						.deleteProxy(caddy.getProxy());
-						
+					} else {
+						ProxyManager.getInstance().deleteProxy(caddy.getProxy());
+
 					}
 				}
 			});

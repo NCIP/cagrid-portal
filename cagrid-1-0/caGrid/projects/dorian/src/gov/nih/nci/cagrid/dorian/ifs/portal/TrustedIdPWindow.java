@@ -39,7 +39,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPWindow.java,v 1.5 2005-12-15 19:29:33 langella Exp $
+ * @version $Id: TrustedIdPWindow.java,v 1.6 2005-12-16 14:49:26 langella Exp $
  */
 public class TrustedIdPWindow extends GridPortalBaseFrame {
 	public static final String PASSWORD = SAMLAuthenticationMethod.value1.getValue();
@@ -320,7 +320,9 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 	private synchronized void updateTrustedIdP() {
 
 		try {
-
+            if(getCredPanel().getCertificate()!=null){
+            	idp.setIdPCertificate(CertUtil.writeCertificateToString(getCredPanel().getCertificate()));
+            }
 			idp.setName(getIdPName().getText().trim());
 			idp.setStatus(getStatus().getSelectedStatus());
 			idp.setUserPolicyClass(((UserPolicyCaddy) getUserPolicy().getSelectedItem()).getPolicy().getClassName());
@@ -406,7 +408,7 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
 					.getPanelLabelColor()));
 			jTabbedPane.addTab(INFO_PANEL, DorianLookAndFeel.getTrustedIdPIcon(), getInfoPanel(), null);
-			jTabbedPane.addTab(CERTIFICATE_PANEL, DorianLookAndFeel.getProxyIcon(), getCertificatePanel(), null);
+			jTabbedPane.addTab(CERTIFICATE_PANEL, DorianLookAndFeel.getCertificateIcon(), getCertificatePanel(), null);
 		}
 		return jTabbedPane;
 	}

@@ -1,10 +1,16 @@
 package gov.nih.nci.cagrid.dorian.ifs.portal;
 
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
+import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.security.cert.X509Certificate;
 
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -14,7 +20,7 @@ import javax.swing.JTextField;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CertificatePanel.java,v 1.3 2005-12-15 19:29:33 langella Exp $
+ * @version $Id: CertificatePanel.java,v 1.4 2005-12-16 14:49:26 langella Exp $
  */
 public class CertificatePanel extends JPanel {
 
@@ -35,7 +41,11 @@ public class CertificatePanel extends JPanel {
 	private JTextField certificateExpires = null;
 	private JTextField certificateCreated = null;
 	private JTextField certificateSubject = null;
-
+	private JPanel buttonPanel = null;
+	private JButton loadButton = null;
+	private JButton saveButton = null;
+	private X509Certificate certificate;
+	
 
 	/**
 	 * This is the default constructor
@@ -49,11 +59,21 @@ public class CertificatePanel extends JPanel {
 	public CertificatePanel(X509Certificate cert) {
 		super();
 		initialize();
+		this.certificate = cert;
 		setCertificate(cert);
+	}
+	
+	public void setAllowExport(boolean allow){
+		this.getSaveButton().setVisible(allow);
+	}
+	
+	public void setAllowImport(boolean allow){
+		this.getLoadButton().setVisible(allow);
 	}
 
 
 	public void setCertificate(X509Certificate cert) {
+		this.certificate = cert;
 		this.getCertificateCreated().setText(cert.getNotBefore().toString());
 		this.getCertificateExpires().setText(cert.getNotAfter().toString());
 		this.getCertificateIssuer().setText(cert.getIssuerDN().getName());
@@ -65,12 +85,29 @@ public class CertificatePanel extends JPanel {
 	}
 
 
+	public void clearCertificate() {
+		this.getCertificateCreated().setText("");
+		this.getCertificateExpires().setText("");
+		this.getCertificateIssuer().setText("");
+		this.getCertificateSerialNumber().setText("");
+		this.getCertificateSubject().setText("");
+		this.getCertificateSignatureAlgorithm().setText("");
+		this.getCertificateType().setText("");
+		this.getCertificateVersion().setText("");
+		this.certificate = null;
+	}
+
+
 	/**
 	 * This method initializes this
 	 * 
 	 * @return void
 	 */
 	private void initialize() {
+		GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
+		gridBagConstraints17.gridx = 0;
+		gridBagConstraints17.insets = new java.awt.Insets(2, 2, 2, 2);
+		gridBagConstraints17.gridy = 1;
 		GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
 		gridBagConstraints16.gridx = 0;
 		gridBagConstraints16.anchor = java.awt.GridBagConstraints.NORTH;
@@ -82,6 +119,7 @@ public class CertificatePanel extends JPanel {
 		this.setLayout(new GridBagLayout());
 		this.setSize(300, 200);
 		this.add(getJPanel(), gridBagConstraints16);
+		this.add(getButtonPanel(), gridBagConstraints17);
 	}
 
 
@@ -343,6 +381,99 @@ public class CertificatePanel extends JPanel {
 			certificateSubject.setEditable(false);
 		}
 		return certificateSubject;
+	}
+
+
+	/**
+	 * This method initializes buttonPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getButtonPanel() {
+		if (buttonPanel == null) {
+			buttonPanel = new JPanel();
+			buttonPanel.add(getLoadButton(), null);
+			buttonPanel.add(getSaveButton(), null);
+		}
+		return buttonPanel;
+	}
+
+
+	/**
+	 * This method initializes loadButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getLoadButton() {
+		if (loadButton == null) {
+			loadButton = new JButton();
+			loadButton.setText("Import Certificate");
+			loadButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					importCertificate();
+
+				}
+			});
+			loadButton.setIcon(DorianLookAndFeel.getImportIcon());
+		}
+		return loadButton;
+	}
+	
+	private void importCertificate(){
+		clearCertificate();
+		JFileChooser fc = new JFileChooser();
+		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		int returnVal = fc.showOpenDialog(this);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			try {
+				certificate = CertUtil.loadCertificate(fc.getSelectedFile().getAbsolutePath());
+			    setCertificate(certificate);
+			} catch (Exception ex) {
+				PortalUtils.showErrorMessage(ex);
+			}
+		}
+		
+	}
+	
+	private void exportCertificate(){
+		JFileChooser fc = new JFileChooser();
+		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		int returnVal = fc.showSaveDialog(this);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			try {
+				CertUtil.writeCertificate(certificate,fc.getSelectedFile().getAbsolutePath());
+			} catch (Exception ex) {
+				PortalUtils.showErrorMessage(ex);
+			}
+		}
+		
+	}
+	
+	
+
+
+	public X509Certificate getCertificate() {
+		return certificate;
+	}
+
+
+	/**
+	 * This method initializes saveButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getSaveButton() {
+		if (saveButton == null) {
+			saveButton = new JButton();
+			saveButton.setIcon(DorianLookAndFeel.getSaveIcon());
+			saveButton.addActionListener(new java.awt.event.ActionListener() { 
+				public void actionPerformed(java.awt.event.ActionEvent e) {    
+					exportCertificate();
+				}
+			});
+			saveButton.setText("Export Certificate");
+		}
+		return saveButton;
 	}
 
 }

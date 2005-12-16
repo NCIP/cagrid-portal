@@ -97,7 +97,7 @@ public class CreateProxyComponent extends GridPortalComponent {
 	private void initialize() {
 		this.setSize(400, 400);
 		this.setContentPane(getJContentPane());
-		this.setFrameIcon(DorianLookAndFeel.getProxyIcon());
+		this.setFrameIcon(DorianLookAndFeel.getCertificateIcon());
 		this.setTitle("Create Proxy");
 	}
 
