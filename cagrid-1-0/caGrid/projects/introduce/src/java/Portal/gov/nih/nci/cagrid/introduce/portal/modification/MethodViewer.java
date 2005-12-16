@@ -1,11 +1,19 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
+import gov.nih.nci.cagrid.introduce.beans.method.SecureValueType;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.io.File;
 import java.util.Vector;
 
@@ -14,16 +22,13 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-import org.jdom.Attribute;
-import org.jdom.Element;
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
-import javax.swing.JTabbedPane;
-import java.awt.Insets;
 
 /**
  * MethodViewer TODO:DOCUMENT ME
@@ -37,7 +42,7 @@ import java.awt.Insets;
  */
 public class MethodViewer extends GridPortalBaseFrame {
 
-	Element method;
+	MethodsTypeMethod method;
 
 	private JPanel mainPanel = null;
 
@@ -103,8 +108,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JLabel methodSecurityStyle = null;
 
-	public MethodViewer(Element method, File schemaDir, MethodsTable table,
-			int selectedRow) {
+	public MethodViewer(MethodsTypeMethod method, File schemaDir,
+			MethodsTable table, int selectedRow) {
 		this.method = method;
 		this.schemaDir = schemaDir;
 		this.methodsTable = table;
@@ -301,123 +306,112 @@ public class MethodViewer extends GridPortalBaseFrame {
 			doneButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					// First process the inputs
-					method.setAttribute("name", getNameField().getText());
+					method.setName(getNameField().getText());
 					String secure = (String) getSecurity().getSelectedItem();
-					method.setAttribute("secure", String.valueOf(secure));
+					method.setSecure(SecureValueType.fromValue(String
+							.valueOf(secure)));
 					methodsTable.changeMethodName(currentRow, getNameField()
 							.getText());
-					Element inputs = method.getChild("inputs", method
-							.getNamespace());
-					inputs.removeChildren("input", method.getNamespace());
+
+					MethodTypeInputs inputs = new MethodTypeInputs();
+					MethodTypeInputsInput[] inputsA = new MethodTypeInputsInput[getInputParamTable()
+							.getRowCount()];
+
 					for (int i = 0; i < getInputParamTable().getRowCount(); i++) {
-						Element input = new Element("input", method
-								.getNamespace());
+						MethodTypeInputsInput input = new MethodTypeInputsInput();
+
 						String className = ((String) getInputParamTable()
 								.getValueAt(i, 0));
-						String name = ((String) getInputParamTable()
+						String isArray = ((String) getInputParamTable()
 								.getValueAt(i, 1));
-						String namespace = ((String) getInputParamTable()
+						String name = ((String) getInputParamTable()
 								.getValueAt(i, 2));
-						String type = ((String) getInputParamTable()
+						String namespace = ((String) getInputParamTable()
 								.getValueAt(i, 3));
-						String location = ((String) getInputParamTable()
+						String type = ((String) getInputParamTable()
 								.getValueAt(i, 4));
+						String location = ((String) getInputParamTable()
+								.getValueAt(i, 5));
 
 						if (className != null && !className.equals("")) {
-							input.setAttribute("className", className);
-							if (className.indexOf("[]") > -1) {
-								input.setAttribute("minOccurs", "0");
-								input.setAttribute("maxOccurs", "unbounded");
-							}
+							input.setClassName(className);
+						}
+						if (isArray.equals("true")) {
+							input.setMinOccurs("0");
+							input.setMaxOccurs("unbounded");
+						}
+						if (isArray != null && !isArray.equals("")) {
+							input.setIsArray(new Boolean(isArray));
 						}
 						if (name != null && !name.equals("")) {
-							input.setAttribute("name", name);
+							input.setName(name);
 						}
 						if (namespace != null && !namespace.equals("")) {
-							input.setAttribute("namespace", namespace);
+							input.setNamespace(namespace);
 						}
 						if (type != null && !type.equals("")) {
-							input.setAttribute("type", type);
+							input.setType(type);
 						}
 						if (location != null && !location.equals("")) {
-							input.setAttribute("location", location);
+							input.setLocation(location);
 						}
 
-						inputs.addContent(input);
+						inputsA[i] = input;
 					}
+
+					inputs.setInput(inputsA);
+					method.setInputs(inputs);
 
 					// process exceptions
-					Element exceptions = method.getChild("exceptions", method
-							.getNamespace());
-					exceptions.removeChildren("exception", method
-							.getNamespace());
+					MethodTypeExceptions exceptions = new MethodTypeExceptions();
+					MethodTypeExceptionsException[] exceptionsA = new MethodTypeExceptionsException[getExceptionsTable()
+							.getRowCount()];
 					for (int i = 0; i < getExceptionsTable().getRowCount(); i++) {
-						Element exception = new Element("exception", method
-								.getNamespace());
-						String className = null;
+						MethodTypeExceptionsException exception = new MethodTypeExceptionsException();
 						String name = ((String) getExceptionsTable()
 								.getValueAt(i, 0));
-						String namespace = null;
-						String type = null;
-						String location = null;
-
-						if (className != null && !className.equals("")) {
-							exception.setAttribute("className", className);
-							if (className.indexOf("[]") > -1) {
-								exception.setAttribute("minOccurs", "0");
-								exception
-										.setAttribute("maxOccurs", "unbounded");
-							}
-						}
-						if (name != null && !name.equals("")) {
-							exception.setAttribute("name", name);
-						}
-						if (namespace != null && !namespace.equals("")) {
-							exception.setAttribute("namespace", namespace);
-						}
-						if (type != null && !type.equals("")) {
-							exception.setAttribute("type", type);
-						}
-						if (location != null && !location.equals("")) {
-							exception.setAttribute("location", location);
-						}
-
-						exceptions.addContent(exception);
+						exception.setName(name);
+						exceptionsA[i] = exception;
 					}
+					exceptions.setException(exceptionsA);
+					method.setExceptions(exceptions);
 
 					// now process the output
-					Element oldOutput = method.getChild("output", method
-							.getNamespace());
-					method.removeContent(oldOutput);
-					Element output = new Element("output", method
-							.getNamespace());
+					MethodTypeOutput output = new MethodTypeOutput();
+
 					String className = ((String) getOutputTypeTable()
 							.getValueAt(0, 0));
-					String namespace = ((String) getOutputTypeTable()
+					String isArray = ((String) getOutputTypeTable()
 							.getValueAt(0, 1));
+					String namespace = ((String) getOutputTypeTable()
+							.getValueAt(0, 2));
 					String type = ((String) getOutputTypeTable().getValueAt(0,
-							2));
+							3));
 					String location = ((String) getOutputTypeTable()
-							.getValueAt(0, 3));
+							.getValueAt(0, 4));
 
 					if (className != null && !className.equals("")) {
-						output.setAttribute("className", className);
-						if (className.indexOf("[]") > -1) {
-							output.setAttribute("minOccurs", "0");
-							output.setAttribute("maxOccurs", "unbounded");
-						}
+						output.setClassName(className);
+					}
+					if (isArray.equals("true")) {
+						output.setMinOccurs("0");
+						output.setMaxOccurs("unbounded");
+					}
+					
+					if (isArray != null && !isArray.equals("")) {
+						output.setIsArray(new Boolean(isArray));
 					}
 					if (namespace != null && !namespace.equals("")) {
-						output.setAttribute("namespace", namespace);
+						output.setNamespace(namespace);
 					}
 					if (type != null && !type.equals("")) {
-						output.setAttribute("type", type);
+						output.setType(type);
 					}
 					if (location != null && !location.equals("")) {
-						output.setAttribute("location", location);
+						output.setLocation(location);
 					}
 
-					method.addContent(1, output);
+					method.setOutput(output);
 
 					dispose();
 				}
@@ -438,14 +432,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			addInputParamButton
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
-							final Element input = new Element("input", method
-									.getNamespace());
-							method.getChild("inputs", method.getNamespace())
-									.addContent(
-											method.getChild("inputs",
-													method.getNamespace())
-													.getChildren().size(),
-											input);
+							final MethodTypeInputsInput input = new MethodTypeInputsInput();
 							getInputParamTable().addRow(input);
 							performModify(e);
 
@@ -556,7 +543,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			return;
 		}
 		Vector v = (Vector) getInputParamTable().getValueAt(
-				getInputParamTable().getSelectedRow(), 6);
+				getInputParamTable().getSelectedRow(), 7);
 		PortalResourceManager.getInstance().getGridPortal()
 				.addGridPortalComponent(
 						new GMEParameterConfigurationComponent(v, schemaDir,
@@ -575,13 +562,12 @@ public class MethodViewer extends GridPortalBaseFrame {
 			security.addItem("INTEGRITY");
 			security.addItem("PRIVACY");
 			security.addItem("EITHER");
-			Attribute secureAtt = method.getAttribute("secure");
-			if (secureAtt != null) {
-				security.setSelectedItem(secureAtt.getValue());
+			if (method.getSecure() != null) {
+				String secureAtt = method.getSecure().getValue();
+				security.setSelectedItem(secureAtt);
 			} else {
 				security.setSelectedItem("NONE");
 			}
-
 		}
 		return security;
 	}
@@ -681,12 +667,13 @@ public class MethodViewer extends GridPortalBaseFrame {
 		if (exceptionInputPanel == null) {
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.gridx = 1;
-			gridBagConstraints3.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints3.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints3.gridy = 0;
 			exceptionInputPanel = new JPanel();
 			exceptionInputPanel.setLayout(new GridBagLayout());
-			exceptionInputPanel.add(getExceptionInputButtonPanel(), gridBagConstraints3);
+			exceptionInputPanel.add(getExceptionInputButtonPanel(),
+					gridBagConstraints3);
 		}
 		return exceptionInputPanel;
 	}
@@ -715,17 +702,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			addExceptionButton
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
-							System.out.println("actionPerformed()");
-							final Element exception = new Element("exception",
-									method.getNamespace());
-							method
-									.getChild("exceptions",
-											method.getNamespace()).addContent(
-											method.getChild("exceptions",
-													method.getNamespace())
-													.getChildren().size(),
-											exception);
-							getExceptionsTable().addRow(exception);
+							getExceptionsTable().addRow(new MethodTypeExceptionsException());
 						}
 					});
 		}
@@ -834,7 +811,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			gridBagConstraints13.gridx = 1;
 			gridBagConstraints13.gridy = 0;
 			gridBagConstraints13.weightx = 1.0;
-			gridBagConstraints13.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints13.insets = new java.awt.Insets(2, 2, 2, 2);
 			securityPanel = new JPanel();
 			securityPanel.setLayout(new GridBagLayout());
 			securityPanel.add(getSecurity(), gridBagConstraints13);
@@ -844,26 +821,28 @@ public class MethodViewer extends GridPortalBaseFrame {
 	}
 
 	/**
-	 * This method initializes exceptionInputButtonPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes exceptionInputButtonPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getExceptionInputButtonPanel() {
 		if (exceptionInputButtonPanel == null) {
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.insets = new java.awt.Insets(5,3,5,5);
+			gridBagConstraints5.insets = new java.awt.Insets(5, 3, 5, 5);
 			gridBagConstraints5.gridy = 0;
 			gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints5.gridx = 0;
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-			gridBagConstraints4.insets = new java.awt.Insets(5,5,5,2);
+			gridBagConstraints4.insets = new java.awt.Insets(5, 5, 5, 2);
 			gridBagConstraints4.gridy = 1;
 			gridBagConstraints4.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints4.gridx = 0;
 			exceptionInputButtonPanel = new JPanel();
 			exceptionInputButtonPanel.setLayout(new GridBagLayout());
-			exceptionInputButtonPanel.add(getRemoveExceptionButton(), gridBagConstraints4);
-			exceptionInputButtonPanel.add(getAddExceptionButton(), gridBagConstraints5);
+			exceptionInputButtonPanel.add(getRemoveExceptionButton(),
+					gridBagConstraints4);
+			exceptionInputButtonPanel.add(getAddExceptionButton(),
+					gridBagConstraints5);
 		}
 		return exceptionInputButtonPanel;
 	}

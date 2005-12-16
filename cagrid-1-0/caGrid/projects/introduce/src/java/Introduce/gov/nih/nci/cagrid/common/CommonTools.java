@@ -1,18 +1,20 @@
 package gov.nih.nci.cagrid.common;
 
-import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.StringTokenizer;
 
+import javax.xml.namespace.QName;
+
 import org.apache.axis.utils.XMLUtils;
 import org.globus.wsrf.encoding.ObjectDeserializer;
+import org.globus.wsrf.encoding.ObjectSerializer;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.XMLUtilities;
 
@@ -60,8 +62,7 @@ public class CommonTools {
 		return cmd;
 	}
 
-	public static String getAntAllCommand(String buildFileDir)
-			throws Exception {
+	public static String getAntAllCommand(String buildFileDir) throws Exception {
 		return getAntCommand("all", buildFileDir);
 	}
 
@@ -153,6 +154,12 @@ public class CommonTools {
 
 		return sb;
 	}
+	
+	public static void stringBufferToFile(StringBuffer string, String fileName) throws Exception {
+		FileWriter fw = new FileWriter(new File(fileName));
+		fw.write(string.toString());
+		fw.close();
+	}
 
 	public static boolean deleteDir(File dir) {
 		if (dir.isDirectory()) {
@@ -166,16 +173,17 @@ public class CommonTools {
 		}
 		return dir.delete();
 	}
-	
-	public static Object deserializeDocument(String fileName, Class objectType) throws Exception {
+
+	public static Object deserializeDocument(String fileName, Class objectType)
+			throws Exception {
 		InputStream inputStream = null;
 
 		try {
 			inputStream = new FileInputStream(fileName);
 			org.w3c.dom.Document doc = XMLUtils.newDocument(inputStream);
 
-			return ObjectDeserializer.toObject(doc
-					.getDocumentElement(), objectType);
+			return ObjectDeserializer.toObject(doc.getDocumentElement(),
+					objectType);
 		} finally {
 			if (inputStream != null) {
 				try {
@@ -187,5 +195,22 @@ public class CommonTools {
 
 	}
 
+	public static void serializeDocument(String fileName, Object object,
+			QName qname) throws Exception {
+		FileWriter fw = null;
+
+		try {
+			fw = new FileWriter(fileName);
+			ObjectSerializer.serialize(fw, object, qname);
+		} finally {
+			if (fw != null) {
+				try {
+					fw.close();
+				} catch (IOException e) {
+				}
+			}
+		}
+
+	}
 
 }

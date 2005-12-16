@@ -75,8 +75,6 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
     private JLabel jLabel = null;
     private JTextField gme = null;
     private JLabel typeLabel = null;
-    private JLabel classLabel = null;
-    private JTextField className = null;
     private JLabel arrayLabel = null;
     private JLabel paramNameLabel = null;
     private JTextField paramName = null;
@@ -89,6 +87,7 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
         this.handleParameterName = handleParameterName;
         this.me = this;
         initialize();
+        discoverFromGME();
     }
 
 
@@ -199,16 +198,16 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
             GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
             gridBagConstraints11.gridx = 1;
             gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
-            gridBagConstraints11.gridy = 2;
+            gridBagConstraints11.gridy = 1;
             GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
             gridBagConstraints19.anchor = java.awt.GridBagConstraints.WEST;
-            gridBagConstraints19.gridy = 3;
+            gridBagConstraints19.gridy = 2;
             gridBagConstraints19.insets = new java.awt.Insets(2, 2, 2, 2);
             gridBagConstraints19.gridx = 0;
             GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
             gridBagConstraints18.fill = java.awt.GridBagConstraints.HORIZONTAL;
             gridBagConstraints18.gridx = 1;
-            gridBagConstraints18.gridy = 3;
+            gridBagConstraints18.gridy = 2;
             gridBagConstraints18.anchor = java.awt.GridBagConstraints.WEST;
             gridBagConstraints18.insets = new java.awt.Insets(2, 2, 2, 2);
             gridBagConstraints18.weighty = 1.0D;
@@ -221,22 +220,7 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
             gridBagConstraints16.gridx = 0;
             gridBagConstraints16.anchor = java.awt.GridBagConstraints.WEST;
             gridBagConstraints16.insets = new java.awt.Insets(2, 2, 2, 2);
-            gridBagConstraints16.gridy = 2;
-            GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
-            gridBagConstraints15.anchor = java.awt.GridBagConstraints.WEST;
-            gridBagConstraints15.gridy = 1;
-            gridBagConstraints15.insets = new java.awt.Insets(2, 2, 2, 2);
-            gridBagConstraints15.gridx = 0;
-            GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
-            gridBagConstraints14.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints14.gridx = 1;
-            gridBagConstraints14.gridy = 1;
-            gridBagConstraints14.anchor = java.awt.GridBagConstraints.WEST;
-            gridBagConstraints14.insets = new java.awt.Insets(2, 2, 2, 2);
-            gridBagConstraints14.weighty = 1.0D;
-            gridBagConstraints14.weightx = 1.0;
-            classLabel = new JLabel();
-            classLabel.setText("Class Name");
+            gridBagConstraints16.gridy = 1;
             GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
             gridBagConstraints13.gridx = 0;
             gridBagConstraints13.anchor = java.awt.GridBagConstraints.WEST;
@@ -259,12 +243,10 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
                 javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
             typesPanel.add(getTypesComboBox(), gridBagConstraints12);
             typesPanel.add(typeLabel, gridBagConstraints13);
-            typesPanel.add(classLabel, gridBagConstraints15);
-            typesPanel.add(getClassName(), gridBagConstraints14);
             typesPanel.add(arrayLabel, gridBagConstraints16);
+            typesPanel.add(paramNameLabel, gridBagConstraints19);
+            typesPanel.add(getParamName(), gridBagConstraints18);
             if (this.handleParameterName) {
-                typesPanel.add(paramNameLabel, gridBagConstraints19);
-                typesPanel.add(getParamName(), gridBagConstraints18);
                 typesPanel.add(getIsArrayCheckBox(), gridBagConstraints11);
             }
         }
@@ -284,6 +266,26 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
         }
         return buttonPanel;
     }
+    
+    private void discoverFromGME(){
+    	 GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
+         List namespaces = null;
+         try {
+             XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
+                 .getGridService(gme.getText());
+             namespaces = handle.getNamespaceDomainList();
+
+             getNamespaceComboBox().removeAllItems();
+             for (int i = 0; i < namespaces.size(); i++) {
+                 getNamespaceComboBox().addItem(namespaces.get(i));
+             }
+
+         } catch (MobiusException e1) {
+             e1.printStackTrace();
+             JOptionPane.showMessageDialog(me,
+                 "Please check the GME URL and make sure that you have the appropriate credentials!");
+         }
+    }
 
 
     /**
@@ -293,26 +295,10 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
      */
     private JButton getQueryButton() {
         if (queryButton == null) {
-            queryButton = new JButton("Discover Schemas", IntroduceLookAndFeel.getMobiusIcon());
+            queryButton = new JButton("Refresh from GME", IntroduceLookAndFeel.getMobiusIcon());
             queryButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
-                    List namespaces = null;
-                    try {
-                        XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
-                            .getGridService(gme.getText());
-                        namespaces = handle.getNamespaceDomainList();
-
-                        getNamespaceComboBox().removeAllItems();
-                        for (int i = 0; i < namespaces.size(); i++) {
-                            getNamespaceComboBox().addItem(namespaces.get(i));
-                        }
-
-                    } catch (MobiusException e1) {
-                        e1.printStackTrace();
-                        JOptionPane.showMessageDialog(me,
-                            "Please check the GME URL and make sure that you have the appropriate credentials!");
-                    }
+                	discoverFromGME();
                 }
             });
         }
@@ -426,7 +412,9 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
 
                     // populate the data vector from the prior screen now......
                     int index = 0;
-                    typeInfo.set(index++, className.getText());
+                    //skip classname
+                    index++;
+                    typeInfo.set(index++, String.valueOf(isArrayCheckBox.isSelected()));
                     if (handleParameterName) {
                         typeInfo.set(index++, paramName.getText());
                     }
@@ -470,18 +458,6 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
                         } catch (MalformedNamespaceException e1) {
                             e1.printStackTrace();
                         }
-                        StringTokenizer tokenizer = new StringTokenizer(currentNamespace.getDomain(), ".", true);
-                        StringBuffer packageName = new StringBuffer();
-                        while (tokenizer.hasMoreElements()) {
-                            packageName.insert(0, tokenizer.nextToken());
-                        }
-
-                        char[] typeChars = currentType.toCharArray();
-                        typeChars[0] = currentType.toUpperCase().charAt(0);
-                        String type = new String(typeChars);
-
-                        className.setText(packageName + ".bean." + type);
-                        toggleArray();
                     }
 
                 }
@@ -627,34 +603,6 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
 
 
     /**
-     * This method initializes jTextField
-     * 
-     * @return javax.swing.JTextField
-     */
-    private JTextField getClassName() {
-        if (className == null) {
-            className = new JTextField();
-            className.setEditable(false);
-        }
-        return className;
-    }
-
-
-    private void toggleArray() {
-        if (this.isArrayCheckBox.isSelected()) {
-            if (!className.getText().endsWith("[]")) {
-                String newClassName = className.getText() + "[]";
-                className.setText(newClassName);
-            }
-        } else {
-            if (className.getText().endsWith("[]")) {
-                className.setText(className.getText().substring(0, className.getText().length() - 2));
-            }
-        }
-    }
-
-
-    /**
      * This method initializes paramName
      * 
      * @return javax.swing.JTextField
@@ -677,8 +625,6 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
             isArrayCheckBox = new JCheckBox();
             isArrayCheckBox.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.out.println("actionPerformed()");
-                    toggleArray();
                 }
             });
         }

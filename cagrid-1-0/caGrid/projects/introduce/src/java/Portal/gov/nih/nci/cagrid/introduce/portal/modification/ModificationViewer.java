@@ -5,6 +5,9 @@ import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.Archive;
 import gov.nih.nci.cagrid.introduce.SyncTools;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
 import java.awt.Font;
@@ -15,27 +18,20 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
 import java.util.Properties;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.xml.namespace.QName;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
 
@@ -43,7 +39,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.20 2005-12-14 17:18:24 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.21 2005-12-16 14:00:22 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -65,7 +61,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 
 	private File methodsDirectory = null;
 
-	private Document methodsDocument = null;
+	private MethodsType methodsType;
 
 	private Properties serviceProperties = null;
 
@@ -186,18 +182,17 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		if (this.methodsDirectory != null) {
 			SAXBuilder builder = new SAXBuilder(false);
 			try {
-				methodsDocument = builder.build(this.methodsDirectory
+				
+				this.methodsType = (MethodsType) CommonTools.deserializeDocument(this.methodsDirectory
 						.getAbsolutePath()
-						+ File.separator + "introduceMethods.xml");
+						+ File.separator + "introduceMethods.xml", MethodsType.class);
 
 				loadServiceProps();
 
 				// this.getServiceName().setText(serviceProperties.getProperty("introduce.skeleton.service.name"));
 				// this.getServiceName().setEnabled(false);
-			} catch (JDOMException e1) {
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				e1.printStackTrace();
+			} catch (Exception e){
+				e.printStackTrace();
 			}
 		}
 
@@ -383,7 +378,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	 */
 	private MethodsTable getMethodsTable() {
 		if (methodsTable == null) {
-			methodsTable = new MethodsTable(this.methodsDocument,
+			methodsTable = new MethodsTable(methodsType,
 					this.methodsDirectory, this.serviceProperties);
 		}
 		methodsTable.addMouseListener(new MouseAdapter() {
@@ -424,25 +419,29 @@ public class ModificationViewer extends GridPortalBaseFrame {
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
 							dirty = true;
-							Element method = new Element("method",
-									methodsDocument.getRootElement()
-											.getNamespace());
-							method.setAttribute("name", "newMethod");
-							Element inputs = new Element("inputs",
-									methodsDocument.getRootElement()
-											.getNamespace());
-							Element output = new Element("output",
-									methodsDocument.getRootElement()
-											.getNamespace());
-							output.setAttribute("className", "void");
-							Element exceptions = new Element("exceptions",
-									methodsDocument.getRootElement()
-											.getNamespace());
-							method.addContent(inputs);
-							method.addContent(output);
-							method.addContent(exceptions);
-							methodsDocument.getRootElement().addContent(method);
+							MethodsTypeMethod method = new MethodsTypeMethod();
+							method.setName("newMethod");
+							MethodTypeOutput output = new MethodTypeOutput();
+							output.setClassName("void");
+							method.setOutput(output);
+							
+							//add new method to array in bean  
+							//this seems to be a wierd way be adding things....
+							MethodsTypeMethod[] newMethods;
+							int newLength = 0;
+							if(methodsType.getMethod()!=null){
+								newLength = methodsType.getMethod().length+1;
+								newMethods= new MethodsTypeMethod[newLength];
+								System.arraycopy(methodsType.getMethod(),0,newMethods,0,methodsType.getMethod().length);
+							} else {
+								newLength = 1;
+								newMethods = new MethodsTypeMethod[newLength];
+							}
+							newMethods[newLength-1]=method;
+							methodsType.setMethod(newMethods);
+							
 							getMethodsTable().addRow(method);
+							
 							performModify();
 						}
 					});
@@ -475,13 +474,9 @@ public class ModificationViewer extends GridPortalBaseFrame {
 								if (confirmed == JOptionPane.OK_OPTION) {
 									System.out
 											.println("Writting service.methods file.");
-									FileWriter fw = new FileWriter(new File(
-											methodsDirectory.getAbsolutePath()
+									CommonTools.serializeDocument(methodsDirectory.getAbsolutePath()
 													+ File.separator
-													+ "introduceMethods.xml"));
-									XMLOutputter out = new XMLOutputter(Format
-											.getPrettyFormat());
-									out.output(methodsDocument, fw);
+													+ "introduceMethods.xml", methodsType,new QName("gme://gov.nih.nci.cagrid.introduce/1/Methods","methodsType"));
 
 									setProgressText("sychronizing skeleton");
 									// call the sync tools
@@ -534,18 +529,6 @@ public class ModificationViewer extends GridPortalBaseFrame {
 								.showErrorMessage("Please select a method to remove.");
 						return;
 					}
-					String methodName = getMethodsTable().getMethodName(
-							getMethodsTable().getSelectedRow());
-					List methods = methodsDocument.getRootElement()
-							.getChildren();
-					for (int i = 0; i < methods.size(); i++) {
-						Element method = (Element) methods.get(i);
-						if (method.getAttributeValue("name").equals(methodName)) {
-							methodsDocument.getRootElement().removeContent(
-									method);
-							break;
-						}
-					}
 					getMethodsTable().removeRow(
 							getMethodsTable().getSelectedRow());
 				}
@@ -562,7 +545,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			return;
 		}
 
-		Element method = (Element) getMethodsTable().getValueAt(
+		MethodsTypeMethod method = (MethodsTypeMethod) getMethodsTable().getValueAt(
 				getMethodsTable().getSelectedRow(), 1);
 		PortalResourceManager
 				.getInstance()

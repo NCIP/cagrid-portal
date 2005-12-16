@@ -1,12 +1,14 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
+
 import java.io.File;
 import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.table.DefaultTableModel;
 
-import org.jdom.Element;
 import org.projectmobius.portal.JComponentTable;
 import org.projectmobius.portal.PortalResourceManager;
 
@@ -15,21 +17,22 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: OutputTypeTable.java,v 1.6 2005-12-13 14:21:41 hastings Exp $
+ * @version $Id: OutputTypeTable.java,v 1.7 2005-12-16 14:00:22 hastings Exp $
  */
 public class OutputTypeTable extends JComponentTable {
 
 	public static String CLASSNAME = "Classname";
+	public static String ISARRAY = "Is Array";
 	public static String NAMESPACE = "Namespace";
 	public static String TYPE = "Type";
 	public static String LOCATION = "Location";
 	public static String GME = "Get Type From GME";
 
-	private Element method;
+	private MethodsTypeMethod method;
 	private File schemaDir;
 
 
-	public OutputTypeTable(Element method, File schemaDir) {
+	public OutputTypeTable(MethodsTypeMethod method, File schemaDir) {
 		super(createTableModel());
 		this.method = method;
 		this.schemaDir = schemaDir;
@@ -48,12 +51,13 @@ public class OutputTypeTable extends JComponentTable {
 
 
 	private void initialize() {
-		Element output = method.getChild("output", method.getNamespace());
+		MethodTypeOutput output = method.getOutput();
 		final Vector v = new Vector();
-		v.add(output.getAttributeValue("className"));
-		v.add(output.getAttributeValue("namespace"));
-		v.add(output.getAttributeValue("type"));
-		v.add(output.getAttributeValue("location"));
+		v.add(output.getClassName());
+		v.add(output.getIsArray());
+		v.add(output.getNamespace());
+		v.add(output.getType());
+		v.add(output.getLocation());
 		JButton gme = new JButton("GME");
 		// gme.setIcon(AnalyticalLookAndFeel.getMobiusIcon());
 		gme.addActionListener(new java.awt.event.ActionListener() {
@@ -71,6 +75,7 @@ public class OutputTypeTable extends JComponentTable {
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn(CLASSNAME);
+		model.addColumn(ISARRAY);
 		model.addColumn(NAMESPACE);
 		model.addColumn(TYPE);
 		model.addColumn(LOCATION);

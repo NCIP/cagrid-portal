@@ -10,6 +10,11 @@
 					schema.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
+		<xs:attribute name="isArray" type="xs:boolean" use="optional">
+			<xs:annotation>
+				<xs:documentation>Used to specify if this class is to be used as an array.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 		<xs:attribute name="namespace" type="xs:string" use="required">
 			<xs:annotation>
 				<xs:documentation>Used to specify the namespace of the schema which defines the

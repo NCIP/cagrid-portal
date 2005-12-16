@@ -5,9 +5,6 @@
 	<!-- Define the environment variable -->
 	<property environment="env" />
 	<property name="ext.globus.location" location="${env.GLOBUS_LOCATION}" />
-	<echo message="GLOBUS LOCATION = ${env.GLOBUS_LOCATION}" />
-	<echo message="GLOBUS LOCATION = ${ext.globus.location}" />
-
 
 	<property name="introduce.skeleton.dir" location="${basedir}/skeleton" />
 	<property name="introduce.skeleton.destination.dir.default" location="${user.home}/caGridServiceSkeleton" />

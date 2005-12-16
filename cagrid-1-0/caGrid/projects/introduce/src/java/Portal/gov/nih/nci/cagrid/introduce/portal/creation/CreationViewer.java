@@ -18,6 +18,9 @@ import javax.swing.JTextField;
 
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
+import java.awt.Insets;
+import javax.swing.JList;
+import javax.swing.JComboBox;
 
 /**
  * CreationViewer
@@ -65,17 +68,23 @@ public class CreationViewer extends GridPortalComponent {
 
 	private JButton closeButton = null;
 
-	private JLabel methodsTemplateLabel = null;
-
 	private JTextField methodsTemplate = null;
 
 	private JButton methodsTemplateButton = null;
 
-	private JLabel metadataTemplateLabel = null;
-
 	private JTextField metadataTemplate = null;
 
 	private JButton metadataTemplateButton = null;
+
+	private JPanel templatePanel = null;
+
+	private JLabel methodTemplateJLabel = null;
+
+	private JLabel metadataTemplateJLabel = null;
+
+	private JLabel serviceStyleLabel = null;
+
+	private JComboBox serviceStyleSeletor = null;
 
 	/**
 	 * This method initializes
@@ -92,7 +101,7 @@ public class CreationViewer extends GridPortalComponent {
 	 */
 	private void initialize() {
 		this.setContentPane(getMainPanel());
-		this.setSize(445, 408);
+		this.setSize(469, 446);
 		this.setFrameIcon(IntroduceLookAndFeel.getCreateIcon());
 		this.setTitle("Create Grid Service");
 
@@ -105,48 +114,32 @@ public class CreationViewer extends GridPortalComponent {
 	 */
 	private JPanel getInputPanel() {
 		if (inputPanel == null) {
-			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
-			gridBagConstraints18.gridx = 2;
-			gridBagConstraints18.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints18.gridy = 6;
-			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
-			gridBagConstraints17.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints17.gridy = 6;
-			gridBagConstraints17.weightx = 1.0;
-			gridBagConstraints17.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints17.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints17.gridx = 1;
 			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
-			gridBagConstraints16.gridx = 0;
-			gridBagConstraints16.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints16.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints16.gridy = 6;
-			metadataTemplateLabel = new JLabel();
-			metadataTemplateLabel.setText("Metadata Template File");
-			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
-			gridBagConstraints15.gridx = 2;
-			gridBagConstraints15.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints15.gridy = 5;
-			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
-			gridBagConstraints14.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints14.gridy = 5;
-			gridBagConstraints14.weightx = 1.0;
-			gridBagConstraints14.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints14.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints14.gridx = 1;
+			gridBagConstraints16.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints16.gridy = 5;
+			gridBagConstraints16.weightx = 1.0;
+			gridBagConstraints16.gridwidth = 2;
+			gridBagConstraints16.gridx = 1;
 			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
 			gridBagConstraints13.gridx = 0;
 			gridBagConstraints13.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints13.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints13.gridy = 5;
-			methodsTemplateLabel = new JLabel();
-			methodsTemplateLabel.setText("Methods Template File");
+			serviceStyleLabel = new JLabel();
+			serviceStyleLabel.setText("Service Style");
+			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
+			gridBagConstraints19.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints19.gridy = 7;
+			gridBagConstraints19.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints19.weightx = 1.0D;
+			gridBagConstraints19.weighty = 1.0D;
+			gridBagConstraints19.gridwidth = 3;
+			gridBagConstraints19.gridx = 0;
 			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
 			gridBagConstraints12.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints12.gridy = 4;
 			gridBagConstraints12.weightx = 1.0;
 			gridBagConstraints12.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints12.insets = new java.awt.Insets(0, 0, 0, 0);
+			gridBagConstraints12.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints12.gridwidth = 2;
 			gridBagConstraints12.weighty = 1.0D;
 			gridBagConstraints12.gridx = 1;
@@ -241,12 +234,9 @@ public class CreationViewer extends GridPortalComponent {
 			inputPanel.add(getNamespaceDomain(), gridBagConstraints12);
 			inputPanel.add(serviceLabel, gridBagConstraints4);
 			inputPanel.add(namespaceLabel, gridBagConstraints11);
-			inputPanel.add(methodsTemplateLabel, gridBagConstraints13);
-			inputPanel.add(getMethodsTemplateFile(), gridBagConstraints14);
-			inputPanel.add(getMethodsTemplateButton(), gridBagConstraints15);
-			inputPanel.add(metadataTemplateLabel, gridBagConstraints16);
-			inputPanel.add(getMetadataTemplate(), gridBagConstraints17);
-			inputPanel.add(getMetadataTemplateButton(), gridBagConstraints18);
+			inputPanel.add(getTemplatePanel(), gridBagConstraints19);
+			inputPanel.add(serviceStyleLabel, gridBagConstraints13);
+			inputPanel.add(getServiceStyleSeletor(), gridBagConstraints16);
 		}
 		return inputPanel;
 	}
@@ -261,7 +251,7 @@ public class CreationViewer extends GridPortalComponent {
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.gridy = 1;
+			gridBagConstraints1.gridy = 2;
 			gridBagConstraints1.anchor = java.awt.GridBagConstraints.SOUTH;
 			gridBagConstraints1.gridheight = 1;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
@@ -308,7 +298,8 @@ public class CreationViewer extends GridPortalComponent {
 			createButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 
-					BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance().getGridPortal(),
+					BusyDialogRunnable r = new BusyDialogRunnable(
+							PortalResourceManager.getInstance().getGridPortal(),
 							"Creating") {
 
 						public void process() {
@@ -351,12 +342,28 @@ public class CreationViewer extends GridPortalComponent {
 								if (methodsTemplate.getText().length() > 0
 										|| metadataTemplate.getText().length() > 0) {
 									if (methodsTemplate.getText().length() > 0) {
-										// TODO: NEED TO COPY THE FILE TO X
-										// LOCATION
+										StringBuffer file = CommonTools
+												.fileToStringBuffer(new File(
+														methodsTemplate
+																.getText()));
+										CommonTools
+												.stringBufferToFile(
+														file,
+														dir.getText()
+																+ File.separator
+																+ "introduceMethods.xml");
 									}
 									if (metadataTemplate.getText().length() > 0) {
-										// TODO: NEED TO COPY THE FILE TO X
-										// LOCATION
+										StringBuffer file = CommonTools
+												.fileToStringBuffer(new File(
+														metadataTemplate
+																.getText()));
+										CommonTools
+												.stringBufferToFile(
+														file,
+														dir.getText()
+																+ File.separator
+																+ "introduceMetadata.xml");
 									}
 									setProgressText("resynchronizing using templates");
 									cmd = CommonTools
@@ -442,7 +449,7 @@ public class CreationViewer extends GridPortalComponent {
 			dirButton.setText("Browse");
 			dirButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					promptDir();
+					dir.setText(promptDir());
 				}
 			});
 		}
@@ -476,7 +483,7 @@ public class CreationViewer extends GridPortalComponent {
 		return namespaceDomain;
 	}
 
-	private void promptDir() {
+	private String promptDir() {
 		JFileChooser chooser = new JFileChooser();
 		chooser.setDialogTitle("Select Attribute File");
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
@@ -484,7 +491,23 @@ public class CreationViewer extends GridPortalComponent {
 		chooser.setMultiSelectionEnabled(false);
 		int returnVal = chooser.showOpenDialog(this);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			this.dir.setText(chooser.getSelectedFile().getAbsolutePath());
+			return chooser.getSelectedFile().getAbsolutePath();
+		} else {
+			return "";
+		}
+	}
+
+	private String promptFile() {
+		JFileChooser chooser = new JFileChooser();
+		chooser.setDialogTitle("Select Attribute File");
+		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
+		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		chooser.setMultiSelectionEnabled(false);
+		int returnVal = chooser.showOpenDialog(this);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			return chooser.getSelectedFile().getAbsolutePath();
+		} else {
+			return "";
 		}
 	}
 
@@ -530,6 +553,13 @@ public class CreationViewer extends GridPortalComponent {
 		if (methodsTemplateButton == null) {
 			methodsTemplateButton = new JButton();
 			methodsTemplateButton.setText("Browse");
+			methodsTemplateButton.setEnabled(false);
+			methodsTemplateButton
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							methodsTemplate.setText(promptFile());
+						}
+					});
 		}
 		return methodsTemplateButton;
 	}
@@ -557,8 +587,103 @@ public class CreationViewer extends GridPortalComponent {
 		if (metadataTemplateButton == null) {
 			metadataTemplateButton = new JButton();
 			metadataTemplateButton.setText("Browse");
+			metadataTemplateButton.setEnabled(false);
+			metadataTemplateButton
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							metadataTemplate.setText(promptFile());
+						}
+					});
 		}
 		return metadataTemplateButton;
+	}
+
+	/**
+	 * This method initializes templatePanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getTemplatePanel() {
+		if (templatePanel == null) {
+			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+			gridBagConstraints21.gridx = 0;
+			gridBagConstraints21.gridy = 1;
+			metadataTemplateJLabel = new JLabel();
+			metadataTemplateJLabel.setText("Metadata Template File");
+			metadataTemplateJLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12));
+			metadataTemplateJLabel.setEnabled(false);
+			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+			gridBagConstraints20.gridx = 0;
+			gridBagConstraints20.gridy = 0;
+			methodTemplateJLabel = new JLabel();
+			methodTemplateJLabel.setText("Methods Template File");
+			methodTemplateJLabel.setEnabled(false);
+			methodTemplateJLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12));
+			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
+			gridBagConstraints18.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints18.gridy = 1;
+			gridBagConstraints18.gridx = 3;
+			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
+			gridBagConstraints17.anchor = GridBagConstraints.WEST;
+			gridBagConstraints17.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints17.gridx = 2;
+			gridBagConstraints17.gridy = 1;
+			gridBagConstraints17.weightx = 1.0;
+			gridBagConstraints17.fill = GridBagConstraints.HORIZONTAL;
+			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
+			gridBagConstraints15.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints15.gridy = 0;
+			gridBagConstraints15.gridx = 3;
+			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
+			gridBagConstraints14.anchor = GridBagConstraints.WEST;
+			gridBagConstraints14.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints14.gridx = 2;
+			gridBagConstraints14.gridy = 0;
+			gridBagConstraints14.weightx = 1.0;
+			gridBagConstraints14.fill = GridBagConstraints.HORIZONTAL;
+			templatePanel = new JPanel();
+			templatePanel.setLayout(new GridBagLayout());
+			templatePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service Template Options", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+			templatePanel.setEnabled(false);
+			templatePanel.add(getMethodsTemplateFile(), gridBagConstraints14);
+			templatePanel.add(getMethodsTemplateButton(), gridBagConstraints15);
+			templatePanel.add(getMetadataTemplate(), gridBagConstraints17);
+			templatePanel.add(getMetadataTemplateButton(), gridBagConstraints18);
+			templatePanel.add(methodTemplateJLabel, gridBagConstraints20);
+			templatePanel.add(metadataTemplateJLabel, gridBagConstraints21);
+		}
+		return templatePanel;
+	}
+
+	/**
+	 * This method initializes serviceStyleSeletor	
+	 * 	
+	 * @return javax.swing.JComboBox	
+	 */
+	private JComboBox getServiceStyleSeletor() {
+		if (serviceStyleSeletor == null) {
+			serviceStyleSeletor = new JComboBox();
+			serviceStyleSeletor.addItem("NONE");
+			serviceStyleSeletor.addItem("ANALYTICAL");
+			serviceStyleSeletor.addItem("DATA");
+			serviceStyleSeletor.addItem("CUSTOM");
+			serviceStyleSeletor.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if(serviceStyleSeletor.getSelectedItem().equals("CUSTOM")){
+						methodTemplateJLabel.setEnabled(true);
+						methodsTemplateButton.setEnabled(true);
+						metadataTemplateJLabel.setEnabled(true);
+						metadataTemplateButton.setEnabled(true);
+					} else {
+						methodTemplateJLabel.setEnabled(false);
+						methodsTemplateButton.setEnabled(false);
+						metadataTemplateJLabel.setEnabled(false);
+						metadataTemplateButton.setEnabled(false);
+					}
+				}
+			});
+		}
+		return serviceStyleSeletor;
 	}
 
 	public static void main(String[] args) {
@@ -566,4 +691,4 @@ public class CreationViewer extends GridPortalComponent {
 
 	}
 
-} // @jve:decl-index=0:visual-constraint="7,6"
+}  //  @jve:decl-index=0:visual-constraint="10,4"

@@ -105,24 +105,32 @@ public class SyncMethods {
 				+ "ProviderImpl.java";
 	}
 
-	private String getClassNameFromElement(MethodTypeInputsInput method) {
-		if (method.getClassName().equals("void")) {
+	private String getClassNameFromElement(MethodTypeInputsInput inputParam) {
+		if (inputParam.getClassName().equals("void")) {
 			return "void";
 		}
 		table.dump(System.out);
-		Type type = table.getType(new QName(method.getNamespace(), method
+		Type type = table.getType(new QName(inputParam.getNamespace(), inputParam
 				.getType()));
-		return type.getName();
+		if (inputParam.getIsArray().booleanValue()) {
+			return type.getName() + "[]";
+		} else {
+			return type.getName();
+		}
 	}
 
-	private String getClassNameFromElement(MethodTypeOutput method) {
-		if (method.getClassName().equals("void")) {
+	private String getClassNameFromElement(MethodTypeOutput outputParam) {
+		if (outputParam.getClassName().equals("void")) {
 			return "void";
 		}
 		table.dump(System.out);
-		Type type = table.getType(new QName(method.getNamespace(), method
+		Type type = table.getType(new QName(outputParam.getNamespace(), outputParam
 				.getType()));
-		return type.getName();
+		if (outputParam.getIsArray().booleanValue()) {
+			return type.getName() + "[]";
+		} else {
+			return type.getName();
+		}
 	}
 
 	private String createExceptions(MethodsTypeMethod method) {
@@ -152,7 +160,8 @@ public class SyncMethods {
 		return exceptions;
 	}
 
-	private String createUnBoxedSignatureStringFromMethod(MethodsTypeMethod method) {
+	private String createUnBoxedSignatureStringFromMethod(
+			MethodsTypeMethod method) {
 		String methodString = "";
 		MethodTypeOutput returnTypeEl = method.getOutput();
 		String methodName = method.getName();
@@ -331,13 +340,12 @@ public class SyncMethods {
 		clientMethod += "{\n\t\t";
 		// clientMethod += "try{\n";
 		clientMethod += "\t\t\t";
-		
+
 		String secureValue = "SECURITY_PROPERTY_NONE";
 		if (method.getSecure() != null) {
-			secureValue = "SECURITY_PROPERTY_"
-					+ method.getSecure();
+			secureValue = "SECURITY_PROPERTY_" + method.getSecure();
 		}
-		
+
 		// get the port
 		// TODO: handle security here
 		clientMethod += this.deploymentProperties

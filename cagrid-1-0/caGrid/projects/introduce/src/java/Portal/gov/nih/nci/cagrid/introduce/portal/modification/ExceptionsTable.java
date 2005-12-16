@@ -1,12 +1,13 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
-import java.util.List;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
+
 import java.util.Vector;
 
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
-import org.jdom.Element;
 import org.projectmobius.portal.PortalTable;
 
 /**
@@ -19,11 +20,14 @@ import org.projectmobius.portal.PortalTable;
 public class ExceptionsTable extends PortalTable {
 
 	public static String NAME = "Name";
-	public static String DATA1 = "DATA1";
-	public static String DATA2 = "DATA2";
-	private Element method;
 
-	public ExceptionsTable(Element method) {
+	public static String DATA1 = "DATA1";
+
+	public static String DATA2 = "DATA2";
+
+	private MethodsTypeMethod method;
+
+	public ExceptionsTable(MethodsTypeMethod method) {
 		super(createTableModel());
 		this.method = method;
 		this.setColumnSelectionAllowed(false);
@@ -37,9 +41,9 @@ public class ExceptionsTable extends PortalTable {
 		return true;
 	}
 
-	public void addRow(final Element exception) {
+	public void addRow(final MethodTypeExceptionsException exception) {
 		final Vector v = new Vector();
-		v.add(exception.getAttributeValue("name"));
+		v.add(exception.getName());
 		v.add(exception);
 		v.add(v);
 
@@ -54,11 +58,10 @@ public class ExceptionsTable extends PortalTable {
 		this.getColumn(DATA2).setMinWidth(0);
 		this.getColumn(DATA2).setPreferredWidth(0);
 
-		List exceptions = method.getChild("exceptions", method.getNamespace())
-				.getChildren();
-		for (int i = 0; i < exceptions.size(); i++) {
-			final Element exception = (Element) exceptions.get(i);
-			addRow(exception);
+		if (method.getExceptions() != null) {
+			for (int i = 0; i < method.getExceptions().getException().length; i++) {
+				addRow( method.getExceptions().getException(i));
+			}
 		}
 	}
 

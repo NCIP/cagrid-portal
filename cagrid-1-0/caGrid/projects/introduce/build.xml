@@ -16,6 +16,7 @@
 	<!-- Source, Config, and Libraries -->
 	<property name="ext.dir" location="${basedir}/ext" />
 	<property name="src.dir" location="${basedir}/src/java" />
+	<property name="template.src.dir" location="${basedir}/src/jettemplates" />
 	<property name="lib.dir" location="${basedir}/lib" />
 	<property name="ext.lib.dir" location="${ext.dir}/lib" />
 	<property name="schema.dir" location="${basedir}/schema" />
@@ -138,23 +139,23 @@
 		</classpath>
 	</taskdef>
 	<target name="generateJETClasses">
-		<jetc destdir="${src.dir}/Introduce" template="templates/server-config.wsdd.xmljet" />
-		<jetc destdir="${src.dir}/Introduce" template="templates/jndi-config.xmljet" />
-		<jetc destdir="${src.dir}/Introduce" template="templates/deploy.properties.txtjet" />
-		<jetc destdir="${src.dir}/Introduce" template="templates/namespace2package.mappings.txtjet" />
-		<jetc destdir="${src.dir}/Introduce" template="templates/.classpath.txtjet" />
-		<jetc destdir="${src.dir}/Introduce" template="templates/.project.xmljet" />
-		<jetc destdir="${src.dir}/Introduce" template="templates/etc/registration.xmljet" />
-		<jetc destdir="${src.dir}/Introduce" template="templates/schema/Service/service.wsdl.xmljet" />
-		<jetc destdir="${src.dir}/Introduce" template="templates/docs/api/doxyfile.txtjet" />
-		<jetc destdir="${src.dir}/Introduce" template="templates/src/client/ServiceClient.javajet" />
-		<jetc destdir="${src.dir}/Introduce" template="templates/src/common/ServiceI.javajet" />
-		<jetc destdir="${src.dir}/Introduce" template="templates/src/service/ServiceImpl.javajet" />
-		<jetc destdir="${src.dir}/Introduce" template="templates/src/service/globus/ServiceProviderImpl.javajet" />
-		<jetc destdir="${src.dir}/Introduce" template="templates/src/service/globus/resource/BaseResource.javajet" />
-		<jetc destdir="${src.dir}/Introduce" template="templates/src/service/globus/resource/BaseResourceHome.javajet" />
-		<jetc destdir="${src.dir}/Introduce" template="templates/src/service/globus/resource/MetadataConfiguration.javajet" />
-		<jetc destdir="${src.dir}/Introduce" template="templates/src/service/globus/resource/ResourceConstants.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/server-config.wsdd.xmljet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/jndi-config.xmljet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/deploy.properties.txtjet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/namespace2package.mappings.txtjet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/.classpath.txtjet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/.project.xmljet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/etc/registration.xmljet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/schema/Service/service.wsdl.xmljet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/docs/api/doxyfile.txtjet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/client/ServiceClient.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/common/ServiceI.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/ServiceImpl.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/ServiceProviderImpl.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/BaseResource.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/BaseResourceHome.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/MetadataConfiguration.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/ResourceConstants.javajet" />
 	</target>
 
 

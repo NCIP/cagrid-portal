@@ -1,5 +1,8 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
+
 import java.util.List;
 import java.util.Vector;
 
@@ -8,7 +11,6 @@ import javax.swing.table.DefaultTableModel;
 
 import org.jdom.Element;
 import org.projectmobius.portal.PortalTable;
-
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
@@ -20,46 +22,54 @@ import org.projectmobius.portal.PortalTable;
 public class InputParametersTable extends PortalTable {
 
 	public static String CLASSNAME = "Classname";
+	
+	public static String ISARRAY = "Is Array";
+
 	public static String NAME = "Name";
+
 	public static String NAMESPACE = "Namespace";
+
 	public static String TYPE = "Type";
+
 	public static String LOCATION = "Location";
+
 	public static String GME = "Get Type From GME";
+
 	public static String DATA1 = "DATA1";
+
 	public static String DATA2 = "DATA2";
-	private Element method;
 
+	private MethodsTypeMethod method;
 
-
-	public InputParametersTable(Element method) {
+	public InputParametersTable(MethodsTypeMethod method) {
 		super(createTableModel());
-		this.method = method;	
+		this.method = method;
 		this.setColumnSelectionAllowed(false);
 		this.setRowSelectionAllowed(true);
 		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		initialize();
 	}
-	
+
 	public boolean isCellEditable(int row, int column) {
 		return true;
 	}
 
-
-	public void addRow(final Element input) {
+	public void addRow(final MethodTypeInputsInput input) {
 		final Vector v = new Vector();
-		v.add(input.getAttributeValue("className"));
-		v.add(input.getAttributeValue("name"));
-		v.add(input.getAttributeValue("namespace"));
-		v.add(input.getAttributeValue("type"));
-		v.add(input.getAttributeValue("location"));
+		v.add(input.getClassName());
+		v.add(input.getIsArray());
+		v.add(input.getName());
+		v.add(input.getNamespace());
+		v.add(input.getType());
+		v.add(input.getLocation());
 
 		v.add(input);
 		v.add(v);
 
 		((DefaultTableModel) this.getModel()).addRow(v);
-		 this.setRowSelectionInterval(this.getModel().getRowCount()-1, this.getModel().getRowCount()-1);
+		this.setRowSelectionInterval(this.getModel().getRowCount() - 1, this
+				.getModel().getRowCount() - 1);
 	}
-
 
 	private void initialize() {
 		this.getColumn(DATA1).setMaxWidth(0);
@@ -68,18 +78,17 @@ public class InputParametersTable extends PortalTable {
 		this.getColumn(DATA2).setMaxWidth(0);
 		this.getColumn(DATA2).setMinWidth(0);
 		this.getColumn(DATA2).setPreferredWidth(0);
-		
-		List parameters = method.getChild("inputs", method.getNamespace()).getChildren();
-		for (int i = 0; i < parameters.size(); i++) {
-			final Element input = (Element) parameters.get(i);
-			addRow(input);
+		if (this.method.getInputs() != null) {
+			for (int i = 0; i < this.method.getInputs().getInput().length; i++) {
+				addRow(this.method.getInputs().getInput(i));
+			}
 		}
 	}
-
 
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn(CLASSNAME);
+		model.addColumn(ISARRAY);
 		model.addColumn(NAME);
 		model.addColumn(NAMESPACE);
 		model.addColumn(TYPE);
