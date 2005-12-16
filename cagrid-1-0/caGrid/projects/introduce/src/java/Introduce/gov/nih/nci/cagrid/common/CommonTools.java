@@ -71,6 +71,11 @@ public class CommonTools {
 		return getAntCommand("flatten", buildFileDir);
 	}
 
+	public static String getAntDeployCommand(String buildFileDir)
+			throws Exception {
+		return getAntCommand("deploy", buildFileDir);
+	}
+
 	public static String getAntSkeletonResyncCommand(String buildFileDir)
 			throws Exception {
 		return getAntCommand("resync", buildFileDir);
@@ -154,8 +159,9 @@ public class CommonTools {
 
 		return sb;
 	}
-	
-	public static void stringBufferToFile(StringBuffer string, String fileName) throws Exception {
+
+	public static void stringBufferToFile(StringBuffer string, String fileName)
+			throws Exception {
 		FileWriter fw = new FileWriter(new File(fileName));
 		fw.write(string.toString());
 		fw.close();

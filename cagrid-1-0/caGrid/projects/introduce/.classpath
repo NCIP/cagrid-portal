@@ -83,7 +83,7 @@
 	<classpathentry kind="lib" path="lib/mobius_factories-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/mobius_gme_client-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/mobius_gme_server-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/mobius_tools-1.1.jar"/>
+	<classpathentry sourcepath="/mobius" kind="lib" path="lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/mobius-castor-0.9.4.3-xml.jar"/>
 	<classpathentry kind="lib" path="lib/GlobalModelExchange_stubs.jar"/>
 	<classpathentry kind="lib" path="lib/GlobalModelExchange.jar"/>

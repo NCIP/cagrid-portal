@@ -293,59 +293,6 @@
 	</target>
 
 
-	<!-- This target added mainly for the purposes of the GT4IDE plugin. It performs the same task as
-         target "dist" except it has no dependencies, and simply assumes the following directory structure:
-	 
-	 build/
-	    WSDD and JNDI files
-	    lib/
-	      JAR files
-	    schema/
-	      WSDL files
-    -->
-	<property name="garschema_nodep.id" value="garschema_nodep" />
-	<fileset dir="${build.dir}/schema" id="garschema_nodep">
-		<include name="**/*" />
-	</fileset>
-
-	<target name="dist_nodep">
-		<mkdir dir="${build.dir}" />
-		<mkdir dir="${build.lib.dir}" />
-		<mkdir dir="${schema.dest}" />
-		<mkdir dir="${etc.dir}" />
-
-		<copy file="server-deploy.wsdd" toDir="${build.dir}" failonerror="false" />
-		<copy file="client-deploy.wsdd" toDir="${build.dir}" failonerror="false" />
-		<copy file="jndi-deploy-config.xml" toDir="${build.dir}" failonerror="false" />
-		<copy file="client-deploy-server.wsdd" toDir="${build.dir}" failonerror="false" />
-
-		<copy toDir="${build.lib.dir}" flatten="true">
-			<fileset dir="." casesensitive="yes">
-				<include name="*/build/lib/*.jar" />
-			</fileset>
-		</copy>
-
-		<copy toDir="${build.dir}" includeEmptyDirs="false">
-			<mapper type="regexp" from="^([^${sep}]+)${sep}([^${sep}]+)${sep}(.*)$$" to="\3" />
-			<fileset dir="./" casesensitive="yes">
-				<include name="**/build/schema/**/*" />
-				<exclude name="**/build/schema/ws/**/*" />
-				<exclude name="**/build/schema/wsrf/**/*" />
-			</fileset>
-		</copy>
-
-		<ant antfile="${build.packages}" target="makeGar">
-			<property name="garserverdeployment.file" value="${build.dir}/server-deploy.wsdd" />
-			<property name="garclientdeployment.file" value="${build.dir}/client-deploy.wsdd" />
-			<property name="garclientserverdeployment.file" value="${build.dir}/client-deploy-server.wsdd" />
-			<property name="garjndiconfigdeployment.file" value="${build.dir}/jndi-deploy-config.xml" />
-			<reference refid="${garjars.id}" />
-			<reference refid="${garschema_nodep.id}" torefid="garschema" />
-			<reference refid="${garetc.id}" />
-		</ant>
-	</target>
-
-
 	<!-- Clean up all the intermediate files -->
 	<target name="clean">
 		<delete dir="tmp" />

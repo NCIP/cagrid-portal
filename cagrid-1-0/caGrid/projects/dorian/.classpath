@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="src" path="test/src"/>
+	<classpathentry kind="src" path="build/stubs-dorian"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/junit.jar"/>
 	<classpathentry kind="lib" path="lib/junit-addons-1.4.jar"/>
@@ -75,5 +76,7 @@
 	<classpathentry kind="lib" path="lib/mobius_common_client-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/mobius_common_server-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/mobius_tools-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-core-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

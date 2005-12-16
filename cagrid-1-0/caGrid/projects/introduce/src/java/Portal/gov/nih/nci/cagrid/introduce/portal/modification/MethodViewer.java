@@ -336,7 +336,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 						if (className != null && !className.equals("")) {
 							input.setClassName(className);
 						}
-						if (isArray.equals("true")) {
+						if (isArray!=null && isArray.equals("true")) {
 							input.setMinOccurs("0");
 							input.setMaxOccurs("unbounded");
 						}
@@ -393,7 +393,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 					if (className != null && !className.equals("")) {
 						output.setClassName(className);
 					}
-					if (isArray.equals("true")) {
+					if (isArray!=null && isArray.equals("true")) {
 						output.setMinOccurs("0");
 						output.setMaxOccurs("unbounded");
 					}
