@@ -64,25 +64,6 @@
 	<!-- Compiled stub classes -->
 	<property name="stubs.dest" location="${stubs.dir}/classes" />
 
-
-	<!-- Global stub directories -->
-	<!-- This is a hack. Once the stubs for a service have been generated and compiled,
-	     the class files are copied to the global directory. This allows us to keep the
-	     stub class files of each service separate (so we won't end up generating GAR
-	     files that contain stub classes from services that don't belong in that GAR file).
-	     The reason for later pooling them into a single directory is because it is very 
-	     convenient, specially when working from an IDE (we don't need to add a new
-	     class folder with each new service, we can simply add the global stub directory).
-	     
-	     Note, however, that the global stub directory does _not_ play any part in the
-	     GAR file generation. It's simply there as a convenience.
-	     
-	     Again, this is a _hack_. It still beats having to run "ant clean" each time the
-	     build script gets confused, but I'm sure there's a better way of doing this -->
-	<property name="stubs.global.dir" location="${build.dir}/stubs" />
-	<property name="stubs.global.dest" location="${stubs.global.dir}/classes" />
-
-
 	<!-- Schema directories -->
 
 	<!-- Location of our schema files -->
@@ -132,9 +113,6 @@
 		<mkdir dir="${stubs.dir}" />
 		<mkdir dir="${stubs.src}" />
 		<mkdir dir="${stubs.dest}" />
-
-		<mkdir dir="${stubs.global.dir}" />
-		<mkdir dir="${stubs.global.dest}" />
 
 		<mkdir dir="${schema.dest}" />
 		<copy toDir="${schema.dest}">
@@ -250,10 +228,6 @@
 				</fileset>
 			</classpath>
 		</javac>
-		<!-- Copy compiled stubs to global stub directory (see note above) -->
-		<copy toDir="${stubs.global.dest}" overwrite="true">
-			<fileset dir="${stubs.dest}" />
-		</copy>
 	</target>
 
 
