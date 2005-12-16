@@ -16,7 +16,7 @@
 	<!-- Source, Config, and Libraries -->
 	<property name="ext.dir" location="${basedir}/ext" />
 	<property name="src.dir" location="${basedir}/src/java" />
-	<property name="template.src.dir" location="${basedir}/src/jettemplates" />
+	<property name="templates.src.dir" location="${basedir}/src/jettemplates" />
 	<property name="lib.dir" location="${basedir}/lib" />
 	<property name="ext.lib.dir" location="${ext.dir}/lib" />
 	<property name="schema.dir" location="${basedir}/schema" />
