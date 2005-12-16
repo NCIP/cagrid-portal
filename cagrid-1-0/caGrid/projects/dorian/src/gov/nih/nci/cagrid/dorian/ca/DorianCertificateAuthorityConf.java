@@ -346,4 +346,45 @@ public class DorianCertificateAuthorityConf implements AbstractMobiusConfigurati
 		return autoCreateYears;
 	}
 
+
+	public void setAutoCreate(boolean autoCreate) {
+		this.autoCreate = autoCreate;
+	}
+
+
+	public void setAutoCreateDays(int autoCreateDays) {
+		this.autoCreateDays = autoCreateDays;
+	}
+
+
+	public void setAutoCreateHours(int autoCreateHours) {
+		this.autoCreateHours = autoCreateHours;
+	}
+
+
+	public void setAutoCreateMinutes(int autoCreateMinutes) {
+		this.autoCreateMinutes = autoCreateMinutes;
+	}
+
+
+	public void setAutoCreateMonths(int autoCreateMonths) {
+		this.autoCreateMonths = autoCreateMonths;
+	}
+
+
+	public void setAutoCreateSeconds(int autoCreateSeconds) {
+		this.autoCreateSeconds = autoCreateSeconds;
+	}
+
+
+	public void setAutoCreateSubject(String autoCreateSubject) {
+		this.autoCreateSubject = autoCreateSubject;
+	}
+
+
+	public void setAutoCreateYears(int autoCreateYears) {
+		this.autoCreateYears = autoCreateYears;
+	}
+	
+
 }
