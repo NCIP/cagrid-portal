@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-
+<!-- adopted from GTBS and modified -->
 <project default="all" name="Introduce Build File" basedir=".">
 
 	<!-- Define the environment variable -->
