@@ -39,4 +39,9 @@ public class IntroduceLookAndFeel extends PortalLookAndFeel {
 		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class
 				.getResource("/edit-redos.png"));
 	}
+	
+	public final static ImageIcon getDeployIcon() {
+		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class
+				.getResource("/ComputerIn20X20.gif"));
+	}
 }
