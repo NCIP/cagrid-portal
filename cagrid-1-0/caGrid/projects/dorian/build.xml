@@ -36,6 +36,7 @@ GSBT - Globus Service Build Tools
 	
 	<!-- Important directories and files -->
 	<property name="src.dir" value="src" />
+	<property name="test.src.dir" value="test/src" />
 	<property name="etc.dir" value="etc" />
 	<property name="mappings.file" value="${basedir}/namespace2package.mappings" />
 
