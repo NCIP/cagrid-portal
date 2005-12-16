@@ -113,6 +113,13 @@
 		</resolveDependencies>
 		<ant dir="${projects.dir}/metadata" inheritAll="false" antfile="build.xml" target="jar" />
 	</target>
+	
+	<!-- =============================================================== -->
+	<!-- DORIAN:                                                         -->
+	<!-- =============================================================== -->
+	<target name="build-dorian" depends="prepare" description="Builds the dorian project">
+		<ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="jar" />
+	</target>
 
 
 	<!-- =============================================================== -->
@@ -149,6 +156,6 @@
 	<!-- ============================================================== -->
 	<!-- Builds from scratch                                            -->
 	<!-- ============================================================== -->
-	<target name="all" description="Builds the entire application" depends="clean, build-core, build-metadata, build-introduce" />
+	<target name="all" description="Builds the entire application" depends="clean, build-core, build-metadata, build-introduce, build-dorian" />
 </project>
 
