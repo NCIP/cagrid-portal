@@ -18,8 +18,6 @@ GSBT - Globus Service Build Tools
 	<property file="${user.home}/build.properties" />
 
 	
-	
-	
 	<!-- Directory where GT4 is installed --> 
 	<!-- Note that the buildfile requires an environment variable GLOBUS_LOCATION
 	     pointing to that directory -->
@@ -37,6 +35,7 @@ GSBT - Globus Service Build Tools
 	<!-- Important directories and files -->
 	<property name="src.dir" value="src" />
 	<property name="lib.dir" value="lib" />
+	<property name="ext.lib.dir" value="ext/lib" />
 	<property name="test.src.dir" value="test/src" />
 	<property name="test.log.dir" value="test/logs" />
 	<property name="etc.dir" value="etc" />
@@ -67,8 +66,6 @@ GSBT - Globus Service Build Tools
 	<property name="build.lib.dir" location="${build.dir}/lib" />
 	<!-- Directory where stub source and class files are placed -->
 	<property name="stubs.dir" location="${build.dir}/stubs-${gar.filename}" />
-	<!-- Stub source files -->
-	<property name="stubs.src" location="${src.dir}" />
 	<!-- Compiled stub classes -->
 	<property name="stubs.dest" location="${stubs.dir}/classes" />
 
@@ -125,7 +122,6 @@ GSBT - Globus Service Build Tools
 		</copy>
 
 		<mkdir dir="${stubs.dir}" />
-		<mkdir dir="${stubs.src}" />
 		<mkdir dir="${stubs.dest}" />
 
 		<mkdir dir="${schema.dest}" />
@@ -207,7 +203,7 @@ GSBT - Globus Service Build Tools
 		<ant antfile="${build.stubs}" target="generateStubs">
 			<property name="mapping.file" location="${build.dir}/namespace2package.mappings" />
 			<property name="source.stubs.dir" location="${schema.dest}/${schema.path}" />
-			<property name="target.stubs.dir" location="${stubs.src}" />
+			<property name="target.stubs.dir" location="${stubs.dir}" />
 			<property name="wsdl.file" value="${interface.name}_service.wsdl" />
 		</ant>
 	</target>
@@ -222,7 +218,7 @@ GSBT - Globus Service Build Tools
 		<ant antfile="${build.stubs}" target="generateStubs">
 			<property name="mapping.file" location="${build.dir}/namespace2package.mappings" />
 			<property name="source.stubs.dir" location="${schema.dest}/${factory.schema.path}" />
-			<property name="target.stubs.dir" location="${stubs.src}" />
+			<property name="target.stubs.dir" location="${stubs.dir}" />
 			<property name="wsdl.file" value="${factory.interface.name}_service.wsdl" />
 		</ant>
 
@@ -231,7 +227,7 @@ GSBT - Globus Service Build Tools
 	
 	<!-- Compile the stubs generated in the previous step -->
 	<target name="compileStubs" depends="stubs, factoryStubs">
-		<javac srcdir="${stubs.src}" destdir="${stubs.dest}" debug="${java.debug}">
+		<javac srcdir="${stubs.dir}" destdir="${stubs.dest}" debug="${java.debug}">
 			<include name="**/*.java" />
 			<classpath>
 				<fileset dir="${globus.location}/lib">
@@ -257,6 +253,9 @@ GSBT - Globus Service Build Tools
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
 				</fileset>
+				<fileset dir="${ext.lib.dir}">
+					<include name="*.jar" />
+				</fileset>
 				<fileset dir="${globus.location}/lib">
 					<include name="*.jar" />
 					<exclude name="${stubs.jar.name}" />
@@ -273,6 +272,9 @@ GSBT - Globus Service Build Tools
 				<pathelement location="${stubs.dest}" />
 				<fileset dir="${build.lib.dir}">
 					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${ext.lib.dir}">
+					<include name="*.jar" />
 				</fileset>
 				<fileset dir="${lib.dir}">
 					<include name="**/*.jar" />

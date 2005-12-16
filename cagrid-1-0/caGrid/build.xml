@@ -118,6 +118,13 @@
 	<!-- DORIAN:                                                         -->
 	<!-- =============================================================== -->
 	<target name="build-dorian" depends="prepare" description="Builds the dorian project">
+		<resolveDependencies extdir="${projects.dir}/dorian/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="metadata.jars" />
+			<artifact refid="metadata.schemas" />
+			<artifact refid="metadata.mappings" />
+		</resolveDependencies>
 		<ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="jar" />
 	</target>
 
