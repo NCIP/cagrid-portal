@@ -1,38 +1,32 @@
 <!-- ======================================================================= -->
 <!-- caGrid Utilities build file                                             -->
 <!-- ======================================================================= -->
-<project name="caGrid-introduce_tests_harness" basedir=".">
-	<property name="junit.results.dir" value="${test.log.dir}/junit"/>
+<project name="caGrid-dorian_tests_harness" basedir=".">
+	<property name="junit.results.dir" value="${test.log.dir}/junit" />
 	<mkdir dir="${test.log.dir}"/>
 	<!-- call the test target for each project and aggregates the log resutls  -->
-	<target name="test" depends="checkGlobus">
-		
+	<target name="test">
 		<echo message="Test results dir: ${junit.results.dir}" />
-		<mkdir dir="${junit.results.dir}"/>
-		
+		<mkdir dir="${junit.results.dir}" />
+
 		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" showoutput="true">
-			<sysproperty key="basedir" value="${basedir}"/>
-			<jvmarg value="-Dbuild.dir=${build.dir}"/>
+			<sysproperty key="basedir" value="${basedir}" />
+			<jvmarg value="-Dbuild.dir=${build.dir}" />
 			<classpath>
-				<path refid="Introduce.test.classpath"/>
-			</classpath>
-			<formatter type="xml"/>
-			<batchtest fork="no" todir="${junit.results.dir}">
-				<fileset dir="${test.src.dir}/Introduce">
-					<include name="**/*Test.java"/>
+				<fileset dir="${build.lib.dir}">
+					<include name="**/*.jar" />
 				</fileset>
-			</batchtest>
-		</junit>
-		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" showoutput="true">
-			<sysproperty key="basedir" value="${basedir}"/>
-			<jvmarg value="-Dbuild.dir=${build.dir}"/>
-			<classpath>
-				<path refid="Portal.test.classpath"/>
+				<fileset dir="${lib.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${globus.location}/lib">
+					<include name="**/*.jar" />
+				</fileset>
 			</classpath>
-			<formatter type="xml"/>
+			<formatter type="xml" />
 			<batchtest fork="no" todir="${junit.results.dir}">
-				<fileset dir="${test.src.dir}/Portal">
-					<include name="**/*Test.java"/>
+				<fileset dir="${test.src.dir}">
+					<include name="**/Test*.java" />
 				</fileset>
 			</batchtest>
 		</junit>
