@@ -33,8 +33,8 @@
 	                		<include name="ant.jar" />
 	                		<include name="ant-launcher.jar" />
 	                	</fileset>
-	                    <pathelement location="${basedir}/resources/introduce/portal" />
-	                    <pathelement location="${basedir}/resources/common/portal" />
+	                    <pathelement location="${basedir}/resources/portal/introduce" />
+	                    <pathelement location="${ext.resources.dir}/resources/portal" />
 	                </classpath>
 	            </java>
 	        </sequential>

@@ -21,6 +21,7 @@
 	<property name="ext.lib.dir" location="${ext.dir}/lib" />
 	<property name="schema.dir" location="${basedir}/schema" />
 	<property name="ext.schema.dir" location="${ext.dir}/schema" />
+	<property name="ext.resources.dir" location="${ext.dir}/resources" />
 	<property name="sde.schema.dir" location="${schema.dir}/types" />
 	<property name="resources.dir" location="${basedir}/resources" />
 
