@@ -15,6 +15,7 @@ import org.apache.tools.ant.types.FileSet;
 public class Artifact extends DataType {
 	public static final String JAR_TYPE = "jars";
 	public static final String SCHEMAS_TYPE = "schemas";
+	public static final String RESOURCES_TYPE = "resources";
 	public static final String MAPPINGS_TYPE = "mappings";
 	public static final String TEST_TRACK = "test";
 	public static final String MAIN_TRACK = "main";

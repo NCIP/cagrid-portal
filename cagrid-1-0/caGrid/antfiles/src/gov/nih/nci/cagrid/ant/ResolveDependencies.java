@@ -81,6 +81,10 @@ public class ResolveDependencies extends Task {
 					copyTask.setTodir(new File(getExtDir().getAbsolutePath() + track + File.separator + "schema"));
 				} else if (artifact.getType().equals(Artifact.MAPPINGS_TYPE)) {
 					copyTask.setTodir(new File(getExtDir().getAbsolutePath()));
+				} else if (artifact.getType().equals(Artifact.RESOURCES_TYPE)) {
+					copyTask.setTodir(new File(getExtDir().getAbsolutePath()+ File.separator + "resources"));
+				} else {
+					throw new BuildException(artifact.getType() + ": not an valid artifact type");
 				}
 
 			} else {

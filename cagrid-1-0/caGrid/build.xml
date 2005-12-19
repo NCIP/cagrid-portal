@@ -93,7 +93,7 @@
 				<include name="NStoPkg.properties" />
 			</fileset>
 		</artifact>
-		<artifact track="main" type="dir" id="core.resources">
+		<artifact track="main" type="resources" id="core.resources">
 			<fileset dir="${projects.dir}/core/resources">
 				<include name="**" />
 			</fileset>
