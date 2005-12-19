@@ -95,6 +95,7 @@ public class TestIFS extends TestCase {
 			IFSUser usr1 = users[0];
 			String certStr = usr1.getCertificate().getCertificateAsString();
 			X509Certificate cert1 = CertUtil.loadCertificateFromString(certStr);
+			Thread.sleep(1000);
 			IFSUser usr2 = ifs.renewUserCredentials(adminGridId, usr1);
 			assertEquals(usr1.getGridId(), usr2.getGridId());
 
