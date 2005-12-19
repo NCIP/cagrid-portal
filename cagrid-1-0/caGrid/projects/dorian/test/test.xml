@@ -9,14 +9,14 @@
 		<echo message="Test results dir: ${junit.results.dir}" />
 		<mkdir dir="${junit.results.dir}" />
 
-		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" showoutput="true">
+		<junit dir="${basedir}" printsummary="yes" haltonfailure="false" showoutput="true">
 			<sysproperty key="basedir" value="${basedir}" />
 			<jvmarg value="-Dbuild.dir=${build.dir}" />
 			<classpath>
-				<fileset dir="${build.lib.dir}">
+				<fileset dir="${globus.location}/lib">
 					<include name="**/*.jar" />
 				</fileset>
-				<fileset dir="${test.lib.dir}">
+				<fileset dir="${build.lib.dir}">
 					<include name="**/*.jar" />
 				</fileset>
 				<fileset dir="${lib.dir}">
@@ -25,12 +25,9 @@
 				<fileset dir="${ext.lib.dir}">
 					<include name="*.jar" />
 				</fileset>
-				<fileset dir="${globus.location}/lib">
-					<include name="**/*.jar" />
-				</fileset>
 			</classpath>
 			<formatter type="xml" />
-			<batchtest fork="no" todir="${junit.results.dir}">
+			<batchtest fork="yes" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}">
 					<include name="**/Test*.java" />
 				</fileset>
