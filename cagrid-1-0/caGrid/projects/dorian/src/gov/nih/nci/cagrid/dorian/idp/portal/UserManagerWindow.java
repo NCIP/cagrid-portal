@@ -1,6 +1,8 @@
 package gov.nih.nci.cagrid.dorian.idp.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.common.security.commstyle.CommunicationStyle;
+import gov.nih.nci.cagrid.common.security.commstyle.SecureConversationWithEncryption;
 import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.client.IdPAdministrationClient;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
@@ -8,8 +10,6 @@ import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
 import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
 import gov.nih.nci.cagrid.dorian.portal.DorianServiceListComboBox;
 import gov.nih.nci.cagrid.dorian.portal.ProxyComboBox;
-import gov.nih.nci.cagrid.security.commstyle.CommunicationStyle;
-import gov.nih.nci.cagrid.security.commstyle.SecureConversationWithEncryption;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -37,7 +37,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.19 2005-12-15 20:24:01 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.20 2005-12-19 20:44:17 hastings Exp $
  */
 public class UserManagerWindow extends GridPortalBaseFrame {
 

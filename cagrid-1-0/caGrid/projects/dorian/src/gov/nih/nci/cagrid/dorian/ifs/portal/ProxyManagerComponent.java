@@ -1,10 +1,10 @@
 package gov.nih.nci.cagrid.dorian.ifs.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.common.security.ProxyUtil;
 import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
 import gov.nih.nci.cagrid.dorian.portal.ProxyCaddy;
 import gov.nih.nci.cagrid.dorian.portal.ProxyManager;
-import gov.nih.nci.cagrid.security.commstyle.ProxyUtil;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;

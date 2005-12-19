@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.dorian.client;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.security.commstyle.CommunicationStyle;
 import gov.nih.nci.cagrid.dorian.IFSAdministration;
 import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
@@ -16,7 +17,6 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.wsrf.DorianPortType;
 import gov.nih.nci.cagrid.dorian.wsrf.IFSFindTrustedIdPs;
 import gov.nih.nci.cagrid.dorian.wsrf.IFSGetUserPolicies;
-import gov.nih.nci.cagrid.security.commstyle.CommunicationStyle;
 
 
 /**
