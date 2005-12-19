@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.dorian.idp;
 
-import gov.nih.nci.cagrid.dorian.common.FaultUtil;
-import gov.nih.nci.cagrid.dorian.common.SimpleResourceManager;
+import gov.nih.nci.cagrid.common.FaultUtil;
+import gov.nih.nci.cagrid.common.SimpleResourceManager;
 import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
 import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
 

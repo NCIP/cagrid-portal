@@ -1,9 +1,9 @@
 package gov.nih.nci.cagrid.dorian.service;
 
+import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
-import gov.nih.nci.cagrid.dorian.common.FaultHelper;
 import gov.nih.nci.cagrid.dorian.common.IOUtils;
 import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
 import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
@@ -168,7 +168,7 @@ public class DorianService {
 
 			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString(Utils.getExceptionMessage(e));
-			gov.nih.nci.cagrid.dorian.common.FaultHelper helper = new gov.nih.nci.cagrid.dorian.common.FaultHelper(fault);
+			gov.nih.nci.cagrid.common.FaultHelper helper = new gov.nih.nci.cagrid.common.FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
 			throw fault;

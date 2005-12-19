@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.dorian.common;
 
+import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
 
 import java.sql.Connection;
@@ -14,7 +15,7 @@ import org.projectmobius.db.Query;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: Database.java,v 1.8 2005-12-15 19:29:32 langella Exp $
+ * @version $Id: Database.java,v 1.9 2005-12-19 20:32:27 hastings Exp $
  */
 public class Database extends DorianObject {
 

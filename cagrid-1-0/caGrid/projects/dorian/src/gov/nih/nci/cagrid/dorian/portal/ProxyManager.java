@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.dorian.portal;
 
-import gov.nih.nci.cagrid.dorian.common.ProxyUtil;
+import gov.nih.nci.cagrid.security.commstyle.ProxyUtil;
 
 import java.io.File;
 import java.io.FileFilter;

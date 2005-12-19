@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.security.commstyle;
+package gov.nih.nci.cagrid.common.security.commstyle;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>

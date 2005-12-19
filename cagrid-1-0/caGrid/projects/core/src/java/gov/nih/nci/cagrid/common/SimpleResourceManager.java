@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.dorian.common;
+package gov.nih.nci.cagrid.common;
 
 import org.projectmobius.common.MobiusConfigurator;
 import org.projectmobius.common.MobiusResourceManager;

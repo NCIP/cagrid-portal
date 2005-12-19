@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.dorian.common;
+package gov.nih.nci.cagrid.common;
 
 import org.oasis.wsrf.faults.BaseFaultType;
 

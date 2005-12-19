@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.security.commstyle;
+package gov.nih.nci.cagrid.common.security.commstyle;
 
 
 import org.apache.axis.client.Stub;

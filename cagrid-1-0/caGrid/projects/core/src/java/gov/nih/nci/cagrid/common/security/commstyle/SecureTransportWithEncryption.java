@@ -1,7 +1,8 @@
-package gov.nih.nci.cagrid.security.commstyle;
+package gov.nih.nci.cagrid.common.security.commstyle;
 
 
 import org.apache.axis.client.Stub;
+import org.globus.axis.util.Util;
 import org.globus.gsi.GlobusCredential;
 import org.globus.gsi.gssapi.GlobusGSSCredentialImpl;
 import org.globus.wsrf.security.Constants;
@@ -13,20 +14,21 @@ import org.ietf.jgss.GSSCredential;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class SecureConversationWithEncryption implements CommunicationStyle{
+public class SecureTransportWithEncryption implements CommunicationStyle{
 	private GlobusCredential credential;
 	
-	public SecureConversationWithEncryption(){	
+	public SecureTransportWithEncryption(){	
 	
 	}
 	
-	public SecureConversationWithEncryption(GlobusCredential credential){	
+	public SecureTransportWithEncryption(GlobusCredential credential){	
 		this.credential = credential;
 	}
 	
 	public void configure(Stub stub) throws CommunicationStyleException{
 		try{
-		stub._setProperty(Constants.GSI_SEC_CONV, Constants.ENCRYPTION);
+			Util.registerTransport();
+		stub._setProperty(Constants.GSI_TRANSPORT, Constants.ENCRYPTION);
 		if (credential != null) {
 			GSSCredential gss = new GlobusGSSCredentialImpl(credential, GSSCredential.INITIATE_AND_ACCEPT);
 			stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_CREDENTIALS, gss);
