@@ -203,29 +203,6 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 			deployButton.setIcon(IntroduceLookAndFeel.getCreateIcon());
 			deployButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-
-					BusyDialogRunnable r = new BusyDialogRunnable(
-							PortalResourceManager.getInstance().getGridPortal(),
-							"Creating") {
-
-						public void process() {
-							try {
-
-							} catch (Exception ex) {
-								ex.printStackTrace();
-								PortalUtils.showErrorMessage(ex.getMessage());
-							}
-
-						}
-
-					};
-
-					Thread th = new Thread(r);
-					th.start();
-				}
-			});
-			deployButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
 					BusyDialogRunnable r = new BusyDialogRunnable(
 							PortalResourceManager.getInstance().getGridPortal(),
 							"Deployment") {
@@ -258,17 +235,17 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 
 							try {
 								String cmd = CommonTools
-										.getAntDeployCommand(".");
+										.getAntDeployCommand(serviceDirectory.getAbsolutePath());
 								Process p = CommonTools
 										.createAndOutputProcess(cmd);
 								p.waitFor();
 								if (p.exitValue() != 0) {
 									PortalUtils
-											.showErrorMessage("Error creating new service!");
+											.showErrorMessage("Error deploying service!");
 								}
 							} catch (Exception e) {
 								PortalUtils
-										.showErrorMessage("Error creating new service!");
+										.showErrorMessage("Error deploying service!");
 								e.printStackTrace();
 							}
 

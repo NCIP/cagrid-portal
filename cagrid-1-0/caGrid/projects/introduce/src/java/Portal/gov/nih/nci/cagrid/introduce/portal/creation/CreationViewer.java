@@ -8,9 +8,11 @@ import gov.nih.nci.cagrid.introduce.portal.modification.ModificationViewer;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.io.File;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -18,9 +20,6 @@ import javax.swing.JTextField;
 
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
-import java.awt.Insets;
-import javax.swing.JList;
-import javax.swing.JComboBox;
 
 /**
  * CreationViewer
@@ -679,6 +678,16 @@ public class CreationViewer extends GridPortalComponent {
 						methodsTemplateButton.setEnabled(false);
 						metadataTemplateJLabel.setEnabled(false);
 						metadataTemplateButton.setEnabled(false);
+						if(serviceStyleSeletor.getSelectedItem().equals("ANALYTICAL")){
+							methodsTemplate.setText("templates" + File.separator + "analyticalIntroduceMethods.xml");
+							metadataTemplate.setText("templates" + File.separator + "analyticalIntroduceMetadata.xml");
+						} else if(serviceStyleSeletor.getSelectedItem().equals("DATA")){
+							methodsTemplate.setText("templates" + File.separator + "dataIntroduceMethods.xml");
+							metadataTemplate.setText("templates" + File.separator + "dataIntroduceMetadata.xml");
+						}  else {
+							methodsTemplate.setText("");
+							metadataTemplate.setText("");
+						}
 					}
 				}
 			});

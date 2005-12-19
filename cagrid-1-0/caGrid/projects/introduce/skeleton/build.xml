@@ -8,52 +8,47 @@
 	<!-- 
 	Properties in these files will override the properties defined in this file.
     -->
-	<property file="build.properties" />
 	<property file="introduce.properties" />
-	<property file="${user.home}/build.properties" />
 	<property name="package.name" value="${introduce.skeleton.package}" />
 	<property name="package.dir" value="${introduce.skeleton.package.dir}" />
-
+	<property name="gar.filename" value="${introduce.skeleton.service.name}" />
+	<property name="schema.path" value="${introduce.skeleton.service.name}" />
+	<property name="interface.name" value="${introduce.skeleton.service.name}" />
+	<property name="factory.interface.name" value="${introduce.skeleton.factory.name}" />
 
 	<!-- Directory where GT4 is installed -->
-	<!-- Note that the buildfile requires an environment variable GLOBUS_LOCATION
-	     pointing to that directory -->
 	<property name="globus.location" location="${env.GLOBUS_LOCATION}" />
-
-
 
 	<!-- GT4 build files and directories-->
 	<property name="build.packages" location="${globus.location}/share/globus_wsrf_common/build-packages.xml" />
 	<property name="build.stubs" location="${globus.location}/share/globus_wsrf_tools/build-stubs.xml" />
 	<property name="schema.src" location="${globus.location}/share/schema" />
 
-
-
 	<!-- Important directories and files -->
 	<property name="src.dir" value="src" />
+	<property name="lib.dir" value="lib" />
 	<property name="etc.dir" value="etc" />
+	<property name="schema.dir" value="schema" />
 	<property name="mappings.file" value="${basedir}/namespace2package.mappings" />
-
-
-
-
-	<!-- Name of the GAR file that will be generated -->
-	<property name="gar.name" value="${gar.filename}.gar" />
-
-
-
-	<!-- Name of the JAR files to be generated -->
 	<property name="jar.name" value="${gar.filename}.jar" />
 	<property name="stubs.jar.name" value="${gar.filename}_stubs.jar" />
+	<property name="gar.name" value="${gar.filename}.gar" />
+	
+	
+	<!-- Important test directories and files -->
+	<property name="test.dir" value="test" />
+	<property name="test.src.dir" value="${test}/src" />
+	<property name="test.lib.dir" value="${test}/lib" />
+	<property name="test.jar.name" value="${gar.filename}-tests.jar" />
 
 
-
-	<!-- Build directories -->
+	<!-- Basic Build directories -->
 
 	<!-- Auxiliary directory where all the intermediate files will be placed -->
 	<property name="build.dir" location="build" />
 	<!-- Directory for compiled service classes -->
 	<property name="build.dest" location="${build.dir}/classes" />
+	<property name="test.build.dest" value="${build.dir}/test/classes" />
 	<!-- Directory for compiled JAR files (additional library files required by
 	     the service will also be placed here) -->
 	<property name="build.lib.dir" location="${build.dir}/lib" />
@@ -64,17 +59,10 @@
 	<!-- Compiled stub classes -->
 	<property name="stubs.dest" location="${stubs.dir}/classes" />
 
-	<!-- Schema directories -->
-
-	<!-- Location of our schema files -->
-	<property name="schema.local" location="./schema" />
 	<!-- Where we have to copy schema files inside the build directory -->
 	<property name="schema.dest" location="${build.dir}/schema" />
-
-
-
+	
 	<!-- Filesets -->
-
 	<!-- JARs to be included in the GAR file -->
 	<fileset dir="${build.lib.dir}" id="garjars" />
 	<property name="garjars.id" value="garjars" />
@@ -82,7 +70,6 @@
 	<!-- Schema files (WSDL, XSD, etc.) to be included in the GAR file -->
 	<fileset dir="${schema.dest}" id="garschema">
 		<include name="${schema.path}/**/*" />
-		<include name="${factory.schema.path}/**/*" />
 	</fileset>
 	<property name="garschema.id" value="garschema" />
 
@@ -91,21 +78,18 @@
 	<fileset dir="${etc.dir}" id="garetc" />
 
 
-
-	<!-- Miscellaneous properties -->
-
-	<!-- This property is defined simply so we can write ${sep} instead of
-	     ${file.separator}, which makes some expressions too long -->
-	<property name="sep" value="${file.separator}" />
 	<!-- We want detailed error messages -->
 	<property name="java.debug" value="on" />
 
 
+	<!--import deployment ant files -->
+	<import file="build-deploy.xml"/>
 
 	<!-- Sets up the build directory structure -->
 	<target name="init">
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.dest}" />
+		<mkdir dir="${test.build.dest}" />
 		<delete dir="${build.lib.dir}" />
 		<!-- Delete build lib dir to avoid JARs from previous builds from getting into our GAR file -->
 		<mkdir dir="${build.lib.dir}" />
@@ -120,10 +104,8 @@
 				<include name="wsrf/**/*" />
 				<include name="ws/**/*" />
 			</fileset>
-			<fileset dir="${schema.local}" casesensitive="yes">
+			<fileset dir="${schema.dir}" casesensitive="yes">
 				<include name="**" />
-				<include name="${schema.path}/*" />
-				<include name="${factory.schema.path}/*" />
 			</fileset>
 		</copy>
 
@@ -212,7 +194,6 @@
 			<property name="target.stubs.dir" location="${stubs.src}" />
 			<property name="wsdl.file" value="${factory.interface.name}_service.wsdl" />
 		</ant>
-
 	</target>
 
 
@@ -236,7 +217,7 @@
 
 		<javac srcdir="${src.dir}" includes="${package.dir}/**" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}">
 			<classpath>
-				<fileset dir="${basedir}/lib">
+				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
 				</fileset>
 				<pathelement location="${stubs.dest}" />
@@ -249,13 +230,42 @@
 		</javac>
 
 	</target>
-
-
+	
+	<!-- Compile the test implementation classes (service, resource, etc.) -->
+	<target name="compileTests" depends="compile">
+		
+		<javac srcdir="${test.src.dir}"  destdir="${test.build.dest}" debug="${java.debug}" deprecation="${deprecation}">
+			<classpath>
+				<fileset dir="${test.lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+				<pathelement location="${build.dest}" />
+				<pathelement location="${stubs.dest}" />
+				<fileset dir="${globus.location}/lib">
+					<include name="*.jar" />
+					<exclude name="${stubs.jar.name}" />
+					<exclude name="${jar.name}" />
+				</fileset>
+			</classpath>
+		</javac>
+		
+	</target>
+	
+	
 	<!-- Create a JAR file with the implementation classes -->
 	<target name="jar" depends="compile">
 		<jar jarfile="${build.lib.dir}/${jar.name}" basedir="${build.dest}">
 			<include name="**/${package.dir}/**" />
 		</jar>
+	</target>
+	
+	
+	<!-- Create a JAR file with the test implementation classes -->
+	<target name="jarTests" depends="jar">
+		<jar jarfile="${build.lib.dir}/${test.jar.name}" basedir="${test.build.dest}"/>
 	</target>
 
 
@@ -267,20 +277,18 @@
 
 	<!-- Empty target, in case we simply want to generate the JAR files -->
 	<!-- NOTE: This is needed by GT4IDE -->
-	<target name="jars" depends="jarStubs, jar">
-	</target>
+	<target name="jars" depends="jarStubs, jar, jarTests" />
 
 
 	<!-- Creates the GAR file -->
-	<target name="dist" depends="jarStubs, jar">
-
+	<target name="gar" depends="jarStubs, jar">
 		<!-- copy the lib files over -->
 		<copy todir="${build.lib.dir}">
 			<fileset dir="${basedir}/lib">
 				<exclude name="**" />
 			</fileset>
 		</copy>
-
+		
 		<ant antfile="${build.packages}" target="makeGar">
 			<property name="garserverdeployment.file" value="${basedir}/server-config.wsdd" />
 			<property name="garclientdeployment.file" value="${basedir}/client-config.wsdd" />
@@ -300,9 +308,8 @@
 		<delete file="${gar.name}" />
 	</target>
 
-
-	<!-- Default target "all" generates the GAR file -->
-	<target name="all" depends="dist" />
+	<!-- Default target "all" builds and jars everything, including test....does not make a GAR-->
+	<target name="all" depends="clean,jars" />
 
 	<target name="resync" description="Uses the introduceMethods.xml to add and remove methods to this service skeleton">
 		<java classname="gov.nih.nci.cagrid.introduce.SyncTools" fork="no" failonerror="true">
@@ -315,7 +322,7 @@
 				<fileset dir="${ant.library.dir}">
 					<include name="*.jar" />
 				</fileset>
-				<fileset dir="${basedir}/lib">
+				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
 				</fileset>
 			</classpath>

@@ -3,6 +3,7 @@
 <project name="build-deploy file" basedir="." default="deploy">
 
 	<property file="deploy.properties" />
+	
 	<property environment="env"/>
 		
 	<!-- Tomcat Properties -->
@@ -12,16 +13,8 @@
 	<property name="tomcat.deploy.lib.dir" value="${tomcat.deploy.dir}/lib" />
 	<property name="tomcat.wsrf.schema.dir" value="${tomcat.dir}/webapps/wsrf/share/schema" />
 	
-	<!-- Relative path to Tomcat server configuration file -->
-	<property name="tomcat.server.xml" value="/conf/server.xml" />
-	
-	<!-- Globus Toolkit Properties -->
-	<property name="gt.dir" value="${env.GLOBUS_LOCATION}" />
-	<property name="gt.lib.dir" value="${gt.dir}/lib" />
-	
-	<property name="service.path" value="mobius/mako" />
-	<property name="service.deployment.descriptor" value="${basedir}/server-config.wsdd" />
-	
+
+	<!-- deploy to tomcat -->
 	<target name="deploy" description="Deploys to CATALINA_HOME" >
 		
 		<echo message="Deploying service under Tomcat at ${tomcat.dir}" />
@@ -50,7 +43,7 @@
 		<replace file="tmp/server-config.wsdd" value="etc/${service.deployment.dir.name}" token="ETC-PATH" />
 		<copy overwrite="true" toDir="${service.deployment.dir}">
 			<fileset dir="tmp">
-				<include name="server-config.wsdd" />
+				<include name="server-config.xml" />
 			</fileset>
 		</copy>
 		
@@ -75,6 +68,7 @@
 			</fileset>
 		</copy>
 		
+		
 		<!--copy over the jars to the lib -->
 		<copy overwrite="true" toDir="${tomcat.deploy.lib.dir}">
 			<fileset dir="lib">
@@ -85,9 +79,10 @@
 			</fileset>
 		</copy>
 		
+		
 		<!--copy over the schema service files-->
 		<copy overwrite="true" toDir="${tomcat.wsrf.schema.dir}/${service.deployment.dir.name}">
-			<fileset dir="build/schema/${service.name}">
+			<fileset dir="build/schema/${introduce.skeleton.service.name}">
 				<include name="**\*" />
 			</fileset>
 		</copy>

@@ -67,15 +67,6 @@
 			<entry key="introduce.skeleton.package.dir" value="${introduce.skeleton.package.dir}" />
 			<entry key="introduce.skeleton.namespace.domain" value="${introduce.skeleton.namespace.domain}" />
 		</propertyfile>
-		<!-- create the propertites files for build of this project-->
-		<propertyfile file="${introduce.skeleton.destination.dir}/build.properties" comment="Service build properties">
-			<entry key="schema.path" value="${introduce.skeleton.service.name}" />
-			<entry key="interface.name" value="${introduce.skeleton.service.name}" />
-			<entry key="package" value="${introduce.skeleton.package}" />
-			<entry key="package.dir" value="${introduce.skeleton.package.dir}" />
-			<entry key="gar.filename" value="${introduce.skeleton.service.name}" />
-		</propertyfile>
-
 	</target>
 
 	<target name="serviceCopySchemaFiles" depends="prepareSkeleton">

@@ -23,7 +23,7 @@ public class SkeletonBaseCreator {
 		
 		ServerConfigTemplate serverConfigT = new ServerConfigTemplate();
 		String serverConfigS = serverConfigT.generate(properties);
-		File serverConfigF = new File(baseDirectory.getAbsolutePath() + File.separator + "server-config.xml");
+		File serverConfigF = new File(baseDirectory.getAbsolutePath() + File.separator + "server-config.wsdd");
 		FileWriter serverConfigFW = new FileWriter(serverConfigF);
 		serverConfigFW.write(serverConfigS);
 		serverConfigFW.close();
