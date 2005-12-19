@@ -310,10 +310,10 @@ GSBT - Globus Service Build Tools
 	<!-- Creates the GAR file -->
 	<target name="dist" depends="jarStubs, jar">
 		<ant antfile="${build.packages}" target="makeGar">
-			<property name="garserverdeployment.file" value="${basedir}/server-deploy.wsdd" />
-			<property name="garclientdeployment.file" value="${basedir}/client-deploy.wsdd" />
-			<property name="garclientserverdeployment.file" value="${basedir}/client-deploy-server.wsdd" />
-			<property name="garjndiconfigdeployment.file" value="${basedir}/jndi-deploy-config.xml" />
+			<property name="garserverdeployment.file" value="${basedir}/server-config.wsdd" />
+			<property name="garclientdeployment.file" value="${basedir}/client-config.wsdd" />
+			<property name="garclientserverdeployment.file" value="${basedir}/client-server.wsdd" />
+			<property name="garjndiconfigdeployment.file" value="${basedir}/jndi-config.xml" />
 			<reference refid="${garjars.id}" />
 			<reference refid="${garschema.id}" />
 			<reference refid="${garetc.id}" />
@@ -334,4 +334,8 @@ GSBT - Globus Service Build Tools
 	<!-- Default target "all" generates the GAR file -->
 	<target name="all" depends="dist" />
 
+	<target name="deploy">
+		<ant antfile="build-deploy.xml" target="deploy" />
+	</target>
+	
 </project>

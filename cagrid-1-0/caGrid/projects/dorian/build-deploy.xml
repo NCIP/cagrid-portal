@@ -13,8 +13,16 @@
 	<property name="tomcat.deploy.lib.dir" value="${tomcat.deploy.dir}/lib" />
 	<property name="tomcat.wsrf.schema.dir" value="${tomcat.dir}/webapps/wsrf/share/schema" />
 	
-
-	<!-- deploy to tomcat -->
+	<!-- Relative path to Tomcat server configuration file -->
+	<property name="tomcat.server.xml" value="/conf/server.xml" />
+	
+	<!-- Globus Toolkit Properties -->
+	<property name="gt.dir" value="${env.GLOBUS_LOCATION}" />
+	<property name="gt.lib.dir" value="${gt.dir}/lib" />
+	
+	<property name="service.path" value="mobius/mako" />
+	<property name="service.deployment.descriptor" value="${basedir}/server-config.wsdd" />
+	
 	<target name="deploy" description="Deploys to CATALINA_HOME" >
 		
 		<echo message="Deploying service under Tomcat at ${tomcat.dir}" />
@@ -68,7 +76,6 @@
 			</fileset>
 		</copy>
 		
-		
 		<!--copy over the jars to the lib -->
 		<copy overwrite="true" toDir="${tomcat.deploy.lib.dir}">
 			<fileset dir="lib">
@@ -79,10 +86,9 @@
 			</fileset>
 		</copy>
 		
-		
 		<!--copy over the schema service files-->
 		<copy overwrite="true" toDir="${tomcat.wsrf.schema.dir}/${service.deployment.dir.name}">
-			<fileset dir="build/schema/${introduce.skeleton.service.name}">
+			<fileset dir="build/schema/cagrid/dorian">
 				<include name="**\*" />
 			</fileset>
 		</copy>
