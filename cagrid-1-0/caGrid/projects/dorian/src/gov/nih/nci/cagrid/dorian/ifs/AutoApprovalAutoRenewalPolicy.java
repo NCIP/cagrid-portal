@@ -16,7 +16,6 @@ import java.security.cert.X509Certificate;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-
 public class AutoApprovalAutoRenewalPolicy extends AutoApprovalPolicy {
 	public void applyPolicy(IFSUser user) throws DorianInternalFault,
 			UserPolicyFault {
