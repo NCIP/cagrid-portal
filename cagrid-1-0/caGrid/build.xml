@@ -93,6 +93,11 @@
 				<include name="NStoPkg.properties" />
 			</fileset>
 		</artifact>
+		<artifact track="main" type="dir" id="core.resources">
+			<fileset dir="${projects.dir}/core/resources">
+				<include name="**" />
+			</fileset>
+		</artifact>
 	</target>
 
 
@@ -121,6 +126,7 @@
 		<resolveDependencies extdir="${projects.dir}/dorian/ext">
 			<artifact refid="core.jars" />
 			<artifact refid="core.test.jars" />
+			<artifact refid="core.resources" />
 			<artifact refid="metadata.jars" />
 			<artifact refid="metadata.schemas" />
 			<artifact refid="metadata.mappings" />
@@ -136,6 +142,7 @@
 		<resolveDependencies extdir="${projects.dir}/introduce/ext">
 			<artifact refid="core.jars" />
 			<artifact refid="core.test.jars" />
+			<artifact refid="core.resources" />
 			<artifact refid="metadata.jars" />
 			<artifact refid="metadata.schemas" />
 			<artifact refid="metadata.mappings" />
