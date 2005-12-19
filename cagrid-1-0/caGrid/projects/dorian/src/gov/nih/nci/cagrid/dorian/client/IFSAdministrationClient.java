@@ -1,12 +1,12 @@
 package gov.nih.nci.cagrid.dorian.client;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.IFSAdministration;
 import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.common.DorianFault;
 import gov.nih.nci.cagrid.dorian.common.FaultHelper;
 import gov.nih.nci.cagrid.dorian.common.FaultUtil;
-import gov.nih.nci.cagrid.dorian.common.IOUtils;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
@@ -62,7 +62,7 @@ public class IFSAdministrationClient extends DorianBaseClient implements IFSAdmi
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			DorianFault fault = new DorianFault();
-			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
+			fault.setFaultString(simplifyMessage(Utils.getExceptionMessage(e)));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianFault) helper.getFault();
@@ -97,7 +97,7 @@ public class IFSAdministrationClient extends DorianBaseClient implements IFSAdmi
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			DorianFault fault = new DorianFault();
-			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
+			fault.setFaultString(simplifyMessage(Utils.getExceptionMessage(e)));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianFault) helper.getFault();
@@ -133,7 +133,7 @@ public class IFSAdministrationClient extends DorianBaseClient implements IFSAdmi
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			DorianFault fault = new DorianFault();
-			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
+			fault.setFaultString(simplifyMessage(Utils.getExceptionMessage(e)));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianFault) helper.getFault();
@@ -167,7 +167,7 @@ public class IFSAdministrationClient extends DorianBaseClient implements IFSAdmi
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			DorianFault fault = new DorianFault();
-			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
+			fault.setFaultString(simplifyMessage(Utils.getExceptionMessage(e)));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianFault) helper.getFault();
@@ -200,7 +200,7 @@ public class IFSAdministrationClient extends DorianBaseClient implements IFSAdmi
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			DorianFault fault = new DorianFault();
-			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
+			fault.setFaultString(simplifyMessage(Utils.getExceptionMessage(e)));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianFault) helper.getFault();
@@ -233,7 +233,7 @@ public class IFSAdministrationClient extends DorianBaseClient implements IFSAdmi
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			DorianFault fault = new DorianFault();
-			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
+			fault.setFaultString(simplifyMessage(Utils.getExceptionMessage(e)));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianFault) helper.getFault();
@@ -267,7 +267,7 @@ public class IFSAdministrationClient extends DorianBaseClient implements IFSAdmi
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			DorianFault fault = new DorianFault();
-			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
+			fault.setFaultString(simplifyMessage(Utils.getExceptionMessage(e)));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianFault) helper.getFault();
@@ -300,7 +300,7 @@ public class IFSAdministrationClient extends DorianBaseClient implements IFSAdmi
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			DorianFault fault = new DorianFault();
-			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
+			fault.setFaultString(simplifyMessage(Utils.getExceptionMessage(e)));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianFault) helper.getFault();
@@ -333,7 +333,7 @@ public class IFSAdministrationClient extends DorianBaseClient implements IFSAdmi
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			DorianFault fault = new DorianFault();
-			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
+			fault.setFaultString(simplifyMessage(Utils.getExceptionMessage(e)));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianFault) helper.getFault();

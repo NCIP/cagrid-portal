@@ -28,20 +28,20 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.xml.namespace.QName;
 
 import org.jdom.input.SAXBuilder;
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.22 2005-12-16 17:01:48 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.23 2005-12-19 18:20:43 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 

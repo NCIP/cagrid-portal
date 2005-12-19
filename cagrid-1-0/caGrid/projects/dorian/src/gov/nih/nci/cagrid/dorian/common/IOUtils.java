@@ -72,16 +72,6 @@ public class IOUtils {
 		return readLine(prompt, false);
 	}
 
-	public static String getExceptionMessage(Exception e) {
-		String mess = e.getMessage();
-		if (e instanceof AxisFault) {
-			mess = ((AxisFault) e).getFaultString();
-			// Handle Special Messages
-			AxisFault f = (AxisFault) e;
-
-		}
-		return mess;
-	}
 
 	public static SAMLAssertion stringToSAMLAssertion(String str)
 			throws Exception {

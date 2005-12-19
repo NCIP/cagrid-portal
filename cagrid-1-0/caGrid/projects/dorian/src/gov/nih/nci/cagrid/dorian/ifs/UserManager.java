@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.dorian.ifs;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.common.AddressValidator;
@@ -636,7 +637,7 @@ public class UserManager extends DorianObject {
 					fault
 							.setFaultString("Unexpected error initializing the User Manager.");
 					FaultHelper helper = new FaultHelper(fault);
-					helper.addDescription(IOUtils.getExceptionMessage(e));
+					helper.addDescription(Utils.getExceptionMessage(e));
 					helper.addFaultCause(e);
 					fault = (DorianInternalFault) helper.getFault();
 					throw fault;

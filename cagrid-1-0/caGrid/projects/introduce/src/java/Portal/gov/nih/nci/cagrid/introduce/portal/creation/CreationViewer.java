@@ -126,7 +126,7 @@ public class CreationViewer extends GridPortalComponent {
 			serviceStyleLabel = new JLabel();
 			serviceStyleLabel.setText("Service Style");
 			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
-			gridBagConstraints19.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints19.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints19.gridy = 7;
 			gridBagConstraints19.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints19.weightx = 1.0D;
@@ -138,7 +138,7 @@ public class CreationViewer extends GridPortalComponent {
 			gridBagConstraints12.gridy = 4;
 			gridBagConstraints12.weightx = 1.0;
 			gridBagConstraints12.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints12.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints12.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints12.gridwidth = 2;
 			gridBagConstraints12.weighty = 1.0D;
 			gridBagConstraints12.gridx = 1;
@@ -598,9 +598,9 @@ public class CreationViewer extends GridPortalComponent {
 	}
 
 	/**
-	 * This method initializes templatePanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes templatePanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getTemplatePanel() {
 		if (templatePanel == null) {
@@ -609,7 +609,8 @@ public class CreationViewer extends GridPortalComponent {
 			gridBagConstraints21.gridy = 1;
 			metadataTemplateJLabel = new JLabel();
 			metadataTemplateJLabel.setText("Metadata Template File");
-			metadataTemplateJLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12));
+			metadataTemplateJLabel.setFont(new java.awt.Font("Dialog",
+					java.awt.Font.PLAIN, 12));
 			metadataTemplateJLabel.setEnabled(false);
 			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
 			gridBagConstraints20.gridx = 0;
@@ -617,7 +618,8 @@ public class CreationViewer extends GridPortalComponent {
 			methodTemplateJLabel = new JLabel();
 			methodTemplateJLabel.setText("Methods Template File");
 			methodTemplateJLabel.setEnabled(false);
-			methodTemplateJLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12));
+			methodTemplateJLabel.setFont(new java.awt.Font("Dialog",
+					java.awt.Font.PLAIN, 12));
 			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
 			gridBagConstraints18.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints18.gridy = 1;
@@ -642,12 +644,21 @@ public class CreationViewer extends GridPortalComponent {
 			gridBagConstraints14.fill = GridBagConstraints.HORIZONTAL;
 			templatePanel = new JPanel();
 			templatePanel.setLayout(new GridBagLayout());
-			templatePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service Template Options", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+			templatePanel
+					.setBorder(javax.swing.BorderFactory
+							.createTitledBorder(
+									null,
+									"Service Template Options",
+									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+									javax.swing.border.TitledBorder.DEFAULT_POSITION,
+									null, IntroduceLookAndFeel
+											.getPanelLabelColor()));
 			templatePanel.setEnabled(false);
 			templatePanel.add(getMethodsTemplateFile(), gridBagConstraints14);
 			templatePanel.add(getMethodsTemplateButton(), gridBagConstraints15);
 			templatePanel.add(getMetadataTemplate(), gridBagConstraints17);
-			templatePanel.add(getMetadataTemplateButton(), gridBagConstraints18);
+			templatePanel
+					.add(getMetadataTemplateButton(), gridBagConstraints18);
 			templatePanel.add(methodTemplateJLabel, gridBagConstraints20);
 			templatePanel.add(metadataTemplateJLabel, gridBagConstraints21);
 		}
@@ -655,9 +666,9 @@ public class CreationViewer extends GridPortalComponent {
 	}
 
 	/**
-	 * This method initializes serviceStyleSeletor	
-	 * 	
-	 * @return javax.swing.JComboBox	
+	 * This method initializes serviceStyleSeletor
+	 * 
+	 * @return javax.swing.JComboBox
 	 */
 	private JComboBox getServiceStyleSeletor() {
 		if (serviceStyleSeletor == null) {
@@ -666,31 +677,44 @@ public class CreationViewer extends GridPortalComponent {
 			serviceStyleSeletor.addItem("ANALYTICAL");
 			serviceStyleSeletor.addItem("DATA");
 			serviceStyleSeletor.addItem("CUSTOM");
-			serviceStyleSeletor.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if(serviceStyleSeletor.getSelectedItem().equals("CUSTOM")){
-						methodTemplateJLabel.setEnabled(true);
-						methodsTemplateButton.setEnabled(true);
-						metadataTemplateJLabel.setEnabled(true);
-						metadataTemplateButton.setEnabled(true);
-					} else {
-						methodTemplateJLabel.setEnabled(false);
-						methodsTemplateButton.setEnabled(false);
-						metadataTemplateJLabel.setEnabled(false);
-						metadataTemplateButton.setEnabled(false);
-						if(serviceStyleSeletor.getSelectedItem().equals("ANALYTICAL")){
-							methodsTemplate.setText("templates" + File.separator + "analyticalIntroduceMethods.xml");
-							metadataTemplate.setText("templates" + File.separator + "analyticalIntroduceMetadata.xml");
-						} else if(serviceStyleSeletor.getSelectedItem().equals("DATA")){
-							methodsTemplate.setText("templates" + File.separator + "dataIntroduceMethods.xml");
-							metadataTemplate.setText("templates" + File.separator + "dataIntroduceMetadata.xml");
-						}  else {
-							methodsTemplate.setText("");
-							metadataTemplate.setText("");
+			serviceStyleSeletor
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							if (serviceStyleSeletor.getSelectedItem().equals(
+									"CUSTOM")) {
+								methodTemplateJLabel.setEnabled(true);
+								methodsTemplateButton.setEnabled(true);
+								metadataTemplateJLabel.setEnabled(true);
+								metadataTemplateButton.setEnabled(true);
+							} else {
+								methodTemplateJLabel.setEnabled(false);
+								methodsTemplateButton.setEnabled(false);
+								metadataTemplateJLabel.setEnabled(false);
+								metadataTemplateButton.setEnabled(false);
+								if (serviceStyleSeletor.getSelectedItem()
+										.equals("ANALYTICAL")) {
+									methodsTemplate.setText("templates"
+											+ File.separator
+											+ "analyticalIntroduceMethods.xml");
+									metadataTemplate
+											.setText("templates"
+													+ File.separator
+													+ "analyticalIntroduceMetadata.xml");
+								} else if (serviceStyleSeletor
+										.getSelectedItem().equals("DATA")) {
+									methodsTemplate.setText("templates"
+											+ File.separator
+											+ "dataIntroduceMethods.xml");
+									metadataTemplate.setText("templates"
+											+ File.separator
+											+ "dataIntroduceMetadata.xml");
+								} else {
+									methodsTemplate.setText("");
+									metadataTemplate.setText("");
+								}
+							}
 						}
-					}
-				}
-			});
+					});
 		}
 		return serviceStyleSeletor;
 	}
@@ -700,4 +724,4 @@ public class CreationViewer extends GridPortalComponent {
 
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="10,4"
+} // @jve:decl-index=0:visual-constraint="10,4"

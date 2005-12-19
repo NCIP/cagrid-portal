@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.common.portal;
 
-import gov.nih.nci.cagrid.dorian.common.IOUtils;
+import gov.nih.nci.cagrid.common.Utils;
 
 import javax.swing.JOptionPane;
 
@@ -38,7 +38,7 @@ public class PortalUtils {
 	}
 
 	public static void showErrorMessage(String title, Exception e) {
-		String mess = IOUtils.getExceptionMessage(e);
+		String mess = Utils.getExceptionMessage(e);
 		JOptionPane.showMessageDialog(PortalResourceManager.getInstance()
 				.getGridPortal(), mess, title, JOptionPane.ERROR_MESSAGE);
 	}

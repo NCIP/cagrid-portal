@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.dorian.service;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.common.FaultHelper;
@@ -54,7 +55,7 @@ public class DorianService {
 			this.dorian = new Dorian(CONFIGURATION_FILE, type.getAddress().toString());
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RemoteException(IOUtils.getExceptionMessage(e));
+			throw new RemoteException(Utils.getExceptionMessage(e));
 		}
 
 	}
@@ -166,7 +167,7 @@ public class DorianService {
 		} catch (Exception e) {
 
 			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString(gov.nih.nci.cagrid.dorian.common.IOUtils.getExceptionMessage(e));
+			fault.setFaultString(Utils.getExceptionMessage(e));
 			gov.nih.nci.cagrid.dorian.common.FaultHelper helper = new gov.nih.nci.cagrid.dorian.common.FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -187,7 +188,7 @@ public class DorianService {
 			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString(e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
-			helper.setDescription(gov.nih.nci.cagrid.dorian.common.IOUtils.getExceptionMessage(e));
+			helper.setDescription(Utils.getExceptionMessage(e));
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
 			throw fault;

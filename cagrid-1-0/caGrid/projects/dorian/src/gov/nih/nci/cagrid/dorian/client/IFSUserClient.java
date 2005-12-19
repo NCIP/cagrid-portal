@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.dorian.client;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.IFSUserAccess;
 import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
@@ -76,7 +77,7 @@ public class IFSUserClient extends DorianBaseClient implements IFSUserAccess {
 		}catch (Exception e) {
 			FaultUtil.printFault(e);
 			DorianFault fault = new DorianFault();
-			fault.setFaultString(simplifyMessage(IOUtils.getExceptionMessage(e)));
+			fault.setFaultString(simplifyMessage(Utils.getExceptionMessage(e)));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianFault) helper.getFault();

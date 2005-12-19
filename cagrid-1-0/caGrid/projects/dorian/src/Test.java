@@ -1,3 +1,4 @@
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.common.FaultHelper;
 import gov.nih.nci.cagrid.dorian.common.FaultUtil;
@@ -26,7 +27,7 @@ public class Test {
 				DorianInternalFault fault = new DorianInternalFault();
 				fault.setFaultString("Problem");
 				FaultHelper helper = new FaultHelper(fault);
-	            helper.setDescription(gov.nih.nci.cagrid.dorian.common.IOUtils.getExceptionMessage(e));
+	            helper.setDescription(Utils.getExceptionMessage(e));
 				helper.addFaultCause(e);
 				fault = (DorianInternalFault) helper.getFault();
 				throw fault;

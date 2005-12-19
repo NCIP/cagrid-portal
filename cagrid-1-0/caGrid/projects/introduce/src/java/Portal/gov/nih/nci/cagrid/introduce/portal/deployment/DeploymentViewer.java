@@ -21,7 +21,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
 import org.projectmobius.portal.GridPortalBaseFrame;
-import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
 
 /**
