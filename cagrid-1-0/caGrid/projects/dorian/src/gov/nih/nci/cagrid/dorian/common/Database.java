@@ -11,56 +11,65 @@ import org.projectmobius.db.ConnectionManager;
 import org.projectmobius.db.DatabaseException;
 import org.projectmobius.db.Query;
 
-
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: Database.java,v 1.10 2005-12-20 15:17:50 hastings Exp $
+ * @version $Id: Database.java,v 1.11 2005-12-20 17:19:30 hastings Exp $
  */
 public class Database extends DorianObject {
 
 	private ConnectionManager root;
-	private ConnectionManager dorian;
+
+	private ConnectionManager dorian = null;
+
 	private String database;
+
 	private boolean dbBuilt = false;
 
-
-	public Database(ConnectionManager rootConnectionManager,String database){
-			this.database = database;
-			this.root = rootConnectionManager;
+	public Database(ConnectionManager rootConnectionManager, String database) {
+		this.database = database;
+		this.root = rootConnectionManager;
 	}
-	
-	public void createDatabaseIfNeeded() throws DorianInternalFault{
+
+	public void createDatabaseIfNeeded() throws DorianInternalFault {
+
 		try {
-			if(!dbBuilt){
-			if (!databaseExists(database)) {
-				Query.update(this.root, "create database " +database);
-			}
-			dorian = new ConnectionManager(database, root.getUrlPrefix(), root.getDriver(), root.getHost(), root
-				.getPort(), root.getUsername(), root.getPassword());
-			dbBuilt = true;
+			if (!dbBuilt) {
+				if (!databaseExists(database)) {
+					Query.update(this.root, "create database " + database);
+				}
+				if (dorian == null) {
+					dorian = new ConnectionManager(database, root
+							.getUrlPrefix(), root.getDriver(), root.getHost(),
+							root.getPort(), root.getUsername(), root
+									.getPassword());
+				}
+				dbBuilt = true;
 			}
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString("An error occured while trying to create the Dorian database ("+database+")");
+			fault
+					.setFaultString("An error occured while trying to create the Dorian database ("
+							+ database + ")");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (DorianInternalFault)helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		}
+
 	}
-	
+
 	public void destroyDatabase() throws DorianInternalFault {
 		try {
 			if (databaseExists(database)) {
-				Query.update(this.root, "drop database if exists " +database);
+				Query.update(this.root, "drop database if exists " + database);
 			}
-			if(dorian!=null){
-			dorian.destroy();
+			if (dorian != null) {
+				dorian.destroy();
 			}
-			if(root!=null){
+			if (root != null) {
 				root.closeAllUnusedConnections();
 			}
 			dorian = null;
@@ -68,16 +77,15 @@ public class Database extends DorianObject {
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString("An error occured while trying to destroy the Dorian database ("+database+")");
+			fault
+					.setFaultString("An error occured while trying to destroy the Dorian database ("
+							+ database + ")");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (DorianInternalFault)helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		}
 	}
-	
-	
-
 
 	public boolean tableExists(String tableName) throws DorianInternalFault {
 		boolean exists = false;
@@ -85,9 +93,10 @@ public class Database extends DorianObject {
 		try {
 			c = dorian.getConnection();
 			DatabaseMetaData dbMetadata = c.getMetaData();
-			String[] names = {"TABLE"};
+			String[] names = { "TABLE" };
 			names[0] = tableName;
-			ResultSet tables = dbMetadata.getTables(null, "%", tableName, names);
+			ResultSet tables = dbMetadata
+					.getTables(null, "%", tableName, names);
 			if (tables.next()) {
 				exists = true;
 			}
@@ -100,56 +109,52 @@ public class Database extends DorianObject {
 			fault.setFaultString("Unexpected Database Error");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (DorianInternalFault)helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		}
 		return exists;
 	}
 
-
 	public void update(String sql) throws DorianInternalFault {
 		try {
 			Query.update(dorian, sql);
 		} catch (Exception e) {
-			//logError(e.getMessage(), e);
+			// logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Unexpected Database Error");
 			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);	
-			throw (DorianInternalFault)helper.getFault();
+			helper.addFaultCause(e);
+			throw (DorianInternalFault) helper.getFault();
 		}
 	}
-	
+
 	public long insertGetId(String sql) throws DorianInternalFault {
 		try {
 			return Query.insertGetId(dorian, sql);
 		} catch (Exception e) {
-			//logError(e.getMessage(), e);
+			// logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Unexpected Database Error");
 			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);	
-			throw (DorianInternalFault)helper.getFault();
+			helper.addFaultCause(e);
+			throw (DorianInternalFault) helper.getFault();
 		}
 	}
 
-
-//	public ConnectionManager getConnectionManager() {
-//		return this.dorian;
-//	}
-	
-	public void releaseConnection(Connection c){
+	public void releaseConnection(Connection c) {
 		this.dorian.releaseConnection(c);
 	}
-	
-	public Connection getConnection() throws DatabaseException{
+
+	public Connection getConnection() throws DatabaseException {
 		return this.dorian.getConnection();
 	}
 
-
-	public boolean databaseExists(String db) throws DorianInternalFault {
+	private boolean databaseExists(String db) throws DorianInternalFault {
 		boolean exists = false;
 		Connection c = null;
+		if (dorian == root) {
+			return true;
+		}
 		try {
 			c = this.root.getConnection();
 			DatabaseMetaData dbMetadata = c.getMetaData();
@@ -168,18 +173,18 @@ public class Database extends DorianObject {
 			fault.setFaultString("Unexpected Database Error");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (DorianInternalFault)helper.getFault();
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		}
 		this.root.releaseConnection(c);
 		return exists;
 	}
-	
-	public int getUsedConnectionCount(){
+
+	public int getUsedConnectionCount() {
 		return this.dorian.getUsedConnectionCount();
 	}
-	
-	public int getRootUsedConnectionCount(){
+
+	public int getRootUsedConnectionCount() {
 		return this.root.getUsedConnectionCount();
 	}
 
