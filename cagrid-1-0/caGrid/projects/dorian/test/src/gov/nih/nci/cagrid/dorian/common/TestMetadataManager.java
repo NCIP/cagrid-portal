@@ -3,7 +3,7 @@ package gov.nih.nci.cagrid.dorian.common;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.bean.Metadata;
 import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthority;
-import gov.nih.nci.cagrid.dorian.test.TestUtils;
+import gov.nih.nci.cagrid.dorian.test.Utils;
 import junit.framework.TestCase;
 
 /**
@@ -112,7 +112,7 @@ public class TestMetadataManager extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
-			db=TestUtils.getDB();
+			db=Utils.getDB();
 			assertEquals(0,db.getUsedConnectionCount());
 			DorianCertificateAuthority.CA_TABLE = TABLE;
 		} catch (Exception e) {

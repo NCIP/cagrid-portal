@@ -7,7 +7,7 @@ import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.common.IOUtils;
 import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
 import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
-import gov.nih.nci.cagrid.dorian.test.TestUtils;
+import gov.nih.nci.cagrid.dorian.test.Utils;
 
 import java.io.File;
 import java.security.KeyPair;
@@ -121,7 +121,7 @@ public class TestAssertionCredentialsManager extends TestCase {
 			X509Certificate cert = cm.getIdPCertificate();
 			assertNotNull(cert);
 			assertNotNull(cm.getIdPKey());
-			String expectedSub = TestUtils.CA_SUBJECT_PREFIX + ",CN="
+			String expectedSub = Utils.CA_SUBJECT_PREFIX + ",CN="
 					+ AssertionCredentialsManager.CA_SUBJECT;
 			assertEquals(expectedSub, cert.getSubjectDN().toString());
 			SAMLAssertion saml = cm.getAuthenticationAssertion(TEST_UID,TEST_EMAIL);
@@ -149,7 +149,7 @@ public class TestAssertionCredentialsManager extends TestCase {
 			X509Certificate cert = cm.getIdPCertificate();
 			assertNotNull(cert);
 			assertNotNull(cm.getIdPKey());
-			String expectedSub = TestUtils.CA_SUBJECT_PREFIX + ",CN="
+			String expectedSub = Utils.CA_SUBJECT_PREFIX + ",CN="
 					+ AssertionCredentialsManager.CA_SUBJECT;
 			assertEquals(expectedSub, cert.getSubjectDN().toString());
 
@@ -213,7 +213,7 @@ public class TestAssertionCredentialsManager extends TestCase {
 			X509Certificate cert = cm.getIdPCertificate();
 			assertNotNull(cert);
 			assertNotNull(cm.getIdPKey());
-			String expectedSub = TestUtils.CA_SUBJECT_PREFIX + ",CN="
+			String expectedSub = Utils.CA_SUBJECT_PREFIX + ",CN="
 					+ AssertionCredentialsManager.CA_SUBJECT;
 			assertEquals(expectedSub, cert.getSubjectDN().toString());
 
@@ -311,9 +311,9 @@ public class TestAssertionCredentialsManager extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
-			db = TestUtils.getDB();
+			db = Utils.getDB();
 			assertEquals(0,db.getUsedConnectionCount());
-			ca = TestUtils.getCA();
+			ca = Utils.getCA();
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);

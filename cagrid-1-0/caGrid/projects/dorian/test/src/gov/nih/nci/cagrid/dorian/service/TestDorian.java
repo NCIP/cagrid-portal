@@ -22,7 +22,7 @@ import gov.nih.nci.cagrid.dorian.ifs.IFSConfiguration;
 import gov.nih.nci.cagrid.dorian.ifs.IFSUtils;
 import gov.nih.nci.cagrid.dorian.ifs.UserManager;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
-import gov.nih.nci.cagrid.dorian.test.TestUtils;
+import gov.nih.nci.cagrid.dorian.test.Utils;
 
 import java.io.File;
 import java.security.KeyPair;
@@ -778,7 +778,7 @@ public class TestDorian extends TestCase{
 		super.setUp();
 		try {
 			count = 0;
-			ca = TestUtils.getCA();
+			ca = Utils.getCA();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

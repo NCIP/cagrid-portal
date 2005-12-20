@@ -10,7 +10,7 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidTrustedIdPFault;
 import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
-import gov.nih.nci.cagrid.dorian.test.TestUtils;
+import gov.nih.nci.cagrid.dorian.test.Utils;
 
 import java.io.File;
 import java.io.StringReader;
@@ -283,7 +283,7 @@ public class TestTrustManager extends TestCase {
 		idp.setAuthenticationMethod(getRandomMethodList());
 
 		KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-		String subject = TestUtils.CA_SUBJECT_PREFIX + ",CN=" + name;
+		String subject = Utils.CA_SUBJECT_PREFIX + ",CN=" + name;
 		PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(subject, pair);
 		assertNotNull(req);
 		GregorianCalendar cal = new GregorianCalendar();
@@ -324,13 +324,13 @@ public class TestTrustManager extends TestCase {
 		super.setUp();
 		try {
 			org.apache.xml.security.Init.init();
-			db = TestUtils.getDB();
+			db = Utils.getDB();
 			assertEquals(0, db.getUsedConnectionCount());
 			IFSConfiguration conf = new IFSConfiguration();
 			conf.setMinimumIdPNameLength(MIN_NAME_LENGTH);
 			conf.setMaximumIdPNameLength(MAX_NAME_LENGTH);
-			conf.setUserPolicies(TestUtils.getUserPolicies());
-			ca = TestUtils.getCA(db);
+			conf.setUserPolicies(Utils.getUserPolicies());
+			ca = Utils.getCA(db);
 			tm = new TrustManager(conf, db);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);

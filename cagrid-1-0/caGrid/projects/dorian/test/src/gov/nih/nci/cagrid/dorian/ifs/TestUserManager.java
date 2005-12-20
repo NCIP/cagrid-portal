@@ -12,7 +12,7 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
-import gov.nih.nci.cagrid.dorian.test.TestUtils;
+import gov.nih.nci.cagrid.dorian.test.Utils;
 
 import java.io.StringReader;
 import java.security.KeyPair;
@@ -370,7 +370,7 @@ public class TestUserManager extends TestCase {
 		conf.setCredentialsValidSeconds(0);
 		conf.setMinimumIdPNameLength(MIN_NAME_LENGTH);
 		conf.setMaximumIdPNameLength(MAX_NAME_LENGTH);
-		conf.setUserPolicies(TestUtils.getUserPolicies());
+		conf.setUserPolicies(Utils.getUserPolicies());
 		TrustedIdP idp = new TrustedIdP();
 		idp.setName("Initial IdP");
 		SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
@@ -380,7 +380,7 @@ public class TestUserManager extends TestCase {
 		idp.setUserPolicyClass(AutoApprovalAutoRenewalPolicy.class.getName());
 
 		KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-		String subject = TestUtils.CA_SUBJECT_PREFIX + ",CN=" + idp.getName();
+		String subject = Utils.CA_SUBJECT_PREFIX + ",CN=" + idp.getName();
 		PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(
 				subject, pair);
 		assertNotNull(req);
@@ -406,9 +406,9 @@ public class TestUserManager extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
-			db = TestUtils.getDB();
+			db = Utils.getDB();
 			assertEquals(0, db.getUsedConnectionCount());
-			ca = TestUtils.getCA(db);
+			ca = Utils.getCA(db);
 			IFSConfiguration conf = getOneYearConf();
 			TrustManager tm = new TrustManager(conf, db);
 			um = new UserManager(db, conf, ca, tm);

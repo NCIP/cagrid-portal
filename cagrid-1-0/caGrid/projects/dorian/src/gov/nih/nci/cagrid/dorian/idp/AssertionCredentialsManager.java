@@ -226,7 +226,6 @@ public class AssertionCredentialsManager extends DorianObject {
 			}
 
 		} catch (Exception e) {
-			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
 			fault
 					.setFaultString("Error obtaining the IDP Asserting Certificate.");

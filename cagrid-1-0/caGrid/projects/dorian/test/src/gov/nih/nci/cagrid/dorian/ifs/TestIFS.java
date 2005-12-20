@@ -18,7 +18,7 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
-import gov.nih.nci.cagrid.dorian.test.TestUtils;
+import gov.nih.nci.cagrid.dorian.test.Utils;
 
 import java.security.KeyPair;
 import java.security.PrivateKey;
@@ -508,7 +508,7 @@ public class TestIFS extends TestCase {
 		conf.setMaxProxyLifetimeHours(12);
 		conf.setMaxProxyLifetimeMinutes(0);
 		conf.setMaxProxyLifetimeSeconds(0);
-		conf.setUserPolicies(TestUtils.getUserPolicies());
+		conf.setUserPolicies(Utils.getUserPolicies());
 		TrustedIdP idp = this.getTrustedIdpAutoApproveAutoRenew("Initial IdP").getIdp();
 		IFSUser usr = new IFSUser();
 		usr.setUID(INITIAL_ADMIN);
@@ -534,7 +534,7 @@ public class TestIFS extends TestCase {
 		conf.setMaxProxyLifetimeHours(12);
 		conf.setMaxProxyLifetimeMinutes(0);
 		conf.setMaxProxyLifetimeSeconds(0);
-		conf.setUserPolicies(TestUtils.getUserPolicies());
+		conf.setUserPolicies(Utils.getUserPolicies());
 		TrustedIdP idp = this.getTrustedIdpAutoApproveAutoRenew("Initial IdP").getIdp();
 		IFSUser usr = new IFSUser();
 		usr.setUID("inital_admin");
@@ -658,7 +658,7 @@ public class TestIFS extends TestCase {
 		idp.setAuthenticationMethod(methods);
 
 		KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-		String subject = TestUtils.CA_SUBJECT_PREFIX + ",CN=" + name;
+		String subject = Utils.CA_SUBJECT_PREFIX + ",CN=" + name;
 		PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(subject, pair);
 		assertNotNull(req);
 		GregorianCalendar cal = new GregorianCalendar();
@@ -676,9 +676,9 @@ public class TestIFS extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
-			db = TestUtils.getDB();
+			db = Utils.getDB();
 			assertEquals(0, db.getUsedConnectionCount());
-			ca = TestUtils.getCA(db);
+			ca = Utils.getCA(db);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

@@ -6,7 +6,7 @@ import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
 import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
 import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidPasswordFault;
-import gov.nih.nci.cagrid.dorian.test.TestUtils;
+import gov.nih.nci.cagrid.dorian.test.Utils;
 
 import java.io.File;
 import java.security.KeyPair;
@@ -212,7 +212,7 @@ public class TestCredentialsManager extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
-			db = TestUtils.getDB();
+			db = Utils.getDB();
 			assertEquals(0,db.getUsedConnectionCount());
 			CredentialsManager.CREDENTIALS_TABLE = TABLE;
 			cred = new CredentialsManager(db);

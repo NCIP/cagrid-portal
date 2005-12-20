@@ -24,7 +24,7 @@ import org.jdom.Document;
 import org.projectmobius.common.XMLUtilities;
 import org.projectmobius.db.ConnectionManager;
 
-public class TestUtils {
+public class Utils {
 	
 	private static final String DB = "TEST_DORIAN";
 

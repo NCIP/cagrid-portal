@@ -12,7 +12,7 @@ import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserRole;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserStatus;
 import gov.nih.nci.cagrid.dorian.idp.bean.StateCode;
-import gov.nih.nci.cagrid.dorian.test.TestUtils;
+import gov.nih.nci.cagrid.dorian.test.Utils;
 
 import java.io.File;
 import java.util.Iterator;
@@ -238,9 +238,9 @@ public class TestIdentityProvider extends TestCase {
 		super.setUp();
 		try {
 			count = 0;
-			db = TestUtils.getDB();
+			db = Utils.getDB();
 			assertEquals(0, db.getUsedConnectionCount());
-			ca = TestUtils.getCA();
+			ca = Utils.getCA();
 			SimpleResourceManager trm = new SimpleResourceManager(IDP_CONFIG);
 			this.conf = (IdPConfiguration) trm
 					.getResource(IdPConfiguration.RESOURCE);
