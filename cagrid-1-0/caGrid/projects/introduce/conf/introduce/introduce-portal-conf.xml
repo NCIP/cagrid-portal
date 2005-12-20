@@ -32,7 +32,7 @@
 					<title>Deploy Service</title>
 					<description>Deploy Grid Service</description>
 					<class>gov.nih.nci.cagrid.introduce.portal.deployment.DeploymentViewer</class>
-					<icon>/ComputerIn20X20.gif</icon>
+					<icon>/World20X20.gif</icon>
 				</component>
 			</components>
 		</grid-portal-config>

@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.common.portal;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
@@ -33,8 +34,21 @@ public class BusyDialog extends JDialog {
 	 * 
 	 */
 	private void initialize() {
-		this.setSize(new java.awt.Dimension(362,85));
+		this.setSize(new java.awt.Dimension(362, 85));
 		this.setContentPane(getMainPanel());
+		this.getOwner();
+		// centers is to it's parent
+		// Get the size of the screen
+		Dimension dim = this.getOwner().getSize();
+
+		// Determine the new location of the window
+		int w = this.getSize().width;
+		int h = this.getSize().height;
+		int x = (dim.width - w) / 2;
+		int y = (dim.height - h) / 2;
+
+		// Move the window
+		this.setLocation(x, y);
 	}
 
 	/**
@@ -87,8 +101,9 @@ public class BusyDialog extends JDialog {
 		if (progress == null) {
 			progress = new JProgressBar();
 			progress.setStringPainted(true);
-			progress.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12));
-			progress.setForeground(new java.awt.Color(153,153,255));
+			progress
+					.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12));
+			progress.setForeground(new java.awt.Color(153, 153, 255));
 			progress.setString("");
 		}
 		return progress;
