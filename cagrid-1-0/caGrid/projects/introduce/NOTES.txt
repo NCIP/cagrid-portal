@@ -17,15 +17,22 @@ Make notes on how to add a new template.
 Need to programatically be able to 
 	-create service from a pre-defined service template
 	-add/remove new metadata to the service
-	-add/remove state variables
-
+	
 (DONE) Because we are now using axis to generate the class names we will not be able to use synctool to always find out which methods are different.  We will need a better method.
 		-- we do not need to know them upfront because we dont need to analyze the signatures, only look at the method names.
 
 Need to be able to not only use Axis for the classnames but also use the users classnames if they provide there own beans or api.
 
 (DONE) moved the sync tools over to use beans instead of using DOM.  Much cleaner an easier to maintain.
-	
+
+FUTURE WORK PROPOSED:
+	-Graphically and programatically add state variables to RP (3 weeks)
+	-Create templates for services who wish to use GRAM (1 week)
+	-Graphically and programatically wrap an existing java API(interface) into a service(4 weeks)
+	-Look into multi-language binding support etc (1 week)
+	-Add grid test cases to test created service deployment nightly (2 days)
+	-Add Robot test cases to test the GUI nightly(4 days)
+	-integrate with caDSR for interface design (2 weeks)
 
 Metadata xmlfile:
 =====
