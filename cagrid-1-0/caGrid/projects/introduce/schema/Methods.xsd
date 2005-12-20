@@ -45,7 +45,7 @@
 				<xs:complexType>
 					<xs:complexContent>
 						<xs:extension base="MethodType">
-							<xs:attribute name="secure" type="secureValueType" use="optional"/>
+							<xs:attribute name="secure" type="SecureValueType" use="optional"/>
 						</xs:extension>
 					</xs:complexContent>
 				</xs:complexType>
