@@ -33,7 +33,7 @@ public class MetadataManager extends DorianObject {
 		Connection c = null;
 		boolean exists = false;
 		try {
-			c = db.getConnectionManager().getConnection();
+			c = db.getConnection();
 			Statement s = c.createStatement();
 			ResultSet rs = s.executeQuery("select count(*) from " + table
 					+ " where name='" + name + "'");
@@ -57,7 +57,7 @@ public class MetadataManager extends DorianObject {
 			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
-			db.getConnectionManager().releaseConnection(c);
+			db.releaseConnection(c);
 		}
 		return exists;
 	}
@@ -97,7 +97,7 @@ public class MetadataManager extends DorianObject {
 		String value = null;
 		String description = null;
 		try {
-			c = db.getConnectionManager().getConnection();
+			c = db.getConnection();
 			Statement s = c.createStatement();
 			ResultSet rs = s.executeQuery("select DESCRIPTION,VALUE from " + table
 					+ " where name='" + name + "'");
@@ -119,7 +119,7 @@ public class MetadataManager extends DorianObject {
 			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
-			db.getConnectionManager().releaseConnection(c);
+			db.releaseConnection(c);
 		}
 
 		if (value == null) {

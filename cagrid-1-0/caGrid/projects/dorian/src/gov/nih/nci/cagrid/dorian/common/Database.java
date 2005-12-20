@@ -8,6 +8,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 
 import org.projectmobius.db.ConnectionManager;
+import org.projectmobius.db.DatabaseException;
 import org.projectmobius.db.Query;
 
 
@@ -15,7 +16,7 @@ import org.projectmobius.db.Query;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: Database.java,v 1.9 2005-12-19 20:32:27 hastings Exp $
+ * @version $Id: Database.java,v 1.10 2005-12-20 15:17:50 hastings Exp $
  */
 public class Database extends DorianObject {
 
@@ -133,8 +134,16 @@ public class Database extends DorianObject {
 	}
 
 
-	public ConnectionManager getConnectionManager() {
-		return this.dorian;
+//	public ConnectionManager getConnectionManager() {
+//		return this.dorian;
+//	}
+	
+	public void releaseConnection(Connection c){
+		this.dorian.releaseConnection(c);
+	}
+	
+	public Connection getConnection() throws DatabaseException{
+		return this.dorian.getConnection();
 	}
 
 

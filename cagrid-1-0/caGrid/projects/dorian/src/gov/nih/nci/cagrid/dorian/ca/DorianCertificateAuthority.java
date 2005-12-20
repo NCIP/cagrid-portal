@@ -114,7 +114,7 @@ public class DorianCertificateAuthority extends DorianObject implements Certific
 		PrivateKey key = null;
 		String keyStr = null;
 		try {
-			c = db.getConnectionManager().getConnection();
+			c = db.getConnection();
 			Statement s = c.createStatement();
 			ResultSet rs = s.executeQuery("select PRIVATE_KEY from " + CA_TABLE + " where ID='" + CA_USER + "'");
 			if (rs.next()) {
@@ -131,7 +131,7 @@ public class DorianCertificateAuthority extends DorianObject implements Certific
 			fault = (CertificateAuthorityFault) helper.getFault();
 			throw fault;
 		} finally {
-			db.getConnectionManager().releaseConnection(c);
+			db.releaseConnection(c);
 		}
 		if (keyStr == null) {
 			NoCACredentialsFault fault = new NoCACredentialsFault();
@@ -169,7 +169,7 @@ public class DorianCertificateAuthority extends DorianObject implements Certific
 		X509Certificate cert = null;
 		String certStr = null;
 		try {
-			c = db.getConnectionManager().getConnection();
+			c = db.getConnection();
 			Statement s = c.createStatement();
 			ResultSet rs = s.executeQuery("select CERTIFICATE from " + CA_TABLE + " where ID='" + CA_USER + "'");
 			if (rs.next()) {
@@ -187,7 +187,7 @@ public class DorianCertificateAuthority extends DorianObject implements Certific
 			fault = (CertificateAuthorityFault) helper.getFault();
 			throw fault;
 		} finally {
-			db.getConnectionManager().releaseConnection(c);
+			db.releaseConnection(c);
 		}
 		if (certStr == null) {
 			NoCACredentialsFault fault = new NoCACredentialsFault();

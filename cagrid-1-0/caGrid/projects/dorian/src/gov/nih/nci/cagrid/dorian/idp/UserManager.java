@@ -156,7 +156,7 @@ public class UserManager extends DorianObject {
 		Connection c = null;
 		List users = new ArrayList();
 		try {
-			c = db.getConnectionManager().getConnection();
+			c = db.getConnection();
 			Statement s = c.createStatement();
 
 			StringBuffer sql = new StringBuffer();
@@ -299,7 +299,7 @@ public class UserManager extends DorianObject {
 			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
-			db.getConnectionManager().releaseConnection(c);
+			db.releaseConnection(c);
 		}
 	}
 
@@ -314,7 +314,7 @@ public class UserManager extends DorianObject {
 		Connection c = null;
 
 		try {
-			c = db.getConnectionManager().getConnection();
+			c = db.getConnection();
 			Statement s = c.createStatement();
 			ResultSet rs = s.executeQuery("select * from " + IDP_USERS_TABLE
 					+ " where UID='" + uid + "'");
@@ -357,7 +357,7 @@ public class UserManager extends DorianObject {
 			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
-			db.getConnectionManager().releaseConnection(c);
+			db.releaseConnection(c);
 		}
 		return user;
 	}
@@ -594,7 +594,7 @@ public class UserManager extends DorianObject {
 		Connection c = null;
 		boolean exists = false;
 		try {
-			c = db.getConnectionManager().getConnection();
+			c = db.getConnection();
 			Statement s = c.createStatement();
 			ResultSet rs = s.executeQuery("select count(*) from "
 					+ IDP_USERS_TABLE + " where UID='" + uid + "'");
@@ -618,7 +618,7 @@ public class UserManager extends DorianObject {
 			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
-			db.getConnectionManager().releaseConnection(c);
+			db.releaseConnection(c);
 		}
 		return exists;
 	}

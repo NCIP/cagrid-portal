@@ -87,7 +87,7 @@ public class TrustManager extends DorianObject {
 		buildDatabase();
 		Connection c = null;
 		try {
-			c = db.getConnectionManager().getConnection();
+			c = db.getConnection();
 			Statement s = c.createStatement();
 			ResultSet rs = s.executeQuery("select * from " + AUTH_METHODS_TABLE + " where ID=" + id);
 			List methods = new ArrayList();
@@ -112,7 +112,7 @@ public class TrustManager extends DorianObject {
 			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
-			db.getConnectionManager().releaseConnection(c);
+			db.releaseConnection(c);
 		}
 
 	}
@@ -225,7 +225,7 @@ public class TrustManager extends DorianObject {
 		buildDatabase();
 		Connection c = null;
 		try {
-			c = db.getConnectionManager().getConnection();
+			c = db.getConnection();
 			Statement s = c.createStatement();
 			ResultSet rs = s.executeQuery("select * from " + TRUST_MANAGER_TABLE);
 			List idps = new ArrayList();
@@ -256,7 +256,7 @@ public class TrustManager extends DorianObject {
 			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
-			db.getConnectionManager().releaseConnection(c);
+			db.releaseConnection(c);
 		}
 
 	}
@@ -267,7 +267,7 @@ public class TrustManager extends DorianObject {
 		Connection c = null;
 
 		try {
-			c = db.getConnectionManager().getConnection();
+			c = db.getConnection();
 			Statement s = c.createStatement();
 			ResultSet rs = s.executeQuery("select * from " + TRUST_MANAGER_TABLE + " WHERE ID=" + id);
 			TrustedIdP idp = null;
@@ -297,7 +297,7 @@ public class TrustManager extends DorianObject {
 			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
-			db.getConnectionManager().releaseConnection(c);
+			db.releaseConnection(c);
 		}
 	}
 
@@ -307,7 +307,7 @@ public class TrustManager extends DorianObject {
 		Connection c = null;
 
 		try {
-			c = db.getConnectionManager().getConnection();
+			c = db.getConnection();
 			Statement s = c.createStatement();
 			ResultSet rs = s.executeQuery("select * from " + TRUST_MANAGER_TABLE + " WHERE NAME='" + name + "'");
 			TrustedIdP idp = null;
@@ -337,7 +337,7 @@ public class TrustManager extends DorianObject {
 			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
-			db.getConnectionManager().releaseConnection(c);
+			db.releaseConnection(c);
 		}
 	}
 
@@ -347,7 +347,7 @@ public class TrustManager extends DorianObject {
 		Connection c = null;
 
 		try {
-			c = db.getConnectionManager().getConnection();
+			c = db.getConnection();
 			Statement s = c.createStatement();
 			ResultSet rs = s.executeQuery("select * from " + TRUST_MANAGER_TABLE + " WHERE IDP_SUBJECT='" + dn + "'");
 			TrustedIdP idp = null;
@@ -377,7 +377,7 @@ public class TrustManager extends DorianObject {
 			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
-			db.getConnectionManager().releaseConnection(c);
+			db.releaseConnection(c);
 		}
 	}
 
@@ -445,7 +445,7 @@ public class TrustManager extends DorianObject {
 		Connection c = null;
 		boolean exists = true;
 		try {
-			c = db.getConnectionManager().getConnection();
+			c = db.getConnection();
 			Statement s = c.createStatement();
 			ResultSet rs = s.executeQuery("select count(*) from " + TRUST_MANAGER_TABLE + " where IDP_CERTIFICATE='"
 				+ certAsString + "'");
@@ -466,7 +466,7 @@ public class TrustManager extends DorianObject {
 			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
-			db.getConnectionManager().releaseConnection(c);
+			db.releaseConnection(c);
 		}
 		return exists;
 	}
@@ -532,7 +532,7 @@ public class TrustManager extends DorianObject {
 		Connection c = null;
 		boolean exists = false;
 		try {
-			c = db.getConnectionManager().getConnection();
+			c = db.getConnection();
 			Statement s = c.createStatement();
 			ResultSet rs = s.executeQuery("select count(*) from " + TRUST_MANAGER_TABLE + " where IDP_SUBJECT='"
 				+ subject + "'");
@@ -553,7 +553,7 @@ public class TrustManager extends DorianObject {
 			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
-			db.getConnectionManager().releaseConnection(c);
+			db.releaseConnection(c);
 		}
 		return exists;
 	}
@@ -564,7 +564,7 @@ public class TrustManager extends DorianObject {
 		Connection c = null;
 		boolean exists = false;
 		try {
-			c = db.getConnectionManager().getConnection();
+			c = db.getConnection();
 			Statement s = c.createStatement();
 			ResultSet rs = s.executeQuery("select count(*) from " + TRUST_MANAGER_TABLE + " where NAME='" + name + "'");
 			if (rs.next()) {
@@ -584,7 +584,7 @@ public class TrustManager extends DorianObject {
 			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
-			db.getConnectionManager().releaseConnection(c);
+			db.releaseConnection(c);
 		}
 		return exists;
 	}

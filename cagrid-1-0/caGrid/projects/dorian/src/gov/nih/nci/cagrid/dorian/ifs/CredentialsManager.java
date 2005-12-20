@@ -40,7 +40,7 @@ public class CredentialsManager extends DorianObject {
 		Connection c = null;
 		boolean exists = false;
 		try {
-			c = db.getConnectionManager().getConnection();
+			c = db.getConnection();
 			Statement s = c.createStatement();
 			ResultSet rs = s.executeQuery("select count(*) from "
 					+ CREDENTIALS_TABLE + " where username='" + username + "'");
@@ -63,7 +63,7 @@ public class CredentialsManager extends DorianObject {
 			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
-			db.getConnectionManager().releaseConnection(c);
+			db.releaseConnection(c);
 		}
 		return exists;
 	}
@@ -104,7 +104,7 @@ public class CredentialsManager extends DorianObject {
 		PrivateKey key = null;
 		String keyStr = null;
 		try {
-			c = db.getConnectionManager().getConnection();
+			c = db.getConnection();
 			Statement s = c.createStatement();
 			ResultSet rs = s.executeQuery("select PRIVATE_KEY from "
 					+ CREDENTIALS_TABLE + " where username='" + username + "'");
@@ -124,7 +124,7 @@ public class CredentialsManager extends DorianObject {
 			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
-			db.getConnectionManager().releaseConnection(c);
+			db.releaseConnection(c);
 		}
 		if (keyStr == null) {
 			DorianInternalFault fault = new DorianInternalFault();
@@ -159,7 +159,7 @@ public class CredentialsManager extends DorianObject {
 		Connection c = null;
 		X509Certificate cert = null;
 		try {
-			c = db.getConnectionManager().getConnection();
+			c = db.getConnection();
 			Statement s = c.createStatement();
 			ResultSet rs = s.executeQuery("select CERTIFICATE from "
 					+ CREDENTIALS_TABLE + " where username='" + username + "'");
@@ -179,7 +179,7 @@ public class CredentialsManager extends DorianObject {
 			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		} finally {
-			db.getConnectionManager().releaseConnection(c);
+			db.releaseConnection(c);
 		}
 		if (cert == null) {
 			DorianInternalFault fault = new DorianInternalFault();
