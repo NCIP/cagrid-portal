@@ -44,7 +44,7 @@ import org.opensaml.SAMLAssertion;
  */
 public class DorianService {
 
-	public static String CONFIGURATION_FILE = "etc/dorian-conf.xml";
+	public static String CONFIGURATION_FILE = "etc/dorian/dorian-conf.xml";
 
 	private Dorian dorian;
 
