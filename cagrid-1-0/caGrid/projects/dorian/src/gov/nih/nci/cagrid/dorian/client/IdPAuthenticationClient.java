@@ -36,7 +36,6 @@ public class IdPAuthenticationClient extends DorianBaseClient implements
 	
 
 	public SAMLAssertion authenticate() throws DorianFault,DorianInternalFault, PermissionDeniedFault {
-		// TODO Auto-generated method stub
 		DorianPortType port = null;
 		try {
 			port = this.getPort(new AnonymousSecureConversationWithEncryption());
