@@ -280,9 +280,8 @@
 	<target name="jars" depends="jarStubs, jar, jarTests" />
 
 
-	<!-- Creates the GAR file -->
+	<!-- Creates the GAR file
 	<target name="gar" depends="jarStubs, jar">
-		<!-- copy the lib files over -->
 		<copy todir="${build.lib.dir}">
 			<fileset dir="${basedir}/lib">
 				<exclude name="**" />
@@ -299,6 +298,7 @@
 			<reference refid="${garetc.id}" />
 		</ant>
 	</target>
+	-->
 
 
 	<!-- Clean up all the intermediate files -->
