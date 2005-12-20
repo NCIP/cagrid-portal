@@ -34,17 +34,17 @@
 			</xs:annotation>
 		</xs:attribute>
 	</xs:attributeGroup>
-	<xs:element name="methods" type="methodsType">
+	<xs:element name="Methods" type="MethodsType">
 		<xs:annotation>
 			<xs:documentation>List of methods for this interface.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="methodsType">
+	<xs:complexType name="MethodsType">
 		<xs:sequence>
-			<xs:element name="method" maxOccurs="unbounded">
+			<xs:element name="Method" maxOccurs="unbounded">
 				<xs:complexType>
 					<xs:complexContent>
-						<xs:extension base="methodType">
+						<xs:extension base="MethodType">
 							<xs:attribute name="secure" type="secureValueType" use="optional"/>
 						</xs:extension>
 					</xs:complexContent>
@@ -52,12 +52,12 @@
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="methodType">
+	<xs:complexType name="MethodType">
 		<xs:sequence>
-			<xs:element name="inputs" minOccurs="0">
+			<xs:element name="Inputs" minOccurs="0">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="input" maxOccurs="unbounded">
+						<xs:element name="Input" maxOccurs="unbounded">
 							<xs:complexType>
 								<xs:attributeGroup ref="SchemaDervivedType"></xs:attributeGroup>
 								<xs:attribute name="name" type="xs:string" use="required"/>
@@ -68,17 +68,17 @@
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
-			<xs:element name="output">
+			<xs:element name="Output">
 				<xs:complexType>
 					<xs:attributeGroup ref="SchemaDervivedType"></xs:attributeGroup>
 					<xs:attribute name="minOccurs" type="xs:string" use="optional"/>
 					<xs:attribute name="maxOccurs" type="xs:string" use="optional"/>
 				</xs:complexType>
 			</xs:element>
-			<xs:element name="exceptions" minOccurs="0">
+			<xs:element name="Exceptions" minOccurs="0">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="exception" maxOccurs="unbounded">
+						<xs:element name="Exception" maxOccurs="unbounded">
 							<xs:complexType>
 								<xs:attribute name="name" type="xs:string" use="required"/>
 							</xs:complexType>
@@ -89,7 +89,7 @@
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 	</xs:complexType>
-	<xs:simpleType name="secureValueType">
+	<xs:simpleType name="SecureValueType">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="NONE"/>
 			<xs:enumeration value="INTEGRITY"/>
