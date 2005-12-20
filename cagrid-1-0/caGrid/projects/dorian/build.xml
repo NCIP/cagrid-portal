@@ -310,6 +310,12 @@ GSBT - Globus Service Build Tools
 
 	<!-- Creates the GAR file -->
 	<target name="dist" depends="jarStubs, jar">
+		<!-- Copy skeleton files to Tomcat and rename -->
+		<copy overwrite="true" toDir="${build.lib.dir}">
+			<fileset dir="${ext.lib.dir}">
+				<include name="*" />
+			</fileset>
+		</copy>
 		<ant antfile="${build.packages}" target="makeGar">
 			<property name="garserverdeployment.file" value="${basedir}/server-config.wsdd" />
 			<property name="garclientdeployment.file" value="${basedir}/client-config.wsdd" />
