@@ -1,0 +1,13 @@
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.etc" class="SecurityDescTemplate" %>
+<% java.util.Properties properties = (java.util.Properties) argument; 
+   String packageName = properties.getProperty("introduce.skeleton.package");
+   String serviceName = properties.getProperty("introduce.skeleton.service.name");
+   String modifiedServiceName = serviceName;
+   if(serviceName.endsWith("Service")){
+   modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
+   }
+   String namespaceDomain = properties.getProperty("introduce.skeleton.namespace.domain");
+%>
+<securityConfig xmlns="http://www.globus.org" xmlns:service="<%=namespaceDomain%>">
+
+</securityConfig>
