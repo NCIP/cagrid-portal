@@ -25,6 +25,9 @@
 				<fileset dir="${ext.lib.dir}">
 					<include name="*.jar" />
 				</fileset>
+				<fileset dir="${ext.test.lib.dir}">
+					<include name="*.jar" />
+				</fileset>
 			</classpath>
 			<formatter type="xml" />
 			<batchtest fork="yes" todir="${junit.results.dir}">

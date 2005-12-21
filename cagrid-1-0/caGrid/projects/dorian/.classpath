@@ -4,9 +4,6 @@
 	<classpathentry kind="src" path="test/src"/>
 	<classpathentry excluding="classes/*" kind="src" path="build/stubs-dorian"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/junit.jar"/>
-	<classpathentry kind="lib" path="lib/junit-addons-1.4.jar"/>
-	<classpathentry kind="lib" path="lib/xmlunit1.0.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar"/>
@@ -69,7 +66,6 @@
 	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
 	<classpathentry kind="lib" path="resources/portal/dorian"/>
-	<classpathentry kind="lib" path="lib/jdepend-2.7-patched.jar"/>
 	<classpathentry kind="lib" path="lib/ogsadai.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/opensaml.jar"/>
 	<classpathentry sourcepath="/mobius" kind="lib" path="lib/mobius_common_client-1.1.jar"/>
