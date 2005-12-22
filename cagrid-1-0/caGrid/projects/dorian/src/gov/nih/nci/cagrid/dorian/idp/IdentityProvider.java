@@ -6,7 +6,7 @@ import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.common.Crypt;
 import gov.nih.nci.cagrid.dorian.common.Database;
-import gov.nih.nci.cagrid.dorian.common.DorianObject;
+import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 import gov.nih.nci.cagrid.dorian.idp.bean.ApplicationReview;
 import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
@@ -31,7 +31,7 @@ import org.opensaml.SAMLAssertion;
  *          Exp $
  */
 
-public class IdentityProvider extends DorianObject {
+public class IdentityProvider extends LoggingObject {
 
 	private UserManager userManager;
 

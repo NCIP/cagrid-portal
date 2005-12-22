@@ -410,7 +410,7 @@ public class TestUserManager extends TestCase {
 			assertEquals(0, db.getUsedConnectionCount());
 			ca = Utils.getCA(db);
 			IFSConfiguration conf = getOneYearConf();
-			TrustManager tm = new TrustManager(conf, db);
+			TrustedIdPManager tm = new TrustedIdPManager(conf, db);
 			um = new UserManager(db, conf, ca, tm);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);

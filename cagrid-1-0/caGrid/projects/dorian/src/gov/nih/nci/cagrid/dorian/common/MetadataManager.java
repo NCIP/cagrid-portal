@@ -16,7 +16,7 @@ import java.sql.Statement;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class MetadataManager extends DorianObject {
+public class MetadataManager extends LoggingObject {
 	private Database db;
 
 	private boolean dbBuilt = false;

@@ -39,7 +39,7 @@ import org.opensaml.SAMLSubject;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class TestTrustManager extends TestCase {
+public class TestTrustedIdPManager extends TestCase {
 
 	public static String IDP_CONFIG = "resources" + File.separator + "general-test" + File.separator + "idp-config.xml";
 
@@ -49,7 +49,7 @@ public class TestTrustManager extends TestCase {
 
 	private Database db;
 
-	private TrustManager tm;
+	private TrustedIdPManager tm;
 
 	private List list;
 
@@ -331,7 +331,7 @@ public class TestTrustManager extends TestCase {
 			conf.setMaximumIdPNameLength(MAX_NAME_LENGTH);
 			conf.setUserPolicies(Utils.getUserPolicies());
 			ca = Utils.getCA(db);
-			tm = new TrustManager(conf, db);
+			tm = new TrustedIdPManager(conf, db);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

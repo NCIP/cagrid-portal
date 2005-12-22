@@ -5,7 +5,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import org.apache.axis.AxisFault;
 import org.opensaml.SAMLAssertion;
 
 /**

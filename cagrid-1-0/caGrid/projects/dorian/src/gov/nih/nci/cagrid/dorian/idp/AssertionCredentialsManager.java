@@ -5,7 +5,7 @@ import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.bean.Metadata;
 import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.common.Database;
-import gov.nih.nci.cagrid.dorian.common.DorianObject;
+import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.common.MetadataManager;
 import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
 import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
@@ -37,7 +37,7 @@ import org.opensaml.SAMLSubject;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class AssertionCredentialsManager extends DorianObject {
+public class AssertionCredentialsManager extends LoggingObject {
 
 	private final static String IDP_PRIVATE_KEY = "IdP Private Key";
 

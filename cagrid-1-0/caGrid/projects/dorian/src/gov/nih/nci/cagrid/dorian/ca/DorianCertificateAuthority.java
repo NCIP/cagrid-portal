@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.dorian.ca;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.dorian.common.Database;
-import gov.nih.nci.cagrid.dorian.common.DorianObject;
+import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
 import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
 
@@ -27,7 +27,7 @@ import org.bouncycastle.jce.PKCS10CertificationRequest;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class DorianCertificateAuthority extends DorianObject implements CertificateAuthority {
+public class DorianCertificateAuthority extends LoggingObject implements CertificateAuthority {
 
 	public static String CA_TABLE = "CERTIFICATE_AUTHORITY";
 

@@ -5,7 +5,7 @@ import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.common.AddressValidator;
 import gov.nih.nci.cagrid.dorian.common.Crypt;
 import gov.nih.nci.cagrid.dorian.common.Database;
-import gov.nih.nci.cagrid.dorian.common.DorianObject;
+import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.idp.bean.CountryCode;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
@@ -29,7 +29,7 @@ import java.util.List;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class UserManager extends DorianObject {
+public class UserManager extends LoggingObject {
 
 	private static final String IDP_USERS_TABLE = "IDP_USERS";
 

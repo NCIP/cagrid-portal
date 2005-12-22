@@ -11,7 +11,7 @@ import java.util.logging.Logger;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public abstract class DorianObject {
+public abstract class LoggingObject {
 	private static final Level DEBUG_LEVEL = Level.FINE;
 	private static final Level INFO_LEVEL = Level.INFO;
 	private static final Level WARN_LEVEL = Level.WARNING;

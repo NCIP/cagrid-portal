@@ -6,7 +6,7 @@ import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.common.AddressValidator;
 import gov.nih.nci.cagrid.dorian.common.Database;
-import gov.nih.nci.cagrid.dorian.common.DorianObject;
+import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
@@ -43,7 +43,7 @@ import org.opensaml.SAMLAuthenticationStatement;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class IFS extends DorianObject {
+public class IFS extends LoggingObject {
 
 	public final static String EMAIL_NAMESPACE = "http://cagrid.nci.nih.gov/email";
 
@@ -51,14 +51,14 @@ public class IFS extends DorianObject {
 
 	private UserManager um;
 
-	private TrustManager tm;
+	private TrustedIdPManager tm;
 
 	private IFSConfiguration conf;
 
 
 	public IFS(IFSConfiguration conf, Database db, CertificateAuthority ca) throws DorianInternalFault {
 		this.conf = conf;
-		tm = new TrustManager(conf, db);
+		tm = new TrustedIdPManager(conf, db);
 		um = new UserManager(db, conf, ca, tm);
 		um.buildDatabase();
 	}

@@ -3,7 +3,7 @@ package gov.nih.nci.cagrid.dorian.ifs;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.common.Database;
-import gov.nih.nci.cagrid.dorian.common.DorianObject;
+import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
 import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
 import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidPasswordFault;
@@ -23,7 +23,7 @@ import java.sql.Statement;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class CredentialsManager extends DorianObject {
+public class CredentialsManager extends LoggingObject {
 
 	public static String CREDENTIALS_TABLE = "CREDENTIALS";
 

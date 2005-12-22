@@ -15,9 +15,9 @@ import org.projectmobius.db.Query;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: Database.java,v 1.11 2005-12-20 17:19:30 hastings Exp $
+ * @version $Id: Database.java,v 1.12 2005-12-22 02:40:46 langella Exp $
  */
-public class Database extends DorianObject {
+public class Database extends LoggingObject {
 
 	private ConnectionManager root;
 

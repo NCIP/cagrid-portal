@@ -3,7 +3,7 @@ package gov.nih.nci.cagrid.dorian.ifs;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.common.Database;
-import gov.nih.nci.cagrid.dorian.common.DorianObject;
+import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidAssertionFault;
@@ -31,7 +31,7 @@ import org.opensaml.SAMLException;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class TrustManager extends DorianObject {
+public class TrustedIdPManager extends LoggingObject {
 	
 
 	private Database db;
@@ -45,7 +45,7 @@ public class TrustManager extends DorianObject {
 	private IFSConfiguration conf;
 
 
-	public TrustManager(IFSConfiguration conf, Database db) {
+	public TrustedIdPManager(IFSConfiguration conf, Database db) {
 		this.db = db;
 		this.conf = conf;
 	}

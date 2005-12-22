@@ -6,8 +6,7 @@ import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.common.AddressValidator;
 import gov.nih.nci.cagrid.dorian.common.Database;
-import gov.nih.nci.cagrid.dorian.common.DorianObject;
-import gov.nih.nci.cagrid.dorian.common.IOUtils;
+import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
 import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
 import gov.nih.nci.cagrid.dorian.ifs.bean.CredentialsFault;
@@ -41,7 +40,7 @@ import org.bouncycastle.jce.PKCS10CertificationRequest;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class UserManager extends DorianObject {
+public class UserManager extends LoggingObject {
 
 	private static final String USERS_TABLE = "IFS_USERS";
 
@@ -55,10 +54,10 @@ public class UserManager extends DorianObject {
 
 	private CertificateAuthority ca;
 
-	private TrustManager tm;
+	private TrustedIdPManager tm;
 
 	public UserManager(Database db, IFSConfiguration conf,
-			CertificateAuthority ca, TrustManager tm) {
+			CertificateAuthority ca, TrustedIdPManager tm) {
 		this.db = db;
 		this.tm = tm;
 		this.credentialsManager = new CredentialsManager(db);
