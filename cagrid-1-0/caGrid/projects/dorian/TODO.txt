@@ -10,6 +10,9 @@ General Tasks
 7) Explore MD5WithRSAEncryption (DONE)
 8) Cleanup Proxy Util (DONE)
 
+9) Add code for checking IdP Status on all methods.
+10) Removing IdP should remove all user accounts.
+
 Implementation Issues
 ----------------------
 

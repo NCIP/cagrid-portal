@@ -64,8 +64,8 @@ public class IFS extends LoggingObject {
 	}
 
 
-	public IFSUserPolicy[] getUserPolicies(String callerGridIdentity) throws DorianInternalFault,
-		InvalidUserFault, PermissionDeniedFault {
+	public IFSUserPolicy[] getUserPolicies(String callerGridIdentity) throws DorianInternalFault, InvalidUserFault,
+		PermissionDeniedFault {
 		IFSUser caller = um.getUser(callerGridIdentity);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
@@ -115,6 +115,16 @@ public class IFS extends LoggingObject {
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
 		tm.removeTrustedIdP(idpId);
+		IFSUserFilter uf = new IFSUserFilter();
+		uf.setIdPId(idpId);
+		IFSUser[] users = um.getUsers(uf);
+		for (int i = 0; i < users.length; i++) {
+			try {
+				um.removeUser(users[i]);
+			} catch (Exception e) {
+				logError(e.getMessage(), e);
+			}
+		}
 	}
 
 
@@ -195,15 +205,6 @@ public class IFS extends LoggingObject {
 
 		// Make sure the assertion is trusted
 		TrustedIdP idp = tm.getTrustedIdP(saml);
-
-		// Verfiy the the idp is ACTIVE
-
-		if (!idp.getStatus().equals(TrustedIdPStatus.Active)) {
-			PermissionDeniedFault fault = new PermissionDeniedFault();
-			fault.setFaultString("The Trusted IdP is NOT Active!!!");
-			throw fault;
-		}
-
 		SAMLAuthenticationStatement auth = getAuthenticationStatement(saml);
 
 		// We need to verify the authentication method now
@@ -376,6 +377,20 @@ public class IFS extends LoggingObject {
 
 
 	private void verifyActiveUser(IFSUser usr) throws DorianInternalFault, PermissionDeniedFault {
+
+		try {
+			TrustedIdP idp = this.tm.getTrustedIdPById(usr.getIdPId());
+
+			if (!idp.getStatus().equals(TrustedIdPStatus.Active)) {
+				PermissionDeniedFault fault = new PermissionDeniedFault();
+				fault.setFaultString("Access for your Identity Provider has been suspended!!!");
+				throw fault;
+			}
+		} catch (InvalidTrustedIdPFault f) {
+			PermissionDeniedFault fault = new PermissionDeniedFault();
+			fault.setFaultString("Unexpected error in determining your Identity Provider has been suspended!!!");
+			throw fault;
+		}
 
 		if (!usr.getUserStatus().equals(IFSUserStatus.Active)) {
 			if (usr.getUserStatus().equals(IFSUserStatus.Suspended)) {

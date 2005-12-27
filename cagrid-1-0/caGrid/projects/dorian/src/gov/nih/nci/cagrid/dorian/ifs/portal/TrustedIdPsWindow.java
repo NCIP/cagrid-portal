@@ -36,10 +36,9 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPsWindow.java,v 1.7 2005-12-19 20:44:16 hastings Exp $
+ * @version $Id: TrustedIdPsWindow.java,v 1.8 2005-12-27 22:23:11 langella Exp $
  */
 public class TrustedIdPsWindow extends GridPortalBaseFrame {
-	
 
 	private javax.swing.JPanel jContentPane = null;
 
@@ -79,11 +78,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 
 	private JProgressBar progress = null;
 
-	private String lastService = null;
-
-	private String lastGridIdentity = null;
-
-	private JButton removeUser = null;
+	private JButton removeTrustedIdPButton = null;
 
 	private JButton addUser = null;
 
@@ -208,7 +203,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 			buttonPanel = new JPanel();
 			buttonPanel.add(getAddUser(), null);
 			buttonPanel.add(getViewTrustedIdP(), null);
-			buttonPanel.add(getRemoveUser(), null);
+			buttonPanel.add(getRemoveTrustedIdPButton(), null);
 		}
 		return buttonPanel;
 	}
@@ -225,8 +220,9 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 		}
 		return trustedIdPTable;
 	}
-	
-	public void addTrustedIdP(TrustedIdP idp){
+
+
+	public void addTrustedIdP(TrustedIdP idp) {
 		getTrustedIdPTable().addTrustedIdP(idp);
 	}
 
@@ -293,7 +289,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 			String service = ((DorianServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-				new TrustedIdPWindow(this,service, proxy, getUserPolicies()));
+				new TrustedIdPWindow(this, service, proxy, getUserPolicies()));
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
 		}
@@ -542,15 +538,15 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getRemoveUser() {
-		if (removeUser == null) {
-			removeUser = new JButton();
-			removeUser.setText("Remove User");
-			removeUser.addActionListener(new java.awt.event.ActionListener() {
+	private JButton getRemoveTrustedIdPButton() {
+		if (removeTrustedIdPButton == null) {
+			removeTrustedIdPButton = new JButton();
+			removeTrustedIdPButton.setText("Remove TrustedIdP");
+			removeTrustedIdPButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
-							removeUser();
+							removeTrustedIdP();
 						}
 					};
 					try {
@@ -560,14 +556,24 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 					}
 				}
 			});
-			removeUser.setIcon(DorianLookAndFeel.getRemoveUserIcon());
+			removeTrustedIdPButton.setIcon(DorianLookAndFeel.getRemoveTrustedIdPIcon());
 		}
-		return removeUser;
+		return removeTrustedIdPButton;
 	}
 
 
-	private void removeUser() {
-		
+	private void removeTrustedIdP() {
+		try {
+			String service = ((DorianServiceListComboBox) getService()).getSelectedService();
+			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			CommunicationStyle style = new SecureConversationWithEncryption(proxy);
+
+			IFSAdministration client = new IFSAdministrationClient(service, style);
+			client.removeTrustedIdP(getTrustedIdPTable().getSelectedTrustedIdP());
+			getTrustedIdPTable().removeSelectedTrustedIdP();
+		} catch (Exception e) {
+			PortalUtils.showErrorMessage(e);
+		}
 	}
 
 
