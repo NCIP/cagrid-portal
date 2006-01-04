@@ -1,12 +1,12 @@
 package edu.osu.idp.portal;
 
-import gov.nih.nci.cagrid.dorian.common.IOUtils;
 import gov.nih.nci.cagrid.dorian.ifs.portal.IdPAuthenticationPanel;
 import gov.nih.nci.cagrid.dorian.portal.IdPConf;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.io.ByteArrayInputStream;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -19,6 +19,7 @@ import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.opensaml.SAMLAssertion;
+import org.opensaml.SAMLResponse;
 
 
 /**
@@ -67,7 +68,9 @@ public class OSUIdPAuthenticationPanel extends IdPAuthenticationPanel {
 
 			// print the status and response
 			System.out.println(status + "\n" + get.getResponseBodyAsString());
-			return IOUtils.stringToSAMLAssertion(get.getResponseBodyAsString());
+			SAMLResponse res = new SAMLResponse(new ByteArrayInputStream(get.getResponseBodyAsString()
+				.getBytes()));
+			return (SAMLAssertion)res.getAssertions().next();
 		} finally {
 			// release any connection resources used by the method
 			get.releaseConnection();
