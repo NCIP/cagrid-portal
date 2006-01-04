@@ -25,7 +25,6 @@ import org.opensaml.SAMLAssertion;
  */
 
 public class DorianIdPAuthenticationPanel extends IdPAuthenticationPanel {
-
 	private JPanel loginPanel = null;
 	private JLabel userIdLabel = null;
 	private JTextField userId = null;
@@ -41,7 +40,7 @@ public class DorianIdPAuthenticationPanel extends IdPAuthenticationPanel {
 		BasicAuthCredential cred = new BasicAuthCredential();
 		cred.setUserId(userId.getText());
 		cred.setPassword(new String(password.getPassword()));
-		IdPAuthenticationClient client = new IdPAuthenticationClient(getIdPInfo().getName(),cred);
+		IdPAuthenticationClient client = new IdPAuthenticationClient(getIdPInfo().getParameter("serviceId"),cred);
 		return client.authenticate();
 	}
 

@@ -82,7 +82,7 @@ public class IdPConf {
 							+ " parameter for the IdP, " + name
 							+ " cannot be defined more than once.");
 				} else {
-					this.parameters.put(name, value);
+					this.parameters.put(pname, value);
 				}
 			}
 

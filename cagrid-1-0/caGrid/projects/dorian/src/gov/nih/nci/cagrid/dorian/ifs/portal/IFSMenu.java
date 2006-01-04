@@ -18,7 +18,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: IFSMenu.java,v 1.9 2005-12-15 19:29:33 langella Exp $
+ * @version $Id: IFSMenu.java,v 1.10 2006-01-04 18:45:28 langella Exp $
  */
 public class IFSMenu extends GridPortalComponent {
 
@@ -226,7 +226,7 @@ public class IFSMenu extends GridPortalComponent {
 		if (createProxy.isSelected()) {
 			PortalResourceManager.getInstance().getGridPortal()
 					.addGridPortalComponent(new CreateProxyComponent(), 450,
-							300);
+							325);
 		} else if (manageProxies.isSelected()) {
 			PortalResourceManager.getInstance().getGridPortal()
 					.addGridPortalComponent(new ProxyManagerComponent(), 600,
