@@ -61,7 +61,9 @@ public class TrustedIdPManager extends LoggingObject {
 					+ "INDEX document_index (NAME));";
 				db.update(trust);
 
-				String methods = "CREATE TABLE " + AUTH_METHODS_TABLE + " (" + "ID INT NOT NULL,"
+				String methods = "CREATE TABLE " + AUTH_METHODS_TABLE + " (" +
+				"ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+				+ "IDP_ID INT NOT NULL,"
 					+ "METHOD VARCHAR(255) NOT NULL," + "INDEX document_index (ID));";
 				db.update(methods);
 			}
@@ -79,7 +81,7 @@ public class TrustedIdPManager extends LoggingObject {
 
 	private void removeAuthenticationMethodsForTrustedIdP(long id) throws DorianInternalFault {
 		buildDatabase();
-		db.update("delete from " + AUTH_METHODS_TABLE + " WHERE ID=" + id);
+		db.update("delete from " + AUTH_METHODS_TABLE + " WHERE IDP_ID=" + id);
 	}
 
 
@@ -89,7 +91,7 @@ public class TrustedIdPManager extends LoggingObject {
 		try {
 			c = db.getConnection();
 			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery("select * from " + AUTH_METHODS_TABLE + " where ID=" + id);
+			ResultSet rs = s.executeQuery("select * from " + AUTH_METHODS_TABLE + " where IDP_ID=" + id +" ORDER BY ID");
 			List methods = new ArrayList();
 			while (rs.next()) {
 				SAMLAuthenticationMethod method = SAMLAuthenticationMethod.fromString(rs.getString("METHOD"));
@@ -523,7 +525,7 @@ public class TrustedIdPManager extends LoggingObject {
 
 	private synchronized void addAuthenticationMethod(long id, SAMLAuthenticationMethod method)
 		throws DorianInternalFault {
-		db.update("INSERT INTO " + AUTH_METHODS_TABLE + " SET ID=" + id + ",METHOD='" + method.getValue() + "'");
+		db.update("INSERT INTO " + AUTH_METHODS_TABLE + " SET IDP_ID=" + id + ",METHOD='" + method.getValue() + "'");
 	}
 
 
