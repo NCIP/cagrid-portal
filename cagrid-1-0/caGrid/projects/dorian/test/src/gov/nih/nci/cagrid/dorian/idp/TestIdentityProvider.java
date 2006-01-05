@@ -41,18 +41,17 @@ public class TestIdentityProvider extends TestCase {
 
 	private CertificateAuthority ca;
 
-	public static String IDP_CONFIG = "resources" + File.separator
-			+ "general-test" + File.separator + "idp-config.xml";
+	public static String IDP_CONFIG = "resources" + File.separator + "general-test" + File.separator + "idp-config.xml";
 
 	private int count = 0;
+
 
 	public void testAutomaticRegistration() {
 		try {
 
 			IdentityProvider idp = new IdentityProvider(conf, db, ca);
 			conf.setRegistrationPolicy(new AutomaticRegistrationPolicy());
-			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf
-					.getRegistrationPolicy().getClass().getName());
+			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy().getClass().getName());
 			Application a = createApplication();
 			idp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
@@ -68,12 +67,12 @@ public class TestIdentityProvider extends TestCase {
 		}
 	}
 
+
 	public void testManualRegistration() {
 		try {
 			IdentityProvider idp = new IdentityProvider(conf, db, ca);
 			conf.setRegistrationPolicy(new ManualRegistrationPolicy());
-			assertEquals(ManualRegistrationPolicy.class.getName(), conf
-					.getRegistrationPolicy().getClass().getName());
+			assertEquals(ManualRegistrationPolicy.class.getName(), conf.getRegistrationPolicy().getClass().getName());
 			Application a = createApplication();
 			idp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
@@ -94,12 +93,12 @@ public class TestIdentityProvider extends TestCase {
 		}
 	}
 
+
 	public void testMultipleUsers() {
 		try {
 			IdentityProvider idp = new IdentityProvider(conf, db, ca);
 			conf.setRegistrationPolicy(new ManualRegistrationPolicy());
-			assertEquals(ManualRegistrationPolicy.class.getName(), conf
-					.getRegistrationPolicy().getClass().getName());
+			assertEquals(ManualRegistrationPolicy.class.getName(), conf.getRegistrationPolicy().getClass().getName());
 			BasicAuthCredential cred = getAdminCreds();
 			for (int i = 0; i < 10; i++) {
 				Application a = createApplication();
@@ -124,13 +123,13 @@ public class TestIdentityProvider extends TestCase {
 				auth.setPassword(a.getPassword());
 				org.opensaml.SAMLAssertion saml = idp.authenticate(auth);
 				assertNotNull(saml);
-				this.verifySAMLAssertion(saml,idp,a);
+				this.verifySAMLAssertion(saml, idp, a);
 			}
 
 			IdPUserFilter uf = new IdPUserFilter();
 			IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
 			assertEquals(11, users.length);
-			for (int i = 0; i < 10; i++) {
+			for (int i = 0; i < users.length; i++) {
 				IdPUserFilter f = new IdPUserFilter();
 				f.setUserId(users[i].getUserId());
 				IdPUser[] us = idp.findUsers(cred.getUserId(), f);
@@ -140,9 +139,11 @@ public class TestIdentityProvider extends TestCase {
 				IdPUser[] us2 = idp.findUsers(cred.getUserId(), f);
 				assertEquals(1, us2.length);
 				assertEquals(us[0], us2[0]);
-				idp.removeUser(cred.getUserId(), users[i].getUserId());
-				us = idp.findUsers(cred.getUserId(), f);
-				assertEquals(0, us.length);
+				if (!users[i].getUserId().equals(cred.getUserId())) {
+					idp.removeUser(cred.getUserId(), users[i].getUserId());
+					us = idp.findUsers(cred.getUserId(), f);
+					assertEquals(0, us.length);
+				}
 			}
 			users = idp.findUsers(cred.getUserId(), uf);
 			assertEquals(1, users.length);
@@ -152,13 +153,12 @@ public class TestIdentityProvider extends TestCase {
 		}
 	}
 
-	public void verifySAMLAssertion(SAMLAssertion saml, IdentityProvider idp,
-			Application app) throws Exception {
+
+	public void verifySAMLAssertion(SAMLAssertion saml, IdentityProvider idp, Application app) throws Exception {
 		assertNotNull(saml);
 		saml.verify(idp.getIdPCertificate(), false);
 
-		assertEquals(idp.getIdPCertificate().getSubjectDN().toString(), saml
-				.getIssuer());
+		assertEquals(idp.getIdPCertificate().getSubjectDN().toString(), saml.getIssuer());
 		Iterator itr = saml.getStatements();
 		int count = 0;
 		boolean emailFound = false;
@@ -174,8 +174,7 @@ public class TestIdentityProvider extends TestCase {
 				}
 				SAMLAuthenticationStatement auth = (SAMLAuthenticationStatement) stmt;
 				assertEquals(app.getUserId(), auth.getSubject().getName());
-				assertEquals("urn:oasis:names:tc:SAML:1.0:am:password", auth
-						.getAuthMethod());
+				assertEquals("urn:oasis:names:tc:SAML:1.0:am:password", auth.getAuthMethod());
 			}
 
 			if (stmt instanceof SAMLAttributeStatement) {
@@ -189,10 +188,8 @@ public class TestIdentityProvider extends TestCase {
 				Iterator i = att.getAttributes();
 				assertTrue(i.hasNext());
 				SAMLAttribute a = (SAMLAttribute) i.next();
-				assertEquals(AssertionCredentialsManager.EMAIL_NAMESPACE, a
-						.getNamespace());
-				assertEquals(AssertionCredentialsManager.EMAIL_NAME, a
-						.getName());
+				assertEquals(AssertionCredentialsManager.EMAIL_NAMESPACE, a.getNamespace());
+				assertEquals(AssertionCredentialsManager.EMAIL_NAME, a.getName());
 				Iterator vals = a.getValues();
 				assertTrue(vals.hasNext());
 				String val = (String) vals.next();
@@ -208,12 +205,14 @@ public class TestIdentityProvider extends TestCase {
 		assertTrue(emailFound);
 	}
 
+
 	private BasicAuthCredential getAdminCreds() {
 		BasicAuthCredential cred = new BasicAuthCredential();
 		cred.setUserId(IdentityProvider.ADMIN_USER_ID);
 		cred.setPassword(IdentityProvider.ADMIN_PASSWORD);
 		return cred;
 	}
+
 
 	private Application createApplication() {
 		Application u = new Application();
@@ -234,6 +233,7 @@ public class TestIdentityProvider extends TestCase {
 		return u;
 	}
 
+
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
@@ -242,13 +242,13 @@ public class TestIdentityProvider extends TestCase {
 			assertEquals(0, db.getUsedConnectionCount());
 			ca = Utils.getCA();
 			SimpleResourceManager trm = new SimpleResourceManager(IDP_CONFIG);
-			this.conf = (IdPConfiguration) trm
-					.getResource(IdPConfiguration.RESOURCE);
+			this.conf = (IdPConfiguration) trm.getResource(IdPConfiguration.RESOURCE);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
 	}
+
 
 	protected void tearDown() throws Exception {
 		super.setUp();
