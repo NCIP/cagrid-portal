@@ -9,7 +9,7 @@
 		<echo message="Test results dir: ${junit.results.dir}" />
 		<mkdir dir="${junit.results.dir}" />
 
-		<junit dir="${basedir}" printsummary="yes" haltonfailure="false" showoutput="true">
+		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" showoutput="true">
 			<sysproperty key="basedir" value="${basedir}" />
 			<jvmarg value="-Dbuild.dir=${build.dir}" />
 			<classpath>
