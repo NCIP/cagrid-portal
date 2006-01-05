@@ -100,7 +100,8 @@ public class TestIdentityProvider extends TestCase {
 			conf.setRegistrationPolicy(new ManualRegistrationPolicy());
 			assertEquals(ManualRegistrationPolicy.class.getName(), conf.getRegistrationPolicy().getClass().getName());
 			BasicAuthCredential cred = getAdminCreds();
-			for (int i = 0; i < 10; i++) {
+			int times = 3;
+			for (int i = 0; i < times; i++) {
 				Application a = createApplication();
 				idp.register(a);
 
@@ -128,7 +129,7 @@ public class TestIdentityProvider extends TestCase {
 
 			IdPUserFilter uf = new IdPUserFilter();
 			IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
-			assertEquals(11, users.length);
+			assertEquals(times+1, users.length);
 			for (int i = 0; i < users.length; i++) {
 				IdPUserFilter f = new IdPUserFilter();
 				f.setUserId(users[i].getUserId());
