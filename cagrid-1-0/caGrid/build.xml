@@ -131,7 +131,7 @@
 			<artifact refid="metadata.schemas" />
 			<artifact refid="metadata.mappings" />
 		</resolveDependencies>
-		<ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="jar" />
+		<ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
 
