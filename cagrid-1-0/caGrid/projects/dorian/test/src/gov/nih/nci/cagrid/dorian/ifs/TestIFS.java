@@ -71,7 +71,6 @@ public class TestIFS extends TestCase {
 	private CertificateAuthority ca;
 
 
-
 	public void testRenewUserCredentials() {
 		try {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
@@ -481,9 +480,11 @@ public class TestIFS extends TestCase {
 			assertEquals(times + 1, idps.length);
 			count = times + 1;
 			for (int i = 0; i < idps.length; i++) {
-				count = count - 1;
-				ifs.removeTrustedIdP(gridId, idps[i].getId());
-				assertEquals(count, ifs.getTrustedIdPs(gridId).length);
+				if (idps[i].getId() != idp0.getIdp().getId()) {
+					count = count - 1;
+					ifs.removeTrustedIdP(gridId, idps[i].getId());
+					assertEquals(count, ifs.getTrustedIdPs(gridId).length);
+				}
 			}
 
 			assertEquals(count, ifs.getTrustedIdPs(gridId).length);
