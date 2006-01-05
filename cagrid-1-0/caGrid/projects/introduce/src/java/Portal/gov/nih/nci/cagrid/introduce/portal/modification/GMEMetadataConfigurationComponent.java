@@ -42,20 +42,10 @@ import javax.swing.JButton;
  * @version $Id: mobiusEclipseCodeTemplates.xml,v 1.2 2005/04/19 14:58:02 oster
  *          Exp $
  */
-public class GMEParameterConfigurationComponent extends GridPortalComponent {
-	boolean handleParameterName = false;
-
-	JLabel paramNameLabel = null;
-
-	JTextField paramName = null;
-
-	JCheckBox isArrayCheckBox = null;
-
+public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 	JPanel customPanel = null;
 
 	protected Vector typeInfo;
-
-	private JLabel arrayLabel = null;
 
 	private JPanel mainPanel = null;
 
@@ -69,11 +59,27 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
 
 	JComponent me;
 
-	public GMEParameterConfigurationComponent(Vector typeInfo, File schemaDir,
-			boolean handleParameterName) {
+	private JLabel isRegisterLabel = null;
+
+	private JLabel isPopulateFromFileLabel = null;
+
+	private JLabel qnameLabel = null;
+
+	private JCheckBox isPopulateFromFile = null;
+
+	private JCheckBox isRegister = null;
+
+	private JTextField qnameDomain = null;
+
+	private JTextField qnameName = null;
+
+	private JLabel qnameDomainLabel = null;
+
+	private JLabel qnameNameLabel = null;
+
+	public GMEMetadataConfigurationComponent(Vector typeInfo, File schemaDir) {
 		this.typeInfo = typeInfo;
 		this.schemaDir = schemaDir;
-		this.handleParameterName = handleParameterName;
 		initialize();
 		this.gmePanel.discoverFromGME();
 		me = this;
@@ -85,70 +91,77 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
 	 */
 	private void initialize() {
 		this.setSize(new java.awt.Dimension(372, 404));
-		this.setTitle("Parameter Configuration");
+		this.setTitle("Metadata Configuration");
 		this.setContentPane(getMainPanel());
-	}
-
-	/**
-	 * This method initializes paramName
-	 * 
-	 * @return javax.swing.JTextField
-	 */
-	JTextField getParamName() {
-		if (paramName == null) {
-			paramName = new JTextField();
-		}
-		return paramName;
-	}
-
-	/**
-	 * This method initializes isArrayCheckBox
-	 * 
-	 * @return javax.swing.JCheckBox
-	 */
-	JCheckBox getIsArrayCheckBox() {
-		if (isArrayCheckBox == null) {
-			isArrayCheckBox = new JCheckBox();
-			isArrayCheckBox
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-						}
-					});
-		}
-		return isArrayCheckBox;
 	}
 
 	public JPanel getCustomPanel() {
 		if (customPanel == null) {
+			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
+			gridBagConstraints31.gridx = 1;
+			gridBagConstraints31.anchor = java.awt.GridBagConstraints.EAST;
+			gridBagConstraints31.gridy = 3;
+			qnameNameLabel = new JLabel();
+			qnameNameLabel.setText("name");
+			qnameNameLabel.setEnabled(false);
+			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+			gridBagConstraints21.gridx = 1;
+			gridBagConstraints21.anchor = java.awt.GridBagConstraints.EAST;
+			gridBagConstraints21.gridy = 2;
+			qnameDomainLabel = new JLabel();
+			qnameDomainLabel.setText("domain");
+			qnameDomainLabel.setEnabled(false);
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints11.gridy = 3;
+			gridBagConstraints11.weightx = 1.0;
+			gridBagConstraints11.gridx = 2;
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints8.gridy = 2;
+			gridBagConstraints8.weightx = 1.0;
+			gridBagConstraints8.gridx = 2;
+			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.gridx = 2;
+			gridBagConstraints7.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints7.gridy = 1;
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints3.gridy = 1;
+			gridBagConstraints3.gridx = 2;
 			gridBagConstraints3.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints3.gridx = 1;
+			gridBagConstraints3.gridy = 0;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints2.gridy = 1;
 			gridBagConstraints2.gridx = 0;
+			gridBagConstraints2.fill = java.awt.GridBagConstraints.NONE;
+			gridBagConstraints2.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints2.gridy = 2;
+			qnameLabel = new JLabel();
+			qnameLabel.setText("Qname:");
+			qnameLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints1.gridx = 1;
+			gridBagConstraints1.gridx = 0;
+			gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints1.gridwidth = 2;
 			gridBagConstraints1.gridy = 0;
-			gridBagConstraints1.weightx = 1.0;
-			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
+			isPopulateFromFileLabel = new JLabel();
+			isPopulateFromFileLabel.setText("Poplate From File");
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints.gridy = 0;
 			gridBagConstraints.gridx = 0;
+			gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints.gridwidth = 2;
+			gridBagConstraints.gridy = 1;
+			isRegisterLabel = new JLabel();
+			isRegisterLabel.setText("Register");
 			customPanel = new JPanel();
 			customPanel.setLayout(new GridBagLayout());
-			paramNameLabel = new JLabel();
-			paramNameLabel.setText("Parameter Name");
-			arrayLabel = new JLabel();
-			arrayLabel.setText("Is Array");
-			customPanel.add(paramNameLabel, gridBagConstraints);
-			customPanel.add(getParamName(), gridBagConstraints1);
-			customPanel.add(arrayLabel, gridBagConstraints2);
-			customPanel.add(getIsArrayCheckBox(), gridBagConstraints3);
+			customPanel.add(isRegisterLabel, gridBagConstraints);
+			customPanel.add(isPopulateFromFileLabel, gridBagConstraints1);
+			customPanel.add(qnameLabel, gridBagConstraints2);
+			customPanel.add(getIsPopulateFromFile(), gridBagConstraints3);
+			customPanel.add(getIsRegister(), gridBagConstraints7);
+			customPanel.add(getQname(), gridBagConstraints8);
+			customPanel.add(getQnameName(), gridBagConstraints11);
+			customPanel.add(qnameDomainLabel, gridBagConstraints21);
+			customPanel.add(qnameNameLabel, gridBagConstraints31);
 		}
 		return customPanel;
 	}
@@ -195,7 +208,7 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
 	 */
 	private GMEConfigurationPanel getGmePanel() {
 		if (gmePanel == null) {
-			gmePanel = new GMEConfigurationPanel(GMEConfigurationPanel.TYPES_ONLY);
+			gmePanel = new GMEConfigurationPanel(GMEConfigurationPanel.ELEMENT_ONLY);
 			gmePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "GME", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
 		}
 		return gmePanel;
@@ -323,10 +336,6 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
 		int index = 0;
 		// skip classname
 		index++;
-		typeInfo.set(index++, String.valueOf(isArrayCheckBox.isSelected()));
-		if (handleParameterName) {
-			typeInfo.set(index++, paramName.getText());
-		}
 		if (this.gmePanel.currentNamespace != null) {
 			typeInfo.set(index++, "gme://"
 					+ this.gmePanel.currentNamespace.getRaw());
@@ -340,7 +349,59 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
 		} else {
 			typeInfo.set(index++, null);
 		}
+		//skip location
+		index++;
+		typeInfo.set(index++, String.valueOf(isPopulateFromFile.isSelected()));
+		typeInfo.set(index++, String.valueOf(isRegister.isSelected()));
 
+	}
+
+	/**
+	 * This method initializes isPopulateFromFile	
+	 * 	
+	 * @return javax.swing.JCheckBox	
+	 */
+	private JCheckBox getIsPopulateFromFile() {
+		if (isPopulateFromFile == null) {
+			isPopulateFromFile = new JCheckBox();
+		}
+		return isPopulateFromFile;
+	}
+
+	/**
+	 * This method initializes isRegister	
+	 * 	
+	 * @return javax.swing.JCheckBox	
+	 */
+	private JCheckBox getIsRegister() {
+		if (isRegister == null) {
+			isRegister = new JCheckBox();
+		}
+		return isRegister;
+	}
+
+	/**
+	 * This method initializes qname	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getQname() {
+		if (qnameDomain == null) {
+			qnameDomain = new JTextField();
+		}
+		return qnameDomain;
+	}
+
+	/**
+	 * This method initializes qnameName	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getQnameName() {
+		if (qnameName == null) {
+			qnameName = new JTextField();
+		}
+		return qnameName;
 	}
 
 } // @jve:decl-index=0:visual-constraint="2,2"

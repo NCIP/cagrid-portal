@@ -5,6 +5,8 @@ import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.Archive;
 import gov.nih.nci.cagrid.introduce.SyncTools;
+import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
+import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
@@ -20,6 +22,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -29,7 +32,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.xml.namespace.QName;
 
@@ -41,7 +43,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.23 2005-12-19 18:20:43 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.24 2006-01-05 01:38:48 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -64,6 +66,8 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	private File methodsDirectory = null;
 
 	private MethodsType methodsType;
+
+	private ServiceMetadataListType metadataListType;
 
 	private Properties serviceProperties = null;
 
@@ -92,7 +96,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 
 	private JScrollPane metadataScrollPane = null;
 
-	private JTable metadataTable = null;
+	private MetadataTable metadataTable = null;
 
 	private JPanel metadataButtonsPanel = null;
 
@@ -198,16 +202,22 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		if (this.methodsDirectory != null) {
 			SAXBuilder builder = new SAXBuilder(false);
 			try {
-				
-				this.methodsType = (MethodsType) CommonTools.deserializeDocument(this.methodsDirectory
-						.getAbsolutePath()
-						+ File.separator + "introduceMethods.xml", MethodsType.class);
+				this.methodsType = (MethodsType) CommonTools
+						.deserializeDocument(this.methodsDirectory
+								.getAbsolutePath()
+								+ File.separator + "introduceMethods.xml",
+								MethodsType.class);
+				this.metadataListType = (ServiceMetadataListType) CommonTools
+						.deserializeDocument(this.methodsDirectory
+								.getAbsolutePath()
+								+ File.separator + "introduceMetadata.xml",
+								ServiceMetadataListType.class);
 
 				loadServiceProps();
 
 				// this.getServiceName().setText(serviceProperties.getProperty("introduce.skeleton.service.name"));
 				// this.getServiceName().setEnabled(false);
-			} catch (Exception e){
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -245,7 +255,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			gridBagConstraints13.weighty = 1.0;
 			gridBagConstraints13.gridx = 0;
 			gridBagConstraints13.gridy = 1;
-			gridBagConstraints13.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints13.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints13.weightx = 1.0;
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			gridBagConstraints11.anchor = java.awt.GridBagConstraints.SOUTH;
@@ -288,7 +298,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			gridBagConstraints.gridx = 3;
 			gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints.gridwidth = 1;
-			gridBagConstraints.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints.gridy = 0;
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			operationsPanel = new JPanel();
@@ -378,14 +388,14 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	 */
 	private MethodsTable getMethodsTable() {
 		if (methodsTable == null) {
-			methodsTable = new MethodsTable(methodsType,
-					this.methodsDirectory, this.serviceProperties);
+			methodsTable = new MethodsTable(methodsType, this.methodsDirectory,
+					this.serviceProperties);
 		}
 		methodsTable.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
 					dirty = true;
-					performModify();
+					performMethodModify();
 				}
 			}
 		});
@@ -424,25 +434,27 @@ public class ModificationViewer extends GridPortalBaseFrame {
 							MethodTypeOutput output = new MethodTypeOutput();
 							output.setClassName("void");
 							method.setOutput(output);
-							
-							//add new method to array in bean  
-							//this seems to be a wierd way be adding things....
+
+							// add new method to array in bean
+							// this seems to be a wierd way be adding things....
 							MethodsTypeMethod[] newMethods;
 							int newLength = 0;
-							if(methodsType.getMethod()!=null){
-								newLength = methodsType.getMethod().length+1;
-								newMethods= new MethodsTypeMethod[newLength];
-								System.arraycopy(methodsType.getMethod(),0,newMethods,0,methodsType.getMethod().length);
+							if (methodsType.getMethod() != null) {
+								newLength = methodsType.getMethod().length + 1;
+								newMethods = new MethodsTypeMethod[newLength];
+								System.arraycopy(methodsType.getMethod(), 0,
+										newMethods, 0,
+										methodsType.getMethod().length);
 							} else {
 								newLength = 1;
 								newMethods = new MethodsTypeMethod[newLength];
 							}
-							newMethods[newLength-1]=method;
+							newMethods[newLength - 1] = method;
 							methodsType.setMethod(newMethods);
-							
+
 							getMethodsTable().addRow(method);
-							
-							performModify();
+
+							performMethodModify();
 						}
 					});
 		}
@@ -474,9 +486,16 @@ public class ModificationViewer extends GridPortalBaseFrame {
 								if (confirmed == JOptionPane.OK_OPTION) {
 									System.out
 											.println("Writting service.methods file.");
-									CommonTools.serializeDocument(methodsDirectory.getAbsolutePath()
-													+ File.separator
-													+ "introduceMethods.xml", methodsType,new QName("gme://gov.nih.nci.cagrid.introduce/1/Methods","methodsType"));
+									CommonTools
+											.serializeDocument(
+													methodsDirectory
+															.getAbsolutePath()
+															+ File.separator
+															+ "introduceMethods.xml",
+													methodsType,
+													new QName(
+															"gme://gov.nih.nci.cagrid.introduce/1/Methods",
+															"methodsType"));
 
 									setProgressText("sychronizing skeleton");
 									// call the sync tools
@@ -537,7 +556,33 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		return removeButton;
 	}
 
-	public void performModify() {
+	public void performMetadataModify() {
+
+		int row = getMetadataTable().getSelectedRow();
+		if ((row < 0) || (row >= getMetadataTable().getRowCount())) {
+			PortalUtils
+					.showErrorMessage("Please select a metadata type to modify.");
+			return;
+		}
+
+		Vector v = (Vector) getMetadataTable().getValueAt(
+				getMetadataTable().getSelectedRow(), 7);
+		PortalResourceManager
+				.getInstance()
+				.getGridPortal()
+				.addGridPortalComponent(
+						new GMEMetadataConfigurationComponent(
+								v,
+								new File(
+										methodsDirectory.getAbsolutePath()
+												+ File.separator
+												+ "schema"
+												+ File.separator
+												+ serviceProperties
+														.getProperty("introduce.skeleton.service.name"))));
+	}
+
+	public void performMethodModify() {
 
 		int row = getMethodsTable().getSelectedRow();
 		if ((row < 0) || (row >= getMethodsTable().getRowCount())) {
@@ -545,8 +590,8 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			return;
 		}
 
-		MethodsTypeMethod method = (MethodsTypeMethod) getMethodsTable().getValueAt(
-				getMethodsTable().getSelectedRow(), 1);
+		MethodsTypeMethod method = (MethodsTypeMethod) getMethodsTable()
+				.getValueAt(getMethodsTable().getSelectedRow(), 1);
 		PortalResourceManager
 				.getInstance()
 				.getGridPortal()
@@ -577,7 +622,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			modifyButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dirty = true;
-					performModify();
+					performMethodModify();
 				}
 			});
 		}
@@ -608,7 +653,8 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			gridBagConstraints5.gridx = 0;
 			operationsButtonPanel = new JPanel();
 			operationsButtonPanel.setLayout(new GridBagLayout());
-			operationsButtonPanel.add(getAddMethodButton(), gridBagConstraints5);
+			operationsButtonPanel
+					.add(getAddMethodButton(), gridBagConstraints5);
 			operationsButtonPanel.add(getModifyButton(), gridBagConstraints6);
 			operationsButtonPanel.add(getRemoveButton(), gridBagConstraints7);
 		}
@@ -668,29 +714,31 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	}
 
 	/**
-	 * This method initializes contentTabbedPane	
-	 * 	
-	 * @return javax.swing.JTabbedPane	
+	 * This method initializes contentTabbedPane
+	 * 
+	 * @return javax.swing.JTabbedPane
 	 */
 	private JTabbedPane getContentTabbedPane() {
 		if (contentTabbedPane == null) {
 			contentTabbedPane = new JTabbedPane();
-			contentTabbedPane.addTab("Operations", null, getMethodsPanel(), null);
-			contentTabbedPane.addTab("Metadata", null, getMetadataPanel(), null);
+			contentTabbedPane.addTab("Operations", null, getMethodsPanel(),
+					null);
+			contentTabbedPane
+					.addTab("Metadata", null, getMetadataPanel(), null);
 		}
 		return contentTabbedPane;
 	}
 
 	/**
-	 * This method initializes metadataPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes metadataPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getMetadataPanel() {
 		if (metadataPanel == null) {
 			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
 			gridBagConstraints12.gridx = 1;
-			gridBagConstraints12.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints12.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints12.gridy = 0;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
@@ -698,7 +746,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			gridBagConstraints1.gridy = 0;
 			gridBagConstraints1.weightx = 1.0;
 			gridBagConstraints1.weighty = 1.0;
-			gridBagConstraints1.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
 			metadataPanel = new JPanel();
 			metadataPanel.setLayout(new GridBagLayout());
 			metadataPanel.add(getMetadataScrollPane(), gridBagConstraints1);
@@ -708,9 +756,9 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	}
 
 	/**
-	 * This method initializes metadataScrollPane	
-	 * 	
-	 * @return javax.swing.JScrollPane	
+	 * This method initializes metadataScrollPane
+	 * 
+	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getMetadataScrollPane() {
 		if (metadataScrollPane == null) {
@@ -721,52 +769,62 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	}
 
 	/**
-	 * This method initializes metadataTable	
-	 * 	
-	 * @return javax.swing.JTable	
+	 * This method initializes metadataTable
+	 * 
 	 */
-	private JTable getMetadataTable() {
+	private MetadataTable getMetadataTable() {
 		if (metadataTable == null) {
-			metadataTable = new JTable();
+			metadataTable = new MetadataTable(this.metadataListType);
+			metadataTable.addMouseListener(new MouseAdapter() {
+				public void mouseClicked(MouseEvent e) {
+					if (e.getClickCount() == 2) {
+						dirty = true;
+						performMetadataModify();
+					}
+				}
+			});
 		}
 		return metadataTable;
 	}
 
 	/**
-	 * This method initializes metadataButtonsPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes metadataButtonsPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getMetadataButtonsPanel() {
 		if (metadataButtonsPanel == null) {
 			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
 			gridBagConstraints16.gridx = 0;
 			gridBagConstraints16.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints16.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints16.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints16.gridy = 2;
 			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
 			gridBagConstraints15.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints15.gridy = 0;
-			gridBagConstraints15.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints15.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints15.gridx = 0;
 			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
 			gridBagConstraints14.gridx = 0;
 			gridBagConstraints14.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints14.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints14.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints14.gridy = 1;
 			metadataButtonsPanel = new JPanel();
 			metadataButtonsPanel.setLayout(new GridBagLayout());
-			metadataButtonsPanel.add(getAddMetadataButton(), gridBagConstraints15);
-			metadataButtonsPanel.add(getRemoveMetadataButton(), gridBagConstraints14);
-			metadataButtonsPanel.add(getModifyMetadataButton(), gridBagConstraints16);
+			metadataButtonsPanel.add(getAddMetadataButton(),
+					gridBagConstraints15);
+			metadataButtonsPanel.add(getRemoveMetadataButton(),
+					gridBagConstraints14);
+			metadataButtonsPanel.add(getModifyMetadataButton(),
+					gridBagConstraints16);
 		}
 		return metadataButtonsPanel;
 	}
 
 	/**
-	 * This method initializes addMetadataButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes addMetadataButton
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getAddMetadataButton() {
 		if (addMetadataButton == null) {
@@ -774,14 +832,42 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			addMetadataButton.setText("Add");
 			addMetadataButton.setToolTipText("add service metadata");
 			addMetadataButton.setIcon(IntroduceLookAndFeel.getAddIcon());
+			addMetadataButton
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							dirty = true;
+							ServiceMetadataType metadata = new ServiceMetadataType();
+
+							// add new method to array in bean
+							// this seems to be a wierd way be adding things....
+							ServiceMetadataType[] metadatas;
+							int newLength = 0;
+							if (methodsType.getMethod() != null) {
+								newLength = methodsType.getMethod().length + 1;
+								metadatas = new ServiceMetadataType[newLength];
+								System.arraycopy(methodsType.getMethod(), 0,
+										metadatas, 0,
+										methodsType.getMethod().length);
+							} else {
+								newLength = 1;
+								metadatas = new ServiceMetadataType[newLength];
+							}
+							metadatas[newLength - 1] = metadata;
+							metadataListType.setMetadata(metadatas);
+
+							getMetadataTable().addRow(metadata);
+
+							performMetadataModify();
+						}
+					});
 		}
 		return addMetadataButton;
 	}
 
 	/**
-	 * This method initializes removeMetadataButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes removeMetadataButton
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getRemoveMetadataButton() {
 		if (removeMetadataButton == null) {
@@ -789,21 +875,43 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			removeMetadataButton.setText("Remove");
 			removeMetadataButton.setToolTipText("remove service metadata");
 			removeMetadataButton.setIcon(IntroduceLookAndFeel.getRemoveIcon());
+			removeMetadataButton
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							dirty = true;
+							int row = getMetadataTable().getSelectedRow();
+							if ((row < 0)
+									|| (row >= getMetadataTable().getRowCount())) {
+								PortalUtils
+										.showErrorMessage("Please select a metdata type to remove.");
+								return;
+							}
+							getMetadataTable().removeRow(
+									getMetadataTable().getSelectedRow());
+						}
+					});
 		}
 		return removeMetadataButton;
 	}
 
 	/**
-	 * This method initializes modifyMetadataButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes modifyMetadataButton
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getModifyMetadataButton() {
 		if (modifyMetadataButton == null) {
 			modifyMetadataButton = new JButton();
 			modifyMetadataButton.setText("Modify");
-			modifyMetadataButton.setToolTipText("modify selected service medata");
+			modifyMetadataButton
+					.setToolTipText("modify selected service medata");
 			modifyMetadataButton.setIcon(IntroduceLookAndFeel.getModifyIcon());
+			modifyMetadataButton
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							performMetadataModify();
+						}
+					});
 		}
 		return modifyMetadataButton;
 	}

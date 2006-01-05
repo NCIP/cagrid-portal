@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ServiceMetadataList xmlns="gme://gov.nih.nci.cagrid.introduce/1/Metadata">
+    <Metadata namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" type="CommonServiceMetadataType" populateFromFile="true" register="false" QName="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common}CommonServiceMetadata"/>
+</ServiceMetadataList>
