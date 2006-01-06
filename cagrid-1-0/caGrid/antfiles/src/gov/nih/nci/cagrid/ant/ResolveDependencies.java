@@ -74,7 +74,16 @@ public class ResolveDependencies extends Task {
 			}
 			// figure out where to copy artifacts
 			if (getTargetDir() == null) {
-				String track = artifact.getTrack().equals(Artifact.TEST_TRACK) ? (File.separator + "test") : "";
+				
+				//pick the track
+				String track = "";
+				if(artifact.getTrack().equals(Artifact.TEST_TRACK)){
+					track="test";
+				}else if(artifact.getTrack().equals(Artifact.ENDORSED_TRACK)){
+					track="endorsed";
+				}
+				
+				//decide where to put it, based on the type
 				if (artifact.getType().equals(Artifact.JAR_TYPE)) {
 					copyTask.setTodir(new File(getExtDir().getAbsolutePath() + track + File.separator + "lib"));
 				} else if (artifact.getType().equals(Artifact.SCHEMAS_TYPE)) {
