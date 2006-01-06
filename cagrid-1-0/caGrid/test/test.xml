@@ -2,11 +2,11 @@
 <!-- caGrid Utilities build file                                             -->
 <!-- ======================================================================= -->
 <project name="caGrid_tests_harness" basedir=".">
-		
+
 	<property name="test.lib.dir" value="${test.dir}/lib" />
 	<property name="test.logs.dir" value="${test.dir}/logs" />
 	<property name="junit.results.dir" value="${test.logs.dir}/junit" />
-	
+
 
 	<!-- Get the HOSTNAME in an os independant way -->
 	<property name="env.HOSTNAME" value="${env.COMPUTERNAME}" />
@@ -55,6 +55,14 @@
 	<!-- =============================================================== -->
 	<target name="test" depends="createDartTestFiles" description="Test all the projects.">
 		<sequential>
+			<!-- Clean out old logs first -->
+			<delete>
+				<fileset dir="${junit.results.dir}">
+					<include name="*" />
+				</fileset>
+			</delete>
+
+			<!-- Now run all the projects' test, sharing the same log dir -->
 			<ant inheritall="false" dir="projects/core" antfile="build.xml" target="test">
 				<property name="junit.results.dir" value="${junit.results.dir}" />
 			</ant>
@@ -107,30 +115,38 @@
 		<property name="dart.experimental.log" value="${test.logs.dir}/${BUILDFILE}.xml" />
 
 		<concat destfile="${dart.experimental.log}">
-			<header filtering="no"><![CDATA[<cruisecontrol>
-	<info>
-		<property name="builddate" value="@BUILDSTAMP@"/>
-	</info>]]></header>		
+			<header filtering="no">
+				<![CDATA[<cruisecontrol>
+				<info>
+					<property name="builddate" value="@BUILDSTAMP@"/>
+				</info>]]></header>
 			<fileset dir="${junit.results.dir}">
 				<include name="TEST-*.xml" />
 			</fileset>
 			<fileset dir="${test.logs.dir}">
 				<include name="BuildNameExperimental.xml" />
-			</fileset>			
-			<footer filtering="no"><![CDATA[</cruisecontrol>]]></footer>
+			</fileset>
+			<footer filtering="no">
+				<![CDATA[</cruisecontrol>]]></footer>
 		</concat>
-		
+
 		<!-- Hackaroo to strip out the xml pragmas (NOTE: this requires a literal exact match) -->
-		<replace file="${dart.experimental.log}" summary="true" token="@BUILDSTAMP@" value="${BUILDSTAMP}"/>
+		<replace file="${dart.experimental.log}" summary="true" token="@BUILDSTAMP@" value="${BUILDSTAMP}" />
 		<replace file="${dart.experimental.log}" summary="true">
-			<replacetoken><![CDATA[<?xml version="1.0" encoding="UTF-8" ?>]]></replacetoken>
+			<replacetoken>
+				<![CDATA[<?xml version="1.0" encoding="UTF-8" ?>]]></replacetoken>
 		</replace>
 		<replace file="${dart.experimental.log}" summary="true">
-			<replacetoken><![CDATA[<?xml version="1.0" encoding="utf-8" ?>]]></replacetoken></replace>
+			<replacetoken>
+				<![CDATA[<?xml version="1.0" encoding="utf-8" ?>]]></replacetoken>
+		</replace>
 		<replace file="${dart.experimental.log}" summary="true">
-			<replacetoken><![CDATA[<?xml version="1.0" encoding="UTF-8"?>]]></replacetoken></replace>
+			<replacetoken>
+				<![CDATA[<?xml version="1.0" encoding="UTF-8"?>]]></replacetoken>
+		</replace>
 		<replace file="${dart.experimental.log}" summary="true">
-			<replacetoken><![CDATA[<?xml version="1.0" encoding="utf-8"?>]]></replacetoken>
+			<replacetoken>
+				<![CDATA[<?xml version="1.0" encoding="utf-8"?>]]></replacetoken>
 		</replace>
 		<ant target="publish">
 			<property name="dart.logfile" value="${dart.experimental.log}" />

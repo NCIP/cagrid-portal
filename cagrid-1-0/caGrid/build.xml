@@ -164,6 +164,8 @@
 		<ant dir="${projects.dir}/metadata" inheritAll="false" antfile="build.xml" target="clean" />
 		<delete dir="${projects.dir}/introduce/ext"/>
 		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="clean" />
+		<delete dir="${projects.dir}/dorian/ext"/>
+		<ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="clean" />
 	</target>
 
 
