@@ -36,6 +36,7 @@ GSBT - Globus Service Build Tools
 	<property name="src.dir" value="src" />
 	<property name="lib.dir" value="lib" />
 	<property name="ext.lib.dir" value="ext/lib" />
+	<property name="ext.endorsed.lib.dir" value="ext/endorsed/lib" />
 	<property name="test.src.dir" value="test/src" />
 	<property name="test.lib.dir" value="test/lib" />
 	<property name="test.log.dir" value="test/logs" />
