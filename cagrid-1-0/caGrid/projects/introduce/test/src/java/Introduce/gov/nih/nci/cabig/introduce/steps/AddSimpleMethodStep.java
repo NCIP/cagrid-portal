@@ -2,9 +2,14 @@ package gov.nih.nci.cabig.introduce.steps;
 
 import gov.nih.nci.cabig.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
 
 import java.io.File;
 import java.io.FileWriter;
+
+import javax.xml.namespace.QName;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -28,24 +33,44 @@ public class AddSimpleMethodStep extends Step {
 			System.err.println("pathtobasedir system property not set");
 			throw new Exception("pathtobasedir system property not set");
 		}
-
-		Document methodsDoc = XMLUtilities.fileNameToDocument(pathtobasedir
+		
+		MethodsType methodsType = (MethodsType) CommonTools
+		.deserializeDocument(pathtobasedir
 				+ File.separator + tci.getDir() + File.separator
-				+ "introduceMethods.xml");
+				+ "introduceMethods.xml",
+				MethodsType.class);
+		
+		MethodsTypeMethod method = new MethodsTypeMethod();
+		method.setName("newMethod");
+		MethodTypeOutput output = new MethodTypeOutput();
+		output.setClassName("void");
+		method.setOutput(output);
 
-		Element root = methodsDoc.getRootElement();
-		Element method = new Element("Method",root.getNamespace());
-		method.setAttribute("name", "simpleMethod");
-		root.addContent(method);
-		Element output = new Element("Output",root.getNamespace());
-		output.setAttribute("className","void");
-		method.addContent(output);
-
-		FileWriter fw = new FileWriter(pathtobasedir + File.separator
-				+ tci.getDir() + File.separator + "introduceMethods.xml");
-		fw.write(XMLUtilities.formatXML(XMLUtilities
-				.documentToString(methodsDoc)));
-		fw.close();
+		// add new method to array in bean
+		// this seems to be a wierd way be adding things....
+		MethodsTypeMethod[] newMethods;
+		int newLength = 0;
+		if (methodsType.getMethod() != null) {
+			newLength = methodsType.getMethod().length + 1;
+			newMethods = new MethodsTypeMethod[newLength];
+			System.arraycopy(methodsType.getMethod(), 0,
+					newMethods, 0,
+					methodsType.getMethod().length);
+		} else {
+			newLength = 1;
+			newMethods = new MethodsTypeMethod[newLength];
+		}
+		newMethods[newLength - 1] = method;
+		methodsType.setMethod(newMethods);
+		
+		CommonTools
+		.serializeDocument(pathtobasedir
+				+ File.separator + tci.getDir() + File.separator
+				+ "introduceMethods.xml",
+				methodsType,
+				new QName(
+						"gme://gov.nih.nci.cagrid.introduce/1/Methods",
+						"methodsType"));
 
 		String cmd = CommonTools.getAntSkeletonResyncCommand(pathtobasedir
 				+ File.separator + tci.getDir());
