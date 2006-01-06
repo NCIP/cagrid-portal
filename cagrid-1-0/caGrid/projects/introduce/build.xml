@@ -37,7 +37,7 @@
 	<!-- testing stuff -->
 	<property name="test.dir" location="${basedir}/test" />
 	<property name="test.src.dir" location="${test.dir}/src/java" />
-	<property name="test.classes.dir" location="${classes.dir}/test" />
+	<property name="test.classes.dir" location="${build.dir}/test_classes" />
 	<property name="test.lib.dir" location="${test.dir}/lib" />
 	<property name="ext.test.lib.dir" location="${ext.dir}/test/lib" />
 	<property name="test.log.dir" location="${test.dir}/logs" />
