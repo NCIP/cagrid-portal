@@ -78,9 +78,9 @@ public class ResolveDependencies extends Task {
 				//pick the track
 				String track = "";
 				if(artifact.getTrack().equals(Artifact.TEST_TRACK)){
-					track="test";
+					track=File.separator+"test";
 				}else if(artifact.getTrack().equals(Artifact.ENDORSED_TRACK)){
-					track="endorsed";
+					track=File.separator+"endorsed";
 				}
 				
 				//decide where to put it, based on the type
