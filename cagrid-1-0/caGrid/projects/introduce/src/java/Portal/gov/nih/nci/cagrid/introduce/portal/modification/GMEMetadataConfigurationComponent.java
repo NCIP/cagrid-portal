@@ -81,9 +81,10 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 	public GMEMetadataConfigurationComponent(Vector typeInfo, File schemaDir) {
 		this.typeInfo = typeInfo;
 		this.schemaDir = schemaDir;
+		me = this;
 		initialize();
 		this.gmePanel.discoverFromGME();
-		me = this;
+
 	}
 
 	/**
@@ -220,16 +221,13 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 			gmePanel.getTypesComboBox().addItemListener(
 					new java.awt.event.ItemListener() {
 						public void itemStateChanged(java.awt.event.ItemEvent e) {
-							if (gmePanel.currentNamespace != null) {
-								qnameDomain.setText("gme://"
-										+ (String) gmePanel
-												.getNamespaceComboBox()
-												.getSelectedItem()
-										+ (String) gmePanel.getSchemaComboBox()
-												.getSelectedItem());
-								qnameName.setText((String) gmePanel
-										.getTypesComboBox().getSelectedItem());
-							}
+							qnameDomain.setText("gme://"
+									+ (String) gmePanel.getNamespaceComboBox()
+											.getSelectedItem()
+									+ (String) gmePanel.getSchemaComboBox()
+											.getSelectedItem());
+							qnameName.setText((String) gmePanel
+									.getTypesComboBox().getSelectedItem());
 
 						}
 					});

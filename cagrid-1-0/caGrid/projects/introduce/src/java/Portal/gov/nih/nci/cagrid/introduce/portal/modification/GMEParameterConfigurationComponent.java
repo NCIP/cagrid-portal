@@ -74,9 +74,9 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
 		this.typeInfo = typeInfo;
 		this.schemaDir = schemaDir;
 		this.handleParameterName = handleParameterName;
+		me = this;
 		initialize();
 		this.gmePanel.discoverFromGME();
-		me = this;
 	}
 
 	/**
