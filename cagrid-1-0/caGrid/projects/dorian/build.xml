@@ -243,7 +243,6 @@ GSBT - Globus Service Build Tools
 					<include name="*.jar" />
 					<exclude name="${stubs.jar.name}" />
 					<exclude name="${jar.name}" />
-					<exclude name="opensaml.jar" />
 					<exclude name="xml-apis.jar" />
 					<exclude name="xercesImpl.jar" />
 				</fileset>
@@ -275,7 +274,6 @@ GSBT - Globus Service Build Tools
 					<include name="*.jar" />
 					<exclude name="${stubs.jar.name}" />
 					<exclude name="${jar.name}" />
-					<exclude name="opensaml.jar" />
 					<exclude name="xml-apis.jar" />
 					<exclude name="xercesImpl.jar" />
 				</fileset>
@@ -304,7 +302,6 @@ GSBT - Globus Service Build Tools
 					<include name="*.jar" />
 					<exclude name="${stubs.jar.name}" />
 					<exclude name="${jar.name}" />
-					<exclude name="opensaml.jar" />
 					<exclude name="xml-apis.jar" />
 					<exclude name="xercesImpl.jar" />
 				</fileset>

@@ -76,5 +76,6 @@
 	<classpathentry sourcepath="/cagrid-opensaml/src" kind="lib" path="ext/lib/cagrid-opensaml-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/endorsed/lib/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="ext/endorsed/lib/xml-apis.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/opensaml.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
