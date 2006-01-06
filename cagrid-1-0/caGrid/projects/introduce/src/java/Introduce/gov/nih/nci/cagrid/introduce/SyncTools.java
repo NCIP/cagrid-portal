@@ -89,8 +89,9 @@ public class SyncTools {
 
 	private void populateMetadata() {
 		try {
-			this.methodsType = (MethodsType) CommonTools.deserializeDocument(this.baseDirectory
-					+ File.separator + "introduceMethods.xml", MethodsType.class);
+			this.methodsType = (MethodsType) CommonTools.deserializeDocument(
+					this.baseDirectory + File.separator
+							+ "introduceMethods.xml", MethodsType.class);
 		} catch (Exception e) {
 			System.err.println("ERROR: problem populating metadata from file: "
 					+ e.getMessage());
@@ -193,20 +194,23 @@ public class SyncTools {
 		JavaMethod[] methods = sourceI.getMethods();
 
 		// look at doc and compare to interface
-		for (int methodIndex = 0; methodIndex < this.methodsType.getMethod().length; methodIndex++) {
-			MethodsTypeMethod mel = this.methodsType.getMethod(methodIndex);
-			boolean found = false;
-			for (int i = 0; i < methods.length; i++) {
-				String methodName = methods[i].getName();
-				if (mel.getName().equals(methodName)) {
-					found = true;
-					break;
+		if (methodsType.getMethod() != null) {
+			for (int methodIndex = 0; methodIndex < this.methodsType
+					.getMethod().length; methodIndex++) {
+				MethodsTypeMethod mel = this.methodsType.getMethod(methodIndex);
+				boolean found = false;
+				for (int i = 0; i < methods.length; i++) {
+					String methodName = methods[i].getName();
+					if (mel.getName().equals(methodName)) {
+						found = true;
+						break;
+					}
 				}
-			}
-			if (!found) {
-				System.out.println("Found a method for addition: "
-						+ mel.getName());
-				this.additions.add(mel);
+				if (!found) {
+					System.out.println("Found a method for addition: "
+							+ mel.getName());
+					this.additions.add(mel);
+				}
 			}
 		}
 
@@ -214,12 +218,15 @@ public class SyncTools {
 		for (int i = 0; i < methods.length; i++) {
 			String methodName = methods[i].getName();
 			boolean found = false;
-			for (int methodIndex = 0; methodIndex < this.methodsType
-					.getMethod().length; methodIndex++) {
-				MethodsTypeMethod mel = this.methodsType.getMethod(methodIndex);
-				if (mel.getName().equals(methodName)) {
-					found = true;
-					break;
+			if (methodsType.getMethod() != null) {
+				for (int methodIndex = 0; methodIndex < this.methodsType
+						.getMethod().length; methodIndex++) {
+					MethodsTypeMethod mel = this.methodsType
+							.getMethod(methodIndex);
+					if (mel.getName().equals(methodName)) {
+						found = true;
+						break;
+					}
 				}
 			}
 			if (!found) {
