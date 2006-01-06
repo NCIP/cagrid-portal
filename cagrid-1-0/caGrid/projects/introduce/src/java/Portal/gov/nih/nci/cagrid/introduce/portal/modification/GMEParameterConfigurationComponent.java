@@ -310,6 +310,8 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
 					} catch (IOException e2) {
 						e2.printStackTrace();
 					}
+					
+					performDone();
 
 					dispose();
 				}

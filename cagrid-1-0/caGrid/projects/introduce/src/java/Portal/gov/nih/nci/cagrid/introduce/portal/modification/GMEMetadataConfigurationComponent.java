@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.projectmobius.common.GridServiceResolver;
+import org.projectmobius.common.MalformedNamespaceException;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.Namespace;
 import org.projectmobius.gme.XMLDataModelService;
@@ -136,7 +137,8 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 			gridBagConstraints2.gridy = 2;
 			qnameLabel = new JLabel();
 			qnameLabel.setText("Qname:");
-			qnameLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
+			qnameLabel
+					.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.gridx = 0;
 			gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
@@ -158,7 +160,7 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 			customPanel.add(qnameLabel, gridBagConstraints2);
 			customPanel.add(getIsPopulateFromFile(), gridBagConstraints3);
 			customPanel.add(getIsRegister(), gridBagConstraints7);
-			customPanel.add(getQname(), gridBagConstraints8);
+			customPanel.add(getQnameDomain(), gridBagConstraints8);
 			customPanel.add(getQnameName(), gridBagConstraints11);
 			customPanel.add(qnameDomainLabel, gridBagConstraints21);
 			customPanel.add(qnameNameLabel, gridBagConstraints31);
@@ -208,8 +210,29 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 	 */
 	private GMEConfigurationPanel getGmePanel() {
 		if (gmePanel == null) {
-			gmePanel = new GMEConfigurationPanel(GMEConfigurationPanel.ELEMENT_ONLY);
-			gmePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "GME", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+			gmePanel = new GMEConfigurationPanel(
+					GMEConfigurationPanel.ELEMENT_ONLY);
+			gmePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+					null, "GME",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					IntroduceLookAndFeel.getPanelLabelColor()));
+			gmePanel.getTypesComboBox().addItemListener(
+					new java.awt.event.ItemListener() {
+						public void itemStateChanged(java.awt.event.ItemEvent e) {
+							if (gmePanel.currentNamespace != null) {
+								qnameDomain.setText("gme://"
+										+ (String) gmePanel
+												.getNamespaceComboBox()
+												.getSelectedItem()
+										+ (String) gmePanel.getSchemaComboBox()
+												.getSelectedItem());
+								qnameName.setText((String) gmePanel
+										.getTypesComboBox().getSelectedItem());
+							}
+
+						}
+					});
 		}
 		return gmePanel;
 	}
@@ -324,6 +347,8 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 						e2.printStackTrace();
 					}
 
+					performDone();
+
 					dispose();
 				}
 			});
@@ -349,17 +374,17 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 		} else {
 			typeInfo.set(index++, null);
 		}
-		//skip location
-		index++;
 		typeInfo.set(index++, String.valueOf(isPopulateFromFile.isSelected()));
 		typeInfo.set(index++, String.valueOf(isRegister.isSelected()));
+		typeInfo.set(index++, getQnameDomain().getText() + ":"
+				+ getQnameName().getText());
 
 	}
 
 	/**
-	 * This method initializes isPopulateFromFile	
-	 * 	
-	 * @return javax.swing.JCheckBox	
+	 * This method initializes isPopulateFromFile
+	 * 
+	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getIsPopulateFromFile() {
 		if (isPopulateFromFile == null) {
@@ -369,9 +394,9 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 	}
 
 	/**
-	 * This method initializes isRegister	
-	 * 	
-	 * @return javax.swing.JCheckBox	
+	 * This method initializes isRegister
+	 * 
+	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getIsRegister() {
 		if (isRegister == null) {
@@ -381,11 +406,11 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 	}
 
 	/**
-	 * This method initializes qname	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes qname
+	 * 
+	 * @return javax.swing.JTextField
 	 */
-	private JTextField getQname() {
+	private JTextField getQnameDomain() {
 		if (qnameDomain == null) {
 			qnameDomain = new JTextField();
 		}
@@ -393,9 +418,9 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 	}
 
 	/**
-	 * This method initializes qnameName	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes qnameName
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getQnameName() {
 		if (qnameName == null) {

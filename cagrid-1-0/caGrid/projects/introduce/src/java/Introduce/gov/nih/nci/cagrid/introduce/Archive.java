@@ -97,6 +97,10 @@ public class Archive {
 		out.close();
 
 	}
+	
+	private static void cleanup(String id,String serviceName){
+		
+	}
 
 	private static void unzip(String baseDir, ZipInputStream zin, String s)
 			throws IOException {

@@ -441,7 +441,7 @@ public class GMEConfigurationPanel extends JPanel {
 		if (gme == null) {
 			gme = new JTextField();
 			gme
-					.setText("http://localhost:8080/wsrf/services/GlobalModelExchange");
+					.setText("http://localhost:8080/wsrf/services/cagrid/GlobalModelExchange");
 		}
 		return gme;
 	}

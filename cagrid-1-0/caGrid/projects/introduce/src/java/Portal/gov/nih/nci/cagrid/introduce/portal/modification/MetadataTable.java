@@ -31,8 +31,8 @@ public class MetadataTable extends PortalTable {
 	
 	public static String REGISTER = "Register";
 	
-	public static String QNAME = "Qname";
-
+	public static String QNAME_NS = "Qname Namespace";
+	
 	public static String DATA1 = "DATA1";
 
 	private ServiceMetadataListType metadatas;
@@ -58,7 +58,7 @@ public class MetadataTable extends PortalTable {
 		v.add(metadata.getLocation());
 		v.add(String.valueOf(metadata.isPopulateFromFile()));
 		v.add(String.valueOf(metadata.isRegister()));
-		v.add(metadata.getQName());
+		v.add(metadata.getQName().getNamespaceURI());
 		v.add(v);
 
 		((DefaultTableModel) this.getModel()).addRow(v);
@@ -87,7 +87,7 @@ public class MetadataTable extends PortalTable {
 		model.addColumn(LOCATION);
 		model.addColumn(POPULATE_FROM_FILE);
 		model.addColumn(REGISTER);
-		model.addColumn(QNAME);
+		model.addColumn(QNAME_NS);
 		model.addColumn(DATA1);
 
 		return model;

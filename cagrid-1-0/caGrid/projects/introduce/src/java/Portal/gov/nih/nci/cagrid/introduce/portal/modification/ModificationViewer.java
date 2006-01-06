@@ -43,7 +43,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.24 2006-01-05 01:38:48 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.25 2006-01-06 14:36:05 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -481,11 +481,64 @@ public class ModificationViewer extends GridPortalBaseFrame {
 
 						public void process() {
 							try {
-								setProgressText("writting methods document");
 
 								if (confirmed == JOptionPane.OK_OPTION) {
+									setProgressText("editing service metadata object");
+									ServiceMetadataType[] metadataArray = new ServiceMetadataType[metadataTable
+											.getRowCount()];
+									for (int i = 0; i < metadataArray.length; i++) {
+										String className = (String)metadataTable.getValueAt(i,0);
+										String namespace = (String)metadataTable.getValueAt(i,1);
+										String type = (String)metadataTable.getValueAt(i,2);
+										String location = (String)metadataTable.getValueAt(i,3);
+										String populateFromFile = (String)metadataTable.getValueAt(i,4);
+										String register = (String)metadataTable.getValueAt(i,5);
+										String qname = (String)metadataTable.getValueAt(i,6);
+										
+										ServiceMetadataType metadata = new ServiceMetadataType();
+										if (className != null && !className.equals("")) {
+											metadata.setClassName(className);
+										}
+										if (namespace != null && !namespace.equals("")) {
+											metadata.setNamespace(namespace);
+										}
+										if (type != null && !type.equals("")) {
+											metadata.setType(type);
+										}
+										if (location != null && !location.equals("")) {
+											metadata.setLocation(location);
+										}
+										if (populateFromFile != null && !populateFromFile.equals("")) {
+											metadata.setPopulateFromFile(Boolean.getBoolean(populateFromFile));
+										}
+										if (register != null && !register.equals("")) {
+											metadata.setRegister(Boolean.getBoolean(register));
+										}
+										if (qname != null && !qname.equals("")) {
+											QName qn = new QName(register);
+											metadata.setQName(qn);
+										}	
+										metadataArray[i] = metadata;
+										
+									}
+									metadataListType.setMetadata(metadataArray);
+									
+									setProgressText("writting service metadata document");
 									System.out
-											.println("Writting service.methods file.");
+											.println("Writting service metadata file.");
+									CommonTools
+											.serializeDocument(
+													methodsDirectory
+															.getAbsolutePath()
+															+ File.separator
+															+ "introduceMetadata.xml",
+													metadataListType,
+													new QName(
+															"gme://gov.nih.nci.cagrid.introduce/1/Metadata",
+															"ServiceMetadataListType"));
+									setProgressText("writting service methods document");
+									System.out
+											.println("Writting service methods file.");
 									CommonTools
 											.serializeDocument(
 													methodsDirectory
