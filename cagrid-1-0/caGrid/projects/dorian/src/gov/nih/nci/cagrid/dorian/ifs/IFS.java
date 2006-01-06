@@ -21,6 +21,10 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
 import gov.nih.nci.cagrid.dorian.ifs.bean.UserPolicyFault;
+import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
+import gov.nih.nci.cagrid.opensaml.SAMLAttribute;
+import gov.nih.nci.cagrid.opensaml.SAMLAttributeStatement;
+import gov.nih.nci.cagrid.opensaml.SAMLAuthenticationStatement;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -29,11 +33,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
-
-import org.opensaml.SAMLAssertion;
-import org.opensaml.SAMLAttribute;
-import org.opensaml.SAMLAttributeStatement;
-import org.opensaml.SAMLAuthenticationStatement;
 
 
 /**
@@ -235,11 +234,11 @@ public class IFS extends LoggingObject {
 		}
 
 		IFSUser usr = null;
-		if (!um.determineIfUserExists(idp.getId(), auth.getSubject().getName())) {
+		if (!um.determineIfUserExists(idp.getId(), auth.getSubject().getNameIdentifier().getName())) {
 			try {
 				usr = new IFSUser();
 				usr.setIdPId(idp.getId());
-				usr.setUID(auth.getSubject().getName());
+				usr.setUID(auth.getSubject().getNameIdentifier().getName());
 				if (emailIsValid) {
 					usr.setEmail(email);
 				}
@@ -258,7 +257,7 @@ public class IFS extends LoggingObject {
 			}
 		} else {
 			try {
-				usr = um.getUser(idp.getId(), auth.getSubject().getName());
+				usr = um.getUser(idp.getId(), auth.getSubject().getNameIdentifier().getName());
 				if (emailIsValid) {
 					if ((usr.getEmail() == null) || (!usr.getEmail().equals(email))) {
 						usr.setEmail(email);

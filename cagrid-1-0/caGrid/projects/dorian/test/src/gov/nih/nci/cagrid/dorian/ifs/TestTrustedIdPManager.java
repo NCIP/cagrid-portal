@@ -11,6 +11,10 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
 import gov.nih.nci.cagrid.dorian.test.Utils;
+import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
+import gov.nih.nci.cagrid.opensaml.SAMLAuthenticationStatement;
+import gov.nih.nci.cagrid.opensaml.SAMLNameIdentifier;
+import gov.nih.nci.cagrid.opensaml.SAMLSubject;
 
 import java.io.File;
 import java.io.StringReader;
@@ -27,9 +31,6 @@ import junit.framework.TestCase;
 
 import org.apache.xml.security.signature.XMLSignature;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.opensaml.SAMLAssertion;
-import org.opensaml.SAMLAuthenticationStatement;
-import org.opensaml.SAMLSubject;
 
 
 /**
@@ -303,9 +304,8 @@ public class TestTrustedIdPManager extends TestCase {
 		String federation = cert.getSubjectDN().toString();
 		String ipAddress = null;
 		String subjectDNS = null;
-
-		SAMLSubject sub = new SAMLSubject(name, federation, "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
-			null, null, null);
+		SAMLNameIdentifier ni = new SAMLNameIdentifier(name, federation, "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
+		SAMLSubject sub = new SAMLSubject(ni,null, null, null);
 		SAMLAuthenticationStatement auth = new SAMLAuthenticationStatement(sub,
 			"urn:oasis:names:tc:SAML:1.0:am:password", new Date(), ipAddress, subjectDNS, null);
 
@@ -314,7 +314,7 @@ public class TestTrustedIdPManager extends TestCase {
 		SAMLAssertion saml = new SAMLAssertion(issuer, start2, end2, null, null, l);
 		List a = new ArrayList();
 		a.add(cert);
-		saml.sign(XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA1, pair.getPrivate(), a, false);
+		saml.sign(XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA1, pair.getPrivate(), a);
 
 		return new IdPContainer(idp, cert, saml);
 	}

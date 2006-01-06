@@ -2,6 +2,8 @@ package edu.osu.idp.portal;
 
 import gov.nih.nci.cagrid.dorian.ifs.portal.IdPAuthenticationPanel;
 import gov.nih.nci.cagrid.dorian.portal.IdPConf;
+import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
+import gov.nih.nci.cagrid.opensaml.SAMLResponse;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -18,8 +20,6 @@ import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.protocol.Protocol;
-import org.opensaml.SAMLAssertion;
-import org.opensaml.SAMLResponse;
 
 
 /**

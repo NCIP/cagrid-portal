@@ -9,6 +9,7 @@ import gov.nih.nci.cagrid.dorian.portal.DorianPortalConf;
 import gov.nih.nci.cagrid.dorian.portal.DorianServiceListComboBox;
 import gov.nih.nci.cagrid.dorian.portal.IdPConf;
 import gov.nih.nci.cagrid.dorian.portal.ProxyManager;
+import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -27,7 +28,6 @@ import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 
 import org.globus.gsi.GlobusCredential;
-import org.opensaml.SAMLAssertion;
 import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;

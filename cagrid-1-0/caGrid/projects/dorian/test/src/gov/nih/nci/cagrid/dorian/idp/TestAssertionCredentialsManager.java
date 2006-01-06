@@ -8,6 +8,12 @@ import gov.nih.nci.cagrid.dorian.common.IOUtils;
 import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
 import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
 import gov.nih.nci.cagrid.dorian.test.Utils;
+import gov.nih.nci.cagrid.opensaml.InvalidCryptoException;
+import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
+import gov.nih.nci.cagrid.opensaml.SAMLAttribute;
+import gov.nih.nci.cagrid.opensaml.SAMLAttributeStatement;
+import gov.nih.nci.cagrid.opensaml.SAMLAuthenticationStatement;
+import gov.nih.nci.cagrid.opensaml.SAMLStatement;
 
 import java.io.File;
 import java.security.KeyPair;
@@ -21,12 +27,6 @@ import java.util.Iterator;
 import junit.framework.TestCase;
 
 import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.opensaml.InvalidCryptoException;
-import org.opensaml.SAMLAssertion;
-import org.opensaml.SAMLAttribute;
-import org.opensaml.SAMLAttributeStatement;
-import org.opensaml.SAMLAuthenticationStatement;
-import org.opensaml.SAMLStatement;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -50,12 +50,12 @@ public class TestAssertionCredentialsManager extends TestCase {
 	public void verifySAMLAssertion(SAMLAssertion saml, AssertionCredentialsManager cm)
 	throws Exception{
 		assertNotNull(saml);
-		saml.verify(cm.getIdPCertificate(), false);
+		saml.verify(cm.getIdPCertificate());
 			
 		try {
 			// Test against a bad certificate
 			saml.verify(CertUtil.loadCertificate(CA_RESOURCES_DIR
-					+ "/bmi-cacert.pem"), false);
+					+ "/bmi-cacert.pem"));
 			assertTrue(false);
 		} catch (InvalidCryptoException ex) {
 
@@ -75,7 +75,7 @@ public class TestAssertionCredentialsManager extends TestCase {
 					authFound = true;
 				}
 				SAMLAuthenticationStatement auth = (SAMLAuthenticationStatement)stmt;
-				assertEquals(TEST_UID,auth.getSubject().getName());
+				assertEquals(TEST_UID,auth.getSubject().getNameIdentifier().getName());
 				assertEquals("urn:oasis:names:tc:SAML:1.0:am:password",auth.getAuthMethod());
 			}
 			
@@ -86,7 +86,7 @@ public class TestAssertionCredentialsManager extends TestCase {
 					emailFound = true;
 				}
 				SAMLAttributeStatement att = (SAMLAttributeStatement)stmt;
-				assertEquals(TEST_UID,att.getSubject().getName());
+				assertEquals(TEST_UID,att.getSubject().getNameIdentifier().getName());
 				Iterator i = att.getAttributes();
 				assertTrue(i.hasNext());
 				SAMLAttribute a = (SAMLAttribute)i.next();

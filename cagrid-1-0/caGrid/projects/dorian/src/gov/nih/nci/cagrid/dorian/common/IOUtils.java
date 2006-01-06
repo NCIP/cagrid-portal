@@ -1,11 +1,11 @@
 package gov.nih.nci.cagrid.dorian.common;
 
+import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
-import org.opensaml.SAMLAssertion;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>

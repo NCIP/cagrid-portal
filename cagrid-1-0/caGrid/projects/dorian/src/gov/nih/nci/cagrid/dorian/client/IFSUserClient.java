@@ -17,12 +17,12 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.dorian.ifs.bean.UserPolicyFault;
 import gov.nih.nci.cagrid.dorian.wsrf.DorianPortType;
 import gov.nih.nci.cagrid.dorian.wsrf.IFSCreateProxy;
+import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import java.security.KeyPair;
 import java.security.cert.X509Certificate;
 
 import org.globus.gsi.GlobusCredential;
-import org.opensaml.SAMLAssertion;
 
 
 public class IFSUserClient extends DorianBaseClient implements IFSUserAccess {

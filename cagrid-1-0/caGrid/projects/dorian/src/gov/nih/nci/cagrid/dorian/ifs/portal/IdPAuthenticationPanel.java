@@ -1,10 +1,9 @@
 package gov.nih.nci.cagrid.dorian.ifs.portal;
 
 import gov.nih.nci.cagrid.dorian.portal.IdPConf;
+import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import javax.swing.JPanel;
-
-import org.opensaml.SAMLAssertion;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>

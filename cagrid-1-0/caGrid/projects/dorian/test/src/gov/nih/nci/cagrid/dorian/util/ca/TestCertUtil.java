@@ -21,7 +21,7 @@ import org.bouncycastle.jce.PKCS10CertificationRequest;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class CertTest extends TestCase {
+public class TestCertUtil extends TestCase {
 	public static String RESOURCES_DIR = "resources" + File.separator
 			+ "ca-test";
 

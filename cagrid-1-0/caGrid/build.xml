@@ -98,6 +98,19 @@
 				<include name="**" />
 			</fileset>
 		</artifact>
+
+		<artifact track="main" type="jars" id="opensaml.jars">
+			<antcall target="build-opensaml" />
+			<fileset dir="${projects.dir}/opensaml/dist">
+				<include name="cagrid-opensaml-1.1.jar" />
+			</fileset>
+		</artifact>
+		<artifact track="endorsed" type="jars" id="opensaml.endorsed">
+			<fileset dir="${projects.dir}/opensaml/endorsed">
+				<include name="xercesImpl.jar" />
+				<include name="xml-apis.jar" />
+			</fileset>
+		</artifact>
 	</target>
 
 
@@ -106,6 +119,14 @@
 	<!-- =============================================================== -->
 	<target name="build-core" depends="prepare" description="Builds the core">
 		<ant dir="${projects.dir}/core" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+	<!-- =============================================================== -->
+	<!-- OPENSAML: This cannot have any dependencies on other projects       -->
+	<!-- =============================================================== -->
+
+	<target name="build-opensaml" depends="prepare" description="Builds opensaml">
+		<ant dir="${projects.dir}/opensaml" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
 
@@ -118,7 +139,7 @@
 		</resolveDependencies>
 		<ant dir="${projects.dir}/metadata" inheritAll="false" antfile="build.xml" target="jar" />
 	</target>
-	
+
 	<!-- =============================================================== -->
 	<!-- DORIAN:                                                         -->
 	<!-- =============================================================== -->
@@ -130,6 +151,8 @@
 			<artifact refid="metadata.jars" />
 			<artifact refid="metadata.schemas" />
 			<artifact refid="metadata.mappings" />
+			<artifact refid="opensaml.jars" />
+			<artifact refid="opensaml.endorsed" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="all" />
 	</target>

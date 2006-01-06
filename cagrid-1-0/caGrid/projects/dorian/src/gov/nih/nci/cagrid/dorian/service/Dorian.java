@@ -33,11 +33,11 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
 import gov.nih.nci.cagrid.dorian.ifs.bean.UserPolicyFault;
+import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 
-import org.opensaml.SAMLAssertion;
 import org.projectmobius.common.MobiusConfigurator;
 import org.projectmobius.common.MobiusResourceManager;
 

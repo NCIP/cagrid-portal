@@ -7,9 +7,9 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidAssertionFault;
 import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidProxyFault;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.dorian.ifs.bean.UserPolicyFault;
+import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import org.globus.gsi.GlobusCredential;
-import org.opensaml.SAMLAssertion;
 
 public interface IFSUserAccess {
 

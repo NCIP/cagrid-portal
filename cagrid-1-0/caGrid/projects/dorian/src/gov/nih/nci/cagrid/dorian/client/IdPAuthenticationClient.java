@@ -13,8 +13,8 @@ import gov.nih.nci.cagrid.dorian.common.DorianFault;
 import gov.nih.nci.cagrid.dorian.common.IOUtils;
 import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.dorian.wsrf.DorianPortType;
+import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
-import org.opensaml.SAMLAssertion;
 import org.projectmobius.common.XMLUtilities;
 
 /**

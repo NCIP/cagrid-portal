@@ -18,10 +18,9 @@ import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserStatus;
 import gov.nih.nci.cagrid.dorian.idp.bean.InvalidUserPropertyFault;
 import gov.nih.nci.cagrid.dorian.idp.bean.NoSuchUserFault;
 import gov.nih.nci.cagrid.dorian.idp.bean.StateCode;
+import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import java.security.cert.X509Certificate;
-
-import org.opensaml.SAMLAssertion;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>

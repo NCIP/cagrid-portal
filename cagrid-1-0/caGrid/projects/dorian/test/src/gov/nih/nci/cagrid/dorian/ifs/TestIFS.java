@@ -19,6 +19,12 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
 import gov.nih.nci.cagrid.dorian.test.Utils;
+import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
+import gov.nih.nci.cagrid.opensaml.SAMLAttribute;
+import gov.nih.nci.cagrid.opensaml.SAMLAttributeStatement;
+import gov.nih.nci.cagrid.opensaml.SAMLAuthenticationStatement;
+import gov.nih.nci.cagrid.opensaml.SAMLNameIdentifier;
+import gov.nih.nci.cagrid.opensaml.SAMLSubject;
 
 import java.security.KeyPair;
 import java.security.PrivateKey;
@@ -30,17 +36,13 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.xml.namespace.QName;
+
 import junit.framework.TestCase;
 
 import org.apache.xml.security.signature.XMLSignature;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.globus.gsi.GlobusCredential;
-import org.opensaml.QName;
-import org.opensaml.SAMLAssertion;
-import org.opensaml.SAMLAttribute;
-import org.opensaml.SAMLAttributeStatement;
-import org.opensaml.SAMLAuthenticationStatement;
-import org.opensaml.SAMLSubject;
 
 
 /**
@@ -586,19 +588,20 @@ public class TestIFS extends TestCase {
 			String federation = cert.getSubjectDN().toString();
 			String ipAddress = null;
 			String subjectDNS = null;
-
-			SAMLSubject sub = new SAMLSubject(id, federation, "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
-				null, null, null);
+			SAMLNameIdentifier ni = new SAMLNameIdentifier(id, federation, "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
+			SAMLNameIdentifier ni2 = new SAMLNameIdentifier(id, federation, "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
+			SAMLSubject sub = new SAMLSubject(ni,null, null, null);
+			SAMLSubject sub2 = new SAMLSubject(ni2,null, null, null);
 			SAMLAuthenticationStatement auth = new SAMLAuthenticationStatement(sub, method, new Date(), ipAddress,
 				subjectDNS, null);
 			QName name = new QName(EMAIL_NAMESPACE, EMAIL_NAME);
 			List vals = new ArrayList();
 			vals.add(email);
-			SAMLAttribute att = new SAMLAttribute(name.getLocalName(), name.getNamespaceURI(), name, (long) 0, vals);
+			SAMLAttribute att = new SAMLAttribute(name.getLocalPart(), name.getNamespaceURI(), name, (long) 0, vals);
 
 			List atts = new ArrayList();
 			atts.add(att);
-			SAMLAttributeStatement attState = new SAMLAttributeStatement(sub, atts);
+			SAMLAttributeStatement attState = new SAMLAttributeStatement(sub2, atts);
 
 			List l = new ArrayList();
 			l.add(auth);
@@ -607,7 +610,7 @@ public class TestIFS extends TestCase {
 			SAMLAssertion saml = new SAMLAssertion(issuer, start, end, null, null, l);
 			List a = new ArrayList();
 			a.add(cert);
-			saml.sign(XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA1, key, a, false);
+			saml.sign(XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA1, key, a);
 
 			return saml;
 		} catch (Exception e) {

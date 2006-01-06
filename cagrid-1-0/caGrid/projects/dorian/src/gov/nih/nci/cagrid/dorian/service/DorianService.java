@@ -23,6 +23,7 @@ import gov.nih.nci.cagrid.dorian.wsrf.IFSUpdateUserResponse;
 import gov.nih.nci.cagrid.dorian.wsrf.IdpFindUsersResponse;
 import gov.nih.nci.cagrid.dorian.wsrf.IdpRemoveUserResponse;
 import gov.nih.nci.cagrid.dorian.wsrf.IdpUpdateUserResponse;
+import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import java.rmi.RemoteException;
 import java.security.PublicKey;
@@ -32,7 +33,6 @@ import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.globus.wsrf.ResourceContext;
 import org.globus.wsrf.security.SecurityManager;
 import org.globus.wsrf.utils.AddressingUtils;
-import org.opensaml.SAMLAssertion;
 
 
 /**

@@ -11,6 +11,8 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidTrustedIdPFault;
 import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
+import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
+import gov.nih.nci.cagrid.opensaml.SAMLException;
 
 import java.io.StringReader;
 import java.security.cert.X509Certificate;
@@ -19,9 +21,6 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.opensaml.SAMLAssertion;
-import org.opensaml.SAMLException;
 
 
 /**
@@ -209,7 +208,7 @@ public class TrustedIdPManager extends LoggingObject {
 		for (int i = 0; i < idps.length; i++) {
 			try {
 				X509Certificate cert = CertUtil.loadCertificateFromString(idps[i].getIdPCertificate());
-				saml.verify(cert, false);
+				saml.verify(cert);
 				return idps[i];
 			} catch (SAMLException se) {
 

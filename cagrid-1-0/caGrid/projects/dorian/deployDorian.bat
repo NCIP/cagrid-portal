@@ -1,1 +1,2 @@
-C:\projects\ws-core-4.0.1\bin\globus-deploy-gar.bat dorian.gar
+%GLOBUS_LOCATION%\bin\globus-deploy-gar.bat dorian.gar
+cp ext\endorsed\lib\* %GLOBUS_LOCATION%\endorsed

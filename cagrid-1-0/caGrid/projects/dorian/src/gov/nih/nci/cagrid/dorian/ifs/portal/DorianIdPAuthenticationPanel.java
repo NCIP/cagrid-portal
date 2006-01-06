@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.dorian.ifs.portal;
 import gov.nih.nci.cagrid.dorian.client.IdPAuthenticationClient;
 import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.dorian.portal.IdPConf;
+import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -12,8 +13,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-
-import org.opensaml.SAMLAssertion;
 
 
 /**

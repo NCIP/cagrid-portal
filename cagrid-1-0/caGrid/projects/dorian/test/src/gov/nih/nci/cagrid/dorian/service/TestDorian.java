@@ -34,6 +34,11 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
 import gov.nih.nci.cagrid.dorian.test.Utils;
+import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
+import gov.nih.nci.cagrid.opensaml.SAMLAttribute;
+import gov.nih.nci.cagrid.opensaml.SAMLAttributeStatement;
+import gov.nih.nci.cagrid.opensaml.SAMLAuthenticationStatement;
+import gov.nih.nci.cagrid.opensaml.SAMLStatement;
 
 import java.io.File;
 import java.security.KeyPair;
@@ -49,11 +54,6 @@ import junit.framework.TestCase;
 
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.globus.gsi.GlobusCredential;
-import org.opensaml.SAMLAssertion;
-import org.opensaml.SAMLAttribute;
-import org.opensaml.SAMLAttributeStatement;
-import org.opensaml.SAMLAuthenticationStatement;
-import org.opensaml.SAMLStatement;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -132,7 +132,7 @@ public class TestDorian extends TestCase{
 			BasicAuthCredential auth = new BasicAuthCredential();
 			auth.setUserId(a.getUserId());
 			auth.setPassword(a.getPassword());
-			org.opensaml.SAMLAssertion saml = jm.authenticate(auth);
+			SAMLAssertion saml = jm.authenticate(auth);
 			assertNotNull(saml);
 			this.verifySAMLAssertion(saml,jm.getIdPCertificate(),a);
 		}catch (Exception e) {
@@ -1256,7 +1256,7 @@ public class TestDorian extends TestCase{
     public void verifySAMLAssertion(SAMLAssertion saml, X509Certificate idpCert,
 			Application app) throws Exception {
 		assertNotNull(saml);
-		saml.verify(idpCert, false);
+		saml.verify(idpCert);
 
 		assertEquals(idpCert.getSubjectDN().toString(), saml
 				.getIssuer());
@@ -1274,7 +1274,7 @@ public class TestDorian extends TestCase{
 					authFound = true;
 				}
 				SAMLAuthenticationStatement auth = (SAMLAuthenticationStatement) stmt;
-				assertEquals(app.getUserId(), auth.getSubject().getName());
+				assertEquals(app.getUserId(), auth.getSubject().getNameIdentifier().getName());
 				assertEquals("urn:oasis:names:tc:SAML:1.0:am:password", auth
 						.getAuthMethod());
 			}
@@ -1286,7 +1286,7 @@ public class TestDorian extends TestCase{
 					emailFound = true;
 				}
 				SAMLAttributeStatement att = (SAMLAttributeStatement) stmt;
-				assertEquals(app.getUserId(), att.getSubject().getName());
+				assertEquals(app.getUserId(), att.getSubject().getNameIdentifier().getName());
 				Iterator i = att.getAttributes();
 				assertTrue(i.hasNext());
 				SAMLAttribute a = (SAMLAttribute) i.next();

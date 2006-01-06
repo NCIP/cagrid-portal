@@ -13,17 +13,16 @@ import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserRole;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserStatus;
 import gov.nih.nci.cagrid.dorian.idp.bean.StateCode;
 import gov.nih.nci.cagrid.dorian.test.Utils;
+import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
+import gov.nih.nci.cagrid.opensaml.SAMLAttribute;
+import gov.nih.nci.cagrid.opensaml.SAMLAttributeStatement;
+import gov.nih.nci.cagrid.opensaml.SAMLAuthenticationStatement;
+import gov.nih.nci.cagrid.opensaml.SAMLStatement;
 
 import java.io.File;
 import java.util.Iterator;
 
 import junit.framework.TestCase;
-
-import org.opensaml.SAMLAssertion;
-import org.opensaml.SAMLAttribute;
-import org.opensaml.SAMLAttributeStatement;
-import org.opensaml.SAMLAuthenticationStatement;
-import org.opensaml.SAMLStatement;
 
 
 /**
@@ -122,7 +121,7 @@ public class TestIdentityProvider extends TestCase {
 				BasicAuthCredential auth = new BasicAuthCredential();
 				auth.setUserId(a.getUserId());
 				auth.setPassword(a.getPassword());
-				org.opensaml.SAMLAssertion saml = idp.authenticate(auth);
+				gov.nih.nci.cagrid.opensaml.SAMLAssertion saml = idp.authenticate(auth);
 				assertNotNull(saml);
 				this.verifySAMLAssertion(saml, idp, a);
 			}
@@ -157,7 +156,7 @@ public class TestIdentityProvider extends TestCase {
 
 	public void verifySAMLAssertion(SAMLAssertion saml, IdentityProvider idp, Application app) throws Exception {
 		assertNotNull(saml);
-		saml.verify(idp.getIdPCertificate(), false);
+		saml.verify(idp.getIdPCertificate());
 
 		assertEquals(idp.getIdPCertificate().getSubjectDN().toString(), saml.getIssuer());
 		Iterator itr = saml.getStatements();
@@ -174,7 +173,7 @@ public class TestIdentityProvider extends TestCase {
 					authFound = true;
 				}
 				SAMLAuthenticationStatement auth = (SAMLAuthenticationStatement) stmt;
-				assertEquals(app.getUserId(), auth.getSubject().getName());
+				assertEquals(app.getUserId(), auth.getSubject().getNameIdentifier().getName());
 				assertEquals("urn:oasis:names:tc:SAML:1.0:am:password", auth.getAuthMethod());
 			}
 
@@ -185,7 +184,7 @@ public class TestIdentityProvider extends TestCase {
 					emailFound = true;
 				}
 				SAMLAttributeStatement att = (SAMLAttributeStatement) stmt;
-				assertEquals(app.getUserId(), att.getSubject().getName());
+				assertEquals(app.getUserId(), att.getSubject().getNameIdentifier().getName());
 				Iterator i = att.getAttributes();
 				assertTrue(i.hasNext());
 				SAMLAttribute a = (SAMLAttribute) i.next();

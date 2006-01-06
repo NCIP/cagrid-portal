@@ -12,7 +12,7 @@
 		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true">
 			<sysproperty key="basedir" value="${basedir}" />
 			<jvmarg value="-Dbuild.dir=${build.dir}" />
-			<jvmarg value="-Djava.endorsed.dirs=${ext.endorsed.lib.dir}" />
+			<jvmarg value="-Djava.endorsed.dirs=${ext.endorsed.dir}" />
 			<classpath>
 				<fileset dir="${globus.location}/lib">
 					<include name="**/*.jar" />

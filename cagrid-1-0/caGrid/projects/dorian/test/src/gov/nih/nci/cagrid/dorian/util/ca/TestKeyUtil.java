@@ -16,7 +16,7 @@ import junit.framework.TestCase;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class KeyTest extends TestCase {
+public class TestKeyUtil extends TestCase {
 	public static String RESOURCES_DIR="resources"+File.separator+"ca-test";
 	
 	public void testCreateWriteLoadEncryptedPrivateKey(){

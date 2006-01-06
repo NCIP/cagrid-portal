@@ -3,8 +3,7 @@ package gov.nih.nci.cagrid.dorian;
 import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.common.DorianFault;
-
-import org.opensaml.SAMLAssertion;
+import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>

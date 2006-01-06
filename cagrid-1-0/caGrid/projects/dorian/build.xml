@@ -17,26 +17,26 @@ GSBT - Globus Service Build Tools
 	<property file="build.properties" />
 	<property file="${user.home}/build.properties" />
 
-	
-	<!-- Directory where GT4 is installed --> 
+
+	<!-- Directory where GT4 is installed -->
 	<!-- Note that the buildfile requires an environment variable GLOBUS_LOCATION
 	     pointing to that directory -->
 	<property name="globus.location" location="${env.GLOBUS_LOCATION}" />
-	
-		
-		
+
+
+
 	<!-- GT4 build files and directories-->
 	<property name="build.packages" location="${globus.location}/share/globus_wsrf_common/build-packages.xml" />
 	<property name="build.stubs" location="${globus.location}/share/globus_wsrf_tools/build-stubs.xml" />
 	<property name="schema.src" location="${globus.location}/share/schema" />
 
-	
-	
+
+
 	<!-- Important directories and files -->
 	<property name="src.dir" value="src" />
 	<property name="lib.dir" value="lib" />
 	<property name="ext.lib.dir" value="ext/lib" />
-	<property name="ext.endorsed.lib.dir" value="ext/endorsed/lib" />
+	<property name="ext.endorsed.dir" value="ext/endorsed/lib" />
 	<property name="test.src.dir" value="test/src" />
 	<property name="test.lib.dir" value="test/lib" />
 	<property name="test.log.dir" value="test/logs" />
@@ -44,28 +44,26 @@ GSBT - Globus Service Build Tools
 	<property name="etc.dir" value="etc" />
 	<property name="mappings.file" value="${basedir}/namespace2package.mappings" />
 
-	
-	
-	
+
+
+
 	<!-- Name of the GAR file that will be generated -->
 	<property name="gar.name" value="${gar.filename}.gar" />
-	
-	
-	
+
+
+
 	<!-- Name of the JAR files to be generated -->
 	<property name="jar.name" value="${gar.filename}.jar" />
-	<property name="test.jar.name" value="${gar.filename}-tests.jar" />
 	<property name="stubs.jar.name" value="${gar.filename}_stubs.jar" />
 
-	
-	
+
+
 	<!-- Build directories -->
-	
+
 	<!-- Auxiliary directory where all the intermediate files will be placed -->
 	<property name="build.dir" location="build" />
 	<!-- Directory for compiled service classes -->
 	<property name="build.dest" location="${build.dir}/classes" />
-	<property name="test.build.dest" location="${build.dir}/test_classes" />
 	<!-- Directory for compiled JAR files (additional library files required by
 	     the service will also be placed here) -->
 	<property name="build.lib.dir" location="${build.dir}/lib" />
@@ -74,13 +72,13 @@ GSBT - Globus Service Build Tools
 	<!-- Compiled stub classes -->
 	<property name="stubs.dest" location="${stubs.dir}/classes" />
 
-	
+
 	<!-- Location of our schema files -->
 	<property name="schema.local" location="./schema" />
 	<!-- Where we have to copy schema files inside the build directory -->
 	<property name="schema.dest" location="${build.dir}/schema" />
 
-	
+
 
 	<!-- Filesets -->
 
@@ -102,28 +100,30 @@ GSBT - Globus Service Build Tools
 
 
 	<!-- Miscellaneous properties -->
-	
+
 	<!-- This property is defined simply so we can write ${sep} instead of
 	     ${file.separator}, which makes some expressions too long -->
 	<property name="sep" value="${file.separator}" />
 	<!-- We want detailed error messages -->
 	<property name="java.debug" value="on" />
-	
+
 	<!-- Load test files -->
 	<import file="test/test.xml" />
-	
+
 	<!-- Sets up the build directory structure -->
 	<target name="init">
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.dest}" />
-		<mkdir dir="${test.build.dest}" />
 		<delete dir="${build.lib.dir}" />
 		<!-- Delete build lib dir to avoid JARs from previous builds from getting into our GAR file -->
 		<mkdir dir="${build.lib.dir}" />
-		
+
 		<copy toDir="${build.lib.dir}">
 			<fileset dir="lib/">
-				<include name="*.jar"/>
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${ext.endorsed.dir}">
+				<include name="*.jar" />
 			</fileset>
 		</copy>
 
@@ -146,7 +146,7 @@ GSBT - Globus Service Build Tools
 		<mkdir dir="${etc.dir}" />
 	</target>
 
-	
+
 	<!-- "Flattens" the WSDL file. i.e. runs the WSDL Preprocessor and creates a single
 	     WSDL file with all the operations and RPs in the portTypes specified in
 	     the wsdlpp:extends attribute (plus, of course, those defined in our own WSDL file) -->
@@ -161,7 +161,7 @@ GSBT - Globus Service Build Tools
 		</ant>
 	</target>
 
-	
+
 	<!-- Same as above, but for the factory WSDL file (if any) -->
 	<target name="factoryFlatten" depends="init" if="factory.schema.path">
 		<ant antfile="${build.stubs}" target="flatten">
@@ -173,7 +173,7 @@ GSBT - Globus Service Build Tools
 		</ant>
 	</target>
 
-	
+
 	<!-- Generate bindings for our WSDL file -->
 	<!-- This is done with a GT4 tool -->
 	<target name="generateBindings" depends="flatten">
@@ -185,7 +185,7 @@ GSBT - Globus Service Build Tools
 		</ant>
 	</target>
 
-	
+
 	<!-- Same as above, but for the factory WSDL file (if any) -->
 	<target name="generateFactoryBindings" depends="factoryFlatten" if="factory.schema.path">
 		<ant antfile="${build.stubs}" target="generateBinding">
@@ -196,7 +196,7 @@ GSBT - Globus Service Build Tools
 		</ant>
 	</target>
 
-	
+
 	<!-- Generate the stub source files -->
 	<!-- This is done with a GT4 tool -->
 	<target name="stubs" depends="generateBindings">
@@ -205,7 +205,7 @@ GSBT - Globus Service Build Tools
 			<property name="mapping.src" location="${mappings.file}" />
 			<property name="mapping.dst" location="${build.dir}/namespace2package.mappings" />
 		</ant>
-		<!-- Invoke the stub generator --> 
+		<!-- Invoke the stub generator -->
 		<ant antfile="${build.stubs}" target="generateStubs">
 			<property name="mapping.file" location="${build.dir}/namespace2package.mappings" />
 			<property name="source.stubs.dir" location="${schema.dest}/${schema.path}" />
@@ -214,7 +214,7 @@ GSBT - Globus Service Build Tools
 		</ant>
 	</target>
 
-	
+
 	<!-- Same as above, but for the factory service (if any) -->
 	<target name="factoryStubs" depends="generateFactoryBindings" if="factory.schema.path">
 		<ant antfile="${build.stubs}" target="mergePackageMapping">
@@ -230,16 +230,22 @@ GSBT - Globus Service Build Tools
 
 	</target>
 
-	
+
 	<!-- Compile the stubs generated in the previous step -->
 	<target name="compileStubs" depends="stubs, factoryStubs">
 		<javac srcdir="${stubs.dir}" destdir="${stubs.dest}" debug="${java.debug}">
 			<include name="**/*.java" />
 			<classpath>
+				<fileset dir="${ext.endorsed.dir}">
+					<include name="*.jar" />
+				</fileset>
 				<fileset dir="${globus.location}/lib">
 					<include name="*.jar" />
 					<exclude name="${stubs.jar.name}" />
 					<exclude name="${jar.name}" />
+					<exclude name="opensaml.jar" />
+					<exclude name="xml-apis.jar" />
+					<exclude name="xercesImpl.jar" />
 				</fileset>
 				<fileset dir="${build.lib.dir}">
 					<include name="*.jar" />
@@ -250,7 +256,7 @@ GSBT - Globus Service Build Tools
 		</javac>
 	</target>
 
-	
+
 	<!-- Compile the implementation classes (service, resource, etc.) -->
 	<target name="compile" depends="compileStubs">
 		<javac srcdir="${src.dir}" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}">
@@ -262,47 +268,54 @@ GSBT - Globus Service Build Tools
 				<fileset dir="${ext.lib.dir}">
 					<include name="*.jar" />
 				</fileset>
+				<fileset dir="${ext.endorsed.dir}">
+					<include name="*.jar" />
+				</fileset>
 				<fileset dir="${globus.location}/lib">
 					<include name="*.jar" />
 					<exclude name="${stubs.jar.name}" />
 					<exclude name="${jar.name}" />
+					<exclude name="opensaml.jar" />
+					<exclude name="xml-apis.jar" />
+					<exclude name="xercesImpl.jar" />
 				</fileset>
 			</classpath>
 		</javac>
 	</target>
-	
+
 	<!-- Compile the implementation classes (service, resource, etc.) -->
 	<target name="compileTests" depends="compile">
-		<javac srcdir="${test.src.dir}" destdir="${test.build.dest}" debug="${java.debug}" deprecation="${deprecation}">
+		<javac srcdir="${test.src.dir}" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}">
 			<classpath>
 				<pathelement location="${stubs.dest}" />
-				<pathelement location="${build.dest}" />
-				<fileset dir="${test.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
+				<fileset dir="${build.lib.dir}">
+					<include name="**/*.jar" />
 				</fileset>
 				<fileset dir="${ext.lib.dir}">
 					<include name="*.jar" />
 				</fileset>
+				<fileset dir="${lib.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${ext.endorsed.dir}">
+					<include name="*.jar" />
+				</fileset>
 				<fileset dir="${globus.location}/lib">
 					<include name="*.jar" />
 					<exclude name="${stubs.jar.name}" />
 					<exclude name="${jar.name}" />
+					<exclude name="opensaml.jar" />
+					<exclude name="xml-apis.jar" />
+					<exclude name="xercesImpl.jar" />
 				</fileset>
 			</classpath>
 		</javac>
 	</target>
-	
+
+
 	<!-- Create a JAR file with the implementation classes -->
-	<target name="jar" depends="compile">
+	<target name="jar" depends="compile, compileTests">
 		<jar jarfile="${build.lib.dir}/${jar.name}" basedir="${build.dest}" />
-	</target>
-	
-	<!-- Create a JAR file with the implementation classes -->
-	<target name="jarTests" depends="compileTests">
-		<jar jarfile="${build.lib.dir}/${test.jar.name}" basedir="${test.build.dest}" />
 	</target>
 
 
@@ -311,15 +324,15 @@ GSBT - Globus Service Build Tools
 		<jar destfile="${build.lib.dir}/${stubs.jar.name}" basedir="${stubs.dest}" />
 	</target>
 
-	
+
 	<!-- Empty target, in case we simply want to generate the JAR files -->
 	<!-- NOTE: This is needed by GT4IDE -->
-	<target name="jars" depends="jarStubs, jar, jarTests">
+	<target name="jars" depends="jarStubs, jar">
 	</target>
 
 
 	<!-- Creates the GAR file -->
-	<target name="dist" depends="jarStubs, jar, jarTests">
+	<target name="dist" depends="jarStubs, jar">
 		<!-- Copy skeleton files to Tomcat and rename -->
 		<copy overwrite="true" toDir="${build.lib.dir}">
 			<fileset dir="${ext.lib.dir}">
@@ -339,7 +352,7 @@ GSBT - Globus Service Build Tools
 
 
 
-	
+
 	<!-- Clean up all the intermediate files -->
 	<target name="clean">
 		<delete dir="tmp" />
@@ -347,12 +360,12 @@ GSBT - Globus Service Build Tools
 		<delete file="${gar.name}" />
 	</target>
 
-	
+
 	<!-- Default target "all" generates the GAR file -->
-	<target name="all" depends="clean,dist" />
+	<target name="all" depends="dist" />
 
 	<target name="deploy">
 		<ant antfile="build-deploy.xml" target="deploy" />
 	</target>
-	
+
 </project>
