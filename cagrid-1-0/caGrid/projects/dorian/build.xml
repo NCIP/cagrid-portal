@@ -53,6 +53,7 @@ GSBT - Globus Service Build Tools
 	
 	<!-- Name of the JAR files to be generated -->
 	<property name="jar.name" value="${gar.filename}.jar" />
+	<property name="test.jar.name" value="${gar.filename}-tests.jar" />
 	<property name="stubs.jar.name" value="${gar.filename}_stubs.jar" />
 
 	
@@ -63,6 +64,7 @@ GSBT - Globus Service Build Tools
 	<property name="build.dir" location="build" />
 	<!-- Directory for compiled service classes -->
 	<property name="build.dest" location="${build.dir}/classes" />
+	<property name="test.build.dest" location="${build.dir}/test_classes" />
 	<!-- Directory for compiled JAR files (additional library files required by
 	     the service will also be placed here) -->
 	<property name="build.lib.dir" location="${build.dir}/lib" />
@@ -113,6 +115,7 @@ GSBT - Globus Service Build Tools
 	<target name="init">
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.dest}" />
+		<mkdir dir="${test.build.dest}" />
 		<delete dir="${build.lib.dir}" />
 		<!-- Delete build lib dir to avoid JARs from previous builds from getting into our GAR file -->
 		<mkdir dir="${build.lib.dir}" />
@@ -269,17 +272,18 @@ GSBT - Globus Service Build Tools
 	
 	<!-- Compile the implementation classes (service, resource, etc.) -->
 	<target name="compileTests" depends="compile">
-		<javac srcdir="${test.src.dir}" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}">
+		<javac srcdir="${test.src.dir}" destdir="${test.build.dest}" debug="${java.debug}" deprecation="${deprecation}">
 			<classpath>
 				<pathelement location="${stubs.dest}" />
-				<fileset dir="${build.lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${ext.lib.dir}">
+				<pathelement location="${build.dest}" />
+				<fileset dir="${test.lib.dir}">
 					<include name="*.jar" />
 				</fileset>
 				<fileset dir="${lib.dir}">
-					<include name="**/*.jar" />
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${ext.lib.dir}">
+					<include name="*.jar" />
 				</fileset>
 				<fileset dir="${globus.location}/lib">
 					<include name="*.jar" />
@@ -290,10 +294,14 @@ GSBT - Globus Service Build Tools
 		</javac>
 	</target>
 	
+	<!-- Create a JAR file with the implementation classes -->
+	<target name="jar" depends="compile">
+		<jar jarfile="${build.lib.dir}/${jar.name}" basedir="${build.dest}" />
+	</target>
 	
 	<!-- Create a JAR file with the implementation classes -->
-	<target name="jar" depends="compile, compileTests">
-		<jar jarfile="${build.lib.dir}/${jar.name}" basedir="${build.dest}" />
+	<target name="jarTests" depends="compileTests">
+		<jar jarfile="${build.lib.dir}/${test.jar.name}" basedir="${test.build.dest}" />
 	</target>
 
 
@@ -305,12 +313,12 @@ GSBT - Globus Service Build Tools
 	
 	<!-- Empty target, in case we simply want to generate the JAR files -->
 	<!-- NOTE: This is needed by GT4IDE -->
-	<target name="jars" depends="jarStubs, jar">
+	<target name="jars" depends="jarStubs, jar, jarTests">
 	</target>
 
 
 	<!-- Creates the GAR file -->
-	<target name="dist" depends="jarStubs, jar">
+	<target name="dist" depends="jarStubs, jar, jarTests">
 		<!-- Copy skeleton files to Tomcat and rename -->
 		<copy overwrite="true" toDir="${build.lib.dir}">
 			<fileset dir="${ext.lib.dir}">
