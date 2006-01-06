@@ -312,7 +312,7 @@
 	<target name="all" depends="clean,jars" />
 
 	<target name="resync" description="Uses the introduceMethods.xml to add and remove methods to this service skeleton">
-		<java classname="gov.nih.nci.cagrid.introduce.SyncTools" fork="no" failonerror="true">
+		<java classname="gov.nih.nci.cagrid.introduce.codegen.SyncTools" fork="no" failonerror="true">
 			<arg value="-d" />
 			<arg value="${basedir}" />
 			<classpath>

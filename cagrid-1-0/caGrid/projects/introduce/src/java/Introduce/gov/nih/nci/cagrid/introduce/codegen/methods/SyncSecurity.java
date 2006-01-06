@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce;
+package gov.nih.nci.cagrid.introduce.codegen.methods;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;

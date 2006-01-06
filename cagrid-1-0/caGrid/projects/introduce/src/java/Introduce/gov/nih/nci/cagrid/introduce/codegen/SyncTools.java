@@ -1,8 +1,13 @@
-package gov.nih.nci.cagrid.introduce;
+package gov.nih.nci.cagrid.introduce.codegen;
 
 import gov.nih.nci.cagrid.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.Archive;
+import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
+import gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods;
+import gov.nih.nci.cagrid.introduce.codegen.methods.SyncSecurity;
+import gov.nih.nci.cagrid.introduce.codegen.methods.SyncWSDL;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -61,6 +66,8 @@ public class SyncTools {
 	File baseDirectory;
 
 	MethodsType methodsType;
+	
+	ServiceMetadataListType serviceMetadataListType;
 
 	public SyncTools(File baseDirectory) {
 
