@@ -1,7 +1,5 @@
-package gov.nih.nci.cagrid.introduce.codegen;
 
-import gov.nih.nci.cagrid.introduce.codegen.metadata.SyncMetadata;
-import gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods;
+package gov.nih.nci.cagrid.introduce.codegen.metadata;
 
 import java.io.File;
 
@@ -22,28 +20,26 @@ import org.apache.commons.cli.PosixParser;
  * @version $Id: mobiusEclipseCodeTemplates.xml,v 1.2 2005/04/19 14:58:02 oster
  *          Exp $
  */
-public class SyncTools {
+public class SyncMetadata {
 
 	public static final String DIR_OPT = "d";
 
 	public static final String DIR_OPT_FULL = "directory";
-	
-	public File directory;
-	
-	public SyncTools(File directory){
-		this.directory = directory;
-	}
-	
-	
-	public void sync() throws Exception {
-		SyncMethods methods = new SyncMethods(directory);
-		methods.sync();
-		
-		SyncMetadata metadata = new SyncMetadata(directory);
-		metadata.sync();
-		
+
+	File baseDirectory;
+
+	public SyncMetadata(File baseDirectory) {
+
+		this.baseDirectory = baseDirectory;
 	}
 
+	public void sync() throws Exception {
+	
+	}
+
+	public void lookForUpdates() {
+
+	}
 
 	public static void main(String[] args) {
 		Options options = new Options();
@@ -62,7 +58,7 @@ public class SyncTools {
 			e.printStackTrace();
 		}
 
-		SyncTools sync = new SyncTools(directory);
+		SyncMetadata sync = new SyncMetadata(directory);
 		try {
 			sync.sync();
 		} catch (Exception e) {
