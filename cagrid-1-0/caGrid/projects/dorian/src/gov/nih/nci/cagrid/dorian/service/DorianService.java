@@ -44,15 +44,15 @@ import org.globus.wsrf.utils.AddressingUtils;
  */
 public class DorianService {
 
-	public static String CONFIGURATION_FILE = "etc/dorian/dorian-conf.xml";
-
 	private Dorian dorian;
 
 
 	public DorianService() throws RemoteException {
+
 		try {
 			EndpointReferenceType type = AddressingUtils.createEndpointReference(null);
-			this.dorian = new Dorian(CONFIGURATION_FILE, type.getAddress().toString());
+			DorianResourceHome home = (DorianResourceHome) ResourceContext.getResourceContext().getResourceHome();
+			this.dorian = new Dorian(home.getDorianConfig(), type.getAddress().toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RemoteException(Utils.getExceptionMessage(e));
@@ -61,11 +61,16 @@ public class DorianService {
 	}
 
 
+	private Dorian getDorianHandle() throws RemoteException {
+		return dorian;
+	}
+
+
 	public gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP addTrustedIdP(
 		gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP parameters) throws java.rmi.RemoteException,
 		gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault, gov.nih.nci.cagrid.dorian.ifs.bean.InvalidUserFault,
 		gov.nih.nci.cagrid.dorian.ifs.bean.InvalidTrustedIdPFault, gov.nih.nci.cagrid.dorian.bean.DorianInternalFault {
-		return dorian.addTrustedIdP(getCallerIdentity(), parameters);
+		return getDorianHandle().addTrustedIdP(getCallerIdentity(), parameters);
 	}
 
 
@@ -73,7 +78,7 @@ public class DorianService {
 		gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP parameters) throws java.rmi.RemoteException,
 		gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault, gov.nih.nci.cagrid.dorian.ifs.bean.InvalidUserFault,
 		gov.nih.nci.cagrid.dorian.ifs.bean.InvalidTrustedIdPFault, gov.nih.nci.cagrid.dorian.bean.DorianInternalFault {
-		dorian.updatedTrustedIdP(getCallerIdentity(), parameters);
+		getDorianHandle().updatedTrustedIdP(getCallerIdentity(), parameters);
 		return new IFSUpdateTrustedIdPResponse();
 	}
 
@@ -82,7 +87,7 @@ public class DorianService {
 		gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP parameters) throws java.rmi.RemoteException,
 		gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault, gov.nih.nci.cagrid.dorian.ifs.bean.InvalidUserFault,
 		gov.nih.nci.cagrid.dorian.ifs.bean.InvalidTrustedIdPFault, gov.nih.nci.cagrid.dorian.bean.DorianInternalFault {
-		dorian.removeTrustedIdP(getCallerIdentity(), parameters);
+		getDorianHandle().removeTrustedIdP(getCallerIdentity(), parameters);
 		return new IFSRemoveTrustedIdPResponse();
 	}
 
@@ -91,7 +96,7 @@ public class DorianService {
 		gov.nih.nci.cagrid.dorian.wsrf.IFSGetUserPolicies parameters) throws java.rmi.RemoteException,
 		gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault, gov.nih.nci.cagrid.dorian.ifs.bean.InvalidUserFault,
 		gov.nih.nci.cagrid.dorian.bean.DorianInternalFault {
-		return new IFSGetUserPoliciesResponse(dorian.getIFSUserPolicies(getCallerIdentity()));
+		return new IFSGetUserPoliciesResponse(getDorianHandle().getIFSUserPolicies(getCallerIdentity()));
 	}
 
 
@@ -99,7 +104,7 @@ public class DorianService {
 		gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser parameters) throws java.rmi.RemoteException,
 		gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault, gov.nih.nci.cagrid.dorian.ifs.bean.InvalidUserFault,
 		gov.nih.nci.cagrid.dorian.bean.DorianInternalFault {
-		return dorian.renewIFSUserCredentials(getCallerIdentity(), parameters);
+		return getDorianHandle().renewIFSUserCredentials(getCallerIdentity(), parameters);
 	}
 
 
@@ -107,7 +112,7 @@ public class DorianService {
 		gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter parameters) throws java.rmi.RemoteException,
 		gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault, gov.nih.nci.cagrid.dorian.ifs.bean.InvalidUserFault,
 		gov.nih.nci.cagrid.dorian.bean.DorianInternalFault {
-		return new IFSFindUsersResponse(dorian.findIFSUsers(getCallerIdentity(), parameters));
+		return new IFSFindUsersResponse(getDorianHandle().findIFSUsers(getCallerIdentity(), parameters));
 	}
 
 
@@ -115,7 +120,7 @@ public class DorianService {
 		gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser parameters) throws java.rmi.RemoteException,
 		gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault, gov.nih.nci.cagrid.dorian.ifs.bean.InvalidUserFault,
 		gov.nih.nci.cagrid.dorian.bean.DorianInternalFault {
-		dorian.updateIFSUser(getCallerIdentity(), parameters);
+		getDorianHandle().updateIFSUser(getCallerIdentity(), parameters);
 		return new IFSUpdateUserResponse();
 	}
 
@@ -124,7 +129,7 @@ public class DorianService {
 		gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser parameters) throws java.rmi.RemoteException,
 		gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault, gov.nih.nci.cagrid.dorian.ifs.bean.InvalidUserFault,
 		gov.nih.nci.cagrid.dorian.bean.DorianInternalFault {
-		dorian.removeIFSUser(getCallerIdentity(), parameters);
+		getDorianHandle().removeIFSUser(getCallerIdentity(), parameters);
 		return new IFSRemoveUserResponse();
 	}
 
@@ -133,19 +138,19 @@ public class DorianService {
 		gov.nih.nci.cagrid.dorian.wsrf.IFSFindTrustedIdPs parameters) throws java.rmi.RemoteException,
 		gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault, gov.nih.nci.cagrid.dorian.ifs.bean.InvalidUserFault,
 		gov.nih.nci.cagrid.dorian.bean.DorianInternalFault {
-		return new IFSFindTrustedIdPsResponse(dorian.getTrustedIdPs(getCallerIdentity()));
+		return new IFSFindTrustedIdPsResponse(getDorianHandle().getTrustedIdPs(getCallerIdentity()));
 	}
 
 
 	public gov.nih.nci.cagrid.dorian.wsrf.IFSCreateProxyResponse createProxy(IFSCreateProxy parameters)
-		throws java.rmi.RemoteException, gov.nih.nci.cagrid.dorian.ifs.bean.InvalidAssertionFault, PermissionDeniedFault,
-		gov.nih.nci.cagrid.dorian.ifs.bean.UserPolicyFault, gov.nih.nci.cagrid.dorian.ifs.bean.InvalidProxyFault,
-		DorianInternalFault {
+		throws java.rmi.RemoteException, gov.nih.nci.cagrid.dorian.ifs.bean.InvalidAssertionFault,
+		PermissionDeniedFault, gov.nih.nci.cagrid.dorian.ifs.bean.UserPolicyFault,
+		gov.nih.nci.cagrid.dorian.ifs.bean.InvalidProxyFault, DorianInternalFault {
 		try {
 			ProxyLifetime lifetime = parameters.getProxyLifetime();
 			PublicKey key = KeyUtil.loadPublicKeyFromString(parameters.getPublicKey().getKeyAsString());
 			SAMLAssertion saml = IOUtils.stringToSAMLAssertion(parameters.getSAMLAssertion().getXml());
-			X509Certificate[] certs = dorian.createProxy(saml, key, lifetime);
+			X509Certificate[] certs = getDorianHandle().createProxy(saml, key, lifetime);
 
 			gov.nih.nci.cagrid.dorian.ifs.bean.X509Certificate[] certList = new gov.nih.nci.cagrid.dorian.ifs.bean.X509Certificate[certs.length];
 			for (int i = 0; i < certs.length; i++) {
@@ -180,7 +185,7 @@ public class DorianService {
 		gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential auth) throws java.rmi.RemoteException,
 		gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault, gov.nih.nci.cagrid.dorian.bean.DorianInternalFault {
 
-		SAMLAssertion saml = dorian.authenticate(auth);
+		SAMLAssertion saml = getDorianHandle().authenticate(auth);
 		try {
 			String xml = IOUtils.samlAssertionToString(saml);
 			return new gov.nih.nci.cagrid.dorian.bean.SAMLAssertion(xml);
@@ -197,7 +202,7 @@ public class DorianService {
 
 
 	public String registerWithIdP(Application a) throws RemoteException, InvalidUserPropertyFault, DorianInternalFault {
-		return dorian.registerWithIdP(a);
+		return getDorianHandle().registerWithIdP(a);
 	}
 
 
@@ -205,17 +210,18 @@ public class DorianService {
 		gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter filter) throws java.rmi.RemoteException,
 		gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault, gov.nih.nci.cagrid.dorian.bean.DorianInternalFault {
 
-		IdPUser[] users = dorian.findIdPUsers(getCallerIdentity(), filter);
+		IdPUser[] users = getDorianHandle().findIdPUsers(getCallerIdentity(), filter);
 		return new IdpFindUsersResponse(users);
 	}
 
 
 	public gov.nih.nci.cagrid.dorian.wsrf.IdpUpdateUserResponse updateIdPUser(
 		gov.nih.nci.cagrid.dorian.idp.bean.IdPUser user) throws java.rmi.RemoteException,
-		gov.nih.nci.cagrid.dorian.idp.bean.InvalidUserPropertyFault, gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault,
-		gov.nih.nci.cagrid.dorian.idp.bean.NoSuchUserFault, gov.nih.nci.cagrid.dorian.bean.DorianInternalFault {
+		gov.nih.nci.cagrid.dorian.idp.bean.InvalidUserPropertyFault,
+		gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault, gov.nih.nci.cagrid.dorian.idp.bean.NoSuchUserFault,
+		gov.nih.nci.cagrid.dorian.bean.DorianInternalFault {
 
-		dorian.updateIdPUser(getCallerIdentity(), user);
+		getDorianHandle().updateIdPUser(getCallerIdentity(), user);
 		return new IdpUpdateUserResponse();
 	}
 
@@ -224,7 +230,7 @@ public class DorianService {
 		throws java.rmi.RemoteException, gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault,
 		gov.nih.nci.cagrid.dorian.bean.DorianInternalFault {
 
-		dorian.removeIdPUser(getCallerIdentity(), parameters);
+		getDorianHandle().removeIdPUser(getCallerIdentity(), parameters);
 		return new IdpRemoveUserResponse();
 	}
 

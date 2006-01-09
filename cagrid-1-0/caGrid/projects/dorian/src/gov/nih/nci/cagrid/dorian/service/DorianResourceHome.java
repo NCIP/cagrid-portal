@@ -11,6 +11,10 @@ import org.globus.wsrf.impl.SingletonResourceHome;
  *          Exp $
  */
 public class DorianResourceHome extends SingletonResourceHome {
+   
+	private String dorianConfig;
+	
+
 
 	public Resource findSingleton() {
 		try {
@@ -23,5 +27,13 @@ public class DorianResourceHome extends SingletonResourceHome {
 			return null;
 		}
 
+	}
+	
+	public String getDorianConfig() {
+		return dorianConfig;
+	}
+
+	public void setDorianConfig(String dorianConfig) {
+		this.dorianConfig = dorianConfig;
 	}
 }

@@ -10,7 +10,7 @@ import org.globus.wsrf.impl.SimpleResourcePropertySet;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: DorianResource.java,v 1.1 2005-12-15 19:29:33 langella Exp $
+ * @version $Id: DorianResource.java,v 1.2 2006-01-09 20:21:42 langella Exp $
  */
 public class DorianResource implements Resource, ResourceProperties {
 
@@ -51,4 +51,6 @@ public class DorianResource implements Resource, ResourceProperties {
 	public ResourcePropertySet getResourcePropertySet() {
 		return this.propSet;
 	}
+	
+	
 }

@@ -1,6 +1,5 @@
 package edu.osu.idp.portal;
 
-import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
 import gov.nih.nci.cagrid.dorian.ifs.portal.IdPAuthenticationPanel;
 import gov.nih.nci.cagrid.dorian.portal.IdPConf;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
@@ -10,8 +9,6 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.ByteArrayInputStream;
-import java.security.cert.X509Certificate;
-import java.util.Iterator;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;

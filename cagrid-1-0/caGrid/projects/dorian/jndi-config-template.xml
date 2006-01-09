@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
 
-<service name="cagrid/dorian">
+<service name="SERVICE-INSTANCE-NAME">
 	<resource name="home" type="gov.nih.nci.cagrid.dorian.service.DorianResourceHome">
 	<resourceParams>
 
@@ -12,7 +12,7 @@
 		
 		<parameter>
 			<name>dorianConfig</name>
-			<value>etc/dorian/dorian-conf.xml</value>
+			<value>ETC-FULL-PATH/dorian-conf.xml</value>
 		</parameter>
 
 	</resourceParams>
