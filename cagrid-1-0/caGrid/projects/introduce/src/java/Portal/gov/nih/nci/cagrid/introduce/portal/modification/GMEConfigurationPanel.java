@@ -446,17 +446,5 @@ public class GMEConfigurationPanel extends JPanel {
 		return gme;
 	}
 
-//	/**
-//	 * This method initializes customPanel	
-//	 * 	
-//	 * @return javax.swing.JPanel	
-//	 */
-//	private JPanel getCustomPanel() {
-//		if (customPanel == null) {
-//			customPanel = new JPanel();
-//			customPanel.setLayout(new GridBagLayout());
-//		}
-//		return customPanel;
-//	}
 
 }
