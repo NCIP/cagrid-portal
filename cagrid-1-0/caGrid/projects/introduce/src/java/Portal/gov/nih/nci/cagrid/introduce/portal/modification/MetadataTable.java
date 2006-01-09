@@ -18,7 +18,7 @@ import org.projectmobius.portal.PortalTable;
  *          Exp $
  */
 public class MetadataTable extends PortalTable {
-	
+
 	public static String CLASSNAME = "Classname";
 
 	public static String NAMESPACE = "Namespace";
@@ -26,17 +26,17 @@ public class MetadataTable extends PortalTable {
 	public static String TYPE = "Type";
 
 	public static String LOCATION = "Location";
-	
+
 	public static String POPULATE_FROM_FILE = "Populate From File";
-	
+
 	public static String REGISTER = "Register";
-	
+
 	public static String QNAME_NS = "Qname Namespace";
-	
+
 	public static String DATA1 = "DATA1";
 
 	private ServiceMetadataListType metadatas;
-	
+
 	public MetadataTable(ServiceMetadataListType metadatas) {
 		super(createTableModel());
 		this.metadatas = metadatas;
@@ -58,12 +58,12 @@ public class MetadataTable extends PortalTable {
 		v.add(metadata.getLocation());
 		v.add(String.valueOf(metadata.isPopulateFromFile()));
 		v.add(String.valueOf(metadata.isRegister()));
-		if(metadata.getQName()!=null){
+		if (metadata.getQName() != null) {
 			v.add(metadata.getQName().getNamespaceURI());
-		} else{
+		} else {
 			v.add("");
 		}
-		
+
 		v.add(v);
 
 		((DefaultTableModel) this.getModel()).addRow(v);
@@ -75,13 +75,12 @@ public class MetadataTable extends PortalTable {
 		this.getColumn(DATA1).setMaxWidth(0);
 		this.getColumn(DATA1).setMinWidth(0);
 		this.getColumn(DATA1).setPreferredWidth(0);
-		
+
 		if (metadatas.getMetadata() != null) {
 			for (int i = 0; i < metadatas.getMetadata().length; i++) {
 				this.addRow(metadatas.getMetadata(i));
 			}
 		}
-
 	}
 
 	public static DefaultTableModel createTableModel() {

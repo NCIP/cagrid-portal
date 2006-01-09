@@ -4,9 +4,12 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.zip.ZipEntry;
@@ -14,6 +17,7 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 public class Archive {
+	public static final int MAX_ARCHIVE = 5;
 
 	private static synchronized void getDirectoryListing(List names, File dir,
 			String parentPath) {
@@ -90,16 +94,56 @@ public class Archive {
 			// Complete the entry
 			out.closeEntry();
 			in.close();
+
 		}
 
 		// Complete the ZIP file
 		out.flush();
 		out.close();
 
+		// cleanup if there are more that MAX_ARCHIVE files in the backup area
+		cleanup(id, serviceName);
+
 	}
-	
-	private static void cleanup(String id,String serviceName){
-		
+
+	private static void cleanup(String currentId, String serviceName) {
+		String userHome = System.getProperty("user.home");
+		File userHomeF = new File(userHome);
+		File caGridCache = new File(userHomeF.getAbsolutePath()
+				+ File.separator + ".cagrid");
+		caGridCache.mkdir();
+		File introduceCache = new File(caGridCache + File.separator
+				+ "introduce");
+		introduceCache.mkdir();
+
+		final String finalServiceName = serviceName;
+		FilenameFilter f = new FilenameFilter() {
+
+			public boolean accept(File dir, String name) {
+				if (name.indexOf(finalServiceName) >= 0) {
+					return true;
+				}
+				return false;
+			}
+
+		};
+
+		String[] cacheFiles = introduceCache.list(f);
+		System.out.println("Found " + cacheFiles.length);
+		List cacheFilesList = Arrays.asList(cacheFiles);
+		Collections.sort(cacheFilesList, String.CASE_INSENSITIVE_ORDER);
+		Collections.reverse(cacheFilesList);
+
+		if (cacheFilesList.size() > MAX_ARCHIVE) {
+			for (int i = MAX_ARCHIVE; i < cacheFilesList.size(); i++) {
+				System.out.println("Removing file from cache: " + i + "  "
+						+ caGridCache.getAbsolutePath() + File.separator
+						+ cacheFilesList.get(i));
+				File cacheFile = new File(introduceCache.getAbsolutePath()
+						+ File.separator + cacheFilesList.get(i));
+				cacheFile.delete();
+			}
+		}
 	}
 
 	private static void unzip(String baseDir, ZipInputStream zin, String s)
@@ -116,8 +160,8 @@ public class Archive {
 		out.close();
 	}
 
-	public static synchronized void restoreLatest(String currentId, String serviceName,
-			String baseDir) throws Exception {
+	public static synchronized void restoreLatest(String currentId,
+			String serviceName, String baseDir) throws Exception {
 
 		String userHome = System.getProperty("user.home");
 		File userHomeF = new File(userHome);
@@ -128,7 +172,19 @@ public class Archive {
 				+ "introduce");
 		introduceCache.mkdir();
 
-		String[] cacheFiles = introduceCache.list();
+		final String finalServiceName = serviceName;
+		FilenameFilter f = new FilenameFilter() {
+
+			public boolean accept(File dir, String name) {
+				if (name.indexOf(finalServiceName) >= 0) {
+					return true;
+				}
+				return false;
+			}
+
+		};
+
+		String[] cacheFiles = introduceCache.list(f);
 		long thisTime = Long.parseLong(currentId);
 		long lastTime = 0;
 		for (int i = 0; i < cacheFiles.length; i++) {
@@ -165,7 +221,7 @@ public class Archive {
 
 			Thread.sleep(5000);
 
-			//Archive.restoreLatest("HelloWorld", "c:\\HelloWorld");
+			// Archive.restoreLatest("HelloWorld", "c:\\HelloWorld");
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
