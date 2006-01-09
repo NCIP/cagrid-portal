@@ -92,7 +92,6 @@
 				<include name="**\*" />
 			</fileset>
 		</copy>
-		
 	</target>
 
 </project>
