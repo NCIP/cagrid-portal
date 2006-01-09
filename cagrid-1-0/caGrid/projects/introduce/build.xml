@@ -10,7 +10,7 @@
 	<property file="${user.dir}/build.properties" />
 
 	<!-- Information -->
-	<property name="project.name" value="introduce" />
+	<property name="project.name" value="caGrid-introduce" />
 	<property name="project.version" value="1.0" />
 
 	<!-- Source, Config, and Libraries -->
