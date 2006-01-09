@@ -58,7 +58,12 @@ public class MetadataTable extends PortalTable {
 		v.add(metadata.getLocation());
 		v.add(String.valueOf(metadata.isPopulateFromFile()));
 		v.add(String.valueOf(metadata.isRegister()));
-		v.add(metadata.getQName().getNamespaceURI());
+		if(metadata.getQName()!=null){
+			v.add(metadata.getQName().getNamespaceURI());
+		} else{
+			v.add("");
+		}
+		
 		v.add(v);
 
 		((DefaultTableModel) this.getModel()).addRow(v);
