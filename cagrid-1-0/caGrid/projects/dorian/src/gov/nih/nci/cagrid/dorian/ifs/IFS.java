@@ -99,7 +99,7 @@ public class IFS extends LoggingObject {
 	}
 
 
-	public void updatedTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws DorianInternalFault,
+	public void updateTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws DorianInternalFault,
 		InvalidTrustedIdPFault, InvalidUserFault, PermissionDeniedFault {
 		IFSUser caller = um.getUser(callerGridIdentity);
 		verifyActiveUser(caller);

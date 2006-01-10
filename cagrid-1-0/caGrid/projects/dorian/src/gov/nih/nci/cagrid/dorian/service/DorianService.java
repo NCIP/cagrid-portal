@@ -78,7 +78,7 @@ public class DorianService {
 		gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP parameters) throws java.rmi.RemoteException,
 		gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault, gov.nih.nci.cagrid.dorian.ifs.bean.InvalidUserFault,
 		gov.nih.nci.cagrid.dorian.ifs.bean.InvalidTrustedIdPFault, gov.nih.nci.cagrid.dorian.bean.DorianInternalFault {
-		getDorianHandle().updatedTrustedIdP(getCallerIdentity(), parameters);
+		getDorianHandle().updateTrustedIdP(getCallerIdentity(), parameters);
 		return new IFSUpdateTrustedIdPResponse();
 	}
 

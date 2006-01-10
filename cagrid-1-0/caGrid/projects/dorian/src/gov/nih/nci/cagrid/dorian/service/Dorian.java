@@ -220,9 +220,9 @@ public class Dorian extends MobiusResourceManager {
 	}
 
 
-	public void updatedTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws DorianInternalFault,
+	public void updateTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws DorianInternalFault,
 		InvalidTrustedIdPFault, InvalidUserFault, PermissionDeniedFault {
-		ifs.updatedTrustedIdP(callerGridIdentity, idp);
+		ifs.updateTrustedIdP(callerGridIdentity, idp);
 	}
 
 
