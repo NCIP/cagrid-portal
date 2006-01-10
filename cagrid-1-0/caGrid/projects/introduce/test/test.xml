@@ -12,7 +12,7 @@
 		
 		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true">
 			<sysproperty key="basedir" value="${basedir}"/>
-			<jvmarg value="-Dbuild.dir=${build.dir}"/>
+			<jvmarg value="-Dbuild.dir=${classes.dir}"/>
 			<classpath>
 				<path refid="Introduce.test.classpath"/>
 			</classpath>
@@ -25,7 +25,7 @@
 		</junit>
 		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true">
 			<sysproperty key="basedir" value="${basedir}"/>
-			<jvmarg value="-Dbuild.dir=${build.dir}"/>
+			<jvmarg value="-Dbuild.dir=${classes.dir}"/>
 			<classpath>
 				<path refid="Portal.test.classpath"/>
 			</classpath>
