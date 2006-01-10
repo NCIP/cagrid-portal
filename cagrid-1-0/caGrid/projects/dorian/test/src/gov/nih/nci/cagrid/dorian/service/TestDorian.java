@@ -4,11 +4,9 @@ package gov.nih.nci.cagrid.dorian.service;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
-import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthorityConf;
 import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
 import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
 import gov.nih.nci.cagrid.dorian.idp.AssertionCredentialsManager;
-import gov.nih.nci.cagrid.dorian.idp.IdPConfiguration;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.dorian.idp.bean.CountryCode;
@@ -20,7 +18,6 @@ import gov.nih.nci.cagrid.dorian.idp.bean.InvalidUserPropertyFault;
 import gov.nih.nci.cagrid.dorian.idp.bean.NoSuchUserFault;
 import gov.nih.nci.cagrid.dorian.idp.bean.StateCode;
 import gov.nih.nci.cagrid.dorian.ifs.AutoApprovalAutoRenewalPolicy;
-import gov.nih.nci.cagrid.dorian.ifs.IFSConfiguration;
 import gov.nih.nci.cagrid.dorian.ifs.IFSUtils;
 import gov.nih.nci.cagrid.dorian.ifs.ManualApprovalPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.UserManager;
@@ -73,33 +70,7 @@ public class TestDorian extends TestCase{
 	
 	private CertificateAuthority ca;
 	
-    public void testDorian(){
-    	try{
-    		Dorian test = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
-    		assertNotNull(test.getConfiguration());
-    		assertNotNull(test.getDatabase());
-    		
-    		assertEquals(0,test.getDatabase().getUsedConnectionCount());
-			test.getDatabase().destroyDatabase();
-    	}catch (Exception e) {
-    		FaultUtil.printFault(e);
-			assertTrue(false);
-		}
-    }
-    
-    public void testGetResource(){
-    	try{
-    		jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
-    		assertNotNull(jm.getConfiguration());
-    		assertNotNull(jm.getDatabase());
-    		assertNotNull(jm.getResource(IdPConfiguration.RESOURCE));
-    		assertNotNull(jm.getResource(IFSConfiguration.RESOURCE));
-    		assertNotNull(jm.getResource(DorianCertificateAuthorityConf.RESOURCE));
-    	}catch (Exception e) {
-    		FaultUtil.printFault(e);
-			assertTrue(false);
-		}
-    }
+ 
  
     /** *************** IdP TEST FUNCTIONS ********************** */
     /** ********************************************************* */
@@ -140,62 +111,7 @@ public class TestDorian extends TestCase{
 			assertTrue(false);
 		}
     }
-    
-    public void testFindIdPUsers(){
-    	try{
-    		jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
-    		assertNotNull(jm.getConfiguration());
-    		assertNotNull(jm.getDatabase());
-    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
-			String gridId = UserManager.subjectToIdentity(gridSubject);
-			Application a = createApplication();
-			jm.registerWithIdP(a);
-			IdPUserFilter uf = new IdPUserFilter();
-			uf.setUserId(a.getUserId());
-			IdPUser[] users = jm.findIdPUsers(gridId, uf);
-			assertEquals(1, users.length);	
-		}catch (Exception e) {
-    		FaultUtil.printFault(e);
-			assertTrue(false);
-		}
-    }
-    
-    public void testRegisterWithIdP(){
-    	try{
-    		jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
-    		assertNotNull(jm.getConfiguration());
-    		assertNotNull(jm.getDatabase());
-    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
-			String gridId = UserManager.subjectToIdentity(gridSubject);
-			
-			Application a = createApplication();
-			jm.registerWithIdP(a);
-			IdPUserFilter uf = new IdPUserFilter();
-			uf.setUserId(a.getUserId());
-			IdPUser[] users = jm.findIdPUsers(gridId, uf);
-			assertEquals(1, users.length);
-			assertEquals(IdPUserStatus.Pending, users[0].getStatus());
-			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
-			users[0].setStatus(IdPUserStatus.Active);
-			jm.updateIdPUser(gridId, users[0]);
-			BasicAuthCredential auth = new BasicAuthCredential();
-			auth.setUserId(a.getUserId());
-			auth.setPassword(a.getPassword());
-			SAMLAssertion saml = jm.authenticate(auth);
-			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-			PublicKey publicKey = pair.getPublic();
-			ProxyLifetime lifetime = getProxyLifetime();
-			X509Certificate[] certs = jm.createProxy(saml, publicKey, lifetime);
-			String newGridId = UserManager.subjectToIdentity(certs[0].getIssuerDN().getName());
-			//try to execute a findIdPUsers with a Non_Administrator	
-			users = jm.findIdPUsers(newGridId, uf);		
-			assertTrue(false);
-    	}catch (PermissionDeniedFault pdf) {
-		}catch (Exception e) {
-    		FaultUtil.printFault(e);
-			assertTrue(false);
-		}
-    }
+   
     
     public void testUpdateIdPUser(){
     	try{
@@ -892,6 +808,7 @@ public class TestDorian extends TestCase{
 			IFSUser usr1 = users[0];
 			String certStr = usr1.getCertificate().getCertificateAsString();
 			X509Certificate cert1 = CertUtil.loadCertificateFromString(certStr);
+			Thread.sleep(2000);
 			IFSUser usr2 = jm.renewIFSUserCredentials(adminGridId, usr1);
 			assertEquals(usr1.getGridId(), usr2.getGridId());
 
