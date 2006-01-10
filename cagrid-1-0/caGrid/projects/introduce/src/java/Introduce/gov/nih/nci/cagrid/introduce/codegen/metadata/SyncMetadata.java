@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.introduce.codegen.metadata;
 
 import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 
 import java.io.File;
 import java.io.FileInputStream;

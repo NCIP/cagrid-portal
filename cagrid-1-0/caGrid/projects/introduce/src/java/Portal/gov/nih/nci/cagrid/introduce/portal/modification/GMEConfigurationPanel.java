@@ -69,8 +69,6 @@ public class GMEConfigurationPanel extends JPanel {
 	JLabel nameLabel = null;
 
 	private JLabel elementTypeLabel = null;
-
-	private JPanel customPanel = null;
 	
 	public static final String ELEMENT_ONLY = "elements";
 	
