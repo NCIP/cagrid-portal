@@ -1,7 +1,12 @@
-
 package gov.nih.nci.cagrid.introduce.codegen.metadata;
 
+import gov.nih.nci.cagrid.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
+
 import java.io.File;
+import java.io.FileInputStream;
+import java.util.Properties;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -26,7 +31,11 @@ public class SyncMetadata {
 
 	public static final String DIR_OPT_FULL = "directory";
 
-	File baseDirectory;
+	private File baseDirectory;
+
+	private ServiceMetadataListType metadatas;
+
+	private Properties serviceProperties;
 
 	public SyncMetadata(File baseDirectory) {
 
@@ -34,10 +43,16 @@ public class SyncMetadata {
 	}
 
 	public void sync() throws Exception {
-	
-	}
-
-	public void lookForUpdates() {
+		this.metadatas = (ServiceMetadataListType) CommonTools
+				.deserializeDocument(this.baseDirectory + File.separator
+						+ "introduceMetadata.xml",
+						ServiceMetadataListType.class);
+		File servicePropertiesFile = new File(baseDirectory.getAbsolutePath()
+				+ File.separator + "introduce.properties");
+		serviceProperties = new Properties();
+		serviceProperties.load(new FileInputStream(servicePropertiesFile));
+		
+		TemplateObjectContainer toc = new TemplateObjectContainer(this.metadatas,this.serviceProperties);
 
 	}
 
