@@ -1,12 +1,17 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus.resource" class="ResourceConstantsTemplate" %>
-<% java.util.Properties properties = (java.util.Properties) argument; 
-   String packageName = properties.getProperty("introduce.skeleton.package");
-   String serviceName = properties.getProperty("introduce.skeleton.service.name");
-   String namespaceDomain = properties.getProperty("introduce.skeleton.namespace.domain");
-   String modifiedServiceName = serviceName;
-   if(serviceName.endsWith("Service")){
-   	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
-   }
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus.resource" class="ResourceConstantsTemplate" 
+imports="gov.nih.nci.cagrid.introduce.codegen.metadata.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.*"
+%>
+<%  TemplateObjectContainer arguments = (TemplateObjectContainer) argument; 
+  	Properties properties = arguments.getServiceProperties();
+	ServiceMetadataListType metadataList = arguments.getMetadata();
+	
+	String packageName = properties.getProperty("introduce.skeleton.package");
+    String serviceName = properties.getProperty("introduce.skeleton.service.name");
+    String namespaceDomain = properties.getProperty("introduce.skeleton.namespace.domain");
+    String modifiedServiceName = serviceName;
+    if(serviceName.endsWith("Service")){
+   		modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
+	}
 %>
 package <%=packageName%>.service.globus.resource;
 
@@ -18,7 +23,16 @@ public interface ResourceConstants {
 	public static final QName RESOURCE_KEY = new QName(SERVICE_NS, "<%=serviceName%>Key");
 	public static final QName RESOURCE_PROPERY_SET = new QName(SERVICE_NS, "<%=serviceName%>ResourceProperties");
 
-	// TODO: this should defined in a class from the metadata project
-	public static final QName COMMON_MD_RP = new QName("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common",
-		"CommonServiceMetadata");
+	//Service level metadata (exposed as resouce properties)
+<%	
+	if(metadataList!=null){
+		for (int i = 0; i < metadataList.getMetadata().length; i++) {
+			ServiceMetadataType metadata = metadataList.getMetadata()[i];
+			stringBuffer.append("\tpublic static final QName ");
+			stringBuffer.append(MetadataTemplateUtils.getResourcePropertyVariableName(metadataList, i));
+			stringBuffer.append("_MD_RP = new QName(\"");
+			stringBuffer.append(metadata.getQName().getNamespaceURI()+"\", \""+metadata.getQName().getLocalPart()+"\");\n");
+		}
+	}
+%>	
 }

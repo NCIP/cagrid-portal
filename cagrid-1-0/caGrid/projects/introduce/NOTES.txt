@@ -60,7 +60,7 @@ make callback for non-file metadata
 
 templating details:
 
-ResourceConstants.java
+(DONE) ResourceConstants.java
 ----------
 for each type (the QName is how the RP is identified... it doesn't have to be the schema QName as you can have several RPs for the same type(but we are gonna to use that for now)):
   public static final QName <upper case rp name>_MD_RP = new QName(<qname namespace>, <qname element name>);
@@ -68,7 +68,7 @@ Example:
   public static final QName COMMON_MD_RP = new QName("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common", "CommonServiceMetadata");
 
 
-BaseResource.java field definitions:
+(DONE) BaseResource.java field definitions:
 ----------
 for each type:
   private ResourceProperty <rp name>RP;
@@ -78,7 +78,7 @@ Example:
   private CommonServiceMetadataType commonMD;
 
 
-BaseResource.java initialize [public void initialize() throws Exception {]:
+(DONE) BaseResource.java initialize [public void initialize() throws Exception {]:
 ----------
 for each type:
   this.<rp name>RP = new SimpleResourceProperty(ResourceConstants.<upper case rp name>_MD_RP);
@@ -90,12 +90,12 @@ Example:
   this.propSet.add(this.commonRP);
 
 
-BaseResource.java make a method for loading each type from a file (for those that should be synced from file):
+(DONE) BaseResource.java make a method for loading each type from a file (for those that should be synced from file):
 ----------
 for each type, define a method to populate the bean:
-	private void load<type element name>FromFile() {
+	private void load<rp name>FromFile() {
 		try {
-			this.<rp name>MD = (<bean class name>) CommonTools.deserializeDocument(getConfiguration().get<type element name>File(),
+			this.<rp name>MD = (<bean class name>) CommonTools.deserializeDocument(getConfiguration().get<rp name>File(),
 				<bean class name>.class);
 		} catch (Exception e) {
 			logger.error("ERROR: problem populating metadata from file: " + e.getMessage(), e);
@@ -111,11 +111,11 @@ Example:
 		}
 	}
 
-BaseResource.java add the population method to the populateMetadata method:
+(DONE) BaseResource.java add the population method to the populateMetadata method:
 ----------
 for each type:
 	private void populateMetadata() {
-		load<type element name>FromFile(); 
+		load<rp name>FromFile(); 
 	}
 Example:
 	private void populateMetadata() {
@@ -123,22 +123,22 @@ Example:
 	}
 
 	
-MetadataConfigutation.java add a feild definition for the file location:
+(DONE) MetadataConfigutation.java add a feild definition for the file location:
 ----------
 for each type being loaded from a file:
-	private String <type element name>File;
+	private String <rp name>File;
 Example:
 	private String commonServiceMetadataFile;
 
 
-MetadataConfigutation.java add a getter and setter for file location:
+(DONE) MetadataConfigutation.java add a getter and setter for file location:
 ----------
 for each type being loaded from a file:
-	public String get<type element name>File() {
-		return <type element name>File;
+	public String get<rp name>File() {
+		return <rp name>File;
 	}
-	public void set<type element name>File(String <type element name>File) {
-		this.<type element name>File = <type element name>File;
+	public void set<rp name>File(String <rp name>File) {
+		this.<rp name>File = <rp name>File;
 	}
 Example:
 	public String getCommonServiceMetadataFile() {

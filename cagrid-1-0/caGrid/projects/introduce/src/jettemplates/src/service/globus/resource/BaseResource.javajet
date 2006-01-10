@@ -1,15 +1,17 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus.resource" class="BaseResourceTemplate" %>
-<% java.util.Properties properties = (java.util.Properties) argument; 
-   String packageName = properties.getProperty("introduce.skeleton.package");
-   String serviceName = properties.getProperty("introduce.skeleton.service.name");
-   String modifiedServiceName = serviceName;
-   if(serviceName.endsWith("Service")){
-   	modifiedServiceName = serviceName.substring(0,serviceName.length()-"Service".length());
-   }
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus.resource" class="BaseResourceTemplate" imports="gov.nih.nci.cagrid.introduce.codegen.metadata.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.*"
+%>
+<%  TemplateObjectContainer arguments = (TemplateObjectContainer) argument; 
+  	Properties properties = arguments.getServiceProperties();
+	ServiceMetadataListType metadataList = arguments.getMetadata();
+	
+	String packageName = properties.getProperty("introduce.skeleton.package");
+	String serviceName = properties.getProperty("introduce.skeleton.service.name");
+	String modifiedServiceName = serviceName;
+	if(serviceName.endsWith("Service")){
+		modifiedServiceName = serviceName.substring(0,serviceName.length()-"Service".length());
+	}
 %>
 package <%=packageName%>.service.globus.resource;
-
-import gov.nih.nci.cagrid.metadata.common.CommonServiceMetadataType;
 
 import java.util.Calendar;
 
@@ -20,6 +22,7 @@ import org.apache.axis.MessageContext;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import org.globus.mds.servicegroup.client.ServiceGroupRegistrationParameters;
 import org.globus.wsrf.Constants;
 import org.globus.wsrf.Resource;
@@ -38,6 +41,7 @@ import org.globus.wsrf.impl.SimpleResourcePropertyMetaData;
 import org.globus.wsrf.impl.SimpleResourcePropertySet;
 import org.globus.wsrf.impl.servicegroup.client.ServiceGroupRegistrationClient;
 import org.globus.wsrf.utils.AddressingUtils;
+
 import gov.nih.nci.cagrid.common.CommonTools;
 
 
@@ -48,15 +52,26 @@ public class BaseResource implements Resource, ResourceProperties, ResourceLifet
 	/** the identifier of this resource */
 	private Object id;
 
-	/** Stores the ResourceProperties of this sticky note */
+	/** Stores the ResourceProperties of this service */
 	private ResourcePropertySet propSet;
 
 	private Calendar terminationTime;
 
-	// TODO: how to add the proper metadata files here?
-	private ResourceProperty commonRP;
-	private CommonServiceMetadataType commonMD;
 	private MetadataConfiguration configuration;
+
+	//Define the metadata resource properties
+	<%	if(metadataList!=null){
+		for (int i = 0; i < metadataList.getMetadata().length; i++) {
+			ServiceMetadataType metadata = metadataList.getMetadata()[i];
+			String name=MetadataTemplateUtils.getResourcePropertyVariableName(metadataList, i);
+			
+			//define the RP
+			stringBuffer.append("\tprivate ResourceProperty "+name+"RP;\n");
+			//define the MD bean to hold the value
+			stringBuffer.append("\tprivate "+metadata.getClassName()+name+"MD;\n");
+		}
+	}%>	
+
 
 
 	// initializes the resource
@@ -76,10 +91,24 @@ public class BaseResource implements Resource, ResourceProperties, ResourceLifet
 
 		// this loads the metadata from XML files
 		populateMetadata();
+		
 		// now add the metadata as resource properties
-		this.commonRP = new SimpleResourceProperty(ResourceConstants.COMMON_MD_RP);
-		this.commonRP.add(this.commonMD);
-		this.propSet.add(this.commonRP);
+		<%	if(metadataList!=null){
+		for (int i = 0; i < metadataList.getMetadata().length; i++) {
+			ServiceMetadataType metadata = metadataList.getMetadata()[i];
+			String name=MetadataTemplateUtils.getResourcePropertyVariableName(metadataList, i);
+			
+			stringBuffer.append("\t//init the rp\n");
+			stringBuffer.append("\tthis."+name+"RP = new SimpleResourceProperty(ResourceConstants."+name.toUpperCase()+"_MD_RP);\n");
+	
+			stringBuffer.append("\t//add the value to the rp\n");
+			stringBuffer.append("\tthis."+name+"RP.add(this."+name+"MD);\n");
+	
+			stringBuffer.append("\t//add the rp to the prop set\n");
+			stringBuffer.append("\tthis.propSet.add(this."+name+"RP);\n");
+		}
+		}%>	
+
 
 		// register the service to the index sevice
 		performRegistration();
@@ -129,15 +158,39 @@ public class BaseResource implements Resource, ResourceProperties, ResourceLifet
 
 
 	private void populateMetadata() {
-
-		try {
-			this.commonMD = (CommonServiceMetadataType) CommonTools.deserializeDocument(getConfiguration().getCommonMetadataFile(),
-				CommonServiceMetadataType.class);
-		} catch (Exception e) {
-			logger.error("ERROR: problem populating metadata from file: " + e.getMessage(), e);
-		} 
+	<%	if(metadataList!=null){
+		for (int i = 0; i < metadataList.getMetadata().length; i++) {
+			ServiceMetadataType metadata = metadataList.getMetadata()[i];
+			if(metadata.isPopulateFromFile()){
+				String name=MetadataTemplateUtils.getResourcePropertyVariableName(metadataList, i);
+	%>
+		load<%=name%>FromFile();
+	<%		}
+		}
+		}
+	%>
 	}
 
+
+		<%	if(metadataList!=null){
+		for (int i = 0; i < metadataList.getMetadata().length; i++) {
+			ServiceMetadataType metadata = metadataList.getMetadata()[i];
+			if(metadata.isPopulateFromFile()){
+				String name=MetadataTemplateUtils.getResourcePropertyVariableName(metadataList, i);
+				String className=metadata.getClassName();
+	%>
+	private void load<%=name%>FromFile() {
+		try {
+			this.<%=name%>MD = (<%=className%>) CommonTools.deserializeDocument(getConfiguration().get<%=name%>File(),
+				<%=className%>.class);
+		} catch (Exception e) {
+			logger.error("ERROR: problem populating metadata from file: " + e.getMessage(), e);
+		}
+	}		
+	
+	<%		}
+		}
+		}%>	
 
 	public MetadataConfiguration getConfiguration() {
 		if (this.configuration != null) {

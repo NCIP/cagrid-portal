@@ -1,5 +1,9 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus.resource" class="MetadataConfigurationTemplate" %>
-<% java.util.Properties properties = (java.util.Properties) argument; 
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus.resource" class="MetadataConfigurationTemplate" imports="gov.nih.nci.cagrid.introduce.codegen.metadata.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.*"
+%>
+<%  TemplateObjectContainer arguments = (TemplateObjectContainer) argument; 
+  	Properties properties = arguments.getServiceProperties();
+	ServiceMetadataListType metadataList = arguments.getMetadata();
+
    String packageName = properties.getProperty("introduce.skeleton.package");
    String serviceName = properties.getProperty("introduce.skeleton.service.name");
    String modifiedServiceName = serviceName;
@@ -10,9 +14,19 @@
 package <%=packageName%>.service.globus.resource;
 
 public class MetadataConfiguration {
-	private String commonMetadataFile;
 	private String registrationTemplateFile;
 	private boolean performRegistration;
+	
+	<%	if(metadataList!=null){
+			for (int i = 0; i < metadataList.getMetadata().length; i++) {
+				ServiceMetadataType metadata = metadataList.getMetadata()[i];
+				if(metadata.isPopulateFromFile()){
+					String name=MetadataTemplateUtils.getResourcePropertyVariableName(metadataList, i);
+					stringBuffer.append("\tprivate String "+name+"File;\n");
+				}
+			}
+		}
+	%>
 
 
 	public boolean shouldPerformRegistration() {
@@ -25,16 +39,6 @@ public class MetadataConfiguration {
 	}
 
 
-	public String getCommonMetadataFile() {
-		return commonMetadataFile;
-	}
-
-
-	public void setCommonMetadataFile(String commonMetadataFile) {
-		this.commonMetadataFile = commonMetadataFile;
-	}
-
-
 	public String getRegistrationTemplateFile() {
 		return registrationTemplateFile;
 	}
@@ -43,4 +47,24 @@ public class MetadataConfiguration {
 	public void setRegistrationTemplateFile(String registrationTemplateFile) {
 		this.registrationTemplateFile = registrationTemplateFile;
 	}
+	<%	if(metadataList!=null){
+			for (int i = 0; i < metadataList.getMetadata().length; i++) {
+				ServiceMetadataType metadata = metadataList.getMetadata()[i];
+				if(metadata.isPopulateFromFile()){
+					String name=MetadataTemplateUtils.getResourcePropertyVariableName(metadataList, i);
+					String className=metadata.getClassName();
+		%>
+	
+	
+	public String get<%=name%>File() {
+		return <%=name%>File;
+	}
+	
+	
+	public void set<%=name%>File(String <%=name%>File) {
+		this.<%=name%>File = <%=name%>File;
+	}
+	<%			}
+			}
+		}%>	
 }
