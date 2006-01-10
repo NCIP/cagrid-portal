@@ -106,10 +106,9 @@ public class SyncSource {
 	}
 
 	private String getClassNameFromElement(MethodTypeInputsInput inputParam) {
-		if (inputParam.getClassName().equals("void")) {
+		if (inputParam.getClassName() !=null  && inputParam.getClassName().equals("void")) {
 			return "void";
 		}
-		table.dump(System.out);
 		Type type = table.getType(new QName(inputParam.getNamespace(), inputParam
 				.getType()));
 		if (inputParam.getIsArray().booleanValue()) {
@@ -120,10 +119,9 @@ public class SyncSource {
 	}
 
 	private String getClassNameFromElement(MethodTypeOutput outputParam) {
-		if (outputParam.getClassName().equals("void")) {
+		if (outputParam.getClassName() != null && outputParam.getClassName().equals("void")) {
 			return "void";
 		}
-		table.dump(System.out);
 		Type type = table.getType(new QName(outputParam.getNamespace(), outputParam
 				.getType()));
 		if (outputParam.getIsArray().booleanValue()) {
