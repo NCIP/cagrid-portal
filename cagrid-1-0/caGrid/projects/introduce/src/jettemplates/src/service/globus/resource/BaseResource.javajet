@@ -1,6 +1,6 @@
 <%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus.resource" class="BaseResourceTemplate" imports="gov.nih.nci.cagrid.introduce.codegen.metadata.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.*"
 %>
-<%  TemplateObjectContainer arguments = (TemplateObjectContainer) argument; 
+<%  gov.nih.nci.cagrid.introduce.ServiceInformation arguments = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
   	Properties properties = arguments.getServiceProperties();
 	ServiceMetadataListType metadataList = arguments.getMetadata();
 	
