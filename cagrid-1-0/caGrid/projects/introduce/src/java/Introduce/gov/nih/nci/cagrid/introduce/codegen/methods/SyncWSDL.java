@@ -331,7 +331,6 @@ public class SyncWSDL {
 				operation.addContent(faultEl);
 			}
 		}
-
 		return operation;
 	}
 
