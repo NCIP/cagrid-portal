@@ -1,12 +1,14 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.etc" class="RegistationTemplate" %>
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.etc" class="RegistationTemplate" imports="gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.*" %>
 <% gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
-   String packageName = info.getServiceProperties().getProperty("introduce.skeleton.package");
-   String serviceName = info.getServiceProperties().getProperty("introduce.skeleton.service.name");
-   String namespaceDomain = info.getServiceProperties().getProperty("introduce.skeleton.namespace.domain");
-   String modifiedServiceName = serviceName;
-   if(serviceName.endsWith("Service")){
-   	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
-   }
+	ServiceMetadataListType metadataList = info.getMetadata();
+	
+	String packageName = info.getServiceProperties().getProperty("introduce.skeleton.package");
+	String serviceName = info.getServiceProperties().getProperty("introduce.skeleton.service.name");
+	String namespaceDomain = info.getServiceProperties().getProperty("introduce.skeleton.namespace.domain");
+	String modifiedServiceName = serviceName;
+	if(serviceName.endsWith("Service")){
+   		modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
+   	}
 %>
 <?xml version="1.0" encoding="UTF-8" ?>
 <ServiceGroupRegistrationParameters xmlns:sgc="http://mds.globus.org/servicegroup/client"
@@ -16,25 +18,30 @@
   xmlns="http://mds.globus.org/servicegroup/client">
   <!-- The ServiceGroupEPR defines the servicegroup to which registrations will be made -->
   <ServiceGroupEPR>
-    <!-- TODO: template this for the Index Service EPR -->
+    <!-- TODO: deploytime template this for the Index Service EPR -->
     <wsa:Address>http://localhost:8080/wsrf/services/DefaultIndexService</wsa:Address>
   </ServiceGroupEPR>
   <!-- Specifies that the registration will be renewed every 10 minutes -->
   <RefreshIntervalSecs>600</RefreshIntervalSecs>
   <Content xsi:type="agg:AggregatorContent" xmlns:agg="http://mds.globus.org/aggregator/types">
     <agg:AggregatorConfig xsi:type="agg:AggregatorConfig">
-      <agg:GetMultipleResourcePropertiesPollType
-        xmlns:cadsr="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.cadsr"
-        xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"
-        xmlns:anl="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.analytical">
+      <agg:GetMultipleResourcePropertiesPollType>
         <!-- Specifies that the index should refresh information
             every 300000 milliseconds (once every 5 minutes) -->
         <agg:PollIntervalMillis>300000</agg:PollIntervalMillis>
-        <!-- specifies all Resource Properties that should be retrieved
-            from the service -->
-        <agg:ResourcePropertyNames>com:CommonServiceMetadata</agg:ResourcePropertyNames>
-        <!-- TODO: template which RPs to add here -->
-        <!-- <agg:ResourcePropertyNames>anl:AnalyticalServiceMetadata</agg:ResourcePropertyNames> -->
+        <!-- specifies all Resource Properties that should be retrieved from the service -->
+        <%	if(metadataList!=null){
+		for (int i = 0; i < metadataList.getMetadata().length; i++) {
+			ServiceMetadataType metadata = metadataList.getMetadata()[i];
+			if(metadata.isRegister()){
+				String qnameName=metadata.getQName().getLocalPart();
+				String qnameNamespace=metadata.getQName().getNamespaceURI();
+		%>
+		<agg:ResourcePropertyNames xmlns:<%=qnameName%>="<%=qnameNamespace%>"><%=qnameName%>:<%=qnameName%></agg:ResourcePropertyNames>
+	<%		}
+		}
+		}
+	%>
       </agg:GetMultipleResourcePropertiesPollType>
     </agg:AggregatorConfig>
     <agg:AggregatorData/>

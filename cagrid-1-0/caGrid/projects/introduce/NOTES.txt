@@ -149,16 +149,14 @@ Example:
 	}
 
 
-registration.xml add types to register:
+(DONE) registration.xml add types to register:
 ----------
 for each type that should be registered (if register is true), add the ns prefix to GetMultipleResourcePropertiesPollType element and QName to ResourcePropertyNames element:
-      <agg:GetMultipleResourcePropertiesPollType  ...
-        xmlns:<rp qname namespace prefix>="<rp qname namespace>" ... >   
-        <agg:ResourcePropertyNames><rp qname namespace prefix>:<rp qname name></agg:ResourcePropertyNames>
+      <agg:GetMultipleResourcePropertiesPollType ... >   
+        <agg:ResourcePropertyNames xmlns:<rp qname namespace prefix>="<rp qname namespace>"><rp qname namespace prefix>:<rp qname name></agg:ResourcePropertyNames>
 Example:
-      <agg:GetMultipleResourcePropertiesPollType  ...
-        xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" ... >   
-        <agg:ResourcePropertyNames>com:CommonServiceMetadata</agg:ResourcePropertyNames>
+      <agg:GetMultipleResourcePropertiesPollType ... >   
+        <agg:ResourcePropertyNames xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">com:CommonServiceMetadata</agg:ResourcePropertyNames>
 
 
 serivce.wsdl add qnames into serviceRP definition in the schema section
