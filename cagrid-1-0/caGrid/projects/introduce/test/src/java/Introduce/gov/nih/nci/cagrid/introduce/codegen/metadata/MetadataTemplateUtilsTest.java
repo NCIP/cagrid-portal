@@ -5,6 +5,7 @@ import java.util.Set;
 
 import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
+import gov.nih.nci.cagrid.introduce.codegen.MetadataTemplateUtils;
 import junit.framework.TestCase;
 
 

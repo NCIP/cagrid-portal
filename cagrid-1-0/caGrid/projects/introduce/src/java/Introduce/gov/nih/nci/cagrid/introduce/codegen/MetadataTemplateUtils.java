@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.codegen.metadata;
+package gov.nih.nci.cagrid.introduce.codegen;
 
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataType;
