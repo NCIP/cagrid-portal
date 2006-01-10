@@ -25,6 +25,7 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserRole;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserStatus;
+import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidAssertionFault;
 import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidUserFault;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
@@ -79,11 +80,15 @@ public class TestDorian extends TestCase{
 
     public void testAuthenticate(){
     	try{
+    		//initialize a Dorian object
     		jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
     		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
+    		
 			String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
+			
+			//test authentication with an active user
 			Application a = createApplication();
 			jm.registerWithIdP(a);	
 			IdPUserFilter uf = new IdPUserFilter();
@@ -106,25 +111,101 @@ public class TestDorian extends TestCase{
 			SAMLAssertion saml = jm.authenticate(auth);
 			assertNotNull(saml);
 			this.verifySAMLAssertion(saml,jm.getIdPCertificate(),a);
+			
+			//test authentication with a status pending user
+			Application b = createApplication();
+			jm.registerWithIdP(b);	
+			uf = new IdPUserFilter();
+			uf.setUserId(b.getUserId());
+			users = jm.findIdPUsers(gridId, uf);
+			assertEquals(1, users.length);
+			assertEquals(IdPUserStatus.Pending, users[0].getStatus());
+			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+			auth = new BasicAuthCredential();
+			auth.setUserId(b.getUserId());
+			auth.setPassword(b.getPassword());
+			try{
+				saml = jm.authenticate(auth);
+				assertTrue(false);
+			}catch(PermissionDeniedFault pdf){	
+			}
+			
+			//test authentication with a status rejected user
+			Application c = createApplication();
+			jm.registerWithIdP(c);	
+			uf = new IdPUserFilter();
+			uf.setUserId(c.getUserId());
+			users = jm.findIdPUsers(gridId, uf);
+			assertEquals(1, users.length);
+			assertEquals(IdPUserStatus.Pending, users[0].getStatus());
+			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+			users[0].setStatus(IdPUserStatus.Rejected);
+			jm.updateIdPUser(gridId, users[0]);
+			auth = new BasicAuthCredential();
+			auth.setUserId(c.getUserId());
+			auth.setPassword(c.getPassword());
+			try{
+				saml = jm.authenticate(auth);
+				assertTrue(false);
+			}catch (PermissionDeniedFault pdf) {	
+			}
+    	
+			//test authentication with a status suspended user
+			Application d = createApplication();
+			jm.registerWithIdP(d);	
+			uf = new IdPUserFilter();
+			uf.setUserId(d.getUserId());
+			users = jm.findIdPUsers(gridId, uf);
+			assertEquals(1, users.length);
+			assertEquals(IdPUserStatus.Pending, users[0].getStatus());
+			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+			users[0].setStatus(IdPUserStatus.Suspended);
+			jm.updateIdPUser(gridId, users[0]);
+			auth = new BasicAuthCredential();
+			auth.setUserId(d.getUserId());
+			auth.setPassword(d.getPassword());
+			try{
+				saml = jm.authenticate(auth);
+				assertTrue(false);
+			}catch (PermissionDeniedFault pdf) {	
+			}
 		}catch (Exception e) {
     		FaultUtil.printFault(e);
 			assertTrue(false);
+		}finally{
+			try {
+				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
+				jm.getDatabase().destroyDatabase();
+			} catch (Exception e) {
+				FaultUtil.printFault(e);
+				assertTrue(false);
+			}
 		}
-    }
+		}				
    
-    
-    public void testUpdateIdPUser(){
+    public void testFindUpdateRemoveIdPUser(){
     	try{
     		jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
     		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
+    		
     		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
+			
 			Application a = createApplication();
 			jm.registerWithIdP(a);
 			IdPUserFilter uf = new IdPUserFilter();
 			uf.setUserId(a.getUserId());
-    		IdPUser[] us = jm.findIdPUsers(gridId, uf);
+			
+			//test findIdPUsers with an invalid gridId
+			try{
+				String invalidGridId = "ThisIsInvalid";
+	    		IdPUser[] users = jm.findIdPUsers(invalidGridId, uf);
+				assertTrue(false);
+			}catch (PermissionDeniedFault pdf) {	
+			}
+    		
+			IdPUser[] us = jm.findIdPUsers(gridId, uf);
     		assertEquals(1, us.length);
     		us[0].setAddress("New_Address");
     		us[0].setAddress2("New_Address2");
@@ -140,6 +221,16 @@ public class TestDorian extends TestCase{
     		us[0].setState(StateCode.AK);
     		us[0].setStatus(IdPUserStatus.Active);
     		us[0].setZipcode("11111");
+    		
+    		//try to update a user that does not exist
+    		try{
+    			IdPUser u = new IdPUser();
+    			u.setUserId("No_SUCH_USER");
+    			jm.updateIdPUser(gridId, u);
+    			assertTrue(false);
+    		}catch (NoSuchUserFault nsuf) {
+    		}
+    		
     		jm.updateIdPUser(gridId, us[0]);
     		us = jm.findIdPUsers(gridId, uf);
     		assertEquals(1, us.length);
@@ -156,34 +247,31 @@ public class TestDorian extends TestCase{
     		assertEquals(StateCode.AK, us[0].getState());
     		assertEquals(IdPUserStatus.Active, us[0].getStatus());
     		assertEquals("11111", us[0].getZipcode());
-		}catch (Exception e) {
-    		FaultUtil.printFault(e);
-			assertTrue(false);
-		}
-    }
-    
-    public void testRemoveIdPUser(){
-    	try{
-    		jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
-    		assertNotNull(jm.getConfiguration());
-    		assertNotNull(jm.getDatabase());
-    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
-			String gridId = UserManager.subjectToIdentity(gridSubject);
-			Application a = createApplication();
-			jm.registerWithIdP(a);
-			IdPUserFilter uf = new IdPUserFilter();
-			uf.setUserId(a.getUserId());
-    		IdPUser[] us = jm.findIdPUsers(gridId, uf);
-    		assertEquals(1, us.length);
-			
+    		
+    		//create an invalid Grid Id and try to removeIdPUser
+    		try{
+    			String invalidGridId = "ThisIsInvalid";
+    			jm.removeIdPUser(invalidGridId, us[0].getUserId());
+    			assertTrue(false);
+    		}catch (PermissionDeniedFault pdf) {
+    		}
+    		
     		//remove the user
     		jm.removeIdPUser(gridId, us[0].getUserId());
     		us = jm.findIdPUsers(gridId, uf);
     		assertEquals(0, us.length);
-    	}catch (PermissionDeniedFault pdf) {
+    		
 		}catch (Exception e) {
     		FaultUtil.printFault(e);
 			assertTrue(false);
+		}finally{
+			try {
+				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
+				jm.getDatabase().destroyDatabase();
+			} catch (Exception e) {
+				FaultUtil.printFault(e);
+				assertTrue(false);
+			}
 		}
     }
     
@@ -191,135 +279,6 @@ public class TestDorian extends TestCase{
     /** ********************************************************* */
     /** ********************************************************* */
     /** ********************************************************* */
-    
-    public void testBadAuthenticateStatusPendingUser(){
-    	try{
-    		jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
-    		assertNotNull(jm.getConfiguration());
-    		assertNotNull(jm.getDatabase());
-    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
-			String gridId = UserManager.subjectToIdentity(gridSubject);
-			Application a = createApplication();
-			jm.registerWithIdP(a);	
-			IdPUserFilter uf = new IdPUserFilter();
-			uf.setUserId(a.getUserId());
-			IdPUser[] users = jm.findIdPUsers(gridId, uf);
-			assertEquals(1, users.length);
-			assertEquals(IdPUserStatus.Pending, users[0].getStatus());
-			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
-			BasicAuthCredential auth = new BasicAuthCredential();
-			auth.setUserId(a.getUserId());
-			auth.setPassword(a.getPassword());
-			SAMLAssertion saml = jm.authenticate(auth);
-			assertTrue(false);
-    	}catch (PermissionDeniedFault pdf) {	
-		}catch (Exception e) {
-    		FaultUtil.printFault(e);
-			assertTrue(false);
-		}
-    }
-    
-    public void testBadAuthenticateStatusRejectedUser(){
-    	try{
-    		jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
-    		assertNotNull(jm.getConfiguration());
-    		assertNotNull(jm.getDatabase());
-    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
-			String gridId = UserManager.subjectToIdentity(gridSubject);
-			Application a = createApplication();
-			jm.registerWithIdP(a);	
-			IdPUserFilter uf = new IdPUserFilter();
-			uf.setUserId(a.getUserId());
-			IdPUser[] users = jm.findIdPUsers(gridId, uf);
-			assertEquals(1, users.length);
-			assertEquals(IdPUserStatus.Pending, users[0].getStatus());
-			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
-			users[0].setStatus(IdPUserStatus.Rejected);
-			jm.updateIdPUser(gridId, users[0]);
-			BasicAuthCredential auth = new BasicAuthCredential();
-			auth.setUserId(a.getUserId());
-			auth.setPassword(a.getPassword());
-			SAMLAssertion saml = jm.authenticate(auth);
-			assertTrue(false);
-    	}catch (PermissionDeniedFault pdf) {	
-		}catch (Exception e) {
-    		FaultUtil.printFault(e);
-			assertTrue(false);
-		}
-    }
-    
-    public void testBadAuthenticateStatusSuspendedUser(){
-    	try{
-    		jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
-    		assertNotNull(jm.getConfiguration());
-    		assertNotNull(jm.getDatabase());
-    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
-			String gridId = UserManager.subjectToIdentity(gridSubject);
-			Application a = createApplication();
-			jm.registerWithIdP(a);	
-			IdPUserFilter uf = new IdPUserFilter();
-			uf.setUserId(a.getUserId());
-			IdPUser[] users = jm.findIdPUsers(gridId, uf);
-			assertEquals(1, users.length);
-			assertEquals(IdPUserStatus.Pending, users[0].getStatus());
-			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
-			users[0].setStatus(IdPUserStatus.Suspended);
-			jm.updateIdPUser(gridId, users[0]);
-			BasicAuthCredential auth = new BasicAuthCredential();
-			auth.setUserId(a.getUserId());
-			auth.setPassword(a.getPassword());
-			SAMLAssertion saml = jm.authenticate(auth);
-			assertTrue(false);
-    	}catch (PermissionDeniedFault pdf) {	
-		}catch (Exception e) {
-    		FaultUtil.printFault(e);
-			assertTrue(false);
-		}
-    }
-    
-    public void testBadFindIdPUsersInvalidGridId(){
-    	try{
-    		jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
-    		assertNotNull(jm.getConfiguration());
-    		assertNotNull(jm.getDatabase());
-			//create a valid IdP User
-			Application a = createApplication();
-			jm.registerWithIdP(a);
-			IdPUserFilter f = new IdPUserFilter();
-			f.setUserId(a.getUserId());
-			
-    		//create an invalid Grid Id and try to findIdPUsers()
-    		String invalidGridId = "ThisIsInvalid";
-    		IdPUser[] us = jm.findIdPUsers(invalidGridId, f);
-			assertTrue(false);
-    	}catch (PermissionDeniedFault pdf) {
-		}catch (Exception e) {
-    		FaultUtil.printFault(e);
-			assertTrue(false);
-		}
-    }
-    
-    public void testBadFindIdPUsersUserNotAdmin(){
-    	try{
-    		jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
-    		assertNotNull(jm.getConfiguration());
-    		assertNotNull(jm.getDatabase());
-			//create a valid IdP User
-			Application a = createApplication();
-			jm.registerWithIdP(a);
-			IdPUserFilter f = new IdPUserFilter();
-			f.setUserId(a.getUserId());
-			
-    		//create an invalid Grid Id and try to findIdPUsers()
-    		String invalidGridId = "ThisIsInvalid";
-    		IdPUser[] us = jm.findIdPUsers(invalidGridId, f);
-			assertTrue(false);
-    	}catch (PermissionDeniedFault pdf) {
-		}catch (Exception e) {
-    		FaultUtil.printFault(e);
-			assertTrue(false);
-		}
-    }
     
     public void testBadRegisterWithIdPTwoIdenticalUsers(){
     	try{
@@ -336,111 +295,65 @@ public class TestDorian extends TestCase{
 		}catch (Exception e) {
     		FaultUtil.printFault(e);
 			assertTrue(false);
+		}finally{
+			try {
+				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
+				jm.getDatabase().destroyDatabase();
+			} catch (Exception e) {
+				FaultUtil.printFault(e);
+				assertTrue(false);
+			}
 		}
     }
     
-    public void testBadRegisterWithIdPPasswordTooLong(){
+    public void testBadRegisterWithIdP(){
     	try{
     		jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
     		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		//test the password length too long
-			Application a = createTooLongPasswordApplication();
-			jm.registerWithIdP(a);	
-			assertTrue(false);
-    	}catch (InvalidUserPropertyFault iupf) {
-		}catch (Exception e) {
+    		try{
+    			Application a = createTooLongPasswordApplication();
+    			jm.registerWithIdP(a);	
+    			assertTrue(false);
+    		}catch (InvalidUserPropertyFault iupf) {
+    		}
+    		
+    		//test the password length is too short
+    		try{
+    			Application b = createTooShortPasswordApplication();
+    			jm.registerWithIdP(b);	
+    			assertTrue(false);
+    		}catch (InvalidUserPropertyFault iupf) {
+    		}
+    		
+    		//test the UserId length is too long
+    		try{
+    			Application c = createTooLongUserIdApplication();
+    			jm.registerWithIdP(c);	
+    			assertTrue(false);
+    		}catch (InvalidUserPropertyFault iupf) {
+    		}
+    		
+    		//test the UserId length is too short
+    		try{
+    			Application d = createTooShortUserIdApplication();
+    			jm.registerWithIdP(d);	
+    			assertTrue(false);
+    		}catch (InvalidUserPropertyFault iupf) {
+    		}
+    	}
+    	catch (Exception e) {
     		FaultUtil.printFault(e);
 			assertTrue(false);
-		}
-    }
-    
-    public void testBadRegisterWithIdPPasswordTooShort(){
-    	try{
-    		jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
-    		assertNotNull(jm.getConfiguration());
-    		assertNotNull(jm.getDatabase());
-    		//test the password length too short
-			Application a = createTooShortPasswordApplication();
-			jm.registerWithIdP(a);	
-			assertTrue(false);
-    	}catch (InvalidUserPropertyFault iupf) {
-		}catch (Exception e) {
-    		FaultUtil.printFault(e);
-			assertTrue(false);
-		}
-    }
-    
-    public void testBadRegisterWithIdPUserIdTooLong(){
-    	try{
-    		jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
-    		assertNotNull(jm.getConfiguration());
-    		assertNotNull(jm.getDatabase());
-    		//test the UserId too long
-			Application a = createTooLongUserIdApplication();
-			jm.registerWithIdP(a);	
-			assertTrue(false);
-    	}catch (InvalidUserPropertyFault iupf) {
-		}catch (Exception e) {
-    		FaultUtil.printFault(e);
-			assertTrue(false);
-		}
-    }
-    
-    public void testBadRegisterWithIdpUserIdTooShort(){
-    	try{
-    		jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
-    		assertNotNull(jm.getConfiguration());
-    		assertNotNull(jm.getDatabase());
-    		//test the UserId too short
-			Application a = createTooShortUserIdApplication();
-			jm.registerWithIdP(a);	
-			assertTrue(false);
-    	}catch (InvalidUserPropertyFault iupf) {
-		}catch (Exception e) {
-    		FaultUtil.printFault(e);
-			assertTrue(false);
-		}
-    }
-    
-    public void testBadUpdateIdPUserNoSuchUser(){
-    	try{
-    		jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
-    		assertNotNull(jm.getConfiguration());
-    		assertNotNull(jm.getDatabase());
-    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
-			String gridId = UserManager.subjectToIdentity(gridSubject);
-			
-    		//test for no such user
-    		IdPUser u = new IdPUser();
-			u.setUserId("No_SUCH_USER");
-			jm.updateIdPUser(gridId, u);
-			assertTrue(false);
-    	}catch (NoSuchUserFault nsuf) {
-		}catch (Exception e) {
-    		FaultUtil.printFault(e);
-			assertTrue(false);
-		}
-    }
-    
-    public void testBadRemoveIdPUserInvalidGridId(){
-    	try{
-    		jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
-    		assertNotNull(jm.getConfiguration());
-    		assertNotNull(jm.getDatabase());
-			//create a valid IdP User
-			Application a = createApplication();
-			jm.registerWithIdP(a);
-			String userId = a.getUserId();
-			
-    		//create an invalid Grid Id and try to findIdPUsers()
-    		String invalidGridId = "ThisIsInvalid";
-    		jm.removeIdPUser(invalidGridId, userId);
-			assertTrue(false);
-    	}catch (PermissionDeniedFault pdf) {
-		}catch (Exception e) {
-    		FaultUtil.printFault(e);
-			assertTrue(false);
+		}finally{
+			try {
+				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
+				jm.getDatabase().destroyDatabase();
+			} catch (Exception e) {
+				FaultUtil.printFault(e);
+				assertTrue(false);
+			}
 		}
     }
     
@@ -467,6 +380,14 @@ public class TestDorian extends TestCase{
 		}catch (Exception e) {
     		FaultUtil.printFault(e);
 			assertTrue(false);
+		}finally{
+			try {
+				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
+				jm.getDatabase().destroyDatabase();
+			} catch (Exception e) {
+				FaultUtil.printFault(e);
+				assertTrue(false);
+			}
 		}
     }
     
@@ -492,6 +413,14 @@ public class TestDorian extends TestCase{
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
+		}finally{
+			try {
+				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
+				jm.getDatabase().destroyDatabase();
+			} catch (Exception e) {
+				FaultUtil.printFault(e);
+				assertTrue(false);
+			}
 		}
 	}
     
@@ -541,6 +470,14 @@ public class TestDorian extends TestCase{
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
+		}finally{
+			try {
+				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
+				jm.getDatabase().destroyDatabase();
+			} catch (Exception e) {
+				FaultUtil.printFault(e);
+				assertTrue(false);
+			}
 		}
 	}
     
@@ -594,6 +531,14 @@ public class TestDorian extends TestCase{
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
+		}finally{
+			try {
+				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
+				jm.getDatabase().destroyDatabase();
+			} catch (Exception e) {
+				FaultUtil.printFault(e);
+				assertTrue(false);
+			}
 		}
 	}
     
@@ -640,6 +585,14 @@ public class TestDorian extends TestCase{
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
+		}finally{
+			try {
+				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
+				jm.getDatabase().destroyDatabase();
+			} catch (Exception e) {
+				FaultUtil.printFault(e);
+				assertTrue(false);
+			}
 		}
 	}
     
@@ -687,7 +640,15 @@ public class TestDorian extends TestCase{
     	} catch (Exception e){
     		FaultUtil.printFault(e);
     		assertTrue(false);
-    	}
+    	}finally{
+			try {
+				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
+				jm.getDatabase().destroyDatabase();
+			} catch (Exception e) {
+				FaultUtil.printFault(e);
+				assertTrue(false);
+			}
+		}
     }
     
     public void testAddRemoveTrustedIdP(){
@@ -731,7 +692,15 @@ public class TestDorian extends TestCase{
     	} catch (Exception e){
     		FaultUtil.printFault(e);
     		assertTrue(false);
-    	}
+    	}finally{
+			try {
+				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
+				jm.getDatabase().destroyDatabase();
+			} catch (Exception e) {
+				FaultUtil.printFault(e);
+				assertTrue(false);
+			}
+		}
     }
     
     public void testUpdateTrustedIdP(){
@@ -772,13 +741,21 @@ public class TestDorian extends TestCase{
 			policyClass = ManualApprovalPolicy.class.getName();
 			idp.setUserPolicyClass(policyClass);
 			idp.setStatus(TrustedIdPStatus.Suspended);
-			jm.updatedTrustedIdP(gridId, idp);
+			jm.updateTrustedIdP(gridId, idp);
 			TrustedIdP[] idps = jm.getTrustedIdPs(gridId);
 			assertEquals(idp.getName(), idps[1].getName());
     	} catch (Exception e){
     		FaultUtil.printFault(e);
     		assertTrue(false);
-    	}
+    	}finally{
+			try {
+				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
+				jm.getDatabase().destroyDatabase();
+			} catch (Exception e) {
+				FaultUtil.printFault(e);
+				assertTrue(false);
+			}
+		}
     }
     
     public void testRenewIFSUserCredentials() {
@@ -823,6 +800,14 @@ public class TestDorian extends TestCase{
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
+		}finally{
+			try {
+				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
+				jm.getDatabase().destroyDatabase();
+			} catch (Exception e) {
+				FaultUtil.printFault(e);
+				assertTrue(false);
+			}
 		}
 	}
     
@@ -878,6 +863,14 @@ public class TestDorian extends TestCase{
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
+		}finally{
+			try {
+				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
+				jm.getDatabase().destroyDatabase();
+			} catch (Exception e) {
+				FaultUtil.printFault(e);
+				assertTrue(false);
+			}
 		}
 	}
     
@@ -930,6 +923,14 @@ public class TestDorian extends TestCase{
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
+		}finally{
+			try {
+				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
+				jm.getDatabase().destroyDatabase();
+			} catch (Exception e) {
+				FaultUtil.printFault(e);
+				assertTrue(false);
+			}
 		}
 	}
     
@@ -978,6 +979,14 @@ public class TestDorian extends TestCase{
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
+		}finally{
+			try {
+				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
+				jm.getDatabase().destroyDatabase();
+			} catch (Exception e) {
+				FaultUtil.printFault(e);
+				assertTrue(false);
+			}
 		}
 	}
     
@@ -1025,7 +1034,15 @@ public class TestDorian extends TestCase{
     	} catch (Exception e){
     		FaultUtil.printFault(e);
     		assertTrue(false);
-    	}
+    	}finally{
+			try {
+				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
+				jm.getDatabase().destroyDatabase();
+			} catch (Exception e) {
+				FaultUtil.printFault(e);
+				assertTrue(false);
+			}
+		}
     }
     
     public void testBadAddTrustedIdPInvalidGridId(){
@@ -1069,7 +1086,15 @@ public class TestDorian extends TestCase{
     	} catch (Exception e){
     		FaultUtil.printFault(e);
     		assertTrue(false);
-    	}
+    	}finally{
+			try {
+				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
+				jm.getDatabase().destroyDatabase();
+			} catch (Exception e) {
+				FaultUtil.printFault(e);
+				assertTrue(false);
+			}
+		}
     }
     
     public void testBadRemoveTrustedIdP(){
@@ -1114,7 +1139,15 @@ public class TestDorian extends TestCase{
     	} catch (Exception e){
     		FaultUtil.printFault(e);
     		assertTrue(false);
-    	}
+    	}finally{
+			try {
+				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
+				jm.getDatabase().destroyDatabase();
+			} catch (Exception e) {
+				FaultUtil.printFault(e);
+				assertTrue(false);
+			}
+		}
     }
     
     public void testBadUpdateTrustedIdPInvalidGridId(){
@@ -1156,13 +1189,21 @@ public class TestDorian extends TestCase{
 			idp.setUserPolicyClass(policyClass);
 			idp.setStatus(TrustedIdPStatus.Suspended);
 			gridId = "Invalid";
-			jm.updatedTrustedIdP(gridId, idp);
+			jm.updateTrustedIdP(gridId, idp);
 			assertTrue(false);
     	}catch (InvalidUserFault iuf) {
     	} catch (Exception e){
     		FaultUtil.printFault(e);
     		assertTrue(false);
-    	}
+    	}finally{
+			try {
+				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
+				jm.getDatabase().destroyDatabase();
+			} catch (Exception e) {
+				FaultUtil.printFault(e);
+				assertTrue(false);
+			}
+		}
     }
     
     /** *************** HELPER FUNCTIONS ************************ */
@@ -1173,6 +1214,16 @@ public class TestDorian extends TestCase{
     public void verifySAMLAssertion(SAMLAssertion saml, X509Certificate idpCert,
 			Application app) throws Exception {
 		assertNotNull(saml);
+		
+		Calendar cal = new GregorianCalendar();
+		Date now = cal.getTime();
+		if ((now.before(saml.getNotBefore())) || (now.after(saml.getNotOnOrAfter()))) {
+		InvalidAssertionFault fault = new InvalidAssertionFault();
+		fault.setFaultString("The Assertion is not valid at " + now + ", the assertion is valid from "
+		+ saml.getNotBefore() + " to " + saml.getNotOnOrAfter());
+		throw fault;
+		}
+
 		saml.verify(idpCert);
 
 		assertEquals(idpCert.getSubjectDN().toString(), saml
@@ -1364,18 +1415,7 @@ public class TestDorian extends TestCase{
 	}
     
     protected void tearDown() throws Exception {
-		super.setUp();
-		try {
-			if(jm != null)
-			{
-				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
-				jm.getDatabase().destroyDatabase();
-				jm = null;
-			}
-		} catch (Exception e) {
-			FaultUtil.printFault(e);
-			assertTrue(false);
-		}
+		super.tearDown();
 	}
     
 }
