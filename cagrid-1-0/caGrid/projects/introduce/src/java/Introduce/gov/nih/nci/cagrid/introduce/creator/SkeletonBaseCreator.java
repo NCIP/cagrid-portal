@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.creator;
 
+import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.ClasspathTemplate;
 import gov.nih.nci.cagrid.introduce.templates.DeployPropertiesTemplate;
 import gov.nih.nci.cagrid.introduce.templates.JNDIConfigTemplate;
@@ -18,46 +19,46 @@ public class SkeletonBaseCreator {
 	}
 
 
-	public void createSkeleton(Properties properties) throws Exception {
-		File baseDirectory = new File(properties.getProperty("introduce.skeleton.destination.dir"));
+	public void createSkeleton(ServiceInformation info) throws Exception {
+		File baseDirectory = new File(info.getServiceProperties().getProperty("introduce.skeleton.destination.dir"));
 		
 		ServerConfigTemplate serverConfigT = new ServerConfigTemplate();
-		String serverConfigS = serverConfigT.generate(properties);
+		String serverConfigS = serverConfigT.generate(info.getServiceProperties());
 		File serverConfigF = new File(baseDirectory.getAbsolutePath() + File.separator + "server-config.wsdd");
 		FileWriter serverConfigFW = new FileWriter(serverConfigF);
 		serverConfigFW.write(serverConfigS);
 		serverConfigFW.close();
 		
 		JNDIConfigTemplate jndiConfigT = new JNDIConfigTemplate();
-		String jndiConfigS = jndiConfigT.generate(properties);
+		String jndiConfigS = jndiConfigT.generate(info.getServiceProperties());
 		File jndiConfigF = new File(baseDirectory.getAbsolutePath() + File.separator + "jndi-config.xml");
 		FileWriter jndiConfigFW = new FileWriter(jndiConfigF);
 		jndiConfigFW.write(jndiConfigS);
 		jndiConfigFW.close();
 		
 		DeployPropertiesTemplate deployPropertiesT = new DeployPropertiesTemplate();
-		String deployPropertiesS = deployPropertiesT.generate(properties);
-		File deployPropertiesF = new File(baseDirectory.getAbsolutePath() + File.separator + "deploy.properties");
+		String deployPropertiesS = deployPropertiesT.generate(info.getServiceProperties());
+		File deployPropertiesF = new File(baseDirectory.getAbsolutePath() + File.separator + "deploy.info.getServiceProperties()");
 		FileWriter deployPropertiesFW = new FileWriter(deployPropertiesF);
 		deployPropertiesFW.write(deployPropertiesS);
 		deployPropertiesFW.close();
 		
 		NamespaceMappingsTemplate namespaceMappingsT = new NamespaceMappingsTemplate();
-		String namespaceMappingsS = namespaceMappingsT.generate(properties);
+		String namespaceMappingsS = namespaceMappingsT.generate(info.getServiceProperties());
 		File namespaceMappingsF = new File(baseDirectory.getAbsolutePath() + File.separator + "namespace2package.mappings");
 		FileWriter namespaceMappingsFW = new FileWriter(namespaceMappingsF);
 		namespaceMappingsFW.write(namespaceMappingsS);
 		namespaceMappingsFW.close();
 		
 		ClasspathTemplate classpathT = new ClasspathTemplate();
-		String classpathS = classpathT.generate(properties);
+		String classpathS = classpathT.generate(info.getServiceProperties());
 		File classpathF = new File(baseDirectory.getAbsolutePath() + File.separator + ".classpath");
 		FileWriter classpathFW = new FileWriter(classpathF);
 		classpathFW.write(classpathS);
 		classpathFW.close();
 		
 		ProjectTemplate projectT = new ProjectTemplate();
-		String projectS = projectT.generate(properties);
+		String projectS = projectT.generate(info.getServiceProperties());
 		File projectF = new File(baseDirectory.getAbsolutePath() + File.separator + ".project");
 		FileWriter projectFW = new FileWriter(projectF);
 		projectFW.write(projectS);

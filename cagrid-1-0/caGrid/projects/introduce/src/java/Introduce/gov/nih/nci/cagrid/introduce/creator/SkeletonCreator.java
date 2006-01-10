@@ -1,5 +1,10 @@
 package gov.nih.nci.cagrid.introduce.creator;
 
+import gov.nih.nci.cagrid.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
+
 import java.io.File;
 import java.util.Properties;
 
@@ -15,6 +20,27 @@ public class SkeletonCreator extends Task {
 		super.execute();
 		Properties properties = new Properties();
 		properties.putAll(this.getProject().getProperties());
+		
+		File baseDirectory = new File(properties.getProperty(
+		"introduce.skeleton.destination.dir"));
+		
+		ServiceMetadataListType metadatas = null;
+		MethodsType methods = null;
+		try {
+			methods = (MethodsType) CommonTools
+			.deserializeDocument(baseDirectory + File.separator
+					+ "introduceMethods.xml",
+					MethodsType.class);
+			metadatas = (ServiceMetadataListType) CommonTools
+			.deserializeDocument(baseDirectory + File.separator
+					+ "introduceMetadata.xml",
+					ServiceMetadataListType.class);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		
+		ServiceInformation info = new ServiceInformation(methods, metadatas, properties);
+		
 		SkeletonBaseCreator sbc = new SkeletonBaseCreator();
 		SkeletonSourceCreator ssc = new SkeletonSourceCreator();
 		SkeletonSchemaCreator sscc = new SkeletonSchemaCreator();
@@ -34,18 +60,17 @@ public class SkeletonCreator extends Task {
 					.println("Service Name cannnot start with lower case letters.");
 			return;
 		}
-		// Create the overall skeleton
-		File baseDirectory = new File(properties
-				.getProperty("introduce.skeleton.destination.dir"));
+
+		//create the dirs to the basedir if needed
 		baseDirectory.mkdirs();
 
 		// Generate the source
 		try {
-			sbc.createSkeleton(properties);
-			ssc.createSkeleton(properties);
-			sscc.createSkeleton(properties);
-			sec.createSkeleton(properties);
-			sdc.createSkeleton(properties);
+			sbc.createSkeleton(info);
+			ssc.createSkeleton(info);
+			sscc.createSkeleton(info);
+			sec.createSkeleton(info);
+			sdc.createSkeleton(info);
 		} catch (Exception e) {
 			BuildException be = new BuildException(e.getMessage());
 			be.setStackTrace(e.getStackTrace());

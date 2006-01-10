@@ -1,7 +1,8 @@
 <%@ jet package="gov.nih.nci.cagrid.introduce.templates.common" class="ServiceITemplate" %>
-<% java.util.Properties properties = (java.util.Properties) argument; 
-	String packageName = properties.getProperty("introduce.skeleton.package");
-   String serviceName = properties.getProperty("introduce.skeleton.service.name");
+<% gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+   String packageName = info.getServiceProperties().getProperty("introduce.skeleton.package");
+   String serviceName = info.getServiceProperties().getProperty("introduce.skeleton.service.name");
+   String namespaceDomain = info.getServiceProperties().getProperty("introduce.skeleton.namespace.domain");
    String modifiedServiceName = serviceName;
    if(serviceName.endsWith("Service")){
    	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);

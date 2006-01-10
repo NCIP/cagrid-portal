@@ -1,16 +1,20 @@
-package gov.nih.nci.cagrid.introduce.codegen.metadata;
+package gov.nih.nci.cagrid.introduce;
 
 import java.util.Properties;
 
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 
-public class TemplateObjectContainer {
+public class ServiceInformation {
 
 	private ServiceMetadataListType metadata;
 	
+	private MethodsType methods;
+	
 	private Properties serviceProperties;
 	
-	public TemplateObjectContainer(ServiceMetadataListType metadata, Properties properties) {
+	public ServiceInformation(MethodsType methods , ServiceMetadataListType metadata, Properties properties) {
+		this.methods = methods;
 		this.metadata = metadata;
 		this.serviceProperties = properties;
 	}
@@ -29,6 +33,14 @@ public class TemplateObjectContainer {
 
 	public void setServiceProperties(Properties serviceProperties) {
 		this.serviceProperties = serviceProperties;
+	}
+
+	public MethodsType getMethods() {
+		return methods;
+	}
+
+	public void setMethods(MethodsType methods) {
+		this.methods = methods;
 	}
 	
 }
