@@ -25,6 +25,8 @@ Need to be able to not only use Axis for the classnames but also use the users c
 
 Need to fix the browse screen so that it can work with paths that have spaces in them.
 
+Need to make sure that the id's used to created archives are good from date through time.
+
 (DONE) moved the sync tools over to use beans instead of using DOM.  Much cleaner an easier to maintain.
 
 FUTURE WORK PROPOSED:
