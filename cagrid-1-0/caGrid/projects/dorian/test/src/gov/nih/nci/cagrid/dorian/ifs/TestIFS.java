@@ -474,7 +474,7 @@ public class TestIFS extends TestCase {
 				IdPContainer updateCont = getTrustedIdpManualApproveAutoRenew(updatedName);
 				TrustedIdP updateIdp = updateCont.getIdp();
 				updateIdp.setId(idp.getId());
-				ifs.updatedTrustedIdP(gridId, updateIdp);
+				ifs.updateTrustedIdP(gridId, updateIdp);
 				assertEquals(count, ifs.getTrustedIdPs(gridId).length);
 			}
 
