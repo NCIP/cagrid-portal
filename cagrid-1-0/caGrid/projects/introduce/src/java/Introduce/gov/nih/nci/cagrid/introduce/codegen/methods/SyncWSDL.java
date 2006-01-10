@@ -69,8 +69,7 @@ public class SyncWSDL {
 	private Element createInputMessage(MethodsTypeMethod method) {
 		Element inputMessage = new Element("message", Namespace
 				.getNamespace(SyncWSDL.WSDL_NAMESPACE));
-		inputMessage.setAttribute("name", method.getName()
-				+ "InputMessage");
+		inputMessage.setAttribute("name", method.getName() + "InputMessage");
 		Element part = new Element("part", Namespace
 				.getNamespace(SyncWSDL.WSDL_NAMESPACE));
 		part.setAttribute("name", "parameters");
@@ -82,13 +81,11 @@ public class SyncWSDL {
 	private Element createOutputMessage(MethodsTypeMethod method) {
 		Element outputMessage = new Element("message", Namespace
 				.getNamespace(SyncWSDL.WSDL_NAMESPACE));
-		outputMessage.setAttribute("name", method.getName()
-				+ "OutputMessage");
+		outputMessage.setAttribute("name", method.getName() + "OutputMessage");
 		Element part = new Element("part", Namespace
 				.getNamespace(SyncWSDL.WSDL_NAMESPACE));
 		part.setAttribute("name", "parameters");
-		part.setAttribute("element", "tns:" + method.getName()
-				+ "Response");
+		part.setAttribute("element", "tns:" + method.getName() + "Response");
 		outputMessage.addContent(part);
 		return outputMessage;
 	}
@@ -96,8 +93,7 @@ public class SyncWSDL {
 	private Element createFaultMessage(MethodTypeExceptionsException fault) {
 		Element faultMessage = new Element("message", Namespace
 				.getNamespace(SyncWSDL.WSDL_NAMESPACE));
-		faultMessage.setAttribute("name", fault.getName()
-				+ "FaultMessage");
+		faultMessage.setAttribute("name", fault.getName() + "FaultMessage");
 		Element part = new Element("part", Namespace
 				.getNamespace(SyncWSDL.WSDL_NAMESPACE));
 		part.setAttribute("name", "parameters");
@@ -107,23 +103,26 @@ public class SyncWSDL {
 	}
 
 	private Element createInputType(MethodsTypeMethod method) {
-		Element inputType = new Element("element", Namespace.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
-		Element cType = new Element("complexType", Namespace.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
+		Element inputType = new Element("element", Namespace
+				.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
+		Element cType = new Element("complexType", Namespace
+				.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
 		inputType.setAttribute("name", method.getName());
 
 		if (method.getInputs() != null) {
 			for (int i = 0; i < method.getInputs().getInput().length; i++) {
-				MethodTypeInputsInput param =  method.getInputs().getInput(i);
-				Element sequence = new Element("sequence", Namespace.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
-				Element element = new Element("element", Namespace.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
+				MethodTypeInputsInput param = method.getInputs().getInput(i);
+				Element sequence = new Element("sequence", Namespace
+						.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
+				Element element = new Element("element", Namespace
+						.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
 				element.setAttribute("name", param.getName());
 				Namespace thisNamespace = null;
 				// get the right namespace prefix for the type.....
 				List namespaces = definitions.getAdditionalNamespaces();
 				for (int nameIndex = 0; nameIndex < namespaces.size(); nameIndex++) {
 					Namespace tempNS = (Namespace) namespaces.get(nameIndex);
-					if (tempNS.getURI().equals(
-							param.getNamespace())) {
+					if (tempNS.getURI().equals(param.getNamespace())) {
 						thisNamespace = tempNS;
 					}
 				}
@@ -139,82 +138,59 @@ public class SyncWSDL {
 					Element importEl = new Element("import", this.definitions
 							.getNamespace());
 					if (param.getLocation() != null) {
-						importEl.setAttribute("location", param
-								.getLocation());
+						importEl.setAttribute("location", param.getLocation());
 					}
-					importEl.setAttribute("namespace", param
-							.getNamespace());
+					importEl.setAttribute("namespace", param.getNamespace());
 					this.definitions.addContent(0, importEl);
 				}
 
-			
-					if ((param.getMaxOccurs() != null)
-							&& (param.getMaxOccurs().equals(
-									"unbounded") || Integer.parseInt(param.getMaxOccurs()) > 1)) {
-						// need to create an element array wrapper for gwsdl to
-						// accept an array as input to a client
-						element.setAttribute("minOccurs", "1");
-						element.setAttribute("maxOccurs", "1");
-						Element acType = new Element(
-								"complexType",
-								Namespace.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
-						Element acContent = new Element(
-								"complexContent",
-								Namespace.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
-						Element aRestriction = new Element(
-								"restriction",
-								Namespace.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
-						aRestriction.setAttribute("base", "soapenc:Array");
-						Element aAttribute = new Element(
-								"attribute",
-								Namespace.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
-						aAttribute.setAttribute("ref", "soapenc:arrayType");
-						if (thisNamespace == null) {
-							aAttribute
-									.setAttribute(
-											"arrayType",
-											ns.getPrefix()
-													+ ":"
-													+ param
-															.getType()
-													+ "[]",
-											definitions
-													.getNamespace(SyncWSDL.WSDL_NAMESPACE_PREFIX));
-						} else {
-							aAttribute
-									.setAttribute(
-											"arrayType",
-											thisNamespace.getPrefix()
-													+ ":"
-													+ param
-															.getType()
-													+ "[]",
-											definitions
-													.getNamespace(SyncWSDL.WSDL_NAMESPACE_PREFIX));
-						}
-						aRestriction.setContent(aAttribute);
-						acContent.setContent(aRestriction);
-						acType.setContent(acContent);
-						element.setContent(acType);
+				if ((param.getMaxOccurs() != null)
+						&& (param.getMaxOccurs().equals("unbounded") || Integer
+								.parseInt(param.getMaxOccurs()) > 1)) {
+					// need to create an element array wrapper for gwsdl to
+					// accept an array as input to a client
+					element.setAttribute("minOccurs", "1");
+					element.setAttribute("maxOccurs", "1");
+					Element acType = new Element("complexType", Namespace
+							.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
+					Element acContent = new Element("complexContent", Namespace
+							.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
+					Element aRestriction = new Element("restriction", Namespace
+							.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
+					aRestriction.setAttribute("base", "soapenc:Array");
+					Element aAttribute = new Element("attribute", Namespace
+							.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
+					aAttribute.setAttribute("ref", "soapenc:arrayType");
+					if (thisNamespace == null) {
+						aAttribute.setAttribute("arrayType", ns.getPrefix()
+								+ ":" + param.getType() + "[]", definitions
+								.getNamespace(SyncWSDL.WSDL_NAMESPACE_PREFIX));
 					} else {
-						if (thisNamespace == null) {
-							element.setAttribute("type", ns.getPrefix() + ":"
-									+ param.getType());
-						} else {
-							element.setAttribute("type", thisNamespace
-									.getPrefix()
-									+ ":" + param.getType());
-						}
-						if (param.getMinOccurs() != null) {
-							element.setAttribute("minOccurs", param
-									.getMinOccurs());
-						}
-						if (param.getMaxOccurs() != null) {
-							element.setAttribute("maxOccurs", param
-									.getMaxOccurs());
-						}
+						aAttribute.setAttribute("arrayType", thisNamespace
+								.getPrefix()
+								+ ":" + param.getType() + "[]", definitions
+								.getNamespace(SyncWSDL.WSDL_NAMESPACE_PREFIX));
 					}
-				
+					aRestriction.setContent(aAttribute);
+					acContent.setContent(aRestriction);
+					acType.setContent(acContent);
+					element.setContent(acType);
+				} else {
+					if (thisNamespace == null) {
+						element.setAttribute("type", ns.getPrefix() + ":"
+								+ param.getType());
+					} else {
+						element.setAttribute("type", thisNamespace.getPrefix()
+								+ ":" + param.getType());
+					}
+					if (param.getMinOccurs() != null) {
+						element.setAttribute("minOccurs", param.getMinOccurs());
+					}
+					if (param.getMaxOccurs() != null) {
+						element.setAttribute("maxOccurs", param.getMaxOccurs());
+					}
+				}
+
 				sequence.addContent(element);
 				cType.addContent(sequence);
 			}
@@ -224,24 +200,26 @@ public class SyncWSDL {
 	}
 
 	private Element createOutputType(MethodsTypeMethod method) {
-		Element outputType = new Element("element", Namespace.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
-		outputType.setAttribute("name", method.getName()
-				+ "Response");
-		Element cType = new Element("complexType", Namespace.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
-		Element sequence = new Element("sequence", Namespace.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
+		Element outputType = new Element("element", Namespace
+				.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
+		outputType.setAttribute("name", method.getName() + "Response");
+		Element cType = new Element("complexType", Namespace
+				.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
+		Element sequence = new Element("sequence", Namespace
+				.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
 		MethodTypeOutput output = method.getOutput();
 
 		// if this methods return has a namespace and type
 		if (!output.getClassName().equals("void")) {
-			Element element = new Element("element", Namespace.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
+			Element element = new Element("element", Namespace
+					.getNamespace(SyncWSDL.XMLSCHEMA_NAMESPACE));
 			element.setAttribute("name", "value");
 			Namespace thisNamespace = null;
 			// get the right namespace prefix for the type.....
 			List namespaces = definitions.getAdditionalNamespaces();
 			for (int nameIndex = 0; nameIndex < namespaces.size(); nameIndex++) {
 				Namespace tempNS = (Namespace) namespaces.get(nameIndex);
-				if (tempNS.getURI().equals(
-						output.getNamespace())) {
+				if (tempNS.getURI().equals(output.getNamespace())) {
 					thisNamespace = tempNS;
 				}
 			}
@@ -254,11 +232,9 @@ public class SyncWSDL {
 				Element importEl = new Element("import", this.definitions
 						.getNamespace());
 				if (output.getLocation() != null) {
-					importEl.setAttribute("location", output
-							.getLocation());
+					importEl.setAttribute("location", output.getLocation());
 				}
-				importEl.setAttribute("namespace", output
-						.getNamespace());
+				importEl.setAttribute("namespace", output.getNamespace());
 				this.definitions.addContent(0, importEl);
 				element.setAttribute("type", ns.getPrefix() + ":"
 						+ output.getType());
@@ -267,12 +243,10 @@ public class SyncWSDL {
 						+ output.getType());
 			}
 			if (output.getMinOccurs() != null) {
-				element.setAttribute("minOccurs", output
-						.getMinOccurs());
+				element.setAttribute("minOccurs", output.getMinOccurs());
 			}
 			if (output.getMaxOccurs() != null) {
-				element.setAttribute("maxOccurs", output
-						.getMaxOccurs());
+				element.setAttribute("maxOccurs", output.getMaxOccurs());
 			}
 
 			sequence.addContent(element);
@@ -313,20 +287,21 @@ public class SyncWSDL {
 		input.setAttribute("message", "tns:" + method.getName()
 				+ "InputMessage");
 		Element output = new Element("output", this.definitions.getNamespace());
-		output.setAttribute("message", "tns:"
-				+ method.getName() + "OutputMessage");
+		output.setAttribute("message", "tns:" + method.getName()
+				+ "OutputMessage");
 		operation.addContent(input);
 		operation.addContent(output);
 
 		// process the faults for this method...
 		MethodTypeExceptions exceptionsEl = method.getExceptions();
-		if (exceptionsEl != null) {
+		if (exceptionsEl != null && exceptionsEl.getException() != null) {
 			for (int i = 0; i < exceptionsEl.getException().length; i++) {
-				MethodTypeExceptionsException fault = exceptionsEl.getException(i);
+				MethodTypeExceptionsException fault = exceptionsEl
+						.getException(i);
 				Element faultEl = new Element("fault", this.definitions
 						.getNamespace());
-				faultEl.setAttribute("message", "tns:"
-						+ fault.getName() + "FaultMessage");
+				faultEl.setAttribute("message", "tns:" + fault.getName()
+						+ "FaultMessage");
 				faultEl.setAttribute("name", fault.getName());
 				operation.addContent(faultEl);
 			}
@@ -344,9 +319,10 @@ public class SyncWSDL {
 	private void addMethod(MethodsTypeMethod method) {
 		// process the faults for this method...
 		MethodTypeExceptions exceptionsEl = method.getExceptions();
-		if (exceptionsEl != null) {
+		if (exceptionsEl != null && exceptionsEl.getException() != null) {
 			for (int i = 0; i < exceptionsEl.getException().length; i++) {
-				MethodTypeExceptionsException child =exceptionsEl.getException(i);
+				MethodTypeExceptionsException child = exceptionsEl
+						.getException(i);
 				// first add the type to the schema
 				this.schema.addContent(createFaultType(child));
 				int typesIndex = this.definitions.indexOf(types);

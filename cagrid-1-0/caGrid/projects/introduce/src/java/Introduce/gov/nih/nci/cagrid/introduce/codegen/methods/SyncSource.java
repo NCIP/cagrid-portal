@@ -106,11 +106,12 @@ public class SyncSource {
 	}
 
 	private String getClassNameFromElement(MethodTypeInputsInput inputParam) {
-		if (inputParam.getClassName() !=null  && inputParam.getClassName().equals("void")) {
+		if (inputParam.getClassName() != null
+				&& inputParam.getClassName().equals("void")) {
 			return "void";
 		}
-		Type type = table.getType(new QName(inputParam.getNamespace(), inputParam
-				.getType()));
+		Type type = table.getType(new QName(inputParam.getNamespace(),
+				inputParam.getType()));
 		if (inputParam.getIsArray().booleanValue()) {
 			return type.getName() + "[]";
 		} else {
@@ -119,11 +120,12 @@ public class SyncSource {
 	}
 
 	private String getClassNameFromElement(MethodTypeOutput outputParam) {
-		if (outputParam.getClassName() != null && outputParam.getClassName().equals("void")) {
+		if (outputParam.getClassName() != null
+				&& outputParam.getClassName().equals("void")) {
 			return "void";
 		}
-		Type type = table.getType(new QName(outputParam.getNamespace(), outputParam
-				.getType()));
+		Type type = table.getType(new QName(outputParam.getNamespace(),
+				outputParam.getType()));
 		if (outputParam.getIsArray().booleanValue()) {
 			return type.getName() + "[]";
 		} else {
@@ -136,7 +138,7 @@ public class SyncSource {
 		// process the faults for this method...
 		MethodTypeExceptions exceptionsEl = method.getExceptions();
 		exceptions += "RemoteException";
-		if (exceptionsEl != null) {
+		if (exceptionsEl != null && exceptionsEl.getException() != null) {
 			if (exceptionsEl.getException().length > 0) {
 				exceptions += ", ";
 			}
@@ -165,7 +167,7 @@ public class SyncSource {
 		String methodName = method.getName();
 		String returnType = getClassNameFromElement(returnTypeEl);
 		methodString += "\tpublic " + returnType + " " + methodName + "(";
-		if (method.getInputs() != null) {
+		if (method.getInputs() != null && method.getInputs().getInput() != null) {
 			for (int j = 0; j < method.getInputs().getInput().length; j++) {
 				String classType = getClassNameFromElement(method.getInputs()
 						.getInput(j));
