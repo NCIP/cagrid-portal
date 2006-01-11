@@ -1,5 +1,8 @@
 package gov.nih.nci.cagrid.introduce.codegen;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataType;
 
@@ -34,4 +37,34 @@ public class MetadataTemplateUtils {
 
 	}
 
+
+	/**
+	 * Build a map of of namespace->prefix definitions for the namespaces of all
+	 * of the QNames in the list
+	 * 
+	 * @param metadataList
+	 *            the list of metadata
+	 * @return Map of namespace->prefix definitions for the namespaces of all of
+	 *         the QNames in the list
+	 */
+	public static Map buildQNameNamespacePrefixMap(ServiceMetadataListType metadataList) {
+		Map map = new HashMap();
+		for (int i = 0; i < metadataList.getMetadata().length; i++) {
+			ServiceMetadataType metadata = metadataList.getMetadata()[i];
+			String qnameName = metadata.getQName().getLocalPart();
+			String qnameNamespace = metadata.getQName().getNamespaceURI();
+
+			String prefixBase = qnameName.toLowerCase().substring(0, Math.min(qnameName.length(), 4));
+			int previousNumber = 0;
+			String prefix = prefixBase + ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
+			while (map.containsValue(prefix)) {
+				previousNumber++;
+				prefix = prefixBase + ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
+			}
+			// add the ns=>prefix entry
+			map.put(qnameNamespace, prefix);
+		}
+
+		return map;
+	}
 }

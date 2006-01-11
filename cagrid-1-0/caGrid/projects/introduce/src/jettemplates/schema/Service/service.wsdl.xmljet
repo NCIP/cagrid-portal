@@ -1,5 +1,8 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.schema.service" class="ServiceWSDLTemplate" %>
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.schema.service" class="ServiceWSDLTemplate"
+imports="gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.*" %>
 <% gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+	ServiceMetadataListType metadataList = info.getMetadata();
+
    String packageName = info.getServiceProperties().getProperty("introduce.skeleton.package");
    String serviceName = info.getServiceProperties().getProperty("introduce.skeleton.service.name");
    String namespaceDomain = info.getServiceProperties().getProperty("introduce.skeleton.namespace.domain");
@@ -32,14 +35,33 @@
     <types>
         <schema targetNamespace="<%=namespaceDomain%>/<%=serviceName%>"
             xmlns:tns="<%=namespaceDomain%>/<%=serviceName%>"
-            xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"
+            
+             <%
+			if(metadataList!=null){
+	      		Map prefixmap=MetadataTemplateUtils.buildQNameNamespacePrefixMap(metadataList);
+	      		Iterator iterator = prefixmap.keySet().iterator();
+				while(iterator.hasNext()){
+					String namespace=(String)iterator.next();%>
+				xmlns:<%=prefixmap.get(namespace)%>=<%=namespace%> 
+				<%}
+      		}%>
             xmlns="http://www.w3.org/2001/XMLSchema">
-            <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"
-                schemaLocation="../cagrid/types/common/CommonServiceMetadata.xsd"/>
+			<%
+			if(metadataList!=null){
+	      		for (int i = 0; i < metadataList.getMetadata().length; i++) {
+					ServiceMetadataType metadata = metadataList.getMetadata()[i];%>
+			<import namespace="<%=metadata.getNamespace()%>" schemaLocation="<%=metadata.getLocation()%>"/>
+			  <%}
+      		}%>
+
             <element name="<%=serviceName%>ResourceProperties">
                 <complexType>
                     <sequence>
-                        <element ref="com:CommonServiceMetadata"/>
+                        <%Map prefixmap=MetadataTemplateUtils.buildQNameNamespacePrefixMap(metadataList);
+                        	for (int i = 0; i < metadataList.getMetadata().length; i++) {
+								ServiceMetadataType metadata = metadataList.getMetadata()[i];%>
+						<element ref="<%=prefixmap.get(metadata.getQName().getNamespaceURI())%>:<%=metadata.getQName().getLocalPart()%>"/>
+						<%	}%>
                     </sequence>
                 </complexType>
             </element>

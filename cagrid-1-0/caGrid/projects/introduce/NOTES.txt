@@ -159,7 +159,7 @@ Example:
         <agg:ResourcePropertyNames xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">com:CommonServiceMetadata</agg:ResourcePropertyNames>
 
 
-serivce.wsdl add qnames into serviceRP definition in the schema section
+(DONE) serivce.wsdl add qnames into serviceRP definition in the schema section
 ----------
 for each type, add a ref to the element def qname, and import statement to the local schema:
         <schema ...

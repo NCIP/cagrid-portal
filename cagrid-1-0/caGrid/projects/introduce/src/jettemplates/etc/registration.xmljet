@@ -1,4 +1,5 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.etc" class="RegistationTemplate" imports="gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.*" %>
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.etc" class="RegistationTemplate"
+imports="gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.*" %>
 <% gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
 	ServiceMetadataListType metadataList = info.getMetadata();
 	
@@ -25,19 +26,30 @@
   <RefreshIntervalSecs>600</RefreshIntervalSecs>
   <Content xsi:type="agg:AggregatorContent" xmlns:agg="http://mds.globus.org/aggregator/types">
     <agg:AggregatorConfig xsi:type="agg:AggregatorConfig">
-      <agg:GetMultipleResourcePropertiesPollType>
+      <agg:GetMultipleResourcePropertiesPollType
+      <%
+      	if(metadataList!=null){
+      		Map prefixmap=MetadataTemplateUtils.buildQNameNamespacePrefixMap(metadataList);
+      		Iterator iterator = prefixmap.keySet().iterator();
+			while(iterator.hasNext()){
+				String namespace=(String)iterator.next();%>
+			xmlns:<%=prefixmap.get(namespace)%>=<%=namespace%> 
+			<%}
+      	}
+      %>>
         <!-- Specifies that the index should refresh information
             every 300000 milliseconds (once every 5 minutes) -->
         <agg:PollIntervalMillis>300000</agg:PollIntervalMillis>
         <!-- specifies all Resource Properties that should be retrieved from the service -->
         <%	if(metadataList!=null){
+        Map prefixmap=MetadataTemplateUtils.buildQNameNamespacePrefixMap(metadataList);
 		for (int i = 0; i < metadataList.getMetadata().length; i++) {
 			ServiceMetadataType metadata = metadataList.getMetadata()[i];
 			if(metadata.isRegister()){
 				String qnameName=metadata.getQName().getLocalPart();
 				String qnameNamespace=metadata.getQName().getNamespaceURI();
 		%>
-		<agg:ResourcePropertyNames xmlns:<%=qnameName%>="<%=qnameNamespace%>"><%=qnameName%>:<%=qnameName%></agg:ResourcePropertyNames>
+		<agg:ResourcePropertyNames><%=prefixmap.get(qnameNamespace)%>:<%=qnameName%></agg:ResourcePropertyNames>
 	<%		}
 		}
 		}
