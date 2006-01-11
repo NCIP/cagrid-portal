@@ -24,7 +24,7 @@ public interface ResourceConstants {
 	public static final QName RESOURCE_PROPERY_SET = new QName(SERVICE_NS, "<%=serviceName%>ResourceProperties");
 
 	//Service level metadata (exposed as resouce properties)
-	
+
 <%	
 	if(metadataList!=null && metadataList.getMetadata()!=null){
 		for (int i = 0; i < metadataList.getMetadata().length; i++) {
