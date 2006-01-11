@@ -10,13 +10,6 @@ import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceCo
 import java.io.File;
 import java.io.FileWriter;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-import org.apache.commons.cli.PosixParser;
-
 /**
  * SyncMethodsOnDeployment
  * 

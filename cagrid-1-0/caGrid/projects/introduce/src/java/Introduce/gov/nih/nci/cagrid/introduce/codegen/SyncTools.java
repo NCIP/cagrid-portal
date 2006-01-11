@@ -80,6 +80,7 @@ public class SyncTools {
 		table = parser.getSymbolTable();
 		CommonTools.deleteDir(new File(baseDirectory.getAbsolutePath() + File.separator + "tmp"));
 
+		//get the classnames from the axis symbol table
 		if (info.getMetadata().getMetadata() != null) {
 			for (int i = 0; i < info.getMetadata().getMetadata().length; i++) {
 				ServiceMetadataType mtype = (ServiceMetadataType) info.getMetadata().getMetadata(i);
@@ -90,6 +91,7 @@ public class SyncTools {
 			}
 		}
 
+		//get the classnames from the axis symbol table
 		if (info.getMethods().getMethod() != null) {
 			for (int i = 0; i < info.getMethods().getMethod().length; i++) {
 				MethodsTypeMethod mtype = (MethodsTypeMethod) info.getMethods().getMethod(i);
