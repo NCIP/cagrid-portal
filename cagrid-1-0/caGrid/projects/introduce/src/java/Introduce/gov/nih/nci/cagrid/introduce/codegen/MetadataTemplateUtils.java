@@ -33,10 +33,13 @@ public class MetadataTemplateUtils {
 		}
 
 		// return the orginal name, if it is unique, otherwise append a number
-		return baseName + ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
+		return fixVariableCase(baseName + ((previousNumber > 0) ? String.valueOf(previousNumber) : ""));
 
 	}
 
+	private static String fixVariableCase(String variableName){
+		return variableName.substring(0,1).toLowerCase()+ variableName.substring(1);
+	}
 
 	/**
 	 * Build a map of of namespace->prefix definitions for the namespaces of all

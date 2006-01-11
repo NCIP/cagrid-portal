@@ -61,15 +61,15 @@ public class BaseResource implements Resource, ResourceProperties, ResourceLifet
 	private MetadataConfiguration configuration;
 
 	//Define the metadata resource properties
-	<%	if(metadataList!=null && metadataList.getMetadata()!=null){
+	<%if(metadataList!=null && metadataList.getMetadata()!=null){
 		for (int i = 0; i < metadataList.getMetadata().length; i++) {
 			ServiceMetadataType metadata = metadataList.getMetadata()[i];
 			String name=MetadataTemplateUtils.getResourcePropertyVariableName(metadataList, i);
 			
 			//define the RP
-			stringBuffer.append("\tprivate ResourceProperty "+name+"RP;\n");
+			stringBuffer.append("private ResourceProperty "+name+"RP;\n");
 			//define the MD bean to hold the value
-			stringBuffer.append("\tprivate "+metadata.getClassName()+name+"MD;\n");
+			stringBuffer.append("\tprivate "+metadata.getClassName()+" "+name+"MD;\n");
 		}
 	}%>	
 

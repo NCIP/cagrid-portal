@@ -5,7 +5,6 @@ import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
 import gov.nih.nci.cagrid.introduce.codegen.MetadataTemplateUtils;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -55,13 +54,13 @@ public class MetadataTemplateUtilsTest extends TestCase {
 		// make sure the pattern is right
 		String computedVarName1 = MetadataTemplateUtils.getResourcePropertyVariableName(metadataList, 0);
 		assertNotNull(computedVarName1);
-		assertTrue(computedVarName1.matches("([a-zA-Z])*"));
+		assertTrue(computedVarName1.matches("([a-z])+([a-zA-Z])*"));
 
 		// make sure the name is uniq when only the name space is different
 		String computedVarName2 = MetadataTemplateUtils.getResourcePropertyVariableName(metadataList, 1);
 		assertNotNull(computedVarName2);
 		assertFalse(computedVarName1.equals(computedVarName2));
-		assertTrue(computedVarName2.matches("([a-zA-Z])*[1-9]+"));
+		assertTrue(computedVarName2.matches("([a-z])+([a-zA-Z])*[1-9]+"));
 
 		// store all the names in a set to check for uniqueness
 		Set names = new HashSet();
