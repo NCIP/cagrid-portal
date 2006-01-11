@@ -1,8 +1,8 @@
-
 package gov.nih.nci.cagrid.introduce.codegen.methods;
 
 import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.Archive;
+import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
@@ -44,13 +44,7 @@ import org.apache.ws.jaxme.js.util.JavaParser;
  */
 public class SyncMethods {
 
-	public static final String DIR_OPT = "d";
-
-	public static final String DIR_OPT_FULL = "directory";
-
 	String serviceInterface;
-
-	Properties deploymentProperties;
 
 	List additions;
 
@@ -66,57 +60,29 @@ public class SyncMethods {
 
 	File baseDirectory;
 
-	MethodsType methodsType;
-	
-	ServiceMetadataListType serviceMetadataListType;
+	ServiceInformation info;
 
-	public SyncMethods(File baseDirectory) {
+	public SyncMethods(File baseDirectory, ServiceInformation info) {
 
 		this.baseDirectory = baseDirectory;
 
-		populateMetadata();
+		this.info = info;
 
-		File deploymentPropertiesFile = new File(baseDirectory
-				.getAbsolutePath()
-				+ File.separator + "introduce.properties");
-		try {
-			deploymentProperties = new Properties();
-			deploymentProperties.load(new FileInputStream(
-					deploymentPropertiesFile));
-
-			secureSync = new SyncSecurity(baseDirectory,
-					this.deploymentProperties);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		this.additions = new ArrayList();
 		this.removals = new ArrayList();
-	}
-
-	private void populateMetadata() {
-		try {
-			this.methodsType = (MethodsType) CommonTools.deserializeDocument(
-					this.baseDirectory + File.separator
-							+ "introduceMethods.xml", MethodsType.class);
-		} catch (Exception e) {
-			System.err.println("ERROR: problem populating metadata from file: "
-					+ e.getMessage());
-		}
 	}
 
 	public void sync() throws Exception {
 		// create the archive
 		long id = System.currentTimeMillis();
-		deploymentProperties.setProperty("introduce.skeleton.timestamp", String
-				.valueOf(id));
-		deploymentProperties.store(new FileOutputStream(baseDirectory
-				.getAbsolutePath()
-				+ File.separator + "introduce.properties"),
+		info.getServiceProperties().setProperty("introduce.skeleton.timestamp",
+				String.valueOf(id));
+		info.getServiceProperties().store(
+				new FileOutputStream(baseDirectory.getAbsolutePath()
+						+ File.separator + "introduce.properties"),
 				"Introduce Properties");
 
-		Archive.createArchive(String.valueOf(id), deploymentProperties
+		Archive.createArchive(String.valueOf(id), info.getServiceProperties()
 				.getProperty("introduce.skeleton.service.name"), baseDirectory
 				.getAbsolutePath());
 
@@ -127,11 +93,11 @@ public class SyncMethods {
 				+ File.separator
 				+ "src"
 				+ File.separator
-				+ this.deploymentProperties
-						.get("introduce.skeleton.package.dir")
+				+ this.info.getServiceProperties().get(
+						"introduce.skeleton.package.dir")
 				+ "/common/"
-				+ this.deploymentProperties
-						.get("introduce.skeleton.service.name") + "I.java";
+				+ this.info.getServiceProperties().get(
+						"introduce.skeleton.service.name") + "I.java";
 
 		jp.parse(new File(serviceInterface));
 		this.sourceI = (JavaSource) jsf.getJavaSources().next();
@@ -143,8 +109,8 @@ public class SyncMethods {
 		this.lookForUpdates();
 
 		// sync the gwsdl
-		SyncWSDL wsdlSync = new SyncWSDL(baseDirectory,
-				this.deploymentProperties);
+		SyncWSDL wsdlSync = new SyncWSDL(baseDirectory, this.info
+				.getServiceProperties());
 		wsdlSync.sync(additions, removals);
 
 		String cmd = CommonTools.getAntFlattenCommand(baseDirectory
@@ -155,35 +121,11 @@ public class SyncMethods {
 			throw new Exception("Service flatten wsdl exited abnormally");
 		}
 
-		// regenerate stubs and get the symbol table
-		Emitter parser = new Emitter();
-		SymbolTable table = null;
-
-		parser.setQuiet(true);
-		parser.setImports(true);
-		parser.setOutputDir(baseDirectory.getAbsolutePath() + File.separator
-				+ "tmp");
-		parser.setNStoPkg(baseDirectory.getAbsolutePath() + File.separator
-				+ "namespace2package.mappings");
-		parser.run(new File(baseDirectory.getAbsolutePath()
-				+ File.separator
-				+ "build"
-				+ File.separator
-				+ "schema"
-				+ File.separator
-				+ this.deploymentProperties
-						.get("introduce.skeleton.service.name")
-				+ File.separator
-				+ this.deploymentProperties
-						.get("introduce.skeleton.service.name") + "_flattened"
-				+ ".wsdl").getAbsolutePath());
-		table = parser.getSymbolTable();
-		CommonTools.deleteDir(new File(baseDirectory.getAbsolutePath()
-				+ File.separator + "tmp"));
+		
 
 		// sync the methods fiels
-		SyncSource methodSync = new SyncSource(table, baseDirectory,
-				this.deploymentProperties);
+		SyncSource methodSync = new SyncSource(baseDirectory, this.info
+				.getServiceProperties());
 		// remove methods
 		methodSync.removeMethods(this.removals);
 		// add new methods
@@ -202,10 +144,11 @@ public class SyncMethods {
 		JavaMethod[] methods = sourceI.getMethods();
 
 		// look at doc and compare to interface
-		if (methodsType.getMethod() != null) {
-			for (int methodIndex = 0; methodIndex < this.methodsType
+		if (info.getMethods().getMethod() != null) {
+			for (int methodIndex = 0; methodIndex < this.info.getMethods()
 					.getMethod().length; methodIndex++) {
-				MethodsTypeMethod mel = this.methodsType.getMethod(methodIndex);
+				MethodsTypeMethod mel = this.info.getMethods().getMethod(
+						methodIndex);
 				boolean found = false;
 				for (int i = 0; i < methods.length; i++) {
 					String methodName = methods[i].getName();
@@ -226,11 +169,11 @@ public class SyncMethods {
 		for (int i = 0; i < methods.length; i++) {
 			String methodName = methods[i].getName();
 			boolean found = false;
-			if (methodsType.getMethod() != null) {
-				for (int methodIndex = 0; methodIndex < this.methodsType
+			if (info.getMethods().getMethod() != null) {
+				for (int methodIndex = 0; methodIndex < this.info.getMethods()
 						.getMethod().length; methodIndex++) {
-					MethodsTypeMethod mel = this.methodsType
-							.getMethod(methodIndex);
+					MethodsTypeMethod mel = this.info.getMethods().getMethod(
+							methodIndex);
 					if (mel.getName().equals(methodName)) {
 						found = true;
 						break;
@@ -241,32 +184,6 @@ public class SyncMethods {
 				System.out.println("Found a method for removal: " + methodName);
 				this.removals.add(methods[i]);
 			}
-		}
-	}
-
-	public static void main(String[] args) {
-		Options options = new Options();
-		Option directoryOpt = new Option(DIR_OPT, DIR_OPT_FULL, true,
-				"The include tool directory");
-		options.addOption(directoryOpt);
-
-		CommandLineParser parser = new PosixParser();
-
-		File directory = null;
-
-		try {
-			CommandLine line = parser.parse(options, args);
-			directory = new File(line.getOptionValue(DIR_OPT));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		SyncMethods sync = new SyncMethods(directory);
-		try {
-			sync.sync();
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(1);
 		}
 	}
 

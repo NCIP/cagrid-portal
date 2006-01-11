@@ -1,9 +1,6 @@
 package gov.nih.nci.cagrid.introduce.codegen.metadata;
 
-import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
-import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.templates.etc.RegistationTemplate;
 import gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.BaseResourceTemplate;
@@ -11,9 +8,7 @@ import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.MetadataCo
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceConstantsTemplate;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
-import java.util.Properties;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -34,38 +29,18 @@ import org.apache.commons.cli.PosixParser;
  */
 public class SyncMetadata {
 
-	public static final String DIR_OPT = "d";
-
-	public static final String DIR_OPT_FULL = "directory";
-
 	private File baseDirectory;
 
-	private ServiceMetadataListType metadatas;
+	private ServiceInformation info;
 
-	private MethodsType methods;
-
-	private Properties serviceProperties;
-
-	public SyncMetadata(File baseDirectory) {
+	public SyncMetadata(File baseDirectory, ServiceInformation info) {
 
 		this.baseDirectory = baseDirectory;
+
+		this.info = info;
 	}
 
 	public void sync() throws Exception {
-
-		methods = (MethodsType) CommonTools.deserializeDocument(baseDirectory
-				+ File.separator + "introduceMethods.xml", MethodsType.class);
-		metadatas = (ServiceMetadataListType) CommonTools.deserializeDocument(
-				baseDirectory + File.separator + "introduceMetadata.xml",
-				ServiceMetadataListType.class);
-
-		File servicePropertiesFile = new File(baseDirectory.getAbsolutePath()
-				+ File.separator + "introduce.properties");
-		serviceProperties = new Properties();
-		serviceProperties.load(new FileInputStream(servicePropertiesFile));
-
-		ServiceInformation info = new ServiceInformation(this.methods,
-				this.metadatas, this.serviceProperties);
 
 		File srcDir = new File(baseDirectory.getAbsolutePath() + File.separator
 				+ "src");
@@ -115,8 +90,7 @@ public class SyncMetadata {
 		resourceContanstsFW.close();
 
 		ServiceWSDLTemplate serviceWSDLT = new ServiceWSDLTemplate();
-		String serviceWSDLS = serviceWSDLT
-				.generate(info);
+		String serviceWSDLS = serviceWSDLT.generate(info);
 		File serviceWSDLF = new File(schemaDir.getAbsolutePath()
 				+ File.separator
 				+ info.getServiceProperties().getProperty(
@@ -136,32 +110,6 @@ public class SyncMetadata {
 		registrationFW.write(registrationS);
 		registrationFW.close();
 
-	}
-
-	public static void main(String[] args) {
-		Options options = new Options();
-		Option directoryOpt = new Option(DIR_OPT, DIR_OPT_FULL, true,
-				"The include tool directory");
-		options.addOption(directoryOpt);
-
-		CommandLineParser parser = new PosixParser();
-
-		File directory = null;
-
-		try {
-			CommandLine line = parser.parse(options, args);
-			directory = new File(line.getOptionValue(DIR_OPT));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		SyncMetadata sync = new SyncMetadata(directory);
-		try {
-			sync.sync();
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
 	}
 
 }
