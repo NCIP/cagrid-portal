@@ -57,11 +57,13 @@ imports="gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.i
             <element name="<%=serviceName%>ResourceProperties">
                 <complexType>
                     <sequence>
-                        <%Map prefixmap=MetadataTemplateUtils.buildQNameNamespacePrefixMap(metadataList);
+                        <%if(metadataList!=null && metadataList.getMetadata()!=null){
+                        	Map prefixmap=MetadataTemplateUtils.buildQNameNamespacePrefixMap(metadataList);
                         	for (int i = 0; i < metadataList.getMetadata().length; i++) {
 								ServiceMetadataType metadata = metadataList.getMetadata()[i];%>
 						<element ref="<%=prefixmap.get(metadata.getQName().getNamespaceURI())%>:<%=metadata.getQName().getLocalPart()%>"/>
-						<%	}%>
+						<%	}
+						}%>
                     </sequence>
                 </complexType>
             </element>
