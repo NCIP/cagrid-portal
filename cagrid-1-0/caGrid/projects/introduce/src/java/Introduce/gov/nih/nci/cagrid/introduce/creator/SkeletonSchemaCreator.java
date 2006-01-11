@@ -24,7 +24,7 @@ public class SkeletonSchemaCreator {
 			.mkdirs();
 
 		ServiceWSDLTemplate serviceWSDLT = new ServiceWSDLTemplate();
-		String serviceWSDLS = serviceWSDLT.generate(info.getServiceProperties());
+		String serviceWSDLS = serviceWSDLT.generate(info);
 		File serviceWSDLF = new File(schemaDir.getAbsolutePath() + File.separator
 			+ info.getServiceProperties().getProperty("introduce.skeleton.service.name") + File.separator
 			+ info.getServiceProperties().getProperty("introduce.skeleton.service.name") + ".wsdl");

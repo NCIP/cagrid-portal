@@ -61,7 +61,7 @@ public class SkeletonSourceCreator {
 				+ "resource").mkdirs();
 
 		ServiceClientTemplate clientT = new ServiceClientTemplate();
-		String clientS = clientT.generate(info.getServiceProperties());
+		String clientS = clientT.generate(info);
 		File clientF = new File(srcDir.getAbsolutePath()
 				+ File.separator
 				+ info.getServiceProperties().getProperty(
@@ -77,7 +77,7 @@ public class SkeletonSourceCreator {
 		clientFW.close();
 
 		ServiceITemplate iT = new ServiceITemplate();
-		String iS = iT.generate(info.getServiceProperties());
+		String iS = iT.generate(info);
 		File iF = new File(srcDir.getAbsolutePath()
 				+ File.separator
 				+ info.getServiceProperties().getProperty(
@@ -93,7 +93,7 @@ public class SkeletonSourceCreator {
 		iFW.close();
 
 		ServiceImplTemplate implT = new ServiceImplTemplate();
-		String implS = implT.generate(info.getServiceProperties());
+		String implS = implT.generate(info);
 		File implF = new File(srcDir.getAbsolutePath()
 				+ File.separator
 				+ info.getServiceProperties().getProperty(

@@ -24,7 +24,7 @@ public class SkeletonDocsCreator {
 		apiDir.mkdir();
 		
 		RegistationTemplate registrationT = new RegistationTemplate();
-		String registrationS = registrationT.generate(info.getServiceProperties());
+		String registrationS = registrationT.generate(info);
 		File registrationF = new File(apiDir.getAbsolutePath() + File.separator + "Doxyfile");
 		FileWriter registrationFW = new FileWriter(registrationF);
 		registrationFW.write(registrationS);

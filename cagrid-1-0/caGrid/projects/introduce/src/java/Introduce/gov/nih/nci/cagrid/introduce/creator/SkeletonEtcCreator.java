@@ -22,7 +22,7 @@ public class SkeletonEtcCreator {
 		etcDir.mkdir();
 
 		RegistationTemplate registrationT = new RegistationTemplate();
-		String registrationS = registrationT.generate(info.getServiceProperties());
+		String registrationS = registrationT.generate(info);
 		File registrationF = new File(etcDir.getAbsolutePath() + File.separator
 				+ "registration.xml");
 		FileWriter registrationFW = new FileWriter(registrationF);
@@ -30,7 +30,7 @@ public class SkeletonEtcCreator {
 		registrationFW.close();
 
 		SecurityDescTemplate securityDescT = new SecurityDescTemplate();
-		String securityDescS = securityDescT.generate(info.getServiceProperties());
+		String securityDescS = securityDescT.generate(info);
 		File securityDescF = new File(etcDir.getAbsolutePath() + File.separator
 				+ "security-desc.xml");
 		FileWriter securityDescFW = new FileWriter(securityDescF);
