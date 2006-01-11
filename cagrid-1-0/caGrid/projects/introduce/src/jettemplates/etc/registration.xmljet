@@ -28,7 +28,7 @@ imports="gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.i
     <agg:AggregatorConfig xsi:type="agg:AggregatorConfig">
       <agg:GetMultipleResourcePropertiesPollType
       <%
-      	if(metadataList!=null){
+      	if(metadataList!=null && metadataList.getMetadata()!=null){
       		Map prefixmap=MetadataTemplateUtils.buildQNameNamespacePrefixMap(metadataList);
       		Iterator iterator = prefixmap.keySet().iterator();
 			while(iterator.hasNext()){
@@ -41,7 +41,7 @@ imports="gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.i
             every 300000 milliseconds (once every 5 minutes) -->
         <agg:PollIntervalMillis>300000</agg:PollIntervalMillis>
         <!-- specifies all Resource Properties that should be retrieved from the service -->
-        <%	if(metadataList!=null){
+        <%	if(metadataList!=null && metadataList.getMetadata()!=null){
         Map prefixmap=MetadataTemplateUtils.buildQNameNamespacePrefixMap(metadataList);
 		for (int i = 0; i < metadataList.getMetadata().length; i++) {
 			ServiceMetadataType metadata = metadataList.getMetadata()[i];
