@@ -109,8 +109,7 @@ public class SkeletonSourceCreator {
 		implFW.close();
 
 		ServiceProviderImplTemplate providerImplT = new ServiceProviderImplTemplate();
-		String providerImplS = providerImplT.generate(info
-				.getServiceProperties());
+		String providerImplS = providerImplT.generate(info);
 		File providerImplF = new File(srcDir.getAbsolutePath()
 				+ File.separator
 				+ info.getServiceProperties().getProperty(
