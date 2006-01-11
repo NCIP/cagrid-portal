@@ -43,7 +43,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.26 2006-01-06 20:57:52 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.27 2006-01-11 15:06:48 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -515,7 +515,10 @@ public class ModificationViewer extends GridPortalBaseFrame {
 											metadata.setRegister(Boolean.getBoolean(register));
 										}
 										if (qname != null && !qname.equals("")) {
-											QName qn = new QName(register);
+											int index = qname.lastIndexOf(":");
+											String qnamespace = qname.substring(0,index);
+											String qnamename = qname.substring(index+1);
+											QName qn = new QName(qnamespace,qnamename);
 											metadata.setQName(qn);
 										}	
 										metadataArray[i] = metadata;
