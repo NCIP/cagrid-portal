@@ -33,6 +33,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import javax.swing.JButton;
 
+
 /**
  * GMETypeExtractionPanel TODO:DOCUMENT ME
  * 
@@ -44,39 +45,24 @@ import javax.swing.JButton;
  *          Exp $
  */
 public class GMEMetadataConfigurationComponent extends GridPortalComponent {
-	JPanel customPanel = null;
-
+	private JPanel customPanel = null;
 	protected Vector typeInfo;
-
 	private JPanel mainPanel = null;
-
 	private File schemaDir = null;
-
 	private GMEConfigurationPanel gmePanel = null;
-
 	private JPanel buttonPanel = null;
-
 	private JButton doneButton = null;
-
-	JComponent me;
-
+	private JComponent me;
 	private JLabel isRegisterLabel = null;
-
 	private JLabel isPopulateFromFileLabel = null;
-
 	private JLabel qnameLabel = null;
-
 	private JCheckBox isPopulateFromFile = null;
-
 	private JCheckBox isRegister = null;
-
 	private JTextField qnameDomain = null;
-
 	private JTextField qnameName = null;
-
 	private JLabel qnameDomainLabel = null;
-
 	private JLabel qnameNameLabel = null;
+
 
 	public GMEMetadataConfigurationComponent(Vector typeInfo, File schemaDir) {
 		this.typeInfo = typeInfo;
@@ -87,15 +73,16 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 
 	}
 
+
 	/**
 	 * This method initializes this
-	 * 
 	 */
 	private void initialize() {
 		this.setSize(new java.awt.Dimension(372, 404));
 		this.setTitle("Metadata Configuration");
 		this.setContentPane(getMainPanel());
 	}
+
 
 	public JPanel getCustomPanel() {
 		if (customPanel == null) {
@@ -138,8 +125,7 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 			gridBagConstraints2.gridy = 2;
 			qnameLabel = new JLabel();
 			qnameLabel.setText("Qname:");
-			qnameLabel
-					.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
+			qnameLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.gridx = 0;
 			gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
@@ -168,6 +154,7 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 		}
 		return customPanel;
 	}
+
 
 	/**
 	 * This method initializes mainPanel
@@ -204,6 +191,7 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 		return mainPanel;
 	}
 
+
 	/**
 	 * This method initializes gmePanel
 	 * 
@@ -211,29 +199,22 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 	 */
 	private GMEConfigurationPanel getGmePanel() {
 		if (gmePanel == null) {
-			gmePanel = new GMEConfigurationPanel(
-					GMEConfigurationPanel.ELEMENT_ONLY);
-			gmePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, "GME",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					IntroduceLookAndFeel.getPanelLabelColor()));
-			gmePanel.getTypesComboBox().addItemListener(
-					new java.awt.event.ItemListener() {
-						public void itemStateChanged(java.awt.event.ItemEvent e) {
-							qnameDomain.setText("gme://"
-									+ (String) gmePanel.getNamespaceComboBox()
-											.getSelectedItem()
-									+ (String) gmePanel.getSchemaComboBox()
-											.getSelectedItem());
-							qnameName.setText((String) gmePanel
-									.getTypesComboBox().getSelectedItem());
+			gmePanel = new GMEConfigurationPanel(GMEConfigurationPanel.ELEMENT_ONLY);
+			gmePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "GME",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+			gmePanel.getTypesComboBox().addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					qnameDomain.setText("gme://" + (String) gmePanel.getNamespaceComboBox().getSelectedItem()
+						+ (String) gmePanel.getSchemaComboBox().getSelectedItem());
+					qnameName.setText((String) gmePanel.getTypesComboBox().getSelectedItem());
 
-						}
-					});
+				}
+			});
 		}
 		return gmePanel;
 	}
+
 
 	/**
 	 * This method initializes buttonPanel
@@ -248,6 +229,7 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 		return buttonPanel;
 	}
 
+
 	/**
 	 * This method initializes doneButton
 	 * 
@@ -259,39 +241,28 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 			doneButton.setText("Done");
 			doneButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					GridServiceResolver.getInstance().setDefaultFactory(
-							new GlobusGMEXMLDataModelServiceFactory());
+					GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
 					List writtenNamespaces = null;
 					try {
-						XMLDataModelService handle = (XMLDataModelService) GridServiceResolver
-								.getInstance().getGridService(
-										gmePanel.getGme().getText());
+						XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
+							.getGridService(gmePanel.getGme().getText());
 						if (gmePanel.currentNamespace != null) {
-							writtenNamespaces = handle.cacheSchema(
-									gmePanel.currentNamespace, schemaDir);
+							writtenNamespaces = handle.cacheSchema(gmePanel.currentNamespace, schemaDir);
 						}
 					} catch (MobiusException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
-						JOptionPane
-								.showMessageDialog(
-										me,
-										"Please check the GME URL and make sure that you have the appropriate credentials!");
+						JOptionPane.showMessageDialog(me,
+							"Please check the GME URL and make sure that you have the appropriate credentials!");
 					}
 
-					File namespace2Mappings = new File(schemaDir
-							.getAbsolutePath()
-							+ File.separator
-							+ ".."
-							+ File.separator
-							+ ".."
-							+ File.separator + "namespace2package.mappings");
+					File namespace2Mappings = new File(schemaDir.getAbsolutePath() + File.separator + ".."
+						+ File.separator + ".." + File.separator + "namespace2package.mappings");
 
 					List mappings = new ArrayList();
 					if (namespace2Mappings.exists()) {
 						try {
-							BufferedReader reader = new BufferedReader(
-									new FileReader(namespace2Mappings));
+							BufferedReader reader = new BufferedReader(new FileReader(namespace2Mappings));
 							String line;
 							try {
 								line = reader.readLine();
@@ -311,21 +282,16 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 					if (writtenNamespaces != null) {
 						for (int i = 0; i < writtenNamespaces.size(); i++) {
 
-							Namespace namespace = (Namespace) writtenNamespaces
-									.get(i);
-							StringTokenizer tokenizer = new StringTokenizer(
-									namespace.getDomain(), ".", true);
+							Namespace namespace = (Namespace) writtenNamespaces.get(i);
+							StringTokenizer tokenizer = new StringTokenizer(namespace.getDomain(), ".", true);
 							StringBuffer packageName = new StringBuffer();
 							while (tokenizer.hasMoreElements()) {
 								packageName.insert(0, tokenizer.nextToken());
 							}
-							String newLine = namespace.getRaw() + "="
-									+ packageName.toString() + ".bean";
+							String newLine = namespace.getRaw() + "=" + packageName.toString() + ".bean";
 							// turns http: into http\:
-							String newnewLine = newLine.replaceFirst(":",
-									"\\\\:");
-							newnewLine = newnewLine.replaceFirst(
-									"\\Q\\\\\\\\:\\E", "\\\\:");
+							String newnewLine = newLine.replaceFirst(":", "\\\\:");
+							newnewLine = newnewLine.replaceFirst("\\Q\\\\\\\\:\\E", "\\\\:");
 							if (!mappings.contains(newnewLine)) {
 								mappings.add(newnewLine);
 							}
@@ -354,30 +320,29 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 		return doneButton;
 	}
 
+
 	public void performDone() {
 		// populate the data vector from the prior screen now......
 		int index = 0;
 		// skip classname
 		index++;
 		if (this.gmePanel.currentNamespace != null) {
-			typeInfo.set(index++, "gme://"
-					+ this.gmePanel.currentNamespace.getRaw());
+			typeInfo.set(index++, "gme://" + this.gmePanel.currentNamespace.getRaw());
 		} else {
 			typeInfo.set(index++, null);
 		}
 		typeInfo.set(index++, this.gmePanel.currentType);
 		if (this.gmePanel.currentNamespace != null) {
-			typeInfo.set(index++, "./"
-					+ this.gmePanel.currentNamespace.getName() + ".xsd");
+			typeInfo.set(index++, "./" + this.gmePanel.currentNamespace.getName() + ".xsd");
 		} else {
 			typeInfo.set(index++, null);
 		}
 		typeInfo.set(index++, String.valueOf(isPopulateFromFile.isSelected()));
 		typeInfo.set(index++, String.valueOf(isRegister.isSelected()));
-		typeInfo.set(index++, getQnameDomain().getText() + ":"
-				+ getQnameName().getText());
+		typeInfo.set(index++, getQnameDomain().getText() + ":" + getQnameName().getText());
 
 	}
+
 
 	/**
 	 * This method initializes isPopulateFromFile
@@ -387,9 +352,11 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 	private JCheckBox getIsPopulateFromFile() {
 		if (isPopulateFromFile == null) {
 			isPopulateFromFile = new JCheckBox();
+			isPopulateFromFile.setSelected(true);
 		}
 		return isPopulateFromFile;
 	}
+
 
 	/**
 	 * This method initializes isRegister
@@ -403,6 +370,7 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 		return isRegister;
 	}
 
+
 	/**
 	 * This method initializes qname
 	 * 
@@ -414,6 +382,7 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 		}
 		return qnameDomain;
 	}
+
 
 	/**
 	 * This method initializes qnameName
