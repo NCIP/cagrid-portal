@@ -38,7 +38,7 @@ public class SkeletonBaseCreator {
 		
 		DeployPropertiesTemplate deployPropertiesT = new DeployPropertiesTemplate();
 		String deployPropertiesS = deployPropertiesT.generate(info);
-		File deployPropertiesF = new File(baseDirectory.getAbsolutePath() + File.separator + "deploy.info.getServiceProperties()");
+		File deployPropertiesF = new File(baseDirectory.getAbsolutePath() + File.separator + "deploy.properties");
 		FileWriter deployPropertiesFW = new FileWriter(deployPropertiesF);
 		deployPropertiesFW.write(deployPropertiesS);
 		deployPropertiesFW.close();
