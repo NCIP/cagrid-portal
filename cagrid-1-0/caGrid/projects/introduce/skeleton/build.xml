@@ -311,4 +311,21 @@
 	<!-- Default target "all" builds and jars everything, including test....does not make a GAR-->
 	<target name="all" depends="clean,jars" />
 
+	<target name="resync" description="Uses the introduceMethods.xml to add and remove methods to this service skeleton">
+		<java classname="gov.nih.nci.cagrid.introduce.codegen.SyncTools" fork="no" failonerror="true">
+			<arg value="-d" />
+			<arg value="${basedir}" />
+			<classpath>
+				<fileset dir="${globus.location}/lib">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${ant.library.dir}">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</java>
+	</target>
 </project>

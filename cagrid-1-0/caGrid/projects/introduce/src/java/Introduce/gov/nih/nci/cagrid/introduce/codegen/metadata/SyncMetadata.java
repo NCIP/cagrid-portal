@@ -67,12 +67,6 @@ public class SyncMetadata {
 		ServiceInformation info = new ServiceInformation(this.methods,
 				this.metadatas, this.serviceProperties);
 
-		File baseDirectory = new File(info.getServiceProperties().getProperty(
-				"introduce.skeleton.destination.dir"));
-		System.out.println("Creating new source code in : "
-				+ info.getServiceProperties().getProperty(
-						"introduce.skeleton.destination.dir"));
-
 		File srcDir = new File(baseDirectory.getAbsolutePath() + File.separator
 				+ "src");
 		File schemaDir = new File(baseDirectory.getAbsolutePath()
@@ -122,7 +116,7 @@ public class SyncMetadata {
 
 		ServiceWSDLTemplate serviceWSDLT = new ServiceWSDLTemplate();
 		String serviceWSDLS = serviceWSDLT
-				.generate(info.getServiceProperties());
+				.generate(info);
 		File serviceWSDLF = new File(schemaDir.getAbsolutePath()
 				+ File.separator
 				+ info.getServiceProperties().getProperty(
@@ -135,8 +129,7 @@ public class SyncMetadata {
 		serviceWSDLFW.close();
 
 		RegistationTemplate registrationT = new RegistationTemplate();
-		String registrationS = registrationT.generate(info
-				.getServiceProperties());
+		String registrationS = registrationT.generate(info);
 		File registrationF = new File(etcDir.getAbsolutePath() + File.separator
 				+ "registration.xml");
 		FileWriter registrationFW = new FileWriter(registrationF);
