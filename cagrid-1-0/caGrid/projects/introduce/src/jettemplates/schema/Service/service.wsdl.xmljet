@@ -42,7 +42,7 @@ imports="gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.i
 	      		Iterator iterator = prefixmap.keySet().iterator();
 				while(iterator.hasNext()){
 					String namespace=(String)iterator.next();%>
-				xmlns:<%=prefixmap.get(namespace)%>=<%=namespace%> 
+				xmlns:<%=prefixmap.get(namespace)%>="<%=namespace%>" 
 				<%}
       		}%>
             xmlns="http://www.w3.org/2001/XMLSchema">
