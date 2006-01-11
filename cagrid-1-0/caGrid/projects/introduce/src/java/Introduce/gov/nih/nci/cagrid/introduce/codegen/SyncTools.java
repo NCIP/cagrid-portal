@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.codegen;
 
 import gov.nih.nci.cagrid.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.Archive;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataType;
@@ -13,6 +14,7 @@ import gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.Properties;
 
 import javax.xml.namespace.QName;
@@ -65,6 +67,23 @@ public class SyncTools {
 
 		ServiceInformation info = new ServiceInformation(methods, metadatas, serviceProperties);
 
+		// create the archive
+		long id = System.currentTimeMillis();
+
+		info.getServiceProperties().setProperty("introduce.skeleton.timestamp", String.valueOf(id));
+		info.getServiceProperties().store(
+			new FileOutputStream(baseDirectory.getAbsolutePath() + File.separator + "introduce.properties"),
+			"Introduce Properties");
+
+		Archive.createArchive(String.valueOf(id), info.getServiceProperties().getProperty(
+			"introduce.skeleton.service.name"), baseDirectory.getAbsolutePath());
+
+		SyncMethods methodsS = new SyncMethods(baseDirectory, info);
+		methodsS.syncWSDL();
+
+		SyncMetadata metadata = new SyncMetadata(baseDirectory, info);
+		metadata.syncWSDL();
+
 		// regenerate stubs and get the symbol table
 		Emitter parser = new Emitter();
 		SymbolTable table = null;
@@ -80,7 +99,7 @@ public class SyncTools {
 		table = parser.getSymbolTable();
 		CommonTools.deleteDir(new File(baseDirectory.getAbsolutePath() + File.separator + "tmp"));
 
-		//get the classnames from the axis symbol table
+		// get the classnames from the axis symbol table
 		if (info.getMetadata().getMetadata() != null) {
 			for (int i = 0; i < info.getMetadata().getMetadata().length; i++) {
 				ServiceMetadataType mtype = (ServiceMetadataType) info.getMetadata().getMetadata(i);
@@ -91,7 +110,7 @@ public class SyncTools {
 			}
 		}
 
-		//get the classnames from the axis symbol table
+		// get the classnames from the axis symbol table
 		if (info.getMethods().getMethod() != null) {
 			for (int i = 0; i < info.getMethods().getMethod().length; i++) {
 				MethodsTypeMethod mtype = (MethodsTypeMethod) info.getMethods().getMethod(i);
@@ -129,10 +148,7 @@ public class SyncTools {
 			}
 		}
 
-		SyncMethods methodsS = new SyncMethods(baseDirectory, info);
 		methodsS.sync();
-
-		SyncMetadata metadata = new SyncMetadata(baseDirectory, info);
 		metadata.sync();
 
 	}

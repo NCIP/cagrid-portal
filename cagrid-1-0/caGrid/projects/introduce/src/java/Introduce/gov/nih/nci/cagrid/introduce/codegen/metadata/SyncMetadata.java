@@ -10,6 +10,7 @@ import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceCo
 import java.io.File;
 import java.io.FileWriter;
 
+
 /**
  * SyncMethodsOnDeployment
  * 
@@ -23,33 +24,42 @@ import java.io.FileWriter;
 public class SyncMetadata {
 
 	private File baseDirectory;
-
 	private ServiceInformation info;
+	private File srcDir;
+	private File schemaDir;
+	private File etcDir;
+
 
 	public SyncMetadata(File baseDirectory, ServiceInformation info) {
 
 		this.baseDirectory = baseDirectory;
 
 		this.info = info;
+		srcDir = new File(baseDirectory.getAbsolutePath() + File.separator + "src");
+		schemaDir = new File(baseDirectory.getAbsolutePath() + File.separator + "schema");
+		etcDir = new File(baseDirectory.getAbsolutePath() + File.separator + "etc");
 	}
+
+
+	public void syncWSDL() throws Exception {
+		ServiceWSDLTemplate serviceWSDLT = new ServiceWSDLTemplate();
+		String serviceWSDLS = serviceWSDLT.generate(info);
+		File serviceWSDLF = new File(schemaDir.getAbsolutePath() + File.separator
+			+ info.getServiceProperties().getProperty("introduce.skeleton.service.name") + File.separator
+			+ info.getServiceProperties().getProperty("introduce.skeleton.service.name") + ".wsdl");
+		FileWriter serviceWSDLFW = new FileWriter(serviceWSDLF);
+		serviceWSDLFW.write(serviceWSDLS);
+		serviceWSDLFW.close();
+	}
+
 
 	public void sync() throws Exception {
 
-		File srcDir = new File(baseDirectory.getAbsolutePath() + File.separator
-				+ "src");
-		File schemaDir = new File(baseDirectory.getAbsolutePath()
-				+ File.separator + "schema");
-		File etcDir = new File(baseDirectory.getAbsolutePath() + File.separator
-				+ "etc");
-
 		BaseResourceTemplate baseResourceT = new BaseResourceTemplate();
 		String baseResourceS = baseResourceT.generate(info);
-		File baseResourceF = new File(srcDir.getAbsolutePath()
-				+ File.separator
-				+ info.getServiceProperties().getProperty(
-						"introduce.skeleton.package.dir") + File.separator
-				+ "service" + File.separator + "globus" + File.separator
-				+ "resource" + File.separator + "BaseResource.java");
+		File baseResourceF = new File(srcDir.getAbsolutePath() + File.separator
+			+ info.getServiceProperties().getProperty("introduce.skeleton.package.dir") + File.separator + "service"
+			+ File.separator + "globus" + File.separator + "resource" + File.separator + "BaseResource.java");
 
 		FileWriter baseResourceFW = new FileWriter(baseResourceF);
 		baseResourceFW.write(baseResourceS);
@@ -57,48 +67,27 @@ public class SyncMetadata {
 
 		MetadataConfigurationTemplate metadataConfigurationT = new MetadataConfigurationTemplate();
 		String metadataConfigurationS = metadataConfigurationT.generate(info);
-		File metadataConfigurationF = new File(srcDir.getAbsolutePath()
-				+ File.separator
-				+ info.getServiceProperties().getProperty(
-						"introduce.skeleton.package.dir") + File.separator
-				+ "service" + File.separator + "globus" + File.separator
-				+ "resource" + File.separator + "MetadataConfiguration.java");
+		File metadataConfigurationF = new File(srcDir.getAbsolutePath() + File.separator
+			+ info.getServiceProperties().getProperty("introduce.skeleton.package.dir") + File.separator + "service"
+			+ File.separator + "globus" + File.separator + "resource" + File.separator + "MetadataConfiguration.java");
 
-		FileWriter metadataConfigurationFW = new FileWriter(
-				metadataConfigurationF);
+		FileWriter metadataConfigurationFW = new FileWriter(metadataConfigurationF);
 		metadataConfigurationFW.write(metadataConfigurationS);
 		metadataConfigurationFW.close();
 
 		ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
 		String resourceContanstsS = resourceContanstsT.generate(info);
-		File resourceContanstsF = new File(srcDir.getAbsolutePath()
-				+ File.separator
-				+ info.getServiceProperties().getProperty(
-						"introduce.skeleton.package.dir") + File.separator
-				+ "service" + File.separator + "globus" + File.separator
-				+ "resource" + File.separator + "ResourceConstants.java");
+		File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
+			+ info.getServiceProperties().getProperty("introduce.skeleton.package.dir") + File.separator + "service"
+			+ File.separator + "globus" + File.separator + "resource" + File.separator + "ResourceConstants.java");
 
 		FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
 		resourceContanstsFW.write(resourceContanstsS);
 		resourceContanstsFW.close();
 
-		ServiceWSDLTemplate serviceWSDLT = new ServiceWSDLTemplate();
-		String serviceWSDLS = serviceWSDLT.generate(info);
-		File serviceWSDLF = new File(schemaDir.getAbsolutePath()
-				+ File.separator
-				+ info.getServiceProperties().getProperty(
-						"introduce.skeleton.service.name")
-				+ File.separator
-				+ info.getServiceProperties().getProperty(
-						"introduce.skeleton.service.name") + ".wsdl");
-		FileWriter serviceWSDLFW = new FileWriter(serviceWSDLF);
-		serviceWSDLFW.write(serviceWSDLS);
-		serviceWSDLFW.close();
-
 		RegistationTemplate registrationT = new RegistationTemplate();
 		String registrationS = registrationT.generate(info);
-		File registrationF = new File(etcDir.getAbsolutePath() + File.separator
-				+ "registration.xml");
+		File registrationF = new File(etcDir.getAbsolutePath() + File.separator + "registration.xml");
 		FileWriter registrationFW = new FileWriter(registrationF);
 		registrationFW.write(registrationS);
 		registrationFW.close();

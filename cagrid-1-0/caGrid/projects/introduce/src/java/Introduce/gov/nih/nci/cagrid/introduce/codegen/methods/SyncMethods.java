@@ -15,6 +15,7 @@ import org.apache.ws.jaxme.js.JavaSource;
 import org.apache.ws.jaxme.js.JavaSourceFactory;
 import org.apache.ws.jaxme.js.util.JavaParser;
 
+
 /**
  * SyncMethodsOnDeployment
  * 
@@ -45,6 +46,7 @@ public class SyncMethods {
 
 	ServiceInformation info;
 
+
 	public SyncMethods(File baseDirectory, ServiceInformation info) {
 
 		this.baseDirectory = baseDirectory;
@@ -55,60 +57,28 @@ public class SyncMethods {
 		this.removals = new ArrayList();
 	}
 
-	public void sync() throws Exception {
-		// create the archive
-		long id = System.currentTimeMillis();
-		info.getServiceProperties().setProperty("introduce.skeleton.timestamp",
-				String.valueOf(id));
-		info.getServiceProperties().store(
-				new FileOutputStream(baseDirectory.getAbsolutePath()
-						+ File.separator + "introduce.properties"),
-				"Introduce Properties");
 
-		Archive.createArchive(String.valueOf(id), info.getServiceProperties()
-				.getProperty("introduce.skeleton.service.name"), baseDirectory
-				.getAbsolutePath());
-
-		jsf = new JavaSourceFactory();
-		jp = new JavaParser(jsf);
-
-		serviceInterface = baseDirectory.getAbsolutePath()
-				+ File.separator
-				+ "src"
-				+ File.separator
-				+ this.info.getServiceProperties().get(
-						"introduce.skeleton.package.dir")
-				+ "/common/"
-				+ this.info.getServiceProperties().get(
-						"introduce.skeleton.service.name") + "I.java";
-
-		jp.parse(new File(serviceInterface));
-		this.sourceI = (JavaSource) jsf.getJavaSources().next();
-		this.sourceI.setForcingFullyQualifiedName(true);
-
-		System.out.println(sourceI.getClassName());
-
+	public void syncWSDL() throws Exception {
 		// check the interface for it's current list of methods
 		this.lookForUpdates();
 
 		// sync the gwsdl
-		SyncWSDL wsdlSync = new SyncWSDL(baseDirectory, this.info
-				.getServiceProperties());
+		SyncWSDL wsdlSync = new SyncWSDL(baseDirectory, this.info.getServiceProperties());
 		wsdlSync.sync(additions, removals);
 
-		String cmd = CommonTools.getAntFlattenCommand(baseDirectory
-				.getAbsolutePath());
+	}
+
+
+	public void sync() throws Exception {
+		String cmd = CommonTools.getAntFlattenCommand(baseDirectory.getAbsolutePath());
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
 		if (p.exitValue() != 0) {
 			throw new Exception("Service flatten wsdl exited abnormally");
 		}
 
-		
-
 		// sync the methods fiels
-		SyncSource methodSync = new SyncSource(baseDirectory, this.info
-				.getServiceProperties());
+		SyncSource methodSync = new SyncSource(baseDirectory, this.info.getServiceProperties());
 		// remove methods
 		methodSync.removeMethods(this.removals);
 		// add new methods
@@ -122,16 +92,28 @@ public class SyncMethods {
 		// secureSync.sync(methodsFromDoc);
 	}
 
-	public void lookForUpdates() {
+
+	public void lookForUpdates() throws Exception {
+
+		jsf = new JavaSourceFactory();
+		jp = new JavaParser(jsf);
+
+		serviceInterface = baseDirectory.getAbsolutePath() + File.separator + "src" + File.separator
+			+ this.info.getServiceProperties().get("introduce.skeleton.package.dir") + "/common/"
+			+ this.info.getServiceProperties().get("introduce.skeleton.service.name") + "I.java";
+
+		jp.parse(new File(serviceInterface));
+		this.sourceI = (JavaSource) jsf.getJavaSources().next();
+		this.sourceI.setForcingFullyQualifiedName(true);
+
+		System.out.println(sourceI.getClassName());
 
 		JavaMethod[] methods = sourceI.getMethods();
 
 		// look at doc and compare to interface
 		if (info.getMethods().getMethod() != null) {
-			for (int methodIndex = 0; methodIndex < this.info.getMethods()
-					.getMethod().length; methodIndex++) {
-				MethodsTypeMethod mel = this.info.getMethods().getMethod(
-						methodIndex);
+			for (int methodIndex = 0; methodIndex < this.info.getMethods().getMethod().length; methodIndex++) {
+				MethodsTypeMethod mel = this.info.getMethods().getMethod(methodIndex);
 				boolean found = false;
 				for (int i = 0; i < methods.length; i++) {
 					String methodName = methods[i].getName();
@@ -141,8 +123,7 @@ public class SyncMethods {
 					}
 				}
 				if (!found) {
-					System.out.println("Found a method for addition: "
-							+ mel.getName());
+					System.out.println("Found a method for addition: " + mel.getName());
 					this.additions.add(mel);
 				}
 			}
@@ -153,10 +134,8 @@ public class SyncMethods {
 			String methodName = methods[i].getName();
 			boolean found = false;
 			if (info.getMethods().getMethod() != null) {
-				for (int methodIndex = 0; methodIndex < this.info.getMethods()
-						.getMethod().length; methodIndex++) {
-					MethodsTypeMethod mel = this.info.getMethods().getMethod(
-							methodIndex);
+				for (int methodIndex = 0; methodIndex < this.info.getMethods().getMethod().length; methodIndex++) {
+					MethodsTypeMethod mel = this.info.getMethods().getMethod(methodIndex);
 					if (mel.getName().equals(methodName)) {
 						found = true;
 						break;
