@@ -56,12 +56,12 @@ public class MetadataConfiguration {
 		%>
 	
 	
-	public String get<%=name%>File() {
+	public String get<%=MetadataTemplateUtils.upperCaseFirstCharacter(name)%>File() {
 		return <%=name%>File;
 	}
 	
 	
-	public void set<%=name%>File(String <%=name%>File) {
+	public void set<%=MetadataTemplateUtils.upperCaseFirstCharacter(name)%>File(String <%=name%>File) {
 		this.<%=name%>File = <%=name%>File;
 	}
 	<%			}

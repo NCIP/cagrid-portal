@@ -165,7 +165,7 @@ public class BaseResource implements Resource, ResourceProperties, ResourceLifet
 			if(metadata.isPopulateFromFile()){
 				String name=MetadataTemplateUtils.getResourcePropertyVariableName(metadataList, i);
 	%>
-		load<%=name%>FromFile();
+		load<%=MetadataTemplateUtils.upperCaseFirstCharacter(name)%>FromFile();
 	<%		}
 		}
 		}
@@ -180,9 +180,9 @@ public class BaseResource implements Resource, ResourceProperties, ResourceLifet
 				String name=MetadataTemplateUtils.getResourcePropertyVariableName(metadataList, i);
 				String className=metadata.getClassName();
 	%>
-	private void load<%=name%>FromFile() {
+	private void load<%=MetadataTemplateUtils.upperCaseFirstCharacter(name)%>FromFile() {
 		try {
-			this.<%=name%>MD = (<%=className%>) CommonTools.deserializeDocument(getConfiguration().get<%=name%>File(),
+			this.<%=name%>MD = (<%=className%>) CommonTools.deserializeDocument(getConfiguration().get<%=MetadataTemplateUtils.upperCaseFirstCharacter(name)%>File(),
 				<%=className%>.class);
 		} catch (Exception e) {
 			logger.error("ERROR: problem populating metadata from file: " + e.getMessage(), e);

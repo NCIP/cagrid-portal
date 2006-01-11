@@ -35,7 +35,7 @@ import javax.swing.JButton;
 
 
 /**
- * GMETypeExtractionPanel TODO:DOCUMENT ME
+ * GMEMetadataConfigurationComponent
  * 
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -366,6 +366,7 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 	private JCheckBox getIsRegister() {
 		if (isRegister == null) {
 			isRegister = new JCheckBox();
+			isRegister.setSelected(true);
 		}
 		return isRegister;
 	}

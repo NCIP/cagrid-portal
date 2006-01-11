@@ -33,13 +33,31 @@ public class MetadataTemplateUtils {
 		}
 
 		// return the orginal name, if it is unique, otherwise append a number
-		return fixVariableCase(baseName + ((previousNumber > 0) ? String.valueOf(previousNumber) : ""));
+		return lowerCaseFirstCharacter(baseName + ((previousNumber > 0) ? String.valueOf(previousNumber) : ""));
 
 	}
 
-	private static String fixVariableCase(String variableName){
-		return variableName.substring(0,1).toLowerCase()+ variableName.substring(1);
+
+	/**
+	 * Returns the input string with the first character converted to lowercase
+	 * @param variableName string to fix
+	 * @return the input string with the first character converted to lowercase
+	 */
+	public static String lowerCaseFirstCharacter(String variableName) {
+		return variableName.substring(0, 1).toLowerCase() + variableName.substring(1);
 	}
+
+
+	/**
+	 * Returns the input string with the first character converted to uppercase
+	 * 
+	 * @param variableName string to fix
+	 * @return the input string with the first character converted to uppercase
+	 */
+	public static String upperCaseFirstCharacter(String variableName) {
+		return variableName.substring(0, 1).toUpperCase() + variableName.substring(1);
+	}
+
 
 	/**
 	 * Build a map of of namespace->prefix definitions for the namespaces of all
