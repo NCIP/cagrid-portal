@@ -14,7 +14,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CertificateTable.java,v 1.3 2005-12-15 19:29:33 langella Exp $
+ * @version $Id: CertificateTable.java,v 1.4 2006-01-11 19:50:28 langella Exp $
  */
 public class CertificateTable extends PortalBaseTable {
 	public static String CERTIFICATE = "certificate";
@@ -68,7 +68,7 @@ public class CertificateTable extends PortalBaseTable {
 	public void doubleClick() throws Exception {
 		int row = getSelectedRow();
 		if ((row >= 0) && (row < getRowCount())) {
-			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new CertificateInformationComponent(getSelectedCertificate()),500,325);	
+			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new CertificateInformationComponent(getSelectedCertificate()),600,425);	
 		} else {
 			throw new Exception(
 					"No certificate selected, please select a certificate!!!");

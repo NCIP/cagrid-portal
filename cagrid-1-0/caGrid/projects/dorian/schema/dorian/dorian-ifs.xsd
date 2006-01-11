@@ -92,13 +92,13 @@
 			<xsd:sequence>
 				<xsd:element name="keyAsString" minOccurs="1" maxOccurs="1" type="xsd:string"/>
 			</xsd:sequence>
-	</xsd:complexType>
+		</xsd:complexType>
 	
 		<xsd:complexType name="X509Certificate">
 			<xsd:sequence>
 				<xsd:element name="certificateAsString" minOccurs="1" maxOccurs="1" type="xsd:string"/>
 			</xsd:sequence>
-	</xsd:complexType>
+		</xsd:complexType>
 	
 		<xsd:complexType name="IFSUserPolicy">
 			<xsd:sequence>
