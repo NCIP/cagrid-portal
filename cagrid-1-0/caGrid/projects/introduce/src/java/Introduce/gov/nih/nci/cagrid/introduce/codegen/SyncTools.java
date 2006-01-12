@@ -11,10 +11,12 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
 import gov.nih.nci.cagrid.introduce.codegen.metadata.SyncMetadata;
 import gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods;
+import gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.util.Properties;
 
 import javax.xml.namespace.QName;
@@ -67,23 +69,19 @@ public class SyncTools {
 
 		ServiceInformation info = new ServiceInformation(methods, metadatas, serviceProperties);
 
-		// create the archive
-		long id = System.currentTimeMillis();
-
-		info.getServiceProperties().setProperty("introduce.skeleton.timestamp", String.valueOf(id));
-		info.getServiceProperties().store(
-			new FileOutputStream(baseDirectory.getAbsolutePath() + File.separator + "introduce.properties"),
-			"Introduce Properties");
-
-		Archive.createArchive(String.valueOf(id), info.getServiceProperties().getProperty(
-			"introduce.skeleton.service.name"), baseDirectory.getAbsolutePath());
-
-		SyncMethods methodsS = new SyncMethods(baseDirectory, info);
-		methodsS.syncWSDL();
-
-		SyncMetadata metadata = new SyncMetadata(baseDirectory, info);
-		metadata.syncWSDL();
-
+		this.createArchive(info);
+		
+		File schemaDir = new File(baseDirectory.getAbsolutePath() + File.separator + "schema");
+		
+		ServiceWSDLTemplate serviceWSDLT = new ServiceWSDLTemplate();
+		String serviceWSDLS = serviceWSDLT.generate(info);
+		File serviceWSDLF = new File(schemaDir.getAbsolutePath() + File.separator
+			+ info.getServiceProperties().getProperty("introduce.skeleton.service.name") + File.separator
+			+ info.getServiceProperties().getProperty("introduce.skeleton.service.name") + ".wsdl");
+		FileWriter serviceWSDLFW = new FileWriter(serviceWSDLF);
+		serviceWSDLFW.write(serviceWSDLS);
+		serviceWSDLFW.close();
+		
 		// regenerate stubs and get the symbol table
 		Emitter parser = new Emitter();
 		SymbolTable table = null;
@@ -99,6 +97,8 @@ public class SyncTools {
 		table = parser.getSymbolTable();
 		CommonTools.deleteDir(new File(baseDirectory.getAbsolutePath() + File.separator + "tmp"));
 
+		table.dump(System.out);
+		
 		// get the classnames from the axis symbol table
 		if (info.getMetadata().getMetadata() != null) {
 			for (int i = 0; i < info.getMetadata().getMetadata().length; i++) {
@@ -147,10 +147,26 @@ public class SyncTools {
 				}
 			}
 		}
+		
+		SyncMethods methodsS = new SyncMethods(baseDirectory, info);
+		SyncMetadata metadata = new SyncMetadata(baseDirectory, info);
 
 		methodsS.sync();
 		metadata.sync();
 
+	}
+	
+	private void createArchive(ServiceInformation info) throws Exception {
+//		 create the archive
+		long id = System.currentTimeMillis();
+
+		info.getServiceProperties().setProperty("introduce.skeleton.timestamp", String.valueOf(id));
+		info.getServiceProperties().store(
+			new FileOutputStream(baseDirectory.getAbsolutePath() + File.separator + "introduce.properties"),
+			"Introduce Properties");
+
+		Archive.createArchive(String.valueOf(id), info.getServiceProperties().getProperty(
+			"introduce.skeleton.service.name"), baseDirectory.getAbsolutePath());		
 	}
 
 

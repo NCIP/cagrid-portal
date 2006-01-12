@@ -1,15 +1,15 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.schema.service" class="ServiceWSDLTemplate"
-imports="gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.*" %>
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.schema.service" class="ServiceWSDLTemplate"  imports="gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.* gov.nih.nci.cagrid.introduce.beans.method.*" %>
 <% gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
 	ServiceMetadataListType metadataList = info.getMetadata();
-
-   String packageName = info.getServiceProperties().getProperty("introduce.skeleton.package");
-   String serviceName = info.getServiceProperties().getProperty("introduce.skeleton.service.name");
-   String namespaceDomain = info.getServiceProperties().getProperty("introduce.skeleton.namespace.domain");
-   String modifiedServiceName = serviceName;
-   if(serviceName.endsWith("Service")){
-   	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
-   }
+	MethodsType methods = info.getMethods();
+    String packageName = info.getServiceProperties().getProperty("introduce.skeleton.package");
+    String serviceName = info.getServiceProperties().getProperty("introduce.skeleton.service.name");
+    String namespaceDomain = info.getServiceProperties().getProperty("introduce.skeleton.namespace.domain");
+    String modifiedServiceName = serviceName;
+    if(serviceName.endsWith("Service")){
+    	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
+    }
+    List faults = new ArrayList();
 %>
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions name="<%=serviceName%>" targetNamespace="<%=namespaceDomain%>/<%=serviceName%>"
@@ -20,6 +20,8 @@ imports="gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.i
     xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl"
     xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing"
     xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl"
+    xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd"
+    xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl"
     xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
     xmlns="http://schemas.xmlsoap.org/wsdl/">
     <import
@@ -37,45 +39,201 @@ imports="gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.i
             xmlns:tns="<%=namespaceDomain%>/<%=serviceName%>"
             
              <%
-			if(metadataList!=null && metadataList.getMetadata()!=null){
-	      		Map prefixmap=MetadataTemplateUtils.buildQNameNamespacePrefixMap(metadataList);
+	      		Map prefixmap=MetadataTemplateUtils.buildMasterNamespacePrefixMap(info);
 	      		Iterator iterator = prefixmap.keySet().iterator();
 				while(iterator.hasNext()){
-					String namespace=(String)iterator.next();%>
-				xmlns:<%=prefixmap.get(namespace)%>="<%=namespace%>" 
+					SchemaInformation schemaInformation=(SchemaInformation)iterator.next();%>
+				xmlns:<%=schemaInformation.getPrefix()%>="<%=schemaInformation.getNamespace()%>" 
 				<%}
-      		}%>
+      		%>
             xmlns="http://www.w3.org/2001/XMLSchema">
-			<%
-			if(metadataList!=null && metadataList.getMetadata()!=null){
-	      		for (int i = 0; i < metadataList.getMetadata().length; i++) {
-					ServiceMetadataType metadata = metadataList.getMetadata()[i];%>
-			<import namespace="<%=metadata.getNamespace()%>" schemaLocation="<%=metadata.getLocation()%>"/>
-			  <%}
-      		}%>
+			
+		<%
+		prefixmap=MetadataTemplateUtils.buildMasterNamespacePrefixMap(info);
+  		iterator = prefixmap.keySet().iterator();
+		while(iterator.hasNext()){
+			SchemaInformation schemaInformation=(SchemaInformation)iterator.next();%>
+			<import namespace="<%=schemaInformation.getNamespace()%>" schemaLocation="<%=schemaInformation.getLocation()%>"/>
+			   <%
+      	}%>
+      	
+      	<%  //walk through each method and create the types for input messages output messages
+      		// and fault messages
+			if(methods!=null && methods.getMethod()!=null){
+	      		for (int methodsI = 0; methodsI < methods.getMethod().length ; methodsI++) {
+	      			MethodType method = methods.getMethod(methodsI);
+	      			%>
+  		       <element name=<%=method.getName()%>>
+  		        <complexType>
+          		  <sequence>
+          		  <% 
+          		  
+          		  if(method.getInputs()!=null && method.getInputs().getInput()!=null){
+	      				for(int inputsI = 0; inputsI < method.getInputs().getInput().length; inputsI++){
+	      					MethodTypeInputsInput inputParam = method.getInputs().getInput(inputsI);
+	      					if((inputParam.getMaxOccurs() != null)
+	      						&& (inputParam.getMaxOccurs().equals("unbounded") || Integer.parseInt(inputParam.getMaxOccurs()) > 1)){
+	      		 %>
+	      		 <element name=<%=inputParam.getName() %> minOccurs="1" maxOccurs="1" >
+	      		     <complexType>
+                       <complexContent>
+                         <restriction base="soapenc:Array">
+                          <attribute ref="soapenc:arrayType" arrayType="<%=((SchemaInformation)prefixmap.get(inputParam.getNamespace())).getPrefix()%>:<%=inputParam.getType() %>" />
+                         </restriction>
+                       </complexContent>
+                     </complexType>
+                   </element>
+                   <%
+                            } else {
+                  %>
+                  <element name="<%=inputParam.getName() %>" type="<%=((SchemaInformation)prefixmap.get(inputParam.getNamespace())).getPrefix()%>:<%=inputParam.getType() %>" minOccurs="1" maxOccurs="1" />
+                  <%
+  		       				}
+	      				}
+	      			}
+	      		%>
+	      		  </sequence>
+          	     </complexType>  
+  		       </element>
+  		       
+  		       <element name=<%=method.getName()%>Response>
+  		        <complexType>
+          		  <sequence>
+          		  <%
+	      			if(method.getOutput()!=null){
+						MethodTypeOutput outputParam = method.getOutput();
+						if(outputParam.getClassName()!=null && !outputParam.getClassName().equals("void")){
+						if((outputParam.getMaxOccurs() != null)
+      						&& (outputParam.getMaxOccurs().equals("unbounded") || Integer.parseInt(outputParam.getMaxOccurs()) > 1)){
+				      		 %>
+				      		 <element name="response" minOccurs="1" maxOccurs="1" >
+				      		     <complexType>
+			                       <complexContent>
+			                         <restriction base="soapenc:Array">
+			                          <attribute ref="soapenc:arrayType" arrayType="<%=((SchemaInformation)prefixmap.get(outputParam.getNamespace())).getPrefix()%>:<%=outputParam.getType() %>" />
+			                         </restriction>
+			                       </complexContent>
+			                     </complexType>
+			                   </element>
+			                   <%
+			            } else {
+			                  %>
+			                  <element name="response" type="<%=((SchemaInformation)prefixmap.get(outputParam.getNamespace())).getPrefix()%>:<%=outputParam.getType() %>" minOccurs="1" maxOccurs="1" />
+			                  <%
+			  		    }
+						}
+					}
+          		  %>
+          		  </sequence>
+          	     </complexType>  
+  		       </element><%
+	    		}
+      		}
+		
+		if(methods!=null && methods.getMethod()!=null){
+      		for (int methodsI = 0; methodsI < methods.getMethod().length ; methodsI++) {
+      			MethodType method = methods.getMethod(methodsI);
+      			if(method.getExceptions()!=null && method.getExceptions().getException()!=null){
+      				for(int exceptionI = 0; exceptionI < method.getInputs().getInput().length; exceptionI++){
+      					MethodTypeExceptionsException exception = method.getExceptions().getException(exceptionI);
+      					if(!faults.contains(exception.getName())){
+      					  faults.add(exception.getName());
+      					%>
+      					<element name="<%=exception.getName() %>" >
+      					    <complexType>
+      					      <complexContent>
+      					        <extension base="wsbf:BaseFaultType">
+      					        </extension>
+      					      </complexContent>
+      					    </complexType>
+      					</element>
+      					<%
+      					}
+      				}
+				}
+    		}
+  		}
+      	%>
+      	
+      		
 
             <element name="<%=serviceName%>ResourceProperties">
                 <complexType>
                     <sequence>
                         <%if(metadataList!=null && metadataList.getMetadata()!=null){
-                        	Map prefixmap=MetadataTemplateUtils.buildQNameNamespacePrefixMap(metadataList);
+                        	prefixmap=MetadataTemplateUtils.buildQNameNamespacePrefixMap(metadataList);
                         	for (int i = 0; i < metadataList.getMetadata().length; i++) {
 								ServiceMetadataType metadata = metadataList.getMetadata()[i];%>
-						<element ref="<%=prefixmap.get(metadata.getQName().getNamespaceURI())%>:<%=metadata.getQName().getLocalPart()%>"/>
-						<%	}
-						}%>
-                    </sequence>
+						<element ref="<%=prefixmap.get(metadata.getQName().getNamespaceURI())%>:<%=metadata.getQName().getLocalPart()%>"/><%
+							}
+						}
+                    %></sequence>
                 </complexType>
             </element>
-            <!-- REQUESTS AND RESPONSES -->
         </schema>
     </types>
-    <!--============================================================
+    
+    
+<!--  place service messages here -->
+<%  		//walk through each method and create the types for input messages output messages
+      		// and fault messages
+if(methods!=null && methods.getMethod()!=null){
+	for (int methodsI = 0; methodsI < methods.getMethod().length ; methodsI++) {
+		MethodType method = methods.getMethod(methodsI);
+%>
+	<message name="<%=method.getName() %>InputMessage">
+		<part name="parameters" element="tns:<%=method.getName() %>"/>
+	</message>
+	
+	<message name="<%=method.getName() %>OutputMessage">
+		<part name="parameters" element="tns:<%=method.getName() %>Response"/>
+	</message>
+<%
+	}
+}
+
+for(int i=0; i < faults.size(); i++){
+%>
+	<message name="<%=(String)faults.get(i) %>FaultMessage">
+		<part name="fault" element="tns:<%=(String)faults.get(i) %>Response"/>
+	</message>
+<%
+}
+			
+			
+%>
+    
+<!--============================================================
 
                        P O R T T Y P E
                       
   ============================================================-->
     <portType name="<%=serviceName%>PortType" wsrp:ResourceProperties="tns:<%=serviceName%>ResourceProperties">
+
+<%
+//walk through methods and create the operations
+if(methods!=null && methods.getMethod()!=null){
+	for (int methodsI = 0; methodsI < methods.getMethod().length ; methodsI++) {
+		MethodType method = methods.getMethod(methodsI);
+%>
+		<operation name="<%=method.getName() %>">
+            <input message="tns:<%=method.getName() %>InputMessage"/>
+            <output message="tns:<%=method.getName() %>OutputMessage"/>
+            <%
+       		if(method.getExceptions()!=null && method.getExceptions().getException()!=null){
+       			for(int faultI = 0; faultI < method.getExceptions().getException().length; faultI++){
+       				MethodTypeExceptionsException exception = (MethodTypeExceptionsException)method.getExceptions().getException(faultI);
+       				%>
+       		 <fault name="<%=exception.getName() %>" message="tns:<%=exception.getName() %>FaultMessage"/>
+       				<%
+       			}
+       		}
+            %>
+        </operation>
+<%
+	}
+}
+%>
         <operation name="GetResourceProperty">
             <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest"
                 wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty"/>

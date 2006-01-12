@@ -3,8 +3,12 @@ package gov.nih.nci.cagrid.introduce.codegen;
 import java.util.HashMap;
 import java.util.Map;
 
+import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
 
 
 public class MetadataTemplateUtils {
@@ -48,6 +52,7 @@ public class MetadataTemplateUtils {
 	}
 
 
+
 	/**
 	 * Returns the input string with the first character converted to uppercase
 	 * 
@@ -84,6 +89,74 @@ public class MetadataTemplateUtils {
 			}
 			// add the ns=>prefix entry
 			map.put(qnameNamespace, prefix);
+		}
+
+		return map;
+	}
+
+
+	public static Map buildMasterNamespacePrefixMap(ServiceInformation info) {
+		Map map = new HashMap();
+		if (info.getMetadata() != null && info.getMetadata().getMetadata() != null) {
+			ServiceMetadataListType metadataList = info.getMetadata();
+			for (int i = 0; i < metadataList.getMetadata().length; i++) {
+				ServiceMetadataType metadata = metadataList.getMetadata()[i];
+				String qnameName = metadata.getQName().getLocalPart();
+				String qnameNamespace = metadata.getQName().getNamespaceURI();
+				String location = metadata.getLocation();
+
+				String prefixBase = qnameName.toLowerCase().substring(0, Math.min(qnameName.length(), 4));
+				int previousNumber = 0;
+				String prefix = prefixBase + ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
+				while (map.containsValue(prefix)) {
+					previousNumber++;
+					prefix = prefixBase + ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
+				}
+				// add the ns=>prefix entry
+				map.put(qnameNamespace, new SchemaInformation(qnameNamespace, prefix, location));
+			}
+		}
+
+		if (info.getMethods() != null) {
+			if (info.getMethods().getMethod() != null) {
+				for (int methodI = 0; methodI < info.getMethods().getMethod().length; methodI++) {
+					MethodsTypeMethod method = info.getMethods().getMethod(methodI);
+					if(method.getInputs()!=null && method.getInputs().getInput()!=null){
+						for(int inputI = 0; inputI < method.getInputs().getInput().length; inputI++){
+							MethodTypeInputsInput inputParam = method.getInputs().getInput(inputI);
+							String qnameName = inputParam.getType();
+							String qnameNamespace = inputParam.getNamespace();
+							String location = inputParam.getLocation();
+
+							String prefixBase = qnameName.toLowerCase().substring(0, Math.min(qnameName.length(), 4));
+							int previousNumber = 0;
+							String prefix = prefixBase + ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
+							while (map.containsValue(prefix)) {
+								previousNumber++;
+								prefix = prefixBase + ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
+							}
+							// add the ns=>prefix entry
+							map.put(qnameNamespace, new SchemaInformation(qnameNamespace, prefix, location));
+						}
+					}
+					if(method.getOutput()!=null){
+						MethodTypeOutput outputParam = method.getOutput();
+						String qnameName = outputParam.getType();
+						String qnameNamespace = outputParam.getNamespace();
+						String location = outputParam.getLocation();
+
+						String prefixBase = qnameName.toLowerCase().substring(0, Math.min(qnameName.length(), 4));
+						int previousNumber = 0;
+						String prefix = prefixBase + ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
+						while (map.containsValue(prefix)) {
+							previousNumber++;
+							prefix = prefixBase + ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
+						}
+						// add the ns=>prefix entry
+						map.put(qnameNamespace, new SchemaInformation(qnameNamespace, prefix, location));
+					}
+				}
+			}
 		}
 
 		return map;

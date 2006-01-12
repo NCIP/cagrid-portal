@@ -1,12 +1,10 @@
 package gov.nih.nci.cagrid.introduce.codegen.methods;
 
 import gov.nih.nci.cagrid.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.Archive;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,19 +55,9 @@ public class SyncMethods {
 		this.removals = new ArrayList();
 	}
 
-
-	public void syncWSDL() throws Exception {
-		// check the interface for it's current list of methods
-		this.lookForUpdates();
-
-		// sync the gwsdl
-		SyncWSDL wsdlSync = new SyncWSDL(baseDirectory, this.info.getServiceProperties());
-		wsdlSync.sync(additions, removals);
-
-	}
-
-
 	public void sync() throws Exception {
+		this.lookForUpdates();
+		
 		String cmd = CommonTools.getAntFlattenCommand(baseDirectory.getAbsolutePath());
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();

@@ -40,19 +40,6 @@ public class SyncMetadata {
 		etcDir = new File(baseDirectory.getAbsolutePath() + File.separator + "etc");
 	}
 
-
-	public void syncWSDL() throws Exception {
-		ServiceWSDLTemplate serviceWSDLT = new ServiceWSDLTemplate();
-		String serviceWSDLS = serviceWSDLT.generate(info);
-		File serviceWSDLF = new File(schemaDir.getAbsolutePath() + File.separator
-			+ info.getServiceProperties().getProperty("introduce.skeleton.service.name") + File.separator
-			+ info.getServiceProperties().getProperty("introduce.skeleton.service.name") + ".wsdl");
-		FileWriter serviceWSDLFW = new FileWriter(serviceWSDLF);
-		serviceWSDLFW.write(serviceWSDLS);
-		serviceWSDLFW.close();
-	}
-
-
 	public void sync() throws Exception {
 
 		BaseResourceTemplate baseResourceT = new BaseResourceTemplate();
