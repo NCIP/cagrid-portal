@@ -65,9 +65,9 @@
 	      		for (int methodsI = 0; methodsI < methods.getMethod().length ; methodsI++) {
 	      			MethodType method = methods.getMethod(methodsI);
 	      			%>
-  		       <element name="<%=method.getName()%>">
-  		        <complexType>
-          		  <sequence>
+				<element name="<%=method.getName()%>">
+					<complexType>
+						<sequence>
           		  <% 
           		  
           		  if(method.getInputs()!=null && method.getInputs().getInput()!=null){
@@ -76,24 +76,23 @@
 	      					if((inputParam.getMaxOccurs() != null)
 	      						&& (inputParam.getMaxOccurs().equals("unbounded") || Integer.parseInt(inputParam.getMaxOccurs()) > 1)){
 	      		 %>
-	      		 <element name="<%=inputParam.getName() %>" type="<%=((SchemaInformation)prefixmap.get(inputParam.getNamespace())).getPrefix()%>:<%=inputParam.getType() %>" minOccurs="1" maxOccurs="<%=inputParam.getMaxOccurs() %>" >
-                   </element>
+							<element name="<%=inputParam.getName() %>" type="<%=((SchemaInformation)prefixmap.get(inputParam.getNamespace())).getPrefix()%>:<%=inputParam.getType() %>" minOccurs="1" maxOccurs="<%=inputParam.getMaxOccurs() %>" />
                    <%
                             } else {
                   %>
-                  <element name="<%=inputParam.getName() %>" type="<%=((SchemaInformation)prefixmap.get(inputParam.getNamespace())).getPrefix()%>:<%=inputParam.getType() %>" minOccurs="1" maxOccurs="1" />
+                  			<element name="<%=inputParam.getName() %>" type="<%=((SchemaInformation)prefixmap.get(inputParam.getNamespace())).getPrefix()%>:<%=inputParam.getType() %>" minOccurs="1" maxOccurs="1" />
                   <%
   		       				}
 	      				}
 	      			}
 	      		%>
-	      		  </sequence>
-          	     </complexType>  
-  		       </element>
+	      				</sequence>
+	      			</complexType>
+	      		</element>
   		       
-  		       <element name="<%=method.getName()%>Response">
-  		        <complexType>
-          		  <sequence>
+				<element name="<%=method.getName()%>Response">
+					<complexType>
+						<sequence>
           		  <%
 	      			if(method.getOutput()!=null){
 						MethodTypeOutput outputParam = method.getOutput();
@@ -101,8 +100,7 @@
 						if((outputParam.getMaxOccurs() != null)
       						&& (outputParam.getMaxOccurs().equals("unbounded") || Integer.parseInt(outputParam.getMaxOccurs()) > 1)){
 				      		 %>
-				      		 <element name="response" type="<%=((SchemaInformation)prefixmap.get(outputParam.getNamespace())).getPrefix()%>:<%=outputParam.getType() %>" minOccurs="1" maxOccurs="<%=outputParam.getMaxOccurs() %>" >
-			                   </element>
+				      		 <element name="response" type="<%=((SchemaInformation)prefixmap.get(outputParam.getNamespace())).getPrefix()%>:<%=outputParam.getType() %>" minOccurs="1" maxOccurs="<%=outputParam.getMaxOccurs() %>" />
 			                   <%
 			            } else {
 			                  %>
@@ -112,9 +110,9 @@
 						}
 					}
           		  %>
-          		  </sequence>
-          	     </complexType>  
-  		       </element><%
+						</sequence>
+					</complexType>
+				</element><%
 	    		}
       		}
 		
@@ -127,14 +125,13 @@
       					if(!faults.contains(exception.getName())){
       					  faults.add(exception.getName());
       					%>
-      					<element name="<%=exception.getName() %>" >
-      					    <complexType>
-      					      <complexContent>
-      					        <extension base="wsbf:BaseFaultType">
-      					        </extension>
-      					      </complexContent>
-      					    </complexType>
-      					</element>
+				<element name="<%=exception.getName() %>" >
+					<complexType>
+						<complexContent>
+							<extension base="wsbf:BaseFaultType"/>
+						</complexContent>
+					</complexType>
+				</element>
       					<%
       					}
       				}
