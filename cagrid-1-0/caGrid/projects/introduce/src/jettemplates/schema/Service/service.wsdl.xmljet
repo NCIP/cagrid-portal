@@ -20,7 +20,6 @@
     xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl"
     xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing"
     xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl"
-    xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd"
     xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl"
     xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
     xmlns="http://schemas.xmlsoap.org/wsdl/">
@@ -47,8 +46,8 @@
 				xmlns:<%=schemaInformation.getPrefix()%>="<%=schemaInformation.getNamespace()%>" 
 				<%}
       		%>
-            xmlns="http://www.w3.org/2001/XMLSchema">
-			
+            xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd">
+			<import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd"/>
 		<%
 		prefixmap=TemplateUtils.buildMasterNamespaceSchemaInformationMap(info);
   		iterator = prefixmap.keySet().iterator();
@@ -120,7 +119,7 @@
       		for (int methodsI = 0; methodsI < methods.getMethod().length ; methodsI++) {
       			MethodType method = methods.getMethod(methodsI);
       			if(method.getExceptions()!=null && method.getExceptions().getException()!=null){
-      				for(int exceptionI = 0; exceptionI < method.getInputs().getInput().length; exceptionI++){
+      				for(int exceptionI = 0; exceptionI < method.Exceptions().getException().length; exceptionI++){
       					MethodTypeExceptionsException exception = method.getExceptions().getException(exceptionI);
       					if(!faults.contains(exception.getName())){
       					  faults.add(exception.getName());
