@@ -64,7 +64,7 @@ public class BaseResource implements Resource, ResourceProperties, ResourceLifet
 	<%if(metadataList!=null && metadataList.getMetadata()!=null){
 		for (int i = 0; i < metadataList.getMetadata().length; i++) {
 			ServiceMetadataType metadata = metadataList.getMetadata()[i];
-			String name=MetadataTemplateUtils.getResourcePropertyVariableName(metadataList, i);
+			String name=TemplateUtils.getResourcePropertyVariableName(metadataList, i);
 			
 			//define the RP
 			stringBuffer.append("private ResourceProperty "+name+"RP;\n");
@@ -97,7 +97,7 @@ public class BaseResource implements Resource, ResourceProperties, ResourceLifet
 <%	if(metadataList!=null && metadataList.getMetadata()!=null){
 		for (int i = 0; i < metadataList.getMetadata().length; i++) {
 			ServiceMetadataType metadata = metadataList.getMetadata()[i];
-			String name=MetadataTemplateUtils.getResourcePropertyVariableName(metadataList, i);
+			String name=TemplateUtils.getResourcePropertyVariableName(metadataList, i);
 			
 			stringBuffer.append("\t\t//init the rp\n");
 			stringBuffer.append("\t\tthis."+name+"RP = new SimpleResourceProperty(ResourceConstants."+name.toUpperCase()+"_MD_RP);\n");
@@ -163,9 +163,9 @@ public class BaseResource implements Resource, ResourceProperties, ResourceLifet
 		for (int i = 0; i < metadataList.getMetadata().length; i++) {
 			ServiceMetadataType metadata = metadataList.getMetadata()[i];
 			if(metadata.isPopulateFromFile()){
-				String name=MetadataTemplateUtils.getResourcePropertyVariableName(metadataList, i);
+				String name=TemplateUtils.getResourcePropertyVariableName(metadataList, i);
 	%>
-		load<%=MetadataTemplateUtils.upperCaseFirstCharacter(name)%>FromFile();
+		load<%=TemplateUtils.upperCaseFirstCharacter(name)%>FromFile();
 	<%		}
 		}
 		}
@@ -177,12 +177,12 @@ public class BaseResource implements Resource, ResourceProperties, ResourceLifet
 		for (int i = 0; i < metadataList.getMetadata().length; i++) {
 			ServiceMetadataType metadata = metadataList.getMetadata()[i];
 			if(metadata.isPopulateFromFile()){
-				String name=MetadataTemplateUtils.getResourcePropertyVariableName(metadataList, i);
+				String name=TemplateUtils.getResourcePropertyVariableName(metadataList, i);
 				String className=metadata.getClassName();
 	%>
-	private void load<%=MetadataTemplateUtils.upperCaseFirstCharacter(name)%>FromFile() {
+	private void load<%=TemplateUtils.upperCaseFirstCharacter(name)%>FromFile() {
 		try {
-			this.<%=name%>MD = (<%=className%>) CommonTools.deserializeDocument(getConfiguration().get<%=MetadataTemplateUtils.upperCaseFirstCharacter(name)%>File(),
+			this.<%=name%>MD = (<%=className%>) CommonTools.deserializeDocument(getConfiguration().get<%=TemplateUtils.upperCaseFirstCharacter(name)%>File(),
 				<%=className%>.class);
 		} catch (Exception e) {
 			logger.error("ERROR: problem populating metadata from file: " + e.getMessage(), e);

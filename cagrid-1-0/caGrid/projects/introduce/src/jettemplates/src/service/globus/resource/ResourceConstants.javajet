@@ -31,7 +31,7 @@ public interface ResourceConstants {
 			ServiceMetadataType metadata = metadataList.getMetadata()[i];
 			
 			stringBuffer.append("\tpublic static final QName ");
-			stringBuffer.append(MetadataTemplateUtils.getResourcePropertyVariableName(metadataList, i).toUpperCase());
+			stringBuffer.append(TemplateUtils.getResourcePropertyVariableName(metadataList, i).toUpperCase());
 			stringBuffer.append("_MD_RP = new QName(\"");
 			stringBuffer.append(metadata.getQName().getNamespaceURI()+"\", \""+metadata.getQName().getLocalPart()+"\");\n");
 		}

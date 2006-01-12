@@ -39,7 +39,7 @@
             xmlns:tns="<%=namespaceDomain%>/<%=serviceName%>"
             
              <%
-	      		Map prefixmap=MetadataTemplateUtils.buildMasterNamespacePrefixMap(info);
+	      		Map prefixmap=TemplateUtils.buildMasterNamespacePrefixMap(info);
 	      		Iterator iterator = prefixmap.keySet().iterator();
 				while(iterator.hasNext()){
 					String namespace = (String)iterator.next();
@@ -50,7 +50,7 @@
             xmlns="http://www.w3.org/2001/XMLSchema">
 			
 		<%
-		prefixmap=MetadataTemplateUtils.buildMasterNamespacePrefixMap(info);
+		prefixmap=TemplateUtils.buildMasterNamespacePrefixMap(info);
   		iterator = prefixmap.keySet().iterator();
 		while(iterator.hasNext()){
 			String namespace = (String)iterator.next();
@@ -76,14 +76,7 @@
 	      					if((inputParam.getMaxOccurs() != null)
 	      						&& (inputParam.getMaxOccurs().equals("unbounded") || Integer.parseInt(inputParam.getMaxOccurs()) > 1)){
 	      		 %>
-	      		 <element name="<%=inputParam.getName() %>" minOccurs="1" maxOccurs="1" >
-	      		     <complexType>
-                       <complexContent>
-                         <restriction base="soapenc:Array">
-                          <attribute ref="soapenc:arrayType" arrayType="<%=((SchemaInformation)prefixmap.get(inputParam.getNamespace())).getPrefix()%>:<%=inputParam.getType() %>" />
-                         </restriction>
-                       </complexContent>
-                     </complexType>
+	      		 <element name="<%=inputParam.getName() %>" type="<%=((SchemaInformation)prefixmap.get(inputParam.getNamespace())).getPrefix()%>:<%=inputParam.getType() %>" minOccurs="1" maxOccurs="<%=inputParam.getMaxOccurs() %>" >
                    </element>
                    <%
                             } else {
@@ -108,14 +101,7 @@
 						if((outputParam.getMaxOccurs() != null)
       						&& (outputParam.getMaxOccurs().equals("unbounded") || Integer.parseInt(outputParam.getMaxOccurs()) > 1)){
 				      		 %>
-				      		 <element name="response" minOccurs="1" maxOccurs="1" >
-				      		     <complexType>
-			                       <complexContent>
-			                         <restriction base="soapenc:Array">
-			                          <attribute ref="soapenc:arrayType" arrayType="<%=((SchemaInformation)prefixmap.get(outputParam.getNamespace())).getPrefix()%>:<%=outputParam.getType() %>" />
-			                         </restriction>
-			                       </complexContent>
-			                     </complexType>
+				      		 <element name="response" type="<%=((SchemaInformation)prefixmap.get(outputParam.getNamespace())).getPrefix()%>:<%=outputParam.getType() %>" minOccurs="1" maxOccurs="<%=outputParam.getMaxOccurs() %>" >
 			                   </element>
 			                   <%
 			            } else {
@@ -163,7 +149,7 @@
                 <complexType>
                     <sequence>
                         <%if(metadataList!=null && metadataList.getMetadata()!=null){
-                        	prefixmap=MetadataTemplateUtils.buildQNameNamespacePrefixMap(metadataList);
+                        	prefixmap=TemplateUtils.buildQNameNamespacePrefixMap(metadataList);
                         	for (int i = 0; i < metadataList.getMetadata().length; i++) {
 								ServiceMetadataType metadata = metadataList.getMetadata()[i];%>
 						<element ref="<%=prefixmap.get(metadata.getQName().getNamespaceURI())%>:<%=metadata.getQName().getLocalPart()%>"/><%

@@ -21,7 +21,7 @@ public class MetadataConfiguration {
 			for (int i = 0; i < metadataList.getMetadata().length; i++) {
 				ServiceMetadataType metadata = metadataList.getMetadata()[i];
 				if(metadata.isPopulateFromFile()){
-					String name=MetadataTemplateUtils.getResourcePropertyVariableName(metadataList, i);
+					String name=TemplateUtils.getResourcePropertyVariableName(metadataList, i);
 					stringBuffer.append("\tprivate String "+name+"File;\n");
 				}
 			}
@@ -51,17 +51,17 @@ public class MetadataConfiguration {
 			for (int i = 0; i < metadataList.getMetadata().length; i++) {
 				ServiceMetadataType metadata = metadataList.getMetadata()[i];
 				if(metadata.isPopulateFromFile()){
-					String name=MetadataTemplateUtils.getResourcePropertyVariableName(metadataList, i);
+					String name=TemplateUtils.getResourcePropertyVariableName(metadataList, i);
 					String className=metadata.getClassName();
 		%>
 	
 	
-	public String get<%=MetadataTemplateUtils.upperCaseFirstCharacter(name)%>File() {
+	public String get<%=TemplateUtils.upperCaseFirstCharacter(name)%>File() {
 		return <%=name%>File;
 	}
 	
 	
-	public void set<%=MetadataTemplateUtils.upperCaseFirstCharacter(name)%>File(String <%=name%>File) {
+	public void set<%=TemplateUtils.upperCaseFirstCharacter(name)%>File(String <%=name%>File) {
 		this.<%=name%>File = <%=name%>File;
 	}
 	<%			}

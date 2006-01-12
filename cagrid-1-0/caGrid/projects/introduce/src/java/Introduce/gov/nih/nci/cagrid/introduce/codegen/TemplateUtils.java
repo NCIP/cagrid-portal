@@ -11,7 +11,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
 
 
-public class MetadataTemplateUtils {
+public class TemplateUtils {
 
 	/**
 	 * Define a unique name for use as a variable for the metadata at the

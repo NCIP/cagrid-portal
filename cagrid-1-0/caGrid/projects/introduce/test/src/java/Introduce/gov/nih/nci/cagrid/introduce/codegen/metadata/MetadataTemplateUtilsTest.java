@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.introduce.codegen.metadata;
 
 import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
-import gov.nih.nci.cagrid.introduce.codegen.MetadataTemplateUtils;
+import gov.nih.nci.cagrid.introduce.codegen.TemplateUtils;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -52,12 +52,12 @@ public class MetadataTemplateUtilsTest extends TestCase {
 
 	public void testGetResourcePropertyVariableName() {
 		// make sure the pattern is right
-		String computedVarName1 = MetadataTemplateUtils.getResourcePropertyVariableName(metadataList, 0);
+		String computedVarName1 = TemplateUtils.getResourcePropertyVariableName(metadataList, 0);
 		assertNotNull(computedVarName1);
 		assertTrue(computedVarName1.matches("([a-z])+([a-zA-Z])*"));
 
 		// make sure the name is uniq when only the name space is different
-		String computedVarName2 = MetadataTemplateUtils.getResourcePropertyVariableName(metadataList, 1);
+		String computedVarName2 = TemplateUtils.getResourcePropertyVariableName(metadataList, 1);
 		assertNotNull(computedVarName2);
 		assertFalse(computedVarName1.equals(computedVarName2));
 		assertTrue(computedVarName2.matches("([a-z])+([a-zA-Z])*[1-9]+"));
@@ -65,7 +65,7 @@ public class MetadataTemplateUtilsTest extends TestCase {
 		// store all the names in a set to check for uniqueness
 		Set names = new HashSet();
 		for (int i = 0; i < metadataList.getMetadata().length; i++) {
-			names.add(MetadataTemplateUtils.getResourcePropertyVariableName(metadataList, i));
+			names.add(TemplateUtils.getResourcePropertyVariableName(metadataList, i));
 		}
 		// makes sure we got a unique name for all items
 		assertEquals(names.size(), metadataList.getMetadata().length);
@@ -73,7 +73,7 @@ public class MetadataTemplateUtilsTest extends TestCase {
 
 
 	public void testBuildQNameNamespacePrefixMap() {
-		Map map = MetadataTemplateUtils.buildQNameNamespacePrefixMap(metadataList);
+		Map map = TemplateUtils.buildQNameNamespacePrefixMap(metadataList);
 		assertNotNull(map);
 
 		assertTrue(map.keySet().size() <= metadataList.getMetadata().length);
