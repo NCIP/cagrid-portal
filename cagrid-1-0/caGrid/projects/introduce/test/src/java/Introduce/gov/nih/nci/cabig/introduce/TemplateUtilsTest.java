@@ -2,6 +2,7 @@ package gov.nih.nci.cabig.introduce;
 
 import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.codegen.TemplateUtils;
 
 import java.util.HashSet;
@@ -15,9 +16,11 @@ import junit.framework.TestCase;
 
 public class TemplateUtilsTest extends TestCase {
 	public static String GOLD_DIRECTORY = "/test/resources/gold/";
-	public static String GOLD_FILE = "ServiceMetadata_Example.xml";
+	public static String GOLD_METADATA_FILE = "ServiceMetadata_Example.xml";
+	public static String GOLD_METHODS_FILE = "ServiceMethods_Example.xml";
 
 	private ServiceMetadataListType metadataList = null;
+	private MethodsType methods = null;
 
 
 	/**
@@ -39,7 +42,10 @@ public class TemplateUtilsTest extends TestCase {
 		String pathtobasedir = System.getProperty("basedir", ".");
 		try {
 			metadataList = (ServiceMetadataListType) CommonTools.deserializeDocument(pathtobasedir + GOLD_DIRECTORY
-				+ GOLD_FILE, ServiceMetadataListType.class);
+				+ GOLD_METADATA_FILE, ServiceMetadataListType.class);
+			
+			methods = (MethodsType) CommonTools.deserializeDocument(pathtobasedir + GOLD_DIRECTORY
+				+ GOLD_METHODS_FILE, MethodsType.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Error in setup:" + e.getMessage());
@@ -47,6 +53,8 @@ public class TemplateUtilsTest extends TestCase {
 
 		assertNotNull(metadataList);
 		assertNotNull(metadataList.getMetadata());
+		assertNotNull(methods);
+		assertNotNull(methods.getMethod());
 	}
 
 

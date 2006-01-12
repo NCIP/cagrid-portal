@@ -97,7 +97,7 @@ public class TemplateUtils {
 	}
 
 
-	public static Map buildMasterNamespacePrefixMap(ServiceInformation info) {
+	public static Map buildMasterNamespaceSchemaInformationMap(ServiceInformation info) {
 		Map map = new HashMap();
 		if (info.getMetadata() != null && info.getMetadata().getMetadata() != null) {
 			ServiceMetadataListType metadataList = info.getMetadata();
