@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.codegen.metadata;
+package gov.nih.nci.cabig.introduce;
 
 import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
@@ -13,7 +13,7 @@ import javax.xml.namespace.QName;
 import junit.framework.TestCase;
 
 
-public class MetadataTemplateUtilsTest extends TestCase {
+public class TemplateUtilsTest extends TestCase {
 	public static String GOLD_DIRECTORY = "/test/resources/gold/";
 	public static String GOLD_FILE = "ServiceMetadata_Example.xml";
 
@@ -88,7 +88,7 @@ public class MetadataTemplateUtilsTest extends TestCase {
 
 
 	public static void main(String[] args) {
-		junit.textui.TestRunner.run(MetadataTemplateUtilsTest.class);
+		junit.textui.TestRunner.run(TemplateUtilsTest.class);
 	}
 
 }
