@@ -42,7 +42,8 @@
 	      		Map prefixmap=MetadataTemplateUtils.buildMasterNamespacePrefixMap(info);
 	      		Iterator iterator = prefixmap.keySet().iterator();
 				while(iterator.hasNext()){
-					SchemaInformation schemaInformation=(SchemaInformation)iterator.next();%>
+					String namespace = (String)iterator.next();
+					SchemaInformation schemaInformation=(SchemaInformation)prefixmap.get(namespace);%>
 				xmlns:<%=schemaInformation.getPrefix()%>="<%=schemaInformation.getNamespace()%>" 
 				<%}
       		%>
@@ -52,7 +53,8 @@
 		prefixmap=MetadataTemplateUtils.buildMasterNamespacePrefixMap(info);
   		iterator = prefixmap.keySet().iterator();
 		while(iterator.hasNext()){
-			SchemaInformation schemaInformation=(SchemaInformation)iterator.next();%>
+			String namespace = (String)iterator.next();
+			SchemaInformation schemaInformation=(SchemaInformation)prefixmap.get(namespace);%>
 			<import namespace="<%=schemaInformation.getNamespace()%>" schemaLocation="<%=schemaInformation.getLocation()%>"/>
 			   <%
       	}%>
@@ -63,7 +65,7 @@
 	      		for (int methodsI = 0; methodsI < methods.getMethod().length ; methodsI++) {
 	      			MethodType method = methods.getMethod(methodsI);
 	      			%>
-  		       <element name=<%=method.getName()%>>
+  		       <element name="<%=method.getName()%>">
   		        <complexType>
           		  <sequence>
           		  <% 
@@ -74,7 +76,7 @@
 	      					if((inputParam.getMaxOccurs() != null)
 	      						&& (inputParam.getMaxOccurs().equals("unbounded") || Integer.parseInt(inputParam.getMaxOccurs()) > 1)){
 	      		 %>
-	      		 <element name=<%=inputParam.getName() %> minOccurs="1" maxOccurs="1" >
+	      		 <element name="<%=inputParam.getName() %>" minOccurs="1" maxOccurs="1" >
 	      		     <complexType>
                        <complexContent>
                          <restriction base="soapenc:Array">
@@ -96,7 +98,7 @@
           	     </complexType>  
   		       </element>
   		       
-  		       <element name=<%=method.getName()%>Response>
+  		       <element name="<%=method.getName()%>Response">
   		        <complexType>
           		  <sequence>
           		  <%

@@ -70,9 +70,9 @@ public class SyncTools {
 		ServiceInformation info = new ServiceInformation(methods, metadatas, serviceProperties);
 
 		this.createArchive(info);
-		
+
 		File schemaDir = new File(baseDirectory.getAbsolutePath() + File.separator + "schema");
-		
+
 		ServiceWSDLTemplate serviceWSDLT = new ServiceWSDLTemplate();
 		String serviceWSDLS = serviceWSDLT.generate(info);
 		File serviceWSDLF = new File(schemaDir.getAbsolutePath() + File.separator
@@ -81,7 +81,14 @@ public class SyncTools {
 		FileWriter serviceWSDLFW = new FileWriter(serviceWSDLF);
 		serviceWSDLFW.write(serviceWSDLS);
 		serviceWSDLFW.close();
-		
+
+		String cmd = CommonTools.getAntFlattenCommand(baseDirectory.getAbsolutePath());
+		Process p = CommonTools.createAndOutputProcess(cmd);
+		p.waitFor();
+		if (p.exitValue() != 0) {
+			throw new Exception("Service flatten wsdl exited abnormally");
+		}
+
 		// regenerate stubs and get the symbol table
 		Emitter parser = new Emitter();
 		SymbolTable table = null;
@@ -90,15 +97,16 @@ public class SyncTools {
 		parser.setImports(true);
 		parser.setOutputDir(baseDirectory.getAbsolutePath() + File.separator + "tmp");
 		parser.setNStoPkg(baseDirectory.getAbsolutePath() + File.separator + "namespace2package.mappings");
-		parser.run(new File(baseDirectory.getAbsolutePath() + File.separator + "build" + File.separator + "schema"
-			+ File.separator + info.getServiceProperties().get("introduce.skeleton.service.name") + File.separator
-			+ info.getServiceProperties().get("introduce.skeleton.service.name") + "_flattened" + ".wsdl")
-			.getAbsolutePath());
+		parser
+			.run(new File(baseDirectory.getAbsolutePath() + File.separator + "build" + File.separator + "schema"
+				+ File.separator + info.getServiceProperties().get("introduce.skeleton.service.name") + File.separator
+				+ info.getServiceProperties().get("introduce.skeleton.service.name") + "_flattened.wsdl")
+				.getAbsolutePath());
 		table = parser.getSymbolTable();
 		CommonTools.deleteDir(new File(baseDirectory.getAbsolutePath() + File.separator + "tmp"));
 
-		table.dump(System.out);
-		
+		// table.dump(System.out);
+
 		// get the classnames from the axis symbol table
 		if (info.getMetadata().getMetadata() != null) {
 			for (int i = 0; i < info.getMetadata().getMetadata().length; i++) {
@@ -134,7 +142,7 @@ public class SyncTools {
 				// process the outputs
 				if (mtype.getOutput() != null) {
 					MethodTypeOutput outputParam = mtype.getOutput();
-					if (outputParam.getClassName() != null && !outputParam.getClassName().equals("void")) {
+					if (outputParam.getClassName() != null && outputParam.getClassName().equals("void")) {
 					} else {
 						Type type = table.getType(new QName(outputParam.getNamespace(), outputParam.getType()));
 						if (outputParam.getIsArray().booleanValue()) {
@@ -147,7 +155,7 @@ public class SyncTools {
 				}
 			}
 		}
-		
+
 		SyncMethods methodsS = new SyncMethods(baseDirectory, info);
 		SyncMetadata metadata = new SyncMetadata(baseDirectory, info);
 
@@ -155,9 +163,10 @@ public class SyncTools {
 		metadata.sync();
 
 	}
-	
+
+
 	private void createArchive(ServiceInformation info) throws Exception {
-//		 create the archive
+		// create the archive
 		long id = System.currentTimeMillis();
 
 		info.getServiceProperties().setProperty("introduce.skeleton.timestamp", String.valueOf(id));
@@ -166,7 +175,7 @@ public class SyncTools {
 			"Introduce Properties");
 
 		Archive.createArchive(String.valueOf(id), info.getServiceProperties().getProperty(
-			"introduce.skeleton.service.name"), baseDirectory.getAbsolutePath());		
+			"introduce.skeleton.service.name"), baseDirectory.getAbsolutePath());
 	}
 
 

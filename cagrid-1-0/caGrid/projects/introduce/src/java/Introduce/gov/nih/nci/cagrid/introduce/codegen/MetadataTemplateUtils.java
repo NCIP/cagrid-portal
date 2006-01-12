@@ -44,7 +44,9 @@ public class MetadataTemplateUtils {
 
 	/**
 	 * Returns the input string with the first character converted to lowercase
-	 * @param variableName string to fix
+	 * 
+	 * @param variableName
+	 *            string to fix
 	 * @return the input string with the first character converted to lowercase
 	 */
 	public static String lowerCaseFirstCharacter(String variableName) {
@@ -52,11 +54,11 @@ public class MetadataTemplateUtils {
 	}
 
 
-
 	/**
 	 * Returns the input string with the first character converted to uppercase
 	 * 
-	 * @param variableName string to fix
+	 * @param variableName
+	 *            string to fix
 	 * @return the input string with the first character converted to uppercase
 	 */
 	public static String upperCaseFirstCharacter(String variableName) {
@@ -121,8 +123,8 @@ public class MetadataTemplateUtils {
 			if (info.getMethods().getMethod() != null) {
 				for (int methodI = 0; methodI < info.getMethods().getMethod().length; methodI++) {
 					MethodsTypeMethod method = info.getMethods().getMethod(methodI);
-					if(method.getInputs()!=null && method.getInputs().getInput()!=null){
-						for(int inputI = 0; inputI < method.getInputs().getInput().length; inputI++){
+					if (method.getInputs() != null && method.getInputs().getInput() != null) {
+						for (int inputI = 0; inputI < method.getInputs().getInput().length; inputI++) {
 							MethodTypeInputsInput inputParam = method.getInputs().getInput(inputI);
 							String qnameName = inputParam.getType();
 							String qnameNamespace = inputParam.getNamespace();
@@ -139,21 +141,23 @@ public class MetadataTemplateUtils {
 							map.put(qnameNamespace, new SchemaInformation(qnameNamespace, prefix, location));
 						}
 					}
-					if(method.getOutput()!=null){
+					if (method.getOutput() != null) {
 						MethodTypeOutput outputParam = method.getOutput();
-						String qnameName = outputParam.getType();
-						String qnameNamespace = outputParam.getNamespace();
-						String location = outputParam.getLocation();
+						if (outputParam.getClassName() != null && !outputParam.getClassName().equals("void")) {
+							String qnameName = outputParam.getType();
+							String qnameNamespace = outputParam.getNamespace();
+							String location = outputParam.getLocation();
 
-						String prefixBase = qnameName.toLowerCase().substring(0, Math.min(qnameName.length(), 4));
-						int previousNumber = 0;
-						String prefix = prefixBase + ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
-						while (map.containsValue(prefix)) {
-							previousNumber++;
-							prefix = prefixBase + ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
+							String prefixBase = qnameName.toLowerCase().substring(0, Math.min(qnameName.length(), 4));
+							int previousNumber = 0;
+							String prefix = prefixBase + ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
+							while (map.containsValue(prefix)) {
+								previousNumber++;
+								prefix = prefixBase + ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
+							}
+							// add the ns=>prefix entry
+							map.put(qnameNamespace, new SchemaInformation(qnameNamespace, prefix, location));
 						}
-						// add the ns=>prefix entry
-						map.put(qnameNamespace, new SchemaInformation(qnameNamespace, prefix, location));
 					}
 				}
 			}
