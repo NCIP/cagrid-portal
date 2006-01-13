@@ -30,6 +30,7 @@ import javax.swing.table.DefaultTableModel;
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
 
+
 /**
  * MethodViewer TODO:DOCUMENT ME
  * 
@@ -108,8 +109,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JLabel methodSecurityStyle = null;
 
-	public MethodViewer(MethodsTypeMethod method, File schemaDir,
-			MethodsTable table, int selectedRow) {
+
+	public MethodViewer(MethodsTypeMethod method, File schemaDir, MethodsTable table, int selectedRow) {
 		this.method = method;
 		this.schemaDir = schemaDir;
 		this.methodsTable = table;
@@ -118,6 +119,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 		initialize();
 	}
 
+
 	private void initialize() {
 		// TODO Auto-generated method stub
 		this.setSize(687, 622);
@@ -125,6 +127,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 		this.setContentPane(getMainPanel());
 		this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
 	}
+
 
 	/**
 	 * This method initializes jPanel
@@ -152,6 +155,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 		return mainPanel;
 	}
 
+
 	/**
 	 * This method initializes jScrollPane
 	 * 
@@ -165,6 +169,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 		return inputParamScrollPanel;
 	}
 
+
 	/**
 	 * This method initializes jTable
 	 * 
@@ -177,6 +182,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 		return inputParamTable;
 	}
 
+
 	/**
 	 * This method initializes jScrollPane
 	 * 
@@ -185,14 +191,13 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JScrollPane getOutputTypejScrollPane() {
 		if (outputTypejScrollPane == null) {
 			outputTypejScrollPane = new JScrollPane();
-			outputTypejScrollPane
-					.setVerticalScrollBarPolicy(javax.swing.JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-			outputTypejScrollPane
-					.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			outputTypejScrollPane.setVerticalScrollBarPolicy(javax.swing.JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+			outputTypejScrollPane.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 			outputTypejScrollPane.setViewportView(getOutputTypeTable());
 		}
 		return outputTypejScrollPane;
 	}
+
 
 	/**
 	 * This method initializes jTable
@@ -205,6 +210,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 		}
 		return outputTypeTable;
 	}
+
 
 	/**
 	 * This method initializes jPanel
@@ -230,11 +236,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 			inputPanel = new JPanel();
 			inputPanel.setLayout(new GridBagLayout());
-			inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, "Input Parameters",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					IntroduceLookAndFeel.getPanelLabelColor()));
+			inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Input Parameters",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
 			gridBagConstraints8.gridx = 0;
 			gridBagConstraints8.gridy = 0;
 			gridBagConstraints8.weightx = 1.0D;
@@ -248,6 +252,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 		}
 		return inputPanel;
 	}
+
 
 	/**
 	 * This method initializes jPanel
@@ -265,19 +270,14 @@ public class MethodViewer extends GridPortalBaseFrame {
 			gridBagContraints9.gridy = 0;
 			outputTypePanel = new JPanel();
 			outputTypePanel.setLayout(new GridBagLayout());
-			outputTypePanel
-					.setBorder(javax.swing.BorderFactory
-							.createTitledBorder(
-									null,
-									"Output Type",
-									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, IntroduceLookAndFeel
-											.getPanelLabelColor()));
+			outputTypePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Output Type",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
 			outputTypePanel.add(getOutputTypejScrollPane(), gridBagContraints9);
 		}
 		return outputTypePanel;
 	}
+
 
 	/**
 	 * This method initializes jPanel
@@ -294,6 +294,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 		return buttonPanel;
 	}
 
+
 	/**
 	 * This method initializes jButton
 	 * 
@@ -308,35 +309,26 @@ public class MethodViewer extends GridPortalBaseFrame {
 					// First process the inputs
 					method.setName(getNameField().getText());
 					String secure = (String) getSecurity().getSelectedItem();
-					method.setSecure(SecureValueType.fromValue(String
-							.valueOf(secure)));
-					methodsTable.changeMethodName(currentRow, getNameField()
-							.getText());
+					method.setSecure(SecureValueType.fromValue(String.valueOf(secure)));
+					methodsTable.changeMethodName(currentRow, getNameField().getText());
 
 					MethodTypeInputs inputs = new MethodTypeInputs();
-					MethodTypeInputsInput[] inputsA = new MethodTypeInputsInput[getInputParamTable()
-							.getRowCount()];
+					MethodTypeInputsInput[] inputsA = new MethodTypeInputsInput[getInputParamTable().getRowCount()];
 
 					for (int i = 0; i < getInputParamTable().getRowCount(); i++) {
 						MethodTypeInputsInput input = new MethodTypeInputsInput();
 
-						String className = ((String) getInputParamTable()
-								.getValueAt(i, 0));
-						String isArray = ((String) getInputParamTable()
-								.getValueAt(i, 1));
-						String name = ((String) getInputParamTable()
-								.getValueAt(i, 2));
-						String namespace = ((String) getInputParamTable()
-								.getValueAt(i, 3));
-						String type = ((String) getInputParamTable()
-								.getValueAt(i, 4));
-						String location = ((String) getInputParamTable()
-								.getValueAt(i, 5));
+						String className = ((String) getInputParamTable().getValueAt(i, 0));
+						String isArray = ((String) getInputParamTable().getValueAt(i, 1));
+						String name = ((String) getInputParamTable().getValueAt(i, 2));
+						String namespace = ((String) getInputParamTable().getValueAt(i, 3));
+						String type = ((String) getInputParamTable().getValueAt(i, 4));
+						String location = ((String) getInputParamTable().getValueAt(i, 5));
 
 						if (className != null && !className.equals("")) {
 							input.setClassName(className);
 						}
-						if (isArray!=null && isArray.equals("true")) {
+						if (isArray != null && isArray.equals("true")) {
 							input.setMinOccurs("0");
 							input.setMaxOccurs("unbounded");
 						}
@@ -365,11 +357,10 @@ public class MethodViewer extends GridPortalBaseFrame {
 					// process exceptions
 					MethodTypeExceptions exceptions = new MethodTypeExceptions();
 					MethodTypeExceptionsException[] exceptionsA = new MethodTypeExceptionsException[getExceptionsTable()
-							.getRowCount()];
+						.getRowCount()];
 					for (int i = 0; i < getExceptionsTable().getRowCount(); i++) {
 						MethodTypeExceptionsException exception = new MethodTypeExceptionsException();
-						String name = ((String) getExceptionsTable()
-								.getValueAt(i, 0));
+						String name = ((String) getExceptionsTable().getValueAt(i, 0));
 						exception.setName(name);
 						exceptionsA[i] = exception;
 					}
@@ -379,25 +370,20 @@ public class MethodViewer extends GridPortalBaseFrame {
 					// now process the output
 					MethodTypeOutput output = new MethodTypeOutput();
 
-					String className = ((String) getOutputTypeTable()
-							.getValueAt(0, 0));
-					String isArray = ((String) getOutputTypeTable()
-							.getValueAt(0, 1));
-					String namespace = ((String) getOutputTypeTable()
-							.getValueAt(0, 2));
-					String type = ((String) getOutputTypeTable().getValueAt(0,
-							3));
-					String location = ((String) getOutputTypeTable()
-							.getValueAt(0, 4));
+					String className = ((String) getOutputTypeTable().getValueAt(0, 0));
+					String isArray = ((String) getOutputTypeTable().getValueAt(0, 1));
+					String namespace = ((String) getOutputTypeTable().getValueAt(0, 2));
+					String type = ((String) getOutputTypeTable().getValueAt(0, 3));
+					String location = ((String) getOutputTypeTable().getValueAt(0, 4));
 
 					if (className != null && !className.equals("")) {
 						output.setClassName(className);
 					}
-					if (isArray!=null && isArray.equals("true")) {
+					if (isArray != null && isArray.equals("true")) {
 						output.setMinOccurs("0");
 						output.setMaxOccurs("unbounded");
 					}
-					
+
 					if (isArray != null && !isArray.equals("")) {
 						output.setIsArray(new Boolean(isArray));
 					}
@@ -420,6 +406,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 		return doneButton;
 	}
 
+
 	/**
 	 * This method initializes jButton
 	 * 
@@ -429,18 +416,18 @@ public class MethodViewer extends GridPortalBaseFrame {
 		if (addInputParamButton == null) {
 			addInputParamButton = new JButton(IntroduceLookAndFeel.getAddIcon());
 			addInputParamButton.setText("Add");
-			addInputParamButton
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							final MethodTypeInputsInput input = new MethodTypeInputsInput();
-							getInputParamTable().addRow(input);
-							performModify(e);
+			addInputParamButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					final MethodTypeInputsInput input = new MethodTypeInputsInput();
+					getInputParamTable().addRow(input);
+					performModify(e);
 
-						}
-					});
+				}
+			});
 		}
 		return addInputParamButton;
 	}
+
 
 	/**
 	 * This method initializes jPanel
@@ -460,11 +447,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			namePanel = new JPanel();
 			namePanel.setLayout(new GridBagLayout());
-			namePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, "Method Properties",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					IntroduceLookAndFeel.getPanelLabelColor()));
+			namePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Method Properties",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
 			gridBagConstraints2.gridx = 1;
 			gridBagConstraints2.anchor = java.awt.GridBagConstraints.CENTER;
 			gridBagConstraints2.gridy = 0;
@@ -476,6 +461,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 		}
 		return namePanel;
 	}
+
 
 	/**
 	 * This method initializes jTextField
@@ -490,6 +476,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 		return nameField;
 	}
 
+
 	/**
 	 * This method initializes jButton
 	 * 
@@ -502,19 +489,18 @@ public class MethodViewer extends GridPortalBaseFrame {
 			removeButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					int row = getInputParamTable().getSelectedRow();
-					if ((row < 0)
-							|| (row >= getInputParamTable().getRowCount())) {
-						PortalUtils
-								.showErrorMessage("Please select a parameter to remove.");
+					if ((row < 0) || (row >= getInputParamTable().getRowCount())) {
+						PortalUtils.showErrorMessage("Please select a parameter to remove.");
 						return;
 					}
-					((DefaultTableModel) getInputParamTable().getModel())
-							.removeRow(getInputParamTable().getSelectedRow());
+					((DefaultTableModel) getInputParamTable().getModel()).removeRow(getInputParamTable()
+						.getSelectedRow());
 				}
 			});
 		}
 		return removeButton;
 	}
+
 
 	/**
 	 * This method initializes jButton
@@ -535,6 +521,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 		return gmeButton;
 	}
 
+
 	public void performModify(java.awt.event.ActionEvent e) {
 
 		int row = getInputParamTable().getSelectedRow();
@@ -542,13 +529,11 @@ public class MethodViewer extends GridPortalBaseFrame {
 			PortalUtils.showErrorMessage("Please select a parameter to edit.");
 			return;
 		}
-		Vector v = (Vector) getInputParamTable().getValueAt(
-				getInputParamTable().getSelectedRow(), 7);
-		PortalResourceManager.getInstance().getGridPortal()
-				.addGridPortalComponent(
-						new GMEParameterConfigurationComponent(v, schemaDir,
-								true));
+		Vector v = (Vector) getInputParamTable().getValueAt(getInputParamTable().getSelectedRow(), 7);
+		PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+			new GMEParameterConfigurationComponent(v, schemaDir, true));
 	}
+
 
 	/**
 	 * This method initializes security
@@ -572,6 +557,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 		return security;
 	}
 
+
 	/**
 	 * This method initializes inputButtonPanel
 	 * 
@@ -586,6 +572,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 		}
 		return inputButtonPanel;
 	}
+
 
 	/**
 	 * This method initializes cancelButton
@@ -605,6 +592,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 		}
 		return cancelButton;
 	}
+
 
 	/**
 	 * This method initializes exceptionsPanel
@@ -630,20 +618,15 @@ public class MethodViewer extends GridPortalBaseFrame {
 			gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
 			exceptionsPanel = new JPanel();
 			exceptionsPanel.setLayout(new GridBagLayout());
-			exceptionsPanel
-					.setBorder(javax.swing.BorderFactory
-							.createTitledBorder(
-									null,
-									"Faults",
-									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, IntroduceLookAndFeel
-											.getPanelLabelColor()));
+			exceptionsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Faults",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
 			exceptionsPanel.add(getExceptionScrollPane(), gridBagConstraints11);
 			exceptionsPanel.add(getExceptionInputPanel(), gridBagConstraints12);
 		}
 		return exceptionsPanel;
 	}
+
 
 	/**
 	 * This method initializes jScrollPane
@@ -657,6 +640,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 		}
 		return exceptionScrollPane;
 	}
+
 
 	/**
 	 * This method initializes exceptionInputPanel
@@ -672,11 +656,11 @@ public class MethodViewer extends GridPortalBaseFrame {
 			gridBagConstraints3.gridy = 0;
 			exceptionInputPanel = new JPanel();
 			exceptionInputPanel.setLayout(new GridBagLayout());
-			exceptionInputPanel.add(getExceptionInputButtonPanel(),
-					gridBagConstraints3);
+			exceptionInputPanel.add(getExceptionInputButtonPanel(), gridBagConstraints3);
 		}
 		return exceptionInputPanel;
 	}
+
 
 	/**
 	 * This method initializes faultsTable
@@ -690,6 +674,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 		return exceptionsTable;
 	}
 
+
 	/**
 	 * This method initializes addExceptionButton
 	 * 
@@ -699,15 +684,15 @@ public class MethodViewer extends GridPortalBaseFrame {
 		if (addExceptionButton == null) {
 			addExceptionButton = new JButton(IntroduceLookAndFeel.getAddIcon());
 			addExceptionButton.setText("Add");
-			addExceptionButton
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							getExceptionsTable().addRow(new MethodTypeExceptionsException());
-						}
-					});
+			addExceptionButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					getExceptionsTable().addRow(new MethodTypeExceptionsException());
+				}
+			});
 		}
 		return addExceptionButton;
 	}
+
 
 	/**
 	 * This method initializes removeExceptionButton
@@ -716,30 +701,25 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JButton getRemoveExceptionButton() {
 		if (removeExceptionButton == null) {
-			removeExceptionButton = new JButton(IntroduceLookAndFeel
-					.getRemoveIcon());
+			removeExceptionButton = new JButton(IntroduceLookAndFeel.getRemoveIcon());
 			removeExceptionButton.setText("Remove");
-			removeExceptionButton
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							System.out.println("actionPerformed()");
-							// TODO Auto-generated Event stub actionPerformed()
-							int row = getExceptionsTable().getSelectedRow();
-							if ((row < 0)
-									|| (row >= getExceptionsTable()
-											.getRowCount())) {
-								PortalUtils
-										.showErrorMessage("Please select an exception to remove.");
-								return;
-							}
-							((DefaultTableModel) getExceptionsTable()
-									.getModel()).removeRow(getExceptionsTable()
-									.getSelectedRow());
-						}
-					});
+			removeExceptionButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					System.out.println("actionPerformed()");
+					// TODO Auto-generated Event stub actionPerformed()
+					int row = getExceptionsTable().getSelectedRow();
+					if ((row < 0) || (row >= getExceptionsTable().getRowCount())) {
+						PortalUtils.showErrorMessage("Please select an exception to remove.");
+						return;
+					}
+					((DefaultTableModel) getExceptionsTable().getModel()).removeRow(getExceptionsTable()
+						.getSelectedRow());
+				}
+			});
 		}
 		return removeExceptionButton;
 	}
+
 
 	/**
 	 * This method initializes tabbedPanel
@@ -755,6 +735,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 		}
 		return tabbedPanel;
 	}
+
 
 	/**
 	 * This method initializes methodPanel
@@ -794,6 +775,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 		return methodPanel;
 	}
 
+
 	/**
 	 * This method initializes securityPanel
 	 * 
@@ -820,6 +802,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 		return securityPanel;
 	}
 
+
 	/**
 	 * This method initializes exceptionInputButtonPanel
 	 * 
@@ -839,10 +822,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 			gridBagConstraints4.gridx = 0;
 			exceptionInputButtonPanel = new JPanel();
 			exceptionInputButtonPanel.setLayout(new GridBagLayout());
-			exceptionInputButtonPanel.add(getRemoveExceptionButton(),
-					gridBagConstraints4);
-			exceptionInputButtonPanel.add(getAddExceptionButton(),
-					gridBagConstraints5);
+			exceptionInputButtonPanel.add(getRemoveExceptionButton(), gridBagConstraints4);
+			exceptionInputButtonPanel.add(getAddExceptionButton(), gridBagConstraints5);
 		}
 		return exceptionInputButtonPanel;
 	}
