@@ -5,7 +5,6 @@ import gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate
 
 import java.io.File;
 import java.io.FileWriter;
-import java.util.Properties;
 
 
 public class SkeletonSchemaCreator {
@@ -20,8 +19,8 @@ public class SkeletonSchemaCreator {
 		File schemaDir = new File(baseDirectory.getAbsolutePath() + File.separator + "schema");
 		schemaDir.mkdir();
 
-		new File(schemaDir.getAbsolutePath() + File.separator + info.getServiceProperties().getProperty("introduce.skeleton.service.name"))
-			.mkdirs();
+		new File(schemaDir.getAbsolutePath() + File.separator
+			+ info.getServiceProperties().getProperty("introduce.skeleton.service.name")).mkdirs();
 
 		ServiceWSDLTemplate serviceWSDLT = new ServiceWSDLTemplate();
 		String serviceWSDLS = serviceWSDLT.generate(info);

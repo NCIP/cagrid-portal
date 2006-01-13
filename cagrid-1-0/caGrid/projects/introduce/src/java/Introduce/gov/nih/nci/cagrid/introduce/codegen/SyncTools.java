@@ -21,6 +21,7 @@ import java.util.Properties;
 
 import javax.xml.namespace.QName;
 
+import org.apache.axis.wsdl.symbolTable.Element;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.axis.wsdl.symbolTable.Type;
 import org.apache.axis.wsdl.toJava.Emitter;
@@ -105,15 +106,15 @@ public class SyncTools {
 		table = parser.getSymbolTable();
 		CommonTools.deleteDir(new File(baseDirectory.getAbsolutePath() + File.separator + "tmp"));
 
-		// table.dump(System.out);
+		//table.dump(System.out);
 
 		// get the classnames from the axis symbol table
 		if (info.getMetadata().getMetadata() != null) {
 			for (int i = 0; i < info.getMetadata().getMetadata().length; i++) {
-				ServiceMetadataType mtype = (ServiceMetadataType) info.getMetadata().getMetadata(i);
+				ServiceMetadataType mtype = info.getMetadata().getMetadata(i);
 				if (mtype.getClassName() == null || mtype.getClassName().length() == 0) {
-					Type type = table.getType(new QName(mtype.getNamespace(), mtype.getType()));
-					mtype.setClassName(type.getName());
+					Element element = table.getElement(new QName(mtype.getNamespace(), mtype.getType()));
+					mtype.setClassName(element.getName());
 				}
 			}
 		}
@@ -121,11 +122,11 @@ public class SyncTools {
 		// get the classnames from the axis symbol table
 		if (info.getMethods().getMethod() != null) {
 			for (int i = 0; i < info.getMethods().getMethod().length; i++) {
-				MethodsTypeMethod mtype = (MethodsTypeMethod) info.getMethods().getMethod(i);
+				MethodsTypeMethod mtype = info.getMethods().getMethod(i);
 				// process the inputs
 				if (mtype.getInputs() != null && mtype.getInputs().getInput() != null) {
 					for (int j = 0; j < mtype.getInputs().getInput().length; j++) {
-						MethodTypeInputsInput inputParam = (MethodTypeInputsInput) mtype.getInputs().getInput(j);
+						MethodTypeInputsInput inputParam = mtype.getInputs().getInput(j);
 						if (inputParam.getClassName() != null && inputParam.getClassName().equals("void")) {
 						} else {
 							Type type = table.getType(new QName(inputParam.getNamespace(), inputParam.getType()));

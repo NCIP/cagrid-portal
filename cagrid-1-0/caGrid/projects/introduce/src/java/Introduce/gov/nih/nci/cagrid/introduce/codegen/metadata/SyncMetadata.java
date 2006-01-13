@@ -1,8 +1,8 @@
 package gov.nih.nci.cagrid.introduce.codegen.metadata;
 
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.templates.JNDIConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.etc.RegistationTemplate;
-import gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.BaseResourceTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.MetadataConfigurationTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceConstantsTemplate;
@@ -23,22 +23,21 @@ import java.io.FileWriter;
  */
 public class SyncMetadata {
 
-	private File baseDirectory;
 	private ServiceInformation info;
 	private File srcDir;
-	private File schemaDir;
 	private File etcDir;
+	private File baseDir;
 
 
 	public SyncMetadata(File baseDirectory, ServiceInformation info) {
-
-		this.baseDirectory = baseDirectory;
-
 		this.info = info;
+		this.baseDir = baseDirectory;
 		srcDir = new File(baseDirectory.getAbsolutePath() + File.separator + "src");
-		schemaDir = new File(baseDirectory.getAbsolutePath() + File.separator + "schema");
+		// schemaDir = new File(baseDirectory.getAbsolutePath() + File.separator
+		// + "schema");
 		etcDir = new File(baseDirectory.getAbsolutePath() + File.separator + "etc");
 	}
+
 
 	public void sync() throws Exception {
 
@@ -78,6 +77,13 @@ public class SyncMetadata {
 		FileWriter registrationFW = new FileWriter(registrationF);
 		registrationFW.write(registrationS);
 		registrationFW.close();
+
+		JNDIConfigTemplate jndiConfigT = new JNDIConfigTemplate();
+		String jndiConfigS = jndiConfigT.generate(info);
+		File jndiConfigF = new File(this.baseDir.getAbsolutePath() + File.separator + "jndi-config.xml");
+		FileWriter jndiConfigFW = new FileWriter(jndiConfigF);
+		jndiConfigFW.write(jndiConfigS);
+		jndiConfigFW.close();
 
 	}
 

@@ -7,7 +7,8 @@ To Do:
 	i.e. Enable "undo" in the gui.
 
 (DONE) Map the ext/NStoPkg.mappings with those in the skeleton (right now they are copied into the skeleton's file)
-	
+
+namespace to package mappings should be jettemplated at sync time
 Security configuration
 
 Metadata and registration configuration
@@ -183,5 +184,23 @@ Example:
                         <element ref="com:CommonServiceMetadata"/>
                     </sequence>
                 </complexType>
+
+(DONE)jndi-config.xml need to add a path to the file 
+----------
+for each that should be synced from file:
+				<parameter>
+					<name><rp name>File</name>
+					<!-- Set this to the full path of the common metadata extract -->
+					<value>FULL-ETC-PATH/<rp name>.xml</value>
+				</parameter>
+
+Example:
+				<parameter>
+					<name>commonMetadataFile</name>
+					<!-- Set this to the full path of the common metadata extract -->
+					<value>FULL-ETC-PATH/commonMetadata.xml</value>
+				</parameter>
+
+
 
 =======================================================

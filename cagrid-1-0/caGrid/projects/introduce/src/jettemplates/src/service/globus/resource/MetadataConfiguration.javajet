@@ -16,8 +16,8 @@ package <%=packageName%>.service.globus.resource;
 public class MetadataConfiguration {
 	private String registrationTemplateFile;
 	private boolean performRegistration;
-	
-	<%	if(metadataList!=null && metadataList.getMetadata()!=null){
+
+<%	if(metadataList!=null && metadataList.getMetadata()!=null){
 			for (int i = 0; i < metadataList.getMetadata().length; i++) {
 				ServiceMetadataType metadata = metadataList.getMetadata()[i];
 				if(metadata.isPopulateFromFile()){

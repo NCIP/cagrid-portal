@@ -10,7 +10,6 @@ import gov.nih.nci.cagrid.introduce.templates.ServerConfigTemplate;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.util.Properties;
 
 
 public class SkeletonBaseCreator {

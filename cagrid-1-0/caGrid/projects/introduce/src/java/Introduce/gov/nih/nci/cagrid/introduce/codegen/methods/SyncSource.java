@@ -3,7 +3,6 @@ package gov.nih.nci.cagrid.introduce.codegen.methods;
 import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
 
@@ -13,16 +12,12 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
-import javax.xml.namespace.QName;
-
-import org.apache.axis.wsdl.symbolTable.SymbolTable;
-import org.apache.axis.wsdl.symbolTable.Type;
 import org.apache.ws.jaxme.js.JavaMethod;
 import org.apache.ws.jaxme.js.Parameter;
 
 
 /**
- * SyncMethodsOnDeployment TODO:DOCUMENT ME
+ * SyncSource
  * 
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -34,22 +29,15 @@ import org.apache.ws.jaxme.js.Parameter;
 public class SyncSource {
 
 	private String serviceClient;
-
 	private String serviceInterface;
-
 	private String serviceImpl;
-
 	private String serviceProviderImpl;
-
 	private Properties deploymentProperties;
-
 	private String packageName;
-
-	private File baseDir;
 
 
 	public SyncSource(File baseDir, Properties deploymentProperties) {
-		this.baseDir = baseDir;
+		// this.baseDir = baseDir;
 		this.deploymentProperties = deploymentProperties;
 		this.packageName = (String) this.deploymentProperties.get("introduce.skeleton.package") + ".stubs";
 		serviceClient = baseDir.getAbsolutePath() + File.separator + "src" + File.separator
@@ -184,7 +172,7 @@ public class SyncSource {
 		returnType = this.packageName + "." + getBoxedOutputTypeName(method.getName());
 
 		methodString += "\tpublic " + returnType + " " + methodName + "(";
-		Parameter[] inputs = method.getParams();
+		// Parameter[] inputs = method.getParams();
 		// always boxed for now
 		// if (inputs.length > 1 || inputs.length == 0) {
 

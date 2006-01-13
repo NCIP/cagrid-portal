@@ -1,5 +1,8 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="JNDIConfigTemplate" %>
-<% gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="JNDIConfigTemplate" 
+imports="gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.*" %>
+<% gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument;
+   ServiceMetadataListType metadataList = info.getMetadata();
+   
    String packageName = info.getServiceProperties().getProperty("introduce.skeleton.package");
    String serviceName = info.getServiceProperties().getProperty("introduce.skeleton.service.name");
    String namespaceDomain = info.getServiceProperties().getProperty("introduce.skeleton.namespace.domain");
@@ -31,15 +34,24 @@
 					<value>true</value>
 				</parameter>
 				<parameter>
-					<name>commonMetadataFile</name>
-					<!-- Set this to the full path of the common metadata extract -->
-					<value>FULL-ETC-PATH/commonMetadata.xml</value>
-				</parameter>
-				<parameter>
 					<name>registrationTemplateFile</name>
 					<!-- Set this to the full path of the registration parameters template file (ignored if performRegistration is false) -->
 					<value>FULL-ETC-PATH/registration.xml</value>
 				</parameter>
+<%	if(metadataList!=null && metadataList.getMetadata()!=null){
+		for (int i = 0; i < metadataList.getMetadata().length; i++) {
+			ServiceMetadataType metadata = metadataList.getMetadata()[i];
+			if(metadata.isPopulateFromFile()){
+				String name=TemplateUtils.getResourcePropertyVariableName(metadataList, i);
+				String className=metadata.getClassName();%>
+				<parameter>
+					<name><%=name%>File</name>
+					<!-- Set this to the full path of the <%=name%> extract -->
+					<value>FULL-ETC-PATH/<%=name%>.xml</value>
+				</parameter><%
+			}
+		}
+	}%>				
 			</resourceParams>
 		</resource>
 	</service>
