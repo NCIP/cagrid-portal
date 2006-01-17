@@ -123,6 +123,7 @@ public class CreationViewer extends GridPortalComponent {
 			gridBagConstraints16.gridy = 5;
 			gridBagConstraints16.weightx = 1.0;
 			gridBagConstraints16.gridwidth = 2;
+			gridBagConstraints16.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints16.gridx = 1;
 			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
 			gridBagConstraints13.gridx = 0;
