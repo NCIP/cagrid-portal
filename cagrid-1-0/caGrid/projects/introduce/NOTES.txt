@@ -20,7 +20,7 @@ GMEMetadataConfigurationComponent needs to set proper view on viewing an existin
 (DONE) Because we are now using axis to generate the class names we will not be able to use synctool to always find out which methods are different.  We will need a better method.
 		-- we do not need to know them upfront because we dont need to analyze the signatures, only look at the method names.
 
-Need to be able to not only use Axis for the classnames but also use the users classnames if they provide there own beans or api.
+(DONE using sync tools to populate empty classnames) Need to be able to not only use Axis for the classnames but also use the users classnames if they provide there own beans or api.
 
 Need to fix the browse screen so that it can work with paths that have spaces in them.
 
