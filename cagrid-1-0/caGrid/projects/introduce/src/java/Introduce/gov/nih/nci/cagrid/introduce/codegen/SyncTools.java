@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
 import gov.nih.nci.cagrid.introduce.codegen.metadata.SyncMetadata;
 import gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods;
+import gov.nih.nci.cagrid.introduce.templates.NamespaceMappingsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate;
 
 import java.io.File;
@@ -82,6 +83,14 @@ public class SyncTools {
 		FileWriter serviceWSDLFW = new FileWriter(serviceWSDLF);
 		serviceWSDLFW.write(serviceWSDLS);
 		serviceWSDLFW.close();
+		
+		NamespaceMappingsTemplate namespaceMappingsT = new NamespaceMappingsTemplate();
+		String namespaceMappingsS = namespaceMappingsT.generate(info);
+		File namespaceMappingsF = new File(baseDirectory.getAbsolutePath() + File.separator + "namespace2package.mappings");
+		FileWriter namespaceMappingsFW = new FileWriter(namespaceMappingsF);
+		namespaceMappingsFW.write(namespaceMappingsS);
+		namespaceMappingsFW.close();
+		
 
 		String cmd = CommonTools.getAntFlattenCommand(baseDirectory.getAbsolutePath());
 		Process p = CommonTools.createAndOutputProcess(cmd);

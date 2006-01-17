@@ -1,4 +1,4 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="NamespaceMappingsTemplate" %>
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="NamespaceMappingsTemplate" imports="gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.* gov.nih.nci.cagrid.introduce.beans.method.*"%>
 <% gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
    String packageName = info.getServiceProperties().getProperty("introduce.skeleton.package");
    String serviceName = info.getServiceProperties().getProperty("introduce.skeleton.service.name");
@@ -11,3 +11,27 @@
 <%=namespaceDomain%>/<%=serviceName%>=<%=packageName%>.stubs
 <%=namespaceDomain%>/<%=serviceName%>/bindings=<%=packageName%>.stubs.bindings
 <%=namespaceDomain%>/<%=serviceName%>/service=<%=packageName%>.stubs.service
+<%
+		Map prefixmap=TemplateUtils.buildMasterNamespaceSchemaInformationMap(info);
+  		Iterator iterator = prefixmap.keySet().iterator();
+		while(iterator.hasNext()){
+			String namespaceS = (String)iterator.next();
+			SchemaInformation schemaInformation=(SchemaInformation)prefixmap.get(namespaceS);
+			try{ 
+			org.projectmobius.common.Namespace namespace = new org.projectmobius.common.Namespace(schemaInformation.getNamespace());
+							StringTokenizer tokenizer = new StringTokenizer(namespace.getDomain(), ".", true);
+							StringBuffer packageNameBuf = new StringBuffer();
+							while (tokenizer.hasMoreElements()) {
+								packageNameBuf.insert(0, tokenizer.nextToken());
+							}
+							String newLine = namespace.getRaw() + "=" + packageNameBuf.toString() + ".bean";
+							// turns http: into http\:
+							String newnewLine = newLine.replaceFirst(":", "\\\\:");
+							newnewLine = newnewLine.replaceFirst("\\Q\\\\\\\\:\\E", "\\\\:");
+%>
+<%=newnewLine %><%
+} catch (Exception e){
+	e.printStackTrace();
+}
+}
+%>

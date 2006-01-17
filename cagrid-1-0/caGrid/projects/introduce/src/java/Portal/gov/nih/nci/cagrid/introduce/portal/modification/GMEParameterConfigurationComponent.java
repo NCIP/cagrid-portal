@@ -250,62 +250,7 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
 						JOptionPane.showMessageDialog(me,
 							"Please check the GME URL and make sure that you have the appropriate credentials!");
 					}
-
-					File namespace2Mappings = new File(schemaDir.getAbsolutePath() + File.separator + ".."
-						+ File.separator + ".." + File.separator + "namespace2package.mappings");
-
-					List mappings = new ArrayList();
-					if (namespace2Mappings.exists()) {
-						try {
-							BufferedReader reader = new BufferedReader(new FileReader(namespace2Mappings));
-							String line;
-							try {
-								line = reader.readLine();
-								while (line != null) {
-									mappings.add(line);
-									line = reader.readLine();
-								}
-							} catch (IOException e3) {
-								// TODO Auto-generated catch block
-								e3.printStackTrace();
-							}
-
-						} catch (FileNotFoundException e2) {
-							e2.printStackTrace();
-						}
-					}
-					if (writtenNamespaces != null) {
-						for (int i = 0; i < writtenNamespaces.size(); i++) {
-
-							Namespace namespace = (Namespace) writtenNamespaces.get(i);
-							StringTokenizer tokenizer = new StringTokenizer(namespace.getDomain(), ".", true);
-							StringBuffer packageName = new StringBuffer();
-							while (tokenizer.hasMoreElements()) {
-								packageName.insert(0, tokenizer.nextToken());
-							}
-							String newLine = namespace.getRaw() + "=" + packageName.toString() + ".bean";
-							// turns http: into http\:
-							String newnewLine = newLine.replaceFirst(":", "\\\\:");
-							newnewLine = newnewLine.replaceFirst("\\Q\\\\\\\\:\\E", "\\\\:");
-							if (!mappings.contains(newnewLine)) {
-								mappings.add(newnewLine);
-							}
-
-						}
-					}
-
-					try {
-						FileWriter fw = new FileWriter(namespace2Mappings);
-						Iterator it = mappings.iterator();
-						while (it.hasNext()) {
-							String next = (String) it.next();
-							fw.write(next + "\n");
-						}
-						fw.close();
-					} catch (IOException e2) {
-						e2.printStackTrace();
-					}
-
+					
 					performDone();
 
 					dispose();

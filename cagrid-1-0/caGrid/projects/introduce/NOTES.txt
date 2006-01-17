@@ -25,9 +25,9 @@ GMEMetadataConfigurationComponent needs to set proper view on viewing an existin
 
 Need to fix the browse screen so that it can work with paths that have spaces in them.
 
-Need to make sure that the id's used to created archives are good from date through time.
+(DONE) Need to make sure that the id's used to created archives are good from date through time.
 
-Need to pull the namespace to mappings code out of the gui and into the template.
+(DONE) Need to pull the namespace to mappings code out of the gui and into the template.
 
 Need to add more complex tests to the system test for adding complex methods with faults etc.
 
