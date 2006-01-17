@@ -3,7 +3,7 @@ package gov.nih.nci.cagrid.introduce.portal.modification;
 import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.introduce.Archive;
+import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
@@ -44,7 +44,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.28 2006-01-11 15:50:27 oster Exp $
+ * @version $Id: ModificationViewer.java,v 1.29 2006-01-17 18:53:43 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -692,7 +692,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 							try {
 								if (!dirty) {
 									setProgressText("restoring from local cache");
-									Archive.restoreLatest(
+									ResourceManager.restoreLatest(
 										serviceProperties.getProperty("introduce.skeleton.timestamp"),
 										serviceProperties.getProperty("introduce.skeleton.service.name"),
 										serviceProperties.getProperty("introduce.skeleton.destination.dir"));

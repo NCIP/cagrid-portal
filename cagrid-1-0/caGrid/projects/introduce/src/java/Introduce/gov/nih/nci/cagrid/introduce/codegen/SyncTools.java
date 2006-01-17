@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.introduce.codegen;
 
 import gov.nih.nci.cagrid.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.Archive;
+import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataType;
@@ -184,7 +184,7 @@ public class SyncTools {
 			new FileOutputStream(baseDirectory.getAbsolutePath() + File.separator + "introduce.properties"),
 			"Introduce Properties");
 
-		Archive.createArchive(String.valueOf(id), info.getServiceProperties().getProperty(
+		ResourceManager.createArchive(String.valueOf(id), info.getServiceProperties().getProperty(
 			"introduce.skeleton.service.name"), baseDirectory.getAbsolutePath());
 	}
 
