@@ -12,6 +12,7 @@ General Tasks
 
 9) Add code for checking IdP Status on all methods.
 10) Removing IdP should remove all user accounts.
+11) Need to change all propety/config files to be "*.example" files, not check the real ones in, and build should create real ones from examples upon need
 
 Implementation Issues
 ----------------------
