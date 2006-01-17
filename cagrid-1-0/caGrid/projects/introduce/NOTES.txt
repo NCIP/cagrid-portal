@@ -8,7 +8,8 @@ To Do:
 
 (DONE) Map the ext/NStoPkg.mappings with those in the skeleton (right now they are copied into the skeleton's file)
 
-namespace to package mappings should be jettemplated at sync time
+(DONE) namespace to package mappings should be jettemplated at sync time
+
 Security configuration
 
 Metadata and registration configuration
