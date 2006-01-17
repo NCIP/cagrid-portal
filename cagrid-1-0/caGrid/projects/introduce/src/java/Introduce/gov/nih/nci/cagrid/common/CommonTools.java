@@ -1,5 +1,8 @@
 package gov.nih.nci.cagrid.common;
 
+import gov.nih.nci.cagrid.introduce.ResourceManager;
+
+import java.awt.Component;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.StringTokenizer;
 
+import javax.swing.JFileChooser;
 import javax.xml.namespace.QName;
 
 import org.apache.axis.utils.XMLUtils;
@@ -53,6 +57,21 @@ public class CommonTools {
 		thread2.start();
 
 		return p;
+	}
+	
+	public static String promptDir(Component comp) throws Exception {
+		JFileChooser chooser = new JFileChooser(ResourceManager.getLastDirectory());
+		chooser.setDialogTitle("Select Attribute File");
+		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
+		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		chooser.setMultiSelectionEnabled(false);
+		int returnVal = chooser.showOpenDialog(comp);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			ResourceManager.setLastDirectory(chooser.getSelectedFile());
+			return chooser.getSelectedFile().getAbsolutePath();
+		} else {
+			return "";
+		}
 	}
 
 	public static String getAntCommand(String antCommand, String buildFileDir)

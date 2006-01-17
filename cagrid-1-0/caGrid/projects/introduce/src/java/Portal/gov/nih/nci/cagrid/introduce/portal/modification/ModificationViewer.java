@@ -44,7 +44,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.29 2006-01-17 18:53:43 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.30 2006-01-17 21:07:34 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -113,7 +113,11 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	public ModificationViewer() {
 		super();
 		this.me = this;
+		try {
 		chooseService();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 		initialize();
 	}
 
@@ -171,20 +175,10 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	}
 
 
-	private void chooseService() {
-		JFileChooser chooser = new JFileChooser(defaultMethodsDir);
-		chooser.setDialogTitle("Select Service Skeleton Directory");
-		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
-		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		chooser.setMultiSelectionEnabled(false);
-		int returnVal = chooser.showOpenDialog(me);
-
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			this.methodsDirectory = chooser.getSelectedFile();
-			defaultMethodsDir = this.methodsDirectory;
-		} else {
-			return;
-		}
+	private void chooseService() throws Exception {
+		String dir = CommonTools.promptDir(this);
+			this.methodsDirectory = new File(dir);
+			this.defaultMethodsDir = this.methodsDirectory;
 	}
 
 

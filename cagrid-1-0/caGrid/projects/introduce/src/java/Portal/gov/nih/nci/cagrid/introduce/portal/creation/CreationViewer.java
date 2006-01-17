@@ -3,9 +3,11 @@ package gov.nih.nci.cagrid.introduce.portal.creation;
 import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.modification.ModificationViewer;
 
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -84,12 +86,15 @@ public class CreationViewer extends GridPortalComponent {
 	private JLabel serviceStyleLabel = null;
 
 	private JComboBox serviceStyleSeletor = null;
+	
+	private Component me;
 
 	/**
 	 * This method initializes
 	 */
 	public CreationViewer() {
 		super();
+		me = this;
 		initialize();
 	}
 
@@ -448,7 +453,11 @@ public class CreationViewer extends GridPortalComponent {
 			dirButton.setText("Browse");
 			dirButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					dir.setText(promptDir());
+					try {
+					dir.setText(CommonTools.promptDir(me));
+					} catch (Exception ex){
+						ex.printStackTrace();
+					}
 				}
 			});
 		}
@@ -480,20 +489,6 @@ public class CreationViewer extends GridPortalComponent {
 			namespaceDomain.setText(DEFAULT_NAMESPACE);
 		}
 		return namespaceDomain;
-	}
-
-	private String promptDir() {
-		JFileChooser chooser = new JFileChooser();
-		chooser.setDialogTitle("Select Attribute File");
-		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
-		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		chooser.setMultiSelectionEnabled(false);
-		int returnVal = chooser.showOpenDialog(this);
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			return chooser.getSelectedFile().getAbsolutePath();
-		} else {
-			return "";
-		}
 	}
 
 	private String promptFile() {
