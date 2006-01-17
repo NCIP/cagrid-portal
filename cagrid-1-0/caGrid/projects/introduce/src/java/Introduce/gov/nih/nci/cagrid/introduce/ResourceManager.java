@@ -28,7 +28,7 @@ public class ResourceManager {
 	public final static String LAST_DIR_RESOURCE_FILE = "lastdir.resource";
 
 
-	public final static String getResourcePath() {
+	public static String getResourcePath() {
 		String userHome = System.getProperty("user.home");
 		File userHomeF = new File(userHome);
 		File caGridCache = new File(userHomeF.getAbsolutePath() + File.separator + ".cagrid");
@@ -39,7 +39,7 @@ public class ResourceManager {
 	}
 
 
-	public final static File getLastDirectory() throws Exception {
+	public static File getLastDirectory() throws Exception {
 		File lastDir = new File(getResourcePath() + File.separator + LAST_DIR_RESOURCE_FILE);
 		if (lastDir.exists() && lastDir.canRead()) {
 			BufferedReader br = new BufferedReader(new FileReader(lastDir));
@@ -50,7 +50,7 @@ public class ResourceManager {
 	}
 
 
-	public final static void setLastDirectory(File directory) throws Exception {
+	public static void setLastDirectory(File directory) throws Exception {
 		if (directory != null && directory.canRead() && directory.canWrite()) {
 			FileWriter fw = new FileWriter(getResourcePath() + File.separator + LAST_DIR_RESOURCE_FILE);
 			fw.write(directory.getAbsolutePath());
