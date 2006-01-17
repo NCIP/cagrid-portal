@@ -66,7 +66,7 @@ public class Archive {
 
 		// Create the ZIP file
 		String outFilename = introduceCache + File.separator
-				+ serviceName + "_" + id + "_backup.zip";
+				+ serviceName + "_" + id + Constants.CACHE_POSTFIX;
 		ZipOutputStream out = new ZipOutputStream(new FileOutputStream(
 				outFilename));
 
@@ -187,7 +187,7 @@ public class Archive {
 
 		File cachedFile = new File(introduceCache.getAbsolutePath()
 				+ File.separator + serviceName + "_" + String.valueOf(lastTime)
-				+ "_backup.zip");
+				+ Constants.CACHE_POSTFIX);
 
 		InputStream in = new BufferedInputStream(
 				new FileInputStream(cachedFile));
