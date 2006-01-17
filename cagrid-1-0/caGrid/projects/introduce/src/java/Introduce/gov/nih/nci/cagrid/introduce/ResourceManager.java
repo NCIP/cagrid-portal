@@ -1,9 +1,12 @@
 package gov.nih.nci.cagrid.introduce;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,28 +19,47 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+
 public class ResourceManager {
 	public static final int MAX_ARCHIVE = 5;
-	
+
 	public final static String CACHE_POSTFIX = "_backup.zip";
-	
+
 	public final static String LAST_DIR_RESOURCE_FILE = "lastdir.resource";
-	
-	
-	public final static String getResourcePath(){
+
+
+	public final static String getResourcePath() {
 		String userHome = System.getProperty("user.home");
 		File userHomeF = new File(userHome);
-		File caGridCache = new File(userHomeF.getAbsolutePath()
-				+ File.separator + ".cagrid");
+		File caGridCache = new File(userHomeF.getAbsolutePath() + File.separator + ".cagrid");
 		caGridCache.mkdir();
-		File introduceCache = new File(caGridCache + File.separator
-				+ "introduce");
+		File introduceCache = new File(caGridCache + File.separator + "introduce");
 		introduceCache.mkdir();
 		return introduceCache.getAbsolutePath();
 	}
 
-	private static synchronized void getDirectoryListing(List names, File dir,
-			String parentPath) {
+
+	public final static File getLastDirectory() throws Exception {
+		File lastDir = new File(getResourcePath() + File.separator + LAST_DIR_RESOURCE_FILE);
+		if (lastDir.exists() && lastDir.canRead()) {
+			BufferedReader br = new BufferedReader(new FileReader(lastDir));
+			return new File(br.readLine());
+		} else {
+			return null;
+		}
+	}
+
+
+	public final static void setLastDirectory(File directory) throws Exception {
+		if (directory != null && directory.canRead() && directory.canWrite()) {
+			FileWriter fw = new FileWriter(getResourcePath() + File.separator + LAST_DIR_RESOURCE_FILE);
+			fw.write(directory.getAbsolutePath());
+			fw.close();
+		}
+	}
+
+
+	private static synchronized void getDirectoryListing(List names, File dir, String parentPath) {
 
 		String[] children = dir.list();
 
@@ -45,23 +67,19 @@ public class ResourceManager {
 			// Either dir does not exist or is empty
 		} else {
 			for (int i = 0; i < children.length; i++) {
-				File child = new File(dir.getAbsolutePath() + File.separator
-						+ children[i]);
+				File child = new File(dir.getAbsolutePath() + File.separator + children[i]);
 				if (child.isDirectory()) {
 					if (parentPath.equals("")) {
 						getDirectoryListing(names, child, child.getName());
 					} else {
-						getDirectoryListing(names, child, parentPath
-								+ File.separator + child.getName());
+						getDirectoryListing(names, child, parentPath + File.separator + child.getName());
 					}
 
 				} else {
 					if (parentPath.equals("")) {
 						names.add(child.getName());
 					} else {
-						names
-								.add(parentPath + File.separator
-										+ child.getName());
+						names.add(parentPath + File.separator + child.getName());
 					}
 
 				}
@@ -69,8 +87,8 @@ public class ResourceManager {
 		}
 	}
 
-	public static synchronized void createArchive(String id,
-			String serviceName, String baseDir) throws Exception {
+
+	public static synchronized void createArchive(String id, String serviceName, String baseDir) throws Exception {
 		File dir = new File(baseDir);
 
 		String introduceCache = getResourcePath();
@@ -82,15 +100,12 @@ public class ResourceManager {
 		byte[] buf = new byte[1024];
 
 		// Create the ZIP file
-		String outFilename = introduceCache + File.separator
-				+ serviceName + "_" + id + CACHE_POSTFIX;
-		ZipOutputStream out = new ZipOutputStream(new FileOutputStream(
-				outFilename));
+		String outFilename = introduceCache + File.separator + serviceName + "_" + id + CACHE_POSTFIX;
+		ZipOutputStream out = new ZipOutputStream(new FileOutputStream(outFilename));
 
 		// Compress the files
 		for (int i = 0; i < filenames.size(); i++) {
-			FileInputStream in = new FileInputStream(dir.getAbsolutePath()
-					+ File.separator + (String) filenames.get(i));
+			FileInputStream in = new FileInputStream(dir.getAbsolutePath() + File.separator + (String) filenames.get(i));
 
 			// Add ZIP entry to output stream.
 			out.putNextEntry(new ZipEntry((String) filenames.get(i)));
@@ -116,6 +131,7 @@ public class ResourceManager {
 
 	}
 
+
 	private static void cleanup(String currentId, String serviceName) {
 		String introduceCache = getResourcePath();
 
@@ -140,20 +156,17 @@ public class ResourceManager {
 
 		if (cacheFilesList.size() > MAX_ARCHIVE) {
 			for (int i = MAX_ARCHIVE; i < cacheFilesList.size(); i++) {
-				System.out.println("Removing file from cache: " + i + "  "
-						+ introduceCache + File.separator
-						+ cacheFilesList.get(i));
-				File cacheFile = new File(introduceCache
-						+ File.separator + cacheFilesList.get(i));
+				System.out.println("Removing file from cache: " + i + "  " + introduceCache + File.separator
+					+ cacheFilesList.get(i));
+				File cacheFile = new File(introduceCache + File.separator + cacheFilesList.get(i));
 				cacheFile.delete();
 			}
 		}
 	}
 
-	private static void unzip(String baseDir, ZipInputStream zin, String s)
-			throws IOException {
-		File file = new File(new File(baseDir).getAbsolutePath()
-				+ File.separator + s);
+
+	private static void unzip(String baseDir, ZipInputStream zin, String s) throws IOException {
+		File file = new File(new File(baseDir).getAbsolutePath() + File.separator + s);
 		file.getParentFile().mkdirs();
 		FileOutputStream out = new FileOutputStream(file);
 		byte[] b = new byte[512];
@@ -164,16 +177,15 @@ public class ResourceManager {
 		out.close();
 	}
 
-	public static synchronized void restoreLatest(String currentId,
-			String serviceName, String baseDir) throws Exception {
+
+	public static synchronized void restoreLatest(String currentId, String serviceName, String baseDir)
+		throws Exception {
 
 		String userHome = System.getProperty("user.home");
 		File userHomeF = new File(userHome);
-		File caGridCache = new File(userHomeF.getAbsolutePath()
-				+ File.separator + ".cagrid");
+		File caGridCache = new File(userHomeF.getAbsolutePath() + File.separator + ".cagrid");
 		caGridCache.mkdir();
-		File introduceCache = new File(caGridCache + File.separator
-				+ "introduce");
+		File introduceCache = new File(caGridCache + File.separator + "introduce");
 		introduceCache.mkdir();
 
 		final String finalServiceName = serviceName;
@@ -192,8 +204,7 @@ public class ResourceManager {
 		long thisTime = Long.parseLong(currentId);
 		long lastTime = 0;
 		for (int i = 0; i < cacheFiles.length; i++) {
-			StringTokenizer strtok = new StringTokenizer(cacheFiles[i], "_",
-					false);
+			StringTokenizer strtok = new StringTokenizer(cacheFiles[i], "_", false);
 			strtok.nextToken();
 			String timeS = strtok.nextToken();
 			long time = Long.parseLong(timeS);
@@ -202,12 +213,10 @@ public class ResourceManager {
 			}
 		}
 
-		File cachedFile = new File(introduceCache.getAbsolutePath()
-				+ File.separator + serviceName + "_" + String.valueOf(lastTime)
-				+ CACHE_POSTFIX);
+		File cachedFile = new File(introduceCache.getAbsolutePath() + File.separator + serviceName + "_"
+			+ String.valueOf(lastTime) + CACHE_POSTFIX);
 
-		InputStream in = new BufferedInputStream(
-				new FileInputStream(cachedFile));
+		InputStream in = new BufferedInputStream(new FileInputStream(cachedFile));
 		ZipInputStream zin = new ZipInputStream(in);
 		ZipEntry e;
 
@@ -218,10 +227,10 @@ public class ResourceManager {
 
 	}
 
+
 	public static void main(String[] args) {
 		try {
-			ResourceManager.createArchive(String.valueOf(System.currentTimeMillis()),
-					"HelloWorld", "c:\\HelloWorld");
+			ResourceManager.createArchive(String.valueOf(System.currentTimeMillis()), "HelloWorld", "c:\\HelloWorld");
 
 			Thread.sleep(5000);
 
