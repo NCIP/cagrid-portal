@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -25,7 +26,9 @@ public class ResourceManager {
 
 	public final static String CACHE_POSTFIX = "_backup.zip";
 
-	public final static String LAST_DIR_RESOURCE_FILE = "lastdir.resource";
+	public final static String RESOURCE_FILE = "introduce.resources";
+
+	public final static String LAST_DIRECTORY = "introduce.lastdir";
 
 
 	public static String getResourcePath() {
@@ -39,22 +42,27 @@ public class ResourceManager {
 	}
 
 
-	public static File getLastDirectory() throws Exception {
-		File lastDir = new File(getResourcePath() + File.separator + LAST_DIR_RESOURCE_FILE);
-		if (lastDir.exists() && lastDir.canRead()) {
-			BufferedReader br = new BufferedReader(new FileReader(lastDir));
-			return new File(br.readLine());
-		} else {
-			return null;
+	public static String getProperty(String key) throws Exception {
+		File lastDir = new File(getResourcePath() + File.separator + RESOURCE_FILE);
+		Properties properties = new Properties();
+		if (!lastDir.exists()) {
+			lastDir.createNewFile();
 		}
+		properties.load(new FileInputStream(lastDir));
+		return properties.getProperty(key);
 	}
 
 
-	public static void setLastDirectory(File directory) throws Exception {
-		if (directory != null && directory.canRead() && directory.canWrite()) {
-			FileWriter fw = new FileWriter(getResourcePath() + File.separator + LAST_DIR_RESOURCE_FILE);
-			fw.write(directory.getAbsolutePath());
-			fw.close();
+	public static void setProperty(String key, String value) throws Exception {
+		if (key != null) {
+			File lastDir = new File(getResourcePath() + File.separator + RESOURCE_FILE);
+			if (!lastDir.exists()) {
+				lastDir.createNewFile();
+			}
+			Properties properties = new Properties();
+			properties.load(new FileInputStream(lastDir));
+			properties.setProperty(key, value);
+			properties.store(new FileOutputStream(lastDir), "");
 		}
 	}
 
