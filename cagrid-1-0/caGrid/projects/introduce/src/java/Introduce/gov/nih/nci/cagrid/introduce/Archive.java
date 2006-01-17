@@ -56,14 +56,7 @@ public class Archive {
 			String serviceName, String baseDir) throws Exception {
 		File dir = new File(baseDir);
 
-		String userHome = System.getProperty("user.home");
-		File userHomeF = new File(userHome);
-		File caGridCache = new File(userHomeF.getAbsolutePath()
-				+ File.separator + ".cagrid");
-		caGridCache.mkdir();
-		File introduceCache = new File(caGridCache + File.separator
-				+ "introduce");
-		introduceCache.mkdir();
+		String introduceCache = Constants.getResourcePath();
 
 		List filenames = new ArrayList();
 		getDirectoryListing(filenames, dir, "");
@@ -72,7 +65,7 @@ public class Archive {
 		byte[] buf = new byte[1024];
 
 		// Create the ZIP file
-		String outFilename = introduceCache.getAbsolutePath() + File.separator
+		String outFilename = introduceCache + File.separator
 				+ serviceName + "_" + id + "_backup.zip";
 		ZipOutputStream out = new ZipOutputStream(new FileOutputStream(
 				outFilename));
@@ -107,14 +100,7 @@ public class Archive {
 	}
 
 	private static void cleanup(String currentId, String serviceName) {
-		String userHome = System.getProperty("user.home");
-		File userHomeF = new File(userHome);
-		File caGridCache = new File(userHomeF.getAbsolutePath()
-				+ File.separator + ".cagrid");
-		caGridCache.mkdir();
-		File introduceCache = new File(caGridCache + File.separator
-				+ "introduce");
-		introduceCache.mkdir();
+		String introduceCache = Constants.getResourcePath();
 
 		final String finalServiceName = serviceName;
 		FilenameFilter f = new FilenameFilter() {
@@ -128,7 +114,8 @@ public class Archive {
 
 		};
 
-		String[] cacheFiles = introduceCache.list(f);
+		File introduceCacheFile = new File(introduceCache);
+		String[] cacheFiles = introduceCacheFile.list(f);
 		System.out.println("Found " + cacheFiles.length);
 		List cacheFilesList = Arrays.asList(cacheFiles);
 		Collections.sort(cacheFilesList, String.CASE_INSENSITIVE_ORDER);
@@ -137,9 +124,9 @@ public class Archive {
 		if (cacheFilesList.size() > MAX_ARCHIVE) {
 			for (int i = MAX_ARCHIVE; i < cacheFilesList.size(); i++) {
 				System.out.println("Removing file from cache: " + i + "  "
-						+ caGridCache.getAbsolutePath() + File.separator
+						+ introduceCache + File.separator
 						+ cacheFilesList.get(i));
-				File cacheFile = new File(introduceCache.getAbsolutePath()
+				File cacheFile = new File(introduceCache
 						+ File.separator + cacheFilesList.get(i));
 				cacheFile.delete();
 			}
