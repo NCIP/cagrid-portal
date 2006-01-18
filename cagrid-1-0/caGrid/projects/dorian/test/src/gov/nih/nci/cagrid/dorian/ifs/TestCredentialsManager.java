@@ -188,9 +188,8 @@ public class TestCredentialsManager extends TestCase {
 			System.exit(1);
 		}
 
-		X509Certificate issuedCert = CertUtil.signCertificateRequest(request,
-				rootSubject, new Date(System.currentTimeMillis()), new Date(
-						System.currentTimeMillis() + 500000000), rootKey);
+		X509Certificate issuedCert = CertUtil.signCertificateRequest(request, new Date(System.currentTimeMillis()), new Date(
+						System.currentTimeMillis() + 500000000), rootCert,rootKey);
 		assertNotNull(issuedCert);
 		storeRetrieveAndConfirmCredentials(username, password, issuedCert, pair
 				.getPrivate());

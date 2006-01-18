@@ -36,7 +36,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.8 2005-12-19 20:44:16 hastings Exp $
+ * @version $Id: UserWindow.java,v 1.9 2006-01-18 03:10:21 langella Exp $
  */
 public class UserWindow extends GridPortalBaseFrame {
 
@@ -104,9 +104,9 @@ public class UserWindow extends GridPortalBaseFrame {
 
 	private JPanel certificatePanel = null;
 
-	private CertificatePanel credPanel = null;
-
 	private JButton renewCredentials = null;
+
+	private CertificatePanel credPanel = null;
 
 
 	/**
@@ -614,38 +614,18 @@ public class UserWindow extends GridPortalBaseFrame {
 	 */
 	private JPanel getCertificatePanel() {
 		if (certificatePanel == null) {
-			GridBagConstraints gridBagConstraints36 = new GridBagConstraints();
-			gridBagConstraints36.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints36.gridy = 0;
-			gridBagConstraints36.weightx = 1.0D;
-			gridBagConstraints36.weighty = 1.0D;
-			gridBagConstraints36.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints36.anchor = java.awt.GridBagConstraints.NORTH;
-			gridBagConstraints36.gridx = 0;
+			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
+			gridBagConstraints17.anchor = java.awt.GridBagConstraints.NORTH;
+			gridBagConstraints17.gridy = 0;
+			gridBagConstraints17.weightx = 1.0D;
+			gridBagConstraints17.weighty = 1.0D;
+			gridBagConstraints17.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints17.gridx = 0;
 			certificatePanel = new JPanel();
-			certificatePanel.setLayout(new BorderLayout());
-			certificatePanel.add(getCredPanel(), java.awt.BorderLayout.NORTH);
+			certificatePanel.setLayout(new GridBagLayout());
+			certificatePanel.add(getCredPanel(), gridBagConstraints17);
 		}
 		return certificatePanel;
-	}
-
-
-	/**
-	 * This method initializes jPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private CertificatePanel getCredPanel() {
-		if (credPanel == null) {
-			try {
-				credPanel = new CertificatePanel(CertUtil.loadCertificateFromString(user.getCertificate()
-					.getCertificateAsString()));
-				credPanel.setAllowImport(false);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return credPanel;
 	}
 
 
@@ -666,6 +646,25 @@ public class UserWindow extends GridPortalBaseFrame {
 			renewCredentials.setIcon(DorianLookAndFeel.getCertificateActionIcon());
 		}
 		return renewCredentials;
+	}
+
+
+	/**
+	 * This method initializes credPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */    
+	private CertificatePanel getCredPanel(){
+		if (credPanel == null) {
+			try{
+			credPanel = new CertificatePanel(CertUtil.loadCertificateFromString(user.getCertificate()
+				.getCertificateAsString()));
+			credPanel.setAllowImport(false);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		return credPanel;
 	}
 
 }

@@ -21,7 +21,7 @@ import javax.swing.JTextField;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CertificatePanel.java,v 1.5 2006-01-11 19:50:29 langella Exp $
+ * @version $Id: CertificatePanel.java,v 1.6 2006-01-18 03:10:21 langella Exp $
  */
 public class CertificatePanel extends JPanel {
 
@@ -66,6 +66,7 @@ public class CertificatePanel extends JPanel {
 		this.certificate = cert;
 		setCertificate(cert);
 	}
+	
 	
 	public void setAllowExport(boolean allow){
 		this.getSaveButton().setVisible(allow);

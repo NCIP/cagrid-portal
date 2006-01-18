@@ -39,7 +39,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPWindow.java,v 1.7 2005-12-19 20:44:17 hastings Exp $
+ * @version $Id: TrustedIdPWindow.java,v 1.8 2006-01-18 03:10:21 langella Exp $
  */
 public class TrustedIdPWindow extends GridPortalBaseFrame {
 	public static final String PASSWORD = SAMLAuthenticationMethod.value1.getValue();
@@ -608,6 +608,14 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 	 */
 	private JPanel getCertificatePanel() {
 		if (certificatePanel == null) {
+			GridBagConstraints gridBagConstraints40 = new GridBagConstraints();
+			gridBagConstraints40.gridx = 0;
+			gridBagConstraints40.ipadx = 208;
+			gridBagConstraints40.weightx = 1.0D;
+			gridBagConstraints40.weighty = 1.0D;
+			gridBagConstraints40.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints40.anchor = java.awt.GridBagConstraints.NORTH;
+			gridBagConstraints40.gridy = 0;
 			GridBagConstraints gridBagConstraints36 = new GridBagConstraints();
 			gridBagConstraints36.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints36.gridy = 0;
@@ -617,8 +625,8 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 			gridBagConstraints36.anchor = java.awt.GridBagConstraints.NORTH;
 			gridBagConstraints36.gridx = 0;
 			certificatePanel = new JPanel();
-			certificatePanel.setLayout(new BorderLayout());
-			certificatePanel.add(getCredPanel(), java.awt.BorderLayout.NORTH);
+			certificatePanel.setLayout(new GridBagLayout());
+			certificatePanel.add(getCredPanel(), gridBagConstraints40);
 		}
 		return certificatePanel;
 	}
@@ -636,6 +644,7 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 				if (idp.getIdPCertificate() != null) {
 					credPanel.setCertificate(CertUtil.loadCertificateFromString(idp.getIdPCertificate()));
 				}
+				credPanel.setAllowImport(false);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

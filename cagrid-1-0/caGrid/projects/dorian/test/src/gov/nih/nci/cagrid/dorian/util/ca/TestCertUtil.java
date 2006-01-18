@@ -239,8 +239,8 @@ public class TestCertUtil extends TestCase {
 		}
 
 		X509Certificate issuedCert = CertUtil.signCertificateRequest(request,
-				rootSubject, new Date(System.currentTimeMillis()), new Date(
-						System.currentTimeMillis() + 500000000), rootKey);
+				 new Date(System.currentTimeMillis()), new Date(
+						System.currentTimeMillis() + 500000000),rootCert, rootKey);
 		assertNotNull(issuedCert);
 
 		return new X509Certificate[] { issuedCert, rootCert };

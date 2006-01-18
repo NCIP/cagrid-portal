@@ -118,7 +118,7 @@ public class TestIFS extends TestCase {
 
 	public void testFindRemoveUpdateUsers() {
 		try {
-			int times = 5;
+			int times = 3;
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
 			IFSConfiguration conf = getConf();
 			conf.setInitalTrustedIdP(idp.getIdp());
@@ -456,7 +456,7 @@ public class TestIFS extends TestCase {
 			IFS ifs = new IFS(conf, db, ca);
 			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(ca.getCACertificate()
 				.getSubjectDN().getName(), idp0.getIdp().getId(), conf.getInitialUser().getUID()));
-			int times = 5;
+			int times = 3;
 			String baseName = "Test IdP";
 			String baseUpdateName = "Updated IdP";
 			int count = 1;
