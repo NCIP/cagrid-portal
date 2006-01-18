@@ -1,10 +1,10 @@
 package gov.nih.nci.cabig.introduce;
 
 import gov.nih.nci.cabig.introduce.steps.AddSimpleMethodStep;
-import gov.nih.nci.cabig.introduce.steps.BuildSkeletonStep;
 import gov.nih.nci.cabig.introduce.steps.CreateSkeletonStep;
 import gov.nih.nci.cabig.introduce.steps.RemoveSimpleMethodStep;
 import gov.nih.nci.cabig.introduce.steps.RemoveSkeletonStep;
+import gov.nih.nci.cabig.introduce.steps.RollBackStep;
 
 import java.util.Vector;
 
@@ -22,11 +22,10 @@ public class SyncToolsTest extends Story {
 		Vector steps = new Vector();
 
 		steps.add(new CreateSkeletonStep(tci));
-		steps.add(new BuildSkeletonStep(tci));
 		steps.add(new AddSimpleMethodStep(tci));
-		steps.add(new BuildSkeletonStep(tci));
+		steps.add(new RollBackStep(tci));
+		steps.add(new AddSimpleMethodStep(tci));
 		steps.add(new RemoveSimpleMethodStep(tci));
-		steps.add(new BuildSkeletonStep(tci));
 		
 		return steps;
 	}

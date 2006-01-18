@@ -6,21 +6,22 @@ import javax.xml.namespace.QName;
 
 import gov.nih.nci.cabig.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
 
 import com.atomicobject.haste.framework.Step;
 
-public class RemoveSimpleMethodStep extends Step {
+public class RollBackStep extends Step {
 	private TestCaseInfo tci;
 	
-	public RemoveSimpleMethodStep(TestCaseInfo tci){
+	public RollBackStep(TestCaseInfo tci){
 		this.tci = tci;
 	}
 
 	public void runStep() throws Throwable {
-		System.out.println("Removing a simple method.");
+		System.out.println("Rolling back to previous version.");
 
 		String pathtobasedir = System.getProperty("basedir");
 		System.out.println(pathtobasedir);
@@ -34,17 +35,8 @@ public class RemoveSimpleMethodStep extends Step {
 				+ File.separator + tci.getDir() + File.separator
 				+ "introduceMethods.xml",
 				MethodsType.class);
-
-		methodsType.setMethod(null);
 		
-		CommonTools
-		.serializeDocument(pathtobasedir
-				+ File.separator + tci.getDir() + File.separator
-				+ "introduceMethods.xml",
-				methodsType,
-				new QName(
-						"gme://gov.nih.nci.cagrid.introduce/1/Methods",
-						"methodsType"));
+		ResourceManager.restoreLatest(String.valueOf(System.currentTimeMillis()),tci.getName(),tci.getDir());
 
 		String cmd = CommonTools.getAntSkeletonResyncCommand(pathtobasedir
 				+ File.separator + tci.getDir());
@@ -54,11 +46,7 @@ public class RemoveSimpleMethodStep extends Step {
 
 		assertEquals(0, p.exitValue());
 		
-		cmd = CommonTools.getAntAllCommand(pathtobasedir + File.separator + tci.getDir());
-
-		p = CommonTools.createAndOutputProcess(cmd);
-		p.waitFor();
-		assertEquals(0, p.exitValue());
+		//check to see that this is same as before....
 	}
 
 }
