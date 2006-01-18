@@ -23,8 +23,8 @@ public class SyncToolsTest extends Story {
 
 		steps.add(new CreateSkeletonStep(tci));
 		steps.add(new AddSimpleMethodStep(tci));
-		steps.add(new RollBackStep(tci));
-		steps.add(new AddSimpleMethodStep(tci));
+		//steps.add(new RollBackStep(tci));
+		//steps.add(new AddSimpleMethodStep(tci));
 		steps.add(new RemoveSimpleMethodStep(tci));
 		
 		return steps;
