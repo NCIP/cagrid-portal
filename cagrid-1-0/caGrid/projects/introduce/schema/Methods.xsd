@@ -46,6 +46,7 @@
 					<xs:complexContent>
 						<xs:extension base="MethodType">
 							<xs:attribute name="secure" type="SecureValueType" use="optional"/>
+							<xs:attribute name="credentialsRequired" type="CredentialsRequiredType" use="optional"/>
 						</xs:extension>
 					</xs:complexContent>
 				</xs:complexType>
@@ -95,6 +96,13 @@
 			<xs:enumeration value="INTEGRITY"/>
 			<xs:enumeration value="PRIVACY"/>
 			<xs:enumeration value="EITHER"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="CredentialsRequiredType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Yes"/>
+			<xs:enumeration value="No"/>
 		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>

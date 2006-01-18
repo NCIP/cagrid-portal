@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.introduce.beans.method.CredentialsRequiredType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
@@ -108,6 +109,10 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JPanel exceptionInputButtonPanel = null;
 
 	private JLabel methodSecurityStyle = null;
+
+	private JLabel anonymousLabel = null;
+
+	private JComboBox credentialsRequired = null;
 
 
 	public MethodViewer(MethodsTypeMethod method, File schemaDir, MethodsTable table, int selectedRow) {
@@ -310,6 +315,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 					method.setName(getNameField().getText());
 					String secure = (String) getSecurity().getSelectedItem();
 					method.setSecure(SecureValueType.fromValue(String.valueOf(secure)));
+					method.setCredentialsRequired((CredentialsRequiredType)getCredentialsRequired().getSelectedItem());
 					methodsTable.changeMethodName(currentRow, getNameField().getText());
 
 					MethodTypeInputs inputs = new MethodTypeInputs();
@@ -783,8 +789,23 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getSecurityPanel() {
 		if (securityPanel == null) {
+			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
+			gridBagConstraints17.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints17.gridy = 1;
+			gridBagConstraints17.weightx = 1.0;
+			gridBagConstraints17.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints17.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints17.gridx = 1;
+			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
+			gridBagConstraints16.gridx = 0;
+			gridBagConstraints16.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints16.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints16.gridy = 1;
+			anonymousLabel = new JLabel();
+			anonymousLabel.setText("Credentials Required");
 			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
 			gridBagConstraints15.gridx = 0;
+			gridBagConstraints15.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints15.gridy = 0;
 			methodSecurityStyle = new JLabel();
 			methodSecurityStyle.setText("Method Level Security Style");
@@ -793,11 +814,14 @@ public class MethodViewer extends GridPortalBaseFrame {
 			gridBagConstraints13.gridx = 1;
 			gridBagConstraints13.gridy = 0;
 			gridBagConstraints13.weightx = 1.0;
+			gridBagConstraints13.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints13.insets = new java.awt.Insets(2, 2, 2, 2);
 			securityPanel = new JPanel();
 			securityPanel.setLayout(new GridBagLayout());
 			securityPanel.add(getSecurity(), gridBagConstraints13);
 			securityPanel.add(methodSecurityStyle, gridBagConstraints15);
+			securityPanel.add(anonymousLabel, gridBagConstraints16);
+			securityPanel.add(getCredentialsRequired(), gridBagConstraints17);
 		}
 		return securityPanel;
 	}
@@ -826,6 +850,27 @@ public class MethodViewer extends GridPortalBaseFrame {
 			exceptionInputButtonPanel.add(getAddExceptionButton(), gridBagConstraints5);
 		}
 		return exceptionInputButtonPanel;
+	}
+
+
+	/**
+	 * This method initializes credentialsRequired	
+	 * 	
+	 * @return javax.swing.JComboBox	
+	 */    
+	private JComboBox getCredentialsRequired() {
+		if (credentialsRequired == null) {
+			credentialsRequired = new JComboBox();
+			credentialsRequired.addItem(CredentialsRequiredType.No);
+			credentialsRequired.addItem(CredentialsRequiredType.Yes);
+			
+			if (method.getCredentialsRequired() == null) {
+				security.setSelectedItem(CredentialsRequiredType.No);
+			} else {
+				security.setSelectedItem(method.getCredentialsRequired());
+			}
+		}
+		return credentialsRequired;
 	}
 } // @jve:decl-index=0:visual-constraint="10,10"
 
