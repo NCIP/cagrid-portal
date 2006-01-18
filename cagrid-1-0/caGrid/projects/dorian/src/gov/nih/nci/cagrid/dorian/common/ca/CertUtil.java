@@ -21,6 +21,7 @@ import java.util.Date;
 
 import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.asn1.x509.KeyUsage;
+import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
 import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
@@ -28,6 +29,7 @@ import org.bouncycastle.jce.X509Principal;
 import org.bouncycastle.jce.X509V1CertificateGenerator;
 import org.bouncycastle.jce.X509V3CertificateGenerator;
 import org.bouncycastle.openssl.PEMReader;
+
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -38,27 +40,23 @@ import org.bouncycastle.openssl.PEMReader;
  */
 public class CertUtil {
 
-	public static PKCS10CertificationRequest generateCertficateRequest(
-			String subject, KeyPair pair) throws Exception {
+	public static PKCS10CertificationRequest generateCertficateRequest(String subject, KeyPair pair) throws Exception {
 		SecurityUtil.init();
-		return new PKCS10CertificationRequest("MD5WithRSAEncryption",
-				new X509Principal(subject), pair.getPublic(), null, pair
-						.getPrivate());
+		return new PKCS10CertificationRequest("MD5WithRSAEncryption", new X509Principal(subject), pair.getPublic(),
+			null, pair.getPrivate());
 	}
 
-	public static X509Certificate signCertificateRequest(
-			PKCS10CertificationRequest request, X509Name issuer, Date start,
-			Date expired, PrivateKey signerKey) throws InvalidKeyException,
-			NoSuchProviderException, SignatureException,
-			NoSuchAlgorithmException {
-		return generateCertificate(request.getCertificationRequestInfo()
-				.getSubject(), issuer, start, expired, request
-				.getPublicKey("BC"), signerKey);
+
+	public static X509Certificate signCertificateRequest(PKCS10CertificationRequest request,
+		Date start, Date expired, X509Certificate cacert, PrivateKey signerKey) throws InvalidKeyException, NoSuchProviderException,
+		SignatureException, NoSuchAlgorithmException {
+		return generateCertificate(request.getCertificationRequestInfo().getSubject(), start, expired, request
+			.getPublicKey("BC"), cacert, signerKey);
 	}
 
-	public static X509Certificate generateCACertificate(X509Name subject,
-			Date start, Date expired, KeyPair pair) throws InvalidKeyException,
-			NoSuchProviderException, SignatureException {
+
+	public static X509Certificate generateCACertificate3(X509Name subject, Date start, Date expired, KeyPair pair)
+		throws InvalidKeyException, NoSuchProviderException, SignatureException {
 		SecurityUtil.init();
 		// generate the certificate
 		X509V1CertificateGenerator certGen = new X509V1CertificateGenerator();
@@ -74,39 +72,62 @@ public class CertUtil {
 		return certGen.generateX509Certificate(pair.getPrivate(), "BC");
 	}
 
-	public static X509Certificate generateCertificate(X509Name subject,
-			X509Name issuer, Date start, Date expired, PublicKey publicKey,
-			PrivateKey signerKey) throws InvalidKeyException,
-			NoSuchProviderException, SignatureException {
+
+	public static X509Certificate generateCACertificate(X509Name subject, Date start, Date expired, KeyPair pair)
+		throws InvalidKeyException, NoSuchProviderException, SignatureException {
+		SecurityUtil.init();
+		// generate the certificate
+		X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
+
+		certGen.setSerialNumber(BigInteger.valueOf(System.currentTimeMillis()));
+		certGen.setIssuerDN(subject);
+		certGen.setNotBefore(start);
+		certGen.setNotAfter(expired);
+		certGen.setSubjectDN(subject);
+		certGen.setPublicKey(pair.getPublic());
+		certGen.setSignatureAlgorithm("md5WithRSAEncryption");
+		certGen.addExtension(X509Extensions.BasicConstraints, true, new BasicConstraints(20));
+		certGen.addExtension(X509Extensions.KeyUsage, true, new KeyUsage(KeyUsage.digitalSignature
+			| KeyUsage.keyEncipherment | KeyUsage.keyCertSign));
+		certGen.addExtension(X509Extensions.SubjectKeyIdentifier, false, new SubjectKeyIdentifier(pair.getPublic().getEncoded()));
+        certGen.addExtension(X509Extensions.AuthorityKeyIdentifier,false,new SubjectKeyIdentifier(pair.getPublic().getEncoded()));
+		return certGen.generateX509Certificate(pair.getPrivate(), "BC");
+	}
+
+
+	public static X509Certificate generateCertificate(X509Name subject, Date start, Date expired,
+		PublicKey publicKey, X509Certificate cacert, PrivateKey signerKey) throws InvalidKeyException, NoSuchProviderException,
+		SignatureException {
 		SecurityUtil.init();
 		// create the certificate using the information in the request
 		X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
 
 		certGen.setSerialNumber(BigInteger.valueOf(System.currentTimeMillis()));
-		certGen.setIssuerDN(issuer);
+		certGen.setIssuerDN(new X509Name(cacert.getSubjectDN().getName()));
 		certGen.setNotBefore(start);
 		certGen.setNotAfter(expired);
 		certGen.setSubjectDN(subject);
 		certGen.setPublicKey(publicKey);
 		certGen.setSignatureAlgorithm("md5WithRSAEncryption");
-		certGen.addExtension(X509Extensions.BasicConstraints, true,
-				new BasicConstraints(false));
-		certGen.addExtension(X509Extensions.KeyUsage, true, new KeyUsage(
-				KeyUsage.digitalSignature | KeyUsage.keyEncipherment));
+		certGen.addExtension(X509Extensions.BasicConstraints, true, new BasicConstraints(false));
+		certGen.addExtension(X509Extensions.KeyUsage, true, new KeyUsage(KeyUsage.digitalSignature
+			| KeyUsage.keyEncipherment));
+		certGen.addExtension(X509Extensions.SubjectKeyIdentifier, false, new SubjectKeyIdentifier(publicKey.getEncoded()));
+        certGen.addExtension(X509Extensions.AuthorityKeyIdentifier,false,new SubjectKeyIdentifier(cacert.getPublicKey().getEncoded()));
 		X509Certificate issuedCert = certGen.generateX509Certificate(signerKey);
 		return issuedCert;
 	}
 
-	public static void writeCertificate(X509Certificate cert, String path)
-			throws IOException {
+
+	public static void writeCertificate(X509Certificate cert, String path) throws IOException {
 		SecurityUtil.init();
 		PEMWriter pem = new PEMWriter(new FileWriter(new File(path)));
 		pem.writeObject(cert);
 		pem.close();
 	}
 
-	public static String writeCertificateToString(X509Certificate cert)
-			throws IOException {
+
+	public static String writeCertificateToString(X509Certificate cert) throws IOException {
 		SecurityUtil.init();
 		StringWriter sw = new StringWriter();
 		PEMWriter pem = new PEMWriter(sw);
@@ -115,32 +136,33 @@ public class CertUtil {
 		return sw.toString();
 	}
 
-	public static void writeCertificateRequest(PKCS10CertificationRequest cert,
-			String path) throws IOException {
+
+	public static void writeCertificateRequest(PKCS10CertificationRequest cert, String path) throws IOException {
 		SecurityUtil.init();
 		PEMWriter pem = new PEMWriter(new FileWriter(new File(path)));
 		pem.writeObject(cert);
 		pem.close();
 	}
 
-	public static X509Certificate loadCertificate(String certLocation)
-			throws IOException, GeneralSecurityException {
+
+	public static X509Certificate loadCertificate(String certLocation) throws IOException, GeneralSecurityException {
 		return loadCertificate(new FileReader(new File(certLocation)));
 	}
 
-	public static X509Certificate loadCertificateFromString(String str)
-			throws IOException, GeneralSecurityException {
+
+	public static X509Certificate loadCertificateFromString(String str) throws IOException, GeneralSecurityException {
 		StringReader reader = new StringReader(str);
 		return CertUtil.loadCertificate(reader);
 
 	}
 
-	public static X509Certificate loadCertificate(Reader in)
-			throws IOException, GeneralSecurityException {
+
+	public static X509Certificate loadCertificate(Reader in) throws IOException, GeneralSecurityException {
 		SecurityUtil.init();
 		PEMReader reader = new PEMReader(in, null, "BC");
 		return (X509Certificate) reader.readObject();
 	}
+
 
 	public static boolean isExpired(X509Certificate cert) {
 		Date now = new Date();

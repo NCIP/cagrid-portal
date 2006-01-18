@@ -296,8 +296,8 @@ public class DorianCertificateAuthority extends LoggingObject implements Certifi
 			throw fault;
 		}
 		try {
-			return CertUtil.signCertificateRequest(request, new X509Name(cacert.getSubjectDN().getName()), startDate,
-				expirationDate, cakey);
+			return CertUtil.signCertificateRequest(request, startDate,
+				expirationDate, cacert,cakey);
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			CertificateAuthorityFault fault = new CertificateAuthorityFault();

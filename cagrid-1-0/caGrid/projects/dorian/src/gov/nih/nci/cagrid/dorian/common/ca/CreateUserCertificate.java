@@ -85,7 +85,7 @@ public class CreateUserCertificate {
 				end = d;
 			}
 			String issuer = cacert.getSubjectDN().toString();
-			X509Certificate userCert = CertUtil.signCertificateRequest(request,new X509Name(issuer),start,end,cakey);
+			X509Certificate userCert = CertUtil.signCertificateRequest(request,start,end,cacert,cakey);
 
 			String keyOut = IOUtils.readLine("Enter location to write user key");
 			String caOut = IOUtils.readLine("Enter location to write user cert");
