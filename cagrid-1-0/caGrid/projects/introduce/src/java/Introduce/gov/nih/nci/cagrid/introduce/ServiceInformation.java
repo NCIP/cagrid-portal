@@ -1,9 +1,9 @@
 package gov.nih.nci.cagrid.introduce;
 
-import java.util.Properties;
-
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
+
+import java.util.Properties;
 
 public class ServiceInformation {
 

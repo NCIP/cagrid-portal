@@ -2,18 +2,13 @@ package gov.nih.nci.cabig.introduce.steps;
 
 import gov.nih.nci.cabig.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
 
 import java.io.File;
-import java.io.FileWriter;
 
 import javax.xml.namespace.QName;
-
-import org.jdom.Document;
-import org.jdom.Element;
-import org.projectmobius.common.XMLUtilities;
 
 import com.atomicobject.haste.framework.Step;
 
@@ -40,7 +35,7 @@ public class AddSimpleMethodStep extends Step {
 		MethodsType methodsType = (MethodsType) CommonTools.deserializeDocument(pathtobasedir + File.separator
 			+ tci.getDir() + File.separator + "introduceMethods.xml", MethodsType.class);
 
-		MethodsTypeMethod method = new MethodsTypeMethod();
+		MethodType method = new MethodType();
 		method.setName("newMethod");
 		MethodTypeOutput output = new MethodTypeOutput();
 		output.setClassName("void");
@@ -48,15 +43,15 @@ public class AddSimpleMethodStep extends Step {
 
 		// add new method to array in bean
 		// this seems to be a wierd way be adding things....
-		MethodsTypeMethod[] newMethods;
+		MethodType[] newMethods;
 		int newLength = 0;
 		if (methodsType.getMethod() != null) {
 			newLength = methodsType.getMethod().length + 1;
-			newMethods = new MethodsTypeMethod[newLength];
+			newMethods = new MethodType[newLength];
 			System.arraycopy(methodsType.getMethod(), 0, newMethods, 0, methodsType.getMethod().length);
 		} else {
 			newLength = 1;
-			newMethods = new MethodsTypeMethod[newLength];
+			newMethods = new MethodType[newLength];
 		}
 		newMethods[newLength - 1] = method;
 		methodsType.setMethod(newMethods);

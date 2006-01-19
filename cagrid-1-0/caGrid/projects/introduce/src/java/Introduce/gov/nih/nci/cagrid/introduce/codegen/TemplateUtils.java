@@ -1,14 +1,14 @@
 package gov.nih.nci.cagrid.introduce.codegen;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class TemplateUtils {
@@ -122,7 +122,7 @@ public class TemplateUtils {
 		if (info.getMethods() != null) {
 			if (info.getMethods().getMethod() != null) {
 				for (int methodI = 0; methodI < info.getMethods().getMethod().length; methodI++) {
-					MethodsTypeMethod method = info.getMethods().getMethod(methodI);
+					MethodType method = info.getMethods().getMethod(methodI);
 					if (method.getInputs() != null && method.getInputs().getInput() != null) {
 						for (int inputI = 0; inputI < method.getInputs().getInput().length; inputI++) {
 							MethodTypeInputsInput inputParam = method.getInputs().getInput(inputI);

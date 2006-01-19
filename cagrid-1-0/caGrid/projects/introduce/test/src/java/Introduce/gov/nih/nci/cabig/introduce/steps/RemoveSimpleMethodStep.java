@@ -1,14 +1,12 @@
 package gov.nih.nci.cabig.introduce.steps;
 
+import gov.nih.nci.cabig.introduce.TestCaseInfo;
+import gov.nih.nci.cagrid.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
+
 import java.io.File;
 
 import javax.xml.namespace.QName;
-
-import gov.nih.nci.cabig.introduce.TestCaseInfo;
-import gov.nih.nci.cagrid.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
 
 import com.atomicobject.haste.framework.Step;
 

@@ -5,10 +5,10 @@ import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
 import gov.nih.nci.cagrid.introduce.codegen.metadata.SyncMetadata;
 import gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods;
 import gov.nih.nci.cagrid.introduce.templates.NamespaceMappingsTemplate;
@@ -131,7 +131,7 @@ public class SyncTools {
 		// get the classnames from the axis symbol table
 		if (info.getMethods().getMethod() != null) {
 			for (int i = 0; i < info.getMethods().getMethod().length; i++) {
-				MethodsTypeMethod mtype = info.getMethods().getMethod(i);
+				MethodType mtype = info.getMethods().getMethod(i);
 				// process the inputs
 				if (mtype.getInputs() != null && mtype.getInputs().getInput() != null) {
 					for (int j = 0; j < mtype.getInputs().getInput().length; j++) {

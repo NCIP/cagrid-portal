@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
+import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
 
 import java.util.Vector;
 
@@ -25,9 +25,9 @@ public class ExceptionsTable extends PortalTable {
 
 	public static String DATA2 = "DATA2";
 
-	private MethodsTypeMethod method;
+	private MethodType method;
 
-	public ExceptionsTable(MethodsTypeMethod method) {
+	public ExceptionsTable(MethodType method) {
 		super(createTableModel());
 		this.method = method;
 		this.setColumnSelectionAllowed(false);

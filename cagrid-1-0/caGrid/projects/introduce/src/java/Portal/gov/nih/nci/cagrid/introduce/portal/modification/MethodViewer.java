@@ -2,12 +2,12 @@ package gov.nih.nci.cagrid.introduce.portal.modification;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.beans.method.CredentialsRequiredType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
 import gov.nih.nci.cagrid.introduce.beans.method.SecureValueType;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
@@ -44,7 +44,7 @@ import org.projectmobius.portal.PortalResourceManager;
  */
 public class MethodViewer extends GridPortalBaseFrame {
 
-	MethodsTypeMethod method;
+	MethodType method;
 
 	private JPanel mainPanel = null;
 
@@ -115,7 +115,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JComboBox credentialsRequired = null;
 
 
-	public MethodViewer(MethodsTypeMethod method, File schemaDir, MethodsTable table, int selectedRow) {
+	public MethodViewer(MethodType method, File schemaDir, MethodsTable table, int selectedRow) {
 		this.method = method;
 		this.schemaDir = schemaDir;
 		this.methodsTable = table;
@@ -314,8 +314,13 @@ public class MethodViewer extends GridPortalBaseFrame {
 					// First process the inputs
 					method.setName(getNameField().getText());
 					String secure = (String) getSecurity().getSelectedItem();
+					
+					//TODO: Set Security Stuff Here
+					/*
 					method.setSecure(SecureValueType.fromValue(String.valueOf(secure)));
 					method.setCredentialsRequired((CredentialsRequiredType)getCredentialsRequired().getSelectedItem());
+					
+					*/
 					methodsTable.changeMethodName(currentRow, getNameField().getText());
 
 					MethodTypeInputs inputs = new MethodTypeInputs();
@@ -553,12 +558,14 @@ public class MethodViewer extends GridPortalBaseFrame {
 			security.addItem("INTEGRITY");
 			security.addItem("PRIVACY");
 			security.addItem("EITHER");
+			/*
 			if (method.getSecure() != null) {
 				String secureAtt = method.getSecure().getValue();
 				security.setSelectedItem(secureAtt);
 			} else {
 				security.setSelectedItem("NONE");
 			}
+			*/
 		}
 		return security;
 	}
@@ -861,6 +868,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JComboBox getCredentialsRequired() {
 		if (credentialsRequired == null) {
 			credentialsRequired = new JComboBox();
+			/*
 			credentialsRequired.addItem(CredentialsRequiredType.No);
 			credentialsRequired.addItem(CredentialsRequiredType.Yes);
 			
@@ -869,6 +877,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			} else {
 				security.setSelectedItem(method.getCredentialsRequired());
 			}
+			*/
 		}
 		return credentialsRequired;
 	}

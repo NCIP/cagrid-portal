@@ -1,10 +1,10 @@
 package gov.nih.nci.cagrid.introduce.codegen.methods;
 
 import gov.nih.nci.cagrid.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -56,7 +56,7 @@ public class SyncSource {
 	}
 
 
-	private String createExceptions(MethodsTypeMethod method) {
+	private String createExceptions(MethodType method) {
 		String exceptions = "";
 		// process the faults for this method...
 		MethodTypeExceptions exceptionsEl = method.getExceptions();
@@ -82,7 +82,7 @@ public class SyncSource {
 	}
 
 
-	private String createUnBoxedSignatureStringFromMethod(MethodsTypeMethod method) {
+	private String createUnBoxedSignatureStringFromMethod(MethodType method) {
 		String methodString = "";
 		MethodTypeOutput returnTypeEl = method.getOutput();
 		String methodName = method.getName();
@@ -145,7 +145,7 @@ public class SyncSource {
 	}
 
 
-	private String createBoxedSignatureStringFromMethod(MethodsTypeMethod method) {
+	private String createBoxedSignatureStringFromMethod(MethodType method) {
 		String methodString = "";
 		MethodTypeOutput returnTypeEl = method.getOutput();
 		String methodName = method.getName();
@@ -208,7 +208,7 @@ public class SyncSource {
 	public void addMethods(List additions) {
 		for (int i = 0; i < additions.size(); i++) {
 			// add it to the interface
-			MethodsTypeMethod method = (MethodsTypeMethod) additions.get(i);
+			MethodType method = (MethodType) additions.get(i);
 
 			StringBuffer fileContent = null;
 			try {
@@ -241,7 +241,7 @@ public class SyncSource {
 	}
 
 
-	private void addClientImpl(MethodsTypeMethod method) {
+	private void addClientImpl(MethodType method) {
 		StringBuffer fileContent = null;
 		String methodName = method.getName();
 		try {
@@ -258,9 +258,12 @@ public class SyncSource {
 		clientMethod += "\t\t\t";
 
 		String secureValue = "SECURITY_PROPERTY_NONE";
+		//TODO: ADD SECURITY STUFF HERE
+		/*
 		if (method.getSecure() != null) {
 			secureValue = "SECURITY_PROPERTY_" + method.getSecure();
 		}
+		*/
 
 		// get the port
 		// TODO: handle security here
@@ -332,7 +335,7 @@ public class SyncSource {
 	}
 
 
-	private void addImpl(MethodsTypeMethod method) {
+	private void addImpl(MethodType method) {
 		StringBuffer fileContent = null;
 		try {
 			fileContent = CommonTools.fileToStringBuffer(new File(this.serviceImpl));
@@ -365,7 +368,7 @@ public class SyncSource {
 	}
 
 
-	private void addProviderImpl(MethodsTypeMethod method) {
+	private void addProviderImpl(MethodType method) {
 		StringBuffer fileContent = null;
 		try {
 			fileContent = CommonTools.fileToStringBuffer(new File(this.serviceProviderImpl));

@@ -1,15 +1,13 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
+import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
 
-import java.util.List;
 import java.util.Vector;
 
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
-import org.jdom.Element;
 import org.projectmobius.portal.PortalTable;
 
 /**
@@ -39,9 +37,9 @@ public class InputParametersTable extends PortalTable {
 
 	public static String DATA2 = "DATA2";
 
-	private MethodsTypeMethod method;
+	private MethodType method;
 
-	public InputParametersTable(MethodsTypeMethod method) {
+	public InputParametersTable(MethodType method) {
 		super(createTableModel());
 		this.method = method;
 		this.setColumnSelectionAllowed(false);

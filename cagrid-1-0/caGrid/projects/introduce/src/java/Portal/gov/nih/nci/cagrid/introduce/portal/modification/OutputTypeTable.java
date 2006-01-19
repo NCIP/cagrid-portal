@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
+import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
 
 import java.io.File;
 import java.util.Vector;
@@ -17,7 +17,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: OutputTypeTable.java,v 1.7 2005-12-16 14:00:22 hastings Exp $
+ * @version $Id: OutputTypeTable.java,v 1.8 2006-01-19 16:42:39 langella Exp $
  */
 public class OutputTypeTable extends JComponentTable {
 
@@ -28,11 +28,11 @@ public class OutputTypeTable extends JComponentTable {
 	public static String LOCATION = "Location";
 	public static String GME = "Get Type From GME";
 
-	private MethodsTypeMethod method;
+	private MethodType method;
 	private File schemaDir;
 
 
-	public OutputTypeTable(MethodsTypeMethod method, File schemaDir) {
+	public OutputTypeTable(MethodType method, File schemaDir) {
 		super(createTableModel());
 		this.method = method;
 		this.schemaDir = schemaDir;

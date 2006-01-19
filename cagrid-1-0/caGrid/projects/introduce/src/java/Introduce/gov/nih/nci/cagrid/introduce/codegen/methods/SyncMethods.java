@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.introduce.codegen.methods;
 
 import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -101,7 +101,7 @@ public class SyncMethods {
 		// look at doc and compare to interface
 		if (info.getMethods().getMethod() != null) {
 			for (int methodIndex = 0; methodIndex < this.info.getMethods().getMethod().length; methodIndex++) {
-				MethodsTypeMethod mel = this.info.getMethods().getMethod(methodIndex);
+				MethodType mel = this.info.getMethods().getMethod(methodIndex);
 				boolean found = false;
 				for (int i = 0; i < methods.length; i++) {
 					String methodName = methods[i].getName();
@@ -123,7 +123,7 @@ public class SyncMethods {
 			boolean found = false;
 			if (info.getMethods().getMethod() != null) {
 				for (int methodIndex = 0; methodIndex < this.info.getMethods().getMethod().length; methodIndex++) {
-					MethodsTypeMethod mel = this.info.getMethods().getMethod(methodIndex);
+					MethodType mel = this.info.getMethods().getMethod(methodIndex);
 					if (mel.getName().equals(methodName)) {
 						found = true;
 						break;

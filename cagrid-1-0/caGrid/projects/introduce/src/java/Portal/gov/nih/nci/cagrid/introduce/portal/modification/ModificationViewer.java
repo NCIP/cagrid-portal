@@ -6,9 +6,9 @@ import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
@@ -43,7 +43,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.35 2006-01-19 16:12:08 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.36 2006-01-19 16:42:39 langella Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -418,7 +418,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			addMethodButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dirty = true;
-					MethodsTypeMethod method = new MethodsTypeMethod();
+					MethodType method = new MethodType();
 					method.setName("newMethod");
 					MethodTypeOutput output = new MethodTypeOutput();
 					output.setClassName("void");
@@ -426,15 +426,15 @@ public class ModificationViewer extends GridPortalBaseFrame {
 
 					// add new method to array in bean
 					// this seems to be a wierd way be adding things....
-					MethodsTypeMethod[] newMethods;
+					MethodType[] newMethods;
 					int newLength = 0;
 					if (methodsType.getMethod() != null) {
 						newLength = methodsType.getMethod().length + 1;
-						newMethods = new MethodsTypeMethod[newLength];
+						newMethods = new MethodType[newLength];
 						System.arraycopy(methodsType.getMethod(), 0, newMethods, 0, methodsType.getMethod().length);
 					} else {
 						newLength = 1;
-						newMethods = new MethodsTypeMethod[newLength];
+						newMethods = new MethodType[newLength];
 					}
 					newMethods[newLength - 1] = method;
 					methodsType.setMethod(newMethods);
@@ -608,7 +608,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			return;
 		}
 
-		MethodsTypeMethod method = (MethodsTypeMethod) getMethodsTable().getValueAt(getMethodsTable().getSelectedRow(),
+		MethodType method = (MethodType) getMethodsTable().getValueAt(getMethodsTable().getSelectedRow(),
 			1);
 		PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
 			new MethodViewer(method, new File(methodsDirectory.getAbsolutePath() + File.separator + "schema"

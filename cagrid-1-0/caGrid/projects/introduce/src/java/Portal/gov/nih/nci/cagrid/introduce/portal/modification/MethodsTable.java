@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
+import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodsTypeMethod;
 
 import java.io.File;
 import java.util.Properties;
@@ -15,7 +15,7 @@ import org.projectmobius.portal.PortalTable;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: MethodsTable.java,v 1.7 2005-12-16 14:00:22 hastings Exp $
+ * @version $Id: MethodsTable.java,v 1.8 2006-01-19 16:42:39 langella Exp $
  */
 public class MethodsTable extends PortalTable {
 
@@ -58,7 +58,7 @@ public class MethodsTable extends PortalTable {
 		}
 	}
 
-	public void addRow(final MethodsTypeMethod method) {
+	public void addRow(final MethodType method) {
 		final Vector v = new Vector();
 		v.add(method.getName());
 		v.add(method);
