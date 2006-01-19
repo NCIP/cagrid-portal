@@ -7,10 +7,12 @@
    if(serviceName.endsWith("Service")){
    	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
    }
+   String newNamespaceDomain = namespaceDomain.replaceFirst(":", "\\\\:");
+   newNamespaceDomain = newNamespaceDomain.replaceFirst("\\Q\\\\\\\\:\\E", "\\\\:");
 %>
-<%=namespaceDomain%>/<%=serviceName%>=<%=packageName%>.stubs
-<%=namespaceDomain%>/<%=serviceName%>/bindings=<%=packageName%>.stubs.bindings
-<%=namespaceDomain%>/<%=serviceName%>/service=<%=packageName%>.stubs.service
+<%=newNamespaceDomain%>/<%=serviceName%>=<%=packageName%>.stubs
+<%=newNamespaceDomain%>/<%=serviceName%>/bindings=<%=packageName%>.stubs.bindings
+<%=newNamespaceDomain%>/<%=serviceName%>/service=<%=packageName%>.stubs.service
 <%
 		Map prefixmap=TemplateUtils.buildMasterNamespaceSchemaInformationMap(info);
   		Iterator iterator = prefixmap.keySet().iterator();

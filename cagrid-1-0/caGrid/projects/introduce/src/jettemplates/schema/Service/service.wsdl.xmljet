@@ -36,7 +36,6 @@
     <types>
         <schema targetNamespace="<%=namespaceDomain%>/<%=serviceName%>"
             xmlns:tns="<%=namespaceDomain%>/<%=serviceName%>"
-            
              <%
 	      		Map prefixmap=TemplateUtils.buildMasterNamespaceSchemaInformationMap(info);
 	      		Iterator iterator = prefixmap.keySet().iterator();
@@ -127,7 +126,7 @@
 				<element name="<%=exception.getName() %>" >
 					<complexType>
 						<complexContent>
-							<extension base="wsbf:BaseFaultType"/>
+							<extension base="wsrbf:BaseFaultType"/>
 						</complexContent>
 					</complexType>
 				</element>

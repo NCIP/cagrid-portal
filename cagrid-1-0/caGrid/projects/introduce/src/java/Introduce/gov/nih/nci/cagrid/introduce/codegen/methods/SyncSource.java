@@ -283,7 +283,7 @@ public class SyncSource {
 		methodString += this.packageName + "." + capatilzeFirstLetter(methodName) + " params = new " + this.packageName
 			+ "." + capatilzeFirstLetter(methodName) + "();\n";
 		// set the values fo the boxed wrapper
-		if (method.getInputs() != null) {
+		if (method.getInputs() != null && method.getInputs().getInput()!=null) {
 			for (int j = 0; j < method.getInputs().getInput().length; j++) {
 				String paramName = method.getInputs().getInput(j).getName();
 				methodString += lineStart;
@@ -394,7 +394,7 @@ public class SyncSource {
 		// unbox the params
 		String params = "";
 
-		if (method.getInputs() != null) {
+		if (method.getInputs() != null && method.getInputs().getInput()!=null) {
 			// always unbox now
 			if (method.getInputs().getInput().length >= 1) {
 				// inputs were boxed and need to be unboxed

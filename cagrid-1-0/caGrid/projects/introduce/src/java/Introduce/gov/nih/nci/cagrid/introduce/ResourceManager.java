@@ -157,7 +157,6 @@ public class ResourceManager {
 
 		File introduceCacheFile = new File(introduceCache);
 		String[] cacheFiles = introduceCacheFile.list(f);
-		System.out.println("Found " + cacheFiles.length);
 		List cacheFilesList = Arrays.asList(cacheFiles);
 		Collections.sort(cacheFilesList, String.CASE_INSENSITIVE_ORDER);
 		Collections.reverse(cacheFilesList);
