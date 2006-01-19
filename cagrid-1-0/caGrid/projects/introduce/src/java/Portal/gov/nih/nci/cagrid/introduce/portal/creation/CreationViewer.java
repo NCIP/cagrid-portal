@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.introduce.portal.creation;
 import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.modification.ModificationViewer;
 
@@ -454,7 +455,7 @@ public class CreationViewer extends GridPortalComponent {
 			dirButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
-					dir.setText(CommonTools.promptDir(me));
+					dir.setText(ResourceManager.promptDir(me));
 					} catch (Exception ex){
 						ex.printStackTrace();
 					}

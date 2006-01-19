@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce;
 
+import java.awt.Component;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
@@ -19,6 +20,8 @@ import java.util.StringTokenizer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+
+import javax.swing.JFileChooser;
 
 
 public class ResourceManager {
@@ -248,6 +251,27 @@ public class ResourceManager {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+
+
+	public static String promptDir(Component comp) throws Exception {
+		JFileChooser chooser = null;
+		if (getProperty(LAST_DIRECTORY) != null) {
+			chooser = new JFileChooser(new File(getProperty(LAST_DIRECTORY)));
+		} else {
+			chooser = new JFileChooser();
+		}
+		chooser.setDialogTitle("Select Attribute File");
+		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
+		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		chooser.setMultiSelectionEnabled(false);
+		int returnVal = chooser.showOpenDialog(comp);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			setProperty(LAST_DIRECTORY, chooser.getSelectedFile().getAbsolutePath());
+			return chooser.getSelectedFile().getAbsolutePath();
+		} else {
+			return "";
 		}
 	}
 

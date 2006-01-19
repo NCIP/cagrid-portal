@@ -1,8 +1,6 @@
 package gov.nih.nci.cagrid.common;
 
-import gov.nih.nci.cagrid.introduce.ResourceManager;
 
-import java.awt.Component;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.StringTokenizer;
 
-import javax.swing.JFileChooser;
 import javax.xml.namespace.QName;
 
 import org.apache.axis.utils.XMLUtils;
@@ -56,27 +53,6 @@ public class CommonTools {
 		thread2.start();
 
 		return p;
-	}
-
-
-	public static String promptDir(Component comp) throws Exception {
-		JFileChooser chooser = null;
-		if (ResourceManager.getProperty(ResourceManager.LAST_DIRECTORY) != null) {
-			chooser = new JFileChooser(new File(ResourceManager.getProperty(ResourceManager.LAST_DIRECTORY)));
-		} else {
-			chooser = new JFileChooser();
-		}
-		chooser.setDialogTitle("Select Attribute File");
-		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
-		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		chooser.setMultiSelectionEnabled(false);
-		int returnVal = chooser.showOpenDialog(comp);
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			ResourceManager.setProperty(ResourceManager.LAST_DIRECTORY, chooser.getSelectedFile().getAbsolutePath());
-			return chooser.getSelectedFile().getAbsolutePath();
-		} else {
-			return "";
-		}
 	}
 
 
