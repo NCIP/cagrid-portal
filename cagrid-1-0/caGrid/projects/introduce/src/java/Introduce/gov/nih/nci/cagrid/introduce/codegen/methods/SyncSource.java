@@ -470,7 +470,7 @@ public class SyncSource {
 			System.err.println("Looking to remove method: |" + clientMethod + "|");
 			int startOfMethod = fileContent.indexOf(clientMethod);
 			String restOfFile = fileContent.substring(startOfMethod);
-			int endOfMethod = restOfFile.indexOf(";\n") + 2;
+			int endOfMethod = startOfMethod + restOfFile.indexOf(";\n") + 2;
 
 			if (startOfMethod == -1 || endOfMethod == -1) {
 				System.err.println("WARNING: Unable to locate method in I : " + method.getName());
