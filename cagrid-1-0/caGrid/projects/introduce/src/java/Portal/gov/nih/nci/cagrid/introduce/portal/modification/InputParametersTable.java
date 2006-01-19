@@ -55,7 +55,7 @@ public class InputParametersTable extends PortalTable {
 	public void addRow(final MethodTypeInputsInput input) {
 		final Vector v = new Vector();
 		v.add(input.getClassName());
-		v.add(input.getIsArray());
+		v.add(String.valueOf(input.getIsArray().booleanValue()));
 		v.add(input.getName());
 		v.add(input.getNamespace());
 		v.add(input.getType());
