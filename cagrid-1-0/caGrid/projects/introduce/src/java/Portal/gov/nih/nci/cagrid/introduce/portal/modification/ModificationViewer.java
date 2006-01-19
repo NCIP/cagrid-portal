@@ -43,7 +43,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.34 2006-01-19 16:03:55 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.35 2006-01-19 16:12:08 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -470,6 +470,8 @@ public class ModificationViewer extends GridPortalBaseFrame {
 
 								if (confirmed == JOptionPane.OK_OPTION) {
 									setProgressText("editing service metadata object");
+									
+									//walk the metadata table and create the new ServiceMetadataType array
 									ServiceMetadataType[] metadataArray = new ServiceMetadataType[metadataTable
 										.getRowCount()];
 									for (int i = 0; i < metadataArray.length; i++) {
@@ -512,14 +514,17 @@ public class ModificationViewer extends GridPortalBaseFrame {
 
 									}
 									metadataListType.setMetadata(metadataArray);
-
+									
+									
+									//check the methods to make sure they are valid.......
+									
+									
+									//save the metadata and methods and then call the resync and build
 									setProgressText("writting service metadata document");
-									System.out.println("Writting service metadata file.");
 									CommonTools.serializeDocument(methodsDirectory.getAbsolutePath() + File.separator
 										+ "introduceMetadata.xml", metadataListType, new QName(
 										"gme://gov.nih.nci.cagrid.introduce/1/Metadata", "ServiceMetadataListType"));
 									setProgressText("writting service methods document");
-									System.out.println("Writting service methods file.");
 									CommonTools.serializeDocument(methodsDirectory.getAbsolutePath() + File.separator
 										+ "introduceMethods.xml", methodsType, new QName(
 										"gme://gov.nih.nci.cagrid.introduce/1/Methods", "methodsType"));
