@@ -43,7 +43,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.33 2006-01-19 15:42:23 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.34 2006-01-19 16:03:55 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -832,14 +832,14 @@ public class ModificationViewer extends GridPortalBaseFrame {
 					dirty = true;
 					ServiceMetadataType metadata = new ServiceMetadataType();
 
-					// add new method to array in bean
+					// add new metadata to array in bean
 					// this seems to be a wierd way be adding things....
 					ServiceMetadataType[] metadatas;
 					int newLength = 0;
-					if (methodsType.getMethod() != null) {
-						newLength = methodsType.getMethod().length + 1;
+					if (metadataListType.getMetadata() != null) {
+						newLength = metadataListType.getMetadata().length + 1;
 						metadatas = new ServiceMetadataType[newLength];
-						System.arraycopy(methodsType.getMethod(), 0, metadatas, 0, methodsType.getMethod().length);
+						System.arraycopy(metadataListType.getMetadata(), 0, metadatas, 0, metadataListType.getMetadata().length);
 					} else {
 						newLength = 1;
 						metadatas = new ServiceMetadataType[newLength];
