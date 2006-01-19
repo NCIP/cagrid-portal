@@ -468,7 +468,6 @@ public class SyncSource {
 			// remove the method
 			String clientMethod = createUnBoxedSignatureStringFromMethod(method);
 			System.err.println("Looking to remove method: |" + clientMethod + "|");
-			clientMethod += " throws RemoteException ;\n";
 			int startOfMethod = fileContent.indexOf(clientMethod);
 			String restOfFile = fileContent.substring(startOfMethod);
 			int endOfMethod = restOfFile.indexOf(";\n") + 2;
