@@ -1,12 +1,17 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.introduce.beans.method.AnonymousClientsType;
+import gov.nih.nci.cagrid.introduce.beans.method.AuthenticationMethodType;
+import gov.nih.nci.cagrid.introduce.beans.method.ClientAuthorizationType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodSecurityType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
+import gov.nih.nci.cagrid.introduce.beans.method.SecureCommunicationMethodType;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
 import java.awt.FlowLayout;
@@ -28,10 +33,11 @@ import javax.swing.table.DefaultTableModel;
 
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
+import java.awt.BorderLayout;
 
 
 /**
- * MethodViewer TODO:DOCUMENT ME
+ * MethodViewer
  * 
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -76,7 +82,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JLabel methodLabel = null;
 
-	private JComboBox security = null;
+	private JComboBox secureCommunication = null;
 
 	private JPanel inputButtonPanel = null;
 
@@ -106,11 +112,21 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JPanel exceptionInputButtonPanel = null;
 
-	private JLabel methodSecurityStyle = null;
+	private JLabel secureCommunicationLabel = null;
 
-	private JLabel anonymousLabel = null;
+	private JLabel authenticationMethodLabel = null;
 
-	private JComboBox credentialsRequired = null;
+	private JComboBox communicationMethod = null;
+
+	private JLabel anonymousCommunicationLabel = null;
+
+	private JComboBox anonymousCommunication = null;
+
+	private JLabel clientAuthorizationLabel = null;
+
+	private JComboBox clientAuthorization = null;
+
+	private JPanel securityContainerPanel = null;
 
 
 	public MethodViewer(MethodType method, File schemaDir, MethodsTable table, int selectedRow) {
@@ -120,11 +136,25 @@ public class MethodViewer extends GridPortalBaseFrame {
 		this.currentRow = selectedRow;
 		this.setTitle("Modify Method");
 		initialize();
+		MethodSecurityType ms = method.getMethodSecurity();
+		if (ms != null) {
+			if (ms.getSecureCommunication() != null) {
+				secureCommunication.setSelectedItem(ms.getSecureCommunication());
+			}
+			if (ms.getAuthenticationMethod() != null) {
+				communicationMethod.setSelectedItem(ms.getAuthenticationMethod());
+			}
+			if (ms.getAnonymousClients() != null) {
+				anonymousCommunication.setSelectedItem(ms.getAnonymousClients());
+			}
+			if (ms.getClientAuthorization() != null) {
+				clientAuthorization.setSelectedItem(ms.getClientAuthorization());
+			}
+		}
 	}
 
 
 	private void initialize() {
-		// TODO Auto-generated method stub
 		this.setSize(687, 622);
 		this.setTitle("Build/Modify Operation");
 		this.setContentPane(getMainPanel());
@@ -311,14 +341,38 @@ public class MethodViewer extends GridPortalBaseFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					// First process the inputs
 					method.setName(getNameField().getText());
-					String secure = (String) getSecurity().getSelectedItem();
-					
-					//TODO: Set Security Stuff Here
-					/*
-					method.setSecure(SecureValueType.fromValue(String.valueOf(secure)));
-					method.setCredentialsRequired((CredentialsRequiredType)getCredentialsRequired().getSelectedItem());
-					
-					*/
+					MethodSecurityType ms = new MethodSecurityType();
+					SecureCommunicationMethodType comm = (SecureCommunicationMethodType) getSecurity().getSelectedItem();
+					ms.setSecureCommunication(comm);
+					if (comm.equals(SecureCommunicationMethodType.GSI_Transport_Level_Security)) {
+						ms.setAnonymousClients((AnonymousClientsType) getAnonymousCommunication().getSelectedItem());
+						ms.setAuthenticationMethod((AuthenticationMethodType) getCommunicationMethod()
+							.getSelectedItem());
+						ms.setClientAuthorization((ClientAuthorizationType) getClientAuthorization().getSelectedItem());
+					}
+
+					if (comm.equals(SecureCommunicationMethodType.GSI_Secure_Conversation)) {
+						ms.setAnonymousClients((AnonymousClientsType) getAnonymousCommunication().getSelectedItem());
+						ms.setAuthenticationMethod((AuthenticationMethodType) getCommunicationMethod()
+							.getSelectedItem());
+						ms.setClientAuthorization((ClientAuthorizationType) getClientAuthorization().getSelectedItem());
+					}
+
+					if (comm.equals(SecureCommunicationMethodType.GSI_Secure_Message)) {
+						ms.setAnonymousClients(AnonymousClientsType.No);
+						ms.setAuthenticationMethod((AuthenticationMethodType) getCommunicationMethod()
+							.getSelectedItem());
+						ms.setClientAuthorization((ClientAuthorizationType) getClientAuthorization().getSelectedItem());
+					}
+
+					if (comm.equals(SecureCommunicationMethodType.None)) {
+						ms.setAnonymousClients(AnonymousClientsType.No);
+						ms.setAuthenticationMethod((AuthenticationMethodType) getCommunicationMethod()
+							.getSelectedItem());
+						ms.setClientAuthorization(ClientAuthorizationType.None);
+					}
+					method.setMethodSecurity(ms);
+
 					methodsTable.changeMethodName(currentRow, getNameField().getText());
 
 					MethodTypeInputs inputs = new MethodTypeInputs();
@@ -550,22 +604,40 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 * @return javax.swing.JComboBox
 	 */
 	private JComboBox getSecurity() {
-		if (security == null) {
-			security = new JComboBox();
-			security.addItem("NONE");
-			security.addItem("INTEGRITY");
-			security.addItem("PRIVACY");
-			security.addItem("EITHER");
-			/*
-			if (method.getSecure() != null) {
-				String secureAtt = method.getSecure().getValue();
-				security.setSelectedItem(secureAtt);
-			} else {
-				security.setSelectedItem("NONE");
-			}
-			*/
+		if (secureCommunication == null) {
+			secureCommunication = new JComboBox();
+			secureCommunication.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if (secureCommunication.getSelectedItem().equals(SecureCommunicationMethodType.None)) {
+						communicationMethod.setEnabled(false);
+						anonymousCommunication.setSelectedItem(AnonymousClientsType.No);
+						anonymousCommunication.setEnabled(false);
+						clientAuthorization.setEnabled(false);
+					} else if (secureCommunication.getSelectedItem().equals(
+						SecureCommunicationMethodType.GSI_Secure_Conversation)) {
+						communicationMethod.setEnabled(true);
+						anonymousCommunication.setEnabled(true);
+						clientAuthorization.setEnabled(true);
+					} else if (secureCommunication.getSelectedItem().equals(
+						SecureCommunicationMethodType.GSI_Secure_Message)) {
+						communicationMethod.setEnabled(true);
+						anonymousCommunication.setSelectedItem(AnonymousClientsType.No);
+						anonymousCommunication.setEnabled(false);
+						clientAuthorization.setEnabled(true);
+					} else if (secureCommunication.getSelectedItem().equals(
+						SecureCommunicationMethodType.GSI_Transport_Level_Security)) {
+						communicationMethod.setEnabled(true);
+						anonymousCommunication.setEnabled(true);
+						clientAuthorization.setEnabled(true);
+					}
+				}
+			});
+			secureCommunication.addItem(SecureCommunicationMethodType.None);
+			secureCommunication.addItem(SecureCommunicationMethodType.GSI_Transport_Level_Security);
+			secureCommunication.addItem(SecureCommunicationMethodType.GSI_Secure_Conversation);
+			secureCommunication.addItem(SecureCommunicationMethodType.GSI_Secure_Message);
 		}
-		return security;
+		return secureCommunication;
 	}
 
 
@@ -717,7 +789,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 			removeExceptionButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					System.out.println("actionPerformed()");
-					// TODO Auto-generated Event stub actionPerformed()
 					int row = getExceptionsTable().getSelectedRow();
 					if ((row < 0) || (row >= getExceptionsTable().getRowCount())) {
 						PortalUtils.showErrorMessage("Please select an exception to remove.");
@@ -742,7 +813,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			tabbedPanel = new JTabbedPane();
 			tabbedPanel.addTab("Input/Output", null, getMethodPanel(), null);
 			tabbedPanel.addTab("Faults", null, getExceptionsPanel(), null);
-			tabbedPanel.addTab("Security", null, getSecurityPanel(), null);
+			tabbedPanel.addTab("Security", null, getSecurityContainerPanel(), null);
 		}
 		return tabbedPanel;
 	}
@@ -794,26 +865,54 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getSecurityPanel() {
 		if (securityPanel == null) {
+			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+			gridBagConstraints21.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints21.gridy = 3;
+			gridBagConstraints21.weightx = 1.0;
+			gridBagConstraints21.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints21.gridx = 1;
+			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+			gridBagConstraints20.gridx = 0;
+			gridBagConstraints20.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints20.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints20.gridy = 3;
+			clientAuthorizationLabel = new JLabel();
+			clientAuthorizationLabel.setText("Client Authorization");
+			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
+			gridBagConstraints19.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints19.gridy = 2;
+			gridBagConstraints19.weightx = 1.0;
+			gridBagConstraints19.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints19.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints19.gridx = 1;
+			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
+			gridBagConstraints18.gridx = 0;
+			gridBagConstraints18.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints18.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints18.gridy = 2;
+			anonymousCommunicationLabel = new JLabel();
+			anonymousCommunicationLabel.setText("Anonymous Communication");
 			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
 			gridBagConstraints17.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints17.gridy = 1;
 			gridBagConstraints17.weightx = 1.0;
 			gridBagConstraints17.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints17.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints17.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints17.gridx = 1;
 			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
-			gridBagConstraints16.gridx = 0;
 			gridBagConstraints16.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints16.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints16.gridy = 1;
-			anonymousLabel = new JLabel();
-			anonymousLabel.setText("Credentials Required");
+			gridBagConstraints16.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints16.gridx = 0;
+			authenticationMethodLabel = new JLabel();
+			authenticationMethodLabel.setText("Communication Method");
 			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
 			gridBagConstraints15.gridx = 0;
-			gridBagConstraints15.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints15.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints15.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints15.gridy = 0;
-			methodSecurityStyle = new JLabel();
-			methodSecurityStyle.setText("Method Level Security Style");
+			secureCommunicationLabel = new JLabel();
+			secureCommunicationLabel.setText("Secure Communication");
 			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
 			gridBagConstraints13.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints13.gridx = 1;
@@ -822,11 +921,19 @@ public class MethodViewer extends GridPortalBaseFrame {
 			gridBagConstraints13.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints13.insets = new java.awt.Insets(2, 2, 2, 2);
 			securityPanel = new JPanel();
+			securityPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+				"Method Level Security Configuration", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
 			securityPanel.setLayout(new GridBagLayout());
+
+			securityPanel.add(secureCommunicationLabel, gridBagConstraints15);
+			securityPanel.add(authenticationMethodLabel, gridBagConstraints16);
+			securityPanel.add(getCommunicationMethod(), gridBagConstraints17);
+			securityPanel.add(anonymousCommunicationLabel, gridBagConstraints18);
+			securityPanel.add(getAnonymousCommunication(), gridBagConstraints19);
+			securityPanel.add(clientAuthorizationLabel, gridBagConstraints20);
+			securityPanel.add(getClientAuthorization(), gridBagConstraints21);
 			securityPanel.add(getSecurity(), gridBagConstraints13);
-			securityPanel.add(methodSecurityStyle, gridBagConstraints15);
-			securityPanel.add(anonymousLabel, gridBagConstraints16);
-			securityPanel.add(getCredentialsRequired(), gridBagConstraints17);
 		}
 		return securityPanel;
 	}
@@ -859,25 +966,64 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 
 	/**
-	 * This method initializes credentialsRequired	
-	 * 	
-	 * @return javax.swing.JComboBox	
-	 */    
-	private JComboBox getCredentialsRequired() {
-		if (credentialsRequired == null) {
-			credentialsRequired = new JComboBox();
-			/*
-			credentialsRequired.addItem(CredentialsRequiredType.No);
-			credentialsRequired.addItem(CredentialsRequiredType.Yes);
-			
-			if (method.getCredentialsRequired() == null) {
-				security.setSelectedItem(CredentialsRequiredType.No);
-			} else {
-				security.setSelectedItem(method.getCredentialsRequired());
-			}
-			*/
+	 * This method initializes communicationMethod
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
+	private JComboBox getCommunicationMethod() {
+		if (communicationMethod == null) {
+			communicationMethod = new JComboBox();
+			communicationMethod.addItem(AuthenticationMethodType.Integrity);
+			communicationMethod.addItem(AuthenticationMethodType.Privacy);
+			communicationMethod.addItem(AuthenticationMethodType.Integrity_Or_Privacy);
 		}
-		return credentialsRequired;
+		return communicationMethod;
+	}
+
+
+	/**
+	 * This method initializes anonymousCommunication
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
+	private JComboBox getAnonymousCommunication() {
+		if (anonymousCommunication == null) {
+			anonymousCommunication = new JComboBox();
+			anonymousCommunication.addItem(AnonymousClientsType.No);
+			anonymousCommunication.addItem(AnonymousClientsType.Yes);
+		}
+		return anonymousCommunication;
+	}
+
+
+	/**
+	 * This method initializes clientAuthorization
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
+	private JComboBox getClientAuthorization() {
+		if (clientAuthorization == null) {
+			clientAuthorization = new JComboBox();
+			clientAuthorization.addItem(ClientAuthorizationType.None);
+			clientAuthorization.addItem(ClientAuthorizationType.Host);
+			clientAuthorization.addItem(ClientAuthorizationType.Self);
+		}
+		return clientAuthorization;
+	}
+
+
+	/**
+	 * This method initializes securityContainerPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getSecurityContainerPanel() {
+		if (securityContainerPanel == null) {
+			securityContainerPanel = new JPanel();
+			securityContainerPanel.setLayout(new BorderLayout());
+			securityContainerPanel.add(getSecurityPanel(), java.awt.BorderLayout.NORTH);
+		}
+		return securityContainerPanel;
 	}
 } // @jve:decl-index=0:visual-constraint="10,10"
 

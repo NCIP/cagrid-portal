@@ -10,6 +10,7 @@ import javax.swing.table.DefaultTableModel;
 
 import org.projectmobius.portal.PortalTable;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -27,6 +28,7 @@ public class ExceptionsTable extends PortalTable {
 
 	private MethodType method;
 
+
 	public ExceptionsTable(MethodType method) {
 		super(createTableModel());
 		this.method = method;
@@ -37,9 +39,11 @@ public class ExceptionsTable extends PortalTable {
 		initialize();
 	}
 
+
 	public boolean isCellEditable(int row, int column) {
 		return true;
 	}
+
 
 	public void addRow(final MethodTypeExceptionsException exception) {
 		final Vector v = new Vector();
@@ -50,6 +54,7 @@ public class ExceptionsTable extends PortalTable {
 		((DefaultTableModel) this.getModel()).addRow(v);
 	}
 
+
 	private void initialize() {
 		this.getColumn(DATA1).setMaxWidth(0);
 		this.getColumn(DATA1).setMinWidth(0);
@@ -59,11 +64,14 @@ public class ExceptionsTable extends PortalTable {
 		this.getColumn(DATA2).setPreferredWidth(0);
 
 		if (method.getExceptions() != null) {
-			for (int i = 0; i < method.getExceptions().getException().length; i++) {
-				addRow( method.getExceptions().getException(i));
+			if (method.getExceptions().getException() != null) {
+				for (int i = 0; i < method.getExceptions().getException().length; i++) {
+					addRow(method.getExceptions().getException(i));
+				}
 			}
 		}
 	}
+
 
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
