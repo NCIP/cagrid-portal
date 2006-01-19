@@ -44,7 +44,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.30 2006-01-17 21:07:34 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.31 2006-01-19 13:48:54 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -379,15 +379,15 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	private MethodsTable getMethodsTable() {
 		if (methodsTable == null) {
 			methodsTable = new MethodsTable(methodsType, this.methodsDirectory, this.serviceProperties);
-		}
-		methodsTable.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount() == 2) {
-					dirty = true;
-					performMethodModify();
+			methodsTable.addMouseListener(new MouseAdapter() {
+				public void mouseClicked(MouseEvent e) {
+					if (e.getClickCount() == 2) {
+						dirty = true;
+						performMethodModify();
+					}
 				}
-			}
-		});
+			});
+		}
 		return methodsTable;
 	}
 
