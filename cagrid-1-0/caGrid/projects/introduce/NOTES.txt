@@ -12,7 +12,7 @@ To Do:
 
 Security configuration
 
-Metadata and registration configuration
+(DONE) Metadata and registration configuration
 
 Make notes on how to add a new template.
 

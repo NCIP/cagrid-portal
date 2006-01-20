@@ -4,9 +4,9 @@ import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
-import gov.nih.nci.cagrid.introduce.beans.IntroduceService;
-import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
-import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataType;
+import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
+import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
@@ -43,7 +43,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.39 2006-01-20 17:38:33 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.40 2006-01-20 18:17:13 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -65,7 +65,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 
 	private File methodsDirectory = null;
 
-	private IntroduceService introService;
+	private ServiceDescription introService;
 
 	private Properties serviceProperties = null;
 
@@ -194,11 +194,11 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		if (this.methodsDirectory != null) {
 			SAXBuilder builder = new SAXBuilder(false);
 			try {
-				this.introService = (IntroduceService) CommonTools
+				this.introService = (ServiceDescription) CommonTools
 						.deserializeDocument(this.methodsDirectory
 								.getAbsolutePath()
 								+ File.separator + "introduce.xml",
-								IntroduceService.class);
+								ServiceDescription.class);
 
 				loadServiceProps();
 
@@ -491,7 +491,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 
 									// walk the metadata table and create the
 									// new ServiceMetadataType array
-									ServiceMetadataType[] metadataArray = new ServiceMetadataType[metadataTable
+									MetadataType[] metadataArray = new MetadataType[metadataTable
 											.getRowCount()];
 									for (int i = 0; i < metadataArray.length; i++) {
 										String className = (String) metadataTable
@@ -509,7 +509,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 										String qname = (String) metadataTable
 												.getValueAt(i, 6);
 
-										ServiceMetadataType metadata = new ServiceMetadataType();
+										MetadataType metadata = new MetadataType();
 										if (className != null
 												&& !className.equals("")) {
 											metadata.setClassName(className);
@@ -553,9 +553,9 @@ public class ModificationViewer extends GridPortalBaseFrame {
 
 									}
 									
-									ServiceMetadataListType serviceMetadataList = new ServiceMetadataListType();
+									MetadataListType serviceMetadataList = new MetadataListType();
 									serviceMetadataList.setMetadata(metadataArray);
-									introService.setServiceMetadataList(serviceMetadataList);
+									introService.setMetadataList(serviceMetadataList);
 
 									// check the methods to make sure they are
 									// valid.......
@@ -850,7 +850,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	private MetadataTable getMetadataTable() {
 		if (metadataTable == null) {
 			metadataTable = new MetadataTable(introService
-					.getServiceMetadataList());
+					.getMetadataList());
 			metadataTable.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					if (e.getClickCount() == 2) {
@@ -912,30 +912,30 @@ public class ModificationViewer extends GridPortalBaseFrame {
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
 							dirty = true;
-							ServiceMetadataType metadata = new ServiceMetadataType();
+							MetadataType metadata = new MetadataType();
 
 							// add new metadata to array in bean
 							// this seems to be a wierd way be adding things....
-							ServiceMetadataType[] metadatas;
+							MetadataType[] metadatas;
 							int newLength = 0;
-							if (introService.getServiceMetadataList() != null
-									&& introService.getServiceMetadataList()
+							if (introService.getMetadataList() != null
+									&& introService.getMetadataList()
 											.getMetadata() != null) {
 								newLength = introService
-										.getServiceMetadataList().getMetadata().length + 1;
-								metadatas = new ServiceMetadataType[newLength];
+										.getMetadataList().getMetadata().length + 1;
+								metadatas = new MetadataType[newLength];
 								System.arraycopy(
-										introService.getServiceMetadataList()
+										introService.getMetadataList()
 												.getMetadata(), 0, metadatas,
 										0, introService
-												.getServiceMetadataList()
+												.getMetadataList()
 												.getMetadata().length);
 							} else {
 								newLength = 1;
-								metadatas = new ServiceMetadataType[newLength];
+								metadatas = new MetadataType[newLength];
 							}
 							metadatas[newLength - 1] = metadata;
-							introService.getServiceMetadataList().setMetadata(
+							introService.getMetadataList().setMetadata(
 									metadatas);
 
 							getMetadataTable().addRow(metadata);

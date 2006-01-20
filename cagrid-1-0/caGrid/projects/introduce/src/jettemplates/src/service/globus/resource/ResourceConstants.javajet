@@ -3,7 +3,7 @@ imports="gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.i
 %>
 <%  gov.nih.nci.cagrid.introduce.ServiceInformation arguments = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
   	Properties properties = arguments.getServiceProperties();
-	ServiceMetadataListType metadataList = arguments.getMetadata();
+	MetadataListType metadataList = arguments.getMetadata();
 	
 	String packageName = properties.getProperty("introduce.skeleton.package");
     String serviceName = properties.getProperty("introduce.skeleton.service.name");
@@ -28,7 +28,7 @@ public interface ResourceConstants {
 <%	
 	if(metadataList!=null && metadataList.getMetadata()!=null){
 		for (int i = 0; i < metadataList.getMetadata().length; i++) {
-			ServiceMetadataType metadata = metadataList.getMetadata()[i];
+			MetadataType metadata = metadataList.getMetadata()[i];
 			
 			stringBuffer.append("\tpublic static final QName ");
 			stringBuffer.append(TemplateUtils.getResourcePropertyVariableName(metadataList, i).toUpperCase());

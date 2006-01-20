@@ -31,13 +31,13 @@
 			</xs:annotation>
 		</xs:attribute>
 	</xs:attributeGroup>
-	<xs:element name="ServiceMetadataList" type="ServiceMetadataListType"/>
-	<xs:complexType name="ServiceMetadataListType">
+	<xs:element name="MetadataList" type="MetadataListType"/>
+	<xs:complexType name="MetadataListType">
 		<xs:sequence>
-			<xs:element name="Metadata" type="ServiceMetadataType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Metadata" type="MetadataType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="ServiceMetadataType">
+	<xs:complexType name="MetadataType">
 		<xs:attributeGroup ref="SchemaDervivedType"/>
 		<xs:attribute name="populateFromFile" type="xs:boolean" use="required">
 			<xs:annotation>

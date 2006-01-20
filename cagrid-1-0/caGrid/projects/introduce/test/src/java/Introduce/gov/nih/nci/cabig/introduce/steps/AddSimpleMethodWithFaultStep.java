@@ -2,7 +2,7 @@ package gov.nih.nci.cabig.introduce.steps;
 
 import gov.nih.nci.cabig.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.beans.IntroduceService;
+import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
@@ -32,10 +32,10 @@ public class AddSimpleMethodWithFaultStep extends Step {
 			throw new Exception("pathtobasedir system property not set");
 		}
 
-		IntroduceService introService = (IntroduceService) CommonTools
+		ServiceDescription introService = (ServiceDescription) CommonTools
 				.deserializeDocument(pathtobasedir
 						+ File.separator + tci.getDir() + File.separator
-						+ "introduce.xml", IntroduceService.class);
+						+ "introduce.xml", ServiceDescription.class);
 		MethodsType methodsType = introService.getMethods();
 
 		MethodType method = new MethodType();

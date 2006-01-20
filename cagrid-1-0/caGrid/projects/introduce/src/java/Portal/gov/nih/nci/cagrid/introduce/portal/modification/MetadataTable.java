@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
-import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
-import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataType;
+import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
+import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataType;
 
 import java.util.Vector;
 
@@ -35,9 +35,9 @@ public class MetadataTable extends PortalTable {
 
 	public static String DATA1 = "DATA1";
 
-	private ServiceMetadataListType metadatas;
+	private MetadataListType metadatas;
 
-	public MetadataTable(ServiceMetadataListType metadatas) {
+	public MetadataTable(MetadataListType metadatas) {
 		super(createTableModel());
 		this.metadatas = metadatas;
 		this.setColumnSelectionAllowed(false);
@@ -50,7 +50,7 @@ public class MetadataTable extends PortalTable {
 		return true;
 	}
 
-	public void addRow(ServiceMetadataType metadata) {
+	public void addRow(MetadataType metadata) {
 		final Vector v = new Vector();
 		v.add(metadata.getClassName());
 		v.add(metadata.getNamespace());

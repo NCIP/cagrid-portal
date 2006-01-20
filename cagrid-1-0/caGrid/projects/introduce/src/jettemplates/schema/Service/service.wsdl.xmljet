@@ -1,6 +1,6 @@
 <%@ jet package="gov.nih.nci.cagrid.introduce.templates.schema.service" class="ServiceWSDLTemplate"  imports="gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.* gov.nih.nci.cagrid.introduce.beans.method.*" %>
 <% gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
-	ServiceMetadataListType metadataList = info.getMetadata();
+	MetadataListType metadataList = info.getMetadata();
 	MethodsType methods = info.getMethods();
     String packageName = info.getServiceProperties().getProperty("introduce.skeleton.package");
     String serviceName = info.getServiceProperties().getProperty("introduce.skeleton.service.name");
@@ -143,7 +143,7 @@
                         <%if(metadataList!=null && metadataList.getMetadata()!=null){
                         	prefixmap=TemplateUtils.buildQNameNamespacePrefixMap(metadataList);
                         	for (int i = 0; i < metadataList.getMetadata().length; i++) {
-								ServiceMetadataType metadata = metadataList.getMetadata()[i];%>
+								MetadataType metadata = metadataList.getMetadata()[i];%>
 						<element ref="<%=prefixmap.get(metadata.getQName().getNamespaceURI())%>:<%=metadata.getQName().getLocalPart()%>"/><%
 							}
 						}

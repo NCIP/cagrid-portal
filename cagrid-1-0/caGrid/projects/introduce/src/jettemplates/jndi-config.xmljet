@@ -1,7 +1,7 @@
 <%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="JNDIConfigTemplate" 
 imports="gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.*" %>
 <% gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument;
-   ServiceMetadataListType metadataList = info.getMetadata();
+   MetadataListType metadataList = info.getMetadata();
    
    String packageName = info.getServiceProperties().getProperty("introduce.skeleton.package");
    String serviceName = info.getServiceProperties().getProperty("introduce.skeleton.service.name");
@@ -40,7 +40,7 @@ imports="gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.i
 				</parameter>
 <%	if(metadataList!=null && metadataList.getMetadata()!=null){
 		for (int i = 0; i < metadataList.getMetadata().length; i++) {
-			ServiceMetadataType metadata = metadataList.getMetadata()[i];
+			MetadataType metadata = metadataList.getMetadata()[i];
 			if(metadata.isPopulateFromFile()){
 				String name=TemplateUtils.getResourcePropertyVariableName(metadataList, i);
 				String className=metadata.getClassName();%>

@@ -3,9 +3,9 @@ package gov.nih.nci.cagrid.introduce.codegen;
 import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
-import gov.nih.nci.cagrid.introduce.beans.IntroduceService;
-import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
-import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataType;
+import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
+import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
@@ -61,8 +61,8 @@ public class SyncTools {
 
 	public void sync() throws Exception {
 
-		IntroduceService introService =  (IntroduceService) CommonTools.deserializeDocument(baseDirectory + File.separator
-				+ "introduce.xml", IntroduceService.class);
+		ServiceDescription introService =  (ServiceDescription) CommonTools.deserializeDocument(baseDirectory + File.separator
+				+ "introduce.xml", ServiceDescription.class);
 
 		File servicePropertiesFile = new File(baseDirectory.getAbsolutePath() + File.separator + "introduce.properties");
 		Properties serviceProperties = new Properties();
@@ -119,7 +119,7 @@ public class SyncTools {
 		// get the classnames from the axis symbol table
 		if (info.getMetadata().getMetadata() != null) {
 			for (int i = 0; i < info.getMetadata().getMetadata().length; i++) {
-				ServiceMetadataType mtype = info.getMetadata().getMetadata(i);
+				MetadataType mtype = info.getMetadata().getMetadata(i);
 				if (mtype.getClassName() == null || mtype.getClassName().length() == 0) {
 					Element element = table.getElement(new QName(mtype.getNamespace(), mtype.getType()));
 					mtype.setClassName(element.getName());

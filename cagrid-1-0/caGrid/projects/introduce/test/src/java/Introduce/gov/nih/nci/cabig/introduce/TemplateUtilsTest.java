@@ -1,7 +1,7 @@
 package gov.nih.nci.cabig.introduce;
 
 import gov.nih.nci.cagrid.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
+import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.codegen.TemplateUtils;
 
@@ -19,7 +19,7 @@ public class TemplateUtilsTest extends TestCase {
 	public static String GOLD_METADATA_FILE = "ServiceMetadata_Example.xml";
 	public static String GOLD_METHODS_FILE = "ServiceMethods_Example.xml";
 
-	private ServiceMetadataListType metadataList = null;
+	private MetadataListType metadataList = null;
 	private MethodsType methods = null;
 
 
@@ -41,8 +41,8 @@ public class TemplateUtilsTest extends TestCase {
 	public void setUp() {
 		String pathtobasedir = System.getProperty("basedir", ".");
 		try {
-			metadataList = (ServiceMetadataListType) CommonTools.deserializeDocument(pathtobasedir + GOLD_DIRECTORY
-				+ GOLD_METADATA_FILE, ServiceMetadataListType.class);
+			metadataList = (MetadataListType) CommonTools.deserializeDocument(pathtobasedir + GOLD_DIRECTORY
+				+ GOLD_METADATA_FILE, MetadataListType.class);
 
 			methods = (MethodsType) CommonTools.deserializeDocument(pathtobasedir + GOLD_DIRECTORY + GOLD_METHODS_FILE,
 				MethodsType.class);

@@ -1,8 +1,8 @@
 package gov.nih.nci.cagrid.introduce.codegen;
 
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
-import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
-import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataType;
+import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
+import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
@@ -23,12 +23,12 @@ public class TemplateUtils {
 	 *            the index into the metadata list of the targeted metadata item
 	 * @return the variable name to use
 	 */
-	public static String getResourcePropertyVariableName(ServiceMetadataListType metadataList, int index) {
+	public static String getResourcePropertyVariableName(MetadataListType metadataList, int index) {
 		String baseName = metadataList.getMetadata(index).getQName().getLocalPart();
 
 		int previousNumber = 0;
 		for (int i = 0; (i < index && i < metadataList.getMetadata().length); i++) {
-			ServiceMetadataType metadata = metadataList.getMetadata()[i];
+			MetadataType metadata = metadataList.getMetadata()[i];
 			if (metadata.getQName().getLocalPart().equalsIgnoreCase(baseName)) {
 				// the qname local parts are the same for multiple qnames
 				// resolve the issue by appending a number
@@ -75,10 +75,10 @@ public class TemplateUtils {
 	 * @return Map of namespace->prefix definitions for the namespaces of all of
 	 *         the QNames in the list
 	 */
-	public static Map buildQNameNamespacePrefixMap(ServiceMetadataListType metadataList) {
+	public static Map buildQNameNamespacePrefixMap(MetadataListType metadataList) {
 		Map map = new HashMap();
 		for (int i = 0; i < metadataList.getMetadata().length; i++) {
-			ServiceMetadataType metadata = metadataList.getMetadata()[i];
+			MetadataType metadata = metadataList.getMetadata()[i];
 			String qnameName = metadata.getQName().getLocalPart();
 			String qnameNamespace = metadata.getQName().getNamespaceURI();
 
@@ -100,9 +100,9 @@ public class TemplateUtils {
 	public static Map buildMasterNamespaceSchemaInformationMap(ServiceInformation info) {
 		Map map = new HashMap();
 		if (info.getMetadata() != null && info.getMetadata().getMetadata() != null) {
-			ServiceMetadataListType metadataList = info.getMetadata();
+			MetadataListType metadataList = info.getMetadata();
 			for (int i = 0; i < metadataList.getMetadata().length; i++) {
-				ServiceMetadataType metadata = metadataList.getMetadata()[i];
+				MetadataType metadata = metadataList.getMetadata()[i];
 				String qnameName = metadata.getQName().getLocalPart();
 				String qnameNamespace = metadata.getQName().getNamespaceURI();
 				String location = metadata.getLocation();

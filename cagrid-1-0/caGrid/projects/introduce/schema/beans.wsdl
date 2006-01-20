@@ -6,7 +6,7 @@
             xmlns:introduce="gme://gov.nih.nci.cagrid/1/Introduce"
             xmlns="http://www.w3.org/2001/XMLSchema">
             <import namespace="gme://gov.nih.nci.cagrid/1/Introduce"
-                schemaLocation="./IntroduceService.xsd"/>
+                schemaLocation="./IntroduceServiceDescription.xsd"/>
         </schema>
     </types>
 </definitions>

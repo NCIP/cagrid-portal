@@ -3,7 +3,7 @@ package gov.nih.nci.cabig.introduce.steps;
 import gov.nih.nci.cabig.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
-import gov.nih.nci.cagrid.introduce.beans.IntroduceService;
+import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 
 import java.io.File;
