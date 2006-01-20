@@ -14,6 +14,26 @@ General Tasks
 10) Removing IdP should remove all user accounts.
 11) Need to change all propety/config files to be "*.example" files, not check the real ones in, and build should create real ones from examples upon need
 
+
+Testing Tasks
+--------------
+1) moving testing resources (e.g. resources/ca-test) to test/resources (e.g. resources/ca-test)
+2) Add test/resources to testing classpath
+3) Change to loading resources using classloader instead of filesystem
+e.g.
+	FROM: 
+	=====
+	public static String DB_CONFIG = "resources" + File.separator + "general-test" + File.separator + "db-config.xml";
+    ...
+    Document doc = XMLUtilities.fileNameToDocument(DB_CONFIG);
+    TO:
+    =====
+    public static String DB_CONFIG = "/general-test/db-config.xml";
+    Document doc = XMLUtilities.streamToDocument(getClass().getResourceAsStream(DB_CONFIG));
+4) Don't put these full paths as constants in every file, make some TestConstants.java somewhere that has the paths
+5) Don't check in your config files (e.g db-config.xml), you should only check in examples (e.g. db-config.xml.example) and Ant should create the real one from the example
+
+
 Implementation Issues
 ----------------------
 
