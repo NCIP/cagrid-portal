@@ -43,7 +43,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.40 2006-01-20 18:17:13 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.41 2006-01-20 18:30:23 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -572,7 +572,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 													introService,
 													new QName(
 															"gme://gov.nih.nci.cagrid/1/Introduce",
-															"Introduce"));
+															"ServiceSkeleton"));
 									setProgressText("sychronizing skeleton");
 									// call the sync tools
 									SyncTools sync = new SyncTools(

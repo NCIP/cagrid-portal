@@ -61,7 +61,7 @@ public class AddSimpleMethodStep extends Step {
 		CommonTools.serializeDocument(pathtobasedir
 				+ File.separator + tci.getDir() + File.separator
 				+ "introduce.xml", introService, new QName(
-				"gme://gov.nih.nci.cagrid/1/Introduce", "Introduce"));
+				"gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
 
 		String cmd = CommonTools.getAntSkeletonResyncCommand(pathtobasedir
 				+ File.separator + tci.getDir());
