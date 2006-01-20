@@ -254,7 +254,8 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
 	public void performDone() {
 		// populate the data vector from the prior screen now......
 		int index = 0;
-		// skip classname
+		// skip packageName and classname
+		index++;
 		index++;
 		typeInfo.set(index++, new Boolean(isArrayCheckBox.isSelected()));
 		if (handleParameterName) {

@@ -43,7 +43,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.41 2006-01-20 18:30:23 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.42 2006-01-20 21:20:49 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -494,22 +494,28 @@ public class ModificationViewer extends GridPortalBaseFrame {
 									MetadataType[] metadataArray = new MetadataType[metadataTable
 											.getRowCount()];
 									for (int i = 0; i < metadataArray.length; i++) {
+										String packageName = (String) metadataTable
+										.getValueAt(i, 0);
 										String className = (String) metadataTable
-												.getValueAt(i, 0);
-										String namespace = (String) metadataTable
 												.getValueAt(i, 1);
-										String type = (String) metadataTable
+										String namespace = (String) metadataTable
 												.getValueAt(i, 2);
-										String location = (String) metadataTable
+										String type = (String) metadataTable
 												.getValueAt(i, 3);
-										String populateFromFile = (String) metadataTable
+										String location = (String) metadataTable
 												.getValueAt(i, 4);
-										String register = (String) metadataTable
+										String populateFromFile = (String) metadataTable
 												.getValueAt(i, 5);
-										String qname = (String) metadataTable
+										String register = (String) metadataTable
 												.getValueAt(i, 6);
+										String qname = (String) metadataTable
+												.getValueAt(i, 7);
 
 										MetadataType metadata = new MetadataType();
+										if (packageName != null
+												&& !packageName.equals("")) {
+											metadata.setPackageName(packageName);
+										}
 										if (className != null
 												&& !className.equals("")) {
 											metadata.setClassName(className);

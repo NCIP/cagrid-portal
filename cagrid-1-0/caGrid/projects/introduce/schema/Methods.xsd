@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- edited with XMLSpy v2005 rel. 3 U (http://www.altova.com) by Shannon Hastings  -->
 <xs:schema xmlns="gme://gov.nih.nci.cagrid.introduce/1/Methods" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="gme://gov.nih.nci.cagrid.introduce/1/Methods" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:attributeGroup name="SchemaDervivedType">
+	   <xs:attribute name="packageName" type="xs:string" use="optional">
+			<xs:annotation>
+				<xs:documentation>Used to specify the package to be use when the object is created of
+				    by use of an already existing object.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 		<xs:attribute name="className" type="xs:string" use="optional">
 			<xs:annotation>
 				<xs:documentation>Used to specify the class name of an existing object that can

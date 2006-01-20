@@ -18,6 +18,8 @@ import org.projectmobius.portal.PortalTable;
  *          Exp $
  */
 public class InputParametersTable extends PortalTable {
+	
+	public static String PACKAGENAME = "Package Name";
 
 	public static String CLASSNAME = "Classname";
 
@@ -54,6 +56,7 @@ public class InputParametersTable extends PortalTable {
 
 	public void addRow(final MethodTypeInputsInput input) {
 		final Vector v = new Vector();
+		v.add(input.getPackageName());
 		v.add(input.getClassName());
 		v.add(input.getIsArray());
 		v.add(input.getName());
@@ -85,6 +88,7 @@ public class InputParametersTable extends PortalTable {
 
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
+		model.addColumn(PACKAGENAME);
 		model.addColumn(CLASSNAME);
 		model.addColumn(ISARRAY);
 		model.addColumn(NAME);

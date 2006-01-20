@@ -19,6 +19,8 @@ import org.projectmobius.portal.PortalTable;
  */
 public class MetadataTable extends PortalTable {
 
+	public static String PACKAGENAME = "Package Name";
+	
 	public static String CLASSNAME = "Classname";
 
 	public static String NAMESPACE = "Namespace";
@@ -52,6 +54,7 @@ public class MetadataTable extends PortalTable {
 
 	public void addRow(MetadataType metadata) {
 		final Vector v = new Vector();
+		v.add(metadata.getPackageName());
 		v.add(metadata.getClassName());
 		v.add(metadata.getNamespace());
 		v.add(metadata.getType());
@@ -85,6 +88,7 @@ public class MetadataTable extends PortalTable {
 
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
+		model.addColumn(PACKAGENAME);
 		model.addColumn(CLASSNAME);
 		model.addColumn(NAMESPACE);
 		model.addColumn(TYPE);

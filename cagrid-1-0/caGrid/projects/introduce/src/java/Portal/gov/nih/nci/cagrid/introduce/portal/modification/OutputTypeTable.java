@@ -16,10 +16,12 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: OutputTypeTable.java,v 1.9 2006-01-20 20:46:03 hastings Exp $
+ * @version $Id: OutputTypeTable.java,v 1.10 2006-01-20 21:19:36 hastings Exp $
  */
 public class OutputTypeTable extends JComponentTable {
 
+	public static String PACKAGENAME = "Package Name";
+	
 	public static String CLASSNAME = "Classname";
 
 	public static String ISARRAY = "Is Array";
@@ -55,6 +57,7 @@ public class OutputTypeTable extends JComponentTable {
 	private void initialize() {
 		MethodTypeOutput output = method.getOutput();
 		final Vector v = new Vector();
+		v.add(output.getPackageName());
 		v.add(output.getClassName());
 		v.add(output.getIsArray());
 		v.add(output.getNamespace());
@@ -77,6 +80,7 @@ public class OutputTypeTable extends JComponentTable {
 
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
+		model.addColumn(PACKAGENAME);
 		model.addColumn(CLASSNAME);
 		model.addColumn(ISARRAY);
 		model.addColumn(NAMESPACE);

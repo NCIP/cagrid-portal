@@ -315,13 +315,17 @@ public class MethodViewer extends GridPortalBaseFrame {
 					for (int i = 0; i < getInputParamTable().getRowCount(); i++) {
 						MethodTypeInputsInput input = new MethodTypeInputsInput();
 
-						String className = ((String) getInputParamTable().getValueAt(i, 0));
-						Boolean isArray = ((Boolean) getInputParamTable().getValueAt(i, 1));
-						String name = ((String) getInputParamTable().getValueAt(i, 2));
-						String namespace = ((String) getInputParamTable().getValueAt(i, 3));
-						String type = ((String) getInputParamTable().getValueAt(i, 4));
-						String location = ((String) getInputParamTable().getValueAt(i, 5));
+						String packageName = ((String) getInputParamTable().getValueAt(i, 0));
+						String className = ((String) getInputParamTable().getValueAt(i, 1));
+						Boolean isArray = ((Boolean) getInputParamTable().getValueAt(i, 2));
+						String name = ((String) getInputParamTable().getValueAt(i, 3));
+						String namespace = ((String) getInputParamTable().getValueAt(i, 4));
+						String type = ((String) getInputParamTable().getValueAt(i, 5));
+						String location = ((String) getInputParamTable().getValueAt(i, 6));
 
+						if (packageName != null && !packageName.equals("")) {
+							input.setPackageName(packageName);
+						}
 						if (className != null && !className.equals("")) {
 							input.setClassName(className);
 						}
@@ -367,12 +371,16 @@ public class MethodViewer extends GridPortalBaseFrame {
 					// now process the output
 					MethodTypeOutput output = new MethodTypeOutput();
 
-					String className = ((String) getOutputTypeTable().getValueAt(0, 0));
-					Boolean isArray = ((Boolean) getOutputTypeTable().getValueAt(0, 1));
-					String namespace = ((String) getOutputTypeTable().getValueAt(0, 2));
-					String type = ((String) getOutputTypeTable().getValueAt(0, 3));
-					String location = ((String) getOutputTypeTable().getValueAt(0, 4));
+					String packageName = ((String) getOutputTypeTable().getValueAt(0, 1));
+					String className = ((String) getOutputTypeTable().getValueAt(0, 2));
+					Boolean isArray = ((Boolean) getOutputTypeTable().getValueAt(0, 3));
+					String namespace = ((String) getOutputTypeTable().getValueAt(0, 4));
+					String type = ((String) getOutputTypeTable().getValueAt(0, 5));
+					String location = ((String) getOutputTypeTable().getValueAt(0, 6));
 
+					if (packageName != null && !packageName.equals("")) {
+						output.setPackageName(packageName);
+					}
 					if (className != null && !className.equals("")) {
 						output.setClassName(className);
 					}
