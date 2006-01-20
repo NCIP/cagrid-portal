@@ -29,13 +29,15 @@ public class RemoveSimpleMethodStep extends Step {
 		}
 
 		IntroduceService introService = (IntroduceService) CommonTools
-				.deserializeDocument(pathtobasedir + File.separator
+				.deserializeDocument(pathtobasedir
+						+ File.separator + tci.getDir() + File.separator
 						+ "introduce.xml", IntroduceService.class);
 		MethodsType methodsType = introService.getMethods();
 
 		methodsType.setMethod(null);
 
-		CommonTools.serializeDocument(pathtobasedir + File.separator
+		CommonTools.serializeDocument(pathtobasedir
+				+ File.separator + tci.getDir() + File.separator
 				+ "introduce.xml", introService, new QName(
 				"gme://gov.nih.nci.cagrid/1/Introduce", "Introduce"));
 

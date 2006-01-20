@@ -5,9 +5,11 @@ import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.IntroduceService;
+import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
@@ -41,7 +43,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.38 2006-01-20 17:21:40 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.39 2006-01-20 17:38:33 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -473,6 +475,19 @@ public class ModificationViewer extends GridPortalBaseFrame {
 
 								if (confirmed == JOptionPane.OK_OPTION) {
 									setProgressText("editing service metadata object");
+									
+									// walk the methods table and create the
+									// new MethodsType array
+									MethodType[] methodsArray = new MethodType[methodsTable
+											.getRowCount()];
+									for (int i = 0; i < methodsArray.length; i++) {
+										MethodType methodInstance = (MethodType) methodsTable.getValueAt(i,1);
+										methodsArray[i] = methodInstance;
+									}
+									MethodsType methods = new MethodsType();
+									methods.setMethod(methodsArray);
+									introService.setMethods(methods);
+									
 
 									// walk the metadata table and create the
 									// new ServiceMetadataType array
@@ -537,8 +552,10 @@ public class ModificationViewer extends GridPortalBaseFrame {
 										metadataArray[i] = metadata;
 
 									}
-									introService.getServiceMetadataList()
-											.setMetadata(metadataArray);
+									
+									ServiceMetadataListType serviceMetadataList = new ServiceMetadataListType();
+									serviceMetadataList.setMetadata(metadataArray);
+									introService.setServiceMetadataList(serviceMetadataList);
 
 									// check the methods to make sure they are
 									// valid.......
