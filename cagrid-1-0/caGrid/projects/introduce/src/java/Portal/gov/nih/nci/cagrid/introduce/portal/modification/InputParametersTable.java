@@ -20,7 +20,7 @@ import org.projectmobius.portal.PortalTable;
 public class InputParametersTable extends PortalTable {
 
 	public static String CLASSNAME = "Classname";
-	
+
 	public static String ISARRAY = "Is Array";
 
 	public static String NAME = "Name";
@@ -55,7 +55,7 @@ public class InputParametersTable extends PortalTable {
 	public void addRow(final MethodTypeInputsInput input) {
 		final Vector v = new Vector();
 		v.add(input.getClassName());
-		v.add(String.valueOf(input.getIsArray().booleanValue()));
+		v.add(input.getIsArray());
 		v.add(input.getName());
 		v.add(input.getNamespace());
 		v.add(input.getType());

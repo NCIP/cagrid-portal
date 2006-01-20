@@ -316,7 +316,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 						MethodTypeInputsInput input = new MethodTypeInputsInput();
 
 						String className = ((String) getInputParamTable().getValueAt(i, 0));
-						String isArray = ((String) getInputParamTable().getValueAt(i, 1));
+						Boolean isArray = ((Boolean) getInputParamTable().getValueAt(i, 1));
 						String name = ((String) getInputParamTable().getValueAt(i, 2));
 						String namespace = ((String) getInputParamTable().getValueAt(i, 3));
 						String type = ((String) getInputParamTable().getValueAt(i, 4));
@@ -329,8 +329,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 							input.setMinOccurs("0");
 							input.setMaxOccurs("unbounded");
 						}
-						if (isArray != null && !isArray.equals("")) {
-							input.setIsArray(new Boolean(isArray));
+						if (isArray != null) {
+							input.setIsArray(isArray);
 						}
 						if (name != null && !name.equals("")) {
 							input.setName(name);
@@ -368,7 +368,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 					MethodTypeOutput output = new MethodTypeOutput();
 
 					String className = ((String) getOutputTypeTable().getValueAt(0, 0));
-					String isArray = ((String) getOutputTypeTable().getValueAt(0, 1));
+					Boolean isArray = ((Boolean) getOutputTypeTable().getValueAt(0, 1));
 					String namespace = ((String) getOutputTypeTable().getValueAt(0, 2));
 					String type = ((String) getOutputTypeTable().getValueAt(0, 3));
 					String location = ((String) getOutputTypeTable().getValueAt(0, 4));
@@ -381,8 +381,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 						output.setMaxOccurs("unbounded");
 					}
 
-					if (isArray != null && !isArray.equals("")) {
-						output.setIsArray(new Boolean(isArray));
+					if (isArray != null) {
+						output.setIsArray(isArray);
 					}
 					if (namespace != null && !namespace.equals("")) {
 						output.setNamespace(namespace);

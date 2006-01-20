@@ -12,25 +12,29 @@ import javax.swing.table.DefaultTableModel;
 import org.projectmobius.portal.JComponentTable;
 import org.projectmobius.portal.PortalResourceManager;
 
-
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: OutputTypeTable.java,v 1.8 2006-01-19 16:42:39 langella Exp $
+ * @version $Id: OutputTypeTable.java,v 1.9 2006-01-20 20:46:03 hastings Exp $
  */
 public class OutputTypeTable extends JComponentTable {
 
 	public static String CLASSNAME = "Classname";
+
 	public static String ISARRAY = "Is Array";
+
 	public static String NAMESPACE = "Namespace";
+
 	public static String TYPE = "Type";
+
 	public static String LOCATION = "Location";
+
 	public static String GME = "Get Type From GME";
 
 	private MethodType method;
-	private File schemaDir;
 
+	private File schemaDir;
 
 	public OutputTypeTable(MethodType method, File schemaDir) {
 		super(createTableModel());
@@ -39,16 +43,14 @@ public class OutputTypeTable extends JComponentTable {
 		initialize();
 	}
 
-
 	public boolean isCellEditable(int row, int column) {
 		return true;
-//		if (column == 4) {
-//			return true;
-//		} else {
-//			return false;
-//		}
+		// if (column == 4) {
+		// return true;
+		// } else {
+		// return false;
+		// }
 	}
-
 
 	private void initialize() {
 		MethodTypeOutput output = method.getOutput();
@@ -62,15 +64,16 @@ public class OutputTypeTable extends JComponentTable {
 		// gme.setIcon(AnalyticalLookAndFeel.getMobiusIcon());
 		gme.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
-				PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-					new GMEParameterConfigurationComponent(v, schemaDir, false));
+				PortalResourceManager.getInstance().getGridPortal()
+						.addGridPortalComponent(
+								new GMEParameterConfigurationComponent(v,
+										schemaDir, false));
 				editCellAt(0, Integer.MAX_VALUE);
 			}
 		});
 		v.add(gme);
 		((DefaultTableModel) this.getModel()).addRow(v);
 	}
-
 
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
