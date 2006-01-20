@@ -1,9 +1,9 @@
 package gov.nih.nci.cabig.introduce.steps;
 
-import java.io.File;
-
 import gov.nih.nci.cabig.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.common.CommonTools;
+
+import java.io.File;
 
 import com.atomicobject.haste.framework.Step;
 

@@ -5,16 +5,8 @@ import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -33,7 +25,6 @@ import org.projectmobius.common.Namespace;
 import org.projectmobius.common.XMLUtilities;
 import org.projectmobius.gme.XMLDataModelService;
 import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
-import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.protocol.gme.SchemaNode;
 
 public class GMEConfigurationPanel extends JPanel {

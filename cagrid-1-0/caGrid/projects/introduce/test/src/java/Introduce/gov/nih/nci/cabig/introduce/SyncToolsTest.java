@@ -5,7 +5,6 @@ import gov.nih.nci.cabig.introduce.steps.AddSimpleMethodWithFaultStep;
 import gov.nih.nci.cabig.introduce.steps.CreateSkeletonStep;
 import gov.nih.nci.cabig.introduce.steps.RemoveSimpleMethodStep;
 import gov.nih.nci.cabig.introduce.steps.RemoveSkeletonStep;
-import gov.nih.nci.cabig.introduce.steps.RollBackStep;
 
 import java.util.Vector;
 

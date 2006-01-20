@@ -78,12 +78,12 @@
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
-			<xs:element name="MethodSecurity" minOccurs="0" maxOccurs="1" type="MethodSecurityType"/>
+			<xs:element name="MethodSecurity" minOccurs="0" maxOccurs="1" type="SecureCommunicationConfiguration"/>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 	</xs:complexType>
 	
-	<xs:complexType name="MethodSecurityType">
+	<xs:complexType name="SecureCommunicationConfiguration">
 		<xs:sequence>
 			<xs:element name="SecureCommunication" minOccurs="0" maxOccurs="1" type="SecureCommunicationMethodType"/>
 			<xs:element name="AuthenticationMethod" minOccurs="0" maxOccurs="1" type="AuthenticationMethodType"/>

@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
-import javax.swing.JMenuBar;
 import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 public class ModificationMenu extends JMenuBar {

@@ -1,17 +1,12 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.introduce.beans.method.AnonymousClientsType;
-import gov.nih.nci.cagrid.introduce.beans.method.AuthenticationMethodType;
-import gov.nih.nci.cagrid.introduce.beans.method.ClientAuthorizationType;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodSecurityType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
-import gov.nih.nci.cagrid.introduce.beans.method.SecureCommunicationMethodType;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
 import java.awt.FlowLayout;
@@ -21,19 +16,19 @@ import java.awt.Insets;
 import java.io.File;
 import java.util.Vector;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
-import java.awt.BorderLayout;
 
 
 /**
@@ -82,8 +77,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JLabel methodLabel = null;
 
-	private JComboBox secureCommunication = null;
-
 	private JPanel inputButtonPanel = null;
 
 	private MethodsTable methodsTable;
@@ -108,23 +101,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JPanel methodPanel = null;
 
-	private JPanel securityPanel = null;
-
 	private JPanel exceptionInputButtonPanel = null;
-
-	private JLabel secureCommunicationLabel = null;
-
-	private JLabel authenticationMethodLabel = null;
-
-	private JComboBox communicationMethod = null;
-
-	private JLabel anonymousCommunicationLabel = null;
-
-	private JComboBox anonymousCommunication = null;
-
-	private JLabel clientAuthorizationLabel = null;
-
-	private JComboBox clientAuthorization = null;
 
 	private JPanel securityContainerPanel = null;
 
@@ -136,21 +113,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 		this.currentRow = selectedRow;
 		this.setTitle("Modify Method");
 		initialize();
-		MethodSecurityType ms = method.getMethodSecurity();
-		if (ms != null) {
-			if (ms.getSecureCommunication() != null) {
-				secureCommunication.setSelectedItem(ms.getSecureCommunication());
-			}
-			if (ms.getAuthenticationMethod() != null) {
-				communicationMethod.setSelectedItem(ms.getAuthenticationMethod());
-			}
-			if (ms.getAnonymousClients() != null) {
-				anonymousCommunication.setSelectedItem(ms.getAnonymousClients());
-			}
-			if (ms.getClientAuthorization() != null) {
-				clientAuthorization.setSelectedItem(ms.getClientAuthorization());
-			}
-		}
 	}
 
 
@@ -341,37 +303,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					// First process the inputs
 					method.setName(getNameField().getText());
-					MethodSecurityType ms = new MethodSecurityType();
-					SecureCommunicationMethodType comm = (SecureCommunicationMethodType) getSecurity().getSelectedItem();
-					ms.setSecureCommunication(comm);
-					if (comm.equals(SecureCommunicationMethodType.GSI_Transport_Level_Security)) {
-						ms.setAnonymousClients((AnonymousClientsType) getAnonymousCommunication().getSelectedItem());
-						ms.setAuthenticationMethod((AuthenticationMethodType) getCommunicationMethod()
-							.getSelectedItem());
-						ms.setClientAuthorization((ClientAuthorizationType) getClientAuthorization().getSelectedItem());
-					}
 
-					if (comm.equals(SecureCommunicationMethodType.GSI_Secure_Conversation)) {
-						ms.setAnonymousClients((AnonymousClientsType) getAnonymousCommunication().getSelectedItem());
-						ms.setAuthenticationMethod((AuthenticationMethodType) getCommunicationMethod()
-							.getSelectedItem());
-						ms.setClientAuthorization((ClientAuthorizationType) getClientAuthorization().getSelectedItem());
-					}
-
-					if (comm.equals(SecureCommunicationMethodType.GSI_Secure_Message)) {
-						ms.setAnonymousClients(AnonymousClientsType.No);
-						ms.setAuthenticationMethod((AuthenticationMethodType) getCommunicationMethod()
-							.getSelectedItem());
-						ms.setClientAuthorization((ClientAuthorizationType) getClientAuthorization().getSelectedItem());
-					}
-
-					if (comm.equals(SecureCommunicationMethodType.None)) {
-						ms.setAnonymousClients(AnonymousClientsType.No);
-						ms.setAuthenticationMethod((AuthenticationMethodType) getCommunicationMethod()
-							.getSelectedItem());
-						ms.setClientAuthorization(ClientAuthorizationType.None);
-					}
-					method.setMethodSecurity(ms);
+					method.setMethodSecurity(((SecurityConfigurationPanel) securityContainerPanel)
+						.getSecureCommunicationConfiguration());
 
 					methodsTable.changeMethodName(currentRow, getNameField().getText());
 
@@ -599,49 +533,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 
 	/**
-	 * This method initializes security
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getSecurity() {
-		if (secureCommunication == null) {
-			secureCommunication = new JComboBox();
-			secureCommunication.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if (secureCommunication.getSelectedItem().equals(SecureCommunicationMethodType.None)) {
-						communicationMethod.setEnabled(false);
-						anonymousCommunication.setSelectedItem(AnonymousClientsType.No);
-						anonymousCommunication.setEnabled(false);
-						clientAuthorization.setEnabled(false);
-					} else if (secureCommunication.getSelectedItem().equals(
-						SecureCommunicationMethodType.GSI_Secure_Conversation)) {
-						communicationMethod.setEnabled(true);
-						anonymousCommunication.setEnabled(true);
-						clientAuthorization.setEnabled(true);
-					} else if (secureCommunication.getSelectedItem().equals(
-						SecureCommunicationMethodType.GSI_Secure_Message)) {
-						communicationMethod.setEnabled(true);
-						anonymousCommunication.setSelectedItem(AnonymousClientsType.No);
-						anonymousCommunication.setEnabled(false);
-						clientAuthorization.setEnabled(true);
-					} else if (secureCommunication.getSelectedItem().equals(
-						SecureCommunicationMethodType.GSI_Transport_Level_Security)) {
-						communicationMethod.setEnabled(true);
-						anonymousCommunication.setEnabled(true);
-						clientAuthorization.setEnabled(true);
-					}
-				}
-			});
-			secureCommunication.addItem(SecureCommunicationMethodType.None);
-			secureCommunication.addItem(SecureCommunicationMethodType.GSI_Transport_Level_Security);
-			secureCommunication.addItem(SecureCommunicationMethodType.GSI_Secure_Conversation);
-			secureCommunication.addItem(SecureCommunicationMethodType.GSI_Secure_Message);
-		}
-		return secureCommunication;
-	}
-
-
-	/**
 	 * This method initializes inputButtonPanel
 	 * 
 	 * @return javax.swing.JPanel
@@ -859,87 +750,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 
 	/**
-	 * This method initializes securityPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getSecurityPanel() {
-		if (securityPanel == null) {
-			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
-			gridBagConstraints21.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints21.gridy = 3;
-			gridBagConstraints21.weightx = 1.0;
-			gridBagConstraints21.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints21.gridx = 1;
-			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
-			gridBagConstraints20.gridx = 0;
-			gridBagConstraints20.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints20.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints20.gridy = 3;
-			clientAuthorizationLabel = new JLabel();
-			clientAuthorizationLabel.setText("Client Authorization");
-			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
-			gridBagConstraints19.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints19.gridy = 2;
-			gridBagConstraints19.weightx = 1.0;
-			gridBagConstraints19.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints19.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints19.gridx = 1;
-			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
-			gridBagConstraints18.gridx = 0;
-			gridBagConstraints18.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints18.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints18.gridy = 2;
-			anonymousCommunicationLabel = new JLabel();
-			anonymousCommunicationLabel.setText("Anonymous Communication");
-			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
-			gridBagConstraints17.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints17.gridy = 1;
-			gridBagConstraints17.weightx = 1.0;
-			gridBagConstraints17.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints17.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints17.gridx = 1;
-			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
-			gridBagConstraints16.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints16.gridy = 1;
-			gridBagConstraints16.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints16.gridx = 0;
-			authenticationMethodLabel = new JLabel();
-			authenticationMethodLabel.setText("Communication Method");
-			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
-			gridBagConstraints15.gridx = 0;
-			gridBagConstraints15.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints15.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints15.gridy = 0;
-			secureCommunicationLabel = new JLabel();
-			secureCommunicationLabel.setText("Secure Communication");
-			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
-			gridBagConstraints13.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints13.gridx = 1;
-			gridBagConstraints13.gridy = 0;
-			gridBagConstraints13.weightx = 1.0;
-			gridBagConstraints13.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints13.insets = new java.awt.Insets(2, 2, 2, 2);
-			securityPanel = new JPanel();
-			securityPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
-				"Method Level Security Configuration", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
-			securityPanel.setLayout(new GridBagLayout());
-
-			securityPanel.add(secureCommunicationLabel, gridBagConstraints15);
-			securityPanel.add(authenticationMethodLabel, gridBagConstraints16);
-			securityPanel.add(getCommunicationMethod(), gridBagConstraints17);
-			securityPanel.add(anonymousCommunicationLabel, gridBagConstraints18);
-			securityPanel.add(getAnonymousCommunication(), gridBagConstraints19);
-			securityPanel.add(clientAuthorizationLabel, gridBagConstraints20);
-			securityPanel.add(getClientAuthorization(), gridBagConstraints21);
-			securityPanel.add(getSecurity(), gridBagConstraints13);
-		}
-		return securityPanel;
-	}
-
-
-	/**
 	 * This method initializes exceptionInputButtonPanel
 	 * 
 	 * @return javax.swing.JPanel
@@ -966,62 +776,14 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 
 	/**
-	 * This method initializes communicationMethod
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getCommunicationMethod() {
-		if (communicationMethod == null) {
-			communicationMethod = new JComboBox();
-			communicationMethod.addItem(AuthenticationMethodType.Integrity);
-			communicationMethod.addItem(AuthenticationMethodType.Privacy);
-			communicationMethod.addItem(AuthenticationMethodType.Integrity_Or_Privacy);
-		}
-		return communicationMethod;
-	}
-
-
-	/**
-	 * This method initializes anonymousCommunication
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getAnonymousCommunication() {
-		if (anonymousCommunication == null) {
-			anonymousCommunication = new JComboBox();
-			anonymousCommunication.addItem(AnonymousClientsType.No);
-			anonymousCommunication.addItem(AnonymousClientsType.Yes);
-		}
-		return anonymousCommunication;
-	}
-
-
-	/**
-	 * This method initializes clientAuthorization
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getClientAuthorization() {
-		if (clientAuthorization == null) {
-			clientAuthorization = new JComboBox();
-			clientAuthorization.addItem(ClientAuthorizationType.None);
-			clientAuthorization.addItem(ClientAuthorizationType.Host);
-			clientAuthorization.addItem(ClientAuthorizationType.Self);
-		}
-		return clientAuthorization;
-	}
-
-
-	/**
 	 * This method initializes securityContainerPanel
 	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getSecurityContainerPanel() {
 		if (securityContainerPanel == null) {
-			securityContainerPanel = new JPanel();
-			securityContainerPanel.setLayout(new BorderLayout());
-			securityContainerPanel.add(getSecurityPanel(), java.awt.BorderLayout.NORTH);
+			securityContainerPanel = new SecurityConfigurationPanel(this.method.getMethodSecurity());
+			securityContainerPanel.setBorder(BorderFactory.createTitledBorder(null, "Method Level Security Configuration", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
 		}
 		return securityContainerPanel;
 	}

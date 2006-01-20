@@ -2,18 +2,13 @@ package gov.nih.nci.cagrid.introduce.portal.modification;
 
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
-import java.io.BufferedReader;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.StringTokenizer;
 import java.util.Vector;
 
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -23,14 +18,9 @@ import javax.swing.JTextField;
 
 import org.projectmobius.common.GridServiceResolver;
 import org.projectmobius.common.MobiusException;
-import org.projectmobius.common.Namespace;
 import org.projectmobius.gme.XMLDataModelService;
 import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
 import org.projectmobius.portal.GridPortalComponent;
-
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import javax.swing.JButton;
 
 
 /**
