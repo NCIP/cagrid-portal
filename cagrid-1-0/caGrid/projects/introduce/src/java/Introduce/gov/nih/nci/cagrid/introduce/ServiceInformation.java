@@ -1,30 +1,28 @@
 package gov.nih.nci.cagrid.introduce;
 
+import gov.nih.nci.cagrid.introduce.beans.IntroduceService;
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 
 import java.util.Properties;
 
 public class ServiceInformation {
-
-	private ServiceMetadataListType metadata;
 	
-	private MethodsType methods;
+	private IntroduceService introService;
 	
 	private Properties serviceProperties;
 	
-	public ServiceInformation(MethodsType methods , ServiceMetadataListType metadata, Properties properties) {
-		this.methods = methods;
-		this.metadata = metadata;
+	public ServiceInformation(IntroduceService service, Properties properties) {
+		this.introService = service;
 		this.serviceProperties = properties;
 	}
 	
 	public ServiceMetadataListType getMetadata() {
-		return metadata;
+		return introService.getServiceMetadataList();
 	}
 
 	public void setMetadata(ServiceMetadataListType metadata) {
-		this.metadata = metadata;
+		introService.setServiceMetadataList(metadata);
 	}
 
 	public Properties getServiceProperties() {
@@ -36,11 +34,11 @@ public class ServiceInformation {
 	}
 
 	public MethodsType getMethods() {
-		return methods;
+		return introService.getMethods();
 	}
 
 	public void setMethods(MethodsType methods) {
-		this.methods = methods;
+		this.introService.setMethods(methods);
 	}
 	
 }

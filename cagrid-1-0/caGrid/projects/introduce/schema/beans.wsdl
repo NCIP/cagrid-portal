@@ -3,13 +3,10 @@
     <types>
         <schema targetNamespace="gov.nih.nci.cagrid.beans/beans"
             xmlns:tns="gov.nih.nci.cagrid.beans/beans"
-            xmlns:methods="gme://gov.nih.nci.cagrid.introduce/1/Methods"
-            xmlns:meta="gme://gov.nih.nci.cagrid.introduce/1/Metadata"
+            xmlns:introduce="gme://gov.nih.nci.cagrid/1/Introduce"
             xmlns="http://www.w3.org/2001/XMLSchema">
-            <import namespace="gme://gov.nih.nci.cagrid.introduce/1/Methods"
-                schemaLocation="./Methods.xsd"/>
-            <import namespace="gme://gov.nih.nci.cagrid.introduce/1/Metadata"
-                schemaLocation="./ServiceMetadata.xsd"/>
+            <import namespace="gme://gov.nih.nci.cagrid/1/Introduce"
+                schemaLocation="./IntroduceService.xsd"/>
         </schema>
     </types>
 </definitions>

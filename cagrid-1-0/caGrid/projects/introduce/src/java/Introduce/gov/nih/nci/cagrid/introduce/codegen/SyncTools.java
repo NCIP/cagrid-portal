@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.introduce.codegen;
 import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.beans.IntroduceService;
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -60,16 +61,14 @@ public class SyncTools {
 
 	public void sync() throws Exception {
 
-		MethodsType methods = (MethodsType) CommonTools.deserializeDocument(baseDirectory + File.separator
-			+ "introduceMethods.xml", MethodsType.class);
-		ServiceMetadataListType metadatas = (ServiceMetadataListType) CommonTools.deserializeDocument(baseDirectory
-			+ File.separator + "introduceMetadata.xml", ServiceMetadataListType.class);
+		IntroduceService introService =  (IntroduceService) CommonTools.deserializeDocument(baseDirectory + File.separator
+				+ "introduce.xml", IntroduceService.class);
 
 		File servicePropertiesFile = new File(baseDirectory.getAbsolutePath() + File.separator + "introduce.properties");
 		Properties serviceProperties = new Properties();
 		serviceProperties.load(new FileInputStream(servicePropertiesFile));
 
-		ServiceInformation info = new ServiceInformation(methods, metadatas, serviceProperties);
+		ServiceInformation info = new ServiceInformation(introService, serviceProperties);
 
 		this.createArchive(info);
 

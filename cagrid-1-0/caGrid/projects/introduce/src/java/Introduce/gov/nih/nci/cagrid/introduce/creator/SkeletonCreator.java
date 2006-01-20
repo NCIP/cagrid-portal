@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.creator;
 
 import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.beans.IntroduceService;
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 
@@ -28,19 +29,17 @@ public class SkeletonCreator extends Task {
 
 		File baseDirectory = new File(properties.getProperty("introduce.skeleton.destination.dir"));
 
-		ServiceMetadataListType metadatas = null;
-		MethodsType methods = null;
+		IntroduceService introService = null;
 		try {
-			methods = (MethodsType) CommonTools.deserializeDocument(baseDirectory + File.separator
-				+ "introduceMethods.xml", MethodsType.class);
-			metadatas = (ServiceMetadataListType) CommonTools.deserializeDocument(baseDirectory + File.separator
-				+ "introduceMetadata.xml", ServiceMetadataListType.class);
+			
+			introService =  (IntroduceService) CommonTools.deserializeDocument(baseDirectory + File.separator
+					+ "introduce.xml", IntroduceService.class);
+			
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-
-		ServiceInformation info = new ServiceInformation(methods, metadatas, properties);
-
+		
+		ServiceInformation info = new ServiceInformation(introService, properties);
 		SkeletonBaseCreator sbc = new SkeletonBaseCreator();
 		SkeletonSourceCreator ssc = new SkeletonSourceCreator();
 		SkeletonSchemaCreator sscc = new SkeletonSchemaCreator();
@@ -70,6 +69,7 @@ public class SkeletonCreator extends Task {
 		} catch (Exception e) {
 			BuildException be = new BuildException(e.getMessage());
 			be.setStackTrace(e.getStackTrace());
+			be.printStackTrace();
 			throw be;
 		}
 	}

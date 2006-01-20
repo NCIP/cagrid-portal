@@ -4,11 +4,10 @@ import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
-import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataListType;
+import gov.nih.nci.cagrid.introduce.beans.IntroduceService;
 import gov.nih.nci.cagrid.introduce.beans.metadata.ServiceMetadataType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
@@ -42,7 +41,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.37 2006-01-20 01:44:47 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.38 2006-01-20 17:21:40 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -64,9 +63,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 
 	private File methodsDirectory = null;
 
-	private MethodsType methodsType;
-
-	private ServiceMetadataListType metadataListType;
+	private IntroduceService introService;
 
 	private Properties serviceProperties = null;
 
@@ -195,16 +192,11 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		if (this.methodsDirectory != null) {
 			SAXBuilder builder = new SAXBuilder(false);
 			try {
-				this.methodsType = (MethodsType) CommonTools
+				this.introService = (IntroduceService) CommonTools
 						.deserializeDocument(this.methodsDirectory
 								.getAbsolutePath()
-								+ File.separator + "introduceMethods.xml",
-								MethodsType.class);
-				this.metadataListType = (ServiceMetadataListType) CommonTools
-						.deserializeDocument(this.methodsDirectory
-								.getAbsolutePath()
-								+ File.separator + "introduceMetadata.xml",
-								ServiceMetadataListType.class);
+								+ File.separator + "introduce.xml",
+								IntroduceService.class);
 
 				loadServiceProps();
 
@@ -381,8 +373,8 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	 */
 	private MethodsTable getMethodsTable() {
 		if (methodsTable == null) {
-			methodsTable = new MethodsTable(methodsType, this.methodsDirectory,
-					this.serviceProperties);
+			methodsTable = new MethodsTable(introService.getMethods(),
+					this.methodsDirectory, this.serviceProperties);
 			methodsTable.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					if (e.getClickCount() == 2) {
@@ -432,18 +424,22 @@ public class ModificationViewer extends GridPortalBaseFrame {
 							// this seems to be a wierd way be adding things....
 							MethodType[] newMethods;
 							int newLength = 0;
-							if (methodsType.getMethod() != null) {
-								newLength = methodsType.getMethod().length + 1;
+							if (introService.getMethods() != null
+									&& introService.getMethods().getMethod() != null) {
+								newLength = introService.getMethods()
+										.getMethod().length + 1;
 								newMethods = new MethodType[newLength];
-								System.arraycopy(methodsType.getMethod(), 0,
-										newMethods, 0,
-										methodsType.getMethod().length);
+								System
+										.arraycopy(introService.getMethods()
+												.getMethod(), 0, newMethods, 0,
+												introService.getMethods()
+														.getMethod().length);
 							} else {
 								newLength = 1;
 								newMethods = new MethodType[newLength];
 							}
 							newMethods[newLength - 1] = method;
-							methodsType.setMethod(newMethods);
+							introService.getMethods().setMethod(newMethods);
 
 							getMethodsTable().addRow(method);
 
@@ -541,36 +537,25 @@ public class ModificationViewer extends GridPortalBaseFrame {
 										metadataArray[i] = metadata;
 
 									}
-									metadataListType.setMetadata(metadataArray);
+									introService.getServiceMetadataList()
+											.setMetadata(metadataArray);
 
 									// check the methods to make sure they are
 									// valid.......
 
 									// save the metadata and methods and then
 									// call the resync and build
-									setProgressText("writting service metadata document");
+									setProgressText("writting service document");
 									CommonTools
 											.serializeDocument(
 													methodsDirectory
 															.getAbsolutePath()
 															+ File.separator
-															+ "introduceMetadata.xml",
-													metadataListType,
+															+ "introduce.xml",
+													introService,
 													new QName(
-															"gme://gov.nih.nci.cagrid.introduce/1/Metadata",
-															"ServiceMetadataListType"));
-									setProgressText("writting service methods document");
-									CommonTools
-											.serializeDocument(
-													methodsDirectory
-															.getAbsolutePath()
-															+ File.separator
-															+ "introduceMethods.xml",
-													methodsType,
-													new QName(
-															"gme://gov.nih.nci.cagrid.introduce/1/Methods",
-															"methodsType"));
-
+															"gme://gov.nih.nci.cagrid/1/Introduce",
+															"Introduce"));
 									setProgressText("sychronizing skeleton");
 									// call the sync tools
 									SyncTools sync = new SyncTools(
@@ -847,7 +832,8 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	 */
 	private MetadataTable getMetadataTable() {
 		if (metadataTable == null) {
-			metadataTable = new MetadataTable(this.metadataListType);
+			metadataTable = new MetadataTable(introService
+					.getServiceMetadataList());
 			metadataTable.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					if (e.getClickCount() == 2) {
@@ -915,19 +901,25 @@ public class ModificationViewer extends GridPortalBaseFrame {
 							// this seems to be a wierd way be adding things....
 							ServiceMetadataType[] metadatas;
 							int newLength = 0;
-							if (metadataListType.getMetadata() != null) {
-								newLength = metadataListType.getMetadata().length + 1;
+							if (introService.getServiceMetadataList() != null
+									&& introService.getServiceMetadataList()
+											.getMetadata() != null) {
+								newLength = introService
+										.getServiceMetadataList().getMetadata().length + 1;
 								metadatas = new ServiceMetadataType[newLength];
 								System.arraycopy(
-										metadataListType.getMetadata(), 0,
-										metadatas, 0, metadataListType
+										introService.getServiceMetadataList()
+												.getMetadata(), 0, metadatas,
+										0, introService
+												.getServiceMetadataList()
 												.getMetadata().length);
 							} else {
 								newLength = 1;
 								metadatas = new ServiceMetadataType[newLength];
 							}
 							metadatas[newLength - 1] = metadata;
-							metadataListType.setMetadata(metadatas);
+							introService.getServiceMetadataList().setMetadata(
+									metadatas);
 
 							getMetadataTable().addRow(metadata);
 
