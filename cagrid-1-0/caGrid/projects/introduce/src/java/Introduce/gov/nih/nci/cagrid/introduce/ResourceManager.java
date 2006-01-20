@@ -252,9 +252,11 @@ public class ResourceManager {
 	}
 
 
-	public static String promptDir(Component comp) throws Exception {
+	public static String promptDir(Component comp, String defaultLocation) throws Exception {
 		JFileChooser chooser = null;
-		if (getProperty(LAST_DIRECTORY) != null) {
+		if(defaultLocation !=null && defaultLocation.length()>0 && new File(defaultLocation).exists()){
+			chooser = new JFileChooser(new File(defaultLocation));
+		} else if (getProperty(LAST_DIRECTORY) != null) {
 			chooser = new JFileChooser(new File(getProperty(LAST_DIRECTORY)));
 		} else {
 			chooser = new JFileChooser();

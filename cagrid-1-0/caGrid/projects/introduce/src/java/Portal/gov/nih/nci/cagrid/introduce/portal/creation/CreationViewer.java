@@ -86,7 +86,7 @@ public class CreationViewer extends GridPortalComponent {
 	private JLabel serviceStyleLabel = null;
 
 	private JComboBox serviceStyleSeletor = null;
-	
+
 	private Component me;
 
 	/**
@@ -123,7 +123,7 @@ public class CreationViewer extends GridPortalComponent {
 			gridBagConstraints16.gridy = 5;
 			gridBagConstraints16.weightx = 1.0;
 			gridBagConstraints16.gridwidth = 2;
-			gridBagConstraints16.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints16.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints16.gridx = 1;
 			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
 			gridBagConstraints13.gridx = 0;
@@ -455,8 +455,15 @@ public class CreationViewer extends GridPortalComponent {
 			dirButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
-					dir.setText(ResourceManager.promptDir(me));
-					} catch (Exception ex){
+						String previous = dir.getText();
+						String location = ResourceManager.promptDir(me,
+								previous);
+						if (location != null && location.length() > 0) {
+							dir.setText(location);
+						} else {
+							dir.setText(previous);
+						}
+					} catch (Exception ex) {
 						ex.printStackTrace();
 					}
 				}
