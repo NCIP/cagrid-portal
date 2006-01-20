@@ -2,6 +2,7 @@ package gov.nih.nci.cabig.introduce.steps;
 
 import gov.nih.nci.cabig.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.beans.IntroduceService;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 
 import java.io.File;
@@ -12,8 +13,8 @@ import com.atomicobject.haste.framework.Step;
 
 public class RemoveSimpleMethodStep extends Step {
 	private TestCaseInfo tci;
-	
-	public RemoveSimpleMethodStep(TestCaseInfo tci){
+
+	public RemoveSimpleMethodStep(TestCaseInfo tci) {
 		this.tci = tci;
 	}
 
@@ -26,23 +27,17 @@ public class RemoveSimpleMethodStep extends Step {
 			System.err.println("pathtobasedir system property not set");
 			throw new Exception("pathtobasedir system property not set");
 		}
-		
-		MethodsType methodsType = (MethodsType) CommonTools
-		.deserializeDocument(pathtobasedir
-				+ File.separator + tci.getDir() + File.separator
-				+ "introduceMethods.xml",
-				MethodsType.class);
+
+		IntroduceService introService = (IntroduceService) CommonTools
+				.deserializeDocument(pathtobasedir + File.separator
+						+ "introduce.xml", IntroduceService.class);
+		MethodsType methodsType = introService.getMethods();
 
 		methodsType.setMethod(null);
-		
-		CommonTools
-		.serializeDocument(pathtobasedir
-				+ File.separator + tci.getDir() + File.separator
-				+ "introduceMethods.xml",
-				methodsType,
-				new QName(
-						"gme://gov.nih.nci.cagrid.introduce/1/Methods",
-						"methodsType"));
+
+		CommonTools.serializeDocument(pathtobasedir + File.separator
+				+ "introduce.xml", introService, new QName(
+				"gme://gov.nih.nci.cagrid/1/Introduce", "Introduce"));
 
 		String cmd = CommonTools.getAntSkeletonResyncCommand(pathtobasedir
 				+ File.separator + tci.getDir());
@@ -51,8 +46,9 @@ public class RemoveSimpleMethodStep extends Step {
 		p.waitFor();
 
 		assertEquals(0, p.exitValue());
-		
-		cmd = CommonTools.getAntAllCommand(pathtobasedir + File.separator + tci.getDir());
+
+		cmd = CommonTools.getAntAllCommand(pathtobasedir + File.separator
+				+ tci.getDir());
 
 		p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();

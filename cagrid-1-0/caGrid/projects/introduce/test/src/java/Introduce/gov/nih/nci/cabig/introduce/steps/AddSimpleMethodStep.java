@@ -2,6 +2,7 @@ package gov.nih.nci.cabig.introduce.steps;
 
 import gov.nih.nci.cabig.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.beans.IntroduceService;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
@@ -12,15 +13,12 @@ import javax.xml.namespace.QName;
 
 import com.atomicobject.haste.framework.Step;
 
-
 public class AddSimpleMethodStep extends Step {
 	private TestCaseInfo tci;
-
 
 	public AddSimpleMethodStep(TestCaseInfo tci) {
 		this.tci = tci;
 	}
-
 
 	public void runStep() throws Throwable {
 		System.out.println("Adding a simple method.");
@@ -32,8 +30,10 @@ public class AddSimpleMethodStep extends Step {
 			throw new Exception("pathtobasedir system property not set");
 		}
 
-		MethodsType methodsType = (MethodsType) CommonTools.deserializeDocument(pathtobasedir + File.separator
-			+ tci.getDir() + File.separator + "introduceMethods.xml", MethodsType.class);
+		IntroduceService introService = (IntroduceService) CommonTools
+				.deserializeDocument(pathtobasedir + File.separator
+						+ "introduce.xml", IntroduceService.class);
+		MethodsType methodsType = introService.getMethods();
 
 		MethodType method = new MethodType();
 		method.setName("newMethod");
@@ -48,7 +48,8 @@ public class AddSimpleMethodStep extends Step {
 		if (methodsType.getMethod() != null) {
 			newLength = methodsType.getMethod().length + 1;
 			newMethods = new MethodType[newLength];
-			System.arraycopy(methodsType.getMethod(), 0, newMethods, 0, methodsType.getMethod().length);
+			System.arraycopy(methodsType.getMethod(), 0, newMethods, 0,
+					methodsType.getMethod().length);
 		} else {
 			newLength = 1;
 			newMethods = new MethodType[newLength];
@@ -56,18 +57,20 @@ public class AddSimpleMethodStep extends Step {
 		newMethods[newLength - 1] = method;
 		methodsType.setMethod(newMethods);
 
-		CommonTools.serializeDocument(pathtobasedir + File.separator + tci.getDir() + File.separator
-			+ "introduceMethods.xml", methodsType, new QName("gme://gov.nih.nci.cagrid.introduce/1/Methods",
-			"methodsType"));
+		CommonTools.serializeDocument(pathtobasedir + File.separator
+				+ "introduce.xml", introService, new QName(
+				"gme://gov.nih.nci.cagrid/1/Introduce", "Introduce"));
 
-		String cmd = CommonTools.getAntSkeletonResyncCommand(pathtobasedir + File.separator + tci.getDir());
+		String cmd = CommonTools.getAntSkeletonResyncCommand(pathtobasedir
+				+ File.separator + tci.getDir());
 
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
 
 		assertEquals(0, p.exitValue());
 
-		cmd = CommonTools.getAntAllCommand(pathtobasedir + File.separator + tci.getDir());
+		cmd = CommonTools.getAntAllCommand(pathtobasedir + File.separator
+				+ tci.getDir());
 
 		p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
