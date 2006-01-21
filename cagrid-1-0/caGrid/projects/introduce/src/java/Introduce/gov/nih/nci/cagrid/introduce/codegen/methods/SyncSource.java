@@ -86,11 +86,12 @@ public class SyncSource {
 		String methodString = "";
 		MethodTypeOutput returnTypeEl = method.getOutput();
 		String methodName = method.getName();
-		String returnType = returnTypeEl.getClassName();
+		String returnType = returnTypeEl.getPackageName() + "." + returnTypeEl.getClassName();
 		methodString += "     public " + returnType + " " + methodName + "(";
 		if (method.getInputs() != null && method.getInputs().getInput() != null) {
 			for (int j = 0; j < method.getInputs().getInput().length; j++) {
-				String classType = method.getInputs().getInput(j).getClassName();
+				String packageName = method.getInputs().getInput(j).getPackageName();
+				String classType = packageName + "." + method.getInputs().getInput(j).getClassName();
 				String paramName = method.getInputs().getInput(j).getName();
 				methodString += classType + " " + paramName;
 				if (j < method.getInputs().getInput().length - 1) {

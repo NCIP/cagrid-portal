@@ -52,7 +52,7 @@ public class MetadataConfiguration {
 				MetadataType metadata = metadataList.getMetadata()[i];
 				if(metadata.isPopulateFromFile()){
 					String name=TemplateUtils.getResourcePropertyVariableName(metadataList, i);
-					String className=metadata.getClassName();
+					String className=metadata.getPackageName() + "." + metadata.getClassName();
 		%>
 	
 	

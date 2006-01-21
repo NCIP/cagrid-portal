@@ -6,6 +6,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -254,9 +255,24 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
 	public void performDone() {
 		// populate the data vector from the prior screen now......
 		int index = 0;
-		// skip packageName and classname
+		
+		//set the package name
+		String domain = this.gmePanel.currentNamespace.getDomain();
+		String csi = this.gmePanel.currentNamespace.getName();
+		int csiDomainIndex = csi.lastIndexOf(".");
+		if(csiDomainIndex>=0){
+			domain = csi.substring(0,csiDomainIndex);
+		}
+		StringTokenizer tokenizer = new StringTokenizer(domain, ".", true);
+		StringBuffer packageNameBuf = new StringBuffer();
+		while (tokenizer.hasMoreElements()) {
+			packageNameBuf.insert(0, tokenizer.nextToken());
+		}
+		typeInfo.set(index++, packageNameBuf.toString());
+		
+		// skip classname
 		index++;
-		index++;
+
 		typeInfo.set(index++, new Boolean(isArrayCheckBox.isSelected()));
 		if (handleParameterName) {
 			typeInfo.set(index++, paramName.getText());

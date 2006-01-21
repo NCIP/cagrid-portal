@@ -57,6 +57,15 @@ public class SyncTools {
 	public SyncTools(File directory) {
 		this.baseDirectory = directory;
 	}
+	
+	private String getRelativeClassName(String fullyQualifiedClassName){
+		int index = fullyQualifiedClassName.lastIndexOf(".");
+		if(index>=0){
+			return fullyQualifiedClassName.substring(index+1);
+		} else {
+			return fullyQualifiedClassName;
+		}
+	}
 
 
 	public void sync() throws Exception {
@@ -122,7 +131,7 @@ public class SyncTools {
 				MetadataType mtype = info.getMetadata().getMetadata(i);
 				if (mtype.getClassName() == null || mtype.getClassName().length() == 0) {
 					Element element = table.getElement(new QName(mtype.getNamespace(), mtype.getType()));
-					mtype.setClassName(element.getName());
+					mtype.setClassName(getRelativeClassName(element.getName()));
 				}
 			}
 		}
@@ -140,9 +149,9 @@ public class SyncTools {
 							Type type = table.getType(new QName(inputParam.getNamespace(), inputParam.getType()));
 
 							if (inputParam.getIsArray().booleanValue()) {
-								inputParam.setClassName(type.getName() + "[]");
+								inputParam.setClassName(getRelativeClassName(type.getName()) + "[]");
 							} else {
-								inputParam.setClassName(type.getName());
+								inputParam.setClassName(getRelativeClassName(type.getName()));
 							}
 						}
 					}
@@ -155,9 +164,9 @@ public class SyncTools {
 					} else {
 						Type type = table.getType(new QName(outputParam.getNamespace(), outputParam.getType()));
 						if (outputParam.getIsArray().booleanValue()) {
-							outputParam.setClassName(type.getName() + "[]");
+							outputParam.setClassName(getRelativeClassName(type.getName()) + "[]");
 						} else {
-							outputParam.setClassName(type.getName());
+							outputParam.setClassName(getRelativeClassName(type.getName()));
 						}
 					}
 

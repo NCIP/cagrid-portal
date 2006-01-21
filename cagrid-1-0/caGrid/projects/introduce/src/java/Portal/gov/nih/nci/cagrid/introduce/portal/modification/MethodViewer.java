@@ -534,7 +534,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			PortalUtils.showErrorMessage("Please select a parameter to edit.");
 			return;
 		}
-		Vector v = (Vector) getInputParamTable().getValueAt(getInputParamTable().getSelectedRow(), 7);
+		Vector v = (Vector) getInputParamTable().getValueAt(getInputParamTable().getSelectedRow(), 8);
 		PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
 			new GMEParameterConfigurationComponent(v, schemaDir, true));
 	}

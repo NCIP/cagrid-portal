@@ -115,7 +115,7 @@ public class TemplateUtils {
 					prefix = prefixBase + ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
 				}
 				// add the ns=>prefix entry
-				map.put(qnameNamespace, new SchemaInformation(qnameNamespace, prefix, location));
+				map.put(qnameNamespace, new SchemaInformation(metadata.getPackageName(),qnameNamespace, prefix, location));
 			}
 		}
 
@@ -138,7 +138,7 @@ public class TemplateUtils {
 								prefix = prefixBase + ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
 							}
 							// add the ns=>prefix entry
-							map.put(qnameNamespace, new SchemaInformation(qnameNamespace, prefix, location));
+							map.put(qnameNamespace, new SchemaInformation(inputParam.getPackageName(),qnameNamespace, prefix, location));
 						}
 					}
 					if (method.getOutput() != null) {
@@ -156,7 +156,7 @@ public class TemplateUtils {
 								prefix = prefixBase + ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
 							}
 							// add the ns=>prefix entry
-							map.put(qnameNamespace, new SchemaInformation(qnameNamespace, prefix, location));
+							map.put(qnameNamespace, new SchemaInformation(outputParam.getPackageName(),qnameNamespace, prefix, location));
 						}
 					}
 				}

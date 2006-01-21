@@ -20,13 +20,19 @@
 			String namespaceS = (String)iterator.next();
 			SchemaInformation schemaInformation=(SchemaInformation)prefixmap.get(namespaceS);
 			try{ 
+			String newLine = "";
 			org.projectmobius.common.Namespace namespace = new org.projectmobius.common.Namespace(schemaInformation.getNamespace());
+			if(schemaInformation.getPackageName()!=null && !schemaInformation.getPackageName().equals("")){
 							StringTokenizer tokenizer = new StringTokenizer(namespace.getDomain(), ".", true);
 							StringBuffer packageNameBuf = new StringBuffer();
 							while (tokenizer.hasMoreElements()) {
 								packageNameBuf.insert(0, tokenizer.nextToken());
 							}
-							String newLine = namespace.getRaw() + "=" + packageNameBuf.toString() + ".bean";
+							newLine = namespace.getRaw() + "=" + packageNameBuf.toString();
+							} else {
+							newLine = namespace.getRaw() + "=" + schemaInformation.getPackageName();
+							}
+							
 							// turns http: into http\:
 							String newnewLine = newLine.replaceFirst(":", "\\\\:");
 							newnewLine = newnewLine.replaceFirst("\\Q\\\\\\\\:\\E", "\\\\:");

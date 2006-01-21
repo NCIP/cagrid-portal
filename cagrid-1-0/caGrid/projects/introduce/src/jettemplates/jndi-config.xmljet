@@ -43,7 +43,7 @@ imports="gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.i
 			MetadataType metadata = metadataList.getMetadata()[i];
 			if(metadata.isPopulateFromFile()){
 				String name=TemplateUtils.getResourcePropertyVariableName(metadataList, i);
-				String className=metadata.getClassName();%>
+				String className=metadata.getPackageName() + "." + metadata.getClassName();%>
 				<parameter>
 					<name><%=name%>File</name>
 					<!-- Set this to the full path of the <%=name%> extract -->
