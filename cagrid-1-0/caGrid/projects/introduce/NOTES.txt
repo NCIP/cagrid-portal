@@ -10,7 +10,7 @@ To Do:
 
 (DONE) namespace to package mappings should be jettemplated at sync time
 
-Security configuration
+Security configuration (STEVE)
 
 (DONE) Metadata and registration configuration
 
