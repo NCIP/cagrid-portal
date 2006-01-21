@@ -145,6 +145,7 @@ public class SyncTools {
 					for (int j = 0; j < mtype.getInputs().getInput().length; j++) {
 						MethodTypeInputsInput inputParam = mtype.getInputs().getInput(j);
 						if (inputParam.getClassName() != null && inputParam.getClassName().equals("void")) {
+							inputParam.setPackageName("");
 						} else {
 							Type type = table.getType(new QName(inputParam.getNamespace(), inputParam.getType()));
 
@@ -161,6 +162,7 @@ public class SyncTools {
 				if (mtype.getOutput() != null) {
 					MethodTypeOutput outputParam = mtype.getOutput();
 					if (outputParam.getClassName() != null && outputParam.getClassName().equals("void")) {
+						outputParam.setPackageName("");
 					} else {
 						Type type = table.getType(new QName(outputParam.getNamespace(), outputParam.getType()));
 						if (outputParam.getIsArray().booleanValue()) {

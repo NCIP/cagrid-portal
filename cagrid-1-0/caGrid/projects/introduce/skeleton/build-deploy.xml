@@ -4,7 +4,6 @@
 
 	<property file="deploy.properties" />
 	
-	<property environment="env"/>
 		
 	<!-- Tomcat Properties -->
 	<property name="tomcat.dir" value="${env.CATALINA_HOME}" />
@@ -86,6 +85,62 @@
 				<include name="**\*" />
 			</fileset>
 		</copy>
+		
+	</target>
+	
+	<!-- deploy to tomcat -->
+	<target name="deployGar" description="Deploys to GLOBUS_LOCATION" >
+		
+		<echo message="Deploying server to Globus Container" />
+		
+		<copy todir="${build.lib.dir}">
+			<fileset dir="${basedir}/lib">
+				<exclude name="**" />
+			</fileset>
+		</copy>
+		
+		<!-- Configure Tomcat destination for skeletons -->
+		<pathconvert dirsep="_" property="service.deployment.dir.name">
+			<path>
+				<pathelement path="${service.deployment.path}" />
+			</path>
+			<map from="${basedir}" to="" />
+			<map from="/" to="" />
+		</pathconvert>
+		
+		<property name="service.deployment.dir" value="${tomcat.deploy.dir}/etc/${service.deployment.dir.name}" />
+		
+		<!-- prepare the deployment directory -->
+		<mkdir dir="${service.deployment.dir}" />
+		
+		<!-- prepare the server-config file -->
+		<mkdir dir="tmp" />
+		<copy overwrite="true" todir="tmp" file="server-config.wsdd" />
+		<!-- replace the config paths in the server deploy file -->
+		<replace file="tmp/server-config.wsdd" value="${service.deployment.dir.name}" token="SERVICE-INSTANCE-PATH" />
+		<replace file="tmp/server-config.wsdd" value="${service.deployment.path}" token="SERVICE-INSTANCE-NAME" />
+		<replace file="tmp/server-config.wsdd" value="etc/${service.deployment.dir.name}" token="ETC-PATH" />
+		
+		
+		<!-- prepare the jndi file -->
+		<copy overwrite="true" todir="tmp" file="jndi-config.xml" />
+		<!-- replace the config paths in the server deploy file -->
+		<replace file="tmp/jndi-config.xml" value="${service.deployment.dir.name}" token="SERVICE-INSTANCE-PATH" />
+		<replace file="tmp/jndi-config.xml" value="${service.deployment.path}" token="SERVICE-INSTANCE-NAME" />
+		<replace file="tmp/jndi-config.xml" value="etc/${service.deployment.dir.name}" token="ETC-PATH" />
+		
+		<!-- make the gar file -->
+		<ant antfile="${build.packages}" target="makeGar">
+			<property name="garserverdeployment.file" value="${basedir}/tmp/server-config.wsdd" />
+			<property name="garjndiconfigdeployment.file" value="${basedir}/tmp/jndi-config.xml" />
+			<property name="garclientdeployment.file" value="${basedir}/client-config.wsdd" />
+			<property name="garclientserverdeployment.file" value="${basedir}/client-server.wsdd" />
+			<reference refid="${garjars.id}" />
+			<reference refid="${garschema.id}" />
+			<reference refid="${garetc.id}" />
+		</ant>
+		
+		<delete dir="tmp" />
 		
 	</target>
 
