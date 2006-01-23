@@ -1,6 +1,7 @@
 <%@ jet package="gov.nih.nci.cagrid.introduce.templates.etc" class="SecurityDescTemplate" %>
 <% 
    gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+   gov.nih.nci.cagrid.introduce.beans.ServiceSecurityConfiguration conf = info.getServiceSecurityConfiguration();
    String packageName = info.getServiceProperties().getProperty("introduce.skeleton.package");
    String serviceName = info.getServiceProperties().getProperty("introduce.skeleton.service.name");
    String namespaceDomain = info.getServiceProperties().getProperty("introduce.skeleton.namespace.domain");
@@ -82,6 +83,72 @@
 			}		}	
 				
 				}
+			}
+		}
+		if(conf!=null){
+				gov.nih.nci.cagrid.introduce.beans.method.SecureCommunicationConfiguration scc =conf.getServiceCommunicationSecurity();
+				
+					if(scc!=null){
+					gov.nih.nci.cagrid.introduce.beans.method.SecureCommunicationMethodType mt = scc.getSecureCommunication();
+					
+					if(!(mt.equals(gov.nih.nci.cagrid.introduce.beans.method.SecureCommunicationMethodType.Default))){
+					
+					gov.nih.nci.cagrid.introduce.beans.method.AuthenticationMethodType auth = scc.getAuthenticationMethod();
+		StringBuffer authStr = new StringBuffer();
+		String tab="		";
+		String tab2=tab+"	";
+		String tab3=tab2+"	 ";
+	
+		if(mt.equals(gov.nih.nci.cagrid.introduce.beans.method.SecureCommunicationMethodType.None)){
+			authStr.append(tab+"<none/>\n");
+		}else if(mt.equals(gov.nih.nci.cagrid.introduce.beans.method.SecureCommunicationMethodType.GSI_Transport_Level_Security)){
+			authStr.append(tab+"<GSITransport>\n");
+			authStr.append(tab2+"<protection-level>\n");
+				if(auth.equals(gov.nih.nci.cagrid.introduce.beans.method.AuthenticationMethodType.Integrity)){
+					authStr.append(tab3+"<integrity/>\n");
+				}else if(auth.equals(gov.nih.nci.cagrid.introduce.beans.method.AuthenticationMethodType.Privacy)){
+					authStr.append(tab3+"<privacy/>\n");
+				}else{
+					authStr.append(tab3+"<integrity/>\n");
+					authStr.append(tab3+"<privacy/>\n");
+				}
+			authStr.append(tab2+"</protection-level>\n");
+			authStr.append(tab+"</GSITransport>\n");
+		}else if(mt.equals(gov.nih.nci.cagrid.introduce.beans.method.SecureCommunicationMethodType.GSI_Secure_Conversation)){
+			authStr.append(tab+"<GSISecureConversation>\n");
+			authStr.append(tab2+"<protection-level>\n");
+				if(auth.equals(gov.nih.nci.cagrid.introduce.beans.method.AuthenticationMethodType.Integrity)){
+					authStr.append(tab3+"<integrity/>\n");
+				}else if(auth.equals(gov.nih.nci.cagrid.introduce.beans.method.AuthenticationMethodType.Privacy)){
+					authStr.append(tab3+"<privacy/>\n");
+				}else{
+					authStr.append(tab3+"<integrity/>\n");
+					authStr.append(tab3+"<privacy/>\n");
+				}
+			authStr.append(tab2+"</protection-level>\n");
+			authStr.append(tab+"</GSISecureConversation>\n");
+		}else if(mt.equals(gov.nih.nci.cagrid.introduce.beans.method.SecureCommunicationMethodType.GSI_Secure_Message)){
+		authStr.append(tab+"<GSISecureMessage>\n");
+			authStr.append(tab2+"<protection-level>\n");
+				if(auth.equals(gov.nih.nci.cagrid.introduce.beans.method.AuthenticationMethodType.Integrity)){
+					authStr.append(tab3+"<integrity/>\n");
+				}else if(auth.equals(gov.nih.nci.cagrid.introduce.beans.method.AuthenticationMethodType.Privacy)){
+					authStr.append(tab3+"<privacy/>\n");
+				}else{
+					authStr.append(tab3+"<integrity/>\n");
+					authStr.append(tab3+"<privacy/>\n");
+				}
+			authStr.append(tab2+"</protection-level>\n");
+			authStr.append(tab+"</GSISecureMessage>\n");
+		}
+					
+	%>
+		<auth-method>
+<%=authStr.toString()%>
+  		</auth-method>
+ 
+					
+	<%				}
 			}
 		}
 	%>
