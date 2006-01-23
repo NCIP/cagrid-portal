@@ -4,12 +4,10 @@ import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
-import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.codegen.metadata.SyncMetadata;
 import gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods;
 import gov.nih.nci.cagrid.introduce.templates.NamespaceMappingsTemplate;
@@ -57,11 +55,12 @@ public class SyncTools {
 	public SyncTools(File directory) {
 		this.baseDirectory = directory;
 	}
-	
-	private String getRelativeClassName(String fullyQualifiedClassName){
+
+
+	private String getRelativeClassName(String fullyQualifiedClassName) {
 		int index = fullyQualifiedClassName.lastIndexOf(".");
-		if(index>=0){
-			return fullyQualifiedClassName.substring(index+1);
+		if (index >= 0) {
+			return fullyQualifiedClassName.substring(index + 1);
 		} else {
 			return fullyQualifiedClassName;
 		}
@@ -70,8 +69,8 @@ public class SyncTools {
 
 	public void sync() throws Exception {
 
-		ServiceDescription introService =  (ServiceDescription) CommonTools.deserializeDocument(baseDirectory + File.separator
-				+ "introduce.xml", ServiceDescription.class);
+		ServiceDescription introService = (ServiceDescription) CommonTools.deserializeDocument(baseDirectory
+			+ File.separator + "introduce.xml", ServiceDescription.class);
 
 		File servicePropertiesFile = new File(baseDirectory.getAbsolutePath() + File.separator + "introduce.properties");
 		Properties serviceProperties = new Properties();
@@ -91,14 +90,14 @@ public class SyncTools {
 		FileWriter serviceWSDLFW = new FileWriter(serviceWSDLF);
 		serviceWSDLFW.write(serviceWSDLS);
 		serviceWSDLFW.close();
-		
+
 		NamespaceMappingsTemplate namespaceMappingsT = new NamespaceMappingsTemplate();
 		String namespaceMappingsS = namespaceMappingsT.generate(info);
-		File namespaceMappingsF = new File(baseDirectory.getAbsolutePath() + File.separator + "namespace2package.mappings");
+		File namespaceMappingsF = new File(baseDirectory.getAbsolutePath() + File.separator
+			+ "namespace2package.mappings");
 		FileWriter namespaceMappingsFW = new FileWriter(namespaceMappingsF);
 		namespaceMappingsFW.write(namespaceMappingsS);
 		namespaceMappingsFW.close();
-		
 
 		String cmd = CommonTools.getAntFlattenCommand(baseDirectory.getAbsolutePath());
 		Process p = CommonTools.createAndOutputProcess(cmd);
@@ -123,7 +122,7 @@ public class SyncTools {
 		table = parser.getSymbolTable();
 		CommonTools.deleteDir(new File(baseDirectory.getAbsolutePath() + File.separator + "tmp"));
 
-		//table.dump(System.out);
+		// table.dump(System.out);
 
 		// get the classnames from the axis symbol table
 		if (info.getMetadata().getMetadata() != null) {

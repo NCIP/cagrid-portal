@@ -3,8 +3,6 @@ package gov.nih.nci.cagrid.introduce.creator;
 import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
-import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 
 import java.io.File;
 import java.util.Properties;
@@ -31,14 +29,14 @@ public class SkeletonCreator extends Task {
 
 		ServiceDescription introService = null;
 		try {
-			
-			introService =  (ServiceDescription) CommonTools.deserializeDocument(baseDirectory + File.separator
-					+ "introduce.xml", ServiceDescription.class);
-			
+
+			introService = (ServiceDescription) CommonTools.deserializeDocument(baseDirectory + File.separator
+				+ "introduce.xml", ServiceDescription.class);
+
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		
+
 		ServiceInformation info = new ServiceInformation(introService, properties);
 		SkeletonBaseCreator sbc = new SkeletonBaseCreator();
 		SkeletonSourceCreator ssc = new SkeletonSourceCreator();
