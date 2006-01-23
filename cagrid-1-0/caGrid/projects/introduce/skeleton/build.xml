@@ -32,8 +32,6 @@
 	<property name="mappings.file" value="${basedir}/namespace2package.mappings" />
 	<property name="jar.name" value="${gar.filename}.jar" />
 	<property name="stubs.jar.name" value="${gar.filename}_stubs.jar" />
-	<property name="gar.name" value="${gar.filename}.gar" />
-	
 	
 	<!-- Important test directories and files -->
 	<property name="test.dir" value="test" />
