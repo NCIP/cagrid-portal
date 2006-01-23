@@ -74,7 +74,7 @@
 	
 	
 	<!-- deploy a gar -->
-	<target name="deployGar" description="Deploys a gar to GLOBUS_LOCATION">
+	<target name="deployGar" depends="checkTomcat" description="Deploys a gar to GLOBUS_LOCATION">
 		<echo message="Deploying server to Globus Container" />
 		<copy todir="${build.lib.dir}">
 			<fileset dir="${basedir}/lib">

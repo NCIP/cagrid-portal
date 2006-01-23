@@ -371,12 +371,12 @@ public class MethodViewer extends GridPortalBaseFrame {
 					// now process the output
 					MethodTypeOutput output = new MethodTypeOutput();
 
-					String packageName = ((String) getOutputTypeTable().getValueAt(0, 1));
-					String className = ((String) getOutputTypeTable().getValueAt(0, 2));
-					Boolean isArray = ((Boolean) getOutputTypeTable().getValueAt(0, 3));
-					String namespace = ((String) getOutputTypeTable().getValueAt(0, 4));
-					String type = ((String) getOutputTypeTable().getValueAt(0, 5));
-					String location = ((String) getOutputTypeTable().getValueAt(0, 6));
+					String packageName = ((String) getOutputTypeTable().getValueAt(0, 0));
+					String className = ((String) getOutputTypeTable().getValueAt(0, 1));
+					Boolean isArray = ((Boolean) getOutputTypeTable().getValueAt(0, 2));
+					String namespace = ((String) getOutputTypeTable().getValueAt(0, 3));
+					String type = ((String) getOutputTypeTable().getValueAt(0, 4));
+					String location = ((String) getOutputTypeTable().getValueAt(0, 5));
 
 					if (packageName != null && !packageName.equals("")) {
 						output.setPackageName(packageName);

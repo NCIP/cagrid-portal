@@ -95,7 +95,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 	 */
 	private void initialize() {
 		this.setContentPane(getMainPanel());
-		this.setSize(452, 217);
+		this.setSize(452, 237);
 		this.setFrameIcon(IntroduceLookAndFeel.getDeployIcon());
 		this.setTitle("Deploy Grid Service");
 
@@ -221,6 +221,9 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 							"Deployment") {
 
 						public void process() {
+							setProgressText("validating environment variables");
+							
+							
 							setProgressText("writing deployment property file");
 
 							Enumeration keys = deployProperties.keys();
