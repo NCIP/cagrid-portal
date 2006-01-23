@@ -288,7 +288,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 
 	private String promptDir() {
 		JFileChooser chooser = new JFileChooser();
-		chooser.setDialogTitle("Select Attribute File");
+		chooser.setDialogTitle("Select Directory");
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		chooser.setMultiSelectionEnabled(false);
@@ -302,7 +302,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 
 	private String promptFile() {
 		JFileChooser chooser = new JFileChooser();
-		chooser.setDialogTitle("Select Attribute File");
+		chooser.setDialogTitle("Select File");
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		chooser.setMultiSelectionEnabled(false);
