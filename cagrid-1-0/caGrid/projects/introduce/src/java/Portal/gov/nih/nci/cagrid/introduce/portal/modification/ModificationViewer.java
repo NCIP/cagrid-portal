@@ -45,7 +45,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.43 2006-01-23 17:49:02 langella Exp $
+ * @version $Id: ModificationViewer.java,v 1.44 2006-01-23 19:53:12 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -657,7 +657,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		}
 
 		Vector v = (Vector) getMetadataTable().getValueAt(
-				getMetadataTable().getSelectedRow(), 7);
+				getMetadataTable().getSelectedRow(), 8);
 		PortalResourceManager
 				.getInstance()
 				.getGridPortal()
