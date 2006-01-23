@@ -37,7 +37,7 @@ public class SyncToolsTest extends Story {
 
 	protected void storyTearDown() throws Throwable {
 		RemoveSkeletonStep step = new RemoveSkeletonStep(tci);
-		//step.runStep();
+		step.runStep();
 	}
 
 	// used to make sure that if we are going to use a junit testsuite to test this 
