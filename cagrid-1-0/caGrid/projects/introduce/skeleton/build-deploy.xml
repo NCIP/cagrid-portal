@@ -1,24 +1,15 @@
 <?xml version="1.0"?>
-
 <project name="build-deploy file" basedir="." default="deploy">
-
 	<property file="deploy.properties" />
-	
-		
 	<!-- Tomcat Properties -->
 	<property name="tomcat.dir" value="${env.CATALINA_HOME}" />
 	<property name="tomcat.common.lib.dir" value="${tomcat.dir}/common/lib" />
 	<property name="tomcat.deploy.dir" value="${tomcat.dir}/webapps/wsrf/WEB-INF" />
 	<property name="tomcat.deploy.lib.dir" value="${tomcat.deploy.dir}/lib" />
 	<property name="tomcat.wsrf.schema.dir" value="${tomcat.dir}/webapps/wsrf/share/schema" />
-	
-
 	<!-- deploy to tomcat -->
-	<target name="deploy" description="Deploys to CATALINA_HOME" >
-		
+	<target name="deploy" description="Deploys to CATALINA_HOME">
 		<echo message="Deploying service under Tomcat at ${tomcat.dir}" />
-		
-		
 		<!-- Configure Tomcat destination for skeletons -->
 		<pathconvert dirsep="_" property="service.deployment.dir.name">
 			<path>
@@ -27,12 +18,9 @@
 			<map from="${basedir}" to="" />
 			<map from="/" to="" />
 		</pathconvert>
-		
 		<property name="service.deployment.dir" value="${tomcat.deploy.dir}/etc/${service.deployment.dir.name}" />
-		
 		<!-- prepare the deployment directory -->
 		<mkdir dir="${service.deployment.dir}" />
-		
 		<!-- prepare the server-config file -->
 		<mkdir dir="tmp" />
 		<copy overwrite="true" todir="tmp" file="server-config.wsdd" />
@@ -45,7 +33,6 @@
 				<include name="server-config.wsdd" />
 			</fileset>
 		</copy>
-		
 		<!-- prepare the jndi file -->
 		<copy overwrite="true" todir="tmp" file="jndi-config.xml" />
 		<!-- replace the config paths in the server deploy file -->
@@ -57,17 +44,13 @@
 				<include name="jndi-config.xml" />
 			</fileset>
 		</copy>
-		
 		<delete dir="tmp" />
-		
 		<!-- Copy skeleton files to Tomcat and rename -->
 		<copy overwrite="true" toDir="${service.deployment.dir}">
 			<fileset dir="${basedir}/etc">
 				<include name="*" />
 			</fileset>
 		</copy>
-		
-		
 		<!--copy over the jars to the lib -->
 		<copy overwrite="true" toDir="${tomcat.deploy.lib.dir}">
 			<fileset dir="lib">
@@ -77,29 +60,22 @@
 				<include name="*" />
 			</fileset>
 		</copy>
-		
-		
 		<!--copy over the schema service files-->
 		<copy overwrite="true" toDir="${tomcat.wsrf.schema.dir}/${service.deployment.dir.name}">
 			<fileset dir="build/schema/${introduce.skeleton.service.name}">
 				<include name="**\*" />
 			</fileset>
 		</copy>
-		
 	</target>
-	
-	<!-- deploy to tomcat -->
-	<target name="deployGar" description="Deploys to GLOBUS_LOCATION" >
-		
+	<!-- deploy a gar -->
+	<target name="deployGar" description="Deploys to GLOBUS_LOCATION">
 		<echo message="Deploying server to Globus Container" />
-		
 		<copy todir="${build.lib.dir}">
 			<fileset dir="${basedir}/lib">
 				<exclude name="**" />
 			</fileset>
 		</copy>
-		
-		<!-- Configure Tomcat destination for skeletons -->
+		<!-- configure the paths for deployment -->
 		<pathconvert dirsep="_" property="service.deployment.dir.name">
 			<path>
 				<pathelement path="${service.deployment.path}" />
@@ -107,12 +83,7 @@
 			<map from="${basedir}" to="" />
 			<map from="/" to="" />
 		</pathconvert>
-		
-		<property name="service.deployment.dir" value="${tomcat.deploy.dir}/etc/${service.deployment.dir.name}" />
-		
-		<!-- prepare the deployment directory -->
-		<mkdir dir="${service.deployment.dir}" />
-		
+		<property name="service.deployment.dir" value="${globus.location}/etc/${service.deployment.dir.name}" />
 		<!-- prepare the server-config file -->
 		<mkdir dir="tmp" />
 		<copy overwrite="true" todir="tmp" file="server-config.wsdd" />
@@ -120,15 +91,12 @@
 		<replace file="tmp/server-config.wsdd" value="${service.deployment.dir.name}" token="SERVICE-INSTANCE-PATH" />
 		<replace file="tmp/server-config.wsdd" value="${service.deployment.path}" token="SERVICE-INSTANCE-NAME" />
 		<replace file="tmp/server-config.wsdd" value="etc/${service.deployment.dir.name}" token="ETC-PATH" />
-		
-		
 		<!-- prepare the jndi file -->
 		<copy overwrite="true" todir="tmp" file="jndi-config.xml" />
 		<!-- replace the config paths in the server deploy file -->
 		<replace file="tmp/jndi-config.xml" value="${service.deployment.dir.name}" token="SERVICE-INSTANCE-PATH" />
 		<replace file="tmp/jndi-config.xml" value="${service.deployment.path}" token="SERVICE-INSTANCE-NAME" />
 		<replace file="tmp/jndi-config.xml" value="etc/${service.deployment.dir.name}" token="ETC-PATH" />
-		
 		<!-- make the gar file -->
 		<ant antfile="${build.packages}" target="makeGar">
 			<property name="garserverdeployment.file" value="${basedir}/tmp/server-config.wsdd" />
@@ -139,9 +107,23 @@
 			<reference refid="${garschema.id}" />
 			<reference refid="${garetc.id}" />
 		</ant>
-		
+		<java classname="org.globus.bootstrap.AntBootstrap" fork="yes" failonerror="true">
+			<jvmarg value="-DGLOBUS_LOCATION=${globus.location}" />
+			<jvmarg value="-Djava.endorsed.dirs=${globus.location}/endorsed" />
+			<sysproperty key="GLOBUS_LOCATION" value="${globus.location}" />
+			<sysproperty key="ANT_HOME" value="${ant.home}" />
+			<arg value="org.globus.tools.gar.DeployGar" />
+			<arg value="${gar.name}" />
+			<classpath>
+				<fileset dir="${globus.location}/lib">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${ant.library.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</java>
 		<delete dir="tmp" />
-		
+		<!-- deploy the gar -->
 	</target>
-
 </project>
