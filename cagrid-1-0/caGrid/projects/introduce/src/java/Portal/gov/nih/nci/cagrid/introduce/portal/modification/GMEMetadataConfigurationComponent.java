@@ -266,12 +266,8 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 		if(csiDomainIndex>=0){
 			domain = csi.substring(0,csiDomainIndex);
 		}
-		StringTokenizer tokenizer = new StringTokenizer(domain, ".", true);
-		StringBuffer packageNameBuf = new StringBuffer();
-		while (tokenizer.hasMoreElements()) {
-			packageNameBuf.insert(0, tokenizer.nextToken());
-		}
-		typeInfo.set(index++, packageNameBuf.toString());
+		
+		typeInfo.set(index++, domain);
 		
 		//skip classname
 		index++;
