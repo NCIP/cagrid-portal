@@ -74,7 +74,7 @@
 	
 	
 	<!-- deploy a gar -->
-	<target name="deployGar" depends="checkTomcat" description="Deploys a gar to GLOBUS_LOCATION">
+	<target name="deployGar" depends="checkGlobus, checkTomcat" description="Deploys a gar to GLOBUS_LOCATION">
 		<echo message="Deploying server to Globus Container" />
 		<copy todir="${build.lib.dir}">
 			<fileset dir="${basedir}/lib">
@@ -82,7 +82,7 @@
 			</fileset>
 		</copy>
 		
-		<property name="service.deployment.dir" value="${globus.location}/etc/${introduce.skeleton.service.name}" />
+		<property name="service.deployment.dir" value="${ext.globus.dir}/etc/${introduce.skeleton.service.name}" />
 		<!-- prepare the server-config file -->
 		<mkdir dir="tmp" />
 		<copy overwrite="true" todir="tmp" file="server-config.wsdd" />
@@ -107,14 +107,14 @@
 			<reference refid="${garetc.id}" />
 		</ant>
 		<java classname="org.globus.bootstrap.AntBootstrap" fork="yes" failonerror="true">
-			<jvmarg value="-DGLOBUS_LOCATION=${globus.location}" />
-			<jvmarg value="-Djava.endorsed.dirs=${globus.location}/endorsed" />
-			<sysproperty key="GLOBUS_LOCATION" value="${globus.location}" />
+			<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
+			<jvmarg value="-Djava.endorsed.dirs=${ext.globus.dir}/endorsed" />
+			<sysproperty key="GLOBUS_LOCATION" value="${ext.globus.dir}" />
 			<sysproperty key="ANT_HOME" value="${ant.home}" />
 			<arg value="org.globus.tools.gar.DeployGar" />
 			<arg value="${gar.name}" />
 			<classpath>
-				<fileset dir="${globus.location}/lib">
+				<fileset dir="${ext.globus.dir}/lib">
 					<include name="*.jar" />
 				</fileset>
 				<fileset dir="${ant.library.dir}">
