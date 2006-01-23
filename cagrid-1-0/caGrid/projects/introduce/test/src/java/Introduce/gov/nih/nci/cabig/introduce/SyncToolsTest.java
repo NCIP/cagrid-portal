@@ -3,7 +3,7 @@ package gov.nih.nci.cabig.introduce;
 import gov.nih.nci.cabig.introduce.steps.AddSimpleMethodStep;
 import gov.nih.nci.cabig.introduce.steps.AddSimpleMethodWithFaultStep;
 import gov.nih.nci.cabig.introduce.steps.CreateSkeletonStep;
-import gov.nih.nci.cabig.introduce.steps.RemoveSimpleMethodStep;
+import gov.nih.nci.cabig.introduce.steps.RemoveMethodStep;
 import gov.nih.nci.cabig.introduce.steps.RemoveSkeletonStep;
 import gov.nih.nci.cabig.introduce.steps.RollBackStep;
 
@@ -23,11 +23,12 @@ public class SyncToolsTest extends Story {
 		Vector steps = new Vector();
 
 		steps.add(new CreateSkeletonStep(tci));
-		steps.add(new AddSimpleMethodStep(tci));
-		steps.add(new AddSimpleMethodWithFaultStep(tci));
-		steps.add(new RollBackStep(tci));
-		//steps.add(new AddSimpleMethodStep(tci));
-		steps.add(new RemoveSimpleMethodStep(tci));
+		steps.add(new AddSimpleMethodStep(tci, "newMethod"));
+		steps.add(new AddSimpleMethodWithFaultStep(tci,"newMethodWithFault"));
+		//steps.add(new RollBackStep(tci));
+		//steps.add(new AddSimpleMethodWithFaultStep(tci));
+		steps.add(new RemoveMethodStep(tci, "newMethod"));
+		steps.add(new AddSimpleMethodStep(tci,"newMethod2"));
 		
 		return steps;
 	}
@@ -38,7 +39,7 @@ public class SyncToolsTest extends Story {
 
 	protected void storyTearDown() throws Throwable {
 		RemoveSkeletonStep step = new RemoveSkeletonStep(tci);
-		step.runStep();
+		//step.runStep();
 	}
 
 	// used to make sure that if we are going to use a junit testsuite to test this 

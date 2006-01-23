@@ -1,5 +1,7 @@
 package gov.nih.nci.cabig.introduce;
 
+import java.io.File;
+
 public class TestCaseInfo {
 
 	public String name = "IntroduceTest";
@@ -7,6 +9,8 @@ public class TestCaseInfo {
 	public String dir = "IntroduceTest";
 
 	public String packageName = "org.test";
+	
+	public String packageDir = "org" + File.separator + "test";
 
 	public String namespaceDomain = "test.org";
 
@@ -53,6 +57,14 @@ public class TestCaseInfo {
 
 	public void setPackageName(String packageName) {
 		this.packageName = packageName;
+	}
+
+	public String getPackageDir() {
+		return packageDir;
+	}
+
+	public void setPackageDir(String packageDir) {
+		this.packageDir = packageDir;
 	}
 
 }

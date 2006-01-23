@@ -17,9 +17,11 @@ import com.atomicobject.haste.framework.Step;
 
 public class AddSimpleMethodWithFaultStep extends Step {
 	private TestCaseInfo tci;
+	private String methodName;
 
-	public AddSimpleMethodWithFaultStep(TestCaseInfo tci) {
+	public AddSimpleMethodWithFaultStep(TestCaseInfo tci, String methodName) {
 		this.tci = tci;
+		this.methodName = methodName;
 	}
 
 	public void runStep() throws Throwable {
@@ -33,13 +35,13 @@ public class AddSimpleMethodWithFaultStep extends Step {
 		}
 
 		ServiceDescription introService = (ServiceDescription) CommonTools
-				.deserializeDocument(pathtobasedir
-						+ File.separator + tci.getDir() + File.separator
-						+ "introduce.xml", ServiceDescription.class);
+				.deserializeDocument(pathtobasedir + File.separator
+						+ tci.getDir() + File.separator + "introduce.xml",
+						ServiceDescription.class);
 		MethodsType methodsType = introService.getMethods();
 
 		MethodType method = new MethodType();
-		method.setName("newMethodWithFault");
+		method.setName(methodName);
 		MethodTypeOutput output = new MethodTypeOutput();
 		output.setClassName("void");
 		MethodTypeExceptionsException[] exceptionsArray = new MethodTypeExceptionsException[1];
@@ -67,10 +69,10 @@ public class AddSimpleMethodWithFaultStep extends Step {
 		newMethods[newLength - 1] = method;
 		methodsType.setMethod(newMethods);
 
-		CommonTools.serializeDocument(pathtobasedir
-				+ File.separator + tci.getDir() + File.separator
-				+ "introduce.xml", introService, new QName(
-				"gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
+		CommonTools.serializeDocument(pathtobasedir + File.separator
+				+ tci.getDir() + File.separator + "introduce.xml",
+				introService, new QName("gme://gov.nih.nci.cagrid/1/Introduce",
+						"ServiceSkeleton"));
 
 		String cmd = CommonTools.getAntSkeletonResyncCommand(pathtobasedir
 				+ File.separator + tci.getDir());
@@ -80,6 +82,14 @@ public class AddSimpleMethodWithFaultStep extends Step {
 
 		assertEquals(0, p.exitValue());
 
+		
+		// look at the interface to make sure method exists.......
+		String serviceInterface = pathtobasedir + File.separator + tci.dir
+				+ File.separator + "src" + File.separator
+				+ tci.getPackageDir() + "/common/" + tci.getName() + "I.java";
+		assertTrue(StepTools.methodExists(serviceInterface, methodName));
+
+		
 		cmd = CommonTools.getAntAllCommand(pathtobasedir + File.separator
 				+ tci.getDir());
 

@@ -3,6 +3,7 @@ package gov.nih.nci.cabig.introduce.steps;
 import gov.nih.nci.cabig.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 
 import java.io.File;
@@ -11,11 +12,13 @@ import javax.xml.namespace.QName;
 
 import com.atomicobject.haste.framework.Step;
 
-public class RemoveSimpleMethodStep extends Step {
+public class RemoveMethodStep extends Step {
 	private TestCaseInfo tci;
+	private String methodName;
 
-	public RemoveSimpleMethodStep(TestCaseInfo tci) {
+	public RemoveMethodStep(TestCaseInfo tci, String methodName) {
 		this.tci = tci;
+		this.methodName = methodName;
 	}
 
 	public void runStep() throws Throwable {
@@ -33,8 +36,17 @@ public class RemoveSimpleMethodStep extends Step {
 						+ File.separator + tci.getDir() + File.separator
 						+ "introduce.xml", ServiceDescription.class);
 		MethodsType methodsType = introService.getMethods();
-
-		methodsType.setMethod(null);
+		
+		MethodType[] newMethods = new MethodType[methodsType.getMethod().length-1];
+		int newMethodsI = 0;
+		for(int i=0;i<methodsType.getMethod().length; i++){
+			 MethodType method = methodsType.getMethod(i);
+			if(!method.getName().equals(methodName)){
+				newMethods[newMethodsI]=method;
+				newMethodsI++;
+			}
+		}
+		methodsType.setMethod(newMethods);
 
 		CommonTools.serializeDocument(pathtobasedir
 				+ File.separator + tci.getDir() + File.separator
@@ -48,6 +60,13 @@ public class RemoveSimpleMethodStep extends Step {
 		p.waitFor();
 
 		assertEquals(0, p.exitValue());
+		
+		//		 look at the interface to make sure method exists.......
+		String serviceInterface = pathtobasedir + File.separator + tci.dir
+				+ File.separator + "src" + File.separator
+				+ tci.getPackageDir() + "/common/" + tci.getName() + "I.java";
+		assertTrue(!StepTools.methodExists(serviceInterface, methodName));
+		
 
 		cmd = CommonTools.getAntAllCommand(pathtobasedir + File.separator
 				+ tci.getDir());
