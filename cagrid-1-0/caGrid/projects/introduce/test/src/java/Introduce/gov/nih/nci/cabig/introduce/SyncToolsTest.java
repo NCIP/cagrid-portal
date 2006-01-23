@@ -5,6 +5,7 @@ import gov.nih.nci.cabig.introduce.steps.AddSimpleMethodWithFaultStep;
 import gov.nih.nci.cabig.introduce.steps.CreateSkeletonStep;
 import gov.nih.nci.cabig.introduce.steps.RemoveSimpleMethodStep;
 import gov.nih.nci.cabig.introduce.steps.RemoveSkeletonStep;
+import gov.nih.nci.cabig.introduce.steps.RollBackStep;
 
 import java.util.Vector;
 
@@ -24,7 +25,7 @@ public class SyncToolsTest extends Story {
 		steps.add(new CreateSkeletonStep(tci));
 		steps.add(new AddSimpleMethodStep(tci));
 		steps.add(new AddSimpleMethodWithFaultStep(tci));
-		//steps.add(new RollBackStep(tci));
+		steps.add(new RollBackStep(tci));
 		//steps.add(new AddSimpleMethodStep(tci));
 		steps.add(new RemoveSimpleMethodStep(tci));
 		
