@@ -101,6 +101,7 @@
 	
 	<xs:simpleType name="SecureCommunicationMethodType">
 		<xs:restriction base="xs:string">
+			<xs:enumeration value="Default"/>
 			<xs:enumeration value="None"/>
 			<xs:enumeration value="GSI_Transport_Level_Security"/>
 			<xs:enumeration value="GSI_Secure_Conversation"/>

@@ -227,7 +227,12 @@ public class SecurityConfigurationPanel extends JPanel {
 
 
 	private void updateCombos(){
-		if (secureCommunication.getSelectedItem().equals(SecureCommunicationMethodType.None)) {
+		if (secureCommunication.getSelectedItem().equals(SecureCommunicationMethodType.Default)) {
+			communicationMethod.setEnabled(false);
+			anonymousCommunication.setSelectedItem(AnonymousClientsType.No);
+			anonymousCommunication.setEnabled(false);
+			clientAuthorization.setEnabled(false);
+		}else if (secureCommunication.getSelectedItem().equals(SecureCommunicationMethodType.None)) {
 			communicationMethod.setEnabled(false);
 			anonymousCommunication.setSelectedItem(AnonymousClientsType.No);
 			anonymousCommunication.setEnabled(false);
@@ -254,6 +259,7 @@ public class SecurityConfigurationPanel extends JPanel {
 	private JComboBox getSecureCommunication() {
 		if (secureCommunication == null) {
 			secureCommunication = new JComboBox();
+			secureCommunication.addItem(SecureCommunicationMethodType.Default);
 			secureCommunication.addItem(SecureCommunicationMethodType.None);
 			secureCommunication.addItem(SecureCommunicationMethodType.GSI_Transport_Level_Security);
 			secureCommunication.addItem(SecureCommunicationMethodType.GSI_Secure_Conversation);

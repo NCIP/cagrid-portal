@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.codegen.metadata.SyncMetadata;
 import gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods;
 import gov.nih.nci.cagrid.introduce.templates.NamespaceMappingsTemplate;
+import gov.nih.nci.cagrid.introduce.templates.etc.SecurityDescTemplate;
 import gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate;
 
 import java.io.File;
@@ -98,6 +99,7 @@ public class SyncTools {
 		FileWriter namespaceMappingsFW = new FileWriter(namespaceMappingsF);
 		namespaceMappingsFW.write(namespaceMappingsS);
 		namespaceMappingsFW.close();
+		
 
 		String cmd = CommonTools.getAntFlattenCommand(baseDirectory.getAbsolutePath());
 		Process p = CommonTools.createAndOutputProcess(cmd);
@@ -180,6 +182,14 @@ public class SyncTools {
 
 		methodsS.sync();
 		metadata.sync();
+		
+		File etcDir = new File(baseDirectory.getAbsolutePath() + File.separator + "etc");
+		SecurityDescTemplate securityDescT = new SecurityDescTemplate();
+		String securityDescS = securityDescT.generate(info);
+		File securityDescF = new File(etcDir.getAbsolutePath() + File.separator + "security-desc.xml");
+		FileWriter securityDescFW = new FileWriter(securityDescF);
+		securityDescFW.write(securityDescS);
+		securityDescFW.close();
 
 	}
 
