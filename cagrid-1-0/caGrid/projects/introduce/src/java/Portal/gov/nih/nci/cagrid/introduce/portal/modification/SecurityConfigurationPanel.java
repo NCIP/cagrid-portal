@@ -226,11 +226,31 @@ public class SecurityConfigurationPanel extends JPanel {
 	}
 
 
-	/**
-	 * This method initializes jComboBox3	
-	 * 	
-	 * @return javax.swing.JComboBox	
-	 */    
+	private void updateCombos(){
+		if (secureCommunication.getSelectedItem().equals(SecureCommunicationMethodType.None)) {
+			communicationMethod.setEnabled(false);
+			anonymousCommunication.setSelectedItem(AnonymousClientsType.No);
+			anonymousCommunication.setEnabled(false);
+			clientAuthorization.setEnabled(false);
+		} else if (secureCommunication.getSelectedItem().equals(
+			SecureCommunicationMethodType.GSI_Secure_Conversation)) {
+			communicationMethod.setEnabled(true);
+			anonymousCommunication.setEnabled(true);
+			clientAuthorization.setEnabled(true);
+		} else if (secureCommunication.getSelectedItem().equals(
+			SecureCommunicationMethodType.GSI_Secure_Message)) {
+			communicationMethod.setEnabled(true);
+			anonymousCommunication.setSelectedItem(AnonymousClientsType.No);
+			anonymousCommunication.setEnabled(false);
+			clientAuthorization.setEnabled(true);
+		} else if (secureCommunication.getSelectedItem().equals(
+			SecureCommunicationMethodType.GSI_Transport_Level_Security)) {
+			communicationMethod.setEnabled(true);
+			anonymousCommunication.setEnabled(true);
+			clientAuthorization.setEnabled(true);
+		}
+	}
+	
 	private JComboBox getSecureCommunication() {
 		if (secureCommunication == null) {
 			secureCommunication = new JComboBox();
@@ -240,30 +260,10 @@ public class SecurityConfigurationPanel extends JPanel {
 			secureCommunication.addItem(SecureCommunicationMethodType.GSI_Secure_Message);
 			secureCommunication.addActionListener(new java.awt.event.ActionListener() { 
 				public void actionPerformed(java.awt.event.ActionEvent e) {    
-					if (secureCommunication.getSelectedItem().equals(SecureCommunicationMethodType.None)) {
-						communicationMethod.setEnabled(false);
-						anonymousCommunication.setSelectedItem(AnonymousClientsType.No);
-						anonymousCommunication.setEnabled(false);
-						clientAuthorization.setEnabled(false);
-					} else if (secureCommunication.getSelectedItem().equals(
-						SecureCommunicationMethodType.GSI_Secure_Conversation)) {
-						communicationMethod.setEnabled(true);
-						anonymousCommunication.setEnabled(true);
-						clientAuthorization.setEnabled(true);
-					} else if (secureCommunication.getSelectedItem().equals(
-						SecureCommunicationMethodType.GSI_Secure_Message)) {
-						communicationMethod.setEnabled(true);
-						anonymousCommunication.setSelectedItem(AnonymousClientsType.No);
-						anonymousCommunication.setEnabled(false);
-						clientAuthorization.setEnabled(true);
-					} else if (secureCommunication.getSelectedItem().equals(
-						SecureCommunicationMethodType.GSI_Transport_Level_Security)) {
-						communicationMethod.setEnabled(true);
-						anonymousCommunication.setEnabled(true);
-						clientAuthorization.setEnabled(true);
-					}
+					updateCombos();
 				}
 			});
+			updateCombos();
 		}
 		return secureCommunication;
 	}
