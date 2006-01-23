@@ -16,6 +16,7 @@ import java.util.Enumeration;
 import java.util.Properties;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
@@ -35,6 +36,10 @@ import org.projectmobius.portal.PortalResourceManager;
  */
 public class DeploymentViewer extends GridPortalBaseFrame {
 
+	private static final String GLOBUS = "GLOBUS_LOCATION";
+
+	private static final String TOMCAT = "CATALINA_HOME";
+
 	private JPanel inputPanel = null;
 
 	private JPanel mainPanel = null;
@@ -52,6 +57,10 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 	private String defaultServiceDir = ".";
 
 	Properties deployProperties;
+
+	private JPanel deploymetnTypePanel = null;
+
+	private JComboBox deploymentTypeSelector = null;
 
 	/**
 	 * This method initializes
@@ -86,7 +95,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 	 */
 	private void initialize() {
 		this.setContentPane(getMainPanel());
-		this.setSize(454, 124);
+		this.setSize(452, 217);
 		this.setFrameIcon(IntroduceLookAndFeel.getDeployIcon());
 		this.setTitle("Deploy Grid Service");
 
@@ -150,10 +159,14 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.gridx = 0;
+			gridBagConstraints11.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints11.gridy = 0;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.gridy = 2;
+			gridBagConstraints1.gridy = 3;
 			gridBagConstraints1.anchor = java.awt.GridBagConstraints.SOUTH;
 			gridBagConstraints1.weighty = 0.0D;
 			gridBagConstraints1.weightx = 1.0D;
@@ -162,7 +175,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridheight = 1;
 			gridBagConstraints.gridx = 0;
-			gridBagConstraints.gridy = 0;
+			gridBagConstraints.gridy = 1;
 			gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
 			gridBagConstraints.weightx = 0.0D;
@@ -172,6 +185,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 			mainPanel.setLayout(new GridBagLayout());
 			mainPanel.add(getInputPanel(), gridBagConstraints);
 			mainPanel.add(getButtonPanel(), gridBagConstraints1);
+			mainPanel.add(getDeploymetnTypePanel(), gridBagConstraints11);
 		}
 		return mainPanel;
 	}
@@ -233,8 +247,17 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 							setProgressText("deploying");
 
 							try {
-								String cmd = CommonTools
-										.getAntDeployCommand(serviceDirectory.getAbsolutePath());
+								String cmd = "";
+								if (((String)deploymentTypeSelector.getSelectedItem())
+										.equals(GLOBUS)) {
+									cmd = CommonTools
+											.getAntDeployGarCommand(serviceDirectory
+													.getAbsolutePath());
+								} else {
+									cmd = CommonTools
+											.getAntDeployCommand(serviceDirectory
+													.getAbsolutePath());
+								}
 								Process p = CommonTools
 										.createAndOutputProcess(cmd);
 								p.waitFor();
@@ -305,6 +328,47 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 			});
 		}
 		return closeButton;
+	}
+
+	/**
+	 * This method initializes deploymetnTypePanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getDeploymetnTypePanel() {
+		if (deploymetnTypePanel == null) {
+			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints2.weightx = 1.0;
+			deploymetnTypePanel = new JPanel();
+			deploymetnTypePanel.setLayout(new GridBagLayout());
+			deploymetnTypePanel
+					.setBorder(javax.swing.BorderFactory
+							.createTitledBorder(
+									null,
+									"Deployment Location",
+									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+									javax.swing.border.TitledBorder.DEFAULT_POSITION,
+									null, IntroduceLookAndFeel
+											.getPanelLabelColor()));
+			deploymetnTypePanel.add(getDeploymentTypeSelector(),
+					gridBagConstraints2);
+		}
+		return deploymetnTypePanel;
+	}
+
+	/**
+	 * This method initializes deploymentTypeSelector
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
+	private JComboBox getDeploymentTypeSelector() {
+		if (deploymentTypeSelector == null) {
+			deploymentTypeSelector = new JComboBox();
+			deploymentTypeSelector.addItem(TOMCAT);
+			deploymentTypeSelector.addItem(GLOBUS);
+		}
+		return deploymentTypeSelector;
 	}
 
 	public static void main(String[] args) {

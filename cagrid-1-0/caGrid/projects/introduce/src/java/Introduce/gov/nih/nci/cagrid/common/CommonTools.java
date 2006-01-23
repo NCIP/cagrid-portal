@@ -76,6 +76,10 @@ public class CommonTools {
 	public static String getAntDeployCommand(String buildFileDir) throws Exception {
 		return getAntCommand("deploy", buildFileDir);
 	}
+	
+	public static String getAntDeployGarCommand(String buildFileDir) throws Exception {
+		return getAntCommand("deployGar", buildFileDir);
+	}
 
 
 	public static String getAntSkeletonResyncCommand(String buildFileDir) throws Exception {

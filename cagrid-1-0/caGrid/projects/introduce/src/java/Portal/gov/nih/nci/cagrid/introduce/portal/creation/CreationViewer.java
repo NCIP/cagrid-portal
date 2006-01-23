@@ -69,19 +69,13 @@ public class CreationViewer extends GridPortalComponent {
 
 	private JButton closeButton = null;
 
-	private JTextField methodsTemplate = null;
+	private JTextField serviceTemplate = null;
 
-	private JButton methodsTemplateButton = null;
-
-	private JTextField metadataTemplate = null;
-
-	private JButton metadataTemplateButton = null;
+	private JButton serviceTemplateButton = null;
 
 	private JPanel templatePanel = null;
 
-	private JLabel methodTemplateJLabel = null;
-
-	private JLabel metadataTemplateJLabel = null;
+	private JLabel serviceTemplateJLabel = null;
 
 	private JLabel serviceStyleLabel = null;
 
@@ -344,32 +338,17 @@ public class CreationViewer extends GridPortalComponent {
 									PortalUtils
 											.showErrorMessage("Error creating new service!");
 								}
-								if (methodsTemplate.getText().length() > 0
-										|| metadataTemplate.getText().length() > 0) {
-									if (methodsTemplate.getText().length() > 0) {
+								if (serviceTemplate.getText().length() > 0) {
+									if (serviceTemplate.getText().length() > 0) {
 										StringBuffer file = CommonTools
 												.fileToStringBuffer(new File(
-														methodsTemplate
+														serviceTemplate
 																.getText()));
-										CommonTools
-												.stringBufferToFile(
-														file,
-														dir.getText()
-																+ File.separator
-																+ "introduceMethods.xml");
+										CommonTools.stringBufferToFile(file,
+												dir.getText() + File.separator
+														+ "introduce.xml");
 									}
-									if (metadataTemplate.getText().length() > 0) {
-										StringBuffer file = CommonTools
-												.fileToStringBuffer(new File(
-														metadataTemplate
-																.getText()));
-										CommonTools
-												.stringBufferToFile(
-														file,
-														dir.getText()
-																+ File.separator
-																+ "introduceMetadata.xml");
-									}
+
 									setProgressText("resynchronizing using templates");
 									cmd = CommonTools
 											.getAntSkeletonResyncCommand(dir
@@ -538,12 +517,12 @@ public class CreationViewer extends GridPortalComponent {
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getMethodsTemplateFile() {
-		if (methodsTemplate == null) {
-			methodsTemplate = new JTextField();
-			methodsTemplate.setEditable(false);
-			methodsTemplate.setEnabled(false);
+		if (serviceTemplate == null) {
+			serviceTemplate = new JTextField();
+			serviceTemplate.setEditable(false);
+			serviceTemplate.setEnabled(false);
 		}
-		return methodsTemplate;
+		return serviceTemplate;
 	}
 
 	/**
@@ -551,53 +530,19 @@ public class CreationViewer extends GridPortalComponent {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getMethodsTemplateButton() {
-		if (methodsTemplateButton == null) {
-			methodsTemplateButton = new JButton();
-			methodsTemplateButton.setText("Browse");
-			methodsTemplateButton.setEnabled(false);
-			methodsTemplateButton
+	private JButton getServiceTemplateButton() {
+		if (serviceTemplateButton == null) {
+			serviceTemplateButton = new JButton();
+			serviceTemplateButton.setText("Browse");
+			serviceTemplateButton.setEnabled(false);
+			serviceTemplateButton
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
-							methodsTemplate.setText(promptFile());
+							serviceTemplate.setText(promptFile());
 						}
 					});
 		}
-		return methodsTemplateButton;
-	}
-
-	/**
-	 * This method initializes metadataTemplate
-	 * 
-	 * @return javax.swing.JTextField
-	 */
-	private JTextField getMetadataTemplate() {
-		if (metadataTemplate == null) {
-			metadataTemplate = new JTextField();
-			metadataTemplate.setEditable(false);
-			metadataTemplate.setEnabled(false);
-		}
-		return metadataTemplate;
-	}
-
-	/**
-	 * This method initializes metadataTemplateButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getMetadataTemplateButton() {
-		if (metadataTemplateButton == null) {
-			metadataTemplateButton = new JButton();
-			metadataTemplateButton.setText("Browse");
-			metadataTemplateButton.setEnabled(false);
-			metadataTemplateButton
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							metadataTemplate.setText(promptFile());
-						}
-					});
-		}
-		return metadataTemplateButton;
+		return serviceTemplateButton;
 	}
 
 	/**
@@ -607,33 +552,14 @@ public class CreationViewer extends GridPortalComponent {
 	 */
 	private JPanel getTemplatePanel() {
 		if (templatePanel == null) {
-			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
-			gridBagConstraints21.gridx = 0;
-			gridBagConstraints21.gridy = 1;
-			metadataTemplateJLabel = new JLabel();
-			metadataTemplateJLabel.setText("Metadata Template File");
-			metadataTemplateJLabel.setFont(new java.awt.Font("Dialog",
-					java.awt.Font.PLAIN, 12));
-			metadataTemplateJLabel.setEnabled(false);
 			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
 			gridBagConstraints20.gridx = 0;
 			gridBagConstraints20.gridy = 0;
-			methodTemplateJLabel = new JLabel();
-			methodTemplateJLabel.setText("Methods Template File");
-			methodTemplateJLabel.setEnabled(false);
-			methodTemplateJLabel.setFont(new java.awt.Font("Dialog",
+			serviceTemplateJLabel = new JLabel();
+			serviceTemplateJLabel.setText("Service Template File");
+			serviceTemplateJLabel.setEnabled(false);
+			serviceTemplateJLabel.setFont(new java.awt.Font("Dialog",
 					java.awt.Font.PLAIN, 12));
-			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
-			gridBagConstraints18.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints18.gridy = 1;
-			gridBagConstraints18.gridx = 3;
-			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
-			gridBagConstraints17.anchor = GridBagConstraints.WEST;
-			gridBagConstraints17.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints17.gridx = 2;
-			gridBagConstraints17.gridy = 1;
-			gridBagConstraints17.weightx = 1.0;
-			gridBagConstraints17.fill = GridBagConstraints.HORIZONTAL;
 			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
 			gridBagConstraints15.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints15.gridy = 0;
@@ -658,12 +584,8 @@ public class CreationViewer extends GridPortalComponent {
 											.getPanelLabelColor()));
 			templatePanel.setEnabled(false);
 			templatePanel.add(getMethodsTemplateFile(), gridBagConstraints14);
-			templatePanel.add(getMethodsTemplateButton(), gridBagConstraints15);
-			templatePanel.add(getMetadataTemplate(), gridBagConstraints17);
-			templatePanel
-					.add(getMetadataTemplateButton(), gridBagConstraints18);
-			templatePanel.add(methodTemplateJLabel, gridBagConstraints20);
-			templatePanel.add(metadataTemplateJLabel, gridBagConstraints21);
+			templatePanel.add(getServiceTemplateButton(), gridBagConstraints15);
+			templatePanel.add(serviceTemplateJLabel, gridBagConstraints20);
 		}
 		return templatePanel;
 	}
@@ -685,35 +607,23 @@ public class CreationViewer extends GridPortalComponent {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
 							if (serviceStyleSeletor.getSelectedItem().equals(
 									"CUSTOM")) {
-								methodTemplateJLabel.setEnabled(true);
-								methodsTemplateButton.setEnabled(true);
-								metadataTemplateJLabel.setEnabled(true);
-								metadataTemplateButton.setEnabled(true);
+								serviceTemplateJLabel.setEnabled(true);
+								serviceTemplateButton.setEnabled(true);
 							} else {
-								methodTemplateJLabel.setEnabled(false);
-								methodsTemplateButton.setEnabled(false);
-								metadataTemplateJLabel.setEnabled(false);
-								metadataTemplateButton.setEnabled(false);
+								serviceTemplateJLabel.setEnabled(false);
+								serviceTemplateButton.setEnabled(false);
 								if (serviceStyleSeletor.getSelectedItem()
 										.equals("ANALYTICAL")) {
-									methodsTemplate.setText("templates"
+									serviceTemplate.setText("templates"
 											+ File.separator
-											+ "analyticalIntroduceMethods.xml");
-									metadataTemplate
-											.setText("templates"
-													+ File.separator
-													+ "analyticalIntroduceMetadata.xml");
+											+ "analyticalIntroduce.xml");
 								} else if (serviceStyleSeletor
 										.getSelectedItem().equals("DATA")) {
-									methodsTemplate.setText("templates"
+									serviceTemplate.setText("templates"
 											+ File.separator
-											+ "dataIntroduceMethods.xml");
-									metadataTemplate.setText("templates"
-											+ File.separator
-											+ "dataIntroduceMetadata.xml");
+											+ "dataIntroduce.xml");
 								} else {
-									methodsTemplate.setText("");
-									metadataTemplate.setText("");
+									serviceTemplate.setText("");
 								}
 							}
 						}
