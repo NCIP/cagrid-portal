@@ -14,7 +14,14 @@
                                  <xs:sequence>
                                             <xs:element ref="methods:Methods"/>
                                             <xs:element ref="metadata:MetadataList"/>
+                                            <xs:element name="ServiceSecurity" minOccurs="0" maxOccurs="1" type="ServiceSecurityConfiguration"/>
                                  </xs:sequence>
                       </xs:complexType>
            </xs:element>
+           
+           <xs:complexType name="ServiceSecurityConfiguration">
+			 <xs:sequence>
+				<xs:element name="ServiceCommunicationSecurity" minOccurs="0" maxOccurs="1" type="methods:SecureCommunicationConfiguration"/>
+			 </xs:sequence>
+		  </xs:complexType>
 </xs:schema>

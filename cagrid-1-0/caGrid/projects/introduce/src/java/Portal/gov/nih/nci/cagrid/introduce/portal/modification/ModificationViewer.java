@@ -5,11 +5,13 @@ import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.beans.ServiceSecurityConfiguration;
 import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
+import gov.nih.nci.cagrid.introduce.beans.method.SecureCommunicationConfiguration;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
@@ -43,7 +45,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.42 2006-01-20 21:20:49 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.43 2006-01-23 17:49:02 langella Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -103,6 +105,10 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	private JButton removeMetadataButton = null;
 
 	private JButton modifyMetadataButton = null;
+
+	private JPanel securityPanel = null;
+
+	private JPanel baseSecurityPanel = null;
 
 	/**
 	 * This is the default constructor
@@ -562,7 +568,10 @@ public class ModificationViewer extends GridPortalBaseFrame {
 									MetadataListType serviceMetadataList = new MetadataListType();
 									serviceMetadataList.setMetadata(metadataArray);
 									introService.setMetadataList(serviceMetadataList);
-
+									
+									ServiceSecurityConfiguration ssc = new ServiceSecurityConfiguration();
+									ssc.setServiceCommunicationSecurity(((SecurityConfigurationPanel)baseSecurityPanel).getSecureCommunicationConfiguration());
+									introService.setServiceSecurity(ssc);
 									// check the methods to make sure they are
 									// valid.......
 
@@ -807,6 +816,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 					null);
 			contentTabbedPane
 					.addTab("Metadata", null, getMetadataPanel(), null);
+			contentTabbedPane.addTab("Security", null, getSecurityPanel(), null);
 		}
 		return contentTabbedPane;
 	}
@@ -1003,5 +1013,36 @@ public class ModificationViewer extends GridPortalBaseFrame {
 					});
 		}
 		return modifyMetadataButton;
+	}
+
+	/**
+	 * This method initializes securityPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */    
+	private JPanel getSecurityPanel() {
+		if (securityPanel == null) {
+			securityPanel = new JPanel();
+			securityPanel.add(getBaseSecurityPanel(), null);
+		}
+		return securityPanel;
+	}
+
+	/**
+	 * This method initializes baseSecurityPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */    
+	private JPanel getBaseSecurityPanel() {
+		if (baseSecurityPanel == null) {
+			SecureCommunicationConfiguration comm = null;
+			if(introService.getServiceSecurity()!=null){
+				if(introService.getServiceSecurity().getServiceCommunicationSecurity()!=null){
+					comm = introService.getServiceSecurity().getServiceCommunicationSecurity();
+				}
+			}
+			baseSecurityPanel = new SecurityConfigurationPanel(comm);
+		}
+		return baseSecurityPanel;
 	}
 } // @jve:decl-index=0:visual-constraint="6,9"
