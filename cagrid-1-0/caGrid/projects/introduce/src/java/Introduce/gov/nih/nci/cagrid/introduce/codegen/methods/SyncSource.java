@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
+import gov.nih.nci.cagrid.introduce.codegen.TemplateUtils;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -69,7 +70,7 @@ public class SyncSource {
 				MethodTypeExceptionsException fault = exceptionsEl.getException(i);
 				// hack for now, should look at the namespace in the
 				// element.....
-				exceptions += this.packageName + "." + capatilzeFirstLetter(fault.getName());
+				exceptions += this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(fault.getName());
 				if (i < exceptionsEl.getException().length - 1) {
 					exceptions += ", ";
 				}
@@ -87,7 +88,7 @@ public class SyncSource {
 		MethodTypeOutput returnTypeEl = method.getOutput();
 		String methodName = method.getName();
 		String returnType = returnTypeEl.getClassName();
-		if(returnTypeEl.getPackageName() != null && returnTypeEl.getPackageName().length()>0){
+		if (returnTypeEl.getPackageName() != null && returnTypeEl.getPackageName().length() > 0) {
 			returnType = returnTypeEl.getPackageName() + "." + returnType;
 		}
 		methodString += "     public " + returnType + " " + methodName + "(";
@@ -138,13 +139,7 @@ public class SyncSource {
 
 
 	private String getBoxedOutputTypeName(String input) {
-		String returnType = capatilzeFirstLetter(input) + "Response";
-		return returnType;
-	}
-
-
-	private String capatilzeFirstLetter(String input) {
-		String returnType = input.toUpperCase().toCharArray()[0] + input.substring(1, input.length());
+		String returnType = TemplateUtils.upperCaseFirstCharacter(input) + "Response";
 		return returnType;
 	}
 
@@ -160,7 +155,7 @@ public class SyncSource {
 		methodString += "     public " + returnType + " " + methodName + "(";
 
 		// boxed
-		methodString += this.packageName + "." + capatilzeFirstLetter(methodName) + " params";
+		methodString += this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + " params";
 
 		methodString += ")";
 		return methodString;
@@ -181,7 +176,7 @@ public class SyncSource {
 		// if (inputs.length > 1 || inputs.length == 0) {
 
 		// boxed
-		methodString += this.packageName + "." + capatilzeFirstLetter(methodName) + " params";
+		methodString += this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + " params";
 
 		methodString += ")";
 		return methodString;
@@ -262,12 +257,11 @@ public class SyncSource {
 		clientMethod += "               ";
 
 		String secureValue = "SECURITY_PROPERTY_NONE";
-		//TODO: ADD SECURITY STUFF HERE
+		// TODO: ADD SECURITY STUFF HERE
 		/*
-		if (method.getSecure() != null) {
-			secureValue = "SECURITY_PROPERTY_" + method.getSecure();
-		}
-		*/
+		 * if (method.getSecure() != null) { secureValue = "SECURITY_PROPERTY_" +
+		 * method.getSecure(); }
+		 */
 
 		// get the port
 		// TODO: handle security here
@@ -287,14 +281,14 @@ public class SyncSource {
 
 		// always a boxed call now becuase using complex types in the wsdl
 		// create handle for the boxed wrapper
-		methodString += this.packageName + "." + capatilzeFirstLetter(methodName) + " params = new " + this.packageName
-			+ "." + capatilzeFirstLetter(methodName) + "();\n";
+		methodString += this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + " params = new " + this.packageName
+			+ "." + TemplateUtils.upperCaseFirstCharacter(methodName) + "();\n";
 		// set the values fo the boxed wrapper
-		if (method.getInputs() != null && method.getInputs().getInput()!=null) {
+		if (method.getInputs() != null && method.getInputs().getInput() != null) {
 			for (int j = 0; j < method.getInputs().getInput().length; j++) {
 				String paramName = method.getInputs().getInput(j).getName();
 				methodString += lineStart;
-				methodString += "params.set" + capatilzeFirstLetter(paramName) + "(" + paramName + ");\n";
+				methodString += "params.set" + TemplateUtils.upperCaseFirstCharacter(paramName) + "(" + paramName + ");\n";
 			}
 		}
 		// make the call
@@ -311,15 +305,15 @@ public class SyncSource {
 
 		clientMethod += methodString;
 
-		// clientMethod += "          } catch(Exception e)
-		// {\n               e.printStackTrace();\n          }\n";
+		// clientMethod += " } catch(Exception e)
+		// {\n e.printStackTrace();\n }\n";
 		// Element methodReturn = method.getChild("output",
 		// method.getNamespace());
 		// if (!methodReturn.getAttributeValue("className").equals("void")) {
 		// if (!isPrimitive(returnType)) {
-		// clientMethod += "          return null;";
+		// clientMethod += " return null;";
 		// } else if (isPrimitive(returnType)) {
-		// clientMethod += "          return "
+		// clientMethod += " return "
 		// + createPrimitiveReturn(methodReturn
 		// .getAttributeValue("className")) + ";\n";
 		// }
@@ -401,13 +395,13 @@ public class SyncSource {
 		// unbox the params
 		String params = "";
 
-		if (method.getInputs() != null && method.getInputs().getInput()!=null) {
+		if (method.getInputs() != null && method.getInputs().getInput() != null) {
 			// always unbox now
 			if (method.getInputs().getInput().length >= 1) {
 				// inputs were boxed and need to be unboxed
 				for (int j = 0; j < method.getInputs().getInput().length; j++) {
 					String paramName = method.getInputs().getInput(j).getName();
-					params += "params.get" + capatilzeFirstLetter(paramName) + "()";
+					params += "params.get" + TemplateUtils.upperCaseFirstCharacter(paramName) + "()";
 					if (j < method.getInputs().getInput().length - 1) {
 						params += ",";
 					}
