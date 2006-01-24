@@ -245,27 +245,8 @@ public class SyncSource {
 	}
 
 
-	private void addClientImpl(MethodType method) {
-		StringBuffer fileContent = null;
-		String methodName = method.getName();
-		try {
-			fileContent = CommonTools.fileToStringBuffer(new File(this.serviceClient));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		// insert the new client method
-		int endOfClass = fileContent.lastIndexOf("}");
-		String clientMethod = createUnBoxedSignatureStringFromMethod(method) + " " + createExceptions(method);
-		clientMethod += "{\n          ";
-		// clientMethod += "try{\n";
-		clientMethod += "               ";
-		clientMethod += this.deploymentProperties.get("introduce.skeleton.service.name")
-			+ "PortType port = this.getPortType();\n";
-
-		clientMethod += "";
+	private String getClientSecurityCode(SecureCommunicationConfiguration scc) {
 		StringBuffer sec = new StringBuffer();
-		SecureCommunicationConfiguration scc = method.getMethodSecurity();
 		if (scc != null) {
 			SecureCommunicationMethodType comm = scc.getSecureCommunication();
 			if (comm != null) {
@@ -274,6 +255,34 @@ public class SyncSource {
 				if (comm.equals(SecureCommunicationMethodType.Default)) {
 
 				} else if (comm.equals(SecureCommunicationMethodType.GSI_Transport_Level_Security)) {
+					if (scc.getAuthenticationMethod().equals(AuthenticationMethodType.Integrity)) {
+						sec.append("stub._setProperty(Constants.GSI_TRANSPORT, Constants.SIGNATURE);\n");
+					} else {
+						sec.append("stub._setProperty(Constants.GSI_TRANSPORT, Constants.ENCRYPTION);\n");
+					}
+
+					if (scc.getAnonymousClients().equals(AnonymousClientsType.Yes)) {
+						sec
+							.append("	stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS,Boolean.TRUE);\n");
+					} else {
+						sec.append("	if (proxy != null) {\n");
+						sec
+							.append("		GSSCredential gss = new GlobusGSSCredentialImpl(proxy,GSSCredential.INITIATE_AND_ACCEPT);\n");
+						sec.append("		stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_CREDENTIALS, gss);\n");
+						sec.append("	}\n");
+					}
+
+					if (scc.getClientAuthorization() != null) {
+						if (scc.getClientAuthorization().equals(ClientAuthorizationType.None)) {
+							sec.append("stub._setProperty(Constants.AUTHORIZATION, NoAuthorization.getInstance());\n");
+						} else if (scc.getClientAuthorization().equals(ClientAuthorizationType.Host)) {
+							sec
+								.append("stub._setProperty(Constants.AUTHORIZATION, HostAuthorization.getInstance());\n");
+						} else if (scc.getClientAuthorization().equals(ClientAuthorizationType.Self)) {
+							sec
+								.append("stub._setProperty(Constants.AUTHORIZATION, SelfAuthorization.getInstance());\n");
+						}
+					}
 
 				} else if (comm.equals(SecureCommunicationMethodType.GSI_Secure_Conversation)) {
 					if (scc.getAuthenticationMethod().equals(AuthenticationMethodType.Integrity)) {
@@ -306,13 +315,58 @@ public class SyncSource {
 					}
 
 				} else if (comm.equals(SecureCommunicationMethodType.GSI_Secure_Message)) {
+					if (scc.getAuthenticationMethod().equals(AuthenticationMethodType.Integrity)) {
+						sec.append("stub._setProperty(Constants.GSI_SEC_MSG, Constants.SIGNATURE);\n");
+					} else {
+						sec.append("stub._setProperty(Constants.GSI_SEC_MSG, Constants.ENCRYPTION);\n");
+					}
 
-				} else if (comm.equals(SecureCommunicationMethodType.None)) {
+					sec.append("	if (proxy != null) {\n");
+					sec
+						.append("		GSSCredential gss = new GlobusGSSCredentialImpl(proxy,GSSCredential.INITIATE_AND_ACCEPT);\n");
+					sec.append("		stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_CREDENTIALS, gss);\n");
+					sec.append("	}\n");
 
+					if (scc.getClientAuthorization() != null) {
+						if (scc.getClientAuthorization().equals(ClientAuthorizationType.None)) {
+							sec.append("stub._setProperty(Constants.AUTHORIZATION, NoAuthorization.getInstance());\n");
+						} else if (scc.getClientAuthorization().equals(ClientAuthorizationType.Host)) {
+							sec
+								.append("stub._setProperty(Constants.AUTHORIZATION, HostAuthorization.getInstance());\n");
+						} else if (scc.getClientAuthorization().equals(ClientAuthorizationType.Self)) {
+							sec
+								.append("stub._setProperty(Constants.AUTHORIZATION, SelfAuthorization.getInstance());\n");
+						}
+					}
 				}
 			}
 		}
-		clientMethod += "\n" + sec.toString();
+		return sec.toString();
+	}
+
+
+	private void addClientImpl(MethodType method) {
+		StringBuffer fileContent = null;
+		String methodName = method.getName();
+		try {
+			fileContent = CommonTools.fileToStringBuffer(new File(this.serviceClient));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		// insert the new client method
+		int endOfClass = fileContent.lastIndexOf("}");
+		String clientMethod = createUnBoxedSignatureStringFromMethod(method) + " " + createExceptions(method);
+		clientMethod += "{\n          ";
+		// clientMethod += "try{\n";
+		clientMethod += "               ";
+		clientMethod += this.deploymentProperties.get("introduce.skeleton.service.name")
+			+ "PortType port = this.getPortType();\n";
+
+		clientMethod += "";
+		SecureCommunicationConfiguration scc = method.getMethodSecurity();
+
+		clientMethod += "\n" + getClientSecurityCode(scc);
 		// put in the call to the client
 		String var = "port";
 
@@ -324,14 +378,15 @@ public class SyncSource {
 
 		// always a boxed call now becuase using complex types in the wsdl
 		// create handle for the boxed wrapper
-		methodString += this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + " params = new " + this.packageName
-			+ "." + TemplateUtils.upperCaseFirstCharacter(methodName) + "();\n";
+		methodString += this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + " params = new "
+			+ this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + "();\n";
 		// set the values fo the boxed wrapper
 		if (method.getInputs() != null && method.getInputs().getInput() != null) {
 			for (int j = 0; j < method.getInputs().getInput().length; j++) {
 				String paramName = method.getInputs().getInput(j).getName();
 				methodString += lineStart;
-				methodString += "params.set" + TemplateUtils.upperCaseFirstCharacter(paramName) + "(" + paramName + ");\n";
+				methodString += "params.set" + TemplateUtils.upperCaseFirstCharacter(paramName) + "(" + paramName
+					+ ");\n";
 			}
 		}
 		// make the call
