@@ -41,7 +41,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.11 2005-12-19 20:44:16 hastings Exp $
+ * @version $Id: UserManagerWindow.java,v 1.12 2006-01-24 23:20:36 langella Exp $
  */
 public class UserManagerWindow extends GridPortalBaseFrame {
 
@@ -507,7 +507,12 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 				this.getUsersTable().addUser(users[i]);
 			}
 			}
-			this.updateProgress(false, "Querying Completed [" + users.length + " users found]");
+			
+			int length=0;
+			if(users != null){
+				length = users.length;
+			}
+			this.updateProgress(false, "Querying Completed [" + length + " users found]");
 
 		} catch (PermissionDeniedFault pdf) {
 			PortalUtils.showErrorMessage(pdf);

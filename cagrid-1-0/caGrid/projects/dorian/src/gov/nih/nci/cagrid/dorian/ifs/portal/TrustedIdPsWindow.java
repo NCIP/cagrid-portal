@@ -36,7 +36,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPsWindow.java,v 1.8 2005-12-27 22:23:11 langella Exp $
+ * @version $Id: TrustedIdPsWindow.java,v 1.9 2006-01-24 23:20:36 langella Exp $
  */
 public class TrustedIdPsWindow extends GridPortalBaseFrame {
 
@@ -435,7 +435,12 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 			for (int i = 0; i < idps.length; i++) {
 				this.getTrustedIdPTable().addTrustedIdP(idps[i]);
 			}
-			this.updateProgress(false, "Completed [Found " + idps.length + " IdPs]");
+			
+			int length=0;
+			if(idps != null){
+				length = idps.length;
+			}
+			this.updateProgress(false, "Completed [Found " + length + " IdPs]");
 
 		} catch (PermissionDeniedFault pdf) {
 			PortalUtils.showErrorMessage(pdf);
