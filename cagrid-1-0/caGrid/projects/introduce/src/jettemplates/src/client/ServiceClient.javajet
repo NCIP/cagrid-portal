@@ -15,6 +15,12 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.globus.gsi.GlobusCredential;
+import org.globus.gsi.gssapi.GlobusGSSCredentialImpl;
+import org.globus.wsrf.security.Constants;
+import org.ietf.jgss.GSSCredential;
+import org.globus.wsrf.impl.security.authorization.*;
+import org.apache.axis.client.Stub;
 
 import <%=packageName%>.stubs.<%=serviceName%>PortType;
 import <%=packageName%>.stubs.service.<%=modifiedServiceName%>ServiceAddressingLocator;
@@ -30,8 +36,14 @@ public class <%=serviceName%>Client implements <%=serviceName%>I {
 	
 	private <%=modifiedServiceName%>ServiceAddressingLocator locator;
 	private EndpointReferenceType endpoint;
-
+	private GlobusCredential proxy;
+	
 	public <%=serviceName%>Client(String url) {
+		this(url,null);	
+	}
+
+	public <%=serviceName%>Client(String url, GlobusCredential proxy) {
+	   	this.proxy = proxy;
 		//Create endpoint reference to service
 	    endpoint = new EndpointReferenceType();
 	    try {

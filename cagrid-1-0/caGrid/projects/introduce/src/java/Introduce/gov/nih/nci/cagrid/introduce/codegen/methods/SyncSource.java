@@ -1,10 +1,15 @@
 package gov.nih.nci.cagrid.introduce.codegen.methods;
 
 import gov.nih.nci.cagrid.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.beans.method.AnonymousClientsType;
+import gov.nih.nci.cagrid.introduce.beans.method.AuthenticationMethodType;
+import gov.nih.nci.cagrid.introduce.beans.method.ClientAuthorizationType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
+import gov.nih.nci.cagrid.introduce.beans.method.SecureCommunicationConfiguration;
+import gov.nih.nci.cagrid.introduce.beans.method.SecureCommunicationMethodType;
 import gov.nih.nci.cagrid.introduce.codegen.TemplateUtils;
 
 import java.io.File;
@@ -255,21 +260,59 @@ public class SyncSource {
 		clientMethod += "{\n          ";
 		// clientMethod += "try{\n";
 		clientMethod += "               ";
-
-		String secureValue = "SECURITY_PROPERTY_NONE";
-		// TODO: ADD SECURITY STUFF HERE
-		/*
-		 * if (method.getSecure() != null) { secureValue = "SECURITY_PROPERTY_" +
-		 * method.getSecure(); }
-		 */
-
-		// get the port
-		// TODO: handle security here
 		clientMethod += this.deploymentProperties.get("introduce.skeleton.service.name")
 			+ "PortType port = this.getPortType();\n";
 
 		clientMethod += "";
+		StringBuffer sec = new StringBuffer();
+		SecureCommunicationConfiguration scc = method.getMethodSecurity();
+		if (scc != null) {
+			SecureCommunicationMethodType comm = scc.getSecureCommunication();
+			if (comm != null) {
 
+				sec.append("Stub stub = (Stub) port;\n");
+				if (comm.equals(SecureCommunicationMethodType.Default)) {
+
+				} else if (comm.equals(SecureCommunicationMethodType.GSI_Transport_Level_Security)) {
+
+				} else if (comm.equals(SecureCommunicationMethodType.GSI_Secure_Conversation)) {
+					if (scc.getAuthenticationMethod().equals(AuthenticationMethodType.Integrity)) {
+						sec.append("stub._setProperty(Constants.GSI_SEC_CONV, Constants.SIGNATURE);\n");
+					} else {
+						sec.append("stub._setProperty(Constants.GSI_SEC_CONV, Constants.ENCRYPTION);\n");
+					}
+
+					if (scc.getAnonymousClients().equals(AnonymousClientsType.Yes)) {
+						sec
+							.append("	stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS,Boolean.TRUE);\n");
+					} else {
+						sec.append("	if (proxy != null) {\n");
+						sec
+							.append("		GSSCredential gss = new GlobusGSSCredentialImpl(proxy,GSSCredential.INITIATE_AND_ACCEPT);\n");
+						sec.append("		stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_CREDENTIALS, gss);\n");
+						sec.append("	}\n");
+					}
+
+					if (scc.getClientAuthorization() != null) {
+						if (scc.getClientAuthorization().equals(ClientAuthorizationType.None)) {
+							sec.append("stub._setProperty(Constants.AUTHORIZATION, NoAuthorization.getInstance());\n");
+						} else if (scc.getClientAuthorization().equals(ClientAuthorizationType.Host)) {
+							sec
+								.append("stub._setProperty(Constants.AUTHORIZATION, HostAuthorization.getInstance());\n");
+						} else if (scc.getClientAuthorization().equals(ClientAuthorizationType.Self)) {
+							sec
+								.append("stub._setProperty(Constants.AUTHORIZATION, SelfAuthorization.getInstance());\n");
+						}
+					}
+
+				} else if (comm.equals(SecureCommunicationMethodType.GSI_Secure_Message)) {
+
+				} else if (comm.equals(SecureCommunicationMethodType.None)) {
+
+				}
+			}
+		}
+		clientMethod += "\n" + sec.toString();
 		// put in the call to the client
 		String var = "port";
 
