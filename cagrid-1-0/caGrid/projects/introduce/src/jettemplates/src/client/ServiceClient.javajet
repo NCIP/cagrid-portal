@@ -16,11 +16,6 @@ import java.rmi.RemoteException;
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.globus.gsi.GlobusCredential;
-import org.globus.gsi.gssapi.GlobusGSSCredentialImpl;
-import org.globus.wsrf.security.Constants;
-import org.ietf.jgss.GSSCredential;
-import org.globus.wsrf.impl.security.authorization.*;
-import org.apache.axis.client.Stub;
 
 import <%=packageName%>.stubs.<%=serviceName%>PortType;
 import <%=packageName%>.stubs.service.<%=modifiedServiceName%>ServiceAddressingLocator;

@@ -66,7 +66,8 @@ public class SyncMethods {
 		}
 
 		// sync the methods fiels
-		SyncSource methodSync = new SyncSource(baseDirectory, this.info.getServiceProperties());
+		
+		SyncSource methodSync = new SyncSource(baseDirectory, this.info);
 		// remove methods
 		methodSync.removeMethods(this.removals);
 		// add new methods

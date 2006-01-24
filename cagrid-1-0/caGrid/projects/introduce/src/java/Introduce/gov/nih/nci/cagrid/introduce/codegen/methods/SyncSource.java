@@ -1,6 +1,8 @@
 package gov.nih.nci.cagrid.introduce.codegen.methods;
 
 import gov.nih.nci.cagrid.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.beans.ServiceSecurityConfiguration;
 import gov.nih.nci.cagrid.introduce.beans.method.AnonymousClientsType;
 import gov.nih.nci.cagrid.introduce.beans.method.AuthenticationMethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.ClientAuthorizationType;
@@ -40,11 +42,13 @@ public class SyncSource {
 	private String serviceProviderImpl;
 	private Properties deploymentProperties;
 	private String packageName;
+	private ServiceInformation serviceInfo;
 
 
-	public SyncSource(File baseDir, Properties deploymentProperties) {
+	public SyncSource(File baseDir, ServiceInformation info) {
 		// this.baseDir = baseDir;
-		this.deploymentProperties = deploymentProperties;
+		this.serviceInfo = info;
+		this.deploymentProperties = this.serviceInfo.getServiceProperties();
 		this.packageName = (String) this.deploymentProperties.get("introduce.skeleton.package") + ".stubs";
 		serviceClient = baseDir.getAbsolutePath() + File.separator + "src" + File.separator
 			+ this.deploymentProperties.get("introduce.skeleton.package.dir") + File.separator + "client"
@@ -245,20 +249,26 @@ public class SyncSource {
 	}
 
 
-	private String getClientSecurityCode(SecureCommunicationConfiguration scc) {
+	private String getClientSecurityCode(SecureCommunicationConfiguration scc, boolean isService) {
 		StringBuffer sec = new StringBuffer();
 		if (scc != null) {
 			SecureCommunicationMethodType comm = scc.getSecureCommunication();
 			if (comm != null) {
 
-				sec.append("Stub stub = (Stub) port;\n");
 				if (comm.equals(SecureCommunicationMethodType.Default)) {
-
+					ServiceSecurityConfiguration serviceConf = this.serviceInfo.getServiceSecurityConfiguration();
+					if (serviceConf != null) {
+						if (!isService) {
+							return getClientSecurityCode(serviceConf.getServiceCommunicationSecurity(), true);
+						}
+					}
 				} else if (comm.equals(SecureCommunicationMethodType.GSI_Transport_Level_Security)) {
 					if (scc.getAuthenticationMethod().equals(AuthenticationMethodType.Integrity)) {
-						sec.append("stub._setProperty(Constants.GSI_TRANSPORT, Constants.SIGNATURE);\n");
+						sec
+							.append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT, org.globus.wsrf.security.Constants.SIGNATURE);\n");
 					} else {
-						sec.append("stub._setProperty(Constants.GSI_TRANSPORT, Constants.ENCRYPTION);\n");
+						sec
+							.append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT, org.globus.wsrf.security.Constants.ENCRYPTION);\n");
 					}
 
 					if (scc.getAnonymousClients().equals(AnonymousClientsType.Yes)) {
@@ -266,29 +276,36 @@ public class SyncSource {
 							.append("	stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS,Boolean.TRUE);\n");
 					} else {
 						sec.append("	if (proxy != null) {\n");
+						sec.append("try{\n");
 						sec
-							.append("		GSSCredential gss = new GlobusGSSCredentialImpl(proxy,GSSCredential.INITIATE_AND_ACCEPT);\n");
+							.append("		org.ietf.jgss.GSSCredential gss = new org.globus.gsi.gssapi.GlobusGSSCredentialImpl(proxy,org.ietf.jgss.GSSCredential.INITIATE_AND_ACCEPT);\n");
 						sec.append("		stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_CREDENTIALS, gss);\n");
-						sec.append("	}\n");
+						sec.append("}catch(org.ietf.jgss.GSSException ex){\n");
+						sec.append("throw new RemoteException(ex.getMessage());\n");
+						sec.append("}\n");
+						sec.append("}\n");
 					}
 
 					if (scc.getClientAuthorization() != null) {
 						if (scc.getClientAuthorization().equals(ClientAuthorizationType.None)) {
-							sec.append("stub._setProperty(Constants.AUTHORIZATION, NoAuthorization.getInstance());\n");
+							sec
+								.append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());\n");
 						} else if (scc.getClientAuthorization().equals(ClientAuthorizationType.Host)) {
 							sec
-								.append("stub._setProperty(Constants.AUTHORIZATION, HostAuthorization.getInstance());\n");
+								.append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.HostAuthorization.getInstance());\n");
 						} else if (scc.getClientAuthorization().equals(ClientAuthorizationType.Self)) {
 							sec
-								.append("stub._setProperty(Constants.AUTHORIZATION, SelfAuthorization.getInstance());\n");
+								.append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.SelfAuthorization.getInstance());\n");
 						}
 					}
 
 				} else if (comm.equals(SecureCommunicationMethodType.GSI_Secure_Conversation)) {
 					if (scc.getAuthenticationMethod().equals(AuthenticationMethodType.Integrity)) {
-						sec.append("stub._setProperty(Constants.GSI_SEC_CONV, Constants.SIGNATURE);\n");
+						sec
+							.append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_CONV, org.globus.wsrf.security.Constants.SIGNATURE);\n");
 					} else {
-						sec.append("stub._setProperty(Constants.GSI_SEC_CONV, Constants.ENCRYPTION);\n");
+						sec
+							.append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_CONV, org.globus.wsrf.security.Constants.ENCRYPTION);\n");
 					}
 
 					if (scc.getAnonymousClients().equals(AnonymousClientsType.Yes)) {
@@ -296,46 +313,58 @@ public class SyncSource {
 							.append("	stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS,Boolean.TRUE);\n");
 					} else {
 						sec.append("	if (proxy != null) {\n");
+						sec.append("try{\n");
 						sec
-							.append("		GSSCredential gss = new GlobusGSSCredentialImpl(proxy,GSSCredential.INITIATE_AND_ACCEPT);\n");
+							.append("		org.ietf.jgss.GSSCredential gss = new org.globus.gsi.gssapi.GlobusGSSCredentialImpl(proxy,org.ietf.jgss.GSSCredential.INITIATE_AND_ACCEPT);\n");
 						sec.append("		stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_CREDENTIALS, gss);\n");
-						sec.append("	}\n");
+						sec.append("}catch(org.ietf.jgss.GSSException ex){\n");
+						sec.append("throw new RemoteException(ex.getMessage());\n");
+						sec.append("}\n");
+						sec.append("}\n");
 					}
 
 					if (scc.getClientAuthorization() != null) {
 						if (scc.getClientAuthorization().equals(ClientAuthorizationType.None)) {
-							sec.append("stub._setProperty(Constants.AUTHORIZATION, NoAuthorization.getInstance());\n");
+							sec
+								.append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());\n");
 						} else if (scc.getClientAuthorization().equals(ClientAuthorizationType.Host)) {
 							sec
-								.append("stub._setProperty(Constants.AUTHORIZATION, HostAuthorization.getInstance());\n");
+								.append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.HostAuthorization.getInstance());\n");
 						} else if (scc.getClientAuthorization().equals(ClientAuthorizationType.Self)) {
 							sec
-								.append("stub._setProperty(Constants.AUTHORIZATION, SelfAuthorization.getInstance());\n");
+								.append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.SelfAuthorization.getInstance());\n");
 						}
 					}
 
 				} else if (comm.equals(SecureCommunicationMethodType.GSI_Secure_Message)) {
 					if (scc.getAuthenticationMethod().equals(AuthenticationMethodType.Integrity)) {
-						sec.append("stub._setProperty(Constants.GSI_SEC_MSG, Constants.SIGNATURE);\n");
+						sec
+							.append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_MSG, org.globus.wsrf.security.Constants.SIGNATURE);\n");
 					} else {
-						sec.append("stub._setProperty(Constants.GSI_SEC_MSG, Constants.ENCRYPTION);\n");
+						sec
+							.append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_MSG, org.globus.wsrf.security.Constants.ENCRYPTION);\n");
 					}
 
 					sec.append("	if (proxy != null) {\n");
+					sec.append("try{\n");
 					sec
-						.append("		GSSCredential gss = new GlobusGSSCredentialImpl(proxy,GSSCredential.INITIATE_AND_ACCEPT);\n");
+						.append("		org.ietf.jgss.GSSCredential gss = new org.globus.gsi.gssapi.GlobusGSSCredentialImpl(proxy,org.ietf.jgss.GSSCredential.INITIATE_AND_ACCEPT);\n");
 					sec.append("		stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_CREDENTIALS, gss);\n");
-					sec.append("	}\n");
+					sec.append("}catch(org.ietf.jgss.GSSException ex){\n");
+					sec.append("throw new RemoteException(ex.getMessage());\n");
+					sec.append("}\n");
+					sec.append("}\n");
 
 					if (scc.getClientAuthorization() != null) {
 						if (scc.getClientAuthorization().equals(ClientAuthorizationType.None)) {
-							sec.append("stub._setProperty(Constants.AUTHORIZATION, NoAuthorization.getInstance());\n");
+							sec
+								.append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());\n");
 						} else if (scc.getClientAuthorization().equals(ClientAuthorizationType.Host)) {
 							sec
-								.append("stub._setProperty(Constants.AUTHORIZATION, HostAuthorization.getInstance());\n");
+								.append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.HostAuthorization.getInstance());\n");
 						} else if (scc.getClientAuthorization().equals(ClientAuthorizationType.Self)) {
 							sec
-								.append("stub._setProperty(Constants.AUTHORIZATION, SelfAuthorization.getInstance());\n");
+								.append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.SelfAuthorization.getInstance());\n");
 						}
 					}
 				}
@@ -364,9 +393,10 @@ public class SyncSource {
 			+ "PortType port = this.getPortType();\n";
 
 		clientMethod += "";
+		clientMethod += "org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;\n";
 		SecureCommunicationConfiguration scc = method.getMethodSecurity();
 
-		clientMethod += "\n" + getClientSecurityCode(scc);
+		clientMethod += "\n" + getClientSecurityCode(scc, false);
 		// put in the call to the client
 		String var = "port";
 
