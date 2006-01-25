@@ -13,11 +13,14 @@ import gov.nih.nci.cagrid.dorian.ifs.ManualApprovalPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
 
 import java.io.File;
+import java.io.InputStream;
 import java.security.KeyPair;
 import java.security.cert.X509Certificate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+
+import junit.framework.TestCase;
 
 import org.bouncycastle.asn1.x509.X509Name;
 import org.jdom.Document;
@@ -28,15 +31,12 @@ public class Utils {
 	
 	private static final String DB = "TEST_DORIAN";
 
-	public static String DB_CONFIG = "resources" + File.separator
-			+ "general-test" + File.separator + "db-config.xml";
-	
-	
 	public static String CA_SUBJECT_PREFIX =  "O=Ohio State University,OU=BMI,OU=TEST";
 	public static String CA_SUBJECT_DN= "Temp Certificate Authority";
 	
 	public static Database getDB() throws Exception{
-		Document doc = XMLUtilities.fileNameToDocument(DB_CONFIG);
+		InputStream resource = TestCase.class.getResourceAsStream(Constants.DB_CONFIG);
+		Document doc = XMLUtilities.streamToDocument(resource);
 		ConnectionManager cm = new ConnectionManager(doc.getRootElement());
 		Database db = new Database(cm, DB);
 		db.destroyDatabase();
