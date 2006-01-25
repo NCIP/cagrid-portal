@@ -41,7 +41,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *---------------------------------------------------------------------------*/
 
-package gov.nih.nci.cabig.introduce;
+package gov.nih.nci.cagrid.introduce;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package gov.nih.nci.cabig.introduce;
+package gov.nih.nci.cagrid.introduce;
 
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;

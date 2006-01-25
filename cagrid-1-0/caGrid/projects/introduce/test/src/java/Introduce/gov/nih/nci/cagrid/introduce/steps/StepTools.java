@@ -1,4 +1,4 @@
-package gov.nih.nci.cabig.introduce.steps;
+package gov.nih.nci.cagrid.introduce.steps;
 
 import java.io.File;
 

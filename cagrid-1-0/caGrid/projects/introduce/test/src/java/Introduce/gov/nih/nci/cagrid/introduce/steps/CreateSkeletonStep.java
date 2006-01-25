@@ -1,7 +1,7 @@
-package gov.nih.nci.cabig.introduce.steps;
+package gov.nih.nci.cagrid.introduce.steps;
 
-import gov.nih.nci.cabig.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.TestCaseInfo;
 
 import java.io.File;
 

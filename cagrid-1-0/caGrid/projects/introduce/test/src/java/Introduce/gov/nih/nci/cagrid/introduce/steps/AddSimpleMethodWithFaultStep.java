@@ -1,9 +1,11 @@
-package gov.nih.nci.cabig.introduce.steps;
+package gov.nih.nci.cagrid.introduce.steps;
 
-import gov.nih.nci.cabig.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 
@@ -13,17 +15,17 @@ import javax.xml.namespace.QName;
 
 import com.atomicobject.haste.framework.Step;
 
-public class AddSimpleMethodStep extends Step {
+public class AddSimpleMethodWithFaultStep extends Step {
 	private TestCaseInfo tci;
 	private String methodName;
 
-	public AddSimpleMethodStep(TestCaseInfo tci, String methodName) {
+	public AddSimpleMethodWithFaultStep(TestCaseInfo tci, String methodName) {
 		this.tci = tci;
 		this.methodName = methodName;
 	}
 
 	public void runStep() throws Throwable {
-		System.out.println("Adding a simple method.");
+		System.out.println("Adding a simple method with fault.");
 
 		String pathtobasedir = System.getProperty("basedir");
 		System.out.println(pathtobasedir);
@@ -39,9 +41,16 @@ public class AddSimpleMethodStep extends Step {
 		MethodsType methodsType = introService.getMethods();
 
 		MethodType method = new MethodType();
-		method.setName(this.methodName);
+		method.setName(methodName);
 		MethodTypeOutput output = new MethodTypeOutput();
 		output.setClassName("void");
+		MethodTypeExceptionsException[] exceptionsArray = new MethodTypeExceptionsException[1];
+		MethodTypeExceptionsException exception = new MethodTypeExceptionsException();
+		exception.setName("testFault");
+		exceptionsArray[0] = exception;
+		MethodTypeExceptions exceptions = new MethodTypeExceptions();
+		exceptions.setException(exceptionsArray);
+		method.setExceptions(exceptions);
 		method.setOutput(output);
 
 		// add new method to array in bean
@@ -78,9 +87,9 @@ public class AddSimpleMethodStep extends Step {
 		String serviceInterface = pathtobasedir + File.separator + tci.dir
 				+ File.separator + "src" + File.separator
 				+ tci.getPackageDir() + "/common/" + tci.getName() + "I.java";
-		assertTrue(StepTools.methodExists(serviceInterface,methodName));
-	
+		assertTrue(StepTools.methodExists(serviceInterface, methodName));
 
+		
 		cmd = CommonTools.getAntAllCommand(pathtobasedir + File.separator
 				+ tci.getDir());
 

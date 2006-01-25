@@ -1,11 +1,11 @@
-package gov.nih.nci.cabig.introduce;
+package gov.nih.nci.cagrid.introduce;
 
-import gov.nih.nci.cabig.introduce.steps.AddSimpleMethodStep;
-import gov.nih.nci.cabig.introduce.steps.AddSimpleMethodWithFaultStep;
-import gov.nih.nci.cabig.introduce.steps.CreateSkeletonStep;
-import gov.nih.nci.cabig.introduce.steps.RemoveMethodStep;
-import gov.nih.nci.cabig.introduce.steps.RemoveSkeletonStep;
-import gov.nih.nci.cabig.introduce.steps.RollBackStep;
+import gov.nih.nci.cagrid.introduce.steps.AddSimpleMethodStep;
+import gov.nih.nci.cagrid.introduce.steps.AddSimpleMethodWithFaultStep;
+import gov.nih.nci.cagrid.introduce.steps.CreateSkeletonStep;
+import gov.nih.nci.cagrid.introduce.steps.RemoveMethodStep;
+import gov.nih.nci.cagrid.introduce.steps.RemoveSkeletonStep;
+import gov.nih.nci.cagrid.introduce.steps.RollBackStep;
 
 import java.util.Vector;
 
@@ -38,7 +38,7 @@ public class SyncToolsTest extends Story {
 
 	protected void storyTearDown() throws Throwable {
 		RemoveSkeletonStep step = new RemoveSkeletonStep(tci);
-		step.runStep();
+		//step.runStep();
 	}
 
 	// used to make sure that if we are going to use a junit testsuite to test this 

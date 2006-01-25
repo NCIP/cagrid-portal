@@ -1,4 +1,4 @@
-package gov.nih.nci.cabig.introduce;
+package gov.nih.nci.cagrid.introduce;
 
 import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
