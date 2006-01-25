@@ -239,4 +239,6 @@ Example:
 
 5) Add Service Run As Support
 
+6) Add Service Side Support for Rejecting Limited Proxies.
+
 
