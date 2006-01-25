@@ -265,8 +265,8 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
 		}
 		typeInfo.set(index++, domain);
 		
-		// skip classname
-		index++;
+		// set classname
+		typeInfo.set(index++, "");
 
 		typeInfo.set(index++, new Boolean(isArrayCheckBox.isSelected()));
 		if (handleParameterName) {
