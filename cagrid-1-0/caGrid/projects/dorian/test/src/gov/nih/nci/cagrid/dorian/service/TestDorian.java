@@ -32,6 +32,7 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
 import gov.nih.nci.cagrid.dorian.test.Utils;
+import gov.nih.nci.cagrid.dorian.test.Constants;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import gov.nih.nci.cagrid.opensaml.SAMLAttribute;
 import gov.nih.nci.cagrid.opensaml.SAMLAttributeStatement;
@@ -39,6 +40,7 @@ import gov.nih.nci.cagrid.opensaml.SAMLAuthenticationStatement;
 import gov.nih.nci.cagrid.opensaml.SAMLStatement;
 
 import java.io.File;
+import java.io.InputStream;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -62,14 +64,14 @@ import org.globus.gsi.GlobusCredential;
  */
 
 public class TestDorian extends TestCase{
-	public static String RESOURCES_DIR = "resources" + File.separator
-	+ "general-test";
 	
 	private Dorian jm;
 	
 	private int count = 0;
 	
 	private CertificateAuthority ca;
+	
+	private InputStream resource = TestCase.class.getResourceAsStream(Constants.DORIAN_CONF);
 	
  
  
@@ -81,7 +83,7 @@ public class TestDorian extends TestCase{
     public void testAuthenticate(){
     	try{
     		//initialize a Dorian object
-    		jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		jm = new Dorian(resource,"localhost");
     		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		
@@ -185,7 +187,7 @@ public class TestDorian extends TestCase{
    
     public void testFindUpdateRemoveIdPUser(){
     	try{
-    		jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		jm = new Dorian(resource,"localhost");
     		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		
@@ -282,7 +284,7 @@ public class TestDorian extends TestCase{
     
     public void testBadRegisterWithIdPTwoIdenticalUsers(){
     	try{
-    		jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		jm = new Dorian(resource,"localhost");
     		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
 			Application a = createApplication();
@@ -308,7 +310,7 @@ public class TestDorian extends TestCase{
     
     public void testBadRegisterWithIdP(){
     	try{
-    		jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		jm = new Dorian(resource,"localhost");
     		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		//test the password length too long
@@ -359,7 +361,7 @@ public class TestDorian extends TestCase{
     
     public void testBadRemoveIdPUserNoSuchUser(){
     	try{
-    		jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		jm = new Dorian(resource,"localhost");
     		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
@@ -398,7 +400,7 @@ public class TestDorian extends TestCase{
     
     public void testCreateProxy() {
 		try {
-			jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+			jm = new Dorian(resource,"localhost");
     		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
 			BasicAuthCredential auth = new BasicAuthCredential();
@@ -426,7 +428,7 @@ public class TestDorian extends TestCase{
     
     public void testRemoveIFSUser() {
 		try {
-			jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+			jm = new Dorian(resource,"localhost");
     		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
@@ -483,7 +485,7 @@ public class TestDorian extends TestCase{
     
     public void testUpdateIFSUser() {
 		try {
-			jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+			jm = new Dorian(resource,"localhost");
     		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
@@ -544,7 +546,7 @@ public class TestDorian extends TestCase{
     
     public void testFindIFSUsers() {
 		try {
-			jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+			jm = new Dorian(resource,"localhost");
     		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
@@ -598,7 +600,7 @@ public class TestDorian extends TestCase{
     
     public void testGetTrustedIdPs(){
     	try{
-    		jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		jm = new Dorian(resource,"localhost");
     		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		
@@ -653,7 +655,7 @@ public class TestDorian extends TestCase{
     
     public void testAddRemoveTrustedIdP(){
     	try{
-    		jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		jm = new Dorian(resource,"localhost");
     		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		
@@ -705,7 +707,7 @@ public class TestDorian extends TestCase{
     
     public void testUpdateTrustedIdP(){
     	try{
-    		jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		jm = new Dorian(resource,"localhost");
     		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		
@@ -760,7 +762,7 @@ public class TestDorian extends TestCase{
     
     public void testRenewIFSUserCredentials() {
 		try {
-			jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+			jm = new Dorian(resource,"localhost");
     		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		
@@ -818,7 +820,7 @@ public class TestDorian extends TestCase{
  
     public void testBadRemoveIFSUserInvalidGridId() {
 		try {
-			jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+			jm = new Dorian(resource,"localhost");
     		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
@@ -876,7 +878,7 @@ public class TestDorian extends TestCase{
     
     public void testBadUpdateIFSUserInvalidGridId() {
 		try {
-			jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+			jm = new Dorian(resource,"localhost");
     		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
@@ -936,7 +938,7 @@ public class TestDorian extends TestCase{
     
     public void testBadFindIFSUsersInvalidGridId() {
 		try {
-			jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+			jm = new Dorian(resource,"localhost");
     		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
@@ -992,7 +994,7 @@ public class TestDorian extends TestCase{
     
     public void testBadGetTrustedIdPs(){
     	try{
-    		jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		jm = new Dorian(resource,"localhost");
     		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		
@@ -1047,7 +1049,7 @@ public class TestDorian extends TestCase{
     
     public void testBadAddTrustedIdPInvalidGridId(){
     	try{
-    		jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		jm = new Dorian(resource,"localhost");
     		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		
@@ -1099,7 +1101,7 @@ public class TestDorian extends TestCase{
     
     public void testBadRemoveTrustedIdP(){
     	try{
-    		jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		jm = new Dorian(resource,"localhost");
     		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		
@@ -1152,7 +1154,7 @@ public class TestDorian extends TestCase{
     
     public void testBadUpdateTrustedIdPInvalidGridId(){
     	try{
-    		jm = new Dorian(RESOURCES_DIR+File.separator+"dorian-conf.xml","localhost");
+    		jm = new Dorian(resource,"localhost");
     		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		
