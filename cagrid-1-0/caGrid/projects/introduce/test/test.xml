@@ -26,7 +26,7 @@
 
 		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true">
 			<sysproperty key="basedir" value="${basedir}"/>
-			<sysproperty key="awt.toolkit" value="org.uispec4j.interception.toolkit.UISpecToolkit"/>
+			<!-- <sysproperty key="awt.toolkit" value="org.uispec4j.interception.toolkit.UISpecToolkit"/> -->
 			
 			<classpath>
 				<path refid="Portal.test.classpath"/>
@@ -38,6 +38,5 @@
 				</fileset>
 			</batchtest>
 		</junit>
-
 	</target>
 </project>
