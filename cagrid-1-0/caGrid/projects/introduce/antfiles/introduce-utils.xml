@@ -16,26 +16,7 @@
 	            <echo message="Running portal with @{configFile}" />
 	            <java classname="org.projectmobius.portal.GridPortal" fork="yes">
 	                <arg value="@{configFile}" />
-	                <classpath>
-	                    <fileset dir="${jars.dir}">
-	                        <include name="*.jar" />
-	                    </fileset>
-	                    <fileset dir="${lib.dir}">
-	                        <include name="*.jar" />
-	                    </fileset>
-	                	<fileset dir="${ext.lib.dir}">
-	                		<include name="*.jar" />
-	                	</fileset>
-	                    <fileset dir="${ext.globus.dir}/lib">
-	                        <include name="*.jar" />
-	                    </fileset>
-	                	<fileset dir="${ant.library.dir}">
-	                		<include name="ant.jar" />
-	                		<include name="ant-launcher.jar" />
-	                	</fileset>
-	                    <pathelement location="${basedir}/resources/portal/introduce" />
-	                    <pathelement location="${ext.resources.dir}/portal" />
-	                </classpath>
+	                <classpath refid="Portal.classpath"/>
 	            </java>
 	        </sequential>
 	    </macrodef>

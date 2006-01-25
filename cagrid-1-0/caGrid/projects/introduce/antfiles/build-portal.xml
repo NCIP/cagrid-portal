@@ -17,6 +17,8 @@
 			<fileset dir="${ext.lib.dir}">
 				<include name="*.jar"/>
 			</fileset>
+			<pathelement location="${basedir}/resources/portal/introduce" />
+			<pathelement location="${ext.resources.dir}/portal" />
 		</path>
 		<path id="Portal.test.classpath">
 			<fileset dir="${ext.globus.dir}/lib">
@@ -40,6 +42,8 @@
 			<fileset dir="${ant.library.dir}">
 				<include name="*.jar" />
 			</fileset>
+			<pathelement location="${basedir}/resources/portal/introduce" />
+			<pathelement location="${ext.resources.dir}/portal" />
 		</path>
 	</target>
 </project>
