@@ -14,7 +14,7 @@ Security configuration (STEVE)
 
 (DONE) Metadata and registration configuration
 
-(*STARTED*  need to add more)Add gui testing
+(*STARTED*  need to add more)Add gui testing (requires a HEAD to run)
 
 Make notes on how to add a new template.
 
