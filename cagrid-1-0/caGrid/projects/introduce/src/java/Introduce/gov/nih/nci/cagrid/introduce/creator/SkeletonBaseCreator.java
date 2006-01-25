@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.creator;
 
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.ClasspathTemplate;
+import gov.nih.nci.cagrid.introduce.templates.ClientConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.DeployPropertiesTemplate;
 import gov.nih.nci.cagrid.introduce.templates.JNDIConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.NamespaceMappingsTemplate;
@@ -27,6 +28,13 @@ public class SkeletonBaseCreator {
 		FileWriter serverConfigFW = new FileWriter(serverConfigF);
 		serverConfigFW.write(serverConfigS);
 		serverConfigFW.close();
+		
+		ClientConfigTemplate clientConfigT = new ClientConfigTemplate();
+		String clientConfigS = clientConfigT.generate(info);
+		File clientConfigF = new File(baseDirectory.getAbsolutePath() + File.separator + "client-config.wsdd");
+		FileWriter clientConfigFW = new FileWriter(clientConfigF);
+		clientConfigFW.write(clientConfigS);
+		clientConfigFW.close();
 		
 		JNDIConfigTemplate jndiConfigT = new JNDIConfigTemplate();
 		String jndiConfigS = jndiConfigT.generate(info);

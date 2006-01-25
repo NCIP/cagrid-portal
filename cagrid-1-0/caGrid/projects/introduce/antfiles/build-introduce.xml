@@ -18,6 +18,9 @@
 			<fileset dir="${ant.library.dir}">
 				<include name="*.jar" />
 			</fileset>
+			<fileset dir="${build.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
 		</path>
 		<path id="Introduce.test.classpath">
 			<fileset dir="${ext.globus.dir}/lib">

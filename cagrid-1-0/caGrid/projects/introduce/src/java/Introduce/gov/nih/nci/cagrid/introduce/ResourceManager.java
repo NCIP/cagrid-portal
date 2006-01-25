@@ -261,7 +261,7 @@ public class ResourceManager {
 		} else {
 			chooser = new JFileChooser();
 		}
-		chooser.setDialogTitle("Select Attribute File");
+		chooser.setDialogTitle("Select Directory");
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		chooser.setMultiSelectionEnabled(false);

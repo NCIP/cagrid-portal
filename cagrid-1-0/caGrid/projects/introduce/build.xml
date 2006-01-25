@@ -143,6 +143,7 @@
 	</taskdef>
 	<target name="generateJETClasses">
 		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/server-config.wsdd.xmljet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/client-config.wsdd.xmljet" />
 		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/jndi-config.xmljet" />
 		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/deploy.properties.txtjet" />
 		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/namespace2package.mappings.txtjet" />
