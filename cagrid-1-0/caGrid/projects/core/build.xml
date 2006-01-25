@@ -20,6 +20,7 @@
 	<property name="jar.dir" value="${build.dir}/jars" />
 	<property name="project.jarfile" value="${jar.dir}/${project.name}-${project.version}.jar" />
 	<property name="lib.dir" value="${basedir}/lib" />
+	<property name="ext.lib.dir" value="${basedir}/ext/lib" />
 
 	<!-- testing stuff -->
 	<property name="test.dir" location="${basedir}/test" />
@@ -43,6 +44,9 @@
 		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
+		<fileset dir="${ext.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
 		<fileset dir="${globus.dir}/lib">
 			<include name="**/*.jar" />
 		</fileset>
@@ -54,6 +58,9 @@
 	<!-- =============================================================== -->
 	<path id="run.classpath">
 		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${ext.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
 		<fileset dir="${globus.dir}/lib">
@@ -68,6 +75,9 @@
 		<pathelement path="${classes.dir}" />
 		<pathelement path="${test.classes.dir}" />
 		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${ext.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
 		<fileset dir="${test.lib.dir}">

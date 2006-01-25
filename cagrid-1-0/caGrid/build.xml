@@ -66,6 +66,15 @@
 				<include name="*.jar" />
 				<exclude name="*test*.jar" />
 			</fileset>
+			<fileset dir="${projects.dir}/core/ext/lib">
+				<include name="*.jar" />
+				<exclude name="*test*.jar" />
+			</fileset>
+		</artifact>
+		<artifact track="main" type="jars" id="mobius.jars">
+			<fileset dir="${basedir}/share/lib/mobius">
+				<include name="*.jar" />
+			</fileset>
 		</artifact>
 		<artifact track="test" type="jars" id="core.test.jars">
 			<antcall target="build-core" />
@@ -118,6 +127,9 @@
 	<!-- CORE: This cannot have any dependencies on other projects       -->
 	<!-- =============================================================== -->
 	<target name="build-core" depends="prepare" description="Builds the core">
+		<resolveDependencies extdir="${projects.dir}/core/ext">
+			<artifact refid="mobius.jars" />
+		</resolveDependencies>
 		<ant dir="${projects.dir}/core" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
@@ -148,6 +160,7 @@
 			<artifact refid="core.jars" />
 			<artifact refid="core.test.jars" />
 			<artifact refid="core.resources" />
+			<artifact refid="mobius.jars" />
 			<artifact refid="metadata.jars" />
 			<artifact refid="metadata.schemas" />
 			<artifact refid="metadata.mappings" />
@@ -166,6 +179,7 @@
 			<artifact refid="core.jars" />
 			<artifact refid="core.test.jars" />
 			<artifact refid="core.resources" />
+			<artifact refid="mobius.jars" />
 			<artifact refid="metadata.jars" />
 			<artifact refid="metadata.schemas" />
 			<artifact refid="metadata.mappings" />
