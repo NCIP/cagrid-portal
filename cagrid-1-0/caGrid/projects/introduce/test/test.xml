@@ -24,6 +24,11 @@
 			</batchtest>
 		</junit>
 
+		<antcall target="testGUI"/>
+	</target>
+	
+	<target name="testGUI" if="introduce.test.gui" >
+		
 		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true">
 			<sysproperty key="basedir" value="${basedir}"/>
 			<jvmarg value="-Dbasedir=${basedir}"/>
