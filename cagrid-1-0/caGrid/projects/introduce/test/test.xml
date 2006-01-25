@@ -10,7 +10,7 @@
 		<echo message="Test results dir: ${junit.results.dir}" />
 		<mkdir dir="${junit.results.dir}"/>
 		
-<!--		
+		
 		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true">
 			<sysproperty key="basedir" value="${basedir}"/>
 			<jvmarg value="-Dbuild.dir=${classes.dir}"/>
@@ -24,7 +24,7 @@
 				</fileset>
 			</batchtest>
 		</junit>
--->
+
 		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true">
 			<sysproperty key="basedir" value="${basedir}"/>
 			<jvmarg value="-Dbuild.dir=${classes.dir}"/>
