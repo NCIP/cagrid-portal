@@ -170,6 +170,7 @@ public class CommonTools {
 			for (int i = 0; i < children.length; i++) {
 				boolean success = deleteDir(new File(dir, children[i]));
 				if (!success) {
+					System.err.println("could not remove directory: " + dir.getAbsolutePath());
 					return false;
 				}
 			}

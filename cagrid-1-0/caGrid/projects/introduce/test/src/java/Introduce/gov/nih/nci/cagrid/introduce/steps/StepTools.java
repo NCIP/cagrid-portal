@@ -45,6 +45,12 @@ public class StepTools {
 				found = false;
 			}
 		}
+		
+		sourceI = null;
+		jsf = null;
+		jp = null;
+		System.gc();
+		
 		return found;
 	}
 
