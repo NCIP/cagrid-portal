@@ -1,52 +1,52 @@
 <project name="cagrid_portal" basedir="." default="usage">
 	<target name="usage">
-		<echo message="Not to be called directly." />
+		<echo message="Not to be called directly."/>
 	</target>
 	<!-- put stuff in here needed for building introduce-->
 	<target name="preparePortal">
 		<path id="Portal.classpath">
-			<fileset dir="${ext.globus.dir}/lib">
-				<include name="*.jar" />
-			</fileset>
 			<fileset dir="${lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${ant.library.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${ext.lib.dir}">
-				<include name="*.jar" />
+				<include name="*.jar"/>
 			</fileset>
 			<fileset dir="${build.lib.dir}">
-				<include name="*.jar" />
+				<include name="*.jar"/>
 			</fileset>
-			<pathelement location="${basedir}/resources/portal/introduce" />
-			<pathelement location="${ext.resources.dir}/portal" />
+			<fileset dir="${ext.lib.dir}">
+				<include name="*.jar"/>
+			</fileset>
+			<fileset dir="${ext.globus.dir}/lib">
+				<include name="*.jar"/>
+			</fileset>
+			<fileset dir="${ant.library.dir}">
+				<include name="*.jar"/>
+			</fileset>
+			<pathelement location="${basedir}/resources/portal/introduce"/>
+			<pathelement location="${ext.resources.dir}/portal"/>
 		</path>
 		<path id="Portal.test.classpath">
-			<fileset dir="${ext.globus.dir}/lib">
-				<include name="*.jar" />
-			</fileset>
 			<fileset dir="${lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${ext.lib.dir}">
-				<include name="*.jar" />
+				<include name="*.jar"/>
 			</fileset>
 			<fileset dir="${build.lib.dir}">
-				<include name="*.jar" />
+				<include name="*.jar"/>
 			</fileset>
 			<fileset dir="${test.lib.dir}">
-				<include name="*.jar" />
+				<include name="*.jar"/>
 			</fileset>
 			<fileset dir="${ext.test.lib.dir}">
-				<include name="*.jar" />
+				<include name="*.jar"/>
+			</fileset>
+			<fileset dir="${ext.lib.dir}">
+				<include name="*.jar"/>
+			</fileset>
+			<fileset dir="${ext.globus.dir}/lib">
+				<include name="*.jar"/>
 			</fileset>
 			<fileset dir="${ant.library.dir}">
-				<include name="*.jar" />
+				<include name="*.jar"/>
 			</fileset>
-			<pathelement location="${basedir}/resources/portal/introduce" />
-			<pathelement location="${ext.resources.dir}/portal" />
+			<pathelement location="${basedir}/resources/portal/introduce"/>
+			<pathelement location="${ext.resources.dir}/portal"/>
 		</path>
 	</target>
 </project>
