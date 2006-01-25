@@ -211,3 +211,32 @@ Example:
 
 
 =======================================================
+
+
+=======================================================
+ SECURITY STUFF
+=======================================================
+
+
+1) Client Side Authorization
+
+	A) Add Support for Identity Authorization
+	B) Add Support for Custom Authorization
+	C) Add Input for host and Identity Authorization
+
+2) Server Side Authorization, Add Support for the following authorization mechanisms
+
+	A) None
+	B) Self
+	C) GridMap
+	D) Identity Authorization
+	E) Host Authorization
+	F) SAML Callout Authorization
+		
+3) Add Client side support for delegation
+
+4) Add Service Credential Support
+
+5) Add Service Run As Support
+
+
