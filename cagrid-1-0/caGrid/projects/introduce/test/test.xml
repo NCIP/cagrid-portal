@@ -28,8 +28,8 @@
 			<sysproperty key="basedir" value="${basedir}"/>
 			<jvmarg value="-Dbasedir=${basedir}"/>
 			
-			<sysproperty key="awt.toolkit" value="org.uispec4j.interception.toolkit.UISpecToolkit"/>
-			<jvmarg value="-Dawt.toolkit=org.uispec4j.interception.toolkit.UISpecToolkit"/>
+			<sysproperty key="awt.toolkit" value="sun.awt.windows.WToolkit"/>
+			<jvmarg value="-Dawt.toolkit=sun.awt.windows.WToolkit"/>
 			
 			<classpath refid="Portal.test.classpath"/>
 			
