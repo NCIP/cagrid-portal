@@ -12,8 +12,10 @@ import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserStatus;
 import gov.nih.nci.cagrid.dorian.idp.bean.NoSuchUserFault;
 import gov.nih.nci.cagrid.dorian.idp.bean.StateCode;
 import gov.nih.nci.cagrid.dorian.test.Utils;
+import gov.nih.nci.cagrid.dorian.test.Constants;
 
 import java.io.File;
+import java.io.InputStream;
 
 import junit.framework.TestCase;
 
@@ -25,9 +27,6 @@ import junit.framework.TestCase;
  *          Exp $
  */
 public class TestUserManager extends TestCase {
-	
-	public static String IDP_CONFIG = "resources" + File.separator
-	+ "general-test" + File.separator + "idp-config.xml";
 
 	private Database db;
 
@@ -543,7 +542,8 @@ public class TestUserManager extends TestCase {
 			count = 0;
 		    db = Utils.getDB();
 		    assertEquals(0,db.getUsedConnectionCount());
-		    SimpleResourceManager trm = new SimpleResourceManager(IDP_CONFIG);
+		    InputStream resource = TestCase.class.getResourceAsStream(Constants.IDP_CONFIG);
+		    SimpleResourceManager trm = new SimpleResourceManager(resource);
 		    this.conf = (IdPConfiguration)trm.getResource(IdPConfiguration.RESOURCE);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);

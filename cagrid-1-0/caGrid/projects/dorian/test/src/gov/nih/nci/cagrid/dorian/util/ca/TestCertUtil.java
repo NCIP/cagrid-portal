@@ -1,10 +1,15 @@
 package gov.nih.nci.cagrid.dorian.util.ca;
 
+import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.FaultUtil;
+import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
 import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
+import gov.nih.nci.cagrid.dorian.test.Constants;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
@@ -22,16 +27,12 @@ import org.bouncycastle.jce.PKCS10CertificationRequest;
  *          Exp $
  */
 public class TestCertUtil extends TestCase {
-	public static String RESOURCES_DIR = "resources" + File.separator
-			+ "ca-test";
 
 	public void testCreateCertificateSimpleCARoot() {
 		try {
-			String certLocation = RESOURCES_DIR + File.separator
-					+ "simpleca-cacert.pem";
-			String keyLocation = RESOURCES_DIR + File.separator
-					+ "simpleca-cakey.pem";
-			;
+			InputStream certLocation = TestCase.class.getResourceAsStream(Constants.SIMPLECA_CACERT);
+			InputStream keyLocation = TestCase.class.getResourceAsStream(Constants.SIMPLECA_CAKEY);
+			
 			String keyPassword = "gomets123";
 			X509Certificate[] certs = createCertificateSpecifyRootCA(
 					certLocation, keyLocation, keyPassword);
@@ -52,11 +53,9 @@ public class TestCertUtil extends TestCase {
 
 	public void testCreateCertificateDorianCARoot() {
 		try {
-			String certLocation = RESOURCES_DIR + File.separator
-					+ "bmi-cacert.pem";
-			String keyLocation = RESOURCES_DIR + File.separator
-					+ "bmi-cakey.pem";
-			;
+			InputStream certLocation = TestCase.class.getResourceAsStream(Constants.BMI_CACERT);
+			InputStream keyLocation = TestCase.class.getResourceAsStream(Constants.BMI_CAKEY);
+
 			String keyPassword = "gomets123";
 			X509Certificate[] certs = createCertificateSpecifyRootCA(
 					certLocation, keyLocation, keyPassword);
@@ -205,6 +204,13 @@ public class TestCertUtil extends TestCase {
 	public X509Certificate[] createCertificateSpecifyRootCA(
 			String certLocation, String keyLocation, String keyPassword)
 			throws Exception {
+		return createCertificateSpecifyRootCA(getFileInputStream(certLocation), getFileInputStream(keyLocation),
+				keyPassword);
+		
+	}
+	public X509Certificate[] createCertificateSpecifyRootCA(
+			InputStream certLocation, InputStream keyLocation, String keyPassword)
+			throws Exception {
 		// Load a root certificate
 		PrivateKey rootKey = KeyUtil.loadPrivateKey(keyLocation, keyPassword);
 		assertNotNull(rootKey);
@@ -244,6 +250,21 @@ public class TestCertUtil extends TestCase {
 		assertNotNull(issuedCert);
 
 		return new X509Certificate[] { issuedCert, rootCert };
+	}
+	
+	private static FileInputStream getFileInputStream(String file)
+		throws DorianInternalFault {
+		try {
+			return new FileInputStream(new File(file));
+		} catch (Exception e) {
+			DorianInternalFault fault = new DorianInternalFault();
+			fault
+			.setFaultString("An unexpected error occurred in configuring the service.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		}
 	}
 
 }

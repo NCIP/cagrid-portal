@@ -4,8 +4,10 @@ import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.SimpleResourceManager;
 import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
 import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
+import gov.nih.nci.cagrid.dorian.test.Constants;
 
 import java.io.File;
+import java.io.InputStream;
 
 import junit.framework.TestCase;
 
@@ -36,16 +38,11 @@ public class TestIdPConfiguration extends TestCase {
 	private final static String DEFAULT_REGISTRATION_POLICY = ManualRegistrationPolicy.class
 			.getName();
 
-	public static String IDP_CONFIG = "resources" + File.separator
-	+ "general-test" + File.separator + "idp-config.xml";
-	
-	public static String IDP_CONFIG2 = "resources" + File.separator
-	+ "general-test" + File.separator + "idp-config2.xml";
-
 	public void testAutoConfiguration() {
 		try {
-			 SimpleResourceManager trm = new SimpleResourceManager(IDP_CONFIG);
-			 IdPConfiguration conf = (IdPConfiguration)trm.getResource(IdPConfiguration.RESOURCE);
+			InputStream resource = TestCase.class.getResourceAsStream(Constants.IDP_CONFIG);
+			SimpleResourceManager trm = new SimpleResourceManager(resource);
+			IdPConfiguration conf = (IdPConfiguration)trm.getResource(IdPConfiguration.RESOURCE);
 		
 			assertEquals(DEFAULT_MIN_PASSWORD_LENGTH, conf
 					.getMinimumPasswordLength());
@@ -71,8 +68,9 @@ public class TestIdPConfiguration extends TestCase {
 	}
 	public void testConfiguration() {
 		try {
-			 SimpleResourceManager trm = new SimpleResourceManager(IDP_CONFIG2);
-			 IdPConfiguration conf = (IdPConfiguration)trm.getResource(IdPConfiguration.RESOURCE);
+			InputStream resource = TestCase.class.getResourceAsStream(Constants.IDP_CONFIG2);
+			SimpleResourceManager trm = new SimpleResourceManager(resource);
+			IdPConfiguration conf = (IdPConfiguration)trm.getResource(IdPConfiguration.RESOURCE);
 		
 			assertEquals(DEFAULT_MIN_PASSWORD_LENGTH, conf
 					.getMinimumPasswordLength());
@@ -87,8 +85,10 @@ public class TestIdPConfiguration extends TestCase {
 		
 			assertEquals(false,conf.isAutoCreateAssertingCredentials());
 			assertEquals(false,conf.isAutoRenewAssertingCredentials());
-			assertEquals(CertUtil.loadCertificate("resources/ca-test/dorian-cert.pem"),conf.getAssertingCertificate());
-			assertEquals(KeyUtil.loadPrivateKey("resources/ca-test/dorian-key.pem",conf.getKeyPassword()),conf.getAssertingKey());
+			resource = TestCase.class.getResourceAsStream(Constants.DORIAN_CERT);
+			assertEquals(CertUtil.loadCertificate(resource),conf.getAssertingCertificate());
+			resource = TestCase.class.getResourceAsStream(Constants.DORIAN_KEY);
+			assertEquals(KeyUtil.loadPrivateKey(resource,conf.getKeyPassword()),conf.getAssertingKey());
 			
 		
 		} catch (Exception e) {

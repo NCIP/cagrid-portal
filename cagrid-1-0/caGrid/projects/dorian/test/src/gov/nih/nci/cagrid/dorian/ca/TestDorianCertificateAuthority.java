@@ -4,8 +4,10 @@ import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
 import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
+import gov.nih.nci.cagrid.dorian.test.Constants;
 
 import java.io.File;
+import java.io.InputStream;
 import java.security.KeyPair;
 import java.security.cert.X509Certificate;
 import java.util.Calendar;
@@ -33,9 +35,6 @@ public class TestDorianCertificateAuthority extends TestCase {
 	private static final String TABLE = "TEST_DORIAN_CA";
 
 	private static final String SUBJECT_PREFIX = "O=Ohio State University,OU=BMI,OU=MSCL,CN=";
-
-	public static String DB_CONFIG = "resources" + File.separator
-			+ "general-test" + File.separator + "db-config.xml";
 
 	private Database db;
 
@@ -304,7 +303,8 @@ public class TestDorianCertificateAuthority extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
-			Document doc = XMLUtilities.fileNameToDocument(DB_CONFIG);
+			InputStream resource = TestCase.class.getResourceAsStream(Constants.DB_CONFIG);
+			Document doc = XMLUtilities.streamToDocument(resource);
 			ConnectionManager cm = new ConnectionManager(doc.getRootElement());
 			db = new Database(cm, DB);
 			db.destroyDatabase();

@@ -34,9 +34,6 @@ public class TestCredentialsManager extends TestCase {
 
 	private static final String CA_PASSWORD = "CA_PASSWORD";
 
-	public static String DB_CONFIG = "resources" + File.separator
-			+ "general-test" + File.separator + "db-config.xml";
-
 	private Database db;
 
 	private CredentialsManager cred;

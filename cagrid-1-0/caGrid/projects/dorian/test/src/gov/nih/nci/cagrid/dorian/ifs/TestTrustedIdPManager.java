@@ -42,8 +42,6 @@ import org.bouncycastle.jce.PKCS10CertificationRequest;
  */
 public class TestTrustedIdPManager extends TestCase {
 
-	public static String IDP_CONFIG = "resources" + File.separator + "general-test" + File.separator + "idp-config.xml";
-
 	private static final int MIN_NAME_LENGTH = 4;
 
 	private static final int MAX_NAME_LENGTH = 50;

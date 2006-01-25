@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.dorian.common.IOUtils;
 import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
 import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
 import gov.nih.nci.cagrid.dorian.test.Utils;
+import gov.nih.nci.cagrid.dorian.test.Constants;
 import gov.nih.nci.cagrid.opensaml.InvalidCryptoException;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import gov.nih.nci.cagrid.opensaml.SAMLAttribute;
@@ -16,6 +17,7 @@ import gov.nih.nci.cagrid.opensaml.SAMLAuthenticationStatement;
 import gov.nih.nci.cagrid.opensaml.SAMLStatement;
 
 import java.io.File;
+import java.io.InputStream;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
@@ -37,9 +39,6 @@ import org.bouncycastle.jce.PKCS10CertificationRequest;
  */
 public class TestAssertionCredentialsManager extends TestCase {
 
-	public static String CA_RESOURCES_DIR = "resources" + File.separator
-			+ "ca-test";
-
 	private Database db;
 
 	private CertificateAuthority ca;
@@ -54,8 +53,8 @@ public class TestAssertionCredentialsManager extends TestCase {
 			
 		try {
 			// Test against a bad certificate
-			saml.verify(CertUtil.loadCertificate(CA_RESOURCES_DIR
-					+ "/bmi-cacert.pem"));
+			InputStream resource = TestCase.class.getResourceAsStream(Constants.BMI_CACERT);
+			saml.verify(CertUtil.loadCertificate(resource));
 			assertTrue(false);
 		} catch (InvalidCryptoException ex) {
 
@@ -256,12 +255,14 @@ public class TestAssertionCredentialsManager extends TestCase {
 
 			assertEquals(false, conf.isAutoCreateAssertingCredentials());
 			assertEquals(false, conf.isAutoRenewAssertingCredentials());
+			InputStream resource = TestCase.class.getResourceAsStream(Constants.DORIAN_CERT);
 			X509Certificate providedCert = CertUtil
-					.loadCertificate(CA_RESOURCES_DIR + "/dorian-cert.pem");
+					.loadCertificate(resource);
 			assertTrue(!CertUtil.isExpired(providedCert));
 			assertEquals(providedCert, conf.getAssertingCertificate());
-			assertEquals(KeyUtil.loadPrivateKey(CA_RESOURCES_DIR
-					+ "/dorian-key.pem", conf.getKeyPassword()), conf
+			resource = TestCase.class.getResourceAsStream(Constants.DORIAN_KEY);
+			assertEquals(KeyUtil.loadPrivateKey(resource
+					, conf.getKeyPassword()), conf
 					.getAssertingKey());
 
 			AssertionCredentialsManager cm = new AssertionCredentialsManager(
@@ -300,11 +301,12 @@ public class TestAssertionCredentialsManager extends TestCase {
 		IdPConfiguration config = new IdPConfiguration();
 		config.setAutoCreateAssertingCredentials(false);
 		config.setAutoRenewAssertingCredentials(false);
-
+		InputStream resource = TestCase.class.getResourceAsStream(Constants.DORIAN_CERT);
 		config.setAssertingCertificate(CertUtil
-				.loadCertificate(CA_RESOURCES_DIR + "/dorian-cert.pem"));
-		config.setAssertingKey(KeyUtil.loadPrivateKey(CA_RESOURCES_DIR
-				+ "/dorian-key.pem", config.getKeyPassword()));
+				.loadCertificate(resource));
+		resource = TestCase.class.getResourceAsStream(Constants.DORIAN_KEY);
+		config.setAssertingKey(KeyUtil.loadPrivateKey(resource
+				, config.getKeyPassword()));
 		return config;
 	}
 

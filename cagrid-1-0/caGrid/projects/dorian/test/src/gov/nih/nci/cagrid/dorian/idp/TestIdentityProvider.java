@@ -13,6 +13,7 @@ import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserRole;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserStatus;
 import gov.nih.nci.cagrid.dorian.idp.bean.StateCode;
 import gov.nih.nci.cagrid.dorian.test.Utils;
+import gov.nih.nci.cagrid.dorian.test.Constants;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import gov.nih.nci.cagrid.opensaml.SAMLAttribute;
 import gov.nih.nci.cagrid.opensaml.SAMLAttributeStatement;
@@ -20,6 +21,7 @@ import gov.nih.nci.cagrid.opensaml.SAMLAuthenticationStatement;
 import gov.nih.nci.cagrid.opensaml.SAMLStatement;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.Iterator;
 
 import junit.framework.TestCase;
@@ -39,8 +41,6 @@ public class TestIdentityProvider extends TestCase {
 	private Database db;
 
 	private CertificateAuthority ca;
-
-	public static String IDP_CONFIG = "resources" + File.separator + "general-test" + File.separator + "idp-config.xml";
 
 	private int count = 0;
 
@@ -241,7 +241,8 @@ public class TestIdentityProvider extends TestCase {
 			db = Utils.getDB();
 			assertEquals(0, db.getUsedConnectionCount());
 			ca = Utils.getCA();
-			SimpleResourceManager trm = new SimpleResourceManager(IDP_CONFIG);
+			InputStream resource = TestCase.class.getResourceAsStream(Constants.IDP_CONFIG);
+			SimpleResourceManager trm = new SimpleResourceManager(resource);
 			this.conf = (IdPConfiguration) trm.getResource(IdPConfiguration.RESOURCE);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);

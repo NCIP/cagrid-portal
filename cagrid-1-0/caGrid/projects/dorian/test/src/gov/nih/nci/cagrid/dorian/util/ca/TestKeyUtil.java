@@ -2,8 +2,10 @@ package gov.nih.nci.cagrid.dorian.util.ca;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
+import gov.nih.nci.cagrid.dorian.test.Constants;
 
 import java.io.File;
+import java.io.InputStream;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -17,7 +19,6 @@ import junit.framework.TestCase;
  *          Exp $
  */
 public class TestKeyUtil extends TestCase {
-	public static String RESOURCES_DIR="resources"+File.separator+"ca-test";
 	
 	public void testCreateWriteLoadEncryptedPrivateKey(){
 		try{
@@ -95,7 +96,8 @@ public class TestKeyUtil extends TestCase {
 	
 	public void testLoadEncyptedPrivateKey(){
 		try{
-			PrivateKey key=KeyUtil.loadPrivateKey(RESOURCES_DIR+File.separator+"simpleca-cakey.pem","gomets123");
+			InputStream keyLocation = TestCase.class.getResourceAsStream(Constants.SIMPLECA_CAKEY);
+			PrivateKey key=KeyUtil.loadPrivateKey(keyLocation,"gomets123");
 		    assertNotNull(key);
 		}catch (Exception e) {
 			FaultUtil.printFault(e);;
@@ -105,7 +107,8 @@ public class TestKeyUtil extends TestCase {
 	
 	public void testLoadPrivateKey(){
 		try{
-			PrivateKey key=KeyUtil.loadPrivateKey(RESOURCES_DIR+File.separator+"bmi-cakey.pem",null);
+			InputStream keyLocation = TestCase.class.getResourceAsStream(Constants.BMI_CAKEY);
+			PrivateKey key=KeyUtil.loadPrivateKey(keyLocation,null);
 		    assertNotNull(key);
 		}catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -113,7 +116,8 @@ public class TestKeyUtil extends TestCase {
 		}	
 		
 		try{
-			PrivateKey key=KeyUtil.loadPrivateKey(RESOURCES_DIR+File.separator+"dorian-key.pem",null);
+			InputStream keyLocation = TestCase.class.getResourceAsStream(Constants.DORIAN_KEY);
+			PrivateKey key=KeyUtil.loadPrivateKey(keyLocation,null);
 		    assertNotNull(key);
 		}catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -123,7 +127,8 @@ public class TestKeyUtil extends TestCase {
 	
 	public void testLoadBadPrivateKey(){
 		try{
-			KeyUtil.loadPrivateKey(RESOURCES_DIR+File.separator+"BADKEY","");
+			InputStream keyLocation = TestCase.class.getResourceAsStream(Constants.BAD_KEY);
+			KeyUtil.loadPrivateKey(keyLocation,"");
 			assertTrue(false);
 		}catch (Exception e) {
 			
@@ -132,7 +137,8 @@ public class TestKeyUtil extends TestCase {
 	
 	public void testLoadEncyptedPrivateKeyBadPassword(){
 		try{
-			KeyUtil.loadPrivateKey(RESOURCES_DIR+File.separator+"simpleca-cakey.pem","badpassword");
+			InputStream keyLocation = TestCase.class.getResourceAsStream(Constants.SIMPLECA_CAKEY);
+			KeyUtil.loadPrivateKey(keyLocation,"badpassword");
 			assertTrue(false);
 		}catch (Exception e) {
 			

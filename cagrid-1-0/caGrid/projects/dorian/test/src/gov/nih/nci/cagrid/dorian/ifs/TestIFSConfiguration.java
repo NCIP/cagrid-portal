@@ -2,8 +2,10 @@ package gov.nih.nci.cagrid.dorian.ifs;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.SimpleResourceManager;
+import gov.nih.nci.cagrid.dorian.test.Constants;
 
 import java.io.File;
+import java.io.InputStream;
 
 import junit.framework.TestCase;
 
@@ -37,15 +39,11 @@ public class TestIFSConfiguration extends TestCase {
 	public static final int DEFAULT_MAX_PROXY_LIFETIME_MINUTES = 10;
 
 	public static final int DEFAULT_MAX_PROXY_LIFETIME_SECONDS = 11;
-
 	
-	public static String IFS_CONF = "resources" + File.separator
-	+ "general-test" + File.separator + "ifs-conf.xml";
-	
-
 	public void testConfiguration() {
 		try {
-			 SimpleResourceManager trm = new SimpleResourceManager(IFS_CONF);
+			InputStream resource = TestCase.class.getResourceAsStream(Constants.IFS_CONF);
+			 SimpleResourceManager trm = new SimpleResourceManager(resource);
 			 IFSConfiguration conf = (IFSConfiguration)trm.getResource(IFSConfiguration.RESOURCE);
 		
 			assertEquals(DEFAULT_MIN_LENGTH, conf

@@ -1,9 +1,15 @@
 package gov.nih.nci.cagrid.dorian.common.ca;
 
+import gov.nih.nci.cagrid.common.FaultHelper;
+import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
+
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -148,6 +154,10 @@ public class CertUtil {
 	public static X509Certificate loadCertificate(String certLocation) throws IOException, GeneralSecurityException {
 		return loadCertificate(new FileReader(new File(certLocation)));
 	}
+	
+	public static X509Certificate loadCertificate(InputStream certLocation) throws IOException, GeneralSecurityException {
+		return loadCertificate(new InputStreamReader(certLocation));
+	}
 
 
 	public static X509Certificate loadCertificateFromString(String str) throws IOException, GeneralSecurityException {
@@ -172,4 +182,5 @@ public class CertUtil {
 			return false;
 		}
 	}
+	
 }

@@ -4,8 +4,10 @@ import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
 import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
+import gov.nih.nci.cagrid.dorian.test.Constants;
 
 import java.io.File;
+import java.io.InputStream;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -23,8 +25,6 @@ import org.globus.gsi.GlobusCredential;
  *          Exp $
  */
 public class TestProxyUtil extends TestCase {
-	public static String RESOURCES_DIR = "resources" + File.separator
-			+ "ca-test";
 	
 	private String identityToSubject(String identity){
 		String s = identity.substring(1);
@@ -33,11 +33,9 @@ public class TestProxyUtil extends TestCase {
 
 	public void testCreateProxy() {
 		try {
-				String certLocation = RESOURCES_DIR + File.separator
-						+ "dorian-cert.pem";
-				String keyLocation = RESOURCES_DIR + File.separator
-						+ "dorian-key.pem";
-		
+				InputStream certLocation = TestCase.class.getResourceAsStream(Constants.DORIAN_CERT);
+				InputStream keyLocation = TestCase.class.getResourceAsStream(Constants.DORIAN_KEY);
+			
 				ProxyLifetime lifetime = new ProxyLifetime();
 				lifetime.setHours(2);
 				lifetime.setMinutes(0);
@@ -75,10 +73,8 @@ public class TestProxyUtil extends TestCase {
 	
 	public void testInvalidProxyTimeToGreat() {
 		try {
-				String certLocation = RESOURCES_DIR + File.separator
-						+ "dorian-cert.pem";
-				String keyLocation = RESOURCES_DIR + File.separator
-						+ "dorian-key.pem";
+				InputStream certLocation = TestCase.class.getResourceAsStream(Constants.DORIAN_CERT);
+				InputStream keyLocation = TestCase.class.getResourceAsStream(Constants.DORIAN_KEY);
 				ProxyLifetime lifetime = new ProxyLifetime();
 				lifetime.setHours(50000);
 				lifetime.setMinutes(0);
