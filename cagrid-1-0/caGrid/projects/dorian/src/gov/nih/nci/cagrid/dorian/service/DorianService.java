@@ -54,7 +54,7 @@ public class DorianService {
 			DorianResourceHome home = (DorianResourceHome) ResourceContext.getResourceContext().getResourceHome();
 			this.dorian = new Dorian(home.getDorianConfig(), type.getAddress().toString());
 		} catch (Exception e) {
-			e.printStackTrace();
+			FaultHelper.printStackTrace(e);
 			throw new RemoteException(Utils.getExceptionMessage(e));
 		}
 

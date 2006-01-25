@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.dorian.wsrf.service.DorianServiceAddressingLocator;
 import org.apache.axis.client.Stub;
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.globus.axis.util.Util;
 import org.globus.wsrf.impl.security.authorization.NoAuthorization;
 import org.globus.wsrf.security.Constants;
 
@@ -22,6 +23,7 @@ public class DorianBaseClient {
 	protected String serviceURI;
 
 	public DorianBaseClient(String serviceURI) {
+		Util.registerTransport();
 		this.serviceURI = serviceURI;
 	}
 
