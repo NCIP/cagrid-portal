@@ -28,8 +28,11 @@
 			<sysproperty key="basedir" value="${basedir}"/>
 			<jvmarg value="-Dbasedir=${basedir}"/>
 			
-			<sysproperty key="awt.toolkit" value="sun.awt.windows.WToolkit"/>
-			<jvmarg value="-Dawt.toolkit=sun.awt.windows.WToolkit"/>
+			<!--<sysproperty key="awt.toolkit" value="sun.awt.windows.WToolkit"/>
+			<jvmarg value="-Dawt.toolkit=sun.awt.windows.WToolkit"/>-->
+			
+			<sysproperty key="java.awt.headless" value="true"/>
+			<jvmarg value="-Djava.awt.headless=true"/>
 			
 			<classpath refid="Portal.test.classpath"/>
 			
