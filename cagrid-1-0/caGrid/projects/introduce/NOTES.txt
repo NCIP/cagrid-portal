@@ -14,6 +14,8 @@ Security configuration (STEVE)
 
 (DONE) Metadata and registration configuration
 
+(*STARTED*  need to add more)Add gui testing
+
 Make notes on how to add a new template.
 
 GMEMetadataConfigurationComponent needs to set proper view on viewing an existing one from "modify"

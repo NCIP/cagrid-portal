@@ -82,7 +82,6 @@
 	<classpathentry kind="lib" path="lib/mobius_factories-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/mobius_gme_client-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/mobius_gme_server-1.1.jar"/>
-	<classpathentry sourcepath="/mobius" kind="lib" path="lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/mobius-castor-0.9.4.3-xml.jar"/>
 	<classpathentry kind="lib" path="lib/GlobalModelExchange_stubs.jar"/>
 	<classpathentry kind="lib" path="lib/GlobalModelExchange.jar"/>
@@ -99,5 +98,7 @@
 	<classpathentry kind="var" path="ANT_HOME/lib/ant-launcher.jar"/>
 	<classpathentry kind="lib" path="test/lib/shaste-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-core-1.0.jar"/>
+	<classpathentry kind="lib" path="test/lib/uispec4j-0.15.jar"/>
+	<classpathentry kind="lib" path="lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
