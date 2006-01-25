@@ -30,6 +30,7 @@
 				<fileset dir="${ext.test.lib.dir}">
 					<include name="*.jar" />
 				</fileset>
+				<pathelement location="${test.dir}/resources"/>
 			</classpath>
 			<formatter type="xml" />
 			<batchtest fork="yes" haltonfailure="true" haltonerror="true" todir="${junit.results.dir}">
