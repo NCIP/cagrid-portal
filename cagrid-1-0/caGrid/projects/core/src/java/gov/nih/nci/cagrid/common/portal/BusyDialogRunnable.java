@@ -25,7 +25,7 @@ public abstract class BusyDialogRunnable implements Runnable {
 		process();
 		dialog.getProgress().setIndeterminate(false);
 		setProgressText("");
-		dialog.dispose();
+		dialog.setVisible(false);
 	}
 
 	public abstract void process();
