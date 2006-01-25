@@ -31,7 +31,6 @@
 			<classpath>
 				<path refid="Portal.test.classpath"/>
 			</classpath>
-			<!--<formatter type="plain"/>-->
 			<formatter type="xml"/>
 			<batchtest fork="no" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}/Portal">
@@ -39,5 +38,6 @@
 				</fileset>
 			</batchtest>
 		</junit>
+
 	</target>
 </project>
