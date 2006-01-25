@@ -5,10 +5,9 @@
 	<property name="junit.results.dir" value="${test.log.dir}/junit" />
 	<mkdir dir="${test.log.dir}" />
 	<!-- call the test target for each project and aggregates the log resutls  -->
-	<target name="test">
+	<target name="test" depends="create_config_files">
 		<echo message="Test results dir: ${junit.results.dir}" />
 		<mkdir dir="${junit.results.dir}" />
-
 		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true">
 			<sysproperty key="basedir" value="${basedir}" />
 			<jvmarg value="-Xmx512M" />
@@ -30,7 +29,7 @@
 				<fileset dir="${ext.test.lib.dir}">
 					<include name="*.jar" />
 				</fileset>
-				<pathelement location="${test.dir}/resources"/>
+				<pathelement location="${test.dir}/resources" />
 			</classpath>
 			<formatter type="xml" />
 			<batchtest fork="yes" haltonfailure="true" haltonerror="true" todir="${junit.results.dir}">
@@ -39,5 +38,17 @@
 				</fileset>
 			</batchtest>
 		</junit>
+	</target>
+	<!-- ============================================================== -->
+	<!-- Creates conf files from examples                               -->
+	<!-- ============================================================== -->
+	<target name="create_config_files" description="Creates conf files from examples">
+		<echo message="You have not configured configuration files.  Creating from example..." />
+		<copy todir="${test.dir}/resources" overwrite="false">
+            <fileset dir="${test.dir}/resources">
+                <include name="**/*.example" />
+            </fileset>
+			<mapper type="glob" from="*.example" to="*" />
+		</copy>
 	</target>
 </project>
