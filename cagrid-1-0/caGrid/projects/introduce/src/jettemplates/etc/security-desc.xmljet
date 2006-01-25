@@ -10,7 +10,9 @@
    	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
    }
 %>
-<securityConfig xmlns="http://www.globus.org" xmlns:service="<%=namespaceDomain%>">
+<securityConfig xmlns="http://www.globus.org">
+
+<authz value="none"/>
 	<%
 		gov.nih.nci.cagrid.introduce.beans.method.MethodsType methods = info.getMethods();
 		if(methods!=null){
@@ -74,7 +76,7 @@
 		}
 					
 	%>
-   <method name="service:<%=list[i].getName()%>">
+   <method name="<%=list[i].getName()%>">
 		<auth-method>
 <%=authStr.toString()%>
   		</auth-method>

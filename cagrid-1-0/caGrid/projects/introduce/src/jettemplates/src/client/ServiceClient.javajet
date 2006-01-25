@@ -30,8 +30,8 @@ import <%=packageName%>.common.<%=serviceName%>I;
 public class <%=serviceName%>Client implements <%=serviceName%>I {
 	
 	private <%=modifiedServiceName%>ServiceAddressingLocator locator;
-	private EndpointReferenceType endpoint;
 	private GlobusCredential proxy;
+	private String url;
 	
 	public <%=serviceName%>Client(String url) {
 		this(url,null);	
@@ -39,19 +39,14 @@ public class <%=serviceName%>Client implements <%=serviceName%>I {
 
 	public <%=serviceName%>Client(String url, GlobusCredential proxy) {
 	   	this.proxy = proxy;
-		//Create endpoint reference to service
-	    endpoint = new EndpointReferenceType();
-	    try {
-	    	endpoint.setAddress(new Address(url));
-	    } catch (Exception e){
-	    	e.printStackTrace();
-	    }
-		//create a locator for this service
-		this.locator = new <%=modifiedServiceName%>ServiceAddressingLocator();
+	   	this.url = url;	
 	}
 
 	private <%=serviceName%>PortType getPortType(){
 		try {
+		<%=modifiedServiceName%>ServiceAddressingLocator locator = new <%=modifiedServiceName%>ServiceAddressingLocator();
+		EndpointReferenceType endpoint = new EndpointReferenceType();
+		endpoint.setAddress(new Address(url));
 			<%=serviceName%>PortType port = locator.get<%=serviceName%>PortTypePort(endpoint);
 			return port;
 		} catch (Exception e) {

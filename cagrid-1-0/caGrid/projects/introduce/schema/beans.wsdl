@@ -4,9 +4,12 @@
         <schema targetNamespace="gov.nih.nci.cagrid.beans/beans"
             xmlns:tns="gov.nih.nci.cagrid.beans/beans"
             xmlns:introduce="gme://gov.nih.nci.cagrid/1/Introduce"
+            xmlns:security="gme://gov.nih.nci.cagrid.introduce/1/Security"
             xmlns="http://www.w3.org/2001/XMLSchema">
             <import namespace="gme://gov.nih.nci.cagrid/1/Introduce"
                 schemaLocation="./IntroduceServiceDescription.xsd"/>
+                 <import namespace="gme://gov.nih.nci.cagrid.introduce/1/Security"
+                      schemaLocation="./Security.xsd"/>
         </schema>
     </types>
 </definitions>

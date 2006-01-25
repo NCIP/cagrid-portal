@@ -263,6 +263,7 @@ public class SyncSource {
 						}
 					}
 				} else if (comm.equals(SecureCommunicationMethodType.GSI_Transport_Level_Security)) {
+						sec.append("Util.registerTransport();\n");
 					if (scc.getAuthenticationMethod().equals(AuthenticationMethodType.Integrity)) {
 						sec
 							.append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT, org.globus.wsrf.security.Constants.SIGNATURE);\n");
