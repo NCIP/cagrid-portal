@@ -25,8 +25,10 @@
 		</junit>
 
 		<antcall target="testGUI"/>
+		
 	</target>
 	
+	<!-- setting the ant var introduce.test.gui will make the gui tests run, else they will not -->
 	<target name="testGUI" if="introduce.test.gui" >
 		
 		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true">
