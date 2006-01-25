@@ -27,6 +27,8 @@
 		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true">
 			<sysproperty key="basedir" value="${basedir}"/>
 			<jvmarg value="-Dbuild.dir=${classes.dir}"/>
+			<jvmarg value="-Dawt.toolkit=org.uispec4j.interception.UISpecToolkit"/>
+			
 			<classpath>
 				<path refid="Portal.test.classpath"/>
 			</classpath>

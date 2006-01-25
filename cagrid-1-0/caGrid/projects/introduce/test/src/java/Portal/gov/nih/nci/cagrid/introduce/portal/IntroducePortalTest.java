@@ -11,7 +11,6 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
-import org.projectmobius.common.MobiusException;
 import org.projectmobius.portal.GridPortal;
 import org.uispec4j.Trigger;
 import org.uispec4j.UISpec4J;
@@ -20,16 +19,14 @@ import org.uispec4j.interception.WindowInterceptor;
 
 import com.atomicobject.haste.framework.Story;
 
+
 public class IntroducePortalTest extends Story {
 	private TestCaseInfo tci;
-
 	private Window mainWindow = null;
-
 	private GridPortal myApp;
-
 	private CreateServiceStep createService;
-	
 	private ModifyServiceStep modifyService;
+
 
 	protected Vector steps() {
 		System.out.println("TRYING TO SET THIS TEST UP.......................................");
@@ -38,21 +35,17 @@ public class IntroducePortalTest extends Story {
 		mainWindow = WindowInterceptor.run(new Trigger() {
 			public void run() {
 				try {
-					
+
 					String pathtobasedir = System.getProperty("basedir");
 					System.out.println(pathtobasedir);
 					if (pathtobasedir == null) {
-						System.err.println("pathtobasedir system property not set");
-						throw new Exception("pathtobasedir system property not set");
+						System.err.println("basedir system property not set");
+						throw new Exception("basedir system property not set");
 					}
-					
+
 					System.out.println("TRYING TO CREATE THE PORTAL WITH NO PROBLEMS...................");
-					System.out.println(pathtobasedir + File.separator +
-							"conf\\introduce\\introduce-portal-conf.xml");
-					System.err.println(new File(pathtobasedir + File.separator +
-							"conf\\introduce\\introduce-portal-conf.xml").exists());
-					myApp = new GridPortal(pathtobasedir + File.separator +
-							"conf\\introduce\\introduce-portal-conf.xml");
+					myApp = new GridPortal(pathtobasedir + File.separator
+						+ "conf\\introduce\\introduce-portal-conf.xml");
 					System.out.println("CREATED THE PORTAL WITH NO PROBLEMS...................");
 					myApp.show();
 				} catch (Exception e) {
@@ -61,25 +54,29 @@ public class IntroducePortalTest extends Story {
 				}
 			}
 		});
-		
+
 		System.out.println("DONE SETTING THIS TEST UP.......................................");
 
 		createService = new CreateServiceStep(mainWindow);
 		modifyService = new ModifyServiceStep(mainWindow);
 		this.tci = new TestCaseInfo();
+
 		Vector steps = new Vector();
 		steps.add(createService);
-		//steps.add(modifyService);
+		// steps.add(modifyService);
 		return steps;
 	}
+
 
 	public String getDescription() {
 		return "Tests the code generation tools";
 	}
 
+
 	protected void storyTearDown() throws Throwable {
-		//myApp.setVisible(false);
+		// myApp.setVisible(false);
 	}
+
 
 	// used to make sure that if we are going to use a junit testsuite to test
 	// this
@@ -87,13 +84,13 @@ public class IntroducePortalTest extends Story {
 	public void testDummy() throws Throwable {
 	}
 
+
 	/**
 	 * Convenience method for running all the Steps in this Story.
 	 */
 	public static void main(String args[]) {
 		TestRunner runner = new TestRunner();
-		TestResult result = runner.doRun(new TestSuite(
-				IntroducePortalTest.class));
+		TestResult result = runner.doRun(new TestSuite(IntroducePortalTest.class));
 		System.exit(result.errorCount() + result.failureCount());
 	}
 
