@@ -17,7 +17,7 @@
 			build files."/>
 	</target>
 	<target name="createService" description="Will create an anaytical skeleton deployment"
-		depends="checkInputProps, copySkeleton, copyCaGridJars, serviceCopySchemaFiles,
+		depends=" checkInputProps, copySkeleton, copyCaGridJars, serviceCopySchemaFiles,
 		serviceCopyPortalFiles, setActivePath"> </target>
 	<taskdef name="createSkeleton" classname="gov.nih.nci.cagrid.introduce.creator.SkeletonCreator">
 		<classpath>
@@ -33,7 +33,7 @@
 			<fileset dir="${build.lib.dir}">
 				<include name="*.jar"/>
 			</fileset>
-			<fileset dir="${ext.globus.dir}/lib">
+			<fileset dir="${ext.globus.location}/lib">
 				<include name="*.jar"/>
 			</fileset>
 		</classpath>
