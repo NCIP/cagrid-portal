@@ -45,7 +45,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.44 2006-01-23 19:53:12 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.45 2006-01-26 02:08:29 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -76,9 +76,6 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	private JButton saveButton = null;
 
 	private JComponent me;
-
-	private static File defaultMethodsDir = new File(System
-			.getProperty("user.dir"));
 
 	private JButton removeButton = null;
 
@@ -121,6 +118,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 		initialize();
 	}
 
@@ -128,7 +126,9 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		super();
 		this.me = this;
 		this.methodsDirectory = methodsDirectory;
+
 		initialize();
+
 	}
 
 	private void loadServiceProps() {
@@ -187,8 +187,8 @@ public class ModificationViewer extends GridPortalBaseFrame {
 
 	private void chooseService() throws Exception {
 		String dir = ResourceManager.promptDir(this, null);
+		System.out.println(dir);
 		this.methodsDirectory = new File(dir);
-		this.defaultMethodsDir = this.methodsDirectory;
 	}
 
 	/**
@@ -200,26 +200,31 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		if (this.methodsDirectory != null) {
 			SAXBuilder builder = new SAXBuilder(false);
 			try {
-				this.introService = (ServiceDescription) CommonTools
-						.deserializeDocument(this.methodsDirectory
-								.getAbsolutePath()
-								+ File.separator + "introduce.xml",
-								ServiceDescription.class);
+				File file = new File(this.methodsDirectory.getAbsolutePath()
+						+ File.separator + "introduce.xml");
+				if (file.exists() && file.canRead()) {
 
-				loadServiceProps();
+					this.introService = (ServiceDescription) CommonTools
+							.deserializeDocument(this.methodsDirectory
+									.getAbsolutePath()
+									+ File.separator + "introduce.xml",
+									ServiceDescription.class);
+					loadServiceProps();
+					this.setSize(500, 400);
+					this.setContentPane(getJContentPane());
+					this.setTitle("Modify Service Interface");
+					this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
+					
+				} else {
+					JOptionPane.showMessageDialog(this, "Directory "
+							+ this.methodsDirectory.getAbsolutePath()
+							+ " does not seem to be an introduce service");
+				}
 
-				// this.getServiceName().setText(serviceProperties.getProperty("introduce.skeleton.service.name"));
-				// this.getServiceName().setEnabled(false);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-
-		this.setSize(500, 400);
-		this.setContentPane(getJContentPane());
-		this.setTitle("Modify Service Interface");
-		this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
-
 	}
 
 	/**
@@ -481,19 +486,19 @@ public class ModificationViewer extends GridPortalBaseFrame {
 
 								if (confirmed == JOptionPane.OK_OPTION) {
 									setProgressText("editing service metadata object");
-									
+
 									// walk the methods table and create the
 									// new MethodsType array
 									MethodType[] methodsArray = new MethodType[methodsTable
 											.getRowCount()];
 									for (int i = 0; i < methodsArray.length; i++) {
-										MethodType methodInstance = (MethodType) methodsTable.getValueAt(i,1);
+										MethodType methodInstance = (MethodType) methodsTable
+												.getValueAt(i, 1);
 										methodsArray[i] = methodInstance;
 									}
 									MethodsType methods = new MethodsType();
 									methods.setMethod(methodsArray);
 									introService.setMethods(methods);
-									
 
 									// walk the metadata table and create the
 									// new ServiceMetadataType array
@@ -501,7 +506,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 											.getRowCount()];
 									for (int i = 0; i < metadataArray.length; i++) {
 										String packageName = (String) metadataTable
-										.getValueAt(i, 0);
+												.getValueAt(i, 0);
 										String className = (String) metadataTable
 												.getValueAt(i, 1);
 										String namespace = (String) metadataTable
@@ -520,7 +525,8 @@ public class ModificationViewer extends GridPortalBaseFrame {
 										MetadataType metadata = new MetadataType();
 										if (packageName != null
 												&& !packageName.equals("")) {
-											metadata.setPackageName(packageName);
+											metadata
+													.setPackageName(packageName);
 										}
 										if (className != null
 												&& !className.equals("")) {
@@ -564,13 +570,17 @@ public class ModificationViewer extends GridPortalBaseFrame {
 										metadataArray[i] = metadata;
 
 									}
-									
+
 									MetadataListType serviceMetadataList = new MetadataListType();
-									serviceMetadataList.setMetadata(metadataArray);
-									introService.setMetadataList(serviceMetadataList);
-									
+									serviceMetadataList
+											.setMetadata(metadataArray);
+									introService
+											.setMetadataList(serviceMetadataList);
+
 									ServiceSecurityConfiguration ssc = new ServiceSecurityConfiguration();
-									ssc.setServiceCommunicationSecurity(((SecurityConfigurationPanel)baseSecurityPanel).getSecureCommunicationConfiguration());
+									ssc
+											.setServiceCommunicationSecurity(((SecurityConfigurationPanel) baseSecurityPanel)
+													.getSecureCommunicationConfiguration());
 									introService.setServiceSecurity(ssc);
 									// check the methods to make sure they are
 									// valid.......
@@ -816,7 +826,8 @@ public class ModificationViewer extends GridPortalBaseFrame {
 					null);
 			contentTabbedPane
 					.addTab("Metadata", null, getMetadataPanel(), null);
-			contentTabbedPane.addTab("Security", null, getSecurityPanel(), null);
+			contentTabbedPane
+					.addTab("Security", null, getSecurityPanel(), null);
 		}
 		return contentTabbedPane;
 	}
@@ -865,8 +876,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	 */
 	private MetadataTable getMetadataTable() {
 		if (metadataTable == null) {
-			metadataTable = new MetadataTable(introService
-					.getMetadataList());
+			metadataTable = new MetadataTable(introService.getMetadataList());
 			metadataTable.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					if (e.getClickCount() == 2) {
@@ -937,14 +947,12 @@ public class ModificationViewer extends GridPortalBaseFrame {
 							if (introService.getMetadataList() != null
 									&& introService.getMetadataList()
 											.getMetadata() != null) {
-								newLength = introService
-										.getMetadataList().getMetadata().length + 1;
+								newLength = introService.getMetadataList()
+										.getMetadata().length + 1;
 								metadatas = new MetadataType[newLength];
-								System.arraycopy(
+								System.arraycopy(introService.getMetadataList()
+										.getMetadata(), 0, metadatas, 0,
 										introService.getMetadataList()
-												.getMetadata(), 0, metadatas,
-										0, introService
-												.getMetadataList()
 												.getMetadata().length);
 							} else {
 								newLength = 1;
@@ -1016,10 +1024,10 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	}
 
 	/**
-	 * This method initializes securityPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes securityPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private JPanel getSecurityPanel() {
 		if (securityPanel == null) {
 			securityPanel = new JPanel();
@@ -1029,16 +1037,18 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	}
 
 	/**
-	 * This method initializes baseSecurityPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes baseSecurityPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private JPanel getBaseSecurityPanel() {
 		if (baseSecurityPanel == null) {
 			SecureCommunicationConfiguration comm = null;
-			if(introService.getServiceSecurity()!=null){
-				if(introService.getServiceSecurity().getServiceCommunicationSecurity()!=null){
-					comm = introService.getServiceSecurity().getServiceCommunicationSecurity();
+			if (introService.getServiceSecurity() != null) {
+				if (introService.getServiceSecurity()
+						.getServiceCommunicationSecurity() != null) {
+					comm = introService.getServiceSecurity()
+							.getServiceCommunicationSecurity();
 				}
 			}
 			baseSecurityPanel = new SecurityConfigurationPanel(comm);
