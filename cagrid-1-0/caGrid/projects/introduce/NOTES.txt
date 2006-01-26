@@ -49,6 +49,11 @@ Make notes on how to add a new template.
 Need to validate the model before we begin to do code gen
 	-- will reduce bugs and bug checking
 	-- validate that the package names and classnames are being set correctly
+	--VALIDATION:
+		-unique method names
+		-unique metadata qnames
+		-run schema validation?
+		-others?
 	
 Need to support "MODIFIED" methods.
 
