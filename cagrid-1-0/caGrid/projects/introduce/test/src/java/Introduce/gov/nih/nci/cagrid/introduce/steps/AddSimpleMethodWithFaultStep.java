@@ -80,7 +80,7 @@ public class AddSimpleMethodWithFaultStep extends Step {
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
 
-		assertEquals(0, p.exitValue());
+		assertEquals("Checking resync status", 0, p.exitValue());
 
 		
 		// look at the interface to make sure method exists.......
@@ -95,7 +95,7 @@ public class AddSimpleMethodWithFaultStep extends Step {
 
 		p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
-		assertEquals(0, p.exitValue());
+		assertEquals("Checking build status", 0, p.exitValue());
 	}
 
 }

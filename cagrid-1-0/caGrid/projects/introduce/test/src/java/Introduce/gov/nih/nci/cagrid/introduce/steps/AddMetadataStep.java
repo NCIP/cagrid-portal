@@ -40,7 +40,7 @@ public class AddMetadataStep extends Step {
 		metadata.setLocation("../cagrid/types/cadsr/caDSRMetadata.xsd");
 		metadata.setNamespace("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.cadsr");
 		metadata.setPopulateFromFile(false);
-		metadata.setRegister(false);
+		metadata.setRegister(true);
 		metadata.setType("caDSRMetadata");
 		metadata.setQName(new QName("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.cadsr",
 			"caDSRMetadata"));

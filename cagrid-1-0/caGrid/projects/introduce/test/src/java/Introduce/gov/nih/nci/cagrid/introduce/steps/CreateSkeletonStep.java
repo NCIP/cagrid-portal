@@ -32,13 +32,13 @@ public class CreateSkeletonStep extends Step {
 
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
-		assertEquals(0, p.exitValue());
+		assertEquals("Checking creation status", 0, p.exitValue());
 
 		cmd = CommonTools.getAntAllCommand(pathtobasedir + File.separator + tci.getDir());
 
 		p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
-		assertEquals(0, p.exitValue());
+		assertEquals("Checking build status", 0, p.exitValue());
 	}
 
 }

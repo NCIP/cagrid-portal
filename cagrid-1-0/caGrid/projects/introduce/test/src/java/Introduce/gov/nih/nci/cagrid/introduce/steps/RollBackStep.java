@@ -30,13 +30,6 @@ public class RollBackStep extends Step {
 
 		ResourceManager.restoreLatest(String.valueOf(System.currentTimeMillis()), tci.getName(), tci.getDir());
 
-		String cmd = CommonTools.getAntSkeletonResyncCommand(pathtobasedir + File.separator + tci.getDir());
-
-		Process p = CommonTools.createAndOutputProcess(cmd);
-		p.waitFor();
-
-		assertEquals(0, p.exitValue());
-
 		// check to see that this is same as before....
 	}
 
