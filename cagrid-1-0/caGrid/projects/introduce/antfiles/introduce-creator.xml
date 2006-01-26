@@ -20,17 +20,7 @@
 		depends="checkInputProps, copySkeleton, copyCaGridJars, serviceCopySchemaFiles,
 		serviceCopyPortalFiles, setActivePath"> </target>
 	<taskdef name="createSkeleton" classname="gov.nih.nci.cagrid.introduce.creator.SkeletonCreator">
-		<classpath>
-			<fileset dir="${build.lib.dir}">
-				<include name="*.jar"/>
-			</fileset>
-			<fileset dir="${lib.dir}">
-				<include name="*.jar"/>
-			</fileset>
-			<fileset dir="${ext.globus.location}/lib">
-				<include name="*.jar"/>
-			</fileset>
-		</classpath>
+		<classpath refid="Introduce.classpath"/>
 	</taskdef>
 	<target name="setActivePath">
 		<property name="active.skeleton.destination.dir"
