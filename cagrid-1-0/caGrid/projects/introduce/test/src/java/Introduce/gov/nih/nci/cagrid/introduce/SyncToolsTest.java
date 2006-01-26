@@ -1,6 +1,8 @@
 package gov.nih.nci.cagrid.introduce;
 
 import gov.nih.nci.cagrid.introduce.steps.AddComplexMethodWithFaultStep;
+import gov.nih.nci.cagrid.introduce.steps.AddMetadataStep;
+import gov.nih.nci.cagrid.introduce.steps.AddMetadatatWithLoadFromFileStep;
 import gov.nih.nci.cagrid.introduce.steps.AddSimpleMethodStep;
 import gov.nih.nci.cagrid.introduce.steps.AddSimpleMethodWithFaultStep;
 import gov.nih.nci.cagrid.introduce.steps.CreateSkeletonStep;
@@ -16,8 +18,10 @@ import junit.textui.TestRunner;
 
 import com.atomicobject.haste.framework.Story;
 
+
 public class SyncToolsTest extends Story {
 	private TestCaseInfo tci;
+
 
 	protected Vector steps() {
 		this.tci = new TestCaseInfo();
@@ -26,25 +30,33 @@ public class SyncToolsTest extends Story {
 		steps.add(new CreateSkeletonStep(tci));
 		steps.add(new AddSimpleMethodStep(tci, "newMethod"));
 		steps.add(new RemoveMethodStep(tci, "newMethod"));
-		steps.add(new AddSimpleMethodWithFaultStep(tci,"newMethodWithFault"));
+		steps.add(new AddSimpleMethodWithFaultStep(tci, "newMethodWithFault"));
 		steps.add(new RollBackStep(tci));
-		steps.add(new AddComplexMethodWithFaultStep(tci,"newComplexMethodWithFault"));
+		steps.add(new AddComplexMethodWithFaultStep(tci, "newComplexMethodWithFault"));
+		steps.add(new AddMetadataStep(tci));
+		steps.add(new AddMetadatatWithLoadFromFileStep(tci));
+		
 		return steps;
 	}
+
 
 	public String getDescription() {
 		return "Tests the code generation tools";
 	}
+
 
 	protected void storyTearDown() throws Throwable {
 		RemoveSkeletonStep step = new RemoveSkeletonStep(tci);
 		step.runStep();
 	}
 
-	// used to make sure that if we are going to use a junit testsuite to test this 
+
+	// used to make sure that if we are going to use a junit testsuite to test
+	// this
 	// that the test suite will not error out looking for a single test......
 	public void testDummy() throws Throwable {
 	}
+
 
 	/**
 	 * Convenience method for running all the Steps in this Story.

@@ -111,7 +111,7 @@ public class AddComplexMethodWithFaultStep extends Step {
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
 
-		assertEquals(0, p.exitValue());
+		assertEquals("Checking resync status", 0, p.exitValue());
 
 		// look at the interface to make sure method exists.......
 		String serviceInterface = pathtobasedir + File.separator + tci.dir
@@ -124,7 +124,7 @@ public class AddComplexMethodWithFaultStep extends Step {
 
 		p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
-		assertEquals(0, p.exitValue());
+		assertEquals("Checking build status", 0, p.exitValue());
 	}
 
 }
