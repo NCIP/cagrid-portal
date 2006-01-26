@@ -14,6 +14,33 @@ Security configuration (STEVE)
 
 (DONE) Metadata and registration configuration
 
+
+
+
+================================================================================
+Need to verify we can achieve literal mapping between caDSR definition, XML serialization, and generated bean model
+
+Example Model:
+org.foo.A
+  -org.foo.B b;
+  -org.foo.C c;
+
+XML (with appropriate namespaces of course):
+<A>
+  <B/>
+  <C/>
+<A>
+
+Java Model:
+org.foo
+  -A {B b; C c;}
+  -B
+  -C
+================================================================================
+
+
+
+
 (*STARTED*  need to add more)Add gui testing (requires a HEAD to run)
 
 Make notes on how to add a new template.
