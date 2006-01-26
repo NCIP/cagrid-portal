@@ -19,6 +19,7 @@ Security configuration (STEVE)
 
 ================================================================================
 Need to verify we can achieve literal mapping between caDSR definition, XML serialization, and generated bean model
+(we need to create a simple one of these, and add it to the specification document)
 
 Example Model:
 org.foo.A
