@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.introduce.steps.AddMetadatatWithLoadFromFileStep;
 import gov.nih.nci.cagrid.introduce.steps.AddSimpleMethodStep;
 import gov.nih.nci.cagrid.introduce.steps.AddSimpleMethodWithFaultStep;
 import gov.nih.nci.cagrid.introduce.steps.CreateSkeletonStep;
+import gov.nih.nci.cagrid.introduce.steps.RemoveAllMetadataStep;
 import gov.nih.nci.cagrid.introduce.steps.RemoveMethodStep;
 import gov.nih.nci.cagrid.introduce.steps.RemoveSkeletonStep;
 import gov.nih.nci.cagrid.introduce.steps.RollBackStep;
@@ -35,6 +36,7 @@ public class SyncToolsTest extends Story {
 		steps.add(new AddComplexMethodWithFaultStep(tci, "newComplexMethodWithFault"));
 		steps.add(new AddMetadataStep(tci));
 		steps.add(new AddMetadatatWithLoadFromFileStep(tci));
+		steps.add(new RemoveAllMetadataStep(tci));
 		
 		return steps;
 	}
