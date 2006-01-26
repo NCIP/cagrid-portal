@@ -54,6 +54,7 @@ import org.projectmobius.common.AbstractMobiusConfiguration;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.MobiusResourceManager;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -62,8 +63,8 @@ import org.projectmobius.common.MobiusResourceManager;
  *          Exp $
  */
 public class IdPConfiguration implements AbstractMobiusConfiguration {
-	
-	public static final String RESOURCE="IdPConfiguration";
+
+	public static final String RESOURCE = "IdPConfiguration";
 
 	public static final String UID_LENGTH = "uid-length";
 
@@ -76,15 +77,13 @@ public class IdPConfiguration implements AbstractMobiusConfiguration {
 	public static final String REGISTRATION_POLICY = "registration-policy";
 
 	public static final String REGISTRATION_POLICY_CLASS = "class";
-	
+
 	public static final String ASSERTING_CREDENTIALS = "asserting-credentials";
 	public static final String ASSERTING_CREDENTIALS_AUTO = "auto";
 	public static final String ASSERTING_CREDENTIALS_RENEW = "renew";
 	public static final String ASSERTING_CREDENTIALS_CERT = "cert";
 	public static final String ASSERTING_CREDENTIALS_KEY = "key";
 	public static final String ASSERTING_CREDENTIALS_PASS = "key-password";
-	
-	
 
 	private int minimumUsernameLength;
 
@@ -93,105 +92,93 @@ public class IdPConfiguration implements AbstractMobiusConfiguration {
 	private int minimumPasswordLength;
 
 	private int maximumPasswordLength;
-	
-	private IdPRegistrationPolicy registrationPolicy;
-	
-	private boolean autoCreateAssertingCredentials;
-	
-	private boolean autoRenewAssertingCredentials;
-	
-	private X509Certificate assertingCertificate;
-	
-	private PrivateKey assertingKey;
-	
-	private String keyPassword;
-	
-	
 
-	public void parse(MobiusResourceManager resourceManager, Element config)
-			throws MobiusException {
-		Element creds = config.getChild(ASSERTING_CREDENTIALS,config.getNamespace());
-		
-		if(creds == null){
-			throw new MobiusException(
-			"Error configuring IdP, no asserting credentials specified.");
-		}else{
+	private IdPRegistrationPolicy registrationPolicy;
+
+	private boolean autoCreateAssertingCredentials;
+
+	private boolean autoRenewAssertingCredentials;
+
+	private X509Certificate assertingCertificate;
+
+	private PrivateKey assertingKey;
+
+	private String keyPassword;
+
+
+	public void parse(MobiusResourceManager resourceManager, Element config) throws MobiusException {
+		Element creds = config.getChild(ASSERTING_CREDENTIALS, config.getNamespace());
+
+		if (creds == null) {
+			throw new MobiusException("Error configuring IdP, no asserting credentials specified.");
+		} else {
 			String autoS = creds.getAttributeValue(ASSERTING_CREDENTIALS_AUTO);
-			keyPassword =creds.getAttributeValue(ASSERTING_CREDENTIALS_PASS);
-			if(autoS == null){
+			keyPassword = creds.getAttributeValue(ASSERTING_CREDENTIALS_PASS);
+			if (autoS == null) {
 				throw new MobiusException(
-				"Error configuring IdP, asserting credentials invalidly specified, please specify whether to user auto mode or not.");
-			}else{
+					"Error configuring IdP, asserting credentials invalidly specified, please specify whether to user auto mode or not.");
+			} else {
 				this.autoCreateAssertingCredentials = Boolean.valueOf(autoS).booleanValue();
 				String renewS = creds.getAttributeValue(ASSERTING_CREDENTIALS_RENEW);
-				if(renewS == null){
+				if (renewS == null) {
 					this.autoRenewAssertingCredentials = false;
-				}else{
+				} else {
 					this.autoRenewAssertingCredentials = Boolean.valueOf(renewS).booleanValue();
 				}
-				if(!this.autoCreateAssertingCredentials){
+				if (!this.autoCreateAssertingCredentials) {
 					String certLocation = creds.getAttributeValue(ASSERTING_CREDENTIALS_CERT);
-					if(certLocation == null){
+					if (certLocation == null) {
 						throw new MobiusException(
-						"Error configuring IdP, no asserting certificate specified, an asserting certificate is required when the IdP is not configured to automatically generate credentials.");
-					}else{
-						try{
-						this.assertingCertificate = CertUtil.loadCertificate(certLocation);
-						}catch(Exception e){
+							"Error configuring IdP, no asserting certificate specified, an asserting certificate is required when the IdP is not configured to automatically generate credentials.");
+					} else {
+						try {
+							this.assertingCertificate = CertUtil.loadCertificate(certLocation);
+						} catch (Exception e) {
 							throw new MobiusException(
-							"Error configuring IdP, an error occurred loading the certificate "+certLocation+": "+e.getMessage(),e);
-						}
-					}			
-					
-					String keyLocation = creds.getAttributeValue(ASSERTING_CREDENTIALS_KEY);
-					if(keyLocation == null){
-						throw new MobiusException(
-						"Error configuring IdP, no asserting key specified, an asserting key is required when the IdP is not configured to automatically generate credentials.");
-					}else{
-						try{
-						this.assertingKey = KeyUtil.loadPrivateKey(keyLocation,keyPassword);
-						}catch(Exception e){
-							throw new MobiusException(
-							"Error configuring IdP, an error occurred loading the key "+keyLocation+": "+e.getMessage(),e);
+								"Error configuring IdP, an error occurred loading the certificate " + certLocation
+									+ ": " + e.getMessage(), e);
 						}
 					}
-					
-					
+
+					String keyLocation = creds.getAttributeValue(ASSERTING_CREDENTIALS_KEY);
+					if (keyLocation == null) {
+						throw new MobiusException(
+							"Error configuring IdP, no asserting key specified, an asserting key is required when the IdP is not configured to automatically generate credentials.");
+					} else {
+						try {
+							this.assertingKey = KeyUtil.loadPrivateKey(keyLocation, keyPassword);
+						} catch (Exception e) {
+							throw new MobiusException("Error configuring IdP, an error occurred loading the key "
+								+ keyLocation + ": " + e.getMessage(), e);
+						}
+					}
+
 				}
 			}
 
 		}
-		
-		Element reg =  config.getChild(REGISTRATION_POLICY, config
-				.getNamespace());
-		
-		if(reg == null){
-			throw new MobiusException(
-			"Error configuring IdP, registration policy not specified.");
-		}else{
+
+		Element reg = config.getChild(REGISTRATION_POLICY, config.getNamespace());
+
+		if (reg == null) {
+			throw new MobiusException("Error configuring IdP, registration policy not specified.");
+		} else {
 			String cl = reg.getAttributeValue(REGISTRATION_POLICY_CLASS);
-			try{
-				registrationPolicy = (IdPRegistrationPolicy)Class.forName(cl).newInstance();
-			}catch(Exception e){
-				throw new MobiusException(
-				"Error configuring IdP, invalid registration policy specified.");
+			try {
+				registrationPolicy = (IdPRegistrationPolicy) Class.forName(cl).newInstance();
+			} catch (Exception e) {
+				throw new MobiusException("Error configuring IdP, invalid registration policy specified.");
 			}
 		}
-		
 
-		Element passwordLength = config.getChild(PASSWORD_LENGTH, config
-				.getNamespace());
+		Element passwordLength = config.getChild(PASSWORD_LENGTH, config.getNamespace());
 		if (passwordLength == null) {
-			throw new MobiusException(
-					"Error configuring IdP, no password length specified.");
+			throw new MobiusException("Error configuring IdP, no password length specified.");
 		} else {
-			String min = passwordLength.getAttributeValue(MIN_LENGTH,
-					passwordLength.getNamespace());
-			String max = passwordLength.getAttributeValue(MAX_LENGTH,
-					passwordLength.getNamespace());
+			String min = passwordLength.getAttributeValue(MIN_LENGTH, passwordLength.getNamespace());
+			String max = passwordLength.getAttributeValue(MAX_LENGTH, passwordLength.getNamespace());
 			if ((min == null) && (max == null)) {
-				throw new MobiusException(
-						"Error configuring IdP, no min or max password length specified.");
+				throw new MobiusException("Error configuring IdP, no min or max password length specified.");
 			} else {
 				try {
 					this.minimumPasswordLength = Integer.parseInt(min);
@@ -199,65 +186,56 @@ public class IdPConfiguration implements AbstractMobiusConfiguration {
 
 				} catch (Exception n) {
 					throw new MobiusException(
-							"Error configuring IdP, the min and max password length must be an integer.");
+						"Error configuring IdP, the min and max password length must be an integer.");
 				}
 
-				if ((this.minimumPasswordLength <= 0)
-						|| (this.minimumPasswordLength > 255)) {
+				if ((this.minimumPasswordLength <= 0) || (this.minimumPasswordLength > 255)) {
 					throw new MobiusException(
-							"Error configuring IdP, the min password length must be greater than 0 and less than 255.");
+						"Error configuring IdP, the min password length must be greater than 0 and less than 255.");
 				}
 
-				if ((this.maximumPasswordLength <= 0)
-						|| (this.maximumPasswordLength > 255)) {
+				if ((this.maximumPasswordLength <= 0) || (this.maximumPasswordLength > 255)) {
 					throw new MobiusException(
-							"Error configuring IdP, the max password length must be greater than 0 and less than 255.");
+						"Error configuring IdP, the max password length must be greater than 0 and less than 255.");
 				}
 				if (maximumPasswordLength < minimumPasswordLength) {
 					throw new MobiusException(
-							"Error configuring IdP, the max username length must be greater than or equal to the min password length.");
+						"Error configuring IdP, the max username length must be greater than or equal to the min password length.");
 				}
 
 			}
 
 		}
 
-		Element usernameLength = config.getChild(UID_LENGTH, config
-				.getNamespace());
+		Element usernameLength = config.getChild(UID_LENGTH, config.getNamespace());
 		if (usernameLength == null) {
-			throw new MobiusException(
-					"Error configuring IdP, no username length specified.");
+			throw new MobiusException("Error configuring IdP, no username length specified.");
 		} else {
-			String min = usernameLength.getAttributeValue(MIN_LENGTH,
-					usernameLength.getNamespace());
-			String max = usernameLength.getAttributeValue(MAX_LENGTH,
-					usernameLength.getNamespace());
+			String min = usernameLength.getAttributeValue(MIN_LENGTH, usernameLength.getNamespace());
+			String max = usernameLength.getAttributeValue(MAX_LENGTH, usernameLength.getNamespace());
 			if ((min == null) && (max == null)) {
-				throw new MobiusException(
-						"Error configuring IdP, no min or max username length specified.");
+				throw new MobiusException("Error configuring IdP, no min or max username length specified.");
 			} else {
 				try {
 					this.minimumUsernameLength = Integer.parseInt(min);
 					this.maximumUsernameLength = Integer.parseInt(max);
 				} catch (Exception n) {
 					throw new MobiusException(
-							"Error configuring IdP, the min and max username length must be an integer.");
+						"Error configuring IdP, the min and max username length must be an integer.");
 				}
 
-				if ((this.minimumUsernameLength <= 0)
-						|| (this.minimumUsernameLength > 255)) {
+				if ((this.minimumUsernameLength <= 0) || (this.minimumUsernameLength > 255)) {
 					throw new MobiusException(
-							"Error configuring IdP, the min username length must be greater than 0 and less than 255.");
+						"Error configuring IdP, the min username length must be greater than 0 and less than 255.");
 				}
 
-				if ((this.maximumUsernameLength <= 0)
-						|| (this.maximumUsernameLength > 255)) {
+				if ((this.maximumUsernameLength <= 0) || (this.maximumUsernameLength > 255)) {
 					throw new MobiusException(
-							"Error configuring IdP, the max username length must be greater than 0 and less than 255.");
+						"Error configuring IdP, the max username length must be greater than 0 and less than 255.");
 				}
 				if (maximumUsernameLength < minimumUsernameLength) {
 					throw new MobiusException(
-							"Error configuring IdP, the max username length must be greater than or equal to the min username length.");
+						"Error configuring IdP, the max username length must be greater than or equal to the min username length.");
 				}
 
 			}
@@ -265,72 +243,84 @@ public class IdPConfiguration implements AbstractMobiusConfiguration {
 
 	}
 
+
 	public int getMaximumPasswordLength() {
 		return maximumPasswordLength;
 	}
+
 
 	public int getMaximumUIDLength() {
 		return maximumUsernameLength;
 	}
 
+
 	public int getMinimumPasswordLength() {
 		return minimumPasswordLength;
 	}
+
 
 	public int getMinimumUIDLength() {
 		return minimumUsernameLength;
 	}
 
+
 	public IdPRegistrationPolicy getRegistrationPolicy() {
 		return registrationPolicy;
 	}
+
 
 	public X509Certificate getAssertingCertificate() {
 		return assertingCertificate;
 	}
 
+
 	public PrivateKey getAssertingKey() {
 		return assertingKey;
 	}
+
 
 	public boolean isAutoCreateAssertingCredentials() {
 		return autoCreateAssertingCredentials;
 	}
 
+
 	public boolean isAutoRenewAssertingCredentials() {
 		return autoRenewAssertingCredentials;
 	}
+
 
 	public String getKeyPassword() {
 		return keyPassword;
 	}
 
+
 	public void setRegistrationPolicy(IdPRegistrationPolicy registrationPolicy) {
 		this.registrationPolicy = registrationPolicy;
 	}
+
 
 	public void setAssertingCertificate(X509Certificate assertingCertificate) {
 		this.assertingCertificate = assertingCertificate;
 	}
 
+
 	public void setAssertingKey(PrivateKey assertingKey) {
 		this.assertingKey = assertingKey;
 	}
 
-	public void setAutoCreateAssertingCredentials(
-			boolean autoCreateAssertingCredentials) {
+
+	public void setAutoCreateAssertingCredentials(boolean autoCreateAssertingCredentials) {
 		this.autoCreateAssertingCredentials = autoCreateAssertingCredentials;
 	}
 
-	public void setAutoRenewAssertingCredentials(
-			boolean autoRenewAssertingCredentials) {
+
+	public void setAutoRenewAssertingCredentials(boolean autoRenewAssertingCredentials) {
 		this.autoRenewAssertingCredentials = autoRenewAssertingCredentials;
 	}
+
 
 	public void setKeyPassword(String keyPassword) {
 		this.keyPassword = keyPassword;
 	}
-	
-	
 
 }

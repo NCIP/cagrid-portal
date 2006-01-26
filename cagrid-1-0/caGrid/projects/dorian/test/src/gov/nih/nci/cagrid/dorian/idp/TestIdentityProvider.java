@@ -12,15 +12,14 @@ import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserRole;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserStatus;
 import gov.nih.nci.cagrid.dorian.idp.bean.StateCode;
-import gov.nih.nci.cagrid.dorian.test.Utils;
 import gov.nih.nci.cagrid.dorian.test.Constants;
+import gov.nih.nci.cagrid.dorian.test.Utils;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import gov.nih.nci.cagrid.opensaml.SAMLAttribute;
 import gov.nih.nci.cagrid.opensaml.SAMLAttributeStatement;
 import gov.nih.nci.cagrid.opensaml.SAMLAuthenticationStatement;
 import gov.nih.nci.cagrid.opensaml.SAMLStatement;
 
-import java.io.File;
 import java.io.InputStream;
 import java.util.Iterator;
 
@@ -128,7 +127,7 @@ public class TestIdentityProvider extends TestCase {
 
 			IdPUserFilter uf = new IdPUserFilter();
 			IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
-			assertEquals(times+1, users.length);
+			assertEquals(times + 1, users.length);
 			for (int i = 0; i < users.length; i++) {
 				IdPUserFilter f = new IdPUserFilter();
 				f.setUserId(users[i].getUserId());

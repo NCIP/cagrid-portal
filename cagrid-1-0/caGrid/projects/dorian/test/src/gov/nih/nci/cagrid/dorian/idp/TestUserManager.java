@@ -11,13 +11,13 @@ import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserRole;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserStatus;
 import gov.nih.nci.cagrid.dorian.idp.bean.NoSuchUserFault;
 import gov.nih.nci.cagrid.dorian.idp.bean.StateCode;
-import gov.nih.nci.cagrid.dorian.test.Utils;
 import gov.nih.nci.cagrid.dorian.test.Constants;
+import gov.nih.nci.cagrid.dorian.test.Utils;
 
-import java.io.File;
 import java.io.InputStream;
 
 import junit.framework.TestCase;
+
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -31,8 +31,9 @@ public class TestUserManager extends TestCase {
 	private Database db;
 
 	private int count = 0;
-	
+
 	private IdPConfiguration conf;
+
 
 	public void testMultipleUsers() {
 		try {
@@ -53,36 +54,28 @@ public class TestUserManager extends TestCase {
 
 			for (int i = 0; i < users.length; i++) {
 				if ((i % 8) == 0) {
-					users[i] = makeUser(IdPUserRole.Non_Administrator,
-							IdPUserStatus.Active);
+					users[i] = makeUser(IdPUserRole.Non_Administrator, IdPUserStatus.Active);
 					activeNA = activeNA + 1;
 				} else if ((i % 8) == 1) {
-					users[i] = makeUser(IdPUserRole.Non_Administrator,
-							IdPUserStatus.Pending);
+					users[i] = makeUser(IdPUserRole.Non_Administrator, IdPUserStatus.Pending);
 					pendingNA = pendingNA + 1;
 				} else if ((i % 8) == 2) {
-					users[i] = makeUser(IdPUserRole.Non_Administrator,
-							IdPUserStatus.Rejected);
+					users[i] = makeUser(IdPUserRole.Non_Administrator, IdPUserStatus.Rejected);
 					rejectedNA = rejectedNA + 1;
 				} else if ((i % 8) == 3) {
-					users[i] = makeUser(IdPUserRole.Non_Administrator,
-							IdPUserStatus.Suspended);
+					users[i] = makeUser(IdPUserRole.Non_Administrator, IdPUserStatus.Suspended);
 					suspendedNA = suspendedNA + 1;
 				} else if ((i % 8) == 4) {
-					users[i] = makeUser(IdPUserRole.Administrator,
-							IdPUserStatus.Active);
+					users[i] = makeUser(IdPUserRole.Administrator, IdPUserStatus.Active);
 					activeA = activeA + 1;
 				} else if ((i % 8) == 5) {
-					users[i] = makeUser(IdPUserRole.Administrator,
-							IdPUserStatus.Pending);
+					users[i] = makeUser(IdPUserRole.Administrator, IdPUserStatus.Pending);
 					pendingA = pendingA + 1;
 				} else if ((i % 8) == 6) {
-					users[i] = makeUser(IdPUserRole.Administrator,
-							IdPUserStatus.Rejected);
+					users[i] = makeUser(IdPUserRole.Administrator, IdPUserStatus.Rejected);
 					rejectedA = rejectedA + 1;
 				} else if ((i % 8) == 7) {
-					users[i] = makeUser(IdPUserRole.Administrator,
-							IdPUserStatus.Suspended);
+					users[i] = makeUser(IdPUserRole.Administrator, IdPUserStatus.Suspended);
 					suspendedA = suspendedA + 1;
 				}
 
@@ -129,40 +122,31 @@ public class TestUserManager extends TestCase {
 				um.removeUser(users[i].getUserId());
 				numberOfUsers = numberOfUsers - 1;
 				if ((users[i].getStatus().equals(IdPUserStatus.Active))
-						&& (users[i].getRole()
-								.equals(IdPUserRole.Non_Administrator))) {
+					&& (users[i].getRole().equals(IdPUserRole.Non_Administrator))) {
 					activeNA = activeNA - 1;
 				} else if ((users[i].getStatus().equals(IdPUserStatus.Pending))
-						&& (users[i].getRole()
-								.equals(IdPUserRole.Non_Administrator))) {
+					&& (users[i].getRole().equals(IdPUserRole.Non_Administrator))) {
 					pendingNA = pendingNA - 1;
 				}
 				if ((users[i].getStatus().equals(IdPUserStatus.Rejected))
-						&& (users[i].getRole()
-								.equals(IdPUserRole.Non_Administrator))) {
+					&& (users[i].getRole().equals(IdPUserRole.Non_Administrator))) {
 					rejectedNA = rejectedNA - 1;
 				}
 				if ((users[i].getStatus().equals(IdPUserStatus.Suspended))
-						&& (users[i].getRole()
-								.equals(IdPUserRole.Non_Administrator))) {
-					users[i] = makeUser(IdPUserRole.Non_Administrator,
-							IdPUserStatus.Suspended);
+					&& (users[i].getRole().equals(IdPUserRole.Non_Administrator))) {
+					users[i] = makeUser(IdPUserRole.Non_Administrator, IdPUserStatus.Suspended);
 					suspendedNA = suspendedNA - 1;
 				} else if ((users[i].getStatus().equals(IdPUserStatus.Active))
-						&& (users[i].getRole()
-								.equals(IdPUserRole.Administrator))) {
+					&& (users[i].getRole().equals(IdPUserRole.Administrator))) {
 					activeA = activeA - 1;
 				} else if ((users[i].getStatus().equals(IdPUserStatus.Pending))
-						&& (users[i].getRole()
-								.equals(IdPUserRole.Administrator))) {
+					&& (users[i].getRole().equals(IdPUserRole.Administrator))) {
 					pendingA = pendingA - 1;
 				} else if ((users[i].getStatus().equals(IdPUserStatus.Rejected))
-						&& (users[i].getRole()
-								.equals(IdPUserRole.Administrator))) {
+					&& (users[i].getRole().equals(IdPUserRole.Administrator))) {
 					rejectedA = rejectedA - 1;
 				} else if ((users[i].getStatus().equals(IdPUserStatus.Suspended))
-						&& (users[i].getRole()
-								.equals(IdPUserRole.Administrator))) {
+					&& (users[i].getRole().equals(IdPUserRole.Administrator))) {
 					suspendedA = suspendedA - 1;
 				}
 				assertFalse(um.userExists(users[i].getEmail()));
@@ -201,8 +185,9 @@ public class TestUserManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} 
+		}
 	}
+
 
 	public void testChangeStatus() {
 		try {
@@ -223,6 +208,7 @@ public class TestUserManager extends TestCase {
 
 	}
 
+
 	public void testChangeRole() {
 		try {
 			UserManager um = new UserManager(db, conf);
@@ -237,8 +223,9 @@ public class TestUserManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} 
+		}
 	}
+
 
 	public void testChangePassword() {
 		try {
@@ -255,10 +242,11 @@ public class TestUserManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} 
+		}
 
 	}
-	
+
+
 	public void testUpdateUser() {
 		try {
 			UserManager um = new UserManager(db, conf);
@@ -286,10 +274,10 @@ public class TestUserManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} 
+		}
 
 	}
-	
+
 
 	public void testSingleUser() {
 		try {
@@ -338,8 +326,9 @@ public class TestUserManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} 
+		}
 	}
+
 
 	public void testFindUsers() {
 		try {
@@ -349,16 +338,15 @@ public class TestUserManager extends TestCase {
 				um.addUser(makeUser(IdPUserRole.Non_Administrator, IdPUserStatus.Active));
 			}
 			assertEquals(size, um.getUsers(getActiveUserFilter()).length);
-			
-//			test email address
+
+			// test email address
 			IdPUserFilter fid = getActiveUserFilter();
 			fid.setUserId("user");
 			assertEquals(size, um.getUsers(fid).length);
 			fid.setUserId("XX");
 			assertEquals(0, um.getUsers(fid).length);
-			
-			
-			//test email address
+
+			// test email address
 			IdPUserFilter f1 = getActiveUserFilter();
 			f1.setEmail("@mail.com");
 			assertEquals(size, um.getUsers(f1).length);
@@ -366,8 +354,8 @@ public class TestUserManager extends TestCase {
 			assertEquals(size, um.getUsers(f1).length);
 			f1.setEmail("XX");
 			assertEquals(0, um.getUsers(f1).length);
-			
-			//Test First Name and Last Name
+
+			// Test First Name and Last Name
 			IdPUserFilter f2 = getActiveUserFilter();
 			f2.setFirstName("firs");
 			assertEquals(size, um.getUsers(f2).length);
@@ -377,31 +365,29 @@ public class TestUserManager extends TestCase {
 			assertEquals(0, um.getUsers(f2).length);
 			f2.setFirstName(null);
 			assertEquals(size, um.getUsers(f2).length);
-			
 
-			//Test Organization
+			// Test Organization
 			IdPUserFilter f0 = getActiveUserFilter();
 			f0.setOrganization("org");
 			assertEquals(size, um.getUsers(f0).length);
 			f0.setOrganization("XX");
 			assertEquals(0, um.getUsers(f0).length);
 
-			
-			//Test Address
+			// Test Address
 			IdPUserFilter f3 = getActiveUserFilter();
 			f3.setAddress("address");
 			assertEquals(size, um.getUsers(f3).length);
 			f3.setAddress("XX");
 			assertEquals(0, um.getUsers(f3).length);
-			
-			//Test Address 2
+
+			// Test Address 2
 			IdPUserFilter f4 = getActiveUserFilter();
 			f4.setAddress2("address2");
 			assertEquals(size, um.getUsers(f4).length);
 			f4.setAddress2("XX");
 			assertEquals(0, um.getUsers(f4).length);
-			
-			//Test City and State
+
+			// Test City and State
 			IdPUserFilter f5 = getActiveUserFilter();
 			f5.setCity("Columbus");
 			assertEquals(size, um.getUsers(f5).length);
@@ -411,85 +397,80 @@ public class TestUserManager extends TestCase {
 			assertEquals(size, um.getUsers(f5).length);
 			f5.setState(null);
 			assertEquals(size, um.getUsers(f5).length);
-			
-			//Test Zip Code
+
+			// Test Zip Code
 			IdPUserFilter f6 = getActiveUserFilter();
 			f6.setZipcode("43210");
 			assertEquals(size, um.getUsers(f6).length);
 			f6.setZipcode("XX");
 			assertEquals(0, um.getUsers(f6).length);
-			
-//			Test country
+
+			// Test country
 			IdPUserFilter cf = getActiveUserFilter();
 			cf.setCountry(CountryCode.US);
 			assertEquals(size, um.getUsers(cf).length);
-		
-			
-			
-			
-			//Test Phone Number
+
+			// Test Phone Number
 			IdPUserFilter f7 = getActiveUserFilter();
 			f7.setPhoneNumber("614-555-5555");
 			assertEquals(size, um.getUsers(f7).length);
 			f7.setPhoneNumber("XX");
 			assertEquals(0, um.getUsers(f7).length);
-		
-			//test for each user
-			
+
+			// test for each user
+
 			for (int i = 0; i < size; i++) {
-				
-				
-//				test email address
+
+				// test email address
 				IdPUserFilter all = getActiveUserFilter();
-				
+
 				IdPUserFilter uid = getActiveUserFilter();
-				uid.setUserId(i+"user");
-				all.setUserId(i+"user");
+				uid.setUserId(i + "user");
+				all.setUserId(i + "user");
 				assertEquals(1, um.getUsers(uid).length);
 				assertEquals(1, um.getUsers(all).length);
-				
-				
+
 				IdPUserFilter u1 = getActiveUserFilter();
-				u1.setEmail(i+"user@mail.com");
-				all.setEmail(i+"user@mail.com");
+				u1.setEmail(i + "user@mail.com");
+				all.setEmail(i + "user@mail.com");
 				assertEquals(1, um.getUsers(u1).length);
 				assertEquals(1, um.getUsers(all).length);
-				
-				//Test First Name
+
+				// Test First Name
 				IdPUserFilter u2 = getActiveUserFilter();
-				u2.setFirstName(i+"first");
-				all.setFirstName(i+"first");
+				u2.setFirstName(i + "first");
+				all.setFirstName(i + "first");
 				assertEquals(1, um.getUsers(u2).length);
 				assertEquals(1, um.getUsers(all).length);
-				
-				//Test Last Name
+
+				// Test Last Name
 				IdPUserFilter u3 = getActiveUserFilter();
-				u3.setLastName(i+"last");
-				all.setLastName(i+"last");
+				u3.setLastName(i + "last");
+				all.setLastName(i + "last");
 				assertEquals(1, um.getUsers(u3).length);
 				assertEquals(1, um.getUsers(all).length);
 
-				//Test Organization
+				// Test Organization
 				IdPUserFilter u4 = getActiveUserFilter();
-				u4.setOrganization(i+"organization");
-				all.setOrganization(i+"organization");
+				u4.setOrganization(i + "organization");
+				all.setOrganization(i + "organization");
 				assertEquals(1, um.getUsers(u4).length);
 				assertEquals(1, um.getUsers(all).length);
-				
-				//Test Address
+
+				// Test Address
 				IdPUserFilter u5 = getActiveUserFilter();
-				u5.setAddress(i+"address");
-				all.setAddress(i+"address");
+				u5.setAddress(i + "address");
+				all.setAddress(i + "address");
 				assertEquals(1, um.getUsers(u5).length);
 				assertEquals(1, um.getUsers(all).length);
-				
-				//Test Address 2
+
+				// Test Address 2
 				IdPUserFilter u6 = getActiveUserFilter();
-				u6.setAddress2(i+"address2");
-				all.setAddress2(i+"address2");
+				u6.setAddress2(i + "address2");
+				all.setAddress2(i + "address2");
 				assertEquals(1, um.getUsers(u6).length);
 				assertEquals(1, um.getUsers(all).length);
-				
+
 				all.setCity("Columbus");
 				all.setState(StateCode.OH);
 				all.setCountry(CountryCode.US);
@@ -497,12 +478,13 @@ public class TestUserManager extends TestCase {
 				all.setPhoneNumber("614-555-5555");
 				assertEquals(1, um.getUsers(all).length);
 			}
-			
+
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
 	}
+
 
 	private IdPUserFilter getActiveUserFilter() {
 		IdPUserFilter filter = new IdPUserFilter();
@@ -511,50 +493,54 @@ public class TestUserManager extends TestCase {
 		return filter;
 	}
 
+
 	private IdPUser makeActiveUser() {
 		return makeUser(IdPUserRole.Non_Administrator, IdPUserStatus.Active);
 	}
 
+
 	private IdPUser makeUser(IdPUserRole role, IdPUserStatus status) {
 		IdPUser u = new IdPUser();
-		u.setUserId(count+"user");
-		u.setEmail(count+"user@mail.com");
-		u.setPassword(count+"password");
-		u.setFirstName(count+"first");
-		u.setLastName(count+"last");
-		u.setAddress(count+"address");
-		u.setAddress2(count+"address2");
+		u.setUserId(count + "user");
+		u.setEmail(count + "user@mail.com");
+		u.setPassword(count + "password");
+		u.setFirstName(count + "first");
+		u.setLastName(count + "last");
+		u.setAddress(count + "address");
+		u.setAddress2(count + "address2");
 		u.setCity("Columbus");
 		u.setState(StateCode.OH);
 		u.setZipcode("43210");
 		u.setCountry(CountryCode.US);
 		u.setPhoneNumber("614-555-5555");
-		u.setOrganization(count+"organization");
+		u.setOrganization(count + "organization");
 		u.setStatus(status);
 		u.setRole(role);
 		count = count + 1;
 		return u;
 	}
 
+
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
 			count = 0;
-		    db = Utils.getDB();
-		    assertEquals(0,db.getUsedConnectionCount());
-		    InputStream resource = TestCase.class.getResourceAsStream(Constants.IDP_CONFIG);
-		    SimpleResourceManager trm = new SimpleResourceManager(resource);
-		    this.conf = (IdPConfiguration)trm.getResource(IdPConfiguration.RESOURCE);
+			db = Utils.getDB();
+			assertEquals(0, db.getUsedConnectionCount());
+			InputStream resource = TestCase.class.getResourceAsStream(Constants.IDP_CONFIG);
+			SimpleResourceManager trm = new SimpleResourceManager(resource);
+			this.conf = (IdPConfiguration) trm.getResource(IdPConfiguration.RESOURCE);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
 	}
-	
+
+
 	protected void tearDown() throws Exception {
 		super.setUp();
 		try {
-			assertEquals(0,db.getUsedConnectionCount());
+			assertEquals(0, db.getUsedConnectionCount());
 			db.destroyDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);

@@ -3,6 +3,7 @@
 <!-- ======================================================================= -->
 <project name="caGrid-dorian_tests_harness" basedir=".">
 	<property name="junit.results.dir" value="${test.log.dir}/junit" />
+	<property name="force.config.replace" value="false" />
 	<mkdir dir="${test.log.dir}" />
 	<!-- call the test target for each project and aggregates the log resutls  -->
 	<target name="test" depends="create_config_files">
@@ -42,12 +43,12 @@
 	<!-- ============================================================== -->
 	<!-- Creates conf files from examples                               -->
 	<!-- ============================================================== -->
-	<target name="create_config_files" description="Creates conf files from examples">
-		<echo message="You have not configured configuration files.  Creating from example..." />
-		<copy todir="${test.dir}/resources" overwrite="false">
-            <fileset dir="${test.dir}/resources">
-                <include name="**/*.example" />
-            </fileset>
+	<target name="create_config_files" description="Creates conf files from examples.
+		Set property force.config.replace to true to force replacement.">
+		<copy todir="${test.dir}/resources" overwrite="${force.config.replace}">
+			<fileset dir="${test.dir}/resources">
+				<include name="**/*.example" />
+			</fileset>
 			<mapper type="glob" from="*.example" to="*" />
 		</copy>
 	</target>
