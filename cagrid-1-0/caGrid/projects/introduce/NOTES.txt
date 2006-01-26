@@ -18,6 +18,12 @@ Security configuration (STEVE)
 
 Make notes on how to add a new template.
 
+Need to validate the model before we begin to do code gen
+	-- will reduce bugs and bug checking
+	-- validate that the package names and classnames are being set correctly
+	
+Need to support "MODIFIED" methods.
+
 GMEMetadataConfigurationComponent needs to set proper view on viewing an existing one from "modify"
 
 (DONE) add packageName as a seperate parameter so that we can handle the funny mappings that we will use for caDSR->GME schemas.....

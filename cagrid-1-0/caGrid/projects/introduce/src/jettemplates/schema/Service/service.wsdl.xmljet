@@ -71,11 +71,10 @@
           		  if(method.getInputs()!=null && method.getInputs().getInput()!=null){
 	      				for(int inputsI = 0; inputsI < method.getInputs().getInput().length; inputsI++){
 	      					MethodTypeInputsInput inputParam = method.getInputs().getInput(inputsI);
-	      					if((inputParam.getMaxOccurs() != null)
-	      						&& (inputParam.getMaxOccurs().equals("unbounded") || Integer.parseInt(inputParam.getMaxOccurs()) > 1)){
-	      		 %>
-							<element name="<%=inputParam.getName() %>" type="<%=((SchemaInformation)prefixmap.get(inputParam.getNamespace())).getPrefix()%>:<%=inputParam.getType() %>" minOccurs="1" maxOccurs="<%=inputParam.getMaxOccurs() %>" />
-                   <%
+	      					if((inputParam.getIsArray() != null && inputParam.getIsArray().booleanValue())){
+	      		  %>
+							<element name="<%=inputParam.getName() %>" type="<%=((SchemaInformation)prefixmap.get(inputParam.getNamespace())).getPrefix()%>:<%=inputParam.getType() %>" minOccurs="1" maxOccurs="unbounded" />
+                  <%
                             } else {
                   %>
                   			<element name="<%=inputParam.getName() %>" type="<%=((SchemaInformation)prefixmap.get(inputParam.getNamespace())).getPrefix()%>:<%=inputParam.getType() %>" minOccurs="1" maxOccurs="1" />
@@ -94,11 +93,10 @@
           		  <%
 	      			if(method.getOutput()!=null){
 						MethodTypeOutput outputParam = method.getOutput();
-						if(outputParam.getClassName()!=null && !outputParam.getClassName().equals("void")){
-						if((outputParam.getMaxOccurs() != null)
-      						&& (outputParam.getMaxOccurs().equals("unbounded") || Integer.parseInt(outputParam.getMaxOccurs()) > 1)){
+						if(outputParam.getClassName()==null || (outputParam.getClassName()!=null && !outputParam.getClassName().equals("void"))){
+						if((outputParam.getIsArray() != null && outputParam.getIsArray().booleanValue())){
 				      		 %>
-				      		 <element name="response" type="<%=((SchemaInformation)prefixmap.get(outputParam.getNamespace())).getPrefix()%>:<%=outputParam.getType() %>" minOccurs="1" maxOccurs="<%=outputParam.getMaxOccurs() %>" />
+				      		 <element name="response" type="<%=((SchemaInformation)prefixmap.get(outputParam.getNamespace())).getPrefix()%>:<%=outputParam.getType() %>" minOccurs="1" maxOccurs="unbounded" />
 			                   <%
 			            } else {
 			                  %>

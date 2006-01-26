@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce;
 
+import gov.nih.nci.cagrid.introduce.steps.AddComplexMethodWithFaultStep;
 import gov.nih.nci.cagrid.introduce.steps.AddSimpleMethodStep;
 import gov.nih.nci.cagrid.introduce.steps.AddSimpleMethodWithFaultStep;
 import gov.nih.nci.cagrid.introduce.steps.CreateSkeletonStep;
@@ -24,11 +25,10 @@ public class SyncToolsTest extends Story {
 
 		steps.add(new CreateSkeletonStep(tci));
 		steps.add(new AddSimpleMethodStep(tci, "newMethod"));
-		steps.add(new AddSimpleMethodWithFaultStep(tci,"newMethodWithFault"));
 		steps.add(new RemoveMethodStep(tci, "newMethod"));
-		steps.add(new AddSimpleMethodStep(tci,"newMethod2"));
-		steps.add(new AddSimpleMethodStep(tci,"newMethod"));
-		//steps.add(new RollBackStep(tci));
+		steps.add(new AddSimpleMethodWithFaultStep(tci,"newMethodWithFault"));
+		steps.add(new RollBackStep(tci));
+		steps.add(new AddComplexMethodWithFaultStep(tci,"newComplexMethodWithFault"));
 		return steps;
 	}
 
@@ -38,7 +38,7 @@ public class SyncToolsTest extends Story {
 
 	protected void storyTearDown() throws Throwable {
 		RemoveSkeletonStep step = new RemoveSkeletonStep(tci);
-		step.runStep();
+		//step.runStep();
 	}
 
 	// used to make sure that if we are going to use a junit testsuite to test this 

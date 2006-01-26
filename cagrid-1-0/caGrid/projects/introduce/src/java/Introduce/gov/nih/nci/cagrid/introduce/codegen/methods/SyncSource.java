@@ -429,7 +429,7 @@ public class SyncSource {
 			+ "(params);\n";
 		methodString += lineStart;
 		if (!returnType.equals("void")) {
-			methodString += "return boxedResult.getValue();\n";
+			methodString += "return boxedResult.getResponse();\n";
 		}
 
 		clientMethod += methodString;
@@ -561,7 +561,7 @@ public class SyncSource {
 			methodString += this.packageName + "." + returnTypeBoxed + " boxedResult = new " + this.packageName + "."
 				+ returnTypeBoxed + "();\n";
 			methodString += lineStart;
-			methodString += "boxedResult.setValue(" + var + "." + methodName + "(" + params + "));\n";
+			methodString += "boxedResult.setResponse(" + var + "." + methodName + "(" + params + "));\n";
 			methodString += lineStart;
 			methodString += "return boxedResult;\n";
 		}

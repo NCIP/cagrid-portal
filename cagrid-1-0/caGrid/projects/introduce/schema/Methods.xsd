@@ -59,8 +59,6 @@
 							<xs:complexType>
 								<xs:attributeGroup ref="SchemaDervivedType"></xs:attributeGroup>
 								<xs:attribute name="name" type="xs:string" use="required"/>
-								<xs:attribute name="minOccurs" type="xs:string" use="optional"/>
-								<xs:attribute name="maxOccurs" type="xs:string" use="optional"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
@@ -69,8 +67,6 @@
 			<xs:element name="Output">
 				<xs:complexType>
 					<xs:attributeGroup ref="SchemaDervivedType"></xs:attributeGroup>
-					<xs:attribute name="minOccurs" type="xs:string" use="optional"/>
-					<xs:attribute name="maxOccurs" type="xs:string" use="optional"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="Exceptions" minOccurs="0">
