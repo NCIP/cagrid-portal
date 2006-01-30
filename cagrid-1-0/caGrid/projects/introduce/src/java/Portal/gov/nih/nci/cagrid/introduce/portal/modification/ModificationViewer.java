@@ -15,6 +15,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.SecureCommunicationConfiguratio
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -28,7 +29,6 @@ import java.util.Properties;
 import java.util.Vector;
 
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -41,11 +41,12 @@ import org.jdom.input.SAXBuilder;
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.45 2006-01-26 02:08:29 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.46 2006-01-30 21:02:08 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -74,8 +75,6 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	private JButton addMethodButton = null;
 
 	private JButton saveButton = null;
-
-	private JComponent me;
 
 	private JButton removeButton = null;
 
@@ -107,38 +106,55 @@ public class ModificationViewer extends GridPortalBaseFrame {
 
 	private JPanel baseSecurityPanel = null;
 
+
 	/**
 	 * This is the default constructor
 	 */
 	public ModificationViewer() {
 		super();
-		this.me = this;
-		try {
-			chooseService();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		initialize();
+		Thread th = createChooserThread();
+		th.start();
 	}
+
 
 	public ModificationViewer(File methodsDirectory) {
 		super();
-		this.me = this;
 		this.methodsDirectory = methodsDirectory;
-
 		initialize();
 
 	}
+
+
+	private Thread createChooserThread() {
+		Thread th = new Thread(new Runnable() {
+
+			public void run() {
+				try {
+					chooseService();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				File file = new File(methodsDirectory.getAbsolutePath() + File.separator + "introduce.xml");
+				if (file.exists() && file.canRead()) {
+					initialize();
+				} else {
+					JOptionPane.showMessageDialog(ModificationViewer.this, "Directory "
+						+ methodsDirectory.getAbsolutePath() + " does not seem to be an introduce service");
+					ModificationViewer.this.dispose();
+				}
+			}
+
+		});
+		return th;
+	}
+
 
 	private void loadServiceProps() {
 		try {
 			serviceProperties = new Properties();
-			serviceProperties.load(new FileInputStream(this.methodsDirectory
-					.getAbsolutePath()
-					+ File.separator + "introduce.properties"));
-			serviceProperties.setProperty("introduce.skeleton.destination.dir",
-					methodsDirectory.getAbsolutePath());
+			serviceProperties.load(new FileInputStream(this.methodsDirectory.getAbsolutePath() + File.separator
+				+ "introduce.properties"));
+			serviceProperties.setProperty("introduce.skeleton.destination.dir", methodsDirectory.getAbsolutePath());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -152,44 +168,38 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		f2 = f2.deriveFont(f2.getStyle() ^ Font.ITALIC);
 
 		this.addTextField(this.getSelectPanel(), "Timestamp", serviceProperties
-				.getProperty("introduce.skeleton.timestamp"), 1, false);
+			.getProperty("introduce.skeleton.timestamp"), 1, false);
 		this.getLabel("Timestamp").setFont(f1);
 		this.getTextField("Timestamp").setFont(f2);
-		this.addTextField(this.getSelectPanel(), "Service Name",
-				serviceProperties
-						.getProperty("introduce.skeleton.service.name"), 2,
-				false);
+		this.addTextField(this.getSelectPanel(), "Service Name", serviceProperties
+			.getProperty("introduce.skeleton.service.name"), 2, false);
 		this.getLabel("Service Name").setFont(f1);
 		this.getTextField("Service Name").setFont(f2);
 
-		this.addTextField(this.getSelectPanel(), "Location", methodsDirectory
-				.getAbsolutePath(), 3, false);
+		this.addTextField(this.getSelectPanel(), "Location", methodsDirectory.getAbsolutePath(), 3, false);
 		this.getLabel("Location").setFont(f1);
 		this.getTextField("Location").setFont(f2);
-		this.addTextField(this.getSelectPanel(), "Package", serviceProperties
-				.getProperty("introduce.skeleton.package"), 4, false);
+		this.addTextField(this.getSelectPanel(), "Package",
+			serviceProperties.getProperty("introduce.skeleton.package"), 4, false);
 		this.getLabel("Package").setFont(f1);
 		this.getTextField("Package").setFont(f2);
-		this
-				.addTextField(this.getSelectPanel(), "Package Dir",
-						serviceProperties
-								.getProperty("introduce.skeleton.package.dir"),
-						5, false);
+		this.addTextField(this.getSelectPanel(), "Package Dir", serviceProperties
+			.getProperty("introduce.skeleton.package.dir"), 5, false);
 		this.getLabel("Package Dir").setFont(f1);
 		this.getTextField("Package Dir").setFont(f2);
-		this.addTextField(this.getSelectPanel(), "Namespace Domain",
-				serviceProperties
-						.getProperty("introduce.skeleton.namespace.domain"), 6,
-				false);
+		this.addTextField(this.getSelectPanel(), "Namespace Domain", serviceProperties
+			.getProperty("introduce.skeleton.namespace.domain"), 6, false);
 		this.getLabel("Namespace Domain").setFont(f1);
 		this.getTextField("Namespace Domain").setFont(f2);
 	}
+
 
 	private void chooseService() throws Exception {
 		String dir = ResourceManager.promptDir(this, null);
 		System.out.println(dir);
 		this.methodsDirectory = new File(dir);
 	}
+
 
 	/**
 	 * This method initializes this
@@ -198,34 +208,23 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	 */
 	private void initialize() {
 		if (this.methodsDirectory != null) {
-			SAXBuilder builder = new SAXBuilder(false);
 			try {
-				File file = new File(this.methodsDirectory.getAbsolutePath()
-						+ File.separator + "introduce.xml");
-				if (file.exists() && file.canRead()) {
 
-					this.introService = (ServiceDescription) CommonTools
-							.deserializeDocument(this.methodsDirectory
-									.getAbsolutePath()
-									+ File.separator + "introduce.xml",
-									ServiceDescription.class);
-					loadServiceProps();
-					this.setSize(500, 400);
-					this.setContentPane(getJContentPane());
-					this.setTitle("Modify Service Interface");
-					this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
-					
-				} else {
-					JOptionPane.showMessageDialog(this, "Directory "
-							+ this.methodsDirectory.getAbsolutePath()
-							+ " does not seem to be an introduce service");
-				}
+				this.introService = (ServiceDescription) CommonTools.deserializeDocument(this.methodsDirectory
+					.getAbsolutePath()
+					+ File.separator + "introduce.xml", ServiceDescription.class);
+				loadServiceProps();
+				this.setSize(500, 400);
+				this.setContentPane(getJContentPane());
+				this.setTitle("Modify Service Interface");
+				this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
 
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
+
 
 	/**
 	 * This method initializes jContentPane
@@ -240,6 +239,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		}
 		return jContentPane;
 	}
+
 
 	/**
 	 * This method initializes jPanel
@@ -285,6 +285,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		return mainPanel;
 	}
 
+
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -312,6 +313,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		}
 		return operationsPanel;
 	}
+
 
 	/**
 	 * This method initializes jPanel
@@ -342,6 +344,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		return buttonPanel;
 	}
 
+
 	/**
 	 * This method initializes jButton1
 	 * 
@@ -361,6 +364,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		return cancel;
 	}
 
+
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -370,14 +374,13 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		if (selectPanel == null) {
 			selectPanel = new JPanel();
 			selectPanel.setLayout(new GridBagLayout());
-			selectPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, "Service Properties",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					IntroduceLookAndFeel.getPanelLabelColor()));
+			selectPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service Properties",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
 		}
 		return selectPanel;
 	}
+
 
 	/**
 	 * This method initializes jTable
@@ -386,8 +389,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	 */
 	private MethodsTable getMethodsTable() {
 		if (methodsTable == null) {
-			methodsTable = new MethodsTable(introService.getMethods(),
-					this.methodsDirectory, this.serviceProperties);
+			methodsTable = new MethodsTable(introService.getMethods(), this.methodsDirectory, this.serviceProperties);
 			methodsTable.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					if (e.getClickCount() == 2) {
@@ -399,6 +401,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		}
 		return methodsTable;
 	}
+
 
 	/**
 	 * This method initializes jScrollPane
@@ -413,6 +416,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		return jScrollPane;
 	}
 
+
 	/**
 	 * This method initializes jButton
 	 * 
@@ -423,45 +427,40 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			addMethodButton = new JButton(IntroduceLookAndFeel.getAddIcon());
 			addMethodButton.setText("Add");
 			addMethodButton.setToolTipText("add new operation");
-			addMethodButton
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							dirty = true;
-							MethodType method = new MethodType();
-							method.setName("newMethod");
-							MethodTypeOutput output = new MethodTypeOutput();
-							output.setClassName("void");
-							method.setOutput(output);
+			addMethodButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					dirty = true;
+					MethodType method = new MethodType();
+					method.setName("newMethod");
+					MethodTypeOutput output = new MethodTypeOutput();
+					output.setClassName("void");
+					method.setOutput(output);
 
-							// add new method to array in bean
-							// this seems to be a wierd way be adding things....
-							MethodType[] newMethods;
-							int newLength = 0;
-							if (introService.getMethods() != null
-									&& introService.getMethods().getMethod() != null) {
-								newLength = introService.getMethods()
-										.getMethod().length + 1;
-								newMethods = new MethodType[newLength];
-								System
-										.arraycopy(introService.getMethods()
-												.getMethod(), 0, newMethods, 0,
-												introService.getMethods()
-														.getMethod().length);
-							} else {
-								newLength = 1;
-								newMethods = new MethodType[newLength];
-							}
-							newMethods[newLength - 1] = method;
-							introService.getMethods().setMethod(newMethods);
+					// add new method to array in bean
+					// this seems to be a wierd way be adding things....
+					MethodType[] newMethods;
+					int newLength = 0;
+					if (introService.getMethods() != null && introService.getMethods().getMethod() != null) {
+						newLength = introService.getMethods().getMethod().length + 1;
+						newMethods = new MethodType[newLength];
+						System.arraycopy(introService.getMethods().getMethod(), 0, newMethods, 0, introService
+							.getMethods().getMethod().length);
+					} else {
+						newLength = 1;
+						newMethods = new MethodType[newLength];
+					}
+					newMethods[newLength - 1] = method;
+					introService.getMethods().setMethod(newMethods);
 
-							getMethodsTable().addRow(method);
+					getMethodsTable().addRow(method);
 
-							performMethodModify();
-						}
-					});
+					performMethodModify();
+				}
+			});
 		}
 		return addMethodButton;
 	}
+
 
 	/**
 	 * This method initializes jButton
@@ -475,11 +474,10 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			saveButton.setToolTipText("modify and rebuild service");
 			saveButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					final int confirmed = JOptionPane.showConfirmDialog(me,
-							"Are you sure you want to save?");
-					BusyDialogRunnable r = new BusyDialogRunnable(
-							PortalResourceManager.getInstance().getGridPortal(),
-							"Save") {
+					final int confirmed = JOptionPane.showConfirmDialog(ModificationViewer.this,
+						"Are you sure you want to save?");
+					BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance().getGridPortal(),
+						"Save") {
 
 						public void process() {
 							try {
@@ -489,11 +487,9 @@ public class ModificationViewer extends GridPortalBaseFrame {
 
 									// walk the methods table and create the
 									// new MethodsType array
-									MethodType[] methodsArray = new MethodType[methodsTable
-											.getRowCount()];
+									MethodType[] methodsArray = new MethodType[methodsTable.getRowCount()];
 									for (int i = 0; i < methodsArray.length; i++) {
-										MethodType methodInstance = (MethodType) methodsTable
-												.getValueAt(i, 1);
+										MethodType methodInstance = (MethodType) methodsTable.getValueAt(i, 1);
 										methodsArray[i] = methodInstance;
 									}
 									MethodsType methods = new MethodsType();
@@ -502,69 +498,45 @@ public class ModificationViewer extends GridPortalBaseFrame {
 
 									// walk the metadata table and create the
 									// new ServiceMetadataType array
-									MetadataType[] metadataArray = new MetadataType[metadataTable
-											.getRowCount()];
+									MetadataType[] metadataArray = new MetadataType[metadataTable.getRowCount()];
 									for (int i = 0; i < metadataArray.length; i++) {
-										String packageName = (String) metadataTable
-												.getValueAt(i, 0);
-										String className = (String) metadataTable
-												.getValueAt(i, 1);
-										String namespace = (String) metadataTable
-												.getValueAt(i, 2);
-										String type = (String) metadataTable
-												.getValueAt(i, 3);
-										String location = (String) metadataTable
-												.getValueAt(i, 4);
-										String populateFromFile = (String) metadataTable
-												.getValueAt(i, 5);
-										String register = (String) metadataTable
-												.getValueAt(i, 6);
-										String qname = (String) metadataTable
-												.getValueAt(i, 7);
+										String packageName = (String) metadataTable.getValueAt(i, 0);
+										String className = (String) metadataTable.getValueAt(i, 1);
+										String namespace = (String) metadataTable.getValueAt(i, 2);
+										String type = (String) metadataTable.getValueAt(i, 3);
+										String location = (String) metadataTable.getValueAt(i, 4);
+										String populateFromFile = (String) metadataTable.getValueAt(i, 5);
+										String register = (String) metadataTable.getValueAt(i, 6);
+										String qname = (String) metadataTable.getValueAt(i, 7);
 
 										MetadataType metadata = new MetadataType();
-										if (packageName != null
-												&& !packageName.equals("")) {
-											metadata
-													.setPackageName(packageName);
+										if (packageName != null && !packageName.equals("")) {
+											metadata.setPackageName(packageName);
 										}
-										if (className != null
-												&& !className.equals("")) {
+										if (className != null && !className.equals("")) {
 											metadata.setClassName(className);
 										}
-										if (namespace != null
-												&& !namespace.equals("")) {
+										if (namespace != null && !namespace.equals("")) {
 											metadata.setNamespace(namespace);
 										}
 										if (type != null && !type.equals("")) {
 											metadata.setType(type);
 										}
-										if (location != null
-												&& !location.equals("")) {
+										if (location != null && !location.equals("")) {
 											metadata.setLocation(location);
 										}
-										if (populateFromFile != null
-												&& !populateFromFile.equals("")) {
-											metadata
-													.setPopulateFromFile(Boolean
-															.valueOf(
-																	populateFromFile)
-															.booleanValue());
+										if (populateFromFile != null && !populateFromFile.equals("")) {
+											metadata.setPopulateFromFile(Boolean.valueOf(populateFromFile)
+												.booleanValue());
 										}
-										if (register != null
-												&& !register.equals("")) {
-											metadata.setRegister(Boolean
-													.valueOf(register)
-													.booleanValue());
+										if (register != null && !register.equals("")) {
+											metadata.setRegister(Boolean.valueOf(register).booleanValue());
 										}
 										if (qname != null && !qname.equals("")) {
 											int index = qname.lastIndexOf(":");
-											String qnamespace = qname
-													.substring(0, index);
-											String qnamename = qname
-													.substring(index + 1);
-											QName qn = new QName(qnamespace,
-													qnamename);
+											String qnamespace = qname.substring(0, index);
+											String qnamename = qname.substring(index + 1);
+											QName qn = new QName(qnamespace, qnamename);
 											metadata.setQName(qn);
 										}
 										metadataArray[i] = metadata;
@@ -572,15 +544,13 @@ public class ModificationViewer extends GridPortalBaseFrame {
 									}
 
 									MetadataListType serviceMetadataList = new MetadataListType();
-									serviceMetadataList
-											.setMetadata(metadataArray);
-									introService
-											.setMetadataList(serviceMetadataList);
+									serviceMetadataList.setMetadata(metadataArray);
+									introService.setMetadataList(serviceMetadataList);
 
 									ServiceSecurityConfiguration ssc = new ServiceSecurityConfiguration();
 									ssc
-											.setServiceCommunicationSecurity(((SecurityConfigurationPanel) baseSecurityPanel)
-													.getSecureCommunicationConfiguration());
+										.setServiceCommunicationSecurity(((SecurityConfigurationPanel) baseSecurityPanel)
+											.getSecureCommunicationConfiguration());
 									introService.setServiceSecurity(ssc);
 									// check the methods to make sure they are
 									// valid.......
@@ -588,27 +558,17 @@ public class ModificationViewer extends GridPortalBaseFrame {
 									// save the metadata and methods and then
 									// call the resync and build
 									setProgressText("writting service document");
-									CommonTools
-											.serializeDocument(
-													methodsDirectory
-															.getAbsolutePath()
-															+ File.separator
-															+ "introduce.xml",
-													introService,
-													new QName(
-															"gme://gov.nih.nci.cagrid/1/Introduce",
-															"ServiceSkeleton"));
+									CommonTools.serializeDocument(methodsDirectory.getAbsolutePath() + File.separator
+										+ "introduce.xml", introService, new QName(
+										"gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
 									setProgressText("sychronizing skeleton");
 									// call the sync tools
-									SyncTools sync = new SyncTools(
-											methodsDirectory);
+									SyncTools sync = new SyncTools(methodsDirectory);
 									sync.sync();
 									setProgressText("rebuilding skeleton");
-									String cmd = CommonTools.getAntCommand(
-											"clean all", methodsDirectory
-													.getAbsolutePath());
-									Process p = CommonTools
-											.createAndOutputProcess(cmd);
+									String cmd = CommonTools.getAntCommand("clean all", methodsDirectory
+										.getAbsolutePath());
+									Process p = CommonTools.createAndOutputProcess(cmd);
 									p.waitFor();
 									dirty = false;
 									setProgressText("loading service properties");
@@ -629,6 +589,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		return saveButton;
 	}
 
+
 	/**
 	 * This method initializes jButton
 	 * 
@@ -645,43 +606,31 @@ public class ModificationViewer extends GridPortalBaseFrame {
 					dirty = true;
 					int row = getMethodsTable().getSelectedRow();
 					if ((row < 0) || (row >= getMethodsTable().getRowCount())) {
-						PortalUtils
-								.showErrorMessage("Please select a method to remove.");
+						PortalUtils.showErrorMessage("Please select a method to remove.");
 						return;
 					}
-					getMethodsTable().removeRow(
-							getMethodsTable().getSelectedRow());
+					getMethodsTable().removeRow(getMethodsTable().getSelectedRow());
 				}
 			});
 		}
 		return removeButton;
 	}
 
+
 	public void performMetadataModify() {
 
 		int row = getMetadataTable().getSelectedRow();
 		if ((row < 0) || (row >= getMetadataTable().getRowCount())) {
-			PortalUtils
-					.showErrorMessage("Please select a metadata type to modify.");
+			PortalUtils.showErrorMessage("Please select a metadata type to modify.");
 			return;
 		}
 
-		Vector v = (Vector) getMetadataTable().getValueAt(
-				getMetadataTable().getSelectedRow(), 8);
-		PortalResourceManager
-				.getInstance()
-				.getGridPortal()
-				.addGridPortalComponent(
-						new GMEMetadataConfigurationComponent(
-								v,
-								new File(
-										methodsDirectory.getAbsolutePath()
-												+ File.separator
-												+ "schema"
-												+ File.separator
-												+ serviceProperties
-														.getProperty("introduce.skeleton.service.name"))));
+		Vector v = (Vector) getMetadataTable().getValueAt(getMetadataTable().getSelectedRow(), 8);
+		PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+			new GMEMetadataConfigurationComponent(v, new File(methodsDirectory.getAbsolutePath() + File.separator
+				+ "schema" + File.separator + serviceProperties.getProperty("introduce.skeleton.service.name"))));
 	}
+
 
 	public void performMethodModify() {
 
@@ -691,24 +640,13 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			return;
 		}
 
-		MethodType method = (MethodType) getMethodsTable().getValueAt(
-				getMethodsTable().getSelectedRow(), 1);
-		PortalResourceManager
-				.getInstance()
-				.getGridPortal()
-				.addGridPortalComponent(
-						new MethodViewer(
-								method,
-								new File(
-										methodsDirectory.getAbsolutePath()
-												+ File.separator
-												+ "schema"
-												+ File.separator
-												+ serviceProperties
-														.getProperty("introduce.skeleton.service.name")),
-								getMethodsTable(), getMethodsTable()
-										.getSelectedRow()));
+		MethodType method = (MethodType) getMethodsTable().getValueAt(getMethodsTable().getSelectedRow(), 1);
+		PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+			new MethodViewer(method, new File(methodsDirectory.getAbsolutePath() + File.separator + "schema"
+				+ File.separator + serviceProperties.getProperty("introduce.skeleton.service.name")),
+				getMethodsTable(), getMethodsTable().getSelectedRow()));
 	}
+
 
 	/**
 	 * This method initializes jButton
@@ -729,6 +667,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		}
 		return modifyButton;
 	}
+
 
 	/**
 	 * This method initializes jPanel
@@ -754,13 +693,13 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			gridBagConstraints5.gridx = 0;
 			operationsButtonPanel = new JPanel();
 			operationsButtonPanel.setLayout(new GridBagLayout());
-			operationsButtonPanel
-					.add(getAddMethodButton(), gridBagConstraints5);
+			operationsButtonPanel.add(getAddMethodButton(), gridBagConstraints5);
 			operationsButtonPanel.add(getModifyButton(), gridBagConstraints6);
 			operationsButtonPanel.add(getRemoveButton(), gridBagConstraints7);
 		}
 		return operationsButtonPanel;
 	}
+
 
 	/**
 	 * This method initializes undoButton
@@ -774,31 +713,22 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			undoButton.setToolTipText("roll back to last save state");
 			undoButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					BusyDialogRunnable r = new BusyDialogRunnable(
-							PortalResourceManager.getInstance().getGridPortal(),
-							"Undo") {
+					BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance().getGridPortal(),
+						"Undo") {
 
 						public void process() {
-							System.out
-									.println("Loading in last known save for this project");
+							System.out.println("Loading in last known save for this project");
 							try {
 								if (!dirty) {
 									setProgressText("restoring from local cache");
-									ResourceManager
-											.restoreLatest(
-													serviceProperties
-															.getProperty("introduce.skeleton.timestamp"),
-													serviceProperties
-															.getProperty("introduce.skeleton.service.name"),
-													serviceProperties
-															.getProperty("introduce.skeleton.destination.dir"));
+									ResourceManager.restoreLatest(serviceProperties
+										.getProperty("introduce.skeleton.timestamp"), serviceProperties
+										.getProperty("introduce.skeleton.service.name"), serviceProperties
+										.getProperty("introduce.skeleton.destination.dir"));
 								}
 								dispose();
-								PortalResourceManager.getInstance()
-										.getGridPortal()
-										.addGridPortalComponent(
-												new ModificationViewer(
-														methodsDirectory));
+								PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+									new ModificationViewer(methodsDirectory));
 							} catch (Exception e1) {
 								e1.printStackTrace();
 							}
@@ -814,6 +744,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		return undoButton;
 	}
 
+
 	/**
 	 * This method initializes contentTabbedPane
 	 * 
@@ -822,15 +753,13 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	private JTabbedPane getContentTabbedPane() {
 		if (contentTabbedPane == null) {
 			contentTabbedPane = new JTabbedPane();
-			contentTabbedPane.addTab("Operations", null, getMethodsPanel(),
-					null);
-			contentTabbedPane
-					.addTab("Metadata", null, getMetadataPanel(), null);
-			contentTabbedPane
-					.addTab("Security", null, getSecurityPanel(), null);
+			contentTabbedPane.addTab("Operations", null, getMethodsPanel(), null);
+			contentTabbedPane.addTab("Metadata", null, getMetadataPanel(), null);
+			contentTabbedPane.addTab("Security", null, getSecurityPanel(), null);
 		}
 		return contentTabbedPane;
 	}
+
 
 	/**
 	 * This method initializes metadataPanel
@@ -858,6 +787,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		return metadataPanel;
 	}
 
+
 	/**
 	 * This method initializes metadataScrollPane
 	 * 
@@ -870,6 +800,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		}
 		return metadataScrollPane;
 	}
+
 
 	/**
 	 * This method initializes metadataTable
@@ -888,6 +819,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		}
 		return metadataTable;
 	}
+
 
 	/**
 	 * This method initializes metadataButtonsPanel
@@ -913,15 +845,13 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			gridBagConstraints14.gridy = 1;
 			metadataButtonsPanel = new JPanel();
 			metadataButtonsPanel.setLayout(new GridBagLayout());
-			metadataButtonsPanel.add(getAddMetadataButton(),
-					gridBagConstraints15);
-			metadataButtonsPanel.add(getRemoveMetadataButton(),
-					gridBagConstraints14);
-			metadataButtonsPanel.add(getModifyMetadataButton(),
-					gridBagConstraints16);
+			metadataButtonsPanel.add(getAddMetadataButton(), gridBagConstraints15);
+			metadataButtonsPanel.add(getRemoveMetadataButton(), gridBagConstraints14);
+			metadataButtonsPanel.add(getModifyMetadataButton(), gridBagConstraints16);
 		}
 		return metadataButtonsPanel;
 	}
+
 
 	/**
 	 * This method initializes addMetadataButton
@@ -934,42 +864,36 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			addMetadataButton.setText("Add");
 			addMetadataButton.setToolTipText("add service metadata");
 			addMetadataButton.setIcon(IntroduceLookAndFeel.getAddIcon());
-			addMetadataButton
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							dirty = true;
-							MetadataType metadata = new MetadataType();
+			addMetadataButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					dirty = true;
+					MetadataType metadata = new MetadataType();
 
-							// add new metadata to array in bean
-							// this seems to be a wierd way be adding things....
-							MetadataType[] metadatas;
-							int newLength = 0;
-							if (introService.getMetadataList() != null
-									&& introService.getMetadataList()
-											.getMetadata() != null) {
-								newLength = introService.getMetadataList()
-										.getMetadata().length + 1;
-								metadatas = new MetadataType[newLength];
-								System.arraycopy(introService.getMetadataList()
-										.getMetadata(), 0, metadatas, 0,
-										introService.getMetadataList()
-												.getMetadata().length);
-							} else {
-								newLength = 1;
-								metadatas = new MetadataType[newLength];
-							}
-							metadatas[newLength - 1] = metadata;
-							introService.getMetadataList().setMetadata(
-									metadatas);
+					// add new metadata to array in bean
+					// this seems to be a wierd way be adding things....
+					MetadataType[] metadatas;
+					int newLength = 0;
+					if (introService.getMetadataList() != null && introService.getMetadataList().getMetadata() != null) {
+						newLength = introService.getMetadataList().getMetadata().length + 1;
+						metadatas = new MetadataType[newLength];
+						System.arraycopy(introService.getMetadataList().getMetadata(), 0, metadatas, 0, introService
+							.getMetadataList().getMetadata().length);
+					} else {
+						newLength = 1;
+						metadatas = new MetadataType[newLength];
+					}
+					metadatas[newLength - 1] = metadata;
+					introService.getMetadataList().setMetadata(metadatas);
 
-							getMetadataTable().addRow(metadata);
+					getMetadataTable().addRow(metadata);
 
-							performMetadataModify();
-						}
-					});
+					performMetadataModify();
+				}
+			});
 		}
 		return addMetadataButton;
 	}
+
 
 	/**
 	 * This method initializes removeMetadataButton
@@ -982,24 +906,21 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			removeMetadataButton.setText("Remove");
 			removeMetadataButton.setToolTipText("remove service metadata");
 			removeMetadataButton.setIcon(IntroduceLookAndFeel.getRemoveIcon());
-			removeMetadataButton
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							dirty = true;
-							int row = getMetadataTable().getSelectedRow();
-							if ((row < 0)
-									|| (row >= getMetadataTable().getRowCount())) {
-								PortalUtils
-										.showErrorMessage("Please select a metdata type to remove.");
-								return;
-							}
-							getMetadataTable().removeRow(
-									getMetadataTable().getSelectedRow());
-						}
-					});
+			removeMetadataButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					dirty = true;
+					int row = getMetadataTable().getSelectedRow();
+					if ((row < 0) || (row >= getMetadataTable().getRowCount())) {
+						PortalUtils.showErrorMessage("Please select a metdata type to remove.");
+						return;
+					}
+					getMetadataTable().removeRow(getMetadataTable().getSelectedRow());
+				}
+			});
 		}
 		return removeMetadataButton;
 	}
+
 
 	/**
 	 * This method initializes modifyMetadataButton
@@ -1010,18 +931,17 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		if (modifyMetadataButton == null) {
 			modifyMetadataButton = new JButton();
 			modifyMetadataButton.setText("Modify");
-			modifyMetadataButton
-					.setToolTipText("modify selected service medata");
+			modifyMetadataButton.setToolTipText("modify selected service medata");
 			modifyMetadataButton.setIcon(IntroduceLookAndFeel.getModifyIcon());
-			modifyMetadataButton
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							performMetadataModify();
-						}
-					});
+			modifyMetadataButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					performMetadataModify();
+				}
+			});
 		}
 		return modifyMetadataButton;
 	}
+
 
 	/**
 	 * This method initializes securityPanel
@@ -1036,6 +956,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		return securityPanel;
 	}
 
+
 	/**
 	 * This method initializes baseSecurityPanel
 	 * 
@@ -1045,10 +966,8 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		if (baseSecurityPanel == null) {
 			SecureCommunicationConfiguration comm = null;
 			if (introService.getServiceSecurity() != null) {
-				if (introService.getServiceSecurity()
-						.getServiceCommunicationSecurity() != null) {
-					comm = introService.getServiceSecurity()
-							.getServiceCommunicationSecurity();
+				if (introService.getServiceSecurity().getServiceCommunicationSecurity() != null) {
+					comm = introService.getServiceSecurity().getServiceCommunicationSecurity();
 				}
 			}
 			baseSecurityPanel = new SecurityConfigurationPanel(comm);
