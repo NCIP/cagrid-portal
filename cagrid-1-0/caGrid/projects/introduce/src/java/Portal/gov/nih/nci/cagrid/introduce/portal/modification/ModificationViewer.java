@@ -44,7 +44,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.47 2006-01-30 21:03:27 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.48 2006-01-30 21:10:07 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -110,6 +110,8 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	 */
 	public ModificationViewer() {
 		super();
+		// throw a thread out so that i can make sure that if the chooser is
+		// canceled i can dispose of this frame
 		Thread th = createChooserThread();
 		th.start();
 	}
@@ -131,6 +133,9 @@ public class ModificationViewer extends GridPortalBaseFrame {
 					chooseService();
 				} catch (Exception e) {
 					e.printStackTrace();
+				}
+				if(methodsDirectory==null){
+					ModificationViewer.this.dispose();
 				}
 				File file = new File(methodsDirectory.getAbsolutePath() + File.separator + "introduce.xml");
 				if (file.exists() && file.canRead()) {
@@ -195,7 +200,9 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	private void chooseService() throws Exception {
 		String dir = ResourceManager.promptDir(this, null);
 		System.out.println(dir);
-		this.methodsDirectory = new File(dir);
+		if (dir != null) {
+			this.methodsDirectory = new File(dir);
+		}
 	}
 
 
