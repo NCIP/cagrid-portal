@@ -5,10 +5,38 @@
 	<xs:complexType name="MethodSecurity">
 		<xs:sequence>
 			<xs:element name="MethodSecuritySetting" minOccurs="1" maxOccurs="1" type="MethodSecurityType"/>
-			<xs:element name="TransportLevelSecurity" minOccurs="1" maxOccurs="1" type="TransportLevelSecurity"/>
-			
+			<xs:element name="TransportLevelSecurity" minOccurs="0" maxOccurs="1" type="TransportLevelSecurity"/>
+			<xs:element name="SecureConversation" minOccurs="0" maxOccurs="1" type="SecureConversation"/>
+			<xs:element name="SecureMessage" minOccurs="0" maxOccurs="1" type="SecureMessage"/>
+			<xs:element name="ClientAuthorization" minOccurs="0" maxOccurs="1" type="ClientAuthorization"/>
+			<xs:element name="RunAsMode" minOccurs="1" maxOccurs="1" type="RunAsMode"/>
+			<xs:element name="DelegationMode" minOccurs="1" maxOccurs="1" type="DelegationMode"/>
 		</xs:sequence>
 	</xs:complexType>
+	
+	
+	<xs:complexType name="ClientAuthorization">
+		<xs:choice>
+			<xs:element name="NoAuthorization" minOccurs="1" maxOccurs="1" type="NoAuthorization"/>
+			<xs:element name="HostAuthorization" minOccurs="1" maxOccurs="1" type="HostAuthorization"/>
+			<xs:element name="IdentityAuthorization" minOccurs="1" maxOccurs="1" type="IdentityAuthorization"/>
+		</xs:choice>
+	</xs:complexType>
+	
+	<xs:complexType name="NoAuthorization"/>
+	
+	<xs:complexType name="HostAuthorization">
+		<xs:sequence>
+			<xs:element name="hostname" minOccurs="1" maxOccurs="1" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="IdentityAuthorization">
+		<xs:sequence>
+			<xs:element name="identity" minOccurs="1" maxOccurs="1" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	
 	
 	<xs:complexType name="TransportLevelSecurity">
 		<xs:sequence>
@@ -40,10 +68,33 @@
 		</xs:restriction>
 	</xs:simpleType>
 	
+	
+	
+	
+	
 	<xs:simpleType name="AnonymousCommunication">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="Yes"/>
 			<xs:enumeration value="No"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="RunAsMode">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Default"/>
+			<xs:enumeration value="System"/>
+			<xs:enumeration value="Service"/>
+			<xs:enumeration value="Resource"/>
+			<xs:enumeration value="Caller"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="DelegationMode">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Default"/>
+			<xs:enumeration value="None"/>
+			<xs:enumeration value="Limited"/>
+			<xs:enumeration value="Full"/>
 		</xs:restriction>
 	</xs:simpleType>
 	
