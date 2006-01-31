@@ -44,7 +44,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.48 2006-01-30 21:10:07 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.49 2006-01-31 02:01:58 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -199,7 +199,6 @@ public class ModificationViewer extends GridPortalBaseFrame {
 
 	private void chooseService() throws Exception {
 		String dir = ResourceManager.promptDir(this, null);
-		System.out.println(dir);
 		if (dir != null) {
 			this.methodsDirectory = new File(dir);
 		}
