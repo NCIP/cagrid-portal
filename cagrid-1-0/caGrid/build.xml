@@ -186,6 +186,22 @@
 		</resolveDependencies>
 		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
+	
+	<!-- =============================================================== -->
+	<!-- CAGRID GME:                                                     -->
+	<!-- =============================================================== -->
+	<target name="build-gme" depends="prepare" description="Builds caGrid GME">
+		<resolveDependencies extdir="${projects.dir}/gme/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="core.resources" />
+			<artifact refid="mobius.jars" />
+			<artifact refid="metadata.jars" />
+			<artifact refid="metadata.schemas" />
+			<artifact refid="metadata.mappings" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/gme" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
 
 
 	<!-- ============================================================== -->
@@ -199,6 +215,8 @@
 		<ant dir="${projects.dir}/core" inheritAll="false" antfile="build.xml" target="clean" />
 		<delete dir="${projects.dir}/metadata/ext"/>
 		<ant dir="${projects.dir}/metadata" inheritAll="false" antfile="build.xml" target="clean" />
+		<delete dir="${projects.dir}/gme/ext"/>
+		<ant dir="${projects.dir}/gme" inheritAll="false" antfile="build.xml" target="clean" />
 		<delete dir="${projects.dir}/introduce/ext"/>
 		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="clean" />
 		<delete dir="${projects.dir}/dorian/ext"/>
@@ -209,6 +227,6 @@
 	<!-- ============================================================== -->
 	<!-- Builds from scratch                                            -->
 	<!-- ============================================================== -->
-	<target name="all" description="Builds the entire application" depends="clean, build-core, build-metadata, build-introduce, build-dorian" />
+	<target name="all" description="Builds the entire application" depends="clean, build-core, build-metadata, build-gme, build-introduce, build-dorian" />
 </project>
 
