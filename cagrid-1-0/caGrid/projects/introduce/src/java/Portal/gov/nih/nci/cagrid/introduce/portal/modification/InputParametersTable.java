@@ -10,6 +10,7 @@ import javax.swing.table.DefaultTableModel;
 
 import org.projectmobius.portal.PortalTable;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -18,7 +19,7 @@ import org.projectmobius.portal.PortalTable;
  *          Exp $
  */
 public class InputParametersTable extends PortalTable {
-	
+
 	public static String PACKAGENAME = "Package Name";
 
 	public static String CLASSNAME = "Classname";
@@ -41,6 +42,7 @@ public class InputParametersTable extends PortalTable {
 
 	private MethodType method;
 
+
 	public InputParametersTable(MethodType method) {
 		super(createTableModel());
 		this.method = method;
@@ -50,15 +52,21 @@ public class InputParametersTable extends PortalTable {
 		initialize();
 	}
 
+
 	public boolean isCellEditable(int row, int column) {
 		return true;
 	}
+
 
 	public void addRow(final MethodTypeInputsInput input) {
 		final Vector v = new Vector();
 		v.add(input.getPackageName());
 		v.add(input.getClassName());
-		v.add(input.getIsArray());
+		if (input.getIsArray() != null) {
+			v.add((String.valueOf(input.getIsArray().booleanValue())));
+		} else {
+			v.add("");
+		}
 		v.add(input.getName());
 		v.add(input.getNamespace());
 		v.add(input.getType());
@@ -68,9 +76,9 @@ public class InputParametersTable extends PortalTable {
 		v.add(v);
 
 		((DefaultTableModel) this.getModel()).addRow(v);
-		this.setRowSelectionInterval(this.getModel().getRowCount() - 1, this
-				.getModel().getRowCount() - 1);
+		this.setRowSelectionInterval(this.getModel().getRowCount() - 1, this.getModel().getRowCount() - 1);
 	}
+
 
 	private void initialize() {
 		this.getColumn(DATA1).setMaxWidth(0);
@@ -79,12 +87,13 @@ public class InputParametersTable extends PortalTable {
 		this.getColumn(DATA2).setMaxWidth(0);
 		this.getColumn(DATA2).setMinWidth(0);
 		this.getColumn(DATA2).setPreferredWidth(0);
-		if (this.method.getInputs() != null) {
+		if (this.method.getInputs() != null && this.method.getInputs().getInput() != null) {
 			for (int i = 0; i < this.method.getInputs().getInput().length; i++) {
 				addRow(this.method.getInputs().getInput(i));
 			}
 		}
 	}
+
 
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();

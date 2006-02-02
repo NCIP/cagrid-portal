@@ -317,7 +317,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 						String packageName = ((String) getInputParamTable().getValueAt(i, 0));
 						String className = ((String) getInputParamTable().getValueAt(i, 1));
-						Boolean isArray = ((Boolean) getInputParamTable().getValueAt(i, 2));
+						Boolean isArray = new Boolean((String) getInputParamTable().getValueAt(i, 2));
 						String name = ((String) getInputParamTable().getValueAt(i, 3));
 						String namespace = ((String) getInputParamTable().getValueAt(i, 4));
 						String type = ((String) getInputParamTable().getValueAt(i, 5));
@@ -369,7 +369,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 					String packageName = ((String) getOutputTypeTable().getValueAt(0, 0));
 					String className = ((String) getOutputTypeTable().getValueAt(0, 1));
-					Boolean isArray = ((Boolean) getOutputTypeTable().getValueAt(0, 2));
+					Boolean isArray = new Boolean(((String) getOutputTypeTable().getValueAt(0, 2)));
 					String namespace = ((String) getOutputTypeTable().getValueAt(0, 3));
 					String type = ((String) getOutputTypeTable().getValueAt(0, 4));
 					String location = ((String) getOutputTypeTable().getValueAt(0, 5));

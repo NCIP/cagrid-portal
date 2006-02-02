@@ -247,6 +247,60 @@ public class SyncSource {
 			addClientImpl(method);
 		}
 	}
+	
+	public void modifyMethods(List modifiedMethods) {
+		for (int i = 0; i < modifiedMethods.size(); i++) {
+			// add it to the interface
+			MethodType method = (MethodType) modifiedMethods.get(i);
+			
+
+			StringBuffer fileContent = null;
+			try {
+				fileContent = CommonTools.fileToStringBuffer(new File(this.serviceInterface));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			// remove the old interface method
+			String clientMethod = createUnBoxedSignatureStringFromMethod(method);
+			System.err.println("Looking to remove method: |" + clientMethod + "|");
+			int startOfMethod = fileContent.indexOf(clientMethod);
+			String restOfFile = fileContent.substring(startOfMethod);
+			int endOfMethod = startOfMethod + restOfFile.indexOf(";\n") + 2;
+
+			if (startOfMethod == -1 || endOfMethod == -1) {
+				System.err.println("WARNING: Unable to locate method in I : " + method.getName());
+				return;
+			}
+
+			fileContent.delete(startOfMethod, endOfMethod);
+
+
+			
+			// insert the new client method
+			int endOfClass = fileContent.lastIndexOf("}");
+			clientMethod = createUnBoxedSignatureStringFromMethod(method) + " " + createExceptions(method);
+			clientMethod += ";\n";
+
+			fileContent.insert(endOfClass - 1, clientMethod);
+			try {
+				FileWriter fw = new FileWriter(new File(this.serviceInterface));
+				fw.write(fileContent.toString());
+				fw.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+
+			// just clean up the modified impl
+			modifyImpl(method);
+			// redo the provider impl method
+			removeProviderImpl(method);
+			addProviderImpl(method);
+			// redo the client method
+			removeClientImpl(method);
+			addClientImpl(method);
+		}
+	}
 
 
 	private String getClientSecurityCode(SecureCommunicationConfiguration scc, boolean isService) {
@@ -652,6 +706,35 @@ public class SyncSource {
 			e1.printStackTrace();
 		}
 	}
+	
+	private void removeClientImpl(MethodType method) {
+		StringBuffer fileContent = null;
+		try {
+			fileContent = CommonTools.fileToStringBuffer(new File(this.serviceClient));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		// remove the method
+		String clientMethod = createUnBoxedSignatureStringFromMethod(method);
+		int startOfMethod = fileContent.indexOf(clientMethod);
+		int endOfMethod = parenMatch(fileContent, startOfMethod + clientMethod.length());
+
+		if (startOfMethod == -1 || endOfMethod == -1) {
+			System.err.println("WARNING: Unable to locate method in clientImpl : " + method.getName());
+			return;
+		}
+
+		fileContent.delete(startOfMethod, endOfMethod);
+
+		try {
+			FileWriter fw = new FileWriter(new File(this.serviceClient));
+			fw.write(fileContent.toString());
+			fw.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
 
 
 	private void removeProviderImpl(JavaMethod method) {
@@ -683,7 +766,71 @@ public class SyncSource {
 		}
 
 	}
+	
+	private void removeProviderImpl(MethodType method) {
+		StringBuffer fileContent = null;
+		try {
+			fileContent = CommonTools.fileToStringBuffer(new File(this.serviceProviderImpl));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
+		// remove the method
+		String clientMethod = createBoxedSignatureStringFromMethod(method);
+		int startOfMethod = fileContent.indexOf(clientMethod);
+		int endOfMethod = parenMatch(fileContent, startOfMethod + clientMethod.length());
+
+		if (startOfMethod == -1 || endOfMethod == -1) {
+			System.err.println("WARNING: Unable to locate method in providerImpl : " + method.getName());
+			return;
+		}
+
+		fileContent.delete(startOfMethod, endOfMethod);
+
+		try {
+			FileWriter fw = new FileWriter(new File(this.serviceProviderImpl));
+			fw.write(fileContent.toString());
+			fw.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+
+	}
+
+	private void modifyImpl(MethodType method) {
+		StringBuffer fileContent = null;
+		try {
+			fileContent = CommonTools.fileToStringBuffer(new File(this.serviceImpl));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		// remove the old method signature
+		String clientMethod = createUnBoxedSignatureStringFromMethod(method);
+		int startOfMethod = fileContent.indexOf(clientMethod);
+		int endOfSignature = endOfSignature(fileContent, startOfMethod + clientMethod.length());
+
+		if (startOfMethod == -1 || endOfSignature == -1) {
+			System.err.println("WARNING: Unable to locate method in Impl : " + method.getName());
+			return;
+		}
+
+		fileContent.delete(startOfMethod, endOfSignature);
+		
+		//add in the new modified signature
+		clientMethod = createUnBoxedSignatureStringFromMethod(method) + " " + createExceptions(method);
+		clientMethod += "{\n";
+		fileContent.insert(startOfMethod, clientMethod);
+
+		try {
+			FileWriter fw = new FileWriter(new File(this.serviceImpl));
+			fw.write(fileContent.toString());
+			fw.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+
+	}
 
 	private void removeImpl(JavaMethod method) {
 		StringBuffer fileContent = null;
@@ -738,4 +885,37 @@ public class SyncSource {
 		}
 		return index;
 	}
+	
+	private int endOfSignature(StringBuffer sb, int startingIndex) {
+		int index = startingIndex;
+		boolean found = false;
+		while (!found) {
+			char ch = sb.charAt(index);
+			if (ch == '{') {
+				found=true;
+			}
+			index++;
+		}
+		return index;
+	}
+	
+	private int nextSemiColon(StringBuffer sb, int startingIndex) {
+		int index = startingIndex;
+		boolean found = false;
+		while (!found) {
+			char ch = sb.charAt(index);
+			if (ch == ';') {
+				found=true;
+			}
+			index++;
+		}
+		return index;
+	}
+	
+//	private int startOfMethodSignature(StringBuffer sb, String methodName) {
+//		boolean found = false;
+//		while(!found){
+//			int startOfMethod = sb.indexOf(methodName+"(");
+//		}
+//	}
 }

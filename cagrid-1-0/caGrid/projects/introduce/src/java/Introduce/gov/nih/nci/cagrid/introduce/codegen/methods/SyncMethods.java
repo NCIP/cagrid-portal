@@ -3,6 +3,9 @@ package gov.nih.nci.cagrid.introduce.codegen.methods;
 import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -11,6 +14,7 @@ import java.util.List;
 import org.apache.ws.jaxme.js.JavaMethod;
 import org.apache.ws.jaxme.js.JavaSource;
 import org.apache.ws.jaxme.js.JavaSourceFactory;
+import org.apache.ws.jaxme.js.Parameter;
 import org.apache.ws.jaxme.js.util.JavaParser;
 
 
@@ -31,6 +35,8 @@ public class SyncMethods {
 	List additions;
 
 	List removals;
+
+	List modifications;
 
 	JavaSource sourceI;
 
@@ -53,11 +59,13 @@ public class SyncMethods {
 
 		this.additions = new ArrayList();
 		this.removals = new ArrayList();
+		this.modifications = new ArrayList();
 	}
+
 
 	public void sync() throws Exception {
 		this.lookForUpdates();
-		
+
 		String cmd = CommonTools.getAntFlattenCommand(baseDirectory.getAbsolutePath());
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
@@ -66,19 +74,14 @@ public class SyncMethods {
 		}
 
 		// sync the methods fiels
-		
+
 		SyncSource methodSync = new SyncSource(baseDirectory, this.info);
 		// remove methods
 		methodSync.removeMethods(this.removals);
 		// add new methods
 		methodSync.addMethods(this.additions);
-
-		// sync the security config
-		// TODO: turning off this until we get a gt4 solution
-		// this will need to be refactored to use the bean...
-		// List methodsFromDoc =
-		// this.methodsDocument.getRootElement().getChildren();
-		// secureSync.sync(methodsFromDoc);
+		// modify method signatures
+		methodSync.modifyMethods(this.modifications);
 	}
 
 
@@ -108,6 +111,70 @@ public class SyncMethods {
 					String methodName = methods[i].getName();
 					if (mel.getName().equals(methodName)) {
 						found = true;
+
+						// SLH don't break until you check for modifications,
+						// check more thoroughly to determine if it is a mod
+						// if it is a mod we will handle that differently
+
+						// first check for a parameter difference....
+						if (mel.getInputs() != null && mel.getInputs().getInput() != null) {
+							// check for same number of params
+							MethodTypeInputsInput[] inputs = mel.getInputs().getInput();
+							if (inputs.length != methods[i].getParams().length) {
+								// params lengths are not the same
+								// add to mods and break
+								System.out.println("Found a method for modification: " + mel.getName());
+								this.modifications.add(mel);
+							}
+							for (int inputI = 0; inputI < inputs.length; inputI++) {
+								MethodTypeInputsInput input = inputs[inputI];
+								Parameter param = methods[i].getParams()[inputI];
+								// now compare the input
+								if (input.getType().equals(param.getType())) {
+									// not the same type or order so need to add
+									if (!this.modifications.contains(mel)) {
+										System.out.println("Found a method for modification: " + mel.getName());
+										this.modifications.add(mel);
+									}
+								}
+
+							}
+						}
+
+						// now check the outputType.....
+						if (mel.getOutput() != null) {
+							// now compare the output to
+							MethodTypeOutput output = mel.getOutput();
+							if (output.getType() != null && methods[i].getType() != null) {
+								if (output.getType().equals(methods[i].getType())) {
+									// they are differnt so add this to mods
+									// list
+									if (!this.modifications.contains(mel)) {
+										System.out.println("Found a method for modification: " + mel.getName());
+										this.modifications.add(mel);
+									}
+								}
+							}
+						}
+
+						// now check the faults
+						if (mel.getExceptions() != null && mel.getExceptions().getException() != null) {
+							MethodTypeExceptionsException[] exceptions = mel.getExceptions().getException();
+							if (exceptions.length != methods[i].getExceptions().length-1) {
+								if (!this.modifications.contains(mel)) {
+									System.out.println("Found a method for modification: " + mel.getName());
+									this.modifications.add(mel);
+								}
+								for (int exceptionI = 0; exceptionI < exceptions.length; exceptionI++) {
+									if (exceptions[exceptionI].getName().equals(
+										methods[i].getExceptions()[exceptionI].getClassName())) {
+										System.out.println("Found a method for modification: " + mel.getName());
+										this.modifications.add(mel);
+									}
+								}
+							}
+						}
+
 						break;
 					}
 				}

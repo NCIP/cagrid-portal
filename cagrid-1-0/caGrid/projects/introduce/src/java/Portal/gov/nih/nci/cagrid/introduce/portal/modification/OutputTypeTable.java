@@ -12,16 +12,17 @@ import javax.swing.table.DefaultTableModel;
 import org.projectmobius.portal.JComponentTable;
 import org.projectmobius.portal.PortalResourceManager;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: OutputTypeTable.java,v 1.10 2006-01-20 21:19:36 hastings Exp $
+ * @version $Id: OutputTypeTable.java,v 1.11 2006-02-02 18:21:16 hastings Exp $
  */
 public class OutputTypeTable extends JComponentTable {
 
 	public static String PACKAGENAME = "Package Name";
-	
+
 	public static String CLASSNAME = "Classname";
 
 	public static String ISARRAY = "Is Array";
@@ -38,12 +39,14 @@ public class OutputTypeTable extends JComponentTable {
 
 	private File schemaDir;
 
+
 	public OutputTypeTable(MethodType method, File schemaDir) {
 		super(createTableModel());
 		this.method = method;
 		this.schemaDir = schemaDir;
 		initialize();
 	}
+
 
 	public boolean isCellEditable(int row, int column) {
 		return true;
@@ -54,12 +57,17 @@ public class OutputTypeTable extends JComponentTable {
 		// }
 	}
 
+
 	private void initialize() {
 		MethodTypeOutput output = method.getOutput();
 		final Vector v = new Vector();
 		v.add(output.getPackageName());
 		v.add(output.getClassName());
-		v.add(output.getIsArray());
+		if (output.getIsArray() != null) {
+			v.add(String.valueOf(output.getIsArray().booleanValue()));
+		} else {
+			v.add("");
+		}
 		v.add(output.getNamespace());
 		v.add(output.getType());
 		v.add(output.getLocation());
@@ -67,16 +75,15 @@ public class OutputTypeTable extends JComponentTable {
 		// gme.setIcon(AnalyticalLookAndFeel.getMobiusIcon());
 		gme.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
-				PortalResourceManager.getInstance().getGridPortal()
-						.addGridPortalComponent(
-								new GMEParameterConfigurationComponent(v,
-										schemaDir, false));
+				PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+					new GMEParameterConfigurationComponent(v, schemaDir, false));
 				editCellAt(0, Integer.MAX_VALUE);
 			}
 		});
 		v.add(gme);
 		((DefaultTableModel) this.getModel()).addRow(v);
 	}
+
 
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
