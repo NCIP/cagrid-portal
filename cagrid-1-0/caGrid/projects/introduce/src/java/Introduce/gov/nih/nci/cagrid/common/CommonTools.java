@@ -84,7 +84,7 @@ public class CommonTools {
 
 	public static String getAntSkeletonResyncCommand(String buildFileDir)
 			throws Exception {
-		return getAntCommand("resync", buildFileDir);
+		return getAntCommand("resync", buildFileDir );
 	}
 
 	public static String getAntSkeletonCreationCommand(String buildFileDir,
@@ -95,7 +95,7 @@ public class CommonTools {
 		if (!dirF.isAbsolute()) {
 			dir = buildFileDir + File.separator + dir;
 		}
-		String cmd = " -Dintroduce.skeleton.destination.dir=" + dir
+		String cmd = " -Dintroduce.skeleton.destination.dir=" + "\"" + dir + "\""
 				+ " -Dintroduce.skeleton.service.name=" + name
 				+ " -Dintroduce.skeleton.package=" + packagename
 				+ " -Dintroduce.skeleton.package.dir="
@@ -115,7 +115,7 @@ public class CommonTools {
 							.getProperty("java.class.path"), true)
 					+ "\" org.apache.tools.ant.launch.Launcher -lib \""
 					+ System.getProperty("java.class.path") + "\" -buildfile "
-					+ buildFileDir + File.separator + "build.xml" + cmd;
+					+ "\"" + buildFileDir + File.separator + "build.xml\"" + cmd;
 			cmd = "java.exe " + cmd;
 		} else if ((os.indexOf("Linux") >= 0) || (os.indexOf("linux") >= 0)) {
 			cmd = "-classpath "
@@ -123,7 +123,7 @@ public class CommonTools {
 							.getProperty("java.class.path"), false)
 					+ " org.apache.tools.ant.launch.Launcher -lib "
 					+ System.getProperty("java.class.path") + " -buildfile "
-					+ buildFileDir + File.separator + "build.xml" + cmd;
+					+ "\"" + buildFileDir + File.separator + "build.xml\"" + cmd;
 			cmd = "java " + cmd;
 		} else {
 			throw new Exception(
