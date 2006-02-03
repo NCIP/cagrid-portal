@@ -13,6 +13,9 @@ import java.util.Map;
 
 public class TemplateUtils {
 
+	public static final String W3CNAMESPACE = "http://www.w3.org/2001/XMLSchema";
+
+
 	/**
 	 * Define a unique name for use as a variable for the metadata at the
 	 * specified index given the scope of the ServiceMetadataListType.
@@ -115,7 +118,8 @@ public class TemplateUtils {
 					prefix = prefixBase + ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
 				}
 				// add the ns=>prefix entry
-				map.put(qnameNamespace, new SchemaInformation(metadata.getPackageName(),qnameNamespace, prefix, location));
+				map.put(qnameNamespace, new SchemaInformation(metadata.getPackageName(), qnameNamespace, prefix,
+					location));
 			}
 		}
 
@@ -128,35 +132,54 @@ public class TemplateUtils {
 							MethodTypeInputsInput inputParam = method.getInputs().getInput(inputI);
 							String qnameName = inputParam.getType();
 							String qnameNamespace = inputParam.getNamespace();
-							String location = inputParam.getLocation();
+							if (!qnameNamespace.equals(TemplateUtils.W3CNAMESPACE)) {
+								String location = inputParam.getLocation();
 
-							String prefixBase = qnameName.toLowerCase().substring(0, Math.min(qnameName.length(), 4));
-							int previousNumber = 0;
-							String prefix = prefixBase + ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
-							while (map.containsValue(prefix)) {
-								previousNumber++;
-								prefix = prefixBase + ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
+								String prefixBase = qnameName.toLowerCase().substring(0,
+									Math.min(qnameName.length(), 4));
+								int previousNumber = 0;
+								String prefix = prefixBase
+									+ ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
+								while (map.containsValue(prefix)) {
+									previousNumber++;
+									prefix = prefixBase + ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
+								}
+								// add the ns=>prefix entry
+								map.put(qnameNamespace, new SchemaInformation(inputParam.getPackageName(),
+									qnameNamespace, prefix, location));
+							} else {
+								inputParam.setPackageName("");
+								map.put(qnameNamespace, new SchemaInformation("",
+									qnameNamespace, "xs", ""));
 							}
-							// add the ns=>prefix entry
-							map.put(qnameNamespace, new SchemaInformation(inputParam.getPackageName(),qnameNamespace, prefix, location));
 						}
 					}
 					if (method.getOutput() != null) {
 						MethodTypeOutput outputParam = method.getOutput();
-						if (outputParam.getClassName() != null && !outputParam.getClassName().equals("void")) {
+						if ((outputParam.getClassName()==null) || (outputParam.getClassName() != null && !outputParam.getClassName().equals("void"))) {
 							String qnameName = outputParam.getType();
 							String qnameNamespace = outputParam.getNamespace();
 							String location = outputParam.getLocation();
 
-							String prefixBase = qnameName.toLowerCase().substring(0, Math.min(qnameName.length(), 4));
-							int previousNumber = 0;
-							String prefix = prefixBase + ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
-							while (map.containsValue(prefix)) {
-								previousNumber++;
-								prefix = prefixBase + ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
+							if (!qnameNamespace.equals(TemplateUtils.W3CNAMESPACE)) {
+
+								String prefixBase = qnameName.toLowerCase().substring(0,
+									Math.min(qnameName.length(), 4));
+								int previousNumber = 0;
+								String prefix = prefixBase
+									+ ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
+								while (map.containsValue(prefix)) {
+									previousNumber++;
+									prefix = prefixBase + ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
+								}
+								// add the ns=>prefix entry
+								map.put(qnameNamespace, new SchemaInformation(outputParam.getPackageName(),
+									qnameNamespace, prefix, location));
+							} else {
+								outputParam.setPackageName("");
+								map.put(qnameNamespace, new SchemaInformation("",
+									qnameNamespace, "xs", ""));
 							}
-							// add the ns=>prefix entry
-							map.put(qnameNamespace, new SchemaInformation(outputParam.getPackageName(),qnameNamespace, prefix, location));
 						}
 					}
 				}

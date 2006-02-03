@@ -104,7 +104,12 @@ public class SyncSource {
 		if (method.getInputs() != null && method.getInputs().getInput() != null) {
 			for (int j = 0; j < method.getInputs().getInput().length; j++) {
 				String packageName = method.getInputs().getInput(j).getPackageName();
-				String classType = packageName + "." + method.getInputs().getInput(j).getClassName();
+				String classType = null;
+				if (packageName.length() > 0) {
+					classType = packageName + "." + method.getInputs().getInput(j).getClassName();
+				} else {
+					classType = method.getInputs().getInput(j).getClassName();
+				}
 				String paramName = method.getInputs().getInput(j).getName();
 				methodString += classType + " " + paramName;
 				if (j < method.getInputs().getInput().length - 1) {
@@ -132,7 +137,12 @@ public class SyncSource {
 		methodString += "     public " + returnType + " " + methodName + "(";
 		Parameter[] inputs = method.getParams();
 		for (int j = 0; j < inputs.length; j++) {
-			String classType = inputs[j].getType().getPackageName() + "." + inputs[j].getType().getClassName();
+			String classType = null;
+			if (packageName.length() > 0) {
+				classType = inputs[j].getType().getPackageName() + "." + inputs[j].getType().getClassName();
+			} else {
+				classType = inputs[j].getType().getClassName();
+			}
 			if (inputs[j].getType().isArray()) {
 				classType += "[]";
 			}
@@ -247,12 +257,12 @@ public class SyncSource {
 			addClientImpl(method);
 		}
 	}
-	
+
+
 	public void modifyMethods(List modifiedMethods) {
 		for (int i = 0; i < modifiedMethods.size(); i++) {
 			// add it to the interface
 			MethodType method = (MethodType) modifiedMethods.get(i);
-			
 
 			StringBuffer fileContent = null;
 			try {
@@ -275,8 +285,6 @@ public class SyncSource {
 
 			fileContent.delete(startOfMethod, endOfMethod);
 
-
-			
 			// insert the new client method
 			int endOfClass = fileContent.lastIndexOf("}");
 			clientMethod = createUnBoxedSignatureStringFromMethod(method) + " " + createExceptions(method);
@@ -317,7 +325,7 @@ public class SyncSource {
 						}
 					}
 				} else if (comm.equals(SecureCommunicationMethodType.GSI_Transport_Level_Security)) {
-						sec.append("Util.registerTransport();\n");
+					sec.append("Util.registerTransport();\n");
 					if (scc.getAuthenticationMethod().equals(AuthenticationMethodType.Integrity)) {
 						sec
 							.append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT, org.globus.wsrf.security.Constants.SIGNATURE);\n");
@@ -706,7 +714,8 @@ public class SyncSource {
 			e1.printStackTrace();
 		}
 	}
-	
+
+
 	private void removeClientImpl(MethodType method) {
 		StringBuffer fileContent = null;
 		try {
@@ -766,7 +775,8 @@ public class SyncSource {
 		}
 
 	}
-	
+
+
 	private void removeProviderImpl(MethodType method) {
 		StringBuffer fileContent = null;
 		try {
@@ -797,6 +807,7 @@ public class SyncSource {
 
 	}
 
+
 	private void modifyImpl(MethodType method) {
 		StringBuffer fileContent = null;
 		try {
@@ -816,8 +827,8 @@ public class SyncSource {
 		}
 
 		fileContent.delete(startOfMethod, endOfSignature);
-		
-		//add in the new modified signature
+
+		// add in the new modified signature
 		clientMethod = createUnBoxedSignatureStringFromMethod(method) + " " + createExceptions(method);
 		clientMethod += "{\n";
 		fileContent.insert(startOfMethod, clientMethod);
@@ -831,6 +842,7 @@ public class SyncSource {
 		}
 
 	}
+
 
 	private void removeImpl(JavaMethod method) {
 		StringBuffer fileContent = null;
@@ -885,37 +897,39 @@ public class SyncSource {
 		}
 		return index;
 	}
-	
+
+
 	private int endOfSignature(StringBuffer sb, int startingIndex) {
 		int index = startingIndex;
 		boolean found = false;
 		while (!found) {
 			char ch = sb.charAt(index);
 			if (ch == '{') {
-				found=true;
+				found = true;
 			}
 			index++;
 		}
 		return index;
 	}
-	
+
+
 	private int nextSemiColon(StringBuffer sb, int startingIndex) {
 		int index = startingIndex;
 		boolean found = false;
 		while (!found) {
 			char ch = sb.charAt(index);
 			if (ch == ';') {
-				found=true;
+				found = true;
 			}
 			index++;
 		}
 		return index;
 	}
-	
-//	private int startOfMethodSignature(StringBuffer sb, String methodName) {
-//		boolean found = false;
-//		while(!found){
-//			int startOfMethod = sb.indexOf(methodName+"(");
-//		}
-//	}
+
+	// private int startOfMethodSignature(StringBuffer sb, String methodName) {
+	// boolean found = false;
+	// while(!found){
+	// int startOfMethod = sb.indexOf(methodName+"(");
+	// }
+	// }
 }

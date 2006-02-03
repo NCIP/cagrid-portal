@@ -41,20 +41,23 @@
 	      		Iterator iterator = prefixmap.keySet().iterator();
 				while(iterator.hasNext()){
 					String namespace = (String)iterator.next();
+					if(!namespace.equals(TemplateUtils.W3CNAMESPACE)){
 					SchemaInformation schemaInformation=(SchemaInformation)prefixmap.get(namespace);%>
 			xmlns:<%=schemaInformation.getPrefix()%>="<%=schemaInformation.getNamespace()%>" 
-			<%  }
+			<%  }}
       		%>
-            xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd">
+            xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd">
 			<import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd"/>
 		<%
 		prefixmap=TemplateUtils.buildMasterNamespaceSchemaInformationMap(info);
   		iterator = prefixmap.keySet().iterator();
 		while(iterator.hasNext()){
 			String namespace = (String)iterator.next();
+			if(!namespace.equals(TemplateUtils.W3CNAMESPACE)){
 			SchemaInformation schemaInformation=(SchemaInformation)prefixmap.get(namespace);%>
 			<import namespace="<%=schemaInformation.getNamespace()%>" schemaLocation="<%=schemaInformation.getLocation()%>"/>
 			   <%
+      	}
       	}%>
       	
       	<%  //walk through each method and create the types for input messages output messages
