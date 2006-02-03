@@ -55,8 +55,13 @@ Need to validate the model before we begin to do code gen
 		-run schema validation?
 		-others?
 	
-Need to support "MODIFIED" methods.
-
+(DONE)Need to support "MODIFIED" methods.
+	-- support for changing of 
+		-- output type
+		-- number and type of parameters
+		-- number and types of faults
+	
+	
 GMEMetadataConfigurationComponent needs to set proper view on viewing an existing one from "modify"
 
 (DONE) add packageName as a seperate parameter so that we can handle the funny mappings that we will use for caDSR->GME schemas.....

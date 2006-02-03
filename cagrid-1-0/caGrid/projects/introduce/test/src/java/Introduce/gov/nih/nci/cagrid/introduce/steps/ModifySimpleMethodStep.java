@@ -15,17 +15,17 @@ import javax.xml.namespace.QName;
 
 import com.atomicobject.haste.framework.Step;
 
-public class AddSimpleMethodStep extends Step {
+public class ModifySimpleMethodStep extends Step {
 	private TestCaseInfo tci;
 	private String methodName;
 
-	public AddSimpleMethodStep(TestCaseInfo tci, String methodName) {
+	public ModifySimpleMethodStep(TestCaseInfo tci, String methodName) {
 		this.tci = tci;
 		this.methodName = methodName;
 	}
 
 	public void runStep() throws Throwable {
-		System.out.println("Adding a simple method.");
+		System.out.println("modifying the simple method.");
 
 		String pathtobasedir = System.getProperty("basedir");
 		System.out.println(pathtobasedir);
@@ -39,40 +39,32 @@ public class AddSimpleMethodStep extends Step {
 						+ tci.getDir() + File.separator + "introduce.xml",
 						ServiceDescription.class);
 		MethodsType methodsType = introService.getMethods();
-
-		MethodType method = new MethodType();
-		method.setName(this.methodName);
-		MethodTypeOutput output = new MethodTypeOutput();
-		output.setClassName("void");
-		method.setOutput(output);
+		MethodType method = methodsType.getMethod(0);
 		
 		//create a new input param
 		MethodTypeInputsInput input = new MethodTypeInputsInput();
 		input.setNamespace("http://www.w3.org/2001/XMLSchema");
-		input.setName("foo");
-		input.setType("string");
+		input.setName("bar");
+		input.setType("int");
 		input.setIsArray(new Boolean(false));
-		MethodTypeInputsInput[] newInputs = new MethodTypeInputsInput[1];
-		newInputs[0] = input;
+		
+		// add new input to array in bean
+		// this seems to be a wierd way be adding things....
+		MethodTypeInputsInput[] newInputs;
+		int newLength = 0;
+		if (method.getInputs()!=null && method.getInputs().getInput()!=null) {
+			newLength = method.getInputs().getInput().length + 1;
+			newInputs = new MethodTypeInputsInput[newLength];
+			System.arraycopy(method.getInputs().getInput(), 0,newInputs, 0,
+					method.getInputs().getInput().length);
+		} else {
+			newLength = 1;
+			newInputs = new MethodTypeInputsInput[newLength];
+		}
+		newInputs[newLength - 1] = input;
 		MethodTypeInputs inputs = new MethodTypeInputs();
 		inputs.setInput(newInputs);
 		method.setInputs(inputs);
-
-		// add new method to array in bean
-		// this seems to be a wierd way be adding things....
-		MethodType[] newMethods;
-		int newLength = 0;
-		if (methodsType.getMethod() != null) {
-			newLength = methodsType.getMethod().length + 1;
-			newMethods = new MethodType[newLength];
-			System.arraycopy(methodsType.getMethod(), 0, newMethods, 0,
-					methodsType.getMethod().length);
-		} else {
-			newLength = 1;
-			newMethods = new MethodType[newLength];
-		}
-		newMethods[newLength - 1] = method;
-		methodsType.setMethod(newMethods);
 
 		CommonTools.serializeDocument(pathtobasedir + File.separator
 				+ tci.getDir() + File.separator + "introduce.xml",
