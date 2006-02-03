@@ -138,7 +138,7 @@ public class SyncSource {
 		Parameter[] inputs = method.getParams();
 		for (int j = 0; j < inputs.length; j++) {
 			String classType = null;
-			if (packageName.length() > 0) {
+			if (inputs[j].getType().getPackageName().length() > 0) {
 				classType = inputs[j].getType().getPackageName() + "." + inputs[j].getType().getClassName();
 			} else {
 				classType = inputs[j].getType().getClassName();
