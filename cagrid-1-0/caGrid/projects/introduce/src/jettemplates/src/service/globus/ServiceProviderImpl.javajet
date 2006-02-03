@@ -28,5 +28,6 @@ public class <%=serviceName%>ProviderImpl{
 	public <%=serviceName%>ProviderImpl() {
 		impl = new <%=serviceName%>Impl();
 	}
+	
 
 }

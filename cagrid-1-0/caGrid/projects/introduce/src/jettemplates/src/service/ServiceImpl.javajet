@@ -26,5 +26,6 @@ public class <%=serviceName%>Impl implements <%=serviceName%>I{
 	
 	}
 
+
 }
 

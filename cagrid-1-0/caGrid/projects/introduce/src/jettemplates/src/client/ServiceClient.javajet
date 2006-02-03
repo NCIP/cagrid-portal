@@ -78,5 +78,6 @@ public class <%=serviceName%>Client implements <%=serviceName%>I {
 			e.printStackTrace();
 		}
 	}
+	
 
 }

@@ -262,7 +262,8 @@ public class SyncSource {
 	public void modifyMethods(List modifiedMethods) {
 		for (int i = 0; i < modifiedMethods.size(); i++) {
 			// add it to the interface
-			MethodType method = (MethodType) modifiedMethods.get(i);
+			Modification mod = (Modification)modifiedMethods.get(i);
+			MethodType method = mod.getMethodType();
 
 			StringBuffer fileContent = null;
 			try {
@@ -272,7 +273,7 @@ public class SyncSource {
 			}
 
 			// remove the old interface method
-			String clientMethod = createUnBoxedSignatureStringFromMethod(method);
+			String clientMethod = createUnBoxedSignatureStringFromMethod(mod.getJavaMethod());
 			System.err.println("Looking to remove method: |" + clientMethod + "|");
 			int startOfMethod = fileContent.indexOf(clientMethod);
 			String restOfFile = fileContent.substring(startOfMethod);
@@ -300,12 +301,12 @@ public class SyncSource {
 			}
 
 			// just clean up the modified impl
-			modifyImpl(method);
+			modifyImpl(mod);
 			// redo the provider impl method
-			removeProviderImpl(method);
+			removeProviderImpl(mod.getJavaMethod());
 			addProviderImpl(method);
 			// redo the client method
-			removeClientImpl(method);
+			removeClientImpl(mod.getJavaMethod());
 			addClientImpl(method);
 		}
 	}
@@ -808,7 +809,10 @@ public class SyncSource {
 	}
 
 
-	private void modifyImpl(MethodType method) {
+	private void modifyImpl(Modification mod) {
+		MethodType method = mod.getMethodType();
+		JavaMethod oldMethod = mod.getJavaMethod();
+		
 		StringBuffer fileContent = null;
 		try {
 			fileContent = CommonTools.fileToStringBuffer(new File(this.serviceImpl));
@@ -817,12 +821,12 @@ public class SyncSource {
 		}
 
 		// remove the old method signature
-		String clientMethod = createUnBoxedSignatureStringFromMethod(method);
+		String clientMethod = createUnBoxedSignatureStringFromMethod(oldMethod);
 		int startOfMethod = fileContent.indexOf(clientMethod);
 		int endOfSignature = endOfSignature(fileContent, startOfMethod + clientMethod.length());
 
 		if (startOfMethod == -1 || endOfSignature == -1) {
-			System.err.println("WARNING: Unable to locate method in Impl : " + method.getName());
+			System.err.println("WARNING: Unable to locate method in Impl : " + oldMethod.getName());
 			return;
 		}
 
@@ -911,25 +915,4 @@ public class SyncSource {
 		}
 		return index;
 	}
-
-
-	private int nextSemiColon(StringBuffer sb, int startingIndex) {
-		int index = startingIndex;
-		boolean found = false;
-		while (!found) {
-			char ch = sb.charAt(index);
-			if (ch == ';') {
-				found = true;
-			}
-			index++;
-		}
-		return index;
-	}
-
-	// private int startOfMethodSignature(StringBuffer sb, String methodName) {
-	// boolean found = false;
-	// while(!found){
-	// int startOfMethod = sb.indexOf(methodName+"(");
-	// }
-	// }
 }

@@ -162,6 +162,8 @@ public class CommonTools {
 		} catch (Exception e) {
 			throw new Exception("Error reading the buffer: " + e.getMessage());
 		}
+		
+		br.close();
 
 		return sb;
 	}

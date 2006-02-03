@@ -124,20 +124,22 @@ public class SyncMethods {
 								// params lengths are not the same
 								// add to mods and break
 								System.out.println("Found a method for modification: " + mel.getName());
-								this.modifications.add(mel);
-							}
-							for (int inputI = 0; inputI < inputs.length; inputI++) {
-								MethodTypeInputsInput input = inputs[inputI];
-								Parameter param = methods[i].getParams()[inputI];
-								// now compare the input
-								if (input.getType().equals(param.getType())) {
-									// not the same type or order so need to add
-									if (!this.modifications.contains(mel)) {
-										System.out.println("Found a method for modification: " + mel.getName());
-										this.modifications.add(mel);
+								this.modifications.add(new Modification(mel, methods[i]));
+							} else {
+								for (int inputI = 0; inputI < inputs.length; inputI++) {
+									MethodTypeInputsInput input = inputs[inputI];
+									Parameter param = methods[i].getParams()[inputI];
+									// now compare the input
+									if (input.getType().equals(param.getType())) {
+										// not the same type or order so need to
+										// add
+										if (!this.modifications.contains(mel)) {
+											System.out.println("Found a method for modification: " + mel.getName());
+											this.modifications.add(new Modification(mel, methods[i]));
+										}
 									}
-								}
 
+								}
 							}
 						}
 
@@ -151,7 +153,7 @@ public class SyncMethods {
 									// list
 									if (!this.modifications.contains(mel)) {
 										System.out.println("Found a method for modification: " + mel.getName());
-										this.modifications.add(mel);
+										this.modifications.add(new Modification(mel, methods[i]));
 									}
 								}
 							}
@@ -160,16 +162,17 @@ public class SyncMethods {
 						// now check the faults
 						if (mel.getExceptions() != null && mel.getExceptions().getException() != null) {
 							MethodTypeExceptionsException[] exceptions = mel.getExceptions().getException();
-							if (exceptions.length != methods[i].getExceptions().length-1) {
+							if (exceptions.length != methods[i].getExceptions().length - 1) {
 								if (!this.modifications.contains(mel)) {
 									System.out.println("Found a method for modification: " + mel.getName());
-									this.modifications.add(mel);
-								}
-								for (int exceptionI = 0; exceptionI < exceptions.length; exceptionI++) {
-									if (exceptions[exceptionI].getName().equals(
-										methods[i].getExceptions()[exceptionI].getClassName())) {
-										System.out.println("Found a method for modification: " + mel.getName());
-										this.modifications.add(mel);
+									this.modifications.add(new Modification(mel, methods[i]));
+								} else {
+									for (int exceptionI = 0; exceptionI < exceptions.length; exceptionI++) {
+										if (exceptions[exceptionI].getName().equals(
+											methods[i].getExceptions()[exceptionI].getClassName())) {
+											System.out.println("Found a method for modification: " + mel.getName());
+											this.modifications.add(new Modification(mel, methods[i]));
+										}
 									}
 								}
 							}
