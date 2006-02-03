@@ -71,7 +71,7 @@ GMEMetadataConfigurationComponent needs to set proper view on viewing an existin
 
 (DONE using sync tools to populate empty classnames) Need to be able to not only use Axis for the classnames but also use the users classnames if they provide there own beans or api.
 
-Need to fix the browse screen so that it can work with paths that have spaces in them.
+(DONE Need to fix the browse screen so that it can work with paths that have spaces in them.
 
 (DONE) Need to make sure that the id's used to created archives are good from date through time.
 
