@@ -119,7 +119,7 @@ public class CommonTools {
 			cmd = "java.exe " + cmd;
 		} else if ((os.indexOf("Linux") >= 0) || (os.indexOf("linux") >= 0)) {
 			//escape out the spaces.....
-			buildFileDir.replaceAll("\\s","\\\\s");
+			buildFileDir = buildFileDir.replaceAll("\\s","\\\\s");
 			cmd = "-classpath "
 					+ CommonTools.getAntLauncherJarLocation(System
 							.getProperty("java.class.path"), false)
