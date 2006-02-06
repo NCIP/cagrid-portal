@@ -14,7 +14,7 @@ Security configuration (STEVE)
 
 (DONE) Metadata and registration configuration
 
-
+need a way to generate XSD and beanmappers for existing object models that want to use default de/serialization
 
 
 ================================================================================
