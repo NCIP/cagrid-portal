@@ -123,7 +123,7 @@ public class CommonTools {
 							.getProperty("java.class.path"), false)
 					+ " org.apache.tools.ant.launch.Launcher -lib "
 					+ System.getProperty("java.class.path") + " -buildfile "
-					+ "\"" + buildFileDir + File.separator + "build.xml\"" + cmd;
+				 + buildFileDir + File.separator + "build.xml" + cmd;
 			cmd = "java " + cmd;
 		} else {
 			throw new Exception(
