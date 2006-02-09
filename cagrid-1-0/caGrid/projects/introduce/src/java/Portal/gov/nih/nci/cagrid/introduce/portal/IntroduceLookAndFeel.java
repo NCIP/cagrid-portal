@@ -45,4 +45,9 @@ public class IntroduceLookAndFeel extends PortalLookAndFeel {
 		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class
 				.getResource("/World20X20.gif"));
 	}
+	
+	public final static ImageIcon getCADSRIcon() {
+		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class
+				.getResource("/caDSR_logo.gif"));
+	}
 }
