@@ -361,6 +361,7 @@ public class GMEConfigurationPanel extends JPanel {
 		if (schemaPanel == null) {
 			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
 			gridBagConstraints13.gridx = 0;
+			gridBagConstraints13.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints13.gridy = 2;
 			elementTypeLabel = new JLabel();
 			elementTypeLabel.setText("Element Type");
