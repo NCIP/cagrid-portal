@@ -8,6 +8,7 @@
 			<xs:element name="TransportLevelSecurity" minOccurs="0" maxOccurs="1" type="TransportLevelSecurity"/>
 			<xs:element name="SecureConversation" minOccurs="0" maxOccurs="1" type="SecureConversation"/>
 			<xs:element name="SecureMessage" minOccurs="0" maxOccurs="1" type="SecureMessage"/>
+			<xs:element name="ClientCommunication" minOccurs="0" maxOccurs="1" type="ClientCommunication"/>
 			<xs:element name="ClientAuthorization" minOccurs="0" maxOccurs="1" type="ClientAuthorization"/>
 			<xs:element name="RunAsMode" minOccurs="1" maxOccurs="1" type="RunAsMode"/>
 			<xs:element name="DelegationMode" minOccurs="1" maxOccurs="1" type="DelegationMode"/>
@@ -102,6 +103,13 @@
 			<xs:enumeration value="Integrity"/>
 			<xs:enumeration value="Privacy"/>
 			<xs:enumeration value="Integrity_Or_Privacy"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ClientCommunication">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Transport_Layer_Security"/>
+			<xs:enumeration value="Secure_Conversation"/>
+			<xs:enumeration value="Secure_Message"/>
 		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>

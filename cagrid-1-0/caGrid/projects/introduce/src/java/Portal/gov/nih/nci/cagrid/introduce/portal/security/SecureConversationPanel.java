@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.portal.security;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.beans.security.CommunicationMethod;
 import gov.nih.nci.cagrid.introduce.beans.security.SecureConversation;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
@@ -44,7 +43,7 @@ public class SecureConversationPanel extends JPanel {
 		}
 	}
 
-	public SecureConversation getSecureConversation() {
+	public SecureConversation getSecureConversation() throws Exception{
 		if (enabled) {
 			SecureConversation tls = new SecureConversation();
 			tls.setCommunicationMethod((CommunicationMethod)communicationMethod.getSelectedItem());
@@ -53,7 +52,7 @@ public class SecureConversationPanel extends JPanel {
 				try{
 					tls.setContextLifetime(Integer.valueOf(s));
 				}catch(Exception e){
-					PortalUtils.showErrorMessage("Context Lifetime must be an integer!!!");
+					throw new Exception("Context Lifetime must be an integer!!!");
 				}
 			}
 			return tls;

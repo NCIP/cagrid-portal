@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.portal.security;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.beans.security.CommunicationMethod;
 import gov.nih.nci.cagrid.introduce.beans.security.SecureMessage;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
@@ -44,7 +43,7 @@ public class SecureMessagePanel extends JPanel {
 		}
 	}
 
-	public SecureMessage getSecureMessage() {
+	public SecureMessage getSecureMessage() throws Exception{
 		if (enabled) {
 			SecureMessage sm = new SecureMessage();
 			sm.setCommunicationMethod((CommunicationMethod)communicationMethod.getSelectedItem());
@@ -53,7 +52,7 @@ public class SecureMessagePanel extends JPanel {
 				try{
 					sm.setReplayAttackInterval(Integer.valueOf(s));
 				}catch(Exception e){
-					PortalUtils.showErrorMessage("Replay Attack Interval must be an integer!!!");
+					throw new Exception("Replay Attack Interval must be an integer!!!");
 				}
 			}
 			return sm;
