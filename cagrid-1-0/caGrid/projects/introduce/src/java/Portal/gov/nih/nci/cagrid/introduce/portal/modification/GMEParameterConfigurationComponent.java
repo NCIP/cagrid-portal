@@ -228,12 +228,11 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
 			doneButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
-					List writtenNamespaces = null;
 					try {
 						XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
 							.getGridService(gmePanel.getGme().getText());
 						if (gmePanel.currentNamespace != null) {
-							writtenNamespaces = handle.cacheSchema(gmePanel.currentNamespace, schemaDir);
+							handle.cacheSchema(gmePanel.currentNamespace, schemaDir);
 						}
 					} catch (MobiusException e1) {
 						// TODO Auto-generated catch block
