@@ -702,7 +702,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 		if (tabbedPanel == null) {
 			tabbedPanel = new JTabbedPane();
 			tabbedPanel.addTab("Input/Output", null, getMethodPanel(), null);
-			tabbedPanel.addTab("Faults", null, getExceptionsPanel(), null);
 			tabbedPanel.addTab("Security", null, getSecurityContainerPanel(), null);
 		}
 		return tabbedPanel;
@@ -716,6 +715,10 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getMethodPanel() {
 		if (methodPanel == null) {
+			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
+			gridBagConstraints13.gridx = 0;
+			gridBagConstraints13.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints13.gridy = 4;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.fill = GridBagConstraints.BOTH;
 			gridBagConstraints1.gridx = 0;
@@ -743,6 +746,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			methodPanel.add(getInputPanel(), gridBagConstraints6);
 			methodPanel.add(getOutputTypePanel(), gridBagConstraints7);
 			methodPanel.add(getNamePanel(), gridBagConstraints1);
+			methodPanel.add(getExceptionsPanel(), gridBagConstraints13);
 		}
 		return methodPanel;
 	}
