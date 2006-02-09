@@ -11,6 +11,7 @@
 			<xs:element name="ClientAuthorization" minOccurs="0" maxOccurs="1" type="ClientAuthorization"/>
 			<xs:element name="RunAsMode" minOccurs="1" maxOccurs="1" type="RunAsMode"/>
 			<xs:element name="DelegationMode" minOccurs="1" maxOccurs="1" type="DelegationMode"/>
+			<xs:element name="AnonymousClients" minOccurs="1" maxOccurs="1" type="AnonymousCommunication"/>
 		</xs:sequence>
 	</xs:complexType>
 	
@@ -40,22 +41,20 @@
 	
 	<xs:complexType name="TransportLevelSecurity">
 		<xs:sequence>
-			<xs:element name="AuthMethod" minOccurs="1" maxOccurs="1" type="AuthenticationMethod"/>
-			<xs:element name="AnonymousClients" minOccurs="1" maxOccurs="1" type="AnonymousCommunication"/>
+			<xs:element name="CommunicationMethod" minOccurs="1" maxOccurs="1" type="CommunicationMethod"/>
 		</xs:sequence>
 	</xs:complexType>
 	
 	<xs:complexType name="SecureConversation">
 		<xs:sequence>
-			<xs:element name="AuthMethod" minOccurs="1" maxOccurs="1" type="AuthenticationMethod"/>
-			<xs:element name="AnonymousClients" minOccurs="1" maxOccurs="1" type="AnonymousCommunication"/>
+			<xs:element name="CommunicationMethod" minOccurs="1" maxOccurs="1" type="CommunicationMethod"/>
 			<xs:element name="ContextLifetime" minOccurs="0" maxOccurs="1" type="xs:int"/>
 		</xs:sequence>
 	</xs:complexType>
 	
 	<xs:complexType name="SecureMessage">
 		<xs:sequence>
-			<xs:element name="AuthMethod" minOccurs="1" maxOccurs="1" type="AuthenticationMethod"/>
+			<xs:element name="CommunicationMethod" minOccurs="1" maxOccurs="1" type="CommunicationMethod"/>
 			<xs:element name="ReplayAttackInterval" minOccurs="0" maxOccurs="1" type="xs:int"/>
 		</xs:sequence>
 	</xs:complexType>
@@ -98,7 +97,7 @@
 		</xs:restriction>
 	</xs:simpleType>
 	
-	<xs:simpleType name="AuthenticationMethod">
+	<xs:simpleType name="CommunicationMethod">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="Integrity"/>
 			<xs:enumeration value="Privacy"/>
