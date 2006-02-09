@@ -239,7 +239,6 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 							handle.cacheSchema(gmePanel.currentNamespace, schemaDir);
 						}
 					} catch (MobiusException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 						JOptionPane.showMessageDialog(me,
 							"Please check the GME URL and make sure that you have the appropriate credentials!");
