@@ -701,7 +701,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JTabbedPane getTabbedPanel() {
 		if (tabbedPanel == null) {
 			tabbedPanel = new JTabbedPane();
-			tabbedPanel.addTab("Input/Output", null, getMethodPanel(), null);
+			tabbedPanel.addTab("Operation Signature", null, getMethodPanel(), null);
 			tabbedPanel.addTab("Security", null, getSecurityContainerPanel(), null);
 		}
 		return tabbedPanel;
