@@ -39,13 +39,12 @@
 					<class>gov.nih.nci.cagrid.introduce.portal.deployment.DeploymentViewer</class>
 					<icon>/World20X20.gif</icon>
 				</component>
-				<component>
-					<title>Security Test</title>
-					<description>Security Test</description>
-					<class>gov.nih.nci.cagrid.introduce.portal.security.SecurityTestViewer</class>
-					<icon>/Plus20X20.gif</icon>
-				</component>
 			</components>
 		</grid-portal-config>
+	</resource>
+	<resource name="IntroducePortalConf" class="gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf">
+		<introduce-portal-config>
+			
+		</introduce-portal-config>
 	</resource>
 </grid-portal>
