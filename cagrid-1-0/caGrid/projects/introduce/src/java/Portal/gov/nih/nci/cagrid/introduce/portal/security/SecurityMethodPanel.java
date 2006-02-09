@@ -2,6 +2,8 @@ package gov.nih.nci.cagrid.introduce.portal.security;
 
 import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurityType;
+import gov.nih.nci.cagrid.introduce.beans.security.SecureConversation;
+import gov.nih.nci.cagrid.introduce.beans.security.SecureMessage;
 import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
@@ -25,7 +27,6 @@ import javax.swing.JRadioButton;
  */
 public class SecurityMethodPanel extends JPanel implements PanelSynchronizer {
 
-	private boolean enabled = false;
 	private JPanel secureCommunicationPanel = null;
 	private JRadioButton defaultButton = null;
 	private ButtonGroup buttonGroup = new ButtonGroup();
@@ -43,6 +44,8 @@ public class SecurityMethodPanel extends JPanel implements PanelSynchronizer {
 	private JLabel jLabel3 = null;
 	private JCheckBox secureMessageButton = null;
 	private JLabel jLabel4 = null;
+	private SecureConversationPanel secureConversationPanel = null;
+	private SecureMessagePanel secureMessagePanel = null;
 	public SecurityMethodPanel() {
 		super();
 		initialize();
@@ -64,6 +67,18 @@ public class SecurityMethodPanel extends JPanel implements PanelSynchronizer {
 		 * javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
 		 * IntroduceLookAndFeel.getPanelLabelColor()));
 		 */
+		GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+		gridBagConstraints6.gridx = 0;
+		gridBagConstraints6.weightx = 1.0D;
+		gridBagConstraints6.fill = java.awt.GridBagConstraints.HORIZONTAL;
+		gridBagConstraints6.insets = new java.awt.Insets(2,2,2,2);
+		gridBagConstraints6.gridy = 4;
+		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+		gridBagConstraints11.gridx = 0;
+		gridBagConstraints11.insets = new java.awt.Insets(2,2,2,2);
+		gridBagConstraints11.weightx = 1.0D;
+		gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
+		gridBagConstraints11.gridy = 3;
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -71,9 +86,11 @@ public class SecurityMethodPanel extends JPanel implements PanelSynchronizer {
 		gridBagConstraints.weightx = 1.0D;
 		gridBagConstraints.gridy = 1;
 		this.setLayout(new GridBagLayout());
-		this.setSize(500, 200);
+		this.setSize(500, 400);
 		this.add(getSecureCommunicationPanel(), new GridBagConstraints());
 		this.add(getTlsPanel(), gridBagConstraints);
+		this.add(getSecureConversationPanel(), gridBagConstraints11);
+		this.add(getSecureMessagePanel(), gridBagConstraints6);
 		synchronize();
 	}
 
@@ -176,6 +193,12 @@ public class SecurityMethodPanel extends JPanel implements PanelSynchronizer {
 			if(tlsButton.isSelected()){
 				ms.setTransportLevelSecurity(this.tlsPanel.getTransportLevelSecurity());
 			}
+			if(secureConversationButton.isSelected()){
+				ms.setSecureConversation(this.secureConversationPanel.getSecureConversation());
+			}
+			if(secureMessageButton.isSelected()){
+				ms.setSecureMessage(this.secureMessagePanel.getSecureMessage());
+			}
 		}
 		return ms;
 	}
@@ -193,6 +216,16 @@ public class SecurityMethodPanel extends JPanel implements PanelSynchronizer {
 				tlsButton.setEnabled(true);
 				this.tlsPanel.setTransportLevelSecurity(tls);
 			}
+			SecureConversation sc = ms.getSecureConversation();
+			if(sc!=null){
+				secureConversationButton.setEnabled(true);
+				this.secureConversationPanel.setSecureConversation(sc);
+			}
+			SecureMessage sm = ms.getSecureMessage();
+			if(sm!=null){
+				secureMessageButton.setSelected(true);
+				this.secureMessagePanel.setSecureConversation(sm);
+			}
 		}
 
 	}
@@ -207,6 +240,12 @@ public class SecurityMethodPanel extends JPanel implements PanelSynchronizer {
 			if (tlsButton.isSelected()) {
 				tlsPanel.enablePanel();
 			}
+			if(secureConversationButton.isSelected()){
+				secureConversationPanel.enablePanel();
+			}
+			if(secureMessageButton.isSelected()){
+				secureMessagePanel.enablePanel();
+			}
 
 		} 
 	}
@@ -217,6 +256,8 @@ public class SecurityMethodPanel extends JPanel implements PanelSynchronizer {
 		tlsButton.setEnabled(false);
 		secureConversationButton.setEnabled(false);
 		secureMessageButton.setEnabled(false);
+		secureConversationPanel.disablePanel();
+		secureMessagePanel.disablePanel();
 	}
 
 
@@ -344,6 +385,32 @@ public class SecurityMethodPanel extends JPanel implements PanelSynchronizer {
 			});
 		}
 		return secureMessageButton;
+	}
+
+
+	/**
+	 * This method initializes secureConversationPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */    
+	private JPanel getSecureConversationPanel() {
+		if (secureConversationPanel == null) {
+			secureConversationPanel = new SecureConversationPanel();
+		}
+		return secureConversationPanel;
+	}
+
+
+	/**
+	 * This method initializes secureMessagePanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */    
+	private JPanel getSecureMessagePanel() {
+		if (secureMessagePanel == null) {
+			secureMessagePanel = new SecureMessagePanel();
+		}
+		return secureMessagePanel;
 	}
 
 }

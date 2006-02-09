@@ -1,0 +1,150 @@
+package gov.nih.nci.cagrid.introduce.portal.security;
+
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.introduce.beans.security.CommunicationMethod;
+import gov.nih.nci.cagrid.introduce.beans.security.SecureConversation;
+import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
+
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+
+/**
+ * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
+ * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
+ * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
+ * @created Jun 22, 2005
+ * @version $Id: mobiusEclipseCodeTemplates.xml,v 1.2 2005/04/19 14:58:02 oster
+ *          Exp $
+ */
+public class SecureConversationPanel extends JPanel {
+
+	private boolean enabled = false;
+	private JLabel authMethodLabel = null;
+	private JComboBox communicationMethod = null;
+	private JLabel jLabel = null;
+	private JTextField contextLifetime = null;
+
+
+	public SecureConversationPanel() {
+		super();
+		initialize();
+	}
+
+	public void setSecureConversation(SecureConversation sc){
+		communicationMethod.setSelectedItem(sc.getCommunicationMethod());
+		Integer num = sc.getContextLifetime();
+		if(num!=null){
+			this.contextLifetime.setText(num.toString());
+		}
+	}
+
+	public SecureConversation getSecureConversation() {
+		if (enabled) {
+			SecureConversation tls = new SecureConversation();
+			tls.setCommunicationMethod((CommunicationMethod)communicationMethod.getSelectedItem());
+			String s = contextLifetime.getText().trim();
+			if(s.length()>0){
+				try{
+					tls.setContextLifetime(Integer.valueOf(s));
+				}catch(Exception e){
+					PortalUtils.showErrorMessage("Context Lifetime must be an integer!!!");
+				}
+			}
+			return tls;
+		} else {
+			return null;
+		}
+	}
+
+
+	public void disablePanel() {
+		enabled = false;
+		communicationMethod.setEnabled(false);
+		contextLifetime.setEnabled(false);
+	}
+
+
+	public void enablePanel() {
+		enabled = true;
+		communicationMethod.setEnabled(true);
+		contextLifetime.setEnabled(true);
+	}
+
+
+	private void initialize() {
+		GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+		gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
+		gridBagConstraints5.gridy = 1;
+		gridBagConstraints5.weightx = 1.0;
+		gridBagConstraints5.anchor = java.awt.GridBagConstraints.WEST;
+		gridBagConstraints5.insets = new java.awt.Insets(2,2,2,2);
+		gridBagConstraints5.gridx = 1;
+		GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+		gridBagConstraints4.gridx = 0;
+		gridBagConstraints4.anchor = java.awt.GridBagConstraints.WEST;
+		gridBagConstraints4.insets = new java.awt.Insets(2,2,2,2);
+		gridBagConstraints4.gridy = 1;
+		jLabel = new JLabel();
+		jLabel.setText("Context Lifetime (Seconds)");
+		setBorder(javax.swing.BorderFactory.createTitledBorder(
+			null, "Secure Conversation",
+			javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+			javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+			IntroduceLookAndFeel.getPanelLabelColor()));
+		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+		gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
+		gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
+		gridBagConstraints1.gridx = 1;
+		gridBagConstraints1.gridy = 0;
+		gridBagConstraints1.insets = new java.awt.Insets(2,2,2,2);
+		gridBagConstraints1.weightx = 1.0;
+		GridBagConstraints gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.insets = new java.awt.Insets(2,2,2,2);
+		gridBagConstraints.gridy = 0;
+		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+		gridBagConstraints.gridx = 0;
+		authMethodLabel = new JLabel();
+		authMethodLabel.setText("Communication Method");
+		this.setLayout(new GridBagLayout());
+		this.setSize(300, 200);
+		this.add(authMethodLabel, gridBagConstraints);
+		this.add(getCommunicationMethod(), gridBagConstraints1);
+		this.add(jLabel, gridBagConstraints4);
+		this.add(getContextLifetime(), gridBagConstraints5);
+	}
+
+
+	/**
+	 * This method initializes communicationMethod	
+	 * 	
+	 * @return javax.swing.JComboBox	
+	 */    
+	private JComboBox getCommunicationMethod() {
+		if (communicationMethod == null) {
+			communicationMethod = new JComboBox();
+			communicationMethod.addItem(CommunicationMethod.Integrity);
+			communicationMethod.addItem(CommunicationMethod.Privacy);
+			communicationMethod.addItem(CommunicationMethod.Integrity_Or_Privacy);
+		}
+		return communicationMethod;
+	}
+
+	/**
+	 * This method initializes contextLifetime	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */    
+	private JTextField getContextLifetime() {
+		if (contextLifetime == null) {
+			contextLifetime = new JTextField();
+		}
+		return contextLifetime;
+	}
+
+}
