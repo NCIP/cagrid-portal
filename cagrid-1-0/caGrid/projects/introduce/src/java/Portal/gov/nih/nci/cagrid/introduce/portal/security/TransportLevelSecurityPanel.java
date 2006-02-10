@@ -60,7 +60,7 @@ public class TransportLevelSecurityPanel extends JPanel {
 
 	private void initialize() {
 		setBorder(javax.swing.BorderFactory.createTitledBorder(
-			null, "Transport Level Security (TLS)",
+			null, "Transport Layer Security (TLS)",
 			javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 			javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
 			IntroduceLookAndFeel.getPanelLabelColor()));

@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.security;
 
+import gov.nih.nci.cagrid.introduce.beans.security.SecureConversation;
+import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
 import javax.swing.JPanel;
@@ -20,7 +22,6 @@ import org.projectmobius.portal.GridPortalComponent;
 public class SecurityTestViewer extends GridPortalComponent {
 
 	private JPanel jPanel = null;
-
 
 	/**
 	 * This method initializes
@@ -52,7 +53,9 @@ public class SecurityTestViewer extends GridPortalComponent {
 	 */    
 	private JPanel getJPanel() {
 		if (jPanel == null) {
-			jPanel = new SecurityMethodPanel();
+			ServiceSecurity sec = new ServiceSecurity();
+			sec.setSecureConversation(new SecureConversation());
+			jPanel = new SecurityMethodPanel(sec);
 		}
 		return jPanel;
 	}
