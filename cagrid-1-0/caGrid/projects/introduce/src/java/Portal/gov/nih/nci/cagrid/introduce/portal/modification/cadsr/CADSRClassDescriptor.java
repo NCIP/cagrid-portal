@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.portal.modification;
+package gov.nih.nci.cagrid.introduce.portal.modification.cadsr;
 
 public class CADSRClassDescriptor {
 	

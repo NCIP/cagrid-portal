@@ -15,6 +15,8 @@ import gov.nih.nci.cagrid.introduce.beans.method.SecureCommunicationConfiguratio
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
+import gov.nih.nci.cagrid.introduce.portal.modification.cadsr.CADSRMetadataConfigurationComponent;
+import gov.nih.nci.cagrid.introduce.portal.modification.gme.GMEMetadataConfigurationComponent;
 
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -45,7 +47,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.50 2006-02-10 10:14:28 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.51 2006-02-10 10:21:04 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 

@@ -9,6 +9,8 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
+import gov.nih.nci.cagrid.introduce.portal.modification.cadsr.CADSRParameterConfigurationComponent;
+import gov.nih.nci.cagrid.introduce.portal.modification.gme.GMEParameterConfigurationComponent;
 
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;

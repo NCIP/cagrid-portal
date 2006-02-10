@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.portal.modification;
+package gov.nih.nci.cagrid.introduce.portal.modification.gme;
 
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
@@ -29,7 +29,7 @@ import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
 import org.projectmobius.portal.PortalResourceManager;
 import org.projectmobius.protocol.gme.SchemaNode;
 
-public class CADSRConfigurationPanel extends JPanel {
+public class GMEConfigurationPanel extends JPanel {
 
 	private JPanel mainPanel = null;
 
@@ -55,7 +55,7 @@ public class CADSRConfigurationPanel extends JPanel {
 
 	private JLabel namespaceLabel = null;
 
-	private JTextField cadsr = null;
+	private JTextField gme = null;
 
 	JLabel gmeAddressLabel = null;
 
@@ -69,8 +69,6 @@ public class CADSRConfigurationPanel extends JPanel {
 	
 	public String filterType = null;
 	
-	private CADSRClassDescriptor cadsrClass = null;
-	
 	
 
 
@@ -78,7 +76,7 @@ public class CADSRConfigurationPanel extends JPanel {
 	 * This method initializes 
 	 * 
 	 */
-	public CADSRConfigurationPanel(String filterType) {
+	public GMEConfigurationPanel(String filterType) {
 		super();
 		this.filterType = filterType;
 		initialize();
@@ -93,17 +91,13 @@ public class CADSRConfigurationPanel extends JPanel {
         this.add(getMainPanel(), null);
 			
 	}
-	
-	public CADSRClassDescriptor getCADSRClassDescriptor(){
-		return this.cadsrClass;
-	}
 
 	/**
 	 * This method initializes jPanel
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getMainPanel() {
+	public JPanel getMainPanel() {
 		if (mainPanel == null) {
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
@@ -131,7 +125,7 @@ public class CADSRConfigurationPanel extends JPanel {
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getQueryPanel() {
+	public JPanel getQueryPanel() {
 		if (queryPanel == null) {
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 			gridBagConstraints6.anchor = java.awt.GridBagConstraints.WEST;
@@ -144,7 +138,7 @@ public class CADSRConfigurationPanel extends JPanel {
 			gridBagConstraints5.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints5.weightx = 1.0;
 			gmeAddressLabel = new JLabel();
-			gmeAddressLabel.setText("CADSR");
+			gmeAddressLabel.setText("GME");
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			gridBagConstraints4.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints4.gridy = 1;
@@ -154,25 +148,25 @@ public class CADSRConfigurationPanel extends JPanel {
 			queryPanel = new JPanel();
 			queryPanel.setLayout(new GridBagLayout());
 			queryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, "Discover Classes",
+					null, "Discover Schemas",
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
 					IntroduceLookAndFeel.getPanelLabelColor()));
 			queryPanel.add(getQueryButton(), gridBagConstraints4);
 			queryPanel.add(gmeAddressLabel, gridBagConstraints6);
-			queryPanel.add(getCADSR(), gridBagConstraints5);
+			queryPanel.add(getGme(), gridBagConstraints5);
 		}
 		return queryPanel;
 	}
 
 
-	public void discoverFromCADSR() {
+	public void discoverFromGME() {
 		GridServiceResolver.getInstance().setDefaultFactory(
 				new GlobusGMEXMLDataModelServiceFactory());
 		List namespaces = null;
 		try {
 			XMLDataModelService handle = (XMLDataModelService) GridServiceResolver
-					.getInstance().getGridService(cadsr.getText());
+					.getInstance().getGridService(gme.getText());
 			namespaces = handle.getNamespaceDomainList();
 
 			getNamespaceComboBox().removeAllItems();
@@ -194,21 +188,22 @@ public class CADSRConfigurationPanel extends JPanel {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getQueryButton() {
+	public JButton getQueryButton() {
 		if (queryButton == null) {
-			queryButton = new JButton("Refresh from CADSR", IntroduceLookAndFeel.getCADSRIcon());
+			queryButton = new JButton("Refresh from GME", IntroduceLookAndFeel
+					.getMobiusIcon());
 			queryButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					discoverFromCADSR();
+					discoverFromGME();
 				}
 			});
 		}
 		return queryButton;
 	}
 
-	private void initializeTypes(SchemaNode node) {
+	public void initializeTypes(SchemaNode node) {
 		try {
-			if(this.filterType.equals(CADSRConfigurationPanel.ELEMENT_ONLY)){
+			if(this.filterType.equals(GMEConfigurationPanel.ELEMENT_ONLY)){
 				Document doc = XMLUtilities.stringToDocument(node
 						.getSchemaContents());
 				List elementTypes = doc.getRootElement().getChildren("element",
@@ -220,7 +215,7 @@ public class CADSRConfigurationPanel extends JPanel {
 					String name = element.getAttributeValue("name");
 					typesBox.addItem(name);
 				}
-			} else if(this.filterType.equals(CADSRConfigurationPanel.TYPES_ONLY)){
+			} else if(this.filterType.equals(GMEConfigurationPanel.TYPES_ONLY)){
 				Document doc = XMLUtilities.stringToDocument(node
 						.getSchemaContents());
 				List complexTypes = doc.getRootElement().getChildren("complexType",
@@ -250,7 +245,7 @@ public class CADSRConfigurationPanel extends JPanel {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private JComboBox getTypesComboBox() {
+	public JComboBox getTypesComboBox() {
 		if (typesComboBox == null) {
 			typesComboBox = new JComboBox();
 			typesComboBox.addItemListener(new java.awt.event.ItemListener() {
@@ -281,7 +276,7 @@ public class CADSRConfigurationPanel extends JPanel {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private JComboBox getNamespaceComboBox() {
+	public JComboBox getNamespaceComboBox() {
 		if (namespaceComboBox == null) {
 			namespaceComboBox = new JComboBox();
 			namespaceComboBox
@@ -295,7 +290,7 @@ public class CADSRConfigurationPanel extends JPanel {
 
 								XMLDataModelService handle = (XMLDataModelService) GridServiceResolver
 										.getInstance().getGridService(
-												cadsr.getText());
+												gme.getText());
 								List schemas = handle
 										.getSchemaListForNamespaceDomain((String) namespaceComboBox
 												.getSelectedItem());
@@ -314,7 +309,7 @@ public class CADSRConfigurationPanel extends JPanel {
 								JOptionPane
 										.showMessageDialog(
 												me,
-												"Please check the CADSR URL and make sure that you have the appropriate credentials!");
+												"Please check the GME URL and make sure that you have the appropriate credentials!");
 							}
 						}
 					});
@@ -327,7 +322,7 @@ public class CADSRConfigurationPanel extends JPanel {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private JComboBox getSchemaComboBox() {
+	public JComboBox getSchemaComboBox() {
 		if (schemaComboBox == null) {
 			schemaComboBox = new JComboBox();
 			schemaComboBox.addItemListener(new java.awt.event.ItemListener() {
@@ -336,7 +331,7 @@ public class CADSRConfigurationPanel extends JPanel {
 							new GlobusGMEXMLDataModelServiceFactory());
 					try {
 						XMLDataModelService handle = (XMLDataModelService) GridServiceResolver
-								.getInstance().getGridService(cadsr.getText());
+								.getInstance().getGridService(gme.getText());
 						if (schemaComboBox.getSelectedItem() != null) {
 							SchemaNode node = handle.getSchema(new Namespace(
 									(String) namespaceComboBox
@@ -364,7 +359,7 @@ public class CADSRConfigurationPanel extends JPanel {
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getSchemaPanel() {
+	public JPanel getSchemaPanel() {
 		if (schemaPanel == null) {
 			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
 			gridBagConstraints13.gridx = 0;
@@ -372,7 +367,7 @@ public class CADSRConfigurationPanel extends JPanel {
 			gridBagConstraints13.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints13.gridy = 2;
 			elementTypeLabel = new JLabel();
-			elementTypeLabel.setText("Schema Item");
+			elementTypeLabel.setText("Element Type");
 			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
 			gridBagConstraints12.anchor = GridBagConstraints.WEST;
 			gridBagConstraints12.insets = new Insets(2, 2, 2, 2);
@@ -382,7 +377,7 @@ public class CADSRConfigurationPanel extends JPanel {
 			gridBagConstraints12.weighty = 1.0D;
 			gridBagConstraints12.fill = GridBagConstraints.HORIZONTAL;
 			nameLabel = new JLabel();
-			nameLabel.setText("Classification Scheme");
+			nameLabel.setText("Name");
 
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
 			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
@@ -395,7 +390,7 @@ public class CADSRConfigurationPanel extends JPanel {
 			gridBagConstraints9.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints9.gridx = 0;
 			namespaceLabel = new JLabel();
-			namespaceLabel.setText("Context");
+			namespaceLabel.setText("Namespace");
 			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 			gridBagConstraints8.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints8.gridy = 1;
@@ -415,7 +410,7 @@ public class CADSRConfigurationPanel extends JPanel {
 			schemaPanel = new JPanel();
 			schemaPanel.setLayout(new GridBagLayout());
 			schemaPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, "Select Class",
+					null, "Select Schema",
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
 					IntroduceLookAndFeel.getPanelLabelColor()));
@@ -435,15 +430,15 @@ public class CADSRConfigurationPanel extends JPanel {
 	 * 
 	 * @return javax.swing.JTextField
 	 */
-	private JTextField getCADSR() {
-		if (cadsr == null) {
-			cadsr = new JTextField();
+	public JTextField getGme() {
+		if (gme == null) {
+			gme = new JTextField();
 			IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager
 			.getInstance().getResource(IntroducePortalConf.RESOURCE);
-			cadsr
-					.setText(conf.getCADSR());
+			gme
+					.setText(conf.getGME());
 		}
-		return cadsr;
+		return gme;
 	}
 
 

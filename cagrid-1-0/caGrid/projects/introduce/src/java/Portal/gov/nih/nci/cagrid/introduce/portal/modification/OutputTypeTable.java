@@ -3,6 +3,8 @@ package gov.nih.nci.cagrid.introduce.portal.modification;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
+import gov.nih.nci.cagrid.introduce.portal.modification.cadsr.CADSRParameterConfigurationComponent;
+import gov.nih.nci.cagrid.introduce.portal.modification.gme.GMEParameterConfigurationComponent;
 
 import java.io.File;
 import java.util.Vector;
@@ -18,7 +20,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: OutputTypeTable.java,v 1.12 2006-02-10 10:14:28 hastings Exp $
+ * @version $Id: OutputTypeTable.java,v 1.13 2006-02-10 10:21:04 hastings Exp $
  */
 public class OutputTypeTable extends JComponentTable {
 
