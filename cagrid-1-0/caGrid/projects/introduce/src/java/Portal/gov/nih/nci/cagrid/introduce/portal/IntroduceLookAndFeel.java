@@ -1,9 +1,13 @@
 package gov.nih.nci.cagrid.introduce.portal;
 
 
+import java.awt.Color;
+import java.awt.Font;
+
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 
 import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 
 /**
  * *
@@ -50,4 +54,5 @@ public class IntroduceLookAndFeel extends PortalLookAndFeel {
 		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class
 				.getResource("/caDSR_logo.gif"));
 	}
+
 }

@@ -2,6 +2,7 @@
 	<resource name="GridPortalConfig" class="org.projectmobius.portal.GridPortalConfig">
 		<grid-portal-config>
 			<application>
+				<look-and-feel>com.jgoodies.looks.plastic.Plastic3DPLookAndFeel</look-and-feel>
 				<name>caGrid Introduce Portal</name>
 				<icon>/caBIGWorld.jpg</icon>
 				<logo-bar-image>/caBIGLogo.jpg</logo-bar-image>
