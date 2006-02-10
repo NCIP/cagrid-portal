@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -73,7 +74,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JButton removeButton = null;
 
-	private JButton gmeButton = null;
+	private JButton discoveryButton = null;
 
 	private JLabel methodLabel = null;
 
@@ -503,18 +504,26 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getGmeButton() {
-		if (gmeButton == null) {
-			gmeButton = new JButton();
-			gmeButton.setText("Edit With GME");
-			gmeButton.setIcon(IntroduceLookAndFeel.getMobiusIcon());
-			gmeButton.addActionListener(new java.awt.event.ActionListener() {
+	private JButton getDiscoveryButton() {
+		if (discoveryButton == null) {
+			discoveryButton = new JButton();
+			IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
+				IntroducePortalConf.RESOURCE);
+			if (conf.getDiscoveryType().equals(IntroducePortalConf.GME_DISCOVERY)) {
+				discoveryButton.setText("Edit With GME");
+				discoveryButton.setIcon(IntroduceLookAndFeel.getMobiusIcon());
+			} else if (conf.getDiscoveryType().equals(IntroducePortalConf.CADSR_DISCOVERY)) {
+				discoveryButton.setText("Edit With caDSR");
+				discoveryButton.setIcon(IntroduceLookAndFeel.getCADSRIcon());
+			}
+
+			discoveryButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					performModify(e);
 				}
 			});
 		}
-		return gmeButton;
+		return discoveryButton;
 	}
 
 
@@ -526,8 +535,16 @@ public class MethodViewer extends GridPortalBaseFrame {
 			return;
 		}
 		Vector v = (Vector) getInputParamTable().getValueAt(getInputParamTable().getSelectedRow(), 8);
-		PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-			new GMEParameterConfigurationComponent(v, schemaDir, true));
+		IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
+			IntroducePortalConf.RESOURCE);
+		if (conf.getDiscoveryType().equals(IntroducePortalConf.GME_DISCOVERY)) {
+			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+				new GMEParameterConfigurationComponent(v, schemaDir, true));
+		} else if (conf.getDiscoveryType().equals(IntroducePortalConf.CADSR_DISCOVERY)) {
+			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+				new CADSRParameterConfigurationComponent(v, schemaDir, true));
+		}
+
 	}
 
 
@@ -541,7 +558,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			inputButtonPanel = new JPanel();
 			inputButtonPanel.add(getAddInputParamButton(), null);
 			inputButtonPanel.add(getRemoveButton(), null);
-			inputButtonPanel.add(getGmeButton(), null);
+			inputButtonPanel.add(getDiscoveryButton(), null);
 		}
 		return inputButtonPanel;
 	}
@@ -786,7 +803,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JPanel getSecurityContainerPanel() {
 		if (securityContainerPanel == null) {
 			securityContainerPanel = new SecurityConfigurationPanel(this.method.getMethodSecurity());
-			securityContainerPanel.setBorder(BorderFactory.createTitledBorder(null, "Method Level Security Configuration", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+			securityContainerPanel.setBorder(BorderFactory.createTitledBorder(null,
+				"Method Level Security Configuration", TitledBorder.DEFAULT_JUSTIFICATION,
+				TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
 		}
 		return securityContainerPanel;
 	}

@@ -14,6 +14,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.method.SecureCommunicationConfiguration;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -44,7 +45,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.49 2006-01-31 02:01:58 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.50 2006-02-10 10:14:28 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -134,7 +135,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				if(methodsDirectory==null){
+				if (methodsDirectory == null) {
 					ModificationViewer.this.dispose();
 				}
 				File file = new File(methodsDirectory.getAbsolutePath() + File.separator + "introduce.xml");
@@ -630,9 +631,17 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		}
 
 		Vector v = (Vector) getMetadataTable().getValueAt(getMetadataTable().getSelectedRow(), 8);
-		PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-			new GMEMetadataConfigurationComponent(v, new File(methodsDirectory.getAbsolutePath() + File.separator
-				+ "schema" + File.separator + serviceProperties.getProperty("introduce.skeleton.service.name"))));
+		IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
+			IntroducePortalConf.RESOURCE);
+		if (conf.getDiscoveryType().equals(IntroducePortalConf.GME_DISCOVERY)) {
+			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+				new GMEMetadataConfigurationComponent(v, new File(methodsDirectory.getAbsolutePath() + File.separator
+					+ "schema" + File.separator + serviceProperties.getProperty("introduce.skeleton.service.name"))));
+		} else if (conf.getDiscoveryType().equals(IntroducePortalConf.CADSR_DISCOVERY)) {
+			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+				new CADSRMetadataConfigurationComponent(v, new File(methodsDirectory.getAbsolutePath() + File.separator
+					+ "schema" + File.separator + serviceProperties.getProperty("introduce.skeleton.service.name"))));
+		}
 	}
 
 

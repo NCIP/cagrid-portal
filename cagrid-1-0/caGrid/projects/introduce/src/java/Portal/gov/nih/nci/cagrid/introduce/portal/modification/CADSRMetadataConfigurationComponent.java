@@ -6,6 +6,8 @@ import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
+import java.util.List;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -16,10 +18,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.projectmobius.common.GridServiceFactory;
 import org.projectmobius.common.GridServiceResolver;
 import org.projectmobius.common.MobiusException;
-import org.projectmobius.common.Namespace;
 import org.projectmobius.gme.XMLDataModelService;
 import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
 import org.projectmobius.portal.GridPortalComponent;
@@ -27,7 +27,7 @@ import org.projectmobius.portal.PortalResourceManager;
 
 
 /**
- * GMETypeExtractionPanel TODO:DOCUMENT ME
+ * CADSRMetadataConfigurationComponent
  * 
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -36,41 +36,33 @@ import org.projectmobius.portal.PortalResourceManager;
  * @version $Id: mobiusEclipseCodeTemplates.xml,v 1.2 2005/04/19 14:58:02 oster
  *          Exp $
  */
-public class CADSRParameterConfigurationComponent extends GridPortalComponent {
-	boolean handleParameterName = true;
-
-	JLabel paramNameLabel = null;
-
-	JTextField paramName = null;
-
-	JCheckBox isArrayCheckBox = null;
-
-	JPanel customPanel = null;
-
+public class CADSRMetadataConfigurationComponent extends GridPortalComponent {
+	private JPanel customPanel = null;
 	protected Vector typeInfo;
-
-	private JLabel arrayLabel = null;
-
 	private JPanel mainPanel = null;
-
 	private File schemaDir = null;
-
 	private CADSRConfigurationPanel cadsrPanel = null;
-
 	private JPanel buttonPanel = null;
-
 	private JButton doneButton = null;
+	private JComponent me;
+	private JLabel isRegisterLabel = null;
+	private JLabel isPopulateFromFileLabel = null;
+	private JLabel qnameLabel = null;
+	private JCheckBox isPopulateFromFile = null;
+	private JCheckBox isRegister = null;
+	private JTextField qnameDomain = null;
+	private JTextField qnameName = null;
+	private JLabel qnameDomainLabel = null;
+	private JLabel qnameNameLabel = null;
 
-	JComponent me;
 
-
-	public CADSRParameterConfigurationComponent(Vector typeInfo, File schemaDir, boolean handleParameterName) {
+	public CADSRMetadataConfigurationComponent(Vector typeInfo, File schemaDir) {
 		this.typeInfo = typeInfo;
 		this.schemaDir = schemaDir;
-		this.handleParameterName = handleParameterName;
 		me = this;
 		initialize();
 		this.cadsrPanel.discoverFromCADSR();
+
 	}
 
 
@@ -79,74 +71,78 @@ public class CADSRParameterConfigurationComponent extends GridPortalComponent {
 	 */
 	private void initialize() {
 		this.setSize(new java.awt.Dimension(372, 404));
-		this.setTitle("Parameter Configuration");
+		this.setTitle("Metadata Configuration");
 		this.setContentPane(getMainPanel());
-	}
-
-
-	/**
-	 * This method initializes paramName
-	 * 
-	 * @return javax.swing.JTextField
-	 */
-	JTextField getParamName() {
-		if (paramName == null) {
-			paramName = new JTextField();
-		}
-		return paramName;
-	}
-
-
-	/**
-	 * This method initializes isArrayCheckBox
-	 * 
-	 * @return javax.swing.JCheckBox
-	 */
-	JCheckBox getIsArrayCheckBox() {
-		if (isArrayCheckBox == null) {
-			isArrayCheckBox = new JCheckBox();
-			isArrayCheckBox.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-				}
-			});
-		}
-		return isArrayCheckBox;
 	}
 
 
 	public JPanel getCustomPanel() {
 		if (customPanel == null) {
+			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
+			gridBagConstraints31.gridx = 1;
+			gridBagConstraints31.anchor = java.awt.GridBagConstraints.EAST;
+			gridBagConstraints31.gridy = 3;
+			qnameNameLabel = new JLabel();
+			qnameNameLabel.setText("name");
+			qnameNameLabel.setEnabled(false);
+			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+			gridBagConstraints21.gridx = 1;
+			gridBagConstraints21.anchor = java.awt.GridBagConstraints.EAST;
+			gridBagConstraints21.gridy = 2;
+			qnameDomainLabel = new JLabel();
+			qnameDomainLabel.setText("domain");
+			qnameDomainLabel.setEnabled(false);
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints11.gridy = 3;
+			gridBagConstraints11.weightx = 1.0;
+			gridBagConstraints11.gridx = 2;
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints8.gridy = 2;
+			gridBagConstraints8.weightx = 1.0;
+			gridBagConstraints8.gridx = 2;
+			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.gridx = 2;
+			gridBagConstraints7.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints7.gridy = 1;
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints3.gridy = 1;
+			gridBagConstraints3.gridx = 2;
 			gridBagConstraints3.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints3.gridx = 1;
+			gridBagConstraints3.gridy = 0;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints2.gridy = 1;
 			gridBagConstraints2.gridx = 0;
+			gridBagConstraints2.fill = java.awt.GridBagConstraints.NONE;
+			gridBagConstraints2.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints2.gridy = 2;
+			qnameLabel = new JLabel();
+			qnameLabel.setText("Qname:");
+			qnameLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints1.gridx = 1;
+			gridBagConstraints1.gridx = 0;
+			gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints1.gridwidth = 2;
 			gridBagConstraints1.gridy = 0;
-			gridBagConstraints1.weightx = 1.0;
-			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
+			isPopulateFromFileLabel = new JLabel();
+			isPopulateFromFileLabel.setText("Poplate From File");
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints.gridy = 0;
 			gridBagConstraints.gridx = 0;
+			gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints.gridwidth = 2;
+			gridBagConstraints.gridy = 1;
+			isRegisterLabel = new JLabel();
+			isRegisterLabel.setText("Register");
 			customPanel = new JPanel();
 			customPanel.setLayout(new GridBagLayout());
-			paramNameLabel = new JLabel();
-			paramNameLabel.setText("Parameter Name");
-			arrayLabel = new JLabel();
-			arrayLabel.setText("Is Array");
-			if (this.handleParameterName) {
-				customPanel.add(paramNameLabel, gridBagConstraints);
-				customPanel.add(getParamName(), gridBagConstraints1);
-			}
-			customPanel.add(arrayLabel, gridBagConstraints2);
-			customPanel.add(getIsArrayCheckBox(), gridBagConstraints3);
+			customPanel.add(isRegisterLabel, gridBagConstraints);
+			customPanel.add(isPopulateFromFileLabel, gridBagConstraints1);
+			customPanel.add(qnameLabel, gridBagConstraints2);
+			customPanel.add(getIsPopulateFromFile(), gridBagConstraints3);
+			customPanel.add(getIsRegister(), gridBagConstraints7);
+			customPanel.add(getQnameDomain(), gridBagConstraints8);
+			customPanel.add(getQnameName(), gridBagConstraints11);
+			customPanel.add(qnameDomainLabel, gridBagConstraints21);
+			customPanel.add(qnameNameLabel, gridBagConstraints31);
 		}
 		return customPanel;
 	}
@@ -195,8 +191,8 @@ public class CADSRParameterConfigurationComponent extends GridPortalComponent {
 	 */
 	private CADSRConfigurationPanel getCADSRPanel() {
 		if (cadsrPanel == null) {
-			cadsrPanel = new CADSRConfigurationPanel(CADSRConfigurationPanel.TYPES_ONLY);
-			cadsrPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "",
+			cadsrPanel = new CADSRConfigurationPanel(CADSRConfigurationPanel.ELEMENT_ONLY);
+			cadsrPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "CADSR",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
 		}
@@ -229,23 +225,20 @@ public class CADSRParameterConfigurationComponent extends GridPortalComponent {
 			doneButton.setText("Done");
 			doneButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager
+					.getInstance().getResource(IntroducePortalConf.RESOURCE);
 					GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
 					try {
-						IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager
-						.getInstance().getResource(IntroducePortalConf.RESOURCE);
 						XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
 							.getGridService(conf.getGME());
-						if (cadsrPanel.getCADSRClassDescriptor()!= null) {
-							CADSRClassDescriptor descriptor = cadsrPanel.getCADSRClassDescriptor();
-							Namespace namespace = new Namespace("gme://" + descriptor.getClassificationScheme() + "." + descriptor.getContext() + "/" + descriptor.getVersion() + "/" + descriptor.getSchemeItem());
-							handle.cacheSchema(namespace, schemaDir);
+						if (cadsrPanel.currentNamespace != null) {
+							handle.cacheSchema(cadsrPanel.currentNamespace, schemaDir);
 						}
 					} catch (MobiusException e1) {
 						e1.printStackTrace();
 						JOptionPane.showMessageDialog(me,
-							"Please check the GME URL in the config file and make sure that you have the appropriate credentials!");
+							"Please check the CADSR URL and make sure that you have the appropriate credentials!");
 					}
-					
 					performDone();
 
 					dispose();
@@ -267,15 +260,11 @@ public class CADSRParameterConfigurationComponent extends GridPortalComponent {
 		if(csiDomainIndex>=0){
 			domain = csi.substring(0,csiDomainIndex);
 		}
+		
 		typeInfo.set(index++, domain);
 		
-		// set classname
-		typeInfo.set(index++, "");
-
-		typeInfo.set(index++, String.valueOf(isArrayCheckBox.isSelected()));
-		if (handleParameterName) {
-			typeInfo.set(index++, paramName.getText());
-		}
+		//skip classname
+		index++;
 		if (this.cadsrPanel.currentNamespace != null) {
 			typeInfo.set(index++, "cadsr://" + this.cadsrPanel.currentNamespace.getRaw());
 		} else {
@@ -287,7 +276,64 @@ public class CADSRParameterConfigurationComponent extends GridPortalComponent {
 		} else {
 			typeInfo.set(index++, null);
 		}
+		typeInfo.set(index++, String.valueOf(isPopulateFromFile.isSelected()));
+		typeInfo.set(index++, String.valueOf(isRegister.isSelected()));
+		typeInfo.set(index++, getQnameDomain().getText() + ":" + getQnameName().getText());
 
+	}
+
+
+	/**
+	 * This method initializes isPopulateFromFile
+	 * 
+	 * @return javax.swing.JCheckBox
+	 */
+	private JCheckBox getIsPopulateFromFile() {
+		if (isPopulateFromFile == null) {
+			isPopulateFromFile = new JCheckBox();
+			isPopulateFromFile.setSelected(true);
+		}
+		return isPopulateFromFile;
+	}
+
+
+	/**
+	 * This method initializes isRegister
+	 * 
+	 * @return javax.swing.JCheckBox
+	 */
+	private JCheckBox getIsRegister() {
+		if (isRegister == null) {
+			isRegister = new JCheckBox();
+			isRegister.setSelected(true);
+		}
+		return isRegister;
+	}
+
+
+	/**
+	 * This method initializes qname
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getQnameDomain() {
+		if (qnameDomain == null) {
+			qnameDomain = new JTextField();
+		}
+		return qnameDomain;
+	}
+
+
+	/**
+	 * This method initializes qnameName
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getQnameName() {
+		if (qnameName == null) {
+			qnameName = new JTextField();
+		}
+		return qnameName;
 	}
 
 } // @jve:decl-index=0:visual-constraint="2,2"

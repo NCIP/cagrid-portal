@@ -21,8 +21,7 @@
 						<width>500</width>
 						<height>300</height>
 					</dimensions>
-				</component>
-				
+				</component>	
 				<component>
 					<title>Modify Service</title>
 					<description>Modify Service Skeleton</description>
@@ -43,8 +42,9 @@
 		</grid-portal-config>
 	</resource>
 	<resource name="IntroducePortalConf" class="gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf">
-		<introduce-portal-config>
-			
+		<introduce-portal-config discoveryType="GME">
+			<gme>http://dc01.bmi.ohio-state.edu:8080/wsrf/services/cagrid/GlobalModelExchange</gme>
+			<cadsr></cadsr>
 		</introduce-portal-config>
 	</resource>
 </grid-portal>

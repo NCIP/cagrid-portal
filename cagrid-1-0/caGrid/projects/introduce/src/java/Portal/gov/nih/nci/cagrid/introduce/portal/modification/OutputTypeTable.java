@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.portal.modification;
 
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
+import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 
 import java.io.File;
 import java.util.Vector;
@@ -17,7 +18,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: OutputTypeTable.java,v 1.11 2006-02-02 18:21:16 hastings Exp $
+ * @version $Id: OutputTypeTable.java,v 1.12 2006-02-10 10:14:28 hastings Exp $
  */
 public class OutputTypeTable extends JComponentTable {
 
@@ -33,7 +34,7 @@ public class OutputTypeTable extends JComponentTable {
 
 	public static String LOCATION = "Location";
 
-	public static String GME = "Get Type From GME";
+	public static String DISCOVERY = "Discover Type";
 
 	private MethodType method;
 
@@ -71,16 +72,29 @@ public class OutputTypeTable extends JComponentTable {
 		v.add(output.getNamespace());
 		v.add(output.getType());
 		v.add(output.getLocation());
-		JButton gme = new JButton("GME");
+		JButton discoveryButton = null;
+		IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
+			IntroducePortalConf.RESOURCE);
+		if (conf.getDiscoveryType().equals(IntroducePortalConf.GME_DISCOVERY)) {
+			discoveryButton = new JButton("GME");
+		} else if (conf.getDiscoveryType().equals(IntroducePortalConf.CADSR_DISCOVERY)) {
+			discoveryButton = new JButton("CADSR");
+		}
 		// gme.setIcon(AnalyticalLookAndFeel.getMobiusIcon());
-		gme.addActionListener(new java.awt.event.ActionListener() {
+		discoveryButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
-				PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-					new GMEParameterConfigurationComponent(v, schemaDir, false));
-				editCellAt(0, Integer.MAX_VALUE);
+				IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
+					IntroducePortalConf.RESOURCE);
+				if (conf.getDiscoveryType().equals(IntroducePortalConf.GME_DISCOVERY)) {
+					PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+						new GMEParameterConfigurationComponent(v, schemaDir, true));
+				} else if (conf.getDiscoveryType().equals(IntroducePortalConf.CADSR_DISCOVERY)) {
+					PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+						new CADSRParameterConfigurationComponent(v, schemaDir, true));
+				}
 			}
 		});
-		v.add(gme);
+		v.add(discoveryButton);
 		((DefaultTableModel) this.getModel()).addRow(v);
 	}
 
@@ -93,7 +107,7 @@ public class OutputTypeTable extends JComponentTable {
 		model.addColumn(NAMESPACE);
 		model.addColumn(TYPE);
 		model.addColumn(LOCATION);
-		model.addColumn(GME);
+		model.addColumn(DISCOVERY);
 
 		return model;
 	}

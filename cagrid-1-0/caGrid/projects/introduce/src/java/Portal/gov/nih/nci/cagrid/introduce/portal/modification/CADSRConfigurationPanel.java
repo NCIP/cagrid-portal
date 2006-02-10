@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -25,6 +26,7 @@ import org.projectmobius.common.Namespace;
 import org.projectmobius.common.XMLUtilities;
 import org.projectmobius.gme.XMLDataModelService;
 import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
+import org.projectmobius.portal.PortalResourceManager;
 import org.projectmobius.protocol.gme.SchemaNode;
 
 public class CADSRConfigurationPanel extends JPanel {
@@ -312,7 +314,7 @@ public class CADSRConfigurationPanel extends JPanel {
 								JOptionPane
 										.showMessageDialog(
 												me,
-												"Please check the GME URL and make sure that you have the appropriate credentials!");
+												"Please check the CADSR URL and make sure that you have the appropriate credentials!");
 							}
 						}
 					});
@@ -436,8 +438,10 @@ public class CADSRConfigurationPanel extends JPanel {
 	private JTextField getCADSR() {
 		if (cadsr == null) {
 			cadsr = new JTextField();
+			IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager
+			.getInstance().getResource(IntroducePortalConf.RESOURCE);
 			cadsr
-					.setText("http://dc01.bmi.ohio-state.edu:8080/wsrf/services/cagrid/GlobalModelExchange");
+					.setText(conf.getCADSR());
 		}
 		return cadsr;
 	}
