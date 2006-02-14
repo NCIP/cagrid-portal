@@ -4,11 +4,12 @@ import gov.nih.nci.cagrid.introduce.beans.security.CommunicationMethod;
 import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 
 /**
@@ -93,8 +94,8 @@ public class TransportLevelSecurityPanel extends JPanel {
 	private JComboBox getCommunicationMethod() {
 		if (communicationMethod == null) {
 			communicationMethod = new JComboBox();
-			communicationMethod.addItem(CommunicationMethod.Integrity);
 			communicationMethod.addItem(CommunicationMethod.Privacy);
+			communicationMethod.addItem(CommunicationMethod.Integrity);
 			communicationMethod.addItem(CommunicationMethod.Integrity_Or_Privacy);
 		}
 		return communicationMethod;

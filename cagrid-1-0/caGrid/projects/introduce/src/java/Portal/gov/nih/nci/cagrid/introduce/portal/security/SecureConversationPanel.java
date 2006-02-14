@@ -127,8 +127,8 @@ public class SecureConversationPanel extends JPanel {
 	private JComboBox getCommunicationMethod() {
 		if (communicationMethod == null) {
 			communicationMethod = new JComboBox();
-			communicationMethod.addItem(CommunicationMethod.Integrity);
 			communicationMethod.addItem(CommunicationMethod.Privacy);
+			communicationMethod.addItem(CommunicationMethod.Integrity);
 			communicationMethod.addItem(CommunicationMethod.Integrity_Or_Privacy);
 		}
 		return communicationMethod;

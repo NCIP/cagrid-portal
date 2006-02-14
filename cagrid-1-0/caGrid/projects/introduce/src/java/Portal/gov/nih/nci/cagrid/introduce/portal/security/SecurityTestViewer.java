@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.portal.security;
 
-import gov.nih.nci.cagrid.introduce.beans.security.SecureConversation;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
@@ -54,7 +53,7 @@ public class SecurityTestViewer extends GridPortalComponent {
 	private JPanel getJPanel() {
 		if (jPanel == null) {
 			ServiceSecurity sec = new ServiceSecurity();
-			sec.setSecureConversation(new SecureConversation());
+			//sec.setSecureConversation(new SecureConversation());
 			jPanel = new SecurityMethodPanel(sec);
 		}
 		return jPanel;

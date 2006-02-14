@@ -35,7 +35,7 @@ public class SecureMessagePanel extends JPanel {
 		initialize();
 	}
 
-	public void setSecureConversation(SecureMessage sm){
+	public void setSecureMessage(SecureMessage sm){
 		communicationMethod.setSelectedItem(sm.getCommunicationMethod());
 		Integer num = sm.getReplayAttackInterval();
 		if(num!=null){
@@ -127,8 +127,8 @@ public class SecureMessagePanel extends JPanel {
 	private JComboBox getCommunicationMethod() {
 		if (communicationMethod == null) {
 			communicationMethod = new JComboBox();
-			communicationMethod.addItem(CommunicationMethod.Integrity);
 			communicationMethod.addItem(CommunicationMethod.Privacy);
+			communicationMethod.addItem(CommunicationMethod.Integrity);
 			communicationMethod.addItem(CommunicationMethod.Integrity_Or_Privacy);
 		}
 		return communicationMethod;
