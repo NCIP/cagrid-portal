@@ -1,7 +1,9 @@
 package gov.nih.nci.cagrid.dorian.service;
 
 
+import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.FaultUtil;
+import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
@@ -18,9 +20,12 @@ import gov.nih.nci.cagrid.dorian.idp.bean.InvalidUserPropertyFault;
 import gov.nih.nci.cagrid.dorian.idp.bean.NoSuchUserFault;
 import gov.nih.nci.cagrid.dorian.idp.bean.StateCode;
 import gov.nih.nci.cagrid.dorian.ifs.AutoApprovalAutoRenewalPolicy;
+import gov.nih.nci.cagrid.dorian.ifs.AutoApprovalPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.IFSUtils;
+import gov.nih.nci.cagrid.dorian.ifs.ManualApprovalAutoRenewalPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.ManualApprovalPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.UserManager;
+import gov.nih.nci.cagrid.dorian.ifs.TestIFS.IdPContainer;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserRole;
@@ -37,7 +42,9 @@ import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import gov.nih.nci.cagrid.opensaml.SAMLAttribute;
 import gov.nih.nci.cagrid.opensaml.SAMLAttributeStatement;
 import gov.nih.nci.cagrid.opensaml.SAMLAuthenticationStatement;
+import gov.nih.nci.cagrid.opensaml.SAMLNameIdentifier;
 import gov.nih.nci.cagrid.opensaml.SAMLStatement;
+import gov.nih.nci.cagrid.opensaml.SAMLSubject;
 
 import java.io.File;
 import java.io.InputStream;
@@ -45,13 +52,18 @@ import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
+import java.util.List;
+
+import javax.xml.namespace.QName;
 
 import junit.framework.TestCase;
 
+import org.apache.xml.security.signature.XMLSignature;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.globus.gsi.GlobusCredential;
 
@@ -71,7 +83,17 @@ public class TestDorian extends TestCase{
 	
 	private CertificateAuthority ca;
 	
+	private static final int SHORT_PROXY_VALID = 2;
+	
+	private static final int SHORT_CREDENTIALS_VALID = 10;
+	
+	public final static String EMAIL_NAMESPACE = "http://cagrid.nci.nih.gov/email";
+
+	public final static String EMAIL_NAME = "email";
+	
 	private InputStream resource = TestCase.class.getResourceAsStream(Constants.DORIAN_CONF);
+	
+	private InputStream expiringCredentialsResource = TestCase.class.getResourceAsStream(Constants.DORIAN_CONF_EXPIRING_CREDENTIALS);
 	
  
  
@@ -178,6 +200,7 @@ public class TestDorian extends TestCase{
 			try {
 				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
 				jm.getDatabase().destroyDatabase();
+				jm = null;
 			} catch (Exception e) {
 				FaultUtil.printFault(e);
 				assertTrue(false);
@@ -270,6 +293,7 @@ public class TestDorian extends TestCase{
 			try {
 				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
 				jm.getDatabase().destroyDatabase();
+				jm = null;
 			} catch (Exception e) {
 				FaultUtil.printFault(e);
 				assertTrue(false);
@@ -301,6 +325,7 @@ public class TestDorian extends TestCase{
 			try {
 				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
 				jm.getDatabase().destroyDatabase();
+				jm = null;
 			} catch (Exception e) {
 				FaultUtil.printFault(e);
 				assertTrue(false);
@@ -352,6 +377,7 @@ public class TestDorian extends TestCase{
 			try {
 				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
 				jm.getDatabase().destroyDatabase();
+				jm = null;
 			} catch (Exception e) {
 				FaultUtil.printFault(e);
 				assertTrue(false);
@@ -386,6 +412,7 @@ public class TestDorian extends TestCase{
 			try {
 				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
 				jm.getDatabase().destroyDatabase();
+				jm = null;
 			} catch (Exception e) {
 				FaultUtil.printFault(e);
 				assertTrue(false);
@@ -419,6 +446,7 @@ public class TestDorian extends TestCase{
 			try {
 				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
 				jm.getDatabase().destroyDatabase();
+				jm = null;
 			} catch (Exception e) {
 				FaultUtil.printFault(e);
 				assertTrue(false);
@@ -426,218 +454,47 @@ public class TestDorian extends TestCase{
 		}
 	}
     
-    public void testRemoveIFSUser() {
-		try {
-			jm = new Dorian(resource,"localhost");
-    		assertNotNull(jm.getConfiguration());
-    		assertNotNull(jm.getDatabase());
-    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
-			String gridId = UserManager.subjectToIdentity(gridSubject);
-			BasicAuthCredential auth = new BasicAuthCredential();
-			auth.setUserId(Dorian.IDP_ADMIN_USER_ID);
-			auth.setPassword(Dorian.IDP_ADMIN_PASSWORD);
-			SAMLAssertion saml = jm.authenticate(auth);
-			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-			PublicKey publicKey = pair.getPublic();
-			ProxyLifetime lifetime = getProxyLifetime();
-			X509Certificate[] certs = jm.createProxy(saml, publicKey, lifetime);
-			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
-			
-			Application a = createApplication();
-			jm.registerWithIdP(a);
-			IdPUserFilter uf = new IdPUserFilter();
-			uf.setUserId(a.getUserId());
-			IdPUser[] users = jm.findIdPUsers(gridId, uf);
-			assertEquals(1, users.length);
-			assertEquals(IdPUserStatus.Pending, users[0].getStatus());
-			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
-			users[0].setStatus(IdPUserStatus.Active);
-			jm.updateIdPUser(gridId, users[0]);
-			BasicAuthCredential auth2 = new BasicAuthCredential();
-			auth2.setUserId(a.getUserId());
-			auth2.setPassword(a.getPassword());
-			SAMLAssertion saml2 = jm.authenticate(auth2);
-			KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
-			PublicKey publicKey2 = pair2.getPublic();
-			ProxyLifetime lifetime2 = getProxyLifetime();
-			X509Certificate[] certs2 = jm.createProxy(saml2, publicKey2, lifetime2);
-			users = jm.findIdPUsers(gridId, uf);
-			IFSUserFilter f1 = new IFSUserFilter();
-			f1.setUID(users[0].getUserId());
-			IFSUser[] ifsu = jm.findIFSUsers(gridId, f1);
-			assertEquals(1, ifsu.length);
-			jm.removeIFSUser(gridId, ifsu[0]);
-			ifsu = jm.findIFSUsers(gridId, f1);
-			assertEquals(0, ifsu.length);
-		} catch (Exception e) {
-			FaultUtil.printFault(e);
-			assertTrue(false);
-		}finally{
-			try {
-				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
-				jm.getDatabase().destroyDatabase();
-			} catch (Exception e) {
-				FaultUtil.printFault(e);
-				assertTrue(false);
-			}
-		}
-	}
-    
-    public void testUpdateIFSUser() {
-		try {
-			jm = new Dorian(resource,"localhost");
-    		assertNotNull(jm.getConfiguration());
-    		assertNotNull(jm.getDatabase());
-    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
-			String gridId = UserManager.subjectToIdentity(gridSubject);
-			BasicAuthCredential auth = new BasicAuthCredential();
-			auth.setUserId(Dorian.IDP_ADMIN_USER_ID);
-			auth.setPassword(Dorian.IDP_ADMIN_PASSWORD);
-			SAMLAssertion saml = jm.authenticate(auth);
-			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-			PublicKey publicKey = pair.getPublic();
-			ProxyLifetime lifetime = getProxyLifetime();
-			X509Certificate[] certs = jm.createProxy(saml, publicKey, lifetime);
-			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
-			
-			Application a = createApplication();
-			jm.registerWithIdP(a);
-			IdPUserFilter uf = new IdPUserFilter();
-			uf.setUserId(a.getUserId());
-			IdPUser[] users = jm.findIdPUsers(gridId, uf);
-			assertEquals(1, users.length);
-			assertEquals(IdPUserStatus.Pending, users[0].getStatus());
-			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
-			users[0].setStatus(IdPUserStatus.Active);
-			jm.updateIdPUser(gridId, users[0]);
-			BasicAuthCredential auth2 = new BasicAuthCredential();
-			auth2.setUserId(a.getUserId());
-			auth2.setPassword(a.getPassword());
-			SAMLAssertion saml2 = jm.authenticate(auth2);
-			KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
-			PublicKey publicKey2 = pair2.getPublic();
-			ProxyLifetime lifetime2 = getProxyLifetime();
-			X509Certificate[] certs2 = jm.createProxy(saml2, publicKey2, lifetime2);
-			users = jm.findIdPUsers(gridId, uf);
-			IFSUserFilter f1 = new IFSUserFilter();
-			f1.setUID(users[0].getUserId());
-			IFSUser[] ifsu = jm.findIFSUsers(gridId, f1);
-			assertEquals(1, ifsu.length);
-			ifsu[0].setUserRole(IFSUserRole.Administrator);
-			ifsu[0].setUserStatus(IFSUserStatus.Suspended);
-			jm.updateIFSUser(gridId, ifsu[0]);
-			ifsu = jm.findIFSUsers(gridId, f1);
-			assertEquals(1, ifsu.length);
-			assertEquals(IFSUserRole.Administrator, ifsu[0].getUserRole());
-			assertEquals(IFSUserStatus.Suspended, ifsu[0].getUserStatus());                         
-		} catch (Exception e) {
-			FaultUtil.printFault(e);
-			assertTrue(false);
-		}finally{
-			try {
-				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
-				jm.getDatabase().destroyDatabase();
-			} catch (Exception e) {
-				FaultUtil.printFault(e);
-				assertTrue(false);
-			}
-		}
-	}
-    
-    public void testFindIFSUsers() {
-		try {
-			jm = new Dorian(resource,"localhost");
-    		assertNotNull(jm.getConfiguration());
-    		assertNotNull(jm.getDatabase());
-    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
-			String gridId = UserManager.subjectToIdentity(gridSubject);
-			BasicAuthCredential auth = new BasicAuthCredential();
-			auth.setUserId(Dorian.IDP_ADMIN_USER_ID);
-			auth.setPassword(Dorian.IDP_ADMIN_PASSWORD);
-			SAMLAssertion saml = jm.authenticate(auth);
-			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-			PublicKey publicKey = pair.getPublic();
-			ProxyLifetime lifetime = getProxyLifetime();
-			X509Certificate[] certs = jm.createProxy(saml, publicKey, lifetime);
-			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
-			
-			Application a = createApplication();
-			jm.registerWithIdP(a);
-			IdPUserFilter uf = new IdPUserFilter();
-			uf.setUserId(a.getUserId());
-			IdPUser[] users = jm.findIdPUsers(gridId, uf);
-			assertEquals(1, users.length);
-			assertEquals(IdPUserStatus.Pending, users[0].getStatus());
-			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
-			users[0].setStatus(IdPUserStatus.Active);
-			jm.updateIdPUser(gridId, users[0]);
-			BasicAuthCredential auth2 = new BasicAuthCredential();
-			auth2.setUserId(a.getUserId());
-			auth2.setPassword(a.getPassword());
-			SAMLAssertion saml2 = jm.authenticate(auth2);
-			KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
-			PublicKey publicKey2 = pair2.getPublic();
-			ProxyLifetime lifetime2 = getProxyLifetime();
-			X509Certificate[] certs2 = jm.createProxy(saml2, publicKey2, lifetime2);
-			users = jm.findIdPUsers(gridId, uf);
-			IFSUserFilter f1 = new IFSUserFilter();
-			f1.setUID(users[0].getUserId());
-			IFSUser[] ifsu = jm.findIFSUsers(gridId, f1);
-			assertEquals(1, ifsu.length);                       
-		} catch (Exception e) {
-			FaultUtil.printFault(e);
-			assertTrue(false);
-		}finally{
-			try {
-				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
-				jm.getDatabase().destroyDatabase();
-			} catch (Exception e) {
-				FaultUtil.printFault(e);
-				assertTrue(false);
-			}
-		}
-	}
-    
-    public void testGetTrustedIdPs(){
+    public void testAutoApprovalAutoRenewal() {	
     	try{
-    		jm = new Dorian(resource,"localhost");
+    		if(jm!=null){
+    			jm.getDatabase().destroyDatabase();	
+    		}
+    		jm = new Dorian(expiringCredentialsResource,"localhost");
     		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		
     		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
-			
-			int times = 5;
-			String baseName = "Test IdP";
-			int count = 1;
-			for (int i = 0; i < times; i++) {
-				assertEquals(count, jm.getTrustedIdPs(gridId).length);
-				count = count + 1;
-				String name = baseName + " " + count;
-				TrustedIdP idp = new TrustedIdP();
-				idp.setName(name);
-				String policyClass = AutoApprovalAutoRenewalPolicy.class.getName();
-				idp.setUserPolicyClass(policyClass);
-				idp.setStatus(TrustedIdPStatus.Active);
-
-				SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
-				methods[0] = SAMLAuthenticationMethod.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
-				idp.setAuthenticationMethod(methods);
-
-				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-				String subject = Utils.CA_SUBJECT_PREFIX + ",CN=" + name;
-				PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(subject, pair);
-				assertNotNull(req);
-				GregorianCalendar cal = new GregorianCalendar();
-				Date start = cal.getTime();
-				cal.add(Calendar.MONTH, 10);
-				Date end = cal.getTime();
-				X509Certificate cert = ca.requestCertificate(req, start, end);
-				assertNotNull(cert);
-				assertEquals(cert.getSubjectDN().getName(), subject);
-				idp.setIdPCertificate(CertUtil.writeCertificateToString(cert));
-				idp = jm.addTrustedIdP(gridId, idp);
-				assertEquals(count, jm.getTrustedIdPs(gridId).length);
+    		IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
+    		jm.addTrustedIdP(gridId, idp.getIdp());
+			String username = "user";
+			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+			ProxyLifetime lifetime = getProxyLifetimeShort();
+			X509Certificate[] certs = jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
+    		
+			BasicAuthCredential auth = new BasicAuthCredential();
+			auth.setUserId(Dorian.IDP_ADMIN_USER_ID);
+			auth.setPassword(Dorian.IDP_ADMIN_PASSWORD);
+			SAMLAssertion saml = jm.authenticate(auth);
+			KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
+			PublicKey publicKey = pair2.getPublic();
+			ProxyLifetime lifetime2 = getProxyLifetimeShort();
+			X509Certificate[] certs2 = jm.createProxy(saml, publicKey, lifetime2);
+			createAndCheckProxyLifetime(lifetime2, pair2.getPrivate(), certs2);
+					
+			IFSUserFilter filter = new IFSUserFilter();
+			IFSUser[] ifsUser = jm.findIFSUsers(gridId, filter);
+			assertEquals(ifsUser.length, 2);
+			IFSUser before = ifsUser[1];
+			assertEquals(before.getUserStatus(), IFSUserStatus.Active);
+			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
+			certs = jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
+			ifsUser = jm.findIFSUsers(gridId, filter);
+			assertEquals(ifsUser.length, 2);
+			IFSUser after = ifsUser[1];
+			assertEquals(after.getUserStatus(), IFSUserStatus.Active);
+			if (before.getCertificate().equals(after.getCertificate())) {
+				assertTrue(false);
 			}
     	} catch (Exception e){
     		FaultUtil.printFault(e);
@@ -646,6 +503,7 @@ public class TestDorian extends TestCase{
 			try {
 				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
 				jm.getDatabase().destroyDatabase();
+				jm = null;
 			} catch (Exception e) {
 				FaultUtil.printFault(e);
 				assertTrue(false);
@@ -653,386 +511,127 @@ public class TestDorian extends TestCase{
 		}
     }
     
-    public void testAddRemoveTrustedIdP(){
+    public void testManualApprovalAutoRenewal() {	
     	try{
-    		jm = new Dorian(resource,"localhost");
+    		if(jm!=null){
+    			jm.getDatabase().destroyDatabase();	
+    		}
+    		jm = new Dorian(expiringCredentialsResource,"localhost");
     		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		
     		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 			
-			assertEquals(1, jm.getTrustedIdPs(gridId).length);
-			String name = "Test IdP";
-			TrustedIdP idp = new TrustedIdP();
-			idp.setName(name);
-			String policyClass = AutoApprovalAutoRenewalPolicy.class.getName();
-			idp.setUserPolicyClass(policyClass);
-			idp.setStatus(TrustedIdPStatus.Active);
-			
-			SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
-			methods[0] = SAMLAuthenticationMethod.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
-			idp.setAuthenticationMethod(methods);
-			
-			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-			String subject = Utils.CA_SUBJECT_PREFIX + ",CN=" + name;
-			PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(subject, pair);
-			assertNotNull(req);
-			GregorianCalendar cal = new GregorianCalendar();
-			Date start = cal.getTime();
-			cal.add(Calendar.MONTH, 10);
-			Date end = cal.getTime();
-			X509Certificate cert = ca.requestCertificate(req, start, end);
-			assertNotNull(cert);
-			assertEquals(cert.getSubjectDN().getName(), subject);
-			idp.setIdPCertificate(CertUtil.writeCertificateToString(cert));
-			idp = jm.addTrustedIdP(gridId, idp);
-			assertEquals(2, jm.getTrustedIdPs(gridId).length);
-			
-			jm.removeTrustedIdP(gridId, idp);
-			assertEquals(1, jm.getTrustedIdPs(gridId).length);
-    	} catch (Exception e){
-    		FaultUtil.printFault(e);
-    		assertTrue(false);
-    	}finally{
-			try {
-				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
-				jm.getDatabase().destroyDatabase();
-			} catch (Exception e) {
-				FaultUtil.printFault(e);
-				assertTrue(false);
-			}
-		}
-    }
-    
-    public void testUpdateTrustedIdP(){
-    	try{
-    		jm = new Dorian(resource,"localhost");
-    		assertNotNull(jm.getConfiguration());
-    		assertNotNull(jm.getDatabase());
-    		
-    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
-			String gridId = UserManager.subjectToIdentity(gridSubject);
-			//add a trusted IdP
-			assertEquals(1, jm.getTrustedIdPs(gridId).length);
-			String name = "Test IdP";
-			TrustedIdP idp = new TrustedIdP();
-			idp.setName(name);
-			String policyClass = AutoApprovalAutoRenewalPolicy.class.getName();
-			idp.setUserPolicyClass(policyClass);
-			idp.setStatus(TrustedIdPStatus.Active);
-			SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
-			methods[0] = SAMLAuthenticationMethod.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
-			idp.setAuthenticationMethod(methods);
-			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-			String subject = Utils.CA_SUBJECT_PREFIX + ",CN=" + name;
-			PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(subject, pair);
-			assertNotNull(req);
-			GregorianCalendar cal = new GregorianCalendar();
-			Date start = cal.getTime();
-			cal.add(Calendar.MONTH, 10);
-			Date end = cal.getTime();
-			X509Certificate cert = ca.requestCertificate(req, start, end);
-			assertNotNull(cert);
-			assertEquals(cert.getSubjectDN().getName(), subject);
-			idp.setIdPCertificate(CertUtil.writeCertificateToString(cert));
-			idp = jm.addTrustedIdP(gridId, idp);
-			assertEquals(2, jm.getTrustedIdPs(gridId).length);
-			//update the trusted IdP
-			idp.setName("Updated");
-			policyClass = ManualApprovalPolicy.class.getName();
-			idp.setUserPolicyClass(policyClass);
-			idp.setStatus(TrustedIdPStatus.Suspended);
-			jm.updateTrustedIdP(gridId, idp);
-			TrustedIdP[] idps = jm.getTrustedIdPs(gridId);
-			assertEquals(idp.getName(), idps[1].getName());
-    	} catch (Exception e){
-    		FaultUtil.printFault(e);
-    		assertTrue(false);
-    	}finally{
-			try {
-				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
-				jm.getDatabase().destroyDatabase();
-			} catch (Exception e) {
-				FaultUtil.printFault(e);
-				assertTrue(false);
-			}
-		}
-    }
-    
-    public void testRenewIFSUserCredentials() {
-		try {
-			jm = new Dorian(resource,"localhost");
-    		assertNotNull(jm.getConfiguration());
-    		assertNotNull(jm.getDatabase());
-    		
-    		String adminGridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
-			String adminGridId = UserManager.subjectToIdentity(adminGridSubject);
-			
-			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-			PublicKey publicKey = pair.getPublic();
-			ProxyLifetime lifetime = getProxyLifetime();
 			BasicAuthCredential auth = new BasicAuthCredential();
 			auth.setUserId(Dorian.IDP_ADMIN_USER_ID);
 			auth.setPassword(Dorian.IDP_ADMIN_PASSWORD);
 			SAMLAssertion saml = jm.authenticate(auth);
-			X509Certificate[] certs = jm.createProxy(saml, publicKey, lifetime);
-			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
-			IFSUserFilter f1 = new IFSUserFilter();
-			TrustedIdP[] idps = jm.getTrustedIdPs(adminGridId);
-			f1.setIdPId(idps[0].getId());
-			f1.setUID(Dorian.IDP_ADMIN_USER_ID);
-			IFSUser[] users = jm.findIFSUsers(adminGridId, f1);
-			assertEquals(1, users.length);
-			IFSUser usr1 = users[0];
-			String certStr = usr1.getCertificate().getCertificateAsString();
-			X509Certificate cert1 = CertUtil.loadCertificateFromString(certStr);
-			Thread.sleep(2000);
-			IFSUser usr2 = jm.renewIFSUserCredentials(adminGridId, usr1);
-			assertEquals(usr1.getGridId(), usr2.getGridId());
-
-			if (certStr.equals(usr2.getCertificate().getCertificateAsString())) {
-				assertTrue(false);
-			}
-
-			X509Certificate cert2 = CertUtil.loadCertificateFromString(usr2.getCertificate().getCertificateAsString());
-
-			assertTrue(cert2.getNotBefore().after(cert1.getNotBefore()));
-
-		} catch (Exception e) {
-			FaultUtil.printFault(e);
-			assertTrue(false);
-		}finally{
-			try {
-				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
-				jm.getDatabase().destroyDatabase();
-			} catch (Exception e) {
-				FaultUtil.printFault(e);
-				assertTrue(false);
-			}
-		}
-	}
-    
-    /** *************** IFS BAD TEST FUNCTIONS ****************** */
-    /** ********************************************************* */
-    /** ********************************************************* */
-    /** ********************************************************* */
- 
-    public void testBadRemoveIFSUserInvalidGridId() {
-		try {
-			jm = new Dorian(resource,"localhost");
-    		assertNotNull(jm.getConfiguration());
-    		assertNotNull(jm.getDatabase());
-    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
-			String gridId = UserManager.subjectToIdentity(gridSubject);
-			BasicAuthCredential auth = new BasicAuthCredential();
-			auth.setUserId(Dorian.IDP_ADMIN_USER_ID);
-			auth.setPassword(Dorian.IDP_ADMIN_PASSWORD);
-			SAMLAssertion saml = jm.authenticate(auth);
-			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-			PublicKey publicKey = pair.getPublic();
-			ProxyLifetime lifetime = getProxyLifetime();
-			X509Certificate[] certs = jm.createProxy(saml, publicKey, lifetime);
-			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
-			
-			Application a = createApplication();
-			jm.registerWithIdP(a);
-			IdPUserFilter uf = new IdPUserFilter();
-			uf.setUserId(a.getUserId());
-			IdPUser[] users = jm.findIdPUsers(gridId, uf);
-			assertEquals(1, users.length);
-			assertEquals(IdPUserStatus.Pending, users[0].getStatus());
-			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
-			users[0].setStatus(IdPUserStatus.Active);
-			jm.updateIdPUser(gridId, users[0]);
-			BasicAuthCredential auth2 = new BasicAuthCredential();
-			auth2.setUserId(a.getUserId());
-			auth2.setPassword(a.getPassword());
-			SAMLAssertion saml2 = jm.authenticate(auth2);
 			KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
-			PublicKey publicKey2 = pair2.getPublic();
-			ProxyLifetime lifetime2 = getProxyLifetime();
-			X509Certificate[] certs2 = jm.createProxy(saml2, publicKey2, lifetime2);
-			users = jm.findIdPUsers(gridId, uf);
-			IFSUserFilter f1 = new IFSUserFilter();
-			f1.setUID(users[0].getUserId());
-			IFSUser[] ifsu = jm.findIFSUsers(gridId, f1);
-			assertEquals(1, ifsu.length);
-			gridId = "Invalid";
-			jm.removeIFSUser(gridId, ifsu[0]);
-			assertTrue(false);
-		}catch (InvalidUserFault iuf) {
-		} catch (Exception e) {
-			FaultUtil.printFault(e);
-			assertTrue(false);
-		}finally{
+			PublicKey publicKey = pair2.getPublic();
+			ProxyLifetime lifetime2 = getProxyLifetimeShort();
+			X509Certificate[] certs2 = jm.createProxy(saml, publicKey, lifetime2);
+			createAndCheckProxyLifetime(lifetime2, pair2.getPrivate(), certs2);
+			
+			IdPContainer idp = this.getTrustedIdpManualApproveAutoRenew("My IdP");
+			jm.addTrustedIdP(gridId, idp.getIdp());
+			String username = "user";
+			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+			ProxyLifetime lifetime = getProxyLifetimeShort();
+			try {
+				jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort());
+				assertTrue(false);
+			} catch (PermissionDeniedFault f) {
+
+			}
+			
+			IFSUserFilter filter = new IFSUserFilter();
+			IFSUser[] ifsUser = jm.findIFSUsers(gridId, filter);
+			assertEquals(ifsUser.length, 2);
+			IFSUser before = ifsUser[1];
+			assertEquals(before.getUserStatus(), IFSUserStatus.Pending);
+			before.setUserStatus(IFSUserStatus.Active);
+			jm.updateIFSUser(gridId, before);
+			X509Certificate[] certs = jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
+			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
+			certs = jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
+			ifsUser = jm.findIFSUsers(gridId, filter);
+			assertEquals(ifsUser.length, 2);
+			IFSUser after = ifsUser[1];
+			assertEquals(after.getUserStatus(), IFSUserStatus.Active);
+			if (before.getCertificate().equals(after.getCertificate())) {
+				assertTrue(false);
+			}
+			
+    	} catch (Exception e){
+    		FaultUtil.printFault(e);
+    		assertTrue(false);
+    	}finally{
 			try {
 				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
 				jm.getDatabase().destroyDatabase();
+				jm = null;
 			} catch (Exception e) {
 				FaultUtil.printFault(e);
 				assertTrue(false);
 			}
 		}
-	}
+    }
     
-    public void testBadUpdateIFSUserInvalidGridId() {
-		try {
-			jm = new Dorian(resource,"localhost");
+    public void testAutoApprovalManualRenewal() {	
+    	try{
+    		if(jm!=null){
+    			jm.getDatabase().destroyDatabase();	
+    		}
+    		jm = new Dorian(expiringCredentialsResource,"localhost");
     		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
+    		
     		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
+    		IdPContainer idp = this.getTrustedIdpAutoApprove("My IdP");
+    		jm.addTrustedIdP(gridId, idp.getIdp());
+			String username = "user";
+			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+			ProxyLifetime lifetime = getProxyLifetimeShort();
+			X509Certificate[] certs = jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
+    		
 			BasicAuthCredential auth = new BasicAuthCredential();
 			auth.setUserId(Dorian.IDP_ADMIN_USER_ID);
 			auth.setPassword(Dorian.IDP_ADMIN_PASSWORD);
 			SAMLAssertion saml = jm.authenticate(auth);
-			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-			PublicKey publicKey = pair.getPublic();
-			ProxyLifetime lifetime = getProxyLifetime();
-			X509Certificate[] certs = jm.createProxy(saml, publicKey, lifetime);
-			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
-			
-			Application a = createApplication();
-			jm.registerWithIdP(a);
-			IdPUserFilter uf = new IdPUserFilter();
-			uf.setUserId(a.getUserId());
-			IdPUser[] users = jm.findIdPUsers(gridId, uf);
-			assertEquals(1, users.length);
-			assertEquals(IdPUserStatus.Pending, users[0].getStatus());
-			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
-			users[0].setStatus(IdPUserStatus.Active);
-			jm.updateIdPUser(gridId, users[0]);
-			BasicAuthCredential auth2 = new BasicAuthCredential();
-			auth2.setUserId(a.getUserId());
-			auth2.setPassword(a.getPassword());
-			SAMLAssertion saml2 = jm.authenticate(auth2);
 			KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
-			PublicKey publicKey2 = pair2.getPublic();
-			ProxyLifetime lifetime2 = getProxyLifetime();
-			X509Certificate[] certs2 = jm.createProxy(saml2, publicKey2, lifetime2);
-			users = jm.findIdPUsers(gridId, uf);
-			IFSUserFilter f1 = new IFSUserFilter();
-			f1.setUID(users[0].getUserId());
-			IFSUser[] ifsu = jm.findIFSUsers(gridId, f1);
-			assertEquals(1, ifsu.length);
-			ifsu[0].setUserRole(IFSUserRole.Administrator);
-			ifsu[0].setUserStatus(IFSUserStatus.Suspended);
-			gridId = "Invalid";
-			jm.updateIFSUser(gridId, ifsu[0]); 
-			assertTrue(false);
-		}catch (InvalidUserFault iuf) {
-		} catch (Exception e) {
-			FaultUtil.printFault(e);
-			assertTrue(false);
-		}finally{
+			PublicKey publicKey = pair2.getPublic();
+			ProxyLifetime lifetime2 = getProxyLifetimeShort();
+			X509Certificate[] certs2 = jm.createProxy(saml, publicKey, lifetime2);
+			createAndCheckProxyLifetime(lifetime2, pair2.getPrivate(), certs2);
+					
+			IFSUserFilter filter = new IFSUserFilter();
+			IFSUser[] ifsUser = jm.findIFSUsers(gridId, filter);
+			assertEquals(ifsUser.length, 2);
+			IFSUser before = ifsUser[1];
+			assertEquals(before.getUserStatus(), IFSUserStatus.Active);
+			X509Certificate certBefore = CertUtil.loadCertificateFromString(before.getCertificate().getCertificateAsString());
+
+			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
+	
 			try {
-				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
-				jm.getDatabase().destroyDatabase();
-			} catch (Exception e) {
-				FaultUtil.printFault(e);
+				jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort());
+				assertTrue(false);
+			} catch (PermissionDeniedFault f) {
+
+			}
+			jm.renewIFSUserCredentials(gridId, ifsUser[1]);
+			
+			certs = jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
+			ifsUser = jm.findIFSUsers(gridId, filter);
+			assertEquals(ifsUser.length, 2);
+			IFSUser after = ifsUser[1];
+			assertEquals(after.getUserStatus(), IFSUserStatus.Active);
+
+			if (certBefore.equals(after.getCertificate())) {
 				assertTrue(false);
 			}
-		}
-	}
-    
-    public void testBadFindIFSUsersInvalidGridId() {
-		try {
-			jm = new Dorian(resource,"localhost");
-    		assertNotNull(jm.getConfiguration());
-    		assertNotNull(jm.getDatabase());
-    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
-			String gridId = UserManager.subjectToIdentity(gridSubject);
-			BasicAuthCredential auth = new BasicAuthCredential();
-			auth.setUserId(Dorian.IDP_ADMIN_USER_ID);
-			auth.setPassword(Dorian.IDP_ADMIN_PASSWORD);
-			SAMLAssertion saml = jm.authenticate(auth);
-			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-			PublicKey publicKey = pair.getPublic();
-			ProxyLifetime lifetime = getProxyLifetime();
-			X509Certificate[] certs = jm.createProxy(saml, publicKey, lifetime);
-			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
-			
-			Application a = createApplication();
-			jm.registerWithIdP(a);
-			IdPUserFilter uf = new IdPUserFilter();
-			uf.setUserId(a.getUserId());
-			IdPUser[] users = jm.findIdPUsers(gridId, uf);
-			assertEquals(1, users.length);
-			assertEquals(IdPUserStatus.Pending, users[0].getStatus());
-			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
-			users[0].setStatus(IdPUserStatus.Active);
-			jm.updateIdPUser(gridId, users[0]);
-			BasicAuthCredential auth2 = new BasicAuthCredential();
-			auth2.setUserId(a.getUserId());
-			auth2.setPassword(a.getPassword());
-			SAMLAssertion saml2 = jm.authenticate(auth2);
-			KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
-			PublicKey publicKey2 = pair2.getPublic();
-			ProxyLifetime lifetime2 = getProxyLifetime();
-			X509Certificate[] certs2 = jm.createProxy(saml2, publicKey2, lifetime2);
-			users = jm.findIdPUsers(gridId, uf);
-			IFSUserFilter f1 = new IFSUserFilter();
-			f1.setUID(users[0].getUserId());
-			gridId = "Invalid";
-			IFSUser[] ifsu = jm.findIFSUsers(gridId, f1);
-			assertTrue(false);
-		}catch (InvalidUserFault iuf) {
-		} catch (Exception e) {
-			FaultUtil.printFault(e);
-			assertTrue(false);
-		}finally{
-			try {
-				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
-				jm.getDatabase().destroyDatabase();
-			} catch (Exception e) {
-				FaultUtil.printFault(e);
-				assertTrue(false);
-			}
-		}
-	}
-    
-    public void testBadGetTrustedIdPs(){
-    	try{
-    		jm = new Dorian(resource,"localhost");
-    		assertNotNull(jm.getConfiguration());
-    		assertNotNull(jm.getDatabase());
-    		
-    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
-			String gridId = UserManager.subjectToIdentity(gridSubject);
-			
-			String baseName = "Test IdP";
-			int count = 1;
-			assertEquals(count, jm.getTrustedIdPs(gridId).length);
-			count = count + 1;
-			String name = baseName + " " + count;
-			TrustedIdP idp = new TrustedIdP();
-			idp.setName(name);
-			String policyClass = AutoApprovalAutoRenewalPolicy.class.getName();
-			idp.setUserPolicyClass(policyClass);
-			idp.setStatus(TrustedIdPStatus.Active);
-			
-			SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
-			methods[0] = SAMLAuthenticationMethod.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
-			idp.setAuthenticationMethod(methods);
-		
-			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-			String subject = Utils.CA_SUBJECT_PREFIX + ",CN=" + name;
-			PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(subject, pair);
-			assertNotNull(req);
-			GregorianCalendar cal = new GregorianCalendar();
-			Date start = cal.getTime();
-			cal.add(Calendar.MONTH, 10);
-			Date end = cal.getTime();
-			X509Certificate cert = ca.requestCertificate(req, start, end);
-			assertNotNull(cert);
-			assertEquals(cert.getSubjectDN().getName(), subject);
-			idp.setIdPCertificate(CertUtil.writeCertificateToString(cert));
-			idp = jm.addTrustedIdP(gridId, idp);
-			gridId = "Invalid";
-			TrustedIdP[] tidps = jm.getTrustedIdPs(gridId);
-			assertTrue(false);
-    	}catch (InvalidUserFault iuf) {
     	} catch (Exception e){
     		FaultUtil.printFault(e);
     		assertTrue(false);
@@ -1040,6 +639,7 @@ public class TestDorian extends TestCase{
 			try {
 				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
 				jm.getDatabase().destroyDatabase();
+				jm = null;
 			} catch (Exception e) {
 				FaultUtil.printFault(e);
 				assertTrue(false);
@@ -1047,97 +647,68 @@ public class TestDorian extends TestCase{
 		}
     }
     
-    public void testBadAddTrustedIdPInvalidGridId(){
+    public void testManualApprovalManualRenewal() {	
     	try{
-    		jm = new Dorian(resource,"localhost");
+    		if(jm!=null){
+    			jm.getDatabase().destroyDatabase();	
+    		}
+    		jm = new Dorian(expiringCredentialsResource,"localhost");
     		assertNotNull(jm.getConfiguration());
     		assertNotNull(jm.getDatabase());
     		
     		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
-			String gridId = UserManager.subjectToIdentity(gridSubject);
+    		String gridId = UserManager.subjectToIdentity(gridSubject);
+    		
+    		BasicAuthCredential auth = new BasicAuthCredential();
+    		auth.setUserId(Dorian.IDP_ADMIN_USER_ID);
+    		auth.setPassword(Dorian.IDP_ADMIN_PASSWORD);
+    		SAMLAssertion saml = jm.authenticate(auth);
+    		KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
+    		PublicKey publicKey = pair2.getPublic();
+    		ProxyLifetime lifetime2 = getProxyLifetimeShort();
+    		X509Certificate[] certs2 = jm.createProxy(saml, publicKey, lifetime2);
+    		createAndCheckProxyLifetime(lifetime2, pair2.getPrivate(), certs2);
 			
-			assertEquals(1, jm.getTrustedIdPs(gridId).length);
-			String name = "Test IdP";
-			TrustedIdP idp = new TrustedIdP();
-			idp.setName(name);
-			String policyClass = AutoApprovalAutoRenewalPolicy.class.getName();
-			idp.setUserPolicyClass(policyClass);
-			idp.setStatus(TrustedIdPStatus.Active);
-			
-			SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
-			methods[0] = SAMLAuthenticationMethod.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
-			idp.setAuthenticationMethod(methods);
-			
+			IdPContainer idp = this.getTrustedIdpManualApprove("My IdP");
+			jm.addTrustedIdP(gridId, idp.getIdp());
+			String username = "user";
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-			String subject = Utils.CA_SUBJECT_PREFIX + ",CN=" + name;
-			PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(subject, pair);
-			assertNotNull(req);
-			GregorianCalendar cal = new GregorianCalendar();
-			Date start = cal.getTime();
-			cal.add(Calendar.MONTH, 10);
-			Date end = cal.getTime();
-			X509Certificate cert = ca.requestCertificate(req, start, end);
-			assertNotNull(cert);
-			assertEquals(cert.getSubjectDN().getName(), subject);
-			idp.setIdPCertificate(CertUtil.writeCertificateToString(cert));
-			gridId = "Invalid";
-			idp = jm.addTrustedIdP(gridId, idp);
-			assertTrue(false);
-			
-    	}catch (InvalidUserFault iuf) {
-    	} catch (Exception e){
-    		FaultUtil.printFault(e);
-    		assertTrue(false);
-    	}finally{
+			ProxyLifetime lifetime = getProxyLifetimeShort();
 			try {
-				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
-				jm.getDatabase().destroyDatabase();
-			} catch (Exception e) {
-				FaultUtil.printFault(e);
+				jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort());
+				assertTrue(false);
+			} catch (PermissionDeniedFault f) {
+
+			}
+			
+			IFSUserFilter filter = new IFSUserFilter();
+			IFSUser[] ifsUser = jm.findIFSUsers(gridId, filter);
+			assertEquals(ifsUser.length, 2);
+			IFSUser before = ifsUser[1];
+			assertEquals(before.getUserStatus(), IFSUserStatus.Pending);
+			before.setUserStatus(IFSUserStatus.Active);
+			jm.updateIFSUser(gridId, before);
+			X509Certificate[] certs = jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
+			X509Certificate certBefore = CertUtil.loadCertificateFromString(before.getCertificate().getCertificateAsString());
+			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
+	
+			try {
+				jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort());
+				assertTrue(false);
+			} catch (PermissionDeniedFault f) {
+
+			}
+			jm.renewIFSUserCredentials(gridId, ifsUser[1]);
+			
+			certs = jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
+			ifsUser = jm.findIFSUsers(gridId, filter);
+			assertEquals(ifsUser.length, 2);
+			IFSUser after = ifsUser[1];
+			assertEquals(after.getUserStatus(), IFSUserStatus.Active);
+
+			if (certBefore.equals(after.getCertificate())) {
 				assertTrue(false);
 			}
-		}
-    }
-    
-    public void testBadRemoveTrustedIdP(){
-    	try{
-    		jm = new Dorian(resource,"localhost");
-    		assertNotNull(jm.getConfiguration());
-    		assertNotNull(jm.getDatabase());
-    		
-    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
-			String gridId = UserManager.subjectToIdentity(gridSubject);
-			
-			assertEquals(1, jm.getTrustedIdPs(gridId).length);
-			String name = "Test IdP";
-			TrustedIdP idp = new TrustedIdP();
-			idp.setName(name);
-			String policyClass = AutoApprovalAutoRenewalPolicy.class.getName();
-			idp.setUserPolicyClass(policyClass);
-			idp.setStatus(TrustedIdPStatus.Active);
-			
-			SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
-			methods[0] = SAMLAuthenticationMethod.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
-			idp.setAuthenticationMethod(methods);
-			
-			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-			String subject = Utils.CA_SUBJECT_PREFIX + ",CN=" + name;
-			PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(subject, pair);
-			assertNotNull(req);
-			GregorianCalendar cal = new GregorianCalendar();
-			Date start = cal.getTime();
-			cal.add(Calendar.MONTH, 10);
-			Date end = cal.getTime();
-			X509Certificate cert = ca.requestCertificate(req, start, end);
-			assertNotNull(cert);
-			assertEquals(cert.getSubjectDN().getName(), subject);
-			idp.setIdPCertificate(CertUtil.writeCertificateToString(cert));
-			idp = jm.addTrustedIdP(gridId, idp);
-			assertEquals(2, jm.getTrustedIdPs(gridId).length);
-			gridId = "Invalid";
-			jm.removeTrustedIdP(gridId, idp);
-			assertTrue(false);
-    	}catch (InvalidUserFault iuf) {
     	} catch (Exception e){
     		FaultUtil.printFault(e);
     		assertTrue(false);
@@ -1145,62 +716,7 @@ public class TestDorian extends TestCase{
 			try {
 				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
 				jm.getDatabase().destroyDatabase();
-			} catch (Exception e) {
-				FaultUtil.printFault(e);
-				assertTrue(false);
-			}
-		}
-    }
-    
-    public void testBadUpdateTrustedIdPInvalidGridId(){
-    	try{
-    		jm = new Dorian(resource,"localhost");
-    		assertNotNull(jm.getConfiguration());
-    		assertNotNull(jm.getDatabase());
-    		
-    		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
-			String gridId = UserManager.subjectToIdentity(gridSubject);
-			//add a trusted IdP
-			assertEquals(1, jm.getTrustedIdPs(gridId).length);
-			String name = "Test IdP";
-			TrustedIdP idp = new TrustedIdP();
-			idp.setName(name);
-			String policyClass = AutoApprovalAutoRenewalPolicy.class.getName();
-			idp.setUserPolicyClass(policyClass);
-			idp.setStatus(TrustedIdPStatus.Active);
-			SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
-			methods[0] = SAMLAuthenticationMethod.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
-			idp.setAuthenticationMethod(methods);
-			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-			String subject = Utils.CA_SUBJECT_PREFIX + ",CN=" + name;
-			PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(subject, pair);
-			assertNotNull(req);
-			GregorianCalendar cal = new GregorianCalendar();
-			Date start = cal.getTime();
-			cal.add(Calendar.MONTH, 10);
-			Date end = cal.getTime();
-			X509Certificate cert = ca.requestCertificate(req, start, end);
-			assertNotNull(cert);
-			assertEquals(cert.getSubjectDN().getName(), subject);
-			idp.setIdPCertificate(CertUtil.writeCertificateToString(cert));
-			idp = jm.addTrustedIdP(gridId, idp);
-			assertEquals(2, jm.getTrustedIdPs(gridId).length);
-			//update the trusted IdP
-			idp.setName("Updated");
-			policyClass = ManualApprovalPolicy.class.getName();
-			idp.setUserPolicyClass(policyClass);
-			idp.setStatus(TrustedIdPStatus.Suspended);
-			gridId = "Invalid";
-			jm.updateTrustedIdP(gridId, idp);
-			assertTrue(false);
-    	}catch (InvalidUserFault iuf) {
-    	} catch (Exception e){
-    		FaultUtil.printFault(e);
-    		assertTrue(false);
-    	}finally{
-			try {
-				assertEquals(0,jm.getDatabase().getUsedConnectionCount());
-				jm.getDatabase().destroyDatabase();
+				jm = null;
 			} catch (Exception e) {
 				FaultUtil.printFault(e);
 				assertTrue(false);
@@ -1278,6 +794,62 @@ public class TestDorian extends TestCase{
 		assertTrue(authFound);
 		assertTrue(emailFound);
 	}
+    
+    private SAMLAssertion getSAMLAssertion(String id, IdPContainer idp) throws Exception {
+		GregorianCalendar cal = new GregorianCalendar();
+		Date start = cal.getTime();
+		cal.add(Calendar.MINUTE, 2);
+		Date end = cal.getTime();
+		return this.getSAMLAssertion(id, idp, start, end, "urn:oasis:names:tc:SAML:1.0:am:password");
+	}
+    
+    private SAMLAssertion getSAMLAssertion(String id, IdPContainer idp, Date start, Date end, String method)
+	throws Exception {
+	try {
+		org.apache.xml.security.Init.init();
+		X509Certificate cert = idp.getCert();
+		PrivateKey key = idp.getKey();
+		String email = id + "@test.com";
+
+		String issuer = cert.getSubjectDN().toString();
+		String federation = cert.getSubjectDN().toString();
+		String ipAddress = null;
+		String subjectDNS = null;
+		SAMLNameIdentifier ni = new SAMLNameIdentifier(id, federation, "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
+		SAMLNameIdentifier ni2 = new SAMLNameIdentifier(id, federation, "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
+		SAMLSubject sub = new SAMLSubject(ni,null, null, null);
+		SAMLSubject sub2 = new SAMLSubject(ni2,null, null, null);
+		SAMLAuthenticationStatement auth = new SAMLAuthenticationStatement(sub, method, new Date(), ipAddress,
+			subjectDNS, null);
+		QName name = new QName(EMAIL_NAMESPACE, EMAIL_NAME);
+		List vals = new ArrayList();
+		vals.add(email);
+		SAMLAttribute att = new SAMLAttribute(name.getLocalPart(), name.getNamespaceURI(), name, (long) 0, vals);
+
+		List atts = new ArrayList();
+		atts.add(att);
+		SAMLAttributeStatement attState = new SAMLAttributeStatement(sub2, atts);
+
+		List l = new ArrayList();
+		l.add(auth);
+		l.add(attState);
+
+		SAMLAssertion saml = new SAMLAssertion(issuer, start, end, null, null, l);
+		List a = new ArrayList();
+		a.add(cert);
+		saml.sign(XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA1, key, a);
+
+		return saml;
+	} catch (Exception e) {
+		DorianInternalFault fault = new DorianInternalFault();
+		fault.setFaultString("Error creating SAML Assertion.");
+		FaultHelper helper = new FaultHelper(fault);
+		helper.addFaultCause(e);
+		fault = (DorianInternalFault) helper.getFault();
+		throw fault;
+
+	}
+    }
     
     private Application createApplication() {
 		Application u = new Application();
@@ -1373,19 +945,6 @@ public class TestDorian extends TestCase{
 		count = count + 1;
 		return u;
 	}
-    
-    private String identityToSubject(String identity) {
-		String s = identity.substring(1);
-		return s.replace('/', ',');
-	}
-
-	private ProxyLifetime getProxyLifetime() {
-		ProxyLifetime valid = new ProxyLifetime();
-		valid.setHours(12);
-		valid.setMinutes(0);
-		valid.setSeconds(0);
-		return valid;
-	}
 
 	private void createAndCheckProxyLifetime(ProxyLifetime lifetime,
 			PrivateKey key, X509Certificate[] certs) throws Exception {
@@ -1403,6 +962,102 @@ public class TestDorian extends TestCase{
 				.getIdentity()));
 		assertEquals(cred.getIssuer(), identityToSubject(cred.getIdentity()));
 		cred.verify();
+	}
+	
+	private String identityToSubject(String identity) {
+		String s = identity.substring(1);
+		return s.replace('/', ',');
+	}
+
+	private ProxyLifetime getProxyLifetime() {
+		ProxyLifetime valid = new ProxyLifetime();
+		valid.setHours(12);
+		valid.setMinutes(0);
+		valid.setSeconds(0);
+		return valid;
+	}
+	
+	private ProxyLifetime getProxyLifetimeShort() {
+		ProxyLifetime valid = new ProxyLifetime();
+		valid.setHours(0);
+		valid.setMinutes(0);
+		valid.setSeconds(SHORT_PROXY_VALID);
+		return valid;
+	}	
+	
+	private IdPContainer getTrustedIdpAutoApproveAutoRenew(String name) throws Exception {
+		return this.getTrustedIdp(name, AutoApprovalAutoRenewalPolicy.class.getName());
+	}
+	
+	private IdPContainer getTrustedIdpAutoApprove(String name) throws Exception {
+		return this.getTrustedIdp(name, AutoApprovalPolicy.class.getName());
+	}
+
+
+	private IdPContainer getTrustedIdpManualApprove(String name) throws Exception {
+		return this.getTrustedIdp(name, ManualApprovalPolicy.class.getName());
+	}
+
+
+	private IdPContainer getTrustedIdpManualApproveAutoRenew(String name) throws Exception {
+		return this.getTrustedIdp(name, ManualApprovalAutoRenewalPolicy.class.getName());
+	}
+	
+	private IdPContainer getTrustedIdp(String name, String policyClass) throws Exception {
+		TrustedIdP idp = new TrustedIdP();
+		idp.setName(name);
+		idp.setUserPolicyClass(policyClass);
+		idp.setStatus(TrustedIdPStatus.Active);
+
+		SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
+		methods[0] = SAMLAuthenticationMethod.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
+		idp.setAuthenticationMethod(methods);
+
+		KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+		String subject = Utils.CA_SUBJECT_PREFIX + ",CN=" + name;
+		PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(subject, pair);
+		assertNotNull(req);
+		GregorianCalendar cal = new GregorianCalendar();
+		Date start = cal.getTime();
+		cal.add(Calendar.MONTH, 10);
+		Date end = cal.getTime();
+		X509Certificate cert = ca.requestCertificate(req, start, end);
+		assertNotNull(cert);
+		assertEquals(cert.getSubjectDN().getName(), subject);
+		idp.setIdPCertificate(CertUtil.writeCertificateToString(cert));
+		
+		return new IdPContainer(idp, cert, pair.getPrivate());
+	}
+	
+	public class IdPContainer {
+
+		TrustedIdP idp;
+
+		X509Certificate cert;
+
+		PrivateKey key;
+
+
+		public IdPContainer(TrustedIdP idp, X509Certificate cert, PrivateKey key) {
+			this.idp = idp;
+			this.cert = cert;
+			this.key = key;
+		}
+
+
+		public X509Certificate getCert() {
+			return cert;
+		}
+
+
+		public TrustedIdP getIdp() {
+			return idp;
+		}
+
+
+		public PrivateKey getKey() {
+			return key;
+		}
 	}
 	
    protected void setUp() throws Exception {

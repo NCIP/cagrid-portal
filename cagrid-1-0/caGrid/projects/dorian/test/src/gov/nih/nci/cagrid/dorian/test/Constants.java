@@ -18,6 +18,8 @@ public class Constants {
 	
 	public static String DORIAN_CONF = "/general-test/dorian-conf.xml";
 	
+	public static String DORIAN_CONF_EXPIRING_CREDENTIALS = "/general-test/dorian-conf-expiring-credentials.xml";
+	
 	public static String IDP_CONFIG = "/general-test/idp-config.xml";
 	
 	public static String IDP_CONFIG2 = "/general-test/idp-config2.xml";

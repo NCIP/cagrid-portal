@@ -17,9 +17,9 @@ General Tasks
 
 Testing Tasks
 --------------
-1) moving testing resources (e.g. resources/ca-test) to test/resources (e.g. resources/ca-test)
-2) Add test/resources to testing classpath
-3) Change to loading resources using classloader instead of filesystem
+(DONE) 1) moving testing resources (e.g. resources/ca-test) to test/resources (e.g. resources/ca-test)
+(DONE) 2) Add test/resources to testing classpath
+(DONE) 3) Change to loading resources using classloader instead of filesystem
 e.g.
 	FROM: 
 	=====
@@ -30,7 +30,7 @@ e.g.
     =====
     public static String DB_CONFIG = "/general-test/db-config.xml";
     Document doc = XMLUtilities.streamToDocument(getClass().getResourceAsStream(DB_CONFIG));
-4) Don't put these full paths as constants in every file, make some TestConstants.java somewhere that has the paths
+(DONE) 4) Don't put these full paths as constants in every file, make some TestConstants.java somewhere that has the paths
 (DONE) 5) Don't check in your config files (e.g db-config.xml), you should only check in examples (e.g. db-config.xml.example) and Ant should create the real one from the example
 
 
