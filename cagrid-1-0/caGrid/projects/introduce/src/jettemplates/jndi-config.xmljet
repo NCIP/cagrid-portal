@@ -36,7 +36,7 @@ imports="gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.i
 				<parameter>
 					<name>registrationTemplateFile</name>
 					<!-- Set this to the full path of the registration parameters template file (ignored if performRegistration is false) -->
-					<value>FULL-ETC-PATH/registration.xml</value>
+					<value>ETC-PATH/registration.xml</value>
 				</parameter>
 <%	if(metadataList!=null && metadataList.getMetadata()!=null){
 		for (int i = 0; i < metadataList.getMetadata().length; i++) {
@@ -47,7 +47,7 @@ imports="gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.i
 				<parameter>
 					<name><%=name%>File</name>
 					<!-- Set this to the full path of the <%=name%> extract -->
-					<value>FULL-ETC-PATH/<%=name%>.xml</value>
+					<value>ETC-PATH/<%=name%>.xml</value>
 				</parameter><%
 			}
 		}

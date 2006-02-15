@@ -14,6 +14,7 @@ imports="gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.i
 %>
 package <%=packageName%>.service.globus.resource;
 
+import java.io.File;
 import java.util.Calendar;
 
 import javax.naming.Context;
@@ -23,7 +24,6 @@ import org.apache.axis.MessageContext;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.globus.mds.servicegroup.client.ServiceGroupRegistrationParameters;
 import org.globus.wsrf.Constants;
 import org.globus.wsrf.Resource;
@@ -35,15 +35,13 @@ import org.globus.wsrf.ResourceLifetime;
 import org.globus.wsrf.ResourceProperties;
 import org.globus.wsrf.ResourceProperty;
 import org.globus.wsrf.ResourcePropertySet;
+import org.globus.wsrf.config.ContainerConfig;
 import org.globus.wsrf.impl.ReflectionResourceProperty;
 import org.globus.wsrf.impl.SimpleResourceKey;
-import org.globus.wsrf.impl.SimpleResourceProperty;
 import org.globus.wsrf.impl.SimpleResourcePropertyMetaData;
 import org.globus.wsrf.impl.SimpleResourcePropertySet;
 import org.globus.wsrf.impl.servicegroup.client.ServiceGroupRegistrationClient;
 import org.globus.wsrf.utils.AddressingUtils;
-
-import gov.nih.nci.cagrid.common.CommonTools;
 
 
 public class BaseResource implements Resource, ResourceProperties, ResourceLifetime, ResourceIdentifier {
@@ -141,14 +139,23 @@ public class BaseResource implements Resource, ResourceProperties, ResourceLifet
 			try {
 				// This is how registration parameters are set (read from
 				// template)
-				ServiceGroupRegistrationParameters params = ServiceGroupRegistrationClient
-					.readParams(getConfiguration().getRegistrationTemplateFile());
-				// set our service's EPR as the registrant
-				params.setRegistrantEPR(epr);
+				File registrationFile = new File(ContainerConfig.getBaseDirectory() + File.separator
+					+ getConfiguration().getRegistrationTemplateFile());
 
-				ServiceGroupRegistrationClient client = new ServiceGroupRegistrationClient();
-				// apply the registration params to the client
-				client.register(params);
+				if (registrationFile.exists() && registrationFile.canRead()) {
+					logger.debug("Loading registration information from:" + registrationFile);
+
+					ServiceGroupRegistrationParameters params = ServiceGroupRegistrationClient
+						.readParams(registrationFile.getAbsolutePath());
+					// set our service's EPR as the registrant
+					params.setRegistrantEPR(epr);
+
+					ServiceGroupRegistrationClient client = new ServiceGroupRegistrationClient();
+					// apply the registration params to the client
+					client.register(params);
+				} else {
+					logger.error("Unable to read registration file:" + registrationFile);
+				}
 			} catch (Exception e) {
 				logger.error("Exception when trying to register service (" + epr + "): " + e);
 			}
