@@ -225,8 +225,8 @@ public class CADSRMetadataConfigurationComponent extends GridPortalComponent {
 			doneButton.setText("Done");
 			doneButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager
-					.getInstance().getResource(IntroducePortalConf.RESOURCE);
+					IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
+						IntroducePortalConf.RESOURCE);
 					GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
 					try {
 						XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
@@ -252,18 +252,18 @@ public class CADSRMetadataConfigurationComponent extends GridPortalComponent {
 	public void performDone() {
 		// populate the data vector from the prior screen now......
 		int index = 0;
-		
-		//set the package name
+
+		// set the package name
 		String domain = this.cadsrPanel.currentNamespace.getDomain();
 		String csi = this.cadsrPanel.currentNamespace.getName();
 		int csiDomainIndex = csi.lastIndexOf(".");
-		if(csiDomainIndex>=0){
-			domain = csi.substring(0,csiDomainIndex);
+		if (csiDomainIndex >= 0) {
+			domain = csi.substring(0, csiDomainIndex);
 		}
-		
+
 		typeInfo.set(index++, domain);
-		
-		//skip classname
+
+		// skip classname
 		index++;
 		if (this.cadsrPanel.currentNamespace != null) {
 			typeInfo.set(index++, "cadsr://" + this.cadsrPanel.currentNamespace.getRaw());
@@ -278,7 +278,8 @@ public class CADSRMetadataConfigurationComponent extends GridPortalComponent {
 		}
 		typeInfo.set(index++, String.valueOf(isPopulateFromFile.isSelected()));
 		typeInfo.set(index++, String.valueOf(isRegister.isSelected()));
-		typeInfo.set(index++, getQnameDomain().getText() + ":" + getQnameName().getText());
+		typeInfo.set(index++, getQnameDomain().getText());
+		typeInfo.set(index++, getQnameName().getText());
 
 	}
 

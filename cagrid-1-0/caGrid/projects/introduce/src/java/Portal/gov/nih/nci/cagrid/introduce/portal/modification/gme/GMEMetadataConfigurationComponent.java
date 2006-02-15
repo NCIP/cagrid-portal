@@ -256,18 +256,18 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 	public void performDone() {
 		// populate the data vector from the prior screen now......
 		int index = 0;
-		
-		//set the package name
+
+		// set the package name
 		String domain = this.gmePanel.currentNamespace.getDomain();
 		String csi = this.gmePanel.currentNamespace.getName();
 		int csiDomainIndex = csi.lastIndexOf(".");
-		if(csiDomainIndex>=0){
-			domain = csi.substring(0,csiDomainIndex);
+		if (csiDomainIndex >= 0) {
+			domain = csi.substring(0, csiDomainIndex);
 		}
-		
+
 		typeInfo.set(index++, domain);
-		
-		//skip classname
+
+		// skip classname
 		index++;
 		if (this.gmePanel.currentNamespace != null) {
 			typeInfo.set(index++, "gme://" + this.gmePanel.currentNamespace.getRaw());
@@ -282,7 +282,8 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 		}
 		typeInfo.set(index++, String.valueOf(isPopulateFromFile.isSelected()));
 		typeInfo.set(index++, String.valueOf(isRegister.isSelected()));
-		typeInfo.set(index++, getQnameDomain().getText() + ":" + getQnameName().getText());
+		typeInfo.set(index++, getQnameDomain().getText());
+		typeInfo.set(index++, getQnameName().getText());
 
 	}
 

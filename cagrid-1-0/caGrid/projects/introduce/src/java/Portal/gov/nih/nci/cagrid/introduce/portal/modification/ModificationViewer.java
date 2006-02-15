@@ -47,7 +47,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.51 2006-02-10 10:21:04 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.52 2006-02-15 21:49:53 oster Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -216,7 +216,6 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	private void initialize() {
 		if (this.methodsDirectory != null) {
 			try {
-
 				this.introService = (ServiceDescription) CommonTools.deserializeDocument(this.methodsDirectory
 					.getAbsolutePath()
 					+ File.separator + "introduce.xml", ServiceDescription.class);
@@ -514,7 +513,8 @@ public class ModificationViewer extends GridPortalBaseFrame {
 										String location = (String) metadataTable.getValueAt(i, 4);
 										String populateFromFile = (String) metadataTable.getValueAt(i, 5);
 										String register = (String) metadataTable.getValueAt(i, 6);
-										String qname = (String) metadataTable.getValueAt(i, 7);
+										String qnameNS = (String) metadataTable.getValueAt(i, 7);
+										String qnameName = (String) metadataTable.getValueAt(i, 8);
 
 										MetadataType metadata = new MetadataType();
 										if (packageName != null && !packageName.equals("")) {
@@ -539,11 +539,8 @@ public class ModificationViewer extends GridPortalBaseFrame {
 										if (register != null && !register.equals("")) {
 											metadata.setRegister(Boolean.valueOf(register).booleanValue());
 										}
-										if (qname != null && !qname.equals("")) {
-											int index = qname.lastIndexOf(":");
-											String qnamespace = qname.substring(0, index);
-											String qnamename = qname.substring(index + 1);
-											QName qn = new QName(qnamespace, qnamename);
+										if (qnameNS != null && !qnameNS.equals("") && qnameName !=null && !qnameName.equals("")) {
+											QName qn = new QName(qnameNS, qnameName);
 											metadata.setQName(qn);
 										}
 										metadataArray[i] = metadata;
@@ -632,7 +629,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			return;
 		}
 
-		Vector v = (Vector) getMetadataTable().getValueAt(getMetadataTable().getSelectedRow(), 8);
+		Vector v = (Vector) getMetadataTable().getValueAt(getMetadataTable().getSelectedRow(), 9);
 		IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
 			IntroducePortalConf.RESOURCE);
 		if (conf.getDiscoveryType().equals(IntroducePortalConf.GME_DISCOVERY)) {
