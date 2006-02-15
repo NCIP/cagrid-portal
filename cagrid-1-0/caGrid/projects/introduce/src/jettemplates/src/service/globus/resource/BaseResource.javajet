@@ -191,7 +191,9 @@ public class BaseResource implements Resource, ResourceProperties, ResourceLifet
 	%>
 	private void load<%=TemplateUtils.upperCaseFirstCharacter(name)%>FromFile() {
 		try {
-			this.<%=name%>MD = (<%=className%>) CommonTools.deserializeDocument(getConfiguration().get<%=TemplateUtils.upperCaseFirstCharacter(name)%>File(),
+			File dataFile = new File(ContainerConfig.getBaseDirectory() + File.separator
+					+ getConfiguration().get<%=TemplateUtils.upperCaseFirstCharacter(name)%>File());
+			this.<%=name%>MD = (<%=className%>) CommonTools.deserializeDocument(dataFile.getAbsolutePath(),
 				<%=className%>.class);
 		} catch (Exception e) {
 			logger.error("ERROR: problem populating metadata from file: " + e.getMessage(), e);

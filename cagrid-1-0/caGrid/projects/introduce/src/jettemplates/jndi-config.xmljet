@@ -35,7 +35,7 @@ imports="gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.i
 				</parameter>
 				<parameter>
 					<name>registrationTemplateFile</name>
-					<!-- Set this to the full path of the registration parameters template file (ignored if performRegistration is false) -->
+					<!-- Set this to the relative path (from the container root, e.g GLOBUS_LOCATION for globus container) of the registration parameters template file (ignored if performRegistration is false) -->
 					<value>ETC-PATH/registration.xml</value>
 				</parameter>
 <%	if(metadataList!=null && metadataList.getMetadata()!=null){
@@ -46,7 +46,7 @@ imports="gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.i
 				String className=metadata.getPackageName() + "." + metadata.getClassName();%>
 				<parameter>
 					<name><%=name%>File</name>
-					<!-- Set this to the full path of the <%=name%> extract -->
+					<!-- Set this to the relative path (from the container root, e.g GLOBUS_LOCATION for globus container) of the <%=name%> extract -->
 					<value>ETC-PATH/<%=name%>.xml</value>
 				</parameter><%
 			}
