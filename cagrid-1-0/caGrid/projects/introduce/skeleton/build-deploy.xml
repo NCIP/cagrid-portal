@@ -8,12 +8,13 @@
 	<property name="tomcat.deploy.lib.dir" value="${tomcat.deploy.dir}/lib" />
 	<property name="tomcat.wsrf.schema.dir" value="${tomcat.dir}/webapps/wsrf/share/schema" />
 	
-	<property name="gar.name" value="tmp/${gar.filename}.gar" />
+	<property name="gar.name" value="${gar.filename}.gar" />
 	
 	
-	<!-- deploy to tomcat -->
-	<target name="deploy" description="Deploys to CATALINA_HOME">
+	<!-- deploy  a gar to tomcat -->
+	<target name="deployTomcat" depends="createDeploymentGar" description="Deploys to CATALINA_HOME">
 		<echo message="Deploying service under Tomcat at ${tomcat.dir}" />
+		
 		<!-- Configure Tomcat destination for skeletons -->
 		<pathconvert dirsep="_" property="service.deployment.dir.name">
 			<path>
@@ -70,19 +71,17 @@
 				<include name="**\*" />
 			</fileset>
 		</copy>
+
 	</target>
 	
-	
-	<!-- deploy a gar -->
-	<target name="deployGar" depends="checkGlobus, checkTomcat" description="Deploys a gar to GLOBUS_LOCATION">
-		<echo message="Deploying server to Globus Container" />
+	<!-- make deployment configured gar -->
+	<target name="createDeploymentGar" depends="checkGlobus, checkTomcat">
 		<copy todir="${build.lib.dir}">
 			<fileset dir="${basedir}/lib">
 				<exclude name="**" />
 			</fileset>
 		</copy>
 		
-		<property name="service.deployment.dir" value="${ext.globus.dir}/etc/${introduce.skeleton.service.name}" />
 		<!-- prepare the server-config file -->
 		<mkdir dir="tmp" />
 		<copy overwrite="true" todir="tmp" file="server-config.wsdd" />
@@ -106,6 +105,14 @@
 			<reference refid="${garschema.id}" />
 			<reference refid="${garetc.id}" />
 		</ant>
+		<delete dir="tmp" />
+	</target>
+	
+	
+	<!-- deploy a gar to globus -->
+	<target name="deployGlobus" depends="checkGlobus, checkTomcat, createDeploymentGar" description="Deploys a gar to GLOBUS_LOCATION">
+		<echo message="Deploying server to Globus Container" />
+
 		<java classname="org.globus.bootstrap.AntBootstrap" fork="yes" failonerror="true">
 			<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
 			<jvmarg value="-Djava.endorsed.dirs=${ext.globus.dir}/endorsed" />
@@ -123,7 +130,7 @@
 			</classpath>
 		</java>
 		
-		<delete dir="tmp" />
+		<delete dir="${gar.name}" />
 		<!-- deploy the gar -->
 	</target>
 </project>
