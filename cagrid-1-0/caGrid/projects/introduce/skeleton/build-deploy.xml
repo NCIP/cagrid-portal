@@ -71,7 +71,7 @@
 				<include name="**\*" />
 			</fileset>
 		</copy>
-
+		
 	</target>
 	
 	<!-- make deployment configured gar -->
@@ -112,7 +112,7 @@
 	<!-- deploy a gar to globus -->
 	<target name="deployGlobus" depends="checkGlobus, checkTomcat, createDeploymentGar" description="Deploys a gar to GLOBUS_LOCATION">
 		<echo message="Deploying server to Globus Container" />
-
+		
 		<java classname="org.globus.bootstrap.AntBootstrap" fork="yes" failonerror="true">
 			<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
 			<jvmarg value="-Djava.endorsed.dirs=${ext.globus.dir}/endorsed" />
