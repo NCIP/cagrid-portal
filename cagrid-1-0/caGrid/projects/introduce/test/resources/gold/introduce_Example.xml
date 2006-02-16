@@ -5,13 +5,6 @@
             <ns2:Inputs/>
             <ns2:Output className="void"/>
             <ns2:Exceptions/>
-            <ns2:MethodSecurity xsi:type="ns2:SecureCommunicationConfiguration">
-                <ns2:SecureCommunication xsi:type="ns2:SecureCommunicationMethodType">None</ns2:SecureCommunication>
-                <ns2:AuthenticationMethod xsi:type="ns2:AuthenticationMethodType">Integrity</ns2:AuthenticationMethod>
-                <ns2:AnonymousClients xsi:type="ns2:AnonymousClientsType">No</ns2:AnonymousClients>
-                <ns2:ClientAuthorization xsi:type="ns2:ClientAuthorizationType"
-                >None</ns2:ClientAuthorization>
-            </ns2:MethodSecurity>
         </ns2:Method>
     </ns2:Methods>
     <ns3:MetadataList xsi:type="ns3:MetadataListType" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
