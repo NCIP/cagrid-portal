@@ -20,7 +20,10 @@
 		<mkdir dir="tmp" />
 		
 		<unjar src="${gar.name}.gar" dest="tmp"/>
+		<!-- fix up the secret names for tomcat -->
 		<move failonerror="false" file="tmp/server-deploy.wsdd" tofile="tmp/server-config.wsdd"/>
+		<move failonerror="false" file="tmp/client-deploy.wsdd" tofile="tmp/client-config.wsdd"/>
+		<move failonerror="false" file="tmp/jndi-config-deploy.xml" tofile="tmp/jndi-config.xml"/>
 		
 		<mkdir dir="${tomcat.deploy.etc.dir}/${gar.name}" />
 		<!-- Copy config files to tomcat -->
