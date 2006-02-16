@@ -20,7 +20,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: OutputTypeTable.java,v 1.13 2006-02-10 10:21:04 hastings Exp $
+ * @version $Id: OutputTypeTable.java,v 1.14 2006-02-16 19:47:24 hastings Exp $
  */
 public class OutputTypeTable extends JComponentTable {
 
@@ -89,10 +89,10 @@ public class OutputTypeTable extends JComponentTable {
 					IntroducePortalConf.RESOURCE);
 				if (conf.getDiscoveryType().equals(IntroducePortalConf.GME_DISCOVERY)) {
 					PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-						new GMEParameterConfigurationComponent(v, schemaDir, true));
+						new GMEParameterConfigurationComponent(v, schemaDir, false));
 				} else if (conf.getDiscoveryType().equals(IntroducePortalConf.CADSR_DISCOVERY)) {
 					PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-						new CADSRParameterConfigurationComponent(v, schemaDir, true));
+						new CADSRParameterConfigurationComponent(v, schemaDir, false));
 				}
 			}
 		});
