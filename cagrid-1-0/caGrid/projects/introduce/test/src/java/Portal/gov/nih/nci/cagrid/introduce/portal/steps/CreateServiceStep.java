@@ -1,13 +1,10 @@
 package gov.nih.nci.cagrid.introduce.portal.steps;
 
-import java.awt.Component;
-
 import org.projectmobius.portal.GridPortal;
 import org.projectmobius.portal.PortalResourceManager;
 import org.uispec4j.Panel;
 import org.uispec4j.Trigger;
 import org.uispec4j.Window;
-import org.uispec4j.finder.ComponentMatcher;
 import org.uispec4j.interception.WindowHandler;
 import org.uispec4j.interception.WindowInterceptor;
 

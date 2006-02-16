@@ -1,10 +1,7 @@
 package gov.nih.nci.cagrid.introduce.steps;
 
-import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.TestCaseInfo;
-
-import java.io.File;
 
 import com.atomicobject.haste.framework.Step;
 

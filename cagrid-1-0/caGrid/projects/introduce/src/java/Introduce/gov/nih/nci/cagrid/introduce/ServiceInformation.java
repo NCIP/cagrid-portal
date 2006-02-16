@@ -1,9 +1,9 @@
 package gov.nih.nci.cagrid.introduce;
 
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
-import gov.nih.nci.cagrid.introduce.beans.ServiceSecurityConfiguration;
 import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
+import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 
 import java.util.Properties;
 
@@ -42,7 +42,7 @@ public class ServiceInformation {
 		this.introService.setMethods(methods);
 	}
 	
-	public ServiceSecurityConfiguration getServiceSecurityConfiguration(){
+	public ServiceSecurity getServiceSecurity(){
 		return this.introService.getServiceSecurity();
 	}
 	

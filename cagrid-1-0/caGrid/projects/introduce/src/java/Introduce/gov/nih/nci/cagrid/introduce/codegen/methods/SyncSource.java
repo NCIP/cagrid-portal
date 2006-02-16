@@ -2,16 +2,10 @@ package gov.nih.nci.cagrid.introduce.codegen.methods;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
-import gov.nih.nci.cagrid.introduce.beans.ServiceSecurityConfiguration;
-import gov.nih.nci.cagrid.introduce.beans.method.AnonymousClientsType;
-import gov.nih.nci.cagrid.introduce.beans.method.AuthenticationMethodType;
-import gov.nih.nci.cagrid.introduce.beans.method.ClientAuthorizationType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
-import gov.nih.nci.cagrid.introduce.beans.method.SecureCommunicationConfiguration;
-import gov.nih.nci.cagrid.introduce.beans.method.SecureCommunicationMethodType;
 import gov.nih.nci.cagrid.introduce.codegen.TemplateUtils;
 
 import java.io.File;
@@ -311,7 +305,7 @@ public class SyncSource {
 		}
 	}
 
-
+/*
 	private String getClientSecurityCode(SecureCommunicationConfiguration scc, boolean isService) {
 		StringBuffer sec = new StringBuffer();
 		if (scc != null) {
@@ -436,7 +430,7 @@ public class SyncSource {
 		}
 		return sec.toString();
 	}
-
+*/
 
 	private void addClientImpl(MethodType method) {
 		StringBuffer fileContent = null;
@@ -458,9 +452,10 @@ public class SyncSource {
 
 		clientMethod += "";
 		clientMethod += "org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;\n";
-		SecureCommunicationConfiguration scc = method.getMethodSecurity();
-
-		clientMethod += "\n" + getClientSecurityCode(scc, false);
+		
+		//TODO: ADD CLIENT SECURITY
+		//SecureCommunicationConfiguration scc = method.getMethodSecurity();
+		//clientMethod += "\n" + getClientSecurityCode(scc, false);
 		// put in the call to the client
 		String var = "port";
 

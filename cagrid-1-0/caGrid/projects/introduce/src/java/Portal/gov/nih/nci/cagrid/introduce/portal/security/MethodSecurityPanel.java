@@ -36,7 +36,7 @@ import javax.swing.JTabbedPane;
  * @version $Id: mobiusEclipseCodeTemplates.xml,v 1.2 2005/04/19 14:58:02 oster
  *          Exp $
  */
-public class SecurityMethodPanel extends JPanel implements PanelSynchronizer {
+public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 
 	private JPanel secureCommunicationPanel = null;
 	private ButtonGroup buttonGroup = new ButtonGroup();
@@ -81,14 +81,14 @@ public class SecurityMethodPanel extends JPanel implements PanelSynchronizer {
 	private final static String IDENTITY_AUTHORIZATION = "Identity Authorization";
 
 
-	public SecurityMethodPanel(ServiceSecurity sec) {
+	public MethodSecurityPanel(ServiceSecurity sec) {
 		super();
 		this.serviceSecurity = sec;
 		initialize();
 	}
 
 
-	public SecurityMethodPanel(ServiceSecurity sec, MethodSecurity ms) {
+	public MethodSecurityPanel(ServiceSecurity sec, MethodSecurity ms) {
 		super();
 		this.serviceSecurity = sec;
 		initialize();
@@ -301,6 +301,7 @@ public class SecurityMethodPanel extends JPanel implements PanelSynchronizer {
 
 
 	public void setMethodSecurity(MethodSecurity ms) {
+		if(ms!=null){
 		if (ms.getMethodSecuritySetting().equals(MethodSecurityType.None)) {
 			noneButton.setSelected(true);
 		} else if (ms.getMethodSecuritySetting().equals(MethodSecurityType.Custom)) {
@@ -355,6 +356,7 @@ public class SecurityMethodPanel extends JPanel implements PanelSynchronizer {
 					identityAuthorization.setIdentityAuthorization(cli.getIdentityAuthorization());
 				}
 			}
+		}
 		}
 
 	}

@@ -7,10 +7,12 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
+import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.modification.cadsr.CADSRParameterConfigurationComponent;
 import gov.nih.nci.cagrid.introduce.portal.modification.gme.GMEParameterConfigurationComponent;
+import gov.nih.nci.cagrid.introduce.portal.security.MethodSecurityPanel;
 
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -305,10 +307,11 @@ public class MethodViewer extends GridPortalBaseFrame {
 			doneButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					// First process the inputs
+					try{
 					method.setName(getNameField().getText());
 
-					method.setMethodSecurity(((SecurityConfigurationPanel) securityContainerPanel)
-						.getSecureCommunicationConfiguration());
+					method.setMethodSecurity(((MethodSecurityPanel) securityContainerPanel)
+						.getMethodSecurity());
 
 					methodsTable.changeMethodName(currentRow, getNameField().getText());
 
@@ -397,9 +400,12 @@ public class MethodViewer extends GridPortalBaseFrame {
 					}
 
 					method.setOutput(output);
-
+					}catch(Exception ex){
+						PortalUtils.showErrorMessage(ex);
+					}
 					dispose();
 				}
+				
 			});
 		}
 		return doneButton;
@@ -804,7 +810,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getSecurityContainerPanel() {
 		if (securityContainerPanel == null) {
-			securityContainerPanel = new SecurityConfigurationPanel(this.method.getMethodSecurity());
+			//TODO: Add Service Method Security
+			securityContainerPanel = new MethodSecurityPanel(new ServiceSecurity(),this.method.getMethodSecurity());
 			securityContainerPanel.setBorder(BorderFactory.createTitledBorder(null,
 				"Method Level Security Configuration", TitledBorder.DEFAULT_JUSTIFICATION,
 				TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));

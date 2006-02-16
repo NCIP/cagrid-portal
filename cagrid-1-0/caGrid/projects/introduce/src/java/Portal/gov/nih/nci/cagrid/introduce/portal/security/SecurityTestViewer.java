@@ -54,7 +54,7 @@ public class SecurityTestViewer extends GridPortalComponent {
 		if (jPanel == null) {
 			ServiceSecurity sec = new ServiceSecurity();
 			//sec.setSecureConversation(new SecureConversation());
-			jPanel = new SecurityMethodPanel(sec);
+			jPanel = new MethodSecurityPanel(sec);
 		}
 		return jPanel;
 	}

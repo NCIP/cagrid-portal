@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns="gme://gov.nih.nci.cagrid.introduce/1/Methods" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="gme://gov.nih.nci.cagrid.introduce/1/Methods" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns="gme://gov.nih.nci.cagrid.introduce/1/Methods" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:security="gme://gov.nih.nci.cagrid.introduce/1/Security" targetNamespace="gme://gov.nih.nci.cagrid.introduce/1/Methods" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	  <xs:import namespace="gme://gov.nih.nci.cagrid.introduce/1/Security"
+                      schemaLocation="./Security.xsd"/>
 	<xs:attributeGroup name="SchemaDervivedType">
 	   <xs:attribute name="packageName" type="xs:string" use="optional">
 			<xs:annotation>
@@ -80,51 +82,8 @@
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
-			<xs:element name="MethodSecurity" minOccurs="0" maxOccurs="1" type="SecureCommunicationConfiguration"/>
+			<xs:element name="MethodSecurity" minOccurs="0" maxOccurs="1" type="security:MethodSecurity"/>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 	</xs:complexType>
-	
-	<xs:complexType name="SecureCommunicationConfiguration">
-		<xs:sequence>
-			<xs:element name="SecureCommunication" minOccurs="0" maxOccurs="1" type="SecureCommunicationMethodType"/>
-			<xs:element name="AuthenticationMethod" minOccurs="0" maxOccurs="1" type="AuthenticationMethodType"/>
-			<xs:element name="AnonymousClients" minOccurs="0" maxOccurs="1" type="AnonymousClientsType"/>
-			<xs:element name="ClientAuthorization" minOccurs="0" maxOccurs="1" type="ClientAuthorizationType"/>
-		</xs:sequence>
-	</xs:complexType>
-
-	
-	<xs:simpleType name="SecureCommunicationMethodType">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="Default"/>
-			<xs:enumeration value="None"/>
-			<xs:enumeration value="GSI_Transport_Level_Security"/>
-			<xs:enumeration value="GSI_Secure_Conversation"/>
-			<xs:enumeration value="GSI_Secure_Message"/>	
-		</xs:restriction>
-	</xs:simpleType>
-	
-	<xs:simpleType name="AuthenticationMethodType">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="Integrity"/>
-			<xs:enumeration value="Privacy"/>
-			<xs:enumeration value="Integrity_Or_Privacy"/>
-		</xs:restriction>
-	</xs:simpleType>
-	
-	<xs:simpleType name="AnonymousClientsType">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="Yes"/>
-			<xs:enumeration value="No"/>
-		</xs:restriction>
-	</xs:simpleType>
-	
-	<xs:simpleType name="ClientAuthorizationType">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="None"/>
-			<xs:enumeration value="Self"/>
-			<xs:enumeration value="Host"/>
-		</xs:restriction>
-	</xs:simpleType>
 </xs:schema>

@@ -1,8 +1,8 @@
 package gov.nih.nci.cagrid.introduce.codegen.methods;
 
-import org.apache.ws.jaxme.js.JavaMethod;
-
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
+
+import org.apache.ws.jaxme.js.JavaMethod;
 
 public class Modification {
 	

@@ -6,8 +6,6 @@ import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
-import java.util.List;
-import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.swing.JButton;
