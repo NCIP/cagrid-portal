@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.introduce.steps;
 
-import gov.nih.nci.cagrid.common.CommonTools;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.TestCaseInfo;
 
 import java.io.File;
@@ -24,7 +24,7 @@ public class RemoveSkeletonStep extends Step {
 			throw new Exception("pathtobasedir system property not set");
 		}
 		Thread.sleep(5000);
-		boolean results = CommonTools.deleteDir(new File(pathtobasedir
+		boolean results = Utils.deleteDir(new File(pathtobasedir
 				+ File.separator + tci.getDir()));
 		System.out.println("__________________________" + results);
 		assertTrue(results);

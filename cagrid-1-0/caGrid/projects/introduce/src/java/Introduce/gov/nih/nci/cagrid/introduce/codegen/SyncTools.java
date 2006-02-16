@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.codegen;
 
 import gov.nih.nci.cagrid.common.CommonTools;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
@@ -33,7 +34,6 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
-import org.apache.tools.ant.PathTokenizer;
 import org.projectmobius.common.Namespace;
 
 /**
@@ -69,7 +69,7 @@ public class SyncTools {
 
 	public void sync() throws Exception {
 
-		ServiceDescription introService = (ServiceDescription) CommonTools
+		ServiceDescription introService = (ServiceDescription) Utils
 				.deserializeDocument(baseDirectory + File.separator
 						+ "introduce.xml", ServiceDescription.class);
 
@@ -138,7 +138,7 @@ public class SyncTools {
 						"introduce.skeleton.service.name") + "_flattened.wsdl")
 				.getAbsolutePath());
 		table = parser.getSymbolTable();
-		CommonTools.deleteDir(new File(baseDirectory.getAbsolutePath()
+		Utils.deleteDir(new File(baseDirectory.getAbsolutePath()
 				+ File.separator + "tmp"));
 
 		// table.dump(System.out);
@@ -220,7 +220,7 @@ public class SyncTools {
 			}
 		}
 		
-		CommonTools
+		Utils
 		.serializeDocument(baseDirectory.getAbsolutePath() + File.separator + "lastprocesses.xml",
 				introService,
 				new QName(

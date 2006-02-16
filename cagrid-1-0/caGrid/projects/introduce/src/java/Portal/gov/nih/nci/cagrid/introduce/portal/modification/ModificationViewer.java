@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
 import gov.nih.nci.cagrid.common.CommonTools;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
@@ -47,7 +48,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.52 2006-02-15 21:49:53 oster Exp $
+ * @version $Id: ModificationViewer.java,v 1.53 2006-02-16 15:15:25 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -216,7 +217,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	private void initialize() {
 		if (this.methodsDirectory != null) {
 			try {
-				this.introService = (ServiceDescription) CommonTools.deserializeDocument(this.methodsDirectory
+				this.introService = (ServiceDescription) Utils.deserializeDocument(this.methodsDirectory
 					.getAbsolutePath()
 					+ File.separator + "introduce.xml", ServiceDescription.class);
 				loadServiceProps();
@@ -562,7 +563,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 									// save the metadata and methods and then
 									// call the resync and build
 									setProgressText("writting service document");
-									CommonTools.serializeDocument(methodsDirectory.getAbsolutePath() + File.separator
+									Utils.serializeDocument(methodsDirectory.getAbsolutePath() + File.separator
 										+ "introduce.xml", introService, new QName(
 										"gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
 									setProgressText("sychronizing skeleton");

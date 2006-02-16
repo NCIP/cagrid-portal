@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.steps;
 
 import gov.nih.nci.cagrid.common.CommonTools;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -38,13 +39,13 @@ public class AddComplexMethodWithFaultStep extends Step {
 		}
 
 		// copy over the bookstore schema to be used with the test
-		CommonTools.copyFile(new File(pathtobasedir + File.separator
+		Utils.copyFile(new File(pathtobasedir + File.separator
 				+ TestCaseInfo.GOLD_SCHEMA_DIR + File.separator
 				+ "bookstore.xsd"), new File(pathtobasedir + File.separator
 				+ tci.getDir() + File.separator + "schema" + File.separator
 				+ tci.getName() + File.separator + "bookstore.xsd"));
 
-		ServiceDescription introService = (ServiceDescription) CommonTools
+		ServiceDescription introService = (ServiceDescription) Utils
 				.deserializeDocument(pathtobasedir + File.separator
 						+ tci.getDir() + File.separator + "introduce.xml",
 						ServiceDescription.class);
@@ -100,7 +101,7 @@ public class AddComplexMethodWithFaultStep extends Step {
 		newMethods[newLength - 1] = method;
 		methodsType.setMethod(newMethods);
 
-		CommonTools.serializeDocument(pathtobasedir + File.separator
+		Utils.serializeDocument(pathtobasedir + File.separator
 				+ tci.getDir() + File.separator + "introduce.xml",
 				introService, new QName("gme://gov.nih.nci.cagrid/1/Introduce",
 						"ServiceSkeleton"));

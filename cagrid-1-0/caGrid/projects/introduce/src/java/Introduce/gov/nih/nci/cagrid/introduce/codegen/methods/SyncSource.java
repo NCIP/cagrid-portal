@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.introduce.codegen.methods;
 
-import gov.nih.nci.cagrid.common.CommonTools;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.ServiceSecurityConfiguration;
 import gov.nih.nci.cagrid.introduce.beans.method.AnonymousClientsType;
@@ -230,7 +230,7 @@ public class SyncSource {
 
 			StringBuffer fileContent = null;
 			try {
-				fileContent = CommonTools.fileToStringBuffer(new File(this.serviceInterface));
+				fileContent = Utils.fileToStringBuffer(new File(this.serviceInterface));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -267,7 +267,7 @@ public class SyncSource {
 
 			StringBuffer fileContent = null;
 			try {
-				fileContent = CommonTools.fileToStringBuffer(new File(this.serviceInterface));
+				fileContent = Utils.fileToStringBuffer(new File(this.serviceInterface));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -442,7 +442,7 @@ public class SyncSource {
 		StringBuffer fileContent = null;
 		String methodName = method.getName();
 		try {
-			fileContent = CommonTools.fileToStringBuffer(new File(this.serviceClient));
+			fileContent = Utils.fileToStringBuffer(new File(this.serviceClient));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -528,7 +528,7 @@ public class SyncSource {
 	private void addImpl(MethodType method) {
 		StringBuffer fileContent = null;
 		try {
-			fileContent = CommonTools.fileToStringBuffer(new File(this.serviceImpl));
+			fileContent = Utils.fileToStringBuffer(new File(this.serviceImpl));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -561,7 +561,7 @@ public class SyncSource {
 	private void addProviderImpl(MethodType method) {
 		StringBuffer fileContent = null;
 		try {
-			fileContent = CommonTools.fileToStringBuffer(new File(this.serviceProviderImpl));
+			fileContent = Utils.fileToStringBuffer(new File(this.serviceProviderImpl));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -650,7 +650,7 @@ public class SyncSource {
 
 			StringBuffer fileContent = null;
 			try {
-				fileContent = CommonTools.fileToStringBuffer(new File(this.serviceInterface));
+				fileContent = Utils.fileToStringBuffer(new File(this.serviceInterface));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -690,7 +690,7 @@ public class SyncSource {
 	private void removeClientImpl(JavaMethod method) {
 		StringBuffer fileContent = null;
 		try {
-			fileContent = CommonTools.fileToStringBuffer(new File(this.serviceClient));
+			fileContent = Utils.fileToStringBuffer(new File(this.serviceClient));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -720,7 +720,7 @@ public class SyncSource {
 	private void removeClientImpl(MethodType method) {
 		StringBuffer fileContent = null;
 		try {
-			fileContent = CommonTools.fileToStringBuffer(new File(this.serviceClient));
+			fileContent = Utils.fileToStringBuffer(new File(this.serviceClient));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -750,7 +750,7 @@ public class SyncSource {
 	private void removeProviderImpl(JavaMethod method) {
 		StringBuffer fileContent = null;
 		try {
-			fileContent = CommonTools.fileToStringBuffer(new File(this.serviceProviderImpl));
+			fileContent = Utils.fileToStringBuffer(new File(this.serviceProviderImpl));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -781,7 +781,7 @@ public class SyncSource {
 	private void removeProviderImpl(MethodType method) {
 		StringBuffer fileContent = null;
 		try {
-			fileContent = CommonTools.fileToStringBuffer(new File(this.serviceProviderImpl));
+			fileContent = Utils.fileToStringBuffer(new File(this.serviceProviderImpl));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -815,7 +815,7 @@ public class SyncSource {
 		
 		StringBuffer fileContent = null;
 		try {
-			fileContent = CommonTools.fileToStringBuffer(new File(this.serviceImpl));
+			fileContent = Utils.fileToStringBuffer(new File(this.serviceImpl));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -851,7 +851,7 @@ public class SyncSource {
 	private void removeImpl(JavaMethod method) {
 		StringBuffer fileContent = null;
 		try {
-			fileContent = CommonTools.fileToStringBuffer(new File(this.serviceImpl));
+			fileContent = Utils.fileToStringBuffer(new File(this.serviceImpl));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

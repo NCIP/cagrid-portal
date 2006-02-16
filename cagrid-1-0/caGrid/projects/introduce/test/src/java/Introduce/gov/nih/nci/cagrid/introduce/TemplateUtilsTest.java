@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.introduce;
 
-import gov.nih.nci.cagrid.common.CommonTools;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
@@ -44,7 +44,7 @@ public class TemplateUtilsTest extends TestCase {
 		String pathtobasedir = System.getProperty("basedir", ".");
 		try {
 
-			info = (ServiceDescription) CommonTools.deserializeDocument(
+			info = (ServiceDescription) Utils.deserializeDocument(
 					pathtobasedir + GOLD_DIRECTORY + GOLD_FILE,
 					ServiceDescription.class);
 

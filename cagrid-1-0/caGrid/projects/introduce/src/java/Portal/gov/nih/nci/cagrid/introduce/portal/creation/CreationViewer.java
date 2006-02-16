@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.creation;
 
 import gov.nih.nci.cagrid.common.CommonTools;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
@@ -340,11 +341,11 @@ public class CreationViewer extends GridPortalComponent {
 								}
 								if (serviceTemplate.getText().length() > 0) {
 									if (serviceTemplate.getText().length() > 0) {
-										StringBuffer file = CommonTools
+										StringBuffer file = Utils
 												.fileToStringBuffer(new File(
 														serviceTemplate
 																.getText()));
-										CommonTools.stringBufferToFile(file,
+										Utils.stringBufferToFile(file,
 												dir.getText() + File.separator
 														+ "introduce.xml");
 									}

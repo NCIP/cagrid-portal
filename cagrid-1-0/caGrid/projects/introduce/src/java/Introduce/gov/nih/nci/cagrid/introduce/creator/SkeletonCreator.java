@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.introduce.creator;
 
-import gov.nih.nci.cagrid.common.CommonTools;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 
@@ -30,7 +30,7 @@ public class SkeletonCreator extends Task {
 		ServiceDescription introService = null;
 		try {
 
-			introService = (ServiceDescription) CommonTools.deserializeDocument(baseDirectory + File.separator
+			introService = (ServiceDescription) Utils.deserializeDocument(baseDirectory + File.separator
 				+ "introduce.xml", ServiceDescription.class);
 
 		} catch (Exception e1) {

@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.steps;
 
 import gov.nih.nci.cagrid.common.CommonTools;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -34,7 +35,7 @@ public class AddSimpleMethodWithFaultStep extends Step {
 			throw new Exception("pathtobasedir system property not set");
 		}
 
-		ServiceDescription introService = (ServiceDescription) CommonTools
+		ServiceDescription introService = (ServiceDescription) Utils
 				.deserializeDocument(pathtobasedir + File.separator
 						+ tci.getDir() + File.separator + "introduce.xml",
 						ServiceDescription.class);
@@ -69,7 +70,7 @@ public class AddSimpleMethodWithFaultStep extends Step {
 		newMethods[newLength - 1] = method;
 		methodsType.setMethod(newMethods);
 
-		CommonTools.serializeDocument(pathtobasedir + File.separator
+		Utils.serializeDocument(pathtobasedir + File.separator
 				+ tci.getDir() + File.separator + "introduce.xml",
 				introService, new QName("gme://gov.nih.nci.cagrid/1/Introduce",
 						"ServiceSkeleton"));
