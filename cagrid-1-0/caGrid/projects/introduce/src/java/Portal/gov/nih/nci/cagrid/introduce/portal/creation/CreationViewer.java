@@ -297,13 +297,16 @@ public class CreationViewer extends GridPortalComponent {
 			createButton.setIcon(IntroduceLookAndFeel.getCreateIcon());
 			createButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-
+					
 					BusyDialogRunnable r = new BusyDialogRunnable(
 							PortalResourceManager.getInstance().getGridPortal(),
 							"Creating") {
 
 						public void process() {
 							try {
+								setProgressText("caching directory location");
+								ResourceManager.setProperty(ResourceManager.LAST_DIRECTORY,getDir().getText());
+								
 								setProgressText("validating");
 								if (service.getText().length() > 0) {
 									if (!service.getText().matches(
