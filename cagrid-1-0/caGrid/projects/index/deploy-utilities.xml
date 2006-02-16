@@ -18,37 +18,33 @@
 		<echo message="Deploying service under Tomcat at ${tomcat.dir}" />
 		
 		<mkdir dir="tmp" />
-		<!-- Make these to simplfy logic if they don't exist in the gars-->
-		<mkdir dir="tmp/etc" />
-		<mkdir dir="tmp/lib" />
-		<mkdir dir="tmp/schema" />
 		
 		<unjar src="${gar.name}.gar" dest="tmp"/>
-		<move file="tmp/server-deploy.wsdd" tofile="tmp/server-config.wsdd"/>
+		<move failonerror="false" file="tmp/server-deploy.wsdd" tofile="tmp/server-config.wsdd"/>
 		
 		<mkdir dir="${tomcat.deploy.etc.dir}/${gar.name}" />
 		<!-- Copy config files to tomcat -->
-		<copy includeemptydirs="false" overwrite="true" toDir="${tomcat.deploy.etc.dir}/${gar.name}">
+		<copy failonerror="false" includeemptydirs="false" overwrite="true" toDir="${tomcat.deploy.etc.dir}/${gar.name}">
 			<fileset dir="tmp">
 				<include name="*" />
 			</fileset>
 		</copy>
 		<!-- Copy skeleton files to Tomcat and rename -->
-		<copy overwrite="true" toDir="${tomcat.deploy.etc.dir}/${gar.name}">
+		<copy failonerror="false" overwrite="true" toDir="${tomcat.deploy.etc.dir}/${gar.name}">
 			<fileset dir="tmp/etc">
 				<include name="*" />
 			</fileset>
 		</copy>
 			
 		<!--copy over the jars to the lib -->
-		<copy overwrite="true" toDir="${tomcat.deploy.lib.dir}">
+		<copy failonerror="false" overwrite="true" toDir="${tomcat.deploy.lib.dir}">
 			<fileset dir="tmp/lib">
 				<include name="*" />
 			</fileset>
 		</copy>
 		
 		<!--copy over the schema service files-->
-		<copy overwrite="true" toDir="${tomcat.wsrf.schema.dir}">
+		<copy failonerror="false" overwrite="true" toDir="${tomcat.wsrf.schema.dir}">
 			<fileset dir="tmp/schema">
 				<include name="**/*" />
 			</fileset>
