@@ -25,20 +25,6 @@ public class TemplateUtilsTest extends TestCase {
 
 	private MethodsType methods = null;
 
-	/**
-	 * <Metadata xmlns:a="http://ns1" className="AType" namespace="http://ns1"
-	 * type="A" location="." populateFromFile="true" register="true"
-	 * QName="a:A"/> <Metadata xmlns:a="http://ns2" className="AType"
-	 * namespace="http://ns2" type="A" location="." populateFromFile="true"
-	 * register="true" QName="a:A"/> <Metadata xmlns:a="http://ns1"
-	 * className="BType" namespace="http://ns1" type="B" location="."
-	 * populateFromFile="true" register="true" QName="b:B"/> <Metadata
-	 * xmlns:a="http://ns2" className="BType" namespace="http://ns2" type="B"
-	 * location="." populateFromFile="false" register="false" QName="b:B"/>
-	 * <Metadata xmlns:a="http://ns3" className="BType" namespace="http://ns3"
-	 * type="B" location="." populateFromFile="false" register="true"
-	 * QName="b:B"/>
-	 */
 
 	public void setUp() {
 		String pathtobasedir = System.getProperty("basedir", ".");

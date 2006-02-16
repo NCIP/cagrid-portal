@@ -1,17 +1,5 @@
 <%@ jet package="gov.nih.nci.cagrid.introduce.templates.etc" class="SecurityDescTemplate" %>
 <% 
    gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
-   gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity conf = info.getServiceSecurity();
-   String packageName = info.getServiceProperties().getProperty("introduce.skeleton.package");
-   String serviceName = info.getServiceProperties().getProperty("introduce.skeleton.service.name");
-   String namespaceDomain = info.getServiceProperties().getProperty("introduce.skeleton.namespace.domain");
-   String modifiedServiceName = serviceName;
-   if(serviceName.endsWith("Service")){
-   	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
-   }
 %>
-<securityConfig xmlns="http://www.globus.org">
-
-<authz value="none"/>
-	
-</securityConfig>
+<%=gov.nih.nci.cagrid.introduce.codegen.security.SecurityDescriptor.writeSecurityDescriptor(info)%>
