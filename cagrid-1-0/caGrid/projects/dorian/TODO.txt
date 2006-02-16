@@ -15,6 +15,7 @@ General Tasks
 11) Need to change all propety/config files to be "*.example" files, not check the real ones in, and build should create real ones from examples upon need
 
 
+
 Testing Tasks
 --------------
 (DONE) 1) moving testing resources (e.g. resources/ca-test) to test/resources (e.g. resources/ca-test)
