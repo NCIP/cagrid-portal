@@ -8,6 +8,8 @@
 	<property name="tomcat.wsrf.schema.dir" value="${tomcat.dir}/webapps/wsrf/share/schema" />
 	<property name="tomcat.etc.dir" value="${tomcat.dir}/webapps/wsrf/etc" />
 
+	<property environment="env" />
+
 	<!-- deploy  a gar to tomcat -->
 	<target name="deployTomcat" description="Deploys to CATALINA_HOME">
 		<echo message="Deploying service under Tomcat at ${tomcat.dir}" />
