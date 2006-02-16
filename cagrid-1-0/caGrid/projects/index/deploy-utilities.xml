@@ -24,7 +24,7 @@
 		<mkdir dir="tmp/schema" />
 		
 		<unjar src="${gar.name}.gar" dest="tmp"/>
-		<rename dest="tmp/server-deploy.wsdd" src="tmp/server-config.wsdd"/>
+		<move file="tmp/server-deploy.wsdd" tofile="tmp/server-config.wsdd"/>
 		
 		<mkdir dir="${tomcat.deploy.etc.dir}/${gar.name}" />
 		<!-- Copy config files to tomcat -->
