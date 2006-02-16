@@ -192,7 +192,8 @@ schema.local:   Directory where our schema files are located.
 
 
 	<import file="${basedir}/antfiles/${project.name}-utils.xml" />
-
+	<!--import deployment ant files -->
+	<import file="build-deploy.xml"/>
 
 	<!-- Sets up the build directory structure -->
 	<target name="init">
