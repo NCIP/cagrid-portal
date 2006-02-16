@@ -4,7 +4,7 @@
 <!-- Index Service Deploy build file                                   -->
 <!-- ================================================================= -->
 
-<project name="mds-index" default="deployIndex" basedir=".">
+<project name="mds-index" default="deployIndexTomcat" basedir=".">
     <import file="deploy-utilities.xml" />
 
     <!-- =============================================================== -->
