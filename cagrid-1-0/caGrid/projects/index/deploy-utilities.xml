@@ -13,9 +13,15 @@
 	<!-- deploy  a gar to tomcat -->
 	<target name="deployTomcat" description="Deploys to CATALINA_HOME">
 		<echo message="Deploying service under Tomcat at ${tomcat.dir}" />
+		
 		<mkdir dir="tmp" />
-		<unjar src="${gar.name}.gar" dest="tmp">
-		</unjar>
+		<!-- Make these to simplfy logic if they don't exist in the gars-->
+		<mkdir dir="tmp/etc" />
+		<mkdir dir="tmp/lib" />
+		<mkdir dir="tmp/schema" />
+		
+		<unjar src="${gar.name}.gar" dest="tmp"/>
+		
 		<mkdir dir="${tomcat.etc.dir}/${gar.name}" />
 		<!-- Copy config files to tomcat -->
 		<copy overwrite="true" toDir="${tomcat.etc.dir}/${gar.name}">
@@ -29,21 +35,21 @@
 				<include name="*" />
 			</fileset>
 		</copy>
+			
 		<!--copy over the jars to the lib -->
 		<copy overwrite="true" toDir="${tomcat.deploy.lib.dir}">
-			<fileset dir="lib">
-				<include name="*" />
-			</fileset>
 			<fileset dir="tmp/lib">
 				<include name="*" />
 			</fileset>
 		</copy>
+		
 		<!--copy over the schema service files-->
 		<copy overwrite="true" toDir="${tomcat.wsrf.schema.dir}">
 			<fileset dir="tmp/schema">
-				<include name="**\*" />
+				<include name="**/*" />
 			</fileset>
 		</copy>
+		
 		<delete dir="tmp" />
 	</target>
 </project>
