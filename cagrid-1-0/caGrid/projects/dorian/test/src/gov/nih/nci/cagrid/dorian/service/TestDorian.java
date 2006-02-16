@@ -479,8 +479,8 @@ public class TestDorian extends TestCase{
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
 			certs = jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
 			ifsUser = jm.findIFSUsers(gridId, filter);
-			assertEquals(ifsUser.length, 2);
-			IFSUser after = ifsUser[1];
+			assertEquals(ifsUser.length, 1);
+			IFSUser after = ifsUser[0];
 			assertEquals(after.getUserStatus(), IFSUserStatus.Active);
 			if (before.getCertificate().equals(after.getCertificate())) {
 				assertTrue(false);
@@ -538,8 +538,8 @@ public class TestDorian extends TestCase{
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
 			certs = jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
 			ifsUser = jm.findIFSUsers(gridId, filter);
-			assertEquals(ifsUser.length, 2);
-			IFSUser after = ifsUser[1];
+			assertEquals(ifsUser.length, 1);
+			IFSUser after = ifsUser[0];
 			assertEquals(after.getUserStatus(), IFSUserStatus.Active);
 			if (before.getCertificate().equals(after.getCertificate())) {
 				assertTrue(false);
