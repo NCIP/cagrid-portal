@@ -25,19 +25,16 @@ import gov.nih.nci.cagrid.dorian.ifs.IFSUtils;
 import gov.nih.nci.cagrid.dorian.ifs.ManualApprovalAutoRenewalPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.ManualApprovalPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.UserManager;
-import gov.nih.nci.cagrid.dorian.ifs.TestIFS.IdPContainer;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
-import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserRole;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidAssertionFault;
-import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidUserFault;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
-import gov.nih.nci.cagrid.dorian.test.Utils;
 import gov.nih.nci.cagrid.dorian.test.Constants;
+import gov.nih.nci.cagrid.dorian.test.Utils;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import gov.nih.nci.cagrid.opensaml.SAMLAttribute;
 import gov.nih.nci.cagrid.opensaml.SAMLAttributeStatement;
@@ -46,7 +43,6 @@ import gov.nih.nci.cagrid.opensaml.SAMLNameIdentifier;
 import gov.nih.nci.cagrid.opensaml.SAMLStatement;
 import gov.nih.nci.cagrid.opensaml.SAMLSubject;
 
-import java.io.File;
 import java.io.InputStream;
 import java.security.KeyPair;
 import java.security.PrivateKey;
@@ -126,9 +122,6 @@ public class TestDorian extends TestCase{
 			users = jm.findIdPUsers(gridId, uf);
 			assertEquals(1, users.length);
 			assertEquals(IdPUserStatus.Active, users[0].getStatus());
-			uf.setUserId("user");
-			users = jm.findIdPUsers(gridId, uf);
-			assertEquals(1, users.length);
 			BasicAuthCredential auth = new BasicAuthCredential();
 			auth.setUserId(a.getUserId());
 			auth.setPassword(a.getPassword());
@@ -150,7 +143,7 @@ public class TestDorian extends TestCase{
 			auth.setPassword(b.getPassword());
 			try{
 				saml = jm.authenticate(auth);
-				assertTrue(false);
+				fail("User is pending and should not be able to authenticate.");
 			}catch(PermissionDeniedFault pdf){	
 			}
 			
@@ -170,7 +163,7 @@ public class TestDorian extends TestCase{
 			auth.setPassword(c.getPassword());
 			try{
 				saml = jm.authenticate(auth);
-				assertTrue(false);
+				fail("User is rejected and should not be able to authenticate.");
 			}catch (PermissionDeniedFault pdf) {	
 			}
     	
@@ -190,7 +183,7 @@ public class TestDorian extends TestCase{
 			auth.setPassword(d.getPassword());
 			try{
 				saml = jm.authenticate(auth);
-				assertTrue(false);
+				fail("User is suspended and should not be able to authenticate.");
 			}catch (PermissionDeniedFault pdf) {	
 			}
 		}catch (Exception e) {
@@ -226,9 +219,19 @@ public class TestDorian extends TestCase{
 			try{
 				String invalidGridId = "ThisIsInvalid";
 	    		IdPUser[] users = jm.findIdPUsers(invalidGridId, uf);
-				assertTrue(false);
+				fail("Invoker should not be able to invoke.");
 			}catch (PermissionDeniedFault pdf) {	
 			}
+			
+//			try to update a user that does not exist
+    		try{
+    			IdPUser u = new IdPUser();
+    			u.setUserId("No_SUCH_USER");
+    			jm.updateIdPUser(gridId, u);
+    			fail("Should not be able to update no such user.");
+    		}catch (NoSuchUserFault nsuf) {
+    		}
+			
     		
 			IdPUser[] us = jm.findIdPUsers(gridId, uf);
     		assertEquals(1, us.length);
@@ -247,14 +250,7 @@ public class TestDorian extends TestCase{
     		us[0].setStatus(IdPUserStatus.Active);
     		us[0].setZipcode("11111");
     		
-    		//try to update a user that does not exist
-    		try{
-    			IdPUser u = new IdPUser();
-    			u.setUserId("No_SUCH_USER");
-    			jm.updateIdPUser(gridId, u);
-    			assertTrue(false);
-    		}catch (NoSuchUserFault nsuf) {
-    		}
+    		
     		
     		jm.updateIdPUser(gridId, us[0]);
     		us = jm.findIdPUsers(gridId, uf);
@@ -466,26 +462,19 @@ public class TestDorian extends TestCase{
     		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
     		IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-    		jm.addTrustedIdP(gridId, idp.getIdp());
+    		idp.getIdp().setId(jm.addTrustedIdP(gridId, idp.getIdp()).getId());
 			String username = "user";
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
 			X509Certificate[] certs = jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
-    		
-			BasicAuthCredential auth = new BasicAuthCredential();
-			auth.setUserId(Dorian.IDP_ADMIN_USER_ID);
-			auth.setPassword(Dorian.IDP_ADMIN_PASSWORD);
-			SAMLAssertion saml = jm.authenticate(auth);
-			KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
-			PublicKey publicKey = pair2.getPublic();
-			ProxyLifetime lifetime2 = getProxyLifetimeShort();
-			X509Certificate[] certs2 = jm.createProxy(saml, publicKey, lifetime2);
-			createAndCheckProxyLifetime(lifetime2, pair2.getPrivate(), certs2);
+    		createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
 					
 			IFSUserFilter filter = new IFSUserFilter();
+			filter.setUID(username);
+			filter.setIdPId(idp.getIdp().getId());
 			IFSUser[] ifsUser = jm.findIFSUsers(gridId, filter);
-			assertEquals(ifsUser.length, 2);
-			IFSUser before = ifsUser[1];
+			assertEquals(ifsUser.length, 1);
+			IFSUser before = ifsUser[0];
 			assertEquals(before.getUserStatus(), IFSUserStatus.Active);
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
 			certs = jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
@@ -523,18 +512,9 @@ public class TestDorian extends TestCase{
     		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 			
-			BasicAuthCredential auth = new BasicAuthCredential();
-			auth.setUserId(Dorian.IDP_ADMIN_USER_ID);
-			auth.setPassword(Dorian.IDP_ADMIN_PASSWORD);
-			SAMLAssertion saml = jm.authenticate(auth);
-			KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
-			PublicKey publicKey = pair2.getPublic();
-			ProxyLifetime lifetime2 = getProxyLifetimeShort();
-			X509Certificate[] certs2 = jm.createProxy(saml, publicKey, lifetime2);
-			createAndCheckProxyLifetime(lifetime2, pair2.getPrivate(), certs2);
 			
 			IdPContainer idp = this.getTrustedIdpManualApproveAutoRenew("My IdP");
-			jm.addTrustedIdP(gridId, idp.getIdp());
+			idp.getIdp().setId(jm.addTrustedIdP(gridId, idp.getIdp()).getId());
 			String username = "user";
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
@@ -546,9 +526,11 @@ public class TestDorian extends TestCase{
 			}
 			
 			IFSUserFilter filter = new IFSUserFilter();
+			filter.setUID(username);
+			filter.setIdPId(idp.getIdp().getId());
 			IFSUser[] ifsUser = jm.findIFSUsers(gridId, filter);
-			assertEquals(ifsUser.length, 2);
-			IFSUser before = ifsUser[1];
+			assertEquals(ifsUser.length, 1);
+			IFSUser before = ifsUser[0];
 			assertEquals(before.getUserStatus(), IFSUserStatus.Pending);
 			before.setUserStatus(IFSUserStatus.Active);
 			jm.updateIFSUser(gridId, before);
