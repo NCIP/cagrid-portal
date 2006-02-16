@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+
+<!-- ================================================================= -->
+<!-- Index Service Deploy build file                                   -->
+<!-- ================================================================= -->
+
+<project name="mds-index" default="deployIndex" basedir=".">
+    <import file="deploy-utilities.xml" />
+
+    <!-- =============================================================== -->
+    <!-- Deploy the Index Service                                        -->
+    <!-- =============================================================== -->
+    <target name="deployIndexTomcat">
+        <antcall target="deployTomcat">
+            <param name="gar.name" value="globus_wsrf_aggregator_schema"/>
+        </antcall>
+        <antcall target="deployTomcat">
+            <param name="gar.name" value="globus_wsrf_mds_aggregator"/>
+        </antcall>
+        <antcall target="deployTomcat">
+            <param name="gar.name" value="globus_wsrf_mds_index"/>
+        </antcall>
+        <antcall target="deployTomcat">
+            <param name="gar.name" value="globus_wsrf_mds_index_schema"/>
+        </antcall>
+        <antcall target="deployTomcat">
+            <param name="gar.name" value="globus_wsrf_mds_trigger"/>
+        </antcall>
+        <antcall target="deployTomcat">
+            <param name="gar.name" value="globus_wsrf_mds_usefulrp"/>
+        </antcall>
+        <antcall target="deployTomcat">
+            <param name="gar.name" value="globus_wsrf_mds_usefulrp_schema"/>
+        </antcall>
+        <antcall target="deployTomcat">
+            <param name="gar.name" value="globus_wsrf_servicegroup"/>
+        </antcall>
+        <antcall target="deployTomcat">
+            <param name="gar.name" value="globus_wsrf_servicegroup_schema"/>
+        </antcall>
+    </target>
+
+</project>
+

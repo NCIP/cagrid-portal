@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<project name="deploy-utilities file" basedir="." default="deployTomcat">
+	
+	<!-- Tomcat Properties -->
+	<property name="tomcat.dir" value="${env.CATALINA_HOME}" />
+	<property name="tomcat.common.lib.dir" value="${tomcat.dir}/common/lib" />
+	<property name="tomcat.deploy.dir" value="${tomcat.dir}/webapps/wsrf/WEB-INF" />
+	<property name="tomcat.deploy.lib.dir" value="${tomcat.deploy.dir}/lib" />
+	<property name="tomcat.wsrf.schema.dir" value="${tomcat.dir}/webapps/wsrf/share/schema" />
+	<property name="tomcat.etc.dir" value="${tomcat.dir}/webapps/wsrf/etc" />
+	
+	<!-- deploy  a gar to tomcat -->
+	<target name="deployTomcat" description="Deploys to CATALINA_HOME">
+		<echo message="Deploying service under Tomcat at ${tomcat.dir}" />
+		
+		<mkdir dir="tmp" />
+		<unzip src="${gar.name}.gar"
+			dest="tmp">
+		</unzip>
+		
+		<mkdir dir="${tomcat.etc.dir}/${gar.name}"/>
+		
+		<!-- Copy config files to tomcat -->
+		<copy overwrite="true" toDir="${tomcat.etc.dir}/${gar.name}">
+			<fileset dir="tmp">
+				<include name="*" />
+			</fileset>
+		</copy>
+		
+		<!-- Copy skeleton files to Tomcat and rename -->
+		<copy overwrite="true" toDir="${tomcat.etc.dir}/${gar.name}">
+			<fileset dir="tmp/etc">
+				<include name="*" />
+			</fileset>
+		</copy>
+		
+		<!--copy over the jars to the lib -->
+		<copy overwrite="true" toDir="${tomcat.deploy.lib.dir}">
+			<fileset dir="lib">
+				<include name="*" />
+			</fileset>
+			<fileset dir="tmp/lib">
+				<include name="*" />
+			</fileset>
+		</copy>
+		
+		<!--copy over the schema service files-->
+		<copy overwrite="true" toDir="${tomcat.wsrf.schema.dir}">
+			<fileset dir="tmp/schema">
+				<include name="**\*" />
+			</fileset>
+		</copy>
+		
+		<delete dir="tmp" />
+		
+	</target>
+	
+</project>
