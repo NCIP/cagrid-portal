@@ -309,12 +309,12 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 
 			TransportLevelSecurity tls = ms.getTransportLevelSecurity();
 			if (tls != null) {
-				tlsButton.setEnabled(true);
+				tlsButton.setSelected(true);
 				this.tlsPanel.setTransportLevelSecurity(tls);
 			}
 			SecureConversation sc = ms.getSecureConversation();
 			if (sc != null) {
-				secureConversationButton.setEnabled(true);
+				secureConversationButton.setSelected(true);
 				this.secureConversationPanel.setSecureConversation(sc);
 			}
 			SecureMessage sm = ms.getSecureMessage();
