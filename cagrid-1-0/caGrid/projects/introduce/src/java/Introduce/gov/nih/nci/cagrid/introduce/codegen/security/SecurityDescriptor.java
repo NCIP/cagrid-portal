@@ -37,7 +37,7 @@ public class SecurityDescriptor {
 					}
 				}
 			}
-			xml.append(writeServiceSettings());
+			xml.append(writeServiceSettings(info.getServiceSecurity()));
 			xml.append("</securityConfig>");
 			try {
 				return XMLUtilities.formatXML(xml.toString());
@@ -48,6 +48,33 @@ public class SecurityDescriptor {
 			ex.printStackTrace();
 			return "";
 		}
+	}
+	
+	private static String writeServiceSettings(ServiceSecurity ss) throws Exception{
+		StringBuffer xml = new StringBuffer();
+		
+		if ((ss.getMethodSecuritySetting() != null)
+				&& (ss.getMethodSecuritySetting()
+						.equals(MethodSecurityType.Custom))) {
+			xml.append("<auth-method>");
+			xml.append(getSecureConversationSettings(ss
+					.getSecureConversation()));
+			xml.append(getSecureMessageSettings(ss.getSecureMessage()));
+			xml.append(getTransportLayerSecuritySettings(ss
+					.getTransportLevelSecurity()));
+			xml.append("</auth-method>");
+			xml.append(getSecureConversationExtras(ss
+					.getSecureConversation()));
+			xml.append(getSecureMessageExtras(ss.getSecureMessage()));
+			xml.append(getRunAsMode(ss.getRunAsMode()));			
+		} else {
+			xml.append("<auth-method>");
+			xml.append("<none/>");
+			xml.append("</auth-method>");
+		}
+		
+		xml.append("<authz value=\"none\"/>");
+		return xml.toString();
 	}
 
 	private static String writeMethodSettings(ServiceSecurity service,
@@ -261,11 +288,4 @@ public class SecurityDescriptor {
 			return false;
 		}
 	}
-
-	private static String writeServiceSettings() {
-		StringBuffer xml = new StringBuffer();
-		xml.append("<authz value=\"none\"/>");
-		return xml.toString();
-	}
-
 }
