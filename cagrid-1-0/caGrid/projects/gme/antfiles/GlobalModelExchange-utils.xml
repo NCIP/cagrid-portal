@@ -3,13 +3,19 @@
 <!-- ======================================================================= -->
 <project name="globalModelExchange_utilities" basedir="." default="usage">
 	<path id="GlobalModelExchange.classpath">
+		<fileset dir="${build.lib.dir}">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${lib.dir}">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${ext.lib.dir}">
+			<include name="*.jar"/>
+		</fileset>
 		<fileset dir="${globus.location}/lib">
 			<include name="*.jar" />
 			<exclude name="${stubs.jar.name}" />
 			<exclude name="${jar.name}" />
-		</fileset>
-		<fileset dir="${build.lib.dir}">
-			<include name="*.jar"/>
 		</fileset>
 	</path>
 	<target name="gmeViewer" description="Execute the Gme Viewer">
