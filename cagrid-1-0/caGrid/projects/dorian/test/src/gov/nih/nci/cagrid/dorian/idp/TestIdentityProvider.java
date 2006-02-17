@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.dorian.idp;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.SimpleResourceManager;
+import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
@@ -11,7 +12,10 @@ import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserRole;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserStatus;
+import gov.nih.nci.cagrid.dorian.idp.bean.InvalidUserPropertyFault;
 import gov.nih.nci.cagrid.dorian.idp.bean.StateCode;
+import gov.nih.nci.cagrid.dorian.ifs.UserManager;
+import gov.nih.nci.cagrid.dorian.service.Dorian;
 import gov.nih.nci.cagrid.dorian.test.Constants;
 import gov.nih.nci.cagrid.dorian.test.Utils;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
@@ -90,7 +94,95 @@ public class TestIdentityProvider extends TestCase {
 			assertTrue(false);
 		}
 	}
+	
+	
+	 public void testBadRegisterWithIdP(){
+	    	try{
+	    		IdentityProvider idp = new IdentityProvider(conf, db, ca);
+				conf.setRegistrationPolicy(new AutomaticRegistrationPolicy());
+				assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy().getClass().getName());
+				//Application a = createApplication();
+				//idp.register(a);
+	    		//test the password length too long
+	    		try{
+	    			Application a = createTooLongPasswordApplication();
+	    			idp.register(a);	
+	    			fail("Should not be able to register with a password of this length.");
+	    		}catch (InvalidUserPropertyFault iupf) {
+	    		}
+	    		
+	    		//test the password length is too short
+	    		try{
+	    			Application b = createTooShortPasswordApplication();
+	    			idp.register(b);	
+	    			fail("Should not be able to register with a password of this length.");
+	    		}catch (InvalidUserPropertyFault iupf) {
+	    		}
+	    		
+	    		//test the UserId length is too long
+	    		try{
+	    			Application c = createTooLongUserIdApplication();
+	    			idp.register(c);	
+	    			fail("Should not be able to register with a UserId of this length.");
+	    		}catch (InvalidUserPropertyFault iupf) {
+	    		}
+	    		
+	    		//test the UserId length is too short
+	    		try{
+	    			Application d = createTooShortUserIdApplication();
+	    			idp.register(d);	
+	    			fail("Should not be able to register with a UserId of this length.");
+	    		}catch (InvalidUserPropertyFault iupf) {
+	    		}
+	    	}
+	    	catch (Exception e) {
+	    		FaultUtil.printFault(e);
+				assertTrue(false);
+			}
+	    }
 
+	 
+	 public void testBadRemoveIdPUserNoSuchUser(){
+	    	try{
+	    		IdentityProvider idp = new IdentityProvider(conf, db, ca);
+				conf.setRegistrationPolicy(new AutomaticRegistrationPolicy());
+				assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy().getClass().getName());
+	    		Application a = createApplication();
+				idp.register(a);
+				BasicAuthCredential cred = getAdminCreds();
+				IdPUserFilter uf = new IdPUserFilter();
+	    		IdPUser[] us = idp.findUsers(cred.getUserId(), uf);
+	    		assertEquals(2, us.length);
+				
+	    		//create a userId that does not exist
+	    		String userId = "No_SUCH_USER";
+	    		idp.removeUser(cred.getUserId(), userId);
+	    		IdPUserFilter f = new IdPUserFilter();
+	    		IdPUser[] users = idp.findUsers(cred.getUserId(), f);
+	    		assertEquals(2, users.length);
+	    	}catch (PermissionDeniedFault pdf) {
+			}catch (Exception e) {
+	    		FaultUtil.printFault(e);
+				assertTrue(false);
+			}
+	 }
+	 
+	 public void testBadRegisterWithIdPTwoIdenticalUsers(){
+	    	try{
+	    		IdentityProvider idp = new IdentityProvider(conf, db, ca);
+				conf.setRegistrationPolicy(new AutomaticRegistrationPolicy());
+				assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy().getClass().getName());
+	    		Application a = createApplication();
+				idp.register(a);
+				Application b = a;
+				idp.register(b);
+				fail("Should not be able to register two identical users.");
+	    	}catch (InvalidUserPropertyFault iupf) {
+			}catch (Exception e) {
+	    		FaultUtil.printFault(e);
+				assertTrue(false);
+			}
+	    }
 
 	public void testMultipleUsers() {
 		try {
@@ -232,6 +324,82 @@ public class TestIdentityProvider extends TestCase {
 		return u;
 	}
 
+	
+	private Application createTooLongPasswordApplication() {
+		Application u = new Application();
+		u.setUserId(count + "user");
+		u.setEmail(count + "user@mail.com");
+		u.setPassword(count + "thispasswordiswaytoolong");
+		u.setFirstName(count + "first");
+		u.setLastName(count + "last");
+		u.setAddress(count + "address");
+		u.setAddress2(count + "address2");
+		u.setCity("Columbus");
+		u.setState(StateCode.OH);
+		u.setCountry(CountryCode.US);
+		u.setZipcode("43210");
+		u.setPhoneNumber("614-555-5555");
+		u.setOrganization(count + "organization");
+		count = count + 1;
+		return u;
+	}
+    
+    private Application createTooShortPasswordApplication() {
+		Application u = new Application();
+		u.setUserId(count + "user");
+		u.setEmail(count + "user@mail.com");
+		u.setPassword(count + "p");
+		u.setFirstName(count + "first");
+		u.setLastName(count + "last");
+		u.setAddress(count + "address");
+		u.setAddress2(count + "address2");
+		u.setCity("Columbus");
+		u.setState(StateCode.OH);
+		u.setCountry(CountryCode.US);
+		u.setZipcode("43210");
+		u.setPhoneNumber("614-555-5555");
+		u.setOrganization(count + "organization");
+		count = count + 1;
+		return u;
+	}
+    
+    private Application createTooLongUserIdApplication() {
+		Application u = new Application();
+		u.setUserId(count + "thisuseridiswaytoolong");
+		u.setEmail(count + "user@mail.com");
+		u.setPassword(count + "password");
+		u.setFirstName(count + "first");
+		u.setLastName(count + "last");
+		u.setAddress(count + "address");
+		u.setAddress2(count + "address2");
+		u.setCity("Columbus");
+		u.setState(StateCode.OH);
+		u.setCountry(CountryCode.US);
+		u.setZipcode("43210");
+		u.setPhoneNumber("614-555-5555");
+		u.setOrganization(count + "organization");
+		count = count + 1;
+		return u;
+	}
+    
+    private Application createTooShortUserIdApplication() {
+		Application u = new Application();
+		u.setUserId(count + "u");
+		u.setEmail(count + "user@mail.com");
+		u.setPassword(count + "password");
+		u.setFirstName(count + "first");
+		u.setLastName(count + "last");
+		u.setAddress(count + "address");
+		u.setAddress2(count + "address2");
+		u.setCity("Columbus");
+		u.setState(StateCode.OH);
+		u.setCountry(CountryCode.US);
+		u.setZipcode("43210");
+		u.setPhoneNumber("614-555-5555");
+		u.setOrganization(count + "organization");
+		count = count + 1;
+		return u;
+	}
 
 	protected void setUp() throws Exception {
 		super.setUp();
