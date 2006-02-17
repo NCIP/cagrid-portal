@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
+import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
@@ -47,7 +48,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.55 2006-02-17 18:22:54 langella Exp $
+ * @version $Id: ModificationViewer.java,v 1.56 2006-02-17 19:28:41 langella Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -104,6 +105,8 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	private JButton modifyMetadataButton = null;
 
 	private ServiceSecurityPanel securityPanel = null;
+	
+	private ServiceSecurity lastServiceSecurity;
 
 	/**
 	 * This is the default constructor
@@ -217,6 +220,10 @@ public class ModificationViewer extends GridPortalBaseFrame {
 					.getAbsolutePath()
 					+ File.separator + "introduce.xml", ServiceDescription.class);
 				loadServiceProps();
+				this.lastServiceSecurity = this.introService.getServiceSecurity();
+				if(this.lastServiceSecurity==null){
+					this.lastServiceSecurity = new ServiceSecurity();
+				}
 				this.setSize(500, 400);
 				this.setContentPane(getJContentPane());
 				this.setTitle("Modify Service Interface");
@@ -479,6 +486,13 @@ public class ModificationViewer extends GridPortalBaseFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					final int confirmed = JOptionPane.showConfirmDialog(ModificationViewer.this,
 						"Are you sure you want to save?");
+					if (confirmed == JOptionPane.OK_OPTION) {
+						try{
+						resetMethodSecurityIfServiceSecurityChanged();
+						}catch(Exception ex){
+							PortalUtils.showErrorMessage(ex);
+						}
+					}
 					BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance().getGridPortal(),
 						"Save") {
 
@@ -486,8 +500,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 							try {
 
 								if (confirmed == JOptionPane.OK_OPTION) {
-									setProgressText("editing service metadata object");
-
+									setProgressText("editing service metadata object");	
 									// walk the methods table and create the
 									// new MethodsType array
 									MethodType[] methodsArray = new MethodType[methodsTable.getRowCount()];
@@ -547,15 +560,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 									MetadataListType serviceMetadataList = new MetadataListType();
 									serviceMetadataList.setMetadata(metadataArray);
 									introService.setMetadataList(serviceMetadataList);
-
-									//TODO: ADD Security
-									/*
-									ServiceSecurityConfiguration ssc = new ServiceSecurityConfiguration();
-									ssc
-										.setServiceCommunicationSecurity(((SecurityConfigurationPanel) baseSecurityPanel)
-											.getSecureCommunicationConfiguration());
-									introService.setServiceSecurity(ssc);
-									*/
+									introService.setServiceSecurity(securityPanel.getServiceSecurity());
 									// check the methods to make sure they are
 									// valid.......
 
@@ -642,19 +647,40 @@ public class ModificationViewer extends GridPortalBaseFrame {
 					+ "schema" + File.separator + serviceProperties.getProperty("introduce.skeleton.service.name"))));
 		}
 	}
+	
+	private void resetMethodSecurityIfServiceSecurityChanged() throws Exception{
+		if(!lastServiceSecurity.equals(securityPanel.getServiceSecurity())){
+			MethodsType mt = this.introService.getMethods();
+			if(mt!=null){
+				lastServiceSecurity = securityPanel.getServiceSecurity();
+				PortalUtils.showMessage("Service security configuration changed, resetting all method security configurations.");
+				MethodType[] methods = mt.getMethod();
+				if(methods!=null){
+					for(int i=0; i<methods.length; i++){
+						methods[i].setMethodSecurity(null);
+					}
+				}
+			}
+		}
+	}
 
 
 	public void performMethodModify() {
-
+		
 		int row = getMethodsTable().getSelectedRow();
 		if ((row < 0) || (row >= getMethodsTable().getRowCount())) {
 			PortalUtils.showErrorMessage("Please select a method to modify.");
 			return;
 		}
-
+		try{
+			this.resetMethodSecurityIfServiceSecurityChanged();
+		}catch(Exception e){
+			PortalUtils.showErrorMessage(e);
+			return;
+		}
 		MethodType method = (MethodType) getMethodsTable().getValueAt(getMethodsTable().getSelectedRow(), 1);
 		PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-			new MethodViewer(method, new File(methodsDirectory.getAbsolutePath() + File.separator + "schema"
+			new MethodViewer(method, lastServiceSecurity, new File(methodsDirectory.getAbsolutePath() + File.separator + "schema"
 				+ File.separator + serviceProperties.getProperty("introduce.skeleton.service.name")),
 				getMethodsTable(), getMethodsTable().getSelectedRow()));
 	}

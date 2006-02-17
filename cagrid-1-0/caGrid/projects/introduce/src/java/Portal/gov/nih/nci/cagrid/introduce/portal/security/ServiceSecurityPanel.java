@@ -231,42 +231,42 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	}
 
 
-	public MethodSecurity getMethodSecurity() throws Exception {
-		MethodSecurity ms = new MethodSecurity();
+	public ServiceSecurity getServiceSecurity() throws Exception {
+		ServiceSecurity ss = new ServiceSecurity();
 		if (noneButton.isSelected()) {
-			ms.setMethodSecuritySetting(MethodSecurityType.None);
+			ss.setMethodSecuritySetting(MethodSecurityType.None);
 		} else if (customButton.isSelected()) {
-			ms.setMethodSecuritySetting(MethodSecurityType.Custom);
+			ss.setMethodSecuritySetting(MethodSecurityType.Custom);
 			if (!isSecure()) {
 				throw new Exception("You must select at least one transport mechanism!!!");
 			}
 
 			if (tlsButton.isSelected()) {
-				ms.setTransportLevelSecurity(this.tlsPanel.getTransportLevelSecurity());
+				ss.setTransportLevelSecurity(this.tlsPanel.getTransportLevelSecurity());
 
 			}
 			if (secureConversationButton.isSelected()) {
-				ms.setSecureConversation(this.secureConversationPanel.getSecureConversation());
+				ss.setSecureConversation(this.secureConversationPanel.getSecureConversation());
 
 			}
 			if (secureMessageButton.isSelected()) {
-				ms.setSecureMessage(this.secureMessagePanel.getSecureMessage());
+				ss.setSecureMessage(this.secureMessagePanel.getSecureMessage());
 			}
 			if (clientCommunication.isEnabled()) {
-				ms.setClientCommunication((ClientCommunication) clientCommunication.getSelectedItem());
+				ss.setClientCommunication((ClientCommunication) clientCommunication.getSelectedItem());
 			}
 			if (runAsMode.isEnabled()) {
-				ms.setRunAsMode((RunAsMode) runAsMode.getSelectedItem());
+				ss.setRunAsMode((RunAsMode) runAsMode.getSelectedItem());
 			}
 			if (delegationMode.isEnabled()) {
-				ms.setDelegationMode((DelegationMode) delegationMode.getSelectedItem());
+				ss.setDelegationMode((DelegationMode) delegationMode.getSelectedItem());
 			} else {
-				ms.setDelegationMode(DelegationMode.None);
+				ss.setDelegationMode(DelegationMode.None);
 			}
 			if (anonymousCommunication.isEnabled()) {
-				ms.setAnonymousClients((AnonymousCommunication) anonymousCommunication.getSelectedItem());
+				ss.setAnonymousClients((AnonymousCommunication) anonymousCommunication.getSelectedItem());
 			} else {
-				ms.setAnonymousClients(AnonymousCommunication.No);
+				ss.setAnonymousClients(AnonymousCommunication.No);
 			}
 			
 			ClientAuthorization cli = new ClientAuthorization();
@@ -281,10 +281,10 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			}else{
 				cli.setNoAuthorization(new NoAuthorization());
 			}
-			ms.setClientAuthorization(cli);
+			ss.setClientAuthorization(cli);
 
 		}
-		return ms;
+		return ss;
 	}
 
 

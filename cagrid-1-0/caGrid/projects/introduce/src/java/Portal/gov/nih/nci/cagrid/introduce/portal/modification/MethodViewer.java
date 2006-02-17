@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
@@ -109,9 +110,12 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JPanel exceptionInputButtonPanel = null;
 
 	private JPanel securityContainerPanel = null;
+	
+	private ServiceSecurity serviceSecurity;
 
 
-	public MethodViewer(MethodType method, File schemaDir, MethodsTable table, int selectedRow) {
+	public MethodViewer(MethodType method, ServiceSecurity serviceSecurity, File schemaDir, MethodsTable table, int selectedRow) {
+		this.serviceSecurity = serviceSecurity;
 		this.method = method;
 		this.schemaDir = schemaDir;
 		this.methodsTable = table;
@@ -810,8 +814,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getSecurityContainerPanel() {
 		if (securityContainerPanel == null) {
-			//TODO: Add Service Security
-			securityContainerPanel = new MethodSecurityPanel(new ServiceSecurity(),this.method.getMethodSecurity());
+			securityContainerPanel = new MethodSecurityPanel(this.serviceSecurity,this.method.getMethodSecurity());
 			securityContainerPanel.setBorder(BorderFactory.createTitledBorder(null,
 				"Method Level Security Configuration", TitledBorder.DEFAULT_JUSTIFICATION,
 				TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));

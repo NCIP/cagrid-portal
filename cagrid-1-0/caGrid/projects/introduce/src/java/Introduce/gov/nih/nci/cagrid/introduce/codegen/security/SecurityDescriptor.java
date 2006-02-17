@@ -82,7 +82,7 @@ public class SecurityDescriptor {
 		} catch (Exception e) {
 			throw new Exception(
 					"Error configuring the security descriptor for the method "
-							+ method.getName() + ".");
+							+ method.getName() + ": "+e.getMessage());
 		}
 	}
 
