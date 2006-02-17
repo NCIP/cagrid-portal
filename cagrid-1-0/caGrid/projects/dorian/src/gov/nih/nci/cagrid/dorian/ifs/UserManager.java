@@ -654,8 +654,7 @@ public class UserManager extends LoggingObject {
 	}
 
 	public static String subjectToIdentity(String subject) {
-		String s = subject.substring(0);
-		return "/" + s.replace(',', '/');
+		return "/" + subject.replace(',', '/');
 	}
 
 }

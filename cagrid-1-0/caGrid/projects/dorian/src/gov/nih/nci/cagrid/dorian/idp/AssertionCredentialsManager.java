@@ -27,8 +27,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import javax.xml.namespace.QName;
-
 import org.apache.xml.security.signature.XMLSignature;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 
@@ -171,10 +169,9 @@ public class AssertionCredentialsManager extends LoggingObject {
 			SAMLSubject sub2 = new SAMLSubject(ni2, null, null, null);
 			SAMLAuthenticationStatement auth = new SAMLAuthenticationStatement(sub,
 				"urn:oasis:names:tc:SAML:1.0:am:password", new Date(), ipAddress, subjectDNS, null);
-			QName name = new QName(EMAIL_NAMESPACE, EMAIL_NAME);
 			List vals = new ArrayList();
 			vals.add(email);
-			SAMLAttribute att = new SAMLAttribute(EMAIL_NAME, EMAIL_NAMESPACE, null, (long) 0, vals);
+			SAMLAttribute att = new SAMLAttribute(EMAIL_NAME, EMAIL_NAMESPACE, null, 0, vals);
 
 			List atts = new ArrayList();
 			atts.add(att);
