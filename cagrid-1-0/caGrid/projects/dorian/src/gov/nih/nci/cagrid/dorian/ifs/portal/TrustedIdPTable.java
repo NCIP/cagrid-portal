@@ -12,16 +12,16 @@ import javax.swing.table.TableColumn;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: TrustedIdPTable.java,v 1.3 2005-12-15 19:29:33 langella Exp $
+ * @version $Id: TrustedIdPTable.java,v 1.4 2006-02-17 19:42:15 langella Exp $
  */
 public class TrustedIdPTable extends PortalBaseTable {
-	public static String IDP = "idp";
+	public final static String IDP = "idp";
 
-	public static String IDP_ID = "IdP Id";
+	public final static String IDP_ID = "IdP Id";
 	
-	public static String NAME = "Identity Provider Name";
+	public final static String NAME = "Identity Provider Name";
 	
-	public static String STATUS = "Status";
+	public final static String STATUS = "Status";
 
 	
 	TrustedIdPsWindow window;

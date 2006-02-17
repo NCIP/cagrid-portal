@@ -61,12 +61,12 @@ import javax.swing.table.DefaultTableModel;
  */
 public abstract class PortalTable extends JTable {
 	
-	private static Color DEFAULT_FOREGROUND_1 = Color.BLACK;
-	private static Color DEFAULT_BACKGROUND_1 = Color.WHITE;
-	private static Color DEFAULT_FOREGROUND_2 = Color.BLACK;
-	private static Color DEFAULT_BACKGROUND_2 = Color.WHITE;
-	private static Color DEFAULT_SELECTED_FOREGROUND = Color.BLACK;
-	private static Color DEFAULT_SELECTED_BACKGROUND = Color.WHITE;
+	private final static Color DEFAULT_FOREGROUND_1 = Color.BLACK;
+	private final static Color DEFAULT_BACKGROUND_1 = Color.WHITE;
+	private final static Color DEFAULT_FOREGROUND_2 = Color.BLACK;
+	private final static Color DEFAULT_BACKGROUND_2 = Color.WHITE;
+	private final static Color DEFAULT_SELECTED_FOREGROUND = Color.BLACK;
+	private final static Color DEFAULT_SELECTED_BACKGROUND = Color.WHITE;
 
 
 	public PortalTable(DefaultTableModel model){

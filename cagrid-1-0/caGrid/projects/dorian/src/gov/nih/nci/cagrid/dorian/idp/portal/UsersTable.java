@@ -12,24 +12,24 @@ import javax.swing.table.TableColumn;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: UsersTable.java,v 1.5 2005-12-15 19:29:33 langella Exp $
+ * @version $Id: UsersTable.java,v 1.6 2006-02-17 19:42:15 langella Exp $
  */
 public class UsersTable extends PortalBaseTable {
-	public static String USER = "user";
+	public final static String USER = "user";
 
-	public static String USERNAME = "Username";
+	public final static String USERNAME = "Username";
 
-	public static String FIRST_NAME = "First Name";
+	public final static String FIRST_NAME = "First Name";
 
-	public static String LAST_NAME = "Last Name";
+	public final static String LAST_NAME = "Last Name";
 
-	public static String ORGANIZATION = "Organization";
+	public final static String ORGANIZATION = "Organization";
 
-	public static String EMAIL = "Email";
+	public final static String EMAIL = "Email";
 
-	public static String STATUS = "Status";
+	public final static String STATUS = "Status";
 
-	public static String ROLE = "Role";
+	public final static String ROLE = "Role";
 	
 	UserManagerWindow window;
 

@@ -16,15 +16,15 @@ import javax.swing.table.TableColumn;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CertificateExtensionsTable.java,v 1.1 2006-01-11 19:50:29 langella Exp $
+ * @version $Id: CertificateExtensionsTable.java,v 1.2 2006-02-17 19:42:15 langella Exp $
  */
 public class CertificateExtensionsTable extends PortalBaseTable {
 
-	public static String OID = "OID";
-	public static String NAME = "NAME";
-	public static String CRITICAL = "Critical";
+	public final static String OID = "OID";
+	public final static String NAME = "NAME";
+	public final static String CRITICAL = "Critical";
 
-	public static String VALUE = "Value";
+	public final static String VALUE = "Value";
 
 
 	public CertificateExtensionsTable() {

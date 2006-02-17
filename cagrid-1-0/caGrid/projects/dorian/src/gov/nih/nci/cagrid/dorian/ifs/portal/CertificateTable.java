@@ -14,14 +14,14 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CertificateTable.java,v 1.4 2006-01-11 19:50:28 langella Exp $
+ * @version $Id: CertificateTable.java,v 1.5 2006-02-17 19:42:15 langella Exp $
  */
 public class CertificateTable extends PortalBaseTable {
-	public static String CERTIFICATE = "certificate";
+	public final static String CERTIFICATE = "certificate";
 
-	public static String SUBJECT = "Subject";
+	public final static String SUBJECT = "Subject";
 
-	public static String EXPIRES = "Expires";
+	public final static String EXPIRES = "Expires";
 
 
 	public CertificateTable() {
