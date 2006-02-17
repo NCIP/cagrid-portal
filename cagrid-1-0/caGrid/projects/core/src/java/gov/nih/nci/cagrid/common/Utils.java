@@ -17,29 +17,26 @@ import org.apache.axis.utils.XMLUtils;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.globus.wsrf.encoding.ObjectSerializer;
 
+
 public class Utils {
-	
+
 	public static String getExceptionMessage(Exception e) {
 		String mess = e.getMessage();
 		if (e instanceof AxisFault) {
 			mess = ((AxisFault) e).getFaultString();
-			// Handle Special Messages
-			AxisFault f = (AxisFault) e;
-
 		}
 		return mess;
 	}
 
-	public static Object deserializeDocument(String fileName, Class objectType)
-			throws Exception {
+
+	public static Object deserializeDocument(String fileName, Class objectType) throws Exception {
 		InputStream inputStream = null;
-	
+
 		try {
 			inputStream = new FileInputStream(fileName);
 			org.w3c.dom.Document doc = XMLUtils.newDocument(inputStream);
-	
-			return ObjectDeserializer.toObject(doc.getDocumentElement(),
-					objectType);
+
+			return ObjectDeserializer.toObject(doc.getDocumentElement(), objectType);
 		} finally {
 			if (inputStream != null) {
 				try {
@@ -49,6 +46,7 @@ public class Utils {
 			}
 		}
 	}
+
 
 	public static void copyFile(File in, File out) throws Exception {
 		FileInputStream fis = new FileInputStream(in);
@@ -62,20 +60,21 @@ public class Utils {
 		fos.close();
 	}
 
+
 	public static boolean deleteDir(File dir) {
 		if (dir.isDirectory()) {
 			String[] children = dir.list();
 			for (int i = 0; i < children.length; i++) {
 				boolean success = deleteDir(new File(dir, children[i]));
 				if (!success) {
-					System.err.println("could not remove directory: "
-							+ dir.getAbsolutePath());
+					System.err.println("could not remove directory: " + dir.getAbsolutePath());
 					return false;
 				}
 			}
 		}
 		return dir.delete();
 	}
+
 
 	public static StringBuffer fileToStringBuffer(File file) throws Exception {
 		BufferedReader br = null;
@@ -93,16 +92,16 @@ public class Utils {
 		} catch (Exception e) {
 			throw new Exception("Error reading the buffer: " + e.getMessage());
 		}
-		
+
 		br.close();
-	
+
 		return sb;
 	}
 
-	public static void serializeDocument(String fileName, Object object,
-			QName qname) throws Exception {
+
+	public static void serializeDocument(String fileName, Object object, QName qname) throws Exception {
 		FileWriter fw = null;
-	
+
 		try {
 			fw = new FileWriter(fileName);
 			ObjectSerializer.serialize(fw, object, qname);
@@ -114,11 +113,11 @@ public class Utils {
 				}
 			}
 		}
-	
+
 	}
 
-	public static void stringBufferToFile(StringBuffer string, String fileName)
-			throws Exception {
+
+	public static void stringBufferToFile(StringBuffer string, String fileName) throws Exception {
 		FileWriter fw = new FileWriter(new File(fileName));
 		fw.write(string.toString());
 		fw.close();
