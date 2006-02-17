@@ -775,7 +775,9 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JTabbedPane getTransportPanel() {
 		if (transportPanel == null) {
 			transportPanel = new JTabbedPane();
-			transportPanel.addTab("Secure Communication", null, getCommunicationPanel(), null);
+			transportPanel.addTab("Transport Layer Security", null, getTlsPanel(), null);
+			transportPanel.addTab("Secure Conversation", null, getSecureConversationPanel(), null);
+			transportPanel.addTab("Secure Message", null, getSecureMessagePanel(), null);
 			transportPanel.addTab("Client Authorization", null, getClientAuthorization(), null);
 		}
 		return transportPanel;
@@ -789,30 +791,8 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	 */
 	private JPanel getCommunicationPanel() {
 		if (communicationPanel == null) {
-			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-			gridBagConstraints11.gridx = 0;
-			gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints11.weightx = 1.0D;
-			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints11.gridy = 2;
-			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-			gridBagConstraints7.gridx = 0;
-			gridBagConstraints7.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints7.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints7.weightx = 1.0D;
-			gridBagConstraints7.gridy = 1;
-			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-			gridBagConstraints6.gridx = 0;
-			gridBagConstraints6.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints6.weightx = 1.0D;
-			gridBagConstraints6.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints6.anchor = java.awt.GridBagConstraints.CENTER;
-			gridBagConstraints6.gridy = 0;
 			communicationPanel = new JPanel();
 			communicationPanel.setLayout(new GridBagLayout());
-			communicationPanel.add(getTlsPanel(), gridBagConstraints6);
-			communicationPanel.add(getSecureConversationPanel(), gridBagConstraints7);
-			communicationPanel.add(getSecureMessagePanel(), gridBagConstraints11);
 		}
 		return communicationPanel;
 	}
