@@ -235,6 +235,7 @@ public class TestDorian extends TestCase{
     		
 			IdPUser[] us = jm.findIdPUsers(gridId, uf);
     		assertEquals(1, us.length);
+    		String address = us[0].getAddress();
     		us[0].setAddress("New_Address");
     		us[0].setAddress2("New_Address2");
     		us[0].setCity("New_City");
@@ -250,9 +251,11 @@ public class TestDorian extends TestCase{
     		us[0].setStatus(IdPUserStatus.Active);
     		us[0].setZipcode("11111");
     		
-    		
-    		
     		jm.updateIdPUser(gridId, us[0]);
+    		uf.setAddress(address);
+    		us = jm.findIdPUsers(gridId, uf);
+    		assertEquals(0, us.length);
+    		uf.setAddress("New_Address");
     		us = jm.findIdPUsers(gridId, uf);
     		assertEquals(1, us.length);
     		assertEquals("New_Address", us[0].getAddress());
@@ -273,7 +276,7 @@ public class TestDorian extends TestCase{
     		try{
     			String invalidGridId = "ThisIsInvalid";
     			jm.removeIdPUser(invalidGridId, us[0].getUserId());
-    			assertTrue(false);
+    			fail("Should not be able to Remove User with invalid Grid Id");
     		}catch (PermissionDeniedFault pdf) {
     		}
     		
@@ -312,7 +315,7 @@ public class TestDorian extends TestCase{
 			jm.registerWithIdP(a);
 			
 			jm.registerWithIdP(b);
-			assertTrue(false);
+			fail("Should not be able to register two identical users.");
     	}catch (InvalidUserPropertyFault iupf) {
 		}catch (Exception e) {
     		FaultUtil.printFault(e);
@@ -338,7 +341,7 @@ public class TestDorian extends TestCase{
     		try{
     			Application a = createTooLongPasswordApplication();
     			jm.registerWithIdP(a);	
-    			assertTrue(false);
+    			fail("Should not be able to register with a password of this length.");
     		}catch (InvalidUserPropertyFault iupf) {
     		}
     		
@@ -346,7 +349,7 @@ public class TestDorian extends TestCase{
     		try{
     			Application b = createTooShortPasswordApplication();
     			jm.registerWithIdP(b);	
-    			assertTrue(false);
+    			fail("Should not be able to register with a password of this length.");
     		}catch (InvalidUserPropertyFault iupf) {
     		}
     		
@@ -354,7 +357,7 @@ public class TestDorian extends TestCase{
     		try{
     			Application c = createTooLongUserIdApplication();
     			jm.registerWithIdP(c);	
-    			assertTrue(false);
+    			fail("Should not be able to register with a UserId of this length.");
     		}catch (InvalidUserPropertyFault iupf) {
     		}
     		
@@ -362,7 +365,7 @@ public class TestDorian extends TestCase{
     		try{
     			Application d = createTooShortUserIdApplication();
     			jm.registerWithIdP(d);	
-    			assertTrue(false);
+    			fail("Should not be able to register with a UserId of this length.");
     		}catch (InvalidUserPropertyFault iupf) {
     		}
     	}
@@ -483,7 +486,7 @@ public class TestDorian extends TestCase{
 			IFSUser after = ifsUser[0];
 			assertEquals(after.getUserStatus(), IFSUserStatus.Active);
 			if (before.getCertificate().equals(after.getCertificate())) {
-				assertTrue(false);
+				fail("A problem occured with the renewal of credentials");
 			}
     	} catch (Exception e){
     		FaultUtil.printFault(e);
@@ -512,7 +515,6 @@ public class TestDorian extends TestCase{
     		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 			
-			
 			IdPContainer idp = this.getTrustedIdpManualApproveAutoRenew("My IdP");
 			idp.getIdp().setId(jm.addTrustedIdP(gridId, idp.getIdp()).getId());
 			String username = "user";
@@ -520,7 +522,7 @@ public class TestDorian extends TestCase{
 			ProxyLifetime lifetime = getProxyLifetimeShort();
 			try {
 				jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort());
-				assertTrue(false);
+				fail("Should not be able to create a proxy with an IdP that is not approved");
 			} catch (PermissionDeniedFault f) {
 
 			}
@@ -542,7 +544,7 @@ public class TestDorian extends TestCase{
 			IFSUser after = ifsUser[0];
 			assertEquals(after.getUserStatus(), IFSUserStatus.Active);
 			if (before.getCertificate().equals(after.getCertificate())) {
-				assertTrue(false);
+				fail("A problem occured with the renewal of credentials");
 			}
 			
     	} catch (Exception e){
@@ -572,26 +574,18 @@ public class TestDorian extends TestCase{
     		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
     		IdPContainer idp = this.getTrustedIdpAutoApprove("My IdP");
-    		jm.addTrustedIdP(gridId, idp.getIdp());
+    		idp.getIdp().setId(jm.addTrustedIdP(gridId, idp.getIdp()).getId());
 			String username = "user";
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
 			X509Certificate[] certs = jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
-    		
-			BasicAuthCredential auth = new BasicAuthCredential();
-			auth.setUserId(Dorian.IDP_ADMIN_USER_ID);
-			auth.setPassword(Dorian.IDP_ADMIN_PASSWORD);
-			SAMLAssertion saml = jm.authenticate(auth);
-			KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
-			PublicKey publicKey = pair2.getPublic();
-			ProxyLifetime lifetime2 = getProxyLifetimeShort();
-			X509Certificate[] certs2 = jm.createProxy(saml, publicKey, lifetime2);
-			createAndCheckProxyLifetime(lifetime2, pair2.getPrivate(), certs2);
 					
 			IFSUserFilter filter = new IFSUserFilter();
+			filter.setUID(username);
+			filter.setIdPId(idp.getIdp().getId());
 			IFSUser[] ifsUser = jm.findIFSUsers(gridId, filter);
-			assertEquals(ifsUser.length, 2);
-			IFSUser before = ifsUser[1];
+			assertEquals(ifsUser.length, 1);
+			IFSUser before = ifsUser[0];
 			assertEquals(before.getUserStatus(), IFSUserStatus.Active);
 			X509Certificate certBefore = CertUtil.loadCertificateFromString(before.getCertificate().getCertificateAsString());
 
@@ -599,20 +593,20 @@ public class TestDorian extends TestCase{
 	
 			try {
 				jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort());
-				assertTrue(false);
+				fail("Should not be able to create a proxy with an IdP that has not been renewed");
 			} catch (PermissionDeniedFault f) {
 
 			}
-			jm.renewIFSUserCredentials(gridId, ifsUser[1]);
+			jm.renewIFSUserCredentials(gridId, ifsUser[0]);
 			
 			certs = jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
 			ifsUser = jm.findIFSUsers(gridId, filter);
-			assertEquals(ifsUser.length, 2);
-			IFSUser after = ifsUser[1];
+			assertEquals(ifsUser.length, 1);
+			IFSUser after = ifsUser[0];
 			assertEquals(after.getUserStatus(), IFSUserStatus.Active);
 
 			if (certBefore.equals(after.getCertificate())) {
-				assertTrue(false);
+				fail("A problem occured with the renewal of credentials");
 			}
     	} catch (Exception e){
     		FaultUtil.printFault(e);
@@ -640,33 +634,25 @@ public class TestDorian extends TestCase{
     		
     		String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(),1,Dorian.IDP_ADMIN_USER_ID);
     		String gridId = UserManager.subjectToIdentity(gridSubject);
-    		
-    		BasicAuthCredential auth = new BasicAuthCredential();
-    		auth.setUserId(Dorian.IDP_ADMIN_USER_ID);
-    		auth.setPassword(Dorian.IDP_ADMIN_PASSWORD);
-    		SAMLAssertion saml = jm.authenticate(auth);
-    		KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
-    		PublicKey publicKey = pair2.getPublic();
-    		ProxyLifetime lifetime2 = getProxyLifetimeShort();
-    		X509Certificate[] certs2 = jm.createProxy(saml, publicKey, lifetime2);
-    		createAndCheckProxyLifetime(lifetime2, pair2.getPrivate(), certs2);
 			
 			IdPContainer idp = this.getTrustedIdpManualApprove("My IdP");
-			jm.addTrustedIdP(gridId, idp.getIdp());
+			idp.getIdp().setId(jm.addTrustedIdP(gridId, idp.getIdp()).getId());
 			String username = "user";
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
 			try {
 				jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort());
-				assertTrue(false);
+				fail("Should not be able to create a proxy with an IdP that has not been approved");
 			} catch (PermissionDeniedFault f) {
 
 			}
 			
 			IFSUserFilter filter = new IFSUserFilter();
+			filter.setUID(username);
+			filter.setIdPId(idp.getIdp().getId());
 			IFSUser[] ifsUser = jm.findIFSUsers(gridId, filter);
-			assertEquals(ifsUser.length, 2);
-			IFSUser before = ifsUser[1];
+			assertEquals(ifsUser.length, 1);
+			IFSUser before = ifsUser[0];
 			assertEquals(before.getUserStatus(), IFSUserStatus.Pending);
 			before.setUserStatus(IFSUserStatus.Active);
 			jm.updateIFSUser(gridId, before);
@@ -676,20 +662,20 @@ public class TestDorian extends TestCase{
 	
 			try {
 				jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort());
-				assertTrue(false);
+				fail("Should not be able to create a proxy with an IdP that has not been renewed");
 			} catch (PermissionDeniedFault f) {
 
 			}
-			jm.renewIFSUserCredentials(gridId, ifsUser[1]);
+			jm.renewIFSUserCredentials(gridId, ifsUser[0]);
 			
 			certs = jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
 			ifsUser = jm.findIFSUsers(gridId, filter);
-			assertEquals(ifsUser.length, 2);
-			IFSUser after = ifsUser[1];
+			assertEquals(ifsUser.length, 1);
+			IFSUser after = ifsUser[0];
 			assertEquals(after.getUserStatus(), IFSUserStatus.Active);
 
 			if (certBefore.equals(after.getCertificate())) {
-				assertTrue(false);
+				fail("A problem occured with the renewal of credentials");
 			}
     	} catch (Exception e){
     		FaultUtil.printFault(e);
