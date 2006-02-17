@@ -57,6 +57,6 @@
 	</macrodef>
 	<target name="gmeExtract" depends="all" description="Extract types from GME for use in grid
 		services.">
-		<gmeExtractMacro directory="${directory}" service="$gme.service}" uris="${schema.uri}"/>
+		<gmeExtractMacro directory="${directory}" service="${gme.service}" uris="${schema.uri}"/>
 	</target>
 </project>
