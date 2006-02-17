@@ -245,9 +245,9 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 
 	public MethodSecurity getMethodSecurity() throws Exception {
 		MethodSecurity ms = new MethodSecurity();
-		if (noneButton.isEnabled()) {
+		if (noneButton.isSelected()) {
 			ms.setMethodSecuritySetting(MethodSecurityType.None);
-		} else if (customButton.isEnabled()) {
+		} else if (customButton.isSelected()) {
 			ms.setMethodSecuritySetting(MethodSecurityType.Custom);
 			if (!isSecure()) {
 				throw new Exception("You must select at least one transport mechanism!!!");

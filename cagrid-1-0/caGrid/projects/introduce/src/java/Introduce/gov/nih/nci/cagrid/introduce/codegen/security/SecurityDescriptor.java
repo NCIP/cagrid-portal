@@ -5,8 +5,12 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.security.CommunicationMethod;
 import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurity;
+import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurityType;
+import gov.nih.nci.cagrid.introduce.beans.security.RunAsMode;
 import gov.nih.nci.cagrid.introduce.beans.security.SecureConversation;
+import gov.nih.nci.cagrid.introduce.beans.security.SecureMessage;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
+import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
 
 import org.projectmobius.common.XMLUtilities;
 
@@ -20,37 +24,109 @@ import org.projectmobius.common.XMLUtilities;
  */
 public class SecurityDescriptor {
 	public static String writeSecurityDescriptor(ServiceInformation info) {
-		StringBuffer xml = new StringBuffer();
-		xml.append("<securityConfig xmlns=\"http://www.globus.org\">");
-		MethodsType methods = info.getMethods();
-		if (methods != null) {
-			MethodType[] method = methods.getMethod();
-			if (method != null) {
-				for (int i = 0; i < method.length; i++) {
-					xml.append(writeMethodSettings(info.getServiceSecurity(),
-							method[i]));
+		try {
+			StringBuffer xml = new StringBuffer();
+			xml.append("<securityConfig xmlns=\"http://www.globus.org\">");
+			MethodsType methods = info.getMethods();
+			if (methods != null) {
+				MethodType[] method = methods.getMethod();
+				if (method != null) {
+					for (int i = 0; i < method.length; i++) {
+						xml.append(writeMethodSettings(info
+								.getServiceSecurity(), method[i]));
+					}
 				}
 			}
-		}
-		xml.append(writeServiceSettings());
-		xml.append("</securityConfig>");
-		try {
-			return XMLUtilities.formatXML(xml.toString());
-		} catch (Exception e) {
-			return xml.toString();
+			xml.append(writeServiceSettings());
+			xml.append("</securityConfig>");
+			try {
+				return XMLUtilities.formatXML(xml.toString());
+			} catch (Exception e) {
+				return xml.toString();
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return "";
 		}
 	}
 
 	private static String writeMethodSettings(ServiceSecurity service,
-			MethodType method) {
-		MethodSecurity ms = method.getMethodSecurity();
-		StringBuffer xml = new StringBuffer();
-		if (differsFromService(service, ms)) {
-			xml.append("<method name=\"" + method.getName() + "\">");
-
-			xml.append("</method>");
+			MethodType method) throws Exception {
+		try {
+			MethodSecurity ms = method.getMethodSecurity();
+			StringBuffer xml = new StringBuffer();
+			if (differsFromService(service, ms)) {
+				xml.append("<method name=\"" + method.getName() + "\">");
+				if ((ms.getMethodSecuritySetting() != null)
+						&& (ms.getMethodSecuritySetting()
+								.equals(MethodSecurityType.Custom))) {
+					xml.append("<auth-method>");
+					xml.append(getSecureConversationSettings(ms
+							.getSecureConversation()));
+					xml.append(getSecureMessageSettings(ms.getSecureMessage()));
+					xml.append(getTransportLayerSecuritySettings(ms
+							.getTransportLevelSecurity()));
+					xml.append("</auth-method>");
+					xml.append(getSecureConversationExtras(ms
+							.getSecureConversation()));
+					xml.append(getSecureMessageExtras(ms.getSecureMessage()));
+					xml.append(getRunAsMode(ms.getRunAsMode()));			
+				} else {
+					xml.append("<auth-method>");
+					xml.append("<none/>");
+					xml.append("</auth-method>");
+				}
+				xml.append("</method>");
+			}
+			return xml.toString();
+		} catch (Exception e) {
+			throw new Exception(
+					"Error configuring the security descriptor for the method "
+							+ method.getName() + ".");
 		}
+	}
 
+	private static String getRunAsMode(RunAsMode mode) throws Exception {
+		StringBuffer xml = new StringBuffer();
+		if (mode != null) {
+			xml.append("<run-as>");
+			if (mode.equals(RunAsMode.System)) {
+				xml.append("<system-identity/>");
+			} else if (mode.equals(RunAsMode.Service)) {
+				xml.append("<service-identity/>");
+			} else if (mode.equals(RunAsMode.Resource)) {
+				xml.append("<resource-identity/>");
+			} else if (mode.equals(RunAsMode.Caller)) {
+				xml.append("<caller-identity/>");
+			} else {
+				throw new Exception("Unsupported run as provided.");
+			}
+			xml.append("</run-as>");
+		}
+		return xml.toString();
+	}
+
+	private static String getSecureConversationExtras(SecureConversation comm)
+			throws Exception {
+		StringBuffer xml = new StringBuffer();
+		if (comm != null) {
+			if (comm.getContextLifetime() != null) {
+				xml.append("<context-lifetime value=\""
+						+ comm.getContextLifetime().intValue() + "\"/>");
+			}
+		}
+		return xml.toString();
+	}
+
+	private static String getSecureMessageExtras(SecureMessage comm)
+			throws Exception {
+		StringBuffer xml = new StringBuffer();
+		if (comm != null) {
+			if (comm.getReplayAttackInterval() != null) {
+				xml.append("<replay-attack-interval value=\""
+						+ comm.getReplayAttackInterval().intValue() + "\"/>");
+			}
+		}
 		return xml.toString();
 	}
 
@@ -58,30 +134,59 @@ public class SecurityDescriptor {
 			throws Exception {
 		StringBuffer xml = new StringBuffer();
 		if (comm != null) {
-			xml.append("<auth-method>");
 			xml.append("<GSISecureConversation>");
-			xml.append("<protection-level>");
-			if (comm.getCommunicationMethod() == null) {
-				throw new Exception(
-						"Secure Conversation requires the specification of acceptable communication mechanism.");
-			} else if (comm.getCommunicationMethod().equals(
-					CommunicationMethod.Privacy)) {
-				xml.append("<privacy/>");
-			} else if (comm.getCommunicationMethod().equals(
-					CommunicationMethod.Integrity)) {
-				xml.append("<integrity/>");
-			} else if (comm.getCommunicationMethod().equals(
-					CommunicationMethod.Integrity_Or_Privacy)) {
-				xml.append("<privacy/>");
-				xml.append("<integrity/>");
-			} else {
-				throw new Exception(
-						"Secure Conversation requires the specification of acceptable communication mechanism.");
-			}
-			xml.append("</protection-level>");
+			xml.append(getProtectionLevel("Secure Conversation", comm
+					.getCommunicationMethod()));
 			xml.append("</GSISecureConversation>");
-			xml.append("</auth-method>");
 		}
+		return xml.toString();
+	}
+
+	private static String getSecureMessageSettings(SecureMessage comm)
+			throws Exception {
+		StringBuffer xml = new StringBuffer();
+		if (comm != null) {
+			xml.append("<GSISecureMessage>");
+			xml.append(getProtectionLevel("Secure Message", comm
+					.getCommunicationMethod()));
+			xml.append("</GSISecureMessage>");
+		}
+		return xml.toString();
+	}
+
+	private static String getTransportLayerSecuritySettings(
+			TransportLevelSecurity comm) throws Exception {
+		StringBuffer xml = new StringBuffer();
+		if (comm != null) {
+			xml.append("<GSITransport>");
+			xml.append(getProtectionLevel("Transport Layer Security", comm
+					.getCommunicationMethod()));
+			xml.append("</GSITransport>");
+		}
+		return xml.toString();
+	}
+
+	private static String getProtectionLevel(String type,
+			CommunicationMethod comm) throws Exception {
+		StringBuffer xml = new StringBuffer();
+		xml.append("<protection-level>");
+		if (comm == null) {
+			throw new Exception(
+					type
+							+ " requires the specification of acceptable communication mechanism.");
+		} else if (comm.equals(CommunicationMethod.Privacy)) {
+			xml.append("<privacy/>");
+		} else if (comm.equals(CommunicationMethod.Integrity)) {
+			xml.append("<integrity/>");
+		} else if (comm.equals(CommunicationMethod.Integrity_Or_Privacy)) {
+			xml.append("<privacy/>");
+			xml.append("<integrity/>");
+		} else {
+			throw new Exception(
+					type
+							+ " requires the specification of acceptable communication mechanism.");
+		}
+		xml.append("</protection-level>");
 		return xml.toString();
 	}
 

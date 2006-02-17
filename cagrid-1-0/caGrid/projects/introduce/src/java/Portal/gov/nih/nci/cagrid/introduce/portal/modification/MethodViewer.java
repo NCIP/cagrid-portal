@@ -810,7 +810,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getSecurityContainerPanel() {
 		if (securityContainerPanel == null) {
-			//TODO: Add Service Method Security
+			//TODO: Add Service Security
 			securityContainerPanel = new MethodSecurityPanel(new ServiceSecurity(),this.method.getMethodSecurity());
 			securityContainerPanel.setBorder(BorderFactory.createTitledBorder(null,
 				"Method Level Security Configuration", TitledBorder.DEFAULT_JUSTIFICATION,
