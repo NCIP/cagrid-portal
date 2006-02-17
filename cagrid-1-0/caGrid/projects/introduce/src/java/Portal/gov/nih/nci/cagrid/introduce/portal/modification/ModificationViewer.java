@@ -16,6 +16,7 @@ import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.modification.cadsr.CADSRMetadataConfigurationComponent;
 import gov.nih.nci.cagrid.introduce.portal.modification.gme.GMEMetadataConfigurationComponent;
+import gov.nih.nci.cagrid.introduce.portal.security.ServiceSecurityPanel;
 
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -46,7 +47,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.54 2006-02-16 18:44:06 langella Exp $
+ * @version $Id: ModificationViewer.java,v 1.55 2006-02-17 18:22:54 langella Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -101,6 +102,8 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	private JButton removeMetadataButton = null;
 
 	private JButton modifyMetadataButton = null;
+
+	private ServiceSecurityPanel securityPanel = null;
 
 	/**
 	 * This is the default constructor
@@ -764,6 +767,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			contentTabbedPane = new JTabbedPane();
 			contentTabbedPane.addTab("Operations", null, getMethodsPanel(), null);
 			contentTabbedPane.addTab("Metadata", null, getMetadataPanel(), null);
+			contentTabbedPane.addTab("Security", null, getSecurityPanel(), null);
 		}
 		return contentTabbedPane;
 	}
@@ -948,5 +952,18 @@ public class ModificationViewer extends GridPortalBaseFrame {
 			});
 		}
 		return modifyMetadataButton;
+	}
+
+
+	/**
+	 * This method initializes securityPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */    
+	private ServiceSecurityPanel getSecurityPanel() {
+		if (securityPanel == null) {
+			securityPanel = new ServiceSecurityPanel(introService.getServiceSecurity());
+		}
+		return securityPanel;
 	}
 } // @jve:decl-index=0:visual-constraint="6,9"
