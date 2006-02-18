@@ -6,6 +6,10 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
+import gov.nih.nci.cagrid.introduce.beans.security.AnonymousCommunication;
+import gov.nih.nci.cagrid.introduce.beans.security.ClientAuthorization;
+import gov.nih.nci.cagrid.introduce.beans.security.ClientCommunication;
+import gov.nih.nci.cagrid.introduce.beans.security.DelegationMode;
 import gov.nih.nci.cagrid.introduce.codegen.TemplateUtils;
 
 import java.io.File;
@@ -304,6 +308,74 @@ public class SyncSource {
 			addClientImpl(method);
 		}
 	}
+	
+	private String configureClientSecurity(ClientCommunication comm,
+			ClientAuthorization auth, AnonymousCommunication anon,
+			DelegationMode delegation) {
+		StringBuffer sec = new StringBuffer();
+		if ((comm == null) || (comm.equals(ClientCommunication.No_Security))) {
+			// do nothing
+		} else if (comm.equals(ClientCommunication.Transport_Layer_Security)) {
+
+		}
+
+		return sec.toString();
+	}
+
+	private String configureAnonymousCommunication(AnonymousCommunication anon) {
+		StringBuffer sec = new StringBuffer();
+		if (anon.equals(AnonymousCommunication.Yes)) {
+			sec
+					.append("	stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS,Boolean.TRUE);\n");
+		} else {
+			sec.append(configureProxyIfSupplied());
+		}
+
+		return sec.toString();
+	}
+
+	private String configureProxyIfSupplied() {
+		StringBuffer sec = new StringBuffer();
+		sec.append("	if (proxy != null) {\n");
+		sec.append("try{\n");
+		sec
+				.append("		org.ietf.jgss.GSSCredential gss = new org.globus.gsi.gssapi.GlobusGSSCredentialImpl(proxy,org.ietf.jgss.GSSCredential.INITIATE_AND_ACCEPT);\n");
+		sec
+				.append("		stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_CREDENTIALS, gss);\n");
+		sec.append("}catch(org.ietf.jgss.GSSException ex){\n");
+		sec.append("throw new RemoteException(ex.getMessage());\n");
+		sec.append("}\n");
+		sec.append("}\n");
+		return sec.toString();
+	}
+	
+	private String configureClientAuthorization(ClientAuthorization auth) {
+		StringBuffer sec = new StringBuffer();
+		if (auth != null) {
+			if (auth.getNoAuthorization() != null) {
+				sec
+					.append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());\n");
+			} else if (auth.getHostAuthorization()!=null) {
+				sec.append("org.globus.wsrf.impl.security.authorization.HostAuthorization host = new org.globus.wsrf.impl.security.authorization.HostAuthorization("+auth.getHostAuthorization().getHostname()+");\n");
+				sec
+					.append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, host);\n");
+			} else if (auth.getIdentityAuthorization()!=null) {
+				sec.append("org.globus.wsrf.impl.security.authorization.IdentityAuthorization iden = new org.globus.wsrf.impl.security.authorization.IdentityAuthorization("+auth.getIdentityAuthorization().getIdentity()+");\n");
+				sec
+					.append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, iden);\n");
+			}else if (auth.getSelfAuthorization()!=null) {
+				sec
+					.append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.SelfAuthorization.getInstance());\n");
+			}
+			
+		}else{
+			sec
+			.append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());\n");
+		}
+		return sec.toString();
+	}
+	
+	
 
 /*
 	private String getClientSecurityCode(SecureCommunicationConfiguration scc, boolean isService) {
