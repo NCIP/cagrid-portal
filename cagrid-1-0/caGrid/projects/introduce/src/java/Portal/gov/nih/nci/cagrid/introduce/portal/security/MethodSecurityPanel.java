@@ -10,6 +10,7 @@ import gov.nih.nci.cagrid.introduce.beans.security.NoAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.RunAsMode;
 import gov.nih.nci.cagrid.introduce.beans.security.SecureConversation;
 import gov.nih.nci.cagrid.introduce.beans.security.SecureMessage;
+import gov.nih.nci.cagrid.introduce.beans.security.SelfAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
@@ -79,7 +80,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	private final static String NO_AUTHORIZATION = "No Authorization";
 	private final static String HOST_AUTHORIZATION = "Host Authorization";
 	private final static String IDENTITY_AUTHORIZATION = "Identity Authorization";
-
+	private final static String SELF_AUTHORIZATION = "Self Authorization";
 
 	public MethodSecurityPanel(ServiceSecurity sec) {
 		super();
@@ -287,6 +288,8 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 					cli.setHostAuthorization(hostAuthorization.getHostAuthorization());
 				}else if(this.clientAuth.getSelectedItem().equals(IDENTITY_AUTHORIZATION)){
 					cli.setIdentityAuthorization(identityAuthorization.getIdentitytAuthorization());
+				}else if(this.clientAuth.getSelectedItem().equals(SELF_AUTHORIZATION)){
+					cli.setSelfAuthorization(new SelfAuthorization());
 				}else{
 					cli.setNoAuthorization(new NoAuthorization());
 				}		
@@ -345,6 +348,10 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 				ClientAuthorization cli = ms.getClientAuthorization();
 				if (cli.getNoAuthorization() != null) {
 					this.clientAuth.setSelectedItem(NO_AUTHORIZATION);
+				}
+				
+				if (cli.getSelfAuthorization() != null) {
+					this.clientAuth.setSelectedItem(SELF_AUTHORIZATION);
 				}
 				if (cli.getHostAuthorization() != null) {
 					this.clientAuth.setSelectedItem(HOST_AUTHORIZATION);
@@ -465,6 +472,10 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 				ClientAuthorization cli = this.serviceSecurity.getClientAuthorization();
 				if (cli.getNoAuthorization() != null) {
 					this.clientAuth.setSelectedItem(NO_AUTHORIZATION);
+				}
+				
+				if (cli.getSelfAuthorization() != null) {
+					this.clientAuth.setSelectedItem(SELF_AUTHORIZATION);
 				}
 				if (cli.getHostAuthorization() != null) {
 					this.clientAuth.setSelectedItem(HOST_AUTHORIZATION);
@@ -957,6 +968,10 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 					if(clientAuth.getSelectedItem().equals(NO_AUTHORIZATION)){
 						clientAuthLayout.show(clientAuthorization,NO_AUTHORIZATION);
 					}
+					
+					if(clientAuth.getSelectedItem().equals(SELF_AUTHORIZATION)){
+						clientAuthLayout.show(clientAuthorization,NO_AUTHORIZATION);
+					}
 					if(clientAuth.getSelectedItem().equals(HOST_AUTHORIZATION)){
 						clientAuthLayout.show(clientAuthorization,HOST_AUTHORIZATION);
 					}
@@ -968,6 +983,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			clientAuth.addItem(NO_AUTHORIZATION);
 			clientAuth.addItem(HOST_AUTHORIZATION);
 			clientAuth.addItem(IDENTITY_AUTHORIZATION);
+			clientAuth.addItem(SELF_AUTHORIZATION);
 		}
 		return clientAuth;
 	}

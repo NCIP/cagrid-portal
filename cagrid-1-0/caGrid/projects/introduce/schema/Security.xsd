@@ -34,13 +34,15 @@
 	<xs:complexType name="ClientAuthorization">
 		<xs:choice>
 			<xs:element name="NoAuthorization" minOccurs="1" maxOccurs="1" type="NoAuthorization"/>
-			<xs:element name="SelfAuthorization" minOccurs="1" maxOccurs="1" type="HostAuthorization"/>
+			<xs:element name="SelfAuthorization" minOccurs="1" maxOccurs="1" type="SelfAuthorization"/>
 			<xs:element name="HostAuthorization" minOccurs="1" maxOccurs="1" type="HostAuthorization"/>
 			<xs:element name="IdentityAuthorization" minOccurs="1" maxOccurs="1" type="IdentityAuthorization"/>
 		</xs:choice>
 	</xs:complexType>
 	
 	<xs:complexType name="NoAuthorization"/>
+	
+	<xs:complexType name="SelfAuthorization"/>
 	
 	<xs:complexType name="HostAuthorization">
 		<xs:sequence>

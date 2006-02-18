@@ -9,6 +9,7 @@ import gov.nih.nci.cagrid.introduce.beans.security.NoAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.RunAsMode;
 import gov.nih.nci.cagrid.introduce.beans.security.SecureConversation;
 import gov.nih.nci.cagrid.introduce.beans.security.SecureMessage;
+import gov.nih.nci.cagrid.introduce.beans.security.SelfAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
@@ -26,7 +27,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTabbedPane;
 
-
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
@@ -38,59 +38,95 @@ import javax.swing.JTabbedPane;
 public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
 	private JPanel secureCommunicationPanel = null;
+
 	private ButtonGroup buttonGroup = new ButtonGroup();
+
 	private JRadioButton noneButton = null;
+
 	private JRadioButton customButton = null;
+
 	private TransportLevelSecurityPanel tlsPanel = null;
+
 	private JCheckBox tlsButton = null;
+
 	private JCheckBox secureConversationButton = null;
+
 	private JPanel choicePanel = null;
+
 	private JPanel commPanel = null;
+
 	private JLabel jLabel1 = null;
+
 	private JLabel Custom = null;
+
 	private JLabel jLabel2 = null;
+
 	private JLabel jLabel3 = null;
+
 	private JCheckBox secureMessageButton = null;
+
 	private JLabel jLabel4 = null;
+
 	private SecureConversationPanel secureConversationPanel = null;
+
 	private SecureMessagePanel secureMessagePanel = null;
+
 	private JPanel confPanel = null;
+
 	private JLabel jLabel5 = null;
+
 	private JComboBox clientCommunication = null;
+
 	private JLabel jLabel6 = null;
+
 	private JComboBox runAsMode = null;
+
 	private JLabel jLabel7 = null;
+
 	private JComboBox delegationMode = null;
+
 	private boolean syncingComm = false;
+
 	private JLabel jLabel8 = null;
+
 	private JComboBox anonymousCommunication = null;
+
 	private JTabbedPane transportPanel = null;
+
 	private JPanel communicationPanel = null;
+
 	private JPanel clientAuthorization = null;
+
 	private HostAuthorizationPanel hostAuthorization = null;
+
 	private CardLayout clientAuthLayout = new CardLayout();
+
 	private IdentityAuthorizationPanel identityAuthorization = null;
+
 	private JPanel blankPanel = null;
+
 	private JLabel jLabel = null;
+
 	private JComboBox clientAuth = null;
 
 	private final static String NO_AUTHORIZATION = "No Authorization";
+
 	private final static String HOST_AUTHORIZATION = "Host Authorization";
+
 	private final static String IDENTITY_AUTHORIZATION = "Identity Authorization";
 
+	private final static String SELF_AUTHORIZATION = "Self Authorization";
 
 	public ServiceSecurityPanel() {
 		super();
 		initialize();
 	}
 
-
 	public ServiceSecurityPanel(ServiceSecurity sec) {
 		super();
 		initialize();
 		setServiceSecurity(sec);
 	}
-
 
 	private void initialize() {
 		/*
@@ -120,14 +156,15 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		this.setLayout(new GridBagLayout());
 		this.setSize(500, 500);
 		this.add(getSecureCommunicationPanel(), gridBagConstraints71);
-		setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Security Configuration",
-			javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
-			null, IntroduceLookAndFeel.getPanelLabelColor()));
+		setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+				"Security Configuration",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+				IntroduceLookAndFeel.getPanelLabelColor()));
 		this.add(getTransportPanel(), gridBagConstraints17);
 		this.add(getConfPanel(), gridBagConstraints);
 		synchronize();
 	}
-
 
 	/**
 	 * This method initializes secureCommunicationPanel
@@ -154,7 +191,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return secureCommunicationPanel;
 	}
 
-
 	/**
 	 * This method initializes noneButton
 	 * 
@@ -172,7 +208,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		}
 		return noneButton;
 	}
-
 
 	/**
 	 * This method initializes customButton
@@ -192,16 +227,15 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return customButton;
 	}
 
-
 	private boolean isSecure() {
-		if (usesTransportSecurity() || usesSecureConversation() || usesSecureMessage()) {
+		if (usesTransportSecurity() || usesSecureConversation()
+				|| usesSecureMessage()) {
 			return true;
 		} else {
 			return false;
 		}
 
 	}
-
 
 	private boolean usesTransportSecurity() {
 		if (tlsButton.isSelected()) {
@@ -211,7 +245,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		}
 	}
 
-
 	private boolean usesSecureConversation() {
 		if (secureConversationButton.isSelected()) {
 			return true;
@@ -219,7 +252,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			return false;
 		}
 	}
-
 
 	private boolean usesSecureMessage() {
 		if (secureMessageButton.isSelected()) {
@@ -229,7 +261,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		}
 	}
 
-
 	public ServiceSecurity getServiceSecurity() throws Exception {
 		ServiceSecurity ss = new ServiceSecurity();
 		if (noneButton.isSelected()) {
@@ -237,47 +268,62 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		} else if (customButton.isSelected()) {
 			ss.setMethodSecuritySetting(MethodSecurityType.Custom);
 			if (!isSecure()) {
-				throw new Exception("You must select at least one transport mechanism!!!");
+				throw new Exception(
+						"You must select at least one transport mechanism!!!");
 			}
 
 			if (tlsButton.isSelected()) {
-				ss.setTransportLevelSecurity(this.tlsPanel.getTransportLevelSecurity());
+				ss.setTransportLevelSecurity(this.tlsPanel
+						.getTransportLevelSecurity());
 
 			}
 			if (secureConversationButton.isSelected()) {
-				ss.setSecureConversation(this.secureConversationPanel.getSecureConversation());
+				ss.setSecureConversation(this.secureConversationPanel
+						.getSecureConversation());
 
 			}
 			if (secureMessageButton.isSelected()) {
 				ss.setSecureMessage(this.secureMessagePanel.getSecureMessage());
 			}
 			if (clientCommunication.isEnabled()) {
-				ss.setClientCommunication((ClientCommunication) clientCommunication.getSelectedItem());
+				ss
+						.setClientCommunication((ClientCommunication) clientCommunication
+								.getSelectedItem());
 			}
 			if (runAsMode.isEnabled()) {
 				ss.setRunAsMode((RunAsMode) runAsMode.getSelectedItem());
 			}
 			if (delegationMode.isEnabled()) {
-				ss.setDelegationMode((DelegationMode) delegationMode.getSelectedItem());
+				ss.setDelegationMode((DelegationMode) delegationMode
+						.getSelectedItem());
 			} else {
 				ss.setDelegationMode(DelegationMode.None);
 			}
 			if (anonymousCommunication.isEnabled()) {
-				ss.setAnonymousClients((AnonymousCommunication) anonymousCommunication.getSelectedItem());
+				ss
+						.setAnonymousClients((AnonymousCommunication) anonymousCommunication
+								.getSelectedItem());
 			} else {
 				ss.setAnonymousClients(AnonymousCommunication.No);
 			}
-			
+
 			ClientAuthorization cli = new ClientAuthorization();
-			if(clientAuth.isEnabled()){
-				if(this.clientAuth.getSelectedItem().equals(HOST_AUTHORIZATION)){
-					cli.setHostAuthorization(hostAuthorization.getHostAuthorization());
-				}else if(this.clientAuth.getSelectedItem().equals(IDENTITY_AUTHORIZATION)){
-					cli.setIdentityAuthorization(identityAuthorization.getIdentitytAuthorization());
-				}else{
+			if (clientAuth.isEnabled()) {
+				if (this.clientAuth.getSelectedItem()
+						.equals(HOST_AUTHORIZATION)) {
+					cli.setHostAuthorization(hostAuthorization
+							.getHostAuthorization());
+				} else if (this.clientAuth.getSelectedItem().equals(
+						IDENTITY_AUTHORIZATION)) {
+					cli.setIdentityAuthorization(identityAuthorization
+							.getIdentitytAuthorization());
+				} else if (this.clientAuth.getSelectedItem().equals(SELF_AUTHORIZATION)) {
+					cli.setSelfAuthorization(new SelfAuthorization());
+				} else {
+
 					cli.setNoAuthorization(new NoAuthorization());
-				}		
-			}else{
+				}
+			} else {
 				cli.setNoAuthorization(new NoAuthorization());
 			}
 			ss.setClientAuthorization(cli);
@@ -286,68 +332,72 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return ss;
 	}
 
-
 	public void setServiceSecurity(ServiceSecurity ss) {
-		if(ss!=null){
-		if (ss.getMethodSecuritySetting().equals(MethodSecurityType.None)) {
-			noneButton.setSelected(true);
-		} else if (ss.getMethodSecuritySetting().equals(MethodSecurityType.Custom)) {
-			customButton.setSelected(true);
+		if (ss != null) {
+			if (ss.getMethodSecuritySetting().equals(MethodSecurityType.None)) {
+				noneButton.setSelected(true);
+			} else if (ss.getMethodSecuritySetting().equals(
+					MethodSecurityType.Custom)) {
+				customButton.setSelected(true);
 
-			TransportLevelSecurity tls = ss.getTransportLevelSecurity();
-			if (tls != null) {
-				tlsButton.setSelected(true);
-				this.tlsPanel.setTransportLevelSecurity(tls);
-			}
-			SecureConversation sc = ss.getSecureConversation();
-			if (sc != null) {
-				secureConversationButton.setSelected(true);
-				this.secureConversationPanel.setSecureConversation(sc);
-			}
-			SecureMessage sm = ss.getSecureMessage();
-			if (sm != null) {
-				secureMessageButton.setSelected(true);
-				this.secureMessagePanel.setSecureMessage(sm);
-			}
-			this.synchClientCommunication();
-			ClientCommunication cc = ss.getClientCommunication();
-			if (cc != null) {
-				clientCommunication.setSelectedItem(cc);
-			}
-			RunAsMode runas = ss.getRunAsMode();
-			if (runas != null) {
-				this.runAsMode.setSelectedItem(runas);
-			}
-
-			DelegationMode dm = ss.getDelegationMode();
-			if (delegationMode != null) {
-				this.delegationMode.setSelectedItem(dm);
-			}
-			AnonymousCommunication anon = ss.getAnonymousClients();
-			if (anon != null) {
-				anonymousCommunication.setSelectedItem(anon);
-			}
-			
-			if (ss.getClientAuthorization() != null) {
-				ClientAuthorization cli = ss.getClientAuthorization();
-				if (cli.getNoAuthorization() != null) {
-					this.clientAuth.setSelectedItem(NO_AUTHORIZATION);
+				TransportLevelSecurity tls = ss.getTransportLevelSecurity();
+				if (tls != null) {
+					tlsButton.setSelected(true);
+					this.tlsPanel.setTransportLevelSecurity(tls);
 				}
-				if (cli.getHostAuthorization() != null) {
-					this.clientAuth.setSelectedItem(HOST_AUTHORIZATION);
-					hostAuthorization.setHostAuthorization(cli.getHostAuthorization());
+				SecureConversation sc = ss.getSecureConversation();
+				if (sc != null) {
+					secureConversationButton.setSelected(true);
+					this.secureConversationPanel.setSecureConversation(sc);
+				}
+				SecureMessage sm = ss.getSecureMessage();
+				if (sm != null) {
+					secureMessageButton.setSelected(true);
+					this.secureMessagePanel.setSecureMessage(sm);
+				}
+				this.synchClientCommunication();
+				ClientCommunication cc = ss.getClientCommunication();
+				if (cc != null) {
+					clientCommunication.setSelectedItem(cc);
+				}
+				RunAsMode runas = ss.getRunAsMode();
+				if (runas != null) {
+					this.runAsMode.setSelectedItem(runas);
 				}
 
-				if (cli.getIdentityAuthorization() != null) {
-					this.clientAuth.setSelectedItem(IDENTITY_AUTHORIZATION);
-					identityAuthorization.setIdentityAuthorization(cli.getIdentityAuthorization());
+				DelegationMode dm = ss.getDelegationMode();
+				if (delegationMode != null) {
+					this.delegationMode.setSelectedItem(dm);
+				}
+				AnonymousCommunication anon = ss.getAnonymousClients();
+				if (anon != null) {
+					anonymousCommunication.setSelectedItem(anon);
+				}
+
+				if (ss.getClientAuthorization() != null) {
+					ClientAuthorization cli = ss.getClientAuthorization();
+					if (cli.getNoAuthorization() != null) {
+						this.clientAuth.setSelectedItem(NO_AUTHORIZATION);
+					}
+					if (cli.getHostAuthorization() != null) {
+						this.clientAuth.setSelectedItem(HOST_AUTHORIZATION);
+						hostAuthorization.setHostAuthorization(cli
+								.getHostAuthorization());
+					}
+					if(cli.getSelfAuthorization()!=null){
+						this.clientAuth.setSelectedItem(SELF_AUTHORIZATION);
+					}
+
+					if (cli.getIdentityAuthorization() != null) {
+						this.clientAuth.setSelectedItem(IDENTITY_AUTHORIZATION);
+						identityAuthorization.setIdentityAuthorization(cli
+								.getIdentityAuthorization());
+					}
 				}
 			}
-		}
 		}
 
 	}
-
 
 	public void synchronize() {
 		disableAll();
@@ -382,22 +432,22 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			}
 
 			if (isSecure()) {
-				ClientCommunication comm = (ClientCommunication) clientCommunication.getSelectedItem();
+				ClientCommunication comm = (ClientCommunication) clientCommunication
+						.getSelectedItem();
 				if (determineCommOk(comm)) {
 					// TODO: Check Service Auth
 					anonymousCommunication.setEnabled(true);
 				}
 			}
-			
-			if(isSecure()){
+
+			if (isSecure()) {
 				clientAuth.setEnabled(true);
 				hostAuthorization.enablePanel();
-				identityAuthorization.enablePanel();	
+				identityAuthorization.enablePanel();
 			}
 
 		}
 	}
-
 
 	private boolean determineCommOk(ClientCommunication comm) {
 		boolean commOk = false;
@@ -410,10 +460,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		}
 		return commOk;
 	}
-
-
-
-
 
 	public void disableAll() {
 		tlsPanel.disablePanel();
@@ -431,7 +477,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		identityAuthorization.disablePanel();
 	}
 
-
 	private synchronized void synchClientCommunication() {
 		if (!syncingComm) {
 			syncingComm = true;
@@ -441,13 +486,16 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 				clientCommunication.setEnabled(true);
 
 				if (tlsButton.isSelected()) {
-					clientCommunication.addItem(ClientCommunication.Transport_Layer_Security);
+					clientCommunication
+							.addItem(ClientCommunication.Transport_Layer_Security);
 				}
 				if (secureConversationButton.isSelected()) {
-					clientCommunication.addItem(ClientCommunication.Secure_Conversation);
+					clientCommunication
+							.addItem(ClientCommunication.Secure_Conversation);
 				}
 				if (secureMessageButton.isSelected()) {
-					clientCommunication.addItem(ClientCommunication.Secure_Message);
+					clientCommunication
+							.addItem(ClientCommunication.Secure_Message);
 				}
 
 				if (obj != null) {
@@ -457,7 +505,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			syncingComm = false;
 		}
 	}
-
 
 	/**
 	 * This method initializes tlsPanel
@@ -470,7 +517,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		}
 		return tlsPanel;
 	}
-
 
 	/**
 	 * This method initializes tlsButton
@@ -489,7 +535,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return tlsButton;
 	}
 
-
 	/**
 	 * This method initializes secureConversationButton
 	 * 
@@ -498,16 +543,16 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JCheckBox getSecureConversationButton() {
 		if (secureConversationButton == null) {
 			secureConversationButton = new JCheckBox();
-			secureConversationButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					synchronize();
-				}
-			});
+			secureConversationButton
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							synchronize();
+						}
+					});
 
 		}
 		return secureConversationButton;
 	}
-
 
 	/**
 	 * This method initializes choicePanel
@@ -538,7 +583,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return choicePanel;
 	}
 
-
 	/**
 	 * This method initializes commPanel
 	 * 
@@ -563,7 +607,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return commPanel;
 	}
 
-
 	/**
 	 * This method initializes secureMessageButton
 	 * 
@@ -572,15 +615,15 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JCheckBox getSecureMessageButton() {
 		if (secureMessageButton == null) {
 			secureMessageButton = new JCheckBox();
-			secureMessageButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					synchronize();
-				}
-			});
+			secureMessageButton
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							synchronize();
+						}
+					});
 		}
 		return secureMessageButton;
 	}
-
 
 	/**
 	 * This method initializes secureConversationPanel
@@ -594,7 +637,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return secureConversationPanel;
 	}
 
-
 	/**
 	 * This method initializes secureMessagePanel
 	 * 
@@ -606,7 +648,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		}
 		return secureMessagePanel;
 	}
-
 
 	/**
 	 * This method initializes confPanel
@@ -699,7 +740,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return confPanel;
 	}
 
-
 	/**
 	 * This method initializes clientCommunication
 	 * 
@@ -708,15 +748,15 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JComboBox getClientCommunication() {
 		if (clientCommunication == null) {
 			clientCommunication = new JComboBox();
-			clientCommunication.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					synchronize();
-				}
-			});
+			clientCommunication
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							synchronize();
+						}
+					});
 		}
 		return clientCommunication;
 	}
-
 
 	/**
 	 * This method initializes runAsMode
@@ -734,7 +774,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return runAsMode;
 	}
 
-
 	/**
 	 * This method initializes delegationMode
 	 * 
@@ -750,7 +789,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return delegationMode;
 	}
 
-
 	/**
 	 * This method initializes anonymousCommunication
 	 * 
@@ -765,7 +803,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return anonymousCommunication;
 	}
 
-
 	/**
 	 * This method initializes transportPanel
 	 * 
@@ -774,14 +811,17 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JTabbedPane getTransportPanel() {
 		if (transportPanel == null) {
 			transportPanel = new JTabbedPane();
-			transportPanel.addTab("Transport Layer Security", null, getTlsPanel(), null);
-			transportPanel.addTab("Secure Conversation", null, getSecureConversationPanel(), null);
-			transportPanel.addTab("Secure Message", null, getSecureMessagePanel(), null);
-			transportPanel.addTab("Client Authorization", null, getClientAuthorization(), null);
+			transportPanel.addTab("Transport Layer Security", null,
+					getTlsPanel(), null);
+			transportPanel.addTab("Secure Conversation", null,
+					getSecureConversationPanel(), null);
+			transportPanel.addTab("Secure Message", null,
+					getSecureMessagePanel(), null);
+			transportPanel.addTab("Client Authorization", null,
+					getClientAuthorization(), null);
 		}
 		return transportPanel;
 	}
-
 
 	/**
 	 * This method initializes communicationPanel
@@ -796,7 +836,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return communicationPanel;
 	}
 
-
 	/**
 	 * This method initializes clientAuthorization
 	 * 
@@ -806,13 +845,14 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		if (clientAuthorization == null) {
 			clientAuthorization = new JPanel();
 			clientAuthorization.setLayout(clientAuthLayout);
-			clientAuthorization.add(getHostAuthorization(), getHostAuthorization().getName());
-			clientAuthorization.add(getIdentityAuthorization(), getIdentityAuthorization().getName());
+			clientAuthorization.add(getHostAuthorization(),
+					getHostAuthorization().getName());
+			clientAuthorization.add(getIdentityAuthorization(),
+					getIdentityAuthorization().getName());
 			clientAuthorization.add(getBlankPanel(), getBlankPanel().getName());
 		}
 		return clientAuthorization;
 	}
-
 
 	/**
 	 * This method initializes hostAuthorization
@@ -827,7 +867,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return hostAuthorization;
 	}
 
-
 	/**
 	 * This method initializes identityAuthorization
 	 * 
@@ -840,7 +879,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		}
 		return identityAuthorization;
 	}
-
 
 	/**
 	 * This method initializes blankPanel
@@ -855,7 +893,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return blankPanel;
 	}
 
-
 	/**
 	 * This method initializes clientAuth
 	 * 
@@ -864,22 +901,33 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JComboBox getClientAuth() {
 		if (clientAuth == null) {
 			clientAuth = new JComboBox();
-			clientAuth.addActionListener(new java.awt.event.ActionListener() { 
-				public void actionPerformed(java.awt.event.ActionEvent e) {    
-					if(clientAuth.getSelectedItem().equals(NO_AUTHORIZATION)){
-						clientAuthLayout.show(clientAuthorization,NO_AUTHORIZATION);
+			clientAuth.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if (clientAuth.getSelectedItem().equals(NO_AUTHORIZATION)) {
+						clientAuthLayout.show(clientAuthorization,
+								NO_AUTHORIZATION);
 					}
-					if(clientAuth.getSelectedItem().equals(HOST_AUTHORIZATION)){
-						clientAuthLayout.show(clientAuthorization,HOST_AUTHORIZATION);
+					
+					if (clientAuth.getSelectedItem().equals(SELF_AUTHORIZATION)) {
+						clientAuthLayout.show(clientAuthorization,
+								NO_AUTHORIZATION);
 					}
-					if(clientAuth.getSelectedItem().equals(IDENTITY_AUTHORIZATION)){
-						clientAuthLayout.show(clientAuthorization,IDENTITY_AUTHORIZATION);
+					
+					if (clientAuth.getSelectedItem().equals(HOST_AUTHORIZATION)) {
+						clientAuthLayout.show(clientAuthorization,
+								HOST_AUTHORIZATION);
+					}
+					if (clientAuth.getSelectedItem().equals(
+							IDENTITY_AUTHORIZATION)) {
+						clientAuthLayout.show(clientAuthorization,
+								IDENTITY_AUTHORIZATION);
 					}
 				}
 			});
 			clientAuth.addItem(NO_AUTHORIZATION);
 			clientAuth.addItem(HOST_AUTHORIZATION);
 			clientAuth.addItem(IDENTITY_AUTHORIZATION);
+			clientAuth.addItem(SELF_AUTHORIZATION);
 		}
 		return clientAuth;
 	}
