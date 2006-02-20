@@ -6,10 +6,8 @@
 	<classpathentry kind="lib" path="lib/concurrent-1.3.4.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/mobius_common_client-1.1.jar"/>
-	<classpathentry sourcepath="/mobius" kind="lib" path="lib/mobius_common_server-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/mobius_factories-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/mobius_gme_client-1.1.jar"/>
-	<classpathentry sourcepath="/mobius" kind="lib" path="lib/mobius_gme_server-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/mobius_mako_client-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/mobius_mako_server-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/mobius_tools-1.1.jar"/>
