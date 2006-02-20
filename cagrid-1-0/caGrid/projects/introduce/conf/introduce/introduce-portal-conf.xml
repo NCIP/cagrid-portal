@@ -38,12 +38,18 @@
 					<class>gov.nih.nci.cagrid.introduce.portal.deployment.DeploymentViewer</class>
 					<icon>/World20X20.gif</icon>
 				</component>
+				<component>
+					<title>caGrid GME Tools</title>
+					<description>caGrid GME Tools</description>
+					<class>gov.nih.nci.cagrid.introduce.portal.gme.GMEViewer</class>
+					<icon>/mobiusIcon.gif</icon>
+				</component>
 			</components>
 		</grid-portal-config>
 	</resource>
 	<resource name="IntroducePortalConf" class="gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf">
 		<introduce-portal-config discoveryType="GME">
-			<gme>http://dc01.bmi.ohio-state.edu:8080/wsrf/services/cagrid/GlobalModelExchange</gme>
+			<gme>http://localhost:8080/wsrf/services/cagrid/GlobalModelExchange</gme>
 			<cadsr></cadsr>
 		</introduce-portal-config>
 	</resource>

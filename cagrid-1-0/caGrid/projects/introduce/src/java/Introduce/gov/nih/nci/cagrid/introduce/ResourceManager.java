@@ -29,6 +29,7 @@ public class ResourceManager {
 	public final static String RESOURCE_FILE = "introduce.resources";
 
 	public final static String LAST_DIRECTORY = "introduce.lastdir";
+	public final static String LAST_FILE = "introduce.lastfile";
 
 
 	public static String getResourcePath() {
@@ -264,6 +265,27 @@ public class ResourceManager {
 		chooser.setDialogTitle("Select Directory");
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		chooser.setMultiSelectionEnabled(false);
+		int returnVal = chooser.showOpenDialog(comp);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			return chooser.getSelectedFile().getAbsolutePath();
+		} else {
+			return null;
+		}
+	}
+	
+	public static String promptFile(Component comp, String defaultLocation) throws Exception {
+		JFileChooser chooser = null;
+		if(defaultLocation !=null && defaultLocation.length()>0 && new File(defaultLocation).exists()){
+			chooser = new JFileChooser(new File(defaultLocation));
+		} else if (getProperty(LAST_FILE) != null) {
+			chooser = new JFileChooser(new File(getProperty(LAST_FILE)));
+		} else {
+			chooser = new JFileChooser();
+		}
+		chooser.setDialogTitle("Select File");
+		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
+		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		chooser.setMultiSelectionEnabled(false);
 		int returnVal = chooser.showOpenDialog(comp);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
