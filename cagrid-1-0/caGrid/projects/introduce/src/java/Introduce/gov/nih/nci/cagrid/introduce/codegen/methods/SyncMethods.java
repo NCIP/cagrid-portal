@@ -44,8 +44,6 @@ public class SyncMethods {
 
 	JavaParser jp;
 
-	SyncSecurity secureSync;
-
 	File baseDirectory;
 
 	ServiceInformation info;
@@ -111,73 +109,7 @@ public class SyncMethods {
 					String methodName = methods[i].getName();
 					if (mel.getName().equals(methodName)) {
 						found = true;
-
-						// SLH don't break until you check for modifications,
-						// check more thoroughly to determine if it is a mod
-						// if it is a mod we will handle that differently
-
-						// first check for a parameter difference....
-						if (mel.getInputs() != null && mel.getInputs().getInput() != null) {
-							// check for same number of params
-							MethodTypeInputsInput[] inputs = mel.getInputs().getInput();
-							if (inputs.length != methods[i].getParams().length) {
-								// params lengths are not the same
-								// add to mods and break
-								System.out.println("Found a method for modification: " + mel.getName());
-								this.modifications.add(new Modification(mel, methods[i]));
-							} else {
-								for (int inputI = 0; inputI < inputs.length; inputI++) {
-									MethodTypeInputsInput input = inputs[inputI];
-									Parameter param = methods[i].getParams()[inputI];
-									// now compare the input
-									if (input.getType().equals(param.getType())) {
-										// not the same type or order so need to
-										// add
-										if (!this.modifications.contains(mel)) {
-											System.out.println("Found a method for modification: " + mel.getName());
-											this.modifications.add(new Modification(mel, methods[i]));
-										}
-									}
-
-								}
-							}
-						}
-
-						// now check the outputType.....
-						if (mel.getOutput() != null) {
-							// now compare the output to
-							MethodTypeOutput output = mel.getOutput();
-							if (output.getType() != null && methods[i].getType() != null) {
-								if (output.getType().equals(methods[i].getType())) {
-									// they are differnt so add this to mods
-									// list
-									if (!this.modifications.contains(mel)) {
-										System.out.println("Found a method for modification: " + mel.getName());
-										this.modifications.add(new Modification(mel, methods[i]));
-									}
-								}
-							}
-						}
-
-						// now check the faults
-						if (mel.getExceptions() != null && mel.getExceptions().getException() != null) {
-							MethodTypeExceptionsException[] exceptions = mel.getExceptions().getException();
-							if (exceptions.length != methods[i].getExceptions().length - 1) {
-								if (!this.modifications.contains(mel)) {
-									System.out.println("Found a method for modification: " + mel.getName());
-									this.modifications.add(new Modification(mel, methods[i]));
-								} else {
-									for (int exceptionI = 0; exceptionI < exceptions.length; exceptionI++) {
-										if (exceptions[exceptionI].getName().equals(
-											methods[i].getExceptions()[exceptionI].getClassName())) {
-											System.out.println("Found a method for modification: " + mel.getName());
-											this.modifications.add(new Modification(mel, methods[i]));
-										}
-									}
-								}
-							}
-						}
-
+						this.modifications.add(new Modification(mel, methods[i]));
 						break;
 					}
 				}

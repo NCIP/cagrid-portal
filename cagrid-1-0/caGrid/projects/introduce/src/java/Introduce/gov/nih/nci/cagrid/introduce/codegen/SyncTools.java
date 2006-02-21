@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.codegen.metadata.SyncMetadata;
 import gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods;
+import gov.nih.nci.cagrid.introduce.codegen.security.SyncSecurity;
 import gov.nih.nci.cagrid.introduce.templates.NamespaceMappingsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.etc.SecurityDescTemplate;
 import gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate;
@@ -229,9 +230,11 @@ public class SyncTools {
 
 		SyncMethods methodsS = new SyncMethods(baseDirectory, info);
 		SyncMetadata metadata = new SyncMetadata(baseDirectory, info);
+		SyncSecurity security = new SyncSecurity(baseDirectory, info);
 
 		methodsS.sync();
 		metadata.sync();
+		security.sync();
 
 		File etcDir = new File(baseDirectory.getAbsolutePath() + File.separator
 				+ "etc");
