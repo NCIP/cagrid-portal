@@ -1,4 +1,7 @@
 To Do:
+
+Click Modify Service Click Cancel, Null pointer.
+
 (DONE) Make sure that skeleton names entered in the GUI are acceptable.
 	i.e. No Service in the name (fixed 12/7/05)
 		 No non-acceptable characters for java class names
