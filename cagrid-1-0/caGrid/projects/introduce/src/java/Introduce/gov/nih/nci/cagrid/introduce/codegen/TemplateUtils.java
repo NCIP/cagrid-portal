@@ -148,7 +148,8 @@ public class TemplateUtils {
 								map.put(qnameNamespace, new SchemaInformation(inputParam.getPackageName(),
 									qnameNamespace, prefix, location));
 							} else {
-								map.put(qnameNamespace, new SchemaInformation(inputParam.getPackageName(),
+								inputParam.setPackageName("");
+								map.put(qnameNamespace, new SchemaInformation("",
 									qnameNamespace, "xs", ""));
 							}
 						}
@@ -175,7 +176,8 @@ public class TemplateUtils {
 								map.put(qnameNamespace, new SchemaInformation(outputParam.getPackageName(),
 									qnameNamespace, prefix, location));
 							} else {
-								map.put(qnameNamespace, new SchemaInformation(outputParam.getPackageName(),
+								outputParam.setPackageName("");
+								map.put(qnameNamespace, new SchemaInformation("",
 									qnameNamespace, "xs", ""));
 							}
 						}

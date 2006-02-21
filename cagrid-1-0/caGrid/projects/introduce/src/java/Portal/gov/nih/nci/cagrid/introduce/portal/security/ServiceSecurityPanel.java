@@ -331,7 +331,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	}
 
 	public void setServiceSecurity(ServiceSecurity ss) {
-		if (ss != null) {
+		if (ss != null && ss.getMethodSecuritySetting()!=null) {
 			if (ss.getMethodSecuritySetting().equals(MethodSecurityType.None)) {
 				noneButton.setSelected(true);
 			} else if (ss.getMethodSecuritySetting().equals(

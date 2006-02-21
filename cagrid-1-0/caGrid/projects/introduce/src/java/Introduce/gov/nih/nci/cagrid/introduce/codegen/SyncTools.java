@@ -134,7 +134,7 @@ public class SyncTools {
 			for (int i = 0; i < info.getMetadata().getMetadata().length; i++) {
 				MetadataType mtype = info.getMetadata().getMetadata(i);
 				if (mtype.getNamespace() != null
-					&& (mtype.getPackageName() == null || mtype.getPackageName().length() < 0)) {
+					&& (mtype.getPackageName() == null || mtype.getPackageName().length() <= 0)) {
 					mtype.setPackageName(getPackageName(new Namespace(mtype.getNamespace())));
 				}
 				if (mtype.getClassName() == null || mtype.getClassName().length() == 0) {
@@ -152,13 +152,13 @@ public class SyncTools {
 				if (mtype.getInputs() != null && mtype.getInputs().getInput() != null) {
 					for (int j = 0; j < mtype.getInputs().getInput().length; j++) {
 						MethodTypeInputsInput inputParam = mtype.getInputs().getInput(j);
-						if (inputParam.getNamespace() != null
+						if (inputParam.getNamespace() != null && !inputParam.getNamespace().equals(TemplateUtils.W3CNAMESPACE)
 							&& (inputParam.getPackageName() == null || inputParam.getPackageName().length() <= 0)) {
 							inputParam.setPackageName(getPackageName(new Namespace(inputParam.getNamespace())));
 						}
 						if (inputParam.getClassName() != null && inputParam.getClassName().equals("void")) {
 							inputParam.setPackageName("");
-						} else if (inputParam.getClass() == null) {
+						} else if (inputParam.getClassName() == null) {
 							Type type = table.getType(new QName(inputParam.getNamespace(), inputParam.getType()));
 
 							if (inputParam.getIsArray().booleanValue() == true) {
@@ -173,13 +173,13 @@ public class SyncTools {
 				// process the outputs
 				if (mtype.getOutput() != null) {
 					MethodTypeOutput outputParam = mtype.getOutput();
-					if (outputParam.getNamespace() != null
-						&& (outputParam.getPackageName() == null || outputParam.getPackageName().length() <= 0)) {
+					if (outputParam.getNamespace() != null &&
+						!outputParam.getNamespace().equals(TemplateUtils.W3CNAMESPACE) && (outputParam.getPackageName() == null || outputParam.getPackageName().length() <= 0)) {
 						outputParam.setPackageName(getPackageName(new Namespace(outputParam.getNamespace())));
 					}
 					if (outputParam.getClassName() != null && outputParam.getClassName().equals("void")) {
 						outputParam.setPackageName("");
-					} else if (outputParam.getClass() == null) {
+					} else if (outputParam.getClassName() == null) {
 						Type type = table.getType(new QName(outputParam.getNamespace(), outputParam.getType()));
 						if (outputParam.getIsArray() != null && outputParam.getIsArray().booleanValue() == true) {
 							outputParam.setClassName(getRelativeClassName(type.getName()) + "[]");
