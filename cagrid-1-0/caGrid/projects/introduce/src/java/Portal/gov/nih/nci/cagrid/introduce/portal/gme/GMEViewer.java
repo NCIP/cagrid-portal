@@ -12,6 +12,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -23,6 +24,7 @@ import javax.swing.JTextField;
 import org.apache.tools.ant.filters.StringInputStream;
 import org.exolab.castor.xml.schema.reader.SchemaReader;
 import org.projectmobius.common.GridServiceResolver;
+import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.Namespace;
 import org.projectmobius.common.gme.NamespaceExistsException;
 import org.projectmobius.gme.XMLDataModelService;
@@ -253,6 +255,7 @@ public class GMEViewer extends GridPortalComponent {
 					// TODO Auto-generated method stub
 					if (gmeSchemaLocatorPanel.currentNode != null) {
 						getSchemaTextPane().setText(gmeSchemaLocatorPanel.currentNode.getSchemaContents());
+						getSchemaTextPane().setCaretPosition(0);
 					}
 				}
 
@@ -285,6 +288,7 @@ public class GMEViewer extends GridPortalComponent {
 						try {
 							StringBuffer buf = Utils.fileToStringBuffer(file);
 							uploadSchemaTextPane.setText(buf.toString());
+							uploadSchemaTextPane.setCaretPosition(0);
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
@@ -416,19 +420,49 @@ public class GMEViewer extends GridPortalComponent {
 		if (gmeDownloadButton == null) {
 			gmeDownloadButton = new JButton();
 			gmeDownloadButton.setText("Download");
+			gmeDownloadButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					try {
+						String location = ResourceManager.promptDir(GMEViewer.this, null);
+						if (location != null && location.length() > 0) {
+							GridServiceResolver.getInstance().setDefaultFactory(
+								new GlobusGMEXMLDataModelServiceFactory());
+							try {
+								XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
+									.getGridService(gmeSchemaLocatorPanel.getGme().getText());
+								if (gmeSchemaLocatorPanel.getSchemaComboBox().getSelectedItem() != null) {
+									handle.cacheSchema(new Namespace((String) gmeSchemaLocatorPanel
+										.getNamespaceComboBox().getSelectedItem()
+										+ (String) gmeSchemaLocatorPanel.getSchemaComboBox().getSelectedItem()),
+										new File(location));
+								}
+							} catch (MobiusException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+								JOptionPane
+									.showMessageDialog(GMEViewer.this,
+										"Please check the GME URL and make sure that you have the appropriate credentials!");
+							}
+						}
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
 		}
 		return gmeDownloadButton;
 	}
 
 
 	/**
-	 * This method initializes uploadSchemaTextPane	
-	 * 	
-	 * @return javax.swing.JTextArea	
+	 * This method initializes uploadSchemaTextPane
+	 * 
+	 * @return javax.swing.JTextArea
 	 */
 	private JEditTextArea getUploadSchemaTextPane() {
 		if (uploadSchemaTextPane == null) {
-			uploadSchemaTextPane = new JEditTextArea();
+			uploadSchemaTextPane = new JEditTextArea(GMETextAreaDefaults.getDefaults());
 			uploadSchemaTextPane.setTokenMarker(new XMLTokenMarker());
 		}
 		return uploadSchemaTextPane;
@@ -436,13 +470,13 @@ public class GMEViewer extends GridPortalComponent {
 
 
 	/**
-	 * This method initializes schemaTextPane	
-	 * 	
-	 * @return javax.swing.JTextArea	
+	 * This method initializes schemaTextPane
+	 * 
+	 * @return javax.swing.JTextArea
 	 */
 	private JEditTextArea getSchemaTextPane() {
 		if (schemaTextPane == null) {
-			schemaTextPane = new JEditTextArea();
+			schemaTextPane = new JEditTextArea(GMETextAreaDefaults.getDefaults());
 			schemaTextPane.setTokenMarker(new XMLTokenMarker());
 			schemaTextPane.setEditable(false);
 		}
