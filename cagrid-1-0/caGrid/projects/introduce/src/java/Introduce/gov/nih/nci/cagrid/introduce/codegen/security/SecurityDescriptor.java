@@ -82,7 +82,7 @@ public class SecurityDescriptor {
 		try {
 			MethodSecurity ms = method.getMethodSecurity();
 			StringBuffer xml = new StringBuffer();
-			if (differsFromService(service, ms)) {
+			if (determineWriteMethod(service, ms)) {
 				xml.append("<method name=\"" + method.getName() + "\">");
 				if ((ms.getMethodSecuritySetting() != null)
 						&& (ms.getMethodSecuritySetting()
@@ -107,6 +107,7 @@ public class SecurityDescriptor {
 			}
 			return xml.toString();
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new Exception(
 					"Error configuring the security descriptor for the method "
 							+ method.getName() + ": "+e.getMessage());
@@ -217,9 +218,12 @@ public class SecurityDescriptor {
 		return xml.toString();
 	}
 
-	private static boolean differsFromService(ServiceSecurity service,
+	private static boolean determineWriteMethod(ServiceSecurity service,
 			MethodSecurity method) {
 		if (service != null) {
+			if(method == null){
+				return false;
+			}
 			if (!objectEquals(service.getMethodSecuritySetting(), method
 					.getMethodSecuritySetting())) {
 				return true;

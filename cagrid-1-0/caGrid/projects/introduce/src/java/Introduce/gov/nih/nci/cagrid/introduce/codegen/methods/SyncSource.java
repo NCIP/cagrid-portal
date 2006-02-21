@@ -654,7 +654,7 @@ public class SyncSource {
 		clientMethod += "org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;\n";
 
 		// TODO: ADD CLIENT SECURITY
-		 clientMethod += "\n" + configureClientSecurity(new ServiceSecurity(),method.getMethodSecurity());
+		 clientMethod += "\n" + configureClientSecurity(this.serviceInfo.getServiceSecurity(),method.getMethodSecurity());
 		// put in the call to the client
 		String var = "port";
 
