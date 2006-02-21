@@ -52,7 +52,7 @@ public class SecurityDescriptor {
 	
 	private static String writeServiceSettings(ServiceSecurity ss) throws Exception{
 		StringBuffer xml = new StringBuffer();
-		
+		if(ss!=null){
 		if ((ss.getMethodSecuritySetting() != null)
 				&& (ss.getMethodSecuritySetting()
 						.equals(MethodSecurityType.Custom))) {
@@ -75,6 +75,9 @@ public class SecurityDescriptor {
 		
 		xml.append("<authz value=\"none\"/>");
 		return xml.toString();
+		}else{
+			return "";
+		}
 	}
 
 	private static String writeMethodSettings(ServiceSecurity service,
