@@ -50,11 +50,8 @@ public class SyncMethods {
 
 
 	public SyncMethods(File baseDirectory, ServiceInformation info) {
-
 		this.baseDirectory = baseDirectory;
-
 		this.info = info;
-
 		this.additions = new ArrayList();
 		this.removals = new ArrayList();
 		this.modifications = new ArrayList();
