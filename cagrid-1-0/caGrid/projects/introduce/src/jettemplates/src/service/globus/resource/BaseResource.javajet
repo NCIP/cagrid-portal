@@ -44,6 +44,8 @@ import org.globus.wsrf.impl.SimpleResourcePropertySet;
 import org.globus.wsrf.impl.servicegroup.client.ServiceGroupRegistrationClient;
 import org.globus.wsrf.utils.AddressingUtils;
 
+import commonj.timers.Timer;
+
 import gov.nih.nci.cagrid.common.Utils;
 
 public class BaseResource implements Resource, ResourceProperties, ResourceLifetime, ResourceIdentifier {
@@ -57,6 +59,9 @@ public class BaseResource implements Resource, ResourceProperties, ResourceLifet
 	private ResourcePropertySet propSet;
 
 	private Calendar terminationTime;
+	
+	//this can be used to cancel the registration renewal
+	private Timer registrationTimer;
 
 	private MetadataConfiguration configuration;
 
@@ -154,7 +159,7 @@ public class BaseResource implements Resource, ResourceProperties, ResourceLifet
 
 					ServiceGroupRegistrationClient client = new ServiceGroupRegistrationClient();
 					// apply the registration params to the client
-					client.register(params);
+					registrationTimer = client.register(params);
 				} else {
 					logger.error("Unable to read registration file:" + registrationFile);
 				}
