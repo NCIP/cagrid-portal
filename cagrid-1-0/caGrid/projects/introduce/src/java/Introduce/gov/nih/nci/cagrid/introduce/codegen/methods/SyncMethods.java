@@ -48,7 +48,6 @@ public class SyncMethods {
 
 	ServiceInformation info;
 
-
 	public SyncMethods(File baseDirectory, ServiceInformation info) {
 		this.baseDirectory = baseDirectory;
 		this.info = info;
