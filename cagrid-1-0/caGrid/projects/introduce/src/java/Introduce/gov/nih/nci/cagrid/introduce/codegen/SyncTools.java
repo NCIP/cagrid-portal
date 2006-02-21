@@ -37,6 +37,7 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.projectmobius.common.Namespace;
 
+
 /**
  * SyncMethodsOnDeployment
  * 
@@ -55,9 +56,11 @@ public class SyncTools {
 
 	public File baseDirectory;
 
+
 	public SyncTools(File directory) {
 		this.baseDirectory = directory;
 	}
+
 
 	private String getRelativeClassName(String fullyQualifiedClassName) {
 		int index = fullyQualifiedClassName.lastIndexOf(".");
@@ -68,48 +71,40 @@ public class SyncTools {
 		}
 	}
 
+
 	public void sync() throws Exception {
 
-		ServiceDescription introService = (ServiceDescription) Utils
-				.deserializeDocument(baseDirectory + File.separator
-						+ "introduce.xml", ServiceDescription.class);
+		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(baseDirectory + File.separator
+			+ "introduce.xml", ServiceDescription.class);
 
-		File servicePropertiesFile = new File(baseDirectory.getAbsolutePath()
-				+ File.separator + "introduce.properties");
+		File servicePropertiesFile = new File(baseDirectory.getAbsolutePath() + File.separator + "introduce.properties");
 		Properties serviceProperties = new Properties();
 		serviceProperties.load(new FileInputStream(servicePropertiesFile));
 
-		ServiceInformation info = new ServiceInformation(introService,
-				serviceProperties);
+		ServiceInformation info = new ServiceInformation(introService, serviceProperties);
 
 		this.createArchive(info);
 
-		File schemaDir = new File(baseDirectory.getAbsolutePath()
-				+ File.separator + "schema");
+		File schemaDir = new File(baseDirectory.getAbsolutePath() + File.separator + "schema");
 
 		ServiceWSDLTemplate serviceWSDLT = new ServiceWSDLTemplate();
 		String serviceWSDLS = serviceWSDLT.generate(info);
-		File serviceWSDLF = new File(schemaDir.getAbsolutePath()
-				+ File.separator
-				+ info.getServiceProperties().getProperty(
-						"introduce.skeleton.service.name")
-				+ File.separator
-				+ info.getServiceProperties().getProperty(
-						"introduce.skeleton.service.name") + ".wsdl");
+		File serviceWSDLF = new File(schemaDir.getAbsolutePath() + File.separator
+			+ info.getServiceProperties().getProperty("introduce.skeleton.service.name") + File.separator
+			+ info.getServiceProperties().getProperty("introduce.skeleton.service.name") + ".wsdl");
 		FileWriter serviceWSDLFW = new FileWriter(serviceWSDLF);
 		serviceWSDLFW.write(serviceWSDLS);
 		serviceWSDLFW.close();
 
 		NamespaceMappingsTemplate namespaceMappingsT = new NamespaceMappingsTemplate();
 		String namespaceMappingsS = namespaceMappingsT.generate(info);
-		File namespaceMappingsF = new File(baseDirectory.getAbsolutePath()
-				+ File.separator + "namespace2package.mappings");
+		File namespaceMappingsF = new File(baseDirectory.getAbsolutePath() + File.separator
+			+ "namespace2package.mappings");
 		FileWriter namespaceMappingsFW = new FileWriter(namespaceMappingsF);
 		namespaceMappingsFW.write(namespaceMappingsS);
 		namespaceMappingsFW.close();
 
-		String cmd = CommonTools.getAntFlattenCommand(baseDirectory
-				.getAbsolutePath());
+		String cmd = CommonTools.getAntFlattenCommand(baseDirectory.getAbsolutePath());
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
 		if (p.exitValue() != 0) {
@@ -122,25 +117,15 @@ public class SyncTools {
 
 		parser.setQuiet(true);
 		parser.setImports(true);
-		parser.setOutputDir(baseDirectory.getAbsolutePath() + File.separator
-				+ "tmp");
-		parser.setNStoPkg(baseDirectory.getAbsolutePath() + File.separator
-				+ "namespace2package.mappings");
-		parser.run(new File(baseDirectory.getAbsolutePath()
-				+ File.separator
-				+ "build"
-				+ File.separator
-				+ "schema"
-				+ File.separator
-				+ info.getServiceProperties().get(
-						"introduce.skeleton.service.name")
-				+ File.separator
-				+ info.getServiceProperties().get(
-						"introduce.skeleton.service.name") + "_flattened.wsdl")
+		parser.setOutputDir(baseDirectory.getAbsolutePath() + File.separator + "tmp");
+		parser.setNStoPkg(baseDirectory.getAbsolutePath() + File.separator + "namespace2package.mappings");
+		parser
+			.run(new File(baseDirectory.getAbsolutePath() + File.separator + "build" + File.separator + "schema"
+				+ File.separator + info.getServiceProperties().get("introduce.skeleton.service.name") + File.separator
+				+ info.getServiceProperties().get("introduce.skeleton.service.name") + "_flattened.wsdl")
 				.getAbsolutePath());
 		table = parser.getSymbolTable();
-		Utils.deleteDir(new File(baseDirectory.getAbsolutePath()
-				+ File.separator + "tmp"));
+		Utils.deleteDir(new File(baseDirectory.getAbsolutePath() + File.separator + "tmp"));
 
 		// table.dump(System.out);
 
@@ -148,13 +133,12 @@ public class SyncTools {
 		if (info.getMetadata().getMetadata() != null) {
 			for (int i = 0; i < info.getMetadata().getMetadata().length; i++) {
 				MetadataType mtype = info.getMetadata().getMetadata(i);
-				if(mtype.getNamespace()!=null && (mtype.getPackageName()==null || mtype.getPackageName().length()<0)){
+				if (mtype.getNamespace() != null
+					&& (mtype.getPackageName() == null || mtype.getPackageName().length() < 0)) {
 					mtype.setPackageName(getPackageName(new Namespace(mtype.getNamespace())));
 				}
-				if (mtype.getClassName() == null
-						|| mtype.getClassName().length() == 0) {
-					Element element = table.getElement(new QName(mtype
-							.getNamespace(), mtype.getType()));
+				if (mtype.getClassName() == null || mtype.getClassName().length() == 0) {
+					Element element = table.getElement(new QName(mtype.getNamespace(), mtype.getType()));
 					mtype.setClassName(getRelativeClassName(element.getName()));
 				}
 			}
@@ -165,30 +149,22 @@ public class SyncTools {
 			for (int i = 0; i < info.getMethods().getMethod().length; i++) {
 				MethodType mtype = info.getMethods().getMethod(i);
 				// process the inputs
-				if (mtype.getInputs() != null
-						&& mtype.getInputs().getInput() != null) {
+				if (mtype.getInputs() != null && mtype.getInputs().getInput() != null) {
 					for (int j = 0; j < mtype.getInputs().getInput().length; j++) {
-						MethodTypeInputsInput inputParam = mtype.getInputs()
-								.getInput(j);
-						if(inputParam.getNamespace()!=null && (inputParam.getPackageName()==null || inputParam.getPackageName().length()<0)){
+						MethodTypeInputsInput inputParam = mtype.getInputs().getInput(j);
+						if (inputParam.getNamespace() != null
+							&& (inputParam.getPackageName() == null || inputParam.getPackageName().length() <= 0)) {
 							inputParam.setPackageName(getPackageName(new Namespace(inputParam.getNamespace())));
 						}
-						if (inputParam.getClassName() != null
-								&& inputParam.getClassName().equals("void")) {
+						if (inputParam.getClassName() != null && inputParam.getClassName().equals("void")) {
 							inputParam.setPackageName("");
-						} else {
-							Type type = table.getType(new QName(inputParam
-									.getNamespace(), inputParam.getType()));
+						} else if (inputParam.getClass() == null) {
+							Type type = table.getType(new QName(inputParam.getNamespace(), inputParam.getType()));
 
-							if (inputParam.getIsArray().booleanValue()==true) {
-								inputParam
-										.setClassName(getRelativeClassName(type
-												.getName())
-												+ "[]");
+							if (inputParam.getIsArray().booleanValue() == true) {
+								inputParam.setClassName(getRelativeClassName(type.getName()) + "[]");
 							} else {
-								inputParam
-										.setClassName(getRelativeClassName(type
-												.getName()));
+								inputParam.setClassName(getRelativeClassName(type.getName()));
 							}
 						}
 					}
@@ -197,36 +173,27 @@ public class SyncTools {
 				// process the outputs
 				if (mtype.getOutput() != null) {
 					MethodTypeOutput outputParam = mtype.getOutput();
-					if(outputParam.getNamespace()!=null && (outputParam.getPackageName()==null || outputParam.getPackageName().length()<0)){
+					if (outputParam.getNamespace() != null
+						&& (outputParam.getPackageName() == null || outputParam.getPackageName().length() <= 0)) {
 						outputParam.setPackageName(getPackageName(new Namespace(outputParam.getNamespace())));
 					}
-					if (outputParam.getClassName() != null
-							&& outputParam.getClassName().equals("void")) {
+					if (outputParam.getClassName() != null && outputParam.getClassName().equals("void")) {
 						outputParam.setPackageName("");
-					} else {
-						Type type = table.getType(new QName(outputParam
-								.getNamespace(), outputParam.getType()));
-						if (outputParam.getIsArray() != null
-								&& outputParam.getIsArray().booleanValue()==true) {
-							outputParam.setClassName(getRelativeClassName(type
-									.getName())
-									+ "[]");
+					} else if (outputParam.getClass() == null) {
+						Type type = table.getType(new QName(outputParam.getNamespace(), outputParam.getType()));
+						if (outputParam.getIsArray() != null && outputParam.getIsArray().booleanValue() == true) {
+							outputParam.setClassName(getRelativeClassName(type.getName()) + "[]");
 						} else {
-							outputParam.setClassName(getRelativeClassName(type
-									.getName()));
+							outputParam.setClassName(getRelativeClassName(type.getName()));
 						}
 					}
 
 				}
 			}
 		}
-		
-		Utils
-		.serializeDocument(baseDirectory.getAbsolutePath() + File.separator + "lastprocesses.xml",
-				introService,
-				new QName(
-						"gme://gov.nih.nci.cagrid/1/Introduce",
-						"ServiceSkeleton"));
+
+		Utils.serializeDocument(baseDirectory.getAbsolutePath() + File.separator + "lastprocesses.xml", introService,
+			new QName("gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
 
 		SyncMethods methodsS = new SyncMethods(baseDirectory, info);
 		SyncMetadata metadata = new SyncMetadata(baseDirectory, info);
@@ -236,21 +203,19 @@ public class SyncTools {
 		metadata.sync();
 		security.sync();
 
-		File etcDir = new File(baseDirectory.getAbsolutePath() + File.separator
-				+ "etc");
+		File etcDir = new File(baseDirectory.getAbsolutePath() + File.separator + "etc");
 		SecurityDescTemplate securityDescT = new SecurityDescTemplate();
 		String securityDescS = securityDescT.generate(info);
-		File securityDescF = new File(etcDir.getAbsolutePath() + File.separator
-				+ "security-desc.xml");
+		File securityDescF = new File(etcDir.getAbsolutePath() + File.separator + "security-desc.xml");
 		FileWriter securityDescFW = new FileWriter(securityDescF);
 		securityDescFW.write(securityDescS);
 		securityDescFW.close();
 
 	}
 
+
 	private String getPackageName(Namespace namespace) {
-		StringTokenizer tokenizer = new StringTokenizer(namespace.getDomain(),
-				".", true);
+		StringTokenizer tokenizer = new StringTokenizer(namespace.getDomain(), ".", true);
 		StringBuffer packageNameBuf = new StringBuffer();
 		while (tokenizer.hasMoreElements()) {
 			packageNameBuf.insert(0, tokenizer.nextToken());
@@ -258,27 +223,24 @@ public class SyncTools {
 		return packageNameBuf.toString();
 	}
 
+
 	private void createArchive(ServiceInformation info) throws Exception {
 		// create the archive
 		long id = System.currentTimeMillis();
 
-		info.getServiceProperties().setProperty("introduce.skeleton.timestamp",
-				String.valueOf(id));
+		info.getServiceProperties().setProperty("introduce.skeleton.timestamp", String.valueOf(id));
 		info.getServiceProperties().store(
-				new FileOutputStream(baseDirectory.getAbsolutePath()
-						+ File.separator + "introduce.properties"),
-				"Introduce Properties");
+			new FileOutputStream(baseDirectory.getAbsolutePath() + File.separator + "introduce.properties"),
+			"Introduce Properties");
 
-		ResourceManager.createArchive(String.valueOf(id), info
-				.getServiceProperties().getProperty(
-						"introduce.skeleton.service.name"), baseDirectory
-				.getAbsolutePath());
+		ResourceManager.createArchive(String.valueOf(id), info.getServiceProperties().getProperty(
+			"introduce.skeleton.service.name"), baseDirectory.getAbsolutePath());
 	}
+
 
 	public static void main(String[] args) {
 		Options options = new Options();
-		Option directoryOpt = new Option(DIR_OPT, DIR_OPT_FULL, true,
-				"The include tool directory");
+		Option directoryOpt = new Option(DIR_OPT, DIR_OPT_FULL, true, "The include tool directory");
 		options.addOption(directoryOpt);
 
 		CommandLineParser parser = new PosixParser();

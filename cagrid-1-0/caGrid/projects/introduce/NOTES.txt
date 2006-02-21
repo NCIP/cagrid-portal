@@ -1,6 +1,8 @@
 To Do:
 
-Click Modify Service Click Cancel, Null pointer.
+Do not write hte w3.org namespace to the namespace2package mappings......
+
+(DONE)Click Modify Service Click Cancel, Null pointer.
 
 (DONE) Make sure that skeleton names entered in the GUI are acceptable.
 	i.e. No Service in the name (fixed 12/7/05)
