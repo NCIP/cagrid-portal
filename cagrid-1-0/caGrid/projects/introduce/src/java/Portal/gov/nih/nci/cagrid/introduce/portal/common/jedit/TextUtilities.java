@@ -7,12 +7,13 @@
  * remains intact in all source distributions of this package.
  */
 package gov.nih.nci.cagrid.introduce.portal.common.jedit;
-import javax.swing.text.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 
 /**
  * Class with several utility functions used by the text area component.
  * @author Slava Pestov
- * @version $Id: TextUtilities.java,v 1.1 2006-02-20 21:13:51 hastings Exp $
+ * @version $Id: TextUtilities.java,v 1.2 2006-02-21 20:34:41 oster Exp $
  */
 public class TextUtilities
 {

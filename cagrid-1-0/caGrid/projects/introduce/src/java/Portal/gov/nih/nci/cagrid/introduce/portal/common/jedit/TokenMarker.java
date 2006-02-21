@@ -8,7 +8,6 @@
  */
 package gov.nih.nci.cagrid.introduce.portal.common.jedit;
 import javax.swing.text.Segment;
-import java.util.*;
 
 /**
  * A token marker that splits lines of text into tokens. Each token carries
@@ -21,7 +20,7 @@ import java.util.*;
  * cached.
  *
  * @author Slava Pestov
- * @version $Id: TokenMarker.java,v 1.1 2006-02-20 21:13:52 hastings Exp $
+ * @version $Id: TokenMarker.java,v 1.2 2006-02-21 20:34:42 oster Exp $
  *
  * @see org.gjt.sp.jedit.syntax.Token
  */

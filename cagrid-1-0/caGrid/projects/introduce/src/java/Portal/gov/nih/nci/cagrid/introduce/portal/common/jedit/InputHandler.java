@@ -7,11 +7,17 @@
  * remains intact in all source distributions of this package.
  */
 package gov.nih.nci.cagrid.introduce.portal.common.jedit;
-import javax.swing.text.*;
-import javax.swing.JPopupMenu;
-import java.awt.event.*;
 import java.awt.Component;
-import java.util.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.Enumeration;
+import java.util.EventObject;
+import java.util.Hashtable;
+
+import javax.swing.JPopupMenu;
+import javax.swing.text.BadLocationException;
 
 /**
  * An input handler converts the user's key strokes into concrete actions.
@@ -22,7 +28,7 @@ import java.util.*;
  * to the implementations of this class to do so.
  *
  * @author Slava Pestov
- * @version $Id: InputHandler.java,v 1.1 2006-02-20 21:13:52 hastings Exp $
+ * @version $Id: InputHandler.java,v 1.2 2006-02-21 20:34:42 oster Exp $
  * @see org.gjt.sp.jedit.textarea.DefaultInputHandler
  */
 public abstract class InputHandler extends KeyAdapter
@@ -129,10 +135,10 @@ public abstract class InputHandler extends KeyAdapter
 	 */
 	public static String getActionName(ActionListener listener)
 	{
-		Enumeration enum = getActions();
-		while(enum.hasMoreElements())
+		Enumeration enumeration = getActions();
+		while(enumeration.hasMoreElements())
 		{
-			String name = (String)enum.nextElement();
+			String name = (String)enumeration.nextElement();
 			ActionListener _listener = getAction(name);
 			if(_listener == listener)
 				return name;

@@ -7,14 +7,17 @@
  * remains intact in all source distributions of this package.
  */
 package gov.nih.nci.cagrid.introduce.portal.common.jedit;
-import java.awt.*;
-import java.util.StringTokenizer;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Toolkit;
 
 /**
  * A simple text style class. It can specify the color, italic flag,
  * and bold flag of a run of text.
  * @author Slava Pestov
- * @version $Id: SyntaxStyle.java,v 1.1 2006-02-20 21:13:50 hastings Exp $
+ * @version $Id: SyntaxStyle.java,v 1.2 2006-02-21 20:34:41 oster Exp $
  */
 public class SyntaxStyle
 {

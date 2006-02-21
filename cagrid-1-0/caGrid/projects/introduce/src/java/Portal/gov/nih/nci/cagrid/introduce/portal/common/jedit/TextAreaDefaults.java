@@ -7,8 +7,9 @@
  * remains intact in all source distributions of this package.
  */
 package gov.nih.nci.cagrid.introduce.portal.common.jedit;
-import javax.swing.JPopupMenu;
 import java.awt.Color;
+
+import javax.swing.JPopupMenu;
 
 /**
  * Encapsulates default settings for a text area. This can be passed

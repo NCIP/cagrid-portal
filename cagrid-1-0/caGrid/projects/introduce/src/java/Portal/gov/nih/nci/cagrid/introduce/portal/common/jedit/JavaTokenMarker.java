@@ -7,13 +7,12 @@
  * remains intact in all source distributions of this package.
  */
 package gov.nih.nci.cagrid.introduce.portal.common.jedit;
-import javax.swing.text.Segment;
 
 /**
  * Java token marker.
  *
  * @author Slava Pestov
- * @version $Id: JavaTokenMarker.java,v 1.1 2006-02-20 21:13:50 hastings Exp $
+ * @version $Id: JavaTokenMarker.java,v 1.2 2006-02-21 20:34:41 oster Exp $
  */
 public class JavaTokenMarker extends CTokenMarker
 {

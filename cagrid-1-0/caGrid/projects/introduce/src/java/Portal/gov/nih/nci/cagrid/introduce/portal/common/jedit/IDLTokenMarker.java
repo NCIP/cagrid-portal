@@ -8,14 +8,13 @@
  * remains intact in all source distributions of this package.
  */
 package gov.nih.nci.cagrid.introduce.portal.common.jedit;
-import javax.swing.text.Segment;
 
 /**
  * IDL token marker.
  *
  * @author Slava Pestov
  * @author Juha Lindfors
- * @version $Id: IDLTokenMarker.java,v 1.1 2006-02-20 21:13:50 hastings Exp $
+ * @version $Id: IDLTokenMarker.java,v 1.2 2006-02-21 20:34:41 oster Exp $
  */
 public class IDLTokenMarker extends CTokenMarker
 {

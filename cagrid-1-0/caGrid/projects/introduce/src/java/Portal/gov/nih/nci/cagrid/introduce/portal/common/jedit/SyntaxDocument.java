@@ -7,8 +7,11 @@
  * remains intact in all source distributions of this package.
  */
 package gov.nih.nci.cagrid.introduce.portal.common.jedit;
-import javax.swing.event.*;
-import javax.swing.text.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Element;
+import javax.swing.text.PlainDocument;
+import javax.swing.text.Segment;
 import javax.swing.undo.UndoableEdit;
 
 /**
@@ -16,7 +19,7 @@ import javax.swing.undo.UndoableEdit;
  * system.
  *
  * @author Slava Pestov
- * @version $Id: SyntaxDocument.java,v 1.1 2006-02-20 21:13:51 hastings Exp $
+ * @version $Id: SyntaxDocument.java,v 1.2 2006-02-21 20:34:42 oster Exp $
  */
 public class SyntaxDocument extends PlainDocument
 {

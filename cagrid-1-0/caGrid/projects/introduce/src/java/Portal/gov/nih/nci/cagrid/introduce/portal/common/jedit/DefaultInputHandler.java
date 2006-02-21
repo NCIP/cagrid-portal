@@ -7,17 +7,20 @@
  * remains intact in all source distributions of this package.
  */
 package gov.nih.nci.cagrid.introduce.portal.common.jedit;
-import javax.swing.KeyStroke;
-import java.awt.event.*;
 import java.awt.Toolkit;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
+
+import javax.swing.KeyStroke;
 
 /**
  * The default input handler. It maps sequences of keystrokes into actions
  * and inserts key typed events into the text area.
  * @author Slava Pestov
- * @version $Id: DefaultInputHandler.java,v 1.1 2006-02-20 21:13:52 hastings Exp $
+ * @version $Id: DefaultInputHandler.java,v 1.2 2006-02-21 20:34:41 oster Exp $
  */
 public class DefaultInputHandler extends InputHandler
 {
