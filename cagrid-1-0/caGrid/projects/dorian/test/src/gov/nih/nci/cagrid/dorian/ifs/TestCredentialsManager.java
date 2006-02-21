@@ -8,7 +8,6 @@ import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
 import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidPasswordFault;
 import gov.nih.nci.cagrid.dorian.test.Utils;
 
-import java.io.File;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
@@ -159,7 +158,6 @@ public class TestCredentialsManager extends TestCase {
 		X509Certificate rootCert = cred.getCertificate(CA_USER);
 		assertNotNull(rootCert);
 		String rootSub = rootCert.getSubjectDN().toString();
-		X509Name rootSubject = new X509Name(rootSub);
 
 		Date now = new Date(System.currentTimeMillis());
 

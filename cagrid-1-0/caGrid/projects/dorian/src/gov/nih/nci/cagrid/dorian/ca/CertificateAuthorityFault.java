@@ -28,7 +28,6 @@ public class CertificateAuthorityFault  extends org.oasis.wsrf.faults.BaseFaultT
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof CertificateAuthorityFault)) return false;
-        CertificateAuthorityFault other = (CertificateAuthorityFault) obj;
         if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {

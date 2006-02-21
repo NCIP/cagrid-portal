@@ -31,7 +31,6 @@ public class DorianFault extends org.oasis.wsrf.faults.BaseFaultType  implements
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof DorianInternalFault)) return false;
-        DorianInternalFault other = (DorianInternalFault) obj;
         if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {

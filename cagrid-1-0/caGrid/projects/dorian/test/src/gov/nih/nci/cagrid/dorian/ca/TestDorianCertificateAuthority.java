@@ -6,7 +6,6 @@ import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
 import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
 import gov.nih.nci.cagrid.dorian.test.Constants;
 
-import java.io.File;
 import java.io.InputStream;
 import java.security.KeyPair;
 import java.security.cert.X509Certificate;

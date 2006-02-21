@@ -16,7 +16,6 @@ import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserRole;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserStatus;
-import gov.nih.nci.cagrid.dorian.idp.bean.InvalidUserPropertyFault;
 import gov.nih.nci.cagrid.dorian.idp.bean.NoSuchUserFault;
 import gov.nih.nci.cagrid.dorian.idp.bean.StateCode;
 import gov.nih.nci.cagrid.dorian.ifs.AutoApprovalAutoRenewalPolicy;
@@ -218,7 +217,7 @@ public class TestDorian extends TestCase{
 			//test findIdPUsers with an invalid gridId
 			try{
 				String invalidGridId = "ThisIsInvalid";
-	    		IdPUser[] users = jm.findIdPUsers(invalidGridId, uf);
+	    		jm.findIdPUsers(invalidGridId, uf);
 				fail("Invoker should not be able to invoke.");
 			}catch (PermissionDeniedFault pdf) {	
 			}
@@ -419,9 +418,9 @@ public class TestDorian extends TestCase{
 			assertEquals(before.getUserStatus(), IFSUserStatus.Pending);
 			before.setUserStatus(IFSUserStatus.Active);
 			jm.updateIFSUser(gridId, before);
-			X509Certificate[] certs = jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
+			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
-			certs = jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
+			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
 			ifsUser = jm.findIFSUsers(gridId, filter);
 			assertEquals(ifsUser.length, 1);
 			IFSUser after = ifsUser[0];
@@ -461,7 +460,7 @@ public class TestDorian extends TestCase{
 			String username = "user";
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
-			X509Certificate[] certs = jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
+			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
 					
 			IFSUserFilter filter = new IFSUserFilter();
 			filter.setUID(username);
@@ -482,7 +481,7 @@ public class TestDorian extends TestCase{
 			}
 			jm.renewIFSUserCredentials(gridId, ifsUser[0]);
 			
-			certs = jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
+			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
 			ifsUser = jm.findIFSUsers(gridId, filter);
 			assertEquals(ifsUser.length, 1);
 			IFSUser after = ifsUser[0];
@@ -539,7 +538,7 @@ public class TestDorian extends TestCase{
 			assertEquals(before.getUserStatus(), IFSUserStatus.Pending);
 			before.setUserStatus(IFSUserStatus.Active);
 			jm.updateIFSUser(gridId, before);
-			X509Certificate[] certs = jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
+			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
 			X509Certificate certBefore = CertUtil.loadCertificateFromString(before.getCertificate().getCertificateAsString());
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
 	
@@ -551,7 +550,7 @@ public class TestDorian extends TestCase{
 			}
 			jm.renewIFSUserCredentials(gridId, ifsUser[0]);
 			
-			certs = jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
+			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
 			ifsUser = jm.findIFSUsers(gridId, filter);
 			assertEquals(ifsUser.length, 1);
 			IFSUser after = ifsUser[0];

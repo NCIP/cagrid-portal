@@ -93,8 +93,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
 	private JTabbedPane transportPanel = null;
 
-	private JPanel communicationPanel = null;
-
 	private JPanel clientAuthorization = null;
 
 	private HostAuthorizationPanel hostAuthorization = null;
@@ -823,18 +821,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return transportPanel;
 	}
 
-	/**
-	 * This method initializes communicationPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getCommunicationPanel() {
-		if (communicationPanel == null) {
-			communicationPanel = new JPanel();
-			communicationPanel.setLayout(new GridBagLayout());
-		}
-		return communicationPanel;
-	}
 
 	/**
 	 * This method initializes clientAuthorization

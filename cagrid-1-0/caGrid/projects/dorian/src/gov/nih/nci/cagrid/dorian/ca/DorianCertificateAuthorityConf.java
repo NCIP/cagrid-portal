@@ -171,21 +171,6 @@ public class DorianCertificateAuthorityConf implements AbstractMobiusConfigurati
 	}
 
 
-	private int getAutoCreatelInteger(Element e, String att) throws MobiusException {
-		String s = e.getAttributeValue(att);
-		if (s == null) {
-			throw new MobiusException("Error configuring the Dorian Certificate Authority, the " + AUTO_CREATE_VALID
-				+ " attribute, " + att + " must be specified.");
-		} else {
-			try {
-				return Integer.valueOf(s).intValue();
-			} catch (Exception ex) {
-				throw new MobiusException("Error configuring the Dorian Certificate Authority, the "
-					+ AUTO_CREATE_VALID + " attribute, " + att + " must be an integer.");
-			}
-		}
-	}
-
 
 	private int getAutoRenewalInteger(Element e, String att) throws MobiusException {
 		String s = e.getAttributeValue(att);

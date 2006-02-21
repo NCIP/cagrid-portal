@@ -16,7 +16,6 @@ import gov.nih.nci.cagrid.opensaml.SAMLAuthenticationStatement;
 import gov.nih.nci.cagrid.opensaml.SAMLNameIdentifier;
 import gov.nih.nci.cagrid.opensaml.SAMLSubject;
 
-import java.io.File;
 import java.io.StringReader;
 import java.lang.reflect.Field;
 import java.security.KeyPair;

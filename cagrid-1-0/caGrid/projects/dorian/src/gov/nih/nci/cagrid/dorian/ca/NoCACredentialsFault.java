@@ -30,7 +30,6 @@ public class NoCACredentialsFault  extends org.oasis.wsrf.faults.BaseFaultType  
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof NoCACredentialsFault)) return false;
-        NoCACredentialsFault other = (NoCACredentialsFault) obj;
         if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {

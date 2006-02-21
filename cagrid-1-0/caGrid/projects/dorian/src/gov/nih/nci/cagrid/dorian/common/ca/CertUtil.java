@@ -1,10 +1,6 @@
 package gov.nih.nci.cagrid.dorian.common.ca;
 
-import gov.nih.nci.cagrid.common.FaultHelper;
-import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
-
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;

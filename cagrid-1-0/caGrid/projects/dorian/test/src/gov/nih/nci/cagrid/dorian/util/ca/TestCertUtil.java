@@ -217,7 +217,7 @@ public class TestCertUtil extends TestCase {
 		X509Certificate rootCert = CertUtil.loadCertificate(certLocation);
 		assertNotNull(rootCert);
 		String rootSub = rootCert.getSubjectDN().toString();
-		X509Name rootSubject = new X509Name(rootSub);
+		
 		
 		Date now = new Date(System.currentTimeMillis());
 

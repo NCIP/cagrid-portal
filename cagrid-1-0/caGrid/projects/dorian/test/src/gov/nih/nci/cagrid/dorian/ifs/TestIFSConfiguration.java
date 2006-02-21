@@ -4,7 +4,6 @@ import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.SimpleResourceManager;
 import gov.nih.nci.cagrid.dorian.test.Constants;
 
-import java.io.File;
 import java.io.InputStream;
 
 import junit.framework.TestCase;

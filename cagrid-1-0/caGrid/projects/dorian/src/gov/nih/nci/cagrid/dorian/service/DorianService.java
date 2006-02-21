@@ -256,8 +256,8 @@ public class DorianService {
 			throw new RemoteException("Unable to access resource.", e);
 		}
 
-		DorianResource mathResource = (DorianResource) resource;
-		return mathResource;
+		DorianResource res = (DorianResource) resource;
+		return res;
 	}
 
 }

@@ -12,7 +12,6 @@ import gov.nih.nci.cagrid.dorian.ifs.ManualApprovalAutoRenewalPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.ManualApprovalPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
 
-import java.io.File;
 import java.io.InputStream;
 import java.security.KeyPair;
 import java.security.cert.X509Certificate;
