@@ -462,7 +462,7 @@ public class GMEViewer extends GridPortalComponent {
 	 */
 	private JEditTextArea getUploadSchemaTextPane() {
 		if (uploadSchemaTextPane == null) {
-			uploadSchemaTextPane = new JEditTextArea(GMETextAreaDefaults.getDefaults());
+			uploadSchemaTextPane = new JEditTextArea(GMETextAreaDefaults.createDefaults());
 			uploadSchemaTextPane.setTokenMarker(new XMLTokenMarker());
 		}
 		return uploadSchemaTextPane;
@@ -476,7 +476,7 @@ public class GMEViewer extends GridPortalComponent {
 	 */
 	private JEditTextArea getSchemaTextPane() {
 		if (schemaTextPane == null) {
-			schemaTextPane = new JEditTextArea(GMETextAreaDefaults.getDefaults());
+			schemaTextPane = new JEditTextArea(GMETextAreaDefaults.createDefaults());
 			schemaTextPane.setTokenMarker(new XMLTokenMarker());
 			schemaTextPane.setEditable(false);
 		}

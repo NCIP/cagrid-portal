@@ -10,12 +10,10 @@ import java.awt.Color;
 
 public class GMETextAreaDefaults
 {
-	private static TextAreaDefaults DEFAULTS;
 
-	public static TextAreaDefaults getDefaults()
+	public static TextAreaDefaults createDefaults()
 	{
-		if(DEFAULTS == null)
-		{
+	 TextAreaDefaults DEFAULTS;
 			DEFAULTS = new TextAreaDefaults();
 
 			DEFAULTS.inputHandler = new DefaultInputHandler();
@@ -39,8 +37,6 @@ public class GMETextAreaDefaults
 			DEFAULTS.eolMarkerColor = new Color(0x009999);
 			DEFAULTS.eolMarkers = false;
 			DEFAULTS.paintInvalid = true;
-		}
-
 		return DEFAULTS;
 	}
 	

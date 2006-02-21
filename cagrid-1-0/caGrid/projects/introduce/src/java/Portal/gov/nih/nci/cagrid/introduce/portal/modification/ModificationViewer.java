@@ -48,7 +48,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.56 2006-02-17 19:28:41 langella Exp $
+ * @version $Id: ModificationViewer.java,v 1.57 2006-02-21 14:53:20 hastings Exp $
  */
 public class ModificationViewer extends GridPortalBaseFrame {
 
@@ -139,6 +139,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 				}
 				if (methodsDirectory == null) {
 					ModificationViewer.this.dispose();
+					return;
 				}
 				File file = new File(methodsDirectory.getAbsolutePath() + File.separator + "introduce.xml");
 				if (file.exists() && file.canRead()) {
