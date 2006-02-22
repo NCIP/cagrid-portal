@@ -250,7 +250,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 								if (((String)deploymentTypeSelector.getSelectedItem())
 										.equals(GLOBUS)) {
 									cmd = CommonTools
-											.getAntDeployGarCommand(serviceDirectory
+											.getAntDeployGlobusCommand(serviceDirectory
 													.getAbsolutePath());
 								} else {
 									cmd = CommonTools

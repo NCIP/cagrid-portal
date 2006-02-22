@@ -64,9 +64,9 @@ public class CommonTools {
 		return getAntCommand("deploy", buildFileDir);
 	}
 
-	public static String getAntDeployGarCommand(String buildFileDir)
+	public static String getAntDeployGlobusCommand(String buildFileDir)
 			throws Exception {
-		return getAntCommand("deployGar", buildFileDir);
+		return getAntCommand("deployGlobus", buildFileDir);
 	}
 
 	public static String getAntSkeletonResyncCommand(String buildFileDir)
