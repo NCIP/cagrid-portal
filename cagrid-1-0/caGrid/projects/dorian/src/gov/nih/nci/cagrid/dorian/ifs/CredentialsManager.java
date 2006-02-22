@@ -133,20 +133,11 @@ public class CredentialsManager extends LoggingObject {
 		}
 		try {
 			key = KeyUtil.loadPrivateKey(new ByteArrayInputStream(keyStr.getBytes()), password);
-		} catch (javax.crypto.BadPaddingException e) {
+		} catch (Exception e) {
 			InvalidPasswordFault fault = new InvalidPasswordFault();
 			fault.setFaultString("Invalid Password Specified.");
 			throw fault;
-		} catch (Exception e) {
-			logError(e.getMessage(), e);
-			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString("Unexpected Database Error, Error obtaining the private key for the user " + username
-				+ ".");
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (DorianInternalFault) helper.getFault();
-			throw fault;
-		}
+		} 
 		return key;
 	}
 
