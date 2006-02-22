@@ -254,7 +254,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 													.getAbsolutePath());
 								} else {
 									cmd = CommonTools
-											.getAntDeployCommand(serviceDirectory
+											.getAntDeployTomcatCommand(serviceDirectory
 													.getAbsolutePath());
 								}
 								Process p = CommonTools

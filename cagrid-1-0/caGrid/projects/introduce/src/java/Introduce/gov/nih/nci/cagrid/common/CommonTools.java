@@ -59,9 +59,9 @@ public class CommonTools {
 		return getAntCommand("flatten", buildFileDir);
 	}
 
-	public static String getAntDeployCommand(String buildFileDir)
+	public static String getAntDeployTomcatCommand(String buildFileDir)
 			throws Exception {
-		return getAntCommand("deploy", buildFileDir);
+		return getAntCommand("deployTomcat", buildFileDir);
 	}
 
 	public static String getAntDeployGlobusCommand(String buildFileDir)

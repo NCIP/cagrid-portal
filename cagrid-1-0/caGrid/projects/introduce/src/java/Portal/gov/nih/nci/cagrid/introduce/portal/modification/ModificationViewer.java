@@ -48,7 +48,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.59 2006-02-22 17:37:40 langella Exp $
+ * @version $Id: ModificationViewer.java,v 1.60 2006-02-22 21:12:27 hastings Exp $
  */
 public class ModificationViewer extends GridPortalComponent {
 
@@ -112,15 +112,15 @@ public class ModificationViewer extends GridPortalComponent {
 
 	private JTextField serviceName = null;
 
-	private JLabel jLabel = null;
+	private JLabel packageLabel = null;
 
 	private JTextField packageName = null;
 
-	private JLabel jLabel1 = null;
+	private JLabel lastSavedLabel = null;
 
 	private JTextField lastSaved = null;
 
-	private JLabel jLabel2 = null;
+	private JLabel saveLocationLabel = null;
 
 	private JTextField saveLocation = null;
 
@@ -387,8 +387,9 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints23.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints23.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints23.gridy = 1;
-			jLabel2 = new JLabel();
-			jLabel2.setText("Location");
+			saveLocationLabel = new JLabel();
+			saveLocationLabel.setText("Location");
+			saveLocationLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12));
 			GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
 			gridBagConstraints22.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints22.gridy = 1;
@@ -401,8 +402,9 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints21.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints21.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints21.gridy = 1;
-			jLabel1 = new JLabel();
-			jLabel1.setText("Last Saved");
+			lastSavedLabel = new JLabel();
+			lastSavedLabel.setText("Last Saved");
+			lastSavedLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12));
 			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
 			gridBagConstraints20.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints20.gridy = 0;
@@ -413,8 +415,9 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints19.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints19.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints19.gridy = 0;
-			jLabel = new JLabel();
-			jLabel.setText("Package");
+			packageLabel = new JLabel();
+			packageLabel.setText("Package");
+			packageLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12));
 			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
 			gridBagConstraints18.gridx = 0;
 			gridBagConstraints18.anchor = java.awt.GridBagConstraints.WEST;
@@ -429,6 +432,7 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints17.weightx = 1.0;
 			serviceNameLabel = new JLabel();
 			serviceNameLabel.setText("Service Name");
+			serviceNameLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12));
 			selectPanel = new JPanel();
 			selectPanel.setLayout(new GridBagLayout());
 			selectPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service Properties",
@@ -436,11 +440,11 @@ public class ModificationViewer extends GridPortalComponent {
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
 			selectPanel.add(serviceNameLabel, gridBagConstraints18);
 			selectPanel.add(getServiceName(), gridBagConstraints17);
-			selectPanel.add(jLabel, gridBagConstraints19);
+			selectPanel.add(packageLabel, gridBagConstraints19);
 			selectPanel.add(getPackageName(), gridBagConstraints20);
-			selectPanel.add(jLabel1, gridBagConstraints21);
+			selectPanel.add(lastSavedLabel, gridBagConstraints21);
 			selectPanel.add(getLastSaved(), gridBagConstraints22);
-			selectPanel.add(jLabel2, gridBagConstraints23);
+			selectPanel.add(saveLocationLabel, gridBagConstraints23);
 			selectPanel.add(getSaveLocation(), gridBagConstraints24);
 		}
 		return selectPanel;
@@ -1064,6 +1068,7 @@ public class ModificationViewer extends GridPortalComponent {
 		if (serviceName == null) {
 			serviceName = new JTextField();
 			serviceName.setEditable(false);
+			serviceName.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
 			serviceName.setText(serviceProperties.getProperty("introduce.skeleton.service.name"));
 		}
 		return serviceName;
@@ -1079,6 +1084,7 @@ public class ModificationViewer extends GridPortalComponent {
 		if (packageName == null) {
 			packageName = new JTextField();
 			packageName.setText(serviceProperties.getProperty("introduce.skeleton.package"));
+			packageName.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
 			packageName.setEditable(false);
 		}
 		return packageName;
@@ -1094,6 +1100,7 @@ public class ModificationViewer extends GridPortalComponent {
 		if (lastSaved == null) {
 			lastSaved = new JTextField();
 			lastSaved.setEditable(false);
+			lastSaved.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
 			lastSaved.setText(serviceProperties
 			.getProperty("introduce.skeleton.timestamp"));
 		}
@@ -1110,6 +1117,7 @@ public class ModificationViewer extends GridPortalComponent {
 		if (saveLocation == null) {
 			saveLocation = new JTextField();
 			saveLocation.setText(methodsDirectory.getAbsolutePath());
+			saveLocation.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
 			saveLocation.setEditable(false);
 		}
 		return saveLocation;
