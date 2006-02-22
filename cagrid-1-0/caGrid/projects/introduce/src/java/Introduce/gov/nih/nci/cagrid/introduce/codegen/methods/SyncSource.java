@@ -927,74 +927,7 @@ public class SyncSource {
 		}
 	}
 
-	private void removeClientImpl(MethodType method) {
-		StringBuffer fileContent = null;
-		try {
-			fileContent = Utils
-					.fileToStringBuffer(new File(this.serviceClient));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		// remove the method
-		String clientMethod = createUnBoxedSignatureStringFromMethod(method);
-		int startOfMethod = fileContent.indexOf(clientMethod);
-		int endOfMethod = parenMatch(fileContent, startOfMethod
-				+ clientMethod.length());
-
-		if (startOfMethod == -1 || endOfMethod == -1) {
-			System.err
-					.println("WARNING: Unable to locate method in clientImpl : "
-							+ method.getName());
-			return;
-		}
-
-		fileContent.delete(startOfMethod, endOfMethod);
-
-		try {
-			FileWriter fw = new FileWriter(new File(this.serviceClient));
-			fw.write(fileContent.toString());
-			fw.close();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-	}
-
 	private void removeProviderImpl(JavaMethod method) {
-		StringBuffer fileContent = null;
-		try {
-			fileContent = Utils.fileToStringBuffer(new File(
-					this.serviceProviderImpl));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		// remove the method
-		String clientMethod = createBoxedSignatureStringFromMethod(method);
-		int startOfMethod = fileContent.indexOf(clientMethod);
-		int endOfMethod = parenMatch(fileContent, startOfMethod
-				+ clientMethod.length());
-
-		if (startOfMethod == -1 || endOfMethod == -1) {
-			System.err
-					.println("WARNING: Unable to locate method in providerImpl : "
-							+ method.getName());
-			return;
-		}
-
-		fileContent.delete(startOfMethod, endOfMethod);
-
-		try {
-			FileWriter fw = new FileWriter(new File(this.serviceProviderImpl));
-			fw.write(fileContent.toString());
-			fw.close();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-
-	}
-
-	private void removeProviderImpl(MethodType method) {
 		StringBuffer fileContent = null;
 		try {
 			fileContent = Utils.fileToStringBuffer(new File(

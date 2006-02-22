@@ -53,9 +53,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 	private JComponent me = null;
 
 	private File serviceDirectory;
-
-	private String defaultServiceDir = ".";
-
+	
 	Properties deployProperties;
 
 	private JPanel deploymetnTypePanel = null;
@@ -82,7 +80,6 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			this.serviceDirectory = chooser.getSelectedFile();
-			defaultServiceDir = this.serviceDirectory.getAbsolutePath();
 		} else {
 			return;
 		}
@@ -227,7 +224,6 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 							setProgressText("writing deployment property file");
 
 							Enumeration keys = deployProperties.keys();
-							int i = 0;
 							while (keys.hasMoreElements()) {
 								String key = (String) keys.nextElement();
 								String value = getTextFieldValue(key);
@@ -284,34 +280,6 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 		}
 
 		return deployButton;
-	}
-
-	private String promptDir() {
-		JFileChooser chooser = new JFileChooser();
-		chooser.setDialogTitle("Select Directory");
-		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
-		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		chooser.setMultiSelectionEnabled(false);
-		int returnVal = chooser.showOpenDialog(this);
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			return chooser.getSelectedFile().getAbsolutePath();
-		} else {
-			return "";
-		}
-	}
-
-	private String promptFile() {
-		JFileChooser chooser = new JFileChooser();
-		chooser.setDialogTitle("Select File");
-		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
-		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		chooser.setMultiSelectionEnabled(false);
-		int returnVal = chooser.showOpenDialog(this);
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			return chooser.getSelectedFile().getAbsolutePath();
-		} else {
-			return "";
-		}
 	}
 
 	/**

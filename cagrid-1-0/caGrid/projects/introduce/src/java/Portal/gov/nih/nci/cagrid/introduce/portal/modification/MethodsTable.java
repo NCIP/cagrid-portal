@@ -15,7 +15,7 @@ import org.projectmobius.portal.PortalTable;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: MethodsTable.java,v 1.8 2006-01-19 16:42:39 langella Exp $
+ * @version $Id: MethodsTable.java,v 1.9 2006-02-22 00:40:46 hastings Exp $
  */
 public class MethodsTable extends PortalTable {
 
@@ -25,20 +25,11 @@ public class MethodsTable extends PortalTable {
 
 	private MethodsType methodsType;
 
-	private File methodsDirectory;
-
-	private Properties serviceProperties;
-
-	private MethodsTable me;
-
 	public MethodsTable(MethodsType methodsType, File methodsDirectory,
 			Properties serviceProperties) {
 		super(createTableModel());
 		this.methodsType = methodsType;
 		this.setRowSelectionAllowed(true);
-		this.methodsDirectory = methodsDirectory;
-		this.serviceProperties = serviceProperties;
-		me = this;
 		initialize();
 	}
 

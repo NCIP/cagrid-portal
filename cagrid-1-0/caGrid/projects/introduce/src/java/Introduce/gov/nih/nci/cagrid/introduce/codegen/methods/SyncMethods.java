@@ -3,9 +3,6 @@ package gov.nih.nci.cagrid.introduce.codegen.methods;
 import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -14,7 +11,6 @@ import java.util.List;
 import org.apache.ws.jaxme.js.JavaMethod;
 import org.apache.ws.jaxme.js.JavaSource;
 import org.apache.ws.jaxme.js.JavaSourceFactory;
-import org.apache.ws.jaxme.js.Parameter;
 import org.apache.ws.jaxme.js.util.JavaParser;
 
 
