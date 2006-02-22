@@ -169,6 +169,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JRadioButton getNoneButton() {
 		if (noneButton == null) {
 			noneButton = new JRadioButton();
+			noneButton.setSelected(true);
 			noneButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					synchronize();

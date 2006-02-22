@@ -197,6 +197,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JRadioButton getNoneButton() {
 		if (noneButton == null) {
 			noneButton = new JRadioButton();
+			noneButton.setSelected(true);
 			noneButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					synchronize();
@@ -331,7 +332,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	}
 
 	public void setServiceSecurity(ServiceSecurity ss) {
-		if (ss != null && ss.getMethodSecuritySetting()!=null) {
+		if (ss != null) {
 			if (ss.getMethodSecuritySetting().equals(MethodSecurityType.None)) {
 				noneButton.setSelected(true);
 			} else if (ss.getMethodSecuritySetting().equals(

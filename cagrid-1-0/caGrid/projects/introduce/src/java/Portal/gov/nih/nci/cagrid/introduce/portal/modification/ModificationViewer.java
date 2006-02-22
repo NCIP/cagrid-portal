@@ -40,7 +40,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.xml.namespace.QName;
 
-import org.projectmobius.portal.GridPortalBaseFrame;
+import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
 
 
@@ -48,9 +48,9 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.57 2006-02-21 14:53:20 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.58 2006-02-22 15:32:29 langella Exp $
  */
-public class ModificationViewer extends GridPortalBaseFrame {
+public class ModificationViewer extends GridPortalComponent {
 
 	private javax.swing.JPanel jContentPane = null;
 
@@ -105,8 +105,25 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	private JButton modifyMetadataButton = null;
 
 	private ServiceSecurityPanel securityPanel = null;
-	
+
 	private ServiceSecurity lastServiceSecurity;
+
+	private JLabel serviceNameLabel = null;
+
+	private JTextField serviceName = null;
+
+	private JLabel jLabel = null;
+
+	private JTextField packageName = null;
+
+	private JLabel jLabel1 = null;
+
+	private JTextField lastSaved = null;
+
+	private JLabel jLabel2 = null;
+
+	private JTextField saveLocation = null;
+
 
 	/**
 	 * This is the default constructor
@@ -173,31 +190,6 @@ public class ModificationViewer extends GridPortalBaseFrame {
 		JTextField field = new JTextField();
 		Font f2 = field.getFont();
 		f2 = f2.deriveFont(f2.getStyle() ^ Font.ITALIC);
-
-		this.addTextField(this.getSelectPanel(), "Timestamp", serviceProperties
-			.getProperty("introduce.skeleton.timestamp"), 1, false);
-		this.getLabel("Timestamp").setFont(f1);
-		this.getTextField("Timestamp").setFont(f2);
-		this.addTextField(this.getSelectPanel(), "Service Name", serviceProperties
-			.getProperty("introduce.skeleton.service.name"), 2, false);
-		this.getLabel("Service Name").setFont(f1);
-		this.getTextField("Service Name").setFont(f2);
-
-		this.addTextField(this.getSelectPanel(), "Location", methodsDirectory.getAbsolutePath(), 3, false);
-		this.getLabel("Location").setFont(f1);
-		this.getTextField("Location").setFont(f2);
-		this.addTextField(this.getSelectPanel(), "Package",
-			serviceProperties.getProperty("introduce.skeleton.package"), 4, false);
-		this.getLabel("Package").setFont(f1);
-		this.getTextField("Package").setFont(f2);
-		this.addTextField(this.getSelectPanel(), "Package Dir", serviceProperties
-			.getProperty("introduce.skeleton.package.dir"), 5, false);
-		this.getLabel("Package Dir").setFont(f1);
-		this.getTextField("Package Dir").setFont(f2);
-		this.addTextField(this.getSelectPanel(), "Namespace Domain", serviceProperties
-			.getProperty("introduce.skeleton.namespace.domain"), 6, false);
-		this.getLabel("Namespace Domain").setFont(f1);
-		this.getTextField("Namespace Domain").setFont(f2);
 	}
 
 
@@ -222,7 +214,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 					+ File.separator + "introduce.xml", ServiceDescription.class);
 				loadServiceProps();
 				this.lastServiceSecurity = this.introService.getServiceSecurity();
-				if(this.lastServiceSecurity==null){
+				if (this.lastServiceSecurity == null) {
 					this.lastServiceSecurity = new ServiceSecurity();
 				}
 				this.setSize(500, 400);
@@ -383,11 +375,73 @@ public class ModificationViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getSelectPanel() {
 		if (selectPanel == null) {
+			GridBagConstraints gridBagConstraints24 = new GridBagConstraints();
+			gridBagConstraints24.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints24.gridy = 1;
+			gridBagConstraints24.weightx = 1.0;
+			gridBagConstraints24.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints24.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints24.gridx = 3;
+			GridBagConstraints gridBagConstraints23 = new GridBagConstraints();
+			gridBagConstraints23.gridx = 2;
+			gridBagConstraints23.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints23.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints23.gridy = 1;
+			jLabel2 = new JLabel();
+			jLabel2.setText("Location");
+			GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
+			gridBagConstraints22.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints22.gridy = 1;
+			gridBagConstraints22.weightx = 1.0;
+			gridBagConstraints22.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints22.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints22.gridx = 1;
+			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+			gridBagConstraints21.gridx = 0;
+			gridBagConstraints21.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints21.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints21.gridy = 1;
+			jLabel1 = new JLabel();
+			jLabel1.setText("Last Saved");
+			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+			gridBagConstraints20.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints20.gridy = 0;
+			gridBagConstraints20.weightx = 1.0;
+			gridBagConstraints20.gridx = 3;
+			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
+			gridBagConstraints19.gridx = 2;
+			gridBagConstraints19.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints19.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints19.gridy = 0;
+			jLabel = new JLabel();
+			jLabel.setText("Package");
+			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
+			gridBagConstraints18.gridx = 0;
+			gridBagConstraints18.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints18.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints18.gridy = 0;
+			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
+			gridBagConstraints17.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints17.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints17.gridx = 1;
+			gridBagConstraints17.gridy = 0;
+			gridBagConstraints17.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints17.weightx = 1.0;
+			serviceNameLabel = new JLabel();
+			serviceNameLabel.setText("Service Name");
 			selectPanel = new JPanel();
 			selectPanel.setLayout(new GridBagLayout());
 			selectPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service Properties",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+			selectPanel.add(serviceNameLabel, gridBagConstraints18);
+			selectPanel.add(getServiceName(), gridBagConstraints17);
+			selectPanel.add(jLabel, gridBagConstraints19);
+			selectPanel.add(getPackageName(), gridBagConstraints20);
+			selectPanel.add(jLabel1, gridBagConstraints21);
+			selectPanel.add(getLastSaved(), gridBagConstraints22);
+			selectPanel.add(jLabel2, gridBagConstraints23);
+			selectPanel.add(getSaveLocation(), gridBagConstraints24);
 		}
 		return selectPanel;
 	}
@@ -488,9 +542,9 @@ public class ModificationViewer extends GridPortalBaseFrame {
 					final int confirmed = JOptionPane.showConfirmDialog(ModificationViewer.this,
 						"Are you sure you want to save?");
 					if (confirmed == JOptionPane.OK_OPTION) {
-						try{
-						resetMethodSecurityIfServiceSecurityChanged();
-						}catch(Exception ex){
+						try {
+							resetMethodSecurityIfServiceSecurityChanged();
+						} catch (Exception ex) {
 							PortalUtils.showErrorMessage(ex);
 						}
 					}
@@ -501,7 +555,7 @@ public class ModificationViewer extends GridPortalBaseFrame {
 							try {
 
 								if (confirmed == JOptionPane.OK_OPTION) {
-									setProgressText("editing service metadata object");	
+									setProgressText("editing service metadata object");
 									// walk the methods table and create the
 									// new MethodsType array
 									MethodType[] methodsArray = new MethodType[methodsTable.getRowCount()];
@@ -550,7 +604,8 @@ public class ModificationViewer extends GridPortalBaseFrame {
 										if (register != null && !register.equals("")) {
 											metadata.setRegister(Boolean.valueOf(register).booleanValue());
 										}
-										if (qnameNS != null && !qnameNS.equals("") && qnameName !=null && !qnameName.equals("")) {
+										if (qnameNS != null && !qnameNS.equals("") && qnameName != null
+											&& !qnameName.equals("")) {
 											QName qn = new QName(qnameNS, qnameName);
 											metadata.setQName(qn);
 										}
@@ -648,16 +703,18 @@ public class ModificationViewer extends GridPortalBaseFrame {
 					+ "schema" + File.separator + serviceProperties.getProperty("introduce.skeleton.service.name"))));
 		}
 	}
-	
-	private void resetMethodSecurityIfServiceSecurityChanged() throws Exception{
-		if(!lastServiceSecurity.equals(securityPanel.getServiceSecurity())){
+
+
+	private void resetMethodSecurityIfServiceSecurityChanged() throws Exception {
+		if (!lastServiceSecurity.equals(securityPanel.getServiceSecurity())) {
 			MethodsType mt = this.introService.getMethods();
-			if(mt!=null){
+			if (mt != null) {
 				lastServiceSecurity = securityPanel.getServiceSecurity();
-				PortalUtils.showMessage("Service security configuration changed, resetting all method security configurations.");
+				PortalUtils
+					.showMessage("Service security configuration changed, resetting all method security configurations.");
 				MethodType[] methods = mt.getMethod();
-				if(methods!=null){
-					for(int i=0; i<methods.length; i++){
+				if (methods != null) {
+					for (int i = 0; i < methods.length; i++) {
 						methods[i].setMethodSecurity(null);
 					}
 				}
@@ -667,22 +724,22 @@ public class ModificationViewer extends GridPortalBaseFrame {
 
 
 	public void performMethodModify() {
-		
+
 		int row = getMethodsTable().getSelectedRow();
 		if ((row < 0) || (row >= getMethodsTable().getRowCount())) {
 			PortalUtils.showErrorMessage("Please select a method to modify.");
 			return;
 		}
-		try{
+		try {
 			this.resetMethodSecurityIfServiceSecurityChanged();
-		}catch(Exception e){
+		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
 			return;
 		}
 		MethodType method = (MethodType) getMethodsTable().getValueAt(getMethodsTable().getSelectedRow(), 1);
 		PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-			new MethodViewer(method, lastServiceSecurity, new File(methodsDirectory.getAbsolutePath() + File.separator + "schema"
-				+ File.separator + serviceProperties.getProperty("introduce.skeleton.service.name")),
+			new MethodViewer(method, lastServiceSecurity, new File(methodsDirectory.getAbsolutePath() + File.separator
+				+ "schema" + File.separator + serviceProperties.getProperty("introduce.skeleton.service.name")),
 				getMethodsTable(), getMethodsTable().getSelectedRow()));
 	}
 
@@ -983,14 +1040,75 @@ public class ModificationViewer extends GridPortalBaseFrame {
 
 
 	/**
-	 * This method initializes securityPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes securityPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private ServiceSecurityPanel getSecurityPanel() {
 		if (securityPanel == null) {
 			securityPanel = new ServiceSecurityPanel(introService.getServiceSecurity());
 		}
 		return securityPanel;
+	}
+
+
+	/**
+	 * This method initializes serviceName
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getServiceName() {
+		if (serviceName == null) {
+			serviceName = new JTextField();
+			serviceName.setEditable(false);
+			serviceName.setText(serviceProperties.getProperty("introduce.skeleton.service.name"));
+		}
+		return serviceName;
+	}
+
+
+	/**
+	 * This method initializes packageName	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */    
+	private JTextField getPackageName() {
+		if (packageName == null) {
+			packageName = new JTextField();
+			packageName.setText(serviceProperties.getProperty("introduce.skeleton.package"));
+			packageName.setEditable(false);
+		}
+		return packageName;
+	}
+
+
+	/**
+	 * This method initializes lastSaved	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */    
+	private JTextField getLastSaved() {
+		if (lastSaved == null) {
+			lastSaved = new JTextField();
+			lastSaved.setEditable(false);
+			lastSaved.setText(serviceProperties
+			.getProperty("introduce.skeleton.timestamp"));
+		}
+		return lastSaved;
+	}
+
+
+	/**
+	 * This method initializes location	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */    
+	private JTextField getSaveLocation() {
+		if (saveLocation == null) {
+			saveLocation = new JTextField();
+			saveLocation.setText(methodsDirectory.getAbsolutePath());
+			saveLocation.setEditable(false);
+		}
+		return saveLocation;
 	}
 } // @jve:decl-index=0:visual-constraint="6,9"
