@@ -39,7 +39,7 @@ import org.projectmobius.common.Namespace;
 
 
 /**
- * SyncMethodsOnDeployment
+ * Top level controller for re-syncing the service.
  * 
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>

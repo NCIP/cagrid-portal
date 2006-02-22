@@ -11,6 +11,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+/**
+ * Templating Utility Functions
+ * 
+ * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
+ * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
+ * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
+ * @created Jun 8, 2005
+ * @version $Id: mobiusEclipseCodeTemplates.xml,v 1.2 2005/04/19 14:58:02 oster
+ *          Exp $
+ */
 public class TemplateUtils {
 
 	public static final String W3CNAMESPACE = "http://www.w3.org/2001/XMLSchema";
