@@ -56,16 +56,11 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JLabel jLabel4 = null;
 	private SecureConversationPanel secureConversationPanel = null;
 	private SecureMessagePanel secureMessagePanel = null;
-	private JPanel confPanel = null;
-	private JLabel jLabel5 = null;
 	private JComboBox clientCommunication = null;
-	private JLabel jLabel6 = null;
 	private JComboBox runAsMode = null;
-	private JLabel jLabel7 = null;
 	private JComboBox delegationMode = null;
 	private ServiceSecurity serviceSecurity;
 	private boolean syncingComm = false;
-	private JLabel jLabel8 = null;
 	private JComboBox anonymousCommunication = null;
 	private JTabbedPane transportPanel = null;
 	private JPanel clientAuthorization = null;
@@ -73,13 +68,20 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	private CardLayout clientAuthLayout = new CardLayout();
 	private IdentityAuthorizationPanel identityAuthorization = null;
 	private JPanel blankPanel = null;
-	private JLabel jLabel = null;
 	private JComboBox clientAuth = null;
 
 	private final static String NO_AUTHORIZATION = "No Authorization";
 	private final static String HOST_AUTHORIZATION = "Host Authorization";
 	private final static String IDENTITY_AUTHORIZATION = "Identity Authorization";
 	private final static String SELF_AUTHORIZATION = "Self Authorization";
+	private JPanel communicationPanel = null;
+	private JPanel clientPanel = null;
+	private JLabel jLabel9 = null;
+	private JLabel jLabel5 = null;
+	private JLabel dele = null;
+	private JLabel jLabel7 = null;
+	private JPanel generalSecurity = null;
+	private JLabel jLabel = null;
 	public MethodSecurityPanel(ServiceSecurity sec) {
 		super();
 		this.serviceSecurity = sec;
@@ -103,13 +105,6 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 		 * javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
 		 * IntroduceLookAndFeel.getPanelLabelColor()));
 		 */
-		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-		gridBagConstraints.anchor = GridBagConstraints.CENTER;
-		gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-		gridBagConstraints.gridx = 0;
-		gridBagConstraints.gridy = 1;
-		gridBagConstraints.weightx = 1.0D;
-		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 		GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
 		gridBagConstraints17.fill = java.awt.GridBagConstraints.BOTH;
 		gridBagConstraints17.weighty = 1.0;
@@ -127,8 +122,6 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
 			null, IntroduceLookAndFeel.getPanelLabelColor()));
 		this.add(getTransportPanel(), gridBagConstraints17);
-		this.add(getConfPanel(), gridBagConstraints);
-
 		applyServiceSettings();
 
 		synchronize();
@@ -142,9 +135,6 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	 */
 	private JPanel getSecureCommunicationPanel() {
 		if (secureCommunicationPanel == null) {
-			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-			gridBagConstraints4.gridx = 0;
-			gridBagConstraints4.gridy = 1;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.gridx = 0;
 			gridBagConstraints2.gridy = 0;
@@ -155,7 +145,6 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			secureCommunicationPanel = new JPanel();
 			secureCommunicationPanel.setLayout(new GridBagLayout());
 			secureCommunicationPanel.add(getChoicePanel(), gridBagConstraints2);
-			secureCommunicationPanel.add(getCommPanel(), gridBagConstraints4);
 		}
 		return secureCommunicationPanel;
 	}
@@ -423,7 +412,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 		if (comm != null) {
 			if (comm.equals(ClientCommunication.Secure_Conversation)) {
 				commOk = true;
-			} else if (comm.equals(ClientCommunication.Secure_Conversation)) {
+			} else if (comm.equals(ClientCommunication.Transport_Layer_Security)) {
 				commOk = true;
 			}
 		}
@@ -687,98 +676,6 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 
 
 	/**
-	 * This method initializes confPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getConfPanel() {
-		if (confPanel == null) {
-			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
-			gridBagConstraints19.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints19.gridy = 4;
-			gridBagConstraints19.weightx = 1.0;
-			gridBagConstraints19.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints19.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints19.gridx = 1;
-			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
-			gridBagConstraints18.gridx = 0;
-			gridBagConstraints18.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints18.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints18.gridy = 4;
-			jLabel = new JLabel();
-			jLabel.setText("Client Authorization");
-			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
-			gridBagConstraints16.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints16.gridy = 3;
-			gridBagConstraints16.weightx = 1.0;
-			gridBagConstraints16.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints16.gridx = 1;
-			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
-			gridBagConstraints15.gridx = 0;
-			gridBagConstraints15.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints15.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints15.gridy = 3;
-			jLabel8 = new JLabel();
-			jLabel8.setText("Anonymous Communication");
-			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
-			gridBagConstraints14.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints14.gridy = 1;
-			gridBagConstraints14.weightx = 1.0;
-			gridBagConstraints14.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints14.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints14.gridx = 1;
-			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
-			gridBagConstraints13.gridx = 0;
-			gridBagConstraints13.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints13.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints13.gridy = 1;
-			jLabel7 = new JLabel();
-			jLabel7.setText("Delegation Mode");
-			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
-			gridBagConstraints12.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints12.gridy = 0;
-			gridBagConstraints12.weightx = 1.0;
-			gridBagConstraints12.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints12.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints12.gridx = 1;
-			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
-			gridBagConstraints10.gridx = 0;
-			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints10.gridy = 0;
-			jLabel6 = new JLabel();
-			jLabel6.setText("Run As");
-			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
-			gridBagConstraints9.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints9.gridx = 1;
-			gridBagConstraints9.gridy = 2;
-			gridBagConstraints9.weightx = 1.0;
-			gridBagConstraints9.insets = new java.awt.Insets(2, 2, 2, 2);
-			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
-			gridBagConstraints8.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints8.gridy = 2;
-			gridBagConstraints8.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints8.gridx = 0;
-			jLabel5 = new JLabel();
-			jLabel5.setText("Client Communication");
-			confPanel = new JPanel();
-			confPanel.setLayout(new GridBagLayout());
-			confPanel.add(jLabel5, gridBagConstraints8);
-			confPanel.add(getClientCommunication(), gridBagConstraints9);
-			confPanel.add(jLabel6, gridBagConstraints10);
-			confPanel.add(getRunAsMode(), gridBagConstraints12);
-			confPanel.add(jLabel7, gridBagConstraints13);
-			confPanel.add(getDelegationMode(), gridBagConstraints14);
-			confPanel.add(jLabel8, gridBagConstraints15);
-			confPanel.add(getAnonymousCommunication(), gridBagConstraints16);
-			confPanel.add(jLabel, gridBagConstraints18);
-			confPanel.add(getClientAuth(), gridBagConstraints19);
-		}
-		return confPanel;
-	}
-
-
-	/**
 	 * This method initializes clientCommunication
 	 * 
 	 * @return javax.swing.JComboBox
@@ -852,10 +749,9 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JTabbedPane getTransportPanel() {
 		if (transportPanel == null) {
 			transportPanel = new JTabbedPane();
-			transportPanel.addTab("Transport Layer Security", null, getTlsPanel(), null);
-			transportPanel.addTab("Secure Conversation", null, getSecureConversationPanel(), null);
-			transportPanel.addTab("Secure Message", null, getSecureMessagePanel(), null);
-			transportPanel.addTab("Client Authorization", null, getClientAuthorization(), null);
+			transportPanel.addTab("Secure Communication", null, getCommunicationPanel(), null);
+			transportPanel.addTab("Client", null, getClientPanel(), null);
+			transportPanel.addTab("General Security", null, getGeneralSecurity(), null);
 		}
 		return transportPanel;
 	}
@@ -953,6 +849,167 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			clientAuth.addItem(SELF_AUTHORIZATION);
 		}
 		return clientAuth;
+	}
+
+
+	/**
+	 * This method initializes communicationPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */    
+	private JPanel getCommunicationPanel() {
+		if (communicationPanel == null) {
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints11.gridy = 3;
+			gridBagConstraints11.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints11.weightx = 1.0D;
+			gridBagConstraints11.weighty = 1.0D;
+			gridBagConstraints11.gridx = 0;
+			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints7.gridy = 2;
+			gridBagConstraints7.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints7.weightx = 1.0D;
+			gridBagConstraints7.weighty = 1.0D;
+			gridBagConstraints7.gridx = 0;
+			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+			gridBagConstraints6.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints6.gridy = 1;
+			gridBagConstraints6.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints6.weightx = 1.0D;
+			gridBagConstraints6.weighty = 1.0D;
+			gridBagConstraints6.gridx = 0;
+			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+			gridBagConstraints4.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints4.gridy = 0;
+			gridBagConstraints4.weightx = 1.0D;
+			gridBagConstraints4.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints4.gridx = 0;
+			communicationPanel = new JPanel();
+			communicationPanel.setLayout(new GridBagLayout());
+			communicationPanel.add(getCommPanel(), gridBagConstraints4);
+			communicationPanel.add(getTlsPanel(), gridBagConstraints6);
+			communicationPanel.add(getSecureConversationPanel(), gridBagConstraints7);
+			communicationPanel.add(getSecureMessagePanel(), gridBagConstraints11);
+		}
+		return communicationPanel;
+	}
+
+
+	/**
+	 * This method initializes clientPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */    
+	private JPanel getClientPanel() {
+		if (clientPanel == null) {
+			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
+			gridBagConstraints18.insets = new java.awt.Insets(10,10,10,10);
+			gridBagConstraints18.weightx = 1.0D;
+			gridBagConstraints18.weighty = 1.0D;
+			gridBagConstraints18.gridwidth = 2;
+			gridBagConstraints18.gridx = 0;
+			gridBagConstraints18.gridy = 4;
+			gridBagConstraints18.fill = java.awt.GridBagConstraints.BOTH;
+			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
+			gridBagConstraints19.anchor = GridBagConstraints.WEST;
+			gridBagConstraints19.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints19.gridx = 1;
+			gridBagConstraints19.gridy = 3;
+			gridBagConstraints19.weightx = 1.0;
+			gridBagConstraints19.fill = GridBagConstraints.HORIZONTAL;
+			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
+			gridBagConstraints13.gridx = 0;
+			gridBagConstraints13.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints13.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints13.gridy = 3;
+			jLabel7 = new JLabel();
+			jLabel7.setText("Client Authorization");
+			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
+			gridBagConstraints14.anchor = GridBagConstraints.WEST;
+			gridBagConstraints14.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints14.gridx = 1;
+			gridBagConstraints14.gridy = 2;
+			gridBagConstraints14.weightx = 1.0;
+			gridBagConstraints14.fill = GridBagConstraints.HORIZONTAL;
+			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
+			gridBagConstraints15.gridx = 0;
+			gridBagConstraints15.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints15.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints15.gridy = 2;
+			dele = new JLabel();
+			dele.setText("Delegation Mode");
+			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
+			gridBagConstraints16.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints16.gridx = 1;
+			gridBagConstraints16.gridy = 1;
+			gridBagConstraints16.weightx = 1.0;
+			gridBagConstraints16.insets = new Insets(2, 2, 2, 2);
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.gridx = 0;
+			gridBagConstraints8.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints8.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints8.gridy = 1;
+			jLabel5 = new JLabel();
+			jLabel5.setText("Anonymous Communication");
+			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+			gridBagConstraints20.gridx = 0;
+			gridBagConstraints20.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints20.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints20.gridy = 0;
+			jLabel9 = new JLabel();
+			jLabel9.setText("Client Communication");
+			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
+			gridBagConstraints9.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints9.gridx = 1;
+			gridBagConstraints9.gridy = 0;
+			gridBagConstraints9.weightx = 1.0;
+			gridBagConstraints9.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints9.insets = new Insets(2, 2, 2, 2);
+			clientPanel = new JPanel();
+			clientPanel.setLayout(new GridBagLayout());
+			clientPanel.add(getClientCommunication(), gridBagConstraints9);
+			clientPanel.add(jLabel9, gridBagConstraints20);
+			clientPanel.add(jLabel5, gridBagConstraints8);
+			clientPanel.add(getAnonymousCommunication(), gridBagConstraints16);
+			clientPanel.add(dele, gridBagConstraints15);
+			clientPanel.add(getDelegationMode(), gridBagConstraints14);
+			clientPanel.add(jLabel7, gridBagConstraints13);
+			
+			clientPanel.add(getClientAuthorization(), gridBagConstraints18);
+			clientPanel.add(getClientAuth(), gridBagConstraints19);
+		}
+		return clientPanel;
+	}
+
+
+	/**
+	 * This method initializes generalSecurity	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */    
+	private JPanel getGeneralSecurity() {
+		if (generalSecurity == null) {
+			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+			gridBagConstraints12.anchor = java.awt.GridBagConstraints.NORTHWEST;
+			gridBagConstraints12.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints12.gridx = 1;
+			gridBagConstraints12.gridy = 0;
+			gridBagConstraints12.weightx = 1.0;
+			gridBagConstraints12.fill = GridBagConstraints.HORIZONTAL;
+			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+			gridBagConstraints21.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints21.gridy = 0;
+			gridBagConstraints21.gridx = 0;
+			jLabel = new JLabel();
+			jLabel.setText("Run As");
+			generalSecurity = new JPanel();
+			generalSecurity.setLayout(new GridBagLayout());
+			generalSecurity.add(jLabel, gridBagConstraints21);
+			generalSecurity.add(getRunAsMode(), gridBagConstraints12);
+		}
+		return generalSecurity;
 	}
 
 }
