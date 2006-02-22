@@ -48,7 +48,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.58 2006-02-22 15:32:29 langella Exp $
+ * @version $Id: ModificationViewer.java,v 1.59 2006-02-22 17:37:40 langella Exp $
  */
 public class ModificationViewer extends GridPortalComponent {
 
@@ -638,6 +638,9 @@ public class ModificationViewer extends GridPortalComponent {
 									dirty = false;
 									setProgressText("loading service properties");
 									loadServiceProps();
+									lastSaved.setText(serviceProperties
+										.getProperty("introduce.skeleton.timestamp"));
+									this.
 									setProgressText("");
 								}
 							} catch (Exception e1) {
