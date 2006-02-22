@@ -751,7 +751,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			transportPanel = new JTabbedPane();
 			transportPanel.addTab("Secure Communication", null, getCommunicationPanel(), null);
 			transportPanel.addTab("Client", null, getClientPanel(), null);
-			transportPanel.addTab("General Security", null, getGeneralSecurity(), null);
+			transportPanel.addTab("Other", null, getGeneralSecurity(), null);
 		}
 		return transportPanel;
 	}
