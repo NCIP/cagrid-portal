@@ -13,6 +13,7 @@
 			<xs:element name="RunAsMode" minOccurs="0" maxOccurs="1" type="RunAsMode"/>
 			<xs:element name="DelegationMode" minOccurs="1" maxOccurs="1" type="DelegationMode"/>
 			<xs:element name="AnonymousClients" minOccurs="1" maxOccurs="1" type="AnonymousCommunication"/>
+			<xs:element name="ServiceCredentials" minOccurs="0" maxOccurs="1" type="ServiceCredential"/>
 		</xs:sequence>
 	</xs:complexType>
 	
@@ -74,6 +75,26 @@
 		<xs:sequence>
 			<xs:element name="CommunicationMethod" minOccurs="1" maxOccurs="1" type="CommunicationMethod"/>
 			<xs:element name="ReplayAttackInterval" minOccurs="0" maxOccurs="1" type="xs:int"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="ServiceCredential">
+		<xs:choice>
+			<xs:element name="X509Credential" minOccurs="1" maxOccurs="1" type="X509Credential"/>
+			<xs:element name="ProxyCredential" minOccurs="1" maxOccurs="1" type="ProxyCredential"/>
+		</xs:choice>
+	</xs:complexType>
+	
+	<xs:complexType name="X509Credential">
+		<xs:sequence>
+			<xs:element name="certificate" minOccurs="1" maxOccurs="1" type="xs:string"/>
+			<xs:element name="privateKey" minOccurs="1" maxOccurs="1" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="ProxyCredential">
+		<xs:sequence>
+			<xs:element name="certificate" minOccurs="1" maxOccurs="1" type="xs:string"/>
 		</xs:sequence>
 	</xs:complexType>
 	
