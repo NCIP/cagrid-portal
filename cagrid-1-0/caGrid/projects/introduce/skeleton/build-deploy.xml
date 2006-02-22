@@ -78,7 +78,7 @@
 	<target name="createDeploymentGar" depends="checkGlobus, checkTomcat">
 		<copy todir="${build.lib.dir}">
 			<fileset dir="${basedir}/lib">
-				<exclude name="**" />
+				<include name="*.jar" />
 			</fileset>
 		</copy>
 		
