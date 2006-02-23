@@ -4,6 +4,7 @@
 	xmlns:tns="http://projectmobius.org/1/GlobalModelExchange"
 	xmlns:gme="gme://projectmobius.org/1/Protocol"
 	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing"
 	xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd"
 	xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
 	xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd"
@@ -19,7 +20,9 @@
 	<types>
 		<xsd:schema targetNamespace="http://projectmobius.org/1/GlobalModelExchange"
 			attributeFormDefault="qualified" elementFormDefault="qualified"
-			xmlns="http://www.w3.org/2001/XMLSchema">
+			xmlns="http://www.w3.org/2001/XMLSchema"
+			xmlns:comm="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+			<import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" schemaLocation="./gov.nih.nci.cagrid.metadata.common.xsd"/>
 			<xsd:element name="addNamespace">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -230,6 +233,12 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
+			<element name="tns:GlobalModelExchangeResourceProperties">
+				<complexType>
+					<sequence>
+						<element ref="comm:CommonServiceMetadata"/></sequence>
+				</complexType>
+			</element>
 		</xsd:schema>
 	</types>
 	<message name="AddNamespaceInputMessage">
@@ -322,7 +331,7 @@
 	<message name="DestroyServiceOutputMessage">
 		<part name="parameters" element="tns:destroyServiceResponse"/>
 	</message>
-	<portType name="GlobalModelExchangePortType">
+	<portType name="GlobalModelExchangePortType" wsrp:ResourceProperties="tns:GlobalModelExchangeResourceProperties">
 		<operation name="addNamespace">
 			<input message="tns:AddNamespaceInputMessage"/>
 			<output message="tns:AddNamespaceOutputMessage"/>
@@ -382,6 +391,41 @@
 		<operation name="destroyService">
 			<input message="tns:DestroyServiceInputMessage"/>
 			<output message="tns:DestroyServiceOutputMessage"/>
+		</operation>
+		<operation name="GetResourceProperty">
+			<input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest"
+				wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty"/>
+			<output name="GetResourcePropertyResponse" message="wsrpw:GetResourcePropertyResponse"
+				wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourcePropertyResponse"/>
+			<fault name="InvalidResourcePropertyQNameFault"
+				message="wsrpw:InvalidResourcePropertyQNameFault"/>
+			<fault name="ResourceUnknownFault" message="wsrpw:ResourceUnknownFault"/>
+		</operation>
+		<operation name="GetMultipleResourceProperties">
+			<input name="GetMultipleResourcePropertiesRequest"
+				message="wsrpw:GetMultipleResourcePropertiesRequest"
+				wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetMultipleResourceProperties"/>
+			<output name="GetMultipleResourcePropertiesResponse"
+				message="wsrpw:GetMultipleResourcePropertiesResponse"
+				wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetMultipleResourceProperties"/>
+			<fault name="InvalidResourcePropertyQNameFault"
+				message="wsrpw:InvalidResourcePropertyQNameFault"/>
+			<fault name="ResourceUnknownFault" message="wsrpw:ResourceUnknownFault"/>
+		</operation>
+		<operation name="QueryResourceProperties">
+			<input name="QueryResourcePropertiesRequest"
+				message="wsrpw:QueryResourcePropertiesRequest"
+				wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/QueryResourceProperties"/>
+			<output name="QueryResourcePropertiesResponse"
+				message="wsrpw:QueryResourcePropertiesResponse"
+				wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/QueryResourcePropertiesResponse"/>
+			<fault name="ResourceUnknownFault" message="wsrpw:ResourceUnknownFault"/>
+			<fault name="InvalidResourcePropertyQNameFault"
+				message="wsrpw:InvalidResourcePropertyQNameFault"/>
+			<fault name="UnknownQueryExpressionDialectFault"
+				message="wsrpw:UnknownQueryExpressionDialectFault"/>
+			<fault name="InvalidQueryExpressionFault" message="wsrpw:InvalidQueryExpressionFault"/>
+			<fault name="QueryEvaluationErrorFault" message="wsrpw:QueryEvaluationErrorFault"/>
 		</operation>
 	</portType>
 </definitions>

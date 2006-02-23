@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project name="build-deploy file" basedir="." default="deploy">
+<project name="build-deploy file" basedir="." default="deployTomcat">
 
 	<property file="deploy.properties" />
 	<property environment="env"/>
@@ -22,7 +22,7 @@
 	<property name="service.path" value="mobius/mako" />
 	<property name="service.deployment.descriptor" value="${basedir}/server-config.wsdd" />
 	
-	<target name="deploy" description="Deploys to CATALINA_HOME" >
+	<target name="deployTomcat" description="Deploys to CATALINA_HOME" >
 		
 		<echo message="Deploying service under Tomcat at ${tomcat.dir}" />
 		
@@ -50,13 +50,13 @@
 		
 		<!--copy over the jars to the lib -->
 		<copy overwrite="true" toDir="${tomcat.deploy.lib.dir}">
+			<fileset dir="ext/lib">
+				<include name="*" />
+			</fileset>
 			<fileset dir="lib">
 				<include name="*" />
 			</fileset>
 			<fileset dir="build/lib">
-				<include name="*" />
-			</fileset>
-			<fileset dir="ext/lib">
 				<include name="*" />
 			</fileset>
 		</copy>
