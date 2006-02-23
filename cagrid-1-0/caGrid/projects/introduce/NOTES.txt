@@ -1,5 +1,6 @@
 To Do:
 
+Click Create Service, create a service with name "test1", error.
 Click Modifiy Service, Click Save, Click Cancel or No, Save Progress comes up.
 
 Do not write hte w3.org namespace to the namespace2package mappings......
