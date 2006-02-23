@@ -1,5 +1,7 @@
 To Do:
 
+Click Modifiy Service, Click Save, Click Cancel or No, Save Progress comes up.
+
 Do not write hte w3.org namespace to the namespace2package mappings......
 
 Create service needs to check that the directory they select is empty.  If not, should prompt and ask if it is ok to delete the dir and recreate it.
