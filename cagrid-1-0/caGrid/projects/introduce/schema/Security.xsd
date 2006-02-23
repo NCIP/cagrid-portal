@@ -87,14 +87,14 @@
 	
 	<xs:complexType name="X509Credential">
 		<xs:sequence>
-			<xs:element name="certificate" minOccurs="1" maxOccurs="1" type="xs:string"/>
-			<xs:element name="privateKey" minOccurs="1" maxOccurs="1" type="xs:string"/>
+			<xs:element name="certificateLocation" minOccurs="1" maxOccurs="1" type="xs:string"/>
+			<xs:element name="privateKeyLocation" minOccurs="1" maxOccurs="1" type="xs:string"/>
 		</xs:sequence>
 	</xs:complexType>
 	
 	<xs:complexType name="ProxyCredential">
 		<xs:sequence>
-			<xs:element name="certificate" minOccurs="1" maxOccurs="1" type="xs:string"/>
+			<xs:element name="proxyLocation" minOccurs="1" maxOccurs="1" type="xs:string"/>
 		</xs:sequence>
 	</xs:complexType>
 	

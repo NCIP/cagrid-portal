@@ -20,6 +20,11 @@ public class IntroduceLookAndFeel extends PortalLookAndFeel {
 		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class
 				.getResource("/Plus20X20.gif"));
 	}
+	
+	public final static ImageIcon getCredentialsIcon() {
+		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class
+				.getResource("/BCard.gif"));
+	}
 
 	public final static ImageIcon getModifyIcon() {
 		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class
