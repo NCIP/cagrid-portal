@@ -266,10 +266,10 @@ public class MethodViewer extends GridPortalBaseFrame {
 		if (outputTypePanel == null) {
 			GridBagConstraints gridBagContraints9 = new GridBagConstraints();
 			gridBagContraints9.gridx = 0;
-			gridBagContraints9.weightx = 1.0D;
-			gridBagContraints9.weighty = 1.0D;
 			gridBagContraints9.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagContraints9.gridheight = 1;
+			gridBagContraints9.weighty = 1.0D;
+			gridBagContraints9.weightx = 1.0D;
+			gridBagContraints9.ipady = 22;
 			gridBagContraints9.gridy = 0;
 			outputTypePanel = new JPanel();
 			outputTypePanel.setLayout(new GridBagLayout());
