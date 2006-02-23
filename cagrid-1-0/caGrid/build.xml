@@ -114,6 +114,23 @@
 				<include name="cagrid-opensaml-1.1.jar" />
 			</fileset>
 		</artifact>
+		
+		<artifact track="main" type="jars" id="dorian.client.jars">
+				<antcall target="build-dorian" />
+					<fileset dir="${projects.dir}/dorian/build/lib">
+						<include name="dorian.jar" />
+						<include name="dorian_stubs.jar" />
+						<include name="commons-codec-1.3.jar" />
+						<include name="commons-httpclient-3.0.jar" />
+					</fileset>
+		</artifact>	
+		
+		<artifact track="main" type="resources" id="dorian.client.resources">
+			<fileset dir="${projects.dir}/dorian/resources/portal/dorian">
+				<include name="**" />
+			</fileset>
+		</artifact>
+		
 		<artifact track="endorsed" type="jars" id="opensaml.endorsed">
 			<fileset dir="${projects.dir}/opensaml/endorsed">
 				<include name="xercesImpl.jar" />
@@ -183,6 +200,10 @@
 			<artifact refid="metadata.jars" />
 			<artifact refid="metadata.schemas" />
 			<artifact refid="metadata.mappings" />
+			<artifact refid="opensaml.jars" />
+			<artifact refid="opensaml.endorsed" />
+			<artifact refid="dorian.client.jars" />
+			<artifact refid="dorian.client.resources" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
