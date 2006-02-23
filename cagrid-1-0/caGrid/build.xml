@@ -126,7 +126,7 @@
 		</artifact>	
 		
 		<artifact track="main" type="resources" id="dorian.client.resources">
-			<fileset dir="${projects.dir}/dorian/resources/portal/dorian">
+			<fileset dir="${projects.dir}/dorian/resources">
 				<include name="**" />
 			</fileset>
 		</artifact>
