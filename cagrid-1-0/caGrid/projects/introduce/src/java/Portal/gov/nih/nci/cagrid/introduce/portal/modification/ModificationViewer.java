@@ -48,7 +48,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.60 2006-02-22 21:12:27 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.61 2006-02-23 20:04:12 oster Exp $
  */
 public class ModificationViewer extends GridPortalComponent {
 
@@ -380,12 +380,12 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints24.gridy = 1;
 			gridBagConstraints24.weightx = 1.0;
 			gridBagConstraints24.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints24.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints24.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints24.gridx = 3;
 			GridBagConstraints gridBagConstraints23 = new GridBagConstraints();
 			gridBagConstraints23.gridx = 2;
 			gridBagConstraints23.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints23.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints23.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints23.gridy = 1;
 			saveLocationLabel = new JLabel();
 			saveLocationLabel.setText("Location");
@@ -394,13 +394,13 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints22.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints22.gridy = 1;
 			gridBagConstraints22.weightx = 1.0;
-			gridBagConstraints22.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints22.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints22.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints22.gridx = 1;
 			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
 			gridBagConstraints21.gridx = 0;
 			gridBagConstraints21.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints21.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints21.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints21.gridy = 1;
 			lastSavedLabel = new JLabel();
 			lastSavedLabel.setText("Last Saved");
@@ -413,7 +413,7 @@ public class ModificationViewer extends GridPortalComponent {
 			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
 			gridBagConstraints19.gridx = 2;
 			gridBagConstraints19.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints19.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints19.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints19.gridy = 0;
 			packageLabel = new JLabel();
 			packageLabel.setText("Package");
@@ -642,10 +642,8 @@ public class ModificationViewer extends GridPortalComponent {
 									dirty = false;
 									setProgressText("loading service properties");
 									loadServiceProps();
-									lastSaved.setText(serviceProperties
-										.getProperty("introduce.skeleton.timestamp"));
-									this.
-									setProgressText("");
+									lastSaved.setText(serviceProperties.getProperty("introduce.skeleton.timestamp"));
+									this.setProgressText("");
 								}
 							} catch (Exception e1) {
 								e1.printStackTrace();
@@ -858,6 +856,14 @@ public class ModificationViewer extends GridPortalComponent {
 			contentTabbedPane = new JTabbedPane();
 			contentTabbedPane.addTab("Operations", null, getMethodsPanel(), null);
 			contentTabbedPane.addTab("Metadata", null, getMetadataPanel(), null);
+			// diable the metadata tab if they've specified not to sync metadata
+			MetadataListType metadataList = this.introService.getMetadataList();
+			if (metadataList != null && metadataList.getSynchronizeMetadataFramework() != null
+				&& !metadataList.getSynchronizeMetadataFramework().booleanValue()) {
+				// Disable the tab
+				contentTabbedPane.setEnabledAt(contentTabbedPane.getTabCount() - 1, false);
+			}
+
 			contentTabbedPane.addTab("Security", null, getSecurityPanel(), null);
 		}
 		return contentTabbedPane;
@@ -1076,10 +1082,10 @@ public class ModificationViewer extends GridPortalComponent {
 
 
 	/**
-	 * This method initializes packageName	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
+	 * This method initializes packageName
+	 * 
+	 * @return javax.swing.JTextField
+	 */
 	private JTextField getPackageName() {
 		if (packageName == null) {
 			packageName = new JTextField();
@@ -1092,27 +1098,26 @@ public class ModificationViewer extends GridPortalComponent {
 
 
 	/**
-	 * This method initializes lastSaved	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
+	 * This method initializes lastSaved
+	 * 
+	 * @return javax.swing.JTextField
+	 */
 	private JTextField getLastSaved() {
 		if (lastSaved == null) {
 			lastSaved = new JTextField();
 			lastSaved.setEditable(false);
 			lastSaved.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
-			lastSaved.setText(serviceProperties
-			.getProperty("introduce.skeleton.timestamp"));
+			lastSaved.setText(serviceProperties.getProperty("introduce.skeleton.timestamp"));
 		}
 		return lastSaved;
 	}
 
 
 	/**
-	 * This method initializes location	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
+	 * This method initializes location
+	 * 
+	 * @return javax.swing.JTextField
+	 */
 	private JTextField getSaveLocation() {
 		if (saveLocation == null) {
 			saveLocation = new JTextField();
