@@ -18,6 +18,7 @@ import junit.framework.TestCase;
 import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -37,14 +38,16 @@ public class TestCredentialsManager extends TestCase {
 
 	private CredentialsManager cred;
 
+
 	public void testCreateObtainCACredentials() {
 		try {
 			createAndStoreCA();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} 
+		}
 	}
+
 
 	public void testInsertObtainUserCredentials() {
 		try {
@@ -53,68 +56,71 @@ public class TestCredentialsManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} 
+		}
 	}
-	
+
+
 	public void testDeleteUserCredentials() {
 		try {
 			createAndStoreCA();
 			String user = "user";
 			String password = "password";
-			createAndStoreUserCredentials(user,password);
+			createAndStoreUserCredentials(user, password);
 			cred.deleteCredentials(user);
 			assertFalse(cred.hasCredentials(user));
-			try{
-				cred.getPrivateKey(user,password);
+			try {
+				cred.getPrivateKey(user, password);
 				assertTrue(false);
-			}catch (DorianInternalFault gie) {
-				
+			} catch (DorianInternalFault gie) {
+
 			}
-			try{
+			try {
 				cred.getCertificate(user);
 				assertTrue(false);
-			}catch (DorianInternalFault gie) {
-				
-			}
-		} catch (Exception e) {
-			FaultUtil.printFault(e);
-			assertTrue(false);
-		} 
-	}
-	
-	public void testInsertObtainManyUserCredentials() {
-		try {
-			createAndStoreCA();
-			for(int i=0; i<10; i++){
-				createAndStoreUserCredentials("user"+i, "password"+i);
+			} catch (DorianInternalFault gie) {
+
 			}
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
 	}
-	
+
+
+	public void testInsertObtainManyUserCredentials() {
+		try {
+			createAndStoreCA();
+			for (int i = 0; i < 10; i++) {
+				createAndStoreUserCredentials("user" + i, "password" + i);
+			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+	}
+
+
 	public void testDeleteManyUserCredentials() {
 		try {
 			createAndStoreCA();
-			for(int i=0; i<10; i++){
-				createAndStoreUserCredentials("user"+i, "password"+i);
+			for (int i = 0; i < 10; i++) {
+				createAndStoreUserCredentials("user" + i, "password" + i);
 			}
-			
-			for(int i=0; i<10; i++){
-				cred.deleteCredentials("user"+i);
-				assertFalse(cred.hasCredentials("user"+i));
-				try{
-					cred.getPrivateKey("user"+i, "password"+i);
+
+			for (int i = 0; i < 10; i++) {
+				cred.deleteCredentials("user" + i);
+				assertFalse(cred.hasCredentials("user" + i));
+				try {
+					cred.getPrivateKey("user" + i, "password" + i);
 					assertTrue(false);
-				}catch (DorianInternalFault gie) {
-					
+				} catch (DorianInternalFault gie) {
+
 				}
-				try{
-					cred.getCertificate("user"+i);
+				try {
+					cred.getCertificate("user" + i);
 					assertTrue(false);
-				}catch (DorianInternalFault gie) {
-					
+				} catch (DorianInternalFault gie) {
+
 				}
 			}
 		} catch (Exception e) {
@@ -134,25 +140,24 @@ public class TestCredentialsManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} 
+		}
 	}
+
 
 	private void createAndStoreCA() throws Exception {
 		KeyPair rootPair = KeyUtil.generateRSAKeyPair1024();
 		assertNotNull(rootPair);
 		String rootSub = "O=Ohio State University,OU=BMI,OU=MSCL,CN=Temp Certificate Authority";
 		X509Name rootSubject = new X509Name(rootSub);
-		X509Certificate root = CertUtil.generateCACertificate(rootSubject,
-				new Date(System.currentTimeMillis()), new Date(System
-						.currentTimeMillis() + 500000000), rootPair);
+		X509Certificate root = CertUtil.generateCACertificate(rootSubject, new Date(System.currentTimeMillis()),
+			new Date(System.currentTimeMillis() + 500000000), rootPair);
 		assertNotNull(root);
-		storeRetrieveAndConfirmCredentials(CA_USER, CA_PASSWORD, root, rootPair
-				.getPrivate());
+		storeRetrieveAndConfirmCredentials(CA_USER, CA_PASSWORD, root, rootPair.getPrivate());
 
 	}
 
-	private void createAndStoreUserCredentials(String username, String password)
-			throws Exception {
+
+	private Creds createAndStoreUserCredentials(String username, String password) throws Exception {
 		PrivateKey rootKey = cred.getPrivateKey(CA_USER, CA_PASSWORD);
 		assertNotNull(rootKey);
 		X509Certificate rootCert = cred.getCertificate(CA_USER);
@@ -174,8 +179,7 @@ public class TestCredentialsManager extends TestCase {
 		assertNotNull(pair);
 		int index = rootSub.lastIndexOf(",");
 		String sub = rootSub.substring(0, index) + ",CN=" + username;
-		PKCS10CertificationRequest request = CertUtil
-				.generateCertficateRequest(sub, pair);
+		PKCS10CertificationRequest request = CertUtil.generateCertficateRequest(sub, pair);
 
 		// validate the certification request
 		if (!request.verify("BC")) {
@@ -183,17 +187,16 @@ public class TestCredentialsManager extends TestCase {
 			System.exit(1);
 		}
 
-		X509Certificate issuedCert = CertUtil.signCertificateRequest(request, new Date(System.currentTimeMillis()), new Date(
-						System.currentTimeMillis() + 500000000), rootCert,rootKey);
+		X509Certificate issuedCert = CertUtil.signCertificateRequest(request, new Date(System.currentTimeMillis()),
+			new Date(System.currentTimeMillis() + 500000000), rootCert, rootKey);
 		assertNotNull(issuedCert);
-		storeRetrieveAndConfirmCredentials(username, password, issuedCert, pair
-				.getPrivate());
-
+		storeRetrieveAndConfirmCredentials(username, password, issuedCert, pair.getPrivate());
+		return new Creds(issuedCert, pair.getPrivate());
 	}
 
-	private void storeRetrieveAndConfirmCredentials(String username,
-			String password, X509Certificate cert, PrivateKey key)
-			throws Exception {
+
+	private void storeRetrieveAndConfirmCredentials(String username, String password, X509Certificate cert,
+		PrivateKey key) throws Exception {
 		cred.addCredentials(username, password, cert, key);
 		assertTrue(cred.hasCredentials(username));
 		X509Certificate dbCert = cred.getCertificate(username);
@@ -203,11 +206,12 @@ public class TestCredentialsManager extends TestCase {
 		assertEquals(key, dbKey);
 	}
 
+
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
 			db = Utils.getDB();
-			assertEquals(0,db.getUsedConnectionCount());
+			assertEquals(0, db.getUsedConnectionCount());
 			CredentialsManager.CREDENTIALS_TABLE = TABLE;
 			cred = new CredentialsManager(db);
 			cred.destroyTable();
@@ -216,16 +220,59 @@ public class TestCredentialsManager extends TestCase {
 			assertTrue(false);
 		}
 	}
-	
+
+
 	protected void tearDown() throws Exception {
 		super.setUp();
 		try {
-			assertEquals(0,db.getUsedConnectionCount());
+			assertEquals(0, db.getUsedConnectionCount());
 			db.destroyDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
+	}
+
+
+public void stessTestInsertAndObtainBadPassword() throws Exception {
+		try {
+			createAndStoreCA();
+			Creds temp = createAndStoreUserCredentials("foo", "foobar");
+			if(temp.key.equals(cred.getPrivateKey("foo", "foobad"))){
+				assertTrue(false);
+			}
+			//assertTrue(false);
+		} catch (InvalidPasswordFault ipf) {
+		}
+	}	public class Creds {
+		public X509Certificate cert;
+		public PrivateKey key;
+
+
+		public Creds(X509Certificate cert, PrivateKey key) {
+			this.cert = cert;
+			this.key = key;
+		}
+	}
+
+
+	public static void main(String[] args) {
+		try {
+			int count = 0;
+			while (true) {
+				count++;
+				System.err.println("Run " + count);
+				TestCredentialsManager tcm = new TestCredentialsManager();
+				tcm.setUp();
+				tcm.stessTestInsertAndObtainBadPassword();
+				tcm.tearDown();
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			System.exit(1);
+		}
+
 	}
 
 }
