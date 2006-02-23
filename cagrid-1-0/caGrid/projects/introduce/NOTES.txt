@@ -1,5 +1,8 @@
 To Do:
 
+need to test primative return types; currently broken... created method Impl doesn't have a return statement.
+
+
 is client-config.wsdd really needed in the root dir?  can't you just add GLOBUS_LOCATION to your classpath
 Click Modifiy Service, Click Save, Click Cancel or No, Save Progress comes up.
 
