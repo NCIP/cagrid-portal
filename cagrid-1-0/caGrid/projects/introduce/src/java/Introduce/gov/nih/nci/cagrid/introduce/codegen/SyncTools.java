@@ -192,9 +192,6 @@ public class SyncTools {
 			}
 		}
 
-		Utils.serializeDocument(baseDirectory.getAbsolutePath() + File.separator + "lastprocesses.xml", introService,
-			new QName("gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
-
 		SyncMethods methodsS = new SyncMethods(baseDirectory, info);
 		SyncMetadata metadata = new SyncMetadata(baseDirectory, info);
 		SyncSecurity security = new SyncSecurity(baseDirectory, info);

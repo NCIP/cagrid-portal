@@ -40,6 +40,13 @@ public class SyncMetadata {
 
 
 	public void sync() throws Exception {
+		// check for the override attribute that signifies metadata
+		// synchronization should be skipped
+		if (this.info.getMetadata() != null && this.info.getMetadata().getSynchronizeMetadataFramework() != null
+			&& !this.info.getMetadata().getSynchronizeMetadataFramework().booleanValue()) {
+			// the preference is set and set to skip, so do nothing
+			return;
+		}
 
 		BaseResourceTemplate baseResourceT = new BaseResourceTemplate();
 		String baseResourceS = baseResourceT.generate(info);
