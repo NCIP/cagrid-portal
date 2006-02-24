@@ -34,10 +34,6 @@ public class GMEConfigurationPanel extends JPanel {
 
 	private JPanel mainPanel = null;
 
-	private JPanel queryPanel = null;
-
-	private JButton queryButton = null;
-
 	private JComboBox typesComboBox = null;
 
 	public Namespace currentNamespace = null;
@@ -55,10 +51,6 @@ public class GMEConfigurationPanel extends JPanel {
 	private JPanel schemaPanel = null;
 
 	private JLabel namespaceLabel = null;
-
-	private JTextField gme = null;
-
-	JLabel gmeAddressLabel = null;
 
 	JLabel nameLabel = null;
 
@@ -86,6 +78,7 @@ public class GMEConfigurationPanel extends JPanel {
 	 * This method initializes this
 	 */
 	private void initialize() {
+		this.setSize(new java.awt.Dimension(138,122));
 		this.add(getMainPanel(), null);
 
 	}
@@ -99,62 +92,16 @@ public class GMEConfigurationPanel extends JPanel {
 	public JPanel getMainPanel() {
 		if (mainPanel == null) {
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.gridx = 0;
+			gridBagConstraints.gridx = 1;
 			gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints.weightx = 1.0D;
 			gridBagConstraints.weighty = 1.0D;
-			gridBagConstraints.gridy = 1;
-			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+			gridBagConstraints.gridy = 0;
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
-			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.gridy = 0;
-			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints1.weightx = 0.0D;
-			gridBagConstraints1.weighty = 0.0D;
-			mainPanel.add(getQueryPanel(), gridBagConstraints1);
 			mainPanel.add(getSchemaPanel(), gridBagConstraints);
 		}
 		return mainPanel;
-	}
-
-
-	/**
-	 * This method initializes jPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	public JPanel getQueryPanel() {
-		if (queryPanel == null) {
-			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-			gridBagConstraints6.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints6.gridy = 0;
-			gridBagConstraints6.gridx = 0;
-			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints5.gridx = 1;
-			gridBagConstraints5.gridy = 0;
-			gridBagConstraints5.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints5.weightx = 1.0;
-			gmeAddressLabel = new JLabel();
-			gmeAddressLabel.setText("GME");
-			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-			gridBagConstraints4.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints4.gridy = 1;
-			gridBagConstraints4.anchor = java.awt.GridBagConstraints.CENTER;
-			gridBagConstraints4.gridwidth = 2;
-			gridBagConstraints4.gridx = 0;
-			queryPanel = new JPanel();
-			queryPanel.setLayout(new GridBagLayout());
-			queryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Discover Schemas",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
-			queryPanel.add(getQueryButton(), gridBagConstraints4);
-			queryPanel.add(gmeAddressLabel, gridBagConstraints6);
-			queryPanel.add(getGme(), gridBagConstraints5);
-		}
-		return queryPanel;
 	}
 
 
@@ -162,8 +109,10 @@ public class GMEConfigurationPanel extends JPanel {
 		GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
 		List namespaces = null;
 		try {
+			IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
+				IntroducePortalConf.RESOURCE);
 			XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance().getGridService(
-				gme.getText());
+				conf.getGME());
 			namespaces = handle.getNamespaceDomainList();
 
 			getNamespaceComboBox().removeAllItems();
@@ -176,24 +125,6 @@ public class GMEConfigurationPanel extends JPanel {
 			JOptionPane.showMessageDialog(me,
 				"Please check the GME URL and make sure that you have the appropriate credentials!");
 		}
-	}
-
-
-	/**
-	 * This method initializes jButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	public JButton getQueryButton() {
-		if (queryButton == null) {
-			queryButton = new JButton("Refresh from GME", IntroduceLookAndFeel.getMobiusIcon());
-			queryButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					discoverFromGME();
-				}
-			});
-		}
-		return queryButton;
 	}
 
 
@@ -276,8 +207,10 @@ public class GMEConfigurationPanel extends JPanel {
 					try {
 						if ((String) namespaceComboBox.getSelectedItem() != null
 							&& ((String) namespaceComboBox.getSelectedItem()).length() > 0) {
+							IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance()
+								.getResource(IntroducePortalConf.RESOURCE);
 							XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
-								.getGridService(gme.getText());
+								.getGridService(conf.getGME());
 							List schemas = handle.getSchemaListForNamespaceDomain((String) namespaceComboBox
 								.getSelectedItem());
 
@@ -312,8 +245,10 @@ public class GMEConfigurationPanel extends JPanel {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
 					try {
+						IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance()
+							.getResource(IntroducePortalConf.RESOURCE);
 						XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
-							.getGridService(gme.getText());
+							.getGridService(conf.getGME());
 						if (schemaComboBox.getSelectedItem() != null) {
 							SchemaNode node = handle.getSchema(new Namespace((String) namespaceComboBox
 								.getSelectedItem()
@@ -405,20 +340,4 @@ public class GMEConfigurationPanel extends JPanel {
 		return schemaPanel;
 	}
 
-
-	/**
-	 * This method initializes gme
-	 * 
-	 * @return javax.swing.JTextField
-	 */
-	public JTextField getGme() {
-		if (gme == null) {
-			gme = new JTextField();
-			IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
-				IntroducePortalConf.RESOURCE);
-			gme.setText(conf.getGME());
-		}
-		return gme;
-	}
-
-}
+} // @jve:decl-index=0:visual-constraint="10,10"

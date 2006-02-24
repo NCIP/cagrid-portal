@@ -18,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -303,76 +304,95 @@ public class CreationViewer extends GridPortalComponent {
 			createButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 
-					BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance().getGridPortal(),
-						"Creating") {
+					int doIdeleteResult = JOptionPane.CANCEL_OPTION;
+					final File dirFile = new File(getDir().getText());
+					if (dirFile.exists() && dirFile.list().length != 0) {
+						doIdeleteResult = JOptionPane.showConfirmDialog(me,
+							"The creation directory is not empty.  All information in the directory will be lost.");
+					}
 
-						public void process() {
-							try {
-								setProgressText("caching directory location");
-								ResourceManager.setProperty(ResourceManager.LAST_DIRECTORY, getDir().getText());
+					if (doIdeleteResult == JOptionPane.OK_OPTION) {
+						final int finalDoIdeleteResult = doIdeleteResult;
+						BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance()
+							.getGridPortal(), "Creating") {
 
-								setProgressText("validating");
-								if (service.getText().length() > 0) {
-									if (!service.getText().matches("[A-Z]++[A-Za-z0-9\\_\\$]*")) {
-										PortalUtils
-											.showMessage("Service Name can only contain [A-Z]++[A-Za-z0-9\\_\\$]*");
+							public void process() {
+								try {
+									if (finalDoIdeleteResult == JOptionPane.OK_OPTION) {
+										setProgressText("deleting existing directory");
+										Utils.deleteDir(dirFile);
+									} else {
 										return;
 									}
-									if (service.getText().substring(0, 1).toLowerCase().equals(
-										service.getText().substring(0, 1))) {
-										PortalUtils.showMessage("Service Name cannnot start with lower case letters.");
+
+									setProgressText("caching directory location");
+									ResourceManager.setProperty(ResourceManager.LAST_DIRECTORY, getDir().getText());
+
+									setProgressText("validating");
+									if (service.getText().length() > 0) {
+										if (!service.getText().matches("[A-Z]++[A-Za-z0-9\\_\\$]*")) {
+											PortalUtils
+												.showMessage("Service Name can only contain [A-Z]++[A-Za-z0-9\\_\\$]*");
+											return;
+										}
+										if (service.getText().substring(0, 1).toLowerCase().equals(
+											service.getText().substring(0, 1))) {
+											PortalUtils
+												.showMessage("Service Name cannnot start with lower case letters.");
+											return;
+										}
+									} else {
+										PortalUtils.showMessage("Service Name cannot be empty.");
 										return;
 									}
-								} else {
-									PortalUtils.showMessage("Service Name cannot be empty.");
-									return;
-								}
-								setProgressText("creating");
-								String cmd = CommonTools.getAntSkeletonCreationCommand(".", service.getText(), dir
-									.getText(), servicePackage.getText(), namespaceDomain.getText());
-								Process p = CommonTools.createAndOutputProcess(cmd);
-								p.waitFor();
-								if (p.exitValue() != 0) {
-									PortalUtils.showErrorMessage("Error creating new service!");
-								}
-								if (serviceTemplate.getText().length() > 0) {
-									if (serviceTemplate.getText().length() > 0) {
-										StringBuffer file = Utils
-											.fileToStringBuffer(new File(serviceTemplate.getText()));
-										Utils
-											.stringBufferToFile(file, dir.getText() + File.separator + "introduce.xml");
-									}
-
-									setProgressText("resynchronizing using templates");
-									cmd = CommonTools.getAntSkeletonResyncCommand(dir.getText());
-									p = CommonTools.createAndOutputProcess(cmd);
+									setProgressText("creating");
+									String cmd = CommonTools.getAntSkeletonCreationCommand(".", service.getText(), dir
+										.getText(), servicePackage.getText(), namespaceDomain.getText());
+									Process p = CommonTools.createAndOutputProcess(cmd);
 									p.waitFor();
 									if (p.exitValue() != 0) {
-										PortalUtils.showErrorMessage("Error templating new service!");
+										PortalUtils.showErrorMessage("Error creating new service!");
 									}
-								}
-								setProgressText("building");
-								cmd = CommonTools.getAntAllCommand(dir.getText());
-								p = CommonTools.createAndOutputProcess(cmd);
-								p.waitFor();
-								if (p.exitValue() == 0) {
-									PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-										new ModificationViewer(new File(dir.getText())));
+									if (serviceTemplate.getText().length() > 0) {
+										if (serviceTemplate.getText().length() > 0) {
+											StringBuffer file = Utils.fileToStringBuffer(new File(serviceTemplate
+												.getText()));
+											Utils.stringBufferToFile(file, dir.getText() + File.separator
+												+ "introduce.xml");
+										}
+
+										setProgressText("resynchronizing using templates");
+										cmd = CommonTools.getAntSkeletonResyncCommand(dir.getText());
+										p = CommonTools.createAndOutputProcess(cmd);
+										p.waitFor();
+										if (p.exitValue() != 0) {
+											PortalUtils.showErrorMessage("Error templating new service!");
+										}
+									}
+									setProgressText("building");
+									cmd = CommonTools.getAntAllCommand(dir.getText());
+									p = CommonTools.createAndOutputProcess(cmd);
+									p.waitFor();
+									if (p.exitValue() == 0) {
+										PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+											new ModificationViewer(new File(dir.getText())));
+										dispose();
+									} else {
+										PortalUtils.showErrorMessage("Error creating new service!");
+									}
+								} catch (Exception ex) {
+									ex.printStackTrace();
+									PortalUtils.showErrorMessage(ex.getMessage());
 									dispose();
-								} else {
-									PortalUtils.showErrorMessage("Error creating new service!");
 								}
-							} catch (Exception ex) {
-								ex.printStackTrace();
-								PortalUtils.showErrorMessage(ex.getMessage());
+
 							}
 
-						}
+						};
 
-					};
-
-					Thread th = new Thread(r);
-					th.start();
+						Thread th = new Thread(r);
+						th.start();
+					}
 				}
 			});
 		}

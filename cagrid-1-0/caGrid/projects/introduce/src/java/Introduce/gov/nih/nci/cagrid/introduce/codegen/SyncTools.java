@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.codegen;
 
 import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
@@ -152,7 +153,7 @@ public class SyncTools {
 				if (mtype.getInputs() != null && mtype.getInputs().getInput() != null) {
 					for (int j = 0; j < mtype.getInputs().getInput().length; j++) {
 						MethodTypeInputsInput inputParam = mtype.getInputs().getInput(j);
-						if (inputParam.getNamespace() != null && !inputParam.getNamespace().equals(TemplateUtils.W3CNAMESPACE)
+						if (inputParam.getNamespace() != null && !inputParam.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)
 							&& (inputParam.getPackageName() == null || inputParam.getPackageName().length() <= 0)) {
 							inputParam.setPackageName(getPackageName(new Namespace(inputParam.getNamespace())));
 						}
@@ -174,7 +175,7 @@ public class SyncTools {
 				if (mtype.getOutput() != null) {
 					MethodTypeOutput outputParam = mtype.getOutput();
 					if (outputParam.getNamespace() != null &&
-						!outputParam.getNamespace().equals(TemplateUtils.W3CNAMESPACE) && (outputParam.getPackageName() == null || outputParam.getPackageName().length() <= 0)) {
+						!outputParam.getNamespace().equals(IntroduceConstants.W3CNAMESPACE) && (outputParam.getPackageName() == null || outputParam.getPackageName().length() <= 0)) {
 						outputParam.setPackageName(getPackageName(new Namespace(outputParam.getNamespace())));
 					}
 					if (outputParam.getClassName() != null && outputParam.getClassName().equals("void")) {

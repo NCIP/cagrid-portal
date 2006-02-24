@@ -32,38 +32,17 @@ import org.projectmobius.portal.GridPortalComponent;
  * @version $Id: mobiusEclipseCodeTemplates.xml,v 1.2 2005/04/19 14:58:02 oster
  *          Exp $
  */
-public class GMEParameterConfigurationComponent extends GridPortalComponent {
-	boolean handleParameterName = true;
-
-	JLabel paramNameLabel = null;
-
-	JTextField paramName = null;
-
-	JCheckBox isArrayCheckBox = null;
-
+public class GMEParameterConfigurationComponent extends JPanel {
 	JPanel customPanel = null;
-
-	protected Vector typeInfo;
-
-	private JLabel arrayLabel = null;
 
 	private JPanel mainPanel = null;
 
-	private File schemaDir = null;
-
 	private GMEConfigurationPanel gmePanel = null;
-
-	private JPanel buttonPanel = null;
-
-	private JButton doneButton = null;
 
 	JComponent me;
 
 
-	public GMEParameterConfigurationComponent(Vector typeInfo, File schemaDir, boolean handleParameterName) {
-		this.typeInfo = typeInfo;
-		this.schemaDir = schemaDir;
-		this.handleParameterName = handleParameterName;
+	public GMEParameterConfigurationComponent() {
 		me = this;
 		initialize();
 		this.gmePanel.discoverFromGME();
@@ -74,75 +53,14 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
 	 * This method initializes this
 	 */
 	private void initialize() {
-		this.setSize(new java.awt.Dimension(372, 404));
-		this.setTitle("Parameter Configuration");
-		this.setContentPane(getMainPanel());
-	}
-
-
-	/**
-	 * This method initializes paramName
-	 * 
-	 * @return javax.swing.JTextField
-	 */
-	JTextField getParamName() {
-		if (paramName == null) {
-			paramName = new JTextField();
-		}
-		return paramName;
-	}
-
-
-	/**
-	 * This method initializes isArrayCheckBox
-	 * 
-	 * @return javax.swing.JCheckBox
-	 */
-	JCheckBox getIsArrayCheckBox() {
-		if (isArrayCheckBox == null) {
-			isArrayCheckBox = new JCheckBox();
-			isArrayCheckBox.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-				}
-			});
-		}
-		return isArrayCheckBox;
+		this.add(getMainPanel());
 	}
 
 
 	public JPanel getCustomPanel() {
 		if (customPanel == null) {
-			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints3.gridy = 1;
-			gridBagConstraints3.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints3.gridx = 1;
-			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints2.gridy = 1;
-			gridBagConstraints2.gridx = 0;
-			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints1.gridx = 1;
-			gridBagConstraints1.gridy = 0;
-			gridBagConstraints1.weightx = 1.0;
-			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
-			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints.gridy = 0;
-			gridBagConstraints.gridx = 0;
 			customPanel = new JPanel();
 			customPanel.setLayout(new GridBagLayout());
-			paramNameLabel = new JLabel();
-			paramNameLabel.setText("Parameter Name");
-			arrayLabel = new JLabel();
-			arrayLabel.setText("Is Array");
-			if (this.handleParameterName) {
-				customPanel.add(paramNameLabel, gridBagConstraints);
-				customPanel.add(getParamName(), gridBagConstraints1);
-			}
-			customPanel.add(arrayLabel, gridBagConstraints2);
-			customPanel.add(getIsArrayCheckBox(), gridBagConstraints3);
 		}
 		return customPanel;
 	}
@@ -155,10 +73,6 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
-			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-			gridBagConstraints6.gridx = 0;
-			gridBagConstraints6.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints6.gridy = 2;
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints5.gridy = 1;
@@ -178,7 +92,6 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
 			mainPanel.setLayout(new GridBagLayout());
 			mainPanel.add(getGmePanel(), gridBagConstraints4);
 			mainPanel.add(getCustomPanel(), gridBagConstraints5);
-			mainPanel.add(getButtonPanel(), gridBagConstraints6);
 		}
 		return mainPanel;
 	}
@@ -200,55 +113,7 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
 	}
 
 
-	/**
-	 * This method initializes buttonPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getButtonPanel() {
-		if (buttonPanel == null) {
-			buttonPanel = new JPanel();
-			buttonPanel.add(getDoneButton(), null);
-		}
-		return buttonPanel;
-	}
-
-
-	/**
-	 * This method initializes doneButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getDoneButton() {
-		if (doneButton == null) {
-			doneButton = new JButton(IntroduceLookAndFeel.getSelectIcon());
-			doneButton.setText("Done");
-			doneButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
-					try {
-						XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
-							.getGridService(gmePanel.getGme().getText());
-						if (gmePanel.currentNamespace != null) {
-							handle.cacheSchema(gmePanel.currentNamespace, schemaDir);
-						}
-					} catch (MobiusException e1) {
-						e1.printStackTrace();
-						JOptionPane.showMessageDialog(me,
-							"Please check the GME URL and make sure that you have the appropriate credentials!");
-					}
-					
-					performDone();
-
-					dispose();
-				}
-			});
-		}
-		return doneButton;
-	}
-
-
-	public void performDone() {
+	public void populateRow(Vector typeInfo, boolean handleParameterName) {
 		// populate the data vector from the prior screen now......
 		int index = 0;
 		
@@ -264,9 +129,9 @@ public class GMEParameterConfigurationComponent extends GridPortalComponent {
 		// set classname
 		typeInfo.set(index++, "");
 
-		typeInfo.set(index++, String.valueOf(isArrayCheckBox.isSelected()));
+		typeInfo.set(index++, "false");
 		if (handleParameterName) {
-			typeInfo.set(index++, paramName.getText());
+			typeInfo.set(index++, this.gmePanel.currentType);
 		}
 		if (this.gmePanel.currentNamespace != null) {
 			typeInfo.set(index++, "gme://" + this.gmePanel.currentNamespace.getRaw());

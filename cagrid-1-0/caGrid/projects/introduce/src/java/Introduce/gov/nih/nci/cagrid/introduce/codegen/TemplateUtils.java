@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.codegen;
 
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataType;
@@ -22,9 +23,6 @@ import java.util.Map;
  *          Exp $
  */
 public class TemplateUtils {
-
-	public static final String W3CNAMESPACE = "http://www.w3.org/2001/XMLSchema";
-
 
 	/**
 	 * Define a unique name for use as a variable for the metadata at the
@@ -142,7 +140,7 @@ public class TemplateUtils {
 							MethodTypeInputsInput inputParam = method.getInputs().getInput(inputI);
 							String qnameName = inputParam.getType();
 							String qnameNamespace = inputParam.getNamespace();
-							if (!qnameNamespace.equals(TemplateUtils.W3CNAMESPACE)) {
+							if (!qnameNamespace.equals(IntroduceConstants.W3CNAMESPACE)) {
 								String location = inputParam.getLocation();
 
 								String prefixBase = qnameName.toLowerCase().substring(0,
@@ -171,7 +169,7 @@ public class TemplateUtils {
 							String qnameNamespace = outputParam.getNamespace();
 							String location = outputParam.getLocation();
 
-							if (!qnameNamespace.equals(TemplateUtils.W3CNAMESPACE)) {
+							if (!qnameNamespace.equals(IntroduceConstants.W3CNAMESPACE)) {
 
 								String prefixBase = qnameName.toLowerCase().substring(0,
 									Math.min(qnameName.length(), 4));

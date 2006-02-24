@@ -10,7 +10,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
-import gov.nih.nci.cagrid.introduce.portal.modification.cadsr.CADSRParameterConfigurationComponent;
+import gov.nih.nci.cagrid.introduce.portal.gme.GMEViewer;
 import gov.nih.nci.cagrid.introduce.portal.modification.gme.GMEParameterConfigurationComponent;
 import gov.nih.nci.cagrid.introduce.portal.security.MethodSecurityPanel;
 
@@ -24,6 +24,7 @@ import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -32,6 +33,11 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
+import org.projectmobius.common.GridServiceResolver;
+import org.projectmobius.common.MobiusException;
+import org.projectmobius.common.Namespace;
+import org.projectmobius.gme.XMLDataModelService;
+import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
 
@@ -109,11 +115,16 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JPanel exceptionInputButtonPanel = null;
 
 	private JPanel securityContainerPanel = null;
-	
+
 	private ServiceSecurity serviceSecurity;
 
+	private GMEParameterConfigurationComponent discoveryPanel = null;
 
-	public MethodViewer(MethodType method, ServiceSecurity serviceSecurity, File schemaDir, MethodsTable table, int selectedRow) {
+	private JButton outputTypeLoadFromDiscoveryButton = null;
+
+
+	public MethodViewer(MethodType method, ServiceSecurity serviceSecurity, File schemaDir, MethodsTable table,
+		int selectedRow) {
 		this.serviceSecurity = serviceSecurity;
 		this.method = method;
 		this.schemaDir = schemaDir;
@@ -125,7 +136,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 
 	private void initialize() {
-		this.setSize(687, 622);
+		this.setSize(510, 622);
 		this.setTitle("Build/Modify Operation");
 		this.setContentPane(getMainPanel());
 		this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
@@ -209,7 +220,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JTable getOutputTypeTable() {
 		if (outputTypeTable == null) {
-			outputTypeTable = new OutputTypeTable(this.method, this.schemaDir);
+			outputTypeTable = new OutputTypeTable(getDiscoveryPanel(), this.method, this.schemaDir);
 		}
 		return outputTypeTable;
 	}
@@ -264,12 +275,15 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getOutputTypePanel() {
 		if (outputTypePanel == null) {
+			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
+			gridBagConstraints16.gridx = 0;
+			gridBagConstraints16.gridy = 1;
 			GridBagConstraints gridBagContraints9 = new GridBagConstraints();
 			gridBagContraints9.gridx = 0;
 			gridBagContraints9.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagContraints9.weighty = 1.0D;
 			gridBagContraints9.weightx = 1.0D;
-			gridBagContraints9.ipady = 22;
+			gridBagContraints9.ipady = 0;
 			gridBagContraints9.gridy = 0;
 			outputTypePanel = new JPanel();
 			outputTypePanel.setLayout(new GridBagLayout());
@@ -277,6 +291,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
 			outputTypePanel.add(getOutputTypejScrollPane(), gridBagContraints9);
+			outputTypePanel.add(getOutputTypeLoadFromDiscoveryButton(), gridBagConstraints16);
 		}
 		return outputTypePanel;
 	}
@@ -310,108 +325,130 @@ public class MethodViewer extends GridPortalBaseFrame {
 			doneButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					// First process the inputs
-					try{
-					method.setName(getNameField().getText());
+					try {
+						method.setName(getNameField().getText());
 
-					method.setMethodSecurity(((MethodSecurityPanel) securityContainerPanel)
-						.getMethodSecurity());
+						method.setMethodSecurity(((MethodSecurityPanel) securityContainerPanel).getMethodSecurity());
 
-					methodsTable.changeMethodName(currentRow, getNameField().getText());
+						methodsTable.changeMethodName(currentRow, getNameField().getText());
 
-					MethodTypeInputs inputs = new MethodTypeInputs();
-					MethodTypeInputsInput[] inputsA = new MethodTypeInputsInput[getInputParamTable().getRowCount()];
+						MethodTypeInputs inputs = new MethodTypeInputs();
+						MethodTypeInputsInput[] inputsA = new MethodTypeInputsInput[getInputParamTable().getRowCount()];
 
-					for (int i = 0; i < getInputParamTable().getRowCount(); i++) {
-						MethodTypeInputsInput input = new MethodTypeInputsInput();
+						for (int i = 0; i < getInputParamTable().getRowCount(); i++) {
+							MethodTypeInputsInput input = new MethodTypeInputsInput();
 
-						String packageName = ((String) getInputParamTable().getValueAt(i, 0));
-						String className = ((String) getInputParamTable().getValueAt(i, 1));
-						Boolean isArray = new Boolean((String) getInputParamTable().getValueAt(i, 2));
-						String name = ((String) getInputParamTable().getValueAt(i, 3));
-						String namespace = ((String) getInputParamTable().getValueAt(i, 4));
-						String type = ((String) getInputParamTable().getValueAt(i, 5));
-						String location = ((String) getInputParamTable().getValueAt(i, 6));
+							String packageName = ((String) getInputParamTable().getValueAt(i, 0));
+							String className = ((String) getInputParamTable().getValueAt(i, 1));
+							Boolean isArray = new Boolean((String) getInputParamTable().getValueAt(i, 2));
+							String name = ((String) getInputParamTable().getValueAt(i, 3));
+							String namespace = ((String) getInputParamTable().getValueAt(i, 4));
+							String type = ((String) getInputParamTable().getValueAt(i, 5));
+							String location = ((String) getInputParamTable().getValueAt(i, 6));
+
+							if (packageName != null && !packageName.equals("")) {
+								input.setPackageName(packageName);
+							}
+							if (className != null && !className.equals("")) {
+								input.setClassName(className);
+							}
+							if (isArray != null) {
+								input.setIsArray(isArray);
+							}
+							if (name != null && !name.equals("")) {
+								input.setName(name);
+							}
+							if (namespace != null && !namespace.equals("")) {
+								input.setNamespace(namespace);
+								//cache the needed schemas in the schema dir
+								cacheSchema(schemaDir,namespace);
+							}
+							if (type != null && !type.equals("")) {
+								input.setType(type);
+							}
+							if (location != null && !location.equals("")) {
+								input.setLocation(location);
+							}
+
+							inputsA[i] = input;
+						}
+
+						inputs.setInput(inputsA);
+						method.setInputs(inputs);
+
+						// process exceptions
+						MethodTypeExceptions exceptions = new MethodTypeExceptions();
+						MethodTypeExceptionsException[] exceptionsA = new MethodTypeExceptionsException[getExceptionsTable()
+							.getRowCount()];
+						for (int i = 0; i < getExceptionsTable().getRowCount(); i++) {
+							MethodTypeExceptionsException exception = new MethodTypeExceptionsException();
+							String name = ((String) getExceptionsTable().getValueAt(i, 0));
+							exception.setName(name);
+							exceptionsA[i] = exception;
+						}
+						exceptions.setException(exceptionsA);
+						method.setExceptions(exceptions);
+
+						// now process the output
+						MethodTypeOutput output = new MethodTypeOutput();
+
+						String packageName = ((String) getOutputTypeTable().getValueAt(0, 0));
+						String className = ((String) getOutputTypeTable().getValueAt(0, 1));
+						Boolean isArray = new Boolean(((String) getOutputTypeTable().getValueAt(0, 2)));
+						String namespace = ((String) getOutputTypeTable().getValueAt(0, 3));
+						String type = ((String) getOutputTypeTable().getValueAt(0, 4));
+						String location = ((String) getOutputTypeTable().getValueAt(0, 5));
 
 						if (packageName != null && !packageName.equals("")) {
-							input.setPackageName(packageName);
+							output.setPackageName(packageName);
 						}
 						if (className != null && !className.equals("")) {
-							input.setClassName(className);
+							output.setClassName(className);
 						}
 						if (isArray != null) {
-							input.setIsArray(isArray);
-						}
-						if (name != null && !name.equals("")) {
-							input.setName(name);
+							output.setIsArray(isArray);
 						}
 						if (namespace != null && !namespace.equals("")) {
-							input.setNamespace(namespace);
+							output.setNamespace(namespace);
+							//cache the needed schemas in the schema dir
+							cacheSchema(schemaDir,namespace);
 						}
 						if (type != null && !type.equals("")) {
-							input.setType(type);
+							output.setType(type);
 						}
 						if (location != null && !location.equals("")) {
-							input.setLocation(location);
+							output.setLocation(location);
 						}
 
-						inputsA[i] = input;
-					}
-
-					inputs.setInput(inputsA);
-					method.setInputs(inputs);
-
-					// process exceptions
-					MethodTypeExceptions exceptions = new MethodTypeExceptions();
-					MethodTypeExceptionsException[] exceptionsA = new MethodTypeExceptionsException[getExceptionsTable()
-						.getRowCount()];
-					for (int i = 0; i < getExceptionsTable().getRowCount(); i++) {
-						MethodTypeExceptionsException exception = new MethodTypeExceptionsException();
-						String name = ((String) getExceptionsTable().getValueAt(i, 0));
-						exception.setName(name);
-						exceptionsA[i] = exception;
-					}
-					exceptions.setException(exceptionsA);
-					method.setExceptions(exceptions);
-
-					// now process the output
-					MethodTypeOutput output = new MethodTypeOutput();
-
-					String packageName = ((String) getOutputTypeTable().getValueAt(0, 0));
-					String className = ((String) getOutputTypeTable().getValueAt(0, 1));
-					Boolean isArray = new Boolean(((String) getOutputTypeTable().getValueAt(0, 2)));
-					String namespace = ((String) getOutputTypeTable().getValueAt(0, 3));
-					String type = ((String) getOutputTypeTable().getValueAt(0, 4));
-					String location = ((String) getOutputTypeTable().getValueAt(0, 5));
-
-					if (packageName != null && !packageName.equals("")) {
-						output.setPackageName(packageName);
-					}
-					if (className != null && !className.equals("")) {
-						output.setClassName(className);
-					}
-					if (isArray != null) {
-						output.setIsArray(isArray);
-					}
-					if (namespace != null && !namespace.equals("")) {
-						output.setNamespace(namespace);
-					}
-					if (type != null && !type.equals("")) {
-						output.setType(type);
-					}
-					if (location != null && !location.equals("")) {
-						output.setLocation(location);
-					}
-
-					method.setOutput(output);
-					}catch(Exception ex){
+						method.setOutput(output);
+						
+					} catch (Exception ex) {
 						PortalUtils.showErrorMessage(ex);
 					}
 					dispose();
 				}
-				
+
 			});
 		}
 		return doneButton;
+	}
+
+
+	private void cacheSchema(File dir, String namespace) {
+		IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
+			IntroducePortalConf.RESOURCE);
+		GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
+		try {
+			XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance().getGridService(
+				conf.getGME());
+			handle.cacheSchema(new Namespace(namespace), dir);
+		} catch (MobiusException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			JOptionPane.showMessageDialog(MethodViewer.this,
+				"Please check the GME URL and make sure that you have the appropriate credentials!");
+		}
+
 	}
 
 
@@ -503,6 +540,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 					}
 					((DefaultTableModel) getInputParamTable().getModel()).removeRow(getInputParamTable()
 						.getSelectedRow());
+
 				}
 			});
 		}
@@ -521,10 +559,10 @@ public class MethodViewer extends GridPortalBaseFrame {
 			IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
 				IntroducePortalConf.RESOURCE);
 			if (conf.getDiscoveryType().equals(IntroducePortalConf.GME_DISCOVERY)) {
-				discoveryButton.setText("Edit With GME");
+				discoveryButton.setText("Populate from GME");
 				discoveryButton.setIcon(IntroduceLookAndFeel.getMobiusIcon());
 			} else if (conf.getDiscoveryType().equals(IntroducePortalConf.CADSR_DISCOVERY)) {
-				discoveryButton.setText("Edit With caDSR");
+				discoveryButton.setText("Populate from caDSR");
 				discoveryButton.setIcon(IntroduceLookAndFeel.getCADSRIcon());
 			}
 
@@ -548,14 +586,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 		Vector v = (Vector) getInputParamTable().getValueAt(getInputParamTable().getSelectedRow(), 8);
 		IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
 			IntroducePortalConf.RESOURCE);
-		if (conf.getDiscoveryType().equals(IntroducePortalConf.GME_DISCOVERY)) {
-			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-				new GMEParameterConfigurationComponent(v, schemaDir, true));
-		} else if (conf.getDiscoveryType().equals(IntroducePortalConf.CADSR_DISCOVERY)) {
-			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-				new CADSRParameterConfigurationComponent(v, schemaDir, true));
-		}
-
+		getDiscoveryPanel().populateRow(v, true);
+		paint(getGraphics());
 	}
 
 
@@ -729,7 +761,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JTabbedPane getTabbedPanel() {
 		if (tabbedPanel == null) {
 			tabbedPanel = new JTabbedPane();
-			tabbedPanel.addTab("Operation Signature", null, getMethodPanel(), null);
+			tabbedPanel.addTab("Method Signature", null, getMethodPanel(), null);
 			tabbedPanel.addTab("Security", null, getSecurityContainerPanel(), null);
 		}
 		return tabbedPanel;
@@ -743,6 +775,11 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getMethodPanel() {
 		if (methodPanel == null) {
+			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
+			gridBagConstraints15.gridx = 0;
+			gridBagConstraints15.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints15.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints15.gridy = 0;
 			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
 			gridBagConstraints13.gridx = 0;
 			gridBagConstraints13.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -750,20 +787,20 @@ public class MethodViewer extends GridPortalBaseFrame {
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.fill = GridBagConstraints.BOTH;
 			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.gridy = 0;
+			gridBagConstraints1.gridy = 1;
 			gridBagConstraints1.weightx = 0.0D;
 			gridBagConstraints1.weighty = 0.0D;
 			gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 			gridBagConstraints6.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints6.gridy = 1;
+			gridBagConstraints6.gridy = 2;
 			gridBagConstraints6.weightx = 1.0D;
 			gridBagConstraints6.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints6.weighty = 1.0D;
 			gridBagConstraints6.gridx = 0;
 			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
 			gridBagConstraints7.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints7.gridy = 2;
+			gridBagConstraints7.gridy = 3;
 			gridBagConstraints7.weightx = 0.0D;
 			gridBagConstraints7.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints7.weighty = 0.0D;
@@ -775,6 +812,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			methodPanel.add(getOutputTypePanel(), gridBagConstraints7);
 			methodPanel.add(getNamePanel(), gridBagConstraints1);
 			methodPanel.add(getExceptionsPanel(), gridBagConstraints13);
+			methodPanel.add(getDiscoveryPanel(), gridBagConstraints15);
 		}
 		return methodPanel;
 	}
@@ -813,12 +851,56 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getSecurityContainerPanel() {
 		if (securityContainerPanel == null) {
-			securityContainerPanel = new MethodSecurityPanel(this.serviceSecurity,this.method.getMethodSecurity());
+			securityContainerPanel = new MethodSecurityPanel(this.serviceSecurity, this.method.getMethodSecurity());
 			securityContainerPanel.setBorder(BorderFactory.createTitledBorder(null,
 				"Method Level Security Configuration", TitledBorder.DEFAULT_JUSTIFICATION,
 				TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
 		}
 		return securityContainerPanel;
 	}
-} // @jve:decl-index=0:visual-constraint="10,10"
+
+
+	/**
+	 * This method initializes discoveryPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private GMEParameterConfigurationComponent getDiscoveryPanel() {
+		if (discoveryPanel == null) {
+			discoveryPanel = new GMEParameterConfigurationComponent();
+		}
+		return discoveryPanel;
+	}
+
+
+	/**
+	 * This method initializes outputTypeLoadFromDiscoveryButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getOutputTypeLoadFromDiscoveryButton() {
+		if (outputTypeLoadFromDiscoveryButton == null) {
+			outputTypeLoadFromDiscoveryButton = new JButton();
+			IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
+				IntroducePortalConf.RESOURCE);
+			if (conf.getDiscoveryType().equals(IntroducePortalConf.GME_DISCOVERY)) {
+				outputTypeLoadFromDiscoveryButton.setText("Populate from GME");
+				outputTypeLoadFromDiscoveryButton.setIcon(IntroduceLookAndFeel.getMobiusIcon());
+			} else if (conf.getDiscoveryType().equals(IntroducePortalConf.CADSR_DISCOVERY)) {
+				outputTypeLoadFromDiscoveryButton.setText("Populate from caDSR");
+				outputTypeLoadFromDiscoveryButton.setIcon(IntroduceLookAndFeel.getCADSRIcon());
+			}
+			outputTypeLoadFromDiscoveryButton.setText("Populate From GME");
+			outputTypeLoadFromDiscoveryButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					Vector v = (Vector) getOutputTypeTable().getValueAt(0, 6);
+					getDiscoveryPanel().populateRow(v, false);
+					paint(getGraphics());
+				}
+			});
+
+		}
+		return outputTypeLoadFromDiscoveryButton;
+	}
+} // @jve:decl-index=0:visual-constraint="4,12"
 
