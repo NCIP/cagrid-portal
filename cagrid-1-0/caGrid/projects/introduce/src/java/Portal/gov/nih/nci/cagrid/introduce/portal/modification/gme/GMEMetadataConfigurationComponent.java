@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.gme;
 
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -20,6 +21,7 @@ import org.projectmobius.common.MobiusException;
 import org.projectmobius.gme.XMLDataModelService;
 import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
 import org.projectmobius.portal.GridPortalComponent;
+import org.projectmobius.portal.PortalResourceManager;
 
 
 /**
@@ -231,8 +233,10 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
 					try {
+						IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
+							IntroducePortalConf.RESOURCE);
 						XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
-							.getGridService(gmePanel.getGme().getText());
+							.getGridService(conf.getGME());
 						if (gmePanel.currentNamespace != null) {
 							handle.cacheSchema(gmePanel.currentNamespace, schemaDir);
 						}

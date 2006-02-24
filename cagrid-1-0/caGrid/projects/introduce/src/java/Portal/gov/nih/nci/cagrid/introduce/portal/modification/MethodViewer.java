@@ -10,7 +10,6 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
-import gov.nih.nci.cagrid.introduce.portal.gme.GMEViewer;
 import gov.nih.nci.cagrid.introduce.portal.modification.gme.GMEParameterConfigurationComponent;
 import gov.nih.nci.cagrid.introduce.portal.security.MethodSecurityPanel;
 
@@ -584,8 +583,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 			return;
 		}
 		Vector v = (Vector) getInputParamTable().getValueAt(getInputParamTable().getSelectedRow(), 8);
-		IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
-			IntroducePortalConf.RESOURCE);
 		getDiscoveryPanel().populateRow(v, true);
 		paint(getGraphics());
 	}

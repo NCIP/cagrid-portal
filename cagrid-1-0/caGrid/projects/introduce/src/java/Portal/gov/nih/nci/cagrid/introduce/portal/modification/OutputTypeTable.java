@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.modification.cadsr.CADSRParameterConfigurationComponent;
+import gov.nih.nci.cagrid.introduce.portal.modification.gme.GMEConfigurationPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.gme.GMEParameterConfigurationComponent;
 
 import java.io.File;
@@ -20,7 +21,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: OutputTypeTable.java,v 1.14 2006-02-16 19:47:24 hastings Exp $
+ * @version $Id: OutputTypeTable.java,v 1.15 2006-02-24 20:19:05 hastings Exp $
  */
 public class OutputTypeTable extends JComponentTable {
 
@@ -35,18 +36,21 @@ public class OutputTypeTable extends JComponentTable {
 	public static String TYPE = "Type";
 
 	public static String LOCATION = "Location";
-
-	public static String DISCOVERY = "Discover Type";
+	
+	public static String DATA1 = "DATA1";
 
 	private MethodType method;
 
 	private File schemaDir;
+	
+	private GMEParameterConfigurationComponent gmePanel;
 
 
-	public OutputTypeTable(MethodType method, File schemaDir) {
+	public OutputTypeTable(GMEParameterConfigurationComponent gmePanel, MethodType method, File schemaDir) {
 		super(createTableModel());
 		this.method = method;
 		this.schemaDir = schemaDir;
+		this.gmePanel = gmePanel;
 		initialize();
 	}
 
@@ -62,6 +66,9 @@ public class OutputTypeTable extends JComponentTable {
 
 
 	private void initialize() {
+		this.getColumn(DATA1).setMaxWidth(0);
+		this.getColumn(DATA1).setMinWidth(0);
+		this.getColumn(DATA1).setPreferredWidth(0);
 		MethodTypeOutput output = method.getOutput();
 		final Vector v = new Vector();
 		v.add(output.getPackageName());
@@ -74,29 +81,7 @@ public class OutputTypeTable extends JComponentTable {
 		v.add(output.getNamespace());
 		v.add(output.getType());
 		v.add(output.getLocation());
-		JButton discoveryButton = null;
-		IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
-			IntroducePortalConf.RESOURCE);
-		if (conf.getDiscoveryType().equals(IntroducePortalConf.GME_DISCOVERY)) {
-			discoveryButton = new JButton("GME");
-		} else if (conf.getDiscoveryType().equals(IntroducePortalConf.CADSR_DISCOVERY)) {
-			discoveryButton = new JButton("CADSR");
-		}
-		// gme.setIcon(AnalyticalLookAndFeel.getMobiusIcon());
-		discoveryButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-				IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
-					IntroducePortalConf.RESOURCE);
-				if (conf.getDiscoveryType().equals(IntroducePortalConf.GME_DISCOVERY)) {
-					PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-						new GMEParameterConfigurationComponent(v, schemaDir, false));
-				} else if (conf.getDiscoveryType().equals(IntroducePortalConf.CADSR_DISCOVERY)) {
-					PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-						new CADSRParameterConfigurationComponent(v, schemaDir, false));
-				}
-			}
-		});
-		v.add(discoveryButton);
+		v.add(v);
 		((DefaultTableModel) this.getModel()).addRow(v);
 	}
 
@@ -109,7 +94,7 @@ public class OutputTypeTable extends JComponentTable {
 		model.addColumn(NAMESPACE);
 		model.addColumn(TYPE);
 		model.addColumn(LOCATION);
-		model.addColumn(DISCOVERY);
+		model.addColumn("DATA1");
 
 		return model;
 	}

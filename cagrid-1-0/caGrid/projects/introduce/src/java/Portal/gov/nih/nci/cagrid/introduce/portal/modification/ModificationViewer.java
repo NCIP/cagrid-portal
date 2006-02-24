@@ -48,7 +48,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.62 2006-02-24 15:57:22 langella Exp $
+ * @version $Id: ModificationViewer.java,v 1.63 2006-02-24 20:19:05 hastings Exp $
  */
 public class ModificationViewer extends GridPortalComponent {
 
@@ -551,108 +551,117 @@ public class ModificationViewer extends GridPortalComponent {
 						} catch (Exception ex) {
 							PortalUtils.showErrorMessage(ex);
 						}
-					}
-					BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance().getGridPortal(),
-						"Save") {
 
-						public void process() {
-							try {
+						BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance()
+							.getGridPortal(), "Save") {
 
-								if (confirmed == JOptionPane.OK_OPTION) {
-									setProgressText("editing service metadata object");
-									// walk the methods table and create the
-									// new MethodsType array
-									MethodType[] methodsArray = new MethodType[methodsTable.getRowCount()];
-									for (int i = 0; i < methodsArray.length; i++) {
-										MethodType methodInstance = (MethodType) methodsTable.getValueAt(i, 1);
-										methodsArray[i] = methodInstance;
+							public void process() {
+								try {
+
+									if (confirmed == JOptionPane.OK_OPTION) {
+										setProgressText("editing service metadata object");
+										// walk the methods table and create the
+										// new MethodsType array
+										MethodType[] methodsArray = new MethodType[methodsTable.getRowCount()];
+										for (int i = 0; i < methodsArray.length; i++) {
+											MethodType methodInstance = (MethodType) methodsTable.getValueAt(i, 1);
+											methodsArray[i] = methodInstance;
+										}
+										MethodsType methods = new MethodsType();
+										methods.setMethod(methodsArray);
+										introService.setMethods(methods);
+
+										// walk the metadata table and create
+										// the
+										// new ServiceMetadataType array
+										MetadataType[] metadataArray = new MetadataType[metadataTable.getRowCount()];
+										for (int i = 0; i < metadataArray.length; i++) {
+											String packageName = (String) metadataTable.getValueAt(i, 0);
+											String className = (String) metadataTable.getValueAt(i, 1);
+											String namespace = (String) metadataTable.getValueAt(i, 2);
+											String type = (String) metadataTable.getValueAt(i, 3);
+											String location = (String) metadataTable.getValueAt(i, 4);
+											String populateFromFile = (String) metadataTable.getValueAt(i, 5);
+											String register = (String) metadataTable.getValueAt(i, 6);
+											String qnameNS = (String) metadataTable.getValueAt(i, 7);
+											String qnameName = (String) metadataTable.getValueAt(i, 8);
+
+											MetadataType metadata = new MetadataType();
+											if (packageName != null && !packageName.equals("")) {
+												metadata.setPackageName(packageName);
+											}
+											if (className != null && !className.equals("")) {
+												metadata.setClassName(className);
+											}
+											if (namespace != null && !namespace.equals("")) {
+												metadata.setNamespace(namespace);
+											}
+											if (type != null && !type.equals("")) {
+												metadata.setType(type);
+											}
+											if (location != null && !location.equals("")) {
+												metadata.setLocation(location);
+											}
+											if (populateFromFile != null && !populateFromFile.equals("")) {
+												metadata.setPopulateFromFile(Boolean.valueOf(populateFromFile)
+													.booleanValue());
+											}
+											if (register != null && !register.equals("")) {
+												metadata.setRegister(Boolean.valueOf(register).booleanValue());
+											}
+											if (qnameNS != null && !qnameNS.equals("") && qnameName != null
+												&& !qnameName.equals("")) {
+												QName qn = new QName(qnameNS, qnameName);
+												metadata.setQName(qn);
+											}
+											metadataArray[i] = metadata;
+
+										}
+
+										MetadataListType serviceMetadataList = new MetadataListType();
+										serviceMetadataList.setMetadata(metadataArray);
+										introService.setMetadataList(serviceMetadataList);
+										introService.setServiceSecurity(securityPanel.getServiceSecurity());
+										// check the methods to make sure they
+										// are
+										// valid.......
+
+										// save the metadata and methods and
+										// then
+										// call the resync and build
+										setProgressText("writting service document");
+										Utils.serializeDocument(methodsDirectory.getAbsolutePath() + File.separator
+											+ "introduce.xml", introService, new QName(
+											"gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
+										setProgressText("sychronizing skeleton");
+										// call the sync tools
+										SyncTools sync = new SyncTools(methodsDirectory);
+										sync.sync();
+										setProgressText("rebuilding skeleton");
+										String cmd = CommonTools.getAntCommand("clean all", methodsDirectory
+											.getAbsolutePath());
+										Process p = CommonTools.createAndOutputProcess(cmd);
+										p.waitFor();
+										dirty = false;
+										setProgressText("loading service properties");
+										loadServiceProps();
+										lastSaved
+											.setText(serviceProperties.getProperty("introduce.skeleton.timestamp"));
+										this.setProgressText("");
+									} else {
+										dispose();
 									}
-									MethodsType methods = new MethodsType();
-									methods.setMethod(methodsArray);
-									introService.setMethods(methods);
-
-									// walk the metadata table and create the
-									// new ServiceMetadataType array
-									MetadataType[] metadataArray = new MetadataType[metadataTable.getRowCount()];
-									for (int i = 0; i < metadataArray.length; i++) {
-										String packageName = (String) metadataTable.getValueAt(i, 0);
-										String className = (String) metadataTable.getValueAt(i, 1);
-										String namespace = (String) metadataTable.getValueAt(i, 2);
-										String type = (String) metadataTable.getValueAt(i, 3);
-										String location = (String) metadataTable.getValueAt(i, 4);
-										String populateFromFile = (String) metadataTable.getValueAt(i, 5);
-										String register = (String) metadataTable.getValueAt(i, 6);
-										String qnameNS = (String) metadataTable.getValueAt(i, 7);
-										String qnameName = (String) metadataTable.getValueAt(i, 8);
-
-										MetadataType metadata = new MetadataType();
-										if (packageName != null && !packageName.equals("")) {
-											metadata.setPackageName(packageName);
-										}
-										if (className != null && !className.equals("")) {
-											metadata.setClassName(className);
-										}
-										if (namespace != null && !namespace.equals("")) {
-											metadata.setNamespace(namespace);
-										}
-										if (type != null && !type.equals("")) {
-											metadata.setType(type);
-										}
-										if (location != null && !location.equals("")) {
-											metadata.setLocation(location);
-										}
-										if (populateFromFile != null && !populateFromFile.equals("")) {
-											metadata.setPopulateFromFile(Boolean.valueOf(populateFromFile)
-												.booleanValue());
-										}
-										if (register != null && !register.equals("")) {
-											metadata.setRegister(Boolean.valueOf(register).booleanValue());
-										}
-										if (qnameNS != null && !qnameNS.equals("") && qnameName != null
-											&& !qnameName.equals("")) {
-											QName qn = new QName(qnameNS, qnameName);
-											metadata.setQName(qn);
-										}
-										metadataArray[i] = metadata;
-
-									}
-
-									MetadataListType serviceMetadataList = new MetadataListType();
-									serviceMetadataList.setMetadata(metadataArray);
-									introService.setMetadataList(serviceMetadataList);
-									introService.setServiceSecurity(securityPanel.getServiceSecurity());
-									// check the methods to make sure they are
-									// valid.......
-
-									// save the metadata and methods and then
-									// call the resync and build
-									setProgressText("writting service document");
-									Utils.serializeDocument(methodsDirectory.getAbsolutePath() + File.separator
-										+ "introduce.xml", introService, new QName(
-										"gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
-									setProgressText("sychronizing skeleton");
-									// call the sync tools
-									SyncTools sync = new SyncTools(methodsDirectory);
-									sync.sync();
-									setProgressText("rebuilding skeleton");
-									String cmd = CommonTools.getAntCommand("clean all", methodsDirectory
-										.getAbsolutePath());
-									Process p = CommonTools.createAndOutputProcess(cmd);
-									p.waitFor();
-									dirty = false;
-									setProgressText("loading service properties");
-									loadServiceProps();
-									lastSaved.setText(serviceProperties.getProperty("introduce.skeleton.timestamp"));
-									this.setProgressText("");
+								} catch (Exception e1) {
+									e1.printStackTrace();
+									dispose();
 								}
-							} catch (Exception e1) {
-								e1.printStackTrace();
 							}
-						}
 
-					};
-					Thread th = new Thread(r);
-					th.start();
+						};
+
+						Thread th = new Thread(r);
+						th.start();
+					}
 				}
 			});
 		}

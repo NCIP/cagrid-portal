@@ -1,4 +1,4 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.schema.service" class="ServiceWSDLTemplate"  imports="gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.* gov.nih.nci.cagrid.introduce.beans.method.*" %>
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.schema.service" class="ServiceWSDLTemplate"  imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.* gov.nih.nci.cagrid.introduce.beans.method.*" %>
 <% gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
 	MetadataListType metadataList = info.getMetadata();
 	MethodsType methods = info.getMethods();
@@ -41,7 +41,7 @@
 	      		Iterator iterator = prefixmap.keySet().iterator();
 				while(iterator.hasNext()){
 					String namespace = (String)iterator.next();
-					if(!namespace.equals(TemplateUtils.W3CNAMESPACE)){
+					if(!namespace.equals(IntroduceConstants.W3CNAMESPACE)){
 					SchemaInformation schemaInformation=(SchemaInformation)prefixmap.get(namespace);%>
 			xmlns:<%=schemaInformation.getPrefix()%>="<%=schemaInformation.getNamespace()%>" 
 			<%  }}
@@ -53,7 +53,7 @@
   		iterator = prefixmap.keySet().iterator();
 		while(iterator.hasNext()){
 			String namespace = (String)iterator.next();
-			if(!namespace.equals(TemplateUtils.W3CNAMESPACE)){
+			if(!namespace.equals(IntroduceConstants.W3CNAMESPACE)){
 			SchemaInformation schemaInformation=(SchemaInformation)prefixmap.get(namespace);%>
 			<import namespace="<%=schemaInformation.getNamespace()%>" schemaLocation="<%=schemaInformation.getLocation()%>"/>
 			   <%
