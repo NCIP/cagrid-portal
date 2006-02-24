@@ -3,12 +3,11 @@ package gov.nih.nci.cagrid.introduce.portal.security;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
 import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
+import gov.nih.nci.cagrid.introduce.beans.security.X509Credential;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.security.PrivateKey;
-import java.security.cert.X509Certificate;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -17,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.projectmobius.portal.GridPortalComponent;
+
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
@@ -41,12 +41,14 @@ public class LoadCredentialsFromFileSystemWindow extends GridPortalComponent {
 	private JButton setCredentialsButton = null;
 	private JButton cancelButton = null;
 	private ServiceSecurityPanel serviceSecurity;
+
+
 	/**
 	 * This is the default constructor
 	 */
 	public LoadCredentialsFromFileSystemWindow(ServiceSecurityPanel ssp) {
 		super();
-		this.serviceSecurity=ssp;
+		this.serviceSecurity = ssp;
 		initialize();
 	}
 
@@ -73,7 +75,7 @@ public class LoadCredentialsFromFileSystemWindow extends GridPortalComponent {
 		if (jContentPane == null) {
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			gridBagConstraints11.gridx = 0;
-			gridBagConstraints11.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints11.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints11.gridy = 1;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridheight = 1;
@@ -94,28 +96,28 @@ public class LoadCredentialsFromFileSystemWindow extends GridPortalComponent {
 
 
 	/**
-	 * This method initializes mainPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes mainPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.gridx = 2;
 			gridBagConstraints5.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints5.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints5.gridy = 1;
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			gridBagConstraints4.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints4.gridy = 1;
 			gridBagConstraints4.weightx = 1.0;
 			gridBagConstraints4.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints4.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints4.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints4.gridx = 1;
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.gridx = 0;
 			gridBagConstraints3.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints3.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints3.gridy = 1;
 			jLabel1 = new JLabel();
 			jLabel1.setText("Private Key");
@@ -124,12 +126,12 @@ public class LoadCredentialsFromFileSystemWindow extends GridPortalComponent {
 			gridBagConstraints2.gridy = 0;
 			gridBagConstraints2.weightx = 1.0;
 			gridBagConstraints2.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints2.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints2.gridx = 1;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.gridx = 0;
 			gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints1.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints1.gridy = 0;
 			jLabel = new JLabel();
 			jLabel.setText("Certificate");
@@ -147,10 +149,10 @@ public class LoadCredentialsFromFileSystemWindow extends GridPortalComponent {
 
 
 	/**
-	 * This method initializes certificate	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
+	 * This method initializes certificate
+	 * 
+	 * @return javax.swing.JTextField
+	 */
 	private JTextField getCertificate() {
 		if (certificate == null) {
 			certificate = new JTextField();
@@ -161,47 +163,49 @@ public class LoadCredentialsFromFileSystemWindow extends GridPortalComponent {
 
 
 	/**
-	 * This method initializes browseCertButton	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */    
+	 * This method initializes browseCertButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
 	private JButton getBrowseCertButton() {
 		if (browseCertButton == null) {
 			browseCertButton = new JButton();
 			browseCertButton.setText("Browse");
-			browseCertButton.addActionListener(new java.awt.event.ActionListener() { 
-				public void actionPerformed(java.awt.event.ActionEvent e) {    
+			browseCertButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
 					browseCertificate();
 				}
 			});
 		}
 		return browseCertButton;
 	}
-	
-	private void browseCertificate(){
+
+
+	private void browseCertificate() {
 		JFileChooser fc = new JFileChooser();
 		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fc.setMultiSelectionEnabled(false);
-		if(fc.showOpenDialog(this)==JFileChooser.APPROVE_OPTION){			
+		if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 			this.certificate.setText(fc.getSelectedFile().getAbsolutePath());
 		}
 	}
-	
-	private void browsePrivateKey(){
+
+
+	private void browsePrivateKey() {
 		JFileChooser fc = new JFileChooser();
 		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fc.setMultiSelectionEnabled(false);
-		if(fc.showOpenDialog(this)==JFileChooser.APPROVE_OPTION){			
+		if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 			this.privateKey.setText(fc.getSelectedFile().getAbsolutePath());
 		}
 	}
 
 
 	/**
-	 * This method initializes privateKey	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
+	 * This method initializes privateKey
+	 * 
+	 * @return javax.swing.JTextField
+	 */
 	private JTextField getPrivateKey() {
 		if (privateKey == null) {
 			privateKey = new JTextField();
@@ -212,16 +216,16 @@ public class LoadCredentialsFromFileSystemWindow extends GridPortalComponent {
 
 
 	/**
-	 * This method initializes privateKeyButton	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */    
+	 * This method initializes privateKeyButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
 	private JButton getPrivateKeyButton() {
 		if (privateKeyButton == null) {
 			privateKeyButton = new JButton();
 			privateKeyButton.setText("Browse");
-			privateKeyButton.addActionListener(new java.awt.event.ActionListener() { 
-				public void actionPerformed(java.awt.event.ActionEvent e) {    
+			privateKeyButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
 					browsePrivateKey();
 				}
 			});
@@ -231,10 +235,10 @@ public class LoadCredentialsFromFileSystemWindow extends GridPortalComponent {
 
 
 	/**
-	 * This method initializes buttonPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes buttonPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
@@ -246,16 +250,16 @@ public class LoadCredentialsFromFileSystemWindow extends GridPortalComponent {
 
 
 	/**
-	 * This method initializes setCredentialsButton	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */    
+	 * This method initializes setCredentialsButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
 	private JButton getSetCredentialsButton() {
 		if (setCredentialsButton == null) {
 			setCredentialsButton = new JButton();
 			setCredentialsButton.setText("Set Credentials");
-			setCredentialsButton.addActionListener(new java.awt.event.ActionListener() { 
-				public void actionPerformed(java.awt.event.ActionEvent e) {    
+			setCredentialsButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
 					setCredentials();
 				}
 			});
@@ -263,47 +267,55 @@ public class LoadCredentialsFromFileSystemWindow extends GridPortalComponent {
 		}
 		return setCredentialsButton;
 	}
-	
-	private void setCredentials(){
+
+
+	private void setCredentials() {
 		String certStr = this.certificate.getText().trim();
-		if(certStr.length()==0){
+		if (certStr.length() == 0) {
 			PortalUtils.showErrorMessage("You must specify a certificate!!!");
 		}
-		X509Certificate cert = null;
-		try{
-			cert = CertUtil.loadCertificate(certStr);
-		}catch (Exception e) {
+		
+		try {
+			CertUtil.loadCertificate(certStr);
+		} catch (Exception e) {
 			PortalUtils.showErrorMessage("Invalid certificate specified!!!");
 		}
-		
+
 		String keyStr = this.privateKey.getText().trim();
-		if(keyStr.length()==0){
+		if (keyStr.length() == 0) {
 			PortalUtils.showErrorMessage("You must specify a private key!!!");
 		}
-	
-		PrivateKey key =null;
-		try{
-			key = KeyUtil.loadPrivateKey(keyStr,null);
-		}catch (Exception e) {
-			PortalUtils.showErrorMessage("Invalid private key specified: "+e.getMessage());
+
+		
+		try {
+			 KeyUtil.loadPrivateKey(keyStr, null);
+		} catch (Exception e) {
+			PortalUtils.showErrorMessage("Invalid private key specified: " + e.getMessage());
 		}
-		this.serviceSecurity.setCredentials(certStr,keyStr);
+		X509Credential cred = new X509Credential();
+		cred.setCertificateLocation(certStr);
+		cred.setPrivateKeyLocation(keyStr);
+		try {
+			this.serviceSecurity.setCredentials(cred);
+		} catch (Exception e) {
+			PortalUtils.showErrorMessage(e);
+		}
 		dispose();
 	}
 
 
 	/**
-	 * This method initializes cancelButton	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */    
+	 * This method initializes cancelButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
 	private JButton getCancelButton() {
 		if (cancelButton == null) {
 			cancelButton = new JButton();
 			cancelButton.setText("Cancel");
 			cancelButton.setIcon(IntroduceLookAndFeel.getCloseIcon());
-			cancelButton.addActionListener(new java.awt.event.ActionListener() { 
-				public void actionPerformed(java.awt.event.ActionEvent e) {    
+			cancelButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();
 				}
 			});

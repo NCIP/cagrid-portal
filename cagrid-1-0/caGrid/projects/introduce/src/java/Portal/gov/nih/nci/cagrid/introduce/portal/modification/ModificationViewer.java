@@ -48,7 +48,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.61 2006-02-23 20:04:12 oster Exp $
+ * @version $Id: ModificationViewer.java,v 1.62 2006-02-24 15:57:22 langella Exp $
  */
 public class ModificationViewer extends GridPortalComponent {
 
@@ -1059,7 +1059,11 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private ServiceSecurityPanel getSecurityPanel() {
 		if (securityPanel == null) {
+			try{
 			securityPanel = new ServiceSecurityPanel(introService.getServiceSecurity());
+			}catch(Exception e){
+				PortalUtils.showErrorMessage(e);
+			}
 		}
 		return securityPanel;
 	}

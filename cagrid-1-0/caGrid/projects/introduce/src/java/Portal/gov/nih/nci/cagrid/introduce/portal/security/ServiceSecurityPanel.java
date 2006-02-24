@@ -1,5 +1,8 @@
 package gov.nih.nci.cagrid.introduce.portal.security;
 
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
+import gov.nih.nci.cagrid.dorian.ifs.portal.CertificatePanel;
 import gov.nih.nci.cagrid.introduce.beans.security.AnonymousCommunication;
 import gov.nih.nci.cagrid.introduce.beans.security.ClientAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.ClientCommunication;
@@ -17,6 +20,7 @@ import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.X509Credential;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -82,6 +86,10 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private final static String FILE_SYSTEM_PROXY = "Proxy from file system";
 	private final static String FILE_SYSTEM_CERT_KEY = "Certificate/Private Key from file system";
 
+	private final static String PROXY_CRED_PANEL = "Proxy Cred Panel";
+	private final static String PKI_CRED_PANEL = "PKI Cred Panel";
+	private final static String N0_CRED_PANEL = "No Cred Panel";
+
 	private JPanel communicationPanel = null;
 	private JPanel clientPanel = null;
 	private JLabel jLabel9 = null;
@@ -98,6 +106,10 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private String certificateLocation;
 	private String privateKeyLocation;
 	private String proxyLocation;
+	private JPanel credentialsPanel = null;
+	private CardLayout credentialPanelLayout;
+	private JPanel nonePanel = null;
+	private CertificatePanel certificatePanel = null;
 
 
 	public ServiceSecurityPanel() {
@@ -106,7 +118,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	}
 
 
-	public ServiceSecurityPanel(ServiceSecurity sec) {
+	public ServiceSecurityPanel(ServiceSecurity sec) throws Exception {
 		super();
 		initialize();
 		setServiceSecurity(sec);
@@ -312,7 +324,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	}
 
 
-	public void setServiceSecurity(ServiceSecurity ss) {
+	public void setServiceSecurity(ServiceSecurity ss) throws Exception {
 		if (ss != null) {
 			if (ss.getMethodSecuritySetting().equals(MethodSecurityType.None)) {
 				noneButton.setSelected(true);
@@ -372,6 +384,11 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 						identityAuthorization.setIdentityAuthorization(cli.getIdentityAuthorization());
 					}
 				}
+				ServiceCredential scred = ss.getServiceCredentials();
+				if (scred != null) {
+					this.setCredentials(scred.getX509Credential());
+					this.setProxy(scred.getProxyCredential());
+				}
 			}
 		}
 
@@ -418,9 +435,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 				}
 			}
 
-			if ((secureConversationButton.isSelected()) || (secureMessageButton.isSelected())) {
-				credentialLoadMethod.setEnabled(true);
-			}
+			this.syncServiceCredentials();
 
 			if (isSecure()) {
 				clientAuth.setEnabled(true);
@@ -460,6 +475,24 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		hostAuthorization.disablePanel();
 		identityAuthorization.disablePanel();
 		credentialLoadMethod.setEnabled(false);
+		credentialPanelLayout.show(credentialsPanel, N0_CRED_PANEL);
+	}
+
+
+	private void syncServiceCredentials() {
+		if ((secureConversationButton.isSelected()) || (secureMessageButton.isSelected())) {
+			credentialLoadMethod.setEnabled(true);
+			if ((this.certificateLocation != null) && (this.privateKeyLocation != null)) {
+				credentialPanelLayout.show(credentialsPanel, PKI_CRED_PANEL);
+			} else if (this.proxyLocation != null) {
+				credentialPanelLayout.show(credentialsPanel, PROXY_CRED_PANEL);
+			} else {
+				credentialPanelLayout.show(credentialsPanel, N0_CRED_PANEL);
+			}
+		} else {
+			credentialLoadMethod.setEnabled(false);
+			credentialPanelLayout.show(credentialsPanel, N0_CRED_PANEL);
+		}
 	}
 
 
@@ -984,8 +1017,9 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JPanel getServiceCredentials() {
 		if (serviceCredentials == null) {
 			serviceCredentials = new JPanel();
-			serviceCredentials.add(getSelectPanel(), null);
-			serviceCredentials.add(getLoadCredentialsButton(), null);
+			serviceCredentials.setLayout(new BorderLayout());
+			serviceCredentials.add(getSelectPanel(), java.awt.BorderLayout.NORTH);
+			serviceCredentials.add(getCredentialsPanel(), java.awt.BorderLayout.CENTER);
 		}
 		return serviceCredentials;
 	}
@@ -1000,6 +1034,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		if (selectPanel == null) {
 			selectPanel = new JPanel();
 			selectPanel.add(getCredentialLoadMethod(), null);
+			selectPanel.add(getLoadCredentialsButton(), null);
 		}
 		return selectPanel;
 	}
@@ -1048,17 +1083,78 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	}
 
 
-	public void setProxy(String loc) {
-		this.certificateLocation = null;
-		this.privateKeyLocation = null;
-		this.proxyLocation = loc;
+	public void setProxy(ProxyCredential proxy) throws Exception {
+		if (proxy != null) {
+			this.certificateLocation = null;
+			this.privateKeyLocation = null;
+			this.proxyLocation = proxy.getProxyLocation();
+			// TODO: FINISH
+			syncServiceCredentials();
+		}
+
 	}
 
 
-	public void setCredentials(String cert, String key) {
-		this.certificateLocation = cert;
-		this.privateKeyLocation = key;
-		this.proxyLocation = null;
+	public void setCredentials(X509Credential cred) throws Exception {
+		if (cred != null) {
+			this.certificateLocation = cred.getCertificateLocation();
+			this.privateKeyLocation = cred.getPrivateKeyLocation();
+			this.proxyLocation = null;
+			try {
+				this.certificatePanel.setCertificate(CertUtil.loadCertificate(cred.getCertificateLocation()));
+			} catch (Exception e) {
+				PortalUtils.showErrorMessage("Invalid certificate specified!!!");
+			}
+			syncServiceCredentials();
+		}
+	}
+
+
+	/**
+	 * This method initializes credentialsPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getCredentialsPanel() {
+		if (credentialsPanel == null) {
+			credentialsPanel = new JPanel();
+			this.credentialPanelLayout = new CardLayout();
+			credentialsPanel.setLayout(this.credentialPanelLayout);
+			credentialsPanel.add(getNonePanel(), N0_CRED_PANEL);
+			credentialsPanel.add(getCertificatePanel(), PKI_CRED_PANEL);
+
+		}
+		return credentialsPanel;
+	}
+
+
+	/**
+	 * This method initializes nonePanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getNonePanel() {
+		if (nonePanel == null) {
+			nonePanel = new JPanel();
+			nonePanel.setLayout(new BorderLayout());
+			nonePanel.setName(N0_CRED_PANEL);
+		}
+		return nonePanel;
+	}
+
+
+	/**
+	 * This method initializes certificatePanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private CertificatePanel getCertificatePanel() {
+		if (certificatePanel == null) {
+			certificatePanel = new CertificatePanel();
+			certificatePanel.setName(PKI_CRED_PANEL);
+
+		}
+		return certificatePanel;
 	}
 
 }
