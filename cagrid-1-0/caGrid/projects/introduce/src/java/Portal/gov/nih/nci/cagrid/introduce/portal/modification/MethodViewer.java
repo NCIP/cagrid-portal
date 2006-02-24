@@ -359,8 +359,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 							}
 							if (namespace != null && !namespace.equals("")) {
 								input.setNamespace(namespace);
-								//cache the needed schemas in the schema dir
-								cacheSchema(schemaDir,namespace);
+								// cache the needed schemas in the schema dir
+								cacheSchema(schemaDir, namespace);
 							}
 							if (type != null && !type.equals("")) {
 								input.setType(type);
@@ -409,8 +409,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 						}
 						if (namespace != null && !namespace.equals("")) {
 							output.setNamespace(namespace);
-							//cache the needed schemas in the schema dir
-							cacheSchema(schemaDir,namespace);
+							// cache the needed schemas in the schema dir
+							cacheSchema(schemaDir, namespace);
 						}
 						if (type != null && !type.equals("")) {
 							output.setType(type);
@@ -420,7 +420,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 						}
 
 						method.setOutput(output);
-						
+
 					} catch (Exception ex) {
 						PortalUtils.showErrorMessage(ex);
 					}
@@ -537,9 +537,14 @@ public class MethodViewer extends GridPortalBaseFrame {
 						PortalUtils.showErrorMessage("Please select a parameter to remove.");
 						return;
 					}
-					((DefaultTableModel) getInputParamTable().getModel()).removeRow(getInputParamTable()
-						.getSelectedRow());
-
+					int oldSelectedRow = getInputParamTable().getSelectedRow();
+					((DefaultTableModel) getInputParamTable().getModel()).removeRow(oldSelectedRow);
+					if (oldSelectedRow == 0) {
+						oldSelectedRow++;
+					}
+					if (getInputParamTable().getRowCount() > 0) {
+						getInputParamTable().setRowSelectionInterval(oldSelectedRow - 1, oldSelectedRow - 1);
+					}
 				}
 			});
 		}

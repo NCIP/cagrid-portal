@@ -48,7 +48,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.63 2006-02-24 20:19:05 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.64 2006-02-24 20:35:12 hastings Exp $
  */
 public class ModificationViewer extends GridPortalComponent {
 
@@ -688,7 +688,14 @@ public class ModificationViewer extends GridPortalComponent {
 						PortalUtils.showErrorMessage("Please select a method to remove.");
 						return;
 					}
-					getMethodsTable().removeRow(getMethodsTable().getSelectedRow());
+					int oldSelectedRow = getMethodsTable().getSelectedRow();
+					getMethodsTable().removeRow(oldSelectedRow);
+					if (oldSelectedRow == 0) {
+						oldSelectedRow++;
+					}
+					if (getMethodsTable().getRowCount() > 0) {
+						getMethodsTable().setRowSelectionInterval(oldSelectedRow - 1, oldSelectedRow - 1);
+					}
 				}
 			});
 		}
@@ -1068,9 +1075,9 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private ServiceSecurityPanel getSecurityPanel() {
 		if (securityPanel == null) {
-			try{
-			securityPanel = new ServiceSecurityPanel(introService.getServiceSecurity());
-			}catch(Exception e){
+			try {
+				securityPanel = new ServiceSecurityPanel(introService.getServiceSecurity());
+			} catch (Exception e) {
 				PortalUtils.showErrorMessage(e);
 			}
 		}
