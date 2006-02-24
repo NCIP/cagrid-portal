@@ -1,8 +1,10 @@
 package gov.nih.nci.cagrid.introduce.portal.security;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.common.security.ProxyUtil;
 import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
 import gov.nih.nci.cagrid.dorian.ifs.portal.CertificatePanel;
+import gov.nih.nci.cagrid.dorian.ifs.portal.ProxyPanel;
 import gov.nih.nci.cagrid.introduce.beans.security.AnonymousCommunication;
 import gov.nih.nci.cagrid.introduce.beans.security.ClientAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.ClientCommunication;
@@ -110,6 +112,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private CardLayout credentialPanelLayout;
 	private JPanel nonePanel = null;
 	private CertificatePanel certificatePanel = null;
+	private ProxyPanel proxyPanel = null;
 
 
 	public ServiceSecurityPanel() {
@@ -1080,6 +1083,11 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
 				new LoadCredentialsFromFileSystemWindow(this), 500, 200);
 		}
+		if (method.equals(FILE_SYSTEM_PROXY)) {
+			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+				new LoadProxyFromFileSystemWindow(this), 500, 200);
+		}
+		
 	}
 
 
@@ -1088,7 +1096,12 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			this.certificateLocation = null;
 			this.privateKeyLocation = null;
 			this.proxyLocation = proxy.getProxyLocation();
-			// TODO: FINISH
+			try {
+				this.proxyPanel.clearProxy();
+				this.proxyPanel.showProxy(ProxyUtil.loadProxy(this.proxyLocation));
+			} catch (Exception e) {
+				PortalUtils.showErrorMessage("Invalid proxy specified!!!");
+			}
 			syncServiceCredentials();
 		}
 
@@ -1122,7 +1135,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			credentialsPanel.setLayout(this.credentialPanelLayout);
 			credentialsPanel.add(getNonePanel(), N0_CRED_PANEL);
 			credentialsPanel.add(getCertificatePanel(), PKI_CRED_PANEL);
-
+			credentialsPanel.add(getProxyPanel(), PROXY_CRED_PANEL);
 		}
 		return credentialsPanel;
 	}
@@ -1152,9 +1165,24 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		if (certificatePanel == null) {
 			certificatePanel = new CertificatePanel();
 			certificatePanel.setName(PKI_CRED_PANEL);
+			certificatePanel.setAllowExport(false);
+			certificatePanel.setAllowImport(false);
 
 		}
 		return certificatePanel;
+	}
+
+
+	/**
+	 * This method initializes proxyPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */    
+	private ProxyPanel getProxyPanel() {
+		if (proxyPanel == null) {
+			proxyPanel = new ProxyPanel();
+		}
+		return proxyPanel;
 	}
 
 }
