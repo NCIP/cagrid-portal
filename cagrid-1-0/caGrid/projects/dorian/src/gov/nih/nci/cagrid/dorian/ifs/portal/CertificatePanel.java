@@ -21,7 +21,7 @@ import javax.swing.JTextField;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CertificatePanel.java,v 1.6 2006-01-18 03:10:21 langella Exp $
+ * @version $Id: CertificatePanel.java,v 1.7 2006-02-24 18:40:40 langella Exp $
  */
 public class CertificatePanel extends JPanel {
 
@@ -510,6 +510,7 @@ public class CertificatePanel extends JPanel {
 			gridBagConstraints18.weighty = 1.0;
 			gridBagConstraints18.weightx = 1.0;
 			jPanel1 = new JPanel();
+			
 			jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(
 				null, "Certificate Extensions",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
