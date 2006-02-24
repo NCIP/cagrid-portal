@@ -1,23 +1,22 @@
 package gov.nih.nci.cagrid.dorian.ifs.portal;
 
-import javax.swing.JPanel;
-import java.awt.GridBagLayout;
-import javax.swing.JLabel;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.JTextField;
-import javax.swing.JScrollPane;
-import javax.swing.BorderFactory;
-import javax.swing.border.TitledBorder;
-
-import org.globus.gsi.GlobusCredential;
-
 import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
-import java.awt.BorderLayout;
+
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.security.cert.X509Certificate;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.awt.FlowLayout;
+
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
+
+import org.globus.gsi.GlobusCredential;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
