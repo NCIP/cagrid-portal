@@ -402,7 +402,7 @@ public class SyncSource {
 		if ((comm == null) || (comm.equals(ClientCommunication.No_Security))) {
 			// do nothing
 		} else if (comm.equals(ClientCommunication.Transport_Layer_Security)) {
-			sec.append("Util.registerTransport();\n");
+			sec.append("org.globus.axis.util.Util.registerTransport();\n");
 			if (tls.getCommunicationMethod().equals(
 					CommunicationMethod.Integrity)) {
 				sec
