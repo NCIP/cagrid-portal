@@ -1,5 +1,9 @@
 To Do:
 
+if introduce.jar and the like is removed from the service and expected to be run from elsewhere, introduce will need to check that it supports the version of 
+introduce.xml that the service uses.  We need to either have a "version" attribute in the document, or use the xmlns to decide the version.
+(probably should add a version attribute as the behavior could change without the dcoument structure changing).
+
 is client-config.wsdd really needed in the root dir?  can't you just add GLOBUS_LOCATION to your classpath
 
 (DONE) Click Modifiy Service, Click Save, Click Cancel or No, Save Progress comes up.
