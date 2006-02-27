@@ -293,8 +293,8 @@ public class LoadCredentialsFromFileSystemWindow extends GridPortalComponent {
 			PortalUtils.showErrorMessage("Invalid private key specified: " + e.getMessage());
 		}
 		X509Credential cred = new X509Credential();
-		cred.setCertificateLocation(certStr);
-		cred.setPrivateKeyLocation(keyStr);
+		cred.setCertificateLocation(certStr.replace('\\','/'));
+		cred.setPrivateKeyLocation(keyStr.replace('\\','/'));
 		try {
 			this.serviceSecurity.setCredentials(cred);
 		} catch (Exception e) {
