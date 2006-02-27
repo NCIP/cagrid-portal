@@ -155,8 +155,7 @@
         </javadoc>
 	</target>
 
-	<!-- Create product distribution and move it to ${dist} -->
-	<target name="all" depends="clean-build, compile, create-jar" />
+	<!-- Create product distribution and move it to ${dist} -->	
     <target name="dist-debug" depends="clean-build, compile-debug, create-jar" />
 	<target name="create-jar">
         <jar jarfile="${jarfile}" basedir="${build}" />
@@ -204,5 +203,5 @@
 	</target>
 	
 	
-	
+	<target name="all" depends="compile, create-jar" />
 </project>

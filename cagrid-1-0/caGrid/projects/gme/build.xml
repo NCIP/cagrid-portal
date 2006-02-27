@@ -303,6 +303,6 @@
 
 
 	<!-- Default target "all" generates the GAR file -->
-	<target name="all" depends="clean,jarStubs, jar" />
+	<target name="all" depends="jarStubs, jar" />
 
 </project>

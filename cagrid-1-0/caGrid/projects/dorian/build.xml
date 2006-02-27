@@ -360,7 +360,7 @@ GSBT - Globus Service Build Tools
 
 
 	<!-- Default target "all" generates the GAR file -->
-	<target name="all" depends="clean,dist" />
+	<target name="all" depends="dist" />
 
 	<target name="deploy">
 		<ant antfile="build-deploy.xml" target="deploy" />

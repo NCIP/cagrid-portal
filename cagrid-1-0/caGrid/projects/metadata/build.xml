@@ -96,6 +96,6 @@
     </target>
 
 
-    <target name="all" depends="clean,jar" />
+    <target name="all" depends="jar" />
 
 </project>

@@ -244,7 +244,7 @@
 	<!-- =================================================================== -->
 	<!-- Builds the project from a clean start                               -->
 	<!-- =================================================================== -->
-	<target name="all" description="Cleans and build the entire application" depends="clean, generateStubs, build" />
+	<target name="all" description="Cleans and build the entire application" depends="generateStubs, build" />
 
 	
 </project>
