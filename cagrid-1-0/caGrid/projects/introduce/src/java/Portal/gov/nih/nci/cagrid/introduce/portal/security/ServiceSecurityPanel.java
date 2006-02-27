@@ -319,6 +319,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 				ServiceCredential cred = new ServiceCredential();
 				ProxyCredential proxy = new ProxyCredential();
 				proxy.setProxyLocation(this.proxyLocation);
+				cred.setProxyCredential(proxy);
 				ss.setServiceCredentials(cred);
 			}
 

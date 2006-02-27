@@ -6,11 +6,14 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.security.CommunicationMethod;
 import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurityType;
+import gov.nih.nci.cagrid.introduce.beans.security.ProxyCredential;
 import gov.nih.nci.cagrid.introduce.beans.security.RunAsMode;
 import gov.nih.nci.cagrid.introduce.beans.security.SecureConversation;
 import gov.nih.nci.cagrid.introduce.beans.security.SecureMessage;
+import gov.nih.nci.cagrid.introduce.beans.security.ServiceCredential;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
+import gov.nih.nci.cagrid.introduce.beans.security.X509Credential;
 
 import org.projectmobius.common.XMLUtilities;
 
@@ -54,6 +57,27 @@ public class SecurityDescriptor {
 	private static String writeServiceSettings(ServiceSecurity ss) throws Exception {
 		StringBuffer xml = new StringBuffer();
 		if (ss != null) {
+
+			if (ss.getServiceCredentials() != null) {
+				ServiceCredential cred = ss.getServiceCredentials();
+
+				if (cred.getX509Credential() != null) {
+					X509Credential x509 = cred.getX509Credential();
+					if ((x509.getCertificateLocation() != null) && (x509.getPrivateKeyLocation() != null)) {
+						xml.append("<credential>");
+						xml.append("<key-file value=\"" + x509.getPrivateKeyLocation() + "\"/>");
+						xml.append("<cert-file value=\"" + x509.getCertificateLocation() + "\"/>");
+						xml.append("</credential>");
+					}
+				} else if (cred.getProxyCredential() != null) {
+					ProxyCredential proxy = cred.getProxyCredential();
+					if (proxy.getProxyLocation() != null) {
+						xml.append("<proxy-file value=\"" + proxy.getProxyLocation() + "\"/>");
+					}
+				}
+
+			}
+
 			if ((ss.getMethodSecuritySetting() != null)
 				&& (ss.getMethodSecuritySetting().equals(MethodSecurityType.Custom))) {
 				xml.append("<auth-method>");
