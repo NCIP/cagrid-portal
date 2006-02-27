@@ -79,6 +79,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private IdentityAuthorizationPanel identityAuthorization = null;
 	private JPanel blankPanel = null;
 	private JComboBox clientAuth = null;
+	private boolean isInited = false;
 
 	private final static String NO_AUTHORIZATION = "No Authorization";
 	private final static String HOST_AUTHORIZATION = "Host Authorization";
@@ -113,6 +114,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JPanel nonePanel = null;
 	private CertificatePanel certificatePanel = null;
 	private ProxyPanel proxyPanel = null;
+	private boolean isSyncingRunAs = false;
 
 
 	public ServiceSecurityPanel() {
@@ -154,6 +156,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			null, IntroduceLookAndFeel.getPanelLabelColor()));
 		this.add(getTransportPanel(), gridBagConstraints17);
 		synchronize();
+		isInited = true;
 	}
 
 
@@ -393,6 +396,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 					this.setCredentials(scred.getX509Credential());
 					this.setProxy(scred.getProxyCredential());
 				}
+				synchronize();
 			}
 		}
 
@@ -427,6 +431,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 				}
 			}
 
+			synchRunAsMode();
 			if (isSecure()) {
 				runAsMode.setEnabled(true);
 			}
@@ -496,6 +501,46 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		} else {
 			credentialLoadMethod.setEnabled(false);
 			credentialPanelLayout.show(credentialsPanel, N0_CRED_PANEL);
+		}
+	}
+
+
+	private synchronized void synchRunAsMode() {
+		if (!isSyncingRunAs) {
+			isSyncingRunAs = true;
+			this.runAsMode.removeAllItems();
+			if (isSecure()) {
+				runAsMode.setEnabled(true);
+				this.runAsMode.addItem(RunAsMode.System);
+				if (hasServiceCredentials()) {
+					this.runAsMode.addItem(RunAsMode.Service);
+				}
+				if (this.getDelegationMode().isEnabled()) {
+					if ((this.getDelegationMode().getSelectedItem().equals(DelegationMode.Limited))
+						|| (this.getDelegationMode().getSelectedItem().equals(DelegationMode.Full))) {
+
+						if (!getAnonymousCommunication().isEnabled()) {
+							this.runAsMode.addItem(RunAsMode.Caller);
+						} else if (getAnonymousCommunication().getSelectedItem().equals(AnonymousCommunication.No)) {
+							this.runAsMode.addItem(RunAsMode.Caller);
+						}
+					}
+				}
+
+			}
+			isSyncingRunAs = false;
+		}
+
+	}
+
+
+	private boolean hasServiceCredentials() {
+		if ((this.certificateLocation != null) && (this.privateKeyLocation != null)) {
+			return true;
+		} else if (this.proxyLocation != null) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -702,10 +747,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JComboBox getRunAsMode() {
 		if (runAsMode == null) {
 			runAsMode = new JComboBox();
-			runAsMode.addItem(RunAsMode.System);
-			runAsMode.addItem(RunAsMode.Service);
-			runAsMode.addItem(RunAsMode.Caller);
-			runAsMode.addItem(RunAsMode.Resource);
 		}
 		return runAsMode;
 	}
@@ -719,6 +760,13 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JComboBox getDelegationMode() {
 		if (delegationMode == null) {
 			delegationMode = new JComboBox();
+			delegationMode.addActionListener(new java.awt.event.ActionListener() { 
+				public void actionPerformed(java.awt.event.ActionEvent e) {    
+					if(isInited){
+					synchronize();
+					}
+				}
+			});
 			delegationMode.addItem(DelegationMode.None);
 			delegationMode.addItem(DelegationMode.Limited);
 			delegationMode.addItem(DelegationMode.Full);
@@ -735,6 +783,13 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JComboBox getAnonymousCommunication() {
 		if (anonymousCommunication == null) {
 			anonymousCommunication = new JComboBox();
+			anonymousCommunication.addActionListener(new java.awt.event.ActionListener() { 
+				public void actionPerformed(java.awt.event.ActionEvent e) {    
+					if(isInited){
+						synchronize();
+						}
+				}
+			});
 			anonymousCommunication.addItem(AnonymousCommunication.No);
 			anonymousCommunication.addItem(AnonymousCommunication.Yes);
 		}
@@ -1088,7 +1143,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
 				new LoadProxyFromFileSystemWindow(this), 500, 200);
 		}
-		
+
 	}
 
 
@@ -1175,10 +1230,10 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
 
 	/**
-	 * This method initializes proxyPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes proxyPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private ProxyPanel getProxyPanel() {
 		if (proxyPanel == null) {
 			proxyPanel = new ProxyPanel();
