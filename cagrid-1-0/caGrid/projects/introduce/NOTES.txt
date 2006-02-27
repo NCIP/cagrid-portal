@@ -1,5 +1,7 @@
 To Do:
 
+Make a method, save, add code to client and impl, modify name of input parameter, save, build error when trying to remove method and then unable to delete directory.
+
 if introduce.jar and the like is removed from the service and expected to be run from elsewhere, introduce will need to check that it supports the version of 
 introduce.xml that the service uses.  We need to either have a "version" attribute in the document, or use the xmlns to decide the version.
 (probably should add a version attribute as the behavior could change without the dcoument structure changing).
