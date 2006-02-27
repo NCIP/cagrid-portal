@@ -304,7 +304,7 @@ public class CreationViewer extends GridPortalComponent {
 			createButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 
-					int doIdeleteResult = JOptionPane.CANCEL_OPTION;
+					int doIdeleteResult = JOptionPane.OK_OPTION;
 					final File dirFile = new File(getDir().getText());
 					if (dirFile.exists() && dirFile.list().length != 0) {
 						doIdeleteResult = JOptionPane.showConfirmDialog(me,
