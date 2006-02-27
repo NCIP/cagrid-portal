@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
@@ -282,7 +283,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			gridBagContraints9.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagContraints9.weighty = 1.0D;
 			gridBagContraints9.weightx = 1.0D;
-			gridBagContraints9.ipady = 0;
+			gridBagContraints9.ipady = 20;
 			gridBagContraints9.gridy = 0;
 			outputTypePanel = new JPanel();
 			outputTypePanel.setLayout(new GridBagLayout());
@@ -434,6 +435,10 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 
 	private void cacheSchema(File dir, String namespace) {
+		if (namespace.equals(IntroduceConstants.W3CNAMESPACE)) {
+			// this is "natively supported" so we don't need to cache it
+			return;
+		}
 		IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
 			IntroducePortalConf.RESOURCE);
 		GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());

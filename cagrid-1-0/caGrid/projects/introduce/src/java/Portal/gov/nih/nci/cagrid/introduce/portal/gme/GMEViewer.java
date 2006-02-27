@@ -12,6 +12,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Enumeration;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -277,6 +278,9 @@ public class GMEViewer extends GridPortalComponent {
 					String location = null;
 					try {
 						location = ResourceManager.promptFile(GMEViewer.this, null);
+						if (location == null) {
+							return;
+						}
 						uploadLocationText.setText(location);
 					} catch (Exception e1) {
 						JOptionPane.showMessageDialog(GMEViewer.this, "Error selecting schema file");
@@ -351,18 +355,20 @@ public class GMEViewer extends GridPortalComponent {
 						sr.setValidation(false);
 						org.exolab.castor.xml.schema.Schema schema = sr.read();
 						Namespace schemaTargetNamespace = new Namespace(schema.getTargetNamespace());
-						handle.addNamespaceDomain(schemaTargetNamespace.getDomain());
+						try {
+							handle.addNamespaceDomain(schemaTargetNamespace.getDomain());
+						} catch (NamespaceExistsException ex) {
+							// should be ok here do nothing.........
+						}
 						handle.publishSchema(uploadSchemaTextPane.getText());
 						JOptionPane.showMessageDialog(GMEViewer.this, "Schema was successfully uploaded.");
-
-					} catch (NamespaceExistsException ex) {
-						// should be ok here do nothing.........
 					} catch (Exception e1) {
 						e1.printStackTrace();
 						JOptionPane
 							.showMessageDialog(
 								GMEViewer.this,
-								"Please check the GME URL and make sure that you have the appropriate credentials and make sure the schema is well formed!");
+								"Please check the GME URL and make sure that you have the appropriate credentials and make sure the schema is well formed!"
+									+ "\nError:" + e1.getMessage());
 					}
 					uploadLocationText.setText("");
 					uploadSchemaTextPane.setText("");

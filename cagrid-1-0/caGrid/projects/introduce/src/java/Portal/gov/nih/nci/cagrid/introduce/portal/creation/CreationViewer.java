@@ -326,7 +326,6 @@ public class CreationViewer extends GridPortalComponent {
 									}
 
 									setProgressText("caching directory location");
-									ResourceManager.setProperty(ResourceManager.LAST_DIRECTORY, getDir().getText());
 
 									setProgressText("validating");
 									if (service.getText().length() > 0) {

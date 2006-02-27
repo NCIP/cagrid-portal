@@ -268,6 +268,7 @@ public class ResourceManager {
 		chooser.setMultiSelectionEnabled(false);
 		int returnVal = chooser.showOpenDialog(comp);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			setProperty(ResourceManager.LAST_DIRECTORY, chooser.getSelectedFile().getAbsolutePath());
 			return chooser.getSelectedFile().getAbsolutePath();
 		} else {
 			return null;
@@ -289,6 +290,7 @@ public class ResourceManager {
 		chooser.setMultiSelectionEnabled(false);
 		int returnVal = chooser.showOpenDialog(comp);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			setProperty(ResourceManager.LAST_FILE, chooser.getSelectedFile().getAbsolutePath());
 			return chooser.getSelectedFile().getAbsolutePath();
 		} else {
 			return null;
