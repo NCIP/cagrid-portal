@@ -67,14 +67,12 @@
 	<xs:complexType name="SecureConversation">
 		<xs:sequence>
 			<xs:element name="CommunicationMethod" minOccurs="1" maxOccurs="1" type="CommunicationMethod"/>
-			<xs:element name="ContextLifetime" minOccurs="0" maxOccurs="1" type="xs:int"/>
 		</xs:sequence>
 	</xs:complexType>
 	
 	<xs:complexType name="SecureMessage">
 		<xs:sequence>
 			<xs:element name="CommunicationMethod" minOccurs="1" maxOccurs="1" type="CommunicationMethod"/>
-			<xs:element name="ReplayAttackInterval" minOccurs="0" maxOccurs="1" type="xs:int"/>
 		</xs:sequence>
 	</xs:complexType>
 	

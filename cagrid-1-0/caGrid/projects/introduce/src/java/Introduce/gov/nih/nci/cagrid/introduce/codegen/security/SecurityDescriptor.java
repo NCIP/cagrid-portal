@@ -85,8 +85,6 @@ public class SecurityDescriptor {
 				xml.append(getSecureMessageSettings(ss.getSecureMessage()));
 				xml.append(getTransportLayerSecuritySettings(ss.getTransportLevelSecurity()));
 				xml.append("</auth-method>");
-				xml.append(getSecureConversationExtras(ss.getSecureConversation()));
-				xml.append(getSecureMessageExtras(ss.getSecureMessage()));
 				xml.append(getRunAsMode(ss.getRunAsMode()));
 			} else {
 				xml.append("<auth-method>");
@@ -115,8 +113,6 @@ public class SecurityDescriptor {
 					xml.append(getSecureMessageSettings(ms.getSecureMessage()));
 					xml.append(getTransportLayerSecuritySettings(ms.getTransportLevelSecurity()));
 					xml.append("</auth-method>");
-					xml.append(getSecureConversationExtras(ms.getSecureConversation()));
-					xml.append(getSecureMessageExtras(ms.getSecureMessage()));
 					xml.append(getRunAsMode(ms.getRunAsMode()));
 				} else {
 					xml.append("<auth-method>");
@@ -155,26 +151,7 @@ public class SecurityDescriptor {
 	}
 
 
-	private static String getSecureConversationExtras(SecureConversation comm) throws Exception {
-		StringBuffer xml = new StringBuffer();
-		if (comm != null) {
-			if (comm.getContextLifetime() != null) {
-				xml.append("<context-lifetime value=\"" + comm.getContextLifetime().intValue() + "\"/>");
-			}
-		}
-		return xml.toString();
-	}
-
-
-	private static String getSecureMessageExtras(SecureMessage comm) throws Exception {
-		StringBuffer xml = new StringBuffer();
-		if (comm != null) {
-			if (comm.getReplayAttackInterval() != null) {
-				xml.append("<replay-attack-interval value=\"" + comm.getReplayAttackInterval().intValue() + "\"/>");
-			}
-		}
-		return xml.toString();
-	}
+	
 
 
 	private static String getSecureConversationSettings(SecureConversation comm) throws Exception {
