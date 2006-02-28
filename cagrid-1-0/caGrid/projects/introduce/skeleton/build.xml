@@ -240,6 +240,10 @@
 		<javac srcdir="${stubs.src}" destdir="${stubs.dest}" debug="${java.debug}">
 			<include name="**/*.java" />
 			<classpath>
+				<!-- need to include libs incase they are using their own types -->
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
 				<fileset dir="${ext.globus.dir}/lib">
 					<include name="*.jar" />
 					<exclude name="${stubs.jar.name}" />
