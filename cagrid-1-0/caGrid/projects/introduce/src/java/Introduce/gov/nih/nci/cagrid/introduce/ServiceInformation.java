@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 
+import java.io.File;
 import java.util.Properties;
 
 public class ServiceInformation {
@@ -13,9 +14,12 @@ public class ServiceInformation {
 	
 	private Properties serviceProperties;
 	
-	public ServiceInformation(ServiceDescription service, Properties properties) {
+	private File baseDirectory;
+	
+	public ServiceInformation(ServiceDescription service, Properties properties, File baseDirectory) {
 		this.introService = service;
 		this.serviceProperties = properties;
+		this.baseDirectory = baseDirectory;
 	}
 	
 	public MetadataListType getMetadata() {
@@ -44,6 +48,10 @@ public class ServiceInformation {
 	
 	public ServiceSecurity getServiceSecurity(){
 		return this.introService.getServiceSecurity();
+	}
+
+	public File getBaseDirectory() {
+		return baseDirectory;
 	}
 	
 	

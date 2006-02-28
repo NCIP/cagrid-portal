@@ -8,8 +8,21 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 
+import java.io.File;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
+
+import org.jdom.Document;
+import org.jdom.Element;
+import org.projectmobius.common.MalformedNamespaceException;
+import org.projectmobius.common.MobiusException;
+import org.projectmobius.common.Namespace;
+import org.projectmobius.common.XMLUtilities;
 
 
 /**
@@ -195,5 +208,38 @@ public class TemplateUtils {
 		}
 
 		return map;
+	}
+
+
+	public static void walkSchemasGetNamespaces(File schemaDir, String fileName, Set namespaces){
+		try {
+			System.out.println("Looking at schema " + fileName);
+			Document schema = XMLUtilities.fileNameToDocument(fileName);
+			List importEls = schema.getRootElement().getChildren("import",schema.getRootElement().getNamespace(IntroduceConstants.W3CNAMESPACE));
+			for(int i=0;i<importEls.size();i++){
+				org.jdom.Element importEl = (org.jdom.Element)importEls.get(i);
+				String namespace = importEl.getAttributeValue("namespace");
+				namespaces.add(namespace);
+				System.out.println("adding namepace " + namespace);
+				String location = importEl.getAttributeValue("location");
+				walkSchemasGetNamespaces(schemaDir, schemaDir + File.separator + location,namespaces);
+			}
+		} catch (MobiusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+	}
+
+
+	public static  String getPackageName(Namespace namespace) {
+		StringTokenizer tokenizer = new StringTokenizer(namespace.getDomain(), ".", true);
+		StringBuffer packageNameBuf = new StringBuffer();
+		while (tokenizer.hasMoreElements()) {
+			packageNameBuf.insert(0, tokenizer.nextToken());
+		}
+		return packageNameBuf.toString();
 	}
 }

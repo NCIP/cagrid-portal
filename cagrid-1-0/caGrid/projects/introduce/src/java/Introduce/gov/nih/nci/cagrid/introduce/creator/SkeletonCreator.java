@@ -37,7 +37,7 @@ public class SkeletonCreator extends Task {
 			e1.printStackTrace();
 		}
 
-		ServiceInformation info = new ServiceInformation(introService, properties);
+		ServiceInformation info = new ServiceInformation(introService, properties, baseDirectory);
 		SkeletonBaseCreator sbc = new SkeletonBaseCreator();
 		SkeletonSourceCreator ssc = new SkeletonSourceCreator();
 		SkeletonSchemaCreator sscc = new SkeletonSchemaCreator();

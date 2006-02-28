@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.projectmobius.client.gme.ImportInfo;
 import org.projectmobius.common.GridServiceResolver;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.gme.XMLDataModelService;
@@ -278,7 +279,8 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 		}
 		typeInfo.set(index++, this.gmePanel.currentType);
 		if (this.gmePanel.currentNamespace != null) {
-			typeInfo.set(index++, "./" + this.gmePanel.currentNamespace.getName() + ".xsd");
+			ImportInfo ii = new ImportInfo(this.gmePanel.currentNamespace);
+			typeInfo.set(index++, "./" + ii.getFileName());
 		} else {
 			typeInfo.set(index++, null);
 		}

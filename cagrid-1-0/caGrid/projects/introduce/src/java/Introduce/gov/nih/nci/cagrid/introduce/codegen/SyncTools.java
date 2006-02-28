@@ -27,7 +27,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import javax.xml.namespace.QName;
 
@@ -41,6 +40,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
+import org.projectmobius.client.gme.ImportInfo;
 import org.projectmobius.common.MalformedNamespaceException;
 import org.projectmobius.common.Namespace;
 
@@ -86,7 +86,7 @@ public class SyncTools {
 		File servicePropertiesFile = new File(baseDirectory.getAbsolutePath() + File.separator + "introduce.properties");
 		Properties serviceProperties = new Properties();
 		serviceProperties.load(new FileInputStream(servicePropertiesFile));
-		ServiceInformation info = new ServiceInformation(introService, serviceProperties);
+		ServiceInformation info = new ServiceInformation(introService, serviceProperties, baseDirectory);
 		File schemaDir = new File(baseDirectory.getAbsolutePath() + File.separator + "schema");
 
 		// STEP 2: make a backup of the service implementation
@@ -132,7 +132,7 @@ public class SyncTools {
 				MetadataType mtype = info.getMetadata().getMetadata(i);
 				if (mtype.getNamespace() != null
 					&& (mtype.getPackageName() == null || mtype.getPackageName().length() <= 0)) {
-					mtype.setPackageName(getPackageName(new Namespace(mtype.getNamespace())));
+					mtype.setPackageName(TemplateUtils.getPackageName(new Namespace(mtype.getNamespace())));
 				}
 				if (mtype.getClassName() == null || mtype.getClassName().length() == 0) {
 					Element element = table.getElement(new QName(mtype.getNamespace(), mtype.getType()));
@@ -152,7 +152,7 @@ public class SyncTools {
 						if (inputParam.getNamespace() != null
 							&& !inputParam.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)
 							&& (inputParam.getPackageName() == null || inputParam.getPackageName().length() <= 0)) {
-							inputParam.setPackageName(getPackageName(new Namespace(inputParam.getNamespace())));
+							inputParam.setPackageName(TemplateUtils.getPackageName(new Namespace(inputParam.getNamespace())));
 						}
 
 						if (inputParam.getClassName() == null) {
@@ -173,7 +173,7 @@ public class SyncTools {
 					if (outputParam.getNamespace() != null
 						&& !outputParam.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)
 						&& (outputParam.getPackageName() == null || outputParam.getPackageName().length() <= 0)) {
-						outputParam.setPackageName(getPackageName(new Namespace(outputParam.getNamespace())));
+						outputParam.setPackageName(TemplateUtils.getPackageName(new Namespace(outputParam.getNamespace())));
 					}
 					if (outputParam.getClassName() != null && outputParam.getClassName().equals("void")) {
 						outputParam.setPackageName("");
@@ -203,12 +203,15 @@ public class SyncTools {
 	 */
 	private Set generateNamespaceExcludesSet(ServiceInformation info) throws MalformedNamespaceException {
 		Set excludeSet = new HashSet();
+		File schemaDir = new File(baseDirectory.getAbsolutePath() + File.separator + "schema");
 		// exclude namespaces that have FQN for metadata class
 		if (info.getMetadata().getMetadata() != null) {
 			for (int i = 0; i < info.getMetadata().getMetadata().length; i++) {
 				MetadataType mtype = info.getMetadata().getMetadata(i);
 				if (mtype.getClassName() != null) {
 					excludeSet.add(mtype.getNamespace());
+					ImportInfo ii = new ImportInfo(new Namespace(mtype.getNamespace()));
+					TemplateUtils.walkSchemasGetNamespaces(schemaDir, schemaDir + File.separator +ii.getFileName(),excludeSet);
 				}
 			}
 		}
@@ -223,6 +226,8 @@ public class SyncTools {
 						MethodTypeInputsInput inputParam = mtype.getInputs().getInput(j);
 						if (inputParam.getClassName() != null) {
 							excludeSet.add(inputParam.getNamespace());
+							ImportInfo ii = new ImportInfo(new Namespace(inputParam.getNamespace()));
+							TemplateUtils.walkSchemasGetNamespaces(schemaDir, schemaDir + File.separator + ii.getFileName(),excludeSet);
 						}
 					}
 				}
@@ -232,6 +237,8 @@ public class SyncTools {
 					MethodTypeOutput outputParam = mtype.getOutput();
 					if (outputParam.getClassName() != null) {
 						excludeSet.add(outputParam.getNamespace());
+						ImportInfo ii = new ImportInfo(new Namespace(outputParam.getNamespace()));
+						TemplateUtils.walkSchemasGetNamespaces(schemaDir, schemaDir + File.separator + ii.getFileName(),excludeSet);
 					}
 				}
 			}
@@ -239,8 +246,7 @@ public class SyncTools {
 
 		return excludeSet;
 	}
-
-
+	
 	private void writeNamespaceMappings(ServiceInformation info) throws IOException {
 		NamespaceMappingsTemplate namespaceMappingsT = new NamespaceMappingsTemplate();
 		String namespaceMappingsS = namespaceMappingsT.generate(info);
@@ -300,17 +306,7 @@ public class SyncTools {
 	}
 
 
-	private String getPackageName(Namespace namespace) {
-		StringTokenizer tokenizer = new StringTokenizer(namespace.getDomain(), ".", true);
-		StringBuffer packageNameBuf = new StringBuffer();
-		while (tokenizer.hasMoreElements()) {
-			packageNameBuf.insert(0, tokenizer.nextToken());
-		}
-		return packageNameBuf.toString();
-	}
-
-
-	private void createArchive(ServiceInformation info) throws Exception {
+private void createArchive(ServiceInformation info) throws Exception {
 		// create the archive
 		long id = System.currentTimeMillis();
 

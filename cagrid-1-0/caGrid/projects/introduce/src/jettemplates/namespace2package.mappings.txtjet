@@ -1,4 +1,4 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="NamespaceMappingsTemplate" imports="gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.* gov.nih.nci.cagrid.introduce.beans.method.*"%>
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="NamespaceMappingsTemplate" imports="gov.nih.nci.cagrid.introduce.codegen.* org.projectmobius.common.* java.io.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.* gov.nih.nci.cagrid.introduce.beans.method.*"%>
 <% gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
    String packageName = info.getServiceProperties().getProperty("introduce.skeleton.package");
    String serviceName = info.getServiceProperties().getProperty("introduce.skeleton.service.name");
@@ -15,7 +15,9 @@
 <%=newNamespaceDomain%>/<%=serviceName%>/service=<%=packageName%>.stubs.service
 <%
 		Map prefixmap=TemplateUtils.buildMasterNamespaceSchemaInformationMap(info);
+		Set importNamespaces = new HashSet();
   		Iterator iterator = prefixmap.keySet().iterator();
+  
 		while(iterator.hasNext()){
 			String namespaceS = (String)iterator.next();
 			SchemaInformation schemaInformation=(SchemaInformation)prefixmap.get(namespaceS);
@@ -31,16 +33,40 @@
 					packageNameBuf.insert(0, tokenizer.nextToken());
 				}
 				newLine = namespace.getRaw() + "=" + packageNameBuf.toString();
-				
-			}
-							
+			}			
 			// turns http: into http\:
 			String newnewLine = newLine.replaceFirst(":", "\\\\:");
-			newnewLine = newnewLine.replaceFirst("\\Q\\\\\\\\:\\E", "\\\\:");
+			newnewLine = newnewLine.replaceFirst("\\Q\\\\\\\\:\\E", "\\\\:");	
+			
+			//get all the imports if there are any for this schema and write there namespace to package maps down		
+			TemplateUtils.walkSchemasGetNamespaces(new File(info.getBaseDirectory().getAbsolutePath() + File.separator + "schema"),info.getBaseDirectory().getAbsolutePath() + File.separator + "schema" + File.separator + schemaInformation.getLocation(), importNamespaces );
+	
 %>
-<%=newnewLine %><%
+<%=newnewLine %><%		
+
 } catch (Exception e){
 	e.printStackTrace();
 }
+
+		Iterator it = importNamespaces.iterator();
+		while(it.hasNext()){
+			String newLine = "";
+			String newnewLine = "";
+			try {
+				String thisnamespace = (String)it.next();
+				String thispackageName = TemplateUtils.getPackageName(new Namespace(thisnamespace));
+				newLine = thisnamespace + "=" + thispackageName;
+				// turns http: into http\:
+				newnewLine = newLine.replaceFirst(":", "\\\\:");
+				newnewLine = newnewLine.replaceFirst("\\Q\\\\\\\\:\\E", "\\\\:");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			%>
+<%=newnewLine %><%	
+		}
 }
+
+
 %>
