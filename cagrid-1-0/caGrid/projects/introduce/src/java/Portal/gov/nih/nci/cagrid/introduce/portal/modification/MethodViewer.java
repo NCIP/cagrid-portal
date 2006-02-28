@@ -330,7 +330,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 						method.setMethodSecurity(((MethodSecurityPanel) securityContainerPanel).getMethodSecurity());
 
-						methodsTable.changeMethodName(currentRow, getNameField().getText());
+						//methodsTable.changeMethodName(currentRow, getNameField().getText());
+						methodsTable.refreshRowFromMethodType(currentRow);
 
 						MethodTypeInputs inputs = new MethodTypeInputs();
 						MethodTypeInputsInput[] inputsA = new MethodTypeInputsInput[getInputParamTable().getRowCount()];
@@ -520,7 +521,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JTextField getNameField() {
 		if (nameField == null) {
 			nameField = new JTextField();
-			nameField.setText(methodsTable.getMethodName(currentRow));
+			nameField.setText(methodsTable.getSelectedMethodType().getName());
 		}
 		return nameField;
 	}

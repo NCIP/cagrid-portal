@@ -48,7 +48,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.64 2006-02-24 20:35:12 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.65 2006-02-28 16:42:43 oster Exp $
  */
 public class ModificationViewer extends GridPortalComponent {
 
@@ -745,19 +745,17 @@ public class ModificationViewer extends GridPortalComponent {
 
 
 	public void performMethodModify() {
-
-		int row = getMethodsTable().getSelectedRow();
-		if ((row < 0) || (row >= getMethodsTable().getRowCount())) {
-			PortalUtils.showErrorMessage("Please select a method to modify.");
-			return;
-		}
 		try {
 			this.resetMethodSecurityIfServiceSecurityChanged();
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
 			return;
 		}
-		MethodType method = (MethodType) getMethodsTable().getValueAt(getMethodsTable().getSelectedRow(), 1);
+		MethodType method = getMethodsTable().getSelectedMethodType();
+		if (method == null) {
+			PortalUtils.showErrorMessage("Please select a method to modify.");
+			return;
+		}
 		PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
 			new MethodViewer(method, lastServiceSecurity, new File(methodsDirectory.getAbsolutePath() + File.separator
 				+ "schema" + File.separator + serviceProperties.getProperty("introduce.skeleton.service.name")),
