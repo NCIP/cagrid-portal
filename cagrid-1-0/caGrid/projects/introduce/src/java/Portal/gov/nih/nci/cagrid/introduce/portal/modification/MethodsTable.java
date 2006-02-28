@@ -20,7 +20,7 @@ import org.projectmobius.portal.PortalTable;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: MethodsTable.java,v 1.10 2006-02-28 16:42:43 oster Exp $
+ * @version $Id: MethodsTable.java,v 1.11 2006-02-28 17:18:38 oster Exp $
  */
 public class MethodsTable extends PortalTable {
 	public static final String OPERATION = "Operation";
@@ -49,13 +49,17 @@ public class MethodsTable extends PortalTable {
 	}
 
 
-	public MethodType getSelectedMethodType() {
-		int row = getSelectedRow();
+	public MethodType getMethodType(int row) {
 		if ((row < 0) || (row >= getRowCount())) {
 			return null;
 		}
 
-		return ((MethodTypeContainer) getValueAt(getSelectedRow(), 0)).getMethod();
+		return ((MethodTypeContainer) getValueAt(row, 0)).getMethod();
+	}
+
+
+	public MethodType getSelectedMethodType() {
+		return getMethodType(getSelectedRow());
 	}
 
 

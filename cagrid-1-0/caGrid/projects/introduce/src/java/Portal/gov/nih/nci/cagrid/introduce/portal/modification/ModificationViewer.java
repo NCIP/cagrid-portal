@@ -48,7 +48,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.65 2006-02-28 16:42:43 oster Exp $
+ * @version $Id: ModificationViewer.java,v 1.66 2006-02-28 17:18:38 oster Exp $
  */
 public class ModificationViewer extends GridPortalComponent {
 
@@ -564,7 +564,7 @@ public class ModificationViewer extends GridPortalComponent {
 										// new MethodsType array
 										MethodType[] methodsArray = new MethodType[methodsTable.getRowCount()];
 										for (int i = 0; i < methodsArray.length; i++) {
-											MethodType methodInstance = (MethodType) methodsTable.getValueAt(i, 1);
+											MethodType methodInstance = methodsTable.getMethodType(i);
 											methodsArray[i] = methodInstance;
 										}
 										MethodsType methods = new MethodsType();
