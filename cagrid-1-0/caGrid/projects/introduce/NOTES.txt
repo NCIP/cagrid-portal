@@ -1,5 +1,7 @@
 To Do:
 
+running from ant is causing portal errors on create and modify
+
 If it could not delete the dir prior to creation then warn and exit.
 
 Code generation is broken for custom class definition when isArray is true (doesn't add array def in all places)
