@@ -125,6 +125,7 @@ public class GMEParameterConfigurationComponent extends JPanel {
 		if(csiDomainIndex>=0){
 			domain = csi.substring(0,csiDomainIndex);
 		}
+		domain = domain.replace('/','.');
 		typeInfo.set(index++, domain);
 		
 		// set classname

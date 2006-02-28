@@ -1,5 +1,7 @@
 To Do:
 
+If it could not delete the dir prior to creation then warn and exit.
+
 Code generation is broken for custom class definition when isArray is true (doesn't add array def in all places)
 
 Make a method, save, add code to client and impl, modify name of input parameter, save, build error when trying to remove method and then unable to delete directory.

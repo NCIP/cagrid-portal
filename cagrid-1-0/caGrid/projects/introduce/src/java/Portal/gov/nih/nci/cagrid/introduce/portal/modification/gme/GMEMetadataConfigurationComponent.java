@@ -267,6 +267,7 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 		if (csiDomainIndex >= 0) {
 			domain = csi.substring(0, csiDomainIndex);
 		}
+		domain = domain.replace('/','.');
 
 		typeInfo.set(index++, domain);
 

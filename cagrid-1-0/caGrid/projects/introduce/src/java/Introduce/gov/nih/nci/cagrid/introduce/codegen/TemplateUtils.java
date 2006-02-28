@@ -240,6 +240,8 @@ public class TemplateUtils {
 		while (tokenizer.hasMoreElements()) {
 			packageNameBuf.insert(0, tokenizer.nextToken());
 		}
-		return packageNameBuf.toString();
+		String packageName = packageNameBuf.toString();
+		packageName = packageName.replace('/','.');
+		return packageName;
 	}
 }
