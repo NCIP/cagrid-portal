@@ -20,7 +20,7 @@ import org.projectmobius.portal.PortalTable;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: MethodsTable.java,v 1.12 2006-02-28 17:39:49 oster Exp $
+ * @version $Id: MethodsTable.java,v 1.13 2006-02-28 18:01:29 oster Exp $
  */
 public class MethodsTable extends PortalTable {
 	public static final String OPERATION = "Operation";
@@ -134,12 +134,12 @@ public class MethodsTable extends PortalTable {
 						// use classname if set, else use schema type
 						if (inputType.getClassName() != null && !inputType.getClassName().trim().equals("")) {
 							if (!input.equals("")) {
-								input += ",";
+								input += ", ";
 							}
 							input += inputType.getClassName();
 						} else if (inputType.getType() != null && !inputType.getType().trim().equals("")) {
 							if (!input.equals("")) {
-								input += ",";
+								input += ", ";
 							}
 							input += inputType.getType();
 						} else {
