@@ -1,5 +1,7 @@
 To Do:
 
+Code generation is broken for custom class definition when isArray is true (doesn't add array def in all places)
+
 Make a method, save, add code to client and impl, modify name of input parameter, save, build error when trying to remove method and then unable to delete directory.
 
 if introduce.jar and the like is removed from the service and expected to be run from elsewhere, introduce will need to check that it supports the version of 
