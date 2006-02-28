@@ -203,16 +203,18 @@ public class SyncTools {
 	 */
 	private Set generateNamespaceExcludesSet(ServiceInformation info) throws MalformedNamespaceException {
 		Set excludeSet = new HashSet();
-		File schemaDir = new File(baseDirectory.getAbsolutePath() + File.separator + "schema");
+		File schemaDir = new File(baseDirectory.getAbsolutePath() + File.separator + "schema" + File.separator
+			 + info.getServiceProperties().getProperty("introduce.skeleton.service.name"));
 		// exclude namespaces that have FQN for metadata class
 		if (info.getMetadata().getMetadata() != null) {
 			for (int i = 0; i < info.getMetadata().getMetadata().length; i++) {
 				MetadataType mtype = info.getMetadata().getMetadata(i);
 				if (mtype.getClassName() != null) {
+					if(mtype.getNamespace() != null){
 					excludeSet.add(mtype.getNamespace());
 					ImportInfo ii = new ImportInfo(new Namespace(mtype.getNamespace()));
 					TemplateUtils.walkSchemasGetNamespaces(schemaDir, schemaDir + File.separator +ii.getFileName(),excludeSet);
-				}
+				}}
 			}
 		}
 
@@ -225,10 +227,11 @@ public class SyncTools {
 					for (int j = 0; j < mtype.getInputs().getInput().length; j++) {
 						MethodTypeInputsInput inputParam = mtype.getInputs().getInput(j);
 						if (inputParam.getClassName() != null) {
+							if(inputParam.getNamespace() != null){
 							excludeSet.add(inputParam.getNamespace());
 							ImportInfo ii = new ImportInfo(new Namespace(inputParam.getNamespace()));
 							TemplateUtils.walkSchemasGetNamespaces(schemaDir, schemaDir + File.separator + ii.getFileName(),excludeSet);
-						}
+						}}
 					}
 				}
 
@@ -236,10 +239,11 @@ public class SyncTools {
 				if (mtype.getOutput() != null) {
 					MethodTypeOutput outputParam = mtype.getOutput();
 					if (outputParam.getClassName() != null) {
+						if(outputParam.getNamespace() != null){
 						excludeSet.add(outputParam.getNamespace());
 						ImportInfo ii = new ImportInfo(new Namespace(outputParam.getNamespace()));
 						TemplateUtils.walkSchemasGetNamespaces(schemaDir, schemaDir + File.separator + ii.getFileName(),excludeSet);
-					}
+					}}
 				}
 			}
 		}

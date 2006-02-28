@@ -39,7 +39,7 @@
 			newnewLine = newnewLine.replaceFirst("\\Q\\\\\\\\:\\E", "\\\\:");	
 			
 			//get all the imports if there are any for this schema and write there namespace to package maps down		
-			TemplateUtils.walkSchemasGetNamespaces(new File(info.getBaseDirectory().getAbsolutePath() + File.separator + "schema"),info.getBaseDirectory().getAbsolutePath() + File.separator + "schema" + File.separator + schemaInformation.getLocation(), importNamespaces );
+			TemplateUtils.walkSchemasGetNamespaces(new File(info.getBaseDirectory().getAbsolutePath() + File.separator + "schema" + File.separator + serviceName),info.getBaseDirectory().getAbsolutePath() + File.separator + "schema" + File.separator + serviceName + File.separator + schemaInformation.getLocation(), importNamespaces );
 	
 %>
 <%=newnewLine %><%		
