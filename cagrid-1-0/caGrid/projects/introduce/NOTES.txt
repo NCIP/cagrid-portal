@@ -15,7 +15,10 @@ How about changing this "@created by caGrid toolkit version 0.5"
 
 MUST FIX THE WHITESPACE SENSTIVE CODE FINDER!!!
 
-when you download a schema that has dependencies, the dependant schemas are not added to the namespace to package mappings... you need to parse every schema, looking for imports, and make sure each imported schema has a mapping
+when you download a schema that has dependencies, the dependant schemas are not added to the namespace to package mappings... you need to parse every schema (and imported schema), looking for imports, and make sure each imported schema has a mapping
+- the namespaceExclude code needs to be updated when this is supported too.
+- there no "good" way to do it, but the process should be to exclude any namespace that is imported from a schema that is excluded
+  - basically just exclude any namespace that is included from a schema for a namespace that is being excluded (recursively)
 
 (DONE) need to NOT generate stubs for schemas that the user specifies the class to use... this is important as it will/could generate classes with exact same name and cause the service to break
 -- still need to handle imported schemas, but so do the rest of the code (package mappings, etc)
