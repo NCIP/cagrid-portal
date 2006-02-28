@@ -30,13 +30,19 @@ public class SyncSecurity {
 
 
 	public void sync() throws Exception {
-
 		SecurityDescTemplate secDescT = new SecurityDescTemplate();
 		String secDescS = secDescT.generate(info);
 		File secDescF = new File(etcDir.getAbsolutePath() + File.separator + "security-desc.xml");
 		FileWriter secDescFW = new FileWriter(secDescF);
 		secDescFW.write(secDescS);
 		secDescFW.close();
+		
+		SecurityDescTemplate securityDescT = new SecurityDescTemplate();
+		String securityDescS = securityDescT.generate(info);
+		File securityDescF = new File(etcDir.getAbsolutePath() + File.separator + "security-desc.xml");
+		FileWriter securityDescFW = new FileWriter(securityDescF);
+		securityDescFW.write(securityDescS);
+		securityDescFW.close();
 	}
 
 }
