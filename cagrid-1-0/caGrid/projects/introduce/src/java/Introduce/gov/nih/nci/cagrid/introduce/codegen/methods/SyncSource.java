@@ -739,7 +739,7 @@ public class SyncSource {
 		MethodTypeOutput methodReturn = method.getOutput();
 		if (!methodReturn.getClassName().equals("void")
 				&& !isPrimitive(methodReturn.getClassName())) {
-			clientMethod += "          return null;\n";
+			clientMethod += "          throw new RemoteException(\"Not yet implemented\");\n";
 		} else if (isPrimitive(methodReturn.getClassName())) {
 			clientMethod += "          return "
 					+ createPrimitiveReturn(methodReturn.getClassName())
