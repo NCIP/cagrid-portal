@@ -37,6 +37,10 @@
 					<description>Deploy Grid Service</description>
 					<class>gov.nih.nci.cagrid.introduce.portal.deployment.DeploymentViewer</class>
 					<icon>/World20X20.gif</icon>
+					<dimensions>
+						<width>0</width>
+						<height>0</height>
+					</dimensions>
 				</component>
 				<component>
 					<title>caGrid GME Tools</title>
