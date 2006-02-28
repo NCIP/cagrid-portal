@@ -17,7 +17,7 @@ import java.rmi.RemoteException;
  *  <%=packageName%>I
  *  TODO:DOCUMENT ME
  * 
- * @created by caGrid toolkit version 0.5
+ * @created by Introduce Toolkit version 1.0
  * 
  */
 public class <%=serviceName%>Impl implements <%=serviceName%>I{
