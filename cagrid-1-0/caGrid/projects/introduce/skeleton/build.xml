@@ -326,7 +326,7 @@
 	</target>
 
 	<!-- Default target "all" builds and jars everything, including test....does not make a GAR-->
-	<target name="all" depends="clean,jars" />
+	<target name="all" depends="jars" />
 
 	<target name="resync" depends="checkGlobus" description="Uses the introduceMethods.xml to add and remove methods to this service skeleton">
 		<java classname="gov.nih.nci.cagrid.introduce.codegen.SyncTools" fork="no" failonerror="true">
