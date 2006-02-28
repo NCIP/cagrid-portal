@@ -305,7 +305,7 @@ public class CADSRConfigurationPanel extends JPanel {
 									Namespace schemaNS = (Namespace) schemas
 											.get(i);
 									getSchemaComboBox().addItem(
-											"/" + schemaNS.getVersion() + "/"
+											"/"
 													+ schemaNS.getName());
 								}
 							} catch (MobiusException e1) {

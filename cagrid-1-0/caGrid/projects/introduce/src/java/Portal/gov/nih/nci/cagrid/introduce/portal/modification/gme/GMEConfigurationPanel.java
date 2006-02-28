@@ -217,7 +217,7 @@ public class GMEConfigurationPanel extends JPanel {
 							getSchemaComboBox().removeAllItems();
 							for (int i = 0; i < schemas.size(); i++) {
 								Namespace schemaNS = (Namespace) schemas.get(i);
-								getSchemaComboBox().addItem("/" + schemaNS.getVersion() + "/" + schemaNS.getName());
+								getSchemaComboBox().addItem("/" + schemaNS.getName());
 							}
 						}
 					} catch (MobiusException e1) {
