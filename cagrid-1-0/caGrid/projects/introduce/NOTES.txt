@@ -24,7 +24,7 @@ when you download a schema that has dependencies, the dependant schemas are not 
 
 Last Saved in service properties should display as a normal looking Date/Time
 
-Operations list should display as a standard looking method: e.g.  void foo(A a, B b)
+(DONE) Operations list should display as a standard looking method: e.g.  void foo(A a, B b)
  
 
 (DONE) need to NOT generate stubs for schemas that the user specifies the class to use... this is important as it will/could generate classes with exact same name and cause the service to break
