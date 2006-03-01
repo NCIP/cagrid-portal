@@ -2,7 +2,7 @@ To Do:
 
 running from ant is causing portal errors on create and modify
 
-If it could not delete the dir prior to creation then warn and exit.
+(DONE) If it could not delete the dir prior to creation then warn and exit.
 
 Code generation is broken for custom class definition when isArray is true (doesn't add array def in all places)
 
@@ -21,12 +21,12 @@ is client-config.wsdd really needed in the root dir?  can't you just add GLOBUS_
 
 MUST FIX THE WHITESPACE SENSTIVE CODE FINDER!!!
 
-when you download a schema that has dependencies, the dependant schemas are not added to the namespace to package mappings... you need to parse every schema (and imported schema), looking for imports, and make sure each imported schema has a mapping
+(DONE ++++   NEEDS TESTED  ++++++++) when you download a schema that has dependencies, the dependant schemas are not added to the namespace to package mappings... you need to parse every schema (and imported schema), looking for imports, and make sure each imported schema has a mapping
 - the namespaceExclude code needs to be updated when this is supported too.
 - there no "good" way to do it, but the process should be to exclude any namespace that is imported from a schema that is excluded
   - basically just exclude any namespace that is included from a schema for a namespace that is being excluded (recursively)
 
-Last Saved in service properties should display as a normal looking Date/Time
+(DONE) Last Saved in service properties should display as a normal looking Date/Time
 
 (DONE) Operations list should display as a standard looking method: e.g.  void foo(A a, B b)
  

@@ -320,7 +320,11 @@ public class CreationViewer extends GridPortalComponent {
 								try {
 									if (finalDoIdeleteResult == JOptionPane.OK_OPTION) {
 										setProgressText("deleting existing directory");
-										Utils.deleteDir(dirFile);
+										boolean deleted = Utils.deleteDir(dirFile);
+										if(!deleted){
+											JOptionPane.showMessageDialog(CreationViewer.this,"Unable to delete creation directory");
+											return;
+										}
 									} else {
 										return;
 									}

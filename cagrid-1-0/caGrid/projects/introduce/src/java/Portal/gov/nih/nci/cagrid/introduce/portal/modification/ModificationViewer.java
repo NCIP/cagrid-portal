@@ -28,6 +28,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -48,7 +51,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.66 2006-02-28 17:18:38 oster Exp $
+ * @version $Id: ModificationViewer.java,v 1.67 2006-03-01 01:22:14 hastings Exp $
  */
 public class ModificationViewer extends GridPortalComponent {
 
@@ -1125,7 +1128,14 @@ public class ModificationViewer extends GridPortalComponent {
 			lastSaved = new JTextField();
 			lastSaved.setEditable(false);
 			lastSaved.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
-			lastSaved.setText(serviceProperties.getProperty("introduce.skeleton.timestamp"));
+			Date date;
+			if (serviceProperties.getProperty("introduce.skeleton.timestamp").equals("0")) {
+				date = new Date();
+			} else {
+				date = new Date(Long.parseLong(serviceProperties.getProperty("introduce.skeleton.timestamp")));
+			}
+			SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+			lastSaved.setText(formatter.format(date));
 		}
 		return lastSaved;
 	}
