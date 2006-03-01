@@ -48,6 +48,7 @@
 } catch (Exception e){
 	e.printStackTrace();
 }
+}
 
 		Iterator it = importNamespaces.iterator();
 		while(it.hasNext()){
@@ -66,7 +67,6 @@
 			}
 			%>
 <%=newnewLine %><%	
-		}
 		}
 }
 
