@@ -51,7 +51,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.69 2006-03-01 16:19:48 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.70 2006-03-01 16:49:05 hastings Exp $
  */
 public class ModificationViewer extends GridPortalComponent {
 
@@ -652,8 +652,7 @@ public class ModificationViewer extends GridPortalComponent {
 										dirty = false;
 										setProgressText("loading service properties");
 										loadServiceProps();
-										lastSaved
-											.setText(serviceProperties.getProperty("introduce.skeleton.timestamp"));
+										setLastSaved(serviceProperties.getProperty("introduce.skeleton.timestamp"));
 										this.setProgressText("");
 									}
 								} catch (Exception e1) {
@@ -1131,16 +1130,21 @@ public class ModificationViewer extends GridPortalComponent {
 			lastSaved = new JTextField();
 			lastSaved.setEditable(false);
 			lastSaved.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
-			Date date;
-			if (serviceProperties.getProperty("introduce.skeleton.timestamp").equals("0")) {
-				date = new Date();
-			} else {
-				date = new Date(Long.parseLong(serviceProperties.getProperty("introduce.skeleton.timestamp")));
-			}
-			SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-			lastSaved.setText(formatter.format(date));
+			setLastSaved(serviceProperties.getProperty("introduce.skeleton.timestamp"));
 		}
 		return lastSaved;
+	}
+	
+	
+	private void setLastSaved(String savedDate){
+		Date date;
+		if (savedDate.equals("0")) {
+			date = new Date();
+		} else {
+			date = new Date(Long.parseLong(savedDate));
+		}
+		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+		lastSaved.setText(formatter.format(date));
 	}
 
 
