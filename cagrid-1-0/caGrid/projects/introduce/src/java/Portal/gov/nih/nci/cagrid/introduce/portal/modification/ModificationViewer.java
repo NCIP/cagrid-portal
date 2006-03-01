@@ -51,7 +51,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.70 2006-03-01 16:49:05 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.71 2006-03-01 16:53:29 hastings Exp $
  */
 public class ModificationViewer extends GridPortalComponent {
 
@@ -850,7 +850,8 @@ public class ModificationViewer extends GridPortalComponent {
 								PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
 									new ModificationViewer(methodsDirectory));
 							} catch (Exception e1) {
-								e1.printStackTrace();
+								//e1.printStackTrace();
+								JOptionPane.showMessageDialog(ModificationViewer.this,"Unable to roll back, there may be no older versions available");
 							}
 
 						}
