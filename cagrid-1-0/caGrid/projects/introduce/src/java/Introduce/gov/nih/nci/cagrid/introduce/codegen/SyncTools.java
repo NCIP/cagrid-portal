@@ -40,7 +40,6 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
-import org.projectmobius.client.gme.ImportInfo;
 import org.projectmobius.common.MalformedNamespaceException;
 import org.projectmobius.common.Namespace;
 
@@ -119,8 +118,11 @@ public class SyncTools {
 		SyncMetadata metadata = new SyncMetadata(baseDirectory, info);
 		SyncSecurity security = new SyncSecurity(baseDirectory, info);
 
+		System.out.println("Synchronizing the methods");
 		methodsS.sync();
+		System.out.println("Synchronizing the metadata");
 		metadata.sync();
+		System.out.println("Synchronizing the security");
 		security.sync();
 	}
 

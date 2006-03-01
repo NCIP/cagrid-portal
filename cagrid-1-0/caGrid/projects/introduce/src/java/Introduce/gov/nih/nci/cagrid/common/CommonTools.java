@@ -35,7 +35,6 @@ public class CommonTools {
 				} catch (MobiusException e) {
 					e.printStackTrace();
 				}
-
 			}
 		});
 		thread2.start();
