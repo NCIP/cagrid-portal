@@ -90,6 +90,7 @@ public class Utils {
 				sb.append(s + "\n");
 			}
 		} catch (Exception e) {
+			br.close();
 			throw new Exception("Error reading the buffer: " + e.getMessage());
 		}
 
