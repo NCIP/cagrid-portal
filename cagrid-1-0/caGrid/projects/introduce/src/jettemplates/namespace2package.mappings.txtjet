@@ -1,4 +1,4 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="NamespaceMappingsTemplate" imports="gov.nih.nci.cagrid.common.* gov.nih.nci.cagrid.introduce.codegen.* org.projectmobius.common.* java.io.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.* gov.nih.nci.cagrid.introduce.beans.method.*"%>
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="NamespaceMappingsTemplate" imports="gov.nih.nci.cagrid.common.* gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.codegen.* org.projectmobius.common.* java.io.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.* gov.nih.nci.cagrid.introduce.beans.method.*"%>
 <% gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
    String packageName = info.getServiceProperties().getProperty("introduce.skeleton.package");
    String serviceName = info.getServiceProperties().getProperty("introduce.skeleton.service.name");
@@ -20,6 +20,7 @@
   
 		while(iterator.hasNext()){
 			String namespaceS = (String)iterator.next();
+			if(!namespaceS.equals(IntroduceConstants.W3CNAMESPACE)){
 			SchemaInformation schemaInformation=(SchemaInformation)prefixmap.get(namespaceS);
 			try{ 
 			String newLine = "";
@@ -65,6 +66,7 @@
 			}
 			%>
 <%=newnewLine %><%	
+		}
 		}
 }
 
