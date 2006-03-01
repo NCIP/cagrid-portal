@@ -139,7 +139,7 @@ public class CommonTools {
 	public static  String getPackageName(Namespace namespace) {
 		String domain = namespace.getDomain();
 		domain = domain.replace('/','.');
-		StringTokenizer tokenizer = new StringTokenizer(namespace.getDomain(), ".", true);
+		StringTokenizer tokenizer = new StringTokenizer(domain, ".", true);
 		StringBuffer packageNameBuf = new StringBuffer();
 		while (tokenizer.hasMoreElements()) {
 			String nextToken = tokenizer.nextToken();
@@ -152,7 +152,6 @@ public class CommonTools {
 			}
 		}
 		String packageName = packageNameBuf.toString();
-		packageName = packageName.replace('/','.');
 		return packageName;
 	}
 
