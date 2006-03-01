@@ -5,8 +5,6 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.common.SAMLUtils;
-import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
-import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
 import gov.nih.nci.cagrid.dorian.idp.bean.InvalidUserPropertyFault;
@@ -23,6 +21,8 @@ import gov.nih.nci.cagrid.dorian.wsrf.IFSUpdateUserResponse;
 import gov.nih.nci.cagrid.dorian.wsrf.IdpFindUsersResponse;
 import gov.nih.nci.cagrid.dorian.wsrf.IdpRemoveUserResponse;
 import gov.nih.nci.cagrid.dorian.wsrf.IdpUpdateUserResponse;
+import gov.nih.nci.cagrid.gridca.common.CertUtil;
+import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import java.rmi.RemoteException;

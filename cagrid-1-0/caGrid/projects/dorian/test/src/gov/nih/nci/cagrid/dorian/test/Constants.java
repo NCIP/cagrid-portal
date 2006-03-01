@@ -10,10 +10,6 @@ public class Constants {
 
 	public static final String DORIAN_KEY = "/ca-test/dorian-key.pem";
 
-	public static final String SIMPLECA_CACERT = "/ca-test/simpleca-cacert.pem";
-
-	public static final String SIMPLECA_CAKEY = "/ca-test/simpleca-cakey.pem";
-
 	public static final String DB_CONFIG = "/general-test/db-config.xml";
 
 	public static final String DORIAN_CONF = "/general-test/dorian-conf.xml";
@@ -25,7 +21,4 @@ public class Constants {
 	public static final String IDP_CONFIG2 = "/general-test/idp-config2.xml";
 
 	public static final String IFS_CONF = "/general-test/ifs-conf.xml";
-
-	public static final String BAD_KEY = "/general-test/BADKEY";
-
 }

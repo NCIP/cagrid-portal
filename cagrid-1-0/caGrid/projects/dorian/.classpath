@@ -77,5 +77,6 @@
 	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="test/resources"/>
+	<classpathentry kind="lib" path="ext/lib/gridca.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

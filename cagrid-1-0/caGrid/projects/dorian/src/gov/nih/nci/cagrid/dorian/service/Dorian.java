@@ -7,7 +7,6 @@ import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthority;
 import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthorityConf;
 import gov.nih.nci.cagrid.dorian.common.Database;
-import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
 import gov.nih.nci.cagrid.dorian.idp.IdPConfiguration;
 import gov.nih.nci.cagrid.dorian.idp.IdentityProvider;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
@@ -33,6 +32,7 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
 import gov.nih.nci.cagrid.dorian.ifs.bean.UserPolicyFault;
+import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import java.io.File;

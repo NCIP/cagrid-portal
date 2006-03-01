@@ -4,8 +4,8 @@ import gov.nih.nci.cagrid.common.SimpleResourceManager;
 import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthority;
 import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthorityConf;
 import gov.nih.nci.cagrid.dorian.common.Database;
-import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
 import gov.nih.nci.cagrid.dorian.service.DorianConfiguration;
+import gov.nih.nci.cagrid.gridca.common.CertUtil;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>

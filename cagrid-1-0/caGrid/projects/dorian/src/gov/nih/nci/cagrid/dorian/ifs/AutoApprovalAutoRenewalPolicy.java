@@ -2,9 +2,9 @@ package gov.nih.nci.cagrid.dorian.ifs;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
-import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.UserPolicyFault;
+import gov.nih.nci.cagrid.gridca.common.CertUtil;
 
 import java.security.cert.X509Certificate;
 

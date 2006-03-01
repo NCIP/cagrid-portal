@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.dorian.ifs;
 
-import gov.nih.nci.cagrid.dorian.common.ca.SecurityUtil;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
+import gov.nih.nci.cagrid.gridca.common.SecurityUtil;
 
 import java.io.IOException;
 import java.math.BigInteger;
