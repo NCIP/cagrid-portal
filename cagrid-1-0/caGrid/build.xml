@@ -115,6 +115,13 @@
 			</fileset>
 		</artifact>
 		
+		<artifact track="main" type="jars" id="gridca.jars">
+			<antcall target="build-gridca" />
+			<fileset dir="${projects.dir}/gridca/build/lib">
+				<include name="gridca.jar" />
+			</fileset>
+	    </artifact>	
+		
 		<artifact track="main" type="jars" id="dorian.client.jars">
 				<antcall target="build-dorian" />
 					<fileset dir="${projects.dir}/dorian/build/lib">
@@ -168,6 +175,20 @@
 		</resolveDependencies>
 		<ant dir="${projects.dir}/metadata" inheritAll="false" antfile="build.xml" target="jar" />
 	</target>
+	
+	
+		<!-- =============================================================== -->
+		<!-- Grid CA:                                                         -->
+		<!-- =============================================================== -->
+		<target name="build-gridca" depends="prepare" description="Builds the gridca project">
+			<resolveDependencies extdir="${projects.dir}/gridca/ext">
+				<artifact refid="core.jars" />
+				<artifact refid="core.test.jars" />
+				<artifact refid="core.resources" />
+			</resolveDependencies>
+			<ant dir="${projects.dir}/gridca" inheritAll="false" antfile="build.xml" target="all" />
+		</target>
+	
 
 	<!-- =============================================================== -->
 	<!-- DORIAN:                                                         -->
@@ -239,12 +260,16 @@
 		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="clean" />
 		<delete dir="${projects.dir}/dorian/ext"/>
 		<ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="clean" />
+		<delete dir="${projects.dir}/gridca/ext"/>
+		<ant dir="${projects.dir}/gridca" inheritAll="false" antfile="build.xml" target="clean" />
+		<delete dir="${projects.dir}/opensaml/ext"/>
+				<ant dir="${projects.dir}/opensaml" inheritAll="false" antfile="build.xml" target="clean" />
 	</target>
 
 
 	<!-- ============================================================== -->
 	<!-- Builds from scratch                                            -->
 	<!-- ============================================================== -->
-	<target name="all" description="Builds the entire application" depends="clean, build-core, build-metadata, build-gme, build-introduce, build-dorian" />
+	<target name="all" description="Builds the entire application" depends="clean, build-core, build-gridca,build-opensaml,build-metadata, build-gme, build-introduce, build-dorian" />
 </project>
 
