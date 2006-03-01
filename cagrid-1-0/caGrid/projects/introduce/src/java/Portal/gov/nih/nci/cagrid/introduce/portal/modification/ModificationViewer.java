@@ -51,7 +51,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.71 2006-03-01 16:53:29 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.72 2006-03-01 17:02:05 hastings Exp $
  */
 public class ModificationViewer extends GridPortalComponent {
 
@@ -645,8 +645,9 @@ public class ModificationViewer extends GridPortalComponent {
 											.getAbsolutePath());
 										Process p = CommonTools.createAndOutputProcess(cmd);
 										p.waitFor();
-										if(p.exitValue()!=0){
-											JOptionPane.showMessageDialog(ModificationViewer.this,"Error: Unable to rebuild the skeleton");
+										if (p.exitValue() != 0) {
+											JOptionPane.showMessageDialog(ModificationViewer.this,
+												"Error: Unable to rebuild the skeleton");
 											return;
 										}
 										dirty = false;
@@ -657,7 +658,7 @@ public class ModificationViewer extends GridPortalComponent {
 									}
 								} catch (Exception e1) {
 									e1.printStackTrace();
-									JOptionPane.showMessageDialog(ModificationViewer.this,"Error: " + e1.getMessage());
+									JOptionPane.showMessageDialog(ModificationViewer.this, "Error: " + e1.getMessage());
 									return;
 								}
 							}
@@ -833,32 +834,39 @@ public class ModificationViewer extends GridPortalComponent {
 			undoButton.setToolTipText("roll back to last save state");
 			undoButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance().getGridPortal(),
-						"Undo") {
 
-						public void process() {
-							System.out.println("Loading in last known save for this project");
-							try {
-								if (!dirty) {
-									setProgressText("restoring from local cache");
-									ResourceManager.restoreLatest(serviceProperties
-										.getProperty("introduce.skeleton.timestamp"), serviceProperties
-										.getProperty("introduce.skeleton.service.name"), serviceProperties
-										.getProperty("introduce.skeleton.destination.dir"));
+					int decision = JOptionPane.showConfirmDialog(ModificationViewer.this,
+						"Are you sure you wish to roll back.");
+					if (decision == JOptionPane.OK_OPTION) {
+						BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance()
+							.getGridPortal(), "Undo") {
+
+							public void process() {
+								System.out.println("Loading in last known save for this project");
+								try {
+									if (!dirty) {
+										setProgressText("restoring from local cache");
+										ResourceManager.restoreLatest(serviceProperties
+											.getProperty("introduce.skeleton.timestamp"), serviceProperties
+											.getProperty("introduce.skeleton.service.name"), serviceProperties
+											.getProperty("introduce.skeleton.destination.dir"));
+									}
+									dispose();
+									PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+										new ModificationViewer(methodsDirectory));
+								} catch (Exception e1) {
+									// e1.printStackTrace();
+									JOptionPane.showMessageDialog(ModificationViewer.this,
+										"Unable to roll back, there may be no older versions available");
+									return;
 								}
-								dispose();
-								PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-									new ModificationViewer(methodsDirectory));
-							} catch (Exception e1) {
-								//e1.printStackTrace();
-								JOptionPane.showMessageDialog(ModificationViewer.this,"Unable to roll back, there may be no older versions available");
+
 							}
 
-						}
-
-					};
-					Thread th = new Thread(r);
-					th.start();
+						};
+						Thread th = new Thread(r);
+						th.start();
+					}
 				}
 			});
 		}
@@ -1135,9 +1143,9 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return lastSaved;
 	}
-	
-	
-	private void setLastSaved(String savedDate){
+
+
+	private void setLastSaved(String savedDate) {
 		Date date;
 		if (savedDate.equals("0")) {
 			date = new Date();

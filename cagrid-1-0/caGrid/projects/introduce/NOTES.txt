@@ -1,5 +1,7 @@
 To Do:
 
+When creating a new service be sure to remove all the old zips from teh resource directory....
+
 Do primative arrays as returns work?  I seem to be getting "binding" errors when using them.
 
 (DONE) If it could not delete the dir prior to creation then warn and exit.
