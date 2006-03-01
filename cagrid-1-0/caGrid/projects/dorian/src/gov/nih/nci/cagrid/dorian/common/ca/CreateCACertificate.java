@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.dorian.common.ca;
 
-import gov.nih.nci.cagrid.dorian.common.IOUtils;
+import gov.nih.nci.cagrid.common.IOUtils;
 
 import java.security.KeyPair;
 import java.security.Security;

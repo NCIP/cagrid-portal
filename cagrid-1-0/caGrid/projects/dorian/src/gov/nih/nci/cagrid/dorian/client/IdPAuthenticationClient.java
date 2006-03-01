@@ -10,7 +10,7 @@ import gov.nih.nci.cagrid.dorian.IdPAuthentication;
 import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.common.DorianFault;
-import gov.nih.nci.cagrid.dorian.common.IOUtils;
+import gov.nih.nci.cagrid.dorian.common.SAMLUtils;
 import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.dorian.wsrf.DorianPortType;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
@@ -51,7 +51,7 @@ public class IdPAuthenticationClient extends DorianBaseClient implements
 		try {
 			String xml = port.authenticateWithIdP(cred).getXml();
 			System.out.println(XMLUtilities.formatXML(xml));
-			return IOUtils.stringToSAMLAssertion(xml);
+			return SAMLUtils.stringToSAMLAssertion(xml);
 		}catch(DorianInternalFault gie){
 			throw gie;
 		}catch (PermissionDeniedFault ilf){

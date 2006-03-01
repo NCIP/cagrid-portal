@@ -8,7 +8,7 @@ import gov.nih.nci.cagrid.dorian.IFSUserAccess;
 import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.common.DorianFault;
-import gov.nih.nci.cagrid.dorian.common.IOUtils;
+import gov.nih.nci.cagrid.dorian.common.SAMLUtils;
 import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
 import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
 import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidAssertionFault;
@@ -55,7 +55,7 @@ public class IFSUserClient extends DorianBaseClient implements IFSUserAccess {
 			params.setProxyLifetime(lifetime);
 			gov.nih.nci.cagrid.dorian.ifs.bean.PublicKey key = new gov.nih.nci.cagrid.dorian.ifs.bean.PublicKey(KeyUtil.writePublicKeyToString(pair.getPublic()));
 			params.setPublicKey(key);
-			gov.nih.nci.cagrid.dorian.bean.SAMLAssertion s = new gov.nih.nci.cagrid.dorian.bean.SAMLAssertion(IOUtils.samlAssertionToString(saml));
+			gov.nih.nci.cagrid.dorian.bean.SAMLAssertion s = new gov.nih.nci.cagrid.dorian.bean.SAMLAssertion(SAMLUtils.samlAssertionToString(saml));
 			params.setSAMLAssertion(s);	
 			gov.nih.nci.cagrid.dorian.ifs.bean.X509Certificate list[] = port
 					.createProxy(params).getCertificates();

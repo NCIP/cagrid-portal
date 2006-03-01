@@ -4,7 +4,7 @@ import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.common.Database;
-import gov.nih.nci.cagrid.dorian.common.IOUtils;
+import gov.nih.nci.cagrid.dorian.common.SAMLUtils;
 import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
 import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
 import gov.nih.nci.cagrid.dorian.test.Constants;
@@ -123,8 +123,8 @@ public class TestAssertionCredentialsManager extends TestCase {
 			assertEquals(expectedSub, cert.getSubjectDN().toString());
 			SAMLAssertion saml = cm.getAuthenticationAssertion(TEST_UID, TEST_EMAIL);
 			verifySAMLAssertion(saml, cm);
-			String xml = IOUtils.samlAssertionToString(saml);
-			SAMLAssertion saml2 = IOUtils.stringToSAMLAssertion(xml);
+			String xml = SAMLUtils.samlAssertionToString(saml);
+			SAMLAssertion saml2 = SAMLUtils.stringToSAMLAssertion(xml);
 			verifySAMLAssertion(saml2, cm);
 
 		} catch (Exception e) {
@@ -184,8 +184,8 @@ public class TestAssertionCredentialsManager extends TestCase {
 
 			SAMLAssertion saml = cm.getAuthenticationAssertion(TEST_UID, TEST_EMAIL);
 			verifySAMLAssertion(saml, cm);
-			String xml = IOUtils.samlAssertionToString(saml);
-			SAMLAssertion saml2 = IOUtils.stringToSAMLAssertion(xml);
+			String xml = SAMLUtils.samlAssertionToString(saml);
+			SAMLAssertion saml2 = SAMLUtils.stringToSAMLAssertion(xml);
 			verifySAMLAssertion(saml2, cm);
 
 		} catch (Exception e) {

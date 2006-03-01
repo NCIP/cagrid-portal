@@ -4,7 +4,7 @@ import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
-import gov.nih.nci.cagrid.dorian.common.IOUtils;
+import gov.nih.nci.cagrid.dorian.common.SAMLUtils;
 import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
 import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
@@ -149,7 +149,7 @@ public class DorianService {
 		try {
 			ProxyLifetime lifetime = parameters.getProxyLifetime();
 			PublicKey key = KeyUtil.loadPublicKeyFromString(parameters.getPublicKey().getKeyAsString());
-			SAMLAssertion saml = IOUtils.stringToSAMLAssertion(parameters.getSAMLAssertion().getXml());
+			SAMLAssertion saml = SAMLUtils.stringToSAMLAssertion(parameters.getSAMLAssertion().getXml());
 			X509Certificate[] certs = getDorianHandle().createProxy(saml, key, lifetime);
 
 			gov.nih.nci.cagrid.dorian.ifs.bean.X509Certificate[] certList = new gov.nih.nci.cagrid.dorian.ifs.bean.X509Certificate[certs.length];
@@ -187,7 +187,7 @@ public class DorianService {
 
 		SAMLAssertion saml = getDorianHandle().authenticate(auth);
 		try {
-			String xml = IOUtils.samlAssertionToString(saml);
+			String xml = SAMLUtils.samlAssertionToString(saml);
 			return new gov.nih.nci.cagrid.dorian.bean.SAMLAssertion(xml);
 		} catch (Exception e) {
 			DorianInternalFault fault = new DorianInternalFault();
