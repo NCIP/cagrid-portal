@@ -17,7 +17,6 @@ public class CommonTools {
 		Thread thread1 = new Thread(new Runnable() {
 			public void run() {
 				try {
-
 					System.out.println(XMLUtilities.streamToString(p
 							.getInputStream()));
 				} catch (MobiusException e) {
