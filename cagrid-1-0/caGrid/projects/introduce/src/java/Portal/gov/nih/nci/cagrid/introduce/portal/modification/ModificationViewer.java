@@ -51,7 +51,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.67 2006-03-01 01:22:14 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.68 2006-03-01 16:04:25 hastings Exp $
  */
 public class ModificationViewer extends GridPortalComponent {
 
@@ -645,14 +645,16 @@ public class ModificationViewer extends GridPortalComponent {
 											.getAbsolutePath());
 										Process p = CommonTools.createAndOutputProcess(cmd);
 										p.waitFor();
+										if(p.exitValue()!=0){
+											JOptionPane.showMessageDialog(ModificationViewer.this,"Error: Unable to rebuild the skeleton");
+											return;
+										}
 										dirty = false;
 										setProgressText("loading service properties");
 										loadServiceProps();
 										lastSaved
 											.setText(serviceProperties.getProperty("introduce.skeleton.timestamp"));
 										this.setProgressText("");
-									} else {
-										dispose();
 									}
 								} catch (Exception e1) {
 									e1.printStackTrace();
