@@ -25,6 +25,7 @@ import javax.swing.JTextField;
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
 
+
 /**
  * CreationViewer
  * 
@@ -85,6 +86,7 @@ public class CreationViewer extends GridPortalComponent {
 
 	private Component me;
 
+
 	/**
 	 * This method initializes
 	 */
@@ -93,6 +95,7 @@ public class CreationViewer extends GridPortalComponent {
 		me = this;
 		initialize();
 	}
+
 
 	/**
 	 * This method initializes this
@@ -106,6 +109,7 @@ public class CreationViewer extends GridPortalComponent {
 		this.setTitle("Create Grid Service");
 
 	}
+
 
 	/**
 	 * This method initializes jPanel
@@ -162,11 +166,9 @@ public class CreationViewer extends GridPortalComponent {
 			gridBagConstraints10.gridx = 1;
 			inputPanel = new JPanel();
 			inputPanel.setLayout(new GridBagLayout());
-			inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, "Create Grid Service",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					IntroduceLookAndFeel.getPanelLabelColor()));
+			inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Create Grid Service",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
 			packageLabel = new JLabel();
 			packageLabel.setText("Package");
 			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
@@ -242,6 +244,7 @@ public class CreationViewer extends GridPortalComponent {
 		return inputPanel;
 	}
 
+
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -272,6 +275,7 @@ public class CreationViewer extends GridPortalComponent {
 		return mainPanel;
 	}
 
+
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -285,6 +289,7 @@ public class CreationViewer extends GridPortalComponent {
 		}
 		return buttonPanel;
 	}
+
 
 	/**
 	 * This method initializes jButton
@@ -302,30 +307,24 @@ public class CreationViewer extends GridPortalComponent {
 					int doIdeleteResult = JOptionPane.OK_OPTION;
 					final File dirFile = new File(getDir().getText());
 					if (dirFile.exists() && dirFile.list().length != 0) {
-						doIdeleteResult = JOptionPane
-								.showConfirmDialog(
-										me,
-										"The creation directory is not empty.  All information in the directory will be lost.");
+						doIdeleteResult = JOptionPane.showConfirmDialog(me,
+							"The creation directory is not empty.  All information in the directory will be lost.");
 					}
 
 					if (doIdeleteResult == JOptionPane.OK_OPTION) {
 						final int finalDoIdeleteResult = doIdeleteResult;
-						BusyDialogRunnable r = new BusyDialogRunnable(
-								PortalResourceManager.getInstance()
-										.getGridPortal(), "Creating") {
+						BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance()
+							.getGridPortal(), "Creating") {
 
 							public void process() {
 								try {
 									if (finalDoIdeleteResult == JOptionPane.OK_OPTION) {
 										if (dirFile.exists()) {
 											setProgressText("deleting existing directory");
-											boolean deleted = Utils
-													.deleteDir(dirFile);
+											boolean deleted = Utils.deleteDir(dirFile);
 											if (!deleted) {
-												JOptionPane
-														.showMessageDialog(
-																CreationViewer.this,
-																"Unable to delete creation directory");
+												JOptionPane.showMessageDialog(CreationViewer.this,
+													"Unable to delete creation directory");
 												return;
 											}
 										}
@@ -337,90 +336,59 @@ public class CreationViewer extends GridPortalComponent {
 
 									setProgressText("validating");
 									if (service.getText().length() > 0) {
-										if (!service.getText().matches(
-												"[A-Z]++[A-Za-z0-9\\_\\$]*")) {
+										if (!service.getText().matches("[A-Z]++[A-Za-z0-9\\_\\$]*")) {
 											PortalUtils
-													.showMessage("Service Name can only contain [A-Z]++[A-Za-z0-9\\_\\$]*");
+												.showMessage("Service Name can only contain [A-Z]++[A-Za-z0-9\\_\\$]*");
 											return;
 										}
-										if (service
-												.getText()
-												.substring(0, 1)
-												.toLowerCase()
-												.equals(
-														service
-																.getText()
-																.substring(0, 1))) {
+										if (service.getText().substring(0, 1).toLowerCase().equals(
+											service.getText().substring(0, 1))) {
 											PortalUtils
-													.showMessage("Service Name cannnot start with lower case letters.");
+												.showMessage("Service Name cannnot start with lower case letters.");
 											return;
 										}
 									} else {
-										PortalUtils
-												.showMessage("Service Name cannot be empty.");
+										PortalUtils.showMessage("Service Name cannot be empty.");
 										return;
 									}
 									setProgressText("creating");
-									String cmd = CommonTools
-											.getAntSkeletonCreationCommand(".",
-													service.getText(), dir
-															.getText(),
-													servicePackage.getText(),
-													namespaceDomain.getText());
-									Process p = CommonTools
-											.createAndOutputProcess(cmd);
+									String cmd = CommonTools.getAntSkeletonCreationCommand(".", service.getText(), dir
+										.getText(), servicePackage.getText(), namespaceDomain.getText());
+									Process p = CommonTools.createAndOutputProcess(cmd);
 									p.waitFor();
 									if (p.exitValue() != 0) {
-										PortalUtils
-												.showErrorMessage("Error creating new service!");
+										PortalUtils.showErrorMessage("Error creating new service!");
 									}
 									if (serviceTemplate.getText().length() > 0) {
 										if (serviceTemplate.getText().length() > 0) {
-											StringBuffer file = Utils
-													.fileToStringBuffer(new File(
-															serviceTemplate
-																	.getText()));
-											Utils.stringBufferToFile(file, dir
-													.getText()
-													+ File.separator
-													+ "introduce.xml");
+											StringBuffer file = Utils.fileToStringBuffer(new File(serviceTemplate
+												.getText()));
+											Utils.stringBufferToFile(file, dir.getText() + File.separator
+												+ "introduce.xml");
 										}
 
 										setProgressText("resynchronizing using templates");
-										cmd = CommonTools
-												.getAntSkeletonResyncCommand(dir
-														.getText());
-										p = CommonTools
-												.createAndOutputProcess(cmd);
+										cmd = CommonTools.getAntSkeletonResyncCommand(dir.getText());
+										p = CommonTools.createAndOutputProcess(cmd);
 										p.waitFor();
 										if (p.exitValue() != 0) {
-											PortalUtils
-													.showErrorMessage("Error templating new service!");
+											PortalUtils.showErrorMessage("Error templating new service!");
 										}
 									}
 									setProgressText("building");
-									cmd = CommonTools.getAntAllCommand(dir
-											.getText());
+									cmd = CommonTools.getAntAllCommand(dir.getText());
 									p = CommonTools.createAndOutputProcess(cmd);
 									p.waitFor();
 									if (p.exitValue() == 0) {
-										PortalResourceManager
-												.getInstance()
-												.getGridPortal()
-												.addGridPortalComponent(
-														new ModificationViewer(
-																new File(
-																		dir
-																				.getText())));
+										PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+											new ModificationViewer(new File(dir.getText())));
 										dispose();
 									} else {
-										PortalUtils
-												.showErrorMessage("Error creating new service!");
+										PortalUtils.showErrorMessage("Error creating new service!");
 									}
 								} catch (Exception ex) {
 									ex.printStackTrace();
-									PortalUtils.showErrorMessage(ex
-											.getMessage());
+									PortalUtils.showErrorMessage(ex.getMessage());
 									dispose();
 								}
 
@@ -438,6 +406,7 @@ public class CreationViewer extends GridPortalComponent {
 		return createButton;
 	}
 
+
 	/**
 	 * This method initializes service
 	 * 
@@ -450,6 +419,7 @@ public class CreationViewer extends GridPortalComponent {
 		}
 		return service;
 	}
+
 
 	/**
 	 * This method initializes jTextField
@@ -464,6 +434,7 @@ public class CreationViewer extends GridPortalComponent {
 		return dir;
 	}
 
+
 	/**
 	 * This method initializes jButton
 	 * 
@@ -477,8 +448,7 @@ public class CreationViewer extends GridPortalComponent {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
 						String previous = dir.getText();
-						String location = ResourceManager.promptDir(me,
-								previous);
+						String location = ResourceManager.promptDir(me, previous);
 						if (location != null && location.length() > 0) {
 							dir.setText(location);
 						} else {
@@ -493,6 +463,7 @@ public class CreationViewer extends GridPortalComponent {
 		return dirButton;
 	}
 
+
 	/**
 	 * This method initializes servicePackage
 	 * 
@@ -501,11 +472,11 @@ public class CreationViewer extends GridPortalComponent {
 	private JTextField getServicePackage() {
 		if (servicePackage == null) {
 			servicePackage = new JTextField();
-			servicePackage.setText((DEFAULT_JAVA_PACKAGE + "." + DEFAULT_NAME)
-					.toLowerCase());
+			servicePackage.setText((DEFAULT_JAVA_PACKAGE + "." + DEFAULT_NAME).toLowerCase());
 		}
 		return servicePackage;
 	}
+
 
 	/**
 	 * This method initializes namespaceDomain
@@ -520,6 +491,7 @@ public class CreationViewer extends GridPortalComponent {
 		return namespaceDomain;
 	}
 
+
 	private String promptFile() {
 		JFileChooser chooser = new JFileChooser();
 		chooser.setDialogTitle("Select Attribute File");
@@ -532,6 +504,7 @@ public class CreationViewer extends GridPortalComponent {
 		}
 		return "";
 	}
+
 
 	/**
 	 * This method initializes closeButton
@@ -552,6 +525,7 @@ public class CreationViewer extends GridPortalComponent {
 		return closeButton;
 	}
 
+
 	/**
 	 * This method initializes methodsTemplateFile
 	 * 
@@ -566,6 +540,7 @@ public class CreationViewer extends GridPortalComponent {
 		return serviceTemplate;
 	}
 
+
 	/**
 	 * This method initializes methodsTemplateButton
 	 * 
@@ -576,15 +551,15 @@ public class CreationViewer extends GridPortalComponent {
 			serviceTemplateButton = new JButton();
 			serviceTemplateButton.setText("Browse");
 			serviceTemplateButton.setEnabled(false);
-			serviceTemplateButton
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							serviceTemplate.setText(promptFile());
-						}
-					});
+			serviceTemplateButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					serviceTemplate.setText(promptFile());
+				}
+			});
 		}
 		return serviceTemplateButton;
 	}
+
 
 	/**
 	 * This method initializes templatePanel
@@ -599,8 +574,7 @@ public class CreationViewer extends GridPortalComponent {
 			serviceTemplateJLabel = new JLabel();
 			serviceTemplateJLabel.setText("Service Template File");
 			serviceTemplateJLabel.setEnabled(false);
-			serviceTemplateJLabel.setFont(new java.awt.Font("Dialog",
-					java.awt.Font.PLAIN, 12));
+			serviceTemplateJLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12));
 			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
 			gridBagConstraints15.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints15.gridy = 0;
@@ -614,15 +588,9 @@ public class CreationViewer extends GridPortalComponent {
 			gridBagConstraints14.fill = GridBagConstraints.HORIZONTAL;
 			templatePanel = new JPanel();
 			templatePanel.setLayout(new GridBagLayout());
-			templatePanel
-					.setBorder(javax.swing.BorderFactory
-							.createTitledBorder(
-									null,
-									"Service Template Options",
-									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, IntroduceLookAndFeel
-											.getPanelLabelColor()));
+			templatePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service Template Options",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
 			templatePanel.setEnabled(false);
 			templatePanel.add(getMethodsTemplateFile(), gridBagConstraints14);
 			templatePanel.add(getServiceTemplateButton(), gridBagConstraints15);
@@ -630,6 +598,7 @@ public class CreationViewer extends GridPortalComponent {
 		}
 		return templatePanel;
 	}
+
 
 	/**
 	 * This method initializes serviceStyleSeletor
@@ -643,35 +612,28 @@ public class CreationViewer extends GridPortalComponent {
 			serviceStyleSeletor.addItem("ANALYTICAL");
 			serviceStyleSeletor.addItem("DATA");
 			serviceStyleSeletor.addItem("CUSTOM");
-			serviceStyleSeletor
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							if (serviceStyleSeletor.getSelectedItem().equals(
-									"CUSTOM")) {
-								serviceTemplateJLabel.setEnabled(true);
-								serviceTemplateButton.setEnabled(true);
-							} else {
-								serviceTemplateJLabel.setEnabled(false);
-								serviceTemplateButton.setEnabled(false);
-								if (serviceStyleSeletor.getSelectedItem()
-										.equals("ANALYTICAL")) {
-									serviceTemplate.setText("templates"
-											+ File.separator
-											+ "analyticalIntroduce.xml");
-								} else if (serviceStyleSeletor
-										.getSelectedItem().equals("DATA")) {
-									serviceTemplate.setText("templates"
-											+ File.separator
-											+ "dataIntroduce.xml");
-								} else {
-									serviceTemplate.setText("");
-								}
-							}
+			serviceStyleSeletor.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if (serviceStyleSeletor.getSelectedItem().equals("CUSTOM")) {
+						serviceTemplateJLabel.setEnabled(true);
+						serviceTemplateButton.setEnabled(true);
+					} else {
+						serviceTemplateJLabel.setEnabled(false);
+						serviceTemplateButton.setEnabled(false);
+						if (serviceStyleSeletor.getSelectedItem().equals("ANALYTICAL")) {
+							serviceTemplate.setText("templates" + File.separator + "analyticalIntroduce.xml");
+						} else if (serviceStyleSeletor.getSelectedItem().equals("DATA")) {
+							serviceTemplate.setText("templates" + File.separator + "dataIntroduce.xml");
+						} else {
+							serviceTemplate.setText("");
 						}
-					});
+					}
+				}
+			});
 		}
 		return serviceStyleSeletor;
 	}
+
 
 	public static void main(String[] args) {
 		System.out.println();
