@@ -152,7 +152,8 @@ public class SyncTools {
 						if (inputParam.getNamespace() != null
 							&& !inputParam.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)
 							&& (inputParam.getPackageName() == null || inputParam.getPackageName().length() <= 0)) {
-							inputParam.setPackageName(CommonTools.getPackageName(new Namespace(inputParam.getNamespace())));
+							inputParam.setPackageName(CommonTools.getPackageName(new Namespace(inputParam
+								.getNamespace())));
 						}
 
 						if (inputParam.getClassName() == null) {
@@ -173,7 +174,8 @@ public class SyncTools {
 					if (outputParam.getNamespace() != null
 						&& !outputParam.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)
 						&& (outputParam.getPackageName() == null || outputParam.getPackageName().length() <= 0)) {
-						outputParam.setPackageName(CommonTools.getPackageName(new Namespace(outputParam.getNamespace())));
+						outputParam.setPackageName(CommonTools
+							.getPackageName(new Namespace(outputParam.getNamespace())));
 					}
 					if (outputParam.getClassName() != null && outputParam.getClassName().equals("void")) {
 						outputParam.setPackageName("");
@@ -204,17 +206,18 @@ public class SyncTools {
 	private Set generateNamespaceExcludesSet(ServiceInformation info) throws MalformedNamespaceException {
 		Set excludeSet = new HashSet();
 		File schemaDir = new File(baseDirectory.getAbsolutePath() + File.separator + "schema" + File.separator
-			 + info.getServiceProperties().getProperty("introduce.skeleton.service.name"));
+			+ info.getServiceProperties().getProperty("introduce.skeleton.service.name"));
 		// exclude namespaces that have FQN for metadata class
 		if (info.getMetadata().getMetadata() != null) {
 			for (int i = 0; i < info.getMetadata().getMetadata().length; i++) {
 				MetadataType mtype = info.getMetadata().getMetadata(i);
 				if (mtype.getClassName() != null) {
-					if(mtype.getNamespace() != null){
-					excludeSet.add(mtype.getNamespace());
-					ImportInfo ii = new ImportInfo(new Namespace(mtype.getNamespace()));
-					TemplateUtils.walkSchemasGetNamespaces(schemaDir, schemaDir + File.separator +ii.getFileName(),excludeSet);
-				}}
+					if (mtype.getLocation() != null) {
+						excludeSet.add(mtype.getNamespace());
+						TemplateUtils.walkSchemasGetNamespaces(schemaDir, schemaDir + File.separator
+							+ mtype.getLocation(), excludeSet);
+					}
+				}
 			}
 		}
 
@@ -227,11 +230,12 @@ public class SyncTools {
 					for (int j = 0; j < mtype.getInputs().getInput().length; j++) {
 						MethodTypeInputsInput inputParam = mtype.getInputs().getInput(j);
 						if (inputParam.getClassName() != null) {
-							if(inputParam.getNamespace() != null){
-							excludeSet.add(inputParam.getNamespace());
-							ImportInfo ii = new ImportInfo(new Namespace(inputParam.getNamespace()));
-							TemplateUtils.walkSchemasGetNamespaces(schemaDir, schemaDir + File.separator + ii.getFileName(),excludeSet);
-						}}
+							if (inputParam.getLocation() != null) {
+								excludeSet.add(inputParam.getNamespace());
+								TemplateUtils.walkSchemasGetNamespaces(schemaDir, schemaDir + File.separator
+									+ inputParam.getLocation(), excludeSet);
+							}
+						}
 					}
 				}
 
@@ -239,18 +243,20 @@ public class SyncTools {
 				if (mtype.getOutput() != null) {
 					MethodTypeOutput outputParam = mtype.getOutput();
 					if (outputParam.getClassName() != null) {
-						if(outputParam.getNamespace() != null){
-						excludeSet.add(outputParam.getNamespace());
-						ImportInfo ii = new ImportInfo(new Namespace(outputParam.getNamespace()));
-						TemplateUtils.walkSchemasGetNamespaces(schemaDir, schemaDir + File.separator + ii.getFileName(),excludeSet);
-					}}
+						if (outputParam.getLocation() != null) {
+							excludeSet.add(outputParam.getNamespace());
+							TemplateUtils.walkSchemasGetNamespaces(schemaDir, schemaDir + File.separator
+								+ outputParam.getLocation(), excludeSet);
+						}
+					}
 				}
 			}
 		}
 
 		return excludeSet;
 	}
-	
+
+
 	private void writeNamespaceMappings(ServiceInformation info) throws IOException {
 		NamespaceMappingsTemplate namespaceMappingsT = new NamespaceMappingsTemplate();
 		String namespaceMappingsS = namespaceMappingsT.generate(info);
@@ -310,7 +316,7 @@ public class SyncTools {
 	}
 
 
-private void createArchive(ServiceInformation info) throws Exception {
+	private void createArchive(ServiceInformation info) throws Exception {
 		// create the archive
 		long id = System.currentTimeMillis();
 

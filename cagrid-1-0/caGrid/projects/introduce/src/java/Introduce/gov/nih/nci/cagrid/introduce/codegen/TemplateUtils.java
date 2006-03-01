@@ -168,14 +168,14 @@ public class TemplateUtils {
 									qnameNamespace, prefix, location));
 							} else {
 								inputParam.setPackageName("");
-								map.put(qnameNamespace, new SchemaInformation("",
-									qnameNamespace, "xs", ""));
+								map.put(qnameNamespace, new SchemaInformation("", qnameNamespace, "xs", ""));
 							}
 						}
 					}
 					if (method.getOutput() != null) {
 						MethodTypeOutput outputParam = method.getOutput();
-						if ((outputParam.getClassName()==null) || (outputParam.getClassName() != null && !outputParam.getClassName().equals("void"))) {
+						if ((outputParam.getClassName() == null)
+							|| (outputParam.getClassName() != null && !outputParam.getClassName().equals("void"))) {
 							String qnameName = outputParam.getType();
 							String qnameNamespace = outputParam.getNamespace();
 							String location = outputParam.getLocation();
@@ -196,8 +196,7 @@ public class TemplateUtils {
 									qnameNamespace, prefix, location));
 							} else {
 								outputParam.setPackageName("");
-								map.put(qnameNamespace, new SchemaInformation("",
-									qnameNamespace, "xs", ""));
+								map.put(qnameNamespace, new SchemaInformation("", qnameNamespace, "xs", ""));
 							}
 						}
 					}
@@ -209,25 +208,25 @@ public class TemplateUtils {
 	}
 
 
-	public static void walkSchemasGetNamespaces(File schemaDir, String fileName, Set namespaces){
+	public static void walkSchemasGetNamespaces(File schemaDir, String fileName, Set namespaces) {
 		try {
 			System.out.println("Looking at schema " + fileName);
 			Document schema = XMLUtilities.fileNameToDocument(fileName);
-			List importEls = schema.getRootElement().getChildren("import",schema.getRootElement().getNamespace(IntroduceConstants.W3CNAMESPACE));
-			for(int i=0;i<importEls.size();i++){
-				org.jdom.Element importEl = (org.jdom.Element)importEls.get(i);
+			List importEls = schema.getRootElement().getChildren("import",
+				schema.getRootElement().getNamespace(IntroduceConstants.W3CNAMESPACE));
+			for (int i = 0; i < importEls.size(); i++) {
+				org.jdom.Element importEl = (org.jdom.Element) importEls.get(i);
 				String namespace = importEl.getAttributeValue("namespace");
-				namespaces.add(namespace);
-				System.out.println("adding namepace " + namespace);
-				String location = importEl.getAttributeValue("location");
-				walkSchemasGetNamespaces(schemaDir, schemaDir + File.separator + location,namespaces);
+				if (namespaces.add(namespace)) {
+					System.out.println("adding namepace " + namespace);
+				}
+				String location = importEl.getAttributeValue("schemaLocation");
+				walkSchemasGetNamespaces(schemaDir, schemaDir + File.separator + location, namespaces);
 			}
 		} catch (MobiusException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		
+
 	}
 }

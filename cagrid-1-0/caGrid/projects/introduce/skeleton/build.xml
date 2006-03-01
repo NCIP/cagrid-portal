@@ -33,10 +33,6 @@
 	<property name="test.lib.dir" value="${test}/lib" />
 	<property name="test.jar.name" value="${gar.filename}-tests.jar" />
 	
-	
-	<import file="./build-deploy.xml" />
-
-
 	<!-- Basic Build directories -->
 
 	<!-- Auxiliary directory where all the intermediate files will be placed -->
