@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.common.portal;
 
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 public abstract class BusyDialogRunnable implements Runnable {
 
@@ -10,8 +11,12 @@ public abstract class BusyDialogRunnable implements Runnable {
 		dialog = new BusyDialog(owner, "Progress (" + title + ")", this);
 	}
 
-	public void setProgressText(String text) {
-		dialog.getProgress().setString(text);
+	public void setProgressText(final String text) {
+		SwingUtilities.invokeLater(new Runnable() {
+	        public void run() {
+	        	dialog.getProgress().setString(text);
+	        }
+	    });
 	}
 
 	public void run() {
