@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.gme;
 
+import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 
@@ -261,15 +262,9 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 		int index = 0;
 
 		// set the package name
-		String domain = this.gmePanel.currentNamespace.getDomain();
-		String csi = this.gmePanel.currentNamespace.getName();
-		int csiDomainIndex = csi.lastIndexOf(".");
-		if (csiDomainIndex >= 0) {
-			domain = csi.substring(0, csiDomainIndex);
-		}
-		domain = domain.replace('/','.');
+		String packageName = CommonTools.getPackageName(gmePanel.currentNamespace);
 
-		typeInfo.set(index++, domain);
+		typeInfo.set(index++, packageName);
 
 		// skip classname
 		index++;

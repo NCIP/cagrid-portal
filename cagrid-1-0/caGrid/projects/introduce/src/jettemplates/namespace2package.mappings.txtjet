@@ -1,4 +1,4 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="NamespaceMappingsTemplate" imports="gov.nih.nci.cagrid.introduce.codegen.* org.projectmobius.common.* java.io.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.* gov.nih.nci.cagrid.introduce.beans.method.*"%>
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="NamespaceMappingsTemplate" imports="gov.nih.nci.cagrid.common.* gov.nih.nci.cagrid.introduce.codegen.* org.projectmobius.common.* java.io.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.* gov.nih.nci.cagrid.introduce.beans.method.*"%>
 <% gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
    String packageName = info.getServiceProperties().getProperty("introduce.skeleton.package");
    String serviceName = info.getServiceProperties().getProperty("introduce.skeleton.service.name");
@@ -54,7 +54,7 @@
 			String newnewLine = "";
 			try {
 				String thisnamespace = (String)it.next();
-				String thispackageName = TemplateUtils.getPackageName(new Namespace(thisnamespace));
+				String thispackageName = CommonTools.getPackageName(new Namespace(thisnamespace));
 				newLine = thisnamespace + "=" + thispackageName;
 				// turns http: into http\:
 				newnewLine = newLine.replaceFirst(":", "\\\\:");

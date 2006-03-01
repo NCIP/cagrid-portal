@@ -15,13 +15,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import org.jdom.Document;
 import org.jdom.Element;
 import org.projectmobius.common.MalformedNamespaceException;
 import org.projectmobius.common.MobiusException;
-import org.projectmobius.common.Namespace;
 import org.projectmobius.common.XMLUtilities;
 
 
@@ -231,17 +229,5 @@ public class TemplateUtils {
 		
 		
 		
-	}
-
-
-	public static  String getPackageName(Namespace namespace) {
-		StringTokenizer tokenizer = new StringTokenizer(namespace.getDomain(), ".", true);
-		StringBuffer packageNameBuf = new StringBuffer();
-		while (tokenizer.hasMoreElements()) {
-			packageNameBuf.insert(0, tokenizer.nextToken());
-		}
-		String packageName = packageNameBuf.toString();
-		packageName = packageName.replace('/','.');
-		return packageName;
 	}
 }

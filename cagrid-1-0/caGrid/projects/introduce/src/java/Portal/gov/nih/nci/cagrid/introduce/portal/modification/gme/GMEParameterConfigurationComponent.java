@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.gme;
 
+import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
 import java.awt.GridBagConstraints;
@@ -119,14 +120,8 @@ public class GMEParameterConfigurationComponent extends JPanel {
 		int index = 0;
 		
 		//set the package name
-		String domain = this.gmePanel.currentNamespace.getDomain();
-		String csi = this.gmePanel.currentNamespace.getName();
-		int csiDomainIndex = csi.lastIndexOf(".");
-		if(csiDomainIndex>=0){
-			domain = csi.substring(0,csiDomainIndex);
-		}
-		domain = domain.replace('/','.');
-		typeInfo.set(index++, domain);
+		String packageName = CommonTools.getPackageName(gmePanel.currentNamespace);
+		typeInfo.set(index++, packageName);
 		
 		// set classname
 		typeInfo.set(index++, "");

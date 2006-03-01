@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.StringTokenizer;
 
 import org.projectmobius.common.MobiusException;
+import org.projectmobius.common.Namespace;
 import org.projectmobius.common.XMLUtilities;
 
 public class CommonTools {
@@ -133,6 +134,26 @@ public class CommonTools {
 			}
 		}
 		return null;
+	}
+
+	public static  String getPackageName(Namespace namespace) {
+		String domain = namespace.getDomain();
+		domain = domain.replace('/','.');
+		StringTokenizer tokenizer = new StringTokenizer(namespace.getDomain(), ".", true);
+		StringBuffer packageNameBuf = new StringBuffer();
+		while (tokenizer.hasMoreElements()) {
+			String nextToken = tokenizer.nextToken();
+			if(nextToken.length()>0){
+				char startingChar = nextToken.charAt(0);
+				if(startingChar >=48 && startingChar <=57 ){
+					nextToken = "_" + nextToken;
+				}
+				packageNameBuf.insert(0, nextToken);
+			}
+		}
+		String packageName = packageNameBuf.toString();
+		packageName = packageName.replace('/','.');
+		return packageName;
 	}
 
 }

@@ -132,7 +132,7 @@ public class SyncTools {
 				MetadataType mtype = info.getMetadata().getMetadata(i);
 				if (mtype.getNamespace() != null
 					&& (mtype.getPackageName() == null || mtype.getPackageName().length() <= 0)) {
-					mtype.setPackageName(TemplateUtils.getPackageName(new Namespace(mtype.getNamespace())));
+					mtype.setPackageName(CommonTools.getPackageName(new Namespace(mtype.getNamespace())));
 				}
 				if (mtype.getClassName() == null || mtype.getClassName().length() == 0) {
 					Element element = table.getElement(new QName(mtype.getNamespace(), mtype.getType()));
@@ -152,7 +152,7 @@ public class SyncTools {
 						if (inputParam.getNamespace() != null
 							&& !inputParam.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)
 							&& (inputParam.getPackageName() == null || inputParam.getPackageName().length() <= 0)) {
-							inputParam.setPackageName(TemplateUtils.getPackageName(new Namespace(inputParam.getNamespace())));
+							inputParam.setPackageName(CommonTools.getPackageName(new Namespace(inputParam.getNamespace())));
 						}
 
 						if (inputParam.getClassName() == null) {
@@ -173,7 +173,7 @@ public class SyncTools {
 					if (outputParam.getNamespace() != null
 						&& !outputParam.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)
 						&& (outputParam.getPackageName() == null || outputParam.getPackageName().length() <= 0)) {
-						outputParam.setPackageName(TemplateUtils.getPackageName(new Namespace(outputParam.getNamespace())));
+						outputParam.setPackageName(CommonTools.getPackageName(new Namespace(outputParam.getNamespace())));
 					}
 					if (outputParam.getClassName() != null && outputParam.getClassName().equals("void")) {
 						outputParam.setPackageName("");
