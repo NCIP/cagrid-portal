@@ -9,18 +9,15 @@ import java.awt.Insets;
 import java.io.File;
 import java.util.List;
 
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import org.jdom.Document;
 import org.jdom.Element;
 import org.projectmobius.common.GridServiceResolver;
-import org.projectmobius.common.MalformedNamespaceException;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.Namespace;
 import org.projectmobius.common.XMLUtilities;
@@ -78,7 +75,7 @@ public class GMEConfigurationPanel extends JPanel {
 	 * This method initializes this
 	 */
 	private void initialize() {
-		this.setSize(new java.awt.Dimension(138,122));
+		this.setSize(new java.awt.Dimension(138, 122));
 		this.add(getMainPanel(), null);
 
 	}
@@ -179,9 +176,8 @@ public class GMEConfigurationPanel extends JPanel {
 
 						currentNamespace = null;
 						try {
-							currentNamespace = new Namespace((String) getNamespaceComboBox().getSelectedItem()
-								+ (String) getSchemaComboBox().getSelectedItem());
-						} catch (MalformedNamespaceException e1) {
+							currentNamespace = ((SchemaWrapper) getSchemaComboBox().getSelectedItem()).getNamespace();
+						} catch (Exception e1) {
 							e1.printStackTrace();
 						}
 					}
@@ -217,11 +213,10 @@ public class GMEConfigurationPanel extends JPanel {
 							getSchemaComboBox().removeAllItems();
 							for (int i = 0; i < schemas.size(); i++) {
 								Namespace schemaNS = (Namespace) schemas.get(i);
-								getSchemaComboBox().addItem("/" + schemaNS.getName());
+								getSchemaComboBox().addItem(new SchemaWrapper(schemaNS));
 							}
 						}
 					} catch (MobiusException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 						JOptionPane.showMessageDialog(me,
 							"Please check the GME URL and make sure that you have the appropriate credentials!");
@@ -250,9 +245,7 @@ public class GMEConfigurationPanel extends JPanel {
 						XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
 							.getGridService(conf.getGME());
 						if (schemaComboBox.getSelectedItem() != null) {
-							SchemaNode node = handle.getSchema(new Namespace((String) namespaceComboBox
-								.getSelectedItem()
-								+ (String) schemaComboBox.getSelectedItem()), false);
+							SchemaNode node = handle.getSchema( ((SchemaWrapper) schemaComboBox.getSelectedItem()).getNamespace(),false);
 							initializeTypes(node);
 						}
 					} catch (MobiusException e1) {
@@ -338,6 +331,26 @@ public class GMEConfigurationPanel extends JPanel {
 			schemaPanel.add(elementTypeLabel, gridBagConstraints13);
 		}
 		return schemaPanel;
+	}
+
+
+	class SchemaWrapper {
+		Namespace ns;
+
+
+		public Namespace getNamespace() {
+			return ns;
+		}
+
+
+		public SchemaWrapper(Namespace ns) {
+			this.ns = ns;
+		}
+
+
+		public String toString() {
+			return ns.getName();
+		}
 	}
 
 } // @jve:decl-index=0:visual-constraint="10,10"

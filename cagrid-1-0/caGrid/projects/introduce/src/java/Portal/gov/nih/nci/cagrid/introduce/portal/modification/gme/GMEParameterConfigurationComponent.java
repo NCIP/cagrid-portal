@@ -131,7 +131,7 @@ public class GMEParameterConfigurationComponent extends JPanel {
 			typeInfo.set(index++, this.gmePanel.currentType);
 		}
 		if (this.gmePanel.currentNamespace != null) {
-			typeInfo.set(index++, "gme://" + this.gmePanel.currentNamespace.getRaw());
+			typeInfo.set(index++, this.gmePanel.currentNamespace.getRaw());
 		} else {
 			typeInfo.set(index++, null);
 		}

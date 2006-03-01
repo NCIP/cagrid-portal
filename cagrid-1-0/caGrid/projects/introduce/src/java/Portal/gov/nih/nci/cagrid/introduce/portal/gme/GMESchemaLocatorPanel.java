@@ -51,7 +51,7 @@ public class GMESchemaLocatorPanel extends JPanel {
 	JLabel gmeAddressLabel = null;
 
 	JLabel nameLabel = null;
-	
+
 	public SchemaNode currentNode = null;
 
 
@@ -180,7 +180,6 @@ public class GMESchemaLocatorPanel extends JPanel {
 	}
 
 
-
 	/**
 	 * This method initializes jComboBox
 	 * 
@@ -203,7 +202,7 @@ public class GMESchemaLocatorPanel extends JPanel {
 							getSchemaComboBox().removeAllItems();
 							for (int i = 0; i < schemas.size(); i++) {
 								Namespace schemaNS = (Namespace) schemas.get(i);
-								getSchemaComboBox().addItem("/" + schemaNS.getName());
+								getSchemaComboBox().addItem(new SchemaWrapper(schemaNS));
 							}
 						}
 					} catch (MobiusException e1) {
@@ -234,9 +233,7 @@ public class GMESchemaLocatorPanel extends JPanel {
 						XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
 							.getGridService(gme.getText());
 						if (schemaComboBox.getSelectedItem() != null) {
-							currentNode = handle.getSchema(new Namespace((String) namespaceComboBox
-								.getSelectedItem()
-								+ (String) schemaComboBox.getSelectedItem()), false);
+							currentNode = handle.getSchema(((SchemaWrapper)schemaComboBox.getSelectedItem()).getNamespace(), false);
 						}
 					} catch (MobiusException e1) {
 						// TODO Auto-generated catch block
@@ -318,4 +315,23 @@ public class GMESchemaLocatorPanel extends JPanel {
 		return gme;
 	}
 
+
+	class SchemaWrapper {
+		Namespace ns;
+
+
+		public Namespace getNamespace() {
+			return ns;
+		}
+
+
+		public SchemaWrapper(Namespace ns) {
+			this.ns = ns;
+		}
+
+
+		public String toString() {
+			return ns.getName();
+		}
+	}
 }

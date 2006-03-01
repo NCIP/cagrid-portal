@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.common.jedit.JEditTextArea;
 import gov.nih.nci.cagrid.introduce.portal.common.jedit.XMLTokenMarker;
+import gov.nih.nci.cagrid.introduce.portal.gme.GMESchemaLocatorPanel.SchemaWrapper;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -251,7 +252,6 @@ public class GMEViewer extends GridPortalComponent {
 			gmeSchemaLocatorPanel.getSchemaComboBox().addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
 					if (gmeSchemaLocatorPanel.currentNode != null) {
 						getSchemaTextPane().setText(gmeSchemaLocatorPanel.currentNode.getSchemaContents());
 						getSchemaTextPane().setCaretPosition(0);
@@ -435,9 +435,7 @@ public class GMEViewer extends GridPortalComponent {
 								XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
 									.getGridService(gmeSchemaLocatorPanel.getGme().getText());
 								if (gmeSchemaLocatorPanel.getSchemaComboBox().getSelectedItem() != null) {
-									handle.cacheSchema(new Namespace((String) gmeSchemaLocatorPanel
-										.getNamespaceComboBox().getSelectedItem()
-										+ (String) gmeSchemaLocatorPanel.getSchemaComboBox().getSelectedItem()),
+									handle.cacheSchema(((SchemaWrapper)gmeSchemaLocatorPanel.getSchemaComboBox().getSelectedItem()).getNamespace(),
 										new File(location));
 								}
 							} catch (MobiusException e1) {

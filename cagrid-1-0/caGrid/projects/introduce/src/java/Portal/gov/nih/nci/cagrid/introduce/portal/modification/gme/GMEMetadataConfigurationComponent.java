@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.introduce.portal.modification.gme;
 import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
+import gov.nih.nci.cagrid.introduce.portal.modification.gme.GMEConfigurationPanel.SchemaWrapper;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -197,8 +198,8 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
 			gmePanel.getTypesComboBox().addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					qnameDomain.setText("gme://" + (String) gmePanel.getNamespaceComboBox().getSelectedItem()
-						+ (String) gmePanel.getSchemaComboBox().getSelectedItem());
+					qnameDomain.setText(((SchemaWrapper) gmePanel.getSchemaComboBox().getSelectedItem()).getNamespace()
+						.getDomain());
 					qnameName.setText((String) gmePanel.getTypesComboBox().getSelectedItem());
 
 				}
@@ -235,8 +236,8 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
 					try {
-						IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
-							IntroducePortalConf.RESOURCE);
+						IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance()
+							.getResource(IntroducePortalConf.RESOURCE);
 						XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
 							.getGridService(conf.getGME());
 						if (gmePanel.currentNamespace != null) {
@@ -269,7 +270,7 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 		// skip classname
 		index++;
 		if (this.gmePanel.currentNamespace != null) {
-			typeInfo.set(index++, "gme://" + this.gmePanel.currentNamespace.getRaw());
+			typeInfo.set(index++, this.gmePanel.currentNamespace.getRaw());
 		} else {
 			typeInfo.set(index++, null);
 		}
