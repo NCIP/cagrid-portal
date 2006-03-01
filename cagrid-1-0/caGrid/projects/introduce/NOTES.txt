@@ -1,6 +1,6 @@
 To Do:
 
-running from ant is causing portal errors on create and modify
+Do primative arrays as returns work?  I seem to be getting "binding" errors when using them.
 
 (DONE) If it could not delete the dir prior to creation then warn and exit.
 
