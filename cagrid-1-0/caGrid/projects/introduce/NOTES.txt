@@ -1,5 +1,12 @@
 To Do:
 
+Need to fix commontools to read some preference to set the rule to use for namespace mapping, right now its hardcoded as below:
+	//TODO: where should this mapperClassname preference be set
+	String mapperClassname = "gov.nih.nci.cagrid.common.CaBIGNamespaceToPackageMapper";
+
+probably need to separate out the namespacetopackage mapping definitions from each output/input/metadata as it is now, as its really a service level thing
+we need a separate tab to define the mappings; this will probably be needed for custom serialization too
+
 When creating a new service be sure to remove all the old zips from teh resource directory....
 
 Do primative arrays as returns work?  I seem to be getting "binding" errors when using them.
