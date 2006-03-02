@@ -108,5 +108,6 @@
 	<classpathentry kind="lib" path="ext/lib/dorian.jar"/>
 	<classpathentry kind="lib" path="ext/endorsed/lib/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="ext/endorsed/lib/xml-apis.jar"/>
+	<classpathentry kind="lib" path="ext/lib/gridca.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,8 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.security;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.dorian.common.ca.CertUtil;
-import gov.nih.nci.cagrid.dorian.common.ca.KeyUtil;
+import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 import gov.nih.nci.cagrid.introduce.beans.security.X509Credential;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
@@ -15,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.globus.gsi.CertUtil;
 import org.projectmobius.portal.GridPortalComponent;
 
 
