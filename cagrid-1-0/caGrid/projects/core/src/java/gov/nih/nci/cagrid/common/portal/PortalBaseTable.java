@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.dorian.portal;
+package gov.nih.nci.cagrid.common.portal;
 
 import java.awt.Color;
 
@@ -13,7 +13,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public abstract class PortalBaseTable extends PortalTable{
 	public PortalBaseTable(DefaultTableModel model){
-		super(model,Color.WHITE,Color.BLACK,DorianLookAndFeel.getTableRowColor(),Color.BLACK,DorianLookAndFeel.getTableSelectColor(),DorianLookAndFeel.getTableSelectTextColor());
+		super(model,Color.WHITE,Color.BLACK,PortalLookAndFeel.getTableRowColor(),Color.BLACK,PortalLookAndFeel.getTableSelectColor(),PortalLookAndFeel.getTableSelectTextColor());
 	}
 
 }

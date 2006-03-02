@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.dorian.portal;
+package gov.nih.nci.cagrid.gridca.portal;
 
 import gov.nih.nci.cagrid.common.security.ProxyUtil;
 

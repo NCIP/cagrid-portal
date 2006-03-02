@@ -1,7 +1,6 @@
-package gov.nih.nci.cagrid.dorian.ifs.portal;
+package gov.nih.nci.cagrid.gridca.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 
 import java.awt.GridBagConstraints;
@@ -21,7 +20,7 @@ import javax.swing.JTextField;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CertificatePanel.java,v 1.8 2006-03-01 21:38:52 langella Exp $
+ * @version $Id: CertificatePanel.java,v 1.1 2006-03-02 17:54:34 langella Exp $
  */
 public class CertificatePanel extends JPanel {
 
@@ -78,6 +77,7 @@ public class CertificatePanel extends JPanel {
 
 
 	public void setCertificate(X509Certificate cert) {
+		if(cert!=null){
 		this.certificate = cert;
 		this.getCertificateCreated().setText(cert.getNotBefore().toString());
 		this.getCertificateExpires().setText(cert.getNotAfter().toString());
@@ -89,6 +89,7 @@ public class CertificatePanel extends JPanel {
 		this.getCertificateVersion().setText(String.valueOf(cert.getVersion()));
 		this.getCertificateExtensionsTable().clearTable();
 		((CertificateExtensionsTable)this.getCertificateExtensionsTable()).addCertificate(cert);
+		}
 	}
 
 
@@ -270,7 +271,7 @@ public class CertificatePanel extends JPanel {
 				null, "Certificate Information",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-				DorianLookAndFeel.getPanelLabelColor()));
+				GridCALookAndFeel.getPanelLabelColor()));
 			jPanel.setLayout(new GridBagLayout());
 			jPanel.add(jLabel, gridBagConstraints);
 			jPanel.add(jLabel1, gridBagConstraints1);
@@ -435,7 +436,7 @@ public class CertificatePanel extends JPanel {
 
 				}
 			});
-			loadButton.setIcon(DorianLookAndFeel.getImportIcon());
+			loadButton.setIcon(GridCALookAndFeel.getImportIcon());
 		}
 		return loadButton;
 	}
@@ -486,7 +487,7 @@ public class CertificatePanel extends JPanel {
 	private JButton getSaveButton() {
 		if (saveButton == null) {
 			saveButton = new JButton();
-			saveButton.setIcon(DorianLookAndFeel.getSaveIcon());
+			saveButton.setIcon(GridCALookAndFeel.getSaveIcon());
 			saveButton.addActionListener(new java.awt.event.ActionListener() { 
 				public void actionPerformed(java.awt.event.ActionEvent e) {    
 					exportCertificate();
@@ -515,7 +516,7 @@ public class CertificatePanel extends JPanel {
 				null, "Certificate Extensions",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-				DorianLookAndFeel.getPanelLabelColor()));
+				GridCALookAndFeel.getPanelLabelColor()));
 			jPanel1.setLayout(new GridBagLayout());
 			jPanel1.add(getJScrollPane(), gridBagConstraints18);
 		}
@@ -540,7 +541,7 @@ public class CertificatePanel extends JPanel {
 	/**
 	 * This method initializes certificateExtensionsTable	
 	 * 	
-	 * @return gov.nih.nci.cagrid.dorian.ifs.portal.CertificateExtensionsTable	
+	 * @return gov.nih.nci.cagrid.gridca.portal.CertificateExtensionsTable	
 	 */    
 	private CertificateExtensionsTable getCertificateExtensionsTable() {
 		if (certificateExtensionsTable == null) {

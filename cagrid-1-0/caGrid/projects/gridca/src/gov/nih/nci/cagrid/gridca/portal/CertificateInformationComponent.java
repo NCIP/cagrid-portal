@@ -1,6 +1,4 @@
-package gov.nih.nci.cagrid.dorian.ifs.portal;
-
-import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
+package gov.nih.nci.cagrid.gridca.portal;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -14,7 +12,7 @@ import org.projectmobius.portal.GridPortalComponent;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CertificateInformationComponent.java,v 1.8 2006-01-11 19:50:29 langella Exp $
+ * @version $Id: CertificateInformationComponent.java,v 1.1 2006-03-02 17:54:33 langella Exp $
  */
 public class CertificateInformationComponent extends GridPortalComponent {
 
@@ -22,6 +20,11 @@ public class CertificateInformationComponent extends GridPortalComponent {
 	private JPanel mainPanel = null;
 	private X509Certificate cert;
 	private JPanel certificatePanel = null;
+	
+	public CertificateInformationComponent() {
+		super();
+		initialize();
+	}
 	/**
 	 * This is the default constructor
 	 */
@@ -42,7 +45,7 @@ public class CertificateInformationComponent extends GridPortalComponent {
 	private void initialize() {
 		this.setSize(400,400);
 		this.setContentPane(getJContentPane());
-		this.setFrameIcon(DorianLookAndFeel.getCertificateIcon());
+		this.setFrameIcon(GridCALookAndFeel.getCertificateIcon());
 		this.setTitle("Certificate Viewer");
 	}
 	/**

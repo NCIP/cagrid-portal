@@ -1,6 +1,4 @@
-package gov.nih.nci.cagrid.dorian.ifs.portal;
-
-import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
+package gov.nih.nci.cagrid.gridca.portal;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -186,7 +184,7 @@ public class ProxyPanel extends JPanel {
 			jLabel.setText("Subject");
 			jPanel = new JPanel();
 			jPanel.setLayout(new GridBagLayout());
-			jPanel.setBorder(BorderFactory.createTitledBorder(null, "Proxy Information", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel.getPanelLabelColor()));
+			jPanel.setBorder(BorderFactory.createTitledBorder(null, "Proxy Information", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GridCALookAndFeel.getPanelLabelColor()));
 			jPanel.add(jLabel, gridBagConstraints);
 			jPanel.add(jLabel1, gridBagConstraints1);
 			jPanel.add(jLabel2, gridBagConstraints2);
@@ -284,7 +282,7 @@ public class ProxyPanel extends JPanel {
 			gridBagConstraints10.weightx = 1.0;
 			gridBagConstraints10.weighty = 1.0;
 			certificateChain = new JPanel();
-			certificateChain.setBorder(BorderFactory.createTitledBorder(null, "Certificate Chain", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel.getPanelLabelColor()));
+			certificateChain.setBorder(BorderFactory.createTitledBorder(null, "Certificate Chain", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GridCALookAndFeel.getPanelLabelColor()));
 			certificateChain.setLayout(new GridBagLayout());
 			certificateChain.add(getJScrollPane(), gridBagConstraints10);
 		}

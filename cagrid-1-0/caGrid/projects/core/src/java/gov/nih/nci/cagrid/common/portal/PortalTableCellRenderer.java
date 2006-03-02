@@ -40,16 +40,15 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *---------------------------------------------------------------------------*/
-package gov.nih.nci.cagrid.dorian.portal;
+package gov.nih.nci.cagrid.common.portal;
 
 import java.awt.Color;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.Vector;
+import java.awt.Component;
 
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
+
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -59,70 +58,42 @@ import javax.swing.table.DefaultTableModel;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public abstract class PortalTable extends JTable {
+public class PortalTableCellRenderer extends DefaultTableCellRenderer implements TableCellRenderer {
+   
 	
-	private final static Color DEFAULT_FOREGROUND_1 = Color.BLACK;
-	private final static Color DEFAULT_BACKGROUND_1 = Color.WHITE;
-	private final static Color DEFAULT_FOREGROUND_2 = Color.BLACK;
-	private final static Color DEFAULT_BACKGROUND_2 = Color.WHITE;
-	private final static Color DEFAULT_SELECTED_FOREGROUND = Color.BLACK;
-	private final static Color DEFAULT_SELECTED_BACKGROUND = Color.WHITE;
-
-
-	public PortalTable(DefaultTableModel model){
-		this(model,DEFAULT_BACKGROUND_1,DEFAULT_FOREGROUND_1,DEFAULT_BACKGROUND_2,DEFAULT_FOREGROUND_2,DEFAULT_SELECTED_BACKGROUND,DEFAULT_SELECTED_FOREGROUND);
-	}
- 
-	public PortalTable(DefaultTableModel model,Color bg1, Color fg1, Color bg2, Color fg2, Color sbg, Color sfg){
-		super(model);
-		setDefaultRenderer(Object.class, new PortalTableCellRenderer(bg1,fg1,bg2,fg2,sbg,sfg));
-		// setDefaultEditor(JComponent.class, new JComponentCellEditor());
-		// this.setCellSelectionEnabled(true);
-		this.setRowSelectionAllowed(true);
-		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		this.addMouseListener(new MouseAdapter(){
-		     public void mouseClicked(MouseEvent e){
-		      if (e.getClickCount() == 2){
-		    	  try{
-		    	  doubleClick();
-		    	  }catch(Exception ex){
-		    		  ex.printStackTrace();
-		    	  }
-		         }else if(e.getClickCount() == 1){
-		        	 try{
-				    	  singleClick();
-				    	  }catch(Exception ex){
-				    		  ex.printStackTrace();
-				    	  }
-		         }
-		     }
-		}
-		     );
-		// this.setOpaque(true);
+	private Color bg1;
+	private Color fg1;
+	private Color bg2; 
+	private Color fg2;
+	private Color sbg; 
+	private Color sfg;
+	
+	public PortalTableCellRenderer(Color bg1, Color fg1, Color bg2, Color fg2, Color sbg, Color sfg){
+		this.bg1 = bg1;
+		this.fg1 = fg1;
+		this.bg2 = bg2;
+		this.fg2 = fg2;
+		this.sbg = sbg;
+		this.sfg = sfg;
 	}
 	
-	public abstract void doubleClick() throws Exception;
-	public abstract void singleClick() throws Exception;
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+        int row, int column) {
 
+        Component comp = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        if (!isSelected) {
+            if ((row % 2) == 0) {
+                comp.setBackground(bg1);
+                comp.setForeground(fg1);
+            } else {
+                comp.setBackground(bg2);
+                comp.setForeground(fg2);
+            }
+        }else{
+            comp.setBackground(sbg);
+            comp.setForeground(sfg);
+        }
 
-	public boolean isCellEditable(int row, int column) {
-		return false;
-	}
-
-	public synchronized void addRow(Vector v) {
-		((DefaultTableModel) this.getModel()).addRow(v);
-	}
-
-	public synchronized void removeRow(int i) {
-		((DefaultTableModel) this.getModel()).removeRow(i);
-	}
-
-	public synchronized void clearTable() {
-		DefaultTableModel model = (DefaultTableModel) this.getModel();
-		while (model.getRowCount() != 0) {
-			model.removeRow(0);
-		}
-
-	}
-
+        return comp;
+    }
 }

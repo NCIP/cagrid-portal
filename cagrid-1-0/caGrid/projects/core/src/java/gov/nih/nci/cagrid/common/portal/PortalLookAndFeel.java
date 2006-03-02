@@ -69,4 +69,14 @@ public class PortalLookAndFeel {
 		return new javax.swing.ImageIcon(PortalLookAndFeel.class
 				.getResource("/Magnify.gif"));
 	}
+	
+	public final static ImageIcon getSaveIcon() {
+		return new javax.swing.ImageIcon(PortalLookAndFeel.class
+				.getResource("/Save.gif"));
+	}
+	
+	public final static ImageIcon getImportIcon() {
+		return new javax.swing.ImageIcon(PortalLookAndFeel.class
+				.getResource("/Door.gif"));
+	}
 }

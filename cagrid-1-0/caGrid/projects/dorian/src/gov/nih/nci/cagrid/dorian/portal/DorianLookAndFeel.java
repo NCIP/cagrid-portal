@@ -37,26 +37,27 @@ public class DorianLookAndFeel extends PortalLookAndFeel {
 				.getResource("/UnPlug.gif"));
 	}
 
+	//TODO: REMOVE
 	public final static ImageIcon getCertificateIcon() {
 		return new javax.swing.ImageIcon(DorianLookAndFeel.class
 				.getResource("/BCard.gif"));
 	}
 	
-	public final static ImageIcon getImportIcon() {
-		return new javax.swing.ImageIcon(DorianLookAndFeel.class
-				.getResource("/Door.gif"));
-	}
+
 	
 	public final static ImageIcon getCertificateActionIcon() {
 		return new javax.swing.ImageIcon(DorianLookAndFeel.class
 				.getResource("/EditBCard.gif"));
 	}
 
+	
+	//TODO: REMOVE
 	public final static ImageIcon getProxyManagerIcon() {
 		return new javax.swing.ImageIcon(DorianLookAndFeel.class
 				.getResource("/EditBCard.gif"));
 	}
 	
+	//TODO: REMOVE
 	public final static ImageIcon getDeleteProxyIcon() {
 		return new javax.swing.ImageIcon(DorianLookAndFeel.class
 				.getResource("/DeleteBCard.gif"));
@@ -68,11 +69,7 @@ public class DorianLookAndFeel extends PortalLookAndFeel {
 				.getResource("/Lock.gif"));
 	}
 
-	public final static ImageIcon getSaveIcon() {
-		return new javax.swing.ImageIcon(DorianLookAndFeel.class
-				.getResource("/Save.gif"));
-	}
-
+	//TODO: Remove
 	public final static ImageIcon getGreenFlagIcon() {
 		return new javax.swing.ImageIcon(DorianLookAndFeel.class
 				.getResource("/GreenFlag.gif"));

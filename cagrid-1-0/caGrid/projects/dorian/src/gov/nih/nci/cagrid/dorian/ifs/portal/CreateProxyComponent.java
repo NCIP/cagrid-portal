@@ -8,7 +8,8 @@ import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
 import gov.nih.nci.cagrid.dorian.portal.DorianPortalConf;
 import gov.nih.nci.cagrid.dorian.portal.DorianServiceListComboBox;
 import gov.nih.nci.cagrid.dorian.portal.IdPConf;
-import gov.nih.nci.cagrid.dorian.portal.ProxyManager;
+import gov.nih.nci.cagrid.gridca.portal.ProxyManager;
+import gov.nih.nci.cagrid.gridca.portal.ProxyManagerComponent;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import java.awt.BorderLayout;

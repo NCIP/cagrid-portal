@@ -122,18 +122,9 @@
 			</fileset>
 	    </artifact>	
 		
-		<artifact track="main" type="jars" id="dorian.client.jars">
-				<antcall target="build-dorian" />
-					<fileset dir="${projects.dir}/dorian/build/lib">
-						<include name="dorian.jar" />
-						<include name="dorian_stubs.jar" />
-						<include name="commons-codec-1.3.jar" />
-						<include name="commons-httpclient-3.0.jar" />
-					</fileset>
-		</artifact>	
-		
-		<artifact track="main" type="resources" id="dorian.client.resources">
-			<fileset dir="${projects.dir}/dorian/resources">
+	
+		<artifact track="main" type="resources" id="gridca.resources">
+			<fileset dir="${projects.dir}/gridca/resources">
 				<include name="**" />
 			</fileset>
 		</artifact>
@@ -199,6 +190,7 @@
 			<artifact refid="core.test.jars" />
 			<artifact refid="core.resources" />
 			<artifact refid="gridca.jars" />
+			<artifact refid="gridca.resources" />
 			<artifact refid="mobius.jars" />
 			<artifact refid="opensaml.jars" />
 			<artifact refid="opensaml.endorsed" />
@@ -221,9 +213,8 @@
 			<artifact refid="metadata.mappings" />
 			<artifact refid="opensaml.jars" />
 			<artifact refid="opensaml.endorsed" />
-			<artifact refid="dorian.client.jars" />
-			<artifact refid="dorian.client.resources" />
 			<artifact refid="gridca.jars" />
+			<artifact refid="gridca.resources" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="all" />
 	</target>

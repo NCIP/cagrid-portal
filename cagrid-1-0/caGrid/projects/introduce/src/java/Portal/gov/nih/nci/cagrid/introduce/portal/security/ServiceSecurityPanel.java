@@ -2,9 +2,9 @@ package gov.nih.nci.cagrid.introduce.portal.security;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.common.security.ProxyUtil;
-import gov.nih.nci.cagrid.dorian.ifs.portal.CertificatePanel;
-import gov.nih.nci.cagrid.dorian.ifs.portal.ProxyPanel;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
+import gov.nih.nci.cagrid.gridca.portal.CertificatePanel;
+import gov.nih.nci.cagrid.gridca.portal.ProxyPanel;
 import gov.nih.nci.cagrid.introduce.beans.security.AnonymousCommunication;
 import gov.nih.nci.cagrid.introduce.beans.security.ClientAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.ClientCommunication;

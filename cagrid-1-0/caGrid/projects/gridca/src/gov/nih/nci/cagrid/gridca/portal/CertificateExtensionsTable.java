@@ -1,6 +1,6 @@
-package gov.nih.nci.cagrid.dorian.ifs.portal;
+package gov.nih.nci.cagrid.gridca.portal;
 
-import gov.nih.nci.cagrid.dorian.portal.PortalBaseTable;
+import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.gridca.common.CertificateExtensionsUtil;
 
 import java.security.cert.X509Certificate;
@@ -16,7 +16,7 @@ import javax.swing.table.TableColumn;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CertificateExtensionsTable.java,v 1.3 2006-03-01 21:38:52 langella Exp $
+ * @version $Id: CertificateExtensionsTable.java,v 1.1 2006-03-02 17:54:34 langella Exp $
  */
 public class CertificateExtensionsTable extends PortalBaseTable {
 

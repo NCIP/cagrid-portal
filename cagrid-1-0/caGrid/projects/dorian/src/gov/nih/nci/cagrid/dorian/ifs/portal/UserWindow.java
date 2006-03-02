@@ -7,9 +7,10 @@ import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
-import gov.nih.nci.cagrid.dorian.portal.ProxyCaddy;
-import gov.nih.nci.cagrid.dorian.portal.ProxyComboBox;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
+import gov.nih.nci.cagrid.gridca.portal.CertificatePanel;
+import gov.nih.nci.cagrid.gridca.portal.ProxyCaddy;
+import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -36,7 +37,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.10 2006-03-01 21:38:52 langella Exp $
+ * @version $Id: UserWindow.java,v 1.11 2006-03-02 17:56:51 langella Exp $
  */
 public class UserWindow extends GridPortalBaseFrame {
 
