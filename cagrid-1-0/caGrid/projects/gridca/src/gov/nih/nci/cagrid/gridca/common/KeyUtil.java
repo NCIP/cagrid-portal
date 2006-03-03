@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.gridca.common;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -38,22 +40,22 @@ public class KeyUtil {
 		return kpGen.generateKeyPair();
 	}
 
-	public static void writePrivateKey(PrivateKey key, String file)
+	public static void writePrivateKey(PrivateKey key, File file)
 			throws Exception {
 		writePrivateKey(key, file, null);
 	}
 
-	public static void writePrivateKey(PrivateKey key, String file,
+	public static void writePrivateKey(PrivateKey key, File file,
 			String password) throws Exception {
 		SecurityUtil.init();
 		OpenSSLKey ssl = new BouncyCastleOpenSSLKey(key);
 		if (password != null) {
 			ssl.encrypt(password);
 		}
-		ssl.writeTo(file);
+		ssl.writeTo(file.getAbsolutePath());
 	}
 
-	public static String writePrivateKeyToString(PrivateKey key, String password)
+	public static String writePrivateKey(PrivateKey key, String password)
 			throws Exception {
 		SecurityUtil.init();
 		OpenSSLKey ssl = new BouncyCastleOpenSSLKey(key);
@@ -65,10 +67,10 @@ public class KeyUtil {
 		return sw.toString();
 	}
 
-	public static PrivateKey loadPrivateKey(String location, String password)
+	public static PrivateKey loadPrivateKey(File location, String password)
 			throws IOException, GeneralSecurityException {
 		SecurityUtil.init();
-		OpenSSLKey key = new BouncyCastleOpenSSLKey(location);
+		OpenSSLKey key = new BouncyCastleOpenSSLKey(location.getAbsolutePath());
 		if (key.isEncrypted()) {
 			key.decrypt(password);
 		}
@@ -85,7 +87,7 @@ public class KeyUtil {
 		return key.getPrivateKey();
 	}
 
-	public static PublicKey loadPublicKeyFromString(String key)
+	public static PublicKey loadPublicKey(String key)
 			throws IOException, GeneralSecurityException {
 		SecurityUtil.init();
 		StringReader in = new StringReader(key);
@@ -93,7 +95,7 @@ public class KeyUtil {
 		return (PublicKey) reader.readObject();
 	}
 
-	public static String writePublicKeyToString(PublicKey key)
+	public static String writePublicKey(PublicKey key)
 			throws IOException {
 		SecurityUtil.init();
 		StringWriter sw = new StringWriter();

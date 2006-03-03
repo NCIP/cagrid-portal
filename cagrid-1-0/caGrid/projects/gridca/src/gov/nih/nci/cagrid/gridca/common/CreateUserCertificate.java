@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.gridca.common;
 
 import gov.nih.nci.cagrid.common.IOUtils;
 
+import java.io.File;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.security.PrivateKey;
@@ -36,7 +37,7 @@ public class CreateUserCertificate {
 				try{
 					String key = IOUtils.readLine("Enter CA key location",true);
 					String password = IOUtils.readLine("Enter CA key password.");
-					cakey = KeyUtil.loadPrivateKey(key,password);
+					cakey = KeyUtil.loadPrivateKey(new File(key),password);
 					break;
 				}catch(Exception e){
 					e.printStackTrace();		
@@ -48,7 +49,7 @@ public class CreateUserCertificate {
 			while(true){
 				try{
 					String cert = IOUtils.readLine("Enter CA certificate location",true);
-					cacert = CertUtil.loadCertificate(cert);
+					cacert = CertUtil.loadCertificate(new File(cert));
 					break;
 				}catch(Exception e){
 					e.printStackTrace();		
@@ -87,8 +88,8 @@ public class CreateUserCertificate {
 
 			String keyOut = IOUtils.readLine("Enter location to write user key");
 			String caOut = IOUtils.readLine("Enter location to write user cert");
-			KeyUtil.writePrivateKey(pair.getPrivate(),keyOut);
-			CertUtil.writeCertificate(userCert,caOut);
+			KeyUtil.writePrivateKey(pair.getPrivate(),new File(keyOut));
+			CertUtil.writeCertificate(userCert,new File(caOut));
 			System.out.println("Successfully create the user certificate:");
 			System.out.println(userCert.getSubjectDN().toString());
 			System.out.println("User certificate issued by:");

@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.gridca.common;
 
 import gov.nih.nci.cagrid.common.IOUtils;
 
+import java.io.File;
 import java.security.KeyPair;
 import java.security.Security;
 import java.security.cert.X509Certificate;
@@ -69,8 +70,8 @@ public class CreateCACertificate {
 					sb.toString()), start,end, root);
 			String keyOut = IOUtils.readLine("Enter location to write CA key");
 			String caOut = IOUtils.readLine("Enter location to write CA cert");
-			KeyUtil.writePrivateKey(root.getPrivate(),keyOut);
-			CertUtil.writeCertificate(cert,caOut);
+			KeyUtil.writePrivateKey(root.getPrivate(),new File(keyOut));
+			CertUtil.writeCertificate(cert,new File(caOut));
 			System.out.println("Successfully create the CA certificate:");
 			System.out.println(sb.toString());
 			System.out.println("CA Certificate Valid Till:");
