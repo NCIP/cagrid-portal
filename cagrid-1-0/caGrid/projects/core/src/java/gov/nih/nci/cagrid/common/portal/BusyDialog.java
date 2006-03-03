@@ -9,29 +9,25 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
+
 public class BusyDialog extends JDialog {
 
 	private JPanel mainPanel = null;
-
-	private Runnable r;
-
 	private JPanel progressPanel = null;
-
 	private JProgressBar progress = null;
+
 
 	/**
 	 * This method initializes
-	 * 
 	 */
-	public BusyDialog(JFrame owner, String title, Runnable r) {
+	public BusyDialog(JFrame owner, String title) {
 		super(owner, title, true);
-		this.r = r;
 		initialize();
 	}
 
+
 	/**
 	 * This method initializes this
-	 * 
 	 */
 	private void initialize() {
 		this.setSize(new java.awt.Dimension(362, 85));
@@ -50,6 +46,7 @@ public class BusyDialog extends JDialog {
 		// Move the window
 		this.setLocation(x, y);
 	}
+
 
 	/**
 	 * This method initializes mainPanel
@@ -72,6 +69,7 @@ public class BusyDialog extends JDialog {
 		return mainPanel;
 	}
 
+
 	/**
 	 * This method initializes progressPanel
 	 * 
@@ -92,6 +90,7 @@ public class BusyDialog extends JDialog {
 		return progressPanel;
 	}
 
+
 	/**
 	 * This method initializes progress
 	 * 
@@ -101,8 +100,7 @@ public class BusyDialog extends JDialog {
 		if (progress == null) {
 			progress = new JProgressBar();
 			progress.setStringPainted(true);
-			progress
-					.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12));
+			progress.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12));
 			progress.setForeground(new java.awt.Color(153, 153, 255));
 			progress.setString("");
 		}
