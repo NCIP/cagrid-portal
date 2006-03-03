@@ -160,12 +160,7 @@ public class SyncTools {
 
 						if (inputParam.getClassName() == null) {
 							Type type = table.getType(new QName(inputParam.getNamespace(), inputParam.getType()));
-
-							if (inputParam.getIsArray().booleanValue() == true) {
-								inputParam.setClassName(getRelativeClassName(type.getName()) + "[]");
-							} else {
 								inputParam.setClassName(getRelativeClassName(type.getName()));
-							}
 						}
 					}
 				}
@@ -183,13 +178,8 @@ public class SyncTools {
 						outputParam.setPackageName("");
 					} else if (outputParam.getClassName() == null) {
 						Type type = table.getType(new QName(outputParam.getNamespace(), outputParam.getType()));
-						if (outputParam.getIsArray() != null && outputParam.getIsArray().booleanValue() == true) {
-							outputParam.setClassName(getRelativeClassName(type.getName()) + "[]");
-						} else {
 							outputParam.setClassName(getRelativeClassName(type.getName()));
-						}
 					}
-
 				}
 			}
 		}
