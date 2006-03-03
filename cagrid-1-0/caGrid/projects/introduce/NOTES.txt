@@ -28,7 +28,7 @@ is client-config.wsdd really needed in the root dir?  can't you just add GLOBUS_
 
 (DONE) How about changing this "@created by caGrid toolkit version 0.5"
 
-MUST FIX THE WHITESPACE SENSTIVE CODE FINDER!!!
+(DONE) MUST FIX THE WHITESPACE SENSTIVE CODE FINDER!!!
 
 (DONE ++++   NEEDS TESTED  ++++++++) when you download a schema that has dependencies, the dependant schemas are not added to the namespace to package mappings... you need to parse every schema (and imported schema), looking for imports, and make sure each imported schema has a mapping
 - the namespaceExclude code needs to be updated when this is supported too.

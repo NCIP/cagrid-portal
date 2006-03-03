@@ -113,6 +113,9 @@ public class SyncSource {
 		if (returnTypeEl.getPackageName() != null && returnTypeEl.getPackageName().length() > 0) {
 			returnType = returnTypeEl.getPackageName() + "." + returnType;
 		}
+		if (returnTypeEl.getIsArray() != null && returnTypeEl.getIsArray().booleanValue()) {
+			returnType += "[]";
+		}
 		methodString += "     public " + returnType + " " + methodName + "(";
 		if (method.getInputs() != null && method.getInputs().getInput() != null) {
 			for (int j = 0; j < method.getInputs().getInput().length; j++) {
@@ -122,6 +125,10 @@ public class SyncSource {
 					classType = packageName + "." + method.getInputs().getInput(j).getClassName();
 				} else {
 					classType = method.getInputs().getInput(j).getClassName();
+				}
+				if (method.getInputs().getInput(j).getIsArray() != null
+					&& method.getInputs().getInput(j).getIsArray().booleanValue()) {
+					classType += "[]";
 				}
 				String paramName = method.getInputs().getInput(j).getName();
 				methodString += classType + " " + paramName;
@@ -871,9 +878,9 @@ public class SyncSource {
 			}
 			index++;
 		}
-		if(found){
+		if (found) {
 			char ch = sb.charAt(index);
-			while(ch=='\t' || ch==' '){
+			while (ch == '\t' || ch == ' ') {
 				ch = sb.charAt(++index);
 			}
 		}
