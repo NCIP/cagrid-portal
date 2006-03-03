@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -288,7 +289,7 @@ public class LoadCredentialsFromFileSystemWindow extends GridPortalComponent {
 
 		
 		try {
-			 KeyUtil.loadPrivateKey(keyStr, null);
+			 KeyUtil.loadPrivateKey(new File(keyStr), null);
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage("Invalid private key specified: " + e.getMessage());
 		}

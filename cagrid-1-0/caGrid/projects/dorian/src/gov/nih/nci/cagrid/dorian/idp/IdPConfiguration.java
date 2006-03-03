@@ -46,6 +46,7 @@ package gov.nih.nci.cagrid.dorian.idp;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
+import java.io.File;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 
@@ -132,7 +133,7 @@ public class IdPConfiguration implements AbstractMobiusConfiguration {
 							"Error configuring IdP, no asserting certificate specified, an asserting certificate is required when the IdP is not configured to automatically generate credentials.");
 					} else {
 						try {
-							this.assertingCertificate = CertUtil.loadCertificate(certLocation);
+							this.assertingCertificate = CertUtil.loadCertificate(new File(certLocation));
 						} catch (Exception e) {
 							throw new MobiusException(
 								"Error configuring IdP, an error occurred loading the certificate " + certLocation
@@ -146,7 +147,7 @@ public class IdPConfiguration implements AbstractMobiusConfiguration {
 							"Error configuring IdP, no asserting key specified, an asserting key is required when the IdP is not configured to automatically generate credentials.");
 					} else {
 						try {
-							this.assertingKey = KeyUtil.loadPrivateKey(keyLocation, keyPassword);
+							this.assertingKey = KeyUtil.loadPrivateKey(new File(keyLocation), keyPassword);
 						} catch (Exception e) {
 							throw new MobiusException("Error configuring IdP, an error occurred loading the key "
 								+ keyLocation + ": " + e.getMessage(), e);

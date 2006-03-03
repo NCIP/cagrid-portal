@@ -50,8 +50,8 @@ public class DorianCertificateAuthority extends LoggingObject implements Certifi
 		this.buildDatabase();
 		try {
 			this.deleteCACredentials();
-			String keyStr = KeyUtil.writePrivateKeyToString(key, conf.getCaPassword());
-			String certStr = CertUtil.writeCertificateToString(cert);
+			String keyStr = KeyUtil.writePrivateKey(key, conf.getCaPassword());
+			String certStr = CertUtil.writeCertificate(cert);
 			db.update("INSERT INTO " + CA_TABLE + " VALUES('" + CA_USER + "','" + certStr + "','" + keyStr + "')");
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
@@ -108,7 +108,7 @@ public class DorianCertificateAuthority extends LoggingObject implements Certifi
 	}
 
 
-	private PrivateKey getCAPrivateKey() throws CertificateAuthorityFault, NoCACredentialsFault {
+	public PrivateKey getCAPrivateKey() throws CertificateAuthorityFault, NoCACredentialsFault {
 		this.buildDatabase();
 		Connection c = null;
 		PrivateKey key = null;

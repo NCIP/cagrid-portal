@@ -391,7 +391,7 @@ public class TestUserManager extends TestCase {
 		X509Certificate cert = ca.requestCertificate(req, start, end);
 		assertNotNull(cert);
 		assertEquals(cert.getSubjectDN().getName(), subject);
-		idp.setIdPCertificate(CertUtil.writeCertificateToString(cert));
+		idp.setIdPCertificate(CertUtil.writeCertificate(cert));
 		idp.setStatus(TrustedIdPStatus.Active);
 		IFSUser usr = new IFSUser();
 		usr.setUID("inital_admin");

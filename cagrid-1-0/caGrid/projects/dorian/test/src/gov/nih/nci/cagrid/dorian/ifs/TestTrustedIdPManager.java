@@ -291,7 +291,7 @@ public class TestTrustedIdPManager extends TestCase {
 		X509Certificate cert = ca.requestCertificate(req, start, end);
 		assertNotNull(cert);
 		assertEquals(cert.getSubjectDN().getName(), subject);
-		idp.setIdPCertificate(CertUtil.writeCertificateToString(cert));
+		idp.setIdPCertificate(CertUtil.writeCertificate(cert));
 
 		GregorianCalendar cal2 = new GregorianCalendar();
 		Date start2 = cal2.getTime();

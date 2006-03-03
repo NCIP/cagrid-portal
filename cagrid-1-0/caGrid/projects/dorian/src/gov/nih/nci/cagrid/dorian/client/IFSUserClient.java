@@ -53,7 +53,7 @@ public class IFSUserClient extends DorianBaseClient implements IFSUserAccess {
 			KeyPair pair = KeyUtil.generateRSAKeyPair512();
 			IFSCreateProxy params = new IFSCreateProxy();
 			params.setProxyLifetime(lifetime);
-			gov.nih.nci.cagrid.dorian.ifs.bean.PublicKey key = new gov.nih.nci.cagrid.dorian.ifs.bean.PublicKey(KeyUtil.writePublicKeyToString(pair.getPublic()));
+			gov.nih.nci.cagrid.dorian.ifs.bean.PublicKey key = new gov.nih.nci.cagrid.dorian.ifs.bean.PublicKey(KeyUtil.writePublicKey(pair.getPublic()));
 			params.setPublicKey(key);
 			gov.nih.nci.cagrid.dorian.bean.SAMLAssertion s = new gov.nih.nci.cagrid.dorian.bean.SAMLAssertion(SAMLUtils.samlAssertionToString(saml));
 			params.setSAMLAssertion(s);	
@@ -61,7 +61,7 @@ public class IFSUserClient extends DorianBaseClient implements IFSUserAccess {
 					.createProxy(params).getCertificates();
 			X509Certificate[] certs = new X509Certificate[list.length];
 			for(int i=0; i<list.length; i++){
-				certs[i] = CertUtil.loadCertificateFromString(list[i].getCertificateAsString());
+				certs[i] = CertUtil.loadCertificate(list[i].getCertificateAsString());
 			}
 			return new GlobusCredential(pair.getPrivate(),certs);
 		} catch (DorianInternalFault gie) {

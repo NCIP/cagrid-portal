@@ -92,13 +92,13 @@ public class AssertionCredentialsManager extends LoggingObject {
 		mm.remove(IDP_CERTIFICATE);
 		Metadata key = new Metadata();
 		key.setName(IDP_PRIVATE_KEY);
-		key.setValue(KeyUtil.writePrivateKeyToString(pkey, keyPassword));
+		key.setValue(KeyUtil.writePrivateKey(pkey, keyPassword));
 		key.setDescription(IDP_PRIVATE_KEY_DESCRIPTION);
 		mm.insert(key);
 
 		Metadata certificate = new Metadata();
 		certificate.setName(IDP_CERTIFICATE);
-		certificate.setValue(CertUtil.writeCertificateToString(cert));
+		certificate.setValue(CertUtil.writeCertificate(cert));
 		certificate.setDescription(IDP_CERTIFICATE_DESCRIPTION);
 		mm.insert(certificate);
 	}

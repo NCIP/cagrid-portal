@@ -314,7 +314,7 @@ public class IFS extends LoggingObject {
 		X509Certificate cert = null;
 
 		try {
-			cert = CertUtil.loadCertificateFromString(usr.getCertificate().getCertificateAsString());
+			cert = CertUtil.loadCertificate(usr.getCertificate().getCertificateAsString());
 
 		} catch (Exception e) {
 			DorianInternalFault fault = new DorianInternalFault();

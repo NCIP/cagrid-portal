@@ -134,7 +134,7 @@ public class UserManager extends LoggingObject {
 			throw gif;
 		}
 		try {
-			user.setCertificate(new gov.nih.nci.cagrid.dorian.ifs.bean.X509Certificate(CertUtil.writeCertificateToString(cert)));
+			user.setCertificate(new gov.nih.nci.cagrid.dorian.ifs.bean.X509Certificate(CertUtil.writeCertificate(cert)));
 		} catch (IOException ioe) {
 			this.credentialsManager.deleteCredentials(getCredentialsManagerUID(
 					user.getIdPId(), user.getUID()));
@@ -228,7 +228,7 @@ public class UserManager extends LoggingObject {
 				X509Certificate cert = credentialsManager
 						.getCertificate(getCredentialsManagerUID(user
 								.getIdPId(), user.getUID()));
-				user.setCertificate(new gov.nih.nci.cagrid.dorian.ifs.bean.X509Certificate(CertUtil.writeCertificateToString(cert)));
+				user.setCertificate(new gov.nih.nci.cagrid.dorian.ifs.bean.X509Certificate(CertUtil.writeCertificate(cert)));
 			} else {
 				InvalidUserFault fault = new InvalidUserFault();
 				fault.setFaultString("No such user "
@@ -284,7 +284,7 @@ public class UserManager extends LoggingObject {
 				X509Certificate cert = credentialsManager
 						.getCertificate(getCredentialsManagerUID(user
 								.getIdPId(), user.getUID()));
-				user.setCertificate(new gov.nih.nci.cagrid.dorian.ifs.bean.X509Certificate(CertUtil.writeCertificateToString(cert)));
+				user.setCertificate(new gov.nih.nci.cagrid.dorian.ifs.bean.X509Certificate(CertUtil.writeCertificate(cert)));
 			} else {
 				InvalidUserFault fault = new InvalidUserFault();
 				fault.setFaultString("No such user " + gridId);
@@ -379,7 +379,7 @@ public class UserManager extends LoggingObject {
 				X509Certificate cert = credentialsManager
 						.getCertificate(getCredentialsManagerUID(user
 								.getIdPId(), user.getUID()));
-				user.setCertificate(new gov.nih.nci.cagrid.dorian.ifs.bean.X509Certificate(CertUtil.writeCertificateToString(cert)));
+				user.setCertificate(new gov.nih.nci.cagrid.dorian.ifs.bean.X509Certificate(CertUtil.writeCertificate(cert)));
 				users.add(user);
 			}
 			rs.close();
@@ -413,7 +413,7 @@ public class UserManager extends LoggingObject {
 					.getUID());
 			try {
 				// Write method for creating and setting a users credentials
-				user.setCertificate(new gov.nih.nci.cagrid.dorian.ifs.bean.X509Certificate(CertUtil.writeCertificateToString(cert)));
+				user.setCertificate(new gov.nih.nci.cagrid.dorian.ifs.bean.X509Certificate(CertUtil.writeCertificate(cert)));
 				user
 						.setGridId(subjectToIdentity(cert.getSubjectDN()
 								.toString()));

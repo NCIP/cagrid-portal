@@ -27,6 +27,7 @@ import java.awt.CardLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.io.File;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -1170,7 +1171,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			this.privateKeyLocation = cred.getPrivateKeyLocation();
 			this.proxyLocation = null;
 			try {
-				this.certificatePanel.setCertificate(CertUtil.loadCertificate(cred.getCertificateLocation()));
+				this.certificatePanel.setCertificate(CertUtil.loadCertificate(new File(cred.getCertificateLocation())));
 			} catch (Exception e) {
 				PortalUtils.showErrorMessage("Invalid certificate specified!!!");
 			}

@@ -37,7 +37,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.11 2006-03-02 17:56:51 langella Exp $
+ * @version $Id: UserWindow.java,v 1.12 2006-03-03 21:48:04 langella Exp $
  */
 public class UserWindow extends GridPortalBaseFrame {
 
@@ -284,7 +284,7 @@ public class UserWindow extends GridPortalBaseFrame {
 			IFSAdministrationClient client = new IFSAdministrationClient(service, new SecureConversationWithEncryption(
 				c));
 			user = client.renewUserCredentials(user);
-			X509Certificate cert = CertUtil.loadCertificateFromString(user.getCertificate().getCertificateAsString());
+			X509Certificate cert = CertUtil.loadCertificate(user.getCertificate().getCertificateAsString());
 			this.getCredPanel().setCertificate(cert);
 			PortalUtils.showMessage("Successfully renewed the credentials for the user " + user.getGridId() + ".");
 		} catch (PermissionDeniedFault pdf) {
@@ -658,7 +658,7 @@ public class UserWindow extends GridPortalBaseFrame {
 	private CertificatePanel getCredPanel(){
 		if (credPanel == null) {
 			try{
-			credPanel = new CertificatePanel(CertUtil.loadCertificateFromString(user.getCertificate()
+			credPanel = new CertificatePanel(CertUtil.loadCertificate(user.getCertificate()
 				.getCertificateAsString()));
 			credPanel.setAllowImport(false);
 			}catch(Exception e){

@@ -96,7 +96,7 @@ public class Dorian extends MobiusResourceManager {
 			idp.setUserPolicyClass(AutoApprovalAutoRenewalPolicy.class
 					.getName());
 			idp.setIdPCertificate(CertUtil
-					.writeCertificateToString(this.identityProvider
+					.writeCertificate(this.identityProvider
 							.getIdPCertificate()));
 			idp.setStatus(TrustedIdPStatus.Active);
 			IFSUser usr = new IFSUser();

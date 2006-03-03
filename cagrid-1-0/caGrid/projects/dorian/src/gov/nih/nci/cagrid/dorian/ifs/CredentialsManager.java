@@ -82,8 +82,8 @@ public class CredentialsManager extends LoggingObject {
 		try {
 
 			if (!hasCredentials(username)) {
-				String keyStr = KeyUtil.writePrivateKeyToString(key, password);
-				String certStr = CertUtil.writeCertificateToString(cert);
+				String keyStr = KeyUtil.writePrivateKey(key, password);
+				String certStr = CertUtil.writeCertificate(cert);
 				db.update("INSERT INTO " + CREDENTIALS_TABLE + " VALUES('" + username + "','" + certStr + "','"
 					+ keyStr + "')");
 			}
@@ -153,7 +153,7 @@ public class CredentialsManager extends LoggingObject {
 				+ username + "'");
 			if (rs.next()) {
 				String certStr = rs.getString("CERTIFICATE");
-				cert = CertUtil.loadCertificateFromString(certStr);
+				cert = CertUtil.loadCertificate(certStr);
 			}
 			rs.close();
 			s.close();

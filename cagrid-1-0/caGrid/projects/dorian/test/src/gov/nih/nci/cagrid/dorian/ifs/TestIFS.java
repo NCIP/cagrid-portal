@@ -95,7 +95,7 @@ public class TestIFS extends TestCase {
 			assertEquals(1, users.length);
 			IFSUser usr1 = users[0];
 			String certStr = usr1.getCertificate().getCertificateAsString();
-			X509Certificate cert1 = CertUtil.loadCertificateFromString(certStr);
+			X509Certificate cert1 = CertUtil.loadCertificate(certStr);
 			Thread.sleep(1000);
 			IFSUser usr2 = ifs.renewUserCredentials(adminGridId, usr1);
 			assertEquals(usr1.getGridId(), usr2.getGridId());
@@ -104,7 +104,7 @@ public class TestIFS extends TestCase {
 				assertTrue(false);
 			}
 
-			X509Certificate cert2 = CertUtil.loadCertificateFromString(usr2.getCertificate().getCertificateAsString());
+			X509Certificate cert2 = CertUtil.loadCertificate(usr2.getCertificate().getCertificateAsString());
 
 			assertTrue(cert2.getNotBefore().after(cert1.getNotBefore()));
 
@@ -672,7 +672,7 @@ public class TestIFS extends TestCase {
 		X509Certificate cert = ca.requestCertificate(req, start, end);
 		assertNotNull(cert);
 		assertEquals(cert.getSubjectDN().getName(), subject);
-		idp.setIdPCertificate(CertUtil.writeCertificateToString(cert));
+		idp.setIdPCertificate(CertUtil.writeCertificate(cert));
 		return new IdPContainer(idp, cert, pair.getPrivate());
 	}
 

@@ -148,14 +148,14 @@ public class DorianService {
 		gov.nih.nci.cagrid.dorian.ifs.bean.InvalidProxyFault, DorianInternalFault {
 		try {
 			ProxyLifetime lifetime = parameters.getProxyLifetime();
-			PublicKey key = KeyUtil.loadPublicKeyFromString(parameters.getPublicKey().getKeyAsString());
+			PublicKey key = KeyUtil.loadPublicKey(parameters.getPublicKey().getKeyAsString());
 			SAMLAssertion saml = SAMLUtils.stringToSAMLAssertion(parameters.getSAMLAssertion().getXml());
 			X509Certificate[] certs = getDorianHandle().createProxy(saml, key, lifetime);
 
 			gov.nih.nci.cagrid.dorian.ifs.bean.X509Certificate[] certList = new gov.nih.nci.cagrid.dorian.ifs.bean.X509Certificate[certs.length];
 			for (int i = 0; i < certs.length; i++) {
 				certList[i] = new gov.nih.nci.cagrid.dorian.ifs.bean.X509Certificate();
-				certList[i].setCertificateAsString(CertUtil.writeCertificateToString(certs[i]));
+				certList[i].setCertificateAsString(CertUtil.writeCertificate(certs[i]));
 			}
 
 			return new IFSCreateProxyResponse(certList);

@@ -25,7 +25,7 @@ public class ManualApprovalAutoRenewalPolicy extends UserPolicy {
 		
 		try {
 			// Next we check if the user's credentials have expired
-			X509Certificate cert = CertUtil.loadCertificateFromString(user
+			X509Certificate cert = CertUtil.loadCertificate(user
 					.getCertificate().getCertificateAsString());
 			if (CertUtil.isExpired(cert)) {
 				um.renewUserCredentials(user);

@@ -40,7 +40,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPWindow.java,v 1.10 2006-03-02 17:56:52 langella Exp $
+ * @version $Id: TrustedIdPWindow.java,v 1.11 2006-03-03 21:48:04 langella Exp $
  */
 public class TrustedIdPWindow extends GridPortalBaseFrame {
 	public static final String PASSWORD = SAMLAuthenticationMethod.value1.getValue();
@@ -322,7 +322,7 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 
 		try {
             if(getCredPanel().getCertificate()!=null){
-            	idp.setIdPCertificate(CertUtil.writeCertificateToString(getCredPanel().getCertificate()));
+            	idp.setIdPCertificate(CertUtil.writeCertificate(getCredPanel().getCertificate()));
             }
 			idp.setName(getIdPName().getText().trim());
 			idp.setStatus(getStatus().getSelectedStatus());
@@ -643,7 +643,7 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 			try {
 				credPanel = new CertificatePanel();
 				if (idp.getIdPCertificate() != null) {
-					credPanel.setCertificate(CertUtil.loadCertificateFromString(idp.getIdPCertificate()));
+					credPanel.setCertificate(CertUtil.loadCertificate(idp.getIdPCertificate()));
 				}
 				credPanel.setAllowImport(false);
 			} catch (Exception e) {

@@ -469,7 +469,7 @@ public class TestDorian extends TestCase{
 			assertEquals(ifsUser.length, 1);
 			IFSUser before = ifsUser[0];
 			assertEquals(before.getUserStatus(), IFSUserStatus.Active);
-			X509Certificate certBefore = CertUtil.loadCertificateFromString(before.getCertificate().getCertificateAsString());
+			X509Certificate certBefore = CertUtil.loadCertificate(before.getCertificate().getCertificateAsString());
 
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
 	
@@ -539,7 +539,7 @@ public class TestDorian extends TestCase{
 			before.setUserStatus(IFSUserStatus.Active);
 			jm.updateIFSUser(gridId, before);
 			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
-			X509Certificate certBefore = CertUtil.loadCertificateFromString(before.getCertificate().getCertificateAsString());
+			X509Certificate certBefore = CertUtil.loadCertificate(before.getCertificate().getCertificateAsString());
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
 	
 			try {
@@ -800,7 +800,7 @@ public class TestDorian extends TestCase{
 		X509Certificate cert = ca.requestCertificate(req, start, end);
 		assertNotNull(cert);
 		assertEquals(cert.getSubjectDN().getName(), subject);
-		idp.setIdPCertificate(CertUtil.writeCertificateToString(cert));
+		idp.setIdPCertificate(CertUtil.writeCertificate(cert));
 		
 		return new IdPContainer(idp, cert, pair.getPrivate());
 	}

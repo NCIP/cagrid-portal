@@ -207,7 +207,7 @@ public class TrustedIdPManager extends LoggingObject {
 		TrustedIdP[] idps = getTrustedIdPs();
 		for (int i = 0; i < idps.length; i++) {
 			try {
-				X509Certificate cert = CertUtil.loadCertificateFromString(idps[i].getIdPCertificate());
+				X509Certificate cert = CertUtil.loadCertificate(idps[i].getIdPCertificate());
 				saml.verify(cert);
 				return idps[i];
 			} catch (SAMLException se) {
