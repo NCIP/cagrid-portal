@@ -309,7 +309,7 @@ public class SyncSource {
 			// insert the new client method
 			int endOfClass = fileContent.lastIndexOf("}");
 			clientMethod = createUnBoxedSignatureStringFromMethod(method) + " " + createExceptions(method);
-			clientMethod += ";";
+			clientMethod += ";\n";
 
 			fileContent.insert(endOfClass - 1, clientMethod);
 			try {
