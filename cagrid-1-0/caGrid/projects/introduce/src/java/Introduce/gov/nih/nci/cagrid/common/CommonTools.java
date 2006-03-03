@@ -3,9 +3,7 @@ package gov.nih.nci.cagrid.common;
 import java.io.File;
 import java.util.StringTokenizer;
 
-import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.Namespace;
-import org.projectmobius.common.XMLUtilities;
 
 
 public class CommonTools {
@@ -14,29 +12,10 @@ public class CommonTools {
 		final Process p;
 
 		p = Runtime.getRuntime().exec(cmd);
-
-		Thread thread1 = new Thread(new Runnable() {
-			public void run() {
-				try {
-					System.out.println(XMLUtilities.streamToString(p.getInputStream()));
-				} catch (MobiusException e) {
-					e.printStackTrace();
-				}
-
-			}
-		});
-		thread1.start();
-
-		Thread thread2 = new Thread(new Runnable() {
-			public void run() {
-				try {
-					System.err.println(XMLUtilities.streamToString(p.getErrorStream()));
-				} catch (MobiusException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		thread2.start();
+		StreamGobbler errGobbler = new StreamGobbler(p.getErrorStream(), "ERR");
+		StreamGobbler outGobbler = new StreamGobbler(p.getInputStream(), "OUT");
+		errGobbler.start();
+		outGobbler.start();
 
 		return p;
 	}
@@ -127,7 +106,7 @@ public class CommonTools {
 
 	public static String getPackageName(Namespace namespace) {
 		try {
-			//TODO: where should this mapperClassname preference be set
+			// TODO: where should this mapperClassname preference be set
 			String mapperClassname = "gov.nih.nci.cagrid.common.CaBIGNamespaceToPackageMapper";
 			Class clazz = Class.forName(mapperClassname);
 			NamespaceToPackageMapper mapper = (NamespaceToPackageMapper) clazz.newInstance();

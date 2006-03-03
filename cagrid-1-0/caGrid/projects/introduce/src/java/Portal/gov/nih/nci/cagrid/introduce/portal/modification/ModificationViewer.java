@@ -28,7 +28,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
@@ -51,7 +50,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.72 2006-03-01 17:02:05 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.73 2006-03-03 17:57:40 oster Exp $
  */
 public class ModificationViewer extends GridPortalComponent {
 
@@ -645,6 +644,8 @@ public class ModificationViewer extends GridPortalComponent {
 											.getAbsolutePath());
 										Process p = CommonTools.createAndOutputProcess(cmd);
 										p.waitFor();
+										//really really waitFor
+										//Thread.sleep(100);
 										if (p.exitValue() != 0) {
 											JOptionPane.showMessageDialog(ModificationViewer.this,
 												"Error: Unable to rebuild the skeleton");

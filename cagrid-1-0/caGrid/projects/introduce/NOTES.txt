@@ -9,22 +9,28 @@ we need a separate tab to define the mappings; this will probably be needed for 
 
 When creating a new service be sure to remove all the old zips from teh resource directory....
 
-Do primative arrays as returns work?  I seem to be getting "binding" errors when using them.
+need a way to generate XSD and beanmappers for existing object models that want to use default de/serialization
 
-(DONE) If it could not delete the dir prior to creation then warn and exit.
-
-(DONE I think this was an overall issue) Code generation is broken for custom class definition when isArray is true (doesn't add array def in all places)
-
-Make a method, save, add code to client and impl, modify name of input parameter, save, build error when trying to remove method and then unable to delete directory.
+is client-config.wsdd really needed in the root dir?  can't you just add GLOBUS_LOCATION to your classpath
 
 if introduce.jar and the like is removed from the service and expected to be run from elsewhere, introduce will need to check that it supports the version of 
 introduce.xml that the service uses.  We need to either have a "version" attribute in the document, or use the xmlns to decide the version.
 (probably should add a version attribute as the behavior could change without the dcoument structure changing).
 
+Need to add more complex tests to the system test for adding complex methods with faults etc.
+
+Security configuration (STEVE)
+
+============================ D O N E ================================================================
+
+(DONE) If it could not delete the dir prior to creation then warn and exit.
+
+(DONE I think this was an overall issue) Code generation is broken for custom class definition when isArray is true (doesn't add array def in all places)
+
+(DONE- fixed with streamgobbler) Make a method, save, add code to client and impl, modify name of input parameter, save, build error when trying to remove method and then unable to delete directory.
+
 (DONE) When introduce adds new methods it shouldn't add a "return null;" it should add the following (even if its a void method):
 	throw new RemoteException("Not yet implemented");
-
-is client-config.wsdd really needed in the root dir?  can't you just add GLOBUS_LOCATION to your classpath
 
 (DONE) How about changing this "@created by caGrid toolkit version 0.5"
 
@@ -60,11 +66,7 @@ is client-config.wsdd really needed in the root dir?  can't you just add GLOBUS_
 
 (DONE) namespace to package mappings should be jettemplated at sync time
 
-Security configuration (STEVE)
-
 (DONE) Metadata and registration configuration
-
-need a way to generate XSD and beanmappers for existing object models that want to use default de/serialization
 
 
 ================================================================================
@@ -112,7 +114,7 @@ Need to validate the model before we begin to do code gen
 		-- number and types of faults
 	
 	
-GMEMetadataConfigurationComponent needs to set proper view on viewing an existing one from "modify"
+(DONE) GMEMetadataConfigurationComponent needs to set proper view on viewing an existing one from "modify"
 
 (DONE) add packageName as a seperate parameter so that we can handle the funny mappings that we will use for caDSR->GME schemas.....
 
@@ -126,8 +128,6 @@ GMEMetadataConfigurationComponent needs to set proper view on viewing an existin
 (DONE) Need to make sure that the id's used to created archives are good from date through time.
 
 (DONE) Need to pull the namespace to mappings code out of the gui and into the template.
-
-Need to add more complex tests to the system test for adding complex methods with faults etc.
 
 (DONE) moved the sync tools over to use beans instead of using DOM.  Much cleaner an easier to maintain.
 
