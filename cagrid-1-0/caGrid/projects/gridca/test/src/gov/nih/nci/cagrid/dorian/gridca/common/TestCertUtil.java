@@ -85,8 +85,8 @@ public class TestCertUtil extends TestCase {
 			String certLocation = "temp-cacert.pem";
 			String keyLocation = "temp-cakey.pem";
 			String keyPassword = "gomets123";
-			KeyUtil.writePrivateKey(rootPair.getPrivate(), keyLocation, keyPassword);
-			CertUtil.writeCertificate(root, certLocation);
+			KeyUtil.writePrivateKey(rootPair.getPrivate(), new File(keyLocation), keyPassword);
+			CertUtil.writeCertificate(root, new File(certLocation));
 
 			X509Certificate[] certs = createCertificateSpecifyRootCA(certLocation, keyLocation, keyPassword);
 			File f1 = new File(certLocation);
@@ -121,8 +121,8 @@ public class TestCertUtil extends TestCase {
 			String certLocation = "temp-cacert.pem";
 			String keyLocation = "temp-cakey.pem";
 			String keyPassword = "gomets123";
-			KeyUtil.writePrivateKey(rootPair.getPrivate(), keyLocation, keyPassword);
-			CertUtil.writeCertificate(root, certLocation);
+			KeyUtil.writePrivateKey(rootPair.getPrivate(), new File(keyLocation), keyPassword);
+			CertUtil.writeCertificate(root, new File(certLocation));
 			checkCert(root, rootSub, rootSub);
 			checkWriteReadCertificate(root);
 			try {
@@ -156,8 +156,8 @@ public class TestCertUtil extends TestCase {
 			String certLocation = "temp-cacert.pem";
 			String keyLocation = "temp-cakey.pem";
 			String keyPassword = "gomets123";
-			KeyUtil.writePrivateKey(rootPair.getPrivate(), keyLocation, keyPassword);
-			CertUtil.writeCertificate(root, certLocation);
+			KeyUtil.writePrivateKey(rootPair.getPrivate(), new File(keyLocation), keyPassword);
+			CertUtil.writeCertificate(root, new File(certLocation));
 			checkCert(root, rootSub, rootSub);
 			checkWriteReadCertificate(root);
 			try {
@@ -181,8 +181,8 @@ public class TestCertUtil extends TestCase {
 
 	private void checkWriteReadCertificate(X509Certificate cert) throws Exception {
 		String temp = "temp.pem";
-		CertUtil.writeCertificate(cert, temp);
-		X509Certificate in = CertUtil.loadCertificate(temp);
+		CertUtil.writeCertificate(cert, new File(temp));
+		X509Certificate in = CertUtil.loadCertificate(new File(temp));
 		assertEquals(cert, in);
 		File f = new File(temp);
 		f.delete();

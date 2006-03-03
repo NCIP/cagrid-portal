@@ -27,8 +27,8 @@ public class TestKeyUtil extends TestCase {
 			assertNotNull(pair);
 			PrivateKey pkey = pair.getPrivate();
 			assertNotNull(pkey);
-			KeyUtil.writePrivateKey(pkey,keyFile,"password");
-			PrivateKey key=KeyUtil.loadPrivateKey(keyFile,"password");
+			KeyUtil.writePrivateKey(pkey,new File(keyFile),"password");
+			PrivateKey key=KeyUtil.loadPrivateKey(new File(keyFile),"password");
 		    assertNotNull(key);
 		    assertEquals(key,pkey);
 		    File f = new File(keyFile);
@@ -45,9 +45,9 @@ public class TestKeyUtil extends TestCase {
 			assertNotNull(pair);
 			PublicKey pkey = pair.getPublic();
 			assertNotNull(pkey);
-			String str = KeyUtil.writePublicKeyToString(pkey);
+			String str = KeyUtil.writePublicKey(pkey);
 			assertNotNull(str);
-			PublicKey key=KeyUtil.loadPublicKeyFromString(str);
+			PublicKey key=KeyUtil.loadPublicKey(str);
 		    assertNotNull(key);
 		    assertEquals(key,pkey);
 		}catch (Exception e) {
@@ -63,8 +63,8 @@ public class TestKeyUtil extends TestCase {
 			assertNotNull(pair);
 			PrivateKey pkey = pair.getPrivate();
 			assertNotNull(pkey);
-			KeyUtil.writePrivateKey(pkey,keyFile,"password");
-			PrivateKey key=KeyUtil.loadPrivateKey(keyFile,"bad");
+			KeyUtil.writePrivateKey(pkey,new File(keyFile),"password");
+			PrivateKey key=KeyUtil.loadPrivateKey(new File(keyFile),"bad");
 		    assertNotNull(key);
 		    assertEquals(key,pkey);
 		    File f = new File(keyFile);
@@ -82,8 +82,8 @@ public class TestKeyUtil extends TestCase {
 			assertNotNull(pair);
 			PrivateKey pkey = pair.getPrivate();
 			assertNotNull(pkey);
-			KeyUtil.writePrivateKey(pkey,keyFile);
-			PrivateKey key=KeyUtil.loadPrivateKey(keyFile,null);
+			KeyUtil.writePrivateKey(pkey,new File(keyFile));
+			PrivateKey key=KeyUtil.loadPrivateKey(new File(keyFile),null);
 		    assertNotNull(key);
 		    assertEquals(key,pkey);
 		    File f = new File(keyFile);

@@ -6,6 +6,9 @@ import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthorityConf;
 import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.service.DorianConfiguration;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
+import gov.nih.nci.cagrid.gridca.common.KeyUtil;
+
+import java.io.File;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -33,8 +36,8 @@ public class WriteCACertificate {
 						.getDorianInternalId());
 				db.createDatabaseIfNeeded();
 				DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
-				CertUtil.writeCertificate(ca.getCACertificate(), "cacert.pem");
-				
+				CertUtil.writeCertificate(ca.getCACertificate(), new File("dorian-ca-cert.pem"));
+				KeyUtil.writePrivateKey(ca.getCAPrivateKey(), new File("dorian-ca-key.pem"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);

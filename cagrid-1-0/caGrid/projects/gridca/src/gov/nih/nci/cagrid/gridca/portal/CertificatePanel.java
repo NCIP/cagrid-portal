@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.io.File;
 import java.security.cert.X509Certificate;
 
 import javax.swing.JButton;
@@ -20,7 +21,7 @@ import javax.swing.JTextField;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CertificatePanel.java,v 1.1 2006-03-02 17:54:34 langella Exp $
+ * @version $Id: CertificatePanel.java,v 1.2 2006-03-03 21:47:38 langella Exp $
  */
 public class CertificatePanel extends JPanel {
 
@@ -448,7 +449,7 @@ public class CertificatePanel extends JPanel {
 		int returnVal = fc.showOpenDialog(this);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			try {
-				certificate = CertUtil.loadCertificate(fc.getSelectedFile().getAbsolutePath());
+				certificate = CertUtil.loadCertificate(new File(fc.getSelectedFile().getAbsolutePath()));
 			    setCertificate(certificate);
 			} catch (Exception ex) {
 				PortalUtils.showErrorMessage(ex);
@@ -463,7 +464,7 @@ public class CertificatePanel extends JPanel {
 		int returnVal = fc.showSaveDialog(this);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			try {
-				CertUtil.writeCertificate(certificate,fc.getSelectedFile().getAbsolutePath());
+				CertUtil.writeCertificate(certificate,new File(fc.getSelectedFile().getAbsolutePath()));
 			} catch (Exception ex) {
 				PortalUtils.showErrorMessage(ex);
 			}
