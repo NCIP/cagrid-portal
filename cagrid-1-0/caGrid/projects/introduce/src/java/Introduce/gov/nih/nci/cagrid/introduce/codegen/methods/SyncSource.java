@@ -18,14 +18,18 @@ import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
 import gov.nih.nci.cagrid.introduce.codegen.TemplateUtils;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.List;
 import java.util.Properties;
+import java.util.StringTokenizer;
 
 import org.apache.ws.jaxme.js.JavaMethod;
 import org.apache.ws.jaxme.js.Parameter;
+
 
 /**
  * SyncSource
@@ -53,61 +57,27 @@ public class SyncSource {
 
 	private ServiceInformation serviceInfo;
 
+
 	public SyncSource(File baseDir, ServiceInformation info) {
 		// this.baseDir = baseDir;
 		this.serviceInfo = info;
 		this.deploymentProperties = this.serviceInfo.getServiceProperties();
-		this.packageName = (String) this.deploymentProperties
-				.get("introduce.skeleton.package")
-				+ ".stubs";
-		serviceClient = baseDir.getAbsolutePath()
-				+ File.separator
-				+ "src"
-				+ File.separator
-				+ this.deploymentProperties
-						.get("introduce.skeleton.package.dir")
-				+ File.separator
-				+ "client"
-				+ File.separator
-				+ this.deploymentProperties
-						.get("introduce.skeleton.service.name") + "Client.java";
-		serviceInterface = baseDir.getAbsolutePath()
-				+ File.separator
-				+ "src"
-				+ File.separator
-				+ this.deploymentProperties
-						.get("introduce.skeleton.package.dir")
-				+ File.separator
-				+ "common"
-				+ File.separator
-				+ this.deploymentProperties
-						.get("introduce.skeleton.service.name") + "I.java";
-		serviceImpl = baseDir.getAbsolutePath()
-				+ File.separator
-				+ "src"
-				+ File.separator
-				+ this.deploymentProperties
-						.get("introduce.skeleton.package.dir")
-				+ File.separator
-				+ "service"
-				+ File.separator
-				+ this.deploymentProperties
-						.get("introduce.skeleton.service.name") + "Impl.java";
-		serviceProviderImpl = baseDir.getAbsolutePath()
-				+ File.separator
-				+ "src"
-				+ File.separator
-				+ this.deploymentProperties
-						.get("introduce.skeleton.package.dir")
-				+ File.separator
-				+ "service"
-				+ File.separator
-				+ "globus"
-				+ File.separator
-				+ this.deploymentProperties
-						.get("introduce.skeleton.service.name")
-				+ "ProviderImpl.java";
+		this.packageName = (String) this.deploymentProperties.get("introduce.skeleton.package") + ".stubs";
+		serviceClient = baseDir.getAbsolutePath() + File.separator + "src" + File.separator
+			+ this.deploymentProperties.get("introduce.skeleton.package.dir") + File.separator + "client"
+			+ File.separator + this.deploymentProperties.get("introduce.skeleton.service.name") + "Client.java";
+		serviceInterface = baseDir.getAbsolutePath() + File.separator + "src" + File.separator
+			+ this.deploymentProperties.get("introduce.skeleton.package.dir") + File.separator + "common"
+			+ File.separator + this.deploymentProperties.get("introduce.skeleton.service.name") + "I.java";
+		serviceImpl = baseDir.getAbsolutePath() + File.separator + "src" + File.separator
+			+ this.deploymentProperties.get("introduce.skeleton.package.dir") + File.separator + "service"
+			+ File.separator + this.deploymentProperties.get("introduce.skeleton.service.name") + "Impl.java";
+		serviceProviderImpl = baseDir.getAbsolutePath() + File.separator + "src" + File.separator
+			+ this.deploymentProperties.get("introduce.skeleton.package.dir") + File.separator + "service"
+			+ File.separator + "globus" + File.separator
+			+ this.deploymentProperties.get("introduce.skeleton.service.name") + "ProviderImpl.java";
 	}
+
 
 	private String createExceptions(MethodType method) {
 		String exceptions = "";
@@ -119,14 +89,10 @@ public class SyncSource {
 				exceptions += ", ";
 			}
 			for (int i = 0; i < exceptionsEl.getException().length; i++) {
-				MethodTypeExceptionsException fault = exceptionsEl
-						.getException(i);
+				MethodTypeExceptionsException fault = exceptionsEl.getException(i);
 				// hack for now, should look at the namespace in the
 				// element.....
-				exceptions += this.packageName
-						+ "."
-						+ TemplateUtils
-								.upperCaseFirstCharacter(fault.getName());
+				exceptions += this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(fault.getName());
 				if (i < exceptionsEl.getException().length - 1) {
 					exceptions += ", ";
 				}
@@ -138,24 +104,22 @@ public class SyncSource {
 		return exceptions;
 	}
 
+
 	private String createUnBoxedSignatureStringFromMethod(MethodType method) {
 		String methodString = "";
 		MethodTypeOutput returnTypeEl = method.getOutput();
 		String methodName = method.getName();
 		String returnType = returnTypeEl.getClassName();
-		if (returnTypeEl.getPackageName() != null
-				&& returnTypeEl.getPackageName().length() > 0) {
+		if (returnTypeEl.getPackageName() != null && returnTypeEl.getPackageName().length() > 0) {
 			returnType = returnTypeEl.getPackageName() + "." + returnType;
 		}
 		methodString += "     public " + returnType + " " + methodName + "(";
 		if (method.getInputs() != null && method.getInputs().getInput() != null) {
 			for (int j = 0; j < method.getInputs().getInput().length; j++) {
-				String packageName = method.getInputs().getInput(j)
-						.getPackageName();
+				String packageName = method.getInputs().getInput(j).getPackageName();
 				String classType = null;
 				if (packageName.length() > 0) {
-					classType = packageName + "."
-							+ method.getInputs().getInput(j).getClassName();
+					classType = packageName + "." + method.getInputs().getInput(j).getClassName();
 				} else {
 					classType = method.getInputs().getInput(j).getClassName();
 				}
@@ -170,6 +134,7 @@ public class SyncSource {
 
 		return methodString;
 	}
+
 
 	private String createUnBoxedSignatureStringFromMethod(JavaMethod method) {
 		String methodString = "";
@@ -187,8 +152,7 @@ public class SyncSource {
 		for (int j = 0; j < inputs.length; j++) {
 			String classType = null;
 			if (inputs[j].getType().getPackageName().length() > 0) {
-				classType = inputs[j].getType().getPackageName() + "."
-						+ inputs[j].getType().getClassName();
+				classType = inputs[j].getType().getPackageName() + "." + inputs[j].getType().getClassName();
 			} else {
 				classType = inputs[j].getType().getClassName();
 			}
@@ -205,11 +169,12 @@ public class SyncSource {
 		return methodString;
 	}
 
+
 	private String getBoxedOutputTypeName(String input) {
-		String returnType = TemplateUtils.upperCaseFirstCharacter(input)
-				+ "Response";
+		String returnType = TemplateUtils.upperCaseFirstCharacter(input) + "Response";
 		return returnType;
 	}
+
 
 	private String createBoxedSignatureStringFromMethod(MethodType method) {
 		String methodString = "";
@@ -217,18 +182,17 @@ public class SyncSource {
 		String methodName = method.getName();
 		String returnType = returnTypeEl.getClassName();
 
-		returnType = this.packageName + "."
-				+ getBoxedOutputTypeName(methodName);
+		returnType = this.packageName + "." + getBoxedOutputTypeName(methodName);
 
-		methodString += "     public " + returnType + " " + methodName + "(";
+		methodString += "public " + returnType + " " + methodName + "(";
 
 		// boxed
-		methodString += this.packageName + "."
-				+ TemplateUtils.upperCaseFirstCharacter(methodName) + " params";
+		methodString += this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + " params";
 
 		methodString += ")";
 		return methodString;
 	}
+
 
 	private String createBoxedSignatureStringFromMethod(JavaMethod method) {
 		String methodString = "";
@@ -236,36 +200,33 @@ public class SyncSource {
 		String returnType = "";
 
 		// need to box the output type
-		returnType = this.packageName + "."
-				+ getBoxedOutputTypeName(method.getName());
+		returnType = this.packageName + "." + getBoxedOutputTypeName(method.getName());
 
-		methodString += "     public " + returnType + " " + methodName + "(";
+		methodString += "public " + returnType + " " + methodName + "(";
 		// Parameter[] inputs = method.getParams();
 		// always boxed for now
 		// if (inputs.length > 1 || inputs.length == 0) {
 
 		// boxed
-		methodString += this.packageName + "."
-				+ TemplateUtils.upperCaseFirstCharacter(methodName) + " params";
+		methodString += this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + " params";
 
 		methodString += ")";
 		return methodString;
 	}
 
+
 	private boolean isPrimitive(String type) {
-		if (type.equals("int") || type.equals("double") || type.equals("float")
-				|| type.equals("boolean") || type.equals("short")
-				|| type.equals("byte") || type.equals("char")
-				|| type.equals("long")) {
+		if (type.equals("int") || type.equals("double") || type.equals("float") || type.equals("boolean")
+			|| type.equals("short") || type.equals("byte") || type.equals("char") || type.equals("long")) {
 			return true;
 		}
 		return false;
 	}
 
+
 	private String createPrimitiveReturn(String type) {
-		if (type.equals("int") || type.equals("double") || type.equals("float")
-				|| type.equals("short") || type.equals("byte")
-				|| type.equals("char") || type.equals("long")) {
+		if (type.equals("int") || type.equals("double") || type.equals("float") || type.equals("short")
+			|| type.equals("byte") || type.equals("char") || type.equals("long")) {
 			return "0";
 		} else if (type.equals("boolean")) {
 			return "false";
@@ -274,6 +235,7 @@ public class SyncSource {
 		}
 	}
 
+
 	public void addMethods(List additions) {
 		for (int i = 0; i < additions.size(); i++) {
 			// add it to the interface
@@ -281,16 +243,15 @@ public class SyncSource {
 
 			StringBuffer fileContent = null;
 			try {
-				fileContent = Utils.fileToStringBuffer(new File(
-						this.serviceInterface));
+				fileContent = Utils.fileToStringBuffer(new File(this.serviceInterface));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
 			// insert the new client method
 			int endOfClass = fileContent.lastIndexOf("}");
-			String clientMethod = createUnBoxedSignatureStringFromMethod(method)
-					+ " " + createExceptions(method);
+			String clientMethod = "\t" + createUnBoxedSignatureStringFromMethod(method) + " "
+				+ createExceptions(method);
 			clientMethod += ";\n";
 
 			fileContent.insert(endOfClass - 1, clientMethod);
@@ -311,6 +272,7 @@ public class SyncSource {
 		}
 	}
 
+
 	public void modifyMethods(List modifiedMethods) {
 		for (int i = 0; i < modifiedMethods.size(); i++) {
 			// add it to the interface
@@ -319,24 +281,19 @@ public class SyncSource {
 
 			StringBuffer fileContent = null;
 			try {
-				fileContent = Utils.fileToStringBuffer(new File(
-						this.serviceInterface));
+				fileContent = Utils.fileToStringBuffer(new File(this.serviceInterface));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
 			// remove the old interface method
-			String clientMethod = createUnBoxedSignatureStringFromMethod(mod
-					.getJavaMethod());
-			System.err.println("Looking to remove method: |" + clientMethod
-					+ "|");
-			int startOfMethod = fileContent.indexOf(clientMethod);
+			String clientMethod = createUnBoxedSignatureStringFromMethod(mod.getJavaMethod());
+			int startOfMethod = startOfSignature(fileContent, clientMethod);
 			String restOfFile = fileContent.substring(startOfMethod);
-			int endOfMethod = startOfMethod + restOfFile.indexOf(";\n") + 2;
+			int endOfMethod = startOfMethod + restOfFile.indexOf(";") + 1;
 
 			if (startOfMethod == -1 || endOfMethod == -1) {
-				System.err.println("WARNING: Unable to locate method in I : "
-						+ method.getName());
+				System.err.println("WARNING: Unable to locate method in I : " + method.getName());
 				return;
 			}
 
@@ -344,9 +301,8 @@ public class SyncSource {
 
 			// insert the new client method
 			int endOfClass = fileContent.lastIndexOf("}");
-			clientMethod = createUnBoxedSignatureStringFromMethod(method) + " "
-					+ createExceptions(method);
-			clientMethod += ";\n";
+			clientMethod = createUnBoxedSignatureStringFromMethod(method) + " " + createExceptions(method);
+			clientMethod += ";";
 
 			fileContent.insert(endOfClass - 1, clientMethod);
 			try {
@@ -368,9 +324,9 @@ public class SyncSource {
 		}
 	}
 
-	private String configureClientSecurity(ServiceSecurity ss,
-			MethodSecurity ms) {
-		if((ss==null)&&(ms==null)){
+
+	private String configureClientSecurity(ServiceSecurity ss, MethodSecurity ms) {
+		if ((ss == null) && (ms == null)) {
 			return "";
 		}
 		ClientAuthorization auth = null;
@@ -403,38 +359,35 @@ public class SyncSource {
 			// do nothing
 		} else if (comm.equals(ClientCommunication.Transport_Layer_Security)) {
 			sec.append("org.globus.axis.util.Util.registerTransport();\n");
-			if (tls.getCommunicationMethod().equals(
-					CommunicationMethod.Integrity)) {
+			if (tls.getCommunicationMethod().equals(CommunicationMethod.Integrity)) {
 				sec
-						.append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT, org.globus.wsrf.security.Constants.SIGNATURE);\n");
+					.append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT, org.globus.wsrf.security.Constants.SIGNATURE);\n");
 			} else {
 				sec
-						.append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT, org.globus.wsrf.security.Constants.ENCRYPTION);\n");
+					.append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT, org.globus.wsrf.security.Constants.ENCRYPTION);\n");
 			}
 			sec.append(configureAnonymousCommunication(anon));
 			sec.append(configureClientAuthorization(auth));
 			sec.append(configureClientDelegation(delegation));
 		} else if (comm.equals(ClientCommunication.Secure_Conversation)) {
-			if (sc.getCommunicationMethod().equals(
-					CommunicationMethod.Integrity)) {
+			if (sc.getCommunicationMethod().equals(CommunicationMethod.Integrity)) {
 				sec
-						.append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_CONV, org.globus.wsrf.security.Constants.SIGNATURE);\n");
+					.append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_CONV, org.globus.wsrf.security.Constants.SIGNATURE);\n");
 			} else {
 				sec
-						.append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_CONV, org.globus.wsrf.security.Constants.ENCRYPTION);\n");
+					.append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_CONV, org.globus.wsrf.security.Constants.ENCRYPTION);\n");
 			}
 			sec.append(configureAnonymousCommunication(anon));
 			sec.append(configureClientAuthorization(auth));
 			sec.append(configureClientDelegation(delegation));
 
 		} else if (comm.equals(ClientCommunication.Secure_Message)) {
-			if (sm.getCommunicationMethod().equals(
-					CommunicationMethod.Integrity)) {
+			if (sm.getCommunicationMethod().equals(CommunicationMethod.Integrity)) {
 				sec
-						.append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_MSG, org.globus.wsrf.security.Constants.SIGNATURE);\n");
+					.append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_MSG, org.globus.wsrf.security.Constants.SIGNATURE);\n");
 			} else {
 				sec
-						.append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_MSG, org.globus.wsrf.security.Constants.ENCRYPTION);\n");
+					.append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_MSG, org.globus.wsrf.security.Constants.ENCRYPTION);\n");
 			}
 			sec.append(configureAnonymousCommunication(anon));
 			sec.append(configureClientAuthorization(auth));
@@ -445,11 +398,11 @@ public class SyncSource {
 		return sec.toString();
 	}
 
+
 	private String configureAnonymousCommunication(AnonymousCommunication anon) {
 		StringBuffer sec = new StringBuffer();
 		if (anon.equals(AnonymousCommunication.Yes)) {
-			sec
-					.append("	stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS,Boolean.TRUE);\n");
+			sec.append("	stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS,Boolean.TRUE);\n");
 		} else {
 			sec.append(configureProxyIfSupplied());
 		}
@@ -457,14 +410,14 @@ public class SyncSource {
 		return sec.toString();
 	}
 
+
 	private String configureProxyIfSupplied() {
 		StringBuffer sec = new StringBuffer();
 		sec.append("	if (proxy != null) {\n");
 		sec.append("try{\n");
 		sec
-				.append("		org.ietf.jgss.GSSCredential gss = new org.globus.gsi.gssapi.GlobusGSSCredentialImpl(proxy,org.ietf.jgss.GSSCredential.INITIATE_AND_ACCEPT);\n");
-		sec
-				.append("		stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_CREDENTIALS, gss);\n");
+			.append("		org.ietf.jgss.GSSCredential gss = new org.globus.gsi.gssapi.GlobusGSSCredentialImpl(proxy,org.ietf.jgss.GSSCredential.INITIATE_AND_ACCEPT);\n");
+		sec.append("		stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_CREDENTIALS, gss);\n");
 		sec.append("}catch(org.ietf.jgss.GSSException ex){\n");
 		sec.append("throw new RemoteException(ex.getMessage());\n");
 		sec.append("}\n");
@@ -472,189 +425,73 @@ public class SyncSource {
 		return sec.toString();
 	}
 
+
 	private String configureClientDelegation(DelegationMode del) {
 		StringBuffer sec = new StringBuffer();
 		if (del != null) {
 			if (del.equals(DelegationMode.Limited)) {
 				sec
-						.append("stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_MODE, org.globus.axis.gsi.GSIConstants.GSI_MODE_LIMITED_DELEG);\n");
+					.append("stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_MODE, org.globus.axis.gsi.GSIConstants.GSI_MODE_LIMITED_DELEG);\n");
 			} else if (del.equals(DelegationMode.Full)) {
 				sec
-						.append("stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_MODE, org.globus.axis.gsi.GSIConstants.GSI_MODE_FULL_DELEG);\n");
+					.append("stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_MODE, org.globus.axis.gsi.GSIConstants.GSI_MODE_FULL_DELEG);\n");
 			}
 		}
 		return sec.toString();
 	}
+
 
 	private String configureClientAuthorization(ClientAuthorization auth) {
 		StringBuffer sec = new StringBuffer();
 		if (auth != null) {
 			if (auth.getNoAuthorization() != null) {
 				sec
-						.append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());\n");
+					.append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());\n");
 			} else if (auth.getHostAuthorization() != null) {
 				sec
-						.append("org.globus.wsrf.impl.security.authorization.HostAuthorization host = new org.globus.wsrf.impl.security.authorization.HostAuthorization(\""
-								+ auth.getHostAuthorization().getHostname()
-								+ "\");\n");
-				sec
-						.append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, host);\n");
+					.append("org.globus.wsrf.impl.security.authorization.HostAuthorization host = new org.globus.wsrf.impl.security.authorization.HostAuthorization(\""
+						+ auth.getHostAuthorization().getHostname() + "\");\n");
+				sec.append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, host);\n");
 			} else if (auth.getIdentityAuthorization() != null) {
 				sec
-						.append("org.globus.wsrf.impl.security.authorization.IdentityAuthorization iden = new org.globus.wsrf.impl.security.authorization.IdentityAuthorization(\""
-								+ auth.getIdentityAuthorization().getIdentity()
-								+ "\");\n");
-				sec
-						.append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, iden);\n");
+					.append("org.globus.wsrf.impl.security.authorization.IdentityAuthorization iden = new org.globus.wsrf.impl.security.authorization.IdentityAuthorization(\""
+						+ auth.getIdentityAuthorization().getIdentity() + "\");\n");
+				sec.append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, iden);\n");
 			} else if (auth.getSelfAuthorization() != null) {
 				sec
-						.append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.SelfAuthorization.getInstance());\n");
+					.append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.SelfAuthorization.getInstance());\n");
 			}
 
 		} else {
 			sec
-					.append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());\n");
+				.append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());\n");
 		}
 		return sec.toString();
 	}
 
-	/*
-	 * private String getClientSecurityCode(SecureCommunicationConfiguration
-	 * scc, boolean isService) { StringBuffer sec = new StringBuffer(); if (scc !=
-	 * null) { SecureCommunicationMethodType comm =
-	 * scc.getSecureCommunication(); if (comm != null) {
-	 * 
-	 * if (comm.equals(SecureCommunicationMethodType.Default)) {
-	 * ServiceSecurityConfiguration serviceConf =
-	 * this.serviceInfo.getServiceSecurityConfiguration(); if (serviceConf !=
-	 * null) { if (!isService) { return
-	 * getClientSecurityCode(serviceConf.getServiceCommunicationSecurity(),
-	 * true); } } } else if
-	 * (comm.equals(SecureCommunicationMethodType.GSI_Transport_Level_Security)) {
-	 * sec.append("Util.registerTransport();\n"); if
-	 * (scc.getAuthenticationMethod().equals(AuthenticationMethodType.Integrity)) {
-	 * sec
-	 * .append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT,
-	 * org.globus.wsrf.security.Constants.SIGNATURE);\n"); } else { sec
-	 * .append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT,
-	 * org.globus.wsrf.security.Constants.ENCRYPTION);\n"); }
-	 * 
-	 * if (scc.getAnonymousClients().equals(AnonymousClientsType.Yes)) { sec
-	 * .append("
-	 * stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS,Boolean.TRUE);\n"); }
-	 * else { sec.append(" if (proxy != null) {\n"); sec.append("try{\n"); sec
-	 * .append(" org.ietf.jgss.GSSCredential gss = new
-	 * org.globus.gsi.gssapi.GlobusGSSCredentialImpl(proxy,org.ietf.jgss.GSSCredential.INITIATE_AND_ACCEPT);\n");
-	 * sec.append("
-	 * stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_CREDENTIALS,
-	 * gss);\n"); sec.append("}catch(org.ietf.jgss.GSSException ex){\n");
-	 * sec.append("throw new RemoteException(ex.getMessage());\n");
-	 * sec.append("}\n"); sec.append("}\n"); }
-	 * 
-	 * if (scc.getClientAuthorization() != null) { if
-	 * (scc.getClientAuthorization().equals(ClientAuthorizationType.None)) { sec
-	 * .append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION,
-	 * org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());\n"); }
-	 * else if
-	 * (scc.getClientAuthorization().equals(ClientAuthorizationType.Host)) { sec
-	 * .append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION,
-	 * org.globus.wsrf.impl.security.authorization.HostAuthorization.getInstance());\n"); }
-	 * else if
-	 * (scc.getClientAuthorization().equals(ClientAuthorizationType.Self)) { sec
-	 * .append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION,
-	 * org.globus.wsrf.impl.security.authorization.SelfAuthorization.getInstance());\n"); } }
-	 *  } else if
-	 * (comm.equals(SecureCommunicationMethodType.GSI_Secure_Conversation)) { if
-	 * (scc.getAuthenticationMethod().equals(AuthenticationMethodType.Integrity)) {
-	 * sec
-	 * .append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_CONV,
-	 * org.globus.wsrf.security.Constants.SIGNATURE);\n"); } else { sec
-	 * .append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_CONV,
-	 * org.globus.wsrf.security.Constants.ENCRYPTION);\n"); }
-	 * 
-	 * if (scc.getAnonymousClients().equals(AnonymousClientsType.Yes)) { sec
-	 * .append("
-	 * stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS,Boolean.TRUE);\n"); }
-	 * else { sec.append(" if (proxy != null) {\n"); sec.append("try{\n"); sec
-	 * .append(" org.ietf.jgss.GSSCredential gss = new
-	 * org.globus.gsi.gssapi.GlobusGSSCredentialImpl(proxy,org.ietf.jgss.GSSCredential.INITIATE_AND_ACCEPT);\n");
-	 * sec.append("
-	 * stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_CREDENTIALS,
-	 * gss);\n"); sec.append("}catch(org.ietf.jgss.GSSException ex){\n");
-	 * sec.append("throw new RemoteException(ex.getMessage());\n");
-	 * sec.append("}\n"); sec.append("}\n"); }
-	 * 
-	 * if (scc.getClientAuthorization() != null) { if
-	 * (scc.getClientAuthorization().equals(ClientAuthorizationType.None)) { sec
-	 * .append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION,
-	 * org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());\n"); }
-	 * else if
-	 * (scc.getClientAuthorization().equals(ClientAuthorizationType.Host)) { sec
-	 * .append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION,
-	 * org.globus.wsrf.impl.security.authorization.HostAuthorization.getInstance());\n"); }
-	 * else if
-	 * (scc.getClientAuthorization().equals(ClientAuthorizationType.Self)) { sec
-	 * .append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION,
-	 * org.globus.wsrf.impl.security.authorization.SelfAuthorization.getInstance());\n"); } }
-	 *  } else if
-	 * (comm.equals(SecureCommunicationMethodType.GSI_Secure_Message)) { if
-	 * (scc.getAuthenticationMethod().equals(AuthenticationMethodType.Integrity)) {
-	 * sec
-	 * .append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_MSG,
-	 * org.globus.wsrf.security.Constants.SIGNATURE);\n"); } else { sec
-	 * .append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_MSG,
-	 * org.globus.wsrf.security.Constants.ENCRYPTION);\n"); }
-	 * 
-	 * sec.append(" if (proxy != null) {\n"); sec.append("try{\n"); sec
-	 * .append(" org.ietf.jgss.GSSCredential gss = new
-	 * org.globus.gsi.gssapi.GlobusGSSCredentialImpl(proxy,org.ietf.jgss.GSSCredential.INITIATE_AND_ACCEPT);\n");
-	 * sec.append("
-	 * stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_CREDENTIALS,
-	 * gss);\n"); sec.append("}catch(org.ietf.jgss.GSSException ex){\n");
-	 * sec.append("throw new RemoteException(ex.getMessage());\n");
-	 * sec.append("}\n"); sec.append("}\n");
-	 * 
-	 * if (scc.getClientAuthorization() != null) { if
-	 * (scc.getClientAuthorization().equals(ClientAuthorizationType.None)) { sec
-	 * .append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION,
-	 * org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());\n"); }
-	 * else if
-	 * (scc.getClientAuthorization().equals(ClientAuthorizationType.Host)) { sec
-	 * .append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION,
-	 * org.globus.wsrf.impl.security.authorization.HostAuthorization.getInstance());\n"); }
-	 * else if
-	 * (scc.getClientAuthorization().equals(ClientAuthorizationType.Self)) { sec
-	 * .append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION,
-	 * org.globus.wsrf.impl.security.authorization.SelfAuthorization.getInstance());\n"); } } } } }
-	 * return sec.toString(); }
-	 */
 
 	private void addClientImpl(MethodType method) {
 		StringBuffer fileContent = null;
 		String methodName = method.getName();
 		try {
-			fileContent = Utils
-					.fileToStringBuffer(new File(this.serviceClient));
+			fileContent = Utils.fileToStringBuffer(new File(this.serviceClient));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		// insert the new client method
 		int endOfClass = fileContent.lastIndexOf("}");
-		String clientMethod = createUnBoxedSignatureStringFromMethod(method)
-				+ " " + createExceptions(method);
-		clientMethod += "{\n          ";
-		// clientMethod += "try{\n";
-		clientMethod += "               ";
-		clientMethod += this.deploymentProperties
-				.get("introduce.skeleton.service.name")
-				+ "PortType port = this.getPortType();\n";
+		String clientMethod = "\t" + createUnBoxedSignatureStringFromMethod(method) + " " + createExceptions(method);
+		clientMethod += "{\n\t\t";
+		clientMethod += this.deploymentProperties.get("introduce.skeleton.service.name")
+			+ "PortType port = this.getPortType();\n";
 
 		clientMethod += "";
 		clientMethod += "org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;\n";
 
 		// TODO: ADD CLIENT SECURITY
-		 clientMethod += "\n" + configureClientSecurity(this.serviceInfo.getServiceSecurity(),method.getMethodSecurity());
+		clientMethod += "\n"
+			+ configureClientSecurity(this.serviceInfo.getServiceSecurity(), method.getMethodSecurity());
 		// put in the call to the client
 		String var = "port";
 
@@ -666,18 +503,15 @@ public class SyncSource {
 
 		// always a boxed call now becuase using complex types in the wsdl
 		// create handle for the boxed wrapper
-		methodString += this.packageName + "."
-				+ TemplateUtils.upperCaseFirstCharacter(methodName)
-				+ " params = new " + this.packageName + "."
-				+ TemplateUtils.upperCaseFirstCharacter(methodName) + "();\n";
+		methodString += this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + " params = new "
+			+ this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + "();\n";
 		// set the values fo the boxed wrapper
 		if (method.getInputs() != null && method.getInputs().getInput() != null) {
 			for (int j = 0; j < method.getInputs().getInput().length; j++) {
 				String paramName = method.getInputs().getInput(j).getName();
 				methodString += lineStart;
-				methodString += "params.set"
-						+ TemplateUtils.upperCaseFirstCharacter(paramName)
-						+ "(" + paramName + ");\n";
+				methodString += "params.set" + TemplateUtils.upperCaseFirstCharacter(paramName) + "(" + paramName
+					+ ");\n";
 			}
 		}
 		// make the call
@@ -685,8 +519,8 @@ public class SyncSource {
 
 		// always boxed returns now because of complex types in wsdl
 		String returnTypeBoxed = getBoxedOutputTypeName(methodName);
-		methodString += this.packageName + "." + returnTypeBoxed
-				+ " boxedResult = " + var + "." + methodName + "(params);\n";
+		methodString += this.packageName + "." + returnTypeBoxed + " boxedResult = " + var + "." + methodName
+			+ "(params);\n";
 		methodString += lineStart;
 		if (!returnType.equals("void")) {
 			methodString += "return boxedResult.getResponse();\n";
@@ -708,7 +542,7 @@ public class SyncSource {
 		// }
 		// }
 
-		clientMethod += "\n     }\n\n";
+		clientMethod += "\n\t}\n\n";
 
 		fileContent.insert(endOfClass - 1, clientMethod);
 		try {
@@ -721,6 +555,7 @@ public class SyncSource {
 
 	}
 
+
 	private void addImpl(MethodType method) {
 		StringBuffer fileContent = null;
 		try {
@@ -731,21 +566,17 @@ public class SyncSource {
 
 		// insert the new client method
 		int endOfClass = fileContent.lastIndexOf("}");
-		String clientMethod = createUnBoxedSignatureStringFromMethod(method)
-				+ " " + createExceptions(method);
+		String clientMethod = "\t" + createUnBoxedSignatureStringFromMethod(method) + " " + createExceptions(method);
 
 		clientMethod += "{\n";
-		clientMethod += "          //TODO: Implement this autogenerated method\n";
+		clientMethod += "\t\t//TODO: Implement this autogenerated method\n";
 		MethodTypeOutput methodReturn = method.getOutput();
-		if (!methodReturn.getClassName().equals("void")
-				&& !isPrimitive(methodReturn.getClassName())) {
-			clientMethod += "          throw new RemoteException(\"Not yet implemented\");\n";
+		if (!methodReturn.getClassName().equals("void") && !isPrimitive(methodReturn.getClassName())) {
+			clientMethod += "\t\tthrow new RemoteException(\"Not yet implemented\");\n";
 		} else if (isPrimitive(methodReturn.getClassName())) {
-			clientMethod += "          return "
-					+ createPrimitiveReturn(methodReturn.getClassName())
-					+ ";\n";
+			clientMethod += "\t\treturn " + createPrimitiveReturn(methodReturn.getClassName()) + ";\n";
 		}
-		clientMethod += "     }\n";
+		clientMethod += "\t}\n";
 
 		fileContent.insert(endOfClass - 1, clientMethod);
 		try {
@@ -757,11 +588,11 @@ public class SyncSource {
 		}
 	}
 
+
 	private void addProviderImpl(MethodType method) {
 		StringBuffer fileContent = null;
 		try {
-			fileContent = Utils.fileToStringBuffer(new File(
-					this.serviceProviderImpl));
+			fileContent = Utils.fileToStringBuffer(new File(this.serviceProviderImpl));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -770,15 +601,14 @@ public class SyncSource {
 		int endOfClass = fileContent.lastIndexOf("}");
 		// slh -- in migration to globus 4 we need to check here for autoboxing
 		// and get appropriate
-		String clientMethod = createBoxedSignatureStringFromMethod(method)
-				+ " " + createExceptions(method);
+		String clientMethod = "\t" + createBoxedSignatureStringFromMethod(method) + " " + createExceptions(method);
 
 		// clientMethod += " throws RemoteException";
 		clientMethod += "{\n";
 
 		// create the unboxed call to the implementation
 		String var = "impl";
-		String lineStart = "          ";
+		String lineStart = "\t\t";
 
 		String methodName = method.getName();
 		String methodString = "";
@@ -794,9 +624,7 @@ public class SyncSource {
 				// inputs were boxed and need to be unboxed
 				for (int j = 0; j < method.getInputs().getInput().length; j++) {
 					String paramName = method.getInputs().getInput(j).getName();
-					params += "params.get"
-							+ TemplateUtils.upperCaseFirstCharacter(paramName)
-							+ "()";
+					params += "params.get" + TemplateUtils.upperCaseFirstCharacter(paramName) + "()";
 					if (j < method.getInputs().getInput().length - 1) {
 						params += ",";
 					}
@@ -820,23 +648,20 @@ public class SyncSource {
 			methodString += lineStart;
 			methodString += var + "." + methodName + "(" + params + ");\n";
 			methodString += lineStart;
-			methodString += "return new " + this.packageName + "."
-					+ returnTypeBoxed + "();\n";
+			methodString += "return new " + this.packageName + "." + returnTypeBoxed + "();\n";
 		} else {
 			// need to unbox on the way out
 			methodString += lineStart;
-			methodString += this.packageName + "." + returnTypeBoxed
-					+ " boxedResult = new " + this.packageName + "."
-					+ returnTypeBoxed + "();\n";
+			methodString += this.packageName + "." + returnTypeBoxed + " boxedResult = new " + this.packageName + "."
+				+ returnTypeBoxed + "();\n";
 			methodString += lineStart;
-			methodString += "boxedResult.setResponse(" + var + "." + methodName
-					+ "(" + params + "));\n";
+			methodString += "boxedResult.setResponse(" + var + "." + methodName + "(" + params + "));\n";
 			methodString += lineStart;
 			methodString += "return boxedResult;\n";
 		}
 
 		clientMethod += methodString;
-		clientMethod += "     }\n";
+		clientMethod += "\t}\n";
 		fileContent.insert(endOfClass - 1, clientMethod);
 
 		try {
@@ -849,29 +674,27 @@ public class SyncSource {
 
 	}
 
+
 	public void removeMethods(List removals) {
 		for (int i = 0; i < removals.size(); i++) {
 			JavaMethod method = (JavaMethod) removals.get(i);
 
 			StringBuffer fileContent = null;
 			try {
-				fileContent = Utils.fileToStringBuffer(new File(
-						this.serviceInterface));
+				fileContent = Utils.fileToStringBuffer(new File(this.serviceInterface));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
 			// remove the method
 			String clientMethod = createUnBoxedSignatureStringFromMethod(method);
-			System.err.println("Looking to remove method: |" + clientMethod
-					+ "|");
-			int startOfMethod = fileContent.indexOf(clientMethod);
+			System.err.println("Looking to remove method: |" + clientMethod + "|");
+			int startOfMethod = startOfSignature(fileContent, clientMethod);
 			String restOfFile = fileContent.substring(startOfMethod);
 			int endOfMethod = startOfMethod + restOfFile.indexOf(";\n") + 2;
 
 			if (startOfMethod == -1 || endOfMethod == -1) {
-				System.err.println("WARNING: Unable to locate method in I : "
-						+ method.getName());
+				System.err.println("WARNING: Unable to locate method in I : " + method.getName());
 				return;
 			}
 
@@ -894,25 +717,22 @@ public class SyncSource {
 		}
 	}
 
+
 	private void removeClientImpl(JavaMethod method) {
 		StringBuffer fileContent = null;
 		try {
-			fileContent = Utils
-					.fileToStringBuffer(new File(this.serviceClient));
+			fileContent = Utils.fileToStringBuffer(new File(this.serviceClient));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		// remove the method
 		String clientMethod = createUnBoxedSignatureStringFromMethod(method);
-		int startOfMethod = fileContent.indexOf(clientMethod);
-		int endOfMethod = parenMatch(fileContent, startOfMethod
-				+ clientMethod.length());
+		int startOfMethod = startOfSignature(fileContent, clientMethod);
+		int endOfMethod = bracketMatch(fileContent, startOfMethod);
 
 		if (startOfMethod == -1 || endOfMethod == -1) {
-			System.err
-					.println("WARNING: Unable to locate method in clientImpl : "
-							+ method.getName());
+			System.err.println("WARNING: Unable to locate method in clientImpl : " + method.getName());
 			return;
 		}
 
@@ -927,25 +747,22 @@ public class SyncSource {
 		}
 	}
 
+
 	private void removeProviderImpl(JavaMethod method) {
 		StringBuffer fileContent = null;
 		try {
-			fileContent = Utils.fileToStringBuffer(new File(
-					this.serviceProviderImpl));
+			fileContent = Utils.fileToStringBuffer(new File(this.serviceProviderImpl));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		// remove the method
 		String clientMethod = createBoxedSignatureStringFromMethod(method);
-		int startOfMethod = fileContent.indexOf(clientMethod);
-		int endOfMethod = parenMatch(fileContent, startOfMethod
-				+ clientMethod.length());
+		int startOfMethod = startOfSignature(fileContent, clientMethod);
+		int endOfMethod = bracketMatch(fileContent, startOfMethod);
 
 		if (startOfMethod == -1 || endOfMethod == -1) {
-			System.err
-					.println("WARNING: Unable to locate method in providerImpl : "
-							+ method.getName());
+			System.err.println("WARNING: Unable to locate method in providerImpl : " + method.getName());
 			return;
 		}
 
@@ -961,6 +778,7 @@ public class SyncSource {
 
 	}
 
+
 	private void modifyImpl(Modification mod) {
 		MethodType method = mod.getMethodType();
 		JavaMethod oldMethod = mod.getJavaMethod();
@@ -974,22 +792,19 @@ public class SyncSource {
 
 		// remove the old method signature
 		String clientMethod = createUnBoxedSignatureStringFromMethod(oldMethod);
-		int startOfMethod = fileContent.indexOf(clientMethod);
-		int endOfSignature = endOfSignature(fileContent, startOfMethod
-				+ clientMethod.length());
+		int startOfMethod = startOfSignature(fileContent, clientMethod);
+		int endOfSignature = endOfSignature(fileContent, startOfMethod);
 
 		if (startOfMethod == -1 || endOfSignature == -1) {
-			System.err.println("WARNING: Unable to locate method in Impl : "
-					+ oldMethod.getName());
+			System.err.println("WARNING: Unable to locate method in Impl : " + oldMethod.getName());
 			return;
 		}
 
 		fileContent.delete(startOfMethod, endOfSignature);
 
 		// add in the new modified signature
-		clientMethod = createUnBoxedSignatureStringFromMethod(method) + " "
-				+ createExceptions(method);
-		clientMethod += "{\n";
+		clientMethod = "\t" + createUnBoxedSignatureStringFromMethod(method) + " " + createExceptions(method);
+		clientMethod += "{";
 		fileContent.insert(startOfMethod, clientMethod);
 
 		try {
@@ -1002,6 +817,7 @@ public class SyncSource {
 
 	}
 
+
 	private void removeImpl(JavaMethod method) {
 		StringBuffer fileContent = null;
 		try {
@@ -1012,13 +828,11 @@ public class SyncSource {
 
 		// remove the method
 		String clientMethod = createUnBoxedSignatureStringFromMethod(method);
-		int startOfMethod = fileContent.indexOf(clientMethod);
-		int endOfMethod = parenMatch(fileContent, startOfMethod
-				+ clientMethod.length());
+		int startOfMethod = startOfSignature(fileContent, clientMethod);
+		int endOfMethod = bracketMatch(fileContent, startOfMethod);
 
 		if (startOfMethod == -1 || endOfMethod == -1) {
-			System.err.println("WARNING: Unable to locate method in Impl : "
-					+ method.getName());
+			System.err.println("WARNING: Unable to locate method in Impl : " + method.getName());
 			return;
 		}
 
@@ -1034,7 +848,10 @@ public class SyncSource {
 
 	}
 
-	private int parenMatch(StringBuffer sb, int startingIndex) {
+
+	private int bracketMatch(StringBuffer sb, int startingIndex) {
+		System.out.println("Starting to look for brackets on this string:");
+		System.out.println(sb.toString().substring(startingIndex));
 		int parenCount = 0;
 		int index = startingIndex;
 		boolean found = false;
@@ -1054,11 +871,21 @@ public class SyncSource {
 			}
 			index++;
 		}
+		if(found){
+			char ch = sb.charAt(index);
+			while(ch=='\t' || ch==' '){
+				ch = sb.charAt(++index);
+			}
+		}
 		return index;
 	}
 
+
 	private int endOfSignature(StringBuffer sb, int startingIndex) {
 		int index = startingIndex;
+		if (index < 0) {
+			return index;
+		}
 		boolean found = false;
 		while (!found) {
 			char ch = sb.charAt(index);
@@ -1068,5 +895,95 @@ public class SyncSource {
 			index++;
 		}
 		return index;
+	}
+
+
+	private int startOfSignature(StringBuffer sb, String searchString) {
+		BufferedReader br = new BufferedReader(new StringReader(sb.toString()));
+		// tokenizer to compress all parts, then start matching the parts
+		int charsRead = 0;
+		try {
+			String line1 = null;
+			String line2 = null;
+			String line3 = null;
+
+			line1 = br.readLine();
+			if (line1 != null) {
+				line1 += "\n";
+				line2 = br.readLine();
+				if (line2 != null) {
+					line2 += "\n";
+					line3 = br.readLine();
+					if (line3 != null) {
+						line3 += "\n";
+					}
+				}
+			}
+
+			String matchedLine = null;
+			boolean found = false;
+
+			while (line1 != null && !found) {
+				matchedLine = line1;
+				// if the line is empty just skip it...
+				if (!line1.equals("\n")) {
+					if (line2 != null) {
+						matchedLine += line2;
+						if (line3 != null) {
+							matchedLine += line3;
+						}
+					}
+
+					StringTokenizer searchStringTokenizer = new StringTokenizer(searchString, " \t\n\r\f(),");
+					StringTokenizer lineTokenizer = new StringTokenizer(matchedLine, " \t\n\r\f(),");
+					int matchCount = 0;
+					// this could be advanced to support multiple lines......
+					while (searchStringTokenizer.hasMoreTokens() && lineTokenizer.hasMoreTokens()) {
+						String searchToken = searchStringTokenizer.nextToken();
+						String lineToken = lineTokenizer.nextToken();
+						if (searchToken.equals(lineToken)) {
+							matchCount++;
+							if (matchCount == 3) {
+								found = true;
+								break;
+							}
+						} else {
+							break;
+						}
+					}
+				}
+				if (!found) {
+					charsRead += line1.length();
+					line1 = line2;
+					line2 = line3;
+					line3 = br.readLine();
+					if (line3 != null) {
+						line3 += "\n";
+					}
+				}
+			}
+			if (found) {
+				System.out.println("Found start of method: " + matchedLine);
+			} else {
+				System.out.println("Did not find the appropriate match");
+			}
+			// if the last line i found the match then lets look for the start
+			// of the method
+			if (found) {
+				StringTokenizer searchStringTokenizer = new StringTokenizer(searchString);
+				String startToken = searchStringTokenizer.nextToken();
+				int index = charsRead + matchedLine.indexOf(startToken);
+
+				char prevChar = sb.toString().charAt(--index);
+				while (prevChar != '\n' && (prevChar == ' ' || prevChar == '\t')) {
+					prevChar = sb.toString().charAt(--index);
+				}
+				index++;
+				return index;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return -1;
 	}
 }
