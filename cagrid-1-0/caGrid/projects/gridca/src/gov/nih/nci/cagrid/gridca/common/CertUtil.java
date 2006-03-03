@@ -28,7 +28,6 @@ import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.jce.X509Principal;
-import org.bouncycastle.jce.X509V1CertificateGenerator;
 import org.bouncycastle.jce.X509V3CertificateGenerator;
 import org.bouncycastle.openssl.PEMReader;
 
@@ -57,23 +56,6 @@ public class CertUtil {
 	}
 
 
-	public static X509Certificate generateCACertificate3(X509Name subject, Date start, Date expired, KeyPair pair)
-		throws InvalidKeyException, NoSuchProviderException, SignatureException {
-		SecurityUtil.init();
-		// generate the certificate
-		X509V1CertificateGenerator certGen = new X509V1CertificateGenerator();
-
-		certGen.setSerialNumber(BigInteger.valueOf(System.currentTimeMillis()));
-		certGen.setIssuerDN(subject);
-		certGen.setNotBefore(start);
-		certGen.setNotAfter(expired);
-		certGen.setSubjectDN(subject);
-		certGen.setPublicKey(pair.getPublic());
-		certGen.setSignatureAlgorithm("md5WithRSAEncryption");
-
-		return certGen.generateX509Certificate(pair.getPrivate(), "BC");
-	}
-
 
 	public static X509Certificate generateCACertificate(X509Name subject, Date start, Date expired, KeyPair pair)
 		throws InvalidKeyException, NoSuchProviderException, SignatureException {
@@ -88,7 +70,7 @@ public class CertUtil {
 		certGen.setSubjectDN(subject);
 		certGen.setPublicKey(pair.getPublic());
 		certGen.setSignatureAlgorithm("md5WithRSAEncryption");
-		certGen.addExtension(X509Extensions.BasicConstraints, true, new BasicConstraints(20));
+		certGen.addExtension(X509Extensions.BasicConstraints, true, new BasicConstraints(1));
 		certGen.addExtension(X509Extensions.KeyUsage, true, new KeyUsage(KeyUsage.digitalSignature
 			| KeyUsage.keyEncipherment | KeyUsage.keyCertSign));
 		certGen.addExtension(X509Extensions.SubjectKeyIdentifier, false, new SubjectKeyIdentifier(pair.getPublic().getEncoded()));
