@@ -97,6 +97,37 @@ public class ResourceManager {
 	}
 
 
+	public static synchronized void purgeArchives(String serviceName) throws Exception {
+		String introduceCache = getResourcePath();
+
+		final String finalServiceName = serviceName;
+		FilenameFilter f = new FilenameFilter() {
+
+			public boolean accept(File dir, String name) {
+				if (name.indexOf(finalServiceName) >= 0) {
+					return true;
+				}
+				return false;
+			}
+
+		};
+
+		File introduceCacheFile = new File(introduceCache);
+		String[] cacheFiles = introduceCacheFile.list(f);
+		List cacheFilesList = Arrays.asList(cacheFiles);
+		Collections.sort(cacheFilesList, String.CASE_INSENSITIVE_ORDER);
+		Collections.reverse(cacheFilesList);
+
+		for (int i = 0; i < cacheFilesList.size(); i++) {
+			System.out.println("Removing file from cache: " + i + "  " + introduceCache + File.separator
+				+ cacheFilesList.get(i));
+			File cacheFile = new File(introduceCache + File.separator + cacheFilesList.get(i));
+			cacheFile.delete();
+		}
+
+	}
+
+
 	public static synchronized void createArchive(String id, String serviceName, String baseDir) throws Exception {
 		File dir = new File(baseDir);
 
@@ -136,12 +167,12 @@ public class ResourceManager {
 		out.close();
 
 		// cleanup if there are more that MAX_ARCHIVE files in the backup area
-		cleanup(id, serviceName);
+		cleanup(serviceName);
 
 	}
 
 
-	private static void cleanup(String currentId, String serviceName) {
+	private static void cleanup(String serviceName) {
 		String introduceCache = getResourcePath();
 
 		final String finalServiceName = serviceName;
@@ -255,7 +286,7 @@ public class ResourceManager {
 
 	public static String promptDir(Component comp, String defaultLocation) throws Exception {
 		JFileChooser chooser = null;
-		if(defaultLocation !=null && defaultLocation.length()>0 && new File(defaultLocation).exists()){
+		if (defaultLocation != null && defaultLocation.length() > 0 && new File(defaultLocation).exists()) {
 			chooser = new JFileChooser(new File(defaultLocation));
 		} else if (getProperty(LAST_DIRECTORY) != null) {
 			chooser = new JFileChooser(new File(getProperty(LAST_DIRECTORY)));
@@ -274,10 +305,11 @@ public class ResourceManager {
 			return null;
 		}
 	}
-	
+
+
 	public static String promptFile(Component comp, String defaultLocation) throws Exception {
 		JFileChooser chooser = null;
-		if(defaultLocation !=null && defaultLocation.length()>0 && new File(defaultLocation).exists()){
+		if (defaultLocation != null && defaultLocation.length() > 0 && new File(defaultLocation).exists()) {
 			chooser = new JFileChooser(new File(defaultLocation));
 		} else if (getProperty(LAST_FILE) != null) {
 			chooser = new JFileChooser(new File(getProperty(LAST_FILE)));

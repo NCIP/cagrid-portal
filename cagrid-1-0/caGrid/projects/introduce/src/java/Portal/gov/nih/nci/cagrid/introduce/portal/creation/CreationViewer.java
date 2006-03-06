@@ -13,6 +13,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.File;
+import java.io.FileOutputStream;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -386,6 +387,10 @@ public class CreationViewer extends GridPortalComponent {
 									} else {
 										PortalUtils.showErrorMessage("Error creating new service!");
 									}
+									
+									setProgressText("purging old archives");
+									ResourceManager.purgeArchives(service.getText());
+									
 								} catch (Exception ex) {
 									ex.printStackTrace();
 									PortalUtils.showErrorMessage(ex.getMessage());
