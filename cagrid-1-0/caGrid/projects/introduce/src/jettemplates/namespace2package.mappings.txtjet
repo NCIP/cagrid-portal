@@ -25,16 +25,12 @@
 			try{ 
 			String newLine = "";
 			org.projectmobius.common.Namespace namespace = new org.projectmobius.common.Namespace(schemaInformation.getNamespace());
-			if(schemaInformation.getPackageName()!=null && !schemaInformation.getPackageName().equals("")){
-               newLine = namespace.getRaw() + "=" + schemaInformation.getPackageName();
+			if (schemaInformation.getPackageName() != null && !schemaInformation.getPackageName().equals("")) {
+				newLine = namespace.getRaw() + "=" + schemaInformation.getPackageName();
 			} else {
-				StringTokenizer tokenizer = new StringTokenizer(namespace.getDomain(), ".", true);
-				StringBuffer packageNameBuf = new StringBuffer();
-				while (tokenizer.hasMoreElements()) {
-					packageNameBuf.insert(0, tokenizer.nextToken());
-				}
-				newLine = namespace.getRaw() + "=" + packageNameBuf.toString();
-			}			
+				newLine = namespace.getRaw() + "=" + CommonTools.getPackageName(namespace);
+			}
+						
 			// turns http: into http\:
 			String newnewLine = newLine.replaceFirst(":", "\\\\:");
 			newnewLine = newnewLine.replaceFirst("\\Q\\\\\\\\:\\E", "\\\\:");	
