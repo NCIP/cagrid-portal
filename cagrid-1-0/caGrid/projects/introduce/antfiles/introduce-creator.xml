@@ -17,8 +17,7 @@
 			build files."/>
 	</target>
 	<target name="createService" description="Will create an anaytical skeleton deployment"
-		depends=" checkInputProps, copySkeleton, copyCaGridJars, serviceCopySchemaFiles,
-		serviceCopyPortalFiles, setActivePath"> </target>
+		depends=" checkInputProps, copySkeleton, copyCaGridJars, setActivePath"> </target>
 	<taskdef name="createSkeleton" classname="gov.nih.nci.cagrid.introduce.creator.SkeletonCreator">
 		<classpath>
 			<fileset dir="${lib.dir}">
@@ -77,36 +76,6 @@
 				value="${introduce.skeleton.namespace.domain}"/>
 		</propertyfile>
 	</target>
-	<target name="serviceCopySchemaFiles" depends="prepareSkeleton">
-		<concat destfile="${introduce.skeleton.destination.dir}/namespace2package.mappings"
-			append="yes">
-			<filelist dir="${ext.dir}" files="NStoPkg.properties"/>
-		</concat>
-		<copy toDir="${introduce.skeleton.destination.dir}/schema/cagrid/types">
-			<fileset dir="${ext.schema.dir}/cagrid/types">
-				<include name="**/*.xsd"/>
-			</fileset>
-		</copy>
-	</target>
-	<target name="serviceCopyPortalFiles">
-		<!-- THESE WILL NEED TO BE ADDED AFTER THE REFACTOR IS COMPLETE
-		<copy toDir="${introduce.skeleton.destination.dir}/resources/portal">
-			<fileset dir="${basedir}/resources/common/portal">
-				<include name="**/*" />
-			</fileset>
-		</copy>
-		<copy toDir="${introduce.skeleton.destination.dir}/resources/portal">
-			<fileset dir="${basedir}/resources/introduce/portal">
-				<include name="**/*" />
-			</fileset>
-		</copy>
-		<copy toDir="${introduce.skeleton.destination.dir}/resources/portal">
-			<fileset dir="${basedir}/resources/security/portal/gums">
-				<include name="**/*" />
-			</fileset>
-		</copy>
-		-->
-	</target>
 	<target name="checkLoadPropertiesFile" if="introduce.properties">
 		<property file="${introduce.properties}"/>
 	</target>
@@ -154,18 +123,6 @@
 			includeemptydirs="false">
 			<fileset dir="${lib.dir}">
 				<include name="**/*"/>
-			</fileset>
-		</copy>
-		<copy todir="${introduce.skeleton.destination.dir}/ext/lib" flatten="true"
-			includeemptydirs="false">
-			<fileset dir="${build.lib.dir}">
-				<include name="*"/>
-			</fileset>
-		</copy>
-		<copy todir="${introduce.skeleton.destination.dir}/ext/lib" flatten="true"
-			includeemptydirs="false">
-			<fileset dir="${ext.lib.dir}">
-				<include name="*"/>
 			</fileset>
 		</copy>
 		<copy todir="${introduce.skeleton.destination.dir}/lib" flatten="true"
