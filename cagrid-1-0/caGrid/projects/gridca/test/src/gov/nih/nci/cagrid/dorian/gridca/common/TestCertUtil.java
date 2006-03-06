@@ -339,12 +339,8 @@ public class TestCertUtil extends TestCase {
 		}
 	}
 
-
 	private static FileInputStream getFileInputStream(String file) throws Exception {
 		return new FileInputStream(new File(file));
 
 	}
-	
-	
-
 }
