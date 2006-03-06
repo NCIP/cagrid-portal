@@ -221,7 +221,11 @@ public class TemplateUtils {
 					System.out.println("adding namepace " + namespace);
 				}
 				String location = importEl.getAttributeValue("schemaLocation");
+                if(!fileName.equals(schemaDir + File.separator + location)){
 				walkSchemasGetNamespaces(schemaDir, schemaDir + File.separator + location, namespaces);
+                } else {
+                    System.err.println("WARNING: Schema is importing itself. " + fileName);
+                }
 			}
 		} catch (MobiusException e) {
 			// TODO Auto-generated catch block
