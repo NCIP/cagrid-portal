@@ -18,11 +18,11 @@
 	<classpathentry kind="lib" path="ext/test/lib/junit-addons-1.4.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/xmlunit1.0.jar"/>
 	<classpathentry kind="lib" path="resources/portal/gridca"/>
-	<classpathentry kind="lib" path="ext/resources/portal"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/concurrent.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
 	<classpathentry kind="var" path="GLOBUS_LOCATION/lib/xercesImpl.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core_stubs.jar"/>
+	<classpathentry kind="lib" path="ext/resources/portal/common"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

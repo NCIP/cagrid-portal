@@ -8,7 +8,9 @@ import java.math.BigInteger;
 import java.security.Key;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.cert.CRLException;
 import java.security.cert.CertificateEncodingException;
+import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.DSAPrivateKey;
 import java.security.interfaces.RSAPrivateKey;
@@ -88,8 +90,18 @@ public class PEMWriter
             {
                 throw new IOException("Cannot encode object: " + e.toString());
             }
-        }
-        else if (o instanceof PrivateKey)
+        }else if (o instanceof X509CRL)
+        {
+            type = "X509 CRL";
+            try
+            {
+                encoding = ((X509CRL)o).getEncoded();
+            }
+            catch (CRLException e)
+            {
+                throw new IOException("Cannot encode object: " + e.toString());
+            }
+        }else if (o instanceof PrivateKey)
         {
             ByteArrayInputStream    bIn = new ByteArrayInputStream(((Key)o).getEncoded());
             ASN1InputStream         aIn = new ASN1InputStream(bIn);

@@ -174,36 +174,65 @@ public class CertUtil {
 	}
 
 
-	public static X509CRL createCRL(X509Certificate caCert, PrivateKey caKey, BigInteger revokedSerialNumber,
-		int reason, Date expires) throws Exception {
+	public static X509CRL createCRL(X509Certificate caCert, PrivateKey caKey, CRLEntry[] entries, Date expires)
+		throws Exception {
 		X509V2CRLGenerator crlGen = new X509V2CRLGenerator();
 		Date now = new Date();
 		crlGen.setIssuerDN(new X509Name(caCert.getSubjectDN().getName()));
 		crlGen.setThisUpdate(now);
 		crlGen.setNextUpdate(expires);
-		crlGen.setSignatureAlgorithm("SHA256WithRSAEncryption");
-		crlGen.addCRLEntry(revokedSerialNumber, now, reason);
+		crlGen.setSignatureAlgorithm("md5WithRSAEncryption");
+		for (int i = 0; i < entries.length; i++) {
+			crlGen.addCRLEntry(entries[i].getCertificateSerialNumber(), now, entries[i].getReason());
+		}
 		SubjectPublicKeyInfo apki = new SubjectPublicKeyInfo((ASN1Sequence) new DERInputStream(
 			new ByteArrayInputStream(caCert.getPublicKey().getEncoded())).readObject());
 		crlGen.addExtension(X509Extensions.AuthorityKeyIdentifier, false, new AuthorityKeyIdentifier(apki));
-		crlGen.addExtension(X509Extensions.CRLNumber, false, new CRLNumber(BigInteger.valueOf(System.currentTimeMillis())));
+		crlGen.addExtension(X509Extensions.CRLNumber, false, new CRLNumber(BigInteger.valueOf(System
+			.currentTimeMillis())));
 		return crlGen.generateX509CRL(caKey, "BC");
 	}
-	
-	public static void writeCRL(X509CRL crl, String path) throws IOException {
+
+
+	public static void writeCRL(X509CRL crl, File path) throws IOException {
 		SecurityUtil.init();
-		PEMWriter pem = new PEMWriter(new FileWriter(new File(path)));
+		PEMWriter pem = new PEMWriter(new FileWriter(path));
 		pem.writeObject(crl);
 		pem.close();
 	}
-	
-	public static String writeCRLToString(X509CRL crl) throws IOException {
+
+
+	public static String writeCRL(X509CRL crl) throws IOException {
 		SecurityUtil.init();
 		StringWriter sw = new StringWriter();
 		PEMWriter pem = new PEMWriter(sw);
 		pem.writeObject(crl);
 		pem.close();
 		return sw.toString();
+	}
+
+
+	public static X509CRL loadCRL(File crlLocation) throws IOException, GeneralSecurityException {
+		return loadCRL(new FileReader(crlLocation));
+	}
+
+
+	public static X509CRL loadCRL(InputStream crlLocation) throws IOException, GeneralSecurityException {
+		return loadCRL(new InputStreamReader(crlLocation));
+	}
+
+
+	public static X509CRL loadCRL(String str) throws IOException, GeneralSecurityException {
+		StringReader reader = new StringReader(str);
+		return CertUtil.loadCRL(reader);
+
+	}
+
+
+	public static X509CRL loadCRL(Reader in) throws IOException, GeneralSecurityException {
+		SecurityUtil.init();
+		CRLReader reader = new CRLReader(in, "BC");
+		return reader.readCRL();
 	}
 
 

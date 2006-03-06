@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.dorian.gridca.common;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
+import gov.nih.nci.cagrid.gridca.common.CRLEntry;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
@@ -9,11 +10,15 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.security.KeyPair;
 import java.security.PrivateKey;
+import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import junit.framework.TestCase;
 
+import org.bouncycastle.asn1.x509.CRLReason;
 import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 
@@ -33,7 +38,7 @@ public class TestCertUtil extends TestCase {
 			InputStream keyLocation = TestCase.class.getResourceAsStream(Constants.SIMPLECA_CAKEY);
 
 			String keyPassword = "gomets123";
-			X509Certificate[] certs = createCertificateSpecifyRootCA(certLocation, keyLocation, keyPassword);
+			X509Certificate[] certs = createCertificateSpecifyRootCA(certLocation, keyLocation, keyPassword, "John Doe");
 			assertEquals(2, certs.length);
 			String rootSub = "O=caBIG,OU=Ohio State University,OU=Department of Biomedical Informatics,CN=caBIG Certificate Authority";
 			String issuedSub = "O=caBIG,OU=Ohio State University,OU=Department of Biomedical Informatics,CN=John Doe";
@@ -56,7 +61,7 @@ public class TestCertUtil extends TestCase {
 			InputStream keyLocation = TestCase.class.getResourceAsStream(Constants.BMI_CAKEY);
 
 			String keyPassword = "gomets123";
-			X509Certificate[] certs = createCertificateSpecifyRootCA(certLocation, keyLocation, keyPassword);
+			X509Certificate[] certs = createCertificateSpecifyRootCA(certLocation, keyLocation, keyPassword, "John Doe");
 			assertEquals(2, certs.length);
 			String rootSub = "O=Ohio State University,OU=BMI,OU=MSCL,CN=BMI Certificate Authority";
 			String issuedSub = "O=Ohio State University,OU=BMI,OU=MSCL,CN=John Doe";
@@ -88,7 +93,7 @@ public class TestCertUtil extends TestCase {
 			KeyUtil.writePrivateKey(rootPair.getPrivate(), new File(keyLocation), keyPassword);
 			CertUtil.writeCertificate(root, new File(certLocation));
 
-			X509Certificate[] certs = createCertificateSpecifyRootCA(certLocation, keyLocation, keyPassword);
+			X509Certificate[] certs = createCertificateSpecifyRootCA(certLocation, keyLocation, keyPassword, "John Doe");
 			File f1 = new File(certLocation);
 			f1.delete();
 			File f2 = new File(keyLocation);
@@ -126,7 +131,7 @@ public class TestCertUtil extends TestCase {
 			checkCert(root, rootSub, rootSub);
 			checkWriteReadCertificate(root);
 			try {
-				createCertificateSpecifyRootCA(certLocation, keyLocation, keyPassword);
+				createCertificateSpecifyRootCA(certLocation, keyLocation, keyPassword, "John Doe");
 				assertTrue(false);
 			} catch (Exception e) {
 				assertEquals("Root Certificate Expired.", e.getMessage());
@@ -161,7 +166,7 @@ public class TestCertUtil extends TestCase {
 			checkCert(root, rootSub, rootSub);
 			checkWriteReadCertificate(root);
 			try {
-				createCertificateSpecifyRootCA(certLocation, keyLocation, keyPassword);
+				createCertificateSpecifyRootCA(certLocation, keyLocation, keyPassword, "John Doe");
 				assertTrue(false);
 			} catch (Exception e) {
 				assertEquals("Root Certificate not yet valid.", e.getMessage());
@@ -195,16 +200,16 @@ public class TestCertUtil extends TestCase {
 	}
 
 
-	public X509Certificate[] createCertificateSpecifyRootCA(String certLocation, String keyLocation, String keyPassword)
-		throws Exception {
+	public X509Certificate[] createCertificateSpecifyRootCA(String certLocation, String keyLocation,
+		String keyPassword, String cn) throws Exception {
 		return createCertificateSpecifyRootCA(getFileInputStream(certLocation), getFileInputStream(keyLocation),
-			keyPassword);
+			keyPassword, cn);
 
 	}
 
 
 	public X509Certificate[] createCertificateSpecifyRootCA(InputStream certLocation, InputStream keyLocation,
-		String keyPassword) throws Exception {
+		String keyPassword, String cn) throws Exception {
 		// Load a root certificate
 		PrivateKey rootKey = KeyUtil.loadPrivateKey(keyLocation, keyPassword);
 		assertNotNull(rootKey);
@@ -226,7 +231,7 @@ public class TestCertUtil extends TestCase {
 		KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 		assertNotNull(pair);
 		int index = rootSub.lastIndexOf(",");
-		String sub = rootSub.substring(0, index) + ",CN=John Doe";
+		String sub = rootSub.substring(0, index) + ",CN=" + cn;
 		PKCS10CertificationRequest request = CertUtil.generateCertficateRequest(sub, pair);
 
 		// validate the certification request
@@ -243,9 +248,103 @@ public class TestCertUtil extends TestCase {
 	}
 
 
+	public void testCRL() {
+		try {
+
+			String rootSub = "O=Ohio State University,OU=BMI,OU=MSCL,CN=TestCA";
+			String user1Sub = "O=Ohio State University,OU=BMI,OU=MSCL,CN=John Doe";
+			String user2Sub = "O=Ohio State University,OU=BMI,OU=MSCL,CN=Jane Doe";
+			String user3Sub = "O=Ohio State University,OU=BMI,OU=MSCL,CN=Tom Doe";
+
+			KeyPair rootKeys = KeyUtil.generateRSAKeyPair512();
+			assertNotNull(rootKeys);
+			Calendar c = new GregorianCalendar();
+			Date now = c.getTime();
+			c.add(Calendar.YEAR, 1);
+			Date end = c.getTime();
+			X509Certificate cacert = CertUtil.generateCACertificate(new X509Name(rootSub), now, end, rootKeys);
+			checkCert(cacert, rootSub, rootSub);
+			checkWriteReadCertificate(cacert);
+
+			KeyPair user1Keys = KeyUtil.generateRSAKeyPair512();
+			assertNotNull(user1Keys);
+			X509Certificate user1 = CertUtil.generateCertificate(new X509Name(user1Sub), now, end, user1Keys
+				.getPublic(), cacert, rootKeys.getPrivate());
+			checkCert(user1, rootSub, user1Sub);
+			checkWriteReadCertificate(user1);
+
+			KeyPair user2Keys = KeyUtil.generateRSAKeyPair512();
+			assertNotNull(user2Keys);
+			X509Certificate user2 = CertUtil.generateCertificate(new X509Name(user2Sub), now, end, user2Keys
+				.getPublic(), cacert, rootKeys.getPrivate());
+			checkCert(user2, rootSub, user2Sub);
+			checkWriteReadCertificate(user2);
+
+			KeyPair user3Keys = KeyUtil.generateRSAKeyPair512();
+			assertNotNull(user3Keys);
+			X509Certificate user3 = CertUtil.generateCertificate(new X509Name(user3Sub), now, end, user3Keys
+				.getPublic(), cacert, rootKeys.getPrivate());
+			checkCert(user3, rootSub, user3Sub);
+			checkWriteReadCertificate(user3);
+
+			CRLEntry[] crls = new CRLEntry[2];
+			crls[0] = new CRLEntry(user1.getSerialNumber(), CRLReason.PRIVILEGE_WITHDRAWN);
+			crls[1] = new CRLEntry(user3.getSerialNumber(), CRLReason.PRIVILEGE_WITHDRAWN);
+			X509CRL crl = CertUtil.createCRL(cacert, rootKeys.getPrivate(), crls, cacert.getNotAfter());
+			assertNotNull(crl);
+
+			// Test validity of CRL
+			crl.verify(cacert.getPublicKey());
+			try {
+				crl.verify(user1.getPublicKey());
+				fail("CRL verified against invalid certificate");
+			} catch (Exception ex) {
+			}
+			assertTrue(crl.isRevoked(user1));
+			assertTrue(!crl.isRevoked(user2));
+			assertTrue(crl.isRevoked(user3));
+
+			// Test validity after reading writing to string
+			String crlStr = CertUtil.writeCRL(crl);
+			X509CRL crl2 = CertUtil.loadCRL(crlStr);
+			assertEquals(crl, crl2);
+			crl2.verify(cacert.getPublicKey());
+			try {
+				crl2.verify(user1.getPublicKey());
+				fail("CRL verified against invalid certificate");
+			} catch (Exception ex) {
+			}
+			assertTrue(crl2.isRevoked(user1));
+			assertTrue(!crl2.isRevoked(user2));
+			assertTrue(crl2.isRevoked(user3));
+			
+//			 Test validity after reading writing to file
+			File f = new File("temp-crl.pem");
+			CertUtil.writeCRL(crl,f);
+			X509CRL crl3 = CertUtil.loadCRL(f);
+			assertEquals(crl, crl3);
+			crl3.verify(cacert.getPublicKey());
+			try {
+				crl3.verify(user1.getPublicKey());
+				fail("CRL verified against invalid certificate");
+			} catch (Exception ex) {
+			}
+			assertTrue(crl3.isRevoked(user1));
+			assertTrue(!crl3.isRevoked(user2));
+			assertTrue(crl3.isRevoked(user3));
+			f.delete();
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+	}
+
+
 	private static FileInputStream getFileInputStream(String file) throws Exception {
 		return new FileInputStream(new File(file));
 
 	}
+	
+	
 
 }
