@@ -23,8 +23,8 @@ public class CreateSkeletonStep extends Step {
 		String pathtobasedir = System.getProperty("basedir");
 		System.out.println(pathtobasedir);
 		if (pathtobasedir == null) {
-			System.out.println("pathtobasedir system property not set");
-			throw new Exception("pathtobasedir system property not set");
+			System.out.println("basedir system property not set");
+			throw new Exception("basedir system property not set");
 		}
 
 		String cmd = CommonTools.getAntSkeletonCreationCommand(pathtobasedir, tci.getName(), tci.getDir(), tci

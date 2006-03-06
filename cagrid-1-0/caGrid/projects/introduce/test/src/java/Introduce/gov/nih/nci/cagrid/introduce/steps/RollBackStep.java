@@ -21,8 +21,8 @@ public class RollBackStep extends Step {
 		String pathtobasedir = System.getProperty("basedir");
 		System.out.println(pathtobasedir);
 		if (pathtobasedir == null) {
-			System.err.println("pathtobasedir system property not set");
-			throw new Exception("pathtobasedir system property not set");
+			System.err.println("basedir system property not set");
+			throw new Exception("basedir system property not set");
 		}
 
 		ResourceManager.restoreLatest(String.valueOf(System.currentTimeMillis()), tci.getName(), tci.getDir());

@@ -7,12 +7,14 @@ import org.apache.ws.jaxme.js.JavaSource;
 import org.apache.ws.jaxme.js.JavaSourceFactory;
 import org.apache.ws.jaxme.js.util.JavaParser;
 
+
 public class StepTools {
 
 	public static boolean methodExists(String fileName, String methodNames) throws Exception {
-		return methodsExists(fileName,new String[] {methodNames});
+		return methodsExists(fileName, new String[]{methodNames});
 	}
-	
+
+
 	public static boolean methodsExists(String fileName, String[] methodNames) throws Exception {
 
 		JavaSource sourceI;
@@ -31,26 +33,26 @@ public class StepTools {
 		System.out.println(sourceI.getClassName());
 
 		JavaMethod[] methods = sourceI.getMethods();
-		
+
 		boolean found = true;
-		for(int i =0; i < methodNames.length ; i++){
+		for (int i = 0; i < methodNames.length; i++) {
 			String methodName = methodNames[i];
 			boolean foundThisOne = false;
-			for(int j =0; j < methods.length ; j++){
-				if(methods[j].getName().equals(methodName)){
+			for (int j = 0; j < methods.length; j++) {
+				if (methods[j].getName().equals(methodName)) {
 					foundThisOne = true;
 				}
 			}
-			if(foundThisOne!=true){
+			if (foundThisOne != true) {
 				found = false;
 			}
 		}
-		
+
 		sourceI = null;
 		jsf = null;
 		jp = null;
 		System.gc();
-		
+
 		return found;
 	}
 
