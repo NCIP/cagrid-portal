@@ -10,15 +10,11 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.jdom.Document;
-import org.jdom.Element;
-import org.projectmobius.common.MalformedNamespaceException;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.XMLUtilities;
 
