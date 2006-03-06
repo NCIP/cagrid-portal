@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BPEL Process Definition
+Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.com)
+-->
+<process name="RProteomics" suppressJoinFailure="yes" targetNamespace="http://RProteomics" xmlns="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:ns1="http://cabig.nic.nih.gov/bpel" xmlns:ns2="http://www.globus.org/namespaces/cagrid/RProteomics/RProteomics" xmlns:ns3="gme://RProteomics.caBIG/5/edu.duke.cabig.rproteomics.domain.serviceInterface" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <partnerLinks>
+      <partnerLink myRole="service" name="RproteomicsPartnerLinkType" partnerLinkType="ns1:RproteomicsPartnerLinkType" partnerRole="service"/>
+      <partnerLink myRole="client" name="RproteomicsClientPartnerLinkType" partnerLinkType="ns1:RproteomicsClientPartnerLinkType"/>
+   </partnerLinks>
+   <variables>
+      <variable messageType="ns2:echoInputMessage" name="callEchoInputMessage"/>
+      <variable messageType="ns2:echoOutputMessage" name="callEchoOutputMessage"/>
+      <variable messageType="ns2:echoInputMessage" name="echoInputMessage"/>
+      <variable messageType="ns2:echoOutputMessage" name="echoOutputMessage"/>
+   </variables>
+   <sequence>
+      <receive createInstance="yes" operation="invokeEcho" partnerLink="RproteomicsClientPartnerLinkType" portType="ns1:invokeRproteomicsPortType" variable="callEchoInputMessage"/>
+      <assign>
+         <copy>
+            <from part="parameters" variable="callEchoInputMessage"/>
+            <to part="parameters" variable="echoInputMessage"/>
+         </copy>
+      </assign>
+      <invoke inputVariable="echoInputMessage" operation="echo" outputVariable="echoOutputMessage" partnerLink="RproteomicsPartnerLinkType" portType="ns2:RProteomicsPortType"/>
+      <assign>
+         <copy>
+            <from part="parameters" variable="echoOutputMessage"/>
+            <to part="parameters" variable="callEchoOutputMessage"/>
+         </copy>
+      </assign>
+      <reply operation="invokeEcho" partnerLink="RproteomicsClientPartnerLinkType" portType="ns1:invokeRproteomicsPortType" variable="callEchoOutputMessage"/>
+   </sequence>
+</process>

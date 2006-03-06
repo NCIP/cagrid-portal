@@ -1,0 +1,48 @@
+<project name="ActiveBPEL Engine test" default="deploy-bpr" basedir=".">
+
+<description>
+  See doc/index.html.
+</description>
+
+<!--   ENVIRONMENT SPECIFIC PROPERTIES - EDIT AS REQUIRED   -->
+<!-- webservice.dest is the root directory of your server.  -->
+<!-- For ActiveBPEL and other Tomcat-supported servers,     -->
+<!--  this is CATALINA_HOME.  Edit this property as needed. -->
+<property environment="env"/>
+<property name="webservice.dest" value="${env.CATALINA_HOME}"/>
+
+<!-- bpr.dest is the deployment location for your BPR file  -->
+<!-- Edit this property as needed.                          -->
+<property name="bpr.dest" value="${webservice.dest}/bpr"/>
+
+
+<property name="bpel.archive" value="Rproteomics.bpr"/>
+<property name="dist" location="support/Rproteomics"/>
+
+<!-- Initialization -->
+<target name="timestamp">
+  <tstamp/>
+</target>
+
+<!-- Create the BPR for deployment -->
+<target name="create-bpr" depends="timestamp">
+  <jar destfile="${dist}/${bpel.archive}">
+     <!-- PDD Files. -->
+     <zipfileset file="${dist}/RProteomics.pdd" fullpath="RProteomics.pdd" />
+     <!-- BPEL Files. -->
+     <zipfileset file="${dist}/bpel/RProteomics.bpel" fullpath="bpel/RProteomics.bpel" />
+     <!-- WSDL Files. -->
+     <zipfileset file="${dist}/wsdl/callRproteomicsService.wsdl" fullpath="wsdl/callRproteomicsService.wsdl" />
+     <zipfileset file="${dist}/wsdl/RProteomics_flattened.wsdl" fullpath="wsdl/RProteomics_flattened.wsdl" />
+     <!-- WSDL Catalog. -->
+     <zipfileset file="${dist}/META-INF/wsdlCatalog.xml" fullpath="META-INF/wsdlCatalog.xml" />
+  </jar>
+</target>
+
+<!-- Deploy the BPEL Process -->
+<target name="deploy-bpr" depends="create-bpr"
+   description="deploy BPEL process">
+  <copy file="${dist}/${bpel.archive}" todir="${bpr.dest}"/>
+</target>
+
+</project>
