@@ -119,12 +119,6 @@
 			defaultvalue="${introduce.skeleton.namespace.domain.default}"/>
 	</target>
 	<target name="copyCaGridJars" depends="prepareSkeleton,copySkeleton">
-		<copy todir="${introduce.skeleton.destination.dir}/ext/lib" flatten="true"
-			includeemptydirs="false">
-			<fileset dir="${lib.dir}">
-				<include name="**/*"/>
-			</fileset>
-		</copy>
 		<copy todir="${introduce.skeleton.destination.dir}/lib" flatten="true"
 			includeemptydirs="false">
 			<fileset dir="${ext.lib.dir}">
