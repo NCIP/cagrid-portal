@@ -47,12 +47,6 @@ public class CommonTools {
 		return getAntCommand("deployGlobus", buildFileDir);
 	}
 
-
-	public static String getAntSkeletonResyncCommand(String buildFileDir) throws Exception {
-		return getAntCommand("resync", buildFileDir);
-	}
-
-
 	public static String getAntSkeletonCreationCommand(String buildFileDir, String name, String dir,
 		String packagename, String namespacedomain) throws Exception {
 		// fix dir path if it relative......

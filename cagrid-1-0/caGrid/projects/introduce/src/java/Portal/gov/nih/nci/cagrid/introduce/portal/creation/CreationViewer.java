@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.modification.ModificationViewer;
 
@@ -369,12 +370,8 @@ public class CreationViewer extends GridPortalComponent {
 										}
 
 										setProgressText("resynchronizing using templates");
-										cmd = CommonTools.getAntSkeletonResyncCommand(dir.getText());
-										p = CommonTools.createAndOutputProcess(cmd);
-										p.waitFor();
-										if (p.exitValue() != 0) {
-											PortalUtils.showErrorMessage("Error templating new service!");
-										}
+										SyncTools sync = new SyncTools(new File(dir.getText()));
+										sync.sync();
 									}
 									setProgressText("building");
 									cmd = CommonTools.getAntAllCommand(dir.getText());

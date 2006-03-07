@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataType;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 
 import java.io.File;
 
@@ -64,12 +65,13 @@ public class AddMetadatatWithLoadFromFileStep extends Step {
 		Utils.serializeDocument(pathtobasedir + File.separator + tci.getDir() + File.separator + "introduce.xml",
 			introService, new QName("gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
 
-		String cmd = CommonTools.getAntSkeletonResyncCommand(pathtobasedir + File.separator + tci.getDir());
-
-		Process p = CommonTools.createAndOutputProcess(cmd);
-		p.waitFor();
-
-		assertEquals("Checking resync status", 0, p.exitValue());
+		try {
+			SyncTools sync = new SyncTools(new File(pathtobasedir + File.separator + tci.getDir()));
+			sync.sync();
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
 
 		// look at the interface to make sure method from file exists.......
 		String serviceInterface = pathtobasedir + File.separator + tci.dir + File.separator + "src" + File.separator
@@ -79,9 +81,9 @@ public class AddMetadatatWithLoadFromFileStep extends Step {
 			"loadCommonServiceMetadataFromFile"));
 
 		// build the service
-		cmd = CommonTools.getAntAllCommand(pathtobasedir + File.separator + tci.getDir());
+		String cmd = CommonTools.getAntAllCommand(pathtobasedir + File.separator + tci.getDir());
 
-		p = CommonTools.createAndOutputProcess(cmd);
+		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
 		assertEquals("Checking build status", 0, p.exitValue());
 	}
