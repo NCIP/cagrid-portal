@@ -1,5 +1,7 @@
 To Do:
 
+BaseResource bug that Mike and Steve found.
+
 Need to fix commontools to read some preference to set the rule to use for namespace mapping, right now its hardcoded as below:
 	//TODO: where should this mapperClassname preference be set
 	String mapperClassname = "gov.nih.nci.cagrid.common.CaBIGNamespaceToPackageMapper";
