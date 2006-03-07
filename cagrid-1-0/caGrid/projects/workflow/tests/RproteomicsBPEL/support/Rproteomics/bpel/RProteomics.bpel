@@ -13,6 +13,10 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
       <variable messageType="ns2:echoOutputMessage" name="callEchoOutputMessage"/>
       <variable messageType="ns2:echoInputMessage" name="echoInputMessage"/>
       <variable messageType="ns2:echoOutputMessage" name="echoOutputMessage"/>
+      <variable messageType="ns2:general_interpolateInputMessage" name="general_interpolateInputMessage"/>
+      <variable messageType="ns2:general_interpolateOutputMessage" name="general_interpolateOutputMessage"/>
+      <variable messageType="ns2:removeBackground_runningQuantileInputMessage" name="removeBackground_runningQuantileInputMessage"/>
+      <variable messageType="ns2:removeBackground_runningQuantileOutputMessage" name="removeBackground_runningQuantileOutputMessage"/>
    </variables>
    <sequence>
       <receive createInstance="yes" operation="invokeEcho" partnerLink="RproteomicsClientPartnerLinkType" portType="ns1:invokeRproteomicsPortType" variable="callEchoInputMessage"/>
@@ -26,6 +30,40 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
       <assign>
          <copy>
             <from part="parameters" variable="echoOutputMessage"/>
+            <to part="parameters" variable="callEchoOutputMessage"/>
+         </copy>
+      </assign>
+      <assign>
+         <copy>
+            <from part="parameters" variable="callEchoInputMessage"/>
+            <to part="parameters" variable="general_interpolateInputMessage"/>
+         </copy>
+      </assign>
+      <invoke inputVariable="general_interpolateInputMessage" operation="general_interpolate" outputVariable="general_interpolateOutputMessage" partnerLink="RproteomicsPartnerLinkType" portType="ns2:RProteomicsPortType"/>
+      <assign>
+         <copy>
+            <from part="parameters" variable="general_interpolateOutputMessage"/>
+            <to part="parameters" variable="callEchoOutputMessage"/>
+         </copy>
+      </assign>
+      <assign>
+         <copy>
+            <from part="parameters" query="/ns2:echoResponse/response" variable="callEchoOutputMessage"/>
+            <to part="parameters" query="/ns2:removeBackground_runningQuantile/lsids" variable="removeBackground_runningQuantileInputMessage"/>
+         </copy>
+         <copy>
+            <from expression="'1023'"/>
+            <to part="parameters" query="/ns2:removeBackground_runningQuantile/windowSize/size" variable="removeBackground_runningQuantileInputMessage"/>
+         </copy>
+         <copy>
+            <from expression="'75'"/>
+            <to part="parameters" query="/ns2:removeBackground_runningQuantile/percentile/value" variable="removeBackground_runningQuantileInputMessage"/>
+         </copy>
+      </assign>
+      <invoke inputVariable="removeBackground_runningQuantileInputMessage" operation="removeBackground_runningQuantile" outputVariable="removeBackground_runningQuantileOutputMessage" partnerLink="RproteomicsPartnerLinkType" portType="ns2:RProteomicsPortType"/>
+      <assign>
+         <copy>
+            <from part="parameters" variable="removeBackground_runningQuantileOutputMessage"/>
             <to part="parameters" variable="callEchoOutputMessage"/>
          </copy>
       </assign>
