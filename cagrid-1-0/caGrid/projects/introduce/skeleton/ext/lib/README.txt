@@ -1,1 +1,0 @@
-This directory contains library files from introduce so that they can be used from this skeleton to resync etc.

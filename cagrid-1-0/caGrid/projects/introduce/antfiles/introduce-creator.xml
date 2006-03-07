@@ -49,17 +49,6 @@
 		</copy>
 		<!-- call our creation ant task -->
 		<createSkeleton/>
-		<copy todir="${introduce.skeleton.destination.dir}/resources">
-			<fileset dir="${resources.dir}">
-				<include name="**\*"/>
-			</fileset>
-		</copy>
-		<!-- copy in common service metadata file etc. -->
-		<copy todir="${introduce.skeleton.destination.dir}/schema">
-			<fileset dir="${basedir}/ext/schema">
-				<include name="**\*"/>
-			</fileset>
-		</copy>
 		<!-- do replacements on the basic service files -->
 		<replace file="${introduce.skeleton.destination.dir}/namespace2package.mappings" token=":"
 			value="\:"/>
