@@ -21,7 +21,7 @@
 				<include name="*.jar"/>
 			</fileset>
 			<pathelement location="${basedir}/resources/portal/introduce"/>
-			<pathelement location="${ext.resources.dir}/portal"/>
+			<pathelement location="${ext.resources.dir}/portal/common"/>
 		</path>
 		<path id="Portal.test.classpath">
 			<fileset dir="${lib.dir}">
@@ -46,7 +46,7 @@
 				<include name="*.jar"/>
 			</fileset>
 			<pathelement location="${basedir}/resources/portal/introduce"/>
-			<pathelement location="${ext.resources.dir}/portal"/>
+			<pathelement location="${ext.resources.dir}/portal/common"/>
 		</path>
 	</target>
 </project>
