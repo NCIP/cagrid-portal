@@ -33,6 +33,10 @@ public class <%=serviceName%>Client implements <%=serviceName%>I {
 	private GlobusCredential proxy;
 	private String url;
 	
+	static{
+		org.globus.axis.util.Util.registerTransport();
+	}
+	
 	public <%=serviceName%>Client(String url) {
 		this(url,null);	
 	}
