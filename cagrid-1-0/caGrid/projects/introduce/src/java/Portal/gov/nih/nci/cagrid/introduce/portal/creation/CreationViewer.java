@@ -242,6 +242,7 @@ public class CreationViewer extends GridPortalComponent {
 			inputPanel.add(getTemplatePanel(), gridBagConstraints19);
 			inputPanel.add(serviceStyleLabel, gridBagConstraints13);
 			inputPanel.add(getServiceStyleSeletor(), gridBagConstraints16);
+			serviceStyleLabel.setEnabled(false);
 		}
 		return inputPanel;
 	}
@@ -610,6 +611,7 @@ public class CreationViewer extends GridPortalComponent {
 	private JComboBox getServiceStyleSeletor() {
 		if (serviceStyleSeletor == null) {
 			serviceStyleSeletor = new JComboBox();
+			serviceStyleSeletor.setEnabled(false);
 			serviceStyleSeletor.addItem("NONE");
 			serviceStyleSeletor.addItem("ANALYTICAL");
 			serviceStyleSeletor.addItem("DATA");
