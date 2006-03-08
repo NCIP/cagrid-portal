@@ -14,7 +14,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.Properties;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -388,6 +390,17 @@ public class CreationViewer extends GridPortalComponent {
 									
 									setProgressText("purging old archives");
 									ResourceManager.purgeArchives(service.getText());
+									
+									//create the archive
+									long id = System.currentTimeMillis();
+									Properties props = new Properties();
+									props.load(new FileInputStream(dir.getText() + File.separator + "introduce.properties"));
+									props.setProperty("introduce.skeleton.timestamp", String.valueOf(id));
+									props.store(
+										new FileOutputStream(dir.getText() + File.separator + "introduce.properties"),
+										"Introduce Properties");
+									setProgressText("creating a new archive");
+									ResourceManager.createArchive(String.valueOf(id), service.getText(), dir.getText());
 									
 								} catch (Exception ex) {
 									ex.printStackTrace();
