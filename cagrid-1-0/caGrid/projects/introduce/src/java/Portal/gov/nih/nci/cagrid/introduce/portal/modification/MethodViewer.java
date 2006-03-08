@@ -122,6 +122,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JButton outputTypeLoadFromDiscoveryButton = null;
 
+	private JScrollPane mainScrollPane = null;
+
 
 	public MethodViewer(MethodType method, ServiceSecurity serviceSecurity, File schemaDir, MethodsTable table,
 		int selectedRow) {
@@ -137,8 +139,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private void initialize() {
 		this.setSize(510, 622);
+		this.setContentPane(getMainScrollPane());
 		this.setTitle("Build/Modify Operation");
-		this.setContentPane(getMainPanel());
 		this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
 	}
 
@@ -909,6 +911,20 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 		}
 		return outputTypeLoadFromDiscoveryButton;
+	}
+
+
+	/**
+	 * This method initializes mainScrollPane	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getMainScrollPane() {
+		if (mainScrollPane == null) {
+			mainScrollPane = new JScrollPane();
+			mainScrollPane.setViewportView(getMainPanel());
+		}
+		return mainScrollPane;
 	}
 } // @jve:decl-index=0:visual-constraint="4,12"
 
