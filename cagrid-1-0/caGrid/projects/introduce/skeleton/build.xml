@@ -31,7 +31,11 @@
 	<property name="test.dir" value="test" />
 	<property name="test.src.dir" value="${test.dir}/src" />
 	<property name="test.lib.dir" value="${test.dir}/lib" />
+	<property name="test.log.dir" value="test/logs" />
 	<property name="test.jar.name" value="${gar.filename}-tests.jar" />
+	<property name="ext.test.lib.dir" value="ext/test/lib" />
+	<property name="junit.results.dir" value="${test.log.dir}/junit" />
+	<property name="force.config.replace" value="false" />
 	
 	<!-- Basic Build directories -->
 
@@ -302,7 +306,7 @@
 	
 	
 	<!-- Create a JAR file with the test implementation classes -->
-	<target name="jarTests" depends="jar">
+	<target name="jarTests" depends="jar,compileTests">
 		<jar jarfile="${build.lib.dir}/${test.jar.name}" basedir="${test.build.dest}"/>
 	</target>
 
@@ -316,6 +320,55 @@
 	<!-- Empty target, in case we simply want to generate the JAR files -->
 	<!-- NOTE: This is needed by GT4IDE -->
 	<target name="jars" depends="jarStubs, jar, jarTests" />
+	
+	<mkdir dir="${test.log.dir}" />
+	<!-- call the test target for each project and aggregates the log resutls  -->
+	<target name="test" depends="checkGlobus,create_config_files">
+		<echo message="Test results dir: ${junit.results.dir}" />
+		<mkdir dir="${junit.results.dir}" />
+		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true">
+			<sysproperty key="basedir" value="${basedir}" />
+			<jvmarg value="-Xmx512M" />
+			<jvmarg value="-Dbuild.dir=${build.dir}" />
+			<jvmarg value="-Djava.endorsed.dirs=${ext.endorsed.dir}" />
+			<classpath>
+				<fileset dir="${ext.globus.dir}/lib">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${build.lib.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${lib.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${ext.lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${ext.test.lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+				<pathelement location="${test.dir}/resources" />
+			</classpath>
+			<formatter type="xml" />
+			<batchtest fork="yes" haltonfailure="true" haltonerror="true" todir="${junit.results.dir}">
+				<fileset dir="${test.src.dir}">
+					<include name="**/Test*.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+	<!-- ============================================================== -->
+	<!-- Creates conf files from examples                               -->
+	<!-- ============================================================== -->
+	<target name="create_config_files" description="Creates conf files from examples.
+		Set property force.config.replace to true to force replacement.">
+		<copy todir="${test.dir}/resources" overwrite="${force.config.replace}">
+			<fileset dir="${test.dir}/resources">
+				<include name="**/*.example" />
+			</fileset>
+			<mapper type="glob" from="*.example" to="*" />
+		</copy>
+	</target>
 	
 
 	<!-- Clean up all the intermediate files -->
