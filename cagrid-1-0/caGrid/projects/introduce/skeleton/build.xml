@@ -318,7 +318,6 @@
 
 
 	<!-- Empty target, in case we simply want to generate the JAR files -->
-	<!-- NOTE: This is needed by GT4IDE -->
 	<target name="jars" depends="jarStubs, jar, jarTests" />
 	
 	<mkdir dir="${test.log.dir}" />
