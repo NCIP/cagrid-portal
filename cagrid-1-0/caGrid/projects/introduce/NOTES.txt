@@ -1,5 +1,7 @@
 To Do:
 
+The GME Browser screen does not scroll correctly.
+
 BaseResource bug that Mike and Steve found.
 
 Need to fix commontools to read some preference to set the rule to use for namespace mapping, right now its hardcoded as below:
