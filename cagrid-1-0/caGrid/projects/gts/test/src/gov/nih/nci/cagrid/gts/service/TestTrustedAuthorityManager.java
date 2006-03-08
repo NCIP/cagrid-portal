@@ -19,7 +19,7 @@ public class TestTrustedAuthorityManager extends TestCase {
 
 	public void testCreateAndDestroy() {
 		try {
-			TrustedAuthorityManager trust = new TrustedAuthorityManager(db);
+			TrustedAuthorityManager trust = new TrustedAuthorityManager("localhost",db);
 			trust.buildDatabase();
 			trust.destroy();
 		} catch (Exception e) {

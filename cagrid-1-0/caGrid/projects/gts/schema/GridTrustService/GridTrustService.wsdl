@@ -23,12 +23,12 @@
     <types>
         <schema targetNamespace="http://cagrid.nci.nih.gov/GridTrustService"
             xmlns:tns="http://cagrid.nci.nih.gov/GridTrustService"
-			xmlns:trus="http://cagrid.nci.nih.gov/2/gts" 
+			xmlns:trus="http://cagrid.nci.nih.gov/3/gts" 
 			
             xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd">
 			<import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd"/>
 		
-			<import namespace="http://cagrid.nci.nih.gov/2/gts" schemaLocation="./2_gts.xsd"/>
+			<import namespace="http://cagrid.nci.nih.gov/3/gts" schemaLocation="./3_gts.xsd"/>
 			   
       	
       	
@@ -56,6 +56,14 @@
 					</complexType>
 				</element>
       					
+				<element name="IllegalTrustedAuthorityFault" >
+					<complexType>
+						<complexContent>
+							<extension base="wsrbf:BaseFaultType"/>
+						</complexContent>
+					</complexType>
+				</element>
+      					
             <element name="GridTrustServiceResourceProperties">
                 <complexType>
                     <sequence></sequence>
@@ -76,6 +84,9 @@
 	<message name="GTSInternalFaultFaultMessage">
 		<part name="fault" element="tns:GTSInternalFault"/>
 	</message>
+	<message name="IllegalTrustedAuthorityFaultFaultMessage">
+		<part name="fault" element="tns:IllegalTrustedAuthorityFault"/>
+	</message>
     
 <!--============================================================
 
@@ -88,6 +99,8 @@
             <input message="tns:addTrustedAuthorityInputMessage"/>
             <output message="tns:addTrustedAuthorityOutputMessage"/>
        		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+       		 <fault name="IllegalTrustedAuthorityFault" message="tns:IllegalTrustedAuthorityFaultFaultMessage"/>
        				
         </operation>
         <operation name="GetResourceProperty">
