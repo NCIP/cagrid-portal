@@ -63,15 +63,22 @@ public class TestClient {
 	  LsidType[] lsidArrayResponse = null;
 	  try {
 		  Echo echoInputType = new Echo();
-		  LsidType byt = new LsidType("ravi");
-		  LsidType byt1 = new LsidType("kiran");
-		  LsidType[] lsidArray = new LsidType[] {byt, byt1} ;
+		  LsidType id1 = new LsidType("urn:lsid:rproteomics.cabig.duhs.duke.edu:scanfeatures:5077304f-af23-46fb-b69b-de67881597c8");
+		  LsidType id2 = new LsidType("urn:lsid:rproteomics.cabig.duhs.duke.edu:scanfeatures:9d694d22-f049-43ac-b3dd-c94f1df544c4");
+		  LsidType id3 = new LsidType("urn:lsid:rproteomics.cabig.duhs.duke.edu:scanfeatures:9d694d22-f049-43ac-b3dd-c94f1df544c4");
+		  //LsidType[] lsidArray = new LsidType[] {id1} ;
+          //Uncomment
+		  LsidType[] lsidArray = new LsidType[] {id1, id2, id3} ;
 		  echoInputType.setLsids(lsidArray);
 		  echoResponse = (EchoResponse) call.invoke(new Object[] {echoInputType}); 
 		  lsidArrayResponse = echoResponse.getResponse();
+		  System.out.println(lsidArrayResponse.length);
 		  for(int i =0; i< lsidArrayResponse.length;i++) {
-			  result = result + lsidArrayResponse[i].getValue();
+		      System.out.println(lsidArrayResponse[i].getValue());
 		  }
+		  //
+		  //			  result = result + lsidArrayResponse[i].getValue();
+		  //		  }
 	  }
 	  catch (Exception e) {
 	    result = "Exception seen: " + e.toString();
