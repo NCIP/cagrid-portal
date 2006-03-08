@@ -1,15 +1,15 @@
 package gov.nih.nci.cagrid.gts.client;
 
 
-import java.net.URL;
+import gov.nih.nci.cagrid.gts.common.GridTrustServiceI;
+import gov.nih.nci.cagrid.gts.stubs.GridTrustServicePortType;
+import gov.nih.nci.cagrid.gts.stubs.service.GridTrustServiceAddressingLocator;
+
 import java.rmi.RemoteException;
+
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.globus.gsi.GlobusCredential;
-
-import gov.nih.nci.cagrid.gts.stubs.GridTrustServicePortType;
-import gov.nih.nci.cagrid.gts.stubs.service.GridTrustServiceAddressingLocator;
-import gov.nih.nci.cagrid.gts.common.GridTrustServiceI;
 
 
 /**
