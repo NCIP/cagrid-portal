@@ -377,6 +377,7 @@ public class SyncSource {
 			sec.append(configureClientAuthorization(auth));
 			sec.append(configureClientDelegation(delegation));
 		} else if (comm.equals(ClientCommunication.Secure_Conversation)) {
+			sec.append("org.globus.axis.util.Util.registerTransport();\n");
 			if (sc.getCommunicationMethod().equals(CommunicationMethod.Integrity)) {
 				sec
 					.append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_CONV, org.globus.wsrf.security.Constants.SIGNATURE);\n");
@@ -389,6 +390,7 @@ public class SyncSource {
 			sec.append(configureClientDelegation(delegation));
 
 		} else if (comm.equals(ClientCommunication.Secure_Message)) {
+			sec.append("org.globus.axis.util.Util.registerTransport();\n");
 			if (sm.getCommunicationMethod().equals(CommunicationMethod.Integrity)) {
 				sec
 					.append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_MSG, org.globus.wsrf.security.Constants.SIGNATURE);\n");

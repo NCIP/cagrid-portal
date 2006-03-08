@@ -2,6 +2,8 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test/resources"/>
+	<classpathentry kind="src" path="test/src"/>
 	<classpathentry kind="src" path="ext/resources/portal/common"/>
 	<classpathentry kind="src" path="ext/resources/portal/gridca"/>
 	<classpathentry kind="src" path="build/stubs-GridTrustService/src"/>
@@ -76,5 +78,11 @@
 	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/caGrid-core-tests-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/jdepend-2.7-patched.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/junit.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/junit-addons-1.4.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/xmlunit1.0.jar"/>
+	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
