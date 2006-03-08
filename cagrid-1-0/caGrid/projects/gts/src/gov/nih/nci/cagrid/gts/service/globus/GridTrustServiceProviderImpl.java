@@ -20,6 +20,7 @@ public class GridTrustServiceProviderImpl{
 	}
 	
 
+
 	public gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityResponse addTrustedAuthority(gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthority params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault {
 		impl.addTrustedAuthority(params.getTrustedAuthority());
 		return new gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityResponse();

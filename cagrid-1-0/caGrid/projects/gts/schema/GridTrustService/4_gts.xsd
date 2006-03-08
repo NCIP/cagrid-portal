@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:gts="http://cagrid.nci.nih.gov/3/gts" targetNamespace="http://cagrid.nci.nih.gov/3/gts" attributeFormDefault="qualified" elementFormDefault="qualified">
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:gts="http://cagrid.nci.nih.gov/4/gts" targetNamespace="http://cagrid.nci.nih.gov/4/gts" attributeFormDefault="qualified" elementFormDefault="qualified">
   <xsd:complexType name="TrustedAuthority">
     <xsd:sequence>
       <xsd:element name="TrustedAuthorityId" minOccurs="1" maxOccurs="1" type="xsd:long" />
       <xsd:element name="TrustedAuthorityName" minOccurs="1" maxOccurs="1" type="xsd:string" />
       <xsd:element name="TrustLevel" minOccurs="1" maxOccurs="1" type="gts:TrustLevel" />
       <xsd:element name="Status" minOccurs="1" maxOccurs="1" type="gts:Status" />
-      <xsd:element name="Is_Authority" minOccurs="1" maxOccurs="1" type="xsd:boolean" />
+      <xsd:element name="IsAuthority" minOccurs="1" maxOccurs="1" type="xsd:boolean" />
       <xsd:element name="Authority" minOccurs="1" maxOccurs="1" type="xsd:string" />
       <xsd:element name="Certificate" minOccurs="1" maxOccurs="1" type="gts:X509Certificate" />
       <xsd:element name="CRL" minOccurs="1" maxOccurs="1" type="gts:X509CRL" />

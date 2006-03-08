@@ -2,7 +2,7 @@
  <ns2:Methods xsi:type="ns2:MethodsType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Methods" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns2:Method name="addTrustedAuthority" xsi:type="ns2:MethodType">
    <ns2:Inputs>
-    <ns2:Input isArray="false" location="./3_gts.xsd" name="TrustedAuthority" namespace="http://cagrid.nci.nih.gov/3/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="TrustedAuthority"/>
+    <ns2:Input isArray="false" location="./4_gts.xsd" name="TrustedAuthority" namespace="http://cagrid.nci.nih.gov/4/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="TrustedAuthority"/>
    </ns2:Inputs>
    <ns2:Output className="void" isArray="false"/>
    <ns2:Exceptions>
