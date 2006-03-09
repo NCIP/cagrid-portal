@@ -9,6 +9,7 @@ import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.X509CRL;
 import gov.nih.nci.cagrid.gts.bean.X509Certificate;
 import gov.nih.nci.cagrid.gts.common.Database;
+import gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault;
 import gov.nih.nci.cagrid.gts.test.CA;
 import gov.nih.nci.cagrid.gts.test.Utils;
 
@@ -58,6 +59,34 @@ public class TestTrustedAuthorityManager extends TestCase {
 			ta.setTrustLevel(TrustLevel.Five);		
 			trust.addTrustedAuthority(ta);
 			assertEquals(ta,trust.getTrustedAuthority(ta.getTrustedAuthorityId()));
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		}
+	}
+	
+	public void testAddTrustedAuthorityWithInvalidCRL() {
+		try {
+			TrustedAuthorityManager trust = new TrustedAuthorityManager("localhost", db);
+			CA ca = new CA();
+			CA ca2 = new CA();
+			BigInteger sn = new BigInteger(String.valueOf(System.currentTimeMillis()));
+			CRLEntry entry = new CRLEntry(sn,CRLReason.PRIVILEGE_WITHDRAWN);
+			ca2.updateCRL(entry);
+			try{
+			TrustedAuthority ta = new TrustedAuthority();
+			ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
+			ta.setCRL(new X509CRL(CertUtil.writeCRL(ca2.getCRL())));
+			ta.setIsAuthority(true);
+			ta.setStatus(Status.Trusted);
+			ta.setTrustLevel(TrustLevel.Five);		
+			trust.addTrustedAuthority(ta);
+			fail("Did not generate error when an invalidly signed CRL was provided.");
+			}catch(IllegalTrustedAuthorityFault f){
+				
+			}
+			
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
