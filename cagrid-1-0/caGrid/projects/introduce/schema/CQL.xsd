@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQL" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQL" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="CQLQueryResults" type="CQLQueryResultsType"/>
+	<xs:complexType name="CQLQueryResultsType">
+		<xs:sequence>
+			<xs:element name="CQLQueryResult" type="CQLQueryResultType" minOccurs="0" maxOccurs="unbounded">
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CQLQueryResultType">
+		<xs:sequence>
+			<xs:any></xs:any>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="GroupType" mixed="true">
+		<xs:annotation>
+			<xs:documentation>Binary joint of two conditions</xs:documentation>
+		</xs:annotation>
+				<xs:sequence>
+					<xs:element name="Objects" type="CriteriaType" minOccurs="2" maxOccurs="unbounded"/>
+				</xs:sequence>
+				<xs:attribute name="LogicRelation" type="LogicalOperatorType"/>
+	</xs:complexType>
+	<xs:complexType name="CriteriaType" mixed="true">
+		<xs:annotation>
+			<xs:documentation>Classes of objects to be queried.</xs:documentation>
+		</xs:annotation>
+				<xs:sequence>
+					<xs:element name="Objects" type="CriteriaType" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="Group" type="GroupType" minOccurs="0"/>
+					<xs:element name="Property" type="PropertyType" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+				<xs:attribute name="name" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:simpleType name="PredicateType">
+		<xs:annotation>
+			<xs:documentation>Currnetly there are only two kinds, "equal" and "like". It is extensible. </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="equal"/>
+			<xs:enumeration value="like"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="PropertyType" mixed="true">
+		<xs:annotation>
+			<xs:documentation>conditon.element</xs:documentation>
+		</xs:annotation>
+	
+				<xs:attribute name="name" type="xs:string"/>
+				<xs:attribute name="predicate" type="PredicateType"/>
+				<xs:attribute name="value" type="xs:string"/>
+		
+	</xs:complexType>
+	<xs:simpleType name="LogicalOperatorType">
+		<xs:annotation>
+			<xs:documentation>Logical operators "AND" and "OR". This is extensible.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AND"/>
+			<xs:enumeration value="OR"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="TargetType" mixed="true">
+		<xs:annotation>
+			<xs:documentation>This is the query targget.</xs:documentation>
+		</xs:annotation>
+				<xs:sequence>
+					<xs:element name="Group" type="GroupType" minOccurs="0"/>
+					<xs:element name="Objects" type="CriteriaType" minOccurs="0"/>
+				</xs:sequence>
+				<xs:attribute name="name" type="xs:string"/>
+				<xs:attribute name="path" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="CQLQueryType">
+		<xs:annotation>
+			<xs:documentation>Query unit.</xs:documentation>
+		</xs:annotation>
+				<xs:sequence>
+					<xs:element name="Target" type="TargetType" />
+				</xs:sequence>
+	</xs:complexType>
+	<xs:element name="CQLQuery" type="CQLQueryType"/>
+</xs:schema>
