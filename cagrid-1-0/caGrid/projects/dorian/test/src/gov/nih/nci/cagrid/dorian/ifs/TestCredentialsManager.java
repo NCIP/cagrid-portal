@@ -135,7 +135,7 @@ public class TestCredentialsManager extends TestCase {
 			createAndStoreCA();
 			createAndStoreUserCredentials("foo", "foobar");
 			cred.getPrivateKey("foo", "foobad");
-			assertTrue(false);
+			fail("Should have thrown InvalidPasswordFault!");
 		} catch (InvalidPasswordFault ipf) {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
