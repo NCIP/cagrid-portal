@@ -94,6 +94,8 @@ public class TrustedAuthorityManager {
 			throw fault;
 		}
 
+		//TODO: MAY NEED TO RESET STATUS BASED ON USER PERMISSION
+		
 		if (ta.getStatus() == null) {
 			IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
 			fault.setFaultString("No status specified for the Trusted Authority!!!");
