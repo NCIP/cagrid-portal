@@ -197,6 +197,23 @@
 		</resolveDependencies>
 		<ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
+	
+	
+	<!-- =============================================================== -->
+	<!-- Grid Trust Service:                                                         -->
+	<!-- =============================================================== -->
+	<target name="build-gts" depends="prepare" description="Builds the dorian project">
+		<resolveDependencies extdir="${projects.dir}/gts/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="core.resources" />
+			<artifact refid="gridca.jars" />
+			<artifact refid="gridca.resources" />
+			<artifact refid="mobius.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/gts" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+	
 
 
 	<!-- =============================================================== -->
@@ -263,6 +280,6 @@
 	<!-- ============================================================== -->
 	<!-- Builds from scratch                                            -->
 	<!-- ============================================================== -->
-	<target name="all" description="Builds the entire application" depends="clean, build-core, build-gridca,build-opensaml,build-metadata, build-gme, build-introduce, build-dorian" />
+	<target name="all" description="Builds the entire application" depends="clean, build-core, build-gridca,build-opensaml,build-metadata, build-gme,build-gts, build-introduce, build-dorian" />
 </project>
 
