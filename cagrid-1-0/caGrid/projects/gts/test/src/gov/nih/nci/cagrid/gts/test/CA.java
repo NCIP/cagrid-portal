@@ -3,10 +3,10 @@ package gov.nih.nci.cagrid.gts.test;
 import gov.nih.nci.cagrid.gridca.common.CRLEntry;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
-import gov.nih.nci.cagrid.gts.bean.X509CRL;
 
 import java.security.KeyPair;
 import java.security.PrivateKey;
+import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.util.Calendar;
 import java.util.Date;
@@ -77,13 +77,13 @@ public class CA {
 	public X509CRL updateCRL(CRLEntry entry) throws Exception {
 		CRLEntry[] entries = new CRLEntry[1];
 		entries[0] = entry;
-		CertUtil.createCRL(cert, key, entries, cert.getNotAfter());
+		crl=CertUtil.createCRL(cert, key, entries, cert.getNotAfter());
 		return crl;
 	}
 
 
 	public X509CRL updateCRL(CRLEntry[] entries) throws Exception {
-		CertUtil.createCRL(cert, key, entries, cert.getNotAfter());
+		crl=CertUtil.createCRL(cert, key, entries, cert.getNotAfter());
 		return crl;
 	}
 

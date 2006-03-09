@@ -87,7 +87,6 @@ public class TestTrustedAuthorityManager extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
-
 			db = Utils.getDB();
 			assertEquals(0, db.getUsedConnectionCount());
 		} catch (Exception e) {
