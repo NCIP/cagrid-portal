@@ -49,7 +49,7 @@ public class TrustedAuthorityManager {
 			if (rs.next()) {
 				TrustedAuthority ta = new TrustedAuthority();
 				ta.setTrustedAuthorityId(rs.getLong("ID"));
-				ta.setTrustedAuthorityName(rs.getString(rs.getString("NAME")));
+				ta.setTrustedAuthorityName(rs.getString("NAME"));
 				ta.setTrustLevel(TrustLevel.fromValue(rs.getString("TRUST_LEVEL")));
 				ta.setStatus(Status.fromValue(rs.getString("STATUS")));
 				ta.setIsAuthority(rs.getBoolean("IS_AUTHORITY"));
@@ -125,7 +125,7 @@ public class TrustedAuthorityManager {
 
 			insert.append("INSERT INTO " + TRUSTED_AUTHORITIES_TABLE + " SET NAME='" + ta.getTrustedAuthorityName()
 				+ "',TRUST_LEVEL='" + ta.getTrustLevel().getValue() + "', STATUS='" + ta.getStatus().getValue()
-				+ "', IS_AUTHORITY='" + isAuthority + "',AUTHORITY='" + gtsURI + "'" + "', CERTIFICATE='"
+				+ "', IS_AUTHORITY='" + isAuthority + "',AUTHORITY='" + gtsURI  + "', CERTIFICATE='"
 				+ ta.getCertificate().getCertificateEncodedString() + "'");
 
 			if (crl != null) {
