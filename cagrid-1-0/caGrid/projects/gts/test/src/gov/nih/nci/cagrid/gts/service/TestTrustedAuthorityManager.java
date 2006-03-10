@@ -88,7 +88,6 @@ public class TestTrustedAuthorityManager extends TestCase {
 			} catch (IllegalTrustedAuthorityFault f) {
 
 			}
-
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());

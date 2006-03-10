@@ -76,6 +76,20 @@ public class TrustedAuthorityManager {
 	}
 
 
+	public void removeTrustedAuthority(long id) throws GTSInternalFault {
+		String sql = "delete FROM " + TRUSTED_AUTHORITIES_TABLE + " where ID=" + id;
+		try {
+			db.update(sql);
+		} catch (Exception e) {
+			this.logger.log(Level.SEVERE, "Unexpected database error incurred in removing the Trusted Authority, " + id
+				+ ", the following statement generated the error: \n" + sql + "\n", e);
+			GTSInternalFault fault = new GTSInternalFault();
+			fault.setFaultString("Unexpected error removing the TrustedAuthority " + id);
+			throw fault;
+		}
+	}
+
+
 	public TrustedAuthority addTrustedAuthority(TrustedAuthority ta) throws GTSInternalFault,
 		IllegalTrustedAuthorityFault {
 		this.buildDatabase();
@@ -94,8 +108,8 @@ public class TrustedAuthorityManager {
 			throw fault;
 		}
 
-		//TODO: MAY NEED TO RESET STATUS BASED ON USER PERMISSION
-		
+		// TODO: MAY NEED TO RESET STATUS BASED ON USER PERMISSION
+
 		if (ta.getStatus() == null) {
 			IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
 			fault.setFaultString("No status specified for the Trusted Authority!!!");
@@ -127,7 +141,7 @@ public class TrustedAuthorityManager {
 
 			insert.append("INSERT INTO " + TRUSTED_AUTHORITIES_TABLE + " SET NAME='" + ta.getTrustedAuthorityName()
 				+ "',TRUST_LEVEL='" + ta.getTrustLevel().getValue() + "', STATUS='" + ta.getStatus().getValue()
-				+ "', IS_AUTHORITY='" + isAuthority + "',AUTHORITY='" + gtsURI  + "', CERTIFICATE='"
+				+ "', IS_AUTHORITY='" + isAuthority + "',AUTHORITY='" + gtsURI + "', CERTIFICATE='"
 				+ ta.getCertificate().getCertificateEncodedString() + "'");
 
 			if (crl != null) {
