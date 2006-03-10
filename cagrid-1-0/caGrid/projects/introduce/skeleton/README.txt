@@ -17,5 +17,4 @@ Tomcat > 4.0 installed and "CATALINA_HOME" env defined
 To Build:
 =======================================
 "ant all" will build 
-"ant resync" will resyn the service skeleton with the methods described in the analyticalMethods.xml
-"ant deploy" will deploy to "CATALINA_HOME"
+"ant deployTomcat" will deploy to "CATALINA_HOME"
