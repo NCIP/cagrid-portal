@@ -178,6 +178,13 @@ public class TestTrustedAuthorityManager extends TestCase {
 			}catch(InvalidTrustedAuthorityFault f){
 				
 			}
+			
+			try{
+				trust.removeTrustedAuthority(ta.getTrustedAuthorityId());
+				fail("Trusted Authority still exists when it should have been removed");
+				}catch(InvalidTrustedAuthorityFault f){
+					
+				}
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());

@@ -108,15 +108,21 @@ public class TrustedAuthorityManager {
 	}
 
 
-	public void removeTrustedAuthority(long id) throws GTSInternalFault {
-		String sql = "delete FROM " + TRUSTED_AUTHORITIES_TABLE + " where ID=" + id;
-		try {
-			db.update(sql);
-		} catch (Exception e) {
-			this.logger.log(Level.SEVERE, "Unexpected database error incurred in removing the Trusted Authority, " + id
-				+ ", the following statement generated the error: \n" + sql + "\n", e);
-			GTSInternalFault fault = new GTSInternalFault();
-			fault.setFaultString("Unexpected error removing the TrustedAuthority " + id);
+	public void removeTrustedAuthority(long id) throws GTSInternalFault, InvalidTrustedAuthorityFault {
+		if (doesTrustedAuthorityExist(id)) {
+			String sql = "delete FROM " + TRUSTED_AUTHORITIES_TABLE + " where ID=" + id;
+			try {
+				db.update(sql);
+			} catch (Exception e) {
+				this.logger.log(Level.SEVERE, "Unexpected database error incurred in removing the Trusted Authority, "
+					+ id + ", the following statement generated the error: \n" + sql + "\n", e);
+				GTSInternalFault fault = new GTSInternalFault();
+				fault.setFaultString("Unexpected error removing the TrustedAuthority " + id);
+				throw fault;
+			}
+		} else {
+			InvalidTrustedAuthorityFault fault = new InvalidTrustedAuthorityFault();
+			fault.setFaultString("The TrustedAuthority " + id + " does not exist.");
 			throw fault;
 		}
 	}
