@@ -39,7 +39,10 @@ public class AddMetadatatWithLoadFromFileStep extends Step {
 		MetadataListType metadatasType = introService.getMetadataList();
 
 		MetadataType metadata = new MetadataType();
-		metadata.setLocation("../../../../../metadata/schema/cagrid/types/common/CommonServiceMetadata.xsd");
+		metadata.setLocation(".." + File.separator + ".." + File.separator + ".." + File.separator + ".."
+			+ File.separator + ".." + File.separator + "metadata" + File.separator + "schema" + File.separator
+			+ "cagrid" + File.separator + "types" + File.separator + "common" + File.separator
+			+ "CommonServiceMetadata.xsd");
 		metadata.setNamespace("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common");
 		metadata.setPopulateFromFile(true);
 		metadata.setRegister(true);

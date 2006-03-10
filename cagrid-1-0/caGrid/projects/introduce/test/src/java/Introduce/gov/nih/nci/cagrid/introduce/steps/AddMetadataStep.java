@@ -34,18 +34,19 @@ public class AddMetadataStep extends Step {
 			throw new Exception("basedir system property not set");
 		}
 
-		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(pathtobasedir
-			+ File.separator + tci.getDir() + File.separator + "introduce.xml", ServiceDescription.class);
+		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(pathtobasedir + File.separator
+			+ tci.getDir() + File.separator + "introduce.xml", ServiceDescription.class);
 		MetadataListType metadatasType = introService.getMetadataList();
 
 		MetadataType metadata = new MetadataType();
-		metadata.setLocation("../../../../../metadata/schema/cagrid/types/cadsr/caDSRMetadata.xsd");
+		metadata.setLocation(".." + File.separator + ".." + File.separator + ".." + File.separator + ".."
+			+ File.separator + ".." + File.separator + "metadata" + File.separator + "schema" + File.separator
+			+ "cagrid" + File.separator + "types" + File.separator + "cadsr" + File.separator + "caDSRMetadata.xsd");
 		metadata.setNamespace("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.cadsr");
 		metadata.setPopulateFromFile(false);
 		metadata.setRegister(true);
 		metadata.setType("caDSRMetadata");
-		metadata.setQName(new QName("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.cadsr",
-			"caDSRMetadata"));
+		metadata.setQName(new QName("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.cadsr", "caDSRMetadata"));
 
 		// add new metadata to array in bean
 		// this seems to be a wierd way be adding things....
@@ -73,7 +74,8 @@ public class AddMetadataStep extends Step {
 			fail(e.getMessage());
 		}
 
-		// look at the interface to make sure method from file does not exists.......
+		// look at the interface to make sure method from file does not
+		// exists.......
 		String serviceInterface = pathtobasedir + File.separator + tci.dir + File.separator + "src" + File.separator
 			+ tci.getPackageDir() + "/service/" + File.separator + "globus" + File.separator + "resource"
 			+ File.separator + "BaseResource.java";
