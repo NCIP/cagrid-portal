@@ -14,6 +14,8 @@
         <parameter name="scope" value="Application"/>
         <parameter name="providers" value="GetRPProvider GetMRPProvider QueryRPProvider"/>
         <parameter name="loadOnStartup" value="true"/>
+
+		<parameter name="dataDir" value="C:\Documents and Settings\MCCON012\My Documents\Projects\JRProteomicsGridSkeletonValue-1.0\data"/>
     </service>
     <typeMapping 
         name="AggregatorContent" 

@@ -1,7 +1,14 @@
 package gov.nih.nci.cagrid.rproteomics.client;
 
+import java.io.StringWriter;
 import java.net.URL;
 import java.rmi.RemoteException;
+
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.apache.axis.message.MessageElement;
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.globus.gsi.GlobusCredential;
@@ -55,20 +62,27 @@ public class RPDataClient implements RPDataI {
 
 	public static void main(String[] args) {
 		try {
+			args = new String[] {
+				"-gsh", "http://localhost:8080/wsrf/services/cagrid/RPData",
+			};
 			if (!(args.length < 2)) {
 				if (args[0].equals("-gsh")) {
 					RPDataClient client = new RPDataClient(args[1]);
-					// place client calls here if you want to use this main as a
-					// test....
 
 					gov.nih.nci.cagrid.cql.CQLQueryType query = new gov.nih.nci.cagrid.cql.CQLQueryType();
-					// query.setQuery("Test CQL Query");
+					query.setName("test");
 					gov.nih.nci.cagrid.cql.CQLQueryResultsType results = client.query(query);
 					gov.nih.nci.cagrid.cql.CQLQueryResultType[] resultsArray = results.getCQLQueryResult();
 					if (resultsArray != null) {
 						for (int i = 0; i < resultsArray.length; i++) {
 							gov.nih.nci.cagrid.cql.CQLQueryResultType result = resultsArray[i];
 							// Deserialize and print out each element........
+							MessageElement[] msgs = result.get_any();
+							for (int j = 0; j < msgs.length; j++) {
+								StringWriter output = new StringWriter();
+								TransformerFactory.newInstance().newTransformer().transform(new DOMSource(msgs[j]), new StreamResult(output));
+								System.out.println(output.toString());
+							}
 						}
 					}
 
@@ -86,16 +100,27 @@ public class RPDataClient implements RPDataI {
 	}
 
 
-	public gov.nih.nci.cagrid.cql.CQLQueryResultsType query(gov.nih.nci.cagrid.cql.CQLQueryType query)
-		throws RemoteException, gov.nih.nci.cagrid.rproteomics.stubs.MalformedQueryException {
-		RPDataPortType port = this.getPortType();
-		org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
 
-		gov.nih.nci.cagrid.rproteomics.stubs.Query params = new gov.nih.nci.cagrid.rproteomics.stubs.Query();
-		params.setQuery(query);
-		gov.nih.nci.cagrid.rproteomics.stubs.QueryResponse boxedResult = port.query(params);
-		return boxedResult.getResponse();
+
+
+
+
+
+
+
+
+
+
+	     public gov.nih.nci.cagrid.cql.CQLQueryResultsType query(gov.nih.nci.cagrid.cql.CQLQueryType query) throws RemoteException, gov.nih.nci.cagrid.rproteomics.stubs.MalformedQueryException {
+		RPDataPortType port = this.getPortType();
+org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
+
+               gov.nih.nci.cagrid.rproteomics.stubs.Query params = new gov.nih.nci.cagrid.rproteomics.stubs.Query();
+               params.setQuery(query);
+               gov.nih.nci.cagrid.rproteomics.stubs.QueryResponse boxedResult = port.query(params);
+               return boxedResult.getResponse();
 
 	}
+
 
 }

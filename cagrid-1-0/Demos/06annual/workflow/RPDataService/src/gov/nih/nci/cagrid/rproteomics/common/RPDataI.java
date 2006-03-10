@@ -11,6 +11,12 @@ import java.rmi.RemoteException;
 public interface RPDataI {
 
 
+
+
+
+
+
+
      public gov.nih.nci.cagrid.cql.CQLQueryResultsType query(gov.nih.nci.cagrid.cql.CQLQueryType query) throws RemoteException, gov.nih.nci.cagrid.rproteomics.stubs.MalformedQueryException ;
 
 }
