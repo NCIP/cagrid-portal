@@ -20,3 +20,12 @@ http://cvs.apache.org/viewcvs.cgi/webservices/axis/trunk/java/src/org/apache/axi
 make generic and more to core project
 
 get mapper and marshaller staticly?
+
+had to hand edit:
+ -stub to use the right element name and namespace
+ -stub to associate proper ser/desr [CRITICAL]
+ -wsdl to use right element name
+ -client and serviec impl to use the right name
+
+NOT necessary to edit:
+ - client type mapping
