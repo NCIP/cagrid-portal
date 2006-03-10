@@ -69,6 +69,12 @@
 			<ant inheritall="false" dir="projects/introduce" antfile="build.xml" target="test">
 				<property name="junit.results.dir" value="${junit.results.dir}" />
 			</ant>
+			<ant inheritall="false" dir="projects/gridca" antfile="build.xml" target="test">
+							<property name="junit.results.dir" value="${junit.results.dir}" />
+						</ant>
+			<ant inheritall="false" dir="projects/gts" antfile="build.xml" target="test">
+										<property name="junit.results.dir" value="${junit.results.dir}" />
+									</ant>
 			<ant inheritall="false" dir="projects/dorian" antfile="build.xml" target="test">
 				<property name="junit.results.dir" value="${junit.results.dir}" />
 			</ant>
