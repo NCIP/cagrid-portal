@@ -6,7 +6,8 @@ Method modification window needs an overhaul....
 
 The GME Browser screen does not scroll correctly.
 
-BaseResource bug that Mike and Steve found.
+BaseResource bug that Mike and Steve found.  Make new service with secure conv. and keep the initial
+settings.  Use a proxy created from Dorian in the credentials section.  Stand up globus without security.
 
 Need to fix commontools to read some preference to set the rule to use for namespace mapping, right now its hardcoded as below:
 	//TODO: where should this mapperClassname preference be set
