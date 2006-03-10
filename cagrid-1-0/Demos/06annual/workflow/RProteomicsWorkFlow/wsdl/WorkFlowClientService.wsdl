@@ -11,9 +11,10 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
 xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
 xmlns="http://schema.xmlsoap.org/wsdl/"
-xmlns:rprotdata="http://rproteomics.cagrid.nci.nih.gov/RPData">
+xmlns:rprotdata="http://rproteomics.cagrid.nci.nih.gov/RPData"
+xmlns:cqlq="http://CQL.caBig/1/gov.nih.nci.cagrid.CQL">
  
- <wsdl:import location="http://152.16.195.32/wsrf/share/schema/_cagrid_RPData/RPData_flattened.wsdl" namespace="http://rproteomics.cagrid.nci.nih.gov/RPData"/>
+ <wsdl:import location="http://ccis1716.duhs.duke.edu/wsrf/share/schema/_cagrid_RPData/RPData_flattened.wsdl" namespace="http://rproteomics.cagrid.nci.nih.gov/RPData"/>
  <wsdl:import location="http://ccis1716.duhs.duke.edu/wsrf/share/schema/_cagrid_RProteomics/RProteomics_flattened.wsdl" namespace="http://www.globus.org/namespaces/cagrid/RProteomics/RProteomics"/>
  
   <wsdl:types>
@@ -21,18 +22,18 @@ xmlns:rprotdata="http://rproteomics.cagrid.nci.nih.gov/RPData">
     xmlns="http://www.w3.org/2001/XMLSchema" 
     xmlns:rprot="http://www.globus.org/namespaces/cagrid/RProteomics/RProteomics" 
     xmlns:rprotdata="http://rproteomics.cagrid.nci.nih.gov/RPData" 
-    xmlns:cqlq="http://CQL.caBig/1/gov.nih.nci.cagrid.CQL" 
+    xmlns:cqlq="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQL" 
     xmlns:rtypes="gme://RProteomics.caBIG/5/edu.duke.cabig.rproteomics.domain.serviceInterface" 
     xmlns:tns="http://annualdemo.cagrid.nci.nih.gov/bpel">
     
     <import namespace="gme://RProteomics.caBIG/5/edu.duke.cabig.rproteomics.domain.serviceInterface" 
     schemaLocation="http://ccis1716.duhs.duke.edu/wsrf/share/schema/_cagrid_RProteomics/edu.duke.cabig.rproteomics.domain.serviceInterface.xsd"/>
-    <import namespace="http://CQL.caBig/1/gov.nih.nci.cagrid.CQL" 
+    <import namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQL" 
     schemaLocation="http://ccis1716.duhs.duke.edu/wsrf/share/schema/_cagrid_RPData/1_gov.nih.nci.cagrid.CQL.xsd"/>
     	
             <complexType name="WorkFlowInputType">
                 <sequence>
-                    <element name="queryType" type="cqlq:CQLQueryType" minOccurs="1" maxOccurs="1" />
+                    <element name="queryType" type="cqlq:CQLQueryType"/>
                     <element name="windowType" type="rtypes:WindowType"/>
                     <element name="percentileType" type="rtypes:PercentileType"/>
                 </sequence>
@@ -40,7 +41,7 @@ xmlns:rprotdata="http://rproteomics.cagrid.nci.nih.gov/RPData">
             
             <complexType name="WorkFlowOutputType">
                 <sequence>
-                    <element name="result" type="xsd:string"/>
+                    <element name="result" type="cqlq:CQLQueryResultsType"/>
                 </sequence>
             </complexType>
             

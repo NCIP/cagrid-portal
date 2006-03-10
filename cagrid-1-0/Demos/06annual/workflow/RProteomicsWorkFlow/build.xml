@@ -97,6 +97,20 @@
     </java>
 
     </target>
+<target name="wsdl2java">
+    <java fork="yes" classname="org.apache.axis.wsdl.WSDL2Java">
+    <arg value="wsdl/WorkFlowClientService.wsdl"/>
+    <classpath>
+            <fileset dir="${deploy.dir}/lib">
+                <include name="common/*.jar"/>
+                <include name="*.jar"/>
+            </fileset>
+            <fileset dir="${build.lib.dir}">
+                <include name="*.jar"/>
+            </fileset>
+        </classpath>
+    </java>
+</target>
 
 
 </project>
