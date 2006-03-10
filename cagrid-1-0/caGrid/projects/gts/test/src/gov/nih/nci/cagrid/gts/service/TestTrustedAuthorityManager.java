@@ -93,6 +93,54 @@ public class TestTrustedAuthorityManager extends TestCase {
 			fail(e.getMessage());
 		}
 	}
+	
+	public void testAddInvalidTrustedAuthority() {
+		try {
+			TrustedAuthorityManager trust = new TrustedAuthorityManager("localhost", db);
+			CA ca = new CA();
+			
+			//No Certificate
+			try {
+				TrustedAuthority ta = new TrustedAuthority();
+				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+				ta.setIsAuthority(true);
+				ta.setStatus(Status.Trusted);
+				ta.setTrustLevel(TrustLevel.Five);
+				trust.addTrustedAuthority(ta);
+				fail("Did not generate error when an invalidl Trusted Authority was provided.");
+			} catch (IllegalTrustedAuthorityFault f) {
+
+			}
+			//No Status
+			try {
+				TrustedAuthority ta = new TrustedAuthority();
+				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
+				ta.setIsAuthority(true);
+				ta.setTrustLevel(TrustLevel.Five);
+				trust.addTrustedAuthority(ta);
+				fail("Did not generate error when an invalidl Trusted Authority was provided.");
+			} catch (IllegalTrustedAuthorityFault f) {
+
+			}
+			
+			//No Trust Level
+			try {
+				TrustedAuthority ta = new TrustedAuthority();
+				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
+				ta.setIsAuthority(true);
+				ta.setStatus(Status.Trusted);
+				trust.addTrustedAuthority(ta);
+				fail("Did not generate error when an invalidl Trusted Authority was provided.");
+			} catch (IllegalTrustedAuthorityFault f) {
+
+			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		}
+	}
 
 
 	public void testAddTrustedAuthorityNoCRL() {
