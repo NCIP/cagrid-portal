@@ -75,7 +75,7 @@ public class GMEConfigurationPanel extends JPanel {
 	 * This method initializes this
 	 */
 	private void initialize() {
-		this.setSize(new java.awt.Dimension(138, 122));
+		this.setSize(new java.awt.Dimension(161,122));
 		this.add(getMainPanel(), null);
 
 	}
@@ -316,13 +316,9 @@ public class GMEConfigurationPanel extends JPanel {
 			gridBagConstraints7.gridx = 1;
 			schemaPanel = new JPanel();
 			schemaPanel.setLayout(new GridBagLayout());
-			schemaPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Schema",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
 			schemaPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Type",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
-				new java.awt.Color(62, 109, 181)));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),IntroduceLookAndFeel.getPanelLabelColor()));
 			schemaPanel.add(getNamespaceComboBox(), gridBagConstraints7);
 			schemaPanel.add(namespaceLabel, gridBagConstraints9);
 			schemaPanel.add(getSchemaComboBox(), gridBagConstraints8);

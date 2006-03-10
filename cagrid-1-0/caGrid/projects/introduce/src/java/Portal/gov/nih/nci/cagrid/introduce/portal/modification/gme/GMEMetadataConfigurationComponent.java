@@ -199,7 +199,7 @@ public class GMEMetadataConfigurationComponent extends GridPortalComponent {
 			gmePanel.getTypesComboBox().addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					qnameDomain.setText(((SchemaWrapper) gmePanel.getSchemaComboBox().getSelectedItem()).getNamespace()
-						.getDomain());
+						.getRaw());
 					qnameName.setText((String) gmePanel.getTypesComboBox().getSelectedItem());
 
 				}
