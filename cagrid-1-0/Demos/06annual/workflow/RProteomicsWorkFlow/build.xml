@@ -28,7 +28,7 @@
 <property name="bpr.dest" value="${webservice.dest}/bpr"/>
 
 
-<property name="bpel.archive" value="Rproteomics.bpr"/>
+<property name="bpel.archive" value="AnnualDemo.bpr"/>
 <property name="dist" location="."/>
 
 <!-- Initialization -->
@@ -66,12 +66,11 @@
 <target name="create-bpr" depends="timestamp">
   <jar destfile="${dist}/${bpel.archive}">
      <!-- PDD Files. -->
-     <zipfileset file="${dist}/RProteomics.pdd" fullpath="RProteomics.pdd" />
+     <zipfileset file="${dist}/AnnualDemoPDD.pdd" fullpath="AnnualDemoPDD.pdd" />
      <!-- BPEL Files. -->
-     <zipfileset file="${dist}/bpel/RProteomics.bpel" fullpath="bpel/RProteomics.bpel" />
+     <zipfileset file="${dist}/bpel/AnnualDemo.bpel" fullpath="bpel/AnnualDemo.bpel" />
      <!-- WSDL Files. -->
-     <zipfileset file="${dist}/wsdl/callRproteomicsService.wsdl" fullpath="wsdl/callRproteomicsService.wsdl" />
-     <zipfileset file="${dist}/wsdl/RProteomics_flattened.wsdl" fullpath="wsdl/RProteomics_flattened.wsdl" />
+     <zipfileset file="${dist}/wsdl/WorkFlowClientService.wsdl" fullpath="wsdl/WorkFlowClientService.wsdl" />
      <!-- WSDL Catalog. -->
      <zipfileset file="${dist}/META-INF/wsdlCatalog.xml" fullpath="META-INF/wsdlCatalog.xml" />
   </jar>

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<process location="bpel/RProteomics.bpel" name="bpelns:RProteomics" xmlns="http://schemas.active-endpoints.com/pdd/2005/09/pdd.xsd" xmlns:bpelns="http://RProteomics" xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing">
+<process location="bpel/AnnualDemo.bpel" name="bpelns:AnnualDemo" xmlns="http://schemas.active-endpoints.com/pdd/2005/09/pdd.xsd" xmlns:bpelns="http://AnnualDemo" xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing">
    <partnerLinks>
 
       <partnerLink name="WorkFlowClientPartnerLinkType">
          <myRole allowedRoles="" binding="RPC" service="WorkFlowClientService"/>
       </partnerLink>
 
-      <partnerLink name="RproteomicsPartnerLinkType">
+      <partnerLink name="RproteomicsDataLinkType">
          <partnerRole endpointReference="static" invokeHandler="default:Address">
             <wsa:EndpointReference xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing"> 
-            <wsa:Address>http://ccis1716.duhs.duke.edu/wsrf/services/cagrid/RProteomics</wsa:Address> 
+            <wsa:Address>http://ccis1716.duhs.duke.edu/wsrf/services/cagrid/RPData</wsa:Address> 
             </wsa:EndpointReference>
          </partnerRole>
       </partnerLink>
@@ -17,6 +17,6 @@
    </partnerLinks>
    <wsdlReferences>
       <wsdl location="wsdl/WorkFlowClientService.wsdl" namespace="http://cabig.nic.nih.gov/bpel"/>
-      <wsdl location="http://ccis1716.duhs.duke.edu/wsrf/share/schema/_cagrid_RProteomics/RProteomics_flattened.wsdl" namespace="http://www.globus.org/namespaces/cagrid/RProteomics/RProteomics"/>
+      <wsdl location="http://ccis1716.duhs.duke.edu/wsrf/share/schema/_cagrid_RPData/RPData_flattened.wsdl" namespace="http://rproteomics.cagrid.nci.nih.gov/RPData"/>
    </wsdlReferences>
 </process>

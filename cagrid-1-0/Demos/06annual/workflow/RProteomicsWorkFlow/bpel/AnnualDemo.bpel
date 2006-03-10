@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BPEL Process Definition
+Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.com)
+-->
+<process name="AnnualDemo" suppressJoinFailure="yes" targetNamespace="http://AnnualDemo" xmlns="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:ns1="http://annualdemo.cagrid.nci.nih.gov/bpel" xmlns:ns2="http://rproteomics.cagrid.nci.nih.gov/RPData" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <partnerLinks>
+      <partnerLink myRole="client" name="WorkFlowClientPartnerLinkType" partnerLinkType="ns1:WorkFlowClientPartnerLinkType"/>
+      <partnerLink name="RproteomicsDataLinkType" partnerLinkType="ns1:RproteomicsDataLinkType" partnerRole="data"/>
+   </partnerLinks>
+   <variables>
+      <variable messageType="ns1:startWorkFlowInputMessage" name="startWorkFlowInputMessage"/>
+      <variable messageType="ns1:startWorkFlowOutputMessage" name="startWorkFlowOutputMessage"/>
+      <variable messageType="ns2:queryInputMessage" name="queryInputMessage"/>
+      <variable messageType="ns2:queryOutputMessage" name="queryOutputMessage"/>
+   </variables>
+   <sequence>
+      <receive createInstance="yes" operation="startWorkFlow" partnerLink="WorkFlowClientPartnerLinkType" portType="ns1:startWorkFlowPortType" variable="startWorkFlowInputMessage"/>
+      <assign>
+         <copy>
+            <from part="parameters" query="/parameters/queryType" variable="startWorkFlowInputMessage"/>
+            <to part="parameters" query="/ns2:query/query" variable="queryInputMessage"/>
+         </copy>
+      </assign>
+      <invoke inputVariable="queryInputMessage" operation="query" outputVariable="queryOutputMessage" partnerLink="RproteomicsDataLinkType" portType="ns2:RPDataPortType"/>
+      <reply operation="startWorkFlow" partnerLink="WorkFlowClientPartnerLinkType" portType="ns1:startWorkFlowPortType" variable="startWorkFlowOutputMessage"/>
+   </sequence>
+</process>

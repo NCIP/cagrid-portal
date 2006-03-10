@@ -1,37 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wsdl:definitions name="WorkFlowClientService" 
-	targetNamespace="http://cabig.nic.nih.gov/bpel" xmlns:tns="http://cabig.nic.nih.gov/bpel" 
-	xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" 
-	xmlns:rtypes="gme://RProteomics.caBIG/5/edu.duke.cabig.rproteomics.domain.serviceInterface" 
-	xmlns:rprot="http://www.globus.org/namespaces/cagrid/RProteomics/RProteomics" 
-	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 
-	xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" 
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
-	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  
-  <wsdl:import namespace="gme://RProteomics.caBIG/5/edu.duke.cabig.rproteomics.domain.serviceInterface" 
-  location="http://ccis1716.duhs.duke.edu/wsrf/share/schema/_cagrid_RProteomics/edu.duke.cabig.rproteomics.domain.serviceInterface.xsd"/>
-  <wsdl:import namespace="http://www.globus.org/namespaces/cagrid/RProteomics/RProteomics" 
-  location="http://ccis1716.duhs.duke.edu/wsrf/share/schema/_cagrid_RProteomics/RProteomics_flattened.wsdl"/>
-
-  <wsdl:message name="startWorkFlowInputMessage">
-    <wsdl:part name="parameters" element="rprot:echo"/>
- </wsdl:message>
- <wsdl:message name="startWorkFlowOutputMessage">
-    <wsdl:part name="parameters" element="rprot:echoResponse"/>
- </wsdl:message>
+targetNamespace="http://annualdemo.cagrid.nci.nih.gov/bpel" 
+xmlns:tns="http://annualdemo.cagrid.nci.nih.gov/bpel" 
+xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" 
+xmlns:rtypes="gme://RProteomics.caBIG/5/edu.duke.cabig.rproteomics.domain.serviceInterface" 
+xmlns:rprot="http://www.globus.org/namespaces/cagrid/RProteomics/RProteomics" 
+xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 
+xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" 
+xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+xmlns="http://schema.xmlsoap.org/wsdl/"
+xmlns:rprotdata="http://rproteomics.cagrid.nci.nih.gov/RPData">
  
-  
-
+ <wsdl:import location="http://152.16.195.32/wsrf/share/schema/_cagrid_RPData/RPData_flattened.wsdl" namespace="http://rproteomics.cagrid.nci.nih.gov/RPData"/>
+ <wsdl:import location="http://ccis1716.duhs.duke.edu/wsrf/share/schema/_cagrid_RProteomics/RProteomics_flattened.wsdl" namespace="http://www.globus.org/namespaces/cagrid/RProteomics/RProteomics"/>
+ 
+  <wsdl:types>
+    <schema targetNamespace="http://annualdemo.cagrid.nci.nih.gov/bpel" 
+    xmlns="http://www.w3.org/2001/XMLSchema" 
+    xmlns:rprot="http://www.globus.org/namespaces/cagrid/RProteomics/RProteomics" 
+    xmlns:rprotdata="http://rproteomics.cagrid.nci.nih.gov/RPData" 
+    xmlns:cqlq="http://CQL.caBig/1/gov.nih.nci.cagrid.CQL" 
+    xmlns:rtypes="gme://RProteomics.caBIG/5/edu.duke.cabig.rproteomics.domain.serviceInterface" 
+    xmlns:tns="http://annualdemo.cagrid.nci.nih.gov/bpel">
+    
+    <import namespace="gme://RProteomics.caBIG/5/edu.duke.cabig.rproteomics.domain.serviceInterface" 
+    schemaLocation="http://ccis1716.duhs.duke.edu/wsrf/share/schema/_cagrid_RProteomics/edu.duke.cabig.rproteomics.domain.serviceInterface.xsd"/>
+    <import namespace="http://CQL.caBig/1/gov.nih.nci.cagrid.CQL" 
+    schemaLocation="http://ccis1716.duhs.duke.edu/wsrf/share/schema/_cagrid_RPData/1_gov.nih.nci.cagrid.CQL.xsd"/>
+    	
+            <complexType name="WorkFlowInputType">
+                <sequence>
+                    <element name="queryType" type="cqlq:CQLQueryType" minOccurs="1" maxOccurs="1" />
+                    <element name="windowType" type="rtypes:WindowType"/>
+                    <element name="percentileType" type="rtypes:PercentileType"/>
+                </sequence>
+            </complexType>
+            
+            <complexType name="WorkFlowOutputType">
+                <sequence>
+                    <element name="result" type="xsd:string"/>
+                </sequence>
+            </complexType>
+            
+        </schema>
+  </wsdl:types>
+  <wsdl:message name="startWorkFlowOutputMessage">
+    <wsdl:part name="parameters" type="tns:WorkFlowOutputType"/>
+  </wsdl:message>
+  <wsdl:message name="startWorkFlowInputMessage">
+    <wsdl:part name="parameters" type="tns:WorkFlowInputType"/>
+  </wsdl:message>
   <wsdl:portType name="startWorkFlowPortType">
     <wsdl:operation name="startWorkFlow">
-        <wsdl:input message="rprot:echoInputMessage"/>
-        <wsdl:output message="rprot:echoOutputMessage"/>
+      <wsdl:input message="tns:startWorkFlowInputMessage"/>
+      <wsdl:output message="tns:startWorkFlowOutputMessage"/>
     </wsdl:operation>
-    
   </wsdl:portType>
-
+    
 <plnk:partnerLinkType name="WorkFlowClientPartnerLinkType">
    <plnk:role name="client">
       <plnk:portType name="tns:startWorkFlowPortType"/>
@@ -40,6 +67,11 @@
 <plnk:partnerLinkType name="RproteomicsPartnerLinkType">
    <plnk:role name="service">
       <plnk:portType name="rprot:RProteomicsPortType"/>
+   </plnk:role>
+</plnk:partnerLinkType>
+<plnk:partnerLinkType name="RproteomicsDataLinkType">
+   <plnk:role name="data">
+      <plnk:portType name="rprotdata:RPDataPortType"/>
    </plnk:role>
 </plnk:partnerLinkType>
 </wsdl:definitions>
