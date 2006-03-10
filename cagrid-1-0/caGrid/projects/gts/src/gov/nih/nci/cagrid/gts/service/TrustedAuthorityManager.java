@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gts.bean.Status;
 import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
+import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
 import gov.nih.nci.cagrid.gts.common.Database;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault;
@@ -14,6 +15,8 @@ import java.security.cert.X509Certificate;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,6 +40,112 @@ public class TrustedAuthorityManager {
 		logger = Logger.getLogger(this.getClass().getName());
 		this.gtsURI = gtsURI;
 		this.db = db;
+	}
+
+
+	public synchronized TrustedAuthority[] findTrustAuthorities(TrustedAuthorityFilter filter) throws GTSInternalFault {
+
+		this.buildDatabase();
+		Connection c = null;
+		List authorities = new ArrayList();
+		StringBuffer sql = new StringBuffer();
+		try {
+			c = db.getConnection();
+			Statement s = c.createStatement();
+
+			sql.append("select * from " + TRUSTED_AUTHORITIES_TABLE);
+			if (filter != null) {
+				boolean firstAppended = false;
+
+				if (filter.getTrustedAuthorityId() != null) {
+					sql = appendWhereOrAnd(firstAppended, sql);
+					firstAppended = true;
+					sql.append(" ID =" + filter.getTrustedAuthorityId().longValue());
+				}
+
+				if (filter.getTrustedAuthorityName() != null) {
+					sql = appendWhereOrAnd(firstAppended, sql);
+					firstAppended = true;
+					sql.append(" NAME LIKE '%" + filter.getTrustedAuthorityName() + "%'");
+				}
+
+				if (filter.getCertificateDN() != null) {
+					sql = appendWhereOrAnd(firstAppended, sql);
+					firstAppended = true;
+					sql.append(" CERTIFICATE_DN LIKE '%" + filter.getCertificateDN() + "%'");
+				}
+
+				if (filter.getStatus() != null) {
+					sql = appendWhereOrAnd(firstAppended, sql);
+					firstAppended = true;
+					sql.append(" STATUS='" + filter.getStatus() + "'");
+				}
+
+				if (filter.getTrustLevel() != null) {
+					sql = appendWhereOrAnd(firstAppended, sql);
+					firstAppended = true;
+					sql.append(" TRUST_LEVEL='" + filter.getTrustLevel() + "'");
+				}
+
+				if (filter.getIsAuthority() != null) {
+					sql = appendWhereOrAnd(firstAppended, sql);
+					firstAppended = true;
+					sql.append(" IS_AUTHORITY='" + filter.getIsAuthority().booleanValue() + "'");
+				}
+
+				if (filter.getAuthority() != null) {
+					sql = appendWhereOrAnd(firstAppended, sql);
+					firstAppended = true;
+					sql.append(" AUTHORITY LIKE '%" + filter.getAuthority() + "%'");
+				}
+
+			}
+
+			ResultSet rs = s.executeQuery(sql.toString());
+			while (rs.next()) {
+				TrustedAuthority ta = new TrustedAuthority();
+				ta.setTrustedAuthorityId(rs.getLong("ID"));
+				ta.setTrustedAuthorityName(rs.getString("NAME"));
+				ta.setTrustLevel(TrustLevel.fromValue(rs.getString("TRUST_LEVEL")));
+				ta.setStatus(Status.fromValue(rs.getString("STATUS")));
+				ta.setIsAuthority(Boolean.valueOf(rs.getBoolean("IS_AUTHORITY")));
+				ta.setAuthority(rs.getString("AUTHORITY"));
+				ta.setCertificate(new gov.nih.nci.cagrid.gts.bean.X509Certificate(rs.getString("CERTIFICATE")));
+				String crl = rs.getString("CRL");
+				if ((crl != null) && (crl.trim().length() > 0)) {
+					ta.setCRL(new gov.nih.nci.cagrid.gts.bean.X509CRL(crl));
+				}
+				authorities.add(ta);
+			}
+			rs.close();
+			s.close();
+
+			TrustedAuthority[] list = new TrustedAuthority[authorities.size()];
+			for (int i = 0; i < list.length; i++) {
+				list[i] = (TrustedAuthority) authorities.get(i);
+			}
+			return list;
+
+		} catch (Exception e) {
+			this.logger.log(Level.SEVERE,
+				"Unexpected database error incurred in finding trusted authorities, the following statement generated the error: \n"
+					+ sql.toString() + "\n", e);
+			GTSInternalFault fault = new GTSInternalFault();
+			fault.setFaultString("Unexpected error occurred in finding Trusted Authorities");
+			throw fault;
+		} finally {
+			db.releaseConnection(c);
+		}
+	}
+
+
+	private StringBuffer appendWhereOrAnd(boolean firstAppended, StringBuffer sql) {
+		if (firstAppended) {
+			sql.append(" AND ");
+		} else {
+			sql.append(" WHERE");
+		}
+		return sql;
 	}
 
 
@@ -178,8 +287,9 @@ public class TrustedAuthorityManager {
 		try {
 
 			insert.append("INSERT INTO " + TRUSTED_AUTHORITIES_TABLE + " SET NAME='" + ta.getTrustedAuthorityName()
-				+ "',TRUST_LEVEL='" + ta.getTrustLevel().getValue() + "', STATUS='" + ta.getStatus().getValue()
-				+ "', IS_AUTHORITY='" + isAuthority + "',AUTHORITY='" + gtsURI + "', CERTIFICATE='"
+				+ "',CERTIFICATE_DN='" + cert.getSubjectDN().toString() + "',TRUST_LEVEL='"
+				+ ta.getTrustLevel().getValue() + "', STATUS='" + ta.getStatus().getValue() + "', IS_AUTHORITY='"
+				+ isAuthority + "',AUTHORITY='" + gtsURI + "', CERTIFICATE='"
 				+ ta.getCertificate().getCertificateEncodedString() + "'");
 
 			if (crl != null) {
@@ -257,9 +367,10 @@ public class TrustedAuthorityManager {
 			if (!this.db.tableExists(TRUSTED_AUTHORITIES_TABLE)) {
 				String trust = "CREATE TABLE " + TRUSTED_AUTHORITIES_TABLE + " ("
 					+ "ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY," + "NAME VARCHAR(255) NOT NULL,"
-					+ "TRUST_LEVEL VARCHAR(255) NOT NULL," + "STATUS VARCHAR(50) NOT NULL,"
-					+ "IS_AUTHORITY VARCHAR(5) NOT NULL," + "AUTHORITY VARCHAR(255) NOT NULL,"
-					+ "CERTIFICATE TEXT NOT NULL," + "CRL TEXT, INDEX document_index (NAME));";
+					+ "CERTIFICATE_DN VARCHAR(255) NOT NULL," + "TRUST_LEVEL VARCHAR(255) NOT NULL,"
+					+ "STATUS VARCHAR(50) NOT NULL," + "IS_AUTHORITY VARCHAR(5) NOT NULL,"
+					+ "AUTHORITY VARCHAR(255) NOT NULL," + "CERTIFICATE TEXT NOT NULL,"
+					+ "CRL TEXT, INDEX document_index (NAME));";
 				db.update(trust);
 			}
 			dbBuilt = true;

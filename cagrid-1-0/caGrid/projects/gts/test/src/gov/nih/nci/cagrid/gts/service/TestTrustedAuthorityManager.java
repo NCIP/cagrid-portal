@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gts.bean.Status;
 import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
+import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
 import gov.nih.nci.cagrid.gts.bean.X509CRL;
 import gov.nih.nci.cagrid.gts.bean.X509Certificate;
 import gov.nih.nci.cagrid.gts.common.Database;
@@ -92,13 +93,14 @@ public class TestTrustedAuthorityManager extends TestCase {
 			fail(e.getMessage());
 		}
 	}
-	
+
+
 	public void testAddInvalidTrustedAuthority() {
 		try {
 			TrustedAuthorityManager trust = new TrustedAuthorityManager("localhost", db);
 			CA ca = new CA();
-			
-			//No Certificate
+
+			// No Certificate
 			try {
 				TrustedAuthority ta = new TrustedAuthority();
 				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
@@ -109,7 +111,7 @@ public class TestTrustedAuthorityManager extends TestCase {
 			} catch (IllegalTrustedAuthorityFault f) {
 
 			}
-			//No Status
+			// No Status
 			try {
 				TrustedAuthority ta = new TrustedAuthority();
 				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
@@ -120,8 +122,8 @@ public class TestTrustedAuthorityManager extends TestCase {
 			} catch (IllegalTrustedAuthorityFault f) {
 
 			}
-			
-			//No Trust Level
+
+			// No Trust Level
 			try {
 				TrustedAuthority ta = new TrustedAuthority();
 				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
@@ -155,7 +157,8 @@ public class TestTrustedAuthorityManager extends TestCase {
 			fail(e.getMessage());
 		}
 	}
-	
+
+
 	public void testRemoveTrustedAuthority() {
 		try {
 			TrustedAuthorityManager trust = new TrustedAuthorityManager("localhost", db);
@@ -172,23 +175,152 @@ public class TestTrustedAuthorityManager extends TestCase {
 			trust.addTrustedAuthority(ta);
 			assertEquals(ta, trust.getTrustedAuthority(ta.getTrustedAuthorityId()));
 			trust.removeTrustedAuthority(ta.getTrustedAuthorityId());
-			try{
-			trust.getTrustedAuthority(ta.getTrustedAuthorityId());
-			fail("Trusted Authority still exists when it should have been removed");
-			}catch(InvalidTrustedAuthorityFault f){
-				
+			try {
+				trust.getTrustedAuthority(ta.getTrustedAuthorityId());
+				fail("Trusted Authority still exists when it should have been removed");
+			} catch (InvalidTrustedAuthorityFault f) {
+
 			}
-			
-			try{
+
+			try {
 				trust.removeTrustedAuthority(ta.getTrustedAuthorityId());
 				fail("Trusted Authority still exists when it should have been removed");
-				}catch(InvalidTrustedAuthorityFault f){
-					
-				}
+			} catch (InvalidTrustedAuthorityFault f) {
+
+			}
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
 		}
+	}
+
+
+	public void testFindTrustedAuthorities() {
+		try {
+			TrustedAuthorityManager trust = new TrustedAuthorityManager("localhost", db);
+			int count = 5;
+			String nameSub = "Trust Authority";
+			String dnPrefix = "O=Organization ABC,OU=Unit XYZ,CN=Certificate Authority";
+			TrustedAuthority[] auths = new TrustedAuthority[count];
+			for (int i = 0; i < count; i++) {
+				String dn = dnPrefix + i;
+				String name = nameSub + i;
+				CA ca = new CA(dn);
+				BigInteger sn = new BigInteger(String.valueOf(System.currentTimeMillis()));
+				CRLEntry entry = new CRLEntry(sn, CRLReason.PRIVILEGE_WITHDRAWN);
+				ca.updateCRL(entry);
+				auths[i] = new TrustedAuthority();
+				auths[i].setTrustedAuthorityName(name);
+				auths[i].setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
+				auths[i].setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
+				auths[i].setStatus(Status.Trusted);
+				auths[i].setTrustLevel(TrustLevel.Five);
+				trust.addTrustedAuthority(auths[i]);
+				assertEquals(auths[i], trust.getTrustedAuthority(auths[i].getTrustedAuthorityId()));
+				TrustedAuthority[] tas = trust.findTrustAuthorities(new TrustedAuthorityFilter());
+				assertEquals(tas.length, (i + 1));
+
+				// Filter by Id
+				TrustedAuthorityFilter tf1 = new TrustedAuthorityFilter();
+				tf1.setTrustedAuthorityId(new Long(auths[i].getTrustedAuthorityId()));
+				TrustedAuthority[] tas1 = trust.findTrustAuthorities(tf1);
+				assertEquals(1, tas1.length);
+				assertEquals(auths[i], tas1[0]);
+
+				// Filter by name
+				TrustedAuthorityFilter tf2 = new TrustedAuthorityFilter();
+				tf2.setTrustedAuthorityName(name);
+				TrustedAuthority[] tas2 = trust.findTrustAuthorities(tf2);
+				assertEquals(1, tas2.length);
+				assertEquals(auths[i], tas2[0]);
+				tf2.setTrustedAuthorityName("yada yada");
+				tas2 = trust.findTrustAuthorities(tf2);
+				assertEquals(0, tas2.length);
+				tf2.setTrustedAuthorityName(nameSub);
+				tas2 = trust.findTrustAuthorities(tf2);
+				assertEquals((i + 1), tas2.length);
+
+				// Filter by DN
+				TrustedAuthorityFilter tf3 = new TrustedAuthorityFilter();
+				tf3.setCertificateDN(dn);
+				TrustedAuthority[] tas3 = trust.findTrustAuthorities(tf3);
+				assertEquals(1, tas3.length);
+				assertEquals(auths[i], tas3[0]);
+				tf3.setCertificateDN("yada yada");
+				tas3 = trust.findTrustAuthorities(tf3);
+				assertEquals(0, tas3.length);
+				tf3.setCertificateDN(dnPrefix);
+				tas3 = trust.findTrustAuthorities(tf3);
+				assertEquals((i + 1), tas3.length);
+
+				// Filter by Trust Level
+				TrustedAuthorityFilter tf4 = new TrustedAuthorityFilter();
+				tf4.setTrustLevel(TrustLevel.Five);
+				TrustedAuthority[] tas4 = trust.findTrustAuthorities(tf4);
+				assertEquals((i + 1), tas4.length);
+				tf4.setTrustLevel(TrustLevel.Four);
+				tas4 = trust.findTrustAuthorities(tf4);
+				assertEquals(0, tas4.length);
+
+				// Filter by Status
+				TrustedAuthorityFilter tf5 = new TrustedAuthorityFilter();
+				tf5.setStatus(Status.Trusted);
+				TrustedAuthority[] tas5 = trust.findTrustAuthorities(tf5);
+				assertEquals((i + 1), tas5.length);
+				tf5.setStatus(Status.Suspended);
+				tas5 = trust.findTrustAuthorities(tf5);
+				assertEquals(0, tas5.length);
+				
+				//Filter by IsAuthority and Authority
+				TrustedAuthorityFilter tf6 = new TrustedAuthorityFilter();
+				tf6.setIsAuthority(Boolean.TRUE);
+				tf6.setAuthority("localhost");
+				TrustedAuthority[] tas6 = trust.findTrustAuthorities(tf6);
+				assertEquals((i + 1), tas6.length);
+				tf6.setIsAuthority(Boolean.FALSE);
+				tas6 = trust.findTrustAuthorities(tf6);
+				assertEquals(0, tas6.length);
+				tf6.setIsAuthority(Boolean.TRUE);
+				tf6.setAuthority("yada yada");
+				tas6 = trust.findTrustAuthorities(tf6);
+				assertEquals(0, tas6.length);
+				
+				// Filter by ALL
+				TrustedAuthorityFilter tf7 = new TrustedAuthorityFilter();
+				tf7.setTrustedAuthorityId(new Long(auths[i].getTrustedAuthorityId()));
+				TrustedAuthority[] tas7 = trust.findTrustAuthorities(tf7);
+				assertEquals(1, tas7.length);
+				assertEquals(auths[i], tas7[0]);
+				tf7.setTrustedAuthorityName(name);
+				tas7 = trust.findTrustAuthorities(tf7);
+				assertEquals(1, tas7.length);
+				assertEquals(auths[i], tas7[0]);
+				tf7.setCertificateDN(dn);
+				tas7 = trust.findTrustAuthorities(tf7);
+				assertEquals(1, tas7.length);
+				assertEquals(auths[i], tas7[0]);
+				tf7.setTrustLevel(TrustLevel.Five);
+				tas7 = trust.findTrustAuthorities(tf7);
+				assertEquals(1, tas7.length);
+				assertEquals(auths[i], tas7[0]);
+				tf7.setStatus(Status.Trusted);
+				tas7 = trust.findTrustAuthorities(tf7);
+				assertEquals(1, tas7.length);
+				assertEquals(auths[i], tas7[0]);
+				tf7.setIsAuthority(Boolean.TRUE);
+				tas7 = trust.findTrustAuthorities(tf7);
+				assertEquals(1, tas7.length);
+				assertEquals(auths[i], tas7[0]);
+				tf7.setAuthority("localhost");
+				tas7 = trust.findTrustAuthorities(tf7);
+				assertEquals(1, tas7.length);
+				assertEquals(auths[i], tas7[0]);
+			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		}
+
 	}
 
 
