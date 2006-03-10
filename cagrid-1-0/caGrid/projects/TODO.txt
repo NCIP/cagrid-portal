@@ -1,0 +1,18 @@
+
+until there is a public 3.1 server, this uses nci internal ones with a localhost sshtunnel
+
+extract property for nci service to contact
+
+caching using resources?
+
+
+
+
+serialization stuff:
+====================
+http://gforge.nci.nih.gov/plugins/scmcvs/cvsweb.php/cacoretoolkit/src/gov/nih/nci/common/util/?cvsroot=cacoretoolkit
+http://cvs.apache.org/viewcvs.cgi/webservices/axis/trunk/java/src/org/apache/axis/encoding/ser/castor/
+
+make generic and more to core project
+
+get mapper and marshaller staticly?
