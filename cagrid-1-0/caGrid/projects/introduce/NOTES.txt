@@ -1,8 +1,8 @@
 To Do:
 
-Method modification window needs an overhaul....
+when using a non-bean response object, the wsdl writter is broken.  It assumes the element name is "response".  It should assume it is the className
 
-(DONE) Need to be able to roll back "created" version 0.
+Method modification window needs an overhaul....
 
 The GME Browser screen does not scroll correctly.
 
@@ -31,6 +31,8 @@ Need to add more complex tests to the system test for adding complex methods wit
 Security configuration (STEVE)
 
 ============================ D O N E ================================================================
+
+(DONE) Need to be able to roll back "created" version 0.
 
 (DONE) When creating a new service be sure to remove all the old zips from teh resource directory....
 
