@@ -149,7 +149,7 @@ public class TrustedAuthorityManager {
 	}
 
 
-	public TrustedAuthority getTrustedAuthority(long id) throws GTSInternalFault, InvalidTrustedAuthorityFault {
+	public synchronized TrustedAuthority getTrustedAuthority(long id) throws GTSInternalFault, InvalidTrustedAuthorityFault {
 		String sql = "select * from " + TRUSTED_AUTHORITIES_TABLE + " where ID=" + id;
 		Connection c = null;
 		try {
@@ -188,7 +188,7 @@ public class TrustedAuthorityManager {
 	}
 
 
-	public boolean doesTrustedAuthorityExist(long id) throws GTSInternalFault {
+	public synchronized boolean doesTrustedAuthorityExist(long id) throws GTSInternalFault {
 		String sql = "select count(*) from " + TRUSTED_AUTHORITIES_TABLE + " where ID=" + id;
 		Connection c = null;
 		boolean exists = false;
@@ -217,7 +217,7 @@ public class TrustedAuthorityManager {
 	}
 
 
-	public void removeTrustedAuthority(long id) throws GTSInternalFault, InvalidTrustedAuthorityFault {
+	public synchronized void removeTrustedAuthority(long id) throws GTSInternalFault, InvalidTrustedAuthorityFault {
 		if (doesTrustedAuthorityExist(id)) {
 			String sql = "delete FROM " + TRUSTED_AUTHORITIES_TABLE + " where ID=" + id;
 			try {
@@ -237,7 +237,7 @@ public class TrustedAuthorityManager {
 	}
 
 
-	public TrustedAuthority addTrustedAuthority(TrustedAuthority ta) throws GTSInternalFault,
+	public synchronized TrustedAuthority addTrustedAuthority(TrustedAuthority ta) throws GTSInternalFault,
 		IllegalTrustedAuthorityFault {
 		this.buildDatabase();
 		X509Certificate cert = checkAndExtractCertificate(ta);
@@ -362,7 +362,7 @@ public class TrustedAuthorityManager {
 	}
 
 
-	public void buildDatabase() throws GTSInternalFault {
+	public synchronized void buildDatabase() throws GTSInternalFault {
 		if (!dbBuilt) {
 			if (!this.db.tableExists(TRUSTED_AUTHORITIES_TABLE)) {
 				String trust = "CREATE TABLE " + TRUSTED_AUTHORITIES_TABLE + " ("
