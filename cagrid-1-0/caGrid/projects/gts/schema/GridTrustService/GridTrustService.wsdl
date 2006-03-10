@@ -23,12 +23,12 @@
     <types>
         <schema targetNamespace="http://cagrid.nci.nih.gov/GridTrustService"
             xmlns:tns="http://cagrid.nci.nih.gov/GridTrustService"
-			xmlns:trus="http://cagrid.nci.nih.gov/4/gts" 
+			xmlns:trus="http://cagrid.nci.nih.gov/1/gts" 
 			
             xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd">
 			<import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd"/>
 		
-			<import namespace="http://cagrid.nci.nih.gov/4/gts" schemaLocation="./4_gts.xsd"/>
+			<import namespace="http://cagrid.nci.nih.gov/1/gts" schemaLocation="./1_gts.xsd"/>
 			   
       	
       	
@@ -48,6 +48,39 @@
 						</sequence>
 					</complexType>
 				</element>
+				<element name="getTrustedAuthorities">
+					<complexType>
+						<sequence>
+          		  
+                  			<element name="TrustedAuthorityFilter" type="trus:TrustedAuthorityFilter" minOccurs="1" maxOccurs="1" />
+	      				</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="getTrustedAuthoritiesResponse">
+					<complexType>
+						<sequence>
+          		  
+				      		 <element name="response" type="trus:TrustedAuthority" minOccurs="1" maxOccurs="unbounded" />
+			                   
+						</sequence>
+					</complexType>
+				</element>
+				<element name="removeTrustedAuthority">
+					<complexType>
+						<sequence>
+          		  
+	      				</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="removeTrustedAuthorityResponse">
+					<complexType>
+						<sequence>
+          		  
+						</sequence>
+					</complexType>
+				</element>
 				<element name="GTSInternalFault" >
 					<complexType>
 						<complexContent>
@@ -57,6 +90,14 @@
 				</element>
       					
 				<element name="IllegalTrustedAuthorityFault" >
+					<complexType>
+						<complexContent>
+							<extension base="wsrbf:BaseFaultType"/>
+						</complexContent>
+					</complexType>
+				</element>
+      					
+				<element name="InvalidTrustedAuthorityFault" >
 					<complexType>
 						<complexContent>
 							<extension base="wsrbf:BaseFaultType"/>
@@ -81,11 +122,28 @@
 	<message name="addTrustedAuthorityOutputMessage">
 		<part name="parameters" element="tns:addTrustedAuthorityResponse"/>
 	</message>
+	<message name="getTrustedAuthoritiesInputMessage">
+		<part name="parameters" element="tns:getTrustedAuthorities"/>
+	</message>
+	
+	<message name="getTrustedAuthoritiesOutputMessage">
+		<part name="parameters" element="tns:getTrustedAuthoritiesResponse"/>
+	</message>
+	<message name="removeTrustedAuthorityInputMessage">
+		<part name="parameters" element="tns:removeTrustedAuthority"/>
+	</message>
+	
+	<message name="removeTrustedAuthorityOutputMessage">
+		<part name="parameters" element="tns:removeTrustedAuthorityResponse"/>
+	</message>
 	<message name="GTSInternalFaultFaultMessage">
 		<part name="fault" element="tns:GTSInternalFault"/>
 	</message>
 	<message name="IllegalTrustedAuthorityFaultFaultMessage">
 		<part name="fault" element="tns:IllegalTrustedAuthorityFault"/>
+	</message>
+	<message name="InvalidTrustedAuthorityFaultFaultMessage">
+		<part name="fault" element="tns:InvalidTrustedAuthorityFault"/>
 	</message>
     
 <!--============================================================
@@ -101,6 +159,20 @@
        		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
        				
        		 <fault name="IllegalTrustedAuthorityFault" message="tns:IllegalTrustedAuthorityFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="getTrustedAuthorities">
+            <input message="tns:getTrustedAuthoritiesInputMessage"/>
+            <output message="tns:getTrustedAuthoritiesOutputMessage"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="removeTrustedAuthority">
+            <input message="tns:removeTrustedAuthorityInputMessage"/>
+            <output message="tns:removeTrustedAuthorityOutputMessage"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+       		 <fault name="InvalidTrustedAuthorityFault" message="tns:InvalidTrustedAuthorityFaultFaultMessage"/>
        				
         </operation>
         <operation name="GetResourceProperty">

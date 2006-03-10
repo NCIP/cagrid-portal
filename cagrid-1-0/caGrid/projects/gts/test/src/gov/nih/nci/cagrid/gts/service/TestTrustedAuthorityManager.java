@@ -55,7 +55,6 @@ public class TestTrustedAuthorityManager extends TestCase {
 			ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
 			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 			ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
-			ta.setIsAuthority(true);
 			ta.setStatus(Status.Trusted);
 			ta.setTrustLevel(TrustLevel.Five);
 			trust.addTrustedAuthority(ta);
@@ -80,7 +79,6 @@ public class TestTrustedAuthorityManager extends TestCase {
 				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
 				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 				ta.setCRL(new X509CRL(CertUtil.writeCRL(ca2.getCRL())));
-				ta.setIsAuthority(true);
 				ta.setStatus(Status.Trusted);
 				ta.setTrustLevel(TrustLevel.Five);
 				trust.addTrustedAuthority(ta);
@@ -103,7 +101,6 @@ public class TestTrustedAuthorityManager extends TestCase {
 			try {
 				TrustedAuthority ta = new TrustedAuthority();
 				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
-				ta.setIsAuthority(true);
 				ta.setStatus(Status.Trusted);
 				ta.setTrustLevel(TrustLevel.Five);
 				trust.addTrustedAuthority(ta);
@@ -116,7 +113,6 @@ public class TestTrustedAuthorityManager extends TestCase {
 				TrustedAuthority ta = new TrustedAuthority();
 				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
 				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
-				ta.setIsAuthority(true);
 				ta.setTrustLevel(TrustLevel.Five);
 				trust.addTrustedAuthority(ta);
 				fail("Did not generate error when an invalidl Trusted Authority was provided.");
@@ -129,7 +125,6 @@ public class TestTrustedAuthorityManager extends TestCase {
 				TrustedAuthority ta = new TrustedAuthority();
 				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
 				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
-				ta.setIsAuthority(true);
 				ta.setStatus(Status.Trusted);
 				trust.addTrustedAuthority(ta);
 				fail("Did not generate error when an invalidl Trusted Authority was provided.");
@@ -150,7 +145,6 @@ public class TestTrustedAuthorityManager extends TestCase {
 			TrustedAuthority ta = new TrustedAuthority();
 			ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
 			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
-			ta.setIsAuthority(true);
 			ta.setStatus(Status.Trusted);
 			ta.setTrustLevel(TrustLevel.Five);
 			trust.addTrustedAuthority(ta);
@@ -172,7 +166,6 @@ public class TestTrustedAuthorityManager extends TestCase {
 			ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
 			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 			ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
-			ta.setIsAuthority(true);
 			ta.setStatus(Status.Trusted);
 			ta.setTrustLevel(TrustLevel.Five);
 			trust.addTrustedAuthority(ta);

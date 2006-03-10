@@ -52,7 +52,7 @@ public class TrustedAuthorityManager {
 				ta.setTrustedAuthorityName(rs.getString("NAME"));
 				ta.setTrustLevel(TrustLevel.fromValue(rs.getString("TRUST_LEVEL")));
 				ta.setStatus(Status.fromValue(rs.getString("STATUS")));
-				ta.setIsAuthority(rs.getBoolean("IS_AUTHORITY"));
+				ta.setIsAuthority(Boolean.valueOf(rs.getBoolean("IS_AUTHORITY")));
 				ta.setAuthority(rs.getString("AUTHORITY"));
 				ta.setCertificate(new gov.nih.nci.cagrid.gts.bean.X509Certificate(rs.getString("CERTIFICATE")));
 				String crl = rs.getString("CRL");
@@ -116,7 +116,7 @@ public class TrustedAuthorityManager {
 			throw fault;
 		}
 
-		if (!ta.isIsAuthority()) {
+		if((ta.getIsAuthority()!=null)&& (!ta.getIsAuthority().booleanValue())) {
 			logger
 				.log(
 					Level.WARNING,
@@ -149,7 +149,7 @@ public class TrustedAuthorityManager {
 			}
 			long id = db.insertGetId(insert.toString());
 			ta.setTrustedAuthorityId(id);
-			ta.setIsAuthority(true);
+			ta.setIsAuthority(Boolean.valueOf(isAuthority));
 			ta.setAuthority(gtsURI);
 		} catch (Exception e) {
 			this.logger.log(Level.SEVERE, "Unexpected database error incurred in adding the Trusted Authority, "
