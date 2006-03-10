@@ -160,6 +160,30 @@ public class TestTrustedAuthorityManager extends TestCase {
 			fail(e.getMessage());
 		}
 	}
+	
+	public void testRemoveTrustedAuthority() {
+		try {
+			TrustedAuthorityManager trust = new TrustedAuthorityManager("localhost", db);
+			CA ca = new CA();
+			BigInteger sn = new BigInteger(String.valueOf(System.currentTimeMillis()));
+			CRLEntry entry = new CRLEntry(sn, CRLReason.PRIVILEGE_WITHDRAWN);
+			ca.updateCRL(entry);
+			TrustedAuthority ta = new TrustedAuthority();
+			ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
+			ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
+			ta.setIsAuthority(true);
+			ta.setStatus(Status.Trusted);
+			ta.setTrustLevel(TrustLevel.Five);
+			trust.addTrustedAuthority(ta);
+			assertEquals(ta, trust.getTrustedAuthority(ta.getTrustedAuthorityId()));
+			trust.removeTrustedAuthority(ta.getTrustedAuthorityId());
+			assertNull(trust.getTrustedAuthority(ta.getTrustedAuthorityId()));
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		}
+	}
 
 
 	protected void setUp() throws Exception {
