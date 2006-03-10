@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.common.Database;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault;
+import gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault;
 
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
@@ -39,7 +40,7 @@ public class TrustedAuthorityManager {
 	}
 
 
-	public TrustedAuthority getTrustedAuthority(long id) throws GTSInternalFault {
+	public TrustedAuthority getTrustedAuthority(long id) throws GTSInternalFault, InvalidTrustedAuthorityFault {
 		String sql = "select * from " + TRUSTED_AUTHORITIES_TABLE + " where ID=" + id;
 		Connection c = null;
 		try {
@@ -72,7 +73,38 @@ public class TrustedAuthorityManager {
 		} finally {
 			db.releaseConnection(c);
 		}
-		return null;
+		InvalidTrustedAuthorityFault fault = new InvalidTrustedAuthorityFault();
+		fault.setFaultString("The TrustedAuthority " + id + " does not exist.");
+		throw fault;
+	}
+
+
+	public boolean doesTrustedAuthorityExist(long id) throws GTSInternalFault {
+		String sql = "select count(*) from " + TRUSTED_AUTHORITIES_TABLE + " where ID=" + id;
+		Connection c = null;
+		boolean exists = false;
+		try {
+			c = db.getConnection();
+			Statement s = c.createStatement();
+			ResultSet rs = s.executeQuery(sql);
+			if (rs.next()) {
+				int count = rs.getInt(1);
+				if (count > 0) {
+					exists = true;
+				}
+			}
+			rs.close();
+			s.close();
+		} catch (Exception e) {
+			this.logger.log(Level.SEVERE, "Unexpected database error incurred in odetermining if the TrustedAuthority "
+				+ id + " exists, the following statement generated the error: \n" + sql + "\n", e);
+			GTSInternalFault fault = new GTSInternalFault();
+			fault.setFaultString("Unexpected error in determining if the TrustedAuthority " + id + " exists.");
+			throw fault;
+		} finally {
+			db.releaseConnection(c);
+		}
+		return exists;
 	}
 
 
@@ -116,7 +148,7 @@ public class TrustedAuthorityManager {
 			throw fault;
 		}
 
-		if((ta.getIsAuthority()!=null)&& (!ta.getIsAuthority().booleanValue())) {
+		if ((ta.getIsAuthority() != null) && (!ta.getIsAuthority().booleanValue())) {
 			logger
 				.log(
 					Level.WARNING,

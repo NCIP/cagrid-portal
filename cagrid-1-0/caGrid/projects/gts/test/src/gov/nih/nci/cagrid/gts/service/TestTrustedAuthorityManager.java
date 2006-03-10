@@ -10,6 +10,7 @@ import gov.nih.nci.cagrid.gts.bean.X509CRL;
 import gov.nih.nci.cagrid.gts.bean.X509Certificate;
 import gov.nih.nci.cagrid.gts.common.Database;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault;
+import gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault;
 import gov.nih.nci.cagrid.gts.test.CA;
 import gov.nih.nci.cagrid.gts.test.Utils;
 
@@ -171,7 +172,12 @@ public class TestTrustedAuthorityManager extends TestCase {
 			trust.addTrustedAuthority(ta);
 			assertEquals(ta, trust.getTrustedAuthority(ta.getTrustedAuthorityId()));
 			trust.removeTrustedAuthority(ta.getTrustedAuthorityId());
-			assertNull(trust.getTrustedAuthority(ta.getTrustedAuthorityId()));
+			try{
+			trust.getTrustedAuthority(ta.getTrustedAuthorityId());
+			fail("Trusted Authority still exists when it should have been removed");
+			}catch(InvalidTrustedAuthorityFault f){
+				
+			}
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
