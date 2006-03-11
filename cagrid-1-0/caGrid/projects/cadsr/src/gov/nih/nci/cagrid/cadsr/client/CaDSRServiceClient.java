@@ -62,12 +62,12 @@ public class CaDSRServiceClient implements CaDSRServiceI {
 					// place client calls here if you want to use this main as a
 					// test....
 
-					// String[] projNames = client.findAllProjects();
-					// for (int i = 0; i < projNames.length; i++) {
-					// System.out.println(projNames[i]);
-					// }
+					Project[] projs = client.findAllProjects();
+					for (int i = 0; i < projs.length; i++) {
+						System.out.println(projs[i].getShortName());
+					}
 
-					Project[] projs = client.findProjects("caBIG");
+					projs = client.findProjects("caBIG");
 					for (int i = 0; i < projs.length; i++) {
 						System.out.println(projs[i].getShortName());
 					}
