@@ -27,7 +27,7 @@
 	<property name="common.jar.name" value="${gar.filename}-common.jar" />
 	<property name="client.jar.name" value="${gar.filename}-client.jar" />
 	<property name="service.jar.name" value="${gar.filename}-service.jar" />
-	<property name="stubs.jar.name" value="${gar.filename}_stubs.jar" />
+	<property name="stubs.jar.name" value="${gar.filename}-stubs.jar" />
 
 	<!-- Important test directories and files -->
 	<property name="test.dir" value="test" />

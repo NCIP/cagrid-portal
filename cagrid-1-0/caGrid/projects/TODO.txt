@@ -22,31 +22,11 @@ make generic and more to core project
 get mapper and marshaller staticly?
 
 had to hand edit:
- -stub to associate proper ser/desr [CRITICAL]
- 	defined:
- 		java.lang.Class castorsf = SDKSerializerFactory.class;
-		java.lang.Class castordf = SDKDeserializerFactory.class;
-	edited:
-		qName = new javax.xml.namespace.QName("gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain", "Project");
-		cachedSerQNames.add(qName);
-		cls = gov.nih.nci.cadsr.umlproject.domain.Project.class;
-		cachedSerClasses.add(cls);
-		cachedSerFactories.add(beansf);
-		cachedDeserFactories.add(beandf)
-	to be:
-		qName = new javax.xml.namespace.QName("gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain", "Project");
-		cachedSerQNames.add(qName);
-		cls = gov.nih.nci.cadsr.umlproject.domain.Project.class;
-		cachedSerClasses.add(cls);
-		cachedSerFactories.add(castorsf);
-		cachedDeserFactories.add(castordf)
- 
- -wsdl to use right element name
+ -client type mapping
+ -wsdl to use right element
 	 -introduce expects all output elements to be of the "name" response... custom types need to use custom names.. should default to Classname
+	 - actually, i need an element ref
  -client and serviec impl to use the right name
  	-based on wsdl change
  -protocol bean to use right element name
  	 	-based on wsdl change
-
-NOT necessary to edit:
- - client type mapping
