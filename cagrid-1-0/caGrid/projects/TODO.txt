@@ -22,11 +22,11 @@ make generic and more to core project
 get mapper and marshaller staticly?
 
 had to hand edit:
- -client type mapping
+ -client type mapping in client-config.wsdd
  -wsdl to use right element
 	 -introduce expects all output elements to be of the "name" response... custom types need to use custom names.. should default to Classname
 	 - actually, i need an element ref
- -client and serviec impl to use the right name
+ -client and service impl to use the right method names (getProject not getResponse)
  	-based on wsdl change
- -protocol bean to use right element name
+ -protocol bean to use right element
  	 	-based on wsdl change
