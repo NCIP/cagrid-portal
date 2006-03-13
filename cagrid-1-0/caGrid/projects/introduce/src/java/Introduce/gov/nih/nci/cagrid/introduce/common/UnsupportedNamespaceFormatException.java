@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.common;
+package gov.nih.nci.cagrid.introduce.common;
 
 public class UnsupportedNamespaceFormatException extends Exception {
 

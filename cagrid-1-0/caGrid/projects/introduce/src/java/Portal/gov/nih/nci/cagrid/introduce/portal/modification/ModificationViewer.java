@@ -1,9 +1,9 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
-import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
@@ -13,6 +13,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.modification.cadsr.CADSRMetadataConfigurationComponent;
@@ -50,7 +51,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.73 2006-03-03 17:57:40 oster Exp $
+ * @version $Id: ModificationViewer.java,v 1.74 2006-03-13 15:23:11 hastings Exp $
  */
 public class ModificationViewer extends GridPortalComponent {
 
@@ -142,7 +143,12 @@ public class ModificationViewer extends GridPortalComponent {
 	public ModificationViewer(File methodsDirectory) {
 		super();
 		this.methodsDirectory = methodsDirectory;
-		initialize();
+		try {
+			initialize();
+		} catch (Exception e) {
+			// should never get here but in case.....
+			e.printStackTrace();
+		}
 
 	}
 
@@ -162,7 +168,13 @@ public class ModificationViewer extends GridPortalComponent {
 				}
 				File file = new File(methodsDirectory.getAbsolutePath() + File.separator + "introduce.xml");
 				if (file.exists() && file.canRead()) {
-					initialize();
+					try {
+						initialize();
+					} catch (Exception e) {
+						e.printStackTrace();
+						JOptionPane.showMessageDialog(ModificationViewer.this, e.getMessage());
+						ModificationViewer.this.dispose();
+					}
 				} else {
 					JOptionPane.showMessageDialog(ModificationViewer.this, "Directory "
 						+ methodsDirectory.getAbsolutePath() + " does not seem to be an introduce service");
@@ -208,25 +220,25 @@ public class ModificationViewer extends GridPortalComponent {
 	 * 
 	 * @return void
 	 */
-	private void initialize() {
+	private void initialize() throws Exception {
 		if (this.methodsDirectory != null) {
-			try {
-				this.introService = (ServiceDescription) Utils.deserializeDocument(this.methodsDirectory
-					.getAbsolutePath()
-					+ File.separator + "introduce.xml", ServiceDescription.class);
-				loadServiceProps();
-				this.lastServiceSecurity = this.introService.getServiceSecurity();
-				if (this.lastServiceSecurity == null) {
-					this.lastServiceSecurity = new ServiceSecurity();
-				}
-				this.setSize(500, 400);
-				this.setContentPane(getJContentPane());
-				this.setTitle("Modify Service Interface");
-				this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
-
-			} catch (Exception e) {
-				e.printStackTrace();
+			this.introService = (ServiceDescription) Utils.deserializeDocument(this.methodsDirectory.getAbsolutePath()
+				+ File.separator + "introduce.xml", ServiceDescription.class);
+			if (introService.getIntroduceVersion() == null
+				|| !introService.getIntroduceVersion().equals(IntroduceConstants.INTRODUCE_VERSION)) {
+				throw new Exception(
+					"Introduce version in project does not match version provided by Introduce Toolkit ( "
+						+ IntroduceConstants.INTRODUCE_VERSION + " ): " + introService.getIntroduceVersion());
 			}
+			loadServiceProps();
+			this.lastServiceSecurity = this.introService.getServiceSecurity();
+			if (this.lastServiceSecurity == null) {
+				this.lastServiceSecurity = new ServiceSecurity();
+			}
+			this.setSize(500, 400);
+			this.setContentPane(getJContentPane());
+			this.setTitle("Modify Service Interface");
+			this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
 		}
 	}
 
@@ -644,8 +656,8 @@ public class ModificationViewer extends GridPortalComponent {
 											.getAbsolutePath());
 										Process p = CommonTools.createAndOutputProcess(cmd);
 										p.waitFor();
-										//really really waitFor
-										//Thread.sleep(100);
+										// really really waitFor
+										// Thread.sleep(100);
 										if (p.exitValue() != 0) {
 											JOptionPane.showMessageDialog(ModificationViewer.this,
 												"Error: Unable to rebuild the skeleton");

@@ -19,7 +19,7 @@
                                             <xs:element ref="metadata:MetadataList"/>
                                             <xs:element name="ServiceSecurity" minOccurs="0" maxOccurs="1" type="security:ServiceSecurity"/>
                                  </xs:sequence>
-                                 <xs:attribute name="introduceVersion"></xs:attribute>
+                                 <xs:attribute name="introduceVersion" type="xs:string" use="optional"></xs:attribute>
                       </xs:complexType>
            </xs:element>
 </xs:schema>

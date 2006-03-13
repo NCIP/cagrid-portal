@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.codegen;
 
-import gov.nih.nci.cagrid.common.CommonTools;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
@@ -13,6 +12,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.codegen.metadata.SyncMetadata;
 import gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods;
 import gov.nih.nci.cagrid.introduce.codegen.security.SyncSecurity;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.templates.NamespaceMappingsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate;
 
@@ -82,6 +82,9 @@ public class SyncTools {
 		// STEP 1: populate the object model representation of the service
 		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(baseDirectory + File.separator
 			+ "introduce.xml", ServiceDescription.class);
+		if(introService.getIntroduceVersion()==null || !introService.getIntroduceVersion().equals(IntroduceConstants.INTRODUCE_VERSION)){
+			throw new Exception("Introduce version in project does not match version provided by Introduce Toolkit ( " + IntroduceConstants.INTRODUCE_VERSION + " ): " + introService.getIntroduceVersion());
+		}
 		File servicePropertiesFile = new File(baseDirectory.getAbsolutePath() + File.separator + "introduce.properties");
 		Properties serviceProperties = new Properties();
 		serviceProperties.load(new FileInputStream(servicePropertiesFile));

@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.gme;
 
-import gov.nih.nci.cagrid.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.modification.gme.GMEConfigurationPanel.SchemaWrapper;
