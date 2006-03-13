@@ -1,5 +1,4 @@
 
-remove cagrid-core jar from lib and add build dependency
 
 make introduce depend on this
 
@@ -10,6 +9,8 @@ extract property for nci service to contact
 caching using resources?
 
 (DONE) handle all exceptions
+
+(DONE) remove cagrid-core jar from lib and add build dependency
 
 
 serialization stuff:
