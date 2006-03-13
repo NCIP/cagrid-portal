@@ -9,13 +9,17 @@ extract property for nci service to contact
 
 caching using resources?
 
-handle all exceptions
+(DONE) handle all exceptions
 
 
 serialization stuff:
 ====================
 http://gforge.nci.nih.gov/plugins/scmcvs/cvsweb.php/cacoretoolkit/src/gov/nih/nci/common/util/?cvsroot=cacoretoolkit
 http://cvs.apache.org/viewcvs.cgi/webservices/axis/trunk/java/src/org/apache/axis/encoding/ser/castor/
+
+http://www.castor.org/xml-faq.html
+http://www.castor.org/how-to-enable-xml-validation.html
+http://www.castor.org/xml-mapping.html
 
 make generic and move to core project
 

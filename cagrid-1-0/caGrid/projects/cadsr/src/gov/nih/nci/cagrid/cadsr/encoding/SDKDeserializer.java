@@ -6,15 +6,21 @@ import org.apache.axis.encoding.DeserializationContext;
 import org.apache.axis.encoding.Deserializer;
 import org.apache.axis.encoding.DeserializerImpl;
 import org.apache.axis.message.MessageElement;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.exolab.castor.mapping.Mapping;
 import org.exolab.castor.mapping.MappingException;
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.Unmarshaller;
 import org.exolab.castor.xml.ValidationException;
+import org.w3c.dom.Element;
 
 
 public class SDKDeserializer extends DeserializerImpl implements Deserializer {
 	public QName xmlType;
 	public Class javaType;
+
+	protected static Log LOG = LogFactory.getLog(SDKDeserializer.class.getName());
 
 
 	public SDKDeserializer(Class javaType, QName xmlType) {
@@ -26,25 +32,26 @@ public class SDKDeserializer extends DeserializerImpl implements Deserializer {
 	public void onEndElement(String namespace, String localName, DeserializationContext context) {
 		Unmarshaller unmarshall = new Unmarshaller(javaType);
 		try {
-			unmarshall.setMapping(EncodingUtils.getMapping());
-		} catch (MappingException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			Mapping mapping = EncodingUtils.getMapping();
+			unmarshall.setMapping(mapping);
+		} catch (MappingException e) {
+			LOG.error("Problem establishing castor mapping!  Using default mapping.", e);
 		}
 
 		MessageElement msgElem = context.getCurElement();
-		if (msgElem != null) {
+		Element asDOM = null;
+		try {
+			asDOM = msgElem.getAsDOM();
+		} catch (Exception e) {
+			LOG.error("Problem extracting message type! Result will be null!", e);
+		}
+		if (asDOM != null) {
 			try {
-				value = unmarshall.unmarshal(msgElem.getAsDOM());
+				value = unmarshall.unmarshal(asDOM);
 			} catch (MarshalException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOG.error("Problem with castor marshalling!", e);
 			} catch (ValidationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOG.error("XML does not match schema!", e);
 			}
 		}
 	}

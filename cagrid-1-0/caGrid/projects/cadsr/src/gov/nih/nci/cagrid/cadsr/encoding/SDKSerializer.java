@@ -8,6 +8,9 @@ import org.apache.axis.Constants;
 import org.apache.axis.encoding.SerializationContext;
 import org.apache.axis.encoding.Serializer;
 import org.apache.axis.wsdl.fromJava.Types;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.exolab.castor.mapping.Mapping;
 import org.exolab.castor.mapping.MappingException;
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.Marshaller;
@@ -17,22 +20,33 @@ import org.xml.sax.Attributes;
 
 
 public class SDKSerializer implements Serializer {
+
+	protected static Log LOG = LogFactory.getLog(SDKSerializer.class.getName());
+
+
 	public void serialize(QName name, Attributes attributes, Object value, SerializationContext context)
 		throws IOException {
 
 		AxisContentHandler hand = new AxisContentHandler(context);
 		Marshaller marshaller = new Marshaller(hand);
 		try {
-			marshaller.setMapping(EncodingUtils.getMapping());
+			Mapping mapping = EncodingUtils.getMapping();
+			marshaller.setMapping(mapping);
+			marshaller.setValidation(true);
 		} catch (MappingException e) {
-			throw new IOException("Problem establishing castor mapping!" + e.getMessage());
+			LOG.error("Problem establishing castor mapping!  Using default mapping.", e);
 		}
 		try {
 			marshaller.marshal(value);
 		} catch (MarshalException e) {
+			LOG.error("Problem using castor marshalling.", e);
 			throw new IOException("Problem using castor marshalling." + e.getMessage());
 		} catch (ValidationException e) {
-			throw new IOException("Problem validating castor marshalling." + e.getMessage());
+			LOG.error("Problem validating castor marshalling; message doesn't comply with the associated XML schema.",
+				e);
+			throw new IOException(
+				"Problem validating castor marshalling; message doesn't comply with the associated XML schema."
+					+ e.getMessage());
 		}
 	}
 

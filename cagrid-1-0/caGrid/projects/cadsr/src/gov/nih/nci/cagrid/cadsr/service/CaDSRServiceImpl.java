@@ -10,20 +10,26 @@ import java.rmi.RemoteException;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 /**
  * gov.nih.nci.cagrid.cadsrI
  * 
- * @created by caGrid toolkit version 0.5
+ * @created by caGrid toolkit version 1.0
  */
 public class CaDSRServiceImpl implements CaDSRServiceI {
+
+	protected static Log LOG = LogFactory.getLog(CaDSRServiceImpl.class.getName());
+
 
 	public CaDSRServiceImpl() {
 
 	}
 
 
-	     public gov.nih.nci.cadsr.umlproject.domain.Project[] findAllProjects() throws RemoteException {
+	public gov.nih.nci.cadsr.umlproject.domain.Project[] findAllProjects() throws RemoteException {
 		try {
 			ApplicationService appService =
 			// ApplicationServiceProvider.getApplicationService();
@@ -31,7 +37,7 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 			ApplicationService.getRemoteInstance("http://localhost:49080/cacore31/http/remoteService");
 			// ApplicationService.getRemoteInstance("http://cbioqa101.nci.nih.gov:49080/cacore31/http/remoteService");
 
-			System.out.println("Using basic search. Retrieving allprojects");
+			LOG.debug("Using basic search. Retrieving allprojects");
 
 			Project projPrototype = new Project();
 			ClassificationScheme cs = new ClassificationScheme();
@@ -44,11 +50,11 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 			try {
 				List resultList = appService.search(Project.class, projPrototype);
 				Project arr[] = new Project[resultList.size()];
-				System.out.println("result count: " + resultList.size());
+				LOG.debug("result count: " + resultList.size());
 				int index = 0;
 				for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
 					Project project = (Project) resultsIterator.next();
-					System.out.println("project name:" + project.getLongName());
+					LOG.debug("project name:" + project.getLongName());
 					arr[index++] = project;
 				}
 				return arr;
@@ -64,7 +70,7 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 	}
 
 
-	     public gov.nih.nci.cadsr.umlproject.domain.Project[] findProjects(String context) throws RemoteException {
+	public gov.nih.nci.cadsr.umlproject.domain.Project[] findProjects(String context) throws RemoteException {
 		try {
 			ApplicationService appService =
 			// ApplicationServiceProvider.getApplicationService();
@@ -72,7 +78,7 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 			ApplicationService.getRemoteInstance("http://localhost:49080/cacore31/http/remoteService");
 			// ApplicationService.getRemoteInstance("http://cbioqa101.nci.nih.gov:49080/cacore31/http/remoteService");
 
-			System.out.println("Using basic search. Retrieving all projects under context:" + context);
+			LOG.debug("Using basic search. Retrieving all projects under context:" + context);
 
 			Project projPrototype = new Project();
 			ClassificationScheme cs = new ClassificationScheme();
@@ -85,11 +91,11 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 			try {
 				List resultList = appService.search(Project.class, projPrototype);
 				Project arr[] = new Project[resultList.size()];
-				System.out.println("result count: " + resultList.size());
+				LOG.debug("result count: " + resultList.size());
 				int index = 0;
 				for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
 					Project project = (Project) resultsIterator.next();
-					System.out.println("project name:" + project.getLongName());
+					LOG.debug("project name:" + project.getLongName());
 					arr[index++] = project;
 				}
 				return arr;
@@ -103,5 +109,4 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 			throw new RemoteException(e2.getMessage(), e2);
 		}
 	}
-
 }

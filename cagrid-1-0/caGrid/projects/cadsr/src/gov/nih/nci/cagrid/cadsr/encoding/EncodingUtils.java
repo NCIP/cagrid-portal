@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.axis.utils.ClassUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.exolab.castor.mapping.Mapping;
 import org.exolab.castor.mapping.MappingException;
 import org.xml.sax.EntityResolver;
@@ -11,6 +13,9 @@ import org.xml.sax.InputSource;
 
 
 public class EncodingUtils {
+
+	protected static Log LOG = LogFactory.getLog(EncodingUtils.class.getName());
+
 
 	public static Mapping getMapping() {
 
@@ -23,19 +28,23 @@ public class EncodingUtils {
 				return null;
 			}
 		};
-		InputStream mappingStream = ClassUtils.getResourceAsStream(EncodingUtils.class, "/xml-mapping.xml");
+		
+		//TODO: what to use here such that multiple services can use?
+		String mappingLocation = "/xml-mapping.xml";
+		InputStream mappingStream = ClassUtils.getResourceAsStream(EncodingUtils.class, mappingLocation);
 		if (mappingStream == null) {
-			System.err.println("Mapping file was null!");
+			LOG.error("Mapping file was null!");
 		}
 		InputSource mappIS = new org.xml.sax.InputSource(mappingStream);
+		
 		Mapping mapping = new Mapping();
 		mapping.setEntityResolver(resolver);
 		try {
 			mapping.loadMapping(mappIS);
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOG.error("Unable to load mapping file:" + mappingLocation, e);
 		} catch (MappingException e) {
-			e.printStackTrace();
+			LOG.error("Problem with mapping!", e);
 		}
 
 		return mapping;
