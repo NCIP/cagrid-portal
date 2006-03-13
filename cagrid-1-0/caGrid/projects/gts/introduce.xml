@@ -1,13 +1,11 @@
-<ns1:ServiceSkeleton xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
+<ns1:ServiceSkeleton introduceVersion="0.9" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Methods xsi:type="ns2:MethodsType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Methods" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns2:Method name="addTrustedAuthority" xsi:type="ns2:MethodType">
-   <ns2:Inputs>
-    <ns2:Input isArray="false" location="./1_gts.xsd" name="TrustedAuthority" namespace="http://cagrid.nci.nih.gov/1/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="TrustedAuthority"/>
-   </ns2:Inputs>
+  <ns2:Method name="removeTrustedAuthority" xsi:type="ns2:MethodType">
+   <ns2:Inputs/>
    <ns2:Output className="void" isArray="false"/>
    <ns2:Exceptions>
     <ns2:Exception name="GTSInternalFault"/>
-    <ns2:Exception name="IllegalTrustedAuthorityFault"/>
+    <ns2:Exception name="InvalidTrustedAuthorityFault"/>
    </ns2:Exceptions>
    <ns2:MethodSecurity xsi:type="ns3:MethodSecurity" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Security">
     <ns3:MethodSecuritySetting xsi:type="ns3:MethodSecurityType">None</ns3:MethodSecuritySetting>
@@ -16,13 +14,14 @@
     <ns3:AnonymousClients xsi:type="ns3:AnonymousCommunication" xsi:nil="true"/>
    </ns2:MethodSecurity>
   </ns2:Method>
-  <ns2:Method name="getTrustedAuthorities" xsi:type="ns2:MethodType">
+  <ns2:Method name="addTrustedAuthority" xsi:type="ns2:MethodType">
    <ns2:Inputs>
-    <ns2:Input isArray="false" location="./1_gts.xsd" name="TrustedAuthorityFilter" namespace="http://cagrid.nci.nih.gov/1/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="TrustedAuthorityFilter"/>
+    <ns2:Input isArray="false" location="./2_gts.xsd" name="TrustedAuthority" namespace="http://cagrid.nci.nih.gov/2/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="TrustedAuthority"/>
    </ns2:Inputs>
-   <ns2:Output isArray="true" location="./1_gts.xsd" namespace="http://cagrid.nci.nih.gov/1/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="TrustedAuthority"/>
+   <ns2:Output className="void" isArray="false"/>
    <ns2:Exceptions>
     <ns2:Exception name="GTSInternalFault"/>
+    <ns2:Exception name="IllegalTrustedAuthorityFault"/>
    </ns2:Exceptions>
    <ns2:MethodSecurity xsi:type="ns4:MethodSecurity" xmlns:ns4="gme://gov.nih.nci.cagrid.introduce/1/Security">
     <ns4:MethodSecuritySetting xsi:type="ns4:MethodSecurityType">None</ns4:MethodSecuritySetting>
@@ -31,12 +30,13 @@
     <ns4:AnonymousClients xsi:type="ns4:AnonymousCommunication" xsi:nil="true"/>
    </ns2:MethodSecurity>
   </ns2:Method>
-  <ns2:Method name="removeTrustedAuthority" xsi:type="ns2:MethodType">
-   <ns2:Inputs/>
-   <ns2:Output className="void" isArray="false"/>
+  <ns2:Method name="findTrustedAuthorities" xsi:type="ns2:MethodType">
+   <ns2:Inputs>
+    <ns2:Input isArray="false" location="./2_gts.xsd" name="TrustedAuthorityFilter" namespace="http://cagrid.nci.nih.gov/2/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="TrustedAuthorityFilter"/>
+   </ns2:Inputs>
+   <ns2:Output isArray="true" location="./2_gts.xsd" namespace="http://cagrid.nci.nih.gov/2/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="TrustedAuthority"/>
    <ns2:Exceptions>
     <ns2:Exception name="GTSInternalFault"/>
-    <ns2:Exception name="InvalidTrustedAuthorityFault"/>
    </ns2:Exceptions>
    <ns2:MethodSecurity xsi:type="ns5:MethodSecurity" xmlns:ns5="gme://gov.nih.nci.cagrid.introduce/1/Security">
     <ns5:MethodSecuritySetting xsi:type="ns5:MethodSecurityType">None</ns5:MethodSecuritySetting>

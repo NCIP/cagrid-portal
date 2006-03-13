@@ -60,7 +60,7 @@ public class TestTrustedAuthorityManager extends TestCase {
 			ta.setStatus(Status.Trusted);
 			ta.setTrustLevel(TrustLevel.Five);
 			trust.addTrustedAuthority(ta);
-			assertEquals(ta, trust.getTrustedAuthority(ta.getTrustedAuthorityId()));
+			assertEquals(ta, trust.getTrustedAuthority(ta.getTrustedAuthorityName()));
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
@@ -151,7 +151,7 @@ public class TestTrustedAuthorityManager extends TestCase {
 			ta.setStatus(Status.Trusted);
 			ta.setTrustLevel(TrustLevel.Five);
 			trust.addTrustedAuthority(ta);
-			assertEquals(ta, trust.getTrustedAuthority(ta.getTrustedAuthorityId()));
+			assertEquals(ta, trust.getTrustedAuthority(ta.getTrustedAuthorityName()));
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
@@ -173,17 +173,17 @@ public class TestTrustedAuthorityManager extends TestCase {
 			ta.setStatus(Status.Trusted);
 			ta.setTrustLevel(TrustLevel.Five);
 			trust.addTrustedAuthority(ta);
-			assertEquals(ta, trust.getTrustedAuthority(ta.getTrustedAuthorityId()));
-			trust.removeTrustedAuthority(ta.getTrustedAuthorityId());
+			assertEquals(ta, trust.getTrustedAuthority(ta.getTrustedAuthorityName()));
+			trust.removeTrustedAuthority(ta.getTrustedAuthorityName());
 			try {
-				trust.getTrustedAuthority(ta.getTrustedAuthorityId());
+				trust.getTrustedAuthority(ta.getTrustedAuthorityName());
 				fail("Trusted Authority still exists when it should have been removed");
 			} catch (InvalidTrustedAuthorityFault f) {
 
 			}
 
 			try {
-				trust.removeTrustedAuthority(ta.getTrustedAuthorityId());
+				trust.removeTrustedAuthority(ta.getTrustedAuthorityName());
 				fail("Trusted Authority still exists when it should have been removed");
 			} catch (InvalidTrustedAuthorityFault f) {
 
@@ -199,13 +199,13 @@ public class TestTrustedAuthorityManager extends TestCase {
 		try {
 			TrustedAuthorityManager trust = new TrustedAuthorityManager("localhost", db);
 			int count = 5;
-			String nameSub = "Trust Authority";
 			String dnPrefix = "O=Organization ABC,OU=Unit XYZ,CN=Certificate Authority";
 			TrustedAuthority[] auths = new TrustedAuthority[count];
 			for (int i = 0; i < count; i++) {
 				String dn = dnPrefix + i;
-				String name = nameSub + i;
 				CA ca = new CA(dn);
+				String name = ca.getCertificate().getSubjectDN().toString();
+				
 				BigInteger sn = new BigInteger(String.valueOf(System.currentTimeMillis()));
 				CRLEntry entry = new CRLEntry(sn, CRLReason.PRIVILEGE_WITHDRAWN);
 				ca.updateCRL(entry);
@@ -216,16 +216,11 @@ public class TestTrustedAuthorityManager extends TestCase {
 				auths[i].setStatus(Status.Trusted);
 				auths[i].setTrustLevel(TrustLevel.Five);
 				trust.addTrustedAuthority(auths[i]);
-				assertEquals(auths[i], trust.getTrustedAuthority(auths[i].getTrustedAuthorityId()));
+				assertEquals(auths[i], trust.getTrustedAuthority(auths[i].getTrustedAuthorityName()));
 				TrustedAuthority[] tas = trust.findTrustAuthorities(new TrustedAuthorityFilter());
 				assertEquals(tas.length, (i + 1));
 
-				// Filter by Id
-				TrustedAuthorityFilter tf1 = new TrustedAuthorityFilter();
-				tf1.setTrustedAuthorityId(new Long(auths[i].getTrustedAuthorityId()));
-				TrustedAuthority[] tas1 = trust.findTrustAuthorities(tf1);
-				assertEquals(1, tas1.length);
-				assertEquals(auths[i], tas1[0]);
+			
 
 				// Filter by name
 				TrustedAuthorityFilter tf2 = new TrustedAuthorityFilter();
@@ -236,7 +231,7 @@ public class TestTrustedAuthorityManager extends TestCase {
 				tf2.setTrustedAuthorityName("yada yada");
 				tas2 = trust.findTrustAuthorities(tf2);
 				assertEquals(0, tas2.length);
-				tf2.setTrustedAuthorityName(nameSub);
+				tf2.setTrustedAuthorityName(dnPrefix);
 				tas2 = trust.findTrustAuthorities(tf2);
 				assertEquals((i + 1), tas2.length);
 
@@ -274,25 +269,21 @@ public class TestTrustedAuthorityManager extends TestCase {
 				//Filter by IsAuthority and Authority
 				TrustedAuthorityFilter tf6 = new TrustedAuthorityFilter();
 				tf6.setIsAuthority(Boolean.TRUE);
-				tf6.setAuthority("localhost");
+				tf6.setAuthorityTrustService("localhost");
 				TrustedAuthority[] tas6 = trust.findTrustAuthorities(tf6);
 				assertEquals((i + 1), tas6.length);
 				tf6.setIsAuthority(Boolean.FALSE);
 				tas6 = trust.findTrustAuthorities(tf6);
 				assertEquals(0, tas6.length);
 				tf6.setIsAuthority(Boolean.TRUE);
-				tf6.setAuthority("yada yada");
+				tf6.setAuthorityTrustService("yada yada");
 				tas6 = trust.findTrustAuthorities(tf6);
 				assertEquals(0, tas6.length);
 				
 				// Filter by ALL
 				TrustedAuthorityFilter tf7 = new TrustedAuthorityFilter();
-				tf7.setTrustedAuthorityId(new Long(auths[i].getTrustedAuthorityId()));
-				TrustedAuthority[] tas7 = trust.findTrustAuthorities(tf7);
-				assertEquals(1, tas7.length);
-				assertEquals(auths[i], tas7[0]);
 				tf7.setTrustedAuthorityName(name);
-				tas7 = trust.findTrustAuthorities(tf7);
+				TrustedAuthority[] tas7 = trust.findTrustAuthorities(tf7);
 				assertEquals(1, tas7.length);
 				assertEquals(auths[i], tas7[0]);
 				tf7.setCertificateDN(dn);
@@ -311,7 +302,7 @@ public class TestTrustedAuthorityManager extends TestCase {
 				tas7 = trust.findTrustAuthorities(tf7);
 				assertEquals(1, tas7.length);
 				assertEquals(auths[i], tas7[0]);
-				tf7.setAuthority("localhost");
+				tf7.setAuthorityTrustService("localhost");
 				tas7 = trust.findTrustAuthorities(tf7);
 				assertEquals(1, tas7.length);
 				assertEquals(auths[i], tas7[0]);
