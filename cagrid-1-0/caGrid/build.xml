@@ -114,21 +114,32 @@
 				<include name="cagrid-opensaml-1.1.jar" />
 			</fileset>
 		</artifact>
-		
+
 		<artifact track="main" type="jars" id="gridca.jars">
 			<antcall target="build-gridca" />
 			<fileset dir="${projects.dir}/gridca/build/lib">
 				<include name="gridca.jar" />
 			</fileset>
-	    </artifact>	
-		
-	
+		</artifact>
+
+		<artifact track="main" type="jars" id="cadsr.jars">
+			<antcall target="build-cadsr" />
+			<fileset dir="${projects.dir}/cadsr/build/jars">
+				<include name="*.jar" />
+				<exclude name="*test*.jar" />
+			</fileset>
+			<fileset dir="${projects.dir}/cadsr/lib">
+				<include name="*.jar" />
+			</fileset>
+		</artifact>
+
+
 		<artifact track="main" type="resources" id="gridca.resources">
 			<fileset dir="${projects.dir}/gridca/resources">
 				<include name="**" />
 			</fileset>
 		</artifact>
-		
+
 		<artifact track="endorsed" type="jars" id="opensaml.endorsed">
 			<fileset dir="${projects.dir}/opensaml/endorsed">
 				<include name="xercesImpl.jar" />
@@ -166,20 +177,31 @@
 		</resolveDependencies>
 		<ant dir="${projects.dir}/metadata" inheritAll="false" antfile="build.xml" target="jar" />
 	</target>
-	
-	
-		<!-- =============================================================== -->
-		<!-- Grid CA:                                                         -->
-		<!-- =============================================================== -->
-		<target name="build-gridca" depends="prepare" description="Builds the gridca project">
-			<resolveDependencies extdir="${projects.dir}/gridca/ext">
-				<artifact refid="core.jars" />
-				<artifact refid="core.test.jars" />
-				<artifact refid="core.resources" />
-			</resolveDependencies>
-			<ant dir="${projects.dir}/gridca" inheritAll="false" antfile="build.xml" target="all" />
-		</target>
-	
+
+
+	<!-- =============================================================== -->
+	<!-- cadsr:                                                         -->
+	<!-- =============================================================== -->
+	<target name="build-cadsr" depends="prepare" description="Builds the cadsr project">
+		<resolveDependencies extdir="${projects.dir}/cadsr/ext">
+			<artifact refid="core.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/cadsr" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+
+	<!-- =============================================================== -->
+	<!-- Grid CA:                                                         -->
+	<!-- =============================================================== -->
+	<target name="build-gridca" depends="prepare" description="Builds the gridca project">
+		<resolveDependencies extdir="${projects.dir}/gridca/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="core.resources" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/gridca" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
 
 	<!-- =============================================================== -->
 	<!-- DORIAN:                                                         -->
@@ -197,8 +219,8 @@
 		</resolveDependencies>
 		<ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
-	
-	
+
+
 	<!-- =============================================================== -->
 	<!-- Grid Trust Service:                                                         -->
 	<!-- =============================================================== -->
@@ -213,7 +235,7 @@
 		</resolveDependencies>
 		<ant dir="${projects.dir}/gts" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
-	
+
 
 
 	<!-- =============================================================== -->
@@ -235,7 +257,7 @@
 		</resolveDependencies>
 		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
-	
+
 	<!-- =============================================================== -->
 	<!-- CAGRID GME:                                                     -->
 	<!-- =============================================================== -->
@@ -260,26 +282,28 @@
 		<!--<subant target="clean"  >
 			<fileset dir="${projects.dir}" includes="*/build.xml" />
 		</subant>-->
-		<delete dir="${projects.dir}/core/ext"/>
+		<delete dir="${projects.dir}/core/ext" />
 		<ant dir="${projects.dir}/core" inheritAll="false" antfile="build.xml" target="clean" />
-		<delete dir="${projects.dir}/metadata/ext"/>
+		<delete dir="${projects.dir}/metadata/ext" />
 		<ant dir="${projects.dir}/metadata" inheritAll="false" antfile="build.xml" target="clean" />
-		<delete dir="${projects.dir}/gme/ext"/>
+		<delete dir="${projects.dir}/gme/ext" />
 		<ant dir="${projects.dir}/gme" inheritAll="false" antfile="build.xml" target="clean" />
-		<delete dir="${projects.dir}/introduce/ext"/>
+		<delete dir="${projects.dir}/introduce/ext" />
 		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="clean" />
-		<delete dir="${projects.dir}/dorian/ext"/>
+		<delete dir="${projects.dir}/dorian/ext" />
 		<ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="clean" />
-		<delete dir="${projects.dir}/gridca/ext"/>
+		<delete dir="${projects.dir}/gridca/ext" />
 		<ant dir="${projects.dir}/gridca" inheritAll="false" antfile="build.xml" target="clean" />
-		<delete dir="${projects.dir}/opensaml/ext"/>
-				<ant dir="${projects.dir}/opensaml" inheritAll="false" antfile="build.xml" target="clean" />
+		<delete dir="${projects.dir}/cadsr/ext" />
+		<ant dir="${projects.dir}/cadsr" inheritAll="false" antfile="build.xml" target="clean" />
+		<delete dir="${projects.dir}/opensaml/ext" />
+		<ant dir="${projects.dir}/opensaml" inheritAll="false" antfile="build.xml" target="clean" />
 	</target>
 
 
 	<!-- ============================================================== -->
 	<!-- Builds from scratch                                            -->
 	<!-- ============================================================== -->
-	<target name="all" description="Builds the entire application" depends="clean, build-core, build-gridca,build-opensaml,build-metadata, build-gme,build-gts, build-introduce, build-dorian" />
+	<target name="all" description="Builds the entire application" depends="clean, build-core, build-cadsr, build-gridca, build-opensaml, build-metadata, build-gme, build-gts, build-introduce, build-dorian" />
 </project>
 
