@@ -12,9 +12,9 @@ xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
 xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
 xmlns="http://schema.xmlsoap.org/wsdl/"
 xmlns:rprotdata="http://rproteomics.cagrid.nci.nih.gov/RPData"
-xmlns:cqlq="http://CQL.caBig/1/gov.nih.nci.cagrid.CQL">
+xmlns:cqlq="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQL">
  
- <wsdl:import location="http://ccis1716.duhs.duke.edu/wsrf/share/schema/_cagrid_RPData/RPData_flattened.wsdl" namespace="http://rproteomics.cagrid.nci.nih.gov/RPData"/>
+ <wsdl:import location="http://localhost:8080/wsrf/share/schema/_cagrid_RPData/RPData_flattened.wsdl" namespace="http://rproteomics.cagrid.nci.nih.gov/RPData"/>
  <wsdl:import location="http://ccis1716.duhs.duke.edu/wsrf/share/schema/_cagrid_RProteomics/RProteomics_flattened.wsdl" namespace="http://www.globus.org/namespaces/cagrid/RProteomics/RProteomics"/>
  
   <wsdl:types>
@@ -36,6 +36,8 @@ xmlns:cqlq="http://CQL.caBig/1/gov.nih.nci.cagrid.CQL">
                     <element name="queryType" type="cqlq:CQLQueryType"/>
                     <element name="windowType" type="rtypes:WindowType"/>
                     <element name="percentileType" type="rtypes:PercentileType"/>
+                    <element name="windowType2" type="rtypes:WindowType"/>
+                    <element name="thresholdType" type="rtypes:ThresholdType"/>
                 </sequence>
             </complexType>
             
@@ -55,8 +57,8 @@ xmlns:cqlq="http://CQL.caBig/1/gov.nih.nci.cagrid.CQL">
   </wsdl:message>
   <wsdl:portType name="startWorkFlowPortType">
     <wsdl:operation name="startWorkFlow">
-      <wsdl:input message="tns:startWorkFlowInputMessage"/>
-      <wsdl:output message="tns:startWorkFlowOutputMessage"/>
+      <wsdl:input message="rprotdata:workFlowInputMessage"/>
+      <wsdl:output message="rprotdata:workFlowOutputMessage"/>
     </wsdl:operation>
   </wsdl:portType>
     

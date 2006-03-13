@@ -17,6 +17,6 @@
    </partnerLinks>
    <wsdlReferences>
       <wsdl location="wsdl/WorkFlowClientService.wsdl" namespace="http://cabig.nic.nih.gov/bpel"/>
-      <wsdl location="http://ccis1716.duhs.duke.edu/wsrf/share/schema/_cagrid_RPData/RPData_flattened.wsdl" namespace="http://rproteomics.cagrid.nci.nih.gov/RPData"/>
+      <wsdl location="http://localhost:8080/wsrf/share/schema/_cagrid_RPData/RPData_flattened.wsdl" namespace="http://rproteomics.cagrid.nci.nih.gov/RPData"/>
    </wsdlReferences>
 </process>

@@ -83,7 +83,7 @@
 </target>
 
 <target name="runClient" depends="jar">
-    <java fork="yes" classname="gov.nci.nih.cabig.client.TestClient">
+    <java fork="yes" classname="gov.nci.nih.cabig.annualdemo.client.TestClient">
     <arg value="http://localhost:8080/active-bpel/services/"/>
         <classpath>
             <fileset dir="${deploy.dir}/lib">
