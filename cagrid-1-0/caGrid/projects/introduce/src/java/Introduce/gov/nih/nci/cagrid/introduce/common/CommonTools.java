@@ -101,7 +101,7 @@ public class CommonTools {
 	public static String getPackageName(Namespace namespace) {
 		try {
 			// TODO: where should this mapperClassname preference be set
-			String mapperClassname = "gov.nih.nci.cagrid.common.CaBIGNamespaceToPackageMapper";
+			String mapperClassname = "gov.nih.nci.cagrid.introduce.common.CaBIGNamespaceToPackageMapper";
 			Class clazz = Class.forName(mapperClassname);
 			NamespaceToPackageMapper mapper = (NamespaceToPackageMapper) clazz.newInstance();
 			return mapper.getPackageName(namespace.getRaw());

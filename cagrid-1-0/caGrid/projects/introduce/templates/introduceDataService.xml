@@ -1,4 +1,4 @@
-<ns1:ServiceSkeleton xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
+<ns1:ServiceSkeleton introduceVersion="0.9" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Methods xsi:type="ns2:MethodsType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Methods" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns2:Method name="query" xsi:type="ns2:MethodType">
    <ns2:Inputs>
