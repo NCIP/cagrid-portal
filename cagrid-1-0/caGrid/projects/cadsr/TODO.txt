@@ -22,7 +22,7 @@ http://www.castor.org/xml-faq.html
 http://www.castor.org/how-to-enable-xml-validation.html
 http://www.castor.org/xml-mapping.html
 
-make generic and move to core project
+(PARTIAL - made generic, need to test works for multiple services) make generic and move to core project
 
 get mapper and marshaller staticly?
 

@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.cadsr.encoding;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.axis.MessageContext;
 import org.apache.axis.utils.ClassUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -13,30 +14,49 @@ import org.xml.sax.InputSource;
 
 
 public class EncodingUtils {
+	public static final String CASTOR_MAPPING_DTD = "mapping.dtd";
+	public static final String CASTOR_MAPPING_DTD_ENTITY = "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN";
+	public static final String DEFAULT_XML_MAPPING = "/xml-mapping.xml";
+	public static final String CASTOR_MAPPING_PROPERTY = "castorMapping";
 
 	protected static Log LOG = LogFactory.getLog(EncodingUtils.class.getName());
+	
 
 
-	public static Mapping getMapping() {
-
+	public static Mapping getMapping(MessageContext context) {
 		EntityResolver resolver = new EntityResolver() {
 			public InputSource resolveEntity(String publicId, String systemId) {
-				if (publicId.equals("-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN")) {
-					InputStream in = ClassUtils.getResourceAsStream(EncodingUtils.class, "mapping.dtd");
+				if (publicId.equals(CASTOR_MAPPING_DTD_ENTITY)) {
+					InputStream in = ClassUtils.getResourceAsStream(EncodingUtils.class, CASTOR_MAPPING_DTD);
 					return new InputSource(in);
 				}
 				return null;
 			}
 		};
-		
-		//TODO: what to use here such that multiple services can use?
-		String mappingLocation = "/xml-mapping.xml";
+
+		// extract mapping file from message context, such that multiple
+		// services can use this code using different mappings.
+		String mappingLocation = DEFAULT_XML_MAPPING;
+		if (context != null) {
+			String prop = (String) context.getProperty(CASTOR_MAPPING_PROPERTY);
+			if (prop != null && !prop.trim().equals("")) {
+				mappingLocation = prop;
+				LOG.debug("Loading castor mapping from property[" + CASTOR_MAPPING_PROPERTY + "]");
+			} else {
+				LOG.debug("Unable to locate castor mapping property[" + CASTOR_MAPPING_PROPERTY
+					+ "], using default mapping location:" + DEFAULT_XML_MAPPING);
+			}
+		} else {
+			LOG.debug("Unable to determine message context, using default mapping location:" + DEFAULT_XML_MAPPING);
+		}
+
+		LOG.debug("Attempting to load mapping from mapping location:" + mappingLocation);
 		InputStream mappingStream = ClassUtils.getResourceAsStream(EncodingUtils.class, mappingLocation);
 		if (mappingStream == null) {
-			LOG.error("Mapping file was null!");
+			LOG.error("Mapping file [" + mappingLocation + "] was null!");
 		}
 		InputSource mappIS = new org.xml.sax.InputSource(mappingStream);
-		
+
 		Mapping mapping = new Mapping();
 		mapping.setEntityResolver(resolver);
 		try {

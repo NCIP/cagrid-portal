@@ -29,8 +29,9 @@ public class SDKSerializer implements Serializer {
 
 		AxisContentHandler hand = new AxisContentHandler(context);
 		Marshaller marshaller = new Marshaller(hand);
+
 		try {
-			Mapping mapping = EncodingUtils.getMapping();
+			Mapping mapping = EncodingUtils.getMapping(context.getMessageContext());
 			marshaller.setMapping(mapping);
 			marshaller.setValidation(true);
 		} catch (MappingException e) {

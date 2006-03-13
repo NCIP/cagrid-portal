@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<deployment name="defaultServerConfig" 
-    xmlns="http://xml.apache.org/axis/wsdd/"
+<deployment name="defaultServerConfig" xmlns="http://xml.apache.org/axis/wsdd/"
     xmlns:aggr="http://mds.globus.org/aggregator/types"
-    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java" 
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-
+    
     <service name="SERVICE-INSTANCE-NAME" provider="Handler" use="literal" style="document">
-        <parameter name="className" value="gov.nih.nci.cagrid.cadsr.service.globus.CaDSRServiceProviderImpl"/>
+        <parameter name="className"
+            value="gov.nih.nci.cagrid.cadsr.service.globus.CaDSRServiceProviderImpl"/>
         <wsdlFile>share/schema/SERVICE-INSTANCE-PATH/CaDSRService_service.wsdl</wsdlFile>
         <parameter name="securityDescriptor" value="ETC-PATH/security-desc.xml"/>
         <parameter name="allowedMethods" value="*"/>
@@ -14,19 +14,16 @@
         <parameter name="scope" value="Application"/>
         <parameter name="providers" value="GetRPProvider GetMRPProvider QueryRPProvider"/>
         <parameter name="loadOnStartup" value="true"/>
+        <parameter name="castorMapping" value="/xml-mapping.xml"/>
     </service>
-    <typeMapping 
-        name="AggregatorContent" 
-        qname="aggr:AggregatorContent" 
+    
+    <typeMapping name="AggregatorContent" qname="aggr:AggregatorContent"
         type="java:org.globus.mds.aggregator.types.AggregatorContent"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
-        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
-        encodingStyle="" />
-        
-     <typeMapping qname="uml:Project" xmlns:uml="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"
-    languageSpecificType="java:gov.nih.nci.cadsr.umlproject.domain.Project"
-    serializer="gov.nih.nci.cagrid.cadsr.encoding.SDKSerializerFactory"
-      deserializer="gov.nih.nci.cagrid.cadsr.encoding.SDKDeserializerFactory"
-    encodingStyle=""/>
-    
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle=""/>
+    <typeMapping qname="uml:Project"
+        xmlns:uml="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"
+        languageSpecificType="java:gov.nih.nci.cadsr.umlproject.domain.Project"
+        serializer="gov.nih.nci.cagrid.cadsr.encoding.SDKSerializerFactory"
+        deserializer="gov.nih.nci.cagrid.cadsr.encoding.SDKDeserializerFactory" encodingStyle=""/>
 </deployment>

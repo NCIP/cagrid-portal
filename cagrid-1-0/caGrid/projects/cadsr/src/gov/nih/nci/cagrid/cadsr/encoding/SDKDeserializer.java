@@ -31,9 +31,14 @@ public class SDKDeserializer extends DeserializerImpl implements Deserializer {
 
 	public void onEndElement(String namespace, String localName, DeserializationContext context) {
 		Unmarshaller unmarshall = new Unmarshaller(javaType);
+
 		try {
-			Mapping mapping = EncodingUtils.getMapping();
-			unmarshall.setMapping(mapping);
+			Mapping mapping = EncodingUtils.getMapping(context.getMessageContext());
+			if (mapping != null) {
+				unmarshall.setMapping(mapping);
+			} else {
+				LOG.error("Castor mapping was null!  Using default mapping.");
+			}
 		} catch (MappingException e) {
 			LOG.error("Problem establishing castor mapping!  Using default mapping.", e);
 		}
