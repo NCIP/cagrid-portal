@@ -134,7 +134,7 @@ public class SyncTools {
 
 	private void populateClassnames(ServiceInformation info, SymbolTable table) throws MalformedNamespaceException {
 
-		table.dump(System.out);
+		//table.dump(System.out);
 
 		// get the classnames from the axis symbol table
 		if (info.getMetadata().getMetadata() != null) {

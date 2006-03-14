@@ -21,30 +21,31 @@
 		while(iterator.hasNext()){
 			String namespaceS = (String)iterator.next();
 			if(!namespaceS.equals(IntroduceConstants.W3CNAMESPACE)){
-			SchemaInformation schemaInformation=(SchemaInformation)prefixmap.get(namespaceS);
-			try{ 
-			String newLine = "";
-			org.projectmobius.common.Namespace namespace = new org.projectmobius.common.Namespace(schemaInformation.getNamespace());
-			if (schemaInformation.getPackageName() != null && !schemaInformation.getPackageName().equals("")) {
-				newLine = namespace.getRaw() + "=" + schemaInformation.getPackageName();
-			} else {
-				newLine = namespace.getRaw() + "=" + CommonTools.getPackageName(namespace);
-			}
+				SchemaInformation schemaInformation=(SchemaInformation)prefixmap.get(namespaceS);
+				try{ 
+					String newLine = "";
+					org.projectmobius.common.Namespace namespace = new org.projectmobius.common.Namespace(schemaInformation.getNamespace());
+					if (schemaInformation.getPackageName() != null && !schemaInformation.getPackageName().equals("")) {
+						newLine = namespace.getRaw() + "=" + schemaInformation.getPackageName();
+					} else {
+						newLine = namespace.getRaw() + "=" + CommonTools.getPackageName(namespace);
+					}
 						
-			// turns http: into http\:
-			String newnewLine = newLine.replaceFirst(":", "\\\\:");
-			newnewLine = newnewLine.replaceFirst("\\Q\\\\\\\\:\\E", "\\\\:");	
+					// turns http: into http\:
+					String newnewLine = newLine.replaceFirst(":", "\\\\:");
+					newnewLine = newnewLine.replaceFirst("\\Q\\\\\\\\:\\E", "\\\\:");	
 			
-			//get all the imports if there are any for this schema and write there namespace to package maps down		
-			TemplateUtils.walkSchemasGetNamespaces(new File(info.getBaseDirectory().getAbsolutePath() + File.separator + "schema" + File.separator + serviceName),info.getBaseDirectory().getAbsolutePath() + File.separator + "schema" + File.separator + serviceName + File.separator + schemaInformation.getLocation(), importNamespaces );
+					//get all the imports if there are any for this schema and write there namespace to package maps down		
+					TemplateUtils.walkSchemasGetNamespaces(new File(info.getBaseDirectory().getAbsolutePath() + File.separator + "schema" + File.separator + serviceName),info.getBaseDirectory().getAbsolutePath() + File.separator + "schema" + File.separator + serviceName + File.separator + schemaInformation.getLocation(), importNamespaces );
 	
 %>
 <%=newnewLine %><%		
 
-} catch (Exception e){
-	e.printStackTrace();
-}
-}
+				} catch (Exception e){
+					e.printStackTrace();
+				}
+			}
+		}
 
 		Iterator it = importNamespaces.iterator();
 		while(it.hasNext()){
@@ -64,7 +65,5 @@
 			%>
 <%=newnewLine %><%	
 		}
-}
-
 
 %>
