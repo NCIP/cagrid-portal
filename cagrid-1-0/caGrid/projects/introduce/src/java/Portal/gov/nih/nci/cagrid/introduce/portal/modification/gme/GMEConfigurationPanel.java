@@ -53,19 +53,14 @@ public class GMEConfigurationPanel extends JPanel {
 
 	private JLabel elementTypeLabel = null;
 
-	public static final String ELEMENT_ONLY = "elements";
-
-	public static final String TYPES_ONLY = "types";
-
 	public String filterType = null;
 
 
 	/**
 	 * This method initializes
 	 */
-	public GMEConfigurationPanel(String filterType) {
+	public GMEConfigurationPanel() {
 		super();
-		this.filterType = filterType;
 		initialize();
 
 	}
@@ -75,7 +70,7 @@ public class GMEConfigurationPanel extends JPanel {
 	 * This method initializes this
 	 */
 	private void initialize() {
-		this.setSize(new java.awt.Dimension(161,122));
+		this.setSize(new java.awt.Dimension(161, 122));
 		this.add(getMainPanel(), null);
 
 	}
@@ -127,34 +122,17 @@ public class GMEConfigurationPanel extends JPanel {
 
 	public void initializeTypes(SchemaNode node) {
 		try {
-			if (this.filterType.equals(GMEConfigurationPanel.ELEMENT_ONLY)) {
-				Document doc = XMLUtilities.stringToDocument(node.getSchemaContents());
-				List elementTypes = doc.getRootElement().getChildren("element", doc.getRootElement().getNamespace());
-				JComboBox typesBox = this.getTypesComboBox();
-				typesBox.removeAllItems();
-				for (int i = 0; i < elementTypes.size(); i++) {
-					Element element = (Element) elementTypes.get(i);
-					String name = element.getAttributeValue("name");
-					typesBox.addItem(name);
-				}
-			} else if (this.filterType.equals(GMEConfigurationPanel.TYPES_ONLY)) {
-				Document doc = XMLUtilities.stringToDocument(node.getSchemaContents());
-				List complexTypes = doc.getRootElement()
-					.getChildren("complexType", doc.getRootElement().getNamespace());
-				List simpleTypes = doc.getRootElement().getChildren("simpleType", doc.getRootElement().getNamespace());
-				JComboBox typesBox = this.getTypesComboBox();
-				typesBox.removeAllItems();
-				for (int i = 0; i < complexTypes.size(); i++) {
-					Element element = (Element) complexTypes.get(i);
-					String name = element.getAttributeValue("name");
-					typesBox.addItem(name);
-				}
-				for (int i = 0; i < simpleTypes.size(); i++) {
-					Element element = (Element) simpleTypes.get(i);
-					String name = element.getAttributeValue("name");
-					typesBox.addItem(name);
-				}
+
+			Document doc = XMLUtilities.stringToDocument(node.getSchemaContents());
+			List elementTypes = doc.getRootElement().getChildren("element", doc.getRootElement().getNamespace());
+			JComboBox typesBox = this.getTypesComboBox();
+			typesBox.removeAllItems();
+			for (int i = 0; i < elementTypes.size(); i++) {
+				Element element = (Element) elementTypes.get(i);
+				String name = element.getAttributeValue("name");
+				typesBox.addItem(name);
 			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -245,7 +223,8 @@ public class GMEConfigurationPanel extends JPanel {
 						XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
 							.getGridService(conf.getGME());
 						if (schemaComboBox.getSelectedItem() != null) {
-							SchemaNode node = handle.getSchema( ((SchemaWrapper) schemaComboBox.getSelectedItem()).getNamespace(),false);
+							SchemaNode node = handle.getSchema(((SchemaWrapper) schemaComboBox.getSelectedItem())
+								.getNamespace(), false);
 							initializeTypes(node);
 						}
 					} catch (MobiusException e1) {
@@ -274,7 +253,7 @@ public class GMEConfigurationPanel extends JPanel {
 			gridBagConstraints13.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints13.gridy = 2;
 			elementTypeLabel = new JLabel();
-			elementTypeLabel.setText("Element Type");
+			elementTypeLabel.setText("Element");
 			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
 			gridBagConstraints12.anchor = GridBagConstraints.WEST;
 			gridBagConstraints12.insets = new Insets(2, 2, 2, 2);
@@ -318,7 +297,8 @@ public class GMEConfigurationPanel extends JPanel {
 			schemaPanel.setLayout(new GridBagLayout());
 			schemaPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Type",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),IntroduceLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+				IntroduceLookAndFeel.getPanelLabelColor()));
 			schemaPanel.add(getNamespaceComboBox(), gridBagConstraints7);
 			schemaPanel.add(namespaceLabel, gridBagConstraints9);
 			schemaPanel.add(getSchemaComboBox(), gridBagConstraints8);

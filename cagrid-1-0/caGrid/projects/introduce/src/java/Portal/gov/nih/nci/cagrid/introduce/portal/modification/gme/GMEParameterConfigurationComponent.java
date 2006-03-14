@@ -106,7 +106,7 @@ public class GMEParameterConfigurationComponent extends JPanel {
 	 */
 	private GMEConfigurationPanel getGmePanel() {
 		if (gmePanel == null) {
-			gmePanel = new GMEConfigurationPanel(GMEConfigurationPanel.ELEMENT_ONLY);
+			gmePanel = new GMEConfigurationPanel();
 			gmePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "GME",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
