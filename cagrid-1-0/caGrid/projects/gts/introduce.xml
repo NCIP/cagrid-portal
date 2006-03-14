@@ -16,7 +16,7 @@
   </ns2:Method>
   <ns2:Method name="addTrustedAuthority" xsi:type="ns2:MethodType">
    <ns2:Inputs>
-    <ns2:Input isArray="false" location="./2_gts.xsd" name="TrustedAuthority" namespace="http://cagrid.nci.nih.gov/2/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="TrustedAuthority"/>
+    <ns2:Input isArray="false" location="./4_gts.xsd" name="TrustedAuthority" namespace="http://cagrid.nci.nih.gov/4/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="TrustedAuthority"/>
    </ns2:Inputs>
    <ns2:Output className="void" isArray="false"/>
    <ns2:Exceptions>
@@ -32,9 +32,9 @@
   </ns2:Method>
   <ns2:Method name="findTrustedAuthorities" xsi:type="ns2:MethodType">
    <ns2:Inputs>
-    <ns2:Input isArray="false" location="./2_gts.xsd" name="TrustedAuthorityFilter" namespace="http://cagrid.nci.nih.gov/2/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="TrustedAuthorityFilter"/>
+    <ns2:Input isArray="false" location="./4_gts.xsd" name="TrustedAuthorityFilter" namespace="http://cagrid.nci.nih.gov/4/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="TrustedAuthorityFilter"/>
    </ns2:Inputs>
-   <ns2:Output isArray="true" location="./2_gts.xsd" namespace="http://cagrid.nci.nih.gov/2/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="TrustedAuthority"/>
+   <ns2:Output isArray="true" location="./4_gts.xsd" namespace="http://cagrid.nci.nih.gov/4/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="TrustedAuthority"/>
    <ns2:Exceptions>
     <ns2:Exception name="GTSInternalFault"/>
    </ns2:Exceptions>
@@ -45,11 +45,42 @@
     <ns5:AnonymousClients xsi:type="ns5:AnonymousCommunication" xsi:nil="true"/>
    </ns2:MethodSecurity>
   </ns2:Method>
+  <ns2:Method name="addPermission" xsi:type="ns2:MethodType">
+   <ns2:Inputs>
+    <ns2:Input isArray="false" location="./4_gts.xsd" name="Permission" namespace="http://cagrid.nci.nih.gov/4/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="Permission"/>
+   </ns2:Inputs>
+   <ns2:Output className="void" isArray="false"/>
+   <ns2:Exceptions>
+    <ns2:Exception name="GTSInternalFault"/>
+    <ns2:Exception name="IllegalPermissionFault"/>
+   </ns2:Exceptions>
+   <ns2:MethodSecurity xsi:type="ns6:MethodSecurity" xmlns:ns6="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns6:MethodSecuritySetting xsi:type="ns6:MethodSecurityType">None</ns6:MethodSecuritySetting>
+    <ns6:RunAsMode xsi:type="ns6:RunAsMode" xsi:nil="true"/>
+    <ns6:DelegationMode xsi:type="ns6:DelegationMode" xsi:nil="true"/>
+    <ns6:AnonymousClients xsi:type="ns6:AnonymousCommunication" xsi:nil="true"/>
+   </ns2:MethodSecurity>
+  </ns2:Method>
+  <ns2:Method name="findPermissions" xsi:type="ns2:MethodType">
+   <ns2:Inputs>
+    <ns2:Input isArray="false" location="./4_gts.xsd" name="PermissionFilter" namespace="http://cagrid.nci.nih.gov/4/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="PermissionFilter"/>
+   </ns2:Inputs>
+   <ns2:Output isArray="true" location="./4_gts.xsd" namespace="http://cagrid.nci.nih.gov/4/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="Permission"/>
+   <ns2:Exceptions>
+    <ns2:Exception name="GTSInternalFault"/>
+   </ns2:Exceptions>
+   <ns2:MethodSecurity xsi:type="ns7:MethodSecurity" xmlns:ns7="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns7:MethodSecuritySetting xsi:type="ns7:MethodSecurityType">None</ns7:MethodSecuritySetting>
+    <ns7:RunAsMode xsi:type="ns7:RunAsMode" xsi:nil="true"/>
+    <ns7:DelegationMode xsi:type="ns7:DelegationMode" xsi:nil="true"/>
+    <ns7:AnonymousClients xsi:type="ns7:AnonymousCommunication" xsi:nil="true"/>
+   </ns2:MethodSecurity>
+  </ns2:Method>
  </ns2:Methods>
- <ns6:MetadataList xsi:type="ns6:MetadataListType" xmlns:ns6="gme://gov.nih.nci.cagrid.introduce/1/Metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
- <ns1:ServiceSecurity xsi:type="ns7:ServiceSecurity" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns7="gme://gov.nih.nci.cagrid.introduce/1/Security">
-  <ns7:MethodSecuritySetting xsi:type="ns7:MethodSecurityType">None</ns7:MethodSecuritySetting>
-  <ns7:DelegationMode xsi:type="ns7:DelegationMode" xsi:nil="true"/>
-  <ns7:AnonymousClients xsi:type="ns7:AnonymousCommunication" xsi:nil="true"/>
+ <ns8:MetadataList xsi:type="ns8:MetadataListType" xmlns:ns8="gme://gov.nih.nci.cagrid.introduce/1/Metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns1:ServiceSecurity xsi:type="ns9:ServiceSecurity" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns9="gme://gov.nih.nci.cagrid.introduce/1/Security">
+  <ns9:MethodSecuritySetting xsi:type="ns9:MethodSecurityType">None</ns9:MethodSecuritySetting>
+  <ns9:DelegationMode xsi:type="ns9:DelegationMode" xsi:nil="true"/>
+  <ns9:AnonymousClients xsi:type="ns9:AnonymousCommunication" xsi:nil="true"/>
  </ns1:ServiceSecurity>
 </ns1:ServiceSkeleton>

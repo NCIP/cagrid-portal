@@ -1,8 +1,30 @@
-<xsd:schema targetNamespace="http://cagrid.nci.nih.gov/2/gts"
+<xsd:schema targetNamespace="http://cagrid.nci.nih.gov/4/gts"
 	attributeFormDefault="qualified"
 	elementFormDefault="qualified"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-	xmlns:gts="http://cagrid.nci.nih.gov/2/gts">    
+	xmlns:gts="http://cagrid.nci.nih.gov/4/gts">    
+	
+	   <xsd:element name="Permission" minOccurs="0" maxOccurs="1" type="gts:Permission"/>
+	
+	   <xsd:complexType name="Permission">
+			<xsd:sequence>
+			    <xsd:element name="GridIdentity" minOccurs="0" maxOccurs="1" type="xsd:string"/>
+			    <xsd:element name="Role" minOccurs="0" maxOccurs="1" type="gts:Role"/>
+				<xsd:element name="TrustedAuthorityName" minOccurs="0" maxOccurs="1" type="xsd:string"/>
+			</xsd:sequence>
+		</xsd:complexType>
+		
+		  <xsd:element name="PermissionFilter" minOccurs="0" maxOccurs="1" type="gts:PermissionFilter"/>
+		
+		   <xsd:complexType name="PermissionFilter">
+			<xsd:sequence>
+			    <xsd:element name="GridIdentity" minOccurs="0" maxOccurs="1" type="xsd:string"/>
+			    <xsd:element name="Role" minOccurs="0" maxOccurs="1" type="gts:Role"/>
+				<xsd:element name="TrustedAuthorityName" minOccurs="0" maxOccurs="1" type="xsd:string"/>
+			</xsd:sequence>
+		</xsd:complexType>
+		
+		 <xsd:element name="TrustedAuthorityFilter" minOccurs="0" maxOccurs="1" type="gts:TrustedAuthorityFilter"/>
 	
 		<xsd:complexType name="TrustedAuthorityFilter">
 			<xsd:sequence>
@@ -14,6 +36,8 @@
 				<xsd:element name="AuthorityTrustService" minOccurs="0" maxOccurs="1" type="xsd:string"/>
 			</xsd:sequence>
 		</xsd:complexType>
+		
+		<xsd:element name="TrustedAuthority" minOccurs="0" maxOccurs="1" type="gts:TrustedAuthority"/>
 
 		<xsd:complexType name="TrustedAuthority">
 			<xsd:sequence>
@@ -26,6 +50,14 @@
 				<xsd:element name="CRL" minOccurs="0" maxOccurs="1" type="gts:X509CRL"/>
 			</xsd:sequence>
 		</xsd:complexType>
+		
+		<xsd:simpleType name="Role">
+  			<xsd:restriction base="xsd:string">
+   				<xsd:enumeration value="TrustServiceAdmin"/>
+   				<xsd:enumeration value="TrustAuthorityManager"/>
+   				<xsd:enumeration value="User"/>
+  			</xsd:restriction>
+ 		 </xsd:simpleType>
 		
 		<xsd:simpleType name="Status">
   			<xsd:restriction base="xsd:string">
