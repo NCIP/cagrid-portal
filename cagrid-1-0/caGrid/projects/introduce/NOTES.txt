@@ -1,5 +1,7 @@
 To Do:
 
+need to put a validator on the param name, it must be java valid......
+
 when using a non-bean response object, the wsdl writter is broken.  It assumes the element name is "response".  It should assume it is the className
 
 Method modification window needs an overhaul....
