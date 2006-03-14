@@ -43,11 +43,8 @@ public class PermissionManager {
 		// This method assumes that any Trusted Authorites associated with a
 		// permission is valid
 		this.buildDatabase();
-
-		if (this.doesPermissionExist(p)) {
-			IllegalPermissionFault fault = new IllegalPermissionFault();
-			fault.setFaultString("The permission " + formatPermission(p) + " cannot be added, it already exists.");
-			throw fault;
+		if (p.getTrustedAuthorityName() == null) {
+			p.setTrustedAuthorityName(ALL_TRUST_AUTHORITIES);
 		}
 
 		if (p.getGridIdentity() == null) {
@@ -61,11 +58,15 @@ public class PermissionManager {
 			fault.setFaultString("The permission " + formatPermission(p) + " no role specified.");
 			throw fault;
 		}
+		
 
-		if (p.getTrustedAuthorityName() == null) {
-			p.setTrustedAuthorityName(ALL_TRUST_AUTHORITIES);
+		if (this.doesPermissionExist(p)) {
+			IllegalPermissionFault fault = new IllegalPermissionFault();
+			fault.setFaultString("The permission " + formatPermission(p) + " cannot be added, it already exists.");
+			throw fault;
 		}
 
+		
 		StringBuffer insert = new StringBuffer();
 		try {
 			insert.append("INSERT INTO " + PERMISSIONS_TABLE + " SET GRID_IDENTITY='" + p.getGridIdentity()
@@ -117,7 +118,11 @@ public class PermissionManager {
 
 
 	private String formatPermission(Permission p) {
-		return "[" + p.getGridIdentity() + "," + p.getRole().getValue() + "," + p.getTrustedAuthorityName() + "]";
+		String role = null;
+		if(p.getRole()!=null){
+			role = p.getRole().getValue();
+		}
+		return "[" + p.getGridIdentity() + "," + role + "," + p.getTrustedAuthorityName() + "]";
 	}
 
 

@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.gts.bean.Permission;
 import gov.nih.nci.cagrid.gts.bean.Role;
 import gov.nih.nci.cagrid.gts.common.Database;
+import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
 import gov.nih.nci.cagrid.gts.test.Utils;
 import junit.framework.TestCase;
 
@@ -28,20 +29,22 @@ public class TestPermissionManager extends TestCase {
 			assertTrue(false);
 		}
 	}
-	
+
 	public void testAddPermission() {
 		try {
 			PermissionManager pm = new PermissionManager(db);
+			
 			Permission p1 = new Permission();
 			p1.setGridIdentity("O=Test Organization,OU=Test Unit,CN=User");
 			p1.setRole(Role.TrustServiceAdmin);
 			pm.addPermission(p1);
 			assertTrue(pm.doesPermissionExist(p1));
-			
+
 			Permission p2 = new Permission();
 			p2.setGridIdentity("O=Test Organization,OU=Test Unit,CN=User");
 			p2.setRole(Role.TrustAuthorityManager);
-			p2.setTrustedAuthorityName("O=Test Organization,OU=Test Unit,CN=CA");
+			p2
+					.setTrustedAuthorityName("O=Test Organization,OU=Test Unit,CN=CA");
 			pm.addPermission(p2);
 			assertTrue(pm.doesPermissionExist(p2));
 		} catch (Exception e) {
@@ -50,7 +53,51 @@ public class TestPermissionManager extends TestCase {
 		}
 	}
 
-	
+	public void testAddInvalidPermission() {
+		try {
+			PermissionManager pm = new PermissionManager(db);
+		
+			//Test adding the same permission twice
+			
+			Permission p1 = new Permission();
+			p1.setGridIdentity("O=Test Organization,OU=Test Unit,CN=User");
+			p1.setRole(Role.TrustServiceAdmin);
+			pm.addPermission(p1);
+			assertTrue(pm.doesPermissionExist(p1));
+
+			try {
+				Permission p2 = new Permission();
+				p2.setGridIdentity("O=Test Organization,OU=Test Unit,CN=User");
+				p2.setRole(Role.TrustServiceAdmin);
+				pm.addPermission(p2);
+				fail("Should not be able to add an existing permission.");
+			} catch (IllegalPermissionFault f) {
+
+			}
+			
+			try {
+				Permission p3 = new Permission();
+				p3.setRole(Role.TrustServiceAdmin);
+				pm.addPermission(p3);
+				fail("Should not be able to add a permission without a grid identity.");
+			} catch (IllegalPermissionFault f) {
+
+			}
+			
+			try {
+				Permission p4 = new Permission();
+				p4.setGridIdentity("O=Test Organization,OU=Test Unit,CN=User");
+				pm.addPermission(p4);
+				fail("Should not be able to add a permission without a role.");
+			} catch (IllegalPermissionFault f) {
+
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+	}
 
 	protected void setUp() throws Exception {
 		super.setUp();
