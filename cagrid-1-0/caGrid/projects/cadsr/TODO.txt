@@ -27,7 +27,7 @@ http://www.castor.org/xml-mapping.html
 get mapper and marshaller staticly?
 
 had to hand edit:
- -client type mapping in client-config.wsdd
+ -client type mapping in client-config.wsdd, and castorMapping property to point to classpath location to load mapping file
  -wsdl to use right element
 	 -introduce expects all output elements to be of the "name" response... custom types need to use custom names.. should default to Classname
 	 - actually, i need an element ref
