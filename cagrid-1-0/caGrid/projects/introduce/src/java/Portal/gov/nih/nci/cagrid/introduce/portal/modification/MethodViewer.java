@@ -27,6 +27,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -122,7 +123,13 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JButton outputTypeLoadFromDiscoveryButton = null;
 
-	private JScrollPane mainScrollPane = null;
+	private JSplitPane mainDividerPane = null;
+
+	private JPanel configurePanel = null;
+
+	private JTabbedPane configureTabbedPane = null;
+
+	private JPanel topConfigurePanel = null;
 
 
 	public MethodViewer(MethodType method, ServiceSecurity serviceSecurity, File schemaDir, MethodsTable table,
@@ -139,7 +146,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private void initialize() {
 		this.setSize(510, 622);
-		this.setContentPane(getMainScrollPane());
+		this.setContentPane(getMainPanel());
 		this.setTitle("Build/Modify Operation");
 		this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
 	}
@@ -255,6 +262,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Input Parameters",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+			inputPanel.setPreferredSize(new java.awt.Dimension(200,73));
 			gridBagConstraints8.gridx = 0;
 			gridBagConstraints8.gridy = 0;
 			gridBagConstraints8.weightx = 1.0D;
@@ -785,44 +793,13 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getMethodPanel() {
 		if (methodPanel == null) {
-			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
-			gridBagConstraints15.gridx = 0;
-			gridBagConstraints15.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints15.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints15.gridy = 0;
-			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
-			gridBagConstraints13.gridx = 0;
-			gridBagConstraints13.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints13.gridy = 4;
-			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.fill = GridBagConstraints.BOTH;
-			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.gridy = 1;
-			gridBagConstraints1.weightx = 0.0D;
-			gridBagConstraints1.weighty = 0.0D;
-			gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
-			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-			gridBagConstraints6.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints6.gridy = 2;
-			gridBagConstraints6.weightx = 1.0D;
-			gridBagConstraints6.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints6.weighty = 1.0D;
-			gridBagConstraints6.gridx = 0;
-			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-			gridBagConstraints7.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints7.gridy = 3;
-			gridBagConstraints7.weightx = 0.0D;
-			gridBagConstraints7.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints7.weighty = 0.0D;
-			gridBagConstraints7.ipady = 10;
-			gridBagConstraints7.gridx = 0;
+			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
+			gridBagConstraints17.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints17.weighty = 1.0;
+			gridBagConstraints17.weightx = 1.0;
 			methodPanel = new JPanel();
 			methodPanel.setLayout(new GridBagLayout());
-			methodPanel.add(getInputPanel(), gridBagConstraints6);
-			methodPanel.add(getOutputTypePanel(), gridBagConstraints7);
-			methodPanel.add(getNamePanel(), gridBagConstraints1);
-			methodPanel.add(getExceptionsPanel(), gridBagConstraints13);
-			methodPanel.add(getDiscoveryPanel(), gridBagConstraints15);
+			methodPanel.add(getMainDividerPane(), gridBagConstraints17);
 		}
 		return methodPanel;
 	}
@@ -919,12 +896,84 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 * 	
 	 * @return javax.swing.JScrollPane	
 	 */
-	private JScrollPane getMainScrollPane() {
-		if (mainScrollPane == null) {
-			mainScrollPane = new JScrollPane();
-			mainScrollPane.setViewportView(getMainPanel());
+	private JSplitPane getMainDividerPane() {
+		if (mainDividerPane == null) {
+			mainDividerPane = new JSplitPane();
+			mainDividerPane.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+			mainDividerPane.setTopComponent(getTopConfigurePanel());
+			mainDividerPane.setBottomComponent(getConfigurePanel());
 		}
-		return mainScrollPane;
+		return mainDividerPane;
+	}
+
+
+	/**
+	 * This method initializes configurePanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getConfigurePanel() {
+		if (configurePanel == null) {
+			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints1.gridx = 0;
+			gridBagConstraints1.gridy = 0;
+			gridBagConstraints1.weightx = 1.0;
+			gridBagConstraints1.weighty = 1.0;
+			gridBagConstraints1.insets = new java.awt.Insets(2,2,2,2);
+			configurePanel = new JPanel();
+			configurePanel.setLayout(new GridBagLayout());
+			configurePanel.add(getConfigureTabbedPane(), gridBagConstraints1);
+		}
+		return configurePanel;
+	}
+
+
+	/**
+	 * This method initializes configureTabbedPane	
+	 * 	
+	 * @return javax.swing.JTabbedPane	
+	 */
+	private JTabbedPane getConfigureTabbedPane() {
+		if (configureTabbedPane == null) {
+			configureTabbedPane = new JTabbedPane();
+			configureTabbedPane.addTab("Inputs", null, getInputPanel(), null);
+			configureTabbedPane.addTab("Output", null, getOutputTypePanel(), null);
+			configureTabbedPane.addTab("Faults", null, getExceptionsPanel(), null);
+			
+		}
+		return configureTabbedPane;
+	}
+
+
+	/**
+	 * This method initializes mainConfigurePanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getTopConfigurePanel() {
+		if (topConfigurePanel == null) {
+			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
+			gridBagConstraints13.gridx = 0;
+			gridBagConstraints13.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints13.weightx = 1.0D;
+			gridBagConstraints13.weighty = 1.0D;
+			gridBagConstraints13.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints13.gridy = 0;
+			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+			gridBagConstraints6.gridx = 1;
+			gridBagConstraints6.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints6.weightx = 1.0D;
+			gridBagConstraints6.weighty = 1.0D;
+			gridBagConstraints6.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints6.gridy = 0;
+			topConfigurePanel = new JPanel();
+			topConfigurePanel.setLayout(new GridBagLayout());
+			topConfigurePanel.add(getDiscoveryPanel(), gridBagConstraints6);
+			topConfigurePanel.add(getNamePanel(), gridBagConstraints13);
+			
+		}
+		return topConfigurePanel;
 	}
 } // @jve:decl-index=0:visual-constraint="4,12"
 
