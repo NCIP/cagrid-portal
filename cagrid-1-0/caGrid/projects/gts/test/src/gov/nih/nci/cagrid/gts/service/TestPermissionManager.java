@@ -1,25 +1,12 @@
 package gov.nih.nci.cagrid.gts.service;
 
-import java.math.BigInteger;
-
-import org.bouncycastle.asn1.x509.CRLReason;
-
 import gov.nih.nci.cagrid.common.FaultUtil;
-import gov.nih.nci.cagrid.gridca.common.CRLEntry;
-import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gts.bean.Permission;
 import gov.nih.nci.cagrid.gts.bean.PermissionFilter;
 import gov.nih.nci.cagrid.gts.bean.Role;
-import gov.nih.nci.cagrid.gts.bean.Status;
-import gov.nih.nci.cagrid.gts.bean.TrustLevel;
-import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
-import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
-import gov.nih.nci.cagrid.gts.bean.X509CRL;
-import gov.nih.nci.cagrid.gts.bean.X509Certificate;
 import gov.nih.nci.cagrid.gts.common.Database;
 import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault;
-import gov.nih.nci.cagrid.gts.test.CA;
 import gov.nih.nci.cagrid.gts.test.Utils;
 import junit.framework.TestCase;
 
@@ -168,8 +155,9 @@ public class TestPermissionManager extends TestCase {
 			PermissionManager pm = new PermissionManager(db);
 
 			int count = 5;
-			String dnPrefix1 = "O=Organization ABC,OU=Unit XYZ,CN=User X";
-			String dnPrefix2 = "O=Organization ABC,OU=Unit XYZ,CN=User Y";
+			String dnPrefix = "O=Organization ABC,OU=Unit XYZ,CN=User";
+			String dnPrefix1 = dnPrefix + " X";
+			String dnPrefix2 = dnPrefix + " Y";
 			String ta = "O=Organization ABC,OU=Unit XYZ,CN=Certificate Authority";
 			Permission[] perms1 = new Permission[count];
 			Permission[] perms2 = new Permission[count];
@@ -192,7 +180,7 @@ public class TestPermissionManager extends TestCase {
 
 				perms2[i] = new Permission();
 				perms2[i].setGridIdentity(dn2);
-				perms2[i].setRole(Role.TrustServiceAdmin);
+				perms2[i].setRole(Role.TrustAuthorityManager);
 				perms2[i].setTrustedAuthorityName(ta);
 				pm.addPermission(perms2[i]);
 				assertTrue(pm.doesPermissionExist(perms2[i]));
@@ -204,6 +192,42 @@ public class TestPermissionManager extends TestCase {
 				Permission[] py = pm.findPermissions(fy);
 				assertEquals(1, py.length);
 				assertEquals(perms2[i], py[0]);
+
+				// Test Filter by Grid Identity
+				PermissionFilter f1 = new PermissionFilter();
+				f1.setGridIdentity("yada yada");
+				assertEquals(0, pm.findPermissions(f1).length);
+				f1.setGridIdentity(dnPrefix);
+				assertEquals(((i + 1) * 2), pm.findPermissions(f1).length);
+				f1.setGridIdentity(dnPrefix1);
+				assertEquals(((i + 1)), pm.findPermissions(f1).length);
+				f1.setGridIdentity(dnPrefix2);
+				assertEquals(((i + 1)), pm.findPermissions(f1).length);
+				f1.setGridIdentity(dn1);
+				assertEquals(1, pm.findPermissions(f1).length);
+				assertEquals(perms1[i], pm.findPermissions(f1)[0]);
+				f1.setGridIdentity(dn2);
+				assertEquals(1, pm.findPermissions(f1).length);
+				assertEquals(perms2[i], pm.findPermissions(f1)[0]);
+
+				//Test Filter by Role
+				PermissionFilter f2 = new PermissionFilter();
+				f2.setRole(Role.User);
+				assertEquals(0, pm.findPermissions(f2).length);
+				f2.setRole(Role.TrustServiceAdmin);
+				assertEquals(((i + 1)), pm.findPermissions(f2).length);
+				f2.setRole(Role.TrustAuthorityManager);
+				assertEquals(((i + 1)), pm.findPermissions(f2).length);
+				
+				//Test Filter by Trusted Authority
+				PermissionFilter f3 = new PermissionFilter();
+				assertEquals(((i + 1) * 2), pm.findPermissions(f3).length);
+				f3.setTrustedAuthorityName("yada yada");
+				assertEquals(0, pm.findPermissions(f3).length);
+				f3.setTrustedAuthorityName(ta);
+				assertEquals((i+1), pm.findPermissions(f3).length);
+				f3.setTrustedAuthorityName("*");
+				assertEquals((i+1), pm.findPermissions(f3).length);
 			}
 			// Test Remove
 			for (int i = 0; i < count; i++) {
