@@ -41,11 +41,17 @@ public interface GridTrustServiceI {
 
 
 
-	     public void addPermission(gov.nih.nci.cagrid.gts.bean.Permission Permission) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault ;
-	     public gov.nih.nci.cagrid.gts.bean.Permission[] findPermissions(gov.nih.nci.cagrid.gts.bean.PermissionFilter PermissionFilter) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault ;
+
+
+
+
+
+	     public void revokePermission(gov.nih.nci.cagrid.gts.bean.Permission Permission) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault ;
      public void removeTrustedAuthority() throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault ;
      public void addTrustedAuthority(gov.nih.nci.cagrid.gts.bean.TrustedAuthority TrustedAuthority) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault ;
      public gov.nih.nci.cagrid.gts.bean.TrustedAuthority[] findTrustedAuthorities(gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter TrustedAuthorityFilter) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault ;
+     public void addPermission(gov.nih.nci.cagrid.gts.bean.Permission Permission) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault ;
+     public gov.nih.nci.cagrid.gts.bean.Permission[] findPermissions(gov.nih.nci.cagrid.gts.bean.PermissionFilter PermissionFilter) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault ;
 
 }
 

@@ -72,29 +72,26 @@ public class GridTrustServiceClient implements GridTrustServiceI {
 
 
 
-	     public void addPermission(gov.nih.nci.cagrid.gts.bean.Permission Permission) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault {
+
+
+
+
+
+
+
+
+
+
+	     public void revokePermission(gov.nih.nci.cagrid.gts.bean.Permission Permission) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault {
                GridTrustServicePortType port = this.getPortType();
                org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
 
-               gov.nih.nci.cagrid.gts.stubs.AddPermission params = new gov.nih.nci.cagrid.gts.stubs.AddPermission();
-               gov.nih.nci.cagrid.gts.stubs.AddPermissionPermission PermissionContainer = new gov.nih.nci.cagrid.gts.stubs.AddPermissionPermission();
+               gov.nih.nci.cagrid.gts.stubs.RevokePermission params = new gov.nih.nci.cagrid.gts.stubs.RevokePermission();
+               gov.nih.nci.cagrid.gts.stubs.RevokePermissionPermission PermissionContainer = new gov.nih.nci.cagrid.gts.stubs.RevokePermissionPermission();
                PermissionContainer.setPermission(Permission);
                params.setPermission(PermissionContainer);
-               gov.nih.nci.cagrid.gts.stubs.AddPermissionResponse boxedResult = port.addPermission(params);
+               gov.nih.nci.cagrid.gts.stubs.RevokePermissionResponse boxedResult = port.revokePermission(params);
                
-	}
-
-	     public gov.nih.nci.cagrid.gts.bean.Permission[] findPermissions(gov.nih.nci.cagrid.gts.bean.PermissionFilter PermissionFilter) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault {
-               GridTrustServicePortType port = this.getPortType();
-               org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
-
-               gov.nih.nci.cagrid.gts.stubs.FindPermissions params = new gov.nih.nci.cagrid.gts.stubs.FindPermissions();
-               gov.nih.nci.cagrid.gts.stubs.FindPermissionsPermissionFilter PermissionFilterContainer = new gov.nih.nci.cagrid.gts.stubs.FindPermissionsPermissionFilter();
-               PermissionFilterContainer.setPermissionFilter(PermissionFilter);
-               params.setPermissionFilter(PermissionFilterContainer);
-               gov.nih.nci.cagrid.gts.stubs.FindPermissionsResponse boxedResult = port.findPermissions(params);
-               return boxedResult.getPermission();
-
 	}
 
 	     public void removeTrustedAuthority() throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault {
@@ -128,6 +125,31 @@ public class GridTrustServiceClient implements GridTrustServiceI {
                params.setTrustedAuthorityFilter(TrustedAuthorityFilterContainer);
                gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesResponse boxedResult = port.findTrustedAuthorities(params);
                return boxedResult.getTrustedAuthority();
+
+	}
+
+	     public void addPermission(gov.nih.nci.cagrid.gts.bean.Permission Permission) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault {
+               GridTrustServicePortType port = this.getPortType();
+               org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
+
+               gov.nih.nci.cagrid.gts.stubs.AddPermission params = new gov.nih.nci.cagrid.gts.stubs.AddPermission();
+               gov.nih.nci.cagrid.gts.stubs.AddPermissionPermission PermissionContainer = new gov.nih.nci.cagrid.gts.stubs.AddPermissionPermission();
+               PermissionContainer.setPermission(Permission);
+               params.setPermission(PermissionContainer);
+               gov.nih.nci.cagrid.gts.stubs.AddPermissionResponse boxedResult = port.addPermission(params);
+               
+	}
+
+	     public gov.nih.nci.cagrid.gts.bean.Permission[] findPermissions(gov.nih.nci.cagrid.gts.bean.PermissionFilter PermissionFilter) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault {
+               GridTrustServicePortType port = this.getPortType();
+               org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
+
+               gov.nih.nci.cagrid.gts.stubs.FindPermissions params = new gov.nih.nci.cagrid.gts.stubs.FindPermissions();
+               gov.nih.nci.cagrid.gts.stubs.FindPermissionsPermissionFilter PermissionFilterContainer = new gov.nih.nci.cagrid.gts.stubs.FindPermissionsPermissionFilter();
+               PermissionFilterContainer.setPermissionFilter(PermissionFilter);
+               params.setPermissionFilter(PermissionFilterContainer);
+               gov.nih.nci.cagrid.gts.stubs.FindPermissionsResponse boxedResult = port.findPermissions(params);
+               return boxedResult.getPermission();
 
 	}
 

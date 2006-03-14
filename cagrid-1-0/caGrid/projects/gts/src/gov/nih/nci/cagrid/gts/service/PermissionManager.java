@@ -4,13 +4,13 @@ import gov.nih.nci.cagrid.gts.bean.Permission;
 import gov.nih.nci.cagrid.gts.common.Database;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
+import gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
@@ -31,14 +31,13 @@ public class PermissionManager {
 
 	private String ALL_TRUST_AUTHORITIES = "*";
 
-
 	public PermissionManager(Database db) {
 		logger = Logger.getLogger(this.getClass().getName());
 		this.db = db;
 	}
 
-
-	public synchronized void addPermission(Permission p) throws GTSInternalFault, IllegalPermissionFault {
+	public synchronized void addPermission(Permission p)
+			throws GTSInternalFault, IllegalPermissionFault {
 
 		// This method assumes that any Trusted Authorites associated with a
 		// permission is valid
@@ -49,46 +48,90 @@ public class PermissionManager {
 
 		if (p.getGridIdentity() == null) {
 			IllegalPermissionFault fault = new IllegalPermissionFault();
-			fault.setFaultString("The permission " + formatPermission(p) + " no grid identity specified.");
+			fault.setFaultString("The permission " + formatPermission(p)
+					+ " no grid identity specified.");
 			throw fault;
 		}
 
 		if (p.getRole() == null) {
 			IllegalPermissionFault fault = new IllegalPermissionFault();
-			fault.setFaultString("The permission " + formatPermission(p) + " no role specified.");
+			fault.setFaultString("The permission " + formatPermission(p)
+					+ " no role specified.");
 			throw fault;
 		}
-		
 
 		if (this.doesPermissionExist(p)) {
 			IllegalPermissionFault fault = new IllegalPermissionFault();
-			fault.setFaultString("The permission " + formatPermission(p) + " cannot be added, it already exists.");
+			fault.setFaultString("The permission " + formatPermission(p)
+					+ " cannot be added, it already exists.");
 			throw fault;
 		}
 
-		
 		StringBuffer insert = new StringBuffer();
 		try {
-			insert.append("INSERT INTO " + PERMISSIONS_TABLE + " SET GRID_IDENTITY='" + p.getGridIdentity()
-				+ "',ROLE='" + p.getRole().getValue() + "',TRUSTED_AUTHORITY='" + p.getTrustedAuthorityName() + "'");
+			insert.append("INSERT INTO " + PERMISSIONS_TABLE
+					+ " SET GRID_IDENTITY='" + p.getGridIdentity() + "',ROLE='"
+					+ p.getRole().getValue() + "',TRUSTED_AUTHORITY='"
+					+ p.getTrustedAuthorityName() + "'");
 
 			db.update(insert.toString());
 
 		} catch (Exception e) {
-			this.logger.log(Level.SEVERE, "Unexpected database error incurred in adding the permission "+formatPermission(p)
-				+ ", the following statement generated the error: \n"
-				+ insert.toString() + "\n", e);
+			this.logger
+					.log(
+							Level.SEVERE,
+							"Unexpected database error incurred in adding the permission "
+									+ formatPermission(p)
+									+ ", the following statement generated the error: \n"
+									+ insert.toString() + "\n", e);
 			GTSInternalFault fault = new GTSInternalFault();
-			fault.setFaultString("Unexpected error adding the permission " + formatPermission(p)
-				+ "!!!");
+			fault.setFaultString("Unexpected error adding the permission "
+					+ formatPermission(p) + "!!!");
 			throw fault;
 		}
 	}
 
+	public synchronized void revokePermission(Permission p)
+			throws GTSInternalFault, InvalidPermissionFault {
+		buildDatabase();
+		if (!doesPermissionExist(p)) {
+			InvalidPermissionFault fault = new InvalidPermissionFault();
+			fault.setFaultString("Could not revoke " + formatPermission(p)
+					+ ", the permission does not exist!!!");
+			throw fault;
+		}
 
-	public synchronized boolean doesPermissionExist(Permission p) throws GTSInternalFault {
-		String sql = "select count(*) from " + PERMISSIONS_TABLE + " where GRID_IDENTITY='" + p.getGridIdentity()
-			+ "' AND ROLE='" + p.getRole().getValue() + "' AND TRUSTED_AUTHORITY='" + p.getTrustedAuthorityName() + "'";
+		String sql = "delete from " + PERMISSIONS_TABLE
+				+ " where GRID_IDENTITY='" + p.getGridIdentity()
+				+ "' AND ROLE='" + p.getRole().getValue()
+				+ "' AND TRUSTED_AUTHORITY='" + p.getTrustedAuthorityName()
+				+ "'";
+		try {
+			db.update(sql);
+		} catch (Exception e) {
+			String perm = formatPermission(p);
+			this.logger
+					.log(
+							Level.SEVERE,
+							"Unexpected database error incurred in removing the permission "
+									+ perm
+									+ " exists, the following statement generated the error: \n"
+									+ sql + "\n", e);
+			GTSInternalFault fault = new GTSInternalFault();
+			fault.setFaultString("Unexpected error in removing the permission "
+					+ perm + " exists.");
+			throw fault;
+		}
+
+	}
+
+	public synchronized boolean doesPermissionExist(Permission p)
+			throws GTSInternalFault {
+		String sql = "select count(*) from " + PERMISSIONS_TABLE
+				+ " where GRID_IDENTITY='" + p.getGridIdentity()
+				+ "' AND ROLE='" + p.getRole().getValue()
+				+ "' AND TRUSTED_AUTHORITY='" + p.getTrustedAuthorityName()
+				+ "'";
 		Connection c = null;
 		boolean exists = false;
 		try {
@@ -105,10 +148,17 @@ public class PermissionManager {
 			s.close();
 		} catch (Exception e) {
 			String perm = formatPermission(p);
-			this.logger.log(Level.SEVERE, "Unexpected database error incurred in determining if the permission " + perm
-				+ " exists, the following statement generated the error: \n" + sql + "\n", e);
+			this.logger
+					.log(
+							Level.SEVERE,
+							"Unexpected database error incurred in determining if the permission "
+									+ perm
+									+ " exists, the following statement generated the error: \n"
+									+ sql + "\n", e);
 			GTSInternalFault fault = new GTSInternalFault();
-			fault.setFaultString("Unexpected error in determining if the permission " + perm + " exists.");
+			fault
+					.setFaultString("Unexpected error in determining if the permission "
+							+ perm + " exists.");
 			throw fault;
 		} finally {
 			db.releaseConnection(c);
@@ -116,28 +166,28 @@ public class PermissionManager {
 		return exists;
 	}
 
-
 	private String formatPermission(Permission p) {
 		String role = null;
-		if(p.getRole()!=null){
+		if (p.getRole() != null) {
 			role = p.getRole().getValue();
 		}
-		return "[" + p.getGridIdentity() + "," + role + "," + p.getTrustedAuthorityName() + "]";
+		return "[" + p.getGridIdentity() + "," + role + ","
+				+ p.getTrustedAuthorityName() + "]";
 	}
-
 
 	public synchronized void buildDatabase() throws GTSInternalFault {
 		if (!dbBuilt) {
 			if (!this.db.tableExists(PERMISSIONS_TABLE)) {
-				String trust = "CREATE TABLE " + PERMISSIONS_TABLE + " (" + "GRID_IDENTITY VARCHAR(255) NOT NULL,"
-					+ "ROLE VARCHAR(50) NOT NULL," + "TRUSTED_AUTHORITY VARCHAR(255) NOT NULL,"
-					+ "INDEX document_index (GRID_IDENTITY));";
+				String trust = "CREATE TABLE " + PERMISSIONS_TABLE + " ("
+						+ "GRID_IDENTITY VARCHAR(255) NOT NULL,"
+						+ "ROLE VARCHAR(50) NOT NULL,"
+						+ "TRUSTED_AUTHORITY VARCHAR(255) NOT NULL,"
+						+ "INDEX document_index (GRID_IDENTITY));";
 				db.update(trust);
 			}
 			dbBuilt = true;
 		}
 	}
-
 
 	public void destroy() throws GTSInternalFault {
 		db.update("DROP TABLE IF EXISTS " + PERMISSIONS_TABLE);

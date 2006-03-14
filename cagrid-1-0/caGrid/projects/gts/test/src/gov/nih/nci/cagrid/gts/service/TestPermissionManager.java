@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.gts.bean.Permission;
 import gov.nih.nci.cagrid.gts.bean.Role;
 import gov.nih.nci.cagrid.gts.common.Database;
 import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
+import gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault;
 import gov.nih.nci.cagrid.gts.test.Utils;
 import junit.framework.TestCase;
 
@@ -33,7 +34,7 @@ public class TestPermissionManager extends TestCase {
 	public void testAddPermission() {
 		try {
 			PermissionManager pm = new PermissionManager(db);
-			
+
 			Permission p1 = new Permission();
 			p1.setGridIdentity("O=Test Organization,OU=Test Unit,CN=User");
 			p1.setRole(Role.TrustServiceAdmin);
@@ -53,12 +54,60 @@ public class TestPermissionManager extends TestCase {
 		}
 	}
 
+	public void testRevokePermission() {
+		try {
+			PermissionManager pm = new PermissionManager(db);
+
+			Permission p1 = new Permission();
+			p1.setGridIdentity("O=Test Organization,OU=Test Unit,CN=User");
+			p1.setRole(Role.TrustServiceAdmin);
+			pm.addPermission(p1);
+			assertTrue(pm.doesPermissionExist(p1));
+
+			Permission p2 = new Permission();
+			p2.setGridIdentity("O=Test Organization,OU=Test Unit,CN=User");
+			p2.setRole(Role.TrustAuthorityManager);
+			p2
+					.setTrustedAuthorityName("O=Test Organization,OU=Test Unit,CN=CA");
+			pm.addPermission(p2);
+			assertTrue(pm.doesPermissionExist(p2));
+			pm.revokePermission(p1);
+			assertFalse(pm.doesPermissionExist(p1));
+			assertTrue(pm.doesPermissionExist(p2));
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+	}
+
+	public void testRevokeNonExistingPermission() {
+		try {
+			PermissionManager pm = new PermissionManager(db);
+
+			Permission p = new Permission();
+			p.setGridIdentity("O=Test Organization,OU=Test Unit,CN=User");
+			p.setRole(Role.TrustAuthorityManager);
+			p.setTrustedAuthorityName("O=Test Organization,OU=Test Unit,CN=CA");
+
+			try {
+				pm.revokePermission(p);
+				fail("Should not be able to revoke a permission that does not exist.");
+			} catch (InvalidPermissionFault f) {
+
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+	}
+
 	public void testAddInvalidPermission() {
 		try {
 			PermissionManager pm = new PermissionManager(db);
-		
-			//Test adding the same permission twice
-			
+
+			// Test adding the same permission twice
+
 			Permission p1 = new Permission();
 			p1.setGridIdentity("O=Test Organization,OU=Test Unit,CN=User");
 			p1.setRole(Role.TrustServiceAdmin);
@@ -74,7 +123,7 @@ public class TestPermissionManager extends TestCase {
 			} catch (IllegalPermissionFault f) {
 
 			}
-			
+
 			try {
 				Permission p3 = new Permission();
 				p3.setRole(Role.TrustServiceAdmin);
@@ -83,7 +132,7 @@ public class TestPermissionManager extends TestCase {
 			} catch (IllegalPermissionFault f) {
 
 			}
-			
+
 			try {
 				Permission p4 = new Permission();
 				p4.setGridIdentity("O=Test Organization,OU=Test Unit,CN=User");

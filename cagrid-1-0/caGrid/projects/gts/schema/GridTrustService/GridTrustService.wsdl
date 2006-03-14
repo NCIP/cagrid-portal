@@ -147,6 +147,30 @@
 						</sequence>
 					</complexType>
 				</element>
+				<element name="revokePermission">
+					<complexType>
+						<sequence>
+          		  
+                  					
+							<element name="Permission">
+	      		  				<complexType>
+									<sequence>
+										<element ref="perm:Permission" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+                  				 	
+	      				</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="revokePermissionResponse">
+					<complexType>
+						<sequence>
+          		  
+						</sequence>
+					</complexType>
+				</element>
 				<element name="GTSInternalFault" >
 					<complexType>
 						<complexContent>
@@ -172,6 +196,14 @@
 				</element>
       					
 				<element name="IllegalPermissionFault" >
+					<complexType>
+						<complexContent>
+							<extension base="wsrbf:BaseFaultType"/>
+						</complexContent>
+					</complexType>
+				</element>
+      					
+				<element name="InvalidPermissionFault" >
 					<complexType>
 						<complexContent>
 							<extension base="wsrbf:BaseFaultType"/>
@@ -224,6 +256,13 @@
 	<message name="findPermissionsOutputMessage">
 		<part name="parameters" element="tns:findPermissionsResponse"/>
 	</message>
+	<message name="revokePermissionInputMessage">
+		<part name="parameters" element="tns:revokePermission"/>
+	</message>
+	
+	<message name="revokePermissionOutputMessage">
+		<part name="parameters" element="tns:revokePermissionResponse"/>
+	</message>
 	<message name="GTSInternalFaultFaultMessage">
 		<part name="fault" element="tns:GTSInternalFault"/>
 	</message>
@@ -235,6 +274,9 @@
 	</message>
 	<message name="IllegalPermissionFaultFaultMessage">
 		<part name="fault" element="tns:IllegalPermissionFault"/>
+	</message>
+	<message name="InvalidPermissionFaultFaultMessage">
+		<part name="fault" element="tns:InvalidPermissionFault"/>
 	</message>
     
 <!--============================================================
@@ -278,6 +320,14 @@
             <input message="tns:findPermissionsInputMessage"/>
             <output message="tns:findPermissionsOutputMessage"/>
        		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="revokePermission">
+            <input message="tns:revokePermissionInputMessage"/>
+            <output message="tns:revokePermissionOutputMessage"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+       		 <fault name="InvalidPermissionFault" message="tns:InvalidPermissionFaultFaultMessage"/>
        				
         </operation>
         <operation name="GetResourceProperty">
