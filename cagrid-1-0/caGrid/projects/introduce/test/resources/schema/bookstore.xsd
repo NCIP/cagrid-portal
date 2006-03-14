@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:mobius="gme://projectmobius.org/1/BookStore" targetNamespace="gme://projectmobius.org/1/BookStore" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xsd:element name="Book" type="mobius:BookType"/>
+  
                   <xsd:complexType name="BookType">
                     <xsd:sequence>
                       <xsd:element name="Title" type="xsd:string" minOccurs="1" maxOccurs="1"/>

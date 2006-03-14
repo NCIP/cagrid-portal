@@ -82,8 +82,10 @@ public class SyncTools {
 		// STEP 1: populate the object model representation of the service
 		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(baseDirectory + File.separator
 			+ "introduce.xml", ServiceDescription.class);
-		if(introService.getIntroduceVersion()==null || !introService.getIntroduceVersion().equals(IntroduceConstants.INTRODUCE_VERSION)){
-			throw new Exception("Introduce version in project does not match version provided by Introduce Toolkit ( " + IntroduceConstants.INTRODUCE_VERSION + " ): " + introService.getIntroduceVersion());
+		if (introService.getIntroduceVersion() == null
+			|| !introService.getIntroduceVersion().equals(IntroduceConstants.INTRODUCE_VERSION)) {
+			throw new Exception("Introduce version in project does not match version provided by Introduce Toolkit ( "
+				+ IntroduceConstants.INTRODUCE_VERSION + " ): " + introService.getIntroduceVersion());
 		}
 		File servicePropertiesFile = new File(baseDirectory.getAbsolutePath() + File.separator + "introduce.properties");
 		Properties serviceProperties = new Properties();
@@ -131,6 +133,9 @@ public class SyncTools {
 
 
 	private void populateClassnames(ServiceInformation info, SymbolTable table) throws MalformedNamespaceException {
+
+		table.dump(System.out);
+
 		// get the classnames from the axis symbol table
 		if (info.getMetadata().getMetadata() != null) {
 			for (int i = 0; i < info.getMetadata().getMetadata().length; i++) {
@@ -162,8 +167,21 @@ public class SyncTools {
 						}
 
 						if (inputParam.getClassName() == null) {
-							Type type = table.getType(new QName(inputParam.getNamespace(), inputParam.getType()));
+							if (inputParam.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
+								Type type = table.getType(new QName(inputParam.getNamespace(), inputParam.getType()));
 								inputParam.setClassName(getRelativeClassName(type.getName()));
+							} else {
+								Element element = table.getElement(new QName(inputParam.getNamespace(), inputParam
+									.getType()));
+								inputParam.setClassName(getRelativeClassName(element.getName()));
+								Type type = table.getType(new QName(info.getServiceProperties().getProperty(
+									"introduce.skeleton.namespace.domain")
+									+ "/" + info.getServiceProperties().getProperty("introduce.skeleton.service.name"),
+									">>" + mtype.getName() + ">" + inputParam.getName()));
+								inputParam.setContainerClassName(info.getServiceProperties().getProperty(
+									"introduce.skeleton.package")
+									+ ".stubs." + getRelativeClassName(type.getName()));
+							}
 						}
 					}
 				}
@@ -180,8 +198,14 @@ public class SyncTools {
 					if (outputParam.getClassName() != null && outputParam.getClassName().equals("void")) {
 						outputParam.setPackageName("");
 					} else if (outputParam.getClassName() == null) {
-						Type type = table.getType(new QName(outputParam.getNamespace(), outputParam.getType()));
+						if (outputParam.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
+							Type type = table.getType(new QName(outputParam.getNamespace(), outputParam.getType()));
 							outputParam.setClassName(getRelativeClassName(type.getName()));
+						} else {
+							Element element = table.getElement(new QName(outputParam.getNamespace(), outputParam
+								.getType()));
+							outputParam.setClassName(getRelativeClassName(element.getName()));
+						}
 					}
 				}
 			}

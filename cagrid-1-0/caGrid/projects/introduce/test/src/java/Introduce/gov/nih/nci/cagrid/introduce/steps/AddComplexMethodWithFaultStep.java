@@ -57,7 +57,7 @@ public class AddComplexMethodWithFaultStep extends Step {
 		// set the output
 		MethodTypeOutput output = new MethodTypeOutput();
 		output.setLocation("./bookstore.xsd");
-		output.setType("BookType");
+		output.setType("Book");
 		output.setIsArray(new Boolean(false));
 		output.setNamespace("gme://projectmobius.org/1/BookStore");
 
@@ -66,7 +66,7 @@ public class AddComplexMethodWithFaultStep extends Step {
 		MethodTypeInputsInput[] inputsArray = new MethodTypeInputsInput[1];
 		MethodTypeInputsInput input = new MethodTypeInputsInput();
 		input.setName("inputOne");
-		input.setType("BookType");
+		input.setType("Book");
 		input.setLocation("./bookstore.xsd");
 		input.setIsArray(new Boolean(true));
 		input.setNamespace("gme://projectmobius.org/1/BookStore");

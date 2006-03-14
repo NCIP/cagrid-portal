@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.codegen.methods;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
@@ -57,7 +58,7 @@ public class SyncSource {
 
 	private ServiceInformation serviceInfo;
 
-	
+
 	public SyncSource(File baseDir, ServiceInformation info) {
 		// this.baseDir = baseDir;
 		this.serviceInfo = info;
@@ -365,7 +366,7 @@ public class SyncSource {
 		if ((comm == null) || (comm.equals(ClientCommunication.No_Security))) {
 			// do nothing
 		} else if (comm.equals(ClientCommunication.Transport_Layer_Security)) {
-			
+
 			if (tls.getCommunicationMethod().equals(CommunicationMethod.Integrity)) {
 				sec
 					.append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT, org.globus.wsrf.security.Constants.SIGNATURE);\n");
@@ -485,15 +486,16 @@ public class SyncSource {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		String lineStart = "               ";
 
 		// insert the new client method
 		int endOfClass = fileContent.lastIndexOf("}");
 		String clientMethod = "\t" + createUnBoxedSignatureStringFromMethod(method) + " " + createExceptions(method);
-		clientMethod += "{\n\t\t";
+		clientMethod += "{\n" + lineStart;
 		clientMethod += this.deploymentProperties.get("introduce.skeleton.service.name")
 			+ "PortType port = this.getPortType();\n";
 
-		clientMethod += "";
+		clientMethod += lineStart;
 		clientMethod += "org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;\n";
 
 		// TODO: ADD CLIENT SECURITY
@@ -501,8 +503,6 @@ public class SyncSource {
 			+ configureClientSecurity(this.serviceInfo.getServiceSecurity(), method.getMethodSecurity());
 		// put in the call to the client
 		String var = "port";
-
-		String lineStart = "               ";
 
 		String methodString = lineStart;
 		MethodTypeOutput returnTypeEl = method.getOutput();
@@ -516,9 +516,21 @@ public class SyncSource {
 		if (method.getInputs() != null && method.getInputs().getInput() != null) {
 			for (int j = 0; j < method.getInputs().getInput().length; j++) {
 				String paramName = method.getInputs().getInput(j).getName();
+				String containerClassName = method.getInputs().getInput(j).getContainerClassName();
+				String elementName = method.getInputs().getInput(j).getType();
 				methodString += lineStart;
-				methodString += "params.set" + TemplateUtils.upperCaseFirstCharacter(paramName) + "(" + paramName
-					+ ");\n";
+				if (method.getInputs().getInput(j).getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
+					methodString += "params.set" + TemplateUtils.upperCaseFirstCharacter(paramName) + "(" + paramName
+						+ ");\n";
+				} else {
+					methodString += containerClassName + " " + paramName + "Container = new " + containerClassName
+						+ "();\n";
+					methodString += lineStart;
+					methodString += paramName + "Container.set" + elementName + "(" + paramName + ");\n";
+					methodString += lineStart;
+					methodString += "params.set" + TemplateUtils.upperCaseFirstCharacter(paramName) + "(" + paramName
+						+ "Container);\n";
+				}
 			}
 		}
 		// make the call
@@ -530,24 +542,14 @@ public class SyncSource {
 			+ "(params);\n";
 		methodString += lineStart;
 		if (!returnType.equals("void")) {
-			methodString += "return boxedResult.getResponse();\n";
+			if (returnTypeEl.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
+				methodString += "return boxedResult.getResponse();\n";
+			} else {
+				methodString += "return boxedResult.get" + returnTypeEl.getType() + "();\n";
+			}
 		}
 
 		clientMethod += methodString;
-
-		// clientMethod += " } catch(Exception e)
-		// {\n e.printStackTrace();\n }\n";
-		// Element methodReturn = method.getChild("output",
-		// method.getNamespace());
-		// if (!methodReturn.getAttributeValue("className").equals("void")) {
-		// if (!isPrimitive(returnType)) {
-		// clientMethod += " return null;";
-		// } else if (isPrimitive(returnType)) {
-		// clientMethod += " return "
-		// + createPrimitiveReturn(methodReturn
-		// .getAttributeValue("className")) + ";\n";
-		// }
-		// }
 
 		clientMethod += "\n\t}\n\n";
 
@@ -631,7 +633,13 @@ public class SyncSource {
 				// inputs were boxed and need to be unboxed
 				for (int j = 0; j < method.getInputs().getInput().length; j++) {
 					String paramName = method.getInputs().getInput(j).getName();
-					params += "params.get" + TemplateUtils.upperCaseFirstCharacter(paramName) + "()";
+					String paramType = method.getInputs().getInput(j).getType();
+					if (method.getInputs().getInput(j).getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
+						params += "params.get" + TemplateUtils.upperCaseFirstCharacter(paramName) + "()";
+					} else {
+						params += "params.get" + TemplateUtils.upperCaseFirstCharacter(paramName) + "().get"
+							+ paramType + "()";
+					}
 					if (j < method.getInputs().getInput().length - 1) {
 						params += ",";
 					}
@@ -662,7 +670,12 @@ public class SyncSource {
 			methodString += this.packageName + "." + returnTypeBoxed + " boxedResult = new " + this.packageName + "."
 				+ returnTypeBoxed + "();\n";
 			methodString += lineStart;
-			methodString += "boxedResult.setResponse(" + var + "." + methodName + "(" + params + "));\n";
+			if (returnTypeEl.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
+				methodString += "boxedResult.setResponse(" + var + "." + methodName + "(" + params + "));\n";
+			} else {
+				methodString += "boxedResult.set" + returnTypeEl.getType() + "(" + var + "." + methodName + "("
+					+ params + "));\n";
+			}
 			methodString += lineStart;
 			methodString += "return boxedResult;\n";
 		}
