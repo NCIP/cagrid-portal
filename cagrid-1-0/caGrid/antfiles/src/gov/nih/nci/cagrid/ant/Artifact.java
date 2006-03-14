@@ -32,6 +32,11 @@ public class Artifact extends DataType {
 	}
 
 
+	public String getIdentifer() {
+		return getRefid().getRefId();
+	}
+
+
 	protected Artifact getReferencedArtifact() {
 		Object o = getRefid().getReferencedObject(this.getProject());
 		return (Artifact) o;

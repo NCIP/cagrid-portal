@@ -55,11 +55,21 @@ public class ResolveDependencies extends Task {
 	public void execute() throws BuildException {
 		super.execute();
 		for (int i = 0; i < artifactList.size(); i++) {
+
 			Artifact artifact = (Artifact) artifactList.get(i);
 			CallTarget antCall = artifact.getAntCall();
 			if (antCall != null) {
-				antCall.setProject(this.getProject());
-				antCall.execute();
+				// see if we call this target yet, in this run, if so, skip it
+				String prop = "called.antcall.of." + artifact.getIdentifer();
+				String calledProperty = this.getProject().getProperty(prop);
+				if (calledProperty != null) {
+					System.out.println("Skipping dependent artifact's ant call["+antCall.getTaskName()+"], as propery was set:" + prop);
+				} else {
+					System.out.println("Calling dependent artifact's ant call["+antCall.getTaskName()+"] for first time; setting property:" + prop);
+					this.getProject().setProperty(prop, "true");
+					antCall.setProject(this.getProject());
+					antCall.execute();
+				}
 			}
 
 			// configure a copy task to send the created artifacts where they
@@ -74,16 +84,16 @@ public class ResolveDependencies extends Task {
 			}
 			// figure out where to copy artifacts
 			if (getTargetDir() == null) {
-				
-				//pick the track
+
+				// pick the track
 				String track = "";
-				if(artifact.getTrack().equals(Artifact.TEST_TRACK)){
-					track=File.separator+"test";
-				}else if(artifact.getTrack().equals(Artifact.ENDORSED_TRACK)){
-					track=File.separator+"endorsed";
+				if (artifact.getTrack().equals(Artifact.TEST_TRACK)) {
+					track = File.separator + "test";
+				} else if (artifact.getTrack().equals(Artifact.ENDORSED_TRACK)) {
+					track = File.separator + "endorsed";
 				}
-				
-				//decide where to put it, based on the type
+
+				// decide where to put it, based on the type
 				if (artifact.getType().equals(Artifact.JAR_TYPE)) {
 					copyTask.setTodir(new File(getExtDir().getAbsolutePath() + track + File.separator + "lib"));
 				} else if (artifact.getType().equals(Artifact.SCHEMAS_TYPE)) {
@@ -91,7 +101,7 @@ public class ResolveDependencies extends Task {
 				} else if (artifact.getType().equals(Artifact.MAPPINGS_TYPE)) {
 					copyTask.setTodir(new File(getExtDir().getAbsolutePath()));
 				} else if (artifact.getType().equals(Artifact.RESOURCES_TYPE)) {
-					copyTask.setTodir(new File(getExtDir().getAbsolutePath()+ File.separator + "resources"));
+					copyTask.setTodir(new File(getExtDir().getAbsolutePath() + File.separator + "resources"));
 				} else {
 					throw new BuildException(artifact.getType() + ": not an valid artifact type");
 				}
@@ -100,7 +110,6 @@ public class ResolveDependencies extends Task {
 				copyTask.setTodir(getTargetDir());
 			}
 			copyTask.execute();
-
 		}
 	}
 
