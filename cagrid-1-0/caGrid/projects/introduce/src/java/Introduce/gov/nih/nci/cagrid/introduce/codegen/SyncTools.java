@@ -222,7 +222,7 @@ public class SyncTools {
 	 * @param info
 	 * @throws MalformedNamespaceException
 	 */
-	private Set generateNamespaceExcludesSet(ServiceInformation info) throws MalformedNamespaceException {
+	private Set generateNamespaceExcludesSet(ServiceInformation info) throws Exception {
 		Set excludeSet = new HashSet();
 		File schemaDir = new File(baseDirectory.getAbsolutePath() + File.separator + "schema" + File.separator
 			+ info.getServiceProperties().getProperty("introduce.skeleton.service.name"));

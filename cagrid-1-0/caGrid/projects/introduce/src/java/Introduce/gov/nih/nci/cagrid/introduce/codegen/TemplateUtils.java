@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jdom.Document;
-import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.XMLUtilities;
 
 
@@ -204,28 +203,23 @@ public class TemplateUtils {
 	}
 
 
-	public static void walkSchemasGetNamespaces(File schemaDir, String fileName, Set namespaces) {
-		try {
-			System.out.println("Looking at schema " + fileName);
-			Document schema = XMLUtilities.fileNameToDocument(fileName);
-			List importEls = schema.getRootElement().getChildren("import",
-				schema.getRootElement().getNamespace(IntroduceConstants.W3CNAMESPACE));
-			for (int i = 0; i < importEls.size(); i++) {
-				org.jdom.Element importEl = (org.jdom.Element) importEls.get(i);
-				String namespace = importEl.getAttributeValue("namespace");
-				if (namespaces.add(namespace)) {
-					System.out.println("adding namepace " + namespace);
-				}
-				String location = importEl.getAttributeValue("schemaLocation");
-                if(!fileName.equals(schemaDir + File.separator + location)){
-				walkSchemasGetNamespaces(schemaDir, schemaDir + File.separator + location, namespaces);
-                } else {
-                    System.err.println("WARNING: Schema is importing itself. " + fileName);
-                }
+	public static void walkSchemasGetNamespaces(File schemaDir, String fileName, Set namespaces) throws Exception {
+		System.out.println("Looking at schema " + fileName);
+		Document schema = XMLUtilities.fileNameToDocument(fileName);
+		List importEls = schema.getRootElement().getChildren("import",
+			schema.getRootElement().getNamespace(IntroduceConstants.W3CNAMESPACE));
+		for (int i = 0; i < importEls.size(); i++) {
+			org.jdom.Element importEl = (org.jdom.Element) importEls.get(i);
+			String namespace = importEl.getAttributeValue("namespace");
+			if (namespaces.add(namespace)) {
+				System.out.println("adding namepace " + namespace);
 			}
-		} catch (MobiusException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			String location = importEl.getAttributeValue("schemaLocation");
+			if (!fileName.equals(schemaDir + File.separator + location)) {
+				walkSchemasGetNamespaces(schemaDir, schemaDir + File.separator + location, namespaces);
+			} else {
+				System.err.println("WARNING: Schema is importing itself. " + fileName);
+			}
 		}
 
 	}
