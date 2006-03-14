@@ -1,6 +1,8 @@
 package gov.nih.nci.cagrid.gts.service;
 
 import gov.nih.nci.cagrid.gts.bean.Permission;
+import gov.nih.nci.cagrid.gts.bean.PermissionFilter;
+import gov.nih.nci.cagrid.gts.bean.Role;
 import gov.nih.nci.cagrid.gts.common.Database;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
@@ -9,6 +11,8 @@ import gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -164,6 +168,95 @@ public class PermissionManager {
 			db.releaseConnection(c);
 		}
 		return exists;
+	}
+
+	public synchronized Permission[] findPermissions(PermissionFilter filter)
+			throws GTSInternalFault {
+
+		this.buildDatabase();
+		Connection c = null;
+		List permissions = new ArrayList();
+		StringBuffer sql = new StringBuffer();
+		try {
+			c = db.getConnection();
+			Statement s = c.createStatement();
+
+			sql.append("select * from " + PERMISSIONS_TABLE);
+			if (filter != null) {
+				boolean firstAppended = false;
+
+				if (filter.getGridIdentity() != null) {
+					sql = appendWhereOrAnd(firstAppended, sql);
+					firstAppended = true;
+					sql.append(" GRID_IDENTITY LIKE '%"
+							+ filter.getGridIdentity() + "%'");
+				}
+
+				if (filter.getRole() != null) {
+					sql = appendWhereOrAnd(firstAppended, sql);
+					firstAppended = true;
+					sql.append(" ROLE='" + filter.getRole() + "'");
+				}
+
+				if (filter.getTrustedAuthorityName() != null) {
+					sql = appendWhereOrAnd(firstAppended, sql);
+					firstAppended = true;
+					sql.append(" TRUSTED_AUTHORITY LIKE '%"
+							+ filter.getTrustedAuthorityName() + "%'");
+				}
+
+			}
+
+			ResultSet rs = s.executeQuery(sql.toString());
+			while (rs.next()) {
+				Permission p = new Permission();
+				p.setGridIdentity(rs.getString("GRID_IDENTITY"));
+				p.setRole(Role.fromValue(rs.getString("ROLE")));
+				p
+						.setTrustedAuthorityName(clean(rs
+								.getString("TRUSTED_AUTHORITY")));
+				permissions.add(p);
+			}
+			rs.close();
+			s.close();
+
+			Permission[] list = new Permission[permissions.size()];
+			for (int i = 0; i < list.length; i++) {
+				list[i] = (Permission) permissions.get(i);
+			}
+			return list;
+
+		} catch (Exception e) {
+			this.logger
+					.log(
+							Level.SEVERE,
+							"Unexpected database error incurred in finding permissions, the following statement generated the error: \n"
+									+ sql.toString() + "\n", e);
+			GTSInternalFault fault = new GTSInternalFault();
+			fault
+					.setFaultString("Unexpected error occurred in finding permissions.");
+			throw fault;
+		} finally {
+			db.releaseConnection(c);
+		}
+	}
+
+	private String clean(String s) {
+		if ((s == null) || (s.trim().length() == 0)) {
+			return null;
+		} else {
+			return s;
+		}
+	}
+
+	private StringBuffer appendWhereOrAnd(boolean firstAppended,
+			StringBuffer sql) {
+		if (firstAppended) {
+			sql.append(" AND ");
+		} else {
+			sql.append(" WHERE");
+		}
+		return sql;
 	}
 
 	private String formatPermission(Permission p) {
