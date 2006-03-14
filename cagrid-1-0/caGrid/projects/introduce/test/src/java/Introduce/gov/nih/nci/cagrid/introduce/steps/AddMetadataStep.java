@@ -39,7 +39,7 @@ public class AddMetadataStep extends Step {
 		MetadataListType metadatasType = introService.getMetadataList();
 
 		MetadataType metadata = new MetadataType();
-		metadata.setLocation(".." + File.separator + ".." + File.separator + ".."
+		metadata.setLocation(".." + File.separator + ".."
 			+ File.separator + ".." + File.separator + "metadata" + File.separator + "schema" + File.separator
 			+ "cagrid" + File.separator + "types" + File.separator + "cadsr" + File.separator + "caDSRMetadata.xsd");
 		metadata.setNamespace("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.cadsr");
