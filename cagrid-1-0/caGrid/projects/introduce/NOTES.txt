@@ -34,8 +34,6 @@ Security configuration (STEVE)
 introduce.xml that the service uses.  We need to either have a "version" attribute in the document, or use the xmlns to decide the version.
 (probably should add a version attribute as the behavior could change without the dcoument structure changing).
 
-DONE) Need to be able to roll back "created" version 0.
-
 (DONE) Need to be able to roll back "created" version 0.
 
 (DONE) When creating a new service be sure to remove all the old zips from teh resource directory....
