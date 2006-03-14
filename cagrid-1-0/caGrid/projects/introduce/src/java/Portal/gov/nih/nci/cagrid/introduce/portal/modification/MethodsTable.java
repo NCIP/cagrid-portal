@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
+import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
@@ -13,16 +14,14 @@ import java.util.Vector;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 
-import org.projectmobius.portal.PortalTable;
-
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: MethodsTable.java,v 1.13 2006-02-28 18:01:29 oster Exp $
+ * @version $Id: MethodsTable.java,v 1.14 2006-03-14 20:04:54 hastings Exp $
  */
-public class MethodsTable extends PortalTable {
+public class MethodsTable extends PortalBaseTable {
 	public static final String OPERATION = "Operation";
 	private MethodsType methodsType;
 
@@ -161,6 +160,18 @@ public class MethodsTable extends PortalTable {
 
 			return output;
 		}
+	}
+
+
+	public void singleClick() throws Exception {
+		// TODO Auto-generated method stub
+
+	}
+
+
+	public void doubleClick() throws Exception {
+		// TODO Auto-generated method stub
+
 	}
 
 }

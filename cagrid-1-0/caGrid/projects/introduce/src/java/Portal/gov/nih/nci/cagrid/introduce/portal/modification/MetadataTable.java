@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
+import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataType;
 
@@ -8,7 +9,6 @@ import java.util.Vector;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
-import org.projectmobius.portal.PortalTable;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
@@ -17,10 +17,10 @@ import org.projectmobius.portal.PortalTable;
  * @version $Id: InputParametersTable.java,v 1.1 2005/06/29 19:31:01 hastings
  *          Exp $
  */
-public class MetadataTable extends PortalTable {
+public class MetadataTable extends PortalBaseTable {
 
 	public static String PACKAGENAME = "Package Name";
-	
+
 	public static String CLASSNAME = "Classname";
 
 	public static String NAMESPACE = "Namespace";
@@ -34,12 +34,13 @@ public class MetadataTable extends PortalTable {
 	public static String REGISTER = "Register";
 
 	public static String QNAME_NS = "Qname Namespace";
-	
+
 	public static String QNAME_NAME = "Qname Name";
 
 	public static String DATA1 = "DATA1";
 
 	private MetadataListType metadatas;
+
 
 	public MetadataTable(MetadataListType metadatas) {
 		super(createTableModel());
@@ -50,9 +51,11 @@ public class MetadataTable extends PortalTable {
 		initialize();
 	}
 
+
 	public boolean isCellEditable(int row, int column) {
 		return true;
 	}
+
 
 	public void addRow(MetadataType metadata) {
 		final Vector v = new Vector();
@@ -74,9 +77,9 @@ public class MetadataTable extends PortalTable {
 		v.add(v);
 
 		((DefaultTableModel) this.getModel()).addRow(v);
-		this.setRowSelectionInterval(this.getModel().getRowCount() - 1, this
-				.getModel().getRowCount() - 1);
+		this.setRowSelectionInterval(this.getModel().getRowCount() - 1, this.getModel().getRowCount() - 1);
 	}
+
 
 	private void initialize() {
 		this.getColumn(DATA1).setMaxWidth(0);
@@ -89,6 +92,7 @@ public class MetadataTable extends PortalTable {
 			}
 		}
 	}
+
 
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
@@ -104,5 +108,17 @@ public class MetadataTable extends PortalTable {
 		model.addColumn(DATA1);
 
 		return model;
+	}
+
+
+	public void singleClick() throws Exception {
+		// TODO Auto-generated method stub
+
+	}
+
+
+	public void doubleClick() throws Exception {
+		// TODO Auto-generated method stub
+
 	}
 }

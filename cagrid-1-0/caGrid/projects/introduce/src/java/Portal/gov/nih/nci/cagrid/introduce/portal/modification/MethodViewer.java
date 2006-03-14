@@ -222,7 +222,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JTable getOutputTypeTable() {
 		if (outputTypeTable == null) {
-			outputTypeTable = new OutputTypeTable(getDiscoveryPanel(), this.method, this.schemaDir);
+			outputTypeTable = new OutputTypeTable(this.method);
 		}
 		return outputTypeTable;
 	}

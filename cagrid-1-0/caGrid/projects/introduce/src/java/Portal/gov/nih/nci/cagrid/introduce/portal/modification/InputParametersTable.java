@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
+import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 
@@ -7,8 +8,6 @@ import java.util.Vector;
 
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
-
-import org.projectmobius.portal.PortalTable;
 
 
 /**
@@ -18,7 +17,7 @@ import org.projectmobius.portal.PortalTable;
  * @version $Id: InputParametersTable.java,v 1.1 2005/06/29 19:31:01 hastings
  *          Exp $
  */
-public class InputParametersTable extends PortalTable {
+public class InputParametersTable extends PortalBaseTable {
 
 	public static String PACKAGENAME = "Package Name";
 
@@ -108,5 +107,16 @@ public class InputParametersTable extends PortalTable {
 		model.addColumn(DATA2);
 
 		return model;
+	}
+	
+
+	public void singleClick() throws Exception {
+		// TODO Auto-generated method stub
+
+	}
+	
+	public void doubleClick() throws Exception {
+		// TODO Auto-generated method stub
+
 	}
 }

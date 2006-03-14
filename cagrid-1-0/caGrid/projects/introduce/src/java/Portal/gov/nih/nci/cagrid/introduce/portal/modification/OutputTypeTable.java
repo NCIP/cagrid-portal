@@ -1,29 +1,23 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
+import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
-import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
-import gov.nih.nci.cagrid.introduce.portal.modification.cadsr.CADSRParameterConfigurationComponent;
-import gov.nih.nci.cagrid.introduce.portal.modification.gme.GMEConfigurationPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.gme.GMEParameterConfigurationComponent;
 
 import java.io.File;
 import java.util.Vector;
 
-import javax.swing.JButton;
 import javax.swing.table.DefaultTableModel;
-
-import org.projectmobius.portal.JComponentTable;
-import org.projectmobius.portal.PortalResourceManager;
 
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: OutputTypeTable.java,v 1.15 2006-02-24 20:19:05 hastings Exp $
+ * @version $Id: OutputTypeTable.java,v 1.16 2006-03-14 20:04:54 hastings Exp $
  */
-public class OutputTypeTable extends JComponentTable {
+public class OutputTypeTable extends PortalBaseTable {
 
 	public static String PACKAGENAME = "Package Name";
 
@@ -41,16 +35,9 @@ public class OutputTypeTable extends JComponentTable {
 
 	private MethodType method;
 
-	private File schemaDir;
-	
-	private GMEParameterConfigurationComponent gmePanel;
-
-
-	public OutputTypeTable(GMEParameterConfigurationComponent gmePanel, MethodType method, File schemaDir) {
+	public OutputTypeTable(MethodType method) {
 		super(createTableModel());
 		this.method = method;
-		this.schemaDir = schemaDir;
-		this.gmePanel = gmePanel;
 		initialize();
 	}
 
@@ -97,5 +84,16 @@ public class OutputTypeTable extends JComponentTable {
 		model.addColumn("DATA1");
 
 		return model;
+	}
+	
+
+	public void singleClick() throws Exception {
+		// TODO Auto-generated method stub
+
+	}
+	
+	public void doubleClick() throws Exception {
+		// TODO Auto-generated method stub
+
 	}
 }
