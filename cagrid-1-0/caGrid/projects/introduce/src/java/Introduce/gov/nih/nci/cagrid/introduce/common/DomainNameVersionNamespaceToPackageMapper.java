@@ -6,12 +6,12 @@ import java.util.StringTokenizer;
 public class DomainNameVersionNamespaceToPackageMapper implements NamespaceToPackageMapper {
 
 	public String getPackageName(String namespace) throws UnsupportedNamespaceFormatException {
-		int index = namespace.indexOf(":");
+		int index = namespace.indexOf("://");
 		if (index == -1) {
 			throw new UnsupportedNamespaceFormatException(
 				"Namespace must be in the format PROTOCOL://DOMAIN/VERSION/NAME");
 		} else {
-			namespace = namespace.substring(index + 1);
+			namespace = namespace.substring(index + 3);
 			index = namespace.indexOf("/");
 			if (index == -1) {
 				throw new UnsupportedNamespaceFormatException(
