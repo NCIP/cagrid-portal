@@ -39,8 +39,12 @@ public class AddMetadataStep extends Step {
 		MetadataListType metadatasType = introService.getMetadataList();
 
 		MetadataType metadata = new MetadataType();
-		metadata.setLocation(pathtobasedir + File.separator + ".." +  File.separator + "metadata" + File.separator + "schema" + File.separator
-			+ "cagrid" + File.separator + "types" + File.separator + "cadsr" + File.separator + "caDSRMetadata.xsd");
+		// copy over the bookstore schema to be used with the test
+		Utils.copyFile(new File(pathtobasedir + File.separator + TestCaseInfo.GOLD_SCHEMA_DIR + File.separator
+			+ "caDSRMetadata.xsd"), new File(pathtobasedir + File.separator + tci.getDir() + File.separator + "schema"
+			+ File.separator + tci.getName() + File.separator + "caDSRMetadata.xsd"));
+
+		metadata.setLocation("./caDSRMetadata.xsd");
 		metadata.setNamespace("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.cadsr");
 		metadata.setPopulateFromFile(false);
 		metadata.setRegister(true);
