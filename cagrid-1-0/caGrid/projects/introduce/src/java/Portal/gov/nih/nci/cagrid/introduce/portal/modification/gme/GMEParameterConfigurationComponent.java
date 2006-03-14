@@ -35,8 +35,6 @@ import org.projectmobius.portal.GridPortalComponent;
  *          Exp $
  */
 public class GMEParameterConfigurationComponent extends JPanel {
-	JPanel customPanel = null;
-
 	private JPanel mainPanel = null;
 
 	private GMEConfigurationPanel gmePanel = null;
@@ -55,16 +53,15 @@ public class GMEParameterConfigurationComponent extends JPanel {
 	 * This method initializes this
 	 */
 	private void initialize() {
-		this.add(getMainPanel());
-	}
-
-
-	public JPanel getCustomPanel() {
-		if (customPanel == null) {
-			customPanel = new JPanel();
-			customPanel.setLayout(new GridBagLayout());
-		}
-		return customPanel;
+		GridBagConstraints gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.insets = new java.awt.Insets(0,0,0,0);
+		gridBagConstraints.gridy = 0;
+		gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+		gridBagConstraints.weightx = 1.0D;
+		gridBagConstraints.weighty = 1.0D;
+		gridBagConstraints.gridx = 0;
+		this.setLayout(new GridBagLayout());
+		this.add(getMainPanel(), gridBagConstraints);
 	}
 
 
@@ -75,25 +72,17 @@ public class GMEParameterConfigurationComponent extends JPanel {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
-			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints5.gridy = 1;
-			gridBagConstraints5.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints5.weightx = 0.0D;
-			gridBagConstraints5.weighty = 1.0D;
-			gridBagConstraints5.gridx = 0;
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			gridBagConstraints4.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints4.gridy = 0;
 			gridBagConstraints4.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints4.gridwidth = 1;
 			gridBagConstraints4.weightx = 1.0D;
-			gridBagConstraints4.weighty = 0.0D;
+			gridBagConstraints4.weighty = 1.0D;
 			gridBagConstraints4.gridx = 0;
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
 			mainPanel.add(getGmePanel(), gridBagConstraints4);
-			mainPanel.add(getCustomPanel(), gridBagConstraints5);
 		}
 		return mainPanel;
 	}
@@ -107,6 +96,7 @@ public class GMEParameterConfigurationComponent extends JPanel {
 	private GMEConfigurationPanel getGmePanel() {
 		if (gmePanel == null) {
 			gmePanel = new GMEConfigurationPanel();
+			gmePanel.setLayout(new GridBagLayout());
 			gmePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "GME",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));

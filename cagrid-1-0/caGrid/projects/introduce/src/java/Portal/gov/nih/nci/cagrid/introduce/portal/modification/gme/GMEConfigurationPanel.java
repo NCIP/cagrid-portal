@@ -70,7 +70,7 @@ public class GMEConfigurationPanel extends JPanel {
 	 * This method initializes this
 	 */
 	private void initialize() {
-		this.setSize(new java.awt.Dimension(161, 122));
+		this.setSize(new java.awt.Dimension(128,120));
 		this.add(getMainPanel(), null);
 
 	}
