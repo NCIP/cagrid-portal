@@ -522,6 +522,7 @@ public class TrustedAuthorityManager {
 
 	public synchronized void buildDatabase() throws GTSInternalFault {
 		if (!dbBuilt) {
+			db.createDatabaseIfNeeded();
 			if (!this.db.tableExists(TRUSTED_AUTHORITIES_TABLE)) {
 				String trust = "CREATE TABLE " + TRUSTED_AUTHORITIES_TABLE
 						+ " (" + "NAME VARCHAR(255) NOT NULL PRIMARY KEY,"
@@ -539,7 +540,7 @@ public class TrustedAuthorityManager {
 	}
 
 	public void destroy() throws GTSInternalFault {
-		db.createDatabaseIfNeeded();
+		buildDatabase();
 		db.update("DROP TABLE IF EXISTS " + TRUSTED_AUTHORITIES_TABLE);
 		dbBuilt = false;
 	}

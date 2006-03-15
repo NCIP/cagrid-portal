@@ -1,12 +1,6 @@
 package gov.nih.nci.cagrid.gts.service;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
-import gov.nih.nci.cagrid.gts.bean.Permission;
-import gov.nih.nci.cagrid.gts.bean.PermissionFilter;
-import gov.nih.nci.cagrid.gts.bean.Role;
-import gov.nih.nci.cagrid.gts.common.Database;
-import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
-import gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault;
 import gov.nih.nci.cagrid.gts.test.Utils;
 import junit.framework.TestCase;
 
@@ -30,5 +24,18 @@ public class TestGTS extends TestCase {
 			assertTrue(false);
 		}
 	}
+	
+	public void testAddTrustedAuthority() {
+		try {
+			GTS gts = new GTS(Utils.getGTSConfiguration(), "localhost");
+			// Make sure we start fresh
+			gts.destroy();
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+	}
+	
+	
 
 }

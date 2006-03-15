@@ -11,10 +11,6 @@ import gov.nih.nci.cagrid.gts.service.PermissionManager;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
 
-import java.io.InputStream;
-
-import junit.framework.TestCase;
-
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
@@ -66,10 +62,10 @@ public class PermissionBootstapper {
 		try{
 			PermissionBootstapper util = new PermissionBootstapper(conf);
 			System.out.println("*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*");
-			System.out.println("*               Grid Trust Service Permission Bootstrapper                 *");
+			System.out.println("*            Grid Trust Service (GTS) Permission Bootstrapper             *");
 			System.out.println("*                                                                         *");
 			System.out.println("*  This tool is used for bootstrapping the Grid Trust Service (GTS).  It  *");
-			System.out.println("*enables one to configure the GTS with a preliminary of administrators. It*");
+			System.out.println("*enables the GTS to be configured with a preliminary list of admins. It   *");
 			System.out.println("*is not intended to be used as the method of managing GTS administrators. *");
 			System.out.println("*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*");
 			System.out.println();

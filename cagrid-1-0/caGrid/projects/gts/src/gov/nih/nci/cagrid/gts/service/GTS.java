@@ -8,8 +8,6 @@ import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault;
 
-import java.util.logging.Logger;
-
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
@@ -19,7 +17,7 @@ import java.util.logging.Logger;
  *          Exp $
  */
 public class GTS {
-	private Logger logger;
+
 	private GTSConfiguration conf;
 	private String gtsURI;
 	private TrustedAuthorityManager trust;
@@ -27,7 +25,6 @@ public class GTS {
 
 
 	public GTS(GTSConfiguration conf, String gtsURI) {
-		logger = Logger.getLogger(this.getClass().getName());
 		this.conf = conf;
 		this.gtsURI = gtsURI;
 		Database db = new Database(this.conf.getConnectionManager(), this.conf.getGTSInternalId());
@@ -36,8 +33,8 @@ public class GTS {
 	}
 
 
-	public TrustedAuthority addTrustedAuthority(String gridIdentity, TrustedAuthority ta)
-		throws GTSInternalFault, IllegalTrustedAuthorityFault, PermissionDeniedFault {
+	public TrustedAuthority addTrustedAuthority(String gridIdentity, TrustedAuthority ta) throws GTSInternalFault,
+		IllegalTrustedAuthorityFault, PermissionDeniedFault {
 		checkServiceAdministrator(gridIdentity);
 		return trust.addTrustedAuthority(ta);
 	}
@@ -54,7 +51,8 @@ public class GTS {
 			throw fault;
 		}
 	}
-	
+
+
 	public void destroy() throws GTSInternalFault {
 		trust.destroy();
 		permissions.destroy();

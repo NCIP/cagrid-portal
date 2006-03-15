@@ -286,6 +286,7 @@ public class PermissionManager {
 
 	public synchronized void buildDatabase() throws GTSInternalFault {
 		if (!dbBuilt) {
+			db.createDatabaseIfNeeded();
 			if (!this.db.tableExists(PERMISSIONS_TABLE)) {
 				String trust = "CREATE TABLE " + PERMISSIONS_TABLE + " ("
 						+ "GRID_IDENTITY VARCHAR(255) NOT NULL,"
@@ -299,7 +300,7 @@ public class PermissionManager {
 	}
 
 	public void destroy() throws GTSInternalFault {
-		db.createDatabaseIfNeeded();
+		buildDatabase();
 		db.update("DROP TABLE IF EXISTS " + PERMISSIONS_TABLE);
 		dbBuilt = false;
 	}
