@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.gme;
 
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
@@ -54,7 +56,7 @@ public class GMEParameterConfigurationComponent extends JPanel {
 	 */
 	private void initialize() {
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-		gridBagConstraints.insets = new java.awt.Insets(0,0,0,0);
+		gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 0);
 		gridBagConstraints.gridy = 0;
 		gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
 		gridBagConstraints.weightx = 1.0D;
@@ -105,34 +107,47 @@ public class GMEParameterConfigurationComponent extends JPanel {
 	}
 
 
-	public void populateRow(Vector typeInfo, boolean handleParameterName) {
-		// populate the data vector from the prior screen now......
-		int index = 0;
-		
-		//set the package name
-		String packageName = CommonTools.getPackageName(gmePanel.currentNamespace);
-		typeInfo.set(index++, packageName);
-		
-		// set classname
-		typeInfo.set(index++, "");
+	public MethodTypeInputsInput createInput() {
+		MethodTypeInputsInput input = new MethodTypeInputsInput();
 
-		typeInfo.set(index++, "false");
-		if (handleParameterName) {
-			typeInfo.set(index++, this.gmePanel.currentType);
-		}
+		// set the package name
+		String packageName = CommonTools.getPackageName(gmePanel.currentNamespace);
+		input.setPackageName(packageName);
+
+		input.setIsArray(new Boolean(false));
+
+		input.setName(this.gmePanel.currentType);
 		if (this.gmePanel.currentNamespace != null) {
-			typeInfo.set(index++, this.gmePanel.currentNamespace.getRaw());
-		} else {
-			typeInfo.set(index++, null);
+			input.setNamespace(this.gmePanel.currentNamespace.getRaw());
 		}
-		typeInfo.set(index++, this.gmePanel.currentType);
+		input.setType(this.gmePanel.currentType);
 		if (this.gmePanel.currentNamespace != null) {
 			ImportInfo ii = new ImportInfo(this.gmePanel.currentNamespace);
-			typeInfo.set(index++, "./" + ii.getFileName());
-		} else {
-			typeInfo.set(index++, null);
+			input.setLocation("./" + ii.getFileName());
 		}
 
+		return input;
+	}
+
+
+	public MethodTypeOutput createOutput() {
+		MethodTypeOutput output = new MethodTypeOutput();
+
+		// set the package name
+		String packageName = CommonTools.getPackageName(gmePanel.currentNamespace);
+		output.setPackageName(packageName);
+
+		output.setIsArray(new Boolean(false));
+		if (this.gmePanel.currentNamespace != null) {
+			output.setNamespace(this.gmePanel.currentNamespace.getRaw());
+		}
+		output.setType(this.gmePanel.currentType);
+		if (this.gmePanel.currentNamespace != null) {
+			ImportInfo ii = new ImportInfo(this.gmePanel.currentNamespace);
+			output.setLocation("./" + ii.getFileName());
+		}
+
+		return output;
 	}
 
 } // @jve:decl-index=0:visual-constraint="2,2"

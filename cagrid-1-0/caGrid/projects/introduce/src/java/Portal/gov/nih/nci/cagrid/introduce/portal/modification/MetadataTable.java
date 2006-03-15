@@ -79,6 +79,21 @@ public class MetadataTable extends PortalBaseTable {
 		((DefaultTableModel) this.getModel()).addRow(v);
 		this.setRowSelectionInterval(this.getModel().getRowCount() - 1, this.getModel().getRowCount() - 1);
 	}
+	
+	public void removeSelectedRow() throws Exception {
+		int row = getSelectedRow();
+		if ((row < 0) || (row >= getRowCount())) {
+			throw new Exception("invalid row");
+		}
+		int oldSelectedRow = getSelectedRow();
+		((DefaultTableModel) getModel()).removeRow(oldSelectedRow);
+		if (oldSelectedRow == 0) {
+			oldSelectedRow++;
+		}
+		if (getRowCount() > 0) {
+			setRowSelectionInterval(oldSelectedRow - 1, oldSelectedRow - 1);
+		}
+	}
 
 
 	private void initialize() {

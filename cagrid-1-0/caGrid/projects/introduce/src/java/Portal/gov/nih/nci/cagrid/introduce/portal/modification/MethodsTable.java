@@ -19,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: MethodsTable.java,v 1.14 2006-03-14 20:04:54 hastings Exp $
+ * @version $Id: MethodsTable.java,v 1.15 2006-03-15 17:36:23 hastings Exp $
  */
 public class MethodsTable extends PortalBaseTable {
 	public static final String OPERATION = "Operation";
@@ -44,6 +44,21 @@ public class MethodsTable extends PortalBaseTable {
 			for (int i = 0; i < methodsType.getMethod().length; i++) {
 				this.addRow(methodsType.getMethod(i));
 			}
+		}
+	}
+	
+	public void removeSelectedRow() throws Exception {
+		int row = getSelectedRow();
+		if ((row < 0) || (row >= getRowCount())) {
+			throw new Exception("invalid row");
+		}
+		int oldSelectedRow = getSelectedRow();
+		((DefaultTableModel) getModel()).removeRow(oldSelectedRow);
+		if (oldSelectedRow == 0) {
+			oldSelectedRow++;
+		}
+		if (getRowCount() > 0) {
+			setRowSelectionInterval(oldSelectedRow - 1, oldSelectedRow - 1);
 		}
 	}
 

@@ -37,8 +37,6 @@ public class InputParametersTable extends PortalBaseTable {
 
 	public static String DATA1 = "DATA1";
 
-	public static String DATA2 = "DATA2";
-
 	private MethodType method;
 
 
@@ -71,7 +69,6 @@ public class InputParametersTable extends PortalBaseTable {
 		v.add(input.getType());
 		v.add(input.getLocation());
 
-		v.add(input);
 		v.add(v);
 
 		((DefaultTableModel) this.getModel()).addRow(v);
@@ -79,13 +76,93 @@ public class InputParametersTable extends PortalBaseTable {
 	}
 
 
+	public void modifySelectedRow(final MethodTypeInputsInput input) throws Exception {
+		int row = getSelectedRow();
+		if ((row < 0) || (row >= getRowCount())) {
+			throw new Exception("invalid row");
+		}
+		Vector v = (Vector) getValueAt(getSelectedRow(), 7);
+		v.set(0, input.getPackageName());
+		v.set(1, input.getClassName());
+		if (input.getIsArray() != null) {
+			v.set(2, (String.valueOf(input.getIsArray().booleanValue())));
+		} else {
+			v.set(2, "");
+		}
+		v.set(3, input.getName());
+		v.set(4, input.getNamespace());
+		v.set(5, input.getType());
+		v.set(6, input.getLocation());
+
+		v.set(7, v);
+	}
+
+
+	public void removeSelectedRow() throws Exception {
+		int row = getSelectedRow();
+		if ((row < 0) || (row >= getRowCount())) {
+			throw new Exception("invalid row");
+		}
+		int oldSelectedRow = getSelectedRow();
+		((DefaultTableModel) getModel()).removeRow(oldSelectedRow);
+		if (oldSelectedRow == 0) {
+			oldSelectedRow++;
+		}
+		if (getRowCount() > 0) {
+			setRowSelectionInterval(oldSelectedRow - 1, oldSelectedRow - 1);
+		}
+	}
+
+
+	public MethodTypeInputsInput getRowData(int row) throws Exception {
+		if ((row < 0) || (row >= getRowCount())) {
+			throw new Exception("invalid row");
+		}
+		MethodTypeInputsInput input = new MethodTypeInputsInput();
+
+		String packageName = ((String) getValueAt(row, 0));
+		String className = ((String) getValueAt(row, 1));
+		Boolean isArray = new Boolean((String) getValueAt(row, 2));
+		String name = ((String) getValueAt(row, 3));
+		String namespace = ((String) getValueAt(row, 4));
+		String type = ((String) getValueAt(row, 5));
+		String location = ((String) getValueAt(row, 6));
+
+		if (packageName != null && !packageName.equals("")) {
+			input.setPackageName(packageName);
+		}
+		if (className != null && !className.equals("")) {
+			input.setClassName(className);
+		}
+		if (isArray != null) {
+			input.setIsArray(isArray);
+		}
+		if (name != null && !name.equals("")) {
+			input.setName(name);
+		}
+		if (namespace != null && !namespace.equals("")) {
+			input.setNamespace(namespace);
+		}
+		if (type != null && !type.equals("")) {
+			input.setType(type);
+		}
+		if (location != null && !location.equals("")) {
+			input.setLocation(location);
+		}
+
+		return input;
+	}
+
+
+	public MethodTypeInputsInput getSelectedRowData() throws Exception {
+		return getRowData(getSelectedRow());
+	}
+
+
 	private void initialize() {
 		this.getColumn(DATA1).setMaxWidth(0);
 		this.getColumn(DATA1).setMinWidth(0);
 		this.getColumn(DATA1).setPreferredWidth(0);
-		this.getColumn(DATA2).setMaxWidth(0);
-		this.getColumn(DATA2).setMinWidth(0);
-		this.getColumn(DATA2).setPreferredWidth(0);
 		if (this.method.getInputs() != null && this.method.getInputs().getInput() != null) {
 			for (int i = 0; i < this.method.getInputs().getInput().length; i++) {
 				addRow(this.method.getInputs().getInput(i));
@@ -104,17 +181,17 @@ public class InputParametersTable extends PortalBaseTable {
 		model.addColumn(TYPE);
 		model.addColumn(LOCATION);
 		model.addColumn(DATA1);
-		model.addColumn(DATA2);
 
 		return model;
 	}
-	
+
 
 	public void singleClick() throws Exception {
 		// TODO Auto-generated method stub
 
 	}
-	
+
+
 	public void doubleClick() throws Exception {
 		// TODO Auto-generated method stub
 
