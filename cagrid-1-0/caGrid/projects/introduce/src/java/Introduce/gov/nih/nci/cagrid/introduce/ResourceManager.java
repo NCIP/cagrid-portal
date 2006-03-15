@@ -20,7 +20,12 @@ import java.util.zip.ZipOutputStream;
 
 import javax.swing.JFileChooser;
 
-
+/**
+ * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
+ * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
+ * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
+ * 
+ */
 public class ResourceManager {
 	public static final int MAX_ARCHIVE = 5;
 

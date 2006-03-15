@@ -5,7 +5,12 @@ import java.util.StringTokenizer;
 
 import org.projectmobius.common.Namespace;
 
-
+/**
+ * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
+ * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
+ * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
+ * 
+ */
 public class CommonTools {
 
 	public static Process createAndOutputProcess(String cmd) throws Exception {

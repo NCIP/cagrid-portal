@@ -10,7 +10,12 @@ import java.util.Properties;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
-
+/**
+ * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
+ * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
+ * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
+ * 
+ */
 public class SkeletonCreator extends Task {
 
 	public SkeletonCreator() {

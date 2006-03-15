@@ -48,10 +48,10 @@ import org.projectmobius.portal.PortalResourceManager;
 
 
 /**
- * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
+ * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
- * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.75 2006-03-15 17:46:53 hastings Exp $
+ * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
+ * 
  */
 public class ModificationViewer extends GridPortalComponent {
 

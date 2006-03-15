@@ -11,11 +11,10 @@ import javax.swing.table.DefaultTableModel;
 
 
 /**
- * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
+ * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
- * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: InputParametersTable.java,v 1.1 2005/06/29 19:31:01 hastings
- *          Exp $
+ * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
+ * 
  */
 public class InputParametersTable extends PortalBaseTable {
 

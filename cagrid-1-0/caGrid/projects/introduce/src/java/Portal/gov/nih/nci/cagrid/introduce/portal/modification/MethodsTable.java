@@ -16,10 +16,10 @@ import javax.swing.table.DefaultTableModel;
 
 
 /**
- * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
- * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: MethodsTable.java,v 1.15 2006-03-15 17:36:23 hastings Exp $
+ * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
+ * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
+ * 
  */
 public class MethodsTable extends PortalBaseTable {
 	public static final String OPERATION = "Operation";

@@ -12,7 +12,12 @@ import gov.nih.nci.cagrid.introduce.templates.ServerConfigTemplate;
 import java.io.File;
 import java.io.FileWriter;
 
-
+/**
+ * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
+ * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
+ * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
+ * 
+ */
 public class SkeletonBaseCreator {
 
 	public SkeletonBaseCreator() {

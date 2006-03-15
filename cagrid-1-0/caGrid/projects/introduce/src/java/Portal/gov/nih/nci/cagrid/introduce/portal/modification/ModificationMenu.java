@@ -4,6 +4,12 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+/**
+ * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
+ * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
+ * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
+ * 
+ */
 public class ModificationMenu extends JMenuBar {
 
 	private JMenu fileMenu = null;
