@@ -49,6 +49,7 @@ public class PermissionManager {
 		if (p.getTrustedAuthorityName() == null) {
 			p.setTrustedAuthorityName(ALL_TRUST_AUTHORITIES);
 		}
+		
 
 		if (p.getGridIdentity() == null) {
 			IllegalPermissionFault fault = new IllegalPermissionFault();
@@ -61,6 +62,21 @@ public class PermissionManager {
 			IllegalPermissionFault fault = new IllegalPermissionFault();
 			fault.setFaultString("The permission " + formatPermission(p)
 					+ " no role specified.");
+			throw fault;
+		}
+		
+		if((p.getTrustedAuthorityName().equals(ALL_TRUST_AUTHORITIES))
+			&& (!p.getRole().equals(Role.TrustServiceAdmin))){
+			IllegalPermissionFault fault = new IllegalPermissionFault();
+			fault.setFaultString("The permission " + formatPermission(p)
+					+ " must specify a specific Trust Authority.");
+			throw fault;
+		}
+		if((!p.getTrustedAuthorityName().equals(ALL_TRUST_AUTHORITIES))
+			&& (p.getRole().equals(Role.TrustServiceAdmin))){
+			IllegalPermissionFault fault = new IllegalPermissionFault();
+			fault.setFaultString("The permission " + formatPermission(p)
+					+ " cannot specify a specific Trust Authority.");
 			throw fault;
 		}
 

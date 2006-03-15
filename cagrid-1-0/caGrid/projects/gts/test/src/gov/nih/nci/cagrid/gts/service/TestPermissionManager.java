@@ -103,7 +103,7 @@ public class TestPermissionManager extends TestCase {
 		}
 	}
 
-	public void testAddInvalidPermission() {
+	public void testAddInvalidPermissions() {
 		try {
 			PermissionManager pm = new PermissionManager(db);
 
@@ -139,6 +139,38 @@ public class TestPermissionManager extends TestCase {
 				p4.setGridIdentity("O=Test Organization,OU=Test Unit,CN=User");
 				pm.addPermission(p4);
 				fail("Should not be able to add a permission without a role.");
+			} catch (IllegalPermissionFault f) {
+
+			}
+			
+			try {
+				Permission p5 = new Permission();
+				p5.setGridIdentity("O=Test Organization,OU=Test Unit,CN=User");
+				p5.setRole(Role.TrustAuthorityManager);
+				pm.addPermission(p5);
+				fail("Should not be able to add a permission for a TrustAuthorityManager without specifying a trust authority.");
+			} catch (IllegalPermissionFault f) {
+
+			}
+			
+			try {
+				Permission p6 = new Permission();
+				p6.setGridIdentity("O=Test Organization,OU=Test Unit,CN=User");
+				p6.setRole(Role.TrustAuthorityManager);
+				p6.setTrustedAuthorityName("*");
+				pm.addPermission(p6);
+				fail("Should not be able to add a permission for a TrustAuthorityManager without specifying a trust authority.");
+			} catch (IllegalPermissionFault f) {
+
+			}
+			
+			try {
+				Permission p7 = new Permission();
+				p7.setGridIdentity("O=Test Organization,OU=Test Unit,CN=User");
+				p7.setRole(Role.TrustServiceAdmin);
+				p7.setTrustedAuthorityName("O=Test Organization,OU=Test Unit,CN=CA");
+				pm.addPermission(p7);
+				fail("Should not be able to specify a TrustServiceAdmin permission that applies to one TrustAuthority.");
 			} catch (IllegalPermissionFault f) {
 
 			}

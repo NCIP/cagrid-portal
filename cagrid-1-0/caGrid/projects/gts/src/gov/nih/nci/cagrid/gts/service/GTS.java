@@ -36,7 +36,7 @@ public class GTS {
 	}
 
 
-	public synchronized TrustedAuthority addTrustedAuthority(String gridIdentity, TrustedAuthority ta)
+	public TrustedAuthority addTrustedAuthority(String gridIdentity, TrustedAuthority ta)
 		throws GTSInternalFault, IllegalTrustedAuthorityFault, PermissionDeniedFault {
 		checkServiceAdministrator(gridIdentity);
 		return trust.addTrustedAuthority(ta);
