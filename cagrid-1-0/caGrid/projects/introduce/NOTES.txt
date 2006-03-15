@@ -4,8 +4,6 @@ need to put a validator on the param name, it must be java valid......
 
 Method modification window needs an overhaul....
 
-The GME Browser screen does not scroll correctly.
-
 BaseResource bug that Mike and Steve found.  Make new service with secure conv. and keep the initial
 settings.  Use a proxy created from Dorian in the credentials section.  Stand up globus without security.
 --seems the AuthenticationService intercepts the intial call, then rewrites the resourcecontext targetService to be itself... this causes the resourcehome to break
@@ -27,6 +25,8 @@ Need to add more complex tests to the system test for adding complex methods wit
 Security configuration (STEVE)
 
 ============================ D O N E ================================================================
+(DONE) The GME Browser screen does not scroll correctly.
+
 (DONE) when using a non-bean response object, the wsdl writter is broken.  It assumes the element name is "response".  It should assume it is the className
 
 (DONE) if introduce.jar and the like is removed from the service and expected to be run from elsewhere, introduce will need to check that it supports the version of 

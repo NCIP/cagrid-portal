@@ -83,7 +83,7 @@ import javax.swing.undo.UndoableEdit;
  * </pre>
  * 
  * @author Slava Pestov
- * @version $Id: JEditTextArea.java,v 1.4 2006-03-15 14:24:03 hastings Exp $
+ * @version $Id: JEditTextArea.java,v 1.5 2006-03-15 14:24:22 hastings Exp $
  */
 public class JEditTextArea extends JComponent {
 	/**
@@ -131,7 +131,6 @@ public class JEditTextArea extends JComponent {
 		// add a listener for scrolling.......
 		this.addMouseWheelListener(new MouseWheelListener() {
 			public void mouseWheelMoved(MouseWheelEvent e) {
-				String message;
 				int notches = e.getWheelRotation();
 				if (e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL) {
 					vertical.setValue(vertical.getValue() + (notches * vertical.getUnitIncrement(1)));
