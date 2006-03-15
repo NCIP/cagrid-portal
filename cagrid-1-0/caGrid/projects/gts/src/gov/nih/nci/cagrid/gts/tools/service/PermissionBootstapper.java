@@ -1,0 +1,86 @@
+package gov.nih.nci.cagrid.gts.tools.service;
+
+import gov.nih.nci.cagrid.common.FaultUtil;
+import gov.nih.nci.cagrid.common.IOUtils;
+import gov.nih.nci.cagrid.common.SimpleResourceManager;
+import gov.nih.nci.cagrid.gts.bean.Permission;
+import gov.nih.nci.cagrid.gts.bean.Role;
+import gov.nih.nci.cagrid.gts.common.Database;
+import gov.nih.nci.cagrid.gts.service.GTSConfiguration;
+import gov.nih.nci.cagrid.gts.service.PermissionManager;
+import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
+import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
+
+import java.io.InputStream;
+
+import junit.framework.TestCase;
+
+
+/**
+ * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
+ * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
+ * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
+ * @version $Id: TrustedAuthorityManager.java,v 1.1 2006/03/08 19:48:46 langella
+ *          Exp $
+ */
+
+public class PermissionBootstapper {
+
+	private PermissionManager pm;
+
+
+	public PermissionBootstapper(GTSConfiguration conf) {
+		pm = new PermissionManager(new Database(conf.getConnectionManager(), conf.getGTSInternalId()));
+	}
+
+
+	public void addAdminUser(String gridIdentity) throws GTSInternalFault,IllegalPermissionFault{
+		Permission p = new Permission();
+		p.setGridIdentity(gridIdentity);
+		p.setRole(Role.TrustServiceAdmin);
+		pm.addPermission(p);
+	}
+
+
+	public static void usage() {
+		System.err.println(PermissionBootstapper.class.getName() + " Usage:");
+		System.err.println();
+		System.err.println("java " + PermissionBootstapper.class.getName() + " GTS_CONFIGURATION_FILE");
+	}
+
+
+	public static void main(String[] args) {
+		if (args.length != 1) {
+			usage();
+			System.exit(1);
+		}
+		GTSConfiguration conf = null;
+		try {
+			SimpleResourceManager srm = new SimpleResourceManager(args[0]);
+			conf = (GTSConfiguration) srm.getResource(GTSConfiguration.RESOURCE);
+		} catch (Exception e) {
+			System.out.println("Error loading the GTS config file, "+args[0]);
+			e.printStackTrace();
+			System.exit(1);
+		}
+		try{
+			PermissionBootstapper util = new PermissionBootstapper(conf);
+			System.out.println("*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*");
+			System.out.println("*               Grid Trust Service Permission Bootstrapper                 *");
+			System.out.println("*                                                                         *");
+			System.out.println("*  This tool is used for bootstrapping the Grid Trust Service (GTS).  It  *");
+			System.out.println("*enables one to configure the GTS with a preliminary of administrators. It*");
+			System.out.println("*is not intended to be used as the method of managing GTS administrators. *");
+			System.out.println("*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*");
+			System.out.println();
+			System.out.println("Below please enter the Grid Identity of the GTS Administrator:");
+			String gridId = IOUtils.readLine("Grid Identity>",true);
+			util.addAdminUser(gridId);
+			System.out.println("The user "+gridId+" was succesfully added as an administrator of the GTS ("+conf.getGTSInternalId()+")");
+		}catch(Exception e){
+			FaultUtil.printFault(e);
+			System.exit(1);
+		}
+	}
+
+}
