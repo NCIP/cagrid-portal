@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.gts.service;
 
+import gov.nih.nci.cagrid.gts.bean.PermissionFilter;
+import gov.nih.nci.cagrid.gts.bean.Role;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.common.Database;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
@@ -23,19 +25,34 @@ public class GTS {
 	private TrustedAuthorityManager trust;
 	private PermissionManager permissions;
 
+
 	public GTS(GTSConfiguration conf, String gtsURI) {
 		logger = Logger.getLogger(this.getClass().getName());
 		this.conf = conf;
 		this.gtsURI = gtsURI;
-		Database db = new Database(conf.getConnectionManager(), conf.getGTSInternalId());
-		trust = new TrustedAuthorityManager(gtsURI, db);
+		Database db = new Database(this.conf.getConnectionManager(), this.conf.getGTSInternalId());
+		trust = new TrustedAuthorityManager(this.gtsURI, db);
 		permissions = new PermissionManager(db);
 	}
-	
+
+
 	public synchronized TrustedAuthority addTrustedAuthority(String gridIdentity, TrustedAuthority ta)
-	throws GTSInternalFault, IllegalTrustedAuthorityFault, PermissionDeniedFault {
-		
-		return null;
+		throws GTSInternalFault, IllegalTrustedAuthorityFault, PermissionDeniedFault {
+		checkServiceAdministrator(gridIdentity);
+		return trust.addTrustedAuthority(ta);
+	}
+
+
+	private void checkServiceAdministrator(String gridIdentity) throws GTSInternalFault, PermissionDeniedFault {
+		PermissionFilter p = new PermissionFilter();
+		p.setGridIdentity(gridIdentity);
+		p.setRole(Role.TrustServiceAdmin);
+		p.setTrustedAuthorityName("*");
+		if (permissions.findPermissions(p).length == 0) {
+			PermissionDeniedFault fault = new PermissionDeniedFault();
+			fault.setFaultString("You are not a trust service administrator!!!");
+			throw fault;
+		}
 	}
 
 }
