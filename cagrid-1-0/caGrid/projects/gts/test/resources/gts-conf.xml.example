@@ -2,7 +2,7 @@
 	<resource name="GTSConfiguration"
 		class="gov.nih.nci.cagrid.gts.service.GTSConfiguration">
 		<gts-config>
-			<gts-internal-id>GTS</gts-internal-id>
+			<gts-internal-id>GTS_TEST</gts-internal-id>
 			<database>
 				<name/>
 				<driver>com.mysql.jdbc.Driver</driver>
