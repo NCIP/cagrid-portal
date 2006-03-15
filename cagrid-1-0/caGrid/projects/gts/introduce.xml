@@ -22,6 +22,7 @@
    <ns2:Exceptions>
     <ns2:Exception name="GTSInternalFault"/>
     <ns2:Exception name="IllegalTrustedAuthorityFault"/>
+    <ns2:Exception name="PermissionDeniedFault"/>
    </ns2:Exceptions>
    <ns2:MethodSecurity xsi:type="ns4:MethodSecurity" xmlns:ns4="gme://gov.nih.nci.cagrid.introduce/1/Security">
     <ns4:MethodSecuritySetting xsi:type="ns4:MethodSecurityType">None</ns4:MethodSecuritySetting>

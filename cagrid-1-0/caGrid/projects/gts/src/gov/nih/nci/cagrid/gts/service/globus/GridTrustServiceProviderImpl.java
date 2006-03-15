@@ -59,15 +59,17 @@ public class GridTrustServiceProviderImpl{
 
 
 
-	public gov.nih.nci.cagrid.gts.stubs.RevokePermissionResponse revokePermission(gov.nih.nci.cagrid.gts.stubs.RevokePermission params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault {
-		impl.revokePermission(params.getPermission().getPermission());
-		return new gov.nih.nci.cagrid.gts.stubs.RevokePermissionResponse();
-	}
+
+
+
+
+
+
 	public gov.nih.nci.cagrid.gts.stubs.RemoveTrustedAuthorityResponse removeTrustedAuthority(gov.nih.nci.cagrid.gts.stubs.RemoveTrustedAuthority params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault {
 		impl.removeTrustedAuthority();
 		return new gov.nih.nci.cagrid.gts.stubs.RemoveTrustedAuthorityResponse();
 	}
-	public gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityResponse addTrustedAuthority(gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthority params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault {
+	public gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityResponse addTrustedAuthority(gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthority params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
 		impl.addTrustedAuthority(params.getTrustedAuthority().getTrustedAuthority());
 		return new gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityResponse();
 	}
@@ -84,6 +86,10 @@ public class GridTrustServiceProviderImpl{
 		gov.nih.nci.cagrid.gts.stubs.FindPermissionsResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.FindPermissionsResponse();
 		boxedResult.setPermission(impl.findPermissions(params.getPermissionFilter().getPermissionFilter()));
 		return boxedResult;
+	}
+	public gov.nih.nci.cagrid.gts.stubs.RevokePermissionResponse revokePermission(gov.nih.nci.cagrid.gts.stubs.RevokePermission params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault {
+		impl.revokePermission(params.getPermission().getPermission());
+		return new gov.nih.nci.cagrid.gts.stubs.RevokePermissionResponse();
 	}
 
 }

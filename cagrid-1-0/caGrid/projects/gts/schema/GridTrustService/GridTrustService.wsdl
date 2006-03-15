@@ -195,6 +195,14 @@
 					</complexType>
 				</element>
       					
+				<element name="PermissionDeniedFault" >
+					<complexType>
+						<complexContent>
+							<extension base="wsrbf:BaseFaultType"/>
+						</complexContent>
+					</complexType>
+				</element>
+      					
 				<element name="IllegalPermissionFault" >
 					<complexType>
 						<complexContent>
@@ -272,6 +280,9 @@
 	<message name="IllegalTrustedAuthorityFaultFaultMessage">
 		<part name="fault" element="tns:IllegalTrustedAuthorityFault"/>
 	</message>
+	<message name="PermissionDeniedFaultFaultMessage">
+		<part name="fault" element="tns:PermissionDeniedFault"/>
+	</message>
 	<message name="IllegalPermissionFaultFaultMessage">
 		<part name="fault" element="tns:IllegalPermissionFault"/>
 	</message>
@@ -300,6 +311,8 @@
        		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
        				
        		 <fault name="IllegalTrustedAuthorityFault" message="tns:IllegalTrustedAuthorityFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
        				
         </operation>
 		<operation name="findTrustedAuthorities">
