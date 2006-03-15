@@ -1,6 +1,8 @@
 package gov.nih.nci.cagrid.gts.test;
 
+import gov.nih.nci.cagrid.common.SimpleResourceManager;
 import gov.nih.nci.cagrid.gts.common.Database;
+import gov.nih.nci.cagrid.gts.service.GTSConfiguration;
 
 import java.io.InputStream;
 
@@ -14,7 +16,7 @@ import org.projectmobius.db.ConnectionManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: Utils.java,v 1.3 2006-03-08 20:56:46 langella Exp $
+ * @version $Id: Utils.java,v 1.4 2006-03-15 16:33:22 langella Exp $
  */
 public class Utils {
 	
@@ -28,6 +30,12 @@ public class Utils {
 		db.destroyDatabase();
 		db.createDatabaseIfNeeded();	
 		return db;
+	}
+	
+	public static GTSConfiguration getGTSConfiguration() throws Exception{
+		InputStream in = TestCase.class.getResourceAsStream(GTSConstants.GTS_CONFIG);
+		SimpleResourceManager srm = new SimpleResourceManager(in);
+		return (GTSConfiguration)srm.getResource(GTSConfiguration.RESOURCE);
 	}
 
 }

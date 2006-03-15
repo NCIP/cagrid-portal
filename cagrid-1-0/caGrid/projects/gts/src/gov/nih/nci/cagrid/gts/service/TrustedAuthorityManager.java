@@ -539,6 +539,7 @@ public class TrustedAuthorityManager {
 	}
 
 	public void destroy() throws GTSInternalFault {
+		db.createDatabaseIfNeeded();
 		db.update("DROP TABLE IF EXISTS " + TRUSTED_AUTHORITIES_TABLE);
 		dbBuilt = false;
 	}

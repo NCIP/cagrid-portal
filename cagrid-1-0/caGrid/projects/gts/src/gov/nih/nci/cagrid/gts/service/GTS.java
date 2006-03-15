@@ -54,5 +54,10 @@ public class GTS {
 			throw fault;
 		}
 	}
+	
+	public void destroy() throws GTSInternalFault {
+		trust.destroy();
+		permissions.destroy();
+	}
 
 }

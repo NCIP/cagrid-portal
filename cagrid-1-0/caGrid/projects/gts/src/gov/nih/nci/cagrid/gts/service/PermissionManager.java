@@ -299,6 +299,7 @@ public class PermissionManager {
 	}
 
 	public void destroy() throws GTSInternalFault {
+		db.createDatabaseIfNeeded();
 		db.update("DROP TABLE IF EXISTS " + PERMISSIONS_TABLE);
 		dbBuilt = false;
 	}
