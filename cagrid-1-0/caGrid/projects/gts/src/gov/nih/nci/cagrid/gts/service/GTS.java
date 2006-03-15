@@ -1,9 +1,12 @@
 package gov.nih.nci.cagrid.gts.service;
 
+import gov.nih.nci.cagrid.gts.bean.Permission;
+import gov.nih.nci.cagrid.gts.bean.PermissionFilter;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
 import gov.nih.nci.cagrid.gts.common.Database;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
+import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault;
 
@@ -41,6 +44,28 @@ public class GTS {
 
 	public TrustedAuthority[] findTrustAuthorities(TrustedAuthorityFilter filter) throws GTSInternalFault {
 		return trust.findTrustAuthorities(filter);
+	}
+
+
+	public void addPermission(Permission p, String callerGridIdentity) throws GTSInternalFault, IllegalPermissionFault,
+		PermissionDeniedFault {
+		checkServiceAdministrator(callerGridIdentity);
+		if (p.getTrustedAuthorityName() != null) {
+			if (!trust.doesTrustedAuthorityExist(p.getTrustedAuthorityName())) {
+				IllegalPermissionFault fault = new IllegalPermissionFault();
+				fault.setFaultString("Cannot add permission, the Trusted Authority (" + p.getTrustedAuthorityName()
+					+ ") specified does not exist.");
+				throw fault;
+			}
+		}
+		permissions.addPermission(p);
+	}
+
+
+	public Permission[] findPermissions(PermissionFilter filter, String callerGridIdentity) throws GTSInternalFault,
+		PermissionDeniedFault {
+		checkServiceAdministrator(callerGridIdentity);
+		return permissions.findPermissions(filter);
 	}
 
 

@@ -1,12 +1,11 @@
 package gov.nih.nci.cagrid.gts.service;
 
-import java.math.BigInteger;
-
-import org.bouncycastle.asn1.x509.CRLReason;
-
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.gridca.common.CRLEntry;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
+import gov.nih.nci.cagrid.gts.bean.Permission;
+import gov.nih.nci.cagrid.gts.bean.PermissionFilter;
+import gov.nih.nci.cagrid.gts.bean.Role;
 import gov.nih.nci.cagrid.gts.bean.Status;
 import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
@@ -17,7 +16,12 @@ import gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gts.test.CA;
 import gov.nih.nci.cagrid.gts.test.Utils;
 import gov.nih.nci.cagrid.gts.tools.service.PermissionBootstapper;
+
+import java.math.BigInteger;
+
 import junit.framework.TestCase;
+
+import org.bouncycastle.asn1.x509.CRLReason;
 
 
 /**
@@ -44,7 +48,7 @@ public class TestGTS extends TestCase {
 	}
 
 
-	public void testAddTrustedAuthority() {
+	public void testAddPermission() {
 		try {
 			GTSConfiguration conf = Utils.getGTSConfiguration();
 
@@ -54,19 +58,29 @@ public class TestGTS extends TestCase {
 
 			PermissionBootstapper pb = new PermissionBootstapper(conf);
 			pb.addAdminUser(ADMIN_USER);
-			CA ca = new CA();
-			BigInteger sn = new BigInteger(String.valueOf(System.currentTimeMillis()));
-			CRLEntry entry = new CRLEntry(sn, CRLReason.PRIVILEGE_WITHDRAWN);
-			ca.updateCRL(entry);
-			TrustedAuthority ta = new TrustedAuthority();
-			ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
-			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
-			ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
-			ta.setStatus(Status.Trusted);
-			ta.setTrustLevel(TrustLevel.Five);
-			gts.addTrustedAuthority(ta, ADMIN_USER);
-			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
-			assertEquals(ta, gts.findTrustAuthorities(new TrustedAuthorityFilter())[0]);
+			
+			//TODO: Test
+			
+			gts.destroy();
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+	}
+	
+	public void testFindPermissions() {
+		try {
+			GTSConfiguration conf = Utils.getGTSConfiguration();
+
+			GTS gts = new GTS(conf, "localhost");
+			// Make sure we start fresh
+			gts.destroy();
+
+			PermissionBootstapper pb = new PermissionBootstapper(conf);
+			pb.addAdminUser(ADMIN_USER);
+			
+			//TODO: Test
+			
 			gts.destroy();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -75,7 +89,8 @@ public class TestGTS extends TestCase {
 	}
 
 
-	public void testAddTrustedAuthorityInvalidPermissions() {
+
+	public void testAddTrustedAuthority() {
 		try {
 			GTSConfiguration conf = Utils.getGTSConfiguration();
 
@@ -104,8 +119,8 @@ public class TestGTS extends TestCase {
 
 			}
 			assertEquals(0, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
-			
-			//Test Empty String
+
+			// Test Empty String
 			try {
 				gts.addTrustedAuthority(ta, "");
 				fail("Non trust service administrators should not be able to add a trust authority!!!");
@@ -114,7 +129,7 @@ public class TestGTS extends TestCase {
 			}
 			assertEquals(0, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
 
-			//Test User without any permissions
+			// Test User without any permissions
 			try {
 				gts.addTrustedAuthority(ta, user);
 				fail("Non trust service administrators should not be able to add a trust authority!!!");
@@ -122,17 +137,56 @@ public class TestGTS extends TestCase {
 
 			}
 			assertEquals(0, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
-			
+
 			// Finally Add a trust authority so we can create trust manager
 			// users
 			gts.addTrustedAuthority(ta, ADMIN_USER);
 			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
 			assertEquals(ta, gts.findTrustAuthorities(new TrustedAuthorityFilter())[0]);
+
+			// Now create a permission for a user on the previous added trust
+			// authority.
+			Permission p = new Permission();
+			p.setGridIdentity(user);
+			p.setRole(Role.TrustAuthorityManager);
+			p.setTrustedAuthorityName(ta.getTrustedAuthorityName());	
+			gts.addPermission(p,ADMIN_USER);
+			
+			//Check to make sure the permission was properly added
+			PermissionFilter pf = permissionToPermissionFilter(p);
+			assertEquals(1,gts.findPermissions(pf,ADMIN_USER).length);
+			assertEquals(p,gts.findPermissions(pf,ADMIN_USER)[0]);
+
+			//Now Create a new Trust Authority
+			CA ca2 = new CA();
+			TrustedAuthority ta2 = new TrustedAuthority();
+			ta2.setTrustedAuthorityName(ca2.getCertificate().getSubjectDN().toString());
+			ta2.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca2.getCertificate())));
+			ta2.setStatus(Status.Trusted);
+			ta2.setTrustLevel(TrustLevel.Five);
+			
+			try {
+				gts.addTrustedAuthority(ta, user);
+				fail("Non trust service administrators should not be able to add a trust authority!!!");
+			} catch (PermissionDeniedFault f) {
+
+			}
+			
+			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+			
 			gts.destroy();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
+	}
+	
+	private PermissionFilter permissionToPermissionFilter(Permission p){
+		PermissionFilter pf = new PermissionFilter();
+		pf.setGridIdentity(p.getGridIdentity());
+		pf.setRole(p.getRole());
+		pf.setTrustedAuthorityName(p.getTrustedAuthorityName());
+		return pf;
 	}
 
 }
