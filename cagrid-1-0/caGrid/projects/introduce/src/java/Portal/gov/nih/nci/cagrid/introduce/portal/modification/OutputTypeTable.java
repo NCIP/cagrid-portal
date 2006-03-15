@@ -1,33 +1,20 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
 import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
-import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
-import gov.nih.nci.cagrid.introduce.portal.modification.gme.GMEParameterConfigurationComponent;
 
-import java.io.File;
 import java.util.Vector;
 
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-
-import org.projectmobius.common.GridServiceResolver;
-import org.projectmobius.common.MobiusException;
-import org.projectmobius.common.Namespace;
-import org.projectmobius.gme.XMLDataModelService;
-import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
-import org.projectmobius.portal.PortalResourceManager;
 
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: OutputTypeTable.java,v 1.17 2006-03-15 17:36:23 hastings Exp $
+ * @version $Id: OutputTypeTable.java,v 1.18 2006-03-15 17:39:17 hastings Exp $
  */
 public class OutputTypeTable extends PortalBaseTable {
 
