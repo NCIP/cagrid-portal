@@ -51,7 +51,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: ModificationViewer.java,v 1.74 2006-03-13 15:23:11 hastings Exp $
+ * @version $Id: ModificationViewer.java,v 1.75 2006-03-15 17:46:53 hastings Exp $
  */
 public class ModificationViewer extends GridPortalComponent {
 
@@ -590,44 +590,7 @@ public class ModificationViewer extends GridPortalComponent {
 										// new ServiceMetadataType array
 										MetadataType[] metadataArray = new MetadataType[metadataTable.getRowCount()];
 										for (int i = 0; i < metadataArray.length; i++) {
-											String packageName = (String) metadataTable.getValueAt(i, 0);
-											String className = (String) metadataTable.getValueAt(i, 1);
-											String namespace = (String) metadataTable.getValueAt(i, 2);
-											String type = (String) metadataTable.getValueAt(i, 3);
-											String location = (String) metadataTable.getValueAt(i, 4);
-											String populateFromFile = (String) metadataTable.getValueAt(i, 5);
-											String register = (String) metadataTable.getValueAt(i, 6);
-											String qnameNS = (String) metadataTable.getValueAt(i, 7);
-											String qnameName = (String) metadataTable.getValueAt(i, 8);
-
-											MetadataType metadata = new MetadataType();
-											if (packageName != null && !packageName.equals("")) {
-												metadata.setPackageName(packageName);
-											}
-											if (className != null && !className.equals("")) {
-												metadata.setClassName(className);
-											}
-											if (namespace != null && !namespace.equals("")) {
-												metadata.setNamespace(namespace);
-											}
-											if (type != null && !type.equals("")) {
-												metadata.setType(type);
-											}
-											if (location != null && !location.equals("")) {
-												metadata.setLocation(location);
-											}
-											if (populateFromFile != null && !populateFromFile.equals("")) {
-												metadata.setPopulateFromFile(Boolean.valueOf(populateFromFile)
-													.booleanValue());
-											}
-											if (register != null && !register.equals("")) {
-												metadata.setRegister(Boolean.valueOf(register).booleanValue());
-											}
-											if (qnameNS != null && !qnameNS.equals("") && qnameName != null
-												&& !qnameName.equals("")) {
-												QName qn = new QName(qnameNS, qnameName);
-												metadata.setQName(qn);
-											}
+											MetadataType metadata = metadataTable.getRowData(i);
 											metadataArray[i] = metadata;
 
 										}

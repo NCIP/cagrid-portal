@@ -8,6 +8,7 @@ import java.util.Vector;
 
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+import javax.xml.namespace.QName;
 
 
 /**
@@ -54,6 +55,52 @@ public class MetadataTable extends PortalBaseTable {
 
 	public boolean isCellEditable(int row, int column) {
 		return true;
+	}
+	
+	public MetadataType getRowData(int row) throws Exception {
+		if ((row < 0) || (row >= getRowCount())) {
+			throw new Exception("invalid row");
+		}
+		String packageName = (String) getValueAt(row, 0);
+		String className = (String) getValueAt(row, 1);
+		String namespace = (String) getValueAt(row, 2);
+		String type = (String) getValueAt(row, 3);
+		String location = (String) getValueAt(row, 4);
+		String populateFromFile = (String) getValueAt(row, 5);
+		String register = (String) getValueAt(row, 6);
+		String qnameNS = (String) getValueAt(row, 7);
+		String qnameName = (String) getValueAt(row, 8);
+
+		MetadataType metadata = new MetadataType();
+		if (packageName != null && !packageName.equals("")) {
+			metadata.setPackageName(packageName);
+		}
+		if (className != null && !className.equals("")) {
+			metadata.setClassName(className);
+		}
+		if (namespace != null && !namespace.equals("")) {
+			metadata.setNamespace(namespace);
+		}
+		if (type != null && !type.equals("")) {
+			metadata.setType(type);
+		}
+		if (location != null && !location.equals("")) {
+			metadata.setLocation(location);
+		}
+		if (populateFromFile != null && !populateFromFile.equals("")) {
+			metadata.setPopulateFromFile(Boolean.valueOf(populateFromFile)
+				.booleanValue());
+		}
+		if (register != null && !register.equals("")) {
+			metadata.setRegister(Boolean.valueOf(register).booleanValue());
+		}
+		if (qnameNS != null && !qnameNS.equals("") && qnameName != null
+			&& !qnameName.equals("")) {
+			QName qn = new QName(qnameNS, qnameName);
+			metadata.setQName(qn);
+		}
+		
+		return metadata;
 	}
 
 
