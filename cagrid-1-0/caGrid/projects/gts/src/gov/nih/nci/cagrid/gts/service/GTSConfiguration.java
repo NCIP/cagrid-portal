@@ -41,7 +41,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *---------------------------------------------------------------------------*/
 
-package gov.nih.nci.cagrid.dorian.service;
+package gov.nih.nci.cagrid.gts.service;
 
 import org.jdom.Element;
 import org.projectmobius.common.AbstractMobiusConfiguration;
@@ -56,31 +56,17 @@ import org.projectmobius.db.ConnectionManager;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class DorianConfiguration implements AbstractMobiusConfiguration {
-	
-	public static final String RESOURCE = "DorianConfiguration";
-	
+public class GTSConfiguration implements AbstractMobiusConfiguration {
+
+	public static final String RESOURCE = "GTSConfiguration";
+
 	public static final String DATABASE = "database";
 
-	public static final String DORIAN_ID = "dorian-internal-id";
-
-	public static final String EMAIL_ELEMENT = "outgoing-email";
-
-	public static final String EMAIL_SERVER_ATT = "host";
-
-	public static final String EMAIL_PORT_ATT = "port";
-
-	public static final String EMAIL_PROTOCOL_ATT = "protocol";
+	public static final String GTS_ID = "gts-internal-id";
 
 	private ConnectionManager rootConnectionManager;
 
-	private String dorianInternalId;
-
-	private String outgoingEmailHost;
-
-	private int outgoingEmailPort;
-
-	private String outgoingEmailProtocol;
+	private String gtsInternalId;
 
 	public void parse(MobiusResourceManager resourceManager, Element config)
 			throws MobiusException {
@@ -90,53 +76,16 @@ public class DorianConfiguration implements AbstractMobiusConfiguration {
 					rootDatabaseConfig);
 		} else {
 			throw new MobiusException(
-					"No database defined in the Dorian Configuration.");
+					"No database defined in the GTS Configuration.");
 		}
-		this.dorianInternalId = config.getChildText(DORIAN_ID);
-		if (dorianInternalId == null) {
+		this.gtsInternalId = config.getChildText(GTS_ID);
+		if (gtsInternalId == null) {
 			throw new MobiusException("No internal id specified.");
-		}
-
-		Element email = config.getChild(EMAIL_ELEMENT, config.getNamespace());
-		if (email == null) {
-			throw new MobiusException(
-					"Error configuring Dorian, no outgoing email configuration specified.");
-		} else {
-			String server = email.getAttributeValue(EMAIL_SERVER_ATT, email
-					.getNamespace());
-			if (server == null) {
-				throw new MobiusException(
-						"Error configuring , no outgoing email server specified.");
-			} else {
-				this.outgoingEmailHost = server;
-			}
-
-			String port = email.getAttributeValue(EMAIL_PORT_ATT, email
-					.getNamespace());
-			if (port == null) {
-				throw new MobiusException(
-						"Error configuring Dorian, no outgoing email server port specified.");
-			} else {
-				try {
-					this.outgoingEmailPort = Integer.valueOf(port).intValue();
-				} catch (Exception ex) {
-					throw new MobiusException(
-							"Error configuring Dorian, the outgoing email server port specified was not an integer.");
-				}
-			}
-			String protocol = email.getAttributeValue(EMAIL_PROTOCOL_ATT, email
-					.getNamespace());
-			if (protocol == null) {
-				throw new MobiusException(
-						"Error configuring Dorian, no outgoing email protocol specified.");
-			} else {
-				this.outgoingEmailProtocol = protocol;
-			}
 		}
 	}
 
-	public String getDorianInternalId() {
-		return dorianInternalId;
+	public String getGTSInternalId() {
+		return gtsInternalId;
 	}
 
 	/**
@@ -144,17 +93,5 @@ public class DorianConfiguration implements AbstractMobiusConfiguration {
 	 */
 	public ConnectionManager getConnectionManager() {
 		return rootConnectionManager;
-	}
-
-	public String getOutgoingEmailHost() {
-		return outgoingEmailHost;
-	}
-
-	public int getOutgoingEmailPort() {
-		return outgoingEmailPort;
-	}
-
-	public String getOutgoingEmailProtocol() {
-		return outgoingEmailProtocol;
 	}
 }
