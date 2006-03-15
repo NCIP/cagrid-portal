@@ -26,6 +26,7 @@ import org.exolab.castor.xml.schema.reader.SchemaReader;
 import org.projectmobius.common.GridServiceResolver;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.Namespace;
+import org.projectmobius.common.XMLUtilities;
 import org.projectmobius.common.gme.NamespaceExistsException;
 import org.projectmobius.gme.XMLDataModelService;
 import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
@@ -253,7 +254,11 @@ public class GMEViewer extends GridPortalComponent {
 
 				public void actionPerformed(ActionEvent e) {
 					if (gmeSchemaLocatorPanel.currentNode != null) {
-						getSchemaTextPane().setText(gmeSchemaLocatorPanel.currentNode.getSchemaContents());
+						try {
+							getSchemaTextPane().setText(XMLUtilities.formatXML(gmeSchemaLocatorPanel.currentNode.getSchemaContents()));
+						} catch (MobiusException e1) {
+							e1.printStackTrace();
+						}
 						getSchemaTextPane().setCaretPosition(0);
 					}
 				}
@@ -289,8 +294,8 @@ public class GMEViewer extends GridPortalComponent {
 					if (file.exists() && file.canRead()) {
 						try {
 							StringBuffer buf = Utils.fileToStringBuffer(file);
-							uploadSchemaTextPane.setText(buf.toString());
-							uploadSchemaTextPane.setCaretPosition(0);
+							getUploadSchemaTextPane().setText(XMLUtilities.formatXML(buf.toString()));
+							getUploadSchemaTextPane().setCaretPosition(0);
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();

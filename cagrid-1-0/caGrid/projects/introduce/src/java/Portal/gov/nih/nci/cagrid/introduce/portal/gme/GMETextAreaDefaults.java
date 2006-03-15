@@ -23,7 +23,7 @@ public class GMETextAreaDefaults
 
 			DEFAULTS.caretVisible = true;
 			DEFAULTS.caretBlinks = false;
-			DEFAULTS.electricScroll = 3;
+			DEFAULTS.electricScroll = 0;
 
 			DEFAULTS.cols = 80;
 			DEFAULTS.rows = 25;
