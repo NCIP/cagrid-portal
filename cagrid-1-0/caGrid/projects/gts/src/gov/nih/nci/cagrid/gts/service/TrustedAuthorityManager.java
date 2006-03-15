@@ -307,6 +307,7 @@ public class TrustedAuthorityManager {
 
 	public synchronized boolean doesTrustedAuthorityExist(String name)
 			throws GTSInternalFault {
+		this.buildDatabase();
 		String sql = "select count(*) from " + TRUSTED_AUTHORITIES_TABLE
 				+ " where NAME='" + name + "'";
 		Connection c = null;

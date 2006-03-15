@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.gts.common.Database;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault;
+import gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault;
 import gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault;
 
 
@@ -66,6 +67,13 @@ public class GTS {
 		PermissionDeniedFault {
 		checkServiceAdministrator(callerGridIdentity);
 		return permissions.findPermissions(filter);
+	}
+
+
+	public void revokePermission(Permission p, String callerGridIdentity) throws GTSInternalFault,
+		InvalidPermissionFault, PermissionDeniedFault {
+		checkServiceAdministrator(callerGridIdentity);
+		permissions.revokePermission(p);
 	}
 
 
