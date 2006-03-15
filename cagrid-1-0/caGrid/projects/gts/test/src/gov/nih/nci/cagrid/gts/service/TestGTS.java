@@ -19,7 +19,6 @@ import gov.nih.nci.cagrid.gts.test.Utils;
 import gov.nih.nci.cagrid.gts.tools.service.PermissionBootstapper;
 
 import java.math.BigInteger;
-import java.util.concurrent.ThreadPoolExecutor.CallerRunsPolicy;
 
 import junit.framework.TestCase;
 
