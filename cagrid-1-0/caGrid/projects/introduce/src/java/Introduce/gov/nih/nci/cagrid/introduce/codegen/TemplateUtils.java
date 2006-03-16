@@ -10,13 +10,13 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.jdom.Document;
 import org.projectmobius.common.XMLUtilities;
-
 
 /**
  * Templating Utility Functions
@@ -116,6 +116,7 @@ public class TemplateUtils {
 
 	public static Map buildMasterNamespaceSchemaInformationMap(ServiceInformation info) {
 		Map map = new HashMap();
+		Set usedPrefixes = new HashSet();
 		if (info.getMetadata() != null && info.getMetadata().getMetadata() != null) {
 			MetadataListType metadataList = info.getMetadata();
 			for (int i = 0; i < metadataList.getMetadata().length; i++) {
@@ -127,78 +128,82 @@ public class TemplateUtils {
 				String prefixBase = qnameName.toLowerCase().substring(0, Math.min(qnameName.length(), 4));
 				int previousNumber = 0;
 				String prefix = prefixBase + ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
-				while (map.containsValue(prefix)) {
+				while (usedPrefixes.contains(prefix)) {
 					previousNumber++;
 					prefix = prefixBase + ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
 				}
 				// add the ns=>prefix entry
+				usedPrefixes.add(prefix);
+				System.out.println("Assigning prefix " + prefix + " to qname " + qnameName);
 				map.put(qnameNamespace, new SchemaInformation(metadata.getPackageName(), qnameNamespace, prefix,
 					location));
 			}
 		}
-
-		if (info.getMethods() != null) {
-			if (info.getMethods().getMethod() != null) {
-				for (int methodI = 0; methodI < info.getMethods().getMethod().length; methodI++) {
-					MethodType method = info.getMethods().getMethod(methodI);
-					if (method.getInputs() != null && method.getInputs().getInput() != null) {
-						for (int inputI = 0; inputI < method.getInputs().getInput().length; inputI++) {
-							MethodTypeInputsInput inputParam = method.getInputs().getInput(inputI);
-							String qnameName = inputParam.getType();
-							String qnameNamespace = inputParam.getNamespace();
-							if (!qnameNamespace.equals(IntroduceConstants.W3CNAMESPACE)) {
-								String location = inputParam.getLocation();
-
-								String prefixBase = qnameName.toLowerCase().substring(0,
-									Math.min(qnameName.length(), 4));
-								int previousNumber = 0;
-								String prefix = prefixBase
-									+ ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
-								while (map.containsValue(prefix)) {
-									previousNumber++;
-									prefix = prefixBase + ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
-								}
-								// add the ns=>prefix entry
-								map.put(qnameNamespace, new SchemaInformation(inputParam.getPackageName(),
-									qnameNamespace, prefix, location));
-							} else {
-								inputParam.setPackageName("");
-								map.put(qnameNamespace, new SchemaInformation("", qnameNamespace, "xs", ""));
+		
+		if (info.getMethods() != null && info.getMethods().getMethod() != null) {
+			for (int methodI = 0; methodI < info.getMethods().getMethod().length; methodI++) {
+				MethodType method = info.getMethods().getMethod(methodI);
+				if (method.getInputs() != null && method.getInputs().getInput() != null) {
+					for (int inputI = 0; inputI < method.getInputs().getInput().length; inputI++) {
+						MethodTypeInputsInput inputParam = method.getInputs().getInput(inputI);
+						String qnameName = inputParam.getType();
+						String qnameNamespace = inputParam.getNamespace();
+						if (!qnameNamespace.equals(IntroduceConstants.W3CNAMESPACE)) {
+							String location = inputParam.getLocation();
+							
+							String prefixBase = qnameName.toLowerCase().substring(0,
+								Math.min(qnameName.length(), 4));
+							int previousNumber = 0;
+							String prefix = prefixBase
+							+ ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
+							while (usedPrefixes.contains(prefix)) {
+								previousNumber++;
+								prefix = prefixBase + ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
 							}
+							// add the ns=>prefix entry
+							usedPrefixes.add(prefix);
+							System.out.println("Assigning prefix " + prefix + " to qname " + qnameName);
+							map.put(qnameNamespace, new SchemaInformation(inputParam.getPackageName(),
+								qnameNamespace, prefix, location));
+						} else {
+							inputParam.setPackageName("");
+							map.put(qnameNamespace, new SchemaInformation("", qnameNamespace, "xs", ""));
 						}
 					}
-					if (method.getOutput() != null) {
-						MethodTypeOutput outputParam = method.getOutput();
-						if ((outputParam.getClassName() == null)
-							|| (outputParam.getClassName() != null && !outputParam.getClassName().equals("void"))) {
-							String qnameName = outputParam.getType();
-							String qnameNamespace = outputParam.getNamespace();
-							String location = outputParam.getLocation();
-
-							if (!qnameNamespace.equals(IntroduceConstants.W3CNAMESPACE)) {
-
-								String prefixBase = qnameName.toLowerCase().substring(0,
-									Math.min(qnameName.length(), 4));
-								int previousNumber = 0;
-								String prefix = prefixBase
-									+ ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
-								while (map.containsValue(prefix)) {
-									previousNumber++;
-									prefix = prefixBase + ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
-								}
-								// add the ns=>prefix entry
-								map.put(qnameNamespace, new SchemaInformation(outputParam.getPackageName(),
-									qnameNamespace, prefix, location));
-							} else {
-								outputParam.setPackageName("");
-								map.put(qnameNamespace, new SchemaInformation("", qnameNamespace, "xs", ""));
+				}
+				if (method.getOutput() != null) {
+					MethodTypeOutput outputParam = method.getOutput();
+					if ((outputParam.getClassName() == null)
+						|| (outputParam.getClassName() != null && !outputParam.getClassName().equals("void"))) {
+						String qnameName = outputParam.getType();
+						String qnameNamespace = outputParam.getNamespace();
+						String location = outputParam.getLocation();
+						
+						if (!qnameNamespace.equals(IntroduceConstants.W3CNAMESPACE)) {
+							
+							String prefixBase = qnameName.toLowerCase().substring(0,
+								Math.min(qnameName.length(), 4));
+							int previousNumber = 0;
+							String prefix = prefixBase
+							+ ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
+							while (usedPrefixes.contains(prefix)) {
+								previousNumber++;
+								prefix = prefixBase + ((previousNumber > 0) ? String.valueOf(previousNumber) : "");
 							}
+							// add the ns=>prefix entry
+							usedPrefixes.add(prefix);
+							System.out.println("Assigning prefix " + prefix + " to qname " + qnameName);
+							map.put(qnameNamespace, new SchemaInformation(outputParam.getPackageName(),
+								qnameNamespace, prefix, location));
+						} else {
+							outputParam.setPackageName("");
+							map.put(qnameNamespace, new SchemaInformation("", qnameNamespace, "xs", ""));
 						}
 					}
 				}
 			}
 		}
-
+		
 		return map;
 	}
 
