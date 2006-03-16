@@ -3,36 +3,55 @@
 BPEL Process Definition
 Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.com)
 -->
-<process name="AnnualDemo" suppressJoinFailure="yes" targetNamespace="http://AnnualDemo" xmlns="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:ns1="http://annualdemo.cagrid.nci.nih.gov/bpel" xmlns:ns2="http://rproteomics.cagrid.nci.nih.gov/RPData" xmlns:ns3="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQL" xmlns:ns4="http://www.globus.org/namespaces/cagrid/RProteomics/RProteomics" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<process name="AnnualDemo" suppressJoinFailure="yes" targetNamespace="http://AnnualDemo" xmlns="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:ns1="http://rproteomics.cagrid.nci.nih.gov/RPData" xmlns:ns2="http://annualdemo.cagrid.nci.nih.gov/bpel" xmlns:ns3="http://www.globus.org/namespaces/cagrid/RProteomics/RProteomics" xmlns:ns4="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQL" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
    <partnerLinks>
-      <partnerLink myRole="client" name="WorkFlowClientPartnerLinkType" partnerLinkType="ns1:WorkFlowClientPartnerLinkType"/>
-      <partnerLink name="RproteomicsDataLinkType" partnerLinkType="ns1:RproteomicsDataLinkType" partnerRole="data"/>
-      <partnerLink name="RproteomicsPartnerLinkType" partnerLinkType="ns1:RproteomicsPartnerLinkType" partnerRole="service"/>
+      <partnerLink myRole="client" name="WorkFlowClientPartnerLinkType" partnerLinkType="ns2:WorkFlowClientPartnerLinkType"/>
+      <partnerLink name="RproteomicsDataLinkType" partnerLinkType="ns2:RproteomicsDataLinkType" partnerRole="data"/>
+      <partnerLink name="RproteomicsPartnerLinkType" partnerLinkType="ns2:RproteomicsPartnerLinkType" partnerRole="service"/>
    </partnerLinks>
    <variables>
-      <variable messageType="ns2:workFlowInputMessage" name="workFlowInputMessage"/>
-      <variable messageType="ns2:workFlowOutputMessage" name="workFlowOutputMessage"/>
-      <variable messageType="ns2:queryInputMessage" name="queryInputMessage"/>
-      <variable messageType="ns2:queryOutputMessage" name="queryOutputMessage"/>
-      <variable messageType="ns4:echoByValueInputMessage" name="echoByValueInputMessage"/>
-      <variable messageType="ns4:echoByValueOutputMessage" name="echoByValueOutputMessage"/>
+      <variable messageType="ns1:workFlowInputMessage" name="workFlowInputMessage"/>
+      <variable messageType="ns1:workFlowOutputMessage" name="workFlowOutputMessage"/>
+      <variable messageType="ns1:queryInputMessage" name="queryInputMessage"/>
+      <variable messageType="ns1:queryOutputMessage" name="queryOutputMessage"/>
+      <variable messageType="ns3:echoByValueInputMessage" name="echoByValueInputMessage"/>
+      <variable messageType="ns3:echoByValueOutputMessage" name="echoByValueOutputMessage"/>
+      <!-- For Loops -->
+      <variable name="indexCounter" type="xsd:integer"/>
+      <variable name="count" type="xsd:integer"/>
    </variables>
    <sequence>
-      <receive createInstance="yes" operation="startWorkFlow" partnerLink="WorkFlowClientPartnerLinkType" portType="ns1:startWorkFlowPortType" variable="workFlowInputMessage"/>
+      <receive createInstance="yes" operation="startWorkFlow" partnerLink="WorkFlowClientPartnerLinkType" portType="ns2:startWorkFlowPortType" variable="workFlowInputMessage"/>
       <assign>
          <copy>
-            <from part="parameters" query="/ns2:WorkFlowInputType/queryType" variable="workFlowInputMessage"/>
-            <to part="parameters" query="/ns2:query/query" variable="queryInputMessage"/>
+            <from expression="&quot;1&quot;"/>
+            <to variable="indexCounter"/>
+         </copy>
+         <copy>
+            <from part="parameters" query="/ns1:WorkFlowInputType/queryType" variable="workFlowInputMessage"/>
+            <to part="parameters" query="/ns1:query/query" variable="queryInputMessage"/>
          </copy>
       </assign>
-      <invoke inputVariable="queryInputMessage" operation="query" outputVariable="queryOutputMessage" partnerLink="RproteomicsDataLinkType" portType="ns2:RPDataPortType"/>
+      <invoke inputVariable="queryInputMessage" operation="query" outputVariable="queryOutputMessage" partnerLink="RproteomicsDataLinkType" portType="ns1:RPDataPortType"/>
       <assign>
          <copy>
-            <from part="parameters" query="/ns2:queryResponse/response" variable="queryOutputMessage"/>
-            <to part="parameters" query="/ns4:echoByValue/scanFeaturesXml" variable="echoByValueInputMessage"/>
+            <from expression="count(bpws:getVariableData('queryOutputMessage', 'parameters', '/ns1:queryResponse')/*[1]/ns4:CQLQueryResult)"/>
+            <to variable="count"/>
          </copy>
       </assign>
-      <invoke inputVariable="echoByValueInputMessage" operation="echoByValue" outputVariable="echoByValueOutputMessage" partnerLink="RproteomicsPartnerLinkType" portType="ns4:RProteomicsPortType"/>
-      <reply operation="startWorkFlow" partnerLink="WorkFlowClientPartnerLinkType" portType="ns1:startWorkFlowPortType" variable="workFlowOutputMessage"/>
+      <while condition="bpws:getVariableData('indexCounter') &lt;= bpws:getVariableData('count')">
+         <assign>
+            <copy>
+               <from expression="bpws:getVariableData('queryOutputMessage', 'parameters', '/ns1:queryResponse')/response/ns4:CQLQueryResult[bpws:getVariableData('indexCounter')]"/>
+               <to part="parameters" query="/ns3:echoByValue/scanFeaturesXml[bpws:getVariableData('indexCounter')]" variable="echoByValueInputMessage"/>
+            </copy>
+            <copy>
+               <from expression="bpws:getVariableData('indexCounter') + 1"/>
+               <to variable="indexCounter"/>
+            </copy>
+         </assign>
+      </while>
+      <invoke inputVariable="echoByValueInputMessage" operation="echoByValue" outputVariable="echoByValueOutputMessage" partnerLink="RproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
+      <reply operation="startWorkFlow" partnerLink="WorkFlowClientPartnerLinkType" portType="ns2:startWorkFlowPortType" variable="workFlowOutputMessage"/>
    </sequence>
 </process>
