@@ -4,7 +4,7 @@
 <project name="caGrid_report_utilities" basedir="." default="">
 
 	<property name="javancss.lib.dir" location="share/lib/javancss" />
-	<property name="javancss.excludes" location="**/build/,**/templates/,**/stubs/,**/bean/,**/beans/,**/opensaml/" />
+	<property name="javancss.excludes" location="**/build/**,**/templates/**,**/stubs/**,**/bean/**,**/beans/**,**/opensaml/**" />
 	<property name="javancss.functionMetrics" location="false" />
 	<property name="javancss.classMetrics" location="false" />
 
