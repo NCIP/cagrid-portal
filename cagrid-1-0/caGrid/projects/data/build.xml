@@ -1,7 +1,7 @@
 <!-- ======================================================================= -->
 <!-- caGrid 1.0 Data Service Tools build file                                -->
 <!-- ======================================================================= -->
-<project name="metadata" default="jar" basedir=".">
+<project name="metadata" default="all" basedir=".">
     <!-- Environment -->
     <property environment="env" />
     <property file="${basedir}/build.properties" />
@@ -20,6 +20,7 @@
     <property name="stubs.src" location="build/stubs/src" />
     <property name="stubs.dest" location="build/stubs/classes" />
     <property name="stubs.jar.name" value="${project.name}-${project.version}.jar" />
+	<property name="stubs.jar.file" value="${build.jars.dir}/${stubs.jar.name}"/>
 
     <property name="ant.build.stubs" location="${globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
 
@@ -79,8 +80,8 @@
     </target>
 
 
-    <target name="jar" depends="compileStubs">
-        <jar destfile="${build.jars.dir}/${stubs.jar.name}">
+    <target name="jarStubs" depends="compileStubs">
+        <jar destfile="${stubs.jar.file}">
             <fileset dir="${stubs.dest}" />
             <fileset dir="${stubs.src}" />
         </jar>
@@ -98,5 +99,6 @@
 		<delete dir="${stubs.dest}"/>
 	</target>
 
-    <target name="all" depends="jar" />
+	
+    <target name="all" depends="jarStubs" />
 </project>
