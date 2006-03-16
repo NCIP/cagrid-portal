@@ -320,39 +320,39 @@
 
 	<target name="jarRProteomics">
 		<copy todir="${lib.dir}">
-			<fileset dir="../JRProteomicsServices/dist/RProteomics/lib">
+			<fileset dir="C:/Documents and Settings/MCCON012/My Documents/Projects/JRProteomicsServices/dist/RProteomics/lib">
 				<filename name="**/*.jar"/>
 			</fileset>
 		</copy>
 		<jar destfile="${lib.dir}/rproteomics.jar">
-			<fileset dir="../JRProteomicsServices/bin">
+			<fileset dir="C:/Documents and Settings/MCCON012/My Documents/Projects/JRProteomicsServices/bin">
 				<filename name="**/*"/>
 			</fileset>
-			<fileset dir="../JRProteomicsServices/src">
+			<fileset dir="C:/Documents and Settings/MCCON012/My Documents/Projects/JRProteomicsServices/src">
 				<filename name="**/*"/>
 			</fileset>
-			<fileset dir="../JRProteomicsData/bin">
+			<fileset dir="C:/Documents and Settings/MCCON012/My Documents/Projects/JRProteomicsData/bin">
 				<filename name="**/*"/>
 			</fileset>
-			<fileset dir="../JRProteomicsData/src">
+			<fileset dir="C:/Documents and Settings/MCCON012/My Documents/Projects/JRProteomicsData/src">
 				<filename name="**/*"/>
 			</fileset>
-			<fileset dir="../JavaBridge/bin">
+			<fileset dir="C:/Documents and Settings/MCCON012/My Documents/Projects/JavaBridge/bin">
 				<filename name="**/*"/>
 			</fileset>
-			<fileset dir="../JavaBridge/src">
+			<fileset dir="C:/Documents and Settings/MCCON012/My Documents/Projects/JavaBridge/src">
 				<filename name="**/*"/>
 			</fileset>
-			<fileset dir="../JWebServiceUtils/bin">
+			<fileset dir="C:/Documents and Settings/MCCON012/My Documents/Projects/JWebServiceUtils/bin">
 				<filename name="**/*"/>
 			</fileset>
-			<fileset dir="../JWebServiceUtils/src">
+			<fileset dir="C:/Documents and Settings/MCCON012/My Documents/Projects/JWebServiceUtils/src">
 				<filename name="**/*"/>
 			</fileset>
-			<fileset dir="../JUnitUtils/bin">
+			<fileset dir="C:/Documents and Settings/MCCON012/My Documents/Projects/JUnitUtils/bin">
 				<filename name="**/*"/>
 			</fileset>
-			<fileset dir="../JUnitUtils/src">
+			<fileset dir="C:/Documents and Settings/MCCON012/My Documents/Projects/JUnitUtils/src">
 				<filename name="**/*"/>
 			</fileset>
 		</jar>
