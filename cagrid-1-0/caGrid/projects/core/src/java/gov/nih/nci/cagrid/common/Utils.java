@@ -23,7 +23,16 @@ public class Utils {
 	public static String getExceptionMessage(Exception e) {
 		String mess = e.getMessage();
 		if (e instanceof AxisFault) {
-			mess = ((AxisFault) e).getFaultString();
+			AxisFault af = (AxisFault) e;
+			if ((af.getFaultCode() != null)
+				&& (af.getFaultCode().toString()
+					.equals("{http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}General"))) {
+                mess = "An error occurred establishing a secure communication channel.  The \n"
+                	  +"problem may be that the server's credentials are NOT trusted by the \n"
+                	  +"the client and/or the client's credentials are NOT trusted by the server.";
+			} else {
+				mess = af.getFaultString();
+			}
 		}
 		return mess;
 	}
