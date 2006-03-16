@@ -49,16 +49,4 @@ public class DorianBaseClient {
 		}
 		return err;
 	}
-
-
-	public String simplifyMessage(String m) {
-		if ((m == null) || (m.equalsIgnoreCase("null"))) {
-			m = "Unknown Error";
-		} else if (m.indexOf("Connection refused") >= 0) {
-			m = "Could not connect to " + serviceURI + ", the service may not exist or may be down.";
-		} else if (m.indexOf("Unknown CA") >= 0) {
-			m = "Could establish a connection with the service, Unknown CA.";
-		}
-		return m;
-	}
 }

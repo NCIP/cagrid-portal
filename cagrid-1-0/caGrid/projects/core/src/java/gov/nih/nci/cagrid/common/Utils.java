@@ -27,14 +27,32 @@ public class Utils {
 			if ((af.getFaultCode() != null)
 				&& (af.getFaultCode().toString()
 					.equals("{http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}General"))) {
-                mess = "An error occurred establishing a secure communication channel.  The \n"
-                	  +"problem may be that the server's credentials are NOT trusted by the \n"
-                	  +"the client and/or the client's credentials are NOT trusted by the server.";
+				System.out.println(af.getFaultString());
+				if ((af.getFaultString() != null)
+					&& (af.getFaultString().equals("javax.xml.rpc.soap.SOAPFaultException"))) {
+					mess = "An error occurred establishing a secure communication channel.  The \n"
+						+ "problem may be that the client's credentials are NOT trusted by the server.";
+				} else {
+					mess = af.getFaultString();
+				}
+
 			} else {
 				mess = af.getFaultString();
 			}
 		}
-		return mess;
+		return simplifyErrorMessage(mess);
+	}
+
+
+	public static String simplifyErrorMessage(String m) {
+		if ((m == null) || (m.equalsIgnoreCase("null"))) {
+			m = "Unknown Error";
+		} else if (m.indexOf("Connection refused") >= 0) {
+			m = "Could not connect to the request service, the service may not exist or may be down.";
+		} else if (m.indexOf("Unknown CA") >= 0) {
+			m = "Could establish a connection with the service, the service CA is not trusted.";
+		}
+		return m;
 	}
 
 

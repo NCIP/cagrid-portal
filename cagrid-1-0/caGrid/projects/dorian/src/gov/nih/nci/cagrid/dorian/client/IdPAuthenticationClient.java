@@ -59,7 +59,7 @@ public class IdPAuthenticationClient extends DorianBaseClient implements
 		}catch (Exception e) {
 			FaultUtil.printFault(e);
 			DorianFault fault = new DorianFault();
-			fault.setFaultString(simplifyMessage(Utils.getExceptionMessage(e)));
+			fault.setFaultString(Utils.getExceptionMessage(e));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianFault) helper.getFault();
