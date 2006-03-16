@@ -12,7 +12,7 @@
 	</path>
 	<taskdef name="javancss" classname="javancss.JavancssAntTask" classpathref="javancss.classpath" />
 
-	<target name="javancss">
+	<target name="javancss" description="Generates an HTML report of code metrics">
 		<javancss srcdir="projects" functionMetrics="false" classMetrics="false" includes="**/*.java" excludes="**/build/,**/stubs/,**/bean/,**/beans/,**/opensaml/" generateReport="true" outputfile="javancss_metrics.xml" format="xml" />
 		<xslt in="javancss_metrics.xml" out="javancss_metrics.html" style="${share.lib.dir}/javancss/javancss2html.xsl"/>
 		<delete file="javancss_metrics.xml"/>
