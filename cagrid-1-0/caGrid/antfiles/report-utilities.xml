@@ -1,0 +1,21 @@
+<!-- ======================================================================= -->
+<!-- caGrid Reporting Utilities build file                                   -->
+<!-- ======================================================================= -->
+<project name="caGrid_report_utilities" basedir="." default="">
+
+	<property name="share.lib.dir" location="share/lib" />
+
+	<path id="javancss.classpath">
+		<fileset dir="${share.lib.dir}/javancss">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+	<taskdef name="javancss" classname="javancss.JavancssAntTask" classpathref="javancss.classpath" />
+
+	<target name="javancss">
+		<javancss srcdir="projects" functionMetrics="false" classMetrics="false" includes="**/*.java" excludes="**/build/,**/stubs/,**/bean/,**/beans/,**/opensaml/" generateReport="true" outputfile="javancss_metrics.xml" format="xml" />
+		<xslt in="javancss_metrics.xml" out="javancss_metrics.html" style="${share.lib.dir}/javancss/javancss2html.xsl"/>
+		<delete file="javancss_metrics.xml"/>
+	</target>
+
+</project>
