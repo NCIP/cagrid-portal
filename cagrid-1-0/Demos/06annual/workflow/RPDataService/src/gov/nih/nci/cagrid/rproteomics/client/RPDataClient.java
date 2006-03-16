@@ -111,6 +111,8 @@ public class RPDataClient implements RPDataI {
 
 
 
+
+
 	     public gov.nih.nci.cagrid.cql.CQLQueryResultsType query(gov.nih.nci.cagrid.cql.CQLQueryType query) throws RemoteException, gov.nih.nci.cagrid.rproteomics.stubs.MalformedQueryException {
 		RPDataPortType port = this.getPortType();
 org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
