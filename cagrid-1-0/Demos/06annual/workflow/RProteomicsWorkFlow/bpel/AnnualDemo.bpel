@@ -35,7 +35,7 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
       <invoke inputVariable="queryInputMessage" operation="query" outputVariable="queryOutputMessage" partnerLink="RproteomicsDataLinkType" portType="ns1:RPDataPortType"/>
       <assign>
          <copy>
-            <from expression="count(bpws:getVariableData('queryOutputMessage', 'parameters', '/ns1:queryResponse')/*[1]/ns4:CQLQueryResult)"/>
+            <from expression="count(bpws:getVariableData('queryOutputMessage', 'parameters', '/ns1:queryResponse')/*[1]/ns4:CQLQueryResult/scanFeaturesXml)"/>
             <to variable="count"/>
          </copy>
       </assign>
