@@ -19,6 +19,8 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
       <!-- For Loops -->
       <variable name="indexCounter" type="xsd:integer"/>
       <variable name="count" type="xsd:integer"/>
+      <variable messageType="ns3:general_interpolateByValueInputMessage" name="general_interpolateByValueInputMessage"/>
+      <variable messageType="ns3:general_interpolateByValueOutputMessage" name="general_interpolateByValueOutputMessage"/>
    </variables>
    <sequence>
       <receive createInstance="yes" operation="startWorkFlow" partnerLink="WorkFlowClientPartnerLinkType" portType="ns2:startWorkFlowPortType" variable="workFlowInputMessage"/>
@@ -52,6 +54,13 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
          </assign>
       </while>
       <invoke inputVariable="echoByValueInputMessage" operation="echoByValue" outputVariable="echoByValueOutputMessage" partnerLink="RproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
+      <assign>
+         <copy>
+            <from part="parameters" query="/ns3:echoByValueResponse/response" variable="echoByValueOutputMessage"/>
+            <to part="parameters" query="/ns3:general_interpolateByValue/scanFeaturesXml" variable="general_interpolateByValueInputMessage"/>
+         </copy>
+      </assign>
+      <invoke inputVariable="general_interpolateByValueInputMessage" operation="general_interpolateByValue" outputVariable="general_interpolateByValueOutputMessage" partnerLink="RproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
       <reply operation="startWorkFlow" partnerLink="WorkFlowClientPartnerLinkType" portType="ns2:startWorkFlowPortType" variable="workFlowOutputMessage"/>
    </sequence>
 </process>
