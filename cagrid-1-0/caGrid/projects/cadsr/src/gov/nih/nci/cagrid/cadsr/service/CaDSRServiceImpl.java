@@ -23,6 +23,10 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 
 	protected static Log LOG = LogFactory.getLog(CaDSRServiceImpl.class.getName());
 
+	// "http://cbioqa101.nci.nih.gov:49080/cacore31/http/remoteService"
+	// "http://cbiodev104.nci.nih.gov:49080/cacore31/http/remoteService
+	private String serviceURL = "http://localhost:49080/cacore31/http/remoteService";
+
 
 	public CaDSRServiceImpl() {
 
@@ -31,12 +35,7 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 
 	public gov.nih.nci.cadsr.umlproject.domain.Project[] findAllProjects() throws RemoteException {
 		try {
-			ApplicationService appService =
-			// ApplicationServiceProvider.getApplicationService();
-			// ApplicationService.getRemoteInstance("http://cbiodev104.nci.nih.gov:49080/cacore31/http/remoteService");
-			ApplicationService.getRemoteInstance("http://localhost:49080/cacore31/http/remoteService");
-			// ApplicationService.getRemoteInstance("http://cbioqa101.nci.nih.gov:49080/cacore31/http/remoteService");
-
+			ApplicationService appService = ApplicationService.getRemoteInstance(serviceURL);
 			LOG.debug("Using basic search. Retrieving allprojects");
 
 			Project projPrototype = new Project();
@@ -72,12 +71,7 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 
 	public gov.nih.nci.cadsr.umlproject.domain.Project[] findProjects(String context) throws RemoteException {
 		try {
-			ApplicationService appService =
-			// ApplicationServiceProvider.getApplicationService();
-			// ApplicationService.getRemoteInstance("http://cbiodev104.nci.nih.gov:49080/cacore31/http/remoteService");
-			ApplicationService.getRemoteInstance("http://localhost:49080/cacore31/http/remoteService");
-			// ApplicationService.getRemoteInstance("http://cbioqa101.nci.nih.gov:49080/cacore31/http/remoteService");
-
+			ApplicationService appService = ApplicationService.getRemoteInstance(serviceURL);
 			LOG.debug("Using basic search. Retrieving all projects under context:" + context);
 
 			Project projPrototype = new Project();

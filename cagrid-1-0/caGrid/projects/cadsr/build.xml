@@ -15,7 +15,6 @@
 	<property name="gar.filename" value="${introduce.skeleton.service.name}" />
 	<property name="schema.path" value="${introduce.skeleton.service.name}" />
 	<property name="interface.name" value="${introduce.skeleton.service.name}" />
-	<property name="factory.interface.name" value="${introduce.skeleton.factory.name}" />
 
 	<!-- Important directories and files -->
 	<property name="src.dir" value="src" />
@@ -136,7 +135,7 @@
 
 
 	<target name="checkJDK" unless="isJDK1.5">
-		<fail message="JDK with version &lt; 1.5 is required to build this project!"/>
+		<fail message="JDK with version &lt; 1.5 is required to build this project!" />
 	</target>
 
 	<!-- Sets up the build directory structure -->
@@ -183,18 +182,6 @@
 	</target>
 
 
-	<!-- Same as above, but for the factory WSDL file (if any) -->
-	<target name="factoryFlatten" depends="init" if="factory.schema.path">
-		<ant antfile="${build.stubs}" target="flatten">
-			<property name="source.flatten.dir" location="${schema.dest}/${factory.schema.path}" />
-			<property name="target.flatten.dir" location="${schema.dest}/${factory.schema.path}" />
-			<property name="wsdl.source" value="${factory.interface.name}.wsdl" />
-			<property name="wsdl.target" value="${factory.interface.name}_flattened.wsdl" />
-			<property name="wsdl.porttype" value="${factory.interface.name}PortType" />
-		</ant>
-	</target>
-
-
 	<!-- Generate bindings for our WSDL file -->
 	<!-- This is done with a GT4 tool -->
 	<target name="generateBindings" depends="flatten">
@@ -203,17 +190,6 @@
 			<property name="target.binding.dir" value="${schema.dest}/${schema.path}" />
 			<property name="porttype.wsdl" value="${interface.name}_flattened.wsdl" />
 			<property name="binding.root" value="${interface.name}" />
-		</ant>
-	</target>
-
-
-	<!-- Same as above, but for the factory WSDL file (if any) -->
-	<target name="generateFactoryBindings" depends="factoryFlatten" if="factory.schema.path">
-		<ant antfile="${build.stubs}" target="generateBinding">
-			<property name="source.binding.dir" value="${schema.dest}/${factory.schema.path}" />
-			<property name="target.binding.dir" value="${schema.dest}/${factory.schema.path}" />
-			<property name="porttype.wsdl" value="${factory.interface.name}_flattened.wsdl" />
-			<property name="binding.root" value="${factory.interface.name}" />
 		</ant>
 	</target>
 
@@ -237,23 +213,8 @@
 	</target>
 
 
-	<!-- Same as above, but for the factory service (if any) -->
-	<target name="factoryStubs" depends="generateFactoryBindings" if="factory.schema.path">
-		<ant antfile="${build.stubs}" target="mergePackageMapping">
-			<property name="mapping.src" location="${mappings.file}" />
-			<property name="mapping.dst" location="${build.dir}/namespace2package.mappings" />
-		</ant>
-		<ant antfile="${build.stubs}" target="generateStubs">
-			<property name="mapping.file" location="${build.dir}/namespace2package.mappings" />
-			<property name="source.stubs.dir" location="${schema.dest}/${factory.schema.path}" />
-			<property name="target.stubs.dir" location="${stubs.src}" />
-			<property name="wsdl.file" value="${factory.interface.name}_service.wsdl" />
-		</ant>
-	</target>
-
-
 	<!-- Compile the stubs generated in the previous step -->
-	<target name="compileStubs" depends="stubs, factoryStubs">
+	<target name="compileStubs" depends="stubs">
 		<javac srcdir="${stubs.src}" destdir="${stubs.dest}" debug="${java.debug}">
 			<include name="**/*.java" />
 			<classpath>
