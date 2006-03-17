@@ -7,30 +7,39 @@
     <property file="${basedir}/build.properties" />
     <property file="${user.dir}/build.properties" />
     <property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
+	
+	<!-- build with debugging information -->
+	<property name="java.debug" value="on" />
 
     <!-- Information -->
     <property name="project.name" value="caGrid-data" />
     <property name="project.version" value="1.0" />
 
+	<!-- build output dirs -->
     <property name="build.dir" location="build" />
     <property name="build.dest" location="build/classes" />
     <property name="build.jars.dir" location="build/lib" />
+	<property name="project.jar.name" value="${project.name}-${project.version}.jar"/>
+	<property name="project.jar.file" value="${build.jars.dir}/${project.jar.name}"/>
 
+	<!-- stubs -->
     <property name="stubs.dir" location="build/stubs" />
     <property name="stubs.src" location="build/stubs/src" />
     <property name="stubs.dest" location="build/stubs/classes" />
-    <property name="stubs.jar.name" value="${project.name}-${project.version}.jar" />
+    <property name="stubs.jar.name" value="${project.name}-${project.version}_Stubs.jar" />
 	<property name="stubs.jar.file" value="${build.jars.dir}/${stubs.jar.name}"/>
+    <property name="ant.build.stubs" location="${globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />    
 
-    <property name="ant.build.stubs" location="${globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
-
-    <property name="java.debug" value="on" />
-
+	<!-- schemas and namespace mappings -->
     <property name="schema.src" location="${globus.dir}/share/schema" />
     <property name="schema.dest" location="${build.dir}/schema" />
-
     <property name="mapping.src" value="${basedir}/NStoPkg.properties" />
+	
+	<!-- primary source directory -->
+	<property name="src.dir" location="${basedir}/src"/>
 
+
+	<!-- creates output directories -->
     <target name="init">
         <mkdir dir="${build.dir}" />
         <mkdir dir="${build.dest}" />
@@ -39,15 +48,18 @@
         <mkdir dir="${stubs.src}" />
         <mkdir dir="${stubs.dest}" />
         <mkdir dir="${schema.dest}" />
+    	<!-- copy schemas to the output directory for them -->
         <copy toDir="${schema.dest}">
             <fileset dir="schema" casesensitive="yes">
-                <include name="Data/**/*" />
+                <include name="Data/**/*.xsd" />
+                <include name="Data/**/*.wsdl" />
             </fileset>
         </copy>
         <available property="stubs.present" type="dir" file="${stubs.dest}/gov/nih/nci/cagrid" />
     </target>
 
 
+	<!-- generates source stubs for the schema defined types -->
     <target name="stubs" unless="stubs.present" depends="init">
         <property name="mapping.dst" value="${build.dir}/NStoPkg.properties" />
         <ant antfile="${ant.build.stubs}" target="mergePackageMapping" />
@@ -67,6 +79,7 @@
     </target>
 
 
+	<!-- compiles the source stubs for the schema defined types -->
     <target name="compileStubs" depends="stubs">
         <delete dir="${stubs.src}/org/apache" />
         <javac srcdir="${stubs.src}" destdir="${stubs.dest}" debug="${java.debug}">
@@ -78,27 +91,57 @@
             </classpath>
         </javac>
     </target>
+	
+	
+	<!-- compiles the source code -->
+	<target name="compileSource" depends="compileStubs">
+		<javac srcdir="${src.dir}" destdir="${build.dest}" debug="${java.debug}">
+			<include name="**/*.java" />
+			<classpath>
+				<fileset dir="${globus.dir}/lib">
+					<include name="*.jar"/>
+				</fileset>
+				<fileset dir="${stubs.dest}">
+					<include name="**/*.class"/>
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
 
-
-    <target name="jarStubs" depends="compileStubs">
+	
+	<!-- jars the stubs -->
+    <target name="jarStubs" depends="compileStubs" description="Builds and jars just the stubs and beans">
         <jar destfile="${stubs.jar.file}">
             <fileset dir="${stubs.dest}" />
             <fileset dir="${stubs.src}" />
         </jar>
     </target>
+	
+	
+	<!-- jars the whole project -->
+	<target name="jarAll" depends="compileSource" description="Builds and jars the whole project">
+		<jar destfile="${project.jar.file}">
+			<fileset dir="${stubs.dest}"/>
+			<fileset dir="${build.dest}">
+				<include name="**/*.class"/>
+			</fileset>
+		</jar>
+	</target>
     
 	
+	<!-- removes all build output -->
     <target name="clean">
         <delete dir="tmp" />
         <delete dir="${build.dir}" />
     </target>
 	
 	
+	<!-- removes build output related to stubs and beans -->
 	<target name="cleanBeans">
 		<delete dir="${stubs.src}"/>
 		<delete dir="${stubs.dest}"/>
 	</target>
 
 	
-    <target name="all" depends="jarStubs" />
+    <target name="all" depends="jarAll" />
 </project>
