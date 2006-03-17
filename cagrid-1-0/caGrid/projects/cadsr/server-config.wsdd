@@ -24,6 +24,6 @@
     <typeMapping qname="uml:Project"
         xmlns:uml="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"
         languageSpecificType="java:gov.nih.nci.cadsr.umlproject.domain.Project"
-        serializer="gov.nih.nci.cagrid.cadsr.encoding.SDKSerializerFactory"
-        deserializer="gov.nih.nci.cagrid.cadsr.encoding.SDKDeserializerFactory" encodingStyle=""/>
+        serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory"
+        deserializer="gov.nih.nci.cagrid.cadsr.SDKDeserializerFactory" encodingStyle=""/>
 </deployment>
