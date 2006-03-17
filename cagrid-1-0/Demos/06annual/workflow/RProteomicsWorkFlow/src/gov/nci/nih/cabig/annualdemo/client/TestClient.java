@@ -94,8 +94,9 @@ public class TestClient {
 		String result = null;
 		try {
 			CQLQueryType query = new CQLQueryType();
-			WindowType windowType = new WindowType();
-			PercentileType percentileType = new PercentileType();
+            int windowSize = 1023;
+			WindowType windowType = new WindowType(windowSize);
+			PercentileType percentileType = new PercentileType(75);
 			WorkFlowInputType input = new WorkFlowInputType();
 			input.setQueryType(query);
 			input.setWindowType(windowType);
