@@ -42,7 +42,7 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
       <while condition="bpws:getVariableData('indexCounter') &lt;= bpws:getVariableData('count')">
          <assign>
             <copy>
-               <from expression="bpws:getVariableData('queryOutputMessage', 'parameters', '/ns1:queryResponse')/response/ns4:CQLQueryResult[bpws:getVariableData('indexCounter')]"/>
+               <from expression="bpws:getVariableData('queryOutputMessage', 'parameters', '/ns1:queryResponse')/response/ns4:CQLQueryResult/scanFeaturesXml[bpws:getVariableData('indexCounter')]"/>
                <to part="parameters" query="/ns3:echoByValue/scanFeaturesXml[bpws:getVariableData('indexCounter')]" variable="echoByValueInputMessage"/>
             </copy>
             <copy>
