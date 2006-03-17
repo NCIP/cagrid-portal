@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.cadsr.encoding;
+package gov.nih.nci.cagrid.encoding;
 
 import java.io.IOException;
 

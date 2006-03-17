@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.cadsr.encoding;
+package gov.nih.nci.cagrid.encoding;
 
 /*
  * The Apache Software License, Version 1.1 Copyright (c) 2001 The Apache
