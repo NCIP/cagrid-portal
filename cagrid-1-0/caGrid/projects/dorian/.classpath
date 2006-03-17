@@ -75,7 +75,7 @@
 	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="test/resources"/>
-	<classpathentry kind="lib" path="ext/lib/gridca.jar"/>
+	<classpathentry sourcepath="/caGrid-1.0-gridca" kind="lib" path="ext/lib/gridca.jar"/>
 	<classpathentry kind="lib" path="resources/portal/dorian"/>
 	<classpathentry kind="lib" path="ext/resources/portal/common"/>
 	<classpathentry kind="lib" path="ext/resources/portal/gridca"/>

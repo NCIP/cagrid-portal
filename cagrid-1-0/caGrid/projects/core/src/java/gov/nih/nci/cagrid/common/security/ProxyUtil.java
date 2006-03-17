@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import org.globus.gsi.GlobusCredential;
 import org.globus.util.ConfigUtil;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -15,21 +16,23 @@ import org.globus.util.ConfigUtil;
  *          Exp $
  */
 public class ProxyUtil {
-	public static void saveProxy(GlobusCredential proxy, String file)
-			throws Exception {
+	public static void saveProxy(GlobusCredential proxy, String file) throws Exception {
 		FileOutputStream fos = new FileOutputStream(file);
 		proxy.save(fos);
 		fos.close();
 	}
 
+
 	public static GlobusCredential getDefaultProxy() throws Exception {
 		return loadProxy(ConfigUtil.discoverProxyLocation());
 	}
-	
-	public static void destroyDefaultProxy(){
+
+
+	public static void destroyDefaultProxy() {
 		File f = new File(ConfigUtil.discoverProxyLocation());
 		f.delete();
 	}
+
 
 	public static GlobusCredential loadProxy(String location) throws Exception {
 		FileInputStream fis = new FileInputStream(location);
@@ -37,9 +40,8 @@ public class ProxyUtil {
 		return proxy;
 	}
 
-	public static void saveProxyAsDefault(GlobusCredential proxy)
-			throws Exception {
+
+	public static void saveProxyAsDefault(GlobusCredential proxy) throws Exception {
 		saveProxy(proxy, ConfigUtil.discoverProxyLocation());
 	}
-
 }

@@ -66,6 +66,50 @@ public class CertUtil {
 
 	public static X509Certificate generateCACertificate(X509Name subject, Date start, Date expired, KeyPair pair)
 		throws InvalidKeyException, NoSuchProviderException, SignatureException, IOException {
+		return generateCACertificate(subject, start, expired, pair, 1);
+	}
+
+
+	public static X509Certificate generateIntermediateCACertificate(X509Certificate cacert, PrivateKey signerKey,
+		X509Name subject, Date start, Date expired, PublicKey publicKey) throws InvalidKeyException,
+		NoSuchProviderException, SignatureException, IOException {
+		SecurityUtil.init();
+
+		int constraints = cacert.getBasicConstraints();
+		if (constraints <= 1) {
+			throw new SignatureException(
+				"The CA Certificate specified cannot generate an intermediate CA certificate (Basic Constraints :"
+					+ constraints + ")");
+		}
+		constraints = constraints - 1;
+
+		// generate the certificate
+		X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
+
+		certGen.setSerialNumber(BigInteger.valueOf(System.currentTimeMillis()));
+		certGen.setIssuerDN(new X509Name(cacert.getSubjectDN().toString()));
+		certGen.setNotBefore(start);
+		certGen.setNotAfter(expired);
+		certGen.setSubjectDN(subject);
+		certGen.setPublicKey(publicKey);
+		certGen.setSignatureAlgorithm("md5WithRSAEncryption");
+		certGen.addExtension(X509Extensions.BasicConstraints, true, new BasicConstraints(constraints));
+		certGen.addExtension(X509Extensions.KeyUsage, true, new KeyUsage(KeyUsage.digitalSignature
+			| KeyUsage.keyEncipherment | KeyUsage.keyCertSign));
+
+		SubjectPublicKeyInfo spki = new SubjectPublicKeyInfo((ASN1Sequence) new DERInputStream(
+			new ByteArrayInputStream(publicKey.getEncoded())).readObject());
+		certGen.addExtension(X509Extensions.SubjectKeyIdentifier, false, new SubjectKeyIdentifier(spki));
+
+		SubjectPublicKeyInfo apki = new SubjectPublicKeyInfo((ASN1Sequence) new DERInputStream(
+			new ByteArrayInputStream(cacert.getPublicKey().getEncoded())).readObject());
+		certGen.addExtension(X509Extensions.AuthorityKeyIdentifier, false, new AuthorityKeyIdentifier(apki));
+		return certGen.generateX509Certificate(signerKey, "BC");
+	}
+
+
+	public static X509Certificate generateCACertificate(X509Name subject, Date start, Date expired, KeyPair pair,
+		int numberOfCAs) throws InvalidKeyException, NoSuchProviderException, SignatureException, IOException {
 		SecurityUtil.init();
 		// generate the certificate
 		X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
@@ -77,7 +121,7 @@ public class CertUtil {
 		certGen.setSubjectDN(subject);
 		certGen.setPublicKey(pair.getPublic());
 		certGen.setSignatureAlgorithm("md5WithRSAEncryption");
-		certGen.addExtension(X509Extensions.BasicConstraints, true, new BasicConstraints(1));
+		certGen.addExtension(X509Extensions.BasicConstraints, true, new BasicConstraints(numberOfCAs));
 		certGen.addExtension(X509Extensions.KeyUsage, true, new KeyUsage(KeyUsage.digitalSignature
 			| KeyUsage.keyEncipherment | KeyUsage.keyCertSign));
 
@@ -244,5 +288,8 @@ public class CertUtil {
 			return false;
 		}
 	}
+
+
+	
 
 }
