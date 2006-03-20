@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mako-viewer>
+  <gridServiceFactories>
+    <gridServiceFactory name="Default" isDefault="true" class="org.projectmobius.common.servicefactory.NetworkServiceFactory">
+      <parameters>
+        <param name="mentatProtocol" value="TCP" />
+        <param name="registryServicePort" value="3939" />
+        <param name="xmlDataModelProtocol" value="TCP" />
+        <param name="dtsPort" value="3941" />
+        <param name="xmlDataServicePort" value="3940" />
+        <param name="dtsProtocol" value="TCP" />
+        <param name="registryProtocol" value="TCP" />
+        <param name="xmlDataModelServicePort" value="1111" />
+        <param name="mentatPort" value="1234" />
+        <param name="xmlDataServiceProtocol" value="TCP" />
+      </parameters>
+    </gridServiceFactory>
+  </gridServiceFactories>
+  <registries>
+    
+  </registries>
+  <NamespaceDefinitions />
+  <!-- if this element is NOT present, the viewer config defaults to false
+  <dangerousOptions show="true"/>
+  -->
+</mako-viewer>
+

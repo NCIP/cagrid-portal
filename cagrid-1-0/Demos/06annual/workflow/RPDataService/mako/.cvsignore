@@ -1,0 +1,6 @@
+runall.bat
+startMyTcpmon.bat
+startTcpmon.bat
+startTomcat.bat
+stopTomcat.bat
+build

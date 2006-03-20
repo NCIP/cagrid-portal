@@ -1,0 +1,37 @@
+<mobius>
+	<resource name="mobiusConfig" class="org.projectmobius.services.common.MobiusConfiguration">
+		<mobius-configuration>
+			<MobiusNetworkServiceDescriptor serviceType="MAKO" hostname="localhost">
+				<serviceIdentifier serviceId="localhost"/>
+				<ports>
+					<port protocol="TCP" portNumber="3940"/>
+				</ports>
+				<aliases/>
+			</MobiusNetworkServiceDescriptor>
+			<handlers>
+				<handler name="SubmitXMLRequest" class="org.projectmobius.xbridge.handlers.SubmitXMLHandlerImpl"/>
+				<handler name="XPathRequest" class="org.projectmobius.xbridge.handlers.XPathRequestHandlerImpl"/>
+				<handler name="CollectionListRequest" class="org.projectmobius.xbridge.handlers.CollectionListHandlerImpl"/>
+			</handlers>
+			<gridServiceFactories>
+				<gridServiceFactory name="default" isDefault="true" class="org.projectmobius.common.servicefactory.NetworkServiceFactory"/>
+			</gridServiceFactories>
+			<serviceRegistry serviceId="localhost" registryClass="org.projectmobius.client.common.DefaultRegistry"/>
+		</mobius-configuration>
+	</resource>
+	<resource name="makoConfig" class="org.projectmobius.services.mako.MakoConfiguration">
+		<mako-configuration>
+		</mako-configuration>
+	</resource>
+	<resource name="xbridgeConfig" class="org.projectmobius.xbridge.MakoXBridgeConfiguration">
+		<xbridge-configuration>
+			<mapFile path="C:/oradev/reports/j2ee/reports_ids/web/iwmobius.map"/>
+			<database>
+				<driver value="oracle.jdbc.driver.OracleDriver"/>
+				<url value="jdbc:oracle:thin:@datamrt2.medctr.ohio-state.edu:1521:D011"/>
+				<username value="mobius"/>
+				<password value="ging78er"/>
+			</database>
+		</xbridge-configuration>
+	</resource>
+</mobius>

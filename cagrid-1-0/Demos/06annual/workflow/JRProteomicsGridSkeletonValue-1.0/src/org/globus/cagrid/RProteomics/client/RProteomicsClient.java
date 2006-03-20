@@ -61,7 +61,8 @@ public class RProteomicsClient implements RProteomicsI {
 	public static void main(String [] args) throws Exception {
 		try{
 			args = new String[] {
-				"-gsh", "http://ccis1716.duhs.duke.edu/wsrf/services/cagrid/RProteomics",
+				//"-gsh", "http://ccis1716.duhs.duke.edu/wsrf/services/cagrid/RProteomics",
+				"-gsh", "http://localhost:8080/wsrf/services/cagrid/RProteomics",
 			};
 		if(!(args.length < 2)){
 			if(args[0].equals("-gsh")){
@@ -75,7 +76,8 @@ public class RProteomicsClient implements RProteomicsI {
 			  File dir = new File("data");
 			  ScanFeaturesType[] scans = ServiceUtils.readScanFeaturesFromDir(new File("data"));
 			  
-			  scans = client.general_interpolateByValue(scans);
+			  //scans = client.general_interpolateByValue(scans);
+			  client.echoByValue(scans);
 			} else {
 				usage();
 				System.exit(1);

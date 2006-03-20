@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vmako>
+	<xml-data-services>
+		<xml-data-service serviceId="MAKO://dc01.bmi.ohio-state.edu"/>
+		<xml-data-service serviceId="MAKO://dc02.bmi.ohio-state.edu"/>
+		<xml-data-service serviceId="MAKO://dc03.bmi.ohio-state.edu"/>
+		<xml-data-service serviceId="MAKO://dc04.bmi.ohio-state.edu"/>
+		<xml-data-service serviceId="MAKO://dc05.bmi.ohio-state.edu"/>
+	</xml-data-services>
+	<virtual-collections>
+		<virtual-collection name="/gpacs-placenta" ingestor="org.projectmobius.services.vmako.ingestors.RoundRobinIngestor">
+			<xml-collection-handle serviceId="MAKO://dc01.bmi.ohio-state.edu" collectionName="/gpacs-placenta"/>
+			<xml-collection-handle serviceId="MAKO://dc02.bmi.ohio-state.edu" collectionName="/gpacs-placenta"/>
+			<xml-collection-handle serviceId="MAKO://dc03.bmi.ohio-state.edu" collectionName="/gpacs-placenta"/>
+			<xml-collection-handle serviceId="MAKO://dc04.bmi.ohio-state.edu" collectionName="/gpacs-placenta"/>
+			<xml-collection-handle serviceId="MAKO://dc05.bmi.ohio-state.edu" collectionName="/gpacs-placenta"/>
+		</virtual-collection>
+	</virtual-collections>
+</vmako>

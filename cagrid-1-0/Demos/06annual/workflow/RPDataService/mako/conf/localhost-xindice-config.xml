@@ -1,0 +1,49 @@
+<mobius>
+	<resource name="mobiusConfig" class="org.projectmobius.services.common.MobiusConfiguration">
+		<mobius-configuration>
+			<MobiusNetworkServiceDescriptor serviceType="MAKO" hostname="localhost">
+				<serviceIdentifier serviceId="MAKO://localhost"/>
+				<ports>
+					<port protocol="TCP" portNumber="3940"/>
+				</ports>
+				<aliases/>
+			</MobiusNetworkServiceDescriptor>
+			<handlers>
+			    <!-- Currently do nothing Impls -->
+				<handler name="SubmitSchemaRequest" class="org.projectmobius.xmldb.handlers.SubmitSchemaHandlerImpl"/>
+
+			    <!-- XMLDB specific Impls -->			
+				<handler name="RetrieveXMLRequest" class="org.projectmobius.xmldb.handlers.RetrieveXMLHandlerImpl"/>
+				<handler name="CreateCollectionRequest" class="org.projectmobius.xmldb.handlers.CreateCollectionHandlerImpl"/>
+				<handler name="RemoveCollectionRequest" class="org.projectmobius.xmldb.handlers.RemoveCollectionHandlerImpl"/>
+				<handler name="SubmitXMLRequest" class="org.projectmobius.xmldb.handlers.SubmitXMLHandlerImpl"/>
+				<handler name="XPathRequest" class="org.projectmobius.xmldb.handlers.XPathRequestHandlerImpl"/>
+				<handler name="CollectionListRequest" class="org.projectmobius.xmldb.handlers.CollectionListHandlerImpl"/>
+				<handler name="RemoveXMLRequest" class="org.projectmobius.xmldb.handlers.RemoveXMLHandlerImpl"/>
+				<handler name="DestroyServiceRequest" class="org.projectmobius.xmldb.handlers.DestroyServiceHandlerImpl"/>
+								
+				<!-- Common Impls -->
+				<handler name="ServiceDataRequest" class="org.projectmobius.services.common.handlers.DefaultServiceDataRequestHandler"/>
+				<handler name="StatusRequest" class="org.projectmobius.services.mako.handlers.DefaultStatusRequestHandler"/>
+				<handler name="StopRequest" class="org.projectmobius.services.common.handlers.DefaultStopRequestHandler"/>
+			</handlers>
+			<gridServiceFactories>
+				<gridServiceFactory name="default" isDefault="true" class="org.projectmobius.common.servicefactory.NetworkServiceFactory"/>
+			</gridServiceFactories>
+			<serviceRegistry serviceId="localhost" registryClass="org.projectmobius.client.common.DefaultRegistry"/>
+		</mobius-configuration>
+	</resource>
+	<resource name="makoConfig" class="org.projectmobius.services.mako.MakoConfiguration">
+		<mako-configuration>
+		</mako-configuration>
+	</resource>
+	<resource name="xmlDBConfig" class="org.projectmobius.xmldb.XMLDBConfiguration">
+		<xmldb-configuration>
+			<xmldb useExtendedXPathIds="true">
+				<uri>xmldb:xindice-embed://</uri>
+				<driver>org.apache.xindice.client.xmldb.embed.DatabaseImpl</driver>
+				<collectionPrefix>/db</collectionPrefix>
+			</xmldb>
+		</xmldb-configuration>
+	</resource>
+</mobius>

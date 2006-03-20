@@ -63,7 +63,8 @@ public class RPDataClient implements RPDataI {
 	public static void main(String[] args) {
 		try {
 			args = new String[] {
-				"-gsh", "http://ccis1716.duhs.duke.edu/wsrf/services/cagrid/RPData",
+				//"-gsh", "http://ccis1716.duhs.duke.edu/wsrf/services/cagrid/RPData",
+				"-gsh", "http://localhost:8080/wsrf/services/cagrid/RPData",
 			};
 			if (!(args.length < 2)) {
 				if (args[0].equals("-gsh")) {
