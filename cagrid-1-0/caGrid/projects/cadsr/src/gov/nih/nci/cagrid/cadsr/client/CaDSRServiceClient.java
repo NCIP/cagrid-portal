@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.cadsr.client;
 
 import gov.nih.nci.cadsr.umlproject.domain.Project;
+import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.common.CaDSRServiceI;
 import gov.nih.nci.cagrid.cadsr.stubs.CaDSRServicePortType;
@@ -64,20 +65,28 @@ public class CaDSRServiceClient implements CaDSRServiceI {
 					// test....
 
 					Project[] projs = client.findAllProjects();
-					System.out.println("All projects:");
-					for (int i = 0; i < projs.length; i++) {
-						System.out.println(projs[i].getShortName());
-						UMLPackageMetadata[] metadatas = client.findPackagesInProject(projs[i]);
-						System.out.println("\tPackages in Project:");
-						for (int j = 0; j < metadatas.length; j++) {
-							System.out.println("\t"+metadatas[j].getName());
+					if (projs != null) {
+						for (int i = 0; i < projs.length; i++) {
+							System.out.println("\n"+projs[i].getShortName());
+							UMLPackageMetadata[] packs = client.findPackagesInProject(projs[i]);
+							if (packs != null) {
+								for (int j = 0; j < packs.length; j++) {
+									System.out.println("\t-" + packs[j].getName());
+									UMLClassMetadata[] classes = client.findClassesInPackage(packs[j]);
+									if (classes != null) {
+										for (int k = 0; k < classes.length; k++) {
+											System.out.println("\t\t-" + classes[k].getName());
+										}
+									}
+								}
+							}
 						}
 					}
 
-//					projs = client.findProjects("caBIG");
-//					for (int i = 0; i < projs.length; i++) {
-//						System.out.println(projs[i].getShortName());
-//					}
+					// projs = client.findProjects("caBIG");
+					// for (int i = 0; i < projs.length; i++) {
+					// System.out.println(projs[i].getShortName());
+					// }
 				} else {
 					usage();
 					System.exit(1);
