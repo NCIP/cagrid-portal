@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path=""/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JRProteomicsGridSkeleton-1.0"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/RPData"/>
+	<classpathentry kind="lib" path="E:/globus/install/lib/axis.jar"/>
+	<classpathentry kind="lib" path="E:/globus/install/lib/jaxrpc.jar"/>
+	<classpathentry kind="output" path=""/>
+</classpath>
