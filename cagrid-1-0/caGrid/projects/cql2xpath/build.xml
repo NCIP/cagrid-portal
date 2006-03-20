@@ -28,6 +28,7 @@
 	<property name="test.src.dir" location="${test.dir}/src/java" />
 	<property name="test.classes.dir" location="${classes.dir}/test" />
 	<property name="test.lib.dir" location="${test.dir}/lib" />
+	<property name="test.log.dir" location="${test.dir}/logs" />
 	<property name="test.logs.dir" location="${test.dir}/logs" />
 	<property name="test.project.jar" location="${jar.dir}/${project.name}-tests-${project.version}.jar" />
 

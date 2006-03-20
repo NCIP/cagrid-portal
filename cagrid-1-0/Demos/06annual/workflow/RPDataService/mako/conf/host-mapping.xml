@@ -1,5 +1,0 @@
-<HostMappings>
-	<HostMapping origHost="A" newHost="dc02.bmi.ohio-state.edu"/>
-	<HostMapping origHost="B" newHost="dc03.bmi.ohio-state.edu"/>
-	<HostMapping origHost="C" newHost="dc04.bmi.ohio-state.edu"/>	
-</HostMappings>
