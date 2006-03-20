@@ -8,11 +8,7 @@
   <parameter name="sendXsiTypes" value="true"/>
   <parameter name="sendMultiRefs" value="true"/>
   <parameter name="sendXMLDeclaration" value="true"/>
-  
   <parameter name="castorMapping" value="/xml-mapping.xml"/>
-  
-
-  
   <requestFlow>
    <handler type="java:org.globus.wsrf.handlers.AddressingHandler"/>
    <handler type="java:org.globus.wsrf.impl.security.authorization.ClientPropertiesHandler"/>
@@ -118,10 +114,21 @@
   serializer="org.globus.wsrf.encoding.QueryExpressionSerializerFactory"
   type="java:org.oasis.wsrf.properties.QueryExpressionType"
   xmlns:ns12="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd"/>
-
+  
+  
  <typeMapping qname="uml:Project"
   xmlns:uml="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"
   languageSpecificType="java:gov.nih.nci.cadsr.umlproject.domain.Project"
-  serializer="gov.nih.nci.cagrid.cadsr.encoding.SDKSerializerFactory"
-  deserializer="gov.nih.nci.cagrid.cadsr.encoding.SDKDeserializerFactory" encodingStyle=""/>
+  serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory"
+  deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" encodingStyle=""/>
+ <typeMapping qname="uml:UMLPackageMetadata"
+  xmlns:uml="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"
+  languageSpecificType="java:gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata"
+  serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory"
+  deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" encodingStyle=""/>
+ <typeMapping qname="uml:UMLClassMetadata"
+  xmlns:uml="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"
+  languageSpecificType="java:gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata"
+  serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory"
+  deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" encodingStyle=""/>
 </deployment>

@@ -1,0 +1,41 @@
+
+
+make introduce depend on this
+
+until there is a public 3.1 server, this uses nci internal ones with a localhost sshtunnel
+
+extract property for nci service to contact
+
+caching using resources?
+
+(DONE) handle all exceptions
+
+(DONE) remove cagrid-core jar from lib and add build dependency
+
+
+serialization stuff:
+====================
+http://gforge.nci.nih.gov/plugins/scmcvs/cvsweb.php/cacoretoolkit/src/gov/nih/nci/common/util/?cvsroot=cacoretoolkit
+http://cvs.apache.org/viewcvs.cgi/webservices/axis/trunk/java/src/org/apache/axis/encoding/ser/castor/
+
+http://www.castor.org/xml-faq.html
+http://www.castor.org/how-to-enable-xml-validation.html
+http://www.castor.org/xml-mapping.html
+
+(DONE) make generic and move to core project
+
+get mapper and marshaller staticly?
+
+had to hand edit:
+ -client type mapping in client-config.wsdd, and castorMapping property to point to classpath location to load mapping file
+
+
+
+(FIXED WITH INTRODUCE CHANGES)
+ -wsdl to use right element
+	 -introduce expects all output elements to be of the "name" response... custom types need to use custom names.. should default to Classname
+	 - actually, i need an element ref
+ -client and service impl to use the right method names (getProject not getResponse)
+ 	-based on wsdl change
+ -protocol bean to use right element
+ 	 	-based on wsdl change

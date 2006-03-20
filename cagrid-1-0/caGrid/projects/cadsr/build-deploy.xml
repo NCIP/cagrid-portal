@@ -139,4 +139,6 @@
 		<delete dir="${gar.name}" />
 		<!-- deploy the gar -->
 	</target>
+	
+	<target name="deploy" depends="deployTomcat"/>
 </project>

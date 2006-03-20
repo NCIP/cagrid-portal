@@ -23,7 +23,7 @@
     <types>
         <schema targetNamespace="http://cadsr.cagrid.nci.nih.gov/CaDSRService"
             xmlns:tns="http://cadsr.cagrid.nci.nih.gov/CaDSRService"
-			xmlns:proj="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" 
+			xmlns:umlc2="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" 
 			
 			xmlns:comm="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" 
 			
@@ -48,7 +48,7 @@
 					<complexType>
 						<sequence>
           		  
-										<element ref="proj:Project" minOccurs="1" maxOccurs="unbounded" />
+										<element ref="umlc2:Project" minOccurs="1" maxOccurs="unbounded" />
 			                  		
 						</sequence>
 					</complexType>
@@ -68,7 +68,169 @@
 					<complexType>
 						<sequence>
           		  
-										<element ref="proj:Project" minOccurs="1" maxOccurs="unbounded" />
+										<element ref="umlc2:Project" minOccurs="1" maxOccurs="unbounded" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
+				<element name="findPackagesInProject">
+					<complexType>
+						<sequence>
+          		  
+                  					
+							<element name="project">
+	      		  				<complexType>
+									<sequence>
+										<element ref="umlc2:Project" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+                  				 	
+	      				</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="findPackagesInProjectResponse">
+					<complexType>
+						<sequence>
+          		  
+										<element ref="umlc2:UMLPackageMetadata" minOccurs="1" maxOccurs="unbounded" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
+				<element name="findClassesInProject">
+					<complexType>
+						<sequence>
+          		  
+                  					
+							<element name="project">
+	      		  				<complexType>
+									<sequence>
+										<element ref="umlc2:Project" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+                  				 	
+	      				</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="findClassesInProjectResponse">
+					<complexType>
+						<sequence>
+          		  
+										<element ref="umlc2:UMLClassMetadata" minOccurs="1" maxOccurs="unbounded" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
+				<element name="findClassesInPackage">
+					<complexType>
+						<sequence>
+          		  
+                  					
+							<element name="pkg">
+	      		  				<complexType>
+									<sequence>
+										<element ref="umlc2:UMLPackageMetadata" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+                  				 	
+	      				</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="findClassesInPackageResponse">
+					<complexType>
+						<sequence>
+          		  
+										<element ref="umlc2:UMLClassMetadata" minOccurs="1" maxOccurs="unbounded" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
+				<element name="generateMetadataExtractForProject">
+					<complexType>
+						<sequence>
+          		  
+                  					
+							<element name="project">
+	      		  				<complexType>
+									<sequence>
+										<element ref="umlc2:Project" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+                  				 	
+	      				</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="generateMetadataExtractForProjectResponse">
+					<complexType>
+						<sequence>
+          		  
+										<element name="response" type="xs:string" minOccurs="1" maxOccurs="unbounded" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
+				<element name="generateMetadataExtractForPackages">
+					<complexType>
+						<sequence>
+          		  
+	      		  					
+							<element name="packages">
+	      		  				<complexType>
+									<sequence>
+										<element ref="umlc2:UMLPackageMetadata" minOccurs="1" maxOccurs="unbounded" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+                  				 	
+	      		  		
+
+                  				 	
+	      				</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="generateMetadataExtractForPackagesResponse">
+					<complexType>
+						<sequence>
+          		  
+										<element name="response" type="xs:string" minOccurs="1" maxOccurs="1" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
+				<element name="generateMetadataExtractForClasses">
+					<complexType>
+						<sequence>
+          		  
+	      		  					
+							<element name="classes">
+	      		  				<complexType>
+									<sequence>
+										<element ref="umlc2:UMLClassMetadata" minOccurs="1" maxOccurs="unbounded" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+                  				 	
+	      		  		
+
+                  				 	
+	      				</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="generateMetadataExtractForClassesResponse">
+					<complexType>
+						<sequence>
+          		  
+										<element name="response" type="xs:string" minOccurs="1" maxOccurs="1" />
 			                  		
 						</sequence>
 					</complexType>
@@ -98,6 +260,48 @@
 	<message name="findProjectsOutputMessage">
 		<part name="parameters" element="tns:findProjectsResponse"/>
 	</message>
+	<message name="findPackagesInProjectInputMessage">
+		<part name="parameters" element="tns:findPackagesInProject"/>
+	</message>
+	
+	<message name="findPackagesInProjectOutputMessage">
+		<part name="parameters" element="tns:findPackagesInProjectResponse"/>
+	</message>
+	<message name="findClassesInProjectInputMessage">
+		<part name="parameters" element="tns:findClassesInProject"/>
+	</message>
+	
+	<message name="findClassesInProjectOutputMessage">
+		<part name="parameters" element="tns:findClassesInProjectResponse"/>
+	</message>
+	<message name="findClassesInPackageInputMessage">
+		<part name="parameters" element="tns:findClassesInPackage"/>
+	</message>
+	
+	<message name="findClassesInPackageOutputMessage">
+		<part name="parameters" element="tns:findClassesInPackageResponse"/>
+	</message>
+	<message name="generateMetadataExtractForProjectInputMessage">
+		<part name="parameters" element="tns:generateMetadataExtractForProject"/>
+	</message>
+	
+	<message name="generateMetadataExtractForProjectOutputMessage">
+		<part name="parameters" element="tns:generateMetadataExtractForProjectResponse"/>
+	</message>
+	<message name="generateMetadataExtractForPackagesInputMessage">
+		<part name="parameters" element="tns:generateMetadataExtractForPackages"/>
+	</message>
+	
+	<message name="generateMetadataExtractForPackagesOutputMessage">
+		<part name="parameters" element="tns:generateMetadataExtractForPackagesResponse"/>
+	</message>
+	<message name="generateMetadataExtractForClassesInputMessage">
+		<part name="parameters" element="tns:generateMetadataExtractForClasses"/>
+	</message>
+	
+	<message name="generateMetadataExtractForClassesOutputMessage">
+		<part name="parameters" element="tns:generateMetadataExtractForClassesResponse"/>
+	</message>
     
 <!--============================================================
 
@@ -113,6 +317,30 @@
 		<operation name="findProjects">
             <input message="tns:findProjectsInputMessage"/>
             <output message="tns:findProjectsOutputMessage"/>
+        </operation>
+		<operation name="findPackagesInProject">
+            <input message="tns:findPackagesInProjectInputMessage"/>
+            <output message="tns:findPackagesInProjectOutputMessage"/>
+        </operation>
+		<operation name="findClassesInProject">
+            <input message="tns:findClassesInProjectInputMessage"/>
+            <output message="tns:findClassesInProjectOutputMessage"/>
+        </operation>
+		<operation name="findClassesInPackage">
+            <input message="tns:findClassesInPackageInputMessage"/>
+            <output message="tns:findClassesInPackageOutputMessage"/>
+        </operation>
+		<operation name="generateMetadataExtractForProject">
+            <input message="tns:generateMetadataExtractForProjectInputMessage"/>
+            <output message="tns:generateMetadataExtractForProjectOutputMessage"/>
+        </operation>
+		<operation name="generateMetadataExtractForPackages">
+            <input message="tns:generateMetadataExtractForPackagesInputMessage"/>
+            <output message="tns:generateMetadataExtractForPackagesOutputMessage"/>
+        </operation>
+		<operation name="generateMetadataExtractForClasses">
+            <input message="tns:generateMetadataExtractForClassesInputMessage"/>
+            <output message="tns:generateMetadataExtractForClassesOutputMessage"/>
         </operation>
         <operation name="GetResourceProperty">
             <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest"

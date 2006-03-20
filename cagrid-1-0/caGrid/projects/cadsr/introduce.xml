@@ -24,13 +24,91 @@
     <ns4:AnonymousClients xsi:type="ns4:AnonymousCommunication" xsi:nil="true"/>
    </ns2:MethodSecurity>
   </ns2:Method>
+  <ns2:Method name="findPackagesInProject" xsi:type="ns2:MethodType">
+   <ns2:Inputs>
+    <ns2:Input isArray="false" location="./3.0_gov.nih.nci.cadsr.umlproject.domain.xsd" name="project" namespace="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" packageName="gov.nih.nci.cadsr.umlproject.domain" type="Project"/>
+   </ns2:Inputs>
+   <ns2:Output isArray="true" location="./3.0_gov.nih.nci.cadsr.umlproject.domain.xsd" namespace="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" packageName="gov.nih.nci.cadsr.umlproject.domain" type="UMLPackageMetadata"/>
+   <ns2:Exceptions/>
+   <ns2:MethodSecurity xsi:type="ns5:MethodSecurity" xmlns:ns5="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns5:MethodSecuritySetting xsi:type="ns5:MethodSecurityType">None</ns5:MethodSecuritySetting>
+    <ns5:RunAsMode xsi:type="ns5:RunAsMode" xsi:nil="true"/>
+    <ns5:DelegationMode xsi:type="ns5:DelegationMode" xsi:nil="true"/>
+    <ns5:AnonymousClients xsi:type="ns5:AnonymousCommunication" xsi:nil="true"/>
+   </ns2:MethodSecurity>
+  </ns2:Method>
+  <ns2:Method name="findClassesInProject" xsi:type="ns2:MethodType">
+   <ns2:Inputs>
+    <ns2:Input isArray="false" location="./3.0_gov.nih.nci.cadsr.umlproject.domain.xsd" name="project" namespace="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" packageName="gov.nih.nci.cadsr.umlproject.domain" type="Project"/>
+   </ns2:Inputs>
+   <ns2:Output isArray="true" location="./3.0_gov.nih.nci.cadsr.umlproject.domain.xsd" namespace="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" packageName="gov.nih.nci.cadsr.umlproject.domain" type="UMLClassMetadata"/>
+   <ns2:Exceptions/>
+   <ns2:MethodSecurity xsi:type="ns6:MethodSecurity" xmlns:ns6="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns6:MethodSecuritySetting xsi:type="ns6:MethodSecurityType">None</ns6:MethodSecuritySetting>
+    <ns6:RunAsMode xsi:type="ns6:RunAsMode" xsi:nil="true"/>
+    <ns6:DelegationMode xsi:type="ns6:DelegationMode" xsi:nil="true"/>
+    <ns6:AnonymousClients xsi:type="ns6:AnonymousCommunication" xsi:nil="true"/>
+   </ns2:MethodSecurity>
+  </ns2:Method>
+  <ns2:Method name="findClassesInPackage" xsi:type="ns2:MethodType">
+   <ns2:Inputs>
+    <ns2:Input isArray="false" location="./3.0_gov.nih.nci.cadsr.umlproject.domain.xsd" name="pkg" namespace="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" packageName="gov.nih.nci.cadsr.umlproject.domain" type="UMLPackageMetadata"/>
+   </ns2:Inputs>
+   <ns2:Output isArray="true" location="./3.0_gov.nih.nci.cadsr.umlproject.domain.xsd" namespace="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" packageName="gov.nih.nci.cadsr.umlproject.domain" type="UMLClassMetadata"/>
+   <ns2:Exceptions/>
+   <ns2:MethodSecurity xsi:type="ns7:MethodSecurity" xmlns:ns7="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns7:MethodSecuritySetting xsi:type="ns7:MethodSecurityType">None</ns7:MethodSecuritySetting>
+    <ns7:RunAsMode xsi:type="ns7:RunAsMode" xsi:nil="true"/>
+    <ns7:DelegationMode xsi:type="ns7:DelegationMode" xsi:nil="true"/>
+    <ns7:AnonymousClients xsi:type="ns7:AnonymousCommunication" xsi:nil="true"/>
+   </ns2:MethodSecurity>
+  </ns2:Method>
+  <ns2:Method name="generateMetadataExtractForProject" xsi:type="ns2:MethodType">
+   <ns2:Inputs>
+    <ns2:Input isArray="false" location="./3.0_gov.nih.nci.cadsr.umlproject.domain.xsd" name="project" namespace="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" packageName="gov.nih.nci.cadsr.umlproject.domain" type="Project"/>
+   </ns2:Inputs>
+   <ns2:Output isArray="true" namespace="http://www.w3.org/2001/XMLSchema" type="string"/>
+   <ns2:Exceptions/>
+   <ns2:MethodSecurity xsi:type="ns8:MethodSecurity" xmlns:ns8="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns8:MethodSecuritySetting xsi:type="ns8:MethodSecurityType">None</ns8:MethodSecuritySetting>
+    <ns8:RunAsMode xsi:type="ns8:RunAsMode" xsi:nil="true"/>
+    <ns8:DelegationMode xsi:type="ns8:DelegationMode" xsi:nil="true"/>
+    <ns8:AnonymousClients xsi:type="ns8:AnonymousCommunication" xsi:nil="true"/>
+   </ns2:MethodSecurity>
+  </ns2:Method>
+  <ns2:Method name="generateMetadataExtractForPackages" xsi:type="ns2:MethodType">
+   <ns2:Inputs>
+    <ns2:Input isArray="true" location="./3.0_gov.nih.nci.cadsr.umlproject.domain.xsd" name="packages" namespace="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" packageName="gov.nih.nci.cadsr.umlproject.domain" type="UMLPackageMetadata"/>
+   </ns2:Inputs>
+   <ns2:Output isArray="false" namespace="http://www.w3.org/2001/XMLSchema" type="string"/>
+   <ns2:Exceptions/>
+   <ns2:MethodSecurity xsi:type="ns9:MethodSecurity" xmlns:ns9="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns9:MethodSecuritySetting xsi:type="ns9:MethodSecurityType">None</ns9:MethodSecuritySetting>
+    <ns9:RunAsMode xsi:type="ns9:RunAsMode" xsi:nil="true"/>
+    <ns9:DelegationMode xsi:type="ns9:DelegationMode" xsi:nil="true"/>
+    <ns9:AnonymousClients xsi:type="ns9:AnonymousCommunication" xsi:nil="true"/>
+   </ns2:MethodSecurity>
+  </ns2:Method>
+  <ns2:Method name="generateMetadataExtractForClasses" xsi:type="ns2:MethodType">
+   <ns2:Inputs>
+    <ns2:Input isArray="true" location="./3.0_gov.nih.nci.cadsr.umlproject.domain.xsd" name="classes" namespace="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" packageName="gov.nih.nci.cadsr.umlproject.domain" type="UMLClassMetadata"/>
+   </ns2:Inputs>
+   <ns2:Output isArray="false" namespace="http://www.w3.org/2001/XMLSchema" type="string"/>
+   <ns2:Exceptions/>
+   <ns2:MethodSecurity xsi:type="ns10:MethodSecurity" xmlns:ns10="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns10:MethodSecuritySetting xsi:type="ns10:MethodSecurityType">None</ns10:MethodSecuritySetting>
+    <ns10:RunAsMode xsi:type="ns10:RunAsMode" xsi:nil="true"/>
+    <ns10:DelegationMode xsi:type="ns10:DelegationMode" xsi:nil="true"/>
+    <ns10:AnonymousClients xsi:type="ns10:AnonymousCommunication" xsi:nil="true"/>
+   </ns2:MethodSecurity>
+  </ns2:Method>
  </ns2:Methods>
- <ns5:MetadataList xsi:type="ns5:MetadataListType" xmlns:ns5="gme://gov.nih.nci.cagrid.introduce/1/Metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns5:Metadata QName="ns6:CommonServiceMetadata" location="./1.0_gov.nih.nci.cagrid.metadata.common.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" packageName="gov.nih.nci.cagrid.metadata.common" populateFromFile="true" register="true" type="CommonServiceMetadata" xsi:type="ns5:MetadataType" xmlns:ns6="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
- </ns5:MetadataList>
- <ns1:ServiceSecurity xsi:type="ns7:ServiceSecurity" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns7="gme://gov.nih.nci.cagrid.introduce/1/Security">
-  <ns7:MethodSecuritySetting xsi:type="ns7:MethodSecurityType">None</ns7:MethodSecuritySetting>
-  <ns7:DelegationMode xsi:type="ns7:DelegationMode" xsi:nil="true"/>
-  <ns7:AnonymousClients xsi:type="ns7:AnonymousCommunication" xsi:nil="true"/>
+ <ns11:MetadataList xsi:type="ns11:MetadataListType" xmlns:ns11="gme://gov.nih.nci.cagrid.introduce/1/Metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns11:Metadata QName="ns12:CommonServiceMetadata" location="./1.0_gov.nih.nci.cagrid.metadata.common.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" packageName="gov.nih.nci.cagrid.metadata.common" populateFromFile="true" register="true" type="CommonServiceMetadata" xsi:type="ns11:MetadataType" xmlns:ns12="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+ </ns11:MetadataList>
+ <ns1:ServiceSecurity xsi:type="ns13:ServiceSecurity" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns13="gme://gov.nih.nci.cagrid.introduce/1/Security">
+  <ns13:MethodSecuritySetting xsi:type="ns13:MethodSecurityType">None</ns13:MethodSecuritySetting>
+  <ns13:DelegationMode xsi:type="ns13:DelegationMode" xsi:nil="true"/>
+  <ns13:AnonymousClients xsi:type="ns13:AnonymousCommunication" xsi:nil="true"/>
  </ns1:ServiceSecurity>
 </ns1:ServiceSkeleton>

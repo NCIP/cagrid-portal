@@ -3,7 +3,6 @@
     xmlns:aggr="http://mds.globus.org/aggregator/types"
     xmlns:java="http://xml.apache.org/axis/wsdd/providers/java"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-    
     <service name="SERVICE-INSTANCE-NAME" provider="Handler" use="literal" style="document">
         <parameter name="className"
             value="gov.nih.nci.cagrid.cadsr.service.globus.CaDSRServiceProviderImpl"/>
@@ -16,14 +15,25 @@
         <parameter name="loadOnStartup" value="true"/>
         <parameter name="castorMapping" value="/xml-mapping.xml"/>
     </service>
-    
     <typeMapping name="AggregatorContent" qname="aggr:AggregatorContent"
         type="java:org.globus.mds.aggregator.types.AggregatorContent"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle=""/>
+        
+        
     <typeMapping qname="uml:Project"
         xmlns:uml="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"
         languageSpecificType="java:gov.nih.nci.cadsr.umlproject.domain.Project"
         serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory"
-        deserializer="gov.nih.nci.cagrid.cadsr.SDKDeserializerFactory" encodingStyle=""/>
+        deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" encodingStyle=""/>
+    <typeMapping qname="uml:UMLPackageMetadata"
+        xmlns:uml="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"
+        languageSpecificType="java:gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata"
+        serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory"
+        deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" encodingStyle=""/>
+    <typeMapping qname="uml:UMLClassMetadata"
+        xmlns:uml="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"
+        languageSpecificType="java:gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata"
+        serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory"
+        deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" encodingStyle=""/>
 </deployment>
