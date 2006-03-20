@@ -78,6 +78,10 @@
 			<ant inheritall="false" dir="projects/dorian" antfile="build.xml" target="test">
 				<property name="junit.results.dir" value="${junit.results.dir}" />
 			</ant>
+
+			<ant inheritall="false" dir="projects/cql2xpath" antfile="build.xml" target="test">
+				<property name="junit.results.dir" value="${junit.results.dir}" />
+			</ant>
 		</sequential>
 	</target>
 

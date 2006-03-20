@@ -157,6 +157,13 @@
 				<include name="xml-apis.jar" />
 			</fileset>
 		</artifact>
+
+		<artifact track="main" type="jars" id="cql2xpath.jars">
+			<antcall target="build-cql2xpath"/>
+			<fileset dir="${projects.dir}/cql2xpath/build/lib">
+				<include name="*.jar"/>
+			</fileset>
+		</artifact>
 	</target>
 
 
@@ -292,6 +299,17 @@
 	<target name="build-data" depends="prepare" description="Builds caGrid Data Services components">
 		<ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="all"/>
 	</target>
+	
+	
+	<!-- =============================================================== -->
+	<!-- CAGRID Cql2Xpath:                                             -->
+	<!-- =============================================================== -->
+	<target name="build-cql2xpath" depends="prepare" description="Builds caGrid Cql2Xpath utility">
+		<resolveDependencies extdir="${projects.dir}/cql2xpath/ext">
+			<artifact refid="core.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/cql2xpath" inheritAll="false" antfile="build.xml" target="all"/>
+	</target>
 
 
 	<!-- ============================================================== -->
@@ -317,6 +335,8 @@
 		<ant dir="${projects.dir}/cadsr" inheritAll="false" antfile="build.xml" target="clean" />
 		<delete dir="${projects.dir}/opensaml/ext" />
 		<ant dir="${projects.dir}/opensaml" inheritAll="false" antfile="build.xml" target="clean" />
+		<delete dir="${projects.dir}/cql2xpath/ext" />
+		<ant dir="${projects.dir}/cql2xpath" inheritAll="false" antfile="build.xml" target="clean" />
 	</target>
 
 
