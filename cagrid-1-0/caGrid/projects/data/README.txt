@@ -1,0 +1,1 @@
+To build the required beans, type 'ant jarStubs' at the project's top level.
