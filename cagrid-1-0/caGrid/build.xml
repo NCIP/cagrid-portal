@@ -297,6 +297,7 @@
 	<!-- CAGRID DataService:                                             -->
 	<!-- =============================================================== -->
 	<target name="build-data" depends="prepare" description="Builds caGrid Data Services components">
+		<resolveDependencies extdir="${projects.dir}/data/ext"/>
 		<ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="all"/>
 	</target>
 	
@@ -335,6 +336,8 @@
 		<ant dir="${projects.dir}/cadsr" inheritAll="false" antfile="build.xml" target="clean" />
 		<delete dir="${projects.dir}/opensaml/ext" />
 		<ant dir="${projects.dir}/opensaml" inheritAll="false" antfile="build.xml" target="clean" />
+		<delete dir="${projects.dir}/data/ext"/>
+		<ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="clean"/>
 		<delete dir="${projects.dir}/cql2xpath/ext" />
 		<ant dir="${projects.dir}/cql2xpath" inheritAll="false" antfile="build.xml" target="clean" />
 	</target>
@@ -349,12 +352,12 @@
 
 	<echo message="${isJDK1.5}" />
 	<target name="all" depends="all_1.5,all_pre_1.5" description="Builds the entire application" />
-	<target name="all_1.5_build" if="isJDK1.5" depends="clean, build-core, build-cadsr, build-gridca, build-opensaml, build-metadata, build-cql2xpath, build-gme, build-gts, build-introduce, build-dorian" />
+	<target name="all_1.5_build" if="isJDK1.5" depends="clean, build-core, build-cadsr, build-gridca, build-opensaml, build-metadata, build-cql2xpath, build-gme, build-gts, build-introduce, build-dorian, build-data" />
 	<target name="all_1.5" if="isJDK1.5">
 		<antcall target="all_1.5_build" />
 		<echo message="Successfully built all projects." />
 	</target>
-	<target name="all_pre_1.5_build" unless="isJDK1.5" depends="clean, build-core, build-gridca, build-opensaml, build-metadata, build-gme, build-gts, build-introduce, build-dorian" />
+	<target name="all_pre_1.5_build" unless="isJDK1.5" depends="clean, build-core, build-gridca, build-opensaml, build-metadata, build-gme, build-gts, build-introduce, build-dorian, build-data" />
 	<target name="all_pre_1.5" unless="isJDK1.5">
 		<echo message="=====================================================================================" />
 		<echo message="WARNING: When building with a JDK of version &lt; 1.5, not all projects can be built!" />
