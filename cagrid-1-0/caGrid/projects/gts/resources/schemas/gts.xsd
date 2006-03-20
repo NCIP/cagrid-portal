@@ -88,5 +88,6 @@
 				<xsd:element name="crlEncodedString" minOccurs="1" maxOccurs="1" type="xsd:string"/>
 			</xsd:sequence>
 		</xsd:complexType>
-	    
+		
+		<xsd:element name="TrustedAuthorityNameStr" minOccurs="1" maxOccurs="1" type="xsd:string"/>
 </xsd:schema>

@@ -1,8 +1,8 @@
 <securityConfig xmlns="http://www.globus.org" xmlns:dorian="http://cagrid.nci.nih.gov/dorian">
 
    <credential>
-      <key-file value="c:/certificates/gums-key.pem"/>
-      <cert-file value="c:/certificates/gums-cert.pem"/>
+      <key-file value="c:/certificates/dorian-key.pem"/>
+      <cert-file value="c:/certificates/dorian-cert.pem"/>
    </credential>
 
 <authz value="none"/>
