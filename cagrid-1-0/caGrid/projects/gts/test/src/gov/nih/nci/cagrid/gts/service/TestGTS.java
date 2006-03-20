@@ -50,11 +50,12 @@ public class TestGTS extends TestCase {
 
 
 	public void testAddFindRevokePermission() {
+		GTS gts = null;
 		try {
 			GTSConfiguration conf = Utils.getGTSConfiguration();
 			String user = "O=Test Organization,OU=Test Unit,CN=User";
 			String user2 = "O=Test Organization,OU=Test Unit,CN=User2";
-			GTS gts = new GTS(conf, "localhost");
+			gts = new GTS(conf, "localhost");
 			// Make sure we start fresh
 			gts.destroy();
 
@@ -158,11 +159,11 @@ public class TestGTS extends TestCase {
 
 			}
 			gts.addTrustedAuthority(ta, ADMIN_USER);
-			assertEquals(1,gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
-			assertEquals(ta,gts.findTrustAuthorities(new TrustedAuthorityFilter())[0]);
+			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+			assertEquals(ta, gts.findTrustAuthorities(new TrustedAuthorityFilter())[0]);
 			gts.addPermission(userPerm, ADMIN_USER);
-			assertEquals(1,gts.findPermissions(permissionToPermissionFilter(userPerm),ADMIN_USER).length);
-			assertEquals(userPerm,gts.findPermissions(permissionToPermissionFilter(userPerm),ADMIN_USER)[0]);
+			assertEquals(1, gts.findPermissions(permissionToPermissionFilter(userPerm), ADMIN_USER).length);
+			assertEquals(userPerm, gts.findPermissions(permissionToPermissionFilter(userPerm), ADMIN_USER)[0]);
 			// Test user with Invalid Permission
 			try {
 				gts.addPermission(p, user);
@@ -184,26 +185,26 @@ public class TestGTS extends TestCase {
 			} catch (PermissionDeniedFault f) {
 
 			}
-			
-			//Now give use Admin rights
+
+			// Now give use Admin rights
 			Permission admin = new Permission();
 			admin.setGridIdentity(user);
 			admin.setRole(Role.TrustServiceAdmin);
-			
+
 			gts.addPermission(admin, ADMIN_USER);
-			assertEquals(1,gts.findPermissions(permissionToPermissionFilter( admin),ADMIN_USER).length);
-			assertEquals(admin,gts.findPermissions(permissionToPermissionFilter( admin),ADMIN_USER)[0]);
-			
-			//Now that the user is admin try again
+			assertEquals(1, gts.findPermissions(permissionToPermissionFilter(admin), ADMIN_USER).length);
+			assertEquals(admin, gts.findPermissions(permissionToPermissionFilter(admin), ADMIN_USER)[0]);
+
+			// Now that the user is admin try again
 			gts.addPermission(p, user);
-			assertEquals(1,gts.findPermissions(permissionToPermissionFilter(p),user).length);
-			assertEquals(p,gts.findPermissions(permissionToPermissionFilter(p),user)[0]);
-			gts.revokePermission(p,user);
-			assertEquals(0,gts.findPermissions(permissionToPermissionFilter(p),user).length);
-			
-			//Now Revoke the user's admin rights and try again
-			gts.revokePermission(admin,ADMIN_USER);
-			assertEquals(0,gts.findPermissions(permissionToPermissionFilter( admin),ADMIN_USER).length);
+			assertEquals(1, gts.findPermissions(permissionToPermissionFilter(p), user).length);
+			assertEquals(p, gts.findPermissions(permissionToPermissionFilter(p), user)[0]);
+			gts.revokePermission(p, user);
+			assertEquals(0, gts.findPermissions(permissionToPermissionFilter(p), user).length);
+
+			// Now Revoke the user's admin rights and try again
+			gts.revokePermission(admin, ADMIN_USER);
+			assertEquals(0, gts.findPermissions(permissionToPermissionFilter(admin), ADMIN_USER).length);
 			try {
 				gts.addPermission(p, user);
 				fail("Non trust service administrators should not be able to add a permission!!!");
@@ -224,20 +225,28 @@ public class TestGTS extends TestCase {
 			} catch (PermissionDeniedFault f) {
 
 			}
-			
-			gts.destroy();
+
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
+		} finally {
+			if (gts != null) {
+				try {
+					gts.destroy();
+				} catch (Exception e) {
+					FaultUtil.printFault(e);
+				}
+			}
 		}
 	}
 
 
 	public void testAddTrustedAuthority() {
+		GTS gts = null;
 		try {
 			GTSConfiguration conf = Utils.getGTSConfiguration();
 
-			GTS gts = new GTS(conf, "localhost");
+			gts = new GTS(conf, "localhost");
 			// Make sure we start fresh
 			gts.destroy();
 			String user = "O=Test Organization,OU=Test Unit,CN=User";
@@ -257,7 +266,7 @@ public class TestGTS extends TestCase {
 			// Test null
 			try {
 				gts.addTrustedAuthority(ta, null);
-				fail("Non trust service administrators should not be able to add a trust authority!!!");
+				fail("Non trust service administrators should not be able to update a trust authority!!!");
 			} catch (PermissionDeniedFault f) {
 
 			}
@@ -266,7 +275,7 @@ public class TestGTS extends TestCase {
 			// Test Empty String
 			try {
 				gts.addTrustedAuthority(ta, "");
-				fail("Non trust service administrators should not be able to add a trust authority!!!");
+				fail("Non trust service administrators should not be able to update a trust authority!!!");
 			} catch (PermissionDeniedFault f) {
 
 			}
@@ -275,7 +284,7 @@ public class TestGTS extends TestCase {
 			// Test User without any permissions
 			try {
 				gts.addTrustedAuthority(ta, user);
-				fail("Non trust service administrators should not be able to add a trust authority!!!");
+				fail("Non trust service administrators should not be able to update a trust authority!!!");
 			} catch (PermissionDeniedFault f) {
 
 			}
@@ -310,7 +319,7 @@ public class TestGTS extends TestCase {
 
 			try {
 				gts.addTrustedAuthority(ta, user);
-				fail("Non trust service administrators should not be able to add a trust authority!!!");
+				fail("Non trust service administrators should not be able to update a trust authority!!!");
 			} catch (PermissionDeniedFault f) {
 
 			}
@@ -321,6 +330,226 @@ public class TestGTS extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
+		} finally {
+			if (gts != null) {
+				try {
+					gts.destroy();
+				} catch (Exception e) {
+					FaultUtil.printFault(e);
+				}
+			}
+		}
+	}
+
+
+	public void testUpdateTrustedAuthority() {
+		GTS gts = null;
+		try {
+			GTSConfiguration conf = Utils.getGTSConfiguration();
+
+			gts = new GTS(conf, "localhost");
+			// Make sure we start fresh
+			gts.destroy();
+			String user = "O=Test Organization,OU=Test Unit,CN=User";
+			PermissionBootstapper pb = new PermissionBootstapper(conf);
+			pb.addAdminUser(ADMIN_USER);
+			CA ca = new CA();
+			BigInteger sn = new BigInteger(String.valueOf(System.currentTimeMillis()));
+			CRLEntry entry = new CRLEntry(sn, CRLReason.PRIVILEGE_WITHDRAWN);
+			ca.updateCRL(entry);
+			TrustedAuthority ta = new TrustedAuthority();
+			ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
+			ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
+			ta.setStatus(Status.Trusted);
+			ta.setTrustLevel(TrustLevel.Five);
+
+			ta = gts.addTrustedAuthority(ta, ADMIN_USER);
+			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+			TrustedAuthority updated = gts.findTrustAuthorities(new TrustedAuthorityFilter())[0];
+			assertEquals(ta, updated);
+			CRLEntry crlE = new CRLEntry(new BigInteger(String.valueOf(System.currentTimeMillis())),
+				CRLReason.PRIVILEGE_WITHDRAWN);
+			ca.updateCRL(crlE);
+			updated.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
+			updated.setStatus(Status.Pending);
+			updated.setTrustLevel(TrustLevel.Two);
+
+			// Test null
+			try {
+				gts.updateTrustedAuthority(updated, null);
+				fail("Non trust service administrators should not be able to update a trust authority!!!");
+			} catch (PermissionDeniedFault f) {
+
+			}
+
+			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+
+			// Test Empty String
+			try {
+				gts.updateTrustedAuthority(updated, "");
+				fail("Non trust service administrators should not be able to update a trust authority!!!");
+			} catch (PermissionDeniedFault f) {
+
+			}
+			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+
+			// Test User without any permissions
+			try {
+				gts.updateTrustedAuthority(updated, user);
+				fail("Non trust service administrators should not be able to update a trust authority!!!");
+			} catch (PermissionDeniedFault f) {
+
+			}
+			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+
+			// Now create a permission for a user on the previous added trust
+			// authority.
+			Permission p = new Permission();
+			p.setGridIdentity(user);
+			p.setRole(Role.TrustAuthorityManager);
+			p.setTrustedAuthorityName(ta.getTrustedAuthorityName());
+			gts.addPermission(p, ADMIN_USER);
+
+			// Check to make sure the permission was properly added
+			PermissionFilter pf = permissionToPermissionFilter(p);
+			assertEquals(1, gts.findPermissions(pf, ADMIN_USER).length);
+			assertEquals(p, gts.findPermissions(pf, ADMIN_USER)[0]);
+
+			try {
+				gts.updateTrustedAuthority(updated, user);
+				fail("Non trust service administrators should not be able to update a trust authority!!!");
+			} catch (PermissionDeniedFault f) {
+
+			}
+
+			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+
+			// Now give use Admin rights
+			Permission admin = new Permission();
+			admin.setGridIdentity(user);
+			admin.setRole(Role.TrustServiceAdmin);
+
+			gts.addPermission(admin, ADMIN_USER);
+			assertEquals(1, gts.findPermissions(permissionToPermissionFilter(admin), ADMIN_USER).length);
+			assertEquals(admin, gts.findPermissions(permissionToPermissionFilter(admin), ADMIN_USER)[0]);
+
+			// Now that the user is admin try again
+			gts.updateTrustedAuthority(updated, user);
+			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+			assertEquals(updated, gts.findTrustAuthorities(new TrustedAuthorityFilter())[0]);
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			if (gts != null) {
+				try {
+					gts.destroy();
+				} catch (Exception e) {
+					FaultUtil.printFault(e);
+				}
+			}
+		}
+	}
+	
+	public void testRemoveTrustedAuthority() {
+		GTS gts = null;
+		try {
+			GTSConfiguration conf = Utils.getGTSConfiguration();
+
+			gts = new GTS(conf, "localhost");
+			// Make sure we start fresh
+			gts.destroy();
+			String user = "O=Test Organization,OU=Test Unit,CN=User";
+			PermissionBootstapper pb = new PermissionBootstapper(conf);
+			pb.addAdminUser(ADMIN_USER);
+			CA ca = new CA();
+			BigInteger sn = new BigInteger(String.valueOf(System.currentTimeMillis()));
+			CRLEntry entry = new CRLEntry(sn, CRLReason.PRIVILEGE_WITHDRAWN);
+			ca.updateCRL(entry);
+			TrustedAuthority ta = new TrustedAuthority();
+			ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
+			ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
+			ta.setStatus(Status.Trusted);
+			ta.setTrustLevel(TrustLevel.Five);
+
+			ta = gts.addTrustedAuthority(ta, ADMIN_USER);
+			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+
+			// Test null
+			try {
+				gts.removeTrustedAuthority(ta.getTrustedAuthorityName(), null);
+				fail("Non trust service administrators should not be able to remove a trust authority!!!");
+			} catch (PermissionDeniedFault f) {
+
+			}
+
+			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+
+			// Test Empty String
+			try {
+				gts.removeTrustedAuthority(ta.getTrustedAuthorityName(), "");
+				fail("Non trust service administrators should not be able to remove a trust authority!!!");
+			} catch (PermissionDeniedFault f) {
+
+			}
+			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+
+			// Test User without any permissions
+			try {
+				gts.removeTrustedAuthority(ta.getTrustedAuthorityName(), user);
+				fail("Non trust service administrators should not be able to remove a trust authority!!!");
+			} catch (PermissionDeniedFault f) {
+
+			}
+			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+
+			// Now create a permission for a user on the previous added trust
+			// authority.
+			Permission p = new Permission();
+			p.setGridIdentity(user);
+			p.setRole(Role.TrustAuthorityManager);
+			p.setTrustedAuthorityName(ta.getTrustedAuthorityName());
+			gts.addPermission(p, ADMIN_USER);
+
+			// Check to make sure the permission was properly added
+			PermissionFilter pf = permissionToPermissionFilter(p);
+			assertEquals(1, gts.findPermissions(pf, ADMIN_USER).length);
+			assertEquals(p, gts.findPermissions(pf, ADMIN_USER)[0]);
+
+			try {
+				gts.removeTrustedAuthority(ta.getTrustedAuthorityName(), user);
+				fail("Non trust service administrators should not be able to remove a trust authority!!!");
+			} catch (PermissionDeniedFault f) {
+
+			}
+
+			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+
+			// Now give use Admin rights
+			Permission admin = new Permission();
+			admin.setGridIdentity(user);
+			admin.setRole(Role.TrustServiceAdmin);
+
+			gts.addPermission(admin, ADMIN_USER);
+			assertEquals(1, gts.findPermissions(permissionToPermissionFilter(admin), ADMIN_USER).length);
+			assertEquals(admin, gts.findPermissions(permissionToPermissionFilter(admin), ADMIN_USER)[0]);
+
+			// Now that the user is admin try again
+			gts.removeTrustedAuthority(ta.getTrustedAuthorityName(), user);
+			assertEquals(0, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			if (gts != null) {
+				try {
+					gts.destroy();
+				} catch (Exception e) {
+					FaultUtil.printFault(e);
+				}
+			}
 		}
 	}
 

@@ -9,6 +9,7 @@ import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault;
+import gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault;
 
 
@@ -45,6 +46,19 @@ public class GTS {
 
 	public TrustedAuthority[] findTrustAuthorities(TrustedAuthorityFilter filter) throws GTSInternalFault {
 		return trust.findTrustAuthorities(filter);
+	}
+
+
+	public void updateTrustedAuthority(TrustedAuthority ta, String callerGridIdentity) throws GTSInternalFault,
+		IllegalTrustedAuthorityFault, InvalidTrustedAuthorityFault, PermissionDeniedFault {
+		checkServiceAdministrator(callerGridIdentity);
+		trust.updateTrustedAuthority(ta);
+	}
+
+
+	public void removeTrustedAuthority(String name, String callerGridIdentity) throws GTSInternalFault, InvalidTrustedAuthorityFault, PermissionDeniedFault {
+		checkServiceAdministrator(callerGridIdentity);
+		trust.removeTrustedAuthority(name);
 	}
 
 
