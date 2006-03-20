@@ -37,8 +37,7 @@
 	
 	<!-- primary source directory -->
 	<property name="src.dir" location="${basedir}/src"/>
-
-
+	
 	<!-- creates output directories -->
     <target name="init">
         <mkdir dir="${build.dir}" />
@@ -77,8 +76,7 @@
             <property name="target.stubs.dir" location="${stubs.src}" />
         </ant>
     </target>
-
-
+	
 	<!-- compiles the source stubs for the schema defined types -->
     <target name="compileStubs" depends="stubs">
         <delete dir="${stubs.src}/org/apache" />
@@ -96,15 +94,13 @@
 	<!-- compiles the source code -->
 	<target name="compileSource" depends="compileStubs">
 		<javac srcdir="${src.dir}" destdir="${build.dest}" debug="${java.debug}">
-			<include name="**/*.java" />
 			<classpath>
 				<fileset dir="${globus.dir}/lib">
 					<include name="*.jar"/>
 				</fileset>
-				<fileset dir="${stubs.dest}">
-					<include name="**/*.class"/>
-				</fileset>
+				<pathelement location="${stubs.dest}"/>
 			</classpath>
+			<include name="**/*.java" />
 		</javac>
 	</target>
 
@@ -121,7 +117,9 @@
 	<!-- jars the whole project -->
 	<target name="jarAll" depends="compileSource" description="Builds and jars the whole project">
 		<jar destfile="${project.jar.file}">
-			<fileset dir="${stubs.dest}"/>
+			<fileset dir="${stubs.dest}">
+				<include name="**/*.class"/>
+			</fileset>
 			<fileset dir="${build.dest}">
 				<include name="**/*.class"/>
 			</fileset>
