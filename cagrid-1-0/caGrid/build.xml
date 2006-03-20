@@ -357,7 +357,7 @@
 		<antcall target="all_1.5_build" />
 		<echo message="Successfully built all projects." />
 	</target>
-	<target name="all_pre_1.5_build" unless="isJDK1.5" depends="clean, build-core, build-gridca, build-opensaml, build-metadata, build-gme, build-gts, build-introduce, build-dorian, build-data" />
+	<target name="all_pre_1.5_build" unless="isJDK1.5" depends="clean, build-core, build-gridca, build-opensaml, build-metadata, build-cql2xpath, build-gme, build-gts, build-introduce, build-dorian, build-data" />
 	<target name="all_pre_1.5" unless="isJDK1.5">
 		<echo message="=====================================================================================" />
 		<echo message="WARNING: When building with a JDK of version &lt; 1.5, not all projects can be built!" />

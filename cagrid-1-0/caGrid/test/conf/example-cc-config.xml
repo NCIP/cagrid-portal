@@ -42,7 +42,7 @@
                 css="/usr/local/bin/cruisecontrol/reporting/jsp/webcontent/css/cruisecontrol.css" xsldir="/usr/local/bin/cruisecontrol/reporting/jsp/webcontent/xsl" 
                 logdir="logs/caGrid-1.0-continuous">
                 <failure address="developers" reportWhenFixed="true"/>
-                <map alias="developers" address="oster@bmi.osu.edu, hastings@bmi.osu.edu, langella@bmi.osu.edu, patrick.mcconnell@Duke.edu, christman@bmi.osu.edu, madduri@mcs.anl.gov" />
+                <map alias="developers" address="oster@bmi.osu.edu, hastings@bmi.osu.edu, langella@bmi.osu.edu, ervin@bmi.osu.edu, christman@bmi.osu.edu, patrick.mcconnell@Duke.edu, madduri@mcs.anl.gov" />
             </htmlemail>
             <!--<artifactspublisher dir="checkout/caGrid-1.0-continuous/build/jars" dest="artifacts/caGrid-1.0-continuous"/>-->
             <antpublisher buildfile="checkout/caGrid-1.0-continuous/caGrid/build.xml" target="ccpublish"/>
@@ -96,7 +96,7 @@
                 css="/usr/local/bin/cruisecontrol/reporting/jsp/webcontent/css/cruisecontrol.css" xsldir="/usr/local/bin/cruisecontrol/reporting/jsp/webcontent/xsl" 
                 logdir="logs/caGrid-1.0-nightly">
                 <failure address="developers" reportWhenFixed="true"/>
-                <map alias="developers" address="oster@bmi.osu.edu, hastings@bmi.osu.edu, langella@bmi.osu.edu, patrick.mcconnell@Duke.edu, christman@bmi.osu.edu, madduri@mcs.anl.gov" />
+                <map alias="developers" address="oster@bmi.osu.edu, hastings@bmi.osu.edu, langella@bmi.osu.edu, ervin@bmi.osu.edu, christman@bmi.osu.edu, patrick.mcconnell@Duke.edu, madduri@mcs.anl.gov" />
             </htmlemail>
             <!--<artifactspublisher dir="checkout/caGrid-1.0-nightly/build/jars" dest="artifacts/caGrid-1.0-nightly"/>-->
             <antpublisher buildfile="checkout/caGrid-1.0-nightly/caGrid/build.xml" target="ccpublish"/>
