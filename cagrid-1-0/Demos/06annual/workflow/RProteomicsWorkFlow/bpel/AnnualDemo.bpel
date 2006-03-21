@@ -30,6 +30,8 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
       <variable messageType="ns3:removeBackground_runningQuantileByValueOutputMessage" name="removeBackground_runningQuantileByValueOutputMessage"/>
       <variable messageType="ns3:removeBackground_minusByValueInputMessage" name="removeBackground_minusByValueInputMessage"/>
       <variable messageType="ns3:removeBackground_minusByValueOutputMessage" name="removeBackground_minusByValueOutputMessage"/>
+      <variable messageType="ns3:denoise_waveletUDWTWByValueInputMessage" name="denoise_waveletUDWTWByValueInputMessage"/>
+      <variable messageType="ns3:denoise_waveletUDWTWByValueOutputMessage" name="denoise_waveletUDWTWByValueOutputMessage"/>
    </variables>
    <sequence>
       <!-- This is used to get input from the user. -->
@@ -150,6 +152,39 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
          </assign>
       </while>
       <invoke inputVariable="removeBackground_minusByValueInputMessage" operation="removeBackground_minusByValue" outputVariable="removeBackground_minusByValueOutputMessage" partnerLink="RproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
+      <assign>
+         <copy>
+            <from expression="&quot;1&quot;"/>
+            <to variable="indexCounter"/>
+         </copy>
+         <copy>
+            <from expression="count(bpws:getVariableData('removeBackground_minusByValueOutputMessage', 'parameters', '/ns3:removeBackground_minusByValueResponse')/response)"/>
+            <to variable="count"/>
+         </copy>
+      </assign>
+      <while condition="bpws:getVariableData('indexCounter') &lt;= bpws:getVariableData('count')">
+         <assign>
+            <copy>
+               <from expression="bpws:getVariableData('removeBackground_minusByValueOutputMessage', 'parameters','/ns3:removeBackground_minusByValueResponse')/response[bpws:getVariableData('indexCounter')]"/>
+               <to part="parameters" query="/ns3:denoise_waveletUDWTWByValue/scanFeaturesXml[bpws:getVariableData('indexCounter')]" variable="denoise_waveletUDWTWByValueInputMessage"/>
+            </copy>
+            <copy>
+               <from expression="bpws:getVariableData('indexCounter') + 1"/>
+               <to variable="indexCounter"/>
+            </copy>
+         </assign>
+      </while>
+      <assign>
+         <copy>
+            <from part="parameters" query="/ns1:WorkFlowInputType/windowType" variable="workFlowInputMessage"/>
+            <to part="parameters" query="/ns3:denoise_waveletUDWTWByValue/windowSize" variable="denoise_waveletUDWTWByValueInputMessage"/>
+         </copy>
+         <copy>
+            <from part="parameters" query="/ns1:WorkFlowInputType/thresholdType" variable="workFlowInputMessage"/>
+            <to part="parameters" query="/ns3:denoise_waveletUDWTWByValue/thresholdMultiplier" variable="denoise_waveletUDWTWByValueInputMessage"/>
+         </copy>
+      </assign>
+      <invoke inputVariable="denoise_waveletUDWTWByValueInputMessage" operation="denoise_waveletUDWTWByValue" outputVariable="denoise_waveletUDWTWByValueOutputMessage" partnerLink="RproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
       <reply operation="startWorkFlow" partnerLink="WorkFlowClientPartnerLinkType" portType="ns2:startWorkFlowPortType" variable="workFlowOutputMessage"/>
    </sequence>
 </process>
