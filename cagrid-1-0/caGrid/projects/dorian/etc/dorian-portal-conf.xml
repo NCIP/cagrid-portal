@@ -20,8 +20,8 @@
 	  		<class>gov.nih.nci.cagrid.dorian.ifs.portal.IFSMenu</class>
 	  		<icon>/FlowGraph.gif</icon>
 	  		<dimensions>
-	  			<width>275</width>
-	  			<height>240</height>
+	  			<width>300</width>
+	  			<height>300</height>
 	  		</dimensions>
 	  	</component>
 	  	<component>
@@ -42,11 +42,17 @@
 		<dorian-portal-config>
 		<dorian-services>
 			<dorian-service>http://localhost:8080/wsrf/services/cagrid/dorian</dorian-service>
+			<dorian-service>http://irondale.bmi.ohio-state.edu:8080/wsrf/services/cagrid/dorian</dorian-service>
 		</dorian-services>
 		<idps>
-			<idp name="Localhost Dorian IdP" authPanelClass="gov.nih.nci.cagrid.dorian.ifs.portal.DorianIdPAuthenticationPanel">
+			<idp name="Dorian [localhost] IdP" authPanelClass="gov.nih.nci.cagrid.dorian.ifs.portal.DorianIdPAuthenticationPanel">
 				<parameters>
 					<parameter name="serviceId" value="http://localhost:8080/wsrf/services/cagrid/dorian"/>
+				</parameters>
+			</idp>
+			<idp name="Dorian [irondale.bmi.ohio-state.edu]  IdP" authPanelClass="gov.nih.nci.cagrid.dorian.ifs.portal.DorianIdPAuthenticationPanel">
+				<parameters>
+					<parameter name="serviceId" value="http://irondale.bmi.ohio-state.edu:8080/wsrf/services/cagrid/dorian"/>
 				</parameters>
 			</idp>
 			<idp name="Ohio State University" authPanelClass="edu.osu.idp.portal.OSUIdPAuthenticationPanel"/>

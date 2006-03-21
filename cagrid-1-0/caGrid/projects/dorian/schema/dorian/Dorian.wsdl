@@ -86,6 +86,15 @@
    
 	<!-- IFS TYPES -->
 	
+	<xsd:element name="IFSGetCACertificate">
+		<xsd:complexType>
+			<xsd:complexType/>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="IFSGetCACertificateResponse" type="ifs:X509Certificate"/>
+		
+	
 	<xsd:element name="IFSCreateProxy">
 		<xsd:complexType>
 			<xsd:sequence>
@@ -259,6 +268,14 @@
 	
 	
 <!-- IFS Messages -->
+
+<message name="IFSGetCACertificateInputMessage">
+		<part name="parameters" element="tns:IFSGetCACertificate"/>
+	</message>
+	
+	<message name="IFSGetCACertificateOutputMessage">
+		<part name="parameters" element="tns:IFSGetCACertificateResponse"/>
+	</message>
 	
 	<message name="IFSCreateProxyInputMessage">
 		<part name="parameters" element="tns:IFSCreateProxy"/>
@@ -411,6 +428,12 @@
 		<output message="tns:IdPAuthenticateOutputMessage"/>
 		<fault message="tns:DorianInternalFaultMessage" name="DorianInternalFault"/>
 	    <fault message="tns:PermissionDeniedFaultMessage" name="PermissionDeniedFault"/>
+	</operation>
+	
+	<operation name="getCACertificate">
+		<input message="tns:IFSGetCACertificateInputMessage"/>
+		<output message="tns:IFSGetCACertificateOutputMessage"/>
+		<fault message="tns:DorianInternalFaultMessage" name="DorianInternalFault"/>
 	</operation>
 	
 	<operation name="createProxy">

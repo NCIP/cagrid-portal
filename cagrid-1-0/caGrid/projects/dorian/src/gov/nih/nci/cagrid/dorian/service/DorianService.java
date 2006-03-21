@@ -66,6 +66,21 @@ public class DorianService {
 	}
 
 
+	public gov.nih.nci.cagrid.dorian.ifs.bean.X509Certificate getCACertificate(
+		gov.nih.nci.cagrid.dorian.wsrf.IFSGetCACertificate parameters) throws java.rmi.RemoteException,
+		gov.nih.nci.cagrid.dorian.bean.DorianInternalFault {
+		X509Certificate cert = getDorianHandle().getCACertificate();
+		try {
+			String certStr = CertUtil.writeCertificate(cert);
+			return new gov.nih.nci.cagrid.dorian.ifs.bean.X509Certificate(certStr);
+		} catch (Exception e) {
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("An error while trying to write the CA certificate.");
+			throw fault;
+		}
+	}
+
+
 	public gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP addTrustedIdP(
 		gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP parameters) throws java.rmi.RemoteException,
 		gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault, gov.nih.nci.cagrid.dorian.ifs.bean.InvalidUserFault,

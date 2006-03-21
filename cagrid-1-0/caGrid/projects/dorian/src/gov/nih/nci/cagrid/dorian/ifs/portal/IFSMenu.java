@@ -19,7 +19,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: IFSMenu.java,v 1.12 2006-03-02 17:56:51 langella Exp $
+ * @version $Id: IFSMenu.java,v 1.13 2006-03-21 17:42:55 langella Exp $
  */
 public class IFSMenu extends GridPortalComponent {
 
@@ -52,6 +52,10 @@ public class IFSMenu extends GridPortalComponent {
 	private JRadioButton trustedIdP = null;
 
 	private JLabel idpLabel = null;
+
+	private JRadioButton findCACertificate = null;
+
+	private JLabel jLabel = null;
 
 	public IFSMenu() {
 		super();
@@ -113,6 +117,18 @@ public class IFSMenu extends GridPortalComponent {
 
 	private JPanel getMenuPanel() {
 		if (menuPanel == null) {
+			GridBagConstraints gridBagConstraints23 = new GridBagConstraints();
+			gridBagConstraints23.gridx = 1;
+			gridBagConstraints23.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints23.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints23.gridy = 4;
+			jLabel = new JLabel();
+			jLabel.setText("Dorian CA Certifcate");
+			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
+			gridBagConstraints13.gridx = 0;
+			gridBagConstraints13.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints13.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints13.gridy = 4;
 			GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
 			gridBagConstraints22.gridx = 1;
 			gridBagConstraints22.anchor = java.awt.GridBagConstraints.WEST;
@@ -178,6 +194,8 @@ public class IFSMenu extends GridPortalComponent {
 			menuPanel.add(manageUsersLabel, gridBagConstraints3);
 			menuPanel.add(getTrustedIdP(), gridBagConstraints12);
 			menuPanel.add(idpLabel, gridBagConstraints22);
+			menuPanel.add(getFindCACertificate(), gridBagConstraints13);
+			menuPanel.add(jLabel, gridBagConstraints23);
 		}
 		return menuPanel;
 	}
@@ -238,6 +256,9 @@ public class IFSMenu extends GridPortalComponent {
 		}else if (trustedIdP.isSelected()) {
 			PortalResourceManager.getInstance().getGridPortal()
 			.addGridPortalComponent(new TrustedIdPsWindow());
+		}else if (findCACertificate.isSelected()) {
+			PortalResourceManager.getInstance().getGridPortal()
+			.addGridPortalComponent(new CACertificateComponent(),500,150);
 		}
 		dispose();
 	}
@@ -298,5 +319,18 @@ public class IFSMenu extends GridPortalComponent {
 			group.add(trustedIdP);
 		}
 		return trustedIdP;
+	}
+
+	/**
+	 * This method initializes findCACertificate	
+	 * 	
+	 * @return javax.swing.JRadioButton	
+	 */    
+	private JRadioButton getFindCACertificate() {
+		if (findCACertificate == null) {
+			findCACertificate = new JRadioButton();
+			group.add(findCACertificate);
+		}
+		return findCACertificate;
 	}
 }
