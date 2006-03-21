@@ -1,29 +1,22 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.gme;
 
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.io.File;
-import java.util.Vector;
+import java.util.List;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
+import org.jdom.Document;
+import org.jdom.Element;
 import org.projectmobius.client.gme.ImportInfo;
-import org.projectmobius.common.GridServiceResolver;
 import org.projectmobius.common.MobiusException;
-import org.projectmobius.gme.XMLDataModelService;
-import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
-import org.projectmobius.portal.GridPortalComponent;
+import org.projectmobius.common.XMLUtilities;
 
 
 /**
@@ -36,7 +29,7 @@ import org.projectmobius.portal.GridPortalComponent;
  * @version $Id: mobiusEclipseCodeTemplates.xml,v 1.2 2005/04/19 14:58:02 oster
  *          Exp $
  */
-public class GMEParameterConfigurationComponent extends JPanel {
+public class GMETypeSelectionComponent extends JPanel {
 	private JPanel mainPanel = null;
 
 	private GMEConfigurationPanel gmePanel = null;
@@ -44,7 +37,7 @@ public class GMEParameterConfigurationComponent extends JPanel {
 	JComponent me;
 
 
-	public GMEParameterConfigurationComponent() {
+	public GMETypeSelectionComponent() {
 		me = this;
 		initialize();
 		this.gmePanel.discoverFromGME();
@@ -107,47 +100,39 @@ public class GMEParameterConfigurationComponent extends JPanel {
 	}
 
 
-	public MethodTypeInputsInput createInput() {
-		MethodTypeInputsInput input = new MethodTypeInputsInput();
+	public NamespaceType createNamespace() {
+		NamespaceType input = new NamespaceType();
 
 		// set the package name
 		String packageName = CommonTools.getPackageName(gmePanel.currentNamespace);
 		input.setPackageName(packageName);
 
-		input.setIsArray(new Boolean(false));
-
-		input.setName(this.gmePanel.currentType);
 		if (this.gmePanel.currentNamespace != null) {
 			input.setNamespace(this.gmePanel.currentNamespace.getRaw());
 		}
-		input.setType(this.gmePanel.currentType);
+
 		if (this.gmePanel.currentNamespace != null) {
 			ImportInfo ii = new ImportInfo(this.gmePanel.currentNamespace);
 			input.setLocation("./" + ii.getFileName());
 		}
+		
+		Document doc = null;
+		try {
+			doc = XMLUtilities.stringToDocument(gmePanel.currentNode.getSchemaContents());
+		} catch (MobiusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		List elementTypes = doc.getRootElement().getChildren("element", doc.getRootElement().getNamespace());
+		SchemaElementType[] schemaTypes = new SchemaElementType[elementTypes.size()];
+		for (int i = 0; i < elementTypes.size(); i++) {
+			Element element = (Element) elementTypes.get(i);
+			SchemaElementType type = new SchemaElementType();
+			type.setType(element.getAttributeValue("name"));
+			schemaTypes[i] = type;
+		}
+		input.setSchemaElement(schemaTypes);
 
 		return input;
 	}
-
-
-	public MethodTypeOutput createOutput() {
-		MethodTypeOutput output = new MethodTypeOutput();
-
-		// set the package name
-		String packageName = CommonTools.getPackageName(gmePanel.currentNamespace);
-		output.setPackageName(packageName);
-
-		output.setIsArray(new Boolean(false));
-		if (this.gmePanel.currentNamespace != null) {
-			output.setNamespace(this.gmePanel.currentNamespace.getRaw());
-		}
-		output.setType(this.gmePanel.currentType);
-		if (this.gmePanel.currentNamespace != null) {
-			ImportInfo ii = new ImportInfo(this.gmePanel.currentNamespace);
-			output.setLocation("./" + ii.getFileName());
-		}
-
-		return output;
-	}
-
 } // @jve:decl-index=0:visual-constraint="2,2"

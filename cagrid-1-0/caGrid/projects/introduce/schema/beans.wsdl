@@ -8,8 +8,6 @@
             xmlns="http://www.w3.org/2001/XMLSchema">
             <import namespace="gme://gov.nih.nci.cagrid/1/Introduce"
                 schemaLocation="./ServiceDescription.xsd"/>
-                 <import namespace="gme://gov.nih.nci.cagrid.introduce/1/Security"
-                      schemaLocation="./Security.xsd"/>
         </schema>
     </types>
 </definitions>

@@ -46,7 +46,7 @@ public class AddSimpleMethodWithFaultStep extends Step {
 		MethodType method = new MethodType();
 		method.setName(methodName);
 		MethodTypeOutput output = new MethodTypeOutput();
-		output.setClassName("void");
+		output.setQName(new QName("","void"));
 		MethodTypeExceptionsException[] exceptionsArray = new MethodTypeExceptionsException[1];
 		MethodTypeExceptionsException exception = new MethodTypeExceptionsException();
 		exception.setName("testFault");

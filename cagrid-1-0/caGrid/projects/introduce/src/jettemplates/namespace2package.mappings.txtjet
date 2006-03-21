@@ -14,19 +14,19 @@
 <%=newNamespaceDomain%>/<%=serviceName%>/bindings=<%=packageName%>.stubs.bindings
 <%=newNamespaceDomain%>/<%=serviceName%>/service=<%=packageName%>.stubs.service
 <%
-		Map prefixmap=TemplateUtils.buildMasterNamespaceSchemaInformationMap(info);
+		Map prefixmap=TemplateUtils.buildMasterNamespaceInformationMap(info);
 		Set importNamespaces = new HashSet();
   		Iterator iterator = prefixmap.keySet().iterator();
   
 		while(iterator.hasNext()){
 			String namespaceS = (String)iterator.next();
 			if(!namespaceS.equals(IntroduceConstants.W3CNAMESPACE)){
-				SchemaInformation schemaInformation=(SchemaInformation)prefixmap.get(namespaceS);
+				NamespaceInformation namespaceInformation=(NamespaceInformation)prefixmap.get(namespaceS);
 				try{ 
 					String newLine = "";
-					org.projectmobius.common.Namespace namespace = new org.projectmobius.common.Namespace(schemaInformation.getNamespace());
-					if (schemaInformation.getPackageName() != null && !schemaInformation.getPackageName().equals("")) {
-						newLine = namespace.getRaw() + "=" + schemaInformation.getPackageName();
+					org.projectmobius.common.Namespace namespace = new org.projectmobius.common.Namespace(namespaceInformation.getNamespace().getNamespace());
+					if (namespaceInformation.getNamespace().getPackageName() != null && !namespaceInformation.getNamespace().getPackageName().equals("")) {
+						newLine = namespace.getRaw() + "=" + namespaceInformation.getNamespace().getPackageName();
 					} else {
 						newLine = namespace.getRaw() + "=" + CommonTools.getPackageName(namespace);
 					}
@@ -36,7 +36,7 @@
 					newnewLine = newnewLine.replaceFirst("\\Q\\\\\\\\:\\E", "\\\\:");	
 			
 					//get all the imports if there are any for this schema and write there namespace to package maps down		
-					TemplateUtils.walkSchemasGetNamespaces(new File(info.getBaseDirectory().getAbsolutePath() + File.separator + "schema" + File.separator + serviceName),info.getBaseDirectory().getAbsolutePath() + File.separator + "schema" + File.separator + serviceName + File.separator + schemaInformation.getLocation(), importNamespaces );
+					TemplateUtils.walkSchemasGetNamespaces(new File(info.getBaseDirectory().getAbsolutePath() + File.separator + "schema" + File.separator + serviceName),info.getBaseDirectory().getAbsolutePath() + File.separator + "schema" + File.separator + serviceName + File.separator + namespaceInformation.getNamespace().getLocation(), importNamespaces );
 	
 %>
 <%=newnewLine %><%		

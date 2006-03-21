@@ -46,15 +46,14 @@ public class AddSimpleMethodStep extends Step {
 		MethodType method = new MethodType();
 		method.setName(this.methodName);
 		MethodTypeOutput output = new MethodTypeOutput();
-		output.setClassName("void");
+		output.setQName(new QName("","void"));
 		method.setOutput(output);
 
 		// create a new input param
 		MethodTypeInputsInput input = new MethodTypeInputsInput();
-		input.setNamespace("http://www.w3.org/2001/XMLSchema");
+		input.setQName(new QName("http://www.w3.org/2001/XMLSchema", "string"));
 		input.setName("foo");
-		input.setType("string");
-		input.setIsArray(new Boolean(false));
+		input.setIsArray(false);
 		MethodTypeInputsInput[] newInputs = new MethodTypeInputsInput[1];
 		newInputs[0] = input;
 		MethodTypeInputs inputs = new MethodTypeInputs();

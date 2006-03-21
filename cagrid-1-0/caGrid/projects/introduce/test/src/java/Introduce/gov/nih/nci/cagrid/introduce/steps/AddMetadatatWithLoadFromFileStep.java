@@ -5,6 +5,9 @@ import gov.nih.nci.cagrid.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
@@ -36,18 +39,34 @@ public class AddMetadatatWithLoadFromFileStep extends Step {
 
 		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(pathtobasedir + File.separator
 			+ tci.getDir() + File.separator + "introduce.xml", ServiceDescription.class);
+		Utils.copyFile(new File(pathtobasedir + File.separator + TestCaseInfo.GOLD_SCHEMA_DIR + File.separator
+			+ "CommonServiceMetadata.xsd"), new File(pathtobasedir + File.separator + tci.getDir() + File.separator
+			+ "schema" + File.separator + tci.getName() + File.separator + "CommonServiceMetadata.xsd"));
+		int currentLength = 0;
+		NamespacesType namespaces = introService.getNamespaces();
+		if (namespaces.getNamespace() != null) {
+			currentLength = namespaces.getNamespace().length;
+		}
+		NamespaceType[] newNamespaceTypes = new NamespaceType[currentLength + 1];
+		if (currentLength > 0) {
+			System.arraycopy(namespaces.getNamespace(), 0, newNamespaceTypes, 0, currentLength);
+		}
+		NamespaceType type = new NamespaceType();
+		type.setLocation("./CommonServiceMetadata.xsd");
+		type.setNamespace("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common");
+		SchemaElementType etype = new SchemaElementType();
+		etype.setType("CommonServiceMetadata");
+		SchemaElementType[] etypeArr = new SchemaElementType[1];
+		etypeArr[0] = etype;
+		type.setSchemaElement(etypeArr);
+		newNamespaceTypes[currentLength] = type;
+		namespaces.setNamespace(newNamespaceTypes);
+
 		MetadataListType metadatasType = introService.getMetadataList();
 
 		MetadataType metadata = new MetadataType();
-		Utils.copyFile(new File(pathtobasedir + File.separator + TestCaseInfo.GOLD_SCHEMA_DIR + File.separator
-			+ "CommonServiceMetadata.xsd"), new File(pathtobasedir + File.separator + tci.getDir() + File.separator + "schema"
-			+ File.separator + tci.getName() + File.separator + "CommonServiceMetadata.xsd"));
-
-		metadata.setLocation("./CommonServiceMetadata.xsd");
-		metadata.setNamespace("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common");
 		metadata.setPopulateFromFile(true);
 		metadata.setRegister(true);
-		metadata.setType("CommonServiceMetadata");
 		metadata.setQName(new QName("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common",
 			"CommonServiceMetadata"));
 

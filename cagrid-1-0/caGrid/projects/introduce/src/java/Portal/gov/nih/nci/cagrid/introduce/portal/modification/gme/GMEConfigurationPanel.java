@@ -31,11 +31,9 @@ public class GMEConfigurationPanel extends JPanel {
 
 	private JPanel mainPanel = null;
 
-	private JComboBox typesComboBox = null;
-
 	public Namespace currentNamespace = null;
-
-	public String currentType = null;
+	
+	public SchemaNode currentNode = null;
 
 	protected File schemaDir;
 
@@ -50,8 +48,6 @@ public class GMEConfigurationPanel extends JPanel {
 	private JLabel namespaceLabel = null;
 
 	JLabel nameLabel = null;
-
-	private JLabel elementTypeLabel = null;
 
 	public String filterType = null;
 
@@ -70,7 +66,7 @@ public class GMEConfigurationPanel extends JPanel {
 	 * This method initializes this
 	 */
 	private void initialize() {
-		this.setSize(new java.awt.Dimension(128,120));
+		this.setSize(new java.awt.Dimension(128, 92));
 		this.add(getMainPanel(), null);
 
 	}
@@ -117,53 +113,6 @@ public class GMEConfigurationPanel extends JPanel {
 			JOptionPane.showMessageDialog(me,
 				"Please check the GME URL and make sure that you have the appropriate credentials!");
 		}
-	}
-
-
-	public void initializeTypes(SchemaNode node) {
-		try {
-
-			Document doc = XMLUtilities.stringToDocument(node.getSchemaContents());
-			List elementTypes = doc.getRootElement().getChildren("element", doc.getRootElement().getNamespace());
-			JComboBox typesBox = this.getTypesComboBox();
-			typesBox.removeAllItems();
-			for (int i = 0; i < elementTypes.size(); i++) {
-				Element element = (Element) elementTypes.get(i);
-				String name = element.getAttributeValue("name");
-				typesBox.addItem(name);
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-
-	/**
-	 * This method initializes jComboBox
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	public JComboBox getTypesComboBox() {
-		if (typesComboBox == null) {
-			typesComboBox = new JComboBox();
-			typesComboBox.addItemListener(new java.awt.event.ItemListener() {
-				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					currentType = (String) typesComboBox.getSelectedItem();
-					if (currentType != null) {
-
-						currentNamespace = null;
-						try {
-							currentNamespace = ((SchemaWrapper) getSchemaComboBox().getSelectedItem()).getNamespace();
-						} catch (Exception e1) {
-							e1.printStackTrace();
-						}
-					}
-
-				}
-			});
-		}
-		return typesComboBox;
 	}
 
 
@@ -217,21 +166,16 @@ public class GMEConfigurationPanel extends JPanel {
 			schemaComboBox.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
-					try {
+					if (getSchemaComboBox().getSelectedItem() != null) {
+						currentNamespace = ((SchemaWrapper) getSchemaComboBox().getSelectedItem()).getNamespace();
 						IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance()
-							.getResource(IntroducePortalConf.RESOURCE);
-						XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
-							.getGridService(conf.getGME());
-						if (schemaComboBox.getSelectedItem() != null) {
-							SchemaNode node = handle.getSchema(((SchemaWrapper) schemaComboBox.getSelectedItem())
-								.getNamespace(), false);
-							initializeTypes(node);
+						.getResource(IntroducePortalConf.RESOURCE);
+						try {
+							XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance().getGridService(conf.getGME());
+							currentNode = handle.getSchema(currentNamespace,false);
+						} catch (MobiusException e1) {
+							e1.printStackTrace();
 						}
-					} catch (MobiusException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-						JOptionPane.showMessageDialog(me,
-							"Please check the GME URL and make sure that you have the appropriate credentials!");
 					}
 				}
 			});
@@ -247,21 +191,6 @@ public class GMEConfigurationPanel extends JPanel {
 	 */
 	public JPanel getSchemaPanel() {
 		if (schemaPanel == null) {
-			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
-			gridBagConstraints13.gridx = 0;
-			gridBagConstraints13.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints13.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints13.gridy = 2;
-			elementTypeLabel = new JLabel();
-			elementTypeLabel.setText("Element");
-			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
-			gridBagConstraints12.anchor = GridBagConstraints.WEST;
-			gridBagConstraints12.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints12.gridx = 1;
-			gridBagConstraints12.gridy = 2;
-			gridBagConstraints12.weightx = 1.0;
-			gridBagConstraints12.weighty = 1.0D;
-			gridBagConstraints12.fill = GridBagConstraints.HORIZONTAL;
 			nameLabel = new JLabel();
 			nameLabel.setText("Name");
 
@@ -303,8 +232,6 @@ public class GMEConfigurationPanel extends JPanel {
 			schemaPanel.add(namespaceLabel, gridBagConstraints9);
 			schemaPanel.add(getSchemaComboBox(), gridBagConstraints8);
 			schemaPanel.add(nameLabel, gridBagConstraints10);
-			schemaPanel.add(getTypesComboBox(), gridBagConstraints12);
-			schemaPanel.add(elementTypeLabel, gridBagConstraints13);
 		}
 		return schemaPanel;
 	}

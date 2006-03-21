@@ -1,4 +1,4 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.schema.service" class="ServiceWSDLTemplate"  imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.* gov.nih.nci.cagrid.introduce.beans.method.*" %>
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.schema.service" class="ServiceWSDLTemplate"  imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.namespace.* gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.* gov.nih.nci.cagrid.introduce.beans.method.*" %>
 <% gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
 	MetadataListType metadataList = info.getMetadata();
 	MethodsType methods = info.getMethods();
@@ -37,25 +37,25 @@
         <schema targetNamespace="<%=namespaceDomain%>/<%=serviceName%>"
             xmlns:tns="<%=namespaceDomain%>/<%=serviceName%>"
              <%
-	      		Map prefixmap=TemplateUtils.buildMasterNamespaceSchemaInformationMap(info);
+	      		Map prefixmap=TemplateUtils.buildMasterNamespaceInformationMap(info);
 	      		Iterator iterator = prefixmap.keySet().iterator();
 				while(iterator.hasNext()){
 					String namespace = (String)iterator.next();
 					if(!namespace.equals(IntroduceConstants.W3CNAMESPACE)){
-					SchemaInformation schemaInformation=(SchemaInformation)prefixmap.get(namespace);%>
-			xmlns:<%=schemaInformation.getPrefix()%>="<%=schemaInformation.getNamespace()%>" 
+					NamespaceInformation namespaceInformation=(NamespaceInformation)prefixmap.get(namespace);%>
+			xmlns:<%=namespaceInformation.getPrefix()%>="<%=namespaceInformation.getNamespace().getNamespace()%>" 
 			<%  }}
       		%>
-            xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd">
+            xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
 			<import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd"/>
 		<%
-		prefixmap=TemplateUtils.buildMasterNamespaceSchemaInformationMap(info);
+		prefixmap=TemplateUtils.buildMasterNamespaceInformationMap(info);
   		iterator = prefixmap.keySet().iterator();
 		while(iterator.hasNext()){
 			String namespace = (String)iterator.next();
 			if(!namespace.equals(IntroduceConstants.W3CNAMESPACE)){
-			SchemaInformation schemaInformation=(SchemaInformation)prefixmap.get(namespace);%>
-			<import namespace="<%=schemaInformation.getNamespace()%>" schemaLocation="<%=schemaInformation.getLocation()%>"/>
+			NamespaceInformation namespaceInformation=(NamespaceInformation)prefixmap.get(namespace);%>
+			<import namespace="<%=namespaceInformation.getNamespace().getNamespace()%>" schemaLocation="<%=namespaceInformation.getNamespace().getLocation()%>"/>
 			   <%
       	}
       	}%>
@@ -74,19 +74,21 @@
           		  if(method.getInputs()!=null && method.getInputs().getInput()!=null){
 	      				for(int inputsI = 0; inputsI < method.getInputs().getInput().length; inputsI++){
 	      					MethodTypeInputsInput inputParam = method.getInputs().getInput(inputsI);
-	      					if((inputParam.getIsArray() != null && inputParam.getIsArray().booleanValue())){
+	      					SchemaInformation schemaInformation = info.getSchemaInformation(inputParam.getQName());
+	      					
+	      					if(inputParam.isIsArray()){
 	      		  %>
 	      		  					<%
-									if(inputParam.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)){
+									if(schemaInformation.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)){
 									%>
-							<element name="<%=inputParam.getName() %>" type="<%=((SchemaInformation)prefixmap.get(inputParam.getNamespace())).getPrefix()%>:<%=inputParam.getType() %>" minOccurs="1" maxOccurs="unbounded" />
+							<element name="<%=inputParam.getName() %>" type="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType() %>" minOccurs="1" maxOccurs="unbounded" />
                   				 	<%
 									} else {
 									%>
 							<element name="<%=inputParam.getName() %>">
 	      		  				<complexType>
 									<sequence>
-										<element ref="<%=((SchemaInformation)prefixmap.get(inputParam.getNamespace())).getPrefix()%>:<%=inputParam.getType() %>" minOccurs="1" maxOccurs="unbounded" />
+										<element ref="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType() %>" minOccurs="1" maxOccurs="unbounded" />
                   				 	</sequence>
 	      			        	</complexType>
 	      			        </element>
@@ -100,16 +102,16 @@
                             } else {
                   %>
                   					<%
-									if(inputParam.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)){
+									if(schemaInformation.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)){
 									%>
-							<element name="<%=inputParam.getName() %>" type="<%=((SchemaInformation)prefixmap.get(inputParam.getNamespace())).getPrefix()%>:<%=inputParam.getType() %>" minOccurs="1" maxOccurs="1" />
+							<element name="<%=inputParam.getName() %>" type="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType() %>" minOccurs="1" maxOccurs="1" />
                   				 	<%
 									} else {
 									%>
 							<element name="<%=inputParam.getName() %>">
 	      		  				<complexType>
 									<sequence>
-										<element ref="<%=((SchemaInformation)prefixmap.get(inputParam.getNamespace())).getPrefix()%>:<%=inputParam.getType() %>" minOccurs="1" maxOccurs="1" />
+										<element ref="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType() %>" minOccurs="1" maxOccurs="1" />
                   				 	</sequence>
 	      			        	</complexType>
 	      			        </element>
@@ -131,30 +133,33 @@
           		  <%
 	      			if(method.getOutput()!=null){
 						MethodTypeOutput outputParam = method.getOutput();
-						if(outputParam.getClassName()==null || (outputParam.getClassName()!=null && !outputParam.getClassName().equals("void"))){
-						if((outputParam.getIsArray() != null && outputParam.getIsArray().booleanValue())){
-				      		 		if(outputParam.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)){
+						SchemaInformation schemaInformation = info.getSchemaInformation(outputParam.getQName());
+	      				if(schemaInformation !=null) {
+	      					if(schemaInformation.getType().getClassName()==null || (schemaInformation.getType().getClassName()!=null)){
+								if(outputParam.isIsArray()){
+				      		 		if(schemaInformation.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)){
 									%>
-										<element name="response" type="<%=((SchemaInformation)prefixmap.get(outputParam.getNamespace())).getPrefix()%>:<%=outputParam.getType() %>" minOccurs="1" maxOccurs="unbounded" />
+										<element name="response" type="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType() %>" minOccurs="1" maxOccurs="unbounded" />
 			                  		<%
 									} else {
 									%>
-										<element ref="<%=((SchemaInformation)prefixmap.get(outputParam.getNamespace())).getPrefix()%>:<%=outputParam.getType() %>" minOccurs="1" maxOccurs="unbounded" />
+										<element ref="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType() %>" minOccurs="1" maxOccurs="unbounded" />
 			                  		<%
                   				 	}
 				     
-			            } else {
-			            			if(outputParam.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)){
+			            		} else {
+			            			if(schemaInformation.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)){
 									%>
-										<element name="response" type="<%=((SchemaInformation)prefixmap.get(outputParam.getNamespace())).getPrefix()%>:<%=outputParam.getType() %>" minOccurs="1" maxOccurs="1" />
+										<element name="response" type="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType() %>" minOccurs="1" maxOccurs="1" />
 			                  		<%
 									} else {
 									%>
-										<element ref="<%=((SchemaInformation)prefixmap.get(outputParam.getNamespace())).getPrefix()%>:<%=outputParam.getType() %>" minOccurs="1" maxOccurs="1" />
+										<element ref="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType() %>" minOccurs="1" maxOccurs="1" />
 			                  		<%
 			                  		}
 
-			  		    }
+			  		    		}
+							}
 						}
 					}
           		  %>
@@ -193,8 +198,9 @@
                         <%if(metadataList!=null && metadataList.getMetadata()!=null){
                         	prefixmap=TemplateUtils.buildQNameNamespacePrefixMap(metadataList);
                         	for (int i = 0; i < metadataList.getMetadata().length; i++) {
-								MetadataType metadata = metadataList.getMetadata()[i];%>
-						<element ref="<%=prefixmap.get(metadata.getQName().getNamespaceURI())%>:<%=metadata.getQName().getLocalPart()%>"/><%
+								MetadataType metadata = metadataList.getMetadata()[i];
+								SchemaInformation schemaInformation = info.getSchemaInformation(metadata.getQName());%>
+						<element ref="<%=prefixmap.get(schemaInformation.getNamespace().getNamespace())%>:<%=schemaInformation.getType().getType()%>"/><%
 							}
 						}
                     %></sequence>

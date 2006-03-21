@@ -9,6 +9,8 @@ import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.codegen.metadata.SyncMetadata;
 import gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods;
 import gov.nih.nci.cagrid.introduce.codegen.security.SyncSecurity;
@@ -78,6 +80,15 @@ public class SyncTools {
 	}
 
 
+	private String getPackageName(String fullyQualifiedClassName) {
+		int index = fullyQualifiedClassName.lastIndexOf(".");
+		if (index >= 0) {
+			return fullyQualifiedClassName.substring(0, index);
+		}
+		return null;
+	}
+
+
 	public void sync() throws Exception {
 		// STEP 1: populate the object model representation of the service
 		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(baseDirectory + File.separator
@@ -134,20 +145,36 @@ public class SyncTools {
 
 	private void populateClassnames(ServiceInformation info, SymbolTable table) throws MalformedNamespaceException {
 
-		//table.dump(System.out);
-
+		table.dump(System.out);
 		// get the classnames from the axis symbol table
-		if (info.getMetadata().getMetadata() != null) {
-			for (int i = 0; i < info.getMetadata().getMetadata().length; i++) {
-				MetadataType mtype = info.getMetadata().getMetadata(i);
-				if (mtype.getNamespace() != null
-					&& (mtype.getPackageName() == null || mtype.getPackageName().length() <= 0)) {
-					mtype.setPackageName(CommonTools.getPackageName(new Namespace(mtype.getNamespace())));
+		if (info.getNamespaces() != null && info.getNamespaces().getNamespace() != null) {
+			for (int i = 0; i < info.getNamespaces().getNamespace().length; i++) {
+				NamespaceType ntype = info.getNamespaces().getNamespace(i);
+				if (ntype.getNamespace() != null && !ntype.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)
+					&& (ntype.getPackageName() == null || ntype.getPackageName().length() <= 0)) {
+					ntype.setPackageName(CommonTools.getPackageName(new Namespace(ntype.getNamespace())));
 				}
-				if (mtype.getClassName() == null || mtype.getClassName().length() == 0) {
-					Element element = table.getElement(new QName(mtype.getNamespace(), mtype.getType()));
-					mtype.setClassName(getRelativeClassName(element.getName()));
+				if (ntype.getSchemaElement() != null) {
+					for (int j = 0; j < ntype.getSchemaElement().length; j++) {
+						SchemaElementType type = ntype.getSchemaElement(j);
+						if (type.getClassName() == null) {
+							if (ntype.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
+								Type symtype = table.getType(new QName(ntype.getNamespace(), type.getType()));
+								// type may not be being used so axis will
+								// ignore it....
+								if (symtype != null) {
+									type.setClassName(getRelativeClassName(symtype.getName()));
+									type.setPackageName(getPackageName(symtype.getName()));
+								}
+							} else {
+								Element element = table.getElement(new QName(ntype.getNamespace(), type.getType()));
+								type.setClassName(getRelativeClassName(element.getName()));
+								type.setPackageName(getPackageName(element.getName()));
+							}
+						}
+					}
 				}
+
 			}
 		}
 
@@ -159,55 +186,20 @@ public class SyncTools {
 				if (mtype.getInputs() != null && mtype.getInputs().getInput() != null) {
 					for (int j = 0; j < mtype.getInputs().getInput().length; j++) {
 						MethodTypeInputsInput inputParam = mtype.getInputs().getInput(j);
-						if (inputParam.getNamespace() != null
-							&& !inputParam.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)
-							&& (inputParam.getPackageName() == null || inputParam.getPackageName().length() <= 0)) {
-							inputParam.setPackageName(CommonTools.getPackageName(new Namespace(inputParam
-								.getNamespace())));
+						SchemaInformation namespace = info.getSchemaInformation(inputParam.getQName());
+						if (!namespace.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
+							Type type = table.getType(new QName(info.getServiceProperties().getProperty(
+								"introduce.skeleton.namespace.domain")
+								+ "/" + info.getServiceProperties().getProperty("introduce.skeleton.service.name"),
+								">>" + mtype.getName() + ">" + inputParam.getName()));
+							inputParam.setContainerClassName(info.getServiceProperties().getProperty(
+								"introduce.skeleton.package")
+								+ ".stubs." + getRelativeClassName(type.getName()));
 						}
 
-						if (inputParam.getClassName() == null) {
-							if (inputParam.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
-								Type type = table.getType(new QName(inputParam.getNamespace(), inputParam.getType()));
-								inputParam.setClassName(getRelativeClassName(type.getName()));
-							} else {
-								Element element = table.getElement(new QName(inputParam.getNamespace(), inputParam
-									.getType()));
-								inputParam.setClassName(getRelativeClassName(element.getName()));
-								Type type = table.getType(new QName(info.getServiceProperties().getProperty(
-									"introduce.skeleton.namespace.domain")
-									+ "/" + info.getServiceProperties().getProperty("introduce.skeleton.service.name"),
-									">>" + mtype.getName() + ">" + inputParam.getName()));
-								inputParam.setContainerClassName(info.getServiceProperties().getProperty(
-									"introduce.skeleton.package")
-									+ ".stubs." + getRelativeClassName(type.getName()));
-							}
-						}
 					}
 				}
 
-				// process the outputs
-				if (mtype.getOutput() != null) {
-					MethodTypeOutput outputParam = mtype.getOutput();
-					if (outputParam.getNamespace() != null
-						&& !outputParam.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)
-						&& (outputParam.getPackageName() == null || outputParam.getPackageName().length() <= 0)) {
-						outputParam.setPackageName(CommonTools
-							.getPackageName(new Namespace(outputParam.getNamespace())));
-					}
-					if (outputParam.getClassName() != null && outputParam.getClassName().equals("void")) {
-						outputParam.setPackageName("");
-					} else if (outputParam.getClassName() == null) {
-						if (outputParam.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
-							Type type = table.getType(new QName(outputParam.getNamespace(), outputParam.getType()));
-							outputParam.setClassName(getRelativeClassName(type.getName()));
-						} else {
-							Element element = table.getElement(new QName(outputParam.getNamespace(), outputParam
-								.getType()));
-							outputParam.setClassName(getRelativeClassName(element.getName()));
-						}
-					}
-				}
 			}
 		}
 	}
@@ -227,45 +219,19 @@ public class SyncTools {
 		File schemaDir = new File(baseDirectory.getAbsolutePath() + File.separator + "schema" + File.separator
 			+ info.getServiceProperties().getProperty("introduce.skeleton.service.name"));
 		// exclude namespaces that have FQN for metadata class
-		if (info.getMetadata().getMetadata() != null) {
-			for (int i = 0; i < info.getMetadata().getMetadata().length; i++) {
-				MetadataType mtype = info.getMetadata().getMetadata(i);
-				if (mtype.getClassName() != null) {
-					if (mtype.getLocation() != null) {
-						excludeSet.add(mtype.getNamespace());
-						TemplateUtils.walkSchemasGetNamespaces(schemaDir, schemaDir + File.separator
-							+ mtype.getLocation(), excludeSet);
-					}
-				}
-			}
-		}
-
-		// exclude namespaces that have FQN for method output or input
-		if (info.getMethods().getMethod() != null) {
-			for (int i = 0; i < info.getMethods().getMethod().length; i++) {
-				MethodType mtype = info.getMethods().getMethod(i);
-				// process the inputs
-				if (mtype.getInputs() != null && mtype.getInputs().getInput() != null) {
-					for (int j = 0; j < mtype.getInputs().getInput().length; j++) {
-						MethodTypeInputsInput inputParam = mtype.getInputs().getInput(j);
-						if (inputParam.getClassName() != null) {
-							if (inputParam.getLocation() != null) {
-								excludeSet.add(inputParam.getNamespace());
+		// get the classnames from the axis symbol table
+		if (info.getNamespaces() != null && info.getNamespaces().getNamespace() != null) {
+			for (int i = 0; i < info.getNamespaces().getNamespace().length; i++) {
+				NamespaceType ntype = info.getNamespaces().getNamespace(i);
+				if (ntype.getSchemaElement() != null) {
+					for (int j = 0; j < ntype.getSchemaElement().length; j++) {
+						SchemaElementType type = ntype.getSchemaElement(j);
+						if (type.getClassName() != null) {
+							if (ntype.getLocation() != null) {
+								excludeSet.add(ntype.getNamespace());
 								TemplateUtils.walkSchemasGetNamespaces(schemaDir, schemaDir + File.separator
-									+ inputParam.getLocation(), excludeSet);
+									+ ntype.getLocation(), excludeSet);
 							}
-						}
-					}
-				}
-
-				// process the outputs
-				if (mtype.getOutput() != null) {
-					MethodTypeOutput outputParam = mtype.getOutput();
-					if (outputParam.getClassName() != null) {
-						if (outputParam.getLocation() != null) {
-							excludeSet.add(outputParam.getNamespace());
-							TemplateUtils.walkSchemasGetNamespaces(schemaDir, schemaDir + File.separator
-								+ outputParam.getLocation(), excludeSet);
 						}
 					}
 				}

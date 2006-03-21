@@ -14,31 +14,32 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
  * @version $Id: mobiusEclipseCodeTemplates.xml,v 1.2 2005/04/19 14:58:02 oster
  *          Exp $
  */
-public class SchemaInformation {
+public class NamespaceInformation {
 
 	private NamespaceType namespace;
-	private SchemaElementType type;
+	private String prefix;
 
-	public SchemaInformation(NamespaceType namespace, SchemaElementType type){
+	
+	public NamespaceInformation(NamespaceType namespace, String prefix){
 		this.namespace = namespace;
-		this.type = type;
-		
-	}
+		this.prefix = prefix;
+	}	
+	
 
 	public NamespaceType getNamespace() {
 		return namespace;
 	}
 
-	public SchemaElementType getType() {
-		return type;
-	}
-
-	public void setType(SchemaElementType type) {
-		this.type = type;
-	}
-
 	public void setNamespace(NamespaceType namespace) {
 		this.namespace = namespace;
+	}
+
+	public String getPrefix() {
+		return prefix;
+	}
+
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
 	}
 
 }

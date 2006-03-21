@@ -8,6 +8,7 @@ import java.util.Vector;
 
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+import javax.xml.namespace.QName;
 
 
 /**
@@ -18,21 +19,13 @@ import javax.swing.table.DefaultTableModel;
  */
 public class InputParametersTable extends PortalBaseTable {
 
-	public static String PACKAGENAME = "Package Name";
-
-	public static String CLASSNAME = "Classname";
-
-	public static String ISARRAY = "Is Array";
-
 	public static String NAME = "Name";
+	
+	public static String ISARRAY = "Is Array";
 
 	public static String NAMESPACE = "Namespace";
 
 	public static String TYPE = "Type";
-
-	public static String LOCATION = "Location";
-
-	public static String GME = "Get Type From GME";
 
 	public static String DATA1 = "DATA1";
 
@@ -56,17 +49,10 @@ public class InputParametersTable extends PortalBaseTable {
 
 	public void addRow(final MethodTypeInputsInput input) {
 		final Vector v = new Vector();
-		v.add(input.getPackageName());
-		v.add(input.getClassName());
-		if (input.getIsArray() != null) {
-			v.add((String.valueOf(input.getIsArray().booleanValue())));
-		} else {
-			v.add("");
-		}
 		v.add(input.getName());
-		v.add(input.getNamespace());
-		v.add(input.getType());
-		v.add(input.getLocation());
+		v.add(String.valueOf(input.isIsArray()));
+		v.add(input.getQName().getNamespaceURI());
+		v.add(input.getQName().getLocalPart());
 
 		v.add(v);
 
@@ -80,20 +66,12 @@ public class InputParametersTable extends PortalBaseTable {
 		if ((row < 0) || (row >= getRowCount())) {
 			throw new Exception("invalid row");
 		}
-		Vector v = (Vector) getValueAt(getSelectedRow(), 7);
-		v.set(0, input.getPackageName());
-		v.set(1, input.getClassName());
-		if (input.getIsArray() != null) {
-			v.set(2, (String.valueOf(input.getIsArray().booleanValue())));
-		} else {
-			v.set(2, "");
-		}
-		v.set(3, input.getName());
-		v.set(4, input.getNamespace());
-		v.set(5, input.getType());
-		v.set(6, input.getLocation());
-
-		v.set(7, v);
+		Vector v = (Vector) getValueAt(getSelectedRow(), 4);
+		v.set(0, input.getName());
+		v.set(1, (String.valueOf(input.isIsArray())));
+		v.set(2, input.getQName().getNamespaceURI());
+		v.set(3, input.getQName().getLocalPart());
+		v.set(4, v);
 	}
 
 
@@ -118,35 +96,19 @@ public class InputParametersTable extends PortalBaseTable {
 			throw new Exception("invalid row");
 		}
 		MethodTypeInputsInput input = new MethodTypeInputsInput();
+		
+		String name = ((String) getValueAt(row, 0));
+		boolean isArray = new Boolean((String) getValueAt(row, 1)).booleanValue();
+		String namespace = ((String) getValueAt(row, 2));
+		String type = ((String) getValueAt(row, 3));
 
-		String packageName = ((String) getValueAt(row, 0));
-		String className = ((String) getValueAt(row, 1));
-		Boolean isArray = new Boolean((String) getValueAt(row, 2));
-		String name = ((String) getValueAt(row, 3));
-		String namespace = ((String) getValueAt(row, 4));
-		String type = ((String) getValueAt(row, 5));
-		String location = ((String) getValueAt(row, 6));
-
-		if (packageName != null && !packageName.equals("")) {
-			input.setPackageName(packageName);
-		}
-		if (className != null && !className.equals("")) {
-			input.setClassName(className);
-		}
-		if (isArray != null) {
 			input.setIsArray(isArray);
-		}
+	
 		if (name != null && !name.equals("")) {
 			input.setName(name);
 		}
-		if (namespace != null && !namespace.equals("")) {
-			input.setNamespace(namespace);
-		}
-		if (type != null && !type.equals("")) {
-			input.setType(type);
-		}
-		if (location != null && !location.equals("")) {
-			input.setLocation(location);
+		if (namespace != null && !namespace.equals("") && type != null && !type.equals("")) {
+			input.setQName(new QName(namespace,type));
 		}
 
 		return input;
@@ -172,13 +134,10 @@ public class InputParametersTable extends PortalBaseTable {
 
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
-		model.addColumn(PACKAGENAME);
-		model.addColumn(CLASSNAME);
-		model.addColumn(ISARRAY);
 		model.addColumn(NAME);
+		model.addColumn(ISARRAY);
 		model.addColumn(NAMESPACE);
 		model.addColumn(TYPE);
-		model.addColumn(LOCATION);
 		model.addColumn(DATA1);
 
 		return model;

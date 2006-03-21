@@ -36,9 +36,9 @@ public class SyncToolsTest extends Story {
 		steps.add(new AddSimpleMethodWithFaultStep(tci, "newMethodWithFault"));
 		steps.add(new RollBackStep(tci));
 		steps.add(new AddComplexMethodWithFaultStep(tci, "newComplexMethodWithFault"));
-		steps.add(new AddMetadataStep(tci));
-		steps.add(new AddMetadatatWithLoadFromFileStep(tci));
-		steps.add(new RemoveAllMetadataStep(tci));
+		//steps.add(new AddMetadataStep(tci));
+		//steps.add(new AddMetadatatWithLoadFromFileStep(tci));
+		//steps.add(new RemoveAllMetadataStep(tci));
 		
 		return steps;
 	}
@@ -51,7 +51,7 @@ public class SyncToolsTest extends Story {
 
 	protected void storyTearDown() throws Throwable {
 		RemoveSkeletonStep step = new RemoveSkeletonStep(tci);
-		step.runStep();
+		//step.runStep();
 	}
 
 

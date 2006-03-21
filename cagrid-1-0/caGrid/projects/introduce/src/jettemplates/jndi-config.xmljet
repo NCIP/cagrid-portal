@@ -1,5 +1,5 @@
 <%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="JNDIConfigTemplate" 
-imports="gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.*" %>
+imports="gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.*" %>
 <% gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument;
    MetadataListType metadataList = info.getMetadata();
    
@@ -43,7 +43,8 @@ imports="gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.i
 			MetadataType metadata = metadataList.getMetadata()[i];
 			if(metadata.isPopulateFromFile()){
 				String name=TemplateUtils.getResourcePropertyVariableName(metadataList, i);
-				String className=metadata.getPackageName() + "." + metadata.getClassName();%>
+				SchemaInformation schemaInformation = info.getSchemaInformation(metadata.getQName());
+				String className=schemaInformation.getNamespace().getPackageName() + "." + schemaInformation.getType().getClassName();%>
 				<parameter>
 					<name><%=name%>File</name>
 					<!-- Set this to the relative path (from the container root, e.g GLOBUS_LOCATION for globus container) of the <%=name%> extract -->

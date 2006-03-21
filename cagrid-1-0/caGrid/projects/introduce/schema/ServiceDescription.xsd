@@ -3,18 +3,23 @@
            xmlns:metadata="gme://gov.nih.nci.cagrid.introduce/1/Metadata"
            xmlns:methods="gme://gov.nih.nci.cagrid.introduce/1/Methods"
            xmlns:security="gme://gov.nih.nci.cagrid.introduce/1/Security"
+           xmlns:namespace="gme://gov.nih.nci.cagrid.introduce/1/Namespace"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
            targetNamespace="gme://gov.nih.nci.cagrid/1/Introduce" elementFormDefault="qualified"
            attributeFormDefault="unqualified">
+           <xs:import namespace="gme://gov.nih.nci.cagrid.introduce/1/Namespace"
+                      schemaLocation="./Namespace.xsd"/>
            <xs:import namespace="gme://gov.nih.nci.cagrid.introduce/1/Methods"
                       schemaLocation="./Methods.xsd"/> 
-                      <xs:import namespace="gme://gov.nih.nci.cagrid.introduce/1/Security"
+           <xs:import namespace="gme://gov.nih.nci.cagrid.introduce/1/Security"
                       schemaLocation="./Security.xsd"/>
            <xs:import namespace="gme://gov.nih.nci.cagrid.introduce/1/Metadata"
                       schemaLocation="./Metadata.xsd"/>
+                      
            <xs:element name="ServiceDescription">
                       <xs:complexType>
                                  <xs:sequence>
+                                            <xs:element ref="namespace:Namespaces"/>
                                             <xs:element ref="methods:Methods"/>
                                             <xs:element ref="metadata:MetadataList"/>
                                             <xs:element name="ServiceSecurity" minOccurs="0" maxOccurs="1" type="security:ServiceSecurity"/>

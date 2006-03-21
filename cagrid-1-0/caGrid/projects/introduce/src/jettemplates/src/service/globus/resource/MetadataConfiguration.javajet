@@ -1,4 +1,4 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus.resource" class="MetadataConfigurationTemplate" imports="gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.*"
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus.resource" class="MetadataConfigurationTemplate" imports="gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.*"
 %>
 <%  gov.nih.nci.cagrid.introduce.ServiceInformation arguments = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
   	Properties properties = arguments.getServiceProperties();
@@ -52,7 +52,8 @@ public class MetadataConfiguration {
 				MetadataType metadata = metadataList.getMetadata()[i];
 				if(metadata.isPopulateFromFile()){
 					String name=TemplateUtils.getResourcePropertyVariableName(metadataList, i);
-					String className=metadata.getPackageName() + "." + metadata.getClassName();
+					SchemaInformation schemaInformation = arguments.getSchemaInformation(metadata.getQName());
+					String className=schemaInformation.getNamespace().getPackageName() + "." + schemaInformation.getType().getClassName();
 		%>
 	
 	

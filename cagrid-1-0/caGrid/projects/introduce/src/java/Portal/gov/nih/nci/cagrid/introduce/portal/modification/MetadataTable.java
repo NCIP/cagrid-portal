@@ -19,23 +19,13 @@ import javax.xml.namespace.QName;
  */
 public class MetadataTable extends PortalBaseTable {
 
-	public static String PACKAGENAME = "Package Name";
-
-	public static String CLASSNAME = "Classname";
-
 	public static String NAMESPACE = "Namespace";
 
 	public static String TYPE = "Type";
 
-	public static String LOCATION = "Location";
-
 	public static String POPULATE_FROM_FILE = "Populate From File";
 
 	public static String REGISTER = "Register";
-
-	public static String QNAME_NS = "Qname Namespace";
-
-	public static String QNAME_NAME = "Qname Name";
 
 	public static String DATA1 = "DATA1";
 
@@ -60,31 +50,15 @@ public class MetadataTable extends PortalBaseTable {
 		if ((row < 0) || (row >= getRowCount())) {
 			throw new Exception("invalid row");
 		}
-		String packageName = (String) getValueAt(row, 0);
-		String className = (String) getValueAt(row, 1);
-		String namespace = (String) getValueAt(row, 2);
-		String type = (String) getValueAt(row, 3);
-		String location = (String) getValueAt(row, 4);
-		String populateFromFile = (String) getValueAt(row, 5);
-		String register = (String) getValueAt(row, 6);
-		String qnameNS = (String) getValueAt(row, 7);
-		String qnameName = (String) getValueAt(row, 8);
+		String namespace = (String) getValueAt(row, 0);
+		String type = (String) getValueAt(row, 1);
+		String populateFromFile = (String) getValueAt(row, 2);
+		String register = (String) getValueAt(row, 3);
 
 		MetadataType metadata = new MetadataType();
-		if (packageName != null && !packageName.equals("")) {
-			metadata.setPackageName(packageName);
-		}
-		if (className != null && !className.equals("")) {
-			metadata.setClassName(className);
-		}
-		if (namespace != null && !namespace.equals("")) {
-			metadata.setNamespace(namespace);
-		}
-		if (type != null && !type.equals("")) {
-			metadata.setType(type);
-		}
-		if (location != null && !location.equals("")) {
-			metadata.setLocation(location);
+
+		if (namespace != null && !namespace.equals("") && type != null && !type.equals("")) {
+			metadata.setQName(new QName(namespace,type));
 		}
 		if (populateFromFile != null && !populateFromFile.equals("")) {
 			metadata.setPopulateFromFile(Boolean.valueOf(populateFromFile)
@@ -93,11 +67,6 @@ public class MetadataTable extends PortalBaseTable {
 		if (register != null && !register.equals("")) {
 			metadata.setRegister(Boolean.valueOf(register).booleanValue());
 		}
-		if (qnameNS != null && !qnameNS.equals("") && qnameName != null
-			&& !qnameName.equals("")) {
-			QName qn = new QName(qnameNS, qnameName);
-			metadata.setQName(qn);
-		}
 		
 		return metadata;
 	}
@@ -105,25 +74,15 @@ public class MetadataTable extends PortalBaseTable {
 
 	public void addRow(MetadataType metadata) {
 		final Vector v = new Vector();
-		v.add(metadata.getPackageName());
-		v.add(metadata.getClassName());
-		v.add(metadata.getNamespace());
-		v.add(metadata.getType());
-		v.add(metadata.getLocation());
+		v.add(metadata.getQName().getNamespaceURI());
+		v.add(metadata.getQName().getLocalPart());
 		v.add(String.valueOf(metadata.isPopulateFromFile()));
 		v.add(String.valueOf(metadata.isRegister()));
-		if (metadata.getQName() != null) {
-			v.add(metadata.getQName().getNamespaceURI());
-			v.add(metadata.getQName().getLocalPart());
-		} else {
-			v.add("");
-			v.add("");
-		}
-
 		v.add(v);
 
 		((DefaultTableModel) this.getModel()).addRow(v);
 		this.setRowSelectionInterval(this.getModel().getRowCount() - 1, this.getModel().getRowCount() - 1);
+		paint(getGraphics());
 	}
 	
 	public void removeSelectedRow() throws Exception {
@@ -139,6 +98,7 @@ public class MetadataTable extends PortalBaseTable {
 		if (getRowCount() > 0) {
 			setRowSelectionInterval(oldSelectedRow - 1, oldSelectedRow - 1);
 		}
+		paint(getGraphics());
 	}
 
 
@@ -157,15 +117,10 @@ public class MetadataTable extends PortalBaseTable {
 
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
-		model.addColumn(PACKAGENAME);
-		model.addColumn(CLASSNAME);
 		model.addColumn(NAMESPACE);
 		model.addColumn(TYPE);
-		model.addColumn(LOCATION);
 		model.addColumn(POPULATE_FROM_FILE);
 		model.addColumn(REGISTER);
-		model.addColumn(QNAME_NS);
-		model.addColumn(QNAME_NAME);
 		model.addColumn(DATA1);
 
 		return model;

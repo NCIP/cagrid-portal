@@ -45,10 +45,9 @@ public class ModifySimpleMethodStep extends Step {
 
 		// create a new input param
 		MethodTypeInputsInput input = new MethodTypeInputsInput();
-		input.setNamespace("http://www.w3.org/2001/XMLSchema");
+		input.setQName(new QName("http://www.w3.org/2001/XMLSchema","integer"));
 		input.setName("bar");
-		input.setType("int");
-		input.setIsArray(new Boolean(false));
+		input.setIsArray(false);
 
 		// add new input to array in bean
 		// this seems to be a wierd way be adding things....

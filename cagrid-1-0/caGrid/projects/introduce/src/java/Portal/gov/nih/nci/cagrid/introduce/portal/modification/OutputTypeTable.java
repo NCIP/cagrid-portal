@@ -8,27 +8,21 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
+import javax.xml.namespace.QName;
 
 
 /**
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
- * 
  */
 public class OutputTypeTable extends PortalBaseTable {
-
-	public static String PACKAGENAME = "Package Name";
-
-	public static String CLASSNAME = "Classname";
 
 	public static String ISARRAY = "Is Array";
 
 	public static String NAMESPACE = "Namespace";
 
 	public static String TYPE = "Type";
-
-	public static String LOCATION = "Location";
 
 	public static String DATA1 = "DATA1";
 
@@ -57,76 +51,51 @@ public class OutputTypeTable extends PortalBaseTable {
 		this.getColumn(DATA1).setMinWidth(0);
 		this.getColumn(DATA1).setPreferredWidth(0);
 		MethodTypeOutput output = method.getOutput();
-		final Vector v = new Vector();
-		v.add(output.getPackageName());
-		v.add(output.getClassName());
-		if (output.getIsArray() != null) {
-			v.add(String.valueOf(output.getIsArray().booleanValue()));
-		} else {
-			v.add("");
+		if (output != null) {
+			final Vector v = new Vector();
+			v.add(String.valueOf(output.isIsArray()));
+			v.add(output.getQName().getNamespaceURI());
+			v.add(output.getQName().getLocalPart());
+			v.add(v);
+			((DefaultTableModel) this.getModel()).addRow(v);
 		}
-		v.add(output.getNamespace());
-		v.add(output.getType());
-		v.add(output.getLocation());
-		v.add(v);
-		((DefaultTableModel) this.getModel()).addRow(v);
 	}
 
-	
+
 	public void modifyRow(int row, final MethodTypeOutput output) throws Exception {
 		if ((row < 0) || (row >= getRowCount())) {
 			throw new Exception("invalid row");
 		}
-		Vector v = (Vector) getValueAt(row, 6);
-		v.set(0, output.getPackageName());
-		v.set(1, output.getClassName());
-		if (output.getIsArray() != null) {
-			v.set(2, (String.valueOf(output.getIsArray().booleanValue())));
-		} else {
-			v.set(2, "");
-		}
-		v.set(3, output.getNamespace());
-		v.set(4, output.getType());
-		v.set(5, output.getLocation());
-		v.set(6, v);
+		Vector v = (Vector) getValueAt(row, 3);
+		v.set(0, (String.valueOf(output.isIsArray())));
+		v.set(1, output.getQName().getNamespaceURI());
+		v.set(2, output.getQName().getLocalPart());
+		v.set(3, v);
+		paint(getGraphics());
 	}
+
 
 	public void modifySelectedRow(final MethodTypeOutput output) throws Exception {
-		modifyRow(getSelectedRow(),output);
+		modifyRow(getSelectedRow(), output);
 	}
-	
-	public MethodTypeOutput getRowData(int row) throws Exception{
-		
+
+
+	public MethodTypeOutput getRowData(int row) throws Exception {
+
 		MethodTypeOutput output = new MethodTypeOutput();
 
-		String packageName = ((String) getValueAt(row, 0));
-		String className = ((String) getValueAt(row, 1));
-		Boolean isArray = new Boolean(((String) getValueAt(row, 2)));
-		String namespace = ((String) getValueAt(row, 3));
-		String type = ((String) getValueAt(row, 4));
-		String location = ((String) getValueAt(row, 5));
+		boolean isArray = new Boolean(((String) getValueAt(row, 0))).booleanValue();
+		String namespace = ((String) getValueAt(row, 1));
+		String type = ((String) getValueAt(row, 2));
 
-		if (packageName != null && !packageName.equals("")) {
-			output.setPackageName(packageName);
+		output.setIsArray(isArray);
+		if (namespace != null && type != null) {
+			output.setQName(new QName(namespace, type));
 		}
-		if (className != null && !className.equals("")) {
-			output.setClassName(className);
-		}
-		if (isArray != null) {
-			output.setIsArray(isArray);
-		}
-		if (namespace != null && !namespace.equals("")) {
-			output.setNamespace(namespace);
-		}
-		if (type != null && !type.equals("")) {
-			output.setType(type);
-		}
-		if (location != null && !location.equals("")) {
-			output.setLocation(location);
-		}
-		
+
 		return output;
 	}
+
 
 	public void removeSelectedRow() throws Exception {
 		int row = getSelectedRow();
@@ -156,14 +125,10 @@ public class OutputTypeTable extends PortalBaseTable {
 
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
-		model.addColumn(PACKAGENAME);
-		model.addColumn(CLASSNAME);
 		model.addColumn(ISARRAY);
 		model.addColumn(NAMESPACE);
 		model.addColumn(TYPE);
-		model.addColumn(LOCATION);
 		model.addColumn("DATA1");
-
 		return model;
 	}
 

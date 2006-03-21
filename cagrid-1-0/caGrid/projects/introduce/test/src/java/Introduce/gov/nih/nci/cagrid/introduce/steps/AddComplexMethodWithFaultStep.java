@@ -10,6 +10,9 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
@@ -49,6 +52,31 @@ public class AddComplexMethodWithFaultStep extends Step {
 
 		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(pathtobasedir + File.separator
 			+ tci.getDir() + File.separator + "introduce.xml", ServiceDescription.class);
+		
+		
+		int currentLength = 0;
+		NamespacesType namespaces = introService.getNamespaces();
+		if (namespaces.getNamespace() != null) {
+			currentLength = namespaces.getNamespace().length;
+		}
+		NamespaceType[] newNamespaceTypes = new NamespaceType[currentLength + 1];
+		if (currentLength > 0) {
+			System.arraycopy(namespaces.getNamespace(), 0, newNamespaceTypes, 0, currentLength);
+		}
+		NamespaceType type = new NamespaceType();
+		type.setLocation("./bookstore.xsd");
+		type.setNamespace("gme://projectmobius.org/1/BookStore");
+		SchemaElementType etype = new SchemaElementType();
+		etype.setType("Book");
+		SchemaElementType[] etypeArr = new SchemaElementType[1];
+		etypeArr[0] = etype;
+		type.setSchemaElement(etypeArr);
+		newNamespaceTypes[currentLength] = type;
+		namespaces.setNamespace(newNamespaceTypes);
+		
+		
+		
+		
 		MethodsType methodsType = introService.getMethods();
 
 		MethodType method = new MethodType();
@@ -56,22 +84,16 @@ public class AddComplexMethodWithFaultStep extends Step {
 
 		// set the output
 		MethodTypeOutput output = new MethodTypeOutput();
-		output.setLocation("./bookstore.xsd");
-		output.setType("Book");
-		output.setPackageName("bookstore");
-		output.setIsArray(new Boolean(false));
-		output.setNamespace("gme://projectmobius.org/1/BookStore");
+		output.setQName(new QName("gme://projectmobius.org/1/BookStore","Book"));
+		output.setIsArray(false);
 
 		// set some parameters
 		MethodTypeInputs inputs = new MethodTypeInputs();
 		MethodTypeInputsInput[] inputsArray = new MethodTypeInputsInput[1];
 		MethodTypeInputsInput input = new MethodTypeInputsInput();
 		input.setName("inputOne");
-		input.setType("Book");
-		input.setLocation("./bookstore.xsd");
-		input.setPackageName("bookstore");
-		input.setIsArray(new Boolean(true));
-		input.setNamespace("gme://projectmobius.org/1/BookStore");
+		input.setQName(new QName("gme://projectmobius.org/1/BookStore","Book"));
+		input.setIsArray(true);
 		inputsArray[0] = input;
 		inputs.setInput(inputsArray);
 		method.setInputs(inputs);
@@ -105,6 +127,8 @@ public class AddComplexMethodWithFaultStep extends Step {
 		Utils.serializeDocument(pathtobasedir + File.separator + tci.getDir() + File.separator + "introduce.xml",
 			introService, new QName("gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
 
+		Thread.sleep(10);
+		
 		try {
 			SyncTools sync = new SyncTools(new File(pathtobasedir + File.separator + tci.getDir()));
 			sync.sync();

@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.security.AnonymousCommunication;
 import gov.nih.nci.cagrid.introduce.beans.security.ClientAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.ClientCommunication;
@@ -17,6 +18,7 @@ import gov.nih.nci.cagrid.introduce.beans.security.SecureConversation;
 import gov.nih.nci.cagrid.introduce.beans.security.SecureMessage;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
+import gov.nih.nci.cagrid.introduce.codegen.SchemaInformation;
 import gov.nih.nci.cagrid.introduce.codegen.TemplateUtils;
 
 import java.io.BufferedReader;
@@ -110,25 +112,32 @@ public class SyncSource {
 		String methodString = "";
 		MethodTypeOutput returnTypeEl = method.getOutput();
 		String methodName = method.getName();
-		String returnType = returnTypeEl.getClassName();
-		if (returnTypeEl.getPackageName() != null && returnTypeEl.getPackageName().length() > 0) {
-			returnType = returnTypeEl.getPackageName() + "." + returnType;
-		}
-		if (returnTypeEl.getIsArray() != null && returnTypeEl.getIsArray().booleanValue()) {
-			returnType += "[]";
+		String returnType = null;
+		if (returnTypeEl.getQName().getNamespaceURI().equals("")
+			&& returnTypeEl.getQName().getLocalPart().equals("void")) {
+			returnType = "void";
+		} else {
+			SchemaInformation info = serviceInfo.getSchemaInformation(returnTypeEl.getQName());
+			returnType = info.getType().getClassName();
+			if (info.getType().getPackageName() != null && info.getType().getPackageName().length() > 0) {
+				returnType = info.getType().getPackageName() + "." + returnType;
+			}
+			if (returnTypeEl.isIsArray()) {
+				returnType += "[]";
+			}
 		}
 		methodString += "     public " + returnType + " " + methodName + "(";
 		if (method.getInputs() != null && method.getInputs().getInput() != null) {
 			for (int j = 0; j < method.getInputs().getInput().length; j++) {
-				String packageName = method.getInputs().getInput(j).getPackageName();
+				SchemaInformation info = serviceInfo.getSchemaInformation(method.getInputs().getInput(j).getQName());
+				String packageName = info.getType().getPackageName();
 				String classType = null;
 				if (packageName.length() > 0) {
-					classType = packageName + "." + method.getInputs().getInput(j).getClassName();
+					classType = packageName + "." + info.getType().getClassName();
 				} else {
-					classType = method.getInputs().getInput(j).getClassName();
+					classType = info.getType().getClassName();
 				}
-				if (method.getInputs().getInput(j).getIsArray() != null
-					&& method.getInputs().getInput(j).getIsArray().booleanValue()) {
+				if (method.getInputs().getInput(j).isIsArray()) {
 					classType += "[]";
 				}
 				String paramName = method.getInputs().getInput(j).getName();
@@ -188,8 +197,7 @@ public class SyncSource {
 		String methodString = "";
 		MethodTypeOutput returnTypeEl = method.getOutput();
 		String methodName = method.getName();
-		String returnType = returnTypeEl.getClassName();
-
+		String returnType = null;
 		returnType = this.packageName + "." + getBoxedOutputTypeName(methodName);
 
 		methodString += "public " + returnType + " " + methodName + "(";
@@ -506,8 +514,14 @@ public class SyncSource {
 
 		String methodString = lineStart;
 		MethodTypeOutput returnTypeEl = method.getOutput();
-		String returnType = returnTypeEl.getClassName();
-
+		String returnType = null;
+		if (returnTypeEl.getQName().getNamespaceURI().equals("")
+			&& returnTypeEl.getQName().getLocalPart().equals("void")) {
+			returnType = "void";
+		} else {
+			SchemaInformation info = serviceInfo.getSchemaInformation(returnTypeEl.getQName());
+			returnType = info.getType().getClassName();
+		}
 		// always a boxed call now becuase using complex types in the wsdl
 		// create handle for the boxed wrapper
 		methodString += this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + " params = new "
@@ -515,18 +529,20 @@ public class SyncSource {
 		// set the values fo the boxed wrapper
 		if (method.getInputs() != null && method.getInputs().getInput() != null) {
 			for (int j = 0; j < method.getInputs().getInput().length; j++) {
+				SchemaInformation inNamespace = serviceInfo.getSchemaInformation(method.getInputs().getInput(j)
+					.getQName());
 				String paramName = method.getInputs().getInput(j).getName();
 				String containerClassName = method.getInputs().getInput(j).getContainerClassName();
-				String elementName = method.getInputs().getInput(j).getType();
+				String containerMethodCall = TemplateUtils.upperCaseFirstCharacter(inNamespace.getType().getType());
 				methodString += lineStart;
-				if (method.getInputs().getInput(j).getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
+				if (inNamespace.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
 					methodString += "params.set" + TemplateUtils.upperCaseFirstCharacter(paramName) + "(" + paramName
 						+ ");\n";
 				} else {
 					methodString += containerClassName + " " + paramName + "Container = new " + containerClassName
 						+ "();\n";
 					methodString += lineStart;
-					methodString += paramName + "Container.set" + elementName + "(" + paramName + ");\n";
+					methodString += paramName + "Container.set" + containerMethodCall + "(" + paramName + ");\n";
 					methodString += lineStart;
 					methodString += "params.set" + TemplateUtils.upperCaseFirstCharacter(paramName) + "(" + paramName
 						+ "Container);\n";
@@ -541,11 +557,14 @@ public class SyncSource {
 		methodString += this.packageName + "." + returnTypeBoxed + " boxedResult = " + var + "." + methodName
 			+ "(params);\n";
 		methodString += lineStart;
-		if (!returnType.equals("void")) {
-			if (returnTypeEl.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
+		if (!returnTypeEl.getQName().getNamespaceURI().equals("")
+			&& !returnTypeEl.getQName().getLocalPart().equals("void")) {
+			SchemaInformation info = serviceInfo.getSchemaInformation(returnTypeEl.getQName());
+			if (info.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
 				methodString += "return boxedResult.getResponse();\n";
 			} else {
-				methodString += "return boxedResult.get" + returnTypeEl.getType() + "();\n";
+				methodString += "return boxedResult.get"
+					+ TemplateUtils.upperCaseFirstCharacter(info.getType().getType()) + "();\n";
 			}
 		}
 
@@ -580,10 +599,17 @@ public class SyncSource {
 		clientMethod += "{\n";
 		clientMethod += "\t\t//TODO: Implement this autogenerated method\n";
 		MethodTypeOutput methodReturn = method.getOutput();
-		if (!methodReturn.getClassName().equals("void") && !isPrimitive(methodReturn.getClassName())) {
-			clientMethod += "\t\tthrow new RemoteException(\"Not yet implemented\");\n";
-		} else if (isPrimitive(methodReturn.getClassName())) {
-			clientMethod += "\t\treturn " + createPrimitiveReturn(methodReturn.getClassName()) + ";\n";
+		if (methodReturn.getQName().getNamespaceURI().equals("")
+			&& methodReturn.getQName().getLocalPart().equals("void")) {
+			// do nothing this is void
+		} else {
+			SchemaInformation outputNamespace = serviceInfo.getSchemaInformation(methodReturn.getQName());
+			if (!outputNamespace.getType().getType().equals("void")
+				&& !isPrimitive(outputNamespace.getType().getClassName())) {
+				clientMethod += "\t\tthrow new RemoteException(\"Not yet implemented\");\n";
+			} else if (isPrimitive(outputNamespace.getType().getClassName())) {
+				clientMethod += "\t\treturn " + createPrimitiveReturn(outputNamespace.getType().getClassName()) + ";\n";
+			}
 		}
 		clientMethod += "\t}\n";
 
@@ -622,7 +648,6 @@ public class SyncSource {
 		String methodName = method.getName();
 		String methodString = "";
 		MethodTypeOutput returnTypeEl = method.getOutput();
-		String returnType = returnTypeEl.getClassName();
 
 		// unbox the params
 		String params = "";
@@ -632,13 +657,14 @@ public class SyncSource {
 			if (method.getInputs().getInput().length >= 1) {
 				// inputs were boxed and need to be unboxed
 				for (int j = 0; j < method.getInputs().getInput().length; j++) {
+					SchemaInformation inNamespace = serviceInfo.getSchemaInformation(method.getInputs().getInput(j)
+						.getQName());
 					String paramName = method.getInputs().getInput(j).getName();
-					String paramType = method.getInputs().getInput(j).getType();
-					if (method.getInputs().getInput(j).getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
+					if (inNamespace.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
 						params += "params.get" + TemplateUtils.upperCaseFirstCharacter(paramName) + "()";
 					} else {
 						params += "params.get" + TemplateUtils.upperCaseFirstCharacter(paramName) + "().get"
-							+ paramType + "()";
+							+ TemplateUtils.upperCaseFirstCharacter(inNamespace.getType().getType()) + "()";
 					}
 					if (j < method.getInputs().getInput().length - 1) {
 						params += ",";
@@ -658,27 +684,27 @@ public class SyncSource {
 
 		// return the boxed type
 		String returnTypeBoxed = getBoxedOutputTypeName(methodName);
-		if (returnType.equals("void")) {
-			// just call it is void
-			methodString += lineStart;
-			methodString += var + "." + methodName + "(" + params + ");\n";
-			methodString += lineStart;
-			methodString += "return new " + this.packageName + "." + returnTypeBoxed + "();\n";
+
+		// need to unbox on the way out
+		methodString += lineStart;
+		methodString += this.packageName + "." + returnTypeBoxed + " boxedResult = new " + this.packageName + "."
+			+ returnTypeBoxed + "();\n";
+		methodString += lineStart;
+		if (returnTypeEl.getQName().getNamespaceURI().equals("")
+			&& returnTypeEl.getQName().getLocalPart().equals("void")) {
+			// do nothing because it was null
 		} else {
-			// need to unbox on the way out
-			methodString += lineStart;
-			methodString += this.packageName + "." + returnTypeBoxed + " boxedResult = new " + this.packageName + "."
-				+ returnTypeBoxed + "();\n";
-			methodString += lineStart;
-			if (returnTypeEl.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
+			SchemaInformation outputNamespace = serviceInfo.getSchemaInformation(returnTypeEl.getQName());
+			if (outputNamespace.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
 				methodString += "boxedResult.setResponse(" + var + "." + methodName + "(" + params + "));\n";
 			} else {
-				methodString += "boxedResult.set" + returnTypeEl.getType() + "(" + var + "." + methodName + "("
-					+ params + "));\n";
+				methodString += "boxedResult.set"
+					+ TemplateUtils.upperCaseFirstCharacter(outputNamespace.getType().getType()) + "(" + var + "."
+					+ methodName + "(" + params + "));\n";
 			}
-			methodString += lineStart;
-			methodString += "return boxedResult;\n";
 		}
+		methodString += lineStart;
+		methodString += "return boxedResult;\n";
 
 		clientMethod += methodString;
 		clientMethod += "\t}\n";
