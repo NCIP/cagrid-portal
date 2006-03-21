@@ -9,7 +9,7 @@
       <partnerLink name="RproteomicsDataLinkType">
          <partnerRole endpointReference="static" invokeHandler="default:Address">
             <wsa:EndpointReference xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing"> 
-            <wsa:Address>http://localhost:9090/wsrf/services/cagrid/RPData</wsa:Address> 
+            <wsa:Address>http://ccis1716.duhs.duke.edu/wsrf/services/cagrid/RPData</wsa:Address> 
             </wsa:EndpointReference>
          </partnerRole>
       </partnerLink>

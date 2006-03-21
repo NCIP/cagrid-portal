@@ -3,7 +3,7 @@
 BPEL Process Definition
 Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.com)
 -->
-<process name="AnnualDemo" suppressJoinFailure="yes" targetNamespace="http://AnnualDemo" xmlns="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:ns1="http://rproteomics.cagrid.nci.nih.gov/RPData" xmlns:ns2="http://annualdemo.cagrid.nci.nih.gov/bpel" xmlns:ns3="http://www.globus.org/namespaces/cagrid/RProteomics/RProteomics" xmlns:ns4="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQL" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<process name="AnnualDemo" suppressJoinFailure="yes" targetNamespace="http://AnnualDemo" xmlns="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:ns1="http://rproteomics.cagrid.nci.nih.gov/RPData" xmlns:ns2="http://annualdemo.cagrid.nci.nih.gov/bpel" xmlns:ns3="http://www.globus.org/namespaces/cagrid/RProteomics/RProteomics" xmlns:ns4="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQL" xmlns:ns5="rproteomics.cabig.duke.edu/1/scanFeatures" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
    <partnerLinks>
       <!-- Declare all partnerLinks used in this workflow:                                      -->
       <!-- 1. client is a service to take input from the user                                   -->
@@ -56,14 +56,14 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
       <invoke inputVariable="queryInputMessage" operation="query" outputVariable="queryOutputMessage" partnerLink="RproteomicsDataLinkType" portType="ns1:RPDataPortType"/>
       <assign>
          <copy>
-            <from expression="count(bpws:getVariableData('queryOutputMessage', 'parameters', '/ns1:queryResponse')/*[1]/ns4:CQLQueryResult/scanFeaturesXml)"/>
+            <from expression="count(bpws:getVariableData('queryOutputMessage', 'parameters', '/ns1:queryResponse')/response/ns4:CQLQueryResult)"/>
             <to variable="count"/>
          </copy>
       </assign>
       <while condition="bpws:getVariableData('indexCounter') &lt;= bpws:getVariableData('count')">
          <assign>
             <copy>
-               <from expression="bpws:getVariableData('queryOutputMessage', 'parameters', '/ns1:queryResponse')/response/ns4:CQLQueryResult[bpws:getVariableData('indexCounter')]/scanFeaturesXml"/>
+               <from expression="bpws:getVariableData('queryOutputMessage', 'parameters', '/ns1:queryResponse')/response/ns4:CQLQueryResult[bpws:getVariableData('indexCounter')]/ns5:scanFeatures"/>
                <to part="parameters" query="/ns3:echoByValue/scanFeaturesXml[bpws:getVariableData('indexCounter')]" variable="echoByValueInputMessage"/>
             </copy>
             <copy>
