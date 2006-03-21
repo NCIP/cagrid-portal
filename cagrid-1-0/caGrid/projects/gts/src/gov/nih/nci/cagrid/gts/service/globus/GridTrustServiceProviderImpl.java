@@ -101,6 +101,18 @@ public class GridTrustServiceProviderImpl{
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 	public gov.nih.nci.cagrid.gts.stubs.RemoveTrustedAuthorityResponse removeTrustedAuthority(gov.nih.nci.cagrid.gts.stubs.RemoveTrustedAuthority params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault {
 		impl.removeTrustedAuthority(params.getTrustedAuthorityName());
 		return new gov.nih.nci.cagrid.gts.stubs.RemoveTrustedAuthorityResponse();

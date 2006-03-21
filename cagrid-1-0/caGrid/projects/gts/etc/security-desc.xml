@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <securityConfig xmlns="http://www.globus.org">
+  <method name="findTrustedAuthorities">
+    <auth-method>
+      <none />
+    </auth-method>
+  </method>
+  <credential>
+    <key-file value="C:/certificates/gts-key.pem" />
+    <cert-file value="C:/certificates/gts-cert.pem" />
+  </credential>
   <auth-method>
-    <none />
+    <GSISecureConversation>
+      <protection-level>
+        <privacy />
+      </protection-level>
+    </GSISecureConversation>
   </auth-method>
+  <run-as>
+    <system-identity />
+  </run-as>
   <authz value="none" />
 </securityConfig>
 

@@ -9,12 +9,6 @@
     <ns2:Exception name="GTSInternalFault"/>
     <ns2:Exception name="InvalidTrustedAuthorityFault"/>
    </ns2:Exceptions>
-   <ns2:MethodSecurity xsi:type="ns3:MethodSecurity" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns3:MethodSecuritySetting xsi:type="ns3:MethodSecurityType">None</ns3:MethodSecuritySetting>
-    <ns3:RunAsMode xsi:type="ns3:RunAsMode" xsi:nil="true"/>
-    <ns3:DelegationMode xsi:type="ns3:DelegationMode" xsi:nil="true"/>
-    <ns3:AnonymousClients xsi:type="ns3:AnonymousCommunication" xsi:nil="true"/>
-   </ns2:MethodSecurity>
   </ns2:Method>
   <ns2:Method name="addTrustedAuthority" xsi:type="ns2:MethodType">
    <ns2:Inputs>
@@ -26,12 +20,6 @@
     <ns2:Exception name="IllegalTrustedAuthorityFault"/>
     <ns2:Exception name="PermissionDeniedFault"/>
    </ns2:Exceptions>
-   <ns2:MethodSecurity xsi:type="ns4:MethodSecurity" xmlns:ns4="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns4:MethodSecuritySetting xsi:type="ns4:MethodSecurityType">None</ns4:MethodSecuritySetting>
-    <ns4:RunAsMode xsi:type="ns4:RunAsMode" xsi:nil="true"/>
-    <ns4:DelegationMode xsi:type="ns4:DelegationMode" xsi:nil="true"/>
-    <ns4:AnonymousClients xsi:type="ns4:AnonymousCommunication" xsi:nil="true"/>
-   </ns2:MethodSecurity>
   </ns2:Method>
   <ns2:Method name="findTrustedAuthorities" xsi:type="ns2:MethodType">
    <ns2:Inputs>
@@ -41,11 +29,11 @@
    <ns2:Exceptions>
     <ns2:Exception name="GTSInternalFault"/>
    </ns2:Exceptions>
-   <ns2:MethodSecurity xsi:type="ns5:MethodSecurity" xmlns:ns5="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns5:MethodSecuritySetting xsi:type="ns5:MethodSecurityType">None</ns5:MethodSecuritySetting>
-    <ns5:RunAsMode xsi:type="ns5:RunAsMode" xsi:nil="true"/>
-    <ns5:DelegationMode xsi:type="ns5:DelegationMode" xsi:nil="true"/>
-    <ns5:AnonymousClients xsi:type="ns5:AnonymousCommunication" xsi:nil="true"/>
+   <ns2:MethodSecurity xsi:type="ns3:MethodSecurity" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns3:MethodSecuritySetting xsi:type="ns3:MethodSecurityType">None</ns3:MethodSecuritySetting>
+    <ns3:RunAsMode xsi:type="ns3:RunAsMode" xsi:nil="true"/>
+    <ns3:DelegationMode xsi:type="ns3:DelegationMode" xsi:nil="true"/>
+    <ns3:AnonymousClients xsi:type="ns3:AnonymousCommunication" xsi:nil="true"/>
    </ns2:MethodSecurity>
   </ns2:Method>
   <ns2:Method name="addPermission" xsi:type="ns2:MethodType">
@@ -57,12 +45,6 @@
     <ns2:Exception name="GTSInternalFault"/>
     <ns2:Exception name="IllegalPermissionFault"/>
    </ns2:Exceptions>
-   <ns2:MethodSecurity xsi:type="ns6:MethodSecurity" xmlns:ns6="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns6:MethodSecuritySetting xsi:type="ns6:MethodSecurityType">None</ns6:MethodSecuritySetting>
-    <ns6:RunAsMode xsi:type="ns6:RunAsMode" xsi:nil="true"/>
-    <ns6:DelegationMode xsi:type="ns6:DelegationMode" xsi:nil="true"/>
-    <ns6:AnonymousClients xsi:type="ns6:AnonymousCommunication" xsi:nil="true"/>
-   </ns2:MethodSecurity>
   </ns2:Method>
   <ns2:Method name="findPermissions" xsi:type="ns2:MethodType">
    <ns2:Inputs>
@@ -72,12 +54,6 @@
    <ns2:Exceptions>
     <ns2:Exception name="GTSInternalFault"/>
    </ns2:Exceptions>
-   <ns2:MethodSecurity xsi:type="ns7:MethodSecurity" xmlns:ns7="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns7:MethodSecuritySetting xsi:type="ns7:MethodSecurityType">None</ns7:MethodSecuritySetting>
-    <ns7:RunAsMode xsi:type="ns7:RunAsMode" xsi:nil="true"/>
-    <ns7:DelegationMode xsi:type="ns7:DelegationMode" xsi:nil="true"/>
-    <ns7:AnonymousClients xsi:type="ns7:AnonymousCommunication" xsi:nil="true"/>
-   </ns2:MethodSecurity>
   </ns2:Method>
   <ns2:Method name="revokePermission" xsi:type="ns2:MethodType">
    <ns2:Inputs>
@@ -88,18 +64,26 @@
     <ns2:Exception name="GTSInternalFault"/>
     <ns2:Exception name="InvalidPermissionFault"/>
    </ns2:Exceptions>
-   <ns2:MethodSecurity xsi:type="ns8:MethodSecurity" xmlns:ns8="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns8:MethodSecuritySetting xsi:type="ns8:MethodSecurityType">None</ns8:MethodSecuritySetting>
-    <ns8:RunAsMode xsi:type="ns8:RunAsMode" xsi:nil="true"/>
-    <ns8:DelegationMode xsi:type="ns8:DelegationMode" xsi:nil="true"/>
-    <ns8:AnonymousClients xsi:type="ns8:AnonymousCommunication" xsi:nil="true"/>
-   </ns2:MethodSecurity>
   </ns2:Method>
  </ns2:Methods>
- <ns9:MetadataList xsi:type="ns9:MetadataListType" xmlns:ns9="gme://gov.nih.nci.cagrid.introduce/1/Metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
- <ns1:ServiceSecurity xsi:type="ns10:ServiceSecurity" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns10="gme://gov.nih.nci.cagrid.introduce/1/Security">
-  <ns10:MethodSecuritySetting xsi:type="ns10:MethodSecurityType">None</ns10:MethodSecuritySetting>
-  <ns10:DelegationMode xsi:type="ns10:DelegationMode" xsi:nil="true"/>
-  <ns10:AnonymousClients xsi:type="ns10:AnonymousCommunication" xsi:nil="true"/>
+ <ns4:MetadataList xsi:type="ns4:MetadataListType" xmlns:ns4="gme://gov.nih.nci.cagrid.introduce/1/Metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns1:ServiceSecurity xsi:type="ns5:ServiceSecurity" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns5="gme://gov.nih.nci.cagrid.introduce/1/Security">
+  <ns5:MethodSecuritySetting xsi:type="ns5:MethodSecurityType">Custom</ns5:MethodSecuritySetting>
+  <ns5:SecureConversation xsi:type="ns5:SecureConversation">
+   <ns5:CommunicationMethod xsi:type="ns5:CommunicationMethod">Privacy</ns5:CommunicationMethod>
+  </ns5:SecureConversation>
+  <ns5:ClientCommunication xsi:type="ns5:ClientCommunication">Secure_Conversation</ns5:ClientCommunication>
+  <ns5:ClientAuthorization xsi:type="ns5:ClientAuthorization">
+   <ns5:NoAuthorization xsi:type="ns5:NoAuthorization"/>
+  </ns5:ClientAuthorization>
+  <ns5:RunAsMode xsi:type="ns5:RunAsMode">System</ns5:RunAsMode>
+  <ns5:DelegationMode xsi:type="ns5:DelegationMode">None</ns5:DelegationMode>
+  <ns5:AnonymousClients xsi:type="ns5:AnonymousCommunication">No</ns5:AnonymousClients>
+  <ns5:ServiceCredentials xsi:type="ns5:ServiceCredential">
+   <ns5:X509Credential xsi:type="ns5:X509Credential">
+    <ns5:certificateLocation xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">C:/certificates/gts-cert.pem</ns5:certificateLocation>
+    <ns5:privateKeyLocation xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">C:/certificates/gts-key.pem</ns5:privateKeyLocation>
+   </ns5:X509Credential>
+  </ns5:ServiceCredentials>
  </ns1:ServiceSecurity>
 </ns1:ServiceSkeleton>
