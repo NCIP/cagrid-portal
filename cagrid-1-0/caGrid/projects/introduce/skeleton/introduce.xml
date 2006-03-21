@@ -3,6 +3,7 @@
         <ns4:Namespace namespace="http://www.w3.org/2001/XMLSchema" xsi:type="ns4:NamespaceType">
             <ns4:SchemaElement type="string" xsi:type="ns4:SchemaElementType"/>
             <ns4:SchemaElement type="integer" xsi:type="ns4:SchemaElementType"/>
+            <ns4:SchemaElement type="boolean" xsi:type="ns4:SchemaElementType"/>
         </ns4:Namespace>
     </ns4:Namespaces>
  <ns2:Methods xsi:type="ns2:MethodsType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Methods" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
