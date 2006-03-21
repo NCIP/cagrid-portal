@@ -7,12 +7,18 @@ import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
 import org.apache.axis.encoding.ser.BeanDeserializerFactory;
 import org.apache.axis.encoding.ser.BeanSerializerFactory;
-import org.globus.cagrid.RProteomics.stubs.EchoResponse;
+
+import caBIG.RProteomics.JpegImageType;
 
 import caBIG.RProteomics.PercentileType;
 import caBIG.RProteomics.WindowType;
 import gov.nih.nci.cagrid.cql.CQLQueryType;
 import gov.nih.nci.cagrid.rproteomics.stubs.*;
+import java.io.File;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+
+import org.apache.axis.encoding.Base64;
 
 public class TestClient {
 	protected static final String DEFAULT_URL_BASE =
@@ -38,10 +44,21 @@ public class TestClient {
 	  if (args.length > 0)
 	    urlPrefix = args[0];
 
-	  try {
+      try {
 	    TestClient testClient = new TestClient();
 	    testClient.setURL(urlPrefix + "WorkFlowClientService");
-	    System.out.println(testClient.callService());
+        File imageFile = new File("plot.jpg");
+        WorkFlowOutputType output = testClient.callService();
+        if (output != null) {
+            JpegImageType image = output.getJpegImage();
+            byte[] imageBytes = Base64.decode(image.getData());
+            BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(imageFile));
+            os.write(imageBytes);
+            os.flush();
+            os.close();
+        } else {
+            System.out.println("No Output!");
+        }
 	  }
 	  catch (Exception e) {
 	    System.err.println(e.toString());
@@ -55,43 +72,10 @@ public class TestClient {
 	  urlString = u;
 	}
 
-	/**
-	 * Creates a SOAP RPC call, calls the BPEL process Web service, and returns
-	 * the result returned from the server.
-	 *
-	 * @return the string returned by the BPEL process
-	public String callService() throws Exception {
-	  // Call BPEL process Web service using RPC
-	  Call call = createCall();
-	  String result = null;
-	  WorkFlowOutputType reponse = null;
-	  WorkFlowInputType input = new WorkFlowInputType();
-	  CQLQueryType query = new CQLQueryType();
-	  //EchoResponse echoResponse = null;
-	  LsidType[] lsidArrayResponse = null;
-	  try {
-		  Echo echoInputType = new Echo();
-		  LsidType id1 = new LsidType("urn:lsid:rproteomics.cabig.duhs.duke.edu:scanfeatures:5077304f-af23-46fb-b69b-de67881597c8");
-		  LsidType id2 = new LsidType("urn:lsid:rproteomics.cabig.duhs.duke.edu:scanfeatures:9d694d22-f049-43ac-b3dd-c94f1df544c4");
-		  LsidType[] lsidArray = new LsidType[] {id1} ;
-		  echoInputType.setLsids(lsidArray);
-		  echoResponse = (EchoResponse) call.invoke(new Object[] {echoInputType}); 
-		  lsidArrayResponse = echoResponse.getResponse();
-		  for(int i =0; i< lsidArrayResponse.length;i++) {
-			  result = result + lsidArrayResponse[i].getValue();
-		  }
-	  }
-	  catch (Exception e) {
-	    result = "Exception seen: " + e.toString();
-	    e.printStackTrace();
-	  }
 
-	  return result;
-	}*/
-	
-
-	public String callService() throws Exception {
+	public WorkFlowOutputType callService() throws Exception {
 		String result = null;
+        WorkFlowOutputType output = null;
 		try {
 			CQLQueryType query = new CQLQueryType();
             int windowSize = 1023;
@@ -102,13 +86,13 @@ public class TestClient {
 			input.setWindowType(windowType);
 			input.setPercentileType(percentileType);
 			Call call = createCall();
-			WorkFlowOutputType output = (WorkFlowOutputType) call.invoke(new Object[] {input});
-			
+			output = (WorkFlowOutputType) call.invoke(new Object[] {input});
+			return output;
 		} catch (Exception e) {
 			result = "Exception seen: " + e.toString();
 			e.printStackTrace();
 		}
-		return result;
+		return output;
 	}
 	/**
 	 * Creates and returns an RPC SOAP call.
@@ -127,7 +111,7 @@ public class TestClient {
 	  call.setOperationName("startWorkFlow");
 	  
 	  call.addParameter("parameters", workFlowInputQName, ParameterMode.IN);
-	  call.setReturnType(workFlowOuputQName, EchoResponse.class);
+	  call.setReturnType(workFlowOuputQName, WorkFlowOutputType.class);
 
 	  register(call, WorkFlowInputType.class, workFlowInputQName);
 	  register(call, WorkFlowOutputType.class, workFlowOuputQName);
