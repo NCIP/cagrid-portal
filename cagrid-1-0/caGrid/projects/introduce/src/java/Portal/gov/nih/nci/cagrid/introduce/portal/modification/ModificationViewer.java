@@ -558,7 +558,7 @@ public class ModificationViewer extends GridPortalComponent {
 			saveButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					final int confirmed = JOptionPane.showConfirmDialog(ModificationViewer.this,
-						"Are you sure you want to save?");
+						"Are you sure you want to save?", "Confirm Save", JOptionPane.YES_NO_OPTION);
 					if (confirmed == JOptionPane.OK_OPTION) {
 						try {
 							resetMethodSecurityIfServiceSecurityChanged();
