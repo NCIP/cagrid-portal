@@ -22,7 +22,7 @@ import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
 
 
-public class CACertificateComponent extends GridPortalComponent {
+public class ViewCACertificateWindow extends GridPortalComponent {
 
 	private JPanel jContentPane = null;
 	private JPanel mainPanel = null;
@@ -37,7 +37,7 @@ public class CACertificateComponent extends GridPortalComponent {
 	/**
 	 * This is the default constructor
 	 */
-	public CACertificateComponent() {
+	public ViewCACertificateWindow() {
 		super();
 		initialize();
 	}

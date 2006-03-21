@@ -19,7 +19,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: IFSMenu.java,v 1.13 2006-03-21 17:42:55 langella Exp $
+ * @version $Id: IFSMenu.java,v 1.14 2006-03-21 17:54:30 langella Exp $
  */
 public class IFSMenu extends GridPortalComponent {
 
@@ -258,7 +258,7 @@ public class IFSMenu extends GridPortalComponent {
 			.addGridPortalComponent(new TrustedIdPsWindow());
 		}else if (findCACertificate.isSelected()) {
 			PortalResourceManager.getInstance().getGridPortal()
-			.addGridPortalComponent(new CACertificateComponent(),500,150);
+			.addGridPortalComponent(new ViewCACertificateWindow(),500,150);
 		}
 		dispose();
 	}
