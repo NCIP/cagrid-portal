@@ -1,7 +1,9 @@
 <ns1:ServiceSkeleton introduceVersion="0.9" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Methods xsi:type="ns2:MethodsType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Methods" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns2:Method name="removeTrustedAuthority" xsi:type="ns2:MethodType">
-   <ns2:Inputs/>
+   <ns2:Inputs>
+    <ns2:Input isArray="false" name="trustedAuthorityName" namespace="http://www.w3.org/2001/XMLSchema" type="string"/>
+   </ns2:Inputs>
    <ns2:Output className="void" isArray="false"/>
    <ns2:Exceptions>
     <ns2:Exception name="GTSInternalFault"/>
@@ -16,9 +18,9 @@
   </ns2:Method>
   <ns2:Method name="addTrustedAuthority" xsi:type="ns2:MethodType">
    <ns2:Inputs>
-    <ns2:Input isArray="false" location="./4_gts.xsd" name="TrustedAuthority" namespace="http://cagrid.nci.nih.gov/4/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="TrustedAuthority"/>
+    <ns2:Input isArray="false" location="./5_gts.xsd" name="TrustedAuthority" namespace="http://cagrid.nci.nih.gov/5/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="TrustedAuthority"/>
    </ns2:Inputs>
-   <ns2:Output className="void" isArray="false"/>
+   <ns2:Output isArray="false" location="./5_gts.xsd" namespace="http://cagrid.nci.nih.gov/5/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="TrustedAuthority"/>
    <ns2:Exceptions>
     <ns2:Exception name="GTSInternalFault"/>
     <ns2:Exception name="IllegalTrustedAuthorityFault"/>
@@ -33,9 +35,9 @@
   </ns2:Method>
   <ns2:Method name="findTrustedAuthorities" xsi:type="ns2:MethodType">
    <ns2:Inputs>
-    <ns2:Input isArray="false" location="./4_gts.xsd" name="TrustedAuthorityFilter" namespace="http://cagrid.nci.nih.gov/4/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="TrustedAuthorityFilter"/>
+    <ns2:Input isArray="false" location="./5_gts.xsd" name="TrustedAuthorityFilter" namespace="http://cagrid.nci.nih.gov/5/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="TrustedAuthorityFilter"/>
    </ns2:Inputs>
-   <ns2:Output isArray="true" location="./4_gts.xsd" namespace="http://cagrid.nci.nih.gov/4/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="TrustedAuthority"/>
+   <ns2:Output isArray="true" location="./5_gts.xsd" namespace="http://cagrid.nci.nih.gov/5/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="TrustedAuthority"/>
    <ns2:Exceptions>
     <ns2:Exception name="GTSInternalFault"/>
    </ns2:Exceptions>
@@ -48,7 +50,7 @@
   </ns2:Method>
   <ns2:Method name="addPermission" xsi:type="ns2:MethodType">
    <ns2:Inputs>
-    <ns2:Input isArray="false" location="./4_gts.xsd" name="Permission" namespace="http://cagrid.nci.nih.gov/4/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="Permission"/>
+    <ns2:Input isArray="false" location="./5_gts.xsd" name="Permission" namespace="http://cagrid.nci.nih.gov/5/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="Permission"/>
    </ns2:Inputs>
    <ns2:Output className="void" isArray="false"/>
    <ns2:Exceptions>
@@ -64,9 +66,9 @@
   </ns2:Method>
   <ns2:Method name="findPermissions" xsi:type="ns2:MethodType">
    <ns2:Inputs>
-    <ns2:Input isArray="false" location="./4_gts.xsd" name="PermissionFilter" namespace="http://cagrid.nci.nih.gov/4/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="PermissionFilter"/>
+    <ns2:Input isArray="false" location="./5_gts.xsd" name="PermissionFilter" namespace="http://cagrid.nci.nih.gov/5/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="PermissionFilter"/>
    </ns2:Inputs>
-   <ns2:Output isArray="true" location="./4_gts.xsd" namespace="http://cagrid.nci.nih.gov/4/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="Permission"/>
+   <ns2:Output isArray="true" location="./5_gts.xsd" namespace="http://cagrid.nci.nih.gov/5/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="Permission"/>
    <ns2:Exceptions>
     <ns2:Exception name="GTSInternalFault"/>
    </ns2:Exceptions>
@@ -79,7 +81,7 @@
   </ns2:Method>
   <ns2:Method name="revokePermission" xsi:type="ns2:MethodType">
    <ns2:Inputs>
-    <ns2:Input isArray="false" location="./4_gts.xsd" name="Permission" namespace="http://cagrid.nci.nih.gov/4/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="Permission"/>
+    <ns2:Input isArray="false" location="./5_gts.xsd" name="Permission" namespace="http://cagrid.nci.nih.gov/5/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="Permission"/>
    </ns2:Inputs>
    <ns2:Output className="void" isArray="false"/>
    <ns2:Exceptions>

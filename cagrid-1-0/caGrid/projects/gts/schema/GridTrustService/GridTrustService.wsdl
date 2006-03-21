@@ -23,12 +23,12 @@
     <types>
         <schema targetNamespace="http://cagrid.nci.nih.gov/GridTrustService"
             xmlns:tns="http://cagrid.nci.nih.gov/GridTrustService"
-			xmlns:perm="http://cagrid.nci.nih.gov/4/gts" 
+			xmlns:perm3="http://cagrid.nci.nih.gov/5/gts" 
 			
             xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd">
 			<import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd"/>
 		
-			<import namespace="http://cagrid.nci.nih.gov/4/gts" schemaLocation="./4_gts.xsd"/>
+			<import namespace="http://cagrid.nci.nih.gov/5/gts" schemaLocation="./5_gts.xsd"/>
 			   
       	
       	
@@ -36,6 +36,9 @@
 					<complexType>
 						<sequence>
           		  
+                  					
+							<element name="trustedAuthorityName" type="xs:string" minOccurs="1" maxOccurs="1" />
+                  				 	
 	      				</sequence>
 	      			</complexType>
 	      		</element>
@@ -55,7 +58,7 @@
 							<element name="TrustedAuthority">
 	      		  				<complexType>
 									<sequence>
-										<element ref="perm:TrustedAuthority" minOccurs="1" maxOccurs="1" />
+										<element ref="perm3:TrustedAuthority" minOccurs="1" maxOccurs="1" />
                   				 	</sequence>
 	      			        	</complexType>
 	      			        </element>
@@ -68,6 +71,8 @@
 					<complexType>
 						<sequence>
           		  
+										<element ref="perm3:TrustedAuthority" minOccurs="1" maxOccurs="1" />
+			                  		
 						</sequence>
 					</complexType>
 				</element>
@@ -79,7 +84,7 @@
 							<element name="TrustedAuthorityFilter">
 	      		  				<complexType>
 									<sequence>
-										<element ref="perm:TrustedAuthorityFilter" minOccurs="1" maxOccurs="1" />
+										<element ref="perm3:TrustedAuthorityFilter" minOccurs="1" maxOccurs="1" />
                   				 	</sequence>
 	      			        	</complexType>
 	      			        </element>
@@ -92,7 +97,7 @@
 					<complexType>
 						<sequence>
           		  
-										<element ref="perm:TrustedAuthority" minOccurs="1" maxOccurs="unbounded" />
+										<element ref="perm3:TrustedAuthority" minOccurs="1" maxOccurs="unbounded" />
 			                  		
 						</sequence>
 					</complexType>
@@ -105,7 +110,7 @@
 							<element name="Permission">
 	      		  				<complexType>
 									<sequence>
-										<element ref="perm:Permission" minOccurs="1" maxOccurs="1" />
+										<element ref="perm3:Permission" minOccurs="1" maxOccurs="1" />
                   				 	</sequence>
 	      			        	</complexType>
 	      			        </element>
@@ -129,7 +134,7 @@
 							<element name="PermissionFilter">
 	      		  				<complexType>
 									<sequence>
-										<element ref="perm:PermissionFilter" minOccurs="1" maxOccurs="1" />
+										<element ref="perm3:PermissionFilter" minOccurs="1" maxOccurs="1" />
                   				 	</sequence>
 	      			        	</complexType>
 	      			        </element>
@@ -142,7 +147,7 @@
 					<complexType>
 						<sequence>
           		  
-										<element ref="perm:Permission" minOccurs="1" maxOccurs="unbounded" />
+										<element ref="perm3:Permission" minOccurs="1" maxOccurs="unbounded" />
 			                  		
 						</sequence>
 					</complexType>
@@ -155,7 +160,7 @@
 							<element name="Permission">
 	      		  				<complexType>
 									<sequence>
-										<element ref="perm:Permission" minOccurs="1" maxOccurs="1" />
+										<element ref="perm3:Permission" minOccurs="1" maxOccurs="1" />
                   				 	</sequence>
 	      			        	</complexType>
 	      			        </element>
