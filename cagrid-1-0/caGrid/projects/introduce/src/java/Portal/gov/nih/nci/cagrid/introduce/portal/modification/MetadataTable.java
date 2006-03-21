@@ -101,7 +101,6 @@ public class MetadataTable extends PortalBaseTable {
 		paint(getGraphics());
 	}
 
-
 	private void initialize() {
 		this.getColumn(DATA1).setMaxWidth(0);
 		this.getColumn(DATA1).setMinWidth(0);

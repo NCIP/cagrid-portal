@@ -963,7 +963,6 @@ public class ModificationViewer extends GridPortalComponent {
 			metadataPanel.add(getMetadataNamespaceTypesPanel(), gridBagConstraints35);
 			metadataPanel.addFocusListener(new java.awt.event.FocusAdapter() {
 				public void focusGained(java.awt.event.FocusEvent e) {
-					System.out.println("HERE");
 					metadataNamespaceScrollPane.remove(getMetadataNamespacesJTree());
 					metadataNamespacesJTree = createMetadataNamespacesJTree();
 					metadataNamespaceScrollPane.setViewportView(metadataNamespacesJTree);
