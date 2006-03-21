@@ -247,11 +247,6 @@ GSBT - Globus Service Build Tools
 					<exclude name="xml-apis.jar" />
 					<exclude name="xercesImpl.jar" />
 				</fileset>
-				<fileset dir="${build.lib.dir}">
-					<include name="*.jar" />
-					<exclude name="${stubs.jar.name}" />
-					<exclude name="${jar.name}" />
-				</fileset>
 			</classpath>
 		</javac>
 	</target>
