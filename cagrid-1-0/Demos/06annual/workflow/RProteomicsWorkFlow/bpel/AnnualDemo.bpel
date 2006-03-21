@@ -28,6 +28,8 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
       <variable messageType="ns3:general_interpolateByValueOutputMessage" name="general_interpolateByValueOutputMessage"/>
       <variable messageType="ns3:removeBackground_runningQuantileByValueInputMessage" name="removeBackground_runningQuantileByValueInputMessage"/>
       <variable messageType="ns3:removeBackground_runningQuantileByValueOutputMessage" name="removeBackground_runningQuantileByValueOutputMessage"/>
+      <variable messageType="ns3:removeBackground_minusByValueInputMessage" name="removeBackground_minusByValueInputMessage"/>
+      <variable messageType="ns3:removeBackground_minusByValueOutputMessage" name="removeBackground_minusByValueOutputMessage"/>
    </variables>
    <sequence>
       <!-- This is used to get input from the user. -->
@@ -110,7 +112,44 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
             </copy>
          </assign>
       </while>
+      <assign>
+         <copy>
+            <from part="parameters" query="/ns1:WorkFlowInputType/windowType" variable="workFlowInputMessage"/>
+            <to part="parameters" query="/ns3:removeBackground_runningQuantileByValue/windowSize" variable="removeBackground_runningQuantileByValueInputMessage"/>
+         </copy>
+         <copy>
+            <from part="parameters" query="/ns1:WorkFlowInputType/percentileType" variable="workFlowInputMessage"/>
+            <to part="parameters" query="/ns3:removeBackground_runningQuantileByValue/percentile" variable="removeBackground_runningQuantileByValueInputMessage"/>
+         </copy>
+      </assign>
       <invoke inputVariable="removeBackground_runningQuantileByValueInputMessage" operation="removeBackground_runningQuantileByValue" outputVariable="removeBackground_runningQuantileByValueOutputMessage" partnerLink="RproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
+      <assign>
+         <copy>
+            <from expression="&quot;1&quot;"/>
+            <to variable="indexCounter"/>
+         </copy>
+         <copy>
+            <from expression="count(bpws:getVariableData('general_interpolateByValueOutputMessage', 'parameters', '/ns3:general_interpolateByValueResponse')/response)"/>
+            <to variable="count"/>
+         </copy>
+      </assign>
+      <while condition="bpws:getVariableData('indexCounter') &lt;= bpws:getVariableData('count')">
+         <assign>
+            <copy>
+               <from expression="bpws:getVariableData('general_interpolateByValueOutputMessage', 'parameters', '/ns3:general_interpolateByValueResponse')/response[bpws:getVariableData('indexCounter')]"/>
+               <to part="parameters" query="/ns3:removeBackground_minusByValue/scanFeaturesXml1[bpws:getVariableData('indexCounter')]" variable="removeBackground_minusByValueInputMessage"/>
+            </copy>
+            <copy>
+               <from expression="bpws:getVariableData('removeBackground_runningQuantileByValueOutputMessage', 'parameters', '/ns3:removeBackground_runningQuantileByValueResponse')/response[bpws:getVariableData('indexCounter')]"/>
+               <to part="parameters" query="/ns3:removeBackground_minusByValue/scanFeaturesXml2[bpws:getVariableData('indexCounter')]" variable="removeBackground_minusByValueInputMessage"/>
+            </copy>
+            <copy>
+               <from expression="bpws:getVariableData('indexCounter') + 1"/>
+               <to variable="indexCounter"/>
+            </copy>
+         </assign>
+      </while>
+      <invoke inputVariable="removeBackground_minusByValueInputMessage" operation="removeBackground_minusByValue" outputVariable="removeBackground_minusByValueOutputMessage" partnerLink="RproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
       <reply operation="startWorkFlow" partnerLink="WorkFlowClientPartnerLinkType" portType="ns2:startWorkFlowPortType" variable="workFlowOutputMessage"/>
    </sequence>
 </process>
