@@ -6,8 +6,10 @@ import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.codegen.TemplateUtils;
 
+import java.io.FileInputStream;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.xml.namespace.QName;
@@ -73,7 +75,7 @@ public class TemplateUtilsTest extends TestCase {
 	}
 
 	public void testBuildQNameNamespacePrefixMap() {
-		Map map = TemplateUtils.buildQNameNamespacePrefixMap(metadataList);
+		Map map = TemplateUtils.buildMasterNamespaceInformationMap(info);
 		assertNotNull(map);
 
 		assertTrue(map.keySet().size() <= metadataList.getMetadata().length);

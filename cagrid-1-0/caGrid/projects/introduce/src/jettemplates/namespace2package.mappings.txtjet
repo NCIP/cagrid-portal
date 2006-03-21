@@ -14,7 +14,7 @@
 <%=newNamespaceDomain%>/<%=serviceName%>/bindings=<%=packageName%>.stubs.bindings
 <%=newNamespaceDomain%>/<%=serviceName%>/service=<%=packageName%>.stubs.service
 <%
-		Map prefixmap=TemplateUtils.buildMasterNamespaceInformationMap(info);
+		Map prefixmap=TemplateUtils.buildMasterNamespaceInformationMap(info.getServiceDescriptor());
 		Set importNamespaces = new HashSet();
   		Iterator iterator = prefixmap.keySet().iterator();
   

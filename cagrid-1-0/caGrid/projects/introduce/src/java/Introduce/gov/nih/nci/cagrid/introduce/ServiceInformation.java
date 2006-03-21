@@ -105,4 +105,9 @@ public class ServiceInformation {
 		return null;
 	}
 
+
+	public ServiceDescription getServiceDescriptor() {
+		return introService;
+	}
+
 }

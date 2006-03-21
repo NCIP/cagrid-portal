@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.codegen;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -89,41 +90,12 @@ public class TemplateUtils {
 	}
 
 
-	/**
-	 * Build a map of of namespace->prefix definitions for the namespaces of all
-	 * of the QNames in the list
-	 * 
-	 * @param metadataList
-	 *            the list of metadata
-	 * @return Map of namespace->prefix definitions for the namespaces of all of
-	 *         the QNames in the list
-	 */
-	public static Map buildQNameNamespacePrefixMap(MetadataListType metadataList) {
+	public static Map buildMasterNamespaceInformationMap(ServiceDescription desc) {
 		Map map = new HashMap();
 		int namespaceCount = 0;
-		for (int i = 0; i < metadataList.getMetadata().length; i++) {
-			MetadataType metadata = metadataList.getMetadata()[i];
-			String qnameNamespace = metadata.getQName().getNamespaceURI();
-
-			if (!map.containsKey(qnameNamespace)) {
-				if (qnameNamespace.equals(IntroduceConstants.W3CNAMESPACE)) {
-					map.put(qnameNamespace, IntroduceConstants.W3CNAMESPACE_PREFIX);
-				} else {
-					map.put(qnameNamespace, "ns" + namespaceCount++);
-				}
-			}
-		}
-
-		return map;
-	}
-
-
-	public static Map buildMasterNamespaceInformationMap(ServiceInformation info) {
-		Map map = new HashMap();
-		int namespaceCount = 0;
-		if (info.getNamespaces() != null && info.getNamespaces().getNamespace() != null) {
-			for (int i = 0; i < info.getNamespaces().getNamespace().length; i++) {
-				NamespaceType ntype = info.getNamespaces().getNamespace(i);
+		if (desc.getNamespaces() != null && desc.getNamespaces().getNamespace() != null) {
+			for (int i = 0; i < desc.getNamespaces().getNamespace().length; i++) {
+				NamespaceType ntype = desc.getNamespaces().getNamespace(i);
 				// add the ns=>prefix entry
 				if (!map.containsKey(ntype.getNamespace())) {
 					if (ntype.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {

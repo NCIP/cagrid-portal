@@ -37,7 +37,7 @@
         <schema targetNamespace="<%=namespaceDomain%>/<%=serviceName%>"
             xmlns:tns="<%=namespaceDomain%>/<%=serviceName%>"
              <%
-	      		Map prefixmap=TemplateUtils.buildMasterNamespaceInformationMap(info);
+	      		Map prefixmap=TemplateUtils.buildMasterNamespaceInformationMap(info.getServiceDescriptor());
 	      		Iterator iterator = prefixmap.keySet().iterator();
 				while(iterator.hasNext()){
 					String namespace = (String)iterator.next();
@@ -49,7 +49,7 @@
             xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
 			<import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd"/>
 		<%
-		prefixmap=TemplateUtils.buildMasterNamespaceInformationMap(info);
+		prefixmap=TemplateUtils.buildMasterNamespaceInformationMap(info.getServiceDescriptor());
   		iterator = prefixmap.keySet().iterator();
 		while(iterator.hasNext()){
 			String namespace = (String)iterator.next();
@@ -196,11 +196,11 @@
                 <complexType>
                     <sequence>
                         <%if(metadataList!=null && metadataList.getMetadata()!=null){
-                        	prefixmap=TemplateUtils.buildQNameNamespacePrefixMap(metadataList);
+                        	prefixmap=TemplateUtils.buildMasterNamespaceInformationMap(info.getServiceDescriptor());
                         	for (int i = 0; i < metadataList.getMetadata().length; i++) {
 								MetadataType metadata = metadataList.getMetadata()[i];
 								SchemaInformation schemaInformation = info.getSchemaInformation(metadata.getQName());%>
-						<element ref="<%=prefixmap.get(schemaInformation.getNamespace().getNamespace())%>:<%=schemaInformation.getType().getType()%>"/><%
+						<element ref="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType()%>"/><%
 							}
 						}
                     %></sequence>
