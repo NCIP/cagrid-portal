@@ -58,7 +58,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * 
  * @created Nov 17, 2004 
- * @version $Id: NamespacesTreeRenderer.java,v 1.1 2006-03-21 19:47:09 hastings Exp $ 
+ * @version $Id: NamespacesTreeRenderer.java,v 1.2 2006-03-21 21:11:10 hastings Exp $ 
  */
 public class NamespacesTreeRenderer extends DefaultTreeCellRenderer {
 
@@ -80,8 +80,8 @@ public class NamespacesTreeRenderer extends DefaultTreeCellRenderer {
 			this.setText(node.toString());
 		} else if (value instanceof NamespacesTypeTreeNode) {
 			NamespacesTypeTreeNode node = (NamespacesTypeTreeNode) value;
-			//this.setOpenIcon(node.getOpenIcon());
-			//this.setClosedIcon(node.getClosedIcon());
+			this.setOpenIcon(null);
+			this.setClosedIcon(null);
 			this.setText(node.toString());
 		} 
 		return this;

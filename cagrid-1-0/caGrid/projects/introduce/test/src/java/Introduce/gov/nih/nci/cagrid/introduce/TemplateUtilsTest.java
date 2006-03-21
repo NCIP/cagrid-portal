@@ -74,20 +74,6 @@ public class TemplateUtilsTest extends TestCase {
 		assertEquals(names.size(), metadataList.getMetadata().length);
 	}
 
-	public void testBuildQNameNamespacePrefixMap() {
-		Map map = TemplateUtils.buildMasterNamespaceInformationMap(info);
-		assertNotNull(map);
-
-		assertTrue(map.keySet().size() <= metadataList.getMetadata().length);
-
-		for (int i = 0; i < metadataList.getMetadata().length; i++) {
-			QName qname = metadataList.getMetadata()[i].getQName();
-			String prefix = (String) map.get(qname.getNamespaceURI());
-			assertNotNull(prefix);
-		}
-
-	}
-
 	public static void main(String[] args) {
 		junit.textui.TestRunner.run(TemplateUtilsTest.class);
 	}
