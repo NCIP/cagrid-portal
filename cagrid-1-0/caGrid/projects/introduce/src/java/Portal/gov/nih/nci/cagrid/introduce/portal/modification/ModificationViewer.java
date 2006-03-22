@@ -10,7 +10,6 @@ import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
@@ -50,7 +49,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.xml.namespace.QName;
 
@@ -61,11 +59,6 @@ import org.projectmobius.gme.XMLDataModelService;
 import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
-
-import sun.awt.geom.AreaOp.IntOp;
-
-import java.awt.CardLayout;
-import javax.swing.JScrollBar;
 
 
 /**
@@ -280,9 +273,7 @@ public class ModificationViewer extends GridPortalComponent {
 			}
 			loadServiceProps();
 
-			if (this.introService.getServiceSecurity() == null) {
-				this.introService.setServiceSecurity(new ServiceSecurity());
-			}
+			
 			info = new ServiceInformation(introService, serviceProperties, methodsDirectory);
 			this.setSize(500, 400);
 			this.setContentPane(getJContentPane());
@@ -762,10 +753,23 @@ public class ModificationViewer extends GridPortalComponent {
 
 
 	private void resetMethodSecurityIfServiceSecurityChanged() throws Exception {
-		if (!introService.getServiceSecurity().equals(securityPanel.getServiceSecurity())) {
+		boolean update= false;
+		ServiceSecurity service = introService.getServiceSecurity();
+		ServiceSecurity curr = securityPanel.getServiceSecurity();
+		//This should be cleaned up some
+		if((service==null)&&(curr==null)){
+			update = false;
+		}else if((service!=null)&&(curr==null)){
+			update =true;
+		}else if((service==null)&&(curr!=null)){
+			update = true;
+		}else if (!service.equals(curr)) {
+			update = true;
+		}
+		if(update){
 			MethodsType mt = this.introService.getMethods();
 			if (mt != null) {
-				introService.setServiceSecurity(securityPanel.getServiceSecurity());
+				introService.setServiceSecurity(curr);
 				PortalUtils
 					.showMessage("Service security configuration changed, resetting all method security configurations.");
 				MethodType[] methods = mt.getMethod();

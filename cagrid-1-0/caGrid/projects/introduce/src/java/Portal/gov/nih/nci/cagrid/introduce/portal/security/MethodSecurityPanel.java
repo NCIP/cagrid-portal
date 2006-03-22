@@ -210,7 +210,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	private boolean usesTransportSecurity() {
 		if (tlsButton.isSelected()) {
 			return true;
-		} else if (serviceSecurity.getTransportLevelSecurity() != null) {
+		} else if ((serviceSecurity!=null)&&(serviceSecurity.getTransportLevelSecurity() != null)) {
 			return true;
 		} else {
 			return false;
@@ -221,7 +221,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	private boolean usesSecureConversation() {
 		if (secureConversationButton.isSelected()) {
 			return true;
-		} else if (serviceSecurity.getSecureConversation() != null) {
+		} else if((serviceSecurity!=null)&& (serviceSecurity.getSecureConversation() != null)) {
 			return true;
 		} else {
 			return false;
@@ -232,7 +232,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	private boolean usesSecureMessage() {
 		if (secureMessageButton.isSelected()) {
 			return true;
-		} else if (serviceSecurity.getSecureMessage() != null) {
+		} else if ((serviceSecurity!=null)&&(serviceSecurity.getSecureMessage() != null)) {
 			return true;
 		} else {
 			return false;
@@ -243,7 +243,11 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	public MethodSecurity getMethodSecurity() throws Exception {
 		MethodSecurity ms = new MethodSecurity();
 		if (noneButton.isSelected()) {
-			ms.setMethodSecuritySetting(MethodSecurityType.None);
+			if(this.serviceSecurity == null){
+				return null;
+			}else{
+				ms.setMethodSecuritySetting(MethodSecurityType.None);
+			}
 		} else if (customButton.isSelected()) {
 			ms.setMethodSecuritySetting(MethodSecurityType.Custom);
 			if (!isSecure()) {
@@ -478,6 +482,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 
 
 	public void applyServiceSettings() {
+		if(this.serviceSecurity!=null){
 		if (this.isSecure()) {
 			this.customButton.setSelected(true);
 			if (this.serviceSecurity.getTransportLevelSecurity() != null) {
@@ -536,6 +541,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 		} else {
 			this.noneButton.setSelected(true);
 		}
+		}
 	}
 
 
@@ -564,13 +570,13 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			if (isSecure()) {
 				clientCommunication.setEnabled(true);
 
-				if ((tlsButton.isSelected()) || (serviceSecurity.getTransportLevelSecurity() != null)) {
+				if ((tlsButton.isSelected()) || ((serviceSecurity!=null)&&(serviceSecurity.getTransportLevelSecurity() != null))) {
 					clientCommunication.addItem(ClientCommunication.Transport_Layer_Security);
 				}
-				if ((secureConversationButton.isSelected()) || (serviceSecurity.getSecureConversation() != null)) {
+				if ((secureConversationButton.isSelected()) || ((serviceSecurity!=null)&&(serviceSecurity.getSecureConversation() != null))) {
 					clientCommunication.addItem(ClientCommunication.Secure_Conversation);
 				}
-				if ((secureMessageButton.isSelected()) || (serviceSecurity.getSecureMessage() != null)) {
+				if ((secureMessageButton.isSelected()) || ((serviceSecurity!=null)&&(serviceSecurity.getSecureMessage() != null))) {
 					clientCommunication.addItem(ClientCommunication.Secure_Message);
 				}
 

@@ -260,10 +260,9 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
 
 	public ServiceSecurity getServiceSecurity() throws Exception {
-		ServiceSecurity ss = new ServiceSecurity();
-		if (noneButton.isSelected()) {
-			ss.setMethodSecuritySetting(MethodSecurityType.None);
-		} else if (customButton.isSelected()) {
+		
+		if (customButton.isSelected()) {
+			ServiceSecurity ss = new ServiceSecurity();
 			ss.setMethodSecuritySetting(MethodSecurityType.Custom);
 			if (!isSecure()) {
 				throw new Exception("You must select at least one transport mechanism!!!");
@@ -326,9 +325,10 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 				cred.setProxyCredential(proxy);
 				ss.setServiceCredentials(cred);
 			}
-
+			return ss;
+		}else{
+			return null;
 		}
-		return ss;
 	}
 
 
