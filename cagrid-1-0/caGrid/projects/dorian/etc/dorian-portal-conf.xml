@@ -41,18 +41,18 @@
 	<resource name="DorianPortalConf" class="gov.nih.nci.cagrid.dorian.portal.DorianPortalConf">
 		<dorian-portal-config>
 		<dorian-services>
-			<dorian-service>http://localhost:8080/wsrf/services/cagrid/dorian</dorian-service>
-			<dorian-service>http://irondale.bmi.ohio-state.edu:8080/wsrf/services/cagrid/dorian</dorian-service>
+			<dorian-service>https://localhost:8443/wsrf/services/cagrid/dorian</dorian-service>
+			<dorian-service>https://irondale.bmi.ohio-state.edu:8443/wsrf/services/cagrid/dorian</dorian-service>
 		</dorian-services>
 		<idps>
 			<idp name="Dorian [localhost] IdP" authPanelClass="gov.nih.nci.cagrid.dorian.ifs.portal.DorianIdPAuthenticationPanel">
 				<parameters>
-					<parameter name="serviceId" value="http://localhost:8080/wsrf/services/cagrid/dorian"/>
+					<parameter name="serviceId" value="https://localhost:8443/wsrf/services/cagrid/dorian"/>
 				</parameters>
 			</idp>
 			<idp name="Dorian [irondale.bmi.ohio-state.edu]  IdP" authPanelClass="gov.nih.nci.cagrid.dorian.ifs.portal.DorianIdPAuthenticationPanel">
 				<parameters>
-					<parameter name="serviceId" value="http://irondale.bmi.ohio-state.edu:8080/wsrf/services/cagrid/dorian"/>
+					<parameter name="serviceId" value="https://irondale.bmi.ohio-state.edu:8443/wsrf/services/cagrid/dorian"/>
 				</parameters>
 			</idp>
 			<idp name="Ohio State University" authPanelClass="edu.osu.idp.portal.OSUIdPAuthenticationPanel"/>

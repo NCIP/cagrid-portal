@@ -3,7 +3,7 @@ package gov.nih.nci.cagrid.dorian.client;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.security.commstyle.AnonymousSecureConversationWithEncryption;
+import gov.nih.nci.cagrid.common.security.commstyle.CommunicationStyle;
 import gov.nih.nci.cagrid.dorian.IdPRegistration;
 import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.common.DorianFault;
@@ -21,15 +21,18 @@ import gov.nih.nci.cagrid.dorian.wsrf.DorianPortType;
  */
 public class IdPRegistrationClient extends DorianBaseClient implements
 		IdPRegistration {
+	
+	private CommunicationStyle style;
 
-	public IdPRegistrationClient(String serviceURI) {
+	public IdPRegistrationClient(String serviceURI,CommunicationStyle style) {
 		super(serviceURI);
+		this.style = style;
 	}
 
 	public String register(Application a) throws DorianFault,DorianInternalFault,InvalidUserPropertyFault{
 		DorianPortType port = null;
 		try {
-			port = this.getPort(new AnonymousSecureConversationWithEncryption());
+			port = this.getPort(style);
 		}catch (Exception e) {
 			DorianFault fault = new DorianFault();
 			fault.setFaultString(e.getMessage());

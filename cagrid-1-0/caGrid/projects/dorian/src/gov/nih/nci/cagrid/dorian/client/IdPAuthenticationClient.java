@@ -5,7 +5,7 @@ package gov.nih.nci.cagrid.dorian.client;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.security.commstyle.AnonymousSecureConversationWithEncryption;
+import gov.nih.nci.cagrid.common.security.commstyle.CommunicationStyle;
 import gov.nih.nci.cagrid.dorian.IdPAuthentication;
 import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
@@ -28,10 +28,12 @@ public class IdPAuthenticationClient extends DorianBaseClient implements
 		IdPAuthentication {
 
 	private BasicAuthCredential cred;
+	private CommunicationStyle style;
 	
-	public IdPAuthenticationClient(String serviceURI, BasicAuthCredential cred) {
+	public IdPAuthenticationClient(String serviceURI,CommunicationStyle style, BasicAuthCredential cred) {
 		super(serviceURI);
 		this.cred = cred;
+		this.style = style;
 	}
 	
 	
@@ -39,7 +41,7 @@ public class IdPAuthenticationClient extends DorianBaseClient implements
 	public SAMLAssertion authenticate() throws DorianFault,DorianInternalFault, PermissionDeniedFault {
 		DorianPortType port = null;
 		try {
-			port = this.getPort(new AnonymousSecureConversationWithEncryption());
+			port = this.getPort(style);
 		}catch (Exception e) {
 			DorianFault fault = new DorianFault();
 			fault.setFaultString(e.getMessage());

@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.dorian.ifs.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.common.security.commstyle.CommunicationStyle;
-import gov.nih.nci.cagrid.common.security.commstyle.SecureConversationWithEncryption;
+import gov.nih.nci.cagrid.common.security.commstyle.SecureTransportWithEncryption;
 import gov.nih.nci.cagrid.dorian.IFSAdministration;
 import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
@@ -41,7 +41,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.13 2006-03-02 17:56:51 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.14 2006-03-22 05:01:03 langella Exp $
  */
 public class UserManagerWindow extends GridPortalBaseFrame {
 
@@ -327,9 +327,8 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 					String service = ((DorianServiceListComboBox) getService()).getSelectedService();
 
 					GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-					CommunicationStyle style = new SecureConversationWithEncryption(proxy);
+					CommunicationStyle style = new SecureTransportWithEncryption(proxy);
 					IFSAdministrationClient client = new IFSAdministrationClient(service, style);
-					;
 					TrustedIdP[] idps = client.getTrustedIdPs();
 					TrustedIdP tidp = null;
 					for (int i = 0; i < idps.length; i++) {
@@ -498,8 +497,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			f.setUserStatus(((UserStatusComboBox) this.getUserStatus()).getSelectedUserStatus());
 
 			String service = ((DorianServiceListComboBox) getService()).getSelectedService();
-			CommunicationStyle style = new SecureConversationWithEncryption(proxy);
-
+			CommunicationStyle style = new SecureTransportWithEncryption(proxy);
 			IFSAdministration client = new IFSAdministrationClient(service, style);
 			IFSUser[] users = client.findUsers(f);
 			if(users != null){
@@ -752,7 +750,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		try {
 			this.updateProgress(true, "Seaching for Trusted IdPs");
 			this.getIdp().removeAllItems();
-			CommunicationStyle style = new SecureConversationWithEncryption(cred);
+			CommunicationStyle style = new SecureTransportWithEncryption(cred);
 			IFSAdministrationClient client = new IFSAdministrationClient(service, style);
 			TrustedIdP[] idps = client.getTrustedIdPs();
 			this.getIdp().removeAllItems();
@@ -914,7 +912,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		String service = ((DorianServiceListComboBox) getService()).getSelectedService();
 		try {
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			CommunicationStyle style = new SecureConversationWithEncryption(proxy);
+			CommunicationStyle style = new SecureTransportWithEncryption(proxy);
 			IFSAdministrationClient client = new IFSAdministrationClient(service, style);
 			;
 			IFSUser usr = this.getUsersTable().getSelectedUser();

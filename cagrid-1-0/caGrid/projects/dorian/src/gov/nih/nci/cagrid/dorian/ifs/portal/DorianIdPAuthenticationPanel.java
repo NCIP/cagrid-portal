@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.dorian.ifs.portal;
 
+import gov.nih.nci.cagrid.common.security.commstyle.AnonymousSecureTransportWithEncryption;
 import gov.nih.nci.cagrid.dorian.client.IdPAuthenticationClient;
 import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.dorian.portal.IdPConf;
@@ -39,7 +40,7 @@ public class DorianIdPAuthenticationPanel extends IdPAuthenticationPanel {
 		BasicAuthCredential cred = new BasicAuthCredential();
 		cred.setUserId(userId.getText());
 		cred.setPassword(new String(password.getPassword()));
-		IdPAuthenticationClient client = new IdPAuthenticationClient(getIdPInfo().getParameter("serviceId"),cred);
+		IdPAuthenticationClient client = new IdPAuthenticationClient(getIdPInfo().getParameter("serviceId"),new AnonymousSecureTransportWithEncryption(),cred);
 		return client.authenticate();
 	}
 

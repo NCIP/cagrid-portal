@@ -24,7 +24,7 @@ import gov.nih.nci.cagrid.dorian.wsrf.DorianPortType;
 public class IdPAdministrationClient extends DorianBaseClient implements
 		IdPAdministration {
 
-	CommunicationStyle style;
+	private CommunicationStyle style;
 	public IdPAdministrationClient(String serviceURI, CommunicationStyle style) {
 		super(serviceURI);
 		this.style = style;

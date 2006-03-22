@@ -3,7 +3,7 @@ package gov.nih.nci.cagrid.dorian.client;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.security.commstyle.AnonymousSecureConversationWithEncryption;
+import gov.nih.nci.cagrid.common.security.commstyle.CommunicationStyle;
 import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.common.DorianFault;
 import gov.nih.nci.cagrid.dorian.wsrf.DorianPortType;
@@ -22,14 +22,16 @@ import java.security.cert.X509Certificate;
  */
 public class DorianCertifcateAuthorityClient extends DorianBaseClient {
 
-	public DorianCertifcateAuthorityClient(String serviceURI) {
+	private CommunicationStyle style;
+	public DorianCertifcateAuthorityClient(String serviceURI, CommunicationStyle style) {
 		super(serviceURI);
+		this.style = style;
 	}
 
 	public X509Certificate getCACertificate() throws DorianFault,DorianInternalFault{
 		DorianPortType port = null;
 		try {
-			port = this.getPort(new AnonymousSecureConversationWithEncryption());
+			port = this.getPort(style);
 		}catch (Exception e) {
 			DorianFault fault = new DorianFault();
 			fault.setFaultString(e.getMessage());

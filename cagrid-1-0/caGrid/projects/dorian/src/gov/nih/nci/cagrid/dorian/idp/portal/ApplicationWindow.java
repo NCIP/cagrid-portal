@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.dorian.idp.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.common.security.commstyle.AnonymousSecureTransportWithEncryption;
 import gov.nih.nci.cagrid.dorian.client.IdPRegistrationClient;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
@@ -720,7 +721,7 @@ public class ApplicationWindow extends GridPortalComponent {
 				public void execute() {
 					try {
 						IdPRegistrationClient client = new IdPRegistrationClient(
-								service);
+								service,new AnonymousSecureTransportWithEncryption());
 						PortalUtils.showMessage(client.register(a));
 						dispose();
 					} catch (Exception e) {

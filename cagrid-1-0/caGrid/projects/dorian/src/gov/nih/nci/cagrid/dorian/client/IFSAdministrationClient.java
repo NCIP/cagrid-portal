@@ -18,6 +18,9 @@ import gov.nih.nci.cagrid.dorian.wsrf.DorianPortType;
 import gov.nih.nci.cagrid.dorian.wsrf.IFSFindTrustedIdPs;
 import gov.nih.nci.cagrid.dorian.wsrf.IFSGetUserPolicies;
 
+import org.apache.axis.client.Stub;
+import org.globus.wsrf.impl.security.authorization.HostAuthorization;
+
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -214,6 +217,7 @@ public class IFSAdministrationClient extends DorianBaseClient implements IFSAdmi
 		DorianPortType port = null;
 		try {
 			port = this.getPort(style);
+			((Stub)port)._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, new HostAuthorization("localhost"));
 		} catch (Exception e) {
 			DorianFault fault = new DorianFault();
 			fault.setFaultString(e.getMessage());

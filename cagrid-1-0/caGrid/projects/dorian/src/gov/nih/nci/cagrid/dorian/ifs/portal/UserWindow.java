@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.dorian.ifs.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.common.security.commstyle.SecureConversationWithEncryption;
+import gov.nih.nci.cagrid.common.security.commstyle.SecureTransportWithEncryption;
 import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
@@ -37,7 +37,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.12 2006-03-03 21:48:04 langella Exp $
+ * @version $Id: UserWindow.java,v 1.13 2006-03-22 05:01:03 langella Exp $
  */
 public class UserWindow extends GridPortalBaseFrame {
 
@@ -261,7 +261,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		try {
 			String service = getService().getText();
 			GlobusCredential c = ((ProxyCaddy) getProxy().getSelectedItem()).getProxy();
-			IFSAdministrationClient client = new IFSAdministrationClient(service, new SecureConversationWithEncryption(
+			IFSAdministrationClient client = new IFSAdministrationClient(service, new SecureTransportWithEncryption(
 				c));
 			client.updateUser(user);
 
@@ -281,7 +281,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		try {
 			String service = getService().getText();
 			GlobusCredential c = ((ProxyCaddy) getProxy().getSelectedItem()).getProxy();
-			IFSAdministrationClient client = new IFSAdministrationClient(service, new SecureConversationWithEncryption(
+			IFSAdministrationClient client = new IFSAdministrationClient(service, new SecureTransportWithEncryption(
 				c));
 			user = client.renewUserCredentials(user);
 			X509Certificate cert = CertUtil.loadCertificate(user.getCertificate().getCertificateAsString());

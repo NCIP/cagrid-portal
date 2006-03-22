@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.dorian.idp.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.common.security.commstyle.SecureConversationWithEncryption;
+import gov.nih.nci.cagrid.common.security.commstyle.SecureTransportWithEncryption;
 import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.client.IdPAdministrationClient;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
@@ -31,7 +31,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.12 2005-12-19 20:44:17 hastings Exp $
+ * @version $Id: UserWindow.java,v 1.13 2006-03-22 05:01:03 langella Exp $
  */
 public class UserWindow extends GridPortalBaseFrame {
 
@@ -321,7 +321,7 @@ public class UserWindow extends GridPortalBaseFrame {
 			String service = getService().getText();
  
 			IdPAdministrationClient client = new IdPAdministrationClient(
-					service, new SecureConversationWithEncryption(proxy));
+					service, new SecureTransportWithEncryption(proxy));
 			client.updateUser(user);
 
 			PortalUtils.showMessage("User " + user.getUserId()

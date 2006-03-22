@@ -3,7 +3,7 @@ package gov.nih.nci.cagrid.dorian.client;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.security.commstyle.AnonymousSecureConversationWithEncryption;
+import gov.nih.nci.cagrid.common.security.commstyle.CommunicationStyle;
 import gov.nih.nci.cagrid.dorian.IFSUserAccess;
 import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
@@ -27,8 +27,10 @@ import org.globus.gsi.GlobusCredential;
 
 public class IFSUserClient extends DorianBaseClient implements IFSUserAccess {
 
-	public IFSUserClient(String serviceURI) {
+	private CommunicationStyle style;
+	public IFSUserClient(String serviceURI,CommunicationStyle style) {
 		super(serviceURI);
+		this.style = style;
 	}
 
 	public GlobusCredential createProxy(SAMLAssertion saml,
@@ -38,7 +40,7 @@ public class IFSUserClient extends DorianBaseClient implements IFSUserAccess {
 		DorianPortType port = null;
 		try {
 			port = this
-					.getPort(new AnonymousSecureConversationWithEncryption());
+					.getPort(style);
 		} catch (Exception e) {
 			DorianFault fault = new DorianFault();
 			fault.setFaultString(e.getMessage());

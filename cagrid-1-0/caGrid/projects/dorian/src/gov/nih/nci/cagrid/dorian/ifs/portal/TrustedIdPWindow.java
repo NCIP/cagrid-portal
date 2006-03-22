@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.dorian.ifs.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.common.security.commstyle.SecureConversationWithEncryption;
+import gov.nih.nci.cagrid.common.security.commstyle.SecureTransportWithEncryption;
 import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
@@ -40,7 +40,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPWindow.java,v 1.11 2006-03-03 21:48:04 langella Exp $
+ * @version $Id: TrustedIdPWindow.java,v 1.12 2006-03-22 05:01:03 langella Exp $
  */
 public class TrustedIdPWindow extends GridPortalBaseFrame {
 	public static final String PASSWORD = SAMLAuthenticationMethod.value1.getValue();
@@ -378,7 +378,7 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 
 			String service = getService().getText();
 			GlobusCredential c = ((ProxyCaddy) getProxy().getSelectedItem()).getProxy();
-			IFSAdministrationClient client = new IFSAdministrationClient(service, new SecureConversationWithEncryption(
+			IFSAdministrationClient client = new IFSAdministrationClient(service, new SecureTransportWithEncryption(
 				c));
 			if (newTrustedIdP) {
 				window.addTrustedIdP(client.addTrustedIdP(idp));
@@ -645,7 +645,7 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 				if (idp.getIdPCertificate() != null) {
 					credPanel.setCertificate(CertUtil.loadCertificate(idp.getIdPCertificate()));
 				}
-				credPanel.setAllowImport(false);
+				//credPanel.setAllowImport(false);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

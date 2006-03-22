@@ -135,7 +135,6 @@ public class CertUtil {
 		return certGen.generateX509Certificate(pair.getPrivate(), "BC");
 	}
 
-
 	public static X509Certificate generateCertificate(X509Name subject, Date start, Date expired, PublicKey publicKey,
 		X509Certificate cacert, PrivateKey signerKey) throws InvalidKeyException, NoSuchProviderException,
 		SignatureException, IOException {

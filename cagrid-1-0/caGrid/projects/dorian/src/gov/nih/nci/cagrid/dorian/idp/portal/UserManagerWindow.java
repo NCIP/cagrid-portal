@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.dorian.idp.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.common.security.commstyle.CommunicationStyle;
-import gov.nih.nci.cagrid.common.security.commstyle.SecureConversationWithEncryption;
+import gov.nih.nci.cagrid.common.security.commstyle.SecureTransportWithEncryption;
 import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.client.IdPAdministrationClient;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
@@ -37,7 +37,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.22 2006-03-02 17:56:52 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.23 2006-03-22 05:01:03 langella Exp $
  */
 public class UserManagerWindow extends GridPortalBaseFrame {
 
@@ -908,7 +908,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 
 			String service = ((DorianServiceListComboBox) getService())
 					.getSelectedService();
-			CommunicationStyle style = new SecureConversationWithEncryption(
+			CommunicationStyle style = new SecureTransportWithEncryption(
 					proxy);
 			IdPAdministrationClient client = new IdPAdministrationClient(
 					service, style);
