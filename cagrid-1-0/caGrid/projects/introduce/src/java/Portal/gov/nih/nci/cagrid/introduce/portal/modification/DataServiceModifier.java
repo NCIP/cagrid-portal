@@ -10,6 +10,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -244,7 +245,11 @@ public class DataServiceModifier extends GridPortalComponent {
 			cancelButton.setText("Cancel");
 			cancelButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+					int choice = JOptionPane.showConfirmDialog(DataServiceModifier.this, "Cancel all changes?", 
+						"Are you sure", JOptionPane.YES_NO_OPTION);
+					if (choice == JOptionPane.OK_OPTION){
+						dispose();
+					}
 				}
 			});
 			cancelButton.setIcon(PortalLookAndFeel.getCloseIcon());
