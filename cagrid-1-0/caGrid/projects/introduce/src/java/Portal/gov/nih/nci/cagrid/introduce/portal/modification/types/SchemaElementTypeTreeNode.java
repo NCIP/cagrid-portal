@@ -43,8 +43,6 @@
 
 package gov.nih.nci.cagrid.introduce.portal.modification.types;
 
-import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
-import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 

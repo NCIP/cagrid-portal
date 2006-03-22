@@ -44,9 +44,11 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.types;
 
 import java.awt.Component;
+import java.awt.Font;
 
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.DefaultTreeModel;
 
 
 /** 
@@ -58,12 +60,16 @@ import javax.swing.tree.DefaultTreeCellRenderer;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * 
  * @created Nov 17, 2004 
- * @version $Id: NamespacesTreeRenderer.java,v 1.3 2006-03-22 16:03:26 hastings Exp $ 
+ * @version $Id: NamespacesTreeRenderer.java,v 1.4 2006-03-22 17:28:01 hastings Exp $ 
  */
 public class NamespacesTreeRenderer extends DefaultTreeCellRenderer {
-
-	public NamespacesTreeRenderer() {
+	DefaultTreeModel model = null;
+	Font normal = null;
+	
+	public NamespacesTreeRenderer(DefaultTreeModel model) {
 		super();
+		this.model = model;
+		
 	}
 	
 	
@@ -73,15 +79,21 @@ public class NamespacesTreeRenderer extends DefaultTreeCellRenderer {
 		super.getTreeCellRendererComponent(
 			tree, value, sel, expanded,
 			leaf, row, localHasFocus);
+		if(normal==null){
+			normal = this.getFont();
+		}
+		this.setFont(normal);
 		if (value instanceof NamespaceTypeTreeNode) {
 			NamespaceTypeTreeNode node = (NamespaceTypeTreeNode) value;
 			this.setIcon(node.getOpenIcon());
 			//this.setOpenIcon(node.getOpenIcon());
 			//this.setClosedIcon(node.getClosedIcon());
+			this.setFont(normal.deriveFont(Font.BOLD,12));
 			this.setText(node.toString());
 		} else if (value instanceof SchemaElementTypeTreeNode) {
 			SchemaElementTypeTreeNode node = (SchemaElementTypeTreeNode) value;
 			this.setIcon(node.getOpenIcon());
+			this.setFont(normal.deriveFont(Font.ITALIC));
 			//this.setOpenIcon(null);
 			//this.setClosedIcon(null);
 			this.setText(node.toString());
@@ -90,6 +102,7 @@ public class NamespacesTreeRenderer extends DefaultTreeCellRenderer {
 			this.setOpenIcon(null);
 			this.setClosedIcon(null);
 			this.setText(node.toString());
+			this.setFont(normal.deriveFont(Font.BOLD,15));
 		} 
 		return this;
 	}
