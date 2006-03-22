@@ -169,6 +169,10 @@ public class SyncTools {
 								type.setClassName(getRelativeClassName(element.getName()));
 								type.setPackageName(getPackageName(element.getName()));
 							}
+						} else {
+							// it the classname is already set then set hte package name to the predefined
+							// package name in the namespace type
+							type.setPackageName(ntype.getPackageName());
 						}
 					}
 				}

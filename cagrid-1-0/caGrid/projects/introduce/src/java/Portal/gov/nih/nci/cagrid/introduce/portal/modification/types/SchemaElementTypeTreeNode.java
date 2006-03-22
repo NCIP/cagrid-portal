@@ -70,11 +70,11 @@ public class SchemaElementTypeTreeNode extends DefaultMutableTreeNode {
 	}
 	
 	public ImageIcon getOpenIcon(){
-		return IntroduceLookAndFeel.getNamespaceIcon();
+		return IntroduceLookAndFeel.getSchemaTypeIcon();
 	}
 	
 	public ImageIcon getClosedIcon(){
-		return IntroduceLookAndFeel.getNamespaceIcon();
+		return IntroduceLookAndFeel.getSchemaTypeIcon();
 	}
 	
 	public String toString(){
