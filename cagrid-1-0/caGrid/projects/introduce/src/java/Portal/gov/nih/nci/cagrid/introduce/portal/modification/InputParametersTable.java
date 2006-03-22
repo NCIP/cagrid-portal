@@ -6,9 +6,17 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 
 import java.util.Vector;
 
+import javax.swing.DefaultCellEditor;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import javax.xml.namespace.QName;
+
+import org.uispec4j.ComboBox;
 
 
 /**
@@ -17,7 +25,7 @@ import javax.xml.namespace.QName;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * 
  */
-public class InputParametersTable extends PortalBaseTable {
+public class InputParametersTable extends JTable {
 
 	public static String NAME = "Name";
 	
@@ -33,24 +41,27 @@ public class InputParametersTable extends PortalBaseTable {
 
 
 	public InputParametersTable(MethodType method) {
-		super(createTableModel());
+		super();
+		this.setModel(createTableModel());
 		this.method = method;
-		this.setColumnSelectionAllowed(false);
-		this.setRowSelectionAllowed(true);
-		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		initialize();
+		//this.setColumnSelectionAllowed(true);
+		//this.setRowSelectionAllowed(true);
+		//this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		//TableColumn col = getColumnModel().getColumn(1);
+	    //col.setCellEditor(new DefaultCellEditor(new JCheckBox()));
+	    initialize();
 	}
 
 
 	public boolean isCellEditable(int row, int column) {
-		return true;
+		return false;
 	}
 
 
 	public void addRow(final MethodTypeInputsInput input) {
 		final Vector v = new Vector();
 		v.add(input.getName());
-		v.add(String.valueOf(input.isIsArray()));
+		v.add(new Boolean(input.isIsArray()));
 		v.add(input.getQName().getNamespaceURI());
 		v.add(input.getQName().getLocalPart());
 
@@ -68,7 +79,7 @@ public class InputParametersTable extends PortalBaseTable {
 		}
 		Vector v = (Vector) getValueAt(getSelectedRow(), 4);
 		v.set(0, input.getName());
-		v.set(1, (String.valueOf(input.isIsArray())));
+		v.set(1,new Boolean(input.isIsArray()));
 		v.set(2, input.getQName().getNamespaceURI());
 		v.set(3, input.getQName().getLocalPart());
 		v.set(4, v);
@@ -98,7 +109,7 @@ public class InputParametersTable extends PortalBaseTable {
 		MethodTypeInputsInput input = new MethodTypeInputsInput();
 		
 		String name = ((String) getValueAt(row, 0));
-		boolean isArray = new Boolean((String) getValueAt(row, 1)).booleanValue();
+		boolean isArray = ((Boolean) getValueAt(row, 1)).booleanValue();
 		String namespace = ((String) getValueAt(row, 2));
 		String type = ((String) getValueAt(row, 3));
 
@@ -132,14 +143,8 @@ public class InputParametersTable extends PortalBaseTable {
 	}
 
 
-	public static DefaultTableModel createTableModel() {
-		DefaultTableModel model = new DefaultTableModel();
-		model.addColumn(NAME);
-		model.addColumn(ISARRAY);
-		model.addColumn(NAMESPACE);
-		model.addColumn(TYPE);
-		model.addColumn(DATA1);
-
+	public MyDefaultTableModel createTableModel() {
+		MyDefaultTableModel model = new MyDefaultTableModel();
 		return model;
 	}
 
@@ -154,4 +159,19 @@ public class InputParametersTable extends PortalBaseTable {
 		// TODO Auto-generated method stub
 
 	}
+	
+	public class MyDefaultTableModel extends DefaultTableModel {
+		
+		public MyDefaultTableModel(){
+			super();
+			addColumn(NAME);
+			addColumn(ISARRAY);
+			addColumn(NAMESPACE);
+			addColumn(TYPE);
+			addColumn(DATA1);
+		}
+		
+		
+	}
 }
+
