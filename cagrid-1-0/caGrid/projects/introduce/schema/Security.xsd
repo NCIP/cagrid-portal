@@ -14,6 +14,7 @@
 			<xs:element name="DelegationMode" minOccurs="0" maxOccurs="1" type="DelegationMode"/>
 			<xs:element name="AnonymousClients" minOccurs="0" maxOccurs="1" type="AnonymousCommunication"/>
 			<xs:element name="ServiceCredentials" minOccurs="0" maxOccurs="1" type="ServiceCredential"/>
+			<xs:element name="ServiceAuthorization" minOccurs="0" maxOccurs="1" type="ServiceAuthorization"/>
 		</xs:sequence>
 	</xs:complexType>
 	
@@ -31,6 +32,12 @@
 		</xs:sequence>
 	</xs:complexType>
 	
+	<xs:complexType name="ServiceAuthorization">
+		<xs:choice>
+			<xs:element name="NoAuthorization" minOccurs="1" maxOccurs="1" type="NoAuthorization"/>
+			<xs:element name="GridMapAuthorization" minOccurs="1" maxOccurs="1" type="GridMapAuthorization"/>
+		</xs:choice>
+	</xs:complexType>
 	
 	<xs:complexType name="ClientAuthorization">
 		<xs:choice>
@@ -54,6 +61,12 @@
 	<xs:complexType name="IdentityAuthorization">
 		<xs:sequence>
 			<xs:element name="identity" minOccurs="1" maxOccurs="1" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="GridMapAuthorization">
+		<xs:sequence>
+			<xs:element name="GridMapFileLocation" minOccurs="1" maxOccurs="1" type="xs:string"/>
 		</xs:sequence>
 	</xs:complexType>
 	
