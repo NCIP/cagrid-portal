@@ -1,4 +1,5 @@
 
+need to add more context to methods for proper unambiguity
 
 make introduce depend on this
 
@@ -27,15 +28,4 @@ http://www.castor.org/xml-mapping.html
 get mapper and marshaller staticly?
 
 had to hand edit:
- -client type mapping in client-config.wsdd, and castorMapping property to point to classpath location to load mapping file
-
-
-
-(FIXED WITH INTRODUCE CHANGES)
- -wsdl to use right element
-	 -introduce expects all output elements to be of the "name" response... custom types need to use custom names.. should default to Classname
-	 - actually, i need an element ref
- -client and service impl to use the right method names (getProject not getResponse)
- 	-based on wsdl change
- -protocol bean to use right element
- 	 	-based on wsdl change
+ -client/server type mapping in client-config.wsdd, and castorMapping property to point to classpath location to load mapping file

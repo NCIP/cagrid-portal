@@ -36,4 +36,9 @@
         languageSpecificType="java:gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata"
         serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory"
         deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" encodingStyle=""/>
+    <typeMapping qname="uml:UMLAttributeMetadata"
+        xmlns:uml="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"
+        languageSpecificType="java:gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata"
+        serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory"
+        deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" encodingStyle=""/>
 </deployment>

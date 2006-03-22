@@ -23,7 +23,7 @@
     <types>
         <schema targetNamespace="http://cadsr.cagrid.nci.nih.gov/CaDSRService"
             xmlns:tns="http://cadsr.cagrid.nci.nih.gov/CaDSRService"
-			xmlns:umlc2="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" 
+			xmlns:umla="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" 
 			
 			xmlns:comm="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" 
 			
@@ -48,7 +48,7 @@
 					<complexType>
 						<sequence>
           		  
-										<element ref="umlc2:Project" minOccurs="1" maxOccurs="unbounded" />
+										<element ref="umla:Project" minOccurs="1" maxOccurs="unbounded" />
 			                  		
 						</sequence>
 					</complexType>
@@ -68,7 +68,7 @@
 					<complexType>
 						<sequence>
           		  
-										<element ref="umlc2:Project" minOccurs="1" maxOccurs="unbounded" />
+										<element ref="umla:Project" minOccurs="1" maxOccurs="unbounded" />
 			                  		
 						</sequence>
 					</complexType>
@@ -81,7 +81,7 @@
 							<element name="project">
 	      		  				<complexType>
 									<sequence>
-										<element ref="umlc2:Project" minOccurs="1" maxOccurs="1" />
+										<element ref="umla:Project" minOccurs="1" maxOccurs="1" />
                   				 	</sequence>
 	      			        	</complexType>
 	      			        </element>
@@ -94,7 +94,7 @@
 					<complexType>
 						<sequence>
           		  
-										<element ref="umlc2:UMLPackageMetadata" minOccurs="1" maxOccurs="unbounded" />
+										<element ref="umla:UMLPackageMetadata" minOccurs="1" maxOccurs="unbounded" />
 			                  		
 						</sequence>
 					</complexType>
@@ -107,7 +107,7 @@
 							<element name="project">
 	      		  				<complexType>
 									<sequence>
-										<element ref="umlc2:Project" minOccurs="1" maxOccurs="1" />
+										<element ref="umla:Project" minOccurs="1" maxOccurs="1" />
                   				 	</sequence>
 	      			        	</complexType>
 	      			        </element>
@@ -120,7 +120,7 @@
 					<complexType>
 						<sequence>
           		  
-										<element ref="umlc2:UMLClassMetadata" minOccurs="1" maxOccurs="unbounded" />
+										<element ref="umla:UMLClassMetadata" minOccurs="1" maxOccurs="unbounded" />
 			                  		
 						</sequence>
 					</complexType>
@@ -133,7 +133,7 @@
 							<element name="pkg">
 	      		  				<complexType>
 									<sequence>
-										<element ref="umlc2:UMLPackageMetadata" minOccurs="1" maxOccurs="1" />
+										<element ref="umla:UMLPackageMetadata" minOccurs="1" maxOccurs="1" />
                   				 	</sequence>
 	      			        	</complexType>
 	      			        </element>
@@ -146,7 +146,7 @@
 					<complexType>
 						<sequence>
           		  
-										<element ref="umlc2:UMLClassMetadata" minOccurs="1" maxOccurs="unbounded" />
+										<element ref="umla:UMLClassMetadata" minOccurs="1" maxOccurs="unbounded" />
 			                  		
 						</sequence>
 					</complexType>
@@ -159,7 +159,7 @@
 							<element name="project">
 	      		  				<complexType>
 									<sequence>
-										<element ref="umlc2:Project" minOccurs="1" maxOccurs="1" />
+										<element ref="umla:Project" minOccurs="1" maxOccurs="1" />
                   				 	</sequence>
 	      			        	</complexType>
 	      			        </element>
@@ -185,7 +185,7 @@
 							<element name="packages">
 	      		  				<complexType>
 									<sequence>
-										<element ref="umlc2:UMLPackageMetadata" minOccurs="1" maxOccurs="unbounded" />
+										<element ref="umla:UMLPackageMetadata" minOccurs="1" maxOccurs="unbounded" />
                   				 	</sequence>
 	      			        	</complexType>
 	      			        </element>
@@ -214,7 +214,7 @@
 							<element name="classes">
 	      		  				<complexType>
 									<sequence>
-										<element ref="umlc2:UMLClassMetadata" minOccurs="1" maxOccurs="unbounded" />
+										<element ref="umla:UMLClassMetadata" minOccurs="1" maxOccurs="unbounded" />
                   				 	</sequence>
 	      			        	</complexType>
 	      			        </element>
@@ -231,6 +231,32 @@
 						<sequence>
           		  
 										<element name="response" type="xs:string" minOccurs="1" maxOccurs="1" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
+				<element name="findAttributesInClass">
+					<complexType>
+						<sequence>
+          		  
+                  					
+							<element name="clazz">
+	      		  				<complexType>
+									<sequence>
+										<element ref="umla:UMLClassMetadata" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+                  				 	
+	      				</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="findAttributesInClassResponse">
+					<complexType>
+						<sequence>
+          		  
+										<element ref="umla:UMLAttributeMetadata" minOccurs="1" maxOccurs="unbounded" />
 			                  		
 						</sequence>
 					</complexType>
@@ -302,6 +328,13 @@
 	<message name="generateMetadataExtractForClassesOutputMessage">
 		<part name="parameters" element="tns:generateMetadataExtractForClassesResponse"/>
 	</message>
+	<message name="findAttributesInClassInputMessage">
+		<part name="parameters" element="tns:findAttributesInClass"/>
+	</message>
+	
+	<message name="findAttributesInClassOutputMessage">
+		<part name="parameters" element="tns:findAttributesInClassResponse"/>
+	</message>
     
 <!--============================================================
 
@@ -341,6 +374,10 @@
 		<operation name="generateMetadataExtractForClasses">
             <input message="tns:generateMetadataExtractForClassesInputMessage"/>
             <output message="tns:generateMetadataExtractForClassesOutputMessage"/>
+        </operation>
+		<operation name="findAttributesInClass">
+            <input message="tns:findAttributesInClassInputMessage"/>
+            <output message="tns:findAttributesInClassOutputMessage"/>
         </operation>
         <operation name="GetResourceProperty">
             <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest"
