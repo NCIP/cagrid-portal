@@ -32,8 +32,10 @@ public class NamespacesJTree extends JTree {
 	private void initialize() {
 		if (namespaces.getNamespace() != null) {
 			for (int i = 0; i < namespaces.getNamespace().length; i++) {
-				NamespaceTypeTreeNode newNode = new NamespaceTypeTreeNode(namespaces.getNamespace(i), model);
-				model.insertNodeInto(newNode, root, root.getChildCount());
+				if (!checkTypeExists(namespaces.getNamespace(i))) {
+					NamespaceTypeTreeNode newNode = new NamespaceTypeTreeNode(namespaces.getNamespace(i), model);
+					model.insertNodeInto(newNode, root, root.getChildCount());
+				}
 			}
 		}
 		expandAll(true);
@@ -145,17 +147,17 @@ public class NamespacesJTree extends JTree {
 			tree.collapsePath(parent);
 		}
 	}
-	
 
-        protected void setExpandedState(TreePath path, boolean state) {
-            // Ignore all collapse requests; collapse events will not be fired
-            if (path.getLastPathComponent()!=root) {
-                super.setExpandedState(path, state);
-            } else if(state && path.getLastPathComponent()==root){
-            	super.setExpandedState(path, state);
-            }
-        }
-	
+
+	protected void setExpandedState(TreePath path, boolean state) {
+		// Ignore all collapse requests; collapse events will not be fired
+		if (path.getLastPathComponent() != root) {
+			super.setExpandedState(path, state);
+		} else if (state && path.getLastPathComponent() == root) {
+			super.setExpandedState(path, state);
+		}
+	}
+
 
 	private boolean checkTypeExists(NamespaceType type) {
 		TreeNode root = (TreeNode) this.getModel().getRoot();
@@ -170,9 +172,9 @@ public class NamespacesJTree extends JTree {
 		if (node.getChildCount() >= 0) {
 			for (java.util.Enumeration e = node.children(); e.hasMoreElements();) {
 				TreeNode n = (TreeNode) e.nextElement();
-				NamespaceTypeTreeNode nsNode = (NamespaceTypeTreeNode)n;
-				NamespaceType nsType = (NamespaceType)nsNode.getUserObject();
-				if(nsType.getNamespace().equals(type.getNamespace())){
+				NamespaceTypeTreeNode nsNode = (NamespaceTypeTreeNode) n;
+				NamespaceType nsType = (NamespaceType) nsNode.getUserObject();
+				if (nsType.getNamespace().equals(type.getNamespace())) {
 					return true;
 				}
 			}

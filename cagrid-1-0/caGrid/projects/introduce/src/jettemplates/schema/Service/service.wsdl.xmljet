@@ -139,11 +139,11 @@
 								if(outputParam.isIsArray()){
 				      		 		if(schemaInformation.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)){
 									%>
-										<element name="response" type="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType() %>" minOccurs="1" maxOccurs="unbounded" />
+										<element name="response" type="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType() %>" minOccurs="0" maxOccurs="unbounded" />
 			                  		<%
 									} else {
 									%>
-										<element ref="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType() %>" minOccurs="1" maxOccurs="unbounded" />
+										<element ref="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType() %>" minOccurs="0" maxOccurs="unbounded" />
 			                  		<%
                   				 	}
 				     
