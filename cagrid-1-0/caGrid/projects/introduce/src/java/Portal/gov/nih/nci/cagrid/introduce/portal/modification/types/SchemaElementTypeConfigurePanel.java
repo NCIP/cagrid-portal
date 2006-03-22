@@ -5,10 +5,15 @@ import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 
 public class SchemaElementTypeConfigurePanel extends JPanel {
@@ -96,13 +101,23 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 		if (typeText == null) {
 			typeText = new JTextField();
 			typeText.setEditable(false);
-			typeText.addKeyListener(new java.awt.event.KeyAdapter() {
-				public void keyTyped(java.awt.event.KeyEvent e) {
+			typeText.getDocument().addDocumentListener(new DocumentListener() {
+				public void changedUpdate(DocumentEvent e) {
 					if (type != null) {
 						type.setType(getTypeText().getText());
 					}
 				}
-			});
+				public void removeUpdate(DocumentEvent e) {
+					if (type != null) {
+						type.setType(getTypeText().getText());
+					}
+				}
+				public void insertUpdate(DocumentEvent e) {
+					if (type != null) {
+						type.setType(getTypeText().getText());
+					}
+				}
+				});
 		}
 		return typeText;
 	}
@@ -116,13 +131,23 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 	private JTextField getClassNameText() {
 		if (classNameText == null) {
 			classNameText = new JTextField();
-			classNameText.addKeyListener(new java.awt.event.KeyAdapter() {
-				public void keyTyped(java.awt.event.KeyEvent e) {
+			classNameText.getDocument().addDocumentListener(new DocumentListener() {
+				public void changedUpdate(DocumentEvent e) {
 					if (type != null) {
 						type.setClassName(getClassNameText().getText());
 					}
 				}
-			});
+				public void removeUpdate(DocumentEvent e) {
+					if (type != null) {
+						type.setClassName(getClassNameText().getText());
+					}
+				}
+				public void insertUpdate(DocumentEvent e) {
+					if (type != null) {
+						type.setClassName(getClassNameText().getText());
+					}
+				}
+				});
 		}
 		return classNameText;
 	}

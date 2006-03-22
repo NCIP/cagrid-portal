@@ -24,7 +24,6 @@ public class NamespacesJTree extends JTree {
 		this.namespaces = namespaces;
 		setModel(model);
 		setCellRenderer(new NamespacesTreeRenderer());
-		model.getPathToRoot(root);
 		initialize();
 	}
 
@@ -42,6 +41,7 @@ public class NamespacesJTree extends JTree {
 	public void addNode(NamespaceType type) {
 		NamespaceTypeTreeNode newNode = new NamespaceTypeTreeNode(type, model);
 		model.insertNodeInto(newNode, root, root.getChildCount());
+		expandPath(new TreePath(model.getPathToRoot(newNode)));
 		// keep namespacestype consistant
 		int currentLength = 0;
 		if (namespaces.getNamespace() != null) {

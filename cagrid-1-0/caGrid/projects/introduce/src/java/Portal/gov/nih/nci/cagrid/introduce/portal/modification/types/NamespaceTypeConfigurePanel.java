@@ -8,6 +8,8 @@ import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 public class NamespaceTypeConfigurePanel extends JPanel{
 
@@ -101,13 +103,23 @@ public class NamespaceTypeConfigurePanel extends JPanel{
 		if (namespaceText == null) {
 			namespaceText = new JTextField();
 			namespaceText.setEditable(false);
-			namespaceText.addKeyListener(new java.awt.event.KeyAdapter() {
-				public void keyTyped(java.awt.event.KeyEvent e) {
-					if(type!=null){
+			namespaceText.getDocument().addDocumentListener(new DocumentListener() {
+				public void changedUpdate(DocumentEvent e) {
+					if (type != null) {
 						type.setNamespace(getNamespaceText().getText());
 					}
 				}
-			});
+				public void removeUpdate(DocumentEvent e) {
+					if (type != null) {
+						type.setNamespace(getNamespaceText().getText());
+					}
+				}
+				public void insertUpdate(DocumentEvent e) {
+					if (type != null) {
+						type.setNamespace(getNamespaceText().getText());
+					}
+				}
+				});
 		}
 		return namespaceText;
 	}
@@ -120,13 +132,23 @@ public class NamespaceTypeConfigurePanel extends JPanel{
 	private JTextField getPackageNameText() {
 		if (packageNameText == null) {
 			packageNameText = new JTextField();
-			packageNameText.addKeyListener(new java.awt.event.KeyAdapter() {
-				public void keyTyped(java.awt.event.KeyEvent e) {
-					if(type!=null){
+			packageNameText.getDocument().addDocumentListener(new DocumentListener() {
+				public void changedUpdate(DocumentEvent e) {
+					if (type != null) {
 						type.setPackageName(getPackageNameText().getText());
 					}
 				}
-			});
+				public void removeUpdate(DocumentEvent e) {
+					if (type != null) {
+						type.setPackageName(getPackageNameText().getText());
+					}
+				}
+				public void insertUpdate(DocumentEvent e) {
+					if (type != null) {
+						type.setPackageName(getPackageNameText().getText());
+					}
+				}
+				});
 		}
 		return packageNameText;
 	}
@@ -139,13 +161,23 @@ public class NamespaceTypeConfigurePanel extends JPanel{
 	private JTextField getLocationText() {
 		if (locationText == null) {
 			locationText = new JTextField();
-			locationText.addKeyListener(new java.awt.event.KeyAdapter() {
-				public void keyTyped(java.awt.event.KeyEvent e) {
-					if(type!=null){
+			locationText.getDocument().addDocumentListener(new DocumentListener() {
+				public void changedUpdate(DocumentEvent e) {
+					if (type != null) {
 						type.setLocation(getLocationText().getText());
 					}
 				}
-			});
+				public void removeUpdate(DocumentEvent e) {
+					if (type != null) {
+						type.setLocation(getLocationText().getText());
+					}
+				}
+				public void insertUpdate(DocumentEvent e) {
+					if (type != null) {
+						type.setLocation(getLocationText().getText());
+					}
+				}
+				});
 		}
 		return locationText;
 	}
