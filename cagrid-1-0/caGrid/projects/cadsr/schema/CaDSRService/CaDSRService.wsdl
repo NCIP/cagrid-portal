@@ -23,11 +23,11 @@
     <types>
         <schema targetNamespace="http://cadsr.cagrid.nci.nih.gov/CaDSRService"
             xmlns:tns="http://cadsr.cagrid.nci.nih.gov/CaDSRService"
-			xmlns:umla="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" 
+			xmlns:ns0="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" 
 			
-			xmlns:comm="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" 
+			xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" 
 			
-            xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd">
+            xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
 			<import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd"/>
 		
 			<import namespace="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" schemaLocation="./3.0_gov.nih.nci.cadsr.umlproject.domain.xsd"/>
@@ -48,7 +48,7 @@
 					<complexType>
 						<sequence>
           		  
-										<element ref="umla:Project" minOccurs="1" maxOccurs="unbounded" />
+										<element ref="ns0:Project" minOccurs="1" maxOccurs="unbounded" />
 			                  		
 						</sequence>
 					</complexType>
@@ -68,7 +68,7 @@
 					<complexType>
 						<sequence>
           		  
-										<element ref="umla:Project" minOccurs="1" maxOccurs="unbounded" />
+										<element ref="ns0:Project" minOccurs="1" maxOccurs="unbounded" />
 			                  		
 						</sequence>
 					</complexType>
@@ -81,7 +81,7 @@
 							<element name="project">
 	      		  				<complexType>
 									<sequence>
-										<element ref="umla:Project" minOccurs="1" maxOccurs="1" />
+										<element ref="ns0:Project" minOccurs="1" maxOccurs="1" />
                   				 	</sequence>
 	      			        	</complexType>
 	      			        </element>
@@ -94,7 +94,7 @@
 					<complexType>
 						<sequence>
           		  
-										<element ref="umla:UMLPackageMetadata" minOccurs="1" maxOccurs="unbounded" />
+										<element ref="ns0:UMLPackageMetadata" minOccurs="1" maxOccurs="unbounded" />
 			                  		
 						</sequence>
 					</complexType>
@@ -107,7 +107,7 @@
 							<element name="project">
 	      		  				<complexType>
 									<sequence>
-										<element ref="umla:Project" minOccurs="1" maxOccurs="1" />
+										<element ref="ns0:Project" minOccurs="1" maxOccurs="1" />
                   				 	</sequence>
 	      			        	</complexType>
 	      			        </element>
@@ -120,7 +120,7 @@
 					<complexType>
 						<sequence>
           		  
-										<element ref="umla:UMLClassMetadata" minOccurs="1" maxOccurs="unbounded" />
+										<element ref="ns0:UMLClassMetadata" minOccurs="1" maxOccurs="unbounded" />
 			                  		
 						</sequence>
 					</complexType>
@@ -133,7 +133,7 @@
 							<element name="pkg">
 	      		  				<complexType>
 									<sequence>
-										<element ref="umla:UMLPackageMetadata" minOccurs="1" maxOccurs="1" />
+										<element ref="ns0:UMLPackageMetadata" minOccurs="1" maxOccurs="1" />
                   				 	</sequence>
 	      			        	</complexType>
 	      			        </element>
@@ -146,7 +146,7 @@
 					<complexType>
 						<sequence>
           		  
-										<element ref="umla:UMLClassMetadata" minOccurs="1" maxOccurs="unbounded" />
+										<element ref="ns0:UMLClassMetadata" minOccurs="1" maxOccurs="unbounded" />
 			                  		
 						</sequence>
 					</complexType>
@@ -159,7 +159,7 @@
 							<element name="project">
 	      		  				<complexType>
 									<sequence>
-										<element ref="umla:Project" minOccurs="1" maxOccurs="1" />
+										<element ref="ns0:Project" minOccurs="1" maxOccurs="1" />
                   				 	</sequence>
 	      			        	</complexType>
 	      			        </element>
@@ -185,7 +185,7 @@
 							<element name="packages">
 	      		  				<complexType>
 									<sequence>
-										<element ref="umla:UMLPackageMetadata" minOccurs="1" maxOccurs="unbounded" />
+										<element ref="ns0:UMLPackageMetadata" minOccurs="1" maxOccurs="unbounded" />
                   				 	</sequence>
 	      			        	</complexType>
 	      			        </element>
@@ -214,7 +214,7 @@
 							<element name="classes">
 	      		  				<complexType>
 									<sequence>
-										<element ref="umla:UMLClassMetadata" minOccurs="1" maxOccurs="unbounded" />
+										<element ref="ns0:UMLClassMetadata" minOccurs="1" maxOccurs="unbounded" />
                   				 	</sequence>
 	      			        	</complexType>
 	      			        </element>
@@ -243,7 +243,7 @@
 							<element name="clazz">
 	      		  				<complexType>
 									<sequence>
-										<element ref="umla:UMLClassMetadata" minOccurs="1" maxOccurs="1" />
+										<element ref="ns0:UMLClassMetadata" minOccurs="1" maxOccurs="1" />
                   				 	</sequence>
 	      			        	</complexType>
 	      			        </element>
@@ -256,7 +256,7 @@
 					<complexType>
 						<sequence>
           		  
-										<element ref="umla:UMLAttributeMetadata" minOccurs="1" maxOccurs="unbounded" />
+										<element ref="ns0:UMLAttributeMetadata" minOccurs="1" maxOccurs="unbounded" />
 			                  		
 						</sequence>
 					</complexType>
@@ -264,7 +264,7 @@
             <element name="CaDSRServiceResourceProperties">
                 <complexType>
                     <sequence>
-						<element ref="comm:CommonServiceMetadata"/></sequence>
+						<element ref="ns1:CommonServiceMetadata"/></sequence>
                 </complexType>
             </element>
         </schema>
