@@ -26,6 +26,12 @@
 	<property name="mappings.file" value="${basedir}/namespace2package.mappings" />
 	<property name="jar.name" value="${gar.filename}.jar" />
 	<property name="stubs.jar.name" value="${gar.filename}_stubs.jar" />
+
+	<property name="mako.collection" value="RProteomicsDatabase" />
+	<property name="mako.host" value="localhost" />
+	<property name="rproteomics.binary.data.dir" location="c:/RProteomicsb4/data" />
+	<property name="rproteomics.schema.dir" location="${schema.dir}/RProteomics" />
+	<property name="rproteomics.data.project" value="WorkflowDemo"/>
 	
 	<!-- Important test directories and files -->
 	<property name="test.dir" value="test" />
@@ -375,6 +381,120 @@
 		<delete dir="tmp" />
 		<delete dir="${build.dir}" />
 		<delete file="${gar.name}" />
+	</target>
+	
+	<!-- run mako -->
+	<property name="mako" location="mako"/>
+	<target name="runMako">
+		<property name="mako.config" location="${mako}/conf/localhost-mako-config.xml"/>
+		<property name="mako.logging.properties" location="${mako}/logging.properties"/>
+
+		<echo message="${mako}"/>
+		<java fork="true" classname="org.projectmobius.services.mako.Mako">
+			<jvmarg value="-server"/>
+			<jvmarg value="-Xmx1000M"/>
+			<jvmarg value="-Djava.util.logging.config.file=${mako.logging.properties}"/>
+			<classpath>
+				<!--
+				<fileset dir="${mako}/build/jars">
+					<include name="*.jar"/>
+				</fileset>
+				-->
+				<fileset dir="${mako}/lib">
+					<include name="*.jar"/>
+				</fileset>
+			</classpath>
+			<arg value="${mako.config}"/>
+		</java>
+	</target>
+	
+	<target name="initMako">
+		<!-- create collection -->
+		<java fork="true" classname="edu.duke.cabig.rproteomics.utils.CollectionSubmitter">
+			<jvmarg value="-Xmx512M"/>
+			<classpath>
+				<fileset dir="lib">
+					<include name="*.jar"/>
+				</fileset>
+				<fileset dir="${mako}/lib">
+					<include name="*.jar"/>
+				</fileset>
+			</classpath>
+			<arg value="-collection"/>
+			<arg value="RProteomicsDatabase"/>
+			<arg value="-hostName"/>
+			<arg value="localhost"/>
+		</java>
+		<!-- add schema -->
+		<java fork="true" classname="edu.duke.cabig.rproteomics.utils.SchemaSubmitter">
+			<jvmarg value="-Xmx512M"/>
+			<classpath>
+				<fileset dir="lib">
+					<include name="*.jar"/>
+				</fileset>
+				<fileset dir="${mako}/lib">
+					<include name="*.jar"/>
+				</fileset>
+			</classpath>
+			<arg value="-collection"/>
+			<arg value="RProteomicsDatabase"/>
+			<arg value="-hostName"/>
+			<arg value="localhost"/>
+			<arg value="-schemadir"/>
+			<arg value="${rproteomics.schema.dir}"/>
+		</java>
+		<!-- submit test data -->
+		<java fork="true" classname="edu.duke.cabig.rproteomics.utils.XMLSubmitter">
+			<jvmarg value="-Xmx512M"/>
+			<classpath>
+				<fileset dir="lib">
+					<include name="*.jar"/>
+				</fileset>
+				<fileset dir="${mako}/lib">
+					<include name="*.jar"/>
+				</fileset>
+			</classpath>
+			<arg value="-collection"/>
+			<arg value="RProteomicsDatabase"/>
+			<arg value="-hostName"/>
+			<arg value="localhost"/>
+			<arg value="-binaryDataDir"/>
+			<arg value="${rproteomics.binary.data.dir}"/>
+			<arg value="-xmldir"/>
+			<arg value="data"/>
+			<arg value="-datatype"/>
+			<arg value="scanfeatures"/>
+			<arg value="-project"/>
+			<arg value="${rproteomics.data.project}"/>
+			<arg value="-processingStep"/>
+			<arg value="load"/>
+		</java>
+	</target>
+	
+	<target name="testService" depends="checkGlobus">
+		<!-- create collection -->
+		<property name="rproteomics.test.query" location="queries/scanFeatures_query3.xml"/>
+		<java fork="true" classname="gov.nih.nci.cagrid.rproteomics.client.RPDataClient">
+			<jvmarg value="-Xmx512M"/>
+			<classpath>
+				<fileset dir="lib">
+					<include name="*.jar"/>
+				</fileset>
+				<fileset dir="build/lib">
+					<include name="*.jar"/>
+				</fileset>
+				<fileset dir="${ext.globus.dir}/lib">
+					<include name="*.jar" />
+					<exclude name="${stubs.jar.name}" />
+					<exclude name="${jar.name}" />
+				</fileset>
+			</classpath>
+			<arg value="-gsh"/>
+			<arg value="http://localhost:8080/wsrf/services/cagrid/RPData"/>
+			<arg value="-query"/>
+			<arg value="${rproteomics.test.query}"/>
+			<!-- <arg value="-printXml"/> -->
+		</java>
 	</target>
 
 	<!-- Default target "all" builds and jars everything, including test....does not make a GAR-->
