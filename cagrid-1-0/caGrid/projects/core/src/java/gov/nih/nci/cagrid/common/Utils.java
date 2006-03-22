@@ -32,10 +32,16 @@ public class Utils {
 					&& (af.getFaultString().equals("javax.xml.rpc.soap.SOAPFaultException"))) {
 					mess = "An error occurred establishing a secure communication channel.  The \n"
 						+ "problem may be that the client's credentials are NOT trusted by the server.";
-				} else {
+				}else {
+			
 					mess = af.getFaultString();
 				}
 
+			}else if ((af.getFaultString() != null)
+				&& (af.getFaultString().equals("java.io.EOFException"))) {
+				mess = "An error occurred in communicating with the service.  If using\n"+
+				   "credentials to authenticate to the service, the problem may be\n"+
+	               "that the credentials being used are not trusted by the server."; 
 			} else {
 				mess = af.getFaultString();
 			}

@@ -47,7 +47,7 @@
 			<ca-password value="admin"/>
 			<auto-create enabled="true">
 				<time-valid years="5" months="0" days="0" hours="0" minutes="0" seconds="0"/>
-				<ca-subject dn="O=OSU,OU=BMI,OU=caGrid,OU=Dorian[localhost],CN=caGrid Dorian CA"/>
+				<ca-subject dn="O=OSU,OU=BMI,OU=caGrid,OU=Dorian,OU=localhost,CN=caGrid Dorian CA"/>
 			</auto-create>
 			<auto-renewal enabled="true" years="5" months="0" days="0" hours="0" minutes="0"
 				seconds="0"/>
