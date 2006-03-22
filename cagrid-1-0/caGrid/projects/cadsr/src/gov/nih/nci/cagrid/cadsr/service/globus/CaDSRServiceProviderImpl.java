@@ -70,6 +70,51 @@ public class CaDSRServiceProviderImpl {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	public gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsResponse findAllProjects(gov.nih.nci.cagrid.cadsr.stubs.FindAllProjects params) throws RemoteException {
 		gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsResponse();
 		boxedResult.setProject(impl.findAllProjects());
