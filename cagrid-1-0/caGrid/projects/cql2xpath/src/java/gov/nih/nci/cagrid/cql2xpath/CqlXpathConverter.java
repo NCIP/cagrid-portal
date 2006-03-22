@@ -46,9 +46,9 @@ public class CqlXpathConverter
 		Objects objs = target.getObjects();
 		Group[] groups = target.getGroup();
 		Group group = null;
-		if (groups.length > 1) {
+		if (groups != null && groups.length > 1) {
 			throw new IllegalArgumentException("more than 1 group under target not supported");
-		} else if (groups.length > 0) {
+		} else if (groups != null && groups.length > 0) {
 			group = groups[0];
 		}
 		String childXpath = toXpath(new CqlNode[] { rootNode }, objs, group);
@@ -100,24 +100,30 @@ public class CqlXpathConverter
 			for (int i = 0; i < props.length; i++) {
 				Property prop = props[i];
 				
-				if (xpath.length() > 0) xpath.append(" and ");
 				CqlNode.CqlProperty cqlProp = child.findProperty(prop.getName());
 				if (cqlProp == null) {
 					throw new IllegalArgumentException("property " + prop.getName() + " not found in CqlNode map for object " + objs.getName());
 				}
 				
-				xpath.append(childXpath);
-				if (cqlProp.xmlPath != null) {
-					xpath.append("/");
-					xpath.append(cqlProp.xmlPath);
+				// mako hack
+				StringBuffer propXpath = new StringBuffer();
+				if (! childXpath.equals(".")) {
+					propXpath.append(childXpath);
 				}
-				xpath.append("/");
-				xpath.append(cqlProp.xmlName);
-				xpath.append("/text()");
-				xpath.append(toXpath(prop.getPredicate()));
-				xpath.append("\"");
-				xpath.append(prop.getValue());
-				xpath.append("\"");
+				if (cqlProp.xmlPath != null) {
+					if (propXpath.length() > 0) propXpath.append("/");
+					propXpath.append(cqlProp.xmlPath);
+				}
+				if (propXpath.length() > 0) propXpath.append("/");
+				propXpath.append(cqlProp.xmlName);
+				propXpath.append("/text()");
+				propXpath.append(toXpath(prop.getPredicate()));
+				propXpath.append("\"");
+				propXpath.append(prop.getValue());
+				propXpath.append("\"");
+
+				if (xpath.length() > 0) xpath.append(" and ");
+				xpath.append(propXpath);
 			}
 			
 			// recurse

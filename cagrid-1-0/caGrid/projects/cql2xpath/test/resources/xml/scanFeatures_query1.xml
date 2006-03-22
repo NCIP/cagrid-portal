@@ -4,7 +4,7 @@
 ..\schema\RPData\1_gov.nih.nci.cagrid.CQL.xsd">
 	<Target name="edu.duke.cabig.scanFeatures.ScanFeatures">
 		<Objects name="edu.duke.cabig.scanFeatures.ScanFeatures">
-			<Property name="lsid" predicate="equal" value="url:lsid:edu.duke.cabig.rproteomics:scanFeatures:1234"/>
+			<Property name="lsid" predicate="equal" value="urn:lsid:rproteomics.cabig.duhs.duke.edu:scanfeatures:773b780a-c8f5-481b-a468-061ce06d7e5d"/>
 		</Objects>
 		<Group>
 			<Objects name="edu.duke.cabig.scanFeatures.Attributes">
