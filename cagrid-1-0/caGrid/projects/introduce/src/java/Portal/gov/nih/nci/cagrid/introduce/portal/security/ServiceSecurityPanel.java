@@ -1160,6 +1160,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 				PortalUtils.showErrorMessage("Invalid proxy specified!!!");
 			}
 			syncServiceCredentials();
+			synchRunAsMode();
 		}
 
 	}
@@ -1176,6 +1177,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 				PortalUtils.showErrorMessage("Invalid certificate specified!!!");
 			}
 			syncServiceCredentials();
+			synchRunAsMode();
 		}
 	}
 
