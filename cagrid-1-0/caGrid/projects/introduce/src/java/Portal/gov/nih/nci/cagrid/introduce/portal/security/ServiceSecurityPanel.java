@@ -9,12 +9,12 @@ import gov.nih.nci.cagrid.introduce.beans.security.AnonymousCommunication;
 import gov.nih.nci.cagrid.introduce.beans.security.ClientAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.ClientCommunication;
 import gov.nih.nci.cagrid.introduce.beans.security.DelegationMode;
-import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurityType;
 import gov.nih.nci.cagrid.introduce.beans.security.NoAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.ProxyCredential;
 import gov.nih.nci.cagrid.introduce.beans.security.RunAsMode;
 import gov.nih.nci.cagrid.introduce.beans.security.SecureConversation;
 import gov.nih.nci.cagrid.introduce.beans.security.SecureMessage;
+import gov.nih.nci.cagrid.introduce.beans.security.SecuritySetting;
 import gov.nih.nci.cagrid.introduce.beans.security.SelfAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceCredential;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
@@ -263,7 +263,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		
 		if (customButton.isSelected()) {
 			ServiceSecurity ss = new ServiceSecurity();
-			ss.setMethodSecuritySetting(MethodSecurityType.Custom);
+			ss.setSecuritySetting(SecuritySetting.Custom);
 			if (!isSecure()) {
 				throw new Exception("You must select at least one transport mechanism!!!");
 			}
@@ -333,10 +333,10 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
 
 	public void setServiceSecurity(ServiceSecurity ss) throws Exception {
-		if (ss != null && ss.getMethodSecuritySetting()!=null) {
-			if (ss.getMethodSecuritySetting().equals(MethodSecurityType.None)) {
+		if (ss != null && ss.getSecuritySetting()!=null) {
+			if (ss.getSecuritySetting().equals(SecuritySetting.None)) {
 				noneButton.setSelected(true);
-			} else if (ss.getMethodSecuritySetting().equals(MethodSecurityType.Custom)) {
+			} else if (ss.getSecuritySetting().equals(SecuritySetting.Custom)) {
 				customButton.setSelected(true);
 
 				TransportLevelSecurity tls = ss.getTransportLevelSecurity();

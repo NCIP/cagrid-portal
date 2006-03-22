@@ -1,16 +1,17 @@
 package gov.nih.nci.cagrid.introduce.portal.security;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.beans.security.AnonymousCommunication;
 import gov.nih.nci.cagrid.introduce.beans.security.ClientAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.ClientCommunication;
 import gov.nih.nci.cagrid.introduce.beans.security.DelegationMode;
 import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurity;
-import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurityType;
 import gov.nih.nci.cagrid.introduce.beans.security.NoAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.ProxyCredential;
 import gov.nih.nci.cagrid.introduce.beans.security.RunAsMode;
 import gov.nih.nci.cagrid.introduce.beans.security.SecureConversation;
 import gov.nih.nci.cagrid.introduce.beans.security.SecureMessage;
+import gov.nih.nci.cagrid.introduce.beans.security.SecuritySetting;
 import gov.nih.nci.cagrid.introduce.beans.security.SelfAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceCredential;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
@@ -238,6 +239,34 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			return false;
 		}
 	}
+	
+	private boolean equals(ServiceSecurity ss, MethodSecurity ms) {
+		if ((ss == null) && (ms == null)) {
+			return true;
+		} else if ((ss != null) && (ms == null)) {
+			return false;
+		} else if ((ss == null) && (ms != null)) {
+			return false;
+		} else if (!Utils.equals(ss.getSecuritySetting(), ms.getSecuritySetting())) {
+			return false;
+		} else if (!Utils.equals(ss.getAnonymousClients(), ms.getAnonymousClients())) {
+			return false;
+		} else if (!Utils.equals(ss.getClientAuthorization(), ms.getClientAuthorization())) {
+			return false;
+		} else if (!Utils.equals(ss.getClientCommunication(), ms.getClientCommunication())) {
+			return false;
+		} else if (!Utils.equals(ss.getDelegationMode(), ms.getDelegationMode())) {
+			return false;
+		} else if (!Utils.equals(ss.getSecureConversation(), ms.getSecureConversation())) {
+			return false;
+		} else if (!Utils.equals(ss.getSecureMessage(), ms.getSecureMessage())) {
+			return false;
+		} else if (!Utils.equals(ss.getTransportLevelSecurity(), ms.getTransportLevelSecurity())) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 
 
 	public MethodSecurity getMethodSecurity() throws Exception {
@@ -246,10 +275,10 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			if(this.serviceSecurity == null){
 				return null;
 			}else{
-				ms.setMethodSecuritySetting(MethodSecurityType.None);
+				ms.setSecuritySetting(SecuritySetting.None);
 			}
 		} else if (customButton.isSelected()) {
-			ms.setMethodSecuritySetting(MethodSecurityType.Custom);
+			ms.setSecuritySetting(SecuritySetting.Custom);
 			if (!isSecure()) {
 				throw new Exception("You must select at least one transport mechanism!!!");
 			}
@@ -299,15 +328,18 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			ms.setClientAuthorization(cli);
 
 		}
+		if(this.equals(serviceSecurity,ms)){
+			return null;
+		}
 		return ms;
 	}
 
 
 	public void setMethodSecurity(MethodSecurity ms) {
 		if (ms != null) {
-			if (ms.getMethodSecuritySetting().equals(MethodSecurityType.None)) {
+			if (ms.getSecuritySetting().equals(SecuritySetting.None)) {
 				noneButton.setSelected(true);
-			} else if (ms.getMethodSecuritySetting().equals(MethodSecurityType.Custom)) {
+			} else if (ms.getSecuritySetting().equals(SecuritySetting.Custom)) {
 				customButton.setSelected(true);
 
 				TransportLevelSecurity tls = ms.getTransportLevelSecurity();
@@ -365,6 +397,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 				}
 			}
 		}
+		synchronize();
 
 	}
 

@@ -273,7 +273,6 @@ public class ModificationViewer extends GridPortalComponent {
 			}
 			loadServiceProps();
 
-			
 			info = new ServiceInformation(introService, serviceProperties, methodsDirectory);
 			this.setSize(500, 400);
 			this.setContentPane(getJContentPane());
@@ -753,20 +752,20 @@ public class ModificationViewer extends GridPortalComponent {
 
 
 	private void resetMethodSecurityIfServiceSecurityChanged() throws Exception {
-		boolean update= false;
+		boolean update = false;
 		ServiceSecurity service = introService.getServiceSecurity();
 		ServiceSecurity curr = securityPanel.getServiceSecurity();
-		//This should be cleaned up some
-		if((service==null)&&(curr==null)){
+		// This should be cleaned up some
+		if ((service == null) && (curr == null)) {
 			update = false;
-		}else if((service!=null)&&(curr==null)){
-			update =true;
-		}else if((service==null)&&(curr!=null)){
+		} else if ((service != null) && (curr == null)) {
 			update = true;
-		}else if (!service.equals(curr)) {
+		} else if ((service == null) && (curr != null)) {
+			update = true;
+		} else if (!service.equals(curr)) {
 			update = true;
 		}
-		if(update){
+		if (update) {
 			MethodsType mt = this.introService.getMethods();
 			if (mt != null) {
 				introService.setServiceSecurity(curr);
@@ -781,6 +780,7 @@ public class ModificationViewer extends GridPortalComponent {
 			}
 		}
 	}
+
 
 
 	public void performMethodModify() {

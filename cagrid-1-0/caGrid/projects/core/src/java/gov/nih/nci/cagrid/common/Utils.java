@@ -32,22 +32,21 @@ public class Utils {
 					&& (af.getFaultString().equals("javax.xml.rpc.soap.SOAPFaultException"))) {
 					mess = "An error occurred establishing a secure communication channel.  The \n"
 						+ "problem may be that the client's credentials are NOT trusted by the server.";
-				}else {
-			
+				} else {
+
 					mess = af.getFaultString();
 				}
-				
-			}else if ((af.getFaultString() != null)
-				&& (af.getFaultString().equals("java.io.EOFException"))) {
-				mess = "An error occurred in communicating with the service.  If using\n"+
-				   "credentials to authenticate to the service, the problem may be\n"+
-	               "that the credentials being used are not trusted by the server."; 
-			}else if ((af.getFaultString() != null)
+
+			} else if ((af.getFaultString() != null) && (af.getFaultString().equals("java.io.EOFException"))) {
+				mess = "An error occurred in communicating with the service.  If using\n"
+					+ "credentials to authenticate to the service, the problem may be\n"
+					+ "that the credentials being used are not trusted by the server.";
+			} else if ((af.getFaultString() != null)
 				&& (af.getFaultString().equals("java.net.SocketException: Connection reset"))) {
-				mess = "An error occurred in communicating with the service.  If using\n"+
-				   "credentials to authenticate to the service, the problem may be\n"+
-	               "that the credentials being used are not trusted by the server."; 
-			}else {
+				mess = "An error occurred in communicating with the service.  If using\n"
+					+ "credentials to authenticate to the service, the problem may be\n"
+					+ "that the credentials being used are not trusted by the server.";
+			} else {
 				mess = af.getFaultString();
 			}
 		}
@@ -160,6 +159,21 @@ public class Utils {
 		FileWriter fw = new FileWriter(new File(fileName));
 		fw.write(string.toString());
 		fw.close();
+	}
+
+
+	public static boolean equals(Object o1, Object o2) {
+		if ((o1 == null) && (o2 == null)) {
+			return true;
+		} else if ((o1 != null) && (o2 == null)) {
+			return false;
+		} else if ((o1 == null) && (o2 != null)) {
+			return false;
+		} else if (o1.equals(o2)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

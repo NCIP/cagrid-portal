@@ -5,11 +5,11 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.security.CommunicationMethod;
 import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurity;
-import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurityType;
 import gov.nih.nci.cagrid.introduce.beans.security.ProxyCredential;
 import gov.nih.nci.cagrid.introduce.beans.security.RunAsMode;
 import gov.nih.nci.cagrid.introduce.beans.security.SecureConversation;
 import gov.nih.nci.cagrid.introduce.beans.security.SecureMessage;
+import gov.nih.nci.cagrid.introduce.beans.security.SecuritySetting;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceCredential;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
@@ -78,8 +78,8 @@ public class SecurityDescriptor {
 
 			}
 
-			if ((ss.getMethodSecuritySetting() != null)
-				&& (ss.getMethodSecuritySetting().equals(MethodSecurityType.Custom))) {
+			if ((ss.getSecuritySetting() != null)
+				&& (ss.getSecuritySetting().equals(SecuritySetting.Custom))) {
 				xml.append("<auth-method>");
 				xml.append(getSecureConversationSettings(ss.getSecureConversation()));
 				xml.append(getSecureMessageSettings(ss.getSecureMessage()));
@@ -106,8 +106,8 @@ public class SecurityDescriptor {
 			StringBuffer xml = new StringBuffer();
 			if (determineWriteMethod(service, ms)) {
 				xml.append("<method name=\"" + method.getName() + "\">");
-				if ((ms.getMethodSecuritySetting() != null)
-					&& (ms.getMethodSecuritySetting().equals(MethodSecurityType.Custom))) {
+				if ((ms.getSecuritySetting() != null)
+					&& (ms.getSecuritySetting().equals(SecuritySetting.Custom))) {
 					xml.append("<auth-method>");
 					xml.append(getSecureConversationSettings(ms.getSecureConversation()));
 					xml.append(getSecureMessageSettings(ms.getSecureMessage()));
@@ -215,7 +215,7 @@ public class SecurityDescriptor {
 
 		if (service != null) {
 
-			if (!objectEquals(service.getMethodSecuritySetting(), method.getMethodSecuritySetting())) {
+			if (!objectEquals(service.getSecuritySetting(), method.getSecuritySetting())) {
 				return true;
 			}
 			if (communicationDiffers(service, method)) {

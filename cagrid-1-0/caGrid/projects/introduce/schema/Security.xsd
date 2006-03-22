@@ -4,30 +4,30 @@
 	
 	<xs:complexType name="ServiceSecurity">
 		<xs:sequence>
-			<xs:element name="MethodSecuritySetting" minOccurs="1" maxOccurs="1" type="MethodSecurityType"/>
+			<xs:element name="SecuritySetting" minOccurs="1" maxOccurs="1" type="SecuritySetting"/>
 			<xs:element name="TransportLevelSecurity" minOccurs="0" maxOccurs="1" type="TransportLevelSecurity"/>
 			<xs:element name="SecureConversation" minOccurs="0" maxOccurs="1" type="SecureConversation"/>
 			<xs:element name="SecureMessage" minOccurs="0" maxOccurs="1" type="SecureMessage"/>
 			<xs:element name="ClientCommunication" minOccurs="0" maxOccurs="1" type="ClientCommunication"/>
 			<xs:element name="ClientAuthorization" minOccurs="0" maxOccurs="1" type="ClientAuthorization"/>
 			<xs:element name="RunAsMode" minOccurs="0" maxOccurs="1" type="RunAsMode"/>
-			<xs:element name="DelegationMode" minOccurs="1" maxOccurs="1" type="DelegationMode"/>
-			<xs:element name="AnonymousClients" minOccurs="1" maxOccurs="1" type="AnonymousCommunication"/>
+			<xs:element name="DelegationMode" minOccurs="0" maxOccurs="1" type="DelegationMode"/>
+			<xs:element name="AnonymousClients" minOccurs="0" maxOccurs="1" type="AnonymousCommunication"/>
 			<xs:element name="ServiceCredentials" minOccurs="0" maxOccurs="1" type="ServiceCredential"/>
 		</xs:sequence>
 	</xs:complexType>
 	
 	<xs:complexType name="MethodSecurity">
 		<xs:sequence>
-			<xs:element name="MethodSecuritySetting" minOccurs="1" maxOccurs="1" type="MethodSecurityType"/>
+			<xs:element name="SecuritySetting" minOccurs="1" maxOccurs="1" type="SecuritySetting"/>
 			<xs:element name="TransportLevelSecurity" minOccurs="0" maxOccurs="1" type="TransportLevelSecurity"/>
 			<xs:element name="SecureConversation" minOccurs="0" maxOccurs="1" type="SecureConversation"/>
 			<xs:element name="SecureMessage" minOccurs="0" maxOccurs="1" type="SecureMessage"/>
 			<xs:element name="ClientCommunication" minOccurs="0" maxOccurs="1" type="ClientCommunication"/>
 			<xs:element name="ClientAuthorization" minOccurs="0" maxOccurs="1" type="ClientAuthorization"/>
-			<xs:element name="RunAsMode" minOccurs="1" maxOccurs="1" type="RunAsMode"/>
-			<xs:element name="DelegationMode" minOccurs="1" maxOccurs="1" type="DelegationMode"/>
-			<xs:element name="AnonymousClients" minOccurs="1" maxOccurs="1" type="AnonymousCommunication"/>
+			<xs:element name="RunAsMode" minOccurs="0" maxOccurs="1" type="RunAsMode"/>
+			<xs:element name="DelegationMode" minOccurs="0" maxOccurs="1" type="DelegationMode"/>
+			<xs:element name="AnonymousClients" minOccurs="0" maxOccurs="1" type="AnonymousCommunication"/>
 		</xs:sequence>
 	</xs:complexType>
 	
@@ -96,7 +96,7 @@
 		</xs:sequence>
 	</xs:complexType>
 	
-	<xs:simpleType name="MethodSecurityType">
+	<xs:simpleType name="SecuritySetting">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="None"/>
 			<xs:enumeration value="Custom"/>
