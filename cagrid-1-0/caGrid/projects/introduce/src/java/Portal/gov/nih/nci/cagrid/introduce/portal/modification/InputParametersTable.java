@@ -22,7 +22,7 @@ public class InputParametersTable extends JTable {
 	public static String NAMESPACE = "Namespace";
 	public static String TYPE = "Type";
 	public static String DATA1 = "DATA1";
-	
+
 	private MethodType method;
 
 
@@ -30,17 +30,12 @@ public class InputParametersTable extends JTable {
 		super();
 		this.setModel(createTableModel());
 		this.method = method;
-		// this.setColumnSelectionAllowed(true);
-		// this.setRowSelectionAllowed(true);
-		// this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		// TableColumn col = getColumnModel().getColumn(1);
-		// col.setCellEditor(new DefaultCellEditor(new JCheckBox()));
 		initialize();
 	}
 
 
 	public boolean isCellEditable(int row, int column) {
-		return false;
+		return true;
 	}
 
 
@@ -158,5 +153,9 @@ public class InputParametersTable extends JTable {
 			addColumn(DATA1);
 		}
 
+
+		public Class getColumnClass(int c) {
+			return getValueAt(0, c).getClass();
+		}
 	}
 }
