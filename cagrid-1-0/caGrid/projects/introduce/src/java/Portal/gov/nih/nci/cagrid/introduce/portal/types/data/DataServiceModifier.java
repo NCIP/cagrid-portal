@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.portal.modification;
+package gov.nih.nci.cagrid.introduce.portal.types.data;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
