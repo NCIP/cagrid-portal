@@ -407,13 +407,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 
 			synchRunAsMode();
 
-			if (isSecure()) {
-				ClientCommunication comm = (ClientCommunication) clientCommunication.getSelectedItem();
-				if (determineCommOk(comm)) {
-					// TODO: Check Service Auth
-					anonymousCommunication.setEnabled(true);
-				}
-			}
+			syncAnonymousCommunication();
 
 			if (isSecure()) {
 				clientAuth.setEnabled(true);
@@ -421,6 +415,23 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 				identityAuthorization.enablePanel();
 			}
 
+		}
+	}
+	
+	private void syncAnonymousCommunication(){
+		
+		if (isSecure()) {
+			ClientCommunication comm = (ClientCommunication) clientCommunication.getSelectedItem();
+			if (determineCommOk(comm)) {
+				// TODO: Check Service Auth
+				if(this.serviceSecurity.getServiceAuthorization()==null){
+					anonymousCommunication.setEnabled(true);
+				}else if(this.serviceSecurity.getServiceAuthorization().getNoAuthorization()!=null){
+					anonymousCommunication.setEnabled(true);
+				}else{
+					anonymousCommunication.setEnabled(false);
+				}
+			}
 		}
 	}
 
