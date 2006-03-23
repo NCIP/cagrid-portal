@@ -1,0 +1,425 @@
+package gov.nih.nci.cagrid.introduce.portal.security;
+
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
+
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.PrintWriter;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+
+public class GridMapPanel extends JPanel {
+
+	private JPanel gridMapFilePanel = null;
+
+	private JLabel jLabel = null;
+
+	private JTextField gridmapLocation = null;
+
+	private JButton browseButton = null;
+
+	private JLabel jLabel1 = null;
+
+	private JPanel tablePanel = null;
+
+	private JScrollPane jScrollPane = null;
+
+	private JTable gridmapTable = null;
+
+	private JPanel controlPanel = null;
+
+	private JPanel userAddEditPanel = null;
+
+	private JLabel jLabel2 = null;
+
+	private JTextField gridIdentity = null;
+
+	private JPanel userManagerButtonPanel = null;
+
+	private JButton addButton = null;
+
+	private JButton removeButton = null;
+	
+
+	/**
+	 * This is the default constructor
+	 */
+	public GridMapPanel(){
+		super();
+		initialize();
+	}
+	
+	public void setGridMapFile(String gridmap) throws Exception{
+		loadGridMapFile(gridmap,true);
+		this.gridmapLocation.setText(gridmap);
+	}
+
+	/**
+	 * This method initializes this
+	 * 
+	 * @return void
+	 */
+	private void initialize() {
+		GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+		gridBagConstraints21.gridx = 0;
+		gridBagConstraints21.weightx = 1.0D;
+		gridBagConstraints21.fill = java.awt.GridBagConstraints.HORIZONTAL;
+		gridBagConstraints21.gridy = 1;
+		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+		gridBagConstraints11.gridx = 0;
+		gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
+		gridBagConstraints11.fill = java.awt.GridBagConstraints.BOTH;
+		gridBagConstraints11.weightx = 1.0D;
+		gridBagConstraints11.weighty = 1.0D;
+		gridBagConstraints11.gridy = 2;
+		GridBagConstraints gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+		gridBagConstraints.weightx = 1.0D;
+		gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+		gridBagConstraints.gridy = 0;
+		this.setLayout(new GridBagLayout());
+		this.setSize(300, 200);
+		setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+				"Manage Grid Map File",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+				IntroduceLookAndFeel.getPanelLabelColor()));
+		this.add(getGridMapFilePanel(), gridBagConstraints);
+		this.add(getTablePanel(), gridBagConstraints11);
+		this.add(getControlPanel(), gridBagConstraints21);
+	}
+
+	/**
+	 * This method initializes gridMapFilePanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getGridMapFilePanel() {
+		if (gridMapFilePanel == null) {
+			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.gridx = 0;
+			gridBagConstraints3.gridwidth = 3;
+			gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints3.gridy = 1;
+			jLabel1 = new JLabel();
+			jLabel1.setText("(File will be created if it does not exist)");
+			jLabel1.setForeground(IntroduceLookAndFeel.getPanelLabelColor());
+
+			jLabel1.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC,
+					12));
+			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints2.gridx = 1;
+			gridBagConstraints2.gridy = 0;
+			gridBagConstraints2.weightx = 1.0;
+			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
+			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints1.gridy = 0;
+			gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints1.gridx = 0;
+			jLabel = new JLabel();
+			jLabel.setText("Grid Map File Location");
+			gridMapFilePanel = new JPanel();
+			gridMapFilePanel.setLayout(new GridBagLayout());
+			gridMapFilePanel.add(jLabel, gridBagConstraints1);
+			gridMapFilePanel.add(jLabel1, gridBagConstraints3);
+			gridMapFilePanel.add(getGridmapLocation(), gridBagConstraints2);
+			gridMapFilePanel.add(getBrowseButton(), new GridBagConstraints());
+		}
+		return gridMapFilePanel;
+	}
+
+	/**
+	 * This method initializes gridmapLocation
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getGridmapLocation() {
+		if (gridmapLocation == null) {
+			gridmapLocation = new JTextField();
+			gridmapLocation.setEditable(false);
+		}
+		return gridmapLocation;
+	}
+
+	/**
+	 * This method initializes browseButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getBrowseButton() {
+		if (browseButton == null) {
+			browseButton = new JButton();
+			browseButton.setText("Browse");
+			browseButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					browse();
+				}
+			});
+		}
+		return browseButton;
+	}
+
+	private void browse() {
+		try{
+		JFileChooser fc = new JFileChooser();
+		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		fc.setMultiSelectionEnabled(false);
+		if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+			String gridmap = fc.getSelectedFile().getAbsolutePath();
+			loadGridMapFile(gridmap,false);
+			this.gridmapLocation
+					.setText(gridmap);
+		}
+		
+		}catch(Exception e){
+			PortalUtils.showErrorMessage(e);
+		}
+	}
+
+	/**
+	 * This method initializes tablePanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getTablePanel() {
+		if (tablePanel == null) {
+			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+			gridBagConstraints4.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints4.weighty = 1.0;
+			gridBagConstraints4.gridx = 0;
+			gridBagConstraints4.gridy = 0;
+			gridBagConstraints4.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints4.weightx = 1.0;
+			tablePanel = new JPanel();
+			tablePanel.setLayout(new GridBagLayout());
+			tablePanel.add(getJScrollPane(), gridBagConstraints4);
+		}
+		return tablePanel;
+	}
+
+	/**
+	 * This method initializes jScrollPane
+	 * 
+	 * @return javax.swing.JScrollPane
+	 */
+	private JScrollPane getJScrollPane() {
+		if (jScrollPane == null) {
+			jScrollPane = new JScrollPane();
+			jScrollPane.setViewportView(getGridmapTable());
+		}
+		return jScrollPane;
+	}
+
+	/**
+	 * This method initializes gridmapTable
+	 * 
+	 * @return javax.swing.JTable
+	 */
+	private JTable getGridmapTable() {
+		if (gridmapTable == null) {
+			gridmapTable = new GridMapTable();
+		}
+		return gridmapTable;
+	}
+
+	/**
+	 * This method initializes controlPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getControlPanel() {
+		if (controlPanel == null) {
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.gridx = 0;
+			gridBagConstraints8.gridy = 1;
+			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.insets = new java.awt.Insets(5, 50, 5, 50);
+			gridBagConstraints7.gridy = 0;
+			gridBagConstraints7.weightx = 1.0D;
+			gridBagConstraints7.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints7.gridx = 0;
+			controlPanel = new JPanel();
+			controlPanel
+					.setBorder(javax.swing.BorderFactory
+							.createTitledBorder(
+									null,
+									"Add/Remove User(s)",
+									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+									javax.swing.border.TitledBorder.DEFAULT_POSITION,
+									null, IntroduceLookAndFeel
+											.getPanelLabelColor()));
+			controlPanel.setLayout(new GridBagLayout());
+			controlPanel.add(getUserAddEditPanel(), gridBagConstraints7);
+			controlPanel.add(getUserManagerButtonPanel(), gridBagConstraints8);
+		}
+		return controlPanel;
+	}
+
+	/**
+	 * This method initializes userAddEditPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getUserAddEditPanel() {
+		if (userAddEditPanel == null) {
+			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+			gridBagConstraints6.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints6.gridx = 1;
+			gridBagConstraints6.gridy = 0;
+			gridBagConstraints6.weightx = 1.0;
+			gridBagConstraints6.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints6.insets = new java.awt.Insets(5, 5, 5, 5);
+			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+			gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints5.gridy = 0;
+			gridBagConstraints5.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints5.gridx = 0;
+			jLabel2 = new JLabel();
+			jLabel2.setText("Grid Identity");
+			userAddEditPanel = new JPanel();
+			userAddEditPanel.setLayout(new GridBagLayout());
+			userAddEditPanel.add(jLabel2, gridBagConstraints5);
+			userAddEditPanel.add(getGridIdentity(), gridBagConstraints6);
+		}
+		return userAddEditPanel;
+	}
+
+	/**
+	 * This method initializes gridIdentity
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getGridIdentity() {
+		if (gridIdentity == null) {
+			gridIdentity = new JTextField();
+		}
+		return gridIdentity;
+	}
+
+	/**
+	 * This method initializes userManagerButtonPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getUserManagerButtonPanel() {
+		if (userManagerButtonPanel == null) {
+			userManagerButtonPanel = new JPanel();
+			userManagerButtonPanel.add(getAddButton(), null);
+			userManagerButtonPanel.add(getRemoveButton(), null);
+		}
+		return userManagerButtonPanel;
+	}
+
+	/**
+	 * This method initializes addButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getAddButton() {
+		if (addButton == null) {
+			addButton = new JButton();
+			addButton.setText("Add User");
+			addButton.setIcon(IntroduceLookAndFeel.getAddIcon());
+			addButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					addUser();
+				}
+			});
+		}
+		return addButton;
+	}
+
+	private void addUser() {
+		String user = this.gridIdentity.getText();
+		if ((user == null) || (user.trim().length() == 0)) {
+			PortalUtils.showErrorMessage("Please enter a user to add!!!");
+		} else {
+			((GridMapTable) this.gridmapTable).addUser(user);
+			this.gridIdentity.setText("");
+		}
+	}
+
+	private void removeUser() {
+		try {
+			((GridMapTable) this.gridmapTable).removeSelectedUser();
+		} catch (Exception e) {
+			PortalUtils.showErrorMessage(e);
+		}
+
+	}
+
+	/**
+	 * This method initializes removeButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getRemoveButton() {
+		if (removeButton == null) {
+			removeButton = new JButton();
+			removeButton.setText("Remove User");
+			removeButton.setIcon(IntroduceLookAndFeel.getRemoveIcon());
+			removeButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					removeUser();
+				}
+			});
+		}
+		return removeButton;
+	}
+	
+
+	
+	private void loadGridMapFile(String gridmapFile,boolean errorIfMissing) throws Exception{
+		File f = new File(gridmapFile);
+		if(f.exists()){
+			try{
+			BufferedReader in = new BufferedReader(new FileReader(f));
+			String line = in.readLine();
+			while(line!=null){
+				((GridMapTable) this.gridmapTable).addUser(line);
+				line = in.readLine();
+			}
+			in.close();
+			}catch(Exception e){
+				throw new Exception("Error loading the grid map file "+gridmapFile);
+			}
+			
+		}else{
+			if(errorIfMissing){
+				throw new Exception("The grid map file "+gridmapFile+" does not exist!!!");
+			}
+		}
+	}
+	
+    public String saveGridMapAndGetLocation() throws Exception{
+    	String location = this.gridmapLocation.getText();
+    	if((location == null) || (location.trim().length()==0)){
+    		return null;
+    	}else{
+    		File f = new File(location);
+    		PrintWriter out = new PrintWriter(new FileOutputStream(f,false));
+    		int count = ((GridMapTable) this.gridmapTable).getUserCount();
+    		for(int i = 0; i<count; i++){
+    			out.println(((GridMapTable) this.gridmapTable).getUserAt(i));
+    		}
+    		out.close();
+    		return location;
+    	}
+    }
+}
