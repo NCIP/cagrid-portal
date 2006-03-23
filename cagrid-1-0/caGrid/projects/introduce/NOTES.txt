@@ -1,5 +1,9 @@
 To Do:
 
+icons from here: http://www.famfamfam.com/lab/icons/
+and http://tango-project.org/Tango_Icon_Gallery
+
+
 when modifying a service, conneciton to GME needs to happen in the background, and fail gracefully
 
 need to put a validator on the param name, it must be java valid......

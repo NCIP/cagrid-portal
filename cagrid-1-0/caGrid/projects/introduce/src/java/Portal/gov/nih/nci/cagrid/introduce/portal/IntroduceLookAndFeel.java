@@ -53,12 +53,12 @@ public class IntroduceLookAndFeel extends PortalLookAndFeel {
 
 
 	public final static ImageIcon getNamespaceIcon() {
-		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/textDocument.png"));
+		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/chart_organisation.png"));
 	}
 
 
 	public final static ImageIcon getSchemaTypeIcon() {
-		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/applications-internet.png"));
+		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/tag.png"));
 	}
 
 
