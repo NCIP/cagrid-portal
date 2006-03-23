@@ -229,7 +229,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 		if (deployButton == null) {
 			deployButton = new JButton();
 			deployButton.setText("Deploy");
-			deployButton.setIcon(IntroduceLookAndFeel.getCreateIcon());
+			deployButton.setIcon(IntroduceLookAndFeel.getDeployIcon());
 			deployButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance().getGridPortal(),
