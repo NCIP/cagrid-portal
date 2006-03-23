@@ -400,7 +400,7 @@ public class DataServiceModifier extends GridPortalComponent {
 					int choice = JOptionPane.OK_OPTION;
 					if (dirty) {
 						choice = JOptionPane.showConfirmDialog(DataServiceModifier.this, "Cancel all changes?", 
-							"Are you sure", JOptionPane.YES_NO_OPTION);
+							"Are you sure?", JOptionPane.YES_NO_OPTION);
 					}
 					if (choice == JOptionPane.OK_OPTION) {
 						dispose();
