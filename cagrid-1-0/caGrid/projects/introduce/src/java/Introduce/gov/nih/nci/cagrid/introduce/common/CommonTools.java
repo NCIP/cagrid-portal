@@ -1,13 +1,20 @@
 package gov.nih.nci.cagrid.introduce.common;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 
 import java.io.File;
+import java.util.List;
 import java.util.StringTokenizer;
 
+import org.jdom.Document;
+import org.jdom.Element;
+import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.Namespace;
+import org.projectmobius.common.XMLUtilities;
 
 /**
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
@@ -148,4 +155,28 @@ public class CommonTools {
 		}
 	}
 
+	
+	public static NamespaceType createNamespaceType(String xsdFilename) throws MobiusException {
+		NamespaceType namespaceType = new NamespaceType();
+		namespaceType.setLocation(xsdFilename);
+		Document schemaDoc = XMLUtilities.fileNameToDocument(xsdFilename);
+		
+		String rawNamespace = schemaDoc.getRootElement().getAttributeValue("targetNamespace");
+		Namespace namespace = new Namespace(rawNamespace);
+		String packageName = getPackageName(namespace);
+		namespaceType.setPackageName(packageName);
+		
+		namespaceType.setNamespace(namespace.getRaw());
+		
+		List elementTypes = schemaDoc.getRootElement().getChildren("element", schemaDoc.getRootElement().getNamespace());
+		SchemaElementType[] schemaTypes = new SchemaElementType[elementTypes.size()];
+		for (int i = 0; i < elementTypes.size(); i++) {
+			Element element = (Element) elementTypes.get(i);
+			SchemaElementType type = new SchemaElementType();
+			type.setType(element.getAttributeValue("name"));
+			schemaTypes[i] = type;
+		}
+		namespaceType.setSchemaElement(schemaTypes);
+		return namespaceType;
+	}
 }
