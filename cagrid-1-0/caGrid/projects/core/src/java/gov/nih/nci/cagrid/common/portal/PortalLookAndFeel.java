@@ -37,7 +37,7 @@ public class PortalLookAndFeel {
 
 	public final static ImageIcon getCloseIcon() {
 		return new javax.swing.ImageIcon(PortalLookAndFeel.class
-				.getResource("/Delete.gif"));
+				.getResource("/edit-delete.png"));
 	}
 
 	public final static ImageIcon getSelectIcon() {
@@ -57,12 +57,12 @@ public class PortalLookAndFeel {
 
 	public final static ImageIcon getAddIcon() {
 		return new javax.swing.ImageIcon(PortalLookAndFeel.class
-				.getResource("/Plus20X20.gif"));
+				.getResource("/list-add.png"));
 	}
 
 	public final static ImageIcon getRemoveIcon() {
 		return new javax.swing.ImageIcon(PortalLookAndFeel.class
-				.getResource("/Minus.gif"));
+				.getResource("/list-remove.png"));
 	}
 
 	public final static ImageIcon getQueryIcon() {
@@ -72,7 +72,7 @@ public class PortalLookAndFeel {
 	
 	public final static ImageIcon getSaveIcon() {
 		return new javax.swing.ImageIcon(PortalLookAndFeel.class
-				.getResource("/Save.gif"));
+				.getResource("/save.png"));
 	}
 	
 	public final static ImageIcon getImportIcon() {

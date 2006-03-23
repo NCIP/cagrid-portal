@@ -346,7 +346,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JButton getDoneButton() {
 		if (doneButton == null) {
-			doneButton = new JButton(IntroduceLookAndFeel.getSelectIcon());
+			doneButton = new JButton(IntroduceLookAndFeel.getDoneIcon());
 			doneButton.setText("Done");
 			doneButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {

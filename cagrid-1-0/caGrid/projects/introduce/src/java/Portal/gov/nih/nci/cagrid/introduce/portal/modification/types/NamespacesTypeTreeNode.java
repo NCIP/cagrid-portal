@@ -43,9 +43,6 @@
 
 package gov.nih.nci.cagrid.introduce.portal.modification.types;
 
-import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
-
-import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /** 
@@ -56,21 +53,13 @@ import javax.swing.tree.DefaultMutableTreeNode;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * 
  * @created Nov 22, 2004 
- * @version $Id: NamespacesTypeTreeNode.java,v 1.1 2006-03-21 19:47:08 hastings Exp $ 
+ * @version $Id: NamespacesTypeTreeNode.java,v 1.2 2006-03-23 00:29:58 oster Exp $ 
  */
 public class NamespacesTypeTreeNode extends DefaultMutableTreeNode {
 
 	public NamespacesTypeTreeNode() {
 		super();
 		this.setUserObject("Schema Namespaces");
-	}
-	
-	public ImageIcon getOpenIcon(){
-		return IntroduceLookAndFeel.getNamespacesIcon();
-	}
-	
-	public ImageIcon getClosedIcon(){
-		return IntroduceLookAndFeel.getNamespacesIcon();
 	}
 	
 	public String toString(){

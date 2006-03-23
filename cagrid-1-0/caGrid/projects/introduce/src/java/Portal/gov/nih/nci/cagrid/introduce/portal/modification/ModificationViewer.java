@@ -590,7 +590,7 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private JButton getSaveButton() {
 		if (saveButton == null) {
-			saveButton = new JButton(IntroduceLookAndFeel.getSelectIcon());
+			saveButton = new JButton(IntroduceLookAndFeel.getSaveIcon());
 			saveButton.setText("Save");
 			saveButton.setToolTipText("modify and rebuild service");
 			saveButton.addActionListener(new java.awt.event.ActionListener() {

@@ -1,9 +1,10 @@
 package gov.nih.nci.cagrid.introduce.portal;
 
-
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
+
 
 /**
  * *
@@ -17,58 +18,57 @@ import javax.swing.ImageIcon;
 public class IntroduceLookAndFeel extends PortalLookAndFeel {
 
 	public final static ImageIcon getCreateIcon() {
-		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class
-				.getResource("/Plus20X20.gif"));
+		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/window-new.png"));
 	}
-	
+
+
 	public final static ImageIcon getCredentialsIcon() {
-		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class
-				.getResource("/BCard.gif"));
+		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/BCard.gif"));
 	}
+
 
 	public final static ImageIcon getModifyIcon() {
-		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class
-				.getResource("/Hammer.gif"));
+		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/modify.png"));
 	}
+
 
 	public final static ImageIcon getMobiusIcon() {
-		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class
-				.getResource("/mobiusIcon.gif"));
+		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/mobiusIcon.gif"));
 	}
 
+
 	public final static ImageIcon getUndoIcon() {
-		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class
-				.getResource("/edit-undos.png"));
+		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/edit-undos.png"));
 	}
-	
+
+
 	public final static ImageIcon getRedoIcon() {
-		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class
-				.getResource("/edit-redos.png"));
+		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/edit-redos.png"));
 	}
-	
+
+
 	public final static ImageIcon getDeployIcon() {
-		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class
-				.getResource("/World20X20.gif"));
+		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/deploy.png"));
 	}
-	
-	public final static ImageIcon getNamespacesIcon() {
-		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class
-				.getResource("/Gem_Blue.gif"));
-	}
-	
+
+
 	public final static ImageIcon getNamespaceIcon() {
-		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class
-				.getResource("/textDocument.png"));
+		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/textDocument.png"));
 	}
-	
+
+
 	public final static ImageIcon getSchemaTypeIcon() {
-		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class
-				.getResource("/textDocument2.png"));
+		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/applications-internet.png"));
 	}
-	
+
+
 	public final static ImageIcon getCADSRIcon() {
-		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class
-				.getResource("/caDSR_logo.gif"));
+		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/caDSR_logo.gif"));
+	}
+
+
+	public static final Icon getDoneIcon() {
+		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/media-playback-start.png"));
 	}
 
 }
