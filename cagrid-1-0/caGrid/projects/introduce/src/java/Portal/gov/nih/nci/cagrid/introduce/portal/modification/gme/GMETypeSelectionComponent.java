@@ -1,15 +1,14 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.gme;
 
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.List;
 
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.jdom.Document;
@@ -30,17 +29,11 @@ import org.projectmobius.common.XMLUtilities;
  *          Exp $
  */
 public class GMETypeSelectionComponent extends JPanel {
-	private JPanel mainPanel = null;
-
 	private GMEConfigurationPanel gmePanel = null;
 
-	JComponent me;
-
-
 	public GMETypeSelectionComponent() {
-		me = this;
 		initialize();
-		this.gmePanel.discoverFromGME();
+		this.getGmePanel().discoverFromGME();
 	}
 
 
@@ -48,38 +41,16 @@ public class GMETypeSelectionComponent extends JPanel {
 	 * This method initializes this
 	 */
 	private void initialize() {
-		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-		gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 0);
-		gridBagConstraints.gridy = 0;
-		gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-		gridBagConstraints.weightx = 1.0D;
-		gridBagConstraints.weighty = 1.0D;
-		gridBagConstraints.gridx = 0;
+		GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+		gridBagConstraints4.insets = new java.awt.Insets(2, 2, 2, 2);
+		gridBagConstraints4.gridy = 0;
+		gridBagConstraints4.fill = java.awt.GridBagConstraints.BOTH;
+		gridBagConstraints4.gridwidth = 1;
+		gridBagConstraints4.weightx = 1.0D;
+		gridBagConstraints4.weighty = 1.0D;
+		gridBagConstraints4.gridx = 0;
 		this.setLayout(new GridBagLayout());
-		this.add(getMainPanel(), gridBagConstraints);
-	}
-
-
-	/**
-	 * This method initializes mainPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getMainPanel() {
-		if (mainPanel == null) {
-			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-			gridBagConstraints4.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints4.gridy = 0;
-			gridBagConstraints4.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints4.gridwidth = 1;
-			gridBagConstraints4.weightx = 1.0D;
-			gridBagConstraints4.weighty = 1.0D;
-			gridBagConstraints4.gridx = 0;
-			mainPanel = new JPanel();
-			mainPanel.setLayout(new GridBagLayout());
-			mainPanel.add(getGmePanel(), gridBagConstraints4);
-		}
-		return mainPanel;
+		this.add(getGmePanel(), gridBagConstraints4);
 	}
 
 
@@ -91,10 +62,9 @@ public class GMETypeSelectionComponent extends JPanel {
 	private GMEConfigurationPanel getGmePanel() {
 		if (gmePanel == null) {
 			gmePanel = new GMEConfigurationPanel();
-			gmePanel.setLayout(new GridBagLayout());
 			gmePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "GME",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 		}
 		return gmePanel;
 	}
@@ -135,4 +105,4 @@ public class GMETypeSelectionComponent extends JPanel {
 
 		return input;
 	}
-} // @jve:decl-index=0:visual-constraint="2,2"
+}
