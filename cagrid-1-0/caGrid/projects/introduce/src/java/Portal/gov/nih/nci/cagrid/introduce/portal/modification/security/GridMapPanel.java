@@ -23,9 +23,10 @@ import javax.swing.JTextField;
 
 import org.globus.util.QuotedStringTokenizer;
 
+
 public class GridMapPanel extends JPanel {
-	
-    private static final String COMMENT_CHARS = "#";
+
+	private static final String COMMENT_CHARS = "#";
 
 	private JPanel gridMapFilePanel = null;
 
@@ -60,20 +61,28 @@ public class GridMapPanel extends JPanel {
 	private JLabel jLabel3 = null;
 
 	private JTextField localUser = null;
-	
+
 
 	/**
 	 * This is the default constructor
 	 */
-	public GridMapPanel(){
+	public GridMapPanel() {
 		super();
 		initialize();
 	}
-	
-	public void setGridMapFile(String gridmap) throws Exception{
-		loadGridMapFile(gridmap,true);
-		this.gridmapLocation.setText(gridmap);
+
+
+	public void setGridMapFile(String gridmap) throws Exception {
+		try {
+			loadGridMapFile(gridmap, true);
+			this.gridmapLocation.setText(gridmap);
+		} catch (Exception e) {
+			this.gridmapLocation.setText("");
+			((GridMapTable) this.gridmapTable).clearTable();
+			throw e;
+		}
 	}
+
 
 	/**
 	 * This method initializes this
@@ -102,15 +111,14 @@ public class GridMapPanel extends JPanel {
 		gridBagConstraints.gridy = 0;
 		this.setLayout(new GridBagLayout());
 		this.setSize(400, 400);
-		setBorder(javax.swing.BorderFactory.createTitledBorder(null,
-				"Manage Grid Map File",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-				IntroduceLookAndFeel.getPanelLabelColor()));
+		setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Manage Grid Map File",
+			javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
+			null, IntroduceLookAndFeel.getPanelLabelColor()));
 		this.add(getGridMapFilePanel(), gridBagConstraints);
 		this.add(getTablePanel(), gridBagConstraints11);
 		this.add(getControlPanel(), gridBagConstraints21);
 	}
+
 
 	/**
 	 * This method initializes gridMapFilePanel
@@ -128,8 +136,7 @@ public class GridMapPanel extends JPanel {
 			jLabel1.setText("(File will be created if it does not exist)");
 			jLabel1.setForeground(IntroduceLookAndFeel.getPanelLabelColor());
 
-			jLabel1.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC,
-					12));
+			jLabel1.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints2.gridx = 1;
@@ -153,6 +160,7 @@ public class GridMapPanel extends JPanel {
 		return gridMapFilePanel;
 	}
 
+
 	/**
 	 * This method initializes gridmapLocation
 	 * 
@@ -165,6 +173,7 @@ public class GridMapPanel extends JPanel {
 		}
 		return gridmapLocation;
 	}
+
 
 	/**
 	 * This method initializes browseButton
@@ -184,22 +193,25 @@ public class GridMapPanel extends JPanel {
 		return browseButton;
 	}
 
+
 	private void browse() {
-		try{
-		JFileChooser fc = new JFileChooser();
-		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		fc.setMultiSelectionEnabled(false);
-		if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-			String gridmap = fc.getSelectedFile().getAbsolutePath();
-			loadGridMapFile(gridmap,false);
-			this.gridmapLocation
-					.setText(gridmap);
-		}
-		
-		}catch(Exception e){
+		try {
+			JFileChooser fc = new JFileChooser();
+			fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			fc.setMultiSelectionEnabled(false);
+			if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+				String gridmap = fc.getSelectedFile().getAbsolutePath();
+				loadGridMapFile(gridmap, false);
+				this.gridmapLocation.setText(gridmap);
+			}
+
+		} catch (Exception e) {
+			this.gridmapLocation.setText("");
+			((GridMapTable) this.gridmapTable).clearTable();
 			PortalUtils.showErrorMessage(e);
 		}
 	}
+
 
 	/**
 	 * This method initializes tablePanel
@@ -222,6 +234,7 @@ public class GridMapPanel extends JPanel {
 		return tablePanel;
 	}
 
+
 	/**
 	 * This method initializes jScrollPane
 	 * 
@@ -235,6 +248,7 @@ public class GridMapPanel extends JPanel {
 		return jScrollPane;
 	}
 
+
 	/**
 	 * This method initializes gridmapTable
 	 * 
@@ -246,6 +260,7 @@ public class GridMapPanel extends JPanel {
 		}
 		return gridmapTable;
 	}
+
 
 	/**
 	 * This method initializes controlPanel
@@ -264,21 +279,16 @@ public class GridMapPanel extends JPanel {
 			gridBagConstraints7.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints7.gridx = 0;
 			controlPanel = new JPanel();
-			controlPanel
-					.setBorder(javax.swing.BorderFactory
-							.createTitledBorder(
-									null,
-									"Add/Remove User(s)",
-									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, IntroduceLookAndFeel
-											.getPanelLabelColor()));
+			controlPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Add/Remove User(s)",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
 			controlPanel.setLayout(new GridBagLayout());
 			controlPanel.add(getUserAddEditPanel(), gridBagConstraints7);
 			controlPanel.add(getUserManagerButtonPanel(), gridBagConstraints8);
 		}
 		return controlPanel;
 	}
+
 
 	/**
 	 * This method initializes userAddEditPanel
@@ -292,12 +302,12 @@ public class GridMapPanel extends JPanel {
 			gridBagConstraints10.gridy = 1;
 			gridBagConstraints10.weightx = 1.0;
 			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints10.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints10.gridx = 1;
 			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
 			gridBagConstraints9.gridx = 0;
 			gridBagConstraints9.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints9.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints9.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints9.gridy = 1;
 			jLabel3 = new JLabel();
 			jLabel3.setText("Local User");
@@ -325,6 +335,7 @@ public class GridMapPanel extends JPanel {
 		return userAddEditPanel;
 	}
 
+
 	/**
 	 * This method initializes gridIdentity
 	 * 
@@ -336,6 +347,7 @@ public class GridMapPanel extends JPanel {
 		}
 		return gridIdentity;
 	}
+
 
 	/**
 	 * This method initializes userManagerButtonPanel
@@ -350,6 +362,7 @@ public class GridMapPanel extends JPanel {
 		}
 		return userManagerButtonPanel;
 	}
+
 
 	/**
 	 * This method initializes addButton
@@ -370,16 +383,23 @@ public class GridMapPanel extends JPanel {
 		return addButton;
 	}
 
+
 	private void addUser() {
 		String gridId = this.gridIdentity.getText();
 		if ((gridId == null) || (gridId.trim().length() == 0)) {
-			PortalUtils.showErrorMessage("Please enter a user to add!!!");
-		} else {
-			String local = Utils.clean(this.localUser.getText());
-			((GridMapTable) this.gridmapTable).addUser(new GridMap(gridId,local));
-			this.gridIdentity.setText("");
+			PortalUtils.showErrorMessage("Please enter the grid identity of a user to add!!!");
+			return;
 		}
+		String local = Utils.clean(this.localUser.getText());
+		if (local == null) {
+			PortalUtils.showErrorMessage("Please enter a local user id of a user to add!!!");
+			return;
+		}
+		((GridMapTable) this.gridmapTable).addUser(new GridMap(gridId, local));
+		this.gridIdentity.setText("");
+		this.localUser.setText("");
 	}
+
 
 	private void removeUser() {
 		try {
@@ -389,6 +409,7 @@ public class GridMapPanel extends JPanel {
 		}
 
 	}
+
 
 	/**
 	 * This method initializes removeButton
@@ -408,93 +429,93 @@ public class GridMapPanel extends JPanel {
 		}
 		return removeButton;
 	}
-	
 
-	
-	private void loadGridMapFile(String gridmapFile,boolean errorIfMissing) throws Exception{
+
+	private void loadGridMapFile(String gridmapFile, boolean errorIfMissing) throws Exception {
 		((GridMapTable) this.gridmapTable).clearTable();
 		File f = new File(gridmapFile);
-		if(f.exists()){
+		if (f.exists()) {
 			BufferedReader in = new BufferedReader(new FileReader(f));
 			String line = null;
-			QuotedStringTokenizer tokenizer=null;
-			StringTokenizer idTokenizer=null;
-			while( (line = in.readLine()) != null) {
-			    line = line.trim();
-			    if ( (line.length() == 0) ||
-				 ( COMMENT_CHARS.indexOf(line.charAt(0)) != -1) ) {
-				continue;
-			    }
-			    
-			    tokenizer = new QuotedStringTokenizer(line);
+			QuotedStringTokenizer tokenizer = null;
+			StringTokenizer idTokenizer = null;
+			while ((line = in.readLine()) != null) {
+				line = line.trim();
+				if ((line.length() == 0) || (COMMENT_CHARS.indexOf(line.charAt(0)) != -1)) {
+					continue;
+				}
 
-			    String globusID = null;
+				tokenizer = new QuotedStringTokenizer(line);
 
-			    if (tokenizer.hasMoreTokens()) {
-				globusID = tokenizer.nextToken();
-			    } else {
-				throw new Exception("Error loading the Gridmap file "+gridmapFile+", the Grid Identity is not defined in the line:\n" + line);
-			    }
+				String globusID = null;
 
-			    String userIDs = null;
-			    StringBuffer ids = new StringBuffer();
-			    if (tokenizer.hasMoreTokens()) {
-				userIDs = tokenizer.nextToken();
-			    
+				if (tokenizer.hasMoreTokens()) {
+					globusID = tokenizer.nextToken();
+				} else {
+					throw new Exception("Error loading the Gridmap file " + gridmapFile
+						+ ", the Grid Identity is not defined in the line:\n" + line);
+				}
 
-			    idTokenizer = new StringTokenizer(userIDs, ",");
-			   
-			    boolean first = true;
-			    while(idTokenizer.hasMoreTokens()) {
-			    	if(!first){
-			    		ids.append(",");
-			    	}
-			    	ids.append(idTokenizer.nextToken());
-			    	first = false;
-			    }
-			    }else {
-			    	//throw new Exception("Error loading the Gridmap file "+gridmapFile+", the local user ids missing in the line:\n" + line);
-			    }
-			    GridMap map = new GridMap(globusID,ids.toString());
-			    ((GridMapTable) this.gridmapTable).addUser(map);
+				String userIDs = null;
+				StringBuffer ids = new StringBuffer();
+				if (tokenizer.hasMoreTokens()) {
+					userIDs = tokenizer.nextToken();
+
+					idTokenizer = new StringTokenizer(userIDs, ",");
+
+					boolean first = true;
+					while (idTokenizer.hasMoreTokens()) {
+						if (!first) {
+							ids.append(",");
+						}
+						ids.append(idTokenizer.nextToken());
+						first = false;
+					}
+				} else {
+					throw new Exception("Error loading the Gridmap file " + gridmapFile
+						+ ", the local user ids missing in the line:\n" + line);
+				}
+				GridMap map = new GridMap(globusID, ids.toString());
+				((GridMapTable) this.gridmapTable).addUser(map);
 			}
-			
-			
-		}else{
-			if(errorIfMissing){
-				throw new Exception("The grid map file "+gridmapFile+" does not exist!!!");
+
+		} else {
+			if (errorIfMissing) {
+				throw new Exception("The grid map file " + gridmapFile + " does not exist!!!");
 			}
 		}
 	}
-	
-    public String saveGridMapAndGetLocation() throws Exception{
-    	String location = this.gridmapLocation.getText();
-    	if((location == null) || (location.trim().length()==0)){
-    		throw new Exception("No Grid Map File Specified!!!");
-    	}else{
-    		File f = new File(location);
-    		PrintWriter out = new PrintWriter(new FileOutputStream(f,false));
-    		int count = ((GridMapTable) this.gridmapTable).getUserCount();
-    		for(int i = 0; i<count; i++){
-    			GridMap map = ((GridMapTable) this.gridmapTable).getUserAt(i);
-    			StringBuffer line = new StringBuffer();
-    			line.append("\""+map.getGridIdentity()+"\"");
-    			String users=Utils.clean(map.getLocalUser());
-    			if(users!=null){
-    				line.append(" "+users);
-    			}
-    			out.println(line.toString());
-    		}
-    		out.close();
-    		return location;
-    	}
-    }
+
+
+	public String saveGridMapAndGetLocation() throws Exception {
+		String location = this.gridmapLocation.getText();
+		if ((location == null) || (location.trim().length() == 0)) {
+			throw new Exception("No Grid Map File Specified!!!");
+		} else {
+			File f = new File(location);
+			PrintWriter out = new PrintWriter(new FileOutputStream(f, false));
+			int count = ((GridMapTable) this.gridmapTable).getUserCount();
+			for (int i = 0; i < count; i++) {
+				GridMap map = ((GridMapTable) this.gridmapTable).getUserAt(i);
+				StringBuffer line = new StringBuffer();
+				line.append("\"" + map.getGridIdentity() + "\"");
+				String users = Utils.clean(map.getLocalUser());
+				if (users != null) {
+					line.append(" " + users);
+				}
+				out.println(line.toString());
+			}
+			out.close();
+			return location;
+		}
+	}
+
 
 	/**
-	 * This method initializes localUser	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
+	 * This method initializes localUser
+	 * 
+	 * @return javax.swing.JTextField
+	 */
 	private JTextField getLocalUser() {
 		if (localUser == null) {
 			localUser = new JTextField();

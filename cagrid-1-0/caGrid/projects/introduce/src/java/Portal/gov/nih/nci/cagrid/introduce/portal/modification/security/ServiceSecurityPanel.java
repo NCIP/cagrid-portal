@@ -199,10 +199,14 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	}
 
 
-	public ServiceSecurityPanel(ServiceSecurity sec) throws Exception {
+	public ServiceSecurityPanel(ServiceSecurity sec){
 		super();
 		initialize();
+		try{
 		setServiceSecurity(sec);
+		}catch(Exception e){
+			PortalUtils.showErrorMessage(e);
+		}
 	}
 
 
