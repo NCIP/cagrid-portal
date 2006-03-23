@@ -1,5 +1,9 @@
 package gov.nih.nci.cagrid.introduce.common;
 
+import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurity;
+import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
+
 import java.io.File;
 import java.util.StringTokenizer;
 
@@ -106,13 +110,41 @@ public class CommonTools {
 	public static String getPackageName(Namespace namespace) {
 		try {
 			// TODO: where should this mapperClassname preference be set
-			String mapperClassname = "gov.nih.nci.cagrid.introduce.common.CaBIGNamespaceToPackageMapper";
+			String mapperClassname = "gov.nih.nci.cagrid.introduce.common.DomainNameVersionNamespaceToPackageMapper";
 			Class clazz = Class.forName(mapperClassname);
 			NamespaceToPackageMapper mapper = (NamespaceToPackageMapper) clazz.newInstance();
 			return mapper.getPackageName(namespace.getRaw());
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
+		}
+	}
+	
+	public static boolean equals(ServiceSecurity ss, MethodSecurity ms) {
+		if ((ss == null) && (ms == null)) {
+			return true;
+		} else if ((ss != null) && (ms == null)) {
+			return false;
+		} else if ((ss == null) && (ms != null)) {
+			return false;
+		} else if (!Utils.equals(ss.getSecuritySetting(), ms.getSecuritySetting())) {
+			return false;
+		} else if (!Utils.equals(ss.getAnonymousClients(), ms.getAnonymousClients())) {
+			return false;
+		} else if (!Utils.equals(ss.getClientAuthorization(), ms.getClientAuthorization())) {
+			return false;
+		} else if (!Utils.equals(ss.getClientCommunication(), ms.getClientCommunication())) {
+			return false;
+		} else if (!Utils.equals(ss.getDelegationMode(), ms.getDelegationMode())) {
+			return false;
+		} else if (!Utils.equals(ss.getSecureConversation(), ms.getSecureConversation())) {
+			return false;
+		} else if (!Utils.equals(ss.getSecureMessage(), ms.getSecureMessage())) {
+			return false;
+		} else if (!Utils.equals(ss.getTransportLevelSecurity(), ms.getTransportLevelSecurity())) {
+			return false;
+		} else {
+			return true;
 		}
 	}
 

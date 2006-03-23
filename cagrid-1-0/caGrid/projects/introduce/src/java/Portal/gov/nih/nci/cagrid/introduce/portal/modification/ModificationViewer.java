@@ -38,7 +38,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -767,15 +769,26 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		if (update) {
 			MethodsType mt = this.introService.getMethods();
+			List changes = new ArrayList();
 			if (mt != null) {
 				introService.setServiceSecurity(curr);
-				PortalUtils
-					.showMessage("Service security configuration changed, resetting all method security configurations.");
 				MethodType[] methods = mt.getMethod();
 				if (methods != null) {
 					for (int i = 0; i < methods.length; i++) {
-						methods[i].setMethodSecurity(null);
+						if((methods[i].getMethodSecurity()!=null)&&(!CommonTools.equals(curr,methods[i].getMethodSecurity()))){
+							methods[i].setMethodSecurity(null);
+							changes.add(methods[i].getName());
+						}
 					}
+				}
+				if(changes.size()>0){
+					StringBuffer sb = new StringBuffer();
+					sb.append("Service security configuration changed, the security configurations for the following methods were reset:\n");
+					for(int i=0; i<changes.size(); i++){
+						String method = (String)changes.get(i);
+						sb.append("    "+(i+1)+") "+method);
+					}
+					PortalUtils.showMessage(sb.toString());
 				}
 			}
 		}
