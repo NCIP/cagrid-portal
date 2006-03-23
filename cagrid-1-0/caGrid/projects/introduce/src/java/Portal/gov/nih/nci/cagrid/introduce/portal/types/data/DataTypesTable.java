@@ -57,8 +57,8 @@ public class DataTypesTable extends PortalBaseTable {
 	public void removeSelectedType() {
 		if (getSelectedRow() != -1) {
 			types.remove(getSelectedRow());
+			((DefaultTableModel) getModel()).removeRow(getSelectedRow());
 		}
-		((DefaultTableModel) getModel()).removeRow(getSelectedRow());
 	}
 	
 	
