@@ -58,7 +58,7 @@ public class LoadProxyFromFileSystemWindow extends GridPortalComponent {
 		this.setSize(300, 200);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Load Proxy");
-		this.setFrameIcon(IntroduceLookAndFeel.getCredentialsIcon());
+		this.setFrameIcon(IntroduceLookAndFeel.getLoadCredentialsIcon());
 	}
 
 
@@ -194,7 +194,7 @@ public class LoadProxyFromFileSystemWindow extends GridPortalComponent {
 					setProxy();
 				}
 			});
-			setCredentialsButton.setIcon(IntroduceLookAndFeel.getCredentialsIcon());
+			setCredentialsButton.setIcon(IntroduceLookAndFeel.getLoadCredentialsIcon());
 		}
 		return setCredentialsButton;
 	}

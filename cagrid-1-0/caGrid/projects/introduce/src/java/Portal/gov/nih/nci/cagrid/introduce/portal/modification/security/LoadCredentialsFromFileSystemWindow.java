@@ -63,7 +63,7 @@ public class LoadCredentialsFromFileSystemWindow extends GridPortalComponent {
 		this.setSize(300, 200);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Load Credentials");
-		this.setFrameIcon(IntroduceLookAndFeel.getCredentialsIcon());
+		this.setFrameIcon(IntroduceLookAndFeel.getLoadCredentialsIcon());
 	}
 
 
@@ -264,7 +264,7 @@ public class LoadCredentialsFromFileSystemWindow extends GridPortalComponent {
 					setCredentials();
 				}
 			});
-			setCredentialsButton.setIcon(IntroduceLookAndFeel.getCredentialsIcon());
+			setCredentialsButton.setIcon(IntroduceLookAndFeel.getLoadCredentialsIcon());
 		}
 		return setCredentialsButton;
 	}

@@ -184,6 +184,7 @@ public class GridMapPanel extends JPanel {
 		if (browseButton == null) {
 			browseButton = new JButton();
 			browseButton.setText("Browse");
+			browseButton.setIcon(IntroduceLookAndFeel.getBrowseIcon());
 			browseButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					browse();
