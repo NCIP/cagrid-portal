@@ -1,11 +1,11 @@
 package gov.nih.nci.cagrid.cadsr.service;
 
-import gov.nih.nci.cadsr.domain.ClassificationScheme;
-import gov.nih.nci.cadsr.domain.Context;
-import gov.nih.nci.cadsr.umlproject.domain.Project;
-import gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata;
-import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
-import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
+import gov.nih.nci.cadsr.domain.ws.ClassificationScheme;
+import gov.nih.nci.cadsr.domain.ws.Context;
+import gov.nih.nci.cadsr.umlproject.domain.ws.Project;
+import gov.nih.nci.cadsr.umlproject.domain.ws.UMLAttributeMetadata;
+import gov.nih.nci.cadsr.umlproject.domain.ws.UMLClassMetadata;
+import gov.nih.nci.cadsr.umlproject.domain.ws.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.common.CaDSRServiceI;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
@@ -36,18 +36,12 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 	}
 
 
-	     public gov.nih.nci.cadsr.umlproject.domain.Project[] findAllProjects() throws RemoteException {
+	public gov.nih.nci.cadsr.umlproject.domain.ws.Project[] findAllProjects() throws RemoteException {
 		try {
 			ApplicationService appService = ApplicationService.getRemoteInstance(serviceURL);
 			LOG.debug("Using basic search. Retrieving allprojects");
 
 			Project projPrototype = new Project();
-			ClassificationScheme cs = new ClassificationScheme();
-			cs.setType("Project");// is this necessary?
-			Context ctx = new Context();
-			ctx.setName("caBIG");
-			cs.setContext(ctx);
-			projPrototype.setClassificationScheme(cs);
 
 			try {
 				List resultList = appService.search(Project.class, projPrototype);
@@ -72,7 +66,8 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 	}
 
 
-	     public gov.nih.nci.cadsr.umlproject.domain.Project[] findProjects(java.lang.String context) throws RemoteException {
+	public gov.nih.nci.cadsr.umlproject.domain.ws.Project[] findProjects(java.lang.String context)
+		throws RemoteException {
 		try {
 			ApplicationService appService = ApplicationService.getRemoteInstance(serviceURL);
 			LOG.debug("Using basic search. Retrieving all projects under context:" + context);
@@ -108,7 +103,8 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 	}
 
 
-	     public gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata[] findPackagesInProject(gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException {
+	public gov.nih.nci.cadsr.umlproject.domain.ws.UMLPackageMetadata[] findPackagesInProject(
+		gov.nih.nci.cadsr.umlproject.domain.ws.Project project) throws RemoteException {
 		try {
 			ApplicationService appService = ApplicationService.getRemoteInstance(serviceURL);
 			LOG.debug("Using basic search. Retrieving all packages under project:" + project.getShortName());
@@ -139,7 +135,8 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 	}
 
 
-	     public gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] findClassesInProject(gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException {
+	public gov.nih.nci.cadsr.umlproject.domain.ws.UMLClassMetadata[] findClassesInProject(
+		gov.nih.nci.cadsr.umlproject.domain.ws.Project project) throws RemoteException {
 		try {
 			ApplicationService appService = ApplicationService.getRemoteInstance(serviceURL);
 			LOG.debug("Using basic search. Retrieving all classes under project:" + project.getShortName());
@@ -170,7 +167,8 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 	}
 
 
-	     public gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] findClassesInPackage(gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata pkg) throws RemoteException {
+	public gov.nih.nci.cadsr.umlproject.domain.ws.UMLClassMetadata[] findClassesInPackage(
+		gov.nih.nci.cadsr.umlproject.domain.ws.UMLPackageMetadata pkg) throws RemoteException {
 		try {
 			ApplicationService appService = ApplicationService.getRemoteInstance(serviceURL);
 			LOG.debug("Using basic search. Retrieving all classes under package:" + pkg.getName());
@@ -201,7 +199,8 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 	}
 
 
-	     public gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata[] findAttributesInClass(gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata clazz) throws RemoteException {
+	public gov.nih.nci.cadsr.umlproject.domain.ws.UMLAttributeMetadata[] findAttributesInClass(
+		gov.nih.nci.cadsr.umlproject.domain.ws.UMLClassMetadata clazz) throws RemoteException {
 		try {
 			ApplicationService appService = ApplicationService.getRemoteInstance(serviceURL);
 			LOG.debug("Using basic search. Retrieving all attributes under class:" + clazz.getName());
@@ -232,19 +231,22 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 	}
 
 
-	     public java.lang.String[] generateMetadataExtractForProject(gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException {
+	public java.lang.String[] generateMetadataExtractForProject(gov.nih.nci.cadsr.umlproject.domain.ws.Project project)
+		throws RemoteException {
 		// TODO: Implement this autogenerated method
 		throw new RemoteException("Not yet implemented");
 	}
 
 
-	     public java.lang.String generateMetadataExtractForPackages(gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata[] packages) throws RemoteException {
+	public java.lang.String generateMetadataExtractForPackages(
+		gov.nih.nci.cadsr.umlproject.domain.ws.UMLPackageMetadata[] packages) throws RemoteException {
 		// TODO: Implement this autogenerated method
 		throw new RemoteException("Not yet implemented");
 	}
 
 
-	     public java.lang.String generateMetadataExtractForClasses(gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] classes) throws RemoteException {
+	public java.lang.String generateMetadataExtractForClasses(
+		gov.nih.nci.cadsr.umlproject.domain.ws.UMLClassMetadata[] classes) throws RemoteException {
 		// TODO: Implement this autogenerated method
 		throw new RemoteException("Not yet implemented");
 	}

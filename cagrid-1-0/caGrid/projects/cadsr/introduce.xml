@@ -5,7 +5,7 @@
    <ns2:SchemaElement type="integer" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="boolean" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./3.0_gov.nih.nci.cadsr.umlproject.domain.xsd" namespace="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" packageName="gov.nih.nci.cadsr.umlproject.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./3.0_gov.nih.nci.cadsr.umlproject.domain.xsd" namespace="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" packageName="gov.nih.nci.cadsr.umlproject.domain.ws" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement className="Project" type="Project" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="SubProject" type="SubProject" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="UMLPackageMetadata" type="UMLPackageMetadata" xsi:type="ns2:SchemaElementType"/>
@@ -26,124 +26,65 @@
    <ns3:Inputs/>
    <ns3:Output qName="ns4:Project" isArray="true" xmlns:ns4="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
    <ns3:Exceptions/>
-   <ns3:MethodSecurity xsi:type="ns5:MethodSecurity" xmlns:ns5="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns5:MethodSecuritySetting xsi:type="ns5:MethodSecurityType">None</ns5:MethodSecuritySetting>
-    <ns5:RunAsMode xsi:type="ns5:RunAsMode" xsi:nil="true"/>
-    <ns5:DelegationMode xsi:type="ns5:DelegationMode" xsi:nil="true"/>
-    <ns5:AnonymousClients xsi:type="ns5:AnonymousCommunication" xsi:nil="true"/>
-   </ns3:MethodSecurity>
   </ns3:Method>
   <ns3:Method name="findProjects" xsi:type="ns3:MethodType">
    <ns3:Inputs>
     <ns3:Input qName="xsd:string" isArray="false" name="context" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
    </ns3:Inputs>
-   <ns3:Output qName="ns6:Project" isArray="true" xmlns:ns6="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+   <ns3:Output qName="ns5:Project" isArray="true" xmlns:ns5="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
    <ns3:Exceptions/>
-   <ns3:MethodSecurity xsi:type="ns7:MethodSecurity" xmlns:ns7="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns7:MethodSecuritySetting xsi:type="ns7:MethodSecurityType">None</ns7:MethodSecuritySetting>
-    <ns7:RunAsMode xsi:type="ns7:RunAsMode" xsi:nil="true"/>
-    <ns7:DelegationMode xsi:type="ns7:DelegationMode" xsi:nil="true"/>
-    <ns7:AnonymousClients xsi:type="ns7:AnonymousCommunication" xsi:nil="true"/>
-   </ns3:MethodSecurity>
   </ns3:Method>
   <ns3:Method name="findPackagesInProject" xsi:type="ns3:MethodType">
    <ns3:Inputs>
-    <ns3:Input qName="ns8:Project" isArray="false" name="project" xmlns:ns8="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+    <ns3:Input qName="ns6:Project" isArray="false" name="project" xmlns:ns6="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
    </ns3:Inputs>
-   <ns3:Output qName="ns9:UMLPackageMetadata" isArray="true" xmlns:ns9="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+   <ns3:Output qName="ns7:UMLPackageMetadata" isArray="true" xmlns:ns7="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
    <ns3:Exceptions/>
-   <ns3:MethodSecurity xsi:type="ns10:MethodSecurity" xmlns:ns10="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns10:MethodSecuritySetting xsi:type="ns10:MethodSecurityType">None</ns10:MethodSecuritySetting>
-    <ns10:RunAsMode xsi:type="ns10:RunAsMode" xsi:nil="true"/>
-    <ns10:DelegationMode xsi:type="ns10:DelegationMode" xsi:nil="true"/>
-    <ns10:AnonymousClients xsi:type="ns10:AnonymousCommunication" xsi:nil="true"/>
-   </ns3:MethodSecurity>
   </ns3:Method>
   <ns3:Method name="findClassesInProject" xsi:type="ns3:MethodType">
    <ns3:Inputs>
-    <ns3:Input qName="ns11:Project" isArray="false" name="project" xmlns:ns11="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+    <ns3:Input qName="ns8:Project" isArray="false" name="project" xmlns:ns8="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
    </ns3:Inputs>
-   <ns3:Output qName="ns12:UMLClassMetadata" isArray="true" xmlns:ns12="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+   <ns3:Output qName="ns9:UMLClassMetadata" isArray="true" xmlns:ns9="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
    <ns3:Exceptions/>
-   <ns3:MethodSecurity xsi:type="ns13:MethodSecurity" xmlns:ns13="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns13:MethodSecuritySetting xsi:type="ns13:MethodSecurityType">None</ns13:MethodSecuritySetting>
-    <ns13:RunAsMode xsi:type="ns13:RunAsMode" xsi:nil="true"/>
-    <ns13:DelegationMode xsi:type="ns13:DelegationMode" xsi:nil="true"/>
-    <ns13:AnonymousClients xsi:type="ns13:AnonymousCommunication" xsi:nil="true"/>
-   </ns3:MethodSecurity>
   </ns3:Method>
   <ns3:Method name="findClassesInPackage" xsi:type="ns3:MethodType">
    <ns3:Inputs>
-    <ns3:Input qName="ns14:UMLPackageMetadata" isArray="false" name="pkg" xmlns:ns14="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+    <ns3:Input qName="ns10:UMLPackageMetadata" isArray="false" name="pkg" xmlns:ns10="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
    </ns3:Inputs>
-   <ns3:Output qName="ns15:UMLClassMetadata" isArray="true" xmlns:ns15="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+   <ns3:Output qName="ns11:UMLClassMetadata" isArray="true" xmlns:ns11="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
    <ns3:Exceptions/>
-   <ns3:MethodSecurity xsi:type="ns16:MethodSecurity" xmlns:ns16="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns16:MethodSecuritySetting xsi:type="ns16:MethodSecurityType">None</ns16:MethodSecuritySetting>
-    <ns16:RunAsMode xsi:type="ns16:RunAsMode" xsi:nil="true"/>
-    <ns16:DelegationMode xsi:type="ns16:DelegationMode" xsi:nil="true"/>
-    <ns16:AnonymousClients xsi:type="ns16:AnonymousCommunication" xsi:nil="true"/>
-   </ns3:MethodSecurity>
   </ns3:Method>
   <ns3:Method name="generateMetadataExtractForProject" xsi:type="ns3:MethodType">
    <ns3:Inputs>
-    <ns3:Input qName="ns17:Project" isArray="false" name="project" xmlns:ns17="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+    <ns3:Input qName="ns12:Project" isArray="false" name="project" xmlns:ns12="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
    </ns3:Inputs>
    <ns3:Output qName="xsd:string" isArray="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
    <ns3:Exceptions/>
-   <ns3:MethodSecurity xsi:type="ns18:MethodSecurity" xmlns:ns18="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns18:MethodSecuritySetting xsi:type="ns18:MethodSecurityType">None</ns18:MethodSecuritySetting>
-    <ns18:RunAsMode xsi:type="ns18:RunAsMode" xsi:nil="true"/>
-    <ns18:DelegationMode xsi:type="ns18:DelegationMode" xsi:nil="true"/>
-    <ns18:AnonymousClients xsi:type="ns18:AnonymousCommunication" xsi:nil="true"/>
-   </ns3:MethodSecurity>
   </ns3:Method>
   <ns3:Method name="generateMetadataExtractForPackages" xsi:type="ns3:MethodType">
    <ns3:Inputs>
-    <ns3:Input qName="ns19:UMLPackageMetadata" isArray="true" name="packages" xmlns:ns19="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+    <ns3:Input qName="ns13:UMLPackageMetadata" isArray="true" name="packages" xmlns:ns13="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
    </ns3:Inputs>
    <ns3:Output qName="xsd:string" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
    <ns3:Exceptions/>
-   <ns3:MethodSecurity xsi:type="ns20:MethodSecurity" xmlns:ns20="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns20:MethodSecuritySetting xsi:type="ns20:MethodSecurityType">None</ns20:MethodSecuritySetting>
-    <ns20:RunAsMode xsi:type="ns20:RunAsMode" xsi:nil="true"/>
-    <ns20:DelegationMode xsi:type="ns20:DelegationMode" xsi:nil="true"/>
-    <ns20:AnonymousClients xsi:type="ns20:AnonymousCommunication" xsi:nil="true"/>
-   </ns3:MethodSecurity>
   </ns3:Method>
   <ns3:Method name="generateMetadataExtractForClasses" xsi:type="ns3:MethodType">
    <ns3:Inputs>
-    <ns3:Input qName="ns21:UMLClassMetadata" isArray="true" name="classes" xmlns:ns21="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+    <ns3:Input qName="ns14:UMLClassMetadata" isArray="true" name="classes" xmlns:ns14="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
    </ns3:Inputs>
    <ns3:Output qName="xsd:string" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
    <ns3:Exceptions/>
-   <ns3:MethodSecurity xsi:type="ns22:MethodSecurity" xmlns:ns22="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns22:MethodSecuritySetting xsi:type="ns22:MethodSecurityType">None</ns22:MethodSecuritySetting>
-    <ns22:RunAsMode xsi:type="ns22:RunAsMode" xsi:nil="true"/>
-    <ns22:DelegationMode xsi:type="ns22:DelegationMode" xsi:nil="true"/>
-    <ns22:AnonymousClients xsi:type="ns22:AnonymousCommunication" xsi:nil="true"/>
-   </ns3:MethodSecurity>
   </ns3:Method>
   <ns3:Method name="findAttributesInClass" xsi:type="ns3:MethodType">
    <ns3:Inputs>
-    <ns3:Input qName="ns23:UMLClassMetadata" isArray="false" name="clazz" xmlns:ns23="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+    <ns3:Input qName="ns15:UMLClassMetadata" isArray="false" name="clazz" xmlns:ns15="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
    </ns3:Inputs>
-   <ns3:Output qName="ns24:UMLAttributeMetadata" isArray="true" xmlns:ns24="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+   <ns3:Output qName="ns16:UMLAttributeMetadata" isArray="true" xmlns:ns16="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
    <ns3:Exceptions/>
-   <ns3:MethodSecurity xsi:type="ns25:MethodSecurity" xmlns:ns25="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns25:MethodSecuritySetting xsi:type="ns25:MethodSecurityType">None</ns25:MethodSecuritySetting>
-    <ns25:RunAsMode xsi:type="ns25:RunAsMode" xsi:nil="true"/>
-    <ns25:DelegationMode xsi:type="ns25:DelegationMode" xsi:nil="true"/>
-    <ns25:AnonymousClients xsi:type="ns25:AnonymousCommunication" xsi:nil="true"/>
-   </ns3:MethodSecurity>
   </ns3:Method>
  </ns3:Methods>
- <ns26:MetadataList xsi:type="ns26:MetadataListType" xmlns:ns26="gme://gov.nih.nci.cagrid.introduce/1/Metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns26:Metadata qName="ns27:CommonServiceMetadata" populateFromFile="true" register="true" xsi:type="ns26:MetadataType" xmlns:ns27="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
- </ns26:MetadataList>
- <ns1:ServiceSecurity xsi:type="ns28:ServiceSecurity" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns28="gme://gov.nih.nci.cagrid.introduce/1/Security">
-  <ns28:MethodSecuritySetting xsi:type="ns28:MethodSecurityType">None</ns28:MethodSecuritySetting>
-  <ns28:DelegationMode xsi:type="ns28:DelegationMode" xsi:nil="true"/>
-  <ns28:AnonymousClients xsi:type="ns28:AnonymousCommunication" xsi:nil="true"/>
- </ns1:ServiceSecurity>
+ <ns17:MetadataList xsi:type="ns17:MetadataListType" xmlns:ns17="gme://gov.nih.nci.cagrid.introduce/1/Metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns17:Metadata qName="ns18:CommonServiceMetadata" populateFromFile="true" register="true" xsi:type="ns17:MetadataType" xmlns:ns18="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+ </ns17:MetadataList>
 </ns1:ServiceSkeleton>
