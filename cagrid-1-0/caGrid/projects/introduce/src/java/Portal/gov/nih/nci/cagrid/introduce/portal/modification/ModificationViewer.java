@@ -20,12 +20,12 @@ import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.modification.gme.GMETypeSelectionComponent;
+import gov.nih.nci.cagrid.introduce.portal.modification.security.ServiceSecurityPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeConfigurePanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeTreeNode;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespacesJTree;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeConfigurePanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeTreeNode;
-import gov.nih.nci.cagrid.introduce.portal.security.ServiceSecurityPanel;
 
 import java.awt.Font;
 import java.awt.GridBagConstraints;

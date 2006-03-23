@@ -153,6 +153,14 @@ public class Utils {
 		}
 
 	}
+	
+	public static String clean(String s) {
+		if ((s == null) || (s.trim().length() == 0)) {
+			return null;
+		} else {
+			return s;
+		}
+	}
 
 
 	public static void stringBufferToFile(StringBuffer string, String fileName) throws Exception {
