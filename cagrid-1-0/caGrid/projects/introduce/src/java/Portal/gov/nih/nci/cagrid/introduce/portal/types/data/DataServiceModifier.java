@@ -1,22 +1,30 @@
 package gov.nih.nci.cagrid.introduce.portal.types.data;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.modification.gme.GMETypeSelectionComponent;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespacesJTree;
+import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeTreeNode;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
+import javax.swing.tree.TreeSelectionModel;
 
 import org.projectmobius.portal.GridPortalComponent;
-import javax.swing.JSplitPane;
 
 /** 
  *  DataServiceModifier
@@ -74,7 +82,7 @@ public class DataServiceModifier extends GridPortalComponent {
 	private JTabbedPane getConfigTabbedPane() {
 		if (configTabbedPane == null) {
 			configTabbedPane = new JTabbedPane();
-			configTabbedPane.addTab("Exposed Data Types", null, getTypesSplitPane(), null);
+			configTabbedPane.addTab("Available Data Types", null, getTypesSplitPane(), null);
 		}
 		return configTabbedPane;
 	}
@@ -91,7 +99,9 @@ public class DataServiceModifier extends GridPortalComponent {
 			includeNamespaceButton.setText("Include Namespace");
 			includeNamespaceButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+					// get namespace from the GME panel
+					NamespaceType nsType = getGmeTypeSelector().createNamespace();
+					getNamespaceTree().addNode(nsType);
 				}
 			});
 			includeNamespaceButton.setIcon(PortalLookAndFeel.getAddIcon());
@@ -136,6 +146,21 @@ public class DataServiceModifier extends GridPortalComponent {
 	private NamespacesJTree getNamespaceTree() {
 		if (namespaceTree == null) {
 			namespaceTree = new NamespacesJTree(new NamespacesType());
+			namespaceTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+			namespaceTree.addMouseListener(new MouseAdapter() {
+				public void mouseClicked(MouseEvent e) {
+					// double click with left mouse button
+					if ((e.getClickCount() == 2) && SwingUtilities.isLeftMouseButton(e)) {
+						// did the user pick a type??
+						List selectedNodes = getNamespaceTree().getSelectedNodes();
+						if (selectedNodes.size() != 0 && selectedNodes.get(0) instanceof SchemaElementTypeTreeNode) {
+							SchemaElementTypeTreeNode selectedNode = (SchemaElementTypeTreeNode) selectedNodes.get(0);
+							SchemaElementType type = (SchemaElementType) selectedNode.getUserObject();
+							getDataTypesTable().addSchemaElement(type);
+						}
+					}
+				}
+			});
 		}
 		return namespaceTree;
 	}
