@@ -10,6 +10,7 @@ import gov.nih.nci.cagrid.introduce.beans.security.RunAsMode;
 import gov.nih.nci.cagrid.introduce.beans.security.SecureConversation;
 import gov.nih.nci.cagrid.introduce.beans.security.SecureMessage;
 import gov.nih.nci.cagrid.introduce.beans.security.SecuritySetting;
+import gov.nih.nci.cagrid.introduce.beans.security.ServiceAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceCredential;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
@@ -31,6 +32,7 @@ public class SecurityDescriptor {
 		try {
 			StringBuffer xml = new StringBuffer();
 			xml.append("<securityConfig xmlns=\"http://www.globus.org\">");
+			xml.append(writeServiceSettings(info.getServiceSecurity()));
 			MethodsType methods = info.getMethods();
 			if (methods != null) {
 				MethodType[] method = methods.getMethod();
@@ -40,7 +42,6 @@ public class SecurityDescriptor {
 					}
 				}
 			}
-			xml.append(writeServiceSettings(info.getServiceSecurity()));
 			xml.append("</securityConfig>");
 			try {
 				return XMLUtilities.formatXML(xml.toString());
@@ -78,8 +79,18 @@ public class SecurityDescriptor {
 
 			}
 
-			if ((ss.getSecuritySetting() != null)
-				&& (ss.getSecuritySetting().equals(SecuritySetting.Custom))) {
+			ServiceAuthorization auth = ss.getServiceAuthorization();
+			if (auth != null) {
+				if(auth.getGridMapAuthorization()!=null){
+					xml.append("<authz value=\"gridmap\"/>");
+					xml.append("<gridmap value=\""+auth.getGridMapAuthorization().getGridMapFileLocation()+"\"/>");
+				}else{
+					xml.append("<authz value=\"none\"/>");
+				}
+			} else {
+				xml.append("<authz value=\"none\"/>");
+			}
+			if ((ss.getSecuritySetting() != null) && (ss.getSecuritySetting().equals(SecuritySetting.Custom))) {
 				xml.append("<auth-method>");
 				xml.append(getSecureConversationSettings(ss.getSecureConversation()));
 				xml.append(getSecureMessageSettings(ss.getSecureMessage()));
@@ -92,7 +103,6 @@ public class SecurityDescriptor {
 				xml.append("</auth-method>");
 			}
 
-			xml.append("<authz value=\"none\"/>");
 			return xml.toString();
 		} else {
 			return "";
@@ -106,8 +116,7 @@ public class SecurityDescriptor {
 			StringBuffer xml = new StringBuffer();
 			if (determineWriteMethod(service, ms)) {
 				xml.append("<method name=\"" + method.getName() + "\">");
-				if ((ms.getSecuritySetting() != null)
-					&& (ms.getSecuritySetting().equals(SecuritySetting.Custom))) {
+				if ((ms.getSecuritySetting() != null) && (ms.getSecuritySetting().equals(SecuritySetting.Custom))) {
 					xml.append("<auth-method>");
 					xml.append(getSecureConversationSettings(ms.getSecureConversation()));
 					xml.append(getSecureMessageSettings(ms.getSecureMessage()));
@@ -149,9 +158,6 @@ public class SecurityDescriptor {
 		}
 		return xml.toString();
 	}
-
-
-	
 
 
 	private static String getSecureConversationSettings(SecureConversation comm) throws Exception {
