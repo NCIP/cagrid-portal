@@ -3,6 +3,7 @@ To Do:
 icons from here: http://www.famfamfam.com/lab/icons/
 and http://tango-project.org/Tango_Icon_Gallery
 
+Shannon, did your refactor break the functionality of synchronizeMetadataFramework in the MetadataListType?
 
 when modifying a service, conneciton to GME needs to happen in the background, and fail gracefully
 

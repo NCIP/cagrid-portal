@@ -16,7 +16,7 @@
 					<title>Create New Service</title>
 					<description>Create Service Skeleton</description>
 					<class>gov.nih.nci.cagrid.introduce.portal.creation.CreationViewer</class>
-					<icon>/window-new.png</icon>
+					<icon>/cog_add.png</icon>
 					<dimensions>
 						<width>500</width>
 						<height>300</height>
@@ -26,7 +26,7 @@
 					<title>Modify Service</title>
 					<description>Modify Service Skeleton</description>
 					<class>gov.nih.nci.cagrid.introduce.portal.modification.ModificationViewer</class>
-					<icon>/edit.png</icon>
+					<icon>/cog_edit.png</icon>
 					<dimensions>
 						<width>0</width>
 						<height>0</height>
@@ -36,7 +36,7 @@
 					<title>Deploy Service</title>
 					<description>Deploy Grid Service</description>
 					<class>gov.nih.nci.cagrid.introduce.portal.deployment.DeploymentViewer</class>
-					<icon>/deploy.png</icon>
+					<icon>/cog_go.png</icon>
 					<dimensions>
 						<width>0</width>
 						<height>0</height>
