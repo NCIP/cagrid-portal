@@ -739,10 +739,5 @@ public class DataServiceModifier extends GridPortalComponent {
 		};
 		Thread runner = new Thread(saver);
 		runner.run();
-		try {
-			runner.join();
-		} catch (InterruptedException ex) {
-			ex.printStackTrace();
-		}
 	}
 }
