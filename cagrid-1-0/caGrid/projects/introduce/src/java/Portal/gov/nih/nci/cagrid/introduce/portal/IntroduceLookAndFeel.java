@@ -18,7 +18,7 @@ import javax.swing.ImageIcon;
 public class IntroduceLookAndFeel extends PortalLookAndFeel {
 
 	public final static ImageIcon getCreateIcon() {
-		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/window-new.png"));
+		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/cog_add.png"));
 	}
 
 
