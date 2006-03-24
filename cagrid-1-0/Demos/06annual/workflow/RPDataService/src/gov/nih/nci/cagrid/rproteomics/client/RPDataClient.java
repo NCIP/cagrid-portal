@@ -98,13 +98,13 @@ public class RPDataClient implements RPDataI {
 	public static void main(String[] args) 
 		throws Exception
 	{
-//		args = new String[] {
-//			//"-gsh", "http://ccis1716.duhs.duke.edu/wsrf/services/cagrid/RPData",
-//			"-gsh", "http://localhost:8080/wsrf/services/cagrid/RPData",
-//			//"-gsh", "http://140.254.80.99:8080/wsrf/services/cagrid/RPData",
-//			"-query", "queries\\scanFeatures_query3.xml",
-//			//"-printXml"
-//		};
+		args = new String[] {
+			"-gsh", "http://ccis1716.duhs.duke.edu/wsrf/services/cagrid/RPData",
+			//"-gsh", "http://localhost:8080/wsrf/services/cagrid/RPData",
+			//"-gsh", "http://140.254.80.99:8080/wsrf/services/cagrid/RPData",
+			"-query", "queries\\scanFeatures_query3.xml",
+			"-printXml"
+		};
 		
         Options options = getOptions();
         CommandLine cmd = null;

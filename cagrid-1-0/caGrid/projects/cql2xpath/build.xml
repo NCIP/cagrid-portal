@@ -32,6 +32,8 @@
 	<property name="test.logs.dir" location="${test.dir}/logs" />
 	<property name="test.project.jar" location="${jar.dir}/${project.name}-tests-${project.version}.jar" />
 
+	<property name="java.debug" value="on"/>
+	
 	<!-- Load common util path -->
 	<import file="../../antfiles/ant-utilities.xml" />
 	<import file="../../antfiles/test-utilities.xml" />
@@ -105,7 +107,7 @@
 	<!-- =================================================================== -->
 	<target name="compile" depends="prepare" description="Compiles all the source files.">
 		<mkdir dir="${classes.dir}" />
-		<javac srcdir="${src.dir}" destdir="${classes.dir}">
+		<javac srcdir="${src.dir}" destdir="${classes.dir}" debug="${java.debug}">
 			<classpath refid="build.classpath" />
 		</javac>
 	</target>

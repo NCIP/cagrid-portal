@@ -68,7 +68,7 @@
 	<classpathentry kind="lib" path="lib/globus_wsrf_servicegroup_stubs.jar"/>
 	<classpathentry kind="lib" path="lib/globus_wsrf_servicegroup.jar"/>
 	<classpathentry kind="lib" path="lib/caGrid-core-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-cql2xpath-1.0.jar"/>
+	<classpathentry sourcepath="/caGrid-1.0-cql2xpath/src/java" kind="lib" path="lib/caGrid-cql2xpath-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/rproteomics.jar"/>
 	<classpathentry kind="lib" path="mako/lib/antlr.jar"/>
 	<classpathentry kind="lib" path="mako/lib/commons-logging-1.0.3.jar"/>

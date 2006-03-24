@@ -76,7 +76,7 @@ public class CqlXpathConverter
 		StringBuffer xpath = new StringBuffer();
 
 		CqlNode[] childPath = null;
-		if (objs != null) {
+		if (objs != null && objs.getName() != null) {
 			// find path from root to the child object
 			CqlNode child = null;
 			String childXpath = null;
@@ -99,6 +99,7 @@ public class CqlXpathConverter
 			Property[] props = objs.getProperty();
 			for (int i = 0; i < props.length; i++) {
 				Property prop = props[i];
+				if (prop.getName() == null) continue;
 				
 				CqlNode.CqlProperty cqlProp = child.findProperty(prop.getName());
 				if (cqlProp == null) {
@@ -140,7 +141,7 @@ public class CqlXpathConverter
 		if (group != null) {
 			if (childPath == null) childPath = path;
 			Objects[] objsArr = group.getObjects();
-			for (int i = 0; i < objsArr.length; i++) {
+			for (int i = 0; objsArr != null && i < objsArr.length; i++) {
 				String nextXpath = toXpath(path, objsArr[i], objsArr[i].getGroup());
 				if (nextXpath != null && ! nextXpath.equals("")) {
 					if (xpath.length() > 0) xpath.append(" and ");
