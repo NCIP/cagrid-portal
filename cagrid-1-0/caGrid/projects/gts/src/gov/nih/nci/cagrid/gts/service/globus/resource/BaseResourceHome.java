@@ -14,6 +14,8 @@ public class BaseResourceHome extends SingletonResourceHome {
 
 	static final Log logger = LogFactory.getLog(BaseResourceHome.class);
 
+	private String gtsConfig;
+
 
 	public Resource findSingleton() {
 		logger.info("Creating a single resource.");
@@ -25,5 +27,15 @@ public class BaseResourceHome extends SingletonResourceHome {
 			logger.error("Exception when creating the resource: " + e);
 			return null;
 		}
+	}
+
+
+	public String getGtsConfig() {
+		return gtsConfig;
+	}
+
+
+	public void setGtsConfig(String gtsConfig) {
+		this.gtsConfig = gtsConfig;
 	}
 }
