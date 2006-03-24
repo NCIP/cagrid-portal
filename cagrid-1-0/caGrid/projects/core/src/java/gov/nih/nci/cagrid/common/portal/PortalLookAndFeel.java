@@ -90,6 +90,6 @@ public class PortalLookAndFeel {
 	
 	public final static ImageIcon getImportIcon() {
 		return new javax.swing.ImageIcon(PortalLookAndFeel.class
-				.getResource("/Door.gif"));
+				.getResource("/folder-open.png"));
 	}
 }

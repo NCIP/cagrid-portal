@@ -16,21 +16,17 @@ public class GridCALookAndFeel extends PortalLookAndFeel {
 
 	public final static ImageIcon getCertificateIcon() {
 		return new javax.swing.ImageIcon(GridCALookAndFeel.class
-				.getResource("/BCard.gif"));
+				.getResource("/contact-new.png"));
 	}
 	
 	public final static ImageIcon getProxyManagerIcon() {
 		return new javax.swing.ImageIcon( GridCALookAndFeel.class
-				.getResource("/EditBCard.gif"));
+				.getResource("/contact-new.png"));
 	}
 	
-	public final static ImageIcon getDeleteProxyIcon() {
-		return new javax.swing.ImageIcon( GridCALookAndFeel.class
-				.getResource("/DeleteBCard.gif"));
-	}
 	
-	public final static ImageIcon getGreenFlagIcon() {
+	public final static ImageIcon getDefaultIcon() {
 		return new javax.swing.ImageIcon(GridCALookAndFeel.class
-				.getResource("/GreenFlag.gif"));
+				.getResource("/go-home.png"));
 	}
 }

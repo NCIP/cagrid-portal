@@ -323,7 +323,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 					}
 				}
 			});
-			setDefaultProxy.setIcon(GridCALookAndFeel.getGreenFlagIcon());
+			setDefaultProxy.setIcon(GridCALookAndFeel.getDefaultIcon());
 		}
 		return setDefaultProxy;
 	}
@@ -338,7 +338,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		if (deleteProxy == null) {
 			deleteProxy = new JButton();
 			deleteProxy.setText("Delete Proxy");
-			deleteProxy.setIcon(GridCALookAndFeel.getDeleteProxyIcon());
+			deleteProxy.setIcon(GridCALookAndFeel.getRemoveIcon());
 			deleteProxy.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					ProxyCaddy caddy = (ProxyCaddy) getProxy().getSelectedItem();
