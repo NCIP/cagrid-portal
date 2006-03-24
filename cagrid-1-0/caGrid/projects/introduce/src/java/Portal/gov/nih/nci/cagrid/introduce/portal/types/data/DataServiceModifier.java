@@ -9,8 +9,9 @@ import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
-import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.modification.gme.GMETypeSelectionComponent;
@@ -24,6 +25,7 @@ import java.awt.Insets;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
@@ -35,10 +37,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.tree.TreeSelectionModel;
+import javax.xml.namespace.QName;
 
+import org.jdom.Document;
 import org.projectmobius.common.GridServiceResolver;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.Namespace;
+import org.projectmobius.common.XMLUtilities;
 import org.projectmobius.gme.XMLDataModelService;
 import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
 import org.projectmobius.portal.GridPortalComponent;
@@ -78,7 +83,6 @@ public class DataServiceModifier extends GridPortalComponent {
 	// service information
 	private ServiceDescription dataServiceDescription;
 	private ServiceInformation dataServiceInformation;
-	private Properties dataServiceProperties;	
 	private File serviceDirectory;
 	
 	// flag to indicate data has been modified
@@ -93,6 +97,7 @@ public class DataServiceModifier extends GridPortalComponent {
 		super();
 		this.dirty = false;
 		this.serviceDirectory = serviceDirectory;
+		loadStoredServiceData();
 		initialize();
 	}
 	
@@ -137,15 +142,15 @@ public class DataServiceModifier extends GridPortalComponent {
 	
 	private void initialize() {
 		setTitle("Modify Data Service");
+		setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
 		this.setContentPane(getMainPanel());
 		setSize(800, 500);
-		setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
-		loadStoredServiceData();
 	}
 	
 	
 	private void loadStoredServiceData() {
 		if (serviceDirectory != null) {
+			System.out.println("Loading stored service data");
 			try {
 				dataServiceDescription = (ServiceDescription) Utils.deserializeDocument(serviceDirectory.getAbsolutePath()
 					+ File.separator + "introduce.xml", ServiceDescription.class);
@@ -156,12 +161,11 @@ public class DataServiceModifier extends GridPortalComponent {
 						+ IntroduceConstants.INTRODUCE_VERSION + " ): " + dataServiceDescription.getIntroduceVersion());
 				}
 				
-				dataServiceInformation = new ServiceInformation(dataServiceDescription, dataServiceProperties, serviceDirectory);
-				
-				dataServiceProperties = new Properties();
+				Properties dataServiceProperties = new Properties();
 				dataServiceProperties.load(new FileInputStream(serviceDirectory.getAbsolutePath() + File.separator
 					+ "introduce.properties"));
 				dataServiceProperties.setProperty("introduce.skeleton.destination.dir", serviceDirectory.getAbsolutePath());
+				dataServiceInformation = new ServiceInformation(dataServiceDescription, dataServiceProperties, serviceDirectory);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -257,7 +261,7 @@ public class DataServiceModifier extends GridPortalComponent {
 	
 	private NamespacesJTree getNamespaceTree() {
 		if (namespaceTree == null) {
-			namespaceTree = new NamespacesJTree(new NamespacesType());
+			namespaceTree = new NamespacesJTree(dataServiceDescription.getNamespaces());
 			namespaceTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 		}
 		return namespaceTree;
@@ -331,7 +335,7 @@ public class DataServiceModifier extends GridPortalComponent {
 					int choice = JOptionPane.showConfirmDialog(DataServiceModifier.this,
 						"Are you sure you would like to save changes?", "Confirm Save", JOptionPane.OK_OPTION);
 					if (choice == JOptionPane.OK_OPTION) {
-						// TODO: save
+						saveService();
 					}
 				}
 			});
@@ -362,6 +366,7 @@ public class DataServiceModifier extends GridPortalComponent {
 							public void process() {
 								setProgressText("restoring from local cache");
 								try {
+									Properties dataServiceProperties = dataServiceInformation.getServiceProperties();
 									ResourceManager.restoreLatest(
 										dataServiceProperties.getProperty("introduce.skeleton.timestamp"), 
 										dataServiceProperties.getProperty("introduce.skeleton.service.name"),
@@ -470,8 +475,10 @@ public class DataServiceModifier extends GridPortalComponent {
 					if (selectedNodes.size() != 0 && selectedNodes.get(0) instanceof SchemaElementTypeTreeNode) {
 						dirty = true;
 						SchemaElementTypeTreeNode selectedNode = (SchemaElementTypeTreeNode) selectedNodes.get(0);
+						NamespaceTypeTreeNode namespaceNode = (NamespaceTypeTreeNode) selectedNode.getParent();
+						NamespaceType namespace = (NamespaceType) namespaceNode.getUserObject();
 						SchemaElementType type = (SchemaElementType) selectedNode.getUserObject();
-						getDataTypesTable().addSchemaElement(type);
+						getDataTypesTable().addSchemaElement(namespace, type);
 					}
 				}
 			});
@@ -565,9 +572,7 @@ public class DataServiceModifier extends GridPortalComponent {
 						dirty = true;
 						NamespaceType nsType = (NamespaceType) getNamespaceTree().getCurrentNode().getUserObject();
 						getNamespaceTree().removeSelectedNode();
-						removeSchemaFromCache(new File(serviceDirectory + File.separator + "schema" + File.separator
-							+ dataServiceInformation.getServiceProperties().getProperty("introduce.skeleton.service.name")), 
-							nsType.getNamespace());
+						removeSchemaFromCache(nsType.getNamespace());
 						removeNamespaceFromServiceDescription(nsType);
 					}
 				}
@@ -629,11 +634,32 @@ public class DataServiceModifier extends GridPortalComponent {
 	}
 	
 	
-	private void removeSchemaFromCache(File dir, String namespace) {
-		String xsdName = dir.getAbsolutePath() + File.separator + namespace + ".xsd";
-		File xsdFile = new File(xsdName);
-		if (xsdFile.exists()) {
-			xsdFile.delete();
+	private void removeSchemaFromCache(String namespace) {
+		/*
+		 * The following ugly hack brought to you by the fact that the GME's
+		 * cacheSchema() method doesn't tell you what file name it saved the schema
+		 * to.  Therefore, I'm opening the schema directory, iterating all XSDs,
+		 * looking at their namespace, and removing the one that matches.
+		 */
+		final File schemaDir = new File(serviceDirectory.getAbsolutePath() + File.separator + "schema");
+		File[] schemaFiles = schemaDir.listFiles(new FilenameFilter() {
+			public boolean accept(File dir, String name) {
+				return (dir.equals(schemaDir) && name.toLowerCase().endsWith(".xsd"));
+			}
+		});
+		for (int i = 0; i < schemaFiles.length; i++) {
+			try {
+				Namespace ns = new Namespace(namespace);
+				Document schemaDoc = XMLUtilities.fileNameToDocument(schemaFiles[i].getAbsolutePath());
+				String targetNamespace = schemaDoc.getRootElement().getAttributeValue("targetNamespace");
+				Namespace targetNs = new Namespace(targetNamespace);
+				if (ns.getNamespace().equals(targetNs.getNamespace())) {
+					schemaFiles[i].delete();
+					break;
+				}
+			} catch (MobiusException ex) {
+				ex.printStackTrace();
+			}
 		}
 	}
 	
@@ -656,27 +682,67 @@ public class DataServiceModifier extends GridPortalComponent {
 	
 	private void removeNamespaceFromServiceDescription(NamespaceType ns) {
 		// create a new array of namespace types
-		StringBuffer nsStringBuffer = new StringBuffer();
-		nsStringBuffer.append(ns.getLocation()).append("{::}");
-		nsStringBuffer.append(ns.getNamespace()).append("{::}");
-		nsStringBuffer.append(ns.getPackageName());
-		String nsString = nsStringBuffer.toString();
 		NamespaceType[] existingNamespaces = dataServiceDescription.getNamespaces().getNamespace();
 		NamespaceType[] namespaces = new NamespaceType[existingNamespaces.length - 1];
-		// TODO: evaluate how good of a check for equality this is
 		int namespaceIndex = 0;
-		StringBuffer existingString = new StringBuffer();
 		for (int i = 0; i < existingNamespaces.length; i++) {
-			existingString.setLength(0);
-			existingString.append(existingNamespaces[i].getLocation()).append("{::}");
-			existingString.append(existingNamespaces[i].getNamespace()).append("{::}");
-			existingString.append(existingNamespaces[i].getPackageName());
-			if (!nsString.equals(existingString.toString())) {
+			if (!ns.equals(existingNamespaces[i])) {
 				namespaces[namespaceIndex] = existingNamespaces[i];
 				namespaceIndex++;
 			}
 		}
 		// set the namespaces into the service description
 		dataServiceDescription.getNamespaces().setNamespace(namespaces);
+	}
+	
+	
+	private void saveService() {
+		BusyDialogRunnable saver = new BusyDialogRunnable(PortalResourceManager.getInstance().getGridPortal(), "Save Service") {
+			public void process() {
+				setProgressText("saving service description");
+				try {
+					Utils.serializeDocument(serviceDirectory.getAbsolutePath() + File.separator
+						+ "introduce.xml", dataServiceDescription, new QName(
+							"gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					PortalUtils.showErrorMessage("Error saving description", ex);
+				}
+				setProgressText("synchronizing the service");
+				try {
+					// call the sync tools
+					SyncTools sync = new SyncTools(serviceDirectory);
+					sync.sync();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					PortalUtils.showErrorMessage("Error synchronizing the service", ex);
+				}
+				setProgressText("rebuilding skeleton");
+				try {
+					String cmd = CommonTools.getAntCommand("clean all", serviceDirectory.getAbsolutePath());
+					Process p = CommonTools.createAndOutputProcess(cmd);
+					p.waitFor();
+					if (p.exitValue() != 0) {
+						JOptionPane.showMessageDialog(DataServiceModifier.this,
+						"Error: Unable to rebuild the skeleton");
+						return;
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					PortalUtils.showErrorMessage("Error rebuilding skeleton", ex);
+				}
+				dirty = false;
+				setProgressText("reloading service properties");
+				loadStoredServiceData();
+				this.setProgressText("");
+			}
+		};
+		Thread runner = new Thread(saver);
+		runner.run();
+		try {
+			runner.join();
+		} catch (InterruptedException ex) {
+			ex.printStackTrace();
+		}
 	}
 }

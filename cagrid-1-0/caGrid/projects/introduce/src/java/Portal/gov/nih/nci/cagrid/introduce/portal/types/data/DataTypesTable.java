@@ -1,13 +1,18 @@
 package gov.nih.nci.cagrid.introduce.portal.types.data;
 
 import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
+
+import org.projectmobius.common.MalformedNamespaceException;
+import org.projectmobius.common.Namespace;
 
 /** 
  *  DataTypesTable
@@ -36,9 +41,13 @@ public class DataTypesTable extends PortalBaseTable {
 	}
 	
 	
-	public void addSchemaElement(SchemaElementType element) {
+	public void addSchemaElement(NamespaceType namespace, SchemaElementType element) {
 		Vector row = new Vector(3);
-		row.add(element.getPackageName());
+		try {
+			row.add(CommonTools.getPackageName(new Namespace(namespace.getNamespace())));
+		} catch (MalformedNamespaceException ex) {
+			row.add("!! ERROR !!");
+		}
 		row.add(element.getClassName());
 		row.add(element.getType());
 		((DefaultTableModel) getModel()).addRow(row);
@@ -70,8 +79,8 @@ public class DataTypesTable extends PortalBaseTable {
 	
 
 	public void doubleClick() throws Exception {
-		// TODO Auto-generated method stub
-
+		// TODO: can somebody make these optional instead of abstract
+		// and therefire required???
 	}
 
 
