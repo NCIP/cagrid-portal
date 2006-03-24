@@ -5,7 +5,7 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
@@ -28,7 +28,7 @@ public class DataTypesTable extends PortalBaseTable {
 	
 	public DataTypesTable() {
 		super(createTableModel());
-		types = new ArrayList();
+		types = new LinkedList();
 	}
 	
 	
@@ -42,16 +42,18 @@ public class DataTypesTable extends PortalBaseTable {
 	
 	
 	public void addSchemaElement(NamespaceType namespace, SchemaElementType element) {
-		Vector row = new Vector(3);
-		try {
-			row.add(CommonTools.getPackageName(new Namespace(namespace.getNamespace())));
-		} catch (MalformedNamespaceException ex) {
-			row.add("!! ERROR !!");
+		if (!types.contains(element)) {
+			Vector row = new Vector(3);
+			try {
+				row.add(CommonTools.getPackageName(new Namespace(namespace.getNamespace())));
+			} catch (MalformedNamespaceException ex) {
+				row.add("!! ERROR !!");
+			}
+			row.add(element.getClassName());
+			row.add(element.getType());
+			((DefaultTableModel) getModel()).addRow(row);
+			types.add(element);
 		}
-		row.add(element.getClassName());
-		row.add(element.getType());
-		((DefaultTableModel) getModel()).addRow(row);
-		types.add(element);
 	}
 	
 	
