@@ -31,7 +31,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.13 2006-03-22 05:01:03 langella Exp $
+ * @version $Id: UserWindow.java,v 1.14 2006-03-24 17:20:37 langella Exp $
  */
 public class UserWindow extends GridPortalBaseFrame {
 
@@ -146,7 +146,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		this.proxy = proxy;
 		this.user = u;
 		initialize();
-		this.setFrameIcon(DorianLookAndFeel.getUserMagnifyIcon());
+		this.setFrameIcon(DorianLookAndFeel.getUserBrowse());
 	}
 
 	/**

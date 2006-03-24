@@ -41,7 +41,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.14 2006-03-22 05:01:03 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.15 2006-03-24 17:20:37 langella Exp $
  */
 public class UserManagerWindow extends GridPortalBaseFrame {
 
@@ -305,7 +305,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		if (manageUser == null) {
 			manageUser = new JButton();
 			manageUser.setText("Manage User");
-			manageUser.setIcon(DorianLookAndFeel.getUserMagnifyIcon());
+			manageUser.setIcon(DorianLookAndFeel.getUserBrowse());
 			manageUser.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					showUser();

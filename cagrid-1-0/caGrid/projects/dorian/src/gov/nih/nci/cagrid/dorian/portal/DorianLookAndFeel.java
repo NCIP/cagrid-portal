@@ -14,99 +14,80 @@ import javax.swing.ImageIcon;
 public class DorianLookAndFeel extends PortalLookAndFeel {
 	public final static ImageIcon getIdpIcon() {
 		return new javax.swing.ImageIcon(DorianLookAndFeel.class
-				.getResource("/LuggageCounter.gif"));
+				.getResource("/system-users.png"));
 	}
 
 	public final static ImageIcon getIFSIcon() {
 		return new javax.swing.ImageIcon(DorianLookAndFeel.class
-				.getResource("/FlowGraph.gif"));
+				.getResource("/applications-internet.png"));
 	}
 	
 	public final static ImageIcon getTrustedIdPIcon() {
 		return new javax.swing.ImageIcon(DorianLookAndFeel.class
-				.getResource("/Chain.gif"));
+				.getResource("/group_link.png"));
 	}
 	
 	public final static ImageIcon getAddTrustedIdPIcon() {
 		return new javax.swing.ImageIcon(DorianLookAndFeel.class
-				.getResource("/NewPlug.gif"));
+				.getResource("/group_add.png"));
 	}
 	
 	public final static ImageIcon getRemoveTrustedIdPIcon() {
 		return new javax.swing.ImageIcon(DorianLookAndFeel.class
-				.getResource("/UnPlug.gif"));
+				.getResource("/group_delete.png"));
 	}
 
-	//TODO: REMOVE
 	public final static ImageIcon getCertificateIcon() {
 		return new javax.swing.ImageIcon(DorianLookAndFeel.class
-				.getResource("/BCard.gif"));
+				.getResource("/contact-new.png"));
 	}
 	
 
 	
 	public final static ImageIcon getCertificateActionIcon() {
 		return new javax.swing.ImageIcon(DorianLookAndFeel.class
-				.getResource("/EditBCard.gif"));
+				.getResource("/contact-new.png"));
 	}
 
 	
-	//TODO: REMOVE
-	public final static ImageIcon getProxyManagerIcon() {
-		return new javax.swing.ImageIcon(DorianLookAndFeel.class
-				.getResource("/EditBCard.gif"));
-	}
-	
-	//TODO: REMOVE
-	public final static ImageIcon getDeleteProxyIcon() {
-		return new javax.swing.ImageIcon(DorianLookAndFeel.class
-				.getResource("/DeleteBCard.gif"));
-	}
+
 
 
 	public final static ImageIcon getAuthenticateIcon() {
 		return new javax.swing.ImageIcon(DorianLookAndFeel.class
-				.getResource("/Lock.gif"));
+				.getResource("/key.png"));
 	}
 
-	//TODO: Remove
-	public final static ImageIcon getGreenFlagIcon() {
-		return new javax.swing.ImageIcon(DorianLookAndFeel.class
-				.getResource("/GreenFlag.gif"));
-	}
+
 
 	public final static ImageIcon getUsersIcon() {
 		return new javax.swing.ImageIcon(DorianLookAndFeel.class
-				.getResource("/Users.gif"));
+				.getResource("/system-users.png"));
 	}
 	
 	public final static ImageIcon getUserIcon() {
 		return new javax.swing.ImageIcon(DorianLookAndFeel.class
-				.getResource("/User.gif"));
+				.getResource("/user.png"));
 	}
 	
 	public final static ImageIcon getRemoveUserIcon() {
 		return new javax.swing.ImageIcon(DorianLookAndFeel.class
-				.getResource("/DeleteUser.gif"));
+				.getResource("/user_delete.png"));
 	}
 
 	public final static ImageIcon getUpdateUserIcon() {
 		return new javax.swing.ImageIcon(DorianLookAndFeel.class
-				.getResource("/Reply.gif"));
+				.getResource("/user_edit.png"));
 	}
 
-	public final static ImageIcon getUserMagnifyIcon() {
+	public final static ImageIcon getUserBrowse() {
 		return new javax.swing.ImageIcon(DorianLookAndFeel.class
-				.getResource("/UserMagnify.gif"));
+				.getResource("/user_edit.png"));
 	}
 
 	public final static ImageIcon getApplicationIcon() {
 		return new javax.swing.ImageIcon(DorianLookAndFeel.class
-				.getResource("/Paste.gif"));
+				.getResource("/edit-paste.png"));
 	}
 
-	public final static ImageIcon getLoginIcon() {
-		return new javax.swing.ImageIcon(DorianLookAndFeel.class
-				.getResource("/Lock.gif"));
-	}
 }

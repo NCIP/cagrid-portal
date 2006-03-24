@@ -12,11 +12,11 @@ public class PortalLookAndFeel {
 	}
 
 	public final static Color getTableSelectTextColor() {
-		return Color.BLACK;
+		return Color.WHITE;
 	}
 
 	public final static Color getTableRowColor() {
-		return getLightGray();
+		return getLightBlue();
 	}
 	
 	public final static Color getLightGray() {
@@ -45,7 +45,7 @@ public class PortalLookAndFeel {
 	}
 
 	public final static Color getTableSelectColor() {
-		return getDarkGray();
+		return getDarkBlue();
 	}
 
 	public final static ImageIcon getCloseIcon() {
@@ -80,7 +80,7 @@ public class PortalLookAndFeel {
 
 	public final static ImageIcon getQueryIcon() {
 		return new javax.swing.ImageIcon(PortalLookAndFeel.class
-				.getResource("/Magnify.gif"));
+				.getResource("/system-search.png"));
 	}
 	
 	public final static ImageIcon getSaveIcon() {
