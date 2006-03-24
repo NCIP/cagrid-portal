@@ -19,7 +19,6 @@ import javax.swing.table.DefaultTableModel;
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
- * 
  */
 public class MethodsTable extends PortalBaseTable {
 	public static final String OPERATION = "Operation";
@@ -46,7 +45,8 @@ public class MethodsTable extends PortalBaseTable {
 			}
 		}
 	}
-	
+
+
 	public void removeSelectedRow() throws Exception {
 		int row = getSelectedRow();
 		if ((row < 0) || (row >= getRowCount())) {
@@ -122,60 +122,53 @@ public class MethodsTable extends PortalBaseTable {
 		public String toString() {
 			// assume its void to start with
 			String output = "void";
-			
-			return this.method.getName();
 
-//			MethodTypeOutput outputType = this.method.getOutput();
-//			if (outputType != null) {
-//				// use classname if set, else use schema type
-//				if (outputType.getClassName() != null && !outputType.getClassName().trim().equals("")) {
-//					output = outputType.getClassName();
-//				} else if (outputType.getType() != null && !outputType.getType().trim().equals("")) {
-//					output = outputType.getType();
-//				}
-//
-//				// add array notation if its an array
-//				if (outputType.getIsArray() != null && outputType.getIsArray().booleanValue()) {
-//					output += "[]";
-//				}
-//			}
-//
-//			String input = "";
-//			MethodTypeInputs inputs = this.method.getInputs();
-//			if (inputs != null) {
-//				MethodTypeInputsInput[] inputarr = inputs.getInput();
-//				if (inputarr != null) {
-//					for (int i = 0; i < inputarr.length; i++) {
-//						MethodTypeInputsInput inputType = inputarr[i];
-//						// use classname if set, else use schema type
-//						if (inputType.getClassName() != null && !inputType.getClassName().trim().equals("")) {
-//							if (!input.equals("")) {
-//								input += ", ";
-//							}
-//							input += inputType.getClassName();
-//						} else if (inputType.getType() != null && !inputType.getType().trim().equals("")) {
-//							if (!input.equals("")) {
-//								input += ", ";
-//							}
-//							input += inputType.getType();
-//						} else {
-//							// why would this be the case?
-//							continue;
-//						}
-//
-//						// add array notation if its an array
-//						if (inputType.getIsArray() != null && inputType.getIsArray().booleanValue()) {
-//							input += "[]";
-//						}
-//
-//						input += " " + inputType.getName();
-//					}
-//				}
-//			}
-//
-//			output += " " + method.getName() + "(" + input + ")";
-//
-//			return output;
+			MethodTypeOutput outputType = this.method.getOutput();
+			if (outputType != null) {
+				// use classname if set, else use schema type
+				if (outputType.getQName() != null && outputType.getQName().getLocalPart() != null
+					&& !outputType.getQName().getLocalPart().trim().equals("")) {
+					output = outputType.getQName().getLocalPart();
+				}
+
+				// add array notation if its an array
+				if (outputType.isIsArray()) {
+					output += "[]";
+				}
+			}
+
+			String input = "";
+			MethodTypeInputs inputs = this.method.getInputs();
+			if (inputs != null) {
+				MethodTypeInputsInput[] inputarr = inputs.getInput();
+				if (inputarr != null) {
+					for (int i = 0; i < inputarr.length; i++) {
+						MethodTypeInputsInput inputType = inputarr[i];
+						// use classname if set, else use schema type
+						if (inputType.getQName() != null && inputType.getQName().getLocalPart() != null
+							&& !inputType.getQName().getLocalPart().trim().equals("")) {
+							if (!input.equals("")) {
+								input += ", ";
+							}
+							input += inputType.getQName().getLocalPart();
+						} else {
+							// why would this be the case?
+							continue;
+						}
+
+						// add array notation if its an array
+						if (inputType.isIsArray()) {
+							input += "[]";
+						}
+
+						input += " " + inputType.getName();
+					}
+				}
+			}
+
+			output += " " + method.getName() + "(" + input + ")";
+
+			return output;
 		}
 	}
 
