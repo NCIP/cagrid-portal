@@ -74,7 +74,7 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
          </assign>
       </while>
       <!-- Invoking echoByValue operation on Rproteomics analytical service -->
-      <invoke inputVariable="echoByValueInputMessage" operation="echoByValue" outputVariable="echoByValueOutputMessage" partnerLink="OSURproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
+      <invoke inputVariable="echoByValueInputMessage" operation="echoByValue" outputVariable="echoByValueOutputMessage" partnerLink="DukeRproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
       <assign>
          <copy>
             <from expression="&quot;1&quot;"/>
