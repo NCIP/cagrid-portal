@@ -1,8 +1,8 @@
-<xsd:schema targetNamespace="http://cagrid.nci.nih.gov/5/gts"
+<xsd:schema targetNamespace="http://cagrid.nci.nih.gov/6/gts"
 	attributeFormDefault="qualified"
 	elementFormDefault="qualified"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-	xmlns:gts="http://cagrid.nci.nih.gov/5/gts">    
+	xmlns:gts="http://cagrid.nci.nih.gov/6/gts">    
 	
 	   <xsd:element name="Permission" minOccurs="0" maxOccurs="1" type="gts:Permission"/>
 	
@@ -89,5 +89,4 @@
 			</xsd:sequence>
 		</xsd:complexType>
 		
-		<xsd:element name="TrustedAuthorityNameStr" minOccurs="1" maxOccurs="1" type="xsd:string"/>
 </xsd:schema>

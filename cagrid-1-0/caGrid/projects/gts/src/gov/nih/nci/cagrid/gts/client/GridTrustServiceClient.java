@@ -190,126 +190,96 @@ public class GridTrustServiceClient implements GridTrustServiceI {
 
 
 
-	     public void removeTrustedAuthority(String trustedAuthorityName) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	     public gov.nih.nci.cagrid.gts.bean.Permission[] findPermissions(gov.nih.nci.cagrid.gts.bean.PermissionFilter f) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
                GridTrustServicePortType port = this.getPortType();
                org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
 
-stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_CONV, org.globus.wsrf.security.Constants.ENCRYPTION);
-	if (proxy != null) {
-try{
-		org.ietf.jgss.GSSCredential gss = new org.globus.gsi.gssapi.GlobusGSSCredentialImpl(proxy,org.ietf.jgss.GSSCredential.INITIATE_AND_ACCEPT);
-		stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_CREDENTIALS, gss);
-}catch(org.ietf.jgss.GSSException ex){
-throw new RemoteException(ex.getMessage());
-}
-}
-stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());
+               gov.nih.nci.cagrid.gts.stubs.FindPermissions params = new gov.nih.nci.cagrid.gts.stubs.FindPermissions();
+               gov.nih.nci.cagrid.gts.stubs.FindPermissionsF fContainer = new gov.nih.nci.cagrid.gts.stubs.FindPermissionsF();
+               fContainer.setPermissionFilter(f);
+               params.setF(fContainer);
+               gov.nih.nci.cagrid.gts.stubs.FindPermissionsResponse boxedResult = port.findPermissions(params);
+               return boxedResult.getPermission();
+
+	}
+
+	     public void revokePermission(gov.nih.nci.cagrid.gts.bean.Permission permission) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+               GridTrustServicePortType port = this.getPortType();
+               org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
+
+               gov.nih.nci.cagrid.gts.stubs.RevokePermission params = new gov.nih.nci.cagrid.gts.stubs.RevokePermission();
+               gov.nih.nci.cagrid.gts.stubs.RevokePermissionPermission permissionContainer = new gov.nih.nci.cagrid.gts.stubs.RevokePermissionPermission();
+               permissionContainer.setPermission(permission);
+               params.setPermission(permissionContainer);
+               gov.nih.nci.cagrid.gts.stubs.RevokePermissionResponse boxedResult = port.revokePermission(params);
+               
+	}
+
+	     public gov.nih.nci.cagrid.gts.bean.TrustedAuthority addTrustedAuthority(gov.nih.nci.cagrid.gts.bean.TrustedAuthority ta) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+               GridTrustServicePortType port = this.getPortType();
+               org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
+
+               gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthority params = new gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthority();
+               gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityTa taContainer = new gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityTa();
+               taContainer.setTrustedAuthority(ta);
+               params.setTa(taContainer);
+               gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityResponse boxedResult = port.addTrustedAuthority(params);
+               return boxedResult.getTrustedAuthority();
+
+	}
+
+	     public gov.nih.nci.cagrid.gts.bean.TrustedAuthority[] findTrustedAuthorities(gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter f) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault {
+               GridTrustServicePortType port = this.getPortType();
+               org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
+
+               gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthorities params = new gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthorities();
+               gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesF fContainer = new gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesF();
+               fContainer.setTrustedAuthorityFilter(f);
+               params.setF(fContainer);
+               gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesResponse boxedResult = port.findTrustedAuthorities(params);
+               return boxedResult.getTrustedAuthority();
+
+	}
+
+	     public void removeTrustedAuthority(java.lang.String trustedAuthorityName) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+               GridTrustServicePortType port = this.getPortType();
+               org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
+
                gov.nih.nci.cagrid.gts.stubs.RemoveTrustedAuthority params = new gov.nih.nci.cagrid.gts.stubs.RemoveTrustedAuthority();
                params.setTrustedAuthorityName(trustedAuthorityName);
                gov.nih.nci.cagrid.gts.stubs.RemoveTrustedAuthorityResponse boxedResult = port.removeTrustedAuthority(params);
                
 	}
 
-	     public gov.nih.nci.cagrid.gts.bean.TrustedAuthority addTrustedAuthority(gov.nih.nci.cagrid.gts.bean.TrustedAuthority TrustedAuthority) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+	     public void addPermission(gov.nih.nci.cagrid.gts.bean.Permission permission) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
                GridTrustServicePortType port = this.getPortType();
                org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
 
-stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_CONV, org.globus.wsrf.security.Constants.ENCRYPTION);
-	if (proxy != null) {
-try{
-		org.ietf.jgss.GSSCredential gss = new org.globus.gsi.gssapi.GlobusGSSCredentialImpl(proxy,org.ietf.jgss.GSSCredential.INITIATE_AND_ACCEPT);
-		stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_CREDENTIALS, gss);
-}catch(org.ietf.jgss.GSSException ex){
-throw new RemoteException(ex.getMessage());
-}
-}
-stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());
-               gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthority params = new gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthority();
-               gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityTrustedAuthority TrustedAuthorityContainer = new gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityTrustedAuthority();
-               TrustedAuthorityContainer.setTrustedAuthority(TrustedAuthority);
-               params.setTrustedAuthority(TrustedAuthorityContainer);
-               gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityResponse boxedResult = port.addTrustedAuthority(params);
-               return boxedResult.getTrustedAuthority();
-
-	}
-
-	     public gov.nih.nci.cagrid.gts.bean.TrustedAuthority[] findTrustedAuthorities(gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter TrustedAuthorityFilter) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault {
-               GridTrustServicePortType port = this.getPortType();
-               org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
-
-               gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthorities params = new gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthorities();
-               gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesTrustedAuthorityFilter TrustedAuthorityFilterContainer = new gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesTrustedAuthorityFilter();
-               TrustedAuthorityFilterContainer.setTrustedAuthorityFilter(TrustedAuthorityFilter);
-               params.setTrustedAuthorityFilter(TrustedAuthorityFilterContainer);
-               gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesResponse boxedResult = port.findTrustedAuthorities(params);
-               return boxedResult.getTrustedAuthority();
-
-	}
-
-	     public void addPermission(gov.nih.nci.cagrid.gts.bean.Permission Permission) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault {
-               GridTrustServicePortType port = this.getPortType();
-               org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
-
-stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_CONV, org.globus.wsrf.security.Constants.ENCRYPTION);
-	if (proxy != null) {
-try{
-		org.ietf.jgss.GSSCredential gss = new org.globus.gsi.gssapi.GlobusGSSCredentialImpl(proxy,org.ietf.jgss.GSSCredential.INITIATE_AND_ACCEPT);
-		stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_CREDENTIALS, gss);
-}catch(org.ietf.jgss.GSSException ex){
-throw new RemoteException(ex.getMessage());
-}
-}
-stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());
                gov.nih.nci.cagrid.gts.stubs.AddPermission params = new gov.nih.nci.cagrid.gts.stubs.AddPermission();
-               gov.nih.nci.cagrid.gts.stubs.AddPermissionPermission PermissionContainer = new gov.nih.nci.cagrid.gts.stubs.AddPermissionPermission();
-               PermissionContainer.setPermission(Permission);
-               params.setPermission(PermissionContainer);
+               gov.nih.nci.cagrid.gts.stubs.AddPermissionPermission permissionContainer = new gov.nih.nci.cagrid.gts.stubs.AddPermissionPermission();
+               permissionContainer.setPermission(permission);
+               params.setPermission(permissionContainer);
                gov.nih.nci.cagrid.gts.stubs.AddPermissionResponse boxedResult = port.addPermission(params);
-               
-	}
-
-	     public gov.nih.nci.cagrid.gts.bean.Permission[] findPermissions(gov.nih.nci.cagrid.gts.bean.PermissionFilter PermissionFilter) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault {
-               GridTrustServicePortType port = this.getPortType();
-               org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
-
-stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_CONV, org.globus.wsrf.security.Constants.ENCRYPTION);
-	if (proxy != null) {
-try{
-		org.ietf.jgss.GSSCredential gss = new org.globus.gsi.gssapi.GlobusGSSCredentialImpl(proxy,org.ietf.jgss.GSSCredential.INITIATE_AND_ACCEPT);
-		stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_CREDENTIALS, gss);
-}catch(org.ietf.jgss.GSSException ex){
-throw new RemoteException(ex.getMessage());
-}
-}
-stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());
-               gov.nih.nci.cagrid.gts.stubs.FindPermissions params = new gov.nih.nci.cagrid.gts.stubs.FindPermissions();
-               gov.nih.nci.cagrid.gts.stubs.FindPermissionsPermissionFilter PermissionFilterContainer = new gov.nih.nci.cagrid.gts.stubs.FindPermissionsPermissionFilter();
-               PermissionFilterContainer.setPermissionFilter(PermissionFilter);
-               params.setPermissionFilter(PermissionFilterContainer);
-               gov.nih.nci.cagrid.gts.stubs.FindPermissionsResponse boxedResult = port.findPermissions(params);
-               return boxedResult.getPermission();
-
-	}
-
-	     public void revokePermission(gov.nih.nci.cagrid.gts.bean.Permission Permission) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault {
-               GridTrustServicePortType port = this.getPortType();
-               org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
-
-stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_CONV, org.globus.wsrf.security.Constants.ENCRYPTION);
-	if (proxy != null) {
-try{
-		org.ietf.jgss.GSSCredential gss = new org.globus.gsi.gssapi.GlobusGSSCredentialImpl(proxy,org.ietf.jgss.GSSCredential.INITIATE_AND_ACCEPT);
-		stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_CREDENTIALS, gss);
-}catch(org.ietf.jgss.GSSException ex){
-throw new RemoteException(ex.getMessage());
-}
-}
-stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());
-               gov.nih.nci.cagrid.gts.stubs.RevokePermission params = new gov.nih.nci.cagrid.gts.stubs.RevokePermission();
-               gov.nih.nci.cagrid.gts.stubs.RevokePermissionPermission PermissionContainer = new gov.nih.nci.cagrid.gts.stubs.RevokePermissionPermission();
-               PermissionContainer.setPermission(Permission);
-               params.setPermission(PermissionContainer);
-               gov.nih.nci.cagrid.gts.stubs.RevokePermissionResponse boxedResult = port.revokePermission(params);
                
 	}
 

@@ -23,15 +23,67 @@
     <types>
         <schema targetNamespace="http://cagrid.nci.nih.gov/GridTrustService"
             xmlns:tns="http://cagrid.nci.nih.gov/GridTrustService"
-			xmlns:perm3="http://cagrid.nci.nih.gov/5/gts" 
+			xmlns:ns0="http://cagrid.nci.nih.gov/6/gts" 
 			
-            xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd">
+            xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
 			<import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd"/>
 		
-			<import namespace="http://cagrid.nci.nih.gov/5/gts" schemaLocation="./5_gts.xsd"/>
+			<import namespace="http://cagrid.nci.nih.gov/6/gts" schemaLocation="./6_gts.xsd"/>
 			   
       	
       	
+				<element name="addTrustedAuthority">
+					<complexType>
+						<sequence>
+          		  
+                  					
+							<element name="ta">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:TrustedAuthority" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+                  				 	
+	      				</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="addTrustedAuthorityResponse">
+					<complexType>
+						<sequence>
+          		  
+										<element ref="ns0:TrustedAuthority" minOccurs="1" maxOccurs="1" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
+				<element name="findTrustedAuthorities">
+					<complexType>
+						<sequence>
+          		  
+                  					
+							<element name="f">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:TrustedAuthorityFilter" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+                  				 	
+	      				</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="findTrustedAuthoritiesResponse">
+					<complexType>
+						<sequence>
+          		  
+										<element ref="ns0:TrustedAuthority" minOccurs="1" maxOccurs="unbounded" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
 				<element name="removeTrustedAuthority">
 					<complexType>
 						<sequence>
@@ -50,67 +102,15 @@
 						</sequence>
 					</complexType>
 				</element>
-				<element name="addTrustedAuthority">
-					<complexType>
-						<sequence>
-          		  
-                  					
-							<element name="TrustedAuthority">
-	      		  				<complexType>
-									<sequence>
-										<element ref="perm3:TrustedAuthority" minOccurs="1" maxOccurs="1" />
-                  				 	</sequence>
-	      			        	</complexType>
-	      			        </element>
-                  				 	
-	      				</sequence>
-	      			</complexType>
-	      		</element>
-  		       
-				<element name="addTrustedAuthorityResponse">
-					<complexType>
-						<sequence>
-          		  
-										<element ref="perm3:TrustedAuthority" minOccurs="1" maxOccurs="1" />
-			                  		
-						</sequence>
-					</complexType>
-				</element>
-				<element name="findTrustedAuthorities">
-					<complexType>
-						<sequence>
-          		  
-                  					
-							<element name="TrustedAuthorityFilter">
-	      		  				<complexType>
-									<sequence>
-										<element ref="perm3:TrustedAuthorityFilter" minOccurs="1" maxOccurs="1" />
-                  				 	</sequence>
-	      			        	</complexType>
-	      			        </element>
-                  				 	
-	      				</sequence>
-	      			</complexType>
-	      		</element>
-  		       
-				<element name="findTrustedAuthoritiesResponse">
-					<complexType>
-						<sequence>
-          		  
-										<element ref="perm3:TrustedAuthority" minOccurs="1" maxOccurs="unbounded" />
-			                  		
-						</sequence>
-					</complexType>
-				</element>
 				<element name="addPermission">
 					<complexType>
 						<sequence>
           		  
                   					
-							<element name="Permission">
+							<element name="permission">
 	      		  				<complexType>
 									<sequence>
-										<element ref="perm3:Permission" minOccurs="1" maxOccurs="1" />
+										<element ref="ns0:Permission" minOccurs="1" maxOccurs="1" />
                   				 	</sequence>
 	      			        	</complexType>
 	      			        </element>
@@ -131,10 +131,10 @@
 						<sequence>
           		  
                   					
-							<element name="PermissionFilter">
+							<element name="f">
 	      		  				<complexType>
 									<sequence>
-										<element ref="perm3:PermissionFilter" minOccurs="1" maxOccurs="1" />
+										<element ref="ns0:PermissionFilter" minOccurs="1" maxOccurs="1" />
                   				 	</sequence>
 	      			        	</complexType>
 	      			        </element>
@@ -147,7 +147,7 @@
 					<complexType>
 						<sequence>
           		  
-										<element ref="perm3:Permission" minOccurs="1" maxOccurs="unbounded" />
+										<element ref="ns0:Permission" minOccurs="1" maxOccurs="unbounded" />
 			                  		
 						</sequence>
 					</complexType>
@@ -157,10 +157,10 @@
 						<sequence>
           		  
                   					
-							<element name="Permission">
+							<element name="permission">
 	      		  				<complexType>
 									<sequence>
-										<element ref="perm3:Permission" minOccurs="1" maxOccurs="1" />
+										<element ref="ns0:Permission" minOccurs="1" maxOccurs="1" />
                   				 	</sequence>
 	      			        	</complexType>
 	      			        </element>
@@ -184,14 +184,6 @@
 					</complexType>
 				</element>
       					
-				<element name="InvalidTrustedAuthorityFault" >
-					<complexType>
-						<complexContent>
-							<extension base="wsrbf:BaseFaultType"/>
-						</complexContent>
-					</complexType>
-				</element>
-      					
 				<element name="IllegalTrustedAuthorityFault" >
 					<complexType>
 						<complexContent>
@@ -201,6 +193,14 @@
 				</element>
       					
 				<element name="PermissionDeniedFault" >
+					<complexType>
+						<complexContent>
+							<extension base="wsrbf:BaseFaultType"/>
+						</complexContent>
+					</complexType>
+				</element>
+      					
+				<element name="InvalidTrustedAuthorityFault" >
 					<complexType>
 						<complexContent>
 							<extension base="wsrbf:BaseFaultType"/>
@@ -234,13 +234,6 @@
     
     
 <!--  place service messages here -->
-	<message name="removeTrustedAuthorityInputMessage">
-		<part name="parameters" element="tns:removeTrustedAuthority"/>
-	</message>
-	
-	<message name="removeTrustedAuthorityOutputMessage">
-		<part name="parameters" element="tns:removeTrustedAuthorityResponse"/>
-	</message>
 	<message name="addTrustedAuthorityInputMessage">
 		<part name="parameters" element="tns:addTrustedAuthority"/>
 	</message>
@@ -254,6 +247,13 @@
 	
 	<message name="findTrustedAuthoritiesOutputMessage">
 		<part name="parameters" element="tns:findTrustedAuthoritiesResponse"/>
+	</message>
+	<message name="removeTrustedAuthorityInputMessage">
+		<part name="parameters" element="tns:removeTrustedAuthority"/>
+	</message>
+	
+	<message name="removeTrustedAuthorityOutputMessage">
+		<part name="parameters" element="tns:removeTrustedAuthorityResponse"/>
 	</message>
 	<message name="addPermissionInputMessage">
 		<part name="parameters" element="tns:addPermission"/>
@@ -279,14 +279,14 @@
 	<message name="GTSInternalFaultFaultMessage">
 		<part name="fault" element="tns:GTSInternalFault"/>
 	</message>
-	<message name="InvalidTrustedAuthorityFaultFaultMessage">
-		<part name="fault" element="tns:InvalidTrustedAuthorityFault"/>
-	</message>
 	<message name="IllegalTrustedAuthorityFaultFaultMessage">
 		<part name="fault" element="tns:IllegalTrustedAuthorityFault"/>
 	</message>
 	<message name="PermissionDeniedFaultFaultMessage">
 		<part name="fault" element="tns:PermissionDeniedFault"/>
+	</message>
+	<message name="InvalidTrustedAuthorityFaultFaultMessage">
+		<part name="fault" element="tns:InvalidTrustedAuthorityFault"/>
 	</message>
 	<message name="IllegalPermissionFaultFaultMessage">
 		<part name="fault" element="tns:IllegalPermissionFault"/>
@@ -302,14 +302,6 @@
   ============================================================-->
     <portType name="GridTrustServicePortType" wsrp:ResourceProperties="tns:GridTrustServiceResourceProperties">
 
-		<operation name="removeTrustedAuthority">
-            <input message="tns:removeTrustedAuthorityInputMessage"/>
-            <output message="tns:removeTrustedAuthorityOutputMessage"/>
-       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
-       				
-       		 <fault name="InvalidTrustedAuthorityFault" message="tns:InvalidTrustedAuthorityFaultFaultMessage"/>
-       				
-        </operation>
 		<operation name="addTrustedAuthority">
             <input message="tns:addTrustedAuthorityInputMessage"/>
             <output message="tns:addTrustedAuthorityOutputMessage"/>
@@ -326,6 +318,16 @@
        		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
        				
         </operation>
+		<operation name="removeTrustedAuthority">
+            <input message="tns:removeTrustedAuthorityInputMessage"/>
+            <output message="tns:removeTrustedAuthorityOutputMessage"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+       		 <fault name="InvalidTrustedAuthorityFault" message="tns:InvalidTrustedAuthorityFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
 		<operation name="addPermission">
             <input message="tns:addPermissionInputMessage"/>
             <output message="tns:addPermissionOutputMessage"/>
@@ -333,11 +335,15 @@
        				
        		 <fault name="IllegalPermissionFault" message="tns:IllegalPermissionFaultFaultMessage"/>
        				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
         </operation>
 		<operation name="findPermissions">
             <input message="tns:findPermissionsInputMessage"/>
             <output message="tns:findPermissionsOutputMessage"/>
        		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
        				
         </operation>
 		<operation name="revokePermission">
@@ -346,6 +352,8 @@
        		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
        				
        		 <fault name="InvalidPermissionFault" message="tns:InvalidPermissionFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
        				
         </operation>
         <operation name="GetResourceProperty">

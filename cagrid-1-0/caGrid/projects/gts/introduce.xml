@@ -1,89 +1,81 @@
-<ns1:ServiceSkeleton introduceVersion="0.9" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
- <ns2:Methods xsi:type="ns2:MethodsType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Methods" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns2:Method name="removeTrustedAuthority" xsi:type="ns2:MethodType">
-   <ns2:Inputs>
-    <ns2:Input isArray="false" name="trustedAuthorityName" namespace="http://www.w3.org/2001/XMLSchema" type="string"/>
-   </ns2:Inputs>
-   <ns2:Output className="void" isArray="false"/>
-   <ns2:Exceptions>
-    <ns2:Exception name="GTSInternalFault"/>
-    <ns2:Exception name="InvalidTrustedAuthorityFault"/>
-   </ns2:Exceptions>
-  </ns2:Method>
-  <ns2:Method name="addTrustedAuthority" xsi:type="ns2:MethodType">
-   <ns2:Inputs>
-    <ns2:Input isArray="false" location="./5_gts.xsd" name="TrustedAuthority" namespace="http://cagrid.nci.nih.gov/5/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="TrustedAuthority"/>
-   </ns2:Inputs>
-   <ns2:Output isArray="false" location="./5_gts.xsd" namespace="http://cagrid.nci.nih.gov/5/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="TrustedAuthority"/>
-   <ns2:Exceptions>
-    <ns2:Exception name="GTSInternalFault"/>
-    <ns2:Exception name="IllegalTrustedAuthorityFault"/>
-    <ns2:Exception name="PermissionDeniedFault"/>
-   </ns2:Exceptions>
-  </ns2:Method>
-  <ns2:Method name="findTrustedAuthorities" xsi:type="ns2:MethodType">
-   <ns2:Inputs>
-    <ns2:Input isArray="false" location="./5_gts.xsd" name="TrustedAuthorityFilter" namespace="http://cagrid.nci.nih.gov/5/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="TrustedAuthorityFilter"/>
-   </ns2:Inputs>
-   <ns2:Output isArray="true" location="./5_gts.xsd" namespace="http://cagrid.nci.nih.gov/5/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="TrustedAuthority"/>
-   <ns2:Exceptions>
-    <ns2:Exception name="GTSInternalFault"/>
-   </ns2:Exceptions>
-   <ns2:MethodSecurity xsi:type="ns3:MethodSecurity" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns3:MethodSecuritySetting xsi:type="ns3:MethodSecurityType">None</ns3:MethodSecuritySetting>
-    <ns3:RunAsMode xsi:type="ns3:RunAsMode" xsi:nil="true"/>
-    <ns3:DelegationMode xsi:type="ns3:DelegationMode" xsi:nil="true"/>
-    <ns3:AnonymousClients xsi:type="ns3:AnonymousCommunication" xsi:nil="true"/>
-   </ns2:MethodSecurity>
-  </ns2:Method>
-  <ns2:Method name="addPermission" xsi:type="ns2:MethodType">
-   <ns2:Inputs>
-    <ns2:Input isArray="false" location="./5_gts.xsd" name="Permission" namespace="http://cagrid.nci.nih.gov/5/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="Permission"/>
-   </ns2:Inputs>
-   <ns2:Output className="void" isArray="false"/>
-   <ns2:Exceptions>
-    <ns2:Exception name="GTSInternalFault"/>
-    <ns2:Exception name="IllegalPermissionFault"/>
-   </ns2:Exceptions>
-  </ns2:Method>
-  <ns2:Method name="findPermissions" xsi:type="ns2:MethodType">
-   <ns2:Inputs>
-    <ns2:Input isArray="false" location="./5_gts.xsd" name="PermissionFilter" namespace="http://cagrid.nci.nih.gov/5/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="PermissionFilter"/>
-   </ns2:Inputs>
-   <ns2:Output isArray="true" location="./5_gts.xsd" namespace="http://cagrid.nci.nih.gov/5/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="Permission"/>
-   <ns2:Exceptions>
-    <ns2:Exception name="GTSInternalFault"/>
-   </ns2:Exceptions>
-  </ns2:Method>
-  <ns2:Method name="revokePermission" xsi:type="ns2:MethodType">
-   <ns2:Inputs>
-    <ns2:Input isArray="false" location="./5_gts.xsd" name="Permission" namespace="http://cagrid.nci.nih.gov/5/gts" packageName="gov.nih.nci.cagrid.gts.bean" type="Permission"/>
-   </ns2:Inputs>
-   <ns2:Output className="void" isArray="false"/>
-   <ns2:Exceptions>
-    <ns2:Exception name="GTSInternalFault"/>
-    <ns2:Exception name="InvalidPermissionFault"/>
-   </ns2:Exceptions>
-  </ns2:Method>
- </ns2:Methods>
- <ns4:MetadataList xsi:type="ns4:MetadataListType" xmlns:ns4="gme://gov.nih.nci.cagrid.introduce/1/Metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
- <ns1:ServiceSecurity xsi:type="ns5:ServiceSecurity" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns5="gme://gov.nih.nci.cagrid.introduce/1/Security">
-  <ns5:MethodSecuritySetting xsi:type="ns5:MethodSecurityType">Custom</ns5:MethodSecuritySetting>
-  <ns5:SecureConversation xsi:type="ns5:SecureConversation">
-   <ns5:CommunicationMethod xsi:type="ns5:CommunicationMethod">Privacy</ns5:CommunicationMethod>
-  </ns5:SecureConversation>
-  <ns5:ClientCommunication xsi:type="ns5:ClientCommunication">Secure_Conversation</ns5:ClientCommunication>
-  <ns5:ClientAuthorization xsi:type="ns5:ClientAuthorization">
-   <ns5:NoAuthorization xsi:type="ns5:NoAuthorization"/>
-  </ns5:ClientAuthorization>
-  <ns5:RunAsMode xsi:type="ns5:RunAsMode">System</ns5:RunAsMode>
-  <ns5:DelegationMode xsi:type="ns5:DelegationMode">None</ns5:DelegationMode>
-  <ns5:AnonymousClients xsi:type="ns5:AnonymousCommunication">No</ns5:AnonymousClients>
-  <ns5:ServiceCredentials xsi:type="ns5:ServiceCredential">
-   <ns5:X509Credential xsi:type="ns5:X509Credential">
-    <ns5:certificateLocation xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">C:/certificates/gts-cert.pem</ns5:certificateLocation>
-    <ns5:privateKeyLocation xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">C:/certificates/gts-key.pem</ns5:privateKeyLocation>
-   </ns5:X509Credential>
-  </ns5:ServiceCredentials>
- </ns1:ServiceSecurity>
+<ns1:ServiceSkeleton introduceVersion="0.95" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
+ <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns2:Namespace location="" namespace="http://www.w3.org/2001/XMLSchema" packageName="" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="string" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="integer" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="boolean" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./6_gts.xsd" namespace="http://cagrid.nci.nih.gov/6/gts" packageName="gov.nih.nci.cagrid.gts.bean" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="Permission" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="PermissionFilter" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="TrustedAuthorityFilter" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="TrustedAuthority" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+ </ns2:Namespaces>
+ <ns3:Methods xsi:type="ns3:MethodsType" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Methods" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns3:Method name="addTrustedAuthority" xsi:type="ns3:MethodType">
+   <ns3:Inputs>
+    <ns3:Input qName="ns4:TrustedAuthority" isArray="false" name="ta" xmlns:ns4="http://cagrid.nci.nih.gov/6/gts"/>
+   </ns3:Inputs>
+   <ns3:Output qName="ns5:TrustedAuthority" isArray="false" xmlns:ns5="http://cagrid.nci.nih.gov/6/gts"/>
+   <ns3:Exceptions>
+    <ns3:Exception name="GTSInternalFault"/>
+    <ns3:Exception name="IllegalTrustedAuthorityFault"/>
+    <ns3:Exception name="PermissionDeniedFault"/>
+   </ns3:Exceptions>
+  </ns3:Method>
+  <ns3:Method name="findTrustedAuthorities" xsi:type="ns3:MethodType">
+   <ns3:Inputs>
+    <ns3:Input qName="ns6:TrustedAuthorityFilter" isArray="false" name="f" xmlns:ns6="http://cagrid.nci.nih.gov/6/gts"/>
+   </ns3:Inputs>
+   <ns3:Output qName="ns7:TrustedAuthority" isArray="true" xmlns:ns7="http://cagrid.nci.nih.gov/6/gts"/>
+   <ns3:Exceptions>
+    <ns3:Exception name="GTSInternalFault"/>
+   </ns3:Exceptions>
+  </ns3:Method>
+  <ns3:Method name="removeTrustedAuthority" xsi:type="ns3:MethodType">
+   <ns3:Inputs>
+    <ns3:Input qName="xsd:string" isArray="false" name="trustedAuthorityName" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   </ns3:Inputs>
+   <ns3:Output qName="void" isArray="false"/>
+   <ns3:Exceptions>
+    <ns3:Exception name="GTSInternalFault"/>
+    <ns3:Exception name="InvalidTrustedAuthorityFault"/>
+    <ns3:Exception name="PermissionDeniedFault"/>
+   </ns3:Exceptions>
+  </ns3:Method>
+  <ns3:Method name="addPermission" xsi:type="ns3:MethodType">
+   <ns3:Inputs>
+    <ns3:Input qName="ns8:Permission" isArray="false" name="permission" xmlns:ns8="http://cagrid.nci.nih.gov/6/gts"/>
+   </ns3:Inputs>
+   <ns3:Output qName="void" isArray="false"/>
+   <ns3:Exceptions>
+    <ns3:Exception name="GTSInternalFault"/>
+    <ns3:Exception name="IllegalPermissionFault"/>
+    <ns3:Exception name="PermissionDeniedFault"/>
+   </ns3:Exceptions>
+  </ns3:Method>
+  <ns3:Method name="findPermissions" xsi:type="ns3:MethodType">
+   <ns3:Inputs>
+    <ns3:Input qName="ns9:PermissionFilter" isArray="false" name="f" xmlns:ns9="http://cagrid.nci.nih.gov/6/gts"/>
+   </ns3:Inputs>
+   <ns3:Output qName="ns10:Permission" isArray="true" xmlns:ns10="http://cagrid.nci.nih.gov/6/gts"/>
+   <ns3:Exceptions>
+    <ns3:Exception name="GTSInternalFault"/>
+    <ns3:Exception name="PermissionDeniedFault"/>
+   </ns3:Exceptions>
+  </ns3:Method>
+  <ns3:Method name="revokePermission" xsi:type="ns3:MethodType">
+   <ns3:Inputs>
+    <ns3:Input qName="ns11:Permission" isArray="false" name="permission" xmlns:ns11="http://cagrid.nci.nih.gov/6/gts"/>
+   </ns3:Inputs>
+   <ns3:Output qName="void" isArray="false"/>
+   <ns3:Exceptions>
+    <ns3:Exception name="GTSInternalFault"/>
+    <ns3:Exception name="InvalidPermissionFault"/>
+    <ns3:Exception name="PermissionDeniedFault"/>
+   </ns3:Exceptions>
+  </ns3:Method>
+ </ns3:Methods>
+ <ns12:MetadataList xsi:type="ns12:MetadataListType" xmlns:ns12="gme://gov.nih.nci.cagrid.introduce/1/Metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
 </ns1:ServiceSkeleton>
