@@ -67,11 +67,17 @@ xmlns:cqlq="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQL">
       <plnk:portType name="tns:startWorkFlowPortType"/>
    </plnk:role>
 </plnk:partnerLinkType>
-<plnk:partnerLinkType name="RproteomicsPartnerLinkType">
-   <plnk:role name="service">
+<plnk:partnerLinkType name="DukeRproteomicsPartnerLinkType">
+   <plnk:role name="dukeservice">
       <plnk:portType name="rprot:RProteomicsPortType"/>
    </plnk:role>
 </plnk:partnerLinkType>
+<plnk:partnerLinkType name="OSURproteomicsPartnerLinkType">
+   <plnk:role name="osuservice">
+      <plnk:portType name="rprot:RProteomicsPortType"/>
+   </plnk:role>
+</plnk:partnerLinkType>
+
 <plnk:partnerLinkType name="RproteomicsDataLinkType">
    <plnk:role name="data">
       <plnk:portType name="rprotdata:RPDataPortType"/>

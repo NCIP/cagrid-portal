@@ -7,11 +7,12 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
    <partnerLinks>
       <!-- Declare all partnerLinks used in this workflow:                                      -->
       <!-- 1. client is a service to take input from the user                                   -->
-      <!-- 2. RproteomicsPartnerLinkType is partnerLink to Rproteomcis Analytic Service at Duke -->
+      <!-- 2. DukeOSURproteomicsPartnerLinkType is partnerLink to Rproteomcis Analytic Service at Duke -->
       <!-- 3. RproteomicsDataLinkType is partnerLink to Rproteomcis Data Service                -->
       <partnerLink myRole="client" name="WorkFlowClientPartnerLinkType" partnerLinkType="ns2:WorkFlowClientPartnerLinkType"/>
       <partnerLink name="RproteomicsDataLinkType" partnerLinkType="ns2:RproteomicsDataLinkType" partnerRole="data"/>
-      <partnerLink name="RproteomicsPartnerLinkType" partnerLinkType="ns2:RproteomicsPartnerLinkType" partnerRole="service"/>
+      <partnerLink name="DukeRproteomicsPartnerLinkType" partnerLinkType="ns2:DukeRproteomicsPartnerLinkType" partnerRole="dukeservice"/>
+      <partnerLink name="OSURproteomicsPartnerLinkType" partnerLinkType="ns2:OSURproteomicsPartnerLinkType" partnerRole="osuservice"/>
    </partnerLinks>
    <variables>
       <!-- Declare all the variables here -->
@@ -73,7 +74,7 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
          </assign>
       </while>
       <!-- Invoking echoByValue operation on Rproteomics analytical service -->
-      <invoke inputVariable="echoByValueInputMessage" operation="echoByValue" outputVariable="echoByValueOutputMessage" partnerLink="RproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
+      <invoke inputVariable="echoByValueInputMessage" operation="echoByValue" outputVariable="echoByValueOutputMessage" partnerLink="OSURproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
       <assign>
          <copy>
             <from expression="&quot;1&quot;"/>
@@ -97,7 +98,7 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
          </assign>
       </while>
       <!-- Invoking general_interpolateByValue operation on Rproteomics Analytic service -->
-      <invoke inputVariable="general_interpolateByValueInputMessage" operation="general_interpolateByValue" outputVariable="general_interpolateByValueOutputMessage" partnerLink="RproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
+      <invoke inputVariable="general_interpolateByValueInputMessage" operation="general_interpolateByValue" outputVariable="general_interpolateByValueOutputMessage" partnerLink="DukeRproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
       <assign>
          <copy>
             <from expression="&quot;1&quot;"/>
@@ -130,7 +131,7 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
             <to part="parameters" query="/ns3:removeBackground_runningQuantileByValue/percentile" variable="removeBackground_runningQuantileByValueInputMessage"/>
          </copy>
       </assign>
-      <invoke inputVariable="removeBackground_runningQuantileByValueInputMessage" operation="removeBackground_runningQuantileByValue" outputVariable="removeBackground_runningQuantileByValueOutputMessage" partnerLink="RproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
+      <invoke inputVariable="removeBackground_runningQuantileByValueInputMessage" operation="removeBackground_runningQuantileByValue" outputVariable="removeBackground_runningQuantileByValueOutputMessage" partnerLink="OSURproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
       <assign>
          <copy>
             <from expression="&quot;1&quot;"/>
@@ -175,7 +176,7 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
             </copy>
          </assign>
       </while>
-      <invoke inputVariable="removeBackground_minusByValueInputMessage" operation="removeBackground_minusByValue" outputVariable="removeBackground_minusByValueOutputMessage" partnerLink="RproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
+      <invoke inputVariable="removeBackground_minusByValueInputMessage" operation="removeBackground_minusByValue" outputVariable="removeBackground_minusByValueOutputMessage" partnerLink="DukeRproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
       <assign>
          <copy>
             <from expression="&quot;1&quot;"/>
@@ -208,7 +209,7 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
             <to part="parameters" query="/ns3:denoise_waveletUDWTWByValue/thresholdMultiplier" variable="denoise_waveletUDWTWByValueInputMessage"/>
          </copy>
       </assign>
-      <invoke inputVariable="denoise_waveletUDWTWByValueInputMessage" operation="denoise_waveletUDWTWByValue" outputVariable="denoise_waveletUDWTWByValueOutputMessage" partnerLink="RproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
+      <invoke inputVariable="denoise_waveletUDWTWByValueInputMessage" operation="denoise_waveletUDWTWByValue" outputVariable="denoise_waveletUDWTWByValueOutputMessage" partnerLink="OSURproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
       <assign>
          <copy>
             <from expression="&quot;1&quot;"/>
@@ -231,7 +232,7 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
             </copy>
          </assign>
       </while>
-      <invoke inputVariable="align_alignxByValueInputMessage" operation="align_alignxByValue" outputVariable="align_alignxByValueOutputMessage" partnerLink="RproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
+      <invoke inputVariable="align_alignxByValueInputMessage" operation="align_alignxByValue" outputVariable="align_alignxByValueOutputMessage" partnerLink="DukeRproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
       <assign>
          <copy>
             <from expression="&quot;1&quot;"/>
@@ -254,7 +255,7 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
             </copy>
          </assign>
       </while>
-      <invoke inputVariable="normalize_quantileByValueInputMessage" operation="normalize_quantileByValue" outputVariable="normalize_quantileByValueOutputMessage" partnerLink="RproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
+      <invoke inputVariable="normalize_quantileByValueInputMessage" operation="normalize_quantileByValue" outputVariable="normalize_quantileByValueOutputMessage" partnerLink="OSURproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
       <assign>
          <copy>
             <from expression="&quot;1&quot;"/>
@@ -299,7 +300,7 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
             </copy>
          </assign>
       </while>
-      <invoke inputVariable="plot_2DStackedByValueInputMessage" operation="plot_2DStackedByValue" outputVariable="plot_2DStackedByValueOutputMessage" partnerLink="RproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
+      <invoke inputVariable="plot_2DStackedByValueInputMessage" operation="plot_2DStackedByValue" outputVariable="plot_2DStackedByValueOutputMessage" partnerLink="DukeRproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
       <assign>
          <copy>
             <from part="parameters" query="/ns3:plot_2DStackedByValueResponse/response" variable="plot_2DStackedByValueOutputMessage"/>

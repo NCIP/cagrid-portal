@@ -13,24 +13,24 @@
    <att name="showMarkers" value="true"/>
    <att name="messageExchanges" value=""/>
    <att name="modelVersion" value="1"/>
-   <att name="objectId" value="114314449005200023"/>
+   <att name="objectId" value="114321526611300023"/>
    <att>
       <graph id="1" name="IMPORTS">
          <att name="ImportCount" value="3"/>
          <node id="2" name="IMPORT">
             <att name="ImportLocation" value="project:/RProteomicsWorkFlow/wsdl/WorkFlowClientService.wsdl;http://annualdemo.cagrid.nci.nih.gov/bpel"/>
             <att name="ImportNamespace" value="http://annualdemo.cagrid.nci.nih.gov/bpel"/>
-            <att name="objectId" value="114314449012300055"/>
+            <att name="objectId" value="114321526619300055"/>
          </node>
          <node id="3" name="IMPORT">
             <att name="ImportLocation" value="http://localhost:8080/wsrf/share/schema/_cagrid_RPData/RPData_flattened.wsdl;http://rproteomics.cagrid.nci.nih.gov/RPData"/>
             <att name="ImportNamespace" value="http://rproteomics.cagrid.nci.nih.gov/RPData"/>
-            <att name="objectId" value="114314451250510347"/>
+            <att name="objectId" value="114321532019110347"/>
          </node>
          <node id="4" name="IMPORT">
             <att name="ImportLocation" value="http://ccis1716.duhs.duke.edu/wsrf/share/schema/_cagrid_RProteomics/RProteomics_flattened.wsdl;http://www.globus.org/namespaces/cagrid/RProteomics/RProteomics"/>
             <att name="ImportNamespace" value="http://www.globus.org/namespaces/cagrid/RProteomics/RProteomics"/>
-            <att name="objectId" value="114314455265210785"/>
+            <att name="objectId" value="114321535926710785"/>
          </node>
       </graph>
    </att>
@@ -40,37 +40,37 @@
          <node id="6" name="NAMESPACE">
             <att name="Prefix" value="ns1"/>
             <att name="Namespace" value="http://rproteomics.cagrid.nci.nih.gov/RPData"/>
-            <att name="objectId" value="114314449006200045"/>
+            <att name="objectId" value="114321526611300045"/>
          </node>
          <node id="7" name="NAMESPACE">
             <att name="Prefix" value="xsd"/>
             <att name="Namespace" value="http://www.w3.org/2001/XMLSchema"/>
-            <att name="objectId" value="114314449012300047"/>
+            <att name="objectId" value="114321526619300047"/>
          </node>
          <node id="8" name="NAMESPACE">
             <att name="Prefix" value="ns3"/>
             <att name="Namespace" value="http://www.globus.org/namespaces/cagrid/RProteomics/RProteomics"/>
-            <att name="objectId" value="114314449012300049"/>
+            <att name="objectId" value="114321526619300049"/>
          </node>
          <node id="9" name="NAMESPACE">
             <att name="Prefix" value="ns4"/>
             <att name="Namespace" value="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQL"/>
-            <att name="objectId" value="114314449012300051"/>
+            <att name="objectId" value="114321526619300051"/>
          </node>
          <node id="10" name="NAMESPACE">
             <att name="Prefix" value="ns2"/>
             <att name="Namespace" value="http://annualdemo.cagrid.nci.nih.gov/bpel"/>
-            <att name="objectId" value="114314449012300053"/>
+            <att name="objectId" value="114321526619300053"/>
          </node>
          <node id="11" name="NAMESPACE">
             <att name="Prefix" value="bpws"/>
             <att name="Namespace" value="http://schemas.xmlsoap.org/ws/2003/03/business-process/"/>
-            <att name="objectId" value="114314449219500057"/>
+            <att name="objectId" value="114321526821600057"/>
          </node>
          <node id="12" name="NAMESPACE">
             <att name="Prefix" value="ns5"/>
             <att name="Namespace" value="rproteomics.cabig.duke.edu/1/scanFeatures"/>
-            <att name="objectId" value="114314449221600059"/>
+            <att name="objectId" value="114321526823600059"/>
          </node>
       </graph>
    </att>
@@ -91,7 +91,7 @@
             <att name="User Locations" value=""/>
             <att name="visible" value="false,false,false,false,"/>
             <att name="BPELComment" value="Declare all partnerLinks used in this workflow:&#10;1. client is a service to take input from the user&#10;2. RproteomicsPartnerLinkType is partnerLink to Rproteomcis Analytic Service at Duke&#10;3. RproteomicsDataLinkType is partnerLink to Rproteomcis Data Service"/>
-            <att name="objectId" value="114314449221600061"/>
+            <att name="objectId" value="114321526823600061"/>
          </node>
          <node id="15" name="PARTNER_LINK">
             <att name="borderColor" value="RGB {147,226,247}"/>
@@ -107,7 +107,7 @@
             <att name="User Locations" value=""/>
             <att name="visible" value="false,false,false,false,"/>
             <att name="BPELComment" value=""/>
-            <att name="objectId" value="114314449221600071"/>
+            <att name="objectId" value="114321526823600071"/>
          </node>
          <node id="16" name="PARTNER_LINK">
             <att name="borderColor" value="RGB {147,226,247}"/>
@@ -123,7 +123,7 @@
             <att name="User Locations" value=""/>
             <att name="visible" value="false,false,false,false,"/>
             <att name="BPELComment" value=""/>
-            <att name="objectId" value="114314449221600081"/>
+            <att name="objectId" value="114321526823600081"/>
          </node>
       </graph>
    </att>
@@ -137,133 +137,133 @@
             <att name="VariableName" value="workFlowInputMessage"/>
             <att name="VariableSpecification" value="MessageType=ns1:workFlowInputMessage"/>
             <att name="BPELComment" value="Declare all the variables here"/>
-            <att name="objectId" value="114314449221600091"/>
+            <att name="objectId" value="114321526824600091"/>
          </node>
          <node id="20" name="VARIABLE_CONTAINER">
             <att name="VariableName" value="workFlowOutputMessage"/>
             <att name="VariableSpecification" value="MessageType=ns1:workFlowOutputMessage"/>
             <att name="BPELComment" value=""/>
-            <att name="objectId" value="114314449221600093"/>
+            <att name="objectId" value="114321526824600093"/>
          </node>
          <node id="21" name="VARIABLE_CONTAINER">
             <att name="VariableName" value="queryInputMessage"/>
             <att name="VariableSpecification" value="MessageType=ns1:queryInputMessage"/>
             <att name="BPELComment" value=""/>
-            <att name="objectId" value="114314449221600095"/>
+            <att name="objectId" value="114321526824600095"/>
          </node>
          <node id="22" name="VARIABLE_CONTAINER">
             <att name="VariableName" value="queryOutputMessage"/>
             <att name="VariableSpecification" value="MessageType=ns1:queryOutputMessage"/>
             <att name="BPELComment" value=""/>
-            <att name="objectId" value="114314449221600097"/>
+            <att name="objectId" value="114321526824600097"/>
          </node>
          <node id="23" name="VARIABLE_CONTAINER">
             <att name="VariableName" value="echoByValueInputMessage"/>
             <att name="VariableSpecification" value="MessageType=ns3:echoByValueInputMessage"/>
             <att name="BPELComment" value=""/>
-            <att name="objectId" value="114314449221600099"/>
+            <att name="objectId" value="114321526824600099"/>
          </node>
          <node id="24" name="VARIABLE_CONTAINER">
             <att name="VariableName" value="echoByValueOutputMessage"/>
             <att name="VariableSpecification" value="MessageType=ns3:echoByValueOutputMessage"/>
             <att name="BPELComment" value=""/>
-            <att name="objectId" value="114314449221600101"/>
+            <att name="objectId" value="114321526824600101"/>
          </node>
          <node id="25" name="VARIABLE_CONTAINER">
             <att name="VariableName" value="indexCounter"/>
             <att name="VariableSpecification" value="Type=xsd:integer"/>
             <att name="BPELComment" value="For Loops"/>
-            <att name="objectId" value="114314449221600103"/>
+            <att name="objectId" value="114321526824600103"/>
          </node>
          <node id="26" name="VARIABLE_CONTAINER">
             <att name="VariableName" value="count"/>
             <att name="VariableSpecification" value="Type=xsd:integer"/>
             <att name="BPELComment" value=""/>
-            <att name="objectId" value="114314449221600105"/>
+            <att name="objectId" value="114321526824600105"/>
          </node>
          <node id="27" name="VARIABLE_CONTAINER">
             <att name="VariableName" value="general_interpolateByValueInputMessage"/>
             <att name="VariableSpecification" value="MessageType=ns3:general_interpolateByValueInputMessage"/>
             <att name="BPELComment" value=""/>
-            <att name="objectId" value="114314449221600107"/>
+            <att name="objectId" value="114321526824600107"/>
          </node>
          <node id="28" name="VARIABLE_CONTAINER">
             <att name="VariableName" value="general_interpolateByValueOutputMessage"/>
             <att name="VariableSpecification" value="MessageType=ns3:general_interpolateByValueOutputMessage"/>
             <att name="BPELComment" value=""/>
-            <att name="objectId" value="114314449221600109"/>
+            <att name="objectId" value="114321526824600109"/>
          </node>
          <node id="29" name="VARIABLE_CONTAINER">
             <att name="VariableName" value="removeBackground_runningQuantileByValueInputMessage"/>
             <att name="VariableSpecification" value="MessageType=ns3:removeBackground_runningQuantileByValueInputMessage"/>
             <att name="BPELComment" value=""/>
-            <att name="objectId" value="114314449221600111"/>
+            <att name="objectId" value="114321526824600111"/>
          </node>
          <node id="30" name="VARIABLE_CONTAINER">
             <att name="VariableName" value="removeBackground_runningQuantileByValueOutputMessage"/>
             <att name="VariableSpecification" value="MessageType=ns3:removeBackground_runningQuantileByValueOutputMessage"/>
             <att name="BPELComment" value=""/>
-            <att name="objectId" value="114314449221600113"/>
+            <att name="objectId" value="114321526824600113"/>
          </node>
          <node id="31" name="VARIABLE_CONTAINER">
             <att name="VariableName" value="removeBackground_minusByValueInputMessage"/>
             <att name="VariableSpecification" value="MessageType=ns3:removeBackground_minusByValueInputMessage"/>
             <att name="BPELComment" value=""/>
-            <att name="objectId" value="114314449221600115"/>
+            <att name="objectId" value="114321526824600115"/>
          </node>
          <node id="32" name="VARIABLE_CONTAINER">
             <att name="VariableName" value="removeBackground_minusByValueOutputMessage"/>
             <att name="VariableSpecification" value="MessageType=ns3:removeBackground_minusByValueOutputMessage"/>
             <att name="BPELComment" value=""/>
-            <att name="objectId" value="114314449221600117"/>
+            <att name="objectId" value="114321526824600117"/>
          </node>
          <node id="33" name="VARIABLE_CONTAINER">
             <att name="VariableName" value="denoise_waveletUDWTWByValueInputMessage"/>
             <att name="VariableSpecification" value="MessageType=ns3:denoise_waveletUDWTWByValueInputMessage"/>
             <att name="BPELComment" value=""/>
-            <att name="objectId" value="114314449221600119"/>
+            <att name="objectId" value="114321526824600119"/>
          </node>
          <node id="34" name="VARIABLE_CONTAINER">
             <att name="VariableName" value="denoise_waveletUDWTWByValueOutputMessage"/>
             <att name="VariableSpecification" value="MessageType=ns3:denoise_waveletUDWTWByValueOutputMessage"/>
             <att name="BPELComment" value=""/>
-            <att name="objectId" value="114314449221600121"/>
+            <att name="objectId" value="114321526824600121"/>
          </node>
          <node id="35" name="VARIABLE_CONTAINER">
             <att name="VariableName" value="align_alignxByValueInputMessage"/>
             <att name="VariableSpecification" value="MessageType=ns3:align_alignxByValueInputMessage"/>
             <att name="BPELComment" value=""/>
-            <att name="objectId" value="114314449221600123"/>
+            <att name="objectId" value="114321526824600123"/>
          </node>
          <node id="36" name="VARIABLE_CONTAINER">
             <att name="VariableName" value="align_alignxByValueOutputMessage"/>
             <att name="VariableSpecification" value="MessageType=ns3:align_alignxByValueOutputMessage"/>
             <att name="BPELComment" value=""/>
-            <att name="objectId" value="114314449221600125"/>
+            <att name="objectId" value="114321526824600125"/>
          </node>
          <node id="37" name="VARIABLE_CONTAINER">
             <att name="VariableName" value="normalize_quantileByValueInputMessage"/>
             <att name="VariableSpecification" value="MessageType=ns3:normalize_quantileByValueInputMessage"/>
             <att name="BPELComment" value=""/>
-            <att name="objectId" value="114314449222600127"/>
+            <att name="objectId" value="114321526824600127"/>
          </node>
          <node id="38" name="VARIABLE_CONTAINER">
             <att name="VariableName" value="normalize_quantileByValueOutputMessage"/>
             <att name="VariableSpecification" value="MessageType=ns3:normalize_quantileByValueOutputMessage"/>
             <att name="BPELComment" value=""/>
-            <att name="objectId" value="114314449222600129"/>
+            <att name="objectId" value="114321526824600129"/>
          </node>
          <node id="39" name="VARIABLE_CONTAINER">
             <att name="VariableName" value="plot_2DStackedByValueInputMessage"/>
             <att name="VariableSpecification" value="MessageType=ns3:plot_2DStackedByValueInputMessage"/>
             <att name="BPELComment" value=""/>
-            <att name="objectId" value="114314449222600131"/>
+            <att name="objectId" value="114321526824600131"/>
          </node>
          <node id="40" name="VARIABLE_CONTAINER">
             <att name="VariableName" value="plot_2DStackedByValueOutputMessage"/>
             <att name="VariableSpecification" value="MessageType=ns3:plot_2DStackedByValueOutputMessage"/>
             <att name="BPELComment" value=""/>
-            <att name="objectId" value="114314449222600133"/>
+            <att name="objectId" value="114321526824600133"/>
          </node>
       </graph>
    </att>
@@ -273,7 +273,7 @@
    <att>
       <graph id="42" name="SCOPE_ACTIVITY">
          <att name="text" value="Process"/>
-         <att name="objectId" value="114314449005200033"/>
+         <att name="objectId" value="114321526611300033"/>
          <att name="drawBorder" value="false"/>
          <att name="borderColor" value="RGB {128,128,128}"/>
          <att name="transparent" value="false"/>
@@ -291,7 +291,7 @@
          <att name="size" value="DIM {169,4528}"/>
          <att>
             <graph id="43" name="SEQUENCE">
-               <att name="objectId" value="114314449222600135"/>
+               <att name="objectId" value="114321526824600135"/>
                <att name="drawBorder" value="true"/>
                <att name="borderColor" value="RGB {128,128,128}"/>
                <att name="transparent" value="false"/>
@@ -320,7 +320,7 @@
                <att name="minor_alignment" value="0"/>
                <att name="gap" value="50"/>
                <node id="44" name="RECEIVE">
-                  <att name="objectId" value="114314449222600137"/>
+                  <att name="objectId" value="114321526824600137"/>
                   <att name="drawBorder" value="false"/>
                   <att name="borderColor" value="RGB {0,0,255}"/>
                   <att name="transparent" value="true"/>
@@ -353,7 +353,7 @@
                </node>
                <att>
                   <graph id="45" name="ASSIGN">
-                     <att name="objectId" value="114314449222600139"/>
+                     <att name="objectId" value="114321526825600139"/>
                      <att name="drawBorder" value="false"/>
                      <att name="borderColor" value="RGB {0,0,255}"/>
                      <att name="transparent" value="true"/>
@@ -391,12 +391,12 @@
                         <att name="toQuery" value=""/>
                         <att name="toPartnerLink" value=""/>
                         <att name="toProperty" value=""/>
-                        <att name="objectId" value="114315562650715413"/>
+                        <att name="objectId" value="114321526825600141"/>
                      </node>
                      <node id="47" name="ASSIGN_COPY">
                         <att name="fromVariable" value="workFlowInputMessage"/>
                         <att name="fromPart" value="parameters"/>
-                        <att name="fromQuery" value="/ns1:WorkFlowInputType/ns1:query/query"/>
+                        <att name="fromQuery" value="/ns1:WorkFlowInputType/query"/>
                         <att name="fromPartnerLink" value=""/>
                         <att name="fromEndpointReference" value=""/>
                         <att name="fromProperty" value=""/>
@@ -405,15 +405,15 @@
                         <att name="fromOpaque" value="false"/>
                         <att name="toVariable" value="queryInputMessage"/>
                         <att name="toPart" value="parameters"/>
-                        <att name="toQuery" value="/ns1:query/query"/>
+                        <att name="toQuery" value="/ns1:query"/>
                         <att name="toPartnerLink" value=""/>
                         <att name="toProperty" value=""/>
-                        <att name="objectId" value="114315562650715415"/>
+                        <att name="objectId" value="114321526825600143"/>
                      </node>
                   </graph>
                </att>
                <node id="48" name="INVOKE">
-                  <att name="objectId" value="114314449223600145"/>
+                  <att name="objectId" value="114321526825600145"/>
                   <att name="drawBorder" value="false"/>
                   <att name="borderColor" value="RGB {0,0,255}"/>
                   <att name="transparent" value="true"/>
@@ -447,7 +447,7 @@
                </node>
                <att>
                   <graph id="49" name="ASSIGN">
-                     <att name="objectId" value="114314449223600147"/>
+                     <att name="objectId" value="114321526825600147"/>
                      <att name="drawBorder" value="false"/>
                      <att name="borderColor" value="RGB {0,0,255}"/>
                      <att name="transparent" value="true"/>
@@ -485,13 +485,13 @@
                         <att name="toQuery" value=""/>
                         <att name="toPartnerLink" value=""/>
                         <att name="toProperty" value=""/>
-                        <att name="objectId" value="114314449223600149"/>
+                        <att name="objectId" value="114321526825600149"/>
                      </node>
                   </graph>
                </att>
                <att>
                   <graph id="51" name="WHILE">
-                     <att name="objectId" value="114314449223600151"/>
+                     <att name="objectId" value="114321526825600151"/>
                      <att name="drawBorder" value="true"/>
                      <att name="borderColor" value="RGB {128,128,128}"/>
                      <att name="transparent" value="false"/>
@@ -518,7 +518,7 @@
                      <att name="whileCondition" value="bpws:getVariableData('indexCounter') &lt;= bpws:getVariableData('count')"/>
                      <att>
                         <graph id="52" name="ASSIGN">
-                           <att name="objectId" value="114314449223600153"/>
+                           <att name="objectId" value="114321526825600153"/>
                            <att name="drawBorder" value="false"/>
                            <att name="borderColor" value="RGB {0,0,255}"/>
                            <att name="transparent" value="true"/>
@@ -556,7 +556,7 @@
                               <att name="toQuery" value="/ns3:echoByValue/scanFeaturesXml[bpws:getVariableData('indexCounter')]"/>
                               <att name="toPartnerLink" value=""/>
                               <att name="toProperty" value=""/>
-                              <att name="objectId" value="114314449223600155"/>
+                              <att name="objectId" value="114321526825600155"/>
                            </node>
                            <node id="54" name="ASSIGN_COPY">
                               <att name="fromVariable" value=""/>
@@ -573,14 +573,14 @@
                               <att name="toQuery" value=""/>
                               <att name="toPartnerLink" value=""/>
                               <att name="toProperty" value=""/>
-                              <att name="objectId" value="114314449223600157"/>
+                              <att name="objectId" value="114321526825600157"/>
                            </node>
                         </graph>
                      </att>
                   </graph>
                </att>
                <node id="55" name="INVOKE">
-                  <att name="objectId" value="114314449223600159"/>
+                  <att name="objectId" value="114321526825600159"/>
                   <att name="drawBorder" value="false"/>
                   <att name="borderColor" value="RGB {0,0,255}"/>
                   <att name="transparent" value="true"/>
@@ -614,7 +614,7 @@
                </node>
                <att>
                   <graph id="56" name="ASSIGN">
-                     <att name="objectId" value="114314449223600161"/>
+                     <att name="objectId" value="114321526825600161"/>
                      <att name="drawBorder" value="false"/>
                      <att name="borderColor" value="RGB {0,0,255}"/>
                      <att name="transparent" value="true"/>
@@ -652,7 +652,7 @@
                         <att name="toQuery" value=""/>
                         <att name="toPartnerLink" value=""/>
                         <att name="toProperty" value=""/>
-                        <att name="objectId" value="114314449223600163"/>
+                        <att name="objectId" value="114321526825600163"/>
                      </node>
                      <node id="58" name="ASSIGN_COPY">
                         <att name="fromVariable" value=""/>
@@ -669,13 +669,13 @@
                         <att name="toQuery" value=""/>
                         <att name="toPartnerLink" value=""/>
                         <att name="toProperty" value=""/>
-                        <att name="objectId" value="114314449223600165"/>
+                        <att name="objectId" value="114321526825600165"/>
                      </node>
                   </graph>
                </att>
                <att>
                   <graph id="59" name="WHILE">
-                     <att name="objectId" value="114314449223600167"/>
+                     <att name="objectId" value="114321526825600167"/>
                      <att name="drawBorder" value="true"/>
                      <att name="borderColor" value="RGB {128,128,128}"/>
                      <att name="transparent" value="false"/>
@@ -702,7 +702,7 @@
                      <att name="whileCondition" value="bpws:getVariableData('indexCounter') &lt;= bpws:getVariableData('count')"/>
                      <att>
                         <graph id="60" name="ASSIGN">
-                           <att name="objectId" value="114314449223600169"/>
+                           <att name="objectId" value="114321526825600169"/>
                            <att name="drawBorder" value="false"/>
                            <att name="borderColor" value="RGB {0,0,255}"/>
                            <att name="transparent" value="true"/>
@@ -740,7 +740,7 @@
                               <att name="toQuery" value="/ns3:general_interpolateByValue/scanFeaturesXml[bpws:getVariableData('indexCounter')]"/>
                               <att name="toPartnerLink" value=""/>
                               <att name="toProperty" value=""/>
-                              <att name="objectId" value="114314449223600171"/>
+                              <att name="objectId" value="114321526825600171"/>
                            </node>
                            <node id="62" name="ASSIGN_COPY">
                               <att name="fromVariable" value=""/>
@@ -757,14 +757,14 @@
                               <att name="toQuery" value=""/>
                               <att name="toPartnerLink" value=""/>
                               <att name="toProperty" value=""/>
-                              <att name="objectId" value="114314449223600173"/>
+                              <att name="objectId" value="114321526825600173"/>
                            </node>
                         </graph>
                      </att>
                   </graph>
                </att>
                <node id="63" name="INVOKE">
-                  <att name="objectId" value="114314449223600175"/>
+                  <att name="objectId" value="114321526825600175"/>
                   <att name="drawBorder" value="false"/>
                   <att name="borderColor" value="RGB {0,0,255}"/>
                   <att name="transparent" value="true"/>
@@ -798,7 +798,7 @@
                </node>
                <att>
                   <graph id="64" name="ASSIGN">
-                     <att name="objectId" value="114314449223600177"/>
+                     <att name="objectId" value="114321526825600177"/>
                      <att name="drawBorder" value="false"/>
                      <att name="borderColor" value="RGB {0,0,255}"/>
                      <att name="transparent" value="true"/>
@@ -836,7 +836,7 @@
                         <att name="toQuery" value=""/>
                         <att name="toPartnerLink" value=""/>
                         <att name="toProperty" value=""/>
-                        <att name="objectId" value="114314449223600179"/>
+                        <att name="objectId" value="114321526825600179"/>
                      </node>
                      <node id="66" name="ASSIGN_COPY">
                         <att name="fromVariable" value=""/>
@@ -853,13 +853,13 @@
                         <att name="toQuery" value=""/>
                         <att name="toPartnerLink" value=""/>
                         <att name="toProperty" value=""/>
-                        <att name="objectId" value="114314449223600181"/>
+                        <att name="objectId" value="114321526825600181"/>
                      </node>
                   </graph>
                </att>
                <att>
                   <graph id="67" name="WHILE">
-                     <att name="objectId" value="114314449223600183"/>
+                     <att name="objectId" value="114321526825600183"/>
                      <att name="drawBorder" value="true"/>
                      <att name="borderColor" value="RGB {128,128,128}"/>
                      <att name="transparent" value="false"/>
@@ -886,7 +886,7 @@
                      <att name="whileCondition" value="bpws:getVariableData('indexCounter') &lt;= bpws:getVariableData('count')"/>
                      <att>
                         <graph id="68" name="ASSIGN">
-                           <att name="objectId" value="114314449223600185"/>
+                           <att name="objectId" value="114321526825600185"/>
                            <att name="drawBorder" value="false"/>
                            <att name="borderColor" value="RGB {0,0,255}"/>
                            <att name="transparent" value="true"/>
@@ -924,7 +924,7 @@
                               <att name="toQuery" value="/ns3:removeBackground_runningQuantileByValue/scanFeaturesXml[bpws:getVariableData('indexCounter')]"/>
                               <att name="toPartnerLink" value=""/>
                               <att name="toProperty" value=""/>
-                              <att name="objectId" value="114314449223600187"/>
+                              <att name="objectId" value="114321526825600187"/>
                            </node>
                            <node id="70" name="ASSIGN_COPY">
                               <att name="fromVariable" value=""/>
@@ -941,7 +941,7 @@
                               <att name="toQuery" value=""/>
                               <att name="toPartnerLink" value=""/>
                               <att name="toProperty" value=""/>
-                              <att name="objectId" value="114314449223600189"/>
+                              <att name="objectId" value="114321526825600189"/>
                            </node>
                         </graph>
                      </att>
@@ -949,7 +949,7 @@
                </att>
                <att>
                   <graph id="71" name="ASSIGN">
-                     <att name="objectId" value="114314449223600191"/>
+                     <att name="objectId" value="114321526825600191"/>
                      <att name="drawBorder" value="false"/>
                      <att name="borderColor" value="RGB {0,0,255}"/>
                      <att name="transparent" value="true"/>
@@ -987,7 +987,7 @@
                         <att name="toQuery" value="/ns3:removeBackground_runningQuantileByValue/windowSize"/>
                         <att name="toPartnerLink" value=""/>
                         <att name="toProperty" value=""/>
-                        <att name="objectId" value="114314449223600193"/>
+                        <att name="objectId" value="114321526825600193"/>
                      </node>
                      <node id="73" name="ASSIGN_COPY">
                         <att name="fromVariable" value="workFlowInputMessage"/>
@@ -1004,12 +1004,12 @@
                         <att name="toQuery" value="/ns3:removeBackground_runningQuantileByValue/percentile"/>
                         <att name="toPartnerLink" value=""/>
                         <att name="toProperty" value=""/>
-                        <att name="objectId" value="114314449223600195"/>
+                        <att name="objectId" value="114321526825600195"/>
                      </node>
                   </graph>
                </att>
                <node id="74" name="INVOKE">
-                  <att name="objectId" value="114314449223600197"/>
+                  <att name="objectId" value="114321526825600197"/>
                   <att name="drawBorder" value="false"/>
                   <att name="borderColor" value="RGB {0,0,255}"/>
                   <att name="transparent" value="true"/>
@@ -1043,7 +1043,7 @@
                </node>
                <att>
                   <graph id="75" name="ASSIGN">
-                     <att name="objectId" value="114314449223600199"/>
+                     <att name="objectId" value="114321526825600199"/>
                      <att name="drawBorder" value="false"/>
                      <att name="borderColor" value="RGB {0,0,255}"/>
                      <att name="transparent" value="true"/>
@@ -1081,7 +1081,7 @@
                         <att name="toQuery" value=""/>
                         <att name="toPartnerLink" value=""/>
                         <att name="toProperty" value=""/>
-                        <att name="objectId" value="114314449223600201"/>
+                        <att name="objectId" value="114321526825600201"/>
                      </node>
                      <node id="77" name="ASSIGN_COPY">
                         <att name="fromVariable" value=""/>
@@ -1098,13 +1098,13 @@
                         <att name="toQuery" value=""/>
                         <att name="toPartnerLink" value=""/>
                         <att name="toProperty" value=""/>
-                        <att name="objectId" value="114314449223600203"/>
+                        <att name="objectId" value="114321526825600203"/>
                      </node>
                   </graph>
                </att>
                <att>
                   <graph id="78" name="WHILE">
-                     <att name="objectId" value="114314449223600205"/>
+                     <att name="objectId" value="114321526825600205"/>
                      <att name="drawBorder" value="true"/>
                      <att name="borderColor" value="RGB {128,128,128}"/>
                      <att name="transparent" value="false"/>
@@ -1131,7 +1131,7 @@
                      <att name="whileCondition" value="bpws:getVariableData('indexCounter') &lt;= bpws:getVariableData('count')"/>
                      <att>
                         <graph id="79" name="ASSIGN">
-                           <att name="objectId" value="114314449223600207"/>
+                           <att name="objectId" value="114321526826600207"/>
                            <att name="drawBorder" value="false"/>
                            <att name="borderColor" value="RGB {0,0,255}"/>
                            <att name="transparent" value="true"/>
@@ -1169,7 +1169,7 @@
                               <att name="toQuery" value="/ns3:removeBackground_minusByValue/scanFeaturesXml1[bpws:getVariableData('indexCounter')]"/>
                               <att name="toPartnerLink" value=""/>
                               <att name="toProperty" value=""/>
-                              <att name="objectId" value="114314449224600209"/>
+                              <att name="objectId" value="114321526826600209"/>
                            </node>
                            <node id="81" name="ASSIGN_COPY">
                               <att name="fromVariable" value=""/>
@@ -1186,7 +1186,7 @@
                               <att name="toQuery" value=""/>
                               <att name="toPartnerLink" value=""/>
                               <att name="toProperty" value=""/>
-                              <att name="objectId" value="114314449224600211"/>
+                              <att name="objectId" value="114321526826600211"/>
                            </node>
                         </graph>
                      </att>
@@ -1194,7 +1194,7 @@
                </att>
                <att>
                   <graph id="82" name="ASSIGN">
-                     <att name="objectId" value="114314449224600213"/>
+                     <att name="objectId" value="114321526826600213"/>
                      <att name="drawBorder" value="false"/>
                      <att name="borderColor" value="RGB {0,0,255}"/>
                      <att name="transparent" value="true"/>
@@ -1232,7 +1232,7 @@
                         <att name="toQuery" value=""/>
                         <att name="toPartnerLink" value=""/>
                         <att name="toProperty" value=""/>
-                        <att name="objectId" value="114314449224600215"/>
+                        <att name="objectId" value="114321526826600215"/>
                      </node>
                      <node id="84" name="ASSIGN_COPY">
                         <att name="fromVariable" value=""/>
@@ -1249,13 +1249,13 @@
                         <att name="toQuery" value=""/>
                         <att name="toPartnerLink" value=""/>
                         <att name="toProperty" value=""/>
-                        <att name="objectId" value="114314449224600217"/>
+                        <att name="objectId" value="114321526827600217"/>
                      </node>
                   </graph>
                </att>
                <att>
                   <graph id="85" name="WHILE">
-                     <att name="objectId" value="114314449225600219"/>
+                     <att name="objectId" value="114321526827600219"/>
                      <att name="drawBorder" value="true"/>
                      <att name="borderColor" value="RGB {128,128,128}"/>
                      <att name="transparent" value="false"/>
@@ -1282,7 +1282,7 @@
                      <att name="whileCondition" value="bpws:getVariableData('indexCounter') &lt;= bpws:getVariableData('count')"/>
                      <att>
                         <graph id="86" name="ASSIGN">
-                           <att name="objectId" value="114314449225600221"/>
+                           <att name="objectId" value="114321526827600221"/>
                            <att name="drawBorder" value="false"/>
                            <att name="borderColor" value="RGB {0,0,255}"/>
                            <att name="transparent" value="true"/>
@@ -1320,7 +1320,7 @@
                               <att name="toQuery" value="/ns3:removeBackground_minusByValue/scanFeaturesXml2[bpws:getVariableData('indexCounter')]"/>
                               <att name="toPartnerLink" value=""/>
                               <att name="toProperty" value=""/>
-                              <att name="objectId" value="114314449225600223"/>
+                              <att name="objectId" value="114321526827600223"/>
                            </node>
                            <node id="88" name="ASSIGN_COPY">
                               <att name="fromVariable" value=""/>
@@ -1337,14 +1337,14 @@
                               <att name="toQuery" value=""/>
                               <att name="toPartnerLink" value=""/>
                               <att name="toProperty" value=""/>
-                              <att name="objectId" value="114314449225600225"/>
+                              <att name="objectId" value="114321526827600225"/>
                            </node>
                         </graph>
                      </att>
                   </graph>
                </att>
                <node id="89" name="INVOKE">
-                  <att name="objectId" value="114314449225600227"/>
+                  <att name="objectId" value="114321526827600227"/>
                   <att name="drawBorder" value="false"/>
                   <att name="borderColor" value="RGB {0,0,255}"/>
                   <att name="transparent" value="true"/>
@@ -1378,7 +1378,7 @@
                </node>
                <att>
                   <graph id="90" name="ASSIGN">
-                     <att name="objectId" value="114314449225600229"/>
+                     <att name="objectId" value="114321526827600229"/>
                      <att name="drawBorder" value="false"/>
                      <att name="borderColor" value="RGB {0,0,255}"/>
                      <att name="transparent" value="true"/>
@@ -1416,7 +1416,7 @@
                         <att name="toQuery" value=""/>
                         <att name="toPartnerLink" value=""/>
                         <att name="toProperty" value=""/>
-                        <att name="objectId" value="114314449225600231"/>
+                        <att name="objectId" value="114321526827600231"/>
                      </node>
                      <node id="92" name="ASSIGN_COPY">
                         <att name="fromVariable" value=""/>
@@ -1433,13 +1433,13 @@
                         <att name="toQuery" value=""/>
                         <att name="toPartnerLink" value=""/>
                         <att name="toProperty" value=""/>
-                        <att name="objectId" value="114314449225600233"/>
+                        <att name="objectId" value="114321526827600233"/>
                      </node>
                   </graph>
                </att>
                <att>
                   <graph id="93" name="WHILE">
-                     <att name="objectId" value="114314449225600235"/>
+                     <att name="objectId" value="114321526827600235"/>
                      <att name="drawBorder" value="true"/>
                      <att name="borderColor" value="RGB {128,128,128}"/>
                      <att name="transparent" value="false"/>
@@ -1466,7 +1466,7 @@
                      <att name="whileCondition" value="bpws:getVariableData('indexCounter') &lt;= bpws:getVariableData('count')"/>
                      <att>
                         <graph id="94" name="ASSIGN">
-                           <att name="objectId" value="114314449225600237"/>
+                           <att name="objectId" value="114321526827600237"/>
                            <att name="drawBorder" value="false"/>
                            <att name="borderColor" value="RGB {0,0,255}"/>
                            <att name="transparent" value="true"/>
@@ -1504,7 +1504,7 @@
                               <att name="toQuery" value="/ns3:denoise_waveletUDWTWByValue/scanFeaturesXml[bpws:getVariableData('indexCounter')]"/>
                               <att name="toPartnerLink" value=""/>
                               <att name="toProperty" value=""/>
-                              <att name="objectId" value="114314449225600239"/>
+                              <att name="objectId" value="114321526827600239"/>
                            </node>
                            <node id="96" name="ASSIGN_COPY">
                               <att name="fromVariable" value=""/>
@@ -1521,7 +1521,7 @@
                               <att name="toQuery" value=""/>
                               <att name="toPartnerLink" value=""/>
                               <att name="toProperty" value=""/>
-                              <att name="objectId" value="114314449225600241"/>
+                              <att name="objectId" value="114321526827600241"/>
                            </node>
                         </graph>
                      </att>
@@ -1529,7 +1529,7 @@
                </att>
                <att>
                   <graph id="97" name="ASSIGN">
-                     <att name="objectId" value="114314449225600243"/>
+                     <att name="objectId" value="114321526827600243"/>
                      <att name="drawBorder" value="false"/>
                      <att name="borderColor" value="RGB {0,0,255}"/>
                      <att name="transparent" value="true"/>
@@ -1567,7 +1567,7 @@
                         <att name="toQuery" value="/ns3:denoise_waveletUDWTWByValue/windowSize"/>
                         <att name="toPartnerLink" value=""/>
                         <att name="toProperty" value=""/>
-                        <att name="objectId" value="114314449225600245"/>
+                        <att name="objectId" value="114321526827600245"/>
                      </node>
                      <node id="99" name="ASSIGN_COPY">
                         <att name="fromVariable" value="workFlowInputMessage"/>
@@ -1584,12 +1584,12 @@
                         <att name="toQuery" value="/ns3:denoise_waveletUDWTWByValue/thresholdMultiplier"/>
                         <att name="toPartnerLink" value=""/>
                         <att name="toProperty" value=""/>
-                        <att name="objectId" value="114314449225600247"/>
+                        <att name="objectId" value="114321526827600247"/>
                      </node>
                   </graph>
                </att>
                <node id="100" name="INVOKE">
-                  <att name="objectId" value="114314449225600249"/>
+                  <att name="objectId" value="114321526827600249"/>
                   <att name="drawBorder" value="false"/>
                   <att name="borderColor" value="RGB {0,0,255}"/>
                   <att name="transparent" value="true"/>
@@ -1623,7 +1623,7 @@
                </node>
                <att>
                   <graph id="101" name="ASSIGN">
-                     <att name="objectId" value="114314449225600251"/>
+                     <att name="objectId" value="114321526827600251"/>
                      <att name="drawBorder" value="false"/>
                      <att name="borderColor" value="RGB {0,0,255}"/>
                      <att name="transparent" value="true"/>
@@ -1661,7 +1661,7 @@
                         <att name="toQuery" value=""/>
                         <att name="toPartnerLink" value=""/>
                         <att name="toProperty" value=""/>
-                        <att name="objectId" value="114314449225600253"/>
+                        <att name="objectId" value="114321526827600253"/>
                      </node>
                      <node id="103" name="ASSIGN_COPY">
                         <att name="fromVariable" value=""/>
@@ -1678,13 +1678,13 @@
                         <att name="toQuery" value=""/>
                         <att name="toPartnerLink" value=""/>
                         <att name="toProperty" value=""/>
-                        <att name="objectId" value="114314449225600255"/>
+                        <att name="objectId" value="114321526827600255"/>
                      </node>
                   </graph>
                </att>
                <att>
                   <graph id="104" name="WHILE">
-                     <att name="objectId" value="114314449225600257"/>
+                     <att name="objectId" value="114321526827600257"/>
                      <att name="drawBorder" value="true"/>
                      <att name="borderColor" value="RGB {128,128,128}"/>
                      <att name="transparent" value="false"/>
@@ -1711,7 +1711,7 @@
                      <att name="whileCondition" value="bpws:getVariableData('indexCounter') &lt;= bpws:getVariableData('count')"/>
                      <att>
                         <graph id="105" name="ASSIGN">
-                           <att name="objectId" value="114314449225600259"/>
+                           <att name="objectId" value="114321526827600259"/>
                            <att name="drawBorder" value="false"/>
                            <att name="borderColor" value="RGB {0,0,255}"/>
                            <att name="transparent" value="true"/>
@@ -1749,7 +1749,7 @@
                               <att name="toQuery" value="/ns3:align_alignxByValue/scanFeaturesXml[bpws:getVariableData('indexCounter')]"/>
                               <att name="toPartnerLink" value=""/>
                               <att name="toProperty" value=""/>
-                              <att name="objectId" value="114314449225600261"/>
+                              <att name="objectId" value="114321526827600261"/>
                            </node>
                            <node id="107" name="ASSIGN_COPY">
                               <att name="fromVariable" value=""/>
@@ -1766,14 +1766,14 @@
                               <att name="toQuery" value=""/>
                               <att name="toPartnerLink" value=""/>
                               <att name="toProperty" value=""/>
-                              <att name="objectId" value="114314449225600263"/>
+                              <att name="objectId" value="114321526827600263"/>
                            </node>
                         </graph>
                      </att>
                   </graph>
                </att>
                <node id="108" name="INVOKE">
-                  <att name="objectId" value="114314449225600265"/>
+                  <att name="objectId" value="114321526827600265"/>
                   <att name="drawBorder" value="false"/>
                   <att name="borderColor" value="RGB {0,0,255}"/>
                   <att name="transparent" value="true"/>
@@ -1807,7 +1807,7 @@
                </node>
                <att>
                   <graph id="109" name="ASSIGN">
-                     <att name="objectId" value="114314449225600267"/>
+                     <att name="objectId" value="114321526827600267"/>
                      <att name="drawBorder" value="false"/>
                      <att name="borderColor" value="RGB {0,0,255}"/>
                      <att name="transparent" value="true"/>
@@ -1845,7 +1845,7 @@
                         <att name="toQuery" value=""/>
                         <att name="toPartnerLink" value=""/>
                         <att name="toProperty" value=""/>
-                        <att name="objectId" value="114314449225600269"/>
+                        <att name="objectId" value="114321526827600269"/>
                      </node>
                      <node id="111" name="ASSIGN_COPY">
                         <att name="fromVariable" value=""/>
@@ -1862,13 +1862,13 @@
                         <att name="toQuery" value=""/>
                         <att name="toPartnerLink" value=""/>
                         <att name="toProperty" value=""/>
-                        <att name="objectId" value="114314449225600271"/>
+                        <att name="objectId" value="114321526827600271"/>
                      </node>
                   </graph>
                </att>
                <att>
                   <graph id="112" name="WHILE">
-                     <att name="objectId" value="114314449225600273"/>
+                     <att name="objectId" value="114321526827600273"/>
                      <att name="drawBorder" value="true"/>
                      <att name="borderColor" value="RGB {128,128,128}"/>
                      <att name="transparent" value="false"/>
@@ -1895,7 +1895,7 @@
                      <att name="whileCondition" value="bpws:getVariableData('indexCounter') &lt;= bpws:getVariableData('count')"/>
                      <att>
                         <graph id="113" name="ASSIGN">
-                           <att name="objectId" value="114314449225600275"/>
+                           <att name="objectId" value="114321526827600275"/>
                            <att name="drawBorder" value="false"/>
                            <att name="borderColor" value="RGB {0,0,255}"/>
                            <att name="transparent" value="true"/>
@@ -1933,7 +1933,7 @@
                               <att name="toQuery" value="/ns3:normalize_quantileByValue/scanFeaturesXml[bpws:getVariableData('indexCounter')]"/>
                               <att name="toPartnerLink" value=""/>
                               <att name="toProperty" value=""/>
-                              <att name="objectId" value="114314449225600277"/>
+                              <att name="objectId" value="114321526827600277"/>
                            </node>
                            <node id="115" name="ASSIGN_COPY">
                               <att name="fromVariable" value=""/>
@@ -1950,14 +1950,14 @@
                               <att name="toQuery" value=""/>
                               <att name="toPartnerLink" value=""/>
                               <att name="toProperty" value=""/>
-                              <att name="objectId" value="114314449225600279"/>
+                              <att name="objectId" value="114321526827600279"/>
                            </node>
                         </graph>
                      </att>
                   </graph>
                </att>
                <node id="116" name="INVOKE">
-                  <att name="objectId" value="114314449225600281"/>
+                  <att name="objectId" value="114321526827600281"/>
                   <att name="drawBorder" value="false"/>
                   <att name="borderColor" value="RGB {0,0,255}"/>
                   <att name="transparent" value="true"/>
@@ -1991,7 +1991,7 @@
                </node>
                <att>
                   <graph id="117" name="ASSIGN">
-                     <att name="objectId" value="114314449225600283"/>
+                     <att name="objectId" value="114321526827600283"/>
                      <att name="drawBorder" value="false"/>
                      <att name="borderColor" value="RGB {0,0,255}"/>
                      <att name="transparent" value="true"/>
@@ -2029,7 +2029,7 @@
                         <att name="toQuery" value=""/>
                         <att name="toPartnerLink" value=""/>
                         <att name="toProperty" value=""/>
-                        <att name="objectId" value="114314449225600285"/>
+                        <att name="objectId" value="114321526827600285"/>
                      </node>
                      <node id="119" name="ASSIGN_COPY">
                         <att name="fromVariable" value=""/>
@@ -2046,13 +2046,13 @@
                         <att name="toQuery" value=""/>
                         <att name="toPartnerLink" value=""/>
                         <att name="toProperty" value=""/>
-                        <att name="objectId" value="114314449225600287"/>
+                        <att name="objectId" value="114321526827600287"/>
                      </node>
                   </graph>
                </att>
                <att>
                   <graph id="120" name="WHILE">
-                     <att name="objectId" value="114314449225600289"/>
+                     <att name="objectId" value="114321526827600289"/>
                      <att name="drawBorder" value="true"/>
                      <att name="borderColor" value="RGB {128,128,128}"/>
                      <att name="transparent" value="false"/>
@@ -2079,7 +2079,7 @@
                      <att name="whileCondition" value="bpws:getVariableData('indexCounter') &lt;= bpws:getVariableData('count')"/>
                      <att>
                         <graph id="121" name="ASSIGN">
-                           <att name="objectId" value="114314449225600291"/>
+                           <att name="objectId" value="114321526827600291"/>
                            <att name="drawBorder" value="false"/>
                            <att name="borderColor" value="RGB {0,0,255}"/>
                            <att name="transparent" value="true"/>
@@ -2117,7 +2117,7 @@
                               <att name="toQuery" value="/ns3:plot_2DStackedByValue/scanFeaturesXmlTop[bpws:getVariableData('indexCounter')]"/>
                               <att name="toPartnerLink" value=""/>
                               <att name="toProperty" value=""/>
-                              <att name="objectId" value="114314449225600293"/>
+                              <att name="objectId" value="114321526827600293"/>
                            </node>
                            <node id="123" name="ASSIGN_COPY">
                               <att name="fromVariable" value=""/>
@@ -2134,7 +2134,7 @@
                               <att name="toQuery" value=""/>
                               <att name="toPartnerLink" value=""/>
                               <att name="toProperty" value=""/>
-                              <att name="objectId" value="114314449225600295"/>
+                              <att name="objectId" value="114321526827600295"/>
                            </node>
                         </graph>
                      </att>
@@ -2142,7 +2142,7 @@
                </att>
                <att>
                   <graph id="124" name="ASSIGN">
-                     <att name="objectId" value="114314449225600297"/>
+                     <att name="objectId" value="114321526827600297"/>
                      <att name="drawBorder" value="false"/>
                      <att name="borderColor" value="RGB {0,0,255}"/>
                      <att name="transparent" value="true"/>
@@ -2180,7 +2180,7 @@
                         <att name="toQuery" value=""/>
                         <att name="toPartnerLink" value=""/>
                         <att name="toProperty" value=""/>
-                        <att name="objectId" value="114314449225600299"/>
+                        <att name="objectId" value="114321526828600299"/>
                      </node>
                      <node id="126" name="ASSIGN_COPY">
                         <att name="fromVariable" value=""/>
@@ -2197,13 +2197,13 @@
                         <att name="toQuery" value=""/>
                         <att name="toPartnerLink" value=""/>
                         <att name="toProperty" value=""/>
-                        <att name="objectId" value="114314449226600301"/>
+                        <att name="objectId" value="114321526828600301"/>
                      </node>
                   </graph>
                </att>
                <att>
                   <graph id="127" name="WHILE">
-                     <att name="objectId" value="114314449226600303"/>
+                     <att name="objectId" value="114321526828600303"/>
                      <att name="drawBorder" value="true"/>
                      <att name="borderColor" value="RGB {128,128,128}"/>
                      <att name="transparent" value="false"/>
@@ -2230,7 +2230,7 @@
                      <att name="whileCondition" value="bpws:getVariableData('indexCounter') &lt;= bpws:getVariableData('count')"/>
                      <att>
                         <graph id="128" name="ASSIGN">
-                           <att name="objectId" value="114314449226600305"/>
+                           <att name="objectId" value="114321526828600305"/>
                            <att name="drawBorder" value="false"/>
                            <att name="borderColor" value="RGB {0,0,255}"/>
                            <att name="transparent" value="true"/>
@@ -2268,7 +2268,7 @@
                               <att name="toQuery" value="/ns3:plot_2DStackedByValue/scanFeaturesXmlBottom[bpws:getVariableData('indexCounter')]"/>
                               <att name="toPartnerLink" value=""/>
                               <att name="toProperty" value=""/>
-                              <att name="objectId" value="114314449226600307"/>
+                              <att name="objectId" value="114321526828600307"/>
                            </node>
                            <node id="130" name="ASSIGN_COPY">
                               <att name="fromVariable" value=""/>
@@ -2285,14 +2285,14 @@
                               <att name="toQuery" value=""/>
                               <att name="toPartnerLink" value=""/>
                               <att name="toProperty" value=""/>
-                              <att name="objectId" value="114314449226600309"/>
+                              <att name="objectId" value="114321526828600309"/>
                            </node>
                         </graph>
                      </att>
                   </graph>
                </att>
                <node id="131" name="INVOKE">
-                  <att name="objectId" value="114314449226600311"/>
+                  <att name="objectId" value="114321526828600311"/>
                   <att name="drawBorder" value="false"/>
                   <att name="borderColor" value="RGB {0,0,255}"/>
                   <att name="transparent" value="true"/>
@@ -2326,7 +2326,7 @@
                </node>
                <att>
                   <graph id="132" name="ASSIGN">
-                     <att name="objectId" value="114314449226600313"/>
+                     <att name="objectId" value="114321526828600313"/>
                      <att name="drawBorder" value="false"/>
                      <att name="borderColor" value="RGB {0,0,255}"/>
                      <att name="transparent" value="true"/>
@@ -2364,12 +2364,12 @@
                         <att name="toQuery" value="/ns1:WorkFlowOutputType/jpegImage"/>
                         <att name="toPartnerLink" value=""/>
                         <att name="toProperty" value=""/>
-                        <att name="objectId" value="114314449226600315"/>
+                        <att name="objectId" value="114321526828600315"/>
                      </node>
                   </graph>
                </att>
                <node id="134" name="REPLY">
-                  <att name="objectId" value="114314449226600317"/>
+                  <att name="objectId" value="114321526828600317"/>
                   <att name="drawBorder" value="false"/>
                   <att name="borderColor" value="RGB {0,0,255}"/>
                   <att name="transparent" value="true"/>
@@ -2405,7 +2405,7 @@
    </att>
    <node id="135" name="SCOPE_FAULTHANDLER">
       <att name="text" value="Fault Handlers"/>
-      <att name="objectId" value="114314449005200037"/>
+      <att name="objectId" value="114321526611300037"/>
       <att name="drawBorder" value="true"/>
       <att name="borderColor" value="RGB {128,128,128}"/>
       <att name="transparent" value="false"/>
@@ -2426,7 +2426,7 @@
    </node>
    <node id="136" name="SCOPE_EVENTHANDLER">
       <att name="text" value="Event Handlers"/>
-      <att name="objectId" value="114314449005200039"/>
+      <att name="objectId" value="114321526611300039"/>
       <att name="drawBorder" value="true"/>
       <att name="borderColor" value="RGB {128,128,128}"/>
       <att name="transparent" value="false"/>
@@ -2447,7 +2447,7 @@
    </node>
    <node id="137" name="SCOPE_COMPENSATOR">
       <att name="text" value="Compensation Handler"/>
-      <att name="objectId" value="114314449005200035"/>
+      <att name="objectId" value="114321526611300035"/>
       <att name="drawBorder" value="true"/>
       <att name="borderColor" value="RGB {128,128,128}"/>
       <att name="transparent" value="false"/>
