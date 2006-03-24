@@ -78,4 +78,20 @@
   </ns3:Method>
  </ns3:Methods>
  <ns12:MetadataList xsi:type="ns12:MetadataListType" xmlns:ns12="gme://gov.nih.nci.cagrid.introduce/1/Metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns1:ServiceSecurity xsi:type="ns13:ServiceSecurity" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns13="gme://gov.nih.nci.cagrid.introduce/1/Security">
+  <ns13:SecuritySetting xsi:type="ns13:SecuritySetting">Custom</ns13:SecuritySetting>
+  <ns13:TransportLevelSecurity xsi:type="ns13:TransportLevelSecurity">
+   <ns13:CommunicationMethod xsi:type="ns13:CommunicationMethod">Privacy</ns13:CommunicationMethod>
+  </ns13:TransportLevelSecurity>
+  <ns13:ClientCommunication xsi:type="ns13:ClientCommunication">Transport_Layer_Security</ns13:ClientCommunication>
+  <ns13:ClientAuthorization xsi:type="ns13:ClientAuthorization">
+   <ns13:NoAuthorization xsi:type="ns13:NoAuthorization"/>
+  </ns13:ClientAuthorization>
+  <ns13:RunAsMode xsi:type="ns13:RunAsMode">System</ns13:RunAsMode>
+  <ns13:DelegationMode xsi:type="ns13:DelegationMode">None</ns13:DelegationMode>
+  <ns13:AnonymousClients xsi:type="ns13:AnonymousCommunication">No</ns13:AnonymousClients>
+  <ns13:ServiceAuthorization xsi:type="ns13:ServiceAuthorization">
+   <ns13:NoAuthorization xsi:type="ns13:NoAuthorization"/>
+  </ns13:ServiceAuthorization>
+ </ns1:ServiceSecurity>
 </ns1:ServiceSkeleton>
