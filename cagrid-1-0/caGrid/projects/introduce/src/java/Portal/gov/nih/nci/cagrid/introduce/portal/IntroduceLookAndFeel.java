@@ -48,7 +48,7 @@ public class IntroduceLookAndFeel extends PortalLookAndFeel {
 
 
 	public final static ImageIcon getDeployIcon() {
-		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/deploy.png"));
+		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/cog_go.png"));
 	}
 
 
