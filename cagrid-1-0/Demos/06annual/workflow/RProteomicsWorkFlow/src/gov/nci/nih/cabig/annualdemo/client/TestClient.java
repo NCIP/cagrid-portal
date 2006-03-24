@@ -2,7 +2,6 @@ package gov.nci.nih.cabig.annualdemo.client;
 
 import javax.xml.namespace.QName;
 import javax.xml.rpc.ParameterMode;
-
 import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
 import org.apache.axis.encoding.ser.BeanDeserializerFactory;
@@ -29,8 +28,6 @@ import org.apache.commons.cli.ParseException;
 
 public class TestClient {
 	protected static final String DEFAULT_URL_BASE = "http://localhost:8080/active-bpel/services/";
-
-	public static final String XML_SCHEMA_NAMESPACE = "http://www.w3.org/2001/XMLSchema";
 
 	private static final String RPROT_DATA_NAMESPACE = "http://rproteomics.cagrid.nci.nih.gov/RPData";
 
@@ -71,17 +68,7 @@ public class TestClient {
 				System.exit(-1);
 				return;
 			}
-			CQLQueryType query = (CQLQueryType) Utils.deserializeDocument(cmd
-					.getOptionValue("query"), CQLQueryType.class);
-		
-			WorkFlowInputType input = new WorkFlowInputType();
-			int windowSize = 1023;
-			WindowType windowType = new WindowType(windowSize);
-			PercentileType percentileType = new PercentileType(75);
-
-			input.setQueryType(query);
-			input.setWindowType(windowType);
-			input.setPercentileType(percentileType);
+			WorkFlowInputType input = createInput(cmd);
 
 			TestClient testClient = new TestClient(cmd.getOptionValue("gsh"),
 					input, cmd.getOptionValue("imageFileName"));
@@ -101,6 +88,21 @@ public class TestClient {
 			e.printStackTrace();
 			System.err.println(e.toString());
 		}
+	}
+
+	private static WorkFlowInputType createInput(CommandLine cmd) throws Exception {
+		CQLQueryType queryType = (CQLQueryType) Utils.deserializeDocument(cmd
+				.getOptionValue("query"), CQLQueryType.class);
+		Query queryElement = new Query(queryType);
+		WorkFlowInputType input = new WorkFlowInputType();
+		int windowSize = 1023;
+		WindowType windowType = new WindowType(windowSize);
+		PercentileType percentileType = new PercentileType(75);
+		input.setQuery(queryElement);
+		input.setWindowType(windowType);
+		input.setPercentileType(percentileType);
+		System.out.println(input.toString());
+		return input;
 	}
 
 	public String getURL() {
@@ -136,10 +138,12 @@ public class TestClient {
 		WorkFlowOutputType output = null;
 		try {
 			Call call = createCall();
-			if (this.workFlowInput.getQueryType() != null) {
+			if (this.workFlowInput.getQuery().getQuery() != null) {
 				System.out.println("Query Name: " + 
-						this.workFlowInput.getQueryType().getName());
-				System.out.println(this.workFlowInput.getQueryType().toString());
+						this.workFlowInput.getQuery().getQuery().getName());
+				QName workFlowInputQName = new QName(RPROT_DATA_NAMESPACE,
+				"WorkFlowInputType");
+				Utils.serializeDocument("sample.xml", this.workFlowInput, workFlowInputQName);
 			output = (WorkFlowOutputType) call
 					.invoke(new Object[] { this.workFlowInput });
 			} else {
@@ -175,6 +179,7 @@ public class TestClient {
 
 		register(call, WorkFlowInputType.class, workFlowInputQName);
 		register(call, WorkFlowOutputType.class, workFlowOuputQName);
+		System.out.println(call.toString());
 		return call;
 	}
 

@@ -48,8 +48,8 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
             <to variable="indexCounter"/>
          </copy>
          <copy>
-            <from part="parameters" query="/ns1:WorkFlowInputType/queryType" variable="workFlowInputMessage"/>
-            <to part="parameters" query="/ns1:query/query" variable="queryInputMessage"/>
+            <from part="parameters" query="/ns1:WorkFlowInputType/query" variable="workFlowInputMessage"/>
+            <to part="parameters" query="/ns1:query" variable="queryInputMessage"/>
          </copy>
       </assign>
       <!-- Invoking query operation on data service -->
