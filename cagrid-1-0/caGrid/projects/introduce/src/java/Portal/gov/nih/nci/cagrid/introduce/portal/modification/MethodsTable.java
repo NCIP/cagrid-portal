@@ -166,7 +166,7 @@ public class MethodsTable extends PortalBaseTable {
 				}
 			}
 
-			output += " " + method.getName() + "(" + input + ")";
+			output += "  " + method.getName() + "(" + input + ")";
 
 			return output;
 		}
