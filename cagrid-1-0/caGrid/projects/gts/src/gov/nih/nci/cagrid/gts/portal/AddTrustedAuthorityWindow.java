@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.gts.portal;
 
+import gov.nih.nci.cagrid.gridca.portal.CertificatePanel;
 import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
 
 import java.awt.BorderLayout;
@@ -41,6 +42,7 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	private JPanel buttonPanel = null;
 	private JButton addButton = null;
 	private JButton cancelButton = null;
+	private CertificatePanel certificatePanel = null;
 
 	/**
 	 * This is the default constructor
@@ -157,6 +159,7 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel.getPanelLabelColor()));
 			taPanel.addTab("Properties", GTSLookAndFeel.getTrustedAuthorityIcon(), getPropertiesNorthPanel(), null);
+			taPanel.addTab("Certificate", GTSLookAndFeel.getCertificateIcon(), getCertificatePanel(), null);
 		}
 		return taPanel;
 	}
@@ -340,6 +343,20 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 			cancelButton.setIcon(GTSLookAndFeel.getCloseIcon());
 		}
 		return cancelButton;
+	}
+
+	/**
+	 * This method initializes certificatePanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */    
+	private CertificatePanel getCertificatePanel() {
+		if (certificatePanel == null) {
+			certificatePanel = new CertificatePanel();
+			certificatePanel.setAllowExport(false);
+			certificatePanel.setAllowImport(true);
+		}
+		return certificatePanel;
 	}
 
 }

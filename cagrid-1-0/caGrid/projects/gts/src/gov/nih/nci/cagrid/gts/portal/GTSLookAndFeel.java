@@ -37,4 +37,9 @@ public class GTSLookAndFeel extends PortalLookAndFeel {
 				.getResource("/key_go.png"));
 	}
 	
+	public final static ImageIcon getCertificateIcon() {
+		return new javax.swing.ImageIcon(GTSLookAndFeel.class
+				.getResource("/contact-new.png"));
+	}
+	
 }
