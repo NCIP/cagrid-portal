@@ -31,6 +31,8 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	private JPanel propertiesPanel = null;
 	private JLabel jLabel2 = null;
 	private JTextField trustedAuthorityName = null;
+	private JLabel jLabel3 = null;
+	private JComboBox status = null;
 
 	/**
 	 * This is the default constructor
@@ -171,6 +173,20 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	 */    
 	private JPanel getPropertiesPanel() {
 		if (propertiesPanel == null) {
+			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
+			gridBagConstraints9.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints9.gridy = 1;
+			gridBagConstraints9.weightx = 1.0;
+			gridBagConstraints9.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints9.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints9.gridx = 1;
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.gridx = 0;
+			gridBagConstraints8.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints8.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints8.gridy = 1;
+			jLabel3 = new JLabel();
+			jLabel3.setText("Status");
 			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
 			gridBagConstraints7.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints7.anchor = java.awt.GridBagConstraints.WEST;
@@ -187,6 +203,8 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 			propertiesPanel.setLayout(new GridBagLayout());
 			propertiesPanel.add(jLabel2, gridBagConstraints6);
 			propertiesPanel.add(getTrustedAuthorityName(), gridBagConstraints7);
+			propertiesPanel.add(jLabel3, gridBagConstraints8);
+			propertiesPanel.add(getStatus(), gridBagConstraints9);
 		}
 		return propertiesPanel;
 	}
@@ -202,6 +220,18 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 			trustedAuthorityName.setEditable(false);
 		}
 		return trustedAuthorityName;
+	}
+
+	/**
+	 * This method initializes status	
+	 * 	
+	 * @return javax.swing.JComboBox	
+	 */    
+	private JComboBox getStatus() {
+		if (status == null) {
+			status = new StatusComboBox();
+		}
+		return status;
 	}
 
 }
