@@ -2,16 +2,17 @@ package gov.nih.nci.cagrid.gts.portal;
 
 import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
 
+import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 
 import org.projectmobius.portal.GridPortalComponent;
-import javax.swing.JLabel;
-import javax.swing.JComboBox;
-import javax.swing.JTextField;
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -33,6 +34,9 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	private JTextField trustedAuthorityName = null;
 	private JLabel jLabel3 = null;
 	private JComboBox status = null;
+	private JPanel propertiesNorthPanel = null;
+	private JLabel jLabel4 = null;
+	private JComboBox trustLevel = null;
 
 	/**
 	 * This is the default constructor
@@ -48,7 +52,7 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(300, 200);
+		this.setSize(400, 400);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Add Trusted Authority");
 		this.setFrameIcon(GTSLookAndFeel.getAddTrustedAuthorityIcon());
@@ -120,6 +124,9 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 			jLabel = new JLabel();
 			jLabel.setText("Grid Trust Service (GTS)");
 			topPanel = new JPanel();
+			topPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service/Login Information",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel.getPanelLabelColor()));
 			topPanel.setLayout(new GridBagLayout());
 			topPanel.add(jLabel, gridBagConstraints2);
 			topPanel.add(getGts(), gridBagConstraints3);
@@ -137,7 +144,10 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	private JTabbedPane getTaPanel() {
 		if (taPanel == null) {
 			taPanel = new JTabbedPane();
-			taPanel.addTab("Properties", GTSLookAndFeel.getTrustedAuthorityIcon(), getPropertiesPanel(), null);
+			taPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Trusted Authority",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel.getPanelLabelColor()));
+			taPanel.addTab("Properties", GTSLookAndFeel.getTrustedAuthorityIcon(), getPropertiesNorthPanel(), null);
 		}
 		return taPanel;
 	}
@@ -173,6 +183,20 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	 */    
 	private JPanel getPropertiesPanel() {
 		if (propertiesPanel == null) {
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints11.gridy = 2;
+			gridBagConstraints11.weightx = 1.0;
+			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints11.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints11.gridx = 1;
+			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints10.gridy = 2;
+			gridBagConstraints10.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints10.gridx = 0;
+			jLabel4 = new JLabel();
+			jLabel4.setText("Trust Level");
 			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
 			gridBagConstraints9.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints9.gridy = 1;
@@ -205,6 +229,8 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 			propertiesPanel.add(getTrustedAuthorityName(), gridBagConstraints7);
 			propertiesPanel.add(jLabel3, gridBagConstraints8);
 			propertiesPanel.add(getStatus(), gridBagConstraints9);
+			propertiesPanel.add(jLabel4, gridBagConstraints10);
+			propertiesPanel.add(getTrustLevel(), gridBagConstraints11);
 		}
 		return propertiesPanel;
 	}
@@ -232,6 +258,32 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 			status = new StatusComboBox();
 		}
 		return status;
+	}
+
+	/**
+	 * This method initializes propertiesNorthPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */    
+	private JPanel getPropertiesNorthPanel() {
+		if (propertiesNorthPanel == null) {
+			propertiesNorthPanel = new JPanel();
+			propertiesNorthPanel.setLayout(new BorderLayout());
+			propertiesNorthPanel.add(getPropertiesPanel(), java.awt.BorderLayout.NORTH);
+		}
+		return propertiesNorthPanel;
+	}
+
+	/**
+	 * This method initializes trustLevel	
+	 * 	
+	 * @return javax.swing.JComboBox	
+	 */    
+	private JComboBox getTrustLevel() {
+		if (trustLevel == null) {
+			trustLevel = new TrustLevelComboBox();
+		}
+		return trustLevel;
 	}
 
 }
