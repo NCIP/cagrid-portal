@@ -10,12 +10,13 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import org.projectmobius.portal.GridPortalComponent;
+import org.projectmobius.portal.PortalResourceManager;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: GTSMenu.java,v 1.1 2006-03-25 04:08:41 langella Exp $
+ * @version $Id: GTSMenu.java,v 1.2 2006-03-25 18:45:53 langella Exp $
  */
 public class GTSMenu extends GridPortalComponent {
 
@@ -157,7 +158,7 @@ public class GTSMenu extends GridPortalComponent {
 	
 	private void perform(){
 		if(trustedAuthority.isSelected()){
-			//PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new ApplicationWindow(),400,500);
+			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new AddTrustedAuthorityWindow());
 		}
 		
 	}

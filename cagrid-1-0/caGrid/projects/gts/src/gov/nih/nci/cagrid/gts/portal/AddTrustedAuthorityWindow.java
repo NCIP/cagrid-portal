@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.gts.portal;
 
+import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
@@ -7,6 +9,8 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import org.projectmobius.portal.GridPortalComponent;
+import javax.swing.JLabel;
+import javax.swing.JComboBox;
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -19,6 +23,10 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	private JPanel jContentPane = null;
 	private JPanel topPanel = null;
 	private JTabbedPane taPanel = null;
+	private JLabel jLabel = null;
+	private JComboBox gts = null;
+	private JLabel jLabel1 = null;
+	private JComboBox proxy = null;
 
 	/**
 	 * This is the default constructor
@@ -76,8 +84,40 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	 */    
 	private JPanel getTopPanel() {
 		if (topPanel == null) {
+			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+			gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints5.gridy = 1;
+			gridBagConstraints5.weightx = 1.0;
+			gridBagConstraints5.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints5.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints5.gridx = 1;
+			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+			gridBagConstraints4.gridx = 0;
+			gridBagConstraints4.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints4.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints4.gridy = 1;
+			jLabel1 = new JLabel();
+			jLabel1.setText("Select Proxy");
+			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints3.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints3.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints3.gridx = 1;
+			gridBagConstraints3.gridy = 0;
+			gridBagConstraints3.weightx = 1.0;
+			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+			gridBagConstraints2.gridx = 0;
+			gridBagConstraints2.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints2.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints2.gridy = 0;
+			jLabel = new JLabel();
+			jLabel.setText("Grid Trust Service (GTS)");
 			topPanel = new JPanel();
 			topPanel.setLayout(new GridBagLayout());
+			topPanel.add(jLabel, gridBagConstraints2);
+			topPanel.add(getGts(), gridBagConstraints3);
+			topPanel.add(jLabel1, gridBagConstraints4);
+			topPanel.add(getProxy(), gridBagConstraints5);
 		}
 		return topPanel;
 	}
@@ -92,6 +132,30 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 			taPanel = new JTabbedPane();
 		}
 		return taPanel;
+	}
+
+	/**
+	 * This method initializes gts	
+	 * 	
+	 * @return javax.swing.JComboBox	
+	 */    
+	private JComboBox getGts() {
+		if (gts == null) {
+			gts = new GTSServiceListComboBox();
+		}
+		return gts;
+	}
+
+	/**
+	 * This method initializes proxy	
+	 * 	
+	 * @return javax.swing.JComboBox	
+	 */    
+	private JComboBox getProxy() {
+		if (proxy == null) {
+			proxy = new ProxyComboBox();
+		}
+		return proxy;
 	}
 
 }
