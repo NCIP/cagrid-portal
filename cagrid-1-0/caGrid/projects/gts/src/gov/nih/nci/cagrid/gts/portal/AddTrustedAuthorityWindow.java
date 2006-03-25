@@ -13,6 +13,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 import org.projectmobius.portal.GridPortalComponent;
+import javax.swing.JButton;
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -37,6 +38,9 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	private JPanel propertiesNorthPanel = null;
 	private JLabel jLabel4 = null;
 	private JComboBox trustLevel = null;
+	private JPanel buttonPanel = null;
+	private JButton addButton = null;
+	private JButton cancelButton = null;
 
 	/**
 	 * This is the default constructor
@@ -65,6 +69,10 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
+			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+			gridBagConstraints12.gridx = 0;
+			gridBagConstraints12.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints12.gridy = 2;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints1.gridx = 0;
@@ -84,6 +92,7 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 			jContentPane.setLayout(new GridBagLayout());
 			jContentPane.add(getTopPanel(), gridBagConstraints);
 			jContentPane.add(getTaPanel(), gridBagConstraints1);
+			jContentPane.add(getButtonPanel(), gridBagConstraints12);
 		}
 		return jContentPane;
 	}
@@ -284,6 +293,53 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 			trustLevel = new TrustLevelComboBox();
 		}
 		return trustLevel;
+	}
+
+	/**
+	 * This method initializes buttonPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */    
+	private JPanel getButtonPanel() {
+		if (buttonPanel == null) {
+			buttonPanel = new JPanel();
+			buttonPanel.add(getAddButton(), null);
+			buttonPanel.add(getCancelButton(), null);
+		}
+		return buttonPanel;
+	}
+
+	/**
+	 * This method initializes addButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */    
+	private JButton getAddButton() {
+		if (addButton == null) {
+			addButton = new JButton();
+			addButton.setText("Add Trusted Authority");
+			addButton.setIcon(GTSLookAndFeel.getAddTrustedAuthorityIcon());
+		}
+		return addButton;
+	}
+
+	/**
+	 * This method initializes cancelButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */    
+	private JButton getCancelButton() {
+		if (cancelButton == null) {
+			cancelButton = new JButton();
+			cancelButton.setText("Cancel");
+			cancelButton.addActionListener(new java.awt.event.ActionListener() { 
+				public void actionPerformed(java.awt.event.ActionEvent e) {    
+					dispose();
+				}
+			});
+			cancelButton.setIcon(GTSLookAndFeel.getCloseIcon());
+		}
+		return cancelButton;
 	}
 
 }
