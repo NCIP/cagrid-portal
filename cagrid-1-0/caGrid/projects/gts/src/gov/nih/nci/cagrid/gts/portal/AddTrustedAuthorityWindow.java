@@ -1,13 +1,18 @@
 package gov.nih.nci.cagrid.gts.portal;
 
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.portal.CertificatePanel;
 import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.io.File;
+import java.security.cert.X509Certificate;
 
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -43,6 +48,7 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	private JButton addButton = null;
 	private JButton cancelButton = null;
 	private CertificatePanel certificatePanel = null;
+	private JButton importCertificate = null;
 
 	/**
 	 * This is the default constructor
@@ -306,6 +312,7 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
+			buttonPanel.add(getImportCertificate(), null);
 			buttonPanel.add(getAddButton(), null);
 			buttonPanel.add(getCancelButton(), null);
 		}
@@ -354,9 +361,46 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 		if (certificatePanel == null) {
 			certificatePanel = new CertificatePanel();
 			certificatePanel.setAllowExport(false);
-			certificatePanel.setAllowImport(true);
+			certificatePanel.setAllowImport(false);
 		}
 		return certificatePanel;
+	}
+
+	/**
+	 * This method initializes importCertificate	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */    
+	private JButton getImportCertificate() {
+		if (importCertificate == null) {
+			importCertificate = new JButton();
+			importCertificate.setText("Import Certificate");
+			importCertificate.addActionListener(new java.awt.event.ActionListener() { 
+				public void actionPerformed(java.awt.event.ActionEvent e) {    
+					importCertificate();
+				}
+			});
+			importCertificate.setIcon(GTSLookAndFeel.getCertificateIcon());
+			
+		}
+		return importCertificate;
+	}
+	
+	private void importCertificate(){
+		certificatePanel.clearCertificate();
+		JFileChooser fc = new JFileChooser();
+		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		int returnVal = fc.showOpenDialog(this);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			try {
+				X509Certificate certificate = CertUtil.loadCertificate(new File(fc.getSelectedFile().getAbsolutePath()));
+				certificatePanel.setCertificate(certificate);
+				this.getTrustedAuthorityName().setText(certificate.getSubjectDN().getName());
+			} catch (Exception ex) {
+				PortalUtils.showErrorMessage(ex);
+			}
+		}
+		
 	}
 
 }
