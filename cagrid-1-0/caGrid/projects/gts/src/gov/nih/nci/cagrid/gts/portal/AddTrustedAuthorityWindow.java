@@ -11,6 +11,7 @@ import javax.swing.JTabbedPane;
 import org.projectmobius.portal.GridPortalComponent;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
+import javax.swing.JTextField;
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -27,6 +28,9 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	private JComboBox gts = null;
 	private JLabel jLabel1 = null;
 	private JComboBox proxy = null;
+	private JPanel propertiesPanel = null;
+	private JLabel jLabel2 = null;
+	private JTextField trustedAuthorityName = null;
 
 	/**
 	 * This is the default constructor
@@ -131,6 +135,7 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	private JTabbedPane getTaPanel() {
 		if (taPanel == null) {
 			taPanel = new JTabbedPane();
+			taPanel.addTab("Properties", GTSLookAndFeel.getTrustedAuthorityIcon(), getPropertiesPanel(), null);
 		}
 		return taPanel;
 	}
@@ -157,6 +162,46 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 			proxy = new ProxyComboBox();
 		}
 		return proxy;
+	}
+
+	/**
+	 * This method initializes propertiesPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */    
+	private JPanel getPropertiesPanel() {
+		if (propertiesPanel == null) {
+			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints7.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints7.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints7.weightx = 1.0;
+			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+			gridBagConstraints6.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints6.gridy = 0;
+			gridBagConstraints6.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints6.gridx = 0;
+			jLabel2 = new JLabel();
+			jLabel2.setText("Trusted Authority Name");
+			propertiesPanel = new JPanel();
+			propertiesPanel.setLayout(new GridBagLayout());
+			propertiesPanel.add(jLabel2, gridBagConstraints6);
+			propertiesPanel.add(getTrustedAuthorityName(), gridBagConstraints7);
+		}
+		return propertiesPanel;
+	}
+
+	/**
+	 * This method initializes trustedAuthorityName	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */    
+	private JTextField getTrustedAuthorityName() {
+		if (trustedAuthorityName == null) {
+			trustedAuthorityName = new JTextField();
+			trustedAuthorityName.setEditable(false);
+		}
+		return trustedAuthorityName;
 	}
 
 }
