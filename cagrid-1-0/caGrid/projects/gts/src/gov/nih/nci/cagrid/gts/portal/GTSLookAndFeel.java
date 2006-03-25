@@ -17,4 +17,24 @@ public class GTSLookAndFeel extends PortalLookAndFeel {
 				.getResource("/system-software-update.png"));
 	}
 	
+	public final static ImageIcon getTrustedAuthorityIcon() {
+		return new javax.swing.ImageIcon(GTSLookAndFeel.class
+				.getResource("/key.png"));
+	}
+	
+	public final static ImageIcon getAddTrustedAuthorityIcon() {
+		return new javax.swing.ImageIcon(GTSLookAndFeel.class
+				.getResource("/key_add.png"));
+	}
+	
+	public final static ImageIcon getRemoveTrustedAuthorityIcon() {
+		return new javax.swing.ImageIcon(GTSLookAndFeel.class
+				.getResource("/key_delete.png"));
+	}
+	
+	public final static ImageIcon getModifyTrustedAuthorityIcon() {
+		return new javax.swing.ImageIcon(GTSLookAndFeel.class
+				.getResource("/key_go.png"));
+	}
+	
 }

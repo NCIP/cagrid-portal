@@ -45,6 +45,7 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 		this.setSize(300, 200);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Add Trusted Authority");
+		this.setFrameIcon(GTSLookAndFeel.getAddTrustedAuthorityIcon());
 	}
 
 	/**
