@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.gts.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
+import gov.nih.nci.cagrid.gridca.portal.CRLPanel;
 import gov.nih.nci.cagrid.gridca.portal.CertificatePanel;
 import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
 
@@ -9,8 +10,10 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
+import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -19,7 +22,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 import org.projectmobius.portal.GridPortalComponent;
-import javax.swing.JButton;
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -49,6 +51,8 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	private JButton cancelButton = null;
 	private CertificatePanel certificatePanel = null;
 	private JButton importCertificate = null;
+	private CRLPanel crlPanel = null;
+	private JButton importCRL = null;
 
 	/**
 	 * This is the default constructor
@@ -166,6 +170,7 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel.getPanelLabelColor()));
 			taPanel.addTab("Properties", GTSLookAndFeel.getTrustedAuthorityIcon(), getPropertiesNorthPanel(), null);
 			taPanel.addTab("Certificate", GTSLookAndFeel.getCertificateIcon(), getCertificatePanel(), null);
+			taPanel.addTab("Certificate Revocation List", GTSLookAndFeel.getCRLIcon(), getCrlPanel(), null);
 		}
 		return taPanel;
 	}
@@ -313,6 +318,7 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
 			buttonPanel.add(getImportCertificate(), null);
+			buttonPanel.add(getImportCRL(), null);
 			buttonPanel.add(getAddButton(), null);
 			buttonPanel.add(getCancelButton(), null);
 		}
@@ -401,6 +407,53 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 			}
 		}
 		
+	}
+	
+	private void importCRL(){
+		crlPanel.clearCRL();
+		JFileChooser fc = new JFileChooser();
+		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		int returnVal = fc.showOpenDialog(this);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			try {
+				X509CRL crl = CertUtil.loadCRL(new File(fc.getSelectedFile().getAbsolutePath()));
+				crlPanel.setCRL(crl);
+			} catch (Exception ex) {
+				PortalUtils.showErrorMessage(ex);
+			}
+		}
+		
+	}
+
+	/**
+	 * This method initializes crlPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */    
+	private CRLPanel getCrlPanel() {
+		if (crlPanel == null) {
+			crlPanel = new CRLPanel();
+		}
+		return crlPanel;
+	}
+
+	/**
+	 * This method initializes importCRL	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */    
+	private JButton getImportCRL() {
+		if (importCRL == null) {
+			importCRL = new JButton();
+			importCRL.setText("Import CRL");
+			importCRL.addActionListener(new java.awt.event.ActionListener() { 
+				public void actionPerformed(java.awt.event.ActionEvent e) {    
+					importCRL();
+				}
+			});
+			importCRL.setIcon(GTSLookAndFeel.getCRLIcon());
+		}
+		return importCRL;
 	}
 
 }

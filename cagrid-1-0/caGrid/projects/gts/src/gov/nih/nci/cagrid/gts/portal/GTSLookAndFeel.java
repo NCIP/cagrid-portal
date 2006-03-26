@@ -42,4 +42,9 @@ public class GTSLookAndFeel extends PortalLookAndFeel {
 				.getResource("/contact-new.png"));
 	}
 	
+	public final static ImageIcon getCRLIcon() {
+		return new javax.swing.ImageIcon(GTSLookAndFeel.class
+				.getResource("/contact-delete.png"));
+	}
+	
 }
