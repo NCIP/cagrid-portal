@@ -394,6 +394,7 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	
 	private void importCertificate(){
 		certificatePanel.clearCertificate();
+		crlPanel.clearCRL();
 		JFileChooser fc = new JFileChooser();
 		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		int returnVal = fc.showOpenDialog(this);
@@ -411,15 +412,24 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	
 	private void importCRL(){
 		crlPanel.clearCRL();
+		X509Certificate cert = certificatePanel.getCertificate();
+		if(cert == null){
+			PortalUtils.showErrorMessage("You must import a certificate before importing a CRL");
+			
+		}
 		JFileChooser fc = new JFileChooser();
 		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		int returnVal = fc.showOpenDialog(this);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			try {
 				X509CRL crl = CertUtil.loadCRL(new File(fc.getSelectedFile().getAbsolutePath()));
+				try{
+					crl.verify(cert.getPublicKey());
+				}catch(Exception crle){
+					PortalUtils.showErrorMessage("Error verifying CRL, the CRL must be issued and signed by same key is the Trusted Authority's Certificate");
+				}
 				crlPanel.setCRL(crl);
 			} catch (Exception ex) {
-				ex.printStackTrace();
 				PortalUtils.showErrorMessage(ex);
 			}
 		}
