@@ -419,6 +419,7 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 				X509CRL crl = CertUtil.loadCRL(new File(fc.getSelectedFile().getAbsolutePath()));
 				crlPanel.setCRL(crl);
 			} catch (Exception ex) {
+				ex.printStackTrace();
 				PortalUtils.showErrorMessage(ex);
 			}
 		}

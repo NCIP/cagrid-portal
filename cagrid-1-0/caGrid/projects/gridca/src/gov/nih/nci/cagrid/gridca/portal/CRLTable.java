@@ -17,8 +17,6 @@ import javax.swing.table.DefaultTableModel;
  * @version $Id$
  */
 public class CRLTable extends PortalBaseTable {
-	public final static String ISSUER = "Issuer";
-
 	public final static String SERIAL_NUMBER = "Serial Number";
 
 	public final static String REVOKE = "Revocation Date";
@@ -31,7 +29,6 @@ public class CRLTable extends PortalBaseTable {
 
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
-		model.addColumn(ISSUER);
 		model.addColumn(SERIAL_NUMBER);
 		model.addColumn(REVOKE);
 		return model;
@@ -46,7 +43,6 @@ public class CRLTable extends PortalBaseTable {
 			X509CRLEntry entry = (X509CRLEntry) itr.next();
 
 			Vector v = new Vector();
-			v.add(entry.getCertificateIssuer().getName());
 			v.add(entry.getSerialNumber());
 			v.add(entry.getRevocationDate().toString());
 			addRow(v);
