@@ -4,7 +4,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.security.cert.X509CRL;
 
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -17,9 +16,7 @@ import javax.swing.JTextField;
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @version $Id$
  */
-public class CRLPanel extends JFrame {
-
-	private JPanel jContentPane = null;
+public class CRLPanel extends JPanel {
 	private JPanel infoPanel = null;
 	private JLabel jLabel = null;
 	private JTextField issuer = null;
@@ -45,38 +42,25 @@ public class CRLPanel extends JFrame {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(300, 200);
-		this.setContentPane(getJContentPane());
-		this.setTitle("JFrame");
+		GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
+		gridBagConstraints31.gridx = 0;
+		gridBagConstraints31.fill = java.awt.GridBagConstraints.BOTH;
+		gridBagConstraints31.weightx = 1.0D;
+		gridBagConstraints31.weighty = 1.0D;
+		gridBagConstraints31.insets = new java.awt.Insets(5,5,5,5);
+		gridBagConstraints31.gridy = 1;
+		GridBagConstraints gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.insets = new java.awt.Insets(5,5,5,5);
+		gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+		gridBagConstraints.weightx = 1.0D;
+		gridBagConstraints.gridy = 0;
+		this.setLayout(new GridBagLayout());
+		this.setSize(500, 400);
+		this.add(getInfoPanel(), gridBagConstraints);
+		this.add(getListPanel(), gridBagConstraints31);
 	}
 
-	/**
-	 * This method initializes jContentPane
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getJContentPane() {
-		if (jContentPane == null) {
-			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
-			gridBagConstraints31.gridx = 0;
-			gridBagConstraints31.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints31.weightx = 1.0D;
-			gridBagConstraints31.weighty = 1.0D;
-			gridBagConstraints31.insets = new java.awt.Insets(5,5,5,5);
-			gridBagConstraints31.gridy = 1;
-			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.gridx = 0;
-			gridBagConstraints.insets = new java.awt.Insets(5,5,5,5);
-			gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints.weightx = 1.0D;
-			gridBagConstraints.gridy = 0;
-			jContentPane = new JPanel();
-			jContentPane.setLayout(new GridBagLayout());
-			jContentPane.add(getInfoPanel(), gridBagConstraints);
-			jContentPane.add(getListPanel(), gridBagConstraints31);
-		}
-		return jContentPane;
-	}
 
 	/**
 	 * This method initializes infoPanel	
