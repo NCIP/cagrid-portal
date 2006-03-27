@@ -28,6 +28,33 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
       <variable messageType="ns3:echoByValueOutputMessage" name="echoByValueOutputMessageDuke"/>
       <variable messageType="ns3:echoByValueInputMessage" name="echoByValueInputMessageOSU"/>
       <variable messageType="ns3:echoByValueOutputMessage" name="echoByValueOutputMessageOSU"/>
+      <variable messageType="ns3:removeBackground_runningQuantileByValueInputMessage" name="removeBackground_runningQuantileByValueInputMessageDuke"/>
+      <variable messageType="ns3:removeBackground_runningQuantileByValueOutputMessage" name="removeBackground_runningQuantileByValueOutputMessageDuke"/>
+      <variable messageType="ns3:removeBackground_runningQuantileByValueInputMessage" name="removeBackground_runningQuantileByValueInputMessageOSU"/>
+      <variable messageType="ns3:removeBackground_runningQuantileByValueOutputMessage" name="removeBackground_runningQuantileByValueOutputMessageOSU"/>
+
+      <variable messageType="ns3:removeBackground_minusByValueInputMessage" name="removeBackground_minusByValueInputMessageDuke"/>
+      <variable messageType="ns3:removeBackground_minusByValueOutputMessage" name="removeBackground_minusByValueOutputMessageDuke"/>
+      <variable messageType="ns3:denoise_waveletUDWTWByValueInputMessage" name="denoise_waveletUDWTWByValueInputMessageDuke"/>
+      <variable messageType="ns3:denoise_waveletUDWTWByValueOutputMessage" name="denoise_waveletUDWTWByValueOutputMessageDuke"/>
+      <variable messageType="ns3:align_alignxByValueInputMessage" name="align_alignxByValueInputMessageDuke"/>
+      <variable messageType="ns3:align_alignxByValueOutputMessage" name="align_alignxByValueOutputMessageDuke"/>
+      <variable messageType="ns3:normalize_quantileByValueInputMessage" name="normalize_quantileByValueInputMessageDuke"/>
+      <variable messageType="ns3:normalize_quantileByValueOutputMessage" name="normalize_quantileByValueOutputMessageDuke"/>
+      <variable messageType="ns3:plot_2DStackedByValueInputMessage" name="plot_2DStackedByValueInputMessageDuke"/>
+      <variable messageType="ns3:plot_2DStackedByValueOutputMessage" name="plot_2DStackedByValueOutputMessageDuke"/>
+
+      <variable messageType="ns3:removeBackground_minusByValueInputMessage" name="removeBackground_minusByValueInputMessageOSU"/>
+      <variable messageType="ns3:removeBackground_minusByValueOutputMessage" name="removeBackground_minusByValueOutputMessageOSU"/>
+      <variable messageType="ns3:denoise_waveletUDWTWByValueInputMessage" name="denoise_waveletUDWTWByValueInputMessageOSU"/>
+      <variable messageType="ns3:denoise_waveletUDWTWByValueOutputMessage" name="denoise_waveletUDWTWByValueOutputMessageOSU"/>
+      <variable messageType="ns3:align_alignxByValueInputMessage" name="align_alignxByValueInputMessageOSU"/>
+      <variable messageType="ns3:align_alignxByValueOutputMessage" name="align_alignxByValueOutputMessageOSU"/>
+      <variable messageType="ns3:normalize_quantileByValueInputMessage" name="normalize_quantileByValueInputMessageOSU"/>
+      <variable messageType="ns3:normalize_quantileByValueOutputMessage" name="normalize_quantileByValueOutputMessageOSU"/>
+      <variable messageType="ns3:plot_2DStackedByValueInputMessage" name="plot_2DStackedByValueInputMessageOSU"/>
+      <variable messageType="ns3:plot_2DStackedByValueOutputMessage" name="plot_2DStackedByValueOutputMessageOSU"/>
+
    </variables>
    <sequence>
       <receive createInstance="yes" operation="startWorkFlow" partnerLink="WorkFlowClientPartnerLinkType" portType="ns2:startWorkFlowPortType" variable="workFlowInputMessage"/>
@@ -105,6 +132,85 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
       </while>
       <!-- Invoking general_interpolateByValue operation on Rproteomics Analytic service -->
       <invoke inputVariable="general_interpolateByValueInputMessageDuke" operation="general_interpolateByValue" outputVariable="general_interpolateByValueOutputMessageDuke" partnerLink="DukeRproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
+      <assign>
+         <copy>
+            <from expression="&quot;1&quot;"/>
+            <to variable="indexCounterDuke"/>
+         </copy>
+         <copy>
+            <from expression="count(bpws:getVariableData('general_interpolateByValueOutputMessageDuke', 'parameters', '/ns3:general_interpolateByValueResponse')/response)"/>
+            <to variable="countDuke"/>
+         </copy>
+      </assign>
+      <while condition="bpws:getVariableData('indexCounterDuke') &lt;= bpws:getVariableData('countDuke')">
+         <assign>
+            <copy>
+               <from expression="bpws:getVariableData('general_interpolateByValueOutputMessageDuke', 'parameters','/ns3:general_interpolateByValueResponse')/response[bpws:getVariableData('indexCounterDuke')]"/>
+               <to part="parameters" query="/ns3:removeBackground_runningQuantileByValue/scanFeaturesXml[bpws:getVariableData('indexCounterDuke')]" variable="removeBackground_runningQuantileByValueInputMessageDuke"/>
+            </copy>
+            <copy>
+               <from expression="bpws:getVariableData('indexCounterDuke') + 1"/>
+               <to variable="indexCounterDuke"/>
+            </copy>
+         </assign>
+      </while>
+      <assign>
+         <copy>
+            <from part="parameters" query="/ns1:WorkFlowInputType/windowType" variable="workFlowInputMessage"/>
+            <to part="parameters" query="/ns3:removeBackground_runningQuantileByValue/windowSize" variable="removeBackground_runningQuantileByValueInputMessageDuke"/>
+         </copy>
+         <copy>
+            <from part="parameters" query="/ns1:WorkFlowInputType/percentileType" variable="workFlowInputMessage"/>
+            <to part="parameters" query="/ns3:removeBackground_runningQuantileByValue/percentile" variable="removeBackground_runningQuantileByValueInputMessageDuke"/>
+         </copy>
+      </assign>
+      <invoke inputVariable="removeBackground_runningQuantileByValueInputMessageDuke" operation="removeBackground_runningQuantileByValue" outputVariable="removeBackground_runningQuantileByValueOutputMessageDuke" partnerLink="DukeRproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
+
+      <assign>
+         <copy>
+            <from expression="&quot;1&quot;"/>
+            <to variable="indexCounterDuke"/>
+         </copy>
+         <copy>
+            <from expression="count(bpws:getVariableData('general_interpolateByValueOutputMessageDuke', 'parameters', '/ns3:general_interpolateByValueResponse')/response)"/>
+            <to variable="countDuke"/>
+         </copy>
+      </assign>
+      <while condition="bpws:getVariableData('indexCounterDuke') &lt;= bpws:getVariableData('countDuke')">
+         <assign>
+            <copy>
+               <from expression="bpws:getVariableData('general_interpolateByValueOutputMessageDuke', 'parameters', '/ns3:general_interpolateByValueResponse')/response[bpws:getVariableData('indexCounterDuke')]"/>
+               <to part="parameters" query="/ns3:removeBackground_minusByValue/scanFeaturesXml1[bpws:getVariableData('indexCounterDuke')]" variable="removeBackground_minusByValueInputMessageDuke"/>
+            </copy>
+            <copy>
+               <from expression="bpws:getVariableData('indexCounterDuke') + 1"/>
+               <to variable="indexCounterDuke"/>
+            </copy>
+         </assign>
+      </while>
+      <assign>
+         <copy>
+            <from expression="&quot;1&quot;"/>
+            <to variable="indexCounterDuke"/>
+         </copy>
+         <copy>
+            <from expression="count(bpws:getVariableData('general_interpolateByValueOutputMessageDuke', 'parameters', '/ns3:general_interpolateByValueResponse')/response)"/>
+            <to variable="countDuke"/>
+         </copy>
+      </assign>
+      <while condition="bpws:getVariableData('indexCounterDuke') &lt;= bpws:getVariableData('countDuke')">
+         <assign>
+            <copy>
+               <from expression="bpws:getVariableData('removeBackground_runningQuantileByValueOutputMessageDuke', 'parameters', '/ns3:removeBackground_runningQuantileByValueResponse')/response[bpws:getVariableData('indexCounterDuke')]"/>
+               <to part="parameters" query="/ns3:removeBackground_minusByValue/scanFeaturesXml2[bpws:getVariableData('indexCounterDuke')]" variable="removeBackground_minusByValueInputMessageDuke"/>
+            </copy>
+            <copy>
+               <from expression="bpws:getVariableData('indexCounterDuke') + 1"/>
+               <to variable="indexCounterDuke"/>
+            </copy>
+         </assign>
+      </while>
+      <invoke inputVariable="removeBackground_minusByValueInputMessageDuke" operation="removeBackground_minusByValue" outputVariable="removeBackground_minusByValueOutputMessageDuke" partnerLink="DukeRproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
 
          </sequence>
 
@@ -151,6 +257,84 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
       </while>
       <!-- Invoking general_interpolateByValue operation on Rproteomics Analytic service -->
       <invoke inputVariable="general_interpolateByValueInputMessageOSU" operation="general_interpolateByValue" outputVariable="general_interpolateByValueOutputMessageOSU" partnerLink="OSURproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
+      <assign>
+         <copy>
+            <from expression="&quot;1&quot;"/>
+            <to variable="indexCounterOSU"/>
+         </copy>
+         <copy>
+            <from expression="count(bpws:getVariableData('general_interpolateByValueOutputMessageOSU', 'parameters', '/ns3:general_interpolateByValueResponse')/response)"/>
+            <to variable="countOSU"/>
+         </copy>
+      </assign>
+      <while condition="bpws:getVariableData('indexCounterOSU') &lt;= bpws:getVariableData('countOSU')">
+         <assign>
+            <copy>
+               <from expression="bpws:getVariableData('general_interpolateByValueOutputMessageOSU', 'parameters','/ns3:general_interpolateByValueResponse')/response[bpws:getVariableData('indexCounterOSU')]"/>
+               <to part="parameters" query="/ns3:removeBackground_runningQuantileByValue/scanFeaturesXml[bpws:getVariableData('indexCounterOSU')]" variable="removeBackground_runningQuantileByValueInputMessageOSU"/>
+            </copy>
+            <copy>
+               <from expression="bpws:getVariableData('indexCounterOSU') + 1"/>
+               <to variable="indexCounterOSU"/>
+            </copy>
+         </assign>
+      </while>
+      <assign>
+         <copy>
+            <from part="parameters" query="/ns1:WorkFlowInputType/windowType" variable="workFlowInputMessage"/>
+            <to part="parameters" query="/ns3:removeBackground_runningQuantileByValue/windowSize" variable="removeBackground_runningQuantileByValueInputMessageOSU"/>
+         </copy>
+         <copy>
+            <from part="parameters" query="/ns1:WorkFlowInputType/percentileType" variable="workFlowInputMessage"/>
+            <to part="parameters" query="/ns3:removeBackground_runningQuantileByValue/percentile" variable="removeBackground_runningQuantileByValueInputMessageOSU"/>
+         </copy>
+      </assign>
+      <invoke inputVariable="removeBackground_runningQuantileByValueInputMessageOSU" operation="removeBackground_runningQuantileByValue" outputVariable="removeBackground_runningQuantileByValueOutputMessageOSU" partnerLink="OSURproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
+    <assign>
+         <copy>
+            <from expression="&quot;1&quot;"/>
+            <to variable="indexCounterOSU"/>
+         </copy>
+         <copy>
+            <from expression="count(bpws:getVariableData('general_interpolateByValueOutputMessageOSU', 'parameters', '/ns3:general_interpolateByValueResponse')/response)"/>
+            <to variable="countOSU"/>
+         </copy>
+      </assign>
+      <while condition="bpws:getVariableData('indexCounterOSU') &lt;= bpws:getVariableData('countOSU')">
+         <assign>
+            <copy>
+               <from expression="bpws:getVariableData('general_interpolateByValueOutputMessageOSU', 'parameters', '/ns3:general_interpolateByValueResponse')/response[bpws:getVariableData('indexCounterOSU')]"/>
+               <to part="parameters" query="/ns3:removeBackground_minusByValue/scanFeaturesXml1[bpws:getVariableData('indexCounterOSU')]" variable="removeBackground_minusByValueInputMessageOSU"/>
+            </copy>
+            <copy>
+               <from expression="bpws:getVariableData('indexCounterOSU') + 1"/>
+               <to variable="indexCounterOSU"/>
+            </copy>
+         </assign>
+      </while>
+      <assign>
+         <copy>
+            <from expression="&quot;1&quot;"/>
+            <to variable="indexCounterOSU"/>
+         </copy>
+         <copy>
+            <from expression="count(bpws:getVariableData('general_interpolateByValueOutputMessageOSU', 'parameters', '/ns3:general_interpolateByValueResponse')/response)"/>
+            <to variable="countOSU"/>
+         </copy>
+      </assign>
+      <while condition="bpws:getVariableData('indexCounterOSU') &lt;= bpws:getVariableData('countOSU')">
+         <assign>
+            <copy>
+               <from expression="bpws:getVariableData('removeBackground_runningQuantileByValueOutputMessageOSU', 'parameters', '/ns3:removeBackground_runningQuantileByValueResponse')/response[bpws:getVariableData('indexCounterOSU')]"/>
+               <to part="parameters" query="/ns3:removeBackground_minusByValue/scanFeaturesXml2[bpws:getVariableData('indexCounterOSU')]" variable="removeBackground_minusByValueInputMessageOSU"/>
+            </copy>
+            <copy>
+               <from expression="bpws:getVariableData('indexCounterOSU') + 1"/>
+               <to variable="indexCounterOSU"/>
+            </copy>
+         </assign>
+      </while>
+      <invoke inputVariable="removeBackground_minusByValueInputMessageOSU" operation="removeBackground_minusByValue" outputVariable="removeBackground_minusByValueOutputMessageOSU" partnerLink="OSURproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
 
          </sequence>
       </flow>
