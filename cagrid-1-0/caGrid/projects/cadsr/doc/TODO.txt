@@ -5,7 +5,7 @@ make introduce depend on this
 
 until there is a public 3.1 server, this uses nci internal ones with a localhost sshtunnel
 
-extract property for nci service to contact
+extract property for cacore service to contact
 
 caching using resources?
 

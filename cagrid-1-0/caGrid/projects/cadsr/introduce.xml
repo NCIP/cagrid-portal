@@ -59,7 +59,7 @@
    <ns3:Inputs>
     <ns3:Input qName="ns12:Project" isArray="false" name="project" xmlns:ns12="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
    </ns3:Inputs>
-   <ns3:Output qName="xsd:string" isArray="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns3:Output qName="xsd:string" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
    <ns3:Exceptions/>
   </ns3:Method>
   <ns3:Method name="generateMetadataExtractForPackages" xsi:type="ns3:MethodType">

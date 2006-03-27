@@ -141,6 +141,60 @@ public class CaDSRServiceClient implements CaDSRServiceI {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	     public gov.nih.nci.cadsr.umlproject.domain.ws.Project[] findAllProjects() throws RemoteException {
                CaDSRServicePortType port = this.getPortType();
                org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
@@ -201,7 +255,7 @@ public class CaDSRServiceClient implements CaDSRServiceI {
 
 	}
 
-	     public java.lang.String[] generateMetadataExtractForProject(gov.nih.nci.cadsr.umlproject.domain.ws.Project project) throws RemoteException {
+	     public java.lang.String generateMetadataExtractForProject(gov.nih.nci.cadsr.umlproject.domain.ws.Project project) throws RemoteException {
                CaDSRServicePortType port = this.getPortType();
                org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
 
