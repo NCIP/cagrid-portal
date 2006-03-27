@@ -285,10 +285,8 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 		try {
 			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			// PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new
-			// TrustedIdPWindow(service, proxy,
-			// getTrustedAuthorityTable().getSelectedTrustedIdP(),
-			// getUserPolicies()));
+			TrustedAuthorityWindow window = new TrustedAuthorityWindow(service,proxy,this.getTrustedAuthorityTable().getSelectedTrustedAuthority());
+			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(window);
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
 		}
@@ -442,7 +440,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 				this.trustedAuthorityTable.addTrustedAuthority(tas[i]);
 			}
 
-			this.updateProgress(false, "Completed [Found " + length + " IdPs]");
+			this.updateProgress(false, "Completed [Found " + length + " Trusted Authority(s)]");
 
 		} catch (Exception e) {
 			e.printStackTrace();

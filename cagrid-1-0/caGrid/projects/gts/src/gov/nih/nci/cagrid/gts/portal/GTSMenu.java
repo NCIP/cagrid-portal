@@ -16,7 +16,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: GTSMenu.java,v 1.3 2006-03-27 18:52:57 langella Exp $
+ * @version $Id: GTSMenu.java,v 1.4 2006-03-27 21:35:59 langella Exp $
  */
 public class GTSMenu extends GridPortalComponent {
 
@@ -176,7 +176,7 @@ public class GTSMenu extends GridPortalComponent {
 	
 	private void perform(){
 		if(trustedAuthority.isSelected()){
-			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new AddTrustedAuthorityWindow());
+			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new TrustedAuthorityWindow());
 		}else if(manageTrustedAuthorities.isSelected()){
 			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new TrustedAuthoritiesWindow());
 		}
