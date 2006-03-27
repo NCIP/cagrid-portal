@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 
 import javax.swing.JComboBox;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -13,7 +14,18 @@ import javax.swing.JComboBox;
  */
 public class TrustLevelComboBox extends JComboBox {
 
+	private static final String ANY = "Any";
+
+
 	public TrustLevelComboBox() {
+		this(false);
+	}
+
+
+	public TrustLevelComboBox(boolean allowAny) {
+		if (allowAny) {
+			this.addItem(ANY);
+		}
 		this.addItem(TrustLevel.One);
 		this.addItem(TrustLevel.Two);
 		this.addItem(TrustLevel.Three);
@@ -22,8 +34,13 @@ public class TrustLevelComboBox extends JComboBox {
 		this.setEditable(false);
 	}
 
+
 	public TrustLevel getTrustLevel() {
-		return (TrustLevel) getSelectedItem();
+		if (getSelectedItem().equals(ANY)) {
+			return null;
+		} else {
+			return (TrustLevel) getSelectedItem();
+		}
 	}
 
 }

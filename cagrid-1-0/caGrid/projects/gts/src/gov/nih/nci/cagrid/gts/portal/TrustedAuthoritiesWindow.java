@@ -1,8 +1,11 @@
 package gov.nih.nci.cagrid.gts.portal;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
-import gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault;
+import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
+import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
+import gov.nih.nci.cagrid.gts.client.GTSSearchClient;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -15,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
@@ -28,7 +32,8 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedAuthoritiesWindow.java,v 1.2 2006-03-27 19:05:40 langella Exp $
+ * @version $Id: TrustedAuthoritiesWindow.java,v 1.2 2006/03/27 19:05:40
+ *          langella Exp $
  */
 public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 
@@ -73,6 +78,18 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 	private JButton removeTrustedAuthorityButton = null;
 
 	private JPanel filterPanel = null;
+
+	private JLabel jLabel = null;
+
+	private JTextField trustedAuthorityName = null;
+
+	private JLabel jLabel1 = null;
+
+	private JLabel jLabel2 = null;
+
+	private JComboBox trustLevel = null;
+
+	private JComboBox status = null;
 
 
 	/**
@@ -408,15 +425,25 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 		this.updateProgress(true, "Finding Trusted Authorities...");
 
 		try {
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
 
-			// this.updateProgress(false, "Completed [Found " + length + "
-			// IdPs]");
+			TrustedAuthorityFilter filter = new TrustedAuthorityFilter();
+			filter.setTrustedAuthorityName(Utils.clean(trustedAuthorityName.getText()));
+			filter.setTrustLevel(((TrustLevelComboBox) trustLevel).getTrustLevel());
+			filter.setStatus(((StatusComboBox) status).getStatus());
 
-		} catch (PermissionDeniedFault pdf) {
-			PortalUtils.showErrorMessage(pdf);
-			this.updateProgress(false, "Error");
+			GTSSearchClient client = new GTSSearchClient(service);
+			int length = 0;
+			TrustedAuthority[] tas = client.findTrustedAuthorities(filter);
+			if (tas != null) {
+				length = tas.length;
+			}
+			for (int i = 0; i < length; i++) {
+				this.trustedAuthorityTable.addTrustedAuthority(tas[i]);
+			}
+
+			this.updateProgress(false, "Completed [Found " + length + " IdPs]");
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			PortalUtils.showErrorMessage(e);
@@ -541,18 +568,98 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 
 
 	/**
-	 * This method initializes filterPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes filterPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private JPanel getFilterPanel() {
 		if (filterPanel == null) {
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints8.gridy = 2;
+			gridBagConstraints8.weightx = 1.0;
+			gridBagConstraints8.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints8.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints8.gridx = 1;
+			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints7.gridy = 1;
+			gridBagConstraints7.weightx = 1.0;
+			gridBagConstraints7.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints7.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints7.gridx = 1;
+			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+			gridBagConstraints6.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints6.gridy = 2;
+			gridBagConstraints6.gridx = 0;
+			jLabel2 = new JLabel();
+			jLabel2.setText("Status");
+			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+			gridBagConstraints5.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints5.gridy = 1;
+			gridBagConstraints5.gridx = 0;
+			jLabel1 = new JLabel();
+			jLabel1.setText("Trust Level");
+			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints3.gridy = 0;
+			gridBagConstraints3.weightx = 1.0;
+			gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints3.gridx = 1;
+			jLabel = new JLabel();
+			jLabel.setText("Trusted Authority Name");
 			filterPanel = new JPanel();
+			filterPanel.setLayout(new GridBagLayout());
 			filterPanel.setBorder(BorderFactory.createTitledBorder(null, "Search Criteria",
 				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel
 					.getPanelLabelColor()));
+			filterPanel.add(jLabel, new GridBagConstraints());
+			filterPanel.add(getTrustedAuthorityName(), gridBagConstraints3);
+			filterPanel.add(jLabel1, gridBagConstraints5);
+			filterPanel.add(jLabel2, gridBagConstraints6);
+			filterPanel.add(getTrustLevel(), gridBagConstraints7);
+			filterPanel.add(getStatus(), gridBagConstraints8);
 		}
 		return filterPanel;
+	}
+
+
+	/**
+	 * This method initializes trustedAuthorityName
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getTrustedAuthorityName() {
+		if (trustedAuthorityName == null) {
+			trustedAuthorityName = new JTextField();
+		}
+		return trustedAuthorityName;
+	}
+
+
+	/**
+	 * This method initializes trustLevel
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
+	private JComboBox getTrustLevel() {
+		if (trustLevel == null) {
+			trustLevel = new TrustLevelComboBox(true);
+		}
+		return trustLevel;
+	}
+
+
+	/**
+	 * This method initializes status
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
+	private JComboBox getStatus() {
+		if (status == null) {
+			status = new StatusComboBox(true);
+		}
+		return status;
 	}
 
 }

@@ -3,6 +3,8 @@ package gov.nih.nci.cagrid.gts.portal;
 import gov.nih.nci.cagrid.gts.bean.Status;
 
 import javax.swing.JComboBox;
+
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -11,17 +13,31 @@ import javax.swing.JComboBox;
  *          Exp $
  */
 public class StatusComboBox extends JComboBox {
+	private static final String ANY = "Any";
 
 
 	public StatusComboBox() {
-	    this.addItem(Status.Trusted);
-	    this.addItem(Status.Pending);
-	    this.addItem(Status.Suspended);
+		this(false);
+	}
+
+
+	public StatusComboBox(boolean allowAny) {
+		if (allowAny) {
+			this.addItem(ANY);
+		}
+		this.addItem(Status.Trusted);
+		this.addItem(Status.Pending);
+		this.addItem(Status.Suspended);
 		this.setEditable(false);
 	}
 
+
 	public Status getStatus() {
-		return (Status) getSelectedItem();
+		if (getSelectedItem().equals(ANY)) {
+			return null;
+		} else {
+			return (Status) getSelectedItem();
+		}
 	}
 
 }
