@@ -27,7 +27,6 @@ import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespacesJTree;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeConfigurePanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeTreeNode;
 
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
@@ -239,12 +238,6 @@ public class ModificationViewer extends GridPortalComponent {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		JLabel label = new JLabel();
-		Font f1 = label.getFont();
-		f1 = f1.deriveFont(f1.getStyle() ^ Font.BOLD);
-		JTextField field = new JTextField();
-		Font f2 = field.getFont();
-		f2 = f2.deriveFont(f2.getStyle() ^ Font.ITALIC);
 	}
 
 
@@ -794,7 +787,7 @@ public class ModificationViewer extends GridPortalComponent {
 
 
 
-	public void performMethodModify() {
+	private void performMethodModify() {
 		try {
 			this.resetMethodSecurityIfServiceSecurityChanged();
 		} catch (Exception e) {
