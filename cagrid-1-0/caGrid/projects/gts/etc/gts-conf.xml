@@ -1,4 +1,4 @@
-<dorian>
+<gts>
 	<resource name="GTSConfiguration"
 		class="gov.nih.nci.cagrid.gts.service.GTSConfiguration">
 		<gts-config>
@@ -15,4 +15,4 @@
 			</database>
 		</gts-config>
 	</resource>
-</dorian>
+</gts>

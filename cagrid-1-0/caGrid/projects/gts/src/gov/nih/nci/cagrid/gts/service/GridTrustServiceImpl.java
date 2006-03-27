@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.gts.service.globus.resource.BaseResourceHome;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 import gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault;
 
+import java.io.File;
 import java.rmi.RemoteException;
 
 import org.apache.axis.message.addressing.EndpointReferenceType;
@@ -48,6 +49,8 @@ public class GridTrustServiceImpl implements GridTrustServiceI {
 	private GTS getGTSHandle() throws GTSInternalFault {
 		if (gts == null) {
 			try {
+				File f = new File(".");
+				System.out.println(f.getAbsolutePath());
 				EndpointReferenceType type = AddressingUtils.createEndpointReference(null);
 				BaseResourceHome home = (BaseResourceHome) ResourceContext.getResourceContext().getResourceHome();
 				SimpleResourceManager srm = new SimpleResourceManager(home.getGtsConfig());

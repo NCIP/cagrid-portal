@@ -8,6 +8,7 @@ import java.rmi.RemoteException;
 
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.globus.axis.util.Util;
 import org.globus.gsi.GlobusCredential;
 
 /**
@@ -22,6 +23,10 @@ public class GridTrustServiceClient implements GridTrustServiceI {
 	private GlobusCredential proxy;
 
 	private String url;
+	
+	static{
+		Util.registerTransport();
+	}
 
 	public GridTrustServiceClient(String url) {
 		this(url, null);
