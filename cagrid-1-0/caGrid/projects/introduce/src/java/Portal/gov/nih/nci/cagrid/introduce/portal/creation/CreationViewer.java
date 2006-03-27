@@ -651,6 +651,9 @@ public class CreationViewer extends GridPortalComponent {
 								InputStream propertyStream = new FileInputStream(propertiesFile);
 								props.load(propertyStream);
 								propertyStream.close();
+								// TODO: there has to be some way to distinguish which type of service
+								// we're talking about.  This is by no means final, and should be
+								// concidered a temporary hack
 								props.put("introduce.data.service", "true");
 								OutputStream propOutStream = new FileOutputStream(propertiesFile);
 								props.store(propOutStream, "");
