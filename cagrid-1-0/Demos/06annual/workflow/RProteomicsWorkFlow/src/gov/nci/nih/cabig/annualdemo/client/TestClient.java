@@ -55,10 +55,7 @@ public class TestClient {
 			
 			CommandLine cmd = null;
 			try {
-				System.out.println("Here");
 				cmd = new BasicParser().parse(options, args);
-				for(int i =0;i<cmd.getArgs().length;i++) 
-				System.out.println(cmd.getArgs());
 			} catch (ParseException e) {
 				e.printStackTrace();
 				System.out
@@ -73,6 +70,7 @@ public class TestClient {
 			TestClient testClient = new TestClient(cmd.getOptionValue("gsh"),
 					input, cmd.getOptionValue("imageFileName"));
 			WorkFlowOutputType output = testClient.callService();
+			System.out.println("Submitted the workflow, waiting for finish");
 			if (output != null) {
 				JpegImageType image = output.getJpegImage();
 				byte[] imageBytes = Base64.decode(image.getData());
@@ -81,6 +79,7 @@ public class TestClient {
 				os.write(imageBytes);
 				os.flush();
 				os.close();
+				System.out.println("Wrote the plot to : " + imageFileName);
 			} else {
 				System.out.println("No Output!");
 			}
@@ -179,7 +178,6 @@ public class TestClient {
 
 		register(call, WorkFlowInputType.class, workFlowInputQName);
 		register(call, WorkFlowOutputType.class, workFlowOuputQName);
-		System.out.println(call.toString());
 		return call;
 	}
 
