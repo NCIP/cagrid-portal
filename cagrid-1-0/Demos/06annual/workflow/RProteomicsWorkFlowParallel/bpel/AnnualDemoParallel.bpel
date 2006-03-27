@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BPEL Process Definition
+Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.com)
+-->
+<process name="AnnualDemoParallel" suppressJoinFailure="yes" targetNamespace="http://AnnualDemoParallel" xmlns="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:ns1="http://rproteomics.cagrid.nci.nih.gov/RPData" xmlns:ns2="http://annualdemo.cagrid.nci.nih.gov/bpel" xmlns:ns3="http://www.globus.org/namespaces/cagrid/RProteomics/RProteomics" xmlns:ns4="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQL" xmlns:ns5="rproteomics.cabig.duke.edu/1/scanFeatures" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <partnerLinks>
+      <partnerLink myRole="client" name="WorkFlowClientPartnerLinkType" partnerLinkType="ns2:WorkFlowClientPartnerLinkType"/>
+      <partnerLink name="RproteomicsDataLinkType" partnerLinkType="ns2:RproteomicsDataLinkType" partnerRole="data"/>
+      <partnerLink name="DukeRproteomicsPartnerLinkType" partnerLinkType="ns2:DukeRproteomicsPartnerLinkType" partnerRole="dukeservice"/>
+      <partnerLink name="OSURproteomicsPartnerLinkType" partnerLinkType="ns2:OSURproteomicsPartnerLinkType" partnerRole="osuservice"/>
+   </partnerLinks>
+   <variables>
+      <variable name="indexCounterDuke" type="xsd:integer"/>
+      <variable name="countDuke" type="xsd:integer"/>
+      <variable name="indexCounterOSU" type="xsd:integer"/>
+      <variable name="countOSU" type="xsd:integer"/>
+      <variable name="tempCount" type="xsd:integer"/>
+      <variable messageType="ns1:workFlowInputMessage" name="workFlowInputMessage"/>
+      <variable messageType="ns1:workFlowOutputMessage" name="workFlowOutputMessage"/>
+      <variable messageType="ns1:queryInputMessage" name="queryInputMessage"/>
+      <variable messageType="ns1:queryOutputMessage" name="queryOutputMessage"/>
+      <variable messageType="ns3:general_interpolateByValueInputMessage" name="general_interpolateByValueInputMessageDuke"/>
+      <variable messageType="ns3:general_interpolateByValueOutputMessage" name="general_interpolateByValueOutputMessageDuke"/>
+      <variable messageType="ns3:general_interpolateByValueInputMessage" name="general_interpolateByValueInputMessageOSU"/>
+      <variable messageType="ns3:general_interpolateByValueOutputMessage" name="general_interpolateByValueOutputMessageOSU"/>
+      <variable messageType="ns3:echoByValueInputMessage" name="echoByValueInputMessageDuke"/>
+      <variable messageType="ns3:echoByValueOutputMessage" name="echoByValueOutputMessageDuke"/>
+      <variable messageType="ns3:echoByValueInputMessage" name="echoByValueInputMessageOSU"/>
+      <variable messageType="ns3:echoByValueOutputMessage" name="echoByValueOutputMessageOSU"/>
+   </variables>
+   <sequence>
+      <receive createInstance="yes" operation="startWorkFlow" partnerLink="WorkFlowClientPartnerLinkType" portType="ns2:startWorkFlowPortType" variable="workFlowInputMessage"/>
+      <assign>
+         <copy>
+            <from expression="&quot;1&quot;"/>
+            <to variable="indexCounterDuke"/>
+         </copy>
+         <copy>
+            <from part="parameters" query="/ns1:WorkFlowInputType/query" variable="workFlowInputMessage"/>
+            <to part="parameters" query="/ns1:query" variable="queryInputMessage"/>
+         </copy>
+      </assign>
+      <invoke inputVariable="queryInputMessage" operation="query" outputVariable="queryOutputMessage" partnerLink="RproteomicsDataLinkType" portType="ns1:RPDataPortType"/>
+      <assign>
+         <copy>
+            <from expression="count(bpws:getVariableData('queryOutputMessage', 'parameters', '/ns1:queryResponse')/response/ns4:CQLQueryResult) div 2"/>
+            <to variable="countDuke"/>
+         </copy>
+      </assign>
+      <assign>
+         <copy>
+            <from expression="&quot;6&quot;"/>
+            <to variable="indexCounterOSU"/>
+         </copy>
+      </assign>
+      <assign>
+        <copy>
+            <from expression="&quot;1;&quot;"/>
+            <to variable="tempCount"/>
+        </copy>
+        </assign>
+      <assign>
+         <copy>
+            <from expression="count(bpws:getVariableData('queryOutputMessage', 'parameters', '/ns1:queryResponse')/response/ns4:CQLQueryResult)"/>
+            <to variable="countOSU"/>
+         </copy>
+      </assign>
+      <flow>
+         <sequence>
+            <while condition="bpws:getVariableData('indexCounterDuke') &lt;= bpws:getVariableData('countDuke')">
+               <assign>
+                  <copy>
+                     <from expression="bpws:getVariableData('queryOutputMessage', 'parameters', '/ns1:queryResponse')/response/ns4:CQLQueryResult[bpws:getVariableData('indexCounterDuke')]/ns5:scanFeatures"/>
+                     <to part="parameters" query="/ns3:echoByValue/scanFeaturesXml[bpws:getVariableData('indexCounterDuke')]" variable="echoByValueInputMessageDuke"/>
+                  </copy>
+                  <copy>
+                     <from expression="bpws:getVariableData('indexCounterDuke') + 1"/>
+                     <to variable="indexCounterDuke"/>
+                  </copy>
+               </assign>
+            </while>
+            <invoke inputVariable="echoByValueInputMessageDuke" operation="echoByValue" outputVariable="echoByValueOutputMessageDuke" partnerLink="DukeRproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
+            <assign>
+            <copy>
+            <from expression="&quot;1&quot;"/>
+            <to variable="indexCounterDuke"/>
+         </copy>
+         <copy>
+            <from expression="count(bpws:getVariableData('echoByValueOutputMessageDuke', 'parameters', '/ns3:echoByValueResponse')/response)"/>
+            <to variable="countDuke"/>
+         </copy>
+      </assign>
+      <while condition="bpws:getVariableData('indexCounterDuke') &lt;= bpws:getVariableData('countDuke')">
+         <assign>
+            <copy>
+               <from expression="bpws:getVariableData('echoByValueOutputMessageDuke', 'parameters','/ns3:echoByValueResponse')/response[bpws:getVariableData('indexCounterDuke')]"/>
+               <to part="parameters" query="/ns3:general_interpolateByValue/scanFeaturesXml[bpws:getVariableData('indexCounterDuke')]" variable="general_interpolateByValueInputMessageDuke"/>
+            </copy>
+            <copy>
+               <from expression="bpws:getVariableData('indexCounterDuke') + 1"/>
+               <to variable="indexCounterDuke"/>
+            </copy>
+         </assign>
+      </while>
+      <!-- Invoking general_interpolateByValue operation on Rproteomics Analytic service -->
+      <invoke inputVariable="general_interpolateByValueInputMessageDuke" operation="general_interpolateByValue" outputVariable="general_interpolateByValueOutputMessageDuke" partnerLink="DukeRproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
+
+         </sequence>
+
+         <sequence>
+            <while condition="bpws:getVariableData('indexCounterOSU') &lt;= bpws:getVariableData('countOSU')">
+               <assign>
+                  <copy>
+                     <from expression="bpws:getVariableData('queryOutputMessage', 'parameters', '/ns1:queryResponse')/response/ns4:CQLQueryResult[bpws:getVariableData('indexCounterOSU')]/ns5:scanFeatures"/>
+                     <to part="parameters" query="/ns3:echoByValue/scanFeaturesXml[bpws:getVariableData('tempCount')]" variable="echoByValueInputMessageOSU"/>
+                  </copy>
+                  <copy>
+                     <from expression="bpws:getVariableData('indexCounterOSU') + 1"/>
+                     <to variable="indexCounterOSU"/>
+                  </copy>
+                  <copy>
+                    <from expression="bpws:getVariableData('tempCount') + 1"/>
+                    <to variable="tempCount"/>
+                </copy>
+                
+               </assign>
+            </while>
+            <invoke inputVariable="echoByValueInputMessageOSU" operation="echoByValue" outputVariable="echoByValueOutputMessageOSU" partnerLink="OSURproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
+            <assign>
+         <copy>
+            <from expression="&quot;1&quot;"/>
+            <to variable="indexCounterOSU"/>
+         </copy>
+         <copy>
+            <from expression="count(bpws:getVariableData('echoByValueOutputMessageOSU', 'parameters', '/ns3:echoByValueResponse')/response)"/>
+            <to variable="countOSU"/>
+         </copy>
+      </assign>
+      <while condition="bpws:getVariableData('indexCounterOSU') &lt;= bpws:getVariableData('countOSU')">
+         <assign>
+            <copy>
+               <from expression="bpws:getVariableData('echoByValueOutputMessageOSU', 'parameters','/ns3:echoByValueResponse')/response[bpws:getVariableData('indexCounterOSU')]"/>
+               <to part="parameters" query="/ns3:general_interpolateByValue/scanFeaturesXml[bpws:getVariableData('indexCounterOSU')]" variable="general_interpolateByValueInputMessageOSU"/>
+            </copy>
+            <copy>
+               <from expression="bpws:getVariableData('indexCounterOSU') + 1"/>
+               <to variable="indexCounterOSU"/>
+            </copy>
+         </assign>
+      </while>
+      <!-- Invoking general_interpolateByValue operation on Rproteomics Analytic service -->
+      <invoke inputVariable="general_interpolateByValueInputMessageOSU" operation="general_interpolateByValue" outputVariable="general_interpolateByValueOutputMessageOSU" partnerLink="OSURproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
+
+         </sequence>
+      </flow>
+      <reply operation="startWorkFlow" partnerLink="WorkFlowClientPartnerLinkType" portType="ns2:startWorkFlowPortType" variable="workFlowOutputMessage"/>
+   </sequence>
+</process>
