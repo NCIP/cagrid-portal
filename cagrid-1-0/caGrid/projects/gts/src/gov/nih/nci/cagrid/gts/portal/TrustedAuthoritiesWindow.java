@@ -28,7 +28,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedAuthoritiesWindow.java,v 1.1 2006-03-27 18:52:57 langella Exp $
+ * @version $Id: TrustedAuthoritiesWindow.java,v 1.2 2006-03-27 19:05:40 langella Exp $
  */
 public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 
@@ -71,6 +71,8 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 	private JProgressBar progress = null;
 
 	private JButton removeTrustedAuthorityButton = null;
+
+	private JPanel filterPanel = null;
 
 
 	/**
@@ -118,15 +120,20 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints = new GridBagConstraints();
+			gridBagConstraints.gridx = 0;
+			gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints.weightx = 1.0D;
+			gridBagConstraints.gridy = 1;
 			GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
 			gridBagConstraints32.gridx = 0;
 			gridBagConstraints32.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints32.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints32.weightx = 1.0D;
-			gridBagConstraints32.gridy = 2;
+			gridBagConstraints32.gridy = 3;
 			GridBagConstraints gridBagConstraints33 = new GridBagConstraints();
 			gridBagConstraints33.gridx = 0;
-			gridBagConstraints33.gridy = 1;
+			gridBagConstraints33.gridy = 2;
 			GridBagConstraints gridBagConstraints35 = new GridBagConstraints();
 			gridBagConstraints35.gridx = 0;
 			gridBagConstraints35.weightx = 1.0D;
@@ -138,14 +145,14 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
 			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.gridy = 3;
+			gridBagConstraints1.gridy = 4;
 			gridBagConstraints1.ipadx = 0;
 			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints1.weightx = 1.0D;
 			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints1.weighty = 1.0D;
 			gridBagConstraints2.gridx = 0;
-			gridBagConstraints2.gridy = 6;
+			gridBagConstraints2.gridy = 5;
 			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints2.anchor = java.awt.GridBagConstraints.SOUTH;
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -154,6 +161,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 			mainPanel.add(getJPanel(), gridBagConstraints35);
 			mainPanel.add(getQueryPanel(), gridBagConstraints33);
 			mainPanel.add(getProgressPanel(), gridBagConstraints32);
+			mainPanel.add(getFilterPanel(), gridBagConstraints);
 		}
 		return mainPanel;
 	}
@@ -529,6 +537,22 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
 		}
+	}
+
+
+	/**
+	 * This method initializes filterPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */    
+	private JPanel getFilterPanel() {
+		if (filterPanel == null) {
+			filterPanel = new JPanel();
+			filterPanel.setBorder(BorderFactory.createTitledBorder(null, "Search Criteria",
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel
+					.getPanelLabelColor()));
+		}
+		return filterPanel;
 	}
 
 }
