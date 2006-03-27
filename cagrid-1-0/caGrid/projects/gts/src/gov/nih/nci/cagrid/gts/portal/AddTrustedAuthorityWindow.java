@@ -5,6 +5,8 @@ import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.portal.CRLPanel;
 import gov.nih.nci.cagrid.gridca.portal.CertificatePanel;
 import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
+import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
+import gov.nih.nci.cagrid.gts.client.GTSAdminClient;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -21,7 +23,9 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
+import org.globus.gsi.GlobusCredential;
 import org.projectmobius.portal.GridPortalComponent;
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -32,26 +36,47 @@ import org.projectmobius.portal.GridPortalComponent;
 public class AddTrustedAuthorityWindow extends GridPortalComponent {
 
 	private JPanel jContentPane = null;
+
 	private JPanel topPanel = null;
+
 	private JTabbedPane taPanel = null;
+
 	private JLabel jLabel = null;
+
 	private JComboBox gts = null;
+
 	private JLabel jLabel1 = null;
+
 	private JComboBox proxy = null;
+
 	private JPanel propertiesPanel = null;
+
 	private JLabel jLabel2 = null;
+
 	private JTextField trustedAuthorityName = null;
+
 	private JLabel jLabel3 = null;
+
 	private JComboBox status = null;
+
 	private JPanel propertiesNorthPanel = null;
+
 	private JLabel jLabel4 = null;
+
 	private JComboBox trustLevel = null;
+
 	private JPanel buttonPanel = null;
+
 	private JButton addButton = null;
+
 	private JButton cancelButton = null;
+
 	private CertificatePanel certificatePanel = null;
+
 	private JButton importCertificate = null;
+
 	private CRLPanel crlPanel = null;
+
 	private JButton importCRL = null;
 
 	/**
@@ -68,7 +93,7 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(400, 400);
+		this.setSize(600, 400);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Add Trusted Authority");
 		this.setFrameIcon(GTSLookAndFeel.getAddTrustedAuthorityIcon());
@@ -83,7 +108,7 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 		if (jContentPane == null) {
 			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
 			gridBagConstraints12.gridx = 0;
-			gridBagConstraints12.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints12.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints12.gridy = 2;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
@@ -92,12 +117,12 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 			gridBagConstraints1.ipady = 0;
 			gridBagConstraints1.weightx = 1.0;
 			gridBagConstraints1.weighty = 1.0;
-			gridBagConstraints1.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints1.insets = new java.awt.Insets(5, 5, 5, 5);
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.ipadx = 0;
 			gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints.weightx = 1.0D;
 			gridBagConstraints.gridy = 0;
 			jContentPane = new JPanel();
@@ -110,44 +135,46 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	}
 
 	/**
-	 * This method initializes topPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes topPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private JPanel getTopPanel() {
 		if (topPanel == null) {
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints5.gridy = 1;
 			gridBagConstraints5.weightx = 1.0;
-			gridBagConstraints5.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints5.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints5.gridx = 1;
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			gridBagConstraints4.gridx = 0;
 			gridBagConstraints4.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints4.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints4.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints4.gridy = 1;
 			jLabel1 = new JLabel();
 			jLabel1.setText("Select Proxy");
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints3.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints3.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints3.gridx = 1;
 			gridBagConstraints3.gridy = 0;
 			gridBagConstraints3.weightx = 1.0;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.gridx = 0;
 			gridBagConstraints2.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints2.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints2.gridy = 0;
 			jLabel = new JLabel();
 			jLabel.setText("Grid Trust Service (GTS)");
 			topPanel = new JPanel();
-			topPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service/Login Information",
+			topPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+					null, "Service/Login Information",
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel.getPanelLabelColor()));
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					GTSLookAndFeel.getPanelLabelColor()));
 			topPanel.setLayout(new GridBagLayout());
 			topPanel.add(jLabel, gridBagConstraints2);
 			topPanel.add(getGts(), gridBagConstraints3);
@@ -158,28 +185,35 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	}
 
 	/**
-	 * This method initializes taPanel	
-	 * 	
-	 * @return javax.swing.JTabbedPane	
-	 */    
+	 * This method initializes taPanel
+	 * 
+	 * @return javax.swing.JTabbedPane
+	 */
 	private JTabbedPane getTaPanel() {
 		if (taPanel == null) {
 			taPanel = new JTabbedPane();
-			taPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Trusted Authority",
+			taPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+					null, "Trusted Authority",
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel.getPanelLabelColor()));
-			taPanel.addTab("Properties", GTSLookAndFeel.getTrustedAuthorityIcon(), getPropertiesNorthPanel(), null);
-			taPanel.addTab("Certificate", GTSLookAndFeel.getCertificateIcon(), getCertificatePanel(), null);
-			taPanel.addTab("Certificate Revocation List", GTSLookAndFeel.getCRLIcon(), getCrlPanel(), null);
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					GTSLookAndFeel.getPanelLabelColor()));
+			taPanel
+					.addTab("Properties", GTSLookAndFeel
+							.getTrustedAuthorityIcon(),
+							getPropertiesNorthPanel(), null);
+			taPanel.addTab("Certificate", GTSLookAndFeel.getCertificateIcon(),
+					getCertificatePanel(), null);
+			taPanel.addTab("Certificate Revocation List", GTSLookAndFeel
+					.getCRLIcon(), getCrlPanel(), null);
 		}
 		return taPanel;
 	}
 
 	/**
-	 * This method initializes gts	
-	 * 	
-	 * @return javax.swing.JComboBox	
-	 */    
+	 * This method initializes gts
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
 	private JComboBox getGts() {
 		if (gts == null) {
 			gts = new GTSServiceListComboBox();
@@ -188,10 +222,10 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	}
 
 	/**
-	 * This method initializes proxy	
-	 * 	
-	 * @return javax.swing.JComboBox	
-	 */    
+	 * This method initializes proxy
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
 	private JComboBox getProxy() {
 		if (proxy == null) {
 			proxy = new ProxyComboBox();
@@ -200,10 +234,10 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	}
 
 	/**
-	 * This method initializes propertiesPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes propertiesPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private JPanel getPropertiesPanel() {
 		if (propertiesPanel == null) {
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
@@ -211,12 +245,12 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 			gridBagConstraints11.gridy = 2;
 			gridBagConstraints11.weightx = 1.0;
 			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints11.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints11.gridx = 1;
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
 			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints10.gridy = 2;
-			gridBagConstraints10.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints10.gridx = 0;
 			jLabel4 = new JLabel();
 			jLabel4.setText("Trust Level");
@@ -225,24 +259,24 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 			gridBagConstraints9.gridy = 1;
 			gridBagConstraints9.weightx = 1.0;
 			gridBagConstraints9.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints9.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints9.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints9.gridx = 1;
 			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 			gridBagConstraints8.gridx = 0;
 			gridBagConstraints8.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints8.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints8.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints8.gridy = 1;
 			jLabel3 = new JLabel();
 			jLabel3.setText("Status");
 			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
 			gridBagConstraints7.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints7.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints7.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints7.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints7.weightx = 1.0;
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 			gridBagConstraints6.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints6.gridy = 0;
-			gridBagConstraints6.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints6.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints6.gridx = 0;
 			jLabel2 = new JLabel();
 			jLabel2.setText("Trusted Authority Name");
@@ -259,10 +293,10 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	}
 
 	/**
-	 * This method initializes trustedAuthorityName	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
+	 * This method initializes trustedAuthorityName
+	 * 
+	 * @return javax.swing.JTextField
+	 */
 	private JTextField getTrustedAuthorityName() {
 		if (trustedAuthorityName == null) {
 			trustedAuthorityName = new JTextField();
@@ -272,10 +306,10 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	}
 
 	/**
-	 * This method initializes status	
-	 * 	
-	 * @return javax.swing.JComboBox	
-	 */    
+	 * This method initializes status
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
 	private JComboBox getStatus() {
 		if (status == null) {
 			status = new StatusComboBox();
@@ -284,24 +318,25 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	}
 
 	/**
-	 * This method initializes propertiesNorthPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes propertiesNorthPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private JPanel getPropertiesNorthPanel() {
 		if (propertiesNorthPanel == null) {
 			propertiesNorthPanel = new JPanel();
 			propertiesNorthPanel.setLayout(new BorderLayout());
-			propertiesNorthPanel.add(getPropertiesPanel(), java.awt.BorderLayout.NORTH);
+			propertiesNorthPanel.add(getPropertiesPanel(),
+					java.awt.BorderLayout.NORTH);
 		}
 		return propertiesNorthPanel;
 	}
 
 	/**
-	 * This method initializes trustLevel	
-	 * 	
-	 * @return javax.swing.JComboBox	
-	 */    
+	 * This method initializes trustLevel
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
 	private JComboBox getTrustLevel() {
 		if (trustLevel == null) {
 			trustLevel = new TrustLevelComboBox();
@@ -310,10 +345,10 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	}
 
 	/**
-	 * This method initializes buttonPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes buttonPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
@@ -326,30 +361,35 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	}
 
 	/**
-	 * This method initializes addButton	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */    
+	 * This method initializes addButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
 	private JButton getAddButton() {
 		if (addButton == null) {
 			addButton = new JButton();
 			addButton.setText("Add Trusted Authority");
+			addButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					addTrustedAuthority();
+				}
+			});
 			addButton.setIcon(GTSLookAndFeel.getAddTrustedAuthorityIcon());
 		}
 		return addButton;
 	}
 
 	/**
-	 * This method initializes cancelButton	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */    
+	 * This method initializes cancelButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
 	private JButton getCancelButton() {
 		if (cancelButton == null) {
 			cancelButton = new JButton();
 			cancelButton.setText("Cancel");
-			cancelButton.addActionListener(new java.awt.event.ActionListener() { 
-				public void actionPerformed(java.awt.event.ActionEvent e) {    
+			cancelButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();
 				}
 			});
@@ -359,10 +399,10 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	}
 
 	/**
-	 * This method initializes certificatePanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes certificatePanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private CertificatePanel getCertificatePanel() {
 		if (certificatePanel == null) {
 			certificatePanel = new CertificatePanel();
@@ -373,26 +413,27 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	}
 
 	/**
-	 * This method initializes importCertificate	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */    
+	 * This method initializes importCertificate
+	 * 
+	 * @return javax.swing.JButton
+	 */
 	private JButton getImportCertificate() {
 		if (importCertificate == null) {
 			importCertificate = new JButton();
 			importCertificate.setText("Import Certificate");
-			importCertificate.addActionListener(new java.awt.event.ActionListener() { 
-				public void actionPerformed(java.awt.event.ActionEvent e) {    
-					importCertificate();
-				}
-			});
+			importCertificate
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							importCertificate();
+						}
+					});
 			importCertificate.setIcon(GTSLookAndFeel.getCertificateIcon());
-			
+
 		}
 		return importCertificate;
 	}
-	
-	private void importCertificate(){
+
+	private void importCertificate() {
 		certificatePanel.clearCertificate();
 		crlPanel.clearCRL();
 		JFileChooser fc = new JFileChooser();
@@ -400,47 +441,53 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 		int returnVal = fc.showOpenDialog(this);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			try {
-				X509Certificate certificate = CertUtil.loadCertificate(new File(fc.getSelectedFile().getAbsolutePath()));
+				X509Certificate certificate = CertUtil
+						.loadCertificate(new File(fc.getSelectedFile()
+								.getAbsolutePath()));
 				certificatePanel.setCertificate(certificate);
-				this.getTrustedAuthorityName().setText(certificate.getSubjectDN().getName());
+				this.getTrustedAuthorityName().setText(
+						certificate.getSubjectDN().getName());
 			} catch (Exception ex) {
 				PortalUtils.showErrorMessage(ex);
 			}
 		}
-		
+
 	}
-	
-	private void importCRL(){
+
+	private void importCRL() {
 		crlPanel.clearCRL();
 		X509Certificate cert = certificatePanel.getCertificate();
-		if(cert == null){
-			PortalUtils.showErrorMessage("You must import a certificate before importing a CRL");
-			
+		if (cert == null) {
+			PortalUtils
+					.showErrorMessage("You must import a certificate before importing a CRL");
+
 		}
 		JFileChooser fc = new JFileChooser();
 		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		int returnVal = fc.showOpenDialog(this);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			try {
-				X509CRL crl = CertUtil.loadCRL(new File(fc.getSelectedFile().getAbsolutePath()));
-				try{
+				X509CRL crl = CertUtil.loadCRL(new File(fc.getSelectedFile()
+						.getAbsolutePath()));
+				try {
 					crl.verify(cert.getPublicKey());
-				}catch(Exception crle){
-					PortalUtils.showErrorMessage("Error verifying CRL, the CRL must be issued and signed by same key is the Trusted Authority's Certificate");
+				} catch (Exception crle) {
+					PortalUtils
+							.showErrorMessage("Error verifying CRL, the CRL must be issued and signed by same key is the Trusted Authority's Certificate");
 				}
 				crlPanel.setCRL(crl);
 			} catch (Exception ex) {
 				PortalUtils.showErrorMessage(ex);
 			}
 		}
-		
+
 	}
 
 	/**
-	 * This method initializes crlPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes crlPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private CRLPanel getCrlPanel() {
 		if (crlPanel == null) {
 			crlPanel = new CRLPanel();
@@ -449,22 +496,61 @@ public class AddTrustedAuthorityWindow extends GridPortalComponent {
 	}
 
 	/**
-	 * This method initializes importCRL	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */    
+	 * This method initializes importCRL
+	 * 
+	 * @return javax.swing.JButton
+	 */
 	private JButton getImportCRL() {
 		if (importCRL == null) {
 			importCRL = new JButton();
 			importCRL.setText("Import CRL");
-			importCRL.addActionListener(new java.awt.event.ActionListener() { 
-				public void actionPerformed(java.awt.event.ActionEvent e) {    
+			importCRL.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
 					importCRL();
 				}
 			});
 			importCRL.setIcon(GTSLookAndFeel.getCRLIcon());
 		}
 		return importCRL;
+	}
+
+	private void addTrustedAuthority() {
+		try {
+			getAddButton().setEnabled(false);
+			X509Certificate cert = this.certificatePanel.getCertificate();
+			if (cert == null) {
+				PortalUtils
+						.showErrorMessage("No certificate specified, you must specify a certificate to add a Trusted Authority!!!");
+				getAddButton().setEnabled(true);
+				return;
+
+			}
+			TrustedAuthority ta = new TrustedAuthority();
+			ta.setTrustedAuthorityName(this.trustedAuthorityName.getText());
+			ta.setStatus(((StatusComboBox) getStatus()).getStatus());
+			ta.setTrustLevel(((TrustLevelComboBox) trustLevel).getTrustLevel());
+			ta.setCertificate(new gov.nih.nci.cagrid.gts.bean.X509Certificate(
+					CertUtil.writeCertificate(cert)));
+			if (crlPanel.getCRL() != null) {
+				ta.setCRL(new gov.nih.nci.cagrid.gts.bean.X509CRL(CertUtil
+						.writeCRL(crlPanel.getCRL())));
+			}
+			GlobusCredential proxy = ((ProxyComboBox) getProxy())
+					.getSelectedProxy();
+			String service = ((GTSServiceListComboBox) getGts())
+					.getSelectedService();
+			GTSAdminClient client = new GTSAdminClient(service, proxy);
+			client.addTrustedAuthority(ta);
+			PortalUtils.showMessage("The Trusted Authority, "
+					+ ta.getTrustedAuthorityName()
+					+ " was succesfully added!!!");
+			dispose();
+		} catch (Exception e) {
+			getAddButton().setEnabled(true);
+			e.printStackTrace();
+			PortalUtils.showErrorMessage(e);
+		}
+
 	}
 
 }
