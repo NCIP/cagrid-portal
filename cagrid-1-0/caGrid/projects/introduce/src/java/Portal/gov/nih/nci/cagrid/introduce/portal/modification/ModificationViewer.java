@@ -197,8 +197,7 @@ public class ModificationViewer extends GridPortalComponent {
 
 
 	private Thread createChooserThread() {
-		Thread th = new Thread(new Runnable() {
-
+		Thread th = new Thread() {
 			public void run() {
 				try {
 					chooseService();
@@ -224,8 +223,7 @@ public class ModificationViewer extends GridPortalComponent {
 					ModificationViewer.this.dispose();
 				}
 			}
-
-		});
+		};
 		return th;
 	}
 
