@@ -55,6 +55,7 @@ import org.projectmobius.portal.PortalResourceManager;
  */
 public class CreationViewer extends GridPortalComponent {
 
+	public static final String SCHEMA_DIR = "schema";
 	public static final String CQL_RESULT_SET_SCHEMA = "2_gov.nih.nci.cagrid.CQLResultSet.xsd";
 	public static final String CQL_QUERY_SCHEMA = "1_gov.nih.nci.cagrid.CQLQuery.xsd";
 
@@ -638,9 +639,9 @@ public class CreationViewer extends GridPortalComponent {
 								// get the template for data services built
 								ServiceDescription dataServiceDescription = getDataService();
 								// copy schemas to the right place
-								Utils.copyFile(new File(CQL_QUERY_SCHEMA), 
+								Utils.copyFile(new File(SCHEMA_DIR + File.separator + CQL_QUERY_SCHEMA), 
 									new File(dirName + File.separator + "schema" + File.separator + serviceName + File.separator + CQL_QUERY_SCHEMA));
-								Utils.copyFile(new File(CQL_RESULT_SET_SCHEMA),
+								Utils.copyFile(new File(SCHEMA_DIR + File.separator + CQL_RESULT_SET_SCHEMA),
 									new File(dirName + File.separator + "schema" + File.separator + serviceName + File.separator + CQL_RESULT_SET_SCHEMA));
 								Utils.serializeDocument(dirName + File.separator + "introduce.xml", dataServiceDescription,
 									new QName("gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
@@ -706,8 +707,10 @@ public class CreationViewer extends GridPortalComponent {
 		NamespacesType namespaces = new NamespacesType();
 		NamespaceType[] namespaceTypes = new NamespaceType[2];
 		try {
-			namespaceTypes[0] = CommonTools.createNamespaceType("." + File.separator + CQL_QUERY_SCHEMA);
-			namespaceTypes[1] = CommonTools.createNamespaceType("." + File.separator + CQL_RESULT_SET_SCHEMA);
+			namespaceTypes[0] = CommonTools.createNamespaceType(SCHEMA_DIR + File.separator + CQL_QUERY_SCHEMA);
+			namespaceTypes[0].setLocation("." + File.separator + CQL_QUERY_SCHEMA);
+			namespaceTypes[1] = CommonTools.createNamespaceType(SCHEMA_DIR + File.separator + CQL_RESULT_SET_SCHEMA);
+			namespaceTypes[1].setLocation("." + File.separator + CQL_RESULT_SET_SCHEMA);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
