@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.deployment;
 
 import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
@@ -23,6 +24,7 @@ import javax.swing.JPanel;
 
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
+import javax.swing.JCheckBox;
 
 
 /**
@@ -55,9 +57,13 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 
 	Properties deployProperties;
 
-	private JPanel deploymetnTypePanel = null;
+	private JPanel deploymentTypePanel = null;
 
 	private JComboBox deploymentTypeSelector = null;
+
+	private JCheckBox rebuildCheckBox = null;
+
+	private JPanel rebuildPanel = null;
 
 
 	/**
@@ -155,7 +161,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 			inputPanel.setLayout(new GridBagLayout());
 			inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Deployment Properties",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
 			gridBagConstraints9.gridx = 0;
 			gridBagConstraints9.gridy = 3;
@@ -173,6 +179,10 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+			gridBagConstraints12.gridx = 0;
+			gridBagConstraints12.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints12.gridy = 2;
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			gridBagConstraints11.gridx = 0;
 			gridBagConstraints11.fill = java.awt.GridBagConstraints.BOTH;
@@ -199,7 +209,8 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 			mainPanel.setLayout(new GridBagLayout());
 			mainPanel.add(getInputPanel(), gridBagConstraints);
 			mainPanel.add(getButtonPanel(), gridBagConstraints1);
-			mainPanel.add(getDeploymetnTypePanel(), gridBagConstraints11);
+			mainPanel.add(getDeploymentTypePanel(), gridBagConstraints11);
+			mainPanel.add(getRebuildPanel(), gridBagConstraints12);
 		}
 		return mainPanel;
 	}
@@ -250,17 +261,32 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 							try {
 								deployProperties.store(new FileOutputStream(new File(serviceDirectory.getAbsolutePath()
 									+ File.separator + "deploy.properties")), "service deployment properties");
-							} catch (FileNotFoundException e) {
-								e.printStackTrace();
-							} catch (IOException e) {
-								e.printStackTrace();
+							} catch (FileNotFoundException ex) {
+								ex.printStackTrace();
+							} catch (IOException ex) {
+								ex.printStackTrace();
+							}
+							
+							if (getRebuildCheckBox().isSelected()) {
+								setProgressText("rebuilding");
+								try {
+									String cmd = CommonTools.getAntAllCommand(serviceDirectory.getAbsolutePath());
+									Process antAll = CommonTools.createAndOutputProcess(cmd);
+									antAll.waitFor();
+									if (antAll.exitValue() != 0) {
+										PortalUtils.showErrorMessage("Error rebuilding service");
+									}
+								} catch (Exception ex) {
+									PortalUtils.showErrorMessage("Error rebuilding service!");
+									ex.printStackTrace();
+								}
 							}
 
 							setProgressText("deploying");
-
+							
 							try {
 								String cmd = "";
-								if (((String) deploymentTypeSelector.getSelectedItem()).equals(GLOBUS)) {
+								if (((String) getDeploymentTypeSelector().getSelectedItem()).equals(GLOBUS)) {
 									cmd = CommonTools.getAntDeployGlobusCommand(serviceDirectory.getAbsolutePath());
 								} else {
 									cmd = CommonTools.getAntDeployTomcatCommand(serviceDirectory.getAbsolutePath());
@@ -269,14 +295,15 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 								p.waitFor();
 								if (p.exitValue() != 0) {
 									PortalUtils.showErrorMessage("Error deploying service!");
+								} else {
+									PortalUtils.showMessage("Service successfully deployed");
+									dispose();
 								}
-							} catch (Exception e) {
+							} catch (Exception ex) {
 								PortalUtils.showErrorMessage("Error deploying service!");
-								e.printStackTrace();
+								ex.printStackTrace();
 							}
-
 						}
-
 					};
 					Thread th = new Thread(r);
 					th.start();
@@ -296,7 +323,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 	private JButton getCloseButton() {
 		if (closeButton == null) {
 			closeButton = new JButton();
-			closeButton.setIcon(IntroduceLookAndFeel.getCloseIcon());
+			closeButton.setIcon(PortalLookAndFeel.getCloseIcon());
 			closeButton.setText("Cancel");
 			closeButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -313,19 +340,19 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getDeploymetnTypePanel() {
-		if (deploymetnTypePanel == null) {
+	private JPanel getDeploymentTypePanel() {
+		if (deploymentTypePanel == null) {
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints2.weightx = 1.0;
-			deploymetnTypePanel = new JPanel();
-			deploymetnTypePanel.setLayout(new GridBagLayout());
-			deploymetnTypePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Deployment Location",
+			deploymentTypePanel = new JPanel();
+			deploymentTypePanel.setLayout(new GridBagLayout());
+			deploymentTypePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Deployment Location",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
-			deploymetnTypePanel.add(getDeploymentTypeSelector(), gridBagConstraints2);
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+			deploymentTypePanel.add(getDeploymentTypeSelector(), gridBagConstraints2);
 		}
-		return deploymetnTypePanel;
+		return deploymentTypePanel;
 	}
 
 
@@ -343,4 +370,40 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 		return deploymentTypeSelector;
 	}
 
-} // @jve:decl-index=0:visual-constraint="10,4"
+
+	/**
+	 * This method initializes jCheckBox	
+	 * 	
+	 * @return javax.swing.JCheckBox	
+	 */
+	private JCheckBox getRebuildCheckBox() {
+		if (rebuildCheckBox == null) {
+			rebuildCheckBox = new JCheckBox();
+			rebuildCheckBox.setText("Force Full Code Reubuild");
+		}
+		return rebuildCheckBox;
+	}
+
+
+	/**
+	 * This method initializes jPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getRebuildPanel() {
+		if (rebuildPanel == null) {
+			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.gridx = 0;
+			gridBagConstraints3.weightx = 1.0D;
+			gridBagConstraints3.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints3.gridy = 0;
+			rebuildPanel = new JPanel();
+			rebuildPanel.setLayout(new GridBagLayout());
+			rebuildPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Rebuild",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
+				null, PortalLookAndFeel.getPanelLabelColor()));
+			rebuildPanel.add(getRebuildCheckBox(), gridBagConstraints3);
+		}
+		return rebuildPanel;
+	}
+}
