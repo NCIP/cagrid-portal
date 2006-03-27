@@ -1,5 +1,7 @@
 To Do:
 
+MyStringType element problem (Scott and Mike know about it)
+
 icons from here: http://www.famfamfam.com/lab/icons/
 and http://tango-project.org/Tango_Icon_Gallery
 
