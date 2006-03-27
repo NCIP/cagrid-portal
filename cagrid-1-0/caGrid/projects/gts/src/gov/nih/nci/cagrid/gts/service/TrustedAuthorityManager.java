@@ -62,7 +62,7 @@ public class TrustedAuthorityManager {
 				if (filter.getTrustedAuthorityName() != null) {
 					sql = appendWhereOrAnd(firstAppended, sql);
 					firstAppended = true;
-					sql.append(" NAME LIKE '%"
+					sql.append(" TRUST_LEVEL LIKE '%"
 							+ filter.getTrustedAuthorityName() + "%'");
 				}
 
@@ -104,7 +104,7 @@ public class TrustedAuthorityManager {
 			ResultSet rs = s.executeQuery(sql.toString());
 			while (rs.next()) {
 				TrustedAuthority ta = new TrustedAuthority();
-				ta.setTrustedAuthorityName(rs.getString("NAME"));
+				ta.setTrustedAuthorityName(rs.getString("TRUST_LEVEL"));
 				ta.setTrustLevel(TrustLevel.fromValue(rs
 						.getString("TRUST_LEVEL")));
 				ta.setStatus(Status.fromValue(rs.getString("STATUS")));
@@ -204,7 +204,7 @@ public class TrustedAuthorityManager {
 		try {
 			if (!ta.equals(curr)) {
 				if (needsUpdate) {
-					sql.append(" WHERE NAME='" + ta.getTrustedAuthorityName()
+					sql.append(" WHERE TRUST_LEVEL='" + ta.getTrustedAuthorityName()
 							+ "'");
 					db.update(sql.toString());
 				}
@@ -257,7 +257,7 @@ public class TrustedAuthorityManager {
 	public synchronized TrustedAuthority getTrustedAuthority(String name)
 			throws GTSInternalFault, InvalidTrustedAuthorityFault {
 		String sql = "select * from " + TRUSTED_AUTHORITIES_TABLE
-				+ " where NAME='" + name + "'";
+				+ " where TRUST_LEVEL='" + name + "'";
 		Connection c = null;
 		try {
 			c = db.getConnection();
@@ -265,7 +265,7 @@ public class TrustedAuthorityManager {
 			ResultSet rs = s.executeQuery(sql);
 			if (rs.next()) {
 				TrustedAuthority ta = new TrustedAuthority();
-				ta.setTrustedAuthorityName(rs.getString("NAME"));
+				ta.setTrustedAuthorityName(rs.getString("TRUST_LEVEL"));
 				ta.setTrustLevel(TrustLevel.fromValue(rs
 						.getString("TRUST_LEVEL")));
 				ta.setStatus(Status.fromValue(rs.getString("STATUS")));
@@ -309,7 +309,7 @@ public class TrustedAuthorityManager {
 			throws GTSInternalFault {
 		this.buildDatabase();
 		String sql = "select count(*) from " + TRUSTED_AUTHORITIES_TABLE
-				+ " where NAME='" + name + "'";
+				+ " where TRUST_LEVEL='" + name + "'";
 		Connection c = null;
 		boolean exists = false;
 		try {
@@ -347,7 +347,7 @@ public class TrustedAuthorityManager {
 			throws GTSInternalFault, InvalidTrustedAuthorityFault {
 		if (doesTrustedAuthorityExist(name)) {
 			String sql = "delete FROM " + TRUSTED_AUTHORITIES_TABLE
-					+ " where NAME='" + name + "'";
+					+ " where TRUST_LEVEL='" + name + "'";
 			try {
 				db.update(sql);
 			} catch (Exception e) {
@@ -437,7 +437,7 @@ public class TrustedAuthorityManager {
 		try {
 
 			insert.append("INSERT INTO " + TRUSTED_AUTHORITIES_TABLE
-					+ " SET NAME='" + ta.getTrustedAuthorityName()
+					+ " SET TRUST_LEVEL='" + ta.getTrustedAuthorityName()
 					+ "',CERTIFICATE_DN='" + cert.getSubjectDN().toString()
 					+ "',TRUST_LEVEL='" + ta.getTrustLevel().getValue()
 					+ "', STATUS='" + ta.getStatus().getValue()
@@ -526,14 +526,14 @@ public class TrustedAuthorityManager {
 			db.createDatabaseIfNeeded();
 			if (!this.db.tableExists(TRUSTED_AUTHORITIES_TABLE)) {
 				String trust = "CREATE TABLE " + TRUSTED_AUTHORITIES_TABLE
-						+ " (" + "NAME VARCHAR(255) NOT NULL PRIMARY KEY,"
+						+ " (" + "TRUST_LEVEL VARCHAR(255) NOT NULL PRIMARY KEY,"
 						+ "CERTIFICATE_DN VARCHAR(255) NOT NULL,"
 						+ "TRUST_LEVEL VARCHAR(255) NOT NULL,"
 						+ "STATUS VARCHAR(50) NOT NULL,"
 						+ "IS_AUTHORITY VARCHAR(5) NOT NULL,"
 						+ "AUTHORITY VARCHAR(255) NOT NULL,"
 						+ "CERTIFICATE TEXT NOT NULL,"
-						+ "CRL TEXT, INDEX document_index (NAME));";
+						+ "CRL TEXT, INDEX document_index (TRUST_LEVEL));";
 				db.update(trust);
 			}
 			dbBuilt = true;

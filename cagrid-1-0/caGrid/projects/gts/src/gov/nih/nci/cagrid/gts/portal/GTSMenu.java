@@ -16,7 +16,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: GTSMenu.java,v 1.2 2006-03-25 18:45:53 langella Exp $
+ * @version $Id: GTSMenu.java,v 1.3 2006-03-27 18:52:57 langella Exp $
  */
 public class GTSMenu extends GridPortalComponent {
 
@@ -30,6 +30,10 @@ public class GTSMenu extends GridPortalComponent {
 	private JPanel buttonPanel = null;
 	private JButton perform = null;
 	private JButton close = null;
+
+	private JRadioButton manageTrustedAuthorities = null;
+
+	private JLabel jLabel = null;
 
 	public GTSMenu() {
 		super();
@@ -88,6 +92,18 @@ public class GTSMenu extends GridPortalComponent {
 
 	private JPanel getMenuPanel() {
 		if (menuPanel == null) {
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.gridx = 1;
+			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints11.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints11.gridy = 1;
+			jLabel = new JLabel();
+			jLabel.setText("Manage Trusted Authorities");
+			GridBagConstraints gridBagConstraints = new GridBagConstraints();
+			gridBagConstraints.gridx = 0;
+			gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints.gridy = 1;
 			addTALabel = new JLabel();
 			menuPanel = new JPanel();
 			menuPanel.setLayout(new GridBagLayout());
@@ -108,6 +124,8 @@ public class GTSMenu extends GridPortalComponent {
 			menuPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Grid Trust Management Options",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel.getPanelLabelColor()));	
+			menuPanel.add(getManageTrustedAuthorities(), gridBagConstraints);
+			menuPanel.add(jLabel, gridBagConstraints11);
 			
 		}
 		return menuPanel;
@@ -159,6 +177,8 @@ public class GTSMenu extends GridPortalComponent {
 	private void perform(){
 		if(trustedAuthority.isSelected()){
 			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new AddTrustedAuthorityWindow());
+		}else if(manageTrustedAuthorities.isSelected()){
+			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new TrustedAuthoritiesWindow());
 		}
 		
 	}
@@ -182,5 +202,17 @@ public class GTSMenu extends GridPortalComponent {
 			});
 		}
 		return close;
+	}
+	/**
+	 * This method initializes manageTrustedAuthorities	
+	 * 	
+	 * @return javax.swing.JRadioButton	
+	 */    
+	private JRadioButton getManageTrustedAuthorities() {
+		if (manageTrustedAuthorities == null) {
+			manageTrustedAuthorities = new JRadioButton();
+			group.add(manageTrustedAuthorities);
+		}
+		return manageTrustedAuthorities;
 	}
      }
