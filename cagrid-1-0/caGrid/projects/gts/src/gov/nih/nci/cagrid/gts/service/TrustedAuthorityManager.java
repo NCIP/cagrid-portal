@@ -149,20 +149,22 @@ public class TrustedAuthorityManager {
 			fault.setFaultString("The authority trust service for a Trusted Authority cannot be changed");
 			throw fault;
 		}
-
-		if ((clean(ta.getCertificate().getCertificateEncodedString()) != null)
-			&& (!ta.getCertificate().equals(curr.getCertificate()))) {
-			IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
-			fault.setFaultString("The certificate for a Trusted Authority cannot be changed");
-			throw fault;
+		if (ta.getCertificate() != null) {
+			if ((clean(ta.getCertificate().getCertificateEncodedString()) != null)
+				&& (!ta.getCertificate().equals(curr.getCertificate()))) {
+				IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
+				fault.setFaultString("The certificate for a Trusted Authority cannot be changed");
+				throw fault;
+			}
 		}
+		if (ta.getCRL() != null) {
+			if ((clean(ta.getCRL().getCrlEncodedString()) != null) && (!ta.getCRL().equals(curr.getCRL()))) {
 
-		if ((clean(ta.getCRL().getCrlEncodedString()) != null) && (!ta.getCRL().equals(curr.getCRL()))) {
-
-			X509Certificate cert = checkAndExtractCertificate(curr);
-			checkAndExtractCRL(ta, cert);
-			buildUpdate(needsUpdate, sql, "CRL", ta.getCRL().getCrlEncodedString());
-			needsUpdate = true;
+				X509Certificate cert = checkAndExtractCertificate(curr);
+				checkAndExtractCRL(ta, cert);
+				buildUpdate(needsUpdate, sql, "CRL", ta.getCRL().getCrlEncodedString());
+				needsUpdate = true;
+			}
 		}
 
 		if ((ta.getIsAuthority() != null) && (!ta.getIsAuthority().equals(curr.getIsAuthority()))) {

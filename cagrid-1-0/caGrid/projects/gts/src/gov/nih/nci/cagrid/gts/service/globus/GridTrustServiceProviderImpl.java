@@ -26,6 +26,7 @@ public class GridTrustServiceProviderImpl {
 		gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault,
 		gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
 		gov.nih.nci.cagrid.gts.stubs.UpdateTrustedAuthorityResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.UpdateTrustedAuthorityResponse();
+		impl.updateTrustedAuthority(params.getTa().getTrustedAuthority());
 		return boxedResult;
 	}
 
@@ -54,6 +55,7 @@ public class GridTrustServiceProviderImpl {
 		gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault,
 		gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
 		gov.nih.nci.cagrid.gts.stubs.RemoveTrustedAuthorityResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.RemoveTrustedAuthorityResponse();
+		impl.removeTrustedAuthority(params.getTrustedAuthorityName());
 		return boxedResult;
 	}
 
