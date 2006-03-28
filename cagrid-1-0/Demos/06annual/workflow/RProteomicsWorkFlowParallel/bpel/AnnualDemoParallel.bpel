@@ -504,7 +504,7 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
          <assign>
             <copy>
                <from expression="bpws:getVariableData('normalize_quantileByValueOutputMessageDuke','parameters','/ns3:normalize_quantileByValueResponse')/response[bpws:getVariableData('indexCounterDuke')]"/>
-               <to part="parameters" query="/ns3:plot_2DStackedByValue/scanFeaturesXmlTop[bpws:getVariableData('indexCounterDuke')]" variable="plot_2DStackedByValueInputMessage"/>
+               <to part="parameters" query="/ns3:plot_2DStackedByValue/scanFeaturesXmlBottom[bpws:getVariableData('indexCounterDuke')]" variable="plot_2DStackedByValueInputMessage"/>
             </copy>
             <copy>
                <from expression="bpws:getVariableData('indexCounterDuke') + 1"/>
@@ -526,7 +526,7 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
          <assign>
             <copy>
                <from expression="bpws:getVariableData('general_interpolateByValueOutputMessageDuke','parameters','/ns3:general_interpolateByValueResponse')/response[bpws:getVariableData('indexCounterDuke')]"/>
-               <to part="parameters" query="/ns3:plot_2DStackedByValue/scanFeaturesXmlBottom[bpws:getVariableData('indexCounterDuke')]" variable="plot_2DStackedByValueInputMessage"/>
+               <to part="parameters" query="/ns3:plot_2DStackedByValue/scanFeaturesXmlTop[bpws:getVariableData('indexCounterDuke')]" variable="plot_2DStackedByValueInputMessage"/>
             </copy>
             <copy>
                <from expression="bpws:getVariableData('indexCounterDuke') + 1"/>
@@ -552,7 +552,7 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
          <assign>
             <copy>
                <from expression="bpws:getVariableData('normalize_quantileByValueOutputMessageOSU','parameters','/ns3:normalize_quantileByValueResponse')/response[bpws:getVariableData('indexCounterOSU')]"/>
-               <to part="parameters" query="/ns3:plot_2DStackedByValue/scanFeaturesXmlTop[bpws:getVariableData('tempCount')]" variable="plot_2DStackedByValueInputMessage"/>
+               <to part="parameters" query="/ns3:plot_2DStackedByValue/scanFeaturesXmlBottom[bpws:getVariableData('tempCount')]" variable="plot_2DStackedByValueInputMessage"/>
             </copy>
             <copy>
                <from expression="bpws:getVariableData('indexCounterOSU') + 1"/>
@@ -582,7 +582,7 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
          <assign>
             <copy>
                <from expression="bpws:getVariableData('general_interpolateByValueOutputMessageOSU','parameters','/ns3:general_interpolateByValueResponse')/response[bpws:getVariableData('indexCounterOSU')]"/>
-               <to part="parameters" query="/ns3:plot_2DStackedByValue/scanFeaturesXmlBottom[bpws:getVariableData('tempCount')]" variable="plot_2DStackedByValueInputMessage"/>
+               <to part="parameters" query="/ns3:plot_2DStackedByValue/scanFeaturesXmlTop[bpws:getVariableData('tempCount')]" variable="plot_2DStackedByValueInputMessage"/>
             </copy>
             <copy>
                <from expression="bpws:getVariableData('indexCounterOSU') + 1"/>
