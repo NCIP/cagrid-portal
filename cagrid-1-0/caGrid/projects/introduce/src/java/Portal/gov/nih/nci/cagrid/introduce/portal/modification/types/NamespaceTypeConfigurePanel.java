@@ -168,7 +168,7 @@ public class NamespaceTypeConfigurePanel extends JPanel{
 		if (locationText == null) {
 			locationText = new JTextField();
 			locationText.setEditable(false);
-			locationText.setEnabled(false);
+			locationText.setEnabled(true);
 			locationText.getDocument().addDocumentListener(new DocumentListener() {
 				public void changedUpdate(DocumentEvent e) {
 					if (type != null) {

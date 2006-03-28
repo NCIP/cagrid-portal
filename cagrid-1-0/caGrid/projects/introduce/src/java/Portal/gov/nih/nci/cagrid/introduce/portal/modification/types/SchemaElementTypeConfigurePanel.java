@@ -35,10 +35,11 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 	}
 
 
-	public void setSchemaElementType(SchemaElementType type) {
+	public void setSchemaElementType(SchemaElementType type, boolean classEditable) {
 		this.type = type;
 		getTypeText().setText(type.getType());
 		getClassNameText().setText(type.getClassName());
+			getClassNameText().setEditable(classEditable);
 	}
 
 
