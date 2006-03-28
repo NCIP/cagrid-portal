@@ -692,7 +692,8 @@ public class SyncSource {
 		methodString += lineStart;
 		if (returnTypeEl.getQName().getNamespaceURI().equals("")
 			&& returnTypeEl.getQName().getLocalPart().equals("void")) {
-			// do nothing because it was null
+			// just call but dont set anything
+			methodString += var + "." + methodName + "(" + params + ");\n";
 		} else {
 			SchemaInformation outputNamespace = serviceInfo.getSchemaInformation(returnTypeEl.getQName());
 			if (outputNamespace.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
