@@ -84,6 +84,12 @@
 
 <target name="runClient" depends="jar">
     <java fork="yes" classname="gov.nci.nih.cabig.annualdemo.client.TestClient">
+    <arg value="-query"/>
+    <arg value="scanFeatures_query3.xml"/>
+    <arg value="-gsh"/>
+    <arg value="http://localhost:8080/active-bpel/services/WorkFlowClientService"/>
+    <arg value="-imageFileName"/>
+    <arg value="plot.jpg"/>
         <classpath>
             <fileset dir="${deploy.dir}/lib">
                 <include name="common/*.jar"/>
