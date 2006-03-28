@@ -25,7 +25,7 @@ import org.projectmobius.protocol.gme.SchemaNode;
 public class GMEConfigurationPanel extends JPanel {
 
 	public Namespace currentNamespace = null;
-	
+
 	public SchemaNode currentNode = null;
 
 	protected File schemaDir;
@@ -33,7 +33,7 @@ public class GMEConfigurationPanel extends JPanel {
 	private JComboBox namespaceComboBox = null;
 
 	private JComboBox schemaComboBox = null;
-	
+
 	private JLabel namespaceLabel = null;
 
 	JLabel nameLabel = null;
@@ -88,9 +88,8 @@ public class GMEConfigurationPanel extends JPanel {
 		gridBagConstraints7.gridx = 1;
 		this.setLayout(new GridBagLayout());
 		this.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Type",
-			javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-			javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
-			PortalLookAndFeel.getPanelLabelColor()));
+			javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
+			new java.awt.Font("Dialog", java.awt.Font.BOLD, 12), PortalLookAndFeel.getPanelLabelColor()));
 		this.add(getNamespaceComboBox(), gridBagConstraints7);
 		this.add(namespaceLabel, gridBagConstraints9);
 		this.add(getSchemaComboBox(), gridBagConstraints8);
@@ -99,6 +98,7 @@ public class GMEConfigurationPanel extends JPanel {
 
 
 	public void discoverFromGME() {
+
 		GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
 		List namespaces = null;
 		try {
@@ -115,9 +115,9 @@ public class GMEConfigurationPanel extends JPanel {
 
 		} catch (MobiusException e1) {
 			e1.printStackTrace();
-			JOptionPane.showMessageDialog(this,
-				"Please check the GME URL and make sure that you have the appropriate credentials!");
+			JOptionPane.showMessageDialog(GMEConfigurationPanel.this, "Unable to connect to the GME");
 		}
+
 	}
 
 
@@ -174,10 +174,11 @@ public class GMEConfigurationPanel extends JPanel {
 					if (getSchemaComboBox().getSelectedItem() != null) {
 						currentNamespace = ((SchemaWrapper) getSchemaComboBox().getSelectedItem()).getNamespace();
 						IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance()
-						.getResource(IntroducePortalConf.RESOURCE);
+							.getResource(IntroducePortalConf.RESOURCE);
 						try {
-							XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance().getGridService(conf.getGME());
-							currentNode = handle.getSchema(currentNamespace,false);
+							XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
+								.getGridService(conf.getGME());
+							currentNode = handle.getSchema(currentNamespace, false);
 						} catch (MobiusException e1) {
 							e1.printStackTrace();
 						}
