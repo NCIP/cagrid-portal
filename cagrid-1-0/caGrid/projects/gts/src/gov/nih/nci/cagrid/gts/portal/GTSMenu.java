@@ -17,7 +17,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: GTSMenu.java,v 1.5 2006-03-28 03:43:59 langella Exp $
+ * @version $Id: GTSMenu.java,v 1.6 2006-03-28 20:49:34 langella Exp $
  */
 public class GTSMenu extends GridPortalComponent {
 
@@ -35,6 +35,10 @@ public class GTSMenu extends GridPortalComponent {
 	private JRadioButton manageTrustedAuthorities = null;
 
 	private JLabel jLabel = null;
+
+	private JRadioButton manageAccess = null;
+
+	private JLabel jLabel1 = null;
 
 
 	public GTSMenu() {
@@ -101,6 +105,18 @@ public class GTSMenu extends GridPortalComponent {
 
 	private JPanel getMenuPanel() {
 		if (menuPanel == null) {
+			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+			gridBagConstraints21.gridx = 1;
+			gridBagConstraints21.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints21.insets = new java.awt.Insets(5, 5, 5, 5);
+			gridBagConstraints21.gridy = 2;
+			jLabel1 = new JLabel();
+			jLabel1.setText("Manage Access Control");
+			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+			gridBagConstraints12.gridx = 0;
+			gridBagConstraints12.insets = new java.awt.Insets(5, 5, 5, 5);
+			gridBagConstraints12.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints12.gridy = 2;
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			gridBagConstraints11.gridx = 1;
 			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
@@ -136,6 +152,8 @@ public class GTSMenu extends GridPortalComponent {
 			menuPanel.add(getManageTrustedAuthorities(), gridBagConstraints);
 			menuPanel.add(jLabel, gridBagConstraints11);
 
+			menuPanel.add(getManageAccess(), gridBagConstraints12);
+			menuPanel.add(jLabel1, gridBagConstraints21);
 		}
 		return menuPanel;
 	}
@@ -190,6 +208,8 @@ public class GTSMenu extends GridPortalComponent {
 			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new TrustedAuthorityWindow());
 		} else if (manageTrustedAuthorities.isSelected()) {
 			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new TrustedAuthoritiesWindow());
+		} else if (manageAccess.isSelected()) {
+			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new PermissionManagerWindow());
 		}
 
 	}
@@ -226,5 +246,19 @@ public class GTSMenu extends GridPortalComponent {
 			group.add(manageTrustedAuthorities);
 		}
 		return manageTrustedAuthorities;
+	}
+
+
+	/**
+	 * This method initializes manageAccess
+	 * 
+	 * @return javax.swing.JRadioButton
+	 */
+	private JRadioButton getManageAccess() {
+		if (manageAccess == null) {
+			manageAccess = new JRadioButton();
+			group.add(manageAccess);
+		}
+		return manageAccess;
 	}
 }

@@ -46,5 +46,18 @@ public class GTSLookAndFeel extends PortalLookAndFeel {
 	public final static ImageIcon getCRLIcon() {
 		return new javax.swing.ImageIcon(GTSLookAndFeel.class.getResource("/contact-delete.png"));
 	}
+	
+	public final static ImageIcon getPermissionIcon() {
+		return new javax.swing.ImageIcon(GTSLookAndFeel.class.getResource("/shield.png"));
+	}
+	public final static ImageIcon getAddPermissionIcon() {
+		return new javax.swing.ImageIcon(GTSLookAndFeel.class.getResource("/shield_add.png"));
+	}
+	public final static ImageIcon getRevokePermissionIcon() {
+		return new javax.swing.ImageIcon(GTSLookAndFeel.class.getResource("/shield_delete.png"));
+	}
+	public final static ImageIcon getViewPermissionIcon() {
+		return new javax.swing.ImageIcon(GTSLookAndFeel.class.getResource("/shield_go.png"));
+	}
 
 }

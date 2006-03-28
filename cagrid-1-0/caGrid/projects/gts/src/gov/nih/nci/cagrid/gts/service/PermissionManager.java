@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.gts.service;
 import gov.nih.nci.cagrid.gts.bean.Permission;
 import gov.nih.nci.cagrid.gts.bean.PermissionFilter;
 import gov.nih.nci.cagrid.gts.bean.Role;
+import gov.nih.nci.cagrid.gts.common.Constants;
 import gov.nih.nci.cagrid.gts.common.Database;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
@@ -34,7 +35,7 @@ public class PermissionManager {
 
 	private Database db;
 
-	private String ALL_TRUST_AUTHORITIES = "*";
+	
 
 
 	public PermissionManager(Database db) {
@@ -49,7 +50,7 @@ public class PermissionManager {
 		// permission is valid
 		this.buildDatabase();
 		if (p.getTrustedAuthorityName() == null) {
-			p.setTrustedAuthorityName(ALL_TRUST_AUTHORITIES);
+			p.setTrustedAuthorityName(Constants.ALL_TRUST_AUTHORITIES);
 		}
 
 		if (p.getGridIdentity() == null) {
@@ -64,13 +65,13 @@ public class PermissionManager {
 			throw fault;
 		}
 
-		if ((p.getTrustedAuthorityName().equals(ALL_TRUST_AUTHORITIES))
+		if ((p.getTrustedAuthorityName().equals(Constants.ALL_TRUST_AUTHORITIES))
 			&& (!p.getRole().equals(Role.TrustServiceAdmin))) {
 			IllegalPermissionFault fault = new IllegalPermissionFault();
 			fault.setFaultString("The permission " + formatPermission(p) + " must specify a specific Trust Authority.");
 			throw fault;
 		}
-		if ((!p.getTrustedAuthorityName().equals(ALL_TRUST_AUTHORITIES))
+		if ((!p.getTrustedAuthorityName().equals(Constants.ALL_TRUST_AUTHORITIES))
 			&& (p.getRole().equals(Role.TrustServiceAdmin))) {
 			IllegalPermissionFault fault = new IllegalPermissionFault();
 			fault.setFaultString("The permission " + formatPermission(p)
@@ -87,7 +88,7 @@ public class PermissionManager {
 		StringBuffer insert = new StringBuffer();
 		try {
 			insert.append("INSERT INTO " + PERMISSIONS_TABLE + " SET GRID_IDENTITY='" + p.getGridIdentity()
-				+ "',ROLE='" + p.getRole().getValue() + "',TRUSTED_AUTHORITY='" + p.getTrustedAuthorityName() + "'");
+				+ "',ROLE='" + p.getRole().getValue() + "',PERMISSION='" + p.getTrustedAuthorityName() + "'");
 
 			db.update(insert.toString());
 
@@ -111,7 +112,7 @@ public class PermissionManager {
 		}
 
 		String sql = "delete from " + PERMISSIONS_TABLE + " where GRID_IDENTITY='" + p.getGridIdentity()
-			+ "' AND ROLE='" + p.getRole().getValue() + "' AND TRUSTED_AUTHORITY='" + p.getTrustedAuthorityName() + "'";
+			+ "' AND ROLE='" + p.getRole().getValue() + "' AND PERMISSION='" + p.getTrustedAuthorityName() + "'";
 		try {
 			db.update(sql);
 		} catch (Exception e) {
@@ -128,7 +129,7 @@ public class PermissionManager {
 
 	public synchronized boolean doesPermissionExist(Permission p) throws GTSInternalFault {
 		String sql = "select count(*) from " + PERMISSIONS_TABLE + " where GRID_IDENTITY='" + p.getGridIdentity()
-			+ "' AND ROLE='" + p.getRole().getValue() + "' AND TRUSTED_AUTHORITY='" + p.getTrustedAuthorityName() + "'";
+			+ "' AND ROLE='" + p.getRole().getValue() + "' AND PERMISSION='" + p.getTrustedAuthorityName() + "'";
 		Connection c = null;
 		boolean exists = false;
 		try {
@@ -169,7 +170,7 @@ public class PermissionManager {
 			sql.append("select count(*) from " + PERMISSIONS_TABLE);
 			sql.append(" WHERE GRID_IDENTITY ='" + gridIdentity + "' AND ");
 			sql.append(" ROLE='" + Role.TrustServiceAdmin + "' AND");
-			sql.append(" TRUSTED_AUTHORITY = '" + ALL_TRUST_AUTHORITIES + "'");
+			sql.append(" PERMISSION = '" + Constants.ALL_TRUST_AUTHORITIES + "'");
 
 			ResultSet rs = s.executeQuery(sql.toString());
 			if (rs.next()) {
@@ -225,7 +226,7 @@ public class PermissionManager {
 				if (filter.getTrustedAuthorityName() != null) {
 					sql = appendWhereOrAnd(firstAppended, sql);
 					firstAppended = true;
-					sql.append(" TRUSTED_AUTHORITY LIKE '%" + filter.getTrustedAuthorityName() + "%'");
+					sql.append(" PERMISSION LIKE '%" + filter.getTrustedAuthorityName() + "%'");
 				}
 
 			}
@@ -235,7 +236,7 @@ public class PermissionManager {
 				Permission p = new Permission();
 				p.setGridIdentity(rs.getString("GRID_IDENTITY"));
 				p.setRole(Role.fromValue(rs.getString("ROLE")));
-				p.setTrustedAuthorityName(clean(rs.getString("TRUSTED_AUTHORITY")));
+				p.setTrustedAuthorityName(clean(rs.getString("PERMISSION")));
 				permissions.add(p);
 			}
 			rs.close();
@@ -293,7 +294,7 @@ public class PermissionManager {
 			db.createDatabaseIfNeeded();
 			if (!this.db.tableExists(PERMISSIONS_TABLE)) {
 				String trust = "CREATE TABLE " + PERMISSIONS_TABLE + " (" + "GRID_IDENTITY VARCHAR(255) NOT NULL,"
-					+ "ROLE VARCHAR(50) NOT NULL," + "TRUSTED_AUTHORITY VARCHAR(255) NOT NULL,"
+					+ "ROLE VARCHAR(50) NOT NULL," + "PERMISSION VARCHAR(255) NOT NULL,"
 					+ "INDEX document_index (GRID_IDENTITY));";
 				db.update(trust);
 			}
