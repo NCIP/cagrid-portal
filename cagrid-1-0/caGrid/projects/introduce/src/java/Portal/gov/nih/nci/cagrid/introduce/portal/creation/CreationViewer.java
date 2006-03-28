@@ -530,31 +530,11 @@ public class CreationViewer extends GridPortalComponent {
 	private JComboBox getServiceStyleSeletor() {
 		if (serviceStyleSeletor == null) {
 			serviceStyleSeletor = new JComboBox();
-			// serviceStyleSeletor.setEnabled(false);
-			// serviceStyleSeletor.addItem("NONE");
+			serviceStyleSeletor.setEnabled(false);
+			serviceStyleSeletor.addItem("NONE");
 			serviceStyleSeletor.addItem("ANALYTICAL");
 			serviceStyleSeletor.addItem("DATA");
-			// serviceStyleSeletor.addItem("CUSTOM");
-			/*
-			serviceStyleSeletor.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if (serviceStyleSeletor.getSelectedItem().equals("CUSTOM")) {
-						serviceTemplateJLabel.setEnabled(true);
-						serviceTemplateButton.setEnabled(true);
-					} else {
-						serviceTemplateJLabel.setEnabled(false);
-						serviceTemplateButton.setEnabled(false);
-						if (serviceStyleSeletor.getSelectedItem().equals("ANALYTICAL")) {
-							serviceTemplate.setText("templates" + File.separator + "analyticalIntroduce.xml");
-						} else if (serviceStyleSeletor.getSelectedItem().equals("DATA")) {
-							serviceTemplate.setText("templates" + File.separator + "dataIntroduce.xml");
-						} else {
-							serviceTemplate.setText("");
-						}
-					}
-				}
-			});
-			*/
+			serviceStyleSeletor.addItem("CUSTOM");
 		}
 		return serviceStyleSeletor;
 	}
