@@ -38,6 +38,10 @@
 	<!-- primary source directory -->
 	<property name="src.dir" location="${basedir}/src"/>
 	
+	<!-- libraries -->
+	<property name="lib.dir" location="${basedir}/lib"/>
+	<property name="ext.lib.dir" location="${basedir}/ext/lib"/>
+	
 	<!-- creates output directories -->
     <target name="init">
         <mkdir dir="${build.dir}" />
@@ -96,6 +100,12 @@
 		<javac srcdir="${src.dir}" destdir="${build.dest}" debug="${java.debug}">
 			<classpath>
 				<fileset dir="${globus.dir}/lib">
+					<include name="*.jar"/>
+				</fileset>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar"/>
+				</fileset>
+				<fileset dir="${ext.lib.dir}">
 					<include name="*.jar"/>
 				</fileset>
 				<pathelement location="${stubs.dest}"/>
