@@ -1,10 +1,14 @@
 package gov.nih.nci.cagrid.gts.portal;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
+import gov.nih.nci.cagrid.gts.bean.Permission;
+import gov.nih.nci.cagrid.gts.bean.PermissionFilter;
 import gov.nih.nci.cagrid.gts.bean.Role;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
+import gov.nih.nci.cagrid.gts.client.GTSAdminClient;
 import gov.nih.nci.cagrid.gts.client.GTSSearchClient;
 import gov.nih.nci.cagrid.gts.common.Constants;
 
@@ -37,7 +41,7 @@ import org.projectmobius.portal.PortalResourceManager;
  *          langella Exp $
  */
 public class PermissionManagerWindow extends GridPortalBaseFrame {
-	
+
 	public final static String ANY = "Any";
 
 	private javax.swing.JPanel jContentPane = null;
@@ -433,8 +437,26 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 
 		try {
 			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
+			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			PermissionFilter f = new PermissionFilter();
+			f.setGridIdentity(Utils.clean(this.gridIdentity.getText()));
+			String ta = (String) trustedAuthorities.getSelectedItem();
+			if (!ta.equals(ANY)) {
+				f.setTrustedAuthorityName(ta);
+			}
 
+			if (!role.getSelectedItem().equals(ANY)) {
+				f.setRole((Role) role.getSelectedItem());
+			}
+			GTSAdminClient client = new GTSAdminClient(service, proxy);
+			Permission[] perms = client.findPermissions(f);
 			int length = 0;
+			if (perms != null) {
+				length = perms.length;
+				for (int i = 0; i < perms.length; i++) {
+					this.permissionsTable.addPermission(perms[i]);
+				}
+			}
 			this.updateProgress(false, "Completed [Found " + length + " Permission(s)]");
 
 		} catch (Exception e) {
@@ -470,7 +492,7 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 
 				}
 			});
-			
+
 		}
 		return service;
 	}
@@ -568,8 +590,7 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 
 	private void removePermission() {
 		try {
-			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+
 			/*
 			 * GTSAdminClient client = new GTSAdminClient(service, proxy);
 			 * client.removeTrustedAuthority(this.getPermissionsTable().getSelectedTrustedAuthority()
@@ -701,7 +722,7 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 				this.trustedAuthorities.removeAllItems();
 				this.trustedAuthorities.addItem(ANY);
 				this.trustedAuthorities.addItem(Constants.ALL_TRUST_AUTHORITIES);
-				
+
 				int length = 0;
 				if (tas != null) {
 					length = tas.length;
@@ -718,21 +739,21 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 			}
 		}
 	}
-	
-	
+
+
 	private synchronized void syncRoles() {
 		this.role.removeAllItems();
-		String ta = (String)this.trustedAuthorities.getSelectedItem();
-		if(ta.equals(ANY)){
+		String ta = (String) this.trustedAuthorities.getSelectedItem();
+		if (ta.equals(ANY)) {
 			role.addItem(ANY);
 			role.addItem(Role.TrustServiceAdmin);
 			role.addItem(Role.TrustAuthorityManager);
-		}else if(ta.equals(Constants.ALL_TRUST_AUTHORITIES)){
+		} else if (ta.equals(Constants.ALL_TRUST_AUTHORITIES)) {
 			role.addItem(ANY);
 			role.addItem(Role.TrustServiceAdmin);
-		}else{
+		} else {
 			role.addItem(ANY);
-			role.addItem(Role.TrustAuthorityManager);	
+			role.addItem(Role.TrustAuthorityManager);
 		}
 	}
 }

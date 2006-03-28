@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.gts.client;
 
+import gov.nih.nci.cagrid.gts.bean.Permission;
+import gov.nih.nci.cagrid.gts.bean.PermissionFilter;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault;
@@ -39,11 +41,17 @@ public class GTSAdminClient {
 		IllegalTrustedAuthorityFault, InvalidTrustedAuthorityFault, PermissionDeniedFault {
 		client.updateTrustedAuthority(ta);
 	}
-	
-	public void removeTrustedAuthority(java.lang.String trustedAuthorityName) throws RemoteException,
-	GTSInternalFault, InvalidTrustedAuthorityFault,
-	PermissionDeniedFault {
+
+
+	public void removeTrustedAuthority(java.lang.String trustedAuthorityName) throws RemoteException, GTSInternalFault,
+		InvalidTrustedAuthorityFault, PermissionDeniedFault {
 		client.removeTrustedAuthority(trustedAuthorityName);
+	}
+
+
+	public Permission[] findPermissions(PermissionFilter f) throws RemoteException, GTSInternalFault,
+		PermissionDeniedFault {
+		return client.findPermissions(f);
 	}
 
 }
