@@ -78,7 +78,7 @@
 	</target>
 	
 	<!-- make deployment configured gar -->
-	<target name="createDeploymentGar" depends="checkGlobus, checkTomcat">
+	<target name="createDeploymentGar" depends="checkGlobus, checkTomcat, all">
 		<copy todir="${build.lib.dir}">
 			<fileset dir="${basedir}/lib">
 				<include name="*.jar" />
@@ -116,7 +116,7 @@
 	
 	
 	<!-- deploy a gar to globus -->
-	<target name="deployGlobus" depends="checkGlobus, checkTomcat, createDeploymentGar" description="Deploys a gar to GLOBUS_LOCATION">
+	<target name="deployGlobus" depends="checkGlobus, checkTomcat, all, createDeploymentGar" description="Deploys a gar to GLOBUS_LOCATION">
 		<echo message="Deploying server to Globus Container" />
 		
 		<java classname="org.globus.bootstrap.AntBootstrap" fork="yes" failonerror="true">

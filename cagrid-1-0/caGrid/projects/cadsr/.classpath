@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test/src"/>
 	<classpathentry kind="src" path="build/stubs-CaDSRService/src"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/log4j-1.2.8.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commons-logging.jar"/>

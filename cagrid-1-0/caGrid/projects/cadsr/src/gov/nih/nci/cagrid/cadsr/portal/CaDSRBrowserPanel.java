@@ -1,0 +1,332 @@
+package gov.nih.nci.cagrid.cadsr.portal;
+
+import gov.nih.nci.cadsr.umlproject.domain.ws.Project;
+import gov.nih.nci.cadsr.umlproject.domain.ws.UMLClassMetadata;
+import gov.nih.nci.cadsr.umlproject.domain.ws.UMLPackageMetadata;
+import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
+import gov.nih.nci.cagrid.cadsr.common.CaDSRServiceI;
+
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.io.File;
+import java.rmi.RemoteException;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+
+public class CaDSRBrowserPanel extends JPanel {
+
+	private JPanel mainPanel = null;
+	private JPanel queryPanel = null;
+	private JButton queryButton = null;
+	protected File schemaDir;
+	private JComboBox projectComboBox = null;
+	private JComboBox packageComboBox = null;
+	private JPanel projectsPanel = null;
+	private JLabel projectLabel = null;
+	private JTextField cadsr = null;
+	private JLabel cadsrAddressLabel = null;
+	private JLabel packageLabel = null;
+	private JComboBox classComboBox = null;
+	private JLabel classLabel = null;
+
+
+	/**
+	 * This method initializes
+	 */
+	public CaDSRBrowserPanel() {
+		super();
+		initialize();
+	}
+
+
+	/**
+	 * This method initializes this
+	 */
+	private void initialize() {
+		this.add(getMainPanel(), null);
+
+	}
+
+
+	/**
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	public JPanel getMainPanel() {
+		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints = new GridBagConstraints();
+			gridBagConstraints.gridx = 0;
+			gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints.weightx = 1.0D;
+			gridBagConstraints.weighty = 1.0D;
+			gridBagConstraints.gridy = 1;
+			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+			mainPanel = new JPanel();
+			mainPanel.setLayout(new GridBagLayout());
+			gridBagConstraints1.gridx = 0;
+			gridBagConstraints1.gridy = 0;
+			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints1.weightx = 0.0D;
+			gridBagConstraints1.weighty = 0.0D;
+			mainPanel.add(getQueryPanel(), gridBagConstraints1);
+			mainPanel.add(getProjectsPanel(), gridBagConstraints);
+		}
+		return mainPanel;
+	}
+
+
+	/**
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	public JPanel getQueryPanel() {
+		if (queryPanel == null) {
+			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+			gridBagConstraints6.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints6.gridy = 0;
+			gridBagConstraints6.gridx = 0;
+			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+			gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints5.gridx = 1;
+			gridBagConstraints5.gridy = 0;
+			gridBagConstraints5.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints5.weightx = 1.0;
+			cadsrAddressLabel = new JLabel();
+			cadsrAddressLabel.setText("caDSR");
+			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+			gridBagConstraints4.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints4.gridy = 1;
+			gridBagConstraints4.anchor = java.awt.GridBagConstraints.CENTER;
+			gridBagConstraints4.gridwidth = 2;
+			gridBagConstraints4.gridx = 0;
+			queryPanel = new JPanel();
+			queryPanel.setLayout(new GridBagLayout());
+			queryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Discover Data Types",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+			queryPanel.add(getQueryButton(), gridBagConstraints4);
+			queryPanel.add(cadsrAddressLabel, gridBagConstraints6);
+			queryPanel.add(getCadsr(), gridBagConstraints5);
+		}
+		return queryPanel;
+	}
+
+
+	public void discoverFromCaDSR() {
+		CaDSRServiceI cadsr = new CaDSRServiceClient(getCadsr().getText());
+		try {
+			getProjectComboBox().removeAllItems();
+			Project[] projects = cadsr.findAllProjects();
+			if (projects != null) {
+				for (int i = 0; i < projects.length; i++) {
+					getProjectComboBox().addItem(projects[i]);
+				}
+			}
+
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			JOptionPane.showMessageDialog(this, "Error communicating with caDSR; please check the caDSR URL!");
+		}
+	}
+
+
+	/**
+	 * This method initializes jButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	public JButton getQueryButton() {
+		if (queryButton == null) {
+			queryButton = new JButton("Refresh from caDSR Service");
+			queryButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					discoverFromCaDSR();
+				}
+			});
+		}
+		return queryButton;
+	}
+
+
+	/**
+	 * This method initializes jComboBox
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
+	public JComboBox getProjectComboBox() {
+		if (projectComboBox == null) {
+			projectComboBox = new JComboBox();
+			projectComboBox.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					if (projectComboBox.getSelectedItem() != null) {
+						getPackageComboBox().removeAllItems();
+						CaDSRServiceI cadsr = new CaDSRServiceClient(getCadsr().getText());
+						try {
+							UMLPackageMetadata[] metadatas = cadsr.findPackagesInProject((Project) projectComboBox
+								.getSelectedItem());
+							if (metadatas != null) {
+								for (int i = 0; i < metadatas.length; i++) {
+									getPackageComboBox().addItem(metadatas[i]);
+								}
+							}
+						} catch (RemoteException e1) {
+							e1.printStackTrace();
+							JOptionPane.showMessageDialog(CaDSRBrowserPanel.this,
+								"Error communicating with caDSR; please check the caDSR URL!");
+						}
+					}
+				}
+			});
+		}
+		return projectComboBox;
+	}
+
+
+	/**
+	 * This method initializes jComboBox
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
+	public JComboBox getPackageComboBox() {
+		if (packageComboBox == null) {
+			packageComboBox = new JComboBox();
+			packageComboBox.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					if (getPackageComboBox().getSelectedItem() != null) {
+						getClassComboBox().removeAllItems();
+						CaDSRServiceI cadsr = new CaDSRServiceClient(getCadsr().getText());
+						try {
+							UMLClassMetadata[] metadatas = cadsr
+								.findClassesInPackage((UMLPackageMetadata) getPackageComboBox().getSelectedItem());
+							if (metadatas != null) {
+								for (int i = 0; i < metadatas.length; i++) {
+									getClassComboBox().addItem(metadatas[i]);
+								}
+							}
+						} catch (RemoteException e1) {
+							e1.printStackTrace();
+							JOptionPane.showMessageDialog(CaDSRBrowserPanel.this,
+								"Error communicating with caDSR; please check the caDSR URL!");
+						}
+
+					}
+				}
+			});
+		}
+		return packageComboBox;
+	}
+
+
+	/**
+	 * This method initializes projectsPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	public JPanel getProjectsPanel() {
+		if (projectsPanel == null) {
+			packageLabel = new JLabel();
+			packageLabel.setText("Package:");
+
+			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.gridx = 0;
+			gridBagConstraints3.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints3.gridy = 2;
+			classLabel = new JLabel();
+			classLabel.setText("Class:");
+			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints2.gridx = 1;
+			gridBagConstraints2.gridy = 2;
+			gridBagConstraints2.weightx = 1.0;
+			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints10.gridy = 1;
+			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints10.gridx = 0;
+			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
+			gridBagConstraints9.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints9.gridy = 0;
+			gridBagConstraints9.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints9.gridx = 0;
+			projectLabel = new JLabel();
+			projectLabel.setText("Project:");
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints8.gridy = 1;
+			gridBagConstraints8.weightx = 1.0;
+			gridBagConstraints8.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints8.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints8.weighty = 1.0D;
+			gridBagConstraints8.gridx = 1;
+			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints7.gridy = 0;
+			gridBagConstraints7.weightx = 1.0;
+			gridBagConstraints7.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints7.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints7.weighty = 1.0D;
+			gridBagConstraints7.gridx = 1;
+			projectsPanel = new JPanel();
+			projectsPanel.setLayout(new GridBagLayout());
+			projectsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Data Type",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+			projectsPanel.add(getProjectComboBox(), gridBagConstraints7);
+			projectsPanel.add(projectLabel, gridBagConstraints9);
+			projectsPanel.add(getPackageComboBox(), gridBagConstraints8);
+			projectsPanel.add(packageLabel, gridBagConstraints10);
+			projectsPanel.add(getClassComboBox(), gridBagConstraints2);
+			projectsPanel.add(classLabel, gridBagConstraints3);
+		}
+		return projectsPanel;
+	}
+
+
+	/**
+	 * This method initializes cadsr
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	public JTextField getCadsr() {
+		if (cadsr == null) {
+			cadsr = new JTextField();
+			// TODO: pull from some property
+			cadsr.setText("http://localhost:8080/wsrf/services/cagrid/CaDSRService");
+		}
+		return cadsr;
+	}
+
+
+	/**
+	 * This method initializes classComboBox
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
+	private JComboBox getClassComboBox() {
+		if (classComboBox == null) {
+			classComboBox = new JComboBox();
+		}
+		return classComboBox;
+	}
+
+
+	public static void main(String[] args) {
+		CaDSRBrowserPanel panel = new CaDSRBrowserPanel();
+		JFrame frame = new JFrame();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().add(panel);
+		frame.pack();
+		frame.setVisible(true);
+	}
+}
