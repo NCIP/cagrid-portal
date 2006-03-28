@@ -3,11 +3,13 @@ package gov.nih.nci.cagrid.gts.client;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault;
+import gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault;
 
 import java.rmi.RemoteException;
 
 import org.globus.gsi.GlobusCredential;
+
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -21,14 +23,21 @@ public class GTSAdminClient {
 
 	GridTrustServiceClient client;
 
+
 	public GTSAdminClient(String url, GlobusCredential proxy) {
 		this.client = new GridTrustServiceClient(url, proxy);
 	}
 
-	public TrustedAuthority addTrustedAuthority(TrustedAuthority ta)
-			throws RemoteException, GTSInternalFault,
-			IllegalTrustedAuthorityFault, PermissionDeniedFault {
+
+	public TrustedAuthority addTrustedAuthority(TrustedAuthority ta) throws RemoteException, GTSInternalFault,
+		IllegalTrustedAuthorityFault, PermissionDeniedFault {
 		return client.addTrustedAuthority(ta);
+	}
+
+
+	public void updateTrustedAuthority(TrustedAuthority ta) throws RemoteException, GTSInternalFault,
+		IllegalTrustedAuthorityFault, InvalidTrustedAuthorityFault, PermissionDeniedFault {
+		client.updateTrustedAuthority(ta);
 	}
 
 }

@@ -79,6 +79,34 @@ public class GridTrustServiceClient implements GridTrustServiceI {
 	}
 
 
+	public void updateTrustedAuthority(gov.nih.nci.cagrid.gts.bean.TrustedAuthority ta) throws RemoteException,
+		gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault,
+		gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+		GridTrustServicePortType port = this.getPortType();
+		org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
+
+		stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT,
+			org.globus.wsrf.security.Constants.ENCRYPTION);
+		if (proxy != null) {
+			try {
+				org.ietf.jgss.GSSCredential gss = new org.globus.gsi.gssapi.GlobusGSSCredentialImpl(proxy,
+					org.ietf.jgss.GSSCredential.INITIATE_AND_ACCEPT);
+				stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_CREDENTIALS, gss);
+			} catch (org.ietf.jgss.GSSException ex) {
+				throw new RemoteException(ex.getMessage());
+			}
+		}
+		stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION,
+			org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());
+		gov.nih.nci.cagrid.gts.stubs.UpdateTrustedAuthority params = new gov.nih.nci.cagrid.gts.stubs.UpdateTrustedAuthority();
+		gov.nih.nci.cagrid.gts.stubs.UpdateTrustedAuthorityTa taContainer = new gov.nih.nci.cagrid.gts.stubs.UpdateTrustedAuthorityTa();
+		taContainer.setTrustedAuthority(ta);
+		params.setTa(taContainer);
+		port.updateTrustedAuthority(params);
+
+	}
+
+
 	public gov.nih.nci.cagrid.gts.bean.TrustedAuthority addTrustedAuthority(
 		gov.nih.nci.cagrid.gts.bean.TrustedAuthority ta) throws RemoteException,
 		gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault,
@@ -117,7 +145,6 @@ public class GridTrustServiceClient implements GridTrustServiceI {
 
 		stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT,
 			org.globus.wsrf.security.Constants.ENCRYPTION);
-
 		stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS, Boolean.TRUE);
 		stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION,
 			org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());
