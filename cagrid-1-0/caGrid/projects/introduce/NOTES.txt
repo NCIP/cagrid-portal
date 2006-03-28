@@ -1,8 +1,5 @@
 To Do:
 
-icons from here: http://www.famfamfam.com/lab/icons/
-and http://tango-project.org/Tango_Icon_Gallery
-
 type browser issues:
 -you can and shouldn't be able to remove the XML schema schema
 -it shouldn't let you remove schema types that are being used by inputs,outputs,or metadata
