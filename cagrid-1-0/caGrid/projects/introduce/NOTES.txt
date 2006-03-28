@@ -1,12 +1,12 @@
 To Do:
 
 type browser issues:
--you can and shouldn't be able to remove the XML schema schema
+-(DONE)you can and shouldn't be able to remove the XML schema schema
 -it shouldn't let you remove schema types that are being used by inputs,outputs,or metadata
--it lets you set the package name for XML schema schema, and shouldn't
--it lets you set the location for XML schema schema, and shouldn't
--it lets you set the class name for XML schema types; does that work?
--does it really support editing the location of a schema? if it does, it needs to move the file that was pulled down from the gme (otherwise it wont exist)
+-(DONE)it lets you set the package name for XML schema schema, and shouldn't
+-(DONE)it lets you set the location for XML schema schema, and shouldn't
+-(DONE)it lets you set the class name for XML schema types; does that work?
+-(DONE)does it really support editing the location of a schema? if it does, it needs to move the file that was pulled down from the gme (otherwise it wont exist)
 
 you should be able to open up an empty introduce.xml document (with no elements), currently null pointers happen in methods and types
 

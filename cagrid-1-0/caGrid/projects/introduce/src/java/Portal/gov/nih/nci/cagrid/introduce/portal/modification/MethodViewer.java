@@ -122,8 +122,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JTextField exceptionEditText = null;
 
-	private JButton exceptionModifyButton = null;
-
 	private JPanel inputNamespacesPanel = null;
 
 	private JScrollPane inputNamespaceScrollPane = null;
@@ -740,11 +738,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getExceptionInputButtonPanel() {
 		if (exceptionInputButtonPanel == null) {
-			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
-			gridBagConstraints18.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints18.gridx = 0;
-			gridBagConstraints18.gridy = 3;
-			gridBagConstraints18.insets = new java.awt.Insets(2, 2, 2, 2);
 			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
 			gridBagConstraints15.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints15.gridy = 0;
@@ -765,7 +758,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 			exceptionInputButtonPanel.add(getRemoveExceptionButton(), gridBagConstraints4);
 			exceptionInputButtonPanel.add(getAddExceptionButton(), gridBagConstraints5);
 			exceptionInputButtonPanel.add(getExceptionEditText(), gridBagConstraints15);
-			exceptionInputButtonPanel.add(getExceptionModifyButton(), gridBagConstraints18);
 		}
 		return exceptionInputButtonPanel;
 	}
@@ -814,31 +806,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 			exceptionEditText = new JTextField();
 		}
 		return exceptionEditText;
-	}
-
-
-	/**
-	 * This method initializes exceptionModifyButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getExceptionModifyButton() {
-		if (exceptionModifyButton == null) {
-			exceptionModifyButton = new JButton();
-			exceptionModifyButton.setText("Modify");
-			exceptionModifyButton.setIcon(IntroduceLookAndFeel.getModifyIcon());
-			exceptionModifyButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					try {
-						getExceptionsTable().modifySelectedRow(getExceptionEditText().getText());
-					} catch (Exception ex) {
-						PortalUtils.showErrorMessage("Please select an exception to Modify");
-					}
-					paint(getGraphics());
-				}
-			});
-		}
-		return exceptionModifyButton;
 	}
 
 
