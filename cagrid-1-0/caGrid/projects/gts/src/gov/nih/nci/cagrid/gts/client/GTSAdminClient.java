@@ -39,5 +39,11 @@ public class GTSAdminClient {
 		IllegalTrustedAuthorityFault, InvalidTrustedAuthorityFault, PermissionDeniedFault {
 		client.updateTrustedAuthority(ta);
 	}
+	
+	public void removeTrustedAuthority(java.lang.String trustedAuthorityName) throws RemoteException,
+	GTSInternalFault, InvalidTrustedAuthorityFault,
+	PermissionDeniedFault {
+		client.removeTrustedAuthority(trustedAuthorityName);
+	}
 
 }

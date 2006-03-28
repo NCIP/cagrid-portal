@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
+import gov.nih.nci.cagrid.gts.client.GTSAdminClient;
 import gov.nih.nci.cagrid.gts.client.GTSSearchClient;
 
 import java.awt.GridBagConstraints;
@@ -560,6 +561,11 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 		try {
 			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GTSAdminClient client = new GTSAdminClient(service, proxy);
+			client.removeTrustedAuthority(this.getTrustedAuthorityTable().getSelectedTrustedAuthority()
+				.getTrustedAuthorityName());
+			this.getTrustedAuthorityTable().removeSelectedTrustedAuthority();
+
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
 		}
