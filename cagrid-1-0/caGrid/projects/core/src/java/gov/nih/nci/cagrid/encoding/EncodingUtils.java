@@ -24,6 +24,8 @@ public class EncodingUtils {
 
 
 	public static Mapping getMapping(MessageContext context) {
+		long startTime=System.currentTimeMillis();
+		
 		EntityResolver resolver = new EntityResolver() {
 			public InputSource resolveEntity(String publicId, String systemId) {
 				if (publicId.equals(CASTOR_MAPPING_DTD_ENTITY)) {
@@ -67,6 +69,9 @@ public class EncodingUtils {
 			LOG.error("Problem with mapping!", e);
 		}
 
+		long duration=System.currentTimeMillis()- startTime;
+		LOG.debug("Time to load mapping file:"+duration+" ms.");
+		
 		return mapping;
 	}
 }

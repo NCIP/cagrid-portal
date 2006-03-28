@@ -26,6 +26,7 @@ public class SDKSerializer implements Serializer {
 
 	public void serialize(QName name, Attributes attributes, Object value, SerializationContext context)
 		throws IOException {
+		long startTime = System.currentTimeMillis();
 
 		AxisContentHandler hand = new AxisContentHandler(context);
 		Marshaller marshaller = new Marshaller(hand);
@@ -49,6 +50,8 @@ public class SDKSerializer implements Serializer {
 				"Problem validating castor marshalling; message doesn't comply with the associated XML schema."
 					+ e.getMessage());
 		}
+		long duration = System.currentTimeMillis() - startTime;
+		LOG.debug("Total time to serialize(" + name.getLocalPart() + "):" + duration + " ms.");
 	}
 
 

@@ -30,6 +30,7 @@ public class SDKDeserializer extends DeserializerImpl implements Deserializer {
 
 
 	public void onEndElement(String namespace, String localName, DeserializationContext context) {
+		long startTime=System.currentTimeMillis();
 		Unmarshaller unmarshall = new Unmarshaller(javaType);
 
 		try {
@@ -59,5 +60,7 @@ public class SDKDeserializer extends DeserializerImpl implements Deserializer {
 				LOG.error("XML does not match schema!", e);
 			}
 		}
+		long duration=System.currentTimeMillis()- startTime;
+		LOG.debug("Total time to deserialize("+localName+"):"+duration+" ms.");
 	}
 }
