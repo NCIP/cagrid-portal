@@ -45,7 +45,7 @@
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
-			<xs:element name="MethodSecurity" minOccurs="0" maxOccurs="1" type="security:MethodSecurity"/>
+			<xs:element ref="security:MethodSecurity" minOccurs="0" maxOccurs="1" />
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 	</xs:complexType>

@@ -17,6 +17,7 @@
 		</xs:sequence>
 	</xs:complexType>
 	
+	<xs:element name="MethodSecurity" type="MethodSecurity"></xs:element>
 	<xs:complexType name="MethodSecurity">
 		<xs:sequence>
 			<xs:element name="SecuritySetting" minOccurs="1" maxOccurs="1" type="SecuritySetting"/>
