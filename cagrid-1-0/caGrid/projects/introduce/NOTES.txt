@@ -1,10 +1,5 @@
 To Do:
 
-MyStringType element problem (Scott and Mike know about it)
-
-icons from here: http://www.famfamfam.com/lab/icons/
-and http://tango-project.org/Tango_Icon_Gallery
-
 type browser issues:
 -you can and shouldn't be able to remove the XML schema schema
 -it shouldn't let you remove schema types that are being used by inputs,outputs,or metadata
@@ -28,20 +23,20 @@ settings.  Use a proxy created from Dorian in the credentials section.  Stand up
 
 Need to fix commontools to read some preference to set the rule to use for namespace mapping, right now its hardcoded as below:
 	//TODO: where should this mapperClassname preference be set
-	String mapperClassname = "gov.nih.nci.cagrid.common.CaBIGNamespaceToPackageMapper";
-
-probably need to separate out the namespacetopackage mapping definitions from each output/input/metadata as it is now, as its really a service level thing
-we need a separate tab to define the mappings; this will probably be needed for custom serialization too
+	String mapperClassname = "gov.nih.nci.cagrid.common.CaBIGNames2paceToPackageMapper";
 
 need a way to generate XSD and beanmappers for existing object models that want to use default de/serialization
-
-is client-config.wsdd really needed in the root dir?  can't you just add GLOBUS_LOCATION to your classpath
 
 Need to add more complex tests to the system test for adding complex methods with faults etc.
 
 Security configuration (STEVE)
 
 ============================ D O N E ================================================================
+(DONE)probably need to separate out the namespacetopackage mapping definitions from each output/input/metadata as it is now, as its really a service level thing
+	-we need a separate tab to define the mappings; this will probably be needed for custom serialization too
+
+(DONE - its fine, as we need to write to it for type mappings) is client-config.wsdd really needed in the root dir?  can't you just add GLOBUS_LOCATION to your classpath
+
 (DONE) Method modification window needs an overhaul....
 
 (DONE) The GME Browser screen does not scroll correctly.
@@ -370,4 +365,10 @@ Example:
 
 6) Add Service Side Support for Rejecting Limited Proxies.
 
+
+=======================================================
+ METADATA STUFF
+=======================================================
+icons from here: http://www.famfamfam.com/lab/icons/
+and http://tango-project.org/Tango_Icon_Gallery
 
