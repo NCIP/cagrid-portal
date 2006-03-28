@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="gme://gov.nih.nci.cagrid.introduce/1/Extension"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="gme://gov.nih.nci.cagrid.introduce/1/Extension" elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+	<xs:element name="Extensions" type="ExtensionsType"></xs:element>
+	<xs:complexType name="ExtensionsType">
+		<xs:sequence>
+			<xs:element ref="Extension" minOccurs="0" maxOccurs="unbounded"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Extension" type="ExtensionType"></xs:element>
+	<xs:element name="ExtensionDescription" type="ExtensionType"></xs:element>
+	<xs:complexType name="ExtensionDescriptionType">
+		<xs:sequence>
+			<xs:element name="CreationPreProcessor" type="xs:string" minOccurs="0" maxOccurs="1" />
+			<xs:element name="CreationPostProcessor" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="CodegenPreProcessor" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="CodegenPostProcessor" type="xs:string" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+	</xs:complexType>
+	
+	<xs:complexType name="ExtensionType">
+		<xs:sequence>
+			<xs:element name="ExtensionData">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:any ></xs:any>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+	</xs:complexType>
+</xs:schema>
