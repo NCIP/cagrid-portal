@@ -120,8 +120,7 @@ public class TestClient {
 						.println("Scenario 1: Using basic search.  Retrieving Genes based on symbol and using Gene class as the Target.");
 					Gene gene = new Gene();
 					gene.setSymbol("brca*"); // searching for all gene’s
-					// whose symbol start with
-					// brac*”;
+					// whose symbol start withbrac*”;
 
 					try {
 						List resultList = appService.search(Gene.class, gene);
