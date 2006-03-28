@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions name="Response" xmlns="http://schemas.xmlsoap.org/wsdl/" >
-	<import location="2_gov.nih.nci.cagrid.CQLResultSet.xsd"/>
+	<import location="3_gov.nih.nci.cagrid.CQLResultSet.xsd"/>
 </definitions>
 

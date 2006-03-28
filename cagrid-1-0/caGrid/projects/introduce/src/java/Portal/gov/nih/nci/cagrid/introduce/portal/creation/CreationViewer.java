@@ -56,7 +56,7 @@ import org.projectmobius.portal.PortalResourceManager;
 public class CreationViewer extends GridPortalComponent {
 
 	public static final String SCHEMA_DIR = "schema";
-	public static final String CQL_RESULT_SET_SCHEMA = "2_gov.nih.nci.cagrid.CQLResultSet.xsd";
+	public static final String CQL_RESULT_SET_SCHEMA = "3_gov.nih.nci.cagrid.CQLResultSet.xsd";
 	public static final String CQL_QUERY_SCHEMA = "1_gov.nih.nci.cagrid.CQLQuery.xsd";
 
 	private static String DEFAULT_NAME = "HelloWorld";
