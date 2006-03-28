@@ -30,13 +30,13 @@ public class PermissionBootstapper {
 	}
 
 
-	public void addAdminUser(String gridIdentity) throws GTSInternalFault,IllegalPermissionFault{
+	public void addAdminUser(String gridIdentity) throws GTSInternalFault, IllegalPermissionFault {
 		Permission p = new Permission();
 		p.setGridIdentity(gridIdentity);
 		p.setRole(Role.TrustServiceAdmin);
 		pm.addPermission(p);
 	}
-	
+
 
 	public static void usage() {
 		System.err.println(PermissionBootstapper.class.getName() + " Usage:");
@@ -55,11 +55,11 @@ public class PermissionBootstapper {
 			SimpleResourceManager srm = new SimpleResourceManager(args[0]);
 			conf = (GTSConfiguration) srm.getResource(GTSConfiguration.RESOURCE);
 		} catch (Exception e) {
-			System.out.println("Error loading the GTS config file, "+args[0]);
+			System.out.println("Error loading the GTS config file, " + args[0]);
 			e.printStackTrace();
 			System.exit(1);
 		}
-		try{
+		try {
 			PermissionBootstapper util = new PermissionBootstapper(conf);
 			System.out.println("*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*");
 			System.out.println("*            Grid Trust Service (GTS) Permission Bootstrapper             *");
@@ -70,10 +70,11 @@ public class PermissionBootstapper {
 			System.out.println("*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*");
 			System.out.println();
 			System.out.println("Below please enter the Grid Identity of the GTS Administrator:");
-			String gridId = IOUtils.readLine("Grid Identity>",true);
+			String gridId = IOUtils.readLine("Grid Identity>", true);
 			util.addAdminUser(gridId);
-			System.out.println("The user "+gridId+" was succesfully added as an administrator of the GTS ("+conf.getGTSInternalId()+")");
-		}catch(Exception e){
+			System.out.println("The user " + gridId + " was succesfully added as an administrator of the GTS ("
+				+ conf.getGTSInternalId() + ")");
+		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			System.exit(1);
 		}

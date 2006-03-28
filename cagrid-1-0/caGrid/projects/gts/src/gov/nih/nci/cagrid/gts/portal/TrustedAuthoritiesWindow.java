@@ -285,7 +285,8 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 		try {
 			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			TrustedAuthorityWindow window = new TrustedAuthorityWindow(service,proxy,this.getTrustedAuthorityTable().getSelectedTrustedAuthority());
+			TrustedAuthorityWindow window = new TrustedAuthorityWindow(service, proxy, this.getTrustedAuthorityTable()
+				.getSelectedTrustedAuthority());
 			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(window);
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);

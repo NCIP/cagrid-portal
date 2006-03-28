@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -38,14 +39,15 @@ public class TrustedAuthorityManager {
 
 	private String gtsURI;
 
+
 	public TrustedAuthorityManager(String gtsURI, Database db) {
 		logger = Logger.getLogger(this.getClass().getName());
 		this.gtsURI = gtsURI;
 		this.db = db;
 	}
 
-	public synchronized TrustedAuthority[] findTrustAuthorities(
-			TrustedAuthorityFilter filter) throws GTSInternalFault {
+
+	public synchronized TrustedAuthority[] findTrustAuthorities(TrustedAuthorityFilter filter) throws GTSInternalFault {
 
 		this.buildDatabase();
 		Connection c = null;
@@ -62,15 +64,13 @@ public class TrustedAuthorityManager {
 				if (filter.getTrustedAuthorityName() != null) {
 					sql = appendWhereOrAnd(firstAppended, sql);
 					firstAppended = true;
-					sql.append(" NAME LIKE '%"
-							+ filter.getTrustedAuthorityName() + "%'");
+					sql.append(" NAME LIKE '%" + filter.getTrustedAuthorityName() + "%'");
 				}
 
 				if (filter.getCertificateDN() != null) {
 					sql = appendWhereOrAnd(firstAppended, sql);
 					firstAppended = true;
-					sql.append(" CERTIFICATE_DN LIKE '%"
-							+ filter.getCertificateDN() + "%'");
+					sql.append(" CERTIFICATE_DN LIKE '%" + filter.getCertificateDN() + "%'");
 				}
 
 				if (filter.getStatus() != null) {
@@ -88,15 +88,13 @@ public class TrustedAuthorityManager {
 				if (filter.getIsAuthority() != null) {
 					sql = appendWhereOrAnd(firstAppended, sql);
 					firstAppended = true;
-					sql.append(" IS_AUTHORITY='"
-							+ filter.getIsAuthority().booleanValue() + "'");
+					sql.append(" IS_AUTHORITY='" + filter.getIsAuthority().booleanValue() + "'");
 				}
 
 				if (filter.getAuthorityTrustService() != null) {
 					sql = appendWhereOrAnd(firstAppended, sql);
 					firstAppended = true;
-					sql.append(" AUTHORITY LIKE '%"
-							+ filter.getAuthorityTrustService() + "%'");
+					sql.append(" AUTHORITY LIKE '%" + filter.getAuthorityTrustService() + "%'");
 				}
 
 			}
@@ -105,15 +103,11 @@ public class TrustedAuthorityManager {
 			while (rs.next()) {
 				TrustedAuthority ta = new TrustedAuthority();
 				ta.setTrustedAuthorityName(rs.getString("NAME"));
-				ta.setTrustLevel(TrustLevel.fromValue(rs
-						.getString("TRUST_LEVEL")));
+				ta.setTrustLevel(TrustLevel.fromValue(rs.getString("TRUST_LEVEL")));
 				ta.setStatus(Status.fromValue(rs.getString("STATUS")));
-				ta.setIsAuthority(Boolean
-						.valueOf(rs.getBoolean("IS_AUTHORITY")));
+				ta.setIsAuthority(Boolean.valueOf(rs.getBoolean("IS_AUTHORITY")));
 				ta.setAuthorityTrustService(rs.getString("AUTHORITY"));
-				ta
-						.setCertificate(new gov.nih.nci.cagrid.gts.bean.X509Certificate(
-								rs.getString("CERTIFICATE")));
+				ta.setCertificate(new gov.nih.nci.cagrid.gts.bean.X509Certificate(rs.getString("CERTIFICATE")));
 				String crl = rs.getString("CRL");
 				if ((crl != null) && (crl.trim().length() > 0)) {
 					ta.setCRL(new gov.nih.nci.cagrid.gts.bean.X509CRL(crl));
@@ -130,99 +124,80 @@ public class TrustedAuthorityManager {
 			return list;
 
 		} catch (Exception e) {
-			this.logger
-					.log(
-							Level.SEVERE,
-							"Unexpected database error incurred in finding trusted authorities, the following statement generated the error: \n"
-									+ sql.toString() + "\n", e);
+			this.logger.log(Level.SEVERE,
+				"Unexpected database error incurred in finding trusted authorities, the following statement generated the error: \n"
+					+ sql.toString() + "\n", e);
 			GTSInternalFault fault = new GTSInternalFault();
-			fault
-					.setFaultString("Unexpected error occurred in finding Trusted Authorities");
+			fault.setFaultString("Unexpected error occurred in finding Trusted Authorities");
 			throw fault;
 		} finally {
 			db.releaseConnection(c);
 		}
 	}
 
-	public synchronized void updateTrustedAuthority(TrustedAuthority ta)
-			throws GTSInternalFault, IllegalTrustedAuthorityFault,
-			InvalidTrustedAuthorityFault {
 
-		TrustedAuthority curr = this.getTrustedAuthority(ta
-				.getTrustedAuthorityName());
+	public synchronized void updateTrustedAuthority(TrustedAuthority ta) throws GTSInternalFault,
+		IllegalTrustedAuthorityFault, InvalidTrustedAuthorityFault {
+
+		TrustedAuthority curr = this.getTrustedAuthority(ta.getTrustedAuthorityName());
 		StringBuffer sql = new StringBuffer();
 		boolean needsUpdate = false;
 
 		if ((clean(ta.getAuthorityTrustService()) != null)
-				&& (!ta.getAuthorityTrustService().equals(
-						curr.getAuthorityTrustService()))) {
+			&& (!ta.getAuthorityTrustService().equals(curr.getAuthorityTrustService()))) {
 			IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
-			fault
-					.setFaultString("The authority trust service for a Trusted Authority cannot be changed");
+			fault.setFaultString("The authority trust service for a Trusted Authority cannot be changed");
 			throw fault;
 		}
 
 		if ((clean(ta.getCertificate().getCertificateEncodedString()) != null)
-				&& (!ta.getCertificate().equals(curr.getCertificate()))) {
+			&& (!ta.getCertificate().equals(curr.getCertificate()))) {
 			IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
-			fault
-					.setFaultString("The certificate for a Trusted Authority cannot be changed");
+			fault.setFaultString("The certificate for a Trusted Authority cannot be changed");
 			throw fault;
 		}
 
-		if ((clean(ta.getCRL().getCrlEncodedString()) != null)
-				&& (!ta.getCRL().equals(curr.getCRL()))) {
+		if ((clean(ta.getCRL().getCrlEncodedString()) != null) && (!ta.getCRL().equals(curr.getCRL()))) {
 
 			X509Certificate cert = checkAndExtractCertificate(curr);
 			checkAndExtractCRL(ta, cert);
-			buildUpdate(needsUpdate, sql, "CRL", ta.getCRL()
-					.getCrlEncodedString());
+			buildUpdate(needsUpdate, sql, "CRL", ta.getCRL().getCrlEncodedString());
 			needsUpdate = true;
 		}
 
-		if ((ta.getIsAuthority() != null)
-				&& (!ta.getIsAuthority().equals(curr.getIsAuthority()))) {
+		if ((ta.getIsAuthority() != null) && (!ta.getIsAuthority().equals(curr.getIsAuthority()))) {
 			IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
-			fault
-					.setFaultString("The authority trust service for a Trusted Authority cannot be changed");
+			fault.setFaultString("The authority trust service for a Trusted Authority cannot be changed");
 			throw fault;
 		}
 
-		if ((ta.getStatus() != null)
-				&& (!ta.getStatus().equals(curr.getStatus()))) {
+		if ((ta.getStatus() != null) && (!ta.getStatus().equals(curr.getStatus()))) {
 			buildUpdate(needsUpdate, sql, "STATUS", ta.getStatus().getValue());
 			needsUpdate = true;
 		}
 
-		if ((ta.getTrustLevel() != null)
-				&& (!ta.getTrustLevel().equals(curr.getTrustLevel()))) {
-			buildUpdate(needsUpdate, sql, "TRUST_LEVEL", ta.getTrustLevel()
-					.getValue());
+		if ((ta.getTrustLevel() != null) && (!ta.getTrustLevel().equals(curr.getTrustLevel()))) {
+			buildUpdate(needsUpdate, sql, "TRUST_LEVEL", ta.getTrustLevel().getValue());
 			needsUpdate = true;
 		}
 
 		try {
 			if (!ta.equals(curr)) {
 				if (needsUpdate) {
-					sql.append(" WHERE NAME='" + ta.getTrustedAuthorityName()
-							+ "'");
+					sql.append(" WHERE NAME='" + ta.getTrustedAuthorityName() + "'");
 					db.update(sql.toString());
 				}
 			}
 		} catch (Exception e) {
-			this.logger
-					.log(
-							Level.SEVERE,
-							"Unexpected database error incurred in updating "
-									+ ta.getTrustedAuthorityName()
-									+ ", the following statement generated the error: \n"
-									+ sql.toString() + "\n", e);
+			this.logger.log(Level.SEVERE, "Unexpected database error incurred in updating "
+				+ ta.getTrustedAuthorityName() + ", the following statement generated the error: \n" + sql.toString()
+				+ "\n", e);
 			GTSInternalFault fault = new GTSInternalFault();
-			fault.setFaultString("Unexpected error occurred in updating "
-					+ ta.getTrustedAuthorityName() + ".");
+			fault.setFaultString("Unexpected error occurred in updating " + ta.getTrustedAuthorityName() + ".");
 			throw fault;
 		}
 	}
+
 
 	private String clean(String s) {
 		if ((s == null) || (s.trim().length() == 0)) {
@@ -232,11 +207,10 @@ public class TrustedAuthorityManager {
 		}
 	}
 
-	private void buildUpdate(boolean needsUpdate, StringBuffer sql,
-			String field, String value) {
+
+	private void buildUpdate(boolean needsUpdate, StringBuffer sql, String field, String value) {
 		if (needsUpdate) {
-			sql.append(",").append(field).append("='").append(value)
-					.append("'");
+			sql.append(",").append(field).append("='").append(value).append("'");
 		} else {
 			sql.append("UPDATE " + TRUSTED_AUTHORITIES_TABLE + " SET ");
 			sql.append(field).append("='").append(value).append("'");
@@ -244,8 +218,8 @@ public class TrustedAuthorityManager {
 
 	}
 
-	private StringBuffer appendWhereOrAnd(boolean firstAppended,
-			StringBuffer sql) {
+
+	private StringBuffer appendWhereOrAnd(boolean firstAppended, StringBuffer sql) {
 		if (firstAppended) {
 			sql.append(" AND ");
 		} else {
@@ -254,10 +228,10 @@ public class TrustedAuthorityManager {
 		return sql;
 	}
 
-	public synchronized TrustedAuthority getTrustedAuthority(String name)
-			throws GTSInternalFault, InvalidTrustedAuthorityFault {
-		String sql = "select * from " + TRUSTED_AUTHORITIES_TABLE
-				+ " where NAME='" + name + "'";
+
+	public synchronized TrustedAuthority getTrustedAuthority(String name) throws GTSInternalFault,
+		InvalidTrustedAuthorityFault {
+		String sql = "select * from " + TRUSTED_AUTHORITIES_TABLE + " where NAME='" + name + "'";
 		Connection c = null;
 		try {
 			c = db.getConnection();
@@ -266,15 +240,11 @@ public class TrustedAuthorityManager {
 			if (rs.next()) {
 				TrustedAuthority ta = new TrustedAuthority();
 				ta.setTrustedAuthorityName(rs.getString("NAME"));
-				ta.setTrustLevel(TrustLevel.fromValue(rs
-						.getString("TRUST_LEVEL")));
+				ta.setTrustLevel(TrustLevel.fromValue(rs.getString("TRUST_LEVEL")));
 				ta.setStatus(Status.fromValue(rs.getString("STATUS")));
-				ta.setIsAuthority(Boolean
-						.valueOf(rs.getBoolean("IS_AUTHORITY")));
+				ta.setIsAuthority(Boolean.valueOf(rs.getBoolean("IS_AUTHORITY")));
 				ta.setAuthorityTrustService(rs.getString("AUTHORITY"));
-				ta
-						.setCertificate(new gov.nih.nci.cagrid.gts.bean.X509Certificate(
-								rs.getString("CERTIFICATE")));
+				ta.setCertificate(new gov.nih.nci.cagrid.gts.bean.X509Certificate(rs.getString("CERTIFICATE")));
 				String crl = rs.getString("CRL");
 				if ((crl != null) && (crl.trim().length() > 0)) {
 					ta.setCRL(new gov.nih.nci.cagrid.gts.bean.X509CRL(crl));
@@ -284,32 +254,23 @@ public class TrustedAuthorityManager {
 			rs.close();
 			s.close();
 		} catch (Exception e) {
-			this.logger
-					.log(
-							Level.SEVERE,
-							"Unexpected database error incurred in obtaining the Trusted Authority, "
-									+ name
-									+ ", the following statement generated the error: \n"
-									+ sql + "\n", e);
+			this.logger.log(Level.SEVERE, "Unexpected database error incurred in obtaining the Trusted Authority, "
+				+ name + ", the following statement generated the error: \n" + sql + "\n", e);
 			GTSInternalFault fault = new GTSInternalFault();
-			fault
-					.setFaultString("Unexpected error obtaining the TrustedAuthority "
-							+ name);
+			fault.setFaultString("Unexpected error obtaining the TrustedAuthority " + name);
 			throw fault;
 		} finally {
 			db.releaseConnection(c);
 		}
 		InvalidTrustedAuthorityFault fault = new InvalidTrustedAuthorityFault();
-		fault.setFaultString("The TrustedAuthority " + name
-				+ " does not exist.");
+		fault.setFaultString("The TrustedAuthority " + name + " does not exist.");
 		throw fault;
 	}
 
-	public synchronized boolean doesTrustedAuthorityExist(String name)
-			throws GTSInternalFault {
+
+	public synchronized boolean doesTrustedAuthorityExist(String name) throws GTSInternalFault {
 		this.buildDatabase();
-		String sql = "select count(*) from " + TRUSTED_AUTHORITIES_TABLE
-				+ " where NAME='" + name + "'";
+		String sql = "select count(*) from " + TRUSTED_AUTHORITIES_TABLE + " where NAME='" + name + "'";
 		Connection c = null;
 		boolean exists = false;
 		try {
@@ -325,17 +286,10 @@ public class TrustedAuthorityManager {
 			rs.close();
 			s.close();
 		} catch (Exception e) {
-			this.logger
-					.log(
-							Level.SEVERE,
-							"Unexpected database error incurred in odetermining if the TrustedAuthority "
-									+ name
-									+ " exists, the following statement generated the error: \n"
-									+ sql + "\n", e);
+			this.logger.log(Level.SEVERE, "Unexpected database error incurred in odetermining if the TrustedAuthority "
+				+ name + " exists, the following statement generated the error: \n" + sql + "\n", e);
 			GTSInternalFault fault = new GTSInternalFault();
-			fault
-					.setFaultString("Unexpected error in determining if the TrustedAuthority "
-							+ name + " exists.");
+			fault.setFaultString("Unexpected error in determining if the TrustedAuthority " + name + " exists.");
 			throw fault;
 		} finally {
 			db.releaseConnection(c);
@@ -343,45 +297,36 @@ public class TrustedAuthorityManager {
 		return exists;
 	}
 
-	public synchronized void removeTrustedAuthority(String name)
-			throws GTSInternalFault, InvalidTrustedAuthorityFault {
+
+	public synchronized void removeTrustedAuthority(String name) throws GTSInternalFault, InvalidTrustedAuthorityFault {
 		if (doesTrustedAuthorityExist(name)) {
-			String sql = "delete FROM " + TRUSTED_AUTHORITIES_TABLE
-					+ " where NAME='" + name + "'";
+			String sql = "delete FROM " + TRUSTED_AUTHORITIES_TABLE + " where NAME='" + name + "'";
 			try {
 				db.update(sql);
 			} catch (Exception e) {
-				this.logger
-						.log(
-								Level.SEVERE,
-								"Unexpected database error incurred in removing the Trusted Authority, "
-										+ name
-										+ ", the following statement generated the error: \n"
-										+ sql + "\n", e);
+				this.logger.log(Level.SEVERE, "Unexpected database error incurred in removing the Trusted Authority, "
+					+ name + ", the following statement generated the error: \n" + sql + "\n", e);
 				GTSInternalFault fault = new GTSInternalFault();
-				fault
-						.setFaultString("Unexpected error removing the TrustedAuthority "
-								+ name);
+				fault.setFaultString("Unexpected error removing the TrustedAuthority " + name);
 				throw fault;
 			}
 		} else {
 			InvalidTrustedAuthorityFault fault = new InvalidTrustedAuthorityFault();
-			fault.setFaultString("The TrustedAuthority " + name
-					+ " does not exist.");
+			fault.setFaultString("The TrustedAuthority " + name + " does not exist.");
 			throw fault;
 		}
 	}
 
-	public synchronized TrustedAuthority addTrustedAuthority(TrustedAuthority ta)
-			throws GTSInternalFault, IllegalTrustedAuthorityFault {
+
+	public synchronized TrustedAuthority addTrustedAuthority(TrustedAuthority ta) throws GTSInternalFault,
+		IllegalTrustedAuthorityFault {
 		this.buildDatabase();
 		X509Certificate cert = checkAndExtractCertificate(ta);
 		if ((ta.getTrustedAuthorityName() != null)
-				&& (!ta.getTrustedAuthorityName().equals(
-						cert.getSubjectDN().toString()))) {
+			&& (!ta.getTrustedAuthorityName().equals(cert.getSubjectDN().toString()))) {
 			IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
 			fault
-					.setFaultString("The Trusted Authority Name must match the subject of the Trusted Authority's certificate");
+				.setFaultString("The Trusted Authority Name must match the subject of the Trusted Authority's certificate");
 			throw fault;
 		} else {
 			ta.setTrustedAuthorityName(cert.getSubjectDN().toString());
@@ -389,8 +334,7 @@ public class TrustedAuthorityManager {
 
 		if (this.doesTrustedAuthorityExist(ta.getTrustedAuthorityName())) {
 			IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
-			fault.setFaultString("The Trusted Authority "
-					+ ta.getTrustedAuthorityName() + " already exists.");
+			fault.setFaultString("The Trusted Authority " + ta.getTrustedAuthorityName() + " already exists.");
 			throw fault;
 		}
 
@@ -398,8 +342,7 @@ public class TrustedAuthorityManager {
 
 		if (ta.getTrustLevel() == null) {
 			IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
-			fault
-					.setFaultString("No trust level specified for the Trusted Authority!!!");
+			fault.setFaultString("No trust level specified for the Trusted Authority!!!");
 			throw fault;
 		}
 
@@ -407,28 +350,26 @@ public class TrustedAuthorityManager {
 
 		if (ta.getStatus() == null) {
 			IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
-			fault
-					.setFaultString("No status specified for the Trusted Authority!!!");
+			fault.setFaultString("No status specified for the Trusted Authority!!!");
 			throw fault;
 		}
 
-		if ((ta.getIsAuthority() != null)
-				&& (!ta.getIsAuthority().booleanValue())) {
+		if ((ta.getIsAuthority() != null) && (!ta.getIsAuthority().booleanValue())) {
 			logger
-					.log(
-							Level.WARNING,
-							"The Trusted Authority "
-									+ ta.getTrustedAuthorityName()
-									+ ", specified not make the Trust Service the an authority, this will be ignored since adding a Trust Authority makes the Trust Service an authority.");
+				.log(
+					Level.WARNING,
+					"The Trusted Authority "
+						+ ta.getTrustedAuthorityName()
+						+ ", specified not make the Trust Service the an authority, this will be ignored since adding a Trust Authority makes the Trust Service an authority.");
 		}
 
 		if (ta.getAuthorityTrustService() != null) {
 			logger
-					.log(
-							Level.WARNING,
-							"The Trusted Authority "
-									+ ta.getTrustedAuthorityName()
-									+ ", specified an authority Trust Service, this will be ignored since adding a Trust Authority makes the Trust Service an authority.");
+				.log(
+					Level.WARNING,
+					"The Trusted Authority "
+						+ ta.getTrustedAuthorityName()
+						+ ", specified an authority Trust Service, this will be ignored since adding a Trust Authority makes the Trust Service an authority.");
 
 		}
 
@@ -436,41 +377,32 @@ public class TrustedAuthorityManager {
 		StringBuffer insert = new StringBuffer();
 		try {
 
-			insert.append("INSERT INTO " + TRUSTED_AUTHORITIES_TABLE
-					+ " SET NAME='" + ta.getTrustedAuthorityName()
-					+ "',CERTIFICATE_DN='" + cert.getSubjectDN().toString()
-					+ "',TRUST_LEVEL='" + ta.getTrustLevel().getValue()
-					+ "', STATUS='" + ta.getStatus().getValue()
-					+ "', IS_AUTHORITY='" + isAuthority + "',AUTHORITY='"
-					+ gtsURI + "', CERTIFICATE='"
-					+ ta.getCertificate().getCertificateEncodedString() + "'");
+			insert.append("INSERT INTO " + TRUSTED_AUTHORITIES_TABLE + " SET NAME='" + ta.getTrustedAuthorityName()
+				+ "',CERTIFICATE_DN='" + cert.getSubjectDN().toString() + "',TRUST_LEVEL='"
+				+ ta.getTrustLevel().getValue() + "', STATUS='" + ta.getStatus().getValue() + "', IS_AUTHORITY='"
+				+ isAuthority + "',AUTHORITY='" + gtsURI + "', CERTIFICATE='"
+				+ ta.getCertificate().getCertificateEncodedString() + "'");
 
 			if (crl != null) {
-				insert.append(",CRL='" + ta.getCRL().getCrlEncodedString()
-						+ "'");
+				insert.append(",CRL='" + ta.getCRL().getCrlEncodedString() + "'");
 			}
 			db.update(insert.toString());
 			ta.setIsAuthority(Boolean.valueOf(isAuthority));
 			ta.setAuthorityTrustService(gtsURI);
 		} catch (Exception e) {
-			this.logger
-					.log(
-							Level.SEVERE,
-							"Unexpected database error incurred in adding the Trusted Authority, "
-									+ ta.getTrustedAuthorityName()
-									+ ", the following statement generated the error: \n"
-									+ insert.toString() + "\n", e);
+			this.logger.log(Level.SEVERE, "Unexpected database error incurred in adding the Trusted Authority, "
+				+ ta.getTrustedAuthorityName() + ", the following statement generated the error: \n"
+				+ insert.toString() + "\n", e);
 			GTSInternalFault fault = new GTSInternalFault();
-			fault
-					.setFaultString("Unexpected error adding the Trusted Authority, "
-							+ ta.getTrustedAuthorityName() + "!!!");
+			fault.setFaultString("Unexpected error adding the Trusted Authority, " + ta.getTrustedAuthorityName()
+				+ "!!!");
 			throw fault;
 		}
 		return ta;
 	}
 
-	private X509Certificate checkAndExtractCertificate(TrustedAuthority ta)
-			throws IllegalTrustedAuthorityFault {
+
+	private X509Certificate checkAndExtractCertificate(TrustedAuthority ta) throws IllegalTrustedAuthorityFault {
 		if (ta.getCertificate() == null) {
 			IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
 			fault.setFaultString("No certificate specified!!!");
@@ -484,8 +416,7 @@ public class TrustedAuthorityManager {
 		}
 
 		try {
-			return CertUtil.loadCertificate(ta.getCertificate()
-					.getCertificateEncodedString());
+			return CertUtil.loadCertificate(ta.getCertificate().getCertificateEncodedString());
 		} catch (Exception ex) {
 			IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
 			fault.setFaultString("Invalid certificate Provided!!!");
@@ -493,8 +424,8 @@ public class TrustedAuthorityManager {
 		}
 	}
 
-	private X509CRL checkAndExtractCRL(TrustedAuthority ta,
-			X509Certificate signer) throws IllegalTrustedAuthorityFault {
+
+	private X509CRL checkAndExtractCRL(TrustedAuthority ta, X509Certificate signer) throws IllegalTrustedAuthorityFault {
 		X509CRL crl = null;
 		if (ta.getCRL() != null) {
 
@@ -510,8 +441,7 @@ public class TrustedAuthorityManager {
 					crl.verify(signer.getPublicKey());
 				} catch (Exception e) {
 					IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
-					fault
-							.setFaultString("The CRL provided is not signed by the Trusted Authority!!!");
+					fault.setFaultString("The CRL provided is not signed by the Trusted Authority!!!");
 					throw fault;
 				}
 
@@ -521,24 +451,22 @@ public class TrustedAuthorityManager {
 		return crl;
 	}
 
+
 	public synchronized void buildDatabase() throws GTSInternalFault {
 		if (!dbBuilt) {
 			db.createDatabaseIfNeeded();
 			if (!this.db.tableExists(TRUSTED_AUTHORITIES_TABLE)) {
-				String trust = "CREATE TABLE " + TRUSTED_AUTHORITIES_TABLE
-						+ " (" + "NAME VARCHAR(255) NOT NULL PRIMARY KEY,"
-						+ "CERTIFICATE_DN VARCHAR(255) NOT NULL,"
-						+ "TRUST_LEVEL VARCHAR(255) NOT NULL,"
-						+ "STATUS VARCHAR(50) NOT NULL,"
-						+ "IS_AUTHORITY VARCHAR(5) NOT NULL,"
-						+ "AUTHORITY VARCHAR(255) NOT NULL,"
-						+ "CERTIFICATE TEXT NOT NULL,"
-						+ "CRL TEXT, INDEX document_index (NAME));";
+				String trust = "CREATE TABLE " + TRUSTED_AUTHORITIES_TABLE + " ("
+					+ "NAME VARCHAR(255) NOT NULL PRIMARY KEY," + "CERTIFICATE_DN VARCHAR(255) NOT NULL,"
+					+ "TRUST_LEVEL VARCHAR(255) NOT NULL," + "STATUS VARCHAR(50) NOT NULL,"
+					+ "IS_AUTHORITY VARCHAR(5) NOT NULL," + "AUTHORITY VARCHAR(255) NOT NULL,"
+					+ "CERTIFICATE TEXT NOT NULL," + "CRL TEXT, INDEX document_index (NAME));";
 				db.update(trust);
 			}
 			dbBuilt = true;
 		}
 	}
+
 
 	public void destroy() throws GTSInternalFault {
 		buildDatabase();

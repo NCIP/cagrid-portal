@@ -176,6 +176,30 @@
 						</sequence>
 					</complexType>
 				</element>
+				<element name="updateTrustedAuthority">
+					<complexType>
+						<sequence>
+          		  
+                  					
+							<element name="ta">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:TrustedAuthority" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+                  				 	
+	      				</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="updateTrustedAuthorityResponse">
+					<complexType>
+						<sequence>
+          		  
+						</sequence>
+					</complexType>
+				</element>
 				<element name="GTSInternalFault" >
 					<complexType>
 						<complexContent>
@@ -276,6 +300,13 @@
 	<message name="revokePermissionOutputMessage">
 		<part name="parameters" element="tns:revokePermissionResponse"/>
 	</message>
+	<message name="updateTrustedAuthorityInputMessage">
+		<part name="parameters" element="tns:updateTrustedAuthority"/>
+	</message>
+	
+	<message name="updateTrustedAuthorityOutputMessage">
+		<part name="parameters" element="tns:updateTrustedAuthorityResponse"/>
+	</message>
 	<message name="GTSInternalFaultFaultMessage">
 		<part name="fault" element="tns:GTSInternalFault"/>
 	</message>
@@ -352,6 +383,18 @@
        		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
        				
        		 <fault name="InvalidPermissionFault" message="tns:InvalidPermissionFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="updateTrustedAuthority">
+            <input message="tns:updateTrustedAuthorityInputMessage"/>
+            <output message="tns:updateTrustedAuthorityOutputMessage"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+       		 <fault name="IllegalTrustedAuthorityFault" message="tns:IllegalTrustedAuthorityFaultFaultMessage"/>
+       				
+       		 <fault name="InvalidTrustedAuthorityFault" message="tns:InvalidTrustedAuthorityFaultFaultMessage"/>
        				
        		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
        				

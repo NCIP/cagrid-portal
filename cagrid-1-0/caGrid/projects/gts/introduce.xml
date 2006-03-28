@@ -89,22 +89,34 @@
     <ns3:Exception name="PermissionDeniedFault"/>
    </ns3:Exceptions>
   </ns3:Method>
+  <ns3:Method name="updateTrustedAuthority" xsi:type="ns3:MethodType">
+   <ns3:Inputs>
+    <ns3:Input qName="ns13:TrustedAuthority" isArray="false" name="ta" xmlns:ns13="http://cagrid.nci.nih.gov/6/gts"/>
+   </ns3:Inputs>
+   <ns3:Output qName="void" isArray="false"/>
+   <ns3:Exceptions>
+    <ns3:Exception name="GTSInternalFault"/>
+    <ns3:Exception name="IllegalTrustedAuthorityFault"/>
+    <ns3:Exception name="InvalidTrustedAuthorityFault"/>
+    <ns3:Exception name="PermissionDeniedFault"/>
+   </ns3:Exceptions>
+  </ns3:Method>
  </ns3:Methods>
- <ns13:MetadataList xsi:type="ns13:MetadataListType" xmlns:ns13="gme://gov.nih.nci.cagrid.introduce/1/Metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
- <ns1:ServiceSecurity xsi:type="ns14:ServiceSecurity" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns14="gme://gov.nih.nci.cagrid.introduce/1/Security">
-  <ns14:SecuritySetting xsi:type="ns14:SecuritySetting">Custom</ns14:SecuritySetting>
-  <ns14:TransportLevelSecurity xsi:type="ns14:TransportLevelSecurity">
-   <ns14:CommunicationMethod xsi:type="ns14:CommunicationMethod">Privacy</ns14:CommunicationMethod>
-  </ns14:TransportLevelSecurity>
-  <ns14:ClientCommunication xsi:type="ns14:ClientCommunication">Transport_Layer_Security</ns14:ClientCommunication>
-  <ns14:ClientAuthorization xsi:type="ns14:ClientAuthorization">
-   <ns14:NoAuthorization xsi:type="ns14:NoAuthorization"/>
-  </ns14:ClientAuthorization>
-  <ns14:RunAsMode xsi:type="ns14:RunAsMode">System</ns14:RunAsMode>
-  <ns14:DelegationMode xsi:type="ns14:DelegationMode">None</ns14:DelegationMode>
-  <ns14:AnonymousClients xsi:type="ns14:AnonymousCommunication">No</ns14:AnonymousClients>
-  <ns14:ServiceAuthorization xsi:type="ns14:ServiceAuthorization">
-   <ns14:NoAuthorization xsi:type="ns14:NoAuthorization"/>
-  </ns14:ServiceAuthorization>
+ <ns14:MetadataList xsi:type="ns14:MetadataListType" xmlns:ns14="gme://gov.nih.nci.cagrid.introduce/1/Metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns1:ServiceSecurity xsi:type="ns15:ServiceSecurity" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns15="gme://gov.nih.nci.cagrid.introduce/1/Security">
+  <ns15:SecuritySetting xsi:type="ns15:SecuritySetting">Custom</ns15:SecuritySetting>
+  <ns15:TransportLevelSecurity xsi:type="ns15:TransportLevelSecurity">
+   <ns15:CommunicationMethod xsi:type="ns15:CommunicationMethod">Privacy</ns15:CommunicationMethod>
+  </ns15:TransportLevelSecurity>
+  <ns15:ClientCommunication xsi:type="ns15:ClientCommunication">Transport_Layer_Security</ns15:ClientCommunication>
+  <ns15:ClientAuthorization xsi:type="ns15:ClientAuthorization">
+   <ns15:NoAuthorization xsi:type="ns15:NoAuthorization"/>
+  </ns15:ClientAuthorization>
+  <ns15:RunAsMode xsi:type="ns15:RunAsMode">System</ns15:RunAsMode>
+  <ns15:DelegationMode xsi:type="ns15:DelegationMode">None</ns15:DelegationMode>
+  <ns15:AnonymousClients xsi:type="ns15:AnonymousCommunication">No</ns15:AnonymousClients>
+  <ns15:ServiceAuthorization xsi:type="ns15:ServiceAuthorization">
+   <ns15:NoAuthorization xsi:type="ns15:NoAuthorization"/>
+  </ns15:ServiceAuthorization>
  </ns1:ServiceSecurity>
 </ns1:ServiceSkeleton>

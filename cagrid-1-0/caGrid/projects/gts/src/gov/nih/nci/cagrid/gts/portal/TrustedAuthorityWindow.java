@@ -384,7 +384,9 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
-			buttonPanel.add(getImportCertificate(), null);
+			if (!update) {
+				buttonPanel.add(getImportCertificate(), null);
+			}
 			buttonPanel.add(getImportCRL(), null);
 			buttonPanel.add(getAddButton(), null);
 			buttonPanel.add(getCancelButton(), null);
@@ -605,6 +607,27 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 
 
 	private void updateTrustedAuthority() {
+		try {
+			getAddButton().setEnabled(false);
+			TrustedAuthority ta = new TrustedAuthority();
+			ta.setTrustedAuthorityName(this.trustedAuthorityName.getText());
+			ta.setStatus(((StatusComboBox) getStatus()).getStatus());
+			ta.setTrustLevel(((TrustLevelComboBox) trustLevel).getTrustLevel());
+			if (crlPanel.getCRL() != null) {
+				ta.setCRL(new gov.nih.nci.cagrid.gts.bean.X509CRL(CertUtil.writeCRL(crlPanel.getCRL())));
+			}
+			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			String service = ((GTSServiceListComboBox) getGts()).getSelectedService();
+			GTSAdminClient client = new GTSAdminClient(service, proxy);
+			client.updateTrustedAuthority(ta);
+			PortalUtils.showMessage("The Trusted Authority, " + ta.getTrustedAuthorityName()
+				+ " was succesfully updated!!!");
+			getAddButton().setEnabled(true);
+		} catch (Exception e) {
+			getAddButton().setEnabled(true);
+			e.printStackTrace();
+			PortalUtils.showErrorMessage(e);
+		}
 
 	}
 

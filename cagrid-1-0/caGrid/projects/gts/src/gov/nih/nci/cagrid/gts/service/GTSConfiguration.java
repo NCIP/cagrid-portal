@@ -49,6 +49,7 @@ import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.MobiusResourceManager;
 import org.projectmobius.db.ConnectionManager;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -68,15 +69,13 @@ public class GTSConfiguration implements AbstractMobiusConfiguration {
 
 	private String gtsInternalId;
 
-	public void parse(MobiusResourceManager resourceManager, Element config)
-			throws MobiusException {
+
+	public void parse(MobiusResourceManager resourceManager, Element config) throws MobiusException {
 		Element rootDatabaseConfig = config.getChild(DATABASE);
 		if (rootDatabaseConfig != null) {
-			this.rootConnectionManager = new ConnectionManager(
-					rootDatabaseConfig);
+			this.rootConnectionManager = new ConnectionManager(rootDatabaseConfig);
 		} else {
-			throw new MobiusException(
-					"No database defined in the GTS Configuration.");
+			throw new MobiusException("No database defined in the GTS Configuration.");
 		}
 		this.gtsInternalId = config.getChildText(GTS_ID);
 		if (gtsInternalId == null) {
@@ -84,9 +83,11 @@ public class GTSConfiguration implements AbstractMobiusConfiguration {
 		}
 	}
 
+
 	public String getGTSInternalId() {
 		return gtsInternalId;
 	}
+
 
 	/**
 	 * @return Returns the rootConnectionManager.

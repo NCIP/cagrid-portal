@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 
 import javax.swing.ImageIcon;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -13,38 +14,37 @@ import javax.swing.ImageIcon;
  */
 public class GTSLookAndFeel extends PortalLookAndFeel {
 	public final static ImageIcon getGTSIcon() {
-		return new javax.swing.ImageIcon(GTSLookAndFeel.class
-				.getResource("/system-software-update.png"));
+		return new javax.swing.ImageIcon(GTSLookAndFeel.class.getResource("/system-software-update.png"));
 	}
-	
+
+
 	public final static ImageIcon getTrustedAuthorityIcon() {
-		return new javax.swing.ImageIcon(GTSLookAndFeel.class
-				.getResource("/key.png"));
+		return new javax.swing.ImageIcon(GTSLookAndFeel.class.getResource("/key.png"));
 	}
-	
+
+
 	public final static ImageIcon getAddTrustedAuthorityIcon() {
-		return new javax.swing.ImageIcon(GTSLookAndFeel.class
-				.getResource("/key_add.png"));
+		return new javax.swing.ImageIcon(GTSLookAndFeel.class.getResource("/key_add.png"));
 	}
-	
+
+
 	public final static ImageIcon getRemoveTrustedAuthorityIcon() {
-		return new javax.swing.ImageIcon(GTSLookAndFeel.class
-				.getResource("/key_delete.png"));
+		return new javax.swing.ImageIcon(GTSLookAndFeel.class.getResource("/key_delete.png"));
 	}
-	
+
+
 	public final static ImageIcon getModifyTrustedAuthorityIcon() {
-		return new javax.swing.ImageIcon(GTSLookAndFeel.class
-				.getResource("/key_go.png"));
+		return new javax.swing.ImageIcon(GTSLookAndFeel.class.getResource("/key_go.png"));
 	}
-	
+
+
 	public final static ImageIcon getCertificateIcon() {
-		return new javax.swing.ImageIcon(GTSLookAndFeel.class
-				.getResource("/contact-new.png"));
+		return new javax.swing.ImageIcon(GTSLookAndFeel.class.getResource("/contact-new.png"));
 	}
-	
+
+
 	public final static ImageIcon getCRLIcon() {
-		return new javax.swing.ImageIcon(GTSLookAndFeel.class
-				.getResource("/contact-delete.png"));
+		return new javax.swing.ImageIcon(GTSLookAndFeel.class.getResource("/contact-delete.png"));
 	}
-	
+
 }

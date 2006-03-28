@@ -5,6 +5,8 @@ import java.util.List;
 import javax.swing.JComboBox;
 
 import org.projectmobius.portal.PortalResourceManager;
+
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -16,9 +18,9 @@ public class GTSServiceListComboBox extends JComboBox {
 
 	private static String lastSelectedService;
 
+
 	public GTSServiceListComboBox() {
-		GTSPortalConf conf = (GTSPortalConf) PortalResourceManager
-				.getInstance().getResource(GTSPortalConf.RESOURCE);
+		GTSPortalConf conf = (GTSPortalConf) PortalResourceManager.getInstance().getResource(GTSPortalConf.RESOURCE);
 		List services = conf.getGTSServiceList();
 		for (int i = 0; i < services.size(); i++) {
 			this.addItem(services.get(i));
@@ -36,6 +38,7 @@ public class GTSServiceListComboBox extends JComboBox {
 			}
 		});
 	}
+
 
 	public String getSelectedService() {
 		return (String) getSelectedItem();

@@ -56,7 +56,8 @@ public class GTS {
 	}
 
 
-	public void removeTrustedAuthority(String name, String callerGridIdentity) throws GTSInternalFault, InvalidTrustedAuthorityFault, PermissionDeniedFault {
+	public void removeTrustedAuthority(String name, String callerGridIdentity) throws GTSInternalFault,
+		InvalidTrustedAuthorityFault, PermissionDeniedFault {
 		checkServiceAdministrator(callerGridIdentity);
 		trust.removeTrustedAuthority(name);
 	}
