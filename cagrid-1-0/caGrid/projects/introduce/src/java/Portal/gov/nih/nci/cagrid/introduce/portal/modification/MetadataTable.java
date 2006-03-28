@@ -52,8 +52,8 @@ public class MetadataTable extends PortalBaseTable {
 		}
 		String namespace = (String) getValueAt(row, 0);
 		String type = (String) getValueAt(row, 1);
-		String populateFromFile = (String) getValueAt(row, 2);
-		String register = (String) getValueAt(row, 3);
+		Boolean populateFromFile = (Boolean) getValueAt(row, 2);
+		Boolean register = (Boolean) getValueAt(row, 3);
 
 		MetadataType metadata = new MetadataType();
 
@@ -61,11 +61,10 @@ public class MetadataTable extends PortalBaseTable {
 			metadata.setQName(new QName(namespace,type));
 		}
 		if (populateFromFile != null && !populateFromFile.equals("")) {
-			metadata.setPopulateFromFile(Boolean.valueOf(populateFromFile)
-				.booleanValue());
+			metadata.setPopulateFromFile(populateFromFile.booleanValue());
 		}
 		if (register != null && !register.equals("")) {
-			metadata.setRegister(Boolean.valueOf(register).booleanValue());
+			metadata.setRegister(register.booleanValue());
 		}
 		
 		return metadata;
@@ -76,8 +75,8 @@ public class MetadataTable extends PortalBaseTable {
 		final Vector v = new Vector();
 		v.add(metadata.getQName().getNamespaceURI());
 		v.add(metadata.getQName().getLocalPart());
-		v.add(String.valueOf(metadata.isPopulateFromFile()));
-		v.add(String.valueOf(metadata.isRegister()));
+		v.add(new Boolean(metadata.isPopulateFromFile()));
+		v.add(new Boolean(metadata.isRegister()));
 		v.add(v);
 
 		((DefaultTableModel) this.getModel()).addRow(v);
@@ -114,13 +113,8 @@ public class MetadataTable extends PortalBaseTable {
 	}
 
 
-	public static DefaultTableModel createTableModel() {
-		DefaultTableModel model = new DefaultTableModel();
-		model.addColumn(NAMESPACE);
-		model.addColumn(TYPE);
-		model.addColumn(POPULATE_FROM_FILE);
-		model.addColumn(REGISTER);
-		model.addColumn(DATA1);
+	public static MyDefaultTableModel createTableModel() {
+		MyDefaultTableModel model = new MyDefaultTableModel();
 
 		return model;
 	}
@@ -135,5 +129,22 @@ public class MetadataTable extends PortalBaseTable {
 	public void doubleClick() throws Exception {
 		// TODO Auto-generated method stub
 
+	}
+	
+	public static class MyDefaultTableModel extends DefaultTableModel {
+
+		public MyDefaultTableModel() {
+			super();
+			addColumn(NAMESPACE);
+			addColumn(TYPE);
+			addColumn(POPULATE_FROM_FILE);
+			addColumn(REGISTER);
+			addColumn(DATA1);
+		}
+
+
+		public Class getColumnClass(int c) {
+			return getValueAt(0, c).getClass();
+		}
 	}
 }

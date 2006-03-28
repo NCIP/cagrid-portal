@@ -53,7 +53,7 @@ public class OutputTypeTable extends PortalBaseTable {
 		MethodTypeOutput output = method.getOutput();
 		if (output != null) {
 			final Vector v = new Vector();
-			v.add(String.valueOf(output.isIsArray()));
+			v.add(new Boolean(output.isIsArray()));
 			v.add(output.getQName().getNamespaceURI());
 			v.add(output.getQName().getLocalPart());
 			v.add(v);
@@ -67,7 +67,7 @@ public class OutputTypeTable extends PortalBaseTable {
 			throw new Exception("invalid row");
 		}
 		Vector v = (Vector) getValueAt(row, 3);
-		v.set(0, (String.valueOf(output.isIsArray())));
+		v.set(0, (new Boolean(output.isIsArray())));
 		v.set(1, output.getQName().getNamespaceURI());
 		v.set(2, output.getQName().getLocalPart());
 		v.set(3, v);
@@ -84,11 +84,11 @@ public class OutputTypeTable extends PortalBaseTable {
 
 		MethodTypeOutput output = new MethodTypeOutput();
 
-		boolean isArray = new Boolean(((String) getValueAt(row, 0))).booleanValue();
+		Boolean isArray = (Boolean)getValueAt(row, 0);
 		String namespace = ((String) getValueAt(row, 1));
 		String type = ((String) getValueAt(row, 2));
 
-		output.setIsArray(isArray);
+		output.setIsArray(isArray.booleanValue());
 		if (namespace != null && type != null) {
 			output.setQName(new QName(namespace, type));
 		}
@@ -123,12 +123,8 @@ public class OutputTypeTable extends PortalBaseTable {
 	}
 
 
-	public static DefaultTableModel createTableModel() {
-		DefaultTableModel model = new DefaultTableModel();
-		model.addColumn(ISARRAY);
-		model.addColumn(NAMESPACE);
-		model.addColumn(TYPE);
-		model.addColumn("DATA1");
+	public static MyDefaultTableModel createTableModel() {
+		MyDefaultTableModel model = new MyDefaultTableModel();
 		return model;
 	}
 
@@ -142,5 +138,21 @@ public class OutputTypeTable extends PortalBaseTable {
 	public void doubleClick() throws Exception {
 		// TODO Auto-generated method stub
 
+	}
+	
+	public static class MyDefaultTableModel extends DefaultTableModel {
+
+		public MyDefaultTableModel() {
+			super();
+			addColumn(ISARRAY);
+			addColumn(NAMESPACE);
+			addColumn(TYPE);
+			addColumn("DATA1");
+		}
+
+
+		public Class getColumnClass(int c) {
+			return getValueAt(0, c).getClass();
+		}
 	}
 }

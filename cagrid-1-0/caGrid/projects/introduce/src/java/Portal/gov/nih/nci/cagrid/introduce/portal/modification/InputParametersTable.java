@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
+import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 
@@ -15,7 +16,7 @@ import javax.xml.namespace.QName;
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  */
-public class InputParametersTable extends JTable {
+public class InputParametersTable extends PortalBaseTable {
 
 	public static String NAME = "Name";
 	public static String ISARRAY = "Is Array";
@@ -27,8 +28,7 @@ public class InputParametersTable extends JTable {
 
 
 	public InputParametersTable(MethodType method) {
-		super();
-		this.setModel(createTableModel());
+		super(createTableModel());
 		this.method = method;
 		initialize();
 	}
@@ -124,7 +124,7 @@ public class InputParametersTable extends JTable {
 	}
 
 
-	public MyDefaultTableModel createTableModel() {
+	public static MyDefaultTableModel createTableModel() {
 		MyDefaultTableModel model = new MyDefaultTableModel();
 		return model;
 	}
@@ -142,7 +142,7 @@ public class InputParametersTable extends JTable {
 	}
 
 
-	public class MyDefaultTableModel extends DefaultTableModel {
+	public static class MyDefaultTableModel extends DefaultTableModel {
 
 		public MyDefaultTableModel() {
 			super();
