@@ -14,6 +14,6 @@ public class SDKDeserializerFactory extends BaseDeserializerFactory {
 
 	public SDKDeserializerFactory(Class javaType, QName xmlType) {
 		super(SDKDeserializer.class, xmlType, javaType);
-		LOG.info("Initializing SDKDeserializerFactory");
+		LOG.debug("Initializing SDKDeserializerFactory for class:" + javaType + " and QName:" + xmlType);
 	}
 }

@@ -14,6 +14,6 @@ public class SDKSerializerFactory extends BaseSerializerFactory {
 
 	public SDKSerializerFactory(Class javaType, QName xmlType) {
 		super(SDKSerializer.class, xmlType, javaType);
-		LOG.info("Initializing SDKSerializerFactory");
+		LOG.debug("Initializing SDKSerializerFactory for class:" + javaType + " and QName:" + xmlType);
 	}
 }

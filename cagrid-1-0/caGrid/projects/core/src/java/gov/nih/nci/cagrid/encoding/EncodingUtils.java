@@ -2,6 +2,8 @@ package gov.nih.nci.cagrid.encoding;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Hashtable;
+import java.util.Map;
 
 import org.apache.axis.MessageContext;
 import org.apache.axis.utils.ClassUtils;
@@ -20,12 +22,15 @@ public class EncodingUtils {
 	public static final String CASTOR_MAPPING_PROPERTY = "castorMapping";
 
 	protected static Log LOG = LogFactory.getLog(EncodingUtils.class.getName());
-	
+
+	// maps <mapping location> to <Mapping>
+	// using Hashtable for synchronization correctness
+	protected static Map mappingCacheMap = new Hashtable();
 
 
 	public static Mapping getMapping(MessageContext context) {
-		long startTime=System.currentTimeMillis();
-		
+		long startTime = System.currentTimeMillis();
+
 		EntityResolver resolver = new EntityResolver() {
 			public InputSource resolveEntity(String publicId, String systemId) {
 				if (publicId.equals(CASTOR_MAPPING_DTD_ENTITY)) {
@@ -52,26 +57,36 @@ public class EncodingUtils {
 			LOG.debug("Unable to determine message context, using default mapping location:" + DEFAULT_XML_MAPPING);
 		}
 
-		LOG.debug("Attempting to load mapping from mapping location:" + mappingLocation);
-		InputStream mappingStream = ClassUtils.getResourceAsStream(EncodingUtils.class, mappingLocation);
-		if (mappingStream == null) {
-			LOG.error("Mapping file [" + mappingLocation + "] was null!");
-		}
-		InputSource mappIS = new org.xml.sax.InputSource(mappingStream);
+		Mapping mapping = null;
+		if (mappingCacheMap.containsKey(mappingLocation)) {
+			LOG.debug("Loading Mapping from cache for location:" + mappingLocation);
+			mapping = (Mapping) mappingCacheMap.get(mappingLocation);
+		} else {
+			LOG.debug("Unable to loading Mapping from cache for location:" + mappingLocation);
+			LOG.debug("Attempting to load mapping from mapping location:" + mappingLocation);
+			InputStream mappingStream = ClassUtils.getResourceAsStream(EncodingUtils.class, mappingLocation);
+			if (mappingStream == null) {
+				LOG.error("Mapping file [" + mappingLocation + "] was null!");
+			} else {
+				InputSource mappIS = new org.xml.sax.InputSource(mappingStream);
+				mapping = new Mapping();
+				mapping.setEntityResolver(resolver);
+				try {
+					mapping.loadMapping(mappIS);
+					mappingCacheMap.put(mappingLocation, mapping);
+				} catch (IOException e) {
+					LOG.error("Unable to load mapping file:" + mappingLocation, e);
+					mapping = null;
+				} catch (MappingException e) {
+					LOG.error("Problem with mapping!", e);
+					mapping = null;
+				}
+			}
 
-		Mapping mapping = new Mapping();
-		mapping.setEntityResolver(resolver);
-		try {
-			mapping.loadMapping(mappIS);
-		} catch (IOException e) {
-			LOG.error("Unable to load mapping file:" + mappingLocation, e);
-		} catch (MappingException e) {
-			LOG.error("Problem with mapping!", e);
 		}
+		long duration = System.currentTimeMillis() - startTime;
+		LOG.debug("Time to load mapping file:" + duration + " ms.");
 
-		long duration=System.currentTimeMillis()- startTime;
-		LOG.debug("Time to load mapping file:"+duration+" ms.");
-		
 		return mapping;
 	}
 }
