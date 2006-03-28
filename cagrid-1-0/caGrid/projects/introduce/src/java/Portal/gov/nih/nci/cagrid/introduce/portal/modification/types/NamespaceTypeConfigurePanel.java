@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.types;
 
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
@@ -35,6 +36,11 @@ public class NamespaceTypeConfigurePanel extends JPanel{
 		getNamespaceText().setText(type.getNamespace());
 		getPackageNameText().setText(type.getPackageName());
 		getLocationText().setText(type.getLocation());
+		if(type.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)){
+			getPackageNameText().setEditable(false);
+		} else{
+			getPackageNameText().setEditable(true);
+		}
 	}
 	
 	public void clear(){
@@ -161,6 +167,8 @@ public class NamespaceTypeConfigurePanel extends JPanel{
 	private JTextField getLocationText() {
 		if (locationText == null) {
 			locationText = new JTextField();
+			locationText.setEditable(false);
+			locationText.setEnabled(false);
 			locationText.getDocument().addDocumentListener(new DocumentListener() {
 				public void changedUpdate(DocumentEvent e) {
 					if (type != null) {

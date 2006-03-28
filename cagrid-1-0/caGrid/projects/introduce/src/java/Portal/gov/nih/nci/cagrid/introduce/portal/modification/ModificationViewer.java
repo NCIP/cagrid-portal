@@ -766,25 +766,26 @@ public class ModificationViewer extends GridPortalComponent {
 				MethodType[] methods = mt.getMethod();
 				if (methods != null) {
 					for (int i = 0; i < methods.length; i++) {
-						if((methods[i].getMethodSecurity()!=null)&&(!CommonTools.equals(curr,methods[i].getMethodSecurity()))){
+						if ((methods[i].getMethodSecurity() != null)
+							&& (!CommonTools.equals(curr, methods[i].getMethodSecurity()))) {
 							methods[i].setMethodSecurity(null);
 							changes.add(methods[i].getName());
 						}
 					}
 				}
-				if(changes.size()>0){
+				if (changes.size() > 0) {
 					StringBuffer sb = new StringBuffer();
-					sb.append("Service security configuration changed, the security configurations for the following methods were reset:\n");
-					for(int i=0; i<changes.size(); i++){
-						String method = (String)changes.get(i);
-						sb.append("    "+(i+1)+") "+method);
+					sb
+						.append("Service security configuration changed, the security configurations for the following methods were reset:\n");
+					for (int i = 0; i < changes.size(); i++) {
+						String method = (String) changes.get(i);
+						sb.append("    " + (i + 1) + ") " + method);
 					}
 					PortalUtils.showMessage(sb.toString());
 				}
 			}
 		}
 	}
-
 
 
 	private void performMethodModify() {
@@ -1391,7 +1392,10 @@ public class ModificationViewer extends GridPortalComponent {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
 						if (getNamespaceJTree().getCurrentNode() instanceof NamespaceTypeTreeNode) {
-							getNamespaceJTree().removeSelectedNode();
+							NamespaceType type = (NamespaceType) getNamespaceJTree().getCurrentNode().getUserObject();
+							if (!type.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
+								getNamespaceJTree().removeSelectedNode();
+							}
 						}
 					} catch (Exception ex) {
 						JOptionPane.showMessageDialog(ModificationViewer.this, "Please select namespace to Remove");
@@ -1433,11 +1437,16 @@ public class ModificationViewer extends GridPortalComponent {
 							(NamespaceType) ((NamespaceTypeTreeNode) node).getUserObject());
 						getSchemaElementTypeConfigurationPanel().clear();
 					} else if (node instanceof SchemaElementTypeTreeNode) {
-						getSchemaElementTypeConfigurationPanel().setSchemaElementType(
-							(SchemaElementType) ((SchemaElementTypeTreeNode) node).getUserObject());
 						NamespaceTypeTreeNode parentNode = (NamespaceTypeTreeNode) node.getParent();
-						getNamespaceTypeConfigurationPanel().setNamespaceType(
-							(NamespaceType) ((NamespaceTypeTreeNode) parentNode).getUserObject());
+						NamespaceType nsType = (NamespaceType)parentNode.getUserObject();
+						if (nsType.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
+							getSchemaElementTypeConfigurationPanel().setSchemaElementType(
+								(SchemaElementType) ((SchemaElementTypeTreeNode) node).getUserObject(), false);
+						} else {
+							getSchemaElementTypeConfigurationPanel().setSchemaElementType(
+								(SchemaElementType) ((SchemaElementTypeTreeNode) node).getUserObject(), true);
+						}
+						getNamespaceTypeConfigurationPanel().setNamespaceType(nsType);
 					} else {
 						getNamespaceTypeConfigurationPanel().clear();
 						getSchemaElementTypeConfigurationPanel().clear();
