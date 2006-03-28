@@ -3,3 +3,4 @@ gme\://gov.nih.nci.cagrid.introduce/1/Methods=gov.nih.nci.cagrid.introduce.beans
 gme\://gov.nih.nci.cagrid.introduce/1/Metadata=gov.nih.nci.cagrid.introduce.beans.metadata
 gme\://gov.nih.nci.cagrid.introduce/1/Security=gov.nih.nci.cagrid.introduce.beans.security
 gme\://gov.nih.nci.cagrid.introduce/1/Namespace=gov.nih.nci.cagrid.introduce.beans.namespace
+gme\://gov.nih.nci.cagrid.introduce/1/Extension=gov.nih.nci.cagrid.introduce.beans.extension
