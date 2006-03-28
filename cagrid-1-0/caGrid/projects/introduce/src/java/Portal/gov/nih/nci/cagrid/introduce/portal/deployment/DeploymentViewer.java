@@ -24,7 +24,6 @@ import javax.swing.JPanel;
 
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
-import javax.swing.JCheckBox;
 
 
 /**
@@ -60,11 +59,6 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 	private JPanel deploymentTypePanel = null;
 
 	private JComboBox deploymentTypeSelector = null;
-
-	private JCheckBox rebuildCheckBox = null;
-
-	private JPanel rebuildPanel = null;
-
 
 	/**
 	 * This method initializes
@@ -179,10 +173,6 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
-			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
-			gridBagConstraints12.gridx = 0;
-			gridBagConstraints12.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints12.gridy = 2;
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			gridBagConstraints11.gridx = 0;
 			gridBagConstraints11.fill = java.awt.GridBagConstraints.BOTH;
@@ -190,7 +180,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.gridy = 3;
+			gridBagConstraints1.gridy = 2;
 			gridBagConstraints1.anchor = java.awt.GridBagConstraints.SOUTH;
 			gridBagConstraints1.weighty = 0.0D;
 			gridBagConstraints1.weightx = 1.0D;
@@ -210,7 +200,6 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 			mainPanel.add(getInputPanel(), gridBagConstraints);
 			mainPanel.add(getButtonPanel(), gridBagConstraints1);
 			mainPanel.add(getDeploymentTypePanel(), gridBagConstraints11);
-			mainPanel.add(getRebuildPanel(), gridBagConstraints12);
 		}
 		return mainPanel;
 	}
@@ -267,21 +256,6 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 								ex.printStackTrace();
 							}
 							
-							if (getRebuildCheckBox().isSelected()) {
-								setProgressText("rebuilding");
-								try {
-									String cmd = CommonTools.getAntAllCommand(serviceDirectory.getAbsolutePath());
-									Process antAll = CommonTools.createAndOutputProcess(cmd);
-									antAll.waitFor();
-									if (antAll.exitValue() != 0) {
-										PortalUtils.showErrorMessage("Error rebuilding service");
-									}
-								} catch (Exception ex) {
-									PortalUtils.showErrorMessage("Error rebuilding service!");
-									ex.printStackTrace();
-								}
-							}
-
 							setProgressText("deploying");
 							
 							try {
@@ -368,42 +342,5 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 			deploymentTypeSelector.addItem(GLOBUS);
 		}
 		return deploymentTypeSelector;
-	}
-
-
-	/**
-	 * This method initializes jCheckBox	
-	 * 	
-	 * @return javax.swing.JCheckBox	
-	 */
-	private JCheckBox getRebuildCheckBox() {
-		if (rebuildCheckBox == null) {
-			rebuildCheckBox = new JCheckBox();
-			rebuildCheckBox.setText("Force Full Code Reubuild");
-		}
-		return rebuildCheckBox;
-	}
-
-
-	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getRebuildPanel() {
-		if (rebuildPanel == null) {
-			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.gridx = 0;
-			gridBagConstraints3.weightx = 1.0D;
-			gridBagConstraints3.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints3.gridy = 0;
-			rebuildPanel = new JPanel();
-			rebuildPanel.setLayout(new GridBagLayout());
-			rebuildPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Rebuild",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
-				null, PortalLookAndFeel.getPanelLabelColor()));
-			rebuildPanel.add(getRebuildCheckBox(), gridBagConstraints3);
-		}
-		return rebuildPanel;
 	}
 }
