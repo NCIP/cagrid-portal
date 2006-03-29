@@ -17,15 +17,20 @@
 
 	<!-- build output dirs -->
     <property name="build.dir" location="build" />
-    <property name="build.dest" location="build/classes" />
+	<property name="build.utils.dest" location="${build.dir}/utilities/classes"/>
+	<property name="build.extension.dest" location="${build.dir}/extension/classes"/>
     <property name="build.jars.dir" location="build/lib" />
+	<property name="utils.jar.name" value="${project.name}-${project.version}-utils.jar"/>
+	<property name="extension.jar.name" value="${project.name}-${project.version}-extension.jar"/>
 	<property name="project.jar.name" value="${project.name}-${project.version}.jar"/>
+	<property name="utils.jar.file" value="${build.jars.dir}/$utils.jar.name}"/>
+	<property name="extension.jar.file" value="${build.jars.dir}/${extension.jar.name}"/>
 	<property name="project.jar.file" value="${build.jars.dir}/${project.jar.name}"/>
 
 	<!-- stubs -->
-    <property name="stubs.dir" location="build/stubs" />
-    <property name="stubs.src" location="build/stubs/src" />
-    <property name="stubs.dest" location="build/stubs/classes" />
+    <property name="stubs.dir" location="${build.dir}/stubs" />
+    <property name="stubs.src" location="${stubs.dir}/src" />
+    <property name="stubs.dest" location="${stubs.dir}/classes" />
     <property name="stubs.jar.name" value="${project.name}-${project.version}_Stubs.jar" />
 	<property name="stubs.jar.file" value="${build.jars.dir}/${stubs.jar.name}"/>
     <property name="ant.build.stubs" location="${globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />    
@@ -35,8 +40,10 @@
     <property name="schema.dest" location="${build.dir}/schema" />
     <property name="mapping.src" value="${basedir}/NStoPkg.properties" />
 	
-	<!-- primary source directory -->
-	<property name="src.dir" location="${basedir}/src"/>
+	<!-- source directories -->
+	<property name="src.dir" location="${basedir}/src/java"/>
+	<property name="utils.src.dir" location="${src.dir}/utilities"/>
+	<property name="extension.src.dir" location="${src.dir}/extension"/>
 	
 	<!-- libraries -->
 	<property name="lib.dir" location="${basedir}/lib"/>
@@ -45,7 +52,8 @@
 	<!-- creates output directories -->
     <target name="init">
         <mkdir dir="${build.dir}" />
-        <mkdir dir="${build.dest}" />
+    	<mkdir dir="${build.utils.dest}"/>
+    	<mkdir dir="${build.extension.dest}"/>
         <mkdir dir="${build.jars.dir}" />
         <mkdir dir="${stubs.dir}" />
         <mkdir dir="${stubs.src}" />
@@ -95,9 +103,9 @@
     </target>
 	
 	
-	<!-- compiles the source code -->
-	<target name="compileSource" depends="compileStubs">
-		<javac srcdir="${src.dir}" destdir="${build.dest}" debug="${java.debug}">
+	<!-- compiles the utility source code -->
+	<target name="compileUtilsSource" depends="compileStubs">
+		<javac srcdir="${utils.src.dir}" destdir="${build.utils.dest}" debug="${java.debug}">
 			<classpath>
 				<fileset dir="${globus.dir}/lib">
 					<include name="*.jar"/>
@@ -113,6 +121,25 @@
 			<include name="**/*.java" />
 		</javac>
 	</target>
+	
+	
+	<!-- compiles the extension source code -->
+	<target name="compileExtensionSource" depends="compileStubs">
+		<javac srcdir="${extension.src.dir}" destdir="${build.extension.dest}" debug="${java.debug}">
+			<classpath>
+				<fileset dir="${globus.dir}/lib">
+					<include name="*.jar"/>
+				</fileset>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar"/>
+				</fileset>
+					<fileset dir="${ext.lib.dir}">
+				<include name="*.jar"/>
+				</fileset>
+				<pathelement location="${stubs.dest}"/>
+			</classpath>
+		</javac>
+	</target>
 
 	
 	<!-- jars the stubs -->
@@ -124,13 +151,42 @@
     </target>
 	
 	
-	<!-- jars the whole project -->
-	<target name="jarAll" depends="compileSource" description="Builds and jars the whole project">
+	<!-- jars the utilities -->
+	<target name="jarUtils" depends="compileUtilsSource" description="Builds and jars the whole project">
 		<jar destfile="${project.jar.file}">
 			<fileset dir="${stubs.dest}">
 				<include name="**/*.class"/>
 			</fileset>
-			<fileset dir="${build.dest}">
+			<fileset dir="${build.utils.dest}}">
+				<include name="**/*.class"/>
+			</fileset>
+		</jar>
+	</target>
+	
+		
+	<!-- jars the extension -->
+	<target name="jarExtension" depends="compileExtensionSource" description="Jars the introduce extension code">
+		<jar destfile="${extension.jar.file}">
+			<fileset dir="${stubs.dest}">
+				<include name="**/*.class"/>
+			</fileset>
+			<fileset dir="${build.extension.dest}">
+				<include name="**/*.class"/>
+			</fileset>
+		</jar>
+	</target>
+	
+	
+	<!-- jars everything -->
+	<target name="jarAll" depends="compileStubs, compileUtilsSource, compileExtensionSource" description="Jars eveything in the project">
+		<jar destfile="${project.jar.file}">
+			<fileset dir="${stubs.dest}">
+				<include name="**/*.class"/>
+			</fileset>
+			<fileset dir="${build.utils.dest}">
+				<include name="**/*.class"/>
+			</fileset>
+			<fileset dir="${build.extension.dest}">
 				<include name="**/*.class"/>
 			</fileset>
 		</jar>
@@ -148,6 +204,11 @@
 	<target name="cleanBeans">
 		<delete dir="${stubs.src}"/>
 		<delete dir="${stubs.dest}"/>
+	</target>
+	
+	
+	<!-- builds the Introduce extension package -->
+	<target name="buildIntroduceExtension" description="Builds and packages the introduce extension">
 	</target>
 
 	
