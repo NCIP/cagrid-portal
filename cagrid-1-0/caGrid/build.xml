@@ -137,14 +137,14 @@
 				<include name="*.jar" />
 			</fileset>
 		</artifact>
-		
+
 		<artifact track="main" type="jars" id="data.jars">
-			<antcall target="build-data"/>
+			<antcall target="build-data" />
 			<fileset dir="${projects.dir}/data/build/lib">
-				<include name="*.jar"/>
+				<include name="*.jar" />
 			</fileset>
 		</artifact>
-		
+
 		<artifact track="main" type="resources" id="gridca.resources">
 			<fileset dir="${projects.dir}/gridca/resources">
 				<include name="**" />
@@ -159,9 +159,9 @@
 		</artifact>
 
 		<artifact track="main" type="jars" id="cql2xpath.jars">
-			<antcall target="build-cql2xpath"/>
+			<antcall target="build-cql2xpath" />
 			<fileset dir="${projects.dir}/cql2xpath/build/lib">
-				<include name="*.jar"/>
+				<include name="*.jar" />
 			</fileset>
 		</artifact>
 	</target>
@@ -291,19 +291,19 @@
 		</resolveDependencies>
 		<ant dir="${projects.dir}/gme" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
-	
-	
+
+
 	<!-- =============================================================== -->
 	<!-- CAGRID DataService:                                             -->
 	<!-- =============================================================== -->
 	<target name="build-data" depends="prepare" description="Builds caGrid Data Services components">
 		<resolveDependencies extdir="${projects.dir}/data/ext">
-			<artifact refid="core.jars"/>
+			<artifact refid="core.jars" />
 		</resolveDependencies>
-		<ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="all"/>
+		<ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
-	
-	
+
+
 	<!-- =============================================================== -->
 	<!-- CAGRID Cql2Xpath:                                             -->
 	<!-- =============================================================== -->
@@ -311,7 +311,7 @@
 		<resolveDependencies extdir="${projects.dir}/cql2xpath/ext">
 			<artifact refid="core.jars" />
 		</resolveDependencies>
-		<ant dir="${projects.dir}/cql2xpath" inheritAll="false" antfile="build.xml" target="all"/>
+		<ant dir="${projects.dir}/cql2xpath" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
 
@@ -334,12 +334,14 @@
 		<ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="clean" />
 		<delete dir="${projects.dir}/gridca/ext" />
 		<ant dir="${projects.dir}/gridca" inheritAll="false" antfile="build.xml" target="clean" />
+		<delete dir="${projects.dir}/gts/ext" />
+		<ant dir="${projects.dir}/gts" inheritAll="false" antfile="build.xml" target="clean" />
 		<delete dir="${projects.dir}/cadsr/ext" />
 		<ant dir="${projects.dir}/cadsr" inheritAll="false" antfile="build.xml" target="clean" />
 		<delete dir="${projects.dir}/opensaml/ext" />
 		<ant dir="${projects.dir}/opensaml" inheritAll="false" antfile="build.xml" target="clean" />
-		<delete dir="${projects.dir}/data/ext"/>
-		<ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="clean"/>
+		<delete dir="${projects.dir}/data/ext" />
+		<ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="clean" />
 		<delete dir="${projects.dir}/cql2xpath/ext" />
 		<ant dir="${projects.dir}/cql2xpath" inheritAll="false" antfile="build.xml" target="clean" />
 	</target>
