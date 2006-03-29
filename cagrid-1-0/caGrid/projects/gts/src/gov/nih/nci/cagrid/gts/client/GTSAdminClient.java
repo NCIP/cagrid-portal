@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.gts.bean.Permission;
 import gov.nih.nci.cagrid.gts.bean.PermissionFilter;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
+import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault;
@@ -52,6 +53,12 @@ public class GTSAdminClient {
 	public Permission[] findPermissions(PermissionFilter f) throws RemoteException, GTSInternalFault,
 		PermissionDeniedFault {
 		return client.findPermissions(f);
+	}
+	
+	public void addPermission(Permission permission) throws RemoteException,
+	GTSInternalFault, IllegalPermissionFault,
+	PermissionDeniedFault {
+		client.addPermission(permission);
 	}
 
 }

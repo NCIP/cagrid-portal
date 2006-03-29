@@ -1,16 +1,10 @@
 package gov.nih.nci.cagrid.gts.portal;
 
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
 import gov.nih.nci.cagrid.gts.bean.Permission;
 import gov.nih.nci.cagrid.gts.bean.PermissionFilter;
-import gov.nih.nci.cagrid.gts.bean.Role;
-import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
-import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
 import gov.nih.nci.cagrid.gts.client.GTSAdminClient;
-import gov.nih.nci.cagrid.gts.client.GTSSearchClient;
-import gov.nih.nci.cagrid.gts.common.Constants;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -23,7 +17,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
@@ -42,8 +35,6 @@ import org.projectmobius.portal.PortalResourceManager;
  */
 public class PermissionManagerWindow extends GridPortalBaseFrame {
 
-	public final static String ANY = "Any";
-
 	private javax.swing.JPanel jContentPane = null;
 
 	private JPanel mainPanel = null;
@@ -56,7 +47,7 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 
 	private JScrollPane jScrollPane = null;
 
-	private JButton viewTrustedAuthority = null;
+	private JButton addPermission = null;
 
 	private JPanel jPanel = null;
 
@@ -84,19 +75,7 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 
 	private JButton removeTrustedAuthorityButton = null;
 
-	private JPanel filterPanel = null;
-
-	private JLabel jLabel = null;
-
-	private JTextField gridIdentity = null;
-
-	private JLabel jLabel1 = null;
-
-	private JLabel jLabel2 = null;
-
-	private JComboBox trustedAuthorities = null;
-
-	private JComboBox role = null;
+	private PermissionPanel filterPanel = null;
 
 	private String currentService = null;
 
@@ -146,10 +125,18 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+			gridBagConstraints21.gridx = 0;
+			gridBagConstraints21.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints21.weightx = 1.0D;
+			gridBagConstraints21.weighty = 1.0D;
+			gridBagConstraints21.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints21.gridy = 4;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints.weightx = 1.0D;
+			gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints.gridy = 1;
 			GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
 			gridBagConstraints32.gridx = 0;
@@ -167,27 +154,19 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 			gridBagConstraints35.gridy = 0;
 
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
-			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.gridy = 4;
-			gridBagConstraints1.ipadx = 0;
-			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints1.weightx = 1.0D;
-			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints1.weighty = 1.0D;
 			gridBagConstraints2.gridx = 0;
 			gridBagConstraints2.gridy = 5;
 			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints2.anchor = java.awt.GridBagConstraints.SOUTH;
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			mainPanel.add(getButtonPanel(), gridBagConstraints2);
-			mainPanel.add(getContentPanel(), gridBagConstraints1);
 			mainPanel.add(getJPanel(), gridBagConstraints35);
 			mainPanel.add(getQueryPanel(), gridBagConstraints33);
 			mainPanel.add(getProgressPanel(), gridBagConstraints32);
 			mainPanel.add(getFilterPanel(), gridBagConstraints);
+			mainPanel.add(getContentPanel(), gridBagConstraints21);
 		}
 		return mainPanel;
 	}
@@ -265,15 +244,15 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 	 * @return javax.swing.JButton
 	 */
 	private JButton getViewTrustedAuthority() {
-		if (viewTrustedAuthority == null) {
-			viewTrustedAuthority = new JButton();
-			viewTrustedAuthority.setText("View/Edit Permission");
-			viewTrustedAuthority.setIcon(GTSLookAndFeel.getViewPermissionIcon());
-			viewTrustedAuthority.addActionListener(new java.awt.event.ActionListener() {
+		if (addPermission == null) {
+			addPermission = new JButton();
+			addPermission.setText("Add Permission");
+			addPermission.setIcon(GTSLookAndFeel.getAddPermissionIcon());
+			addPermission.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
-							showPermission();
+							addPermission();
 						}
 					};
 					try {
@@ -286,20 +265,16 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 			});
 		}
 
-		return viewTrustedAuthority;
+		return addPermission;
 	}
 
 
-	public void showPermission() {
+	public void addPermission() {
 		try {
 			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			/*
-			 * TrustedAuthorityWindow window = new
-			 * TrustedAuthorityWindow(service, proxy, this.getPermissionsTable()
-			 * .getSelectedTrustedAuthority());
-			 * PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(window);
-			 */
+			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+				new AddPermissionWindow(service, proxy),600,300);
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
 		}
@@ -438,16 +413,7 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 		try {
 			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			PermissionFilter f = new PermissionFilter();
-			f.setGridIdentity(Utils.clean(this.gridIdentity.getText()));
-			String ta = (String) trustedAuthorities.getSelectedItem();
-			if (!ta.equals(ANY)) {
-				f.setTrustedAuthorityName(ta);
-			}
-
-			if (!role.getSelectedItem().equals(ANY)) {
-				f.setRole((Role) role.getSelectedItem());
-			}
+			PermissionFilter f = filterPanel.getPermissionFilter();
 			GTSAdminClient client = new GTSAdminClient(service, proxy);
 			Permission[] perms = client.findPermissions(f);
 			int length = 0;
@@ -609,128 +575,24 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getFilterPanel() {
+	private PermissionPanel getFilterPanel() {
 		if (filterPanel == null) {
-			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
-			gridBagConstraints9.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints9.gridy = 0;
-			gridBagConstraints9.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints9.gridx = 0;
-			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
-			gridBagConstraints8.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints8.gridy = 2;
-			gridBagConstraints8.weightx = 1.0;
-			gridBagConstraints8.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints8.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints8.gridx = 1;
-			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-			gridBagConstraints7.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints7.gridy = 1;
-			gridBagConstraints7.weightx = 1.0;
-			gridBagConstraints7.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints7.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints7.gridx = 1;
-			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-			gridBagConstraints6.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints6.gridy = 2;
-			gridBagConstraints6.gridx = 0;
-			jLabel2 = new JLabel();
-			jLabel2.setText("Role");
-			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints5.gridy = 1;
-			gridBagConstraints5.gridx = 0;
-			jLabel1 = new JLabel();
-			jLabel1.setText("Trusted Authority");
-			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints3.gridy = 0;
-			gridBagConstraints3.weightx = 1.0;
-			gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints3.gridx = 1;
-			jLabel = new JLabel();
-			jLabel.setText("Grid Identity");
-			filterPanel = new JPanel();
-			filterPanel.setLayout(new GridBagLayout());
+			filterPanel = new PermissionPanel(true);
 			filterPanel.setBorder(BorderFactory.createTitledBorder(null, "Search Criteria",
 				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel
 					.getPanelLabelColor()));
-			filterPanel.add(jLabel, gridBagConstraints9);
-			filterPanel.add(getGridIdentity(), gridBagConstraints3);
-			filterPanel.add(jLabel1, gridBagConstraints5);
-			filterPanel.add(jLabel2, gridBagConstraints6);
-			filterPanel.add(getTrustedAuthorities(), gridBagConstraints7);
-			filterPanel.add(getRole(), gridBagConstraints8);
 		}
 		return filterPanel;
-	}
-
-
-	/**
-	 * This method initializes trustedAuthorityName
-	 * 
-	 * @return javax.swing.JTextField
-	 */
-	private JTextField getGridIdentity() {
-		if (gridIdentity == null) {
-			gridIdentity = new JTextField();
-		}
-		return gridIdentity;
-	}
-
-
-	/**
-	 * This method initializes trustLevel
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getTrustedAuthorities() {
-		if (trustedAuthorities == null) {
-			trustedAuthorities = new JComboBox();
-			trustedAuthorities.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					syncRoles();
-				}
-			});
-		}
-		return trustedAuthorities;
-	}
-
-
-	/**
-	 * This method initializes status
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getRole() {
-		if (role == null) {
-			role = new JComboBox();
-		}
-		return role;
 	}
 
 
 	private synchronized void syncServices() {
 		String service = ((GTSServiceListComboBox) getService()).getSelectedService();
 		if ((currentService == null) || (!currentService.equals(service))) {
-			this.currentService = service;
 			try {
+				currentService = service;
 				updateProgress(true, "Discovery Trusted Authorities...");
-
-				GTSSearchClient client = new GTSSearchClient(service);
-				TrustedAuthority[] tas = client.findTrustedAuthorities(new TrustedAuthorityFilter());
-				this.trustedAuthorities.removeAllItems();
-				this.trustedAuthorities.addItem(ANY);
-				this.trustedAuthorities.addItem(Constants.ALL_TRUST_AUTHORITIES);
-
-				int length = 0;
-				if (tas != null) {
-					length = tas.length;
-					for (int i = 0; i < tas.length; i++) {
-						this.trustedAuthorities.addItem(tas[0].getTrustedAuthorityName());
-					}
-				}
-				syncRoles();
+				int length = filterPanel.syncWithService(service);
 				this.updateProgress(false, "Completed [Found " + length + " Trusted Authority(s)]");
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -738,22 +600,6 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 				updateProgress(false, "Error!!!");
 			}
 		}
-	}
 
-
-	private synchronized void syncRoles() {
-		this.role.removeAllItems();
-		String ta = (String) this.trustedAuthorities.getSelectedItem();
-		if (ta.equals(ANY)) {
-			role.addItem(ANY);
-			role.addItem(Role.TrustServiceAdmin);
-			role.addItem(Role.TrustAuthorityManager);
-		} else if (ta.equals(Constants.ALL_TRUST_AUTHORITIES)) {
-			role.addItem(ANY);
-			role.addItem(Role.TrustServiceAdmin);
-		} else {
-			role.addItem(ANY);
-			role.addItem(Role.TrustAuthorityManager);
-		}
 	}
 }

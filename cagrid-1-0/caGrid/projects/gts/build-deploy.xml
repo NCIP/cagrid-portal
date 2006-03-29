@@ -12,7 +12,7 @@
 	
 	
 	<!-- deploy  a gar to tomcat -->
-	<target name="deployTomcat" depends="createDeploymentGar" description="Deploys to CATALINA_HOME">
+	<target name="deployTomcat" depends="all,createDeploymentGar" description="Deploys to CATALINA_HOME">
 		<echo message="Deploying service under Tomcat at ${tomcat.dir}" />
 		
 		<!-- Configure Tomcat destination for skeletons -->
@@ -113,7 +113,7 @@
 	
 	
 	<!-- deploy a gar to globus -->
-	<target name="deployGlobus" depends="checkGlobus, checkTomcat, createDeploymentGar" description="Deploys a gar to GLOBUS_LOCATION">
+	<target name="deployGlobus" depends="checkGlobus, all, createDeploymentGar" description="Deploys a gar to GLOBUS_LOCATION">
 		<echo message="Deploying server to Globus Container" />
 		
 		<java classname="org.globus.bootstrap.AntBootstrap" fork="yes" failonerror="true">

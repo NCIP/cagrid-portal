@@ -66,7 +66,8 @@ public class GTS {
 	public void addPermission(Permission p, String callerGridIdentity) throws GTSInternalFault, IllegalPermissionFault,
 		PermissionDeniedFault {
 		checkServiceAdministrator(callerGridIdentity);
-		if (p.getTrustedAuthorityName() != null) {
+		if ((p.getTrustedAuthorityName() != null)
+			&& (!p.getTrustedAuthorityName().equals(gov.nih.nci.cagrid.gts.common.Constants.ALL_TRUST_AUTHORITIES))) {
 			if (!trust.doesTrustedAuthorityExist(p.getTrustedAuthorityName())) {
 				IllegalPermissionFault fault = new IllegalPermissionFault();
 				fault.setFaultString("Cannot add permission, the Trusted Authority (" + p.getTrustedAuthorityName()
