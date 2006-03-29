@@ -423,7 +423,9 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			ClientCommunication comm = (ClientCommunication) clientCommunication.getSelectedItem();
 			if (determineCommOk(comm)) {
 				// TODO: Check Service Auth
-				if(this.serviceSecurity.getServiceAuthorization()==null){
+				if(this.serviceSecurity==null){
+					anonymousCommunication.setEnabled(true);
+				}else if(this.serviceSecurity.getServiceAuthorization()==null){
 					anonymousCommunication.setEnabled(true);
 				}else if(this.serviceSecurity.getServiceAuthorization().getNoAuthorization()!=null){
 					anonymousCommunication.setEnabled(true);

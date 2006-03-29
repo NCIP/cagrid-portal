@@ -21,68 +21,58 @@ public class GridTrustServiceProviderImpl {
 	}
 
 
-	public gov.nih.nci.cagrid.gts.stubs.UpdateTrustedAuthorityResponse updateTrustedAuthority(
-		gov.nih.nci.cagrid.gts.stubs.UpdateTrustedAuthority params) throws RemoteException,
-		gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault,
-		gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
-		gov.nih.nci.cagrid.gts.stubs.UpdateTrustedAuthorityResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.UpdateTrustedAuthorityResponse();
-		impl.updateTrustedAuthority(params.getTa().getTrustedAuthority());
-		return boxedResult;
-	}
 
 
-	public gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityResponse addTrustedAuthority(
-		gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthority params) throws RemoteException,
-		gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault,
-		gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityResponse addTrustedAuthority(gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthority params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
 		gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityResponse();
 		boxedResult.setTrustedAuthority(impl.addTrustedAuthority(params.getTa().getTrustedAuthority()));
 		return boxedResult;
 	}
-
-
-	public gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesResponse findTrustedAuthorities(
-		gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthorities params) throws RemoteException,
-		gov.nih.nci.cagrid.gts.stubs.GTSInternalFault {
+	public gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesResponse findTrustedAuthorities(gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthorities params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault {
 		gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesResponse();
 		boxedResult.setTrustedAuthority(impl.findTrustedAuthorities(params.getF().getTrustedAuthorityFilter()));
 		return boxedResult;
 	}
-
-
-	public gov.nih.nci.cagrid.gts.stubs.RemoveTrustedAuthorityResponse removeTrustedAuthority(
-		gov.nih.nci.cagrid.gts.stubs.RemoveTrustedAuthority params) throws RemoteException,
-		gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault,
-		gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+	public gov.nih.nci.cagrid.gts.stubs.RemoveTrustedAuthorityResponse removeTrustedAuthority(gov.nih.nci.cagrid.gts.stubs.RemoveTrustedAuthority params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
 		gov.nih.nci.cagrid.gts.stubs.RemoveTrustedAuthorityResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.RemoveTrustedAuthorityResponse();
 		impl.removeTrustedAuthority(params.getTrustedAuthorityName());
 		return boxedResult;
 	}
-
-
-	public gov.nih.nci.cagrid.gts.stubs.AddPermissionResponse addPermission(
-		gov.nih.nci.cagrid.gts.stubs.AddPermission params) throws RemoteException,
-		gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault,
-		gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+	public gov.nih.nci.cagrid.gts.stubs.AddPermissionResponse addPermission(gov.nih.nci.cagrid.gts.stubs.AddPermission params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
 		gov.nih.nci.cagrid.gts.stubs.AddPermissionResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.AddPermissionResponse();
+		impl.addPermission(params.getPermission().getPermission());
 		return boxedResult;
 	}
-
-
-	public gov.nih.nci.cagrid.gts.stubs.FindPermissionsResponse findPermissions(
-		gov.nih.nci.cagrid.gts.stubs.FindPermissions params) throws RemoteException,
-		gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+	public gov.nih.nci.cagrid.gts.stubs.FindPermissionsResponse findPermissions(gov.nih.nci.cagrid.gts.stubs.FindPermissions params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
 		gov.nih.nci.cagrid.gts.stubs.FindPermissionsResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.FindPermissionsResponse();
 		boxedResult.setPermission(impl.findPermissions(params.getF().getPermissionFilter()));
 		return boxedResult;
 	}
-
-
-	public gov.nih.nci.cagrid.gts.stubs.RevokePermissionResponse revokePermission(
-		gov.nih.nci.cagrid.gts.stubs.RevokePermission params) throws RemoteException,
-		gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault,
-		gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+	public gov.nih.nci.cagrid.gts.stubs.RevokePermissionResponse revokePermission(gov.nih.nci.cagrid.gts.stubs.RevokePermission params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
 		gov.nih.nci.cagrid.gts.stubs.RevokePermissionResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.RevokePermissionResponse();
+		impl.revokePermission(params.getPermission().getPermission());
+		return boxedResult;
+	}
+	public gov.nih.nci.cagrid.gts.stubs.UpdateTrustedAuthorityResponse updateTrustedAuthority(gov.nih.nci.cagrid.gts.stubs.UpdateTrustedAuthority params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+		gov.nih.nci.cagrid.gts.stubs.UpdateTrustedAuthorityResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.UpdateTrustedAuthorityResponse();
+		impl.updateTrustedAuthority(params.getTa().getTrustedAuthority());
 		return boxedResult;
 	}
 

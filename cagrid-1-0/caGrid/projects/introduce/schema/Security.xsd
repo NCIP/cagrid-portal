@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns="gme://gov.nih.nci.cagrid.introduce/1/Security" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="gme://gov.nih.nci.cagrid.introduce/1/Security" elementFormDefault="qualified" attributeFormDefault="unqualified">
-	<xs:element name="ServiceSecurity" type="ServiceSecurity"></xs:element>
+<xs:schema xmlns="gme://gov.nih.nci.cagrid.introduce/1/Security" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:sec="gme://gov.nih.nci.cagrid.introduce/1/Security" targetNamespace="gme://gov.nih.nci.cagrid.introduce/1/Security" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="ServiceSecurity" type="sec:ServiceSecurity"/>
 	<xs:complexType name="ServiceSecurity">
 		<xs:sequence>
 			<xs:element name="SecuritySetting" minOccurs="1" maxOccurs="1" type="SecuritySetting"/>
@@ -17,7 +17,7 @@
 		</xs:sequence>
 	</xs:complexType>
 	
-	<xs:element name="MethodSecurity" type="MethodSecurity"></xs:element>
+	<xs:element name="MethodSecurity" type="sec:MethodSecurity"/>
 	<xs:complexType name="MethodSecurity">
 		<xs:sequence>
 			<xs:element name="SecuritySetting" minOccurs="1" maxOccurs="1" type="SecuritySetting"/>

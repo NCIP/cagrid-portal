@@ -32,7 +32,7 @@
    <ns3:Exceptions>
     <ns3:Exception name="GTSInternalFault"/>
    </ns3:Exceptions>
-   <ns3:MethodSecurity xsi:type="ns8:MethodSecurity" xmlns:ns8="gme://gov.nih.nci.cagrid.introduce/1/Security">
+   <ns8:MethodSecurity xsi:type="ns8:MethodSecurity" xmlns:ns8="gme://gov.nih.nci.cagrid.introduce/1/Security">
     <ns8:SecuritySetting xsi:type="ns8:SecuritySetting">Custom</ns8:SecuritySetting>
     <ns8:TransportLevelSecurity xsi:type="ns8:TransportLevelSecurity">
      <ns8:CommunicationMethod xsi:type="ns8:CommunicationMethod">Privacy</ns8:CommunicationMethod>
@@ -44,7 +44,7 @@
     <ns8:RunAsMode xsi:type="ns8:RunAsMode">System</ns8:RunAsMode>
     <ns8:DelegationMode xsi:type="ns8:DelegationMode">None</ns8:DelegationMode>
     <ns8:AnonymousClients xsi:type="ns8:AnonymousCommunication">Yes</ns8:AnonymousClients>
-   </ns3:MethodSecurity>
+   </ns8:MethodSecurity>
   </ns3:Method>
   <ns3:Method name="removeTrustedAuthority" xsi:type="ns3:MethodType">
    <ns3:Inputs>
@@ -103,7 +103,7 @@
   </ns3:Method>
  </ns3:Methods>
  <ns14:MetadataList xsi:type="ns14:MetadataListType" xmlns:ns14="gme://gov.nih.nci.cagrid.introduce/1/Metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
- <ns1:ServiceSecurity xsi:type="ns15:ServiceSecurity" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns15="gme://gov.nih.nci.cagrid.introduce/1/Security">
+ <ns15:ServiceSecurity xsi:type="ns15:ServiceSecurity" xmlns:ns15="gme://gov.nih.nci.cagrid.introduce/1/Security" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns15:SecuritySetting xsi:type="ns15:SecuritySetting">Custom</ns15:SecuritySetting>
   <ns15:TransportLevelSecurity xsi:type="ns15:TransportLevelSecurity">
    <ns15:CommunicationMethod xsi:type="ns15:CommunicationMethod">Privacy</ns15:CommunicationMethod>
@@ -118,5 +118,5 @@
   <ns15:ServiceAuthorization xsi:type="ns15:ServiceAuthorization">
    <ns15:NoAuthorization xsi:type="ns15:NoAuthorization"/>
   </ns15:ServiceAuthorization>
- </ns1:ServiceSecurity>
+ </ns15:ServiceSecurity>
 </ns1:ServiceSkeleton>
