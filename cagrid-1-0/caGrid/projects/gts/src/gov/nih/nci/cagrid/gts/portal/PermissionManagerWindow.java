@@ -274,7 +274,7 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-				new AddPermissionWindow(service, proxy),600,300);
+				new AddPermissionWindow(service, proxy), 600, 300);
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
 		}
@@ -556,13 +556,11 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 
 	private void removePermission() {
 		try {
-
-			/*
-			 * GTSAdminClient client = new GTSAdminClient(service, proxy);
-			 * client.removeTrustedAuthority(this.getPermissionsTable().getSelectedTrustedAuthority()
-			 * .getTrustedAuthorityName());
-			 * this.getPermissionsTable().removeSelectedTrustedAuthority();
-			 */
+			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
+			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GTSAdminClient client = new GTSAdminClient(service, proxy);
+			client.revokePermission(this.permissionsTable.getSelectedPermission());
+			this.getPermissionsTable().removeSelectedPermission();
 
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
