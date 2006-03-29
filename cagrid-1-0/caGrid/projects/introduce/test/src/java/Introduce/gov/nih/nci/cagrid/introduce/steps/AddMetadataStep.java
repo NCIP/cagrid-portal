@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.steps;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
@@ -38,7 +39,7 @@ public class AddMetadataStep extends Step {
 		}
 
 		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(pathtobasedir + File.separator
-			+ tci.getDir() + File.separator + "introduce.xml", ServiceDescription.class);
+			+ tci.getDir() + File.separator + IntroduceConstants.INTRODUCE_XML_FILE, ServiceDescription.class);
 		
 		//		 copy over the bookstore schema to be used with the test
 		Utils.copyFile(new File(pathtobasedir + File.separator + TestCaseInfo.GOLD_SCHEMA_DIR + File.separator
@@ -87,7 +88,7 @@ public class AddMetadataStep extends Step {
 		newMetadatas[newLength - 1] = metadata;
 		metadatasType.setMetadata(newMetadatas);
 
-		Utils.serializeDocument(pathtobasedir + File.separator + tci.getDir() + File.separator + "introduce.xml",
+		Utils.serializeDocument(pathtobasedir + File.separator + tci.getDir() + File.separator + IntroduceConstants.INTRODUCE_XML_FILE,
 			introService, new QName("gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
 
 		try {

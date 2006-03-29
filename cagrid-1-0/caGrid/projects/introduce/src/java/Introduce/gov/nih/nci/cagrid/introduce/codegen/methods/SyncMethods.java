@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.codegen.methods;
 
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
@@ -81,8 +82,8 @@ public class SyncMethods {
 		jp = new JavaParser(jsf);
 
 		serviceInterface = baseDirectory.getAbsolutePath() + File.separator + "src" + File.separator
-			+ this.info.getServiceProperties().get("introduce.skeleton.package.dir") + "/common/"
-			+ this.info.getServiceProperties().get("introduce.skeleton.service.name") + "I.java";
+			+ this.info.getServiceProperties().get(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + "/common/"
+			+ this.info.getServiceProperties().get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + "I.java";
 
 		jp.parse(new File(serviceInterface));
 		this.sourceI = (JavaSource) jsf.getJavaSources().next();

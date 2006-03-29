@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.portal.modification;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
@@ -50,6 +51,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.xml.namespace.QName;
 
@@ -207,7 +209,7 @@ public class ModificationViewer extends GridPortalComponent {
 					ModificationViewer.this.dispose();
 					return;
 				}
-				File file = new File(methodsDirectory.getAbsolutePath() + File.separator + "introduce.xml");
+				File file = new File(methodsDirectory.getAbsolutePath() + File.separator + IntroduceConstants.INTRODUCE_XML_FILE);
 				if (file.exists() && file.canRead()) {
 					try {
 						initialize();
@@ -231,8 +233,8 @@ public class ModificationViewer extends GridPortalComponent {
 		try {
 			serviceProperties = new Properties();
 			serviceProperties.load(new FileInputStream(this.methodsDirectory.getAbsolutePath() + File.separator
-				+ "introduce.properties"));
-			serviceProperties.setProperty("introduce.skeleton.destination.dir", methodsDirectory.getAbsolutePath());
+				+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE));
+			serviceProperties.setProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR, methodsDirectory.getAbsolutePath());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -257,7 +259,7 @@ public class ModificationViewer extends GridPortalComponent {
 	private void initialize() throws Exception {
 		if (this.methodsDirectory != null) {
 			this.introService = (ServiceDescription) Utils.deserializeDocument(this.methodsDirectory.getAbsolutePath()
-				+ File.separator + "introduce.xml", ServiceDescription.class);
+				+ File.separator + IntroduceConstants.INTRODUCE_XML_FILE, ServiceDescription.class);
 			if (introService.getIntroduceVersion() == null
 				|| !introService.getIntroduceVersion().equals(IntroduceConstants.INTRODUCE_VERSION)) {
 				throw new Exception(
@@ -401,9 +403,8 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private JButton getCancel() {
 		if (cancel == null) {
-			cancel = new JButton(IntroduceLookAndFeel.getCloseIcon());
+			cancel = new JButton(PortalLookAndFeel.getCloseIcon());
 			cancel.setText("Cancel");
-			// cancel.setIcon(GumsLookAndFeel.getCloseIcon());
 			cancel.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();
@@ -483,7 +484,7 @@ public class ModificationViewer extends GridPortalComponent {
 			selectPanel.setLayout(new GridBagLayout());
 			selectPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service Properties",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			selectPanel.add(serviceNameLabel, gridBagConstraints18);
 			selectPanel.add(getServiceName(), gridBagConstraints17);
 			selectPanel.add(packageLabel, gridBagConstraints19);
@@ -539,7 +540,7 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private JButton getAddMethodButton() {
 		if (addMethodButton == null) {
-			addMethodButton = new JButton(IntroduceLookAndFeel.getAddIcon());
+			addMethodButton = new JButton(PortalLookAndFeel.getAddIcon());
 			addMethodButton.setText("Add");
 			addMethodButton.setToolTipText("add new operation");
 			addMethodButton.addActionListener(new java.awt.event.ActionListener() {
@@ -583,7 +584,7 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private JButton getSaveButton() {
 		if (saveButton == null) {
-			saveButton = new JButton(IntroduceLookAndFeel.getSaveIcon());
+			saveButton = new JButton(PortalLookAndFeel.getSaveIcon());
 			saveButton.setText("Save");
 			saveButton.setToolTipText("modify and rebuild service");
 			saveButton.addActionListener(new java.awt.event.ActionListener() {
@@ -640,7 +641,7 @@ public class ModificationViewer extends GridPortalComponent {
 										// call the resync and build
 										setProgressText("writting service document");
 										Utils.serializeDocument(methodsDirectory.getAbsolutePath() + File.separator
-											+ "introduce.xml", introService, new QName(
+											+ IntroduceConstants.INTRODUCE_XML_FILE, introService, new QName(
 											"gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
 										setProgressText("sychronizing skeleton");
 										// call the sync tools
@@ -690,7 +691,7 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private JButton getRemoveButton() {
 		if (removeButton == null) {
-			removeButton = new JButton(IntroduceLookAndFeel.getRemoveIcon());
+			removeButton = new JButton(PortalLookAndFeel.getRemoveIcon());
 			removeButton.setText("Remove");
 			removeButton.setToolTipText("remove selected operation");
 			removeButton.addActionListener(new java.awt.event.ActionListener() {
@@ -805,7 +806,7 @@ public class ModificationViewer extends GridPortalComponent {
 
 		PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
 			new MethodViewer(method, info, new File(methodsDirectory.getAbsolutePath() + File.separator + "schema"
-				+ File.separator + serviceProperties.getProperty("introduce.skeleton.service.name")),
+				+ File.separator + serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)),
 				getMethodsTable(), getMethodsTable().getSelectedRow()));
 	}
 
@@ -888,9 +889,9 @@ public class ModificationViewer extends GridPortalComponent {
 									if (!dirty) {
 										setProgressText("restoring from local cache");
 										ResourceManager.restoreLatest(serviceProperties
-											.getProperty("introduce.skeleton.timestamp"), serviceProperties
-											.getProperty("introduce.skeleton.service.name"), serviceProperties
-											.getProperty("introduce.skeleton.destination.dir"));
+											.getProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP), serviceProperties
+											.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME), serviceProperties
+											.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
 									}
 									dispose();
 									PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
@@ -1051,7 +1052,7 @@ public class ModificationViewer extends GridPortalComponent {
 			addMetadataButton = new JButton();
 			addMetadataButton.setText("Add");
 			addMetadataButton.setToolTipText("add service metadata");
-			addMetadataButton.setIcon(IntroduceLookAndFeel.getAddIcon());
+			addMetadataButton.setIcon(PortalLookAndFeel.getAddIcon());
 			addMetadataButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dirty = true;
@@ -1093,7 +1094,7 @@ public class ModificationViewer extends GridPortalComponent {
 			removeMetadataButton = new JButton();
 			removeMetadataButton.setText("Remove");
 			removeMetadataButton.setToolTipText("remove service metadata");
-			removeMetadataButton.setIcon(IntroduceLookAndFeel.getRemoveIcon());
+			removeMetadataButton.setIcon(PortalLookAndFeel.getRemoveIcon());
 			removeMetadataButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dirty = true;
@@ -1138,7 +1139,7 @@ public class ModificationViewer extends GridPortalComponent {
 			serviceName = new JTextField();
 			serviceName.setEditable(false);
 			serviceName.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
-			serviceName.setText(serviceProperties.getProperty("introduce.skeleton.service.name"));
+			serviceName.setText(serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
 		}
 		return serviceName;
 	}
@@ -1363,13 +1364,13 @@ public class ModificationViewer extends GridPortalComponent {
 		if (namespaceAddButton == null) {
 			namespaceAddButton = new JButton();
 			namespaceAddButton.setText("Add");
-			namespaceAddButton.setIcon(IntroduceLookAndFeel.getAddIcon());
+			namespaceAddButton.setIcon(PortalLookAndFeel.getAddIcon());
 			namespaceAddButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					NamespaceType type = getGmeDiscoveryPanel().createNamespace();
 					getNamespaceJTree().addNode(type);
 					cacheSchema(new File(methodsDirectory + File.separator + "schema" + File.separator
-						+ info.getServiceProperties().getProperty("introduce.skeleton.service.name")), type
+						+ info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)), type
 						.getNamespace());
 				}
 			});
@@ -1387,7 +1388,7 @@ public class ModificationViewer extends GridPortalComponent {
 		if (namespaceRemoveButton == null) {
 			namespaceRemoveButton = new JButton();
 			namespaceRemoveButton.setText("Remove");
-			namespaceRemoveButton.setIcon(IntroduceLookAndFeel.getRemoveIcon());
+			namespaceRemoveButton.setIcon(PortalLookAndFeel.getRemoveIcon());
 			namespaceRemoveButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
@@ -1541,7 +1542,7 @@ public class ModificationViewer extends GridPortalComponent {
 		if (metadataNamespaceScrollPane == null) {
 			metadataNamespaceScrollPane = new JScrollPane();
 			metadataNamespaceScrollPane
-				.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 			metadataNamespaceScrollPane.setViewportView(getMetadataNamespacesJTree());
 		}
 		return metadataNamespaceScrollPane;

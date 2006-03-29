@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.steps;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
@@ -34,11 +35,11 @@ public class RemoveAllMetadataStep extends Step {
 		}
 
 		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(pathtobasedir + File.separator
-			+ tci.getDir() + File.separator + "introduce.xml", ServiceDescription.class);
+			+ tci.getDir() + File.separator + IntroduceConstants.INTRODUCE_XML_FILE, ServiceDescription.class);
 		MetadataListType metadatasType = introService.getMetadataList();
 		metadatasType.setMetadata(null);
 
-		Utils.serializeDocument(pathtobasedir + File.separator + tci.getDir() + File.separator + "introduce.xml",
+		Utils.serializeDocument(pathtobasedir + File.separator + tci.getDir() + File.separator + IntroduceConstants.INTRODUCE_XML_FILE,
 			introService, new QName("gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
 
 		try {
