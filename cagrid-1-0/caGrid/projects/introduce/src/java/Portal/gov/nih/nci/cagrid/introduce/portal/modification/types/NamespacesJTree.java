@@ -92,9 +92,6 @@ public class NamespacesJTree extends JTree {
 
 	public void removeSelectedNode() {
 		DefaultMutableTreeNode currentNode = getCurrentNode();
-		if (currentNode != null) {
-			model.removeNodeFromParent(currentNode);
-		}
 
 		// keep the namespaces object in sync
 		if (currentNode instanceof NamespaceTypeTreeNode) {
@@ -105,7 +102,7 @@ public class NamespacesJTree extends JTree {
 				for (int i = 0; i < namespaceTypes.length; i++) {
 					NamespaceType type = namespaceTypes[i];
 					if (!type.equals(currentNode.getUserObject())) {
-						newNamespaceTypes[kept] = (NamespaceType) currentNode.getUserObject();
+						newNamespaceTypes[kept] = type;
 						kept++;
 					}
 				}
@@ -113,6 +110,11 @@ public class NamespacesJTree extends JTree {
 			} else {
 				namespaces.setNamespace(null);
 			}
+		}
+		
+		
+		if (currentNode != null) {
+			model.removeNodeFromParent(currentNode);
 		}
 	}
 
