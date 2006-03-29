@@ -1,0 +1,17 @@
+
+====================================
+|             Server               |     
+====================================
+
+1) Add Support for multiple Permission Types
+2) Solidfy Trust Levels
+3) Fix multi trust service support of get rid of it.
+
+
+
+====================================
+|             Portal               |     
+====================================
+
+1) Add Permission listing to TrustedAuthority Viewer.
+2) Lock TrustAuthority Viewer Service Selection
