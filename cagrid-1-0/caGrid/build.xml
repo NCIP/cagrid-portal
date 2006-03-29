@@ -169,6 +169,7 @@
 			<antcall target="build-introduce"/>
 			<fileset dir="${projects.dir}/introduce/build/jars">
 				<include name="*.jar"/>
+				<exclude name="*tests*.jar"/>
 			</fileset>
 		</artifact>
 	</target>
