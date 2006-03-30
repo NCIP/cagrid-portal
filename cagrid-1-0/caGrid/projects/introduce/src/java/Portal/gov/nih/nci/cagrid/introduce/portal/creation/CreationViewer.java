@@ -329,7 +329,7 @@ public class CreationViewer extends GridPortalComponent {
 
 		return createButton;
 	}
-	
+
 	/**
 	 * This method initializes serviceStyleSeletor
 	 * 
@@ -341,14 +341,13 @@ public class CreationViewer extends GridPortalComponent {
 			serviceStyleSeletor.setEnabled(false);
 			ExtensionsLoader loader = new ExtensionsLoader(new File("." + File.separator + "extensions"));
 			List extensionDescriptors = loader.getExtensions();
-			for(int i =0; i < extensionDescriptors.size(); i ++){
-				ExtensionDescriptionType ex = (ExtensionDescriptionType)extensionDescriptors.get(i);
+			for(int i = 0; i < extensionDescriptors.size(); i ++){
+				ExtensionDescriptionType ex = (ExtensionDescriptionType) extensionDescriptors.get(i);
 				serviceStyleSeletor.addItem(ex.getName());
 			}
 		}
 		return serviceStyleSeletor;
 	}
-
 
 	/**
 	 * This method initializes service
@@ -665,7 +664,7 @@ public class CreationViewer extends GridPortalComponent {
 						long id = System.currentTimeMillis();
 						Properties props = new Properties();
 						props.load(new FileInputStream(dirName + File.separator + IntroduceConstants.INTRODUCE_PROPERTIES_FILE));
-						props.setProperty("introduce.skeleton.timestamp", String.valueOf(id));
+						props.setProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP, String.valueOf(id));
 						props.store(
 							new FileOutputStream(dirName + File.separator + IntroduceConstants.INTRODUCE_PROPERTIES_FILE),
 							"Introduce Properties");

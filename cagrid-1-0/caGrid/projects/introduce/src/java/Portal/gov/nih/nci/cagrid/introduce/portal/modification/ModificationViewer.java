@@ -661,7 +661,7 @@ public class ModificationViewer extends GridPortalComponent {
 										dirty = false;
 										setProgressText("loading service properties");
 										loadServiceProps();
-										setLastSaved(serviceProperties.getProperty("introduce.skeleton.timestamp"));
+										setLastSaved(serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP));
 										this.setProgressText("");
 									}
 								} catch (Exception e1) {
@@ -888,7 +888,7 @@ public class ModificationViewer extends GridPortalComponent {
 									if (!dirty) {
 										setProgressText("restoring from local cache");
 										ResourceManager.restoreLatest(serviceProperties
-											.getProperty("introduce.skeleton.timestamp"), serviceProperties
+											.getProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP), serviceProperties
 											.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME), serviceProperties
 											.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
 									}
@@ -1170,7 +1170,7 @@ public class ModificationViewer extends GridPortalComponent {
 			lastSaved = new JTextField();
 			lastSaved.setEditable(false);
 			lastSaved.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
-			setLastSaved(serviceProperties.getProperty("introduce.skeleton.timestamp"));
+			setLastSaved(serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP));
 		}
 		return lastSaved;
 	}

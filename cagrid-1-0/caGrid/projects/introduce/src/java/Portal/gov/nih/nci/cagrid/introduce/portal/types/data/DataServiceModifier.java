@@ -368,7 +368,7 @@ public class DataServiceModifier extends GridPortalComponent {
 								try {
 									Properties dataServiceProperties = dataServiceInformation.getServiceProperties();
 									ResourceManager.restoreLatest(
-										dataServiceProperties.getProperty("introduce.skeleton.timestamp"), 
+										dataServiceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP), 
 										dataServiceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME),
 										dataServiceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
 									dispose();

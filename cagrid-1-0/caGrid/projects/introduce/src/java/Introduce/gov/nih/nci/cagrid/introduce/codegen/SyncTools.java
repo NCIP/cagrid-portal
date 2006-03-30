@@ -308,7 +308,7 @@ public class SyncTools {
 		// create the archive
 		long id = System.currentTimeMillis();
 
-		info.getServiceProperties().setProperty("introduce.skeleton.timestamp", String.valueOf(id));
+		info.getServiceProperties().setProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP, String.valueOf(id));
 		info.getServiceProperties().store(
 			new FileOutputStream(baseDirectory.getAbsolutePath() + File.separator + IntroduceConstants.INTRODUCE_PROPERTIES_FILE),
 			"Introduce Properties");
