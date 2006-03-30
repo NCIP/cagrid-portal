@@ -50,7 +50,7 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 	public void postCreate(Properties serviceProperties) throws CreationExtensionException {
 		// load the introduce template stuff
 		ServiceDescription description = null;
-		String templateFilename = getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) 
+		String templateFilename = serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) 
 			+ File.separator + IntroduceConstants.INTRODUCE_XML_FILE;
 		try {
 			System.out.println("Loading existing introduce template");
@@ -62,7 +62,7 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		// apply data service requirements to it
 		try {
 			System.out.println("Adding data service components to template");
-			makeDataService(description);
+			makeDataService(description,serviceProperties);
 		} catch (Exception ex) {
 			throw new CreationExtensionException("Error adding data service components to template!", ex);
 		}
@@ -76,9 +76,9 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 	}
 	
 	
-	private void makeDataService(ServiceDescription description) throws Exception {
+	private void makeDataService(ServiceDescription description, Properties props) throws Exception {
 		// grab cql query and result set schemas from GME
-		String schemaDir = getServiceSchemaDir();
+		String schemaDir = getServiceSchemaDir(props);
 		String cqlQuerySchemaLocation = cacheSchema(CQL_QUERY_URI, schemaDir);
 		String cqlResultSetSchemaLocation = cacheSchema(CQL_RESULT_SET_URI, schemaDir);
 		// namespaces
@@ -117,8 +117,8 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 	}
 	
 	
-	private String getServiceSchemaDir() {
-		return getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "schema";
+	private String getServiceSchemaDir(Properties props) {
+		return props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "schema";
 	}
 	
 	
