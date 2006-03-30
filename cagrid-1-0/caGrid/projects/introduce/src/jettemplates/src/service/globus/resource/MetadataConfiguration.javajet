@@ -5,7 +5,7 @@
 	MetadataListType metadataList = arguments.getMetadata();
 
    String packageName = properties.getProperty("introduce.skeleton.package");
-   String serviceName = properties.getProperty("introduce.skeleton.service.name");
+   String serviceName = properties.getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
    String modifiedServiceName = serviceName;
    if(serviceName.endsWith("Service")){
    	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
