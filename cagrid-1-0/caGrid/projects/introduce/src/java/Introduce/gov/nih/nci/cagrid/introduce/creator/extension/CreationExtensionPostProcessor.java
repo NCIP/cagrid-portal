@@ -9,9 +9,9 @@ import java.util.Properties;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @created 
  */
-public abstract class CreationExtensionPreProcessor extends CreationExtensionProcessor {
+public abstract class CreationExtensionPostProcessor extends CreationExtensionProcessor {
 
-	public CreationExtensionPreProcessor(Properties serviceProperties) {
+	public CreationExtensionPostProcessor(Properties serviceProperties) {
 		super(serviceProperties);
 		// TODO Auto-generated constructor stub
 	}
