@@ -9,13 +9,8 @@ import gov.nih.nci.cagrid.introduce.ServiceInformation;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @created 
  */
-public abstract class CodegenExtensionPostProcessor extends CodegenExtensionProcessor {
-
-	public CodegenExtensionPostProcessor(ServiceInformation info) {
-		super(info);
-		// TODO Auto-generated constructor stub
-	}
+public interface CodegenExtensionPostProcessor {
 	
-	public abstract void postCodegen() throws CodegenExtensionException;
+	public abstract void postCodegen(ServiceInformation info) throws CodegenExtensionException;
 
 }

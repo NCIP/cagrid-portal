@@ -13,14 +13,9 @@ import gov.nih.nci.cagrid.introduce.codegen.extension.CodegenExtensionPostProces
  * @created Mar 29, 2006 
  * @version $Id$ 
  */
-public class DataServiceCodegenPostProcessor extends CodegenExtensionPostProcessor {
+public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProcessor {
 
-	public DataServiceCodegenPostProcessor(ServiceInformation info) {
-		super(info);
-	}
-
-
-	public void postCodegen() throws CodegenExtensionException {
+	public void postCodegen(ServiceInformation info) throws CodegenExtensionException {
 		// TODO Auto-generated method stub
 
 	}

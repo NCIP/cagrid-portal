@@ -5,6 +5,8 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
+import gov.nih.nci.cagrid.introduce.codegen.extension.CodegenExtensionPostProcessor;
+import gov.nih.nci.cagrid.introduce.codegen.extension.CodegenExtensionPreProcessor;
 import gov.nih.nci.cagrid.introduce.creator.extension.CreationExtensionPostProcessor;
 
 import java.io.File;
@@ -185,11 +187,11 @@ public class CommonTools {
 		return null;
 	}
 	
-	public static CreationExtensionPostProcessor getCodegenPostProcessor(String extensionName){
+	public static CodegenExtensionPostProcessor getCodegenPostProcessor(String extensionName){
 		return null;
 	}
 	
-	public static CreationExtensionPostProcessor getCodegenPreProcessor(String extensionName){
+	public static CodegenExtensionPreProcessor getCodegenPreProcessor(String extensionName){
 		return null;
 	}
 }

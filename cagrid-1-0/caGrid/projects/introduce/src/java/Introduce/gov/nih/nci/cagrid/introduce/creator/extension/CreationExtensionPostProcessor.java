@@ -9,13 +9,8 @@ import java.util.Properties;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @created 
  */
-public abstract class CreationExtensionPostProcessor extends CreationExtensionProcessor {
+public interface CreationExtensionPostProcessor {
 
-	public CreationExtensionPostProcessor(Properties serviceProperties) {
-		super(serviceProperties);
-		// TODO Auto-generated constructor stub
-	}
-
-	public abstract void postCreate() throws CreationExtensionException;
+	public abstract void postCreate(Properties serviceProperties) throws CreationExtensionException;
 	
 }

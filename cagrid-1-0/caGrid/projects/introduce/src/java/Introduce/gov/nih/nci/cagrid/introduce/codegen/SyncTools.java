@@ -5,14 +5,18 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
+import gov.nih.nci.cagrid.introduce.codegen.extension.CodegenExtensionPostProcessor;
+import gov.nih.nci.cagrid.introduce.codegen.extension.CodegenExtensionPreProcessor;
 import gov.nih.nci.cagrid.introduce.codegen.metadata.SyncMetadata;
 import gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods;
 import gov.nih.nci.cagrid.introduce.codegen.security.SyncSecurity;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.creator.extension.CreationExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.templates.NamespaceMappingsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate;
 
@@ -117,6 +121,16 @@ public class SyncTools {
 		serviceProperties.setProperty("introduce.ns.excludes", excludeLine);
 		serviceProperties.store(new FileOutputStream(servicePropertiesFile), "Introduce Properties");
 
+		System.out.println("Synchronizing with pre processing extensions");
+		//run any extensions that need to be ran
+		if(introService.getExtensions()!=null && introService.getExtensions().getExtension()!=null){
+			ExtensionType[] extensions = introService.getExtensions().getExtension();
+			for(int i =0; i < extensions.length; i++){
+				CodegenExtensionPreProcessor pp = CommonTools.getCodegenPreProcessor(extensions[i].getName());
+				pp.preCodegen(info);
+			}
+		}
+		
 		// STEP 4: write out namespace mappings and flatten the wsdl file
 		flattenWSDL(info, schemaDir);
 
@@ -138,6 +152,18 @@ public class SyncTools {
 		metadata.sync();
 		System.out.println("Synchronizing the security");
 		security.sync();
+		
+		
+		System.out.println("Synchronizing with post processing extensions");
+		//run any extensions that need to be ran
+		if(introService.getExtensions()!=null && introService.getExtensions().getExtension()!=null){
+			ExtensionType[] extensions = introService.getExtensions().getExtension();
+			for(int i =0; i < extensions.length; i++){
+				CodegenExtensionPostProcessor pp = CommonTools.getCodegenPostProcessor(extensions[i].getName());
+				pp.postCodegen(info);
+			}
+		}
+		
 	}
 
 

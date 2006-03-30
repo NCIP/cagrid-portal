@@ -42,17 +42,12 @@ import org.projectmobius.portal.PortalResourceManager;
  * @created Mar 29, 2006 
  * @version $Id$ 
  */
-public class DataServiceCreationPostProcessor extends CreationExtensionPostProcessor {
+public class DataServiceCreationPostProcessor implements CreationExtensionPostProcessor {
 	
 	public static final String CQL_QUERY_URI = "http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery";
 	public static final String CQL_RESULT_SET_URI = "http://CQL.caBIG/3/gov.nih.nci.cagrid.CQLResultSet";
-	
-	public DataServiceCreationPostProcessor(Properties serviceProperties) {
-		super(serviceProperties);
-	}
 
-
-	public void postCreate() throws CreationExtensionException {
+	public void postCreate(Properties serviceProperties) throws CreationExtensionException {
 		// load the introduce template stuff
 		ServiceDescription description = null;
 		String templateFilename = getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) 

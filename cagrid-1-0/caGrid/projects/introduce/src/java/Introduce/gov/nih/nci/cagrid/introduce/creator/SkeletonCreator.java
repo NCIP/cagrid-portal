@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.creator.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.creator.extension.CreationExtensionPostProcessor;
 
 import java.io.File;
@@ -88,6 +89,11 @@ public class SkeletonCreator extends Task {
 			ExtensionType[] extensions = introService.getExtensions().getExtension();
 			for(int i =0; i < extensions.length; i++){
 				CreationExtensionPostProcessor pp = CommonTools.getCreationPostProcessor(extensions[i].getName());
+				try {
+					pp.postCreate(properties);
+				} catch (CreationExtensionException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
