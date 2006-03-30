@@ -31,6 +31,7 @@ import javax.swing.JTextField;
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
 
+
 /**
  * CreationViewer
  * 
@@ -95,6 +96,7 @@ public class CreationViewer extends GridPortalComponent {
 
 	private JComboBox serviceStyleSeletor = null;
 
+
 	/**
 	 * This method initializes
 	 */
@@ -102,6 +104,7 @@ public class CreationViewer extends GridPortalComponent {
 		super();
 		initialize();
 	}
+
 
 	/**
 	 * This method initializes this
@@ -114,6 +117,7 @@ public class CreationViewer extends GridPortalComponent {
 		this.setFrameIcon(IntroduceLookAndFeel.getCreateIcon());
 		this.setTitle("Create Grid Service");
 	}
+
 
 	/**
 	 * This method initializes jPanel
@@ -170,11 +174,9 @@ public class CreationViewer extends GridPortalComponent {
 			gridBagConstraints10.gridx = 1;
 			inputPanel = new JPanel();
 			inputPanel.setLayout(new GridBagLayout());
-			inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, "Create Grid Service",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					PortalLookAndFeel.getPanelLabelColor()));
+			inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Create Grid Service",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			packageLabel = new JLabel();
 			packageLabel.setText("Package");
 			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
@@ -251,6 +253,7 @@ public class CreationViewer extends GridPortalComponent {
 		return inputPanel;
 	}
 
+
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -281,6 +284,7 @@ public class CreationViewer extends GridPortalComponent {
 		return mainPanel;
 	}
 
+
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -294,6 +298,7 @@ public class CreationViewer extends GridPortalComponent {
 		}
 		return buttonPanel;
 	}
+
 
 	/**
 	 * This method initializes jButton
@@ -315,6 +320,7 @@ public class CreationViewer extends GridPortalComponent {
 		return createButton;
 	}
 
+
 	/**
 	 * This method initializes serviceStyleSeletor
 	 * 
@@ -324,17 +330,16 @@ public class CreationViewer extends GridPortalComponent {
 		if (serviceStyleSeletor == null) {
 			serviceStyleSeletor = new JComboBox();
 			serviceStyleSeletor.setEnabled(false);
-			ExtensionsLoader loader = new ExtensionsLoader(new File("."
-					+ File.separator + "extensions"));
+			ExtensionsLoader loader = new ExtensionsLoader(new File("." + File.separator + "extensions"));
 			List extensionDescriptors = loader.getExtensions();
 			for (int i = 0; i < extensionDescriptors.size(); i++) {
-				ExtensionDescriptionType ex = (ExtensionDescriptionType) extensionDescriptors
-						.get(i);
+				ExtensionDescriptionType ex = (ExtensionDescriptionType) extensionDescriptors.get(i);
 				serviceStyleSeletor.addItem(ex.getName());
 			}
 		}
 		return serviceStyleSeletor;
 	}
+
 
 	/**
 	 * This method initializes service
@@ -349,6 +354,7 @@ public class CreationViewer extends GridPortalComponent {
 		return service;
 	}
 
+
 	/**
 	 * This method initializes jTextField
 	 * 
@@ -361,6 +367,7 @@ public class CreationViewer extends GridPortalComponent {
 		}
 		return dir;
 	}
+
 
 	/**
 	 * This method initializes jButton
@@ -375,8 +382,7 @@ public class CreationViewer extends GridPortalComponent {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
 						String previous = getDir().getText();
-						String location = ResourceManager.promptDir(
-								CreationViewer.this, previous);
+						String location = ResourceManager.promptDir(CreationViewer.this, previous);
 						if (location != null && location.length() > 0) {
 							getDir().setText(location);
 						} else {
@@ -391,6 +397,7 @@ public class CreationViewer extends GridPortalComponent {
 		return dirButton;
 	}
 
+
 	/**
 	 * This method initializes servicePackage
 	 * 
@@ -399,11 +406,11 @@ public class CreationViewer extends GridPortalComponent {
 	private JTextField getServicePackage() {
 		if (servicePackage == null) {
 			servicePackage = new JTextField();
-			servicePackage.setText((DEFAULT_JAVA_PACKAGE + "." + DEFAULT_NAME)
-					.toLowerCase());
+			servicePackage.setText((DEFAULT_JAVA_PACKAGE + "." + DEFAULT_NAME).toLowerCase());
 		}
 		return servicePackage;
 	}
+
 
 	/**
 	 * This method initializes namespaceDomain
@@ -418,6 +425,7 @@ public class CreationViewer extends GridPortalComponent {
 		return namespaceDomain;
 	}
 
+
 	private String promptFile() {
 		JFileChooser chooser = new JFileChooser();
 		chooser.setDialogTitle("Select Attribute File");
@@ -430,6 +438,7 @@ public class CreationViewer extends GridPortalComponent {
 		}
 		return "";
 	}
+
 
 	/**
 	 * This method initializes closeButton
@@ -450,6 +459,7 @@ public class CreationViewer extends GridPortalComponent {
 		return closeButton;
 	}
 
+
 	/**
 	 * This method initializes methodsTemplateFile
 	 * 
@@ -464,6 +474,7 @@ public class CreationViewer extends GridPortalComponent {
 		return serviceTemplate;
 	}
 
+
 	/**
 	 * This method initializes methodsTemplateButton
 	 * 
@@ -474,15 +485,15 @@ public class CreationViewer extends GridPortalComponent {
 			serviceTemplateButton = new JButton();
 			serviceTemplateButton.setText("Browse");
 			serviceTemplateButton.setEnabled(false);
-			serviceTemplateButton
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							getMethodsTemplateFile().setText(promptFile());
-						}
-					});
+			serviceTemplateButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					getMethodsTemplateFile().setText(promptFile());
+				}
+			});
 		}
 		return serviceTemplateButton;
 	}
+
 
 	/**
 	 * This method initializes templatePanel
@@ -497,8 +508,7 @@ public class CreationViewer extends GridPortalComponent {
 			serviceTemplateJLabel = new JLabel();
 			serviceTemplateJLabel.setText("Service Template File");
 			serviceTemplateJLabel.setEnabled(false);
-			serviceTemplateJLabel.setFont(new java.awt.Font("Dialog",
-					java.awt.Font.PLAIN, 12));
+			serviceTemplateJLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12));
 			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
 			gridBagConstraints15.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints15.gridy = 0;
@@ -512,15 +522,9 @@ public class CreationViewer extends GridPortalComponent {
 			gridBagConstraints14.fill = GridBagConstraints.HORIZONTAL;
 			templatePanel = new JPanel();
 			templatePanel.setLayout(new GridBagLayout());
-			templatePanel
-					.setBorder(javax.swing.BorderFactory
-							.createTitledBorder(
-									null,
-									"Service Template Options",
-									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, PortalLookAndFeel
-											.getPanelLabelColor()));
+			templatePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service Template Options",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			templatePanel.setEnabled(false);
 			templatePanel.add(getMethodsTemplateFile(), gridBagConstraints14);
 			templatePanel.add(getServiceTemplateButton(), gridBagConstraints15);
@@ -529,20 +533,19 @@ public class CreationViewer extends GridPortalComponent {
 		return templatePanel;
 	}
 
+
 	private void createService() {
 		int doIdeleteResult = JOptionPane.OK_OPTION;
 		final File dirFile = new File(getDir().getText());
 		if (dirFile.exists() && dirFile.list().length != 0) {
-			doIdeleteResult = JOptionPane
-					.showConfirmDialog(
-							this,
-							"The creation directory is not empty.  All information in the directory will be lost.");
+			doIdeleteResult = JOptionPane.showConfirmDialog(this,
+				"The creation directory is not empty.  All information in the directory will be lost.");
 		}
 
 		if (doIdeleteResult == JOptionPane.OK_OPTION) {
 			final int finalDoIdeleteResult = doIdeleteResult;
-			BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager
-					.getInstance().getGridPortal(), "Creating") {
+			BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance().getGridPortal(),
+				"Creating") {
 				public void process() {
 					try {
 						if (finalDoIdeleteResult == JOptionPane.OK_OPTION) {
@@ -550,10 +553,8 @@ public class CreationViewer extends GridPortalComponent {
 								setProgressText("deleting existing directory");
 								boolean deleted = Utils.deleteDir(dirFile);
 								if (!deleted) {
-									JOptionPane
-											.showMessageDialog(
-													CreationViewer.this,
-													"Unable to delete creation directory");
+									JOptionPane.showMessageDialog(CreationViewer.this,
+										"Unable to delete creation directory");
 									return;
 								}
 							}
@@ -571,32 +572,25 @@ public class CreationViewer extends GridPortalComponent {
 						// String templateFilename =
 						// getMethodsTemplateFile().getText();
 						if (serviceName.length() > 0) {
-							if (!serviceName
-									.matches("[A-Z]++[A-Za-z0-9\\_\\$]*")) {
-								PortalUtils
-										.showMessage("Service Name can only contain [A-Z]++[A-Za-z0-9\\_\\$]*");
+							if (!serviceName.matches("[A-Z]++[A-Za-z0-9\\_\\$]*")) {
+								PortalUtils.showMessage("Service Name can only contain [A-Z]++[A-Za-z0-9\\_\\$]*");
 								return;
 							}
-							if (serviceName.substring(0, 1).toLowerCase()
-									.equals(serviceName.substring(0, 1))) {
-								PortalUtils
-										.showMessage("Service Name cannnot start with lower case letters.");
+							if (serviceName.substring(0, 1).toLowerCase().equals(serviceName.substring(0, 1))) {
+								PortalUtils.showMessage("Service Name cannnot start with lower case letters.");
 								return;
 							}
 						} else {
-							PortalUtils
-									.showMessage("Service Name cannot be empty.");
+							PortalUtils.showMessage("Service Name cannot be empty.");
 							return;
 						}
 						setProgressText("creating");
-						String cmd = CommonTools.getAntSkeletonCreationCommand(
-								".", serviceName, dirName, packageName,
-								serviceNsDomain);
+						String cmd = CommonTools.getAntSkeletonCreationCommand(".", serviceName, dirName, packageName,
+							serviceNsDomain);
 						Process p = CommonTools.createAndOutputProcess(cmd);
 						p.waitFor();
 						if (p.exitValue() != 0) {
-							PortalUtils
-									.showErrorMessage("Error creating new service!");
+							PortalUtils.showErrorMessage("Error creating new service!");
 						}
 
 						/*
@@ -605,7 +599,6 @@ public class CreationViewer extends GridPortalComponent {
 						 * File(templateFilename));
 						 * Utils.stringBufferToFile(fileText, dirName +
 						 * File.separator + "introduce.xml");
-						 * 
 						 * setProgressText("resynchronizing using templates");
 						 * SyncTools sync = new SyncTools(new File(dirName));
 						 * sync.sync(); }
@@ -615,14 +608,11 @@ public class CreationViewer extends GridPortalComponent {
 						p = CommonTools.createAndOutputProcess(cmd);
 						p.waitFor();
 						if (p.exitValue() == 0) {
-							PortalResourceManager.getInstance().getGridPortal()
-									.addGridPortalComponent(
-											new ModificationViewer(new File(
-													dirName)));
+							PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+								new ModificationViewer(new File(dirName)));
 							dispose();
 						} else {
-							PortalUtils
-									.showErrorMessage("Error creating new service!");
+							PortalUtils.showErrorMessage("Error creating new service!");
 						}
 
 						setProgressText("purging old archives");
@@ -631,25 +621,13 @@ public class CreationViewer extends GridPortalComponent {
 						// create the archive
 						long id = System.currentTimeMillis();
 						Properties props = new Properties();
-						props
-								.load(new FileInputStream(
-										dirName
-												+ File.separator
-												+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE));
-						props
-								.setProperty(
-										IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP,
-										String.valueOf(id));
-						props
-								.store(
-										new FileOutputStream(
-												dirName
-														+ File.separator
-														+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE),
-										"Introduce Properties");
+						props.load(new FileInputStream(dirName + File.separator
+							+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE));
+						props.setProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP, String.valueOf(id));
+						props.store(new FileOutputStream(dirName + File.separator
+							+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE), "Introduce Properties");
 						setProgressText("creating a new archive");
-						ResourceManager.createArchive(String.valueOf(id),
-								serviceName, dirName);
+						ResourceManager.createArchive(String.valueOf(id), serviceName, dirName);
 					} catch (Exception ex) {
 						ex.printStackTrace();
 						PortalUtils.showErrorMessage(ex.getMessage());
