@@ -249,7 +249,7 @@ public class SyncTools {
 		NamespaceMappingsTemplate namespaceMappingsT = new NamespaceMappingsTemplate();
 		String namespaceMappingsS = namespaceMappingsT.generate(info);
 		File namespaceMappingsF = new File(baseDirectory.getAbsolutePath() + File.separator
-			+ "namespace2package.mappings");
+			+ IntroduceConstants.NAMESPACE2PACKAGE_MAPPINGS_FILE);
 		FileWriter namespaceMappingsFW = new FileWriter(namespaceMappingsF);
 		namespaceMappingsFW.write(namespaceMappingsS);
 		namespaceMappingsFW.close();
@@ -290,7 +290,7 @@ public class SyncTools {
 		parser.setNamespaceExcludes(excludeList);
 
 		parser.setOutputDir(baseDirectory.getAbsolutePath() + File.separator + "tmp");
-		parser.setNStoPkg(baseDirectory.getAbsolutePath() + File.separator + "namespace2package.mappings");
+		parser.setNStoPkg(baseDirectory.getAbsolutePath() + File.separator + IntroduceConstants.NAMESPACE2PACKAGE_MAPPINGS_FILE);
 		parser
 			.run(new File(baseDirectory.getAbsolutePath() + File.separator + "build" + File.separator + "schema"
 				+ File.separator + info.getServiceProperties().get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator

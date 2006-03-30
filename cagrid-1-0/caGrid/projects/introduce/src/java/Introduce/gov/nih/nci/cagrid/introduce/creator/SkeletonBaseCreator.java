@@ -58,7 +58,7 @@ public class SkeletonBaseCreator {
 		
 		NamespaceMappingsTemplate namespaceMappingsT = new NamespaceMappingsTemplate();
 		String namespaceMappingsS = namespaceMappingsT.generate(info);
-		File namespaceMappingsF = new File(baseDirectory.getAbsolutePath() + File.separator + "namespace2package.mappings");
+		File namespaceMappingsF = new File(baseDirectory.getAbsolutePath() + File.separator + IntroduceConstants.NAMESPACE2PACKAGE_MAPPINGS_FILE);
 		FileWriter namespaceMappingsFW = new FileWriter(namespaceMappingsF);
 		namespaceMappingsFW.write(namespaceMappingsS);
 		namespaceMappingsFW.close();
