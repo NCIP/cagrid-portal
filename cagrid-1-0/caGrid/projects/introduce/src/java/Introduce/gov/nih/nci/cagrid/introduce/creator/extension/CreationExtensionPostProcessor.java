@@ -16,6 +16,6 @@ public abstract class CreationExtensionPostProcessor extends CreationExtensionPr
 		// TODO Auto-generated constructor stub
 	}
 
-	public abstract void preCreate() throws CreationExtensionException;
+	public abstract void postCreate() throws CreationExtensionException;
 	
 }
