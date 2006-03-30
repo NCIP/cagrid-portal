@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.gts.client.gtssync;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -17,17 +18,23 @@ public class GTSSyncProperties {
 
 
 	public GTSSyncProperties() {
-
+		this.gtsServices = new ArrayList();
+		this.deleteUnknownFiles = false;
 	}
 
 
-	public List getGTSServices() {
-		return gtsServices;
+	public void addSyncDescriptor(SyncDescriptor gts) {
+		this.gtsServices.add(gts);
 	}
 
 
-	public void setGTSServices(List gtsServices) {
-		this.gtsServices = gtsServices;
+	public int getSyncDescriptorCount() {
+		return this.gtsServices.size();
+	}
+
+
+	public SyncDescriptor getSyncDescriptor(int index) {
+		return (SyncDescriptor) this.gtsServices.get(index);
 	}
 
 

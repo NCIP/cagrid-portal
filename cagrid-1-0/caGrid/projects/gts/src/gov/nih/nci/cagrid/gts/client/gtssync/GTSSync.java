@@ -1,11 +1,12 @@
 package gov.nih.nci.cagrid.gts.client.gtssync;
 
+import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
+import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
 import gov.nih.nci.cagrid.gts.client.GTSSearchClient;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -57,14 +58,40 @@ public class GTSSync {
 
 	public void sync() throws Exception {
 		try {
+			reset();
 			this.readInCurrentCADirectory();
-			List services = prop.getGTSServices();
-			if (services != null) {
-				for (int i = 0; i < services.size(); i++) {
-					String uri = (String) services.get(i);
-					String hash = String.valueOf(uri.hashCode());
-					GTSSearchClient client = new GTSSearchClient(uri);
+			for (int i = 0; i < prop.getSyncDescriptorCount(); i++) {
+				SyncDescriptor des = prop.getSyncDescriptor(i);
+				String uri = des.getGTSServiceURI();
+				String hash = String.valueOf(uri.hashCode());
+				this.logger.info("Syncing with the GTS " + uri);
+				GTSSearchClient client = new GTSSearchClient(uri);
+				Map taMap = new HashMap();
+				for (int j = 0; j < des.getFilterCount(); j++) {
+					TrustedAuthorityFilter f = des.getFilter(j);
+					int filter = j + 1;
+					try {
+						TrustedAuthority[] tas = client.findTrustedAuthorities(f);
+						int length = 0;
+						if (tas != null) {
+							length = tas.length;
+						}
+						this.logger.debug("Successfully synced with " + uri + " filter " + filter + " " + length
+							+ " Trusted Authorities Found!!!");
+
+						for (int x = 0; x < length; x++) {
+							taMap.put(tas[x].getTrustedAuthorityName(), tas[x]);
+						}
+
+					} catch (Exception e) {
+						logger.error("An error occurred syncing with " + uri + " using filter " + filter + "!!!", e);
+					}
 				}
+				// TODO: Write out tas.
+
+				// TODO: Delete Other TAs.
+				this.logger.info("Done syncing with the GTS " + uri + " " + taMap.size()
+					+ " Trusted Authorities found!!!");
 			}
 
 		} catch (Exception e) {
