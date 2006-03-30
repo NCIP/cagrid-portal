@@ -52,7 +52,7 @@ public class AddMetadatatWithLoadFromFileStep extends Step {
 			System.arraycopy(namespaces.getNamespace(), 0, newNamespaceTypes, 0, currentLength);
 		}
 		NamespaceType type = new NamespaceType();
-		type.setLocation("./CommonServiceMetadata.xsd");
+		type.setLocation("." + File.separator + "CommonServiceMetadata.xsd");
 		type.setNamespace("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common");
 		SchemaElementType etype = new SchemaElementType();
 		etype.setType("CommonServiceMetadata");
@@ -98,7 +98,7 @@ public class AddMetadatatWithLoadFromFileStep extends Step {
 
 		// look at the interface to make sure method from file exists.......
 		String serviceInterface = pathtobasedir + File.separator + tci.dir + File.separator + "src" + File.separator
-			+ tci.getPackageDir() + "/service/" + File.separator + "globus" + File.separator + "resource"
+			+ tci.getPackageDir() + File.separator + "service" + File.separator + "globus" + File.separator + "resource"
 			+ File.separator + "BaseResource.java";
 		assertTrue("Checking that BaseResource contains the load method", StepTools.methodExists(serviceInterface,
 			"loadCommonServiceMetadataFromFile"));
@@ -110,5 +110,4 @@ public class AddMetadatatWithLoadFromFileStep extends Step {
 		p.waitFor();
 		assertEquals("Checking build status", 0, p.exitValue());
 	}
-
 }

@@ -104,7 +104,6 @@ public class CycleTestCase extends TestCase {
 					for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 						JavaPackage dependsP = (JavaPackage) iterator.next();
 						System.out.println("->" + dependsP.getName());
-
 					}
 				}
 			}
@@ -116,7 +115,6 @@ public class CycleTestCase extends TestCase {
 
 
 	public static void main(String args[]) {
-
 		TestRunner runner = new TestRunner();
 		TestResult result = runner.doRun(new TestSuite(CycleTestCase.class));
 		System.exit(result.errorCount() + result.failureCount());

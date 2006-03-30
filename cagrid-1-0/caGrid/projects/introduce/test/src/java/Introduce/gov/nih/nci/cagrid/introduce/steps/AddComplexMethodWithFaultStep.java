@@ -64,7 +64,7 @@ public class AddComplexMethodWithFaultStep extends Step {
 			System.arraycopy(namespaces.getNamespace(), 0, newNamespaceTypes, 0, currentLength);
 		}
 		NamespaceType type = new NamespaceType();
-		type.setLocation("./bookstore.xsd");
+		type.setLocation("." + File.separator + "bookstore.xsd");
 		type.setNamespace("gme://projectmobius.org/1/BookStore");
 		SchemaElementType etype = new SchemaElementType();
 		etype.setType("Book");
@@ -73,9 +73,6 @@ public class AddComplexMethodWithFaultStep extends Step {
 		type.setSchemaElement(etypeArr);
 		newNamespaceTypes[currentLength] = type;
 		namespaces.setNamespace(newNamespaceTypes);
-		
-		
-		
 		
 		MethodsType methodsType = introService.getMethods();
 
@@ -139,7 +136,7 @@ public class AddComplexMethodWithFaultStep extends Step {
 
 		// look at the interface to make sure method exists.......
 		String serviceInterface = pathtobasedir + File.separator + tci.dir + File.separator + "src" + File.separator
-			+ tci.getPackageDir() + "/common/" + tci.getName() + "I.java";
+			+ tci.getPackageDir() + File.separator + "common" + File.separator + tci.getName() + "I.java";
 		assertTrue(StepTools.methodExists(serviceInterface, methodName));
 
 		String cmd = CommonTools.getAntAllCommand(pathtobasedir + File.separator + tci.getDir());
@@ -148,5 +145,4 @@ public class AddComplexMethodWithFaultStep extends Step {
 		p.waitFor();
 		assertEquals("Checking build status", 0, p.exitValue());
 	}
-
 }

@@ -45,7 +45,7 @@ public class IntroducePortalTest extends Story {
 
 					System.out.println("TRYING TO CREATE THE PORTAL WITH NO PROBLEMS...................");
 					myApp = new GridPortal(pathtobasedir + File.separator
-						+ "conf\\introduce\\introduce-portal-conf.xml");
+						+ "conf" + File.separator + "introduce" + File.separator + "introduce-portal-conf.xml");
 					System.out.println("CREATED THE PORTAL WITH NO PROBLEMS...................");
 					myApp.show();
 				} catch (Exception e) {

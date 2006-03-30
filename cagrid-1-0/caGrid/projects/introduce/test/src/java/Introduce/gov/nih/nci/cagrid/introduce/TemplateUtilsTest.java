@@ -6,18 +6,14 @@ import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.codegen.TemplateUtils;
 
-import java.io.FileInputStream;
+import java.io.File;
 import java.util.HashSet;
-import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
-
-import javax.xml.namespace.QName;
 
 import junit.framework.TestCase;
 
 public class TemplateUtilsTest extends TestCase {
-	public static String GOLD_DIRECTORY = "/test/resources/gold/";
+	public static String GOLD_DIRECTORY = File.separator + "test" + File.separator + "resources" + File.separator + "gold" + File.separator;
 
 	public static String GOLD_FILE = "introduce_Example.xml";
 
@@ -31,7 +27,6 @@ public class TemplateUtilsTest extends TestCase {
 	public void setUp() {
 		String pathtobasedir = System.getProperty("basedir", ".");
 		try {
-
 			info = (ServiceDescription) Utils.deserializeDocument(
 					pathtobasedir + GOLD_DIRECTORY + GOLD_FILE,
 					ServiceDescription.class);
@@ -74,8 +69,8 @@ public class TemplateUtilsTest extends TestCase {
 		assertEquals(names.size(), metadataList.getMetadata().length);
 	}
 
+	
 	public static void main(String[] args) {
 		junit.textui.TestRunner.run(TemplateUtilsTest.class);
 	}
-
 }

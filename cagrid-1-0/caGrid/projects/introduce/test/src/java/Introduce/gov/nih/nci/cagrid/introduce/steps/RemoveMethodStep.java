@@ -63,7 +63,7 @@ public class RemoveMethodStep extends Step {
 
 		// look at the interface to make sure method exists.......
 		String serviceInterface = pathtobasedir + File.separator + tci.dir + File.separator + "src" + File.separator
-			+ tci.getPackageDir() + "/common/" + tci.getName() + "I.java";
+			+ tci.getPackageDir() + File.separator + "common" + File.separator + tci.getName() + "I.java";
 		assertTrue(!StepTools.methodExists(serviceInterface, methodName));
 
 		String cmd = CommonTools.getAntAllCommand(pathtobasedir + File.separator + tci.getDir());
@@ -72,5 +72,4 @@ public class RemoveMethodStep extends Step {
 		p.waitFor();
 		assertEquals("Checking build status", 0, p.exitValue());
 	}
-
 }

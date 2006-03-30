@@ -55,7 +55,7 @@ public class AddMetadataStep extends Step {
 			System.arraycopy(namespaces.getNamespace(), 0, newNamespaceTypes, 0, currentLength);
 		}
 		NamespaceType type = new NamespaceType();
-		type.setLocation("./caDSRMetadata.xsd");
+		type.setLocation("." + File.separator + "caDSRMetadata.xsd");
 		type.setNamespace("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.cadsr");
 		SchemaElementType etype = new SchemaElementType();
 		etype.setType("caDSRMetadata");
@@ -101,7 +101,7 @@ public class AddMetadataStep extends Step {
 		// look at the interface to make sure method from file does not
 		// exists.......
 		String serviceInterface = pathtobasedir + File.separator + tci.dir + File.separator + "src" + File.separator
-			+ tci.getPackageDir() + "/service/" + File.separator + "globus" + File.separator + "resource"
+			+ tci.getPackageDir() + File.separator  + "service" + File.separator + "globus" + File.separator + "resource"
 			+ File.separator + "BaseResource.java";
 		assertFalse("Checking that BaseResource contains the load method", StepTools.methodExists(serviceInterface,
 			"loadAnalyticalServiceMetadataFromFile"));

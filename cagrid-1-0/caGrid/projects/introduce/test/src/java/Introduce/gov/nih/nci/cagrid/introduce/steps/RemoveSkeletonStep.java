@@ -30,7 +30,5 @@ public class RemoveSkeletonStep extends Step {
 		boolean results = Utils.deleteDir(new File(pathtobasedir + File.separator + tci.getDir()));
 		System.out.println("__________________________" + results);
 		assertTrue(results);
-
 	}
-
 }

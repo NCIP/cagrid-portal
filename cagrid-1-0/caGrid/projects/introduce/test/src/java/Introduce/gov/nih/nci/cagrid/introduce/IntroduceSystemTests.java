@@ -21,10 +21,8 @@ public class IntroduceSystemTests extends StoryBook {
 					new OutputStreamWriter(System.out));
 			StoryBook book = new IntroduceSystemTests();
 			book.printDocument(out);
-
 		} else {
 			JVMStoryRunner.runStoryBook(new IntroduceSystemTests());
 		}
 	}
-
 }
