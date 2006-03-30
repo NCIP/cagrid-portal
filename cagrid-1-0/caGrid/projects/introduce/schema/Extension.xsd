@@ -13,7 +13,6 @@
 	<xs:element name="ExtensionDescription" type="ExtensionDescriptionType"></xs:element>
 	<xs:complexType name="ExtensionDescriptionType">
 		<xs:sequence>
-			<xs:element name="CreationPreProcessor" type="xs:string" minOccurs="0" maxOccurs="1" />
 			<xs:element name="CreationPostProcessor" type="xs:string" minOccurs="0" maxOccurs="1"/>
 			<xs:element name="CodegenPreProcessor" type="xs:string" minOccurs="0" maxOccurs="1"/>
 			<xs:element name="CodegenPostProcessor" type="xs:string" minOccurs="0" maxOccurs="1"/>
