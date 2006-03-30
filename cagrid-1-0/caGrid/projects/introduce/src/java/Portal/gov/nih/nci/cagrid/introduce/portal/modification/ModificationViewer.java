@@ -232,7 +232,7 @@ public class ModificationViewer extends GridPortalComponent {
 			serviceProperties = new Properties();
 			serviceProperties.load(new FileInputStream(this.methodsDirectory.getAbsolutePath() + File.separator
 				+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE));
-			serviceProperties.setProperty("introduce.skeleton.destination.dir", methodsDirectory.getAbsolutePath());
+			serviceProperties.setProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR, methodsDirectory.getAbsolutePath());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -890,7 +890,7 @@ public class ModificationViewer extends GridPortalComponent {
 										ResourceManager.restoreLatest(serviceProperties
 											.getProperty("introduce.skeleton.timestamp"), serviceProperties
 											.getProperty("introduce.skeleton.service.name"), serviceProperties
-											.getProperty("introduce.skeleton.destination.dir"));
+											.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
 									}
 									dispose();
 									PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(

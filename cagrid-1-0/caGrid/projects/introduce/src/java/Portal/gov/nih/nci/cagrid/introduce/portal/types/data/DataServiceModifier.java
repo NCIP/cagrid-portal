@@ -164,7 +164,7 @@ public class DataServiceModifier extends GridPortalComponent {
 				Properties dataServiceProperties = new Properties();
 				dataServiceProperties.load(new FileInputStream(serviceDirectory.getAbsolutePath() + File.separator
 					+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE));
-				dataServiceProperties.setProperty("introduce.skeleton.destination.dir", serviceDirectory.getAbsolutePath());
+				dataServiceProperties.setProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR, serviceDirectory.getAbsolutePath());
 				dataServiceInformation = new ServiceInformation(dataServiceDescription, dataServiceProperties, serviceDirectory);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -370,7 +370,7 @@ public class DataServiceModifier extends GridPortalComponent {
 									ResourceManager.restoreLatest(
 										dataServiceProperties.getProperty("introduce.skeleton.timestamp"), 
 										dataServiceProperties.getProperty("introduce.skeleton.service.name"),
-										dataServiceProperties.getProperty("introduce.skeleton.destination.dir"));
+										dataServiceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
 									dispose();
 									PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
 										new DataServiceModifier(/*directory*/));

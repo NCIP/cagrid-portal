@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.creator;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 
@@ -30,7 +31,7 @@ public class SkeletonCreator extends Task {
 		Properties properties = new Properties();
 		properties.putAll(this.getProject().getProperties());
 
-		File baseDirectory = new File(properties.getProperty("introduce.skeleton.destination.dir"));
+		File baseDirectory = new File(properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
 
 		ServiceDescription introService = null;
 		try {
