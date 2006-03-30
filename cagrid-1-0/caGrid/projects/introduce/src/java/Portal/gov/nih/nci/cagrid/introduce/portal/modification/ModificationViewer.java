@@ -231,7 +231,7 @@ public class ModificationViewer extends GridPortalComponent {
 		try {
 			serviceProperties = new Properties();
 			serviceProperties.load(new FileInputStream(this.methodsDirectory.getAbsolutePath() + File.separator
-				+ "introduce.properties"));
+				+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE));
 			serviceProperties.setProperty("introduce.skeleton.destination.dir", methodsDirectory.getAbsolutePath());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

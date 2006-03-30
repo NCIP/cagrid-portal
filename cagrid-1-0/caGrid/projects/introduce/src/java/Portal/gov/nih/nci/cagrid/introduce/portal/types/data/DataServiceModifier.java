@@ -163,7 +163,7 @@ public class DataServiceModifier extends GridPortalComponent {
 				
 				Properties dataServiceProperties = new Properties();
 				dataServiceProperties.load(new FileInputStream(serviceDirectory.getAbsolutePath() + File.separator
-					+ "introduce.properties"));
+					+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE));
 				dataServiceProperties.setProperty("introduce.skeleton.destination.dir", serviceDirectory.getAbsolutePath());
 				dataServiceInformation = new ServiceInformation(dataServiceDescription, dataServiceProperties, serviceDirectory);
 			} catch (FileNotFoundException e) {

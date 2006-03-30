@@ -96,7 +96,7 @@ public class SyncTools {
 			throw new Exception("Introduce version in project does not match version provided by Introduce Toolkit ( "
 				+ IntroduceConstants.INTRODUCE_VERSION + " ): " + introService.getIntroduceVersion());
 		}
-		File servicePropertiesFile = new File(baseDirectory.getAbsolutePath() + File.separator + "introduce.properties");
+		File servicePropertiesFile = new File(baseDirectory.getAbsolutePath() + File.separator + IntroduceConstants.INTRODUCE_PROPERTIES_FILE);
 		Properties serviceProperties = new Properties();
 		serviceProperties.load(new FileInputStream(servicePropertiesFile));
 		ServiceInformation info = new ServiceInformation(introService, serviceProperties, baseDirectory);
@@ -310,7 +310,7 @@ public class SyncTools {
 
 		info.getServiceProperties().setProperty("introduce.skeleton.timestamp", String.valueOf(id));
 		info.getServiceProperties().store(
-			new FileOutputStream(baseDirectory.getAbsolutePath() + File.separator + "introduce.properties"),
+			new FileOutputStream(baseDirectory.getAbsolutePath() + File.separator + IntroduceConstants.INTRODUCE_PROPERTIES_FILE),
 			"Introduce Properties");
 
 		ResourceManager.createArchive(String.valueOf(id), info.getServiceProperties().getProperty(

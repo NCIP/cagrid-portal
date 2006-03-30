@@ -628,7 +628,7 @@ public class CreationViewer extends GridPortalComponent {
 								setProgressText("resynchronizing using data service template");
 								// set a property in the introduce.properties to indicate this is a data service
 								Properties props = new Properties();
-								File propertiesFile = new File(dirName + File.separator + "introduce.properties");
+								File propertiesFile = new File(dirName + File.separator + IntroduceConstants.INTRODUCE_PROPERTIES_FILE);
 								InputStream propertyStream = new FileInputStream(propertiesFile);
 								props.load(propertyStream);
 								propertyStream.close();
@@ -659,10 +659,10 @@ public class CreationViewer extends GridPortalComponent {
 						//create the archive
 						long id = System.currentTimeMillis();
 						Properties props = new Properties();
-						props.load(new FileInputStream(dirName + File.separator + "introduce.properties"));
+						props.load(new FileInputStream(dirName + File.separator + IntroduceConstants.INTRODUCE_PROPERTIES_FILE));
 						props.setProperty("introduce.skeleton.timestamp", String.valueOf(id));
 						props.store(
-							new FileOutputStream(dirName + File.separator + "introduce.properties"),
+							new FileOutputStream(dirName + File.separator + IntroduceConstants.INTRODUCE_PROPERTIES_FILE),
 							"Introduce Properties");
 						setProgressText("creating a new archive");
 						ResourceManager.createArchive(String.valueOf(id), serviceName, dirName);
