@@ -172,6 +172,12 @@
 				<exclude name="*tests*.jar"/>
 			</fileset>
 		</artifact>
+		
+		<artifact track="main" type="jars" id="gme.globus.client.jars">
+			<fileset dir="${projects.dir}/gme/lib">
+				<include name="GlobalModelExchange.jar"/>
+			</fileset>
+		</artifact>
 	</target>
 
 
@@ -308,6 +314,7 @@
 		<resolveDependencies extdir="${projects.dir}/data/ext">
 			<artifact refid="core.jars" />
 			<artifact refid="introduce.jars"/>
+			<artifact refid="gme.globus.client.jars"/>
 		</resolveDependencies>
 		<ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
@@ -379,6 +386,5 @@
 		<echo message="WARNING: When building with a JDK of version &lt; 1.5, not all projects can be built!" />
 		<echo message="=====================================================================================" />
 	</target>
-
 </project>
 
