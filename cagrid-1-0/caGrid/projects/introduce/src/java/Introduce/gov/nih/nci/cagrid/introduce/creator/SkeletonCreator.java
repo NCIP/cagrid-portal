@@ -4,12 +4,18 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.creator.extension.CreationExtensionPostProcessor;
 
 import java.io.File;
 import java.util.Properties;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
+
+import antlr.CommonToken;
 
 /**
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
@@ -75,6 +81,14 @@ public class SkeletonCreator extends Task {
 			be.setStackTrace(e.getStackTrace());
 			be.printStackTrace();
 			throw be;
+		}
+		
+		//run any extensions that need to be ran
+		if(introService.getExtensions()!=null && introService.getExtensions().getExtension()!=null){
+			ExtensionType[] extensions = introService.getExtensions().getExtension();
+			for(int i =0; i < extensions.length; i++){
+				CreationExtensionPostProcessor pp = CommonTools.getCreationPostProcessor(extensions[i].getName());
+			}
 		}
 	}
 }
