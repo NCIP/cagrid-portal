@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
@@ -28,6 +29,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.Properties;
 
 import javax.swing.JButton;
@@ -327,6 +329,25 @@ public class CreationViewer extends GridPortalComponent {
 
 		return createButton;
 	}
+	
+	/**
+	 * This method initializes serviceStyleSeletor
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
+	private JComboBox getServiceStyleSeletor() {
+		if (serviceStyleSeletor == null) {
+			serviceStyleSeletor = new JComboBox();
+			serviceStyleSeletor.setEnabled(false);
+			ExtensionsLoader loader = new ExtensionsLoader(new File("." + File.separator + "extensions"));
+			List extensionDescriptors = loader.getExtensions();
+			for(int i =0; i < extensionDescriptors.size(); i ++){
+				ExtensionDescriptionType ex = (ExtensionDescriptionType)extensionDescriptors.get(i);
+				serviceStyleSeletor.addItem(ex.getName());
+			}
+		}
+		return serviceStyleSeletor;
+	}
 
 
 	/**
@@ -522,22 +543,6 @@ public class CreationViewer extends GridPortalComponent {
 	}
 
 
-	/**
-	 * This method initializes serviceStyleSeletor
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getServiceStyleSeletor() {
-		if (serviceStyleSeletor == null) {
-			serviceStyleSeletor = new JComboBox();
-			serviceStyleSeletor.setEnabled(false);
-			serviceStyleSeletor.addItem("NONE");
-			serviceStyleSeletor.addItem("ANALYTICAL");
-			serviceStyleSeletor.addItem("DATA");
-			serviceStyleSeletor.addItem("CUSTOM");
-		}
-		return serviceStyleSeletor;
-	}
 
 
 	private void createService() {
