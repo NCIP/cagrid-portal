@@ -26,6 +26,9 @@
 	<property name="utils.jar.file" value="${build.jars.dir}/$utils.jar.name}"/>
 	<property name="extension.jar.file" value="${build.jars.dir}/${extension.jar.name}"/>
 	<property name="project.jar.file" value="${build.jars.dir}/${project.jar.name}"/>
+	<property name="extension.base.dir" location="${basedir}/extension"/>
+	<property name="extension.description.file" value="${extension.base.dir}/extension.xml"/>
+	<property name="extension.out.dir" location="${extension.base.dir}/DataService"/>
 
 	<!-- stubs -->
     <property name="stubs.dir" location="${build.dir}/stubs" />
@@ -197,6 +200,7 @@
     <target name="clean">
         <delete dir="tmp" />
         <delete dir="${build.dir}" />
+    	<delete dir="${extension.out.dir}"/>
     </target>
 	
 	
@@ -208,7 +212,19 @@
 	
 	
 	<!-- builds the Introduce extension package -->
-	<target name="buildIntroduceExtension" description="Builds and packages the introduce extension">
+	<target name="buildExtension" description="Builds and packages the introduce extension" depends="clean, jarStubs, jarExtension">
+		<mkdir dir="${extension.out.dir}"/>
+		<mkdir dir="${extension.out.dir}/lib"/>
+		<copy file="${extension.description.file}" todir="${extension.out.dir}"/>
+		<copy file="${stubs.jar.file}" todir="${extension.out.dir}/lib"/>
+		<copy file="${extension.jar.file}" todir="${extension.out.dir}/lib"/>
+		<zip destfile="${extension.base.dir}/DataServiceExtension.zip">
+			<fileset dir="${extension.base.dir}">
+			    <include name="**/*"/>
+				<exclude name="*.xml"/>
+				<exclude name="*.zip"/>
+			</fileset>
+		</zip>
 	</target>
 
 	
