@@ -1,16 +1,20 @@
 package gov.nih.nci.cagrid.gts.client.gtssync;
 
+import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
 import gov.nih.nci.cagrid.gts.client.GTSSearchClient;
 
 import java.io.File;
+import java.security.cert.X509CRL;
+import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.globus.common.CoGProperties;
+import org.projectmobius.common.MobiusDate;
 
 
 /**
@@ -58,8 +62,13 @@ public class GTSSync {
 
 	public void sync() throws Exception {
 		try {
+			//Need to make it so multiple certs of the same CA cannot be written
+			//Need to make a priority for this.
+			//Hash by service, prioritize by service order
 			reset();
 			this.readInCurrentCADirectory();
+			int taCount = 1;
+			String dt = MobiusDate.getCurrentDateTimeAsString();
 			for (int i = 0; i < prop.getSyncDescriptorCount(); i++) {
 				SyncDescriptor des = prop.getSyncDescriptor(i);
 				String uri = des.getGTSServiceURI();
@@ -76,8 +85,8 @@ public class GTSSync {
 						if (tas != null) {
 							length = tas.length;
 						}
-						this.logger.debug("Successfully synced with " + uri + " filter " + filter + " " + length
-							+ " Trusted Authorities Found!!!");
+						this.logger.debug("Successfully synced with " + uri + " using filter " + filter
+							+ " the search found " + length + " Trusted Authority(s)!!!");
 
 						for (int x = 0; x < length; x++) {
 							taMap.put(tas[x].getTrustedAuthorityName(), tas[x]);
@@ -89,9 +98,40 @@ public class GTSSync {
 				}
 				// TODO: Write out tas.
 
+				Iterator itr = taMap.values().iterator();
+				while (itr.hasNext()) {
+					int fid = this.getNextFileId();
+					String filePrefix = CoGProperties.getDefault().getCaCertLocations() + File.separator + hash + "-"
+						+ dt + "-" + taCount;
+					File caFile = new File(filePrefix + "." + fid);
+					File crlFile = new File(filePrefix + ".r" + fid);
+					try {
+
+						TrustedAuthority ta = (TrustedAuthority) itr.next();
+						X509Certificate cert = CertUtil.loadCertificate(ta.getCertificate()
+							.getCertificateEncodedString());
+						CertUtil.writeCertificate(cert, caFile);
+						logger.debug("Wrote out the certificate for the Trusted Authority "
+							+ ta.getTrustedAuthorityName() + " to the file " + caFile.getAbsolutePath());
+						if (ta.getCRL() != null) {
+							if (ta.getCRL().getCrlEncodedString() != null) {
+								X509CRL crl = CertUtil.loadCRL(ta.getCRL().getCrlEncodedString());
+								CertUtil.writeCRL(crl, crlFile);
+								logger.debug("Wrote out the CRL for the Trusted Authority "
+									+ ta.getTrustedAuthorityName() + " to the file " + crlFile.getAbsolutePath());
+							}
+						}
+
+					} catch (Exception e) {
+						logger.error("An unexpected error occurred writing out the Trusted Authorities!!!", e);
+						caFile.delete();
+						crlFile.delete();
+					}
+					taCount = taCount + 1;
+				}
 				// TODO: Delete Other TAs.
 				this.logger.info("Done syncing with the GTS " + uri + " " + taMap.size()
-					+ " Trusted Authorities found!!!");
+					+ " Trusted Authority(s) found!!!");
 			}
 
 		} catch (Exception e) {
@@ -199,6 +239,9 @@ public class GTSSync {
 	public static void main(String[] args) {
 		try {
 			GTSSyncProperties props = new GTSSyncProperties();
+			SyncDescriptor des = new SyncDescriptor("https://localhost:8443/wsrf/services/cagrid/GridTrustService");
+			des.addFilter(new TrustedAuthorityFilter());
+			props.addSyncDescriptor(des);
 			props.setDeleteUnknownFiles(false);
 			GTSSync sync = new GTSSync(props);
 			sync.sync();
