@@ -46,9 +46,9 @@ public class XPathUtils {
 			prefixedXpath = prefixedXpath.replaceAll("/" + prefix + ":(\\w)?/", "/*[namespace-uri()='" + ns.getRaw()
 				+ "' and local-name()='$1']/");
 
-			// replace the /a:A[]* stuff
-			prefixedXpath = prefixedXpath.replaceAll("/" + prefix + ":(\\w)?\\[([^\\]\\]])", "/*[namespace-uri()='"
-				+ ns.getRaw() + "' and local-name()='$1' and $2");
+			// replace the /a:A[* stuff
+			prefixedXpath = prefixedXpath.replaceAll("/" + prefix + ":(\\w)?\\[", "/*[namespace-uri()='"
+				+ ns.getRaw() + "' and local-name()='$1' and ");
 
 
 		}
