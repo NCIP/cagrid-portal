@@ -53,30 +53,51 @@ public class DataServiceCreationPostProcessor extends CreationExtensionPostProce
 
 
 	public void postCreate() throws CreationExtensionException {
-		// builds on the introduce template file to add the required
-		// query method for all data services
-		
+		// load the introduce template stuff
+		ServiceDescription description = null;
+		String templateFilename = getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) 
+			+ File.separator + IntroduceConstants.INTRODUCE_XML_FILE;
+		try {
+			System.out.println("Loading existing introduce template");
+			description = (ServiceDescription) Utils.deserializeDocument(
+				templateFilename, ServiceDescription.class);
+		} catch (Exception ex) {
+			throw new CreationExtensionException("Error loading service template!", ex);
+		}
+		// apply data service requirements to it
+		try {
+			System.out.println("Adding data service components to template");
+			makeDataService(description);
+		} catch (Exception ex) {
+			throw new CreationExtensionException("Error adding data service components to template!", ex);
+		}
+		// save it back to disk
+		try {
+			System.out.println("Saving service description back to service directory");
+			Utils.serializeDocument(templateFilename, description, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
+		} catch (Exception ex) {
+			throw new CreationExtensionException("Error saving data service description!", ex);
+		}
 	}
 	
 	
-	private ServiceDescription getDataServiceDescription() throws Exception {
-		ServiceDescription dataService = new ServiceDescription();
+	private void makeDataService(ServiceDescription description) throws Exception {
 		// grab cql query and result set schemas from GME
 		String schemaDir = getServiceSchemaDir();
 		String cqlQuerySchemaLocation = cacheSchema(CQL_QUERY_URI, schemaDir);
 		String cqlResultSetSchemaLocation = cacheSchema(CQL_RESULT_SET_URI, schemaDir);
 		// namespaces
-		NamespacesType namespaces = new NamespacesType();
-		NamespaceType[] namespaceTypes = new NamespaceType[2];
-		namespaceTypes[0] = CommonTools.createNamespaceType(schemaDir + File.separator + cqlQuerySchemaLocation);
-		namespaceTypes[0].setLocation("." + File.separator + cqlQuerySchemaLocation);
-		namespaceTypes[1] = CommonTools.createNamespaceType(schemaDir + File.separator + cqlResultSetSchemaLocation);
-		namespaceTypes[1].setLocation("." + File.separator + cqlResultSetSchemaLocation);
-		namespaces.setNamespace(namespaceTypes);
-		dataService.setNamespaces(namespaces);
+		NamespacesType namespaces = description.getNamespaces();
+		NamespaceType[] dsNamespaces = new NamespaceType[namespaces.getNamespace().length + 2];
+		System.arraycopy(namespaces.getNamespace(), 0, dsNamespaces, 0, namespaces.getNamespace().length);
+		dsNamespaces[dsNamespaces.length - 2] = CommonTools.createNamespaceType(schemaDir + File.separator + cqlQuerySchemaLocation);
+		dsNamespaces[dsNamespaces.length - 2].setLocation("." + File.separator + cqlQuerySchemaLocation);
+		dsNamespaces[dsNamespaces.length - 1] = CommonTools.createNamespaceType(schemaDir + File.separator + cqlResultSetSchemaLocation);
+		dsNamespaces[dsNamespaces.length - 1].setLocation("." + File.separator + cqlResultSetSchemaLocation);
+		namespaces.setNamespace(dsNamespaces);
 		
 		// query method
-		MethodsType methods = new MethodsType();
+		MethodsType methods = description.getMethods();
 		MethodType queryMethod = new MethodType();
 		queryMethod.setName("query");
 		// method input parameters
@@ -84,20 +105,20 @@ public class DataServiceCreationPostProcessor extends CreationExtensionPostProce
 		MethodTypeInputsInput queryInput = new MethodTypeInputsInput();
 		queryInput.setName("cqlQuery");
 		queryInput.setIsArray(false);
-		QName queryQname = new QName(namespaceTypes[0].getNamespace(), namespaceTypes[0].getSchemaElement(0).getType());
+		QName queryQname = new QName(dsNamespaces[dsNamespaces.length - 2].getNamespace(), dsNamespaces[dsNamespaces.length - 2].getSchemaElement(0).getType());
 		queryInput.setQName(queryQname);
 		inputs.setInput(new MethodTypeInputsInput[] {queryInput});
 		queryMethod.setInputs(inputs);
 		// method output
 		MethodTypeOutput output = new MethodTypeOutput();
 		output.setIsArray(false);
-		QName resultSetQName = new QName(namespaceTypes[1].getNamespace(), namespaceTypes[1].getSchemaElement(0).getType());
+		QName resultSetQName = new QName(dsNamespaces[dsNamespaces.length - 1].getNamespace(), dsNamespaces[dsNamespaces.length - 1].getSchemaElement(0).getType());
 		output.setQName(resultSetQName);
 		queryMethod.setOutput(output);
-		methods.setMethod(new MethodType[] {queryMethod});
-		dataService.setMethods(methods);
-		
-		return dataService;
+		MethodType[] dsMethods = new MethodType[methods.getMethod().length + 1];
+		System.arraycopy(methods.getMethod(), 0, dsMethods, 0, methods.getMethod().length);
+		dsMethods[dsMethods.length - 1] = queryMethod;
+		methods.setMethod(dsMethods);
 	}
 	
 	
