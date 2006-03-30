@@ -623,12 +623,12 @@ public class CreationViewer extends GridPortalComponent {
 									new File(dirName + File.separator + "schema" + File.separator + serviceName + File.separator + CQL_QUERY_SCHEMA));
 								Utils.copyFile(new File(SCHEMA_DIR + File.separator + CQL_RESULT_SET_SCHEMA),
 									new File(dirName + File.separator + "schema" + File.separator + serviceName + File.separator + CQL_RESULT_SET_SCHEMA));
-								Utils.serializeDocument(dirName + File.separator + IntroduceConstants.INTRODUCE_XML_FILE, dataServiceDescription,
+								Utils.serializeDocument(dirName + File.separator + "introduce.xml", dataServiceDescription,
 									new QName("gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
 								setProgressText("resynchronizing using data service template");
 								// set a property in the introduce.properties to indicate this is a data service
 								Properties props = new Properties();
-								File propertiesFile = new File(dirName + File.separator + IntroduceConstants.INTRODUCE_PROPERTIES_FILE);
+								File propertiesFile = new File(dirName + File.separator + "introduce.properties");
 								InputStream propertyStream = new FileInputStream(propertiesFile);
 								props.load(propertyStream);
 								propertyStream.close();
@@ -659,10 +659,10 @@ public class CreationViewer extends GridPortalComponent {
 						//create the archive
 						long id = System.currentTimeMillis();
 						Properties props = new Properties();
-						props.load(new FileInputStream(dirName + File.separator + IntroduceConstants.INTRODUCE_PROPERTIES_FILE));
-						props.setProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP, String.valueOf(id));
+						props.load(new FileInputStream(dirName + File.separator + "introduce.properties"));
+						props.setProperty("introduce.skeleton.timestamp", String.valueOf(id));
 						props.store(
-							new FileOutputStream(dirName + File.separator + IntroduceConstants.INTRODUCE_PROPERTIES_FILE),
+							new FileOutputStream(dirName + File.separator + "introduce.properties"),
 							"Introduce Properties");
 						setProgressText("creating a new archive");
 						ResourceManager.createArchive(String.valueOf(id), serviceName, dirName);

@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.introduce.steps;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -38,7 +37,7 @@ public class RemoveMethodStep extends Step {
 		}
 
 		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(pathtobasedir + File.separator
-			+ tci.getDir() + File.separator + IntroduceConstants.INTRODUCE_XML_FILE, ServiceDescription.class);
+			+ tci.getDir() + File.separator + "introduce.xml", ServiceDescription.class);
 		MethodsType methodsType = introService.getMethods();
 
 		MethodType[] newMethods = new MethodType[methodsType.getMethod().length - 1];
@@ -52,7 +51,7 @@ public class RemoveMethodStep extends Step {
 		}
 		methodsType.setMethod(newMethods);
 
-		Utils.serializeDocument(pathtobasedir + File.separator + tci.getDir() + File.separator + IntroduceConstants.INTRODUCE_XML_FILE,
+		Utils.serializeDocument(pathtobasedir + File.separator + tci.getDir() + File.separator + "introduce.xml",
 			introService, new QName("gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
 		try {
 			SyncTools sync = new SyncTools(new File(pathtobasedir + File.separator + tci.getDir()));

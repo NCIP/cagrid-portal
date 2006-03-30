@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.introduce.steps;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -52,7 +51,7 @@ public class AddComplexMethodWithFaultStep extends Step {
 			+ File.separator + tci.getName() + File.separator + "bookstore.xsd"));
 
 		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(pathtobasedir + File.separator
-			+ tci.getDir() + File.separator + IntroduceConstants.INTRODUCE_XML_FILE, ServiceDescription.class);
+			+ tci.getDir() + File.separator + "introduce.xml", ServiceDescription.class);
 		
 		
 		int currentLength = 0;
@@ -125,7 +124,7 @@ public class AddComplexMethodWithFaultStep extends Step {
 		newMethods[newLength - 1] = method;
 		methodsType.setMethod(newMethods);
 
-		Utils.serializeDocument(pathtobasedir + File.separator + tci.getDir() + File.separator + IntroduceConstants.INTRODUCE_XML_FILE,
+		Utils.serializeDocument(pathtobasedir + File.separator + tci.getDir() + File.separator + "introduce.xml",
 			introService, new QName("gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
 
 		Thread.sleep(10);

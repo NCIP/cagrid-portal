@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.introduce.creator;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 
@@ -19,8 +18,6 @@ import org.apache.tools.ant.Task;
  */
 public class SkeletonCreator extends Task {
 
-	public static final String SERVICE_NAME_REGEX = "[A-Z]++[A-Za-z0-9\\_\\$]*";
-	
 	public SkeletonCreator() {
 	}
 
@@ -33,14 +30,16 @@ public class SkeletonCreator extends Task {
 		Properties properties = new Properties();
 		properties.putAll(this.getProject().getProperties());
 
-		File baseDirectory = new File(properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
+		File baseDirectory = new File(properties.getProperty("introduce.skeleton.destination.dir"));
 
 		ServiceDescription introService = null;
 		try {
+
 			introService = (ServiceDescription) Utils.deserializeDocument(baseDirectory + File.separator
-				+ IntroduceConstants.INTRODUCE_XML_FILE, ServiceDescription.class);
-		} catch (Exception ex) {
-			ex.printStackTrace();
+				+ "introduce.xml", ServiceDescription.class);
+
+		} catch (Exception e1) {
+			e1.printStackTrace();
 		}
 
 		ServiceInformation info = new ServiceInformation(introService, properties, baseDirectory);
@@ -50,9 +49,9 @@ public class SkeletonCreator extends Task {
 		SkeletonEtcCreator sec = new SkeletonEtcCreator();
 		SkeletonDocsCreator sdc = new SkeletonDocsCreator();
 
-		String service = properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
-		if (!service.matches(SERVICE_NAME_REGEX)) {
-			System.err.println("Service Name can only contain " + SERVICE_NAME_REGEX);
+		String service = properties.getProperty("introduce.skeleton.service.name");
+		if (!service.matches("[A-Z]++[A-Za-z0-9\\_\\$]*")) {
+			System.err.println("Service Name can only contain [A-Z]++[A-Za-z0-9\\_\\$]*");
 			return;
 		}
 		if (service.substring(0, 1).toLowerCase().equals(service.substring(0, 1))) {

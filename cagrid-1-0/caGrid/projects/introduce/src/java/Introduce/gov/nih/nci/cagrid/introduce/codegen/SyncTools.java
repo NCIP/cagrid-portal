@@ -90,13 +90,13 @@ public class SyncTools {
 	public void sync() throws Exception {
 		// STEP 1: populate the object model representation of the service
 		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(baseDirectory + File.separator
-			+ IntroduceConstants.INTRODUCE_XML_FILE, ServiceDescription.class);
+			+ "introduce.xml", ServiceDescription.class);
 		if (introService.getIntroduceVersion() == null
 			|| !introService.getIntroduceVersion().equals(IntroduceConstants.INTRODUCE_VERSION)) {
 			throw new Exception("Introduce version in project does not match version provided by Introduce Toolkit ( "
 				+ IntroduceConstants.INTRODUCE_VERSION + " ): " + introService.getIntroduceVersion());
 		}
-		File servicePropertiesFile = new File(baseDirectory.getAbsolutePath() + File.separator + IntroduceConstants.INTRODUCE_PROPERTIES_FILE);
+		File servicePropertiesFile = new File(baseDirectory.getAbsolutePath() + File.separator + "introduce.properties");
 		Properties serviceProperties = new Properties();
 		serviceProperties.load(new FileInputStream(servicePropertiesFile));
 		ServiceInformation info = new ServiceInformation(introService, serviceProperties, baseDirectory);
@@ -114,7 +114,7 @@ public class SyncTools {
 			String namespace = (String) iter.next();
 			excludeLine += " -x " + namespace;
 		}
-		serviceProperties.setProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES, excludeLine);
+		serviceProperties.setProperty("introduce.ns.excludes", excludeLine);
 		serviceProperties.store(new FileOutputStream(servicePropertiesFile), "Introduce Properties");
 
 		// STEP 4: write out namespace mappings and flatten the wsdl file
@@ -177,6 +177,7 @@ public class SyncTools {
 						}
 					}
 				}
+
 			}
 		}
 
@@ -191,11 +192,11 @@ public class SyncTools {
 						SchemaInformation namespace = info.getSchemaInformation(inputParam.getQName());
 						if (!namespace.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
 							Type type = table.getType(new QName(info.getServiceProperties().getProperty(
-								IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN)
-								+ "/" + info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME),
+								"introduce.skeleton.namespace.domain")
+								+ "/" + info.getServiceProperties().getProperty("introduce.skeleton.service.name"),
 								">>" + mtype.getName() + ">" + inputParam.getName()));
 							inputParam.setContainerClassName(info.getServiceProperties().getProperty(
-								IntroduceConstants.INTRODUCE_SKELETON_PACKAGE)
+								"introduce.skeleton.package")
 								+ ".stubs." + getRelativeClassName(type.getName()));
 						}
 
@@ -219,7 +220,7 @@ public class SyncTools {
 	private Set generateNamespaceExcludesSet(ServiceInformation info) throws Exception {
 		Set excludeSet = new HashSet();
 		File schemaDir = new File(baseDirectory.getAbsolutePath() + File.separator + "schema" + File.separator
-			+ info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
+			+ info.getServiceProperties().getProperty("introduce.skeleton.service.name"));
 		// exclude namespaces that have FQN for metadata class
 		// get the classnames from the axis symbol table
 		if (info.getNamespaces() != null && info.getNamespaces().getNamespace() != null) {
@@ -248,7 +249,7 @@ public class SyncTools {
 		NamespaceMappingsTemplate namespaceMappingsT = new NamespaceMappingsTemplate();
 		String namespaceMappingsS = namespaceMappingsT.generate(info);
 		File namespaceMappingsF = new File(baseDirectory.getAbsolutePath() + File.separator
-			+ IntroduceConstants.NAMESPACE2PACKAGE_MAPPINGS_FILE);
+			+ "namespace2package.mappings");
 		FileWriter namespaceMappingsFW = new FileWriter(namespaceMappingsF);
 		namespaceMappingsFW.write(namespaceMappingsS);
 		namespaceMappingsFW.close();
@@ -259,8 +260,8 @@ public class SyncTools {
 		ServiceWSDLTemplate serviceWSDLT = new ServiceWSDLTemplate();
 		String serviceWSDLS = serviceWSDLT.generate(info);
 		File serviceWSDLF = new File(schemaDir.getAbsolutePath() + File.separator
-			+ info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator
-			+ info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + ".wsdl");
+			+ info.getServiceProperties().getProperty("introduce.skeleton.service.name") + File.separator
+			+ info.getServiceProperties().getProperty("introduce.skeleton.service.name") + ".wsdl");
 		FileWriter serviceWSDLFW = new FileWriter(serviceWSDLF);
 		serviceWSDLFW.write(serviceWSDLS);
 		serviceWSDLFW.close();
@@ -289,11 +290,11 @@ public class SyncTools {
 		parser.setNamespaceExcludes(excludeList);
 
 		parser.setOutputDir(baseDirectory.getAbsolutePath() + File.separator + "tmp");
-		parser.setNStoPkg(baseDirectory.getAbsolutePath() + File.separator + IntroduceConstants.NAMESPACE2PACKAGE_MAPPINGS_FILE);
+		parser.setNStoPkg(baseDirectory.getAbsolutePath() + File.separator + "namespace2package.mappings");
 		parser
 			.run(new File(baseDirectory.getAbsolutePath() + File.separator + "build" + File.separator + "schema"
-				+ File.separator + info.getServiceProperties().get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator
-				+ info.getServiceProperties().get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + "_flattened.wsdl")
+				+ File.separator + info.getServiceProperties().get("introduce.skeleton.service.name") + File.separator
+				+ info.getServiceProperties().get("introduce.skeleton.service.name") + "_flattened.wsdl")
 				.getAbsolutePath());
 		table = parser.getSymbolTable();
 		Utils.deleteDir(new File(baseDirectory.getAbsolutePath() + File.separator + "tmp"));
@@ -307,13 +308,13 @@ public class SyncTools {
 		// create the archive
 		long id = System.currentTimeMillis();
 
-		info.getServiceProperties().setProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP, String.valueOf(id));
+		info.getServiceProperties().setProperty("introduce.skeleton.timestamp", String.valueOf(id));
 		info.getServiceProperties().store(
-			new FileOutputStream(baseDirectory.getAbsolutePath() + File.separator + IntroduceConstants.INTRODUCE_PROPERTIES_FILE),
+			new FileOutputStream(baseDirectory.getAbsolutePath() + File.separator + "introduce.properties"),
 			"Introduce Properties");
 
 		ResourceManager.createArchive(String.valueOf(id), info.getServiceProperties().getProperty(
-			IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME), baseDirectory.getAbsolutePath());
+			"introduce.skeleton.service.name"), baseDirectory.getAbsolutePath());
 	}
 
 

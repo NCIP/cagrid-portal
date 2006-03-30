@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.creator;
 
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.client.ServiceClientTemplate;
 import gov.nih.nci.cagrid.introduce.templates.common.ServiceITemplate;
@@ -27,10 +26,10 @@ public class SkeletonSourceCreator {
 
 	public void createSkeleton(ServiceInformation info) throws Exception {
 		File baseDirectory = new File(info.getServiceProperties().getProperty(
-				IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
+				"introduce.skeleton.destination.dir"));
 		System.out.println("Creating new source code in : "
 				+ info.getServiceProperties().getProperty(
-						IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
+						"introduce.skeleton.destination.dir"));
 
 		File srcDir = new File(baseDirectory.getAbsolutePath() + File.separator
 				+ "src");
@@ -39,31 +38,31 @@ public class SkeletonSourceCreator {
 		new File(srcDir.getAbsolutePath()
 				+ File.separator
 				+ info.getServiceProperties().getProperty(
-						IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR)).mkdirs();
+						"introduce.skeleton.package.dir")).mkdirs();
 		new File(srcDir.getAbsolutePath()
 				+ File.separator
 				+ info.getServiceProperties().getProperty(
-						IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator
+						"introduce.skeleton.package.dir") + File.separator
 				+ "client").mkdirs();
 		new File(srcDir.getAbsolutePath()
 				+ File.separator
 				+ info.getServiceProperties().getProperty(
-						IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator
+						"introduce.skeleton.package.dir") + File.separator
 				+ "common").mkdirs();
 		new File(srcDir.getAbsolutePath()
 				+ File.separator
 				+ info.getServiceProperties().getProperty(
-						IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator
+						"introduce.skeleton.package.dir") + File.separator
 				+ "service").mkdirs();
 		new File(srcDir.getAbsolutePath()
 				+ File.separator
 				+ info.getServiceProperties().getProperty(
-						IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator
+						"introduce.skeleton.package.dir") + File.separator
 				+ "service" + File.separator + "globus").mkdirs();
 		new File(srcDir.getAbsolutePath()
 				+ File.separator
 				+ info.getServiceProperties().getProperty(
-						IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator
+						"introduce.skeleton.package.dir") + File.separator
 				+ "service" + File.separator + "globus" + File.separator
 				+ "resource").mkdirs();
 
@@ -72,12 +71,12 @@ public class SkeletonSourceCreator {
 		File clientF = new File(srcDir.getAbsolutePath()
 				+ File.separator
 				+ info.getServiceProperties().getProperty(
-						IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR)
+						"introduce.skeleton.package.dir")
 				+ File.separator
 				+ "client"
 				+ File.separator
 				+ info.getServiceProperties().getProperty(
-						IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + "Client.java");
+						"introduce.skeleton.service.name") + "Client.java");
 
 		FileWriter clientFW = new FileWriter(clientF);
 		clientFW.write(clientS);
@@ -88,12 +87,12 @@ public class SkeletonSourceCreator {
 		File iF = new File(srcDir.getAbsolutePath()
 				+ File.separator
 				+ info.getServiceProperties().getProperty(
-						IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR)
+						"introduce.skeleton.package.dir")
 				+ File.separator
 				+ "common"
 				+ File.separator
 				+ info.getServiceProperties().getProperty(
-					IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + "I.java");
+						"introduce.skeleton.service.name") + "I.java");
 
 		FileWriter iFW = new FileWriter(iF);
 		iFW.write(iS);
@@ -104,12 +103,12 @@ public class SkeletonSourceCreator {
 		File implF = new File(srcDir.getAbsolutePath()
 				+ File.separator
 				+ info.getServiceProperties().getProperty(
-						IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR)
+						"introduce.skeleton.package.dir")
 				+ File.separator
 				+ "service"
 				+ File.separator
 				+ info.getServiceProperties().getProperty(
-					IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + "Impl.java");
+						"introduce.skeleton.service.name") + "Impl.java");
 
 		FileWriter implFW = new FileWriter(implF);
 		implFW.write(implS);
@@ -120,14 +119,14 @@ public class SkeletonSourceCreator {
 		File providerImplF = new File(srcDir.getAbsolutePath()
 				+ File.separator
 				+ info.getServiceProperties().getProperty(
-						IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR)
+						"introduce.skeleton.package.dir")
 				+ File.separator
 				+ "service"
 				+ File.separator
 				+ "globus"
 				+ File.separator
 				+ info.getServiceProperties().getProperty(
-					IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
+						"introduce.skeleton.service.name")
 				+ "ProviderImpl.java");
 
 		FileWriter providerImplFW = new FileWriter(providerImplF);
@@ -139,7 +138,7 @@ public class SkeletonSourceCreator {
 		File baseResourceF = new File(srcDir.getAbsolutePath()
 				+ File.separator
 				+ info.getServiceProperties().getProperty(
-						IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator
+						"introduce.skeleton.package.dir") + File.separator
 				+ "service" + File.separator + "globus" + File.separator
 				+ "resource" + File.separator + "BaseResource.java");
 
@@ -152,7 +151,7 @@ public class SkeletonSourceCreator {
 		File baseResourceHomeF = new File(srcDir.getAbsolutePath()
 				+ File.separator
 				+ info.getServiceProperties().getProperty(
-						IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator
+						"introduce.skeleton.package.dir") + File.separator
 				+ "service" + File.separator + "globus" + File.separator
 				+ "resource" + File.separator + "BaseResourceHome.java");
 
@@ -165,7 +164,7 @@ public class SkeletonSourceCreator {
 		File metadataConfigurationF = new File(srcDir.getAbsolutePath()
 				+ File.separator
 				+ info.getServiceProperties().getProperty(
-						IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator
+						"introduce.skeleton.package.dir") + File.separator
 				+ "service" + File.separator + "globus" + File.separator
 				+ "resource" + File.separator + "MetadataConfiguration.java");
 
@@ -179,12 +178,14 @@ public class SkeletonSourceCreator {
 		File resourceContanstsF = new File(srcDir.getAbsolutePath()
 				+ File.separator
 				+ info.getServiceProperties().getProperty(
-						IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator
+						"introduce.skeleton.package.dir") + File.separator
 				+ "service" + File.separator + "globus" + File.separator
 				+ "resource" + File.separator + "ResourceConstants.java");
 
 		FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
 		resourceContanstsFW.write(resourceContanstsS);
 		resourceContanstsFW.close();
+
 	}
+
 }

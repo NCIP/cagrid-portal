@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.creator;
 
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate;
 
@@ -20,19 +19,19 @@ public class SkeletonSchemaCreator {
 
 
 	public void createSkeleton(ServiceInformation info) throws Exception {
-		File baseDirectory = new File(info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
+		File baseDirectory = new File(info.getServiceProperties().getProperty("introduce.skeleton.destination.dir"));
 
 		File schemaDir = new File(baseDirectory.getAbsolutePath() + File.separator + "schema");
 		schemaDir.mkdir();
 
 		new File(schemaDir.getAbsolutePath() + File.separator
-			+ info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)).mkdirs();
+			+ info.getServiceProperties().getProperty("introduce.skeleton.service.name")).mkdirs();
 
 		ServiceWSDLTemplate serviceWSDLT = new ServiceWSDLTemplate();
 		String serviceWSDLS = serviceWSDLT.generate(info);
 		File serviceWSDLF = new File(schemaDir.getAbsolutePath() + File.separator
-			+ info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator
-			+ info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + ".wsdl");
+			+ info.getServiceProperties().getProperty("introduce.skeleton.service.name") + File.separator
+			+ info.getServiceProperties().getProperty("introduce.skeleton.service.name") + ".wsdl");
 		FileWriter serviceWSDLFW = new FileWriter(serviceWSDLF);
 		serviceWSDLFW.write(serviceWSDLS);
 		serviceWSDLFW.close();

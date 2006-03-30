@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.creator;
 
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.etc.RegistationTemplate;
 import gov.nih.nci.cagrid.introduce.templates.etc.SecurityDescTemplate;
@@ -21,7 +20,7 @@ public class SkeletonEtcCreator {
 
 
 	public void createSkeleton(ServiceInformation info) throws Exception {
-		File baseDirectory = new File(info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
+		File baseDirectory = new File(info.getServiceProperties().getProperty("introduce.skeleton.destination.dir"));
 
 		File etcDir = new File(baseDirectory.getAbsolutePath() + File.separator + "etc");
 		etcDir.mkdir();
@@ -39,5 +38,7 @@ public class SkeletonEtcCreator {
 		FileWriter securityDescFW = new FileWriter(securityDescF);
 		securityDescFW.write(securityDescS);
 		securityDescFW.close();
+
 	}
+
 }

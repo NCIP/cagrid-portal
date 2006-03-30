@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.security.AnonymousCommunication;
 import gov.nih.nci.cagrid.introduce.beans.security.ClientAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.ClientCommunication;
@@ -64,20 +65,20 @@ public class SyncSource {
 		// this.baseDir = baseDir;
 		this.serviceInfo = info;
 		this.deploymentProperties = this.serviceInfo.getServiceProperties();
-		this.packageName = (String) this.deploymentProperties.get(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE) + ".stubs";
+		this.packageName = (String) this.deploymentProperties.get("introduce.skeleton.package") + ".stubs";
 		serviceClient = baseDir.getAbsolutePath() + File.separator + "src" + File.separator
-			+ this.deploymentProperties.get(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + "client"
-			+ File.separator + this.deploymentProperties.get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + "Client.java";
+			+ this.deploymentProperties.get("introduce.skeleton.package.dir") + File.separator + "client"
+			+ File.separator + this.deploymentProperties.get("introduce.skeleton.service.name") + "Client.java";
 		serviceInterface = baseDir.getAbsolutePath() + File.separator + "src" + File.separator
-			+ this.deploymentProperties.get(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + "common"
-			+ File.separator + this.deploymentProperties.get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + "I.java";
+			+ this.deploymentProperties.get("introduce.skeleton.package.dir") + File.separator + "common"
+			+ File.separator + this.deploymentProperties.get("introduce.skeleton.service.name") + "I.java";
 		serviceImpl = baseDir.getAbsolutePath() + File.separator + "src" + File.separator
-			+ this.deploymentProperties.get(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + "service"
-			+ File.separator + this.deploymentProperties.get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + "Impl.java";
+			+ this.deploymentProperties.get("introduce.skeleton.package.dir") + File.separator + "service"
+			+ File.separator + this.deploymentProperties.get("introduce.skeleton.service.name") + "Impl.java";
 		serviceProviderImpl = baseDir.getAbsolutePath() + File.separator + "src" + File.separator
-			+ this.deploymentProperties.get(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + "service"
+			+ this.deploymentProperties.get("introduce.skeleton.package.dir") + File.separator + "service"
 			+ File.separator + "globus" + File.separator
-			+ this.deploymentProperties.get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + "ProviderImpl.java";
+			+ this.deploymentProperties.get("introduce.skeleton.service.name") + "ProviderImpl.java";
 	}
 
 
@@ -499,7 +500,7 @@ public class SyncSource {
 		int endOfClass = fileContent.lastIndexOf("}");
 		String clientMethod = "\t" + createUnBoxedSignatureStringFromMethod(method) + " " + createExceptions(method);
 		clientMethod += "{\n" + lineStart;
-		clientMethod += this.deploymentProperties.get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
+		clientMethod += this.deploymentProperties.get("introduce.skeleton.service.name")
 			+ "PortType port = this.getPortType();\n";
 
 		clientMethod += lineStart;

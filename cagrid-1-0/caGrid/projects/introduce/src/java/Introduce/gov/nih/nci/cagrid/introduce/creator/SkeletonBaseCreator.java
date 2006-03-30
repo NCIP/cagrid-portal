@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.creator;
 
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.ClasspathTemplate;
 import gov.nih.nci.cagrid.introduce.templates.ClientConfigTemplate;
@@ -26,7 +25,7 @@ public class SkeletonBaseCreator {
 
 
 	public void createSkeleton(ServiceInformation info) throws Exception {
-		File baseDirectory = new File(info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
+		File baseDirectory = new File(info.getServiceProperties().getProperty("introduce.skeleton.destination.dir"));
 		
 		ServerConfigTemplate serverConfigT = new ServerConfigTemplate();
 		String serverConfigS = serverConfigT.generate(info);
@@ -51,14 +50,14 @@ public class SkeletonBaseCreator {
 		
 		DeployPropertiesTemplate deployPropertiesT = new DeployPropertiesTemplate();
 		String deployPropertiesS = deployPropertiesT.generate(info);
-		File deployPropertiesF = new File(baseDirectory.getAbsolutePath() + File.separator + IntroduceConstants.DEPLOY_PROPERTIES_FILE);
+		File deployPropertiesF = new File(baseDirectory.getAbsolutePath() + File.separator + "deploy.properties");
 		FileWriter deployPropertiesFW = new FileWriter(deployPropertiesF);
 		deployPropertiesFW.write(deployPropertiesS);
 		deployPropertiesFW.close();
 		
 		NamespaceMappingsTemplate namespaceMappingsT = new NamespaceMappingsTemplate();
 		String namespaceMappingsS = namespaceMappingsT.generate(info);
-		File namespaceMappingsF = new File(baseDirectory.getAbsolutePath() + File.separator + IntroduceConstants.NAMESPACE2PACKAGE_MAPPINGS_FILE);
+		File namespaceMappingsF = new File(baseDirectory.getAbsolutePath() + File.separator + "namespace2package.mappings");
 		FileWriter namespaceMappingsFW = new FileWriter(namespaceMappingsF);
 		namespaceMappingsFW.write(namespaceMappingsS);
 		namespaceMappingsFW.close();
@@ -77,4 +76,5 @@ public class SkeletonBaseCreator {
 		projectFW.write(projectS);
 		projectFW.close();
 	}
+
 }

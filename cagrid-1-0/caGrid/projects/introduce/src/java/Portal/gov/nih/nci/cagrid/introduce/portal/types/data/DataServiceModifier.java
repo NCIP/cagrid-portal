@@ -110,7 +110,7 @@ public class DataServiceModifier extends GridPortalComponent {
 				String dirName = ResourceManager.promptDir(PortalResourceManager.getInstance().getGridPortal(), (dir == null ? null : dir.getAbsolutePath()));
 				if (dirName != null) {
 					dir = new File(dirName);
-					File introduceFile = new File(dir.getAbsolutePath() + File.separator + IntroduceConstants.INTRODUCE_XML_FILE);
+					File introduceFile = new File(dir.getAbsolutePath() + File.separator + "introduce.xml");
 					if (introduceFile.exists() && introduceFile.canRead()) {
 						choiceMade = true;
 					} else {
@@ -153,7 +153,7 @@ public class DataServiceModifier extends GridPortalComponent {
 			System.out.println("Loading stored service data");
 			try {
 				dataServiceDescription = (ServiceDescription) Utils.deserializeDocument(serviceDirectory.getAbsolutePath()
-					+ File.separator + IntroduceConstants.INTRODUCE_XML_FILE, ServiceDescription.class);
+					+ File.separator + "introduce.xml", ServiceDescription.class);
 				if (dataServiceDescription.getIntroduceVersion() == null
 					|| !dataServiceDescription.getIntroduceVersion().equals(IntroduceConstants.INTRODUCE_VERSION)) {
 					throw new Exception(
@@ -216,7 +216,7 @@ public class DataServiceModifier extends GridPortalComponent {
 					NamespaceType nsType = getGmeTypeSelector().createNamespace();
 					getNamespaceTree().addNode(nsType);
 					cacheSchema(new File(serviceDirectory + File.separator + "schema" + File.separator
-						+ dataServiceInformation.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)), 
+						+ dataServiceInformation.getServiceProperties().getProperty("introduce.skeleton.service.name")), 
 						nsType.getNamespace());
 					addNamespaceToServiceDescription(nsType);
 				}
@@ -368,9 +368,9 @@ public class DataServiceModifier extends GridPortalComponent {
 								try {
 									Properties dataServiceProperties = dataServiceInformation.getServiceProperties();
 									ResourceManager.restoreLatest(
-										dataServiceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP), 
-										dataServiceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME),
-										dataServiceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
+										dataServiceProperties.getProperty("introduce.skeleton.timestamp"), 
+										dataServiceProperties.getProperty("introduce.skeleton.service.name"),
+										dataServiceProperties.getProperty("introduce.skeleton.destination.dir"));
 									dispose();
 									PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
 										new DataServiceModifier(/*directory*/));
@@ -702,7 +702,7 @@ public class DataServiceModifier extends GridPortalComponent {
 				setProgressText("saving service description");
 				try {
 					Utils.serializeDocument(serviceDirectory.getAbsolutePath() + File.separator
-						+ IntroduceConstants.INTRODUCE_XML_FILE, dataServiceDescription, new QName(
+						+ "introduce.xml", dataServiceDescription, new QName(
 							"gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
 				} catch (Exception ex) {
 					ex.printStackTrace();
