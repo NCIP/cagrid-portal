@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.codegen.metadata;
 
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.JNDIConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.etc.RegistationTemplate;
@@ -51,7 +52,7 @@ public class SyncMetadata {
 		BaseResourceTemplate baseResourceT = new BaseResourceTemplate();
 		String baseResourceS = baseResourceT.generate(info);
 		File baseResourceF = new File(srcDir.getAbsolutePath() + File.separator
-			+ info.getServiceProperties().getProperty("introduce.skeleton.package.dir") + File.separator + "service"
+			+ info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + "service"
 			+ File.separator + "globus" + File.separator + "resource" + File.separator + "BaseResource.java");
 
 		FileWriter baseResourceFW = new FileWriter(baseResourceF);
@@ -61,7 +62,7 @@ public class SyncMetadata {
 		MetadataConfigurationTemplate metadataConfigurationT = new MetadataConfigurationTemplate();
 		String metadataConfigurationS = metadataConfigurationT.generate(info);
 		File metadataConfigurationF = new File(srcDir.getAbsolutePath() + File.separator
-			+ info.getServiceProperties().getProperty("introduce.skeleton.package.dir") + File.separator + "service"
+			+ info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + "service"
 			+ File.separator + "globus" + File.separator + "resource" + File.separator + "MetadataConfiguration.java");
 
 		FileWriter metadataConfigurationFW = new FileWriter(metadataConfigurationF);
@@ -71,7 +72,7 @@ public class SyncMetadata {
 		ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
 		String resourceContanstsS = resourceContanstsT.generate(info);
 		File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
-			+ info.getServiceProperties().getProperty("introduce.skeleton.package.dir") + File.separator + "service"
+			+ info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + "service"
 			+ File.separator + "globus" + File.separator + "resource" + File.separator + "ResourceConstants.java");
 
 		FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);

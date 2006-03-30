@@ -82,7 +82,7 @@ public class SyncMethods {
 		jp = new JavaParser(jsf);
 
 		serviceInterface = baseDirectory.getAbsolutePath() + File.separator + "src" + File.separator
-			+ this.info.getServiceProperties().get("introduce.skeleton.package.dir") + File.separator + "common" + File.separator
+			+ this.info.getServiceProperties().get(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + "common" + File.separator
 			+ this.info.getServiceProperties().get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + "I.java";
 
 		jp.parse(new File(serviceInterface));
