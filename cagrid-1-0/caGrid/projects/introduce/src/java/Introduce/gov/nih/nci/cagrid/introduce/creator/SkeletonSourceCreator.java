@@ -77,7 +77,7 @@ public class SkeletonSourceCreator {
 				+ "client"
 				+ File.separator
 				+ info.getServiceProperties().getProperty(
-						"introduce.skeleton.service.name") + "Client.java");
+					IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + "Client.java");
 
 		FileWriter clientFW = new FileWriter(clientF);
 		clientFW.write(clientS);
@@ -93,7 +93,7 @@ public class SkeletonSourceCreator {
 				+ "common"
 				+ File.separator
 				+ info.getServiceProperties().getProperty(
-						"introduce.skeleton.service.name") + "I.java");
+					IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + "I.java");
 
 		FileWriter iFW = new FileWriter(iF);
 		iFW.write(iS);
@@ -109,7 +109,7 @@ public class SkeletonSourceCreator {
 				+ "service"
 				+ File.separator
 				+ info.getServiceProperties().getProperty(
-						"introduce.skeleton.service.name") + "Impl.java");
+					IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + "Impl.java");
 
 		FileWriter implFW = new FileWriter(implF);
 		implFW.write(implS);
@@ -127,7 +127,7 @@ public class SkeletonSourceCreator {
 				+ "globus"
 				+ File.separator
 				+ info.getServiceProperties().getProperty(
-						"introduce.skeleton.service.name")
+						IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
 				+ "ProviderImpl.java");
 
 		FileWriter providerImplFW = new FileWriter(providerImplF);

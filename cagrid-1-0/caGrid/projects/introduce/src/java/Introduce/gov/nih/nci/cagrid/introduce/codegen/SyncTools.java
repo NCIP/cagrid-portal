@@ -193,7 +193,7 @@ public class SyncTools {
 						if (!namespace.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
 							Type type = table.getType(new QName(info.getServiceProperties().getProperty(
 								"introduce.skeleton.namespace.domain")
-								+ "/" + info.getServiceProperties().getProperty("introduce.skeleton.service.name"),
+								+ "/" + info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME),
 								">>" + mtype.getName() + ">" + inputParam.getName()));
 							inputParam.setContainerClassName(info.getServiceProperties().getProperty(
 								"introduce.skeleton.package")
@@ -220,7 +220,7 @@ public class SyncTools {
 	private Set generateNamespaceExcludesSet(ServiceInformation info) throws Exception {
 		Set excludeSet = new HashSet();
 		File schemaDir = new File(baseDirectory.getAbsolutePath() + File.separator + "schema" + File.separator
-			+ info.getServiceProperties().getProperty("introduce.skeleton.service.name"));
+			+ info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
 		// exclude namespaces that have FQN for metadata class
 		// get the classnames from the axis symbol table
 		if (info.getNamespaces() != null && info.getNamespaces().getNamespace() != null) {
@@ -260,8 +260,8 @@ public class SyncTools {
 		ServiceWSDLTemplate serviceWSDLT = new ServiceWSDLTemplate();
 		String serviceWSDLS = serviceWSDLT.generate(info);
 		File serviceWSDLF = new File(schemaDir.getAbsolutePath() + File.separator
-			+ info.getServiceProperties().getProperty("introduce.skeleton.service.name") + File.separator
-			+ info.getServiceProperties().getProperty("introduce.skeleton.service.name") + ".wsdl");
+			+ info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator
+			+ info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + ".wsdl");
 		FileWriter serviceWSDLFW = new FileWriter(serviceWSDLF);
 		serviceWSDLFW.write(serviceWSDLS);
 		serviceWSDLFW.close();
@@ -293,8 +293,8 @@ public class SyncTools {
 		parser.setNStoPkg(baseDirectory.getAbsolutePath() + File.separator + "namespace2package.mappings");
 		parser
 			.run(new File(baseDirectory.getAbsolutePath() + File.separator + "build" + File.separator + "schema"
-				+ File.separator + info.getServiceProperties().get("introduce.skeleton.service.name") + File.separator
-				+ info.getServiceProperties().get("introduce.skeleton.service.name") + "_flattened.wsdl")
+				+ File.separator + info.getServiceProperties().get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator
+				+ info.getServiceProperties().get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + "_flattened.wsdl")
 				.getAbsolutePath());
 		table = parser.getSymbolTable();
 		Utils.deleteDir(new File(baseDirectory.getAbsolutePath() + File.separator + "tmp"));
@@ -314,7 +314,7 @@ public class SyncTools {
 			"Introduce Properties");
 
 		ResourceManager.createArchive(String.valueOf(id), info.getServiceProperties().getProperty(
-			"introduce.skeleton.service.name"), baseDirectory.getAbsolutePath());
+			IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME), baseDirectory.getAbsolutePath());
 	}
 
 

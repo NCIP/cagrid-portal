@@ -50,7 +50,7 @@ public class SkeletonCreator extends Task {
 		SkeletonEtcCreator sec = new SkeletonEtcCreator();
 		SkeletonDocsCreator sdc = new SkeletonDocsCreator();
 
-		String service = properties.getProperty("introduce.skeleton.service.name");
+		String service = properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
 		if (!service.matches("[A-Z]++[A-Za-z0-9\\_\\$]*")) {
 			System.err.println("Service Name can only contain [A-Z]++[A-Za-z0-9\\_\\$]*");
 			return;

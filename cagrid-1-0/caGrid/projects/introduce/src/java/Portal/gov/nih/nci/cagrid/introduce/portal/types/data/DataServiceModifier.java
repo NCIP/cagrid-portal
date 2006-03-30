@@ -216,7 +216,7 @@ public class DataServiceModifier extends GridPortalComponent {
 					NamespaceType nsType = getGmeTypeSelector().createNamespace();
 					getNamespaceTree().addNode(nsType);
 					cacheSchema(new File(serviceDirectory + File.separator + "schema" + File.separator
-						+ dataServiceInformation.getServiceProperties().getProperty("introduce.skeleton.service.name")), 
+						+ dataServiceInformation.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)), 
 						nsType.getNamespace());
 					addNamespaceToServiceDescription(nsType);
 				}
@@ -369,7 +369,7 @@ public class DataServiceModifier extends GridPortalComponent {
 									Properties dataServiceProperties = dataServiceInformation.getServiceProperties();
 									ResourceManager.restoreLatest(
 										dataServiceProperties.getProperty("introduce.skeleton.timestamp"), 
-										dataServiceProperties.getProperty("introduce.skeleton.service.name"),
+										dataServiceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME),
 										dataServiceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
 									dispose();
 									PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(

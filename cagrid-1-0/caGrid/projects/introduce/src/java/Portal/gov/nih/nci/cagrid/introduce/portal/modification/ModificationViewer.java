@@ -733,13 +733,13 @@ public class ModificationViewer extends GridPortalComponent {
 			// new GMEMetadataConfigurationComponent(v, new
 			// File(methodsDirectory.getAbsolutePath() + File.separator
 			// + "schema" + File.separator +
-			// serviceProperties.getProperty("introduce.skeleton.service.name"))));
+			// serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME))));
 		} else if (conf.getDiscoveryType().equals(IntroducePortalConf.CADSR_DISCOVERY)) {
 			// PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
 			// new CADSRMetadataConfigurationComponent(v, new
 			// File(methodsDirectory.getAbsolutePath() + File.separator
 			// + "schema" + File.separator +
-			// serviceProperties.getProperty("introduce.skeleton.service.name"))));
+			// serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME))));
 		}
 	}
 
@@ -805,7 +805,7 @@ public class ModificationViewer extends GridPortalComponent {
 
 		PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
 			new MethodViewer(method, info, new File(methodsDirectory.getAbsolutePath() + File.separator + "schema"
-				+ File.separator + serviceProperties.getProperty("introduce.skeleton.service.name")),
+				+ File.separator + serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)),
 				getMethodsTable(), getMethodsTable().getSelectedRow()));
 	}
 
@@ -889,7 +889,7 @@ public class ModificationViewer extends GridPortalComponent {
 										setProgressText("restoring from local cache");
 										ResourceManager.restoreLatest(serviceProperties
 											.getProperty("introduce.skeleton.timestamp"), serviceProperties
-											.getProperty("introduce.skeleton.service.name"), serviceProperties
+											.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME), serviceProperties
 											.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
 									}
 									dispose();
@@ -1138,7 +1138,7 @@ public class ModificationViewer extends GridPortalComponent {
 			serviceName = new JTextField();
 			serviceName.setEditable(false);
 			serviceName.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
-			serviceName.setText(serviceProperties.getProperty("introduce.skeleton.service.name"));
+			serviceName.setText(serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
 		}
 		return serviceName;
 	}
@@ -1369,7 +1369,7 @@ public class ModificationViewer extends GridPortalComponent {
 					NamespaceType type = getGmeDiscoveryPanel().createNamespace();
 					getNamespaceJTree().addNode(type);
 					cacheSchema(new File(methodsDirectory + File.separator + "schema" + File.separator
-						+ info.getServiceProperties().getProperty("introduce.skeleton.service.name")), type
+						+ info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)), type
 						.getNamespace());
 				}
 			});

@@ -26,13 +26,13 @@ public class SkeletonSchemaCreator {
 		schemaDir.mkdir();
 
 		new File(schemaDir.getAbsolutePath() + File.separator
-			+ info.getServiceProperties().getProperty("introduce.skeleton.service.name")).mkdirs();
+			+ info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)).mkdirs();
 
 		ServiceWSDLTemplate serviceWSDLT = new ServiceWSDLTemplate();
 		String serviceWSDLS = serviceWSDLT.generate(info);
 		File serviceWSDLF = new File(schemaDir.getAbsolutePath() + File.separator
-			+ info.getServiceProperties().getProperty("introduce.skeleton.service.name") + File.separator
-			+ info.getServiceProperties().getProperty("introduce.skeleton.service.name") + ".wsdl");
+			+ info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator
+			+ info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + ".wsdl");
 		FileWriter serviceWSDLFW = new FileWriter(serviceWSDLF);
 		serviceWSDLFW.write(serviceWSDLS);
 		serviceWSDLFW.close();
