@@ -6,20 +6,10 @@ import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
-import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescriptionType;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
-import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
-import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
-import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.modification.ModificationViewer;
-import gov.nih.nci.cagrid.introduce.portal.types.data.DataServiceModifier;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -27,8 +17,6 @@ import java.awt.Insets;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.List;
 import java.util.Properties;
 
@@ -39,11 +27,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.xml.namespace.QName;
 
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
-
 
 /**
  * CreationViewer
@@ -58,7 +44,9 @@ import org.projectmobius.portal.PortalResourceManager;
 public class CreationViewer extends GridPortalComponent {
 
 	public static final String SCHEMA_DIR = "schema";
+
 	public static final String CQL_RESULT_SET_SCHEMA = "3_gov.nih.nci.cagrid.CQLResultSet.xsd";
+
 	public static final String CQL_QUERY_SCHEMA = "1_gov.nih.nci.cagrid.CQLQuery.xsd";
 
 	private static String DEFAULT_NAME = "HelloWorld";
@@ -115,7 +103,6 @@ public class CreationViewer extends GridPortalComponent {
 		initialize();
 	}
 
-
 	/**
 	 * This method initializes this
 	 * 
@@ -127,7 +114,6 @@ public class CreationViewer extends GridPortalComponent {
 		this.setFrameIcon(IntroduceLookAndFeel.getCreateIcon());
 		this.setTitle("Create Grid Service");
 	}
-
 
 	/**
 	 * This method initializes jPanel
@@ -184,9 +170,11 @@ public class CreationViewer extends GridPortalComponent {
 			gridBagConstraints10.gridx = 1;
 			inputPanel = new JPanel();
 			inputPanel.setLayout(new GridBagLayout());
-			inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Create Grid Service",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+			inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+					null, "Create Grid Service",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					PortalLookAndFeel.getPanelLabelColor()));
 			packageLabel = new JLabel();
 			packageLabel.setText("Package");
 			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
@@ -263,7 +251,6 @@ public class CreationViewer extends GridPortalComponent {
 		return inputPanel;
 	}
 
-
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -294,7 +281,6 @@ public class CreationViewer extends GridPortalComponent {
 		return mainPanel;
 	}
 
-
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -308,7 +294,6 @@ public class CreationViewer extends GridPortalComponent {
 		}
 		return buttonPanel;
 	}
-
 
 	/**
 	 * This method initializes jButton
@@ -339,10 +324,12 @@ public class CreationViewer extends GridPortalComponent {
 		if (serviceStyleSeletor == null) {
 			serviceStyleSeletor = new JComboBox();
 			serviceStyleSeletor.setEnabled(false);
-			ExtensionsLoader loader = new ExtensionsLoader(new File("." + File.separator + "extensions"));
+			ExtensionsLoader loader = new ExtensionsLoader(new File("."
+					+ File.separator + "extensions"));
 			List extensionDescriptors = loader.getExtensions();
-			for(int i = 0; i < extensionDescriptors.size(); i ++){
-				ExtensionDescriptionType ex = (ExtensionDescriptionType) extensionDescriptors.get(i);
+			for (int i = 0; i < extensionDescriptors.size(); i++) {
+				ExtensionDescriptionType ex = (ExtensionDescriptionType) extensionDescriptors
+						.get(i);
 				serviceStyleSeletor.addItem(ex.getName());
 			}
 		}
@@ -362,7 +349,6 @@ public class CreationViewer extends GridPortalComponent {
 		return service;
 	}
 
-
 	/**
 	 * This method initializes jTextField
 	 * 
@@ -375,7 +361,6 @@ public class CreationViewer extends GridPortalComponent {
 		}
 		return dir;
 	}
-
 
 	/**
 	 * This method initializes jButton
@@ -390,7 +375,8 @@ public class CreationViewer extends GridPortalComponent {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
 						String previous = getDir().getText();
-						String location = ResourceManager.promptDir(CreationViewer.this, previous);
+						String location = ResourceManager.promptDir(
+								CreationViewer.this, previous);
 						if (location != null && location.length() > 0) {
 							getDir().setText(location);
 						} else {
@@ -405,7 +391,6 @@ public class CreationViewer extends GridPortalComponent {
 		return dirButton;
 	}
 
-
 	/**
 	 * This method initializes servicePackage
 	 * 
@@ -414,11 +399,11 @@ public class CreationViewer extends GridPortalComponent {
 	private JTextField getServicePackage() {
 		if (servicePackage == null) {
 			servicePackage = new JTextField();
-			servicePackage.setText((DEFAULT_JAVA_PACKAGE + "." + DEFAULT_NAME).toLowerCase());
+			servicePackage.setText((DEFAULT_JAVA_PACKAGE + "." + DEFAULT_NAME)
+					.toLowerCase());
 		}
 		return servicePackage;
 	}
-
 
 	/**
 	 * This method initializes namespaceDomain
@@ -433,7 +418,6 @@ public class CreationViewer extends GridPortalComponent {
 		return namespaceDomain;
 	}
 
-
 	private String promptFile() {
 		JFileChooser chooser = new JFileChooser();
 		chooser.setDialogTitle("Select Attribute File");
@@ -446,7 +430,6 @@ public class CreationViewer extends GridPortalComponent {
 		}
 		return "";
 	}
-
 
 	/**
 	 * This method initializes closeButton
@@ -467,7 +450,6 @@ public class CreationViewer extends GridPortalComponent {
 		return closeButton;
 	}
 
-
 	/**
 	 * This method initializes methodsTemplateFile
 	 * 
@@ -482,7 +464,6 @@ public class CreationViewer extends GridPortalComponent {
 		return serviceTemplate;
 	}
 
-
 	/**
 	 * This method initializes methodsTemplateButton
 	 * 
@@ -493,15 +474,15 @@ public class CreationViewer extends GridPortalComponent {
 			serviceTemplateButton = new JButton();
 			serviceTemplateButton.setText("Browse");
 			serviceTemplateButton.setEnabled(false);
-			serviceTemplateButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					getMethodsTemplateFile().setText(promptFile());
-				}
-			});
+			serviceTemplateButton
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							getMethodsTemplateFile().setText(promptFile());
+						}
+					});
 		}
 		return serviceTemplateButton;
 	}
-
 
 	/**
 	 * This method initializes templatePanel
@@ -516,7 +497,8 @@ public class CreationViewer extends GridPortalComponent {
 			serviceTemplateJLabel = new JLabel();
 			serviceTemplateJLabel.setText("Service Template File");
 			serviceTemplateJLabel.setEnabled(false);
-			serviceTemplateJLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12));
+			serviceTemplateJLabel.setFont(new java.awt.Font("Dialog",
+					java.awt.Font.PLAIN, 12));
 			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
 			gridBagConstraints15.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints15.gridy = 0;
@@ -530,9 +512,15 @@ public class CreationViewer extends GridPortalComponent {
 			gridBagConstraints14.fill = GridBagConstraints.HORIZONTAL;
 			templatePanel = new JPanel();
 			templatePanel.setLayout(new GridBagLayout());
-			templatePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service Template Options",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+			templatePanel
+					.setBorder(javax.swing.BorderFactory
+							.createTitledBorder(
+									null,
+									"Service Template Options",
+									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+									javax.swing.border.TitledBorder.DEFAULT_POSITION,
+									null, PortalLookAndFeel
+											.getPanelLabelColor()));
 			templatePanel.setEnabled(false);
 			templatePanel.add(getMethodsTemplateFile(), gridBagConstraints14);
 			templatePanel.add(getServiceTemplateButton(), gridBagConstraints15);
@@ -541,21 +529,20 @@ public class CreationViewer extends GridPortalComponent {
 		return templatePanel;
 	}
 
-
-
-
 	private void createService() {
 		int doIdeleteResult = JOptionPane.OK_OPTION;
 		final File dirFile = new File(getDir().getText());
 		if (dirFile.exists() && dirFile.list().length != 0) {
-			doIdeleteResult = JOptionPane.showConfirmDialog(this,
-				"The creation directory is not empty.  All information in the directory will be lost.");
+			doIdeleteResult = JOptionPane
+					.showConfirmDialog(
+							this,
+							"The creation directory is not empty.  All information in the directory will be lost.");
 		}
 
 		if (doIdeleteResult == JOptionPane.OK_OPTION) {
 			final int finalDoIdeleteResult = doIdeleteResult;
-			BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance()
-				.getGridPortal(), "Creating") {
+			BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager
+					.getInstance().getGridPortal(), "Creating") {
 				public void process() {
 					try {
 						if (finalDoIdeleteResult == JOptionPane.OK_OPTION) {
@@ -563,8 +550,10 @@ public class CreationViewer extends GridPortalComponent {
 								setProgressText("deleting existing directory");
 								boolean deleted = Utils.deleteDir(dirFile);
 								if (!deleted) {
-									JOptionPane.showMessageDialog(CreationViewer.this,
-										"Unable to delete creation directory");
+									JOptionPane
+											.showMessageDialog(
+													CreationViewer.this,
+													"Unable to delete creation directory");
 									return;
 								}
 							}
@@ -579,97 +568,88 @@ public class CreationViewer extends GridPortalComponent {
 						String dirName = getDir().getText();
 						String packageName = getServicePackage().getText();
 						String serviceNsDomain = getNamespaceDomain().getText();
-						// String templateFilename = getMethodsTemplateFile().getText();
+						// String templateFilename =
+						// getMethodsTemplateFile().getText();
 						if (serviceName.length() > 0) {
-							if (!serviceName.matches("[A-Z]++[A-Za-z0-9\\_\\$]*")) {
-								PortalUtils.showMessage("Service Name can only contain [A-Z]++[A-Za-z0-9\\_\\$]*");
+							if (!serviceName
+									.matches("[A-Z]++[A-Za-z0-9\\_\\$]*")) {
+								PortalUtils
+										.showMessage("Service Name can only contain [A-Z]++[A-Za-z0-9\\_\\$]*");
 								return;
 							}
-							if (serviceName.substring(0, 1).toLowerCase().equals(
-								serviceName.substring(0, 1))) {
-								PortalUtils.showMessage("Service Name cannnot start with lower case letters.");
+							if (serviceName.substring(0, 1).toLowerCase()
+									.equals(serviceName.substring(0, 1))) {
+								PortalUtils
+										.showMessage("Service Name cannnot start with lower case letters.");
 								return;
 							}
 						} else {
-							PortalUtils.showMessage("Service Name cannot be empty.");
+							PortalUtils
+									.showMessage("Service Name cannot be empty.");
 							return;
 						}
 						setProgressText("creating");
-						String cmd = CommonTools.getAntSkeletonCreationCommand(".", 
-							serviceName, dirName, packageName, serviceNsDomain);
+						String cmd = CommonTools.getAntSkeletonCreationCommand(
+								".", serviceName, dirName, packageName,
+								serviceNsDomain);
 						Process p = CommonTools.createAndOutputProcess(cmd);
 						p.waitFor();
 						if (p.exitValue() != 0) {
-							PortalUtils.showErrorMessage("Error creating new service!");
+							PortalUtils
+									.showErrorMessage("Error creating new service!");
 						}
-						
-						/*
-						if (templateFilename.length() > 0) {
-							StringBuffer fileText = Utils.fileToStringBuffer(new File(templateFilename));
-							Utils.stringBufferToFile(fileText, dirName + File.separator	+ "introduce.xml");
 
-							setProgressText("resynchronizing using templates");
-							SyncTools sync = new SyncTools(new File(dirName));
-							sync.sync();
-						}
-						*/
+						/*
+						 * if (templateFilename.length() > 0) { StringBuffer
+						 * fileText = Utils.fileToStringBuffer(new
+						 * File(templateFilename));
+						 * Utils.stringBufferToFile(fileText, dirName +
+						 * File.separator + "introduce.xml");
+						 * 
+						 * setProgressText("resynchronizing using templates");
+						 * SyncTools sync = new SyncTools(new File(dirName));
+						 * sync.sync(); }
+						 */
 						setProgressText("building");
 						cmd = CommonTools.getAntAllCommand(dirName);
 						p = CommonTools.createAndOutputProcess(cmd);
 						p.waitFor();
 						if (p.exitValue() == 0) {
-							// is this a data service?
-							if (getServiceStyleSeletor().getSelectedItem().equals("DATA")) {
-								// get the template for data services built
-								ServiceDescription dataServiceDescription = getDataService();
-								// copy schemas to the right place
-								Utils.copyFile(new File(SCHEMA_DIR + File.separator + CQL_QUERY_SCHEMA), 
-									new File(dirName + File.separator + "schema" + File.separator + serviceName + File.separator + CQL_QUERY_SCHEMA));
-								Utils.copyFile(new File(SCHEMA_DIR + File.separator + CQL_RESULT_SET_SCHEMA),
-									new File(dirName + File.separator + "schema" + File.separator + serviceName + File.separator + CQL_RESULT_SET_SCHEMA));
-								Utils.serializeDocument(dirName + File.separator + "introduce.xml", dataServiceDescription,
-									new QName("gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
-								setProgressText("resynchronizing using data service template");
-								// set a property in the introduce.properties to indicate this is a data service
-								Properties props = new Properties();
-								File propertiesFile = new File(dirName + File.separator + IntroduceConstants.INTRODUCE_PROPERTIES_FILE);
-								InputStream propertyStream = new FileInputStream(propertiesFile);
-								props.load(propertyStream);
-								propertyStream.close();
-								// TODO: there has to be some way to distinguish which type of service
-								// we're talking about.  This is by no means final, and should be
-								// concidered a temporary hack
-								props.put("introduce.data.service", "true");
-								OutputStream propOutStream = new FileOutputStream(propertiesFile);
-								props.store(propOutStream, "");
-								propOutStream.close();
-								SyncTools sync = new SyncTools(new File(dirName));
-								sync.sync();
-								PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-									new DataServiceModifier(new File(dirName)));
-							} else {
-								// analytical services
-								PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-									new ModificationViewer(new File(dirName)));
-							}
+							PortalResourceManager.getInstance().getGridPortal()
+									.addGridPortalComponent(
+											new ModificationViewer(new File(
+													dirName)));
 							dispose();
 						} else {
-							PortalUtils.showErrorMessage("Error creating new service!");
+							PortalUtils
+									.showErrorMessage("Error creating new service!");
 						}
-						
+
 						setProgressText("purging old archives");
 						ResourceManager.purgeArchives(serviceName);
-						
-						//create the archive
+
+						// create the archive
 						long id = System.currentTimeMillis();
 						Properties props = new Properties();
-						props.load(new FileInputStream(dirName + File.separator + IntroduceConstants.INTRODUCE_PROPERTIES_FILE));
-						props.setProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP, String.valueOf(id));
-						props.store(
-							new FileOutputStream(dirName + File.separator + IntroduceConstants.INTRODUCE_PROPERTIES_FILE),
-							"Introduce Properties");
+						props
+								.load(new FileInputStream(
+										dirName
+												+ File.separator
+												+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE));
+						props
+								.setProperty(
+										IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP,
+										String.valueOf(id));
+						props
+								.store(
+										new FileOutputStream(
+												dirName
+														+ File.separator
+														+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE),
+										"Introduce Properties");
 						setProgressText("creating a new archive");
-						ResourceManager.createArchive(String.valueOf(id), serviceName, dirName);
+						ResourceManager.createArchive(String.valueOf(id),
+								serviceName, dirName);
 					} catch (Exception ex) {
 						ex.printStackTrace();
 						PortalUtils.showErrorMessage(ex.getMessage());
@@ -681,48 +661,5 @@ public class CreationViewer extends GridPortalComponent {
 			Thread th = new Thread(r);
 			th.start();
 		}
-	}
-	
-	
-	private ServiceDescription getDataService() {
-		ServiceDescription dataService = new ServiceDescription();
-		dataService.setIntroduceVersion(IntroduceConstants.INTRODUCE_VERSION);
-		// namespaces
-		NamespacesType namespaces = new NamespacesType();
-		NamespaceType[] namespaceTypes = new NamespaceType[2];
-		try {
-			namespaceTypes[0] = CommonTools.createNamespaceType(SCHEMA_DIR + File.separator + CQL_QUERY_SCHEMA);
-			namespaceTypes[0].setLocation("." + File.separator + CQL_QUERY_SCHEMA);
-			namespaceTypes[1] = CommonTools.createNamespaceType(SCHEMA_DIR + File.separator + CQL_RESULT_SET_SCHEMA);
-			namespaceTypes[1].setLocation("." + File.separator + CQL_RESULT_SET_SCHEMA);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		namespaces.setNamespace(namespaceTypes);
-		dataService.setNamespaces(namespaces);
-		
-		// query method
-		MethodsType methods = new MethodsType();
-		MethodType queryMethod = new MethodType();
-		queryMethod.setName("query");
-		// method input parameters
-		MethodTypeInputs inputs = new MethodTypeInputs();
-		MethodTypeInputsInput queryInput = new MethodTypeInputsInput();
-		queryInput.setName("cqlQuery");
-		queryInput.setIsArray(false);
-		QName queryQname = new QName(namespaceTypes[0].getNamespace(), namespaceTypes[0].getSchemaElement(0).getType());
-		queryInput.setQName(queryQname);
-		inputs.setInput(new MethodTypeInputsInput[] {queryInput});
-		queryMethod.setInputs(inputs);
-		// method output
-		MethodTypeOutput output = new MethodTypeOutput();
-		output.setIsArray(false);
-		QName resultSetQName = new QName(namespaceTypes[1].getNamespace(), namespaceTypes[1].getSchemaElement(0).getType());
-		output.setQName(resultSetQName);
-		queryMethod.setOutput(output);
-		methods.setMethod(new MethodType[] {queryMethod});
-		dataService.setMethods(methods);
-		
-		return dataService;
 	}
 }
