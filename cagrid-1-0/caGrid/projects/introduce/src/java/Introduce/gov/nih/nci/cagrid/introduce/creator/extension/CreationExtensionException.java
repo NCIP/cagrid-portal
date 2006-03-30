@@ -9,12 +9,17 @@ package gov.nih.nci.cagrid.introduce.creator.extension;
  */
 public class CreationExtensionException extends Exception {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+	public CreationExtensionException(String message) {
+		super(message);
 	}
-
+	
+	
+	public CreationExtensionException(Throwable th) {
+		super(th);
+	}
+	
+	
+	public CreationExtensionException(String message, Throwable th) {
+		super(message, th);
+	}
 }

@@ -9,12 +9,17 @@ package gov.nih.nci.cagrid.introduce.codegen.extension;
  */
 public class CodegenExtensionException extends Exception {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+	public CodegenExtensionException(String message) {
+		super(message);
 	}
-
+	
+	
+	public CodegenExtensionException(Throwable th) {
+		super(th);
+	}
+	
+	
+	public CodegenExtensionException(String message, Throwable th) {
+		super(message, th);
+	}
 }
