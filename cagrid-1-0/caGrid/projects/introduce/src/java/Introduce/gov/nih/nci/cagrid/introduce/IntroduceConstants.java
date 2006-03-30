@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.introduce;
 
+import javax.xml.namespace.QName;
+
 /**
  * Constants used in introduce
  * 
@@ -20,6 +22,7 @@ public class IntroduceConstants {
 	public static final String INTRODUCE_SKELETON_NAMESPACE_DOMAIN = "introduce.skeleton.namespace.domain";
 	public static final String INTRODUCE_SKELETON_PACKAGE = "introduce.skeleton.package";
 	public static final String INTRODUCE_NS_EXCLUDES = "introduce.ns.excludes";
+	public static final QName INTRODUCE_SKELETON_QNAME = new QName("gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton");
 	
 	// deployment properties
 	public static final String DEPLOY_PROPERTIES_FILE = "deploy.properties";
