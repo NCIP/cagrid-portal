@@ -23,7 +23,7 @@
 	
 	<xs:complexType name="ExtensionType">
 		<xs:sequence>
-			<xs:element name="ExtensionData">
+			<xs:element name="ExtensionData" minOccurs="0" maxOccurs="1">
 				<xs:complexType>
 					<xs:sequence>
 						<xs:any ></xs:any>
