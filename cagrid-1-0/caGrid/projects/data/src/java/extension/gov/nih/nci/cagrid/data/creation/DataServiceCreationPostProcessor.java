@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.data.creation;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.data.common.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -44,9 +45,6 @@ import org.projectmobius.portal.PortalResourceManager;
  */
 public class DataServiceCreationPostProcessor implements CreationExtensionPostProcessor {
 	
-	public static final String CQL_QUERY_URI = "http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery";
-	public static final String CQL_RESULT_SET_URI = "http://CQL.caBIG/3/gov.nih.nci.cagrid.CQLResultSet";
-
 	public void postCreate(Properties serviceProperties) throws CreationExtensionException {
 		// load the introduce template stuff
 		ServiceDescription description = null;
@@ -79,8 +77,8 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 	private void makeDataService(ServiceDescription description, Properties props) throws Exception {
 		// grab cql query and result set schemas from GME
 		String schemaDir = getServiceSchemaDir(props);
-		String cqlQuerySchemaLocation = cacheSchema(CQL_QUERY_URI, schemaDir);
-		String cqlResultSetSchemaLocation = cacheSchema(CQL_RESULT_SET_URI, schemaDir);
+		String cqlQuerySchemaLocation = cacheSchema(DataServiceConstants.CQL_QUERY_URI, schemaDir);
+		String cqlResultSetSchemaLocation = cacheSchema(DataServiceConstants.CQL_RESULT_SET_URI, schemaDir);
 		// namespaces
 		NamespacesType namespaces = description.getNamespaces();
 		NamespaceType[] dsNamespaces = new NamespaceType[namespaces.getNamespace().length + 2];
