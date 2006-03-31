@@ -2,24 +2,21 @@
 <!-- caGrid Utilities build file                                             -->
 <!-- ======================================================================= -->
 <project name="caGrid-core_tests_harness" basedir=".">
-
-	<property name="junit.results.dir" value="${test.logs.dir}/junit" />
-	
+	<property name="junit.results.dir" value="${test.logs.dir}/junit"/>
 	<!-- call the test target for each project and aggregates the log resutls  -->
 	<target name="test">
-		<mkdir dir="${junit.results.dir}" />
+		<mkdir dir="${junit.results.dir}"/>
 		<sequential>
 			<junit dir="${basedir}" printsummary="yes" haltonfailure="true" showoutput="true">
-				<jvmarg value="-Dbuild.dir=${build.dir}" />
+				<sysproperty key="build.dir" value="${classes.dir}"/>
+				<jvmarg value="-Dbuild.dir=${classes.dir}"/>
 				<classpath>
-					<path refid="test.classpath" />
+					<path refid="test.classpath"/>
 				</classpath>
-
-				<formatter type="xml" />
-				
+				<formatter type="xml"/>
 				<batchtest fork="yes" todir="${junit.results.dir}">
 					<fileset dir="${test.src.dir}">
-						<include name="**/*TestCase.java" />
+						<include name="**/*TestCase.java"/>
 					</fileset>
 				</batchtest>
 			</junit>
