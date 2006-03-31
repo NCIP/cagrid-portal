@@ -16,7 +16,6 @@ import gov.nih.nci.cagrid.introduce.codegen.metadata.SyncMetadata;
 import gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods;
 import gov.nih.nci.cagrid.introduce.codegen.security.SyncSecurity;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.creator.extension.CreationExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.templates.NamespaceMappingsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate;
 
@@ -218,7 +217,7 @@ public class SyncTools {
 						SchemaInformation namespace = info.getSchemaInformation(inputParam.getQName());
 						if (!namespace.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
 							Type type = table.getType(new QName(info.getServiceProperties().getProperty(
-								"introduce.skeleton.namespace.domain")
+								IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN)
 								+ "/" + info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME),
 								">>" + mtype.getName() + ">" + inputParam.getName()));
 							inputParam.setContainerClassName(info.getServiceProperties().getProperty(
