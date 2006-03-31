@@ -11,6 +11,6 @@ import java.util.Properties;
  */
 public interface CreationExtensionPostProcessor {
 
-	public abstract void postCreate(Properties serviceProperties) throws CreationExtensionException;
+	public void postCreate(Properties serviceProperties) throws CreationExtensionException;
 	
 }

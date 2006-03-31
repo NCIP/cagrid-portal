@@ -11,6 +11,6 @@ import gov.nih.nci.cagrid.introduce.ServiceInformation;
  */
 public interface CodegenExtensionPostProcessor {
 	
-	public abstract void postCodegen(ServiceInformation info) throws CodegenExtensionException;
+	public void postCodegen(ServiceInformation info) throws CodegenExtensionException;
 
 }
