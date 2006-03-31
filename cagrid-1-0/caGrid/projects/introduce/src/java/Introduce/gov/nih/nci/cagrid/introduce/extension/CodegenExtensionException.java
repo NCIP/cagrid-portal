@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.codegen.extension;
+package gov.nih.nci.cagrid.introduce.extension;
 
 /**
  * 

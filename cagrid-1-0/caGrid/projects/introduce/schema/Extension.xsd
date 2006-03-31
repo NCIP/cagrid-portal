@@ -17,7 +17,7 @@
 				<xs:annotation>Must implement the ExtensionCreationPostProcessor</xs:annotation>
 			</xs:element>
 			<xs:element name="CreationUIComponent" type="xs:string" minOccurs="0" maxOccurs="1">
-				<xs:annotation>CreationViewer GUI component that must extend a org.projectmobius.portal.GridPortalComponent</xs:annotation>
+				<xs:annotation>CreationViewer GUI component that must extend a Modal Dialog</xs:annotation>
 			</xs:element>
 			<xs:element name="CodegenPreProcessor" type="xs:string" minOccurs="0" maxOccurs="1">
 				<xs:annotation>Must implement the ExtensionCodegenPreProcessor</xs:annotation>

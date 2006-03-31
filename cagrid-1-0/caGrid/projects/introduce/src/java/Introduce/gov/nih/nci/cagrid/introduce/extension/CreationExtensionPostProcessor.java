@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.creator.extension;
+package gov.nih.nci.cagrid.introduce.extension;
 
 import java.util.Properties;
 

@@ -13,8 +13,8 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.creator.extension.CreationExtensionException;
-import gov.nih.nci.cagrid.introduce.creator.extension.CreationExtensionPostProcessor;
+import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
+import gov.nih.nci.cagrid.introduce.extension.CreationExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 
 import java.io.ByteArrayInputStream;

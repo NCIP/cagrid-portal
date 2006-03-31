@@ -4,8 +4,8 @@ import gov.nih.nci.cagrid.data.common.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
-import gov.nih.nci.cagrid.introduce.codegen.extension.CodegenExtensionException;
-import gov.nih.nci.cagrid.introduce.codegen.extension.CodegenExtensionPostProcessor;
+import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
+import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPostProcessor;
 
 /** 
  *  DataServiceCodegenPostProcessor
