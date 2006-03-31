@@ -1,5 +1,9 @@
 To Do:
 
+Need to make better use of org.apache.axis.utils.JavaUtils
+ -checking for primatives
+ -checking for reserved keywords for things like method and param names
+
 type browser issues:
 -(DONE)you can and shouldn't be able to remove the XML schema schema
 -it shouldn't let you remove schema types that are being used by inputs,outputs,or metadata
