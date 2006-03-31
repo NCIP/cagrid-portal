@@ -89,42 +89,35 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
          </copy>
       </assign>
       <flow>
-         <sequence>
-            <while condition="bpws:getVariableData('indexCounterDuke') &lt;= bpws:getVariableData('countDuke')">
+        <sequence>
+        
+        
+        <while condition="bpws:getVariableData('indexCounterDuke') &lt;= bpws:getVariableData('countDuke')">
+            <sequence>
                <assign>
                   <copy>
                      <from expression="bpws:getVariableData('queryOutputMessage', 'parameters', '/ns1:queryResponse')/response/ns4:CQLQueryResult[bpws:getVariableData('indexCounterDuke')]/ns5:scanFeatures"/>
                      <to part="parameters" query="/ns3:echoByValue/scanFeaturesXml[bpws:getVariableData('indexCounterDuke')]" variable="echoByValueInputMessageDuke"/>
                   </copy>
-                  <copy>
-                     <from expression="bpws:getVariableData('indexCounterDuke') + 1"/>
-                     <to variable="indexCounterDuke"/>
-                  </copy>
-               </assign>
-            </while>
+                  </assign>
             <invoke inputVariable="echoByValueInputMessageDuke" operation="echoByValue" outputVariable="echoByValueOutputMessageDuke" partnerLink="DukeRproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
-            <assign>
-               <copy>
-                  <from expression="&quot;1&quot;"/>
-                  <to variable="indexCounterDuke"/>
-               </copy>
-               <copy>
-                  <from expression="count(bpws:getVariableData('echoByValueOutputMessageDuke', 'parameters', '/ns3:echoByValueResponse')/response)"/>
-                  <to variable="countDuke"/>
-               </copy>
-            </assign>
-            <while condition="bpws:getVariableData('indexCounterDuke') &lt;= bpws:getVariableData('countDuke')">
-               <assign>
-                  <copy>
+                <assign>
+                <copy>
                      <from expression="bpws:getVariableData('echoByValueOutputMessageDuke', 'parameters','/ns3:echoByValueResponse')/response[bpws:getVariableData('indexCounterDuke')]"/>
                      <to part="parameters" query="/ns3:general_interpolateByValue/scanFeaturesXml[bpws:getVariableData('indexCounterDuke')]" variable="general_interpolateByValueInputMessageDuke"/>
                   </copy>
+
                   <copy>
                      <from expression="bpws:getVariableData('indexCounterDuke') + 1"/>
                      <to variable="indexCounterDuke"/>
                   </copy>
+
                </assign>
+               </sequence>
             </while>
+
+
+            
             <!-- Invoking general_interpolateByValue operation on Rproteomics Analytic service -->
             <invoke inputVariable="general_interpolateByValueInputMessageDuke" operation="general_interpolateByValue" outputVariable="general_interpolateByValueOutputMessageDuke" partnerLink="DukeRproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
             <assign>
@@ -285,6 +278,9 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
             </while>
             <invoke inputVariable="normalize_quantileByValueInputMessageDuke" operation="normalize_quantileByValue" outputVariable="normalize_quantileByValueOutputMessageDuke" partnerLink="DukeRproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
          </sequence>
+
+
+
          <!-- -                        -->
          <!--                          -->
          <!-- OSU SEQUENCE STARTS HERE -->
