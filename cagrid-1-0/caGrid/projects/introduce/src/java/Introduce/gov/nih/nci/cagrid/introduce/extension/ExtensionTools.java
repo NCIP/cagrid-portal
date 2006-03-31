@@ -20,31 +20,45 @@ public class ExtensionTools {
 
 	public CreationExtensionPostProcessor getCreationPostProcessor(String extensionName) throws Exception {
 		ExtensionDescriptionType extensionD = loader.getExtension(extensionName);
-		ExtensionClassLoader cloader = new ExtensionClassLoader(new File(loader.getExtensionsDir() + File.separator
-			+ extensionName));
-		Class c = cloader.loadClass(extensionD.getCreationPostProcessor());
-		Object obj = c.newInstance();
-		return (CreationExtensionPostProcessor) obj;
+		if (extensionD != null && extensionD.getCreationPostProcessor() != null
+			&& !extensionD.getCreationPostProcessor().equals("")) {
+			ExtensionClassLoader cloader = new ExtensionClassLoader(new File(loader.getExtensionsDir() + File.separator
+				+ extensionName));
+			Class c = cloader.loadClass(extensionD.getCreationPostProcessor());
+			Object obj = c.newInstance();
+			return (CreationExtensionPostProcessor) obj;
+		}
+		return null;
 	}
 
 
 	public CodegenExtensionPostProcessor getCodegenPostProcessor(String extensionName) throws Exception {
 		ExtensionDescriptionType extensionD = loader.getExtension(extensionName);
-		ExtensionClassLoader cloader = new ExtensionClassLoader(new File(loader.getExtensionsDir() + File.separator
+		if (extensionD != null && extensionD.getCodegenPostProcessor() != null
+			&& !extensionD.getCodegenPostProcessor().equals("")) {
+			ExtensionClassLoader cloader = new ExtensionClassLoader(new File(loader.getExtensionsDir() + File.separator
+
 			+ extensionName));
-		Class c = cloader.loadClass(extensionD.getCodegenPostProcessor());
-		Object obj = c.newInstance();
-		return (CodegenExtensionPostProcessor) obj;
+			Class c = cloader.loadClass(extensionD.getCodegenPostProcessor());
+			Object obj = c.newInstance();
+			return (CodegenExtensionPostProcessor) obj;
+		}
+		return null;
 	}
 
 
 	public CodegenExtensionPreProcessor getCodegenPreProcessor(String extensionName) throws Exception {
 		ExtensionDescriptionType extensionD = loader.getExtension(extensionName);
-		ExtensionClassLoader cloader = new ExtensionClassLoader(new File(loader.getExtensionsDir() + File.separator
+		if (extensionD != null && extensionD.getCodegenPreProcessor() != null
+			&& !extensionD.getCodegenPreProcessor().equals("")) {
+			ExtensionClassLoader cloader = new ExtensionClassLoader(new File(loader.getExtensionsDir() + File.separator
+
 			+ extensionName));
-		Class c = cloader.loadClass(extensionD.getCodegenPreProcessor());
-		Object obj = c.newInstance();
-		return (CodegenExtensionPreProcessor) obj;
+			Class c = cloader.loadClass(extensionD.getCodegenPreProcessor());
+			Object obj = c.newInstance();
+			return (CodegenExtensionPreProcessor) obj;
+		}
+		return null;
 	}
 
 }

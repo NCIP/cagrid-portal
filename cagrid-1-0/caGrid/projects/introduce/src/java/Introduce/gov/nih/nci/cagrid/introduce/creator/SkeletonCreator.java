@@ -48,7 +48,10 @@ public class SkeletonCreator extends Task {
 				+ "introduce.xml", ServiceDescription.class);
 
 		} catch (Exception e1) {
-			e1.printStackTrace();
+			BuildException be = new BuildException(e1.getMessage());
+			be.setStackTrace(e1.getStackTrace());
+			be.printStackTrace();
+			throw be;
 		}
 
 		// for each extension in the properties make sure to add the xml to the
@@ -110,14 +113,20 @@ public class SkeletonCreator extends Task {
 				try {
 					pp = tools.getCreationPostProcessor(extensions[i].getName());
 				} catch (Exception e1) {
-					e1.printStackTrace();
+					BuildException be = new BuildException(e1.getMessage());
+					be.setStackTrace(e1.getStackTrace());
+					be.printStackTrace();
+					throw be;
 				}
 				try {
 					if (pp != null) {
 						pp.postCreate(properties);
 					}
 				} catch (CreationExtensionException e) {
-					e.printStackTrace();
+					BuildException be = new BuildException(e.getMessage());
+					be.setStackTrace(e.getStackTrace());
+					be.printStackTrace();
+					throw be;
 				}
 			}
 		}
@@ -126,8 +135,10 @@ public class SkeletonCreator extends Task {
 			Utils.serializeDocument(baseDirectory + File.separator + "introduce.xml", introService, new QName(
 				"gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			BuildException be = new BuildException(e.getMessage());
+			be.setStackTrace(e.getStackTrace());
+			be.printStackTrace();
+			throw be;
 		}
 	}
 }
