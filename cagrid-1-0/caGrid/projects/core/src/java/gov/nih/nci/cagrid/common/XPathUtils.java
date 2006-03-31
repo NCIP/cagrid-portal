@@ -8,7 +8,7 @@ public class XPathUtils {
 
 	private static final String LOCAL_REPLACEMENT = "' and local-name()='$1'";
 	private static final String URI_REPLACEMENT = "*[namespace-uri()='";
-	private static final String NS_START_REGEX = ":([a-zA-Z])+";
+	private static final String NS_START_REGEX = ":([a-zA-Z]+)";
 
 
 	/**

@@ -1,5 +1,10 @@
 package gov.nih.nci.cagrid.common.client;
 
+import gov.nih.nci.cagrid.common.XPathUtils;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI.MalformedURIException;
@@ -23,10 +28,13 @@ public class Test {
 			System.out.println("Resource Property Set:");
 			XMLUtils.PrettyElementToStream(rps, System.out);
 
-			Element[] elements = ResourcePropertyHelper
-				.queryResourceProperties(
-					indexEPR,
-					"/*/*[namespace-uri()='gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common' and local-name()='CommonServiceMetadata']");
+			Map nsMap = new HashMap();
+			nsMap.put("com", "gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common");
+
+			String xpath = XPathUtils.translateXPath("//com:CommonServiceMetadata", nsMap);
+
+			System.out.println("Querying for:"+xpath);
+			Element[] elements = ResourcePropertyHelper.queryResourceProperties(indexEPR, xpath);
 			System.out.println("\nQuery Results:");
 			if (elements != null) {
 				for (int i = 0; i < elements.length; i++) {
