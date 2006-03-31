@@ -24,6 +24,9 @@ import org.apache.axis.types.URI.MalformedURIException;
 import org.globus.axis.util.Util;
 import org.globus.wsrf.WSRFConstants;
 import org.globus.wsrf.utils.AnyHelper;
+import org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse;
+import org.oasis.wsrf.properties.GetMultipleResourceProperties_Element;
+import org.oasis.wsrf.properties.GetMultipleResourceProperties_PortType;
 import org.oasis.wsrf.properties.GetResourceProperty;
 import org.oasis.wsrf.properties.GetResourcePropertyResponse;
 import org.oasis.wsrf.properties.QueryExpressionType;
@@ -35,34 +38,36 @@ import org.w3c.dom.Element;
 
 
 public class ResourcePropertyHelper {
-	static final String RP_NS = new String(
-		"http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd");
-	static String GET_RP_STRING = "GetResourceProperty";
-	static final QName GET_RP_QNAME = new QName(RP_NS, GET_RP_STRING);
-	static final QName RP_RESPONSE_QNAME = new QName(RP_NS, ">GetResourcePropertyResponse");
+//	static final String RP_NS = new String(
+//		"http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd");
+//	static String GET_RP_STRING = "GetResourceProperty";
+//	static final QName GET_RP_QNAME = new QName(RP_NS, GET_RP_STRING);
+//	static final QName RP_RESPONSE_QNAME = new QName(RP_NS, ">GetResourcePropertyResponse");
+//
+//	static final QName QNAME_QNAME = new QName("http://www.w3.org/2001/XMLSchema", "QName");
+//
+//	static final QName INVALID_RP_QNAME_FAULT_QNAME = new QName(RP_NS, "InvalidResourcePropertyQNameFault");
+//
+//	static final String INVALID_RP_QNAME_FAULT_CLASS_NAME = new String(
+//		"org.oasis.wsrf.properties.InvalidResourcePropertyQNameFaultType");
+//
+//	static final QName INVALID_RP_QNAME_FAULT_TYPE_QNAME = new QName(RP_NS, "InvalidResourcePropertyQNameFaultType");
+//
+//	static final QName RESOURCE_UNKNOWN_FAULT_QNAME = new QName(RP_NS, "ResourceUnknownFault");
+//
+//	static final String RESOURCE_UNKNOWN_FAULT_CLASS_NAME = new String(
+//		"org.oasis.wsrf.properties.ResourceUnknownFaultType");
+//
+//	static final QName RESOURCE_UNKNOWN_FAULT_TYPE_QNAME = new QName(RP_NS, "ResourceUnknownFaultType");
 
-	static final QName QNAME_QNAME = new QName("http://www.w3.org/2001/XMLSchema", "QName");
-
-	static final QName INVALID_RP_QNAME_FAULT_QNAME = new QName(RP_NS, "InvalidResourcePropertyQNameFault");
-
-	static final String INVALID_RP_QNAME_FAULT_CLASS_NAME = new String(
-		"org.oasis.wsrf.properties.InvalidResourcePropertyQNameFaultType");
-
-	static final QName INVALID_RP_QNAME_FAULT_TYPE_QNAME = new QName(RP_NS, "InvalidResourcePropertyQNameFaultType");
-
-	static final QName RESOURCE_UNKNOWN_FAULT_QNAME = new QName(RP_NS, "ResourceUnknownFault");
-
-	static final String RESOURCE_UNKNOWN_FAULT_CLASS_NAME = new String(
-		"org.oasis.wsrf.properties.ResourceUnknownFaultType");
-
-	static final QName RESOURCE_UNKNOWN_FAULT_TYPE_QNAME = new QName(RP_NS, "ResourceUnknownFaultType");
-
+	
+	
 	static {
 		Util.registerTransport();
 	}
 
 
-	public static Element[] queryResourceProperties(EndpointReferenceType endpoint, String queryExpression)
+	public static MessageElement[] queryResourceProperties(EndpointReferenceType endpoint, String queryExpression)
 		throws Exception {
 		String dialect = WSRFConstants.XPATH_1_DIALECT;
 
@@ -100,12 +105,8 @@ public class ResourcePropertyHelper {
 			throw new Exception(e);
 		}
 
-		MessageElement messageElements[] = response.get_any();
-		if (messageElements == null) {
-			return (null);
-		}
+		return response.get_any();
 
-		return AnyHelper.toElement(messageElements);
 
 	}
 
@@ -196,5 +197,24 @@ public class ResourcePropertyHelper {
 			throw new Exception("Error parsing message element", e);
 		}
 		return element;
+	}
+
+
+	public static Element[] getResourceProperties(EndpointReferenceType endpoint, QName[] rpNames) throws Exception {
+
+		WSResourcePropertiesServiceAddressingLocator locator = new WSResourcePropertiesServiceAddressingLocator();
+		GetMultipleResourceProperties_PortType port = locator.getGetMultipleResourcePropertiesPort(endpoint);
+
+		OpenCommunication com = new OpenCommunication();
+		com.configure((Stub) port);
+
+		GetMultipleResourceProperties_Element request = new GetMultipleResourceProperties_Element();
+		request.setResourceProperty(rpNames);
+
+		GetMultipleResourcePropertiesResponse response = port.getMultipleResourceProperties(request);
+
+		System.out.println(AnyHelper.toSingleString(response));
+		return AnyHelper.toElement(response.get_any());
+
 	}
 }
