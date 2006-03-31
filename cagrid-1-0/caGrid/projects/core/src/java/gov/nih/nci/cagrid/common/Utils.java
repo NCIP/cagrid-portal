@@ -13,6 +13,7 @@ import java.io.InputStream;
 import javax.xml.namespace.QName;
 
 import org.apache.axis.AxisFault;
+import org.apache.axis.MessageContext;
 import org.apache.axis.utils.XMLUtils;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.globus.wsrf.encoding.ObjectSerializer;
@@ -184,4 +185,24 @@ public class Utils {
 		}
 	}
 
+
+	/**
+	 * Gets the QName that Axis has registered for the given java class
+	 * @param clazz
+	 * @return
+	 */
+	public static QName getRegisteredQName(Class clazz) {
+		return MessageContext.getCurrentContext().getTypeMapping().getTypeQName(clazz);
+	}
+
+	
+	/**
+	 * Gets the Class that Axis has registerd for the given QName
+	 * @param qname
+	 * @return
+	 */
+	public static Class getRegisteredClass(QName qname) {
+		return MessageContext.getCurrentContext().getTypeMapping().getClassForQName(qname);
+	}
 }
+
