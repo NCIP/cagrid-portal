@@ -64,6 +64,8 @@
 			<entry key="introduce.skeleton.package.dir" value="${introduce.skeleton.package.dir}"/>
 			<entry key="introduce.skeleton.namespace.domain"
 				value="${introduce.skeleton.namespace.domain}"/>
+			<entry key="introduce.skeleton.extensions"
+				value="${introduce.skeleton.extensions}"/>
 		</propertyfile>
 	</target>
 	<target name="checkLoadPropertiesFile" if="introduce.properties">

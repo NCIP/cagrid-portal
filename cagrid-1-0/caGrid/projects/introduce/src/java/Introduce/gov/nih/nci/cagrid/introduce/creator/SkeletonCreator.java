@@ -57,7 +57,7 @@ public class SkeletonCreator extends Task {
 		StringTokenizer strtok = new StringTokenizer(extensionsList, ",", false);
 		ExtensionType[] types = new ExtensionType[strtok.countTokens()];
 		int count = 0;
-		while (strtok.hasMoreElements()) {
+		while (strtok.hasMoreTokens()) {
 			String token = strtok.nextToken();
 			ExtensionType type = new ExtensionType();
 			type.setName(token);
@@ -65,6 +65,7 @@ public class SkeletonCreator extends Task {
 		}
 		ExtensionsType exts = new ExtensionsType();
 		exts.setExtension(types);
+		introService.setExtensions(exts);
 
 		ServiceInformation info = new ServiceInformation(introService, properties, baseDirectory);
 		SkeletonBaseCreator sbc = new SkeletonBaseCreator();

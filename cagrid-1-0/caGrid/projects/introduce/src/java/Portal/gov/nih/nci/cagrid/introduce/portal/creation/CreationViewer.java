@@ -83,14 +83,6 @@ public class CreationViewer extends GridPortalComponent {
 
 	private JButton closeButton = null;
 
-	private JTextField serviceTemplate = null;
-
-	private JButton serviceTemplateButton = null;
-
-	private JPanel templatePanel = null;
-
-	private JLabel serviceTemplateJLabel = null;
-
 	private JLabel serviceStyleLabel = null;
 
 	private JComboBox serviceStyleSeletor = null;
@@ -137,15 +129,7 @@ public class CreationViewer extends GridPortalComponent {
 			gridBagConstraints13.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints13.gridy = 5;
 			serviceStyleLabel = new JLabel();
-			serviceStyleLabel.setText("Service Style");
-			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
-			gridBagConstraints19.insets = new java.awt.Insets(5, 5, 5, 5);
-			gridBagConstraints19.gridy = 7;
-			gridBagConstraints19.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints19.weightx = 1.0D;
-			gridBagConstraints19.weighty = 1.0D;
-			gridBagConstraints19.gridwidth = 3;
-			gridBagConstraints19.gridx = 0;
+			serviceStyleLabel.setText("Service Extension");
 			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
 			gridBagConstraints12.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints12.gridy = 4;
@@ -244,10 +228,9 @@ public class CreationViewer extends GridPortalComponent {
 			inputPanel.add(getNamespaceDomain(), gridBagConstraints12);
 			inputPanel.add(serviceLabel, gridBagConstraints4);
 			inputPanel.add(namespaceLabel, gridBagConstraints11);
-			inputPanel.add(getTemplatePanel(), gridBagConstraints19);
 			inputPanel.add(serviceStyleLabel, gridBagConstraints13);
 			inputPanel.add(getServiceStyleSeletor(), gridBagConstraints16);
-			serviceStyleLabel.setEnabled(false);
+			serviceStyleLabel.setEnabled(true);
 		}
 		return inputPanel;
 	}
@@ -456,80 +439,6 @@ public class CreationViewer extends GridPortalComponent {
 			});
 		}
 		return closeButton;
-	}
-
-
-	/**
-	 * This method initializes methodsTemplateFile
-	 * 
-	 * @return javax.swing.JTextField
-	 */
-	private JTextField getMethodsTemplateFile() {
-		if (serviceTemplate == null) {
-			serviceTemplate = new JTextField();
-			serviceTemplate.setEditable(false);
-			serviceTemplate.setEnabled(false);
-		}
-		return serviceTemplate;
-	}
-
-
-	/**
-	 * This method initializes methodsTemplateButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getServiceTemplateButton() {
-		if (serviceTemplateButton == null) {
-			serviceTemplateButton = new JButton();
-			serviceTemplateButton.setText("Browse");
-			serviceTemplateButton.setEnabled(false);
-			serviceTemplateButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					getMethodsTemplateFile().setText(promptFile());
-				}
-			});
-		}
-		return serviceTemplateButton;
-	}
-
-
-	/**
-	 * This method initializes templatePanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getTemplatePanel() {
-		if (templatePanel == null) {
-			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
-			gridBagConstraints20.gridx = 0;
-			gridBagConstraints20.gridy = 0;
-			serviceTemplateJLabel = new JLabel();
-			serviceTemplateJLabel.setText("Service Template File");
-			serviceTemplateJLabel.setEnabled(false);
-			serviceTemplateJLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12));
-			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
-			gridBagConstraints15.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints15.gridy = 0;
-			gridBagConstraints15.gridx = 3;
-			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
-			gridBagConstraints14.anchor = GridBagConstraints.WEST;
-			gridBagConstraints14.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints14.gridx = 2;
-			gridBagConstraints14.gridy = 0;
-			gridBagConstraints14.weightx = 1.0;
-			gridBagConstraints14.fill = GridBagConstraints.HORIZONTAL;
-			templatePanel = new JPanel();
-			templatePanel.setLayout(new GridBagLayout());
-			templatePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service Template Options",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
-			templatePanel.setEnabled(false);
-			templatePanel.add(getMethodsTemplateFile(), gridBagConstraints14);
-			templatePanel.add(getServiceTemplateButton(), gridBagConstraints15);
-			templatePanel.add(serviceTemplateJLabel, gridBagConstraints20);
-		}
-		return templatePanel;
 	}
 
 
