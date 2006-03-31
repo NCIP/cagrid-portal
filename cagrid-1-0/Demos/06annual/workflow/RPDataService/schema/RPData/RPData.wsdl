@@ -24,13 +24,13 @@
         <schema targetNamespace="http://rproteomics.cagrid.nci.nih.gov/RPData"
             xmlns:tns="http://rproteomics.cagrid.nci.nih.gov/RPData"
 			xmlns:cqlq="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQL" 
-			
+    		xmlns:rprot="gme://RProteomics.caBIG/5/edu.duke.cabig.rproteomics.domain.serviceInterface"	
             xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd">
 			<import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd"/>
 		
 			<import namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQL" schemaLocation="./1_gov.nih.nci.cagrid.CQL.xsd"/>
 			   
-      	
+      	<import namespace="gme://RProteomics.caBIG/5/edu.duke.cabig.rproteomics.domain.serviceInterface" schemaLocation="./5_edu.duke.cabig.rproteomics.domain.serviceInterface.xsd"/>
       	
 				<element name="query">
 					<complexType>
@@ -50,6 +50,24 @@
 						</sequence>
 					</complexType>
 				</element>
+            <element name="WorkFlowInputType">
+                <complexType>
+                <sequence>
+                    <element ref="tns:query" minOccurs="1" maxOccurs="1"/>
+                    <element name="windowType" type="rprot:WindowType"/>
+                    <element name="percentileType" type="rprot:PercentileType"/>
+                    <element name="thresholdType" type="rprot:ThresholdType"/>
+                </sequence>
+            </complexType>
+            </element>
+            <element name="WorkFlowOutputType">
+            <complexType>
+            <sequence>
+                <element name="jpegImage" type="rprot:JpegImageType"/>
+            </sequence>
+                </complexType>
+            </element>
+
 				<element name="MalformedQueryException" >
 					<complexType>
 						<complexContent>
@@ -78,7 +96,16 @@
 	<message name="MalformedQueryExceptionFaultMessage">
 		<part name="fault" element="tns:MalformedQueryException"/>
 	</message>
-    
+
+     <message name="workFlowInputMessage">
+        <part name="parameters" element="tns:WorkFlowInputType">
+    </part>
+    </message>
+    <message name="workFlowOutputMessage">
+    <part name="parameters" element="tns:WorkFlowOutputType"></part>
+    </message>    
+
+
 <!--============================================================
 
                        P O R T T Y P E
