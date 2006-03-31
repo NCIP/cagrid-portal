@@ -16,6 +16,7 @@ import gov.nih.nci.cagrid.introduce.codegen.metadata.SyncMetadata;
 import gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods;
 import gov.nih.nci.cagrid.introduce.codegen.security.SyncSecurity;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.templates.NamespaceMappingsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate;
 
@@ -125,7 +126,7 @@ public class SyncTools {
 		if(introService.getExtensions()!=null && introService.getExtensions().getExtension()!=null){
 			ExtensionType[] extensions = introService.getExtensions().getExtension();
 			for(int i =0; i < extensions.length; i++){
-				CodegenExtensionPreProcessor pp = CommonTools.getCodegenPreProcessor(extensions[i].getName());
+				CodegenExtensionPreProcessor pp = ExtensionTools.getCodegenPreProcessor(extensions[i].getName());
 				pp.preCodegen(info);
 			}
 		}
@@ -158,7 +159,7 @@ public class SyncTools {
 		if(introService.getExtensions()!=null && introService.getExtensions().getExtension()!=null){
 			ExtensionType[] extensions = introService.getExtensions().getExtension();
 			for(int i =0; i < extensions.length; i++){
-				CodegenExtensionPostProcessor pp = CommonTools.getCodegenPostProcessor(extensions[i].getName());
+				CodegenExtensionPostProcessor pp = ExtensionTools.getCodegenPostProcessor(extensions[i].getName());
 				pp.postCodegen(info);
 			}
 		}
