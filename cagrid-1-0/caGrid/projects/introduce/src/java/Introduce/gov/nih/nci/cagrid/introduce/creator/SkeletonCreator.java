@@ -4,19 +4,20 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
-import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionsType;
 import gov.nih.nci.cagrid.introduce.creator.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.creator.extension.CreationExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 
 import java.io.File;
 import java.util.Properties;
+import java.util.StringTokenizer;
+
+import javax.xml.namespace.QName;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
-
-import antlr.CommonToken;
 
 
 /**
@@ -49,6 +50,21 @@ public class SkeletonCreator extends Task {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
+
+		// for each extension in the properties make sure to add the xml to the
+		// introduce model for them to use.....
+		String extensionsList = properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_EXTENSIONS);
+		StringTokenizer strtok = new StringTokenizer(extensionsList, ",", false);
+		ExtensionType[] types = new ExtensionType[strtok.countTokens()];
+		int count = 0;
+		while (strtok.hasMoreElements()) {
+			String token = strtok.nextToken();
+			ExtensionType type = new ExtensionType();
+			type.setName(token);
+			types[count++] = type;
+		}
+		ExtensionsType exts = new ExtensionsType();
+		exts.setExtension(types);
 
 		ServiceInformation info = new ServiceInformation(introService, properties, baseDirectory);
 		SkeletonBaseCreator sbc = new SkeletonBaseCreator();
@@ -103,6 +119,14 @@ public class SkeletonCreator extends Task {
 					e.printStackTrace();
 				}
 			}
+		}
+
+		try {
+			Utils.serializeDocument(baseDirectory + File.separator + "introduce.xml", introService, new QName(
+				"gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }

@@ -17,6 +17,7 @@ public class IntroduceConstants {
 	public static final String INTRODUCE_SKELETON_DESTINATION_DIR = "introduce.skeleton.destination.dir";
 	public static final String INTRODUCE_SKELETON_SERVICE_NAME = "introduce.skeleton.service.name";
 	public static final String INTRODUCE_SKELETON_PACKAGE_DIR = "introduce.skeleton.package.dir";
+	public static final String INTRODUCE_SKELETON_EXTENSIONS = "introduce.skeleton.extensions";
 	public static final String NAMESPACE2PACKAGE_MAPPINGS_FILE = "namespace2package.mappings";
 	public static final String INTRODUCE_SKELETON_TIMESTAMP = "introduce.skeleton.timestamp";
 	public static final String INTRODUCE_SKELETON_NAMESPACE_DOMAIN = "introduce.skeleton.namespace.domain";
