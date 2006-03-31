@@ -6,6 +6,11 @@ import java.util.Map;
 
 public class XPathUtils {
 
+	private static final String LOCAL_REPLACEMENT = "' and local-name()='$1'";
+	private static final String URI_REPLACEMENT = "*[namespace-uri()='";
+	private static final String NS_START_REGEX = ":([a-zA-Z])+";
+
+
 	/**
 	 * This utilty takes an xpath that uses namespace prefixes (such as
 	 * /a:B/a:C) and converts it to one without prefixes, by using the
@@ -39,17 +44,17 @@ public class XPathUtils {
 			String prefix = (String) iterator.next();
 			String ns = (String) namespaces.get(prefix);
 
-			// replace the a:A$ stuff
-			prefixedXpath = prefixedXpath.replaceAll(prefix + ":([a-zA-Z])?[\\s]*$", "*[namespace-uri()='" + ns
-				+ "' and local-name()='$1']");
+			// replace the last thing in the xpath being a qname
+			prefixedXpath = prefixedXpath.replaceAll(prefix + NS_START_REGEX + "[\\s]*$", URI_REPLACEMENT + ns
+				+ LOCAL_REPLACEMENT + "]");
 
-			// replace the a:A/ stuff
-			prefixedXpath = prefixedXpath.replaceAll(prefix + ":([a-zA-Z])?/", "*[namespace-uri()='" + ns
-				+ "' and local-name()='$1']/");
+			// replace any qname that is starting a predicate
+			prefixedXpath = prefixedXpath.replaceAll(prefix + NS_START_REGEX + "\\[", URI_REPLACEMENT + ns
+				+ LOCAL_REPLACEMENT + " and ");
 
-			// replace the /a:A[* stuff
-			prefixedXpath = prefixedXpath.replaceAll(prefix + ":([a-zA-Z])?\\[", "*[namespace-uri()='" + ns
-				+ "' and local-name()='$1' and ");
+			// replace any other qname (has some character after the qname that isn't the start of a predicate)
+			prefixedXpath = prefixedXpath.replaceAll(prefix + NS_START_REGEX + "([^\\[]){1,1}", URI_REPLACEMENT + ns
+				+ LOCAL_REPLACEMENT + "]$2");
 
 		}
 
