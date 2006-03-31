@@ -17,7 +17,7 @@
 	<classpathentry sourcepath="/GT4_LOCATION" kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
 	<classpathentry sourcepath="/GT4_LOCATION/axis-src-1_2_1.zip" kind="var" path="GT4_LOCATION/lib/axis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/bootstrap.jar"/>
+	<classpathentry sourcepath="/GT4_LOCATION" kind="var" path="GT4_LOCATION/lib/bootstrap.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-axis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-jglobus.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-tomcat.jar"/>
