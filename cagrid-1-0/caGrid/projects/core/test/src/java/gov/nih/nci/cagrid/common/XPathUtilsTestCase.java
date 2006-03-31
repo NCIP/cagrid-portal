@@ -5,14 +5,18 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-public class XPathUtilsTest extends TestCase {
+
+public class XPathUtilsTestCase extends TestCase {
 
 	private Map prefixMap;
+	protected static Log LOG = LogFactory.getLog(XPathUtilsTestCase.class.getName());
 
 
 	public static void main(String[] args) {
-		junit.textui.TestRunner.run(XPathUtilsTest.class);
+		junit.textui.TestRunner.run(XPathUtilsTestCase.class);
 	}
 
 
@@ -49,9 +53,8 @@ public class XPathUtilsTest extends TestCase {
 	public void assertReplacedAndRepeatable(String xpath) {
 		try {
 			String translated = XPathUtils.translateXPath(xpath, prefixMap);
-			System.out.println();
-			System.out.println("ORIGINAL:" + xpath);
-			System.out.println("TRANSLATED:" + translated);
+			LOG.debug("ORIGINAL:" + xpath);
+			LOG.debug("TRANSLATED:" + translated);
 
 			assertTrue(translated.length() > xpath.length());
 			assertTrue(translated.indexOf("][") < 0);
