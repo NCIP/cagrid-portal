@@ -197,7 +197,9 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
                   </copy>
                </assign>
             </while>
+
             <invoke inputVariable="removeBackground_minusByValueInputMessageDuke" operation="removeBackground_minusByValue" outputVariable="removeBackground_minusByValueOutputMessageDuke" partnerLink="DukeRproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
+            
             <assign>
                <copy>
                   <from expression="&quot;1&quot;"/>
@@ -208,51 +210,46 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
                   <to variable="countDuke"/>
                </copy>
             </assign>
+            
             <while condition="bpws:getVariableData('indexCounterDuke') &lt;= bpws:getVariableData('countDuke')">
-               <assign>
+               <sequence>
+                <assign>
                   <copy>
                      <from expression="bpws:getVariableData('removeBackground_minusByValueOutputMessageDuke', 'parameters','/ns3:removeBackground_minusByValueResponse')/response[bpws:getVariableData('indexCounterDuke')]"/>
                      <to part="parameters" query="/ns3:denoise_waveletUDWTWByValue/scanFeaturesXml[bpws:getVariableData('indexCounterDuke')]" variable="denoise_waveletUDWTWByValueInputMessageDuke"/>
-                  </copy>
-                  <copy>
-                     <from expression="bpws:getVariableData('indexCounterDuke') + 1"/>
-                     <to variable="indexCounterDuke"/>
-                  </copy>
-               </assign>
-            </while>
-            <assign>
-               <copy>
+                </copy>
+                <copy>
                   <from part="parameters" query="/ns1:WorkFlowInputType/windowType" variable="workFlowInputMessage"/>
                   <to part="parameters" query="/ns3:denoise_waveletUDWTWByValue/windowSize" variable="denoise_waveletUDWTWByValueInputMessageDuke"/>
-               </copy>
+                </copy>
                <copy>
                   <from part="parameters" query="/ns1:WorkFlowInputType/thresholdType" variable="workFlowInputMessage"/>
                   <to part="parameters" query="/ns3:denoise_waveletUDWTWByValue/thresholdMultiplier" variable="denoise_waveletUDWTWByValueInputMessageDuke"/>
                </copy>
-            </assign>
-            <invoke inputVariable="denoise_waveletUDWTWByValueInputMessageDuke" operation="denoise_waveletUDWTWByValue" outputVariable="denoise_waveletUDWTWByValueOutputMessageDuke" partnerLink="DukeRproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
-            <assign>
-               <copy>
-                  <from expression="&quot;1&quot;"/>
-                  <to variable="indexCounterDuke"/>
-               </copy>
-               <copy>
-                  <from expression="count(bpws:getVariableData('denoise_waveletUDWTWByValueOutputMessageDuke', 'parameters', '/ns3:denoise_waveletUDWTWByValueResponse')/response)"/>
-                  <to variable="countDuke"/>
-               </copy>
-            </assign>
-            <while condition="bpws:getVariableData('indexCounterDuke') &lt;= bpws:getVariableData('countDuke')">
-               <assign>
-                  <copy>
-                     <from expression="bpws:getVariableData('denoise_waveletUDWTWByValueOutputMessageDuke','parameters', '/ns3:denoise_waveletUDWTWByValueResponse')/response[bpws:getVariableData('indexCounterDuke')]"/>
+ 
+               </assign>
+                
+                <invoke inputVariable="denoise_waveletUDWTWByValueInputMessageDuke" operation="denoise_waveletUDWTWByValue" outputVariable="denoise_waveletUDWTWByValueOutputMessageDuke" partnerLink="DukeRproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
+                <assign>
+                <copy>
+                    <from expression="&quot;1&quot;"/>
+                    <to variable="tempCount"/>
+                </copy>
+                   <copy>
+                     <from expression="bpws:getVariableData('denoise_waveletUDWTWByValueOutputMessageDuke','parameters', '/ns3:denoise_waveletUDWTWByValueResponse')/response[bpws:getVariableData('tempCount')]"/>
                      <to part="parameters" query="/ns3:align_alignxByValue/scanFeaturesXml[bpws:getVariableData('indexCounterDuke')]" variable="align_alignxByValueInputMessageDuke"/>
                   </copy>
+
                   <copy>
                      <from expression="bpws:getVariableData('indexCounterDuke') + 1"/>
                      <to variable="indexCounterDuke"/>
                   </copy>
+
                </assign>
+               </sequence>
             </while>
+
+            
             <invoke inputVariable="align_alignxByValueInputMessageDuke" operation="align_alignxByValue" outputVariable="align_alignxByValueOutputMessageDuke" partnerLink="DukeRproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
             <assign>
                <copy>
