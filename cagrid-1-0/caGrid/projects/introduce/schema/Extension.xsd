@@ -13,10 +13,23 @@
 	<xs:element name="ExtensionDescription" type="ExtensionDescriptionType"></xs:element>
 	<xs:complexType name="ExtensionDescriptionType">
 		<xs:sequence>
-			<xs:element name="CreationPostProcessor" type="xs:string" minOccurs="0" maxOccurs="1"/>
-			<xs:element name="CodegenPreProcessor" type="xs:string" minOccurs="0" maxOccurs="1"/>
-			<xs:element name="CodegenPostProcessor" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="CreationPostProcessor" type="xs:string" minOccurs="0" maxOccurs="1">
+				<xs:annotation>Must implement the ExtensionCreationPostProcessor</xs:annotation>
+			</xs:element>
+			<xs:element name="CreationUIComponent" type="xs:string" minOccurs="0" maxOccurs="1">
+				<xs:annotation>CreationViewer GUI component that must extend a JFrame</xs:annotation>
+			</xs:element>
+			<xs:element name="CodegenPreProcessor" type="xs:string" minOccurs="0" maxOccurs="1">
+				<xs:annotation>Must implement the ExtensionCodegenPreProcessor</xs:annotation>
+			</xs:element>
+			<xs:element name="CodegenPostProcessor" type="xs:string" minOccurs="0" maxOccurs="1">
+				<xs:annotation>Must implement the ExtensionCodegenPostProcessor</xs:annotation>
+			</xs:element>
+			<xs:element name="ModificationUIComponent" type="xs:string" minOccurs="0" maxOccurs="1">
+				<xs:annotation>ModificationViewer GUI component that must extend a JFrame</xs:annotation>
+			</xs:element>
 		</xs:sequence>
+		<xs:attribute name="displayName" type="xs:string" use="required"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 	</xs:complexType>
 	

@@ -85,6 +85,8 @@ public class CreationViewer extends GridPortalComponent {
 	private JLabel serviceStyleLabel = null;
 
 	private JComboBox serviceStyleSeletor = null;
+	
+	private ExtensionsLoader loader = null;
 
 
 	/**
@@ -92,6 +94,7 @@ public class CreationViewer extends GridPortalComponent {
 	 */
 	public CreationViewer() {
 		super();
+		loader = new ExtensionsLoader();
 		initialize();
 	}
 
@@ -311,11 +314,11 @@ public class CreationViewer extends GridPortalComponent {
 		if (serviceStyleSeletor == null) {
 			serviceStyleSeletor = new JComboBox();
 			serviceStyleSeletor.addItem("NONE");
-			ExtensionsLoader loader = new ExtensionsLoader();
+			
 			List extensionDescriptors = loader.getExtensions();
 			for (int i = 0; i < extensionDescriptors.size(); i++) {
 				ExtensionDescriptionType ex = (ExtensionDescriptionType) extensionDescriptors.get(i);
-				serviceStyleSeletor.addItem(ex.getName());
+				serviceStyleSeletor.addItem(ex.getDisplayName());
 			}
 		}
 		return serviceStyleSeletor;
@@ -495,7 +498,8 @@ public class CreationViewer extends GridPortalComponent {
 						//only supporting one for now.....
 						String serviceExtensions ="";
 						if(!((String)getServiceStyleSeletor().getSelectedItem()).equals("NONE")){
-							serviceExtensions = (String)getServiceStyleSeletor().getSelectedItem();
+							ExtensionDescriptionType edt = loader.getExtensionByDisplayName((String)getServiceStyleSeletor().getSelectedItem());
+							serviceExtensions = edt.getName();
 						}
 						setProgressText("creating");
 						String cmd = CommonTools.getAntSkeletonCreationCommand(".", serviceName, dirName, packageName,
@@ -506,16 +510,6 @@ public class CreationViewer extends GridPortalComponent {
 							PortalUtils.showErrorMessage("Error creating new service!");
 						}
 
-						/*
-						 * if (templateFilename.length() > 0) { StringBuffer
-						 * fileText = Utils.fileToStringBuffer(new
-						 * File(templateFilename));
-						 * Utils.stringBufferToFile(fileText, dirName +
-						 * File.separator + "introduce.xml");
-						 * setProgressText("resynchronizing using templates");
-						 * SyncTools sync = new SyncTools(new File(dirName));
-						 * sync.sync(); }
-						 */
 						setProgressText("building");
 						cmd = CommonTools.getAntAllCommand(dirName);
 						p = CommonTools.createAndOutputProcess(cmd);

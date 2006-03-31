@@ -48,6 +48,16 @@ public class ExtensionsLoader {
 		}
 		return null;
 	}
+	
+	public ExtensionDescriptionType getExtensionByDisplayName(String displayName){
+		for (int i = 0; i < extensionDescriptors.size(); i++) {
+			ExtensionDescriptionType ex = (ExtensionDescriptionType) extensionDescriptors.get(i);
+			if(ex.getDisplayName().equals(displayName)){
+				return ex;
+			}
+		}
+		return null;
+	}
 
 	public File getExtensionsDir() {
 		return extensionsDir;
