@@ -319,7 +319,7 @@ public class CreationViewer extends GridPortalComponent {
 		return createButton;
 	}
 
-
+	
 	/**
 	 * This method initializes serviceStyleSeletor
 	 * 
@@ -328,7 +328,6 @@ public class CreationViewer extends GridPortalComponent {
 	private JComboBox getServiceStyleSeletor() {
 		if (serviceStyleSeletor == null) {
 			serviceStyleSeletor = new JComboBox();
-			serviceStyleSeletor.setEnabled(false);
 			ExtensionsLoader loader = new ExtensionsLoader();
 			List extensionDescriptors = loader.getExtensions();
 			for (int i = 0; i < extensionDescriptors.size(); i++) {
