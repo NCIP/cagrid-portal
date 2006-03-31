@@ -17,18 +17,20 @@ import org.w3c.dom.Element;
 
 public class DiscoveryClient {
 
+	private static final String DEFAULT_INDEX_SERVICE_URL = "http://dc01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService";
+
 	private EndpointReferenceType indexEPR = null;
 
 	private static Map nsMap = new HashMap();
 	static {
-		nsMap.put("com", "gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common");
+		// nsMap.put("com",
+		// "gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common");
 		nsMap.put(WSRFConstants.SERVICEGROUP_PREFIX, WSRFConstants.SERVICEGROUP_NS);
 	}
 
 
 	public DiscoveryClient() throws MalformedURIException {
-		// Default...can be changed with setter
-		this("http://dc01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService");
+		this(DEFAULT_INDEX_SERVICE_URL);
 	}
 
 
@@ -57,22 +59,24 @@ public class DiscoveryClient {
 			System.exit(-1);
 		}
 
-		// try {
-		// Element rps = ResourcePropertyHelper.getResourceProperties(indexEPR);
-		// System.out.println("Index Resource Property Set:");
-		// XMLUtils.PrettyElementToStream(rps, System.out);
-		//
-		// // ResourcePropertyHelper.getResourceProperties(indexEPR,new
-		// // QName[]{new QName()});
-		//
-		EndpointReferenceType[] allServices=null;
+//		Element rps = null;
+//		try {
+//			rps = ResourcePropertyHelper.getResourceProperties(client.getIndexEPR());
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			System.exit(-1);
+//		}
+//		System.out.println("Index Resource Property Set:");
+//		XMLUtils.PrettyElementToStream(rps, System.out);
+
+		EndpointReferenceType[] allServices = null;
 		try {
 			allServices = client.getAllServices();
 		} catch (Exception e1) {
 			e1.printStackTrace();
 			System.exit(-1);
 		}
-		
+
 		if (allServices != null) {
 			for (int i = 0; i < allServices.length; i++) {
 				EndpointReferenceType service = allServices[i];
@@ -82,8 +86,8 @@ public class DiscoveryClient {
 					System.out.println("Resource Property Set:");
 					XMLUtils.PrettyElementToStream(serviceRPs, System.out);
 				} catch (Exception e) {
-					//e.printStackTrace();
-					System.out.println("ERROR:  Unable to access service's resource properties: "+e.getMessage());
+					// e.printStackTrace();
+					System.out.println("ERROR:  Unable to access service's resource properties: " + e.getMessage());
 				}
 			}
 		} else {
@@ -128,5 +132,15 @@ public class DiscoveryClient {
 		}
 
 		return results;
+	}
+
+
+	public EndpointReferenceType getIndexEPR() {
+		return indexEPR;
+	}
+
+
+	public void setIndexEPR(EndpointReferenceType indexEPR) {
+		this.indexEPR = indexEPR;
 	}
 }
