@@ -64,7 +64,7 @@ public class CommonTools {
 	}
 
 	public static String getAntSkeletonCreationCommand(String buildFileDir, String name, String dir,
-		String packagename, String namespacedomain) throws Exception {
+		String packagename, String namespacedomain, String extensions) throws Exception {
 		// fix dir path if it relative......
 		File dirF = new File(dir);
 		if (!dirF.isAbsolute()) {
@@ -73,7 +73,8 @@ public class CommonTools {
 		String cmd = " -Dintroduce.skeleton.destination.dir=" + dir + " -Dintroduce.skeleton.service.name=" + name
 			+ " -Dintroduce.skeleton.package=" + packagename + " -Dintroduce.skeleton.package.dir="
 			+ packagename.replace('.', File.separatorChar) + " -Dintroduce.skeleton.namespace.domain="
-			+ namespacedomain + " createService";
+			+ namespacedomain + " -Dintroduce.skeleton.extensions="
+			+ extensions + " createService";
 		cmd = getAntCommandCall(buildFileDir) + cmd;
 		return cmd;
 	}

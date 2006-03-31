@@ -12,6 +12,7 @@
 	<property name="introduce.skeleton.package.default" value="gov.nih.nci.cagrid"/>
 	<property name="introduce.skeleton.package.dir.default" value="gov/nih/nci/cagrid"/>
 	<property name="introduce.skeleton.namespace.domain.default" value="http://cagrid.nci.nih.gov"/>
+	<property name="introduce.skeleton.extensions.default" value=""/>
 	<target name="usage">
 		<echo message="Not to be called directly.  This file contains utilities to be used in other
 			build files."/>
@@ -74,8 +75,11 @@
 				<and>
 					<and>
 						<and>
-							<isset property="introduce.skeleton.service.name"/>
-							<isset property="introduce.skeleton.destination.dir"/>
+							<and>
+								<isset property="introduce.skeleton.service.name"/>
+								<isset property="introduce.skeleton.destination.dir"/>
+							</and>
+							<isset property="introduce.skeleton.extensions"/>
 						</and>
 						<isset property="introduce.skeleton.package"/>
 					</and>
@@ -106,6 +110,10 @@
 			[${introduce.skeleton.namespace.domain.default}]:"
 			addproperty="introduce.skeleton.namespace.domain"
 			defaultvalue="${introduce.skeleton.namespace.domain.default}"/>
+		<input message="Please enter any service extensions (separate by commas).
+			[${introduce.skeleton.extensions.default}]:"
+			addproperty="introduce.skeleton.extensions"
+			defaultvalue="${introduce.skeleton.extensions.default}"/>
 	</target>
 	<target name="copyCaGridJars" depends="prepareSkeleton,copySkeleton">
 		<copy todir="${introduce.skeleton.destination.dir}/lib" flatten="true"

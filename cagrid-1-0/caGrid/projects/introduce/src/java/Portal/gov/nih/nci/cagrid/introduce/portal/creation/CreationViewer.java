@@ -328,6 +328,7 @@ public class CreationViewer extends GridPortalComponent {
 	private JComboBox getServiceStyleSeletor() {
 		if (serviceStyleSeletor == null) {
 			serviceStyleSeletor = new JComboBox();
+			serviceStyleSeletor.addItem("NONE");
 			ExtensionsLoader loader = new ExtensionsLoader();
 			List extensionDescriptors = loader.getExtensions();
 			for (int i = 0; i < extensionDescriptors.size(); i++) {
@@ -582,9 +583,15 @@ public class CreationViewer extends GridPortalComponent {
 							PortalUtils.showMessage("Service Name cannot be empty.");
 							return;
 						}
+						
+						//only supporting one for now.....
+						String serviceExtensions ="";
+						if(!((String)getServiceStyleSeletor().getSelectedItem()).equals("NONE")){
+							serviceExtensions = (String)getServiceStyleSeletor().getSelectedItem();
+						}
 						setProgressText("creating");
 						String cmd = CommonTools.getAntSkeletonCreationCommand(".", serviceName, dirName, packageName,
-							serviceNsDomain);
+							serviceNsDomain, serviceExtensions);
 						Process p = CommonTools.createAndOutputProcess(cmd);
 						p.waitFor();
 						if (p.exitValue() != 0) {

@@ -28,7 +28,7 @@ public class CreateSkeletonStep extends Step {
 		}
 
 		String cmd = CommonTools.getAntSkeletonCreationCommand(pathtobasedir, tci.getName(), tci.getDir(), tci
-			.getPackageName(), tci.getNamespaceDomain());
+			.getPackageName(), tci.getNamespaceDomain(),"");
 
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
