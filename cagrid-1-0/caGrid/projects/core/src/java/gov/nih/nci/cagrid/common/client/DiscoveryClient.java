@@ -82,7 +82,8 @@ public class DiscoveryClient {
 					System.out.println("Resource Property Set:");
 					XMLUtils.PrettyElementToStream(serviceRPs, System.out);
 				} catch (Exception e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					System.out.println("ERROR:  Unable to access service's resource properties: "+e.getMessage());
 				}
 			}
 		} else {
