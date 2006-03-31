@@ -21,6 +21,11 @@ public class XPathUtils {
 	 * write sane xpath and convert it to the insane xpath globus index service
 	 * supports.
 	 * 
+	 * NOTE: This isn't perfect. The known limitations are: 1) its
+	 * overly agressive, and will replace QName-looking string literals, 2) it
+	 * won't work if you have namespaces attributes 3) it will silently not
+	 * replace any QNames that you haven't supplied a prefix mapping for
+	 * 
 	 * @param prefixedXpath
 	 *            An xpath [optionally] using namespace prefixes in nodetests
 	 * @param namespaces
@@ -52,7 +57,8 @@ public class XPathUtils {
 			prefixedXpath = prefixedXpath.replaceAll(prefix + NS_START_REGEX + "\\[", URI_REPLACEMENT + ns
 				+ LOCAL_REPLACEMENT + " and ");
 
-			// replace any other qname (has some character after the qname that isn't the start of a predicate)
+			// replace any other qname (has some character after the qname that
+			// isn't the start of a predicate)
 			prefixedXpath = prefixedXpath.replaceAll(prefix + NS_START_REGEX + "([^\\[]){1,1}", URI_REPLACEMENT + ns
 				+ LOCAL_REPLACEMENT + "]$2");
 

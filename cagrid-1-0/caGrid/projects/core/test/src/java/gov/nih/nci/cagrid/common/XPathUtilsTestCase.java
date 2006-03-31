@@ -72,7 +72,7 @@ public class XPathUtilsTestCase extends TestCase {
 		assertReplacedAndRepeatable("/a:B/a:C");
 		assertReplacedAndRepeatable("/a:B[@b!='foo']");
 		assertReplacedAndRepeatable("/a:B[@b!='foo']/a:C");
-		assertReplacedAndRepeatable("/a:B[@b!='foo' and a:C/text()='a:b']/a:C");
+		assertReplacedAndRepeatable("/a:B[@b!='foo' and a:C/text()='something']/a:C");
 		assertReplacedAndRepeatable("/a:B[@b!='foo' and a:C or a:B/[@b='a']]/a:C");
 		assertReplacedAndRepeatable("/a:B[@b!='foo' and a:C or a:B/[@b='a']]/*[namespace-uri()='http://DOMAIN.COM:80/SCHEMA' and local-name()='B']");
 	}
