@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce;
 
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionsType;
 import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
@@ -65,6 +66,7 @@ public class ServiceInformation {
 		this.introService.setMethods(methods);
 	}
 
+
 	public NamespacesType getNamespaces() {
 		return introService.getNamespaces();
 	}
@@ -73,6 +75,17 @@ public class ServiceInformation {
 	public void setNamespaces(NamespacesType namespaces) {
 		this.introService.setNamespaces(namespaces);
 	}
+
+
+	public ExtensionsType getExtensions() {
+		return introService.getExtensions();
+	}
+
+
+	public void setExtensions(ExtensionsType extensions) {
+		this.introService.setExtensions(extensions);
+	}
+
 
 	public ServiceSecurity getServiceSecurity() {
 		return this.introService.getServiceSecurity();
@@ -90,11 +103,11 @@ public class ServiceInformation {
 			for (int i = 0; i < namespaces.length; i++) {
 				NamespaceType namespace = namespaces[i];
 				if (namespace.getNamespace().equals(qname.getNamespaceURI())) {
-					if(namespace.getSchemaElement() != null){
-						for(int j=0; j < namespace.getSchemaElement().length; j ++){
+					if (namespace.getSchemaElement() != null) {
+						for (int j = 0; j < namespace.getSchemaElement().length; j++) {
 							SchemaElementType type = namespace.getSchemaElement(j);
-							if(type.getType().equals(qname.getLocalPart())){
-								SchemaInformation info = new SchemaInformation(namespace,type);
+							if (type.getType().equals(qname.getLocalPart())) {
+								SchemaInformation info = new SchemaInformation(namespace, type);
 								return info;
 							}
 						}
