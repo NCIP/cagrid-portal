@@ -19,13 +19,22 @@
     <property name="build.dir" location="build" />
 	<property name="build.utils.dest" location="${build.dir}/utilities/classes"/>
 	<property name="build.extension.dest" location="${build.dir}/extension/classes"/>
+	<property name="build.service.dest" location="${build.dir}/service/classes"/>
     <property name="build.jars.dir" location="build/lib" />
+	
+	<!-- jar names -->
 	<property name="utils.jar.name" value="${project.name}-${project.version}-utils.jar"/>
 	<property name="extension.jar.name" value="${project.name}-${project.version}-extension.jar"/>
 	<property name="project.jar.name" value="${project.name}-${project.version}.jar"/>
-	<property name="utils.jar.file" value="${build.jars.dir}/$utils.jar.name}"/>
+	<property name="service.jar.name" value="${project.name}-${project.version}-service.jar"/>
+	
+	<!-- jar files -->
 	<property name="extension.jar.file" value="${build.jars.dir}/${extension.jar.name}"/>
 	<property name="project.jar.file" value="${build.jars.dir}/${project.jar.name}"/>
+	<property name="utils.jar.file" value="${build.jars.dir}/${utils.jar.name}"/>
+	<property name="service.jar.file" value="${build.jars.dir}/${service.jar.name}"/>
+	
+	<!-- extension -->
 	<property name="extension.base.dir" location="${basedir}/extension"/>
 	<property name="extension.description.file" value="${extension.base.dir}/extension.xml"/>
 	<property name="extension.out.dir" location="${extension.base.dir}/DataService"/>
@@ -47,6 +56,7 @@
 	<property name="src.dir" location="${basedir}/src/java"/>
 	<property name="utils.src.dir" location="${src.dir}/utilities"/>
 	<property name="extension.src.dir" location="${src.dir}/extension"/>
+	<property name="service.src.dir" location="${src.dir}/service"/>
 	
 	<!-- libraries -->
 	<property name="lib.dir" location="${basedir}/lib"/>
@@ -57,12 +67,13 @@
         <mkdir dir="${build.dir}" />
     	<mkdir dir="${build.utils.dest}"/>
     	<mkdir dir="${build.extension.dest}"/>
+    	<mkdir dir="${build.service.dest}"/>
         <mkdir dir="${build.jars.dir}" />
         <mkdir dir="${stubs.dir}" />
         <mkdir dir="${stubs.src}" />
         <mkdir dir="${stubs.dest}" />
         <mkdir dir="${schema.dest}" />
-    	<!-- copy schemas to the output directory for them -->
+    	<!-- copy schemas to the output directory -->
         <copy toDir="${schema.dest}">
             <fileset dir="schema" casesensitive="yes">
                 <include name="Data/**/*.xsd" />
@@ -91,6 +102,7 @@
             <property name="target.stubs.dir" location="${stubs.src}" />
         </ant>
     </target>
+	
 	
 	<!-- compiles the source stubs for the schema defined types -->
     <target name="compileStubs" depends="stubs">
@@ -143,6 +155,25 @@
 			</classpath>
 		</javac>
 	</target>
+	
+	
+	<!-- compiles the service side code -->
+	<target name="compileService" depends="compileStubs">
+		<javac srcdir="${service.src.dir}" destdir="${build.service.dest}" debug="${java.debug}">
+			<classpath>
+				<fileset dir="${globus.dir}/lib">
+					<include name="*.jar"/>
+				</fileset>
+				<fileset dir="${lib.dir}">
+					<include name="**/*.jar"/>
+				</fileset>
+					<fileset dir="${ext.lib.dir}">
+				<include name="*.jar"/>
+				</fileset>
+				<pathelement location="${stubs.dest}"/>
+			</classpath>
+		</javac>
+	</target>
 
 	
 	<!-- jars the stubs -->
@@ -180,8 +211,21 @@
 	</target>
 	
 	
+	<!-- jars the service side stuff -->
+	<target name="jarService" depends="compileService" description="Jars the service side code">
+		<jar destfile="${service.jar.file}">
+			<fileset dir="${stubs.dest}">
+				<include name="**/*.class"/>
+			</fileset>
+			<fileset dir="${build.service.dest}">
+				<include name="**/*.class"/>
+			</fileset>
+		</jar>
+	</target>
+	
+	
 	<!-- jars everything -->
-	<target name="jarAll" depends="compileStubs, compileUtilsSource, compileExtensionSource" description="Jars eveything in the project">
+	<target name="jarAll" depends="compileStubs, compileUtilsSource, compileExtensionSource, compileService" description="Jars eveything in the project">
 		<jar destfile="${project.jar.file}">
 			<fileset dir="${stubs.dest}">
 				<include name="**/*.class"/>
@@ -192,6 +236,9 @@
 			<fileset dir="${build.extension.dest}">
 				<include name="**/*.class"/>
 			</fileset>
+			<fileset dir="${build.service.dest}">
+				<include name="**/*.class"/>
+			</fileset>			
 		</jar>
 	</target>
     
