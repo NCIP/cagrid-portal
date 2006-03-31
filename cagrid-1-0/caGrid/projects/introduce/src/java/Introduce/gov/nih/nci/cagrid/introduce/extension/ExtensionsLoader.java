@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.portal.creation;
+package gov.nih.nci.cagrid.introduce.extension;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescriptionType;
@@ -9,10 +9,10 @@ import java.util.List;
 
 public class ExtensionsLoader {
 	private List extensionDescriptors;
-	private File dir;
+	private File extensionsDir;
 	
-	public ExtensionsLoader(File extensionsDir){
-		this.dir = extensionsDir;
+	public ExtensionsLoader(){
+		this.extensionsDir = new File("." + File.separator + "extensions");
 		extensionDescriptors = new ArrayList();
 		try {
 			this.load();
@@ -22,8 +22,8 @@ public class ExtensionsLoader {
 	}
 	
 	private void load() throws Exception{
-		if(dir.isDirectory()){
-			File[] dirs = dir.listFiles();
+		if(extensionsDir.isDirectory()){
+			File[] dirs = extensionsDir.listFiles();
 			for(int i = 0; i < dirs.length; i ++){
 				if(dirs[i].isDirectory()){
 					if(new File(dirs[i].getAbsolutePath() + File.separator + "extension.xml").exists()){
@@ -37,5 +37,19 @@ public class ExtensionsLoader {
 	
 	public List getExtensions(){
 		return this.extensionDescriptors;
+	}
+	
+	public ExtensionDescriptionType getExtension(String name){
+		for (int i = 0; i < extensionDescriptors.size(); i++) {
+			ExtensionDescriptionType ex = (ExtensionDescriptionType) extensionDescriptors.get(i);
+			if(ex.getName().equals(name)){
+				return ex;
+			}
+		}
+		return null;
+	}
+
+	public File getExtensionsDir() {
+		return extensionsDir;
 	}
 }

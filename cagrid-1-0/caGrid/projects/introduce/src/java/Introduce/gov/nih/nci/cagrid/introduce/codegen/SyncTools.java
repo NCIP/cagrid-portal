@@ -122,12 +122,15 @@ public class SyncTools {
 		serviceProperties.store(new FileOutputStream(servicePropertiesFile), "Introduce Properties");
 
 		System.out.println("Synchronizing with pre processing extensions");
+		ExtensionTools tools = new ExtensionTools();
 		//run any extensions that need to be ran
 		if(introService.getExtensions()!=null && introService.getExtensions().getExtension()!=null){
 			ExtensionType[] extensions = introService.getExtensions().getExtension();
 			for(int i =0; i < extensions.length; i++){
-				CodegenExtensionPreProcessor pp = ExtensionTools.getCodegenPreProcessor(extensions[i].getName());
-				pp.preCodegen(info);
+				CodegenExtensionPreProcessor pp = tools.getCodegenPreProcessor(extensions[i].getName());
+				if(pp!=null){
+					pp.preCodegen(info);
+				}
 			}
 		}
 		
@@ -159,8 +162,10 @@ public class SyncTools {
 		if(introService.getExtensions()!=null && introService.getExtensions().getExtension()!=null){
 			ExtensionType[] extensions = introService.getExtensions().getExtension();
 			for(int i =0; i < extensions.length; i++){
-				CodegenExtensionPostProcessor pp = ExtensionTools.getCodegenPostProcessor(extensions[i].getName());
-				pp.postCodegen(info);
+				CodegenExtensionPostProcessor pp = tools.getCodegenPostProcessor(extensions[i].getName());
+				if(pp!=null){
+					pp.postCodegen(info);
+				}
 			}
 		}
 		

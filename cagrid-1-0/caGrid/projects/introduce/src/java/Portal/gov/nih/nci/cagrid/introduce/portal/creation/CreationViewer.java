@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.modification.ModificationViewer;
 
@@ -328,7 +329,7 @@ public class CreationViewer extends GridPortalComponent {
 		if (serviceStyleSeletor == null) {
 			serviceStyleSeletor = new JComboBox();
 			serviceStyleSeletor.setEnabled(false);
-			ExtensionsLoader loader = new ExtensionsLoader(new File("." + File.separator + "extensions"));
+			ExtensionsLoader loader = new ExtensionsLoader();
 			List extensionDescriptors = loader.getExtensions();
 			for (int i = 0; i < extensionDescriptors.size(); i++) {
 				ExtensionDescriptionType ex = (ExtensionDescriptionType) extensionDescriptors.get(i);
