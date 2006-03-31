@@ -131,7 +131,7 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
             <to part="parameters" query="/ns3:removeBackground_runningQuantileByValue/percentile" variable="removeBackground_runningQuantileByValueInputMessage"/>
          </copy>
       </assign>
-      <invoke inputVariable="removeBackground_runningQuantileByValueInputMessage" operation="removeBackground_runningQuantileByValue" outputVariable="removeBackground_runningQuantileByValueOutputMessage" partnerLink="OSURproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
+      <invoke inputVariable="removeBackground_runningQuantileByValueInputMessage" operation="removeBackground_runningQuantileByValue" outputVariable="removeBackground_runningQuantileByValueOutputMessage" partnerLink="DukeRproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
       <assign>
          <copy>
             <from expression="&quot;1&quot;"/>
@@ -209,7 +209,7 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
             <to part="parameters" query="/ns3:denoise_waveletUDWTWByValue/thresholdMultiplier" variable="denoise_waveletUDWTWByValueInputMessage"/>
          </copy>
       </assign>
-      <invoke inputVariable="denoise_waveletUDWTWByValueInputMessage" operation="denoise_waveletUDWTWByValue" outputVariable="denoise_waveletUDWTWByValueOutputMessage" partnerLink="OSURproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
+      <invoke inputVariable="denoise_waveletUDWTWByValueInputMessage" operation="denoise_waveletUDWTWByValue" outputVariable="denoise_waveletUDWTWByValueOutputMessage" partnerLink="DukeRproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
       <assign>
          <copy>
             <from expression="&quot;1&quot;"/>
@@ -255,7 +255,7 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
             </copy>
          </assign>
       </while>
-      <invoke inputVariable="normalize_quantileByValueInputMessage" operation="normalize_quantileByValue" outputVariable="normalize_quantileByValueOutputMessage" partnerLink="OSURproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
+      <invoke inputVariable="normalize_quantileByValueInputMessage" operation="normalize_quantileByValue" outputVariable="normalize_quantileByValueOutputMessage" partnerLink="DukeRproteomicsPartnerLinkType" portType="ns3:RProteomicsPortType"/>
       <assign>
          <copy>
             <from expression="&quot;1&quot;"/>

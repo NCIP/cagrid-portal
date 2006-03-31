@@ -89,7 +89,7 @@
     <arg value="-gsh"/>
     <arg value="http://localhost:8080/active-bpel/services/WorkFlowClientService"/>
     <arg value="-imageFileName"/>
-    <arg value="plot.jpg"/>
+    <arg value="/autonfs/home/madduri/tomcat/jakarta-tomcat-5.0.30/webapps/ROOT/plot1.jpg"/>
         <classpath>
             <fileset dir="${deploy.dir}/lib">
                 <include name="common/*.jar"/>
