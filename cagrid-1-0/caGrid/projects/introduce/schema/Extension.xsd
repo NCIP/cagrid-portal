@@ -28,6 +28,19 @@
 			<xs:element name="CodegenUIFrame" type="xs:string" minOccurs="0" maxOccurs="1">
 				<xs:annotation>ModificationViewer GUI component that must extend a CodegenExtensionUIFrame</xs:annotation>
 			</xs:element>
+			<xs:element name="Properties" minOccurs="0" maxOccurs="1">
+				<xs:annotation>To be used for extension configuration properties</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Property"  minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="key" type="xs:string"/>
+								<xs:attribute name="value" type="xs:string"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="displayName" type="xs:string" use="required"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
