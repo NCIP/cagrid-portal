@@ -1,10 +1,10 @@
 package gov.nih.nci.cagrid.introduce.extension;
 
-import java.io.File;
-
-import javax.swing.JDialog;
-
+import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescriptionType;
+
+import java.io.File;
+import java.lang.reflect.Constructor;
 
 
 public class ExtensionTools {
@@ -60,7 +60,7 @@ public class ExtensionTools {
 		return null;
 	}
 	
-	public CreationExtensionUIDialog getCreationUIDialog(String extensionName) throws Exception {
+	public CreationExtensionUIDialog getCreationUIDialog(String extensionName, gov.nih.nci.cagrid.introduce.ServiceInformation info) throws Exception {
 		ExtensionDescriptionType extensionD = loader.getExtension(extensionName);
 		if (extensionD != null && extensionD.getCreationUIDialog() != null
 			&& !extensionD.getCreationUIDialog().equals("")) {
@@ -68,7 +68,8 @@ public class ExtensionTools {
 
 			+ extensionName));
 			Class c = cloader.loadClass(extensionD.getCreationUIDialog());
-			Object obj = c.newInstance();
+			Constructor con = c.getConstructor(new Class[] {ServiceInformation.class});
+			Object obj = con.newInstance(new Object[] {info});
 			return (CreationExtensionUIDialog) obj;
 		}
 		return null;

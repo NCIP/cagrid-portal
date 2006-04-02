@@ -6,6 +6,8 @@ import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
+import gov.nih.nci.cagrid.introduce.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
@@ -30,6 +32,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.apache.tools.ant.BuildException;
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
 
@@ -513,9 +516,15 @@ public class CreationViewer extends GridPortalComponent {
 						}
 						
 						setProgressText("running extension viewers");
+						Properties properties = new Properties();
+						properties.load(new FileInputStream(getDir().getText() + File.separator + "introduce.properties"));
+						ServiceDescription introService = null;
+							introService = (ServiceDescription) Utils.deserializeDocument( getDir().getText() + File.separator
+								+ "introduce.xml", ServiceDescription.class);
+                        ServiceInformation info = new ServiceInformation(introService,properties,new File(getDir().getText()));
 						ExtensionTools extTools = new ExtensionTools();
 						if(!serviceExtensions.equals("")){
-							JDialog extDialog = extTools.getCreationUIDialog(serviceExtensions);
+							JDialog extDialog = extTools.getCreationUIDialog(serviceExtensions,info);
 							extDialog.show();
 						}
 
