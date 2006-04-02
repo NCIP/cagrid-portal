@@ -7,6 +7,9 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionsType;
 import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -17,6 +20,9 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionUIPanel;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.modification.gme.GMETypeSelectionComponent;
@@ -60,6 +66,8 @@ import org.projectmobius.gme.XMLDataModelService;
 import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
+
+import sun.awt.geom.AreaOp.IntOp;
 
 
 /**
@@ -232,7 +240,8 @@ public class ModificationViewer extends GridPortalComponent {
 			serviceProperties = new Properties();
 			serviceProperties.load(new FileInputStream(this.methodsDirectory.getAbsolutePath() + File.separator
 				+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE));
-			serviceProperties.setProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR, methodsDirectory.getAbsolutePath());
+			serviceProperties.setProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR, methodsDirectory
+				.getAbsolutePath());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -661,7 +670,8 @@ public class ModificationViewer extends GridPortalComponent {
 										dirty = false;
 										setProgressText("loading service properties");
 										loadServiceProps();
-										setLastSaved(serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP));
+										setLastSaved(serviceProperties
+											.getProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP));
 										this.setProgressText("");
 									}
 								} catch (Exception e1) {
@@ -888,9 +898,11 @@ public class ModificationViewer extends GridPortalComponent {
 									if (!dirty) {
 										setProgressText("restoring from local cache");
 										ResourceManager.restoreLatest(serviceProperties
-											.getProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP), serviceProperties
-											.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME), serviceProperties
-											.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
+											.getProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP),
+											serviceProperties
+												.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME),
+											serviceProperties
+												.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
 									}
 									dispose();
 									PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
@@ -935,6 +947,27 @@ public class ModificationViewer extends GridPortalComponent {
 			}
 
 			contentTabbedPane.addTab("Security", null, getSecurityPanel(), null);
+			// add a tab for each extension...
+			ExtensionsType exts = introService.getExtensions();
+			if (exts != null && exts.getExtension() != null) {
+				ExtensionTools extTools = new ExtensionTools();
+				ExtensionsLoader extLoader = new ExtensionsLoader();
+				ExtensionType[] extsTypes = exts.getExtension();
+				for (int i = 0; i < extsTypes.length; i++) {
+					ExtensionDescriptionType extDtype = extLoader.getExtension(extsTypes[i].getName());
+					try {
+						if (extDtype.getCodegenUIPanel() != null && !extDtype.getCodegenUIPanel().equals("")) {
+							CodegenExtensionUIPanel extPanel = extTools.getCodegenUIPanel(extDtype.getName(), info);
+							contentTabbedPane.addTab(extDtype.getDisplayName(), null, extPanel, null);
+						}
+					} catch (Exception e) {
+						JOptionPane.showMessageDialog(ModificationViewer.this, "Cannot load extension: "
+							+ extDtype.getDisplayName());
+					}
+
+				}
+
+			}
 		}
 		return contentTabbedPane;
 	}
@@ -1369,8 +1402,8 @@ public class ModificationViewer extends GridPortalComponent {
 					NamespaceType type = getGmeDiscoveryPanel().createNamespace();
 					getNamespaceJTree().addNode(type);
 					cacheSchema(new File(methodsDirectory + File.separator + "schema" + File.separator
-						+ info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)), type
-						.getNamespace());
+						+ info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)),
+						type.getNamespace());
 				}
 			});
 		}
@@ -1438,7 +1471,7 @@ public class ModificationViewer extends GridPortalComponent {
 						getSchemaElementTypeConfigurationPanel().clear();
 					} else if (node instanceof SchemaElementTypeTreeNode) {
 						NamespaceTypeTreeNode parentNode = (NamespaceTypeTreeNode) node.getParent();
-						NamespaceType nsType = (NamespaceType)parentNode.getUserObject();
+						NamespaceType nsType = (NamespaceType) parentNode.getUserObject();
 						if (nsType.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
 							getSchemaElementTypeConfigurationPanel().setSchemaElementType(
 								(SchemaElementType) ((SchemaElementTypeTreeNode) node).getUserObject(), false);

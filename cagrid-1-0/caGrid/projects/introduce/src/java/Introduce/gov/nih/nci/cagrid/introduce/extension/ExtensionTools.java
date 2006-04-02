@@ -75,17 +75,17 @@ public class ExtensionTools {
 		return null;
 	}
 	
-	public CodegenExtensionUIFrame getCodegenUIDialog(String extensionName, gov.nih.nci.cagrid.introduce.ServiceInformation info) throws Exception {
+	public CodegenExtensionUIPanel getCodegenUIPanel(String extensionName, gov.nih.nci.cagrid.introduce.ServiceInformation info) throws Exception {
 		ExtensionDescriptionType extensionD = loader.getExtension(extensionName);
-		if (extensionD != null && extensionD.getCodegenUIFrame() != null
-			&& !extensionD.getCodegenUIFrame().equals("")) {
+		if (extensionD != null && extensionD.getCodegenUIPanel() != null
+			&& !extensionD.getCodegenUIPanel().equals("")) {
 			ExtensionClassLoader cloader = new ExtensionClassLoader(new File(loader.getExtensionsDir() + File.separator
 
 			+ extensionName));
-			Class c = cloader.loadClass(extensionD.getCodegenUIFrame());
+			Class c = cloader.loadClass(extensionD.getCodegenUIPanel());
 			Constructor con = c.getConstructor(new Class[] {ServiceInformation.class});
 			Object obj = con.newInstance(new Object[] {info});
-			return (CodegenExtensionUIFrame) obj;
+			return (CodegenExtensionUIPanel) obj;
 		}
 		return null;
 	}

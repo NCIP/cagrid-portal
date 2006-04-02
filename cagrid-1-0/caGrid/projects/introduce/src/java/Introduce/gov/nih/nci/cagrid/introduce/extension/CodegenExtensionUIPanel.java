@@ -2,9 +2,9 @@ package gov.nih.nci.cagrid.introduce.extension;
 
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
 
-import javax.swing.JFrame;
+import javax.swing.JPanel;
 
-public abstract class CodegenExtensionUIFrame extends JFrame {
+public abstract class CodegenExtensionUIPanel extends JPanel {
 	private ServiceInformation serviceInfo;
 	
 	public ServiceInformation getServiceInfo() {
@@ -15,7 +15,7 @@ public abstract class CodegenExtensionUIFrame extends JFrame {
 		this.serviceInfo = serviceInfo;
 	}
 
-	public CodegenExtensionUIFrame(ServiceInformation info){
+	public CodegenExtensionUIPanel(ServiceInformation info){
 		this.serviceInfo = info;
 	}
 
