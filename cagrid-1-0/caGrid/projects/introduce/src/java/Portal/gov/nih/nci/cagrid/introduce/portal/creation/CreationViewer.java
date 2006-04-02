@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.modification.ModificationViewer;
@@ -22,6 +23,7 @@ import java.util.Properties;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -508,6 +510,13 @@ public class CreationViewer extends GridPortalComponent {
 						p.waitFor();
 						if (p.exitValue() != 0) {
 							PortalUtils.showErrorMessage("Error creating new service!");
+						}
+						
+						setProgressText("running extension viewers");
+						ExtensionTools extTools = new ExtensionTools();
+						if(!serviceExtensions.equals("")){
+							JDialog extDialog = extTools.getCreationUIDialog(serviceExtensions);
+							extDialog.show();
 						}
 
 						setProgressText("building");

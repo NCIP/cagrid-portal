@@ -2,6 +2,8 @@ package gov.nih.nci.cagrid.introduce.extension;
 
 import java.io.File;
 
+import javax.swing.JDialog;
+
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescriptionType;
 
 
@@ -54,6 +56,20 @@ public class ExtensionTools {
 			Class c = cloader.loadClass(extensionD.getCodegenPreProcessor());
 			Object obj = c.newInstance();
 			return (CodegenExtensionPreProcessor) obj;
+		}
+		return null;
+	}
+	
+	public CreationExtensionUIDialog getCreationUIDialog(String extensionName) throws Exception {
+		ExtensionDescriptionType extensionD = loader.getExtension(extensionName);
+		if (extensionD != null && extensionD.getCreationUIDialog() != null
+			&& !extensionD.getCreationUIDialog().equals("")) {
+			ExtensionClassLoader cloader = new ExtensionClassLoader(new File(loader.getExtensionsDir() + File.separator
+
+			+ extensionName));
+			Class c = cloader.loadClass(extensionD.getCreationUIDialog());
+			Object obj = c.newInstance();
+			return (CreationExtensionUIDialog) obj;
 		}
 		return null;
 	}

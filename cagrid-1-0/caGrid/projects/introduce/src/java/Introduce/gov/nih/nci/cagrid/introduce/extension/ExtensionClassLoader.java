@@ -36,17 +36,22 @@ public class ExtensionClassLoader {
 
 				});
 
-				URL[] urls = new URL[theirjars.length];
-				for (int i = 0; i < theirjars.length; i++) {
-					urls[i] = new URL("file:/" + theirjars[i].getAbsolutePath());
+				if (theirjars != null) {
+					URL[] urls = new URL[theirjars.length];
+					for (int i = 0; i < theirjars.length; i++) {
+						urls[i] = new URL("file:/" + theirjars[i].getAbsolutePath());
+					}
+					cl = new URLClassLoader(urls, this.getClass().getClassLoader());
+				} else {
+					cl = this.getClass().getClassLoader();
 				}
 
-				cl = new URLClassLoader(urls,this.getClass().getClassLoader());
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			// Load in the class
+			System.out.println("Loading in extension class: " + name);
 			Class cls = cl.loadClass(name);
 			return cls;
 
