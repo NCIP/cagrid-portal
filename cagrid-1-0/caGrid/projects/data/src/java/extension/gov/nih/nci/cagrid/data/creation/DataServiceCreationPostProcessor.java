@@ -67,9 +67,11 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 	private void makeDataService(ServiceDescription description, Properties props) throws Exception {
 		// grab cql query and result set schemas and move them into the service's directory
 		String schemaDir = getServiceSchemaDir(props);
+		System.out.println("Copying schemas to " + schemaDir);
 		copySchema(DataServiceConstants.CQL_QUERY_SCHEMA, schemaDir);
 		copySchema(DataServiceConstants.CQL_RESULT_SET_SCHEMA, schemaDir);
 		// namespaces
+		System.out.println("Modifying namespace definitions");
 		NamespacesType namespaces = description.getNamespaces();
 		NamespaceType[] dsNamespaces = new NamespaceType[namespaces.getNamespace().length + 2];
 		System.arraycopy(namespaces.getNamespace(), 0, dsNamespaces, 0, namespaces.getNamespace().length);
@@ -80,6 +82,7 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		namespaces.setNamespace(dsNamespaces);
 		
 		// query method
+		System.out.println("Building query method");
 		MethodsType methods = description.getMethods();
 		MethodType queryMethod = new MethodType();
 		queryMethod.setName("query");
@@ -111,6 +114,10 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 	
 	
 	private void copySchema(String schemaName, String outputDir) throws FileNotFoundException, IOException {
+		File schemaFile = new File(".." + File.separator + "schema" + File.separator + schemaName);
+		System.out.println("Loading schema from " + schemaFile.getAbsolutePath());
+		File outputDirFile = new File(outputDir);
+		System.out.println("Saving schema to " + outputDirFile.getAbsolutePath());
 		InputStream schemaStream =  getClass().getResourceAsStream(".." + File.separator + "schema" + File.separator + schemaName);
 		FileOutputStream saveSchema = new FileOutputStream(outputDir + File.separator + schemaName);
 		byte[] buffer = new byte[512];

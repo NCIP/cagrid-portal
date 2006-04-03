@@ -23,7 +23,10 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 		// it, and drop in CQL implementation
 		MethodType queryMethod = getQueryMethod(info);
 		if (queryMethod != null) {
+			System.out.println("Found the CQL Query method!");
 			// drop in CQL impl
+		} else {
+			System.out.println("No CQL Query method found, sorry");
 		}
 	}
 	
