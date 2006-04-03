@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.introduce.extension;
 
+import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+
 import java.util.Properties;
 
 /**
@@ -11,6 +13,6 @@ import java.util.Properties;
  */
 public interface CreationExtensionPostProcessor {
 
-	public void postCreate(Properties serviceProperties) throws CreationExtensionException;
+	public void postCreate(ServiceDescription serviceDescription, Properties serviceProperties) throws CreationExtensionException;
 	
 }

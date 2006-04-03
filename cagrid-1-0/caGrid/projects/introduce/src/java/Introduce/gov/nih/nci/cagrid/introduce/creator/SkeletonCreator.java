@@ -14,8 +14,6 @@ import java.io.File;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import javax.xml.namespace.QName;
-
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
@@ -43,10 +41,8 @@ public class SkeletonCreator extends Task {
 
 		ServiceDescription introService = null;
 		try {
-
 			introService = (ServiceDescription) Utils.deserializeDocument(baseDirectory + File.separator
 				+ "introduce.xml", ServiceDescription.class);
-
 		} catch (Exception e1) {
 			BuildException be = new BuildException(e1.getMessage());
 			be.setStackTrace(e1.getStackTrace());
@@ -120,7 +116,7 @@ public class SkeletonCreator extends Task {
 				}
 				try {
 					if (pp != null) {
-						pp.postCreate(properties);
+						pp.postCreate(introService, properties);
 					}
 				} catch (CreationExtensionException e) {
 					BuildException be = new BuildException(e.getMessage());
@@ -132,8 +128,8 @@ public class SkeletonCreator extends Task {
 		}
 
 		try {
-			Utils.serializeDocument(baseDirectory + File.separator + "introduce.xml", introService, new QName(
-				"gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
+			Utils.serializeDocument(baseDirectory + File.separator + "introduce.xml",
+				introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 		} catch (Exception e) {
 			BuildException be = new BuildException(e.getMessage());
 			be.setStackTrace(e.getStackTrace());
