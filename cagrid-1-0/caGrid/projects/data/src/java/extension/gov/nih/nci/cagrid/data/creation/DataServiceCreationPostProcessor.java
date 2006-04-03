@@ -75,6 +75,9 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		// namespaces
 		System.out.println("Modifying namespace definitions");
 		NamespacesType namespaces = description.getNamespaces();
+		if (namespaces == null) {
+			namespaces = new NamespacesType();
+		}
 		NamespaceType[] dsNamespaces = new NamespaceType[namespaces.getNamespace().length + 2];
 		System.arraycopy(namespaces.getNamespace(), 0, dsNamespaces, 0, namespaces.getNamespace().length);
 		dsNamespaces[dsNamespaces.length - 2] = CommonTools.createNamespaceType(schemaDir + File.separator + DataServiceConstants.CQL_QUERY_SCHEMA);
@@ -82,10 +85,14 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		dsNamespaces[dsNamespaces.length - 1] = CommonTools.createNamespaceType(schemaDir + File.separator + DataServiceConstants.CQL_RESULT_SET_SCHEMA);
 		dsNamespaces[dsNamespaces.length - 1].setLocation("." + File.separator + DataServiceConstants.CQL_RESULT_SET_SCHEMA);
 		namespaces.setNamespace(dsNamespaces);
+		description.setNamespaces(namespaces);
 		
 		// query method
 		System.out.println("Building query method");
 		MethodsType methods = description.getMethods();
+		if (methods == null) {
+			methods = new MethodsType();
+		}
 		MethodType queryMethod = new MethodType();
 		queryMethod.setName("query");
 		// method input parameters
@@ -103,15 +110,21 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		QName resultSetQName = new QName(dsNamespaces[dsNamespaces.length - 1].getNamespace(), dsNamespaces[dsNamespaces.length - 1].getSchemaElement(0).getType());
 		output.setQName(resultSetQName);
 		queryMethod.setOutput(output);
-		MethodType[] dsMethods = new MethodType[methods.getMethod().length + 1];
-		System.arraycopy(methods.getMethod(), 0, dsMethods, 0, methods.getMethod().length);
+		MethodType[] dsMethods = null;
+		if (methods.getMethod() != null) {
+			dsMethods = new MethodType[methods.getMethod().length + 1];
+			System.arraycopy(methods.getMethod(), 0, dsMethods, 0, methods.getMethod().length);
+		} else {
+			dsMethods = new MethodType[1];
+		}
 		dsMethods[dsMethods.length - 1] = queryMethod;
 		methods.setMethod(dsMethods);
+		description.setMethods(methods);
 	}
 	
 	
 	private String getServiceSchemaDir(Properties props) {
-		return props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "schema";
+		return props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "schema" + File.separator + props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
 	}
 	
 	
