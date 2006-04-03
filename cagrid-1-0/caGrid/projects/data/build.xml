@@ -37,7 +37,7 @@
 	<!-- extension -->
 	<property name="extension.base.dir" location="${basedir}/extension"/>
 	<property name="extension.description.file" value="${extension.base.dir}/extension.xml"/>
-	<property name="extension.out.dir" location="${extension.base.dir}/DataService"/>
+	<property name="extension.out.dir" location="${extension.base.dir}/data"/>
 
 	<!-- stubs -->
     <property name="stubs.dir" location="${build.dir}/stubs" />
