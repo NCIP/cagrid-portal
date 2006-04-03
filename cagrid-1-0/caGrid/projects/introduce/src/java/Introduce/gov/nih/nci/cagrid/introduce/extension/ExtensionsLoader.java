@@ -8,11 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ExtensionsLoader {
+	
+	public static final String EXTENSIONS_DIRECTORY = "." + File.separator + "extensions";
+	
 	private List extensionDescriptors;
 	private File extensionsDir;
 	
 	public ExtensionsLoader(){
-		this.extensionsDir = new File("." + File.separator + "extensions");
+		this.extensionsDir = new File(EXTENSIONS_DIRECTORY);
 		extensionDescriptors = new ArrayList();
 		try {
 			this.load();
