@@ -2,54 +2,43 @@
 <!-- caGrid Utilities build file                                             -->
 <!-- ======================================================================= -->
 <project name="caGrid_tests_harness" basedir=".">
-
-	<property name="test.lib.dir" value="${test.dir}/lib" />
-	<property name="test.logs.dir" value="${test.dir}/logs" />
-	<property name="junit.results.dir" value="${test.logs.dir}/junit" />
-
-
+	<property name="test.lib.dir" value="${test.dir}/lib"/>
+	<property name="test.logs.dir" value="${test.dir}/logs"/>
+	<property name="junit.results.dir" value="${test.logs.dir}/junit"/>
 	<!-- Get the HOSTNAME in an os independant way -->
-	<property name="env.HOSTNAME" value="${env.COMPUTERNAME}" />
-
+	<property name="env.HOSTNAME" value="${env.COMPUTERNAME}"/>
 	<!-- For your dart client -->
-	<property name="dart.buildname" value="${os.name}-${os.arch}-${os.version}-JDK-${java.version}" />
-	<property name="dart.site" value="${env.HOSTNAME}" />
-
+	<property name="dart.buildname" value="${os.name}-${os.arch}-${os.version}-JDK-${java.version}"/>
+	<property name="dart.site" value="${env.HOSTNAME}"/>
 	<!-- For the dart server-->
-	<property name="dart.port" value="8081" />
-	<property name="dart.project" value="caGrid-1.0" />
-	<property name="dart.server" value="malibu.bmi.ohio-state.edu" />
-
-
+	<property name="dart.port" value="8081"/>
+	<property name="dart.project" value="caGrid-1.0"/>
+	<property name="dart.server" value="malibu.bmi.ohio-state.edu"/>
 	<!-- =============================================================== -->
 	<!-- The Dart Classpath                                              -->
 	<!-- =============================================================== -->
 	<path id="dart.classpath">
 		<fileset dir="${test.lib.dir}">
-			<include name="DartClient-0.6.jar" />
+			<include name="DartClient-0.6.jar"/>
 		</fileset>
 	</path>
-
-
 	<!-- =============================================================== -->
 	<!-- Configure dart                                                  -->
 	<!-- =============================================================== -->
 	<target name="createDartTestFiles">
 		<!-- Create the BuildName info, if necessary -->
-		<filter token="Dart.BuildName" value="${dart.buildname}" />
-		<filter token="Dart.Site" value="${dart.site}" />
-
-		<filter token="Dart.Track" value="Continuous" />
-		<copy file="${test.dir}/BuildNameTemplate.xml" tofile="${test.logs.dir}/BuildNameContinuous.xml" filtering="true" overwrite="true" />
-
-		<filter token="Dart.Track" value="Nightly" />
-		<copy file="${test.dir}/BuildNameTemplate.xml" tofile="${test.logs.dir}/BuildNameNightly.xml" filtering="true" overwrite="true" />
-
-		<filter token="Dart.Track" value="Experimental" />
-		<copy file="${test.dir}/BuildNameTemplate.xml" tofile="${test.logs.dir}/BuildNameExperimental.xml" filtering="true" overwrite="true" />
+		<filter token="Dart.BuildName" value="${dart.buildname}"/>
+		<filter token="Dart.Site" value="${dart.site}"/>
+		<filter token="Dart.Track" value="Continuous"/>
+		<copy file="${test.dir}/BuildNameTemplate.xml"
+			tofile="${test.logs.dir}/BuildNameContinuous.xml" filtering="true" overwrite="true"/>
+		<filter token="Dart.Track" value="Nightly"/>
+		<copy file="${test.dir}/BuildNameTemplate.xml"
+			tofile="${test.logs.dir}/BuildNameNightly.xml" filtering="true" overwrite="true"/>
+		<filter token="Dart.Track" value="Experimental"/>
+		<copy file="${test.dir}/BuildNameTemplate.xml"
+			tofile="${test.logs.dir}/BuildNameExperimental.xml" filtering="true" overwrite="true"/>
 	</target>
-
-
 	<!-- =============================================================== -->
 	<!-- Call test for each project and aggregates the log resutls       -->
 	<!-- =============================================================== -->
@@ -58,72 +47,77 @@
 			<!-- Clean out old logs first -->
 			<delete>
 				<fileset dir="${junit.results.dir}">
-					<include name="*" />
+					<include name="*"/>
 				</fileset>
 			</delete>
-
 			<!-- Now run all the projects' test, sharing the same log dir -->
 			<ant inheritall="false" dir="projects/core" antfile="build.xml" target="test">
-				<property name="junit.results.dir" value="${junit.results.dir}" />
+				<property name="junit.results.dir" value="${junit.results.dir}"/>
 			</ant>
+			
+			<ant inheritall="false" dir="projects/discovery" antfile="build.xml" target="test">
+				<property name="junit.results.dir" value="${junit.results.dir}"/>
+			</ant>
+			
 			<ant inheritall="false" dir="projects/introduce" antfile="build.xml" target="test">
-				<property name="junit.results.dir" value="${junit.results.dir}" />
+				<property name="junit.results.dir" value="${junit.results.dir}"/>
 			</ant>
+			
 			<ant inheritall="false" dir="projects/gridca" antfile="build.xml" target="test">
-							<property name="junit.results.dir" value="${junit.results.dir}" />
-						</ant>
-			<ant inheritall="false" dir="projects/gts" antfile="build.xml" target="test">
-										<property name="junit.results.dir" value="${junit.results.dir}" />
-									</ant>
-			<ant inheritall="false" dir="projects/dorian" antfile="build.xml" target="test">
-				<property name="junit.results.dir" value="${junit.results.dir}" />
+				<property name="junit.results.dir" value="${junit.results.dir}"/>
 			</ant>
-
+			
+			<ant inheritall="false" dir="projects/gts" antfile="build.xml" target="test">
+				<property name="junit.results.dir" value="${junit.results.dir}"/>
+			</ant>
+			
+			<ant inheritall="false" dir="projects/dorian" antfile="build.xml" target="test">
+				<property name="junit.results.dir" value="${junit.results.dir}"/>
+			</ant>
+			
 			<ant inheritall="false" dir="projects/cql2xpath" antfile="build.xml" target="test">
-				<property name="junit.results.dir" value="${junit.results.dir}" />
+				<property name="junit.results.dir" value="${junit.results.dir}"/>
 			</ant>
 		</sequential>
 	</target>
-
-
 	<!-- =============================================================== -->
 	<!-- Set the proxy, and publish the results to dart                  -->
 	<!-- =============================================================== -->
 	<target name="setproxy1" if="env.HTTP_PROXY_PORT">
-		<property name="proxyhost" value="${env.HTTP_PROXY}" />
-		<property name="proxyport" value="${env.HTTP_PROXY_PORT}" />
+		<property name="proxyhost" value="${env.HTTP_PROXY}"/>
+		<property name="proxyport" value="${env.HTTP_PROXY_PORT}"/>
 		<echo>Set proxy1: proxyhost=${proxyhost} proxyport=${proxyport}</echo>
-		<setproxy proxyhost="${proxyhost}" proxyport="${proxyport}" />
+		<setproxy proxyhost="${proxyhost}" proxyport="${proxyport}"/>
 	</target>
 	<target name="setproxy2" if="proxyport">
 		<echo>Set proxy2: proxyhost=${proxyhost} proxyport=${proxyport}</echo>
-		<setproxy proxyhost="${proxyhost}" proxyport="${proxyport}" />
+		<setproxy proxyhost="${proxyhost}" proxyport="${proxyport}"/>
 	</target>
-	<target name="publish" depends="setproxy1, setproxy2" description="Call to publish test results to dart, doesn't do any building or testing.">
-		<fail unless="dart.logfile" message="Before you attempt to publish to dart, you must set the property [dart.logfile] to the location of the log to be sent to dart." />
+	<target name="publish" depends="setproxy1, setproxy2" description="Call to publish test results
+		to dart, doesn't do any building or testing.">
+		<fail unless="dart.logfile" message="Before you attempt to publish to dart, you must set the
+			property [dart.logfile] to the location of the log to be sent to dart."/>
 		<java classname="dart.DartClient" failonerror="true">
-			<classpath refid="dart.classpath" />
-			<arg value="--server" />
-			<arg value="${dart.server}" />
-			<arg value="--port" />
-			<arg value="${dart.port}" />
-			<arg value="${dart.project}" />
-			<arg value="${dart.logfile}" />
+			<classpath refid="dart.classpath"/>
+			<arg value="--server"/>
+			<arg value="${dart.server}"/>
+			<arg value="--port"/>
+			<arg value="${dart.port}"/>
+			<arg value="${dart.project}"/>
+			<arg value="${dart.logfile}"/>
 		</java>
 	</target>
-
-
 	<!-- =============================================================== -->
 	<!-- Run a dart experimental (currently only submits test results)   -->
 	<!-- =============================================================== -->
-	<target name="experimental" depends="all,test" description="Test the projects and publish results to dart board.">
+	<target name="experimental" depends="all,test" description="Test the projects and publish
+		results to dart board.">
 		<tstamp>
-			<format property="BUILDSTAMP" pattern="yyyy-MM-dd'T'HH:mm:ss.SZ" locale="en" />
-			<format property="BUILDFILE" pattern="yyyy-MM-dd'T'HH.mm.ss.SZ" locale="en" />
+			<format property="BUILDSTAMP" pattern="yyyy-MM-dd'T'HH:mm:ss.SZ" locale="en"/>
+			<format property="BUILDFILE" pattern="yyyy-MM-dd'T'HH.mm.ss.SZ" locale="en"/>
 		</tstamp>
-		<echo message="${BUILDSTAMP}" />
-		<property name="dart.experimental.log" value="${test.logs.dir}/${BUILDFILE}.xml" />
-
+		<echo message="${BUILDSTAMP}"/>
+		<property name="dart.experimental.log" value="${test.logs.dir}/${BUILDFILE}.xml"/>
 		<concat destfile="${dart.experimental.log}">
 			<header filtering="no">
 				<![CDATA[<cruisecontrol>
@@ -131,17 +125,17 @@
 					<property name="builddate" value="@BUILDSTAMP@"/>
 				</info>]]></header>
 			<fileset dir="${junit.results.dir}">
-				<include name="TEST-*.xml" />
+				<include name="TEST-*.xml"/>
 			</fileset>
 			<fileset dir="${test.logs.dir}">
-				<include name="BuildNameExperimental.xml" />
+				<include name="BuildNameExperimental.xml"/>
 			</fileset>
 			<footer filtering="no">
 				<![CDATA[</cruisecontrol>]]></footer>
 		</concat>
-
 		<!-- Hackaroo to strip out the xml pragmas (NOTE: this requires a literal exact match) -->
-		<replace file="${dart.experimental.log}" summary="true" token="@BUILDSTAMP@" value="${BUILDSTAMP}" />
+		<replace file="${dart.experimental.log}" summary="true" token="@BUILDSTAMP@"
+			value="${BUILDSTAMP}"/>
 		<replace file="${dart.experimental.log}" summary="true">
 			<replacetoken>
 				<![CDATA[<?xml version="1.0" encoding="UTF-8" ?>]]></replacetoken>
@@ -159,13 +153,12 @@
 				<![CDATA[<?xml version="1.0" encoding="utf-8"?>]]></replacetoken>
 		</replace>
 		<ant target="publish">
-			<property name="dart.logfile" value="${dart.experimental.log}" />
+			<property name="dart.logfile" value="${dart.experimental.log}"/>
 		</ant>
 	</target>
-
 	<!-- ONLY to be called from cruise control's antpublisher (it passes some properties) -->
 	<target name="ccpublish">
-		<property name="dart.logfile" value="${logdir}/${logfile}" />
-		<ant target="publish" />
+		<property name="dart.logfile" value="${logdir}/${logfile}"/>
+		<ant target="publish"/>
 	</target>
 </project>
