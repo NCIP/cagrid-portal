@@ -20,7 +20,7 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionUIPanel;
+import gov.nih.nci.cagrid.introduce.extension.ServiceModificationUIPanel;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
@@ -956,8 +956,8 @@ public class ModificationViewer extends GridPortalComponent {
 				for (int i = 0; i < extsTypes.length; i++) {
 					ExtensionDescriptionType extDtype = extLoader.getExtension(extsTypes[i].getName());
 					try {
-						if (extDtype.getCodegenUIPanel() != null && !extDtype.getCodegenUIPanel().equals("")) {
-							CodegenExtensionUIPanel extPanel = extTools.getCodegenUIPanel(extDtype.getName(), info);
+						if (extDtype.getServiceModificationUIPanel() != null && !extDtype.getServiceModificationUIPanel().equals("")) {
+							ServiceModificationUIPanel extPanel = extTools.getServiceModificationUIPanel(extDtype.getName(), info);
 							contentTabbedPane.addTab(extDtype.getDisplayName(), null, extPanel, null);
 						}
 					} catch (Exception e) {

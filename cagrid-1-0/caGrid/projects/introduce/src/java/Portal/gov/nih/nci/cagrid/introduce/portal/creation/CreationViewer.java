@@ -31,6 +31,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import org.apache.tools.ant.BuildException;
 import org.projectmobius.portal.GridPortalComponent;
@@ -560,6 +561,7 @@ public class CreationViewer extends GridPortalComponent {
 					}
 				}
 			};
+			
 
 			Thread th = new Thread(r);
 			th.start();

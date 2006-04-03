@@ -4,11 +4,11 @@ import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ServiceModificationUIPanel;
 import javax.swing.JLabel;
 
-public class ExampleCodegenPanel extends ServiceModificationUIPanel {
+public class ExampleServiceModificationPanel extends ServiceModificationUIPanel {
 
 	private JLabel jLabel = null;
 
-	public ExampleCodegenPanel(ServiceInformation info) {
+	public ExampleServiceModificationPanel(ServiceInformation info) {
 		super(info);
 		initialize();
 		// TODO Auto-generated constructor stub
