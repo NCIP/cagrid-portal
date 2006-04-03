@@ -132,7 +132,13 @@ public class BaseResource implements Resource, ResourceProperties, ResourceLifet
 			// register with the index service
 			ResourceContext ctx;
 			try {
-				ctx = ResourceContext.getResourceContext();
+				MessageContext msgContext = MessageContext.getCurrentContext();
+				if (msgContext == null) {
+					logger.error("Unable to determine message context!");
+					return;
+				}
+
+				ctx = ResourceContext.getResourceContext(msgContext);
 			} catch (ResourceContextException e) {
 				logger.error("Could not get ResourceContext: " + e);
 				return;

@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.cadsr.service.globus.resource;
 
+import org.apache.axis.MessageContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.globus.wsrf.Resource;
@@ -33,12 +34,24 @@ public class BaseResourceHome extends SingletonResourceHome implements Initializ
 	 * Initialze the singleton resource, when the home is initialized.
 	 */
 	public void initialize() throws Exception {
-		logger.info("Attempting to initialize resource.");
-		Resource resource = findSingleton();
-		if (resource == null) {
-			logger.error("Unable to initialize resource!");
+		// we need the container's transport url, in order to properly configure
+		// the resource
+		// not all containers have this information at initilization time
+		// (globus does, tomcat doesn't), so we'll check for the url here, it
+		// not initialize the resource if we don't have it.
+
+		if (MessageContext.getCurrentContext() == null
+			|| MessageContext.getCurrentContext().getProperty(MessageContext.TRANS_URL) == null) {
+			logger
+				.info("Unable to initialize resource during resourcehome initialization, deferring to first invocation.");
 		} else {
-			logger.info("Successfully initialized resource.");
+			logger.info("Attempting to initialize resource.");
+			Resource resource = findSingleton();
+			if (resource == null) {
+				logger.error("Unable to initialize resource!");
+			} else {
+				logger.info("Successfully initialized resource.");
+			}
 		}
 
 	}
