@@ -1,11 +1,11 @@
 package gov.nih.nci.cagrid.data.codegen;
 
 import gov.nih.nci.cagrid.data.common.DataServiceConstants;
-import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPostProcessor;
+import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 /** 
  *  DataServiceCodegenPostProcessor
