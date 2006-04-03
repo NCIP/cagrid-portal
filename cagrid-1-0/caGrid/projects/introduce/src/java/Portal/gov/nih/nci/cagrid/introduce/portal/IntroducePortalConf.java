@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal;
 
+import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
+
 import java.util.List;
 import java.util.Properties;
 
@@ -57,6 +59,12 @@ public class IntroducePortalConf implements AbstractMobiusConfiguration {
 			}
 		}
 
+	}
+	
+	public NamespaceTypeDiscoveryComponent getNamespaceTypeDiscoveryComponent() throws Exception{
+		Class c = Class.forName(getNamepaceTypeDiscoveryClassname());
+		Object obj = c.newInstance();
+		return (NamespaceTypeDiscoveryComponent)obj;
 	}
 
 }

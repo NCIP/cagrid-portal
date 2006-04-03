@@ -25,6 +25,7 @@ import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
+import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.gme.GMETypeSelectionComponent;
 import gov.nih.nci.cagrid.introduce.portal.modification.security.ServiceSecurityPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeConfigurePanel;
@@ -153,7 +154,7 @@ public class ModificationViewer extends GridPortalComponent {
 
 	private JPanel discoveryButtonPanel = null;
 
-	private GMETypeSelectionComponent gmeDiscoveryPanel = null;
+	private NamespaceTypeDiscoveryComponent namespaceTypeDiscoveryPanel = null;
 
 	private JButton namespaceAddButton = null;
 
@@ -1286,7 +1287,7 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints28.gridx = 0;
 			discoveryPanel = new JPanel();
 			discoveryPanel.setLayout(new GridBagLayout());
-			discoveryPanel.add(getGmeDiscoveryPanel(), gridBagConstraints28);
+			discoveryPanel.add(getNamespaceTypeDiscoveryPanel(), gridBagConstraints28);
 		}
 		return discoveryPanel;
 	}
@@ -1344,11 +1345,16 @@ public class ModificationViewer extends GridPortalComponent {
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private GMETypeSelectionComponent getGmeDiscoveryPanel() {
-		if (gmeDiscoveryPanel == null) {
-			gmeDiscoveryPanel = new GMETypeSelectionComponent();
+	private NamespaceTypeDiscoveryComponent getNamespaceTypeDiscoveryPanel() {
+		if (namespaceTypeDiscoveryPanel == null) {
+			IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(IntroducePortalConf.RESOURCE);
+			try {
+				namespaceTypeDiscoveryPanel = conf.getNamespaceTypeDiscoveryComponent();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
-		return gmeDiscoveryPanel;
+		return namespaceTypeDiscoveryPanel;
 	}
 
 
@@ -1386,7 +1392,7 @@ public class ModificationViewer extends GridPortalComponent {
 			namespaceAddButton.setIcon(IntroduceLookAndFeel.getAddIcon());
 			namespaceAddButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					NamespaceType type = getGmeDiscoveryPanel().createNamespaceType();
+					NamespaceType type = getNamespaceTypeDiscoveryPanel().createNamespaceType();
 					getNamespaceJTree().addNode(type);
 					cacheSchema(new File(methodsDirectory + File.separator + "schema" + File.separator
 						+ info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)),
