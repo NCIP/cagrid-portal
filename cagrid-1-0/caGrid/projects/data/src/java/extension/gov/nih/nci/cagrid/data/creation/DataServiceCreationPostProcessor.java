@@ -14,12 +14,14 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionPostProcessor;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
 
 import javax.xml.namespace.QName;
@@ -114,18 +116,24 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 	
 	
 	private void copySchema(String schemaName, String outputDir) throws FileNotFoundException, IOException {
-		File schemaFile = new File(".." + File.separator + "schema" + File.separator + schemaName);
+		File schemaFile = new File(getExtensionDirectory() + File.separator + "schema" + File.separator + schemaName);
 		System.out.println("Loading schema from " + schemaFile.getAbsolutePath());
 		File outputDirFile = new File(outputDir);
-		System.out.println("Saving schema to " + outputDirFile.getAbsolutePath());
-		InputStream schemaStream =  getClass().getResourceAsStream(".." + File.separator + "schema" + File.separator + schemaName);
+		System.out.println("Saving schema to " + outputDirFile.getAbsolutePath() + File.separator + schemaName);
+		BufferedInputStream schemaStream =  new BufferedInputStream(new FileInputStream(schemaFile));
 		FileOutputStream saveSchema = new FileOutputStream(outputDir + File.separator + schemaName);
 		byte[] buffer = new byte[512];
 		int length = -1;
 		while ((length = schemaStream.read(buffer)) != -1) {
 			saveSchema.write(buffer, 0, length);
 		}
+		saveSchema.flush();
 		saveSchema.close();
 		schemaStream.close();
+	}
+	
+	
+	private String getExtensionDirectory() {
+		return ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data";
 	}
 }
