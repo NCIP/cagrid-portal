@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.introduce.extension;
 
-import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -60,7 +60,7 @@ public class ExtensionTools {
 		return null;
 	}
 	
-	public CreationExtensionUIDialog getCreationUIDialog(String extensionName, gov.nih.nci.cagrid.introduce.ServiceInformation info) throws Exception {
+	public CreationExtensionUIDialog getCreationUIDialog(String extensionName, gov.nih.nci.cagrid.introduce.info.ServiceInformation info) throws Exception {
 		ExtensionDescriptionType extensionD = loader.getExtension(extensionName);
 		if (extensionD != null && extensionD.getCreationUIDialog() != null
 			&& !extensionD.getCreationUIDialog().equals("")) {
@@ -75,7 +75,7 @@ public class ExtensionTools {
 		return null;
 	}
 	
-	public ServiceModificationUIPanel getServiceModificationUIPanel(String extensionName, gov.nih.nci.cagrid.introduce.ServiceInformation info) throws Exception {
+	public ServiceModificationUIPanel getServiceModificationUIPanel(String extensionName, gov.nih.nci.cagrid.introduce.info.ServiceInformation info) throws Exception {
 		ExtensionDescriptionType extensionD = loader.getExtension(extensionName);
 		if (extensionD != null && extensionD.getServiceModificationUIPanel() != null
 			&& !extensionD.getServiceModificationUIPanel().equals("")) {

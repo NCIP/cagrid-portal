@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce;
+package gov.nih.nci.cagrid.introduce.info;
 
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionsType;
@@ -8,7 +8,6 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
-import gov.nih.nci.cagrid.introduce.codegen.SchemaInformation;
 
 import java.io.File;
 import java.util.Properties;

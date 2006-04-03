@@ -1,6 +1,5 @@
-package gov.nih.nci.cagrid.introduce.codegen.security;
+package gov.nih.nci.cagrid.introduce.codegen.security.descriptor;
 
-import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.security.CommunicationMethod;
@@ -15,6 +14,7 @@ import gov.nih.nci.cagrid.introduce.beans.security.ServiceCredential;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.X509Credential;
+import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import org.projectmobius.common.XMLUtilities;
 

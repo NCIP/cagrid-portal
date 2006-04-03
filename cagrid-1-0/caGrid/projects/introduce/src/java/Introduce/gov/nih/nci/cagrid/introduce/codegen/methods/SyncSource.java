@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.introduce.codegen.methods;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
@@ -17,8 +16,9 @@ import gov.nih.nci.cagrid.introduce.beans.security.SecureConversation;
 import gov.nih.nci.cagrid.introduce.beans.security.SecureMessage;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
-import gov.nih.nci.cagrid.introduce.codegen.SchemaInformation;
-import gov.nih.nci.cagrid.introduce.codegen.TemplateUtils;
+import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
+import gov.nih.nci.cagrid.introduce.info.SchemaInformation;
+import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.io.BufferedReader;
 import java.io.File;

@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.codegen;
+package gov.nih.nci.cagrid.introduce.info;
 
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;

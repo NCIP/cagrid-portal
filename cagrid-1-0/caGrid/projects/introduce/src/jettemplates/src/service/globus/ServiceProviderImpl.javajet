@@ -1,5 +1,5 @@
 <%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus" class="ServiceProviderImplTemplate" %>
-<% gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+<% gov.nih.nci.cagrid.introduce.info.ServiceInformation info = (gov.nih.nci.cagrid.introduce.info.ServiceInformation) argument; 
    String packageName = info.getServiceProperties().getProperty("introduce.skeleton.package");
    String serviceName = info.getServiceProperties().getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
    String namespaceDomain = info.getServiceProperties().getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN);

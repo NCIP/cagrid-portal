@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.introduce.extension;
 
-import gov.nih.nci.cagrid.introduce.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 /**
  * 

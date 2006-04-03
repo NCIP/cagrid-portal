@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.introduce.creator;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.client.ServiceClientTemplate;
 import gov.nih.nci.cagrid.introduce.templates.common.ServiceITemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.ServiceImplTemplate;

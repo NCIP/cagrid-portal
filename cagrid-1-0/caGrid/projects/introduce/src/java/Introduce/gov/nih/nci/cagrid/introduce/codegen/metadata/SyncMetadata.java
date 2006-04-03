@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.introduce.codegen.metadata;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.JNDIConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.etc.RegistationTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.BaseResourceTemplate;

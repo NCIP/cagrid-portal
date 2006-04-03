@@ -4,7 +4,7 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
-import gov.nih.nci.cagrid.introduce.codegen.TemplateUtils;
+import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 
 import java.io.File;
 import java.util.HashSet;

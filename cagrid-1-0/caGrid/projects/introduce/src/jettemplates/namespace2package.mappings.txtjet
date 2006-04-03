@@ -1,5 +1,5 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="NamespaceMappingsTemplate" imports="gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.codegen.* org.projectmobius.common.* java.io.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.* gov.nih.nci.cagrid.introduce.beans.method.*"%>
-<% gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="NamespaceMappingsTemplate" imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.codegen.* org.projectmobius.common.* java.io.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.* gov.nih.nci.cagrid.introduce.beans.method.*"%> 
+<% gov.nih.nci.cagrid.introduce.info.ServiceInformation info = (gov.nih.nci.cagrid.introduce.info.ServiceInformation) argument;
    String packageName = info.getServiceProperties().getProperty("introduce.skeleton.package");
    String serviceName = info.getServiceProperties().getProperty("introduce.skeleton.service.name");
    String namespaceDomain = info.getServiceProperties().getProperty("introduce.skeleton.namespace.domain");

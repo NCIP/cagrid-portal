@@ -1,0 +1,471 @@
+Buildfile: build.xml
+
+clean:
+   [delete] Deleting directory C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\build
+   [delete] Deleting directory C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\beans
+
+setGlobus:
+
+checkGlobus:
+     [echo] Globus: C:\ext\grid\ws-core-4.0.1
+
+init:
+    [mkdir] Created dir: C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\build
+    [mkdir] Created dir: C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\build\classes
+    [mkdir] Created dir: C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\build\test_classes
+    [mkdir] Created dir: C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\build\jars
+    [mkdir] Created dir: C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\build\junit
+    [mkdir] Created dir: C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\build\javadoc
+
+prepare:
+
+generateStubs:
+
+generateStubs:
+     [echo]  Generating stubs from beans.wsdl
+
+generateJETClasses:
+     [jetc] Compiling 1 JET template(s) to C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce
+     [jetc] Compiling 1 JET template(s) to C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce
+     [jetc] Compiling 1 JET template(s) to C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce
+     [jetc] Compiling 1 JET template(s) to C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce
+     [jetc] Compiling 1 JET template(s) to C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce
+     [jetc] Compiling 1 JET template(s) to C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce
+     [jetc] Compiling 1 JET template(s) to C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce
+     [jetc] Compiling 1 JET template(s) to C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce
+     [jetc] Compiling 1 JET template(s) to C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce
+     [jetc] Compiling 1 JET template(s) to C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce
+     [jetc] Compiling 1 JET template(s) to C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce
+     [jetc] Compiling 1 JET template(s) to C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce
+     [jetc] Compiling 1 JET template(s) to C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce
+     [jetc] Compiling 1 JET template(s) to C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce
+     [jetc] Compiling 1 JET template(s) to C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce
+     [jetc] Compiling 1 JET template(s) to C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce
+     [jetc] Compiling 1 JET template(s) to C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce
+     [jetc] Compiling 1 JET template(s) to C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce
+     [jetc] Compiling 1 JET template(s) to C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce
+
+compile:
+     [echo] Compiling subproject Introduce
+    [javac] Compiling 97 source files to C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\build\classes
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\ClasspathTemplate.java:13: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                  ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\ClasspathTemplate.java:13: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                                                                          ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\ClientConfigTemplate.java:12: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                  ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\ClientConfigTemplate.java:12: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                                                                          ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\DeployPropertiesTemplate.java:11: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                  ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\DeployPropertiesTemplate.java:11: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                                                                          ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\JNDIConfigTemplate.java:24: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument;
+    [javac]                                  ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\JNDIConfigTemplate.java:24: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument;
+    [javac]                                                                                          ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\JNDIConfigTemplate.java:44: cannot resolve symbol
+    [javac] symbol  : variable TemplateUtils 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.JNDIConfigTemplate
+    [javac] 				String name=TemplateUtils.getResourcePropertyVariableName(metadataList, i);
+    [javac]                                             ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\JNDIConfigTemplate.java:45: cannot resolve symbol
+    [javac] symbol  : class SchemaInformation 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.JNDIConfigTemplate
+    [javac] 				SchemaInformation schemaInformation = info.getSchemaInformation(metadata.getQName());
+    [javac]                                 ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\NamespaceMappingsTemplate.java:34: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                  ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\NamespaceMappingsTemplate.java:34: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                                                                          ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\NamespaceMappingsTemplate.java:67: cannot resolve symbol
+    [javac] symbol  : variable TemplateUtils 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.NamespaceMappingsTemplate
+    [javac] 		Map prefixmap=TemplateUtils.buildMasterNamespaceInformationMap(info.getServiceDescriptor());
+    [javac]                               ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\NamespaceMappingsTemplate.java:74: cannot resolve symbol
+    [javac] symbol  : class NamespaceInformation 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.NamespaceMappingsTemplate
+    [javac] 				NamespaceInformation namespaceInformation=(NamespaceInformation)prefixmap.get(namespaceS);
+    [javac]                                 ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\NamespaceMappingsTemplate.java:74: cannot resolve symbol
+    [javac] symbol  : class NamespaceInformation 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.NamespaceMappingsTemplate
+    [javac] 				NamespaceInformation namespaceInformation=(NamespaceInformation)prefixmap.get(namespaceS);
+    [javac]                                                                            ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\NamespaceMappingsTemplate.java:89: cannot resolve symbol
+    [javac] symbol  : variable TemplateUtils 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.NamespaceMappingsTemplate
+    [javac] 					TemplateUtils.walkSchemasGetNamespaces(new File(info.getBaseDirectory().getAbsolutePath() + File.separator + "schema" + File.separator + serviceName),info.getBaseDirectory().getAbsolutePath() + File.separator + "schema" + File.separator + serviceName + File.separator + namespaceInformation.getNamespace().getLocation(), importNamespaces );
+    [javac]                                         ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\ProjectTemplate.java:13: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                  ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\ProjectTemplate.java:13: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                                                                          ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\ServerConfigTemplate.java:14: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                  ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\ServerConfigTemplate.java:14: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                                                                          ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\client\ServiceClientTemplate.java:31: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                  ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\client\ServiceClientTemplate.java:31: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                                                                          ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\common\ServiceITemplate.java:14: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                  ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\common\ServiceITemplate.java:14: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                                                                          ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\docs\api\DoxyfileTemplate.java:16: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                  ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\docs\api\DoxyfileTemplate.java:16: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                                                                          ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\etc\RegistationTemplate.java:24: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                  ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\etc\RegistationTemplate.java:24: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                                                                          ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\etc\RegistationTemplate.java:38: cannot resolve symbol
+    [javac] symbol  : variable TemplateUtils 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.etc.RegistationTemplate
+    [javac]       		Map prefixmap=TemplateUtils.buildMasterNamespaceInformationMap(info.getServiceDescriptor());
+    [javac]                               ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\etc\RegistationTemplate.java:43: cannot resolve symbol
+    [javac] symbol  : class NamespaceInformation 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.etc.RegistationTemplate
+    [javac]     stringBuffer.append(((NamespaceInformation)prefixmap.get(namespace)).getPrefix());
+    [javac]                           ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\etc\RegistationTemplate.java:51: cannot resolve symbol
+    [javac] symbol  : variable TemplateUtils 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.etc.RegistationTemplate
+    [javac]         Map prefixmap=TemplateUtils.buildMasterNamespaceInformationMap(info.getServiceDescriptor());
+    [javac]                       ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\etc\RegistationTemplate.java:59: cannot resolve symbol
+    [javac] symbol  : class NamespaceInformation 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.etc.RegistationTemplate
+    [javac]     stringBuffer.append(((NamespaceInformation)prefixmap.get(qnameNamespace)).getPrefix());
+    [javac]                           ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\etc\SecurityDescTemplate.java:13: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]    gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\etc\SecurityDescTemplate.java:13: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]    gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                                                                        ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\etc\SecurityDescTemplate.java:16: cannot resolve symbol
+    [javac] symbol  : class SecurityDescriptor 
+    [javac] location: package security
+    [javac]     stringBuffer.append(gov.nih.nci.cagrid.introduce.codegen.security.SecurityDescriptor.writeSecurityDescriptor(info));
+    [javac]                                                                      ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\schema\service\ServiceWSDLTemplate.java:100: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                  ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\schema\service\ServiceWSDLTemplate.java:100: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                                                                          ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\schema\service\ServiceWSDLTemplate.java:132: cannot resolve symbol
+    [javac] symbol  : variable TemplateUtils 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate
+    [javac] 	      		Map prefixmap=TemplateUtils.buildMasterNamespaceInformationMap(info.getServiceDescriptor());
+    [javac]                                       ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\schema\service\ServiceWSDLTemplate.java:137: cannot resolve symbol
+    [javac] symbol  : class NamespaceInformation 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate
+    [javac] 					NamespaceInformation namespaceInformation=(NamespaceInformation)prefixmap.get(namespace);
+    [javac]                                         ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\schema\service\ServiceWSDLTemplate.java:137: cannot resolve symbol
+    [javac] symbol  : class NamespaceInformation 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate
+    [javac] 					NamespaceInformation namespaceInformation=(NamespaceInformation)prefixmap.get(namespace);
+    [javac]                                                                                    ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\schema\service\ServiceWSDLTemplate.java:147: cannot resolve symbol
+    [javac] symbol  : variable TemplateUtils 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate
+    [javac] 		prefixmap=TemplateUtils.buildMasterNamespaceInformationMap(info.getServiceDescriptor());
+    [javac]                           ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\schema\service\ServiceWSDLTemplate.java:152: cannot resolve symbol
+    [javac] symbol  : class NamespaceInformation 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate
+    [javac] 			NamespaceInformation namespaceInformation=(NamespaceInformation)prefixmap.get(namespace);
+    [javac]                         ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\schema\service\ServiceWSDLTemplate.java:152: cannot resolve symbol
+    [javac] symbol  : class NamespaceInformation 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate
+    [javac] 			NamespaceInformation namespaceInformation=(NamespaceInformation)prefixmap.get(namespace);
+    [javac]                                                                    ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\schema\service\ServiceWSDLTemplate.java:176: cannot resolve symbol
+    [javac] symbol  : class SchemaInformation 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate
+    [javac] 	      					SchemaInformation schemaInformation = info.getSchemaInformation(inputParam.getQName());
+    [javac]                                                 ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\schema\service\ServiceWSDLTemplate.java:187: cannot resolve symbol
+    [javac] symbol  : class NamespaceInformation 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate
+    [javac]     stringBuffer.append(((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix());
+    [javac]                           ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\schema\service\ServiceWSDLTemplate.java:197: cannot resolve symbol
+    [javac] symbol  : class NamespaceInformation 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate
+    [javac]     stringBuffer.append(((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix());
+    [javac]                           ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\schema\service\ServiceWSDLTemplate.java:215: cannot resolve symbol
+    [javac] symbol  : class NamespaceInformation 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate
+    [javac]     stringBuffer.append(((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix());
+    [javac]                           ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\schema\service\ServiceWSDLTemplate.java:225: cannot resolve symbol
+    [javac] symbol  : class NamespaceInformation 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate
+    [javac]     stringBuffer.append(((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix());
+    [javac]                           ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\schema\service\ServiceWSDLTemplate.java:243: cannot resolve symbol
+    [javac] symbol  : class SchemaInformation 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate
+    [javac] 						SchemaInformation schemaInformation = info.getSchemaInformation(outputParam.getQName());
+    [javac]                                                 ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\schema\service\ServiceWSDLTemplate.java:250: cannot resolve symbol
+    [javac] symbol  : class NamespaceInformation 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate
+    [javac]     stringBuffer.append(((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix());
+    [javac]                           ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\schema\service\ServiceWSDLTemplate.java:258: cannot resolve symbol
+    [javac] symbol  : class NamespaceInformation 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate
+    [javac]     stringBuffer.append(((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix());
+    [javac]                           ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\schema\service\ServiceWSDLTemplate.java:269: cannot resolve symbol
+    [javac] symbol  : class NamespaceInformation 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate
+    [javac]     stringBuffer.append(((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix());
+    [javac]                           ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\schema\service\ServiceWSDLTemplate.java:277: cannot resolve symbol
+    [javac] symbol  : class NamespaceInformation 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate
+    [javac]     stringBuffer.append(((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix());
+    [javac]                           ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\schema\service\ServiceWSDLTemplate.java:317: cannot resolve symbol
+    [javac] symbol  : variable TemplateUtils 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate
+    [javac]                         	prefixmap=TemplateUtils.buildMasterNamespaceInformationMap(info.getServiceDescriptor());
+    [javac]                                           ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\schema\service\ServiceWSDLTemplate.java:320: cannot resolve symbol
+    [javac] symbol  : class SchemaInformation 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate
+    [javac] 								SchemaInformation schemaInformation = info.getSchemaInformation(metadata.getQName());
+    [javac]                                                                 ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\schema\service\ServiceWSDLTemplate.java:322: cannot resolve symbol
+    [javac] symbol  : class NamespaceInformation 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate
+    [javac]     stringBuffer.append(((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix());
+    [javac]                           ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\service\ServiceImplTemplate.java:19: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                  ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\service\ServiceImplTemplate.java:19: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                                                                          ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\service\globus\ServiceProviderImplTemplate.java:21: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                  ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\service\globus\ServiceProviderImplTemplate.java:21: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                                                                          ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\service\globus\resource\BaseResourceHomeTemplate.java:12: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                  ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\service\globus\resource\BaseResourceHomeTemplate.java:12: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]      gov.nih.nci.cagrid.introduce.ServiceInformation info = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                                                                          ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\service\globus\resource\BaseResourceTemplate.java:30: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]       gov.nih.nci.cagrid.introduce.ServiceInformation arguments = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                   ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\service\globus\resource\BaseResourceTemplate.java:30: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]       gov.nih.nci.cagrid.introduce.ServiceInformation arguments = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                                                                                ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\service\globus\resource\BaseResourceTemplate.java:47: cannot resolve symbol
+    [javac] symbol  : class SchemaInformation 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.service.globus.resource.BaseResourceTemplate
+    [javac] 			SchemaInformation schemaInformation = arguments.getSchemaInformation(metadata.getQName());
+    [javac]                         ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\service\globus\resource\BaseResourceTemplate.java:48: cannot resolve symbol
+    [javac] symbol  : variable TemplateUtils 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.service.globus.resource.BaseResourceTemplate
+    [javac] 			String name=TemplateUtils.getResourcePropertyVariableName(metadataList, i);
+    [javac]                                     ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\service\globus\resource\BaseResourceTemplate.java:60: cannot resolve symbol
+    [javac] symbol  : class SchemaInformation 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.service.globus.resource.BaseResourceTemplate
+    [javac] 			SchemaInformation schemaInformation = arguments.getSchemaInformation(metadata.getQName());
+    [javac]                         ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\service\globus\resource\BaseResourceTemplate.java:61: cannot resolve symbol
+    [javac] symbol  : variable TemplateUtils 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.service.globus.resource.BaseResourceTemplate
+    [javac] 			String name=TemplateUtils.getResourcePropertyVariableName(metadataList, i);
+    [javac]                                     ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\service\globus\resource\BaseResourceTemplate.java:78: cannot resolve symbol
+    [javac] symbol  : variable TemplateUtils 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.service.globus.resource.BaseResourceTemplate
+    [javac] 				String name=TemplateUtils.getResourcePropertyVariableName(metadataList, i);
+    [javac]                                             ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\service\globus\resource\BaseResourceTemplate.java:81: cannot resolve symbol
+    [javac] symbol  : variable TemplateUtils 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.service.globus.resource.BaseResourceTemplate
+    [javac]     stringBuffer.append(TemplateUtils.upperCaseFirstCharacter(name));
+    [javac]                         ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\service\globus\resource\BaseResourceTemplate.java:91: cannot resolve symbol
+    [javac] symbol  : class SchemaInformation 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.service.globus.resource.BaseResourceTemplate
+    [javac] 			SchemaInformation schemaInformation = arguments.getSchemaInformation(metadata.getQName());
+    [javac]                         ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\service\globus\resource\BaseResourceTemplate.java:93: cannot resolve symbol
+    [javac] symbol  : variable TemplateUtils 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.service.globus.resource.BaseResourceTemplate
+    [javac] 				String name=TemplateUtils.getResourcePropertyVariableName(metadataList, i);
+    [javac]                                             ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\service\globus\resource\BaseResourceTemplate.java:97: cannot resolve symbol
+    [javac] symbol  : variable TemplateUtils 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.service.globus.resource.BaseResourceTemplate
+    [javac]     stringBuffer.append(TemplateUtils.upperCaseFirstCharacter(name));
+    [javac]                         ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\service\globus\resource\BaseResourceTemplate.java:99: cannot resolve symbol
+    [javac] symbol  : variable TemplateUtils 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.service.globus.resource.BaseResourceTemplate
+    [javac]     stringBuffer.append(TemplateUtils.upperCaseFirstCharacter(name));
+    [javac]                         ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\service\globus\resource\MetadataConfigurationTemplate.java:27: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]       gov.nih.nci.cagrid.introduce.ServiceInformation arguments = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                   ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\service\globus\resource\MetadataConfigurationTemplate.java:27: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]       gov.nih.nci.cagrid.introduce.ServiceInformation arguments = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                                                                                ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\service\globus\resource\MetadataConfigurationTemplate.java:45: cannot resolve symbol
+    [javac] symbol  : variable TemplateUtils 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.service.globus.resource.MetadataConfigurationTemplate
+    [javac] 					String name=TemplateUtils.getResourcePropertyVariableName(metadataList, i);
+    [javac]                                                     ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\service\globus\resource\MetadataConfigurationTemplate.java:56: cannot resolve symbol
+    [javac] symbol  : variable TemplateUtils 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.service.globus.resource.MetadataConfigurationTemplate
+    [javac] 					String name=TemplateUtils.getResourcePropertyVariableName(metadataList, i);
+    [javac]                                                     ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\service\globus\resource\MetadataConfigurationTemplate.java:57: cannot resolve symbol
+    [javac] symbol  : class SchemaInformation 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.service.globus.resource.MetadataConfigurationTemplate
+    [javac] 					SchemaInformation schemaInformation = arguments.getSchemaInformation(metadata.getQName());
+    [javac]                                         ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\service\globus\resource\MetadataConfigurationTemplate.java:61: cannot resolve symbol
+    [javac] symbol  : variable TemplateUtils 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.service.globus.resource.MetadataConfigurationTemplate
+    [javac]     stringBuffer.append(TemplateUtils.upperCaseFirstCharacter(name));
+    [javac]                         ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\service\globus\resource\MetadataConfigurationTemplate.java:65: cannot resolve symbol
+    [javac] symbol  : variable TemplateUtils 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.service.globus.resource.MetadataConfigurationTemplate
+    [javac]     stringBuffer.append(TemplateUtils.upperCaseFirstCharacter(name));
+    [javac]                         ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\service\globus\resource\ResourceConstantsTemplate.java:22: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]       gov.nih.nci.cagrid.introduce.ServiceInformation arguments = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                   ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\service\globus\resource\ResourceConstantsTemplate.java:22: cannot resolve symbol
+    [javac] symbol  : class ServiceInformation 
+    [javac] location: package introduce
+    [javac]       gov.nih.nci.cagrid.introduce.ServiceInformation arguments = (gov.nih.nci.cagrid.introduce.ServiceInformation) argument; 
+    [javac]                                                                                                ^
+    [javac] C:\projects\cagrid\cagrid-1-0\caGrid\projects\introduce\src\java\Introduce\gov\nih\nci\cagrid\introduce\templates\service\globus\resource\ResourceConstantsTemplate.java:51: cannot resolve symbol
+    [javac] symbol  : variable TemplateUtils 
+    [javac] location: class gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceConstantsTemplate
+    [javac] 			stringBuffer.append(TemplateUtils.getResourcePropertyVariableName(metadataList, i).toUpperCase());
+    [javac]                                             ^
+    [javac] 84 errors
