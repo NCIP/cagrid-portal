@@ -1,7 +1,9 @@
 package gov.nih.nci.cagrid.discovery.client;
 
+import gov.nih.nci.cagrid.discovery.MetadataUtils;
 import gov.nih.nci.cagrid.discovery.ResourcePropertyHelper;
 import gov.nih.nci.cagrid.discovery.XPathUtils;
+import gov.nih.nci.cagrid.metadata.common.CommonServiceMetadataType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -60,15 +62,6 @@ public class DiscoveryClient {
 			System.exit(-1);
 		}
 
-//		Element rps = null;
-//		try {
-//			rps = ResourcePropertyHelper.getResourceProperties(client.getIndexEPR());
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			System.exit(-1);
-//		}
-//		System.out.println("Index Resource Property Set:");
-//		XMLUtils.PrettyElementToStream(rps, System.out);
 
 		EndpointReferenceType[] allServices = null;
 		try {
@@ -83,9 +76,14 @@ public class DiscoveryClient {
 				EndpointReferenceType service = allServices[i];
 				System.out.println("\n\n" + service.getAddress());
 				try {
-					Element serviceRPs = ResourcePropertyHelper.getResourceProperties(service);
-					System.out.println("Resource Property Set:");
-					XMLUtils.PrettyElementToStream(serviceRPs, System.out);
+//					Element serviceRPs = ResourcePropertyHelper.getResourceProperties(service);
+//					System.out.println("Resource Property Set:");
+//					XMLUtils.PrettyElementToStream(serviceRPs, System.out);
+					
+					CommonServiceMetadataType commonMetadata = MetadataUtils.getCommonMetadata(service);
+					if(commonMetadata!=null){
+						System.out.println("Service is from:"+commonMetadata.getResearchCenterInfo().getResearchCenterName());
+					}
 				} catch (Exception e) {
 					// e.printStackTrace();
 					System.out.println("ERROR:  Unable to access service's resource properties: " + e.getMessage());
@@ -94,23 +92,6 @@ public class DiscoveryClient {
 		} else {
 			System.out.println("No services found.");
 		}
-		//
-		// // String xpath =
-		// // XPathUtils.translateXPath("//com:CommonServiceMetadata", nsMap);
-		// //
-		// // System.out.println("Querying for:" + xpath);
-		// // Element[] elements =
-		// // ResourcePropertyHelper.queryResourceProperties(indexEPR, xpath);
-		// // System.out.println("\nQuery Results:");
-		// // if (elements != null) {
-		// // for (int i = 0; i < elements.length; i++) {
-		// // System.out.println(XmlUtils.toString(elements[i]));
-		// // }
-		// // }
-		//
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// }
 	}
 
 

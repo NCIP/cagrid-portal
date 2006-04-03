@@ -1,0 +1,6 @@
+-handle secure communications
+
+-clean up exception handling
+
+-design if there will be one client or several as previously
+
