@@ -6,12 +6,12 @@
 	<mkdir dir="${test.log.dir}"/>
 	<!-- call the test target for each project and aggregates the log resutls  -->
 	<target name="test" depends="checkGlobus">
-		
-		<echo message="Test results dir: ${junit.results.dir}" />
+		<echo message="Test results dir: ${junit.results.dir}"/>
 		<mkdir dir="${junit.results.dir}"/>
-		
-		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true">
+		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true"
+			showoutput="true">
 			<sysproperty key="basedir" value="${basedir}"/>
+			<sysproperty key="build.dir" value="${classes.dir}"/>
 			<jvmarg value="-Dbuild.dir=${classes.dir}"/>
 			<classpath>
 				<path refid="Introduce.test.classpath"/>
@@ -20,29 +20,23 @@
 			<batchtest fork="no" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}/Introduce">
 					<include name="**/*Test.java"/>
+					<include name="**/*TestCase.java"/>
 				</fileset>
 			</batchtest>
 		</junit>
-
 		<antcall target="testGUI"/>
-		
 	</target>
-	
 	<!-- setting the ant var introduce.test.gui will make the gui tests run, else they will not -->
-	<target name="testGUI" depends="checkGlobus" if="introduce.test.gui" >
-		
-		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true">
+	<target name="testGUI" depends="checkGlobus" if="introduce.test.gui">
+		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true"
+			showoutput="true">
 			<sysproperty key="basedir" value="${basedir}"/>
 			<jvmarg value="-Dbasedir=${basedir}"/>
-			
 			<!--<sysproperty key="awt.toolkit" value="sun.awt.windows.WToolkit"/>
 			<jvmarg value="-Dawt.toolkit=sun.awt.windows.WToolkit"/>-->
-			
 			<!--<sysproperty key="java.awt.headless" value="true"/>
 			<jvmarg value="-Djava.awt.headless=true"/>-->
-			
 			<classpath refid="Portal.test.classpath"/>
-			
 			<formatter type="xml"/>
 			<batchtest fork="yes" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}/Portal">
