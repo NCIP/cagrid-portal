@@ -8,7 +8,7 @@
  * file.
  */
 
-package gov.nih.nci.cagrid.common.client;
+package gov.nih.nci.cagrid.discovery;
 
 import gov.nih.nci.cagrid.common.security.commstyle.OpenCommunication;
 

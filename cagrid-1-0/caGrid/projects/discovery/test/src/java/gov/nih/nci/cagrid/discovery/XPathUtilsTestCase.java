@@ -1,4 +1,6 @@
-package gov.nih.nci.cagrid.common;
+package gov.nih.nci.cagrid.discovery;
+
+import gov.nih.nci.cagrid.discovery.XPathUtils;
 
 import java.util.HashMap;
 import java.util.Map;

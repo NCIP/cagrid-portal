@@ -1,5 +1,4 @@
 <?xml version="1.0"?>
-
 <!-- ================================================================= -->
 <!-- caGrid Master build file                                          -->
 <!-- ================================================================= -->
@@ -164,18 +163,18 @@
 				<include name="*.jar" />
 			</fileset>
 		</artifact>
-		
+
 		<artifact track="main" type="jars" id="introduce.jars">
-			<antcall target="build-introduce"/>
+			<antcall target="build-introduce" />
 			<fileset dir="${projects.dir}/introduce/build/jars">
-				<include name="*.jar"/>
-				<exclude name="*tests*.jar"/>
+				<include name="*.jar" />
+				<exclude name="*tests*.jar" />
 			</fileset>
 		</artifact>
-		
+
 		<artifact track="main" type="jars" id="gme.globus.client.jars">
 			<fileset dir="${projects.dir}/gme/lib">
-				<include name="GlobalModelExchange.jar"/>
+				<include name="GlobalModelExchange.jar" />
 			</fileset>
 		</artifact>
 	</target>
@@ -208,6 +207,19 @@
 			<artifact refid="core.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/metadata" inheritAll="false" antfile="build.xml" target="jar" />
+	</target>
+
+
+	<!-- =============================================================== -->
+	<!-- DISCOVERY:                                                      -->
+	<!-- =============================================================== -->
+	<target name="build-discovery" depends="prepare" description="Builds the common metadata">
+		<resolveDependencies extdir="${projects.dir}/discovery/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="metadata.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/discovery" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
 
@@ -313,8 +325,8 @@
 	<target name="build-data" depends="prepare" description="Builds caGrid Data Services components">
 		<resolveDependencies extdir="${projects.dir}/data/ext">
 			<artifact refid="core.jars" />
-			<artifact refid="introduce.jars"/>
-			<artifact refid="gme.globus.client.jars"/>
+			<artifact refid="introduce.jars" />
+			<artifact refid="gme.globus.client.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
@@ -338,26 +350,40 @@
 		<!--<subant target="clean"  >
 			<fileset dir="${projects.dir}" includes="*/build.xml" />
 		</subant>-->
+
 		<delete dir="${projects.dir}/core/ext" />
 		<ant dir="${projects.dir}/core" inheritAll="false" antfile="build.xml" target="clean" />
+
 		<delete dir="${projects.dir}/metadata/ext" />
 		<ant dir="${projects.dir}/metadata" inheritAll="false" antfile="build.xml" target="clean" />
+
+		<delete dir="${projects.dir}/discovery/ext" />
+		<ant dir="${projects.dir}/discovery" inheritAll="false" antfile="build.xml" target="clean" />
+
 		<delete dir="${projects.dir}/gme/ext" />
 		<ant dir="${projects.dir}/gme" inheritAll="false" antfile="build.xml" target="clean" />
+
 		<delete dir="${projects.dir}/introduce/ext" />
 		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="clean" />
+
 		<delete dir="${projects.dir}/dorian/ext" />
 		<ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="clean" />
+
 		<delete dir="${projects.dir}/gridca/ext" />
 		<ant dir="${projects.dir}/gridca" inheritAll="false" antfile="build.xml" target="clean" />
+
 		<delete dir="${projects.dir}/gts/ext" />
 		<ant dir="${projects.dir}/gts" inheritAll="false" antfile="build.xml" target="clean" />
+
 		<delete dir="${projects.dir}/cadsr/ext" />
 		<ant dir="${projects.dir}/cadsr" inheritAll="false" antfile="build.xml" target="clean" />
+
 		<delete dir="${projects.dir}/opensaml/ext" />
 		<ant dir="${projects.dir}/opensaml" inheritAll="false" antfile="build.xml" target="clean" />
+
 		<delete dir="${projects.dir}/data/ext" />
 		<ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="clean" />
+
 		<delete dir="${projects.dir}/cql2xpath/ext" />
 		<ant dir="${projects.dir}/cql2xpath" inheritAll="false" antfile="build.xml" target="clean" />
 	</target>
@@ -371,12 +397,12 @@
 	</condition>
 
 	<target name="all" depends="all_1.5,all_pre_1.5" description="Builds the entire application" />
-	<target name="all_1.5_build" if="isJDK1.5" depends="clean, build-core, build-cadsr, build-gridca, build-opensaml, build-metadata, build-cql2xpath, build-gme, build-gts, build-introduce, build-dorian, build-data" />
+	<target name="all_1.5_build" if="isJDK1.5" depends="clean, build-core, build-cadsr, build-gridca, build-opensaml, build-metadata, build-discovery, build-cql2xpath, build-gme, build-gts, build-introduce, build-dorian, build-data" />
 	<target name="all_1.5" if="isJDK1.5">
 		<antcall target="all_1.5_build" />
 		<echo message="Successfully built all projects." />
 	</target>
-	<target name="all_pre_1.5_build" unless="isJDK1.5" depends="clean, build-core, build-gridca, build-opensaml, build-metadata, build-cql2xpath, build-gme, build-gts, build-introduce, build-dorian, build-data" />
+	<target name="all_pre_1.5_build" unless="isJDK1.5" depends="clean, build-core, build-gridca, build-opensaml, build-metadata, build-discovery, build-cql2xpath, build-gme, build-gts, build-introduce, build-dorian, build-data" />
 	<target name="all_pre_1.5" unless="isJDK1.5">
 		<echo message="=====================================================================================" />
 		<echo message="WARNING: When building with a JDK of version &lt; 1.5, not all projects can be built!" />
