@@ -31,9 +31,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
-import org.apache.tools.ant.BuildException;
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
 
@@ -455,7 +453,8 @@ public class CreationViewer extends GridPortalComponent {
 		final File dirFile = new File(getDir().getText());
 		if (dirFile.exists() && dirFile.list().length != 0) {
 			doIdeleteResult = JOptionPane.showConfirmDialog(this,
-				"The creation directory is not empty.  All information in the directory will be lost.");
+				"The creation directory is not empty.  All information in the directory will be lost.",
+				"Confirm Overwrite", JOptionPane.YES_NO_OPTION);
 		}
 
 		if (doIdeleteResult == JOptionPane.OK_OPTION) {
@@ -518,14 +517,12 @@ public class CreationViewer extends GridPortalComponent {
 						
 						setProgressText("running extension viewers");
 						Properties properties = new Properties();
-						properties.load(new FileInputStream(getDir().getText() + File.separator + "introduce.properties"));
-						ServiceDescription introService = null;
-							introService = (ServiceDescription) Utils.deserializeDocument( getDir().getText() + File.separator
-								+ "introduce.xml", ServiceDescription.class);
-                        ServiceInformation info = new ServiceInformation(introService,properties,new File(getDir().getText()));
+						properties.load(new FileInputStream(getDir().getText() + File.separator + IntroduceConstants.INTRODUCE_PROPERTIES_FILE));
+						ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(getDir().getText() + File.separator + IntroduceConstants.INTRODUCE_XML_FILE, ServiceDescription.class);
+						ServiceInformation info = new ServiceInformation(introService, properties, new File(getDir().getText()));
 						ExtensionTools extTools = new ExtensionTools();
 						if(!serviceExtensions.equals("")){
-							JDialog extDialog = extTools.getCreationUIDialog(serviceExtensions,info);
+							JDialog extDialog = extTools.getCreationUIDialog(serviceExtensions, info);
 							extDialog.show();
 						}
 
