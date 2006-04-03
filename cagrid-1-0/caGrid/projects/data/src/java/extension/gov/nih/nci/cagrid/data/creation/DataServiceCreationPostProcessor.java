@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.data.creation;
 
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.common.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
@@ -37,31 +36,13 @@ import javax.xml.namespace.QName;
  */
 public class DataServiceCreationPostProcessor implements CreationExtensionPostProcessor {
 	
-	public void postCreate(Properties serviceProperties) throws CreationExtensionException {
-		// load the introduce template stuff
-		ServiceDescription description = null;
-		String templateFilename = serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) 
-			+ File.separator + IntroduceConstants.INTRODUCE_XML_FILE;
-		try {
-			System.out.println("Loading existing introduce template");
-			description = (ServiceDescription) Utils.deserializeDocument(
-				templateFilename, ServiceDescription.class);
-		} catch (Exception ex) {
-			throw new CreationExtensionException("Error loading service template!", ex);
-		}
+	public void postCreate(ServiceDescription serviceDescription, Properties serviceProperties) throws CreationExtensionException {
 		// apply data service requirements to it
 		try {
 			System.out.println("Adding data service components to template");
-			makeDataService(description, serviceProperties);
+			makeDataService(serviceDescription, serviceProperties);
 		} catch (Exception ex) {
 			throw new CreationExtensionException("Error adding data service components to template!", ex);
-		}
-		// save it back to disk
-		try {
-			System.out.println("Saving service description back to service directory");
-			Utils.serializeDocument(templateFilename, description, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
-		} catch (Exception ex) {
-			throw new CreationExtensionException("Error saving data service description!", ex);
 		}
 	}
 	
