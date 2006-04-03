@@ -2,12 +2,18 @@ package gov.nih.nci.cagrid.data.cql.cacore;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQueryType;
+import gov.nih.nci.cagrid.cqlquery.Group;
+import gov.nih.nci.cagrid.cqlquery.Objects;
+import gov.nih.nci.cagrid.cqlquery.Property;
 import gov.nih.nci.cagrid.cqlresultset.CQLObjectResult;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResultsType;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.data.cql.InitializationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.namespace.QName;
@@ -48,9 +54,18 @@ public class CoreQueryProcessor implements CQLQueryProcessor {
 		String targetClassName = query.getTarget().getName();
 		Class targetClass = Class.forName(targetClassName);
 		
-		// TODO: implement CQL here
+		List searchMe = new ArrayList();
+		Group[] groups = query.getTarget().getGroup();
+		for (int i = 0; i < groups.length; i++) {
+			String logic = groups[i].getLogicRelation().getValue();
+			Objects[] objects = groups[i].getObjects();
+			for (int j = 0; j < objects.length; j++) {
+				Object queryObject = generateQueryObject(objects[i]);
+				searchMe.add(queryObject);
+			}
+		}
 		
-		List targetObjects = coreService.search(targetClass, null);
+		List targetObjects = coreService.search(targetClass, searchMe);
 		CQLQueryResultsType results = buildResults(targetObjects);
 		return results;
 	}
@@ -71,5 +86,53 @@ public class CoreQueryProcessor implements CQLQueryProcessor {
 		}
 		results.setObjectResult(objectResults);
 		return results;
+	}
+	
+	
+	private Object generateQueryObject(Objects input) throws Exception {
+		Class inputClass = Class.forName(input.getName());
+		Object instance = inputClass.newInstance();
+		Property[] properties = input.getProperty();
+		for (int i = 0; i < properties.length; i++) {
+			Property prop = properties[i];
+			setValueOnObject(instance, prop.getName(), prop.getPredicate().getValue(), prop.getValue());
+		}
+		return instance;
+	}
+	
+	
+	private void setValueOnObject(Object obj, String name, String predicate, String value)
+		throws InvocationTargetException, IllegalAccessException {
+		Method[] methods = obj.getClass().getMethods();
+		for (int i = 0; i < methods.length; i++) {
+			Method currentMethod = methods[i];
+			// is this method a setter??
+			if (isSetter(currentMethod)) {
+				String fieldSet = getSetterField(currentMethod);
+				if (fieldSet.equals(name)) {
+					String[] args = {predicate + value};
+					currentMethod.invoke(obj, args);
+					break;
+				}
+			}
+		}
+	}
+	
+	
+	private boolean isSetter(Method method) {
+		return (method.getName().startsWith("set") && method.getParameterTypes().length == 1 
+			&& method.getParameterTypes()[0].equals(String.class));
+	}
+	
+	
+	private String getSetterField(Method setter) {
+		String name = setter.getName();
+		name = name.substring("set".length());
+		if (name.length() > 1) {
+			name = name.substring(0, 1).toLowerCase() + name.substring(1);
+		} else {
+			name = name.toLowerCase();
+		}
+		return name;
 	}
 }
