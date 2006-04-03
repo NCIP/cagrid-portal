@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.common.jedit.JEditTextArea;
 import gov.nih.nci.cagrid.introduce.portal.common.jedit.XMLTokenMarker;
+import gov.nih.nci.cagrid.introduce.portal.discovery.DiscoveryToolsComponent;
 import gov.nih.nci.cagrid.introduce.portal.gme.GMESchemaLocatorPanel.SchemaWrapper;
 
 import java.awt.GridBagConstraints;
@@ -29,7 +30,6 @@ import org.projectmobius.common.XMLUtilities;
 import org.projectmobius.common.gme.NamespaceExistsException;
 import org.projectmobius.gme.XMLDataModelService;
 import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
-import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
 import org.xml.sax.InputSource;
 
@@ -44,7 +44,7 @@ import org.xml.sax.InputSource;
  * @version $Id: mobiusEclipseCodeTemplates.xml,v 1.2 2005/04/19 14:58:02 oster
  *          Exp $
  */
-public class GMEViewer extends GridPortalComponent {
+public class GMEViewer extends DiscoveryToolsComponent {
 
 	private JPanel mainPanel = null;
 	private JTabbedPane gmeToolsTabs = null;
@@ -348,7 +348,7 @@ public class GMEViewer extends GridPortalComponent {
 						IntroducePortalConf.RESOURCE);
 					try {
 						XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
-							.getGridService(conf.getGME());
+							.getGridService(conf.getProperty(IntroducePortalConf.GME_URL));
 
 						// get the target namespace of the schema and make sure
 						// that it is acceptable by the GME

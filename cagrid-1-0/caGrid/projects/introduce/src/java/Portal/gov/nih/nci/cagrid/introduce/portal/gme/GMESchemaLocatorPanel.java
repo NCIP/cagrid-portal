@@ -310,7 +310,7 @@ public class GMESchemaLocatorPanel extends JPanel {
 			gme = new JTextField();
 			IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
 				IntroducePortalConf.RESOURCE);
-			gme.setText(conf.getGME());
+			gme.setText(conf.getProperty(IntroducePortalConf.GME_URL));
 		}
 		return gme;
 	}

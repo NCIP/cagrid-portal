@@ -411,7 +411,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 		GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
 		try {
 			XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance().getGridService(
-				conf.getGME());
+				conf.getProperty(IntroducePortalConf.GME_URL));
 			handle.cacheSchema(new Namespace(namespace), dir);
 		} catch (MobiusException e1) {
 			// TODO Auto-generated catch block

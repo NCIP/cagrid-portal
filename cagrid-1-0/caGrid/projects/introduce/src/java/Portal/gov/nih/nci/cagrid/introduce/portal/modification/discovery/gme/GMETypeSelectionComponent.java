@@ -1,9 +1,10 @@
-package gov.nih.nci.cagrid.introduce.portal.modification.gme;
+package gov.nih.nci.cagrid.introduce.portal.modification.discovery.gme;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -28,7 +29,7 @@ import org.projectmobius.common.XMLUtilities;
  * @version $Id: mobiusEclipseCodeTemplates.xml,v 1.2 2005/04/19 14:58:02 oster
  *          Exp $
  */
-public class GMETypeSelectionComponent extends JPanel {
+public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent  {
 	private GMEConfigurationPanel gmePanel = null;
 
 	public GMETypeSelectionComponent() {
@@ -70,7 +71,7 @@ public class GMETypeSelectionComponent extends JPanel {
 	}
 
 
-	public NamespaceType createNamespace() {
+	public NamespaceType createNamespaceType() {
 		NamespaceType input = new NamespaceType();
 
 		// set the package name
@@ -105,4 +106,5 @@ public class GMETypeSelectionComponent extends JPanel {
 
 		return input;
 	}
+
 }

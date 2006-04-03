@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.portal.modification.gme;
+package gov.nih.nci.cagrid.introduce.portal.modification.discovery.gme;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
@@ -105,7 +105,7 @@ public class GMEConfigurationPanel extends JPanel {
 			IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
 				IntroducePortalConf.RESOURCE);
 			XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance().getGridService(
-				conf.getGME());
+				conf.getProperty(IntroducePortalConf.GME_URL));
 			namespaces = handle.getNamespaceDomainList();
 
 			getNamespaceComboBox().removeAllItems();
@@ -138,7 +138,7 @@ public class GMEConfigurationPanel extends JPanel {
 							IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance()
 								.getResource(IntroducePortalConf.RESOURCE);
 							XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
-								.getGridService(conf.getGME());
+								.getGridService(conf.getProperty(IntroducePortalConf.GME_URL));
 							List schemas = handle.getSchemaListForNamespaceDomain((String) namespaceComboBox
 								.getSelectedItem());
 
@@ -177,7 +177,7 @@ public class GMEConfigurationPanel extends JPanel {
 							.getResource(IntroducePortalConf.RESOURCE);
 						try {
 							XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
-								.getGridService(conf.getGME());
+								.getGridService(conf.getProperty(IntroducePortalConf.GME_URL));
 							currentNode = handle.getSchema(currentNamespace, false);
 						} catch (MobiusException e1) {
 							e1.printStackTrace();

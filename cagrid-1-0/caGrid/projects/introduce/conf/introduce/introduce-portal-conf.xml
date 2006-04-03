@@ -43,8 +43,8 @@
 					</dimensions>
 				</component>
 				<component>
-					<title>caGrid GME Tools</title>
-					<description>caGrid GME Tools</description>
+					<title>Discovery Tools</title>
+					<description>Discovery Tools</description>
 					<class>gov.nih.nci.cagrid.introduce.portal.gme.GMEViewer</class>
 					<icon>/mobiusIcon.gif</icon>
 				</component>
@@ -52,9 +52,11 @@
 		</grid-portal-config>
 	</resource>
 	<resource name="IntroducePortalConf" class="gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf">
-		<introduce-portal-config discoveryType="GME">
-			<gme>http://dc01.bmi.ohio-state.edu:8080/wsrf/services/cagrid/GlobalModelExchange</gme>
-			<cadsr></cadsr>
+		<introduce-portal-config>
+			<namespaceTypeDiscoveryComponent>gov.nih.nci.cagrid.introduce.portal.modification.discovery.gme.GMETypeSelectionComponent</namespaceTypeDiscoveryComponent>
+			<properties>
+				<property key="GME_URL" value="http://dc01.bmi.ohio-state.edu:8080/wsrf/services/cagrid/GlobalModelExchange"></property>
+			</properties>
 		</introduce-portal-config>
 	</resource>
 </grid-portal>

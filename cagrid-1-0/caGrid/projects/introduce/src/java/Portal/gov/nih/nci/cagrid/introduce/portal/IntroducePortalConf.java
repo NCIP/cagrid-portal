@@ -1,5 +1,8 @@
 package gov.nih.nci.cagrid.introduce.portal;
 
+import java.util.List;
+import java.util.Properties;
+
 import org.jdom.Element;
 import org.projectmobius.common.AbstractMobiusConfiguration;
 import org.projectmobius.common.MobiusException;
@@ -17,51 +20,41 @@ public class IntroducePortalConf implements AbstractMobiusConfiguration {
 
 	public static String RESOURCE = "IntroducePortalConf";
 
-	public static final String GME_EL = "gme";
-	public static final String CADSR_EL = "cadsr";
-	public static final String GME_DISCOVERY = "GME";
-	public static final String CADSR_DISCOVERY = "CADSR";
+	private static final String NAMESPACE_DISCOVERY_COMPONENT = "namespaceTypeDiscoveryComponent";
+	public static final String GME_URL = "GME_URL";
+	private static final String PROPERTIES = "properties";
+	private static final String PROPERTY = "property";
 	
-
-	public String gme = null;
-
-	public String cadsr = null;
-	
-	public String discoveryType = null;
-
+	private Properties props;
+	private String namespaceTypeDiscoveryClassname = null;
 
 	public IntroducePortalConf() {
+		props = new Properties();
 	}
 	
-	public String getDiscoveryType(){
-		return this.discoveryType;
+	public String getNamepaceTypeDiscoveryClassname(){
+		return this.namespaceTypeDiscoveryClassname;
 	}
-
-
-	public String getGME() {
-		return gme;
+	
+	public String getProperty(String key){
+		return props.getProperty(key);
 	}
-
-
-	public String getCADSR() {
-		return cadsr;
-	}
-
-
-	public void setGme(String gme) {
-		this.gme = gme;
-	}
-
+	
 
 	public void parse(MobiusResourceManager resourceManager, Element config) throws MobiusException {
-		this.discoveryType = config.getAttributeValue("discoveryType");
-		Element gmeEl = config.getChild(GME_EL, config.getNamespace());
-		if (gmeEl != null) {
-			this.gme = gmeEl.getText();
+		Element ntdcEl = config.getChild(NAMESPACE_DISCOVERY_COMPONENT, config.getNamespace());
+		if (ntdcEl != null) {
+			this.namespaceTypeDiscoveryClassname= ntdcEl.getText();
 		}
-		Element cadsrEl = config.getChild(CADSR_EL, config.getNamespace());
-		if (cadsrEl != null) {
-			this.cadsr = cadsrEl.getText();
+		Element propertiesEl = config.getChild(PROPERTIES, config.getNamespace());
+		if (propertiesEl != null) {
+			List propertyElArr = propertiesEl.getChildren(PROPERTY,config.getNamespace());
+			for(int i =0; i < propertyElArr.size(); i++){
+				Element propEl = (Element)propertyElArr.get(i);
+				String key = propEl.getAttributeValue("key");
+				String value = propEl.getAttributeValue("value");
+				this.props.put(key, value);
+			}
 		}
 
 	}

@@ -25,7 +25,7 @@ import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
-import gov.nih.nci.cagrid.introduce.portal.modification.gme.GMETypeSelectionComponent;
+import gov.nih.nci.cagrid.introduce.portal.modification.discovery.gme.GMETypeSelectionComponent;
 import gov.nih.nci.cagrid.introduce.portal.modification.security.ServiceSecurityPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeConfigurePanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeTreeNode;
@@ -738,19 +738,6 @@ public class ModificationViewer extends GridPortalComponent {
 		Vector v = (Vector) getMetadataTable().getValueAt(getMetadataTable().getSelectedRow(), 9);
 		IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
 			IntroducePortalConf.RESOURCE);
-		if (conf.getDiscoveryType().equals(IntroducePortalConf.GME_DISCOVERY)) {
-			// PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-			// new GMEMetadataConfigurationComponent(v, new
-			// File(methodsDirectory.getAbsolutePath() + File.separator
-			// + "schema" + File.separator +
-			// serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME))));
-		} else if (conf.getDiscoveryType().equals(IntroducePortalConf.CADSR_DISCOVERY)) {
-			// PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-			// new CADSRMetadataConfigurationComponent(v, new
-			// File(methodsDirectory.getAbsolutePath() + File.separator
-			// + "schema" + File.separator +
-			// serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME))));
-		}
 	}
 
 
@@ -1375,7 +1362,7 @@ public class ModificationViewer extends GridPortalComponent {
 		GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
 		try {
 			XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance().getGridService(
-				conf.getGME());
+				conf.getProperty(IntroducePortalConf.GME_URL));
 			handle.cacheSchema(new Namespace(namespace), dir);
 		} catch (MobiusException e1) {
 			// TODO Auto-generated catch block
@@ -1399,7 +1386,7 @@ public class ModificationViewer extends GridPortalComponent {
 			namespaceAddButton.setIcon(IntroduceLookAndFeel.getAddIcon());
 			namespaceAddButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					NamespaceType type = getGmeDiscoveryPanel().createNamespace();
+					NamespaceType type = getGmeDiscoveryPanel().createNamespaceType();
 					getNamespaceJTree().addNode(type);
 					cacheSchema(new File(methodsDirectory + File.separator + "schema" + File.separator
 						+ info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)),
