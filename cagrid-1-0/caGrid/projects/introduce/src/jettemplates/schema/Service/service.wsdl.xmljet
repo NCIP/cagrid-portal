@@ -10,8 +10,7 @@
     	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
     }
     List faults = new ArrayList();
-%>
-<?xml version="1.0" encoding="UTF-8"?>
+%><?xml version="1.0" encoding="UTF-8"?>
 <definitions name="<%=serviceName%>" targetNamespace="<%=namespaceDomain%>/<%=serviceName%>"
     xmlns:tns="<%=namespaceDomain%>/<%=serviceName%>"
     xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd"
