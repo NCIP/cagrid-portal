@@ -1,10 +1,10 @@
 package gov.nih.nci.cagrid.introduce.extension.example;
 
 import gov.nih.nci.cagrid.introduce.ServiceInformation;
-import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionUIPanel;
+import gov.nih.nci.cagrid.introduce.extension.ServiceModificationUIPanel;
 import javax.swing.JLabel;
 
-public class ExampleCodegenPanel extends CodegenExtensionUIPanel {
+public class ExampleCodegenPanel extends ServiceModificationUIPanel {
 
 	private JLabel jLabel = null;
 

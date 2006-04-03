@@ -4,7 +4,7 @@ import gov.nih.nci.cagrid.introduce.ServiceInformation;
 
 import javax.swing.JPanel;
 
-public abstract class CodegenExtensionUIPanel extends JPanel {
+public abstract class ServiceModificationUIPanel extends JPanel {
 	private ServiceInformation serviceInfo;
 	
 	public ServiceInformation getServiceInfo() {
@@ -15,7 +15,7 @@ public abstract class CodegenExtensionUIPanel extends JPanel {
 		this.serviceInfo = serviceInfo;
 	}
 
-	public CodegenExtensionUIPanel(ServiceInformation info){
+	public ServiceModificationUIPanel(ServiceInformation info){
 		this.serviceInfo = info;
 	}
 
