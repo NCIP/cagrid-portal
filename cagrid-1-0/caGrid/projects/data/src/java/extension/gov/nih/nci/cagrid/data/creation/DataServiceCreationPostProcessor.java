@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.data.creation;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.common.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
@@ -15,24 +14,15 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionPostProcessor;
-import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.util.List;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 import javax.xml.namespace.QName;
-
-import org.jdom.Document;
-import org.jdom.input.SAXBuilder;
-import org.projectmobius.client.gme.ImportInfo;
-import org.projectmobius.common.GridServiceResolver;
-import org.projectmobius.common.MobiusException;
-import org.projectmobius.common.Namespace;
-import org.projectmobius.gme.XMLDataModelService;
-import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
-import org.projectmobius.portal.PortalResourceManager;
 
 /** 
  *  DataServiceCreationPostProcessor
@@ -60,7 +50,7 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		// apply data service requirements to it
 		try {
 			System.out.println("Adding data service components to template");
-			makeDataService(description,serviceProperties);
+			makeDataService(description, serviceProperties);
 		} catch (Exception ex) {
 			throw new CreationExtensionException("Error adding data service components to template!", ex);
 		}
@@ -75,18 +65,18 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 	
 	
 	private void makeDataService(ServiceDescription description, Properties props) throws Exception {
-		// grab cql query and result set schemas from GME
+		// grab cql query and result set schemas and move them into the service's directory
 		String schemaDir = getServiceSchemaDir(props);
-		String cqlQuerySchemaLocation = cacheSchema(DataServiceConstants.CQL_QUERY_URI, schemaDir);
-		String cqlResultSetSchemaLocation = cacheSchema(DataServiceConstants.CQL_RESULT_SET_URI, schemaDir);
+		copySchema(DataServiceConstants.CQL_QUERY_SCHEMA, schemaDir);
+		copySchema(DataServiceConstants.CQL_RESULT_SET_SCHEMA, schemaDir);
 		// namespaces
 		NamespacesType namespaces = description.getNamespaces();
 		NamespaceType[] dsNamespaces = new NamespaceType[namespaces.getNamespace().length + 2];
 		System.arraycopy(namespaces.getNamespace(), 0, dsNamespaces, 0, namespaces.getNamespace().length);
-		dsNamespaces[dsNamespaces.length - 2] = CommonTools.createNamespaceType(schemaDir + File.separator + cqlQuerySchemaLocation);
-		dsNamespaces[dsNamespaces.length - 2].setLocation("." + File.separator + cqlQuerySchemaLocation);
-		dsNamespaces[dsNamespaces.length - 1] = CommonTools.createNamespaceType(schemaDir + File.separator + cqlResultSetSchemaLocation);
-		dsNamespaces[dsNamespaces.length - 1].setLocation("." + File.separator + cqlResultSetSchemaLocation);
+		dsNamespaces[dsNamespaces.length - 2] = CommonTools.createNamespaceType(schemaDir + File.separator + DataServiceConstants.CQL_QUERY_SCHEMA);
+		dsNamespaces[dsNamespaces.length - 2].setLocation("." + File.separator + DataServiceConstants.CQL_QUERY_SCHEMA);
+		dsNamespaces[dsNamespaces.length - 1] = CommonTools.createNamespaceType(schemaDir + File.separator + DataServiceConstants.CQL_RESULT_SET_SCHEMA);
+		dsNamespaces[dsNamespaces.length - 1].setLocation("." + File.separator + DataServiceConstants.CQL_RESULT_SET_SCHEMA);
 		namespaces.setNamespace(dsNamespaces);
 		
 		// query method
@@ -120,42 +110,15 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 	}
 	
 	
-	private String cacheSchema(String uri, String directory) throws Exception {
-		System.out.println("Retrieving schema " + uri);
-		String cachedFilename = null;
-		IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
-			IntroducePortalConf.RESOURCE);
-		GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
-		try {
-			XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance().getGridService(
-				conf.getGME());
-			List retrievedNamespaces = handle.cacheSchema(new Namespace(uri), new File(directory));
-			// determine which of those files is the one we originally asked for
-			for (int i = 0; i < retrievedNamespaces.size(); i++) {
-				ImportInfo nsInfo = new ImportInfo((Namespace) retrievedNamespaces.get(i));
-				String xsdFilename = directory + File.separator + nsInfo.getFileName();
-				String targetNamespace = extractTargetNamespace(xsdFilename);
-				Namespace requestedNs = new Namespace(uri);
-				Namespace targetNs = new Namespace(targetNamespace);
-				if (requestedNs.getNamespace().equals(targetNs.getNamespace())) {
-					cachedFilename = xsdFilename;
-					break;
-				}
-			}
-		} catch (MobiusException ex) {
-			ex.printStackTrace();
-			PortalUtils.showErrorMessage("Could not retrieve schema from GME!  Please check the GME URL and make sure that you have the appropriate credentials!");
+	private void copySchema(String schemaName, String outputDir) throws FileNotFoundException, IOException {
+		InputStream schemaStream =  getClass().getResourceAsStream(".." + File.separator + "schema" + File.separator + schemaName);
+		FileOutputStream saveSchema = new FileOutputStream(outputDir + File.separator + schemaName);
+		byte[] buffer = new byte[512];
+		int length = -1;
+		while ((length = schemaStream.read(buffer)) != -1) {
+			saveSchema.write(buffer, 0, length);
 		}
-		return cachedFilename;
-	}
-	
-	
-	private String extractTargetNamespace(String filename) throws Exception {
-		String fileContents = Utils.fileToStringBuffer(new File(filename)).toString();
-		ByteArrayInputStream stream = new ByteArrayInputStream(fileContents.getBytes());
-		SAXBuilder builder = new SAXBuilder(false);
-		Document doc = builder.build(stream);
-		stream.close();
-		return doc.getRootElement().getAttributeValue("targetNamespace");
+		saveSchema.close();
+		schemaStream.close();
 	}
 }

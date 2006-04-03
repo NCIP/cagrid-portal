@@ -262,9 +262,15 @@
 	<target name="buildExtension" description="Builds and packages the introduce extension" depends="clean, jarStubs, jarExtension">
 		<mkdir dir="${extension.out.dir}"/>
 		<mkdir dir="${extension.out.dir}/lib"/>
+		<mkdir dir="${extension.out.dir}/schema"/>
 		<copy file="${extension.description.file}" todir="${extension.out.dir}"/>
 		<copy file="${stubs.jar.file}" todir="${extension.out.dir}/lib"/>
 		<copy file="${extension.jar.file}" todir="${extension.out.dir}/lib"/>
+		<copy toDir="${extension.out.dir}/schema">
+            <fileset dir="schema/Data" casesensitive="yes">
+                <include name="**/*.xsd" />
+            </fileset>
+        </copy>
 		<zip destfile="${extension.base.dir}/DataServiceExtension.zip">
 			<fileset dir="${extension.base.dir}">
 			    <include name="**/*"/>
