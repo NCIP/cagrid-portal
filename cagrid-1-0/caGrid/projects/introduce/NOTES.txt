@@ -20,6 +20,21 @@ need a way to generate XSD and beanmappers for existing object models that want 
 
 Need to add more complex tests to the system test for adding complex methods with faults etc.
 
+==========
+(Scott) sync serializer/deserializer
+
+	SchemaElement needs to have location and type always and have a choice between:
+	complex type with nothing
+	and one with className serializer and deserializer
+	
+	
+	can be used to build:
+	<typeMapping qname="(from Namespace namespace, and SchemaElement type)"
+	languageSpecificType="java:(from Namespace packageName+.+SchemaElement className)"
+	serializer="(from SchemaElement serializer)"
+	deserializer="(from SchemaElement deserializer)" encodingStyle=""/>
+==========
+
 secure message privacy does not work (STEVE)
 
 support for open saml callouts and everything that globus supports (STEVE)
