@@ -82,6 +82,11 @@
   <copy file="${dist}/${bpel.archive}" todir="${bpr.dest}"/>
 </target>
 
+<target name="clean">
+    <delete file="${dist}/${bpel.archive}"/>
+    <delete file="${bpr.dest}/${bpel.archive}"/>
+</target>
+
 <target name="runClient" depends="jar">
     <java fork="yes" classname="gov.nci.nih.cabig.annualdemo.client.TestClient">
         <classpath>
