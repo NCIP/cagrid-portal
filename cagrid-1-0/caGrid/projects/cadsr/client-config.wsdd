@@ -118,22 +118,22 @@
   
  <typeMapping qname="uml:Project"
   xmlns:uml="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"
-  languageSpecificType="java:gov.nih.nci.cadsr.umlproject.domain.ws.Project"
+  languageSpecificType="java:gov.nih.nci.cadsr.umlproject.domain.Project"
   serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory"
   deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" encodingStyle=""/>
  <typeMapping qname="uml:UMLPackageMetadata"
   xmlns:uml="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"
-  languageSpecificType="java:gov.nih.nci.cadsr.umlproject.domain.ws.UMLPackageMetadata"
+  languageSpecificType="java:gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata"
   serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory"
   deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" encodingStyle=""/>
  <typeMapping qname="uml:UMLClassMetadata"
-  xmlns:uml="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain.ws"
-  languageSpecificType="java:gov.nih.nci.cadsr.umlproject.domain.ws.UMLClassMetadata"
+  xmlns:uml="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"
+  languageSpecificType="java:gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata"
   serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory"
   deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" encodingStyle=""/>
  <typeMapping qname="uml:UMLAttributeMetadata"
-  xmlns:uml="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain.ws"
-  languageSpecificType="java:gov.nih.nci.cadsr.umlproject.domain.ws.UMLAttributeMetadata"
+  xmlns:uml="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"
+  languageSpecificType="java:gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata"
   serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory"
   deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" encodingStyle=""/>
 </deployment>

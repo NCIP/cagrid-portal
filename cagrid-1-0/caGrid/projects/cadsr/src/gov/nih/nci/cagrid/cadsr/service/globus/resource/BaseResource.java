@@ -37,7 +37,6 @@ import commonj.timers.Timer;
 
 import gov.nih.nci.cagrid.common.Utils;
 
-
 public class BaseResource implements Resource, ResourceProperties, ResourceLifetime, ResourceIdentifier {
 
 	static final Log logger = LogFactory.getLog(BaseResource.class);
@@ -49,17 +48,19 @@ public class BaseResource implements Resource, ResourceProperties, ResourceLifet
 	private ResourcePropertySet propSet;
 
 	private Calendar terminationTime;
-
-	// this can be used to cancel the registration renewal
+	
+	//this can be used to cancel the registration renewal
 	private Timer registrationTimer;
 
 	private MetadataConfiguration configuration;
+	
+	private URL baseURL;
 
-	// Define the metadata resource properties
+	//Define the metadata resource properties
 	private ResourceProperty commonServiceMetadataRP;
 	private gov.nih.nci.cagrid.metadata.common.CommonServiceMetadataType commonServiceMetadataMD;
+	
 
-	private URL baseURL;
 
 
 	// initializes the resource
@@ -79,16 +80,19 @@ public class BaseResource implements Resource, ResourceProperties, ResourceLifet
 
 		// this loads the metadata from XML files
 		populateMetadata();
-
-		// now add the metadata as resource properties //init the rp
+		
+		// now add the metadata as resource properties		//init the rp
 		this.commonServiceMetadataRP = new SimpleResourceProperty(ResourceConstants.COMMONSERVICEMETADATA_MD_RP);
-		// add the value to the rp
+		//add the value to the rp
 		this.commonServiceMetadataRP.add(this.commonServiceMetadataMD);
-		// add the rp to the prop set
+		//add the rp to the prop set
 		this.propSet.add(this.commonServiceMetadataRP);
+	
+
 
 		// register the service to the index sevice
 		refreshRegistration(true);
+
 	}
 
 
@@ -200,25 +204,27 @@ public class BaseResource implements Resource, ResourceProperties, ResourceLifet
 	}
 
 
+
 	private void populateMetadata() {
-
+	
 		loadCommonServiceMetadataFromFile();
-
+	
 	}
 
 
+		
 	private void loadCommonServiceMetadataFromFile() {
 		try {
 			File dataFile = new File(ContainerConfig.getBaseDirectory() + File.separator
-				+ getConfiguration().getCommonServiceMetadataFile());
-			this.commonServiceMetadataMD = (gov.nih.nci.cagrid.metadata.common.CommonServiceMetadataType) Utils
-				.deserializeDocument(dataFile.getAbsolutePath(),
-					gov.nih.nci.cagrid.metadata.common.CommonServiceMetadataType.class);
+					+ getConfiguration().getCommonServiceMetadataFile());
+			this.commonServiceMetadataMD = (gov.nih.nci.cagrid.metadata.common.CommonServiceMetadataType) Utils.deserializeDocument(dataFile.getAbsolutePath(),
+				gov.nih.nci.cagrid.metadata.common.CommonServiceMetadataType.class);
 		} catch (Exception e) {
 			logger.error("ERROR: problem populating metadata from file: " + e.getMessage(), e);
 		}
-	}
-
+	}		
+	
+		
 
 	public MetadataConfiguration getConfiguration() {
 		if (this.configuration != null) {

@@ -1,8 +1,8 @@
 package gov.nih.nci.cagrid.cadsr.portal;
 
-import gov.nih.nci.cadsr.umlproject.domain.ws.Project;
-import gov.nih.nci.cadsr.umlproject.domain.ws.UMLClassMetadata;
-import gov.nih.nci.cadsr.umlproject.domain.ws.UMLPackageMetadata;
+import gov.nih.nci.cadsr.umlproject.domain.Project;
+import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
+import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
 import gov.nih.nci.cagrid.cadsr.common.CaDSRServiceI;
 

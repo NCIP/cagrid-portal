@@ -3,11 +3,16 @@ need to add more context to methods for proper unambiguity
 
 make introduce depend on this
 
-until there is a public 3.1 server, this uses nci internal ones with a localhost sshtunnel
-
-extract property for cacore service to contact
-
 caching using resources?
+
+
+
+==================================================
+
+
+(DONE)until there is a public 3.1 server, this uses nci internal ones with a localhost sshtunnel
+
+(DONE) extract property for cacore service to contact
 
 (DONE) handle all exceptions
 

@@ -5,7 +5,7 @@
    <ns2:SchemaElement type="integer" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="boolean" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./3.0_gov.nih.nci.cadsr.umlproject.domain.xsd" namespace="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" packageName="gov.nih.nci.cadsr.umlproject.domain.ws" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./3.0_gov.nih.nci.cadsr.umlproject.domain.xsd" namespace="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" packageName="gov.nih.nci.cadsr.umlproject.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement className="Project" type="Project" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="SubProject" type="SubProject" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="UMLPackageMetadata" type="UMLPackageMetadata" xsi:type="ns2:SchemaElementType"/>

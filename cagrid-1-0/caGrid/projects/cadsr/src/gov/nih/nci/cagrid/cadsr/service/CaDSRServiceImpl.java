@@ -1,11 +1,11 @@
 package gov.nih.nci.cagrid.cadsr.service;
 
-import gov.nih.nci.cadsr.domain.ws.ClassificationScheme;
-import gov.nih.nci.cadsr.domain.ws.Context;
-import gov.nih.nci.cadsr.umlproject.domain.ws.Project;
-import gov.nih.nci.cadsr.umlproject.domain.ws.UMLAttributeMetadata;
-import gov.nih.nci.cadsr.umlproject.domain.ws.UMLClassMetadata;
-import gov.nih.nci.cadsr.umlproject.domain.ws.UMLPackageMetadata;
+import gov.nih.nci.cadsr.domain.ClassificationScheme;
+import gov.nih.nci.cadsr.domain.Context;
+import gov.nih.nci.cadsr.umlproject.domain.Project;
+import gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata;
+import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
+import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.common.CaDSRServiceI;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
@@ -37,7 +37,7 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 	}
 
 
-	public gov.nih.nci.cadsr.umlproject.domain.ws.Project[] findAllProjects() throws RemoteException {
+	public gov.nih.nci.cadsr.umlproject.domain.Project[] findAllProjects() throws RemoteException {
 		try {
 			ApplicationService appService = getApplicationService();
 			LOG.debug("Using basic search. Retrieving allprojects");
@@ -60,15 +60,14 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 				throw new RemoteException(e.getMessage(), e);
 			}
 
-		} catch (RuntimeException e2) {
-			LOG.error("Exception while searching.", e2);
-			throw new RemoteException(e2.getMessage(), e2);
+		} catch (Exception e) {
+			LOG.error("Exception while searching.", e);
+			throw new RemoteException(e.getMessage(), e);
 		}
 	}
 
 
-	public gov.nih.nci.cadsr.umlproject.domain.ws.Project[] findProjects(java.lang.String context)
-		throws RemoteException {
+	public gov.nih.nci.cadsr.umlproject.domain.Project[] findProjects(java.lang.String context) throws RemoteException {
 		try {
 			ApplicationService appService = getApplicationService();
 			LOG.debug("Using basic search. Retrieving all projects under context:" + context);
@@ -97,15 +96,15 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 				throw new RemoteException(e.getMessage(), e);
 			}
 
-		} catch (RuntimeException e2) {
-			LOG.error("Exception while searching.", e2);
-			throw new RemoteException(e2.getMessage(), e2);
+		} catch (Exception e) {
+			LOG.error("Exception while searching.", e);
+			throw new RemoteException(e.getMessage(), e);
 		}
 	}
 
 
-	public gov.nih.nci.cadsr.umlproject.domain.ws.UMLPackageMetadata[] findPackagesInProject(
-		gov.nih.nci.cadsr.umlproject.domain.ws.Project project) throws RemoteException {
+	public gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata[] findPackagesInProject(
+		gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException {
 		try {
 			ApplicationService appService = getApplicationService();
 			LOG.debug("Using basic search. Retrieving all packages under project:" + project.getShortName());
@@ -129,15 +128,15 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 				throw new RemoteException(e.getMessage(), e);
 			}
 
-		} catch (RuntimeException e2) {
-			LOG.error("Exception while searching.", e2);
-			throw new RemoteException(e2.getMessage(), e2);
+		} catch (Exception e) {
+			LOG.error("Exception while searching.", e);
+			throw new RemoteException(e.getMessage(), e);
 		}
 	}
 
 
-	public gov.nih.nci.cadsr.umlproject.domain.ws.UMLClassMetadata[] findClassesInProject(
-		gov.nih.nci.cadsr.umlproject.domain.ws.Project project) throws RemoteException {
+	public gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] findClassesInProject(
+		gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException {
 		try {
 			ApplicationService appService = getApplicationService();
 			LOG.debug("Using basic search. Retrieving all classes under project:" + project.getShortName());
@@ -161,15 +160,15 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 				throw new RemoteException(e.getMessage(), e);
 			}
 
-		} catch (RuntimeException e2) {
-			LOG.error("Exception while searching.", e2);
-			throw new RemoteException(e2.getMessage(), e2);
+		} catch (Exception e) {
+			LOG.error("Exception while searching.", e);
+			throw new RemoteException(e.getMessage(), e);
 		}
 	}
 
 
-	public gov.nih.nci.cadsr.umlproject.domain.ws.UMLClassMetadata[] findClassesInPackage(
-		gov.nih.nci.cadsr.umlproject.domain.ws.UMLPackageMetadata pkg) throws RemoteException {
+	public gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] findClassesInPackage(
+		gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata pkg) throws RemoteException {
 		try {
 			ApplicationService appService = getApplicationService();
 			LOG.debug("Using basic search. Retrieving all classes under package:" + pkg.getName());
@@ -193,15 +192,15 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 				throw new RemoteException(e.getMessage(), e);
 			}
 
-		} catch (RuntimeException e2) {
-			LOG.error("Exception while searching.", e2);
-			throw new RemoteException(e2.getMessage(), e2);
+		} catch (Exception e) {
+			LOG.error("Exception while searching.", e);
+			throw new RemoteException(e.getMessage(), e);
 		}
 	}
 
 
-	public gov.nih.nci.cadsr.umlproject.domain.ws.UMLAttributeMetadata[] findAttributesInClass(
-		gov.nih.nci.cadsr.umlproject.domain.ws.UMLClassMetadata clazz) throws RemoteException {
+	public gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata[] findAttributesInClass(
+		gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata clazz) throws RemoteException {
 		try {
 			ApplicationService appService = getApplicationService();
 			LOG.debug("Using basic search. Retrieving all attributes under class:" + clazz.getName());
@@ -225,14 +224,14 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 				throw new RemoteException(e.getMessage(), e);
 			}
 
-		} catch (RuntimeException e2) {
-			LOG.error("Exception while searching.", e2);
-			throw new RemoteException(e2.getMessage(), e2);
+		} catch (Exception e) {
+			LOG.error("Exception while searching.", e);
+			throw new RemoteException(e.getMessage(), e);
 		}
 	}
 
 
-	public java.lang.String generateMetadataExtractForProject(gov.nih.nci.cadsr.umlproject.domain.ws.Project project)
+	public java.lang.String generateMetadataExtractForProject(gov.nih.nci.cadsr.umlproject.domain.Project project)
 		throws RemoteException {
 		// TODO: Implement this autogenerated method
 		throw new RemoteException("Not yet implemented");
@@ -240,26 +239,26 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 
 
 	public java.lang.String generateMetadataExtractForPackages(
-		gov.nih.nci.cadsr.umlproject.domain.ws.UMLPackageMetadata[] packages) throws RemoteException {
+		gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata[] packages) throws RemoteException {
 		// TODO: Implement this autogenerated method
 		throw new RemoteException("Not yet implemented");
 	}
 
 
 	public java.lang.String generateMetadataExtractForClasses(
-		gov.nih.nci.cadsr.umlproject.domain.ws.UMLClassMetadata[] classes) throws RemoteException {
+		gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] classes) throws RemoteException {
 		// TODO: Implement this autogenerated method
 		throw new RemoteException("Not yet implemented");
 	}
 
 
-	private ApplicationService getApplicationService() {
+	private ApplicationService getApplicationService() throws ConfigurationException {
 		String serviceURL = getConfiguration().getCaCOREServiceURL();
 		return ApplicationService.getRemoteInstance(serviceURL);
 	}
 
 
-	public CaDSRConfiguration getConfiguration() {
+	public CaDSRConfiguration getConfiguration() throws ConfigurationException{
 		if (this.configuration != null) {
 			return this.configuration;
 		}
@@ -274,6 +273,7 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 			this.configuration = (CaDSRConfiguration) initialContext.lookup(jndiName);
 		} catch (Exception e) {
 			LOG.error("Error when performing JNDI lookup for " + jndiName + ": " + e);
+			throw new ConfigurationException("Unable to instantiate service configuration.",e);
 		}
 
 		return this.configuration;
