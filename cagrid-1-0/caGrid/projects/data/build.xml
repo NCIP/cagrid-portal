@@ -272,6 +272,14 @@
                 <include name="**/*.xsd" />
             </fileset>
         </copy>
+		<copy toDir="${extension.out.dir}/lib">
+			<fileset dir="${lib.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${ext.lib.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+		</copy>
 		<zip destfile="${extension.base.dir}/DataServiceExtension.zip">
 			<fileset dir="${extension.base.dir}">
 			    <include name="**/*"/>

@@ -15,11 +15,13 @@ import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 
-import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileFilter;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -42,12 +44,9 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 			System.out.println("Adding data service components to template");
 			makeDataService(serviceDescription, serviceProperties);
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			throw new CreationExtensionException("Error adding data service components to template!", ex);
 		}
-		// at this point, we REALLY need the WSDL rebuilt, but can't call
-		// the SyncTools to get it done because other parts of ther service
-		// aren't quite built yet.  I think this post-create stuff
-		// should be done really POST creation...
 	}
 	
 	
@@ -57,6 +56,8 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		System.out.println("Copying schemas to " + schemaDir);
 		copySchema(DataServiceConstants.CQL_QUERY_SCHEMA, schemaDir);
 		copySchema(DataServiceConstants.CQL_RESULT_SET_SCHEMA, schemaDir);
+		// copy libraries for data services into the new DS's lib directory
+		copyLibraries(getServiceLibDir(props));
 		// namespaces
 		System.out.println("Modifying namespace definitions");
 		NamespacesType namespaces = description.getNamespaces();
@@ -113,25 +114,56 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 	}
 	
 	
-	private void copySchema(String schemaName, String outputDir) throws FileNotFoundException, IOException {
+	private String getServiceLibDir(Properties props) {
+		return props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "lib";
+	}
+	
+	
+	private void copySchema(String schemaName, String outputDir) throws Exception {
 		File schemaFile = new File(getExtensionDirectory() + File.separator + "schema" + File.separator + schemaName);
 		System.out.println("Loading schema from " + schemaFile.getAbsolutePath());
-		File outputDirFile = new File(outputDir);
-		System.out.println("Saving schema to " + outputDirFile.getAbsolutePath() + File.separator + schemaName);
-		BufferedInputStream schemaStream =  new BufferedInputStream(new FileInputStream(schemaFile));
-		FileOutputStream saveSchema = new FileOutputStream(outputDir + File.separator + schemaName);
-		byte[] buffer = new byte[512];
-		int length = -1;
-		while ((length = schemaStream.read(buffer)) != -1) {
-			saveSchema.write(buffer, 0, length);
-		}
-		saveSchema.flush();
-		saveSchema.close();
-		schemaStream.close();
+		File outputFile = new File(outputDir + File.separator + schemaName);
+		System.out.println("Saving schema to " + outputFile.getAbsolutePath());
+		copyFiles(schemaFile, outputFile);
 	}
 	
 	
 	private String getExtensionDirectory() {
 		return ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data";
+	}
+	
+	
+	private void copyLibraries(String toDir) throws Exception {
+		File directory = new File(toDir);
+		if (!directory.exists()) {
+			directory.mkdirs();
+		}
+		// from the lib directory
+		File libDir = new File(getExtensionDirectory() + File.separator + "lib");
+		File[] libs = libDir.listFiles(new FileFilter() {
+			public boolean accept(File pathname) {
+				return pathname.getName().toLowerCase().endsWith(".jar");
+			}
+		});
+		if (libs != null) {
+			for (int i = 0; i < libs.length; i++) {
+				File outFile = new File(toDir + File.separator + libs[i].getName());
+				copyFiles(libs[i], outFile);
+			}
+		}
+	}
+	
+	
+	private void copyFiles(File inputFile, File outputFile) throws FileNotFoundException, IOException {
+		BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+		BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
+		char[] buff = new char[1024];
+		int len = -1;
+		while ((len = reader.read(buff)) != -1) {
+			writer.write(buff, 0, len);
+		}
+		reader.close();
+		writer.flush();
+		writer.close();
 	}
 }
