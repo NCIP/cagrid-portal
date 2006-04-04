@@ -45,7 +45,7 @@
 				<component>
 					<title>Discovery Tools</title>
 					<description>Discovery Tools</description>
-					<class>gov.nih.nci.cagrid.introduce.portal.discoverytools.TypesToolsComponent</class>
+					<class>gov.nih.nci.cagrid.introduce.portal.discoverytools.core.TypesToolsComponent</class>
 					<icon>/mobiusIcon.gif</icon>
 				</component>
 			</components>

@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.portal.discoverytools;
+package gov.nih.nci.cagrid.introduce.portal.discoverytools.core;
 
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
