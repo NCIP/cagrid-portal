@@ -54,19 +54,19 @@
 	<resource name="IntroducePortalConf" class="gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf">
 		<introduce-portal-config>
 			<namespaceTypeToolsComponents>
-				<namespaceTypeToolsComponent class="gov.nih.nci.cagrid.introduce.portal.discoverytools.gme.GMEViewer" type="GME">
+				<namespaceTypeToolsComponent class="gov.nih.nci.cagrid.introduce.portal.discoverytools.gme.GMEViewer" type="GME" displayName="Global Model Exchange">
 					<properties>
 						<property key="GME_URL" value="http://dc01.bmi.ohio-state.edu:8080/wsrf/services/cagrid/GlobalModelExchange"></property>
 					</properties>
 				</namespaceTypeToolsComponent>
 			</namespaceTypeToolsComponents>
 			<namespaceTypeDiscoveryComponents>
-				<namespaceTypeDiscoveryComponent class="gov.nih.nci.cagrid.introduce.portal.modification.discovery.gme.GMETypeSelectionComponent" type="GME">
+				<namespaceTypeDiscoveryComponent class="gov.nih.nci.cagrid.introduce.portal.modification.discovery.gme.GMETypeSelectionComponent" type="GME" displayName="Global Model Exchange">
 					<properties>
 						<property key="GME_URL" value="http://dc01.bmi.ohio-state.edu:8080/wsrf/services/cagrid/GlobalModelExchange"></property>
 					</properties>
 				</namespaceTypeDiscoveryComponent>
-				<namespaceTypeDiscoveryComponent class="gov.nih.nci.cagrid.introduce.portal.modification.discovery.files.FileTypesSelectionComponent" type="FILE"/>
+				<namespaceTypeDiscoveryComponent class="gov.nih.nci.cagrid.introduce.portal.modification.discovery.files.FileTypesSelectionComponent" type="FILE" displayName="File System"/>
 			</namespaceTypeDiscoveryComponents>
 		</introduce-portal-config>
 	</resource>

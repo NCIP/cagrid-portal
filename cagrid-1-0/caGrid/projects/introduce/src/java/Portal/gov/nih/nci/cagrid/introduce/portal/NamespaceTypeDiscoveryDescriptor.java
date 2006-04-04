@@ -13,6 +13,7 @@ public class NamespaceTypeDiscoveryDescriptor {
 	
 	private String classname;
 	private String type;
+	private String displayName;
 	
 	private Properties properties;
 	
@@ -20,6 +21,7 @@ public class NamespaceTypeDiscoveryDescriptor {
 		properties = new Properties();
 		classname = el.getAttributeValue("class");
 		type = el.getAttributeValue("type");
+		displayName = el.getAttributeValue("displayName");
 		Element propertiesEl = el.getChild(PROPERTIES, el.getNamespace());
 		if (propertiesEl != null) {
 			List propertyElArr = propertiesEl.getChildren(PROPERTY,el.getNamespace());
@@ -48,6 +50,10 @@ public class NamespaceTypeDiscoveryDescriptor {
 		Class c = Class.forName(getClassname());
 		Object obj = c.newInstance();
 		return (NamespaceTypeDiscoveryComponent)obj;
+	}
+
+	public String getDisplayName() {
+		return displayName;
 	}
 	
 	

@@ -1604,7 +1604,7 @@ public class ModificationViewer extends GridPortalComponent {
 				for (int i = 0; i < discoveryTypes.size(); i++) {
 					NamespaceTypeDiscoveryDescriptor ntdd = (NamespaceTypeDiscoveryDescriptor) discoveryTypes.get(i);
 					try {
-						discoveryTabbedPane.addTab(ntdd.getType(), ntdd.getNamespaceTypeDiscoveryComponent());
+						discoveryTabbedPane.addTab(ntdd.getDisplayName(), ntdd.getNamespaceTypeDiscoveryComponent());
 					} catch (Exception e) {
 						JOptionPane.showMessageDialog(ModificationViewer.this, "Error loading discovery type: "
 							+ ntdd.getType());

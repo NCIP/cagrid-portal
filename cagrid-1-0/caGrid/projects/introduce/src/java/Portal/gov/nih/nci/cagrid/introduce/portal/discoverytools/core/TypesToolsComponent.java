@@ -69,7 +69,7 @@ public class TypesToolsComponent extends GridPortalComponent {
 				for(int i = 0; i < tools.size(); i++){
 					NamespaceTypeToolDescriptor desc = (NamespaceTypeToolDescriptor)tools.get(i);
 					try {
-						contentTabbedPane.addTab(desc.getType(),desc.getNamespaceTypeToolComponent());
+						contentTabbedPane.addTab(desc.getDisplayName(),desc.getNamespaceTypeToolComponent());
 					} catch (Exception e) {
 						JOptionPane.showMessageDialog(TypesToolsComponent.this,"Could not load types tool: " + desc.getType());
 					}

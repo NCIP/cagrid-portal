@@ -15,6 +15,7 @@ public class NamespaceTypeToolDescriptor {
 	
 	private String classname;
 	private String type;
+	private String displayName;
 	
 	private Properties properties;
 	
@@ -22,6 +23,7 @@ public class NamespaceTypeToolDescriptor {
 		properties = new Properties();
 		classname = el.getAttributeValue("class");
 		type = el.getAttributeValue("type");
+		displayName = el.getAttributeValue("displayName");
 		Element propertiesEl = el.getChild(PROPERTIES, el.getNamespace());
 		if (propertiesEl != null) {
 			List propertyElArr = propertiesEl.getChildren(PROPERTY,el.getNamespace());
@@ -50,6 +52,10 @@ public class NamespaceTypeToolDescriptor {
 		Class c = Class.forName(getClassname());
 		Object obj = c.newInstance();
 		return (NamespaceTypeToolsComponent)obj;
+	}
+
+	public String getDisplayName() {
+		return displayName;
 	}
 	
 	
