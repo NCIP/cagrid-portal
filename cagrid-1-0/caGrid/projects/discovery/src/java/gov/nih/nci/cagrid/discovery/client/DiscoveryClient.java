@@ -12,10 +12,8 @@ import org.apache.axis.message.MessageElement;
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI.MalformedURIException;
-import org.apache.axis.utils.XMLUtils;
 import org.globus.wsrf.WSRFConstants;
 import org.globus.wsrf.encoding.ObjectDeserializer;
-import org.w3c.dom.Element;
 
 
 public class DiscoveryClient {
