@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import org.apache.axis.utils.JavaUtils;
 import org.apache.ws.jaxme.js.JavaMethod;
 import org.apache.ws.jaxme.js.Parameter;
 
@@ -532,7 +533,7 @@ public class SyncSource {
 					.getQName());
 				String paramName = method.getInputs().getInput(j).getName();
 				String containerClassName = method.getInputs().getInput(j).getContainerClassName();
-				String containerMethodCall = TemplateUtils.upperCaseFirstCharacter(inNamespace.getType().getType());
+				String containerMethodCall = TemplateUtils.upperCaseFirstCharacter(JavaUtils.xmlNameToJava(inNamespace.getType().getType()));
 				methodString += lineStart;
 				if (inNamespace.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
 					methodString += "params.set" + TemplateUtils.upperCaseFirstCharacter(paramName) + "(" + paramName

@@ -38,6 +38,7 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.xml.namespace.QName;
 
+import org.apache.axis.utils.JavaUtils;
 import org.projectmobius.common.GridServiceResolver;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.Namespace;
@@ -349,6 +350,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 			doneButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					// First process the inputs
+					boolean valid = true;
+					String message = "";
+
 					try {
 						method.setName(getNameField().getText());
 
@@ -362,6 +366,12 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 						for (int i = 0; i < getInputParamTable().getRowCount(); i++) {
 							MethodTypeInputsInput input = getInputParamTable().getRowData(i);
+							// validate the input param
+							if (!JavaUtils.isJavaId(input.getName())) {
+								valid = false;
+								message = "Parameter name must be a valid java identifier: Method: " + method.getName()
+									+ " param: " + input.getName();
+							}
 							inputsA[i] = input;
 						}
 
@@ -381,25 +391,22 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 						// now process the output
 						MethodTypeOutput output = getOutputTypeTable().getRowData(0);
-						// if (output.getNamespace() != null &&
-						// !output.getNamespace().equals("")) {
-						// // cache the needed schemas in the schema dir
-						// cacheSchema(schemaDir, output.getNamespace());
-						// }
-
 						method.setOutput(output);
 
 					} catch (Exception ex) {
 						PortalUtils.showErrorMessage(ex);
 					}
-					dispose();
+					if (!valid) {
+						JOptionPane.showMessageDialog(MethodViewer.this, message);
+					} else {
+						dispose();
+					}
 				}
 
 			});
 		}
 		return doneButton;
 	}
-
 
 
 	/**
@@ -421,10 +428,10 @@ public class MethodViewer extends GridPortalBaseFrame {
 						MethodTypeInputsInput input = new MethodTypeInputsInput();
 						input.setQName(new QName(nt.getNamespace(), st.getType()));
 						input.setIsArray(false);
-						input.setName("param" + getInputParamTable().getRowCount());
+						input.setName(JavaUtils.xmlNameToJava(st.getType()) + getInputParamTable().getRowCount());
 						getInputParamTable().addRow(input);
 					} else {
-						JOptionPane.showMessageDialog(MethodViewer.this,"Please select a type to add");
+						JOptionPane.showMessageDialog(MethodViewer.this, "Please select a type to add");
 					}
 				}
 			});
@@ -869,7 +876,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 							MethodTypeInputsInput input = new MethodTypeInputsInput();
 							input.setQName(new QName(nt.getNamespace(), st.getType()));
 							input.setIsArray(false);
-							input.setName("param" + getInputParamTable().getRowCount());
+							input.setName(JavaUtils.xmlNameToJava(st.getType()) + getInputParamTable().getRowCount());
 							getInputParamTable().addRow(input);
 						}
 					}
