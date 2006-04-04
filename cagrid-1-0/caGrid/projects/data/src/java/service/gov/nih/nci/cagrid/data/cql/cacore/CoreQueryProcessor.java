@@ -108,7 +108,7 @@ public class CoreQueryProcessor implements CQLQueryProcessor {
 			if (isSetter(currentMethod)) {
 				String fieldSet = getSetterField(currentMethod);
 				if (fieldSet.equals(name)) {
-					String[] args = {predicate + value};
+					Object[] args = {predicate + value};
 					currentMethod.invoke(obj, args);
 					break;
 				}
