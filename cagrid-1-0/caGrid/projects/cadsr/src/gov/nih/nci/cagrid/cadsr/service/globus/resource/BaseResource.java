@@ -1,6 +1,8 @@
 package gov.nih.nci.cagrid.cadsr.service.globus.resource;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Calendar;
 
 import javax.naming.Context;
@@ -22,6 +24,7 @@ import org.globus.wsrf.ResourceProperties;
 import org.globus.wsrf.ResourceProperty;
 import org.globus.wsrf.ResourcePropertySet;
 import org.globus.wsrf.config.ContainerConfig;
+import org.globus.wsrf.container.ServiceHost;
 import org.globus.wsrf.impl.ReflectionResourceProperty;
 import org.globus.wsrf.impl.SimpleResourceKey;
 import org.globus.wsrf.impl.SimpleResourceProperty;
@@ -56,6 +59,8 @@ public class BaseResource implements Resource, ResourceProperties, ResourceLifet
 	private ResourceProperty commonServiceMetadataRP;
 	private gov.nih.nci.cagrid.metadata.common.CommonServiceMetadataType commonServiceMetadataMD;
 
+	private URL baseURL;
+
 
 	// initializes the resource
 	public void initialize() throws Exception {
@@ -83,16 +88,63 @@ public class BaseResource implements Resource, ResourceProperties, ResourceLifet
 		this.propSet.add(this.commonServiceMetadataRP);
 
 		// register the service to the index sevice
-		performRegistration();
-
+		refreshRegistration(true);
 	}
 
 
-	private void performRegistration() {
+	/**
+	 * This checks the configuration file, and attempts to register to the
+	 * IndexService if shouldPerformRegistration==true. It will first read the
+	 * current container URL, and compare it against the saved value. If the
+	 * value exists, it will only try to reregister if the values are different.
+	 * This exists to handle fixing the registration URL which may be incorrect
+	 * during initialization, then later corrected during invocation. The
+	 * existence of baseURL does not imply successful registration (a non-null
+	 * registrationTimer does). We will only attempt to reregister when the URL
+	 * changes (to prevent attempting registration with each invocation if there
+	 * is a configuration problem).
+	 */
+	public void refreshRegistration(boolean forceRefresh) {
 		if (getConfiguration().shouldPerformRegistration()) {
-			logger.info("Attempting registration.");
-			ResourceKey key = new SimpleResourceKey(ResourceConstants.RESOURCE_KEY, this.id);
 
+			URL currentContainerURL = null;
+			try {
+				currentContainerURL = ServiceHost.getBaseURL();
+			} catch (IOException e) {
+				logger.error("Unable to determine container's URL!  Skipping registration.");
+				return;
+			}
+
+			if (this.baseURL != null) {
+				// we've tried to register before (or we are being forced to
+				// retry)
+				// do a string comparison as we don't want to do DNS lookups
+				// for comparison
+				if (forceRefresh || !this.baseURL.toExternalForm().equals(currentContainerURL.toExternalForm())) {
+					// we've tried to register before, and we have a different
+					// URL now.. so cancel the old registration (if it exists),
+					// and try to redo it.
+					if (registrationTimer != null) {
+						registrationTimer.cancel();
+					}
+
+					// save the new value
+					this.baseURL = currentContainerURL;
+					logger.info("Refreshing existing registration [container URL=" + this.baseURL + "].");
+				} else {
+					// URLs are the same (and we weren't forced), so don't try
+					// to reregister
+					return;
+				}
+
+			} else {
+				// we've never saved the baseURL (and therefore haven't tried to
+				// register)
+				this.baseURL = currentContainerURL;
+				logger.info("Attempting registration for the first time[container URL=" + this.baseURL + "].");
+			}
+
+			ResourceKey key = new SimpleResourceKey(ResourceConstants.RESOURCE_KEY, this.id);
 			// register with the index service
 			ResourceContext ctx;
 			try {
@@ -110,7 +162,11 @@ public class BaseResource implements Resource, ResourceProperties, ResourceLifet
 
 			EndpointReferenceType epr;
 			try {
-				epr = AddressingUtils.createEndpointReference(ctx, key);
+				// since this is a singleton, pretty sure we dont't want to
+				// register the key (allows multiple instances of same service
+				// on successive restarts)
+				// epr = AddressingUtils.createEndpointReference(ctx, key);
+				epr = AddressingUtils.createEndpointReference(ctx, null);
 			} catch (Exception e) {
 				logger.error("Could not form EPR: " + e);
 				return;
