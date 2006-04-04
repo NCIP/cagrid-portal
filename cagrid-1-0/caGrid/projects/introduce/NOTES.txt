@@ -22,7 +22,9 @@ need a way to generate XSD and beanmappers for existing object models that want 
 
 Need to add more complex tests to the system test for adding complex methods with faults etc.
 
-Security configuration (STEVE)
+secure message privacy does not work (STEVE)
+
+support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
 
