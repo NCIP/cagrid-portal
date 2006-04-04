@@ -10,8 +10,6 @@ type browser issues:
 
 you should be able to open up an empty introduce.xml document (with no elements), currently null pointers happen in methods and types
 
-Shannon, did your refactor break the functionality of synchronizeMetadataFramework in the MetadataListType?
-
 when modifying a service, conneciton to GME needs to happen in the background, and fail gracefully
 
 Need to fix commontools to read some preference to set the rule to use for namespace mapping, right now its hardcoded as below:
@@ -27,6 +25,7 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+(DONE) Shannon, did your refactor break the functionality of synchronizeMetadataFramework in the MetadataListType?
 
 (DONE) BaseResource bug that Mike and Steve found.  Make new service with secure conv. and keep the initial
 settings.  Use a proxy created from Dorian in the credentials section.  Stand up globus without security.
