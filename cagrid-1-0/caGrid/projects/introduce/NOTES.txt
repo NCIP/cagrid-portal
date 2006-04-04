@@ -14,11 +14,6 @@ Shannon, did your refactor break the functionality of synchronizeMetadataFramewo
 
 when modifying a service, conneciton to GME needs to happen in the background, and fail gracefully
 
-BaseResource bug that Mike and Steve found.  Make new service with secure conv. and keep the initial
-settings.  Use a proxy created from Dorian in the credentials section.  Stand up globus without security.
---seems the AuthenticationService intercepts the intial call, then rewrites the resourcecontext targetService to be itself... this causes the resourcehome to break
-  --need to see why it does this, and if there is a work around
-
 Need to fix commontools to read some preference to set the rule to use for namespace mapping, right now its hardcoded as below:
 	//TODO: where should this mapperClassname preference be set
 	String mapperClassname = "gov.nih.nci.cagrid.common.CaBIGNames2paceToPackageMapper";
@@ -30,6 +25,12 @@ Need to add more complex tests to the system test for adding complex methods wit
 Security configuration (STEVE)
 
 ============================ D O N E ================================================================
+
+(DONE) BaseResource bug that Mike and Steve found.  Make new service with secure conv. and keep the initial
+settings.  Use a proxy created from Dorian in the credentials section.  Stand up globus without security.
+--seems the AuthenticationService intercepts the intial call, then rewrites the resourcecontext targetService to be itself... this causes the resourcehome to break
+  --need to see why it does this, and if there is a work around
+  
 (DONE) need to put a validator on the param name, it must be java valid......
 
 Need to make better use of org.apache.axis.utils.JavaUtils
