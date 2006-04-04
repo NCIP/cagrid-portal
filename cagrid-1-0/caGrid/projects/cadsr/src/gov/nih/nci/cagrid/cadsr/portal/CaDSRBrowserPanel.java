@@ -130,7 +130,7 @@ public class CaDSRBrowserPanel extends JPanel {
 			Project[] projects = cadsr.findAllProjects();
 			if (projects != null) {
 				for (int i = 0; i < projects.length; i++) {
-					getProjectComboBox().addItem(projects[i]);
+					getProjectComboBox().addItem(new ProjectDisplay(projects[i]));
 				}
 			}
 
@@ -173,11 +173,12 @@ public class CaDSRBrowserPanel extends JPanel {
 						getPackageComboBox().removeAllItems();
 						CaDSRServiceI cadsr = new CaDSRServiceClient(getCadsr().getText());
 						try {
-							UMLPackageMetadata[] metadatas = cadsr.findPackagesInProject((Project) projectComboBox
-								.getSelectedItem());
+							UMLPackageMetadata[] metadatas = cadsr
+								.findPackagesInProject(((ProjectDisplay) projectComboBox.getSelectedItem())
+									.getProject());
 							if (metadatas != null) {
 								for (int i = 0; i < metadatas.length; i++) {
-									getPackageComboBox().addItem(metadatas[i]);
+									getPackageComboBox().addItem(new PackageDisplay(metadatas[i]));
 								}
 							}
 						} catch (RemoteException e1) {
@@ -208,10 +209,11 @@ public class CaDSRBrowserPanel extends JPanel {
 						CaDSRServiceI cadsr = new CaDSRServiceClient(getCadsr().getText());
 						try {
 							UMLClassMetadata[] metadatas = cadsr
-								.findClassesInPackage((UMLPackageMetadata) getPackageComboBox().getSelectedItem());
+								.findClassesInPackage(((PackageDisplay) getPackageComboBox().getSelectedItem())
+									.getPackage());
 							if (metadatas != null) {
 								for (int i = 0; i < metadatas.length; i++) {
-									getClassComboBox().addItem(metadatas[i]);
+									getClassComboBox().addItem(new ClassDisplay(metadatas[i]));
 								}
 							}
 						} catch (RemoteException e1) {
@@ -318,6 +320,84 @@ public class CaDSRBrowserPanel extends JPanel {
 			classComboBox = new JComboBox();
 		}
 		return classComboBox;
+	}
+
+
+	class ProjectDisplay {
+		private Project project;
+
+
+		public ProjectDisplay(Project project) {
+			setProject(project);
+		}
+
+
+		public Project getProject() {
+			return project;
+		}
+
+
+		public void setProject(Project project) {
+			this.project = project;
+		}
+
+
+		public String toString() {
+			return project.getShortName();
+		}
+
+	}
+
+
+	class PackageDisplay {
+		private UMLPackageMetadata pack;
+
+
+		public PackageDisplay(UMLPackageMetadata pack) {
+			setPackage(pack);
+		}
+
+
+		public UMLPackageMetadata getPackage() {
+			return pack;
+		}
+
+
+		public void setPackage(UMLPackageMetadata pack) {
+			this.pack = pack;
+		}
+
+
+		public String toString() {
+			return pack.getName();
+		}
+
+	}
+
+
+	class ClassDisplay {
+		private UMLClassMetadata clazz;
+
+
+		public ClassDisplay(UMLClassMetadata clazz) {
+			setClazz(clazz);
+		}
+
+
+		public UMLClassMetadata getClazz() {
+			return clazz;
+		}
+
+
+		public void setClazz(UMLClassMetadata clazz) {
+			this.clazz = clazz;
+		}
+
+
+		public String toString() {
+			return clazz.getName();
+		}
+
 	}
 
 
