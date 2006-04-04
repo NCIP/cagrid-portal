@@ -44,6 +44,10 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		} catch (Exception ex) {
 			throw new CreationExtensionException("Error adding data service components to template!", ex);
 		}
+		// at this point, we REALLY need the WSDL rebuilt, but can't call
+		// the SyncTools to get it done because other parts of ther service
+		// aren't quite built yet.  I think this post-create stuff
+		// should be done really POST creation...
 	}
 	
 	
