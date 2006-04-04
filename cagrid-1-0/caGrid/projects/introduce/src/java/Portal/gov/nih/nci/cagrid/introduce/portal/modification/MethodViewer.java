@@ -26,6 +26,8 @@ import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -364,9 +366,15 @@ public class MethodViewer extends GridPortalBaseFrame {
 						MethodTypeInputs inputs = new MethodTypeInputs();
 						MethodTypeInputsInput[] inputsA = new MethodTypeInputsInput[getInputParamTable().getRowCount()];
 
+						List usedNames = new ArrayList();
 						for (int i = 0; i < getInputParamTable().getRowCount(); i++) {
 							MethodTypeInputsInput input = getInputParamTable().getRowData(i);
 							// validate the input param
+							if(usedNames.contains(input.getName())){
+								valid = false;
+								message = "Method " + method.getName() + " contains more that one parameter named " + input.getName();
+							}
+							usedNames.add(input.getName());
 							if (!JavaUtils.isJavaId(input.getName())) {
 								valid = false;
 								message = "Parameter name must be a valid java identifier: Method: " + method.getName()
@@ -428,7 +436,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 						MethodTypeInputsInput input = new MethodTypeInputsInput();
 						input.setQName(new QName(nt.getNamespace(), st.getType()));
 						input.setIsArray(false);
-						input.setName(JavaUtils.xmlNameToJava(st.getType()) + getInputParamTable().getRowCount());
+						input.setName(JavaUtils.xmlNameToJava(st.getType()));
 						getInputParamTable().addRow(input);
 					} else {
 						JOptionPane.showMessageDialog(MethodViewer.this, "Please select a type to add");
@@ -876,7 +884,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 							MethodTypeInputsInput input = new MethodTypeInputsInput();
 							input.setQName(new QName(nt.getNamespace(), st.getType()));
 							input.setIsArray(false);
-							input.setName(JavaUtils.xmlNameToJava(st.getType()) + getInputParamTable().getRowCount());
+							input.setName(JavaUtils.xmlNameToJava(st.getType()));
 							getInputParamTable().addRow(input);
 						}
 					}

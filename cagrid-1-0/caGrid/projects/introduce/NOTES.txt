@@ -1,9 +1,5 @@
 To Do:
 
-Need to make better use of org.apache.axis.utils.JavaUtils
- -checking for primatives
- -checking for reserved keywords for things like method and param names
-
 type browser issues:
 -(DONE)you can and shouldn't be able to remove the XML schema schema
 -it shouldn't let you remove schema types that are being used by inputs,outputs,or metadata
@@ -17,8 +13,6 @@ you should be able to open up an empty introduce.xml document (with no elements)
 Shannon, did your refactor break the functionality of synchronizeMetadataFramework in the MetadataListType?
 
 when modifying a service, conneciton to GME needs to happen in the background, and fail gracefully
-
-need to put a validator on the param name, it must be java valid......
 
 BaseResource bug that Mike and Steve found.  Make new service with secure conv. and keep the initial
 settings.  Use a proxy created from Dorian in the credentials section.  Stand up globus without security.
@@ -36,6 +30,12 @@ Need to add more complex tests to the system test for adding complex methods wit
 Security configuration (STEVE)
 
 ============================ D O N E ================================================================
+(DONE) need to put a validator on the param name, it must be java valid......
+
+Need to make better use of org.apache.axis.utils.JavaUtils
+ -(DONE) checking for primatives
+ -(DONE) checking for reserved keywords for things like method and param names
+
 (DONE)probably need to separate out the namespacetopackage mapping definitions from each output/input/metadata as it is now, as its really a service level thing
 	-we need a separate tab to define the mappings; this will probably be needed for custom serialization too
 
