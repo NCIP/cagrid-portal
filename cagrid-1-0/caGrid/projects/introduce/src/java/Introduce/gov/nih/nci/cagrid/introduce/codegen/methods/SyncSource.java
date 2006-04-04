@@ -652,7 +652,7 @@ public class SyncSource {
 						params += "params.get" + TemplateUtils.upperCaseFirstCharacter(paramName) + "()";
 					} else {
 						params += "params.get" + TemplateUtils.upperCaseFirstCharacter(paramName) + "().get"
-							+ TemplateUtils.upperCaseFirstCharacter(inNamespace.getType().getType()) + "()";
+							+ TemplateUtils.upperCaseFirstCharacter(JavaUtils.xmlNameToJava(inNamespace.getType().getType())) + "()";
 					}
 					if (j < method.getInputs().getInput().length - 1) {
 						params += ",";
