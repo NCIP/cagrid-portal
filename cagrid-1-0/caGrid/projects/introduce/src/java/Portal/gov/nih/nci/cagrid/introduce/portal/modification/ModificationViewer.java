@@ -1562,10 +1562,12 @@ public class ModificationViewer extends GridPortalComponent {
 						for (int i = 0; i < metadataArray.length; i++) {
 							MetadataType metadata = metadataTable.getRowData(i);
 							metadataArray[i] = metadata;
-							
 						}
 						
 						MetadataListType serviceMetadataList = new MetadataListType();
+						if(introService.getMetadataList().getSynchronizeMetadataFramework()!=null){
+							serviceMetadataList.setSynchronizeMetadataFramework(introService.getMetadataList().getSynchronizeMetadataFramework());
+						}
 						serviceMetadataList.setMetadata(metadataArray);
 						introService.setMetadataList(serviceMetadataList);
 						introService.setServiceSecurity(securityPanel.getServiceSecurity());
