@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.portal.modification;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
@@ -19,15 +20,14 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.extension.ServiceModificationUIPanel;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
+import gov.nih.nci.cagrid.introduce.extension.ServiceModificationUIPanel;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.NamespaceTypeDiscoveryDescriptor;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
-import gov.nih.nci.cagrid.introduce.portal.modification.discovery.gme.GMETypeSelectionComponent;
 import gov.nih.nci.cagrid.introduce.portal.modification.security.ServiceSecurityPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeConfigurePanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeTreeNode;
@@ -61,15 +61,8 @@ import javax.swing.JTextField;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.xml.namespace.QName;
 
-import org.projectmobius.common.GridServiceResolver;
-import org.projectmobius.common.MobiusException;
-import org.projectmobius.common.Namespace;
-import org.projectmobius.gme.XMLDataModelService;
-import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
-
-import sun.awt.geom.AreaOp.IntOp;
 
 
 /**
@@ -412,7 +405,7 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private JButton getCancel() {
 		if (cancel == null) {
-			cancel = new JButton(IntroduceLookAndFeel.getCloseIcon());
+			cancel = new JButton(PortalLookAndFeel.getCloseIcon());
 			cancel.setText("Cancel");
 			// cancel.setIcon(GumsLookAndFeel.getCloseIcon());
 			cancel.addActionListener(new java.awt.event.ActionListener() {
@@ -494,7 +487,7 @@ public class ModificationViewer extends GridPortalComponent {
 			selectPanel.setLayout(new GridBagLayout());
 			selectPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service Properties",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			selectPanel.add(serviceNameLabel, gridBagConstraints18);
 			selectPanel.add(getServiceName(), gridBagConstraints17);
 			selectPanel.add(packageLabel, gridBagConstraints19);
@@ -550,7 +543,7 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private JButton getAddMethodButton() {
 		if (addMethodButton == null) {
-			addMethodButton = new JButton(IntroduceLookAndFeel.getAddIcon());
+			addMethodButton = new JButton(PortalLookAndFeel.getAddIcon());
 			addMethodButton.setText("Add");
 			addMethodButton.setToolTipText("add new operation");
 			addMethodButton.addActionListener(new java.awt.event.ActionListener() {
@@ -594,7 +587,7 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private JButton getSaveButton() {
 		if (saveButton == null) {
-			saveButton = new JButton(IntroduceLookAndFeel.getSaveIcon());
+			saveButton = new JButton(PortalLookAndFeel.getSaveIcon());
 			saveButton.setText("Save");
 			saveButton.setToolTipText("modify and rebuild service");
 			saveButton.addActionListener(new java.awt.event.ActionListener() {
@@ -702,7 +695,7 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private JButton getRemoveButton() {
 		if (removeButton == null) {
-			removeButton = new JButton(IntroduceLookAndFeel.getRemoveIcon());
+			removeButton = new JButton(PortalLookAndFeel.getRemoveIcon());
 			removeButton.setText("Remove");
 			removeButton.setToolTipText("remove selected operation");
 			removeButton.addActionListener(new java.awt.event.ActionListener() {
