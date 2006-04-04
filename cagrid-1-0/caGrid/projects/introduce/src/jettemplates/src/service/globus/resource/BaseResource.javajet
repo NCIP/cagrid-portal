@@ -226,7 +226,7 @@ public class BaseResource implements Resource, ResourceProperties, ResourceLifet
 
 		String servicePath = ctx.getTargetService();
 
-		String jndiName = Constants.JNDI_SERVICES_BASE_NAME + servicePath + File.separator + "configuration";
+		String jndiName = Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/configuration";
 		logger.debug("Will read configuration from jndi name: " + jndiName);
 		try {
 			Context initialContext = new InitialContext();
