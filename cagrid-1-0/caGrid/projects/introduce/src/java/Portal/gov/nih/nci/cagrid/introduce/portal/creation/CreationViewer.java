@@ -26,7 +26,6 @@ import java.util.Properties;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -49,53 +48,32 @@ import org.projectmobius.portal.PortalResourceManager;
 public class CreationViewer extends GridPortalComponent {
 
 	public static final String ALLOWED_SERVICE_NAME_REGEX = "[A-Z]++[A-Za-z0-9\\_\\$]*";
-
 	public static final String SCHEMA_DIR = "schema";
 
 	private static String DEFAULT_NAME = "HelloWorld";
-
 	private static String DEFAULT_JAVA_PACKAGE = "gov.nih.nci.cagrid";
-
 	private static String DEFAULT_NAMESPACE = "http://cagrid.nci.nih.gov";
 
 	private JPanel inputPanel = null;
-
 	private JPanel mainPanel = null;
-
 	private JPanel buttonPanel = null;
-
 	private JButton createButton = null;
-
 	private JLabel serviceLabel = null;
-
 	private JTextField service = null;
-
 	private JLabel destinationLabel = null;
-
 	private JTextField dir = null;
-
 	private JButton dirButton = null;
-
 	private JLabel packageLabel = null;
-
 	private JTextField servicePackage = null;
-
 	private JLabel namespaceLabel = null;
-
 	private JTextField namespaceDomain = null;
-
 	private JButton closeButton = null;
-
 	private JLabel serviceStyleLabel = null;
-
 	private JComboBox serviceStyleSeletor = null;
-	
+
 	private ExtensionsLoader loader = null;
 
 
-	/**
-	 * This method initializes
-	 */
 	public CreationViewer() {
 		super();
 		loader = new ExtensionsLoader();
@@ -414,20 +392,6 @@ public class CreationViewer extends GridPortalComponent {
 	}
 
 
-	private String promptFile() {
-		JFileChooser chooser = new JFileChooser();
-		chooser.setDialogTitle("Select Attribute File");
-		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
-		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		chooser.setMultiSelectionEnabled(false);
-		int returnVal = chooser.showOpenDialog(this);
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			return chooser.getSelectedFile().getAbsolutePath();
-		}
-		return "";
-	}
-
-
 	/**
 	 * This method initializes closeButton
 	 * 
@@ -458,23 +422,18 @@ public class CreationViewer extends GridPortalComponent {
 		}
 
 		if (doIdeleteResult == JOptionPane.OK_OPTION) {
-			final int finalDoIdeleteResult = doIdeleteResult;
 			BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance().getGridPortal(),
 				"Creating") {
 				public void process() {
 					try {
-						if (finalDoIdeleteResult == JOptionPane.OK_OPTION) {
-							if (dirFile.exists()) {
-								setProgressText("deleting existing directory");
-								boolean deleted = Utils.deleteDir(dirFile);
-								if (!deleted) {
-									JOptionPane.showMessageDialog(CreationViewer.this,
-										"Unable to delete creation directory");
-									return;
-								}
+						if (dirFile.exists()) {
+							setProgressText("deleting existing directory");
+							boolean deleted = Utils.deleteDir(dirFile);
+							if (!deleted) {
+								JOptionPane.showMessageDialog(CreationViewer.this,
+								"Unable to delete creation directory");
+								return;
 							}
-						} else {
-							return;
 						}
 
 						setProgressText("caching directory location");
@@ -518,10 +477,11 @@ public class CreationViewer extends GridPortalComponent {
 						setProgressText("running extension viewers");
 						Properties properties = new Properties();
 						properties.load(new FileInputStream(getDir().getText() + File.separator + IntroduceConstants.INTRODUCE_PROPERTIES_FILE));
-						ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(getDir().getText() + File.separator + IntroduceConstants.INTRODUCE_XML_FILE, ServiceDescription.class);
+						ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(getDir().getText() + File.separator 
+							+ IntroduceConstants.INTRODUCE_XML_FILE, ServiceDescription.class);
 						ServiceInformation info = new ServiceInformation(introService, properties, new File(getDir().getText()));
 						ExtensionTools extTools = new ExtensionTools();
-						if(!serviceExtensions.equals("")){
+						if (!serviceExtensions.equals("")) {
 							JDialog extDialog = extTools.getCreationUIDialog(serviceExtensions, info);
 							extDialog.show();
 						}
