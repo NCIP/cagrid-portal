@@ -71,108 +71,108 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  */
 public class ModificationViewer extends GridPortalComponent {
-
+	
 	private javax.swing.JPanel jContentPane = null;
-
+	
 	private JPanel mainPanel = null;
-
+	
 	private JPanel operationsPanel = null;
-
+	
 	private JPanel buttonPanel = null;
-
+	
 	private JButton cancel = null;
-
+	
 	private JPanel selectPanel = null;
-
+	
 	private MethodsTable methodsTable = null;
-
-	private JScrollPane jScrollPane = null;
-
+	
+	private JScrollPane methodsScrollPane = null;
+	
 	private File methodsDirectory = null;
-
+	
 	private ServiceDescription introService;
-
+	
 	private Properties serviceProperties = null;
-
+	
 	private JButton addMethodButton = null;
-
+	
 	private JButton saveButton = null;
-
+	
 	private JButton removeButton = null;
-
+	
 	private JButton modifyButton = null; // @jve:decl-index=0:
-
+	
 	private JPanel operationsButtonPanel = null;
-
+	
 	private JButton undoButton = null;
-
+	
 	private boolean dirty = false;
-
+	
 	private JTabbedPane contentTabbedPane = null;
-
+	
 	private JPanel metadataPanel = null;
-
+	
 	private JScrollPane metadataScrollPane = null;
-
+	
 	private MetadataTable metadataTable = null;
-
+	
 	private JPanel metadataButtonsPanel = null;
-
+	
 	private JButton addMetadataButton = null;
-
+	
 	private JButton removeMetadataButton = null;
-
+	
 	private ServiceSecurityPanel securityPanel = null;
-
+	
 	private JLabel serviceNameLabel = null;
-
+	
 	private JTextField serviceName = null;
-
+	
 	private JLabel packageLabel = null;
-
+	
 	private JTextField packageName = null;
-
+	
 	private JLabel lastSavedLabel = null;
-
+	
 	private JTextField lastSaved = null;
-
+	
 	private JLabel saveLocationLabel = null;
-
+	
 	private JTextField saveLocation = null;
-
+	
 	private JPanel namespacePanel = null;
-
+	
 	private JPanel discoveryPanel = null;
-
+	
 	private JPanel namespaceConfigurationPanel = null;
-
+	
 	private JPanel discoveryButtonPanel = null;
-
+	
 	private JButton namespaceAddButton = null;
-
+	
 	private JButton namespaceRemoveButton = null;
-
+	
 	private JScrollPane namespaceTableScrollPane = null;
-
+	
 	private NamespacesJTree namespaceJTree = null;
-
+	
 	private JPanel namespaceTypePropertiesPanel = null;
-
+	
 	private NamespaceTypeConfigurePanel namespaceTypeConfigurationPanel = null;
-
+	
 	private SchemaElementTypeConfigurePanel schemaElementTypeConfigurationPanel = null;
-
+	
 	private ServiceInformation info = null;
-
+	
 	private JPanel metadataNamespaceTypesPanel = null;
-
+	
 	private JScrollPane metadataNamespaceScrollPane = null;
-
+	
 	private NamespacesJTree metadataNamespacesJTree = null;
-
+	
 	private JTabbedPane discoveryTabbedPane = null;
-
-
+	
+	
 	/**
 	 * This is the default constructor
 	 */
@@ -183,8 +183,8 @@ public class ModificationViewer extends GridPortalComponent {
 		Thread th = createChooserThread();
 		th.start();
 	}
-
-
+	
+	
 	public ModificationViewer(File methodsDirectory) {
 		super();
 		this.methodsDirectory = methodsDirectory;
@@ -194,10 +194,10 @@ public class ModificationViewer extends GridPortalComponent {
 			// should never get here but in case.....
 			e.printStackTrace();
 		}
-
+		
 	}
-
-
+	
+	
 	private Thread createChooserThread() {
 		Thread th = new Thread() {
 			public void run() {
@@ -228,8 +228,8 @@ public class ModificationViewer extends GridPortalComponent {
 		};
 		return th;
 	}
-
-
+	
+	
 	private void loadServiceProps() {
 		try {
 			serviceProperties = new Properties();
@@ -243,16 +243,16 @@ public class ModificationViewer extends GridPortalComponent {
 			e.printStackTrace();
 		}
 	}
-
-
+	
+	
 	private void chooseService() throws Exception {
 		String dir = ResourceManager.promptDir(this, null);
 		if (dir != null) {
 			this.methodsDirectory = new File(dir);
 		}
 	}
-
-
+	
+	
 	/**
 	 * This method initializes this
 	 * 
@@ -266,10 +266,10 @@ public class ModificationViewer extends GridPortalComponent {
 				|| !introService.getIntroduceVersion().equals(IntroduceConstants.INTRODUCE_VERSION)) {
 				throw new Exception(
 					"Introduce version in project does not match version provided by Introduce Toolkit ( "
-						+ IntroduceConstants.INTRODUCE_VERSION + " ): " + introService.getIntroduceVersion());
+					+ IntroduceConstants.INTRODUCE_VERSION + " ): " + introService.getIntroduceVersion());
 			}
 			loadServiceProps();
-
+			
 			info = new ServiceInformation(introService, serviceProperties, methodsDirectory);
 			this.setSize(500, 400);
 			this.setContentPane(getJContentPane());
@@ -277,8 +277,8 @@ public class ModificationViewer extends GridPortalComponent {
 			this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
 		}
 	}
-
-
+	
+	
 	/**
 	 * This method initializes jContentPane
 	 * 
@@ -292,8 +292,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return jContentPane;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -337,8 +337,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return mainPanel;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -361,13 +361,13 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints4.gridwidth = 2;
 			gridBagConstraints4.gridx = 0;
 			gridBagConstraints4.gridy = 0;
-			operationsPanel.add(getJScrollPane(), gridBagConstraints4);
+			operationsPanel.add(getMethodsScrollPane(), gridBagConstraints4);
 			operationsPanel.add(getMethodsButtonPanel(), gridBagConstraints);
 		}
 		return operationsPanel;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -396,8 +396,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return buttonPanel;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes jButton1
 	 * 
@@ -416,8 +416,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return cancel;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -499,8 +499,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return selectPanel;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes jTable
 	 * 
@@ -520,22 +520,22 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return methodsTable;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes jScrollPane
 	 * 
 	 * @return javax.swing.JScrollPane
 	 */
-	private JScrollPane getJScrollPane() {
-		if (jScrollPane == null) {
-			jScrollPane = new JScrollPane();
-			jScrollPane.setViewportView(getMethodsTable());
+	private JScrollPane getMethodsScrollPane() {
+		if (methodsScrollPane == null) {
+			methodsScrollPane = new JScrollPane();
+			methodsScrollPane.setViewportView(getMethodsTable());
 		}
-		return jScrollPane;
+		return methodsScrollPane;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes jButton
 	 * 
@@ -569,17 +569,17 @@ public class ModificationViewer extends GridPortalComponent {
 					}
 					newMethods[newLength - 1] = method;
 					introService.getMethods().setMethod(newMethods);
-
+					
 					getMethodsTable().addRow(method);
-
+					
 					performMethodModify();
 				}
 			});
 		}
 		return addMethodButton;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes jButton
 	 * 
@@ -592,102 +592,14 @@ public class ModificationViewer extends GridPortalComponent {
 			saveButton.setToolTipText("modify and rebuild service");
 			saveButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					final int confirmed = JOptionPane.showConfirmDialog(ModificationViewer.this,
-						"Are you sure you want to save?");
-					if (confirmed == JOptionPane.OK_OPTION) {
-						try {
-							resetMethodSecurityIfServiceSecurityChanged();
-						} catch (Exception ex) {
-							ex.printStackTrace();
-							PortalUtils.showErrorMessage(ex);
-						}
-
-						BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance()
-							.getGridPortal(), "Save") {
-
-							public void process() {
-								try {
-
-									if (confirmed == JOptionPane.OK_OPTION) {
-										setProgressText("editing service metadata object");
-										// walk the methods table and create the
-										// new MethodsType array
-										MethodType[] methodsArray = new MethodType[methodsTable.getRowCount()];
-										for (int i = 0; i < methodsArray.length; i++) {
-											MethodType methodInstance = methodsTable.getMethodType(i);
-											methodsArray[i] = methodInstance;
-										}
-										MethodsType methods = new MethodsType();
-										methods.setMethod(methodsArray);
-										introService.setMethods(methods);
-
-										// walk the metadata table and create
-										// the
-										// new ServiceMetadataType array
-										MetadataType[] metadataArray = new MetadataType[metadataTable.getRowCount()];
-										for (int i = 0; i < metadataArray.length; i++) {
-											MetadataType metadata = metadataTable.getRowData(i);
-											metadataArray[i] = metadata;
-
-										}
-
-										MetadataListType serviceMetadataList = new MetadataListType();
-										serviceMetadataList.setMetadata(metadataArray);
-										introService.setMetadataList(serviceMetadataList);
-										introService.setServiceSecurity(securityPanel.getServiceSecurity());
-										// check the methods to make sure they
-										// are
-										// valid.......
-
-										// save the metadata and methods and
-										// then
-										// call the resync and build
-										setProgressText("writting service document");
-										Utils.serializeDocument(methodsDirectory.getAbsolutePath() + File.separator
-											+ "introduce.xml", introService, new QName(
-											"gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
-										setProgressText("sychronizing skeleton");
-										// call the sync tools
-										SyncTools sync = new SyncTools(methodsDirectory);
-										sync.sync();
-										setProgressText("rebuilding skeleton");
-										String cmd = CommonTools.getAntCommand("clean all", methodsDirectory
-											.getAbsolutePath());
-										Process p = CommonTools.createAndOutputProcess(cmd);
-										p.waitFor();
-										// really really waitFor
-										// Thread.sleep(100);
-										if (p.exitValue() != 0) {
-											JOptionPane.showMessageDialog(ModificationViewer.this,
-												"Error: Unable to rebuild the skeleton");
-											return;
-										}
-										dirty = false;
-										setProgressText("loading service properties");
-										loadServiceProps();
-										setLastSaved(serviceProperties
-											.getProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP));
-										this.setProgressText("");
-									}
-								} catch (Exception e1) {
-									e1.printStackTrace();
-									JOptionPane.showMessageDialog(ModificationViewer.this, "Error: " + e1.getMessage());
-									return;
-								}
-							}
-
-						};
-
-						Thread th = new Thread(r);
-						th.start();
-					}
+					saveModifications();
 				}
 			});
 		}
 		return saveButton;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes jButton
 	 * 
@@ -699,7 +611,7 @@ public class ModificationViewer extends GridPortalComponent {
 			removeButton.setText("Remove");
 			removeButton.setToolTipText("remove selected operation");
 			removeButton.addActionListener(new java.awt.event.ActionListener() {
-
+				
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dirty = true;
 					int row = getMethodsTable().getSelectedRow();
@@ -720,22 +632,22 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return removeButton;
 	}
-
-
+	
+	
 	public void performMetadataModify() {
-
+		
 		int row = getMetadataTable().getSelectedRow();
 		if ((row < 0) || (row >= getMetadataTable().getRowCount())) {
 			PortalUtils.showErrorMessage("Please select a metadata type to modify.");
 			return;
 		}
-
+		
 		Vector v = (Vector) getMetadataTable().getValueAt(getMetadataTable().getSelectedRow(), 9);
 		IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
 			IntroducePortalConf.RESOURCE);
 	}
-
-
+	
+	
 	private void resetMethodSecurityIfServiceSecurityChanged() throws Exception {
 		boolean update = false;
 		ServiceSecurity service = introService.getServiceSecurity();
@@ -768,7 +680,7 @@ public class ModificationViewer extends GridPortalComponent {
 				if (changes.size() > 0) {
 					StringBuffer sb = new StringBuffer();
 					sb
-						.append("Service security configuration changed, the security configurations for the following methods were reset:\n");
+					.append("Service security configuration changed, the security configurations for the following methods were reset:\n");
 					for (int i = 0; i < changes.size(); i++) {
 						String method = (String) changes.get(i);
 						sb.append("    " + (i + 1) + ") " + method);
@@ -778,8 +690,8 @@ public class ModificationViewer extends GridPortalComponent {
 			}
 		}
 	}
-
-
+	
+	
 	private void performMethodModify() {
 		try {
 			this.resetMethodSecurityIfServiceSecurityChanged();
@@ -794,14 +706,14 @@ public class ModificationViewer extends GridPortalComponent {
 			return;
 		}
 		// TODO: check this.... setting this for now......
-
+		
 		PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
 			new MethodViewer(method, info, new File(methodsDirectory.getAbsolutePath() + File.separator + "schema"
 				+ File.separator + serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)),
 				getMethodsTable(), getMethodsTable().getSelectedRow()));
 	}
-
-
+	
+	
 	/**
 	 * This method initializes jButton
 	 * 
@@ -821,8 +733,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return modifyButton;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -853,8 +765,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return operationsButtonPanel;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes undoButton
 	 * 
@@ -867,13 +779,13 @@ public class ModificationViewer extends GridPortalComponent {
 			undoButton.setToolTipText("roll back to last save state");
 			undoButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-
+					
 					int decision = JOptionPane.showConfirmDialog(ModificationViewer.this,
-						"Are you sure you wish to roll back.");
+					"Are you sure you wish to roll back.");
 					if (decision == JOptionPane.OK_OPTION) {
 						BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance()
 							.getGridPortal(), "Undo") {
-
+							
 							public void process() {
 								System.out.println("Loading in last known save for this project");
 								try {
@@ -882,9 +794,9 @@ public class ModificationViewer extends GridPortalComponent {
 										ResourceManager.restoreLatest(serviceProperties
 											.getProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP),
 											serviceProperties
-												.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME),
+											.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME),
 											serviceProperties
-												.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
+											.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
 									}
 									dispose();
 									PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
@@ -892,12 +804,12 @@ public class ModificationViewer extends GridPortalComponent {
 								} catch (Exception e1) {
 									// e1.printStackTrace();
 									JOptionPane.showMessageDialog(ModificationViewer.this,
-										"Unable to roll back, there may be no older versions available");
+									"Unable to roll back, there may be no older versions available");
 									return;
 								}
-
+								
 							}
-
+							
 						};
 						Thread th = new Thread(r);
 						th.start();
@@ -907,8 +819,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return undoButton;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes contentTabbedPane
 	 * 
@@ -927,7 +839,7 @@ public class ModificationViewer extends GridPortalComponent {
 				// Disable the tab
 				contentTabbedPane.setEnabledAt(contentTabbedPane.getTabCount() - 1, false);
 			}
-
+			
 			contentTabbedPane.addTab("Security", null, getSecurityPanel(), null);
 			// add a tab for each extension...
 			ExtensionsType exts = introService.getExtensions();
@@ -948,15 +860,15 @@ public class ModificationViewer extends GridPortalComponent {
 						JOptionPane.showMessageDialog(ModificationViewer.this, "Cannot load extension: "
 							+ extDtype.getDisplayName());
 					}
-
+					
 				}
-
+				
 			}
 		}
 		return contentTabbedPane;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes metadataPanel
 	 * 
@@ -997,8 +909,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return metadataPanel;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes metadataScrollPane
 	 * 
@@ -1011,8 +923,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return metadataScrollPane;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes metadataTable
 	 */
@@ -1030,8 +942,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return metadataTable;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes metadataButtonsPanel
 	 * 
@@ -1056,8 +968,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return metadataButtonsPanel;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes addMetadataButton
 	 * 
@@ -1073,7 +985,7 @@ public class ModificationViewer extends GridPortalComponent {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dirty = true;
 					MetadataType metadata = new MetadataType();
-
+					
 					// add new metadata to array in bean
 					// this seems to be a wierd way be adding things....
 					MetadataType[] metadatas;
@@ -1089,17 +1001,17 @@ public class ModificationViewer extends GridPortalComponent {
 					}
 					metadatas[newLength - 1] = metadata;
 					introService.getMetadataList().setMetadata(metadatas);
-
+					
 					getMetadataTable().addRow(metadata);
-
+					
 					performMetadataModify();
 				}
 			});
 		}
 		return addMetadataButton;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes removeMetadataButton
 	 * 
@@ -1125,8 +1037,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return removeMetadataButton;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes securityPanel
 	 * 
@@ -1143,8 +1055,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return securityPanel;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes serviceName
 	 * 
@@ -1159,8 +1071,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return serviceName;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes packageName
 	 * 
@@ -1175,8 +1087,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return packageName;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes lastSaved
 	 * 
@@ -1191,8 +1103,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return lastSaved;
 	}
-
-
+	
+	
 	private void setLastSaved(String savedDate) {
 		Date date;
 		if (savedDate.equals("0")) {
@@ -1203,8 +1115,8 @@ public class ModificationViewer extends GridPortalComponent {
 		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 		lastSaved.setText(formatter.format(date));
 	}
-
-
+	
+	
 	/**
 	 * This method initializes location
 	 * 
@@ -1219,8 +1131,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return saveLocation;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes namespacePanel
 	 * 
@@ -1265,8 +1177,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return namespacePanel;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes discoveryPanel
 	 * 
@@ -1284,8 +1196,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return discoveryPanel;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes namespaceConfigurationPanel
 	 * 
@@ -1307,8 +1219,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return namespaceConfigurationPanel;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes discoveryButtonPanel
 	 * 
@@ -1331,8 +1243,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return discoveryButtonPanel;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes namespaceAddButton
 	 * 
@@ -1347,16 +1259,16 @@ public class ModificationViewer extends GridPortalComponent {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					NamespaceType type = ((NamespaceTypeDiscoveryComponent) getDiscoveryTabbedPane()
 						.getSelectedComponent()).createNamespaceType(new File(methodsDirectory + File.separator
-						+ "schema" + File.separator
-						+ info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)));
+							+ "schema" + File.separator
+							+ info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)));
 					getNamespaceJTree().addNode(type);
 				}
 			});
 		}
 		return namespaceAddButton;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes namespaceRemoveButton
 	 * 
@@ -1384,8 +1296,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return namespaceRemoveButton;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes namespaceTableScrollPane
 	 * 
@@ -1398,8 +1310,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return namespaceTableScrollPane;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes namespaceJTree
 	 * 
@@ -1435,8 +1347,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return namespaceJTree;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes namespaceTypePropertiesPanel
 	 * 
@@ -1461,8 +1373,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return namespaceTypePropertiesPanel;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes namespaceTypeCconfigurationPanel
 	 * 
@@ -1475,8 +1387,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return namespaceTypeConfigurationPanel;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes schemaElementTypeConfigurationPanel
 	 * 
@@ -1488,8 +1400,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return schemaElementTypeConfigurationPanel;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes metadataNamespaceTypesPanel
 	 * 
@@ -1509,8 +1421,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return metadataNamespaceTypesPanel;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes metadataNamespaceScrollPane
 	 * 
@@ -1520,13 +1432,13 @@ public class ModificationViewer extends GridPortalComponent {
 		if (metadataNamespaceScrollPane == null) {
 			metadataNamespaceScrollPane = new JScrollPane();
 			metadataNamespaceScrollPane
-				.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 			metadataNamespaceScrollPane.setViewportView(getMetadataNamespacesJTree());
 		}
 		return metadataNamespaceScrollPane;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes metadataNamespacesJTree
 	 * 
@@ -1538,36 +1450,36 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return metadataNamespacesJTree;
 	}
-
-
+	
+	
 	private NamespacesJTree createMetadataNamespacesJTree() {
 		NamespacesJTree tree = new NamespacesJTree(introService.getNamespaces());
 		tree.addMouseListener(new MouseListener() {
-
+			
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-
+				
 			}
-
-
+			
+			
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-
+				
 			}
-
-
+			
+			
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
-
+				
 			}
-
-
+			
+			
 			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
-
+				
 			}
-
-
+			
+			
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
 					if (getMetadataNamespacesJTree().getCurrentNode() instanceof SchemaElementTypeTreeNode) {
@@ -1583,12 +1495,12 @@ public class ModificationViewer extends GridPortalComponent {
 					}
 				}
 			}
-
+			
 		});
 		return tree;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes discoveryTabbedPane
 	 * 
@@ -1614,5 +1526,87 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return discoveryTabbedPane;
 	}
-
-} // @jve:decl-index=0:visual-constraint="6,9"
+	
+	
+	private void saveModifications() {
+		int confirmed = JOptionPane.showConfirmDialog(ModificationViewer.this,
+			"Are you sure you want to save?", "Confirm Save", JOptionPane.YES_NO_OPTION);
+		if (confirmed == JOptionPane.OK_OPTION) {
+			try {
+				resetMethodSecurityIfServiceSecurityChanged();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				PortalUtils.showErrorMessage(ex);
+			}
+			
+			BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance()
+				.getGridPortal(), "Save") {				
+				public void process() {
+					try {
+						setProgressText("editing service metadata object");
+						// walk the methods table and create the
+						// new MethodsType array
+						MethodType[] methodsArray = new MethodType[methodsTable.getRowCount()];
+						for (int i = 0; i < methodsArray.length; i++) {
+							MethodType methodInstance = methodsTable.getMethodType(i);
+							methodsArray[i] = methodInstance;
+						}
+						MethodsType methods = new MethodsType();
+						methods.setMethod(methodsArray);
+						introService.setMethods(methods);
+						
+						// walk the metadata table and create
+						// the
+						// new ServiceMetadataType array
+						MetadataType[] metadataArray = new MetadataType[metadataTable.getRowCount()];
+						for (int i = 0; i < metadataArray.length; i++) {
+							MetadataType metadata = metadataTable.getRowData(i);
+							metadataArray[i] = metadata;
+							
+						}
+						
+						MetadataListType serviceMetadataList = new MetadataListType();
+						serviceMetadataList.setMetadata(metadataArray);
+						introService.setMetadataList(serviceMetadataList);
+						introService.setServiceSecurity(securityPanel.getServiceSecurity());
+						// check the methods to make sure they are valid.......
+						
+						// save the metadata and methods and then call the resync and build
+						setProgressText("writting service document");
+						Utils.serializeDocument(methodsDirectory.getAbsolutePath() + File.separator
+							+ "introduce.xml", introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
+						setProgressText("sychronizing skeleton");
+						// call the sync tools
+						SyncTools sync = new SyncTools(methodsDirectory);
+						sync.sync();
+						setProgressText("rebuilding skeleton");
+						String cmd = CommonTools.getAntCommand("clean all", methodsDirectory
+							.getAbsolutePath());
+						Process p = CommonTools.createAndOutputProcess(cmd);
+						p.waitFor();
+						// really really waitFor
+						// Thread.sleep(100);
+						if (p.exitValue() != 0) {
+							JOptionPane.showMessageDialog(ModificationViewer.this,
+							"Error: Unable to rebuild the skeleton");
+							return;
+						}
+						dirty = false;
+						setProgressText("loading service properties");
+						loadServiceProps();
+						setLastSaved(serviceProperties
+							.getProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP));
+						this.setProgressText("");
+					} catch (Exception e1) {
+						e1.printStackTrace();
+						JOptionPane.showMessageDialog(ModificationViewer.this, "Error: " + e1.getMessage());
+						return;
+					}
+				}
+			};
+			
+			Thread th = new Thread(r);
+			th.start();
+		}
+	}
+}
