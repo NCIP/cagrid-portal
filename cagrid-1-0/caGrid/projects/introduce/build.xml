@@ -231,6 +231,7 @@
 	<!-- =================================================================== -->
 	<target name="createService" description="Create new service">
 		<ant dir="${basedir}" antfile="antfiles/introduce-creator.xml" target="createService" inheritall="true" />
+		<ant dir="${basedir}" antfile="antfiles/introduce-resync.xml" target="resyncService" inheritall="true" />
 	</target>
 	
 	<!-- =================================================================== -->

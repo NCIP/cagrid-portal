@@ -5,7 +5,7 @@
 	<!-- Define the environment variable -->
 	<property environment="env"/>
 	<property name="ext.globus.location" location="${env.GLOBUS_LOCATION}"/>
-	<property name="introduce.service.location.dir.default" value="HelloWorld"/>
+	<property name="introduce.skeleton.destination.dir.default" value="HelloWorld"/>
 	<target name="usage">
 		<echo message="Not to be called directly.  This file contains utilities to be used in other
 			build files."/>
@@ -14,7 +14,7 @@
 	<target name="resyncService" depends="checkResyncInputProps, prepareResyncSkeleton" description="Uses the introduceMethods.xml to add and remove methods to this service skeleton">
 		<java classname="gov.nih.nci.cagrid.introduce.codegen.SyncTools" fork="no" failonerror="true">
 			<arg value="-d" />
-			<arg value="${introduce.service.location.dir}" />
+			<arg value="${introduce.skeleton.destination.dir}" />
 			<classpath>
 				<fileset dir="${build.lib.dir}">
 					<include name="*.jar" />
@@ -37,14 +37,14 @@
 	
 	<target name="checkResyncInputProps">
 		<condition property="noInputNeeded">
-			<isset property="introduce.service.location.dir"/>		
+			<isset property="introduce.skeleton.destination.dir"/>		
 		</condition>
 	</target>
 	<target name="prepareResyncSkeleton" unless="noInputNeeded">
 		<input message="Please enter the location of your service
 			[${introduce.service.location.dir.default}]:"
-			addproperty="introduce.service.location.dir"
-			defaultvalue="${introduce.service.location.dir.default}"/>
+			addproperty="introduce.skeleton.destination.dir"
+			defaultvalue="${introduce.skeleton.destination.dir.default}"/>
 	</target>
 	
 	
