@@ -13,7 +13,7 @@
 			</application>
 			<components>
 				<component>
-					<title>Create New Service</title>
+					<title>Create Service</title>
 					<description>Create Service Skeleton</description>
 					<class>gov.nih.nci.cagrid.introduce.portal.creation.CreationViewer</class>
 					<icon>/cog_add.png</icon>
@@ -43,8 +43,8 @@
 					</dimensions>
 				</component>
 				<component>
-					<title>Discovery Tools</title>
-					<description>Discovery Tools</description>
+					<title>Types Management Tools</title>
+					<description>Types Management Tools</description>
 					<class>gov.nih.nci.cagrid.introduce.portal.discoverytools.core.TypesToolsComponent</class>
 					<icon>/system-search.png</icon>
 				</component>
