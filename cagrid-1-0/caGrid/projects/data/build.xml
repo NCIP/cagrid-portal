@@ -158,7 +158,7 @@
 	
 	
 	<!-- compiles the service side code -->
-	<target name="compileService" depends="compileStubs">
+	<target name="compileService" depends="compileStubs, compileUtilsSource">
 		<javac srcdir="${service.src.dir}" destdir="${build.service.dest}" debug="${java.debug}">
 			<classpath>
 				<fileset dir="${globus.dir}/lib">
@@ -171,6 +171,7 @@
 				<include name="*.jar"/>
 				</fileset>
 				<pathelement location="${stubs.dest}"/>
+				<pathelement location="${build.utils.dest}"/>
 			</classpath>
 		</javac>
 	</target>

@@ -1,24 +1,19 @@
 package gov.nih.nci.cagrid.data.cql.cacore;
 
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQueryType;
 import gov.nih.nci.cagrid.cqlquery.Group;
 import gov.nih.nci.cagrid.cqlquery.Objects;
 import gov.nih.nci.cagrid.cqlquery.Property;
-import gov.nih.nci.cagrid.cqlresultset.CQLObjectResult;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResultsType;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.data.cql.InitializationException;
+import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsUtil;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.namespace.QName;
-
-import org.apache.axis.message.MessageElement;
 
 /** 
  *  CoreQueryProcessor
@@ -66,11 +61,13 @@ public class CoreQueryProcessor implements CQLQueryProcessor {
 		}
 		
 		List targetObjects = coreService.search(targetClass, searchMe);
-		CQLQueryResultsType results = buildResults(targetObjects);
+		// CQLQueryResultsType results = buildResults(targetObjects);
+		CQLQueryResultsType results = CQLQueryResultsUtil.createQueryResults(targetObjects);
 		return results;
 	}
 	
 	
+	/*
 	private CQLQueryResultsType buildResults(List objects) {
 		CQLQueryResultsType results = new CQLQueryResultsType();
 		// TODO: At the moment, this only deals with object results, 
@@ -87,6 +84,7 @@ public class CoreQueryProcessor implements CQLQueryProcessor {
 		results.setObjectResult(objectResults);
 		return results;
 	}
+	*/
 	
 	
 	private Object generateQueryObject(Objects input) throws Exception {
