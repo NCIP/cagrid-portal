@@ -286,7 +286,7 @@ public class CreationViewer extends GridPortalComponent {
 		return createButton;
 	}
 
-	
+
 	/**
 	 * This method initializes serviceStyleSeletor
 	 * 
@@ -296,7 +296,7 @@ public class CreationViewer extends GridPortalComponent {
 		if (serviceStyleSeletor == null) {
 			serviceStyleSeletor = new JComboBox();
 			serviceStyleSeletor.addItem("NONE");
-			
+
 			List extensionDescriptors = loader.getExtensions();
 			for (int i = 0; i < extensionDescriptors.size(); i++) {
 				ExtensionDescriptionType ex = (ExtensionDescriptionType) extensionDescriptors.get(i);
@@ -431,7 +431,7 @@ public class CreationViewer extends GridPortalComponent {
 							boolean deleted = Utils.deleteDir(dirFile);
 							if (!deleted) {
 								JOptionPane.showMessageDialog(CreationViewer.this,
-								"Unable to delete creation directory");
+									"Unable to delete creation directory");
 								return;
 							}
 						}
@@ -458,11 +458,12 @@ public class CreationViewer extends GridPortalComponent {
 							PortalUtils.showMessage("Service Name cannot be empty.");
 							return;
 						}
-						
-						//only supporting one for now.....
-						String serviceExtensions ="";
-						if(!((String)getServiceStyleSeletor().getSelectedItem()).equals("NONE")){
-							ExtensionDescriptionType edt = loader.getExtensionByDisplayName((String)getServiceStyleSeletor().getSelectedItem());
+
+						// only supporting one for now.....
+						String serviceExtensions = "";
+						if (!((String) getServiceStyleSeletor().getSelectedItem()).equals("NONE")) {
+							ExtensionDescriptionType edt = loader
+								.getExtensionByDisplayName((String) getServiceStyleSeletor().getSelectedItem());
 							serviceExtensions = edt.getName();
 						}
 						setProgressText("creating");
@@ -473,17 +474,22 @@ public class CreationViewer extends GridPortalComponent {
 						if (p.exitValue() != 0) {
 							PortalUtils.showErrorMessage("Error creating new service!");
 						}
-						
+
 						setProgressText("running extension viewers");
 						Properties properties = new Properties();
-						properties.load(new FileInputStream(getDir().getText() + File.separator + IntroduceConstants.INTRODUCE_PROPERTIES_FILE));
-						ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(getDir().getText() + File.separator 
-							+ IntroduceConstants.INTRODUCE_XML_FILE, ServiceDescription.class);
-						ServiceInformation info = new ServiceInformation(introService, properties, new File(getDir().getText()));
+						properties.load(new FileInputStream(getDir().getText() + File.separator
+							+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE));
+						ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(getDir()
+							.getText()
+							+ File.separator + IntroduceConstants.INTRODUCE_XML_FILE, ServiceDescription.class);
+						ServiceInformation info = new ServiceInformation(introService, properties, new File(getDir()
+							.getText()));
 						ExtensionTools extTools = new ExtensionTools();
 						if (!serviceExtensions.equals("")) {
 							JDialog extDialog = extTools.getCreationUIDialog(serviceExtensions, info);
-							extDialog.show();
+							if (extDialog != null) {
+								extDialog.show();
+							}
 						}
 
 						setProgressText("building");
@@ -518,7 +524,6 @@ public class CreationViewer extends GridPortalComponent {
 					}
 				}
 			};
-			
 
 			Thread th = new Thread(r);
 			th.start();
