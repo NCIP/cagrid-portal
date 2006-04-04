@@ -1,6 +1,5 @@
 <%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="JNDIConfigTemplate" 
 imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.*" %>
-
 <% gov.nih.nci.cagrid.introduce.info.ServiceInformation info = (gov.nih.nci.cagrid.introduce.info.ServiceInformation) argument;
    MetadataListType metadataList = info.getMetadata();
    
@@ -11,8 +10,7 @@ imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codege
    if(serviceName.endsWith("Service")){
    	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
    }
-%>
-<?xml version="1.0" encoding="UTF-8"?>
+%><?xml version="1.0" encoding="UTF-8"?>
 <jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
 	<service name="SERVICE-INSTANCE-NAME">
 		<resource name="home" type="<%=packageName%>.service.globus.resource.BaseResourceHome">
