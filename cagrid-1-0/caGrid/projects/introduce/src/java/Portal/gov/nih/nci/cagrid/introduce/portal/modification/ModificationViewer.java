@@ -25,6 +25,7 @@ import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
+import gov.nih.nci.cagrid.introduce.portal.NamespaceTypeDiscoveryDescriptor;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.gme.GMETypeSelectionComponent;
 import gov.nih.nci.cagrid.introduce.portal.modification.security.ServiceSecurityPanel;
@@ -154,8 +155,6 @@ public class ModificationViewer extends GridPortalComponent {
 
 	private JPanel discoveryButtonPanel = null;
 
-	private NamespaceTypeDiscoveryComponent namespaceTypeDiscoveryPanel = null;
-
 	private JButton namespaceAddButton = null;
 
 	private JButton namespaceRemoveButton = null;
@@ -177,6 +176,8 @@ public class ModificationViewer extends GridPortalComponent {
 	private JScrollPane metadataNamespaceScrollPane = null;
 
 	private NamespacesJTree metadataNamespacesJTree = null;
+
+	private JTabbedPane discoveryTabbedPane = null;
 
 
 	/**
@@ -944,8 +945,10 @@ public class ModificationViewer extends GridPortalComponent {
 				for (int i = 0; i < extsTypes.length; i++) {
 					ExtensionDescriptionType extDtype = extLoader.getExtension(extsTypes[i].getName());
 					try {
-						if (extDtype.getServiceModificationUIPanel() != null && !extDtype.getServiceModificationUIPanel().equals("")) {
-							ServiceModificationUIPanel extPanel = extTools.getServiceModificationUIPanel(extDtype.getName(), info);
+						if (extDtype.getServiceModificationUIPanel() != null
+							&& !extDtype.getServiceModificationUIPanel().equals("")) {
+							ServiceModificationUIPanel extPanel = extTools.getServiceModificationUIPanel(extDtype
+								.getName(), info);
 							contentTabbedPane.addTab(extDtype.getDisplayName(), null, extPanel, null);
 						}
 					} catch (Exception e) {
@@ -1278,16 +1281,13 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private JPanel getDiscoveryPanel() {
 		if (discoveryPanel == null) {
-			GridBagConstraints gridBagConstraints28 = new GridBagConstraints();
-			gridBagConstraints28.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints28.gridy = 0;
-			gridBagConstraints28.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints28.weightx = 1.0D;
-			gridBagConstraints28.weighty = 1.0D;
-			gridBagConstraints28.gridx = 0;
+			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
+			gridBagConstraints16.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints16.weighty = 1.0;
+			gridBagConstraints16.weightx = 1.0;
 			discoveryPanel = new JPanel();
 			discoveryPanel.setLayout(new GridBagLayout());
-			discoveryPanel.add(getNamespaceTypeDiscoveryPanel(), gridBagConstraints28);
+			discoveryPanel.add(getDiscoveryTabbedPane(), gridBagConstraints16);
 		}
 		return discoveryPanel;
 	}
@@ -1341,46 +1341,6 @@ public class ModificationViewer extends GridPortalComponent {
 
 
 	/**
-	 * This method initializes gmeDiscoveryPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private NamespaceTypeDiscoveryComponent getNamespaceTypeDiscoveryPanel() {
-		if (namespaceTypeDiscoveryPanel == null) {
-			IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(IntroducePortalConf.RESOURCE);
-			try {
-				namespaceTypeDiscoveryPanel = conf.getNamespaceTypeDiscoveryComponent();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return namespaceTypeDiscoveryPanel;
-	}
-
-
-	private void cacheSchema(File dir, String namespace) {
-		if (namespace.equals(IntroduceConstants.W3CNAMESPACE)) {
-			// this is "natively supported" so we don't need to cache it
-			return;
-		}
-		IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
-			IntroducePortalConf.RESOURCE);
-		GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
-		try {
-			XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance().getGridService(
-				conf.getProperty(IntroducePortalConf.GME_URL));
-			handle.cacheSchema(new Namespace(namespace), dir);
-		} catch (MobiusException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			JOptionPane.showMessageDialog(ModificationViewer.this,
-				"Please check the GME URL and make sure that you have the appropriate credentials!");
-		}
-
-	}
-
-
-	/**
 	 * This method initializes namespaceAddButton
 	 * 
 	 * @return javax.swing.JButton
@@ -1392,11 +1352,11 @@ public class ModificationViewer extends GridPortalComponent {
 			namespaceAddButton.setIcon(IntroduceLookAndFeel.getAddIcon());
 			namespaceAddButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					NamespaceType type = getNamespaceTypeDiscoveryPanel().createNamespaceType();
+					NamespaceType type = ((NamespaceTypeDiscoveryComponent) getDiscoveryTabbedPane()
+						.getSelectedComponent()).createNamespaceType(new File(methodsDirectory + File.separator
+						+ "schema" + File.separator
+						+ info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)));
 					getNamespaceJTree().addNode(type);
-					cacheSchema(new File(methodsDirectory + File.separator + "schema" + File.separator
-						+ info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)),
-						type.getNamespace());
 				}
 			});
 		}
@@ -1633,6 +1593,33 @@ public class ModificationViewer extends GridPortalComponent {
 
 		});
 		return tree;
+	}
+
+
+	/**
+	 * This method initializes discoveryTabbedPane
+	 * 
+	 * @return javax.swing.JTabbedPane
+	 */
+	private JTabbedPane getDiscoveryTabbedPane() {
+		if (discoveryTabbedPane == null) {
+			discoveryTabbedPane = new JTabbedPane();
+			IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
+				IntroducePortalConf.RESOURCE);
+			List discoveryTypes = conf.getNamespaceTypeDiscoveryComponents();
+			if (discoveryTypes != null) {
+				for (int i = 0; i < discoveryTypes.size(); i++) {
+					NamespaceTypeDiscoveryDescriptor ntdd = (NamespaceTypeDiscoveryDescriptor) discoveryTypes.get(i);
+					try {
+						discoveryTabbedPane.addTab(ntdd.getType(), ntdd.getNamespaceTypeDiscoveryComponent());
+					} catch (Exception e) {
+						JOptionPane.showMessageDialog(ModificationViewer.this, "Error loading discovery type: "
+							+ ntdd.getType());
+					}
+				}
+			}
+		}
+		return discoveryTabbedPane;
 	}
 
 } // @jve:decl-index=0:visual-constraint="6,9"

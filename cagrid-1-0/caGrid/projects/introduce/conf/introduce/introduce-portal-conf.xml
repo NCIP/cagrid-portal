@@ -45,7 +45,7 @@
 				<component>
 					<title>Discovery Tools</title>
 					<description>Discovery Tools</description>
-					<class>gov.nih.nci.cagrid.introduce.portal.gme.GMEViewer</class>
+					<class>gov.nih.nci.cagrid.introduce.portal.discoverytools.TypesToolsComponent</class>
 					<icon>/mobiusIcon.gif</icon>
 				</component>
 			</components>
@@ -53,10 +53,21 @@
 	</resource>
 	<resource name="IntroducePortalConf" class="gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf">
 		<introduce-portal-config>
-			<namespaceTypeDiscoveryComponent>gov.nih.nci.cagrid.introduce.portal.modification.discovery.gme.GMETypeSelectionComponent</namespaceTypeDiscoveryComponent>
-			<properties>
-				<property key="GME_URL" value="http://dc01.bmi.ohio-state.edu:8080/wsrf/services/cagrid/GlobalModelExchange"></property>
-			</properties>
+			<namespaceTypeToolsComponents>
+				<namespaceTypeToolsComponent class="gov.nih.nci.cagrid.introduce.portal.discoverytools.gme.GMEViewer" type="GME">
+					<properties>
+						<property key="GME_URL" value="http://dc01.bmi.ohio-state.edu:8080/wsrf/services/cagrid/GlobalModelExchange"></property>
+					</properties>
+				</namespaceTypeToolsComponent>
+			</namespaceTypeToolsComponents>
+			<namespaceTypeDiscoveryComponents>
+				<namespaceTypeDiscoveryComponent class="gov.nih.nci.cagrid.introduce.portal.modification.discovery.gme.GMETypeSelectionComponent" type="GME">
+					<properties>
+						<property key="GME_URL" value="http://dc01.bmi.ohio-state.edu:8080/wsrf/services/cagrid/GlobalModelExchange"></property>
+					</properties>
+				</namespaceTypeDiscoveryComponent>
+				<namespaceTypeDiscoveryComponent class="gov.nih.nci.cagrid.introduce.portal.modification.discovery.files.FileTypesSelectionComponent" type="FILE"/>
+			</namespaceTypeDiscoveryComponents>
 		</introduce-portal-config>
 	</resource>
 </grid-portal>

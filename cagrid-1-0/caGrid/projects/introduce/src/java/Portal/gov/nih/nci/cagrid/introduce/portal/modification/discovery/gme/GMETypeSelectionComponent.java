@@ -1,22 +1,30 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.discovery.gme;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.io.File;
 import java.util.List;
 
-import javax.swing.JPanel;
+import javax.swing.JOptionPane;
 
 import org.jdom.Document;
 import org.jdom.Element;
 import org.projectmobius.client.gme.ImportInfo;
+import org.projectmobius.common.GridServiceResolver;
 import org.projectmobius.common.MobiusException;
+import org.projectmobius.common.Namespace;
 import org.projectmobius.common.XMLUtilities;
+import org.projectmobius.gme.XMLDataModelService;
+import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
+import org.projectmobius.portal.PortalResourceManager;
 
 
 /**
@@ -30,8 +38,11 @@ import org.projectmobius.common.XMLUtilities;
  *          Exp $
  */
 public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent  {
+	public static String GME_URL = "GME_URL";
+	public static String TYPE = "GME";
+	
 	private GMEConfigurationPanel gmePanel = null;
-
+	
 	public GMETypeSelectionComponent() {
 		initialize();
 		this.getGmePanel().discoverFromGME();
@@ -71,7 +82,7 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent  
 	}
 
 
-	public NamespaceType createNamespaceType() {
+	public NamespaceType createNamespaceType(File schemaDestinationDir) {
 		NamespaceType input = new NamespaceType();
 
 		// set the package name
@@ -103,8 +114,34 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent  
 			schemaTypes[i] = type;
 		}
 		input.setSchemaElement(schemaTypes);
+		
+		cacheSchema(schemaDestinationDir,
+			input.getNamespace());
 
 		return input;
 	}
+	
+
+	private void cacheSchema(File dir, String namespace) {
+		if (namespace.equals(IntroduceConstants.W3CNAMESPACE)) {
+			// this is "natively supported" so we don't need to cache it
+			return;
+		}
+		IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
+			IntroducePortalConf.RESOURCE);
+		GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
+		try {
+			XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance().getGridService(conf.getNamespaceTypeDiscoveryComponent(GMETypeSelectionComponent.TYPE).getProperty(GMETypeSelectionComponent.GME_URL));
+			handle.cacheSchema(new Namespace(namespace), dir);
+		} catch (MobiusException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			JOptionPane.showMessageDialog(GMETypeSelectionComponent.this,
+				"Error retrieving schemas from GME");
+		}
+
+	}
+
+
 
 }

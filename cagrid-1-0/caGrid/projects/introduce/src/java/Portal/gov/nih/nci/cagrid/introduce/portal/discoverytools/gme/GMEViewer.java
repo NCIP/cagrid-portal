@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.portal.discovery.gme;
+package gov.nih.nci.cagrid.introduce.portal.discoverytools.gme;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
@@ -6,8 +6,8 @@ import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.common.jedit.JEditTextArea;
 import gov.nih.nci.cagrid.introduce.portal.common.jedit.XMLTokenMarker;
-import gov.nih.nci.cagrid.introduce.portal.discovery.DiscoveryToolsComponent;
-import gov.nih.nci.cagrid.introduce.portal.discovery.gme.GMESchemaLocatorPanel.SchemaWrapper;
+import gov.nih.nci.cagrid.introduce.portal.discoverytools.NamespaceTypeToolsComponent;
+import gov.nih.nci.cagrid.introduce.portal.discoverytools.gme.GMESchemaLocatorPanel.SchemaWrapper;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -44,7 +44,7 @@ import org.xml.sax.InputSource;
  * @version $Id: mobiusEclipseCodeTemplates.xml,v 1.2 2005/04/19 14:58:02 oster
  *          Exp $
  */
-public class GMEViewer extends DiscoveryToolsComponent {
+public class GMEViewer extends NamespaceTypeToolsComponent{
 
 	private JPanel mainPanel = null;
 	private JTabbedPane gmeToolsTabs = null;
@@ -79,11 +79,8 @@ public class GMEViewer extends DiscoveryToolsComponent {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setContentPane(getMainPanel());
+		this.add(getMainPanel());
 		this.setSize(469, 446);
-		this.setFrameIcon(IntroduceLookAndFeel.getMobiusIcon());
-		this.setTitle("caGrid GME Tools");
-
 	}
 
 
@@ -348,7 +345,7 @@ public class GMEViewer extends DiscoveryToolsComponent {
 						IntroducePortalConf.RESOURCE);
 					try {
 						XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
-							.getGridService(conf.getProperty(IntroducePortalConf.GME_URL));
+							.getGridService(conf.getNamespaceTypeToolsComponent(GMESchemaLocatorPanel.TYPE).getProperty(GMESchemaLocatorPanel.GME_URL));
 
 						// get the target namespace of the schema and make sure
 						// that it is acceptable by the GME

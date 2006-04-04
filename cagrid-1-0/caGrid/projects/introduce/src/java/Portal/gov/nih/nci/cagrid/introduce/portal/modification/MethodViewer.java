@@ -401,27 +401,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 	}
 
 
-	private void cacheSchema(File dir, String namespace) {
-		if (namespace.equals(IntroduceConstants.W3CNAMESPACE)) {
-			// this is "natively supported" so we don't need to cache it
-			return;
-		}
-		IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
-			IntroducePortalConf.RESOURCE);
-		GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
-		try {
-			XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance().getGridService(
-				conf.getProperty(IntroducePortalConf.GME_URL));
-			handle.cacheSchema(new Namespace(namespace), dir);
-		} catch (MobiusException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			JOptionPane.showMessageDialog(MethodViewer.this,
-				"Please check the GME URL and make sure that you have the appropriate credentials!");
-		}
-
-	}
-
 
 	/**
 	 * This method initializes jButton

@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.portal.discovery.gme;
+package gov.nih.nci.cagrid.introduce.portal.discoverytools.gme;
 
 import gov.nih.nci.cagrid.introduce.portal.common.jedit.DefaultInputHandler;
 import gov.nih.nci.cagrid.introduce.portal.common.jedit.SyntaxDocument;

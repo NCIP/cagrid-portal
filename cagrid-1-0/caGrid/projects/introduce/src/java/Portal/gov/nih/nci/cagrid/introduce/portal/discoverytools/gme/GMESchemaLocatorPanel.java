@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.portal.discovery.gme;
+package gov.nih.nci.cagrid.introduce.portal.discoverytools.gme;
 
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
@@ -27,6 +27,9 @@ import org.projectmobius.protocol.gme.SchemaNode;
 
 
 public class GMESchemaLocatorPanel extends JPanel {
+	
+	public static String GME_URL = "GME_URL";
+	public static String TYPE = "GME";
 
 	private JPanel mainPanel = null;
 
@@ -310,7 +313,7 @@ public class GMESchemaLocatorPanel extends JPanel {
 			gme = new JTextField();
 			IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
 				IntroducePortalConf.RESOURCE);
-			gme.setText(conf.getProperty(IntroducePortalConf.GME_URL));
+			gme.setText(conf.getNamespaceTypeToolsComponent(GMESchemaLocatorPanel.TYPE).getProperty(GMESchemaLocatorPanel.GME_URL));
 		}
 		return gme;
 	}

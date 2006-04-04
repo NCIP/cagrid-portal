@@ -1,9 +1,9 @@
 package gov.nih.nci.cagrid.introduce.portal;
 
-import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
-
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 
 import org.jdom.Element;
 import org.projectmobius.common.AbstractMobiusConfiguration;
@@ -23,48 +23,70 @@ public class IntroducePortalConf implements AbstractMobiusConfiguration {
 	public static String RESOURCE = "IntroducePortalConf";
 
 	private static final String NAMESPACE_DISCOVERY_COMPONENT = "namespaceTypeDiscoveryComponent";
-	public static final String GME_URL = "GME_URL";
-	private static final String PROPERTIES = "properties";
-	private static final String PROPERTY = "property";
-	
-	private Properties props;
-	private String namespaceTypeDiscoveryClassname = null;
+	private static final String NAMESPACE_DISCOVERY_COMPONENTS = "namespaceTypeDiscoveryComponents";
+	private static final String NAMESPACE_TOOLS_COMPONENT = "namespaceTypeToolsComponent";
+	private static final String NAMESPACE_TOOLS_COMPONENTS = "namespaceTypeToolsComponents";
+
+	private Map namespaceTypeDiscoveryComponentsMap;
+	private List namespaceTypeDiscoveryComponents;
+	private Map namespaceTypeToolsComponentsMap;
+	private List namespaceTypeToolsComponents;
+
 
 	public IntroducePortalConf() {
-		props = new Properties();
+		namespaceTypeDiscoveryComponentsMap = new HashMap();
+		namespaceTypeDiscoveryComponents = new ArrayList();
+		namespaceTypeToolsComponentsMap = new HashMap();
+		namespaceTypeToolsComponents = new ArrayList();
 	}
-	
-	public String getNamepaceTypeDiscoveryClassname(){
-		return this.namespaceTypeDiscoveryClassname;
-	}
-	
-	public String getProperty(String key){
-		return props.getProperty(key);
-	}
-	
+
 
 	public void parse(MobiusResourceManager resourceManager, Element config) throws MobiusException {
-		Element ntdcEl = config.getChild(NAMESPACE_DISCOVERY_COMPONENT, config.getNamespace());
-		if (ntdcEl != null) {
-			this.namespaceTypeDiscoveryClassname= ntdcEl.getText();
-		}
-		Element propertiesEl = config.getChild(PROPERTIES, config.getNamespace());
-		if (propertiesEl != null) {
-			List propertyElArr = propertiesEl.getChildren(PROPERTY,config.getNamespace());
-			for(int i =0; i < propertyElArr.size(); i++){
-				Element propEl = (Element)propertyElArr.get(i);
-				String key = propEl.getAttributeValue("key");
-				String value = propEl.getAttributeValue("value");
-				this.props.put(key, value);
+		Element ntdsEl = config.getChild(NAMESPACE_DISCOVERY_COMPONENTS, config.getNamespace());
+		if (ntdsEl != null) {
+			List ntdEls = ntdsEl.getChildren(NAMESPACE_DISCOVERY_COMPONENT, config.getNamespace());
+			if (ntdEls != null) {
+				for (int i = 0; i < ntdEls.size(); i++) {
+					Element ntdEl = (Element) ntdEls.get(i);
+					NamespaceTypeDiscoveryDescriptor desc = new NamespaceTypeDiscoveryDescriptor(ntdEl);
+					this.namespaceTypeDiscoveryComponentsMap.put(desc.getType(), desc);
+					this.namespaceTypeDiscoveryComponents.add(desc);
+				}
 			}
 		}
 
+		ntdsEl = config.getChild(NAMESPACE_TOOLS_COMPONENTS, config.getNamespace());
+		if (ntdsEl != null) {
+			List ntdEls = ntdsEl.getChildren(NAMESPACE_TOOLS_COMPONENT, config.getNamespace());
+			if (ntdEls != null) {
+				for (int i = 0; i < ntdEls.size(); i++) {
+					Element ntdEl = (Element) ntdEls.get(i);
+					NamespaceTypeToolDescriptor desc = new NamespaceTypeToolDescriptor(ntdEl);
+					this.namespaceTypeToolsComponentsMap.put(desc.getType(), desc);
+					this.namespaceTypeToolsComponents.add(desc);
+				}
+			}
+		}
 	}
-	
-	public NamespaceTypeDiscoveryComponent getNamespaceTypeDiscoveryComponent() throws Exception{
-		Class c = Class.forName(getNamepaceTypeDiscoveryClassname());
-		Object obj = c.newInstance();
-		return (NamespaceTypeDiscoveryComponent)obj;
+
+
+	public List getNamespaceTypeDiscoveryComponents() {
+		return namespaceTypeDiscoveryComponents;
+	}
+
+
+	public NamespaceTypeDiscoveryDescriptor getNamespaceTypeDiscoveryComponent(String type) {
+		return (NamespaceTypeDiscoveryDescriptor) namespaceTypeDiscoveryComponentsMap.get(type);
+	}
+
+
+	public List getNamespaceToolsComponents() {
+		return namespaceTypeToolsComponents;
+	}
+
+
+	public NamespaceTypeToolDescriptor getNamespaceTypeToolsComponent(String type) {
+		return (NamespaceTypeToolDescriptor) namespaceTypeToolsComponentsMap.get(type);
 	}
 
 }
