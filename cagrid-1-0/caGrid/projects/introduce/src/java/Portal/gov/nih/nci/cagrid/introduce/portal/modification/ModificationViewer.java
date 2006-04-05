@@ -270,7 +270,7 @@ public class ModificationViewer extends GridPortalComponent {
 			loadServiceProps();
 			
 			info = new ServiceInformation(introService, serviceProperties, methodsDirectory);
-			this.setSize(500, 400);
+			this.setSize(500, 472);
 			this.setContentPane(getJContentPane());
 			this.setTitle("Modify Service Interface");
 			this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
@@ -1139,7 +1139,7 @@ public class ModificationViewer extends GridPortalComponent {
 		if (namespacePanel == null) {
 			GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
 			gridBagConstraints32.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints32.gridy = 2;
+			gridBagConstraints32.gridy = 1;
 			gridBagConstraints32.weighty = 1.0D;
 			gridBagConstraints32.gridx = 0;
 			GridBagConstraints gridBagConstraints26 = new GridBagConstraints();
@@ -1148,7 +1148,7 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints26.weightx = 1.0D;
 			gridBagConstraints26.weighty = 1.0D;
 			gridBagConstraints26.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints26.gridheight = 3;
+			gridBagConstraints26.gridheight = 2;
 			gridBagConstraints26.ipadx = 1;
 			gridBagConstraints26.ipady = 1;
 			gridBagConstraints26.gridy = 0;
@@ -1581,4 +1581,4 @@ public class ModificationViewer extends GridPortalComponent {
 			th.start();
 		}
 	}
-}
+}  //  @jve:decl-index=0:visual-constraint="10,10"
