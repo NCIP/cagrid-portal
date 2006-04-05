@@ -1,14 +1,5 @@
 package gov.nih.nci.cagrid.data.ui;
 
-import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
-import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
-import gov.nih.nci.cagrid.introduce.extension.ServiceModificationUIPanel;
-import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
-import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeTreeNode;
-import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespacesJTree;
-import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeTreeNode;
-
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.FocusAdapter;
@@ -21,8 +12,16 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
+
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
+import gov.nih.nci.cagrid.introduce.extension.ServiceModificationUIPanel;
+import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeTreeNode;
+import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespacesJTree;
+import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeTreeNode;
 
 /** 
  *  DataServiceModificationPanel
@@ -141,8 +140,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			removeTypeButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if (getTypesTable().getSelectedRow() != -1) {
-						((DefaultTableModel) getTypesTable().getModel())
-							.removeRow(getTypesTable().getSelectedRow());
+						getTypesTable().removeRow(getTypesTable().getSelectedRow());
 					}
 				}
 			});
