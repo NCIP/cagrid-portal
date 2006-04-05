@@ -1178,25 +1178,24 @@ public class ModificationViewer extends GridPortalComponent {
 		if (discoveryPanel == null) {
 			GridBagConstraints gridBagConstraints27 = new GridBagConstraints();
 			gridBagConstraints27.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints27.gridy = 1;
-			gridBagConstraints27.weightx = 0.0D;
-			gridBagConstraints27.weighty = 0.0D;
 			gridBagConstraints27.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints27.gridx = 0;
+			gridBagConstraints27.gridy = 1;
 			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
 			gridBagConstraints16.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints16.weighty = 1.0;
+			gridBagConstraints16.weightx = 1.0;
 			gridBagConstraints16.gridx = 0;
 			gridBagConstraints16.gridy = 0;
 			gridBagConstraints16.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints16.weightx = 1.0;
 			discoveryPanel = new JPanel();
+			discoveryPanel.setLayout(new GridBagLayout());
 			discoveryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Type",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
 				new java.awt.Font("Dialog", java.awt.Font.BOLD, 12), PortalLookAndFeel.getPanelLabelColor()));
 			discoveryPanel.add(getDiscoveryTabbedPane(), gridBagConstraints16);
 			discoveryPanel.add(getDiscoveryButtonPanel(), gridBagConstraints27);
-			discoveryPanel.setLayout(new GridBagLayout());
+			
 		}
 		return discoveryPanel;
 	}
