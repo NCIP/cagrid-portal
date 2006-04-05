@@ -252,8 +252,10 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 									+ File.separator + "deploy.properties")), "service deployment properties");
 							} catch (FileNotFoundException ex) {
 								ex.printStackTrace();
+								setErrorMessage("Error: " + ex.getMessage());
 							} catch (IOException ex) {
 								ex.printStackTrace();
+								setErrorMessage("Error: " + ex.getMessage());
 							}
 							
 							setProgressText("deploying");
@@ -268,13 +270,10 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 								Process p = CommonTools.createAndOutputProcess(cmd);
 								p.waitFor();
 								if (p.exitValue() != 0) {
-									PortalUtils.showErrorMessage("Error deploying service!");
-								} else {
-									PortalUtils.showMessage("Service successfully deployed");
-									dispose();
-								}
+									setErrorMessage("Error deploying service!");
+								} 
 							} catch (Exception ex) {
-								PortalUtils.showErrorMessage("Error deploying service!");
+								setErrorMessage("Error deploying service! " + ex.getMessage());
 								ex.printStackTrace();
 							}
 						}
