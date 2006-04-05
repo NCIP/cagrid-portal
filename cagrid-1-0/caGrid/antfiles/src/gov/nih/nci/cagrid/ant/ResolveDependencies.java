@@ -63,9 +63,9 @@ public class ResolveDependencies extends Task {
 				String prop = "called.antcall.of." + artifact.getIdentifer();
 				String calledProperty = this.getProject().getProperty(prop);
 				if (calledProperty != null) {
-					System.out.println("Skipping dependent artifact's ant call["+antCall.getTaskName()+"], as propery was set:" + prop);
+					System.out.println("Skipping dependent artifact's ant call, as propery was set:" + prop);
 				} else {
-					System.out.println("Calling dependent artifact's ant call["+antCall.getTaskName()+"] for first time; setting property:" + prop);
+					System.out.println("Calling dependent artifact's ant call for first time; setting property:" + prop);
 					this.getProject().setProperty(prop, "true");
 					antCall.setProject(this.getProject());
 					antCall.execute();
