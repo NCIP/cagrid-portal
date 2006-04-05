@@ -53,13 +53,13 @@ import javax.swing.tree.DefaultMutableTreeNode;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * 
  * @created Nov 22, 2004 
- * @version $Id: NamespacesTypeTreeNode.java,v 1.2 2006-03-23 00:29:58 oster Exp $ 
+ * @version $Id: NamespacesTypeTreeNode.java,v 1.3 2006-04-05 18:13:40 hastings Exp $ 
  */
 public class NamespacesTypeTreeNode extends DefaultMutableTreeNode {
 
 	public NamespacesTypeTreeNode() {
 		super();
-		this.setUserObject("Schema Namespaces");
+		this.setUserObject("Data Types");
 	}
 	
 	public String toString(){
