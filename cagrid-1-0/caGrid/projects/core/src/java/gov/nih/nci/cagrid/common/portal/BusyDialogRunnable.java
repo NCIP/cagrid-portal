@@ -1,15 +1,20 @@
 package gov.nih.nci.cagrid.common.portal;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 
 public abstract class BusyDialogRunnable implements Runnable {
 
 	final private BusyDialog dialog;
+	private String errorMessage = "";
+	private boolean valid = true;
+	private JFrame owner;
 
 
 	public BusyDialogRunnable(JFrame owner, String title) {
+		this.owner = owner;
 		dialog = new BusyDialog(owner, "Progress (" + title + ")");
 	}
 
@@ -44,9 +49,24 @@ public abstract class BusyDialogRunnable implements Runnable {
 		});
 		setProgressText("");
 		dialog.setVisible(false);
+		
+		if(!valid){
+			JOptionPane.showMessageDialog(owner,errorMessage);
+		}
 	}
 
 
 	public abstract void process();
+
+
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+
+
+	public void setErrorMessage(String message) {
+		this.valid = false;
+		this.errorMessage = message;
+	}
 
 }

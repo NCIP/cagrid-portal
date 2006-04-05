@@ -426,15 +426,12 @@ public class CreationViewer extends GridPortalComponent {
 			BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance().getGridPortal(),
 				"Creating") {
 				public void process() {
-					String message = "";
-					boolean valid = false;
 					try {
 						if (dirFile.exists()) {
 							setProgressText("deleting existing directory");
 							boolean deleted = Utils.deleteDir(dirFile);
 							if (!deleted) {
-								message = "Unable to delete creation directory";
-								valid = false;
+								setErrorMessage("Unable to delete creation directory");
 								return;
 							}
 						}
@@ -450,18 +447,15 @@ public class CreationViewer extends GridPortalComponent {
 						// getMethodsTemplateFile().getText();
 						if (serviceName.length() > 0) {
 							if (serviceName.substring(0, 1).toLowerCase().equals(serviceName.substring(0, 1))) {
-								message = "Service Name cannnot start with lower case letters.";
-								valid = false;
+								setErrorMessage("Service Name cannnot start with lower case letters.");
 								return;
 							}
 							if (!serviceName.matches(ALLOWED_SERVICE_NAME_REGEX)) {
-								message = "Service Name can only contain " + ALLOWED_SERVICE_NAME_REGEX;
-								valid = false;
+								setErrorMessage("Service Name can only contain " + ALLOWED_SERVICE_NAME_REGEX);
 								return;
 							}
 						} else {
-							message = "Service Name cannot be empty.";
-							valid = false;
+							setErrorMessage("Service Name cannot be empty.");
 							return;
 						}
 
@@ -478,8 +472,7 @@ public class CreationViewer extends GridPortalComponent {
 						Process p = CommonTools.createAndOutputProcess(cmd);
 						p.waitFor();
 						if (p.exitValue() != 0) {
-							message = "Error creating new service!";
-							valid = false;
+							setErrorMessage("Error creating new service!");
 						}
 
 						setProgressText("running extension viewers");
@@ -508,8 +501,7 @@ public class CreationViewer extends GridPortalComponent {
 								new ModificationViewer(new File(dirName)));
 							dispose();
 						} else {
-							message = "Error creating new service!";
-							valid = false;
+							setErrorMessage("Error creating new service!");
 						}
 
 						setProgressText("purging old archives");
@@ -527,11 +519,7 @@ public class CreationViewer extends GridPortalComponent {
 						ResourceManager.createArchive(String.valueOf(id), serviceName, dirName);
 					} catch (Exception ex) {
 						ex.printStackTrace();
-						PortalUtils.showErrorMessage(ex.getMessage());
-						dispose();
-					}
-					if(!valid){
-						JOptionPane.showMessageDialog(CreationViewer.this,message);
+						setErrorMessage(ex.getMessage());
 					}
 				}
 			};

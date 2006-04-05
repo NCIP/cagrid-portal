@@ -1551,11 +1551,9 @@ public class ModificationViewer extends GridPortalComponent {
 							.getAbsolutePath());
 						Process p = CommonTools.createAndOutputProcess(cmd);
 						p.waitFor();
-						// really really waitFor
-						// Thread.sleep(100);
+						
 						if (p.exitValue() != 0) {
-							JOptionPane.showMessageDialog(ModificationViewer.this,
-							"Error: Unable to rebuild the skeleton");
+							setErrorMessage("Error: Unable to rebuild the skeleton");
 							return;
 						}
 						dirty = false;
@@ -1566,7 +1564,7 @@ public class ModificationViewer extends GridPortalComponent {
 						this.setProgressText("");
 					} catch (Exception e1) {
 						e1.printStackTrace();
-						JOptionPane.showMessageDialog(ModificationViewer.this, "Error: " + e1.getMessage());
+						setErrorMessage("Error: " + e1.getMessage());
 						return;
 					}
 				}
