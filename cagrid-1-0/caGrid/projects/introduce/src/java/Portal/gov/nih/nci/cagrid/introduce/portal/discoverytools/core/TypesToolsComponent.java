@@ -35,7 +35,6 @@ public class TypesToolsComponent extends GridPortalComponent {
         this.setContentPane(getMainPanel());
         this.setTitle("Discovery Tools");
         this.setFrameIcon(IntroduceLookAndFeel.getDiscoveryToolsIcon());
-			
 	}
 
 	/**
