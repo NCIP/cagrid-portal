@@ -420,18 +420,21 @@ public class CreationViewer extends GridPortalComponent {
 				"The creation directory is not empty.  All information in the directory will be lost.",
 				"Confirm Overwrite", JOptionPane.YES_NO_OPTION);
 		}
-
+		
+		
 		if (doIdeleteResult == JOptionPane.OK_OPTION) {
 			BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance().getGridPortal(),
 				"Creating") {
 				public void process() {
+					String message = "";
+					boolean valid = false;
 					try {
 						if (dirFile.exists()) {
 							setProgressText("deleting existing directory");
 							boolean deleted = Utils.deleteDir(dirFile);
 							if (!deleted) {
-								JOptionPane.showMessageDialog(CreationViewer.this,
-									"Unable to delete creation directory");
+								message = "Unable to delete creation directory";
+								valid = false;
 								return;
 							}
 						}
@@ -446,16 +449,19 @@ public class CreationViewer extends GridPortalComponent {
 						// String templateFilename =
 						// getMethodsTemplateFile().getText();
 						if (serviceName.length() > 0) {
-							if (!serviceName.matches(ALLOWED_SERVICE_NAME_REGEX)) {
-								PortalUtils.showMessage("Service Name can only contain " + ALLOWED_SERVICE_NAME_REGEX);
+							if (serviceName.substring(0, 1).toLowerCase().equals(serviceName.substring(0, 1))) {
+								message = "Service Name cannnot start with lower case letters.";
+								valid = false;
 								return;
 							}
-							if (serviceName.substring(0, 1).toLowerCase().equals(serviceName.substring(0, 1))) {
-								PortalUtils.showMessage("Service Name cannnot start with lower case letters.");
+							if (!serviceName.matches(ALLOWED_SERVICE_NAME_REGEX)) {
+								message = "Service Name can only contain " + ALLOWED_SERVICE_NAME_REGEX;
+								valid = false;
 								return;
 							}
 						} else {
-							PortalUtils.showMessage("Service Name cannot be empty.");
+							message = "Service Name cannot be empty.";
+							valid = false;
 							return;
 						}
 
@@ -472,7 +478,8 @@ public class CreationViewer extends GridPortalComponent {
 						Process p = CommonTools.createAndOutputProcess(cmd);
 						p.waitFor();
 						if (p.exitValue() != 0) {
-							PortalUtils.showErrorMessage("Error creating new service!");
+							message = "Error creating new service!";
+							valid = false;
 						}
 
 						setProgressText("running extension viewers");
@@ -501,7 +508,8 @@ public class CreationViewer extends GridPortalComponent {
 								new ModificationViewer(new File(dirName)));
 							dispose();
 						} else {
-							PortalUtils.showErrorMessage("Error creating new service!");
+							message = "Error creating new service!";
+							valid = false;
 						}
 
 						setProgressText("purging old archives");
@@ -522,11 +530,15 @@ public class CreationViewer extends GridPortalComponent {
 						PortalUtils.showErrorMessage(ex.getMessage());
 						dispose();
 					}
+					if(!valid){
+						JOptionPane.showMessageDialog(CreationViewer.this,message);
+					}
 				}
 			};
 
 			Thread th = new Thread(r);
 			th.start();
+			
 		}
 	}
 }
