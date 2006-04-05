@@ -1,11 +1,20 @@
 package gov.nih.nci.cagrid.data.codegen;
 
 import gov.nih.nci.cagrid.data.common.DataServiceConstants;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import org.jdom.Element;
 
 /** 
  *  DataServiceCodegenPostProcessor
@@ -57,5 +66,32 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 			}
 		}
 		return queryMethod;
+	}
+	
+	
+	private String namespacesToTypeMappings(NamespacesType namespaces) {
+		/*
+		<typeMapping qname="cadsr:Address"
+	    	xmlns:cadsr="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain"
+	        languageSpecificType="java:gov.nih.nci.cadsr.domain.Address"
+	        serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory"
+	        deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" encodingStyle=""/>
+	     */
+		// namespaces that we shouldn't be generating any type mappings for
+		Set verbotenNamespaces = new HashSet();
+		verbotenNamespaces.add(IntroduceConstants.W3CNAMESPACE);
+		verbotenNamespaces.add(DataServiceConstants.CQL_QUERY_URI);
+		verbotenNamespaces.add(DataServiceConstants.CQL_RESULT_SET_URI);
+		StringBuffer mappings = new StringBuffer();
+		NamespaceType[] nsTypes = namespaces.getNamespace();
+		for (int i = 0; i < nsTypes.length; i++) {
+			NamespaceType currentNamespace = nsTypes[i];
+			SchemaElementType[] elementTypes = currentNamespace.getSchemaElement();
+			for (int j = 0; j < elementTypes.length; j++) {
+				Element typeMapping = new Element("typeMapping");
+				/////
+			}
+		}
+		return mappings.toString();
 	}
 }

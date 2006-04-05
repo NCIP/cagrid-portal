@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /** 
@@ -139,7 +140,10 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			removeTypeButton.setIcon(PortalLookAndFeel.getRemoveIcon());
 			removeTypeButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+					if (getTypesTable().getSelectedRow() != -1) {
+						((DefaultTableModel) getTypesTable().getModel())
+							.removeRow(getTypesTable().getSelectedRow());
+					}
 				}
 			});
 		}
