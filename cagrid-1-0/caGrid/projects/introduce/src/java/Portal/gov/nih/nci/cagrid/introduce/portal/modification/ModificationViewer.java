@@ -270,7 +270,7 @@ public class ModificationViewer extends GridPortalComponent {
 			loadServiceProps();
 			
 			info = new ServiceInformation(introService, serviceProperties, methodsDirectory);
-			this.setSize(500, 472);
+			this.setSize(592, 545);
 			this.setContentPane(getJContentPane());
 			this.setTitle("Modify Service Interface");
 			this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
