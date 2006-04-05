@@ -20,12 +20,8 @@ public class NamespacesJTree extends JTree {
 
 
 	public NamespacesJTree(NamespacesType namespaces) {
-		this.root = new NamespacesTypeTreeNode();
-		this.model = new DefaultTreeModel(root, false);
-		this.namespaces = namespaces;
-		setModel(model);
 		setCellRenderer(new NamespacesTreeRenderer(model));
-		initialize();
+		setNamespaces(namespaces);
 	}
 
 
@@ -39,6 +35,15 @@ public class NamespacesJTree extends JTree {
 			}
 		}
 		expandAll(true);
+	}
+	
+	
+	public void setNamespaces(NamespacesType ns) {
+		this.root = new NamespacesTypeTreeNode();
+		this.model = new DefaultTreeModel(root, false);
+		this.namespaces = ns;
+		setModel(model);
+		initialize();
 	}
 
 

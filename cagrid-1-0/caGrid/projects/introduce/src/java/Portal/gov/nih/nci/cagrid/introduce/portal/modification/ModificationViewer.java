@@ -39,7 +39,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -901,9 +900,7 @@ public class ModificationViewer extends GridPortalComponent {
 			metadataPanel.add(getMetadataNamespaceTypesPanel(), gridBagConstraints35);
 			metadataPanel.addFocusListener(new java.awt.event.FocusAdapter() {
 				public void focusGained(java.awt.event.FocusEvent e) {
-					metadataNamespaceScrollPane.remove(getMetadataNamespacesJTree());
-					metadataNamespacesJTree = createMetadataNamespacesJTree();
-					metadataNamespaceScrollPane.setViewportView(metadataNamespacesJTree);
+					getMetadataNamespacesJTree().setNamespaces(introService.getNamespaces());
 				}
 			});
 		}
@@ -1446,58 +1443,26 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private NamespacesJTree getMetadataNamespacesJTree() {
 		if (metadataNamespacesJTree == null) {
-			metadataNamespacesJTree = createMetadataNamespacesJTree();
+			metadataNamespacesJTree = new NamespacesJTree(introService.getNamespaces());
+			metadataNamespacesJTree.addMouseListener(new MouseAdapter() {				
+				public void mouseClicked(MouseEvent e) {
+					if (e.getClickCount() == 2) {
+						if (getMetadataNamespacesJTree().getCurrentNode() instanceof SchemaElementTypeTreeNode) {
+							NamespaceType nt = ((NamespaceType) ((NamespaceTypeTreeNode) getMetadataNamespacesJTree()
+								.getCurrentNode().getParent()).getUserObject());
+							SchemaElementType st = ((SchemaElementType) ((SchemaElementTypeTreeNode) getMetadataNamespacesJTree()
+								.getCurrentNode()).getUserObject());
+							MetadataType metadata = new MetadataType();
+							metadata.setQName(new QName(nt.getNamespace(), st.getType()));
+							metadata.setPopulateFromFile(false);
+							metadata.setRegister(false);
+							getMetadataTable().addRow(metadata);
+						}
+					}
+				}				
+			});
 		}
 		return metadataNamespacesJTree;
-	}
-	
-	
-	private NamespacesJTree createMetadataNamespacesJTree() {
-		NamespacesJTree tree = new NamespacesJTree(introService.getNamespaces());
-		tree.addMouseListener(new MouseListener() {
-			
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			
-			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount() == 2) {
-					if (getMetadataNamespacesJTree().getCurrentNode() instanceof SchemaElementTypeTreeNode) {
-						NamespaceType nt = ((NamespaceType) ((NamespaceTypeTreeNode) getMetadataNamespacesJTree()
-							.getCurrentNode().getParent()).getUserObject());
-						SchemaElementType st = ((SchemaElementType) ((SchemaElementTypeTreeNode) getMetadataNamespacesJTree()
-							.getCurrentNode()).getUserObject());
-						MetadataType metadata = new MetadataType();
-						metadata.setQName(new QName(nt.getNamespace(), st.getType()));
-						metadata.setPopulateFromFile(false);
-						metadata.setRegister(false);
-						getMetadataTable().addRow(metadata);
-					}
-				}
-			}
-			
-		});
-		return tree;
 	}
 	
 	
