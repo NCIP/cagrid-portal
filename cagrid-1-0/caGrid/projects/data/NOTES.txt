@@ -1,5 +1,5 @@
 TODO:
-1 [_]: On create, data services need to have the data jars placed in their lib directory.
-2 [_]: On create, data services need the castor jars in their lib directory
+1 [D]: On create, data services need to have the data jars placed in their lib directory.
+2 [D]: On create, data services need the castor jars in their lib directory
 3 [_]: Automagical [client|server]-config.wsdd type mappings
-4 [_]: CQL implemetation that works against caCORE generated data sources
+4 [I]: CQL implemetation that works against caCORE generated data sources
