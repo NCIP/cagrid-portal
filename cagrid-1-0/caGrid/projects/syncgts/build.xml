@@ -270,6 +270,9 @@
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
 				</fileset>
+				<fileset dir="${ext.lib.dir}">
+					<include name="*.jar" />
+				</fileset>
 				<pathelement location="${stubs.dest}" />
 				<fileset dir="${ext.globus.dir}/lib">
 					<include name="*.jar" />
@@ -294,6 +297,9 @@
 		<javac srcdir="${test.src.dir}" destdir="${test.build.dest}" debug="${java.debug}" deprecation="${deprecation}">
 			<classpath>
 				<fileset dir="${test.lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${ext.lib.dir}">
 					<include name="*.jar" />
 				</fileset>
 				<fileset dir="${lib.dir}">
