@@ -1,15 +1,13 @@
 package gov.nih.nci.cagrid.syncgts.client;
 
 
-import java.net.URL;
-import java.rmi.RemoteException;
+import gov.nih.nci.cagrid.syncgts.common.SyncGTSI;
+import gov.nih.nci.cagrid.syncgts.stubs.SyncGTSPortType;
+import gov.nih.nci.cagrid.syncgts.stubs.service.SyncGTSServiceAddressingLocator;
+
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.globus.gsi.GlobusCredential;
-
-import gov.nih.nci.cagrid.syncgts.stubs.SyncGTSPortType;
-import gov.nih.nci.cagrid.syncgts.stubs.service.SyncGTSServiceAddressingLocator;
-import gov.nih.nci.cagrid.syncgts.common.SyncGTSI;
 
 
 /**

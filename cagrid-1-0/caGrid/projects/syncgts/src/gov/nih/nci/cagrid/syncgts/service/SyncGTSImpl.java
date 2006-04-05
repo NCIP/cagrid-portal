@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.syncgts.service;
 
 import gov.nih.nci.cagrid.syncgts.common.SyncGTSI;
-import java.rmi.RemoteException;
 
 /** 
  *  gov.nih.nci.cagrid.syncgtsI
