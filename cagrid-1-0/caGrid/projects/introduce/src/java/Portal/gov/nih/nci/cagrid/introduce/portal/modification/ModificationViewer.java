@@ -1142,12 +1142,6 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints32.gridy = 2;
 			gridBagConstraints32.weighty = 1.0D;
 			gridBagConstraints32.gridx = 0;
-			GridBagConstraints gridBagConstraints27 = new GridBagConstraints();
-			gridBagConstraints27.gridx = 0;
-			gridBagConstraints27.weightx = 0.0D;
-			gridBagConstraints27.weighty = 0.0D;
-			gridBagConstraints27.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints27.gridy = 1;
 			GridBagConstraints gridBagConstraints26 = new GridBagConstraints();
 			gridBagConstraints26.gridx = 1;
 			gridBagConstraints26.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -1169,7 +1163,6 @@ public class ModificationViewer extends GridPortalComponent {
 			namespacePanel.setLayout(new GridBagLayout());
 			namespacePanel.add(getDiscoveryPanel(), gridBagConstraints25);
 			namespacePanel.add(getNamespaceConfigurationPanel(), gridBagConstraints26);
-			namespacePanel.add(getDiscoveryButtonPanel(), gridBagConstraints27);
 			namespacePanel.add(getNamespaceTypePropertiesPanel(), gridBagConstraints32);
 		}
 		return namespacePanel;
@@ -1183,16 +1176,27 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private JPanel getDiscoveryPanel() {
 		if (discoveryPanel == null) {
+			GridBagConstraints gridBagConstraints27 = new GridBagConstraints();
+			gridBagConstraints27.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints27.gridy = 1;
+			gridBagConstraints27.weightx = 0.0D;
+			gridBagConstraints27.weighty = 0.0D;
+			gridBagConstraints27.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints27.gridx = 0;
 			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
 			gridBagConstraints16.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints16.weighty = 1.0;
+			gridBagConstraints16.gridx = 0;
+			gridBagConstraints16.gridy = 0;
+			gridBagConstraints16.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints16.weightx = 1.0;
 			discoveryPanel = new JPanel();
 			discoveryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Type",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
 				new java.awt.Font("Dialog", java.awt.Font.BOLD, 12), PortalLookAndFeel.getPanelLabelColor()));
-			discoveryPanel.setLayout(new GridBagLayout());
 			discoveryPanel.add(getDiscoveryTabbedPane(), gridBagConstraints16);
+			discoveryPanel.add(getDiscoveryButtonPanel(), gridBagConstraints27);
+			discoveryPanel.setLayout(new GridBagLayout());
 		}
 		return discoveryPanel;
 	}
@@ -1229,13 +1233,13 @@ public class ModificationViewer extends GridPortalComponent {
 	private JPanel getDiscoveryButtonPanel() {
 		if (discoveryButtonPanel == null) {
 			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
-			gridBagConstraints31.gridx = 2;
+			gridBagConstraints31.gridx = 1;
 			gridBagConstraints31.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints31.gridy = 1;
+			gridBagConstraints31.gridy = 0;
 			GridBagConstraints gridBagConstraints30 = new GridBagConstraints();
 			gridBagConstraints30.gridx = 0;
 			gridBagConstraints30.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints30.gridy = 1;
+			gridBagConstraints30.gridy = 0;
 			discoveryButtonPanel = new JPanel();
 			discoveryButtonPanel.setLayout(new GridBagLayout());
 			discoveryButtonPanel.add(getNamespaceAddButton(), gridBagConstraints30);
