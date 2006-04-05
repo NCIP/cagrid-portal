@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.gts.client.gtssync;
+package gov.nih.nci.cagrid.syncgts.core;
 
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
@@ -24,16 +24,16 @@ import org.projectmobius.common.MobiusDate;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class GTSSync {
+public class SyncGTS {
 
-	private GTSSyncProperties prop;
+	private SyncProperties prop;
 	private Map caListings;
 	private Map listingsById;
 	private Logger logger;
 	private int nextFileId = 0;
 
 
-	public GTSSync(GTSSyncProperties prop) {
+	public SyncGTS(SyncProperties prop) {
 		this.prop = prop;
 		logger = Logger.getLogger(this.getClass().getName());
 	}
@@ -297,12 +297,12 @@ public class GTSSync {
 
 	public static void main(String[] args) {
 		try {
-			GTSSyncProperties props = new GTSSyncProperties();
+			SyncProperties props = new SyncProperties();
 			SyncDescriptor des = new SyncDescriptor("https://localhost:8443/wsrf/services/cagrid/GridTrustService");
 			des.addFilter(new TrustedAuthorityFilter());
 			props.addSyncDescriptor(des);
 			props.setDeleteUnknownFiles(false);
-			GTSSync sync = new GTSSync(props);
+			SyncGTS sync = new SyncGTS(props);
 			sync.sync();
 		} catch (Exception e) {
 			e.printStackTrace();

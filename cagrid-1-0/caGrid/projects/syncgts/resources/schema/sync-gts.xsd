@@ -1,8 +1,8 @@
-<xsd:schema targetNamespace="http://cagrid.nci.nih.gov/1/gtssync"
+<xsd:schema targetNamespace="http://cagrid.nci.nih.gov/1/SyncGTS"
 	attributeFormDefault="qualified"
 	elementFormDefault="qualified"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-	xmlns:sync="http://cagrid.nci.nih.gov/1/gtssync"
+	xmlns:sync="http://cagrid.nci.nih.gov/1/SyncGTS"
 	xmlns:gts="http://cagrid.nci.nih.gov/6/gts">    
 	
 	   <xsd:element name="SyncProperties" minOccurs="0" maxOccurs="1" type="sync:SyncProperties"/>

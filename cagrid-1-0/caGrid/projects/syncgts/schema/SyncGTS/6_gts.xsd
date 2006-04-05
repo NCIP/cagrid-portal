@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:gts="http://cagrid.nci.nih.gov/6/gts" targetNamespace="http://cagrid.nci.nih.gov/6/gts" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xsd:element name="Permission" minOccurs="0" maxOccurs="1" type="gts:Permission" />
+  <xsd:complexType name="Permission">
+    <xsd:sequence>
+      <xsd:element name="GridIdentity" minOccurs="1" maxOccurs="1" type="xsd:string" />
+      <xsd:element name="Role" minOccurs="1" maxOccurs="1" type="gts:Role" />
+      <xsd:element name="TrustedAuthorityName" minOccurs="0" maxOccurs="1" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="PermissionFilter" minOccurs="0" maxOccurs="1" type="gts:PermissionFilter" />
+  <xsd:complexType name="PermissionFilter">
+    <xsd:sequence>
+      <xsd:element name="GridIdentity" minOccurs="0" maxOccurs="1" type="xsd:string" />
+      <xsd:element name="Role" minOccurs="0" maxOccurs="1" type="gts:Role" />
+      <xsd:element name="TrustedAuthorityName" minOccurs="0" maxOccurs="1" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="TrustedAuthorityFilter" minOccurs="0" maxOccurs="1" type="gts:TrustedAuthorityFilter" />
+  <xsd:complexType name="TrustedAuthorityFilter">
+    <xsd:sequence>
+      <xsd:element name="TrustedAuthorityName" minOccurs="0" maxOccurs="1" type="xsd:string" />
+      <xsd:element name="CertificateDN" minOccurs="0" maxOccurs="1" type="xsd:string" />
+      <xsd:element name="TrustLevel" minOccurs="0" maxOccurs="1" type="gts:TrustLevel" />
+      <xsd:element name="Status" minOccurs="0" maxOccurs="1" type="gts:Status" />
+      <xsd:element name="IsAuthority" minOccurs="0" maxOccurs="1" type="xsd:boolean" />
+      <xsd:element name="AuthorityTrustService" minOccurs="0" maxOccurs="1" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="TrustedAuthority" minOccurs="0" maxOccurs="1" type="gts:TrustedAuthority" />
+  <xsd:complexType name="TrustedAuthority">
+    <xsd:sequence>
+      <xsd:element name="TrustedAuthorityName" minOccurs="1" maxOccurs="1" type="xsd:string" />
+      <xsd:element name="TrustLevel" minOccurs="1" maxOccurs="1" type="gts:TrustLevel" />
+      <xsd:element name="Status" minOccurs="1" maxOccurs="1" type="gts:Status" />
+      <xsd:element name="IsAuthority" minOccurs="0" maxOccurs="1" type="xsd:boolean" />
+      <xsd:element name="AuthorityTrustService" minOccurs="0" maxOccurs="1" type="xsd:string" />
+      <xsd:element name="Certificate" minOccurs="1" maxOccurs="1" type="gts:X509Certificate" />
+      <xsd:element name="CRL" minOccurs="0" maxOccurs="1" type="gts:X509CRL" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:simpleType name="Role">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="TrustServiceAdmin" />
+      <xsd:enumeration value="TrustAuthorityManager" />
+      <xsd:enumeration value="User" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="Status">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Trusted" />
+      <xsd:enumeration value="Suspended" />
+      <xsd:enumeration value="Pending" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TrustLevel">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="One" />
+      <xsd:enumeration value="Two" />
+      <xsd:enumeration value="Three" />
+      <xsd:enumeration value="Four" />
+      <xsd:enumeration value="Five" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="X509Certificate">
+    <xsd:sequence>
+      <xsd:element name="certificateEncodedString" minOccurs="1" maxOccurs="1" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="X509CRL">
+    <xsd:sequence>
+      <xsd:element name="crlEncodedString" minOccurs="1" maxOccurs="1" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>
+

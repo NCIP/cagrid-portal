@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.gts.client.gtssync;
+package gov.nih.nci.cagrid.syncgts.core;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class GTSSyncProperties {
+public class SyncProperties {
 
 	private List gtsServices;
 	private boolean deleteUnknownFiles;
@@ -19,7 +19,7 @@ public class GTSSyncProperties {
 	private String filePrefix;
 
 
-	public GTSSyncProperties() {
+	public SyncProperties() {
 		this.gtsServices = new ArrayList();
 		this.deleteUnknownFiles = false;
 		this.errorOnConflicts = true;

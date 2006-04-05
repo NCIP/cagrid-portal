@@ -125,6 +125,16 @@
 				<include name="gridca.jar" />
 			</fileset>
 		</artifact>
+		
+		
+		<artifact track="main" type="jars" id="gts.client.jars">
+					<antcall target="build-gts" />
+					<fileset dir="${projects.dir}/gts/build/lib">
+						<include name="GridTrustService_stubs.jar" />
+						<include name="GridTrustService-common.jar" />
+						<include name="GridTrustService-client.jar" />
+					</fileset>
+				</artifact>
 
 		<artifact track="main" type="jars" id="cadsr.jars">
 			<antcall target="build-cadsr" />
@@ -268,7 +278,7 @@
 	<!-- =============================================================== -->
 	<!-- Grid Trust Service:                                                         -->
 	<!-- =============================================================== -->
-	<target name="build-gts" depends="prepare" description="Builds the dorian project">
+	<target name="build-gts" depends="prepare" description="Builds the GTS project">
 		<resolveDependencies extdir="${projects.dir}/gts/ext">
 			<artifact refid="core.jars" />
 			<artifact refid="core.test.jars" />
@@ -278,6 +288,21 @@
 			<artifact refid="mobius.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/gts" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+
+	<!-- =============================================================== -->
+	<!-- Sync GTS                                                         -->
+	<!-- =============================================================== -->
+	<target name="build-syncgts" depends="prepare" description="Builds the syncgts project">
+		<resolveDependencies extdir="${projects.dir}/syncgts/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="gridca.jars" />
+			<artifact refid="mobius.jars" />
+			<artifact refid="gts.client.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/syncgts" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
 
@@ -375,6 +400,9 @@
 		<delete dir="${projects.dir}/gts/ext" />
 		<ant dir="${projects.dir}/gts" inheritAll="false" antfile="build.xml" target="clean" />
 
+		<delete dir="${projects.dir}/syncgts/ext" />
+		<ant dir="${projects.dir}/syncgts" inheritAll="false" antfile="build.xml" target="clean" />
+
 		<delete dir="${projects.dir}/cadsr/ext" />
 		<ant dir="${projects.dir}/cadsr" inheritAll="false" antfile="build.xml" target="clean" />
 
@@ -397,12 +425,12 @@
 	</condition>
 
 	<target name="all" depends="all_1.5,all_pre_1.5" description="Builds the entire application" />
-	<target name="all_1.5_build" if="isJDK1.5" depends="clean, build-core, build-cadsr, build-gridca, build-opensaml, build-metadata, build-discovery, build-cql2xpath, build-gme, build-gts, build-introduce, build-dorian, build-data" />
+	<target name="all_1.5_build" if="isJDK1.5" depends="clean, build-core, build-cadsr, build-gridca, build-opensaml, build-metadata, build-discovery, build-cql2xpath, build-gme, build-gts, build-syncgts, build-introduce, build-dorian, build-data" />
 	<target name="all_1.5" if="isJDK1.5">
 		<antcall target="all_1.5_build" />
 		<echo message="Successfully built all projects." />
 	</target>
-	<target name="all_pre_1.5_build" unless="isJDK1.5" depends="clean, build-core, build-gridca, build-opensaml, build-metadata, build-discovery, build-cql2xpath, build-gme, build-gts, build-introduce, build-dorian, build-data" />
+	<target name="all_pre_1.5_build" unless="isJDK1.5" depends="clean, build-core, build-gridca, build-opensaml, build-metadata, build-discovery, build-cql2xpath, build-gme, build-gts, build-syncgts, build-introduce, build-dorian, build-data" />
 	<target name="all_pre_1.5" unless="isJDK1.5">
 		<echo message="=====================================================================================" />
 		<echo message="WARNING: When building with a JDK of version &lt; 1.5, not all projects can be built!" />

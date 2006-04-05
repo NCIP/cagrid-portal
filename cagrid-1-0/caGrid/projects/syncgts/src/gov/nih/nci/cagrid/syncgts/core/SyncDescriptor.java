@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.gts.client.gtssync;
+package gov.nih.nci.cagrid.syncgts.core;
 
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
 

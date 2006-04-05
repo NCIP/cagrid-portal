@@ -270,9 +270,6 @@
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
 				</fileset>
-				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
 				<pathelement location="${stubs.dest}" />
 				<fileset dir="${ext.globus.dir}/lib">
 					<include name="*.jar" />
@@ -302,9 +299,6 @@
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
 				</fileset>
-				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
 				<pathelement location="${build.dest}" />
 				<pathelement location="${stubs.dest}" />
 				<fileset dir="${ext.globus.dir}/lib">
@@ -327,7 +321,6 @@
 		</jar>
 		<jar jarfile="${build.lib.dir}/${service.jar.name}" basedir="${build.dest}">
 			<include name="${package.dir}/service/**" />
-			<include name="${package.dir}/tools/service/**" />
 		</jar>
 		<jar jarfile="${build.lib.dir}/${common.jar.name}" basedir="${build.dest}">
 			<include name="**/*.xml" />
@@ -337,7 +330,6 @@
 			<include name="${package.dir}/**" />
 			<exclude name="${package.dir}/client/**" />
 			<exclude name="${package.dir}/service/**" />
-			<exclude name="${package.dir}/tools/service/**" />
 		</jar>
 	</target>
 
