@@ -1,8 +1,6 @@
 package gov.nih.nci.cagrid.gts.client.gtssync;
 
-import java.io.File;
-
-
+import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -11,85 +9,24 @@ import java.io.File;
  *          Exp $
  */
 public class TrustedCAListing {
-	private File certificate;
-	private File crl;
-	private File signingPolicy;
-	private String name;
-	private Integer fileId;
+
+	private String service;
+	private TrustedAuthority trustedAuthority;
 
 
-	public Integer getFileId() {
-		return fileId;
+	public TrustedCAListing(String service, TrustedAuthority ta) {
+		this.service = service;
+		this.trustedAuthority = ta;
 	}
 
 
-	public void setFileId(Integer fileId) {
-		this.fileId = fileId;
+	public String getService() {
+		return service;
 	}
 
 
-	public TrustedCAListing(String name) {
-		this.name = name;
-	}
-
-
-	public File getCertificate() {
-		return certificate;
-	}
-
-
-	public void setCertificate(File certificate) {
-		this.certificate = certificate;
-	}
-
-
-	public File getCRL() {
-		return crl;
-	}
-
-
-	public void setCRL(File crl) {
-		this.crl = crl;
-	}
-
-
-	public File getSigningPolicy() {
-		return signingPolicy;
-	}
-
-
-	public void setSigningPolicy(File signingPolicy) {
-		this.signingPolicy = signingPolicy;
-	}
-
-
-	public String getName() {
-		return name;
-	}
-
-
-	public boolean isValid() {
-		// TODO: We may want to make sure the files are valid as well.
-		if (this.getCertificate() == null) {
-			return false;
-		}
-
-		if (this.getFileId() == null) {
-			return false;
-		}
-		return true;
-	}
-
-
-	public String toPrintText() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("Trusted CA [" + getName() + "] {\n");
-		sb.append(" Certificate:" + getCertificate() + " \n");
-		sb.append(" CRL:" + getCRL() + " \n");
-		sb.append(" Signing Policy:" + getSigningPolicy() + " \n");
-		sb.append("}\n");
-
-		return sb.toString();
+	public TrustedAuthority getTrustedAuthority() {
+		return trustedAuthority;
 	}
 
 }

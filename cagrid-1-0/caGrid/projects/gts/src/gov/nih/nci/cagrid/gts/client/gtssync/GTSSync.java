@@ -62,17 +62,19 @@ public class GTSSync {
 
 	public void sync() throws Exception {
 		try {
-			//Need to make it so multiple certs of the same CA cannot be written
-			//Need to make a priority for this.
-			//Hash by service, prioritize by service order
+			// Need to make it so multiple certs of the same CA cannot be
+			// written
+			// Need to make a priority for this.
+			// Hash by service, prioritize by service order
 			reset();
 			this.readInCurrentCADirectory();
+			Map master = new HashMap();
 			int taCount = 1;
+			String error = null;
 			String dt = MobiusDate.getCurrentDateTimeAsString();
 			for (int i = 0; i < prop.getSyncDescriptorCount(); i++) {
 				SyncDescriptor des = prop.getSyncDescriptor(i);
 				String uri = des.getGTSServiceURI();
-				String hash = String.valueOf(uri.hashCode());
 				this.logger.info("Syncing with the GTS " + uri);
 				GTSSearchClient client = new GTSSearchClient(uri);
 				Map taMap = new HashMap();
@@ -96,43 +98,75 @@ public class GTSSync {
 						logger.error("An error occurred syncing with " + uri + " using filter " + filter + "!!!", e);
 					}
 				}
-				// TODO: Write out tas.
+
+				// Write all to the master list;
 
 				Iterator itr = taMap.values().iterator();
 				while (itr.hasNext()) {
-					int fid = this.getNextFileId();
-					String filePrefix = CoGProperties.getDefault().getCaCertLocations() + File.separator + hash + "-"
-						+ dt + "-" + taCount;
-					File caFile = new File(filePrefix + "." + fid);
-					File crlFile = new File(filePrefix + ".r" + fid);
-					try {
+					TrustedAuthority ta = (TrustedAuthority) itr.next();
 
-						TrustedAuthority ta = (TrustedAuthority) itr.next();
-						X509Certificate cert = CertUtil.loadCertificate(ta.getCertificate()
-							.getCertificateEncodedString());
-						CertUtil.writeCertificate(cert, caFile);
-						logger.debug("Wrote out the certificate for the Trusted Authority "
-							+ ta.getTrustedAuthorityName() + " to the file " + caFile.getAbsolutePath());
-						if (ta.getCRL() != null) {
-							if (ta.getCRL().getCrlEncodedString() != null) {
-								X509CRL crl = CertUtil.loadCRL(ta.getCRL().getCrlEncodedString());
-								CertUtil.writeCRL(crl, crlFile);
-								logger.debug("Wrote out the CRL for the Trusted Authority "
-									+ ta.getTrustedAuthorityName() + " to the file " + crlFile.getAbsolutePath());
-							}
+					if (master.containsValue(ta.getTrustedAuthorityName())) {
+						TrustedCAListing gta = (TrustedCAListing) master.get(ta.getTrustedAuthorityName());
+						String msg = "Conflict Detected: The Trusted Authority " + ta.getTrustedAuthorityName()
+							+ " was determined to be trusted by both " + gta.getService() + " and " + uri + ".";
+						if (prop.errorOnConflicts()) {
+							error = msg;
+							logger.error(error);
+							break;
+						} else {
+							logger.warn(msg);
 						}
-
-					} catch (Exception e) {
-						logger.error("An unexpected error occurred writing out the Trusted Authorities!!!", e);
-						caFile.delete();
-						crlFile.delete();
+					} else {
+						master.put(ta.getTrustedAuthorityName(), new TrustedCAListing(uri, ta));
 					}
-					taCount = taCount + 1;
 				}
-				// TODO: Delete Other TAs.
-				this.logger.info("Done syncing with the GTS " + uri + " " + taMap.size()
+				this.logger.debug("Done syncing with the GTS " + uri + " " + taMap.size()
 					+ " Trusted Authority(s) found!!!");
+				
+				if (error != null) {
+					break;
+				}
 			}
+			
+			// TODO: Write out tas.
+			Iterator itr = master.values().iterator();
+			while (itr.hasNext()) {
+				int fid = this.getNextFileId();
+				String filePrefix = CoGProperties.getDefault().getCaCertLocations() + File.separator + prop.getFilePrefix() + "-"
+					+ dt + "-" + taCount;
+				File caFile = new File(filePrefix + "." + fid);
+				File crlFile = new File(filePrefix + ".r" + fid);
+				try {
+					TrustedCAListing listing = (TrustedCAListing) itr.next();
+					TrustedAuthority ta = listing.getTrustedAuthority();
+					X509Certificate cert = CertUtil.loadCertificate(ta.getCertificate()
+						.getCertificateEncodedString());
+					CertUtil.writeCertificate(cert, caFile);
+					logger.debug("Wrote out the certificate for the Trusted Authority "
+						+ ta.getTrustedAuthorityName() + " to the file " + caFile.getAbsolutePath());
+					if (ta.getCRL() != null) {
+						if (ta.getCRL().getCrlEncodedString() != null) {
+							X509CRL crl = CertUtil.loadCRL(ta.getCRL().getCrlEncodedString());
+							CertUtil.writeCRL(crl, crlFile);
+							logger.debug("Wrote out the CRL for the Trusted Authority "
+								+ ta.getTrustedAuthorityName() + " to the file " + crlFile.getAbsolutePath());
+						}
+					}
+
+				} catch (Exception e) {
+					logger.error("An unexpected error occurred writing out the Trusted Authorities!!!", e);
+					caFile.delete();
+					crlFile.delete();
+				}
+				taCount = taCount + 1;
+			}
+			// TODO: Delete Other TAs.
+			
+
+			if (error != null) {
+				throw new Exception(error);
+			}
+
 
 		} catch (Exception e) {
 			// TODO: Handle Exception
@@ -171,9 +205,9 @@ public class GTSSync {
 			String name = fn.substring(0, index);
 			String extension = fn.substring(index + 1);
 
-			TrustedCAListing ca = (TrustedCAListing) this.caListings.get(name);
+			TrustedCAFileListing ca = (TrustedCAFileListing) this.caListings.get(name);
 			if (ca == null) {
-				ca = new TrustedCAListing(name);
+				ca = new TrustedCAFileListing(name);
 				caListings.put(name, ca);
 			}
 
@@ -193,7 +227,7 @@ public class GTSSync {
 		Iterator itr = this.caListings.values().iterator();
 		logger.debug("Found " + caListings.size() + " Trusted CAs found!!!");
 		while (itr.hasNext()) {
-			TrustedCAListing ca = (TrustedCAListing) itr.next();
+			TrustedCAFileListing ca = (TrustedCAFileListing) itr.next();
 			if (ca.isValid()) {
 				this.listingsById.put(ca.getFileId(), ca);
 				logger.debug(ca.toPrintText());
@@ -208,7 +242,7 @@ public class GTSSync {
 	}
 
 
-	private void handleUnexpectedCA(TrustedCAListing ca) {
+	private void handleUnexpectedCA(TrustedCAFileListing ca) {
 		if (this.prop.deleteUnknownFiles()) {
 			logger.warn("The ca " + ca.getName() + " is invalid and will be removed!!!");
 			if (ca.getCertificate() != null) {

@@ -15,11 +15,15 @@ public class GTSSyncProperties {
 
 	private List gtsServices;
 	private boolean deleteUnknownFiles;
+	private boolean errorOnConflicts;
+	private String filePrefix;
 
 
 	public GTSSyncProperties() {
 		this.gtsServices = new ArrayList();
 		this.deleteUnknownFiles = false;
+		this.errorOnConflicts = true;
+		this.filePrefix = "gts";
 	}
 
 
@@ -45,6 +49,21 @@ public class GTSSyncProperties {
 
 	public void setDeleteUnknownFiles(boolean deleteUnknownFiles) {
 		this.deleteUnknownFiles = deleteUnknownFiles;
+	}
+
+
+	public boolean errorOnConflicts() {
+		return errorOnConflicts;
+	}
+
+
+	public void setErrorOnConflicts(boolean errorOnConflicts) {
+		this.errorOnConflicts = errorOnConflicts;
+	}
+
+
+	public String getFilePrefix() {
+		return filePrefix;
 	}
 
 }
