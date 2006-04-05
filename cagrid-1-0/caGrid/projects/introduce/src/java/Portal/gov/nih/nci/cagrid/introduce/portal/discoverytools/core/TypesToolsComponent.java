@@ -6,6 +6,7 @@ import org.projectmobius.portal.PortalResourceManager;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.NamespaceTypeToolDescriptor;
+import gov.nih.nci.cagrid.introduce.portal.discoverytools.NamespaceTypeToolsComponent;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -72,7 +73,8 @@ public class TypesToolsComponent extends GridPortalComponent {
 				for(int i = 0; i < tools.size(); i++){
 					NamespaceTypeToolDescriptor desc = (NamespaceTypeToolDescriptor)tools.get(i);
 					try {
-						contentTabbedPane.addTab(desc.getDisplayName(),desc.getNamespaceTypeToolComponent());
+						NamespaceTypeToolsComponent comp = desc.getNamespaceTypeToolComponent();
+						contentTabbedPane.addTab(desc.getDisplayName(),comp);
 					} catch (Exception e) {
 						JOptionPane.showMessageDialog(TypesToolsComponent.this,"Could not load types tool: " + desc.getType());
 					}

@@ -79,8 +79,16 @@ public class GMEViewer extends NamespaceTypeToolsComponent{
 	 * @return void
 	 */
 	private void initialize() {
-		this.add(getMainPanel());
+		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+		gridBagConstraints11.insets = new java.awt.Insets(5,0,0,0);
+		gridBagConstraints11.gridy = 0;
+		gridBagConstraints11.fill = java.awt.GridBagConstraints.BOTH;
+		gridBagConstraints11.weightx = 1.0D;
+		gridBagConstraints11.weighty = 1.0D;
+		gridBagConstraints11.gridx = 0;
+		this.setLayout(new GridBagLayout());
 		this.setSize(469, 446);
+		this.add(getMainPanel(), gridBagConstraints11);
 	}
 
 
