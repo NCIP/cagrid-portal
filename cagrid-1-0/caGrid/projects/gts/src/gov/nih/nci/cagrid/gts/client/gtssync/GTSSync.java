@@ -69,7 +69,7 @@ public class GTSSync {
 			reset();
 			this.readInCurrentCADirectory();
 			Map master = new HashMap();
-			int taCount = 1;
+
 			String error = null;
 			String dt = MobiusDate.getCurrentDateTimeAsString();
 			for (int i = 0; i < prop.getSyncDescriptorCount(); i++) {
@@ -122,34 +122,35 @@ public class GTSSync {
 				}
 				this.logger.debug("Done syncing with the GTS " + uri + " " + taMap.size()
 					+ " Trusted Authority(s) found!!!");
-				
+
 				if (error != null) {
 					break;
 				}
 			}
-			
+
 			// TODO: Write out tas.
+			int taCount = 0;
 			Iterator itr = master.values().iterator();
 			while (itr.hasNext()) {
+				taCount = taCount + 1;
 				int fid = this.getNextFileId();
-				String filePrefix = CoGProperties.getDefault().getCaCertLocations() + File.separator + prop.getFilePrefix() + "-"
-					+ dt + "-" + taCount;
+				String filePrefix = CoGProperties.getDefault().getCaCertLocations() + File.separator
+					+ prop.getFilePrefix() + "-" + dt + "-" + taCount;
 				File caFile = new File(filePrefix + "." + fid);
 				File crlFile = new File(filePrefix + ".r" + fid);
 				try {
 					TrustedCAListing listing = (TrustedCAListing) itr.next();
 					TrustedAuthority ta = listing.getTrustedAuthority();
-					X509Certificate cert = CertUtil.loadCertificate(ta.getCertificate()
-						.getCertificateEncodedString());
+					X509Certificate cert = CertUtil.loadCertificate(ta.getCertificate().getCertificateEncodedString());
 					CertUtil.writeCertificate(cert, caFile);
-					logger.debug("Wrote out the certificate for the Trusted Authority "
-						+ ta.getTrustedAuthorityName() + " to the file " + caFile.getAbsolutePath());
+					logger.debug("Wrote out the certificate for the Trusted Authority " + ta.getTrustedAuthorityName()
+						+ " to the file " + caFile.getAbsolutePath());
 					if (ta.getCRL() != null) {
 						if (ta.getCRL().getCrlEncodedString() != null) {
 							X509CRL crl = CertUtil.loadCRL(ta.getCRL().getCrlEncodedString());
 							CertUtil.writeCRL(crl, crlFile);
-							logger.debug("Wrote out the CRL for the Trusted Authority "
-								+ ta.getTrustedAuthorityName() + " to the file " + crlFile.getAbsolutePath());
+							logger.debug("Wrote out the CRL for the Trusted Authority " + ta.getTrustedAuthorityName()
+								+ " to the file " + crlFile.getAbsolutePath());
 						}
 					}
 
@@ -158,15 +159,39 @@ public class GTSSync {
 					caFile.delete();
 					crlFile.delete();
 				}
-				taCount = taCount + 1;
+
 			}
+			logger.info("Successfully wrote out " + taCount + " Trusted Authority(s) to "
+				+ CoGProperties.getDefault().getCaCertLocations());
 			// TODO: Delete Other TAs.
-			
+			int removeCount = 0;
+			Iterator del = caListings.values().iterator();
+			while (del.hasNext()) {
+				TrustedCAFileListing fl = (TrustedCAFileListing) del.next();
+				if (fl.getName().indexOf(prop.getFilePrefix()) >= 0) {
+					removeCount = removeCount + 1;
+					if (fl.getCertificate() != null) {
+						fl.getCertificate().delete();
+						logger.debug("Removed File "+fl.getCertificate().getAbsolutePath());
+					}
+					
+					if (fl.getCRL() != null) {
+						fl.getCRL().delete();
+						logger.debug("Removed File "+fl.getCRL().getAbsolutePath());
+					}
+					
+					if (fl.getSigningPolicy() != null) {
+						fl.getSigningPolicy() .delete();
+						logger.debug("Removed File "+fl.getSigningPolicy() .getAbsolutePath());
+					}
+				}
+			}
+			logger.info("Successfully removed " + taCount + " Trusted Authority(s) from "
+				+ CoGProperties.getDefault().getCaCertLocations());
 
 			if (error != null) {
 				throw new Exception(error);
 			}
-
 
 		} catch (Exception e) {
 			// TODO: Handle Exception
