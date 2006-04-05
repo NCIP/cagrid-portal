@@ -15,6 +15,7 @@
 <%
 		Map prefixmap=TemplateUtils.buildMasterNamespaceInformationMap(info.getServiceDescriptor());
 		Set importNamespaces = new HashSet();
+		Set writtenNamespaces = new HashSet();
   		Iterator iterator = prefixmap.keySet().iterator();
   
 		while(iterator.hasNext()){
@@ -24,6 +25,7 @@
 				try{ 
 					String newLine = "";
 					org.projectmobius.common.Namespace namespace = new org.projectmobius.common.Namespace(namespaceInformation.getNamespace().getNamespace());
+					writtenNamespaces.add(namespace.getRaw());
 					if (namespaceInformation.getNamespace().getPackageName() != null && !namespaceInformation.getNamespace().getPackageName().equals("")) {
 						newLine = namespace.getRaw() + "=" + namespaceInformation.getNamespace().getPackageName();
 					} else {
@@ -52,11 +54,13 @@
 			String newnewLine = "";
 			try {
 				String thisnamespace = (String)it.next();
-				String thispackageName = CommonTools.getPackageName(new Namespace(thisnamespace));
-				newLine = thisnamespace + "=" + thispackageName;
-				// turns http: into http\:
-				newnewLine = newLine.replaceFirst(":", "\\\\:");
-				newnewLine = newnewLine.replaceFirst("\\Q\\\\\\\\:\\E", "\\\\:");
+				if(!writtenNamespaces.contains(thisnamespace)){
+					String thispackageName = CommonTools.getPackageName(new Namespace(thisnamespace));
+					newLine = thisnamespace + "=" + thispackageName;
+					// turns http: into http\:
+					newnewLine = newLine.replaceFirst(":", "\\\\:");
+					newnewLine = newnewLine.replaceFirst("\\Q\\\\\\\\:\\E", "\\\\:");
+				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
