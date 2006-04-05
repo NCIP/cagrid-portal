@@ -519,7 +519,7 @@ public class CreationViewer extends GridPortalComponent {
 						ResourceManager.createArchive(String.valueOf(id), serviceName, dirName);
 					} catch (Exception ex) {
 						ex.printStackTrace();
-						setErrorMessage(ex.getMessage());
+						setErrorMessage("Error: " + ex.getMessage());
 					}
 				}
 			};
