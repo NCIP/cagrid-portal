@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.introduce.portal.discoverytools.core;
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
 
+import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.NamespaceTypeToolDescriptor;
 
@@ -33,6 +34,7 @@ public class TypesToolsComponent extends GridPortalComponent {
         this.setSize(new java.awt.Dimension(284,182));
         this.setContentPane(getMainPanel());
         this.setTitle("Discovery Tools");
+        this.setFrameIcon(IntroduceLookAndFeel.getDiscoveryToolsIcon());
 			
 	}
 
@@ -46,6 +48,8 @@ public class TypesToolsComponent extends GridPortalComponent {
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints.weighty = 1.0;
+			gridBagConstraints.gridx = 0;
+			gridBagConstraints.gridy = 0;
 			gridBagConstraints.weightx = 1.0;
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
