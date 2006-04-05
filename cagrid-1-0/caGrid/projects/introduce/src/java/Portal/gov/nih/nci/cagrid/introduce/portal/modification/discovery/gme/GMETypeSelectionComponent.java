@@ -54,7 +54,7 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent  
 	 */
 	private void initialize() {
 		GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-		gridBagConstraints4.insets = new java.awt.Insets(2, 2, 2, 2);
+		gridBagConstraints4.insets = new java.awt.Insets(0,0,0,0);
 		gridBagConstraints4.gridy = 0;
 		gridBagConstraints4.fill = java.awt.GridBagConstraints.BOTH;
 		gridBagConstraints4.gridwidth = 1;

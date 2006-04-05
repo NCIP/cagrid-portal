@@ -87,9 +87,6 @@ public class GMEConfigurationPanel extends JPanel {
 		gridBagConstraints7.weighty = 1.0D;
 		gridBagConstraints7.gridx = 1;
 		this.setLayout(new GridBagLayout());
-		this.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Type",
-			javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
-			new java.awt.Font("Dialog", java.awt.Font.BOLD, 12), PortalLookAndFeel.getPanelLabelColor()));
 		this.add(getNamespaceComboBox(), gridBagConstraints7);
 		this.add(namespaceLabel, gridBagConstraints9);
 		this.add(getSchemaComboBox(), gridBagConstraints8);

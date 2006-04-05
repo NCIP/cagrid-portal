@@ -1188,6 +1188,9 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints16.weighty = 1.0;
 			gridBagConstraints16.weightx = 1.0;
 			discoveryPanel = new JPanel();
+			discoveryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Type",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
+				new java.awt.Font("Dialog", java.awt.Font.BOLD, 12), PortalLookAndFeel.getPanelLabelColor()));
 			discoveryPanel.setLayout(new GridBagLayout());
 			discoveryPanel.add(getDiscoveryTabbedPane(), gridBagConstraints16);
 		}

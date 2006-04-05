@@ -24,6 +24,7 @@ import org.jdom.Element;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.Namespace;
 import org.projectmobius.common.XMLUtilities;
+import javax.swing.JTextField;
 
 
 public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent {
@@ -42,6 +43,10 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 
 	private JButton browseButton = null;
 
+	private JTextField namespaceText = null;
+
+	private JTextField filenameText = null;
+
 
 	/**
 	 * This method initializes
@@ -56,41 +61,53 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 	 * This method initializes this
 	 */
 	private void initialize() {
+		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+		gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
+		gridBagConstraints2.gridy = 0;
+		gridBagConstraints2.weightx = 1.0;
+		gridBagConstraints2.insets = new java.awt.Insets(2,2,2,2);
+		gridBagConstraints2.gridx = 1;
+		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+		gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
+		gridBagConstraints1.gridy = 1;
+		gridBagConstraints1.weightx = 1.0;
+		gridBagConstraints1.insets = new java.awt.Insets(2,2,2,2);
+		gridBagConstraints1.gridx = 1;
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-		gridBagConstraints.gridx = 1;
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.insets = new java.awt.Insets(2,2,2,2);
 		gridBagConstraints.gridy = 0;
-		this.setSize(new java.awt.Dimension(161, 92));
+		this.setSize(new java.awt.Dimension(233,92));
 		nameLabel = new JLabel();
 		nameLabel.setText("Name");
 
 		GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
 		gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
-		gridBagConstraints10.gridy = 1;
+		gridBagConstraints10.gridy = 2;
 		gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
 		gridBagConstraints10.gridx = 0;
 		GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
 		gridBagConstraints9.anchor = java.awt.GridBagConstraints.WEST;
-		gridBagConstraints9.gridy = 0;
+		gridBagConstraints9.gridy = 1;
 		gridBagConstraints9.insets = new java.awt.Insets(2, 2, 2, 2);
 		gridBagConstraints9.gridx = 0;
 		namespaceLabel = new JLabel();
 		namespaceLabel.setText("Namespace");
 		GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 		gridBagConstraints8.fill = GridBagConstraints.HORIZONTAL;
-		gridBagConstraints8.gridy = 1;
+		gridBagConstraints8.gridy = 2;
 		gridBagConstraints8.weightx = 1.0;
 		gridBagConstraints8.anchor = java.awt.GridBagConstraints.WEST;
 		gridBagConstraints8.insets = new java.awt.Insets(2, 2, 2, 2);
 		gridBagConstraints8.weighty = 1.0D;
 		gridBagConstraints8.gridx = 1;
 		this.setLayout(new GridBagLayout());
-		this.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Type",
-			javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
-			new java.awt.Font("Dialog", java.awt.Font.BOLD, 12), PortalLookAndFeel.getPanelLabelColor()));
 		this.add(namespaceLabel, gridBagConstraints9);
 		this.add(getSchemaComboBox(), gridBagConstraints8);
 		this.add(nameLabel, gridBagConstraints10);
 		this.add(getBrowseButton(), gridBagConstraints);
+		this.add(getNamespaceText(), gridBagConstraints1);
+		this.add(getFilenameText(), gridBagConstraints2);
 	}
 
 
@@ -121,9 +138,10 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 					try {
 						currentFile = new File(ResourceManager.promptFile(FileTypesSelectionComponent.this, null))
 							.getAbsolutePath();
+						getFilenameText().setText(currentFile);
 						Document doc = XMLUtilities.fileNameToDocument(currentFile);
 						currentNamespace = new Namespace(doc.getRootElement().getAttributeValue("targetNamespace"));
-						browseButton.setText(currentNamespace.getRaw());
+						getNamespaceText().setText(currentNamespace.getRaw());
 						List elements = doc.getRootElement().getChildren("element",
 							doc.getRootElement().getNamespace(Namespace.W3C_XMLSCHEMA));
 						getSchemaComboBox().removeAllItems();
@@ -206,4 +224,33 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 
 	}
 
-} // @jve:decl-index=0:visual-constraint="10,10"
+
+	/**
+	 * This method initializes namespaceText	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getNamespaceText() {
+		if (namespaceText == null) {
+			namespaceText = new JTextField();
+			namespaceText.setEditable(false);
+		}
+		return namespaceText;
+	}
+
+
+	/**
+	 * This method initializes filenameText	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getFilenameText() {
+		if (filenameText == null) {
+			filenameText = new JTextField();
+			filenameText.setEnabled(true);
+			filenameText.setEditable(false);
+		}
+		return filenameText;
+	}
+
+}  //  @jve:decl-index=0:visual-constraint="16,10"
