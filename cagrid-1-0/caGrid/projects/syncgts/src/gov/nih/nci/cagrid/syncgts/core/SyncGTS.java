@@ -1,9 +1,12 @@
 package gov.nih.nci.cagrid.syncgts.core;
 
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
+import gov.nih.nci.cagrid.gts.bean.Status;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
 import gov.nih.nci.cagrid.gts.client.GTSSearchClient;
+import gov.nih.nci.cagrid.syncgts.bean.SyncDescription;
+import gov.nih.nci.cagrid.syncgts.bean.SyncDescriptor;
 
 import java.io.File;
 import java.security.cert.X509CRL;
@@ -26,15 +29,15 @@ import org.projectmobius.common.MobiusDate;
  */
 public class SyncGTS {
 
-	private SyncProperties prop;
+	private SyncDescription description;
 	private Map caListings;
 	private Map listingsById;
 	private Logger logger;
 	private int nextFileId = 0;
 
 
-	public SyncGTS(SyncProperties prop) {
-		this.prop = prop;
+	public SyncGTS(SyncDescription prop) {
+		this.description = prop;
 		logger = Logger.getLogger(this.getClass().getName());
 	}
 
@@ -72,17 +75,25 @@ public class SyncGTS {
 
 			String error = null;
 			String dt = MobiusDate.getCurrentDateTimeAsString();
-			for (int i = 0; i < prop.getSyncDescriptorCount(); i++) {
-				SyncDescriptor des = prop.getSyncDescriptor(i);
-				String uri = des.getGTSServiceURI();
+			SyncDescriptor[] des = description.getSyncDescriptors();
+			int dcount =0; 
+			if(des != null){
+				dcount = des.length;
+			}
+			for (int i = 0; i < dcount; i++) {
+				String uri = des[i].getGtsServiceURI();
 				this.logger.info("Syncing with the GTS " + uri);
 				GTSSearchClient client = new GTSSearchClient(uri);
 				Map taMap = new HashMap();
-				for (int j = 0; j < des.getFilterCount(); j++) {
-					TrustedAuthorityFilter f = des.getFilter(j);
+				TrustedAuthorityFilter[] f = des[i].getTrustedAuthorityFilters();
+				int fcount = 0;
+				if(f!=null){
+					fcount = f.length;
+				}
+				for (int j = 0; j < fcount; j++) {
 					int filter = j + 1;
 					try {
-						TrustedAuthority[] tas = client.findTrustedAuthorities(f);
+						TrustedAuthority[] tas = client.findTrustedAuthorities(f[j]);
 						int length = 0;
 						if (tas != null) {
 							length = tas.length;
@@ -109,7 +120,7 @@ public class SyncGTS {
 						TrustedCAListing gta = (TrustedCAListing) master.get(ta.getTrustedAuthorityName());
 						String msg = "Conflict Detected: The Trusted Authority " + ta.getTrustedAuthorityName()
 							+ " was determined to be trusted by both " + gta.getService() + " and " + uri + ".";
-						if (prop.errorOnConflicts()) {
+						if (description.isErrorOnConflicts()) {
 							error = msg;
 							logger.error(error);
 							break;
@@ -135,7 +146,7 @@ public class SyncGTS {
 				taCount = taCount + 1;
 				int fid = this.getNextFileId();
 				String filePrefix = CoGProperties.getDefault().getCaCertLocations() + File.separator
-					+ prop.getFilePrefix() + "-" + dt + "-" + taCount;
+					+ description.getFilePrefix() + "-" + dt + "-" + taCount;
 				File caFile = new File(filePrefix + "." + fid);
 				File crlFile = new File(filePrefix + ".r" + fid);
 				try {
@@ -168,7 +179,7 @@ public class SyncGTS {
 			Iterator del = caListings.values().iterator();
 			while (del.hasNext()) {
 				TrustedCAFileListing fl = (TrustedCAFileListing) del.next();
-				if (fl.getName().indexOf(prop.getFilePrefix()) >= 0) {
+				if (fl.getName().indexOf(description.getFilePrefix()) >= 0) {
 					removeCount = removeCount + 1;
 					if (fl.getCertificate() != null) {
 						fl.getCertificate().delete();
@@ -257,7 +268,7 @@ public class SyncGTS {
 				this.listingsById.put(ca.getFileId(), ca);
 				logger.debug(ca.toPrintText());
 			} else {
-				if ((!this.prop.deleteUnknownFiles()) && (ca.getFileId() != null)) {
+				if ((!this.description.isDeleteInvalidFiles()) && (ca.getFileId() != null)) {
 					this.listingsById.put(ca.getFileId(), ca);
 				}
 				handleUnexpectedCA(ca);
@@ -268,7 +279,7 @@ public class SyncGTS {
 
 
 	private void handleUnexpectedCA(TrustedCAFileListing ca) {
-		if (this.prop.deleteUnknownFiles()) {
+		if (this.description.isDeleteInvalidFiles()) {
 			logger.warn("The ca " + ca.getName() + " is invalid and will be removed!!!");
 			if (ca.getCertificate() != null) {
 				ca.getCertificate().delete();
@@ -286,7 +297,7 @@ public class SyncGTS {
 
 
 	private void handleUnexpectedFile(File f) {
-		if (this.prop.deleteUnknownFiles()) {
+		if (this.description.isDeleteInvalidFiles()) {
 			logger.warn("The file " + f.getAbsolutePath() + " is unexpected and will be removed!!!");
 			f.delete();
 		} else {
@@ -297,12 +308,19 @@ public class SyncGTS {
 
 	public static void main(String[] args) {
 		try {
-			SyncProperties props = new SyncProperties();
-			SyncDescriptor des = new SyncDescriptor("https://localhost:8443/wsrf/services/cagrid/GridTrustService");
-			des.addFilter(new TrustedAuthorityFilter());
-			props.addSyncDescriptor(des);
-			props.setDeleteUnknownFiles(false);
-			SyncGTS sync = new SyncGTS(props);
+			SyncDescription description = new SyncDescription();
+			SyncDescriptor[] des =new SyncDescriptor[1];
+			des[0] = new SyncDescriptor();
+			des[0].setGtsServiceURI("https://localhost:8443/wsrf/services/cagrid/GridTrustService");
+			TrustedAuthorityFilter[] taf = new TrustedAuthorityFilter[1];
+			taf[0] = new TrustedAuthorityFilter();
+		    taf[0].setStatus(Status.Trusted);
+			des[0].setTrustedAuthorityFilters(taf);
+			description.setSyncDescriptors(des);
+			description.setFilePrefix("gts");
+			description.setErrorOnConflicts(true);
+			description.setDeleteInvalidFiles(false);
+			SyncGTS sync = new SyncGTS(description);
 			sync.sync();
 		} catch (Exception e) {
 			e.printStackTrace();

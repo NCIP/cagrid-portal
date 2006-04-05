@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:sync="http://cagrid.nci.nih.gov/2/SyncGTS" xmlns:gts="http://cagrid.nci.nih.gov/6/gts" targetNamespace="http://cagrid.nci.nih.gov/2/SyncGTS" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xsd:import namespace="http://cagrid.nci.nih.gov/6/gts" schemaLocation="6_gts.xsd" />
+  <xsd:element name="SyncDescription" minOccurs="0" maxOccurs="1" type="sync:SyncDescription" />
+  <xsd:complexType name="SyncDescription">
+    <xsd:sequence>
+      <xsd:element name="SyncDescriptors" minOccurs="1" maxOccurs="unbounded" type="sync:SyncDescriptor" />
+      <xsd:element name="DeleteInvalidFiles" minOccurs="1" maxOccurs="1" type="xsd:boolean" />
+      <xsd:element name="ErrorOnConflicts" minOccurs="1" maxOccurs="1" type="xsd:boolean" />
+      <xsd:element name="FilePrefix" minOccurs="1" maxOccurs="1" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="SyncDescriptor">
+    <xsd:sequence>
+      <xsd:element name="gtsServiceURI" minOccurs="1" maxOccurs="1" type="xsd:string" />
+      <xsd:element name="TrustedAuthorityFilters" minOccurs="1" maxOccurs="unbounded" type="gts:TrustedAuthorityFilter" />
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>
+

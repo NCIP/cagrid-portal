@@ -5,14 +5,14 @@
    <ns2:SchemaElement type="integer" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="boolean" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./6_gts.xsd" namespace="http://cagrid.nci.nih.gov/6/gts" packageName="gov.nci.nih.cagrid.gts.bean" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./6_gts.xsd" namespace="http://cagrid.nci.nih.gov/6/gts" packageName="gov.nih.nci.cagrid.gts.bean" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="Permission" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="PermissionFilter" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="TrustedAuthorityFilter" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="TrustedAuthority" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./1_SyncGTS.xsd" namespace="http://cagrid.nci.nih.gov/1/SyncGTS" packageName="gov.nci.nih.cagrid.syncgts.bean" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="SyncProperties" xsi:type="ns2:SchemaElementType"/>
+  <ns2:Namespace location="./2_SyncGTS.xsd" namespace="http://cagrid.nci.nih.gov/2/SyncGTS" packageName="gov.nih.nci.cagrid.syncgts.bean" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="SyncDescription" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
  </ns2:Namespaces>
  <ns3:Methods xsi:type="ns3:MethodsType" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Methods" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
