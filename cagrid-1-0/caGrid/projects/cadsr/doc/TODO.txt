@@ -5,6 +5,7 @@ make introduce depend on this
 
 caching using resources?
 
+(DONE) browser needs to show project version
 
 
 ==================================================

@@ -343,7 +343,7 @@ public class CaDSRBrowserPanel extends JPanel {
 
 
 		public String toString() {
-			return project.getShortName();
+			return project.getShortName() +" (version: "+project.getVersion()+")";
 		}
 
 	}
