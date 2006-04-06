@@ -5,14 +5,20 @@ import gov.nih.nci.cagrid.gts.bean.Status;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
 import gov.nih.nci.cagrid.gts.client.GTSSearchClient;
+import gov.nih.nci.cagrid.syncgts.bean.AddedTrustedCAs;
+import gov.nih.nci.cagrid.syncgts.bean.RemovedTrustedCAs;
 import gov.nih.nci.cagrid.syncgts.bean.SyncDescription;
 import gov.nih.nci.cagrid.syncgts.bean.SyncDescriptor;
+import gov.nih.nci.cagrid.syncgts.bean.SyncReport;
+import gov.nih.nci.cagrid.syncgts.bean.TrustedCA;
 
 import java.io.File;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -49,7 +55,7 @@ public class SyncGTS {
 	}
 
 
-	private int getNextFileId() {
+	private synchronized int getNextFileId() {
 		nextFileId = nextFileId + 1;
 		boolean found = false;
 		while (!found) {
@@ -63,21 +69,19 @@ public class SyncGTS {
 	}
 
 
-	public void sync() throws Exception {
+	public synchronized SyncReport sync() throws Exception {
+		SyncReport report = new SyncReport();
 		try {
-			// Need to make it so multiple certs of the same CA cannot be
-			// written
-			// Need to make a priority for this.
-			// Hash by service, prioritize by service order
 			reset();
+			String dt = MobiusDate.getCurrentDateTimeAsString();
+			report.setSyncDescription(description);
+			report.setTimestamp(dt);
 			this.readInCurrentCADirectory();
 			Map master = new HashMap();
-
 			String error = null;
-			String dt = MobiusDate.getCurrentDateTimeAsString();
 			SyncDescriptor[] des = description.getSyncDescriptors();
-			int dcount =0; 
-			if(des != null){
+			int dcount = 0;
+			if (des != null) {
 				dcount = des.length;
 			}
 			for (int i = 0; i < dcount; i++) {
@@ -87,7 +91,7 @@ public class SyncGTS {
 				Map taMap = new HashMap();
 				TrustedAuthorityFilter[] f = des[i].getTrustedAuthorityFilters();
 				int fcount = 0;
-				if(f!=null){
+				if (f != null) {
 					fcount = f.length;
 				}
 				for (int j = 0; j < fcount; j++) {
@@ -142,6 +146,7 @@ public class SyncGTS {
 			// TODO: Write out tas.
 			int taCount = 0;
 			Iterator itr = master.values().iterator();
+			List addedList = new ArrayList();
 			while (itr.hasNext()) {
 				taCount = taCount + 1;
 				int fid = this.getNextFileId();
@@ -150,53 +155,80 @@ public class SyncGTS {
 				File caFile = new File(filePrefix + "." + fid);
 				File crlFile = new File(filePrefix + ".r" + fid);
 				try {
+					TrustedCA ca = new TrustedCA();
 					TrustedCAListing listing = (TrustedCAListing) itr.next();
 					TrustedAuthority ta = listing.getTrustedAuthority();
 					X509Certificate cert = CertUtil.loadCertificate(ta.getCertificate().getCertificateEncodedString());
+					ca.setName(cert.getSubjectDN().getName());
+					ca.setGts(listing.getService());
 					CertUtil.writeCertificate(cert, caFile);
+					ca.setCertificateFile(caFile.getAbsolutePath());
 					logger.debug("Wrote out the certificate for the Trusted Authority " + ta.getTrustedAuthorityName()
 						+ " to the file " + caFile.getAbsolutePath());
 					if (ta.getCRL() != null) {
 						if (ta.getCRL().getCrlEncodedString() != null) {
 							X509CRL crl = CertUtil.loadCRL(ta.getCRL().getCrlEncodedString());
 							CertUtil.writeCRL(crl, crlFile);
+							ca.setCRLFile(crlFile.getAbsolutePath());
 							logger.debug("Wrote out the CRL for the Trusted Authority " + ta.getTrustedAuthorityName()
 								+ " to the file " + crlFile.getAbsolutePath());
 						}
 					}
-
+					addedList.add(ca);
 				} catch (Exception e) {
 					logger.error("An unexpected error occurred writing out the Trusted Authorities!!!", e);
 					caFile.delete();
 					crlFile.delete();
 				}
-
 			}
 			logger.info("Successfully wrote out " + taCount + " Trusted Authority(s) to "
 				+ CoGProperties.getDefault().getCaCertLocations());
-			// TODO: Delete Other TAs.
+
+			TrustedCA[] addedCAs = new TrustedCA[taCount];
+			for (int i = 0; i < addedList.size(); i++) {
+				addedCAs[i] = (TrustedCA) addedList.get(i);
+			}
+			AddedTrustedCAs atc = new AddedTrustedCAs();
+			atc.setTrustedCA(addedCAs);
+			report.setAddedTrustedCAs(atc);
+
 			int removeCount = 0;
+			List removedList = new ArrayList();
 			Iterator del = caListings.values().iterator();
 			while (del.hasNext()) {
 				TrustedCAFileListing fl = (TrustedCAFileListing) del.next();
 				if (fl.getName().indexOf(description.getFilePrefix()) >= 0) {
+					TrustedCA ca = new TrustedCA();
 					removeCount = removeCount + 1;
 					if (fl.getCertificate() != null) {
+						X509Certificate cert = CertUtil.loadCertificate(fl.getCertificate());
+						ca.setName(cert.getSubjectDN().getName());
+						ca.setCertificateFile(fl.getCertificate().getAbsolutePath());
 						fl.getCertificate().delete();
-						logger.debug("Removed File "+fl.getCertificate().getAbsolutePath());
+						logger.debug("Removed File " + fl.getCertificate().getAbsolutePath());
 					}
-					
+
 					if (fl.getCRL() != null) {
+						ca.setCRLFile(fl.getCRL().getAbsolutePath());
 						fl.getCRL().delete();
-						logger.debug("Removed File "+fl.getCRL().getAbsolutePath());
+						logger.debug("Removed File " + fl.getCRL().getAbsolutePath());
 					}
-					
+
 					if (fl.getSigningPolicy() != null) {
-						fl.getSigningPolicy() .delete();
-						logger.debug("Removed File "+fl.getSigningPolicy() .getAbsolutePath());
+						ca.setSigningPolicyFile(fl.getSigningPolicy().getAbsolutePath());
+						fl.getSigningPolicy().delete();
+						logger.debug("Removed File " + fl.getSigningPolicy().getAbsolutePath());
 					}
+					removedList.add(ca);
 				}
 			}
+			TrustedCA[] removedCAs = new TrustedCA[removedList.size()];
+			for (int i = 0; i < removedList.size(); i++) {
+				removedCAs[i] = (TrustedCA) removedList.get(i);
+			}
+			RemovedTrustedCAs rtc = new RemovedTrustedCAs();
+			rtc.setTrustedCA(removedCAs);
+			report.setRemovedTrustedCAs(rtc);
 			logger.info("Successfully removed " + taCount + " Trusted Authority(s) from "
 				+ CoGProperties.getDefault().getCaCertLocations());
 
@@ -208,6 +240,7 @@ public class SyncGTS {
 			// TODO: Handle Exception
 			throw e;
 		}
+		return report;
 	}
 
 
@@ -309,12 +342,12 @@ public class SyncGTS {
 	public static void main(String[] args) {
 		try {
 			SyncDescription description = new SyncDescription();
-			SyncDescriptor[] des =new SyncDescriptor[1];
+			SyncDescriptor[] des = new SyncDescriptor[1];
 			des[0] = new SyncDescriptor();
 			des[0].setGtsServiceURI("https://localhost:8443/wsrf/services/cagrid/GridTrustService");
 			TrustedAuthorityFilter[] taf = new TrustedAuthorityFilter[1];
 			taf[0] = new TrustedAuthorityFilter();
-		    taf[0].setStatus(Status.Trusted);
+			taf[0].setStatus(Status.Trusted);
 			des[0].setTrustedAuthorityFilters(taf);
 			description.setSyncDescriptors(des);
 			description.setFilePrefix("gts");
