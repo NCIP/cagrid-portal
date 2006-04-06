@@ -9,9 +9,12 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
+import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
+import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.codegen.metadata.SyncMetadata;
 import gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods;
 import gov.nih.nci.cagrid.introduce.codegen.security.SyncSecurity;
+import gov.nih.nci.cagrid.introduce.codegen.serializers.SyncSerialization;
 import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPostProcessor;
@@ -102,7 +105,8 @@ public class SyncTools {
 			throw new Exception("Introduce version in project does not match version provided by Introduce Toolkit ( "
 				+ IntroduceConstants.INTRODUCE_VERSION + " ): " + introService.getIntroduceVersion());
 		}
-		File servicePropertiesFile = new File(baseDirectory.getAbsolutePath() + File.separator + IntroduceConstants.INTRODUCE_PROPERTIES_FILE);
+		File servicePropertiesFile = new File(baseDirectory.getAbsolutePath() + File.separator
+			+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE);
 		Properties serviceProperties = new Properties();
 		serviceProperties.load(new FileInputStream(servicePropertiesFile));
 		ServiceInformation info = new ServiceInformation(introService, serviceProperties, baseDirectory);
@@ -125,17 +129,17 @@ public class SyncTools {
 
 		System.out.println("Synchronizing with pre processing extensions");
 		ExtensionTools tools = new ExtensionTools();
-		//run any extensions that need to be ran
-		if(introService.getExtensions()!=null && introService.getExtensions().getExtension()!=null){
+		// run any extensions that need to be ran
+		if (introService.getExtensions() != null && introService.getExtensions().getExtension() != null) {
 			ExtensionType[] extensions = introService.getExtensions().getExtension();
-			for(int i =0; i < extensions.length; i++){
+			for (int i = 0; i < extensions.length; i++) {
 				CodegenExtensionPreProcessor pp = tools.getCodegenPreProcessor(extensions[i].getName());
-				if(pp!=null){
+				if (pp != null) {
 					pp.preCodegen(info);
 				}
 			}
 		}
-		
+
 		// STEP 4: write out namespace mappings and flatten the wsdl file
 		flattenWSDL(info, schemaDir);
 
@@ -147,9 +151,10 @@ public class SyncTools {
 		populateClassnames(info, table);
 
 		// STEP 7: run the code generation tools
-		SyncMethods methodsS = new SyncMethods(baseDirectory, info);
-		SyncMetadata metadata = new SyncMetadata(baseDirectory, info);
-		SyncSecurity security = new SyncSecurity(baseDirectory, info);
+		SyncTool methodsS = new SyncMethods(baseDirectory, info);
+		SyncTool metadata = new SyncMetadata(baseDirectory, info);
+		SyncTool security = new SyncSecurity(baseDirectory, info);
+		SyncTool serializerS = new SyncSerialization(baseDirectory, info);
 
 		System.out.println("Synchronizing the methods");
 		methodsS.sync();
@@ -157,24 +162,27 @@ public class SyncTools {
 		metadata.sync();
 		System.out.println("Synchronizing the security");
 		security.sync();
-		
-		
+		System.out.println("Synchronizing the type mappings");
+		serializerS.sync();
+
+		// STEP 8: run the extensions
 		System.out.println("Synchronizing with post processing extensions");
-		//run any extensions that need to be ran
-		if(introService.getExtensions()!=null && introService.getExtensions().getExtension()!=null){
+		// run any extensions that need to be ran
+		if (introService.getExtensions() != null && introService.getExtensions().getExtension() != null) {
 			ExtensionType[] extensions = introService.getExtensions().getExtension();
-			for(int i =0; i < extensions.length; i++){
+			for (int i = 0; i < extensions.length; i++) {
 				CodegenExtensionPostProcessor pp = tools.getCodegenPostProcessor(extensions[i].getName());
-				if(pp!=null){
+				if (pp != null) {
 					pp.postCodegen(info);
 				}
 			}
 		}
-		
+
 	}
 
 
-	private void populateClassnames(ServiceInformation info, SymbolTable table) throws MalformedNamespaceException {
+	private void populateClassnames(ServiceInformation info, SymbolTable table) throws MalformedNamespaceException,
+		SynchronizationException {
 
 		// table.dump(System.out);
 		// get the classnames from the axis symbol table
@@ -203,7 +211,11 @@ public class SyncTools {
 								type.setPackageName(getPackageName(element.getName()));
 							}
 						} else {
-							// it the classname is already set then set hte
+							if (type.getSerializer() == null || type.getDeserializer() == null) {
+								throw new SynchronizationException(
+									"When specifying a custom classname, you must also specify both a serializer and deserializer.");
+							}
+							// it the classname is already set then set the
 							// package name to the predefined
 							// package name in the namespace type
 							type.setPackageName(ntype.getPackageName());
@@ -226,8 +238,10 @@ public class SyncTools {
 						if (!namespace.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
 							Type type = table.getType(new QName(info.getServiceProperties().getProperty(
 								IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN)
-								+ "/" + info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME),
-								">>" + mtype.getName() + ">" + inputParam.getName()));
+								+ "/"
+								+ info.getServiceProperties().getProperty(
+									IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME), ">>" + mtype.getName() + ">"
+								+ inputParam.getName()));
 							inputParam.setContainerClassName(info.getServiceProperties().getProperty(
 								"introduce.skeleton.package")
 								+ ".stubs." + getRelativeClassName(type.getName()));
@@ -293,7 +307,8 @@ public class SyncTools {
 		ServiceWSDLTemplate serviceWSDLT = new ServiceWSDLTemplate();
 		String serviceWSDLS = serviceWSDLT.generate(info);
 		File serviceWSDLF = new File(schemaDir.getAbsolutePath() + File.separator
-			+ info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator
+			+ info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
+			+ File.separator
 			+ info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + ".wsdl");
 		FileWriter serviceWSDLFW = new FileWriter(serviceWSDLF);
 		serviceWSDLFW.write(serviceWSDLS);
@@ -323,12 +338,12 @@ public class SyncTools {
 		parser.setNamespaceExcludes(excludeList);
 
 		parser.setOutputDir(baseDirectory.getAbsolutePath() + File.separator + "tmp");
-		parser.setNStoPkg(baseDirectory.getAbsolutePath() + File.separator + IntroduceConstants.NAMESPACE2PACKAGE_MAPPINGS_FILE);
-		parser
-			.run(new File(baseDirectory.getAbsolutePath() + File.separator + "build" + File.separator + "schema"
-				+ File.separator + info.getServiceProperties().get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator
-				+ info.getServiceProperties().get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + "_flattened.wsdl")
-				.getAbsolutePath());
+		parser.setNStoPkg(baseDirectory.getAbsolutePath() + File.separator
+			+ IntroduceConstants.NAMESPACE2PACKAGE_MAPPINGS_FILE);
+		parser.run(new File(baseDirectory.getAbsolutePath() + File.separator + "build" + File.separator + "schema"
+			+ File.separator + info.getServiceProperties().get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
+			+ File.separator + info.getServiceProperties().get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
+			+ "_flattened.wsdl").getAbsolutePath());
 		table = parser.getSymbolTable();
 		Utils.deleteDir(new File(baseDirectory.getAbsolutePath() + File.separator + "tmp"));
 
@@ -343,8 +358,8 @@ public class SyncTools {
 
 		info.getServiceProperties().setProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP, String.valueOf(id));
 		info.getServiceProperties().store(
-			new FileOutputStream(baseDirectory.getAbsolutePath() + File.separator + IntroduceConstants.INTRODUCE_PROPERTIES_FILE),
-			"Introduce Properties");
+			new FileOutputStream(baseDirectory.getAbsolutePath() + File.separator
+				+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE), "Introduce Properties");
 
 		ResourceManager.createArchive(String.valueOf(id), info.getServiceProperties().getProperty(
 			IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME), baseDirectory.getAbsolutePath());

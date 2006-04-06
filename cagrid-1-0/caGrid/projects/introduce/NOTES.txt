@@ -1,5 +1,9 @@
 To Do:
 
+we could support definition of "service properties" in introduce
+-serviceimpl would have gettters for them (pull them out of service context for them)
+-we would could write them into the wsdd
+
 type browser issues:
 -(DONE)you can and shouldn't be able to remove the XML schema schema
 -it shouldn't let you remove schema types that are being used by inputs,outputs,or metadata
@@ -21,7 +25,7 @@ need a way to generate XSD and beanmappers for existing object models that want 
 Need to add more complex tests to the system test for adding complex methods with faults etc.
 
 ==========
-(Scott) sync serializer/deserializer
+(PARTIAL - still need to add tests.. and GUI - Scott) sync serializer/deserializer
 
 	SchemaElement needs to have location and type always and have a choice between:
 	complex type with nothing
@@ -33,6 +37,14 @@ Need to add more complex tests to the system test for adding complex methods wit
 	languageSpecificType="java:(from Namespace packageName+.+SchemaElement className)"
 	serializer="(from SchemaElement serializer)"
 	deserializer="(from SchemaElement deserializer)" encodingStyle=""/>
+	
+	editors will look for:
+	<!-- START INTRODUCE TYPEMAPPINGS -->
+	if it exists, it dump the type mappings from its start, replacing evertying in the file until finding:
+	<!-- END INTRODUCE TYPEMAPPINGS -->
+	
+	if the tag isn't found, the tags (and type mappings) will be added to the end of the file (in appropriate location for server and client)
+	
 ==========
 
 secure message privacy does not work (STEVE)
