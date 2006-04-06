@@ -82,10 +82,10 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 		gridBagConstraints2.weighty = 0.0D;
 		gridBagConstraints2.weightx = 1.0D;
 		gridBagConstraints2.insets = new java.awt.Insets(0,0,0,0);
-		gridBagConstraints2.ipady = 10;
+		gridBagConstraints2.ipady = 2;
 		gridBagConstraints2.fill = java.awt.GridBagConstraints.BOTH;
 		this.setLayout(new GridBagLayout());
-		this.setSize(new java.awt.Dimension(312, 240));
+		this.setSize(new java.awt.Dimension(312,85));
 		this.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Element Type Configuration",
 			javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
 			null, IntroduceLookAndFeel.getPanelLabelColor()));
@@ -373,6 +373,9 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 			gridBagConstraints6.gridy = 0;
 			customizeLabel = new JLabel();
 			customizeLabel.setIcon(IntroduceLookAndFeel.getAddIcon());
+			customizeLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 10));
+			customizeLabel.setPreferredSize(new java.awt.Dimension(120,22));
+			customizeLabel.setText("Customize Beans");
 			customizeLabel.addMouseListener(new MouseAdapter() {
 			
 				public void mouseClicked(MouseEvent e) {
@@ -396,9 +399,6 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 			gridBagConstraints3.weighty = 1.0D;
 			gridBagConstraints3.gridheight = 2;
 			customBeanWrapperPanel = new JPanel();
-			customBeanWrapperPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Customize Bean",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
 			customBeanWrapperPanel.setLayout(new GridBagLayout());
 			customBeanWrapperPanel.add(getCustomBeanPanel(), gridBagConstraints3);
 			customBeanWrapperPanel.add(customizeLabel, gridBagConstraints6);

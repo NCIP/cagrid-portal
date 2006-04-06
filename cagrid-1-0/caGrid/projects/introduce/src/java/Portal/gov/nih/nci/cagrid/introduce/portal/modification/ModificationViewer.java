@@ -62,6 +62,7 @@ import javax.xml.namespace.QName;
 
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
+import java.awt.Insets;
 
 
 /**
@@ -170,6 +171,8 @@ public class ModificationViewer extends GridPortalComponent {
 	private NamespacesJTree metadataNamespacesJTree = null;
 	
 	private JTabbedPane discoveryTabbedPane = null;
+
+	private JPanel namespaceConfPanel = null;
 	
 	
 	/**
@@ -1137,33 +1140,29 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private JPanel getNamespacePanel() {
 		if (namespacePanel == null) {
-			GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
-			gridBagConstraints32.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints32.gridy = 1;
-			gridBagConstraints32.weighty = 1.0D;
-			gridBagConstraints32.gridx = 0;
+			GridBagConstraints gridBagConstraints28 = new GridBagConstraints();
+			gridBagConstraints28.gridx = 0;
+			gridBagConstraints28.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints28.weighty = 1.0D;
+			gridBagConstraints28.weightx = 0.0D;
+			gridBagConstraints28.anchor = java.awt.GridBagConstraints.NORTHWEST;
+			gridBagConstraints28.ipadx = 1;
+			gridBagConstraints28.ipady = 1;
+			gridBagConstraints28.gridy = 0;
 			GridBagConstraints gridBagConstraints26 = new GridBagConstraints();
 			gridBagConstraints26.gridx = 1;
 			gridBagConstraints26.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints26.weightx = 1.0D;
 			gridBagConstraints26.weighty = 1.0D;
 			gridBagConstraints26.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints26.gridheight = 2;
+			gridBagConstraints26.gridheight = 1;
 			gridBagConstraints26.ipadx = 1;
 			gridBagConstraints26.ipady = 1;
 			gridBagConstraints26.gridy = 0;
-			GridBagConstraints gridBagConstraints25 = new GridBagConstraints();
-			gridBagConstraints25.insets = new java.awt.Insets(0, 0, 0, 0);
-			gridBagConstraints25.gridy = 0;
-			gridBagConstraints25.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints25.weightx = 0.0D;
-			gridBagConstraints25.weighty = 1.0D;
-			gridBagConstraints25.gridx = 0;
+			namespacePanel.add(getNamespaceConfigurationPanel(), gridBagConstraints26);
+			namespacePanel.add(getNamespaceConfPanel(), gridBagConstraints28);
 			namespacePanel = new JPanel();
 			namespacePanel.setLayout(new GridBagLayout());
-			namespacePanel.add(getDiscoveryPanel(), gridBagConstraints25);
-			namespacePanel.add(getNamespaceConfigurationPanel(), gridBagConstraints26);
-			namespacePanel.add(getNamespaceTypePropertiesPanel(), gridBagConstraints32);
 		}
 		return namespacePanel;
 	}
@@ -1257,6 +1256,7 @@ public class ModificationViewer extends GridPortalComponent {
 		if (namespaceAddButton == null) {
 			namespaceAddButton = new JButton();
 			namespaceAddButton.setText("Add");
+			namespaceAddButton.setPreferredSize(new java.awt.Dimension(82,22));
 			namespaceAddButton.setIcon(IntroduceLookAndFeel.getAddIcon());
 			namespaceAddButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -1281,6 +1281,7 @@ public class ModificationViewer extends GridPortalComponent {
 		if (namespaceRemoveButton == null) {
 			namespaceRemoveButton = new JButton();
 			namespaceRemoveButton.setText("Remove");
+			namespaceRemoveButton.setPreferredSize(new java.awt.Dimension(106,22));
 			namespaceRemoveButton.setIcon(IntroduceLookAndFeel.getRemoveIcon());
 			namespaceRemoveButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -1579,5 +1580,35 @@ public class ModificationViewer extends GridPortalComponent {
 			Thread th = new Thread(r);
 			th.start();
 		}
+	}
+
+
+	/**
+	 * This method initializes namespaceConfPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getNamespaceConfPanel() {
+		if (namespaceConfPanel == null) {
+			GridBagConstraints gridBagConstraints25 = new GridBagConstraints();
+			gridBagConstraints25.fill = GridBagConstraints.BOTH;
+			gridBagConstraints25.gridx = 0;
+			gridBagConstraints25.gridy = 0;
+			gridBagConstraints25.weightx = 0.0D;
+			gridBagConstraints25.weighty = 0.0D;
+			gridBagConstraints25.anchor = java.awt.GridBagConstraints.NORTHWEST;
+			gridBagConstraints25.insets = new Insets(0, 0, 0, 0);
+			GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
+			gridBagConstraints32.fill = GridBagConstraints.BOTH;
+			gridBagConstraints32.gridy = 1;
+			gridBagConstraints32.weighty = 0.0D;
+			gridBagConstraints32.anchor = java.awt.GridBagConstraints.NORTHWEST;
+			gridBagConstraints32.gridx = 0;
+			namespaceConfPanel = new JPanel();
+			namespaceConfPanel.setLayout(new GridBagLayout());
+			namespaceConfPanel.add(getNamespaceTypePropertiesPanel(), gridBagConstraints32);
+			namespaceConfPanel.add(getDiscoveryPanel(), gridBagConstraints25);
+		}
+		return namespaceConfPanel;
 	}
 }  //  @jve:decl-index=0:visual-constraint="10,10"
