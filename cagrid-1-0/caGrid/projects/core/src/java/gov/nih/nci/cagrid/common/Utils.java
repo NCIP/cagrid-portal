@@ -20,6 +20,16 @@ import org.globus.wsrf.encoding.ObjectSerializer;
 
 
 public class Utils {
+	
+	public static File getCaGridUserHome(){
+		String userHome = System.getProperty("user.home");
+		File userHomeF = new File(userHome);
+		File caGridCache = new File(userHomeF.getAbsolutePath() + File.separator + ".cagrid");
+		if(!caGridCache.exists()){
+			caGridCache.mkdirs();
+		}
+		return caGridCache;
+	}
 
 	public static String getExceptionMessage(Exception e) {
 		String mess = e.getMessage();
