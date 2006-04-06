@@ -72,7 +72,7 @@
 	<classpathentry kind="lib" path="ext/endorsed/lib/xml-apis.jar"/>
 	<classpathentry sourcepath="/caGrid-1.0-core/src/java" kind="lib" path="ext/lib/caGrid-core-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/cagrid-opensaml-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
+	<classpathentry sourcepath="/mobius" kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="test/resources"/>
 	<classpathentry sourcepath="/caGrid-1.0-gridca" kind="lib" path="ext/lib/gridca.jar"/>
