@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.introduce;
 
+import gov.nih.nci.cagrid.common.Utils;
+
 import java.awt.Component;
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -38,10 +40,7 @@ public class ResourceManager {
 
 
 	public static String getResourcePath() {
-		String userHome = System.getProperty("user.home");
-		File userHomeF = new File(userHome);
-		File caGridCache = new File(userHomeF.getAbsolutePath() + File.separator + ".cagrid");
-		caGridCache.mkdir();
+		File caGridCache = Utils.getCaGridUserHome();
 		File introduceCache = new File(caGridCache + File.separator + "introduce");
 		introduceCache.mkdir();
 		return introduceCache.getAbsolutePath();
@@ -225,11 +224,7 @@ public class ResourceManager {
 	public static synchronized void restoreLatest(String currentId, String serviceName, String baseDir)
 		throws Exception {
 
-		String userHome = System.getProperty("user.home");
-		File userHomeF = new File(userHome);
-		File caGridCache = new File(userHomeF.getAbsolutePath() + File.separator + ".cagrid");
-		caGridCache.mkdir();
-		File introduceCache = new File(caGridCache + File.separator + "introduce");
+		File introduceCache = new File(getResourcePath());
 		introduceCache.mkdir();
 
 		final String finalServiceName = serviceName;
