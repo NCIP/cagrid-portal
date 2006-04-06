@@ -1,5 +1,7 @@
 To Do:
 
+Need to make Configuration Menu work... should be able to set appropriate services URLs, etc
+
 we could support definition of "service properties" in introduce
 -serviceimpl would have gettters for them (pull them out of service context for them)
 -we would could write them into the wsdd
