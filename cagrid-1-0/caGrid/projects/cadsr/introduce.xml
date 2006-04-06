@@ -6,16 +6,16 @@
    <ns2:SchemaElement type="boolean" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace location="./3.0_gov.nih.nci.cadsr.umlproject.domain.xsd" namespace="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" packageName="gov.nih.nci.cadsr.umlproject.domain" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement className="Project" type="Project" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="SubProject" type="SubProject" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="UMLPackageMetadata" type="UMLPackageMetadata" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="UMLClassMetadata" type="UMLClassMetadata" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="UMLAttributeMetadata" type="UMLAttributeMetadata" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="SemanticMetadata" type="SemanticMetadata" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="UMLAssociationMetadata" type="UMLAssociationMetadata" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="UMLGeneralizationMetadata" type="UMLGeneralizationMetadata" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="AtrributeTypeMetadata" type="AttributeTypeMetadata" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="TypeEnumerationMetadata" type="TypeEnumerationMetadata" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Project" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="Project" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SubProject" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="SubProject" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="UMLPackageMetadata" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="UMLPackageMetadata" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="UMLClassMetadata" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="UMLClassMetadata" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="UMLAttributeMetadata" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="UMLAttributeMetadata" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SemanticMetadata" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="SemanticMetadata" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="UMLAssociationMetadata" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="UMLAssociationMetadata" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="UMLGeneralizationMetadata" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="UMLGeneralizationMetadata" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="AttributeTypeMetadata" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="AttributeTypeMetadata" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="TypeEnumerationMetadata" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="TypeEnumerationMetadata" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace location="./1.0_gov.nih.nci.cagrid.metadata.common.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" packageName="gov.nih.nci.cagrid.metadata.common" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="CommonServiceMetadata" xsi:type="ns2:SchemaElementType"/>

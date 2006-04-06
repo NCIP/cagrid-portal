@@ -31,7 +31,7 @@ http://www.sosnoski.com/presents/cleansoap/results.html
 
 (DONE) make generic and move to core project
 
-get mapper and marshaller staticly?
+(DONE - no, but caches now)get mapper and marshaller staticly?
 
-had to hand edit:
+(DONE - fixed in introduce) had to hand edit:
  -client/server type mapping in client-config.wsdd, and castorMapping property to point to classpath location to load mapping file
