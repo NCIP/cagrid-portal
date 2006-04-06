@@ -2,293 +2,293 @@
 <!-- caGrid 1.0 Data Service Tools build file                                -->
 <!-- ======================================================================= -->
 <project name="metadata" default="all" basedir=".">
-	<!-- Environment -->
-	<property environment="env" />
-	<property file="${basedir}/build.properties" />
-	<property file="${user.dir}/build.properties" />
-	<property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
-
+    <!-- Environment -->
+    <property environment="env" />
+    <property file="${basedir}/build.properties" />
+    <property file="${user.dir}/build.properties" />
+    <property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
+	
 	<!-- build with debugging information -->
 	<property name="java.debug" value="on" />
 
-	<!-- Information -->
-	<property name="project.name" value="caGrid-data" />
-	<property name="project.version" value="1.0" />
+    <!-- Information -->
+    <property name="project.name" value="caGrid-data" />
+    <property name="project.version" value="1.0" />
 
 	<!-- build output dirs -->
-	<property name="build.dir" location="build" />
-	<property name="build.utils.dest" location="${build.dir}/utilities/classes" />
-	<property name="build.extension.dest" location="${build.dir}/extension/classes" />
-	<property name="build.service.dest" location="${build.dir}/service/classes" />
-	<property name="build.jars.dir" location="build/lib" />
-
+    <property name="build.dir" location="build" />
+	<property name="build.utils.dest" location="${build.dir}/utilities/classes"/>
+	<property name="build.extension.dest" location="${build.dir}/extension/classes"/>
+	<property name="build.service.dest" location="${build.dir}/service/classes"/>
+    <property name="build.jars.dir" location="build/lib" />
+	
 	<!-- jar names -->
-	<property name="utils.jar.name" value="${project.name}-${project.version}-utils.jar" />
-	<property name="extension.jar.name" value="${project.name}-${project.version}-extension.jar" />
-	<property name="project.jar.name" value="${project.name}-${project.version}.jar" />
-	<property name="service.jar.name" value="${project.name}-${project.version}-service.jar" />
-
+	<property name="utils.jar.name" value="${project.name}-${project.version}-utils.jar"/>
+	<property name="extension.jar.name" value="${project.name}-${project.version}-extension.jar"/>
+	<property name="project.jar.name" value="${project.name}-${project.version}.jar"/>
+	<property name="service.jar.name" value="${project.name}-${project.version}-service.jar"/>
+	
 	<!-- jar files -->
-	<property name="extension.jar.file" value="${build.jars.dir}/${extension.jar.name}" />
-	<property name="project.jar.file" value="${build.jars.dir}/${project.jar.name}" />
-	<property name="utils.jar.file" value="${build.jars.dir}/${utils.jar.name}" />
-	<property name="service.jar.file" value="${build.jars.dir}/${service.jar.name}" />
-
+	<property name="extension.jar.file" value="${build.jars.dir}/${extension.jar.name}"/>
+	<property name="project.jar.file" value="${build.jars.dir}/${project.jar.name}"/>
+	<property name="utils.jar.file" value="${build.jars.dir}/${utils.jar.name}"/>
+	<property name="service.jar.file" value="${build.jars.dir}/${service.jar.name}"/>
+	
 	<!-- extension -->
-	<property name="extension.base.dir" location="${basedir}/extension" />
-	<property name="extension.description.file" value="${extension.base.dir}/extension.xml" />
-	<property name="extension.out.dir" location="${extension.base.dir}/data" />
+	<property name="extension.base.dir" location="${basedir}/extension"/>
+	<property name="extension.description.file" value="${extension.base.dir}/extension.xml"/>
+	<property name="extension.out.dir" location="${extension.base.dir}/data"/>
 
 	<!-- stubs -->
-	<property name="stubs.dir" location="${build.dir}/stubs" />
-	<property name="stubs.src" location="${stubs.dir}/src" />
-	<property name="stubs.dest" location="${stubs.dir}/classes" />
-	<property name="stubs.jar.name" value="${project.name}-${project.version}_Stubs.jar" />
-	<property name="stubs.jar.file" value="${build.jars.dir}/${stubs.jar.name}" />
-	<property name="ant.build.stubs" location="${globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
+    <property name="stubs.dir" location="${build.dir}/stubs" />
+    <property name="stubs.src" location="${stubs.dir}/src" />
+    <property name="stubs.dest" location="${stubs.dir}/classes" />
+    <property name="stubs.jar.name" value="${project.name}-${project.version}_Stubs.jar" />
+	<property name="stubs.jar.file" value="${build.jars.dir}/${stubs.jar.name}"/>
+    <property name="ant.build.stubs" location="${globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />    
 
 	<!-- schemas and namespace mappings -->
-	<property name="schema.src" location="${globus.dir}/share/schema" />
-	<property name="schema.dest" location="${build.dir}/schema" />
-	<property name="mapping.src" value="${basedir}/NStoPkg.properties" />
-
+    <property name="schema.src" location="${globus.dir}/share/schema" />
+    <property name="schema.dest" location="${build.dir}/schema" />
+    <property name="mapping.src" value="${basedir}/NStoPkg.properties" />
+	
 	<!-- source directories -->
-	<property name="src.dir" location="${basedir}/src/java" />
-	<property name="utils.src.dir" location="${src.dir}/utilities" />
-	<property name="extension.src.dir" location="${src.dir}/extension" />
-	<property name="service.src.dir" location="${src.dir}/service" />
-
+	<property name="src.dir" location="${basedir}/src/java"/>
+	<property name="utils.src.dir" location="${src.dir}/utilities"/>
+	<property name="extension.src.dir" location="${src.dir}/extension"/>
+	<property name="service.src.dir" location="${src.dir}/service"/>
+	
 	<!-- libraries -->
-	<property name="lib.dir" location="${basedir}/lib" />
-	<property name="ext.lib.dir" location="${basedir}/ext/lib" />
-
+	<property name="lib.dir" location="${basedir}/lib"/>
+	<property name="ext.lib.dir" location="${basedir}/ext/lib"/>
+	
 	<!-- creates output directories -->
-	<target name="init">
-		<mkdir dir="${build.dir}" />
-		<mkdir dir="${build.utils.dest}" />
-		<mkdir dir="${build.extension.dest}" />
-		<mkdir dir="${build.service.dest}" />
-		<mkdir dir="${build.jars.dir}" />
-		<mkdir dir="${stubs.dir}" />
-		<mkdir dir="${stubs.src}" />
-		<mkdir dir="${stubs.dest}" />
-		<mkdir dir="${schema.dest}" />
-		<!-- copy schemas to the output directory -->
-		<copy toDir="${schema.dest}">
-			<fileset dir="schema" casesensitive="yes">
-				<include name="Data/**/*.xsd" />
-				<include name="Data/**/*.wsdl" />
-			</fileset>
-		</copy>
-		<available property="stubs.present" type="dir" file="${stubs.dest}/gov/nih/nci/cagrid" />
-	</target>
+    <target name="init">
+        <mkdir dir="${build.dir}" />
+    	<mkdir dir="${build.utils.dest}"/>
+    	<mkdir dir="${build.extension.dest}"/>
+    	<mkdir dir="${build.service.dest}"/>
+        <mkdir dir="${build.jars.dir}" />
+        <mkdir dir="${stubs.dir}" />
+        <mkdir dir="${stubs.src}" />
+        <mkdir dir="${stubs.dest}" />
+        <mkdir dir="${schema.dest}" />
+    	<!-- copy schemas to the output directory -->
+        <copy toDir="${schema.dest}">
+            <fileset dir="schema" casesensitive="yes">
+                <include name="Data/**/*.xsd" />
+                <include name="Data/**/*.wsdl" />
+            </fileset>
+        </copy>
+        <available property="stubs.present" type="dir" file="${stubs.dest}/gov/nih/nci/cagrid" />
+    </target>
 
 
 	<!-- generates source stubs for the schema defined types -->
-	<target name="stubs" unless="stubs.present" depends="init">
-		<property name="mapping.dst" value="${build.dir}/NStoPkg.properties" />
-		<ant antfile="${ant.build.stubs}" target="mergePackageMapping" />
-		<property name="mapping.file" value="${mapping.dst}" />
-		<!-- generate stubs for CQLQuery classes -->
-		<ant antfile="${ant.build.stubs}" target="generateStubs">
-			<property name="source.stubs.dir" location="${schema.dest}/Data" />
-			<property name="wsdl.file" value="Query.wsdl" />
-			<property name="target.stubs.dir" location="${stubs.src}" />
+    <target name="stubs" unless="stubs.present" depends="init">
+        <property name="mapping.dst" value="${build.dir}/NStoPkg.properties" />
+        <ant antfile="${ant.build.stubs}" target="mergePackageMapping" />
+        <property name="mapping.file" value="${mapping.dst}" />
+    	<!-- generate stubs for CQLQuery classes -->
+    	<ant antfile="${ant.build.stubs}" target="generateStubs">
+    		<property name="source.stubs.dir" location="${schema.dest}/Data"/>
+    		<property name="wsdl.file" value="Query.wsdl"/>
+			<property name="target.stubs.dir" location="${stubs.src}"/>
 		</ant>
-		<!-- generate stubs for CQLQueryResponse classes -->
-		<ant antfile="${ant.build.stubs}" target="generateStubs">
-			<property name="source.stubs.dir" location="${schema.dest}/Data" />
-			<property name="wsdl.file" value="Response.wsdl" />
-			<property name="target.stubs.dir" location="${stubs.src}" />
-		</ant>
-	</target>
-
-
+    	<!-- generate stubs for CQLQueryResponse classes -->
+        <ant antfile="${ant.build.stubs}" target="generateStubs">
+            <property name="source.stubs.dir" location="${schema.dest}/Data" />
+            <property name="wsdl.file" value="Response.wsdl" />
+            <property name="target.stubs.dir" location="${stubs.src}" />
+        </ant>
+    </target>
+	
+	
 	<!-- compiles the source stubs for the schema defined types -->
-	<target name="compileStubs" depends="stubs">
-		<delete dir="${stubs.src}/org/apache" />
-		<javac srcdir="${stubs.src}" destdir="${stubs.dest}" debug="${java.debug}">
-			<include name="**/*.java" />
-			<classpath>
-				<fileset dir="${globus.dir}/lib">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</javac>
-	</target>
-
-
+    <target name="compileStubs" depends="stubs">
+        <delete dir="${stubs.src}/org/apache" />
+        <javac srcdir="${stubs.src}" destdir="${stubs.dest}" debug="${java.debug}">
+            <include name="**/*.java" />
+            <classpath>
+                <fileset dir="${globus.dir}/lib">
+                    <include name="*.jar" />
+                </fileset>
+            </classpath>
+        </javac>
+    </target>
+	
+	
 	<!-- compiles the utility source code -->
 	<target name="compileUtilsSource" depends="compileStubs">
 		<javac srcdir="${utils.src.dir}" destdir="${build.utils.dest}" debug="${java.debug}">
 			<classpath>
 				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
+					<include name="*.jar"/>
 				</fileset>
 				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar" />
+					<include name="*.jar"/>
 				</fileset>
-				<pathelement location="${stubs.dest}" />
+				<pathelement location="${stubs.dest}"/>
 				<fileset dir="${globus.dir}/lib">
-					<include name="*.jar" />
+					<include name="*.jar"/>
 				</fileset>
 			</classpath>
 			<include name="**/*.java" />
 		</javac>
 	</target>
-
-
+	
+	
 	<!-- compiles the extension source code -->
 	<target name="compileExtensionSource" depends="compileStubs">
 		<javac srcdir="${extension.src.dir}" destdir="${build.extension.dest}" debug="${java.debug}">
 			<classpath>
 				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
+					<include name="*.jar"/>
 				</fileset>
-				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar" />
+					<fileset dir="${ext.lib.dir}">
+				<include name="*.jar"/>
 				</fileset>
-				<pathelement location="${stubs.dest}" />
+				<pathelement location="${stubs.dest}"/>
 				<fileset dir="${globus.dir}/lib">
-					<include name="*.jar" />
+					<include name="*.jar"/>
 				</fileset>
 			</classpath>
 		</javac>
 	</target>
-
-
+	
+	
 	<!-- compiles the service side code -->
 	<target name="compileService" depends="compileStubs, compileUtilsSource">
 		<javac srcdir="${service.src.dir}" destdir="${build.service.dest}" debug="${java.debug}">
 			<classpath>
 				<fileset dir="${lib.dir}">
-					<include name="**/*.jar" />
+					<include name="**/*.jar"/>
 				</fileset>
-				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar" />
+					<fileset dir="${ext.lib.dir}">
+				<include name="*.jar"/>
 				</fileset>
-				<pathelement location="${stubs.dest}" />
-				<pathelement location="${build.utils.dest}" />
+				<pathelement location="${stubs.dest}"/>
+				<pathelement location="${build.utils.dest}"/>
 				<fileset dir="${globus.dir}/lib">
-					<include name="*.jar" />
+					<include name="*.jar"/>
 				</fileset>
 			</classpath>
 		</javac>
 	</target>
 
-
+	
 	<!-- jars the stubs -->
-	<target name="jarStubs" depends="compileStubs" description="Builds and jars just the stubs and beans">
-		<jar destfile="${stubs.jar.file}">
-			<fileset dir="${stubs.dest}" />
-			<fileset dir="${stubs.src}" />
-		</jar>
-	</target>
-
-
+    <target name="jarStubs" depends="compileStubs" description="Builds and jars just the stubs and beans">
+        <jar destfile="${stubs.jar.file}">
+            <fileset dir="${stubs.dest}" />
+            <fileset dir="${stubs.src}" />
+        </jar>
+    </target>
+	
+	
 	<!-- jars the utilities -->
 	<target name="jarUtils" depends="compileUtilsSource" description="Builds and jars the whole project">
 		<jar destfile="${project.jar.file}">
 			<fileset dir="${stubs.dest}">
-				<include name="**/*.class" />
+				<include name="**/*.class"/>
 			</fileset>
-			<fileset dir="${build.utils.dest}}">
-				<include name="**/*.class" />
+			<fileset dir="${build.utils.dest}">
+				<include name="**/*.class"/>
 			</fileset>
 		</jar>
 	</target>
-
-
+	
+		
 	<!-- jars the extension -->
 	<target name="jarExtension" depends="compileExtensionSource" description="Jars the introduce extension code">
 		<jar destfile="${extension.jar.file}">
 			<fileset dir="${stubs.dest}">
-				<include name="**/*.class" />
+				<include name="**/*.class"/>
 			</fileset>
 			<fileset dir="${build.extension.dest}">
-				<include name="**/*.class" />
+				<include name="**/*.class"/>
 			</fileset>
 		</jar>
 	</target>
-
-
+	
+	
 	<!-- jars the service side stuff -->
 	<target name="jarService" depends="compileService" description="Jars the service side code">
 		<jar destfile="${service.jar.file}">
 			<fileset dir="${stubs.dest}">
-				<include name="**/*.class" />
+				<include name="**/*.class"/>
 			</fileset>
 			<fileset dir="${build.service.dest}">
-				<include name="**/*.class" />
+				<include name="**/*.class"/>
 			</fileset>
 		</jar>
 	</target>
-
-
+	
+	
 	<!-- jars everything -->
 	<target name="jarAll" depends="compileStubs, compileUtilsSource, compileExtensionSource, compileService" description="Jars eveything in the project">
 		<jar destfile="${project.jar.file}">
 			<fileset dir="${stubs.dest}">
-				<include name="**/*.class" />
+				<include name="**/*.class"/>
 			</fileset>
 			<fileset dir="${build.utils.dest}">
-				<include name="**/*.class" />
+				<include name="**/*.class"/>
 			</fileset>
 			<fileset dir="${build.extension.dest}">
-				<include name="**/*.class" />
+				<include name="**/*.class"/>
 			</fileset>
 			<fileset dir="${build.service.dest}">
-				<include name="**/*.class" />
-			</fileset>
+				<include name="**/*.class"/>
+			</fileset>			
 		</jar>
 	</target>
-
-
+    
+	
 	<!-- removes all build output -->
-	<target name="clean">
-		<delete dir="tmp" />
-		<delete dir="${build.dir}" />
-		<delete dir="${extension.out.dir}" />
-	</target>
-
-
+    <target name="clean">
+        <delete dir="tmp" />
+        <delete dir="${build.dir}" />
+    	<delete dir="${extension.out.dir}"/>
+    </target>
+	
+	
 	<!-- removes build output related to stubs and beans -->
 	<target name="cleanBeans">
-		<delete dir="${stubs.src}" />
-		<delete dir="${stubs.dest}" />
+		<delete dir="${stubs.src}"/>
+		<delete dir="${stubs.dest}"/>
 	</target>
-
-
+	
+	
 	<!-- builds the Introduce extension package -->
-	<target name="buildExtension" description="Builds and packages the introduce extension" depends="clean, jarStubs, jarExtension">
-		<mkdir dir="${extension.out.dir}" />
-		<mkdir dir="${extension.out.dir}/lib" />
-		<mkdir dir="${extension.out.dir}/schema" />
-		<copy file="${extension.description.file}" todir="${extension.out.dir}" />
-		<copy file="${stubs.jar.file}" todir="${extension.out.dir}/lib" />
-		<copy file="${extension.jar.file}" todir="${extension.out.dir}/lib" />
+	<target name="buildExtension" description="Builds and packages the introduce extension" depends="clean, jarStubs, jarExtension, jarService">
+		<mkdir dir="${extension.out.dir}"/>
+		<mkdir dir="${extension.out.dir}/lib"/>
+		<mkdir dir="${extension.out.dir}/schema"/>
+		<copy file="${extension.description.file}" todir="${extension.out.dir}"/>
+		<copy file="${stubs.jar.file}" todir="${extension.out.dir}/lib"/>
+		<copy file="${extension.jar.file}" todir="${extension.out.dir}/lib"/>
 		<copy toDir="${extension.out.dir}/schema">
-			<fileset dir="schema/Data" casesensitive="yes">
-				<include name="**/*.xsd" />
-			</fileset>
-		</copy>
+            <fileset dir="schema/Data" casesensitive="yes">
+                <include name="**/*.xsd" />
+            </fileset>
+        </copy>
 		<copy toDir="${extension.out.dir}/lib">
 			<fileset dir="${lib.dir}">
-				<include name="**/*.jar" />
+				<include name="**/*.jar"/>
 			</fileset>
 			<fileset dir="${ext.lib.dir}">
-				<include name="**/*.jar" />
+				<include name="**/*.jar"/>
 			</fileset>
 		</copy>
 		<zip destfile="${extension.base.dir}/DataServiceExtension.zip">
 			<fileset dir="${extension.base.dir}">
-				<include name="**/*" />
-				<exclude name="*.xml" />
-				<exclude name="*.zip" />
+			    <include name="**/*"/>
+				<exclude name="*.xml"/>
+				<exclude name="*.zip"/>
 			</fileset>
 		</zip>
 	</target>
 
-
-	<target name="all" depends="jarAll" />
+	
+    <target name="all" depends="jarAll" />
 </project>
