@@ -458,6 +458,9 @@ public class CreationViewer extends GridPortalComponent {
 							setErrorMessage("Service Name cannot be empty.");
 							return;
 						}
+						
+						setProgressText("purging old archives");
+						ResourceManager.purgeArchives(serviceName);
 
 						// only supporting one for now.....
 						String serviceExtensions = "";
@@ -491,7 +494,7 @@ public class CreationViewer extends GridPortalComponent {
 								extDialog.show();
 							}
 						}
-
+				
 						setProgressText("building");
 						cmd = CommonTools.getAntAllCommand(dirName);
 						p = CommonTools.createAndOutputProcess(cmd);
@@ -503,20 +506,7 @@ public class CreationViewer extends GridPortalComponent {
 						} else {
 							setErrorMessage("Error creating new service!");
 						}
-
-						setProgressText("purging old archives");
-						ResourceManager.purgeArchives(serviceName);
-
-						// create the archive
-						long id = System.currentTimeMillis();
-						Properties props = new Properties();
-						props.load(new FileInputStream(dirName + File.separator
-							+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE));
-						props.setProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP, String.valueOf(id));
-						props.store(new FileOutputStream(dirName + File.separator
-							+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE), "Introduce Properties");
-						setProgressText("creating a new archive");
-						ResourceManager.createArchive(String.valueOf(id), serviceName, dirName);
+						
 					} catch (Exception ex) {
 						ex.printStackTrace();
 						setErrorMessage("Error: " + ex.getMessage());
