@@ -217,21 +217,49 @@ public class SyncGTS {
 						X509Certificate cert = CertUtil.loadCertificate(fl.getCertificate());
 						ca.setName(cert.getSubjectDN().getName());
 						ca.setCertificateFile(fl.getCertificate().getAbsolutePath());
-						fl.getCertificate().delete();
-					    logger.debug("Removed File " + fl.getCertificate().getAbsolutePath());
+						if (fl.getCertificate().delete()) {
+							logger.debug("Removed the certificate (" + fl.getCertificate().getAbsolutePath()
+								+ ") for the CA " + ca.getName() + ".");
+						} else {
+							Message err = new Message();
+							err.setType(MessageType.Error);
+							err.setValue("Error removing the certificate (" + fl.getCertificate().getAbsolutePath()
+								+ ") for the CA " + ca.getName() + ".");
+							this.messages.add(err);
+							logger.error(err.getValue());
+						}
 					}
 
 					if (fl.getCRL() != null) {
 						ca.setCRLFile(fl.getCRL().getAbsolutePath());
-						fl.getCRL().delete();
-						logger.debug("Removed File " + fl.getCRL().getAbsolutePath());
+						if (fl.getCRL().delete()) {
+							logger.debug("Removed the CRL (" + fl.getCRL().getAbsolutePath() + ") for the CA "
+								+ ca.getName() + ".");
+						} else {
+							Message err = new Message();
+							err.setType(MessageType.Error);
+							err.setValue("Error removing the CRL (" + fl.getCRL().getAbsolutePath() + ") for the CA "
+								+ ca.getName() + ".");
+							this.messages.add(err);
+							logger.error(err.getValue());
+						}
 					}
 
 					if (fl.getSigningPolicy() != null) {
 						ca.setSigningPolicyFile(fl.getSigningPolicy().getAbsolutePath());
-						fl.getSigningPolicy().delete();
-						logger.debug("Removed File " + fl.getSigningPolicy().getAbsolutePath());
+						if (fl.getSigningPolicy().delete()) {
+							logger.debug("Removed the Signing Policy (" + fl.getCertificate().getAbsolutePath()
+								+ ") for the CA " + ca.getName() + ".");
+						} else {
+							Message err = new Message();
+							err.setType(MessageType.Error);
+							err.setValue("Error removing the Signing Policy (" + fl.getCRL().getAbsolutePath()
+								+ ") for the CA " + ca.getName() + ".");
+							this.messages.add(err);
+							logger.error(err.getValue());
+						}
 					}
+
 					removedList.add(ca);
 				}
 			}
