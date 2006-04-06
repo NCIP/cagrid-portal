@@ -6,6 +6,9 @@ import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
 import gov.nih.nci.cagrid.gts.client.GTSSearchClient;
 import gov.nih.nci.cagrid.syncgts.bean.AddedTrustedCAs;
+import gov.nih.nci.cagrid.syncgts.bean.Message;
+import gov.nih.nci.cagrid.syncgts.bean.MessageType;
+import gov.nih.nci.cagrid.syncgts.bean.Messages;
 import gov.nih.nci.cagrid.syncgts.bean.RemovedTrustedCAs;
 import gov.nih.nci.cagrid.syncgts.bean.SyncDescription;
 import gov.nih.nci.cagrid.syncgts.bean.SyncDescriptor;
@@ -40,6 +43,7 @@ public class SyncGTS {
 	private Map listingsById;
 	private Logger logger;
 	private int nextFileId = 0;
+	private List messages;
 
 
 	public SyncGTS(SyncDescription prop) {
@@ -52,6 +56,7 @@ public class SyncGTS {
 		this.caListings = null;
 		this.listingsById = null;
 		this.nextFileId = 0;
+		messages = new ArrayList();
 	}
 
 
@@ -110,7 +115,12 @@ public class SyncGTS {
 						}
 
 					} catch (Exception e) {
-						logger.error("An error occurred syncing with " + uri + " using filter " + filter + "!!!", e);
+						Message mess = new Message();
+						mess.setType(MessageType.Error);
+						mess.setValue("An error occurred syncing with " + uri + " using filter " + filter + "\n "
+							+ e.getMessage());
+						messages.add(mess);
+						logger.error(mess.getValue(), e);
 					}
 				}
 
@@ -124,13 +134,10 @@ public class SyncGTS {
 						TrustedCAListing gta = (TrustedCAListing) master.get(ta.getTrustedAuthorityName());
 						String msg = "Conflict Detected: The Trusted Authority " + ta.getTrustedAuthorityName()
 							+ " was determined to be trusted by both " + gta.getService() + " and " + uri + ".";
-						if (description.isErrorOnConflicts()) {
-							error = msg;
-							logger.error(error);
-							break;
-						} else {
-							logger.warn(msg);
-						}
+						Message mess = new Message();
+						mess.setType(MessageType.Warning);
+						mess.setValue(msg);
+						messages.add(mess);
 					} else {
 						master.put(ta.getTrustedAuthorityName(), new TrustedCAListing(uri, ta));
 					}
@@ -181,8 +188,12 @@ public class SyncGTS {
 					crlFile.delete();
 				}
 			}
-			logger.info("Successfully wrote out " + taCount + " Trusted Authority(s) to "
+			Message mess = new Message();
+			mess.setType(MessageType.Info);
+			mess.setValue("Successfully wrote out " + taCount + " Trusted Authority(s) to "
 				+ CoGProperties.getDefault().getCaCertLocations());
+			messages.add(mess);
+			logger.info(mess.getValue());
 
 			TrustedCA[] addedCAs = new TrustedCA[taCount];
 			for (int i = 0; i < addedList.size(); i++) {
@@ -229,17 +240,27 @@ public class SyncGTS {
 			RemovedTrustedCAs rtc = new RemovedTrustedCAs();
 			rtc.setTrustedCA(removedCAs);
 			report.setRemovedTrustedCAs(rtc);
-			logger.info("Successfully removed " + taCount + " Trusted Authority(s) from "
+			Message mess2 = new Message();
+			mess2.setType(MessageType.Info);
+			mess2.setValue("Successfully removed " + taCount + " Trusted Authority(s) from "
 				+ CoGProperties.getDefault().getCaCertLocations());
-
-			if (error != null) {
-				throw new Exception(error);
-			}
-
+			messages.add(mess2);
+			logger.info(mess2.getValue());
 		} catch (Exception e) {
-			// TODO: Handle Exception
-			throw e;
+			logger.fatal(e.getMessage(), e);
+			Message error = new Message();
+			error.setType(MessageType.Fatal);
+			error.setValue(e.getMessage());
+			messages.add(error);
 		}
+		// Add messages to the report
+		Message[] list = new Message[messages.size()];
+		for (int i = 0; i < messages.size(); i++) {
+			list[i] = (Message) messages.get(i);
+		}
+		Messages reportMessages = new Messages();
+		reportMessages.setMessage(list);
+		report.setMessages(reportMessages);
 		return report;
 	}
 
@@ -252,15 +273,22 @@ public class SyncGTS {
 		File dir = new File(caDir);
 		if (dir.exists()) {
 			if (!dir.isDirectory()) {
-				throw new Exception("The Trusted Certificates directory, " + dir.getAbsolutePath()
-					+ " is not a directory.");
+				Message mess = new Message();
+				mess.setType(MessageType.Fatal);
+				mess.setValue("The Trusted Certificates directory, " + dir.getAbsolutePath() + " is not a directory.");
+				messages.add(mess);
+				throw new Exception(mess.getValue());
 			}
 
 		} else {
 			boolean create = dir.mkdirs();
 			if (!create) {
-				throw new Exception("The Trusted Certificates directory, " + dir.getAbsolutePath()
+				Message mess = new Message();
+				mess.setType(MessageType.Fatal);
+				mess.setValue("The Trusted Certificates directory, " + dir.getAbsolutePath()
 					+ " does not exist and could not be created.");
+				messages.add(mess);
+				throw new Exception(mess.getValue());
 			}
 		}
 		File[] list = dir.listFiles();
@@ -307,13 +335,23 @@ public class SyncGTS {
 				handleUnexpectedCA(ca);
 			}
 		}
+		Message mess = new Message();
+		mess.setType(MessageType.Info);
+		mess.setValue("A pre synchronization snapshot of the Trusted CA Directory found " + caListings.size()
+			+ " Trusted CAs.");
+		messages.add(mess);
 		logger.info("DONE -Taking Snapshot of Trusted CA Directory, " + caListings.size() + " Trusted CAs found!!!");
 	}
 
 
 	private void handleUnexpectedCA(TrustedCAFileListing ca) {
 		if (this.description.isDeleteInvalidFiles()) {
-			logger.warn("The ca " + ca.getName() + " is invalid and will be removed!!!");
+			Message mess = new Message();
+			mess.setType(MessageType.Warning);
+			mess.setValue("The ca " + ca.getName() + " is invalid and will be removed!!!");
+			messages.add(mess);
+			logger.warn(mess.getValue());
+
 			if (ca.getCertificate() != null) {
 				ca.getCertificate().delete();
 			}
@@ -324,17 +362,29 @@ public class SyncGTS {
 				ca.getSigningPolicy().delete();
 			}
 		} else {
-			logger.warn("The CA " + ca.getName() + " is invalid.!!!");
+			Message mess = new Message();
+			mess.setType(MessageType.Warning);
+			mess.setValue("The CA " + ca.getName() + " is invalid.!!!");
+			messages.add(mess);
+			logger.warn(mess.getValue());
 		}
 	}
 
 
 	private void handleUnexpectedFile(File f) {
 		if (this.description.isDeleteInvalidFiles()) {
-			logger.warn("The file " + f.getAbsolutePath() + " is unexpected and will be removed!!!");
+			Message mess = new Message();
+			mess.setType(MessageType.Warning);
+			mess.setValue("The file " + f.getAbsolutePath() + " is unexpected and will be removed!!!");
+			messages.add(mess);
+			logger.warn(mess.getValue());
 			f.delete();
 		} else {
-			logger.warn("The file " + f.getAbsolutePath() + " is unexpected and will be ignored!!!");
+			Message mess = new Message();
+			mess.setType(MessageType.Warning);
+			mess.setValue("The file " + f.getAbsolutePath() + " is unexpected and will be ignored!!!");
+			messages.add(mess);
+			logger.warn(mess.getValue());
 		}
 	}
 
