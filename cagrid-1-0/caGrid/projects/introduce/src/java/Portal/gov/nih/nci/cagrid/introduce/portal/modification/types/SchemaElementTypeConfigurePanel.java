@@ -5,18 +5,14 @@ import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.JTextArea;
-import javax.swing.JCheckBox;
-import javax.swing.JToggleButton;
 
 
 public class SchemaElementTypeConfigurePanel extends JPanel {
@@ -254,7 +250,7 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 			gridBagConstraints4.gridx = 0;
 			gridBagConstraints4.gridy = 0;
 			classNameLabell = new JLabel();
-			classNameLabell.setText("Classname");
+			classNameLabell.setText("Classname*");
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints.gridx = 1;
@@ -360,7 +356,14 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 			helpArea.setLineWrap(true);
 			helpArea.setBackground(new java.awt.Color(204, 204, 204));
 			helpArea
-				.setText("* optional, if the deserializer and serializer are left blank axis defaults will be used for this class");
+				.setToolTipText("<html>For every Schema that omits these fields for all of its data types, "
+					+ "default Classes, Serializers, and Deserializers will be generated and used.<br>"
+					+ "If you specify a customization of any data types in a given "
+					+ "Schema, no Classes, Serializers, or Deserializers will be generated for any other data types"
+					+ " in that Schema.<br><b>Therefore, if you customize a data type in a Schema,"
+					+ " you need to also customize all other data types in that Schema that you are using in your service.");
+			helpArea
+				.setText("* Optional.  You must specify all these fields if you specify any. [See tooltip, and documentation, for more details]");
 		}
 		return helpArea;
 	}
@@ -390,15 +393,6 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 			});
 		}
 		return customizeButton;
-	}
-
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
 	}
 
 } // @jve:decl-index=0:visual-constraint="10,10"
