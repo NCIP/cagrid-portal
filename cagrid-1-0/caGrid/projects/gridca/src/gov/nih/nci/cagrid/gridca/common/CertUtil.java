@@ -135,6 +135,7 @@ public class CertUtil {
 		return certGen.generateX509Certificate(pair.getPrivate(), "BC");
 	}
 
+
 	public static X509Certificate generateCertificate(X509Name subject, Date start, Date expired, PublicKey publicKey,
 		X509Certificate cacert, PrivateKey signerKey) throws InvalidKeyException, NoSuchProviderException,
 		SignatureException, IOException {
@@ -213,7 +214,9 @@ public class CertUtil {
 	public static X509Certificate loadCertificate(Reader in) throws IOException, GeneralSecurityException {
 		SecurityUtil.init();
 		PEMReader reader = new PEMReader(in, null, "BC");
-		return (X509Certificate) reader.readObject();
+		X509Certificate cert = (X509Certificate) reader.readObject();
+		reader.close();
+		return cert;
 	}
 
 
@@ -275,7 +278,9 @@ public class CertUtil {
 	public static X509CRL loadCRL(Reader in) throws IOException, GeneralSecurityException {
 		SecurityUtil.init();
 		CRLReader reader = new CRLReader(in, "BC");
-		return reader.readCRL();
+		X509CRL crl = reader.readCRL();
+		reader.close();
+		return crl;
 	}
 
 
@@ -287,8 +292,5 @@ public class CertUtil {
 			return false;
 		}
 	}
-
-
-	
 
 }

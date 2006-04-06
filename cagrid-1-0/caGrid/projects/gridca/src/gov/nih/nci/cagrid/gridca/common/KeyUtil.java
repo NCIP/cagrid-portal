@@ -63,7 +63,9 @@ public class KeyUtil {
 		}
 		StringWriter sw = new StringWriter();
 		ssl.writeTo(sw);
-		return sw.toString();
+		String s = sw.toString();
+		sw.close();
+		return s;
 	}
 
 	public static PrivateKey loadPrivateKey(File location, String password)
@@ -91,7 +93,9 @@ public class KeyUtil {
 		SecurityUtil.init();
 		StringReader in = new StringReader(key);
 		PEMReader reader = new PEMReader(in, null, "BC");
-		return (PublicKey) reader.readObject();
+		PublicKey pk =  (PublicKey) reader.readObject();
+		reader.close();
+		return pk;
 	}
 
 	public static String writePublicKey(PublicKey key)

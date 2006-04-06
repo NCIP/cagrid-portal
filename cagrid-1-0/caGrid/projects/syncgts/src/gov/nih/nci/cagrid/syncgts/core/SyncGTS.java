@@ -44,10 +44,12 @@ public class SyncGTS {
 	private Logger logger;
 	private int nextFileId = 0;
 	private List messages;
+	private HistoryManager history;
 
 
 	public SyncGTS(SyncDescription prop) {
 		this.description = prop;
+		this.history = new HistoryManager();
 		logger = Logger.getLogger(this.getClass().getName());
 	}
 
@@ -62,10 +64,10 @@ public class SyncGTS {
 
 	private synchronized int getNextFileId() {
 		nextFileId = nextFileId + 1;
-		boolean found = false;
-		while (!found) {
-			if (listingsById.containsKey(new Integer(nextFileId))) {
-				found = true;
+		boolean found = true;
+		while (found) {
+			if (!listingsById.containsKey(new Integer(nextFileId))) {
+				found = false;
 			} else {
 				nextFileId = nextFileId + 1;
 			}
@@ -74,7 +76,7 @@ public class SyncGTS {
 	}
 
 
-	public synchronized SyncReport sync() throws Exception {
+	public synchronized SyncReport sync() {
 		SyncReport report = new SyncReport();
 		try {
 			reset();
@@ -216,7 +218,7 @@ public class SyncGTS {
 						ca.setName(cert.getSubjectDN().getName());
 						ca.setCertificateFile(fl.getCertificate().getAbsolutePath());
 						fl.getCertificate().delete();
-						logger.debug("Removed File " + fl.getCertificate().getAbsolutePath());
+					    logger.debug("Removed File " + fl.getCertificate().getAbsolutePath());
 					}
 
 					if (fl.getCRL() != null) {
@@ -242,7 +244,7 @@ public class SyncGTS {
 			report.setRemovedTrustedCAs(rtc);
 			Message mess2 = new Message();
 			mess2.setType(MessageType.Info);
-			mess2.setValue("Successfully removed " + taCount + " Trusted Authority(s) from "
+			mess2.setValue("Successfully removed " + removeCount + " Trusted Authority(s) from "
 				+ CoGProperties.getDefault().getCaCertLocations());
 			messages.add(mess2);
 			logger.info(mess2.getValue());
@@ -261,6 +263,13 @@ public class SyncGTS {
 		Messages reportMessages = new Messages();
 		reportMessages.setMessage(list);
 		report.setMessages(reportMessages);
+
+		// Log Report;
+		try {
+			history.addReport(report);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
 		return report;
 	}
 
@@ -401,7 +410,6 @@ public class SyncGTS {
 			des[0].setTrustedAuthorityFilters(taf);
 			description.setSyncDescriptors(des);
 			description.setFilePrefix("gts");
-			description.setErrorOnConflicts(true);
 			description.setDeleteInvalidFiles(false);
 			SyncGTS sync = new SyncGTS(description);
 			sync.sync();
