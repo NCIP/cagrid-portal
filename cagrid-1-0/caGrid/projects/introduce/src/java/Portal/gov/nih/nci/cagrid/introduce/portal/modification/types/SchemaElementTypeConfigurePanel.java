@@ -5,12 +5,16 @@ import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -30,7 +34,7 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 	private JLabel deserializerLabel = null;
 	private JTextField deserializerText = null;
 	private JTextArea helpArea = null;
-	private JToggleButton customizeButton = null;
+	private JPanel customBeanWrapperPanel = null;
 	private JLabel customizeLabel = null;
 
 
@@ -68,17 +72,17 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 	 * This method initializes this
 	 */
 	private void initialize() {
-		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-		gridBagConstraints3.gridx = 0;
-		gridBagConstraints3.fill = java.awt.GridBagConstraints.BOTH;
-		gridBagConstraints3.gridwidth = 2;
-		gridBagConstraints3.gridheight = 2;
-		gridBagConstraints3.gridy = 1;
+		GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+		gridBagConstraints8.gridx = 0;
+		gridBagConstraints8.fill = java.awt.GridBagConstraints.BOTH;
+		gridBagConstraints8.gridy = 1;
 		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 		gridBagConstraints2.gridx = 0;
 		gridBagConstraints2.gridy = 0;
 		gridBagConstraints2.weighty = 0.0D;
 		gridBagConstraints2.weightx = 1.0D;
+		gridBagConstraints2.insets = new java.awt.Insets(0,0,0,0);
+		gridBagConstraints2.ipady = 10;
 		gridBagConstraints2.fill = java.awt.GridBagConstraints.BOTH;
 		this.setLayout(new GridBagLayout());
 		this.setSize(new java.awt.Dimension(312, 240));
@@ -86,7 +90,7 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 			javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
 			null, IntroduceLookAndFeel.getPanelLabelColor()));
 		this.add(getBeanPanel(), gridBagConstraints2);
-		this.add(getCustomBeanPanel(), gridBagConstraints3);
+		this.add(getCustomBeanWrapperPanel(), gridBagConstraints8);
 	}
 
 
@@ -170,16 +174,6 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 	 */
 	private JPanel getBeanPanel() {
 		if (beanPanel == null) {
-			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-			gridBagConstraints6.gridx = 2;
-			gridBagConstraints6.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints6.gridy = 1;
-			customizeLabel = new JLabel();
-			customizeLabel.setText("Customize Bean");
-			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-			gridBagConstraints7.gridx = 0;
-			gridBagConstraints7.gridwidth = 2;
-			gridBagConstraints7.gridy = 1;
 			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
 			gridBagConstraints31.gridx = 1;
 			gridBagConstraints31.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -194,8 +188,6 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 			gridBagConstraints1.gridx = 2;
 			beanPanel = new JPanel();
 			beanPanel.setLayout(new GridBagLayout());
-			beanPanel.add(getCustomizeButton(), gridBagConstraints7);
-			beanPanel.add(customizeLabel, gridBagConstraints6);
 			beanPanel.add(getTypeText(), gridBagConstraints1);
 			beanPanel.add(typeLabel, gridBagConstraints31);
 		}
@@ -259,10 +251,7 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 			gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
 			customBeanPanel = new JPanel();
 			customBeanPanel.setLayout(new GridBagLayout());
-			customBeanPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Customize Bean",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
-			customBeanPanel.setEnabled(false);
+			customBeanPanel.setVisible(false);
 			customBeanPanel.add(getClassNameText(), gridBagConstraints);
 			customBeanPanel.add(classNameLabell, gridBagConstraints4);
 			customBeanPanel.add(serializerLabel, gridBagConstraints5);
@@ -370,29 +359,51 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 
 
 	/**
-	 * This method initializes customizeButton
-	 * 
-	 * @return javax.swing.JToggleButton
+	 * This method initializes customBeanWrapperPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
 	 */
-	private JToggleButton getCustomizeButton() {
-		if (customizeButton == null) {
-			customizeButton = new JToggleButton();
-			customizeButton.setSelectedIcon(IntroduceLookAndFeel.getAddIcon());
-			customizeButton.setIcon(IntroduceLookAndFeel.getRemoveIcon());
-			customizeButton.setText("");
-			customizeButton.setSelected(false);
-			getCustomBeanPanel().setVisible(false);
-			customizeButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if (getCustomizeButton().isSelected()) {
-						getCustomBeanPanel().setVisible(true);
-					} else {
+	private JPanel getCustomBeanWrapperPanel() {
+		if (customBeanWrapperPanel == null) {
+			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+			gridBagConstraints6.gridx = 0;
+			gridBagConstraints6.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints6.fill = java.awt.GridBagConstraints.NONE;
+			gridBagConstraints6.weightx = 1.0D;
+			gridBagConstraints6.gridy = 0;
+			customizeLabel = new JLabel();
+			customizeLabel.setIcon(IntroduceLookAndFeel.getAddIcon());
+			customizeLabel.addMouseListener(new MouseAdapter() {
+			
+				public void mouseClicked(MouseEvent e) {
+					super.mouseClicked(e);
+					if(getCustomBeanPanel().isVisible()){
 						getCustomBeanPanel().setVisible(false);
+						customizeLabel.setIcon(IntroduceLookAndFeel.getAddIcon());
+					} else {
+						getCustomBeanPanel().setVisible(true);
+						customizeLabel.setIcon(IntroduceLookAndFeel.getRemoveIcon());
 					}
 				}
+			
 			});
+			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.fill = GridBagConstraints.BOTH;
+			gridBagConstraints3.gridwidth = 2;
+			gridBagConstraints3.gridx = 0;
+			gridBagConstraints3.gridy = 1;
+			gridBagConstraints3.weightx = 1.0D;
+			gridBagConstraints3.weighty = 1.0D;
+			gridBagConstraints3.gridheight = 2;
+			customBeanWrapperPanel = new JPanel();
+			customBeanWrapperPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Customize Bean",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+			customBeanWrapperPanel.setLayout(new GridBagLayout());
+			customBeanWrapperPanel.add(getCustomBeanPanel(), gridBagConstraints3);
+			customBeanWrapperPanel.add(customizeLabel, gridBagConstraints6);
 		}
-		return customizeButton;
+		return customBeanWrapperPanel;
 	}
 
 } // @jve:decl-index=0:visual-constraint="10,10"
