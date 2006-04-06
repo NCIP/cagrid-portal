@@ -1,8 +1,8 @@
-<xsd:schema targetNamespace="http://cagrid.nci.nih.gov/5/SyncGTS"
+<xsd:schema targetNamespace="http://cagrid.nci.nih.gov/7/SyncGTS"
 	attributeFormDefault="qualified"
 	elementFormDefault="qualified"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-	xmlns:sync="http://cagrid.nci.nih.gov/5/SyncGTS"
+	xmlns:sync="http://cagrid.nci.nih.gov/7/SyncGTS"
 	xmlns:gts="http://cagrid.nci.nih.gov/6/gts">    
 	
 	   <xsd:element name="SyncDescription" minOccurs="0" maxOccurs="1" type="sync:SyncDescription"/>
@@ -30,8 +30,9 @@
 			<xsd:sequence>
 				<xsd:element name="Timestamp" minOccurs="1" maxOccurs="1" type="xsd:string"/>
 			    <xsd:element ref="sync:SyncDescription" minOccurs="1" maxOccurs="1"/>
-			    <xsd:element name="AddedTrustedCAs" minOccurs="1" maxOccurs="1" type="sync:AddedTrustedCAs"/> 
-			    <xsd:element name="RemovedTrustedCAs" minOccurs="1" maxOccurs="1" type="sync:RemovedTrustedCAs"/>   
+			    <xsd:element name="AddedTrustedCAs" minOccurs="0" maxOccurs="1" type="sync:AddedTrustedCAs"/> 
+			    <xsd:element name="RemovedTrustedCAs" minOccurs="0" maxOccurs="1" type="sync:RemovedTrustedCAs"/> 
+			    <xsd:element name="Messages" minOccurs="0" maxOccurs="1" type="sync:Messages"/>  
 			</xsd:sequence>
 		</xsd:complexType>
 		
@@ -59,5 +60,27 @@
 				<xsd:element ref="sync:TrustedCA" minOccurs="0" maxOccurs="unbounded"/>
 			</xsd:sequence>
 		</xsd:complexType>
+		
+		<xsd:complexType name="Messages">
+			<xsd:sequence>
+				<xsd:element name="Message" minOccurs="0" maxOccurs="unbounded" type="sync:Message"/>
+			</xsd:sequence>
+		</xsd:complexType>
+		
+		<xsd:complexType name="Message">
+			<xsd:sequence>
+				<xsd:element name="type" minOccurs="1" maxOccurs="1" type="sync:MessageType"/>
+				<xsd:element name="value" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+			</xsd:sequence>
+		</xsd:complexType>
+		
+		<xsd:simpleType name="MessageType">
+  			<xsd:restriction base="xsd:string">
+   				<xsd:enumeration value="Fatal"/>
+   				<xsd:enumeration value="Error"/>
+   				<xsd:enumeration value="Warning"/>
+   				<xsd:enumeration value="Info"/>
+  			</xsd:restriction>
+ 		 </xsd:simpleType>
 		
 </xsd:schema>
