@@ -22,7 +22,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 import org.apache.tools.ant.filters.StringInputStream;
-import org.exolab.castor.xml.schema.reader.SchemaReader;
+import org.projectmobius.castor.xml.schema.reader.SchemaReader;
 import org.projectmobius.common.GridServiceResolver;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.Namespace;
