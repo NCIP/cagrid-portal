@@ -43,6 +43,7 @@
 package gov.nih.nci.cagrid.common.portal;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Vector;
@@ -50,6 +51,7 @@ import java.util.Vector;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -60,7 +62,7 @@ import javax.swing.table.DefaultTableModel;
  *          Exp $
  */
 public abstract class PortalTable extends JTable {
-	
+
 	private final static Color DEFAULT_FOREGROUND_1 = Color.BLACK;
 	private final static Color DEFAULT_BACKGROUND_1 = Color.WHITE;
 	private final static Color DEFAULT_FOREGROUND_2 = Color.BLACK;
@@ -69,39 +71,48 @@ public abstract class PortalTable extends JTable {
 	private final static Color DEFAULT_SELECTED_BACKGROUND = Color.WHITE;
 
 
-	public PortalTable(DefaultTableModel model){
-		this(model,DEFAULT_BACKGROUND_1,DEFAULT_FOREGROUND_1,DEFAULT_BACKGROUND_2,DEFAULT_FOREGROUND_2,DEFAULT_SELECTED_BACKGROUND,DEFAULT_SELECTED_FOREGROUND);
+	public PortalTable(DefaultTableModel model) {
+		this(model, DEFAULT_BACKGROUND_1, DEFAULT_FOREGROUND_1, DEFAULT_BACKGROUND_2, DEFAULT_FOREGROUND_2,
+			DEFAULT_SELECTED_BACKGROUND, DEFAULT_SELECTED_FOREGROUND);
 	}
- 
-	public PortalTable(DefaultTableModel model,Color bg1, Color fg1, Color bg2, Color fg2, Color sbg, Color sfg){
+
+
+	public PortalTable(DefaultTableModel model, Color bg1, Color fg1, Color bg2, Color fg2, Color sbg, Color sfg) {
 		super(model);
-		setDefaultRenderer(Object.class, new PortalTableCellRenderer(bg1,fg1,bg2,fg2,sbg,sfg));
+		setDefaultRenderer(Object.class, new PortalTableCellRenderer(bg1, fg1, bg2, fg2, sbg, sfg));
 		// setDefaultEditor(JComponent.class, new JComponentCellEditor());
 		// this.setCellSelectionEnabled(true);
 		this.setRowSelectionAllowed(true);
 		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		this.addMouseListener(new MouseAdapter(){
-		     public void mouseClicked(MouseEvent e){
-		      if (e.getClickCount() == 2){
-		    	  try{
-		    	  doubleClick();
-		    	  }catch(Exception ex){
-		    		  ex.printStackTrace();
-		    	  }
-		         }else if(e.getClickCount() == 1){
-		        	 try{
-				    	  singleClick();
-				    	  }catch(Exception ex){
-				    		  ex.printStackTrace();
-				    	  }
-		         }
-		     }
-		}
-		     );
+		this.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2) {
+					try {
+						doubleClick();
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+				} else if (e.getClickCount() == 1) {
+					try {
+						singleClick();
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+				}
+			}
+		});
 		// this.setOpaque(true);
 	}
-	
+
+
+	public Dimension getPreferredScrollableViewportSize() {
+		return getPreferredSize();
+	}
+
+
 	public abstract void doubleClick() throws Exception;
+
+
 	public abstract void singleClick() throws Exception;
 
 
@@ -109,13 +120,16 @@ public abstract class PortalTable extends JTable {
 		return false;
 	}
 
+
 	public synchronized void addRow(Vector v) {
 		((DefaultTableModel) this.getModel()).addRow(v);
 	}
 
+
 	public synchronized void removeRow(int i) {
 		((DefaultTableModel) this.getModel()).removeRow(i);
 	}
+
 
 	public synchronized void clearTable() {
 		DefaultTableModel model = (DefaultTableModel) this.getModel();
