@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.ToolTipManager;
+
 import org.jdom.Element;
 import org.projectmobius.common.AbstractMobiusConfiguration;
 import org.projectmobius.common.MobiusException;
@@ -38,6 +40,7 @@ public class IntroducePortalConf implements AbstractMobiusConfiguration {
 		namespaceTypeDiscoveryComponents = new ArrayList();
 		namespaceTypeToolsComponentsMap = new HashMap();
 		namespaceTypeToolsComponents = new ArrayList();
+		ToolTipManager.sharedInstance().setDismissDelay(Integer.MAX_VALUE);
 	}
 
 
