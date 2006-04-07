@@ -2,6 +2,7 @@ package edu.osu.idp.portal;
 
 import gov.nih.nci.cagrid.dorian.ifs.portal.IdPAuthenticationPanel;
 import gov.nih.nci.cagrid.dorian.portal.IdPConf;
+import gov.nih.nci.cagrid.gridca.common.SecurityUtil;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import gov.nih.nci.cagrid.opensaml.SAMLResponse;
 
@@ -44,6 +45,7 @@ public class OSUIdPAuthenticationPanel extends IdPAuthenticationPanel {
 
 	public OSUIdPAuthenticationPanel(IdPConf conf) {
 		super(conf);
+		SecurityUtil.init();
 		initialize();
 	}
 
