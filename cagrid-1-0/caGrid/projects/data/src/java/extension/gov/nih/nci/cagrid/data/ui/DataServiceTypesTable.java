@@ -1,12 +1,12 @@
 package gov.nih.nci.cagrid.data.ui;
 
-import java.util.Vector;
-
-import javax.swing.table.DefaultTableModel;
-
 import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
+
+import java.util.Vector;
+
+import javax.swing.table.DefaultTableModel;
 
 /** 
  *  DataServiceTypesTable
@@ -18,10 +18,10 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
  * @version $Id$ 
  */
 public class DataServiceTypesTable extends PortalBaseTable {
-	private DefaultTableModel model;
 	
 	public DataServiceTypesTable() {
 		super(createTableModel());
+		setCellEditor(new DataServiceTypesTableCellEditor());
 	}
 	
 	
@@ -32,15 +32,14 @@ public class DataServiceTypesTable extends PortalBaseTable {
 	
 	
 	public void addType(NamespaceType namespace, SchemaElementType type) {
-		Vector row = new Vector(7);
+		Vector row = new Vector(6);
 		row.add(namespace.getNamespace());
 		row.add(type.getType());
-		row.add(type.getPackageName());
 		row.add(type.getClassName());
 		row.add("");
 		row.add("");
 		row.add("");
-		model.addRow(row);
+		((DefaultTableModel) getModel()).addRow(row);
 	}
 	
 	
@@ -48,7 +47,6 @@ public class DataServiceTypesTable extends PortalBaseTable {
 		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn("Namespace");
 		model.addColumn("Type");
-		model.addColumn("Package");
 		model.addColumn("Class");
 		model.addColumn("Serializer");
 		model.addColumn("Deserializer");

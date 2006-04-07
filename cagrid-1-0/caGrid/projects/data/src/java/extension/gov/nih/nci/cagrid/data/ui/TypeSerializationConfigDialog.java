@@ -30,7 +30,7 @@ public class TypeSerializationConfigDialog extends JDialog {
 	private JButton cancelButton = null;
 	private JPanel buttonPanel = null;
 	private JPanel mainPanel = null;
-
+	
 	public TypeSerializationConfigDialog() {
 		super();
 		initialize();
@@ -38,10 +38,10 @@ public class TypeSerializationConfigDialog extends JDialog {
 	
 	
 	private void initialize() {
-		        this.setSize(new java.awt.Dimension(466,283));
-		        this.setContentPane(getMainPanel());
-        this.setTitle("Serialization Configuration");
-pack();
+		this.setContentPane(getMainPanel());
+		this.setTitle("Serialization Configuration");
+		pack();
+		this.setSize(new java.awt.Dimension(466,283));
 		show();
 	}
 	
@@ -85,8 +85,8 @@ pack();
 		}
 		return serializationTypePanel;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes jRadioButton	
 	 * 	
@@ -99,8 +99,8 @@ pack();
 		}
 		return defaultSerializationRadioButton;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes jRadioButton	
 	 * 	
@@ -113,8 +113,8 @@ pack();
 		}
 		return customSerializationRadioButton;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes jRadioButton	
 	 * 	
@@ -136,8 +136,8 @@ pack();
 		}
 		return typeConfigPanel;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes jButton	
 	 * 	
@@ -155,8 +155,8 @@ pack();
 		}
 		return okButton;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes jButton1	
 	 * 	
@@ -174,8 +174,8 @@ pack();
 		}
 		return cancelButton;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes jPanel	
 	 * 	
@@ -200,8 +200,8 @@ pack();
 		}
 		return buttonPanel;
 	}
-
-
+	
+	
 	/**
 	 * This method initializes jPanel	
 	 * 	
