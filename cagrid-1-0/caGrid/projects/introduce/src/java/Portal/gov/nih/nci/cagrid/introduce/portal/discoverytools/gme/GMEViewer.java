@@ -361,7 +361,7 @@ public class GMEViewer extends NamespaceTypeToolsComponent{
 						SchemaReader sr = new SchemaReader(new InputSource(new StringInputStream(uploadSchemaTextPane
 							.getText())));
 						sr.setValidation(false);
-						org.exolab.castor.xml.schema.Schema schema = sr.read();
+						org.projectmobius.castor.xml.schema.Schema schema = sr.read();
 						Namespace schemaTargetNamespace = new Namespace(schema.getTargetNamespace());
 						try {
 							handle.addNamespaceDomain(schemaTargetNamespace.getDomain());
