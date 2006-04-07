@@ -21,7 +21,7 @@ import javax.swing.JTextField;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CertificatePanel.java,v 1.3 2006-04-07 03:52:41 oster Exp $
+ * @version $Id: CertificatePanel.java,v 1.4 2006-04-07 17:09:25 oster Exp $
  */
 public class CertificatePanel extends JPanel {
 
@@ -49,7 +49,7 @@ public class CertificatePanel extends JPanel {
 	private JPanel jPanel1 = null;
 	private JScrollPane jScrollPane = null;
 	private CertificateExtensionsTable certificateExtensionsTable = null;
-	
+
 
 	/**
 	 * This is the default constructor
@@ -66,30 +66,31 @@ public class CertificatePanel extends JPanel {
 		this.certificate = cert;
 		setCertificate(cert);
 	}
-	
-	
-	public void setAllowExport(boolean allow){
+
+
+	public void setAllowExport(boolean allow) {
 		this.getSaveButton().setVisible(allow);
 	}
-	
-	public void setAllowImport(boolean allow){
+
+
+	public void setAllowImport(boolean allow) {
 		this.getLoadButton().setVisible(allow);
 	}
 
 
 	public void setCertificate(X509Certificate cert) {
-		if(cert!=null){
-		this.certificate = cert;
-		this.getCertificateCreated().setText(cert.getNotBefore().toString());
-		this.getCertificateExpires().setText(cert.getNotAfter().toString());
-		this.getCertificateIssuer().setText(cert.getIssuerDN().getName());
-		this.getCertificateSerialNumber().setText(cert.getSerialNumber().toString());
-		this.getCertificateSubject().setText(cert.getSubjectDN().getName());
-		this.getCertificateSignatureAlgorithm().setText(cert.getSigAlgName());
-		this.getCertificateType().setText(cert.getType());
-		this.getCertificateVersion().setText(String.valueOf(cert.getVersion()));
-		this.getCertificateExtensionsTable().clearTable();
-		((CertificateExtensionsTable)this.getCertificateExtensionsTable()).addCertificate(cert);
+		if (cert != null) {
+			this.certificate = cert;
+			this.getCertificateCreated().setText(cert.getNotBefore().toString());
+			this.getCertificateExpires().setText(cert.getNotAfter().toString());
+			this.getCertificateIssuer().setText(cert.getIssuerDN().getName());
+			this.getCertificateSerialNumber().setText(cert.getSerialNumber().toString());
+			this.getCertificateSubject().setText(cert.getSubjectDN().getName());
+			this.getCertificateSignatureAlgorithm().setText(cert.getSigAlgName());
+			this.getCertificateType().setText(cert.getType());
+			this.getCertificateVersion().setText(String.valueOf(cert.getVersion()));
+			this.getCertificateExtensionsTable().clearTable();
+			(this.getCertificateExtensionsTable()).addCertificate(cert);
 		}
 	}
 
@@ -118,7 +119,7 @@ public class CertificatePanel extends JPanel {
 		gridBagConstraints19.gridx = 0;
 		gridBagConstraints19.weightx = 1.0D;
 		gridBagConstraints19.weighty = 1.0D;
-		gridBagConstraints19.insets = new java.awt.Insets(2,2,2,2);
+		gridBagConstraints19.insets = new java.awt.Insets(2, 2, 2, 2);
 		gridBagConstraints19.fill = java.awt.GridBagConstraints.BOTH;
 		gridBagConstraints19.gridy = 1;
 		GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
@@ -267,11 +268,9 @@ public class CertificatePanel extends JPanel {
 			jLabel = new JLabel();
 			jLabel.setText("Subject");
 			jPanel = new JPanel();
-			jPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-				null, "Certificate Information",
+			jPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Certificate Information",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-				GridCALookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridCALookAndFeel.getPanelLabelColor()));
 			jPanel.setLayout(new GridBagLayout());
 			jPanel.add(jLabel, gridBagConstraints);
 			jPanel.add(jLabel1, gridBagConstraints1);
@@ -440,8 +439,9 @@ public class CertificatePanel extends JPanel {
 		}
 		return loadButton;
 	}
-	
-	private void importCertificate(){
+
+
+	private void importCertificate() {
 		clearCertificate();
 		JFileChooser fc = new JFileChooser();
 		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -449,29 +449,28 @@ public class CertificatePanel extends JPanel {
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			try {
 				certificate = CertUtil.loadCertificate(new File(fc.getSelectedFile().getAbsolutePath()));
-			    setCertificate(certificate);
+				setCertificate(certificate);
 			} catch (Exception ex) {
 				PortalUtils.showErrorMessage(ex);
 			}
 		}
-		
+
 	}
-	
-	private void exportCertificate(){
+
+
+	private void exportCertificate() {
 		JFileChooser fc = new JFileChooser();
 		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		int returnVal = fc.showSaveDialog(this);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			try {
-				CertUtil.writeCertificate(certificate,new File(fc.getSelectedFile().getAbsolutePath()));
+				CertUtil.writeCertificate(certificate, new File(fc.getSelectedFile().getAbsolutePath()));
 			} catch (Exception ex) {
 				PortalUtils.showErrorMessage(ex);
 			}
 		}
-		
+
 	}
-	
-	
 
 
 	public X509Certificate getCertificate() {
@@ -488,8 +487,8 @@ public class CertificatePanel extends JPanel {
 		if (saveButton == null) {
 			saveButton = new JButton();
 			saveButton.setIcon(GridCALookAndFeel.getSaveIcon());
-			saveButton.addActionListener(new java.awt.event.ActionListener() { 
-				public void actionPerformed(java.awt.event.ActionEvent e) {    
+			saveButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
 					exportCertificate();
 				}
 			});
@@ -500,10 +499,10 @@ public class CertificatePanel extends JPanel {
 
 
 	/**
-	 * This method initializes jPanel1	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes jPanel1
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private JPanel getJPanel1() {
 		if (jPanel1 == null) {
 			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
@@ -511,12 +510,10 @@ public class CertificatePanel extends JPanel {
 			gridBagConstraints18.weighty = 1.0;
 			gridBagConstraints18.weightx = 1.0;
 			jPanel1 = new JPanel();
-			
-			jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(
-				null, "Certificate Extensions",
+
+			jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Certificate Extensions",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-				GridCALookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridCALookAndFeel.getPanelLabelColor()));
 			jPanel1.setLayout(new GridBagLayout());
 			jPanel1.add(getJScrollPane(), gridBagConstraints18);
 		}
@@ -525,10 +522,10 @@ public class CertificatePanel extends JPanel {
 
 
 	/**
-	 * This method initializes jScrollPane	
-	 * 	
-	 * @return javax.swing.JScrollPane	
-	 */    
+	 * This method initializes jScrollPane
+	 * 
+	 * @return javax.swing.JScrollPane
+	 */
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
@@ -539,10 +536,10 @@ public class CertificatePanel extends JPanel {
 
 
 	/**
-	 * This method initializes certificateExtensionsTable	
-	 * 	
-	 * @return gov.nih.nci.cagrid.gridca.portal.CertificateExtensionsTable	
-	 */    
+	 * This method initializes certificateExtensionsTable
+	 * 
+	 * @return gov.nih.nci.cagrid.gridca.portal.CertificateExtensionsTable
+	 */
 	private CertificateExtensionsTable getCertificateExtensionsTable() {
 		if (certificateExtensionsTable == null) {
 			certificateExtensionsTable = new CertificateExtensionsTable();

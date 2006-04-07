@@ -9,11 +9,13 @@ import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.DERObject;
 import org.bouncycastle.asn1.x509.BasicConstraints;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CertificateExtensionsUtil.java,v 1.1 2006-03-01 20:54:22 langella Exp $
+ * @version $Id: CertificateExtensionsUtil.java,v 1.1 2006/03/01 20:54:22
+ *          langella Exp $
  */
 
 public class CertificateExtensionsUtil {
@@ -61,7 +63,7 @@ public class CertificateExtensionsUtil {
 		ASN1InputStream aIn = new ASN1InputStream(new ByteArrayInputStream(ext));
 		ASN1OctetString extnValue = (ASN1OctetString) aIn.readObject();
 		aIn = new ASN1InputStream(new ByteArrayInputStream(extnValue.getOctets()));
-		DERObject extensionType = (DERObject) aIn.readObject();
+		DERObject extensionType = aIn.readObject();
 		return extensionType;
 	}
 
@@ -100,7 +102,7 @@ public class CertificateExtensionsUtil {
 					}
 					sb.append("keyEncipherment");
 				}
-				
+
 				if (usage[3]) {
 					if (first) {
 						first = false;
@@ -109,7 +111,7 @@ public class CertificateExtensionsUtil {
 					}
 					sb.append("dataEncipherment");
 				}
-				
+
 				if (usage[4]) {
 					if (first) {
 						first = false;
@@ -118,7 +120,7 @@ public class CertificateExtensionsUtil {
 					}
 					sb.append("keyAgreement");
 				}
-				
+
 				if (usage[5]) {
 					if (first) {
 						first = false;
@@ -127,7 +129,7 @@ public class CertificateExtensionsUtil {
 					}
 					sb.append("keyCertSign");
 				}
-				
+
 				if (usage[6]) {
 					if (first) {
 						first = false;
