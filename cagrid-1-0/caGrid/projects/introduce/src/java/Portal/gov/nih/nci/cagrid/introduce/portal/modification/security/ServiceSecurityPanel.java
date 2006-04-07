@@ -36,6 +36,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -196,18 +197,19 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
 	private JLabel jLabel6 = null;
 
+
 	public ServiceSecurityPanel() {
 		super();
 		initialize();
 	}
 
 
-	public ServiceSecurityPanel(ServiceSecurity sec){
+	public ServiceSecurityPanel(ServiceSecurity sec) {
 		super();
 		initialize();
-		try{
-		setServiceSecurity(sec);
-		}catch(Exception e){
+		try {
+			setServiceSecurity(sec);
+		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
 		}
 	}
@@ -232,7 +234,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		gridBagConstraints71.fill = java.awt.GridBagConstraints.HORIZONTAL;
 		gridBagConstraints71.weightx = 1.0D;
 		this.setLayout(new GridBagLayout());
-		this.setSize(500, 500);
 		this.add(getSecureCommunicationPanel(), gridBagConstraints71);
 		setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Security Configuration",
 			javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
@@ -250,16 +251,8 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	 */
 	private JPanel getSecureCommunicationPanel() {
 		if (secureCommunicationPanel == null) {
-			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-			gridBagConstraints2.gridx = 0;
-			gridBagConstraints2.gridy = 0;
-			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints1.gridy = -1;
-			gridBagConstraints1.gridx = -1;
 			secureCommunicationPanel = new JPanel();
-			secureCommunicationPanel.setLayout(new GridBagLayout());
-			secureCommunicationPanel.add(getChoicePanel(), gridBagConstraints2);
+			secureCommunicationPanel.add(getChoicePanel());
 		}
 		return secureCommunicationPanel;
 	}
@@ -548,8 +541,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 				runAsMode.setEnabled(true);
 			}
 
-			
-
 			this.syncServiceCredentials();
 
 			if (isSecure()) {
@@ -562,15 +553,17 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
 		}
 	}
-	
-	private void syncAnonymousCommunication(){
+
+
+	private void syncAnonymousCommunication() {
 		if (isSecure()) {
 			ClientCommunication comm = (ClientCommunication) clientCommunication.getSelectedItem();
 			if (determineCommOk(comm)) {
-				if((this.getAuthorizationMechanism().isEnabled())&&(!this.getAuthorizationMechanism().getSelectedItem().equals(NO_AUTHORIZATION))){
+				if ((this.getAuthorizationMechanism().isEnabled())
+					&& (!this.getAuthorizationMechanism().getSelectedItem().equals(NO_AUTHORIZATION))) {
 					anonymousCommunication.setEnabled(false);
-				}else{
-				anonymousCommunication.setEnabled(true);
+				} else {
+					anonymousCommunication.setEnabled(true);
 				}
 			}
 		}
@@ -774,20 +767,11 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			Custom.setText("Custom");
 			jLabel1 = new JLabel();
 			jLabel1.setText("None");
-			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints5.gridy = -1;
-			gridBagConstraints5.gridx = -1;
-			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints3.gridy = -1;
-			gridBagConstraints3.gridx = -1;
 			choicePanel = new JPanel();
-			choicePanel.setLayout(new GridBagLayout());
-			choicePanel.add(getNoneButton(), gridBagConstraints3);
-			choicePanel.add(jLabel1, new GridBagConstraints());
-			choicePanel.add(getCustomButton(), gridBagConstraints5);
-			choicePanel.add(Custom, new GridBagConstraints());
+			choicePanel.add(getNoneButton());
+			choicePanel.add(jLabel1);
+			choicePanel.add(getCustomButton());
+			choicePanel.add(Custom);
 		}
 		return choicePanel;
 	}
@@ -1189,13 +1173,13 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		if (generalSecurity == null) {
 			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
 			gridBagConstraints12.anchor = java.awt.GridBagConstraints.NORTHWEST;
-			gridBagConstraints12.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints12.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints12.gridx = 1;
 			gridBagConstraints12.gridy = 0;
 			gridBagConstraints12.weightx = 1.0;
 			gridBagConstraints12.fill = GridBagConstraints.HORIZONTAL;
 			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
-			gridBagConstraints21.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints21.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints21.gridy = 0;
 			gridBagConstraints21.gridx = 0;
 			jLabel = new JLabel();
@@ -1233,7 +1217,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JPanel getSelectPanel() {
 		if (selectPanel == null) {
 			GridBagConstraints gridBagConstraints24 = new GridBagConstraints();
-			gridBagConstraints24.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints24.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints24.gridy = 0;
 			gridBagConstraints24.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints24.gridx = 2;
@@ -1243,9 +1227,9 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			gridBagConstraints23.gridy = 0;
 			gridBagConstraints23.weightx = 1.0;
 			gridBagConstraints23.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints23.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints23.insets = new java.awt.Insets(5, 5, 5, 5);
 			GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
-			gridBagConstraints22.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints22.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints22.gridy = 0;
 			gridBagConstraints22.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints22.gridx = 0;
@@ -1254,7 +1238,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			jLabel6.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 14));
 			jLabel6.setForeground(IntroduceLookAndFeel.getPanelLabelColor());
 			selectPanel = new JPanel();
-			
+
 			selectPanel.setLayout(new GridBagLayout());
 			selectPanel.add(jLabel6, gridBagConstraints22);
 			selectPanel.add(getCredentialLoadMethod(), gridBagConstraints23);
@@ -1359,7 +1343,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			credentialsPanel.setLayout(this.credentialPanelLayout);
 			credentialsPanel.add(getNonePanel(), N0_CRED_PANEL);
 			credentialsPanel.add(getCertificatePanel(), PKI_CRED_PANEL);
-			credentialsPanel.add(getProxyPanel(), PROXY_CRED_PANEL);
+			//credentialsPanel.add(getProxyPanel(), PROXY_CRED_PANEL);
 		}
 		return credentialsPanel;
 	}
@@ -1514,21 +1498,21 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
 
 	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private JPanel getJPanel() {
 		if (jPanel == null) {
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
 			gridBagConstraints10.gridx = 0;
-			gridBagConstraints10.insets = new java.awt.Insets(2,50,2,50);
+			gridBagConstraints10.insets = new java.awt.Insets(2, 5, 2, 5);
 			gridBagConstraints10.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints10.weightx = 1.0D;
 			gridBagConstraints10.gridy = 0;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
-			gridBagConstraints.insets = new java.awt.Insets(2,50,2,50);
+			gridBagConstraints.insets = new java.awt.Insets(2, 5, 2, 5);
 			gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints.weightx = 1.0D;
 			gridBagConstraints.gridy = 1;
@@ -1540,4 +1524,13 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return jPanel;
 	}
 
+
+	public static void main(String[] args) {
+		JFrame f = new JFrame();
+		ServiceSecurityPanel s = new ServiceSecurityPanel();
+		f.setContentPane(s);
+		f.pack();
+		f.show();
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
 }

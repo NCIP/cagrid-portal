@@ -87,7 +87,6 @@ public class GMEViewer extends NamespaceTypeToolsComponent{
 		gridBagConstraints11.weighty = 1.0D;
 		gridBagConstraints11.gridx = 0;
 		this.setLayout(new GridBagLayout());
-		this.setSize(469, 446);
 		this.add(getMainPanel(), gridBagConstraints11);
 	}
 

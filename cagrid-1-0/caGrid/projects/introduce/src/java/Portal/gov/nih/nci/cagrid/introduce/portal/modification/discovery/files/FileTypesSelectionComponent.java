@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.discovery.files;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
@@ -18,13 +17,13 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 import org.jdom.Document;
 import org.jdom.Element;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.Namespace;
 import org.projectmobius.common.XMLUtilities;
-import javax.swing.JTextField;
 
 
 public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent {
@@ -77,7 +76,6 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.insets = new java.awt.Insets(2,2,2,2);
 		gridBagConstraints.gridy = 0;
-		this.setSize(new java.awt.Dimension(233,92));
 		nameLabel = new JLabel();
 		nameLabel.setText("Name");
 

@@ -22,7 +22,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: IdPMenu.java,v 1.9 2005-12-15 19:29:33 langella Exp $
+ * @version $Id: IdPMenu.java,v 1.10 2006-04-07 03:52:58 oster Exp $
  */
 public class IdPMenu extends GridPortalComponent {
 
@@ -49,7 +49,6 @@ public class IdPMenu extends GridPortalComponent {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(400,200);
 		this.setContentPane(getJContentPane());
 		this.setFrameIcon(DorianLookAndFeel.getIdpIcon());
 		this.setTitle("Identity Provider Menu");

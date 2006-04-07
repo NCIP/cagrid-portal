@@ -60,7 +60,6 @@ public class LoadCredentialsFromFileSystemWindow extends GridPortalComponent {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(300, 200);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Load Credentials");
 		this.setFrameIcon(IntroduceLookAndFeel.getLoadCredentialsIcon());

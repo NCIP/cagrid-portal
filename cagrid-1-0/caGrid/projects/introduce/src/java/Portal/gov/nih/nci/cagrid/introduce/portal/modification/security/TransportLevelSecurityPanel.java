@@ -80,7 +80,6 @@ public class TransportLevelSecurityPanel extends JPanel {
 		authMethodLabel = new JLabel();
 		authMethodLabel.setText("Communication Method");
 		this.setLayout(new GridBagLayout());
-		this.setSize(300, 200);
 		this.add(authMethodLabel, gridBagConstraints);
 		this.add(getCommunicationMethod(), gridBagConstraints1);
 	}

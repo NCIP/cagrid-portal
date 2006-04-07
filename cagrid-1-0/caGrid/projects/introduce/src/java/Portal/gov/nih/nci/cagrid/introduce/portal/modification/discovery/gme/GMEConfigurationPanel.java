@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.discovery.gme;
 
-import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 
 import java.awt.GridBagConstraints;
@@ -54,7 +53,6 @@ public class GMEConfigurationPanel extends JPanel {
 	 * This method initializes this
 	 */
 	private void initialize() {
-		this.setSize(new java.awt.Dimension(128, 92));
 		nameLabel = new JLabel();
 		nameLabel.setText("Name");
 

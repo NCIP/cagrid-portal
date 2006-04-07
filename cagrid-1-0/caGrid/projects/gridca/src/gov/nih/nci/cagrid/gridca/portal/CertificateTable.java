@@ -10,11 +10,12 @@ import javax.swing.table.TableColumn;
 
 import org.projectmobius.portal.PortalResourceManager;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CertificateTable.java,v 1.1 2006-03-02 17:54:34 langella Exp $
+ * @version $Id: CertificateTable.java,v 1.2 2006-04-07 03:52:41 oster Exp $
  */
 public class CertificateTable extends PortalBaseTable {
 	public final static String CERTIFICATE = "certificate";
@@ -39,6 +40,7 @@ public class CertificateTable extends PortalBaseTable {
 
 	}
 
+
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn(CERTIFICATE);
@@ -48,6 +50,7 @@ public class CertificateTable extends PortalBaseTable {
 
 	}
 
+
 	public void addCertificate(final X509Certificate cert) {
 		Vector v = new Vector();
 		v.add(cert);
@@ -55,6 +58,7 @@ public class CertificateTable extends PortalBaseTable {
 		v.add(cert.getNotAfter());
 		addRow(v);
 	}
+
 
 	public synchronized X509Certificate getSelectedCertificate() {
 		int row = getSelectedRow();
@@ -65,22 +69,22 @@ public class CertificateTable extends PortalBaseTable {
 		}
 	}
 
+
 	public void doubleClick() throws Exception {
 		int row = getSelectedRow();
 		if ((row >= 0) && (row < getRowCount())) {
-			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new CertificateInformationComponent(getSelectedCertificate()),600,425);	
+			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+				new CertificateInformationComponent(getSelectedCertificate()), 600, 425);
 		} else {
-			throw new Exception(
-					"No certificate selected, please select a certificate!!!");
+			throw new Exception("No certificate selected, please select a certificate!!!");
 		}
 
 	}
 
+
 	public void singleClick() throws Exception {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	
 
 }

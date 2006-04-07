@@ -36,7 +36,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPsWindow.java,v 1.12 2006-03-22 05:01:03 langella Exp $
+ * @version $Id: TrustedIdPsWindow.java,v 1.13 2006-04-07 03:52:58 oster Exp $
  */
 public class TrustedIdPsWindow extends GridPortalBaseFrame {
 
@@ -99,7 +99,6 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(500, 500);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Trusted Identity Provider Management");
 

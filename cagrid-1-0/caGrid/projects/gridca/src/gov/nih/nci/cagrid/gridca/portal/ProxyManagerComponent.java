@@ -79,7 +79,6 @@ public class ProxyManagerComponent extends GridPortalComponent {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(500, 400);
 		this.setContentPane(getJContentPane());
 		this.setFrameIcon(GridCALookAndFeel.getProxyManagerIcon());
 		this.setTitle("Proxy Manager");

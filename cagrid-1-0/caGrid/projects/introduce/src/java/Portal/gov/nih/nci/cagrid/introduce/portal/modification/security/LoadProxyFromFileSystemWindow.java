@@ -55,7 +55,6 @@ public class LoadProxyFromFileSystemWindow extends GridPortalComponent {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(300, 200);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Load Proxy");
 		this.setFrameIcon(IntroduceLookAndFeel.getLoadCredentialsIcon());

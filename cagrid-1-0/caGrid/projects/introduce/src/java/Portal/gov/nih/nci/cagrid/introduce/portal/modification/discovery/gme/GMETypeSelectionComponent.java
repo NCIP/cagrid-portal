@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.discovery.gme;
 
-import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
@@ -138,7 +137,4 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent  
 		}
 
 	}
-
-
-
 }

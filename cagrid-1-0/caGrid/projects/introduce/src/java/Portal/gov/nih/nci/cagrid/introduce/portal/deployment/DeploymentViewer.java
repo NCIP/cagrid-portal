@@ -111,7 +111,6 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 	 */
 	private void initialize() {
 		this.setContentPane(getMainPanel());
-		this.setSize(452, 237);
 		this.setFrameIcon(IntroduceLookAndFeel.getDeployIcon());
 		this.setTitle("Deploy Grid Service");
 
@@ -131,6 +130,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 			String key = (String) keys.nextElement();
 			this.addTextField(this.getInputPanel(), key, deployProperties.getProperty(key), i++, true);
 		}
+		pack();
 
 	}
 
@@ -297,7 +297,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 		if (closeButton == null) {
 			closeButton = new JButton();
 			closeButton.setIcon(PortalLookAndFeel.getCloseIcon());
-			closeButton.setText("Cancel");
+			closeButton.setText("Done");
 			closeButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();

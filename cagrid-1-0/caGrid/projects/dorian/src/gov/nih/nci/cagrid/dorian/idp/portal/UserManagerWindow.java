@@ -37,7 +37,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.24 2006-03-24 17:20:37 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.25 2006-04-07 03:52:58 oster Exp $
  */
 public class UserManagerWindow extends GridPortalBaseFrame {
 
@@ -166,7 +166,6 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(500, 500);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Manage Users");
 

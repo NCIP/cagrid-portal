@@ -110,7 +110,6 @@ public class GridMapPanel extends JPanel {
 		gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
 		gridBagConstraints.gridy = 0;
 		this.setLayout(new GridBagLayout());
-		this.setSize(400, 400);
 		setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Manage Grid Map File",
 			javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
 			null, IntroduceLookAndFeel.getPanelLabelColor()));
@@ -274,7 +273,7 @@ public class GridMapPanel extends JPanel {
 			gridBagConstraints8.gridx = 0;
 			gridBagConstraints8.gridy = 1;
 			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-			gridBagConstraints7.insets = new java.awt.Insets(5, 50, 5, 50);
+			gridBagConstraints7.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints7.gridy = 0;
 			gridBagConstraints7.weightx = 1.0D;
 			gridBagConstraints7.fill = java.awt.GridBagConstraints.HORIZONTAL;

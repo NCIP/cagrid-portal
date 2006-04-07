@@ -121,7 +121,6 @@ public class ApplicationWindow extends GridPortalComponent {
 	 * @return void
 	 */
 	private void initialize() {
-		// this.setSize(500, 500);
 		this.setContentPane(getJContentPane());
 		this.setTitle("IdP User Application");
 		this.setFrameIcon(DorianLookAndFeel.getApplicationIcon());

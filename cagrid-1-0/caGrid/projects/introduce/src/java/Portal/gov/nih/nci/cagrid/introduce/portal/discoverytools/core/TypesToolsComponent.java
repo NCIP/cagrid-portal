@@ -32,7 +32,6 @@ public class TypesToolsComponent extends GridPortalComponent {
 	 * This method initializes this
 	 */
 	private void initialize() {
-        this.setSize(new java.awt.Dimension(284,182));
         this.setContentPane(getMainPanel());
         this.setTitle("Discovery Tools");
         this.setFrameIcon(IntroduceLookAndFeel.getDiscoveryToolsIcon());

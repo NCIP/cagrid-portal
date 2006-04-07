@@ -81,11 +81,10 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 		gridBagConstraints2.gridy = 0;
 		gridBagConstraints2.weighty = 0.0D;
 		gridBagConstraints2.weightx = 1.0D;
-		gridBagConstraints2.insets = new java.awt.Insets(0,0,0,0);
+		gridBagConstraints2.insets = new java.awt.Insets(0, 0, 0, 0);
 		gridBagConstraints2.ipady = 2;
 		gridBagConstraints2.fill = java.awt.GridBagConstraints.BOTH;
 		this.setLayout(new GridBagLayout());
-		this.setSize(new java.awt.Dimension(312,85));
 		this.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Element Type Configuration",
 			javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
 			null, IntroduceLookAndFeel.getPanelLabelColor()));
@@ -359,9 +358,9 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 
 
 	/**
-	 * This method initializes customBeanWrapperPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes customBeanWrapperPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getCustomBeanWrapperPanel() {
 		if (customBeanWrapperPanel == null) {
@@ -374,13 +373,12 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 			customizeLabel = new JLabel();
 			customizeLabel.setIcon(IntroduceLookAndFeel.getAddIcon());
 			customizeLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 10));
-			customizeLabel.setPreferredSize(new java.awt.Dimension(120,22));
 			customizeLabel.setText("Customize Beans");
 			customizeLabel.addMouseListener(new MouseAdapter() {
-			
+
 				public void mouseClicked(MouseEvent e) {
 					super.mouseClicked(e);
-					if(getCustomBeanPanel().isVisible()){
+					if (getCustomBeanPanel().isVisible()) {
 						getCustomBeanPanel().setVisible(false);
 						customizeLabel.setIcon(IntroduceLookAndFeel.getAddIcon());
 					} else {
@@ -388,7 +386,7 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 						customizeLabel.setIcon(IntroduceLookAndFeel.getRemoveIcon());
 					}
 				}
-			
+
 			});
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.fill = GridBagConstraints.BOTH;

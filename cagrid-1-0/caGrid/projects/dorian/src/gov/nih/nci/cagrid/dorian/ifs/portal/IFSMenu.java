@@ -19,7 +19,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: IFSMenu.java,v 1.14 2006-03-21 17:54:30 langella Exp $
+ * @version $Id: IFSMenu.java,v 1.15 2006-04-07 03:52:58 oster Exp $
  */
 public class IFSMenu extends GridPortalComponent {
 
@@ -68,7 +68,6 @@ public class IFSMenu extends GridPortalComponent {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(400, 300);
 		this.setContentPane(getJContentPane());
 		this.setFrameIcon(DorianLookAndFeel.getIFSIcon());
 		this.setTitle("Identity Federation Menu");

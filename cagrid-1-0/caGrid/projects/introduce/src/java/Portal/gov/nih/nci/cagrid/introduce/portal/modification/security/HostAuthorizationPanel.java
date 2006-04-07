@@ -76,7 +76,6 @@ public class HostAuthorizationPanel extends JPanel {
 		label = new JLabel();
 		label.setText("Hostname");
 		this.setLayout(new GridBagLayout());
-		this.setSize(300, 200);
 		this.add(label, gridBagConstraints);
 		this.add(getHostname(), gridBagConstraints1);
 	}

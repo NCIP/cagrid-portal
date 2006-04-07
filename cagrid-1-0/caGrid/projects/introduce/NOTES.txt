@@ -2,6 +2,13 @@ To Do:
 
 Need to make Configuration Menu work... should be able to set appropriate services URLs, etc
 
+introduce build needs to make more granular jars (for linking), how about:
+	-caGrid-introduce-core-1.0.jar  		(everything in src/java/Introduce) 
+	-caGrid-introduce-core-tests-1.0.jar  	(everything in test/src/java/Introduce)
+	-caGrid-introduce-portal-1.0.jar  		(everything in src/java/Portal)
+	-caGrid-introduce-portal-tests-1.0.jar 	(everything in test/src/java/Portal)
+	
+
 we could support definition of "service properties" in introduce
 -serviceimpl would have gettters for them (pull them out of service context for them)
 -we would could write them into the wsdd

@@ -21,7 +21,7 @@ import javax.swing.JTextField;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CertificatePanel.java,v 1.2 2006-03-03 21:47:38 langella Exp $
+ * @version $Id: CertificatePanel.java,v 1.3 2006-04-07 03:52:41 oster Exp $
  */
 public class CertificatePanel extends JPanel {
 
@@ -134,7 +134,6 @@ public class CertificatePanel extends JPanel {
 		gridBagConstraints16.weighty = 1.0D;
 		gridBagConstraints16.gridy = 0;
 		this.setLayout(new GridBagLayout());
-		this.setSize(500, 400);
 		this.add(getJPanel(), gridBagConstraints16);
 		this.add(getButtonPanel(), gridBagConstraints17);
 		this.add(getJPanel1(), gridBagConstraints19);

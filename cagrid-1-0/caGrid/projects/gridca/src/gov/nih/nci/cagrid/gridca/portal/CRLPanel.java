@@ -56,7 +56,6 @@ public class CRLPanel extends JPanel {
 		gridBagConstraints.weightx = 1.0D;
 		gridBagConstraints.gridy = 0;
 		this.setLayout(new GridBagLayout());
-		this.setSize(500, 400);
 		this.add(getInfoPanel(), gridBagConstraints);
 		this.add(getListPanel(), gridBagConstraints31);
 	}

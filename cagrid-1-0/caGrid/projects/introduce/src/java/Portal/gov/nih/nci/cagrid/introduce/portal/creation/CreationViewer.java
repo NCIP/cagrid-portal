@@ -88,7 +88,6 @@ public class CreationViewer extends GridPortalComponent {
 	 */
 	private void initialize() {
 		this.setContentPane(getMainPanel());
-		this.setSize(469, 446);
 		this.setFrameIcon(IntroduceLookAndFeel.getCreateIcon());
 		this.setTitle("Create Grid Service");
 	}

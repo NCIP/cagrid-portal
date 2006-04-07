@@ -89,7 +89,6 @@ public class NamespaceTypeConfigurePanel extends JPanel{
         namespaceLabel = new JLabel();
         namespaceLabel.setText("Namespace");
         this.setLayout(new GridBagLayout());
-        this.setSize(new java.awt.Dimension(312,240));
         this.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Namespace Type Configuration", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
         this.add(namespaceLabel, gridBagConstraints);
         this.add(packageNameLabel, gridBagConstraints1);

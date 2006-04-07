@@ -40,7 +40,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPWindow.java,v 1.12 2006-03-22 05:01:03 langella Exp $
+ * @version $Id: TrustedIdPWindow.java,v 1.13 2006-04-07 03:52:58 oster Exp $
  */
 public class TrustedIdPWindow extends GridPortalBaseFrame {
 	public static final String PASSWORD = SAMLAuthenticationMethod.value1.getValue();
@@ -206,7 +206,6 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(700, 500);
 		this.setContentPane(getJContentPane());
 		if (this.newTrustedIdP) {
 			this.setTitle("Add Trusted IdP");

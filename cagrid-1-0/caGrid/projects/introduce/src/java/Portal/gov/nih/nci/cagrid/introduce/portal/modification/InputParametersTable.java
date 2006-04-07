@@ -6,7 +6,6 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 
 import java.util.Vector;
 
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.xml.namespace.QName;
 

@@ -86,7 +86,6 @@ public class OSUIdPAuthenticationPanel extends IdPAuthenticationPanel {
 	 */
 	private void initialize() {
 		this.setLayout(new BorderLayout());
-		this.setSize(300, 200);
 		this.add(getLoginPanel(), java.awt.BorderLayout.CENTER);
 	}
 

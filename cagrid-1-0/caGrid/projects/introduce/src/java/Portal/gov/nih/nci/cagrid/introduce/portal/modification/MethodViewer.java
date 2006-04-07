@@ -158,7 +158,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 
 	private void initialize() {
-		this.setSize(510, 622);
 		this.setContentPane(getMainPanel());
 		this.setTitle("Build/Modify Operation");
 		this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
@@ -285,7 +284,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 			inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Input Parameters",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
-			inputPanel.setPreferredSize(new java.awt.Dimension(200, 73));
 			inputPanel.add(getInputNamespacesPanel(), gridBagConstraints7);
 			inputPanel.add(getInputTypesTablePanel(), gridBagConstraints8);
 		}
