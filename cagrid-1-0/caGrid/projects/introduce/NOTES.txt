@@ -7,7 +7,11 @@ introduce build needs to make more granular jars (for linking), how about:
 	-caGrid-introduce-core-tests-1.0.jar  	(everything in test/src/java/Introduce)
 	-caGrid-introduce-portal-1.0.jar  		(everything in src/java/Portal)
 	-caGrid-introduce-portal-tests-1.0.jar 	(everything in test/src/java/Portal)
-	
+
+(steve)
+Open a service with no security. Go to service security, click custom, check all the options for secure communication.  Go to authz tab, select grid map.
+Now click back on the Operations tab, and click modify to modify a method.
+It gives an appropriate error “No Grid Map File Specified!!!” and dumps this exception, but the problem is there is no context as to where to fix the problem.  It should at least set the security tab as the active tab, and go to the authorization tab.
 
 we could support definition of "service properties" in introduce
 -serviceimpl would have gettters for them (pull them out of service context for them)
