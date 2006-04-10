@@ -360,5 +360,37 @@ GSBT - Globus Service Build Tools
 	<target name="deploy">
 		<ant antfile="build-deploy.xml" target="deploy" />
 	</target>
+	
+	<target name="dorianPortal" description="Run the dorian portal" >
+		<java classname="org.projectmobius.portal.GridPortal" fork="yes">
+			<jvmarg value="-Djava.endorsed.dirs=ext/endorsed/lib"/>
+			<arg value="etc/dorian-portal-conf.xml" />
+			<classpath>
+				<pathelement location="${stubs.dest}" />
+				<fileset dir="${build.lib.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${ext.lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${lib.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${ext.endorsed.dir}">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${globus.location}/lib">
+					<include name="*.jar" />
+					<exclude name="${stubs.jar.name}" />
+					<exclude name="${jar.name}" />
+					<exclude name="xml-apis.jar" />
+					<exclude name="xercesImpl.jar" />
+				</fileset>
+				<pathelement location="resources/portal/dorian"/>
+				<pathelement location="ext/resources/portal/common"/>
+				<pathelement location="ext/resources/portal/gridca"/>
+			</classpath>
+		</java>
+	</target>
 
 </project>
