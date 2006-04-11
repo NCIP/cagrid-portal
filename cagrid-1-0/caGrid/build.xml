@@ -376,6 +376,7 @@
 			<fileset dir="${projects.dir}" includes="*/build.xml" />
 		</subant>-->
 
+		<parallel>
 		<delete dir="${projects.dir}/core/ext" />
 		<ant dir="${projects.dir}/core" inheritAll="false" antfile="build.xml" target="clean" />
 
@@ -414,6 +415,7 @@
 
 		<delete dir="${projects.dir}/cql2xpath/ext" />
 		<ant dir="${projects.dir}/cql2xpath" inheritAll="false" antfile="build.xml" target="clean" />
+		</parallel>
 	</target>
 
 

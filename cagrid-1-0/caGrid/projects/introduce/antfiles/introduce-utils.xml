@@ -2,25 +2,24 @@
 <!-- caGrid Analytical Utilities build file                                  -->
 <!-- ======================================================================= -->
 <project name="introduce_utilities" basedir="." default="usage">
-	<property name="gme.service.default" value="http://malibu.bmi.ohio-state.edu:8080/wsrf/services/cagrid/GlobalModelExchange" />
-	<property name="conf.dir" location="conf" />
-	<property name="introduce.portal.conf" location="${conf.dir}/introduce/introduce-portal-conf.xml" />
-	
-    <target name="introducePortal" depends="build" description="Execute the Introduce Portal">
-        <runPortal configfile="${introduce.portal.conf}" />
-    </target>
-
-	 <macrodef name="runPortal">
-	        <attribute name="configFile" />
-	        <sequential>
-	            <echo message="Running portal with @{configFile}" />
-	            <java classname="org.projectmobius.portal.GridPortal" fork="yes">
-	                <arg value="@{configFile}" />
-	                <classpath refid="Portal.classpath"/>
-	            </java>
-	        </sequential>
-	    </macrodef>
-	    
+	<property name="gme.service.default"
+		value="http://malibu.bmi.ohio-state.edu:8080/wsrf/services/cagrid/GlobalModelExchange"/>
+	<property name="conf.dir" location="conf"/>
+	<property name="introduce.portal.conf"
+		location="${conf.dir}/introduce/introduce-portal-conf.xml"/>
+	<target name="introducePortal" depends="build" description="Execute the Introduce Portal">
+		<runPortal configfile="${introduce.portal.conf}"/>
+	</target>
+	<macrodef name="runPortal">
+		<attribute name="configFile"/>
+		<sequential>
+			<echo message="Running portal with @{configFile}"/>
+			<java classname="org.projectmobius.portal.GridPortal" fork="yes">
+				<arg value="@{configFile}"/>
+				<classpath refid="Portal.classpath"/>
+			</java>
+		</sequential>
+	</macrodef>
 	<!-- =================================================================== -->
 	<!-- GME Viewer                                                          -->
 	<!-- =================================================================== -->
@@ -32,24 +31,22 @@
 			<arg value="conf/gme-view-globus-config.xml"/>
 			<classpath>
 				<fileset dir="${jars.dir}">
-					<include name="*.jar" />
+					<include name="*.jar"/>
 				</fileset>
 				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
+					<include name="*.jar"/>
 				</fileset>
 				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar" />
+					<include name="*.jar"/>
 				</fileset>
 				<fileset dir="${ext.globus.dir}/lib">
-					<include name="*.jar" />
+					<include name="*.jar"/>
 				</fileset>
 				<fileset dir="${ant.library.dir}">
-					<include name="ant.jar" />
-					<include name="ant-launcher.jar" />
+					<include name="ant.jar"/>
+					<include name="ant-launcher.jar"/>
 				</fileset>
 			</classpath>
 		</java>
 	</target>
-	
-	
 </project>
