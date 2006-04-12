@@ -25,7 +25,7 @@
    <ns2:SchemaElement type="ConceptualDomain" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="DataElementConcept" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="DataElement" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="" deserializer="" serializer="" type="ClassificationScheme" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ClassificationScheme" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="ValueDomain" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="ValueDomain" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ClassificationSchemeItem" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="PermissibleValue" xsi:type="ns2:SchemaElementType"/>
