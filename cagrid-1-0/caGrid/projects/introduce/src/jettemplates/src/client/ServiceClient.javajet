@@ -60,13 +60,13 @@ public class <%=serviceName%>Client implements <%=serviceName%>I {
 	}
 	
 	public static void usage(){
-		System.out.println(<%=serviceName%>Client.class.getName() + " -gsh [gsh]");
+		System.out.println(<%=serviceName%>Client.class.getName() + " -url <service url>");
 	}
 	
 	public static void main(String [] args){
 		try{
 		if(!(args.length < 2)){
-			if(args[0].equals("-gsh")){
+			if(args[0].equals("-url")){
 			  <%=serviceName%>Client client = new <%=serviceName%>Client(args[1]);
 			  // place client calls here if you want to use this main as a
 			  // test....
