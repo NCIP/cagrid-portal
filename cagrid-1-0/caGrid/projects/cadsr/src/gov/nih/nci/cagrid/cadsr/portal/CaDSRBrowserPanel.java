@@ -208,9 +208,9 @@ public class CaDSRBrowserPanel extends JPanel {
 						getClassComboBox().removeAllItems();
 						CaDSRServiceI cadsr = new CaDSRServiceClient(getCadsr().getText());
 						try {
-							UMLClassMetadata[] metadatas = cadsr
-								.findClassesInPackage(((PackageDisplay) getPackageComboBox().getSelectedItem())
-									.getPackage());
+							UMLClassMetadata[] metadatas = cadsr.findClassesInPackage(
+								((ProjectDisplay) getProjectComboBox().getSelectedItem()).getProject(),
+								((PackageDisplay) getPackageComboBox().getSelectedItem()).getPackage().getName());
 							if (metadatas != null) {
 								for (int i = 0; i < metadatas.length; i++) {
 									getClassComboBox().addItem(new ClassDisplay(metadatas[i]));
@@ -343,7 +343,7 @@ public class CaDSRBrowserPanel extends JPanel {
 
 
 		public String toString() {
-			return project.getShortName() +" (version: "+project.getVersion()+")";
+			return project.getShortName() + " (version: " + project.getVersion() + ")";
 		}
 
 	}

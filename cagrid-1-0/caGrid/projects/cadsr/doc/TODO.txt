@@ -1,5 +1,5 @@
 
-need to add more context to methods for proper unambiguity
+cadsr api bug.. returning too many classes when there are package aliases
 
 make browser into introduce plugin
 
@@ -8,6 +8,8 @@ caching using resources?
 
 
 ==================================================
+(DONE) need to add more context to methods for proper unambiguity
+
 (DONE) browser needs to show project version
 
 (DONE)until there is a public 3.1 server, this uses nci internal ones with a localhost sshtunnel

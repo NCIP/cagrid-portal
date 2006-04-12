@@ -130,13 +130,16 @@
 						<sequence>
           		  
                   					
-							<element name="pkg">
+							<element name="project">
 	      		  				<complexType>
 									<sequence>
-										<element ref="ns0:UMLPackageMetadata" minOccurs="1" maxOccurs="1" />
+										<element ref="ns0:Project" minOccurs="1" maxOccurs="1" />
                   				 	</sequence>
 	      			        	</complexType>
 	      			        </element>
+                  				 	
+                  					
+							<element name="packageName" type="xs:string" minOccurs="1" maxOccurs="1" />
                   				 	
 	      				</sequence>
 	      			</complexType>
@@ -181,14 +184,17 @@
 					<complexType>
 						<sequence>
           		  
-	      		  					
-							<element name="packages">
+                  					
+							<element name="project">
 	      		  				<complexType>
 									<sequence>
-										<element ref="ns0:UMLPackageMetadata" minOccurs="1" maxOccurs="unbounded" />
+										<element ref="ns0:Project" minOccurs="1" maxOccurs="1" />
                   				 	</sequence>
 	      			        	</complexType>
 	      			        </element>
+                  				 	
+	      		  					
+							<element name="packageNames" type="xs:string" minOccurs="1" maxOccurs="unbounded" />
                   				 	
 	      		  		
 
@@ -210,6 +216,15 @@
 					<complexType>
 						<sequence>
           		  
+                  					
+							<element name="project">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:Project" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+                  				 	
 	      		  					
 							<element name="classes">
 	      		  				<complexType>
@@ -239,6 +254,15 @@
 					<complexType>
 						<sequence>
           		  
+                  					
+							<element name="project">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:Project" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+                  				 	
                   					
 							<element name="clazz">
 	      		  				<complexType>
