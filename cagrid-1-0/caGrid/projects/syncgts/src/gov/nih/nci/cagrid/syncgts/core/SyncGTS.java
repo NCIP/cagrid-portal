@@ -516,8 +516,8 @@ public class SyncGTS {
 			description.setSyncDescriptors(des);
 			description.setFilePrefix("gts");
 			description.setDeleteInvalidFiles(false);
-			description.setNextSync(new BigInteger("5"));
-			description.setDeleteExistingTrustedRoots(true);
+			description.setNextSync(new BigInteger("300"));
+			description.setDeleteExistingTrustedRoots(false);
 			SyncGTS sync = new SyncGTS();
 			sync.syncAndResync(description);
 		} catch (Exception e) {
