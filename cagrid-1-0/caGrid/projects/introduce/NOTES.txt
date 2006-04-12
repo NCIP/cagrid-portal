@@ -2,6 +2,8 @@ To Do:
 
 Need to make Configuration Menu work... should be able to set appropriate services URLs, etc
 
+need to make jndi edited, not replaced everytime.
+
 introduce build needs to make more granular jars (for linking), how about:
 	-caGrid-introduce-core-1.0.jar  		(everything in src/java/Introduce) 
 	-caGrid-introduce-core-tests-1.0.jar  	(everything in test/src/java/Introduce)
@@ -41,8 +43,13 @@ need a way to generate XSD and beanmappers for existing object models that want 
 
 Need to add more complex tests to the system test for adding complex methods with faults etc.
 
+secure message privacy does not work (STEVE)
+
+support for open saml callouts and everything that globus supports (STEVE)
+
+============================ D O N E ================================================================
 ==========
-(PARTIAL - still need to add tests.. and GUI - Scott) sync serializer/deserializer
+(DONE - still need to add tests.. and GUI - Scott) sync serializer/deserializer
 
 	SchemaElement needs to have location and type always and have a choice between:
 	complex type with nothing
@@ -64,11 +71,6 @@ Need to add more complex tests to the system test for adding complex methods wit
 	
 ==========
 
-secure message privacy does not work (STEVE)
-
-support for open saml callouts and everything that globus supports (STEVE)
-
-============================ D O N E ================================================================
 (DONE) Shannon, did your refactor break the functionality of synchronizeMetadataFramework in the MetadataListType?
 
 (DONE) BaseResource bug that Mike and Steve found.  Make new service with secure conv. and keep the initial
