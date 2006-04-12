@@ -7,14 +7,11 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JToggleButton;
-import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -52,7 +49,7 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 		getTypeText().setText(type.getType());
 		getClassNameText().setText(type.getClassName());
 		getDeserializerText().setText(type.getDeserializer());
-		getSerializerText().setText(type.getDeserializer());
+		getSerializerText().setText(type.getSerializer());
 		getClassNameText().setEditable(classEditable);
 		getDeserializerText().setEditable(classEditable);
 		getSerializerText().setEditable(classEditable);
