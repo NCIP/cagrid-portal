@@ -60,8 +60,8 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_test_interop_stubs.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_test_interop.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_test_unit_stubs.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_test_unit.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_test.jar"/>
+	<classpathentry sourcepath="/GT4_LOCATION" kind="var" path="GT4_LOCATION/lib/wsrf_test_unit.jar"/>
+	<classpathentry sourcepath="/GT4_LOCATION" kind="var" path="GT4_LOCATION/lib/wsrf_test.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_tools.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wss4j.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xalan.jar"/>
