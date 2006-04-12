@@ -81,6 +81,14 @@ public class IntroduceLookAndFeel extends PortalLookAndFeel {
 	
 	public static final Icon getBrowseIcon() {
 		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/folder-open.png"));
+	}	
+	
+	public static final Icon getUpIcon() {
+		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/go-up.png"));
+	}
+	
+	public static final Icon getDownIcon() {
+		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/go-down.png"));
 	}
 
 }

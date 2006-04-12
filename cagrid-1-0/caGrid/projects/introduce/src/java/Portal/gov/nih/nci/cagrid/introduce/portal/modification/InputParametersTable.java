@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.introduce.portal.modification;
 import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 
 import java.util.Vector;
 
@@ -52,6 +53,19 @@ public class InputParametersTable extends PortalBaseTable {
 	}
 
 
+	public void modifyRow(final MethodTypeInputsInput input, int row) throws Exception {
+		if ((row < 0) || (row >= getRowCount())) {
+			throw new Exception("invalid row");
+		}
+		Vector v = (Vector) getValueAt(row, 4);
+		v.set(0, input.getName());
+		v.set(1, new Boolean(input.isIsArray()));
+		v.set(2, input.getQName().getNamespaceURI());
+		v.set(3, input.getQName().getLocalPart());
+		v.set(4, v);
+	}
+
+
 	public void modifySelectedRow(final MethodTypeInputsInput input) throws Exception {
 		int row = getSelectedRow();
 		if ((row < 0) || (row >= getRowCount())) {
@@ -63,6 +77,30 @@ public class InputParametersTable extends PortalBaseTable {
 		v.set(2, input.getQName().getNamespaceURI());
 		v.set(3, input.getQName().getLocalPart());
 		v.set(4, v);
+	}
+
+
+	public void moveSelectedRowUp() throws Exception {
+		if (getSelectedRow() != 0 ) {
+			MethodTypeInputsInput input1 = getRowData(getSelectedRow());
+			MethodTypeInputsInput input2 = getRowData(getSelectedRow() - 1);
+			modifySelectedRow(input2);
+			modifyRow(input1, getSelectedRow() - 1);
+			setRowSelectionInterval(getSelectedRow() - 1, getSelectedRow() - 1);
+			this.paint(this.getGraphics());
+		}
+	}
+
+
+	public void moveSelectedRowDown() throws Exception {
+		if (getSelectedRow() < getRowCount()-1 && getRowCount() > 1) {
+			MethodTypeInputsInput input1 = getRowData(getSelectedRow());
+			MethodTypeInputsInput input2 = getRowData(getSelectedRow() + 1);
+			modifySelectedRow(input2);
+			modifyRow(input1, getSelectedRow() + 1);
+			setRowSelectionInterval(getSelectedRow() + 1, getSelectedRow() + 1);
+			this.paint(this.getGraphics());
+		}
 	}
 
 

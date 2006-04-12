@@ -23,6 +23,7 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -145,6 +146,17 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JButton setOutputButton = null;
 
+	private JPanel inputTableControlsPanel = null;
+
+	private JLabel upButtonLabel = null;
+
+	private JLabel downButtonLabel = null;
+
+	private JPanel inputTableControlsPanel1 = null;
+
+	private JLabel upLabel = null;
+
+	private JLabel downLabel = null;
 
 	public MethodViewer(MethodType method, ServiceInformation info, File schemaDir, MethodsTable table, int selectedRow) {
 		this.info = info;
@@ -271,7 +283,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			gridBagConstraints8.weightx = 1.0D;
 			gridBagConstraints8.weighty = 1.0D;
 			gridBagConstraints8.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints8.gridx = 1;
+			gridBagConstraints8.gridx = 2;
 			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
 			gridBagConstraints7.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints7.gridx = 0;
@@ -1047,6 +1059,10 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getInputTypesTablePanel() {
 		if (inputTypesTablePanel == null) {
+			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
+			gridBagConstraints18.gridx = 1;
+			gridBagConstraints18.fill = java.awt.GridBagConstraints.VERTICAL;
+			gridBagConstraints18.gridy = 0;
 			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
 			gridBagConstraints14.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints14.gridwidth = 2;
@@ -1066,6 +1082,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			inputTypesTablePanel.setLayout(new GridBagLayout());
 			inputTypesTablePanel.add(getInputParamScrollPanel(), gridBagConstraints21);
 			inputTypesTablePanel.add(getInputButtonPanel(), gridBagConstraints14);
+			inputTypesTablePanel.add(getInputTableControlsPanel1(), gridBagConstraints18);
 		}
 		return inputTypesTablePanel;
 	}
@@ -1101,6 +1118,57 @@ public class MethodViewer extends GridPortalBaseFrame {
 		}
 		return setOutputButton;
 	}
+
+
+	/**
+	 * This method initializes inputTableControlsPanel1	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getInputTableControlsPanel1() {
+		if (inputTableControlsPanel1 == null) {
+			GridBagConstraints gridBagConstraints25 = new GridBagConstraints();
+			gridBagConstraints25.gridx = 0;
+			gridBagConstraints25.gridy = 0;
+			GridBagConstraints gridBagConstraints24 = new GridBagConstraints();
+			gridBagConstraints24.gridx = 0;
+			gridBagConstraints24.gridy = 1;
+			downLabel = new JLabel();
+			downLabel.setText("");
+			downLabel.setIcon(IntroduceLookAndFeel.getDownIcon());
+			downLabel.addMouseListener(new MouseAdapter() {
+				public void mouseClicked(MouseEvent e) {
+					super.mouseClicked(e);
+					try {
+						getInputParamTable().moveSelectedRowDown();
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+			
+				}
+			});
+			upLabel = new JLabel();
+			upLabel.setText("");
+			upLabel.setIcon(IntroduceLookAndFeel.getUpIcon());
+			upLabel.addMouseListener(new MouseAdapter() {
+				public void mouseClicked(MouseEvent e) {
+					super.mouseClicked(e);
+					try {
+						getInputParamTable().moveSelectedRowUp();
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+			
+			});
+			inputTableControlsPanel1 = new JPanel();
+			inputTableControlsPanel1.setLayout(new GridBagLayout());
+			inputTableControlsPanel1.add(upLabel, gridBagConstraints25);
+			inputTableControlsPanel1.add(downLabel, gridBagConstraints24);
+		}
+		return inputTableControlsPanel1;
+	}
+
 
 } // @jve:decl-index=0:visual-constraint="4,12"
 
