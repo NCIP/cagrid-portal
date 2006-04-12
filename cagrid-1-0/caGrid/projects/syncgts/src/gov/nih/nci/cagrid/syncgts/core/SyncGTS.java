@@ -16,6 +16,7 @@ import gov.nih.nci.cagrid.syncgts.bean.SyncReport;
 import gov.nih.nci.cagrid.syncgts.bean.TrustedCA;
 
 import java.io.File;
+import java.math.BigInteger;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -27,6 +28,8 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.globus.common.CoGProperties;
 import org.projectmobius.common.MobiusDate;
+import org.projectmobius.common.MobiusPoolManager;
+import org.projectmobius.common.MobiusRunnable;
 
 
 /**
@@ -38,23 +41,33 @@ import org.projectmobius.common.MobiusDate;
  */
 public class SyncGTS {
 
-	private SyncDescription description;
 	private Map caListings;
 	private Map listingsById;
 	private Logger logger;
 	private int nextFileId = 0;
 	private List messages;
 	private HistoryManager history;
+	private static SyncGTS instance;
+	private boolean lock = false;
+	private MobiusPoolManager threadManager;
 
 
-	public SyncGTS(SyncDescription prop) {
-		this.description = prop;
+	private SyncGTS() {
 		this.history = new HistoryManager();
+		this.threadManager = new MobiusPoolManager();
 		logger = Logger.getLogger(this.getClass().getName());
 	}
 
 
-	private void reset() {
+	public synchronized static SyncGTS getInstance() {
+		if (instance == null) {
+			instance = new SyncGTS();
+		}
+		return instance;
+	}
+
+
+	private synchronized void reset() {
 		this.caListings = null;
 		this.listingsById = null;
 		this.nextFileId = 0;
@@ -76,14 +89,77 @@ public class SyncGTS {
 	}
 
 
-	public synchronized SyncReport sync() {
+	private synchronized boolean getLock() {
+		if (!lock) {
+			lock = true;
+			return lock;
+		} else {
+			return false;
+		}
+	}
+
+
+	private synchronized void releaseLock() {
+		lock = false;
+	}
+
+
+	public void syncAndResync(final SyncDescription description) throws Exception {
+		if (getLock()) {
+			threadManager.execute(getRunner(description));
+			releaseLock();
+		} else {
+			throw new Exception("Cannot sync unable to get lock.");
+		}
+	}
+
+
+	public void syncAndResyncInBackground(final SyncDescription description) throws Exception {
+		if (getLock()) {
+			threadManager.executeInBackground(getRunner(description));
+			releaseLock();
+		} else {
+			throw new Exception("Cannot sync unable to get lock.");
+		}
+	}
+
+
+	public SyncReport syncOnce(final SyncDescription description) throws Exception {
+		if (getLock()) {
+			SyncReport r = sync(description);
+			releaseLock();
+			return r;
+		} else {
+			throw new Exception("Cannot sync unable to get lock.");
+		}
+	}
+
+
+	private MobiusRunnable getRunner(final SyncDescription description) {
+		MobiusRunnable runner = new MobiusRunnable() {
+			public void execute() {
+				while (true) {
+					sync(description);
+					try {
+						Thread.sleep(description.getNextSync().intValue() * 1000);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		};
+		return runner;
+	}
+
+
+	private synchronized SyncReport sync(SyncDescription description) {
 		SyncReport report = new SyncReport();
 		try {
 			reset();
 			String dt = MobiusDate.getCurrentDateTimeAsString();
 			report.setSyncDescription(description);
 			report.setTimestamp(dt);
-			this.readInCurrentCADirectory();
+			this.readInCurrentCADirectory(description);
 			Map master = new HashMap();
 			String error = null;
 			SyncDescriptor[] des = description.getSyncDescriptors();
@@ -210,7 +286,7 @@ public class SyncGTS {
 			Iterator del = caListings.values().iterator();
 			while (del.hasNext()) {
 				TrustedCAFileListing fl = (TrustedCAFileListing) del.next();
-				if ((this.description.isDeleteExistingTrustedRoots())
+				if ((description.isDeleteExistingTrustedRoots())
 					|| (fl.getName().indexOf(description.getFilePrefix()) >= 0)) {
 					TrustedCA ca = new TrustedCA();
 					removeCount = removeCount + 1;
@@ -303,7 +379,7 @@ public class SyncGTS {
 	}
 
 
-	private void readInCurrentCADirectory() throws Exception {
+	private void readInCurrentCADirectory(SyncDescription description) throws Exception {
 		caListings = new HashMap();
 		this.listingsById = new HashMap();
 		String caDir = CoGProperties.getDefault().getCaCertLocations();
@@ -334,7 +410,7 @@ public class SyncGTS {
 			String fn = list[i].getName();
 			int index = fn.lastIndexOf(".");
 			if (index == -1) {
-				handleUnexpectedFile(list[i]);
+				handleUnexpectedFile(description, list[i]);
 				break;
 			}
 			String name = fn.substring(0, index);
@@ -354,7 +430,7 @@ public class SyncGTS {
 			} else if (extension.equals("signing_policy")) {
 				ca.setSigningPolicy(list[i]);
 			} else {
-				handleUnexpectedFile(list[i]);
+				handleUnexpectedFile(description, list[i]);
 				break;
 			}
 
@@ -367,10 +443,10 @@ public class SyncGTS {
 				this.listingsById.put(ca.getFileId(), ca);
 				logger.debug(ca.toPrintText());
 			} else {
-				if ((!this.description.isDeleteInvalidFiles()) && (ca.getFileId() != null)) {
+				if ((!description.isDeleteInvalidFiles()) && (ca.getFileId() != null)) {
 					this.listingsById.put(ca.getFileId(), ca);
 				}
-				handleUnexpectedCA(ca);
+				handleUnexpectedCA(description, ca);
 			}
 		}
 		Message mess = new Message();
@@ -382,8 +458,8 @@ public class SyncGTS {
 	}
 
 
-	private void handleUnexpectedCA(TrustedCAFileListing ca) {
-		if (this.description.isDeleteInvalidFiles()) {
+	private void handleUnexpectedCA(SyncDescription description, TrustedCAFileListing ca) {
+		if (description.isDeleteInvalidFiles()) {
 			Message mess = new Message();
 			mess.setType(MessageType.Warning);
 			mess.setValue("The ca " + ca.getName() + " is invalid and will be removed!!!");
@@ -409,8 +485,8 @@ public class SyncGTS {
 	}
 
 
-	private void handleUnexpectedFile(File f) {
-		if (this.description.isDeleteInvalidFiles()) {
+	private void handleUnexpectedFile(SyncDescription description, File f) {
+		if (description.isDeleteInvalidFiles()) {
 			Message mess = new Message();
 			mess.setType(MessageType.Warning);
 			mess.setValue("The file " + f.getAbsolutePath() + " is unexpected and will be removed!!!");
@@ -432,7 +508,7 @@ public class SyncGTS {
 			SyncDescription description = new SyncDescription();
 			SyncDescriptor[] des = new SyncDescriptor[1];
 			des[0] = new SyncDescriptor();
-			des[0].setGtsServiceURI("https://localhost:8443/wsrf/services/cagrid/GridTrustService");
+			des[0].setGtsServiceURI("https://irondale.bmi.ohio-state.edu:8443/wsrf/services/cagrid/GridTrustService");
 			TrustedAuthorityFilter[] taf = new TrustedAuthorityFilter[1];
 			taf[0] = new TrustedAuthorityFilter();
 			taf[0].setStatus(Status.Trusted);
@@ -440,8 +516,10 @@ public class SyncGTS {
 			description.setSyncDescriptors(des);
 			description.setFilePrefix("gts");
 			description.setDeleteInvalidFiles(false);
-			SyncGTS sync = new SyncGTS(description);
-			sync.sync();
+			description.setNextSync(new BigInteger("5"));
+			description.setDeleteExistingTrustedRoots(true);
+			SyncGTS sync = new SyncGTS();
+			sync.syncAndResync(description);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
