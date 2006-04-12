@@ -10,8 +10,35 @@
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="Extension" type="ExtensionType"></xs:element>
-	<xs:element name="ExtensionDescription" type="ExtensionDescriptionType"></xs:element>
-	<xs:complexType name="ExtensionDescriptionType">
+	<xs:element name="ExtensionDescription">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="DiscoveryExtensionDescription"></xs:element>
+				<xs:element ref="ServiceExtensionDescription"></xs:element>
+			</xs:choice>
+			<xs:attribute name="extensionType" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DiscoveryExtensionDescription" type="DiscoveryExtensionDescriptionType"></xs:element>
+	<xs:complexType name="DiscoveryExtensionDescriptionType">
+		<xs:sequence>
+			<xs:element name="DiscoveryToolsPanelExtension" type="xs:string" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Must extend the NamespaceTypeToolsComponent</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DiscoveryPanelExtension" type="xs:string" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Must extend the NamespaceTypeDiscoveryComponent</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="Properties"/>
+		</xs:sequence>
+		<xs:attribute name="displayName" type="xs:string" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:element name="ServiceExtensionDescription" type="ServiceExtensionDescriptionType"></xs:element>
+	<xs:complexType name="ServiceExtensionDescriptionType">
 		<xs:sequence>
 			<xs:element name="CreationPostProcessor" type="xs:string" minOccurs="0" maxOccurs="1">
 				<xs:annotation>
@@ -38,25 +65,27 @@
 					<xs:documentation>ModificationViewer GUI component that must extend a ServiceModificatoinUIPanel</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="Properties" minOccurs="0" maxOccurs="1">
-				<xs:annotation>
-					<xs:documentation>To be used for extension configuration properties</xs:documentation>
-				</xs:annotation>
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="Property"  minOccurs="0" maxOccurs="unbounded">
-							<xs:complexType>
-								<xs:attribute name="key" type="xs:string"/>
-								<xs:attribute name="value" type="xs:string"/>
-							</xs:complexType>
-						</xs:element>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
+			<xs:element ref="Properties"/>
 		</xs:sequence>
 		<xs:attribute name="displayName" type="xs:string" use="required"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 	</xs:complexType>
+	
+	<xs:element name="Properties" minOccurs="0" maxOccurs="1">
+		<xs:annotation>
+			<xs:documentation>To be used for extension configuration properties</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Property"  minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:attribute name="key" type="xs:string"/>
+						<xs:attribute name="value" type="xs:string"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
 	
 	<xs:complexType name="ExtensionType">
 		<xs:sequence>
@@ -69,5 +98,6 @@
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="extensionType" type="xs:string"/>
 	</xs:complexType>
 </xs:schema>

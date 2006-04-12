@@ -56,13 +56,16 @@ public class GMESchemaLocatorPanel extends JPanel {
 	JLabel nameLabel = null;
 
 	public SchemaNode currentNode = null;
+	
+	public String url;
 
 
 	/**
 	 * This method initializes
 	 */
-	public GMESchemaLocatorPanel() {
+	public GMESchemaLocatorPanel(String url) {
 		super();
+		this.url = url;
 		initialize();
 
 	}
@@ -313,7 +316,7 @@ public class GMESchemaLocatorPanel extends JPanel {
 			gme = new JTextField();
 			IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
 				IntroducePortalConf.RESOURCE);
-			gme.setText(conf.getNamespaceTypeToolsComponent(GMESchemaLocatorPanel.TYPE).getProperty(GMESchemaLocatorPanel.GME_URL));
+			gme.setText(url);
 		}
 		return gme;
 	}

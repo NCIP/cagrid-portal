@@ -7,9 +7,10 @@ import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
-import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionsType;
+import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -26,7 +27,6 @@ import gov.nih.nci.cagrid.introduce.extension.ServiceModificationUIPanel;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
-import gov.nih.nci.cagrid.introduce.portal.NamespaceTypeDiscoveryDescriptor;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 import gov.nih.nci.cagrid.introduce.portal.modification.security.ServiceSecurityPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeConfigurePanel;
@@ -248,7 +248,7 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints13.gridx = 0;
 			gridBagConstraints13.gridy = 0;
 			gridBagConstraints13.insets = new java.awt.Insets(2, 2, 2, 2);
-			jContentPane.add(getMainPanel(),gridBagConstraints13);
+			jContentPane.add(getMainPanel(), gridBagConstraints13);
 		}
 		return jContentPane;
 	}
@@ -805,10 +805,10 @@ public class ModificationViewer extends GridPortalComponent {
 			ExtensionsType exts = introService.getExtensions();
 			if (exts != null && exts.getExtension() != null) {
 				ExtensionTools extTools = new ExtensionTools();
-				ExtensionsLoader extLoader = new ExtensionsLoader();
 				ExtensionType[] extsTypes = exts.getExtension();
 				for (int i = 0; i < extsTypes.length; i++) {
-					ExtensionDescriptionType extDtype = extLoader.getExtension(extsTypes[i].getName());
+					ServiceExtensionDescriptionType extDtype = ExtensionsLoader.getInstance().getServiceExtension(
+						extsTypes[i].getName());
 					try {
 						if (extDtype.getServiceModificationUIPanel() != null
 							&& !extDtype.getServiceModificationUIPanel().equals("")) {
@@ -1101,7 +1101,7 @@ public class ModificationViewer extends GridPortalComponent {
 			namespacePanel = new JPanel();
 			namespacePanel.add(getNamespaceConfigurationPanel());
 			namespacePanel.add(getNamespaceConfPanel());
-			namespacePanel.setLayout(new GridLayout(1,2));
+			namespacePanel.setLayout(new GridLayout(1, 2));
 		}
 		return namespacePanel;
 	}
@@ -1419,17 +1419,17 @@ public class ModificationViewer extends GridPortalComponent {
 	private JTabbedPane getDiscoveryTabbedPane() {
 		if (discoveryTabbedPane == null) {
 			discoveryTabbedPane = new JTabbedPane();
-			IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
-				IntroducePortalConf.RESOURCE);
-			List discoveryTypes = conf.getNamespaceTypeDiscoveryComponents();
+			List discoveryTypes = ExtensionsLoader.getInstance().getDiscoveryExtensions();
 			if (discoveryTypes != null) {
 				for (int i = 0; i < discoveryTypes.size(); i++) {
-					NamespaceTypeDiscoveryDescriptor ntdd = (NamespaceTypeDiscoveryDescriptor) discoveryTypes.get(i);
+					DiscoveryExtensionDescriptionType dd = (DiscoveryExtensionDescriptionType) discoveryTypes.get(i);
 					try {
-						discoveryTabbedPane.addTab(ntdd.getDisplayName(), ntdd.getNamespaceTypeDiscoveryComponent());
+						discoveryTabbedPane.addTab(dd.getDisplayName(),
+							gov.nih.nci.cagrid.introduce.portal.ExtensionTools.getNamespaceTypeDiscoveryComponent(dd
+								.getName()));
 					} catch (Exception e) {
 						JOptionPane.showMessageDialog(ModificationViewer.this, "Error loading discovery type: "
-							+ ntdd.getType());
+							+ dd.getDisplayName());
 					}
 				}
 			}

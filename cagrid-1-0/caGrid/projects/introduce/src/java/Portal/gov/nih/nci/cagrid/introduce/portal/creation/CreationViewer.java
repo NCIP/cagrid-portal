@@ -7,7 +7,7 @@ import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
-import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
@@ -71,12 +71,8 @@ public class CreationViewer extends GridPortalComponent {
 	private JLabel serviceStyleLabel = null;
 	private JComboBox serviceStyleSeletor = null;
 
-	private ExtensionsLoader loader = null;
-
-
 	public CreationViewer() {
 		super();
-		loader = new ExtensionsLoader();
 		initialize();
 	}
 
@@ -296,9 +292,9 @@ public class CreationViewer extends GridPortalComponent {
 			serviceStyleSeletor = new JComboBox();
 			serviceStyleSeletor.addItem("NONE");
 
-			List extensionDescriptors = loader.getExtensions();
+			List extensionDescriptors = ExtensionsLoader.getInstance().getServiceExtensions();
 			for (int i = 0; i < extensionDescriptors.size(); i++) {
-				ExtensionDescriptionType ex = (ExtensionDescriptionType) extensionDescriptors.get(i);
+				ServiceExtensionDescriptionType ex = (ServiceExtensionDescriptionType) extensionDescriptors.get(i);
 				serviceStyleSeletor.addItem(ex.getDisplayName());
 			}
 		}
@@ -464,8 +460,8 @@ public class CreationViewer extends GridPortalComponent {
 						// only supporting one for now.....
 						String serviceExtensions = "";
 						if (!((String) getServiceStyleSeletor().getSelectedItem()).equals("NONE")) {
-							ExtensionDescriptionType edt = loader
-								.getExtensionByDisplayName((String) getServiceStyleSeletor().getSelectedItem());
+							ServiceExtensionDescriptionType edt = ExtensionsLoader.getInstance()
+								.getServiceExtensionByDisplayName((String) getServiceStyleSeletor().getSelectedItem());
 							serviceExtensions = edt.getName();
 						}
 						setProgressText("creating");

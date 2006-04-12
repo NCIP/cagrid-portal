@@ -22,7 +22,7 @@ public class ExtensionClassLoader {
 	}
 
 
-	protected Class loadClass(String name) throws ClassNotFoundException {
+	public Class loadClass(String name) throws ClassNotFoundException {
 		Class c = (Class) loadedClasses.get(name);
 		if (c == null) {
 			// Create a new class loader with the directory

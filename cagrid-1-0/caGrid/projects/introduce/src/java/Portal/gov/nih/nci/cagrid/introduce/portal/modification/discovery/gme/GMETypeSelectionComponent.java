@@ -1,9 +1,11 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.discovery.gme;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
@@ -42,7 +44,8 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent  
 	
 	private GMEConfigurationPanel gmePanel = null;
 	
-	public GMETypeSelectionComponent() {
+	public GMETypeSelectionComponent(DiscoveryExtensionDescriptionType descriptor) {
+		super(descriptor);
 		initialize();
 		this.getGmePanel().discoverFromGME();
 	}
@@ -72,7 +75,7 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent  
 	 */
 	private GMEConfigurationPanel getGmePanel() {
 		if (gmePanel == null) {
-			gmePanel = new GMEConfigurationPanel();
+			gmePanel = new GMEConfigurationPanel(ExtensionTools.getProperty(getDescriptor().getProperties(),GMETypeSelectionComponent.GME_URL));
 		}
 		return gmePanel;
 	}
@@ -127,7 +130,7 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent  
 			IntroducePortalConf.RESOURCE);
 		GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
 		try {
-			XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance().getGridService(conf.getNamespaceTypeDiscoveryComponent(GMETypeSelectionComponent.TYPE).getProperty(GMETypeSelectionComponent.GME_URL));
+			XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance().getGridService(ExtensionTools.getProperty(getDescriptor().getProperties(),GMETypeSelectionComponent.GME_URL));
 			handle.cacheSchema(new Namespace(namespace), dir);
 		} catch (MobiusException e1) {
 			// TODO Auto-generated catch block

@@ -38,13 +38,16 @@ public class GMEConfigurationPanel extends JPanel {
 	JLabel nameLabel = null;
 
 	public String filterType = null;
+	
+	public String url;
 
 
 	/**
 	 * This method initializes
 	 */
-	public GMEConfigurationPanel() {
+	public GMEConfigurationPanel(String url) {
 		super();
+		this.url = url;
 		initialize();
 	}
 
@@ -97,11 +100,8 @@ public class GMEConfigurationPanel extends JPanel {
 		GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
 		List namespaces = null;
 		try {
-			IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
-				IntroducePortalConf.RESOURCE);
 			XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance().getGridService(
-				conf.getNamespaceTypeDiscoveryComponent(GMETypeSelectionComponent.TYPE).getProperty(
-					GMETypeSelectionComponent.GME_URL));
+				url);
 			namespaces = handle.getNamespaceDomainList();
 
 			getNamespaceComboBox().removeAllItems();
@@ -131,12 +131,8 @@ public class GMEConfigurationPanel extends JPanel {
 					try {
 						if ((String) namespaceComboBox.getSelectedItem() != null
 							&& ((String) namespaceComboBox.getSelectedItem()).length() > 0) {
-							IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance()
-								.getResource(IntroducePortalConf.RESOURCE);
 							XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
-								.getGridService(
-									conf.getNamespaceTypeDiscoveryComponent(GMETypeSelectionComponent.TYPE)
-										.getProperty(GMETypeSelectionComponent.GME_URL));
+								.getGridService(url);
 							List schemas = handle.getSchemaListForNamespaceDomain((String) namespaceComboBox
 								.getSelectedItem());
 
@@ -171,13 +167,10 @@ public class GMEConfigurationPanel extends JPanel {
 					GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
 					if (getSchemaComboBox().getSelectedItem() != null) {
 						currentNamespace = ((SchemaWrapper) getSchemaComboBox().getSelectedItem()).getNamespace();
-						IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance()
-							.getResource(IntroducePortalConf.RESOURCE);
 						try {
 							XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
 								.getGridService(
-									conf.getNamespaceTypeDiscoveryComponent(GMETypeSelectionComponent.TYPE)
-										.getProperty(GMETypeSelectionComponent.GME_URL));
+									url);
 							currentNode = handle.getSchema(currentNamespace, false);
 						} catch (MobiusException e1) {
 							e1.printStackTrace();

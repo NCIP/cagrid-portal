@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.introduce.portal.modification.discovery.files;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
+import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
@@ -50,8 +51,8 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 	/**
 	 * This method initializes
 	 */
-	public FileTypesSelectionComponent() {
-		super();
+	public FileTypesSelectionComponent(DiscoveryExtensionDescriptionType descriptor) {
+		super(descriptor);
 		initialize();
 	}
 

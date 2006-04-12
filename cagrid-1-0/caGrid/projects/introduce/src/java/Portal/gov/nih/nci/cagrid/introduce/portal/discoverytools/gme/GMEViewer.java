@@ -2,6 +2,8 @@ package gov.nih.nci.cagrid.introduce.portal.discoverytools.gme;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
+import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.common.jedit.JEditTextArea;
@@ -44,7 +46,7 @@ import org.xml.sax.InputSource;
  * @version $Id: mobiusEclipseCodeTemplates.xml,v 1.2 2005/04/19 14:58:02 oster
  *          Exp $
  */
-public class GMEViewer extends NamespaceTypeToolsComponent{
+public class GMEViewer extends NamespaceTypeToolsComponent {
 
 	private JPanel mainPanel = null;
 	private JTabbedPane gmeToolsTabs = null;
@@ -66,8 +68,8 @@ public class GMEViewer extends NamespaceTypeToolsComponent{
 	/**
 	 * This method initializes
 	 */
-	public GMEViewer() {
-		super();
+	public GMEViewer(DiscoveryExtensionDescriptionType descriptor) {
+		super(descriptor);
 		initialize();
 		getGmeSchemaLocatorPanel().discoverFromGME();
 	}
@@ -80,7 +82,7 @@ public class GMEViewer extends NamespaceTypeToolsComponent{
 	 */
 	private void initialize() {
 		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-		gridBagConstraints11.insets = new java.awt.Insets(5,0,0,0);
+		gridBagConstraints11.insets = new java.awt.Insets(5, 0, 0, 0);
 		gridBagConstraints11.gridy = 0;
 		gridBagConstraints11.fill = java.awt.GridBagConstraints.BOTH;
 		gridBagConstraints11.weightx = 1.0D;
@@ -252,13 +254,15 @@ public class GMEViewer extends NamespaceTypeToolsComponent{
 	 */
 	private GMESchemaLocatorPanel getGmeSchemaLocatorPanel() {
 		if (gmeSchemaLocatorPanel == null) {
-			gmeSchemaLocatorPanel = new GMESchemaLocatorPanel();
+			gmeSchemaLocatorPanel = new GMESchemaLocatorPanel(ExtensionTools.getProperty(getDescriptor()
+				.getProperties(), GMESchemaLocatorPanel.GME_URL));
 			gmeSchemaLocatorPanel.getSchemaComboBox().addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
 					if (gmeSchemaLocatorPanel.currentNode != null) {
 						try {
-							getSchemaTextPane().setText(XMLUtilities.formatXML(gmeSchemaLocatorPanel.currentNode.getSchemaContents()));
+							getSchemaTextPane().setText(
+								XMLUtilities.formatXML(gmeSchemaLocatorPanel.currentNode.getSchemaContents()));
 						} catch (MobiusException e1) {
 							e1.printStackTrace();
 						}
@@ -348,11 +352,12 @@ public class GMEViewer extends NamespaceTypeToolsComponent{
 					}
 
 					GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
-					IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
-						IntroducePortalConf.RESOURCE);
+
 					try {
 						XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
-							.getGridService(conf.getNamespaceTypeToolsComponent(GMESchemaLocatorPanel.TYPE).getProperty(GMESchemaLocatorPanel.GME_URL));
+							.getGridService(
+								ExtensionTools.getProperty(getDescriptor().getProperties(),
+									GMESchemaLocatorPanel.GME_URL));
 
 						// get the target namespace of the schema and make sure
 						// that it is acceptable by the GME
@@ -443,8 +448,8 @@ public class GMEViewer extends NamespaceTypeToolsComponent{
 								XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
 									.getGridService(gmeSchemaLocatorPanel.getGme().getText());
 								if (gmeSchemaLocatorPanel.getSchemaComboBox().getSelectedItem() != null) {
-									handle.cacheSchema(((SchemaWrapper)gmeSchemaLocatorPanel.getSchemaComboBox().getSelectedItem()).getNamespace(),
-										new File(location));
+									handle.cacheSchema(((SchemaWrapper) gmeSchemaLocatorPanel.getSchemaComboBox()
+										.getSelectedItem()).getNamespace(), new File(location));
 								}
 							} catch (MobiusException e1) {
 								// TODO Auto-generated catch block
