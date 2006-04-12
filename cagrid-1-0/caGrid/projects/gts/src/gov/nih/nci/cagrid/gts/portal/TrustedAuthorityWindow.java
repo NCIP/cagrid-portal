@@ -491,14 +491,7 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 			try {
 				X509Certificate certificate = CertUtil
 					.loadCertificate(new File(fc.getSelectedFile().getAbsolutePath()));
-				String sub = certificate.getSubjectDN().toString();
-				if (!sub.equals(this.getTrustedAuthorityName().getText())) {
-					PortalUtils
-						.showErrorMessage("The DN of the certificate being imported does not match the name of the Trusted Authority!!!");
-					return;
-				}
-
-				certificatePanel.clearCertificate();
+							certificatePanel.clearCertificate();
 				crlPanel.clearCRL();
 				certificatePanel.setCertificate(certificate);
 				this.getTrustedAuthorityName().setText(certificate.getSubjectDN().getName());
