@@ -21,6 +21,15 @@ public class CaDSRServiceProviderImpl {
 	}
 
 
+	public gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeResponse findValueDomainForAttribute(
+		gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttribute params) throws RemoteException {
+		gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeResponse();
+		boxedResult.setValueDomain(impl.findValueDomainForAttribute(params.getProject().getProject(), params
+			.getAttribute().getUMLAttributeMetadata()));
+		return boxedResult;
+	}
+
+
 	public gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsResponse findAllProjects(
 		gov.nih.nci.cagrid.cadsr.stubs.FindAllProjects params) throws RemoteException {
 		gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsResponse();
@@ -92,6 +101,15 @@ public class CaDSRServiceProviderImpl {
 		gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClass params) throws RemoteException {
 		gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClassResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClassResponse();
 		boxedResult.setUMLAttributeMetadata(impl.findAttributesInClass(params.getProject().getProject(), params
+			.getClazz().getUMLClassMetadata()));
+		return boxedResult;
+	}
+
+
+	public gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassResponse findSemanticMetadataForClass(
+		gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClass params) throws RemoteException {
+		gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassResponse();
+		boxedResult.setSemanticMetadata(impl.findSemanticMetadataForClass(params.getProject().getProject(), params
 			.getClazz().getUMLClassMetadata()));
 		return boxedResult;
 	}

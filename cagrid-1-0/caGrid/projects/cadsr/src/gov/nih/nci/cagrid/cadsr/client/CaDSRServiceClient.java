@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.cadsr.client;
 
 import gov.nih.nci.cadsr.umlproject.domain.Project;
-import gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.common.CaDSRServiceI;
@@ -69,9 +68,6 @@ public class CaDSRServiceClient implements CaDSRServiceI {
 					if (projs != null) {
 						for (int i = 0; i < projs.length; i++) {
 							Project project = projs[i];
-							if (project.getShortName().equals("GrandParent")) {
-								continue;
-							}
 							System.out.println("\n" + project.getShortName());
 							UMLPackageMetadata[] packs = client.findPackagesInProject(project);
 							if (packs != null) {
@@ -83,14 +79,18 @@ public class CaDSRServiceClient implements CaDSRServiceI {
 										for (int k = 0; k < classes.length; k++) {
 											UMLClassMetadata clazz = classes[k];
 											System.out.println("\t\t-" + clazz.getName());
-											UMLAttributeMetadata[] atts = client.findAttributesInClass(project, clazz);
-											if (atts != null) {
-												for (int l = 0; l < atts.length; l++) {
-													UMLAttributeMetadata att = atts[l];
-													System.out.println("\t\t\t-" + att.getName());
-												}
-											}
-
+											// UMLAttributeMetadata[] atts =
+											// client.findAttributesInClass(project,
+											// clazz);
+											// if (atts != null) {
+											// for (int l = 0; l < atts.length;
+											// l++) {
+											// UMLAttributeMetadata att =
+											// atts[l];
+											// System.out.println("\t\t\t-" +
+											// att.getName());
+											// }
+											// }
 										}
 									}
 								}
@@ -113,6 +113,26 @@ public class CaDSRServiceClient implements CaDSRServiceI {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+
+	public gov.nih.nci.cadsr.domain.ValueDomain findValueDomainForAttribute(
+		gov.nih.nci.cadsr.umlproject.domain.Project project,
+		gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata attribute) throws RemoteException {
+		CaDSRServicePortType port = this.getPortType();
+		org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
+
+		gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttribute params = new gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttribute();
+		gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeProject();
+		projectContainer.setProject(project);
+		params.setProject(projectContainer);
+		gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeAttribute attributeContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeAttribute();
+		attributeContainer.setUMLAttributeMetadata(attribute);
+		params.setAttribute(attributeContainer);
+		gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeResponse boxedResult = port
+			.findValueDomainForAttribute(params);
+		return boxedResult.getValueDomain();
+
 	}
 
 
@@ -252,6 +272,26 @@ public class CaDSRServiceClient implements CaDSRServiceI {
 		params.setClazz(clazzContainer);
 		gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClassResponse boxedResult = port.findAttributesInClass(params);
 		return boxedResult.getUMLAttributeMetadata();
+
+	}
+
+
+	public gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata[] findSemanticMetadataForClass(
+		gov.nih.nci.cadsr.umlproject.domain.Project project, gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata clazz)
+		throws RemoteException {
+		CaDSRServicePortType port = this.getPortType();
+		org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
+
+		gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClass params = new gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClass();
+		gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassProject();
+		projectContainer.setProject(project);
+		params.setProject(projectContainer);
+		gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassClazz clazzContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassClazz();
+		clazzContainer.setUMLClassMetadata(clazz);
+		params.setClazz(clazzContainer);
+		gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassResponse boxedResult = port
+			.findSemanticMetadataForClass(params);
+		return boxedResult.getSemanticMetadata();
 
 	}
 

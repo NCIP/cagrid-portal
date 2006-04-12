@@ -2,7 +2,9 @@ package gov.nih.nci.cagrid.cadsr.service;
 
 import gov.nih.nci.cadsr.domain.ClassificationScheme;
 import gov.nih.nci.cadsr.domain.Context;
+import gov.nih.nci.cadsr.domain.ValueDomain;
 import gov.nih.nci.cadsr.umlproject.domain.Project;
+import gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
@@ -224,6 +226,75 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 					arr[index++] = att;
 				}
 				return arr;
+			} catch (Exception e) {
+				LOG.error("Exception while searching.", e);
+				throw new RemoteException(e.getMessage(), e);
+			}
+
+		} catch (Exception e) {
+			LOG.error("Exception while searching.", e);
+			throw new RemoteException(e.getMessage(), e);
+		}
+	}
+
+
+	public gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata[] findSemanticMetadataForClass(
+		gov.nih.nci.cadsr.umlproject.domain.Project project, gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata clazz)
+		throws RemoteException {
+		try {
+			ApplicationService appService = getApplicationService();
+			LOG.debug("Using basic search. Retrieving all semantics for class:" + clazz.getName());
+
+			// associate the class with the project
+			clazz.setProject(project);
+
+			try {
+				List resultList = appService.search(SemanticMetadata.class, clazz);
+				SemanticMetadata arr[] = new SemanticMetadata[resultList.size()];
+				LOG.debug("result count: " + resultList.size());
+				int index = 0;
+				for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
+					SemanticMetadata sem = (SemanticMetadata) resultsIterator.next();
+					LOG.debug("semantic concept code:" + sem.getConceptCode());
+					arr[index++] = sem;
+				}
+				return arr;
+			} catch (Exception e) {
+				LOG.error("Exception while searching.", e);
+				throw new RemoteException(e.getMessage(), e);
+			}
+
+		} catch (Exception e) {
+			LOG.error("Exception while searching.", e);
+			throw new RemoteException(e.getMessage(), e);
+		}
+	}
+
+
+	public gov.nih.nci.cadsr.domain.ValueDomain findValueDomainForAttribute(
+		gov.nih.nci.cadsr.umlproject.domain.Project project,
+		gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata attribute) throws RemoteException {
+		try {
+			ApplicationService appService = getApplicationService();
+			LOG.debug("Using basic search. Retrieving value domain for attribute:" + attribute.getName());
+
+			// associate the class with the project
+			attribute.setProject(project);
+
+			try {
+				List resultList = appService.search("gov.nih.nci.cadsr.domain.ValueDomain,gov.nih.nci.cadsr.domain.DataElement", attribute);
+
+				if (resultList.size() > 1) {
+					LOG.error("findValueDomainForAttribute returned more than one ValueDomain for attribute:"
+						+ attribute.getFullyQualifiedName() + " in project:" + project.getShortName());
+				}
+
+				if (resultList.size() == 0) {
+					return null;
+				} else {
+					return (ValueDomain) resultList.get(0);
+				}
+
 			} catch (Exception e) {
 				LOG.error("Exception while searching.", e);
 				throw new RemoteException(e.getMessage(), e);

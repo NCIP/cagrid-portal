@@ -10,7 +10,7 @@
 	<classpathentry kind="lib" path="lib/globus_wsrf_mds_aggregator.jar"/>
 	<classpathentry kind="lib" path="lib/globus_wsrf_servicegroup_stubs.jar"/>
 	<classpathentry kind="lib" path="lib/globus_wsrf_servicegroup.jar"/>
-	<classpathentry kind="lib" path="lib/client.jar"/>
+	<classpathentry sourcepath="C:/Documents and Settings/oster/Desktop/caCORE3-1_SOURCE" kind="lib" path="lib/client.jar"/>
 	<classpathentry kind="lib" path="lib/spring.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate3.jar"/>
 	<classpathentry kind="lib" path="lib/cglib-full-2.0.1.jar"/>

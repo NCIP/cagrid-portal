@@ -20,6 +20,58 @@
   <ns2:Namespace location="./1.0_gov.nih.nci.cagrid.metadata.common.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" packageName="gov.nih.nci.cagrid.metadata.common" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="CommonServiceMetadata" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
+  <ns2:Namespace location="./3.0_gov.nih.nci.cadsr.domain.xsd" namespace="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" packageName="gov.nih.nci.cadsr.domain" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="AdministeredComponent" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ConceptualDomain" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DataElementConcept" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DataElement" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="" deserializer="" serializer="" type="ClassificationScheme" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ValueDomain" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="ValueDomain" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ClassificationSchemeItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="PermissibleValue" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Context" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ReferenceDocument" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ObjectClass" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Property" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Form" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Module" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Protocol" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Question" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Representation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ValidValue" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Designation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="NonenumeratedValueDomain" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DataElementConceptRelationship" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ValueMeaning" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ValueDomainPermissibleValue" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ClassSchemeClassSchemeItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DataElementDerivation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DerivedDataElement" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DerivationType" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="AdministeredComponentClassSchemeItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Instruction" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DataElementRelationship" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ValueDomainRelationship" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ClassificationSchemeRelationship" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ClassificationSchemeItemRelationship" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ObjectClassRelationship" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Concept" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ComponentConcept" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ConceptDerivationRule" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Definition" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DesignationClassSchemeItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="EnumeratedValueDomain" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DefinitionClassSchemeItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="AdministeredComponentContact" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Person" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Organization" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Address" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="FormElement" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="TriggerAction" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="QuestionRepetition" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Function" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ComponentLevel" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
  </ns2:Namespaces>
  <ns3:Methods xsi:type="ns3:MethodsType" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Methods" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns3:Method name="findAllProjects" xsi:type="ns3:MethodType">
@@ -87,8 +139,24 @@
    <ns3:Output qName="ns18:UMLAttributeMetadata" isArray="true" xmlns:ns18="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
    <ns3:Exceptions/>
   </ns3:Method>
+  <ns3:Method name="findSemanticMetadataForClass" xsi:type="ns3:MethodType">
+   <ns3:Inputs>
+    <ns3:Input qName="ns19:Project" isArray="false" name="project" xmlns:ns19="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+    <ns3:Input qName="ns20:UMLClassMetadata" isArray="false" name="clazz" xmlns:ns20="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+   </ns3:Inputs>
+   <ns3:Output qName="ns21:SemanticMetadata" isArray="true" xmlns:ns21="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+   <ns3:Exceptions/>
+  </ns3:Method>
+  <ns3:Method name="findValueDomainForAttribute" xsi:type="ns3:MethodType">
+   <ns3:Inputs>
+    <ns3:Input qName="ns22:Project" isArray="false" name="project" xmlns:ns22="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+    <ns3:Input qName="ns23:UMLAttributeMetadata" isArray="false" name="attribute" xmlns:ns23="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+   </ns3:Inputs>
+   <ns3:Output qName="ns24:ValueDomain" isArray="false" xmlns:ns24="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain"/>
+   <ns3:Exceptions/>
+  </ns3:Method>
  </ns3:Methods>
- <ns19:MetadataList xsi:type="ns19:MetadataListType" xmlns:ns19="gme://gov.nih.nci.cagrid.introduce/1/Metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns19:Metadata qName="ns20:CommonServiceMetadata" populateFromFile="true" register="true" xsi:type="ns19:MetadataType" xmlns:ns20="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
- </ns19:MetadataList>
+ <ns25:MetadataList xsi:type="ns25:MetadataListType" xmlns:ns25="gme://gov.nih.nci.cagrid.introduce/1/Metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns25:Metadata qName="ns26:CommonServiceMetadata" populateFromFile="true" register="true" xsi:type="ns25:MetadataType" xmlns:ns26="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+ </ns25:MetadataList>
 </ns1:ServiceSkeleton>

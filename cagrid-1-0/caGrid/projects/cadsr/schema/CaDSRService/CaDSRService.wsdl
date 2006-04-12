@@ -23,6 +23,8 @@
     <types>
         <schema targetNamespace="http://cadsr.cagrid.nci.nih.gov/CaDSRService"
             xmlns:tns="http://cadsr.cagrid.nci.nih.gov/CaDSRService"
+			xmlns:ns2="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" 
+			
 			xmlns:ns0="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" 
 			
 			xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" 
@@ -30,6 +32,8 @@
             xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
 			<import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd"/>
 		
+			<import namespace="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" schemaLocation="./3.0_gov.nih.nci.cadsr.domain.xsd"/>
+			   
 			<import namespace="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" schemaLocation="./3.0_gov.nih.nci.cadsr.umlproject.domain.xsd"/>
 			   
 			<import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" schemaLocation="./1.0_gov.nih.nci.cagrid.metadata.common.xsd"/>
@@ -285,6 +289,76 @@
 						</sequence>
 					</complexType>
 				</element>
+				<element name="findSemanticMetadataForClass">
+					<complexType>
+						<sequence>
+          		  
+                  					
+							<element name="project">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:Project" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+                  				 	
+                  					
+							<element name="clazz">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:UMLClassMetadata" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+                  				 	
+	      				</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="findSemanticMetadataForClassResponse">
+					<complexType>
+						<sequence>
+          		  
+										<element ref="ns0:SemanticMetadata" minOccurs="1" maxOccurs="unbounded" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
+				<element name="findValueDomainForAttribute">
+					<complexType>
+						<sequence>
+          		  
+                  					
+							<element name="project">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:Project" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+                  				 	
+                  					
+							<element name="attribute">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:UMLAttributeMetadata" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+                  				 	
+	      				</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="findValueDomainForAttributeResponse">
+					<complexType>
+						<sequence>
+          		  
+										<element ref="ns2:ValueDomain" minOccurs="1" maxOccurs="1" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
             <element name="CaDSRServiceResourceProperties">
                 <complexType>
                     <sequence>
@@ -359,6 +433,20 @@
 	<message name="findAttributesInClassOutputMessage">
 		<part name="parameters" element="tns:findAttributesInClassResponse"/>
 	</message>
+	<message name="findSemanticMetadataForClassInputMessage">
+		<part name="parameters" element="tns:findSemanticMetadataForClass"/>
+	</message>
+	
+	<message name="findSemanticMetadataForClassOutputMessage">
+		<part name="parameters" element="tns:findSemanticMetadataForClassResponse"/>
+	</message>
+	<message name="findValueDomainForAttributeInputMessage">
+		<part name="parameters" element="tns:findValueDomainForAttribute"/>
+	</message>
+	
+	<message name="findValueDomainForAttributeOutputMessage">
+		<part name="parameters" element="tns:findValueDomainForAttributeResponse"/>
+	</message>
     
 <!--============================================================
 
@@ -402,6 +490,14 @@
 		<operation name="findAttributesInClass">
             <input message="tns:findAttributesInClassInputMessage"/>
             <output message="tns:findAttributesInClassOutputMessage"/>
+        </operation>
+		<operation name="findSemanticMetadataForClass">
+            <input message="tns:findSemanticMetadataForClassInputMessage"/>
+            <output message="tns:findSemanticMetadataForClassOutputMessage"/>
+        </operation>
+		<operation name="findValueDomainForAttribute">
+            <input message="tns:findValueDomainForAttributeInputMessage"/>
+            <output message="tns:findValueDomainForAttributeOutputMessage"/>
         </operation>
         <operation name="GetResourceProperty">
             <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest"

@@ -2,3 +2,4 @@ build
 CaDSRService.gar
 ext
 bin
+*.log.*
