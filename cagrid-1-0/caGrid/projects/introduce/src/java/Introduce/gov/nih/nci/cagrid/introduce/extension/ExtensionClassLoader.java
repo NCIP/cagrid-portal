@@ -29,7 +29,6 @@ public class ExtensionClassLoader {
 			ClassLoader cl = null;
 			try {
 				File libDir = new File(root.getAbsolutePath() + File.separator + "lib" + File.separator);
-				System.out.println("Extension lib dir: " + libDir.getAbsolutePath());
 				File[] theirjars = libDir.listFiles(new FileFilter() {
 					public boolean accept(File pathname) {
 						return pathname.getName().toLowerCase().endsWith(".jar");
@@ -44,7 +43,6 @@ public class ExtensionClassLoader {
 					}
 					cl = new URLClassLoader(urls, this.getClass().getClassLoader());
 				} else {
-					System.out.println("No extension jars found, using default classloader");
 					cl = this.getClass().getClassLoader();
 				}				
 			} catch (MalformedURLException e) {
