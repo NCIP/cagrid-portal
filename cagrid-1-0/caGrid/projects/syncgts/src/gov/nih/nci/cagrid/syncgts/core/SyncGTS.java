@@ -210,7 +210,8 @@ public class SyncGTS {
 			Iterator del = caListings.values().iterator();
 			while (del.hasNext()) {
 				TrustedCAFileListing fl = (TrustedCAFileListing) del.next();
-				if (fl.getName().indexOf(description.getFilePrefix()) >= 0) {
+				if ((this.description.isDeleteExistingTrustedRoots())
+					|| (fl.getName().indexOf(description.getFilePrefix()) >= 0)) {
 					TrustedCA ca = new TrustedCA();
 					removeCount = removeCount + 1;
 					if (fl.getCertificate() != null) {
