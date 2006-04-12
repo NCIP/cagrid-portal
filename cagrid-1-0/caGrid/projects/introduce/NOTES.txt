@@ -41,8 +41,6 @@ Need to fix commontools to read some preference to set the rule to use for names
 	//TODO: where should this mapperClassname preference be set
 	String mapperClassname = "gov.nih.nci.cagrid.common.CaBIGNames2paceToPackageMapper";
 
-need a way to generate XSD and beanmappers for existing object models that want to use default de/serialization
-
 Need to add more complex tests to the system test for adding complex methods with faults etc.
 
 secure message privacy does not work (STEVE)
@@ -51,6 +49,9 @@ support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
 ==========
+
+(DONE) need a way to generate XSD and beanmappers for existing object models that want to use default de/serialization
+
 (DONE - still need to add tests.. and GUI - Scott) sync serializer/deserializer
 
 	SchemaElement needs to have location and type always and have a choice between:
