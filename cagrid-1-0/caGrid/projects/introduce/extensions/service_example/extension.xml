@@ -1,0 +1,10 @@
+<ns1:ExtensionDescription xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:ns1="gme://gov.nih.nci.cagrid.introduce/1/Extension" extensionType="SERVICE">
+ <ns1:ServiceExtensionDescription displayName="Example Extension" name="example">
+  <ns1:CreationPostProcessor></ns1:CreationPostProcessor>
+  <ns1:CreationUIDialog></ns1:CreationUIDialog>
+  <ns1:CodegenPreProcessor></ns1:CodegenPreProcessor>
+  <ns1:CodegenPostProcessor></ns1:CodegenPostProcessor>
+  <ns1:ServiceModificationUIPanel>gov.nih.nci.cagrid.introduce.extension.example.ExampleServiceModificationPanel</ns1:ServiceModificationUIPanel>
+ </ns1:ServiceExtensionDescription>
+</ns1:ExtensionDescription>
