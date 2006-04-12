@@ -2,6 +2,8 @@ To Do:
 
 Need to make Configuration Menu work... should be able to set appropriate services URLs, etc
 
+need "Up" and "Down" buttons for the order of the tables (operations, method params, etc)
+
 need to make jndi edited, not replaced everytime.
 
 introduce build needs to make more granular jars (for linking), how about:
