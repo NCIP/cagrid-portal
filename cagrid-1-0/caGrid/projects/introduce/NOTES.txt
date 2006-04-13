@@ -2,6 +2,8 @@ To Do:
 
 introduce lets you select an XSD simpletype as metadata... that doesnt work.
 
+metadata type panel isnt updating when you add new schemas from the types tab
+
 Need to make Configuration Menu work... should be able to set appropriate services URLs, etc
 
 need "Up" and "Down" buttons for the order of the tables (operations, method params, etc)
