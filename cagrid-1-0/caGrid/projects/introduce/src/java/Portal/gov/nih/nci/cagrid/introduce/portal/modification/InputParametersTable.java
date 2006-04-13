@@ -81,7 +81,7 @@ public class InputParametersTable extends PortalBaseTable {
 
 
 	public void moveSelectedRowUp() throws Exception {
-		if (getSelectedRow() != 0 ) {
+		if (getSelectedRow() >0 ) {
 			MethodTypeInputsInput input1 = getRowData(getSelectedRow());
 			MethodTypeInputsInput input2 = getRowData(getSelectedRow() - 1);
 			modifySelectedRow(input2);
