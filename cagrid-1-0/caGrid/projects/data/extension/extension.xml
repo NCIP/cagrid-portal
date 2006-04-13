@@ -1,4 +1,4 @@
-<ns1:ExtensionDescription type="SERVICE" xmlns:ns1="gme://gov.nih.nci.cagrid.introduce/1/Extension"
+<ns1:ExtensionDescription extensionType="SERVICE" xmlns:ns1="gme://gov.nih.nci.cagrid.introduce/1/Extension"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="gme://gov.nih.nci.cagrid.introduce/1/Extension
 	C:\caGrid\cagrid-1-0\caGrid\projects\introduce\schema\Extension.xsd">
