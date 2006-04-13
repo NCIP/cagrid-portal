@@ -352,6 +352,7 @@
 			<artifact refid="core.jars" />
 			<artifact refid="introduce.jars" />
 			<artifact refid="gme.globus.client.jars" />
+			<artifact refid="core.resources" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
