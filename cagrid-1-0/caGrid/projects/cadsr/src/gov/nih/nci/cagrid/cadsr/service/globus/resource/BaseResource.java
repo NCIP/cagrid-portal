@@ -1,9 +1,10 @@
 package gov.nih.nci.cagrid.cadsr.service.globus.resource;
 
+import gov.nih.nci.cagrid.common.Utils;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Calendar;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -17,78 +18,52 @@ import org.globus.wsrf.Constants;
 import org.globus.wsrf.Resource;
 import org.globus.wsrf.ResourceContext;
 import org.globus.wsrf.ResourceContextException;
-import org.globus.wsrf.ResourceIdentifier;
-import org.globus.wsrf.ResourceKey;
-import org.globus.wsrf.ResourceLifetime;
 import org.globus.wsrf.ResourceProperties;
 import org.globus.wsrf.ResourceProperty;
 import org.globus.wsrf.ResourcePropertySet;
 import org.globus.wsrf.config.ContainerConfig;
 import org.globus.wsrf.container.ServiceHost;
-import org.globus.wsrf.impl.ReflectionResourceProperty;
-import org.globus.wsrf.impl.SimpleResourceKey;
 import org.globus.wsrf.impl.SimpleResourceProperty;
-import org.globus.wsrf.impl.SimpleResourcePropertyMetaData;
 import org.globus.wsrf.impl.SimpleResourcePropertySet;
 import org.globus.wsrf.impl.servicegroup.client.ServiceGroupRegistrationClient;
 import org.globus.wsrf.utils.AddressingUtils;
 
 import commonj.timers.Timer;
 
-import gov.nih.nci.cagrid.common.Utils;
 
-public class BaseResource implements Resource, ResourceProperties, ResourceLifetime, ResourceIdentifier {
+public class BaseResource implements Resource, ResourceProperties {
 
 	static final Log logger = LogFactory.getLog(BaseResource.class);
-
-	/** the identifier of this resource */
-	private Object id;
 
 	/** Stores the ResourceProperties of this service */
 	private ResourcePropertySet propSet;
 
-	private Calendar terminationTime;
-	
-	//this can be used to cancel the registration renewal
+	// this can be used to cancel the registration renewal
 	private Timer registrationTimer;
 
 	private MetadataConfiguration configuration;
-	
+
 	private URL baseURL;
 
-	//Define the metadata resource properties
+	// Define the metadata resource properties
 	private ResourceProperty commonServiceMetadataRP;
 	private gov.nih.nci.cagrid.metadata.common.CommonServiceMetadataType commonServiceMetadataMD;
-	
-
 
 
 	// initializes the resource
 	public void initialize() throws Exception {
-		// choose an ID
-		this.id = new Integer(hashCode());
-
 		// create the resource property set
 		this.propSet = new SimpleResourcePropertySet(ResourceConstants.RESOURCE_PROPERY_SET);
 
-		// these are the RPs necessary for resource lifetime management
-		ResourceProperty prop = new ReflectionResourceProperty(SimpleResourcePropertyMetaData.TERMINATION_TIME, this);
-		this.propSet.add(prop); // this property exposes the currenttime, as
-		// believed by the local system
-		prop = new ReflectionResourceProperty(SimpleResourcePropertyMetaData.CURRENT_TIME, this);
-		this.propSet.add(prop);
-
 		// this loads the metadata from XML files
 		populateMetadata();
-		
-		// now add the metadata as resource properties		//init the rp
-		this.commonServiceMetadataRP = new SimpleResourceProperty(ResourceConstants.COMMONSERVICEMETADATA_MD_RP);
-		//add the value to the rp
-		this.commonServiceMetadataRP.add(this.commonServiceMetadataMD);
-		//add the rp to the prop set
-		this.propSet.add(this.commonServiceMetadataRP);
-	
 
+		// now add the metadata as resource properties //init the rp
+		this.commonServiceMetadataRP = new SimpleResourceProperty(ResourceConstants.COMMONSERVICEMETADATA_MD_RP);
+		// add the value to the rp
+		this.commonServiceMetadataRP.add(this.commonServiceMetadataMD);
+		// add the rp to the prop set
+		this.propSet.add(this.commonServiceMetadataRP);
 
 		// register the service to the index sevice
 		refreshRegistration(true);
@@ -148,7 +123,6 @@ public class BaseResource implements Resource, ResourceProperties, ResourceLifet
 				logger.info("Attempting registration for the first time[container URL=" + this.baseURL + "].");
 			}
 
-			ResourceKey key = new SimpleResourceKey(ResourceConstants.RESOURCE_KEY, this.id);
 			// register with the index service
 			ResourceContext ctx;
 			try {
@@ -204,27 +178,25 @@ public class BaseResource implements Resource, ResourceProperties, ResourceLifet
 	}
 
 
-
 	private void populateMetadata() {
-	
+
 		loadCommonServiceMetadataFromFile();
-	
+
 	}
 
 
-		
 	private void loadCommonServiceMetadataFromFile() {
 		try {
 			File dataFile = new File(ContainerConfig.getBaseDirectory() + File.separator
-					+ getConfiguration().getCommonServiceMetadataFile());
-			this.commonServiceMetadataMD = (gov.nih.nci.cagrid.metadata.common.CommonServiceMetadataType) Utils.deserializeDocument(dataFile.getAbsolutePath(),
-				gov.nih.nci.cagrid.metadata.common.CommonServiceMetadataType.class);
+				+ getConfiguration().getCommonServiceMetadataFile());
+			this.commonServiceMetadataMD = (gov.nih.nci.cagrid.metadata.common.CommonServiceMetadataType) Utils
+				.deserializeDocument(dataFile.getAbsolutePath(),
+					gov.nih.nci.cagrid.metadata.common.CommonServiceMetadataType.class);
 		} catch (Exception e) {
 			logger.error("ERROR: problem populating metadata from file: " + e.getMessage(), e);
 		}
-	}		
-	
-		
+	}
+
 
 	public MetadataConfiguration getConfiguration() {
 		if (this.configuration != null) {
@@ -249,25 +221,5 @@ public class BaseResource implements Resource, ResourceProperties, ResourceLifet
 
 	public ResourcePropertySet getResourcePropertySet() {
 		return propSet;
-	}
-
-
-	public Object getID() {
-		return id;
-	}
-
-
-	public void setTerminationTime(Calendar time) {
-		this.terminationTime = time;
-	}
-
-
-	public Calendar getTerminationTime() {
-		return this.terminationTime;
-	}
-
-
-	public Calendar getCurrentTime() {
-		return Calendar.getInstance();
 	}
 }
