@@ -18,6 +18,10 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
  * @version $Id$ 
  */
 public class SerializationMapping {
+	public static final String SDK_SERIALIZER = "gov.nih.nci.cagrid.encoding.SDKSerializerFactory";
+	public static final String SDK_DESERIALIZER = "gov.nih.nci.cagrid.encoding.SDKDeserializerFactory";
+	public static final String SDK_ENCODING_STYLE = "";
+	
 	private NamespaceType nsType;
 	private SchemaElementType elemType;
 	private String serializer;

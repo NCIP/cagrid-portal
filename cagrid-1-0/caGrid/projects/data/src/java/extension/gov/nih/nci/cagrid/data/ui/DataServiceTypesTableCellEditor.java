@@ -37,9 +37,12 @@ public class DataServiceTypesTableCellEditor implements TableCellEditor {
 	
 
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+		// TODO: make the constructor take the right serialization mapping
+		DataServiceTypesTable typesTable = (DataServiceTypesTable) table;
+		SerializationMapping mapping = (SerializationMapping) typesTable.getSerializationMappings().get(typesTable.getSelectedRow());
 		PortalResourceManager.getInstance().getGridPortal()
-			.addGridPortalComponent(new TypeSerializationConfigDialog());
-		return null;
+			.addGridPortalComponent(new TypeSerializationConfigDialog(mapping));
+		return (Component) value;
 	}
 
 
@@ -80,7 +83,8 @@ public class DataServiceTypesTableCellEditor implements TableCellEditor {
 					(Component) anEvent.getSource(), mouseEvent.getX(), mouseEvent.getY());
 				if (potentialButton != null && potentialButton instanceof JButton) {
 					JButton button = (JButton) potentialButton;
-					dialog = new TypeSerializationConfigDialog();
+					DataServiceTypesTable table = (DataServiceTypesTable) anEvent.getSource();
+					dialog = new TypeSerializationConfigDialog((SerializationMapping) table.getSerializationMappings().get(table.getSelectedRow()));;
 				}
 			}
 		}
@@ -98,7 +102,7 @@ public class DataServiceTypesTableCellEditor implements TableCellEditor {
 	}
 	
 	
-	protected void fireEditingCanceled() {
+	protected synchronized void fireEditingCanceled() {
 		Iterator iter = editorListeners.iterator();
 		while (iter.hasNext()) {
 			((CellEditorListener) iter.next()).editingCanceled(changeEvent);
@@ -106,7 +110,7 @@ public class DataServiceTypesTableCellEditor implements TableCellEditor {
 	}
 	
 	
-	protected void fireEditingStopped() {
+	protected synchronized void fireEditingStopped() {
 		Iterator iter = editorListeners.iterator();
 		while (iter.hasNext()) {
 			((CellEditorListener) iter.next()).editingStopped(changeEvent);

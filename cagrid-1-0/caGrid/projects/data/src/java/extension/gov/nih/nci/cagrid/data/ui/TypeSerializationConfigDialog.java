@@ -10,6 +10,7 @@ import java.awt.GridBagLayout;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -18,6 +19,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.projectmobius.portal.GridPortalComponent;
+import org.projectmobius.portal.MDIDesktopPane;
 
 /** 
  *  TypeSerializationConfigDialog
@@ -46,8 +48,11 @@ public class TypeSerializationConfigDialog extends GridPortalComponent {
 	private JLabel deserializerLabel = null;
 	private JLabel encodingLabel = null;
 	
-	public TypeSerializationConfigDialog() {
+	private SerializationMapping mapping;
+	
+	public TypeSerializationConfigDialog(SerializationMapping mapping) {
 		super();
+		this.mapping = mapping;
 		initialize();
 	}
 	
@@ -98,7 +103,13 @@ public class TypeSerializationConfigDialog extends GridPortalComponent {
 			group.add(getDefaultSerializationRadioButton());
 			group.add(getCustomSerializationRadioButton());
 			group.add(getSdkSerializationRadioButton());
-			group.setSelected(getDefaultSerializationRadioButton().getModel(), true);
+			if (isDefaultSerialization()) {
+				group.setSelected(getDefaultSerializationRadioButton().getModel(), true);
+			} else if (isSdkSerialization()) {
+				group.setSelected(getSdkSerializationRadioButton().getModel(), true);
+			} else {
+				group.setSelected(getCustomSerializationRadioButton().getModel(), true);
+			}
 		}
 		return serializationTypePanel;
 	}
@@ -113,6 +124,15 @@ public class TypeSerializationConfigDialog extends GridPortalComponent {
 		if (defaultSerializationRadioButton == null) {
 			defaultSerializationRadioButton = new JRadioButton();
 			defaultSerializationRadioButton.setText("Default Serialization");
+			defaultSerializationRadioButton.addChangeListener(new ChangeListener() {
+				public void stateChanged(ChangeEvent e) {
+					if (getDefaultSerializationRadioButton().isSelected()) {
+						getSerializerTextField().setText("");
+						getDeserializerTextField().setText("");
+						getEncodingTextField().setText("");
+					}
+				}
+			});
 		}
 		return defaultSerializationRadioButton;
 	}
@@ -146,6 +166,15 @@ public class TypeSerializationConfigDialog extends GridPortalComponent {
 		if (sdkSerializationRadioButton == null) {
 			sdkSerializationRadioButton = new JRadioButton();
 			sdkSerializationRadioButton.setText("SDK Serialization");
+			sdkSerializationRadioButton.addChangeListener(new ChangeListener() {
+				public void stateChanged(ChangeEvent e) {
+					if (getSdkSerializationRadioButton().isSelected()) {
+						getSerializerTextField().setText(SerializationMapping.SDK_SERIALIZER);
+						getDeserializerTextField().setText(SerializationMapping.SDK_DESERIALIZER);
+						getEncodingTextField().setText(SerializationMapping.SDK_ENCODING_STYLE);
+					}
+				}
+			});
 		}
 		return sdkSerializationRadioButton;
 	}
@@ -402,9 +431,29 @@ public class TypeSerializationConfigDialog extends GridPortalComponent {
 			}
 		}
 	}
+	
+	
+	private boolean isDefaultSerialization() {
+		return mapping.getSerializer().length() == 0 &&
+			mapping.getDeserializer().length() == 0 &&
+			mapping.getEncoding().length() == 0;
+	}
+	
+	
+	private boolean isSdkSerialization() {
+		return mapping.getSerializer().equals(SerializationMapping.SDK_SERIALIZER) &&
+			mapping.getDeserializer().equals(SerializationMapping.SDK_DESERIALIZER) &&
+			mapping.getEncoding().equals(SerializationMapping.SDK_ENCODING_STYLE);
+	}
 
 
 	public static void main(String[] args) {
-		new TypeSerializationConfigDialog();
+		JFrame frame = new JFrame();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		MDIDesktopPane desk = new MDIDesktopPane();
+		frame.setContentPane(desk);
+		desk.add(new TypeSerializationConfigDialog(null));
+		frame.setSize(600,600);
+		frame.show();
 	}
 }
