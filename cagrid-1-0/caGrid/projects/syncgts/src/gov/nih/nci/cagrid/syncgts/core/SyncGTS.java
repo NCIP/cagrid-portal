@@ -104,9 +104,9 @@ public class SyncGTS {
 	}
 
 
-	public void syncAndResync(final SyncDescription description) throws Exception {
+	public void syncAndResync(final SyncDescription description, boolean waitFirst) throws Exception {
 		if (getLock()) {
-			threadManager.execute(getRunner(description));
+			threadManager.execute(getRunner(description, waitFirst));
 			releaseLock();
 		} else {
 			throw new Exception("Cannot sync unable to get lock.");
@@ -114,9 +114,9 @@ public class SyncGTS {
 	}
 
 
-	public void syncAndResyncInBackground(final SyncDescription description) throws Exception {
+	public void syncAndResyncInBackground(final SyncDescription description, boolean waitFirst) throws Exception {
 		if (getLock()) {
-			threadManager.executeInBackground(getRunner(description));
+			threadManager.executeInBackground(getRunner(description, waitFirst));
 			releaseLock();
 		} else {
 			throw new Exception("Cannot sync unable to get lock.");
@@ -135,10 +135,18 @@ public class SyncGTS {
 	}
 
 
-	private MobiusRunnable getRunner(final SyncDescription description) {
+	private MobiusRunnable getRunner(final SyncDescription description, final boolean waitFirst) {
 		MobiusRunnable runner = new MobiusRunnable() {
 			public void execute() {
+				if (waitFirst) {
+					try {
+						Thread.sleep(description.getNextSync().intValue() * 1000);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
 				while (true) {
+
 					sync(description);
 					try {
 						Thread.sleep(description.getNextSync().intValue() * 1000);
@@ -519,7 +527,7 @@ public class SyncGTS {
 			description.setNextSync(new BigInteger("300"));
 			description.setDeleteExistingTrustedRoots(false);
 			SyncGTS sync = new SyncGTS();
-			sync.syncAndResync(description);
+			sync.syncAndResync(description, false);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
