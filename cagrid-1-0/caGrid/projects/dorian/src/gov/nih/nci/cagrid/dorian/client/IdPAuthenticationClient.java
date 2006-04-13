@@ -52,7 +52,7 @@ public class IdPAuthenticationClient extends DorianBaseClient implements
 		}
 		try {
 			String xml = port.authenticateWithIdP(cred).getXml();
-			System.out.println(XMLUtilities.formatXML(xml));
+			//System.out.println(XMLUtilities.formatXML(xml));
 			return SAMLUtils.stringToSAMLAssertion(xml);
 		}catch(DorianInternalFault gie){
 			throw gie;

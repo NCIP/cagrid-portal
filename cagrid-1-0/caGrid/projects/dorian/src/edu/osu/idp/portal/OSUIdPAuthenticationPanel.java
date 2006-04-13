@@ -69,7 +69,7 @@ public class OSUIdPAuthenticationPanel extends IdPAuthenticationPanel {
 			}
 
 			// print the status and response
-			System.out.println(status + "\n" + get.getResponseBodyAsString());
+			//System.out.println(status + "\n" + get.getResponseBodyAsString());
 			SAMLResponse res = new SAMLResponse(new ByteArrayInputStream(get.getResponseBodyAsString()
 				.getBytes()));
 			SAMLAssertion saml =  (SAMLAssertion)res.getAssertions().next();
