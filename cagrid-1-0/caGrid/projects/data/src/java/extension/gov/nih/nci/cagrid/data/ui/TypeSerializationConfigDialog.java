@@ -229,4 +229,9 @@ public class TypeSerializationConfigDialog extends JDialog {
 		}
 		return mainPanel;
 	}
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+	
+	
+	public static void main(String[] args) {
+		new TypeSerializationConfigDialog();
+	}
+}
