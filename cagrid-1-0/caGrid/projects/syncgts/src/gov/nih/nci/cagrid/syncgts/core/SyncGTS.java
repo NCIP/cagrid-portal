@@ -170,7 +170,7 @@ public class SyncGTS {
 			this.readInCurrentCADirectory(description);
 			Map master = new HashMap();
 			String error = null;
-			SyncDescriptor[] des = description.getSyncDescriptors();
+			SyncDescriptor[] des = description.getSyncDescriptor();
 			int dcount = 0;
 			if (des != null) {
 				dcount = des.length;
@@ -180,7 +180,7 @@ public class SyncGTS {
 				this.logger.info("Syncing with the GTS " + uri);
 				GTSSearchClient client = new GTSSearchClient(uri);
 				Map taMap = new HashMap();
-				TrustedAuthorityFilter[] f = des[i].getTrustedAuthorityFilters();
+				TrustedAuthorityFilter[] f = des[i].getTrustedAuthorityFilter();
 				int fcount = 0;
 				if (f != null) {
 					fcount = f.length;
@@ -520,8 +520,8 @@ public class SyncGTS {
 			TrustedAuthorityFilter[] taf = new TrustedAuthorityFilter[1];
 			taf[0] = new TrustedAuthorityFilter();
 			taf[0].setStatus(Status.Trusted);
-			des[0].setTrustedAuthorityFilters(taf);
-			description.setSyncDescriptors(des);
+			des[0].setTrustedAuthorityFilter(taf);
+			description.setSyncDescriptor(des);
 			description.setFilePrefix("gts");
 			description.setDeleteInvalidFiles(false);
 			description.setNextSync(new BigInteger("300"));

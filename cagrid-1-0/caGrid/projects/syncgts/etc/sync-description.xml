@@ -1,0 +1,12 @@
+<ns1:SyncDescription xmlns:ns1="http://cagrid.nci.nih.gov/12/SyncGTS">
+	<ns1:SyncDescriptor>
+		<ns1:gtsServiceURI>https://irondale.bmi.ohio-state.edu:8443/wsrf/services/cagrid/GridTrustService</ns1:gtsServiceURI>
+		<ns1:TrustedAuthorityFilter>
+			<ns2:Status xmlns:ns2="http://cagrid.nci.nih.gov/6/gts">Trusted</ns2:Status>
+		</ns1:TrustedAuthorityFilter>
+	</ns1:SyncDescriptor>
+	<ns1:DeleteInvalidFiles>false</ns1:DeleteInvalidFiles>
+	<ns1:DeleteExistingTrustedRoots>false</ns1:DeleteExistingTrustedRoots>
+	<ns1:FilePrefix>gts</ns1:FilePrefix>
+	<ns1:NextSync>300</ns1:NextSync>
+</ns1:SyncDescription>

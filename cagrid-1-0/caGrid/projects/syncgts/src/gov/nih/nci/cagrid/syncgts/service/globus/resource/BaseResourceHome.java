@@ -17,6 +17,8 @@ public class BaseResourceHome extends SingletonResourceHome implements Initializ
 
 	static final Log logger = LogFactory.getLog(BaseResourceHome.class);
 
+	private String syncDescription;
+
 
 	public Resource findSingleton() {
 		logger.info("Creating a single resource.");
@@ -37,6 +39,16 @@ public class BaseResourceHome extends SingletonResourceHome implements Initializ
 		// registration.
 		resource.refreshRegistration(false);
 		return resource;
+	}
+
+
+	public String getSyncDescription() {
+		return syncDescription;
+	}
+
+
+	public void setSyncDescription(String syncDescription) {
+		this.syncDescription = syncDescription;
 	}
 
 

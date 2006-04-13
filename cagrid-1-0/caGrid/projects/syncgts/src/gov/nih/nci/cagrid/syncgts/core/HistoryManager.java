@@ -17,7 +17,7 @@ import javax.xml.namespace.QName;
  */
 public class HistoryManager {
 
-	private final static QName reportQN = new QName("http://cagrid.nci.nih.gov/8/SyncGTS", "SyncReport");
+	private final static QName reportQN = new QName(SyncGTSDefault.SYNC_GTS_NAMESPACE, "SyncReport");
 
 
 	public File addReport(SyncReport report) throws Exception {
@@ -37,7 +37,7 @@ public class HistoryManager {
 		String year = timestamp.substring(0, 4);
 		String month = timestamp.substring(4, 6);
 		String days = timestamp.substring(6, 8);
-		File dir = new File(Utils.getCaGridUserHome() + File.separator + "syncgts-history" + File.separator + year
+		File dir = new File(SyncGTSDefault.getSyncGTSUserDir() + File.separator + "history" + File.separator + year
 			+ File.separator + month + File.separator + days);
 		dir.mkdirs();
 		return dir;
