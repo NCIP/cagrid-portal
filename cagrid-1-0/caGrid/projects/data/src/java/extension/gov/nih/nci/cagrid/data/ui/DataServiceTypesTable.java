@@ -4,7 +4,8 @@ import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 
-import java.util.Vector;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -18,10 +19,13 @@ import javax.swing.table.DefaultTableModel;
  * @version $Id$ 
  */
 public class DataServiceTypesTable extends PortalBaseTable {
+	private List serializationMappings;
 	
 	public DataServiceTypesTable() {
 		super(createTableModel());
-		setCellEditor(new DataServiceTypesTableCellEditor());
+		setDefaultEditor(Object.class, new DataServiceTypesTableCellEditor());
+		setDefaultRenderer(Object.class, new DataServiceTypesTableCellRenderer());
+		serializationMappings = new LinkedList();
 	}
 	
 	
@@ -32,19 +36,34 @@ public class DataServiceTypesTable extends PortalBaseTable {
 	
 	
 	public void addType(NamespaceType namespace, SchemaElementType type) {
-		Vector row = new Vector(6);
-		row.add(namespace.getNamespace());
-		row.add(type.getType());
-		row.add(type.getClassName());
-		row.add("");
-		row.add("");
-		row.add("");
-		((DefaultTableModel) getModel()).addRow(row);
+		SerializationMapping mapping = new SerializationMapping(namespace, type);
+		addMapping(mapping);
+	}
+	
+	
+	public void addMapping(SerializationMapping mapping) {
+		serializationMappings.add(mapping);
+		((DefaultTableModel) getModel()).addRow(mapping.toVector());
+	}
+	
+	
+	public List getSerializationMappings() {
+		return serializationMappings;
+	}
+	
+	
+	public void removeSerializationMapping(int i) {
+		((DefaultTableModel) getModel()).removeRow(i);
+		serializationMappings.remove(i);
 	}
 	
 	
 	private static DefaultTableModel createTableModel() {
-		DefaultTableModel model = new DefaultTableModel();
+		DefaultTableModel model = new DefaultTableModel() {
+			public boolean isCellEditable(int row, int column) {
+				return column >= 2;
+			}
+		};
 		model.addColumn("Namespace");
 		model.addColumn("Type");
 		model.addColumn("Class");

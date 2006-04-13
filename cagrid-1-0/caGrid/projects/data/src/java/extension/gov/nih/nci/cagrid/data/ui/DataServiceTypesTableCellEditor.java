@@ -1,19 +1,24 @@
 package gov.nih.nci.cagrid.data.ui;
 
 import java.awt.Component;
+import java.awt.event.MouseEvent;
 import java.util.EventObject;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.TableCellEditor;
 
+import org.projectmobius.portal.PortalResourceManager;
+
 /** 
  *  DataServiceTypesTableCellEditor
- *  TODO:DOCUMENT ME
+ *  Cell editor for the data service types table
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
@@ -23,15 +28,18 @@ import javax.swing.table.TableCellEditor;
 public class DataServiceTypesTableCellEditor implements TableCellEditor {
 	private List editorListeners = null;
 	private TypeSerializationConfigDialog dialog = null;
+	private ChangeEvent changeEvent = null;
 	
 	public DataServiceTypesTableCellEditor() {
+		changeEvent = new ChangeEvent(this);
 		editorListeners = new LinkedList();
 	}
 	
 
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-		dialog = new TypeSerializationConfigDialog();
-		return dialog;
+		PortalResourceManager.getInstance().getGridPortal()
+			.addGridPortalComponent(new TypeSerializationConfigDialog());
+		return null;
 	}
 
 
@@ -39,6 +47,7 @@ public class DataServiceTypesTableCellEditor implements TableCellEditor {
 		if (dialog != null) {
 			dialog.hide();
 		}
+		fireEditingCanceled();
 	}
 
 
@@ -47,6 +56,7 @@ public class DataServiceTypesTableCellEditor implements TableCellEditor {
 			dialog.dispose();
 			dialog = null;
 		}
+		fireEditingStopped();
 		return true;
 	}
 
@@ -63,7 +73,18 @@ public class DataServiceTypesTableCellEditor implements TableCellEditor {
 
 
 	public boolean shouldSelectCell(EventObject anEvent) {
-		return true;
+		if (anEvent instanceof MouseEvent) {
+			MouseEvent mouseEvent = (MouseEvent) anEvent;
+			if (SwingUtilities.isLeftMouseButton(mouseEvent)) {
+				Component potentialButton = SwingUtilities.getDeepestComponentAt(
+					(Component) anEvent.getSource(), mouseEvent.getX(), mouseEvent.getY());
+				if (potentialButton != null && potentialButton instanceof JButton) {
+					JButton button = (JButton) potentialButton;
+					dialog = new TypeSerializationConfigDialog();
+				}
+			}
+		}
+		return false;
 	}
 
 
@@ -78,19 +99,17 @@ public class DataServiceTypesTableCellEditor implements TableCellEditor {
 	
 	
 	protected void fireEditingCanceled() {
-		ChangeEvent e = new ChangeEvent(this);
 		Iterator iter = editorListeners.iterator();
 		while (iter.hasNext()) {
-			((CellEditorListener) iter.next()).editingCanceled(e);
+			((CellEditorListener) iter.next()).editingCanceled(changeEvent);
 		}
 	}
 	
 	
 	protected void fireEditingStopped() {
-		ChangeEvent e = new ChangeEvent(this);
 		Iterator iter = editorListeners.iterator();
 		while (iter.hasNext()) {
-			((CellEditorListener) iter.next()).editingStopped(e);
+			((CellEditorListener) iter.next()).editingStopped(changeEvent);
 		}
 	}
 }
