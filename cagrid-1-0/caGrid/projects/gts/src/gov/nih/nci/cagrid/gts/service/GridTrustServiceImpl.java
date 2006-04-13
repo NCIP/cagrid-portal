@@ -49,8 +49,6 @@ public class GridTrustServiceImpl implements GridTrustServiceI {
 	private GTS getGTSHandle() throws GTSInternalFault {
 		if (gts == null) {
 			try {
-				File f = new File(".");
-				System.out.println(f.getAbsolutePath());
 				EndpointReferenceType type = AddressingUtils.createEndpointReference(null);
 				BaseResourceHome home = (BaseResourceHome) ResourceContext.getResourceContext().getResourceHome();
 				SimpleResourceManager srm = new SimpleResourceManager(home.getGtsConfig());
