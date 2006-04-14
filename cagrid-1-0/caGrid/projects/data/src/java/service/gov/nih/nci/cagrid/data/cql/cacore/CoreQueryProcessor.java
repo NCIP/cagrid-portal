@@ -46,6 +46,10 @@ public class CoreQueryProcessor implements CQLQueryProcessor {
 			throw new IllegalStateException("The core service is currently null.  Call init() before calling processQuery()!");
 		}
 		// get the class we're trying to return here
+		// TODO: I believe this is a caDSR type name, not a Java
+		// class name, although they'll mostly match eachother.
+		// Should be using qname here to get the registered
+		// (type mapping) class to create.
 		String targetClassName = query.getTarget().getName();
 		Class targetClass = Class.forName(targetClassName);
 		
@@ -61,30 +65,9 @@ public class CoreQueryProcessor implements CQLQueryProcessor {
 		}
 		
 		List targetObjects = coreService.search(targetClass, searchMe);
-		// CQLQueryResultsType results = buildResults(targetObjects);
 		CQLQueryResultsType results = CQLQueryResultsUtil.createQueryResults(targetObjects);
 		return results;
 	}
-	
-	
-	/*
-	private CQLQueryResultsType buildResults(List objects) {
-		CQLQueryResultsType results = new CQLQueryResultsType();
-		// TODO: At the moment, this only deals with object results, 
-		// not identifiers or attributes
-		CQLObjectResult[] objectResults = new CQLObjectResult[objects.size()];
-		for (int i = 0; i < objects.size(); i++) {
-			Object object = objects.get(i);
-			CQLObjectResult result = new CQLObjectResult();
-			result.setType(object.getClass().getName());
-			QName objectQname = Utils.getRegisteredQName(object.getClass());
-			MessageElement anyElement = new MessageElement(objectQname, object);
-			result.set_any(new MessageElement[] {anyElement});
-		}
-		results.setObjectResult(objectResults);
-		return results;
-	}
-	*/
 	
 	
 	private Object generateQueryObject(Objects input) throws Exception {
