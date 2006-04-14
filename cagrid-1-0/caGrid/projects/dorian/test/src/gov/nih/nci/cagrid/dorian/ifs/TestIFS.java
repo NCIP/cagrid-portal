@@ -728,7 +728,7 @@ public class TestIFS extends TestCase {
 		GlobusCredential cred = new GlobusCredential(key, certs);
 		assertNotNull(cred);
 		long max = IFSUtils.getTimeInSeconds(lifetime);
-		long min = max - 3;
+		long min = max - SHORT_CREDENTIALS_VALID;
 		long timeLeft = cred.getTimeLeft();
 		if ((min > timeLeft) || (timeLeft > max)) {
 			assertTrue(false);
