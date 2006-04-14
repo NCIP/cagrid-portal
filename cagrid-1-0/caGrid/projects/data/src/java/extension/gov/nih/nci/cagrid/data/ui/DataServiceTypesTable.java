@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
 
+import org.projectmobius.portal.PortalResourceManager;
+
 /** 
  *  DataServiceTypesTable
  *  Table to maintain what types are available targets for a data service
@@ -23,15 +25,13 @@ public class DataServiceTypesTable extends PortalBaseTable {
 	
 	public DataServiceTypesTable() {
 		super(createTableModel());
-		setDefaultEditor(Object.class, new DataServiceTypesTableCellEditor());
-		setDefaultRenderer(Object.class, new DataServiceTypesTableCellRenderer());
 		serializationMappings = new ArrayList();
 	}
 	
 	
 	// Allows editing of certain table cells
 	public boolean isCellEditable(int row, int column) {
-		return column >= 2;
+		return false;
 	}
 	
 	
@@ -70,7 +70,7 @@ public class DataServiceTypesTable extends PortalBaseTable {
 	private static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel() {
 			public boolean isCellEditable(int row, int column) {
-				return column >= 2;
+				return false; // not really...
 			}
 		};
 		model.addColumn("Namespace");
@@ -84,7 +84,12 @@ public class DataServiceTypesTable extends PortalBaseTable {
 	
 	
 	public void doubleClick() {
-		
+		if (getSelectedColumn() >= 3) {
+			TypeSerializationConfigDialog dialog = new TypeSerializationConfigDialog(
+				this, (SerializationMapping) serializationMappings.get(getSelectedRow()));
+			PortalResourceManager.getInstance().getGridPortal()
+				.addGridPortalComponent(dialog);
+		}
 	}
 	
 	

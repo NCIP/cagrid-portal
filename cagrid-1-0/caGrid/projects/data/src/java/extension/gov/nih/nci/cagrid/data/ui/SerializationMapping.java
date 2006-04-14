@@ -2,8 +2,6 @@ package gov.nih.nci.cagrid.data.ui;
 
 import java.util.Vector;
 
-import javax.swing.JButton;
-
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 
@@ -112,9 +110,9 @@ public class SerializationMapping {
 		v.add(nsType.getNamespace());
 		v.add(elemType.getType());
 		v.add(elemType.getClassName());
-		v.add(new JButton(serializer));
-		v.add(new JButton(deserializer));
-		v.add(new JButton(encoding));
+		v.add(serializer);
+		v.add(deserializer);
+		v.add(encoding);
 		return v;
 	}
 }
