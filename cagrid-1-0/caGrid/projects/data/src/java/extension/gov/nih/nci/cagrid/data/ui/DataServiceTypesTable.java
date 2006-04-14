@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 
+import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,8 +61,7 @@ public class DataServiceTypesTable extends PortalBaseTable {
 	
 	public void refreshSerializationMapping(SerializationMapping mapping) {
 		int index = serializationMappings.indexOf(mapping);
-		serializationMappings.add(index, mapping);
-		serializationMappings.remove(index + 1);
+		serializationMappings.set(index, mapping);
 		((DefaultTableModel) getModel()).removeRow(index);
 		((DefaultTableModel) getModel()).insertRow(index, mapping.toVector());
 	}
@@ -89,6 +89,13 @@ public class DataServiceTypesTable extends PortalBaseTable {
 				this, (SerializationMapping) serializationMappings.get(getSelectedRow()));
 			PortalResourceManager.getInstance().getGridPortal()
 				.addGridPortalComponent(dialog);
+			try {
+				dialog.setSelected(true);
+			} catch (PropertyVetoException ex) {
+				// thats unfortunate
+				ex.printStackTrace();
+			}
+			dialog.setSize(new java.awt.Dimension(400,153));
 		}
 	}
 	

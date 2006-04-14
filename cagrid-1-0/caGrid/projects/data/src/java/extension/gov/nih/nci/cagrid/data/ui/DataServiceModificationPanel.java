@@ -140,7 +140,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			removeTypeButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if (getTypesTable().getSelectedRow() != -1) {
-						getTypesTable().removeRow(getTypesTable().getSelectedRow());
+						getTypesTable().removeSerializationMapping(getTypesTable().getSelectedRow());
 					}
 				}
 			});

@@ -62,9 +62,10 @@ public class TypeSerializationConfigDialog extends GridPortalComponent {
 	private void initialize() {
 		setTitle("Serialization Configuration");
 		setFrameIcon(IntroduceLookAndFeel.getSchemaTypeIcon());
-		setContentPane(getMainPanel());
-		// for now, we'll use this
 		enableAll(getSerializationConfigPanel(), false);
+		setContentPane(getMainPanel());		
+		populateMappingTextFields();
+		// for now, we'll use this
 		pack();
 		setSize(new java.awt.Dimension(400,153));
 		show();
@@ -452,6 +453,13 @@ public class TypeSerializationConfigDialog extends GridPortalComponent {
 		return mapping.getSerializer().equals(SerializationMapping.SDK_SERIALIZER) &&
 			mapping.getDeserializer().equals(SerializationMapping.SDK_DESERIALIZER) &&
 			mapping.getEncoding().equals(SerializationMapping.SDK_ENCODING_STYLE);
+	}
+	
+	
+	private void populateMappingTextFields() {
+		getSerializerTextField().setText(mapping.getSerializer());
+		getDeserializerTextField().setText(mapping.getDeserializer());
+		getEncodingTextField().setText(mapping.getEncoding());
 	}
 
 
