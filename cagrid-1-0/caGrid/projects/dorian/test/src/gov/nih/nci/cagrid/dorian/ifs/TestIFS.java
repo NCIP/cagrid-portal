@@ -588,16 +588,18 @@ public class TestIFS extends TestCase {
 			String federation = cert.getSubjectDN().toString();
 			String ipAddress = null;
 			String subjectDNS = null;
-			SAMLNameIdentifier ni = new SAMLNameIdentifier(id, federation, "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
-			SAMLNameIdentifier ni2 = new SAMLNameIdentifier(id, federation, "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
-			SAMLSubject sub = new SAMLSubject(ni,null, null, null);
-			SAMLSubject sub2 = new SAMLSubject(ni2,null, null, null);
+			SAMLNameIdentifier ni = new SAMLNameIdentifier(id, federation,
+				"urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
+			SAMLNameIdentifier ni2 = new SAMLNameIdentifier(id, federation,
+				"urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
+			SAMLSubject sub = new SAMLSubject(ni, null, null, null);
+			SAMLSubject sub2 = new SAMLSubject(ni2, null, null, null);
 			SAMLAuthenticationStatement auth = new SAMLAuthenticationStatement(sub, method, new Date(), ipAddress,
 				subjectDNS, null);
 			QName name = new QName(EMAIL_NAMESPACE, EMAIL_NAME);
 			List vals = new ArrayList();
 			vals.add(email);
-			SAMLAttribute att = new SAMLAttribute(name.getLocalPart(), name.getNamespaceURI(), name, (long) 0, vals);
+			SAMLAttribute att = new SAMLAttribute(name.getLocalPart(), name.getNamespaceURI(), name, 0, vals);
 
 			List atts = new ArrayList();
 			atts.add(att);
@@ -728,11 +730,11 @@ public class TestIFS extends TestCase {
 		GlobusCredential cred = new GlobusCredential(key, certs);
 		assertNotNull(cred);
 		long max = IFSUtils.getTimeInSeconds(lifetime);
-		long min = max - SHORT_CREDENTIALS_VALID;
+		// what is this 3 for?
+		long min = max - 3;
 		long timeLeft = cred.getTimeLeft();
-		if ((min > timeLeft) || (timeLeft > max)) {
-			assertTrue(false);
-		}
+		assertTrue(min <= timeLeft);
+		assertTrue(timeLeft <= max);
 		assertEquals(certs[1].getSubjectDN().toString(), identityToSubject(cred.getIdentity()));
 		assertEquals(cred.getIssuer(), identityToSubject(cred.getIdentity()));
 		cred.verify();
