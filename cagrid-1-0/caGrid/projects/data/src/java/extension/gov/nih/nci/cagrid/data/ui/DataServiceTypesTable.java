@@ -30,12 +30,6 @@ public class DataServiceTypesTable extends PortalBaseTable {
 	}
 	
 	
-	// Allows editing of certain table cells
-	public boolean isCellEditable(int row, int column) {
-		return false;
-	}
-	
-	
 	public void addType(NamespaceType namespace, SchemaElementType type) {
 		SerializationMapping mapping = new SerializationMapping(namespace, type);
 		addMapping(mapping);
@@ -70,7 +64,7 @@ public class DataServiceTypesTable extends PortalBaseTable {
 	private static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel() {
 			public boolean isCellEditable(int row, int column) {
-				return false; // not really...
+				return false; // not really... see what happens on double click
 			}
 		};
 		model.addColumn("Namespace");
@@ -95,7 +89,7 @@ public class DataServiceTypesTable extends PortalBaseTable {
 				// thats unfortunate
 				ex.printStackTrace();
 			}
-			dialog.setSize(new java.awt.Dimension(400,153));
+			dialog.setSize(new java.awt.Dimension(500,153));
 		}
 	}
 	

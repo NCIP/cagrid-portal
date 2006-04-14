@@ -18,74 +18,13 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 public class SerializationMapping {
 	public static final String SDK_SERIALIZER = "gov.nih.nci.cagrid.encoding.SDKSerializerFactory";
 	public static final String SDK_DESERIALIZER = "gov.nih.nci.cagrid.encoding.SDKDeserializerFactory";
-	public static final String SDK_ENCODING_STYLE = "";
 	
 	private NamespaceType nsType;
 	private SchemaElementType elemType;
-	private String serializer;
-	private String deserializer;
-	private String encoding;
 
 	public SerializationMapping(NamespaceType namespace, SchemaElementType elementType) {
-		this(namespace, elementType, "", "", "");
-	}
-	
-	
-	public SerializationMapping(NamespaceType namespace, SchemaElementType elementType,
-		String serializer, String deserializer, String encoding) {
 		this.nsType = namespace;
 		this.elemType = elementType;
-		this.serializer = serializer;
-		this.deserializer = deserializer;
-		this.encoding = encoding;
-	}
-
-
-	/**
-	 * @return Returns the deserializer.
-	 */
-	public String getDeserializer() {
-		return deserializer;
-	}
-
-
-	/**
-	 * @param deserializer The deserializer to set.
-	 */
-	public void setDeserializer(String deserializer) {
-		this.deserializer = deserializer;
-	}
-
-
-	/**
-	 * @return Returns the encoding.
-	 */
-	public String getEncoding() {
-		return encoding;
-	}
-
-
-	/**
-	 * @param encoding The encoding to set.
-	 */
-	public void setEncoding(String encoding) {
-		this.encoding = encoding;
-	}
-
-
-	/**
-	 * @return Returns the serializer.
-	 */
-	public String getSerializer() {
-		return serializer;
-	}
-
-
-	/**
-	 * @param serializer The serializer to set.
-	 */
-	public void setSerializer(String serializer) {
-		this.serializer = serializer;
 	}
 
 
@@ -106,13 +45,12 @@ public class SerializationMapping {
 	
 	
 	public Vector toVector() {
-		Vector v = new Vector(6);
+		Vector v = new Vector(5);
 		v.add(nsType.getNamespace());
 		v.add(elemType.getType());
 		v.add(elemType.getClassName());
-		v.add(serializer);
-		v.add(deserializer);
-		v.add(encoding);
+		v.add(elemType.getSerializer());
+		v.add(elemType.getDeserializer());
 		return v;
 	}
 }

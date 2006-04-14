@@ -43,10 +43,8 @@ public class TypeSerializationConfigDialog extends GridPortalComponent {
 	private JPanel serializationConfigPanel = null;
 	private JTextField deserializerTextField = null;
 	private JTextField serializerTextField = null;
-	private JTextField encodingTextField = null;
 	private JLabel serializerLabel = null;
 	private JLabel deserializerLabel = null;
-	private JLabel encodingLabel = null;
 	
 	private DataServiceTypesTable table;
 	private SerializationMapping mapping;
@@ -132,7 +130,6 @@ public class TypeSerializationConfigDialog extends GridPortalComponent {
 					if (getDefaultSerializationRadioButton().isSelected()) {
 						getSerializerTextField().setText("");
 						getDeserializerTextField().setText("");
-						getEncodingTextField().setText("");
 					}
 				}
 			});
@@ -174,7 +171,6 @@ public class TypeSerializationConfigDialog extends GridPortalComponent {
 					if (getSdkSerializationRadioButton().isSelected()) {
 						getSerializerTextField().setText(SerializationMapping.SDK_SERIALIZER);
 						getDeserializerTextField().setText(SerializationMapping.SDK_DESERIALIZER);
-						getEncodingTextField().setText(SerializationMapping.SDK_ENCODING_STYLE);
 					}
 				}
 			});
@@ -196,9 +192,8 @@ public class TypeSerializationConfigDialog extends GridPortalComponent {
 			okButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					// set values into the mapping
-					mapping.setSerializer(getSerializerTextField().getText());
-					mapping.setDeserializer(getDeserializerTextField().getText());
-					mapping.setEncoding(getEncodingTextField().getText());
+					mapping.getElemType().setSerializer(getSerializerTextField().getText());
+					mapping.getElemType().setDeserializer(getDeserializerTextField().getText());
 					// get the table to refresh these fields
 					table.refreshSerializationMapping(mapping);
 					dispose();
@@ -299,12 +294,6 @@ public class TypeSerializationConfigDialog extends GridPortalComponent {
 	 */
 	private JPanel getSerializationConfigPanel() {
 		if (serializationConfigPanel == null) {
-			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
-			gridBagConstraints10.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints10.gridy = 2;
-			gridBagConstraints10.weightx = 1.0;
-			gridBagConstraints10.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints10.gridx = 1;
 			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
 			gridBagConstraints9.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints9.gridy = 1;
@@ -317,12 +306,6 @@ public class TypeSerializationConfigDialog extends GridPortalComponent {
 			gridBagConstraints8.weightx = 1.0;
 			gridBagConstraints8.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints8.gridx = 1;
-			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-			gridBagConstraints7.gridx = 0;
-			gridBagConstraints7.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints7.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints7.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints7.gridy = 2;
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 			gridBagConstraints6.gridx = 0;
 			gridBagConstraints6.anchor = java.awt.GridBagConstraints.WEST;
@@ -339,10 +322,8 @@ public class TypeSerializationConfigDialog extends GridPortalComponent {
 			serializationConfigPanel.setLayout(new GridBagLayout());
 			serializationConfigPanel.add(getSerializerLabel(), gridBagConstraints5);
 			serializationConfigPanel.add(getDeserializerLabel(), gridBagConstraints6);
-			serializationConfigPanel.add(getEncodingLabel(), gridBagConstraints7);
 			serializationConfigPanel.add(getSerializerTextField(), gridBagConstraints8);
 			serializationConfigPanel.add(getDeserializerTextField(), gridBagConstraints9);
-			serializationConfigPanel.add(getEncodingTextField(), gridBagConstraints10);
 		}
 		return serializationConfigPanel;
 	}
@@ -375,19 +356,6 @@ public class TypeSerializationConfigDialog extends GridPortalComponent {
 
 
 	/**
-	 * This method initializes jTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */
-	private JTextField getEncodingTextField() {
-		if (encodingTextField == null) {
-			encodingTextField = new JTextField();
-		}
-		return encodingTextField;
-	}
-
-
-	/**
 	 * This method initializes jLabel	
 	 * 	
 	 * @return javax.swing.JLabel	
@@ -413,20 +381,6 @@ public class TypeSerializationConfigDialog extends GridPortalComponent {
 		}
 		return deserializerLabel;
 	}
-
-
-	/**
-	 * This method initializes jLabel	
-	 * 	
-	 * @return javax.swing.JLabel	
-	 */
-	private JLabel getEncodingLabel() {
-		if (encodingLabel == null) {
-			encodingLabel = new JLabel();
-			encodingLabel.setText("Encoding:");
-		}
-		return encodingLabel;
-	}
 	
 	
 	private void enableAll(Container c, boolean enable) {
@@ -443,23 +397,20 @@ public class TypeSerializationConfigDialog extends GridPortalComponent {
 	
 	
 	private boolean isDefaultSerialization() {
-		return mapping.getSerializer().length() == 0 &&
-			mapping.getDeserializer().length() == 0 &&
-			mapping.getEncoding().length() == 0;
+		return mapping.getElemType().getSerializer().length() == 0 &&
+			mapping.getElemType().getDeserializer().length() == 0;
 	}
 	
 	
 	private boolean isSdkSerialization() {
-		return mapping.getSerializer().equals(SerializationMapping.SDK_SERIALIZER) &&
-			mapping.getDeserializer().equals(SerializationMapping.SDK_DESERIALIZER) &&
-			mapping.getEncoding().equals(SerializationMapping.SDK_ENCODING_STYLE);
+		return mapping.getElemType().getSerializer().equals(SerializationMapping.SDK_SERIALIZER) &&
+			mapping.getElemType().getDeserializer().equals(SerializationMapping.SDK_DESERIALIZER);
 	}
 	
 	
 	private void populateMappingTextFields() {
-		getSerializerTextField().setText(mapping.getSerializer());
-		getDeserializerTextField().setText(mapping.getDeserializer());
-		getEncodingTextField().setText(mapping.getEncoding());
+		getSerializerTextField().setText(mapping.getElemType().getSerializer());
+		getDeserializerTextField().setText(mapping.getElemType().getDeserializer());
 	}
 
 
