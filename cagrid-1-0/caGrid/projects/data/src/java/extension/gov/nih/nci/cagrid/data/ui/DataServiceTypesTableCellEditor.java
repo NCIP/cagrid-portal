@@ -41,7 +41,7 @@ public class DataServiceTypesTableCellEditor implements TableCellEditor {
 		DataServiceTypesTable typesTable = (DataServiceTypesTable) table;
 		SerializationMapping mapping = (SerializationMapping) typesTable.getSerializationMappings().get(typesTable.getSelectedRow());
 		PortalResourceManager.getInstance().getGridPortal()
-			.addGridPortalComponent(new TypeSerializationConfigDialog(mapping));
+			.addGridPortalComponent(new TypeSerializationConfigDialog(typesTable, mapping));
 		return (Component) value;
 	}
 
@@ -84,7 +84,7 @@ public class DataServiceTypesTableCellEditor implements TableCellEditor {
 				if (potentialButton != null && potentialButton instanceof JButton) {
 					JButton button = (JButton) potentialButton;
 					DataServiceTypesTable table = (DataServiceTypesTable) anEvent.getSource();
-					dialog = new TypeSerializationConfigDialog((SerializationMapping) table.getSerializationMappings().get(table.getSelectedRow()));;
+					dialog = new TypeSerializationConfigDialog(table, (SerializationMapping) table.getSerializationMappings().get(table.getSelectedRow()));;
 				}
 			}
 		}

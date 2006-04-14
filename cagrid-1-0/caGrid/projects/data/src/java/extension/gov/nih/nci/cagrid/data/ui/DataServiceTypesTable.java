@@ -4,7 +4,7 @@ import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
@@ -25,7 +25,7 @@ public class DataServiceTypesTable extends PortalBaseTable {
 		super(createTableModel());
 		setDefaultEditor(Object.class, new DataServiceTypesTableCellEditor());
 		setDefaultRenderer(Object.class, new DataServiceTypesTableCellRenderer());
-		serializationMappings = new LinkedList();
+		serializationMappings = new ArrayList();
 	}
 	
 	
@@ -55,6 +55,15 @@ public class DataServiceTypesTable extends PortalBaseTable {
 	public void removeSerializationMapping(int i) {
 		((DefaultTableModel) getModel()).removeRow(i);
 		serializationMappings.remove(i);
+	}
+	
+	
+	public void refreshSerializationMapping(SerializationMapping mapping) {
+		int index = serializationMappings.indexOf(mapping);
+		serializationMappings.add(index, mapping);
+		serializationMappings.remove(index + 1);
+		((DefaultTableModel) getModel()).removeRow(index);
+		((DefaultTableModel) getModel()).insertRow(index, mapping.toVector());
 	}
 	
 	

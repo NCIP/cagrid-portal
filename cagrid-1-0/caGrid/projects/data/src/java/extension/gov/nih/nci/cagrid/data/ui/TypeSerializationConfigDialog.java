@@ -48,10 +48,12 @@ public class TypeSerializationConfigDialog extends GridPortalComponent {
 	private JLabel deserializerLabel = null;
 	private JLabel encodingLabel = null;
 	
+	private DataServiceTypesTable table;
 	private SerializationMapping mapping;
 	
-	public TypeSerializationConfigDialog(SerializationMapping mapping) {
+	public TypeSerializationConfigDialog(DataServiceTypesTable table, SerializationMapping mapping) {
 		super();
+		this.table = table;
 		this.mapping = mapping;
 		initialize();
 	}
@@ -192,7 +194,13 @@ public class TypeSerializationConfigDialog extends GridPortalComponent {
 			okButton.setIcon(PortalLookAndFeel.getSaveIcon());
 			okButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+					// set values into the mapping
+					mapping.setSerializer(getSerializerTextField().getText());
+					mapping.setDeserializer(getDeserializerTextField().getText());
+					mapping.setEncoding(getEncodingTextField().getText());
+					// get the table to refresh these fields
+					table.refreshSerializationMapping(mapping);
+					dispose();
 				}
 			});
 		}
@@ -452,7 +460,7 @@ public class TypeSerializationConfigDialog extends GridPortalComponent {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		MDIDesktopPane desk = new MDIDesktopPane();
 		frame.setContentPane(desk);
-		desk.add(new TypeSerializationConfigDialog(null));
+		desk.add(new TypeSerializationConfigDialog(null, null));
 		frame.setSize(600,600);
 		frame.show();
 	}
