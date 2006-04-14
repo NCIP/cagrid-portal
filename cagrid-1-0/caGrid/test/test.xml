@@ -50,34 +50,30 @@
 					<include name="*"/>
 				</fileset>
 			</delete>
-			<!-- Now run all the projects' test, sharing the same log dir -->
-			<ant inheritall="false" dir="projects/core" antfile="build.xml" target="test">
-				<property name="junit.results.dir" value="${junit.results.dir}"/>
-			</ant>
-			
-			<ant inheritall="false" dir="projects/discovery" antfile="build.xml" target="test">
-				<property name="junit.results.dir" value="${junit.results.dir}"/>
-			</ant>
-			
-			<ant inheritall="false" dir="projects/introduce" antfile="build.xml" target="test">
-				<property name="junit.results.dir" value="${junit.results.dir}"/>
-			</ant>
-			
-			<ant inheritall="false" dir="projects/gridca" antfile="build.xml" target="test">
-				<property name="junit.results.dir" value="${junit.results.dir}"/>
-			</ant>
-			
-			<ant inheritall="false" dir="projects/gts" antfile="build.xml" target="test">
-				<property name="junit.results.dir" value="${junit.results.dir}"/>
-			</ant>
-			
-			<ant inheritall="false" dir="projects/dorian" antfile="build.xml" target="test">
-				<property name="junit.results.dir" value="${junit.results.dir}"/>
-			</ant>
-			
-			<ant inheritall="false" dir="projects/cql2xpath" antfile="build.xml" target="test">
-				<property name="junit.results.dir" value="${junit.results.dir}"/>
-			</ant>
+			<parallel>
+				<!-- Now run all the projects' test, sharing the same log dir -->
+				<ant inheritall="false" dir="projects/core" antfile="build.xml" target="test">
+					<property name="junit.results.dir" value="${junit.results.dir}"/>
+				</ant>
+				<ant inheritall="false" dir="projects/discovery" antfile="build.xml" target="test">
+					<property name="junit.results.dir" value="${junit.results.dir}"/>
+				</ant>
+				<ant inheritall="false" dir="projects/introduce" antfile="build.xml" target="test">
+					<property name="junit.results.dir" value="${junit.results.dir}"/>
+				</ant>
+				<ant inheritall="false" dir="projects/gridca" antfile="build.xml" target="test">
+					<property name="junit.results.dir" value="${junit.results.dir}"/>
+				</ant>
+				<ant inheritall="false" dir="projects/gts" antfile="build.xml" target="test">
+					<property name="junit.results.dir" value="${junit.results.dir}"/>
+				</ant>
+				<ant inheritall="false" dir="projects/dorian" antfile="build.xml" target="test">
+					<property name="junit.results.dir" value="${junit.results.dir}"/>
+				</ant>
+				<ant inheritall="false" dir="projects/cql2xpath" antfile="build.xml" target="test">
+					<property name="junit.results.dir" value="${junit.results.dir}"/>
+				</ant>
+			</parallel>
 		</sequential>
 	</target>
 	<!-- =============================================================== -->
