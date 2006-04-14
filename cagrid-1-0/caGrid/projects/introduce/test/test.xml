@@ -17,7 +17,8 @@
 				<path refid="Introduce.test.classpath"/>
 			</classpath>
 			<formatter type="xml"/>
-			<batchtest fork="no" todir="${junit.results.dir}">
+			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}"/>
+			<batchtest unless="testcase" fork="no" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}/Introduce">
 					<include name="**/*Test.java"/>
 					<include name="**/*TestCase.java"/>
