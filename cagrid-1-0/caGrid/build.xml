@@ -125,16 +125,16 @@
 				<include name="gridca.jar" />
 			</fileset>
 		</artifact>
-		
-		
+
+
 		<artifact track="main" type="jars" id="gts.client.jars">
-					<antcall target="build-gts" />
-					<fileset dir="${projects.dir}/gts/build/lib">
-						<include name="GridTrustService_stubs.jar" />
-						<include name="GridTrustService-common.jar" />
-						<include name="GridTrustService-client.jar" />
-					</fileset>
-				</artifact>
+			<antcall target="build-gts" />
+			<fileset dir="${projects.dir}/gts/build/lib">
+				<include name="GridTrustService_stubs.jar" />
+				<include name="GridTrustService-common.jar" />
+				<include name="GridTrustService-client.jar" />
+			</fileset>
+		</artifact>
 
 		<artifact track="main" type="jars" id="cadsr.jars">
 			<antcall target="build-cadsr" />
@@ -181,10 +181,10 @@
 				<exclude name="*tests*.jar" />
 			</fileset>
 		</artifact>
-		
+
 		<artifact track="main" type="resources" id="introduce.resources">
 			<fileset dir="${projects.dir}/introduce/resources">
-				<include name="**"/>
+				<include name="**" />
 			</fileset>
 		</artifact>
 
@@ -359,7 +359,7 @@
 			<artifact refid="introduce.jars" />
 			<artifact refid="gme.globus.client.jars" />
 			<artifact refid="core.resources" />
-			<artifact refid="introduce.resources"/>
+			<artifact refid="introduce.resources" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
@@ -384,45 +384,45 @@
 			<fileset dir="${projects.dir}" includes="*/build.xml" />
 		</subant>-->
 
-		<parallel>
-		<delete dir="${projects.dir}/core/ext" />
-		<ant dir="${projects.dir}/core" inheritAll="false" antfile="build.xml" target="clean" />
+		<parallel threadcount="5">
+			<delete dir="${projects.dir}/core/ext" />
+			<ant dir="${projects.dir}/core" inheritAll="false" antfile="build.xml" target="clean" />
 
-		<delete dir="${projects.dir}/metadata/ext" />
-		<ant dir="${projects.dir}/metadata" inheritAll="false" antfile="build.xml" target="clean" />
+			<delete dir="${projects.dir}/metadata/ext" />
+			<ant dir="${projects.dir}/metadata" inheritAll="false" antfile="build.xml" target="clean" />
 
-		<delete dir="${projects.dir}/discovery/ext" />
-		<ant dir="${projects.dir}/discovery" inheritAll="false" antfile="build.xml" target="clean" />
+			<delete dir="${projects.dir}/discovery/ext" />
+			<ant dir="${projects.dir}/discovery" inheritAll="false" antfile="build.xml" target="clean" />
 
-		<delete dir="${projects.dir}/gme/ext" />
-		<ant dir="${projects.dir}/gme" inheritAll="false" antfile="build.xml" target="clean" />
+			<delete dir="${projects.dir}/gme/ext" />
+			<ant dir="${projects.dir}/gme" inheritAll="false" antfile="build.xml" target="clean" />
 
-		<delete dir="${projects.dir}/introduce/ext" />
-		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="clean" />
+			<delete dir="${projects.dir}/introduce/ext" />
+			<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="clean" />
 
-		<delete dir="${projects.dir}/dorian/ext" />
-		<ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="clean" />
+			<delete dir="${projects.dir}/dorian/ext" />
+			<ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="clean" />
 
-		<delete dir="${projects.dir}/gridca/ext" />
-		<ant dir="${projects.dir}/gridca" inheritAll="false" antfile="build.xml" target="clean" />
+			<delete dir="${projects.dir}/gridca/ext" />
+			<ant dir="${projects.dir}/gridca" inheritAll="false" antfile="build.xml" target="clean" />
 
-		<delete dir="${projects.dir}/gts/ext" />
-		<ant dir="${projects.dir}/gts" inheritAll="false" antfile="build.xml" target="clean" />
+			<delete dir="${projects.dir}/gts/ext" />
+			<ant dir="${projects.dir}/gts" inheritAll="false" antfile="build.xml" target="clean" />
 
-		<delete dir="${projects.dir}/syncgts/ext" />
-		<ant dir="${projects.dir}/syncgts" inheritAll="false" antfile="build.xml" target="clean" />
+			<delete dir="${projects.dir}/syncgts/ext" />
+			<ant dir="${projects.dir}/syncgts" inheritAll="false" antfile="build.xml" target="clean" />
 
-		<delete dir="${projects.dir}/cadsr/ext" />
-		<ant dir="${projects.dir}/cadsr" inheritAll="false" antfile="build.xml" target="clean" />
+			<delete dir="${projects.dir}/cadsr/ext" />
+			<ant dir="${projects.dir}/cadsr" inheritAll="false" antfile="build.xml" target="clean" />
 
-		<delete dir="${projects.dir}/opensaml/ext" />
-		<ant dir="${projects.dir}/opensaml" inheritAll="false" antfile="build.xml" target="clean" />
+			<delete dir="${projects.dir}/opensaml/ext" />
+			<ant dir="${projects.dir}/opensaml" inheritAll="false" antfile="build.xml" target="clean" />
 
-		<delete dir="${projects.dir}/data/ext" />
-		<ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="clean" />
+			<delete dir="${projects.dir}/data/ext" />
+			<ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="clean" />
 
-		<delete dir="${projects.dir}/cql2xpath/ext" />
-		<ant dir="${projects.dir}/cql2xpath" inheritAll="false" antfile="build.xml" target="clean" />
+			<delete dir="${projects.dir}/cql2xpath/ext" />
+			<ant dir="${projects.dir}/cql2xpath" inheritAll="false" antfile="build.xml" target="clean" />
 		</parallel>
 	</target>
 
