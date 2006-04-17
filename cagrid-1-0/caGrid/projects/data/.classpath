@@ -69,7 +69,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry sourcepath="/caGrid-1.0-core/src/java" kind="lib" path="ext/lib/caGrid-core-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
-	<classpathentry sourcepath="/caGrid-1.0-introduce/src/java/Introduce" kind="lib" path="ext/lib/caGrid-introduce-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_factories-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
@@ -78,5 +77,7 @@
 	<classpathentry kind="lib" path="ext/lib/GlobalModelExchange.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/cacore/client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-core-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-portal-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
