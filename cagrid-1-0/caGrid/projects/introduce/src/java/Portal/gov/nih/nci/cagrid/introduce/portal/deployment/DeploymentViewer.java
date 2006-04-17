@@ -50,8 +50,6 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 
 	private JButton deployButton = null;
 
-	private JButton closeButton = null;
-
 	private File serviceDirectory;
 
 	Properties deployProperties;
@@ -214,7 +212,6 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
 			buttonPanel.add(getDeployButton(), null);
-			buttonPanel.add(getCloseButton(), null);
 		}
 		return buttonPanel;
 	}
@@ -276,6 +273,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 								setErrorMessage("Error deploying service! " + ex.getMessage());
 								ex.printStackTrace();
 							}
+							dispose();
 						}
 					};
 					Thread th = new Thread(r);
@@ -285,26 +283,6 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 		}
 
 		return deployButton;
-	}
-
-
-	/**
-	 * This method initializes closeButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getCloseButton() {
-		if (closeButton == null) {
-			closeButton = new JButton();
-			closeButton.setIcon(PortalLookAndFeel.getCloseIcon());
-			closeButton.setText("Done");
-			closeButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					dispose();
-				}
-			});
-		}
-		return closeButton;
 	}
 
 
