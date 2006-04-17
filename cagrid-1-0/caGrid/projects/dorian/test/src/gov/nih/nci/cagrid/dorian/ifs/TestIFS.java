@@ -60,7 +60,7 @@ public class TestIFS extends TestCase {
 
 	private static final int SHORT_PROXY_VALID = 2;
 
-	private static final int SHORT_CREDENTIALS_VALID = 5;
+	private static final int SHORT_CREDENTIALS_VALID = 10;
 
 	public final static String EMAIL_NAMESPACE = "http://cagrid.nci.nih.gov/email";
 
