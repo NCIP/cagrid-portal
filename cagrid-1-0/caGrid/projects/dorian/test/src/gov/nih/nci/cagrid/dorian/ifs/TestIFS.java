@@ -101,7 +101,7 @@ public class TestIFS extends TestCase {
 			assertEquals(usr1.getGridId(), usr2.getGridId());
 
 			if (certStr.equals(usr2.getCertificate().getCertificateAsString())) {
-				assertTrue(false);
+				fail("Certificate was the same, but should have been renew.");
 			}
 
 			X509Certificate cert2 = CertUtil.loadCertificate(usr2.getCertificate().getCertificateAsString());
@@ -110,7 +110,7 @@ public class TestIFS extends TestCase {
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
-			assertTrue(false);
+			fail("Exception occured:" + e.getMessage());
 		}
 
 	}
@@ -145,7 +145,7 @@ public class TestIFS extends TestCase {
 
 				try {
 					ifs.findUsers(usr[0].getGridId(), new IFSUserFilter());
-					assertTrue(false);
+					fail("Should have thrown exception attempting to find users.");
 				} catch (PermissionDeniedFault f) {
 
 				}
@@ -170,7 +170,7 @@ public class TestIFS extends TestCase {
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
-			assertTrue(false);
+			fail("Exception occured:" + e.getMessage());
 		}
 
 	}
@@ -190,7 +190,7 @@ public class TestIFS extends TestCase {
 			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
-			assertTrue(false);
+			fail("Exception occured:" + e.getMessage());
 		}
 
 	}
@@ -209,13 +209,13 @@ public class TestIFS extends TestCase {
 			ProxyLifetime lifetime = getProxyLifetime();
 			try {
 				ifs.createProxy(getSAMLAssertion("user", idp), publicKey, lifetime);
-				assertTrue(false);
+				fail("Should have thrown exception attempting to create proxy.");
 			} catch (PermissionDeniedFault f) {
 
 			}
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
-			assertTrue(false);
+			fail("Exception occured:" + e.getMessage());
 		}
 
 	}
@@ -240,7 +240,7 @@ public class TestIFS extends TestCase {
 				KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
 				PublicKey publicKey2 = pair2.getPublic();
 				ifs.createProxy(getSAMLAssertion(username, idp), publicKey2, getProxyLifetimeShort());
-				assertTrue(false);
+				fail("Should have thrown exception attempting to create proxy.");
 			} catch (PermissionDeniedFault fault) {
 
 			}
@@ -248,7 +248,7 @@ public class TestIFS extends TestCase {
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
-			assertTrue(false);
+			fail("Exception occured:" + e.getMessage());
 		}
 	}
 
@@ -266,7 +266,7 @@ public class TestIFS extends TestCase {
 			ProxyLifetime lifetime = getProxyLifetimeShort();
 			try {
 				ifs.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
-				assertTrue(false);
+				fail("Should have thrown exception attempting to create proxy.");
 			} catch (PermissionDeniedFault fault) {
 
 			}
@@ -274,7 +274,7 @@ public class TestIFS extends TestCase {
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
-			assertTrue(false);
+			fail("Exception occured:" + e.getMessage());
 		}
 	}
 
@@ -303,12 +303,12 @@ public class TestIFS extends TestCase {
 			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username).getUserStatus(), IFSUserStatus.Active);
 			IFSUser after = ifs.getUser(gridId, idp.getIdp().getId(), username);
 			if (before.getCertificate().equals(after.getCertificate())) {
-				assertTrue(false);
+				fail("Credentials were the same when should have been auto-renewed.");
 			}
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
-			assertTrue(false);
+			fail("Exception occured:" + e.getMessage());
 		}
 	}
 
@@ -326,7 +326,7 @@ public class TestIFS extends TestCase {
 
 			try {
 				ifs.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort());
-				assertTrue(false);
+				fail("Should have thrown exception attempting to create proxy.");
 			} catch (PermissionDeniedFault f) {
 
 			}
@@ -347,12 +347,12 @@ public class TestIFS extends TestCase {
 			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username).getUserStatus(), IFSUserStatus.Active);
 			IFSUser after = ifs.getUser(gridId, idp.getIdp().getId(), username);
 			if (before.getCertificate().equals(after.getCertificate())) {
-				assertTrue(false);
+				fail("Certificate should have been renewed, but was not.");
 			}
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
-			assertTrue(false);
+			fail("Exception occured:" + e.getMessage());
 		}
 	}
 
@@ -372,13 +372,13 @@ public class TestIFS extends TestCase {
 				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 				PublicKey publicKey = pair.getPublic();
 				ifs.createProxy(getSAMLAssertion("user", idp), publicKey, valid);
-				assertTrue(false);
+				fail("Should have thrown an exception creating an invalid proxy.");
 			} catch (InvalidProxyFault f) {
 
 			}
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
-			assertTrue(false);
+			fail("Exception occured:" + e.getMessage());
 		}
 	}
 
@@ -393,13 +393,13 @@ public class TestIFS extends TestCase {
 				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 				PublicKey publicKey = pair.getPublic();
 				ifs.createProxy(getSAMLAssertionUnspecifiedMethod("user", idp), publicKey, getProxyLifetime());
-				assertTrue(false);
+				fail("Should have thrown an exception creating a proxy with an invalid SAML assertion.");
 			} catch (InvalidAssertionFault f) {
 
 			}
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
-			assertTrue(false);
+			fail("Exception occured:" + e.getMessage());
 		}
 	}
 
@@ -416,13 +416,13 @@ public class TestIFS extends TestCase {
 				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 				PublicKey publicKey = pair.getPublic();
 				ifs.createProxy(getSAMLAssertion("user", idp2), publicKey, getProxyLifetime());
-				assertTrue(false);
+				fail("Should have thrown an exception creating a proxy with an invalid SAML assertion.");
 			} catch (InvalidAssertionFault f) {
 
 			}
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
-			assertTrue(false);
+			fail("Exception occured:" + e.getMessage());
 		}
 	}
 
@@ -437,13 +437,13 @@ public class TestIFS extends TestCase {
 				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 				PublicKey publicKey = pair.getPublic();
 				ifs.createProxy(getExpiredSAMLAssertion("user", idp), publicKey, getProxyLifetime());
-				assertTrue(false);
+				fail("Should have thrown an exception creating a proxy with an invalid SAML assertion.");
 			} catch (InvalidAssertionFault f) {
 
 			}
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
-			assertTrue(false);
+			fail("Exception occured:" + e.getMessage());
 		}
 	}
 
@@ -493,7 +493,7 @@ public class TestIFS extends TestCase {
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
-			assertTrue(false);
+			fail("Exception occured:" + e.getMessage());
 		}
 	}
 
@@ -687,7 +687,7 @@ public class TestIFS extends TestCase {
 			ca = Utils.getCA(db);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
-			assertTrue(false);
+			fail("Exception occured:" + e.getMessage());
 		}
 	}
 
@@ -700,7 +700,7 @@ public class TestIFS extends TestCase {
 			db.destroyDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
-			assertTrue(false);
+			fail("Exception occured:" + e.getMessage());
 		}
 	}
 
