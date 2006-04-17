@@ -22,7 +22,7 @@ import java.rmi.RemoteException;
  */
 public class <%=serviceName%>Impl implements <%=serviceName%>I{
 	
-	public <%=serviceName%>Impl(){
+	public <%=serviceName%>Impl() throws java.rmi.RemoteException{
 	
 	}
 
