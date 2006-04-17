@@ -356,7 +356,6 @@
 		<mkdir dir="${junit.results.dir}" />
 		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true">
 			<sysproperty key="basedir" value="${basedir}" />
-			<jvmarg value="-Xmx512M" />
 			<jvmarg value="-Dbuild.dir=${build.dir}" />
 			<jvmarg value="-Djava.endorsed.dirs=${ext.endorsed.dir}" />
 			<classpath>
