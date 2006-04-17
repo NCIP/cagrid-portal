@@ -303,7 +303,7 @@ public class AddPermissionWindow extends GridPortalComponent {
 	private synchronized void syncServices() {
 		String service = ((GTSServiceListComboBox) getGts()).getSelectedService();
 		try {
-			int length = permissionPanel.syncWithService(service);
+			 permissionPanel.syncWithService(service);
 		} catch (Exception e) {
 			e.printStackTrace();
 			PortalUtils.showErrorMessage(e);
