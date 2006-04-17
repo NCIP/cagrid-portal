@@ -2,6 +2,8 @@ To Do:
 
 Try to create a new service on the desktop and throws an error
 
+theres no way to change a method to void once you've set a return type
+
 metadata type panel isnt updating when you add new schemas from the types tab
 
 Need to make Configuration Menu work... should be able to set appropriate services URLs, etc
