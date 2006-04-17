@@ -1261,7 +1261,7 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private NamespacesJTree getNamespaceJTree() {
 		if (namespaceJTree == null) {
-			namespaceJTree = new NamespacesJTree(introService.getNamespaces());
+			namespaceJTree = new NamespacesJTree(introService.getNamespaces(),true);
 			namespaceJTree.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
 				public void valueChanged(javax.swing.event.TreeSelectionEvent e) {
 					DefaultMutableTreeNode node = getNamespaceJTree().getCurrentNode();
@@ -1388,7 +1388,7 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private NamespacesJTree getMetadataNamespacesJTree() {
 		if (metadataNamespacesJTree == null) {
-			metadataNamespacesJTree = new NamespacesJTree(introService.getNamespaces());
+			metadataNamespacesJTree = new NamespacesJTree(introService.getNamespaces(),false);
 			metadataNamespacesJTree.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					if (e.getClickCount() == 2) {

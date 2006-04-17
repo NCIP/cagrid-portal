@@ -857,7 +857,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private NamespacesJTree getInputNamespaceTypesJTree() {
 		if (inputNamespaceTypesJTree == null) {
-			inputNamespaceTypesJTree = new NamespacesJTree(info.getNamespaces());
+			inputNamespaceTypesJTree = new NamespacesJTree(info.getNamespaces(),true);
 			inputNamespaceTypesJTree.addMouseListener(new MouseListener() {
 
 				public void mouseReleased(MouseEvent e) {
@@ -971,7 +971,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private NamespacesJTree getOutputNamespacesJTree() {
 		if (outputNamespacesJTree == null) {
-			outputNamespacesJTree = new NamespacesJTree(info.getNamespaces());
+			outputNamespacesJTree = new NamespacesJTree(info.getNamespaces(),true);
 			outputNamespacesJTree.addMouseListener(new MouseListener() {
 
 				public void mouseClicked(MouseEvent e) {

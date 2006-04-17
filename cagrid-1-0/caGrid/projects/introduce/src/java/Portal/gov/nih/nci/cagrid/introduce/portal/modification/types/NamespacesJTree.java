@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.types;
 
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 
@@ -17,9 +18,11 @@ public class NamespacesJTree extends JTree {
 	NamespacesTypeTreeNode root;
 	DefaultTreeModel model;
 	NamespacesType namespaces;
+	boolean showW3CSimpleTypes = true;
 
 
-	public NamespacesJTree(NamespacesType namespaces) {
+	public NamespacesJTree(NamespacesType namespaces, boolean showW3CSimpleTypes) {
+		this.showW3CSimpleTypes = showW3CSimpleTypes;
 		setCellRenderer(new NamespacesTreeRenderer(model));
 		setNamespaces(namespaces);
 	}
@@ -30,14 +33,20 @@ public class NamespacesJTree extends JTree {
 			for (int i = 0; i < namespaces.getNamespace().length; i++) {
 				if (!checkTypeExists(namespaces.getNamespace(i))) {
 					NamespaceTypeTreeNode newNode = new NamespaceTypeTreeNode(namespaces.getNamespace(i), model);
-					model.insertNodeInto(newNode, root, root.getChildCount());
+					if (namespaces.getNamespace(i).getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
+						if (showW3CSimpleTypes) {
+							model.insertNodeInto(newNode, root, root.getChildCount());
+						}
+					} else {
+						model.insertNodeInto(newNode, root, root.getChildCount());
+					}
 				}
 			}
 		}
 		expandAll(true);
 	}
-	
-	
+
+
 	public void setNamespaces(NamespacesType ns) {
 		this.root = new NamespacesTypeTreeNode();
 		this.model = new DefaultTreeModel(root, false);
@@ -116,8 +125,7 @@ public class NamespacesJTree extends JTree {
 				namespaces.setNamespace(null);
 			}
 		}
-		
-		
+
 		if (currentNode != null) {
 			model.removeNodeFromParent(currentNode);
 		}
