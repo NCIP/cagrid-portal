@@ -1,10 +1,20 @@
 To Do:
 
+Try to create a new service on the desktop and throws an error
+
 metadata type panel isnt updating when you add new schemas from the types tab
 
 Need to make Configuration Menu work... should be able to set appropriate services URLs, etc
 
+parameter names and not being made unique when you add them... double click "string" twice as an input param
+
 need to make jndi edited, not replaced everytime.
+
+introduce build needs to make more granular jars (for linking), how about:
+	-caGrid-introduce-core-1.0.jar  		(everything in src/java/Introduce) 
+	-caGrid-introduce-core-tests-1.0.jar  	(everything in test/src/java/Introduce)
+	-caGrid-introduce-portal-1.0.jar  		(everything in src/java/Portal)
+	-caGrid-introduce-portal-tests-1.0.jar 	(everything in test/src/java/Portal)
 
 (steve)
 Open a service with no security. Go to service security, click custom, check all the options for secure communication.  Go to authz tab, select grid map.
@@ -43,16 +53,6 @@ support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
 ==========
-
-
-(DONE) introduce build needs to make more granular jars (for linking), how about:
-	-caGrid-introduce-core-1.0.jar  		(everything in src/java/Introduce) 
-	-caGrid-introduce-core-tests-1.0.jar  	(everything in test/src/java/Introduce)
-	-caGrid-introduce-portal-1.0.jar  		(everything in src/java/Portal)
-	-caGrid-introduce-portal-tests-1.0.jar 	(everything in test/src/java/Portal)
-
-(DONE the validator will show you the error when you click done) parameter names and not being made unique when you add them... double click "string" twice as an input param
-
 (DONE) introduce lets you select an XSD simpletype as metadata... that doesnt work.
 
 (DONE only needed for params)need "Up" and "Down" buttons for the order of the tables (operations, method params, etc)
