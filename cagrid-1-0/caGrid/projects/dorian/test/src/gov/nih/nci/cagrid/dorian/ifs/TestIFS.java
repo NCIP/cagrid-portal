@@ -60,7 +60,7 @@ public class TestIFS extends TestCase {
 
 	private static final int SHORT_PROXY_VALID = 2;
 
-	private static final int SHORT_CREDENTIALS_VALID = 10;
+	private static final int SHORT_CREDENTIALS_VALID = 5;
 
 	public final static String EMAIL_NAMESPACE = "http://cagrid.nci.nih.gov/email";
 
@@ -232,9 +232,13 @@ public class TestIFS extends TestCase {
 				.getSubjectDN().getName(), idp.getIdp().getId(), conf.getInitialUser().getUID()));
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
+			//give a chance for others to run right before we enter timing sensitive code
+			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+			Thread.currentThread().yield();
 			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
 			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
 			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username).getUserStatus(), IFSUserStatus.Active);
+
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
 			try {
 				KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
@@ -245,7 +249,6 @@ public class TestIFS extends TestCase {
 
 			}
 			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username).getUserStatus(), IFSUserStatus.Expired);
-
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
@@ -291,6 +294,9 @@ public class TestIFS extends TestCase {
 				.getSubjectDN().getName(), idp.getIdp().getId(), conf.getInitialUser().getUID()));
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
+			//give a chance for others to run right before we enter timing sensitive code
+			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+			Thread.currentThread().yield();
 			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
 			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
 			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username).getUserStatus(), IFSUserStatus.Active);
@@ -334,8 +340,10 @@ public class TestIFS extends TestCase {
 			usr.setUserStatus(IFSUserStatus.Active);
 			ifs.updateUser(gridId, usr);
 			ProxyLifetime lifetime = getProxyLifetimeShort();
+			//give a chance for others to run right before we enter timing sensitive code
+			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+			Thread.currentThread().yield();
 			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
-
 			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
 			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username).getUserStatus(), IFSUserStatus.Active);
 			IFSUser before = ifs.getUser(gridId, idp.getIdp().getId(), username);
