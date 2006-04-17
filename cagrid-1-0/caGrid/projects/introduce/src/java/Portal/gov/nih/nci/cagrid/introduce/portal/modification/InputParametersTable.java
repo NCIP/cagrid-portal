@@ -3,7 +3,6 @@ package gov.nih.nci.cagrid.introduce.portal.modification;
 import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 
 import java.util.Vector;
 
