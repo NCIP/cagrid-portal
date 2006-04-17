@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault;
+import gov.nih.nci.cagrid.gts.stubs.InvalidTrustLevelFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault;
 
@@ -71,6 +72,20 @@ public class GTS implements TrustLevelStatus, TrustLevelLookup {
 		IllegalTrustLevelFault, PermissionDeniedFault {
 		checkServiceAdministrator(callerGridIdentity);
 		levels.addTrustLevel(level);
+	}
+
+
+	public void removeTrustLevel(String name, String callerGridIdentity) throws GTSInternalFault,
+		InvalidTrustLevelFault, IllegalTrustLevelFault, PermissionDeniedFault {
+		checkServiceAdministrator(callerGridIdentity);
+		levels.removeTrustLevel(name);
+	}
+
+
+	public void updateTrustLevel(TrustLevel level, String callerGridIdentity) throws GTSInternalFault,
+		InvalidTrustLevelFault, PermissionDeniedFault {
+		checkServiceAdministrator(callerGridIdentity);
+		levels.updateTrustLevel(level);
 	}
 
 

@@ -240,6 +240,7 @@ public class TrustLevelManager {
 				String trust = "CREATE TABLE " + TRUST_LEVELS + " (" + "NAME VARCHAR(255) NOT NULL PRIMARY KEY,"
 					+ "DESCRIPTION TEXT, INDEX document_index (NAME));";
 				db.update(trust);
+				/*
 				try {
 					TrustLevel levelA = new TrustLevel();
 					levelA.setName("Level A");
@@ -258,6 +259,7 @@ public class TrustLevelManager {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				*/
 			}
 			dbBuilt = true;
 		}

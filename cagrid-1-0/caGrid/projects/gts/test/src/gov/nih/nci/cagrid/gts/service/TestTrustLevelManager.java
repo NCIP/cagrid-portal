@@ -31,20 +31,26 @@ public class TestTrustLevelManager extends TestCase implements TrustLevelStatus 
 
 
 	public void testCreateAndDestroy() {
+		TrustLevelManager trust = new TrustLevelManager(this, db);
 		try {
-			TrustLevelManager trust = new TrustLevelManager(this, db);
 			trust.buildDatabase();
 			trust.destroy();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
+		} finally {
+			try {
+				trust.destroy();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 
 	public void testAddRemoveTrustLevel() {
+		TrustLevelManager trust = new TrustLevelManager(this, db);
 		try {
-			TrustLevelManager trust = new TrustLevelManager(this, db);
 			TrustLevel level = new TrustLevel();
 			level.setName("One");
 			level.setDescription("Trust Level One");
@@ -58,13 +64,19 @@ public class TestTrustLevelManager extends TestCase implements TrustLevelStatus 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
+		} finally {
+			try {
+				trust.destroy();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 
 	public void testAddIllegalTrustLevel() {
+		TrustLevelManager trust = new TrustLevelManager(this, db);
 		try {
-			TrustLevelManager trust = new TrustLevelManager(this, db);
 			TrustLevel level = new TrustLevel();
 			level.setName("One");
 			level.setDescription("Trust Level One");
@@ -99,13 +111,19 @@ public class TestTrustLevelManager extends TestCase implements TrustLevelStatus 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
+		} finally {
+			try {
+				trust.destroy();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 
 	public void testRemoveIllegalTrustLevel() {
+		TrustLevelManager trust = new TrustLevelManager(this, db);
 		try {
-			TrustLevelManager trust = new TrustLevelManager(this, db);
 			TrustLevel level = new TrustLevel();
 			level.setName("One");
 			level.setDescription("Trust Level One");
@@ -144,14 +162,20 @@ public class TestTrustLevelManager extends TestCase implements TrustLevelStatus 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
+		} finally {
+			try {
+				trust.destroy();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 	}
 
 
 	public void testAddGetUpdateRemoveTrustLevels() {
+		TrustLevelManager trust = new TrustLevelManager(this, db);
 		try {
-			TrustLevelManager trust = new TrustLevelManager(this, db);
 			int size = 5;
 			TrustLevel[] level = new TrustLevel[size];
 			for (int i = 0; i < size; i++) {
@@ -171,7 +195,7 @@ public class TestTrustLevelManager extends TestCase implements TrustLevelStatus 
 			int count = size;
 			for (int i = 0; i < size; i++) {
 				trust.removeTrustLevel(level[i].getName());
-				count  = count - 1;
+				count = count - 1;
 				assertEquals(count, trust.getTrustLevels().length);
 				assertEquals(false, trust.doesTrustedLevelExist(level[i].getName()));
 			}
@@ -180,6 +204,12 @@ public class TestTrustLevelManager extends TestCase implements TrustLevelStatus 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
+		} finally {
+			try {
+				trust.destroy();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

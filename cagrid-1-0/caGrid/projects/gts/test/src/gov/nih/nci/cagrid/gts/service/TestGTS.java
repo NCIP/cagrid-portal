@@ -392,8 +392,53 @@ public class TestGTS extends TestCase {
 			}
 		}
 	}
+	/*
+	public void testAddGetUpdateRemoveTrustLevels() {
+		GTS gts = null;
+		try {
+			GTSConfiguration conf = Utils.getGTSConfiguration();
+			PermissionBootstapper pb = new PermissionBootstapper(conf);
+			pb.addAdminUser(ADMIN_USER);
+			gts = new GTS(conf, "localhost");
+			int size = 5;
+			TrustLevel[] level = new TrustLevel[size];
+			for (int i = 0; i < size; i++) {
+				level[i] = new TrustLevel();
+				level[i].setName("Level " + i);
+				level[i].setDescription("Trust Level " + i);
+				trust.addTrustLevel(level[i]);
+				assertEquals((i + 1), trust.getTrustLevels().length);
+				assertEquals(true, trust.doesTrustedLevelExist(level[i].getName()));
+				assertEquals(level[i], trust.getTrustLevel(level[i].getName()));
+				level[i].setDescription("Updated Trust Level " + i);
+				trust.updateTrustLevel(level[i]);
+				assertEquals((i + 1), trust.getTrustLevels().length);
+				assertEquals(true, trust.doesTrustedLevelExist(level[i].getName()));
+				assertEquals(level[i], trust.getTrustLevel(level[i].getName()));
+			}
+			int count = size;
+			for (int i = 0; i < size; i++) {
+				trust.removeTrustLevel(level[i].getName());
+				count = count - 1;
+				assertEquals(count, trust.getTrustLevels().length);
+				assertEquals(false, trust.doesTrustedLevelExist(level[i].getName()));
+			}
+			assertEquals(0, trust.getTrustLevels().length);
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			if (gts != null) {
+				try {
+					gts.destroy();
+				} catch (Exception e) {
+					FaultUtil.printFault(e);
+				}
+			}
+		}
+	}
 
-
+*/
 	public void testUpdateTrustedAuthority() {
 		GTS gts = null;
 		try {
