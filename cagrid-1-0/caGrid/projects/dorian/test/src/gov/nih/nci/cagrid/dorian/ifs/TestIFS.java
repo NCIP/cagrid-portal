@@ -710,6 +710,8 @@ public class TestIFS extends TestCase {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
 		}
+		//return the thread to normal priority for those tests which raise the thread priority
+		Thread.currentThread().setPriority(Thread.NORM_PRIORITY);
 	}
 
 
