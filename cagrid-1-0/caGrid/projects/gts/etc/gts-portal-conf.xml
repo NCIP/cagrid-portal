@@ -30,7 +30,7 @@
 	<resource name="GTSPortalConf" class="gov.nih.nci.cagrid.gts.portal.GTSPortalConf">
 		<gts-portal-config>
 		<gts-services>
-			<gts-service>https://irondale.bmi.ohio-state.edu:8443/wsrf/services/cagrid/GridTrustService</gts-service>
+			<gts-service>https://localhost:8443/wsrf/services/cagrid/GridTrustService</gts-service>
 		</gts-services>
         </gts-portal-config>
 	</resource>

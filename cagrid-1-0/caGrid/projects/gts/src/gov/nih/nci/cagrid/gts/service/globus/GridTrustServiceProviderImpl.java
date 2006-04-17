@@ -75,6 +75,69 @@ public class GridTrustServiceProviderImpl {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	public gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityResponse addTrustedAuthority(gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthority params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
 		gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityResponse();
 		boxedResult.setTrustedAuthority(impl.addTrustedAuthority(params.getTa().getTrustedAuthority()));
@@ -108,6 +171,21 @@ public class GridTrustServiceProviderImpl {
 	public gov.nih.nci.cagrid.gts.stubs.UpdateTrustedAuthorityResponse updateTrustedAuthority(gov.nih.nci.cagrid.gts.stubs.UpdateTrustedAuthority params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
 		gov.nih.nci.cagrid.gts.stubs.UpdateTrustedAuthorityResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.UpdateTrustedAuthorityResponse();
 		impl.updateTrustedAuthority(params.getTa().getTrustedAuthority());
+		return boxedResult;
+	}
+	public gov.nih.nci.cagrid.gts.stubs.AddTrustLevelResponse addTrustLevel(gov.nih.nci.cagrid.gts.stubs.AddTrustLevel params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault {
+		gov.nih.nci.cagrid.gts.stubs.AddTrustLevelResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.AddTrustLevelResponse();
+		impl.addTrustLevel();
+		return boxedResult;
+	}
+	public gov.nih.nci.cagrid.gts.stubs.UpdateTrustLevelResponse updateTrustLevel(gov.nih.nci.cagrid.gts.stubs.UpdateTrustLevel params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.InvalidTrustLevelFault {
+		gov.nih.nci.cagrid.gts.stubs.UpdateTrustLevelResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.UpdateTrustLevelResponse();
+		impl.updateTrustLevel();
+		return boxedResult;
+	}
+	public gov.nih.nci.cagrid.gts.stubs.GetTrustLevelsResponse getTrustLevels(gov.nih.nci.cagrid.gts.stubs.GetTrustLevels params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault {
+		gov.nih.nci.cagrid.gts.stubs.GetTrustLevelsResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.GetTrustLevelsResponse();
+		boxedResult.setTrustLevel(impl.getTrustLevels());
 		return boxedResult;
 	}
 

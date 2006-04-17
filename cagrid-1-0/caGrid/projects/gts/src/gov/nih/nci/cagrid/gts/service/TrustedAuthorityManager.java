@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.gts.service;
 
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gts.bean.Status;
-import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
 import gov.nih.nci.cagrid.gts.common.Database;
@@ -39,11 +38,14 @@ public class TrustedAuthorityManager {
 
 	private String gtsURI;
 
+	private TrustLevelLookup lookup;
 
-	public TrustedAuthorityManager(String gtsURI, Database db) {
+
+	public TrustedAuthorityManager(String gtsURI, TrustLevelLookup lookup, Database db) {
 		logger = Logger.getLogger(this.getClass().getName());
 		this.gtsURI = gtsURI;
 		this.db = db;
+		this.lookup = lookup;
 	}
 
 
@@ -103,7 +105,7 @@ public class TrustedAuthorityManager {
 			while (rs.next()) {
 				TrustedAuthority ta = new TrustedAuthority();
 				ta.setTrustedAuthorityName(rs.getString("NAME"));
-				ta.setTrustLevel(TrustLevel.fromValue(rs.getString("TRUST_LEVEL")));
+				ta.setTrustLevel(rs.getString("TRUST_LEVEL"));
 				ta.setStatus(Status.fromValue(rs.getString("STATUS")));
 				ta.setIsAuthority(Boolean.valueOf(rs.getBoolean("IS_AUTHORITY")));
 				ta.setAuthorityTrustService(rs.getString("AUTHORITY"));
@@ -179,7 +181,13 @@ public class TrustedAuthorityManager {
 		}
 
 		if ((ta.getTrustLevel() != null) && (!ta.getTrustLevel().equals(curr.getTrustLevel()))) {
-			buildUpdate(needsUpdate, sql, "TRUST_LEVEL", ta.getTrustLevel().getValue());
+			if (!lookup.doesTrustLevelExist(ta.getTrustLevel())) {
+				IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
+				fault.setFaultString("The Trusted Authority " + ta.getTrustedAuthorityName()
+					+ " could not be updated, the trust level " + ta.getTrustLevel() + " does not exist.");
+				throw fault;
+			}
+			buildUpdate(needsUpdate, sql, "TRUST_LEVEL", ta.getTrustLevel());
 			needsUpdate = true;
 		}
 
@@ -242,7 +250,7 @@ public class TrustedAuthorityManager {
 			if (rs.next()) {
 				TrustedAuthority ta = new TrustedAuthority();
 				ta.setTrustedAuthorityName(rs.getString("NAME"));
-				ta.setTrustLevel(TrustLevel.fromValue(rs.getString("TRUST_LEVEL")));
+				ta.setTrustLevel(rs.getString("TRUST_LEVEL"));
 				ta.setStatus(Status.fromValue(rs.getString("STATUS")));
 				ta.setIsAuthority(Boolean.valueOf(rs.getBoolean("IS_AUTHORITY")));
 				ta.setAuthorityTrustService(rs.getString("AUTHORITY"));
@@ -347,6 +355,13 @@ public class TrustedAuthorityManager {
 			fault.setFaultString("No trust level specified for the Trusted Authority!!!");
 			throw fault;
 		}
+		
+		if (!lookup.doesTrustLevelExist(ta.getTrustLevel())) {
+			IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
+			fault.setFaultString("The Trusted Authority " + ta.getTrustedAuthorityName()
+				+ " could not be added, the trust level " + ta.getTrustLevel() + " does not exist.");
+			throw fault;
+		}
 
 		// TODO: MAY NEED TO RESET STATUS BASED ON USER PERMISSION
 
@@ -380,10 +395,9 @@ public class TrustedAuthorityManager {
 		try {
 
 			insert.append("INSERT INTO " + TRUSTED_AUTHORITIES_TABLE + " SET NAME='" + ta.getTrustedAuthorityName()
-				+ "',CERTIFICATE_DN='" + cert.getSubjectDN().toString() + "',TRUST_LEVEL='"
-				+ ta.getTrustLevel().getValue() + "', STATUS='" + ta.getStatus().getValue() + "', IS_AUTHORITY='"
-				+ isAuthority + "',AUTHORITY='" + gtsURI + "', CERTIFICATE='"
-				+ ta.getCertificate().getCertificateEncodedString() + "'");
+				+ "',CERTIFICATE_DN='" + cert.getSubjectDN().toString() + "',TRUST_LEVEL='" + ta.getTrustLevel()
+				+ "', STATUS='" + ta.getStatus().getValue() + "', IS_AUTHORITY='" + isAuthority + "',AUTHORITY='"
+				+ gtsURI + "', CERTIFICATE='" + ta.getCertificate().getCertificateEncodedString() + "'");
 
 			if (crl != null) {
 				insert.append(",CRL='" + ta.getCRL().getCrlEncodedString() + "'");

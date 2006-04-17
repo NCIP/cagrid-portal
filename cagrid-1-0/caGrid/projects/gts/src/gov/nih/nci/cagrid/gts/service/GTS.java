@@ -2,11 +2,13 @@ package gov.nih.nci.cagrid.gts.service;
 
 import gov.nih.nci.cagrid.gts.bean.Permission;
 import gov.nih.nci.cagrid.gts.bean.PermissionFilter;
+import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
 import gov.nih.nci.cagrid.gts.common.Database;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
+import gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault;
@@ -20,19 +22,21 @@ import gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault;
  * @version $Id: TrustedAuthorityManager.java,v 1.1 2006/03/08 19:48:46 langella
  *          Exp $
  */
-public class GTS {
+public class GTS implements TrustLevelStatus, TrustLevelLookup {
 
 	private GTSConfiguration conf;
 	private String gtsURI;
 	private TrustedAuthorityManager trust;
 	private PermissionManager permissions;
+	private TrustLevelManager levels;
 
 
 	public GTS(GTSConfiguration conf, String gtsURI) {
 		this.conf = conf;
 		this.gtsURI = gtsURI;
 		Database db = new Database(this.conf.getConnectionManager(), this.conf.getGTSInternalId());
-		trust = new TrustedAuthorityManager(this.gtsURI, db);
+		trust = new TrustedAuthorityManager(this.gtsURI, this, db);
+		levels = new TrustLevelManager(this, db);
 		permissions = new PermissionManager(db);
 	}
 
@@ -60,6 +64,18 @@ public class GTS {
 		InvalidTrustedAuthorityFault, PermissionDeniedFault {
 		checkServiceAdministrator(callerGridIdentity);
 		trust.removeTrustedAuthority(name);
+	}
+
+
+	public void addTrustLevel(TrustLevel level, String callerGridIdentity) throws GTSInternalFault,
+		IllegalTrustLevelFault, PermissionDeniedFault {
+		checkServiceAdministrator(callerGridIdentity);
+		levels.addTrustLevel(level);
+	}
+
+
+	public TrustLevel[] getTrustLevels() throws GTSInternalFault {
+		return levels.getTrustLevels();
 	}
 
 
@@ -105,6 +121,28 @@ public class GTS {
 	public void destroy() throws GTSInternalFault {
 		trust.destroy();
 		permissions.destroy();
+		levels.destroy();
+	}
+
+
+	public boolean isTrustLevelUsed(String name) throws GTSInternalFault {
+		TrustedAuthorityFilter f = new TrustedAuthorityFilter();
+		f.setTrustLevel(name);
+		TrustedAuthority[] ta = this.findTrustAuthorities(f);
+		if ((ta == null) || (ta.length == 0)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+
+	public boolean doesTrustLevelExist(String name) throws GTSInternalFault {
+		if (levels.doesTrustedLevelExist(name)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

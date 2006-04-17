@@ -13,6 +13,7 @@ import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
 import gov.nih.nci.cagrid.gts.bean.X509CRL;
 import gov.nih.nci.cagrid.gts.bean.X509Certificate;
 import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
+import gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gts.test.CA;
 import gov.nih.nci.cagrid.gts.test.Utils;
@@ -35,6 +36,9 @@ import org.bouncycastle.asn1.x509.CRLReason;
 public class TestGTS extends TestCase {
 
 	private final static String ADMIN_USER = "O=Test Organization,OU=Test Unit,CN=GTS Admin";
+
+	private final static String LEVEL_ONE = "ONE";
+	private final static String LEVEL_TWO = "TWO";
 
 
 	public void testCreateAndDestroy() {
@@ -69,13 +73,13 @@ public class TestGTS extends TestCase {
 			PermissionBootstapper pb = new PermissionBootstapper(conf);
 			pb.addAdminUser(ADMIN_USER);
 			assertEquals(1, gts.findPermissions(new PermissionFilter(), ADMIN_USER).length);
-
+			addTrustLevels(gts, ADMIN_USER);
 			CA ca = new CA();
 			TrustedAuthority ta = new TrustedAuthority();
 			ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
 			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 			ta.setStatus(Status.Trusted);
-			ta.setTrustLevel(TrustLevel.Five);
+			ta.setTrustLevel(LEVEL_ONE);
 
 			Permission userPerm = new Permission();
 			userPerm.setGridIdentity(user);
@@ -241,6 +245,53 @@ public class TestGTS extends TestCase {
 	}
 
 
+	public void testAddTrustedAuthorityInvalidLevel() {
+		GTS gts = null;
+		try {
+			GTSConfiguration conf = Utils.getGTSConfiguration();
+
+			gts = new GTS(conf, "localhost");
+			// Make sure we start fresh
+			gts.destroy();
+			PermissionBootstapper pb = new PermissionBootstapper(conf);
+			pb.addAdminUser(ADMIN_USER);
+			addTrustLevels(gts, ADMIN_USER);
+			CA ca = new CA();
+			BigInteger sn = new BigInteger(String.valueOf(System.currentTimeMillis()));
+			CRLEntry entry = new CRLEntry(sn, CRLReason.PRIVILEGE_WITHDRAWN);
+			ca.updateCRL(entry);
+			TrustedAuthority ta = new TrustedAuthority();
+			ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
+			ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
+			ta.setStatus(Status.Trusted);
+			ta.setTrustLevel("INVALID_LEVEL");
+
+			try {
+				gts.addTrustedAuthority(ta, ADMIN_USER);
+				fail("Should not to be able to add a trusted authority with and invalid trust level!!!");
+			} catch (IllegalTrustedAuthorityFault f) {
+
+			}
+			assertEquals(0, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+
+			gts.destroy();
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			if (gts != null) {
+				try {
+					gts.destroy();
+				} catch (Exception e) {
+					FaultUtil.printFault(e);
+				}
+			}
+		}
+
+	}
+
+
 	public void testAddTrustedAuthority() {
 		GTS gts = null;
 		try {
@@ -252,6 +303,7 @@ public class TestGTS extends TestCase {
 			String user = "O=Test Organization,OU=Test Unit,CN=User";
 			PermissionBootstapper pb = new PermissionBootstapper(conf);
 			pb.addAdminUser(ADMIN_USER);
+			addTrustLevels(gts, ADMIN_USER);
 			CA ca = new CA();
 			BigInteger sn = new BigInteger(String.valueOf(System.currentTimeMillis()));
 			CRLEntry entry = new CRLEntry(sn, CRLReason.PRIVILEGE_WITHDRAWN);
@@ -261,7 +313,7 @@ public class TestGTS extends TestCase {
 			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 			ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 			ta.setStatus(Status.Trusted);
-			ta.setTrustLevel(TrustLevel.Five);
+			ta.setTrustLevel(LEVEL_ONE);
 
 			// Test null
 			try {
@@ -315,7 +367,7 @@ public class TestGTS extends TestCase {
 			ta2.setTrustedAuthorityName(ca2.getCertificate().getSubjectDN().toString());
 			ta2.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca2.getCertificate())));
 			ta2.setStatus(Status.Trusted);
-			ta2.setTrustLevel(TrustLevel.Five);
+			ta2.setTrustLevel(LEVEL_ONE);
 
 			try {
 				gts.addTrustedAuthority(ta, user);
@@ -353,6 +405,7 @@ public class TestGTS extends TestCase {
 			String user = "O=Test Organization,OU=Test Unit,CN=User";
 			PermissionBootstapper pb = new PermissionBootstapper(conf);
 			pb.addAdminUser(ADMIN_USER);
+			addTrustLevels(gts, ADMIN_USER);
 			CA ca = new CA();
 			BigInteger sn = new BigInteger(String.valueOf(System.currentTimeMillis()));
 			CRLEntry entry = new CRLEntry(sn, CRLReason.PRIVILEGE_WITHDRAWN);
@@ -362,7 +415,7 @@ public class TestGTS extends TestCase {
 			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 			ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 			ta.setStatus(Status.Trusted);
-			ta.setTrustLevel(TrustLevel.Five);
+			ta.setTrustLevel(LEVEL_ONE);
 
 			ta = gts.addTrustedAuthority(ta, ADMIN_USER);
 			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
@@ -373,7 +426,7 @@ public class TestGTS extends TestCase {
 			ca.updateCRL(crlE);
 			updated.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 			updated.setStatus(Status.Pending);
-			updated.setTrustLevel(TrustLevel.Two);
+			updated.setTrustLevel(LEVEL_TWO);
 
 			// Test null
 			try {
@@ -451,7 +504,8 @@ public class TestGTS extends TestCase {
 			}
 		}
 	}
-	
+
+
 	public void testRemoveTrustedAuthority() {
 		GTS gts = null;
 		try {
@@ -463,6 +517,7 @@ public class TestGTS extends TestCase {
 			String user = "O=Test Organization,OU=Test Unit,CN=User";
 			PermissionBootstapper pb = new PermissionBootstapper(conf);
 			pb.addAdminUser(ADMIN_USER);
+			addTrustLevels(gts, ADMIN_USER);
 			CA ca = new CA();
 			BigInteger sn = new BigInteger(String.valueOf(System.currentTimeMillis()));
 			CRLEntry entry = new CRLEntry(sn, CRLReason.PRIVILEGE_WITHDRAWN);
@@ -472,7 +527,7 @@ public class TestGTS extends TestCase {
 			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 			ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 			ta.setStatus(Status.Trusted);
-			ta.setTrustLevel(TrustLevel.Five);
+			ta.setTrustLevel(LEVEL_ONE);
 
 			ta = gts.addTrustedAuthority(ta, ADMIN_USER);
 			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
@@ -551,6 +606,16 @@ public class TestGTS extends TestCase {
 				}
 			}
 		}
+	}
+
+
+	private void addTrustLevels(GTS gts, String gridId) throws Exception {
+		TrustLevel l1 = new TrustLevel();
+		l1.setName(LEVEL_ONE);
+		TrustLevel l2 = new TrustLevel();
+		l2.setName(LEVEL_TWO);
+		gts.addTrustLevel(l1, gridId);
+		gts.addTrustLevel(l2, gridId);
 	}
 
 

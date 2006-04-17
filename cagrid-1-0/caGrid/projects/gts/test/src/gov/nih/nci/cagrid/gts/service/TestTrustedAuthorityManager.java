@@ -4,12 +4,12 @@ import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.gridca.common.CRLEntry;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gts.bean.Status;
-import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
 import gov.nih.nci.cagrid.gts.bean.X509CRL;
 import gov.nih.nci.cagrid.gts.bean.X509Certificate;
 import gov.nih.nci.cagrid.gts.common.Database;
+import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault;
 import gov.nih.nci.cagrid.gts.test.CA;
@@ -21,6 +21,7 @@ import junit.framework.TestCase;
 
 import org.bouncycastle.asn1.x509.CRLReason;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -28,14 +29,18 @@ import org.bouncycastle.asn1.x509.CRLReason;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class TestTrustedAuthorityManager extends TestCase {
+public class TestTrustedAuthorityManager extends TestCase implements TrustLevelLookup {
+
+	private final static String LEVEL_ONE = "ONE";
+	private final static String LEVEL_TWO = "TWO";
+	private final static String LEVEL_THREE = "THREE";
 
 	private Database db;
 
+
 	public void testCreateAndDestroy() {
 		try {
-			TrustedAuthorityManager trust = new TrustedAuthorityManager(
-					"localhost", db);
+			TrustedAuthorityManager trust = new TrustedAuthorityManager("localhost", this, db);
 			trust.buildDatabase();
 			trust.destroy();
 		} catch (Exception e) {
@@ -44,51 +49,44 @@ public class TestTrustedAuthorityManager extends TestCase {
 		}
 	}
 
+
 	public void testAddTrustedAuthorityWithCRL() {
 		try {
-			TrustedAuthorityManager trust = new TrustedAuthorityManager(
-					"localhost", db);
+			TrustedAuthorityManager trust = new TrustedAuthorityManager("localhost", this, db);
 			CA ca = new CA();
-			BigInteger sn = new BigInteger(String.valueOf(System
-					.currentTimeMillis()));
+			BigInteger sn = new BigInteger(String.valueOf(System.currentTimeMillis()));
 			CRLEntry entry = new CRLEntry(sn, CRLReason.PRIVILEGE_WITHDRAWN);
 			ca.updateCRL(entry);
 			TrustedAuthority ta = new TrustedAuthority();
-			ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN()
-					.toString());
-			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca
-					.getCertificate())));
+			ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 			ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 			ta.setStatus(Status.Trusted);
-			ta.setTrustLevel(TrustLevel.Five);
+			ta.setTrustLevel(LEVEL_ONE);
 			trust.addTrustedAuthority(ta);
-			assertEquals(ta, trust.getTrustedAuthority(ta
-					.getTrustedAuthorityName()));
+			assertEquals(ta, trust.getTrustedAuthority(ta.getTrustedAuthorityName()));
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
 		}
 	}
 
+
 	public void testAddTrustedAuthorityWithInvalidCRL() {
 		try {
-			TrustedAuthorityManager trust = new TrustedAuthorityManager(
-					"localhost", db);
+			TrustedAuthorityManager trust = new TrustedAuthorityManager("localhost", this, db);
 			CA ca = new CA();
 			CA ca2 = new CA();
-			BigInteger sn = new BigInteger(String.valueOf(System
-					.currentTimeMillis()));
+			BigInteger sn = new BigInteger(String.valueOf(System.currentTimeMillis()));
 			CRLEntry entry = new CRLEntry(sn, CRLReason.PRIVILEGE_WITHDRAWN);
 			ca2.updateCRL(entry);
 			try {
 				TrustedAuthority ta = new TrustedAuthority();
-				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN()
-						.toString());
-				ta.setCertificate(new X509Certificate(CertUtil
-						.writeCertificate(ca.getCertificate())));
+				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 				ta.setCRL(new X509CRL(CertUtil.writeCRL(ca2.getCRL())));
 				ta.setStatus(Status.Trusted);
-				ta.setTrustLevel(TrustLevel.Five);
+				ta.setTrustLevel(LEVEL_ONE);
 				trust.addTrustedAuthority(ta);
 				fail("Did not generate error when an invalidly signed CRL was provided.");
 			} catch (IllegalTrustedAuthorityFault f) {
@@ -100,19 +98,31 @@ public class TestTrustedAuthorityManager extends TestCase {
 		}
 	}
 
+
 	public void testAddInvalidTrustedAuthority() {
 		try {
-			TrustedAuthorityManager trust = new TrustedAuthorityManager(
-					"localhost", db);
+			TrustedAuthorityManager trust = new TrustedAuthorityManager("localhost", this, db);
 			CA ca = new CA();
+			
+			//Invalid Trust Level
+			try {
+				TrustedAuthority ta = new TrustedAuthority();
+				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
+				ta.setStatus(Status.Trusted);
+				ta.setTrustLevel("INVALID_LEVEL");
+				trust.addTrustedAuthority(ta);
+				fail("Did not generate error when an invalid Trusted Authority was provided.");
+			} catch (IllegalTrustedAuthorityFault f) {
+
+			}
 
 			// No Certificate
 			try {
 				TrustedAuthority ta = new TrustedAuthority();
-				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN()
-						.toString());
+				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
 				ta.setStatus(Status.Trusted);
-				ta.setTrustLevel(TrustLevel.Five);
+				ta.setTrustLevel(LEVEL_ONE);
 				trust.addTrustedAuthority(ta);
 				fail("Did not generate error when an invalidl Trusted Authority was provided.");
 			} catch (IllegalTrustedAuthorityFault f) {
@@ -121,11 +131,9 @@ public class TestTrustedAuthorityManager extends TestCase {
 			// No Status
 			try {
 				TrustedAuthority ta = new TrustedAuthority();
-				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN()
-						.toString());
-				ta.setCertificate(new X509Certificate(CertUtil
-						.writeCertificate(ca.getCertificate())));
-				ta.setTrustLevel(TrustLevel.Five);
+				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
+				ta.setTrustLevel(LEVEL_ONE);
 				trust.addTrustedAuthority(ta);
 				fail("Did not generate error when an invalidl Trusted Authority was provided.");
 			} catch (IllegalTrustedAuthorityFault f) {
@@ -135,10 +143,8 @@ public class TestTrustedAuthorityManager extends TestCase {
 			// No Trust Level
 			try {
 				TrustedAuthority ta = new TrustedAuthority();
-				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN()
-						.toString());
-				ta.setCertificate(new X509Certificate(CertUtil
-						.writeCertificate(ca.getCertificate())));
+				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 				ta.setStatus(Status.Trusted);
 				trust.addTrustedAuthority(ta);
 				fail("Did not generate error when an invalidl Trusted Authority was provided.");
@@ -151,47 +157,40 @@ public class TestTrustedAuthorityManager extends TestCase {
 		}
 	}
 
+
 	public void testAddTrustedAuthorityNoCRL() {
 		try {
-			TrustedAuthorityManager trust = new TrustedAuthorityManager(
-					"localhost", db);
+			TrustedAuthorityManager trust = new TrustedAuthorityManager("localhost", this, db);
 			CA ca = new CA();
 			TrustedAuthority ta = new TrustedAuthority();
-			ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN()
-					.toString());
-			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca
-					.getCertificate())));
+			ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 			ta.setStatus(Status.Trusted);
-			ta.setTrustLevel(TrustLevel.Five);
+			ta.setTrustLevel(LEVEL_ONE);
 			trust.addTrustedAuthority(ta);
-			assertEquals(ta, trust.getTrustedAuthority(ta
-					.getTrustedAuthorityName()));
+			assertEquals(ta, trust.getTrustedAuthority(ta.getTrustedAuthorityName()));
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
 		}
 	}
 
+
 	public void testRemoveTrustedAuthority() {
 		try {
-			TrustedAuthorityManager trust = new TrustedAuthorityManager(
-					"localhost", db);
+			TrustedAuthorityManager trust = new TrustedAuthorityManager("localhost", this, db);
 			CA ca = new CA();
-			BigInteger sn = new BigInteger(String.valueOf(System
-					.currentTimeMillis()));
+			BigInteger sn = new BigInteger(String.valueOf(System.currentTimeMillis()));
 			CRLEntry entry = new CRLEntry(sn, CRLReason.PRIVILEGE_WITHDRAWN);
 			ca.updateCRL(entry);
 			TrustedAuthority ta = new TrustedAuthority();
-			ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN()
-					.toString());
-			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca
-					.getCertificate())));
+			ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 			ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 			ta.setStatus(Status.Trusted);
-			ta.setTrustLevel(TrustLevel.Five);
+			ta.setTrustLevel(LEVEL_ONE);
 			trust.addTrustedAuthority(ta);
-			assertEquals(ta, trust.getTrustedAuthority(ta
-					.getTrustedAuthorityName()));
+			assertEquals(ta, trust.getTrustedAuthority(ta.getTrustedAuthorityName()));
 			trust.removeTrustedAuthority(ta.getTrustedAuthorityName());
 			try {
 				trust.getTrustedAuthority(ta.getTrustedAuthorityName());
@@ -212,10 +211,10 @@ public class TestTrustedAuthorityManager extends TestCase {
 		}
 	}
 
+
 	public void testFindTrustedAuthorities() {
 		try {
-			TrustedAuthorityManager trust = new TrustedAuthorityManager(
-					"localhost", db);
+			TrustedAuthorityManager trust = new TrustedAuthorityManager("localhost", this, db);
 			int count = 5;
 			String dnPrefix = "O=Organization ABC,OU=Unit XYZ,CN=Certificate Authority";
 			TrustedAuthority[] auths = new TrustedAuthority[count];
@@ -224,22 +223,18 @@ public class TestTrustedAuthorityManager extends TestCase {
 				CA ca = new CA(dn);
 				String name = ca.getCertificate().getSubjectDN().toString();
 
-				BigInteger sn = new BigInteger(String.valueOf(System
-						.currentTimeMillis()));
+				BigInteger sn = new BigInteger(String.valueOf(System.currentTimeMillis()));
 				CRLEntry entry = new CRLEntry(sn, CRLReason.PRIVILEGE_WITHDRAWN);
 				ca.updateCRL(entry);
 				auths[i] = new TrustedAuthority();
 				auths[i].setTrustedAuthorityName(name);
-				auths[i].setCertificate(new X509Certificate(CertUtil
-						.writeCertificate(ca.getCertificate())));
+				auths[i].setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 				auths[i].setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 				auths[i].setStatus(Status.Trusted);
-				auths[i].setTrustLevel(TrustLevel.Five);
+				auths[i].setTrustLevel(LEVEL_ONE);
 				trust.addTrustedAuthority(auths[i]);
-				assertEquals(auths[i], trust.getTrustedAuthority(auths[i]
-						.getTrustedAuthorityName()));
-				TrustedAuthority[] tas = trust
-						.findTrustAuthorities(new TrustedAuthorityFilter());
+				assertEquals(auths[i], trust.getTrustedAuthority(auths[i].getTrustedAuthorityName()));
+				TrustedAuthority[] tas = trust.findTrustAuthorities(new TrustedAuthorityFilter());
 				assertEquals(tas.length, (i + 1));
 
 				// Filter by name
@@ -270,10 +265,10 @@ public class TestTrustedAuthorityManager extends TestCase {
 
 				// Filter by Trust Level
 				TrustedAuthorityFilter tf4 = new TrustedAuthorityFilter();
-				tf4.setTrustLevel(TrustLevel.Five);
+				tf4.setTrustLevel(LEVEL_ONE);
 				TrustedAuthority[] tas4 = trust.findTrustAuthorities(tf4);
 				assertEquals((i + 1), tas4.length);
-				tf4.setTrustLevel(TrustLevel.Four);
+				tf4.setTrustLevel(LEVEL_TWO);
 				tas4 = trust.findTrustAuthorities(tf4);
 				assertEquals(0, tas4.length);
 
@@ -310,7 +305,7 @@ public class TestTrustedAuthorityManager extends TestCase {
 				tas7 = trust.findTrustAuthorities(tf7);
 				assertEquals(1, tas7.length);
 				assertEquals(auths[i], tas7[0]);
-				tf7.setTrustLevel(TrustLevel.Five);
+				tf7.setTrustLevel(LEVEL_ONE);
 				tas7 = trust.findTrustAuthorities(tf7);
 				assertEquals(1, tas7.length);
 				assertEquals(auths[i], tas7[0]);
@@ -330,17 +325,11 @@ public class TestTrustedAuthorityManager extends TestCase {
 			// Test Remove
 			int remaining = count;
 			for (int i = 0; i < count; i++) {
-				trust
-						.removeTrustedAuthority(auths[i]
-								.getTrustedAuthorityName());
+				trust.removeTrustedAuthority(auths[i].getTrustedAuthorityName());
 				remaining = remaining - 1;
-				assertEquals(
-						remaining,
-						trust
-								.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+				assertEquals(remaining, trust.findTrustAuthorities(new TrustedAuthorityFilter()).length);
 			}
-			assertEquals(0, trust
-					.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+			assertEquals(0, trust.findTrustAuthorities(new TrustedAuthorityFilter()).length);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
@@ -348,10 +337,10 @@ public class TestTrustedAuthorityManager extends TestCase {
 
 	}
 
+
 	public void testUpdateTrustedAuthorities() {
 		try {
-			TrustedAuthorityManager trust = new TrustedAuthorityManager(
-					"localhost", db);
+			TrustedAuthorityManager trust = new TrustedAuthorityManager("localhost", this, db);
 			int count = 5;
 			String dnPrefix = "O=Organization ABC,OU=Unit XYZ,CN=Certificate Authority";
 			TrustedAuthority[] auths = new TrustedAuthority[count];
@@ -360,22 +349,18 @@ public class TestTrustedAuthorityManager extends TestCase {
 				CA ca = new CA(dn);
 				String name = ca.getCertificate().getSubjectDN().toString();
 
-				BigInteger sn = new BigInteger(String.valueOf(System
-						.currentTimeMillis()));
+				BigInteger sn = new BigInteger(String.valueOf(System.currentTimeMillis()));
 				CRLEntry entry = new CRLEntry(sn, CRLReason.PRIVILEGE_WITHDRAWN);
 				ca.updateCRL(entry);
 				auths[i] = new TrustedAuthority();
 				auths[i].setTrustedAuthorityName(name);
-				auths[i].setCertificate(new X509Certificate(CertUtil
-						.writeCertificate(ca.getCertificate())));
+				auths[i].setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 				auths[i].setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 				auths[i].setStatus(Status.Trusted);
-				auths[i].setTrustLevel(TrustLevel.Five);
+				auths[i].setTrustLevel(LEVEL_ONE);
 				trust.addTrustedAuthority(auths[i]);
-				assertEquals(auths[i], trust.getTrustedAuthority(auths[i]
-						.getTrustedAuthorityName()));
-				TrustedAuthority[] tas = trust
-						.findTrustAuthorities(new TrustedAuthorityFilter());
+				assertEquals(auths[i], trust.getTrustedAuthority(auths[i].getTrustedAuthorityName()));
+				TrustedAuthority[] tas = trust.findTrustAuthorities(new TrustedAuthorityFilter());
 				assertEquals(tas.length, (i + 1));
 				TrustedAuthorityFilter f = new TrustedAuthorityFilter();
 				f.setTrustedAuthorityName(auths[i].getTrustedAuthorityName());
@@ -397,8 +382,7 @@ public class TestTrustedAuthorityManager extends TestCase {
 				// Test Changing the Certificate
 				TrustedAuthority u2 = trust.findTrustAuthorities(f)[0];
 				CA ca2 = new CA();
-				u2.setCertificate(new X509Certificate(CertUtil
-						.writeCertificate(ca2.getCertificate())));
+				u2.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca2.getCertificate())));
 				try {
 					trust.updateTrustedAuthority(u2);
 					fail("Should not be able to change the certificate for a Trust Service");
@@ -413,9 +397,8 @@ public class TestTrustedAuthorityManager extends TestCase {
 				TrustedAuthority u3 = trust.findTrustAuthorities(f)[0];
 				// First Let test a bad CRL
 
-				CRLEntry bad = new CRLEntry(new BigInteger(String
-						.valueOf(System.currentTimeMillis())),
-						CRLReason.PRIVILEGE_WITHDRAWN);
+				CRLEntry bad = new CRLEntry(new BigInteger(String.valueOf(System.currentTimeMillis())),
+					CRLReason.PRIVILEGE_WITHDRAWN);
 				ca2.updateCRL(bad);
 				u3.setCRL(new X509CRL(CertUtil.writeCRL(ca2.getCRL())));
 				try {
@@ -428,9 +411,8 @@ public class TestTrustedAuthorityManager extends TestCase {
 				assertEquals(1, trust.findTrustAuthorities(f).length);
 				assertEquals(auths[i], trust.findTrustAuthorities(f)[0]);
 
-				CRLEntry good = new CRLEntry(new BigInteger(String
-						.valueOf(System.currentTimeMillis())),
-						CRLReason.PRIVILEGE_WITHDRAWN);
+				CRLEntry good = new CRLEntry(new BigInteger(String.valueOf(System.currentTimeMillis())),
+					CRLReason.PRIVILEGE_WITHDRAWN);
 				ca.updateCRL(good);
 				u3.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 				trust.updateTrustedAuthority(u3);
@@ -458,8 +440,18 @@ public class TestTrustedAuthorityManager extends TestCase {
 
 				// Test update trust level
 				TrustedAuthority u6 = trust.findTrustAuthorities(f)[0];
-				u6.setTrustLevel(TrustLevel.One);
+				u6.setTrustLevel(LEVEL_THREE);
 				trust.updateTrustedAuthority(u6);
+				assertEquals(1, trust.findTrustAuthorities(f).length);
+				assertEquals(u6, trust.findTrustAuthorities(f)[0]);
+				u6.setTrustLevel("INVALID_LEVEL");
+				try{
+				trust.updateTrustedAuthority(u6);
+				fail("Should not be able to update a Trusted Authority with an invalid trust level!!!");
+				}catch(IllegalTrustedAuthorityFault itaf){
+					
+				}
+				u6.setTrustLevel(LEVEL_THREE);
 				assertEquals(1, trust.findTrustAuthorities(f).length);
 				assertEquals(u6, trust.findTrustAuthorities(f)[0]);
 
@@ -479,13 +471,12 @@ public class TestTrustedAuthorityManager extends TestCase {
 
 				// Test Updating all
 				TrustedAuthority u8 = trust.findTrustAuthorities(f)[0];
-				CRLEntry crlE = new CRLEntry(new BigInteger(String
-						.valueOf(System.currentTimeMillis())),
-						CRLReason.PRIVILEGE_WITHDRAWN);
+				CRLEntry crlE = new CRLEntry(new BigInteger(String.valueOf(System.currentTimeMillis())),
+					CRLReason.PRIVILEGE_WITHDRAWN);
 				ca.updateCRL(crlE);
 				u8.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 				u8.setStatus(Status.Trusted);
-				u8.setTrustLevel(TrustLevel.Two);
+				u8.setTrustLevel(LEVEL_THREE);
 				trust.updateTrustedAuthority(u8);
 				assertEquals(1, trust.findTrustAuthorities(f).length);
 				assertEquals(u8, trust.findTrustAuthorities(f)[0]);
@@ -495,23 +486,18 @@ public class TestTrustedAuthorityManager extends TestCase {
 			// Test Remove
 			int remaining = count;
 			for (int i = 0; i < count; i++) {
-				trust
-						.removeTrustedAuthority(auths[i]
-								.getTrustedAuthorityName());
+				trust.removeTrustedAuthority(auths[i].getTrustedAuthorityName());
 				remaining = remaining - 1;
-				assertEquals(
-						remaining,
-						trust
-								.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+				assertEquals(remaining, trust.findTrustAuthorities(new TrustedAuthorityFilter()).length);
 			}
-			assertEquals(0, trust
-					.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+			assertEquals(0, trust.findTrustAuthorities(new TrustedAuthorityFilter()).length);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
 		}
 
 	}
+
 
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -524,6 +510,7 @@ public class TestTrustedAuthorityManager extends TestCase {
 		}
 	}
 
+
 	protected void tearDown() throws Exception {
 		super.setUp();
 		try {
@@ -532,6 +519,19 @@ public class TestTrustedAuthorityManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
+		}
+	}
+
+
+	public boolean doesTrustLevelExist(String name) throws GTSInternalFault {
+		if (name.equals(LEVEL_ONE)) {
+			return true;
+		} else if (name.equals(LEVEL_TWO)) {
+			return true;
+		} else if (name.equals(LEVEL_THREE)) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 

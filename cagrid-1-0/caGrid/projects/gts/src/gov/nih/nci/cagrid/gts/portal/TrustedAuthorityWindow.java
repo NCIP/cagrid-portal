@@ -1,13 +1,16 @@
 package gov.nih.nci.cagrid.gts.portal;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.portal.CRLPanel;
 import gov.nih.nci.cagrid.gridca.portal.CertificatePanel;
 import gov.nih.nci.cagrid.gridca.portal.ProxyCaddy;
 import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
+import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.client.GTSAdminClient;
+import gov.nih.nci.cagrid.gts.client.GTSSearchClient;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -90,6 +93,7 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 	public TrustedAuthorityWindow() {
 		super();
 		initialize();
+		this.updateTrustLevels();
 	}
 
 
@@ -99,9 +103,10 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 		initialize();
 		this.gts.setSelectedItem(service);
 		this.proxy.setSelectedItem(new ProxyCaddy(cred));
+		this.updateTrustLevels();
 		this.getTrustedAuthorityName().setText(ta.getTrustedAuthorityName());
 		((StatusComboBox) this.getStatus()).setSelectedItem(ta.getStatus());
-		((TrustLevelComboBox) trustLevel).setSelectedItem(ta.getTrustLevel());
+		trustLevel.setSelectedItem(ta.getTrustLevel());
 		this.getCertificatePanel().setCertificate(
 			CertUtil.loadCertificate(ta.getCertificate().getCertificateEncodedString()));
 		if (ta.getCRL() != null) {
@@ -127,6 +132,29 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 		} else {
 			this.setTitle("View/Modify Trusted Authority");
 			this.setFrameIcon(GTSLookAndFeel.getTrustedAuthorityIcon());
+		}
+	}
+
+
+	private void updateTrustLevels() {
+		trustLevel.removeAllItems();
+		String service = Utils.clean((String) getGts().getSelectedItem());
+		if (service != null) {
+			try {
+				GTSSearchClient client = new GTSSearchClient(service);
+				TrustLevel[] levels = client.getTrustLevels();
+				if (levels != null) {
+					for (int i = 0; i < levels.length; i++) {
+						trustLevel.addItem(levels[i].getName());
+					}
+
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				PortalUtils.showErrorMessage("Error obtaining the trust levels from " + service + ":\n"
+					+ e.getMessage());
+			}
 		}
 	}
 
@@ -243,6 +271,11 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 	private JComboBox getGts() {
 		if (gts == null) {
 			gts = new GTSServiceListComboBox();
+			gts.addActionListener(new java.awt.event.ActionListener() { 
+				public void actionPerformed(java.awt.event.ActionEvent e) {    
+					updateTrustLevels();
+				}
+			});
 		}
 		return gts;
 	}
@@ -370,7 +403,7 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 	 */
 	private JComboBox getTrustLevel() {
 		if (trustLevel == null) {
-			trustLevel = new TrustLevelComboBox();
+			trustLevel = new JComboBox();
 		}
 		return trustLevel;
 	}
@@ -491,7 +524,7 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 			try {
 				X509Certificate certificate = CertUtil
 					.loadCertificate(new File(fc.getSelectedFile().getAbsolutePath()));
-							certificatePanel.clearCertificate();
+				certificatePanel.clearCertificate();
 				crlPanel.clearCRL();
 				certificatePanel.setCertificate(certificate);
 				this.getTrustedAuthorityName().setText(certificate.getSubjectDN().getName());
@@ -578,7 +611,7 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 			TrustedAuthority ta = new TrustedAuthority();
 			ta.setTrustedAuthorityName(this.trustedAuthorityName.getText());
 			ta.setStatus(((StatusComboBox) getStatus()).getStatus());
-			ta.setTrustLevel(((TrustLevelComboBox) trustLevel).getTrustLevel());
+			ta.setTrustLevel((String) trustLevel.getSelectedItem());
 			ta.setCertificate(new gov.nih.nci.cagrid.gts.bean.X509Certificate(CertUtil.writeCertificate(cert)));
 			if (crlPanel.getCRL() != null) {
 				ta.setCRL(new gov.nih.nci.cagrid.gts.bean.X509CRL(CertUtil.writeCRL(crlPanel.getCRL())));
@@ -605,7 +638,7 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 			TrustedAuthority ta = new TrustedAuthority();
 			ta.setTrustedAuthorityName(this.trustedAuthorityName.getText());
 			ta.setStatus(((StatusComboBox) getStatus()).getStatus());
-			ta.setTrustLevel(((TrustLevelComboBox) trustLevel).getTrustLevel());
+			ta.setTrustLevel((String) trustLevel.getSelectedItem());
 			if (crlPanel.getCRL() != null) {
 				ta.setCRL(new gov.nih.nci.cagrid.gts.bean.X509CRL(CertUtil.writeCRL(crlPanel.getCRL())));
 			}

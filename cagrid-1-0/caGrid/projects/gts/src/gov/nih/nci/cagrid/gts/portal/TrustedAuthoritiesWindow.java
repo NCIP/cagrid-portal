@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.gts.portal;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
+import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
 import gov.nih.nci.cagrid.gts.client.GTSAdminClient;
@@ -37,6 +38,8 @@ import org.projectmobius.portal.PortalResourceManager;
  *          langella Exp $
  */
 public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
+
+	private final static String ANY = "Any";
 
 	private javax.swing.JPanel jContentPane = null;
 
@@ -112,7 +115,32 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 		this.setSize(500, 500);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Find Trusted Authority(s)");
+		updateTrustLevels();
 
+	}
+
+
+	private void updateTrustLevels() {
+		trustLevel.removeAllItems();
+		trustLevel.addItem(ANY);
+		String service = Utils.clean((String) getService().getSelectedItem());
+		if (service != null) {
+			try {
+				GTSSearchClient client = new GTSSearchClient(service);
+				TrustLevel[] levels = client.getTrustLevels();
+				if (levels != null) {
+					for (int i = 0; i < levels.length; i++) {
+						trustLevel.addItem(levels[i].getName());
+					}
+
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				PortalUtils.showErrorMessage("Error obtaining the trust levels from " + service + ":\n"
+					+ e.getMessage());
+			}
+		}
 	}
 
 
@@ -429,7 +457,11 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 
 			TrustedAuthorityFilter filter = new TrustedAuthorityFilter();
 			filter.setTrustedAuthorityName(Utils.clean(trustedAuthorityName.getText()));
-			filter.setTrustLevel(((TrustLevelComboBox) trustLevel).getTrustLevel());
+			String tl = (String) trustLevel.getSelectedItem();
+			if (tl.equals(ANY)) {
+				tl = null;
+			}
+			filter.setTrustLevel(tl);
 			filter.setStatus(((StatusComboBox) status).getStatus());
 
 			GTSSearchClient client = new GTSSearchClient(service);
@@ -462,6 +494,11 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 	private JComboBox getService() {
 		if (service == null) {
 			service = new GTSServiceListComboBox();
+			service.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					updateTrustLevels();
+				}
+			});
 		}
 		return service;
 	}
@@ -649,7 +686,8 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 	 */
 	private JComboBox getTrustLevel() {
 		if (trustLevel == null) {
-			trustLevel = new TrustLevelComboBox(true);
+			trustLevel = new JComboBox();
+			trustLevel.addItem(ANY);
 		}
 		return trustLevel;
 	}

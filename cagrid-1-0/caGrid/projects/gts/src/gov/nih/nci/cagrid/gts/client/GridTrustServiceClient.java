@@ -107,53 +107,6 @@ public class GridTrustServiceClient implements GridTrustServiceI {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	     public gov.nih.nci.cagrid.gts.bean.TrustedAuthority addTrustedAuthority(gov.nih.nci.cagrid.gts.bean.TrustedAuthority ta) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
                GridTrustServicePortType port = this.getPortType();
                org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
@@ -300,6 +253,57 @@ stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.w
                params.setTa(taContainer);
                gov.nih.nci.cagrid.gts.stubs.UpdateTrustedAuthorityResponse boxedResult = port.updateTrustedAuthority(params);
                
+	}
+
+	     public void addTrustLevel() throws RemoteException, gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault {
+               GridTrustServicePortType port = this.getPortType();
+               org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
+
+stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT, org.globus.wsrf.security.Constants.ENCRYPTION);
+	if (proxy != null) {
+try{
+		org.ietf.jgss.GSSCredential gss = new org.globus.gsi.gssapi.GlobusGSSCredentialImpl(proxy,org.ietf.jgss.GSSCredential.INITIATE_AND_ACCEPT);
+		stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_CREDENTIALS, gss);
+}catch(org.ietf.jgss.GSSException ex){
+throw new RemoteException(ex.getMessage());
+}
+}
+stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());
+               gov.nih.nci.cagrid.gts.stubs.AddTrustLevel params = new gov.nih.nci.cagrid.gts.stubs.AddTrustLevel();
+               gov.nih.nci.cagrid.gts.stubs.AddTrustLevelResponse boxedResult = port.addTrustLevel(params);
+               
+	}
+
+	     public void updateTrustLevel() throws RemoteException, gov.nih.nci.cagrid.gts.stubs.InvalidTrustLevelFault {
+               GridTrustServicePortType port = this.getPortType();
+               org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
+
+stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT, org.globus.wsrf.security.Constants.ENCRYPTION);
+	if (proxy != null) {
+try{
+		org.ietf.jgss.GSSCredential gss = new org.globus.gsi.gssapi.GlobusGSSCredentialImpl(proxy,org.ietf.jgss.GSSCredential.INITIATE_AND_ACCEPT);
+		stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_CREDENTIALS, gss);
+}catch(org.ietf.jgss.GSSException ex){
+throw new RemoteException(ex.getMessage());
+}
+}
+stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());
+               gov.nih.nci.cagrid.gts.stubs.UpdateTrustLevel params = new gov.nih.nci.cagrid.gts.stubs.UpdateTrustLevel();
+               gov.nih.nci.cagrid.gts.stubs.UpdateTrustLevelResponse boxedResult = port.updateTrustLevel(params);
+               
+	}
+
+	     public gov.nih.nci.cagrid.gts.bean.TrustLevel[] getTrustLevels() throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault {
+               GridTrustServicePortType port = this.getPortType();
+               org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
+
+stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT, org.globus.wsrf.security.Constants.ENCRYPTION);
+	stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS,Boolean.TRUE);
+stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());
+               gov.nih.nci.cagrid.gts.stubs.GetTrustLevels params = new gov.nih.nci.cagrid.gts.stubs.GetTrustLevels();
+               gov.nih.nci.cagrid.gts.stubs.GetTrustLevelsResponse boxedResult = port.getTrustLevels(params);
+               return boxedResult.getTrustLevel();
+
 	}
 
 
