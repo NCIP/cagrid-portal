@@ -51,7 +51,7 @@ public class TrustLevelManager {
 			throw fault;
 		}
 
-		if (doesTrustedLevelExist(level.getName())) {
+		if (doesTrustLevelExist(level.getName())) {
 			IllegalTrustLevelFault fault = new IllegalTrustLevelFault();
 			fault.setFaultString("The Trust Level " + level.getName() + " cannot be added, it already exists.");
 			throw fault;
@@ -177,7 +177,7 @@ public class TrustLevelManager {
 
 	public synchronized void removeTrustLevel(String name) throws GTSInternalFault, InvalidTrustLevelFault,
 		IllegalTrustLevelFault {
-		if (doesTrustedLevelExist(name)) {
+		if (doesTrustLevelExist(name)) {
 			if (status.isTrustLevelUsed(name)) {
 				IllegalTrustLevelFault fault = new IllegalTrustLevelFault();
 				fault.setFaultString("The Trust Level, " + name
@@ -203,7 +203,7 @@ public class TrustLevelManager {
 	}
 
 
-	public synchronized boolean doesTrustedLevelExist(String name) throws GTSInternalFault {
+	public synchronized boolean doesTrustLevelExist(String name) throws GTSInternalFault {
 		this.buildDatabase();
 		String sql = "select count(*) from " + TRUST_LEVELS + " where NAME='" + name + "'";
 		Connection c = null;

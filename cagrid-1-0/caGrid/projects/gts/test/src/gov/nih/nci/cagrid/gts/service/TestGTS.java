@@ -13,6 +13,7 @@ import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
 import gov.nih.nci.cagrid.gts.bean.X509CRL;
 import gov.nih.nci.cagrid.gts.bean.X509Certificate;
 import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
+import gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gts.test.CA;
@@ -392,38 +393,157 @@ public class TestGTS extends TestCase {
 			}
 		}
 	}
-	/*
+
+
+	public void testRemoveReferencedTrustLevels() {
+		GTS gts = null;
+		try {
+			GTSConfiguration conf = Utils.getGTSConfiguration();
+
+			gts = new GTS(conf, "localhost");
+			// Make sure we start fresh
+			gts.destroy();
+			PermissionBootstapper pb = new PermissionBootstapper(conf);
+			pb.addAdminUser(ADMIN_USER);
+			TrustLevel l1 = new TrustLevel();
+			l1.setName(LEVEL_ONE);
+			gts.addTrustLevel(l1, ADMIN_USER);
+			assertTrue(gts.doesTrustLevelExist(l1.getName()));
+			assertEquals(1, gts.getTrustLevels().length);
+
+			CA ca = new CA();
+			BigInteger sn = new BigInteger(String.valueOf(System.currentTimeMillis()));
+			CRLEntry entry = new CRLEntry(sn, CRLReason.PRIVILEGE_WITHDRAWN);
+			ca.updateCRL(entry);
+			TrustedAuthority ta = new TrustedAuthority();
+			ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
+			ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
+			ta.setStatus(Status.Trusted);
+			ta.setTrustLevel(LEVEL_ONE);
+
+			gts.addTrustedAuthority(ta, ADMIN_USER);
+			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+			assertEquals(ta, gts.findTrustAuthorities(new TrustedAuthorityFilter())[0]);
+
+			// Now try and remove the trust level
+			try {
+				gts.removeTrustLevel(l1.getName(), ADMIN_USER);
+				fail("Should not be able to remove a trust level that is referenced by a Trusted Authority!!!");
+			} catch (IllegalTrustLevelFault f) {
+
+			}
+			gts.removeTrustedAuthority(ta.getTrustedAuthorityName(),ADMIN_USER);
+			gts.removeTrustLevel(l1.getName(), ADMIN_USER);
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			if (gts != null) {
+				try {
+					gts.destroy();
+				} catch (Exception e) {
+					FaultUtil.printFault(e);
+				}
+			}
+		}
+
+	}
+
+
 	public void testAddGetUpdateRemoveTrustLevels() {
 		GTS gts = null;
 		try {
 			GTSConfiguration conf = Utils.getGTSConfiguration();
 			PermissionBootstapper pb = new PermissionBootstapper(conf);
 			pb.addAdminUser(ADMIN_USER);
+			String user = "O=Test Organization,OU=Test Unit,CN=User";
 			gts = new GTS(conf, "localhost");
 			int size = 5;
 			TrustLevel[] level = new TrustLevel[size];
 			for (int i = 0; i < size; i++) {
 				level[i] = new TrustLevel();
-				level[i].setName("Level " + i);
+				level[i].setName("My Level " + i);
 				level[i].setDescription("Trust Level " + i);
-				trust.addTrustLevel(level[i]);
-				assertEquals((i + 1), trust.getTrustLevels().length);
-				assertEquals(true, trust.doesTrustedLevelExist(level[i].getName()));
-				assertEquals(level[i], trust.getTrustLevel(level[i].getName()));
+				try {
+					gts.addTrustLevel(level[i], null);
+					fail("Non trust service administrators should not be able to add a trust level!!!");
+				} catch (PermissionDeniedFault f) {
+
+				}
+
+				try {
+					gts.addTrustLevel(level[i], "");
+					fail("Non trust service administrators should not be able to add a trust level!!!");
+				} catch (PermissionDeniedFault f) {
+
+				}
+
+				try {
+					gts.addTrustLevel(level[i], user);
+					fail("Non trust service administrators should not be able to add a trust level!!!");
+				} catch (PermissionDeniedFault f) {
+
+				}
+
+				gts.addTrustLevel(level[i], ADMIN_USER);
+				assertEquals((i + 1), gts.getTrustLevels().length);
+				assertEquals(true, gts.doesTrustLevelExist(level[i].getName()));
 				level[i].setDescription("Updated Trust Level " + i);
-				trust.updateTrustLevel(level[i]);
-				assertEquals((i + 1), trust.getTrustLevels().length);
-				assertEquals(true, trust.doesTrustedLevelExist(level[i].getName()));
-				assertEquals(level[i], trust.getTrustLevel(level[i].getName()));
+
+				try {
+					gts.updateTrustLevel(level[i], null);
+					fail("Non trust service administrators should not be able to update a trust level!!!");
+				} catch (PermissionDeniedFault f) {
+
+				}
+				try {
+					gts.updateTrustLevel(level[i], "");
+					fail("Non trust service administrators should not be able to update a trust level!!!");
+				} catch (PermissionDeniedFault f) {
+
+				}
+
+				try {
+					gts.updateTrustLevel(level[i], user);
+					fail("Non trust service administrators should not be able to update a trust level!!!");
+				} catch (PermissionDeniedFault f) {
+
+				}
+
+				gts.updateTrustLevel(level[i], ADMIN_USER);
+				assertEquals((i + 1), gts.getTrustLevels().length);
+				assertEquals(true, gts.doesTrustLevelExist(level[i].getName()));
 			}
 			int count = size;
 			for (int i = 0; i < size; i++) {
-				trust.removeTrustLevel(level[i].getName());
+				try {
+					gts.removeTrustLevel(level[i].getName(), null);
+					fail("Non trust service administrators should not be able to remove a trust level!!!");
+				} catch (PermissionDeniedFault f) {
+
+				}
+
+				try {
+					gts.removeTrustLevel(level[i].getName(), "");
+					fail("Non trust service administrators should not be able to remove a trust level!!!");
+				} catch (PermissionDeniedFault f) {
+
+				}
+
+				try {
+					gts.removeTrustLevel(level[i].getName(), user);
+					fail("Non trust service administrators should not be able to remove a trust level!!!");
+				} catch (PermissionDeniedFault f) {
+
+				}
+				gts.removeTrustLevel(level[i].getName(), ADMIN_USER);
 				count = count - 1;
-				assertEquals(count, trust.getTrustLevels().length);
-				assertEquals(false, trust.doesTrustedLevelExist(level[i].getName()));
+				assertEquals(count, gts.getTrustLevels().length);
+				assertEquals(false, gts.doesTrustLevelExist(level[i].getName()));
 			}
-			assertEquals(0, trust.getTrustLevels().length);
+			assertEquals(0, gts.getTrustLevels().length);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
@@ -438,7 +558,7 @@ public class TestGTS extends TestCase {
 		}
 	}
 
-*/
+
 	public void testUpdateTrustedAuthority() {
 		GTS gts = null;
 		try {

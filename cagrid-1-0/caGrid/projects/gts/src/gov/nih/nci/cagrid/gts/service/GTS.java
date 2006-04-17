@@ -145,15 +145,15 @@ public class GTS implements TrustLevelStatus, TrustLevelLookup {
 		f.setTrustLevel(name);
 		TrustedAuthority[] ta = this.findTrustAuthorities(f);
 		if ((ta == null) || (ta.length == 0)) {
-			return true;
-		} else {
 			return false;
+		} else {
+			return true;
 		}
 	}
 
 
 	public boolean doesTrustLevelExist(String name) throws GTSInternalFault {
-		if (levels.doesTrustedLevelExist(name)) {
+		if (levels.doesTrustLevelExist(name)) {
 			return true;
 		} else {
 			return false;

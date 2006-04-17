@@ -56,11 +56,11 @@ public class TestTrustLevelManager extends TestCase implements TrustLevelStatus 
 			level.setDescription("Trust Level One");
 			trust.addTrustLevel(level);
 			assertEquals(1, trust.getTrustLevels().length);
-			assertEquals(true, trust.doesTrustedLevelExist(level.getName()));
+			assertEquals(true, trust.doesTrustLevelExist(level.getName()));
 			assertEquals(level, trust.getTrustLevel(level.getName()));
 			trust.removeTrustLevel(level.getName());
 			assertEquals(0, trust.getTrustLevels().length);
-			assertEquals(false, trust.doesTrustedLevelExist(level.getName()));
+			assertEquals(false, trust.doesTrustLevelExist(level.getName()));
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
@@ -82,7 +82,7 @@ public class TestTrustLevelManager extends TestCase implements TrustLevelStatus 
 			level.setDescription("Trust Level One");
 			trust.addTrustLevel(level);
 			assertEquals(1, trust.getTrustLevels().length);
-			assertEquals(true, trust.doesTrustedLevelExist(level.getName()));
+			assertEquals(true, trust.doesTrustLevelExist(level.getName()));
 			assertEquals(level, trust.getTrustLevel(level.getName()));
 			try {
 				trust.addTrustLevel(level);
@@ -91,7 +91,7 @@ public class TestTrustLevelManager extends TestCase implements TrustLevelStatus 
 
 			}
 			assertEquals(1, trust.getTrustLevels().length);
-			assertEquals(true, trust.doesTrustedLevelExist(level.getName()));
+			assertEquals(true, trust.doesTrustLevelExist(level.getName()));
 			assertEquals(level, trust.getTrustLevel(level.getName()));
 
 			try {
@@ -101,12 +101,12 @@ public class TestTrustLevelManager extends TestCase implements TrustLevelStatus 
 
 			}
 			assertEquals(1, trust.getTrustLevels().length);
-			assertEquals(true, trust.doesTrustedLevelExist(level.getName()));
+			assertEquals(true, trust.doesTrustLevelExist(level.getName()));
 			assertEquals(level, trust.getTrustLevel(level.getName()));
 
 			trust.removeTrustLevel(level.getName());
 			assertEquals(0, trust.getTrustLevels().length);
-			assertEquals(false, trust.doesTrustedLevelExist(level.getName()));
+			assertEquals(false, trust.doesTrustLevelExist(level.getName()));
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -136,17 +136,17 @@ public class TestTrustLevelManager extends TestCase implements TrustLevelStatus 
 			}
 
 			assertEquals(0, trust.getTrustLevels().length);
-			assertEquals(false, trust.doesTrustedLevelExist(level.getName()));
+			assertEquals(false, trust.doesTrustLevelExist(level.getName()));
 
 			trust.addTrustLevel(level);
 			assertEquals(1, trust.getTrustLevels().length);
-			assertEquals(true, trust.doesTrustedLevelExist(level.getName()));
+			assertEquals(true, trust.doesTrustLevelExist(level.getName()));
 			assertEquals(level, trust.getTrustLevel(level.getName()));
 
 			trust.addTrustLevel(ref);
 
 			assertEquals(2, trust.getTrustLevels().length);
-			assertEquals(true, trust.doesTrustedLevelExist(ref.getName()));
+			assertEquals(true, trust.doesTrustLevelExist(ref.getName()));
 			assertEquals(ref, trust.getTrustLevel(ref.getName()));
 
 			try {
@@ -158,7 +158,7 @@ public class TestTrustLevelManager extends TestCase implements TrustLevelStatus 
 
 			trust.removeTrustLevel(level.getName());
 			assertEquals(1, trust.getTrustLevels().length);
-			assertEquals(false, trust.doesTrustedLevelExist(level.getName()));
+			assertEquals(false, trust.doesTrustLevelExist(level.getName()));
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
@@ -184,12 +184,12 @@ public class TestTrustLevelManager extends TestCase implements TrustLevelStatus 
 				level[i].setDescription("Trust Level " + i);
 				trust.addTrustLevel(level[i]);
 				assertEquals((i + 1), trust.getTrustLevels().length);
-				assertEquals(true, trust.doesTrustedLevelExist(level[i].getName()));
+				assertEquals(true, trust.doesTrustLevelExist(level[i].getName()));
 				assertEquals(level[i], trust.getTrustLevel(level[i].getName()));
 				level[i].setDescription("Updated Trust Level " + i);
 				trust.updateTrustLevel(level[i]);
 				assertEquals((i + 1), trust.getTrustLevels().length);
-				assertEquals(true, trust.doesTrustedLevelExist(level[i].getName()));
+				assertEquals(true, trust.doesTrustLevelExist(level[i].getName()));
 				assertEquals(level[i], trust.getTrustLevel(level[i].getName()));
 			}
 			int count = size;
@@ -197,7 +197,7 @@ public class TestTrustLevelManager extends TestCase implements TrustLevelStatus 
 				trust.removeTrustLevel(level[i].getName());
 				count = count - 1;
 				assertEquals(count, trust.getTrustLevels().length);
-				assertEquals(false, trust.doesTrustedLevelExist(level[i].getName()));
+				assertEquals(false, trust.doesTrustLevelExist(level[i].getName()));
 			}
 			assertEquals(0, trust.getTrustLevels().length);
 
