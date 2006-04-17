@@ -69,7 +69,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 	
 	private NamespacesJTree getNamespacesTree() {
 		if (namespacesTree == null) {
-			namespacesTree = new NamespacesJTree(getServiceInfo().getNamespaces());
+			namespacesTree = new NamespacesJTree(getServiceInfo().getNamespaces(), true);
 			namespacesTree.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
