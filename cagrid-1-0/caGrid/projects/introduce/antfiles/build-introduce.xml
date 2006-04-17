@@ -22,6 +22,7 @@
 			</fileset>
 		</path>
 		<path id="Introduce.test.classpath">
+			<pathelement location="${introduce.classes.dir}"/>
 			<fileset dir="${lib.dir}">
 				<include name="*.jar"/>
 			</fileset>
