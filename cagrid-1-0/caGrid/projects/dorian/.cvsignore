@@ -4,7 +4,6 @@ temp.pem
 temp-cacert.pem
 bin
 ext
-dorian.gar
-
+*.gar
 cacert.pem
 temp-cakey.pem
