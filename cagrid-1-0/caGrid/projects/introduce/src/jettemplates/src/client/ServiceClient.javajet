@@ -64,6 +64,7 @@ public class <%=serviceName%>Client implements <%=serviceName%>I {
 	}
 	
 	public static void main(String [] args){
+	    System.out.println("Running the Grid Service Client");
 		try{
 		if(!(args.length < 2)){
 			if(args[0].equals("-url")){
