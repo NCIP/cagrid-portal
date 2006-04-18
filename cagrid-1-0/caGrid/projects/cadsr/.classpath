@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test/src"/>
-	<classpathentry kind="src" path="build/stubs-CaDSRService/src"/>
+	<classpathentry kind="src" path="build/stubs-caGrid-caDSR-1.0/src"/>
+	<classpathentry kind="src" path="Portal/src"/>
+	<classpathentry kind="src" path="Service/src"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/log4j-1.2.8.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commons-logging.jar"/>
 	<classpathentry kind="lib" path="lib/globus_wsrf_mds_aggregator_stubs.jar"/>
@@ -74,5 +75,7 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry kind="lib" path="lib/castor-0.9.9.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-core-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-core-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-portal-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
