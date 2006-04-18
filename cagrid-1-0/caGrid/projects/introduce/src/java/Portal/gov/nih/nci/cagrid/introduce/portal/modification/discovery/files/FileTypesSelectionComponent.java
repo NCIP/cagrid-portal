@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.portal.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
@@ -15,13 +16,11 @@ import java.io.File;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import org.jdom.Document;
-import org.jdom.Element;
 import org.projectmobius.common.Namespace;
 import org.projectmobius.common.XMLUtilities;
 
@@ -32,11 +31,7 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 
 	public String currentFile = null;
 
-	private JComboBox schemaComboBox = null;
-
 	private JLabel namespaceLabel = null;
-
-	JLabel nameLabel = null;
 
 	public String filterType = null;
 
@@ -76,14 +71,6 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
 		gridBagConstraints.gridy = 0;
-		nameLabel = new JLabel();
-		nameLabel.setText("Name");
-
-		GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
-		gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
-		gridBagConstraints10.gridy = 2;
-		gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
-		gridBagConstraints10.gridx = 0;
 		GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
 		gridBagConstraints9.anchor = java.awt.GridBagConstraints.WEST;
 		gridBagConstraints9.gridy = 1;
@@ -91,34 +78,11 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 		gridBagConstraints9.gridx = 0;
 		namespaceLabel = new JLabel();
 		namespaceLabel.setText("Namespace");
-		GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
-		gridBagConstraints8.fill = GridBagConstraints.HORIZONTAL;
-		gridBagConstraints8.gridy = 2;
-		gridBagConstraints8.weightx = 1.0;
-		gridBagConstraints8.anchor = java.awt.GridBagConstraints.WEST;
-		gridBagConstraints8.insets = new java.awt.Insets(2, 2, 2, 2);
-		gridBagConstraints8.weighty = 1.0D;
-		gridBagConstraints8.gridx = 1;
 		this.setLayout(new GridBagLayout());
 		this.add(namespaceLabel, gridBagConstraints9);
-		this.add(getSchemaComboBox(), gridBagConstraints8);
-		this.add(nameLabel, gridBagConstraints10);
 		this.add(getBrowseButton(), gridBagConstraints);
 		this.add(getNamespaceText(), gridBagConstraints1);
 		this.add(getFilenameText(), gridBagConstraints2);
-	}
-
-
-	/**
-	 * This method initializes jComboBox
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	public JComboBox getSchemaComboBox() {
-		if (schemaComboBox == null) {
-			schemaComboBox = new JComboBox();
-		}
-		return schemaComboBox;
 	}
 
 
@@ -134,20 +98,12 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 			browseButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
-						currentFile = new File(ResourceManager.promptFile(FileTypesSelectionComponent.this, null))
+						currentFile = new File(ResourceManager.promptFile(FileTypesSelectionComponent.this, null, FileFilters.XSD_FILTER))
 							.getAbsolutePath();
 						getFilenameText().setText(currentFile);
 						Document doc = XMLUtilities.fileNameToDocument(currentFile);
 						currentNamespace = new Namespace(doc.getRootElement().getAttributeValue("targetNamespace"));
 						getNamespaceText().setText(currentNamespace.getRaw());
-						List elements = doc.getRootElement().getChildren("element",
-							doc.getRootElement().getNamespace(Namespace.W3C_XMLSCHEMA));
-						getSchemaComboBox().removeAllItems();
-						for (int i = 0; i < elements.size(); i++) {
-							Element el = (Element) elements.get(i);
-							String name = el.getAttributeValue("name");
-							getSchemaComboBox().addItem(name);
-						}
 					} catch (Exception ex) {
 						JOptionPane.showMessageDialog(FileTypesSelectionComponent.this,
 							"Please make sure the file is a valid XML Schema");

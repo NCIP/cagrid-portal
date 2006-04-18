@@ -21,6 +21,8 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
+
 
 /**
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
@@ -307,7 +309,7 @@ public class ResourceManager {
 	}
 
 
-	public static String promptFile(Component comp, String defaultLocation) throws Exception {
+	public static String promptFile(Component comp, String defaultLocation, FileFilter filter) throws Exception {
 		JFileChooser chooser = null;
 		if (defaultLocation != null && defaultLocation.length() > 0 && new File(defaultLocation).exists()) {
 			chooser = new JFileChooser(new File(defaultLocation));
@@ -316,6 +318,7 @@ public class ResourceManager {
 		} else {
 			chooser = new JFileChooser();
 		}
+		chooser.setFileFilter(filter);
 		chooser.setDialogTitle("Select File");
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);

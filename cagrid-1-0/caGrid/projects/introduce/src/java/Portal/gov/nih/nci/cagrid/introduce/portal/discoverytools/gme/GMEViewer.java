@@ -3,9 +3,9 @@ package gov.nih.nci.cagrid.introduce.portal.discoverytools.gme;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
-import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.common.jedit.JEditTextArea;
 import gov.nih.nci.cagrid.introduce.portal.common.jedit.XMLTokenMarker;
 import gov.nih.nci.cagrid.introduce.portal.discoverytools.NamespaceTypeToolsComponent;
@@ -32,7 +32,6 @@ import org.projectmobius.common.XMLUtilities;
 import org.projectmobius.common.gme.NamespaceExistsException;
 import org.projectmobius.gme.XMLDataModelService;
 import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
-import org.projectmobius.portal.PortalResourceManager;
 import org.xml.sax.InputSource;
 
 
@@ -289,7 +288,7 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					String location = null;
 					try {
-						location = ResourceManager.promptFile(GMEViewer.this, null);
+						location = ResourceManager.promptFile(GMEViewer.this, null, FileFilters.XSD_FILTER);
 						if (location == null) {
 							return;
 						}
