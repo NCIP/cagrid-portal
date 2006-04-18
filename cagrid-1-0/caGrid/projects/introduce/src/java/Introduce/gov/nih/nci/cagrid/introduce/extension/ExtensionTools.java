@@ -14,8 +14,9 @@ public class ExtensionTools {
 		ServiceExtensionDescriptionType extensionD = ExtensionsLoader.getInstance().getServiceExtension(extensionName);
 		if (extensionD != null && extensionD.getCreationPostProcessor() != null
 			&& !extensionD.getCreationPostProcessor().equals("")) {
-			ExtensionClassLoader cloader = new ExtensionClassLoader(new File(ExtensionsLoader.getInstance().getExtensionsDir() + File.separator
-				+ extensionName));
+			ExtensionClassLoader cloader = new ExtensionClassLoader(new File(ExtensionsLoader.getInstance()
+				.getExtensionsDir()
+				+ File.separator + extensionName));
 			Class c = cloader.loadClass(extensionD.getCreationPostProcessor());
 			Object obj = c.newInstance();
 			return (CreationExtensionPostProcessor) obj;
@@ -28,9 +29,11 @@ public class ExtensionTools {
 		ServiceExtensionDescriptionType extensionD = ExtensionsLoader.getInstance().getServiceExtension(extensionName);
 		if (extensionD != null && extensionD.getCodegenPostProcessor() != null
 			&& !extensionD.getCodegenPostProcessor().equals("")) {
-			ExtensionClassLoader cloader = new ExtensionClassLoader(new File(ExtensionsLoader.getInstance().getExtensionsDir() + File.separator
+			ExtensionClassLoader cloader = new ExtensionClassLoader(new File(ExtensionsLoader.getInstance()
+				.getExtensionsDir()
+				+ File.separator
 
-			+ extensionName));
+				+ extensionName));
 			Class c = cloader.loadClass(extensionD.getCodegenPostProcessor());
 			Object obj = c.newInstance();
 			return (CodegenExtensionPostProcessor) obj;
@@ -43,9 +46,11 @@ public class ExtensionTools {
 		ServiceExtensionDescriptionType extensionD = ExtensionsLoader.getInstance().getServiceExtension(extensionName);
 		if (extensionD != null && extensionD.getCodegenPreProcessor() != null
 			&& !extensionD.getCodegenPreProcessor().equals("")) {
-			ExtensionClassLoader cloader = new ExtensionClassLoader(new File(ExtensionsLoader.getInstance().getExtensionsDir() + File.separator
+			ExtensionClassLoader cloader = new ExtensionClassLoader(new File(ExtensionsLoader.getInstance()
+				.getExtensionsDir()
+				+ File.separator
 
-			+ extensionName));
+				+ extensionName));
 			Class c = cloader.loadClass(extensionD.getCodegenPreProcessor());
 			Object obj = c.newInstance();
 			return (CodegenExtensionPreProcessor) obj;
@@ -59,9 +64,11 @@ public class ExtensionTools {
 		ServiceExtensionDescriptionType extensionD = ExtensionsLoader.getInstance().getServiceExtension(extensionName);
 		if (extensionD != null && extensionD.getCreationUIDialog() != null
 			&& !extensionD.getCreationUIDialog().equals("")) {
-			ExtensionClassLoader cloader = new ExtensionClassLoader(new File(ExtensionsLoader.getInstance().getExtensionsDir() + File.separator
+			ExtensionClassLoader cloader = new ExtensionClassLoader(new File(ExtensionsLoader.getInstance()
+				.getExtensionsDir()
+				+ File.separator
 
-			+ extensionName));
+				+ extensionName));
 			Class c = cloader.loadClass(extensionD.getCreationUIDialog());
 			Constructor con = c.getConstructor(new Class[]{ServiceInformation.class});
 			Object obj = con.newInstance(new Object[]{info});
@@ -76,9 +83,11 @@ public class ExtensionTools {
 		ServiceExtensionDescriptionType extensionD = ExtensionsLoader.getInstance().getServiceExtension(extensionName);
 		if (extensionD != null && extensionD.getServiceModificationUIPanel() != null
 			&& !extensionD.getServiceModificationUIPanel().equals("")) {
-			ExtensionClassLoader cloader = new ExtensionClassLoader(new File(ExtensionsLoader.getInstance().getExtensionsDir() + File.separator
+			ExtensionClassLoader cloader = new ExtensionClassLoader(new File(ExtensionsLoader.getInstance()
+				.getExtensionsDir()
+				+ File.separator
 
-			+ extensionName));
+				+ extensionName));
 			Class c = cloader.loadClass(extensionD.getServiceModificationUIPanel());
 			Constructor con = c.getConstructor(new Class[]{ServiceInformation.class});
 			Object obj = con.newInstance(new Object[]{info});
@@ -87,9 +96,10 @@ public class ExtensionTools {
 		return null;
 	}
 
+
 	public static String getProperty(Properties properties, String key) {
 		String value = null;
-		if (properties.getProperty() != null) {
+		if (properties != null && properties.getProperty() != null) {
 			for (int i = 0; i < properties.getProperty().length; i++) {
 				if (properties.getProperty(i).getKey().equals(key)) {
 					return properties.getProperty(i).getValue();

@@ -4,7 +4,7 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.portal.ExtensionTools;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
 import java.awt.GridBagConstraints;
@@ -89,8 +89,8 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 				return null;
 			}
 
-			ExtensionTools.setSchemaElements(input, XMLUtilities.stringToDocument(gmePanel.currentNode
-				.getSchemaContents()));
+			gov.nih.nci.cagrid.introduce.portal.ExtensionTools.setSchemaElements(input, XMLUtilities
+				.stringToDocument(gmePanel.currentNode.getSchemaContents()));
 			cacheSchema(schemaDestinationDir, input.getNamespace());
 		} catch (Exception e) {
 			e.printStackTrace();

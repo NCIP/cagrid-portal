@@ -58,20 +58,6 @@ public class ExtensionTools {
 	}
 
 
-	public static String getProperty(Properties properties, String key) {
-		String value = null;
-		if (properties.getProperty() != null) {
-			for (int i = 0; i < properties.getProperty().length; i++) {
-				if (properties.getProperty(i).getKey().equals(key)) {
-					return properties.getProperty(i).getValue();
-				}
-			}
-		}
-
-		return value;
-	}
-
-
 	/**
 	 * Reads the schema and sets the SchemaElements of the NamespaceType for
 	 * each.
@@ -83,7 +69,8 @@ public class ExtensionTools {
 	 * @throws Exception
 	 */
 	public static void setSchemaElements(NamespaceType namespace, Document schemaContents) throws Exception {
-		List elementTypes = schemaContents.getRootElement().getChildren("element", schemaContents.getRootElement().getNamespace());
+		List elementTypes = schemaContents.getRootElement().getChildren("element",
+			schemaContents.getRootElement().getNamespace());
 		SchemaElementType[] schemaTypes = new SchemaElementType[elementTypes.size()];
 		for (int i = 0; i < elementTypes.size(); i++) {
 			Element element = (Element) elementTypes.get(i);

@@ -11,6 +11,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.File;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -21,7 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 
-public class CaDSRBrowserPanel extends JPanel {
+public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener, PackageSelectedListener {
 
 	private JPanel mainPanel = null;
 	private JPanel queryPanel = null;
@@ -36,14 +38,41 @@ public class CaDSRBrowserPanel extends JPanel {
 	private JLabel packageLabel = null;
 	private JComboBox classComboBox = null;
 	private JLabel classLabel = null;
+	private boolean showQueryPanel = true;
+	private boolean showClassSelection = true;
+
+	private List packageSelectionListeners = new ArrayList();
+	private List projectSelectionListeners = new ArrayList();
+	private List classSelectionListeners = new ArrayList();
 
 
-	/**
-	 * This method initializes
-	 */
 	public CaDSRBrowserPanel() {
 		super();
 		initialize();
+		this.addProjectSelectionListener(this);
+		this.addPackageSelectionListener(this);
+	}
+
+
+	public CaDSRBrowserPanel(boolean showQueryPanel, boolean showClassSelection) {
+		this();
+		this.showQueryPanel = showQueryPanel;
+		this.showClassSelection = showClassSelection;
+	}
+
+
+	public boolean addPackageSelectionListener(PackageSelectedListener listener) {
+		return packageSelectionListeners.add(listener);
+	}
+
+
+	public boolean addProjectSelectionListener(ProjectSelectedListener listener) {
+		return projectSelectionListeners.add(listener);
+	}
+
+
+	public boolean addClassSelectionListener(ClassSelectedListener listener) {
+		return classSelectionListeners.add(listener);
 	}
 
 
@@ -78,7 +107,9 @@ public class CaDSRBrowserPanel extends JPanel {
 			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints1.weightx = 0.0D;
 			gridBagConstraints1.weighty = 0.0D;
-			mainPanel.add(getQueryPanel(), gridBagConstraints1);
+			if (isShowQueryPanel()) {
+				mainPanel.add(getQueryPanel(), gridBagConstraints1);
+			}
 			mainPanel.add(getProjectsPanel(), gridBagConstraints);
 		}
 		return mainPanel;
@@ -170,21 +201,11 @@ public class CaDSRBrowserPanel extends JPanel {
 			projectComboBox.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (projectComboBox.getSelectedItem() != null) {
-						getPackageComboBox().removeAllItems();
-						CaDSRServiceI cadsr = new CaDSRServiceClient(getCadsr().getText());
-						try {
-							UMLPackageMetadata[] metadatas = cadsr
-								.findPackagesInProject(((ProjectDisplay) projectComboBox.getSelectedItem())
-									.getProject());
-							if (metadatas != null) {
-								for (int i = 0; i < metadatas.length; i++) {
-									getPackageComboBox().addItem(new PackageDisplay(metadatas[i]));
-								}
-							}
-						} catch (RemoteException e1) {
-							e1.printStackTrace();
-							JOptionPane.showMessageDialog(CaDSRBrowserPanel.this,
-								"Error communicating with caDSR; please check the caDSR URL!");
+						Project project = ((ProjectDisplay) projectComboBox.getSelectedItem()).getProject();
+						for (int i = 0; i < projectSelectionListeners.size(); i++) {
+							ProjectSelectedListener listener = (ProjectSelectedListener) projectSelectionListeners
+								.get(i);
+							listener.handleProjectSelection(project);
 						}
 					}
 				}
@@ -205,23 +226,12 @@ public class CaDSRBrowserPanel extends JPanel {
 			packageComboBox.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (getPackageComboBox().getSelectedItem() != null) {
-						getClassComboBox().removeAllItems();
-						CaDSRServiceI cadsr = new CaDSRServiceClient(getCadsr().getText());
-						try {
-							UMLClassMetadata[] metadatas = cadsr.findClassesInPackage(
-								((ProjectDisplay) getProjectComboBox().getSelectedItem()).getProject(),
-								((PackageDisplay) getPackageComboBox().getSelectedItem()).getPackage().getName());
-							if (metadatas != null) {
-								for (int i = 0; i < metadatas.length; i++) {
-									getClassComboBox().addItem(new ClassDisplay(metadatas[i]));
-								}
-							}
-						} catch (RemoteException e1) {
-							e1.printStackTrace();
-							JOptionPane.showMessageDialog(CaDSRBrowserPanel.this,
-								"Error communicating with caDSR; please check the caDSR URL!");
+						UMLPackageMetadata pkg = ((PackageDisplay) getPackageComboBox().getSelectedItem()).getPackage();
+						for (int i = 0; i < packageSelectionListeners.size(); i++) {
+							PackageSelectedListener listener = (PackageSelectedListener) packageSelectionListeners
+								.get(i);
+							listener.handlePackageSelection(pkg);
 						}
-
 					}
 				}
 			});
@@ -281,15 +291,19 @@ public class CaDSRBrowserPanel extends JPanel {
 			gridBagConstraints7.gridx = 1;
 			projectsPanel = new JPanel();
 			projectsPanel.setLayout(new GridBagLayout());
-			projectsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Data Type",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+			if (isShowQueryPanel()) {
+				projectsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Data Type",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+			}
 			projectsPanel.add(getProjectComboBox(), gridBagConstraints7);
 			projectsPanel.add(projectLabel, gridBagConstraints9);
 			projectsPanel.add(getPackageComboBox(), gridBagConstraints8);
 			projectsPanel.add(packageLabel, gridBagConstraints10);
-			projectsPanel.add(getClassComboBox(), gridBagConstraints2);
-			projectsPanel.add(classLabel, gridBagConstraints3);
+			if (isShowClassSelection()) {
+				projectsPanel.add(getClassComboBox(), gridBagConstraints2);
+				projectsPanel.add(classLabel, gridBagConstraints3);
+			}
 		}
 		return projectsPanel;
 	}
@@ -318,8 +332,29 @@ public class CaDSRBrowserPanel extends JPanel {
 	private JComboBox getClassComboBox() {
 		if (classComboBox == null) {
 			classComboBox = new JComboBox();
+			classComboBox.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					if (getClassComboBox().getSelectedItem() != null) {
+						UMLClassMetadata clazz = ((ClassDisplay) getClassComboBox().getSelectedItem()).getClazz();
+						for (int i = 0; i < packageSelectionListeners.size(); i++) {
+							ClassSelectedListener listener = (ClassSelectedListener) classSelectionListeners.get(i);
+							listener.handleClassSelection(clazz);
+						}
+					}
+				}
+			});
 		}
 		return classComboBox;
+	}
+
+
+	public boolean isShowQueryPanel() {
+		return showQueryPanel;
+	}
+
+
+	public boolean isShowClassSelection() {
+		return showClassSelection;
 	}
 
 
@@ -409,4 +444,46 @@ public class CaDSRBrowserPanel extends JPanel {
 		frame.pack();
 		frame.setVisible(true);
 	}
+
+
+	public void handleProjectSelection(Project project) {
+		getPackageComboBox().removeAllItems();
+		CaDSRServiceI cadsr = new CaDSRServiceClient(getCadsr().getText());
+		try {
+			UMLPackageMetadata[] metadatas = cadsr.findPackagesInProject(project);
+			if (metadatas != null) {
+				for (int i = 0; i < metadatas.length; i++) {
+					getPackageComboBox().addItem(new PackageDisplay(metadatas[i]));
+				}
+			}
+		} catch (RemoteException e1) {
+			e1.printStackTrace();
+			JOptionPane.showMessageDialog(CaDSRBrowserPanel.this,
+				"Error communicating with caDSR; please check the caDSR URL!");
+		}
+
+	}
+
+
+	public void handlePackageSelection(UMLPackageMetadata pkg) {
+		if (isShowClassSelection()) {
+			getClassComboBox().removeAllItems();
+			CaDSRServiceI cadsr = new CaDSRServiceClient(getCadsr().getText());
+			try {
+				UMLClassMetadata[] metadatas = cadsr.findClassesInPackage(((ProjectDisplay) getProjectComboBox()
+					.getSelectedItem()).getProject(), pkg.getName());
+				if (metadatas != null) {
+					for (int i = 0; i < metadatas.length; i++) {
+						getClassComboBox().addItem(new ClassDisplay(metadatas[i]));
+					}
+				}
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
+				JOptionPane.showMessageDialog(CaDSRBrowserPanel.this,
+					"Error communicating with caDSR; please check the caDSR URL!");
+			}
+		}
+
+	}
+
 }
