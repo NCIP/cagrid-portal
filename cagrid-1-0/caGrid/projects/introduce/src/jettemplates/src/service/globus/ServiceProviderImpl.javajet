@@ -25,7 +25,7 @@ public class <%=serviceName%>ProviderImpl{
 	
 	<%=serviceName%>I impl;
 	
-	public <%=serviceName%>ProviderImpl() {
+	public <%=serviceName%>ProviderImpl() throws RemoteException {
 		impl = new <%=serviceName%>Impl();
 	}
 	

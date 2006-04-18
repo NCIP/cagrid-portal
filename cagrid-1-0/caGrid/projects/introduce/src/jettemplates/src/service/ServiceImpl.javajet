@@ -30,7 +30,7 @@ import org.globus.wsrf.Constants;
 public class <%=serviceName%>Impl implements <%=serviceName%>I{
     private ServiceConfiguration configuration;
 	
-	public <%=serviceName%>Impl(){
+	public <%=serviceName%>Impl() throws RemoteException {
 	
 	}
 	

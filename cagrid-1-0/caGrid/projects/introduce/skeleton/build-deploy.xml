@@ -8,7 +8,21 @@
 	<property name="tomcat.deploy.lib.dir" value="${tomcat.deploy.dir}/lib" />
 	<property name="tomcat.wsrf.schema.dir" value="${tomcat.dir}/webapps/wsrf/share/schema" />
 	
-	<property name="gar.name" value="${gar.filename}.gar" />
+	<property name="gar.name" value="${service.name}.gar" />
+	<!-- Filesets -->
+	<!-- JARs to be included in the GAR file -->
+	<fileset dir="${build.lib.dir}" id="garjars" />
+	<property name="garjars.id" value="garjars" />
+	
+	<!-- Schema files (WSDL, XSD, etc.) to be included in the GAR file -->
+	<fileset dir="${schema.dest}" id="garschema">
+		<include name="${schema.path}/**/*" />
+	</fileset>
+	<property name="garschema.id" value="garschema" />
+	
+	<!-- Configuration files (security, etc.) to be included in the GAR file -->
+	<property name="garetc.id" value="garetc" />
+	<fileset dir="${etc.dir}" id="garetc" />
 	
 	<filter filtersfile="service.properties.tmp"/>
 	
