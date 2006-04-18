@@ -2,14 +2,9 @@ To Do:
 
 Try to create a new service on the desktop and throws an error
 
-theres no way to change a method to void once you've set a return type
-
 metadata type panel isnt updating when you add new schemas from the types tab
 
 Need to make Configuration Menu work... should be able to set appropriate services URLs, etc
-
-parameter names and not being made unique when you add them... double click "string" twice as an input param
-
 
 
 
@@ -50,6 +45,9 @@ support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
 ==========
+(DONE this is checked when you click done...) parameter names and not being made unique when you add them... double click "string" twice as an input param 
+(DONE) theres no way to change a method to void once you've set a return type
+
 (DONE you can set properties through the interface now) need to make jndi edited, not replaced everytime.
 
 (DONE) introduce build needs to make more granular jars (for linking), how about:

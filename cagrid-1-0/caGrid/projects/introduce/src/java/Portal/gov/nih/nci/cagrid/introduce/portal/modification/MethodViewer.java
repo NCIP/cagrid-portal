@@ -149,6 +149,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JLabel downLabel = null;
 
+	private JButton clearOutputTypeButton = null;
+
+
 	public MethodViewer(MethodType method, ServiceInformation info, File schemaDir, MethodsTable table, int selectedRow) {
 		this.info = info;
 		this.method = method;
@@ -371,9 +374,10 @@ public class MethodViewer extends GridPortalBaseFrame {
 						for (int i = 0; i < getInputParamTable().getRowCount(); i++) {
 							MethodTypeInputsInput input = getInputParamTable().getRowData(i);
 							// validate the input param
-							if(usedNames.contains(input.getName())){
+							if (usedNames.contains(input.getName())) {
 								valid = false;
-								message = "Method " + method.getName() + " contains more that one parameter named " + input.getName();
+								message = "Method " + method.getName() + " contains more that one parameter named "
+									+ input.getName();
 							}
 							usedNames.add(input.getName());
 							if (!JavaUtils.isJavaId(input.getName())) {
@@ -848,7 +852,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private NamespacesJTree getInputNamespaceTypesJTree() {
 		if (inputNamespaceTypesJTree == null) {
-			inputNamespaceTypesJTree = new NamespacesJTree(info.getNamespaces(),true);
+			inputNamespaceTypesJTree = new NamespacesJTree(info.getNamespaces(), true);
 			inputNamespaceTypesJTree.addMouseListener(new MouseListener() {
 
 				public void mouseReleased(MouseEvent e) {
@@ -962,7 +966,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private NamespacesJTree getOutputNamespacesJTree() {
 		if (outputNamespacesJTree == null) {
-			outputNamespacesJTree = new NamespacesJTree(info.getNamespaces(),true);
+			outputNamespacesJTree = new NamespacesJTree(info.getNamespaces(), true);
 			outputNamespacesJTree.addMouseListener(new MouseListener() {
 
 				public void mouseClicked(MouseEvent e) {
@@ -1023,6 +1027,10 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getOutputTypesTablePanel() {
 		if (outputTypesTablePanel == null) {
+			GridBagConstraints gridBagConstraints26 = new GridBagConstraints();
+			gridBagConstraints26.gridx = 1;
+			gridBagConstraints26.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints26.gridy = 0;
 			GridBagConstraints gridBagConstraints23 = new GridBagConstraints();
 			gridBagConstraints23.gridx = 0;
 			gridBagConstraints23.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -1033,11 +1041,13 @@ public class MethodViewer extends GridPortalBaseFrame {
 			gridBagConstraints22.gridy = 1;
 			gridBagConstraints22.weightx = 1.0;
 			gridBagConstraints22.weighty = 1.0;
+			gridBagConstraints22.gridwidth = 3;
 			gridBagConstraints22.insets = new java.awt.Insets(2, 2, 2, 2);
 			outputTypesTablePanel = new JPanel();
 			outputTypesTablePanel.setLayout(new GridBagLayout());
 			outputTypesTablePanel.add(getOutputTypejScrollPane(), gridBagConstraints22);
 			outputTypesTablePanel.add(getSetOutputButton(), gridBagConstraints23);
+			outputTypesTablePanel.add(getClearOutputTypeButton(), gridBagConstraints26);
 		}
 		return outputTypesTablePanel;
 	}
@@ -1112,9 +1122,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 
 	/**
-	 * This method initializes inputTableControlsPanel1	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes inputTableControlsPanel1
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getInputTableControlsPanel1() {
 		if (inputTableControlsPanel1 == null) {
@@ -1135,7 +1145,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
-			
+
 				}
 			});
 			upLabel = new JLabel();
@@ -1150,7 +1160,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 						e1.printStackTrace();
 					}
 				}
-			
+
 			});
 			inputTableControlsPanel1 = new JPanel();
 			inputTableControlsPanel1.setLayout(new GridBagLayout());
@@ -1160,6 +1170,30 @@ public class MethodViewer extends GridPortalBaseFrame {
 		return inputTableControlsPanel1;
 	}
 
+
+	/**
+	 * This method initializes clearOutputTypeButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getClearOutputTypeButton() {
+		if (clearOutputTypeButton == null) {
+			clearOutputTypeButton = new JButton();
+			clearOutputTypeButton.setText("Clear Output Type");
+			clearOutputTypeButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					MethodTypeOutput output = new MethodTypeOutput();
+					output.setQName(new QName("", "void"));
+					try {
+						getOutputTypeTable().modifyRow(0,output);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+			});
+		}
+		return clearOutputTypeButton;
+	}
 
 } // @jve:decl-index=0:visual-constraint="4,12"
 
