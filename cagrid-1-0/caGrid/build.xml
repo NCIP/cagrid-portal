@@ -240,11 +240,12 @@
 
 
 	<!-- =============================================================== -->
-	<!-- cadsr:                                                         -->
+	<!-- caDSR:                                                          -->
 	<!-- =============================================================== -->
 	<target name="build-cadsr" depends="prepare" description="Builds the cadsr project">
 		<resolveDependencies extdir="${projects.dir}/cadsr/ext">
 			<artifact refid="core.jars" />
+			<artifact refid="introduce.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/cadsr" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
