@@ -246,6 +246,7 @@
 		<resolveDependencies extdir="${projects.dir}/cadsr/ext">
 			<artifact refid="core.jars" />
 			<artifact refid="introduce.jars" />
+			<artifact refid="gme.globus.client.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/cadsr" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
