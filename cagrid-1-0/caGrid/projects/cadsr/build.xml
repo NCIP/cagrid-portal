@@ -162,6 +162,10 @@
 			<pathelement location="${service.build.dest}" />
 			<path refid="service.build.classpath" />			
 		</path>
+		<path id="test.run.classpath">
+			<pathelement location="${test.build.dest}" />
+			<path refid="test.build.classpath" />			
+		</path>
 		<path id="portal.build.classpath">
 			<pathelement location="${service.build.dest}" />
 			<path refid="service.build.classpath" />			
@@ -316,29 +320,12 @@
 	<target name="test" depends="checkGlobus,create_config_files">
 		<echo message="Test results dir: ${junit.results.dir}" />
 		<mkdir dir="${junit.results.dir}" />
-		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true">
+		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true" >
 			<sysproperty key="basedir" value="${basedir}" />
 			<jvmarg value="-Xmx512M" />
 			<jvmarg value="-Dbuild.dir=${build.dir}" />
 			<jvmarg value="-Djava.endorsed.dirs=${ext.endorsed.dir}" />
-			<classpath>
-				<fileset dir="${ext.globus.dir}/lib">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${build.lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${ext.test.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<pathelement location="${test.dir}/resources" />
-			</classpath>
+			<classpath refid="test.run.classpath"/>
 			<formatter type="xml" />
 			<batchtest fork="yes" haltonfailure="true" haltonerror="true" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}">
