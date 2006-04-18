@@ -5,8 +5,8 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
-import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.portal.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
 import java.awt.GridBagConstraints;
@@ -22,7 +22,6 @@ import javax.swing.JTextField;
 
 import org.jdom.Document;
 import org.jdom.Element;
-import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.Namespace;
 import org.projectmobius.common.XMLUtilities;
 
@@ -65,17 +64,17 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 		gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
 		gridBagConstraints2.gridy = 0;
 		gridBagConstraints2.weightx = 1.0;
-		gridBagConstraints2.insets = new java.awt.Insets(2,2,2,2);
+		gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
 		gridBagConstraints2.gridx = 1;
 		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 		gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
 		gridBagConstraints1.gridy = 1;
 		gridBagConstraints1.weightx = 1.0;
-		gridBagConstraints1.insets = new java.awt.Insets(2,2,2,2);
+		gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
 		gridBagConstraints1.gridx = 1;
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
-		gridBagConstraints.insets = new java.awt.Insets(2,2,2,2);
+		gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
 		gridBagConstraints.gridy = 0;
 		nameLabel = new JLabel();
 		nameLabel.setText("Name");
@@ -163,37 +162,18 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 	public NamespaceType createNamespaceType(File schemaDestinationDir) {
 		NamespaceType input = new NamespaceType();
 
-		// set the package name
-		String packageName = CommonTools.getPackageName(currentNamespace);
-		input.setPackageName(packageName);
-		input.setNamespace(currentNamespace.getRaw());
-		input.setLocation("./" + new File(currentFile).getName());
-		
-		Document doc = null;
 		try {
-			doc = XMLUtilities.fileNameToDocument(currentFile);
-		} catch (MobiusException e1) {
-			e1.printStackTrace();
-		}
-		
-		List elementTypes = doc.getRootElement().getChildren("element", doc.getRootElement().getNamespace());
-		SchemaElementType[] schemaTypes = new SchemaElementType[elementTypes.size()];
-		List elements = doc.getRootElement().getChildren("element",
-			doc.getRootElement().getNamespace(Namespace.W3C_XMLSCHEMA));
-		for (int i = 0; i < elements.size(); i++) {
-			Element el = (Element) elements.get(i);
-			SchemaElementType type = new SchemaElementType();
-			type.setType(el.getAttributeValue("name"));
-			schemaTypes[i] = type;
-		}
-		input.setSchemaElement(schemaTypes);
+			// set the package name
+			String packageName = CommonTools.getPackageName(currentNamespace);
+			input.setPackageName(packageName);
+			input.setNamespace(currentNamespace.getRaw());
+			input.setLocation("./" + new File(currentFile).getName());
 
-		try {
+			ExtensionTools.setSchemaElements(input, XMLUtilities.fileNameToDocument(currentFile));
 			copySchemas(currentFile, schemaDestinationDir);
 		} catch (Exception e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(FileTypesSelectionComponent.this,
-				"Unable to move schema files to service skeleton");
+
 			return null;
 		}
 		return input;
@@ -225,9 +205,9 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 
 
 	/**
-	 * This method initializes namespaceText	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes namespaceText
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getNamespaceText() {
 		if (namespaceText == null) {
@@ -239,9 +219,9 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 
 
 	/**
-	 * This method initializes filenameText	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes filenameText
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getFilenameText() {
 		if (filenameText == null) {
@@ -252,4 +232,4 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 		return filenameText;
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="16,10"
+} // @jve:decl-index=0:visual-constraint="16,10"
