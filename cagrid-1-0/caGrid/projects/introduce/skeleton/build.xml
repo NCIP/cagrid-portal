@@ -133,8 +133,7 @@
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.dest}" />
 		<mkdir dir="${test.build.dest}" />
-		<delete dir="${build.lib.dir}" />
-		<!-- Delete build lib dir to avoid JARs from previous builds from getting into our GAR file -->
+		<mkdir dir="${test.log.dir}" />
 		<mkdir dir="${build.lib.dir}" />
 
 		<mkdir dir="${stubs.dir}" />
@@ -349,7 +348,6 @@
 	<!-- Empty target, in case we simply want to generate the JAR files -->
 	<target name="jars" depends="jarStubs, jar, jarTests" />
 
-	<mkdir dir="${test.log.dir}" />
 	<!-- call the test target for each project and aggregates the log resutls  -->
 	<target name="test" depends="checkGlobus,create_config_files">
 		<echo message="Test results dir: ${junit.results.dir}" />
