@@ -1,5 +1,5 @@
 build
-CaDSRService.gar
+*.gar
 ext
 bin
 *.log.*

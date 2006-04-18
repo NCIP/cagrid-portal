@@ -96,7 +96,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	public JPanel getMainPanel() {
+	protected JPanel getMainPanel() {
 		if (mainPanel == null) {
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
@@ -127,7 +127,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	public JPanel getQueryPanel() {
+	protected JPanel getQueryPanel() {
 		if (queryPanel == null) {
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 			gridBagConstraints6.anchor = java.awt.GridBagConstraints.WEST;
@@ -183,7 +183,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	public JButton getQueryButton() {
+	protected JButton getQueryButton() {
 		if (queryButton == null) {
 			queryButton = new JButton("Refresh from caDSR Service");
 			queryButton.addActionListener(new java.awt.event.ActionListener() {
@@ -196,18 +196,26 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	}
 
 
+	public Project getSelectedProject() {
+		if (projectComboBox.getSelectedItem() != null) {
+			return ((ProjectDisplay) projectComboBox.getSelectedItem()).getProject();
+		}
+		return null;
+	}
+
+
 	/**
 	 * This method initializes jComboBox
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	public JComboBox getProjectComboBox() {
+	protected JComboBox getProjectComboBox() {
 		if (projectComboBox == null) {
 			projectComboBox = new JComboBox();
 			projectComboBox.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (projectComboBox.getSelectedItem() != null) {
-						Project project = ((ProjectDisplay) projectComboBox.getSelectedItem()).getProject();
+						Project project = getSelectedProject();
 						for (int i = 0; i < projectSelectionListeners.size(); i++) {
 							ProjectSelectedListener listener = (ProjectSelectedListener) projectSelectionListeners
 								.get(i);
@@ -226,13 +234,13 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	public JComboBox getPackageComboBox() {
+	protected JComboBox getPackageComboBox() {
 		if (packageComboBox == null) {
 			packageComboBox = new JComboBox();
 			packageComboBox.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (getPackageComboBox().getSelectedItem() != null) {
-						UMLPackageMetadata pkg = ((PackageDisplay) getPackageComboBox().getSelectedItem()).getPackage();
+						UMLPackageMetadata pkg = getSelectedPackage();
 						for (int i = 0; i < packageSelectionListeners.size(); i++) {
 							PackageSelectedListener listener = (PackageSelectedListener) packageSelectionListeners
 								.get(i);
@@ -240,9 +248,18 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 						}
 					}
 				}
+
 			});
 		}
 		return packageComboBox;
+	}
+
+
+	public UMLPackageMetadata getSelectedPackage() {
+		if (getPackageComboBox().getSelectedItem() != null) {
+			return ((PackageDisplay) getPackageComboBox().getSelectedItem()).getPackage();
+		}
+		return null;
 	}
 
 
@@ -341,7 +358,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 			classComboBox.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (getClassComboBox().getSelectedItem() != null) {
-						UMLClassMetadata clazz = ((ClassDisplay) getClassComboBox().getSelectedItem()).getClazz();
+						UMLClassMetadata clazz = getSelectedClass();
 						for (int i = 0; i < classSelectionListeners.size(); i++) {
 							ClassSelectedListener listener = (ClassSelectedListener) classSelectionListeners.get(i);
 							listener.handleClassSelection(clazz);
@@ -490,6 +507,14 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 			}
 		}
 
+	}
+
+
+	public UMLClassMetadata getSelectedClass() {
+		if (getClassComboBox().getSelectedItem() != null) {
+			return ((ClassDisplay) getClassComboBox().getSelectedItem()).getClazz();
+		}
+		return null;
 	}
 
 }
