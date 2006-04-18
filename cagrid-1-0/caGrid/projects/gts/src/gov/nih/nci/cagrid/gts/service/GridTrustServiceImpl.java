@@ -2,10 +2,8 @@ package gov.nih.nci.cagrid.gts.service;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.SimpleResourceManager;
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.gts.common.GridTrustServiceI;
 import gov.nih.nci.cagrid.gts.service.globus.resource.BaseResourceHome;
-import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 import gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault;
 
 import java.rmi.RemoteException;
@@ -28,8 +26,17 @@ public class GridTrustServiceImpl implements GridTrustServiceI {
 	private GTS gts = null;
 
 
-	public GridTrustServiceImpl() {
-
+	public GridTrustServiceImpl() throws RemoteException {
+		try {
+			EndpointReferenceType type = AddressingUtils.createEndpointReference(null);
+			BaseResourceHome home = (BaseResourceHome) ResourceContext.getResourceContext().getResourceHome();
+			SimpleResourceManager srm = new SimpleResourceManager(home.getGtsConfig());
+			GTSConfiguration conf = (GTSConfiguration) srm.getResource(GTSConfiguration.RESOURCE);
+			this.gts = new GTS(conf, type.getAddress().toString());
+		} catch (Exception e) {
+			FaultHelper.printStackTrace(e);
+			throw new RemoteException("Error configuring Grid Trust Service");
+		}
 	}
 
 
@@ -45,77 +52,80 @@ public class GridTrustServiceImpl implements GridTrustServiceI {
 	}
 
 
-	private GTS getGTSHandle() throws GTSInternalFault {
-		if (gts == null) {
-			try {
-				EndpointReferenceType type = AddressingUtils.createEndpointReference(null);
-				BaseResourceHome home = (BaseResourceHome) ResourceContext.getResourceContext().getResourceHome();
-				SimpleResourceManager srm = new SimpleResourceManager(home.getGtsConfig());
-				GTSConfiguration conf = (GTSConfiguration) srm.getResource(GTSConfiguration.RESOURCE);
-				this.gts = new GTS(conf, type.getAddress().toString());
-			} catch (Exception e) {
-				FaultHelper.printStackTrace(e);
-				GTSInternalFault fault = new GTSInternalFault();
-				fault.setFaultString(Utils.getExceptionMessage(e));
-				gov.nih.nci.cagrid.common.FaultHelper helper = new gov.nih.nci.cagrid.common.FaultHelper(fault);
-				helper.addFaultCause(e);
-				fault = (GTSInternalFault) helper.getFault();
-				throw fault;
-			}
-		}
-		return gts;
+	public void removeTrustedAuthority(java.lang.String trustedAuthorityName) throws RemoteException,
+		gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault,
+		gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+		gts.removeTrustedAuthority(trustedAuthorityName, getCallerIdentity());
 	}
 
 
-	     public void removeTrustedAuthority(java.lang.String trustedAuthorityName) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
-		getGTSHandle().removeTrustedAuthority(trustedAuthorityName, getCallerIdentity());
+	public gov.nih.nci.cagrid.gts.bean.TrustedAuthority addTrustedAuthority(
+		gov.nih.nci.cagrid.gts.bean.TrustedAuthority ta) throws RemoteException,
+		gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault,
+		gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+		return gts.addTrustedAuthority(ta, getCallerIdentity());
 	}
 
 
-	     public gov.nih.nci.cagrid.gts.bean.TrustedAuthority addTrustedAuthority(gov.nih.nci.cagrid.gts.bean.TrustedAuthority ta) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
-		return getGTSHandle().addTrustedAuthority(ta, getCallerIdentity());
+	public gov.nih.nci.cagrid.gts.bean.TrustedAuthority[] findTrustedAuthorities(
+		gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter f) throws RemoteException,
+		gov.nih.nci.cagrid.gts.stubs.GTSInternalFault {
+		return gts.findTrustAuthorities(f);
 	}
 
 
-	     public gov.nih.nci.cagrid.gts.bean.TrustedAuthority[] findTrustedAuthorities(gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter f) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault {
-		return getGTSHandle().findTrustAuthorities(f);
+	public void addPermission(gov.nih.nci.cagrid.gts.bean.Permission permission) throws RemoteException,
+		gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault,
+		gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+		gts.addPermission(permission, getCallerIdentity());
 	}
 
 
-	     public void addPermission(gov.nih.nci.cagrid.gts.bean.Permission permission) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
-		getGTSHandle().addPermission(permission, getCallerIdentity());
+	public gov.nih.nci.cagrid.gts.bean.Permission[] findPermissions(gov.nih.nci.cagrid.gts.bean.PermissionFilter f)
+		throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault,
+		gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+		return gts.findPermissions(f, getCallerIdentity());
 	}
 
 
-	     public gov.nih.nci.cagrid.gts.bean.Permission[] findPermissions(gov.nih.nci.cagrid.gts.bean.PermissionFilter f) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
-		return getGTSHandle().findPermissions(f, getCallerIdentity());
+	public void revokePermission(gov.nih.nci.cagrid.gts.bean.Permission permission) throws RemoteException,
+		gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault,
+		gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+		gts.revokePermission(permission, getCallerIdentity());
 	}
 
 
-	     public void revokePermission(gov.nih.nci.cagrid.gts.bean.Permission permission) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
-		getGTSHandle().revokePermission(permission, getCallerIdentity());
+	public void updateTrustedAuthority(gov.nih.nci.cagrid.gts.bean.TrustedAuthority ta) throws RemoteException,
+		gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault,
+		gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+		gts.updateTrustedAuthority(ta, getCallerIdentity());
 	}
 
 
-	     public void updateTrustedAuthority(gov.nih.nci.cagrid.gts.bean.TrustedAuthority ta) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
-		getGTSHandle().updateTrustedAuthority(ta, getCallerIdentity());
+	public void addTrustLevel(gov.nih.nci.cagrid.gts.bean.TrustLevel trustLevel) throws RemoteException,
+		gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault,
+		gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+		gts.addTrustLevel(trustLevel, getCallerIdentity());
 	}
 
 
-	     public void addTrustLevel() throws RemoteException, gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault {
-		// TODO: Implement this autogenerated method
-		throw new RemoteException("Not yet implemented");
+	public void updateTrustLevel(gov.nih.nci.cagrid.gts.bean.TrustLevel trustLevel) throws RemoteException,
+		gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidTrustLevelFault,
+		gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+		gts.updateTrustLevel(trustLevel, getCallerIdentity());
 	}
 
 
-	     public void updateTrustLevel() throws RemoteException, gov.nih.nci.cagrid.gts.stubs.InvalidTrustLevelFault {
-		// TODO: Implement this autogenerated method
-		throw new RemoteException("Not yet implemented");
+	public gov.nih.nci.cagrid.gts.bean.TrustLevel[] getTrustLevels() throws RemoteException,
+		gov.nih.nci.cagrid.gts.stubs.GTSInternalFault {
+		return gts.getTrustLevels();
 	}
 
 
-	     public gov.nih.nci.cagrid.gts.bean.TrustLevel[] getTrustLevels() throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault {
-		return getGTSHandle().getTrustLevels();
+	public void removeTrustLevel(java.lang.String string) throws RemoteException,
+		gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidTrustLevelFault,
+		gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+		gts.removeTrustLevel(string, getCallerIdentity());
 	}
 
 }

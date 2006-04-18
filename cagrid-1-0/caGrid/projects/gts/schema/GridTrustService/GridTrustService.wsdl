@@ -204,6 +204,15 @@
 					<complexType>
 						<sequence>
           		  
+                  					
+							<element name="trustLevel">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:TrustLevel" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+                  				 	
 	      				</sequence>
 	      			</complexType>
 	      		</element>
@@ -219,6 +228,15 @@
 					<complexType>
 						<sequence>
           		  
+                  					
+							<element name="trustLevel">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:TrustLevel" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+                  				 	
 	      				</sequence>
 	      			</complexType>
 	      		</element>
@@ -244,6 +262,24 @@
           		  
 										<element ref="ns0:TrustLevel" minOccurs="1" maxOccurs="unbounded" />
 			                  		
+						</sequence>
+					</complexType>
+				</element>
+				<element name="removeTrustLevel">
+					<complexType>
+						<sequence>
+          		  
+                  					
+							<element name="string" type="xs:string" minOccurs="1" maxOccurs="1" />
+                  				 	
+	      				</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="removeTrustLevelResponse">
+					<complexType>
+						<sequence>
+          		  
 						</sequence>
 					</complexType>
 				</element>
@@ -391,6 +427,13 @@
 	<message name="getTrustLevelsOutputMessage">
 		<part name="parameters" element="tns:getTrustLevelsResponse"/>
 	</message>
+	<message name="removeTrustLevelInputMessage">
+		<part name="parameters" element="tns:removeTrustLevel"/>
+	</message>
+	
+	<message name="removeTrustLevelOutputMessage">
+		<part name="parameters" element="tns:removeTrustLevelResponse"/>
+	</message>
 	<message name="GTSInternalFaultFaultMessage">
 		<part name="fault" element="tns:GTSInternalFault"/>
 	</message>
@@ -492,19 +535,39 @@
 		<operation name="addTrustLevel">
             <input message="tns:addTrustLevelInputMessage"/>
             <output message="tns:addTrustLevelOutputMessage"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
        		 <fault name="IllegalTrustLevelFault" message="tns:IllegalTrustLevelFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
        				
         </operation>
 		<operation name="updateTrustLevel">
             <input message="tns:updateTrustLevelInputMessage"/>
             <output message="tns:updateTrustLevelOutputMessage"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
        		 <fault name="InvalidTrustLevelFault" message="tns:InvalidTrustLevelFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
        				
         </operation>
 		<operation name="getTrustLevels">
             <input message="tns:getTrustLevelsInputMessage"/>
             <output message="tns:getTrustLevelsOutputMessage"/>
        		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="removeTrustLevel">
+            <input message="tns:removeTrustLevelInputMessage"/>
+            <output message="tns:removeTrustLevelOutputMessage"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+       		 <fault name="InvalidTrustLevelFault" message="tns:InvalidTrustLevelFaultFaultMessage"/>
+       				
+       		 <fault name="IllegalTrustLevelFault" message="tns:IllegalTrustLevelFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
        				
         </operation>
         <operation name="GetResourceProperty">

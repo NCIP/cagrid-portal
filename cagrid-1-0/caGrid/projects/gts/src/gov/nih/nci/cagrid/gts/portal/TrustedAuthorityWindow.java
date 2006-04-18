@@ -276,6 +276,9 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 					updateTrustLevels();
 				}
 			});
+			if(this.update){
+				gts.setEnabled(false);
+			}
 		}
 		return gts;
 	}

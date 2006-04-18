@@ -2,11 +2,14 @@ package gov.nih.nci.cagrid.gts.client;
 
 import gov.nih.nci.cagrid.gts.bean.Permission;
 import gov.nih.nci.cagrid.gts.bean.PermissionFilter;
+import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
+import gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault;
+import gov.nih.nci.cagrid.gts.stubs.InvalidTrustLevelFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault;
 
@@ -66,6 +69,24 @@ public class GTSAdminClient {
 	public void revokePermission(Permission permission) throws RemoteException, GTSInternalFault,
 		InvalidPermissionFault, PermissionDeniedFault {
 		client.revokePermission(permission);
+	}
+
+
+	public void addTrustLevel(TrustLevel trustLevel) throws RemoteException, GTSInternalFault, IllegalTrustLevelFault,
+		PermissionDeniedFault {
+		client.addTrustLevel(trustLevel);
+	}
+
+
+	public void updateTrustLevel(TrustLevel trustLevel) throws RemoteException, GTSInternalFault,
+		InvalidTrustLevelFault, PermissionDeniedFault {
+		client.updateTrustLevel(trustLevel);
+	}
+
+
+	public void removeTrustLevel(String trustLevelName) throws RemoteException, GTSInternalFault,
+		InvalidTrustLevelFault, IllegalTrustLevelFault, PermissionDeniedFault {
+		client.removeTrustLevel(trustLevelName);
 	}
 
 }
