@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.discovery.gme;
 
-import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
-
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
@@ -17,7 +15,6 @@ import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.Namespace;
 import org.projectmobius.gme.XMLDataModelService;
 import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
-import org.projectmobius.portal.PortalResourceManager;
 import org.projectmobius.protocol.gme.SchemaNode;
 
 
