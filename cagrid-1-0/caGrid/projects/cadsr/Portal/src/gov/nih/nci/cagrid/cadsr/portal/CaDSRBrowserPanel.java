@@ -41,23 +41,29 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	private boolean showQueryPanel = true;
 	private boolean showClassSelection = true;
 
-	private List packageSelectionListeners = new ArrayList();
-	private List projectSelectionListeners = new ArrayList();
-	private List classSelectionListeners = new ArrayList();
+	private List packageSelectionListeners = null;
+	private List projectSelectionListeners = null;
+	private List classSelectionListeners = null;
 
 
 	public CaDSRBrowserPanel() {
-		super();
-		initialize();
-		this.addProjectSelectionListener(this);
-		this.addPackageSelectionListener(this);
+		this(true, true);
 	}
 
 
 	public CaDSRBrowserPanel(boolean showQueryPanel, boolean showClassSelection) {
-		this();
+		super();
 		this.showQueryPanel = showQueryPanel;
 		this.showClassSelection = showClassSelection;
+
+		packageSelectionListeners = new ArrayList();
+		projectSelectionListeners = new ArrayList();
+		classSelectionListeners = new ArrayList();
+
+		this.addProjectSelectionListener(this);
+		this.addPackageSelectionListener(this);
+		initialize();
+
 	}
 
 
@@ -336,7 +342,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (getClassComboBox().getSelectedItem() != null) {
 						UMLClassMetadata clazz = ((ClassDisplay) getClassComboBox().getSelectedItem()).getClazz();
-						for (int i = 0; i < packageSelectionListeners.size(); i++) {
+						for (int i = 0; i < classSelectionListeners.size(); i++) {
 							ClassSelectedListener listener = (ClassSelectedListener) classSelectionListeners.get(i);
 							listener.handleClassSelection(clazz);
 						}

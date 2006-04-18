@@ -33,7 +33,6 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 		this.gmeURL = ExtensionTools.getProperty(desc.getProperties(), "GME_URL");
 		initialize();
 		this.getCaDSRPanel().discoverFromCaDSR();
-
 	}
 
 
