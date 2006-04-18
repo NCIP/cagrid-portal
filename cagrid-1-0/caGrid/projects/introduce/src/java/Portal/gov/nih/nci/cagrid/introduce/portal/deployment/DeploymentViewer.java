@@ -1,9 +1,12 @@
 package gov.nih.nci.cagrid.introduce.portal.deployment;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
+import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
@@ -42,7 +45,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 
 	private static final String TOMCAT = "CATALINA_HOME";
 
-	private JPanel inputPanel = null;
+	private JPanel deployPropertiesPanel = null;
 
 	private JPanel mainPanel = null;
 
@@ -51,12 +54,16 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 	private JButton deployButton = null;
 
 	private File serviceDirectory;
+	
+	private ServiceDescription introService;
 
 	Properties deployProperties;
 
 	private JPanel deploymentTypePanel = null;
 
 	private JComboBox deploymentTypeSelector = null;
+
+	private JPanel servicePropertiesPanel = null;
 
 	/**
 	 * This method initializes
@@ -81,7 +88,12 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 					return;
 				}
 				if (serviceDirectory.exists() && serviceDirectory.canRead()) {
+					try {
 					initialize();
+					} catch (Exception e){
+						JOptionPane.showMessageDialog(DeploymentViewer.this, "Error initializing the deployment: " + e.getMessage());
+						DeploymentViewer.this.dispose();
+					}
 				} else {
 					JOptionPane.showMessageDialog(DeploymentViewer.this, "Directory "
 						+ serviceDirectory.getAbsolutePath() + " does not seem to be an introduce service");
@@ -107,7 +119,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 	 * 
 	 * @return void
 	 */
-	private void initialize() {
+	private void initialize() throws Exception {
 		this.setContentPane(getMainPanel());
 		this.setFrameIcon(IntroduceLookAndFeel.getDeployIcon());
 		this.setTitle("Deploy Grid Service");
@@ -121,13 +133,34 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		
+		this.introService = (ServiceDescription) Utils.deserializeDocument(this.serviceDirectory.getAbsolutePath()
+			+ File.separator + "introduce.xml", ServiceDescription.class);
+		if (introService.getIntroduceVersion() == null
+			|| !introService.getIntroduceVersion().equals(IntroduceConstants.INTRODUCE_VERSION)) {
+			throw new Exception(
+				"Introduce version in project does not match version provided by Introduce Toolkit ( "
+					+ IntroduceConstants.INTRODUCE_VERSION + " ): " + introService.getIntroduceVersion());
+		}
+		
+		//load up the deploy properties;
 		Enumeration keys = deployProperties.keys();
 		int i = 0;
 		while (keys.hasMoreElements()) {
 			String key = (String) keys.nextElement();
-			this.addTextField(this.getInputPanel(), key, deployProperties.getProperty(key), i++, true);
+			this.addTextField(this.getDeployPropertiesPanel(), key, deployProperties.getProperty(key), i++, true);
 		}
+		
+		//load up the service properties
+		if(introService.getServiceProperties()!=null&&introService.getServiceProperties().getProperty()!=null){
+			for(i =0;i < introService.getServiceProperties().getProperty().length; i++){
+				ServicePropertiesProperty prop = introService.getServiceProperties().getProperty(i);
+				this.addTextField(this.getServicePropertiesPanel(), prop.getKey(), prop.getValue(), i, true);
+				
+			}
+		}
+		
+		
 		pack();
 
 	}
@@ -138,8 +171,8 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getInputPanel() {
-		if (inputPanel == null) {
+	private JPanel getDeployPropertiesPanel() {
+		if (deployPropertiesPanel == null) {
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
 			gridBagConstraints10.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints10.gridy = 3;
@@ -149,9 +182,9 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 			gridBagConstraints10.gridwidth = 2;
 			gridBagConstraints10.weighty = 1.0D;
 			gridBagConstraints10.gridx = 1;
-			inputPanel = new JPanel();
-			inputPanel.setLayout(new GridBagLayout());
-			inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Deployment Properties",
+			deployPropertiesPanel = new JPanel();
+			deployPropertiesPanel.setLayout(new GridBagLayout());
+			deployPropertiesPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Deployment Properties",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
@@ -160,7 +193,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 			gridBagConstraints9.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints9.anchor = java.awt.GridBagConstraints.WEST;
 		}
-		return inputPanel;
+		return deployPropertiesPanel;
 	}
 
 
@@ -171,6 +204,10 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+			gridBagConstraints12.gridx = 0;
+			gridBagConstraints12.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints12.gridy = 2;
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			gridBagConstraints11.gridx = 0;
 			gridBagConstraints11.fill = java.awt.GridBagConstraints.BOTH;
@@ -178,7 +215,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.gridy = 2;
+			gridBagConstraints1.gridy = 3;
 			gridBagConstraints1.anchor = java.awt.GridBagConstraints.SOUTH;
 			gridBagConstraints1.weighty = 0.0D;
 			gridBagConstraints1.weightx = 1.0D;
@@ -195,8 +232,9 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 			gridBagConstraints.gridwidth = 1;
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
-			mainPanel.add(getInputPanel(), gridBagConstraints);
+			mainPanel.add(getDeployPropertiesPanel(), gridBagConstraints);
 			mainPanel.add(getButtonPanel(), gridBagConstraints1);
+			mainPanel.add(getServicePropertiesPanel(), gridBagConstraints12);
 			mainPanel.add(getDeploymentTypePanel(), gridBagConstraints11);
 		}
 		return mainPanel;
@@ -243,10 +281,10 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 								String value = getTextFieldValue(key);
 								deployProperties.setProperty(key, value);
 							}
-
+							
 							try {
 								deployProperties.store(new FileOutputStream(new File(serviceDirectory.getAbsolutePath()
-									+ File.separator + "deploy.properties")), "service deployment properties");
+									+ File.separator + "deploy.properties")), "introduce service deployment properties");
 							} catch (FileNotFoundException ex) {
 								ex.printStackTrace();
 								setErrorMessage("Error: " + ex.getMessage());
@@ -254,6 +292,28 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 								ex.printStackTrace();
 								setErrorMessage("Error: " + ex.getMessage());
 							}
+							
+							Properties serviceProps = new Properties();
+							//	load up the service properties
+							if(introService.getServiceProperties()!=null&&introService.getServiceProperties().getProperty()!=null){
+								for(int i =0;i < introService.getServiceProperties().getProperty().length; i++){
+									ServicePropertiesProperty prop = introService.getServiceProperties().getProperty(i);
+									serviceProps.put(prop.getKey(),getTextFieldValue(prop.getKey()));
+								}
+							}
+							
+							try {
+								serviceProps.store(new FileOutputStream(new File(serviceDirectory.getAbsolutePath()
+									+ File.separator + "service.properties.tmp")), "service deployment properties");
+							} catch (FileNotFoundException ex) {
+								ex.printStackTrace();
+								setErrorMessage("Error: " + ex.getMessage());
+							} catch (IOException ex) {
+								ex.printStackTrace();
+								setErrorMessage("Error: " + ex.getMessage());
+							}
+							
+							
 							
 							setProgressText("deploying");
 							
@@ -319,5 +379,20 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 			deploymentTypeSelector.addItem(GLOBUS);
 		}
 		return deploymentTypeSelector;
+	}
+
+
+	/**
+	 * This method initializes servicePropertiesPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getServicePropertiesPanel() {
+		if (servicePropertiesPanel == null) {
+			servicePropertiesPanel = new JPanel();
+			servicePropertiesPanel.setLayout(new GridBagLayout());
+			servicePropertiesPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service Properties", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+		}
+		return servicePropertiesPanel;
 	}
 }

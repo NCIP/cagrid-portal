@@ -5,6 +5,7 @@
            xmlns:methods="gme://gov.nih.nci.cagrid.introduce/1/Methods"
            xmlns:security="gme://gov.nih.nci.cagrid.introduce/1/Security"
            xmlns:namespace="gme://gov.nih.nci.cagrid.introduce/1/Namespace"
+           xmlns:property="gme://gov.nih.nci.cagrid.introduce/1/Property"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
            targetNamespace="gme://gov.nih.nci.cagrid/1/Introduce" elementFormDefault="qualified"
            attributeFormDefault="unqualified">
@@ -18,6 +19,8 @@
                       schemaLocation="./Metadata.xsd"/>
            <xs:import namespace="gme://gov.nih.nci.cagrid.introduce/1/Extension"
                       schemaLocation="./Extension.xsd"/>
+           <xs:import namespace="gme://gov.nih.nci.cagrid.introduce/1/Property"
+                      schemaLocation="./Property.xsd"/>
                       
            <xs:element name="ServiceDescription">
                       <xs:complexType>
@@ -27,6 +30,7 @@
                                             <xs:element ref="metadata:MetadataList"/>
                                             <xs:element ref="security:ServiceSecurity" minOccurs="0" maxOccurs="1"/>
                                             <xs:element ref="extension:Extensions" minOccurs="0" maxOccurs="1"/>
+                                            <xs:element ref="property:ServiceProperties" minOccurs="0" maxOccurs="1"/>
                                  </xs:sequence>
                                  <xs:attribute name="introduceVersion" type="xs:string" use="optional"></xs:attribute>
                       </xs:complexType>

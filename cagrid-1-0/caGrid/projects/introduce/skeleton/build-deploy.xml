@@ -10,6 +10,8 @@
 	
 	<property name="gar.name" value="${gar.filename}.gar" />
 	
+	<filter filtersfile="service.properties.tmp"/>
+	
 	
 	<!-- deploy  a gar to tomcat -->
 	<target name="deployTomcat" depends="createDeploymentGar" description="Deploys to CATALINA_HOME">
@@ -39,7 +41,7 @@
 			</fileset>
 		</copy>
 		<!-- prepare the jndi file -->
-		<copy overwrite="true" todir="tmp" file="jndi-config.xml" />
+		<copy overwrite="true" todir="tmp" file="jndi-config.xml" filtering="true"/>
 		<!-- replace the config paths in the server deploy file -->
 		<replace file="tmp/jndi-config.xml" value="${service.deployment.dir.name}" token="SERVICE-INSTANCE-PATH" />
 		<replace file="tmp/jndi-config.xml" value="${service.deployment.path}" token="SERVICE-INSTANCE-NAME" />
@@ -90,7 +92,7 @@
 		<replace file="tmp/server-config.wsdd" value="${service.deployment.path}" token="SERVICE-INSTANCE-NAME" />
 		<replace file="tmp/server-config.wsdd" value="etc/${introduce.skeleton.service.name}" token="ETC-PATH" />
 		<!-- prepare the jndi file -->
-		<copy overwrite="true" todir="tmp" file="jndi-config.xml" />
+		<copy overwrite="true" todir="tmp" filtering="true" file="jndi-config.xml" />
 		<!-- replace the config paths in the server deploy file -->
 		<replace file="tmp/jndi-config.xml" value="${introduce.skeleton.service.name}" token="SERVICE-INSTANCE-PATH" />
 		<replace file="tmp/jndi-config.xml" value="${service.deployment.path}" token="SERVICE-INSTANCE-NAME" />

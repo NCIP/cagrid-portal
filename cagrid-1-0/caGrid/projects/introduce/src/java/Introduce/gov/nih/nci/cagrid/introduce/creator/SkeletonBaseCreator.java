@@ -26,7 +26,7 @@ public class SkeletonBaseCreator {
 
 
 	public void createSkeleton(ServiceInformation info) throws Exception {
-		File baseDirectory = new File(info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
+		File baseDirectory = new File(info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
 		
 		ServerConfigTemplate serverConfigT = new ServerConfigTemplate();
 		String serverConfigS = serverConfigT.generate(info);

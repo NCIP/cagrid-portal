@@ -1,7 +1,7 @@
 <%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus.resource" class="MetadataConfigurationTemplate" imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.*"
 %>
 <%  gov.nih.nci.cagrid.introduce.info.ServiceInformation arguments = (gov.nih.nci.cagrid.introduce.info.ServiceInformation) argument; 
-  	Properties properties = arguments.getServiceProperties();
+  	Properties properties = arguments.getIntroduceServiceProperties();
 	MetadataListType metadataList = arguments.getMetadata();
 
    String packageName = properties.getProperty("introduce.skeleton.package");

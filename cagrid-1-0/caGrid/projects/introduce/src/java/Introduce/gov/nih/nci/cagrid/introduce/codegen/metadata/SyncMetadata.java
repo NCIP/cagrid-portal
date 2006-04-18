@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.JNDIConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.etc.RegistationTemplate;
+import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceConfigurationTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.BaseResourceTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.MetadataConfigurationTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceConstantsTemplate;
@@ -55,7 +56,7 @@ public class SyncMetadata extends SyncTool {
 			String baseResourceS = baseResourceT.generate(getServiceInformation());
 			File baseResourceF = new File(srcDir.getAbsolutePath()
 				+ File.separator
-				+ getServiceInformation().getServiceProperties().getProperty(
+				+ getServiceInformation().getIntroduceServiceProperties().getProperty(
 					IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + "service" + File.separator
 				+ "globus" + File.separator + "resource" + File.separator + "BaseResource.java");
 
@@ -67,7 +68,7 @@ public class SyncMetadata extends SyncTool {
 			String metadataConfigurationS = metadataConfigurationT.generate(getServiceInformation());
 			File metadataConfigurationF = new File(srcDir.getAbsolutePath()
 				+ File.separator
-				+ getServiceInformation().getServiceProperties().getProperty(
+				+ getServiceInformation().getIntroduceServiceProperties().getProperty(
 					IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + "service" + File.separator
 				+ "globus" + File.separator + "resource" + File.separator + "MetadataConfiguration.java");
 
@@ -79,7 +80,7 @@ public class SyncMetadata extends SyncTool {
 			String resourceContanstsS = resourceContanstsT.generate(getServiceInformation());
 			File resourceContanstsF = new File(srcDir.getAbsolutePath()
 				+ File.separator
-				+ getServiceInformation().getServiceProperties().getProperty(
+				+ getServiceInformation().getIntroduceServiceProperties().getProperty(
 					IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + "service" + File.separator
 				+ "globus" + File.separator + "resource" + File.separator + "ResourceConstants.java");
 
@@ -100,6 +101,18 @@ public class SyncMetadata extends SyncTool {
 			FileWriter jndiConfigFW = new FileWriter(jndiConfigF);
 			jndiConfigFW.write(jndiConfigS);
 			jndiConfigFW.close();
+
+			ServiceConfigurationTemplate serviceConfT = new ServiceConfigurationTemplate();
+			String serviceConfS = serviceConfT.generate(getServiceInformation());
+			File serviceConfF = new File(srcDir.getAbsolutePath()
+				+ File.separator
+				+ getServiceInformation().getIntroduceServiceProperties().getProperty(
+					IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + "service" + File.separator
+				+ "globus" + File.separator + "ServiceConfiguration.java");
+
+			FileWriter serviceConfFW = new FileWriter(serviceConfF);
+			serviceConfFW.write(serviceConfS);
+			serviceConfFW.close();
 
 		} catch (IOException e) {
 			throw new SynchronizationException("Error writing file:" + e.getMessage(), e);

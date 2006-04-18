@@ -162,6 +162,8 @@
 			<jetc destdir="${src.dir}/Introduce"
 				template="${templates.src.dir}/src/service/ServiceImpl.javajet"/>
 			<jetc destdir="${src.dir}/Introduce"
+				template="${templates.src.dir}/src/service/globus/ServiceConfiguration.javajet"/>
+			<jetc destdir="${src.dir}/Introduce"
 				template="${templates.src.dir}/src/service/globus/ServiceProviderImpl.javajet"/>
 			<jetc destdir="${src.dir}/Introduce"
 				template="${templates.src.dir}/src/service/globus/resource/BaseResource.javajet"/>

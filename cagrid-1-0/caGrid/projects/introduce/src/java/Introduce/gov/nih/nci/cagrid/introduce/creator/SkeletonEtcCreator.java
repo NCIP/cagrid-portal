@@ -21,7 +21,7 @@ public class SkeletonEtcCreator {
 
 
 	public void createSkeleton(ServiceInformation info) throws Exception {
-		File baseDirectory = new File(info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
+		File baseDirectory = new File(info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
 
 		File etcDir = new File(baseDirectory.getAbsolutePath() + File.separator + "etc");
 		etcDir.mkdir();

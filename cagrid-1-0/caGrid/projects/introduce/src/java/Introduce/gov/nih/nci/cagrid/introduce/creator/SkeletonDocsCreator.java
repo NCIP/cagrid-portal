@@ -20,7 +20,7 @@ public class SkeletonDocsCreator {
 
 
 	public void createSkeleton(ServiceInformation info) throws Exception {
-		File baseDirectory = new File(info.getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
+		File baseDirectory = new File(info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
 
 		File docsDir = new File(baseDirectory.getAbsolutePath() + File.separator + "docs");
 		docsDir.mkdir();

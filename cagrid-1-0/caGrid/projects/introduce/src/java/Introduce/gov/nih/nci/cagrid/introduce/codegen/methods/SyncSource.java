@@ -64,7 +64,7 @@ public class SyncSource {
 	public SyncSource(File baseDir, ServiceInformation info) {
 		// this.baseDir = baseDir;
 		this.serviceInfo = info;
-		this.deploymentProperties = this.serviceInfo.getServiceProperties();
+		this.deploymentProperties = this.serviceInfo.getIntroduceServiceProperties();
 		this.packageName = (String) this.deploymentProperties.get("introduce.skeleton.package") + ".stubs";
 		serviceClient = baseDir.getAbsolutePath() + File.separator + "src" + File.separator
 			+ this.deploymentProperties.get(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + "client"

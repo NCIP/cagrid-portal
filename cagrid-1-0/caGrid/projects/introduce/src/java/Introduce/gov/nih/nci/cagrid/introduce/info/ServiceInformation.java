@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
+import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 
 import java.io.File;
@@ -24,14 +25,16 @@ public class ServiceInformation {
 
 	private ServiceDescription introService;
 
-	private Properties serviceProperties;
+	private Properties introduceServiceProperties;
 
 	private File baseDirectory;
+	
+	private ServiceProperties serviceProperties;
 
 
 	public ServiceInformation(ServiceDescription service, Properties properties, File baseDirectory) {
 		this.introService = service;
-		this.serviceProperties = properties;
+		this.introduceServiceProperties = properties;
 		this.baseDirectory = baseDirectory;
 	}
 
@@ -46,13 +49,13 @@ public class ServiceInformation {
 	}
 
 
-	public Properties getServiceProperties() {
-		return serviceProperties;
+	public Properties getIntroduceServiceProperties() {
+		return introduceServiceProperties;
 	}
 
 
 	public void setServiceProperties(Properties serviceProperties) {
-		this.serviceProperties = serviceProperties;
+		this.introduceServiceProperties = serviceProperties;
 	}
 
 
@@ -89,6 +92,16 @@ public class ServiceInformation {
 	public ServiceSecurity getServiceSecurity() {
 		return this.introService.getServiceSecurity();
 	}
+	
+	public ServiceProperties getServiceProperties() {
+		return this.introService.getServiceProperties();
+	}
+
+
+	public void setServiceProperties(ServiceProperties serviceProperties) {
+		this.introService.setServiceProperties(serviceProperties);
+	}
+
 
 
 	public File getBaseDirectory() {
@@ -121,5 +134,7 @@ public class ServiceInformation {
 	public ServiceDescription getServiceDescriptor() {
 		return introService;
 	}
+
+
 
 }

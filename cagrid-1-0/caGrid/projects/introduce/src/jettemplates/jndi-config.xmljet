@@ -1,11 +1,11 @@
 <%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="JNDIConfigTemplate" 
-imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.*" %>
+imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.* gov.nih.nci.cagrid.introduce.beans.property.*" %>
 <% gov.nih.nci.cagrid.introduce.info.ServiceInformation info = (gov.nih.nci.cagrid.introduce.info.ServiceInformation) argument;
    MetadataListType metadataList = info.getMetadata();
-   
-   String packageName = info.getServiceProperties().getProperty("introduce.skeleton.package");
-   String serviceName = info.getServiceProperties().getProperty("introduce.skeleton.service.name");
-   String namespaceDomain = info.getServiceProperties().getProperty("introduce.skeleton.namespace.domain");
+   ServiceProperties properties = info.getServiceProperties();
+   String packageName = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.package");
+   String serviceName = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.service.name");
+   String namespaceDomain = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.namespace.domain");
    String modifiedServiceName = serviceName;
    if(serviceName.endsWith("Service")){
    	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
@@ -52,6 +52,23 @@ imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codege
 			}
 		}
 	}%>				
+			</resourceParams>
+		</resource>
+		<resource name="serviceconfiguration" type="<%=packageName%>.service.globus.ServiceConfiguration">
+			<resourceParams>
+				<parameter>
+					<name>factory</name>
+					<value>org.globus.wsrf.jndi.BeanFactory</value>
+				</parameter>
+				<%if(properties!=null && properties.getProperty()!=null){
+			for (int i = 0; i < properties.getProperty().length; i++) {
+				ServicePropertiesProperty prop = properties.getProperty(i);%>
+					<parameter>
+				<name><%=prop.getKey()%></name>
+					<value>@<%=prop.getKey()%>@</value>
+				</parameter><%
+			}
+	}%>		
 			</resourceParams>
 		</resource>
 	</service>
