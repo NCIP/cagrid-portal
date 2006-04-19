@@ -48,7 +48,7 @@ public class ExtensionClassLoader {
 
 					// give them introduce build
 					File introduceBuildLibDir = new File(introduceLocation + File.separator + "build" + File.separator
-						+ "lib");
+						+ "jars");
 					File[] introduceBuildLibDirjars = introduceBuildLibDir.listFiles(new FileFilter() {
 						public boolean accept(File pathname) {
 							return pathname.getName().toLowerCase().endsWith(".jar");
