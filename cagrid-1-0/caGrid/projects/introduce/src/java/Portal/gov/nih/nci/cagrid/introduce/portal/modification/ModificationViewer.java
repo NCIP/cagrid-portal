@@ -1450,6 +1450,7 @@ public class ModificationViewer extends GridPortalComponent {
 							gov.nih.nci.cagrid.introduce.portal.ExtensionTools.getNamespaceTypeDiscoveryComponent(dd
 								.getName()));
 					} catch (Exception e) {
+						e.printStackTrace();
 						JOptionPane.showMessageDialog(ModificationViewer.this, "Error loading discovery type: "
 							+ dd.getDisplayName());
 					}
