@@ -109,14 +109,14 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 			if (!namespaceDomainList.contains(namespace.getDomain())) {
 				// prompt for alternate
 				String alternativeDomain = (String) JOptionPane.showInputDialog(this,
-					"Unable to locate schema for the selected caDSR package.\n"
-						+ "The GME does not appear to contain schemas under the specified domain: "
-						+ namespace.getDomain() + "\nSelect an alternative domain, or cancel.",
-					"Schema Location Error", JOptionPane.ERROR_MESSAGE, null, namespaceDomainList.toArray(), null);
+					"The GME does not appear to contain schemas under the specified domain.\n"
+						+ "Select an alternative domain, or cancel if no viable option is available.\n"
+						+ "\nExpected domain: " + namespace.getDomain(), "Schema Location Error",
+					JOptionPane.ERROR_MESSAGE, null, namespaceDomainList.toArray(), null);
 
 				if (alternativeDomain != null) {
 					namespace = new Namespace(namespace.getProtocol() + "://" + alternativeDomain + "/"
-						+ namespace.getNamespace());
+						+ namespace.getName());
 					getNsTextField().setText(namespace.getRaw());
 				} else {
 					return null;
@@ -131,8 +131,8 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 				Namespace alternativeSchema = (Namespace) JOptionPane.showInputDialog(this,
 					"Unable to locate schema for the selected caDSR package.\n"
 						+ "This package may not have a published Schema."
-						+ "\nSelect an alternative Schema, or cancel.", "Schema Location Error",
-					JOptionPane.ERROR_MESSAGE, null, schemas.toArray(), null);
+						+ "\nSelect an alternative Schema, or cancel.\n\nExpected schema: " + namespace.getName(),
+					"Schema Location Error", JOptionPane.ERROR_MESSAGE, null, schemas.toArray(), null);
 
 				if (alternativeSchema != null) {
 					namespace = alternativeSchema;
