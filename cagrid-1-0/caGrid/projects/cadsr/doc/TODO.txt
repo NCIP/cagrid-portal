@@ -1,13 +1,13 @@
 
 cadsr api bug.. returning too many classes when there are package aliases
 
-make browser into introduce plugin
-
 caching using resources?
 
 
 
 ==================================================
+(DONE) make browser into introduce plugin
+
 (DONE) need to add more context to methods for proper unambiguity
 
 (DONE) browser needs to show project version
