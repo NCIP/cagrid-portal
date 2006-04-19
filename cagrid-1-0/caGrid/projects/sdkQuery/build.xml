@@ -33,6 +33,18 @@
 	<property name="lib.dir" location="${basedir}/lib"/>
 	<property name="ext.lib.dir" location="${basedir}/ext/lib"/>
 	
+	<!-- check for java 1.5 -->
+	<condition property="isJDK1.5">
+		<and>
+			<equals arg1="${ant.java.version}" arg2="1.5" />
+		</and>
+	</condition>
+	
+	<!-- fail the build gracefully if JDK < 1.5 is used -->
+	<target name="checkJDK" unless="isJDK1.5">
+		<fail message="JDK with version &lt; 1.5 is required to build this project!" />
+	</target>
+	
 	<!-- creates output directories -->
     <target name="init">
         <mkdir dir="${build.dir}" />
@@ -41,7 +53,7 @@
     </target>
 
 	<!-- compiles the utility source code -->
-	<target name="compile" depends="init">
+	<target name="compile" depends="init, checkJDK">
 		<javac srcdir="${src.dir}" destdir="${build.dest}" debug="${java.debug}">
 			<classpath>
 				<fileset dir="${lib.dir}">
