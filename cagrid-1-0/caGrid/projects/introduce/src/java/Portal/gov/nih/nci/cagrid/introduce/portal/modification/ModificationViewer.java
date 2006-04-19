@@ -1446,9 +1446,11 @@ public class ModificationViewer extends GridPortalComponent {
 				for (int i = 0; i < discoveryTypes.size(); i++) {
 					DiscoveryExtensionDescriptionType dd = (DiscoveryExtensionDescriptionType) discoveryTypes.get(i);
 					try {
-						discoveryTabbedPane.addTab(dd.getDisplayName(),
-							gov.nih.nci.cagrid.introduce.portal.ExtensionTools.getNamespaceTypeDiscoveryComponent(dd
-								.getName()));
+						NamespaceTypeDiscoveryComponent comp = gov.nih.nci.cagrid.introduce.portal.ExtensionTools
+							.getNamespaceTypeDiscoveryComponent(dd.getName());
+						if (comp != null) {
+							discoveryTabbedPane.addTab(dd.getDisplayName(), comp);
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						JOptionPane.showMessageDialog(ModificationViewer.this, "Error loading discovery type: "

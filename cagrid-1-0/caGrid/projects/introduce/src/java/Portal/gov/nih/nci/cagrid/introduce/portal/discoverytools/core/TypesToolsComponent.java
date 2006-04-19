@@ -74,8 +74,11 @@ public class TypesToolsComponent extends GridPortalComponent {
 			for (int i = 0; i < tools.size(); i++) {
 				DiscoveryExtensionDescriptionType desc = (DiscoveryExtensionDescriptionType) tools.get(i);
 				try {
-					NamespaceTypeToolsComponent comp = gov.nih.nci.cagrid.introduce.portal.ExtensionTools.getNamespaceTypeToolsComponent(desc.getName());
-					contentTabbedPane.addTab(desc.getDisplayName(), comp);
+					NamespaceTypeToolsComponent comp = gov.nih.nci.cagrid.introduce.portal.ExtensionTools
+						.getNamespaceTypeToolsComponent(desc.getName());
+					if (comp != null) {
+						contentTabbedPane.addTab(desc.getDisplayName(), comp);
+					}
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(TypesToolsComponent.this, "Could not load types tool: "
 						+ desc.getDisplayName());
