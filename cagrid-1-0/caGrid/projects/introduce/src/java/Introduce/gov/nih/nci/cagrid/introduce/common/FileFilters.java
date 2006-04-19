@@ -14,7 +14,7 @@ public interface FileFilters {
 	public class XSDFileFilter extends javax.swing.filechooser.FileFilter {
 		public boolean accept(File file) {
 			String filename = file.getName();
-			return filename.endsWith(".xsd");
+			return file.isDirectory() || filename.endsWith(".xsd");
 		}
 
 
@@ -27,7 +27,7 @@ public interface FileFilters {
 	public class XMLFileFilter extends javax.swing.filechooser.FileFilter {
 		public boolean accept(File file) {
 			String filename = file.getName();
-			return filename.endsWith(".xml");
+			return file.isDirectory() || filename.endsWith(".xml");
 		}
 
 
