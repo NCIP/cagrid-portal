@@ -24,8 +24,6 @@
 	<property name="garetc.id" value="garetc" />
 	<fileset dir="${etc.dir}" id="garetc" />
 	
-	<filter filtersfile="service.properties.tmp"/>
-	
 	
 	<!-- ============================================================== -->
 	<!-- Tomcat properties                                              -->
@@ -75,6 +73,7 @@
 			</fileset>
 		</copy>
 		<!-- prepare the jndi file -->
+		<filter filtersfile="${service.properties.file}"/>
 		<copy overwrite="true" todir="tmp" file="jndi-config.xml" filtering="true"/>
 		<!-- replace the config paths in the server deploy file -->
 		<replace file="tmp/jndi-config.xml" value="${service.deployment.dir.name}" token="SERVICE-INSTANCE-PATH" />
@@ -126,6 +125,7 @@
 		<replace file="tmp/server-config.wsdd" value="${service.deployment.path}" token="SERVICE-INSTANCE-NAME" />
 		<replace file="tmp/server-config.wsdd" value="etc/${introduce.skeleton.service.name}" token="ETC-PATH" />
 		<!-- prepare the jndi file -->
+		<filter filtersfile="${service.properties.file}"/>
 		<copy overwrite="true" todir="tmp" filtering="true" file="jndi-config.xml" />
 		<!-- replace the config paths in the server deploy file -->
 		<replace file="tmp/jndi-config.xml" value="${introduce.skeleton.service.name}" token="SERVICE-INSTANCE-PATH" />
