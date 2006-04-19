@@ -14,6 +14,25 @@
 			</xsd:sequence>
 		</xsd:complexType>
 		
+		<xsd:element name="AuthorityGTS" minOccurs="0" maxOccurs="1" type="gts:AuthorityGTS"/>
+		
+		<xsd:complexType name="AuthorityGTS">
+			<xsd:sequence>
+			    <xsd:element name="ServiceURI" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+			    <xsd:element name="Priority" minOccurs="1" maxOccurs="1" type="xsd:int"/>
+				<xsd:element name="SyncTrustLevels" minOccurs="1" maxOccurs="1" type="xsd:boolean"/>
+				<xsd:element name="TrustedAuthorityTimeToLive" minOccurs="1" maxOccurs="1" type="gts:TrustedAuthorityTimeToLive"/>
+			</xsd:sequence>
+		</xsd:complexType>
+		
+		 <xsd:complexType name="TrustedAuthorityTimeToLive">
+			<xsd:sequence>
+			    <xsd:element name="hours" type="xsd:int"/>
+			    <xsd:element name="minutes" type="xsd:int"/>
+			    <xsd:element name="seconds" type="xsd:int"/>
+			</xsd:sequence>
+	    </xsd:complexType>
+		
 		  <xsd:element name="PermissionFilter" minOccurs="0" maxOccurs="1" type="gts:PermissionFilter"/>
 		
 		   <xsd:complexType name="PermissionFilter">
