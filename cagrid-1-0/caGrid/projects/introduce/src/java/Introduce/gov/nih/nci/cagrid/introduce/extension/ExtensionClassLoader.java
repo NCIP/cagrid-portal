@@ -27,8 +27,9 @@ public class ExtensionClassLoader {
 		if (c == null) {
 			// Create a new class loader with the directory
 			ClassLoader cl = null;
+
 			try {
-				File libDir = new File(root.getAbsolutePath() + File.separator + "lib" + File.separator);
+				File libDir = new File(root.getAbsolutePath() + File.separator + "lib");
 				File[] theirjars = libDir.listFiles(new FileFilter() {
 					public boolean accept(File pathname) {
 						return pathname.getName().toLowerCase().endsWith(".jar");
@@ -36,12 +37,62 @@ public class ExtensionClassLoader {
 				});
 
 				if (theirjars != null) {
-					URL[] urls = new URL[theirjars.length];
+					URL[] theirurls = new URL[theirjars.length];
 					for (int i = 0; i < theirjars.length; i++) {
-						System.out.println("Using jar: " + theirjars[i].getAbsolutePath());
-						urls[i] = theirjars[i].toURL();
+						theirurls[i] = theirjars[i].toURL();
 					}
-					cl = new URLClassLoader(urls,this.getClass().getClassLoader());
+
+					java.util.Properties p = System.getProperties();
+					String globusLocation = p.getProperty("GLOBUS_LOCATION");
+					String introduceLocation = p.getProperty("INTRODUCE_LOCATION");
+
+					// give them introduce build
+					File introduceBuildLibDir = new File(introduceLocation + File.separator + "build" + File.separator
+						+ "lib");
+					File[] introduceBuildLibDirjars = introduceBuildLibDir.listFiles(new FileFilter() {
+						public boolean accept(File pathname) {
+							return pathname.getName().toLowerCase().endsWith(".jar");
+						}
+					});
+
+					// give them introduce lib
+					File introduceLibDir = new File(introduceLocation + File.separator + "lib");
+					File[] introduceLibDirjars = introduceLibDir.listFiles(new FileFilter() {
+						public boolean accept(File pathname) {
+							return pathname.getName().toLowerCase().endsWith(".jar");
+						}
+					});
+
+					// give them introduce ext lib
+					File introduceExtLibDir = new File(introduceLocation + File.separator + "ext" + File.separator
+						+ "lib");
+					File[] introduceExtLibDirjars = introduceExtLibDir.listFiles(new FileFilter() {
+						public boolean accept(File pathname) {
+							return pathname.getName().toLowerCase().endsWith(".jar");
+						}
+					});
+
+					// give them globus
+					File globDir = new File(globusLocation + File.separator + "lib");
+					File[] globDirjars = globDir.listFiles(new FileFilter() {
+						public boolean accept(File pathname) {
+							return pathname.getName().toLowerCase().endsWith(".jar");
+						}
+					});
+
+					URL[] urls = new URL[theirurls.length + globDirjars.length + introduceBuildLibDirjars.length
+						+ introduceLibDirjars.length + introduceExtLibDirjars.length];
+					System.arraycopy(theirurls, 0, urls, 0, theirurls.length);
+					System.arraycopy(introduceBuildLibDirjars, 0, urls, theirurls.length,
+						introduceBuildLibDirjars.length);
+					System.arraycopy(introduceLibDirjars, 0, urls, theirurls.length + introduceBuildLibDirjars.length,
+						introduceLibDirjars.length);
+					System.arraycopy(introduceExtLibDirjars, 0, urls, theirurls.length
+						+ +introduceBuildLibDirjars.length + introduceLibDirjars.length, introduceExtLibDirjars.length);
+					System.arraycopy(globDirjars, 0, urls, theirurls.length + +introduceBuildLibDirjars.length
+						+ introduceLibDirjars.length + introduceExtLibDirjars.length, globDirjars.length);
+
+					cl = new URLClassLoader(urls);
 				} else {
 					cl = this.getClass().getClassLoader();
 				}
@@ -50,7 +101,6 @@ public class ExtensionClassLoader {
 				e.printStackTrace();
 			}
 			// Load in the class
-			System.out.println("Loading in extension class: " + name);
 			c = cl.loadClass(name);
 			loadedClasses.put(name, c);
 		}
