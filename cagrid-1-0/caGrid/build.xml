@@ -189,11 +189,15 @@
 		</artifact>
 
 		<artifact track="main" type="jars" id="gme.globus.client.jars">
+			<antcall target="build-gme" />
 			<fileset dir="${projects.dir}/gme/lib">
 				<include name="GlobalModelExchange.jar" />
-				<include name="GlobalModelExchange_stubs.jar" />
 				<include name="jdom-1.0.jar" />
 				<include name="mobius-castor-0.9.4.3-xml.jar"/>
+			</fileset>
+			<fileset dir="${projects.dir}/gme/build/lib">
+				<include name="caGrid-GlobalModelExchange.jar" />
+				<include name="caGrid-GlobalModelExchange_stubs.jar" />
 			</fileset>
 		</artifact>
 	</target>
