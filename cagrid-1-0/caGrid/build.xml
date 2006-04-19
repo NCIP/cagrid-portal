@@ -191,6 +191,9 @@
 		<artifact track="main" type="jars" id="gme.globus.client.jars">
 			<fileset dir="${projects.dir}/gme/lib">
 				<include name="GlobalModelExchange.jar" />
+				<include name="GlobalModelExchange_stubs.jar" />
+				<include name="jdom-1.0.jar" />
+				<include name="mobius-castor-0.9.4.3-xml.jar"/>
 			</fileset>
 		</artifact>
 	</target>
@@ -324,6 +327,7 @@
 			<artifact refid="core.test.jars" />
 			<artifact refid="core.resources" />
 			<artifact refid="mobius.jars" />
+			<artifact refid="gme.globus.client.jars" />
 			<artifact refid="metadata.jars" />
 			<artifact refid="metadata.schemas" />
 			<artifact refid="metadata.mappings" />
