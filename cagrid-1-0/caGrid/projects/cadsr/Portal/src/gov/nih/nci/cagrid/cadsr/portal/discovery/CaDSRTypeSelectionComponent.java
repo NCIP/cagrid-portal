@@ -42,7 +42,6 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 
 	public String gmeURL = null;
 	public String cadsrURL = null;
-	public static String TYPE = "CADSR";
 
 	private CaDSRBrowserPanel caDSRPanel = null;
 	private JPanel nsPanel = null;
@@ -228,8 +227,8 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 			JFrame frame = new JFrame();
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-			ExtensionDescription ext = (ExtensionDescription) Utils.deserializeDocument(
-				"extensions/caDSR-discovery/extension.xml", ExtensionDescription.class);
+			ExtensionDescription ext = (ExtensionDescription) Utils.deserializeDocument("extension.xml",
+				ExtensionDescription.class);
 			final CaDSRTypeSelectionComponent panel = new CaDSRTypeSelectionComponent(ext
 				.getDiscoveryExtensionDescription());
 			frame.getContentPane().setLayout(new BorderLayout());

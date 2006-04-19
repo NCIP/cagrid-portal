@@ -40,6 +40,10 @@
 
 	<property name="force.config.replace" value="false" />
 
+	<!-- override with introduce.properties or -D on commandline when using outside project structure -->
+	<property name="introduce.extensions.dir" value="../introduce/extensions" />
+	<property name="extensions.dir" value="extensions" />
+
 	<!-- Basic Build directories -->
 
 	<!-- Auxiliary directory where all the intermediate files will be placed -->
@@ -160,15 +164,15 @@
 				<include name="*.jar" />
 			</fileset>
 			<pathelement location="${service.build.dest}" />
-			<path refid="service.build.classpath" />			
+			<path refid="service.build.classpath" />
 		</path>
 		<path id="test.run.classpath">
 			<pathelement location="${test.build.dest}" />
-			<path refid="test.build.classpath" />			
+			<path refid="test.build.classpath" />
 		</path>
 		<path id="portal.build.classpath">
 			<pathelement location="${service.build.dest}" />
-			<path refid="service.build.classpath" />			
+			<path refid="service.build.classpath" />
 		</path>
 	</target>
 
@@ -265,6 +269,11 @@
 				<include name="**/*" />
 			</fileset>
 		</copy>
+		<copy toDir="${service.build.dest}">
+			<fileset dir="${basedir}">
+				<include name="client-config.wsdd" />
+			</fileset>
+		</copy>
 	</target>
 
 	<!-- Compile the test implementation classes -->
@@ -275,6 +284,21 @@
 	<!-- Compile the portal implementation classes  -->
 	<target name="compilePortal" depends="compileService">
 		<javac srcdir="${portal.src.dir}" destdir="${portal.build.dest}" debug="${java.debug}" deprecation="${deprecation}" classpathref="portal.build.classpath" />
+	</target>
+
+	<target name="installIntroduceExtensions" depends="jars" description="Builds and installs the caDSR Introduce extensions into Introduce.">
+		<delete dir="${introduce.extensions.dir}/caDSR-discovery" />
+		<mkdir dir="${introduce.extensions.dir}/caDSR-discovery" />
+		<mkdir dir="${introduce.extensions.dir}/caDSR-discovery/lib" />
+		<copy todir="${introduce.extensions.dir}/caDSR-discovery" file="extension.xml" />
+		<copy todir="${introduce.extensions.dir}/caDSR-discovery/lib">
+			<fileset dir="${lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${build.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
 	</target>
 
 
@@ -291,6 +315,7 @@
 			<include name="**/*.dtd" />
 			<include name="**/*.properties" />
 			<include name="**/*.xsd" />
+			<include name="**/*.wsdd" />
 			<include name="${package.dir}/**" />
 			<exclude name="${package.dir}/client/**" />
 			<exclude name="${package.dir}/service/**" />
@@ -320,12 +345,12 @@
 	<target name="test" depends="checkGlobus,create_config_files">
 		<echo message="Test results dir: ${junit.results.dir}" />
 		<mkdir dir="${junit.results.dir}" />
-		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true" >
+		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true">
 			<sysproperty key="basedir" value="${basedir}" />
 			<jvmarg value="-Xmx512M" />
 			<jvmarg value="-Dbuild.dir=${build.dir}" />
 			<jvmarg value="-Djava.endorsed.dirs=${ext.endorsed.dir}" />
-			<classpath refid="test.run.classpath"/>
+			<classpath refid="test.run.classpath" />
 			<formatter type="xml" />
 			<batchtest fork="yes" haltonfailure="true" haltonerror="true" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}">
