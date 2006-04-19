@@ -37,10 +37,6 @@ public class ExtensionClassLoader {
 				});
 
 				if (theirjars != null) {
-					URL[] theirurls = new URL[theirjars.length];
-					for (int i = 0; i < theirjars.length; i++) {
-						theirurls[i] = theirjars[i].toURL();
-					}
 
 					java.util.Properties p = System.getProperties();
 					String globusLocation = p.getProperty("GLOBUS_LOCATION");
@@ -80,16 +76,16 @@ public class ExtensionClassLoader {
 						}
 					});
 
-					File[] urls = new File[theirurls.length + globDirjars.length + introduceBuildLibDirjars.length
+					File[] urls = new File[theirjars.length + globDirjars.length + introduceBuildLibDirjars.length
 						+ introduceLibDirjars.length + introduceExtLibDirjars.length];
-					System.arraycopy(theirurls, 0, urls, 0, theirurls.length);
-					System.arraycopy(introduceBuildLibDirjars, 0, urls, theirurls.length,
+					System.arraycopy(theirjars, 0, urls, 0, theirjars.length);
+					System.arraycopy(introduceBuildLibDirjars, 0, urls, theirjars.length,
 						introduceBuildLibDirjars.length);
-					System.arraycopy(introduceLibDirjars, 0, urls, theirurls.length + introduceBuildLibDirjars.length,
+					System.arraycopy(introduceLibDirjars, 0, urls, theirjars.length + introduceBuildLibDirjars.length,
 						introduceLibDirjars.length);
-					System.arraycopy(introduceExtLibDirjars, 0, urls, theirurls.length
+					System.arraycopy(introduceExtLibDirjars, 0, urls, theirjars.length
 						+ +introduceBuildLibDirjars.length + introduceLibDirjars.length, introduceExtLibDirjars.length);
-					System.arraycopy(globDirjars, 0, urls, theirurls.length + +introduceBuildLibDirjars.length
+					System.arraycopy(globDirjars, 0, urls, theirjars.length + +introduceBuildLibDirjars.length
 						+ introduceLibDirjars.length + introduceExtLibDirjars.length, globDirjars.length);
 					
 					URL[] urlArr = new URL[urls.length];
