@@ -148,11 +148,17 @@ public class GridTrustServiceProviderImpl {
 
 
 
-	public gov.nih.nci.cagrid.gts.stubs.RemoveTrustLevelResponse removeTrustLevel(gov.nih.nci.cagrid.gts.stubs.RemoveTrustLevel params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidTrustLevelFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
-		gov.nih.nci.cagrid.gts.stubs.RemoveTrustLevelResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.RemoveTrustLevelResponse();
-		impl.removeTrustLevel(params.getString());
-		return boxedResult;
-	}
+
+
+
+
+
+
+
+
+
+
+
 	public gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityResponse addTrustedAuthority(gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthority params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
 		gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityResponse();
 		boxedResult.setTrustedAuthority(impl.addTrustedAuthority(params.getTa().getTrustedAuthority()));
@@ -201,6 +207,11 @@ public class GridTrustServiceProviderImpl {
 	public gov.nih.nci.cagrid.gts.stubs.GetTrustLevelsResponse getTrustLevels(gov.nih.nci.cagrid.gts.stubs.GetTrustLevels params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault {
 		gov.nih.nci.cagrid.gts.stubs.GetTrustLevelsResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.GetTrustLevelsResponse();
 		boxedResult.setTrustLevel(impl.getTrustLevels());
+		return boxedResult;
+	}
+	public gov.nih.nci.cagrid.gts.stubs.RemoveTrustLevelResponse removeTrustLevel(gov.nih.nci.cagrid.gts.stubs.RemoveTrustLevel params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidTrustLevelFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+		gov.nih.nci.cagrid.gts.stubs.RemoveTrustLevelResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.RemoveTrustLevelResponse();
+		impl.removeTrustLevel(params.getString());
 		return boxedResult;
 	}
 

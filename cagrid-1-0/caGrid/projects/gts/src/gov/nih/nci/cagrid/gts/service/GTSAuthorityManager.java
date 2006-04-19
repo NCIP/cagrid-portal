@@ -49,7 +49,6 @@ public class GTSAuthorityManager {
 		if (doesAuthorityExist(gts.getServiceURI())) {
 
 		}
-
 	}
 
 
