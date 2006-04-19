@@ -16,11 +16,11 @@ import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.Namespace;
 import org.projectmobius.common.XMLUtilities;
 
+
 /**
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
- * 
  */
 public class CommonTools {
 
@@ -55,13 +55,16 @@ public class CommonTools {
 
 
 	public static String getAntDeployTomcatCommand(String buildFileDir) throws Exception {
-		return getAntCommand("deployTomcat", buildFileDir);
+		String cmd = " -Dservice.properties.file=" + buildFileDir + File.separator + "service.properties.tmp";
+		cmd = getAntCommand("deployTomcat", buildFileDir) + " " + cmd;
+		return cmd;
 	}
 
 
 	public static String getAntDeployGlobusCommand(String buildFileDir) throws Exception {
 		return getAntCommand("deployGlobus", buildFileDir);
 	}
+
 
 	public static String getAntSkeletonCreationCommand(String buildFileDir, String name, String dir,
 		String packagename, String namespacedomain, String extensions) throws Exception {
@@ -73,8 +76,7 @@ public class CommonTools {
 		String cmd = " -Dintroduce.skeleton.destination.dir=" + dir + " -Dintroduce.skeleton.service.name=" + name
 			+ " -Dintroduce.skeleton.package=" + packagename + " -Dintroduce.skeleton.package.dir="
 			+ packagename.replace('.', File.separatorChar) + " -Dintroduce.skeleton.namespace.domain="
-			+ namespacedomain + " -Dintroduce.skeleton.extensions="
-			+ extensions + " createService";
+			+ namespacedomain + " -Dintroduce.skeleton.extensions=" + extensions + " createService";
 		cmd = getAntCommandCall(buildFileDir) + cmd;
 		return cmd;
 	}
@@ -127,7 +129,8 @@ public class CommonTools {
 			return null;
 		}
 	}
-	
+
+
 	public static boolean equals(ServiceSecurity ss, MethodSecurity ms) {
 		if ((ss == null) && (ms == null)) {
 			return true;
@@ -156,20 +159,21 @@ public class CommonTools {
 		}
 	}
 
-	
+
 	public static NamespaceType createNamespaceType(String xsdFilename) throws MobiusException {
 		NamespaceType namespaceType = new NamespaceType();
 		namespaceType.setLocation(xsdFilename);
 		Document schemaDoc = XMLUtilities.fileNameToDocument(xsdFilename);
-		
+
 		String rawNamespace = schemaDoc.getRootElement().getAttributeValue("targetNamespace");
 		Namespace namespace = new Namespace(rawNamespace);
 		String packageName = getPackageName(namespace);
 		namespaceType.setPackageName(packageName);
-		
+
 		namespaceType.setNamespace(namespace.getRaw());
-		
-		List elementTypes = schemaDoc.getRootElement().getChildren("element", schemaDoc.getRootElement().getNamespace());
+
+		List elementTypes = schemaDoc.getRootElement()
+			.getChildren("element", schemaDoc.getRootElement().getNamespace());
 		SchemaElementType[] schemaTypes = new SchemaElementType[elementTypes.size()];
 		for (int i = 0; i < elementTypes.size(); i++) {
 			Element element = (Element) elementTypes.get(i);
