@@ -35,13 +35,6 @@ public class SkeletonBaseCreator {
 		serverConfigFW.write(serverConfigS);
 		serverConfigFW.close();
 		
-		ClientConfigTemplate clientConfigT = new ClientConfigTemplate();
-		String clientConfigS = clientConfigT.generate(info);
-		File clientConfigF = new File(baseDirectory.getAbsolutePath() + File.separator + "client-config.wsdd");
-		FileWriter clientConfigFW = new FileWriter(clientConfigF);
-		clientConfigFW.write(clientConfigS);
-		clientConfigFW.close();
-		
 		JNDIConfigTemplate jndiConfigT = new JNDIConfigTemplate();
 		String jndiConfigS = jndiConfigT.generate(info);
 		File jndiConfigF = new File(baseDirectory.getAbsolutePath() + File.separator + "jndi-config.xml");

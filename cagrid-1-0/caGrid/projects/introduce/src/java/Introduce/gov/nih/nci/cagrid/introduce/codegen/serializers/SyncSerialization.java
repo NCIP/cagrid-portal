@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.codegen.serializers;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
@@ -55,7 +56,9 @@ public class SyncSerialization extends SyncTool {
 
 	public SyncSerialization(File baseDirectory, ServiceInformation info) {
 		super(baseDirectory, info);
-		clientWSDD = new File(getBaseDirectory() + File.separator + "client-config.wsdd");
+		clientWSDD = new File(baseDirectory.getAbsolutePath() + File.separator + "src" + File.separator
+			+ info.getIntroduceServiceProperties().get(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR)
+			+ File.separator + "client" + File.separator + "client-config.wsdd");
 		serverWSDD = new File(getBaseDirectory() + File.separator + "server-config.wsdd");
 	}
 

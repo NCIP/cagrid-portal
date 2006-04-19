@@ -12,9 +12,16 @@ package <%=packageName%>.client;
 
 
 import java.net.URL;
+import java.io.InputStream;
 import java.rmi.RemoteException;
+
+import org.apache.axis.EngineConfiguration;
+import org.apache.axis.client.AxisClient;
+import org.apache.axis.configuration.FileProvider;
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.apache.axis.utils.ClassUtils;
+
 import org.globus.gsi.GlobusCredential;
 
 import <%=packageName%>.stubs.<%=serviceName%>PortType;
@@ -27,9 +34,7 @@ import <%=packageName%>.common.<%=serviceName%>I;
  * 
  * @created by Introduce Toolkit version 1.0
  */
-public class <%=serviceName%>Client implements <%=serviceName%>I {
-	
-	private <%=modifiedServiceName%>ServiceAddressingLocator locator;
+public class <%=serviceName%>Client implements <%=serviceName%>I {	
 	private GlobusCredential proxy;
 	private String url;
 	
@@ -46,17 +51,27 @@ public class <%=serviceName%>Client implements <%=serviceName%>I {
 	   	this.url = url;	
 	}
 
-	private <%=serviceName%>PortType getPortType(){
-		try {
+	private <%=serviceName%>PortType getPortType() throws RemoteException {
+
 		<%=modifiedServiceName%>ServiceAddressingLocator locator = new <%=modifiedServiceName%>ServiceAddressingLocator();
-		EndpointReferenceType endpoint = new EndpointReferenceType();
-		endpoint.setAddress(new Address(url));
-			<%=serviceName%>PortType port = locator.get<%=serviceName%>PortTypePort(endpoint);
-			return port;
-		} catch (Exception e) {
-			e.printStackTrace();
+		// attempt to load our context sensitive wsdd file
+		InputStream resourceAsStream = ClassUtils.getResourceAsStream(getClass(), "client-config.wsdd");
+		if (resourceAsStream != null) {
+			// we found it, so tell axis to configure an engine to use it
+			EngineConfiguration engineConfig = new FileProvider(resourceAsStream);
+			// set the engine of the locator
+			locator.setEngine(new AxisClient(engineConfig));
 		}
-		return null;
+		<%=serviceName%>PortType port = null;
+		EndpointReferenceType endpoint = new EndpointReferenceType();
+		try {
+			endpoint.setAddress(new Address(url));
+			port = locator.get<%=serviceName%>PortTypePort(endpoint);
+		} catch (Exception e) {
+			throw new RemoteException("Unable to configured porttype:" + e.getMessage(), e);
+		}
+
+		return port;
 	}
 	
 	public static void usage(){

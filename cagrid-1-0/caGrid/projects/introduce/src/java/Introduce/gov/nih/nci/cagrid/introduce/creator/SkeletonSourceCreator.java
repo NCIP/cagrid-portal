@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.creator;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.templates.ClientConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.client.ServiceClientTemplate;
 import gov.nih.nci.cagrid.introduce.templates.common.ServiceITemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.ServiceImplTemplate;
@@ -66,6 +67,15 @@ public class SkeletonSourceCreator {
 		FileWriter clientFW = new FileWriter(clientF);
 		clientFW.write(clientS);
 		clientFW.close();
+
+		ClientConfigTemplate clientConfigT = new ClientConfigTemplate();
+		String clientConfigS = clientConfigT.generate(info);
+		File clientConfigF = new File(srcDir.getAbsolutePath() + File.separator
+			+ info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR)
+			+ File.separator + "client" + File.separator + "client-config.wsdd");
+		FileWriter clientConfigFW = new FileWriter(clientConfigF);
+		clientConfigFW.write(clientConfigS);
+		clientConfigFW.close();
 
 		ServiceITemplate iT = new ServiceITemplate();
 		String iS = iT.generate(info);
