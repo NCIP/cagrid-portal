@@ -41,7 +41,7 @@ public class ExtensionClassLoader {
 						System.out.println("Using jar: " + theirjars[i].getAbsolutePath());
 						urls[i] = theirjars[i].toURL();
 					}
-					cl = new ExtensionLayeredClassLoader(urls);
+					cl = new URLClassLoader(urls,this.getClass().getClassLoader());
 				} else {
 					cl = this.getClass().getClassLoader();
 				}
