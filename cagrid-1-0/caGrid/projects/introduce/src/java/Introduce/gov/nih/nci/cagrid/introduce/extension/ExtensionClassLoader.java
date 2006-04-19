@@ -34,17 +34,17 @@ public class ExtensionClassLoader {
 						return pathname.getName().toLowerCase().endsWith(".jar");
 					}
 				});
-				
+
 				if (theirjars != null) {
 					URL[] urls = new URL[theirjars.length];
 					for (int i = 0; i < theirjars.length; i++) {
 						System.out.println("Using jar: " + theirjars[i].getAbsolutePath());
 						urls[i] = theirjars[i].toURL();
 					}
-					cl = new URLClassLoader(urls, this.getClass().getClassLoader());
+					cl = new ExtensionLayeredClassLoader(urls);
 				} else {
 					cl = this.getClass().getClassLoader();
-				}				
+				}
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
