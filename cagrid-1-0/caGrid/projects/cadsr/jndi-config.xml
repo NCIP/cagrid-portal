@@ -32,18 +32,17 @@
 				</parameter>				
 			</resourceParams>
 		</resource>
-		<resource name="cadsrconfiguration" type="gov.nih.nci.cagrid.cadsr.service.CaDSRConfiguration">
+		<resource name="serviceconfiguration" type="gov.nih.nci.cagrid.cadsr.service.globus.ServiceConfiguration">
 			<resourceParams>
 				<parameter>
 					<name>factory</name>
 					<value>org.globus.wsrf.jndi.BeanFactory</value>
 				</parameter>
-				<parameter>
-					<name>caCOREServiceURL</name>
-					<!-- <value>http://cbioqa101.nci.nih.gov:49080/cacore31/http/remoteService</value> -->
-					<!-- <value>http://cbiodev104.nci.nih.gov:49080/cacore31/http/remoteService</value> -->
-					<value>http://cabio.nci.nih.gov/cacore31/http/remoteService</value>
-				</parameter>			
+				
+					<parameter>
+				<name>caCOREServiceURL</name>
+					<value>@caCOREServiceURL@</value>
+				</parameter>		
 			</resourceParams>
 		</resource>
 	</service>

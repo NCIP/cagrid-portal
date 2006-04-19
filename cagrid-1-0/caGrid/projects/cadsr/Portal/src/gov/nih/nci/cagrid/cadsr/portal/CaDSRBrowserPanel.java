@@ -10,7 +10,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.File;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -161,8 +160,8 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 
 
 	public void discoverFromCaDSR() {
-		CaDSRServiceI cadsr = new CaDSRServiceClient(getCadsr().getText());
 		try {
+			CaDSRServiceI cadsr = new CaDSRServiceClient(getCadsr().getText());
 			getProjectComboBox().removeAllItems();
 			Project[] projects = cadsr.findAllProjects();
 			if (projects != null) {
@@ -471,15 +470,16 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 
 	public void handleProjectSelection(Project project) {
 		getPackageComboBox().removeAllItems();
-		CaDSRServiceI cadsr = new CaDSRServiceClient(getCadsr().getText());
+
 		try {
+			CaDSRServiceI cadsr = new CaDSRServiceClient(getCadsr().getText());
 			UMLPackageMetadata[] metadatas = cadsr.findPackagesInProject(project);
 			if (metadatas != null) {
 				for (int i = 0; i < metadatas.length; i++) {
 					getPackageComboBox().addItem(new PackageDisplay(metadatas[i]));
 				}
 			}
-		} catch (RemoteException e1) {
+		} catch (Exception e1) {
 			e1.printStackTrace();
 			JOptionPane.showMessageDialog(CaDSRBrowserPanel.this,
 				"Error communicating with caDSR; please check the caDSR URL!");
@@ -491,8 +491,8 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	public void handlePackageSelection(UMLPackageMetadata pkg) {
 		if (isShowClassSelection()) {
 			getClassComboBox().removeAllItems();
-			CaDSRServiceI cadsr = new CaDSRServiceClient(getCadsr().getText());
 			try {
+				CaDSRServiceI cadsr = new CaDSRServiceClient(getCadsr().getText());
 				UMLClassMetadata[] metadatas = cadsr.findClassesInPackage(((ProjectDisplay) getProjectComboBox()
 					.getSelectedItem()).getProject(), pkg.getName());
 				if (metadatas != null) {
@@ -500,7 +500,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 						getClassComboBox().addItem(new ClassDisplay(metadatas[i]));
 					}
 				}
-			} catch (RemoteException e1) {
+			} catch (Exception e1) {
 				e1.printStackTrace();
 				JOptionPane.showMessageDialog(CaDSRBrowserPanel.this,
 					"Error communicating with caDSR; please check the caDSR URL!");

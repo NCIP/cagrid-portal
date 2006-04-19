@@ -159,4 +159,7 @@
  <ns25:MetadataList xsi:type="ns25:MetadataListType" xmlns:ns25="gme://gov.nih.nci.cagrid.introduce/1/Metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns25:Metadata qName="ns26:CommonServiceMetadata" populateFromFile="true" register="true" xsi:type="ns25:MetadataType" xmlns:ns26="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
  </ns25:MetadataList>
+ <ns27:ServiceProperties xmlns:ns27="gme://gov.nih.nci.cagrid.introduce/1/Property">
+  <ns27:Property key="caCOREServiceURL" value="http://cabio.nci.nih.gov/cacore31/http/remoteService"/>
+ </ns27:ServiceProperties>
 </ns1:ServiceSkeleton>
