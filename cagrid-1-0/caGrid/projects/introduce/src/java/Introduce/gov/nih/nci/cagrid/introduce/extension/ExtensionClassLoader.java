@@ -80,7 +80,7 @@ public class ExtensionClassLoader {
 						}
 					});
 
-					URL[] urls = new URL[theirurls.length + globDirjars.length + introduceBuildLibDirjars.length
+					File[] urls = new File[theirurls.length + globDirjars.length + introduceBuildLibDirjars.length
 						+ introduceLibDirjars.length + introduceExtLibDirjars.length];
 					System.arraycopy(theirurls, 0, urls, 0, theirurls.length);
 					System.arraycopy(introduceBuildLibDirjars, 0, urls, theirurls.length,
@@ -91,8 +91,13 @@ public class ExtensionClassLoader {
 						+ +introduceBuildLibDirjars.length + introduceLibDirjars.length, introduceExtLibDirjars.length);
 					System.arraycopy(globDirjars, 0, urls, theirurls.length + +introduceBuildLibDirjars.length
 						+ introduceLibDirjars.length + introduceExtLibDirjars.length, globDirjars.length);
+					
+					URL[] urlArr = new URL[urls.length];
+					for(int i = 0; i < urlArr.length; i++){
+						urlArr[i] = urls[i].toURL();
+					}
 
-					cl = new URLClassLoader(urls);
+					cl = new URLClassLoader(urlArr);
 				} else {
 					cl = this.getClass().getClassLoader();
 				}
