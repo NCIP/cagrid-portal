@@ -130,265 +130,183 @@ public class CaDSRServiceClient implements CaDSRServiceI {
 	}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	     public gov.nih.nci.cadsr.umlproject.domain.Project[] findAllProjects() throws RemoteException {
-               CaDSRServicePortType port = this.getPortType();
-               org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
-
-               gov.nih.nci.cagrid.cadsr.stubs.FindAllProjects params = new gov.nih.nci.cagrid.cadsr.stubs.FindAllProjects();
-               gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsResponse boxedResult = port.findAllProjects(params);
-               return boxedResult.getProject();
+	public gov.nih.nci.cadsr.umlproject.domain.Project[] findAllProjects() throws RemoteException {
+		CaDSRServicePortType port = this.getPortType();
+		org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
+
+		gov.nih.nci.cagrid.cadsr.stubs.FindAllProjects params = new gov.nih.nci.cagrid.cadsr.stubs.FindAllProjects();
+		gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsResponse boxedResult = port.findAllProjects(params);
+		return boxedResult.getProject();
 
 	}
 
 
-	     public gov.nih.nci.cadsr.umlproject.domain.Project[] findProjects(java.lang.String context) throws RemoteException {
-               CaDSRServicePortType port = this.getPortType();
-               org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
+	public gov.nih.nci.cadsr.umlproject.domain.Project[] findProjects(java.lang.String context) throws RemoteException {
+		CaDSRServicePortType port = this.getPortType();
+		org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
 
-               gov.nih.nci.cagrid.cadsr.stubs.FindProjects params = new gov.nih.nci.cagrid.cadsr.stubs.FindProjects();
-               params.setContext(context);
-               gov.nih.nci.cagrid.cadsr.stubs.FindProjectsResponse boxedResult = port.findProjects(params);
-               return boxedResult.getProject();
-
-	}
-
-
-	     public gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata[] findPackagesInProject(gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException {
-               CaDSRServicePortType port = this.getPortType();
-               org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
-
-               gov.nih.nci.cagrid.cadsr.stubs.FindPackagesInProject params = new gov.nih.nci.cagrid.cadsr.stubs.FindPackagesInProject();
-               gov.nih.nci.cagrid.cadsr.stubs.FindPackagesInProjectProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindPackagesInProjectProject();
-               projectContainer.setProject(project);
-               params.setProject(projectContainer);
-               gov.nih.nci.cagrid.cadsr.stubs.FindPackagesInProjectResponse boxedResult = port.findPackagesInProject(params);
-               return boxedResult.getUMLPackageMetadata();
+		gov.nih.nci.cagrid.cadsr.stubs.FindProjects params = new gov.nih.nci.cagrid.cadsr.stubs.FindProjects();
+		params.setContext(context);
+		gov.nih.nci.cagrid.cadsr.stubs.FindProjectsResponse boxedResult = port.findProjects(params);
+		return boxedResult.getProject();
 
 	}
 
 
-	     public gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] findClassesInProject(gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException {
-               CaDSRServicePortType port = this.getPortType();
-               org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
+	public gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata[] findPackagesInProject(
+		gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException {
+		CaDSRServicePortType port = this.getPortType();
+		org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
 
-               gov.nih.nci.cagrid.cadsr.stubs.FindClassesInProject params = new gov.nih.nci.cagrid.cadsr.stubs.FindClassesInProject();
-               gov.nih.nci.cagrid.cadsr.stubs.FindClassesInProjectProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindClassesInProjectProject();
-               projectContainer.setProject(project);
-               params.setProject(projectContainer);
-               gov.nih.nci.cagrid.cadsr.stubs.FindClassesInProjectResponse boxedResult = port.findClassesInProject(params);
-               return boxedResult.getUMLClassMetadata();
-
-	}
-
-
-	     public gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] findClassesInPackage(gov.nih.nci.cadsr.umlproject.domain.Project project,java.lang.String packageName) throws RemoteException {
-               CaDSRServicePortType port = this.getPortType();
-               org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
-
-               gov.nih.nci.cagrid.cadsr.stubs.FindClassesInPackage params = new gov.nih.nci.cagrid.cadsr.stubs.FindClassesInPackage();
-               gov.nih.nci.cagrid.cadsr.stubs.FindClassesInPackageProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindClassesInPackageProject();
-               projectContainer.setProject(project);
-               params.setProject(projectContainer);
-               params.setPackageName(packageName);
-               gov.nih.nci.cagrid.cadsr.stubs.FindClassesInPackageResponse boxedResult = port.findClassesInPackage(params);
-               return boxedResult.getUMLClassMetadata();
+		gov.nih.nci.cagrid.cadsr.stubs.FindPackagesInProject params = new gov.nih.nci.cagrid.cadsr.stubs.FindPackagesInProject();
+		gov.nih.nci.cagrid.cadsr.stubs.FindPackagesInProjectProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindPackagesInProjectProject();
+		projectContainer.setProject(project);
+		params.setProject(projectContainer);
+		gov.nih.nci.cagrid.cadsr.stubs.FindPackagesInProjectResponse boxedResult = port.findPackagesInProject(params);
+		return boxedResult.getUMLPackageMetadata();
 
 	}
 
 
-	     public java.lang.String generateMetadataExtractForProject(gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException {
-               CaDSRServicePortType port = this.getPortType();
-               org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
+	public gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] findClassesInProject(
+		gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException {
+		CaDSRServicePortType port = this.getPortType();
+		org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
 
-               gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForProject params = new gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForProject();
-               gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForProjectProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForProjectProject();
-               projectContainer.setProject(project);
-               params.setProject(projectContainer);
-               gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForProjectResponse boxedResult = port.generateMetadataExtractForProject(params);
-               return boxedResult.getResponse();
-
-	}
-
-
-	     public java.lang.String generateMetadataExtractForPackages(gov.nih.nci.cadsr.umlproject.domain.Project project,java.lang.String[] packageNames) throws RemoteException {
-               CaDSRServicePortType port = this.getPortType();
-               org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
-
-               gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForPackages params = new gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForPackages();
-               gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForPackagesProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForPackagesProject();
-               projectContainer.setProject(project);
-               params.setProject(projectContainer);
-               params.setPackageNames(packageNames);
-               gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForPackagesResponse boxedResult = port.generateMetadataExtractForPackages(params);
-               return boxedResult.getResponse();
+		gov.nih.nci.cagrid.cadsr.stubs.FindClassesInProject params = new gov.nih.nci.cagrid.cadsr.stubs.FindClassesInProject();
+		gov.nih.nci.cagrid.cadsr.stubs.FindClassesInProjectProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindClassesInProjectProject();
+		projectContainer.setProject(project);
+		params.setProject(projectContainer);
+		gov.nih.nci.cagrid.cadsr.stubs.FindClassesInProjectResponse boxedResult = port.findClassesInProject(params);
+		return boxedResult.getUMLClassMetadata();
 
 	}
 
 
-	     public java.lang.String generateMetadataExtractForClasses(gov.nih.nci.cadsr.umlproject.domain.Project project,gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] classes) throws RemoteException {
-               CaDSRServicePortType port = this.getPortType();
-               org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
+	public gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] findClassesInPackage(
+		gov.nih.nci.cadsr.umlproject.domain.Project project, java.lang.String packageName) throws RemoteException {
+		CaDSRServicePortType port = this.getPortType();
+		org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
 
-               gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForClasses params = new gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForClasses();
-               gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForClassesProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForClassesProject();
-               projectContainer.setProject(project);
-               params.setProject(projectContainer);
-               gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForClassesClasses classesContainer = new gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForClassesClasses();
-               classesContainer.setUMLClassMetadata(classes);
-               params.setClasses(classesContainer);
-               gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForClassesResponse boxedResult = port.generateMetadataExtractForClasses(params);
-               return boxedResult.getResponse();
-
-	}
-
-
-	     public gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata[] findAttributesInClass(gov.nih.nci.cadsr.umlproject.domain.Project project,gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata clazz) throws RemoteException {
-               CaDSRServicePortType port = this.getPortType();
-               org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
-
-               gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClass params = new gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClass();
-               gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClassProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClassProject();
-               projectContainer.setProject(project);
-               params.setProject(projectContainer);
-               gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClassClazz clazzContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClassClazz();
-               clazzContainer.setUMLClassMetadata(clazz);
-               params.setClazz(clazzContainer);
-               gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClassResponse boxedResult = port.findAttributesInClass(params);
-               return boxedResult.getUMLAttributeMetadata();
+		gov.nih.nci.cagrid.cadsr.stubs.FindClassesInPackage params = new gov.nih.nci.cagrid.cadsr.stubs.FindClassesInPackage();
+		gov.nih.nci.cagrid.cadsr.stubs.FindClassesInPackageProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindClassesInPackageProject();
+		projectContainer.setProject(project);
+		params.setProject(projectContainer);
+		params.setPackageName(packageName);
+		gov.nih.nci.cagrid.cadsr.stubs.FindClassesInPackageResponse boxedResult = port.findClassesInPackage(params);
+		return boxedResult.getUMLClassMetadata();
 
 	}
 
 
-	     public gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata[] findSemanticMetadataForClass(gov.nih.nci.cadsr.umlproject.domain.Project project,gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata clazz) throws RemoteException {
-               CaDSRServicePortType port = this.getPortType();
-               org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
+	public java.lang.String generateMetadataExtractForProject(gov.nih.nci.cadsr.umlproject.domain.Project project)
+		throws RemoteException {
+		CaDSRServicePortType port = this.getPortType();
+		org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
 
-               gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClass params = new gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClass();
-               gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassProject();
-               projectContainer.setProject(project);
-               params.setProject(projectContainer);
-               gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassClazz clazzContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassClazz();
-               clazzContainer.setUMLClassMetadata(clazz);
-               params.setClazz(clazzContainer);
-               gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassResponse boxedResult = port.findSemanticMetadataForClass(params);
-               return boxedResult.getSemanticMetadata();
+		gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForProject params = new gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForProject();
+		gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForProjectProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForProjectProject();
+		projectContainer.setProject(project);
+		params.setProject(projectContainer);
+		gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForProjectResponse boxedResult = port
+			.generateMetadataExtractForProject(params);
+		return boxedResult.getResponse();
+
+	}
+
+
+	public java.lang.String generateMetadataExtractForPackages(gov.nih.nci.cadsr.umlproject.domain.Project project,
+		java.lang.String[] packageNames) throws RemoteException {
+		CaDSRServicePortType port = this.getPortType();
+		org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
+
+		gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForPackages params = new gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForPackages();
+		gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForPackagesProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForPackagesProject();
+		projectContainer.setProject(project);
+		params.setProject(projectContainer);
+		params.setPackageNames(packageNames);
+		gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForPackagesResponse boxedResult = port
+			.generateMetadataExtractForPackages(params);
+		return boxedResult.getResponse();
 
 	}
 
 
-	     public gov.nih.nci.cadsr.domain.ValueDomain findValueDomainForAttribute(gov.nih.nci.cadsr.umlproject.domain.Project project,gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata attribute) throws RemoteException {
-               CaDSRServicePortType port = this.getPortType();
-               org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
+	public java.lang.String generateMetadataExtractForClasses(gov.nih.nci.cadsr.umlproject.domain.Project project,
+		gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] classes) throws RemoteException {
+		CaDSRServicePortType port = this.getPortType();
+		org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
 
-               gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttribute params = new gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttribute();
-               gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeProject();
-               projectContainer.setProject(project);
-               params.setProject(projectContainer);
-               gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeAttribute attributeContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeAttribute();
-               attributeContainer.setUMLAttributeMetadata(attribute);
-               params.setAttribute(attributeContainer);
-               gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeResponse boxedResult = port.findValueDomainForAttribute(params);
-               return boxedResult.getValueDomain();
+		gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForClasses params = new gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForClasses();
+		gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForClassesProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForClassesProject();
+		projectContainer.setProject(project);
+		params.setProject(projectContainer);
+		gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForClassesClasses classesContainer = new gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForClassesClasses();
+		classesContainer.setUMLClassMetadata(classes);
+		params.setClasses(classesContainer);
+		gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForClassesResponse boxedResult = port
+			.generateMetadataExtractForClasses(params);
+		return boxedResult.getResponse();
 
 	}
 
+
+	public gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata[] findAttributesInClass(
+		gov.nih.nci.cadsr.umlproject.domain.Project project, gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata clazz)
+		throws RemoteException {
+		CaDSRServicePortType port = this.getPortType();
+		org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
+
+		gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClass params = new gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClass();
+		gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClassProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClassProject();
+		projectContainer.setProject(project);
+		params.setProject(projectContainer);
+		gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClassClazz clazzContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClassClazz();
+		clazzContainer.setUMLClassMetadata(clazz);
+		params.setClazz(clazzContainer);
+		gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClassResponse boxedResult = port.findAttributesInClass(params);
+		return boxedResult.getUMLAttributeMetadata();
+
+	}
+
+
+	public gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata[] findSemanticMetadataForClass(
+		gov.nih.nci.cadsr.umlproject.domain.Project project, gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata clazz)
+		throws RemoteException {
+		CaDSRServicePortType port = this.getPortType();
+		org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
+
+		gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClass params = new gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClass();
+		gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassProject();
+		projectContainer.setProject(project);
+		params.setProject(projectContainer);
+		gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassClazz clazzContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassClazz();
+		clazzContainer.setUMLClassMetadata(clazz);
+		params.setClazz(clazzContainer);
+		gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassResponse boxedResult = port
+			.findSemanticMetadataForClass(params);
+		return boxedResult.getSemanticMetadata();
+
+	}
+
+
+	public gov.nih.nci.cadsr.domain.ValueDomain findValueDomainForAttribute(
+		gov.nih.nci.cadsr.umlproject.domain.Project project,
+		gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata attribute) throws RemoteException {
+		CaDSRServicePortType port = this.getPortType();
+		org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
+
+		gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttribute params = new gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttribute();
+		gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeProject();
+		projectContainer.setProject(project);
+		params.setProject(projectContainer);
+		gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeAttribute attributeContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeAttribute();
+		attributeContainer.setUMLAttributeMetadata(attribute);
+		params.setAttribute(attributeContainer);
+		gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeResponse boxedResult = port
+			.findValueDomainForAttribute(params);
+		return boxedResult.getValueDomain();
+
+	}
 
 }
