@@ -138,9 +138,12 @@
 
 		<artifact track="main" type="jars" id="cadsr.jars">
 			<antcall target="build-cadsr" />
+			<fileset dir="${projects.dir}/cadsr/build/lib">
+				<include name="*.jar"/>
+				<exclude name="*test*.jar"/>
+			</fileset>
 			<fileset dir="${projects.dir}/cadsr/lib">
 				<include name="*.jar" />
-				<exclude name="*test*.jar" />
 			</fileset>
 		</artifact>
 
