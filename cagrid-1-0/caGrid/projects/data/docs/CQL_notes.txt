@@ -54,13 +54,14 @@ I can say, "give me the Persons for a given address" but I can't say "give me th
             
 7) How can i do a property predicate specifying null as a value? 
 
-8) not really a "language" issue but... need a common set of Exceptions the query method can throw:
+8) We may also want to consider allowing property values to be function calls.  If we do, I suggest we adopt the xpath functions
+for String (http://www.w3.org/TR/xpath#section-String-Functions) and Number (http://www.w3.org/TR/xpath#section-Number-Functions)
+
+9) not really a "language" issue but... need a common set of Exceptions the query method can throw:
  - heres a first cut:
    -MalformedQueryException: the query doesn't validate to the xsd
    -IllegalQueryException: the query is valid format, but the objects, attributes, or associations used in the query aren't allowed by the exposed object model.
    	 -for example, querying for Gene when the model doesn't have one, or querying for Foo->Bar when there is no such association.
    -QueryProcessingExeception: some failure during query processing... could be subtyped
- 
-9) 
 
 ====================
