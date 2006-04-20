@@ -17,6 +17,7 @@ import org.apache.axis.MessageContext;
 import org.apache.axis.utils.XMLUtils;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.globus.wsrf.encoding.ObjectSerializer;
+import org.w3c.dom.Element;
 
 
 public class Utils {
@@ -84,7 +85,7 @@ public class Utils {
 			inputStream = new FileInputStream(fileName);
 			org.w3c.dom.Document doc = XMLUtils.newDocument(inputStream);
 
-			return ObjectDeserializer.toObject(doc.getDocumentElement(), objectType);
+			return deserializeDocument(doc.getDocumentElement(), objectType);
 		} finally {
 			if (inputStream != null) {
 				try {
@@ -93,6 +94,10 @@ public class Utils {
 				}
 			}
 		}
+	}
+	
+	public static Object deserializeDocument(Element element, Class objectType) throws Exception {
+			return ObjectDeserializer.toObject(element, objectType);
 	}
 
 
