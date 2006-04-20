@@ -14,10 +14,7 @@ public class ExtensionTools {
 		ServiceExtensionDescriptionType extensionD = ExtensionsLoader.getInstance().getServiceExtension(extensionName);
 		if (extensionD != null && extensionD.getCreationPostProcessor() != null
 			&& !extensionD.getCreationPostProcessor().equals("")) {
-			ExtensionClassLoader cloader = new ExtensionClassLoader(new File(ExtensionsLoader.getInstance()
-				.getExtensionsDir()
-				+ File.separator + extensionName));
-			Class c = cloader.loadClass(extensionD.getCreationPostProcessor());
+			Class c = Class.forName(extensionD.getCreationPostProcessor());
 			Object obj = c.newInstance();
 			return (CreationExtensionPostProcessor) obj;
 		}
@@ -29,12 +26,7 @@ public class ExtensionTools {
 		ServiceExtensionDescriptionType extensionD = ExtensionsLoader.getInstance().getServiceExtension(extensionName);
 		if (extensionD != null && extensionD.getCodegenPostProcessor() != null
 			&& !extensionD.getCodegenPostProcessor().equals("")) {
-			ExtensionClassLoader cloader = new ExtensionClassLoader(new File(ExtensionsLoader.getInstance()
-				.getExtensionsDir()
-				+ File.separator
-
-				+ extensionName));
-			Class c = cloader.loadClass(extensionD.getCodegenPostProcessor());
+			Class c = Class.forName(extensionD.getCodegenPostProcessor());
 			Object obj = c.newInstance();
 			return (CodegenExtensionPostProcessor) obj;
 		}
@@ -46,12 +38,7 @@ public class ExtensionTools {
 		ServiceExtensionDescriptionType extensionD = ExtensionsLoader.getInstance().getServiceExtension(extensionName);
 		if (extensionD != null && extensionD.getCodegenPreProcessor() != null
 			&& !extensionD.getCodegenPreProcessor().equals("")) {
-			ExtensionClassLoader cloader = new ExtensionClassLoader(new File(ExtensionsLoader.getInstance()
-				.getExtensionsDir()
-				+ File.separator
-
-				+ extensionName));
-			Class c = cloader.loadClass(extensionD.getCodegenPreProcessor());
+			Class c = Class.forName(extensionD.getCodegenPreProcessor());
 			Object obj = c.newInstance();
 			return (CodegenExtensionPreProcessor) obj;
 		}
@@ -64,12 +51,7 @@ public class ExtensionTools {
 		ServiceExtensionDescriptionType extensionD = ExtensionsLoader.getInstance().getServiceExtension(extensionName);
 		if (extensionD != null && extensionD.getCreationUIDialog() != null
 			&& !extensionD.getCreationUIDialog().equals("")) {
-			ExtensionClassLoader cloader = new ExtensionClassLoader(new File(ExtensionsLoader.getInstance()
-				.getExtensionsDir()
-				+ File.separator
-
-				+ extensionName));
-			Class c = cloader.loadClass(extensionD.getCreationUIDialog());
+			Class c = Class.forName(extensionD.getCreationUIDialog());
 			Constructor con = c.getConstructor(new Class[]{ServiceInformation.class});
 			Object obj = con.newInstance(new Object[]{info});
 			return (CreationExtensionUIDialog) obj;
@@ -83,12 +65,7 @@ public class ExtensionTools {
 		ServiceExtensionDescriptionType extensionD = ExtensionsLoader.getInstance().getServiceExtension(extensionName);
 		if (extensionD != null && extensionD.getServiceModificationUIPanel() != null
 			&& !extensionD.getServiceModificationUIPanel().equals("")) {
-			ExtensionClassLoader cloader = new ExtensionClassLoader(new File(ExtensionsLoader.getInstance()
-				.getExtensionsDir()
-				+ File.separator
-
-				+ extensionName));
-			Class c = cloader.loadClass(extensionD.getServiceModificationUIPanel());
+			Class c = Class.forName(extensionD.getServiceModificationUIPanel());
 			Constructor con = c.getConstructor(new Class[]{ServiceInformation.class});
 			Object obj = con.newInstance(new Object[]{info});
 			return (ServiceModificationUIPanel) obj;

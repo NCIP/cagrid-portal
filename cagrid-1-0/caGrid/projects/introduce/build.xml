@@ -43,6 +43,8 @@
 	<property name="ext.test.lib.dir" location="${ext.dir}/test/lib" />
 	<property name="test.log.dir" location="${test.dir}/logs" />
 	<property name="test.project.jar" location="${jars.dir}/${project.name}-tests-${project.version}.jar" />
+	<!-- extensions stuff -->
+	<property name="extensions.lib.dir" location="${basedir}/extensions/lib" />
 	<!-- Load common util path -->
 	<import file="../../antfiles/ant-utilities.xml" />
 	<import file="../../antfiles/test-utilities.xml" />

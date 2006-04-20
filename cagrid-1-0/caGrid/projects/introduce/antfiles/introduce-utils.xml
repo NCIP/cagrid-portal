@@ -16,7 +16,7 @@
 			<echo message="Running portal with @{configFile}"/>
 			<java classname="org.projectmobius.portal.GridPortal" fork="yes">
 				<arg value="@{configFile}"/>
-				<classpath refid="Portal.classpath"/>
+				<classpath refid="Portal.run.classpath"/>
 			</java>
 		</sequential>
 	</macrodef>

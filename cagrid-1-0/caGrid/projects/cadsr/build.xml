@@ -289,9 +289,8 @@
 	<target name="installIntroduceExtensions" depends="jars" description="Builds and installs the caDSR Introduce extensions into Introduce.">
 		<delete dir="${introduce.extensions.dir}/caDSR-discovery" />
 		<mkdir dir="${introduce.extensions.dir}/caDSR-discovery" />
-		<mkdir dir="${introduce.extensions.dir}/caDSR-discovery/lib" />
 		<copy todir="${introduce.extensions.dir}/caDSR-discovery" file="extension.xml" />
-		<copy todir="${introduce.extensions.dir}/caDSR-discovery/lib">
+		<copy todir="${introduce.extensions.dir}/lib">
 			<fileset dir="${lib.dir}">
 				<include name="*.jar" />
 			</fileset>
