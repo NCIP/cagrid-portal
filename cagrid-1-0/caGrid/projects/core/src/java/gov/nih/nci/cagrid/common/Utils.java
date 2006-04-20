@@ -85,7 +85,7 @@ public class Utils {
 			inputStream = new FileInputStream(fileName);
 			org.w3c.dom.Document doc = XMLUtils.newDocument(inputStream);
 
-			return deserializeDocument(doc.getDocumentElement(), objectType);
+			return ObjectDeserializer.toObject(doc.getDocumentElement(), objectType);
 		} finally {
 			if (inputStream != null) {
 				try {
@@ -96,11 +96,6 @@ public class Utils {
 		}
 	}
 	
-	public static Object deserializeDocument(Element element, Class objectType) throws Exception {
-			return ObjectDeserializer.toObject(element, objectType);
-	}
-
-
 	public static void copyFile(File in, File out) throws Exception {
 		FileInputStream fis = new FileInputStream(in);
 		FileOutputStream fos = new FileOutputStream(out);
