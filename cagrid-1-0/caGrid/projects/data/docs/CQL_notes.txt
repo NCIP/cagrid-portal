@@ -54,8 +54,9 @@ I can say, "give me the Persons for a given address" but I can't say "give me th
             
 7) How can i do a property predicate specifying null as a value? 
 
-8) We may also want to consider allowing property values to be function calls.  If we do, I suggest we adopt the xpath functions
+8) We may also want to consider allowing property values to be function calls.  If we do, I suggest we adopt a subset of the xpath functions
 for String (http://www.w3.org/TR/xpath#section-String-Functions) and Number (http://www.w3.org/TR/xpath#section-Number-Functions)
+ - would have to consider trade off of utility vs. difficulty to implement
 
 9) not really a "language" issue but... need a common set of Exceptions the query method can throw:
  - heres a first cut:
