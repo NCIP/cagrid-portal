@@ -131,12 +131,15 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 			gridBagConstraints6.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints6.gridy = 0;
+			gridBagConstraints6.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints6.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints6.gridx = 0;
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints5.gridx = 1;
 			gridBagConstraints5.gridy = 0;
 			gridBagConstraints5.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints5.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints5.weightx = 1.0;
 			cadsrAddressLabel = new JLabel();
 			cadsrAddressLabel.setText("caDSR");
@@ -161,9 +164,9 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 
 	public void discoverFromCaDSR() {
 		try {
-			CaDSRServiceI cadsr = new CaDSRServiceClient(getCadsr().getText());
+			CaDSRServiceI cadsrService = new CaDSRServiceClient(getCadsr().getText());
 			getProjectComboBox().removeAllItems();
-			Project[] projects = cadsr.findAllProjects();
+			Project[] projects = cadsrService.findAllProjects();
 			if (projects != null) {
 				for (int i = 0; i < projects.length; i++) {
 					getProjectComboBox().addItem(new ProjectDisplay(projects[i]));
@@ -275,6 +278,8 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.gridx = 0;
 			gridBagConstraints3.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints3.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints3.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints3.gridy = 2;
 			classLabel = new JLabel();
 			classLabel.setText("Class:");
@@ -282,16 +287,19 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints2.gridx = 1;
 			gridBagConstraints2.gridy = 2;
+			gridBagConstraints2.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints2.weightx = 1.0;
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
 			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints10.gridy = 1;
 			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints10.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints10.gridx = 0;
 			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
 			gridBagConstraints9.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints9.gridy = 0;
 			gridBagConstraints9.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints9.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints9.gridx = 0;
 			projectLabel = new JLabel();
 			projectLabel.setText("Project:");
@@ -299,7 +307,6 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 			gridBagConstraints8.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints8.gridy = 1;
 			gridBagConstraints8.weightx = 1.0;
-			gridBagConstraints8.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints8.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints8.weighty = 1.0D;
 			gridBagConstraints8.gridx = 1;
@@ -307,7 +314,6 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 			gridBagConstraints7.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints7.gridy = 0;
 			gridBagConstraints7.weightx = 1.0;
-			gridBagConstraints7.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints7.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints7.weighty = 1.0D;
 			gridBagConstraints7.gridx = 1;
@@ -317,14 +323,14 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 				projectsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Data Type",
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+				projectsPanel.add(getProjectComboBox(), gridBagConstraints7);
+				projectsPanel.add(projectLabel, gridBagConstraints9);
 			}
-			projectsPanel.add(getProjectComboBox(), gridBagConstraints7);
-			projectsPanel.add(projectLabel, gridBagConstraints9);
 			projectsPanel.add(getPackageComboBox(), gridBagConstraints8);
 			projectsPanel.add(packageLabel, gridBagConstraints10);
+			projectsPanel.add(getClassComboBox(), gridBagConstraints2);
+			projectsPanel.add(classLabel, gridBagConstraints3);
 			if (isShowClassSelection()) {
-				projectsPanel.add(getClassComboBox(), gridBagConstraints2);
-				projectsPanel.add(classLabel, gridBagConstraints3);
 			}
 		}
 		return projectsPanel;
@@ -472,8 +478,8 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 		getPackageComboBox().removeAllItems();
 
 		try {
-			CaDSRServiceI cadsr = new CaDSRServiceClient(getCadsr().getText());
-			UMLPackageMetadata[] metadatas = cadsr.findPackagesInProject(project);
+			CaDSRServiceI cadsrService = new CaDSRServiceClient(getCadsr().getText());
+			UMLPackageMetadata[] metadatas = cadsrService.findPackagesInProject(project);
 			if (metadatas != null) {
 				for (int i = 0; i < metadatas.length; i++) {
 					getPackageComboBox().addItem(new PackageDisplay(metadatas[i]));
@@ -492,8 +498,8 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 		if (isShowClassSelection()) {
 			getClassComboBox().removeAllItems();
 			try {
-				CaDSRServiceI cadsr = new CaDSRServiceClient(getCadsr().getText());
-				UMLClassMetadata[] metadatas = cadsr.findClassesInPackage(((ProjectDisplay) getProjectComboBox()
+				CaDSRServiceI cadsrService = new CaDSRServiceClient(getCadsr().getText());
+				UMLClassMetadata[] metadatas = cadsrService.findClassesInPackage(((ProjectDisplay) getProjectComboBox()
 					.getSelectedItem()).getProject(), pkg.getName());
 				if (metadatas != null) {
 					for (int i = 0; i < metadatas.length; i++) {
