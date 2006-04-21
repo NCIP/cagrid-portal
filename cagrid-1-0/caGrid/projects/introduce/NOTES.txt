@@ -6,8 +6,6 @@ portal lets you add the same method name several times
 introduce created clients should not call getPortType() for each method invocation (its very inefficient), getPortType should be called once in the contructor, and each method should just use it
   - this has security ramifciations as currently security is configured assuming a fresh port type... it needs to set all the options appropriately for each method call
 
-Try to create a new service on the desktop and throws an error
-
 metadata type panel isnt updating when you add new schemas from the types tab
 
 Need to make Configuration Menu work... should be able to set appropriate services URLs, etc
@@ -22,6 +20,7 @@ when you check custom, it should only enable the secure communication tab (as yo
 when you check some for of secure comm, the other tabs should be enabled.
 
 type browser issues:
+-(DONE)Try to create a new service on the desktop and throws an error
 -(DONE)you can and shouldn't be able to remove the XML schema schema
 -it shouldn't let you remove schema types that are being used by inputs,outputs,or metadata
 -(DONE)it lets you set the package name for XML schema schema, and shouldn't
