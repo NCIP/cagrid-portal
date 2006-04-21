@@ -34,9 +34,8 @@
 	<property name="service.jar.file" value="${build.jars.dir}/${service.jar.name}"/>
 	
 	<!-- extension -->
-	<property name="extension.base.dir" location="${basedir}/extension"/>
-	<property name="extension.description.file" value="${extension.base.dir}/extension.xml"/>
-	<property name="extension.out.dir" location="${extension.base.dir}/data"/>
+	<property name="extension.description.file" value="${basedir}/extension/extension.xml"/>
+	<property name="introduce.extensions.dir" location="../introduce/extensions"/>
 
 	<!-- stubs -->
     <property name="stubs.dir" location="${build.dir}/stubs" />
@@ -260,6 +259,24 @@
 				<exclude name="*.zip"/>
 			</fileset>
 		</zip>
+	</target>
+	
+	<!-- Build and install extensions for introduce -->
+	<target name="installIntroduceExtensions" depends="all" description="Builds and installs the Data Services extensions into Introduce.">
+		<delete dir="${introduce.extensions.dir}/data" />
+		<mkdir dir="${introduce.extensions.dir}/data" />
+		<copy todir="${introduce.extensions.dir}/data" file="${extension.description.file}" />
+		<copy todir="${introduce.extensions.dir}/lib">
+			<fileset dir="${lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${ext.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${build.jars.dir}">
+				<include name="**/*.jar" />
+			</fileset>
+		</copy>
 	</target>
 
 	<!-- build and jar everything -->

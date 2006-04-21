@@ -3,14 +3,12 @@ package gov.nih.nci.cagrid.data.ui.types;
 import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
-import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
+import gov.nih.nci.cagrid.introduce.extension.ServiceModificationUIPanel;
+import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -18,7 +16,6 @@ import java.io.File;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -45,7 +42,7 @@ import org.projectmobius.protocol.gme.SchemaNode;
  * @created Apr 20, 2006 
  * @version $Id$ 
  */
-public class TargetTypeSelectionPanel extends JPanel {
+public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	
 	private CaDSRBrowserPanel domainBrowserPanel = null;
 	private TargetTypesTree typesTree = null;
@@ -58,11 +55,9 @@ public class TargetTypeSelectionPanel extends JPanel {
 	private JButton setModelButton = null;
 	
 	private XMLDataModelService gmeHandle = null;
-	private ServiceExtensionDescriptionType serviceDesc;
 	
-	public TargetTypeSelectionPanel(ServiceExtensionDescriptionType serviceDescription) {
-		super();
-		this.serviceDesc = serviceDescription;
+	public TargetTypeSelectionPanel(ServiceInformation serviceInfo) {
+		super(serviceInfo);
 		initialize();
 	}
 	
@@ -331,9 +326,11 @@ public class TargetTypeSelectionPanel extends JPanel {
 	
 	private XMLDataModelService getGME() throws MobiusException {
 		if (gmeHandle == null) {
+			// TODO: what ACTUALLY gets the property I want???
+			String serviceId = getServiceInfo().getIntroduceServiceProperties().getProperty("GME_URL");
 			GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
 			gmeHandle = (XMLDataModelService) GridServiceResolver.getInstance()
-				.getGridService(ExtensionTools.getProperty(serviceDesc.getProperties(), "GME_URL"));
+				.getGridService(serviceId);
 		}
 		return gmeHandle;
 	}
@@ -366,21 +363,5 @@ public class TargetTypeSelectionPanel extends JPanel {
 		}
 		ns.setSchemaElement(types);
 		return ns;
-	}
-	
-	
-	public static void main(String[] args) {
-		JFrame frame = new JFrame();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		try {
-			ExtensionDescription desc = (ExtensionDescription) Utils.deserializeDocument("./extension.xml",
-				ExtensionDescription.class);
-			frame.setContentPane(new TargetTypeSelectionPanel(desc.getServiceExtensionDescription()));
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			System.exit(1);
-		}
-		frame.setSize(900,500);
-		frame.setVisible(true);
 	}
 }

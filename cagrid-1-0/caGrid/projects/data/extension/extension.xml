@@ -5,7 +5,7 @@
 	<ns1:ServiceExtensionDescription displayName="Data Service" name="data">
 		<ns1:CreationPostProcessor>gov.nih.nci.cagrid.data.creation.DataServiceCreationPostProcessor</ns1:CreationPostProcessor>
 		<ns1:CodegenPostProcessor>gov.nih.nci.cagrid.data.codegen.DataServiceCodegenPostProcessor</ns1:CodegenPostProcessor>
-		<ns1:ServiceModificationUIPanel>gov.nih.nci.cagrid.data.ui.DataServiceModificationPanel</ns1:ServiceModificationUIPanel>
+		<ns1:ServiceModificationUIPanel>gov.nih.nci.cagrid.data.ui.types.TargetTypeSelectionPanel</ns1:ServiceModificationUIPanel>
 		<ns1:Properties>
 			<property key="GME_URL"
 			    value="http://dc01.bmi.ohio-state.edu:8080/wsrf/services/cagrid/GlobalModelExchange">
