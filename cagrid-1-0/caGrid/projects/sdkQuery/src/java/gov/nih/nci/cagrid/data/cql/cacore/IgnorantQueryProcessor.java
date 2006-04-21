@@ -41,7 +41,7 @@ public class IgnorantQueryProcessor implements CQLQueryProcessor {
 
 	public CQLQueryResultsType processQuery(CQLQueryType query) throws Exception {
 		Gene gene = new GeneImpl();
-		gene.setSymbol("brca*"); // searching for all genes whose symbol start with brca*”;
+		gene.setSymbol("brca*"); // searching for all genes whose symbol start with brca
 		
 		List resultList = coreService.search(Gene.class, gene);
 		CQLQueryResultsType results = new CQLQueryResultsType();
