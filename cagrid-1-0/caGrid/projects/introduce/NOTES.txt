@@ -45,8 +45,8 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
-(DONE) the introduce created client produces an invalid client when you make a method that returns a boolean.
- it makes a boxedResult.getResponse(), when it should be boxedResult.isResponse()
+(DONE) introduce created an invalid client when you make a method that returns a boolean.
+(DONE) introduce created an invalid impl when you make a method that takes in a boolean.
  
 (DONE) we could support definition of "service properties" in introduce
 -serviceimpl would have gettters for them (pull them out of service context for them)
