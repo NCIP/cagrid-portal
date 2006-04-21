@@ -1,9 +1,12 @@
 package gov.nih.nci.cagrid.data.ui.types;
 
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 
 import java.awt.Component;
+import java.util.ArrayList;
 import java.util.EventObject;
+import java.util.List;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JCheckBox;
@@ -59,6 +62,22 @@ public class TargetTypesTree extends JTree {
 			return mapping;
 		}
 		return null;
+	}
+	
+	
+	public SchemaElementType[] getCheckedTypes() {
+		List selected = new ArrayList();
+		DomainTreeNode domainNode = (DomainTreeNode) model.getRoot();
+		int childCount = domainNode.getChildCount();
+		for (int i = 0; i < childCount; i++) {
+			TypeTreeNode typeNode = (TypeTreeNode) domainNode.getChildAt(i);
+			if (typeNode.isChecked()) {
+				selected.add(typeNode.getType());
+			}
+		}		
+		SchemaElementType[] types = new SchemaElementType[selected.size()];
+		selected.toArray(types);
+		return types;
 	}
 	
 	
