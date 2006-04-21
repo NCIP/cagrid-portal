@@ -41,6 +41,14 @@ public class DataServiceTypesTable extends PortalBaseTable {
 	}
 	
 	
+	public SchemaElementType getSelectedElementType() {
+		if (getSelectedRow() != -1) {
+			return (SchemaElementType) schemaElementTypes.get(getSelectedRow());
+		}
+		return null;
+	}
+	
+	
 	public List getSchemaElementTypes() {
 		return schemaElementTypes;
 	}

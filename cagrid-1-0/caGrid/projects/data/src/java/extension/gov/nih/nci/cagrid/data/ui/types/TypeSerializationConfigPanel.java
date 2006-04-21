@@ -51,7 +51,16 @@ public class TypeSerializationConfigPanel extends JPanel {
 	public TypeSerializationConfigPanel(DataServiceTypesTable table) {
 		super();
 		this.table = table;
+		clear();
 		initialize();
+	}
+	
+	
+	public void clear() {
+		getSerializerTextField().setText("");
+		getDeserializerTextField().setText("");
+		getSetButton().setEnabled(false);
+		getUndoButton().setEnabled(false);
 	}
 	
 	
@@ -59,6 +68,8 @@ public class TypeSerializationConfigPanel extends JPanel {
 		schemaType = type;
 		getSerializerTextField().setText(schemaType.getSerializer());
 		getDeserializerTextField().setText(schemaType.getDeserializer());
+		getSetButton().setEnabled(true);
+		getUndoButton().setEnabled(true);
 		if (isDefaultSerialization()) {
 			getRadioGroup().setSelected(getDefaultSerializationRadioButton().getModel(), true);
 		} else if (isSdkSerialization()) {

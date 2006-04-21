@@ -4,6 +4,7 @@ import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
@@ -21,6 +22,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import org.projectmobius.client.gme.ImportInfo;
 import org.projectmobius.common.GridServiceResolver;
@@ -119,7 +123,9 @@ public class TargetTypeSelectionPanel extends JPanel {
 	private JScrollPane getTypesTreeScrollPane() {
 		if (typesTreeScrollPane == null) {
 			typesTreeScrollPane = new JScrollPane();
-			typesTreeScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Model Data Types", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+			typesTreeScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(
+				null, "Model Data Types", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			typesTreeScrollPane.setViewportView(getTypesTree());
 		}
 		return typesTreeScrollPane;
@@ -128,17 +134,18 @@ public class TargetTypeSelectionPanel extends JPanel {
 	
 	private DataServiceTypesTable getTypesTable() {
 		if (typesTable == null) {
-			typesTable = new DataServiceTypesTable(); /* {
-				public void doubleClick() {
-					if (getSelectedColumn() >= 3) {
-						SerializationMapping mapping = getTypesTree().getSelectedMapping();
-						if (mapping != null) {
-							getSerializationConfigPanel().setSchemaElementType(mapping);
-						}
-					}					
+			typesTable = new DataServiceTypesTable();
+			typesTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			typesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+				public void valueChanged(ListSelectionEvent e) {
+					SchemaElementType selected = getTypesTable().getSelectedElementType();
+					if (selected != null) {
+						getSerializationConfigPanel().setSchemaElementType(selected);
+					} else {
+						getSerializationConfigPanel().clear();
+					}
 				}
-			};
-			*/
+			});
 		}
 		return typesTable;
 	}
@@ -161,7 +168,9 @@ public class TargetTypeSelectionPanel extends JPanel {
 		if (typesTableScrollPane == null) {
 			typesTableScrollPane = new JScrollPane();
 			typesTableScrollPane.setViewportView(getTypesTable());
-			typesTableScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Type Serialization", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+			typesTableScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(
+				null, "Type Serialization", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, 
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 		}
 		return typesTableScrollPane;
 	}
