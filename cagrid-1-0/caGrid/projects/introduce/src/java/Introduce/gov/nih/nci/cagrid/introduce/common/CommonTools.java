@@ -75,11 +75,18 @@ public class CommonTools {
 		if (!dirF.isAbsolute()) {
 			dir = buildFileDir + File.separator + dir;
 		}
-		String cmd = " -Dintroduce.skeleton.destination.dir=\"" + dir + "\" -Dintroduce.skeleton.service.name=" + name
+		String os = System.getProperty("os.name");
+		if ((os.indexOf("Windows") >= 0) || (os.indexOf("windows") >= 0)) {
+			dir = "\"" + dir + "\"";
+		} else {
+			dir = dir.replaceAll(" ", "\\ ");
+		}
+		String cmd = " -Dintroduce.skeleton.destination.dir=" + dir + " -Dintroduce.skeleton.service.name=" + name
 			+ " -Dintroduce.skeleton.package=" + packagename + " -Dintroduce.skeleton.package.dir="
 			+ packagename.replace('.', File.separatorChar) + " -Dintroduce.skeleton.namespace.domain="
 			+ namespacedomain + " -Dintroduce.skeleton.extensions=" + extensions + " createService";
 		cmd = getAntCommandCall(buildFileDir) + cmd;
+		System.out.println("CREATION: cmd: " + cmd );
 		return cmd;
 	}
 
