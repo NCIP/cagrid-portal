@@ -1,12 +1,11 @@
 package gov.nih.nci.cagrid.data.ui.types;
 
-import java.awt.Color;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
-import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
+import javax.swing.tree.DefaultTreeModel;
 
 
 /** 
@@ -22,27 +21,30 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 public class DomainTreeNode extends CheckBoxTreeNode {
 	
 	private NamespaceType namespace;
+	private TargetTypesTree parentTree;
 
-	public DomainTreeNode(NamespaceType namespace) {
+	public DomainTreeNode(TargetTypesTree tree, NamespaceType namespace) {
 		super();
+		this.parentTree = tree;
 		this.namespace = namespace;
 		setUserObject(namespace.getNamespace());
 		// add child nodes
 		SchemaElementType[] types = namespace.getSchemaElement();
 		if (types != null) {
-			// change listener to grey out the check box
-			ChangeListener childChangeListener = new ChangeListener() {
+			ChangeListener childListener = new ChangeListener() {
 				public void stateChanged(ChangeEvent e) {
-					if (!allChildrenChecked()) {
-						getCheckBox().setBackground(Color.LIGHT_GRAY);
-					} else {
-						getCheckBox().setBackground(Color.WHITE);
+					if (allChildrenChecked()) {
+						getCheckBox().setSelected(true);
+					}
+					if (noChildrenChecked()) {
+						getCheckBox().setSelected(false);
 					}
 				}
 			};
+			// add the nodes
 			for (int i = 0; i < types.length; i++) {
 				TypeTreeNode node = new TypeTreeNode(types[i]);
-				node.getCheckBox().addChangeListener(childChangeListener);
+				node.getCheckBox().addChangeListener(childListener);
 				add(node);
 			}
 		}
@@ -53,6 +55,7 @@ public class DomainTreeNode extends CheckBoxTreeNode {
 				for (int i = 0; i < childCount; i++) {
 					TypeTreeNode node = (TypeTreeNode) getChildAt(i);
 					node.getCheckBox().setSelected(isChecked());
+					((DefaultTreeModel) parentTree.getModel()).nodeChanged(node);
 				}
 			}
 		});
@@ -69,6 +72,18 @@ public class DomainTreeNode extends CheckBoxTreeNode {
 		for (int i = 0; i < childCount; i++) {
 			TypeTreeNode node = (TypeTreeNode) getChildAt(i);
 			if (!node.isChecked()) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	
+	private boolean noChildrenChecked() {
+		int childCount = getChildCount();
+		for (int i = 0; i < childCount; i++) {
+			TypeTreeNode node = (TypeTreeNode) getChildAt(i);
+			if (node.isChecked()) {
 				return false;
 			}
 		}

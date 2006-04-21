@@ -3,15 +3,11 @@ package gov.nih.nci.cagrid.data.ui.types;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 
 import java.awt.Component;
-import java.awt.Rectangle;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.EventObject;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JCheckBox;
 import javax.swing.JTree;
-import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
@@ -31,20 +27,11 @@ public class TargetTypesTree extends JTree {
 	
 	public TargetTypesTree() {
 		super();
+		setEditable(true);
 		setCellRenderer(new CellRenderer());
+		setCellEditor(new CellEditor());
 		model = new DefaultTreeModel(new DefaultMutableTreeNode());
 		setModel(model);
-		addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				CheckBoxTreeNode checkNode = getCurrentNode();
-				if (checkNode != null) {
-					Rectangle checkBounds = checkNode.getCheckBox().getBounds();
-					if (checkBounds.contains(e.getPoint())) {
-						checkNode.getCheckBox().doClick();
-					}
-				}
-			}
-		});
 		getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 	}
 	
@@ -58,14 +45,15 @@ public class TargetTypesTree extends JTree {
 	
 	
 	public void setNamespace(NamespaceType ns) {
-		DomainTreeNode domainNode = new DomainTreeNode(ns);
+		DomainTreeNode domainNode = new DomainTreeNode(this, ns);
 		setModel(new DefaultTreeModel(domainNode));
 	}
 	
 	
 	public SerializationMapping getSelectedMapping() {
-		if (getSelectionPath() != null && getSelectionPath().getLastPathComponent() instanceof TypeTreeNode) {
-			TypeTreeNode typeNode = (TypeTreeNode) getSelectionPath().getLastPathComponent();
+		CheckBoxTreeNode currentNode = getCurrentNode();
+		if (currentNode != null && currentNode instanceof TypeTreeNode) {
+			TypeTreeNode typeNode = (TypeTreeNode) currentNode;
 			DomainTreeNode domainNode = (DomainTreeNode) typeNode.getParent();
 			SerializationMapping mapping = new SerializationMapping(domainNode.getNamespace(), typeNode.getType());
 			return mapping;
@@ -87,6 +75,8 @@ public class TargetTypesTree extends JTree {
 			if (value instanceof CheckBoxTreeNode) {
 				CheckBoxTreeNode cbNode = (CheckBoxTreeNode) value;
 				cbNode.getCheckBox().setText(cbNode.toString());
+				cbNode.getCheckBox().setForeground(getForeground());
+				cbNode.getCheckBox().setBackground(getBackground());
 				return cbNode.getCheckBox();
 			}
 			return this;
@@ -115,7 +105,8 @@ public class TargetTypesTree extends JTree {
 		public Component getTreeCellEditorComponent(JTree tree, Object value,
 			boolean isSelected, boolean expanded, boolean leaf, int row) {
 			CheckBoxTreeNode checkNode = (CheckBoxTreeNode) value;
-			return checkNode.getCheckBox();
+			check = checkNode.getCheckBox();
+			return check;
 		}
 	}
 }
