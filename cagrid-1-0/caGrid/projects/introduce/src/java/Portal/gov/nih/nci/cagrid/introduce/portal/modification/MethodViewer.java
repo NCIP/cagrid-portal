@@ -107,8 +107,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JPanel methodPanel = null;
 
-	private JPanel exceptionInputButtonPanel = null;
-
 	private JPanel securityContainerPanel = null;
 
 	private ServiceInformation info;
@@ -150,6 +148,10 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JLabel downLabel = null;
 
 	private JButton clearOutputTypeButton = null;
+
+	private JLabel faultNameLabel = null;
+
+	private JPanel exceptionsInputButtonPanel = null;
 
 
 	public MethodViewer(MethodType method, ServiceInformation info, File schemaDir, MethodsTable table, int selectedRow) {
@@ -577,13 +579,13 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JPanel getExceptionsPanel() {
 		if (exceptionsPanel == null) {
 			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
-			gridBagConstraints12.gridx = 1;
+			gridBagConstraints12.gridx = 0;
 			gridBagConstraints12.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints12.weightx = 0.0D;
 			gridBagConstraints12.weighty = 0.0D;
 			gridBagConstraints12.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints12.anchor = java.awt.GridBagConstraints.SOUTH;
-			gridBagConstraints12.gridy = 0;
+			gridBagConstraints12.gridy = 1;
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			gridBagConstraints11.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints11.gridx = 0;
@@ -625,14 +627,30 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getExceptionInputPanel() {
 		if (exceptionInputPanel == null) {
+			GridBagConstraints gridBagConstraints27 = new GridBagConstraints();
+			gridBagConstraints27.gridx = 1;
+			gridBagConstraints27.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints27.gridheight = 2;
+			gridBagConstraints27.gridy = 0;
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.gridx = 1;
-			gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints3.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints3.gridx = 0;
+			gridBagConstraints3.anchor = java.awt.GridBagConstraints.SOUTHWEST;
+			gridBagConstraints3.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints3.gridy = 0;
+			faultNameLabel = new JLabel();
+			faultNameLabel.setText("Fault Name:");
+			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
+			gridBagConstraints15.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints15.gridx = 0;
+			gridBagConstraints15.gridy = 1;
+			gridBagConstraints15.weightx = 1.0;
+			gridBagConstraints15.insets = new java.awt.Insets(2,2,2,10);
+			gridBagConstraints15.gridheight = 1;
 			exceptionInputPanel = new JPanel();
 			exceptionInputPanel.setLayout(new GridBagLayout());
-			exceptionInputPanel.add(getExceptionInputButtonPanel(), gridBagConstraints3);
+			exceptionInputPanel.add(getExceptionEditText(), gridBagConstraints15);
+			exceptionInputPanel.add(faultNameLabel, gridBagConstraints3);
+			exceptionInputPanel.add(getExceptionsInputButtonPanel(), gridBagConstraints27);
 		}
 		return exceptionInputPanel;
 	}
@@ -727,38 +745,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 			methodPanel.add(getConfigureTabbedPane(), gridBagConstraints1);
 		}
 		return methodPanel;
-	}
-
-
-	/**
-	 * This method initializes exceptionInputButtonPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getExceptionInputButtonPanel() {
-		if (exceptionInputButtonPanel == null) {
-			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
-			gridBagConstraints15.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints15.gridy = 0;
-			gridBagConstraints15.weightx = 1.0;
-			gridBagConstraints15.gridx = 0;
-			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints5.gridy = 1;
-			gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints5.gridx = 0;
-			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-			gridBagConstraints4.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints4.gridy = 2;
-			gridBagConstraints4.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints4.gridx = 0;
-			exceptionInputButtonPanel = new JPanel();
-			exceptionInputButtonPanel.setLayout(new GridBagLayout());
-			exceptionInputButtonPanel.add(getRemoveExceptionButton(), gridBagConstraints4);
-			exceptionInputButtonPanel.add(getAddExceptionButton(), gridBagConstraints5);
-			exceptionInputButtonPanel.add(getExceptionEditText(), gridBagConstraints15);
-		}
-		return exceptionInputButtonPanel;
 	}
 
 
@@ -1193,6 +1179,30 @@ public class MethodViewer extends GridPortalBaseFrame {
 			});
 		}
 		return clearOutputTypeButton;
+	}
+
+
+	/**
+	 * This method initializes exceptionsInputButtonPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getExceptionsInputButtonPanel() {
+		if (exceptionsInputButtonPanel == null) {
+			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+			gridBagConstraints5.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints5.gridy = 0;
+			gridBagConstraints5.gridx = 1;
+			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+			gridBagConstraints4.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints4.gridy = 0;
+			gridBagConstraints4.gridx = 0;
+			exceptionsInputButtonPanel = new JPanel();
+			exceptionsInputButtonPanel.setLayout(new GridBagLayout());
+			exceptionsInputButtonPanel.add(getAddExceptionButton(), gridBagConstraints4);
+			exceptionsInputButtonPanel.add(getRemoveExceptionButton(), gridBagConstraints5);
+		}
+		return exceptionsInputButtonPanel;
 	}
 
 } // @jve:decl-index=0:visual-constraint="4,12"

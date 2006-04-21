@@ -138,6 +138,7 @@ public class ModificationViewer extends GridPortalComponent {
 	private JTextField servicePropertyValueTextField = null;
 	private JLabel servicePropertiesKeyLabel = null;
 	private JLabel servicePropertiesValueLabel = null;
+	private JPanel servicePropertiesButtonPanel = null;
 
 
 	/**
@@ -1586,9 +1587,9 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints26.weighty = 1.0D;
 			gridBagConstraints26.gridy = 0;
 			GridBagConstraints gridBagConstraints25 = new GridBagConstraints();
-			gridBagConstraints25.gridx = 1;
+			gridBagConstraints25.gridx = 0;
 			gridBagConstraints25.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints25.gridy = 0;
+			gridBagConstraints25.gridy = 1;
 			servicePropertiesPanel = new JPanel();
 			servicePropertiesPanel.setLayout(new GridBagLayout());
 			servicePropertiesPanel.add(getServicePropertiesTableContainerPanel(), gridBagConstraints26);
@@ -1654,6 +1655,12 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private JPanel getServicePropertiesControlPanel() {
 		if (servicePropertiesControlPanel == null) {
+			GridBagConstraints gridBagConstraints42 = new GridBagConstraints();
+			gridBagConstraints42.gridx = 1;
+			gridBagConstraints42.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints42.gridwidth = 1;
+			gridBagConstraints42.gridheight = 4;
+			gridBagConstraints42.gridy = 0;
 			GridBagConstraints gridBagConstraints41 = new GridBagConstraints();
 			gridBagConstraints41.gridx = 0;
 			gridBagConstraints41.anchor = java.awt.GridBagConstraints.SOUTHWEST;
@@ -1672,32 +1679,21 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints39.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints39.gridy = 3;
 			gridBagConstraints39.weightx = 1.0;
-			gridBagConstraints39.insets = new java.awt.Insets(2, 2, 20, 2);
+			gridBagConstraints39.insets = new java.awt.Insets(2,2,10,10);
 			gridBagConstraints39.gridx = 0;
 			GridBagConstraints gridBagConstraints38 = new GridBagConstraints();
 			gridBagConstraints38.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints38.gridy = 1;
 			gridBagConstraints38.weightx = 1.0;
-			gridBagConstraints38.insets = new java.awt.Insets(2, 2, 10, 2);
+			gridBagConstraints38.insets = new java.awt.Insets(2,2,10,10);
 			gridBagConstraints38.gridx = 0;
-			GridBagConstraints gridBagConstraints37 = new GridBagConstraints();
-			gridBagConstraints37.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints37.gridx = 0;
-			gridBagConstraints37.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints37.gridy = 4;
-			GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
-			gridBagConstraints32.gridx = 0;
-			gridBagConstraints32.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints32.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints32.gridy = 5;
 			servicePropertiesControlPanel = new JPanel();
 			servicePropertiesControlPanel.setLayout(new GridBagLayout());
-			servicePropertiesControlPanel.add(getAddServiceProperyButton(), gridBagConstraints37);
-			servicePropertiesControlPanel.add(getRemoveServicePropertyButton(), gridBagConstraints32);
 			servicePropertiesControlPanel.add(getServicePropertyKeyTextField(), gridBagConstraints38);
 			servicePropertiesControlPanel.add(getServicePropertyValueTextField(), gridBagConstraints39);
 			servicePropertiesControlPanel.add(servicePropertiesKeyLabel, gridBagConstraints40);
 			servicePropertiesControlPanel.add(servicePropertiesValueLabel, gridBagConstraints41);
+			servicePropertiesControlPanel.add(getServicePropertiesButtonPanel(), gridBagConstraints42);
 		}
 		return servicePropertiesControlPanel;
 	}
@@ -1778,6 +1774,32 @@ public class ModificationViewer extends GridPortalComponent {
 			servicePropertyValueTextField = new JTextField();
 		}
 		return servicePropertyValueTextField;
+	}
+
+
+	/**
+	 * This method initializes servicePropertiesButtonPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getServicePropertiesButtonPanel() {
+		if (servicePropertiesButtonPanel == null) {
+			GridBagConstraints gridBagConstraints37 = new GridBagConstraints();
+			gridBagConstraints37.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints37.gridy = 0;
+			gridBagConstraints37.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints37.gridx = 0;
+			GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
+			gridBagConstraints32.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints32.gridy = 1;
+			gridBagConstraints32.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints32.gridx = 0;
+			servicePropertiesButtonPanel = new JPanel();
+			servicePropertiesButtonPanel.setLayout(new GridBagLayout());
+			servicePropertiesButtonPanel.add(getRemoveServicePropertyButton(), gridBagConstraints32);
+			servicePropertiesButtonPanel.add(getAddServiceProperyButton(), gridBagConstraints37);
+		}
+		return servicePropertiesButtonPanel;
 	}
 
 } // @jve:decl-index=0:visual-constraint="10,10"
