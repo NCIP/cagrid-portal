@@ -421,6 +421,6 @@ public class TypeSerializationConfigDialog extends GridPortalComponent {
 		frame.setContentPane(desk);
 		desk.add(new TypeSerializationConfigDialog(null, null));
 		frame.setSize(600,600);
-		frame.show();
+		frame.setVisible(true);
 	}
 }

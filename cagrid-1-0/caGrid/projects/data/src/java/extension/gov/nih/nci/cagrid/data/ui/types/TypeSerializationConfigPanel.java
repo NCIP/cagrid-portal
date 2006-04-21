@@ -1,6 +1,8 @@
 package gov.nih.nci.cagrid.data.ui.types;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
+import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
 import java.awt.Component;
 import java.awt.Container;
@@ -26,6 +28,8 @@ import javax.swing.event.ChangeListener;
  * @version $Id$ 
  */
 public class TypeSerializationConfigPanel extends JPanel {
+	public static final String SDK_SERIALIZER = "gov.nih.nci.cagrid.encoding.SDKSerializerFactory";
+	public static final String SDK_DESERIALIZER = "gov.nih.nci.cagrid.encoding.SDKDeserializerFactory";
 	
 	private JPanel serializationTypePanel = null;
 	private JRadioButton defaultSerializationRadioButton = null;
@@ -42,7 +46,7 @@ public class TypeSerializationConfigPanel extends JPanel {
 	private JLabel deserializerLabel = null;
 	
 	private DataServiceTypesTable table;
-	private SerializationMapping mapping;
+	private SchemaElementType schemaType;
 	
 	public TypeSerializationConfigPanel(DataServiceTypesTable table) {
 		super();
@@ -51,10 +55,10 @@ public class TypeSerializationConfigPanel extends JPanel {
 	}
 	
 	
-	public void setSerializationMapping(SerializationMapping map) {
-		this.mapping = map;
-		getSerializerTextField().setText(mapping.getElemType().getSerializer());
-		getDeserializerTextField().setText(mapping.getElemType().getDeserializer());
+	public void setSchemaElementType(SchemaElementType type) {
+		schemaType = type;
+		getSerializerTextField().setText(schemaType.getSerializer());
+		getDeserializerTextField().setText(schemaType.getDeserializer());
 		if (isDefaultSerialization()) {
 			getRadioGroup().setSelected(getDefaultSerializationRadioButton().getModel(), true);
 		} else if (isSdkSerialization()) {
@@ -182,8 +186,8 @@ public class TypeSerializationConfigPanel extends JPanel {
 			sdkSerializationRadioButton.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent e) {
 					if (getSdkSerializationRadioButton().isSelected()) {
-						getSerializerTextField().setText(SerializationMapping.SDK_SERIALIZER);
-						getDeserializerTextField().setText(SerializationMapping.SDK_DESERIALIZER);
+						getSerializerTextField().setText(SDK_SERIALIZER);
+						getDeserializerTextField().setText(SDK_DESERIALIZER);
 					}
 				}
 			});
@@ -205,10 +209,10 @@ public class TypeSerializationConfigPanel extends JPanel {
 			setButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					// set values into the mapping
-					mapping.getElemType().setSerializer(getSerializerTextField().getText());
-					mapping.getElemType().setDeserializer(getDeserializerTextField().getText());
+					schemaType.setSerializer(getSerializerTextField().getText());
+					schemaType.setDeserializer(getDeserializerTextField().getText());
 					// get the table to refresh these fields
-					table.refreshSerializationMapping(mapping);
+					table.refreshSerialization(schemaType);
 				}
 			});
 		}
@@ -225,10 +229,10 @@ public class TypeSerializationConfigPanel extends JPanel {
 		if (undoButton == null) {
 			undoButton = new JButton();
 			undoButton.setText("Undo Changes");
-			undoButton.setIcon(PortalLookAndFeel.getCloseIcon());
+			undoButton.setIcon(IntroduceLookAndFeel.getUndoIcon());
 			undoButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					// TODO: revert changes to serialization
+					setSchemaElementType(schemaType);
 				}
 			});
 		}
@@ -372,14 +376,14 @@ public class TypeSerializationConfigPanel extends JPanel {
 	
 	
 	private boolean isDefaultSerialization() {
-		return mapping.getElemType().getSerializer().length() == 0 &&
-			mapping.getElemType().getDeserializer().length() == 0;
+		return schemaType.getSerializer().length() == 0 &&
+			schemaType.getDeserializer().length() == 0;
 	}
 	
 	
 	private boolean isSdkSerialization() {
-		return mapping.getElemType().getSerializer().equals(SerializationMapping.SDK_SERIALIZER) &&
-			mapping.getElemType().getDeserializer().equals(SerializationMapping.SDK_DESERIALIZER);
+		return schemaType.getSerializer().equals(SDK_SERIALIZER) &&
+			schemaType.getDeserializer().equals(SDK_DESERIALIZER);
 	}
 	
 	

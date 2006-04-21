@@ -3,6 +3,12 @@ package gov.nih.nci.cagrid.data.ui.types;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.JCheckBox;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.tree.DefaultTreeModel;
@@ -22,17 +28,20 @@ public class DomainTreeNode extends CheckBoxTreeNode {
 	
 	private NamespaceType namespace;
 	private TargetTypesTree parentTree;
+	private Map schemaTypes;
 
 	public DomainTreeNode(TargetTypesTree tree, NamespaceType namespace) {
 		super();
 		this.parentTree = tree;
 		this.namespace = namespace;
+		this.schemaTypes = new HashMap();
+		
 		setUserObject(namespace.getNamespace());
 		// add child nodes
 		SchemaElementType[] types = namespace.getSchemaElement();
 		if (types != null) {
-			ChangeListener childListener = new ChangeListener() {
-				public void stateChanged(ChangeEvent e) {
+			ItemListener childListener = new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
 					if (allChildrenChecked()) {
 						getCheckBox().setSelected(true);
 					}
@@ -40,13 +49,20 @@ public class DomainTreeNode extends CheckBoxTreeNode {
 						getCheckBox().setSelected(false);
 					}
 					// tell everybody that the type selection has been changed
-					parentTree.fireTypeSelectionChanged();
+					JCheckBox checkBox = (JCheckBox) e.getSource();
+					if (checkBox.isSelected()) {
+						// TODO: get the node the check box belongs to
+						parentTree.fireTypeSelectionAdded((SchemaElementType) schemaTypes.get(checkBox));
+					} else {
+						parentTree.fireTypeSelectionRemoved((SchemaElementType) schemaTypes.get(checkBox));
+					}
 				}
 			};
 			// add the nodes
 			for (int i = 0; i < types.length; i++) {
 				TypeTreeNode node = new TypeTreeNode(types[i]);
-				node.getCheckBox().addChangeListener(childListener);
+				node.getCheckBox().addItemListener(childListener);
+				schemaTypes.put(node.getCheckBox(), node.getType());
 				add(node);
 			}
 		}

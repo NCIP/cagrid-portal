@@ -28,14 +28,13 @@ import javax.swing.tree.TreeSelectionModel;
  * @version $Id$ 
  */
 public class TargetTypesTree extends JTree {
+	private NamespaceType namespaceType;
 	private DefaultTreeModel model;
 	private List typeSelectionListeners;
-	private TypeSelectionEvent event;
 	
 	public TargetTypesTree() {
 		super();
 		typeSelectionListeners = new LinkedList();
-		event = new TypeSelectionEvent(this);
 		setEditable(true);
 		setCellRenderer(new CellRenderer());
 		setCellEditor(new CellEditor());
@@ -45,29 +44,15 @@ public class TargetTypesTree extends JTree {
 	}
 	
 	
-	private CheckBoxTreeNode getCurrentNode() {
-		if (getSelectionPath() != null) {
-			return (CheckBoxTreeNode) getSelectionPath().getLastPathComponent();
-		}
-		return null;
-	}
-	
-	
 	public void setNamespace(NamespaceType ns) {
 		DomainTreeNode domainNode = new DomainTreeNode(this, ns);
 		setModel(new DefaultTreeModel(domainNode));
+		this.namespaceType = ns;
 	}
 	
 	
-	public SerializationMapping getSelectedMapping() {
-		CheckBoxTreeNode currentNode = getCurrentNode();
-		if (currentNode != null && currentNode instanceof TypeTreeNode) {
-			TypeTreeNode typeNode = (TypeTreeNode) currentNode;
-			DomainTreeNode domainNode = (DomainTreeNode) typeNode.getParent();
-			SerializationMapping mapping = new SerializationMapping(domainNode.getNamespace(), typeNode.getType());
-			return mapping;
-		}
-		return null;
+	public NamespaceType getNamespace() {
+		return namespaceType;
 	}
 	
 	
@@ -97,10 +82,26 @@ public class TargetTypesTree extends JTree {
 	}
 	
 	
-	protected void fireTypeSelectionChanged() {
+	protected void fireTypeSelectionAdded(SchemaElementType addedType) {
 		Iterator listenerIter = typeSelectionListeners.iterator();
+		TypeSelectionEvent event = null;
 		while (listenerIter.hasNext()) {
-			((TypeSelectionListener) listenerIter.next()).typeSelectionMade(event);
+			if (event == null) {
+				event = new TypeSelectionEvent(this, addedType);
+			}
+			((TypeSelectionListener) listenerIter.next()).typeSelectionAdded(event);
+		}
+	}
+	
+	
+	protected void fireTypeSelectionRemoved(SchemaElementType removedType) {
+		Iterator listenerIter = typeSelectionListeners.iterator();
+		TypeSelectionEvent event = null;
+		while (listenerIter.hasNext()) {
+			if (event == null) {
+				event = new TypeSelectionEvent(this, removedType);
+			}
+			((TypeSelectionListener) listenerIter.next()).typeSelectionRemoved(event);
 		}
 	}
 	

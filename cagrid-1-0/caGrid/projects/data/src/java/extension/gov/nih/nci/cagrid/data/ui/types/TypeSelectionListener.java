@@ -11,5 +11,8 @@ package gov.nih.nci.cagrid.data.ui.types;
  */
 public interface TypeSelectionListener {
 
-	public void typeSelectionMade(TypeSelectionEvent e);
+	public void typeSelectionAdded(TypeSelectionEvent e);
+	
+	
+	public void typeSelectionRemoved(TypeSelectionEvent e);
 }

@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 
@@ -94,6 +95,17 @@ public class TargetTypeSelectionPanel extends JPanel {
 	private TargetTypesTree getTypesTree() {
 		if (typesTree == null) {
 			typesTree = new TargetTypesTree();
+			typesTree.addTypeSelectionListener(new TypeSelectionListener() {
+				public void typeSelectionAdded(TypeSelectionEvent e) {
+					getTypesTable().addType(getTypesTree().getNamespace(), e.getSchemaElementType());
+				}
+				
+				
+				public void typeSelectionRemoved(TypeSelectionEvent e) {
+					getTypesTable().removeSchemaElementType(e.getSchemaElementType());
+				}
+			});
+			typesTree.setNamespace(getNamespaces());
 		}
 		return typesTree;
 	}
@@ -116,16 +128,17 @@ public class TargetTypeSelectionPanel extends JPanel {
 	
 	private DataServiceTypesTable getTypesTable() {
 		if (typesTable == null) {
-			typesTable = new DataServiceTypesTable() {
+			typesTable = new DataServiceTypesTable(); /* {
 				public void doubleClick() {
 					if (getSelectedColumn() >= 3) {
 						SerializationMapping mapping = getTypesTree().getSelectedMapping();
 						if (mapping != null) {
-							getSerializationConfigPanel().setSerializationMapping(mapping);
+							getSerializationConfigPanel().setSchemaElementType(mapping);
 						}
 					}					
 				}
 			};
+			*/
 		}
 		return typesTable;
 	}
@@ -328,6 +341,25 @@ public class TargetTypeSelectionPanel extends JPanel {
 	}
 	
 	
+	private NamespaceType getNamespaces() {
+		NamespaceType ns = new NamespaceType();
+		ns.setNamespace("projectmobius.org/1/BookStore");
+		ns.setPackageName("org.projectmobius");
+		ns.setLocation(".");
+		SchemaElementType[] types = new SchemaElementType[4];
+		for (int i = 0; i < types.length; i++) {
+			SchemaElementType type = new SchemaElementType();
+			type.setClassName("Book" + i);
+			type.setDeserializer("FakeDeserializer");
+			type.setSerializer("FakeSerializer");
+			type.setType("Book" + i);
+			types[i] = type;
+		}
+		ns.setSchemaElement(types);
+		return ns;
+	}
+	
+	
 	public static void main(String[] args) {
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -339,6 +371,7 @@ public class TargetTypeSelectionPanel extends JPanel {
 			ex.printStackTrace();
 			System.exit(1);
 		}
+		frame.setSize(900,500);
 		frame.setVisible(true);
 	}
 }

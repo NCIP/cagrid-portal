@@ -6,6 +6,8 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -19,42 +21,51 @@ import javax.swing.table.DefaultTableModel;
  * @version $Id$ 
  */
 public class DataServiceTypesTable extends PortalBaseTable {
-	private List serializationMappings;
+	private List schemaElementTypes;
 	
 	public DataServiceTypesTable() {
 		super(createTableModel());
-		serializationMappings = new ArrayList();
+		schemaElementTypes = new ArrayList();
 	}
 	
 	
 	public void addType(NamespaceType namespace, SchemaElementType type) {
-		SerializationMapping mapping = new SerializationMapping(namespace, type);
-		addMapping(mapping);
+		Vector v = new Vector(5);
+		v.add(namespace.getNamespace());
+		v.add(namespace.getPackageName());
+		v.add(type.getType());
+		v.add(type.getSerializer());
+		v.add(type.getDeserializer());
+		((DefaultTableModel) getModel()).addRow(v);
+		schemaElementTypes.add(type);
 	}
 	
 	
-	public void addMapping(SerializationMapping mapping) {
-		serializationMappings.add(mapping);
-		((DefaultTableModel) getModel()).addRow(mapping.toVector());
+	public List getSchemaElementTypes() {
+		return schemaElementTypes;
 	}
 	
 	
-	public List getSerializationMappings() {
-		return serializationMappings;
-	}
-	
-	
-	public void removeSerializationMapping(int i) {
+	public void removeSchemaElementType(int i) {
 		((DefaultTableModel) getModel()).removeRow(i);
-		serializationMappings.remove(i);
+		schemaElementTypes.remove(i);
 	}
 	
 	
-	public void refreshSerializationMapping(SerializationMapping mapping) {
-		int index = serializationMappings.indexOf(mapping);
-		serializationMappings.set(index, mapping);
-		((DefaultTableModel) getModel()).removeRow(index);
-		((DefaultTableModel) getModel()).insertRow(index, mapping.toVector());
+	public void removeSchemaElementType(SchemaElementType type) {
+		int index = schemaElementTypes.indexOf(type);
+		if (index == -1) {
+			throw new NoSuchElementException("No schema element type found");
+		}
+		removeSchemaElementType(index);
+	}
+	
+	
+	public void refreshSerialization(SchemaElementType elementType) {
+		int index = schemaElementTypes.indexOf(elementType);
+		schemaElementTypes.set(index, elementType);
+		((DefaultTableModel) getModel()).setValueAt(elementType.getSerializer(), index, 3);
+		((DefaultTableModel) getModel()).setValueAt(elementType.getDeserializer(), index, 4);
 	}
 	
 	
@@ -65,11 +76,10 @@ public class DataServiceTypesTable extends PortalBaseTable {
 			}
 		};
 		model.addColumn("Namespace");
+		model.addColumn("Package");
 		model.addColumn("Type");
-		model.addColumn("Class");
 		model.addColumn("Serializer");
 		model.addColumn("Deserializer");
-		model.addColumn("Encoding Style");
 		return model;
 	}
 	
