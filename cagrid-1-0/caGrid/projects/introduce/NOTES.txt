@@ -1,4 +1,7 @@
 To Do:
+
+add tests for SystemProperties and CustomBeans and Security for system testing.
+
 make sure that every panel that uses a namespaces jtree has a on focus to restore from the model
 
 portal lets you add the same method name several times
