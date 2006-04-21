@@ -448,7 +448,7 @@ public class CreationViewer extends GridPortalComponent {
 							if (!serviceName.matches(ALLOWED_SERVICE_NAME_REGEX)) {
 								setErrorMessage("Service Name can only contain " + ALLOWED_SERVICE_NAME_REGEX);
 								return;
-							}
+						}
 						} else {
 							setErrorMessage("Service Name cannot be empty.");
 							return;

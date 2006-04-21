@@ -69,6 +69,8 @@ public class CommonTools {
 	public static String getAntSkeletonCreationCommand(String buildFileDir, String name, String dir,
 		String packagename, String namespacedomain, String extensions) throws Exception {
 		// fix dir path if it relative......
+		System.out.println("CREATION: builddir: " + buildFileDir);
+		System.out.println("CREATION: destdir: " + dir);
 		File dirF = new File(dir);
 		if (!dirF.isAbsolute()) {
 			dir = buildFileDir + File.separator + dir;
