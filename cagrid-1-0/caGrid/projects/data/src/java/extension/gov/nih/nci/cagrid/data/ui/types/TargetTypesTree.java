@@ -6,6 +6,8 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.EventObject;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.DefaultCellEditor;
@@ -27,9 +29,13 @@ import javax.swing.tree.TreeSelectionModel;
  */
 public class TargetTypesTree extends JTree {
 	private DefaultTreeModel model;
+	private List typeSelectionListeners;
+	private TypeSelectionEvent event;
 	
 	public TargetTypesTree() {
 		super();
+		typeSelectionListeners = new LinkedList();
+		event = new TypeSelectionEvent(this);
 		setEditable(true);
 		setCellRenderer(new CellRenderer());
 		setCellEditor(new CellEditor());
@@ -78,6 +84,24 @@ public class TargetTypesTree extends JTree {
 		SchemaElementType[] types = new SchemaElementType[selected.size()];
 		selected.toArray(types);
 		return types;
+	}
+	
+	
+	public void addTypeSelectionListener(TypeSelectionListener listener) {
+		typeSelectionListeners.add(listener);
+	}
+	
+	
+	public boolean removeTypeSelectionListener(TypeSelectionListener listener) {
+		return typeSelectionListeners.remove(listener);
+	}
+	
+	
+	protected void fireTypeSelectionChanged() {
+		Iterator listenerIter = typeSelectionListeners.iterator();
+		while (listenerIter.hasNext()) {
+			((TypeSelectionListener) listenerIter.next()).typeSelectionMade(event);
+		}
 	}
 	
 	

@@ -39,6 +39,8 @@ public class DomainTreeNode extends CheckBoxTreeNode {
 					if (noChildrenChecked()) {
 						getCheckBox().setSelected(false);
 					}
+					// tell everybody that the type selection has been changed
+					parentTree.fireTypeSelectionChanged();
 				}
 			};
 			// add the nodes
