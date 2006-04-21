@@ -16,6 +16,7 @@ General Tasks
 12) Add policy chaining
 13) Add support for configuring communication type for the portal
 14) Add support for SSL exception handling
+15) Need a way to query for a retrieve public certificate subjects so introduce can use it to populate grid map files etc.
 
 
 Testing Tasks
