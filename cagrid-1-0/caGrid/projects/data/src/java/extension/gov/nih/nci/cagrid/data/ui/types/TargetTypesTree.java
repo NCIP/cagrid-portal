@@ -3,9 +3,16 @@ package gov.nih.nci.cagrid.data.ui.types;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 
 import java.awt.Component;
+import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.EventObject;
 
-import javax.swing.JPanel;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JCheckBox;
 import javax.swing.JTree;
+import javax.swing.SwingUtilities;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
@@ -20,11 +27,33 @@ import javax.swing.tree.TreeSelectionModel;
  * @version $Id$ 
  */
 public class TargetTypesTree extends JTree {
+	private DefaultTreeModel model;
 	
 	public TargetTypesTree() {
 		super();
 		setCellRenderer(new CellRenderer());
+		model = new DefaultTreeModel(new DefaultMutableTreeNode());
+		setModel(model);
+		addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				CheckBoxTreeNode checkNode = getCurrentNode();
+				if (checkNode != null) {
+					Rectangle checkBounds = checkNode.getCheckBox().getBounds();
+					if (checkBounds.contains(e.getPoint())) {
+						checkNode.getCheckBox().doClick();
+					}
+				}
+			}
+		});
 		getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+	}
+	
+	
+	private CheckBoxTreeNode getCurrentNode() {
+		if (getSelectionPath() != null) {
+			return (CheckBoxTreeNode) getSelectionPath().getLastPathComponent();
+		}
+		return null;
 	}
 	
 	
@@ -56,13 +85,37 @@ public class TargetTypesTree extends JTree {
 			boolean sel, boolean expanded, boolean leaf, int row, boolean focused) {
 			super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, focused);
 			if (value instanceof CheckBoxTreeNode) {
-				JPanel panel = new JPanel();
 				CheckBoxTreeNode cbNode = (CheckBoxTreeNode) value;
-				panel.add(cbNode.getCheckBox());
-				panel.add(this);
-				return panel;
+				cbNode.getCheckBox().setText(cbNode.toString());
+				return cbNode.getCheckBox();
 			}
 			return this;
+		}
+	}
+	
+	
+	private class CellEditor extends DefaultCellEditor {
+		private JCheckBox check;
+		
+		public CellEditor() {
+			super(new JCheckBox());
+		}
+		
+		
+		public Object getCellEditorValue() {
+			return check;
+		}
+		
+		
+		public boolean isCellEditable(EventObject e) {
+			return true;
+		}
+		
+		
+		public Component getTreeCellEditorComponent(JTree tree, Object value,
+			boolean isSelected, boolean expanded, boolean leaf, int row) {
+			CheckBoxTreeNode checkNode = (CheckBoxTreeNode) value;
+			return checkNode.getCheckBox();
 		}
 	}
 }

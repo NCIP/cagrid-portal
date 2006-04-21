@@ -324,7 +324,7 @@ public class TargetTypeSelectionPanel extends JPanel {
 	
 	
 	private File getSchemaDir() {
-		return null;
+		return new File(".");
 	}
 	
 	
@@ -332,7 +332,7 @@ public class TargetTypeSelectionPanel extends JPanel {
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		try {
-			ExtensionDescription desc = (ExtensionDescription) Utils.deserializeDocument("extension.xml",
+			ExtensionDescription desc = (ExtensionDescription) Utils.deserializeDocument("./extension.xml",
 				ExtensionDescription.class);
 			frame.setContentPane(new TargetTypeSelectionPanel(desc.getServiceExtensionDescription()));
 		} catch (Exception ex) {

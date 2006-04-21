@@ -21,7 +21,7 @@ public class TypeTreeNode extends CheckBoxTreeNode {
 		super();
 		setAllowsChildren(false);
 		this.type = type;
-		setUserObject(type.getClassName());
+		setUserObject(type.getType());
 	}
 	
 	
