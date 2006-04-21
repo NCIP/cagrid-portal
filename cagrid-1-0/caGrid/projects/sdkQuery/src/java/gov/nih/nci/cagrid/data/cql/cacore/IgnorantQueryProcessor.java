@@ -1,5 +1,11 @@
 package gov.nih.nci.cagrid.data.cql.cacore;
 
+import java.util.List;
+
+import javax.xml.namespace.QName;
+
+import org.apache.axis.message.MessageElement;
+
 import gov.nih.nci.cabio.domain.Gene;
 import gov.nih.nci.cabio.domain.impl.GeneImpl;
 import gov.nih.nci.cagrid.common.Utils;
@@ -10,15 +16,10 @@ import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.data.cql.InitializationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
-import java.util.List;
-
-import javax.xml.namespace.QName;
-
-import org.apache.axis.message.MessageElement;
-
 /** 
  *  IgnorantQueryProcessor
- *  TODO:DOCUMENT ME
+ *  IQP Takes a cql query, ignores it, and returns some results from a
+ *  caBIO / caCORE SDK data source
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
