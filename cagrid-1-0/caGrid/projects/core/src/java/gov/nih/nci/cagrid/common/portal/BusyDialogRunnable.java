@@ -41,7 +41,13 @@ public abstract class BusyDialogRunnable implements Runnable {
 			}
 		});
 
-		process();
+		try {
+			process();
+		} catch (Exception e) {
+			valid = false;
+			errorMessage = e.getMessage();
+		}
+		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				dialog.getProgress().setIndeterminate(false);
@@ -49,9 +55,9 @@ public abstract class BusyDialogRunnable implements Runnable {
 		});
 		setProgressText("");
 		dialog.setVisible(false);
-		
-		if(!valid){
-			JOptionPane.showMessageDialog(owner,errorMessage);
+
+		if (!valid) {
+			JOptionPane.showMessageDialog(owner, errorMessage);
 		}
 	}
 
