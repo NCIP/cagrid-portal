@@ -35,24 +35,23 @@ public abstract class BusyDialogRunnable implements Runnable {
 			}
 		});
 		thread.start();
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				dialog.getProgress().setIndeterminate(true);
-			}
-		});
-
 		try {
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					dialog.getProgress().setIndeterminate(true);
+				}
+			});
 			process();
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					dialog.getProgress().setIndeterminate(false);
+				}
+			});
 		} catch (Exception e) {
 			valid = false;
 			errorMessage = e.getMessage();
 		}
-		
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				dialog.getProgress().setIndeterminate(false);
-			}
-		});
+
 		setProgressText("");
 		dialog.setVisible(false);
 
