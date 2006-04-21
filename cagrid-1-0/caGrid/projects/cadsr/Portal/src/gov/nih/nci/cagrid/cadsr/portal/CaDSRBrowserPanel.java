@@ -5,6 +5,7 @@ import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
 import gov.nih.nci.cagrid.cadsr.common.CaDSRServiceI;
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -151,9 +152,9 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 			gridBagConstraints4.gridx = 0;
 			queryPanel = new JPanel();
 			queryPanel.setLayout(new GridBagLayout());
-			queryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Discover Data Types",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+			queryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+				null, "Discover Data Types", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			queryPanel.add(getQueryButton(), gridBagConstraints4);
 			queryPanel.add(cadsrAddressLabel, gridBagConstraints6);
 			queryPanel.add(getCadsr(), gridBagConstraints5);
@@ -320,17 +321,17 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 			projectsPanel = new JPanel();
 			projectsPanel.setLayout(new GridBagLayout());
 			if (isShowQueryPanel()) {
-				projectsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Data Type",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+				projectsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+					null, "Select Data Type", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 				projectsPanel.add(getProjectComboBox(), gridBagConstraints7);
 				projectsPanel.add(projectLabel, gridBagConstraints9);
 			}
 			projectsPanel.add(getPackageComboBox(), gridBagConstraints8);
 			projectsPanel.add(packageLabel, gridBagConstraints10);
-			projectsPanel.add(getClassComboBox(), gridBagConstraints2);
-			projectsPanel.add(classLabel, gridBagConstraints3);
 			if (isShowClassSelection()) {
+				projectsPanel.add(getClassComboBox(), gridBagConstraints2);
+				projectsPanel.add(classLabel, gridBagConstraints3);
 			}
 		}
 		return projectsPanel;
