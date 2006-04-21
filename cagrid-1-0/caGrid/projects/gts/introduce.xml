@@ -157,6 +157,13 @@
     <ns3:Exception name="PermissionDeniedFault"/>
    </ns3:Exceptions>
   </ns3:Method>
+  <ns3:Method name="addAuthority" xsi:type="ns3:MethodType">
+   <ns3:Inputs/>
+   <ns3:Output qName="void" isArray="false"/>
+   <ns3:Exceptions>
+    <ns3:Exception name="IllegalAuthorityFault"/>
+   </ns3:Exceptions>
+  </ns3:Method>
  </ns3:Methods>
  <ns18:MetadataList xsi:type="ns18:MetadataListType" xmlns:ns18="gme://gov.nih.nci.cagrid.introduce/1/Metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
  <ns19:ServiceSecurity xsi:type="ns19:ServiceSecurity" xmlns:ns19="gme://gov.nih.nci.cagrid.introduce/1/Security" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">

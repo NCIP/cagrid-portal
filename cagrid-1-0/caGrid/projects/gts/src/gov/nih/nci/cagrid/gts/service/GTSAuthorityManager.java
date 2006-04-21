@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.gts.bean.AuthorityGTS;
 import gov.nih.nci.cagrid.gts.common.Database;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
+import gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -37,17 +38,32 @@ public class GTSAuthorityManager {
 	}
 
 
-	public synchronized void addAuthority(AuthorityGTS gts) throws GTSInternalFault {
+	public synchronized void addAuthority(AuthorityGTS gts) throws GTSInternalFault, IllegalAuthorityFault {
+		this.buildDatabase();
 		if (Utils.clean(gts.getServiceURI()) == null) {
+			IllegalAuthorityFault fault = new IllegalAuthorityFault();
+			fault.setFaultString("The Authority cannot be added, no service URI specified!!!");
+			throw fault;
+		}
 
+		if (gts.getTrustedAuthorityTimeToLive() == null) {
+			IllegalAuthorityFault fault = new IllegalAuthorityFault();
+			fault.setFaultString("The Authority, " + gts.getServiceURI()
+				+ " cannot be added, no time to live specified!!!");
+			throw fault;
 		}
-		
-		if(gts.getTrustedAuthorityTimeToLive()==null){
-			
+
+		if ((gts.isPerformAuthorization()) && (gts.getServiceIdentity() == null)) {
+			IllegalAuthorityFault fault = new IllegalAuthorityFault();
+			fault.setFaultString("The Authority, " + gts.getServiceURI()
+				+ " cannot be added, when authorization is required a service identity must be specified!!!");
+			throw fault;
 		}
-		
+
 		if (doesAuthorityExist(gts.getServiceURI())) {
-
+			IllegalAuthorityFault fault = new IllegalAuthorityFault();
+			fault.setFaultString("The Authority, " + gts.getServiceURI() + " cannot be added, it already exists!!!");
+			throw fault;
 		}
 	}
 
@@ -96,6 +112,7 @@ public class GTSAuthorityManager {
 				String trust = "CREATE TABLE " + GTS_AUTHORITIES + " (" + "GTS_URI VARCHAR(255) NOT NULL PRIMARY KEY,"
 					+ "PRIORITY INT NOT NULL, SYNC_TRUST_LEVELS VARCHAR(5) NOT NULL, "
 					+ "TTL_HOURS INT NOT NULL, TTL_MINUTES INT NOT NULL,TTL_SECONDS INT NOT NULL, "
+					+ "PERFORM_AUTH VARCHAR(5) NOT NULL, GTS_IDENTITY VARCHAR(255),"
 					+ " INDEX document_index (GTS_URI));";
 				db.update(trust);
 			}

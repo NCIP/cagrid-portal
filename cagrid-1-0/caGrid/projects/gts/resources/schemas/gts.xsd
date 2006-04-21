@@ -22,6 +22,8 @@
 			    <xsd:element name="Priority" minOccurs="1" maxOccurs="1" type="xsd:int"/>
 				<xsd:element name="SyncTrustLevels" minOccurs="1" maxOccurs="1" type="xsd:boolean"/>
 				<xsd:element name="TrustedAuthorityTimeToLive" minOccurs="1" maxOccurs="1" type="gts:TrustedAuthorityTimeToLive"/>
+				<xsd:element name="PerformAuthorization" minOccurs="1" maxOccurs="1" type="xsd:boolean"/>
+				<xsd:element name="ServiceIdentity" minOccurs="0" maxOccurs="1" type="xsd:string"/>
 			</xsd:sequence>
 		</xsd:complexType>
 		

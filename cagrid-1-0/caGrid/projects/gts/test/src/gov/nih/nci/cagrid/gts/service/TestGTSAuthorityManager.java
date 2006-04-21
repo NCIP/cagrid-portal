@@ -1,7 +1,10 @@
 package gov.nih.nci.cagrid.gts.service;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
+import gov.nih.nci.cagrid.gts.bean.AuthorityGTS;
+import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityTimeToLive;
 import gov.nih.nci.cagrid.gts.common.Database;
+import gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault;
 import gov.nih.nci.cagrid.gts.test.Utils;
 import junit.framework.TestCase;
 
@@ -28,6 +31,73 @@ public class TestGTSAuthorityManager extends TestCase {
 		try {
 			am.buildDatabase();
 			am.destroy();
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			try {
+				am.destroy();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
+	public void testAddInvalidAuthority() {
+		GTSAuthorityManager am = new GTSAuthorityManager(db);
+		try {
+			TrustedAuthorityTimeToLive ttl = new TrustedAuthorityTimeToLive();
+			ttl.setHours(1);
+			ttl.setMinutes(1);
+			ttl.setSeconds(1);
+
+			// Add Authority no serviceURI
+			AuthorityGTS a1 = new AuthorityGTS();
+			a1.setPriority(1);
+			a1.setPerformAuthorization(true);
+			a1.setServiceIdentity("Service");
+			a1.setSyncTrustLevels(true);
+			a1.setTrustedAuthorityTimeToLive(ttl);
+			try {
+				am.addAuthority(a1);
+				fail("Should not be able to add authority!!!");
+			} catch (IllegalAuthorityFault f) {
+
+			}
+			
+			//Add Authority no ttl
+			AuthorityGTS a2 = new AuthorityGTS();
+			a2.setServiceURI("Service");
+			a2.setPriority(1);
+			a2.setPerformAuthorization(true);
+			a2.setServiceIdentity("Service");
+			a2.setSyncTrustLevels(true);
+			try {
+				am.addAuthority(a1);
+				fail("Should not be able to add authority!!!");
+			} catch (IllegalAuthorityFault f) {
+
+			}
+			
+			//Add Authority no ttl
+			AuthorityGTS a3 = new AuthorityGTS();
+			a3.setServiceURI("Service");
+			a3.setPriority(1);
+			a3.setPerformAuthorization(true);
+			a3.setSyncTrustLevels(true);
+			a3.setTrustedAuthorityTimeToLive(ttl);
+			try {
+				am.addAuthority(a1);
+				fail("Should not be able to add authority!!!");
+			} catch (IllegalAuthorityFault f) {
+
+			}
+			
+			//TODO: TEST ALREADY EXISTING AUTHORITIES
+			
+			
+			
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

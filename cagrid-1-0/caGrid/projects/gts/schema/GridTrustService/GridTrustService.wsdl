@@ -283,6 +283,21 @@
 						</sequence>
 					</complexType>
 				</element>
+				<element name="addAuthority">
+					<complexType>
+						<sequence>
+          		  
+	      				</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="addAuthorityResponse">
+					<complexType>
+						<sequence>
+          		  
+						</sequence>
+					</complexType>
+				</element>
 				<element name="GTSInternalFault" >
 					<complexType>
 						<complexContent>
@@ -340,6 +355,14 @@
 				</element>
       					
 				<element name="InvalidTrustLevelFault" >
+					<complexType>
+						<complexContent>
+							<extension base="wsrbf:BaseFaultType"/>
+						</complexContent>
+					</complexType>
+				</element>
+      					
+				<element name="IllegalAuthorityFault" >
 					<complexType>
 						<complexContent>
 							<extension base="wsrbf:BaseFaultType"/>
@@ -434,6 +457,13 @@
 	<message name="removeTrustLevelOutputMessage">
 		<part name="parameters" element="tns:removeTrustLevelResponse"/>
 	</message>
+	<message name="addAuthorityInputMessage">
+		<part name="parameters" element="tns:addAuthority"/>
+	</message>
+	
+	<message name="addAuthorityOutputMessage">
+		<part name="parameters" element="tns:addAuthorityResponse"/>
+	</message>
 	<message name="GTSInternalFaultFaultMessage">
 		<part name="fault" element="tns:GTSInternalFault"/>
 	</message>
@@ -457,6 +487,9 @@
 	</message>
 	<message name="InvalidTrustLevelFaultFaultMessage">
 		<part name="fault" element="tns:InvalidTrustLevelFault"/>
+	</message>
+	<message name="IllegalAuthorityFaultFaultMessage">
+		<part name="fault" element="tns:IllegalAuthorityFault"/>
 	</message>
     
 <!--============================================================
@@ -568,6 +601,12 @@
        		 <fault name="IllegalTrustLevelFault" message="tns:IllegalTrustLevelFaultFaultMessage"/>
        				
        		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="addAuthority">
+            <input message="tns:addAuthorityInputMessage"/>
+            <output message="tns:addAuthorityOutputMessage"/>
+       		 <fault name="IllegalAuthorityFault" message="tns:IllegalAuthorityFaultFaultMessage"/>
        				
         </operation>
         <operation name="GetResourceProperty">

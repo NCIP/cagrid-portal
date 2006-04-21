@@ -159,6 +159,33 @@ public class GridTrustServiceProviderImpl {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public gov.nih.nci.cagrid.gts.stubs.AddAuthorityResponse addAuthority(gov.nih.nci.cagrid.gts.stubs.AddAuthority params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault {
+		gov.nih.nci.cagrid.gts.stubs.AddAuthorityResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.AddAuthorityResponse();
+		impl.addAuthority();
+		return boxedResult;
+	}
 	public gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityResponse addTrustedAuthority(gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthority params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
 		gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityResponse();
 		boxedResult.setTrustedAuthority(impl.addTrustedAuthority(params.getTa().getTrustedAuthority()));
