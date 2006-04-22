@@ -41,7 +41,7 @@ GSBT - Globus Service Build Tools
 	<property name="test.log.dir" value="test/logs" />
 	<property name="ext.test.lib.dir" value="ext/test/lib" />
 	<property name="etc.dir" value="etc" />
-	
+
 
 
 	<!-- Name of the JAR files to be generated -->
@@ -59,8 +59,6 @@ GSBT - Globus Service Build Tools
 	     the service will also be placed here) -->
 	<property name="build.lib.dir" location="${build.dir}/lib" />
 	<!-- Directory where stub source and class files are placed -->
-	
-
 
 
 	<!-- Miscellaneous properties -->
@@ -78,8 +76,6 @@ GSBT - Globus Service Build Tools
 	<target name="init">
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.dest}" />
-		<delete dir="${build.lib.dir}" />
-		<!-- Delete build lib dir to avoid JARs from previous builds from getting into our GAR file -->
 		<mkdir dir="${build.lib.dir}" />
 
 		<copy toDir="${build.lib.dir}">
@@ -87,9 +83,37 @@ GSBT - Globus Service Build Tools
 				<include name="*.jar" />
 			</fileset>
 		</copy>
+
+		<mkdir dir="${test.log.dir}" />
+
+		<path id="test.classpath">
+			<fileset dir="${test.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${ext.test.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${ext.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<pathelement location="${test.dir}/resources" />
+			<pathelement location="${build.dest}" />
+			<pathelement location="${stubs.dest}" />
+
+			<fileset dir="${globus.location}/lib">
+				<include name="*.jar" />
+				<exclude name="${stubs.jar.name}" />
+				<exclude name="${jar.name}" />
+				<exclude name="xml-apis.jar" />
+				<exclude name="xercesImpl.jar" />
+			</fileset>
+		</path>
 	</target>
 
-	
+
 	<!-- Compile the implementation classes (service, resource, etc.) -->
 	<target name="compile" depends="init">
 		<javac srcdir="${src.dir}" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}">
@@ -101,7 +125,7 @@ GSBT - Globus Service Build Tools
 				<fileset dir="${ext.lib.dir}">
 					<include name="*.jar" />
 				</fileset>
-	
+
 				<fileset dir="${globus.location}/lib">
 					<include name="*.jar" />
 					<exclude name="${jar.name}" />
@@ -114,28 +138,7 @@ GSBT - Globus Service Build Tools
 
 	<!-- Compile the implementation classes (service, resource, etc.) -->
 	<target name="compileTests" depends="compile">
-		<javac srcdir="${test.src.dir}" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}">
-			<classpath>
-				<pathelement location="${stubs.dest}" />
-				<fileset dir="${build.lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				
-				<fileset dir="${globus.location}/lib">
-					<include name="*.jar" />
-					<exclude name="${stubs.jar.name}" />
-					<exclude name="${jar.name}" />
-					<exclude name="xml-apis.jar" />
-					<exclude name="xercesImpl.jar" />
-				</fileset>
-			</classpath>
-		</javac>
+		<javac srcdir="${test.src.dir}" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}" classpathref="test.classpath" />
 	</target>
 
 

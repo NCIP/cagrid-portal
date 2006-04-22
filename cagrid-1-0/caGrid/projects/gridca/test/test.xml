@@ -4,32 +4,34 @@
 <project name="caGrid-dorian_tests_harness" basedir=".">
 	<property name="junit.results.dir" value="${test.log.dir}/junit" />
 	<property name="force.config.replace" value="false" />
-	<mkdir dir="${test.log.dir}" />
+
+	<property name="instrumented.classes.dir" value="${build.dir}/instrumented-classes" />
+	<property name="cobertura.report.dir" value="${build.dir}/coverage" />
+	<property name="cobertura.data.file" location="${instrumented.classes.dir}/${project.name}-cobertura.ser" />
+	
+	<target name="instrument">
+		<taskdef classpathref="test.classpath" resource="tasks.properties" />
+		<mkdir dir="${instrumented.classes.dir}" />
+		<cobertura-instrument todir="${instrumented.classes.dir}" datafile="${cobertura.data.file}">
+			<fileset dir="${build.dest}">
+				<include name="**/*.class" />
+			</fileset>
+		</cobertura-instrument>
+	</target>
+	
 	<!-- call the test target for each project and aggregates the log resutls  -->
-	<target name="test" depends="create_config_files">
+	<target name="test" depends="create_config_files, instrument">
 		<echo message="Test results dir: ${junit.results.dir}" />
 		<mkdir dir="${junit.results.dir}" />
-		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true">
+		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true" fork="true">
 			<sysproperty key="basedir" value="${basedir}" />
 			<jvmarg value="-Xmx512M" />
 			<jvmarg value="-Dbuild.dir=${build.dir}" />
 			<jvmarg value="-Djava.endorsed.dirs=${ext.endorsed.dir}" />
+			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
+			<classpath location="${instrumented.classes.dir}" />
 			<classpath>
-				<fileset dir="${globus.location}/lib">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${build.lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${ext.test.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
+				<path refid="test.classpath" />
 				<pathelement location="${test.dir}/resources" />
 			</classpath>
 			<formatter type="xml" />
@@ -40,6 +42,20 @@
 			</batchtest>
 		</junit>
 	</target>
+	
+	
+	<target name="coverageReport" depends="test" description="Runs the tests and generates a test
+		coverage report.">
+		<cobertura-report format="html" datafile="${cobertura.data.file}" destdir="${cobertura.report.dir}">
+			<fileset dir="${src.dir}">
+				<include name="**/*.java" />
+			</fileset>
+			<fileset dir="${test.src.dir}">
+				<include name="**/*.java" />
+			</fileset>
+		</cobertura-report>
+	</target>
+	
 	<!-- ============================================================== -->
 	<!-- Creates conf files from examples                               -->
 	<!-- ============================================================== -->
