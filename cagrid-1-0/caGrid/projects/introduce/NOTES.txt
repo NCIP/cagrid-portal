@@ -11,6 +11,13 @@ add tests to system tests for (coverage report shows no coverage):
 -methods returning arrays
 -servicename ending in Service
 
+There’s a big time problem in Introduce’s synchronization process with respect to timing.
+All I did to break this build: http://vandelay.bmi.ohio-state.edu:8080/cruisecontrol/buildresults/caGrid-1.0-continuous?log=log20060421222952
+is remove the printouts in SyncTools, and it died.  It continued to fail until I put the printouts back here:
+http://vandelay.bmi.ohio-state.edu:8080/cruisecontrol/buildresults/caGrid-1.0-continuous?log=log20060422001055Lbuild.1075
+Code diffs here:
+http://gforge.nci.nih.gov/plugins/scmcvs/cvsweb.php/cagrid-1-0/caGrid/projects/introduce/src/java/Introduce/gov/nih/nci/cagrid/introduce/codegen/methods/SyncSource.java.diff?r1=1.53;r2=1.54;cvsroot=cagrid-1-0;f=h
+
 make sure that every panel that uses a namespaces jtree has a on focus to restore from the model
 
 portal lets you add the same method name several times
