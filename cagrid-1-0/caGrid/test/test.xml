@@ -49,7 +49,7 @@
 					<include name="*"/>
 				</fileset>
 			</delete>
-			<parallel>
+			<parallel failonany="true">
 				<!-- Now run all the projects' test, sharing the same log dir -->
 				<ant inheritall="false" dir="projects/dorian" antfile="build.xml" target="test">
 					<property name="junit.results.dir" value="${junit.results.dir}"/>
