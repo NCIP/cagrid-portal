@@ -256,6 +256,7 @@
 		<resolveDependencies extdir="${projects.dir}/discovery/ext">
 			<artifact refid="core.jars" />
 			<artifact refid="common.test.jars" />
+			<artifact refid="test.coverage.jars" />
 			<artifact refid="metadata.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/discovery" inheritAll="false" antfile="build.xml" target="all" />
