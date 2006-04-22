@@ -17,20 +17,15 @@ GSBT - Globus Service Build Tools
 	<property file="build.properties" />
 	<property file="${user.home}/build.properties" />
 
-
 	<!-- Directory where GT4 is installed -->
 	<!-- Note that the buildfile requires an environment variable GLOBUS_LOCATION
 	     pointing to that directory -->
 	<property name="globus.location" location="${env.GLOBUS_LOCATION}" />
 
-
-
 	<!-- GT4 build files and directories-->
 	<property name="build.packages" location="${globus.location}/share/globus_wsrf_common/build-packages.xml" />
 	<property name="build.stubs" location="${globus.location}/share/globus_wsrf_tools/build-stubs.xml" />
 	<property name="schema.src" location="${globus.location}/share/schema" />
-
-
 
 	<!-- Important directories and files -->
 	<property name="src.dir" value="src" />
@@ -45,19 +40,12 @@ GSBT - Globus Service Build Tools
 	<property name="etc.dir" value="etc" />
 	<property name="mappings.file" value="${basedir}/namespace2package.mappings" />
 
-
-
-
 	<!-- Name of the GAR file that will be generated -->
 	<property name="gar.name" value="${gar.filename}.gar" />
-
-
 
 	<!-- Name of the JAR files to be generated -->
 	<property name="jar.name" value="${gar.filename}.jar" />
 	<property name="stubs.jar.name" value="${gar.filename}_stubs.jar" />
-
-
 
 	<!-- Build directories -->
 
@@ -73,16 +61,12 @@ GSBT - Globus Service Build Tools
 	<!-- Compiled stub classes -->
 	<property name="stubs.dest" location="${stubs.dir}/classes" />
 
-
 	<!-- Location of our schema files -->
 	<property name="schema.local" location="./schema" />
 	<!-- Where we have to copy schema files inside the build directory -->
 	<property name="schema.dest" location="${build.dir}/schema" />
 
-
-
 	<!-- Filesets -->
-
 	<!-- JARs to be included in the GAR file -->
 	<fileset dir="${build.lib.dir}" id="garjars" />
 	<property name="garjars.id" value="garjars" />
@@ -97,8 +81,6 @@ GSBT - Globus Service Build Tools
 	<!-- Configuration files (security, etc.) to be included in the GAR file -->
 	<property name="garetc.id" value="garetc" />
 	<fileset dir="${etc.dir}" id="garetc" />
-
-
 
 	<!-- Miscellaneous properties -->
 
@@ -115,10 +97,9 @@ GSBT - Globus Service Build Tools
 	<target name="init">
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.dest}" />
-		<delete dir="${build.lib.dir}" />
-		<!-- Delete build lib dir to avoid JARs from previous builds from getting into our GAR file -->
-		<mkdir dir="${build.lib.dir}" />
+		<mkdir dir="${test.log.dir}" />
 
+		<mkdir dir="${build.lib.dir}" />
 		<copy toDir="${build.lib.dir}">
 			<fileset dir="lib/">
 				<include name="*.jar" />
@@ -145,6 +126,32 @@ GSBT - Globus Service Build Tools
 
 		<!-- Creates etc.dir in case it doesn't exist. Has no effect if dir already exists -->
 		<mkdir dir="${etc.dir}" />
+
+		<path id="test.classpath">
+			<pathelement location="${stubs.dest}" />
+			<fileset dir="${build.lib.dir}">
+				<include name="**/*.jar" />
+			</fileset>
+			<fileset dir="${lib.dir}">
+				<include name="**/*.jar" />
+			</fileset>
+			<fileset dir="${ext.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${ext.endorsed.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${ext.test.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${globus.location}/lib">
+				<include name="*.jar" />
+				<exclude name="${stubs.jar.name}" />
+				<exclude name="${jar.name}" />
+				<exclude name="xml-apis.jar" />
+				<exclude name="xercesImpl.jar" />
+			</fileset>
+		</path>
 	</target>
 
 
@@ -279,30 +286,7 @@ GSBT - Globus Service Build Tools
 
 	<!-- Compile the implementation classes (service, resource, etc.) -->
 	<target name="compileTests" depends="compile">
-		<javac srcdir="${test.src.dir}" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}">
-			<classpath>
-				<pathelement location="${stubs.dest}" />
-				<fileset dir="${build.lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${ext.endorsed.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${globus.location}/lib">
-					<include name="*.jar" />
-					<exclude name="${stubs.jar.name}" />
-					<exclude name="${jar.name}" />
-					<exclude name="xml-apis.jar" />
-					<exclude name="xercesImpl.jar" />
-				</fileset>
-			</classpath>
-		</javac>
+		<javac srcdir="${test.src.dir}" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}" classpathref="test.classpath" />
 	</target>
 
 
@@ -360,10 +344,10 @@ GSBT - Globus Service Build Tools
 	<target name="deploy">
 		<ant antfile="build-deploy.xml" target="deploy" />
 	</target>
-	
-	<target name="dorianPortal" description="Run the dorian portal" >
+
+	<target name="dorianPortal" description="Run the dorian portal">
 		<java classname="org.projectmobius.portal.GridPortal" fork="yes">
-			<jvmarg value="-Djava.endorsed.dirs=ext/endorsed/lib"/>
+			<jvmarg value="-Djava.endorsed.dirs=ext/endorsed/lib" />
 			<arg value="etc/dorian-portal-conf.xml" />
 			<classpath>
 				<pathelement location="${stubs.dest}" />
@@ -386,9 +370,9 @@ GSBT - Globus Service Build Tools
 					<exclude name="xml-apis.jar" />
 					<exclude name="xercesImpl.jar" />
 				</fileset>
-				<pathelement location="resources/portal/dorian"/>
-				<pathelement location="ext/resources/portal/common"/>
-				<pathelement location="ext/resources/portal/gridca"/>
+				<pathelement location="resources/portal/dorian" />
+				<pathelement location="ext/resources/portal/common" />
+				<pathelement location="ext/resources/portal/gridca" />
 			</classpath>
 		</java>
 	</target>
