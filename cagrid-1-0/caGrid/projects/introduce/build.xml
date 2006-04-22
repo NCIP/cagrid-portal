@@ -13,7 +13,8 @@
 	<property name="ext.dir" location="${basedir}/ext" />
 	<property name="src.dir" location="${basedir}/src/java" />
 	<property name="templates.src.dir" location="${basedir}/src/jettemplates" />
-	<property name="templates.created.src.dir" location="${basedir}/src/java/Introduce/gov/nih/nci/cagrid/introduce/beans" />
+	<property name="templates.created.src.dir" location="${basedir}/src/java/Introduce/gov/nih/nci/cagrid/introduce/templates" />
+	<property name="beans.created.src.dir" location="${basedir}/src/java/Introduce/gov/nih/nci/cagrid/introduce/beans" />
 	<property name="lib.dir" location="${basedir}/lib" />
 	<property name="ext.lib.dir" location="${ext.dir}/lib" />
 	<property name="schema.dir" location="${basedir}/schema" />
@@ -61,6 +62,7 @@
 	<target name="clean">
 		<delete dir="${build.dir}" />
 		<delete dir="${templates.created.src.dir}" />
+		<delete dir="${beans.created.src.dir}" />
 	</target>
 	<!-- =================================================================== -->
 	<!-- Prepares the build directory and classpaths                         -->
