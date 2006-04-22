@@ -17,7 +17,6 @@ import org.apache.axis.MessageContext;
 import org.apache.axis.utils.XMLUtils;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.globus.wsrf.encoding.ObjectSerializer;
-import org.w3c.dom.Element;
 
 
 public class Utils {
