@@ -133,7 +133,7 @@ public class SyncTools {
 		if (introService.getExtensions() != null && introService.getExtensions().getExtension() != null) {
 			ExtensionType[] extensions = introService.getExtensions().getExtension();
 			for (int i = 0; i < extensions.length; i++) {
-				CodegenExtensionPreProcessor pp = tools.getCodegenPreProcessor(extensions[i].getName());
+				CodegenExtensionPreProcessor pp = ExtensionTools.getCodegenPreProcessor(extensions[i].getName());
 				if (pp != null) {
 					pp.preCodegen(info);
 				}
@@ -171,7 +171,7 @@ public class SyncTools {
 		if (introService.getExtensions() != null && introService.getExtensions().getExtension() != null) {
 			ExtensionType[] extensions = introService.getExtensions().getExtension();
 			for (int i = 0; i < extensions.length; i++) {
-				CodegenExtensionPostProcessor pp = tools.getCodegenPostProcessor(extensions[i].getName());
+				CodegenExtensionPostProcessor pp = ExtensionTools.getCodegenPostProcessor(extensions[i].getName());
 				if (pp != null) {
 					pp.postCodegen(info);
 				}
@@ -309,7 +309,8 @@ public class SyncTools {
 		File serviceWSDLF = new File(schemaDir.getAbsolutePath() + File.separator
 			+ info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
 			+ File.separator
-			+ info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + ".wsdl");
+			+ info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
+			+ ".wsdl");
 		FileWriter serviceWSDLFW = new FileWriter(serviceWSDLF);
 		serviceWSDLFW.write(serviceWSDLS);
 		serviceWSDLFW.close();
@@ -341,8 +342,10 @@ public class SyncTools {
 		parser.setNStoPkg(baseDirectory.getAbsolutePath() + File.separator
 			+ IntroduceConstants.NAMESPACE2PACKAGE_MAPPINGS_FILE);
 		parser.run(new File(baseDirectory.getAbsolutePath() + File.separator + "build" + File.separator + "schema"
-			+ File.separator + info.getIntroduceServiceProperties().get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
-			+ File.separator + info.getIntroduceServiceProperties().get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
+			+ File.separator
+			+ info.getIntroduceServiceProperties().get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
+			+ File.separator
+			+ info.getIntroduceServiceProperties().get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
 			+ "_flattened.wsdl").getAbsolutePath());
 		table = parser.getSymbolTable();
 		Utils.deleteDir(new File(baseDirectory.getAbsolutePath() + File.separator + "tmp"));
@@ -356,7 +359,8 @@ public class SyncTools {
 		// create the archive
 		long id = System.currentTimeMillis();
 
-		info.getIntroduceServiceProperties().setProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP, String.valueOf(id));
+		info.getIntroduceServiceProperties().setProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP,
+			String.valueOf(id));
 		info.getIntroduceServiceProperties().store(
 			new FileOutputStream(baseDirectory.getAbsolutePath() + File.separator
 				+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE), "Introduce Properties");
