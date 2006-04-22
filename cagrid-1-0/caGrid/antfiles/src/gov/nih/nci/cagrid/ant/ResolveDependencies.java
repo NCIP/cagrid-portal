@@ -95,6 +95,7 @@ public class ResolveDependencies extends Task {
 
 				// decide where to put it, based on the type
 				if (artifact.getType().equals(Artifact.JAR_TYPE)) {
+					copyTask.setFlatten(true);
 					copyTask.setTodir(new File(getExtDir().getAbsolutePath() + track + File.separator + "lib"));
 				} else if (artifact.getType().equals(Artifact.SCHEMAS_TYPE)) {
 					copyTask.setTodir(new File(getExtDir().getAbsolutePath() + track + File.separator + "schema"));
