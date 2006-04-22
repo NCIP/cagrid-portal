@@ -3,23 +3,55 @@
 <!-- ======================================================================= -->
 <project name="caGrid-core_tests_harness" basedir=".">
 	<property name="junit.results.dir" value="${test.logs.dir}/junit"/>
+	
+	<property name="instrumented.classes.dir" value="${build.dir}/instrumented-classes"/>
+	<property name="cobertura.report.dir" value="${build.dir}/coverage"/>
+	
+	<target name="instrument">
+		<taskdef classpathref="test.classpath" resource="tasks.properties"/>
+		<mkdir dir="${instrumented.classes.dir}"/>
+		<cobertura-instrument todir="${instrumented.classes.dir}"
+			datafile="${instrumented.classes.dir}/cobertura.ser">
+			<fileset dir="${classes.dir}">
+				<include name="**/*.class"/>
+			</fileset>
+			<fileset dir="${test.classes.dir}">
+				<include name="**/*.class"/>
+			</fileset>
+		</cobertura-instrument>
+	</target>
+	
+	
 	<!-- call the test target for each project and aggregates the log resutls  -->
-	<target name="test">
+	<target name="test" depends="instrument" description="Runs the tests.">
 		<mkdir dir="${junit.results.dir}"/>
-		<sequential>
-			<junit dir="${basedir}" printsummary="yes" haltonfailure="true" showoutput="true">
-				<sysproperty key="build.dir" value="${classes.dir}"/>
-				<jvmarg value="-Dbuild.dir=${classes.dir}"/>
-				<classpath>
-					<path refid="test.classpath"/>
-				</classpath>
-				<formatter type="xml"/>
-				<batchtest fork="yes" todir="${junit.results.dir}">
-					<fileset dir="${test.src.dir}">
-						<include name="**/*TestCase.java"/>
-					</fileset>
-				</batchtest>
-			</junit>
-		</sequential>
+		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" showoutput="true" fork="yes">
+			<sysproperty key="build.dir" value="${classes.dir}"/>
+			<sysproperty key="net.sourceforge.cobertura.datafile"
+				file="${instrumented.classes.dir}/cobertura.ser"/>
+			<jvmarg value="-Dbuild.dir=${classes.dir}"/>
+			<classpath location="${instrumented.classes.dir}"/>
+			<classpath refid="test.classpath"/>
+			<formatter type="xml"/>
+			<batchtest fork="yes" todir="${junit.results.dir}">
+				<fileset dir="${test.src.dir}">
+					<include name="**/*TestCase.java"/>
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+	
+	
+	<target name="coverageReport" depends="test" description="Runs the tests and generates a test
+		coverage report.">
+		<cobertura-report format="html" datafile="${instrumented.classes.dir}/cobertura.ser"
+			destdir="${cobertura.report.dir}">
+			<fileset dir="${src.dir}">
+				<include name="**/*.java"/>
+			</fileset>
+			<fileset dir="${test.src.dir}">
+				<include name="**/*.java"/>
+			</fileset>
+		</cobertura-report>
 	</target>
 </project>

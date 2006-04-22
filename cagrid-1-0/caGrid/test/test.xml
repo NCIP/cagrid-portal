@@ -2,7 +2,6 @@
 <!-- caGrid Utilities build file                                             -->
 <!-- ======================================================================= -->
 <project name="caGrid_tests_harness" basedir=".">
-	<property name="test.lib.dir" value="${test.dir}/lib"/>
 	<property name="test.logs.dir" value="${test.dir}/logs"/>
 	<property name="junit.results.dir" value="${test.logs.dir}/junit"/>
 	<!-- Get the HOSTNAME in an os independant way -->

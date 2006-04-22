@@ -11,6 +11,8 @@
 	<!-- Layout info -->
 	<property name="projects.dir" location="${basedir}/projects" />
 	<property name="test.dir" location="${basedir}/test" />
+	<property name="share.lib.dir" location="${basedir}/share/lib" />
+	<property name="test.lib.dir" location="${test.dir}/lib" />
 
 	<!-- IMPORT THE UTILITIES TARGETS -->
 	<property name="antfiles.dir" location="${basedir}/antfiles" />
@@ -20,6 +22,7 @@
 
 	<!-- IMPORT THE TEST TARGET -->
 	<import file="${test.dir}/test.xml" />
+
 
 
 	<!-- =============================================================== -->
@@ -60,6 +63,26 @@
 	<!-- separate directoris (e.g. jars and conf files)                  -->
 	<!-- =============================================================== -->
 	<target name="defineArtifacts" depends="prepare">
+		<!-- Common Jar Artifacts -->
+		<artifact track="main" type="jars" id="mobius.jars">
+			<fileset dir="${basedir}/share/lib/mobius">
+				<include name="*.jar" />
+			</fileset>
+		</artifact>
+		<artifact track="test" type="jars" id="common.test.jars">
+			<fileset dir="${test.lib.dir}">
+				<include name="jdepend*.jar" />
+				<include name="junit*.jar" />
+				<include name="xmlunit*.jar" />
+			</fileset>
+		</artifact>
+		<artifact track="test" type="jars" id="test.coverage.jars">
+			<fileset dir="${test.lib.dir}/cobertura">
+				<include name="*.jar" />
+			</fileset>
+		</artifact>
+
+		<!-- Project Created Artifacts -->
 		<artifact track="main" type="jars" id="core.jars">
 			<antcall target="build-core" />
 			<fileset dir="${projects.dir}/core/build/jars">
@@ -75,20 +98,12 @@
 				<exclude name="*test*.jar" />
 			</fileset>
 		</artifact>
-		<artifact track="main" type="jars" id="mobius.jars">
-			<fileset dir="${basedir}/share/lib/mobius">
-				<include name="*.jar" />
+		<artifact track="main" type="resources" id="core.resources">
+			<fileset dir="${projects.dir}/core/resources">
+				<include name="**" />
 			</fileset>
 		</artifact>
-		<artifact track="test" type="jars" id="core.test.jars">
-			<antcall target="build-core" />
-			<fileset dir="${projects.dir}/core/build/jars">
-				<include name="*test*.jar" />
-			</fileset>
-			<fileset dir="${projects.dir}/core/test/lib">
-				<include name="*.jar" />
-			</fileset>
-		</artifact>
+
 		<artifact track="main" type="jars" id="metadata.jars">
 			<antcall target="build-metadata" />
 			<fileset dir="${projects.dir}/metadata/build/lib">
@@ -106,16 +121,17 @@
 				<include name="NStoPkg.properties" />
 			</fileset>
 		</artifact>
-		<artifact track="main" type="resources" id="core.resources">
-			<fileset dir="${projects.dir}/core/resources">
-				<include name="**" />
-			</fileset>
-		</artifact>
 
 		<artifact track="main" type="jars" id="opensaml.jars">
 			<antcall target="build-opensaml" />
 			<fileset dir="${projects.dir}/opensaml/dist">
 				<include name="cagrid-opensaml-1.1.jar" />
+			</fileset>
+		</artifact>
+		<artifact track="endorsed" type="jars" id="opensaml.endorsed">
+			<fileset dir="${projects.dir}/opensaml/endorsed">
+				<include name="xercesImpl.jar" />
+				<include name="xml-apis.jar" />
 			</fileset>
 		</artifact>
 
@@ -125,7 +141,6 @@
 				<include name="gridca.jar" />
 			</fileset>
 		</artifact>
-
 
 		<artifact track="main" type="jars" id="gts.client.jars">
 			<antcall target="build-gts" />
@@ -139,8 +154,8 @@
 		<artifact track="main" type="jars" id="cadsr.jars">
 			<antcall target="build-cadsr" />
 			<fileset dir="${projects.dir}/cadsr/build/lib">
-				<include name="*.jar"/>
-				<exclude name="*test*.jar"/>
+				<include name="*.jar" />
+				<exclude name="*test*.jar" />
 			</fileset>
 			<fileset dir="${projects.dir}/cadsr/lib">
 				<include name="*.jar" />
@@ -153,24 +168,17 @@
 				<include name="*.jar" />
 			</fileset>
 		</artifact>
-		
+
 		<artifact track="main" type="jars" id="sdk.query.jars">
-			<antcall target="build-sdkQuery"/>
+			<antcall target="build-sdkQuery" />
 			<fileset dir="${projects.dir}/sdkQuery/build/lib">
-				<include name="*.jar"/>
+				<include name="*.jar" />
 			</fileset>
 		</artifact>
 
 		<artifact track="main" type="resources" id="gridca.resources">
 			<fileset dir="${projects.dir}/gridca/resources">
 				<include name="**" />
-			</fileset>
-		</artifact>
-
-		<artifact track="endorsed" type="jars" id="opensaml.endorsed">
-			<fileset dir="${projects.dir}/opensaml/endorsed">
-				<include name="xercesImpl.jar" />
-				<include name="xml-apis.jar" />
 			</fileset>
 		</artifact>
 
@@ -188,7 +196,6 @@
 				<exclude name="*tests*.jar" />
 			</fileset>
 		</artifact>
-
 		<artifact track="main" type="resources" id="introduce.resources">
 			<fileset dir="${projects.dir}/introduce/resources">
 				<include name="**" />
@@ -200,7 +207,7 @@
 			<fileset dir="${projects.dir}/gme/lib">
 				<include name="GlobalModelExchange.jar" />
 				<include name="jdom-1.0.jar" />
-				<include name="mobius-castor-0.9.4.3-xml.jar"/>
+				<include name="mobius-castor-0.9.4.3-xml.jar" />
 			</fileset>
 			<fileset dir="${projects.dir}/gme/build/lib">
 				<include name="caGrid-GlobalModelExchange.jar" />
@@ -216,6 +223,8 @@
 	<target name="build-core" depends="prepare" description="Builds the core">
 		<resolveDependencies extdir="${projects.dir}/core/ext">
 			<artifact refid="mobius.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="test.coverage.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/core" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
@@ -246,7 +255,7 @@
 	<target name="build-discovery" depends="prepare" description="Builds the common metadata">
 		<resolveDependencies extdir="${projects.dir}/discovery/ext">
 			<artifact refid="core.jars" />
-			<artifact refid="core.test.jars" />
+			<artifact refid="common.test.jars" />
 			<artifact refid="metadata.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/discovery" inheritAll="false" antfile="build.xml" target="all" />
@@ -272,7 +281,7 @@
 	<target name="build-gridca" depends="prepare" description="Builds the gridca project">
 		<resolveDependencies extdir="${projects.dir}/gridca/ext">
 			<artifact refid="core.jars" />
-			<artifact refid="core.test.jars" />
+			<artifact refid="common.test.jars" />
 			<artifact refid="core.resources" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/gridca" inheritAll="false" antfile="build.xml" target="all" />
@@ -285,7 +294,7 @@
 	<target name="build-dorian" depends="prepare" description="Builds the dorian project">
 		<resolveDependencies extdir="${projects.dir}/dorian/ext">
 			<artifact refid="core.jars" />
-			<artifact refid="core.test.jars" />
+			<artifact refid="common.test.jars" />
 			<artifact refid="core.resources" />
 			<artifact refid="gridca.jars" />
 			<artifact refid="gridca.resources" />
@@ -303,7 +312,7 @@
 	<target name="build-gts" depends="prepare" description="Builds the GTS project">
 		<resolveDependencies extdir="${projects.dir}/gts/ext">
 			<artifact refid="core.jars" />
-			<artifact refid="core.test.jars" />
+			<artifact refid="common.test.jars" />
 			<artifact refid="core.resources" />
 			<artifact refid="gridca.jars" />
 			<artifact refid="gridca.resources" />
@@ -319,7 +328,7 @@
 	<target name="build-syncgts" depends="prepare" description="Builds the syncgts project">
 		<resolveDependencies extdir="${projects.dir}/syncgts/ext">
 			<artifact refid="core.jars" />
-			<artifact refid="core.test.jars" />
+			<artifact refid="common.test.jars" />
 			<artifact refid="gridca.jars" />
 			<artifact refid="mobius.jars" />
 			<artifact refid="gts.client.jars" />
@@ -335,7 +344,7 @@
 	<target name="build-introduce" depends="prepare" description="Builds Introduce">
 		<resolveDependencies extdir="${projects.dir}/introduce/ext">
 			<artifact refid="core.jars" />
-			<artifact refid="core.test.jars" />
+			<artifact refid="common.test.jars" />
 			<artifact refid="core.resources" />
 			<artifact refid="mobius.jars" />
 			<artifact refid="gme.globus.client.jars" />
@@ -356,7 +365,7 @@
 	<target name="build-gme" depends="prepare" description="Builds caGrid GME">
 		<resolveDependencies extdir="${projects.dir}/gme/ext">
 			<artifact refid="core.jars" />
-			<artifact refid="core.test.jars" />
+			<artifact refid="common.test.jars" />
 			<artifact refid="core.resources" />
 			<artifact refid="mobius.jars" />
 			<artifact refid="metadata.jars" />
@@ -377,19 +386,19 @@
 			<artifact refid="gme.globus.client.jars" />
 			<artifact refid="core.resources" />
 			<artifact refid="introduce.resources" />
-			<artifact refid="cadsr.jars"/>
+			<artifact refid="cadsr.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
-	
-	
+
+
 	<!-- =============================================================== -->
 	<!-- CAGRID SDK Data Service Query Processor:                        -->
 	<!-- =============================================================== -->
 	<target name="build-sdkQuery" depends="prepare" description="Builds caGrid SDK Query processor">
 		<resolveDependencies extdir="${projects.dir}/sdkQuery/ext">
-			<artifact refid="core.jars"/>
-			<artifact refid="data.jars"/>
+			<artifact refid="core.jars" />
+			<artifact refid="data.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/sdkQuery" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
@@ -450,9 +459,9 @@
 
 			<delete dir="${projects.dir}/data/ext" />
 			<ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="clean" />
-			
-			<delete dir="${projects.dir}/sdkQuery/ext"/>
-			<ant dir="${projects.dir}/sdkQuery" inheritAll="false" antfile="build.xml" target="clean"/>
+
+			<delete dir="${projects.dir}/sdkQuery/ext" />
+			<ant dir="${projects.dir}/sdkQuery" inheritAll="false" antfile="build.xml" target="clean" />
 
 			<delete dir="${projects.dir}/cql2xpath/ext" />
 			<ant dir="${projects.dir}/cql2xpath" inheritAll="false" antfile="build.xml" target="clean" />
