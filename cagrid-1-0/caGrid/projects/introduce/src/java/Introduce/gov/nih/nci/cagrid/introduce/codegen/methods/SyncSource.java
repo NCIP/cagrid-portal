@@ -900,8 +900,8 @@ public class SyncSource {
 
 
 	private int bracketMatch(StringBuffer sb, int startingIndex) {
-		System.out.println("Starting to look for brackets on this string:");
-		System.out.println(sb.toString().substring(startingIndex));
+		// System.out.println("Starting to look for brackets on this string:");
+		// System.out.println(sb.toString().substring(startingIndex));
 		int parenCount = 0;
 		int index = startingIndex;
 		boolean found = false;
@@ -1013,7 +1013,7 @@ public class SyncSource {
 				}
 			}
 			if (found) {
-				System.out.println("Found start of method: " + matchedLine);
+				// System.out.println("Found start of method: " + matchedLine);
 			} else {
 				System.out.println("Did not find the appropriate match");
 			}
