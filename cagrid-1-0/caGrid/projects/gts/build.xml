@@ -49,6 +49,7 @@
 	<!-- Directory for compiled JAR files (additional library files required by
 	     the service will also be placed here) -->
 	<property name="build.lib.dir" location="${build.dir}/lib" />
+
 	<!-- Directory where stub source and class files are placed -->
 	<property name="stubs.dir" location="${build.dir}/stubs-${gar.filename}" />
 	<!-- Stub source files -->
@@ -58,6 +59,10 @@
 
 	<!-- Where we have to copy schema files inside the build directory -->
 	<property name="schema.dest" location="${build.dir}/schema" />
+
+	<property name="instrumented.classes.dir" value="${build.dir}/instrumented-classes" />
+	<property name="cobertura.report.dir" value="${build.dir}/coverage" />
+	<property name="cobertura.data.file" location="${instrumented.classes.dir}/${project.name}-cobertura.ser" />
 
 	<!-- Filesets -->
 	<!-- JARs to be included in the GAR file -->
@@ -133,9 +138,9 @@
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.dest}" />
 		<mkdir dir="${test.build.dest}" />
-		<delete dir="${build.lib.dir}" />
-		<!-- Delete build lib dir to avoid JARs from previous builds from getting into our GAR file -->
 		<mkdir dir="${build.lib.dir}" />
+
+		<mkdir dir="${test.log.dir}" />
 
 		<mkdir dir="${stubs.dir}" />
 		<mkdir dir="${stubs.src}" />
@@ -154,6 +159,32 @@
 
 		<!-- Creates etc.dir in case it doesn't exist. Has no effect if dir already exists -->
 		<mkdir dir="${etc.dir}" />
+
+		<path id="test.classpath">
+			<fileset dir="${test.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${ext.test.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${ext.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<pathelement location="${test.dir}/resources" />
+			<pathelement location="${build.dest}" />
+			<pathelement location="${stubs.dest}" />
+			<fileset dir="${ext.globus.dir}/lib">
+				<include name="*.jar" />
+				<exclude name="${stubs.jar.name}" />
+				<exclude name="${common.jar.name}" />
+				<exclude name="${client.jar.name}" />
+				<exclude name="${service.jar.name}" />
+			</fileset>
+
+		</path>
 	</target>
 
 
@@ -293,30 +324,7 @@
 
 	<!-- Compile the test implementation classes (service, resource, etc.) -->
 	<target name="compileTests" depends="compile">
-
-		<javac srcdir="${test.src.dir}" destdir="${test.build.dest}" debug="${java.debug}" deprecation="${deprecation}">
-			<classpath>
-				<fileset dir="${test.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<pathelement location="${build.dest}" />
-				<pathelement location="${stubs.dest}" />
-				<fileset dir="${ext.globus.dir}/lib">
-					<include name="*.jar" />
-					<exclude name="${stubs.jar.name}" />
-					<exclude name="${common.jar.name}" />
-					<exclude name="${client.jar.name}" />
-					<exclude name="${service.jar.name}" />
-				</fileset>
-			</classpath>
-		</javac>
-
+		<javac srcdir="${test.src.dir}" destdir="${test.build.dest}" debug="${java.debug}" deprecation="${deprecation}" classpathref="test.classpath" />
 	</target>
 
 
@@ -357,33 +365,30 @@
 	<!-- Empty target, in case we simply want to generate the JAR files -->
 	<target name="jars" depends="jarStubs, jar, jarTests" />
 
-	<mkdir dir="${test.log.dir}" />
+	<target name="instrument">
+		<taskdef classpathref="test.classpath" resource="tasks.properties" />
+		<mkdir dir="${instrumented.classes.dir}" />
+		<cobertura-instrument todir="${instrumented.classes.dir}" datafile="${cobertura.data.file}">
+			<fileset dir="${build.dest}">
+				<include name="**/*.class" />
+			</fileset>
+		</cobertura-instrument>
+	</target>
+
 	<!-- call the test target for each project and aggregates the log resutls  -->
-	<target name="test" depends="checkGlobus,create_config_files">
+	<target name="test" depends="checkGlobus, create_config_files, instrument">
 		<echo message="Test results dir: ${junit.results.dir}" />
 		<mkdir dir="${junit.results.dir}" />
-		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true">
+		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true" fork="true">
 			<sysproperty key="basedir" value="${basedir}" />
+			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
 			<jvmarg value="-Xmx512M" />
 			<jvmarg value="-Dbuild.dir=${build.dir}" />
 			<jvmarg value="-Djava.endorsed.dirs=${ext.endorsed.dir}" />
+			<classpath location="${instrumented.classes.dir}" />
+			<classpath refid="test.classpath" />
 			<classpath>
-				<fileset dir="${ext.globus.dir}/lib">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${build.lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${ext.test.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<pathelement location="${test.dir}/resources" />
+				<pathelement location="${test.build.dest}" />
 			</classpath>
 			<formatter type="xml" />
 			<batchtest fork="yes" haltonfailure="true" haltonerror="true" todir="${junit.results.dir}">
@@ -393,6 +398,8 @@
 			</batchtest>
 		</junit>
 	</target>
+
+
 	<!-- ============================================================== -->
 	<!-- Creates conf files from examples                               -->
 	<!-- ============================================================== -->
@@ -404,6 +411,19 @@
 			</fileset>
 			<mapper type="glob" from="*.example" to="*" />
 		</copy>
+	</target>
+
+
+	<target name="coverageReport" depends="test" description="Runs the tests and generates a test
+		coverage report.">
+		<cobertura-report format="html" datafile="${cobertura.data.file}" destdir="${cobertura.report.dir}">
+			<fileset dir="${src.dir}">
+				<include name="**/*.java" />
+			</fileset>
+			<fileset dir="${test.src.dir}">
+				<include name="**/*.java" />
+			</fileset>
+		</cobertura-report>
 	</target>
 
 
