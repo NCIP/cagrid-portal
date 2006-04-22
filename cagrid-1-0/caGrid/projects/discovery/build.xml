@@ -73,8 +73,7 @@
 	<!-- The Test Classpath                                                   -->
 	<!-- =============================================================== -->
 	<path id="test.classpath">
-		<pathelement path="${classes.dir}" />
-		<pathelement path="${test.classes.dir}" />
+		<pathelement path="${classes.dir}" />	
 		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
