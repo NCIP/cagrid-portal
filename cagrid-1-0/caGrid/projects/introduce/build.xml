@@ -79,6 +79,7 @@
 		<mkdir dir="${jars.dir}" />
 		<mkdir dir="${junit.results.dir}" />
 		<mkdir dir="${javadoc.dir}" />
+		<mkdir dir="${test.log.dir}"/>
 	</target>
 	<!-- =================================================================== -->
 	<!-- Prints information about the build                                  -->

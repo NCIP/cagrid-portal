@@ -1,6 +1,15 @@
 To Do:
 
-add tests for SystemProperties and CustomBeans and Security for system testing.
+add tests to system tests for (coverage report shows no coverage):
+-SystemProperties
+-CustomBeans and Serialization
+-Security
+-simple types (boolean, string, etc) as input and output
+-extensions
+-deployment
+-multiple faults on a method
+-methods returning arrays
+-servicename ending in Service
 
 make sure that every panel that uses a namespaces jtree has a on focus to restore from the model
 
