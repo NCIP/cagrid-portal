@@ -8,6 +8,7 @@
   <ns2:Namespace location="./gts.xsd" namespace="http://cagrid.nci.nih.gov/8/gts" packageName="gov.nih.nci.cagrid.gts.bean" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="Permission" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="AuthorityGTS" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="AuthorityPriorityUpdate" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="PermissionFilter" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="TrustedAuthorityFilter" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="TrustedAuthority" xsi:type="ns2:SchemaElementType"/>
@@ -189,4 +190,5 @@
    <ns19:NoAuthorization xsi:type="ns19:NoAuthorization"/>
   </ns19:ServiceAuthorization>
  </ns19:ServiceSecurity>
+ <ns20:ServiceProperties xmlns:ns20="gme://gov.nih.nci.cagrid.introduce/1/Property"/>
 </ns1:ServiceSkeleton>

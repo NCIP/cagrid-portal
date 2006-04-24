@@ -27,5 +27,14 @@
 				</parameter>				
 			</resourceParams>
 		</resource>
+		<resource name="serviceconfiguration" type="gov.nih.nci.cagrid.gts.service.globus.ServiceConfiguration">
+			<resourceParams>
+				<parameter>
+					<name>factory</name>
+					<value>org.globus.wsrf.jndi.BeanFactory</value>
+				</parameter>
+						
+			</resourceParams>
+		</resource>
 	</service>
 </jndiConfig>

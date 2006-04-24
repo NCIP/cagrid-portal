@@ -178,24 +178,149 @@ public class GridTrustServiceClient implements GridTrustServiceI {
 
 
 
-	     public void updateAuthority() throws RemoteException, gov.nih.nci.cagrid.gts.stubs.InvalidAuthorityFault {
-               GridTrustServicePortType port = this.getPortType();
-               org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
 
-stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT, org.globus.wsrf.security.Constants.ENCRYPTION);
-	if (proxy != null) {
-try{
-		org.ietf.jgss.GSSCredential gss = new org.globus.gsi.gssapi.GlobusGSSCredentialImpl(proxy,org.ietf.jgss.GSSCredential.INITIATE_AND_ACCEPT);
-		stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_CREDENTIALS, gss);
-}catch(org.ietf.jgss.GSSException ex){
-throw new RemoteException(ex.getMessage());
-}
-}
-stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());
-               gov.nih.nci.cagrid.gts.stubs.UpdateAuthority params = new gov.nih.nci.cagrid.gts.stubs.UpdateAuthority();
-               gov.nih.nci.cagrid.gts.stubs.UpdateAuthorityResponse boxedResult = port.updateAuthority(params);
-               
-	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	     public gov.nih.nci.cagrid.gts.bean.TrustedAuthority addTrustedAuthority(gov.nih.nci.cagrid.gts.bean.TrustedAuthority ta) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
                GridTrustServicePortType port = this.getPortType();
@@ -220,6 +345,7 @@ stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.w
 
 	}
 
+
 	     public gov.nih.nci.cagrid.gts.bean.TrustedAuthority[] findTrustedAuthorities(gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter f) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault {
                GridTrustServicePortType port = this.getPortType();
                org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
@@ -235,6 +361,7 @@ stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.w
                return boxedResult.getTrustedAuthority();
 
 	}
+
 
 	     public void removeTrustedAuthority(java.lang.String trustedAuthorityName) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
                GridTrustServicePortType port = this.getPortType();
@@ -255,6 +382,7 @@ stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.w
                gov.nih.nci.cagrid.gts.stubs.RemoveTrustedAuthorityResponse boxedResult = port.removeTrustedAuthority(params);
                
 	}
+
 
 	     public void addPermission(gov.nih.nci.cagrid.gts.bean.Permission permission) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
                GridTrustServicePortType port = this.getPortType();
@@ -277,6 +405,7 @@ stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.w
                gov.nih.nci.cagrid.gts.stubs.AddPermissionResponse boxedResult = port.addPermission(params);
                
 	}
+
 
 	     public gov.nih.nci.cagrid.gts.bean.Permission[] findPermissions(gov.nih.nci.cagrid.gts.bean.PermissionFilter f) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
                GridTrustServicePortType port = this.getPortType();
@@ -301,6 +430,7 @@ stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.w
 
 	}
 
+
 	     public void revokePermission(gov.nih.nci.cagrid.gts.bean.Permission permission) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
                GridTrustServicePortType port = this.getPortType();
                org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
@@ -322,6 +452,7 @@ stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.w
                gov.nih.nci.cagrid.gts.stubs.RevokePermissionResponse boxedResult = port.revokePermission(params);
                
 	}
+
 
 	     public void updateTrustedAuthority(gov.nih.nci.cagrid.gts.bean.TrustedAuthority ta) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
                GridTrustServicePortType port = this.getPortType();
@@ -345,6 +476,7 @@ stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.w
                
 	}
 
+
 	     public void addTrustLevel(gov.nih.nci.cagrid.gts.bean.TrustLevel trustLevel) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
                GridTrustServicePortType port = this.getPortType();
                org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
@@ -366,6 +498,7 @@ stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.w
                gov.nih.nci.cagrid.gts.stubs.AddTrustLevelResponse boxedResult = port.addTrustLevel(params);
                
 	}
+
 
 	     public void updateTrustLevel(gov.nih.nci.cagrid.gts.bean.TrustLevel trustLevel) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidTrustLevelFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
                GridTrustServicePortType port = this.getPortType();
@@ -389,6 +522,7 @@ stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.w
                
 	}
 
+
 	     public gov.nih.nci.cagrid.gts.bean.TrustLevel[] getTrustLevels() throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault {
                GridTrustServicePortType port = this.getPortType();
                org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
@@ -401,6 +535,7 @@ stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.w
                return boxedResult.getTrustLevel();
 
 	}
+
 
 	     public void removeTrustLevel(java.lang.String string) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidTrustLevelFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
                GridTrustServicePortType port = this.getPortType();
@@ -422,6 +557,7 @@ stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.w
                
 	}
 
+
 	     public void addAuthority() throws RemoteException, gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault {
                GridTrustServicePortType port = this.getPortType();
                org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
@@ -438,6 +574,26 @@ throw new RemoteException(ex.getMessage());
 stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());
                gov.nih.nci.cagrid.gts.stubs.AddAuthority params = new gov.nih.nci.cagrid.gts.stubs.AddAuthority();
                gov.nih.nci.cagrid.gts.stubs.AddAuthorityResponse boxedResult = port.addAuthority(params);
+               
+	}
+
+
+	     public void updateAuthority() throws RemoteException, gov.nih.nci.cagrid.gts.stubs.InvalidAuthorityFault {
+               GridTrustServicePortType port = this.getPortType();
+               org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
+
+stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT, org.globus.wsrf.security.Constants.ENCRYPTION);
+	if (proxy != null) {
+try{
+		org.ietf.jgss.GSSCredential gss = new org.globus.gsi.gssapi.GlobusGSSCredentialImpl(proxy,org.ietf.jgss.GSSCredential.INITIATE_AND_ACCEPT);
+		stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_CREDENTIALS, gss);
+}catch(org.ietf.jgss.GSSException ex){
+throw new RemoteException(ex.getMessage());
+}
+}
+stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());
+               gov.nih.nci.cagrid.gts.stubs.UpdateAuthority params = new gov.nih.nci.cagrid.gts.stubs.UpdateAuthority();
+               gov.nih.nci.cagrid.gts.stubs.UpdateAuthorityResponse boxedResult = port.updateAuthority(params);
                
 	}
 

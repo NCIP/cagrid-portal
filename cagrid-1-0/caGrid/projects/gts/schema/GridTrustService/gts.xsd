@@ -27,6 +27,22 @@
 			</xsd:sequence>
 		</xsd:complexType>
 		
+		<xsd:element name="AuthorityPriorityUpdate" minOccurs="0" maxOccurs="1" type="gts:AuthorityPriorityUpdate"/>
+		
+		<xsd:complexType name="AuthorityPriorityUpdate">
+			<xsd:sequence>
+			    <xsd:element name="AuthorityPrioritySpecification" minOccurs="1" maxOccurs="unbounded" type="gts:AuthorityPrioritySpecification"/>
+			</xsd:sequence>
+		</xsd:complexType>
+		
+		
+		<xsd:complexType name="AuthorityPrioritySpecification">
+			<xsd:sequence>
+			    <xsd:element name="ServiceURI" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+			    <xsd:element name="Priority" minOccurs="1" maxOccurs="1" type="xsd:int"/>
+			</xsd:sequence>
+		</xsd:complexType>
+		
 		 <xsd:complexType name="TrustedAuthorityTimeToLive">
 			<xsd:sequence>
 			    <xsd:element name="hours" type="xsd:int"/>
