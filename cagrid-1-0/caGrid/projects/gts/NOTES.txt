@@ -8,6 +8,13 @@
 3) Fix multi trust service support of get rid of it.
 
 
+transactions are need in mysql.
+ -use 4.1 (InnoDB, the engine supporting transactions, is default)
+  or
+ -use 4.0 and set default table_type to InnoDB (not default in 4.0)
+  -edit /etc/my.cnf to add following lines:
+  [mysqld]
+  default-table-type=InnoDB
 
 ====================================
 |             Portal               |     
