@@ -166,6 +166,7 @@ public class TestGTSAuthorityManager extends TestCase {
 		GTSAuthorityManager am = new GTSAuthorityManager(db);
 		int count = 5;
 		AuthorityGTS[] a = new AuthorityGTS[count];
+		Connection c = null;
 		try {
 			for (int i = 0; i < count; i++) {
 				a[i] = getAuthority("GTS " + i, 1);
@@ -181,22 +182,22 @@ public class TestGTSAuthorityManager extends TestCase {
 					assertEquals(a[j], am.getAuthority(a[j].getServiceURI()));
 				}
 			}
-			Connection c = db.getConnection();
+			c = db.getConnection();
 			c.setAutoCommit(false);
 			for (int i = 0; i < count; i++) {
 				a[i].setPriority(a[i].getPriority() + 1);
 				am.updateAuthority(c, a[i]);
-			}	
+			}
 			c.commit();
-			
+
 			for (int i = 0; i < count; i++) {
 				assertEquals(a[i], am.getAuthority(a[i].getServiceURI()));
 			}
-			
+
 			for (int i = 0; i < count; i++) {
 				a[i].setPriority(a[i].getPriority() + 1);
 				am.updateAuthority(c, a[i]);
-			}	
+			}
 
 			try {
 				PreparedStatement bad = c.prepareStatement("INSERT INTO NOTHING SET VALUES(1,2)");
@@ -212,7 +213,7 @@ public class TestGTSAuthorityManager extends TestCase {
 			for (int i = 0; i < count; i++) {
 				a[i].setPriority(a[i].getPriority() - 1);
 				assertEquals(a[i], am.getAuthority(a[i].getServiceURI()));
-				
+
 			}
 			c.setAutoCommit(true);
 			db.releaseConnection(c);
@@ -220,6 +221,14 @@ public class TestGTSAuthorityManager extends TestCase {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		} finally {
+			if (c != null) {
+				try {
+					c.setAutoCommit(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				db.releaseConnection(c);
+			}
 			try {
 				am.destroy();
 			} catch (Exception e) {
