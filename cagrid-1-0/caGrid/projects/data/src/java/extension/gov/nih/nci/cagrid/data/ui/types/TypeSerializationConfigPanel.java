@@ -66,8 +66,16 @@ public class TypeSerializationConfigPanel extends JPanel {
 	
 	public void setSchemaElementType(SchemaElementType type) {
 		schemaType = type;
-		getSerializerTextField().setText(schemaType.getSerializer());
-		getDeserializerTextField().setText(schemaType.getDeserializer());
+		if (schemaType.getSerializer() != null) {
+			getSerializerTextField().setText(schemaType.getSerializer());
+		} else {
+			getSerializerTextField().setText("");
+		}
+		if (schemaType.getDeserializer() != null) {
+			getDeserializerTextField().setText(schemaType.getDeserializer());	
+		} else {
+			getDeserializerTextField().setText("");
+		}		
 		getSetButton().setEnabled(true);
 		getUndoButton().setEnabled(true);
 		if (isDefaultSerialization()) {
@@ -387,14 +395,14 @@ public class TypeSerializationConfigPanel extends JPanel {
 	
 	
 	private boolean isDefaultSerialization() {
-		return schemaType.getSerializer().length() == 0 &&
-			schemaType.getDeserializer().length() == 0;
+		return schemaType.getSerializer() != null && schemaType.getSerializer().length() == 0 &&
+			schemaType.getDeserializer() != null && schemaType.getDeserializer().length() == 0;
 	}
 	
 	
 	private boolean isSdkSerialization() {
-		return schemaType.getSerializer().equals(SDK_SERIALIZER) &&
-			schemaType.getDeserializer().equals(SDK_DESERIALIZER);
+		return schemaType.getSerializer() != null && schemaType.getSerializer().equals(SDK_SERIALIZER) &&
+			schemaType.getDeserializer() != null && schemaType.getDeserializer().equals(SDK_DESERIALIZER);
 	}
 	
 	
