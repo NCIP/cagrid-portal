@@ -106,7 +106,6 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 					getTypesTable().removeSchemaElementType(e.getSchemaElementType());
 				}
 			});
-			typesTree.setNamespace(getNamespaces());
 		}
 		return typesTree;
 	}
@@ -345,24 +344,5 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	
 	private File getSchemaDir() {
 		return new File(".");
-	}
-	
-	
-	private NamespaceType getNamespaces() {
-		NamespaceType ns = new NamespaceType();
-		ns.setNamespace("projectmobius.org/1/BookStore");
-		ns.setPackageName("org.projectmobius");
-		ns.setLocation(".");
-		SchemaElementType[] types = new SchemaElementType[4];
-		for (int i = 0; i < types.length; i++) {
-			SchemaElementType type = new SchemaElementType();
-			type.setClassName("Book" + i);
-			type.setDeserializer("FakeDeserializer");
-			type.setSerializer("FakeSerializer");
-			type.setType("Book" + i);
-			types[i] = type;
-		}
-		ns.setSchemaElement(types);
-		return ns;
 	}
 }

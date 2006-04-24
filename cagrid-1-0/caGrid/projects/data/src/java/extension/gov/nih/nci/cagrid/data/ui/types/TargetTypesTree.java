@@ -39,6 +39,7 @@ public class TargetTypesTree extends JTree {
 		setCellRenderer(new CellRenderer());
 		setCellEditor(new CellEditor());
 		model = new DefaultTreeModel(new DefaultMutableTreeNode());
+		setRootVisible(false); // until namespaces are added
 		setModel(model);
 		getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 	}
@@ -47,6 +48,7 @@ public class TargetTypesTree extends JTree {
 	public void setNamespace(NamespaceType ns) {
 		DomainTreeNode domainNode = new DomainTreeNode(this, ns);
 		setModel(new DefaultTreeModel(domainNode));
+		setRootVisible(true);
 		this.namespaceType = ns;
 	}
 	
