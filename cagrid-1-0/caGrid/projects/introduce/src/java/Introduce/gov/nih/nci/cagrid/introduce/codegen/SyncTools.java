@@ -206,7 +206,14 @@ public class SyncTools {
 									type.setPackageName(getPackageName(symtype.getName()));
 								}
 							} else {
-								Element element = table.getElement(new QName(ntype.getNamespace(), type.getType()));
+								QName qname = new QName(ntype.getNamespace(), type.getType());
+								Element element = table.getElement(qname);
+								if (element == null) {
+									table.dump(System.err);
+									throw new SynchronizationException("Unable to find Element in symbol table for: "
+										+ qname);
+
+								}
 								type.setClassName(getRelativeClassName(element.getName()));
 								type.setPackageName(getPackageName(element.getName()));
 							}
