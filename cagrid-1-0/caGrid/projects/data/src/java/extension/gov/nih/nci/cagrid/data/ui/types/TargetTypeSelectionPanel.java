@@ -4,6 +4,7 @@ import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
@@ -98,7 +99,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			typesTree = new TargetTypesTree();
 			typesTree.addTypeSelectionListener(new TypeSelectionListener() {
 				public void typeSelectionAdded(TypeSelectionEvent e) {
-					getTypesTable().addType(getTypesTree().getNamespace(), e.getSchemaElementType());
+					getTypesTable().addType(getTypesTree().getOriginalNamespace(), e.getSchemaElementType());
 				}
 				
 				
@@ -245,7 +246,21 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 					UMLPackageMetadata pack = getDomainBrowserPanel().getSelectedPackage();
 					if (pack != null) {
 						NamespaceType nsType = createNamespaceType(pack);
+						NamespaceType oldNsType = getTypesTree().getOriginalNamespace();
 						getTypesTree().setNamespace(nsType);
+						// add the namespace model to the service information
+						NamespaceType[] serviceNsTypes = getServiceInfo().getServiceDescriptor().getNamespaces().getNamespace();
+						if (serviceNsTypes != null && serviceNsTypes.length != 0) {
+							for (int i = 0; i < serviceNsTypes.length; i++) {
+								if (serviceNsTypes[i] == oldNsType) {
+									serviceNsTypes[i] = nsType;
+									break;
+								}
+							}
+						} else {
+							serviceNsTypes = new NamespaceType[] {nsType};
+						}
+						getServiceInfo().getServiceDescriptor().getNamespaces().setNamespace(serviceNsTypes);
 					}
 				}
 			});
@@ -343,6 +358,8 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	
 	
 	private File getSchemaDir() {
-		return new File(".");
+		String dir = getServiceInfo().getBaseDirectory().getAbsolutePath() + File.separator +
+			"schema" + File.separator + getServiceInfo().getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
+		return new File(dir);
 	}
 }
