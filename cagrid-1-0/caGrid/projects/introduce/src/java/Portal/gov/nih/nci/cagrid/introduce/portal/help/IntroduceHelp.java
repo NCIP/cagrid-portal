@@ -72,12 +72,4 @@ public class IntroduceHelp extends JFrame {
 		}
 	}
 
-
-	public static void main(String[] args) {
-		IntroduceHelp help = new IntroduceHelp();
-		help.setSize(200, 200);
-		help.setVisible(true);
-
-	}
-
 }

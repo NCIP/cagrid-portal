@@ -11,7 +11,6 @@ public class IntroducePortalInitializer implements GridPortalInitializer {
 	private static final int HELP_MENU = 4;
 
 	public void intialize() throws Exception {
-		System.out.println("Initializing Grid Portal");
 		IntroduceHelp help = new IntroduceHelp();
 		JMenu helpMenu = PortalResourceManager.getInstance().getGridPortal().getJMenuBar().getMenu(HELP_MENU);
 		JMenuItem helpMenuItem = new JMenuItem("Introduce Help");
