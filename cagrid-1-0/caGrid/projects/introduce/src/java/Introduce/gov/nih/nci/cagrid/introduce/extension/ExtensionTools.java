@@ -62,12 +62,12 @@ public class ExtensionTools {
 
 	public static ServiceModificationUIPanel getServiceModificationUIPanel(String extensionName,
 		gov.nih.nci.cagrid.introduce.info.ServiceInformation info) throws Exception {
-		ServiceExtensionDescriptionType extensionD = ExtensionsLoader.getInstance().getServiceExtension(extensionName);
-		if (extensionD != null && extensionD.getServiceModificationUIPanel() != null
-			&& !extensionD.getServiceModificationUIPanel().equals("")) {
-			Class c = Class.forName(extensionD.getServiceModificationUIPanel());
-			Constructor con = c.getConstructor(new Class[]{ServiceInformation.class});
-			Object obj = con.newInstance(new Object[]{info});
+		ServiceExtensionDescriptionType extensionDesc = ExtensionsLoader.getInstance().getServiceExtension(extensionName);
+		if (extensionDesc != null && extensionDesc.getServiceModificationUIPanel() != null
+			&& !extensionDesc.getServiceModificationUIPanel().equals("")) {
+			Class c = Class.forName(extensionDesc.getServiceModificationUIPanel());
+			Constructor con = c.getConstructor(new Class[]{ServiceExtensionDescriptionType.class, ServiceInformation.class});
+			Object obj = con.newInstance(new Object[]{extensionDesc, info});
 			return (ServiceModificationUIPanel) obj;
 		}
 		return null;
