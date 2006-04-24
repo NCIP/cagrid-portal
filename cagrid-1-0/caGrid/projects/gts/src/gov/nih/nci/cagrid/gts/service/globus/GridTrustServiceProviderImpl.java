@@ -181,9 +181,21 @@ public class GridTrustServiceProviderImpl {
 
 
 
-	public gov.nih.nci.cagrid.gts.stubs.AddAuthorityResponse addAuthority(gov.nih.nci.cagrid.gts.stubs.AddAuthority params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault {
-		gov.nih.nci.cagrid.gts.stubs.AddAuthorityResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.AddAuthorityResponse();
-		impl.addAuthority();
+
+
+
+
+
+
+
+
+
+
+
+
+	public gov.nih.nci.cagrid.gts.stubs.UpdateAuthorityResponse updateAuthority(gov.nih.nci.cagrid.gts.stubs.UpdateAuthority params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.InvalidAuthorityFault {
+		gov.nih.nci.cagrid.gts.stubs.UpdateAuthorityResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.UpdateAuthorityResponse();
+		impl.updateAuthority();
 		return boxedResult;
 	}
 	public gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityResponse addTrustedAuthority(gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthority params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
@@ -239,6 +251,11 @@ public class GridTrustServiceProviderImpl {
 	public gov.nih.nci.cagrid.gts.stubs.RemoveTrustLevelResponse removeTrustLevel(gov.nih.nci.cagrid.gts.stubs.RemoveTrustLevel params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidTrustLevelFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
 		gov.nih.nci.cagrid.gts.stubs.RemoveTrustLevelResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.RemoveTrustLevelResponse();
 		impl.removeTrustLevel(params.getString());
+		return boxedResult;
+	}
+	public gov.nih.nci.cagrid.gts.stubs.AddAuthorityResponse addAuthority(gov.nih.nci.cagrid.gts.stubs.AddAuthority params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault {
+		gov.nih.nci.cagrid.gts.stubs.AddAuthorityResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.AddAuthorityResponse();
+		impl.addAuthority();
 		return boxedResult;
 	}
 

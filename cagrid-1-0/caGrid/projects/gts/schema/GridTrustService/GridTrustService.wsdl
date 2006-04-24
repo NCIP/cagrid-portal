@@ -298,6 +298,21 @@
 						</sequence>
 					</complexType>
 				</element>
+				<element name="updateAuthority">
+					<complexType>
+						<sequence>
+          		  
+	      				</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="updateAuthorityResponse">
+					<complexType>
+						<sequence>
+          		  
+						</sequence>
+					</complexType>
+				</element>
 				<element name="GTSInternalFault" >
 					<complexType>
 						<complexContent>
@@ -363,6 +378,14 @@
 				</element>
       					
 				<element name="IllegalAuthorityFault" >
+					<complexType>
+						<complexContent>
+							<extension base="wsrbf:BaseFaultType"/>
+						</complexContent>
+					</complexType>
+				</element>
+      					
+				<element name="InvalidAuthorityFault" >
 					<complexType>
 						<complexContent>
 							<extension base="wsrbf:BaseFaultType"/>
@@ -464,6 +487,13 @@
 	<message name="addAuthorityOutputMessage">
 		<part name="parameters" element="tns:addAuthorityResponse"/>
 	</message>
+	<message name="updateAuthorityInputMessage">
+		<part name="parameters" element="tns:updateAuthority"/>
+	</message>
+	
+	<message name="updateAuthorityOutputMessage">
+		<part name="parameters" element="tns:updateAuthorityResponse"/>
+	</message>
 	<message name="GTSInternalFaultFaultMessage">
 		<part name="fault" element="tns:GTSInternalFault"/>
 	</message>
@@ -490,6 +520,9 @@
 	</message>
 	<message name="IllegalAuthorityFaultFaultMessage">
 		<part name="fault" element="tns:IllegalAuthorityFault"/>
+	</message>
+	<message name="InvalidAuthorityFaultFaultMessage">
+		<part name="fault" element="tns:InvalidAuthorityFault"/>
 	</message>
     
 <!--============================================================
@@ -607,6 +640,12 @@
             <input message="tns:addAuthorityInputMessage"/>
             <output message="tns:addAuthorityOutputMessage"/>
        		 <fault name="IllegalAuthorityFault" message="tns:IllegalAuthorityFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="updateAuthority">
+            <input message="tns:updateAuthorityInputMessage"/>
+            <output message="tns:updateAuthorityOutputMessage"/>
+       		 <fault name="InvalidAuthorityFault" message="tns:InvalidAuthorityFaultFaultMessage"/>
        				
         </operation>
         <operation name="GetResourceProperty">
