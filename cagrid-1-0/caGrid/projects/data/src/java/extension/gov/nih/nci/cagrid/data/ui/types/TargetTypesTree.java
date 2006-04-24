@@ -53,7 +53,7 @@ public class TargetTypesTree extends JTree {
 	}
 	
 	
-	public NamespaceType getNamespace() {
+	public NamespaceType getOriginalNamespace() {
 		return namespaceType;
 	}
 	
@@ -71,6 +71,21 @@ public class TargetTypesTree extends JTree {
 		SchemaElementType[] types = new SchemaElementType[selected.size()];
 		selected.toArray(types);
 		return types;
+	}
+	
+	
+	/**
+	 * Creates a new namespace type from the one loaded into the tree
+	 * and the user's selection of schema element types to expose
+	 * @return
+	 */
+	public NamespaceType getUserDefinedNamespace() {
+		NamespaceType ns = new NamespaceType();
+		ns.setLocation(namespaceType.getLocation());
+		ns.setNamespace(namespaceType.getNamespace());
+		ns.setPackageName(namespaceType.getPackageName());
+		ns.setSchemaElement(getCheckedTypes());
+		return ns;
 	}
 	
 	
