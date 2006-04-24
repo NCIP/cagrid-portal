@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.extension.example;
 
+import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.extension.ServiceModificationUIPanel;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
@@ -9,11 +10,11 @@ public class ExampleServiceModificationPanel extends ServiceModificationUIPanel 
 
 	private JLabel jLabel = null;
 
-	public ExampleServiceModificationPanel(ServiceInformation info) {
-		super(info);
+	public ExampleServiceModificationPanel(ServiceExtensionDescriptionType desc, ServiceInformation info) {
+		super(desc, info);
 		initialize();
-		// TODO Auto-generated constructor stub
 	}
+	
 
 	/**
 	 * This method initializes this

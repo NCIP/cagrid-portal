@@ -4,9 +4,11 @@ import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.ServiceModificationUIPanel;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
@@ -56,8 +58,8 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	
 	private XMLDataModelService gmeHandle = null;
 	
-	public TargetTypeSelectionPanel(ServiceInformation serviceInfo) {
-		super(serviceInfo);
+	public TargetTypeSelectionPanel(ServiceExtensionDescriptionType desc, ServiceInformation serviceInfo) {
+		super(desc, serviceInfo);
 		initialize();
 	}
 	
@@ -311,8 +313,8 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 				nsType.setLocation("./" + ii.getFileName());
 				
 				// popualte the schema elements
-				gov.nih.nci.cagrid.introduce.portal.ExtensionTools.setSchemaElements(nsType, 
-					XMLUtilities.stringToDocument(schemaContents));
+				gov.nih.nci.cagrid.introduce.portal.ExtensionTools.setSchemaElements(
+					nsType, XMLUtilities.stringToDocument(schemaContents));
 				// write the schema and its imports to the filesystem
 				getGME().cacheSchema(namespace, getSchemaDir());
 				return nsType;
@@ -326,8 +328,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	
 	private XMLDataModelService getGME() throws MobiusException {
 		if (gmeHandle == null) {
-			// TODO: what ACTUALLY gets the property I want???
-			String serviceId = getServiceInfo().getIntroduceServiceProperties().getProperty("GME_URL");
+			String serviceId = ExtensionTools.getProperty(getExtensionDescription().getProperties(), "GME_URL");
 			GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
 			gmeHandle = (XMLDataModelService) GridServiceResolver.getInstance()
 				.getGridService(serviceId);

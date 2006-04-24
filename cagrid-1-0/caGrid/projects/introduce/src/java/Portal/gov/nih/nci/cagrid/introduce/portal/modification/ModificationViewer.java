@@ -820,7 +820,6 @@ public class ModificationViewer extends GridPortalComponent {
 			// add a tab for each extension...
 			ExtensionsType exts = introService.getExtensions();
 			if (exts != null && exts.getExtension() != null) {
-				ExtensionTools extTools = new ExtensionTools();
 				ExtensionType[] extsTypes = exts.getExtension();
 				for (int i = 0; i < extsTypes.length; i++) {
 					ServiceExtensionDescriptionType extDtype = ExtensionsLoader.getInstance().getServiceExtension(
@@ -828,8 +827,8 @@ public class ModificationViewer extends GridPortalComponent {
 					try {
 						if (extDtype.getServiceModificationUIPanel() != null
 							&& !extDtype.getServiceModificationUIPanel().equals("")) {
-							ServiceModificationUIPanel extPanel = extTools.getServiceModificationUIPanel(extDtype
-								.getName(), info);
+							ServiceModificationUIPanel extPanel = ExtensionTools.getServiceModificationUIPanel(
+								extDtype.getName(), info);
 							contentTabbedPane.addTab(extDtype.getDisplayName(), null, extPanel, null);
 						}
 					} catch (Exception e) {

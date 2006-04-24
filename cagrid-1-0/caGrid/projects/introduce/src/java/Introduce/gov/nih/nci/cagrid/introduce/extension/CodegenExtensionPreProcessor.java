@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.extension;
 
+import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 /**
@@ -11,6 +12,6 @@ import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
  */
 public interface CodegenExtensionPreProcessor {
 	
-	public void preCodegen(ServiceInformation info) throws CodegenExtensionException;
+	public void preCodegen(ServiceExtensionDescriptionType desc, ServiceInformation info) throws CodegenExtensionException;
 
 }

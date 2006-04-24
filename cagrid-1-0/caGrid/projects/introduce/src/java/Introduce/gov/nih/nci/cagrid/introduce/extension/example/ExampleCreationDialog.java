@@ -1,9 +1,9 @@
 package gov.nih.nci.cagrid.introduce.extension.example;
 
+import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionUIDialog;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
-import javax.swing.JDialog;
 import javax.swing.JButton;
 
 public class ExampleCreationDialog extends CreationExtensionUIDialog {
@@ -14,8 +14,8 @@ public class ExampleCreationDialog extends CreationExtensionUIDialog {
 	 * This method initializes 
 	 * 
 	 */
-	public ExampleCreationDialog(ServiceInformation info) {
-		super(info);
+	public ExampleCreationDialog(ServiceExtensionDescriptionType desc, ServiceInformation info) {
+		super(desc, info);
 		initialize();
 	}
 

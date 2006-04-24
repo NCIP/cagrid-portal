@@ -15,6 +15,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.extension.ServiceModificationUIPanel;
@@ -42,8 +43,8 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 	private JSplitPane mainSplitPane = null;
 	private JPanel targetTypesPanel = null;
 
-	public DataServiceModificationPanel(ServiceInformation info) {
-		super(info);
+	public DataServiceModificationPanel(ServiceExtensionDescriptionType desc, ServiceInformation info) {
+		super(desc, info);
 		initialize();
 	}
 	

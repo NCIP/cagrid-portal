@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.data.codegen;
 
 import gov.nih.nci.cagrid.data.common.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
@@ -27,7 +28,7 @@ import org.jdom.Element;
  */
 public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProcessor {
 
-	public void postCodegen(ServiceInformation info) throws CodegenExtensionException {
+	public void postCodegen(ServiceExtensionDescriptionType desc, ServiceInformation info) throws CodegenExtensionException {
 		// TODO: Find the query method, if user hasn't done something to
 		// it, and drop in CQL implementation
 		MethodType queryMethod = getQueryMethod(info);

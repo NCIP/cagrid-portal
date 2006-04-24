@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.data.creation;
 
+import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionUIDialog;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
@@ -20,8 +21,8 @@ import javax.swing.JLabel;
  */
 public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 
-	public DataServiceCreationDialog(ServiceInformation info) {
-		super(info);
+	public DataServiceCreationDialog(ServiceExtensionDescriptionType desc, ServiceInformation info) {
+		super(desc, info);
 		initialize();
 	}
 	
@@ -36,6 +37,6 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 		});
 		getContentPane().add(ok);
 		pack();
-		show();
+		setVisible(true);
 	}
 }

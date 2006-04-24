@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
+import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
@@ -20,6 +21,7 @@ import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPreProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.info.SchemaInformation;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.NamespaceMappingsTemplate;
@@ -128,14 +130,14 @@ public class SyncTools {
 		serviceProperties.store(new FileOutputStream(servicePropertiesFile), "Introduce Properties");
 
 		System.out.println("Synchronizing with pre processing extensions");
-		ExtensionTools tools = new ExtensionTools();
 		// run any extensions that need to be ran
 		if (introService.getExtensions() != null && introService.getExtensions().getExtension() != null) {
 			ExtensionType[] extensions = introService.getExtensions().getExtension();
 			for (int i = 0; i < extensions.length; i++) {
 				CodegenExtensionPreProcessor pp = ExtensionTools.getCodegenPreProcessor(extensions[i].getName());
+				ServiceExtensionDescriptionType desc = ExtensionsLoader.getInstance().getServiceExtension(extensions[i].getName());
 				if (pp != null) {
-					pp.preCodegen(info);
+					pp.preCodegen(desc, info);
 				}
 			}
 		}
@@ -172,8 +174,9 @@ public class SyncTools {
 			ExtensionType[] extensions = introService.getExtensions().getExtension();
 			for (int i = 0; i < extensions.length; i++) {
 				CodegenExtensionPostProcessor pp = ExtensionTools.getCodegenPostProcessor(extensions[i].getName());
+				ServiceExtensionDescriptionType desc = ExtensionsLoader.getInstance().getServiceExtension(extensions[i].getName());
 				if (pp != null) {
-					pp.postCodegen(info);
+					pp.postCodegen(desc, info);
 				}
 			}
 		}
