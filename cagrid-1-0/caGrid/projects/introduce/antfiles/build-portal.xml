@@ -23,6 +23,7 @@
 			</fileset>
 			<pathelement location="${basedir}/resources/portal/introduce"/>
 			<pathelement location="${ext.resources.dir}/portal/common"/>
+			<pathelement location="${basedir}/doc/help"/>
 		</path>
 		<path id="Portal.test.classpath">
 			<pathelement location="${introduce.classes.dir}"/>
@@ -50,6 +51,7 @@
 			</fileset>
 			<pathelement location="${basedir}/resources/portal/introduce"/>
 			<pathelement location="${ext.resources.dir}/portal/common"/>
+			<pathelement location="${basedir}/doc/help"/>
 		</path>
 		<path id="Portal.run.classpath">
 			<pathelement location="${introduce.classes.dir}"/>
@@ -80,6 +82,7 @@
 			</fileset>
 			<pathelement location="${basedir}/resources/portal/introduce"/>
 			<pathelement location="${ext.resources.dir}/portal/common"/>
+			<pathelement location="${basedir}/doc/help"/>
 		</path>
 	</target>
 </project>
