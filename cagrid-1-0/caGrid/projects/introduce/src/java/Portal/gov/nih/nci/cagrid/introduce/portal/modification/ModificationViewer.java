@@ -61,12 +61,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.xml.namespace.QName;
 
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
-import javax.swing.JTable;
 
 
 /**
@@ -238,7 +239,7 @@ public class ModificationViewer extends GridPortalComponent {
 			}
 			loadServiceProps();
 
-			info = new ServiceInformation(introService, serviceProperties, methodsDirectory);
+			this.info = new ServiceInformation(introService, serviceProperties, methodsDirectory);
 			this.setContentPane(getJContentPane());
 			this.setTitle("Modify Service Interface");
 			this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
@@ -808,6 +809,12 @@ public class ModificationViewer extends GridPortalComponent {
 			contentTabbedPane.addTab("Operations", null, getMethodsPanel(), null);
 			contentTabbedPane.addTab("Metadata", null, getMetadataPanel(), null);
 			contentTabbedPane.addTab("Service Properties", null, getServicePropertiesPanel(), null);
+			contentTabbedPane.addChangeListener(new ChangeListener() {
+				public void stateChanged(ChangeEvent e) {
+					getNamespaceJTree().setNamespaces(info.getNamespaces());
+					getMetadataNamespacesJTree().setNamespaces(info.getNamespaces());
+				}
+			});
 			// diable the metadata tab if they've specified not to sync metadata
 			MetadataListType metadataList = this.introService.getMetadataList();
 			if (metadataList != null && metadataList.getSynchronizeMetadataFramework() != null
@@ -832,12 +839,11 @@ public class ModificationViewer extends GridPortalComponent {
 							contentTabbedPane.addTab(extDtype.getDisplayName(), null, extPanel, null);
 						}
 					} catch (Exception e) {
+						e.printStackTrace();
 						JOptionPane.showMessageDialog(ModificationViewer.this, "Cannot load extension: "
 							+ extDtype.getDisplayName());
 					}
-
 				}
-
 			}
 		}
 		return contentTabbedPane;
@@ -874,11 +880,6 @@ public class ModificationViewer extends GridPortalComponent {
 			metadataPanel.add(getMetadataScrollPane(), gridBagConstraints1);
 			metadataPanel.add(getMetadataButtonsPanel(), gridBagConstraints12);
 			metadataPanel.add(getMetadataNamespaceTypesPanel(), gridBagConstraints35);
-			metadataPanel.addFocusListener(new java.awt.event.FocusAdapter() {
-				public void focusGained(java.awt.event.FocusEvent e) {
-					getMetadataNamespacesJTree().setNamespaces(introService.getNamespaces());
-				}
-			});
 		}
 		return metadataPanel;
 	}
@@ -1114,9 +1115,9 @@ public class ModificationViewer extends GridPortalComponent {
 	private JPanel getNamespacePanel() {
 		if (namespacePanel == null) {
 			namespacePanel = new JPanel();
+			namespacePanel.setLayout(new GridLayout(1, 2));
 			namespacePanel.add(getNamespaceConfigurationPanel());
 			namespacePanel.add(getNamespaceConfPanel());
-			namespacePanel.setLayout(new GridLayout(1, 2));
 		}
 		return namespacePanel;
 	}
@@ -1489,8 +1490,7 @@ public class ModificationViewer extends GridPortalComponent {
 						methods.setMethod(methodsArray);
 						introService.setMethods(methods);
 
-						// walk the metadata table and create
-						// the
+						// walk the metadata table and create the
 						// new ServiceMetadataType array
 						MetadataType[] metadataArray = new MetadataType[metadataTable.getRowCount()];
 						for (int i = 0; i < metadataArray.length; i++) {
