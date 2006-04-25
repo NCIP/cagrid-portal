@@ -94,5 +94,14 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-caDSR-1.0-service.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-caDSR-1.0-stubs.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
+	<classpathentry kind="src" path="test/src/java"/>
+	<classpathentry kind="lib" path="ext/test/lib/asm-2.2.1.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/cobertura.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/jakarta-oro-2.0.8.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/jdepend-2.7-patched.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/junit.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/junit-addons-1.4.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/log4j-1.2.9.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/xmlunit1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

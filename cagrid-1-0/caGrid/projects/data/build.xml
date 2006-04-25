@@ -59,6 +59,40 @@
 	<!-- libraries -->
 	<property name="lib.dir" location="${basedir}/lib"/>
 	<property name="ext.lib.dir" location="${basedir}/ext/lib"/>
+	<property name="ext.test.lib.dir" location="${basedir}/ext/test/lib"/>
+	
+	<!-- testing stuff -->
+	<property name="test.dir" location="${basedir}/test" />
+	<property name="test.src.dir" location="${test.dir}/src/java" />
+	<property name="test.classes.dir" location="${build.dir}/test/classes" />
+	<property name="test.lib.dir" location="${test.dir}/lib" />
+	<property name="test.logs.dir" location="${test.dir}/logs" />
+	<property name="test.project.jar" location="${build.jars.dir}/${project.name}-tests-${project.version}.jar" />
+	<import file="test/test.xml" />
+	
+	<!-- =============================================================== -->
+	<!-- The Test Classpath                                                   -->
+	<!-- =============================================================== -->
+	<path id="test.classpath">
+		<pathelement path="${build.utils.dest}" />
+		<pathelement path="${build.extension.dest}"/>
+		<pathelement path="${build.service.dest}"/>
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${ext.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${test.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${ext.test.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${globus.dir}/lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
 	
 	<!-- creates output directories -->
     <target name="init">
@@ -66,6 +100,7 @@
     	<mkdir dir="${build.utils.dest}"/>
     	<mkdir dir="${build.extension.dest}"/>
     	<mkdir dir="${build.service.dest}"/>
+    	<mkdir dir="${test.classes.dir}"/>
         <mkdir dir="${build.jars.dir}" />
         <mkdir dir="${stubs.dir}" />
         <mkdir dir="${stubs.src}" />
@@ -171,6 +206,14 @@
 					<include name="*.jar"/>
 				</fileset>
 			</classpath>
+		</javac>
+	</target>
+	
+	
+	<!-- compiles the test code -->
+	<target name="compileTests" depends="compileStubs, compileUtilsSource, compileExtensionSource, compileService">
+		<javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" debug="${java.debug}">
+			<classpath refid="test.classpath"/>
 		</javac>
 	</target>
 
@@ -280,5 +323,5 @@
 	</target>
 
 	<!-- build and jar everything -->
-	<target name="all" depends="jarStubs, jarUtils, jarExtension, jarService" description="Builds and jars all the classes in the project"/>
+	<target name="all" depends="jarStubs, jarUtils, jarExtension, jarService, compileTests" description="Builds and jars all the classes in the project"/>
 </project>
