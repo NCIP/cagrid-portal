@@ -235,26 +235,6 @@ public class GTSAuthorityManager {
 		Connection c = null;
 		try {
 			c = db.getConnection();
-			this.updateAuthority(c, gts);
-		} catch (Exception e) {
-
-			this.logger.log(Level.SEVERE, "Unexpected database error incurred in updating the authority "
-				+ gts.getServiceURI() + "!!!", e);
-			GTSInternalFault fault = new GTSInternalFault();
-			fault.setFaultString("Unexpected error in updating the authority " + gts.getServiceURI() + "!!!");
-			throw fault;
-		} finally {
-			db.releaseConnection(c);
-		}
-
-	}
-
-
-	protected synchronized void updateAuthority(Connection c, AuthorityGTS gts) throws GTSInternalFault,
-		InvalidAuthorityFault {
-		this.buildDatabase();
-		AuthorityGTS curr = getAuthority(gts.getServiceURI());
-		try {
 			if (!gts.equals(curr)) {
 				PreparedStatement update = c
 					.prepareStatement("UPDATE "
@@ -270,13 +250,15 @@ public class GTSAuthorityManager {
 				update.setString(8, gts.getServiceURI());
 				update.executeUpdate();
 			}
-
 		} catch (Exception e) {
-			this.logger.log(Level.SEVERE, "Unexpected database error incurred in updating the authority, "
-				+ gts.getServiceURI() + ".", e);
+
+			this.logger.log(Level.SEVERE, "Unexpected database error incurred in updating the authority "
+				+ gts.getServiceURI() + "!!!", e);
 			GTSInternalFault fault = new GTSInternalFault();
-			fault.setFaultString("Unexpected error occurred in updating the authority, " + gts.getServiceURI() + ".");
+			fault.setFaultString("Unexpected error in updating the authority " + gts.getServiceURI() + "!!!");
 			throw fault;
+		} finally {
+			db.releaseConnection(c);
 		}
 
 	}
@@ -463,6 +445,50 @@ public class GTSAuthorityManager {
 				+ gts.getServiceURI() + "!!!", e);
 			GTSInternalFault fault = new GTSInternalFault();
 			fault.setFaultString("Unexpected error in adding the authority " + gts.getServiceURI() + "!!!");
+			throw fault;
+		} finally {
+			try {
+				if (c != null) {
+					c.setAutoCommit(true);
+				}
+			} catch (Exception e) {
+
+			}
+			db.releaseConnection(c);
+		}
+
+	}
+
+
+	public synchronized void removeAuthority(String uri) throws GTSInternalFault, InvalidAuthorityFault {
+		this.buildDatabase();
+		AuthorityGTS gts = getAuthority(uri);
+		Connection c = null;
+		try {
+			c = db.getConnection();
+			c.setAutoCommit(false);
+			// Get the current list of Authorities
+			AuthorityGTS[] list = this.getAuthoritiesEqualToOrAfter(gts.getPriority());
+			for (int i = 0; i < list.length; i++) {
+				this.updateAuthorityPriority(c, list[i].getServiceURI(), (list[i].getPriority() - 1));
+			}
+
+			PreparedStatement ps = c.prepareStatement("DELETE FROM " + GTS_AUTHORITIES + " WHERE GTS_URI = ?");
+			ps.setString(1, uri);
+			ps.executeUpdate();
+			c.commit();
+		} catch (Exception e) {
+			if (c != null) {
+				try {
+					c.rollback();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+			this.logger.log(Level.SEVERE,
+				"Unexpected database error incurred in deleting the authority " + uri + "!!!", e);
+			GTSInternalFault fault = new GTSInternalFault();
+			fault.setFaultString("Unexpected error in deleting the authority " + uri + "!!!");
 			throw fault;
 		} finally {
 			try {

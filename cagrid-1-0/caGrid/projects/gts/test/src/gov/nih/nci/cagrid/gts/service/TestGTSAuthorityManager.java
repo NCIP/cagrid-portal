@@ -186,13 +186,13 @@ public class TestGTSAuthorityManager extends TestCase {
 			c.setAutoCommit(false);
 			for (int i = 0; i < count; i++) {
 				a[i].setPriority(a[i].getPriority() + 1);
-				am.updateAuthority(c, a[i]);
+				am.updateAuthorityPriority(c, a[i].getServiceURI(), a[i].getPriority());
 			}
-			
+
 			for (int i = 0; i < count; i++) {
-				assertEquals((a[i].getPriority()-1), am.getAuthority(a[i].getServiceURI()).getPriority());
+				assertEquals((a[i].getPriority() - 1), am.getAuthority(a[i].getServiceURI()).getPriority());
 			}
-			
+
 			c.commit();
 
 			for (int i = 0; i < count; i++) {
@@ -201,7 +201,7 @@ public class TestGTSAuthorityManager extends TestCase {
 
 			for (int i = 0; i < count; i++) {
 				a[i].setPriority(a[i].getPriority() + 1);
-				am.updateAuthority(c, a[i]);
+				am.updateAuthorityPriority(c, a[i].getServiceURI(), a[i].getPriority());
 			}
 
 			try {
