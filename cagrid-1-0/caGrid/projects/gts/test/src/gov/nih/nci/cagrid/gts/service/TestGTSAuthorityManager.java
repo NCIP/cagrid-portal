@@ -2,6 +2,8 @@ package gov.nih.nci.cagrid.gts.service;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.gts.bean.AuthorityGTS;
+import gov.nih.nci.cagrid.gts.bean.AuthorityPrioritySpecification;
+import gov.nih.nci.cagrid.gts.bean.AuthorityPriorityUpdate;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityTimeToLive;
 import gov.nih.nci.cagrid.gts.common.Database;
 import gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault;
@@ -162,6 +164,80 @@ public class TestGTSAuthorityManager extends TestCase {
 	}
 
 
+	public void testAddUpdateRemoveAuthorities() {
+		GTSAuthorityManager am = new GTSAuthorityManager(db);
+		int count = 5;
+		AuthorityGTS[] a = new AuthorityGTS[count];
+
+		try {
+			for (int i = 0; i < count; i++) {
+				a[i] = getAuthority("GTS " + i, 1);
+				assertFalse(am.doesAuthorityExist(a[i].getServiceURI()));
+				assertEquals(i, am.getAuthorityCount());
+				am.addAuthority(a[i]);
+				assertTrue(am.doesAuthorityExist(a[i].getServiceURI()));
+				assertEquals((i + 1), am.getAuthorityCount());
+				assertEquals(a[i], am.getAuthority(a[i].getServiceURI()));
+				for (int j = 0; j < i; j++) {
+					a[j].setPriority(a[j].getPriority() + 1);
+					assertEquals(a[j], am.getAuthority(a[j].getServiceURI()));
+				}
+			}
+
+			for (int i = 0; i < count; i++) {
+				updateAuthority(a[i]);
+				am.updateAuthority(a[i]);
+				assertTrue(am.doesAuthorityExist(a[i].getServiceURI()));
+				assertEquals(count, am.getAuthorityCount());
+				assertEquals(a[i], am.getAuthority(a[i].getServiceURI()));
+			}
+			int priority = 1;
+			AuthorityPrioritySpecification[] specs = new AuthorityPrioritySpecification[count];
+			for (int i = 0; i < count; i++) {
+				a[i].setPriority(priority);
+				specs[i] = new AuthorityPrioritySpecification();
+				specs[i].setServiceURI(a[i].getServiceURI());
+				specs[i].setPriority(a[i].getPriority());
+				priority = priority + 1;
+			}
+			AuthorityPriorityUpdate update = new AuthorityPriorityUpdate();
+			update.setAuthorityPrioritySpecification(specs);
+			am.updateAuthorityPriorities(update);
+
+			for (int i = 0; i < count; i++) {
+				assertTrue(am.doesAuthorityExist(a[i].getServiceURI()));
+				assertEquals(count, am.getAuthorityCount());
+				assertEquals(a[i], am.getAuthority(a[i].getServiceURI()));
+			}
+			AuthorityGTS[] auths = am.getAuthorities();
+			for (int i = 0; i < count; i++) {
+				assertEquals(a[i], auths[i]);
+			}
+			int num = count;
+			for (int i = 0; i < count; i++) {
+				am.removeAuthority(a[i].getServiceURI());
+				num = num - 1;
+				assertFalse(am.doesAuthorityExist(a[i].getServiceURI()));
+				assertEquals(num, am.getAuthorityCount());
+				for (int j = (i + 1); j <= i; j++) {
+					a[j].setPriority(a[j].getPriority() - 1);
+					assertEquals(a[j], am.getAuthority(a[j].getServiceURI()));
+				}
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			try {
+				am.destroy();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
 	public void testUpdateRollback() {
 		GTSAuthorityManager am = new GTSAuthorityManager(db);
 		int count = 5;
@@ -288,6 +364,18 @@ public class TestGTSAuthorityManager extends TestCase {
 		a1.setSyncTrustLevels(true);
 		a1.setTrustedAuthorityTimeToLive(ttl);
 		return a1;
+	}
+
+
+	private void updateAuthority(AuthorityGTS gts) {
+		TrustedAuthorityTimeToLive ttl = new TrustedAuthorityTimeToLive();
+		ttl.setHours(10);
+		ttl.setMinutes(10);
+		ttl.setSeconds(10);
+		gts.setPerformAuthorization(false);
+		gts.setServiceIdentity(null);
+		gts.setSyncTrustLevels(false);
+		gts.setTrustedAuthorityTimeToLive(ttl);
 	}
 
 
