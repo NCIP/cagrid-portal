@@ -125,6 +125,8 @@ public class AddComplexMethodWithFaultStep extends Step {
 		Utils.serializeDocument(pathtobasedir + File.separator + tci.getDir() + File.separator + "introduce.xml",
 			introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 		
+		Thread.sleep(10000);
+		
 		try {
 			SyncTools sync = new SyncTools(new File(pathtobasedir + File.separator + tci.getDir()));
 			sync.sync();

@@ -41,6 +41,10 @@ public class AddSServicePropertiesStep extends Step {
 		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(pathtobasedir + File.separator
 			+ tci.getDir() + File.separator + "introduce.xml", ServiceDescription.class);
 		ServiceProperties props = introService.getServiceProperties();
+		if(props == null){
+			props = new ServiceProperties();
+			introService.setServiceProperties(props);
+		}
 		
 		ServicePropertiesProperty newProperty1 = new ServicePropertiesProperty();
 		newProperty1.setKey("foo");

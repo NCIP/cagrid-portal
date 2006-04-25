@@ -98,7 +98,7 @@ public class AddComplexMethodWithFaulsAndArraysStep extends Step {
 		method.setInputs(inputs);
 
 		// set a fault
-		MethodTypeExceptionsException[] exceptionsArray = new MethodTypeExceptionsException[1];
+		MethodTypeExceptionsException[] exceptionsArray = new MethodTypeExceptionsException[2];
 		MethodTypeExceptionsException exception1 = new MethodTypeExceptionsException();
 		exception1.setName("testFault1");
 		MethodTypeExceptionsException exception2 = new MethodTypeExceptionsException();
@@ -108,7 +108,6 @@ public class AddComplexMethodWithFaulsAndArraysStep extends Step {
 		MethodTypeExceptions exceptions = new MethodTypeExceptions();
 		exceptions.setException(exceptionsArray);
 		method.setExceptions(exceptions);
-
 		method.setOutput(output);
 
 		// add new method to array in bean
