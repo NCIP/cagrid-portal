@@ -44,9 +44,12 @@
 		<property name="ext.tomcat.dir" value="${env.CATALINA_HOME}" />
 	</target>
 	
+	<target name="addFilters" if="service.properties.file">
+		<filter filtersfile="${service.properties.file}"/>
+	</target>
 	
 	<!-- deploy  a gar to tomcat -->
-	<target name="deployTomcat" depends="createDeploymentGar" description="Deploys to CATALINA_HOME (to set the services properties file set the ant command line variable -Dservice.properties.file)">
+	<target name="deployTomcat" depends="addFilters, createDeploymentGar" description="Deploys to CATALINA_HOME (to set the services properties file set the ant command line variable -Dservice.properties.file)">
 		<echo message="Deploying service under Tomcat at ${tomcat.dir}" />
 		
 		<!-- Configure Tomcat destination for skeletons -->
@@ -73,7 +76,7 @@
 			</fileset>
 		</copy>
 		<!-- prepare the jndi file -->
-		<filter filtersfile="${service.properties.file}"/>
+		
 		<copy overwrite="true" todir="tmp" file="jndi-config.xml" filtering="true"/>
 		<!-- replace the config paths in the server deploy file -->
 		<replace file="tmp/jndi-config.xml" value="${service.deployment.dir.name}" token="SERVICE-INSTANCE-PATH" />
@@ -110,7 +113,7 @@
 	</target>
 	
 	<!-- make deployment configured gar -->
-	<target name="createDeploymentGar" depends="checkGlobus, checkTomcat, all">
+	<target name="createDeploymentGar" depends="addFilters, checkGlobus, checkTomcat, all">
 		<copy todir="${build.lib.dir}">
 			<fileset dir="${basedir}/lib">
 				<include name="*.jar" />
@@ -125,7 +128,6 @@
 		<replace file="tmp/server-config.wsdd" value="${service.deployment.path}" token="SERVICE-INSTANCE-NAME" />
 		<replace file="tmp/server-config.wsdd" value="etc/${introduce.skeleton.service.name}" token="ETC-PATH" />
 		<!-- prepare the jndi file -->
-		<filter filtersfile="${service.properties.file}"/>
 		<copy overwrite="true" todir="tmp" filtering="true" file="jndi-config.xml" />
 		<!-- replace the config paths in the server deploy file -->
 		<replace file="tmp/jndi-config.xml" value="${introduce.skeleton.service.name}" token="SERVICE-INSTANCE-PATH" />
