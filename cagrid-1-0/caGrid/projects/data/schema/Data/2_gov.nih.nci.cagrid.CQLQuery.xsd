@@ -20,7 +20,7 @@
 		</xsd:annotation>
 		<xsd:sequence>
 			<xsd:element name="Property" type="cql:ObjectProperty" minOccurs="0" maxOccurs="unbounded"/>
-			<xsd:element name="Group" type="cql:ObjectGroup" minOccurs="0"/>
+			<xsd:element name="Group" type="cql:ObjectGroup" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element name="Object" type="cql:NestedObject" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
 		<xsd:attribute name="name" type="xsd:string" use="required"/>
