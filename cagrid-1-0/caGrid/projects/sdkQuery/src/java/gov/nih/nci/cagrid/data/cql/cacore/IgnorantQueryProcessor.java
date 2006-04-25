@@ -1,11 +1,5 @@
 package gov.nih.nci.cagrid.data.cql.cacore;
 
-import java.util.List;
-
-import javax.xml.namespace.QName;
-
-import org.apache.axis.message.MessageElement;
-
 import gov.nih.nci.cabio.domain.Gene;
 import gov.nih.nci.cabio.domain.impl.GeneImpl;
 import gov.nih.nci.cagrid.common.Utils;
@@ -14,7 +8,14 @@ import gov.nih.nci.cagrid.cqlresultset.CQLObjectResult;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResultsType;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.data.cql.InitializationException;
+import gov.nih.nci.cagrid.data.cql.MalformedQueryException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
+
+import java.util.List;
+
+import javax.xml.namespace.QName;
+
+import org.apache.axis.message.MessageElement;
 
 /** 
  *  IgnorantQueryProcessor
@@ -26,11 +27,12 @@ import gov.nih.nci.system.applicationservice.ApplicationService;
  * @created Apr 3, 2006 
  * @version $Id$ 
  */
-public class IgnorantQueryProcessor implements CQLQueryProcessor {
+public class IgnorantQueryProcessor extends CQLQueryProcessor {
 	
 	private ApplicationService coreService = null;
-
-	public void init(String initString) throws InitializationException {
+	
+	public IgnorantQueryProcessor(String initString) throws InitializationException {
+		super(initString);
 		if (initString.length() == 0) {
 			initString = "http://kramer.bmi.ohio-state.edu:8080/cacore31/server/HTTPServer";
 		}
@@ -40,7 +42,7 @@ public class IgnorantQueryProcessor implements CQLQueryProcessor {
 	}
 
 
-	public CQLQueryResultsType processQuery(CQLQueryType query) throws Exception {
+	public CQLQueryResultsType processQuery(CQLQueryType query) throws MalformedQueryException, Exception {
 		Gene gene = new GeneImpl();
 		gene.setSymbol("brca*"); // searching for all genes whose symbol start with brca
 		

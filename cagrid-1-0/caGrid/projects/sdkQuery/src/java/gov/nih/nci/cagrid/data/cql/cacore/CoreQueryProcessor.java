@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.cqlquery.Objects;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResultsType;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.data.cql.InitializationException;
+import gov.nih.nci.cagrid.data.cql.MalformedQueryException;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsUtil;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
@@ -25,15 +26,11 @@ import org.hibernate.criterion.Subqueries;
  * @created Mar 31, 2006 
  * @version $Id$ 
  */
-public class CoreQueryProcessor implements CQLQueryProcessor {
+public class CoreQueryProcessor extends CQLQueryProcessor {
 	private ApplicationService coreService;
 	
-	public CoreQueryProcessor() {
-		this.coreService = null;
-	}
-	
-	
-	public void init(String initString) throws InitializationException {
+	public CoreQueryProcessor(String initString) throws InitializationException {
+		super(initString);
 		if (initString == null || initString.length() == 0) {
 			coreService = ApplicationService.getLocalInstance();
 		} else {
@@ -42,7 +39,7 @@ public class CoreQueryProcessor implements CQLQueryProcessor {
 	}
 	
 	
-	public CQLQueryResultsType processQuery(CQLQueryType query) throws Exception {
+	public CQLQueryResultsType processQuery(CQLQueryType query) throws MalformedQueryException, Exception {
 		// create target criteria
 		Class targetClass = Class.forName(query.getTarget().getName());
 		DetachedCriteria targetCriteria = DetachedCriteria.forClass(targetClass);
@@ -69,98 +66,4 @@ public class CoreQueryProcessor implements CQLQueryProcessor {
 		CQLQueryResultsType results = CQLQueryResultsUtil.createQueryResults(targetObjects);
 		return results;
 	}
-	
-	
-	/*
-	public CQLQueryResultsType processQuery(CQLQueryType query) throws Exception {
-		if (coreService == null) {
-			throw new IllegalStateException("The core service is currently null.  Call init() before calling processQuery()!");
-		}
-		// get the class we're trying to return here
-		// TODO: I believe this is a caDSR type name, not a Java
-		// class name, although they'll mostly match eachother.
-		// Should be using QName here to get the registered
-		// (type mapping) class to create.
-		String targetClassName = query.getTarget().getName();
-		Class targetClass = Class.forName(targetClassName);
-		
-		List searchMe = new ArrayList();
-		Group[] groups = query.getTarget().getGroup();
-		for (int i = 0; i < groups.length; i++) {
-			String logic = groups[i].getLogicRelation().getValue();
-			Objects[] objects = groups[i].getObjects();
-			for (int j = 0; j < objects.length; j++) {
-				Object queryObject = generateQueryObject(objects[i]);
-				searchMe.add(queryObject);
-			}
-		}
-		
-		DetachedCriteria criteria = DetachedCriteria.forClass(targetClass);
-		
-		
-		List targetObjects = coreService.search(targetClass, searchMe);
-		CQLQueryResultsType results = CQLQueryResultsUtil.createQueryResults(targetObjects);
-		return results;
-	}
-	
-	
-	private Object generateQueryObject(Objects input) throws Exception {
-		Class inputClass = Class.forName(input.getName());
-		Object instance = inputClass.newInstance();
-		Property[] properties = input.getProperty();
-		for (int i = 0; i < properties.length; i++) {
-			Property prop = properties[i];
-			setValueOnObject(instance, prop.getName(), prop.getPredicate().getValue(), prop.getValue());
-		}
-		return instance;
-	}
-	
-	
-	private void setValueOnObject(Object obj, String name, String predicate, String value)
-		throws InvocationTargetException, IllegalAccessException {
-		Method[] methods = obj.getClass().getMethods();
-		for (int i = 0; i < methods.length; i++) {
-			Method currentMethod = methods[i];
-			// is this method a setter??
-			if (isSetter(currentMethod)) {
-				String fieldSet = getSetterField(currentMethod);
-				if (fieldSet.equals(name)) {
-					Object[] args = {predicate + value};
-					currentMethod.invoke(obj, args);
-					break;
-				}
-			}
-		}
-	}
-	
-	
-	private boolean isSetter(Method method) {
-		return (method.getName().startsWith("set") && method.getParameterTypes().length == 1 
-			&& method.getParameterTypes()[0].equals(String.class));
-	}
-	
-	
-	private String getSetterField(Method setter) {
-		String name = setter.getName();
-		name = name.substring("set".length());
-		if (name.length() > 1) {
-			name = name.substring(0, 1).toLowerCase() + name.substring(1);
-		} else {
-			name = name.toLowerCase();
-		}
-		return name;
-	}
-	
-	
-	private DetachedCriteria getCriteria(CQLQueryType query) throws ClassNotFoundException {
-		String targetClassName = query.getTarget().getName();
-		Class targetClass = Class.forName(targetClassName);
-		DetachedCriteria criteria = DetachedCriteria.forClass(targetClass);
-		Session hibernateSession = HibernateUtil.currentSession();
-		Criterion cr = Example.create(null);
-		Junction j = Restrictions.conjunction().add(cr);
-		criteria.add(j);
-		return criteria;
-	}
-	*/
 }

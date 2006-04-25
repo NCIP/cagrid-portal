@@ -5,17 +5,27 @@ import gov.nih.nci.cagrid.cqlresultset.CQLQueryResultsType;
 
 /** 
  *  CQLQueryProcessor
- *  Interface for a service-side implementation of CQL
+ *  Abstract class the service providers must extend to process 
+ *  CQL Queries to a caGrid data service 
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
- * @created Mar 31, 2006 
+ * @created Apr 25, 2006 
  * @version $Id$ 
  */
-public interface CQLQueryProcessor {
-	
-	public void init(String initString) throws InitializationException;
-	
+public abstract class CQLQueryProcessor {
+	private String initString;
 
-	public CQLQueryResultsType processQuery(CQLQueryType query) throws Exception;
+	public CQLQueryProcessor(String initString) throws InitializationException {
+		this.initString = initString;
+	}
+	
+	
+	protected String getInitString() {
+		return this.initString;
+	}
+	
+	
+	public abstract CQLQueryResultsType processQuery(CQLQueryType cqlQuery) 
+		throws MalformedQueryException, Exception;
 }
