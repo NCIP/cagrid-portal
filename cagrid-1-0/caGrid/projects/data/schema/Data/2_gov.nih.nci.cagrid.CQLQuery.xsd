@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2005 rel. 3 U (http://www.altova.com) by David W. Ervin (The Ohio State University / Department of Biomedical Informatics) -->
+<xsd:schema xmlns:cql="http://CQL.caBIG/2/gov.nih.nci.cagrid.CQLQuery" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://CQL.caBIG/2/gov.nih.nci.cagrid.CQLQuery" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xsd:element name="CQLQuery">
+		<xsd:annotation>
+			<xsd:documentation>caBIG XML Query</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="Object">
+					<xsd:complexType>
+						<xsd:complexContent>
+							<xsd:extension base="cql:NestedObject"/>
+						</xsd:complexContent>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:complexType name="NestedObject">
+		<xsd:annotation>
+			<xsd:documentation>Search criteria objects</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="Property" type="cql:ObjectProperty" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="Group" type="cql:ObjectGroup" minOccurs="0"/>
+			<xsd:element name="Object" type="cql:NestedObject" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="xsd:string" use="required"/>
+		<xsd:attribute name="roleName" type="xsd:string" use="optional"/>
+	</xsd:complexType>
+	<xsd:simpleType name="Predicate">
+		<xsd:annotation>
+			<xsd:documentation>Property predicate.  This is extensible</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="EQUAL_TO" id="equal_to"/>
+			<xsd:enumeration value="LIKE" id="like"/>
+			<xsd:enumeration value="LESS_THAN" id="less_than"/>
+			<xsd:enumeration value="GREATER_THAN" id="greater_than"/>
+			<xsd:enumeration value="NOT_EQUAL_TO" id="not_equal_to"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="ObjectProperty">
+		<xsd:annotation>
+			<xsd:documentation>Object property / attribute used as search criteria</xsd:documentation>
+		</xsd:annotation>
+		<xsd:attribute name="name" type="xsd:string" use="required"/>
+		<xsd:attribute name="value" type="xsd:string" default="EQUAL_TO"/>
+		<xsd:attribute name="predicate" type="cql:Predicate" use="required"/>
+	</xsd:complexType>
+	<xsd:simpleType name="LogicalOperator">
+		<xsd:annotation>
+			<xsd:documentation>Logical operators</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="OR"/>
+			<xsd:enumeration value="AND"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="ObjectGroup">
+		<xsd:annotation>
+			<xsd:documentation>Group of objects joined by some logical operator</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="Object" type="cql:NestedObject" minOccurs="2" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="relation" type="cql:LogicalOperator" use="required"/>
+	</xsd:complexType>
+</xsd:schema>
