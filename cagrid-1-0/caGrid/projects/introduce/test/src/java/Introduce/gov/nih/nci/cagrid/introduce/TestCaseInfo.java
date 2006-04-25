@@ -5,7 +5,7 @@ import java.io.File;
 public class TestCaseInfo {
 	public static final String GOLD_SCHEMA_DIR= "test" + File.separator + "resources" + File.separator + "schema";
 
-	public String name = "IntroduceTest";
+	public String name = "IntroduceTestService";
 
 	public String dir = "IntroduceTest";
 

@@ -1,13 +1,18 @@
 package gov.nih.nci.cagrid.introduce;
 
 import gov.nih.nci.cagrid.introduce.steps.AddComplexMethodWithFaultStep;
+import gov.nih.nci.cagrid.introduce.steps.AddComplexMethodWithFaulsAndArraysStep;
 import gov.nih.nci.cagrid.introduce.steps.AddMetadataStep;
 import gov.nih.nci.cagrid.introduce.steps.AddMetadatatWithLoadFromFileStep;
 import gov.nih.nci.cagrid.introduce.steps.AddSimpleMethodStep;
+import gov.nih.nci.cagrid.introduce.steps.AddSimpleMethodWithArraysStep;
+import gov.nih.nci.cagrid.introduce.steps.AddSimpleMethodWithReturnStep;
 import gov.nih.nci.cagrid.introduce.steps.AddSimpleMethodWithFaultStep;
+import gov.nih.nci.cagrid.introduce.steps.AddSServicePropertiesStep;
 import gov.nih.nci.cagrid.introduce.steps.CreateSkeletonStep;
 import gov.nih.nci.cagrid.introduce.steps.ModifySimpleMethodStep;
 import gov.nih.nci.cagrid.introduce.steps.RemoveAllMetadataStep;
+import gov.nih.nci.cagrid.introduce.steps.RemoveAllServicePropertiesStep;
 import gov.nih.nci.cagrid.introduce.steps.RemoveMethodStep;
 import gov.nih.nci.cagrid.introduce.steps.RemoveSkeletonStep;
 import gov.nih.nci.cagrid.introduce.steps.RollBackStep;
@@ -34,11 +39,16 @@ public class SyncToolsTest extends Story {
 		steps.add(new ModifySimpleMethodStep(tci, "newMethod"));
 		steps.add(new RemoveMethodStep(tci, "newMethod"));
 		steps.add(new AddSimpleMethodWithFaultStep(tci, "newMethodWithFault"));
+		steps.add(new AddSimpleMethodWithReturnStep(tci, "newMethodWithReturn"));
+		steps.add(new AddSimpleMethodWithArraysStep(tci, "newMethodWithArrays"));
 		steps.add(new RollBackStep(tci));
 		steps.add(new AddComplexMethodWithFaultStep(tci, "newComplexMethodWithFault"));
+		steps.add(new AddComplexMethodWithFaulsAndArraysStep(tci, "newComplexMethodWithFaultStepsAndArrays"));
 		steps.add(new AddMetadataStep(tci));
 		steps.add(new AddMetadatatWithLoadFromFileStep(tci));
 		steps.add(new RemoveAllMetadataStep(tci));
+		steps.add(new AddSServicePropertiesStep(tci));
+		steps.add(new RemoveAllServicePropertiesStep(tci));
 		
 		return steps;
 	}

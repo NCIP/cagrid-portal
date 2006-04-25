@@ -1,24 +1,20 @@
 To Do:
 
 add tests to system tests for (coverage report shows no coverage):
--SystemProperties
+- (DONE) SystemProperties
 -CustomBeans and Serialization
 -Security
--simple types (boolean, string, etc) as input and output
+- (DONE) simple types (boolean, string, etc) as input and output
 -extensions
 -deployment
--multiple faults on a method
--methods returning arrays
--servicename ending in Service
-
-make sure that every panel that uses a namespaces jtree has a on focus to restore from the model
+- (DONE) multiple faults on a method
+- (DONE) methods returning arrays
+- (DONE) servicename ending in Service
 
 portal lets you add the same method name several times
 
 introduce created clients should not call getPortType() for each method invocation (its very inefficient), getPortType should be called once in the contructor, and each method should just use it
   - this has security ramifciations as currently security is configured assuming a fresh port type... it needs to set all the options appropriately for each method call
-
-metadata type panel isnt updating when you add new schemas from the types tab
 
 Need to make Configuration Menu work... should be able to set appropriate services URLs, etc
 
@@ -55,6 +51,7 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+(DONE) make sure that every panel that uses a namespaces jtree has a on focus to restore from the model
 (DONE) Type browser tools are all messed up... filesystem is showing GME stuff
 (DONE) introduce created an invalid client when you make a method that returns a boolean.
 (DONE) introduce created an invalid impl when you make a method that takes in a boolean.
