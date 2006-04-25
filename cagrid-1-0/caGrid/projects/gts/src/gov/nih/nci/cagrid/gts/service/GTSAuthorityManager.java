@@ -106,7 +106,7 @@ public class GTSAuthorityManager {
 			StringBuffer error = new StringBuffer();
 			error
 				.append("Cannot update the authority priorities, an incomplete authority list was provided.\n The provided list was missing the following authorities:\n");
-			Iterator itr = map.values().iterator();
+			Iterator itr = map.keySet().iterator();
 			while (itr.hasNext()) {
 				error.append((String) itr.next() + "\n");
 			}

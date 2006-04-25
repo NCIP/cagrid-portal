@@ -141,6 +141,82 @@ public class TestGTSAuthorityManager extends TestCase {
 	}
 
 
+	public void testUpdateInvalidAuthority() {
+		GTSAuthorityManager am = new GTSAuthorityManager(db);
+		try {
+			TrustedAuthorityTimeToLive ttl = new TrustedAuthorityTimeToLive();
+			ttl.setHours(10);
+			ttl.setMinutes(10);
+			ttl.setSeconds(10);
+
+			AuthorityGTS a = getAuthority("GTS", 1);
+			am.addAuthority(a);
+			assertTrue(am.doesAuthorityExist(a.getServiceURI()));
+			assertEquals(1, am.getAuthorityCount());
+			assertEquals(a, am.getAuthority(a.getServiceURI()));
+
+			// First make sure update works
+
+			a.setTrustedAuthorityTimeToLive(ttl);
+			am.updateAuthority(a);
+
+			assertTrue(am.doesAuthorityExist(a.getServiceURI()));
+			assertEquals(1, am.getAuthorityCount());
+			assertEquals(a, am.getAuthority(a.getServiceURI()));
+
+			// Add Authority no serviceURI
+			AuthorityGTS a1 = getAuthority("GTS", 1);
+			a1.setServiceURI(null);
+			try {
+				am.updateAuthority(a1);
+				fail("Should not be able to update authority!!!");
+			} catch (IllegalAuthorityFault f) {
+
+			}
+
+			// Add Authority no ttl
+			AuthorityGTS a2 = getAuthority("GTS", 1);
+			a2.setTrustedAuthorityTimeToLive(null);
+			try {
+				am.addAuthority(a2);
+				fail("Should not be able to update authority!!!");
+			} catch (IllegalAuthorityFault f) {
+
+			}
+
+			// Add Authority no service identity
+			AuthorityGTS a3 = getAuthority("GTS", 1);
+			a3.setServiceIdentity(null);
+			try {
+				am.addAuthority(a3);
+				fail("Should not be able to update authority!!!");
+			} catch (IllegalAuthorityFault f) {
+
+			}
+
+			// Invalid Priority
+			AuthorityGTS a4 = getAuthority("GTS", 1);
+			a4.setPriority(2);
+			try {
+				am.addAuthority(a4);
+				fail("Should not be able to update authority!!!");
+			} catch (IllegalAuthorityFault f) {
+
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			try {
+				am.destroy();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
 	public void testAddAuthority() {
 		GTSAuthorityManager am = new GTSAuthorityManager(db);
 		try {
@@ -223,6 +299,94 @@ public class TestGTSAuthorityManager extends TestCase {
 					a[j].setPriority(a[j].getPriority() - 1);
 					assertEquals(a[j], am.getAuthority(a[j].getServiceURI()));
 				}
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			try {
+				am.destroy();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
+	public void testInvalidUpdatePrioritiesAuthorities() {
+		GTSAuthorityManager am = new GTSAuthorityManager(db);
+		int count = 5;
+		AuthorityGTS[] a = new AuthorityGTS[count];
+
+		try {
+			for (int i = 0; i < count; i++) {
+				a[i] = getAuthority("GTS " + i, 1);
+				assertFalse(am.doesAuthorityExist(a[i].getServiceURI()));
+				assertEquals(i, am.getAuthorityCount());
+				am.addAuthority(a[i]);
+				assertTrue(am.doesAuthorityExist(a[i].getServiceURI()));
+				assertEquals((i + 1), am.getAuthorityCount());
+				assertEquals(a[i], am.getAuthority(a[i].getServiceURI()));
+				for (int j = 0; j < i; j++) {
+					a[j].setPriority(a[j].getPriority() + 1);
+					assertEquals(a[j], am.getAuthority(a[j].getServiceURI()));
+				}
+			}
+
+			// First insert invalid amount
+			int priority = 1;
+			AuthorityPrioritySpecification[] specs = new AuthorityPrioritySpecification[(count - 1)];
+			for (int i = 0; i < (count - 1); i++) {
+				a[i].setPriority(priority);
+				specs[i] = new AuthorityPrioritySpecification();
+				specs[i].setServiceURI(a[i].getServiceURI());
+				specs[i].setPriority(a[i].getPriority());
+				priority = priority + 1;
+			}
+			AuthorityPriorityUpdate update = new AuthorityPriorityUpdate();
+			update.setAuthorityPrioritySpecification(specs);
+			try {
+				am.updateAuthorityPriorities(update);
+				fail("Should not be able to update priorities");
+			} catch (IllegalAuthorityFault g) {
+
+			}
+
+			// Invalid priority
+			int priority2 = 2;
+			AuthorityPrioritySpecification[] specs2 = new AuthorityPrioritySpecification[count];
+			for (int i = 0; i < count; i++) {
+				a[i].setPriority(priority2);
+				specs2[i] = new AuthorityPrioritySpecification();
+				specs2[i].setServiceURI(a[i].getServiceURI());
+				specs2[i].setPriority(a[i].getPriority());
+				priority2 = priority2 + 1;
+			}
+			AuthorityPriorityUpdate update2 = new AuthorityPriorityUpdate();
+			update2.setAuthorityPrioritySpecification(specs2);
+			try {
+				am.updateAuthorityPriorities(update2);
+				fail("Should not be able to update priorities");
+			} catch (IllegalAuthorityFault g) {
+
+			}
+
+			// Invalid priority
+			AuthorityPrioritySpecification[] specs3 = new AuthorityPrioritySpecification[count];
+			for (int i = 0; i < count; i++) {
+				a[i].setPriority(1);
+				specs3[i] = new AuthorityPrioritySpecification();
+				specs3[i].setServiceURI(a[i].getServiceURI());
+				specs3[i].setPriority(a[i].getPriority());
+			}
+			AuthorityPriorityUpdate update3 = new AuthorityPriorityUpdate();
+			update3.setAuthorityPrioritySpecification(specs3);
+			try {
+				am.updateAuthorityPriorities(update3);
+				fail("Should not be able to update priorities");
+			} catch (IllegalAuthorityFault g) {
+
 			}
 
 		} catch (Exception e) {
