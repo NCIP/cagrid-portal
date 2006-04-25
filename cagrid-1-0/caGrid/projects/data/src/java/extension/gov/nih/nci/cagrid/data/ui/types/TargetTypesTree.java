@@ -29,7 +29,6 @@ import javax.swing.tree.TreeSelectionModel;
  */
 public class TargetTypesTree extends JTree {
 	private NamespaceType namespaceType;
-	private DefaultTreeModel model;
 	private List typeSelectionListeners;
 	
 	public TargetTypesTree() {
@@ -38,9 +37,8 @@ public class TargetTypesTree extends JTree {
 		setEditable(true);
 		setCellRenderer(new CellRenderer());
 		setCellEditor(new CellEditor());
-		model = new DefaultTreeModel(new DefaultMutableTreeNode());
+		setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
 		setRootVisible(false); // until namespaces are added
-		setModel(model);
 		getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 	}
 	
@@ -60,7 +58,7 @@ public class TargetTypesTree extends JTree {
 	
 	public SchemaElementType[] getCheckedTypes() {
 		List selected = new ArrayList();
-		DomainTreeNode domainNode = (DomainTreeNode) model.getRoot();
+		DomainTreeNode domainNode = (DomainTreeNode) ((DefaultTreeModel) getModel()).getRoot();
 		int childCount = domainNode.getChildCount();
 		for (int i = 0; i < childCount; i++) {
 			TypeTreeNode typeNode = (TypeTreeNode) domainNode.getChildAt(i);

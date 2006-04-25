@@ -100,11 +100,13 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			typesTree.addTypeSelectionListener(new TypeSelectionListener() {
 				public void typeSelectionAdded(TypeSelectionEvent e) {
 					getTypesTable().addType(getTypesTree().getOriginalNamespace(), e.getSchemaElementType());
+					addTreeNamespaceToServiceDescription();
 				}
 				
 				
 				public void typeSelectionRemoved(TypeSelectionEvent e) {
 					getTypesTable().removeSchemaElementType(e.getSchemaElementType());
+					addTreeNamespaceToServiceDescription();
 				}
 			});
 		}
@@ -245,22 +247,35 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					UMLPackageMetadata pack = getDomainBrowserPanel().getSelectedPackage();
 					if (pack != null) {
-						NamespaceType nsType = createNamespaceType(pack);
+						System.out.println("Package selected");
+						NamespaceType nsType = createNamespaceFromUmlPackage(pack);
+						getTypesTree().setNamespace(nsType);
+						addTreeNamespaceToServiceDescription();
+						/*
 						NamespaceType oldNsType = getTypesTree().getOriginalNamespace();
 						getTypesTree().setNamespace(nsType);
 						// add the namespace model to the service information
+						System.out.println("Looking for namespace in service description to replace");
 						NamespaceType[] serviceNsTypes = getServiceInfo().getServiceDescriptor().getNamespaces().getNamespace();
 						if (serviceNsTypes != null && serviceNsTypes.length != 0) {
+							System.out.println("The service contains " + serviceNsTypes.length + " namespaces");
 							for (int i = 0; i < serviceNsTypes.length; i++) {
 								if (serviceNsTypes[i] == oldNsType) {
+									System.out.println("Namespace Found, replacing with new");
 									serviceNsTypes[i] = nsType;
 									break;
 								}
 							}
+							System.out.println("Never found the old namespace, adding to the end of the namespace array");
+							NamespaceType[] moreNamespaces = new NamespaceType[serviceNsTypes.length + 1];
+							System.arraycopy(serviceNsTypes, 0, moreNamespaces, 0, serviceNsTypes.length);
+							moreNamespaces[moreNamespaces.length - 1] = nsType;
 						} else {
+							System.out.println("No nameaspces in service description, creating a new array");
 							serviceNsTypes = new NamespaceType[] {nsType};
 						}
 						getServiceInfo().getServiceDescriptor().getNamespaces().setNamespace(serviceNsTypes);
+						*/
 					}
 				}
 			});
@@ -269,13 +284,13 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	}
 	
 	
-	private NamespaceType createNamespaceType(UMLPackageMetadata pack) {
+	private NamespaceType createNamespaceFromUmlPackage(UMLPackageMetadata pack) {
 		String namespaceString = null;
 		Project proj = getDomainBrowserPanel().getSelectedProject();
 		if (proj != null) {
 			// TODO: need to get Context
 			String version = proj.getVersion();
-			if (version.indexOf(".") < 0) {
+			if (version.indexOf(".") == -1) {
 				version += ".0";
 			}
 			namespaceString = "gme://" + proj.getShortName() + ".caBIG/" + version + "/" + pack.getName();
@@ -322,7 +337,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 				String packageName = CommonTools.getPackageName(namespace);
 				nsType.setPackageName(packageName);
 				
-				nsType.setNamespace(namespaceString);
+				nsType.setNamespace(namespace.getRaw());
 				ImportInfo ii = new ImportInfo(namespace);
 				nsType.setLocation("./" + ii.getFileName());
 				
@@ -337,6 +352,29 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			}
 		}
 		return null;
+	}
+	
+	
+	private void addTreeNamespaceToServiceDescription() {
+		NamespaceType userNamespace = getTypesTree().getUserDefinedNamespace();
+		NamespaceType[] serviceNamespaces = getServiceInfo().getServiceDescriptor().getNamespaces().getNamespace();
+		boolean namespaceFound = false;
+		for (int i = 0; i < serviceNamespaces.length && !namespaceFound; i++) {
+			NamespaceType ns = serviceNamespaces[i];
+			if (ns.getNamespace().equals(userNamespace.getNamespace())) {
+				System.out.println("Found namespace " + ns.getNamespace() + " and replacing with user's namespace");
+				serviceNamespaces[i] = userNamespace;
+				namespaceFound = true;
+			}
+		}
+		if (!namespaceFound) {
+			System.out.println("Never found namespace (new namespace).  Adding tree's namespace");
+			NamespaceType[] moreNamespaces = new NamespaceType[serviceNamespaces.length + 1];
+			System.arraycopy(serviceNamespaces, 0, moreNamespaces, 0, serviceNamespaces.length);
+			moreNamespaces[moreNamespaces.length - 1] = userNamespace;
+			serviceNamespaces = moreNamespaces;
+		}
+		getServiceInfo().getServiceDescriptor().getNamespaces().setNamespace(serviceNamespaces);
 	}
 	
 	
