@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.gts.service;
 
+import gov.nih.nci.cagrid.gts.bean.AuthorityGTS;
+import gov.nih.nci.cagrid.gts.bean.AuthorityPriorityUpdate;
 import gov.nih.nci.cagrid.gts.bean.Permission;
 import gov.nih.nci.cagrid.gts.bean.PermissionFilter;
 import gov.nih.nci.cagrid.gts.bean.TrustLevel;
@@ -7,9 +9,11 @@ import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
 import gov.nih.nci.cagrid.gts.common.Database;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
+import gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault;
+import gov.nih.nci.cagrid.gts.stubs.InvalidAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidTrustLevelFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault;
@@ -30,6 +34,7 @@ public class GTS implements TrustLevelStatus, TrustLevelLookup {
 	private TrustedAuthorityManager trust;
 	private PermissionManager permissions;
 	private TrustLevelManager levels;
+	private GTSAuthorityManager authority;
 
 
 	public GTS(GTSConfiguration conf, String gtsURI) {
@@ -39,6 +44,7 @@ public class GTS implements TrustLevelStatus, TrustLevelLookup {
 		trust = new TrustedAuthorityManager(this.gtsURI, this, db);
 		levels = new TrustLevelManager(this, db);
 		permissions = new PermissionManager(db);
+		authority = new GTSAuthorityManager(db);
 	}
 
 
@@ -124,6 +130,39 @@ public class GTS implements TrustLevelStatus, TrustLevelLookup {
 	}
 
 
+	public void addAuthority(AuthorityGTS gts, String callerGridIdentity) throws GTSInternalFault,
+		IllegalAuthorityFault, PermissionDeniedFault {
+		checkServiceAdministrator(callerGridIdentity);
+		authority.addAuthority(gts);
+	}
+
+
+	public void updateAuthorityPriorities(AuthorityPriorityUpdate update, String callerGridIdentity)
+		throws GTSInternalFault, IllegalAuthorityFault, PermissionDeniedFault {
+		checkServiceAdministrator(callerGridIdentity);
+		authority.updateAuthorityPriorities(update);
+	}
+
+
+	public void updateAuthority(AuthorityGTS gts, String callerGridIdentity) throws GTSInternalFault,
+		IllegalAuthorityFault, InvalidAuthorityFault, PermissionDeniedFault {
+		checkServiceAdministrator(callerGridIdentity);
+		authority.updateAuthority(gts);
+	}
+
+
+	public AuthorityGTS[] getAuthorities() throws GTSInternalFault {
+		return authority.getAuthorities();
+	}
+
+
+	public void removeAuthority(String serviceURI, String callerGridIdentity) throws GTSInternalFault,
+		InvalidAuthorityFault, PermissionDeniedFault {
+		checkServiceAdministrator(callerGridIdentity);
+		authority.removeAuthority(serviceURI);
+	}
+
+
 	private void checkServiceAdministrator(String gridIdentity) throws GTSInternalFault, PermissionDeniedFault {
 		if (!permissions.isUserTrustServiceAdmin(gridIdentity)) {
 			PermissionDeniedFault fault = new PermissionDeniedFault();
@@ -137,6 +176,7 @@ public class GTS implements TrustLevelStatus, TrustLevelLookup {
 		trust.destroy();
 		permissions.destroy();
 		levels.destroy();
+		authority.destroy();
 	}
 
 

@@ -3,6 +3,9 @@ package gov.nih.nci.cagrid.gts.service;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.gridca.common.CRLEntry;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
+import gov.nih.nci.cagrid.gts.bean.AuthorityGTS;
+import gov.nih.nci.cagrid.gts.bean.AuthorityPrioritySpecification;
+import gov.nih.nci.cagrid.gts.bean.AuthorityPriorityUpdate;
 import gov.nih.nci.cagrid.gts.bean.Permission;
 import gov.nih.nci.cagrid.gts.bean.PermissionFilter;
 import gov.nih.nci.cagrid.gts.bean.Role;
@@ -10,6 +13,7 @@ import gov.nih.nci.cagrid.gts.bean.Status;
 import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
+import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityTimeToLive;
 import gov.nih.nci.cagrid.gts.bean.X509CRL;
 import gov.nih.nci.cagrid.gts.bean.X509Certificate;
 import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
@@ -51,6 +55,80 @@ public class TestGTS extends TestCase {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
+	}
+
+
+	public void testAddUpdateRemoveAuthorities() {
+		GTS gts = null;
+		try {
+			GTSConfiguration conf = Utils.getGTSConfiguration();
+			gts = new GTS(conf, "localhost");
+			// Make sure we start fresh
+			gts.destroy();
+
+			try {
+				gts.findPermissions(new PermissionFilter(), ADMIN_USER);
+				fail("Should not be able to fine permissions, no admin permission are configured.");
+			} catch (PermissionDeniedFault f) {
+
+			}
+
+			PermissionBootstapper pb = new PermissionBootstapper(conf);
+			pb.addAdminUser(ADMIN_USER);
+			assertEquals(1, gts.findPermissions(new PermissionFilter(), ADMIN_USER).length);
+			int count = 5;
+			AuthorityGTS[] a = new AuthorityGTS[count];
+
+			for (int i = 0; i < count; i++) {
+				a[i] = getAuthority("GTS " + i, 1);
+				gts.addAuthority(a[i], ADMIN_USER);
+				assertEquals((i + 1), gts.getAuthorities().length);
+				for (int j = 0; j < i; j++) {
+					a[j].setPriority(a[j].getPriority() + 1);
+				}
+			}
+
+			for (int i = 0; i < count; i++) {
+				updateAuthority(a[i]);
+				gts.updateAuthority(a[i], ADMIN_USER);
+				assertEquals(count, gts.getAuthorities().length);
+			}
+			int priority = 1;
+			AuthorityPrioritySpecification[] specs = new AuthorityPrioritySpecification[count];
+			for (int i = 0; i < count; i++) {
+				a[i].setPriority(priority);
+				specs[i] = new AuthorityPrioritySpecification();
+				specs[i].setServiceURI(a[i].getServiceURI());
+				specs[i].setPriority(a[i].getPriority());
+				priority = priority + 1;
+			}
+			AuthorityPriorityUpdate update = new AuthorityPriorityUpdate();
+			update.setAuthorityPrioritySpecification(specs);
+			gts.updateAuthorityPriorities(update, ADMIN_USER);
+			assertEquals(count, gts.getAuthorities().length);
+
+			AuthorityGTS[] auths = gts.getAuthorities();
+			for (int i = 0; i < count; i++) {
+				assertEquals(a[i], auths[i]);
+			}
+			int num = count;
+			for (int i = 0; i < count; i++) {
+				gts.removeAuthority(a[i].getServiceURI(), ADMIN_USER);
+				num = num - 1;
+				assertEquals(num, gts.getAuthorities().length);
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			try {
+				gts.destroy();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 	}
 
 
@@ -433,7 +511,7 @@ public class TestGTS extends TestCase {
 			} catch (IllegalTrustLevelFault f) {
 
 			}
-			gts.removeTrustedAuthority(ta.getTrustedAuthorityName(),ADMIN_USER);
+			gts.removeTrustedAuthority(ta.getTrustedAuthorityName(), ADMIN_USER);
 			gts.removeTrustLevel(l1.getName(), ADMIN_USER);
 
 		} catch (Exception e) {
@@ -790,6 +868,34 @@ public class TestGTS extends TestCase {
 		pf.setRole(p.getRole());
 		pf.setTrustedAuthorityName(p.getTrustedAuthorityName());
 		return pf;
+	}
+
+
+	private AuthorityGTS getAuthority(String uri, int priority) {
+		TrustedAuthorityTimeToLive ttl = new TrustedAuthorityTimeToLive();
+		ttl.setHours(1);
+		ttl.setMinutes(1);
+		ttl.setSeconds(1);
+		AuthorityGTS a1 = new AuthorityGTS();
+		a1.setServiceURI(uri);
+		a1.setPriority(1);
+		a1.setPerformAuthorization(true);
+		a1.setServiceIdentity(uri);
+		a1.setSyncTrustLevels(true);
+		a1.setTrustedAuthorityTimeToLive(ttl);
+		return a1;
+	}
+
+
+	private void updateAuthority(AuthorityGTS gts) {
+		TrustedAuthorityTimeToLive ttl = new TrustedAuthorityTimeToLive();
+		ttl.setHours(10);
+		ttl.setMinutes(10);
+		ttl.setSeconds(10);
+		gts.setPerformAuthorization(false);
+		gts.setServiceIdentity(null);
+		gts.setSyncTrustLevels(false);
+		gts.setTrustedAuthorityTimeToLive(ttl);
 	}
 
 }
