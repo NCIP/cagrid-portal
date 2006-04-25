@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.creator;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.templates.docs.api.DoxyfileTemplate;
 import gov.nih.nci.cagrid.introduce.templates.etc.RegistationTemplate;
 
 import java.io.File;
@@ -28,12 +29,12 @@ public class SkeletonDocsCreator {
 		File apiDir = new File(docsDir.getAbsolutePath() + File.separator + "api");
 		apiDir.mkdir();
 
-		RegistationTemplate registrationT = new RegistationTemplate();
-		String registrationS = registrationT.generate(info);
-		File registrationF = new File(apiDir.getAbsolutePath() + File.separator + "Doxyfile");
-		FileWriter registrationFW = new FileWriter(registrationF);
-		registrationFW.write(registrationS);
-		registrationFW.close();
+		DoxyfileTemplate doxyfileT = new DoxyfileTemplate();
+		String doxyfileS = doxyfileT.generate(info);
+		File doxyfileF = new File(apiDir.getAbsolutePath() + File.separator + "Doxyfile");
+		FileWriter doxyfileFW = new FileWriter(doxyfileF);
+		doxyfileFW.write(doxyfileS);
+		doxyfileFW.close();
 	}
 
 }
