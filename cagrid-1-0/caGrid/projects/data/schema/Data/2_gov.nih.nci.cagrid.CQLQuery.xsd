@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2005 rel. 3 U (http://www.altova.com) by David W. Ervin (The Ohio State University / Department of Biomedical Informatics) -->
 <xsd:schema xmlns:cql="http://CQL.caBIG/2/gov.nih.nci.cagrid.CQLQuery" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://CQL.caBIG/2/gov.nih.nci.cagrid.CQLQuery" elementFormDefault="qualified" attributeFormDefault="unqualified">
-	<xsd:element name="CQLQuery">
+	<xsd:element name="CQLQuery" type="cql:NestedObject">
 		<xsd:annotation>
-			<xsd:documentation>caBIG XML Query</xsd:documentation>
+			<xsd:documentation>caBIG XML Query root element</xsd:documentation>
 		</xsd:annotation>
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="Object">
-					<xsd:complexType>
-						<xsd:complexContent>
-							<xsd:extension base="cql:NestedObject"/>
-						</xsd:complexContent>
-					</xsd:complexType>
-				</xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
 	</xsd:element>
+	<xsd:complexType name="CQLQueryType">
+		<xsd:annotation>
+			<xsd:documentation>CQL Query type</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element ref="cql:CQLQuery"/>
+		</xsd:sequence>
+	</xsd:complexType>
 	<xsd:complexType name="NestedObject">
 		<xsd:annotation>
 			<xsd:documentation>Search criteria objects</xsd:documentation>
