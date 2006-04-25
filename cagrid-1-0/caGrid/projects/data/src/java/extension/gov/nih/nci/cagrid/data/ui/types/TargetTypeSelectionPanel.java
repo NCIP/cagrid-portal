@@ -251,31 +251,6 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 						NamespaceType nsType = createNamespaceFromUmlPackage(pack);
 						getTypesTree().setNamespace(nsType);
 						addTreeNamespaceToServiceDescription();
-						/*
-						NamespaceType oldNsType = getTypesTree().getOriginalNamespace();
-						getTypesTree().setNamespace(nsType);
-						// add the namespace model to the service information
-						System.out.println("Looking for namespace in service description to replace");
-						NamespaceType[] serviceNsTypes = getServiceInfo().getServiceDescriptor().getNamespaces().getNamespace();
-						if (serviceNsTypes != null && serviceNsTypes.length != 0) {
-							System.out.println("The service contains " + serviceNsTypes.length + " namespaces");
-							for (int i = 0; i < serviceNsTypes.length; i++) {
-								if (serviceNsTypes[i] == oldNsType) {
-									System.out.println("Namespace Found, replacing with new");
-									serviceNsTypes[i] = nsType;
-									break;
-								}
-							}
-							System.out.println("Never found the old namespace, adding to the end of the namespace array");
-							NamespaceType[] moreNamespaces = new NamespaceType[serviceNsTypes.length + 1];
-							System.arraycopy(serviceNsTypes, 0, moreNamespaces, 0, serviceNsTypes.length);
-							moreNamespaces[moreNamespaces.length - 1] = nsType;
-						} else {
-							System.out.println("No nameaspces in service description, creating a new array");
-							serviceNsTypes = new NamespaceType[] {nsType};
-						}
-						getServiceInfo().getServiceDescriptor().getNamespaces().setNamespace(serviceNsTypes);
-						*/
 					}
 				}
 			});
