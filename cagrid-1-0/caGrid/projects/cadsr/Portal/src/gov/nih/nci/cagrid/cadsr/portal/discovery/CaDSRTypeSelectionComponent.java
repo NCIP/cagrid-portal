@@ -146,7 +146,7 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 			String packageName = CommonTools.getPackageName(namespace);
 			input.setPackageName(packageName);
 
-			input.setNamespace(ns);
+			input.setNamespace(namespace.getRaw());
 			ImportInfo ii = new ImportInfo(namespace);
 			input.setLocation("./" + ii.getFileName());
 
