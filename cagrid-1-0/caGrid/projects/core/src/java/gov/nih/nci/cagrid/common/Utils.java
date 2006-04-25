@@ -81,18 +81,12 @@ public class Utils {
 	public static Object deserializeDocument(String fileName, Class objectType) throws Exception {
 		InputStream inputStream = null;
 
-		try {
-			inputStream = new FileInputStream(fileName);
-			org.w3c.dom.Document doc = XMLUtils.newDocument(inputStream);
+		inputStream = new FileInputStream(fileName);
+		org.w3c.dom.Document doc = XMLUtils.newDocument(inputStream);
+		Object obj = ObjectDeserializer.toObject(doc.getDocumentElement(), objectType);
+		inputStream.close();
+		return obj;
 
-			return ObjectDeserializer.toObject(doc.getDocumentElement(), objectType);
-		} finally {
-			if (inputStream != null) {
-
-				inputStream.close();
-
-			}
-		}
 	}
 
 
@@ -150,17 +144,9 @@ public class Utils {
 
 	public static void serializeDocument(String fileName, Object object, QName qname) throws Exception {
 		FileWriter fw = null;
-
-		try {
-			fw = new FileWriter(fileName);
-			ObjectSerializer.serialize(fw, object, qname);
-		} finally {
-			if (fw != null) {
-
-				fw.close();
-
-			}
-		}
+		fw = new FileWriter(fileName);
+		ObjectSerializer.serialize(fw, object, qname);
+		fw.close();
 
 	}
 
