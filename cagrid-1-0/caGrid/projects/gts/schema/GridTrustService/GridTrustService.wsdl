@@ -287,6 +287,15 @@
 					<complexType>
 						<sequence>
           		  
+                  					
+							<element name="authorityGTS">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:AuthorityGTS" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+                  				 	
 	      				</sequence>
 	      			</complexType>
 	      		</element>
@@ -302,11 +311,79 @@
 					<complexType>
 						<sequence>
           		  
+                  					
+							<element name="authorityGTS">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:AuthorityGTS" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+                  				 	
 	      				</sequence>
 	      			</complexType>
 	      		</element>
   		       
 				<element name="updateAuthorityResponse">
+					<complexType>
+						<sequence>
+          		  
+						</sequence>
+					</complexType>
+				</element>
+				<element name="updateAuthorityPriorities">
+					<complexType>
+						<sequence>
+          		  
+                  					
+							<element name="authorityPriorityUpdate">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:AuthorityPriorityUpdate" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+                  				 	
+	      				</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="updateAuthorityPrioritiesResponse">
+					<complexType>
+						<sequence>
+          		  
+						</sequence>
+					</complexType>
+				</element>
+				<element name="getAuthorities">
+					<complexType>
+						<sequence>
+          		  
+	      				</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="getAuthoritiesResponse">
+					<complexType>
+						<sequence>
+          		  
+										<element ref="ns0:AuthorityGTS" minOccurs="1" maxOccurs="unbounded" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
+				<element name="removeAuthority">
+					<complexType>
+						<sequence>
+          		  
+                  					
+							<element name="serviceURI" type="xs:string" minOccurs="1" maxOccurs="1" />
+                  				 	
+	      				</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="removeAuthorityResponse">
 					<complexType>
 						<sequence>
           		  
@@ -494,6 +571,27 @@
 	<message name="updateAuthorityOutputMessage">
 		<part name="parameters" element="tns:updateAuthorityResponse"/>
 	</message>
+	<message name="updateAuthorityPrioritiesInputMessage">
+		<part name="parameters" element="tns:updateAuthorityPriorities"/>
+	</message>
+	
+	<message name="updateAuthorityPrioritiesOutputMessage">
+		<part name="parameters" element="tns:updateAuthorityPrioritiesResponse"/>
+	</message>
+	<message name="getAuthoritiesInputMessage">
+		<part name="parameters" element="tns:getAuthorities"/>
+	</message>
+	
+	<message name="getAuthoritiesOutputMessage">
+		<part name="parameters" element="tns:getAuthoritiesResponse"/>
+	</message>
+	<message name="removeAuthorityInputMessage">
+		<part name="parameters" element="tns:removeAuthority"/>
+	</message>
+	
+	<message name="removeAuthorityOutputMessage">
+		<part name="parameters" element="tns:removeAuthorityResponse"/>
+	</message>
 	<message name="GTSInternalFaultFaultMessage">
 		<part name="fault" element="tns:GTSInternalFault"/>
 	</message>
@@ -639,13 +737,49 @@
 		<operation name="addAuthority">
             <input message="tns:addAuthorityInputMessage"/>
             <output message="tns:addAuthorityOutputMessage"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
        		 <fault name="IllegalAuthorityFault" message="tns:IllegalAuthorityFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
        				
         </operation>
 		<operation name="updateAuthority">
             <input message="tns:updateAuthorityInputMessage"/>
             <output message="tns:updateAuthorityOutputMessage"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+       		 <fault name="IllegalAuthorityFault" message="tns:IllegalAuthorityFaultFaultMessage"/>
+       				
        		 <fault name="InvalidAuthorityFault" message="tns:InvalidAuthorityFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="updateAuthorityPriorities">
+            <input message="tns:updateAuthorityPrioritiesInputMessage"/>
+            <output message="tns:updateAuthorityPrioritiesOutputMessage"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+       		 <fault name="IllegalAuthorityFault" message="tns:IllegalAuthorityFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="getAuthorities">
+            <input message="tns:getAuthoritiesInputMessage"/>
+            <output message="tns:getAuthoritiesOutputMessage"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="removeAuthority">
+            <input message="tns:removeAuthorityInputMessage"/>
+            <output message="tns:removeAuthorityOutputMessage"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+       		 <fault name="InvalidAuthorityFault" message="tns:InvalidAuthorityFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
        				
         </operation>
         <operation name="GetResourceProperty">

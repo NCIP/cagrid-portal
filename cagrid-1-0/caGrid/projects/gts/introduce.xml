@@ -159,36 +159,87 @@
    </ns3:Exceptions>
   </ns3:Method>
   <ns3:Method name="addAuthority" xsi:type="ns3:MethodType">
-   <ns3:Inputs/>
+   <ns3:Inputs>
+    <ns3:Input qName="ns18:AuthorityGTS" isArray="false" name="authorityGTS" xmlns:ns18="http://cagrid.nci.nih.gov/8/gts"/>
+   </ns3:Inputs>
    <ns3:Output qName="void" isArray="false"/>
    <ns3:Exceptions>
+    <ns3:Exception name="GTSInternalFault"/>
     <ns3:Exception name="IllegalAuthorityFault"/>
+    <ns3:Exception name="PermissionDeniedFault"/>
    </ns3:Exceptions>
   </ns3:Method>
   <ns3:Method name="updateAuthority" xsi:type="ns3:MethodType">
-   <ns3:Inputs/>
+   <ns3:Inputs>
+    <ns3:Input qName="ns19:AuthorityGTS" isArray="false" name="authorityGTS" xmlns:ns19="http://cagrid.nci.nih.gov/8/gts"/>
+   </ns3:Inputs>
    <ns3:Output qName="void" isArray="false"/>
    <ns3:Exceptions>
+    <ns3:Exception name="GTSInternalFault"/>
+    <ns3:Exception name="IllegalAuthorityFault"/>
     <ns3:Exception name="InvalidAuthorityFault"/>
+    <ns3:Exception name="PermissionDeniedFault"/>
+   </ns3:Exceptions>
+  </ns3:Method>
+  <ns3:Method name="updateAuthorityPriorities" xsi:type="ns3:MethodType">
+   <ns3:Inputs>
+    <ns3:Input qName="ns20:AuthorityPriorityUpdate" isArray="false" name="authorityPriorityUpdate" xmlns:ns20="http://cagrid.nci.nih.gov/8/gts"/>
+   </ns3:Inputs>
+   <ns3:Output qName="void" isArray="false"/>
+   <ns3:Exceptions>
+    <ns3:Exception name="GTSInternalFault"/>
+    <ns3:Exception name="IllegalAuthorityFault"/>
+    <ns3:Exception name="PermissionDeniedFault"/>
+   </ns3:Exceptions>
+  </ns3:Method>
+  <ns3:Method name="getAuthorities" xsi:type="ns3:MethodType">
+   <ns3:Inputs/>
+   <ns3:Output qName="ns21:AuthorityGTS" isArray="true" xmlns:ns21="http://cagrid.nci.nih.gov/8/gts"/>
+   <ns3:Exceptions>
+    <ns3:Exception name="GTSInternalFault"/>
+   </ns3:Exceptions>
+   <ns22:MethodSecurity xsi:type="ns22:MethodSecurity" xmlns:ns22="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns22:SecuritySetting xsi:type="ns22:SecuritySetting">Custom</ns22:SecuritySetting>
+    <ns22:TransportLevelSecurity xsi:type="ns22:TransportLevelSecurity">
+     <ns22:CommunicationMethod xsi:type="ns22:CommunicationMethod">Privacy</ns22:CommunicationMethod>
+    </ns22:TransportLevelSecurity>
+    <ns22:ClientCommunication xsi:type="ns22:ClientCommunication">Transport_Layer_Security</ns22:ClientCommunication>
+    <ns22:ClientAuthorization xsi:type="ns22:ClientAuthorization">
+     <ns22:NoAuthorization xsi:type="ns22:NoAuthorization"/>
+    </ns22:ClientAuthorization>
+    <ns22:RunAsMode xsi:type="ns22:RunAsMode">System</ns22:RunAsMode>
+    <ns22:DelegationMode xsi:type="ns22:DelegationMode">None</ns22:DelegationMode>
+    <ns22:AnonymousClients xsi:type="ns22:AnonymousCommunication">Yes</ns22:AnonymousClients>
+   </ns22:MethodSecurity>
+  </ns3:Method>
+  <ns3:Method name="removeAuthority" xsi:type="ns3:MethodType">
+   <ns3:Inputs>
+    <ns3:Input qName="xsd:string" isArray="false" name="serviceURI" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   </ns3:Inputs>
+   <ns3:Output qName="void" isArray="false"/>
+   <ns3:Exceptions>
+    <ns3:Exception name="GTSInternalFault"/>
+    <ns3:Exception name="InvalidAuthorityFault"/>
+    <ns3:Exception name="PermissionDeniedFault"/>
    </ns3:Exceptions>
   </ns3:Method>
  </ns3:Methods>
- <ns18:MetadataList xsi:type="ns18:MetadataListType" xmlns:ns18="gme://gov.nih.nci.cagrid.introduce/1/Metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
- <ns19:ServiceSecurity xsi:type="ns19:ServiceSecurity" xmlns:ns19="gme://gov.nih.nci.cagrid.introduce/1/Security" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns19:SecuritySetting xsi:type="ns19:SecuritySetting">Custom</ns19:SecuritySetting>
-  <ns19:TransportLevelSecurity xsi:type="ns19:TransportLevelSecurity">
-   <ns19:CommunicationMethod xsi:type="ns19:CommunicationMethod">Privacy</ns19:CommunicationMethod>
-  </ns19:TransportLevelSecurity>
-  <ns19:ClientCommunication xsi:type="ns19:ClientCommunication">Transport_Layer_Security</ns19:ClientCommunication>
-  <ns19:ClientAuthorization xsi:type="ns19:ClientAuthorization">
-   <ns19:NoAuthorization xsi:type="ns19:NoAuthorization"/>
-  </ns19:ClientAuthorization>
-  <ns19:RunAsMode xsi:type="ns19:RunAsMode">System</ns19:RunAsMode>
-  <ns19:DelegationMode xsi:type="ns19:DelegationMode">None</ns19:DelegationMode>
-  <ns19:AnonymousClients xsi:type="ns19:AnonymousCommunication">No</ns19:AnonymousClients>
-  <ns19:ServiceAuthorization xsi:type="ns19:ServiceAuthorization">
-   <ns19:NoAuthorization xsi:type="ns19:NoAuthorization"/>
-  </ns19:ServiceAuthorization>
- </ns19:ServiceSecurity>
- <ns20:ServiceProperties xmlns:ns20="gme://gov.nih.nci.cagrid.introduce/1/Property"/>
+ <ns23:MetadataList xsi:type="ns23:MetadataListType" xmlns:ns23="gme://gov.nih.nci.cagrid.introduce/1/Metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns24:ServiceSecurity xsi:type="ns24:ServiceSecurity" xmlns:ns24="gme://gov.nih.nci.cagrid.introduce/1/Security" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns24:SecuritySetting xsi:type="ns24:SecuritySetting">Custom</ns24:SecuritySetting>
+  <ns24:TransportLevelSecurity xsi:type="ns24:TransportLevelSecurity">
+   <ns24:CommunicationMethod xsi:type="ns24:CommunicationMethod">Privacy</ns24:CommunicationMethod>
+  </ns24:TransportLevelSecurity>
+  <ns24:ClientCommunication xsi:type="ns24:ClientCommunication">Transport_Layer_Security</ns24:ClientCommunication>
+  <ns24:ClientAuthorization xsi:type="ns24:ClientAuthorization">
+   <ns24:NoAuthorization xsi:type="ns24:NoAuthorization"/>
+  </ns24:ClientAuthorization>
+  <ns24:RunAsMode xsi:type="ns24:RunAsMode">System</ns24:RunAsMode>
+  <ns24:DelegationMode xsi:type="ns24:DelegationMode">None</ns24:DelegationMode>
+  <ns24:AnonymousClients xsi:type="ns24:AnonymousCommunication">No</ns24:AnonymousClients>
+  <ns24:ServiceAuthorization xsi:type="ns24:ServiceAuthorization">
+   <ns24:NoAuthorization xsi:type="ns24:NoAuthorization"/>
+  </ns24:ServiceAuthorization>
+ </ns24:ServiceSecurity>
+ <ns25:ServiceProperties xmlns:ns25="gme://gov.nih.nci.cagrid.introduce/1/Property"/>
 </ns1:ServiceSkeleton>
