@@ -59,7 +59,7 @@ public class AddSimpleMethodWithReturnStep extends Step {
 		input2.setQName(new QName("http://www.w3.org/2001/XMLSchema", "integer"));
 		input2.setName("bar");
 		input2.setIsArray(false);
-		MethodTypeInputsInput[] newInputs = new MethodTypeInputsInput[1];
+		MethodTypeInputsInput[] newInputs = new MethodTypeInputsInput[2];
 		newInputs[0] = input1;
 		newInputs[1] = input2;
 		MethodTypeInputs inputs = new MethodTypeInputs();

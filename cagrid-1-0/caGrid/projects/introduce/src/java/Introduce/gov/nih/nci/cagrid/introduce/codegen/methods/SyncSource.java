@@ -565,7 +565,7 @@ public class SyncSource {
 			&& !returnTypeEl.getQName().getLocalPart().equals("void")) {
 			SchemaInformation info = serviceInfo.getSchemaInformation(returnTypeEl.getQName());
 			if (info.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
-				if (info.getType().getType().equals("boolean")) {
+				if (info.getType().getType().equals("boolean") && !returnTypeEl.isIsArray()) {
 					methodString += "return boxedResult.isResponse();\n";
 				} else {
 					methodString += "return boxedResult.getResponse();\n";
@@ -657,7 +657,7 @@ public class SyncSource {
 						.getQName());
 					String paramName = method.getInputs().getInput(j).getName();
 					if (inNamespace.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
-						if (inNamespace.getType().getType().equals("boolean")) {
+						if (inNamespace.getType().getType().equals("boolean") && !method.getInputs().getInput(j).isIsArray()) {
 							params += "params.is" + TemplateUtils.upperCaseFirstCharacter(paramName) + "()";
 						} else {
 							params += "params.get" + TemplateUtils.upperCaseFirstCharacter(paramName) + "()";

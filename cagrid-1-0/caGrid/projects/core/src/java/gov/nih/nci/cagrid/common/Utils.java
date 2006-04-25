@@ -20,16 +20,17 @@ import org.globus.wsrf.encoding.ObjectSerializer;
 
 
 public class Utils {
-	
-	public static File getCaGridUserHome(){
+
+	public static File getCaGridUserHome() {
 		String userHome = System.getProperty("user.home");
 		File userHomeF = new File(userHome);
 		File caGridCache = new File(userHomeF.getAbsolutePath() + File.separator + ".cagrid");
-		if(!caGridCache.exists()){
+		if (!caGridCache.exists()) {
 			caGridCache.mkdirs();
 		}
 		return caGridCache;
 	}
+
 
 	public static String getExceptionMessage(Exception e) {
 		String mess = e.getMessage();
@@ -87,14 +88,14 @@ public class Utils {
 			return ObjectDeserializer.toObject(doc.getDocumentElement(), objectType);
 		} finally {
 			if (inputStream != null) {
-				try {
-					inputStream.close();
-				} catch (IOException e) {
-				}
+
+				inputStream.close();
+
 			}
 		}
 	}
-	
+
+
 	public static void copyFile(File in, File out) throws Exception {
 		FileInputStream fis = new FileInputStream(in);
 		FileOutputStream fos = new FileOutputStream(out);
@@ -155,15 +156,15 @@ public class Utils {
 			ObjectSerializer.serialize(fw, object, qname);
 		} finally {
 			if (fw != null) {
-				try {
-					fw.close();
-				} catch (IOException e) {
-				}
+
+				fw.close();
+
 			}
 		}
 
 	}
-	
+
+
 	public static String clean(String s) {
 		if ((s == null) || (s.trim().length() == 0)) {
 			return null;
@@ -197,6 +198,7 @@ public class Utils {
 
 	/**
 	 * Gets the QName that Axis has registered for the given java class
+	 * 
 	 * @param clazz
 	 * @return
 	 */
@@ -204,9 +206,10 @@ public class Utils {
 		return MessageContext.getCurrentContext().getTypeMapping().getTypeQName(clazz);
 	}
 
-	
+
 	/**
 	 * Gets the Class that Axis has registerd for the given QName
+	 * 
 	 * @param qname
 	 * @return
 	 */
@@ -214,4 +217,3 @@ public class Utils {
 		return MessageContext.getCurrentContext().getTypeMapping().getClassForQName(qname);
 	}
 }
-

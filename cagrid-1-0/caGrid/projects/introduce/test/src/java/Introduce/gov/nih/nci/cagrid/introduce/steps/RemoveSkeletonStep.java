@@ -26,9 +26,7 @@ public class RemoveSkeletonStep extends Step {
 			System.out.println("basedir system property not set");
 			throw new Exception("basedir system property not set");
 		}
-		Thread.sleep(5000);
 		boolean results = Utils.deleteDir(new File(pathtobasedir + File.separator + tci.getDir()));
-		System.out.println("__________________________" + results);
 		assertTrue(results);
 	}
 }

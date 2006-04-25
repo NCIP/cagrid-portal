@@ -55,16 +55,20 @@ public class AddSimpleMethodWithArraysStep extends Step {
 		input1.setQName(new QName("http://www.w3.org/2001/XMLSchema", "string"));
 		input1.setName("foo");
 		input1.setIsArray(true);
-		input1.setIsArray(false);
 		// create a new input param
 		MethodTypeInputsInput input2 = new MethodTypeInputsInput();
 		input2.setQName(new QName("http://www.w3.org/2001/XMLSchema", "integer"));
 		input2.setName("bar");
-		input2.setIsArray(false);
 		input2.setIsArray(true);
-		MethodTypeInputsInput[] newInputs = new MethodTypeInputsInput[1];
+		//create a new input param
+		MethodTypeInputsInput input3 = new MethodTypeInputsInput();
+		input3.setQName(new QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+		input3.setName("who");
+		input3.setIsArray(true);
+		MethodTypeInputsInput[] newInputs = new MethodTypeInputsInput[3];
 		newInputs[0] = input1;
 		newInputs[1] = input2;
+		newInputs[2] = input3;
 		MethodTypeInputs inputs = new MethodTypeInputs();
 		inputs.setInput(newInputs);
 		method.setInputs(inputs);
