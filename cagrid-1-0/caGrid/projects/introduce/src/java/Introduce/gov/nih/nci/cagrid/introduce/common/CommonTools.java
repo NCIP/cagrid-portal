@@ -54,13 +54,6 @@ public class CommonTools {
 	}
 
 
-	public static String getAntDeployTomcatCommand(String buildFileDir) throws Exception {
-		String cmd = " -Dservice.properties.file=" + buildFileDir + File.separator + "service.properties.tmp";
-		cmd = getAntCommand("deployTomcat", buildFileDir) + " " + cmd;
-		return cmd;
-	}
-
-
 	public static String getAntDeployGlobusCommand(String buildFileDir) throws Exception {
 		return getAntCommand("deployGlobus", buildFileDir);
 	}
@@ -86,7 +79,7 @@ public class CommonTools {
 			+ packagename.replace('.', File.separatorChar) + " -Dintroduce.skeleton.namespace.domain="
 			+ namespacedomain + " -Dintroduce.skeleton.extensions=" + extensions + " createService";
 		cmd = getAntCommandCall(buildFileDir) + cmd;
-		System.out.println("CREATION: cmd: " + cmd );
+		System.out.println("CREATION: cmd: " + cmd);
 		return cmd;
 	}
 
