@@ -170,20 +170,29 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 
 
 	public void discoverFromCaDSR() {
-		try {
-			CaDSRServiceI cadsrService = new CaDSRServiceClient(getCadsr().getText());
-			getProjectComboBox().removeAllItems();
-			Project[] projects = cadsrService.findAllProjects();
-			if (projects != null) {
-				for (int i = 0; i < projects.length; i++) {
-					getProjectComboBox().addItem(new ProjectDisplay(projects[i]));
+
+		final CaDSRServiceI cadsrService = new CaDSRServiceClient(getCadsr().getText());
+		getProjectComboBox().removeAllItems();
+		makeCombosEnable(false);
+		Thread t = new Thread() {
+			public void run() {
+				try {
+					Project[] projects = cadsrService.findAllProjects();
+					if (projects != null) {
+						for (int i = 0; i < projects.length; i++) {
+							getProjectComboBox().addItem(new ProjectDisplay(projects[i]));
+						}
+					}
+					makeCombosEnable(true);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+					JOptionPane.showMessageDialog(CaDSRBrowserPanel.this,
+						"Error communicating with caDSR; please check the caDSR URL!");
 				}
 			}
+		};
+		t.start();
 
-		} catch (Exception e1) {
-			e1.printStackTrace();
-			JOptionPane.showMessageDialog(this, "Error communicating with caDSR; please check the caDSR URL!");
-		}
 	}
 
 
@@ -206,8 +215,27 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 
 
 	public Project getSelectedProject() {
-		if (projectComboBox.getSelectedItem() != null) {
-			return ((ProjectDisplay) projectComboBox.getSelectedItem()).getProject();
+		ProjectDisplay p = (ProjectDisplay) projectComboBox.getSelectedItem();
+		if (p != null) {
+			return p.getProject();
+		}
+		return null;
+	}
+
+
+	public UMLPackageMetadata getSelectedPackage() {
+		PackageDisplay p = (PackageDisplay) getPackageComboBox().getSelectedItem();
+		if (p != null) {
+			return p.getPackage();
+		}
+		return null;
+	}
+
+
+	public UMLClassMetadata getSelectedClass() {
+		ClassDisplay c = (ClassDisplay) getClassComboBox().getSelectedItem();
+		if (c != null) {
+			return c.getClazz();
 		}
 		return null;
 	}
@@ -261,14 +289,6 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 			});
 		}
 		return packageComboBox;
-	}
-
-
-	public UMLPackageMetadata getSelectedPackage() {
-		if (getPackageComboBox().getSelectedItem() != null) {
-			return ((PackageDisplay) getPackageComboBox().getSelectedItem()).getPackage();
-		}
-		return null;
 	}
 
 
@@ -480,53 +500,64 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	}
 
 
-	public void handleProjectSelection(Project project) {
+	public void handleProjectSelection(final Project project) {
 		getPackageComboBox().removeAllItems();
-
-		try {
-			CaDSRServiceI cadsrService = new CaDSRServiceClient(getCadsr().getText());
-			UMLPackageMetadata[] metadatas = cadsrService.findPackagesInProject(project);
-			if (metadatas != null) {
-				for (int i = 0; i < metadatas.length; i++) {
-					getPackageComboBox().addItem(new PackageDisplay(metadatas[i]));
+		makeCombosEnable(false);
+		Thread t = new Thread() {
+			public void run() {
+				try {
+					CaDSRServiceI cadsrService = new CaDSRServiceClient(getCadsr().getText());
+					UMLPackageMetadata[] metadatas = cadsrService.findPackagesInProject(project);
+					if (metadatas != null) {
+						for (int i = 0; i < metadatas.length; i++) {
+							getPackageComboBox().addItem(new PackageDisplay(metadatas[i]));
+						}
+					}
+					makeCombosEnable(true);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+					JOptionPane.showMessageDialog(CaDSRBrowserPanel.this,
+						"Error communicating with caDSR; please check the caDSR URL!");
 				}
 			}
-		} catch (Exception e1) {
-			e1.printStackTrace();
-			JOptionPane.showMessageDialog(CaDSRBrowserPanel.this,
-				"Error communicating with caDSR; please check the caDSR URL!");
-		}
-
+		};
+		t.start();
 	}
 
 
-	public void handlePackageSelection(UMLPackageMetadata pkg) {
+	private synchronized void makeCombosEnable(boolean enabled) {
+		getProjectComboBox().setEnabled(enabled);
+		getPackageComboBox().setEnabled(enabled);
+		getClassComboBox().setEnabled(enabled);
+	}
+
+
+	public void handlePackageSelection(final UMLPackageMetadata pkg) {
 		if (isShowClassSelection()) {
 			getClassComboBox().removeAllItems();
-			try {
-				CaDSRServiceI cadsrService = new CaDSRServiceClient(getCadsr().getText());
-				UMLClassMetadata[] metadatas = cadsrService.findClassesInPackage(((ProjectDisplay) getProjectComboBox()
-					.getSelectedItem()).getProject(), pkg.getName());
-				if (metadatas != null) {
-					for (int i = 0; i < metadatas.length; i++) {
-						getClassComboBox().addItem(new ClassDisplay(metadatas[i]));
+			makeCombosEnable(false);
+			Thread t = new Thread() {
+				public void run() {
+					try {
+						CaDSRServiceI cadsrService = new CaDSRServiceClient(getCadsr().getText());
+						UMLClassMetadata[] metadatas = cadsrService.findClassesInPackage(
+							((ProjectDisplay) getProjectComboBox().getSelectedItem()).getProject(), pkg.getName());
+						if (metadatas != null) {
+							for (int i = 0; i < metadatas.length; i++) {
+								getClassComboBox().addItem(new ClassDisplay(metadatas[i]));
+							}
+						}
+						makeCombosEnable(true);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+						JOptionPane.showMessageDialog(CaDSRBrowserPanel.this,
+							"Error communicating with caDSR; please check the caDSR URL!");
 					}
 				}
-			} catch (Exception e1) {
-				e1.printStackTrace();
-				JOptionPane.showMessageDialog(CaDSRBrowserPanel.this,
-					"Error communicating with caDSR; please check the caDSR URL!");
-			}
+			};
+			t.start();
 		}
 
-	}
-
-
-	public UMLClassMetadata getSelectedClass() {
-		if (getClassComboBox().getSelectedItem() != null) {
-			return ((ClassDisplay) getClassComboBox().getSelectedItem()).getClazz();
-		}
-		return null;
 	}
 
 }
