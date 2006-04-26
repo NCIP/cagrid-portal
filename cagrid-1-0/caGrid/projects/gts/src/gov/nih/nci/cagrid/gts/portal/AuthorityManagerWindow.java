@@ -434,7 +434,6 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame {
 			if (auth != null) {
 				length = auth.length;
 				for (int i = 0; i < auth.length; i++) {
-					System.out.println(auth[i].getServiceURI());
 					this.getAuthorityTable().addAuthority(auth[i]);
 				}
 			}

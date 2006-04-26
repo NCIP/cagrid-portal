@@ -135,7 +135,8 @@ public class AuthorityTable extends PortalBaseTable {
 		int row = getSelectedRow();
 		if ((row >= 0) && (row < getRowCount())) {
 			AuthorityGTS selected = (AuthorityGTS) getValueAt(row, 0);
-			if (row > 0) {
+			int rowCount = getRowCount()-1;
+			if (row < rowCount) {
 				int nrow = (row + 1);
 				AuthorityGTS other = (AuthorityGTS) getValueAt(nrow, 0);
 				other.setPriority(other.getPriority() - 1);
