@@ -2,6 +2,8 @@ package gov.nih.nci.cagrid.gts.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.gts.bean.AuthorityGTS;
+import gov.nih.nci.cagrid.gts.bean.AuthorityPrioritySpecification;
+import gov.nih.nci.cagrid.gts.bean.AuthorityPriorityUpdate;
 
 import java.util.Vector;
 
@@ -106,7 +108,7 @@ public class AuthorityTable extends PortalBaseTable {
 	}
 
 
-	public void increasePriority() throws Exception {
+	public synchronized void increasePriority() throws Exception {
 		int row = getSelectedRow();
 		if ((row >= 0) && (row < getRowCount())) {
 			AuthorityGTS selected = (AuthorityGTS) getValueAt(row, 0);
@@ -121,10 +123,48 @@ public class AuthorityTable extends PortalBaseTable {
 				setValueAt(selected, nrow, 0);
 				setValueAt(selected.getServiceURI(), nrow, 1);
 				setValueAt(String.valueOf(selected.getPriority()), nrow, 2);
+				getSelectionModel().setSelectionInterval(nrow, nrow);
 			}
 		} else {
 			throw new Exception("Please select an authority!!!");
 		}
+	}
+
+
+	public synchronized void decreasePriority() throws Exception {
+		int row = getSelectedRow();
+		if ((row >= 0) && (row < getRowCount())) {
+			AuthorityGTS selected = (AuthorityGTS) getValueAt(row, 0);
+			if (row > 0) {
+				int nrow = (row + 1);
+				AuthorityGTS other = (AuthorityGTS) getValueAt(nrow, 0);
+				other.setPriority(other.getPriority() - 1);
+				selected.setPriority(selected.getPriority() + 1);
+				setValueAt(other, row, 0);
+				setValueAt(other.getServiceURI(), row, 1);
+				setValueAt(String.valueOf(other.getPriority()), row, 2);
+				setValueAt(selected, nrow, 0);
+				setValueAt(selected.getServiceURI(), nrow, 1);
+				setValueAt(String.valueOf(selected.getPriority()), nrow, 2);
+				getSelectionModel().setSelectionInterval(nrow, nrow);
+			}
+		} else {
+			throw new Exception("Please select an authority!!!");
+		}
+	}
+
+
+	public synchronized AuthorityPriorityUpdate getPriorityUpdate() {
+		AuthorityPriorityUpdate update = new AuthorityPriorityUpdate();
+		AuthorityPrioritySpecification[] specs = new AuthorityPrioritySpecification[getRowCount()];
+		for (int i = 0; i < getRowCount(); i++) {
+			AuthorityGTS auth = (AuthorityGTS) getValueAt(i, 0);
+			specs[i] = new AuthorityPrioritySpecification();
+			specs[i].setServiceURI(auth.getServiceURI());
+			specs[i].setPriority(auth.getPriority());
+		}
+		update.setAuthorityPrioritySpecification(specs);
+		return update;
 	}
 
 

@@ -77,6 +77,12 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame {
 
 	private JButton viewModifyButton = null;
 
+	private JPanel priorityPanel = null;
+
+	private JButton increasePriority = null;
+
+	private JButton decreasePriority = null;
+
 
 	/**
 	 * This is the default constructor
@@ -169,6 +175,11 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame {
 	 */
 	private JPanel getContentPanel() {
 		if (contentPanel == null) {
+			GridBagConstraints gridBagConstraints = new GridBagConstraints();
+			gridBagConstraints.gridx = 0;
+			gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints.gridy = 1;
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			contentPanel = new JPanel();
 			contentPanel.setLayout(new GridBagLayout());
@@ -181,6 +192,7 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame {
 			gridBagConstraints4.weighty = 1.0;
 			gridBagConstraints4.fill = java.awt.GridBagConstraints.BOTH;
 			contentPanel.add(getJScrollPane(), gridBagConstraints4);
+			contentPanel.add(getPriorityPanel(), gridBagConstraints);
 		}
 		return contentPanel;
 	}
@@ -573,5 +585,66 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame {
 			viewModifyButton.setIcon(GTSLookAndFeel.getAuthorityEditIcon());
 		}
 		return viewModifyButton;
+	}
+
+
+	/**
+	 * This method initializes priorityPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getPriorityPanel() {
+		if (priorityPanel == null) {
+			priorityPanel = new JPanel();
+			priorityPanel.add(getIncreasePriority(), null);
+			priorityPanel.add(getDecreasePriority(), null);
+		}
+		return priorityPanel;
+	}
+
+
+	/**
+	 * This method initializes increasePriority
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getIncreasePriority() {
+		if (increasePriority == null) {
+			increasePriority = new JButton();
+			increasePriority.setText("Increase Priority");
+			increasePriority.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					try {
+						getAuthorityTable().increasePriority();
+					} catch (Exception ex) {
+						PortalUtils.showErrorMessage(ex);
+					}
+				}
+			});
+		}
+		return increasePriority;
+	}
+
+
+	/**
+	 * This method initializes decreasePriority
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getDecreasePriority() {
+		if (decreasePriority == null) {
+			decreasePriority = new JButton();
+			decreasePriority.setText("Decrease Priority");
+			decreasePriority.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					try {
+						getAuthorityTable().decreasePriority();
+					} catch (Exception ex) {
+						PortalUtils.showErrorMessage(ex);
+					}
+				}
+			});
+		}
+		return decreasePriority;
 	}
 }
