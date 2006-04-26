@@ -6,24 +6,7 @@
 	<property name="instrumented.classes.dir" value="${build.dir}/instrumented-classes"/>
 	<property name="cobertura.report.dir" value="${build.dir}/coverage"/>
 	<property name="cobertura.data.file"
-		location="${instrumented.classes.dir}/${project.name}-cobertura.ser"/>
-	<property name="all.class.dir" location="${build.dir}/all"/>
-	
-	<target name="copyClasses">
-		<mkdir dir="${all.class.dir}"/>
-		<copy todir="${all.class.dir}">
-			<fileset dir="${build.utils.dest}">
-				<include name="**/*.class"/>
-			</fileset>
-			<fileset dir="${build.extension.dest}">
-				<include name="**/*.class"/>
-			</fileset>
-			<fileset dir="${build.service.dest}">
-				<include name="**.*.class"/>
-			</fileset>
-		</copy>
-	</target>
-	
+		location="${instrumented.classes.dir}/${project.name}-cobertura.ser"/>	
 	
 	<target name="instrument">
 		<taskdef classpathref="test.classpath" resource="tasks.properties"/>
