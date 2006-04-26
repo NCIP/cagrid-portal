@@ -4,9 +4,9 @@ import gov.nih.nci.cagrid.cqlquery.CQLQueryType;
 import gov.nih.nci.cagrid.cqlquery.Group;
 import gov.nih.nci.cagrid.cqlquery.Objects;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResultsType;
+import gov.nih.nci.cagrid.data.InitializationException;
+import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
-import gov.nih.nci.cagrid.data.cql.InitializationException;
-import gov.nih.nci.cagrid.data.cql.MalformedQueryException;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsUtil;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 

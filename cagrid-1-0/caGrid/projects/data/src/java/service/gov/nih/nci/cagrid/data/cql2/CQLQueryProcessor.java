@@ -1,6 +1,6 @@
-package gov.nih.nci.cagrid.data.cql;
+package gov.nih.nci.cagrid.data.cql2;
 
-import gov.nih.nci.cagrid.cqlquery.CQLQueryType;
+import gov.nih.nci.cagrid.cqlquery2.CQLQueryType;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResultsType;
 import gov.nih.nci.cagrid.data.InitializationException;
 import gov.nih.nci.cagrid.data.MalformedQueryException;

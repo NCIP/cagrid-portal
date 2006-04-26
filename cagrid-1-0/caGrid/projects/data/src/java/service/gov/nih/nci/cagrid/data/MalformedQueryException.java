@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.data.cql;
+package gov.nih.nci.cagrid.data;
 
 /** 
  *  MalformedQueryException
