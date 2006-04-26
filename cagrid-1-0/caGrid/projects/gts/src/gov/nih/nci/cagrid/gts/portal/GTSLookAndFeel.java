@@ -16,19 +16,21 @@ public class GTSLookAndFeel extends PortalLookAndFeel {
 	public final static ImageIcon getGTSIcon() {
 		return new javax.swing.ImageIcon(GTSLookAndFeel.class.getResource("/system-software-update.png"));
 	}
-	
+
+
 	public final static ImageIcon getTrustLevelIcon() {
 		return new javax.swing.ImageIcon(GTSLookAndFeel.class.getResource("/trust_level.png"));
 	}
-	
+
+
 	public final static ImageIcon getAddTrustLevelIcon() {
 		return new javax.swing.ImageIcon(GTSLookAndFeel.class.getResource("/add_trust_level.png"));
 	}
-	
+
+
 	public final static ImageIcon getRemoveTrustLevelIcon() {
 		return new javax.swing.ImageIcon(GTSLookAndFeel.class.getResource("/remove_trust_level.png"));
 	}
-	
 
 
 	public final static ImageIcon getTrustedAuthorityIcon() {
@@ -59,18 +61,50 @@ public class GTSLookAndFeel extends PortalLookAndFeel {
 	public final static ImageIcon getCRLIcon() {
 		return new javax.swing.ImageIcon(GTSLookAndFeel.class.getResource("/contact-delete.png"));
 	}
-	
+
+
 	public final static ImageIcon getPermissionIcon() {
 		return new javax.swing.ImageIcon(GTSLookAndFeel.class.getResource("/shield.png"));
 	}
+
+
 	public final static ImageIcon getAddPermissionIcon() {
 		return new javax.swing.ImageIcon(GTSLookAndFeel.class.getResource("/shield_add.png"));
 	}
+
+
 	public final static ImageIcon getRevokePermissionIcon() {
 		return new javax.swing.ImageIcon(GTSLookAndFeel.class.getResource("/shield_delete.png"));
 	}
+
+
 	public final static ImageIcon getViewPermissionIcon() {
 		return new javax.swing.ImageIcon(GTSLookAndFeel.class.getResource("/shield_go.png"));
+	}
+
+
+	public final static ImageIcon getAuthorityIcon() {
+		return new javax.swing.ImageIcon(GTSLookAndFeel.class.getResource("/plugin.png"));
+	}
+
+
+	public final static ImageIcon getAuthorityEditIcon() {
+		return new javax.swing.ImageIcon(GTSLookAndFeel.class.getResource("/plugin_edit.png"));
+	}
+
+
+	public final static ImageIcon getAuthorityAddIcon() {
+		return new javax.swing.ImageIcon(GTSLookAndFeel.class.getResource("/plugin_add.png"));
+	}
+
+
+	public final static ImageIcon getAuthorityDeleteIcon() {
+		return new javax.swing.ImageIcon(GTSLookAndFeel.class.getResource("/plugin_delete.png"));
+	}
+
+
+	public final static ImageIcon getAuthorityUpdateIcon() {
+		return new javax.swing.ImageIcon(GTSLookAndFeel.class.getResource("/plugin_go.png"));
 	}
 
 }
