@@ -18,7 +18,7 @@ import org.globus.wsrf.encoding.ObjectDeserializer;
 
 public class DiscoveryClient {
 
-	private static final String DEFAULT_INDEX_SERVICE_URL = "http://dc01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService";
+	private static final String DEFAULT_INDEX_SERVICE_URL = "http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService";
 
 	private EndpointReferenceType indexEPR = null;
 
