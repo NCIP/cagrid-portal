@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.gts.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
+import gov.nih.nci.cagrid.gts.bean.AuthorityGTS;
 import gov.nih.nci.cagrid.gts.client.GTSAdminClient;
 import gov.nih.nci.cagrid.gts.client.GTSSearchClient;
 
@@ -416,9 +417,15 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame {
 		try {
 			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
 			GTSSearchClient client = new GTSSearchClient(service);
-
+			AuthorityGTS[] auth = client.getAuthorities();
 			int length = 0;
-
+			if (auth != null) {
+				length = auth.length;
+				for (int i = 0; i < auth.length; i++) {
+					System.out.println(auth[i].getServiceURI());
+					this.getAuthorityTable().addAuthority(auth[i]);
+				}
+			}
 			this.updateProgress(false, "Completed [Found " + length + " Authority(s)]");
 
 		} catch (Exception e) {

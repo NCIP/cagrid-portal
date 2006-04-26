@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.gts.client;
 
+import gov.nih.nci.cagrid.gts.bean.AuthorityGTS;
 import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
@@ -29,9 +30,14 @@ public class GTSSearchClient {
 	public TrustedAuthority[] findTrustedAuthorities(TrustedAuthorityFilter f) throws RemoteException, GTSInternalFault {
 		return this.client.findTrustedAuthorities(f);
 	}
-	
-	public TrustLevel[] getTrustLevels() throws RemoteException, GTSInternalFault{
+
+
+	public TrustLevel[] getTrustLevels() throws RemoteException, GTSInternalFault {
 		return this.client.getTrustLevels();
 	}
 
+
+	public AuthorityGTS[] getAuthorities() throws RemoteException, GTSInternalFault {
+		return this.client.getAuthorities();
+	}
 }

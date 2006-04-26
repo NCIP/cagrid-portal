@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.gts.bean.PermissionFilter;
 import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
+import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityTimeToLive;
 import gov.nih.nci.cagrid.gts.common.Database;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault;
@@ -198,6 +199,24 @@ public class GTS implements TrustLevelStatus, TrustLevelLookup {
 		} else {
 			return false;
 		}
+	}
+
+
+	protected void setupTestAuthorities() throws Exception {
+		TrustedAuthorityTimeToLive ttl = new TrustedAuthorityTimeToLive();
+		ttl.setHours(12);
+		ttl.setMinutes(0);
+		ttl.setSeconds(0);
+		for (int i = 0; i < 10; i++) {
+			AuthorityGTS gts = new AuthorityGTS();
+			gts.setServiceURI("Grid Trust Service " + (i + 1));
+			gts.setPerformAuthorization(false);
+			gts.setPriority(1);
+			gts.setSyncTrustLevels(true);
+			gts.setTrustedAuthorityTimeToLive(ttl);
+			authority.addAuthority(gts);
+		}
+
 	}
 
 }

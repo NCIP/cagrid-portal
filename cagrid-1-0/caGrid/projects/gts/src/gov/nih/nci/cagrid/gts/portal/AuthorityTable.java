@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.gts.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.gts.bean.AuthorityGTS;
-import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 
 import java.util.Vector;
 
@@ -37,8 +36,8 @@ public class AuthorityTable extends PortalBaseTable {
 		c.setResizable(false);
 
 		c = this.getColumn(SERVICE_URI);
-		c.setMaxWidth(150);
-		c.setMinWidth(150);
+		c.setMaxWidth(500);
+		c.setMinWidth(500);
 		this.clearTable();
 	}
 
@@ -60,17 +59,18 @@ public class AuthorityTable extends PortalBaseTable {
 		v.add(String.valueOf(gts.getPriority()));
 		int index = -1;
 		for (int i = 0; i < getRowCount(); i++) {
-			index = i;
+
 			AuthorityGTS auth = (AuthorityGTS) getValueAt(i, 0);
 			if (gts.getPriority() < auth.getPriority()) {
+				index = i;
 				break;
 			}
 		}
 
 		if (index == -1) {
 			addRow(v);
-		}else{
-			((DefaultTableModel) this.getModel()).insertRow(index,v);
+		} else {
+			((DefaultTableModel) this.getModel()).insertRow(index, v);
 		}
 	}
 
@@ -103,6 +103,28 @@ public class AuthorityTable extends PortalBaseTable {
 			throw new Exception("Please select a trust level!!!");
 		}
 
+	}
+
+
+	public void increasePriority() throws Exception {
+		int row = getSelectedRow();
+		if ((row >= 0) && (row < getRowCount())) {
+			AuthorityGTS selected = (AuthorityGTS) getValueAt(row, 0);
+			if (row > 0) {
+				int nrow = (row - 1);
+				AuthorityGTS other = (AuthorityGTS) getValueAt(nrow, 0);
+				other.setPriority(other.getPriority() + 1);
+				selected.setPriority(selected.getPriority() - 1);
+				setValueAt(other, row, 0);
+				setValueAt(other.getServiceURI(), row, 1);
+				setValueAt(String.valueOf(other.getPriority()), row, 2);
+				setValueAt(selected, nrow, 0);
+				setValueAt(selected.getServiceURI(), nrow, 1);
+				setValueAt(String.valueOf(selected.getPriority()), nrow, 2);
+			}
+		} else {
+			throw new Exception("Please select an authority!!!");
+		}
 	}
 
 

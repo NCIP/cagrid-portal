@@ -33,6 +33,7 @@ public class GridTrustServiceImpl implements GridTrustServiceI {
 			SimpleResourceManager srm = new SimpleResourceManager(home.getGtsConfig());
 			GTSConfiguration conf = (GTSConfiguration) srm.getResource(GTSConfiguration.RESOURCE);
 			this.gts = new GTS(conf, type.getAddress().toString());
+			this.gts.setupTestAuthorities();
 		} catch (Exception e) {
 			FaultHelper.printStackTrace(e);
 			throw new RemoteException("Error configuring Grid Trust Service");
@@ -132,21 +133,21 @@ public class GridTrustServiceImpl implements GridTrustServiceI {
 	public void addAuthority(gov.nih.nci.cagrid.gts.bean.AuthorityGTS authorityGTS) throws RemoteException,
 		gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault,
 		gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
-		gts.addAuthority(authorityGTS,getCallerIdentity());
+		gts.addAuthority(authorityGTS, getCallerIdentity());
 	}
 
 
 	public void updateAuthority(gov.nih.nci.cagrid.gts.bean.AuthorityGTS authorityGTS) throws RemoteException,
 		gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault,
 		gov.nih.nci.cagrid.gts.stubs.InvalidAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
-		gts.updateAuthority(authorityGTS,getCallerIdentity());
+		gts.updateAuthority(authorityGTS, getCallerIdentity());
 	}
 
 
 	public void updateAuthorityPriorities(gov.nih.nci.cagrid.gts.bean.AuthorityPriorityUpdate authorityPriorityUpdate)
 		throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault,
 		gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
-		gts.updateAuthorityPriorities(authorityPriorityUpdate,getCallerIdentity());
+		gts.updateAuthorityPriorities(authorityPriorityUpdate, getCallerIdentity());
 	}
 
 
@@ -159,7 +160,7 @@ public class GridTrustServiceImpl implements GridTrustServiceI {
 	public void removeAuthority(java.lang.String serviceURI) throws RemoteException,
 		gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidAuthorityFault,
 		gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
-		gts.removeAuthority(serviceURI,getCallerIdentity());
+		gts.removeAuthority(serviceURI, getCallerIdentity());
 	}
 
 }

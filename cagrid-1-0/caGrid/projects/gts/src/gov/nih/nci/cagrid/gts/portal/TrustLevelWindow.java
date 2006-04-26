@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -20,7 +21,6 @@ import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
-import javax.swing.JScrollPane;
 
 
 /**
