@@ -1,10 +1,12 @@
 package gov.nih.nci.cagrid.gts.client;
 
+import gov.nih.nci.cagrid.gts.bean.AuthorityPriorityUpdate;
 import gov.nih.nci.cagrid.gts.bean.Permission;
 import gov.nih.nci.cagrid.gts.bean.PermissionFilter;
 import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
+import gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault;
@@ -87,6 +89,12 @@ public class GTSAdminClient {
 	public void removeTrustLevel(String trustLevelName) throws RemoteException, GTSInternalFault,
 		InvalidTrustLevelFault, IllegalTrustLevelFault, PermissionDeniedFault {
 		client.removeTrustLevel(trustLevelName);
+	}
+
+
+	public void updateAuthorityPriorities(AuthorityPriorityUpdate update) throws RemoteException, GTSInternalFault,
+		IllegalAuthorityFault, PermissionDeniedFault {
+		client.updateAuthorityPriorities(update);
 	}
 
 }

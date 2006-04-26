@@ -83,6 +83,8 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame {
 
 	private JButton decreasePriority = null;
 
+	private JButton updatePriorities = null;
+
 
 	/**
 	 * This is the default constructor
@@ -209,6 +211,7 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame {
 			buttonPanel.add(getAddAuthority(), null);
 			buttonPanel.add(getViewModifyButton(), null);
 			buttonPanel.add(getRemoveAuthority(), null);
+			buttonPanel.add(getUpdatePriorities(), null);
 		}
 		return buttonPanel;
 	}
@@ -563,6 +566,18 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame {
 	}
 
 
+	private void updatePriorities() {
+		try {
+			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
+			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GTSAdminClient client = new GTSAdminClient(service, proxy);
+			client.updateAuthorityPriorities(getAuthorityTable().getPriorityUpdate());
+		} catch (Exception e) {
+			PortalUtils.showErrorMessage(e);
+		}
+	}
+
+
 	/**
 	 * This method initializes viewModifyButton
 	 * 
@@ -611,6 +626,7 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame {
 		if (increasePriority == null) {
 			increasePriority = new JButton();
 			increasePriority.setText("Increase Priority");
+			increasePriority.setIcon(GTSLookAndFeel.getIncreasePriorityIcon());
 			increasePriority.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
@@ -634,6 +650,7 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame {
 		if (decreasePriority == null) {
 			decreasePriority = new JButton();
 			decreasePriority.setText("Decrease Priority");
+			decreasePriority.setIcon(GTSLookAndFeel.getDecresePriorityIcon());
 			decreasePriority.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
@@ -645,5 +662,25 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame {
 			});
 		}
 		return decreasePriority;
+	}
+
+
+	/**
+	 * This method initializes updatePriorities
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getUpdatePriorities() {
+		if (updatePriorities == null) {
+			updatePriorities = new JButton();
+			updatePriorities.setText("Update Priorities");
+			updatePriorities.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					updatePriorities();
+				}
+			});
+			updatePriorities.setIcon(GTSLookAndFeel.getAuthorityUpdateIcon());
+		}
+		return updatePriorities;
 	}
 }
