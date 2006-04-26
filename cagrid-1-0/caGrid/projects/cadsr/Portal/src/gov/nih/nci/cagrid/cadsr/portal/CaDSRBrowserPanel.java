@@ -330,9 +330,9 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 				projectsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Data Type",
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
-				projectsPanel.add(getProjectComboBox(), gridBagConstraints7);
-				projectsPanel.add(projectLabel, gridBagConstraints9);
 			}
+			projectsPanel.add(getProjectComboBox(), gridBagConstraints7);
+			projectsPanel.add(projectLabel, gridBagConstraints9);
 			projectsPanel.add(getPackageComboBox(), gridBagConstraints8);
 			projectsPanel.add(packageLabel, gridBagConstraints10);
 			if (isShowClassSelection()) {
