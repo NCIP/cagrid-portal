@@ -2,6 +2,9 @@ package gov.nih.nci.cagrid.introduce.steps;
 
 import gov.nih.nci.cagrid.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.extension.example.ExampleCodegenPostProcessor;
+import gov.nih.nci.cagrid.introduce.extension.example.ExampleCodegenPreProcessor;
+import gov.nih.nci.cagrid.introduce.extension.example.ExampleCreationPostProcessor;
 
 import java.io.File;
 
@@ -28,7 +31,7 @@ public class CreateSkeletonStep extends Step {
 		}
 
 		String cmd = CommonTools.getAntSkeletonCreationCommand(pathtobasedir, tci.getName(), tci.getDir(), tci
-			.getPackageName(), tci.getNamespaceDomain(),"");
+			.getPackageName(), tci.getNamespaceDomain(),"service_example");
 
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
@@ -39,6 +42,21 @@ public class CreateSkeletonStep extends Step {
 		p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
 		assertEquals("Checking build status", 0, p.exitValue());
+		
+		//check to see that the extensions ran ok
+		File createFile = new File(tci.dir + File.separator + ExampleCreationPostProcessor.class.getName());
+		if(!createFile.exists()){
+			fail("Creation Extension was not ran");
+		} 
+		File syncPreFile = new File(tci.dir + File.separator + ExampleCodegenPreProcessor.class.getName());
+		if(!syncPreFile.exists()){
+			fail("Codegen Pre Extension was not ran");
+		}
+		File syncPostFile = new File(tci.dir + File.separator + ExampleCodegenPostProcessor.class.getName());
+		if(!syncPostFile.exists()){
+			fail("Codegen Post Extension was not ran");
+		}
+	
 	}
 
 }

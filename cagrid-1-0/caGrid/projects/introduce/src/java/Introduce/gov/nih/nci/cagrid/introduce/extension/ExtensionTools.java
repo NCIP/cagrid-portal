@@ -14,8 +14,7 @@ public class ExtensionTools {
 		if (extensionDesc != null && extensionDesc.getCreationPostProcessor() != null
 			&& !extensionDesc.getCreationPostProcessor().equals("")) {
 			Class c = Class.forName(extensionDesc.getCreationPostProcessor());
-			Constructor con = c.getConstructor(new Class[] {ServiceExtensionDescriptionType.class});
-			Object obj = con.newInstance(new Object[] {extensionDesc});
+			Object obj = c.newInstance();
 			return (CreationExtensionPostProcessor) obj;
 		}
 		return null;

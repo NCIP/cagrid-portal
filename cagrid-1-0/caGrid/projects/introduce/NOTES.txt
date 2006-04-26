@@ -7,7 +7,7 @@ add tests to system tests for (coverage report shows no coverage):
 -CustomBeans and Serialization
 -Security
 - (DONE) simple types (boolean, string, etc) as input and output
--extensions
+- (DONE) extensions
 -deployment
 - (DONE) multiple faults on a method
 - (DONE) methods returning arrays

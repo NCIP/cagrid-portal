@@ -25,6 +25,7 @@ public class TestCaseInfo {
 		this.dir = dir;
 		this.packageName = packageName;
 		this.namespaceDomain = namespaceDomain;
+		
 
 	}
 
