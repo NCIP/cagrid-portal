@@ -70,8 +70,11 @@ public class CycleTestCase extends TestCase {
 	protected void setUp() {
 		jdepend = new JDepend();
 		try {
-			String dir = System.getProperty("build.dir", ".");
-			jdepend.addDirectory(dir);
+			String[] dirs= System.getProperty("build.dirs", ".").split(";");
+			for (int i = 0; i < dirs.length; i++) {
+				// System.out.println("Inspecting classes in directory " + dirs[i]);
+				jdepend.addDirectory(dirs[i]);
+			}
 			jdepend.analyzeTestClasses(false);
 		} catch (IOException ioe) {
 			ioe.printStackTrace();

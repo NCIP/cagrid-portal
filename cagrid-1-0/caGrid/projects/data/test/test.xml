@@ -25,12 +25,18 @@
 	</target>
 	
 	
-	<target name="instrument" depends="copyClasses">
+	<target name="instrument">
 		<taskdef classpathref="test.classpath" resource="tasks.properties"/>
 		<mkdir dir="${instrumented.classes.dir}"/>
 		<cobertura-instrument todir="${instrumented.classes.dir}" datafile="${cobertura.data.file}">
-			<fileset dir="${all.class.dir}">
+			<fileset dir="${build.utils.dest}">
 				<include name="**/*.class"/>
+			</fileset>
+			<fileset dir="${build.extension.dest}">
+				<include name="**/*.class"/>
+			</fileset>
+			<fileset dir="${build.service.dest}">
+				<include name="**.*.class"/>
 			</fileset>
 		</cobertura-instrument>
 	</target>
@@ -40,7 +46,7 @@
 	<target name="test" depends="instrument" description="Runs the tests.">
 		<mkdir dir="${junit.results.dir}"/>
 		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" showoutput="true" fork="yes">
-			<sysproperty key="build.dir" value="${test.classes.dir}"/>
+			<sysproperty key="build.dirs" value="${build.utils.dest};${build.extension.dest};${build.service.dest}"/>
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}"/>
 			<jvmarg value="-Dbuild.dir=${test.classes.dir}"/>
 			<classpath location="${instrumented.classes.dir}"/>
