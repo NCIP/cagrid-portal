@@ -40,8 +40,8 @@ import org.projectmobius.protocol.gme.SchemaNode;
 
 public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent implements PackageSelectedListener {
 
-	public String gmeURL = null;
-	public String cadsrURL = null;
+	private String gmeURL = null;
+	private String cadsrURL = null;
 
 	private CaDSRBrowserPanel caDSRPanel = null;
 	private JPanel nsPanel = null;
@@ -54,6 +54,7 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 		this.cadsrURL = ExtensionTools.getProperty(desc.getProperties(), "CADSR_URL");
 		this.gmeURL = ExtensionTools.getProperty(desc.getProperties(), "GME_URL");
 		initialize();
+		this.getCaDSRPanel().setDefaultCaDSRURL(this.cadsrURL);
 		this.getCaDSRPanel().discoverFromCaDSR();
 	}
 

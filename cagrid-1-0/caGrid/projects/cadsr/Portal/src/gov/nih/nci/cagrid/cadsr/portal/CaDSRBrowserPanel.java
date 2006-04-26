@@ -34,6 +34,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	private JPanel projectsPanel = null;
 	private JLabel projectLabel = null;
 	private JTextField cadsr = null;
+	private String default_cadsrURL = "http://localhost:8080/wsrf/services/cagrid/CaDSRService";
 	private JLabel cadsrAddressLabel = null;
 	private JLabel packageLabel = null;
 	private JComboBox classComboBox = null;
@@ -91,6 +92,11 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	}
 
 
+	public void setDefaultCaDSRURL(String url) {
+		this.default_cadsrURL = url;
+	}
+
+
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -132,7 +138,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 			gridBagConstraints6.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints6.gridy = 0;
-			gridBagConstraints6.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints6.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints6.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints6.gridx = 0;
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
@@ -140,7 +146,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 			gridBagConstraints5.gridx = 1;
 			gridBagConstraints5.gridy = 0;
 			gridBagConstraints5.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints5.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints5.weightx = 1.0;
 			cadsrAddressLabel = new JLabel();
 			cadsrAddressLabel.setText("caDSR");
@@ -152,8 +158,8 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 			gridBagConstraints4.gridx = 0;
 			queryPanel = new JPanel();
 			queryPanel.setLayout(new GridBagLayout());
-			queryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-				null, "Discover Data Types", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+			queryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Discover Data Types",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			queryPanel.add(getQueryButton(), gridBagConstraints4);
 			queryPanel.add(cadsrAddressLabel, gridBagConstraints6);
@@ -279,7 +285,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.gridx = 0;
 			gridBagConstraints3.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints3.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints3.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints3.gridy = 2;
 			classLabel = new JLabel();
@@ -288,7 +294,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints2.gridx = 1;
 			gridBagConstraints2.gridy = 2;
-			gridBagConstraints2.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints2.weightx = 1.0;
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
 			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
@@ -321,8 +327,8 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 			projectsPanel = new JPanel();
 			projectsPanel.setLayout(new GridBagLayout());
 			if (isShowQueryPanel()) {
-				projectsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, "Select Data Type", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				projectsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Data Type",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 				projectsPanel.add(getProjectComboBox(), gridBagConstraints7);
 				projectsPanel.add(projectLabel, gridBagConstraints9);
@@ -346,8 +352,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	public JTextField getCadsr() {
 		if (cadsr == null) {
 			cadsr = new JTextField();
-			// TODO: pull from some property
-			cadsr.setText("http://localhost:8080/wsrf/services/cagrid/CaDSRService");
+			cadsr.setText(this.default_cadsrURL);
 		}
 		return cadsr;
 	}
