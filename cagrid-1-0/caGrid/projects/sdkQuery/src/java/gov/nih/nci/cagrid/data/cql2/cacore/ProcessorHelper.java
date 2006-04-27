@@ -43,6 +43,12 @@ public class ProcessorHelper {
 			Junction groupJunction = processGroup(object.getGroup());
 			objectCriteria.add(groupJunction);
 		}
+		
+		// assign role to this object
+		if (object.getRoleName() != null && object.getRoleName().length() != 0) {
+			Criterion roleCritarion = Restrictions.idEq(object.getRoleName());
+			objectCriteria.add(roleCritarion);
+		}
 		return objectCriteria;
 	}
 	
