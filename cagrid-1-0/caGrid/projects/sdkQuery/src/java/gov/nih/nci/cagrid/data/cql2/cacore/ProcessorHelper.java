@@ -38,12 +38,10 @@ public class ProcessorHelper {
 			}
 		}
 		
-		// process groups
+		// process group
 		if (object.getGroup() != null) {
-			for (int i = 0; i < object.getGroup().length; i++) {
-				Junction groupJunction = processGroup(object.getGroup(i));
-				objectCriteria.add(groupJunction);
-			}
+			Junction groupJunction = processGroup(object.getGroup());
+			objectCriteria.add(groupJunction);
 		}
 		return objectCriteria;
 	}
