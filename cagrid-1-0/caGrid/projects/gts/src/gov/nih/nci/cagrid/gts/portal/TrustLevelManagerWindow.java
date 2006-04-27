@@ -33,7 +33,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @version $Id: TrustedAuthoritiesWindow.java,v 1.2 2006/03/27 19:05:40
  *          langella Exp $
  */
-public class TrustLevelManagerWindow extends GridPortalBaseFrame {
+public class TrustLevelManagerWindow extends GridPortalBaseFrame implements TrustLevelRefresher {
 
 	private javax.swing.JPanel jContentPane = null;
 
@@ -61,10 +61,6 @@ public class TrustLevelManagerWindow extends GridPortalBaseFrame {
 
 	private JComboBox service = null;
 
-	private boolean isQuerying = false;
-
-	private Object mutex = new Object();
-
 	private JLabel proxyLabel = null;
 
 	private JComboBox proxy = null;
@@ -76,6 +72,8 @@ public class TrustLevelManagerWindow extends GridPortalBaseFrame {
 	private JButton removeTrustLevelButton = null;
 
 	private JButton viewModifyButton = null;
+
+	private boolean searchDone = false;
 
 
 	/**
@@ -243,7 +241,9 @@ public class TrustLevelManagerWindow extends GridPortalBaseFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
+							disableAllActions();
 							addTrustLevel();
+							enableAllActions();
 						}
 					};
 					try {
@@ -265,7 +265,7 @@ public class TrustLevelManagerWindow extends GridPortalBaseFrame {
 			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-				new TrustLevelWindow(service, proxy), 500, 400);
+				new TrustLevelWindow(service, proxy, this), 500, 400);
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
 		}
@@ -277,7 +277,7 @@ public class TrustLevelManagerWindow extends GridPortalBaseFrame {
 			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-				new TrustLevelWindow(service, proxy, getTrustLevelTable().getSelectedTrustLevel()), 500, 400);
+				new TrustLevelWindow(service, proxy, getTrustLevelTable().getSelectedTrustLevel(), this), 500, 400);
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
 		}
@@ -382,7 +382,9 @@ public class TrustLevelManagerWindow extends GridPortalBaseFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
+							disableAllActions();
 							getTrustLevels();
+							enableAllActions();
 						}
 					};
 					try {
@@ -399,17 +401,6 @@ public class TrustLevelManagerWindow extends GridPortalBaseFrame {
 
 
 	private void getTrustLevels() {
-
-		synchronized (mutex) {
-			if (isQuerying) {
-				PortalUtils.showErrorMessage("Query Already in Progress",
-					"Please wait until the current query is finished before executing another.");
-				return;
-			} else {
-				isQuerying = true;
-			}
-		}
-
 		this.getTrustLevelTable().clearTable();
 		this.updateProgress(true, "Finding Trust Levels...");
 
@@ -424,6 +415,7 @@ public class TrustLevelManagerWindow extends GridPortalBaseFrame {
 					getTrustLevelTable().addTrustLevel(levels[i]);
 				}
 			}
+			searchDone = true;
 			this.updateProgress(false, "Completed [Found " + length + " Trust Level(s)]");
 
 		} catch (Exception e) {
@@ -431,8 +423,6 @@ public class TrustLevelManagerWindow extends GridPortalBaseFrame {
 			PortalUtils.showErrorMessage(e);
 			this.updateProgress(false, "Error");
 		}
-		isQuerying = false;
-
 	}
 
 
@@ -523,7 +513,9 @@ public class TrustLevelManagerWindow extends GridPortalBaseFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
+							disableAllActions();
 							removeTrustLevel();
+							enableAllActions();
 						}
 					};
 					try {
@@ -547,6 +539,7 @@ public class TrustLevelManagerWindow extends GridPortalBaseFrame {
 			TrustLevel level = getTrustLevelTable().getSelectedTrustLevel();
 			client.removeTrustLevel(level.getName());
 			getTrustLevelTable().removeSelectedTrustLevel();
+			refreshTrustLevels();
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
 		}
@@ -565,7 +558,9 @@ public class TrustLevelManagerWindow extends GridPortalBaseFrame {
 			viewModifyButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
+						disableAllActions();
 						getTrustLevelTable().doubleClick();
+						enableAllActions();
 					} catch (Exception ex) {
 						PortalUtils.showErrorMessage(ex);
 					}
@@ -575,4 +570,31 @@ public class TrustLevelManagerWindow extends GridPortalBaseFrame {
 		}
 		return viewModifyButton;
 	}
+
+
+	private void disableAllActions() {
+		getQuery().setEnabled(false);
+		getAddTrustLevel().setEnabled(false);
+		getViewModifyButton().setEnabled(false);
+		getRemoveTrustLevelButton().setEnabled(false);
+	}
+
+
+	private void enableAllActions() {
+		getQuery().setEnabled(true);
+		getAddTrustLevel().setEnabled(true);
+		getViewModifyButton().setEnabled(true);
+		getRemoveTrustLevelButton().setEnabled(true);
+	}
+
+
+	public void refreshTrustLevels() {
+		if (searchDone) {
+			disableAllActions();
+			this.getTrustLevels();
+			enableAllActions();
+		}
+
+	}
+
 }

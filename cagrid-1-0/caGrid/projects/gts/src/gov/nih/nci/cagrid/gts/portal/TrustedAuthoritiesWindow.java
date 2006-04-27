@@ -37,7 +37,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @version $Id: TrustedAuthoritiesWindow.java,v 1.2 2006/03/27 19:05:40
  *          langella Exp $
  */
-public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
+public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements TrustedAuthorityRefresher {
 
 	private final static String ANY = "Any";
 
@@ -67,10 +67,6 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 
 	private JComboBox service = null;
 
-	private boolean isQuerying = false;
-
-	private Object mutex = new Object();
-
 	private JLabel proxyLabel = null;
 
 	private JComboBox proxy = null;
@@ -94,6 +90,10 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 	private JComboBox trustLevel = null;
 
 	private JComboBox status = null;
+
+	private JButton addButton = null;
+
+	private boolean searchDone = false;
 
 
 	/**
@@ -245,6 +245,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
+			buttonPanel.add(getAddButton(), null);
 			buttonPanel.add(getViewTrustedAuthority(), null);
 			buttonPanel.add(getRemoveTrustedAuthorityButton(), null);
 		}
@@ -293,7 +294,9 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
+							disableAllActions();
 							showTrustedAuthority();
+							enableAllActions();
 						}
 					};
 					try {
@@ -315,7 +318,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			TrustedAuthorityWindow window = new TrustedAuthorityWindow(service, proxy, this.getTrustedAuthorityTable()
-				.getSelectedTrustedAuthority());
+				.getSelectedTrustedAuthority(), this);
 			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(window);
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
@@ -421,7 +424,9 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
+							disableAllActions();
 							findTrustedAuthorities();
+							enableAllActions();
 						}
 					};
 					try {
@@ -438,16 +443,6 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 
 
 	private void findTrustedAuthorities() {
-
-		synchronized (mutex) {
-			if (isQuerying) {
-				PortalUtils.showErrorMessage("Query Already in Progress",
-					"Please wait until the current query is finished before executing another.");
-				return;
-			} else {
-				isQuerying = true;
-			}
-		}
 
 		this.getTrustedAuthorityTable().clearTable();
 		this.updateProgress(true, "Finding Trusted Authorities...");
@@ -473,6 +468,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 			for (int i = 0; i < length; i++) {
 				this.trustedAuthorityTable.addTrustedAuthority(tas[i]);
 			}
+			searchDone = true;
 
 			this.updateProgress(false, "Completed [Found " + length + " Trusted Authority(s)]");
 
@@ -481,8 +477,6 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 			PortalUtils.showErrorMessage(e);
 			this.updateProgress(false, "Error");
 		}
-		isQuerying = false;
-
 	}
 
 
@@ -578,7 +572,9 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
+							disableAllActions();
 							removeTrustedAuthority();
+							enableAllActions();
 						}
 					};
 					try {
@@ -602,6 +598,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 			client.removeTrustedAuthority(this.getTrustedAuthorityTable().getSelectedTrustedAuthority()
 				.getTrustedAuthorityName());
 			this.getTrustedAuthorityTable().removeSelectedTrustedAuthority();
+			refreshTrustedAuthorities();
 
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
@@ -705,4 +702,55 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame {
 		return status;
 	}
 
+
+	/**
+	 * This method initializes addButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getAddButton() {
+		if (addButton == null) {
+			addButton = new JButton();
+			addButton.setText("Add Trusted Authority");
+			addButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					disableAllActions();
+					addTrustedAuthority();
+					enableAllActions();
+				}
+			});
+			addButton.setIcon(GTSLookAndFeel.getAddTrustedAuthorityIcon());
+		}
+		return addButton;
+	}
+
+
+	private void addTrustedAuthority() {
+		PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new TrustedAuthorityWindow(this));
+	}
+
+
+	private void disableAllActions() {
+		getQuery().setEnabled(false);
+		getAddButton().setEnabled(false);
+		getViewTrustedAuthority().setEnabled(false);
+		getRemoveTrustedAuthorityButton().setEnabled(false);
+	}
+
+
+	private void enableAllActions() {
+		getQuery().setEnabled(true);
+		getAddButton().setEnabled(true);
+		getViewTrustedAuthority().setEnabled(true);
+		getRemoveTrustedAuthorityButton().setEnabled(true);
+	}
+
+
+	public void refreshTrustedAuthorities() {
+		if (searchDone) {
+			disableAllActions();
+			findTrustedAuthorities();
+			enableAllActions();
+		}
+	}
 }

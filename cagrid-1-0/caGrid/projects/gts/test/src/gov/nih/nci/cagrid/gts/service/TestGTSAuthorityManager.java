@@ -99,6 +99,21 @@ public class TestGTSAuthorityManager extends TestCase {
 			} catch (IllegalAuthorityFault f) {
 
 			}
+			a3.setServiceIdentity("");
+			try {
+				am.addAuthority(a3);
+				fail("Should not be able to add authority!!!");
+			} catch (IllegalAuthorityFault f) {
+
+			}
+			
+			a3.setServiceIdentity("    ");
+			try {
+				am.addAuthority(a3);
+				fail("Should not be able to add authority!!!");
+			} catch (IllegalAuthorityFault f) {
+
+			}
 
 			// Invalid Priority
 			AuthorityGTS a4 = new AuthorityGTS();
@@ -187,6 +202,22 @@ public class TestGTSAuthorityManager extends TestCase {
 			// Add Authority no service identity
 			AuthorityGTS a3 = getAuthority("GTS", 1);
 			a3.setServiceIdentity(null);
+			try {
+				am.addAuthority(a3);
+				fail("Should not be able to update authority!!!");
+			} catch (IllegalAuthorityFault f) {
+
+			}
+			
+			a3.setServiceIdentity("");
+			try {
+				am.addAuthority(a3);
+				fail("Should not be able to update authority!!!");
+			} catch (IllegalAuthorityFault f) {
+
+			}
+			
+			a3.setServiceIdentity("   ");
 			try {
 				am.addAuthority(a3);
 				fail("Should not be able to update authority!!!");

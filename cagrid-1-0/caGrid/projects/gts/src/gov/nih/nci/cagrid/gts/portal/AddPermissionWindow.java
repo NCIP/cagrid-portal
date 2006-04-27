@@ -49,13 +49,16 @@ public class AddPermissionWindow extends GridPortalComponent {
 	private JButton cancelButton = null;
 
 	private PermissionPanel permissionPanel = null;
+	
+	private PermissionRefresher refresher;
 
 
 	/**
 	 * This is the default constructor
 	 */
-	public AddPermissionWindow(String service, GlobusCredential cred) {
+	public AddPermissionWindow(String service, GlobusCredential cred,PermissionRefresher refresher) {
 		super();
+		this.refresher = refresher;
 		initialize();
 		this.gts.setSelectedItem(service);
 		this.proxy.setSelectedItem(new ProxyCaddy(cred));
@@ -274,7 +277,9 @@ public class AddPermissionWindow extends GridPortalComponent {
 			String service = ((GTSServiceListComboBox) getGts()).getSelectedService();
 			GTSAdminClient client = new GTSAdminClient(service, proxy);
 			client.addPermission(permissionPanel.getPermission());
+			refresher.refreshPermissions();
 			dispose();
+			PortalUtils.showMessage("Succesfully add the permission!!!");
 		} catch (Exception e) {
 			getAddButton().setEnabled(true);
 			e.printStackTrace();

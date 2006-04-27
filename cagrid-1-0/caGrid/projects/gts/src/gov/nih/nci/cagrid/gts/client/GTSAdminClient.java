@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.gts.client;
 
+import gov.nih.nci.cagrid.gts.bean.AuthorityGTS;
 import gov.nih.nci.cagrid.gts.bean.AuthorityPriorityUpdate;
 import gov.nih.nci.cagrid.gts.bean.Permission;
 import gov.nih.nci.cagrid.gts.bean.PermissionFilter;
@@ -10,6 +11,7 @@ import gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault;
+import gov.nih.nci.cagrid.gts.stubs.InvalidAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidTrustLevelFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault;
@@ -95,6 +97,24 @@ public class GTSAdminClient {
 	public void updateAuthorityPriorities(AuthorityPriorityUpdate update) throws RemoteException, GTSInternalFault,
 		IllegalAuthorityFault, PermissionDeniedFault {
 		client.updateAuthorityPriorities(update);
+	}
+
+
+	public void removeAuthority(String serviceURI) throws RemoteException, GTSInternalFault, InvalidAuthorityFault,
+		PermissionDeniedFault {
+		client.removeAuthority(serviceURI);
+	}
+
+
+	public void addAuthority(AuthorityGTS gts) throws RemoteException, GTSInternalFault, IllegalAuthorityFault,
+		PermissionDeniedFault {
+		client.addAuthority(gts);
+	}
+
+
+	public void updateAuthority(AuthorityGTS gts) throws RemoteException, GTSInternalFault, IllegalAuthorityFault,
+		InvalidAuthorityFault, PermissionDeniedFault {
+		client.updateAuthority(gts);
 	}
 
 }

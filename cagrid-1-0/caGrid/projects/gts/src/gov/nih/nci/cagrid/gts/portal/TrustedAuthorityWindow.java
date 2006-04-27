@@ -85,20 +85,24 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 	private JButton importCRL = null;
 
 	private boolean update = false;
+	
+	private TrustedAuthorityRefresher refresher;
 
 
 	/**
 	 * This is the default constructor
 	 */
-	public TrustedAuthorityWindow() {
+	public TrustedAuthorityWindow(TrustedAuthorityRefresher refresher) {
 		super();
+		this.refresher = refresher;
 		initialize();
 		this.updateTrustLevels();
 	}
 
 
-	public TrustedAuthorityWindow(String service, GlobusCredential cred, TrustedAuthority ta) throws Exception {
+	public TrustedAuthorityWindow(String service, GlobusCredential cred, TrustedAuthority ta,TrustedAuthorityRefresher refresher) throws Exception {
 		super();
+		this.refresher = refresher;
 		update = true;
 		initialize();
 		this.gts.setSelectedItem(service);
@@ -625,6 +629,7 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 			client.addTrustedAuthority(ta);
 			PortalUtils.showMessage("The Trusted Authority, " + ta.getTrustedAuthorityName()
 				+ " was succesfully added!!!");
+			refresher.refreshTrustedAuthorities();
 			dispose();
 		} catch (Exception e) {
 			getAddButton().setEnabled(true);
@@ -651,6 +656,7 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 			client.updateTrustedAuthority(ta);
 			PortalUtils.showMessage("The Trusted Authority, " + ta.getTrustedAuthorityName()
 				+ " was succesfully updated!!!");
+			refresher.refreshTrustedAuthorities();
 			getAddButton().setEnabled(true);
 		} catch (Exception e) {
 			getAddButton().setEnabled(true);

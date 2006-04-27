@@ -33,7 +33,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @version $Id: TrustedAuthoritiesWindow.java,v 1.2 2006/03/27 19:05:40
  *          langella Exp $
  */
-public class AuthorityManagerWindow extends GridPortalBaseFrame {
+public class AuthorityManagerWindow extends GridPortalBaseFrame implements AuthorityRefresher {
 
 	private javax.swing.JPanel jContentPane = null;
 
@@ -61,10 +61,6 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame {
 
 	private JComboBox service = null;
 
-	private boolean isQuerying = false;
-
-	private Object mutex = new Object();
-
 	private JLabel proxyLabel = null;
 
 	private JComboBox proxy = null;
@@ -84,6 +80,8 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame {
 	private JButton decreasePriority = null;
 
 	private JButton updatePriorities = null;
+
+	private boolean searchDone = false;
 
 
 	/**
@@ -258,7 +256,9 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
-							addTrustLevel();
+							disableAllActions();
+							addAuthority();
+							enableAllActions();
 						}
 					};
 					try {
@@ -275,13 +275,15 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame {
 	}
 
 
-	public void addTrustLevel() {
+	public void addAuthority() {
 		try {
+
 			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-				new TrustLevelWindow(service, proxy), 500, 400);
+				new AuthorityWindow(service, proxy, this), 600, 400);
 		} catch (Exception e) {
+			e.printStackTrace();
 			PortalUtils.showErrorMessage(e);
 		}
 	}
@@ -291,9 +293,8 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame {
 		try {
 			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			// PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-			// new TrustLevelWindow(service, proxy,
-			// getTrustLevelTable().getSelectedTrustLevel()), 500, 400);
+			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+				new AuthorityWindow(service, proxy, getAuthorityTable().getSelectedAuthority(), this), 600, 400);
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
 		}
@@ -396,6 +397,7 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame {
 			query.setIcon(GTSLookAndFeel.getQueryIcon());
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					disableAllActions();
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
 							getAuthorities();
@@ -416,16 +418,6 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame {
 
 	private void getAuthorities() {
 
-		synchronized (mutex) {
-			if (isQuerying) {
-				PortalUtils.showErrorMessage("Query Already in Progress",
-					"Please wait until the current query is finished before executing another.");
-				return;
-			} else {
-				isQuerying = true;
-			}
-		}
-
 		this.getAuthorityTable().clearTable();
 		this.updateProgress(true, "Finding Authorities...");
 
@@ -440,14 +432,16 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame {
 					this.getAuthorityTable().addAuthority(auth[i]);
 				}
 			}
+			searchDone = true;
 			this.updateProgress(false, "Completed [Found " + length + " Authority(s)]");
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			PortalUtils.showErrorMessage(e);
 			this.updateProgress(false, "Error");
+		} finally {
+			enableAllActions();
 		}
-		isQuerying = false;
 
 	}
 
@@ -537,9 +531,11 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame {
 			removeAuthority.setText("Remove Authority");
 			removeAuthority.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					disableAllActions();
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
 							removeAuthority();
+							enableAllActions();
 						}
 					};
 					try {
@@ -560,6 +556,10 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame {
 			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			GTSAdminClient client = new GTSAdminClient(service, proxy);
+			AuthorityGTS gts = this.getAuthorityTable().getSelectedAuthority();
+			client.removeAuthority(gts.getServiceURI());
+			getAuthorities();
+			PortalUtils.showMessage("Successfully removed the authority " + gts.getServiceURI() + "!!!");
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
 		}
@@ -568,13 +568,39 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame {
 
 	private void updatePriorities() {
 		try {
+			disableAllActions();
 			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			GTSAdminClient client = new GTSAdminClient(service, proxy);
 			client.updateAuthorityPriorities(getAuthorityTable().getPriorityUpdate());
+			PortalUtils.showMessage("Successfully updated the authority priorities!!!");
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
+		} finally {
+			enableAllActions();
 		}
+	}
+
+
+	private void disableAllActions() {
+		getQuery().setEnabled(false);
+		getAddAuthority().setEnabled(false);
+		getViewModifyButton().setEnabled(false);
+		getRemoveAuthority().setEnabled(false);
+		getUpdatePriorities().setEnabled(false);
+		getIncreasePriority().setEnabled(false);
+		getDecreasePriority().setEnabled(false);
+	}
+
+
+	private void enableAllActions() {
+		getQuery().setEnabled(true);
+		getAddAuthority().setEnabled(true);
+		getViewModifyButton().setEnabled(true);
+		getRemoveAuthority().setEnabled(true);
+		getUpdatePriorities().setEnabled(true);
+		getIncreasePriority().setEnabled(true);
+		getDecreasePriority().setEnabled(true);
 	}
 
 
@@ -589,11 +615,23 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame {
 			viewModifyButton.setText("View / Modify Authority");
 			viewModifyButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					MobiusRunnable runner = new MobiusRunnable() {
+						public void execute() {
+							disableAllActions();
+							try {
+								getAuthorityTable().doubleClick();
+							} catch (Exception ex) {
+								PortalUtils.showErrorMessage(ex);
+							}
+							enableAllActions();
+						}
+					};
 					try {
-						getAuthorityTable().doubleClick();
-					} catch (Exception ex) {
-						PortalUtils.showErrorMessage(ex);
+						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
 					}
+
 				}
 			});
 			viewModifyButton.setIcon(GTSLookAndFeel.getAuthorityEditIcon());
@@ -676,11 +714,32 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame {
 			updatePriorities.setText("Update Priorities");
 			updatePriorities.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					updatePriorities();
+					disableAllActions();
+					MobiusRunnable runner = new MobiusRunnable() {
+						public void execute() {
+							updatePriorities();
+							enableAllActions();
+						}
+					};
+					try {
+						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
 				}
 			});
 			updatePriorities.setIcon(GTSLookAndFeel.getAuthorityUpdateIcon());
 		}
 		return updatePriorities;
 	}
+
+
+	public void refeshAuthorities() {
+		if (searchDone) {
+			disableAllActions();
+			getAuthorities();
+			enableAllActions();
+		}
+	}
+
 }

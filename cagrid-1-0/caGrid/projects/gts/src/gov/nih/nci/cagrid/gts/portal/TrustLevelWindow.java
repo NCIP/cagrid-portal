@@ -64,17 +64,20 @@ public class TrustLevelWindow extends GridPortalComponent {
 
 	private JScrollPane jScrollPane = null;
 
+	private TrustLevelRefresher refresher;
+
 
 	/**
 	 * This is the default constructor
 	 */
-	public TrustLevelWindow(String service, GlobusCredential cred) {
-		this(service, cred, null);
+	public TrustLevelWindow(String service, GlobusCredential cred, TrustLevelRefresher refresher) {
+		this(service, cred, null, refresher);
 	}
 
 
-	public TrustLevelWindow(String service, GlobusCredential cred, TrustLevel level) {
+	public TrustLevelWindow(String service, GlobusCredential cred, TrustLevel level, TrustLevelRefresher refresher) {
 		super();
+		this.refresher = refresher;
 		if (level != null) {
 			update = true;
 		} else {
@@ -306,7 +309,13 @@ public class TrustLevelWindow extends GridPortalComponent {
 			} else {
 				client.addTrustLevel(level);
 			}
+			refresher.refreshTrustLevels();
 			dispose();
+			if (update) {
+				PortalUtils.showMessage("Successfully added the trust level " + level.getName() + "!!!");
+			} else {
+				PortalUtils.showMessage("Successfully updated the trust level " + level.getName() + "!!!");
+			}
 		} catch (Exception e) {
 			getAddButton().setEnabled(true);
 			e.printStackTrace();
@@ -328,7 +337,7 @@ public class TrustLevelWindow extends GridPortalComponent {
 			gridBagConstraints9.weighty = 1.0;
 			gridBagConstraints9.gridx = 0;
 			gridBagConstraints9.gridy = 2;
-			gridBagConstraints9.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints9.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints9.gridwidth = 2;
 			gridBagConstraints9.weightx = 1.0;
 			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
@@ -342,11 +351,11 @@ public class TrustLevelWindow extends GridPortalComponent {
 			gridBagConstraints6.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints6.gridx = 1;
 			gridBagConstraints6.gridy = 0;
-			gridBagConstraints6.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints6.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints6.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints6.weightx = 1.0;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints1.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints1.gridy = 0;
 			gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints1.gridx = 0;
@@ -394,10 +403,10 @@ public class TrustLevelWindow extends GridPortalComponent {
 
 
 	/**
-	 * This method initializes jScrollPane	
-	 * 	
-	 * @return javax.swing.JScrollPane	
-	 */    
+	 * This method initializes jScrollPane
+	 * 
+	 * @return javax.swing.JScrollPane
+	 */
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();

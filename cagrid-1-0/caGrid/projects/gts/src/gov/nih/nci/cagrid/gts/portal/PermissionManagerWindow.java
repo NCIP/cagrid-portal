@@ -33,7 +33,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @version $Id: TrustedAuthoritiesWindow.java,v 1.2 2006/03/27 19:05:40
  *          langella Exp $
  */
-public class PermissionManagerWindow extends GridPortalBaseFrame {
+public class PermissionManagerWindow extends GridPortalBaseFrame implements PermissionRefresher{
 
 	private javax.swing.JPanel jContentPane = null;
 
@@ -61,10 +61,6 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 
 	private JComboBox service = null;
 
-	private boolean isQuerying = false;
-
-	private Object mutex = new Object();
-
 	private JLabel proxyLabel = null;
 
 	private JComboBox proxy = null;
@@ -73,11 +69,13 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 
 	private JProgressBar progress = null;
 
-	private JButton removeTrustedAuthorityButton = null;
+	private JButton removePermissionButton = null;
 
 	private PermissionPanel filterPanel = null;
 
 	private String currentService = null;
+	
+	private boolean searchDone = false;
 
 
 	/**
@@ -204,8 +202,8 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
-			buttonPanel.add(getViewTrustedAuthority(), null);
-			buttonPanel.add(getRemoveTrustedAuthorityButton(), null);
+			buttonPanel.add(getAddPermission(), null);
+			buttonPanel.add(getRemovePermissionButton(), null);
 		}
 		return buttonPanel;
 	}
@@ -243,7 +241,7 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getViewTrustedAuthority() {
+	private JButton getAddPermission() {
 		if (addPermission == null) {
 			addPermission = new JButton();
 			addPermission.setText("Add Permission");
@@ -252,7 +250,9 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
+							disableAllActions();
 							addPermission();
+							enableAllActions();
 						}
 					};
 					try {
@@ -274,7 +274,7 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-				new AddPermissionWindow(service, proxy), 600, 300);
+				new AddPermissionWindow(service, proxy,this), 600, 300);
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
 		}
@@ -379,7 +379,9 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
+							disableAllActions();
 							findPermissions();
+							enableAllActions();
 						}
 					};
 					try {
@@ -397,16 +399,6 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 
 	private void findPermissions() {
 
-		synchronized (mutex) {
-			if (isQuerying) {
-				PortalUtils.showErrorMessage("Query Already in Progress",
-					"Please wait until the current query is finished before executing another.");
-				return;
-			} else {
-				isQuerying = true;
-			}
-		}
-
 		this.getPermissionsTable().clearTable();
 		this.updateProgress(true, "Finding Permissions...");
 
@@ -423,6 +415,7 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 					this.permissionsTable.addPermission(perms[i]);
 				}
 			}
+			searchDone = true;
 			this.updateProgress(false, "Completed [Found " + length + " Permission(s)]");
 
 		} catch (Exception e) {
@@ -430,7 +423,6 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 			PortalUtils.showErrorMessage(e);
 			this.updateProgress(false, "Error");
 		}
-		isQuerying = false;
 
 	}
 
@@ -530,15 +522,17 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getRemoveTrustedAuthorityButton() {
-		if (removeTrustedAuthorityButton == null) {
-			removeTrustedAuthorityButton = new JButton();
-			removeTrustedAuthorityButton.setText("Remove Permission");
-			removeTrustedAuthorityButton.addActionListener(new java.awt.event.ActionListener() {
+	private JButton getRemovePermissionButton() {
+		if (removePermissionButton == null) {
+			removePermissionButton = new JButton();
+			removePermissionButton.setText("Remove Permission");
+			removePermissionButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
+							disableAllActions();
 							removePermission();
+							enableAllActions();
 						}
 					};
 					try {
@@ -548,9 +542,9 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 					}
 				}
 			});
-			removeTrustedAuthorityButton.setIcon(GTSLookAndFeel.getRevokePermissionIcon());
+			removePermissionButton.setIcon(GTSLookAndFeel.getRevokePermissionIcon());
 		}
-		return removeTrustedAuthorityButton;
+		return removePermissionButton;
 	}
 
 
@@ -560,7 +554,7 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			GTSAdminClient client = new GTSAdminClient(service, proxy);
 			client.revokePermission(this.permissionsTable.getSelectedPermission());
-			this.getPermissionsTable().removeSelectedPermission();
+			this.refreshPermissions();
 
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
@@ -600,4 +594,28 @@ public class PermissionManagerWindow extends GridPortalBaseFrame {
 		}
 
 	}
+	private void disableAllActions() {
+		getQuery().setEnabled(false);
+		getAddPermission().setEnabled(false);
+		getRemovePermissionButton().setEnabled(false);
+	}
+
+
+	private void enableAllActions() {
+		getQuery().setEnabled(true);
+		getAddPermission().setEnabled(true);
+		getRemovePermissionButton().setEnabled(true);
+	}
+
+
+	public void refreshPermissions() {
+		if(searchDone){
+			disableAllActions();
+			findPermissions();
+			enableAllActions();
+		}
+		
+	}
+	
+	
 }

@@ -20,8 +20,8 @@
 	  		<class>gov.nih.nci.cagrid.gts.portal.GTSMenu</class>
 	  		<icon>/system-software-update.png</icon>
 	  		<dimensions>
-	  			<width>300</width>
-	  			<height>300</height>
+	  			<width>250</width>
+	  			<height>250</height>
 	  		</dimensions>
 	  	</component>
 	  </components>

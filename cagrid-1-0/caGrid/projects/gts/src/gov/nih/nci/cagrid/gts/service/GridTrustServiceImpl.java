@@ -33,7 +33,6 @@ public class GridTrustServiceImpl implements GridTrustServiceI {
 			SimpleResourceManager srm = new SimpleResourceManager(home.getGtsConfig());
 			GTSConfiguration conf = (GTSConfiguration) srm.getResource(GTSConfiguration.RESOURCE);
 			this.gts = new GTS(conf, type.getAddress().toString());
-			this.gts.setupTestAuthorities();
 		} catch (Exception e) {
 			FaultHelper.printStackTrace(e);
 			throw new RemoteException("Error configuring Grid Trust Service");

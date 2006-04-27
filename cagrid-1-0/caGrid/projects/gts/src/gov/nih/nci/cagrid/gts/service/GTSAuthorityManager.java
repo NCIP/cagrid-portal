@@ -215,7 +215,7 @@ public class GTSAuthorityManager {
 			throw fault;
 		}
 
-		if ((gts.isPerformAuthorization()) && (gts.getServiceIdentity() == null)) {
+		if ((gts.isPerformAuthorization()) && (Utils.clean(gts.getServiceIdentity()) == null)) {
 			IllegalAuthorityFault fault = new IllegalAuthorityFault();
 			fault.setFaultString("The Authority, " + gts.getServiceURI()
 				+ " cannot be updated, when authorization is required a service identity must be specified!!!");
@@ -387,7 +387,7 @@ public class GTSAuthorityManager {
 			throw fault;
 		}
 
-		if ((gts.isPerformAuthorization()) && (gts.getServiceIdentity() == null)) {
+		if ((gts.isPerformAuthorization()) && (Utils.clean(gts.getServiceIdentity()) == null)) {
 			IllegalAuthorityFault fault = new IllegalAuthorityFault();
 			fault.setFaultString("The Authority, " + gts.getServiceURI()
 				+ " cannot be added, when authorization is required a service identity must be specified!!!");
