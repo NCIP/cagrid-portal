@@ -36,7 +36,6 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -1343,7 +1342,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			credentialsPanel.setLayout(this.credentialPanelLayout);
 			credentialsPanel.add(getNonePanel(), N0_CRED_PANEL);
 			credentialsPanel.add(getCertificatePanel(), PKI_CRED_PANEL);
-			//credentialsPanel.add(getProxyPanel(), PROXY_CRED_PANEL);
+			credentialsPanel.add(getProxyPanel(), PROXY_CRED_PANEL);
 		}
 		return credentialsPanel;
 	}
@@ -1524,13 +1523,4 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return jPanel;
 	}
 
-
-	public static void main(String[] args) {
-		JFrame f = new JFrame();
-		ServiceSecurityPanel s = new ServiceSecurityPanel();
-		f.setContentPane(s);
-		f.pack();
-		f.show();
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
 }

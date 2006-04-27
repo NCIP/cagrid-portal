@@ -203,21 +203,24 @@ public class LoadProxyFromFileSystemWindow extends GridPortalComponent {
 		String proxyStr = this.proxy.getText().trim();
 		if (proxyStr.length() == 0) {
 			PortalUtils.showErrorMessage("You must specify a proxy!!!");
+			return;
 		}
-		
+
 		try {
 			ProxyUtil.loadProxy(proxyStr);
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage("Invalid proxy specified!!!");
+			return;
 		}
-		
+
 		try {
-			proxyStr = proxyStr.replace('\\','/');
+			proxyStr = proxyStr.replace('\\', '/');
 			System.out.println(proxyStr);
 			ProxyCredential cred = new ProxyCredential(proxyStr);
 			this.serviceSecurity.setProxy(cred);
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
+			return;
 		}
 		dispose();
 	}

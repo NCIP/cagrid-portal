@@ -273,17 +273,20 @@ public class LoadCredentialsFromFileSystemWindow extends GridPortalComponent {
 		String certStr = this.certificate.getText().trim();
 		if (certStr.length() == 0) {
 			PortalUtils.showErrorMessage("You must specify a certificate!!!");
+			return;
 		}
 		
 		try {
 			CertUtil.loadCertificate(certStr);
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage("Invalid certificate specified!!!");
+			return;
 		}
 
 		String keyStr = this.privateKey.getText().trim();
 		if (keyStr.length() == 0) {
 			PortalUtils.showErrorMessage("You must specify a private key!!!");
+			return;
 		}
 
 		
@@ -291,6 +294,7 @@ public class LoadCredentialsFromFileSystemWindow extends GridPortalComponent {
 			 KeyUtil.loadPrivateKey(new File(keyStr), null);
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage("Invalid private key specified: " + e.getMessage());
+			return;
 		}
 		X509Credential cred = new X509Credential();
 		cred.setCertificateLocation(certStr.replace('\\','/'));
@@ -299,6 +303,7 @@ public class LoadCredentialsFromFileSystemWindow extends GridPortalComponent {
 			this.serviceSecurity.setCredentials(cred);
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
+			return;
 		}
 		dispose();
 	}
