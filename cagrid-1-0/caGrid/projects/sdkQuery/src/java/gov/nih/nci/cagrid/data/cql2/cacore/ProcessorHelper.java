@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.cqlquery2.ObjectGroup;
 import gov.nih.nci.cagrid.cqlquery2.ObjectProperty;
 import gov.nih.nci.cagrid.cqlquery2.Predicate;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
+import gov.nih.nci.cagrid.data.QueryProcessingException;
 
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
@@ -24,9 +25,14 @@ import org.hibernate.criterion.Subqueries;
  */
 public class ProcessorHelper {
 
-	public static DetachedCriteria processNestedObject(NestedObject object) throws ClassNotFoundException, MalformedQueryException {
+	public static DetachedCriteria processNestedObject(NestedObject object) throws QueryProcessingException, MalformedQueryException {
+		Class objectClass = null;
 		String objectName = object.getName();
-		Class objectClass = Class.forName(objectName);
+		try {
+			objectClass = Class.forName(objectName);
+		} catch (Exception ex) {
+			throw new QueryProcessingException("Error getting nested object class: " + ex.getMessage(), ex);
+		}
 		DetachedCriteria objectCriteria = DetachedCriteria.forClass(objectClass);
 		
 		// apply properties to the object criteria
@@ -73,7 +79,7 @@ public class ProcessorHelper {
 	}
 	
 	
-	public static Junction processGroup(ObjectGroup group) throws ClassNotFoundException, MalformedQueryException {
+	public static Junction processGroup(ObjectGroup group) throws QueryProcessingException, MalformedQueryException {
 		Junction junction = null;
 		if (group.getRelation().getValue().equals(LogicalOperator._AND)) {
 			junction = Restrictions.conjunction();

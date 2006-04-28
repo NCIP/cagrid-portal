@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.cqlquery.LogicalOperator;
 import gov.nih.nci.cagrid.cqlquery.Objects;
 import gov.nih.nci.cagrid.cqlquery.Predicate;
 import gov.nih.nci.cagrid.cqlquery.Property;
+import gov.nih.nci.cagrid.data.QueryProcessingException;
 
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
@@ -23,10 +24,15 @@ import org.hibernate.criterion.Subqueries;
  */
 public class ProcessorHelper {
 	
-	public static DetachedCriteria processObjects(Objects objects) throws ClassNotFoundException {
+	public static DetachedCriteria processObjects(Objects objects) throws QueryProcessingException {
 		// create the object's criteria
 		String objectName = objects.getName();
-		Class objectClass = Class.forName(objectName);
+		Class objectClass = null;
+		try {
+			objectClass = Class.forName(objectName);
+		} catch (ClassNotFoundException ex) {
+			throw new QueryProcessingException("Error getting object class: " + ex.getMessage(), ex);
+		}
 		DetachedCriteria objectCriteria = DetachedCriteria.forClass(objectClass);		
 		
 		// apply properties to the object
@@ -65,7 +71,7 @@ public class ProcessorHelper {
 	}
 	
 	
-	public static Junction processGroup(Group group) throws ClassNotFoundException {
+	public static Junction processGroup(Group group) throws QueryProcessingException {
 		Junction groupJunction = null;
 		if (group.getLogicRelation().getValue().equals(LogicalOperator._AND)) {
 			groupJunction = Restrictions.conjunction();

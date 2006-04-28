@@ -8,7 +8,9 @@ import gov.nih.nci.cagrid.cqlresultset.CQLObjectResult;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResultsType;
 import gov.nih.nci.cagrid.data.InitializationException;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
+import gov.nih.nci.cagrid.data.QueryProcessingException;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
+import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
 import java.util.List;
@@ -42,11 +44,15 @@ public class IgnorantQueryProcessor extends CQLQueryProcessor {
 	}
 
 
-	public CQLQueryResultsType processQuery(CQLQueryType query) throws MalformedQueryException, Exception {
+	public CQLQueryResultsType processQuery(CQLQueryType query) throws MalformedQueryException, QueryProcessingException {
 		Gene gene = new GeneImpl();
 		gene.setSymbol("brca*"); // searching for all genes whose symbol start with brca
-		
-		List resultList = coreService.search(Gene.class, gene);
+		List resultList = null;
+		try {
+			resultList = coreService.search(Gene.class, gene);
+		} catch (ApplicationException ex) {
+			throw new QueryProcessingException("Error in SDK application service: " + ex.getMessage(), ex);
+		}
 		CQLQueryResultsType results = new CQLQueryResultsType();
 		CQLObjectResult[] objectResults = new CQLObjectResult[resultList.size()];
 		for (int i = 0; i < resultList.size(); i++) {

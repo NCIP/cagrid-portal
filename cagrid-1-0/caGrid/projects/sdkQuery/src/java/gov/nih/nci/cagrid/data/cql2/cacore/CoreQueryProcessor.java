@@ -4,8 +4,10 @@ import gov.nih.nci.cagrid.cqlquery2.CQLQueryType;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResultsType;
 import gov.nih.nci.cagrid.data.InitializationException;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
+import gov.nih.nci.cagrid.data.QueryProcessingException;
 import gov.nih.nci.cagrid.data.cql2.CQLQueryProcessor;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsUtil;
+import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
 import java.util.List;
@@ -38,10 +40,15 @@ public class CoreQueryProcessor extends CQLQueryProcessor {
 	}
 
 
-	public CQLQueryResultsType processQuery(CQLQueryType cqlQuery) throws MalformedQueryException, Exception {
+	public CQLQueryResultsType processQuery(CQLQueryType cqlQuery) throws MalformedQueryException, QueryProcessingException {
 		String targetClassName = cqlQuery.getCQLQuery().getName();
 		DetachedCriteria queryCriteria = ProcessorHelper.processNestedObject(cqlQuery.getCQLQuery());
-		List targetObjects = coreService.query(queryCriteria, targetClassName);
+		List targetObjects = null;
+		try {
+			targetObjects = coreService.query(queryCriteria, targetClassName);
+		} catch (ApplicationException ex) {
+			throw new QueryProcessingException("Error in SDK application service: " + ex.getMessage(), ex);
+		}
 		CQLQueryResultsType results = CQLQueryResultsUtil.createQueryResults(targetObjects);
 		return results;
 	}
