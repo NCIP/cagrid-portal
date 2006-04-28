@@ -1,9 +1,13 @@
 package gov.nih.nci.cagrid.data.creation;
 
+import gov.nih.nci.cagrid.data.MalformedQueryException;
+import gov.nih.nci.cagrid.data.QueryProcessingException;
 import gov.nih.nci.cagrid.data.common.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
@@ -96,6 +100,15 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		QName resultSetQName = new QName(dsNamespaces[dsNamespaces.length - 1].getNamespace(), dsNamespaces[dsNamespaces.length - 1].getSchemaElement(0).getType());
 		output.setQName(resultSetQName);
 		queryMethod.setOutput(output);
+		// exceptions on query method
+		MethodTypeExceptions queryExceptions = new MethodTypeExceptions();
+		MethodTypeExceptionsException[] exceptions = {
+			new MethodTypeExceptionsException(QueryProcessingException.class.getName()),
+			new MethodTypeExceptionsException(MalformedQueryException.class.getName())
+		};
+		queryExceptions.setException(exceptions);
+		queryMethod.setExceptions(queryExceptions);
+		// add query method to methods array
 		MethodType[] dsMethods = null;
 		if (methods.getMethod() != null) {
 			dsMethods = new MethodType[methods.getMethod().length + 1];

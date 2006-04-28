@@ -172,7 +172,7 @@
 	
 	
 	<!-- compiles the extension source code -->
-	<target name="compileExtensionSource" depends="compileStubs">
+	<target name="compileExtensionSource" depends="compileStubs, compileService">
 		<javac srcdir="${extension.src.dir}" destdir="${build.extension.dest}" debug="${java.debug}">
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -182,6 +182,7 @@
 				<include name="*.jar"/>
 				</fileset>
 				<pathelement location="${stubs.dest}"/>
+				<pathelement location="${build.service.dest}"/>
 				<fileset dir="${globus.dir}/lib">
 					<include name="*.jar"/>
 				</fileset>
