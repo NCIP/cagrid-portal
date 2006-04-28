@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.data.cql2.cacore;
 
 import gov.nih.nci.cagrid.cqlquery2.NestedObject;
+import gov.nih.nci.cagrid.cqlquery2.ObjectGroup;
 import gov.nih.nci.cagrid.cqlquery2.ObjectProperty;
 import gov.nih.nci.cagrid.cqlquery2.Predicate;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
@@ -25,12 +26,13 @@ import java.util.List;
 public class ObjectBuilder {
 
 	public static List createCriteria(NestedObject object) throws MalformedQueryException, QueryProcessingException {
-		List criteria = processNestedObject(object, new ArrayList());		
+		List criteria = new ArrayList();
+		processNestedObject(object, criteria);		
 		return criteria;
 	}
 	
 	
-	private static List processNestedObject(NestedObject object, List objectList) throws MalformedQueryException, QueryProcessingException {
+	private static void processNestedObject(NestedObject object, List objectList) throws MalformedQueryException, QueryProcessingException {
 		// get an instance of the top level object
 		Object instance = null;
 		String objectName = object.getName();
@@ -51,14 +53,28 @@ public class ObjectBuilder {
 				setObjectProperty(instance, propertyName, propertyValue, predicate);
 			}
 		}
+		objectList.add(instance);
 		
 		// start setting up related objects
+		for (int i = 0; object.getObject() != null && i < object.getObject().length; i++) {
+			NestedObject subobject = object.getObject(i);
+			processNestedObject(subobject, objectList);
+		}
 		
-		
-		// process groups 
-		
-		
-		return objectList;
+		// process group
+		if (object.getGroup() != null) {
+			List groupItems = processGroup(object.getGroup());
+			objectList.addAll(groupItems);
+		}
+	}
+	
+	
+	private static List processGroup(ObjectGroup group) throws MalformedQueryException, QueryProcessingException {
+		List groupItems = new ArrayList();
+		for (int i = 0; i < group.getObject().length; i++) {
+			processNestedObject(group.getObject(i), groupItems);
+		}
+		return groupItems;
 	}
 	
 	
