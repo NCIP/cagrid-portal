@@ -1,0 +1,23 @@
+There will be one ResourceProperty exposed for ALL services: caGridMetadata (or something similarly named)
+
+The "Service" element is the main entrypoint, which other metadata hangs off of.
+Core services (which aren't necessarily Gold compatible, as they don't expose operations 
+over caDSR-registered data types) will just not have any Operations defined.  The Operations
+will just represent the offical caBIG operations on the service.  All caBIG services will have
+some operations that aren't modeled in this metadata (such as ResourceProperty related operations), for core
+services, all operations may fall under that category.
+
+Service will have optional Associations to other runtime, and service-specific metadata, such as
+  Data Service metadata, and research center information (previously exposed as common service metadata).
+This will allow us extensibility to also hang other types of metadata off of the service (such as LexBIG metadata, etc), 
+and allow DiscoveryClient extensions to make use of this feature for service-specific discovery (such as LexBIG).
+This will be an xsd:any in the XSD.
+
+Does this have ramifications on deserialization of metadata through the generic metadata utils client?
+If so, we could just make sure there are proper finer grain accessors as opposed to just returning the top element.
+For example, getServiceContexts(), getResearchCenterInfo(), etc 
+
+
+   
+
+  
