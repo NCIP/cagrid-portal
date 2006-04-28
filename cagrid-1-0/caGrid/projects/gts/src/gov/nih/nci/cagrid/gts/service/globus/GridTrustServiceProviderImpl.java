@@ -311,23 +311,165 @@ public class GridTrustServiceProviderImpl {
 
 
 
-	public gov.nih.nci.cagrid.gts.stubs.UpdateAuthorityPrioritiesResponse updateAuthorityPriorities(gov.nih.nci.cagrid.gts.stubs.UpdateAuthorityPriorities params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
-		gov.nih.nci.cagrid.gts.stubs.UpdateAuthorityPrioritiesResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.UpdateAuthorityPrioritiesResponse();
-		impl.updateAuthorityPriorities(params.getAuthorityPriorityUpdate().getAuthorityPriorityUpdate());
-		return boxedResult;
-	}
 
-	public gov.nih.nci.cagrid.gts.stubs.GetAuthoritiesResponse getAuthorities(gov.nih.nci.cagrid.gts.stubs.GetAuthorities params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault {
-		gov.nih.nci.cagrid.gts.stubs.GetAuthoritiesResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.GetAuthoritiesResponse();
-		boxedResult.setAuthorityGTS(impl.getAuthorities());
-		return boxedResult;
-	}
 
-	public gov.nih.nci.cagrid.gts.stubs.RemoveAuthorityResponse removeAuthority(gov.nih.nci.cagrid.gts.stubs.RemoveAuthority params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
-		gov.nih.nci.cagrid.gts.stubs.RemoveAuthorityResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.RemoveAuthorityResponse();
-		impl.removeAuthority(params.getServiceURI());
-		return boxedResult;
-	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	public gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityResponse addTrustedAuthority(gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthority params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
 		gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityResponse();
@@ -404,6 +546,24 @@ public class GridTrustServiceProviderImpl {
 	public gov.nih.nci.cagrid.gts.stubs.UpdateAuthorityResponse updateAuthority(gov.nih.nci.cagrid.gts.stubs.UpdateAuthority params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault, gov.nih.nci.cagrid.gts.stubs.InvalidAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
 		gov.nih.nci.cagrid.gts.stubs.UpdateAuthorityResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.UpdateAuthorityResponse();
 		impl.updateAuthority(params.getAuthorityGTS().getAuthorityGTS());
+		return boxedResult;
+	}
+
+	public gov.nih.nci.cagrid.gts.stubs.UpdateAuthorityPrioritiesResponse updateAuthorityPriorities(gov.nih.nci.cagrid.gts.stubs.UpdateAuthorityPriorities params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+		gov.nih.nci.cagrid.gts.stubs.UpdateAuthorityPrioritiesResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.UpdateAuthorityPrioritiesResponse();
+		impl.updateAuthorityPriorities(params.getAuthorityPriorityUpdate().getAuthorityPriorityUpdate());
+		return boxedResult;
+	}
+
+	public gov.nih.nci.cagrid.gts.stubs.GetAuthoritiesResponse getAuthorities(gov.nih.nci.cagrid.gts.stubs.GetAuthorities params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault {
+		gov.nih.nci.cagrid.gts.stubs.GetAuthoritiesResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.GetAuthoritiesResponse();
+		boxedResult.setAuthorityGTS(impl.getAuthorities());
+		return boxedResult;
+	}
+
+	public gov.nih.nci.cagrid.gts.stubs.RemoveAuthorityResponse removeAuthority(gov.nih.nci.cagrid.gts.stubs.RemoveAuthority params) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+		gov.nih.nci.cagrid.gts.stubs.RemoveAuthorityResponse boxedResult = new gov.nih.nci.cagrid.gts.stubs.RemoveAuthorityResponse();
+		impl.removeAuthority(params.getServiceURI());
 		return boxedResult;
 	}
 

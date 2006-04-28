@@ -26,7 +26,6 @@ public class StatusComboBox extends JComboBox {
 			this.addItem(ANY);
 		}
 		this.addItem(Status.Trusted);
-		this.addItem(Status.Pending);
 		this.addItem(Status.Suspended);
 		this.setEditable(false);
 	}

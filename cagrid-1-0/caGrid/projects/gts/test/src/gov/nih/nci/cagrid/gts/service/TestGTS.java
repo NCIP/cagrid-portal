@@ -668,7 +668,7 @@ public class TestGTS extends TestCase {
 				CRLReason.PRIVILEGE_WITHDRAWN);
 			ca.updateCRL(crlE);
 			updated.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
-			updated.setStatus(Status.Pending);
+			updated.setStatus(Status.Suspended);
 			updated.setTrustLevel(LEVEL_TWO);
 
 			// Test null

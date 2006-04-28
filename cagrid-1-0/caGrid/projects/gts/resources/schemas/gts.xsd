@@ -68,9 +68,11 @@
 				<xsd:element name="TrustedAuthorityName" minOccurs="0" maxOccurs="1" type="xsd:string"/>
 				<xsd:element name="CertificateDN" minOccurs="0" maxOccurs="1" type="xsd:string"/>
 				<xsd:element name="TrustLevel" minOccurs="0" maxOccurs="1" type="xsd:string"/>
+				<xsd:element name="Lifetime" minOccurs="0" maxOccurs="1" type="gts:Lifetime"/>
 				<xsd:element name="Status" minOccurs="0" maxOccurs="1" type="gts:Status"/>
 				<xsd:element name="IsAuthority" minOccurs="0" maxOccurs="1" type="xsd:boolean"/>
 				<xsd:element name="AuthorityTrustService" minOccurs="0" maxOccurs="1" type="xsd:string"/>
+				<xsd:element name="SourceTrustService" minOccurs="0" maxOccurs="1" type="xsd:string"/>
 			</xsd:sequence>
 		</xsd:complexType>
 		
@@ -83,6 +85,8 @@
 				<xsd:element name="Status" minOccurs="1" maxOccurs="1" type="gts:Status"/>
 				<xsd:element name="IsAuthority" minOccurs="0" maxOccurs="1" type="xsd:boolean"/>
 				<xsd:element name="AuthorityTrustService" minOccurs="0" maxOccurs="1" type="xsd:string"/>
+				<xsd:element name="SourceTrustService" minOccurs="0" maxOccurs="1" type="xsd:string"/>
+				<xsd:element name="Expires" minOccurs="1" maxOccurs="1" type="xsd:long"/>
 				<xsd:element name="Certificate" minOccurs="1" maxOccurs="1" type="gts:X509Certificate"/>
 				<xsd:element name="CRL" minOccurs="0" maxOccurs="1" type="gts:X509CRL"/>
 			</xsd:sequence>
@@ -100,9 +104,15 @@
   			<xsd:restriction base="xsd:string">
    				<xsd:enumeration value="Trusted"/>
    				<xsd:enumeration value="Suspended"/>
-   				<xsd:enumeration value="Pending"/>
   			</xsd:restriction>
- 		 </xsd:simpleType>
+ 		</xsd:simpleType>
+ 		
+ 		<xsd:simpleType name="Lifetime">
+  			<xsd:restriction base="xsd:string">
+   				<xsd:enumeration value="Valid"/>
+   				<xsd:enumeration value="Expired"/>
+  			</xsd:restriction>
+ 		</xsd:simpleType>
  
  		 
  		 <xsd:element name="TrustLevel" minOccurs="0" maxOccurs="1" type="gts:TrustLevel"/>

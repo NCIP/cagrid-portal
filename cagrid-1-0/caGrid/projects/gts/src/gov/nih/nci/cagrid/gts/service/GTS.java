@@ -2,13 +2,16 @@ package gov.nih.nci.cagrid.gts.service;
 
 import gov.nih.nci.cagrid.gts.bean.AuthorityGTS;
 import gov.nih.nci.cagrid.gts.bean.AuthorityPriorityUpdate;
+import gov.nih.nci.cagrid.gts.bean.Lifetime;
 import gov.nih.nci.cagrid.gts.bean.Permission;
 import gov.nih.nci.cagrid.gts.bean.PermissionFilter;
+import gov.nih.nci.cagrid.gts.bean.Status;
 import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
 import gov.nih.nci.cagrid.gts.common.Database;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
+import gov.nih.nci.cagrid.gts.stubs.GridTrustServicePortType;
 import gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault;
@@ -18,6 +21,19 @@ import gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidTrustLevelFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault;
+import gov.nih.nci.cagrid.gts.stubs.service.GridTrustServiceAddressingLocator;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import org.apache.axis.message.addressing.Address;
+import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.apache.log4j.Logger;
+import org.globus.wsrf.impl.security.authorization.IdentityAuthorization;
+import org.globus.wsrf.impl.security.authorization.NoAuthorization;
 
 
 /**
@@ -35,6 +51,7 @@ public class GTS implements TrustLevelStatus, TrustLevelLookup {
 	private PermissionManager permissions;
 	private TrustLevelManager levels;
 	private GTSAuthorityManager authority;
+	private Logger logger;
 
 
 	public GTS(GTSConfiguration conf, String gtsURI) {
@@ -45,6 +62,7 @@ public class GTS implements TrustLevelStatus, TrustLevelLookup {
 		levels = new TrustLevelManager(this, db);
 		permissions = new PermissionManager(db);
 		authority = new GTSAuthorityManager(db);
+		logger = Logger.getLogger(this.getClass().getName());
 	}
 
 
@@ -197,6 +215,180 @@ public class GTS implements TrustLevelStatus, TrustLevelLookup {
 			return true;
 		} else {
 			return false;
+		}
+	}
+
+
+	private void synchronizeTrustedAuthorities(String authorityServiceURI, TrustedAuthority[] trusted) {
+		// Synchronize the Trusted Authorities
+		if (trusted != null) {
+			// We need to get a list of all the Trusted Authorities provided
+			// by the source,
+			// such that we can remove the ones that are not provided in the
+			// new list
+			Map toBeDeleted = new HashMap();
+			try {
+				TrustedAuthorityFilter f = new TrustedAuthorityFilter();
+				f.setSourceTrustService(authorityServiceURI);
+				TrustedAuthority[] existing = this.trust.findTrustAuthorities(f);
+				for (int i = 0; i < existing.length; i++) {
+					toBeDeleted.put(existing[i].getTrustedAuthorityName(), Boolean.TRUE);
+				}
+			} catch (Exception e) {
+				this.logger.error("Error synchronizing with the authority " + authorityServiceURI
+					+ "the following error occurred obtaining the existing Trusted Authorities: " + e.getMessage(), e);
+				return;
+			}
+
+			for (int j = 0; j < trusted.length; j++) {
+				try {
+					toBeDeleted.remove(trusted[j].getTrustedAuthorityName());
+					if (this.trust.doesTrustedAuthorityExist(trusted[j].getTrustedAuthorityName())) {
+						// Perform Update
+						TrustedAuthority ta = this.trust.getTrustedAuthority(trusted[j].getTrustedAuthorityName());
+						AuthorityGTS currAuthority = authority.getAuthority(ta.getSourceTrustService());
+						AuthorityGTS updateAuthority = authority.getAuthority(authorityServiceURI);
+						// Determine if we should peform update
+						boolean performUpdate = false;
+						// Check to see if this service is the authority
+						if (!ta.getIsAuthority().booleanValue()) {
+							// Check to see if the authority GTS is the same
+							if (currAuthority.getServiceURI().equals(updateAuthority.getServiceURI())) {
+								performUpdate = true;
+								this.logger.debug("The trusted authority (" + ta.getTrustedAuthorityName()
+									+ ") will be updated!!!");
+							} else if (currAuthority.getPriority() > updateAuthority.getPriority()) {
+								performUpdate = true;
+								this.logger.debug("The trusted authority (" + ta.getTrustedAuthorityName()
+									+ ") will be updated, the authority (" + updateAuthority.getServiceURI()
+									+ ") has a greater priority then the current source authority ("
+									+ currAuthority.getServiceURI() + ")!!!");
+
+							} else {
+								this.logger.debug("The trusted authority (" + ta.getTrustedAuthorityName()
+									+ ") will NOT be updated, the current source authority ("
+									+ currAuthority.getServiceURI()
+									+ ") has a greater priority then the source authority ("
+									+ updateAuthority.getServiceURI() + ")!!!");
+								performUpdate = false;
+							}
+						} else {
+							this.logger.debug("The trusted authority (" + ta.getTrustedAuthorityName()
+								+ ") will NOT be updated, this GTS is its authority !!!");
+							performUpdate = false;
+						}
+						if (performUpdate) {
+							trusted[j].setIsAuthority(Boolean.FALSE);
+							trusted[j].setSourceTrustService(authorityServiceURI);
+							Calendar c = new GregorianCalendar();
+							c.roll(Calendar.HOUR, updateAuthority.getTrustedAuthorityTimeToLive().getHours());
+							c.roll(Calendar.MINUTE, updateAuthority.getTrustedAuthorityTimeToLive().getMinutes());
+							c.roll(Calendar.SECOND, updateAuthority.getTrustedAuthorityTimeToLive().getSeconds());
+							trusted[j].setExpires(c.getTimeInMillis());
+							try {
+								trust.updateTrustedAuthority(trusted[j], true);
+							} catch (Exception e) {
+								this.logger.error("Error synchronizing with the authority " + authorityServiceURI
+									+ ", the following error occcurred when trying to update the authority, "
+									+ trusted[j].getTrustedAuthorityName() + ": " + e.getMessage(), e);
+								continue;
+							}
+						}
+					} else {
+						AuthorityGTS updateAuthority = authority.getAuthority(authorityServiceURI);
+						TrustedAuthority ta = this.trust.getTrustedAuthority(trusted[j].getTrustedAuthorityName());
+						this.logger.debug("The trusted authority (" + ta.getTrustedAuthorityName()
+							+ ") will be added with the authority (" + authorityServiceURI + ") as the source!!!");
+						trusted[j].setIsAuthority(Boolean.FALSE);
+						trusted[j].setSourceTrustService(authorityServiceURI);
+						Calendar c = new GregorianCalendar();
+						c.roll(Calendar.HOUR, updateAuthority.getTrustedAuthorityTimeToLive().getHours());
+						c.roll(Calendar.MINUTE, updateAuthority.getTrustedAuthorityTimeToLive().getMinutes());
+						c.roll(Calendar.SECOND, updateAuthority.getTrustedAuthorityTimeToLive().getSeconds());
+						trusted[j].setExpires(c.getTimeInMillis());
+						try {
+							trust.addTrustedAuthority(trusted[j], true);
+						} catch (Exception e) {
+							this.logger.error("Error synchronizing with the authority " + authorityServiceURI
+								+ ", the following error occcurred when trying to add the authority, "
+								+ trusted[j].getTrustedAuthorityName() + ": " + e.getMessage(), e);
+							continue;
+						}
+
+					}
+				} catch (Exception ex) {
+					this.logger.error("Error synchronizing with the authority " + authorityServiceURI + ": "
+						+ ex.getMessage(), ex);
+					continue;
+				}
+			}
+			Iterator itr = toBeDeleted.keySet().iterator();
+			while (itr.hasNext()) {
+				String name = (String) itr.next();
+				try {
+					trust.removeTrustedAuthority(name);
+					this.logger
+						.debug("The trusted authority (" + name
+							+ ") was removed because it has been removed from the authority " + authorityServiceURI
+							+ "!!!");
+				} catch (Exception e) {
+					this.logger.error("The trusted authority (" + name
+						+ ") should have beeen removed because it has been removed from the authority "
+						+ authorityServiceURI + ", however the following error occurred:" + e.getMessage(), e);
+				}
+			}
+
+		}
+	}
+
+
+	private void synchronizeWithAuthorities() {
+		AuthorityGTS[] auths = null;
+		try {
+			auths = this.getAuthorities();
+		} catch (Exception ex) {
+			this.logger
+				.error("Error synchronizing with the authorities, could not obtain a list of authorities!!!", ex);
+			return;
+		}
+
+		TrustedAuthorityFilter filter = new TrustedAuthorityFilter();
+		filter.setStatus(Status.Trusted);
+		filter.setLifetime(Lifetime.Valid);
+
+		for (int i = 0; i < auths.length; i++) {
+			TrustedAuthority[] trusted = null;
+			try {
+				GridTrustServiceAddressingLocator locator = new GridTrustServiceAddressingLocator();
+				EndpointReferenceType endpoint = new EndpointReferenceType();
+				endpoint.setAddress(new Address(auths[i].getServiceURI()));
+				GridTrustServicePortType port = locator.getGridTrustServicePortTypePort(endpoint);
+				org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
+				stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT,
+					org.globus.wsrf.security.Constants.ENCRYPTION);
+				stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS, Boolean.TRUE);
+				if (auths[i].isPerformAuthorization()) {
+					IdentityAuthorization ia = new IdentityAuthorization(auths[i].getServiceIdentity());
+					stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, ia);
+				} else {
+					stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, NoAuthorization.getInstance());
+				}
+				gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthorities params = new gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthorities();
+				gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesF fContainer = new gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesF();
+				fContainer.setTrustedAuthorityFilter(filter);
+				params.setF(fContainer);
+				gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesResponse boxedResult = port
+					.findTrustedAuthorities(params);
+				trusted = boxedResult.getTrustedAuthority();
+
+			} catch (Exception ex) {
+				this.logger.error("Error synchronizing with the authority " + auths[i].getServiceURI() + ": "
+					+ ex.getMessage(), ex);
+				continue;
+			}
+
+			// Synchronize the Trusted Authorities
+			this.synchronizeTrustedAuthorities(auths[i].getServiceURI(), trusted);
 		}
 	}
 }
