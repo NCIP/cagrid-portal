@@ -286,7 +286,7 @@ public class GTS implements TrustLevelStatus, TrustLevelLookup {
 							c.roll(Calendar.SECOND, updateAuthority.getTrustedAuthorityTimeToLive().getSeconds());
 							trusted[j].setExpires(c.getTimeInMillis());
 							try {
-								trust.updateTrustedAuthority(trusted[j], true);
+								trust.updateTrustedAuthority(trusted[j], false);
 							} catch (Exception e) {
 								this.logger.error("Error synchronizing with the authority " + authorityServiceURI
 									+ ", the following error occcurred when trying to update the authority, "
@@ -307,7 +307,7 @@ public class GTS implements TrustLevelStatus, TrustLevelLookup {
 						c.roll(Calendar.SECOND, updateAuthority.getTrustedAuthorityTimeToLive().getSeconds());
 						trusted[j].setExpires(c.getTimeInMillis());
 						try {
-							trust.addTrustedAuthority(trusted[j], true);
+							trust.addTrustedAuthority(trusted[j], false);
 						} catch (Exception e) {
 							this.logger.error("Error synchronizing with the authority " + authorityServiceURI
 								+ ", the following error occcurred when trying to add the authority, "

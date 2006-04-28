@@ -166,7 +166,7 @@ public class TrustedAuthorityManager {
 
 	public synchronized void updateTrustedAuthority(TrustedAuthority ta) throws GTSInternalFault,
 		IllegalTrustedAuthorityFault, InvalidTrustedAuthorityFault {
-		updateTrustedAuthority(ta, false);
+		updateTrustedAuthority(ta, true);
 	}
 
 
@@ -176,7 +176,7 @@ public class TrustedAuthorityManager {
 		TrustedAuthority curr = this.getTrustedAuthority(ta.getTrustedAuthorityName());
 		StringBuffer sql = new StringBuffer();
 		boolean needsUpdate = false;
-		if (!internal) {
+		if (internal) {
 			if (!ta.getAuthorityTrustService().equals(gtsURI)) {
 				IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
 				fault.setFaultString("Cannot update the authority " + ta.getTrustedAuthorityName() + " the GTS, "
@@ -408,7 +408,7 @@ public class TrustedAuthorityManager {
 
 	public synchronized TrustedAuthority addTrustedAuthority(TrustedAuthority ta) throws GTSInternalFault,
 		IllegalTrustedAuthorityFault {
-		return this.addTrustedAuthority(ta, false);
+		return this.addTrustedAuthority(ta, true);
 	}
 
 
@@ -452,7 +452,7 @@ public class TrustedAuthorityManager {
 			fault.setFaultString("No status specified for the Trusted Authority!!!");
 			throw fault;
 		}
-		if (!internal) {
+		if (internal) {
 			if ((ta.getIsAuthority() != null) && (!ta.getIsAuthority().booleanValue())) {
 				logger
 					.log(
@@ -496,6 +496,36 @@ public class TrustedAuthorityManager {
 			ta.setAuthorityTrustService(gtsURI);
 			ta.setSourceTrustService(gtsURI);
 			ta.setExpires(0);
+		} else {
+			if ((ta.getIsAuthority() == null)) {
+				IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
+				fault.setFaultString("The Trusted Authority " + ta.getTrustedAuthorityName()
+					+ " cannot be added because it does not specify whether or not this GTS is the authority of it.");
+				throw fault;
+			}
+
+			if (ta.getAuthorityTrustService() == null) {
+				IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
+				fault.setFaultString("The Trusted Authority " + ta.getTrustedAuthorityName()
+					+ " cannot be added because it does not specify an authority trust service.");
+				throw fault;
+
+			}
+
+			if (ta.getSourceTrustService() == null) {
+				IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
+				fault.setFaultString("The Trusted Authority " + ta.getTrustedAuthorityName()
+					+ " cannot be added because it does not specify an source trust service.");
+				throw fault;
+			}
+
+			if ((!ta.getIsAuthority().booleanValue()) && (ta.getExpires() <= 0)) {
+				IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
+				fault.setFaultString("The Trusted Authority " + ta.getTrustedAuthorityName()
+					+ " cannot be added because it does not specify an expiration.");
+				throw fault;
+			}
+
 		}
 		insertTrustedAuthority(ta, cert, crl);
 		return ta;

@@ -103,8 +103,8 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 		try {
 			TrustedAuthorityManager trust = new TrustedAuthorityManager("localhost", this, db);
 			CA ca = new CA();
-			
-			//Invalid Trust Level
+
+			// INTERNAL ADD: Invalid Trust Level
 			try {
 				TrustedAuthority ta = new TrustedAuthority();
 				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
@@ -117,40 +117,248 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 
 			}
 
-			// No Certificate
+			// INTERNAL ADD: No Certificate
 			try {
 				TrustedAuthority ta = new TrustedAuthority();
 				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
 				ta.setStatus(Status.Trusted);
 				ta.setTrustLevel(LEVEL_ONE);
 				trust.addTrustedAuthority(ta);
-				fail("Did not generate error when an invalidl Trusted Authority was provided.");
+				fail("Did not generate error when an invalid Trusted Authority was provided.");
 			} catch (IllegalTrustedAuthorityFault f) {
 
 			}
-			// No Status
+			// INTERNAL ADD: No Status
 			try {
 				TrustedAuthority ta = new TrustedAuthority();
 				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
 				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 				ta.setTrustLevel(LEVEL_ONE);
 				trust.addTrustedAuthority(ta);
-				fail("Did not generate error when an invalidl Trusted Authority was provided.");
+				fail("Did not generate error when an invalid Trusted Authority was provided.");
 			} catch (IllegalTrustedAuthorityFault f) {
 
 			}
 
-			// No Trust Level
+			// INTERNAL ADD: No Trust Level
 			try {
 				TrustedAuthority ta = new TrustedAuthority();
 				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
 				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 				ta.setStatus(Status.Trusted);
 				trust.addTrustedAuthority(ta);
-				fail("Did not generate error when an invalidl Trusted Authority was provided.");
+				fail("Did not generate error when an invalid Trusted Authority was provided.");
 			} catch (IllegalTrustedAuthorityFault f) {
 
 			}
+
+			// EXTERNAL ADD: Invalid Trust Level
+			try {
+				TrustedAuthority ta = new TrustedAuthority();
+				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
+				ta.setStatus(Status.Trusted);
+				ta.setTrustLevel("INVALID_LEVEL");
+				ta.setIsAuthority(Boolean.FALSE);
+				ta.setSourceTrustService("Some Source");
+				ta.setAuthorityTrustService("Some Authority");
+				ta.setExpires(1);
+				trust.addTrustedAuthority(ta, false);
+				fail("Did not generate error when an invalid Trusted Authority was provided.");
+			} catch (IllegalTrustedAuthorityFault f) {
+
+			}
+
+			// EXTERNAL ADD: No Certificate
+			try {
+				TrustedAuthority ta = new TrustedAuthority();
+				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+				ta.setStatus(Status.Trusted);
+				ta.setTrustLevel("LEVEL_ONE");
+				ta.setIsAuthority(Boolean.FALSE);
+				ta.setSourceTrustService("Some Source");
+				ta.setAuthorityTrustService("Some Authority");
+				ta.setExpires(1);
+				trust.addTrustedAuthority(ta, false);
+				fail("Did not generate error when an invalid Trusted Authority was provided.");
+			} catch (IllegalTrustedAuthorityFault f) {
+
+			}
+
+			// EXTERNAL ADD: No Status
+			try {
+				TrustedAuthority ta = new TrustedAuthority();
+				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
+				ta.setTrustLevel(LEVEL_ONE);
+				ta.setIsAuthority(Boolean.FALSE);
+				ta.setSourceTrustService("Some Source");
+				ta.setAuthorityTrustService("Some Authority");
+				ta.setExpires(1);
+				trust.addTrustedAuthority(ta, false);
+				fail("Did not generate error when an invalid Trusted Authority was provided.");
+			} catch (IllegalTrustedAuthorityFault f) {
+
+			}
+
+			// EXTERNAL ADD: No Trust Level
+			try {
+				TrustedAuthority ta = new TrustedAuthority();
+				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
+				ta.setStatus(Status.Trusted);
+				ta.setIsAuthority(Boolean.FALSE);
+				ta.setSourceTrustService("Some Source");
+				ta.setAuthorityTrustService("Some Authority");
+				ta.setExpires(1);
+				trust.addTrustedAuthority(ta, false);
+				fail("Did not generate error when an invalid Trusted Authority was provided.");
+			} catch (IllegalTrustedAuthorityFault f) {
+
+			}
+
+			// EXTERNAL ADD: No Authority
+			try {
+				TrustedAuthority ta = new TrustedAuthority();
+				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
+				ta.setStatus(Status.Trusted);
+				ta.setTrustLevel(LEVEL_ONE);
+				ta.setSourceTrustService("Some Source");
+				ta.setAuthorityTrustService("Some Authority");
+				ta.setExpires(1);
+				trust.addTrustedAuthority(ta, false);
+				fail("Did not generate error when an invalid Trusted Authority was provided.");
+			} catch (IllegalTrustedAuthorityFault f) {
+
+			}
+
+			// EXTERNAL ADD: No Authority GTS
+			try {
+				TrustedAuthority ta = new TrustedAuthority();
+				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
+				ta.setStatus(Status.Trusted);
+				ta.setTrustLevel(LEVEL_ONE);
+				ta.setIsAuthority(Boolean.FALSE);
+				ta.setSourceTrustService("Some Source");
+				ta.setExpires(1);
+				trust.addTrustedAuthority(ta, false);
+				fail("Did not generate error when an invalid Trusted Authority was provided.");
+			} catch (IllegalTrustedAuthorityFault f) {
+
+			}
+
+			// EXTERNAL ADD: No Source GTS
+			try {
+				TrustedAuthority ta = new TrustedAuthority();
+				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
+				ta.setStatus(Status.Trusted);
+				ta.setTrustLevel(LEVEL_ONE);
+				ta.setIsAuthority(Boolean.FALSE);
+				ta.setAuthorityTrustService("Some Authority");
+				ta.setExpires(1);
+				trust.addTrustedAuthority(ta, false);
+				fail("Did not generate error when an invalid Trusted Authority was provided.");
+			} catch (IllegalTrustedAuthorityFault f) {
+
+			}
+
+			// EXTERNAL ADD: Invalid Expiration
+			try {
+				TrustedAuthority ta = new TrustedAuthority();
+				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
+				ta.setStatus(Status.Trusted);
+				ta.setTrustLevel(LEVEL_ONE);
+				ta.setIsAuthority(Boolean.FALSE);
+				ta.setSourceTrustService("Some Source");
+				ta.setAuthorityTrustService("Some Authority");
+				ta.setExpires(0);
+				trust.addTrustedAuthority(ta, false);
+				fail("Did not generate error when an invalid Trusted Authority was provided.");
+			} catch (IllegalTrustedAuthorityFault f) {
+
+			}
+
+			// EXTERNAL ADD: No experation
+			try {
+				TrustedAuthority ta = new TrustedAuthority();
+				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
+				ta.setStatus(Status.Trusted);
+				ta.setTrustLevel(LEVEL_ONE);
+				ta.setIsAuthority(Boolean.FALSE);
+				ta.setSourceTrustService("Some Source");
+				ta.setAuthorityTrustService("Some Authority");
+				trust.addTrustedAuthority(ta, false);
+				fail("Did not generate error when an invalid Trusted Authority was provided.");
+			} catch (IllegalTrustedAuthorityFault f) {
+
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		}
+	}
+
+
+	public void testUpdateInvalidTrustedAuthority() {
+		try {
+			TrustedAuthorityManager trust = new TrustedAuthorityManager("localhost", this, db);
+			CA ca = new CA();
+			BigInteger sn = new BigInteger(String.valueOf(System.currentTimeMillis()));
+			CRLEntry entry = new CRLEntry(sn, CRLReason.PRIVILEGE_WITHDRAWN);
+			ca.updateCRL(entry);
+			TrustedAuthority ta = new TrustedAuthority();
+			ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
+			ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
+			ta.setStatus(Status.Trusted);
+			ta.setTrustLevel(LEVEL_ONE);
+			trust.addTrustedAuthority(ta);
+			assertEquals(ta, trust.getTrustedAuthority(ta.getTrustedAuthorityName()));
+
+			CA ca2 = new CA("O=Organization ABC,OU=Unit ABC,CN=Certificate Authority");
+			BigInteger sn2 = new BigInteger(String.valueOf(System.currentTimeMillis()));
+			CRLEntry entry2 = new CRLEntry(sn2, CRLReason.PRIVILEGE_WITHDRAWN);
+			ca2.updateCRL(entry2);
+			TrustedAuthority ta2 = new TrustedAuthority();
+			ta2.setTrustedAuthorityName(ca2.getCertificate().getSubjectDN().toString());
+			ta2.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca2.getCertificate())));
+			ta2.setCRL(new X509CRL(CertUtil.writeCRL(ca2.getCRL())));
+			ta2.setStatus(Status.Trusted);
+			ta2.setTrustLevel(LEVEL_ONE);
+			trust.addTrustedAuthority(ta2);
+			assertEquals(ta2, trust.getTrustedAuthority(ta2.getTrustedAuthorityName()));
+
+			TrustedAuthority u1 = trust.getTrustedAuthority(ta.getTrustedAuthorityName());
+			u1.setTrustedAuthorityName(null);
+			try {
+				trust.updateTrustedAuthority(u1);
+				fail("Should not be able to update a trusted authority without specifying a valid name!!!");
+			} catch (InvalidTrustedAuthorityFault f) {
+
+			}
+
+			u1.setTrustedAuthorityName("");
+			try {
+				trust.updateTrustedAuthority(u1);
+				fail("Should not be able to update a trusted authority without specifying a valid name!!!");
+			} catch (InvalidTrustedAuthorityFault f) {
+
+			}
+
+			u1.setTrustedAuthorityName("NONE");
+			try {
+				trust.updateTrustedAuthority(u1);
+				fail("Should not be able to update a trusted authority without specifying a valid name!!!");
+			} catch (InvalidTrustedAuthorityFault f) {
+
+			}
+
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
@@ -445,11 +653,11 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				assertEquals(1, trust.findTrustAuthorities(f).length);
 				assertEquals(u6, trust.findTrustAuthorities(f)[0]);
 				u6.setTrustLevel("INVALID_LEVEL");
-				try{
-				trust.updateTrustedAuthority(u6);
-				fail("Should not be able to update a Trusted Authority with an invalid trust level!!!");
-				}catch(IllegalTrustedAuthorityFault itaf){
-					
+				try {
+					trust.updateTrustedAuthority(u6);
+					fail("Should not be able to update a Trusted Authority with an invalid trust level!!!");
+				} catch (IllegalTrustedAuthorityFault itaf) {
+
 				}
 				u6.setTrustLevel(LEVEL_THREE);
 				assertEquals(1, trust.findTrustAuthorities(f).length);
