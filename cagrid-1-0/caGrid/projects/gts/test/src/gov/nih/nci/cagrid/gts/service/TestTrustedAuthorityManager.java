@@ -496,8 +496,8 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 			} catch (IllegalTrustedAuthorityFault f) {
 
 			}
-			
-//			 Test Invalid Expires
+
+			// Test Invalid Expires
 
 			try {
 				TrustedAuthority u = trust.getTrustedAuthority(ta.getTrustedAuthorityName());
@@ -560,7 +560,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 			} catch (IllegalTrustedAuthorityFault f) {
 
 			}
-			
+
 			// Test Invalid Certificate
 
 			try {
@@ -571,9 +571,6 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 			} catch (IllegalTrustedAuthorityFault f) {
 
 			}
-			
-			
-
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
