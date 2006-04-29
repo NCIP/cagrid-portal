@@ -26,24 +26,23 @@ import org.globus.wsrf.utils.AddressingUtils;
 
 import commonj.timers.Timer;
 
+
 public class BaseResource implements Resource, ResourceProperties {
 
 	static final Log logger = LogFactory.getLog(BaseResource.class);
 
 	/** Stores the ResourceProperties of this service */
 	private ResourcePropertySet propSet;
-	
-	//this can be used to cancel the registration renewal
+
+	// this can be used to cancel the registration renewal
 	private Timer registrationTimer;
 
 	private MetadataConfiguration configuration;
-	
+
 	private URL baseURL;
 
-	//Define the metadata resource properties
-		
 
-
+	// Define the metadata resource properties
 
 	// initializes the resource
 	public void initialize() throws Exception {
@@ -52,9 +51,8 @@ public class BaseResource implements Resource, ResourceProperties {
 
 		// this loads the metadata from XML files
 		populateMetadata();
-		
-		// now add the metadata as resource properties	
 
+		// now add the metadata as resource properties
 
 		// register the service to the index sevice
 		refreshRegistration(true);
@@ -169,13 +167,10 @@ public class BaseResource implements Resource, ResourceProperties {
 	}
 
 
-
 	private void populateMetadata() {
-	
+
 	}
 
-
-			
 
 	public MetadataConfiguration getConfiguration() {
 		if (this.configuration != null) {

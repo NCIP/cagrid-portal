@@ -241,25 +241,17 @@ public class TrustLevelManager {
 					+ "DESCRIPTION TEXT, INDEX document_index (NAME));";
 				db.update(trust);
 				/*
-				try {
-					TrustLevel levelA = new TrustLevel();
-					levelA.setName("Level A");
-					levelA.setDescription("This is level A.");
-					this.addTrustLevel(levelA);
-
-					TrustLevel levelB = new TrustLevel();
-					levelB.setName("Level B");
-					levelB.setDescription("This is level B.");
-					this.addTrustLevel(levelB);
-
-					TrustLevel levelC = new TrustLevel();
-					levelC.setName("Level C");
-					levelC.setDescription("This is level C.");
-					this.addTrustLevel(levelC);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				*/
+				 * try { TrustLevel levelA = new TrustLevel();
+				 * levelA.setName("Level A"); levelA.setDescription("This is
+				 * level A."); this.addTrustLevel(levelA); TrustLevel levelB =
+				 * new TrustLevel(); levelB.setName("Level B");
+				 * levelB.setDescription("This is level B.");
+				 * this.addTrustLevel(levelB); TrustLevel levelC = new
+				 * TrustLevel(); levelC.setName("Level C");
+				 * levelC.setDescription("This is level C.");
+				 * this.addTrustLevel(levelC); } catch (Exception e) {
+				 * e.printStackTrace(); }
+				 */
 			}
 			dbBuilt = true;
 		}

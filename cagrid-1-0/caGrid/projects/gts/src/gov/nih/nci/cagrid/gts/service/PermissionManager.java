@@ -35,8 +35,6 @@ public class PermissionManager {
 
 	private Database db;
 
-	
-
 
 	public PermissionManager(Database db) {
 		logger = Logger.getLogger(this.getClass().getName());

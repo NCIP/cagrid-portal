@@ -9,5 +9,4 @@ package gov.nih.nci.cagrid.gts.portal;
  */
 public interface TrustLevelRefresher {
 	public void refreshTrustLevels();
-
 }

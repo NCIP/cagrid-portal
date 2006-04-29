@@ -26,7 +26,6 @@ public class PermissionsTable extends PortalBaseTable {
 	public final static String ROLE = "Role";
 
 
-
 	public PermissionsTable() {
 		super(createTableModel());
 		TableColumn c = this.getColumn(PERMISSION);
@@ -92,7 +91,7 @@ public class PermissionsTable extends PortalBaseTable {
 	public void doubleClick() throws Exception {
 		int row = getSelectedRow();
 		if ((row >= 0) && (row < getRowCount())) {
-		
+
 		} else {
 			throw new Exception("Please select a Permission!!!");
 		}

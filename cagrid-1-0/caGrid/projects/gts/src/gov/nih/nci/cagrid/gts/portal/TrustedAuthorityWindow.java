@@ -85,7 +85,7 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 	private JButton importCRL = null;
 
 	private boolean update = false;
-	
+
 	private TrustedAuthorityRefresher refresher;
 
 
@@ -100,7 +100,8 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 	}
 
 
-	public TrustedAuthorityWindow(String service, GlobusCredential cred, TrustedAuthority ta,TrustedAuthorityRefresher refresher) throws Exception {
+	public TrustedAuthorityWindow(String service, GlobusCredential cred, TrustedAuthority ta,
+		TrustedAuthorityRefresher refresher) throws Exception {
 		super();
 		this.refresher = refresher;
 		update = true;
@@ -275,12 +276,12 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 	private JComboBox getGts() {
 		if (gts == null) {
 			gts = new GTSServiceListComboBox();
-			gts.addActionListener(new java.awt.event.ActionListener() { 
-				public void actionPerformed(java.awt.event.ActionEvent e) {    
+			gts.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
 					updateTrustLevels();
 				}
 			});
-			if(this.update){
+			if (this.update) {
 				gts.setEnabled(false);
 			}
 		}

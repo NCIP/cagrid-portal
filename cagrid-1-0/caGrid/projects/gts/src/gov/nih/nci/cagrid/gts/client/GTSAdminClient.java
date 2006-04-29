@@ -32,7 +32,7 @@ import org.globus.gsi.GlobusCredential;
 
 public class GTSAdminClient {
 
-	GridTrustServiceClient client;
+	private GridTrustServiceClient client;
 
 
 	public GTSAdminClient(String url, GlobusCredential proxy) {

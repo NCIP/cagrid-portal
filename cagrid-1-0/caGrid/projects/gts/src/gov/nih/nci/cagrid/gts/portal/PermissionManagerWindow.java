@@ -33,7 +33,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @version $Id: TrustedAuthoritiesWindow.java,v 1.2 2006/03/27 19:05:40
  *          langella Exp $
  */
-public class PermissionManagerWindow extends GridPortalBaseFrame implements PermissionRefresher{
+public class PermissionManagerWindow extends GridPortalBaseFrame implements PermissionRefresher {
 
 	private javax.swing.JPanel jContentPane = null;
 
@@ -74,7 +74,7 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 	private PermissionPanel filterPanel = null;
 
 	private String currentService = null;
-	
+
 	private boolean searchDone = false;
 
 
@@ -274,7 +274,7 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-				new AddPermissionWindow(service, proxy,this), 600, 300);
+				new AddPermissionWindow(service, proxy, this), 600, 300);
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
 		}
@@ -594,6 +594,8 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 		}
 
 	}
+
+
 	private void disableAllActions() {
 		getQuery().setEnabled(false);
 		getAddPermission().setEnabled(false);
@@ -609,13 +611,12 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 
 
 	public void refreshPermissions() {
-		if(searchDone){
+		if (searchDone) {
 			disableAllActions();
 			findPermissions();
 			enableAllActions();
 		}
-		
+
 	}
-	
-	
+
 }

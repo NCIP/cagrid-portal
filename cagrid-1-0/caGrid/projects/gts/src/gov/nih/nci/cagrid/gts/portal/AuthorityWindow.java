@@ -89,7 +89,7 @@ public class AuthorityWindow extends GridPortalComponent {
 	private JLabel jLabel9 = null;
 
 	private JComboBox seconds = null;
-	
+
 	private AuthorityRefresher refresher;
 
 
@@ -376,11 +376,11 @@ public class AuthorityWindow extends GridPortalComponent {
 			refresher.refeshAuthorities();
 			dispose();
 			if (update) {
-				PortalUtils.showMessage("The Authority "+auth.getServiceURI()+" was updated successfully!!!");
+				PortalUtils.showMessage("The Authority " + auth.getServiceURI() + " was updated successfully!!!");
 			} else {
-				PortalUtils.showMessage("The Authority "+auth.getServiceURI()+" was added successfully!!!");
+				PortalUtils.showMessage("The Authority " + auth.getServiceURI() + " was added successfully!!!");
 			}
-			
+
 		} catch (Exception e) {
 			getAddButton().setEnabled(true);
 			e.printStackTrace();

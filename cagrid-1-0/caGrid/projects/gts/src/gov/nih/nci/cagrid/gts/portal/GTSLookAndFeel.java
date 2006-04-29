@@ -106,11 +106,13 @@ public class GTSLookAndFeel extends PortalLookAndFeel {
 	public final static ImageIcon getAuthorityUpdateIcon() {
 		return new javax.swing.ImageIcon(GTSLookAndFeel.class.getResource("/plugin_go.png"));
 	}
-	
+
+
 	public final static ImageIcon getIncreasePriorityIcon() {
 		return new javax.swing.ImageIcon(GTSLookAndFeel.class.getResource("/go-up.png"));
 	}
-	
+
+
 	public final static ImageIcon getDecresePriorityIcon() {
 		return new javax.swing.ImageIcon(GTSLookAndFeel.class.getResource("/go-down.png"));
 	}

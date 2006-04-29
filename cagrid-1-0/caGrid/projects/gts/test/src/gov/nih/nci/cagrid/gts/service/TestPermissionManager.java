@@ -10,6 +10,7 @@ import gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault;
 import gov.nih.nci.cagrid.gts.test.Utils;
 import junit.framework.TestCase;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -21,6 +22,7 @@ public class TestPermissionManager extends TestCase {
 
 	private Database db;
 
+
 	public void testCreateAndDestroy() {
 		try {
 			PermissionManager pm = new PermissionManager(db);
@@ -31,6 +33,7 @@ public class TestPermissionManager extends TestCase {
 			assertTrue(false);
 		}
 	}
+
 
 	public void testAddPermission() {
 		try {
@@ -45,8 +48,7 @@ public class TestPermissionManager extends TestCase {
 			Permission p2 = new Permission();
 			p2.setGridIdentity("O=Test Organization,OU=Test Unit,CN=User");
 			p2.setRole(Role.TrustAuthorityManager);
-			p2
-					.setTrustedAuthorityName("O=Test Organization,OU=Test Unit,CN=CA");
+			p2.setTrustedAuthorityName("O=Test Organization,OU=Test Unit,CN=CA");
 			pm.addPermission(p2);
 			assertTrue(pm.doesPermissionExist(p2));
 		} catch (Exception e) {
@@ -54,6 +56,7 @@ public class TestPermissionManager extends TestCase {
 			assertTrue(false);
 		}
 	}
+
 
 	public void testRevokePermission() {
 		try {
@@ -68,8 +71,7 @@ public class TestPermissionManager extends TestCase {
 			Permission p2 = new Permission();
 			p2.setGridIdentity("O=Test Organization,OU=Test Unit,CN=User");
 			p2.setRole(Role.TrustAuthorityManager);
-			p2
-					.setTrustedAuthorityName("O=Test Organization,OU=Test Unit,CN=CA");
+			p2.setTrustedAuthorityName("O=Test Organization,OU=Test Unit,CN=CA");
 			pm.addPermission(p2);
 			assertTrue(pm.doesPermissionExist(p2));
 			pm.revokePermission(p1);
@@ -80,6 +82,7 @@ public class TestPermissionManager extends TestCase {
 			assertTrue(false);
 		}
 	}
+
 
 	public void testRevokeNonExistingPermission() {
 		try {
@@ -102,6 +105,7 @@ public class TestPermissionManager extends TestCase {
 			assertTrue(false);
 		}
 	}
+
 
 	public void testAddInvalidPermissions() {
 		try {
@@ -142,7 +146,7 @@ public class TestPermissionManager extends TestCase {
 			} catch (IllegalPermissionFault f) {
 
 			}
-			
+
 			try {
 				Permission p5 = new Permission();
 				p5.setGridIdentity("O=Test Organization,OU=Test Unit,CN=User");
@@ -152,7 +156,7 @@ public class TestPermissionManager extends TestCase {
 			} catch (IllegalPermissionFault f) {
 
 			}
-			
+
 			try {
 				Permission p6 = new Permission();
 				p6.setGridIdentity("O=Test Organization,OU=Test Unit,CN=User");
@@ -163,7 +167,7 @@ public class TestPermissionManager extends TestCase {
 			} catch (IllegalPermissionFault f) {
 
 			}
-			
+
 			try {
 				Permission p7 = new Permission();
 				p7.setGridIdentity("O=Test Organization,OU=Test Unit,CN=User");
@@ -181,6 +185,7 @@ public class TestPermissionManager extends TestCase {
 		}
 
 	}
+
 
 	public void testFindTrustedAuthorities() {
 		try {
@@ -242,7 +247,7 @@ public class TestPermissionManager extends TestCase {
 				assertEquals(1, pm.findPermissions(f1).length);
 				assertEquals(perms2[i], pm.findPermissions(f1)[0]);
 
-				//Test Filter by Role
+				// Test Filter by Role
 				PermissionFilter f2 = new PermissionFilter();
 				f2.setRole(Role.User);
 				assertEquals(0, pm.findPermissions(f2).length);
@@ -250,16 +255,16 @@ public class TestPermissionManager extends TestCase {
 				assertEquals(((i + 1)), pm.findPermissions(f2).length);
 				f2.setRole(Role.TrustAuthorityManager);
 				assertEquals(((i + 1)), pm.findPermissions(f2).length);
-				
-				//Test Filter by Trusted Authority
+
+				// Test Filter by Trusted Authority
 				PermissionFilter f3 = new PermissionFilter();
 				assertEquals(((i + 1) * 2), pm.findPermissions(f3).length);
 				f3.setTrustedAuthorityName("yada yada");
 				assertEquals(0, pm.findPermissions(f3).length);
 				f3.setTrustedAuthorityName(ta);
-				assertEquals((i+1), pm.findPermissions(f3).length);
+				assertEquals((i + 1), pm.findPermissions(f3).length);
 				f3.setTrustedAuthorityName("*");
-				assertEquals((i+1), pm.findPermissions(f3).length);
+				assertEquals((i + 1), pm.findPermissions(f3).length);
 			}
 			// Test Remove
 			for (int i = 0; i < count; i++) {
@@ -276,6 +281,7 @@ public class TestPermissionManager extends TestCase {
 
 	}
 
+
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
@@ -286,6 +292,7 @@ public class TestPermissionManager extends TestCase {
 			assertTrue(false);
 		}
 	}
+
 
 	protected void tearDown() throws Exception {
 		super.setUp();

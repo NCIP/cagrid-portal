@@ -49,14 +49,14 @@ public class AddPermissionWindow extends GridPortalComponent {
 	private JButton cancelButton = null;
 
 	private PermissionPanel permissionPanel = null;
-	
+
 	private PermissionRefresher refresher;
 
 
 	/**
 	 * This is the default constructor
 	 */
-	public AddPermissionWindow(String service, GlobusCredential cred,PermissionRefresher refresher) {
+	public AddPermissionWindow(String service, GlobusCredential cred, PermissionRefresher refresher) {
 		super();
 		this.refresher = refresher;
 		initialize();
@@ -308,7 +308,7 @@ public class AddPermissionWindow extends GridPortalComponent {
 	private synchronized void syncServices() {
 		String service = ((GTSServiceListComboBox) getGts()).getSelectedService();
 		try {
-			 permissionPanel.syncWithService(service);
+			permissionPanel.syncWithService(service);
 		} catch (Exception e) {
 			e.printStackTrace();
 			PortalUtils.showErrorMessage(e);

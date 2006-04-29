@@ -106,7 +106,7 @@ public class TestGTSAuthorityManager extends TestCase {
 			} catch (IllegalAuthorityFault f) {
 
 			}
-			
+
 			a3.setServiceIdentity("    ");
 			try {
 				am.addAuthority(a3);
@@ -208,7 +208,7 @@ public class TestGTSAuthorityManager extends TestCase {
 			} catch (IllegalAuthorityFault f) {
 
 			}
-			
+
 			a3.setServiceIdentity("");
 			try {
 				am.addAuthority(a3);
@@ -216,7 +216,7 @@ public class TestGTSAuthorityManager extends TestCase {
 			} catch (IllegalAuthorityFault f) {
 
 			}
-			
+
 			a3.setServiceIdentity("   ");
 			try {
 				am.addAuthority(a3);

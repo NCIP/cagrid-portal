@@ -19,7 +19,7 @@ import java.rmi.RemoteException;
 
 public class GTSSearchClient {
 
-	GridTrustServiceClient client;
+	private GridTrustServiceClient client;
 
 
 	public GTSSearchClient(String url) {

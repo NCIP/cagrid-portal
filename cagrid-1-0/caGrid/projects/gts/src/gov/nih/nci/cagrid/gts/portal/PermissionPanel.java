@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -198,14 +199,13 @@ public class PermissionPanel extends JPanel {
 				GTSSearchClient client = new GTSSearchClient(service);
 				TrustedAuthority[] tas = client.findTrustedAuthorities(new TrustedAuthorityFilter());
 
-				
 				if (tas != null) {
 					currentLength = tas.length;
 					for (int i = 0; i < tas.length; i++) {
 						this.trustedAuthorities.addItem(tas[0].getTrustedAuthorityName());
 					}
 				}
-				
+
 				syncRoles();
 			}
 			return currentLength;
