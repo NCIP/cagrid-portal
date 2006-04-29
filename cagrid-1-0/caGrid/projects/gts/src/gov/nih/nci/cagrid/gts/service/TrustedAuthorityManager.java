@@ -69,13 +69,13 @@ public class TrustedAuthorityManager {
 				if (filter.getTrustedAuthorityName() != null) {
 					sql = appendWhereOrAnd(firstAppended, sql);
 					firstAppended = true;
-					sql.append(" NAME LIKE '%" + filter.getTrustedAuthorityName() + "%'");
+					sql.append(" NAME = '" + filter.getTrustedAuthorityName() + "'");
 				}
 
 				if (filter.getCertificateDN() != null) {
 					sql = appendWhereOrAnd(firstAppended, sql);
 					firstAppended = true;
-					sql.append(" CERTIFICATE_DN LIKE '%" + filter.getCertificateDN() + "%'");
+					sql.append(" CERTIFICATE_DN = '" + filter.getCertificateDN() + "'");
 				}
 
 				if (filter.getStatus() != null) {
@@ -99,13 +99,13 @@ public class TrustedAuthorityManager {
 				if (filter.getAuthorityTrustService() != null) {
 					sql = appendWhereOrAnd(firstAppended, sql);
 					firstAppended = true;
-					sql.append(" AUTHORITY_GTS LIKE '%" + filter.getAuthorityTrustService() + "%'");
+					sql.append(" AUTHORITY_GTS = '" + filter.getAuthorityTrustService() + "'");
 				}
 
 				if (filter.getSourceTrustService() != null) {
 					sql = appendWhereOrAnd(firstAppended, sql);
 					firstAppended = true;
-					sql.append(" SOURCE_GTS LIKE '%" + filter.getSourceTrustService() + "%'");
+					sql.append(" SOURCE_GTS = '" + filter.getSourceTrustService() + "'");
 				}
 
 				if (filter.getLifetime() != null) {
@@ -248,8 +248,7 @@ public class TrustedAuthorityManager {
 
 		if (ta.getCRL() != null) {
 			if ((clean(ta.getCRL().getCrlEncodedString()) != null) && (!ta.getCRL().equals(curr.getCRL()))) {
-
-				X509Certificate cert = checkAndExtractCertificate(curr);
+				X509Certificate cert = checkAndExtractCertificate(ta);
 				checkAndExtractCRL(ta, cert);
 				buildUpdate(needsUpdate, sql, "CRL", ta.getCRL().getCrlEncodedString());
 				needsUpdate = true;

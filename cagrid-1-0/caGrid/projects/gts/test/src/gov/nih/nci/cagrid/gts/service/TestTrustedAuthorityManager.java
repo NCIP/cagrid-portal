@@ -119,9 +119,82 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 					f4.setLifetime(Lifetime.Valid);
 				}
 				assertEquals(validCount, trust.findTrustAuthorities(f4).length);
+
+				TrustedAuthorityFilter f5 = new TrustedAuthorityFilter();
+				f5.setTrustLevel(LEVEL_ONE);
+				assertEquals((i + 1), trust.findTrustAuthorities(f5).length);
+				
+				TrustedAuthorityFilter f6 = new TrustedAuthorityFilter();
+				f6.setStatus(Status.Trusted);
+				assertEquals((i + 1), trust.findTrustAuthorities(f6).length);
+
 			}
 
 			// Test Update
+
+			authorityGTS[0] = "Updated Authority 1";
+			authorityGTS[1] = "Updated Authority 2";
+			authorityGTS[2] = "Updated Authority 3";
+			authorityGTS[3] = "Updated Authority 4";
+			int validCount = count / 2;
+			int expiresCount = count / 2;
+			for (int i = 0; i < count; i++) {
+				String dn = dnPrefix + i;
+				int authIndex = i % 2;
+				int sourceIndex = i % 4;
+				int authCount = (i / 2) + 1;
+				int sourceCount = (i / 4) + 1;
+				int expiresIndex = i % 2;
+				if (expiresIndex == 1) {
+					validCount = validCount - 1;
+					expiresCount = expiresCount + 1;
+				}
+
+				CA ca = new CA(dn);
+				BigInteger sn = new BigInteger(String.valueOf(System.currentTimeMillis()));
+				CRLEntry entry = new CRLEntry(sn, CRLReason.PRIVILEGE_WITHDRAWN);
+				ca.updateCRL(entry);
+				auths[i].setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
+				auths[i].setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
+				auths[i].setStatus(Status.Suspended);
+				auths[i].setTrustLevel(LEVEL_TWO);
+				auths[i].setIsAuthority(Boolean.FALSE);
+				auths[i].setAuthorityTrustService(authorityGTS[authIndex]);
+				auths[i].setSourceTrustService(authorityGTS[sourceIndex]);
+				auths[i].setExpires(10);
+				trust.updateTrustedAuthority(auths[i], false);
+				assertEquals(auths[i], trust.getTrustedAuthority(auths[i].getTrustedAuthorityName()));
+				TrustedAuthority[] tas = trust.findTrustAuthorities(new TrustedAuthorityFilter());
+				assertEquals(tas.length, count);
+				TrustedAuthorityFilter f = new TrustedAuthorityFilter();
+				f.setTrustedAuthorityName(auths[i].getTrustedAuthorityName());
+				assertEquals(1, trust.findTrustAuthorities(f).length);
+				assertEquals(auths[i], trust.findTrustAuthorities(f)[0]);
+
+				TrustedAuthorityFilter f2 = new TrustedAuthorityFilter();
+				f2.setAuthorityTrustService(authorityGTS[authIndex]);
+				assertEquals(authCount, trust.findTrustAuthorities(f2).length);
+
+				TrustedAuthorityFilter f3 = new TrustedAuthorityFilter();
+				f3.setSourceTrustService(authorityGTS[sourceIndex]);
+				assertEquals(sourceCount, trust.findTrustAuthorities(f3).length);
+
+				TrustedAuthorityFilter f4 = new TrustedAuthorityFilter();
+				f4.setLifetime(Lifetime.Expired);
+				assertEquals(expiresCount, trust.findTrustAuthorities(f4).length);
+
+				TrustedAuthorityFilter f5 = new TrustedAuthorityFilter();
+				f5.setLifetime(Lifetime.Valid);
+				assertEquals(validCount, trust.findTrustAuthorities(f5).length);
+
+				TrustedAuthorityFilter f6 = new TrustedAuthorityFilter();
+				f6.setTrustLevel(LEVEL_TWO);
+				assertEquals((i + 1), trust.findTrustAuthorities(f6).length);
+				
+				TrustedAuthorityFilter f7 = new TrustedAuthorityFilter();
+				f7.setTrustLevel(LEVEL_ONE);
+				assertEquals((count-(i + 1)), trust.findTrustAuthorities(f7).length);
+			}
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
@@ -667,9 +740,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				tf2.setTrustedAuthorityName("yada yada");
 				tas2 = trust.findTrustAuthorities(tf2);
 				assertEquals(0, tas2.length);
-				tf2.setTrustedAuthorityName(dnPrefix);
-				tas2 = trust.findTrustAuthorities(tf2);
-				assertEquals((i + 1), tas2.length);
+				
 
 				// Filter by DN
 				TrustedAuthorityFilter tf3 = new TrustedAuthorityFilter();
@@ -680,9 +751,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				tf3.setCertificateDN("yada yada");
 				tas3 = trust.findTrustAuthorities(tf3);
 				assertEquals(0, tas3.length);
-				tf3.setCertificateDN(dnPrefix);
-				tas3 = trust.findTrustAuthorities(tf3);
-				assertEquals((i + 1), tas3.length);
+				
 
 				// Filter by Trust Level
 				TrustedAuthorityFilter tf4 = new TrustedAuthorityFilter();
