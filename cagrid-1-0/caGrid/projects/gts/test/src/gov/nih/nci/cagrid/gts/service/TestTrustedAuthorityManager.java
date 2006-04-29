@@ -119,8 +119,9 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 					f4.setLifetime(Lifetime.Valid);
 				}
 				assertEquals(validCount, trust.findTrustAuthorities(f4).length);
-				// ADD EXPIRES And Valid Invalid
 			}
+
+			// Test Update
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
