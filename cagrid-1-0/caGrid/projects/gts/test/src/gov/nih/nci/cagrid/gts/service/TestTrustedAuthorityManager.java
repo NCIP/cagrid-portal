@@ -307,6 +307,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 
 	public void testUpdateInvalidTrustedAuthority() {
 		try {
+
 			TrustedAuthorityManager trust = new TrustedAuthorityManager("localhost", this, db);
 			CA ca = new CA();
 			BigInteger sn = new BigInteger(String.valueOf(System.currentTimeMillis()));
@@ -334,28 +335,140 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 			trust.addTrustedAuthority(ta2);
 			assertEquals(ta2, trust.getTrustedAuthority(ta2.getTrustedAuthorityName()));
 
-			TrustedAuthority u1 = trust.getTrustedAuthority(ta.getTrustedAuthorityName());
-			u1.setTrustedAuthorityName(null);
+			// TEST INTERNAL UPDATE
+
+			// Test BAD or no Name
+
 			try {
-				trust.updateTrustedAuthority(u1);
+				TrustedAuthority u = trust.getTrustedAuthority(ta.getTrustedAuthorityName());
+				u.setTrustedAuthorityName(null);
+				trust.updateTrustedAuthority(u);
 				fail("Should not be able to update a trusted authority without specifying a valid name!!!");
 			} catch (InvalidTrustedAuthorityFault f) {
 
 			}
 
-			u1.setTrustedAuthorityName("");
 			try {
-				trust.updateTrustedAuthority(u1);
+				TrustedAuthority u = trust.getTrustedAuthority(ta.getTrustedAuthorityName());
+				u.setTrustedAuthorityName("");
+				trust.updateTrustedAuthority(u);
 				fail("Should not be able to update a trusted authority without specifying a valid name!!!");
 			} catch (InvalidTrustedAuthorityFault f) {
 
 			}
 
-			u1.setTrustedAuthorityName("NONE");
 			try {
-				trust.updateTrustedAuthority(u1);
+				TrustedAuthority u = trust.getTrustedAuthority(ta.getTrustedAuthorityName());
+				u.setTrustedAuthorityName("DOES NOT EXIST");
+				trust.updateTrustedAuthority(u);
 				fail("Should not be able to update a trusted authority without specifying a valid name!!!");
 			} catch (InvalidTrustedAuthorityFault f) {
+
+			}
+
+			// Test Invalid Authority
+
+			try {
+				TrustedAuthority u = trust.getTrustedAuthority(ta.getTrustedAuthorityName());
+				u.setAuthorityTrustService("Other");
+				trust.updateTrustedAuthority(u);
+				fail("Should not be able to update a trusted authority!!!");
+			} catch (IllegalTrustedAuthorityFault f) {
+
+			}
+
+			try {
+				TrustedAuthority u = trust.getTrustedAuthority(ta.getTrustedAuthorityName());
+				u.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca2.getCertificate())));
+				trust.updateTrustedAuthority(u);
+				fail("Should not be able to update a trusted authority!!!");
+			} catch (IllegalTrustedAuthorityFault f) {
+
+			}
+
+			// Test Invalid Authority
+
+			try {
+				TrustedAuthority u = trust.getTrustedAuthority(ta.getTrustedAuthorityName());
+				u.setIsAuthority(Boolean.FALSE);
+				trust.updateTrustedAuthority(u);
+				fail("Should not be able to update a trusted authority!!!");
+			} catch (IllegalTrustedAuthorityFault f) {
+
+			}
+
+			// Test Invalid Source
+
+			try {
+				TrustedAuthority u = trust.getTrustedAuthority(ta.getTrustedAuthorityName());
+				u.setSourceTrustService("Invalid Source");
+				trust.updateTrustedAuthority(u);
+				fail("Should not be able to update a trusted authority!!!");
+			} catch (IllegalTrustedAuthorityFault f) {
+
+			}
+
+			// Test Invalid Trust Level
+
+			try {
+				TrustedAuthority u = trust.getTrustedAuthority(ta.getTrustedAuthorityName());
+				u.setTrustLevel("INVALID");
+				trust.updateTrustedAuthority(u);
+				fail("Should not be able to update a trusted authority!!!");
+			} catch (IllegalTrustedAuthorityFault f) {
+
+			}
+
+			// TEST EXTERNAL UPDATE
+
+			// Test BAD or no Name
+
+			try {
+				TrustedAuthority u = trust.getTrustedAuthority(ta2.getTrustedAuthorityName());
+				u.setTrustedAuthorityName(null);
+				trust.updateTrustedAuthority(u);
+				fail("Should not be able to update a trusted authority without specifying a valid name!!!");
+			} catch (InvalidTrustedAuthorityFault f) {
+
+			}
+
+			try {
+				TrustedAuthority u = trust.getTrustedAuthority(ta2.getTrustedAuthorityName());
+				u.setTrustedAuthorityName("");
+				trust.updateTrustedAuthority(u);
+				fail("Should not be able to update a trusted authority without specifying a valid name!!!");
+			} catch (InvalidTrustedAuthorityFault f) {
+
+			}
+
+			try {
+				TrustedAuthority u = trust.getTrustedAuthority(ta2.getTrustedAuthorityName());
+				u.setTrustedAuthorityName("DOES NOT EXIST");
+				trust.updateTrustedAuthority(u);
+				fail("Should not be able to update a trusted authority without specifying a valid name!!!");
+			} catch (InvalidTrustedAuthorityFault f) {
+
+			}
+
+			// Test Invalid Authority
+
+			try {
+				TrustedAuthority u = trust.getTrustedAuthority(ta2.getTrustedAuthorityName());
+				u.setIsAuthority(Boolean.FALSE);
+				trust.updateTrustedAuthority(u);
+				fail("Should not be able to update a trusted authority!!!");
+			} catch (IllegalTrustedAuthorityFault f) {
+
+			}
+
+			// Test Invalid Trust Level
+
+			try {
+				TrustedAuthority u = trust.getTrustedAuthority(ta2.getTrustedAuthorityName());
+				u.setTrustLevel("INVALID");
+				trust.updateTrustedAuthority(u);
+				fail("Should not be able to update a trusted authority!!!");
+			} catch (IllegalTrustedAuthorityFault f) {
 
 			}
 

@@ -177,12 +177,6 @@ public class TrustedAuthorityManager {
 		StringBuffer sql = new StringBuffer();
 		boolean needsUpdate = false;
 		if (internal) {
-			if (!ta.getAuthorityTrustService().equals(gtsURI)) {
-				IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
-				fault.setFaultString("Cannot update the authority " + ta.getTrustedAuthorityName() + " the GTS, "
-					+ gtsURI + " is not its authority!!!");
-				throw fault;
-			}
 
 			if ((clean(ta.getAuthorityTrustService()) != null)
 				&& (!ta.getAuthorityTrustService().equals(curr.getAuthorityTrustService()))) {
@@ -200,17 +194,36 @@ public class TrustedAuthorityManager {
 				}
 			}
 
-			if ((ta.getIsAuthority() != null) && (!ta.getIsAuthority().equals(curr.getIsAuthority()))) {
-				IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
-				fault.setFaultString("The authority trust service for a Trusted Authority cannot be changed");
-				throw fault;
-			}
-
 			if (!ta.getSourceTrustService().equals(curr.getSourceTrustService())) {
 				IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
 				fault.setFaultString("The source trust service for a Trusted Authority cannot be changed");
 				throw fault;
 			}
+		} else {
+			if (!ta.getAuthorityTrustService().equals(curr.getAuthorityTrustService())) {
+				buildUpdate(needsUpdate, sql, "AUTHORITY_GTS", ta.getAuthorityTrustService());
+				needsUpdate = true;
+			}
+
+			if (ta.getCertificate() != null) {
+				if ((clean(ta.getCertificate().getCertificateEncodedString()) != null)
+					&& (!ta.getCertificate().equals(curr.getCertificate()))) {
+					checkAndExtractCertificate(ta);
+					buildUpdate(needsUpdate, sql, "CERTIFICATE", ta.getCertificate().getCertificateEncodedString());
+					needsUpdate = true;
+				}
+			}
+
+			if (!ta.getSourceTrustService().equals(curr.getSourceTrustService())) {
+				buildUpdate(needsUpdate, sql, "SOURCE_GTS", ta.getSourceTrustService());
+				needsUpdate = true;
+			}
+		}
+
+		if ((ta.getIsAuthority() != null) && (!ta.getIsAuthority().equals(curr.getIsAuthority()))) {
+			IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
+			fault.setFaultString("The authority trust service for a Trusted Authority cannot be changed");
+			throw fault;
 		}
 
 		if (ta.getCRL() != null) {
