@@ -50,6 +50,64 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 	}
 
 
+	public void testAddUpdateAndRemoveExternalTrustedAuthorities() {
+		try {
+			TrustedAuthorityManager trust = new TrustedAuthorityManager("localhost", this, db);
+			int count = 12;
+			String dnPrefix = "O=Organization ABC,OU=Unit XYZ,CN=Certificate Authority";
+			String[] authorityGTS = new String[4];
+			authorityGTS[0] = "Authority 1";
+			authorityGTS[1] = "Authority 2";
+			authorityGTS[2] = "Authority 3";
+			authorityGTS[3] = "Authority 4";
+
+			TrustedAuthority[] auths = new TrustedAuthority[count];
+			for (int i = 0; i < count; i++) {
+				String dn = dnPrefix + i;
+				int authIndex = i % 2;
+				int sourceIndex = i % 4;
+				int authCount = (i / 2) + 1;
+				int sourceCount = (i / 4) + 1;
+				CA ca = new CA(dn);
+				String name = ca.getCertificate().getSubjectDN().toString();
+				BigInteger sn = new BigInteger(String.valueOf(System.currentTimeMillis()));
+				CRLEntry entry = new CRLEntry(sn, CRLReason.PRIVILEGE_WITHDRAWN);
+				ca.updateCRL(entry);
+				auths[i] = new TrustedAuthority();
+				auths[i].setTrustedAuthorityName(name);
+				auths[i].setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
+				auths[i].setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
+				auths[i].setStatus(Status.Trusted);
+				auths[i].setTrustLevel(LEVEL_ONE);
+				auths[i].setIsAuthority(Boolean.FALSE);
+				auths[i].setAuthorityTrustService(authorityGTS[authIndex]);
+				auths[i].setSourceTrustService(authorityGTS[sourceIndex]);
+				auths[i].setExpires(2);
+				trust.addTrustedAuthority(auths[i],false);
+				assertEquals(auths[i], trust.getTrustedAuthority(auths[i].getTrustedAuthorityName()));
+				TrustedAuthority[] tas = trust.findTrustAuthorities(new TrustedAuthorityFilter());
+				assertEquals(tas.length, (i + 1));
+				TrustedAuthorityFilter f = new TrustedAuthorityFilter();
+				f.setTrustedAuthorityName(auths[i].getTrustedAuthorityName());
+				assertEquals(1, trust.findTrustAuthorities(f).length);
+				assertEquals(auths[i], trust.findTrustAuthorities(f)[0]);
+				
+				TrustedAuthorityFilter f2 = new TrustedAuthorityFilter();
+				f2.setAuthorityTrustService(authorityGTS[authIndex]);
+				assertEquals(authCount, trust.findTrustAuthorities(f2).length);
+				
+				TrustedAuthorityFilter f3 = new TrustedAuthorityFilter();
+				f3.setSourceTrustService(authorityGTS[sourceIndex]);
+				assertEquals(sourceCount, trust.findTrustAuthorities(f3).length);
+//ADD EXPIRES And Valid Invalid
+			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		}
+	}
+
+
 	public void testAddTrustedAuthorityWithCRL() {
 		try {
 			TrustedAuthorityManager trust = new TrustedAuthorityManager("localhost", this, db);
