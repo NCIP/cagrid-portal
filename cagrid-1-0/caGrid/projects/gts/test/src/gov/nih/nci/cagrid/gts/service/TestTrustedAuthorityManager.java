@@ -123,7 +123,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				TrustedAuthorityFilter f5 = new TrustedAuthorityFilter();
 				f5.setTrustLevel(LEVEL_ONE);
 				assertEquals((i + 1), trust.findTrustAuthorities(f5).length);
-				
+
 				TrustedAuthorityFilter f6 = new TrustedAuthorityFilter();
 				f6.setStatus(Status.Trusted);
 				assertEquals((i + 1), trust.findTrustAuthorities(f6).length);
@@ -190,11 +190,28 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				TrustedAuthorityFilter f6 = new TrustedAuthorityFilter();
 				f6.setTrustLevel(LEVEL_TWO);
 				assertEquals((i + 1), trust.findTrustAuthorities(f6).length);
-				
+
 				TrustedAuthorityFilter f7 = new TrustedAuthorityFilter();
 				f7.setTrustLevel(LEVEL_ONE);
-				assertEquals((count-(i + 1)), trust.findTrustAuthorities(f7).length);
+				assertEquals((count - (i + 1)), trust.findTrustAuthorities(f7).length);
+
+				TrustedAuthorityFilter f8 = new TrustedAuthorityFilter();
+				f8.setStatus(Status.Suspended);
+				assertEquals((i + 1), trust.findTrustAuthorities(f8).length);
+
+				TrustedAuthorityFilter f9 = new TrustedAuthorityFilter();
+				f9.setStatus(Status.Trusted);
+				assertEquals((count - (i + 1)), trust.findTrustAuthorities(f9).length);
 			}
+
+			// Test Remove
+			int remaining = count;
+			for (int i = 0; i < count; i++) {
+				trust.removeTrustedAuthority(auths[i].getTrustedAuthorityName());
+				remaining = remaining - 1;
+				assertEquals(remaining, trust.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+			}
+			assertEquals(0, trust.findTrustAuthorities(new TrustedAuthorityFilter()).length);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
@@ -740,7 +757,6 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				tf2.setTrustedAuthorityName("yada yada");
 				tas2 = trust.findTrustAuthorities(tf2);
 				assertEquals(0, tas2.length);
-				
 
 				// Filter by DN
 				TrustedAuthorityFilter tf3 = new TrustedAuthorityFilter();
@@ -751,7 +767,6 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				tf3.setCertificateDN("yada yada");
 				tas3 = trust.findTrustAuthorities(tf3);
 				assertEquals(0, tas3.length);
-				
 
 				// Filter by Trust Level
 				TrustedAuthorityFilter tf4 = new TrustedAuthorityFilter();
