@@ -116,6 +116,7 @@ public class TrustedAuthorityManager {
 						long time = cal.getTimeInMillis();
 						sql.append(" EXPIRES>0 and EXPIRES>" + time);
 					} else if (filter.getLifetime().equals(Lifetime.Expired)) {
+						sql = appendWhereOrAnd(firstAppended, sql);
 						firstAppended = true;
 						Calendar cal = new GregorianCalendar();
 						long time = cal.getTimeInMillis();
@@ -199,6 +200,12 @@ public class TrustedAuthorityManager {
 				fault.setFaultString("The source trust service for a Trusted Authority cannot be changed");
 				throw fault;
 			}
+
+			if (ta.getExpires() != curr.getExpires()) {
+				IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
+				fault.setFaultString("The expiration for a Trusted Authority cannot be changed");
+				throw fault;
+			}
 		} else {
 			if (!ta.getAuthorityTrustService().equals(curr.getAuthorityTrustService())) {
 				buildUpdate(needsUpdate, sql, "AUTHORITY_GTS", ta.getAuthorityTrustService());
@@ -216,6 +223,11 @@ public class TrustedAuthorityManager {
 
 			if (!ta.getSourceTrustService().equals(curr.getSourceTrustService())) {
 				buildUpdate(needsUpdate, sql, "SOURCE_GTS", ta.getSourceTrustService());
+				needsUpdate = true;
+			}
+			
+			if (ta.getExpires()!=curr.getExpires()) {
+				buildUpdate(needsUpdate, sql, "EXPIRES", ta.getExpires());
 				needsUpdate = true;
 			}
 		}
@@ -282,6 +294,16 @@ public class TrustedAuthorityManager {
 	private void buildUpdate(boolean needsUpdate, StringBuffer sql, String field, String value) {
 		if (needsUpdate) {
 			sql.append(",").append(field).append("='").append(value).append("'");
+		} else {
+			sql.append("UPDATE " + TRUSTED_AUTHORITIES_TABLE + " SET ");
+			sql.append(field).append("='").append(value).append("'");
+		}
+
+	}
+	
+	private void buildUpdate(boolean needsUpdate, StringBuffer sql, String field, long value) {
+		if (needsUpdate) {
+			sql.append(",").append(field).append("=").append(value).append("");
 		} else {
 			sql.append("UPDATE " + TRUSTED_AUTHORITIES_TABLE + " SET ");
 			sql.append(field).append("='").append(value).append("'");

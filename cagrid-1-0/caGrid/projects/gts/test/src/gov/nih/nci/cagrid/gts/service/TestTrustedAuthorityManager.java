@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.gts.service;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.gridca.common.CRLEntry;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
+import gov.nih.nci.cagrid.gts.bean.Lifetime;
 import gov.nih.nci.cagrid.gts.bean.Status;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
@@ -16,6 +17,8 @@ import gov.nih.nci.cagrid.gts.test.CA;
 import gov.nih.nci.cagrid.gts.test.Utils;
 
 import java.math.BigInteger;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import junit.framework.TestCase;
 
@@ -60,6 +63,12 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 			authorityGTS[1] = "Authority 2";
 			authorityGTS[2] = "Authority 3";
 			authorityGTS[3] = "Authority 4";
+			Calendar c = new GregorianCalendar();
+			c.add(Calendar.HOUR, 1);
+
+			long[] expires = new long[2];
+			expires[0] = 3;
+			expires[1] = c.getTimeInMillis();
 
 			TrustedAuthority[] auths = new TrustedAuthority[count];
 			for (int i = 0; i < count; i++) {
@@ -68,6 +77,9 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				int sourceIndex = i % 4;
 				int authCount = (i / 2) + 1;
 				int sourceCount = (i / 4) + 1;
+				int expiresIndex = i % 2;
+				int validCount = (i / 2) + 1;
+
 				CA ca = new CA(dn);
 				String name = ca.getCertificate().getSubjectDN().toString();
 				BigInteger sn = new BigInteger(String.valueOf(System.currentTimeMillis()));
@@ -82,8 +94,8 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				auths[i].setIsAuthority(Boolean.FALSE);
 				auths[i].setAuthorityTrustService(authorityGTS[authIndex]);
 				auths[i].setSourceTrustService(authorityGTS[sourceIndex]);
-				auths[i].setExpires(2);
-				trust.addTrustedAuthority(auths[i],false);
+				auths[i].setExpires(expires[expiresIndex]);
+				trust.addTrustedAuthority(auths[i], false);
 				assertEquals(auths[i], trust.getTrustedAuthority(auths[i].getTrustedAuthorityName()));
 				TrustedAuthority[] tas = trust.findTrustAuthorities(new TrustedAuthorityFilter());
 				assertEquals(tas.length, (i + 1));
@@ -91,15 +103,23 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				f.setTrustedAuthorityName(auths[i].getTrustedAuthorityName());
 				assertEquals(1, trust.findTrustAuthorities(f).length);
 				assertEquals(auths[i], trust.findTrustAuthorities(f)[0]);
-				
+
 				TrustedAuthorityFilter f2 = new TrustedAuthorityFilter();
 				f2.setAuthorityTrustService(authorityGTS[authIndex]);
 				assertEquals(authCount, trust.findTrustAuthorities(f2).length);
-				
+
 				TrustedAuthorityFilter f3 = new TrustedAuthorityFilter();
 				f3.setSourceTrustService(authorityGTS[sourceIndex]);
 				assertEquals(sourceCount, trust.findTrustAuthorities(f3).length);
-//ADD EXPIRES And Valid Invalid
+
+				TrustedAuthorityFilter f4 = new TrustedAuthorityFilter();
+				if (authIndex == 0) {
+					f4.setLifetime(Lifetime.Expired);
+				} else {
+					f4.setLifetime(Lifetime.Valid);
+				}
+				assertEquals(validCount, trust.findTrustAuthorities(f4).length);
+				// ADD EXPIRES And Valid Invalid
 			}
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
