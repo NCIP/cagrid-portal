@@ -207,6 +207,7 @@ public class TrustedAuthorityManager {
 				throw fault;
 			}
 		} else {
+
 			if (!ta.getAuthorityTrustService().equals(curr.getAuthorityTrustService())) {
 				buildUpdate(needsUpdate, sql, "AUTHORITY_GTS", ta.getAuthorityTrustService());
 				needsUpdate = true;
@@ -215,7 +216,14 @@ public class TrustedAuthorityManager {
 			if (ta.getCertificate() != null) {
 				if ((clean(ta.getCertificate().getCertificateEncodedString()) != null)
 					&& (!ta.getCertificate().equals(curr.getCertificate()))) {
-					checkAndExtractCertificate(ta);
+					X509Certificate cert = checkAndExtractCertificate(ta);
+					if ((!ta.getTrustedAuthorityName().equals(cert.getSubjectDN().toString()))) {
+						IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
+						fault
+							.setFaultString("The Trusted Authority Name must match the subject of the Trusted Authority's certificate");
+						throw fault;
+					}
+
 					buildUpdate(needsUpdate, sql, "CERTIFICATE", ta.getCertificate().getCertificateEncodedString());
 					needsUpdate = true;
 				}
@@ -225,8 +233,8 @@ public class TrustedAuthorityManager {
 				buildUpdate(needsUpdate, sql, "SOURCE_GTS", ta.getSourceTrustService());
 				needsUpdate = true;
 			}
-			
-			if (ta.getExpires()!=curr.getExpires()) {
+
+			if (ta.getExpires() != curr.getExpires()) {
 				buildUpdate(needsUpdate, sql, "EXPIRES", ta.getExpires());
 				needsUpdate = true;
 			}
@@ -300,7 +308,8 @@ public class TrustedAuthorityManager {
 		}
 
 	}
-	
+
+
 	private void buildUpdate(boolean needsUpdate, StringBuffer sql, String field, long value) {
 		if (needsUpdate) {
 			sql.append(",").append(field).append("=").append(value).append("");

@@ -496,6 +496,17 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 			} catch (IllegalTrustedAuthorityFault f) {
 
 			}
+			
+//			 Test Invalid Expires
+
+			try {
+				TrustedAuthority u = trust.getTrustedAuthority(ta.getTrustedAuthorityName());
+				u.setExpires(2);
+				trust.updateTrustedAuthority(u);
+				fail("Should not be able to update a trusted authority!!!");
+			} catch (IllegalTrustedAuthorityFault f) {
+
+			}
 
 			// TEST EXTERNAL UPDATE
 
@@ -549,6 +560,19 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 			} catch (IllegalTrustedAuthorityFault f) {
 
 			}
+			
+			// Test Invalid Certificate
+
+			try {
+				TrustedAuthority u = trust.getTrustedAuthority(ta2.getTrustedAuthorityName());
+				u.setCertificate(ta.getCertificate());
+				trust.updateTrustedAuthority(u);
+				fail("Should not be able to update a trusted authority!!!");
+			} catch (IllegalTrustedAuthorityFault f) {
+
+			}
+			
+			
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
