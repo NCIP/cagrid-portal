@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.data.creation;
 
-import gov.nih.nci.cagrid.data.MalformedQueryException;
-import gov.nih.nci.cagrid.data.QueryProcessingException;
 import gov.nih.nci.cagrid.data.common.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
@@ -84,11 +82,11 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 			methods = new MethodsType();
 		}
 		MethodType queryMethod = new MethodType();
-		queryMethod.setName("query");
+		queryMethod.setName(DataServiceConstants.QUERY_METHOD_NAME);
 		// method input parameters
 		MethodTypeInputs inputs = new MethodTypeInputs();
 		MethodTypeInputsInput queryInput = new MethodTypeInputsInput();
-		queryInput.setName("cqlQuery");
+		queryInput.setName(DataServiceConstants.QUERY_METHOD_PARAMETER_NAME);
 		queryInput.setIsArray(false);
 		QName queryQname = new QName(dsNamespaces[dsNamespaces.length - 2].getNamespace(), dsNamespaces[dsNamespaces.length - 2].getSchemaElement(0).getType());
 		queryInput.setQName(queryQname);
@@ -103,8 +101,8 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		// exceptions on query method
 		MethodTypeExceptions queryExceptions = new MethodTypeExceptions();
 		MethodTypeExceptionsException[] exceptions = {
-			new MethodTypeExceptionsException(QueryProcessingException.class.getName()),
-			new MethodTypeExceptionsException(MalformedQueryException.class.getName())
+			new MethodTypeExceptionsException(DataServiceConstants.QUERY_METHOD_EXCEPTIONS[0]),
+			new MethodTypeExceptionsException(DataServiceConstants.QUERY_METHOD_EXCEPTIONS[1])
 		};
 		queryExceptions.setException(exceptions);
 		queryMethod.setExceptions(queryExceptions);

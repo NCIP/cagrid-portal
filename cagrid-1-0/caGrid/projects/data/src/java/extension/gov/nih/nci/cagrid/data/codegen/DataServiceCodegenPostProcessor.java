@@ -1,21 +1,18 @@
 package gov.nih.nci.cagrid.data.codegen;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.common.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
-import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
-import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
-import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.jdom.Element;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileWriter;
+import java.io.InputStreamReader;
 
 /** 
  *  DataServiceCodegenPostProcessor
@@ -27,72 +24,106 @@ import org.jdom.Element;
  * @version $Id$ 
  */
 public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProcessor {
-
+	public static final String METHOD_START = "public " + DataServiceConstants.QUERY_METHOD_RETURN_TYPE + " " 
+		+ DataServiceConstants.QUERY_METHOD_NAME + "(" + DataServiceConstants.QUERY_METHOD_PARAMETER_TYPE + " " 
+		+ DataServiceConstants.QUERY_METHOD_PARAMETER_NAME + ")";
+	
 	public void postCodegen(ServiceExtensionDescriptionType desc, ServiceInformation info) throws CodegenExtensionException {
-		// TODO: Find the query method, if user hasn't done something to
-		// it, and drop in CQL implementation
-		MethodType queryMethod = getQueryMethod(info);
-		if (queryMethod != null) {
-			System.out.println("Found the CQL Query method!");
-			// drop in CQL impl
+		modifyQueryMethod(info);
+	}
+	
+	
+	private void modifyQueryMethod(ServiceInformation info) throws CodegenExtensionException {
+		// Find the service implementation file
+		File serviceSrcDir = new File(info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "src");
+		final String implFileName = info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + "Impl.java";
+		// search the service dir for the impl file
+		File[] implFiles = serviceSrcDir.listFiles(new FileFilter() {
+			public boolean accept(File pathname) {
+				return pathname.getName().equals(implFileName);
+			}
+		});
+		File implFile = null;
+		if (implFiles != null && implFiles.length != 0) {
+			implFile = implFiles[0];
 		} else {
-			System.out.println("No CQL Query method found, sorry");
+			// no impl file found
+			throw new CodegenExtensionException("No service implementation found: " + implFileName + " in " + serviceSrcDir.getAbsolutePath());
 		}
+		
+		// read the file in to a string buffer
+		StringBuffer implementation = null;
+		try {
+			implementation = Utils.fileToStringBuffer(implFile);
+		} catch (Exception ex) {
+			throw new CodegenExtensionException("Error reading implementation file: " + ex.getMessage(), ex);
+		}
+		
+		// read template for implementation's body
+		StringBuffer template = new StringBuffer();
+		try {
+			BufferedReader reader =  new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("QueryTemplate.java")));
+			String line = null;
+			while ((line = reader.readLine()) != null) {
+				template.append(line).append("\n");
+			}
+			reader.close();
+		} catch (Exception ex) {
+			throw new CodegenExtensionException("Error reading the implementation template: " + ex.getMessage(), ex);
+		}
+		String body = extractMethodBody(template);
+		
+		// get the processor implementation out of the service properties
+		String implementationClassName = info.getIntroduceServiceProperties().getProperty(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
+		// replace the placeholder in the method body
+		body.replace(DataServiceConstants.QUERY_PROCESSOR_PLACEHOLDER, implementationClassName);
+		
+		// put the implementation in the class
+		dropInImplementation(implementation, body);
+		
+		// save the source file.
+		try {
+			implFile.delete();
+			implFile.createNewFile();
+			FileWriter writer = new FileWriter(implFile);
+			writer.write(implementation.toString());
+			writer.close();
+		} catch (Exception ex) {
+			throw new CodegenExtensionException("Error writing implementation to disk: " + ex.getMessage(), ex);
+		}		
 	}
 	
 	
-	private MethodType getQueryMethod(ServiceInformation info) {
-		MethodType queryMethod = null;
-		MethodType[] methods = info.getMethods().getMethod();
-		for (int i = 0; i < methods.length; i++) {
-			MethodType currentMethod = methods[i];
-			if (currentMethod.getName().equals("query")) {
-				MethodTypeInputsInput[] inputParams = currentMethod.getInputs().getInput();
-				// should only be one input parameter
-				if (inputParams.length == 1) {
-					String paramName = inputParams[0].getName();
-					String paramUri = inputParams[0].getQName().getNamespaceURI();
-					String paramType = inputParams[0].getQName().getLocalPart();
-					// does the parameter have the right name and type?
-					if (paramName.equals("cqlQuery") && paramUri.equals(DataServiceConstants.CQL_QUERY_URI) && paramType.equals(DataServiceConstants.CQL_QUERY_TYPE)) {
-						String returnUri = currentMethod.getOutput().getQName().getNamespaceURI();
-						String returnType = currentMethod.getOutput().getQName().getLocalPart();
-						if (returnUri.equals(DataServiceConstants.CQL_RESULT_SET_URI) && returnType.equals(DataServiceConstants.CQL_RESULT_SET_TYPE)) {
-							// found the method!
-							queryMethod = currentMethod;
-							break;
-						}
-					}
-				}
+	private String extractMethodBody(StringBuffer template) {
+		// find the method signature's line
+		int startIndex = template.indexOf(METHOD_START);
+		// move to the end of the signature
+		startIndex = template.indexOf("{", startIndex);
+		startIndex++;
+		// start counting open and closed brackets until I reach zero.  That's the end of the query method
+		int endIndex = startIndex;
+		int brackets = 1;
+		while (brackets != 0) {
+			char c = template.charAt(endIndex);
+			if (c == '{') {
+				brackets++;
+			} else if (c == '}') {
+				brackets--;
 			}
+			endIndex++;
 		}
-		return queryMethod;
+		endIndex--; // get off the last bracket
+		String body = template.substring(startIndex, endIndex);
+		return body;
 	}
 	
 	
-	private String namespacesToTypeMappings(NamespacesType namespaces) {
-		/*
-		<typeMapping qname="cadsr:Address"
-	    	xmlns:cadsr="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain"
-	        languageSpecificType="java:gov.nih.nci.cadsr.domain.Address"
-	        serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory"
-	        deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" encodingStyle=""/>
-	     */
-		// namespaces that we shouldn't be generating any type mappings for
-		Set verbotenNamespaces = new HashSet();
-		verbotenNamespaces.add(IntroduceConstants.W3CNAMESPACE);
-		verbotenNamespaces.add(DataServiceConstants.CQL_QUERY_URI);
-		verbotenNamespaces.add(DataServiceConstants.CQL_RESULT_SET_URI);
-		StringBuffer mappings = new StringBuffer();
-		NamespaceType[] nsTypes = namespaces.getNamespace();
-		for (int i = 0; i < nsTypes.length; i++) {
-			NamespaceType currentNamespace = nsTypes[i];
-			SchemaElementType[] elementTypes = currentNamespace.getSchemaElement();
-			for (int j = 0; j < elementTypes.length; j++) {
-				Element typeMapping = new Element("typeMapping");
-				/////
-			}
-		}
-		return mappings.toString();
+	private void dropInImplementation(StringBuffer implClass, String methodBody) {
+		int startIndex = implClass.indexOf(METHOD_START);
+		// move to the end of the signature
+		startIndex = implClass.indexOf("{", startIndex);
+		startIndex++;
+		// insert the method body
+		implClass.insert(startIndex, methodBody);
 	}
 }

@@ -2,6 +2,8 @@ package gov.nih.nci.cagrid.data.common;
 
 import gov.nih.nci.cagrid.cqlquery.CQLQueryType;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResultsType;
+import gov.nih.nci.cagrid.data.MalformedQueryException;
+import gov.nih.nci.cagrid.data.QueryProcessingException;
 
 /** 
  *  DataServiceConstants
@@ -21,6 +23,16 @@ public class DataServiceConstants {
 	public static final String CQL_QUERY_TYPE = CQLQueryType.class.getName();
 	public static final String CQL_RESULT_SET_TYPE = CQLQueryResultsType.class.getName();
 	public static final String QUERY_PROCESSOR_CLASS_PROPERTY = "QueryProcessorClass";
+	
+	// query method constants
+	public static final String QUERY_METHOD_NAME = "query";
+	public static final String QUERY_METHOD_RETURN_TYPE = CQL_RESULT_SET_TYPE;
+	public static final String QUERY_METHOD_PARAMETER_TYPE = CQL_QUERY_TYPE;
+	public static final String QUERY_METHOD_PARAMETER_NAME = "cqlQuery";
+	public static final String[] QUERY_METHOD_EXCEPTIONS = new String[] {
+		QueryProcessingException.class.getName(), MalformedQueryException.class.getName()
+	};
+	public static final String QUERY_PROCESSOR_PLACEHOLDER = "%%processorClass%%";
 
 	private DataServiceConstants() {
 		
