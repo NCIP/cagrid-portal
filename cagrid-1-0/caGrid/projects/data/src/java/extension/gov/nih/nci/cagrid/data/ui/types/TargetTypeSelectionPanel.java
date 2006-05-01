@@ -4,6 +4,7 @@ import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.data.common.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
@@ -23,6 +24,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -398,6 +401,21 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 		if (queryProcessorTextField == null) {
 			queryProcessorTextField = new JTextField();
 			queryProcessorTextField.setToolTipText("Class name of query processor");
+			queryProcessorTextField.getDocument().addDocumentListener(new DocumentListener() {
+				public void insertUpdate(DocumentEvent e) {
+					setProcessorClass(getQueryProcessorTextField().getText());
+				}
+				
+				
+				public void removeUpdate(DocumentEvent e) {
+					setProcessorClass(getQueryProcessorTextField().getText());
+				}
+				
+				
+				public void changedUpdate(DocumentEvent e) {
+					setProcessorClass(getQueryProcessorTextField().getText());
+				}
+			});
 		}
 		return queryProcessorTextField;
 	}
@@ -441,5 +459,10 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			queryProcessorPanel.add(getQueryProcessorTextField(), gridBagConstraints7);
 		}
 		return queryProcessorPanel;
+	}
+	
+	
+	private void setProcessorClass(String className) {
+		getServiceInfo().getIntroduceServiceProperties().setProperty(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, className);
 	}
 }

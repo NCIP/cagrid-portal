@@ -20,6 +20,7 @@ public class DataServiceConstants {
 	public static final String CQL_RESULT_SET_URI = "http://CQL.caBIG/3/gov.nih.nci.cagrid.CQLResultSet";
 	public static final String CQL_QUERY_TYPE = CQLQueryType.class.getName();
 	public static final String CQL_RESULT_SET_TYPE = CQLQueryResultsType.class.getName();
+	public static final String QUERY_PROCESSOR_CLASS_PROPERTY = "QueryProcessorClass";
 
 	private DataServiceConstants() {
 		
