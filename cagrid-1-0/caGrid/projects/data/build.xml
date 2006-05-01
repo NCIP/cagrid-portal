@@ -309,6 +309,7 @@
 	<target name="installIntroduceExtensions" depends="all" description="Builds and installs the Data Services extensions into Introduce.">
 		<delete dir="${introduce.extensions.dir}/data" />
 		<mkdir dir="${introduce.extensions.dir}/data" />
+		<mkdir dir="${introduce.extensions.dir}/data/schema"/>
 		<copy todir="${introduce.extensions.dir}/data" file="${extension.description.file}" />
 		<copy todir="${introduce.extensions.dir}/lib">
 			<fileset dir="${lib.dir}">
@@ -319,6 +320,11 @@
 			</fileset>
 			<fileset dir="${build.jars.dir}">
 				<include name="**/*.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${introduce.extensions.dir}/data/schema">
+			<fileset dir="${basedir}/schema/Data/">
+				<include name="*.xsd"/>
 			</fileset>
 		</copy>
 	</target>
