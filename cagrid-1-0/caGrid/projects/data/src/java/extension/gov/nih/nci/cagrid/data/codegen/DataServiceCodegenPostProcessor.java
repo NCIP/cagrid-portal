@@ -34,6 +34,13 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 	
 	
 	private void modifyQueryMethod(ServiceInformation info) throws CodegenExtensionException {
+		// get the processor implementation out of the service properties
+		String implementationClassName = info.getIntroduceServiceProperties().getProperty(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
+		if (implementationClassName == null || implementationClassName.length() == 0) {
+			System.out.println("No CQL Processor implementation specified");
+			return;
+		}
+		
 		// Find the service implementation file
 		File serviceSrcDir = new File(info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "src");
 		final String implFileName = info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + "Impl.java";
@@ -73,8 +80,6 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 		}
 		String body = extractMethodBody(template);
 		
-		// get the processor implementation out of the service properties
-		String implementationClassName = info.getIntroduceServiceProperties().getProperty(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
 		// replace the placeholder in the method body
 		body.replace(DataServiceConstants.QUERY_PROCESSOR_PLACEHOLDER, implementationClassName);
 		
