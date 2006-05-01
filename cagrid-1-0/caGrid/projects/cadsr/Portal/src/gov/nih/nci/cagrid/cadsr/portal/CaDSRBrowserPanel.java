@@ -93,13 +93,12 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 		gridBagConstraints.gridy = 1;
 		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 		setLayout(new GridBagLayout());
-		this.setSize(new java.awt.Dimension(488,197));
 		gridBagConstraints1.gridx = 0;
 		gridBagConstraints1.gridy = 0;
 		gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
 		gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
 		gridBagConstraints1.weightx = 1.0D;
-		gridBagConstraints1.weighty = 0.0D;
+		gridBagConstraints1.weighty = 1.0D;
 		this.add(getQueryPanel(), gridBagConstraints1);
 		if (isShowQueryPanel()) {
 		}
@@ -110,7 +109,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	public void setDefaultCaDSRURL(String url) {
 		this.default_cadsrURL = url;
 	}
-	
+
 
 	/**
 	 * This method initializes jPanel
@@ -544,4 +543,4 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"

@@ -19,7 +19,6 @@ import org.globus.wsrf.encoding.ObjectDeserializer;
 public class DiscoveryClient {
 
 	private static final String DEFAULT_INDEX_SERVICE_URL = "http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService";
-
 	private EndpointReferenceType indexEPR = null;
 
 	private static Map nsMap = new HashMap();
@@ -47,52 +46,6 @@ public class DiscoveryClient {
 	}
 
 
-	public static void main(String[] args) {
-		DiscoveryClient client = null;
-		try {
-			if (args.length == 1) {
-				client = new DiscoveryClient(args[1]);
-			} else {
-				client = new DiscoveryClient();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
-
-
-		EndpointReferenceType[] allServices = null;
-		try {
-			allServices = client.getAllServices();
-		} catch (Exception e1) {
-			e1.printStackTrace();
-			System.exit(-1);
-		}
-
-		if (allServices != null) {
-			for (int i = 0; i < allServices.length; i++) {
-				EndpointReferenceType service = allServices[i];
-				System.out.println("\n\n" + service.getAddress());
-				try {
-//					Element serviceRPs = ResourcePropertyHelper.getResourceProperties(service);
-//					System.out.println("Resource Property Set:");
-//					XMLUtils.PrettyElementToStream(serviceRPs, System.out);
-					
-					CommonServiceMetadataType commonMetadata = MetadataUtils.getCommonMetadata(service);
-					if(commonMetadata!=null){
-						System.out.println("Service is from:"+commonMetadata.getResearchCenterInfo().getResearchCenterName());
-					}
-				} catch (Exception e) {
-					// e.printStackTrace();
-					System.out.println("ERROR:  Unable to access service's resource properties: " + e.getMessage());
-				}
-			}
-		} else {
-			System.out.println("No services found.");
-		}
-	}
-
-
 	public EndpointReferenceType[] getAllServices() throws Exception {
 		String sg = WSRFConstants.SERVICEGROUP_PREFIX;
 		EndpointReferenceType[] results = null;
@@ -113,6 +66,25 @@ public class DiscoveryClient {
 
 		return results;
 	}
+	
+	//----common----
+	//discoverServicesBySearchString
+	//discoverServicesByCancerCenter
+	//discoverServicesBySearchString
+	//discoverServicesByConceptCode
+	//discoverServicesByPointOfContact
+	//----service----
+	//discoverServicesByOperationName
+	//discoverServicesByOperationClass
+	//discoverServicesByOperationInputClass
+	//discoverServicesByOperationOutputClass
+	//
+	//	----data----
+	//discoverServicesByModelName
+	//discoverServicesByClass
+	//discoverServicesByObjectsAssociatedWithClass???
+	//
+	
 
 
 	public EndpointReferenceType getIndexEPR() {
@@ -122,5 +94,47 @@ public class DiscoveryClient {
 
 	public void setIndexEPR(EndpointReferenceType indexEPR) {
 		this.indexEPR = indexEPR;
+	}
+
+
+	public static void main(String[] args) {
+		DiscoveryClient client = null;
+		try {
+			if (args.length == 1) {
+				client = new DiscoveryClient(args[1]);
+			} else {
+				client = new DiscoveryClient();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+
+		EndpointReferenceType[] allServices = null;
+		try {
+			allServices = client.getAllServices();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			System.exit(-1);
+		}
+
+		if (allServices != null) {
+			for (int i = 0; i < allServices.length; i++) {
+				EndpointReferenceType service = allServices[i];
+				System.out.println("\n\n" + service.getAddress());
+				try {
+					CommonServiceMetadataType commonMetadata = MetadataUtils.getCommonMetadata(service);
+					if (commonMetadata != null) {
+						System.out.println("Service is from:"
+							+ commonMetadata.getResearchCenterInfo().getResearchCenterName());
+					}
+				} catch (Exception e) {
+					// e.printStackTrace();
+					System.out.println("ERROR:  Unable to access service's resource properties: " + e.getMessage());
+				}
+			}
+		} else {
+			System.out.println("No services found.");
+		}
 	}
 }
