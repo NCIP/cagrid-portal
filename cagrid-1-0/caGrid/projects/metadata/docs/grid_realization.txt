@@ -19,5 +19,20 @@ For example, getServiceContexts(), getResearchCenterInfo(), etc
 
 
    
+TODO:
+====================
+How to add "runtime" attributes?
+ -add only to types in the XSD and not in model?
+ -make runtime sub-type static? 
 
-  
+
+XSD/Bean Generation
+====================
+1) Model metadata in Enterprise Architect
+2) Export Logical Model Package to XMI 1.0
+3) Open as XMI in hyperModel(http://update.xmlmodeling.com/updates/index.html)
+4) For each package:
+  4.1) Right-click, Open With-> XML Schema
+  4.2) Save as *.xsd
+5) Fix all XSDs by adding proper targetnamespaces, and xsd:imports; convert java primatives to xsd primatives
+6) Use XSDs as types in Globus build (generate beans from XSD)

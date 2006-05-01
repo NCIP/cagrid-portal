@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Scott Oster (BMI) -->
+<xs:schema targetNamespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:uml="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" xmlns="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" schemaLocation="../common/common.xsd"/>
+	<!-- ================================================= -->
+	<!-- ================================================= -->
+	<!-- Package: service  -->
+	<!-- ================================================= -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!-- Class: ContextProperty  -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<xs:element name="ContextProperty" type="ContextProperty"/>
+	<xs:complexType name="ContextProperty">
+		<xs:annotation>
+			<xs:documentation>This represents an exposed property of a service context's state. This
+				is manifested as a resource property in the grid.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="name" type="xs:string"/>
+			<xs:element name="description" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!-- Class: Fault  -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<xs:element name="Fault" type="Fault"/>
+	<xs:complexType name="Fault">
+		<xs:annotation>
+			<xs:documentation>This represents an error that could occur during the execution of the
+				operation. This is manifested as an operation fault in the grid.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="name" type="xs:string"/>
+			<xs:element name="description" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!-- Class: InputParameter  -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<xs:element name="InputParameter" type="InputParameter"/>
+	<xs:complexType name="InputParameter">
+		<xs:annotation>
+			<xs:documentation>Represents an input parameter to an operation. This is manifested as a
+				parameter of a service request in the grid.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="name" type="xs:string"/>
+			<xs:element name="index" type="xs:int"/>
+			<xs:element name="isRequired" type="xs:boolean"/>
+			<xs:element name="isArray" type="xs:boolean"/>
+			<xs:element name="dimentionality" type="xs:int"/>
+			<xs:element name="umlClass" type="com:UMLClass"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!-- Class: Operation  -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<xs:element name="Operation" type="Operation"/>
+	<xs:complexType name="Operation">
+		<xs:annotation>
+			<xs:documentation>This represents a method/operation/function in a service context. Its
+				input parameters are described by its InputParameter associations, its output by its
+				Output association, and any errors it produces by its Fault associations. This is
+				manifested as an operation of a service in the grid.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="name" type="xs:string"/>
+			<xs:element name="description" type="xs:string"/>
+			<xs:element name="inputParameterCollection" type="InputParameter" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="output" type="Output" minOccurs="0"/>
+			<xs:element name="faultCollection" type="Fault" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!-- Class: Output  -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<xs:element name="Output" type="Output"/>
+	<xs:complexType name="Output">
+		<xs:annotation>
+			<xs:documentation>Represents the result/output of an operation. Its non-existence
+				represents the operation produces no result. This is manifested as the value of an
+				operation response in the grid.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="isArray" type="xs:boolean"/>
+			<xs:element name="dimentionality" type="xs:int"/>
+			<xs:element name="umlClass" type="com:UMLClass"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!-- Class: Service  -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<xs:element name="Service" type="Service"/>
+	<xs:complexType name="Service">
+		<xs:annotation>
+			<xs:documentation>A service is a "conceptual" definition of a collection of functional
+				contexts. This has no physical manifestation in the grid.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="name" type="xs:string"/>
+			<xs:element name="version" type="xs:string"/>
+			<xs:element name="description" type="xs:string"/>
+			<xs:element name="serviceContextCollection" type="ServiceContext" maxOccurs="unbounded"/>
+			<xs:element name="pointOfContactCollection" type="com:PointOfContact" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!-- Class: ServiceContext  -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<xs:element name="ServiceContext" type="ServiceContext"/>
+	<xs:complexType name="ServiceContext">
+		<xs:annotation>
+			<xs:documentation>This is a functional collection of operations that work over a common
+				collection of stateful resources. A service without stateful resources would have a
+				single context. This is manifested as an actual service in the
+			grid.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="name" type="xs:string"/>
+			<xs:element name="description" type="xs:string"/>
+			<xs:element name="contextPropertyCollection" type="ContextProperty" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="operationCollection" type="Operation" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,2 @@
+<xs:schema targetNamespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:uml="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" xmlns="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" elementFormDefault="qualified" attributeFormDefault="unqualified">
+</xs:schema>

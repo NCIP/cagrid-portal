@@ -56,15 +56,15 @@
             <property name="source.stubs.dir" location="${schema.dest}/cagrid/types/common" />
             <property name="wsdl.file" value="Common.wsdl" />
             <property name="target.stubs.dir" location="${stubs.src}" />
-        </ant>
+        </ant>        
         <ant antfile="${ant.build.stubs}" target="generateStubs">
-            <property name="source.stubs.dir" location="${schema.dest}/cagrid/types/cadsr" />
-            <property name="wsdl.file" value="caDSR.wsdl" />
+            <property name="source.stubs.dir" location="${schema.dest}/cagrid/types/service" />
+            <property name="wsdl.file" value="Service.wsdl" />
             <property name="target.stubs.dir" location="${stubs.src}" />
         </ant>
         <ant antfile="${ant.build.stubs}" target="generateStubs">
-            <property name="source.stubs.dir" location="${schema.dest}/cagrid/types/analytical" />
-            <property name="wsdl.file" value="Analytical.wsdl" />
+            <property name="source.stubs.dir" location="${schema.dest}/cagrid/types/data" />
+            <property name="wsdl.file" value="Data.wsdl" />
             <property name="target.stubs.dir" location="${stubs.src}" />
         </ant>
     </target>
