@@ -25,7 +25,6 @@ import javax.swing.JTextField;
 
 public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener, PackageSelectedListener {
 
-	private JPanel mainPanel = null;
 	private JPanel queryPanel = null;
 	private JButton queryButton = null;
 	protected File schemaDir;
@@ -64,7 +63,6 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 		this.addProjectSelectionListener(this);
 		this.addPackageSelectionListener(this);
 		initialize();
-
 	}
 
 
@@ -87,46 +85,32 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	 * This method initializes this
 	 */
 	private void initialize() {
-		this.add(getMainPanel(), null);
-
+		GridBagConstraints gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+		gridBagConstraints.weightx = 1.0D;
+		gridBagConstraints.weighty = 1.0D;
+		gridBagConstraints.gridy = 1;
+		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+		setLayout(new GridBagLayout());
+		this.setSize(new java.awt.Dimension(488,197));
+		gridBagConstraints1.gridx = 0;
+		gridBagConstraints1.gridy = 0;
+		gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
+		gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
+		gridBagConstraints1.weightx = 1.0D;
+		gridBagConstraints1.weighty = 0.0D;
+		this.add(getQueryPanel(), gridBagConstraints1);
+		if (isShowQueryPanel()) {
+		}
+		add(getProjectsPanel(), gridBagConstraints);
 	}
 
 
 	public void setDefaultCaDSRURL(String url) {
 		this.default_cadsrURL = url;
 	}
-
-
-	/**
-	 * This method initializes jPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	protected JPanel getMainPanel() {
-		if (mainPanel == null) {
-			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.gridx = 0;
-			gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints.weightx = 1.0D;
-			gridBagConstraints.weighty = 1.0D;
-			gridBagConstraints.gridy = 1;
-			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			mainPanel = new JPanel();
-			mainPanel.setLayout(new GridBagLayout());
-			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.gridy = 0;
-			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints1.weightx = 0.0D;
-			gridBagConstraints1.weighty = 0.0D;
-			if (isShowQueryPanel()) {
-				mainPanel.add(getQueryPanel(), gridBagConstraints1);
-			}
-			mainPanel.add(getProjectsPanel(), gridBagConstraints);
-		}
-		return mainPanel;
-	}
-
+	
 
 	/**
 	 * This method initializes jPanel
@@ -560,4 +544,4 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 
 	}
 
-}
+}  //  @jve:decl-index=0:visual-constraint="10,10"
