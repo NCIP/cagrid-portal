@@ -2,8 +2,6 @@ package gov.nih.nci.cagrid.data.common;
 
 import gov.nih.nci.cagrid.cqlquery.CQLQueryType;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResultsType;
-import gov.nih.nci.cagrid.data.MalformedQueryException;
-import gov.nih.nci.cagrid.data.QueryProcessingException;
 
 /** 
  *  DataServiceConstants
@@ -29,8 +27,15 @@ public class DataServiceConstants {
 	public static final String QUERY_METHOD_RETURN_TYPE = CQL_RESULT_SET_TYPE;
 	public static final String QUERY_METHOD_PARAMETER_TYPE = CQL_QUERY_TYPE;
 	public static final String QUERY_METHOD_PARAMETER_NAME = "cqlQuery";
+	/*
 	public static final String[] QUERY_METHOD_EXCEPTIONS = new String[] {
 		QueryProcessingException.class.getName(), MalformedQueryException.class.getName()
+	};
+	*/
+	// TODO: this goes away when introduce supports using typed exceptions from packages
+	// outside of the generated source tree
+	public static final String[] QUERY_METHOD_EXCEPTIONS = new String[] {
+		"QueryProcessingException", "MalformedQueryException"
 	};
 	public static final String QUERY_PROCESSOR_PLACEHOLDER = "%%processorClass%%";
 
