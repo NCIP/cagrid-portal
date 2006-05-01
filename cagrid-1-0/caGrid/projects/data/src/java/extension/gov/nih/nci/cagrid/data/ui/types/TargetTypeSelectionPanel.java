@@ -35,6 +35,8 @@ import org.projectmobius.common.gme.NoSuchSchemaException;
 import org.projectmobius.gme.XMLDataModelService;
 import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
 import org.projectmobius.protocol.gme.SchemaNode;
+import javax.swing.JTextField;
+import javax.swing.JLabel;
 
 /** 
  *  TargetTypeSelectionPanel
@@ -56,6 +58,9 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	private JPanel serializationPanel = null;
 	private JPanel typeSelectionPanel = null;
 	private JButton setModelButton = null;
+	private JTextField queryProcessorTextField = null;
+	private JLabel queryProcessorLabel = null;
+	private JPanel queryProcessorPanel = null;
 	
 	private XMLDataModelService gmeHandle = null;
 	
@@ -182,6 +187,10 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	 */
 	private JPanel getSerializationPanel() {
 		if (serializationPanel == null) {
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.gridx = 0;
+			gridBagConstraints8.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints8.gridy = 2;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.gridx = 0;
 			gridBagConstraints2.weightx = 1.0D;
@@ -198,6 +207,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			serializationPanel.setLayout(new GridBagLayout());
 			serializationPanel.add(getTypesTableScrollPane(), gridBagConstraints3);
 			serializationPanel.add(getSerializationConfigPanel(), gridBagConstraints2);
+			serializationPanel.add(getQueryProcessorPanel(), gridBagConstraints8);
 		}
 		return serializationPanel;
 	}
@@ -212,6 +222,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 		if (typeSelectionPanel == null) {
 			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
 			gridBagConstraints31.gridx = 0;
+			gridBagConstraints31.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints31.gridy = 1;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.fill = GridBagConstraints.BOTH;
@@ -372,7 +383,63 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	
 	private File getSchemaDir() {
 		String dir = getServiceInfo().getBaseDirectory().getAbsolutePath() + File.separator +
-			"schema" + File.separator + getServiceInfo().getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
+			"schema" + File.separator + getServiceInfo().getIntroduceServiceProperties()
+			.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
 		return new File(dir);
+	}
+
+
+	/**
+	 * This method initializes jTextField	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getQueryProcessorTextField() {
+		if (queryProcessorTextField == null) {
+			queryProcessorTextField = new JTextField();
+			queryProcessorTextField.setToolTipText("Class name of query processor");
+		}
+		return queryProcessorTextField;
+	}
+
+
+	/**
+	 * This method initializes jLabel	
+	 * 	
+	 * @return javax.swing.JLabel	
+	 */
+	private JLabel getQueryProcessorLabel() {
+		if (queryProcessorLabel == null) {
+			queryProcessorLabel = new JLabel();
+			queryProcessorLabel.setText("Query Processor:");
+		}
+		return queryProcessorLabel;
+	}
+
+
+	/**
+	 * This method initializes jPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getQueryProcessorPanel() {
+		if (queryProcessorPanel == null) {
+			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints7.gridy = 0;
+			gridBagConstraints7.weightx = 1.0;
+			gridBagConstraints7.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints7.gridx = 1;
+			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+			gridBagConstraints6.gridx = 0;
+			gridBagConstraints6.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints6.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints6.gridy = 0;
+			queryProcessorPanel = new JPanel();
+			queryProcessorPanel.setLayout(new GridBagLayout());
+			queryProcessorPanel.add(getQueryProcessorLabel(), gridBagConstraints6);
+			queryProcessorPanel.add(getQueryProcessorTextField(), gridBagConstraints7);
+		}
+		return queryProcessorPanel;
 	}
 }
