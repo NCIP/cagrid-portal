@@ -8,3 +8,4 @@ ext
 .jetproperties
 dorian-portal-conf.xml
 cobertura.ser
+junit*.properties
