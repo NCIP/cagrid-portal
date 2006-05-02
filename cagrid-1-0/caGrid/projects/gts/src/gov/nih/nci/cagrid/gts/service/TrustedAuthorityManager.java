@@ -178,7 +178,7 @@ public class TrustedAuthorityManager {
 		StringBuffer sql = new StringBuffer();
 		boolean needsUpdate = false;
 		if (internal) {
-
+			//TODO:  ADD TEST FOR THIS
 			if (!curr.getAuthorityTrustService().equals(gtsURI)) {
 				IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
 				fault.setFaultString("The Trusted Authority cannot be updated, this GTS is not its authority!!!");
