@@ -17,6 +17,10 @@ import javax.swing.ImageIcon;
  */
 public class IntroduceLookAndFeel extends PortalLookAndFeel {
 
+	public final static ImageIcon getResyncIcon() {
+		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/view-refresh.png"));
+	}
+
 	public final static ImageIcon getCreateIcon() {
 		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/cog_add.png"));
 	}
