@@ -1,15 +1,23 @@
 package gov.nih.nci.cagrid.introduce.common;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.introduce.beans.extension.Properties;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
 
 import java.io.File;
+import java.util.List;
 import java.util.StringTokenizer;
 
+import org.jdom.Document;
+import org.jdom.Element;
+import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.Namespace;
+import org.projectmobius.common.XMLUtilities;
 
 
 /**
@@ -81,7 +89,7 @@ public class CommonTools {
 			+ packagename.replace('.', File.separatorChar) + " -Dintroduce.skeleton.namespace.domain="
 			+ namespacedomain + " -Dintroduce.skeleton.extensions=" + extensions + " createService";
 		cmd = getAntCommandCall(buildFileDir) + cmd;
-		System.out.println("CREATION: cmd: " + cmd);
+		System.out.println("CREATION: cmd: " + cmd );
 		return cmd;
 	}
 
@@ -164,6 +172,31 @@ public class CommonTools {
 	}
 
 
+	public static NamespaceType createNamespaceType(String xsdFilename) throws MobiusException {
+		NamespaceType namespaceType = new NamespaceType();
+		namespaceType.setLocation(xsdFilename);
+		Document schemaDoc = XMLUtilities.fileNameToDocument(xsdFilename);
+
+		String rawNamespace = schemaDoc.getRootElement().getAttributeValue("targetNamespace");
+		Namespace namespace = new Namespace(rawNamespace);
+		String packageName = getPackageName(namespace);
+		namespaceType.setPackageName(packageName);
+
+		namespaceType.setNamespace(namespace.getRaw());
+
+		List elementTypes = schemaDoc.getRootElement()
+			.getChildren("element", schemaDoc.getRootElement().getNamespace());
+		SchemaElementType[] schemaTypes = new SchemaElementType[elementTypes.size()];
+		for (int i = 0; i < elementTypes.size(); i++) {
+			Element element = (Element) elementTypes.get(i);
+			SchemaElementType type = new SchemaElementType();
+			type.setType(element.getAttributeValue("name"));
+			schemaTypes[i] = type;
+		}
+		namespaceType.setSchemaElement(schemaTypes);
+		return namespaceType;
+	}
+	
 	public static ServiceType getService(ServicesType services, String name) {
 		if (services != null && services.getService() != null) {
 			for (int i = 0; i < services.getService().length; i++) {
@@ -175,4 +208,6 @@ public class CommonTools {
 
 		return null;
 	}
+	
+	
 }
