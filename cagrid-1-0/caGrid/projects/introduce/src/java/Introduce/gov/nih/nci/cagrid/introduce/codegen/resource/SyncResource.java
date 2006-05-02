@@ -61,7 +61,7 @@ public class SyncResource extends SyncTool {
 					File serviceConfF = new File(srcDir.getAbsolutePath()
 						+ File.separator
 						+ getServiceInformation().getIntroduceServiceProperties().getProperty(
-							IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + service.getName()
+							IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + service.getName().toLowerCase()
 						+ File.separator + "service" + File.separator + "globus" + File.separator
 						+ "ServiceConfiguration.java");
 					FileWriter serviceConfFW = new FileWriter(serviceConfF);
@@ -80,7 +80,7 @@ public class SyncResource extends SyncTool {
 						File baseResourceF = new File(srcDir.getAbsolutePath()
 							+ File.separator
 							+ getServiceInformation().getIntroduceServiceProperties().getProperty(
-								IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + service.getName()
+								IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + service.getName().toLowerCase()
 							+ File.separator + "service" + File.separator + "globus" + File.separator + "resource"
 							+ File.separator + "BaseResource.java");
 
@@ -94,7 +94,7 @@ public class SyncResource extends SyncTool {
 						File resourceContanstsF = new File(srcDir.getAbsolutePath()
 							+ File.separator
 							+ getServiceInformation().getIntroduceServiceProperties().getProperty(
-								IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + service.getName()
+								IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + service.getName().toLowerCase()
 							+ File.separator + "service" + File.separator + "globus" + File.separator + "resource"
 							+ File.separator + "ResourceConstants.java");
 
@@ -110,7 +110,7 @@ public class SyncResource extends SyncTool {
 						File baseResourceF = new File(srcDir.getAbsolutePath()
 							+ File.separator
 							+ getServiceInformation().getIntroduceServiceProperties().getProperty(
-								IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + service.getName()
+								IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + service.getName().toLowerCase()
 							+ File.separator + "service" + File.separator + "globus" + File.separator + "resource"
 							+ File.separator + "BaseResource.java");
 
@@ -124,7 +124,7 @@ public class SyncResource extends SyncTool {
 						File metadataConfigurationF = new File(srcDir.getAbsolutePath()
 							+ File.separator
 							+ getServiceInformation().getIntroduceServiceProperties().getProperty(
-								IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + service.getName()
+								IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + service.getName().toLowerCase()
 							+ File.separator + "service" + File.separator + "globus" + File.separator + "resource"
 							+ File.separator + "ResourceConfiguration.java");
 
@@ -138,7 +138,7 @@ public class SyncResource extends SyncTool {
 						File resourceContanstsF = new File(srcDir.getAbsolutePath()
 							+ File.separator
 							+ getServiceInformation().getIntroduceServiceProperties().getProperty(
-								IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + service.getName()
+								IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + service.getName().toLowerCase()
 							+ File.separator + "service" + File.separator + "globus" + File.separator + "resource"
 							+ File.separator + "ResourceConstants.java");
 
@@ -154,7 +154,7 @@ public class SyncResource extends SyncTool {
 							File baseResourceF = new File(srcDir.getAbsolutePath()
 								+ File.separator
 								+ getServiceInformation().getIntroduceServiceProperties().getProperty(
-									IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + service.getName()
+									IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + service.getName().toLowerCase()
 								+ File.separator + "service" + File.separator + "globus" + File.separator + "resource"
 								+ File.separator + "BaseResource.java");
 
@@ -168,7 +168,7 @@ public class SyncResource extends SyncTool {
 							File metadataConfigurationF = new File(srcDir.getAbsolutePath()
 								+ File.separator
 								+ getServiceInformation().getIntroduceServiceProperties().getProperty(
-									IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + service.getName()
+									IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + service.getName().toLowerCase()
 								+ File.separator + "service" + File.separator + "globus" + File.separator + "resource"
 								+ File.separator + "ResourceConfiguration.java");
 
@@ -182,7 +182,7 @@ public class SyncResource extends SyncTool {
 							File resourceContanstsF = new File(srcDir.getAbsolutePath()
 								+ File.separator
 								+ getServiceInformation().getIntroduceServiceProperties().getProperty(
-									IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + service.getName()
+									IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + service.getName().toLowerCase()
 								+ File.separator + "service" + File.separator + "globus" + File.separator + "resource"
 								+ File.separator + "ResourceConstants.java");
 
