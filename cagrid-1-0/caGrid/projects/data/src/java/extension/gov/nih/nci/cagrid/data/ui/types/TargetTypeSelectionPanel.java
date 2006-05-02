@@ -34,7 +34,10 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.apache.axis.message.MessageElement;
-import org.apache.axis.message.Text;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.output.DOMOutputter;
 import org.projectmobius.client.gme.ImportInfo;
 import org.projectmobius.common.GridServiceResolver;
 import org.projectmobius.common.MobiusException;
@@ -405,6 +408,16 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 		if (queryProcessorTextField == null) {
 			queryProcessorTextField = new JTextField();
 			queryProcessorTextField.setToolTipText("Class name of query processor");
+			synchronized (queryProcessorTextField) {
+				ExtensionTypeExtensionData data = getExtensionData();
+				MessageElement[] dataEntries = data.get_any();
+				for (int i = 0; dataEntries != null && i < dataEntries.length; i++) {
+					if (dataEntries[i].getLocalName().equals(DataServiceConstants.QUERY_PROCESSOR_ELEMENT_NAME)) {
+						String queryProcessorClass = dataEntries[i].getValue();
+						queryProcessorTextField.setText(queryProcessorClass);
+					}
+				}
+			}
 			queryProcessorTextField.getDocument().addDocumentListener(new DocumentListener() {
 				public void insertUpdate(DocumentEvent e) {
 					setProcessorClass(getQueryProcessorTextField().getText());
@@ -468,8 +481,17 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	
 	private void setProcessorClass(String className) {
 		ExtensionTypeExtensionData extensionData = getExtensionData();
-		MessageElement processorElement = new MessageElement(new Text(className));
-		processorElement.setName(DataServiceConstants.QUERY_PROCESSOR_ELEMENT_NAME);
+		Element elem = new Element(DataServiceConstants.QUERY_PROCESSOR_ELEMENT_NAME);
+		elem.setText(className);
+		Document doc = new Document();
+		doc.setRootElement(elem);
+		org.w3c.dom.Document tempDoc = null;
+		try {
+			tempDoc = new DOMOutputter().output(doc);
+		} catch (JDOMException ex) {
+			ex.printStackTrace();
+		}
+		MessageElement processorElement = new MessageElement(tempDoc.getDocumentElement());
 		
 		MessageElement[] anys = extensionData.get_any();
 		if (anys == null) {
