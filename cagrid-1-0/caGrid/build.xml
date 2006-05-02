@@ -472,6 +472,11 @@
 
 			<delete dir="${projects.dir}/cql2xpath/ext" />
 			<ant dir="${projects.dir}/cql2xpath" inheritAll="false" antfile="build.xml" target="clean" />
+			<delete>
+				<fileset dir="${junit.results.dir}">
+					<include name="*"/>
+				</fileset>
+			</delete>
 		</parallel>
 	</target>
 
