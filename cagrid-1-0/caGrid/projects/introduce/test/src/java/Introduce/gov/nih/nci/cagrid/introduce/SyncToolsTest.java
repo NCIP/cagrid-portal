@@ -68,7 +68,7 @@ public class SyncToolsTest extends Story {
 
 	protected void storyTearDown() throws Throwable {
 		RemoveSkeletonStep step = new RemoveSkeletonStep(tci1);
-		//step.runStep();
+		step.runStep();
 	}
 
 
