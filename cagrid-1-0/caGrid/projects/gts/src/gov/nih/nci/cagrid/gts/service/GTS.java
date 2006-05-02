@@ -219,7 +219,7 @@ public class GTS implements TrustLevelStatus, TrustLevelLookup {
 	}
 
 
-	private void synchronizeTrustedAuthorities(String authorityServiceURI, TrustedAuthority[] trusted) {
+	protected void synchronizeTrustedAuthorities(String authorityServiceURI, TrustedAuthority[] trusted) {
 		// Synchronize the Trusted Authorities
 		if (trusted != null) {
 			// We need to get a list of all the Trusted Authorities provided
@@ -246,12 +246,13 @@ public class GTS implements TrustLevelStatus, TrustLevelLookup {
 					if (this.trust.doesTrustedAuthorityExist(trusted[j].getTrustedAuthorityName())) {
 						// Perform Update
 						TrustedAuthority ta = this.trust.getTrustedAuthority(trusted[j].getTrustedAuthorityName());
-						AuthorityGTS currAuthority = authority.getAuthority(ta.getSourceTrustService());
 						AuthorityGTS updateAuthority = authority.getAuthority(authorityServiceURI);
 						// Determine if we should peform update
 						boolean performUpdate = false;
 						// Check to see if this service is the authority
 						if (!ta.getIsAuthority().booleanValue()) {
+							AuthorityGTS currAuthority = authority.getAuthority(ta.getSourceTrustService());
+
 							// Check to see if the authority GTS is the same
 							if (currAuthority.getServiceURI().equals(updateAuthority.getServiceURI())) {
 								performUpdate = true;
@@ -296,8 +297,7 @@ public class GTS implements TrustLevelStatus, TrustLevelLookup {
 						}
 					} else {
 						AuthorityGTS updateAuthority = authority.getAuthority(authorityServiceURI);
-						TrustedAuthority ta = this.trust.getTrustedAuthority(trusted[j].getTrustedAuthorityName());
-						this.logger.debug("The trusted authority (" + ta.getTrustedAuthorityName()
+						this.logger.debug("The trusted authority (" + trusted[j].getTrustedAuthorityName()
 							+ ") will be added with the authority (" + authorityServiceURI + ") as the source!!!");
 						trusted[j].setIsAuthority(Boolean.FALSE);
 						trusted[j].setSourceTrustService(authorityServiceURI);

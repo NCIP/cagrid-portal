@@ -25,6 +25,8 @@ import gov.nih.nci.cagrid.gts.test.Utils;
 import gov.nih.nci.cagrid.gts.tools.service.PermissionBootstapper;
 
 import java.math.BigInteger;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import junit.framework.TestCase;
 
@@ -45,10 +47,14 @@ public class TestGTS extends TestCase {
 	private final static String LEVEL_ONE = "ONE";
 	private final static String LEVEL_TWO = "TWO";
 
+	private int cacount = 0;
+	private final String dnPrefix = "O=Organization ABC,OU=Unit XYZ,CN=Certificate Authority";
+	private final String GTS_URI = "localhost";
+
 
 	public void testCreateAndDestroy() {
 		try {
-			GTS gts = new GTS(Utils.getGTSConfiguration(), "localhost");
+			GTS gts = new GTS(Utils.getGTSConfiguration(), GTS_URI);
 			// Make sure we start fresh
 			gts.destroy();
 		} catch (Exception e) {
@@ -62,7 +68,7 @@ public class TestGTS extends TestCase {
 		GTS gts = null;
 		try {
 			GTSConfiguration conf = Utils.getGTSConfiguration();
-			gts = new GTS(conf, "localhost");
+			gts = new GTS(conf, GTS_URI);
 			// Make sure we start fresh
 			gts.destroy();
 
@@ -138,7 +144,7 @@ public class TestGTS extends TestCase {
 			GTSConfiguration conf = Utils.getGTSConfiguration();
 			String user = "O=Test Organization,OU=Test Unit,CN=User";
 			String user2 = "O=Test Organization,OU=Test Unit,CN=User2";
-			gts = new GTS(conf, "localhost");
+			gts = new GTS(conf, GTS_URI);
 			// Make sure we start fresh
 			gts.destroy();
 
@@ -329,7 +335,7 @@ public class TestGTS extends TestCase {
 		try {
 			GTSConfiguration conf = Utils.getGTSConfiguration();
 
-			gts = new GTS(conf, "localhost");
+			gts = new GTS(conf, GTS_URI);
 			// Make sure we start fresh
 			gts.destroy();
 			PermissionBootstapper pb = new PermissionBootstapper(conf);
@@ -376,7 +382,7 @@ public class TestGTS extends TestCase {
 		try {
 			GTSConfiguration conf = Utils.getGTSConfiguration();
 
-			gts = new GTS(conf, "localhost");
+			gts = new GTS(conf, GTS_URI);
 			// Make sure we start fresh
 			gts.destroy();
 			String user = "O=Test Organization,OU=Test Unit,CN=User";
@@ -478,7 +484,7 @@ public class TestGTS extends TestCase {
 		try {
 			GTSConfiguration conf = Utils.getGTSConfiguration();
 
-			gts = new GTS(conf, "localhost");
+			gts = new GTS(conf, GTS_URI);
 			// Make sure we start fresh
 			gts.destroy();
 			PermissionBootstapper pb = new PermissionBootstapper(conf);
@@ -537,7 +543,7 @@ public class TestGTS extends TestCase {
 			PermissionBootstapper pb = new PermissionBootstapper(conf);
 			pb.addAdminUser(ADMIN_USER);
 			String user = "O=Test Organization,OU=Test Unit,CN=User";
-			gts = new GTS(conf, "localhost");
+			gts = new GTS(conf, GTS_URI);
 			int size = 5;
 			TrustLevel[] level = new TrustLevel[size];
 			for (int i = 0; i < size; i++) {
@@ -642,7 +648,7 @@ public class TestGTS extends TestCase {
 		try {
 			GTSConfiguration conf = Utils.getGTSConfiguration();
 
-			gts = new GTS(conf, "localhost");
+			gts = new GTS(conf, GTS_URI);
 			// Make sure we start fresh
 			gts.destroy();
 			String user = "O=Test Organization,OU=Test Unit,CN=User";
@@ -754,7 +760,7 @@ public class TestGTS extends TestCase {
 		try {
 			GTSConfiguration conf = Utils.getGTSConfiguration();
 
-			gts = new GTS(conf, "localhost");
+			gts = new GTS(conf, GTS_URI);
 			// Make sure we start fresh
 			gts.destroy();
 			String user = "O=Test Organization,OU=Test Unit,CN=User";
@@ -852,6 +858,98 @@ public class TestGTS extends TestCase {
 	}
 
 
+	public void testSyncTrustedAuthoritiesWithSingleAuthorityGTS() {
+		GTS gts = null;
+		try {
+			GTSConfiguration conf = Utils.getGTSConfiguration();
+			gts = new GTS(conf, GTS_URI);
+			// Make sure we start fresh
+			gts.destroy();
+
+			// Add the admin user
+			PermissionBootstapper pb = new PermissionBootstapper(conf);
+			pb.addAdminUser(ADMIN_USER);
+
+			// Add
+			addTrustLevels(gts, ADMIN_USER);
+
+			// Now we add an authority
+			String authName = GTS_URI + " Authority";
+			AuthorityGTS auth = getAuthority(authName, 1);
+			gts.addAuthority(auth, ADMIN_USER);
+			assertEquals(1, gts.getAuthorities().length);
+			assertEquals(auth, gts.getAuthorities()[0]);
+
+			int taCount = 5;
+			int currAuthCount = 2;
+			TrustedAuthority[] ta = new TrustedAuthority[taCount];
+			for (int j = 0; j < 5; j++) {
+				ta[j] = getTrustedAuthority();
+				if (j < currAuthCount) {
+					gts.addTrustedAuthority(ta[j], ADMIN_USER);
+					TrustedAuthorityFilter f = new TrustedAuthorityFilter();
+					assertEquals((j + 1), gts.findTrustAuthorities(f).length);
+					f.setTrustedAuthorityName(ta[j].getTrustedAuthorityName());
+					assertEquals(1, gts.findTrustAuthorities(f).length);
+					assertEquals(ta[j], gts.findTrustAuthorities(f)[0]);
+				} else {
+					ta[j].setIsAuthority(Boolean.FALSE);
+					ta[j].setAuthorityTrustService(authName);
+				}
+			}
+			
+			gts.synchronizeTrustedAuthorities(authName,ta);
+			
+			TrustedAuthorityFilter f = new TrustedAuthorityFilter();
+			assertEquals(taCount, gts.findTrustAuthorities(f).length);
+			//Test After Sync
+			
+			//Test After Expiration
+			
+			//Test After Resync and after Longer Expiration
+			
+			//Test after resync after delete
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			if (gts != null) {
+				try {
+					gts.destroy();
+				} catch (Exception e) {
+					FaultUtil.printFault(e);
+				}
+			}
+		}
+
+	}
+
+
+	private TrustedAuthority getTrustedAuthority() throws Exception {
+		cacount = cacount + 1;
+		String dn = dnPrefix + cacount;
+		CA ca = new CA(dn);
+		Calendar c = new GregorianCalendar();
+		c.add(Calendar.HOUR, 1);
+		String name = ca.getCertificate().getSubjectDN().toString();
+		BigInteger sn = new BigInteger(String.valueOf(System.currentTimeMillis()));
+		CRLEntry entry = new CRLEntry(sn, CRLReason.PRIVILEGE_WITHDRAWN);
+		ca.updateCRL(entry);
+		TrustedAuthority ta = new TrustedAuthority();
+		ta.setTrustedAuthorityName(name);
+		ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
+		ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
+		ta.setStatus(Status.Trusted);
+		ta.setTrustLevel(LEVEL_ONE);
+		ta.setIsAuthority(Boolean.TRUE);
+		ta.setAuthorityTrustService(GTS_URI);
+		ta.setSourceTrustService(GTS_URI);
+		ta.setExpires(c.getTimeInMillis());
+		return ta;
+	}
+
+
 	private void addTrustLevels(GTS gts, String gridId) throws Exception {
 		TrustLevel l1 = new TrustLevel();
 		l1.setName(LEVEL_ONE);
@@ -876,6 +974,11 @@ public class TestGTS extends TestCase {
 		ttl.setHours(1);
 		ttl.setMinutes(1);
 		ttl.setSeconds(1);
+		return getAuthority(uri, priority, ttl);
+	}
+
+
+	private AuthorityGTS getAuthority(String uri, int priority, TrustedAuthorityTimeToLive ttl) {
 		AuthorityGTS a1 = new AuthorityGTS();
 		a1.setServiceURI(uri);
 		a1.setPriority(1);
@@ -896,6 +999,12 @@ public class TestGTS extends TestCase {
 		gts.setServiceIdentity(null);
 		gts.setSyncTrustLevels(false);
 		gts.setTrustedAuthorityTimeToLive(ttl);
+	}
+
+
+	protected void setUp() throws Exception {
+		super.setUp();
+		cacount = 0;
 	}
 
 }
