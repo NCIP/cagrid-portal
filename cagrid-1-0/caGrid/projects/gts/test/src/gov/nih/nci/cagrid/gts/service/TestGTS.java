@@ -876,7 +876,11 @@ public class TestGTS extends TestCase {
 
 			// Now we add an authority
 			String authName = GTS_URI + " Authority";
-			AuthorityGTS auth = getAuthority(authName, 1);
+			TrustedAuthorityTimeToLive ttl = new TrustedAuthorityTimeToLive();
+			ttl.setHours(0);
+			ttl.setMinutes(0);
+			ttl.setSeconds(4);
+			AuthorityGTS auth = getAuthority(authName, 1, ttl);
 			gts.addAuthority(auth, ADMIN_USER);
 			assertEquals(1, gts.getAuthorities().length);
 			assertEquals(auth, gts.getAuthorities()[0]);
@@ -893,7 +897,7 @@ public class TestGTS extends TestCase {
 				assertEquals(ta[j], gts.findTrustAuthorities(f)[0]);
 			}
 
-			int remoteTaCount = 3;
+			int remoteTaCount = 4;
 			TrustedAuthority[] remoteta = new TrustedAuthority[remoteTaCount];
 			for (int j = 0; j < remoteTaCount; j++) {
 				remoteta[j] = getTrustedAuthority();
@@ -903,22 +907,65 @@ public class TestGTS extends TestCase {
 
 			gts.synchronizeTrustedAuthorities(authName, remoteta);
 
-			// Test After Sync
-			TrustedAuthorityFilter f = new TrustedAuthorityFilter();
-			f.setLifetime(Lifetime.Valid);
-			f.setStatus(Status.Trusted);
-			assertEquals(taCount + remoteTaCount, gts.findTrustAuthorities(f).length);
-			f.setAuthorityTrustService(GTS_URI);
-			assertEquals(taCount, gts.findTrustAuthorities(f).length);
-			f.setAuthorityTrustService(authName);
-			assertEquals(remoteTaCount, gts.findTrustAuthorities(f).length);
-			f.setSourceTrustService(authName);
-			assertEquals(remoteTaCount, gts.findTrustAuthorities(f).length);
+			Thread.sleep(4100);
+
 			// Test After Expiration
+			TrustedAuthorityFilter f1 = new TrustedAuthorityFilter();
+			f1.setLifetime(Lifetime.Valid);
+			f1.setStatus(Status.Trusted);
+			assertEquals(taCount, gts.findTrustAuthorities(f1).length);
+			f1.setAuthorityTrustService(GTS_URI);
+			assertEquals(taCount, gts.findTrustAuthorities(f1).length);
+
+			ttl.setHours(5);
+			auth.setTrustedAuthorityTimeToLive(ttl);
+			gts.updateAuthority(auth, ADMIN_USER);
+
+			gts.synchronizeTrustedAuthorities(authName, remoteta);
+			
 
 			// Test After Resync and after Longer Expiration
+			TrustedAuthorityFilter f2 = new TrustedAuthorityFilter();
+			f2.setLifetime(Lifetime.Valid);
+			f2.setStatus(Status.Trusted);
+			assertEquals(taCount + remoteTaCount, gts.findTrustAuthorities(f2).length);
+			f2.setAuthorityTrustService(GTS_URI);
+			assertEquals(taCount, gts.findTrustAuthorities(f2).length);
+			f2.setAuthorityTrustService(authName);
+			assertEquals(remoteTaCount, gts.findTrustAuthorities(f2).length);
+			
+			TrustedAuthority[] list = gts.findTrustAuthorities(f2);
+			for (int j = 0; j <list.length; j++) {
+				Calendar c = new GregorianCalendar();
+				c.setTimeInMillis(list[j].getExpires());
+				System.out.println(c.getTime());
+			}
+			
+			f2.setSourceTrustService(authName);
+			assertEquals(remoteTaCount, gts.findTrustAuthorities(f2).length);
+			
+			
 
 			// Test after resync after delete
+			int remoteTaCount2 = 2;
+			TrustedAuthority[] remoteta2 = new TrustedAuthority[remoteTaCount2];
+			for (int j = 0; j < remoteTaCount2; j++) {
+				remoteta2[j] = remoteta[j];
+			}
+
+			gts.synchronizeTrustedAuthorities(authName, remoteta2);
+
+			// Test After Resync and after Longer Expiration
+			TrustedAuthorityFilter f3 = new TrustedAuthorityFilter();
+			assertEquals(taCount + remoteTaCount2, gts.findTrustAuthorities(f3).length);
+			f3.setLifetime(Lifetime.Valid);
+			f3.setStatus(Status.Trusted);
+			assertEquals(taCount + remoteTaCount2, gts.findTrustAuthorities(f3).length);
+			f3.setAuthorityTrustService(GTS_URI);
+			assertEquals(taCount, gts.findTrustAuthorities(f3).length);
+			f3.setAuthorityTrustService(authName);
+			assertEquals(remoteTaCount2, gts.findTrustAuthorities(f3).length);
+			f3.setSourceTrustService(authName);
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -953,9 +1000,6 @@ public class TestGTS extends TestCase {
 		ta.setStatus(Status.Trusted);
 		ta.setTrustLevel(LEVEL_ONE);
 		ta.setIsAuthority(Boolean.TRUE);
-		ta.setAuthorityTrustService(GTS_URI);
-		ta.setSourceTrustService(GTS_URI);
-		ta.setExpires(c.getTimeInMillis());
 		return ta;
 	}
 
