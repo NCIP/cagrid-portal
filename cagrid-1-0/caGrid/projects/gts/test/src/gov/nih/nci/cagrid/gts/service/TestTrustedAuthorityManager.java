@@ -53,6 +53,42 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 	}
 
 
+	public void testExpiringExternalTrustedAuthorities() {
+		try {
+			TrustedAuthorityManager trust = new TrustedAuthorityManager("localhost", this, db);
+			CA ca = new CA();
+			TrustedAuthority ta = new TrustedAuthority();
+			ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
+			ta.setStatus(Status.Trusted);
+			ta.setTrustLevel(LEVEL_ONE);
+			ta.setIsAuthority(Boolean.FALSE);
+			ta.setSourceTrustService("Some Source");
+			ta.setAuthorityTrustService("Some Authority");
+			Calendar c = new GregorianCalendar();
+			c.add(Calendar.SECOND, 4);
+			ta.setExpires(c.getTimeInMillis());
+			trust.addTrustedAuthority(ta, false);
+			TrustedAuthorityFilter f = new TrustedAuthorityFilter();
+			f.setTrustedAuthorityName(ta.getTrustedAuthorityName());
+			f.setLifetime(Lifetime.Valid);
+			assertEquals(1, trust.findTrustAuthorities(f).length);
+			assertEquals(ta, trust.findTrustAuthorities(f)[0]);
+
+			Thread.sleep(4100);
+			assertEquals(0, trust.findTrustAuthorities(f).length);
+			f.setLifetime(Lifetime.Expired);
+			assertEquals(1, trust.findTrustAuthorities(f).length);
+			assertEquals(ta, trust.findTrustAuthorities(f)[0]);
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		}
+
+	}
+
+
 	public void testAddUpdateAndRemoveExternalTrustedAuthorities() {
 		try {
 			TrustedAuthorityManager trust = new TrustedAuthorityManager("localhost", this, db);
