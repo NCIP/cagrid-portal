@@ -111,6 +111,8 @@ public class SyncTools {
 			+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE);
 		Properties serviceProperties = new Properties();
 		serviceProperties.load(new FileInputStream(servicePropertiesFile));
+		// have to set the service directory in the service properties
+		serviceProperties.setProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR, baseDirectory.getAbsolutePath());
 		ServiceInformation info = new ServiceInformation(introService, serviceProperties, baseDirectory);
 		File schemaDir = new File(baseDirectory.getAbsolutePath() + File.separator + "schema");
 
