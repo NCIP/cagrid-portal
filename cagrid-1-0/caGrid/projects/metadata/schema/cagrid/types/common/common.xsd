@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Scott Oster (BMI) -->
-<xs:schema targetNamespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" xmlns="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" xmlns:uml="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:uml="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" xmlns="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" schemaLocation="../cadsr/3.0_gov.nih.nci.cadsr.umlproject.domain.xsd"/>
 	<!-- ================================================= -->
 	<!-- Package: <<XSDschema>> common  -->
@@ -62,19 +62,6 @@
 			<xs:element name="imageURL" type="xs:string" minOccurs="0"/>
 			<xs:element name="homepageURL" type="xs:string"/>
 			<xs:element name="rssNewsURL" type="xs:string" minOccurs="0"/>
-		</xs:sequence>
-	</xs:complexType>
-	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-	<!-- Class: ServiceHost  -->
-	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-	<xs:element name="ServiceHost" type="ServiceHost"/>
-	<xs:complexType name="ServiceHost">
-		<xs:annotation>
-			<xs:documentation> Any details about the hosting environment would be here
-			</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="hostingResearchCenter" type="ResearchCenter" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
 	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->

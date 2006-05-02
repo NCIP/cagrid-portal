@@ -21,10 +21,10 @@ For example, getServiceContexts(), getResearchCenterInfo(), etc
    
 TODO:
 ====================
-How to add "runtime" attributes?
- -add only to types in the XSD and not in model?
- -make runtime sub-type static? 
-
+- how to best add "type" extensions (such as data service metadata, lexgrid metadata, etc)
+  - add as separate resource property
+  - add an xsd:any to the ServiceMetadata for extensions 
+- model data service metadata
 
 XSD/Bean Generation
 ====================
