@@ -12,6 +12,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionPostProcessor;
@@ -53,6 +54,10 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 	
 	
 	private void makeDataService(ServiceDescription description, Properties props) throws Exception {
+		// get the data service itself
+		String serviceName = props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
+		ServiceType dataService = CommonTools.getService(description.getServices(), serviceName);
+		
 		// grab cql query and result set schemas and move them into the service's directory
 		String schemaDir = getServiceSchemaDir(props);
 		System.out.println("Copying schemas to " + schemaDir);
@@ -77,7 +82,7 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		
 		// query method
 		System.out.println("Building query method");
-		MethodsType methods = description.getMethods();
+		MethodsType methods = dataService.getMethods();
 		if (methods == null) {
 			methods = new MethodsType();
 		}
@@ -116,7 +121,7 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		}
 		dsMethods[dsMethods.length - 1] = queryMethod;
 		methods.setMethod(dsMethods);
-		description.setMethods(methods);
+		dataService.setMethods(methods);
 	}
 	
 	
