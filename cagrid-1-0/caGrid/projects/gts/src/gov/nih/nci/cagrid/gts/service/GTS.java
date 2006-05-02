@@ -177,6 +177,7 @@ public class GTS implements TrustLevelStatus, TrustLevelLookup {
 	public void removeAuthority(String serviceURI, String callerGridIdentity) throws GTSInternalFault,
 		InvalidAuthorityFault, PermissionDeniedFault {
 		checkServiceAdministrator(callerGridIdentity);
+		//TODO: REMOVE ALL RECORDS WITH THIS AUTHORITY
 		authority.removeAuthority(serviceURI);
 	}
 

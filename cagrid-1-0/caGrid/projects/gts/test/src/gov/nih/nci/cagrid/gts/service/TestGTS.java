@@ -33,6 +33,8 @@ import junit.framework.TestCase;
 
 import org.bouncycastle.asn1.x509.CRLReason;
 
+import sun.security.krb5.internal.ccache.au;
+
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -872,31 +874,33 @@ public class TestGTS extends TestCase {
 			pb.addAdminUser(ADMIN_USER);
 			addTrustLevels(gts, ADMIN_USER);
 
-			int authorityCount = 3;
-			AuthorityGTS[] auths = new AuthorityGTS[authorityCount];
-			for (int i = 0; i < authorityCount; i++) {
-				String authName = GTS_URI + " Authority " + (i + 1);
-				auths[i] = getAuthority(authName, (i + 1));
-				gts.addAuthority(auths[i], ADMIN_USER);
-				AuthorityGTS[] list = gts.getAuthorities();
-				assertEquals((i + 1), list.length);
-				for (int j = 0; j <= i; j++) {
-					assertEquals(auths[j], list[j]);
-				}
+			// Create Authorities
+			AuthorityGTS auth1 = getAuthority(GTS_URI + " Authority 1", 1);
+			gts.addAuthority(auth1, ADMIN_USER);
+			AuthorityGTS auth2 = getAuthority(GTS_URI + " Authority 2", 2);
+			gts.addAuthority(auth2, ADMIN_USER);
+			AuthorityGTS[] list = gts.getAuthorities();
+			assertEquals(2, list.length);
+			assertEquals(auth1, list[0]);
+			assertEquals(auth2, list[1]);
 
-			}
 			/*
-			 * int taCount = 2; TrustedAuthority[] ta = new
-			 * TrustedAuthority[taCount]; for (int j = 0; j < taCount; j++) {
-			 * ta[j] = getTrustedAuthority(); gts.addTrustedAuthority(ta[j],
-			 * ADMIN_USER); TrustedAuthorityFilter f = new
-			 * TrustedAuthorityFilter(); assertEquals((j + 1),
-			 * gts.findTrustAuthorities(f).length);
-			 * f.setTrustedAuthorityName(ta[j].getTrustedAuthorityName());
-			 * assertEquals(1, gts.findTrustAuthorities(f).length);
-			 * assertEquals(ta[j], gts.findTrustAuthorities(f)[0]); }
-			 */
+			int taCount = 11;
+			TrustedAuthority[] ta = new TrustedAuthority[taCount];
 
+			for (int j = 0; j < taCount; j++) {
+				ta[j] = getTrustedAuthority();
+				gts.addTrustedAuthority(ta[j], ADMIN_USER);
+				TrustedAuthorityFilter f = new TrustedAuthorityFilter();
+				assertEquals((j + 1), gts.findTrustAuthorities(f).length);
+				f.setTrustedAuthorityName(ta[j].getTrustedAuthorityName());
+				assertEquals(1, gts.findTrustAuthorities(f).length);
+				assertEquals(ta[j], gts.findTrustAuthorities(f)[0]);
+			}
+			// Now Add Trusted Authorities for local GTS
+			TrustedAuthority[] local = new TrustedAuthority[3];
+			local[0] = ta[0];
+			*/
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
