@@ -41,7 +41,7 @@ public class AddSimpleMethodStep extends Step {
 
 		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(pathtobasedir + File.separator
 			+ tci.getDir() + File.separator + "introduce.xml", ServiceDescription.class);
-		MethodsType methodsType = introService.getMethods();
+		MethodsType methodsType = CommonTools.getService(introService.getServices(),tci.getName()).getMethods();
 
 		MethodType method = new MethodType();
 		method.setName(this.methodName);
@@ -64,7 +64,7 @@ public class AddSimpleMethodStep extends Step {
 		// this seems to be a wierd way be adding things....
 		MethodType[] newMethods;
 		int newLength = 0;
-		if (methodsType.getMethod() != null) {
+		if (methodsType!=null && methodsType.getMethod() != null) {
 			newLength = methodsType.getMethod().length + 1;
 			newMethods = new MethodType[newLength];
 			System.arraycopy(methodsType.getMethod(), 0, newMethods, 0, methodsType.getMethod().length);
@@ -72,8 +72,10 @@ public class AddSimpleMethodStep extends Step {
 			newLength = 1;
 			newMethods = new MethodType[newLength];
 		}
+		MethodsType newmethodsType = new MethodsType();
 		newMethods[newLength - 1] = method;
-		methodsType.setMethod(newMethods);
+		newmethodsType.setMethod(newMethods);
+		CommonTools.getService(introService.getServices(),tci.getName()).setMethods(newmethodsType);
 
 		Utils.serializeDocument(pathtobasedir + File.separator + tci.getDir() + File.separator + "introduce.xml",
 			introService, new QName("gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
@@ -87,8 +89,8 @@ public class AddSimpleMethodStep extends Step {
 		}
 		
 		// look at the interface to make sure method exists.......
-		String serviceInterface = pathtobasedir + File.separator + tci.dir + File.separator + "src" + File.separator
-			+ tci.getPackageDir() + File.separator + "common" + File.separator + tci.getName() + "I.java";
+		String serviceInterface = pathtobasedir + File.separator + tci.getDir() + File.separator + "src" + File.separator
+			+ tci.getPackageDir() + File.separator + CommonTools.getService(introService.getServices(),tci.getName()).getName().toLowerCase() + File.separator + "common" + File.separator + tci.getName() + "I.java";
 		assertTrue(StepTools.methodExists(serviceInterface, methodName));
 
 		String cmd = CommonTools.getAntAllCommand(pathtobasedir + File.separator + tci.getDir());

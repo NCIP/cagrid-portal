@@ -3,11 +3,12 @@ package gov.nih.nci.cagrid.introduce.steps;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
-import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
-import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
+import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
+import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
@@ -66,26 +67,28 @@ public class AddMetadataStep extends Step {
 		namespaces.setNamespace(newNamespaceTypes);
 		
 		
-		MetadataListType metadatasType = introService.getMetadataList();
-		MetadataType metadata = new MetadataType();
+		ResourcePropertiesListType metadatasType = CommonTools.getService(introService.getServices(),tci.getName()).getResourcePropertiesList();
+		ResourcePropertyType metadata = new ResourcePropertyType();
 		metadata.setPopulateFromFile(false);
 		metadata.setRegister(true);
 		metadata.setQName(new QName("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.cadsr", "caDSRMetadata"));
 
 		// add new metadata to array in bean
 		// this seems to be a wierd way be adding things....
-		MetadataType[] newMetadatas;
+		ResourcePropertyType[] newMetadatas;
 		int newLength = 0;
-		if (metadatasType.getMetadata() != null) {
-			newLength = metadatasType.getMetadata().length + 1;
-			newMetadatas = new MetadataType[newLength];
-			System.arraycopy(metadatasType.getMetadata(), 0, newMetadatas, 0, metadatasType.getMetadata().length);
+		if (metadatasType !=null && metadatasType.getResourceProperty() != null) {
+			newLength = metadatasType.getResourceProperty().length + 1;
+			newMetadatas = new ResourcePropertyType[newLength];
+			System.arraycopy(metadatasType.getResourceProperty(), 0, newMetadatas, 0, metadatasType.getResourceProperty().length);
 		} else {
 			newLength = 1;
-			newMetadatas = new MetadataType[newLength];
+			newMetadatas = new ResourcePropertyType[newLength];
 		}
+		ResourcePropertiesListType rplist = new ResourcePropertiesListType();
 		newMetadatas[newLength - 1] = metadata;
-		metadatasType.setMetadata(newMetadatas);
+		rplist.setResourceProperty(newMetadatas);
+		introService.getServices().getService(0).setResourcePropertiesList(rplist);
 
 		Utils.serializeDocument(pathtobasedir + File.separator + tci.getDir() + File.separator + "introduce.xml",
 			introService, new QName("gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
@@ -100,8 +103,8 @@ public class AddMetadataStep extends Step {
 
 		// look at the interface to make sure method from file does not
 		// exists.......
-		String serviceInterface = pathtobasedir + File.separator + tci.dir + File.separator + "src" + File.separator
-			+ tci.getPackageDir() + File.separator  + "service" + File.separator + "globus" + File.separator + "resource"
+		String serviceInterface = pathtobasedir + File.separator + tci.getDir() + File.separator + "src" + File.separator
+			+ tci.getPackageDir() + File.separator + introService.getServices().getService(0).getName().toLowerCase() + File.separator  + "service" + File.separator + "globus" + File.separator + "resource"
 			+ File.separator + "BaseResource.java";
 		assertFalse("Checking that BaseResource contains the load method", StepTools.methodExists(serviceInterface,
 			"loadAnalyticalServiceMetadataFromFile"));

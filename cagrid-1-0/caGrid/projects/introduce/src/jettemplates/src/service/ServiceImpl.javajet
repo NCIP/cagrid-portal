@@ -1,17 +1,17 @@
 <%@ jet package="gov.nih.nci.cagrid.introduce.templates.service" class="ServiceImplTemplate" %>
-<% gov.nih.nci.cagrid.introduce.info.ServiceInformation info = (gov.nih.nci.cagrid.introduce.info.ServiceInformation) argument; 
+<% gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation info = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument; 
    String packageName = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.package");
-   String serviceName = info.getIntroduceServiceProperties().getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
+   String serviceName = info.getService().getName();
    String namespaceDomain = info.getIntroduceServiceProperties().getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN);
    String modifiedServiceName = serviceName;
    if(serviceName.endsWith("Service")){
    	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
    }
 %>
-package <%=packageName%>.service;
+package <%=packageName%>.<%=info.getService().getName().toLowerCase()%>.service;
 
-import <%=packageName%>.common.<%=serviceName%>I;
-import <%=packageName%>.service.globus.ServiceConfiguration;
+import <%=packageName%>.<%=info.getService().getName().toLowerCase()%>.common.<%=info.getService().getName()%>I;
+import <%=packageName%>.<%=info.getService().getName().toLowerCase()%>.service.globus.ServiceConfiguration;
 
 import java.rmi.RemoteException;
 
@@ -27,10 +27,10 @@ import org.globus.wsrf.Constants;
  * @created by Introduce Toolkit version 1.0
  * 
  */
-public class <%=serviceName%>Impl implements <%=serviceName%>I{
+public class <%=info.getService().getName()%>Impl implements <%=info.getService().getName()%>I{
     private ServiceConfiguration configuration;
 	
-	public <%=serviceName%>Impl() throws RemoteException {
+	public <%=info.getService().getName()%>Impl() throws RemoteException {
 	
 	}
 	

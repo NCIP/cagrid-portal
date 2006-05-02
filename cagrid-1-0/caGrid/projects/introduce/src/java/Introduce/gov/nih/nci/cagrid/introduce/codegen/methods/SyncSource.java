@@ -16,6 +16,7 @@ import gov.nih.nci.cagrid.introduce.beans.security.SecureConversation;
 import gov.nih.nci.cagrid.introduce.beans.security.SecureMessage;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 import gov.nih.nci.cagrid.introduce.info.SchemaInformation;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
@@ -60,28 +61,31 @@ public class SyncSource {
 
 	private ServiceInformation serviceInfo;
 
+	private ServiceType service;
 
-	public SyncSource(File baseDir, ServiceInformation info) {
+
+	public SyncSource(File baseDir, ServiceInformation info, ServiceType service) {
 		// this.baseDir = baseDir;
+		this.service = service;
 		this.serviceInfo = info;
 		this.deploymentProperties = this.serviceInfo.getIntroduceServiceProperties();
 		this.packageName = (String) this.deploymentProperties.get("introduce.skeleton.package") + ".stubs";
 		serviceClient = baseDir.getAbsolutePath() + File.separator + "src" + File.separator
 			+ this.deploymentProperties.get(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator
-			+ "client" + File.separator
-			+ this.deploymentProperties.get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + "Client.java";
+			+ service.getName().toLowerCase() + File.separator + "client" + File.separator + service.getName()
+			+ "Client.java";
 		serviceInterface = baseDir.getAbsolutePath() + File.separator + "src" + File.separator
 			+ this.deploymentProperties.get(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator
-			+ "common" + File.separator
-			+ this.deploymentProperties.get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + "I.java";
+			+ service.getName().toLowerCase() + File.separator + "common" + File.separator + service.getName()
+			+ "I.java";
 		serviceImpl = baseDir.getAbsolutePath() + File.separator + "src" + File.separator
 			+ this.deploymentProperties.get(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator
-			+ "service" + File.separator
-			+ this.deploymentProperties.get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + "Impl.java";
+			+ service.getName().toLowerCase() + File.separator + "service" + File.separator + service.getName()
+			+ "Impl.java";
 		serviceProviderImpl = baseDir.getAbsolutePath() + File.separator + "src" + File.separator
 			+ this.deploymentProperties.get(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator
-			+ "service" + File.separator + "globus" + File.separator
-			+ this.deploymentProperties.get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + "ProviderImpl.java";
+			+ service.getName().toLowerCase() + File.separator + "service" + File.separator + "globus" + File.separator
+			+ service.getName() + "ProviderImpl.java";
 	}
 
 
@@ -190,8 +194,8 @@ public class SyncSource {
 	}
 
 
-	private String getBoxedOutputTypeName(String input) {
-		String returnType = TemplateUtils.upperCaseFirstCharacter(input) + "Response";
+	private String getBoxedOutputTypeName(String serviceName, String input) {
+		String returnType = serviceName + TemplateUtils.upperCaseFirstCharacter(input) + "Response";
 		return returnType;
 	}
 
@@ -201,12 +205,12 @@ public class SyncSource {
 		MethodTypeOutput returnTypeEl = method.getOutput();
 		String methodName = method.getName();
 		String returnType = null;
-		returnType = this.packageName + "." + getBoxedOutputTypeName(methodName);
+		returnType = this.packageName + "." + getBoxedOutputTypeName(service.getName(), methodName);
 
 		methodString += "public " + returnType + " " + methodName + "(";
 
 		// boxed
-		methodString += this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + " params";
+		methodString += this.packageName + "." + service.getName() + TemplateUtils.upperCaseFirstCharacter(methodName) + " params";
 
 		methodString += ")";
 		return methodString;
@@ -219,7 +223,7 @@ public class SyncSource {
 		String returnType = "";
 
 		// need to box the output type
-		returnType = this.packageName + "." + getBoxedOutputTypeName(method.getName());
+		returnType = this.packageName + "." + getBoxedOutputTypeName(service.getName(), methodName);
 
 		methodString += "public " + returnType + " " + methodName + "(";
 		// Parameter[] inputs = method.getParams();
@@ -503,7 +507,7 @@ public class SyncSource {
 		int endOfClass = fileContent.lastIndexOf("}");
 		String clientMethod = "\n\t" + createUnBoxedSignatureStringFromMethod(method) + " " + createExceptions(method);
 		clientMethod += "{\n" + lineStart;
-		clientMethod += this.deploymentProperties.get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
+		clientMethod += service.getName()
 			+ "PortType port = this.getPortType();\n";
 
 		clientMethod += lineStart;
@@ -527,8 +531,8 @@ public class SyncSource {
 		}
 		// always a boxed call now becuase using complex types in the wsdl
 		// create handle for the boxed wrapper
-		methodString += this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + " params = new "
-			+ this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + "();\n";
+		methodString += this.packageName + "." + service.getName() + TemplateUtils.upperCaseFirstCharacter(methodName) + " params = new "
+			+ this.packageName + "." + service.getName() + TemplateUtils.upperCaseFirstCharacter(methodName) + "();\n";
 		// set the values fo the boxed wrapper
 		if (method.getInputs() != null && method.getInputs().getInput() != null) {
 			for (int j = 0; j < method.getInputs().getInput().length; j++) {
@@ -557,7 +561,7 @@ public class SyncSource {
 		methodString += lineStart;
 
 		// always boxed returns now because of complex types in wsdl
-		String returnTypeBoxed = getBoxedOutputTypeName(methodName);
+		String returnTypeBoxed = getBoxedOutputTypeName(service.getName(), methodName);
 		methodString += this.packageName + "." + returnTypeBoxed + " boxedResult = " + var + "." + methodName
 			+ "(params);\n";
 		methodString += lineStart;
@@ -657,7 +661,8 @@ public class SyncSource {
 						.getQName());
 					String paramName = method.getInputs().getInput(j).getName();
 					if (inNamespace.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
-						if (inNamespace.getType().getType().equals("boolean") && !method.getInputs().getInput(j).isIsArray()) {
+						if (inNamespace.getType().getType().equals("boolean")
+							&& !method.getInputs().getInput(j).isIsArray()) {
 							params += "params.is" + TemplateUtils.upperCaseFirstCharacter(paramName) + "()";
 						} else {
 							params += "params.get" + TemplateUtils.upperCaseFirstCharacter(paramName) + "()";
@@ -686,7 +691,7 @@ public class SyncSource {
 		}
 
 		// return the boxed type
-		String returnTypeBoxed = getBoxedOutputTypeName(methodName);
+		String returnTypeBoxed = getBoxedOutputTypeName(service.getName(), methodName);
 
 		// need to unbox on the way out
 		methodString += lineStart;
@@ -900,8 +905,8 @@ public class SyncSource {
 
 
 	private int bracketMatch(StringBuffer sb, int startingIndex) {
-		//System.out.println("Starting to look for brackets on this string:");
-		//System.out.println(sb.toString().substring(startingIndex));
+		// System.out.println("Starting to look for brackets on this string:");
+		// System.out.println(sb.toString().substring(startingIndex));
 		int parenCount = 0;
 		int index = startingIndex;
 		boolean found = false;
@@ -1013,7 +1018,7 @@ public class SyncSource {
 				}
 			}
 			if (found) {
-				//System.out.println("Found start of method: " + matchedLine);
+				// System.out.println("Found start of method: " + matchedLine);
 			} else {
 				System.out.println("Did not find the appropriate match");
 			}

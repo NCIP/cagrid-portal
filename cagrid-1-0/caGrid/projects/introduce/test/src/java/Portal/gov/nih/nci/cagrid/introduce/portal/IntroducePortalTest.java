@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal;
 
 import gov.nih.nci.cagrid.introduce.TestCaseInfo;
+import gov.nih.nci.cagrid.introduce.TestCaseInfo1;
 import gov.nih.nci.cagrid.introduce.portal.steps.CreateServiceStep;
 import gov.nih.nci.cagrid.introduce.portal.steps.ModifyServiceStep;
 
@@ -59,7 +60,7 @@ public class IntroducePortalTest extends Story {
 
 		createService = new CreateServiceStep(mainWindow);
 		modifyService = new ModifyServiceStep(mainWindow);
-		this.tci = new TestCaseInfo();
+		this.tci = new TestCaseInfo1();
 
 		Vector steps = new Vector();
 		steps.add(createService);

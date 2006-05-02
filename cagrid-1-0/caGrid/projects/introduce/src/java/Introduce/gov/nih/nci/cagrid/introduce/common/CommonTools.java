@@ -1,10 +1,13 @@
 package gov.nih.nci.cagrid.introduce.common;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.introduce.beans.extension.Properties;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
 
 import java.io.File;
 import java.util.List;
@@ -193,4 +196,18 @@ public class CommonTools {
 		namespaceType.setSchemaElement(schemaTypes);
 		return namespaceType;
 	}
+	
+	public static ServiceType getService(ServicesType services, String name) {
+		if (services != null && services.getService() != null) {
+			for (int i = 0; i < services.getService().length; i++) {
+				if (services.getService(i).getName().equals(name)) {
+					return services.getService(i);
+				}
+			}
+		}
+
+		return null;
+	}
+	
+	
 }

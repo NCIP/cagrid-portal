@@ -2,8 +2,8 @@ package gov.nih.nci.cagrid.introduce;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
-import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
+import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 
 import java.io.File;
@@ -19,7 +19,7 @@ public class TemplateUtilsTest extends TestCase {
 
 	private ServiceDescription info = null;
 
-	private MetadataListType metadataList = null;
+	private ResourcePropertiesListType metadataList = null;
 
 	private MethodsType methods = null;
 
@@ -31,16 +31,16 @@ public class TemplateUtilsTest extends TestCase {
 					pathtobasedir + GOLD_DIRECTORY + GOLD_FILE,
 					ServiceDescription.class);
 
-			metadataList = info.getMetadataList();
+			metadataList = info.getServices().getService(0).getResourcePropertiesList();
 
-			methods = info.getMethods();
+			methods = info.getServices().getService(0).getMethods();
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Error in setup:" + e.getMessage());
 		}
 
 		assertNotNull(metadataList);
-		assertNotNull(metadataList.getMetadata());
+		assertNotNull(metadataList.getResourceProperty());
 		assertNotNull(methods);
 		assertNotNull(methods.getMethod());
 	}
@@ -61,12 +61,12 @@ public class TemplateUtilsTest extends TestCase {
 
 		// store all the names in a set to check for uniqueness
 		Set names = new HashSet();
-		for (int i = 0; i < metadataList.getMetadata().length; i++) {
+		for (int i = 0; i < metadataList.getResourceProperty().length; i++) {
 			names.add(TemplateUtils.getResourcePropertyVariableName(
 					metadataList, i));
 		}
 		// makes sure we got a unique name for all items
-		assertEquals(names.size(), metadataList.getMetadata().length);
+		assertEquals(names.size(), metadataList.getResourceProperty().length);
 	}
 
 	

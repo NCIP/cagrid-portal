@@ -44,15 +44,15 @@ public class CreateSkeletonStep extends Step {
 		assertEquals("Checking build status", 0, p.exitValue());
 		
 		//check to see that the extensions ran ok
-		File createFile = new File(tci.dir + File.separator + ExampleCreationPostProcessor.class.getName());
+		File createFile = new File(tci.getDir() + File.separator + ExampleCreationPostProcessor.class.getName());
 		if(!createFile.exists()){
 			fail("Creation Extension was not ran");
 		} 
-		File syncPreFile = new File(tci.dir + File.separator + ExampleCodegenPreProcessor.class.getName());
+		File syncPreFile = new File(tci.getDir() + File.separator + ExampleCodegenPreProcessor.class.getName());
 		if(!syncPreFile.exists()){
 			fail("Codegen Pre Extension was not ran");
 		}
-		File syncPostFile = new File(tci.dir + File.separator + ExampleCodegenPostProcessor.class.getName());
+		File syncPostFile = new File(tci.getDir() + File.separator + ExampleCodegenPostProcessor.class.getName());
 		if(!syncPostFile.exists()){
 			fail("Codegen Post Extension was not ran");
 		}

@@ -11,8 +11,6 @@ import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptio
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionsType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
-import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
-import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
@@ -20,6 +18,8 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
 import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
+import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
+import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
@@ -98,7 +98,7 @@ public class ModificationViewer extends GridPortalComponent {
 	private JTabbedPane contentTabbedPane = null;
 	private JPanel metadataPanel = null;
 	private JScrollPane metadataScrollPane = null;
-	private MetadataTable metadataTable = null;
+	private ResourcePropertyTable metadataTable = null;
 	private JPanel metadataButtonsPanel = null;
 	private JButton addMetadataButton = null;
 	private JButton removeMetadataButton = null;
@@ -484,7 +484,7 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private MethodsTable getMethodsTable() {
 		if (methodsTable == null) {
-			methodsTable = new MethodsTable(introService.getMethods(), this.methodsDirectory, this.serviceProperties);
+			methodsTable = new MethodsTable(introService.getServices().getService(0).getMethods(), this.methodsDirectory, this.serviceProperties);
 			methodsTable.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					if (e.getClickCount() == 2) {
@@ -534,17 +534,20 @@ public class ModificationViewer extends GridPortalComponent {
 					// this seems to be a wierd way be adding things....
 					MethodType[] newMethods;
 					int newLength = 0;
-					if (introService.getMethods() != null && introService.getMethods().getMethod() != null) {
-						newLength = introService.getMethods().getMethod().length + 1;
+					if (introService.getServices().getService(0).getMethods() != null && introService.getServices().getService(0).getMethods().getMethod() != null) {
+						newLength = introService.getServices().getService(0).getMethods().getMethod().length + 1;
 						newMethods = new MethodType[newLength];
-						System.arraycopy(introService.getMethods().getMethod(), 0, newMethods, 0, introService
+						System.arraycopy(introService.getServices().getService(0).getMethods().getMethod(), 0, newMethods, 0, introService.getServices().getService(0)
 							.getMethods().getMethod().length);
 					} else {
 						newLength = 1;
 						newMethods = new MethodType[newLength];
 					}
 					newMethods[newLength - 1] = method;
-					introService.getMethods().setMethod(newMethods);
+					MethodsType methodsType = new MethodsType();
+					methodsType.setMethod(newMethods);
+					
+					introService.getServices().getService(0).setMethods(methodsType);
 
 					getMethodsTable().addRow(method);
 
@@ -639,7 +642,7 @@ public class ModificationViewer extends GridPortalComponent {
 			update = true;
 		}
 		if (update) {
-			MethodsType mt = this.introService.getMethods();
+			MethodsType mt = this.introService.getServices().getService(0).getMethods();
 			List changes = new ArrayList();
 			if (mt != null) {
 				introService.setServiceSecurity(curr);
@@ -816,9 +819,9 @@ public class ModificationViewer extends GridPortalComponent {
 				}
 			});
 			// diable the metadata tab if they've specified not to sync metadata
-			MetadataListType metadataList = this.introService.getMetadataList();
-			if (metadataList != null && metadataList.getSynchronizeMetadataFramework() != null
-				&& !metadataList.getSynchronizeMetadataFramework().booleanValue()) {
+			ResourcePropertiesListType metadataList = this.introService.getServices().getService(0).getResourcePropertiesList();
+			if (metadataList != null && metadataList.getSynchronizeResourceFramework() != null
+				&& !metadataList.getSynchronizeResourceFramework().booleanValue()) {
 				// Disable the tab
 				contentTabbedPane.setEnabledAt(contentTabbedPane.getTabCount() - 1, false);
 			}
@@ -902,9 +905,9 @@ public class ModificationViewer extends GridPortalComponent {
 	/**
 	 * This method initializes metadataTable
 	 */
-	private MetadataTable getMetadataTable() {
+	private ResourcePropertyTable getMetadataTable() {
 		if (metadataTable == null) {
-			metadataTable = new MetadataTable(introService.getMetadataList());
+			metadataTable = new ResourcePropertyTable(introService.getServices().getService(0).getResourcePropertiesList());
 			metadataTable.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					if (e.getClickCount() == 2) {
@@ -958,23 +961,23 @@ public class ModificationViewer extends GridPortalComponent {
 			addMetadataButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dirty = true;
-					MetadataType metadata = new MetadataType();
+					ResourcePropertyType metadata = new ResourcePropertyType();
 
 					// add new metadata to array in bean
 					// this seems to be a wierd way be adding things....
-					MetadataType[] metadatas;
+					ResourcePropertyType[] metadatas;
 					int newLength = 0;
-					if (introService.getMetadataList() != null && introService.getMetadataList().getMetadata() != null) {
-						newLength = introService.getMetadataList().getMetadata().length + 1;
-						metadatas = new MetadataType[newLength];
-						System.arraycopy(introService.getMetadataList().getMetadata(), 0, metadatas, 0, introService
-							.getMetadataList().getMetadata().length);
+					if (introService.getServices().getService(0).getResourcePropertiesList() != null) {
+						newLength = introService.getServices().getService(0).getResourcePropertiesList().getResourceProperty().length + 1;
+						metadatas = new ResourcePropertyType[newLength];
+						System.arraycopy(introService.getServices().getService(0).getResourcePropertiesList().getResourceProperty(), 0, metadatas, 0, introService
+							.getServices().getService(0).getResourcePropertiesList().getResourceProperty().length);
 					} else {
 						newLength = 1;
-						metadatas = new MetadataType[newLength];
+						metadatas = new ResourcePropertyType[newLength];
 					}
 					metadatas[newLength - 1] = metadata;
-					introService.getMetadataList().setMetadata(metadatas);
+					introService.getServices().getService(0).getResourcePropertiesList().setResourceProperty(metadatas);
 
 					getMetadataTable().addRow(metadata);
 
@@ -1420,7 +1423,7 @@ public class ModificationViewer extends GridPortalComponent {
 								.getCurrentNode().getParent()).getUserObject());
 							SchemaElementType st = ((SchemaElementType) ((SchemaElementTypeTreeNode) getMetadataNamespacesJTree()
 								.getCurrentNode()).getUserObject());
-							MetadataType metadata = new MetadataType();
+							ResourcePropertyType metadata = new ResourcePropertyType();
 							metadata.setQName(new QName(nt.getNamespace(), st.getType()));
 							metadata.setPopulateFromFile(false);
 							metadata.setRegister(false);
@@ -1488,23 +1491,16 @@ public class ModificationViewer extends GridPortalComponent {
 						}
 						MethodsType methods = new MethodsType();
 						methods.setMethod(methodsArray);
-						introService.setMethods(methods);
+						introService.getServices().getService(0).setMethods(methods);
 
 						// walk the metadata table and create the
 						// new ServiceMetadataType array
-						MetadataType[] metadataArray = new MetadataType[metadataTable.getRowCount()];
+						ResourcePropertyType[] metadataArray = new ResourcePropertyType[metadataTable.getRowCount()];
 						for (int i = 0; i < metadataArray.length; i++) {
-							MetadataType metadata = metadataTable.getRowData(i);
+							ResourcePropertyType metadata = metadataTable.getRowData(i);
 							metadataArray[i] = metadata;
 						}
 
-						MetadataListType serviceMetadataList = new MetadataListType();
-						if (introService.getMetadataList().getSynchronizeMetadataFramework() != null) {
-							serviceMetadataList.setSynchronizeMetadataFramework(introService.getMetadataList()
-								.getSynchronizeMetadataFramework());
-						}
-						serviceMetadataList.setMetadata(metadataArray);
-						introService.setMetadataList(serviceMetadataList);
 						introService.setServiceSecurity(securityPanel.getServiceSecurity());
 
 						// walk the service properties

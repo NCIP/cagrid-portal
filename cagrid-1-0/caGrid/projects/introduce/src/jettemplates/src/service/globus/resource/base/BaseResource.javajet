@@ -1,0 +1,20 @@
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus.resource.base" class="BaseResourceTemplate" imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.*"%>
+<%  gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation arguments = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument; 
+  	Properties properties = arguments.getIntroduceServiceProperties();
+	ResourcePropertiesListType metadataList = arguments.getService().getResourcePropertiesList();
+	
+	String packageName = properties.getProperty("introduce.skeleton.package");
+	String serviceName = properties.getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
+	String modifiedServiceName = serviceName;
+	if(serviceName.endsWith("Service")){
+		modifiedServiceName = serviceName.substring(0,serviceName.length()-"Service".length());
+	}
+%>
+package <%=packageName%>.<%=arguments.getService().getName().toLowerCase()%>.service.globus.resource;
+
+import org.globus.wsrf.Resource;
+
+public class BaseResource implements Resource {
+
+
+}

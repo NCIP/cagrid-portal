@@ -2,15 +2,10 @@ package gov.nih.nci.cagrid.introduce.codegen.utils;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
-import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
-import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataType;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
-import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
+import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.info.NamespaceInformation;
-import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.io.File;
 import java.util.HashMap;
@@ -18,11 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.axis.wsdl.symbolTable.Element;
-import org.apache.axis.wsdl.symbolTable.Type;
 import org.jdom.Document;
-import org.projectmobius.common.MalformedNamespaceException;
-import org.projectmobius.common.Namespace;
 import org.projectmobius.common.XMLUtilities;
 
 
@@ -48,12 +39,12 @@ public class TemplateUtils {
 	 *            the index into the metadata list of the targeted metadata item
 	 * @return the variable name to use
 	 */
-	public static String getResourcePropertyVariableName(MetadataListType metadataList, int index) {
-		String baseName = metadataList.getMetadata(index).getQName().getLocalPart();
+	public static String getResourcePropertyVariableName(ResourcePropertiesListType metadataList, int index) {
+		String baseName = metadataList.getResourceProperty(index).getQName().getLocalPart();
 
 		int previousNumber = 0;
-		for (int i = 0; (i < index && i < metadataList.getMetadata().length); i++) {
-			MetadataType metadata = metadataList.getMetadata()[i];
+		for (int i = 0; (i < index && i < metadataList.getResourceProperty().length); i++) {
+			ResourcePropertyType metadata = metadataList.getResourceProperty()[i];
 			if (metadata.getQName().getLocalPart().equalsIgnoreCase(baseName)) {
 				// the qname local parts are the same for multiple qnames
 				// resolve the issue by appending a number

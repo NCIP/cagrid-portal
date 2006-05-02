@@ -1,5 +1,5 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus.resource" class="BaseResourceHomeTemplate" %>
-<% gov.nih.nci.cagrid.introduce.info.ServiceInformation info = (gov.nih.nci.cagrid.introduce.info.ServiceInformation) argument; 
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus.resource.main" class="MainResourceHomeTemplate" %>
+<% gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation info = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument; 
    String packageName = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.package");
    String serviceName = info.getIntroduceServiceProperties().getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
    String namespaceDomain = info.getIntroduceServiceProperties().getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN);
@@ -8,7 +8,7 @@
    	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
    }
 %>
-package <%=packageName%>.service.globus.resource;
+package <%=packageName%>.<%=info.getService().getName().toLowerCase()%>.service.globus.resource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

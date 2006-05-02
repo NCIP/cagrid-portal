@@ -1,14 +1,19 @@
 <%@ jet package="gov.nih.nci.cagrid.introduce.templates.client" class="ServiceClientTemplate" %>
-<% gov.nih.nci.cagrid.introduce.info.ServiceInformation info = (gov.nih.nci.cagrid.introduce.info.ServiceInformation) argument; 
+<% gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation info = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument; 
    String packageName = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.package");
-   String serviceName = info.getIntroduceServiceProperties().getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
+   String mainServiceName = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.service.name");
+   String serviceName = info.getService().getName();
    String namespaceDomain = info.getIntroduceServiceProperties().getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN);
+   String mainModifiedServiceName = mainServiceName;
+   if(mainServiceName.endsWith("Service")){
+   	mainModifiedServiceName = mainServiceName.substring(0,mainServiceName.length()-7);
+   }
    String modifiedServiceName = serviceName;
    if(serviceName.endsWith("Service")){
    	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
    }
 %>
-package <%=packageName%>.client;
+package <%=packageName%>.<%=info.getService().getName().toLowerCase()%>.client;
 
 
 import java.net.URL;
@@ -25,8 +30,8 @@ import org.apache.axis.utils.ClassUtils;
 import org.globus.gsi.GlobusCredential;
 
 import <%=packageName%>.stubs.<%=serviceName%>PortType;
-import <%=packageName%>.stubs.service.<%=modifiedServiceName%>ServiceAddressingLocator;
-import <%=packageName%>.common.<%=serviceName%>I;
+import <%=packageName%>.stubs.service.<%=mainModifiedServiceName%>ServiceAddressingLocator;
+import <%=packageName%>.<%=info.getService().getName().toLowerCase()%>.common.<%=serviceName%>I;
 
 
 /**
@@ -34,7 +39,7 @@ import <%=packageName%>.common.<%=serviceName%>I;
  * 
  * @created by Introduce Toolkit version 1.0
  */
-public class <%=serviceName%>Client implements <%=serviceName%>I {	
+public class <%=info.getService().getName()%>Client implements <%=serviceName%>I {	
 	private GlobusCredential proxy;
 	private String url;
 	
@@ -42,18 +47,18 @@ public class <%=serviceName%>Client implements <%=serviceName%>I {
 		org.globus.axis.util.Util.registerTransport();
 	}
 	
-	public <%=serviceName%>Client(String url) {
+	public <%=info.getService().getName()%>Client(String url) {
 		this(url,null);	
 	}
 
-	public <%=serviceName%>Client(String url, GlobusCredential proxy) {
+	public <%=info.getService().getName()%>Client(String url, GlobusCredential proxy) {
 	   	this.proxy = proxy;
 	   	this.url = url;	
 	}
 
-	private <%=serviceName%>PortType getPortType() throws RemoteException {
+	private <%=info.getService().getName()%>PortType getPortType() throws RemoteException {
 
-		<%=modifiedServiceName%>ServiceAddressingLocator locator = new <%=modifiedServiceName%>ServiceAddressingLocator();
+		<%=mainModifiedServiceName%>ServiceAddressingLocator locator = new <%=mainModifiedServiceName%>ServiceAddressingLocator();
 		// attempt to load our context sensitive wsdd file
 		InputStream resourceAsStream = ClassUtils.getResourceAsStream(getClass(), "client-config.wsdd");
 		if (resourceAsStream != null) {
@@ -62,11 +67,11 @@ public class <%=serviceName%>Client implements <%=serviceName%>I {
 			// set the engine of the locator
 			locator.setEngine(new AxisClient(engineConfig));
 		}
-		<%=serviceName%>PortType port = null;
+		<%=info.getService().getName()%>PortType port = null;
 		EndpointReferenceType endpoint = new EndpointReferenceType();
 		try {
 			endpoint.setAddress(new Address(url));
-			port = locator.get<%=serviceName%>PortTypePort(endpoint);
+			port = locator.get<%=info.getService().getName()%>PortTypePort(endpoint);
 		} catch (Exception e) {
 			throw new RemoteException("Unable to configured porttype:" + e.getMessage(), e);
 		}
@@ -75,7 +80,7 @@ public class <%=serviceName%>Client implements <%=serviceName%>I {
 	}
 	
 	public static void usage(){
-		System.out.println(<%=serviceName%>Client.class.getName() + " -url <service url>");
+		System.out.println(<%=info.getService().getName()%>Client.class.getName() + " -url <service url>");
 	}
 	
 	public static void main(String [] args){
@@ -83,7 +88,7 @@ public class <%=serviceName%>Client implements <%=serviceName%>I {
 		try{
 		if(!(args.length < 2)){
 			if(args[0].equals("-url")){
-			  <%=serviceName%>Client client = new <%=serviceName%>Client(args[1]);
+			  <%=info.getService().getName()%>Client client = new <%=info.getService().getName()%>Client(args[1]);
 			  // place client calls here if you want to use this main as a
 			  // test....
 			} else {

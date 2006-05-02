@@ -75,7 +75,7 @@ public class AddComplexMethodWithFaulsAndArraysStep extends Step {
 		newNamespaceTypes[currentLength] = type;
 		namespaces.setNamespace(newNamespaceTypes);
 		
-		MethodsType methodsType = introService.getMethods();
+		MethodsType methodsType =  CommonTools.getService(introService.getServices(),tci.getName()).getMethods();
 
 		MethodType method = new MethodType();
 		method.setName(methodName);
@@ -137,8 +137,8 @@ public class AddComplexMethodWithFaulsAndArraysStep extends Step {
 		}
 
 		// look at the interface to make sure method exists.......
-		String serviceInterface = pathtobasedir + File.separator + tci.dir + File.separator + "src" + File.separator
-			+ tci.getPackageDir() + File.separator + "common" + File.separator + tci.getName() + "I.java";
+		String serviceInterface = pathtobasedir + File.separator + tci.getDir() + File.separator + "src" + File.separator
+			+ tci.getPackageDir()+ File.separator + introService.getServices().getService(0).getName().toLowerCase() + File.separator + "common" + File.separator + tci.getName() + "I.java";
 		assertTrue(StepTools.methodExists(serviceInterface, methodName));
 
 		String cmd = CommonTools.getAntAllCommand(pathtobasedir + File.separator + tci.getDir());

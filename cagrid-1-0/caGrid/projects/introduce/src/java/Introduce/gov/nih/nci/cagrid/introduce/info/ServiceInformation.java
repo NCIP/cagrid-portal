@@ -2,13 +2,13 @@ package gov.nih.nci.cagrid.introduce.info;
 
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionsType;
-import gov.nih.nci.cagrid.introduce.beans.metadata.MetadataListType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
+import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
 
 import java.io.File;
 import java.util.Properties;
@@ -38,17 +38,6 @@ public class ServiceInformation {
 		this.baseDirectory = baseDirectory;
 	}
 
-
-	public MetadataListType getMetadata() {
-		return introService.getMetadataList();
-	}
-
-
-	public void setMetadata(MetadataListType metadata) {
-		introService.setMetadataList(metadata);
-	}
-
-
 	public Properties getIntroduceServiceProperties() {
 		return introduceServiceProperties;
 	}
@@ -59,13 +48,13 @@ public class ServiceInformation {
 	}
 
 
-	public MethodsType getMethods() {
-		return introService.getMethods();
+	public ServicesType getServices() {
+		return introService.getServices();
 	}
 
 
-	public void setMethods(MethodsType methods) {
-		this.introService.setMethods(methods);
+	public void setServices(ServicesType services) {
+		this.introService.setServices(services);
 	}
 
 

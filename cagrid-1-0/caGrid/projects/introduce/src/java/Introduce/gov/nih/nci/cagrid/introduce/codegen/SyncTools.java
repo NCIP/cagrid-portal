@@ -10,12 +10,14 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
-import gov.nih.nci.cagrid.introduce.codegen.metadata.SyncMetadata;
 import gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods;
+import gov.nih.nci.cagrid.introduce.codegen.resource.SyncResource;
 import gov.nih.nci.cagrid.introduce.codegen.security.SyncSecurity;
 import gov.nih.nci.cagrid.introduce.codegen.serializers.SyncSerialization;
+import gov.nih.nci.cagrid.introduce.codegen.services.SyncServices;
 import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPostProcessor;
@@ -153,13 +155,13 @@ public class SyncTools {
 		populateClassnames(info, table);
 
 		// STEP 7: run the code generation tools
-		SyncTool methodsS = new SyncMethods(baseDirectory, info);
-		SyncTool metadata = new SyncMetadata(baseDirectory, info);
+		SyncTool servicesS = new SyncServices(baseDirectory, info);
+		SyncTool metadata = new SyncResource(baseDirectory, info);
 		SyncTool security = new SyncSecurity(baseDirectory, info);
 		SyncTool serializerS = new SyncSerialization(baseDirectory, info);
 
-		System.out.println("Synchronizing the methods");
-		methodsS.sync();
+		System.out.println("Synchronizing the services");
+		servicesS.sync();
 		System.out.println("Synchronizing the metadata");
 		metadata.sync();
 		System.out.println("Synchronizing the security");
@@ -237,9 +239,12 @@ public class SyncTools {
 		}
 
 		// get the classnames from the axis symbol table
-		if (info.getMethods().getMethod() != null) {
-			for (int i = 0; i < info.getMethods().getMethod().length; i++) {
-				MethodType mtype = info.getMethods().getMethod(i);
+		if(info.getServices().getService()!=null){
+			for(int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++){
+				ServiceType service = info.getServices().getService(serviceI);
+				if (service.getMethods()!= null && service.getMethods().getMethod()!=null) {
+			for (int i = 0; i < service.getMethods().getMethod().length; i++) {
+				MethodType mtype = service.getMethods().getMethod(i);
 				// process the inputs
 				if (mtype.getInputs() != null && mtype.getInputs().getInput() != null) {
 					for (int j = 0; j < mtype.getInputs().getInput().length; j++) {
@@ -250,7 +255,7 @@ public class SyncTools {
 								IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN)
 								+ "/"
 								+ info.getIntroduceServiceProperties().getProperty(
-									IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME), ">>" + mtype.getName() + ">"
+									IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME), ">>" + service.getName() + TemplateUtils.upperCaseFirstCharacter(mtype.getName()) + ">"
 								+ inputParam.getName()));
 							inputParam.setContainerClassName(info.getIntroduceServiceProperties().getProperty(
 								"introduce.skeleton.package")
@@ -260,6 +265,8 @@ public class SyncTools {
 					}
 				}
 
+			}
+		}
 			}
 		}
 	}

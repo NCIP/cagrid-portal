@@ -40,7 +40,7 @@ public class ModifySimpleMethodStep extends Step {
 
 		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(pathtobasedir + File.separator
 			+ tci.getDir() + File.separator + "introduce.xml", ServiceDescription.class);
-		MethodsType methodsType = introService.getMethods();
+		MethodsType methodsType = CommonTools.getService(introService.getServices(),tci.getName()).getMethods();
 		MethodType method = methodsType.getMethod(0);
 
 		// create a new input param
@@ -78,8 +78,8 @@ public class ModifySimpleMethodStep extends Step {
 		}
 
 		// look at the interface to make sure method exists.......
-		String serviceInterface = pathtobasedir + File.separator + tci.dir + File.separator + "src" + File.separator
-			+ tci.getPackageDir() + File.separator + "common" + File.separator + tci.getName() + "I.java";
+		String serviceInterface = pathtobasedir + File.separator + tci.getDir() + File.separator + "src" + File.separator
+			+ tci.getPackageDir() + File.separator + CommonTools.getService(introService.getServices(),tci.getName()).getName().toLowerCase() + File.separator + "common" + File.separator + tci.getName() + "I.java";
 		assertTrue(StepTools.methodExists(serviceInterface, methodName));
 
 		String cmd = CommonTools.getAntAllCommand(pathtobasedir + File.separator + tci.getDir());

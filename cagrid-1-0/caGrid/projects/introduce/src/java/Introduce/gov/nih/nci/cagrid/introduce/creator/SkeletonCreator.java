@@ -5,14 +5,20 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionsType;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
+import gov.nih.nci.cagrid.introduce.templates.ClientConfigTemplate;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.util.Properties;
 import java.util.StringTokenizer;
+
+import javax.xml.namespace.QName;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
@@ -43,6 +49,39 @@ public class SkeletonCreator extends Task {
 		try {
 			introService = (ServiceDescription) Utils.deserializeDocument(baseDirectory + File.separator
 				+ "introduce.xml", ServiceDescription.class);
+		} catch (Exception e1) {
+			BuildException be = new BuildException(e1.getMessage());
+			be.setStackTrace(e1.getStackTrace());
+			be.printStackTrace();
+			throw be;
+		}
+
+		// need to add the base service....
+		ServiceType serviceType = new ServiceType();
+		serviceType.setName(properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
+		serviceType.setResourceFrameworkType(IntroduceConstants.INTRODUCE_MAIN_RESOURCE);
+
+		// add new service to the services
+		// add new method to array in bean
+		// this seems to be a wierd way be adding things....
+		ServiceType[] newServices;
+		int newLength = 0;
+		if (introService.getServices() != null && introService.getServices().getService() != null) {
+			newLength = introService.getServices().getService().length + 1;
+			newServices = new ServiceType[newLength];
+			System.arraycopy(introService.getServices().getService(), 0, newServices, 0, introService.getServices()
+				.getService().length);
+		} else {
+			newLength = 1;
+			newServices = new ServiceType[newLength];
+		}
+		newServices[newLength - 1] = serviceType;
+		introService.getServices().setService(newServices);
+
+		// write the modified document back out....
+		try {
+			Utils.serializeDocument(baseDirectory + File.separator + "introduce.xml", introService, new QName(
+				"gme://gov.nih.nci.cagrid/1/Introduce", "ServiceDescription"));
 		} catch (Exception e1) {
 			BuildException be = new BuildException(e1.getMessage());
 			be.setStackTrace(e1.getStackTrace());
@@ -89,7 +128,11 @@ public class SkeletonCreator extends Task {
 		// Generate the source
 		try {
 			sbc.createSkeleton(info);
-			ssc.createSkeleton(info);
+			if (info.getServices() != null && info.getServices().getService() != null) {
+				for (int i = 0; i < info.getServices().getService().length; i++) {
+					ssc.createSkeleton(baseDirectory, info, info.getServices().getService(i));
+				}
+			}
 			sscc.createSkeleton(info);
 			sec.createSkeleton(info);
 			sdc.createSkeleton(info);
@@ -128,8 +171,8 @@ public class SkeletonCreator extends Task {
 		}
 
 		try {
-			Utils.serializeDocument(baseDirectory + File.separator + "introduce.xml",
-				introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
+			Utils.serializeDocument(baseDirectory + File.separator + "introduce.xml", introService,
+				IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 		} catch (Exception e) {
 			BuildException be = new BuildException(e.getMessage());
 			be.setStackTrace(e.getStackTrace());

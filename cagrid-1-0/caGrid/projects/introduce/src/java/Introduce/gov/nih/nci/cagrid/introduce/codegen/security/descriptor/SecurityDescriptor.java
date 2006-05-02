@@ -14,6 +14,7 @@ import gov.nih.nci.cagrid.introduce.beans.security.ServiceCredential;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.X509Credential;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import org.projectmobius.common.XMLUtilities;
@@ -33,12 +34,16 @@ public class SecurityDescriptor {
 			StringBuffer xml = new StringBuffer();
 			xml.append("<securityConfig xmlns=\"http://www.globus.org\">");
 			xml.append(writeServiceSettings(info.getServiceSecurity()));
-			MethodsType methods = info.getMethods();
-			if (methods != null) {
-				MethodType[] method = methods.getMethod();
-				if (method != null) {
-					for (int i = 0; i < method.length; i++) {
-						xml.append(writeMethodSettings(info.getServiceSecurity(), method[i]));
+			if (info.getServices() != null && info.getServices().getService() != null
+				&& info.getServices().getService(0) != null) {
+				ServiceType service = info.getServices().getService(0);
+				MethodsType methods = service.getMethods();
+				if (methods != null) {
+					MethodType[] method = methods.getMethod();
+					if (method != null) {
+						for (int i = 0; i < method.length; i++) {
+							xml.append(writeMethodSettings(info.getServiceSecurity(), method[i]));
+						}
 					}
 				}
 			}
@@ -81,10 +86,10 @@ public class SecurityDescriptor {
 
 			ServiceAuthorization auth = ss.getServiceAuthorization();
 			if (auth != null) {
-				if(auth.getGridMapAuthorization()!=null){
+				if (auth.getGridMapAuthorization() != null) {
 					xml.append("<authz value=\"gridmap\"/>");
-					xml.append("<gridmap value=\""+auth.getGridMapAuthorization().getGridMapFileLocation()+"\"/>");
-				}else{
+					xml.append("<gridmap value=\"" + auth.getGridMapAuthorization().getGridMapFileLocation() + "\"/>");
+				} else {
 					xml.append("<authz value=\"none\"/>");
 				}
 			} else {

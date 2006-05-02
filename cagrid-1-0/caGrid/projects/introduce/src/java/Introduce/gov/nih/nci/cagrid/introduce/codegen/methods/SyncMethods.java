@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.codegen.methods;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
@@ -29,17 +30,19 @@ import org.apache.ws.jaxme.js.util.JavaParser;
  */
 public class SyncMethods extends SyncTool {
 
-	String serviceInterface;
-	List additions;
-	List removals;
-	List modifications;
-	JavaSource sourceI;
-	JavaSourceFactory jsf;
-	JavaParser jp;
+	private String serviceInterface;
+	private List additions;
+	private List removals;
+	private List modifications;
+	private JavaSource sourceI;
+	private JavaSourceFactory jsf;
+	private JavaParser jp;
+	private ServiceType service;
 
 
-	public SyncMethods(File baseDirectory, ServiceInformation info) {
+	public SyncMethods(File baseDirectory, ServiceInformation info, ServiceType service) {
 		super(baseDirectory, info);
+		this.service = service;
 		this.additions = new ArrayList();
 		this.removals = new ArrayList();
 		this.modifications = new ArrayList();
@@ -49,20 +52,9 @@ public class SyncMethods extends SyncTool {
 	public void sync() throws SynchronizationException {
 		this.lookForUpdates();
 
-		try {
-			String cmd = CommonTools.getAntFlattenCommand(getBaseDirectory().getAbsolutePath());
-			Process p = CommonTools.createAndOutputProcess(cmd);
-			p.waitFor();
-			if (p.exitValue() != 0) {
-				throw new SynchronizationException("Service flatten wsdl exited abnormally");
-			}
-		} catch (Exception e) {
-			throw new SynchronizationException("Error executing wsdl flatten command:" + e.getMessage(), e);
-		}
-
 		// sync the methods fiels
 
-		SyncSource methodSync = new SyncSource(getBaseDirectory(), getServiceInformation());
+		SyncSource methodSync = new SyncSource(getBaseDirectory(), getServiceInformation(),service);
 		// remove methods
 		methodSync.removeMethods(this.removals);
 		// add new methods
@@ -79,9 +71,8 @@ public class SyncMethods extends SyncTool {
 
 		serviceInterface = getBaseDirectory().getAbsolutePath() + File.separator + "src" + File.separator
 			+ getServiceInformation().getIntroduceServiceProperties().get(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR)
-			+ File.separator + "common" + File.separator
-			+ getServiceInformation().getIntroduceServiceProperties().get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
-			+ "I.java";
+			+ File.separator + service.getName().toLowerCase() + File.separator + "common" + File.separator
+			+ service.getName() + "I.java";
 
 		try {
 			jp.parse(new File(serviceInterface));
@@ -96,9 +87,9 @@ public class SyncMethods extends SyncTool {
 		JavaMethod[] methods = sourceI.getMethods();
 
 		// look at doc and compare to interface
-		if (getServiceInformation().getMethods().getMethod() != null) {
-			for (int methodIndex = 0; methodIndex < getServiceInformation().getMethods().getMethod().length; methodIndex++) {
-				MethodType mel = getServiceInformation().getMethods().getMethod(methodIndex);
+		if (service.getMethods() !=null && service.getMethods().getMethod() != null) {
+			for (int methodIndex = 0; methodIndex < service.getMethods().getMethod().length; methodIndex++) {
+				MethodType mel = service.getMethods().getMethod(methodIndex);
 				boolean found = false;
 				for (int i = 0; i < methods.length; i++) {
 					String methodName = methods[i].getName();
@@ -119,9 +110,9 @@ public class SyncMethods extends SyncTool {
 		for (int i = 0; i < methods.length; i++) {
 			String methodName = methods[i].getName();
 			boolean found = false;
-			if (getServiceInformation().getMethods().getMethod() != null) {
-				for (int methodIndex = 0; methodIndex < getServiceInformation().getMethods().getMethod().length; methodIndex++) {
-					MethodType mel = getServiceInformation().getMethods().getMethod(methodIndex);
+			if (service.getMethods().getMethod() != null) {
+				for (int methodIndex = 0; methodIndex < service.getMethods().getMethod().length; methodIndex++) {
+					MethodType mel = service.getMethods().getMethod(methodIndex);
 					if (mel.getName().equals(methodName)) {
 						found = true;
 						break;

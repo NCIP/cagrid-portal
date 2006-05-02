@@ -25,11 +25,15 @@ public class IntroduceConstants {
 	public static final String INTRODUCE_NS_EXCLUDES = "introduce.ns.excludes";
 	public static final QName INTRODUCE_SKELETON_QNAME = new QName("gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton");
 	
+	public static final String INTRODUCE_SINGLETON_RESOURCE = "singleton";
+	public static final String INTRODUCE_MAIN_RESOURCE = "main";
+	public static final String INTRODUCE_BASE_RESOURCE = "base";
+	
 	// deployment properties
 	public static final String DEPLOY_PROPERTIES_FILE = "deploy.properties";
 	
 	// introduce specific constants
-	public static final String INTRODUCE_VERSION = "0.95";
+	public static final String INTRODUCE_VERSION = "0.96";
 	public static final String INTRODUCE_XML_FILE = "introduce.xml";
 	
 	// w3c namespaces

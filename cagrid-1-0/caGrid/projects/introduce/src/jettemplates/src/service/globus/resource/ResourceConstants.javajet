@@ -1,10 +1,7 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus.resource" class="ResourceConstantsTemplate" 
-imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.introduce.beans.metadata.*"
-%>
-<%  gov.nih.nci.cagrid.introduce.info.ServiceInformation arguments = (gov.nih.nci.cagrid.introduce.info.ServiceInformation) argument; 
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus.resource" class="ResourceConstantsTemplate" imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.*" %>
+<%  gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation arguments = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument; 
   	Properties properties = arguments.getIntroduceServiceProperties();
-	MetadataListType metadataList = arguments.getMetadata();
-	
+	ResourcePropertiesListType metadataList = arguments.getService().getResourcePropertiesList();
 	String packageName = properties.getProperty("introduce.skeleton.package");
     String serviceName = properties.getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
     String namespaceDomain = properties.getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN);
@@ -13,7 +10,7 @@ imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codege
    		modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
 	}
 %>
-package <%=packageName%>.service.globus.resource;
+package <%=packageName%>.<%=arguments.getService().getName().toLowerCase()%>.service.globus.resource;
 
 import javax.xml.namespace.QName;
 
@@ -26,9 +23,9 @@ public interface ResourceConstants {
 	//Service level metadata (exposed as resouce properties)
 
 <%	
-	if(metadataList!=null && metadataList.getMetadata()!=null){
-		for (int i = 0; i < metadataList.getMetadata().length; i++) {
-			MetadataType metadata = metadataList.getMetadata()[i];
+	if(metadataList!=null && metadataList.getResourceProperty()!=null){
+		for (int i = 0; i < metadataList.getResourceProperty().length; i++) {
+			ResourcePropertyType metadata = metadataList.getResourceProperty()[i];
 			
 			stringBuffer.append("\tpublic static final QName ");
 			stringBuffer.append(TemplateUtils.getResourcePropertyVariableName(metadataList, i).toUpperCase());

@@ -1,5 +1,5 @@
 <%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus" class="ServiceProviderImplTemplate" %>
-<% gov.nih.nci.cagrid.introduce.info.ServiceInformation info = (gov.nih.nci.cagrid.introduce.info.ServiceInformation) argument; 
+<% gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation info = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument; 
    String packageName = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.package");
    String serviceName = info.getIntroduceServiceProperties().getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
    String namespaceDomain = info.getIntroduceServiceProperties().getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN);
@@ -8,10 +8,10 @@
    	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
    }
 %>
-package <%=packageName%>.service.globus;
+package <%=packageName%>.<%=info.getService().getName().toLowerCase()%>.service.globus;
 
-import <%=packageName%>.common.<%=serviceName%>I;
-import <%=packageName%>.service.<%=serviceName%>Impl;
+import <%=packageName%>.<%=info.getService().getName().toLowerCase()%>.common.<%=info.getService().getName()%>I;
+import <%=packageName%>.<%=info.getService().getName().toLowerCase()%>.service.<%=info.getService().getName()%>Impl;
 
 import java.rmi.RemoteException;
 
@@ -21,12 +21,12 @@ import java.rmi.RemoteException;
  * @created by Introduce Toolkit version 1.0
  * 
  */
-public class <%=serviceName%>ProviderImpl{
+public class <%=info.getService().getName()%>ProviderImpl{
 	
-	<%=serviceName%>I impl;
+	<%=info.getService().getName()%>I impl;
 	
-	public <%=serviceName%>ProviderImpl() throws RemoteException {
-		impl = new <%=serviceName%>Impl();
+	public <%=info.getService().getName()%>ProviderImpl() throws RemoteException {
+		impl = new <%=info.getService().getName()%>Impl();
 	}
 	
 

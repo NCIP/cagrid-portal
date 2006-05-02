@@ -137,7 +137,7 @@
 		</classpath>
 	</taskdef>
 	<target name="generateJETClasses">
-		<parallel threadcount="4">
+		
 			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/server-config.wsdd.xmljet" />			
 			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/jndi-config.xmljet" />
 			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/deploy.properties.txtjet" />
@@ -154,11 +154,16 @@
 			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/ServiceImpl.javajet" />
 			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/ServiceConfiguration.javajet" />
 			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/ServiceProviderImpl.javajet" />
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/BaseResource.javajet" />
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/BaseResourceHome.javajet" />
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/MetadataConfiguration.javajet" />
+		    <jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/main/BaseResource.javajet" />
+		    <jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/main/BaseResourceHome.javajet" />
+		    <jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/main/ResourceConfiguration.javajet" />
+		    <jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/base/BaseResource.javajet" />
+			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/base/BaseResourceHome.javajet" />
+			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/singleton/BaseResource.javajet" />
+			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/singleton/BaseResourceHome.javajet" />
+			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/singleton/ResourceConfiguration.javajet" />
 			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/ResourceConstants.javajet" />
-		</parallel>
+	
 	</target>
 	<!-- =================================================================== -->
 	<!-- Compiles the source code                                            -->

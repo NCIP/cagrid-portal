@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="gme://gov.nih.nci.cagrid.introduce/1/Services"
+	xmlns:tns="gme://gov.nih.nci.cagrid.introduce/1/Services"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:methods="gme://gov.nih.nci.cagrid.introduce/1/Methods"
+	xmlns:resources="gme://gov.nih.nci.cagrid.introduce/1/Resources"
+	targetNamespace="gme://gov.nih.nci.cagrid.introduce/1/Services" elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+	<xs:import namespace="gme://gov.nih.nci.cagrid.introduce/1/Methods"
+		schemaLocation="./Methods.xsd"/>
+	<xs:import namespace="gme://gov.nih.nci.cagrid.introduce/1/Resources"
+		schemaLocation="./Resources.xsd"/>
+	<xs:element name="Services" type="tns:ServicesType">
+		<xs:annotation>
+			<xs:documentation>List of Services for this Grid Service</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="ServicesType">
+		<xs:sequence>
+			<xs:element name="Service" maxOccurs="unbounded" type="tns:ServiceType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ServiceType">
+		<xs:sequence>
+			<xs:element ref="methods:Methods" minOccurs="0" maxOccurs="1"/>
+			<xs:element ref="resources:ResourcePropertiesList"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="resourceFrameworkType" type="xs:string" use="required"/>
+	</xs:complexType>
+</xs:schema>
