@@ -3,16 +3,19 @@ package gov.nih.nci.cagrid.data.codegen;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.common.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileWriter;
-import java.io.InputStreamReader;
+import java.util.List;
+
+import org.apache.axis.message.MessageElement;
 
 /** 
  *  DataServiceCodegenPostProcessor
@@ -29,13 +32,13 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 		+ DataServiceConstants.QUERY_METHOD_PARAMETER_NAME + ")";
 	
 	public void postCodegen(ServiceExtensionDescriptionType desc, ServiceInformation info) throws CodegenExtensionException {
-		modifyQueryMethod(info);
+		modifyQueryMethod(desc, info);
 	}
 	
 	
-	private void modifyQueryMethod(ServiceInformation info) throws CodegenExtensionException {
+	private void modifyQueryMethod(ServiceExtensionDescriptionType desc, ServiceInformation info) throws CodegenExtensionException {
 		// get the processor implementation out of the service properties
-		String implementationClassName = info.getIntroduceServiceProperties().getProperty(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
+		String implementationClassName = getQueryProcesorClass(desc, info);
 		if (implementationClassName == null || implementationClassName.length() == 0) {
 			System.out.println("No CQL Processor implementation specified");
 			return;
@@ -45,11 +48,20 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 		File serviceSrcDir = new File(info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "src");
 		final String implFileName = info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + "Impl.java";
 		// search the service dir for the impl file
+		/*
 		File[] implFiles = serviceSrcDir.listFiles(new FileFilter() {
 			public boolean accept(File pathname) {
 				return pathname.getName().equals(implFileName);
 			}
 		});
+		*/
+		List files = Utils.recursiveListFiles(serviceSrcDir, new FileFilter() {
+			public boolean accept(File pathname) {
+				return pathname.getName().equals(implFileName);
+			}
+		});
+		File[] implFiles = new File[files.size()];
+		files.toArray(implFiles);
 		File implFile = null;
 		if (implFiles != null && implFiles.length != 0) {
 			implFile = implFiles[0];
@@ -66,25 +78,8 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 			throw new CodegenExtensionException("Error reading implementation file: " + ex.getMessage(), ex);
 		}
 		
-		// read template for implementation's body
-		StringBuffer template = new StringBuffer();
-		try {
-			BufferedReader reader =  new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("QueryTemplate.java")));
-			String line = null;
-			while ((line = reader.readLine()) != null) {
-				template.append(line).append("\n");
-			}
-			reader.close();
-		} catch (Exception ex) {
-			throw new CodegenExtensionException("Error reading the implementation template: " + ex.getMessage(), ex);
-		}
-		String body = extractMethodBody(template);
-		
-		// replace the placeholder in the method body
-		body.replace(DataServiceConstants.QUERY_PROCESSOR_PLACEHOLDER, implementationClassName);
-		
 		// put the implementation in the class
-		dropInImplementation(implementation, body);
+		dropInImplementation(implementation, implementationClassName);
 		
 		// save the source file.
 		try {
@@ -99,36 +94,53 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 	}
 	
 	
-	private String extractMethodBody(StringBuffer template) {
-		// find the method signature's line
-		int startIndex = template.indexOf(METHOD_START);
-		// move to the end of the signature
-		startIndex = template.indexOf("{", startIndex);
-		startIndex++;
-		// start counting open and closed brackets until I reach zero.  That's the end of the query method
-		int endIndex = startIndex;
-		int brackets = 1;
-		while (brackets != 0) {
-			char c = template.charAt(endIndex);
-			if (c == '{') {
-				brackets++;
-			} else if (c == '}') {
-				brackets--;
-			}
-			endIndex++;
-		}
-		endIndex--; // get off the last bracket
-		String body = template.substring(startIndex, endIndex);
-		return body;
-	}
-	
-	
-	private void dropInImplementation(StringBuffer implClass, String methodBody) {
+	private void dropInImplementation(StringBuffer implClass, String implClassName) {
 		int startIndex = implClass.indexOf(METHOD_START);
 		// move to the end of the signature
 		startIndex = implClass.indexOf("{", startIndex);
 		startIndex++;
-		// insert the method body
-		implClass.insert(startIndex, methodBody);
+		// find the end of the method body
+		int endIndex = implClass.indexOf("}", startIndex);
+		// trim out the existing method body
+		implClass.delete(startIndex, endIndex);
+		// insert the new method body
+		StringBuffer body = new StringBuffer();
+		body.append("\n");
+		body.append("\t\t").append("gov.nih.nci.cagrid.data.cql.CQLQueryProcessor processor = null;").append("\n");
+		body.append("\t\t").append("try {").append("\n");
+		body.append("\t\t\t").append("processor = new ").append(implClassName).append("();").append("\n");
+		body.append("\t\t").append("} catch (gov.nih.nci.cagrid.data.InitializationException ex) {").append("\n");
+		body.append("\t\t\t").append("throw new gov.nih.nci.cagrid.data.QueryProcessingException(\"Error initializing the query processor: \" + ex.getMessage(), ex);").append("\n");
+		body.append("\t\t").append("}").append("\n");
+		body.append("\t\t").append("return processor.processQuery(cqlQuery);").append("\n");
+		implClass.insert(startIndex, body);
+	}
+	
+	
+	private String getQueryProcesorClass(ServiceExtensionDescriptionType desc, ServiceInformation info) {
+		ExtensionTypeExtensionData data = getExtensionData(desc, info);
+		MessageElement[] dataEntries = data.get_any();
+		for (int i = 0; dataEntries != null && i < dataEntries.length; i++) {
+			if (dataEntries[i].getLocalName().equals(DataServiceConstants.QUERY_PROCESSOR_ELEMENT_NAME)) {
+				String queryProcessorClass = dataEntries[i].getValue();
+				return queryProcessorClass;
+			}
+		}
+		return null;
+	}
+	
+	
+	private ExtensionTypeExtensionData getExtensionData(ServiceExtensionDescriptionType desc, ServiceInformation info) {
+		String extensionName = desc.getName();
+		ExtensionType[] extensions = info.getServiceDescriptor().getExtensions().getExtension();
+		for (int i = 0; extensions != null && i < extensions.length; i++) {
+			if (extensions[i].getName().equals(extensionName)) {
+				if (extensions[i].getExtensionData() == null) {
+					extensions[i].setExtensionData(new ExtensionTypeExtensionData());
+				}
+				return extensions[i].getExtensionData();
+			}
+		}
+		return null;
 	}
 }
