@@ -911,6 +911,7 @@ public class TestGTS extends TestCase {
 
 			// Test After Expiration
 			TrustedAuthorityFilter f1 = new TrustedAuthorityFilter();
+			assertEquals(taCount+remoteTaCount, gts.findTrustAuthorities(f1).length);
 			f1.setLifetime(Lifetime.Valid);
 			f1.setStatus(Status.Trusted);
 			assertEquals(taCount, gts.findTrustAuthorities(f1).length);
@@ -933,14 +934,6 @@ public class TestGTS extends TestCase {
 			assertEquals(taCount, gts.findTrustAuthorities(f2).length);
 			f2.setAuthorityTrustService(authName);
 			assertEquals(remoteTaCount, gts.findTrustAuthorities(f2).length);
-			
-			TrustedAuthority[] list = gts.findTrustAuthorities(f2);
-			for (int j = 0; j <list.length; j++) {
-				Calendar c = new GregorianCalendar();
-				c.setTimeInMillis(list[j].getExpires());
-				System.out.println(c.getTime());
-			}
-			
 			f2.setSourceTrustService(authName);
 			assertEquals(remoteTaCount, gts.findTrustAuthorities(f2).length);
 			

@@ -282,9 +282,9 @@ public class GTS implements TrustLevelStatus, TrustLevelLookup {
 							trusted[j].setIsAuthority(Boolean.FALSE);
 							trusted[j].setSourceTrustService(authorityServiceURI);
 							Calendar c = new GregorianCalendar();
-							c.roll(Calendar.HOUR, updateAuthority.getTrustedAuthorityTimeToLive().getHours());
-							c.roll(Calendar.MINUTE, updateAuthority.getTrustedAuthorityTimeToLive().getMinutes());
-							c.roll(Calendar.SECOND, updateAuthority.getTrustedAuthorityTimeToLive().getSeconds());
+							c.add(Calendar.HOUR, updateAuthority.getTrustedAuthorityTimeToLive().getHours());
+							c.add(Calendar.MINUTE, updateAuthority.getTrustedAuthorityTimeToLive().getMinutes());
+							c.add(Calendar.SECOND, updateAuthority.getTrustedAuthorityTimeToLive().getSeconds());
 							trusted[j].setExpires(c.getTimeInMillis());
 							try {
 								trust.updateTrustedAuthority(trusted[j], false);
@@ -302,9 +302,9 @@ public class GTS implements TrustLevelStatus, TrustLevelLookup {
 						trusted[j].setIsAuthority(Boolean.FALSE);
 						trusted[j].setSourceTrustService(authorityServiceURI);
 						Calendar c = new GregorianCalendar();
-						c.roll(Calendar.HOUR, updateAuthority.getTrustedAuthorityTimeToLive().getHours());
-						c.roll(Calendar.MINUTE, updateAuthority.getTrustedAuthorityTimeToLive().getMinutes());
-						c.roll(Calendar.SECOND, updateAuthority.getTrustedAuthorityTimeToLive().getSeconds());
+						c.add(Calendar.HOUR, updateAuthority.getTrustedAuthorityTimeToLive().getHours());
+						c.add(Calendar.MINUTE, updateAuthority.getTrustedAuthorityTimeToLive().getMinutes());
+						c.add(Calendar.SECOND, updateAuthority.getTrustedAuthorityTimeToLive().getSeconds());
 						trusted[j].setExpires(c.getTimeInMillis());
 						try {
 							trust.addTrustedAuthority(trusted[j], false);
