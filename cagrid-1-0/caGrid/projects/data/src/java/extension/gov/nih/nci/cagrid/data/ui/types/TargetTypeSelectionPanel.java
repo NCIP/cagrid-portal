@@ -6,6 +6,8 @@ import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.data.common.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
@@ -20,15 +22,19 @@ import java.io.File;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.apache.axis.message.MessageElement;
+import org.apache.axis.message.Text;
 import org.projectmobius.client.gme.ImportInfo;
 import org.projectmobius.common.GridServiceResolver;
 import org.projectmobius.common.MobiusException;
@@ -38,8 +44,6 @@ import org.projectmobius.common.gme.NoSuchSchemaException;
 import org.projectmobius.gme.XMLDataModelService;
 import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
 import org.projectmobius.protocol.gme.SchemaNode;
-import javax.swing.JTextField;
-import javax.swing.JLabel;
 
 /** 
  *  TargetTypeSelectionPanel
@@ -463,6 +467,46 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	
 	
 	private void setProcessorClass(String className) {
-		getServiceInfo().getIntroduceServiceProperties().setProperty(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, className);
+		ExtensionTypeExtensionData extensionData = getExtensionData();
+		MessageElement processorElement = new MessageElement(new Text(className));
+		processorElement.setName(DataServiceConstants.QUERY_PROCESSOR_ELEMENT_NAME);
+		
+		MessageElement[] anys = extensionData.get_any();
+		if (anys == null) {
+			anys = new MessageElement[1];
+			anys[0] = processorElement;
+		} else {
+			// find the processor class element, if it exists
+			boolean valueSet = false;
+			for (int i = 0; i < anys.length; i++) {
+				if (anys[i].getName().equals(DataServiceConstants.QUERY_PROCESSOR_ELEMENT_NAME)) {
+					anys[i] = processorElement;
+					valueSet = true;
+					break;
+				}
+			}
+			if (!valueSet) {
+				MessageElement[] newAnys = new MessageElement[anys.length + 1];
+				System.arraycopy(anys, 0, newAnys, 0, anys.length);
+				newAnys[newAnys.length - 1] = processorElement;
+				anys = newAnys;
+			}
+		}
+		extensionData.set_any(anys);
+	}
+	
+	
+	private ExtensionTypeExtensionData getExtensionData() {
+		String extensionName = getExtensionDescription().getName();
+		ExtensionType[] extensions = getServiceInfo().getServiceDescriptor().getExtensions().getExtension();
+		for (int i = 0; extensions != null && i < extensions.length; i++) {
+			if (extensions[i].getName().equals(extensionName)) {
+				if (extensions[i].getExtensionData() == null) {
+					extensions[i].setExtensionData(new ExtensionTypeExtensionData());
+				}
+				return extensions[i].getExtensionData();
+			}
+		}
+		return null;
 	}
 }
