@@ -1,7 +1,9 @@
 package gov.nih.nci.cagrid.discovery.client;
 
+import gov.nih.nci.cagrid.discovery.MetadataUtils;
 import gov.nih.nci.cagrid.discovery.ResourcePropertyHelper;
 import gov.nih.nci.cagrid.discovery.XPathUtils;
+import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -64,26 +66,25 @@ public class DiscoveryClient {
 
 		return results;
 	}
-	
-	//----common----
-	//discoverServicesBySearchString
-	//discoverServicesByCancerCenter
-	//discoverServicesBySearchString
-	//discoverServicesByConceptCode
-	//discoverServicesByPointOfContact
-	//----service----
-	//discoverServicesByOperationName
-	//discoverServicesByOperationClass
-	//discoverServicesByOperationInputClass
-	//discoverServicesByOperationOutputClass
-	//
-	//	----data----
-	//discoverServicesByModelName
-	//discoverServicesByClass
-	//discoverServicesByObjectsAssociatedWithClass???
-	//
-	
 
+
+	// ----common----
+	// discoverServicesBySearchString
+	// discoverServicesByCancerCenter
+	// discoverServicesBySearchString
+	// discoverServicesByConceptCode
+	// discoverServicesByPointOfContact
+	// ----service----
+	// discoverServicesByOperationName
+	// discoverServicesByOperationClass
+	// discoverServicesByOperationInputClass
+	// discoverServicesByOperationOutputClass
+	//
+	// ----data----
+	// discoverServicesByModelName
+	// discoverServicesByClass
+	// discoverServicesByObjectsAssociatedWithClass???
+	//
 
 	public EndpointReferenceType getIndexEPR() {
 		return indexEPR;
@@ -121,14 +122,14 @@ public class DiscoveryClient {
 				EndpointReferenceType service = allServices[i];
 				System.out.println("\n\n" + service.getAddress());
 				try {
-//					CommonServiceMetadataType commonMetadata = MetadataUtils.getCommonMetadata(service);
-//					if (commonMetadata != null) {
-//						System.out.println("Service is from:"
-//							+ commonMetadata.getResearchCenterInfo().getResearchCenterName());
-//					}
+					ServiceMetadata commonMetadata = MetadataUtils.getServiceMetadata(service);
+					if (commonMetadata != null && commonMetadata.getHostingResearchCenter() != null) {
+						System.out.println("Service is from:"
+							+ commonMetadata.getHostingResearchCenter().getDisplayName());
+					}
 				} catch (Exception e) {
 					// e.printStackTrace();
-					System.out.println("ERROR:  Unable to access service's resource properties: " + e.getMessage());
+					System.out.println("ERROR:  Unable to access service's standard resource properties: " + e.getMessage());
 				}
 			}
 		} else {
