@@ -54,6 +54,7 @@ public class AddMetadatatWithLoadFromFileStep extends Step {
 		NamespaceType type = new NamespaceType();
 		type.setLocation("." + File.separator + "CommonServiceMetadata.xsd");
 		type.setNamespace("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common");
+		type.setPackageName("gov.nih.nci.cagrid.metadata.common");
 		SchemaElementType etype = new SchemaElementType();
 		etype.setType("CommonServiceMetadata");
 		SchemaElementType[] etypeArr = new SchemaElementType[1];
