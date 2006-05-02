@@ -2,13 +2,14 @@ package gov.nih.nci.cagrid.common;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.namespace.QName;
 
@@ -119,12 +120,7 @@ public class Utils {
 
 
 	public static StringBuffer fileToStringBuffer(File file) throws Exception {
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader(new FileReader(file));
-		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-		}
+		BufferedReader br = new BufferedReader(new FileReader(file));
 		StringBuffer sb = new StringBuffer();
 		try {
 			String s = null;
@@ -133,7 +129,7 @@ public class Utils {
 			}
 		} catch (Exception e) {
 			br.close();
-			throw new Exception("Error reading the buffer: " + e.getMessage());
+			throw new Exception("Error reading the buffer: " + e.getMessage(), e);
 		}
 
 		br.close();
@@ -147,7 +143,6 @@ public class Utils {
 		fw = new FileWriter(fileName);
 		ObjectSerializer.serialize(fw, object, qname);
 		fw.close();
-
 	}
 
 
@@ -201,5 +196,24 @@ public class Utils {
 	 */
 	public static Class getRegisteredClass(QName qname) {
 		return MessageContext.getCurrentContext().getTypeMapping().getClassForQName(qname);
+	}
+	
+	
+	public static List recursiveListFiles(File baseDir, final FileFilter filter) {
+		FileFilter dirFilter = new FileFilter() {
+			public boolean accept(File pathname) {
+				return pathname.isDirectory() || filter.accept(pathname);
+			}
+		};
+		File[] fileArray = baseDir.listFiles(dirFilter);
+		List files = new ArrayList(fileArray.length);
+		for (int i = 0; i < fileArray.length; i++) {
+			if (fileArray[i].isDirectory()) {
+				files.addAll(recursiveListFiles(fileArray[i], filter));
+			} else {
+				files.add(fileArray[i]);
+			}
+		}
+		return files;
 	}
 }
