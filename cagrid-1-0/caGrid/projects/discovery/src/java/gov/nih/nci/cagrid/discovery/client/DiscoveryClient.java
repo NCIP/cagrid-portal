@@ -1,9 +1,7 @@
 package gov.nih.nci.cagrid.discovery.client;
 
-import gov.nih.nci.cagrid.discovery.MetadataUtils;
 import gov.nih.nci.cagrid.discovery.ResourcePropertyHelper;
 import gov.nih.nci.cagrid.discovery.XPathUtils;
-import gov.nih.nci.cagrid.metadata.common.CommonServiceMetadataType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -123,11 +121,11 @@ public class DiscoveryClient {
 				EndpointReferenceType service = allServices[i];
 				System.out.println("\n\n" + service.getAddress());
 				try {
-					CommonServiceMetadataType commonMetadata = MetadataUtils.getCommonMetadata(service);
-					if (commonMetadata != null) {
-						System.out.println("Service is from:"
-							+ commonMetadata.getResearchCenterInfo().getResearchCenterName());
-					}
+//					CommonServiceMetadataType commonMetadata = MetadataUtils.getCommonMetadata(service);
+//					if (commonMetadata != null) {
+//						System.out.println("Service is from:"
+//							+ commonMetadata.getResearchCenterInfo().getResearchCenterName());
+//					}
 				} catch (Exception e) {
 					// e.printStackTrace();
 					System.out.println("ERROR:  Unable to access service's resource properties: " + e.getMessage());
