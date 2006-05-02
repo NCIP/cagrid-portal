@@ -908,7 +908,12 @@ public class TestGTS extends TestCase {
 			f.setLifetime(Lifetime.Valid);
 			f.setStatus(Status.Trusted);
 			assertEquals(taCount + remoteTaCount, gts.findTrustAuthorities(f).length);
-
+			f.setAuthorityTrustService(GTS_URI);
+			assertEquals(taCount, gts.findTrustAuthorities(f).length);
+			f.setAuthorityTrustService(authName);
+			assertEquals(remoteTaCount, gts.findTrustAuthorities(f).length);
+			f.setSourceTrustService(authName);
+			assertEquals(remoteTaCount, gts.findTrustAuthorities(f).length);
 			// Test After Expiration
 
 			// Test After Resync and after Longer Expiration

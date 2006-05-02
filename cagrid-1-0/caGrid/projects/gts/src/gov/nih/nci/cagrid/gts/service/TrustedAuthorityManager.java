@@ -114,7 +114,7 @@ public class TrustedAuthorityManager {
 						firstAppended = true;
 						Calendar cal = new GregorianCalendar();
 						long time = cal.getTimeInMillis();
-						sql.append(" EXPIRES=0 OR EXPIRES>" + time);
+						sql.append(" (EXPIRES=0 OR EXPIRES>" + time+")");
 					} else if (filter.getLifetime().equals(Lifetime.Expired)) {
 						sql = appendWhereOrAnd(firstAppended, sql);
 						firstAppended = true;
