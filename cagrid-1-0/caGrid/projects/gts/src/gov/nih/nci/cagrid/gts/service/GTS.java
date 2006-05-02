@@ -250,7 +250,7 @@ public class GTS implements TrustLevelStatus, TrustLevelLookup {
 						// Determine if we should peform update
 						boolean performUpdate = false;
 						// Check to see if this service is the authority
-						if (!ta.getIsAuthority().booleanValue()) {
+						if (!ta.getAuthorityTrustService().equals(gtsURI)) {
 							AuthorityGTS currAuthority = authority.getAuthority(ta.getSourceTrustService());
 
 							// Check to see if the authority GTS is the same

@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gts.bean.AuthorityGTS;
 import gov.nih.nci.cagrid.gts.bean.AuthorityPrioritySpecification;
 import gov.nih.nci.cagrid.gts.bean.AuthorityPriorityUpdate;
+import gov.nih.nci.cagrid.gts.bean.Lifetime;
 import gov.nih.nci.cagrid.gts.bean.Permission;
 import gov.nih.nci.cagrid.gts.bean.PermissionFilter;
 import gov.nih.nci.cagrid.gts.bean.Role;
@@ -880,35 +881,39 @@ public class TestGTS extends TestCase {
 			assertEquals(1, gts.getAuthorities().length);
 			assertEquals(auth, gts.getAuthorities()[0]);
 
-			int taCount = 5;
-			int currAuthCount = 2;
+			int taCount = 2;
 			TrustedAuthority[] ta = new TrustedAuthority[taCount];
-			for (int j = 0; j < 5; j++) {
+			for (int j = 0; j < taCount; j++) {
 				ta[j] = getTrustedAuthority();
-				if (j < currAuthCount) {
-					gts.addTrustedAuthority(ta[j], ADMIN_USER);
-					TrustedAuthorityFilter f = new TrustedAuthorityFilter();
-					assertEquals((j + 1), gts.findTrustAuthorities(f).length);
-					f.setTrustedAuthorityName(ta[j].getTrustedAuthorityName());
-					assertEquals(1, gts.findTrustAuthorities(f).length);
-					assertEquals(ta[j], gts.findTrustAuthorities(f)[0]);
-				} else {
-					ta[j].setIsAuthority(Boolean.FALSE);
-					ta[j].setAuthorityTrustService(authName);
-				}
+				gts.addTrustedAuthority(ta[j], ADMIN_USER);
+				TrustedAuthorityFilter f = new TrustedAuthorityFilter();
+				assertEquals((j + 1), gts.findTrustAuthorities(f).length);
+				f.setTrustedAuthorityName(ta[j].getTrustedAuthorityName());
+				assertEquals(1, gts.findTrustAuthorities(f).length);
+				assertEquals(ta[j], gts.findTrustAuthorities(f)[0]);
 			}
-			
-			gts.synchronizeTrustedAuthorities(authName,ta);
-			
+
+			int remoteTaCount = 3;
+			TrustedAuthority[] remoteta = new TrustedAuthority[remoteTaCount];
+			for (int j = 0; j < remoteTaCount; j++) {
+				remoteta[j] = getTrustedAuthority();
+				remoteta[j].setIsAuthority(Boolean.FALSE);
+				remoteta[j].setAuthorityTrustService(authName);
+			}
+
+			gts.synchronizeTrustedAuthorities(authName, remoteta);
+
+			// Test After Sync
 			TrustedAuthorityFilter f = new TrustedAuthorityFilter();
-			assertEquals(taCount, gts.findTrustAuthorities(f).length);
-			//Test After Sync
-			
-			//Test After Expiration
-			
-			//Test After Resync and after Longer Expiration
-			
-			//Test after resync after delete
+			f.setLifetime(Lifetime.Valid);
+			f.setStatus(Status.Trusted);
+			assertEquals(taCount + remoteTaCount, gts.findTrustAuthorities(f).length);
+
+			// Test After Expiration
+
+			// Test After Resync and after Longer Expiration
+
+			// Test after resync after delete
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
