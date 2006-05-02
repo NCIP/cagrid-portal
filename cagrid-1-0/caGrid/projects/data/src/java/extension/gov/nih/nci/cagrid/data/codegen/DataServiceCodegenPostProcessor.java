@@ -47,14 +47,6 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 		// Find the service implementation file
 		File serviceSrcDir = new File(info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "src");
 		final String implFileName = info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + "Impl.java";
-		// search the service dir for the impl file
-		/*
-		File[] implFiles = serviceSrcDir.listFiles(new FileFilter() {
-			public boolean accept(File pathname) {
-				return pathname.getName().equals(implFileName);
-			}
-		});
-		*/
 		List files = Utils.recursiveListFiles(serviceSrcDir, new FileFilter() {
 			public boolean accept(File pathname) {
 				return pathname.getName().equals(implFileName);
@@ -100,7 +92,19 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 		startIndex = implClass.indexOf("{", startIndex);
 		startIndex++;
 		// find the end of the method body
-		int endIndex = implClass.indexOf("}", startIndex);
+		// start counting open and closed brackets until I reach zero.  That's the end of the query method
+		int endIndex = startIndex;
+		int brackets = 1;
+		while (brackets != 0) {
+			char c = implClass.charAt(endIndex);
+			if (c == '{') {
+				brackets++;
+			} else if (c == '}') {
+				brackets--;
+			}
+			endIndex++;
+		}
+		endIndex--; // get off the last bracket
 		// trim out the existing method body
 		implClass.delete(startIndex, endIndex);
 		// insert the new method body
