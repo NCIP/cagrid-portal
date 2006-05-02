@@ -67,6 +67,7 @@ public class AddComplexMethodWithFaultStep extends Step {
 		NamespaceType type = new NamespaceType();
 		type.setLocation("." + File.separator + "bookstore.xsd");
 		type.setNamespace("gme://projectmobius.org/1/BookStore");
+		type.setPackageName("projectmobius.org");
 		SchemaElementType etype = new SchemaElementType();
 		etype.setType("Book");
 		SchemaElementType[] etypeArr = new SchemaElementType[1];
