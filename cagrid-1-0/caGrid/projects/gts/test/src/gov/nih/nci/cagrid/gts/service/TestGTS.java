@@ -859,6 +859,60 @@ public class TestGTS extends TestCase {
 	}
 
 
+	public void testSyncTrustedAuthoritiesOverlappingGTSAuthorities() {
+		GTS gts = null;
+		try {
+			GTSConfiguration conf = Utils.getGTSConfiguration();
+			gts = new GTS(conf, GTS_URI);
+			// Make sure we start fresh
+			gts.destroy();
+
+			// Add the admin user
+			PermissionBootstapper pb = new PermissionBootstapper(conf);
+			pb.addAdminUser(ADMIN_USER);
+			addTrustLevels(gts, ADMIN_USER);
+
+			int authorityCount = 3;
+			AuthorityGTS[] auths = new AuthorityGTS[authorityCount];
+			for (int i = 0; i < authorityCount; i++) {
+				String authName = GTS_URI + " Authority " + (i + 1);
+				auths[i] = getAuthority(authName, (i + 1));
+				gts.addAuthority(auths[i], ADMIN_USER);
+				AuthorityGTS[] list = gts.getAuthorities();
+				assertEquals((i + 1), list.length);
+				for (int j = 0; j <= i; j++) {
+					assertEquals(auths[j], list[j]);
+				}
+
+			}
+			/*
+			 * int taCount = 2; TrustedAuthority[] ta = new
+			 * TrustedAuthority[taCount]; for (int j = 0; j < taCount; j++) {
+			 * ta[j] = getTrustedAuthority(); gts.addTrustedAuthority(ta[j],
+			 * ADMIN_USER); TrustedAuthorityFilter f = new
+			 * TrustedAuthorityFilter(); assertEquals((j + 1),
+			 * gts.findTrustAuthorities(f).length);
+			 * f.setTrustedAuthorityName(ta[j].getTrustedAuthorityName());
+			 * assertEquals(1, gts.findTrustAuthorities(f).length);
+			 * assertEquals(ta[j], gts.findTrustAuthorities(f)[0]); }
+			 */
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			if (gts != null) {
+				try {
+					gts.destroy();
+				} catch (Exception e) {
+					FaultUtil.printFault(e);
+				}
+			}
+		}
+
+	}
+
+
 	public void testSyncTrustedAuthoritiesWithSingleAuthorityGTS() {
 		GTS gts = null;
 		try {
@@ -911,7 +965,7 @@ public class TestGTS extends TestCase {
 
 			// Test After Expiration
 			TrustedAuthorityFilter f1 = new TrustedAuthorityFilter();
-			assertEquals(taCount+remoteTaCount, gts.findTrustAuthorities(f1).length);
+			assertEquals(taCount + remoteTaCount, gts.findTrustAuthorities(f1).length);
 			f1.setLifetime(Lifetime.Valid);
 			f1.setStatus(Status.Trusted);
 			assertEquals(taCount, gts.findTrustAuthorities(f1).length);
@@ -923,7 +977,6 @@ public class TestGTS extends TestCase {
 			gts.updateAuthority(auth, ADMIN_USER);
 
 			gts.synchronizeTrustedAuthorities(authName, remoteta);
-			
 
 			// Test After Resync and after Longer Expiration
 			TrustedAuthorityFilter f2 = new TrustedAuthorityFilter();
@@ -936,8 +989,6 @@ public class TestGTS extends TestCase {
 			assertEquals(remoteTaCount, gts.findTrustAuthorities(f2).length);
 			f2.setSourceTrustService(authName);
 			assertEquals(remoteTaCount, gts.findTrustAuthorities(f2).length);
-			
-			
 
 			// Test after resync after delete
 			int remoteTaCount2 = 2;
@@ -972,7 +1023,6 @@ public class TestGTS extends TestCase {
 				}
 			}
 		}
-
 	}
 
 
@@ -1028,7 +1078,7 @@ public class TestGTS extends TestCase {
 	private AuthorityGTS getAuthority(String uri, int priority, TrustedAuthorityTimeToLive ttl) {
 		AuthorityGTS a1 = new AuthorityGTS();
 		a1.setServiceURI(uri);
-		a1.setPriority(1);
+		a1.setPriority(priority);
 		a1.setPerformAuthorization(true);
 		a1.setServiceIdentity(uri);
 		a1.setSyncTrustLevels(true);
