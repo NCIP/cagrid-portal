@@ -1,0 +1,3 @@
+ http\://workflow.cagrid.nci.nih.gov//WorkFlowManagementService=gov.nih.nci.cagrid.workflow.management.stubs
+http\://workflow.cagrid.nci.nih.gov//WorkFlowManagementService/bindings=gov.nih.nci.cagrid.workflow.management.stubs.bindings
+http\://workflow.cagrid.nci.nih.gov//WorkFlowManagementService/service=gov.nih.nci.cagrid.workflow.management.stubs.service
