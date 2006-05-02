@@ -28,8 +28,6 @@
 					writtenNamespaces.add(namespace.getRaw());
 					if (namespaceInformation.getNamespace().getPackageName() != null && !namespaceInformation.getNamespace().getPackageName().equals("")) {
 						newLine = namespace.getRaw() + "=" + namespaceInformation.getNamespace().getPackageName();
-					} else {
-						newLine = namespace.getRaw() + "=" + CommonTools.getPackageName(namespace);
 					}
 						
 					// turns http: into http\:

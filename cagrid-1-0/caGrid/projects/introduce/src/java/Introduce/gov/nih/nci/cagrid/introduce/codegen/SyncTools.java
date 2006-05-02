@@ -13,7 +13,6 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
-import gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods;
 import gov.nih.nci.cagrid.introduce.codegen.resource.SyncResource;
 import gov.nih.nci.cagrid.introduce.codegen.security.SyncSecurity;
 import gov.nih.nci.cagrid.introduce.codegen.serializers.SyncSerialization;
@@ -54,7 +53,6 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.projectmobius.common.MalformedNamespaceException;
-import org.projectmobius.common.Namespace;
 
 
 /**
@@ -194,10 +192,6 @@ public class SyncTools {
 		if (info.getNamespaces() != null && info.getNamespaces().getNamespace() != null) {
 			for (int i = 0; i < info.getNamespaces().getNamespace().length; i++) {
 				NamespaceType ntype = info.getNamespaces().getNamespace(i);
-				if (ntype.getNamespace() != null && !ntype.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)
-					&& (ntype.getPackageName() == null || ntype.getPackageName().length() <= 0)) {
-					ntype.setPackageName(CommonTools.getPackageName(new Namespace(ntype.getNamespace())));
-				}
 				if (ntype.getSchemaElement() != null) {
 					for (int j = 0; j < ntype.getSchemaElement().length; j++) {
 						SchemaElementType type = ntype.getSchemaElement(j);
