@@ -23,6 +23,8 @@ public class TestTrustLevelManager extends TestCase implements TrustLevelStatus 
 
 	private TrustLevel ref;
 
+	private final static String GTS_URI = "localhost";
+
 
 	public TestTrustLevelManager() {
 		ref = new TrustLevel();
@@ -31,7 +33,7 @@ public class TestTrustLevelManager extends TestCase implements TrustLevelStatus 
 
 
 	public void testCreateAndDestroy() {
-		TrustLevelManager trust = new TrustLevelManager(this, db);
+		TrustLevelManager trust = new TrustLevelManager(GTS_URI, this, db);
 		try {
 			trust.buildDatabase();
 			trust.destroy();
@@ -49,7 +51,7 @@ public class TestTrustLevelManager extends TestCase implements TrustLevelStatus 
 
 
 	public void testAddRemoveTrustLevel() {
-		TrustLevelManager trust = new TrustLevelManager(this, db);
+		TrustLevelManager trust = new TrustLevelManager(GTS_URI, this, db);
 		try {
 			TrustLevel level = new TrustLevel();
 			level.setName("One");
@@ -75,7 +77,7 @@ public class TestTrustLevelManager extends TestCase implements TrustLevelStatus 
 
 
 	public void testAddIllegalTrustLevel() {
-		TrustLevelManager trust = new TrustLevelManager(this, db);
+		TrustLevelManager trust = new TrustLevelManager(GTS_URI, this, db);
 		try {
 			TrustLevel level = new TrustLevel();
 			level.setName("One");
@@ -122,7 +124,7 @@ public class TestTrustLevelManager extends TestCase implements TrustLevelStatus 
 
 
 	public void testRemoveIllegalTrustLevel() {
-		TrustLevelManager trust = new TrustLevelManager(this, db);
+		TrustLevelManager trust = new TrustLevelManager(GTS_URI, this, db);
 		try {
 			TrustLevel level = new TrustLevel();
 			level.setName("One");
@@ -174,7 +176,7 @@ public class TestTrustLevelManager extends TestCase implements TrustLevelStatus 
 
 
 	public void testAddGetUpdateRemoveTrustLevels() {
-		TrustLevelManager trust = new TrustLevelManager(this, db);
+		TrustLevelManager trust = new TrustLevelManager(GTS_URI, this, db);
 		try {
 			int size = 5;
 			TrustLevel[] level = new TrustLevel[size];

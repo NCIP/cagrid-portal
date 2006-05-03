@@ -5,6 +5,7 @@ public class MetadataConfiguration {
 	private boolean performRegistration;
 
 
+
 	public boolean shouldPerformRegistration() {
 		return performRegistration;
 	}
@@ -23,5 +24,5 @@ public class MetadataConfiguration {
 	public void setRegistrationTemplateFile(String registrationTemplateFile) {
 		this.registrationTemplateFile = registrationTemplateFile;
 	}
-
+		
 }
