@@ -352,7 +352,6 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 							}
 						}
 					} else {
-						AuthorityGTS updateAuthority = authority.getAuthority(authorityServiceURI);
 						this.logger.debug("The trusted authority (" + levels[j].getName()
 							+ ") will be added with the authority (" + authorityServiceURI + ") as the source!!!");
 						levels[j].setIsAuthority(Boolean.FALSE);

@@ -65,9 +65,13 @@ public class GTSConfiguration implements AbstractMobiusConfiguration {
 
 	public static final String GTS_ID = "gts-internal-id";
 
+	public static final String SYNC_AUTHORITIES = "sync-authorities";
+
 	private ConnectionManager rootConnectionManager;
 
 	private String gtsInternalId;
+
+	private AuthoritySyncTime syncTime;
 
 
 	public void parse(MobiusResourceManager resourceManager, Element config) throws MobiusException {
@@ -80,6 +84,51 @@ public class GTSConfiguration implements AbstractMobiusConfiguration {
 		this.gtsInternalId = config.getChildText(GTS_ID);
 		if (gtsInternalId == null) {
 			throw new MobiusException("No internal id specified.");
+		}
+
+		Element sync = config.getChild(SYNC_AUTHORITIES, config.getNamespace());
+		if (sync != null) {
+			String shours = sync.getAttributeValue("hours");
+			if (shours == null) {
+				throw new MobiusException("In the " + SYNC_AUTHORITIES + " configuration element, no hours specified.");
+			}
+
+			int hours = 0;
+			try {
+				hours = Integer.valueOf(shours).intValue();
+			} catch (Exception e) {
+				throw new MobiusException("In the " + SYNC_AUTHORITIES
+					+ " configuration element, hours must be specified as an integer.");
+			}
+
+			String sminutes = sync.getAttributeValue("minutes");
+			if (sminutes == null) {
+				throw new MobiusException("In the " + SYNC_AUTHORITIES
+					+ " configuration element, no minutes specified.");
+			}
+
+			int minutes = 0;
+			try {
+				minutes = Integer.valueOf(sminutes).intValue();
+			} catch (Exception e) {
+				throw new MobiusException("In the " + SYNC_AUTHORITIES
+					+ " configuration element, minutes must be specified as an integer.");
+			}
+
+			String sseconds = sync.getAttributeValue("seconds");
+			if (sseconds == null) {
+				throw new MobiusException("In the " + SYNC_AUTHORITIES
+					+ " configuration element, no seconds specified.");
+			}
+
+			int seconds = 0;
+			try {
+				seconds = Integer.valueOf(sseconds).intValue();
+			} catch (Exception e) {
+				throw new MobiusException("In the " + SYNC_AUTHORITIES
+					+ " configuration element, seconds must be specified as an integer.");
+			}
+			syncTime = new AuthoritySyncTime(hours, minutes, seconds);
 		}
 	}
 
@@ -95,4 +144,10 @@ public class GTSConfiguration implements AbstractMobiusConfiguration {
 	public ConnectionManager getConnectionManager() {
 		return rootConnectionManager;
 	}
+
+
+	public AuthoritySyncTime getAuthoritySyncTime() {
+		return syncTime;
+	}
+
 }
