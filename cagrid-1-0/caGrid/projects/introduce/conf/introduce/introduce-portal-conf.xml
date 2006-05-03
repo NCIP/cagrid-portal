@@ -26,7 +26,7 @@
 				<component>
 					<title>Modify Service</title>
 					<description>Modify Service Skeleton</description>
-					<class>gov.nih.nci.cagrid.introduce.portal.modification.ModificationViewer</class>
+					<class>gov.nih.nci.cagrid.introduce.portal.modification.NewModificationViewer</class>
 					<icon>/cog_edit.png</icon>
 					<dimensions>
 						<width>0</width>

@@ -85,9 +85,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JPanel inputButtonPanel = null;
 
-	private MethodsTable methodsTable;
+	//private MethodsTable methodsTable;
 
-	private int currentRow;
+	//private int currentRow;
 
 	private JButton cancelButton = null;
 
@@ -154,12 +154,12 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JPanel exceptionsInputButtonPanel = null;
 
 
-	public MethodViewer(MethodType method, ServiceInformation info, File schemaDir, MethodsTable table, int selectedRow) {
+	public MethodViewer(MethodType method, ServiceInformation info, File schemaDir) {
 		this.info = info;
 		this.method = method;
 		this.schemaDir = schemaDir;
-		this.methodsTable = table;
-		this.currentRow = selectedRow;
+		//this.methodsTable = table;
+		//this.currentRow = selectedRow;
 		this.setTitle("Modify Method");
 		initialize();
 	}
@@ -366,7 +366,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 						method.setMethodSecurity(((MethodSecurityPanel) securityContainerPanel).getMethodSecurity());
 
-						methodsTable.refreshRowFromMethodType(currentRow);
+						//methodsTable.refreshRowFromMethodType(currentRow);
 
 						// process the inputs
 						MethodTypeInputs inputs = new MethodTypeInputs();
@@ -497,7 +497,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JTextField getNameField() {
 		if (nameField == null) {
 			nameField = new JTextField();
-			nameField.setText(methodsTable.getSelectedMethodType().getName());
+			nameField.setText(method.getName());
+			//nameField.setText(methodsTable.getSelectedMethodType().getName());
 		}
 		return nameField;
 	}

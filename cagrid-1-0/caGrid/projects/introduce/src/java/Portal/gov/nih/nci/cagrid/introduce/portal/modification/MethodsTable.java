@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
 import java.io.File;
 import java.util.Properties;
@@ -120,55 +121,7 @@ public class MethodsTable extends PortalBaseTable {
 
 
 		public String toString() {
-			// assume its void to start with
-			String output = "void";
-
-			MethodTypeOutput outputType = this.method.getOutput();
-			if (outputType != null) {
-				// use classname if set, else use schema type
-				if (outputType.getQName() != null && outputType.getQName().getLocalPart() != null
-					&& !outputType.getQName().getLocalPart().trim().equals("")) {
-					output = outputType.getQName().getLocalPart();
-				}
-
-				// add array notation if its an array
-				if (outputType.isIsArray()) {
-					output += "[]";
-				}
-			}
-
-			String input = "";
-			MethodTypeInputs inputs = this.method.getInputs();
-			if (inputs != null) {
-				MethodTypeInputsInput[] inputarr = inputs.getInput();
-				if (inputarr != null) {
-					for (int i = 0; i < inputarr.length; i++) {
-						MethodTypeInputsInput inputType = inputarr[i];
-						// use classname if set, else use schema type
-						if (inputType.getQName() != null && inputType.getQName().getLocalPart() != null
-							&& !inputType.getQName().getLocalPart().trim().equals("")) {
-							if (!input.equals("")) {
-								input += ", ";
-							}
-							input += inputType.getQName().getLocalPart();
-						} else {
-							// why would this be the case?
-							continue;
-						}
-
-						// add array notation if its an array
-						if (inputType.isIsArray()) {
-							input += "[]";
-						}
-
-						input += " " + inputType.getName();
-					}
-				}
-			}
-
-			output += "  " + method.getName() + "(" + input + ")";
-
-			return output;
+			return CommonTools.methodTypeToString(this.method);
 		}
 	}
 

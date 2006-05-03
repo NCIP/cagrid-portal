@@ -30,6 +30,7 @@ import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
+import gov.nih.nci.cagrid.introduce.portal.modification.resources.ResourcesJTree;
 import gov.nih.nci.cagrid.introduce.portal.modification.security.ServiceSecurityPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeConfigurePanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeTreeNode;
@@ -61,6 +62,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.JTree;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -75,7 +77,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  */
-public class ModificationViewer extends GridPortalComponent {
+public class NewModificationViewer extends GridPortalComponent {
 
 	private javax.swing.JPanel jContentPane = null;
 	private JPanel mainPanel = null;
@@ -140,12 +142,16 @@ public class ModificationViewer extends GridPortalComponent {
 	private JLabel servicePropertiesKeyLabel = null;
 	private JLabel servicePropertiesValueLabel = null;
 	private JPanel servicePropertiesButtonPanel = null;
+	private JPanel resourceesTabbedPanel = null;
+	private JPanel resourcesPanel = null;
+	private JScrollPane resourcesScrollPane = null;
+	private ResourcesJTree resourcesJTree = null;
 
 
 	/**
 	 * This is the default constructor
 	 */
-	public ModificationViewer() {
+	public NewModificationViewer() {
 		super();
 		// throw a thread out so that i can make sure that if the chooser is
 		// canceled i can dispose of this frame
@@ -154,7 +160,7 @@ public class ModificationViewer extends GridPortalComponent {
 	}
 
 
-	public ModificationViewer(File methodsDirectory) {
+	public NewModificationViewer(File methodsDirectory) {
 		super();
 		this.methodsDirectory = methodsDirectory;
 		try {
@@ -176,7 +182,7 @@ public class ModificationViewer extends GridPortalComponent {
 					e.printStackTrace();
 				}
 				if (methodsDirectory == null) {
-					ModificationViewer.this.dispose();
+					NewModificationViewer.this.dispose();
 					return;
 				}
 				File file = new File(methodsDirectory.getAbsolutePath() + File.separator + "introduce.xml");
@@ -185,13 +191,13 @@ public class ModificationViewer extends GridPortalComponent {
 						initialize();
 					} catch (Exception e) {
 						e.printStackTrace();
-						JOptionPane.showMessageDialog(ModificationViewer.this, e.getMessage());
-						ModificationViewer.this.dispose();
+						JOptionPane.showMessageDialog(NewModificationViewer.this, e.getMessage());
+						NewModificationViewer.this.dispose();
 					}
 				} else {
-					JOptionPane.showMessageDialog(ModificationViewer.this, "Directory "
+					JOptionPane.showMessageDialog(NewModificationViewer.this, "Directory "
 						+ methodsDirectory.getAbsolutePath() + " does not seem to be an introduce service");
-					ModificationViewer.this.dispose();
+					NewModificationViewer.this.dispose();
 				}
 			}
 		};
@@ -758,7 +764,7 @@ public class ModificationViewer extends GridPortalComponent {
 			undoButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 
-					int decision = JOptionPane.showConfirmDialog(ModificationViewer.this,
+					int decision = JOptionPane.showConfirmDialog(NewModificationViewer.this,
 						"Are you sure you wish to roll back.");
 					if (decision == JOptionPane.OK_OPTION) {
 						BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance()
@@ -778,10 +784,10 @@ public class ModificationViewer extends GridPortalComponent {
 									}
 									dispose();
 									PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-										new ModificationViewer(methodsDirectory));
+										new NewModificationViewer(methodsDirectory));
 								} catch (Exception e1) {
 									// e1.printStackTrace();
-									JOptionPane.showMessageDialog(ModificationViewer.this,
+									JOptionPane.showMessageDialog(NewModificationViewer.this,
 										"Unable to roll back, there may be no older versions available");
 									return;
 								}
@@ -811,10 +817,12 @@ public class ModificationViewer extends GridPortalComponent {
 			contentTabbedPane.addTab("Operations", null, getMethodsPanel(), null);
 			contentTabbedPane.addTab("Metadata", null, getMetadataPanel(), null);
 			contentTabbedPane.addTab("Service Properties", null, getServicePropertiesPanel(), null);
+			contentTabbedPane.addTab("Service Contexts", null, getResourceesTabbedPanel(), null);
 			contentTabbedPane.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent e) {
 					getNamespaceJTree().setNamespaces(info.getNamespaces());
 					getMetadataNamespacesJTree().setNamespaces(info.getNamespaces());
+					getResourcesJTree().setServices(info.getServices());
 				}
 			});
 			// diable the metadata tab if they've specified not to sync metadata
@@ -842,7 +850,7 @@ public class ModificationViewer extends GridPortalComponent {
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
-						JOptionPane.showMessageDialog(ModificationViewer.this, "Cannot load extension: "
+						JOptionPane.showMessageDialog(NewModificationViewer.this, "Cannot load extension: "
 							+ extDtype.getDisplayName());
 					}
 				}
@@ -1227,7 +1235,7 @@ public class ModificationViewer extends GridPortalComponent {
 					if (type != null) {
 						getNamespaceJTree().addNode(type);
 					} else {
-						JOptionPane.showMessageDialog(ModificationViewer.this, "Error retrieving schema.");
+						JOptionPane.showMessageDialog(NewModificationViewer.this, "Error retrieving schema.");
 					}
 				}
 			});
@@ -1256,7 +1264,7 @@ public class ModificationViewer extends GridPortalComponent {
 							}
 						}
 					} catch (Exception ex) {
-						JOptionPane.showMessageDialog(ModificationViewer.this, "Please select namespace to Remove");
+						JOptionPane.showMessageDialog(NewModificationViewer.this, "Please select namespace to Remove");
 					}
 				}
 			});
@@ -1456,7 +1464,7 @@ public class ModificationViewer extends GridPortalComponent {
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
-						JOptionPane.showMessageDialog(ModificationViewer.this, "Error loading discovery type: "
+						JOptionPane.showMessageDialog(NewModificationViewer.this, "Error loading discovery type: "
 							+ dd.getDisplayName());
 					}
 				}
@@ -1467,7 +1475,7 @@ public class ModificationViewer extends GridPortalComponent {
 
 
 	private void saveModifications() {
-		int confirmed = JOptionPane.showConfirmDialog(ModificationViewer.this, "Are you sure you want to save?",
+		int confirmed = JOptionPane.showConfirmDialog(NewModificationViewer.this, "Are you sure you want to save?",
 			"Confirm Save", JOptionPane.YES_NO_OPTION);
 		if (confirmed == JOptionPane.OK_OPTION) {
 			try {
@@ -1499,6 +1507,10 @@ public class ModificationViewer extends GridPortalComponent {
 							ResourcePropertyType metadata = metadataTable.getRowData(i);
 							metadataArray[i] = metadata;
 						}
+						ResourcePropertiesListType list = new ResourcePropertiesListType();
+						list.setResourceProperty(metadataArray);
+						introService.getServices().getService(0).setResourcePropertiesList(list);
+						
 
 						introService.setServiceSecurity(securityPanel.getServiceSecurity());
 
@@ -1711,7 +1723,7 @@ public class ModificationViewer extends GridPortalComponent {
 						prop.setValue(getServicePropertyValueTextField().getText());
 						getServicePropertiesTable().addRow(prop);
 					} else {
-						JOptionPane.showMessageDialog(ModificationViewer.this,
+						JOptionPane.showMessageDialog(NewModificationViewer.this,
 							"You must at least enter a key name for the property");
 					}
 				}
@@ -1794,6 +1806,77 @@ public class ModificationViewer extends GridPortalComponent {
 			servicePropertiesButtonPanel.add(getAddServiceProperyButton(), gridBagConstraints37);
 		}
 		return servicePropertiesButtonPanel;
+	}
+
+
+	/**
+	 * This method initializes servicesTabbedPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getResourceesTabbedPanel() {
+		if (resourceesTabbedPanel == null) {
+			GridBagConstraints gridBagConstraints45 = new GridBagConstraints();
+			gridBagConstraints45.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints45.gridy = 0;
+			gridBagConstraints45.weightx = 1.0D;
+			gridBagConstraints45.weighty = 1.0D;
+			gridBagConstraints45.gridx = 1;
+			resourceesTabbedPanel = new JPanel();
+			resourceesTabbedPanel.setLayout(new GridBagLayout());
+			resourceesTabbedPanel.add(getResourcesPanel(), gridBagConstraints45);
+		}
+		return resourceesTabbedPanel;
+	}
+
+
+	/**
+	 * This method initializes resourcesPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getResourcesPanel() {
+		if (resourcesPanel == null) {
+			GridBagConstraints gridBagConstraints46 = new GridBagConstraints();
+			gridBagConstraints46.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints46.gridx = 0;
+			gridBagConstraints46.gridy = 0;
+			gridBagConstraints46.weightx = 1.0;
+			gridBagConstraints46.weighty = 1.0;
+			gridBagConstraints46.insets = new java.awt.Insets(2,2,2,2);
+			resourcesPanel = new JPanel();
+			resourcesPanel.setLayout(new GridBagLayout());
+			resourcesPanel.add(getResourcesScrollPane(), gridBagConstraints46);
+		}
+		return resourcesPanel;
+	}
+
+
+	/**
+	 * This method initializes resourcesScrollPane	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getResourcesScrollPane() {
+		if (resourcesScrollPane == null) {
+			resourcesScrollPane = new JScrollPane();
+			resourcesScrollPane.setPreferredSize(new java.awt.Dimension(252,84));
+			resourcesScrollPane.setViewportView(getResourcesJTree());
+		}
+		return resourcesScrollPane;
+	}
+
+
+	/**
+	 * This method initializes resourcesJTree	
+	 * 	
+	 * @return javax.swing.JTree	
+	 */
+	private ResourcesJTree getResourcesJTree() {
+		if (resourcesJTree == null) {
+			resourcesJTree = new ResourcesJTree(info.getServices(),info);
+		}
+		return resourcesJTree;
 	}
 
 } // @jve:decl-index=0:visual-constraint="10,10"
