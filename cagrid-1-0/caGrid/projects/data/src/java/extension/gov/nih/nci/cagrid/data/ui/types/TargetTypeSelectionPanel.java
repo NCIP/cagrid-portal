@@ -124,6 +124,18 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 					addTreeNamespaceToServiceDescription();
 				}
 			});
+			// get any namespace type that's not the CQL or W3C namespace
+			for (int i = 0; i < getServiceInfo().getNamespaces().getNamespace().length; i++) {
+				NamespaceType ns = getServiceInfo().getNamespaces().getNamespace(i);
+				if (!(ns.getNamespace().equals(DataServiceConstants.CQL_QUERY_URI) ||
+					ns.getNamespace().equals(DataServiceConstants.CQL_RESULT_SET_URI) ||
+					ns.getNamespace().equals(IntroduceConstants.W3CNAMESPACE))) {
+					typesTree.setNamespace(ns);
+					// check the schema types on the tree so they end up in
+					// the types table
+					typesTree.checkSchemaNodes();
+				}
+			}
 		}
 		return typesTree;
 	}

@@ -51,6 +51,17 @@ public class TargetTypesTree extends JTree {
 	}
 	
 	
+	public void checkSchemaNodes() {
+		DomainTreeNode domainNode = (DomainTreeNode) ((DefaultTreeModel) getModel()).getRoot();
+		if (domainNode != null) {
+			for (int i = 0; i < domainNode.getChildCount(); i++) {
+				TypeTreeNode typeNode = (TypeTreeNode) domainNode.getChildAt(i);
+				typeNode.getCheckBox().setSelected(true);
+			}
+		}
+	}
+	
+	
 	public NamespaceType getOriginalNamespace() {
 		return namespaceType;
 	}
