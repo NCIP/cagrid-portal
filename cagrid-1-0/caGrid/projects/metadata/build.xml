@@ -52,8 +52,15 @@
 		<property name="mapping.dst" value="${build.dir}/NStoPkg.properties" />
 		<ant antfile="${ant.build.stubs}" target="mergePackageMapping" />
 		<property name="mapping.file" value="${mapping.dst}" />
+		<!-- Service Metadata -->
 		<ant antfile="${ant.build.stubs}" target="generateStubs">
 			<property name="source.stubs.dir" location="${schema.dest}/cagrid/types" />
+			<property name="wsdl.file" value="Metadata.wsdl" />
+			<property name="target.stubs.dir" location="${stubs.src}" />
+		</ant>
+		<!-- Data Service Metadata -->
+		<ant antfile="${ant.build.stubs}" target="generateStubs">
+			<property name="source.stubs.dir" location="${schema.dest}/cagrid/types/data" />
 			<property name="wsdl.file" value="Metadata.wsdl" />
 			<property name="target.stubs.dir" location="${stubs.src}" />
 		</ant>

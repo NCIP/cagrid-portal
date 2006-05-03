@@ -5,26 +5,11 @@ Core services (which aren't necessarily Gold compatible, as they don't expose op
 over caDSR-registered data types) will just not have any Operations defined.  The Operations
 will just represent the offical caBIG operations on the service.  All caBIG services will have
 some operations that aren't modeled in this metadata (such as ResourceProperty related operations), for core
-services, all operations may fall under that category.
+services, all operations may fall under that category.  This is a generalization of previous  (0.5) analytical
+metadata.  Now all services will have ServiceMetadata (0.5 equivalent to commom and analytical metadata).
+Specific common service types, such as data or vocabulary serivices, will have additional metadata types
+and those will be exposed as separate Resource Properties.
 
-Service will have optional Associations to other runtime, and service-specific metadata, such as
-  Data Service metadata, and research center information (previously exposed as common service metadata).
-This will allow us extensibility to also hang other types of metadata off of the service (such as LexBIG metadata, etc), 
-and allow DiscoveryClient extensions to make use of this feature for service-specific discovery (such as LexBIG).
-This will be an xsd:any in the XSD.
-
-Does this have ramifications on deserialization of metadata through the generic metadata utils client?
-If so, we could just make sure there are proper finer grain accessors as opposed to just returning the top element.
-For example, getServiceContexts(), getResearchCenterInfo(), etc 
-
-
-   
-TODO:
-====================
-- how to best add "type" extensions (such as data service metadata, lexgrid metadata, etc)
-  - add as separate resource property
-  - add an xsd:any to the ServiceMetadata for extensions 
-- model data service metadata
 
 XSD/Bean Generation
 ====================
