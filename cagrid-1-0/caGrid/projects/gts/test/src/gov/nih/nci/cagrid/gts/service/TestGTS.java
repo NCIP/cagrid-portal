@@ -1107,6 +1107,43 @@ public class TestGTS extends TestCase {
 			assertEquals(remote2[2], gts.findTrustAuthorities(getFilterForTA(remote2[2]))[0]);
 			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[2]))[0]
 				.getSourceTrustService());
+			
+			gts.removeAuthority(auth1.getServiceURI(),ADMIN_USER);
+			assertEquals(5, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+			
+			gts.synchronizeTrustedAuthorities(auth2.getServiceURI(), remote2);
+			
+			assertEquals(6, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(local[0])).length);
+			assertEquals(local[0], gts.findTrustAuthorities(getFilterForTA(local[0]))[0]);
+			assertEquals(local[0].getSourceTrustService(), gts.findTrustAuthorities(getFilterForTA(local[0]))[0]
+				.getSourceTrustService());
+
+			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(local[1])).length);
+			assertEquals(local[1], gts.findTrustAuthorities(getFilterForTA(local[1]))[0]);
+			assertEquals(local[1].getSourceTrustService(), gts.findTrustAuthorities(getFilterForTA(local[1]))[0]
+				.getSourceTrustService());
+
+			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(local[2])).length);
+			assertEquals(local[2], gts.findTrustAuthorities(getFilterForTA(local[2]))[0]);
+			assertEquals(local[2].getSourceTrustService(), gts.findTrustAuthorities(getFilterForTA(local[2]))[0]
+				.getSourceTrustService());
+
+			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote2[0])).length);
+			assertEquals(remote2[0], gts.findTrustAuthorities(getFilterForTA(remote2[0]))[0]);
+			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[0]))[0]
+				.getSourceTrustService());
+
+			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote2[1])).length);
+			assertEquals(remote2[1], gts.findTrustAuthorities(getFilterForTA(remote2[1]))[0]);
+			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[1]))[0]
+				.getSourceTrustService());
+
+			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote2[2])).length);
+			assertEquals(remote2[2], gts.findTrustAuthorities(getFilterForTA(remote2[2]))[0]);
+			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[2]))[0]
+				.getSourceTrustService());
+			
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

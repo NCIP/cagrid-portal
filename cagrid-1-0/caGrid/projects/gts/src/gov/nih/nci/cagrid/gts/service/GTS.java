@@ -177,8 +177,37 @@ public class GTS implements TrustLevelStatus, TrustLevelLookup {
 	public void removeAuthority(String serviceURI, String callerGridIdentity) throws GTSInternalFault,
 		InvalidAuthorityFault, PermissionDeniedFault {
 		checkServiceAdministrator(callerGridIdentity);
-		//TODO: REMOVE ALL RECORDS WITH THIS AUTHORITY
-		authority.removeAuthority(serviceURI);
+		try {
+			authority.removeAuthority(serviceURI);
+			TrustedAuthorityFilter f = new TrustedAuthorityFilter();
+			f.setSourceTrustService(serviceURI);
+			TrustedAuthority[] ta = this.trust.findTrustAuthorities(f);
+			boolean error = false;
+			StringBuffer elist = null;
+			for (int i = 0; i < ta.length; i++) {
+				try {
+					trust.removeTrustedAuthority(ta[i].getTrustedAuthorityName());
+				} catch (Exception ex) {
+					logger.error(ex);
+					if (elist == null) {
+						error = true;
+						elist = new StringBuffer("Unable to remove the trusted authorities:\n");
+
+					}
+					elist.append(ta[i].getTrustedAuthorityName() + "\n");
+
+				}
+			}
+			if (error) {
+				throw new Exception(elist.toString());
+			}
+		} catch (Exception e) {
+			logger.error(e);
+			GTSInternalFault fault = new GTSInternalFault();
+			fault.setFaultString("An following unexpected error occurred removing the authority " + serviceURI + ": "
+				+ e.getMessage());
+			throw fault;
+		}
 	}
 
 
