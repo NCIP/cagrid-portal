@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.data.cql3.cacore;
 
-import gov.nih.nci.cagrid.cqlquery3.NestedObjectType;
+import gov.nih.nci.cagrid.cqlquery3.Object;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResultsType;
 import gov.nih.nci.cagrid.data.InitializationException;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
@@ -36,7 +36,7 @@ public class CoreQueryProcessor extends CQLQueryProcessor {
 	}
 	
 
-	public CQLQueryResultsType processQuery(NestedObjectType cqlQuery) 
+	public CQLQueryResultsType processQuery(Object cqlQuery) 
 		throws MalformedQueryException, QueryProcessingException {
 		DetachedCriteria objectCriteria = ProcessorHelper.createQueryCriteria(cqlQuery);
 		List targetObjects = null;

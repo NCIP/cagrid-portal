@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.data.cql3;
 
-import gov.nih.nci.cagrid.cqlquery3.NestedObjectType;
+import gov.nih.nci.cagrid.cqlquery3.Object;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResultsType;
 import gov.nih.nci.cagrid.data.InitializationException;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
@@ -30,6 +30,6 @@ public abstract class CQLQueryProcessor {
 	}
 	
 	
-	public abstract CQLQueryResultsType processQuery(NestedObjectType cqlQuery) 
+	public abstract CQLQueryResultsType processQuery(Object cqlQuery) 
 		throws MalformedQueryException, QueryProcessingException;
 }

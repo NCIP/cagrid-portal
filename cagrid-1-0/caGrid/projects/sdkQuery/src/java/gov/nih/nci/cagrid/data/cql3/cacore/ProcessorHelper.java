@@ -1,11 +1,11 @@
 package gov.nih.nci.cagrid.data.cql3.cacore;
 
-import gov.nih.nci.cagrid.cqlquery3.AssociationType;
-import gov.nih.nci.cagrid.cqlquery3.AttributeType;
-import gov.nih.nci.cagrid.cqlquery3.GroupType;
-import gov.nih.nci.cagrid.cqlquery3.LogicalOperatorType;
-import gov.nih.nci.cagrid.cqlquery3.NestedObjectType;
-import gov.nih.nci.cagrid.cqlquery3.PredicateType;
+import gov.nih.nci.cagrid.cqlquery3.Association;
+import gov.nih.nci.cagrid.cqlquery3.Attribute;
+import gov.nih.nci.cagrid.cqlquery3.Group;
+import gov.nih.nci.cagrid.cqlquery3.LogicalOperator;
+import gov.nih.nci.cagrid.cqlquery3.Object;
+import gov.nih.nci.cagrid.cqlquery3.Predicate;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 
@@ -33,7 +33,7 @@ public class ProcessorHelper {
 	
 	private static Map restrictionFactories = null;
 
-	public static DetachedCriteria createQueryCriteria(NestedObjectType objectType) throws MalformedQueryException, QueryProcessingException {
+	public static DetachedCriteria createQueryCriteria(Object objectType) throws MalformedQueryException, QueryProcessingException {
 		// create criteria for the class
 		String objectName = objectType.getName();
 		Class objectClass = null;
@@ -68,7 +68,7 @@ public class ProcessorHelper {
 	}
 	
 	
-	private static Criterion handleAssociation(Class objectClass, AssociationType association) throws MalformedQueryException, QueryProcessingException {
+	private static Criterion handleAssociation(Class objectClass, Association association) throws MalformedQueryException, QueryProcessingException {
 		String role = association.getRoleName();
 		String associationType = association.getObject().getName();
 		if (role == null) {
@@ -95,7 +95,7 @@ public class ProcessorHelper {
 	}
 	
 	
-	private static void validateObjectChildren(NestedObjectType objectType) throws MalformedQueryException {
+	private static void validateObjectChildren(Object objectType) throws MalformedQueryException {
 		int childTypeCount = 0;
 		if (objectType.getAssociation() != null) {
 			childTypeCount++;
@@ -112,7 +112,7 @@ public class ProcessorHelper {
 	}
 	
 	
-	private static Criterion handleAttribute(AttributeType attrib) throws MalformedQueryException, QueryProcessingException {
+	private static Criterion handleAttribute(Attribute attrib) throws MalformedQueryException, QueryProcessingException {
 		String name = attrib.getName();
 		String value = attrib.getValue();
 		String predicate = attrib.getPredicate().getValue();
@@ -121,7 +121,7 @@ public class ProcessorHelper {
 			throw new MalformedQueryException("Predicate " + predicate + " is not valid or has no restriction factory");
 		}
 		try {
-			return (Criterion) factoryMethod.invoke(null, new Object[] {name, value});
+			return (Criterion) factoryMethod.invoke(null, new java.lang.Object[] {name, value});
 		} catch (Exception ex) {
 			throw new QueryProcessingException("Error generating criterion for attribute " + name + ":" + ex.getMessage(), ex);
 		}
@@ -133,16 +133,16 @@ public class ProcessorHelper {
 			restrictionFactories = new HashMap();
 			Class restrictionClass = Restrictions.class;
 			try {
-				Class[] paramClasses = {String.class, Object.class};
-				restrictionFactories.put(PredicateType._EQUAL_TO, restrictionClass.getMethod("eq", paramClasses));
-				restrictionFactories.put(PredicateType._GREATER_THAN, restrictionClass.getMethod("gt", paramClasses));
-				restrictionFactories.put(PredicateType._GREATER_THAN_EQUAL_TO, restrictionClass.getMethod("ge", paramClasses));
-				restrictionFactories.put(PredicateType._ISNOTNULL, restrictionClass.getMethod("isNotNull", paramClasses));
-				restrictionFactories.put(PredicateType._ISNULL, restrictionClass.getMethod("isNull", paramClasses));
-				restrictionFactories.put(PredicateType._LESS_THAN, restrictionClass.getMethod("lt", paramClasses));
-				restrictionFactories.put(PredicateType._LESS_THAN_EQUAL_TO, restrictionClass.getMethod("le", paramClasses));
-				restrictionFactories.put(PredicateType._LIKE, restrictionClass.getMethod("like", paramClasses));
-				restrictionFactories.put(PredicateType._NOT_EQUAL_TO, restrictionClass.getMethod("ne", paramClasses));
+				Class[] paramClasses = {String.class, java.lang.Object.class};
+				restrictionFactories.put(Predicate._EQUAL_TO, restrictionClass.getMethod("eq", paramClasses));
+				restrictionFactories.put(Predicate._GREATER_THAN, restrictionClass.getMethod("gt", paramClasses));
+				restrictionFactories.put(Predicate._GREATER_THAN_EQUAL_TO, restrictionClass.getMethod("ge", paramClasses));
+				restrictionFactories.put(Predicate._ISNOTNULL, restrictionClass.getMethod("isNotNull", paramClasses));
+				restrictionFactories.put(Predicate._ISNULL, restrictionClass.getMethod("isNull", paramClasses));
+				restrictionFactories.put(Predicate._LESS_THAN, restrictionClass.getMethod("lt", paramClasses));
+				restrictionFactories.put(Predicate._LESS_THAN_EQUAL_TO, restrictionClass.getMethod("le", paramClasses));
+				restrictionFactories.put(Predicate._LIKE, restrictionClass.getMethod("like", paramClasses));
+				restrictionFactories.put(Predicate._NOT_EQUAL_TO, restrictionClass.getMethod("ne", paramClasses));
 			} catch (NoSuchMethodException ex) {
 				throw new QueryProcessingException("Error loading restriction factories: " + ex.getMessage(), ex);
 			}
@@ -151,15 +151,16 @@ public class ProcessorHelper {
 	}
 	
 	
-	private static Junction handleGroup(Class objectClass, GroupType group) throws MalformedQueryException, QueryProcessingException {
+	private static Junction handleGroup(Class objectClass, Group group) throws MalformedQueryException, QueryProcessingException {
 		validateGroup(group);
 		Junction junction = null;
-		if (group.getLogicRelation().getValue().equals(LogicalOperatorType._AND)) {
+		if (group.getLogicRelation().getValue().equals(LogicalOperator._AND)) {
 			junction = Restrictions.conjunction();
-		} else if (group.getLogicRelation().getValue().equals(LogicalOperatorType._OR)) {
+		} else if (group.getLogicRelation().getValue().equals(LogicalOperator._OR)) {
 			junction = Restrictions.disjunction();
 		} else {
-			throw new MalformedQueryException("Logical operation " + group.getLogicRelation().getValue() + " not recognized.  Use either " + LogicalOperatorType._AND + " or " + LogicalOperatorType._OR);
+			throw new MalformedQueryException("Logical operation " + group.getLogicRelation().getValue() 
+				+ " not recognized.  Use either " + LogicalOperator._AND + " or " + LogicalOperator._OR);
 		}
 		
 		// attributes
@@ -181,7 +182,7 @@ public class ProcessorHelper {
 	}
 	
 	
-	private static void validateGroup(GroupType group) throws MalformedQueryException {
+	private static void validateGroup(Group group) throws MalformedQueryException {
 		// ensure there's at least two items in the group
 		int itemCount = 0;
 		if (group.getAssociation() != null) {
