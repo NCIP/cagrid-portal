@@ -34,6 +34,8 @@ import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.log4j.Logger;
 import org.globus.wsrf.impl.security.authorization.IdentityAuthorization;
 import org.globus.wsrf.impl.security.authorization.NoAuthorization;
+import org.projectmobius.common.MobiusPoolManager;
+import org.projectmobius.common.MobiusRunnable;
 
 
 /**
@@ -52,17 +54,31 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 	private TrustLevelManager trustLevelManager;
 	private GTSAuthorityManager authority;
 	private Logger logger;
+	private MobiusPoolManager threadManager;
 
 
 	public GTS(GTSConfiguration conf, String gtsURI) {
 		this.conf = conf;
 		this.gtsURI = gtsURI;
+		logger = Logger.getLogger(this.getClass().getName());
 		Database db = new Database(this.conf.getConnectionManager(), this.conf.getGTSInternalId());
 		trust = new TrustedAuthorityManager(this.gtsURI, this, db);
 		trustLevelManager = new TrustLevelManager(this.gtsURI, this, db);
 		permissions = new PermissionManager(db);
 		authority = new GTSAuthorityManager(db);
-		logger = Logger.getLogger(this.getClass().getName());
+		if (conf.getAuthoritySyncTime() != null) {
+			this.threadManager = new MobiusPoolManager();
+			MobiusRunnable runner = new MobiusRunnable() {
+				public void execute() {
+					synchronizeWithAuthorities();
+				}
+			};
+			try {
+				this.threadManager.executeInBackground(runner);
+			} catch (Exception e) {
+				logger.error(e);
+			}
+		}
 	}
 
 
@@ -499,52 +515,75 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 
 
 	private void synchronizeWithAuthorities() {
-		AuthorityGTS[] auths = null;
-		try {
-			auths = this.getAuthorities();
-		} catch (Exception ex) {
-			this.logger
-				.error("Error synchronizing with the authorities, could not obtain a list of authorities!!!", ex);
-			return;
-		}
-
-		TrustedAuthorityFilter filter = new TrustedAuthorityFilter();
-		filter.setStatus(Status.Trusted);
-		filter.setLifetime(Lifetime.Valid);
-
-		for (int i = 0; i < auths.length; i++) {
-			TrustedAuthority[] trusted = null;
-			try {
-				GridTrustServiceAddressingLocator locator = new GridTrustServiceAddressingLocator();
-				EndpointReferenceType endpoint = new EndpointReferenceType();
-				endpoint.setAddress(new Address(auths[i].getServiceURI()));
-				GridTrustServicePortType port = locator.getGridTrustServicePortTypePort(endpoint);
-				org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
-				stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT,
-					org.globus.wsrf.security.Constants.ENCRYPTION);
-				stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS, Boolean.TRUE);
-				if (auths[i].isPerformAuthorization()) {
-					IdentityAuthorization ia = new IdentityAuthorization(auths[i].getServiceIdentity());
-					stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, ia);
-				} else {
-					stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, NoAuthorization.getInstance());
+		if (conf.getAuthoritySyncTime() != null) {
+			long sleep = (conf.getAuthoritySyncTime().getSeconds() * 1000)
+				+ (conf.getAuthoritySyncTime().getMinutes() * 1000 * 60)
+				+ (conf.getAuthoritySyncTime().getHours() * 1000 * 60 * 60);
+			while (true) {
+				AuthorityGTS[] auths = null;
+				try {
+					auths = this.getAuthorities();
+				} catch (Exception ex) {
+					this.logger.error(
+						"Error synchronizing with the authorities, could not obtain a list of authorities!!!", ex);
+					return;
 				}
-				gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthorities params = new gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthorities();
-				gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesF fContainer = new gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesF();
-				fContainer.setTrustedAuthorityFilter(filter);
-				params.setF(fContainer);
-				gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesResponse boxedResult = port
-					.findTrustedAuthorities(params);
-				trusted = boxedResult.getTrustedAuthority();
 
-			} catch (Exception ex) {
-				this.logger.error("Error synchronizing with the authority " + auths[i].getServiceURI() + ": "
-					+ ex.getMessage(), ex);
-				continue;
+				TrustedAuthorityFilter filter = new TrustedAuthorityFilter();
+				filter.setStatus(Status.Trusted);
+				filter.setLifetime(Lifetime.Valid);
+
+				for (int i = 0; i < auths.length; i++) {
+					TrustLevel[] levels = null;
+					TrustedAuthority[] trusted = null;
+					try {
+						GridTrustServiceAddressingLocator locator = new GridTrustServiceAddressingLocator();
+						EndpointReferenceType endpoint = new EndpointReferenceType();
+						endpoint.setAddress(new Address(auths[i].getServiceURI()));
+						GridTrustServicePortType port = locator.getGridTrustServicePortTypePort(endpoint);
+						org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
+						stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT,
+							org.globus.wsrf.security.Constants.ENCRYPTION);
+						stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS, Boolean.TRUE);
+						if (auths[i].isPerformAuthorization()) {
+							IdentityAuthorization ia = new IdentityAuthorization(auths[i].getServiceIdentity());
+							stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, ia);
+						} else {
+							stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, NoAuthorization
+								.getInstance());
+						}
+
+						gov.nih.nci.cagrid.gts.stubs.GetTrustLevels params2 = new gov.nih.nci.cagrid.gts.stubs.GetTrustLevels();
+						gov.nih.nci.cagrid.gts.stubs.GetTrustLevelsResponse boxedResult2 = port.getTrustLevels(params2);
+						levels = boxedResult2.getTrustLevel();
+
+						// Find Trusted Authorities
+						gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthorities params = new gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthorities();
+						gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesF fContainer = new gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesF();
+						fContainer.setTrustedAuthorityFilter(filter);
+						params.setF(fContainer);
+						gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesResponse boxedResult = port
+							.findTrustedAuthorities(params);
+						trusted = boxedResult.getTrustedAuthority();
+
+					} catch (Exception ex) {
+						this.logger.error("Error synchronizing with the authority " + auths[i].getServiceURI() + ": "
+							+ ex.getMessage(), ex);
+						continue;
+					}
+
+					// Synchronize the Trust Levels
+					this.synchronizeTrustLevels(auths[i].getServiceURI(), levels);
+
+					// Synchronize the Trusted Authorities
+					this.synchronizeTrustedAuthorities(auths[i].getServiceURI(), trusted);
+				}
+				try {
+					Thread.sleep(sleep);
+				} catch (Exception e) {
+					logger.error(e);
+				}
 			}
-
-			// Synchronize the Trusted Authorities
-			this.synchronizeTrustedAuthorities(auths[i].getServiceURI(), trusted);
 		}
 	}
 }
