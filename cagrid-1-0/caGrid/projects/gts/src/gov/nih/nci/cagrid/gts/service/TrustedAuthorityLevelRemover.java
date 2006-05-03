@@ -10,6 +10,6 @@ import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public interface TrustLevelStatus {
-	public boolean isTrustLevelUsed(String name) throws GTSInternalFault;
+public interface TrustedAuthorityLevelRemover {
+	public void removeAssociatedTrustedAuthorities(String trustLevel) throws GTSInternalFault;
 }

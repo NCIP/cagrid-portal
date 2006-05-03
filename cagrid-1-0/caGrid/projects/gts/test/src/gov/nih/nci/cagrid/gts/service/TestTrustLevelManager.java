@@ -5,7 +5,6 @@ import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.common.Database;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault;
-import gov.nih.nci.cagrid.gts.stubs.InvalidTrustLevelFault;
 import gov.nih.nci.cagrid.gts.test.Utils;
 import junit.framework.TestCase;
 
@@ -17,7 +16,7 @@ import junit.framework.TestCase;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class TestTrustLevelManager extends TestCase implements TrustLevelStatus {
+public class TestTrustLevelManager extends TestCase implements TrustedAuthorityLevelRemover {
 
 	private Database db;
 
@@ -60,6 +59,42 @@ public class TestTrustLevelManager extends TestCase implements TrustLevelStatus 
 			assertEquals(1, trust.getTrustLevels().length);
 			assertEquals(true, trust.doesTrustLevelExist(level.getName()));
 			assertEquals(level, trust.getTrustLevel(level.getName()));
+			trust.removeTrustLevel(level.getName());
+			assertEquals(0, trust.getTrustLevels().length);
+			assertEquals(false, trust.doesTrustLevelExist(level.getName()));
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			try {
+				trust.destroy();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
+	public void testAddUpdateRemoveExternalTrustLevel() {
+		TrustLevelManager trust = new TrustLevelManager(GTS_URI, this, db);
+		try {
+			TrustLevel level = new TrustLevel();
+			level.setName("One");
+			level.setDescription("Trust Level One");
+			level.setIsAuthority(Boolean.FALSE);
+			level.setAuthorityTrustService("somehost");
+			level.setSourceTrustService("somehost");
+			trust.addTrustLevel(level, false);
+			assertEquals(1, trust.getTrustLevels().length);
+			assertEquals(true, trust.doesTrustLevelExist(level.getName()));
+			assertEquals(level, trust.getTrustLevel(level.getName()));
+			level.setAuthorityTrustService("someotherhost");
+			level.setSourceTrustService("someotherhost");
+			trust.updateTrustLevel(level, false);
+			assertEquals(1, trust.getTrustLevels().length);
+			assertEquals(true, trust.doesTrustLevelExist(level.getName()));
+			assertEquals(level, trust.getTrustLevel(level.getName()));
+
 			trust.removeTrustLevel(level.getName());
 			assertEquals(0, trust.getTrustLevels().length);
 			assertEquals(false, trust.doesTrustLevelExist(level.getName()));
@@ -123,44 +158,89 @@ public class TestTrustLevelManager extends TestCase implements TrustLevelStatus 
 	}
 
 
-	public void testRemoveIllegalTrustLevel() {
+	public void testAddIllegalExternalTrustLevel() {
 		TrustLevelManager trust = new TrustLevelManager(GTS_URI, this, db);
 		try {
 			TrustLevel level = new TrustLevel();
 			level.setName("One");
 			level.setDescription("Trust Level One");
-
+			level.setIsAuthority(Boolean.FALSE);
+			level.setAuthorityTrustService("somehost");
+			level.setSourceTrustService("somehost");
+			trust.addTrustLevel(level, false);
+			assertEquals(1, trust.getTrustLevels().length);
+			assertEquals(true, trust.doesTrustLevelExist(level.getName()));
+			assertEquals(level, trust.getTrustLevel(level.getName()));
 			try {
-				trust.removeTrustLevel(level.getName());
-				fail("Trust Level should not be able to be remove when it does not exist!!!");
-			} catch (InvalidTrustLevelFault f) {
+				trust.addTrustLevel(level, false);
+				fail("Trust Level should not be able to be added when it already exists!!!");
+			} catch (IllegalTrustLevelFault f) {
 
 			}
-
-			assertEquals(0, trust.getTrustLevels().length);
-			assertEquals(false, trust.doesTrustLevelExist(level.getName()));
-
-			trust.addTrustLevel(level);
 			assertEquals(1, trust.getTrustLevels().length);
 			assertEquals(true, trust.doesTrustLevelExist(level.getName()));
 			assertEquals(level, trust.getTrustLevel(level.getName()));
 
-			trust.addTrustLevel(ref);
-
-			assertEquals(2, trust.getTrustLevels().length);
-			assertEquals(true, trust.doesTrustLevelExist(ref.getName()));
-			assertEquals(ref, trust.getTrustLevel(ref.getName()));
+			trust.removeTrustLevel(level.getName());
+			assertEquals(0, trust.getTrustLevels().length);
+			assertEquals(false, trust.doesTrustLevelExist(level.getName()));
 
 			try {
-				trust.removeTrustLevel(ref.getName());
-				fail("Trust Level should not be able to be removed if it is referenced!!!");
+				trust.addTrustLevel(new TrustLevel(), false);
+				fail("Trust Level should not be able to be added without an name!!!");
+			} catch (IllegalTrustLevelFault f) {
+
+			}
+			assertEquals(0, trust.getTrustLevels().length);
+
+			// Test Adding without authority
+
+			try {
+				TrustLevel tl = new TrustLevel();
+				tl.setName("One");
+				tl.setDescription("Trust Level One");
+				tl.setAuthorityTrustService("somehost");
+				tl.setSourceTrustService("somehost");
+				trust.addTrustLevel(tl, false);
+				fail("Trust Level should not be able to be added!!!");
 			} catch (IllegalTrustLevelFault f) {
 
 			}
 
-			trust.removeTrustLevel(level.getName());
-			assertEquals(1, trust.getTrustLevels().length);
-			assertEquals(false, trust.doesTrustLevelExist(level.getName()));
+			assertEquals(0, trust.getTrustLevels().length);
+
+			// Test Adding without Authority Trust Service
+
+			try {
+				TrustLevel tl = new TrustLevel();
+				tl.setName("One");
+				tl.setDescription("Trust Level One");
+				tl.setIsAuthority(Boolean.FALSE);
+				tl.setSourceTrustService("somehost");
+				trust.addTrustLevel(tl, false);
+				fail("Trust Level should not be able to be added!!!");
+			} catch (IllegalTrustLevelFault f) {
+
+			}
+
+			assertEquals(0, trust.getTrustLevels().length);
+
+			// Test Adding without source trust service
+
+			try {
+				TrustLevel tl = new TrustLevel();
+				tl.setName("One");
+				tl.setDescription("Trust Level One");
+				tl.setIsAuthority(Boolean.FALSE);
+				tl.setAuthorityTrustService("somehost");
+				trust.addTrustLevel(tl, false);
+				fail("Trust Level should not be able to be added!!!");
+			} catch (IllegalTrustLevelFault f) {
+
+			}
+
+			assertEquals(0, trust.getTrustLevels().length);
+
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
@@ -171,7 +251,108 @@ public class TestTrustLevelManager extends TestCase implements TrustLevelStatus 
 				e.printStackTrace();
 			}
 		}
+	}
 
+
+	public void testUpdateIllegalTrustLevel() {
+		TrustLevelManager trust = new TrustLevelManager(GTS_URI, this, db);
+		try {
+			TrustLevel level = new TrustLevel();
+			level.setName("One");
+			level.setDescription("Trust Level One");
+			level.setIsAuthority(Boolean.TRUE);
+			level.setAuthorityTrustService("somehost");
+			level.setSourceTrustService("somehost");
+			trust.addTrustLevel(level, false);
+			assertEquals(1, trust.getTrustLevels().length);
+			assertEquals(true, trust.doesTrustLevelExist(level.getName()));
+			assertEquals(level, trust.getTrustLevel(level.getName()));
+
+			// Test changing the authority
+
+			TrustLevel tl = trust.getTrustLevel(level.getName());
+			try {
+				tl.setIsAuthority(Boolean.FALSE);
+				trust.updateTrustLevel(tl);
+				fail("Trust Level should not be able to be updated!!!");
+			} catch (IllegalTrustLevelFault f) {
+
+			}
+
+			assertEquals(1, trust.getTrustLevels().length);
+
+			tl = trust.getTrustLevel(level.getName());
+			try {
+				tl.setAuthorityTrustService("localhost");
+				trust.updateTrustLevel(tl);
+				fail("Trust Level should not be able to be updated!!!");
+			} catch (IllegalTrustLevelFault f) {
+
+			}
+
+			assertEquals(1, trust.getTrustLevels().length);
+
+			tl = trust.getTrustLevel(level.getName());
+			try {
+				tl.setSourceTrustService("localhost");
+				trust.updateTrustLevel(tl);
+				fail("Trust Level should not be able to be updated!!!");
+			} catch (IllegalTrustLevelFault f) {
+
+			}
+
+			assertEquals(1, trust.getTrustLevels().length);
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			try {
+				trust.destroy();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
+	public void testUpdateIllegalExternalTrustLevel() {
+		TrustLevelManager trust = new TrustLevelManager(GTS_URI, this, db);
+		try {
+			TrustLevel level = new TrustLevel();
+			level.setName("One");
+			level.setDescription("Trust Level One");
+			level.setIsAuthority(Boolean.TRUE);
+			level.setAuthorityTrustService("somehost");
+			level.setSourceTrustService("somehost");
+			trust.addTrustLevel(level, false);
+			assertEquals(1, trust.getTrustLevels().length);
+			assertEquals(true, trust.doesTrustLevelExist(level.getName()));
+			assertEquals(level, trust.getTrustLevel(level.getName()));
+
+			// Test changing the authority
+
+			TrustLevel tl = trust.getTrustLevel(level.getName());
+			try {
+				tl.setIsAuthority(Boolean.FALSE);
+				trust.updateTrustLevel(tl, false);
+				fail("Trust Level should not be able to be updated!!!");
+			} catch (IllegalTrustLevelFault f) {
+
+			}
+
+			assertEquals(1, trust.getTrustLevels().length);
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			try {
+				trust.destroy();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 
@@ -216,12 +397,9 @@ public class TestTrustLevelManager extends TestCase implements TrustLevelStatus 
 	}
 
 
-	public boolean isTrustLevelUsed(String name) throws GTSInternalFault {
-		if (ref.getName().equals(name)) {
-			return true;
-		} else {
-			return false;
-		}
+	public void removeAssociatedTrustedAuthorities(String trustLevel) throws GTSInternalFault {
+		// TODO Auto-generated method stub
+
 	}
 
 

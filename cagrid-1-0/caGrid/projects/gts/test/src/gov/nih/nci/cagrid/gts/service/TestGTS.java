@@ -511,15 +511,9 @@ public class TestGTS extends TestCase {
 			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
 			assertEquals(ta, gts.findTrustAuthorities(new TrustedAuthorityFilter())[0]);
 
-			// Now try and remove the trust level
-			try {
-				gts.removeTrustLevel(l1.getName(), ADMIN_USER);
-				fail("Should not be able to remove a trust level that is referenced by a Trusted Authority!!!");
-			} catch (IllegalTrustLevelFault f) {
-
-			}
-			gts.removeTrustedAuthority(ta.getTrustedAuthorityName(), ADMIN_USER);
 			gts.removeTrustLevel(l1.getName(), ADMIN_USER);
+
+			assertEquals(0, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -1107,12 +1101,12 @@ public class TestGTS extends TestCase {
 			assertEquals(remote2[2], gts.findTrustAuthorities(getFilterForTA(remote2[2]))[0]);
 			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[2]))[0]
 				.getSourceTrustService());
-			
-			gts.removeAuthority(auth1.getServiceURI(),ADMIN_USER);
+
+			gts.removeAuthority(auth1.getServiceURI(), ADMIN_USER);
 			assertEquals(5, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
-			
+
 			gts.synchronizeTrustedAuthorities(auth2.getServiceURI(), remote2);
-			
+
 			assertEquals(6, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(local[0])).length);
 			assertEquals(local[0], gts.findTrustAuthorities(getFilterForTA(local[0]))[0]);
@@ -1143,7 +1137,150 @@ public class TestGTS extends TestCase {
 			assertEquals(remote2[2], gts.findTrustAuthorities(getFilterForTA(remote2[2]))[0]);
 			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[2]))[0]
 				.getSourceTrustService());
-			
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			if (gts != null) {
+				try {
+					gts.destroy();
+				} catch (Exception e) {
+					FaultUtil.printFault(e);
+				}
+			}
+		}
+
+	}
+
+
+	public void testSyncTrusLevelsOverlappingGTSAuthorities() {
+		GTS gts = null;
+		try {
+			GTSConfiguration conf = Utils.getGTSConfiguration();
+			gts = new GTS(conf, GTS_URI);
+			// Make sure we start fresh
+			gts.destroy();
+
+			// Add the admin user
+			PermissionBootstapper pb = new PermissionBootstapper(conf);
+			pb.addAdminUser(ADMIN_USER);
+
+			// Create Authorities
+			AuthorityGTS auth1 = getAuthority(GTS_URI + " Authority 1", 1);
+			gts.addAuthority(auth1, ADMIN_USER);
+			AuthorityGTS auth2 = getAuthority(GTS_URI + " Authority 2", 2);
+			gts.addAuthority(auth2, ADMIN_USER);
+			AuthorityGTS[] list = gts.getAuthorities();
+			assertEquals(2, list.length);
+			assertEquals(auth1, list[0]);
+			assertEquals(auth2, list[1]);
+
+			// Now Add Trusted Authorities for local GTS
+			TrustLevel[] local = new TrustLevel[3];
+
+			for (int i = 0; i < 3; i++) {
+				local[i] = getTrustLevel();
+				gts.addTrustLevel(local[i], ADMIN_USER);
+				assertEquals((i + 1), gts.getTrustLevels().length);
+				assertTrue(gts.doesTrustLevelExist(local[i].getName()));
+			}
+
+			TrustLevel[] remote1 = new TrustLevel[3];
+			remote1[0] = getTrustLevel(local[2].getName());
+			remote1[0].setAuthorityTrustService(auth1.getServiceURI());
+			remote1[1] = getTrustLevel();
+			remote1[1].setAuthorityTrustService(auth1.getServiceURI());
+			remote1[2] = getTrustLevel();
+			remote1[2].setAuthorityTrustService(auth1.getServiceURI());
+
+			TrustLevel[] remote2 = new TrustLevel[3];
+			remote2[0] = getTrustLevel(remote1[2].getName());
+			remote2[0].setAuthorityTrustService(auth2.getServiceURI());
+			remote2[1] = getTrustLevel();
+			remote2[1].setAuthorityTrustService(auth2.getServiceURI());
+			remote2[2] = getTrustLevel();
+			remote2[2].setAuthorityTrustService(auth2.getServiceURI());
+
+			gts.synchronizeTrustLevels(auth2.getServiceURI(), remote2);
+
+			assertEquals(6, gts.getTrustLevels().length);
+			assertEquals(3, gts.getTrustLevels(GTS_URI).length);
+			assertEquals(0, gts.getTrustLevels(auth1.getServiceURI()).length);
+			assertEquals(3, gts.getTrustLevels(auth2.getServiceURI()).length);
+
+			for (int i = 0; i < local.length; i++) {
+				assertTrue(gts.doesTrustLevelExist(local[i].getName()));
+				assertEquals(local[i], gts.getTrustLevel(local[i].getName()));
+				assertEquals(local[i].getSourceTrustService(), gts.getTrustLevel(local[i].getName())
+					.getSourceTrustService());
+			}
+
+			for (int i = 0; i < remote2.length; i++) {
+				assertTrue(gts.doesTrustLevelExist(remote2[i].getName()));
+				assertEquals(remote2[i], gts.getTrustLevel(remote2[i].getName()));
+				assertEquals(remote2[i].getSourceTrustService(), gts.getTrustLevel(remote2[i].getName())
+					.getSourceTrustService());
+			}
+
+			gts.synchronizeTrustLevels(auth1.getServiceURI(), remote1);
+
+			assertEquals(7, gts.getTrustLevels().length);
+			assertEquals(3, gts.getTrustLevels(GTS_URI).length);
+			assertEquals(2, gts.getTrustLevels(auth1.getServiceURI()).length);
+			assertEquals(2, gts.getTrustLevels(auth2.getServiceURI()).length);
+
+			for (int i = 0; i < local.length; i++) {
+				assertTrue(gts.doesTrustLevelExist(local[i].getName()));
+				assertEquals(local[i], gts.getTrustLevel(local[i].getName()));
+				assertEquals(local[i].getSourceTrustService(), gts.getTrustLevel(local[i].getName())
+					.getSourceTrustService());
+			}
+
+			for (int i = 1; i < remote1.length; i++) {
+				assertTrue(gts.doesTrustLevelExist(remote1[i].getName()));
+				TrustLevel l = gts.getTrustLevel(remote1[i].getName());
+				assertEquals(remote1[i], l);
+				assertEquals(remote1[i].getSourceTrustService(), gts.getTrustLevel(remote1[i].getName())
+					.getSourceTrustService());
+			}
+
+			for (int i = 1; i < remote2.length; i++) {
+				assertTrue(gts.doesTrustLevelExist(remote2[i].getName()));
+				assertEquals(remote2[i], gts.getTrustLevel(remote2[i].getName()));
+				assertEquals(remote2[i].getSourceTrustService(), gts.getTrustLevel(remote2[i].getName())
+					.getSourceTrustService());
+			}
+
+			gts.removeAuthority(auth1.getServiceURI(), ADMIN_USER);
+			assertEquals(7, gts.getTrustLevels().length);
+			assertEquals(3, gts.getTrustLevels(GTS_URI).length);
+			assertEquals(2, gts.getTrustLevels(auth1.getServiceURI()).length);
+			assertEquals(2, gts.getTrustLevels(auth2.getServiceURI()).length);
+
+			gts.synchronizeTrustLevels(auth1.getServiceURI(), null);
+			assertEquals(3, gts.getTrustLevels(GTS_URI).length);
+			assertEquals(0, gts.getTrustLevels(auth1.getServiceURI()).length);
+			assertEquals(2, gts.getTrustLevels(auth2.getServiceURI()).length);
+			gts.synchronizeTrustLevels(auth2.getServiceURI(), remote2);
+			assertEquals(3, gts.getTrustLevels(GTS_URI).length);
+			assertEquals(0, gts.getTrustLevels(auth1.getServiceURI()).length);
+			assertEquals(3, gts.getTrustLevels(auth2.getServiceURI()).length);
+
+			for (int i = 0; i < local.length; i++) {
+				assertTrue(gts.doesTrustLevelExist(local[i].getName()));
+				assertEquals(local[i], gts.getTrustLevel(local[i].getName()));
+				assertEquals(local[i].getSourceTrustService(), gts.getTrustLevel(local[i].getName())
+					.getSourceTrustService());
+			}
+
+			for (int i = 0; i < remote2.length; i++) {
+				assertTrue(gts.doesTrustLevelExist(remote2[i].getName()));
+				assertEquals(remote2[i], gts.getTrustLevel(remote2[i].getName()));
+				assertEquals(remote2[i].getSourceTrustService(), gts.getTrustLevel(remote2[i].getName())
+					.getSourceTrustService());
+			}
+
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -1202,6 +1339,21 @@ public class TestGTS extends TestCase {
 		l2.setName(LEVEL_TWO);
 		gts.addTrustLevel(l1, gridId);
 		gts.addTrustLevel(l2, gridId);
+	}
+
+
+	private TrustLevel getTrustLevel() {
+		cacount = cacount + 1;
+		String name = "Trust Level " + cacount;
+		return getTrustLevel(name);
+	}
+
+
+	private TrustLevel getTrustLevel(String name) {
+		TrustLevel l1 = new TrustLevel();
+		l1.setName(name);
+		l1.setDescription(name);
+		return l1;
 	}
 
 

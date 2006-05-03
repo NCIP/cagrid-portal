@@ -179,7 +179,7 @@ public class TrustedAuthorityManager {
 		boolean needsUpdate = false;
 		if (internal) {
 			// TODO: ADD TEST FOR THIS
-			if (!curr.getAuthorityTrustService().equals(gtsURI)) {
+			if (!ta.getAuthorityTrustService().equals(gtsURI)) {
 				IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
 				fault.setFaultString("The Trusted Authority cannot be updated, this GTS is not its authority!!!");
 				throw fault;
@@ -422,6 +422,22 @@ public class TrustedAuthorityManager {
 		} else {
 			InvalidTrustedAuthorityFault fault = new InvalidTrustedAuthorityFault();
 			fault.setFaultString("The TrustedAuthority " + name + " does not exist.");
+			throw fault;
+		}
+	}
+
+
+	public synchronized void removeTrustedAuthoritiesByLevel(String level) throws GTSInternalFault {
+		buildDatabase();
+		String sql = "delete FROM " + TRUSTED_AUTHORITIES_TABLE + " where TRUST_LEVEL='" + level + "'";
+		try {
+			db.update(sql);
+		} catch (Exception e) {
+			this.logger.log(Level.SEVERE,
+				"Unexpected database error incurred in removing the Trusted Authorities with the trust level, " + level
+					+ ", the following statement generated the error: \n" + sql + "\n", e);
+			GTSInternalFault fault = new GTSInternalFault();
+			fault.setFaultString("Unexpected error removing the TrustedAuthorities with the trust level, " + level);
 			throw fault;
 		}
 	}

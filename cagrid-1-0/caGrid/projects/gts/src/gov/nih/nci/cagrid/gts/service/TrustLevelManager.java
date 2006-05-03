@@ -33,12 +33,12 @@ public class TrustLevelManager {
 
 	private Database db;
 
-	private TrustLevelStatus status;
+	private TrustedAuthorityLevelRemover status;
 
 	private String gtsURI;
 
 
-	public TrustLevelManager(String gtsURI, TrustLevelStatus status, Database db) {
+	public TrustLevelManager(String gtsURI, TrustedAuthorityLevelRemover status, Database db) {
 		logger = Logger.getLogger(this.getClass().getName());
 		this.db = db;
 		this.status = status;
@@ -186,6 +186,49 @@ public class TrustLevelManager {
 	}
 
 
+	public synchronized TrustLevel[] getTrustLevels(String gtsSourceURI) throws GTSInternalFault {
+		this.buildDatabase();
+		Connection c = null;
+		List levels = new ArrayList();
+		StringBuffer sql = new StringBuffer();
+		try {
+			c = db.getConnection();
+			Statement s = c.createStatement();
+
+			sql.append("select * from " + TRUST_LEVELS + " WHERE SOURCE_GTS='" + gtsSourceURI + "'");
+
+			ResultSet rs = s.executeQuery(sql.toString());
+			while (rs.next()) {
+				TrustLevel level = new TrustLevel();
+				level.setName(rs.getString("NAME"));
+				level.setDescription(rs.getString("DESCRIPTION"));
+				level.setIsAuthority(new Boolean(rs.getBoolean("IS_AUTHORITY")));
+				level.setAuthorityTrustService(rs.getString("AUTHORITY_GTS"));
+				level.setSourceTrustService(rs.getString("SOURCE_GTS"));
+				levels.add(level);
+			}
+			rs.close();
+			s.close();
+
+			TrustLevel[] list = new TrustLevel[levels.size()];
+			for (int i = 0; i < list.length; i++) {
+				list[i] = (TrustLevel) levels.get(i);
+			}
+			return list;
+
+		} catch (Exception e) {
+			this.logger.log(Level.SEVERE,
+				"Unexpected database error incurred in getting trust levels, the following statement generated the error: \n"
+					+ sql.toString() + "\n", e);
+			GTSInternalFault fault = new GTSInternalFault();
+			fault.setFaultString("Unexpected error occurred in getting trust levels.");
+			throw fault;
+		} finally {
+			db.releaseConnection(c);
+		}
+	}
+
+
 	public synchronized TrustLevel getTrustLevel(String name) throws GTSInternalFault, InvalidTrustLevelFault {
 		String sql = "select * from " + TRUST_LEVELS + " where NAME='" + name + "'";
 		Connection c = null;
@@ -231,8 +274,7 @@ public class TrustLevelManager {
 		StringBuffer sql = new StringBuffer();
 		boolean needsUpdate = false;
 		if (internal) {
-			// TODO: ADD TEST FOR THIS
-			if (!curr.getAuthorityTrustService().equals(gtsURI)) {
+			if (!level.getAuthorityTrustService().equals(gtsURI)) {
 				IllegalTrustLevelFault fault = new IllegalTrustLevelFault();
 				fault.setFaultString("The trust level cannot be updated, this GTS is not its authority!!!");
 				throw fault;
@@ -254,12 +296,12 @@ public class TrustLevelManager {
 
 		} else {
 
-			if (!level.getAuthorityTrustService().equals(level.getAuthorityTrustService())) {
+			if (!curr.getAuthorityTrustService().equals(level.getAuthorityTrustService())) {
 				buildUpdate(needsUpdate, sql, "AUTHORITY_GTS", level.getAuthorityTrustService());
 				needsUpdate = true;
 			}
 
-			if (!level.getSourceTrustService().equals(level.getSourceTrustService())) {
+			if (!curr.getSourceTrustService().equals(level.getSourceTrustService())) {
 				buildUpdate(needsUpdate, sql, "SOURCE_GTS", level.getSourceTrustService());
 				needsUpdate = true;
 			}
@@ -299,13 +341,7 @@ public class TrustLevelManager {
 	public synchronized void removeTrustLevel(String name) throws GTSInternalFault, InvalidTrustLevelFault,
 		IllegalTrustLevelFault {
 		if (doesTrustLevelExist(name)) {
-			if (status.isTrustLevelUsed(name)) {
-				IllegalTrustLevelFault fault = new IllegalTrustLevelFault();
-				fault.setFaultString("The Trust Level, " + name
-					+ " cannot be removed until all the Trusted Authorities referencing it are removed.");
-				throw fault;
-			}
-
+			this.status.removeAssociatedTrustedAuthorities(name);
 			String sql = "delete FROM " + TRUST_LEVELS + " where NAME='" + name + "'";
 			try {
 				db.update(sql);
