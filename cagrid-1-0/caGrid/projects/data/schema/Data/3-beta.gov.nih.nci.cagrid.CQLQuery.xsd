@@ -36,9 +36,9 @@
 		</xsd:annotation>
 		<xsd:sequence>
 			<xsd:choice minOccurs="2" maxOccurs="unbounded">
-				<xsd:element name="Association" type="cql:AssociationType" minOccurs="0" maxOccurs="unbounded"/>
-				<xsd:element name="Attribute" type="cql:AttributeType" minOccurs="0" maxOccurs="unbounded"/>
-				<xsd:element name="Group" type="cql:GroupType" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="Association" type="cql:AssociationType" maxOccurs="unbounded"/>
+				<xsd:element name="Attribute" type="cql:AttributeType" maxOccurs="unbounded"/>
+				<xsd:element name="Group" type="cql:GroupType" maxOccurs="unbounded"/>
 			</xsd:choice>
 		</xsd:sequence>
 		<xsd:attribute name="logicRelation" type="cql:LogicalOperatorType" use="required"/>
