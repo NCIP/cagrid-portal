@@ -13,3 +13,13 @@ build.xml		This is the main build process that manages all of the project to pro
 
 
 For more information, refer to the Documentation module of the repository.  Specifically the Documentation/docs/BuildProcess directory.
+
+
+CVS TAGS
+========================================
+caGrid_Annual_Meeting_06 = Code used to demonstrate at caBIG Annual Meeting April 10th
+
+caGrid_1_0_release = (not yet used) Code released for 1.0
+caGrid_1_0_beta = (not yet used) Code released for Beta release
+caGrid_1_0_staging = (not yet used) Floating tag used to mark current staging code base
+caGrid_1_0_stableX = (not yet used) X=incrementing int, used to mark code base stable for use by early adopters

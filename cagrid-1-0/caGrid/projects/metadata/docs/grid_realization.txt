@@ -11,6 +11,15 @@ Specific common service types, such as data or vocabulary serivices, will have a
 and those will be exposed as separate Resource Properties.
 
 
+TODO:
+====================
+- Should we support referencing objects instead of replicating? (such as for UMLClass in input, output, and associations)
+  - don't really want to replicate identical object definitions (in XML, as its verbose), but want APIs to be as is (e.g. inputParameter.getUMLClass() -> UMLClass).
+  - used to use caDSR public id, and do attribute refID
+    - we don't really need the public ID for our use cases and its more work to include it
+    - breaks the API (you get an ID, not the object) 
+
+
 XSD/Bean Generation
 ====================
 1) Model metadata in Enterprise Architect
