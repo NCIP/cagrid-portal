@@ -121,6 +121,9 @@
 			<xsd:sequence>
 				<xsd:element name="name" minOccurs="1" maxOccurs="1" type="xsd:string"/>
 				<xsd:element name="description" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+				<xsd:element name="IsAuthority" minOccurs="0" maxOccurs="1" type="xsd:boolean"/>
+				<xsd:element name="AuthorityTrustService" minOccurs="0" maxOccurs="1" type="xsd:string"/>
+				<xsd:element name="SourceTrustService" minOccurs="0" maxOccurs="1" type="xsd:string"/>
 			</xsd:sequence>
 		</xsd:complexType>
  		 

@@ -123,6 +123,7 @@
    <ns3:Exceptions>
     <ns3:Exception name="GTSInternalFault"/>
     <ns3:Exception name="InvalidTrustLevelFault"/>
+    <ns3:Exception name="IllegalTrustLevelFault"/>
     <ns3:Exception name="PermissionDeniedFault"/>
    </ns3:Exceptions>
   </ns3:Method>

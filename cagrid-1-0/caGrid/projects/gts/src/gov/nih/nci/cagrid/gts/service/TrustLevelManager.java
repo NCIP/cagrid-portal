@@ -5,8 +5,10 @@ import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.common.Database;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault;
+import gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidTrustLevelFault;
 
+import java.security.cert.X509Certificate;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -35,15 +37,24 @@ public class TrustLevelManager {
 
 	private TrustLevelStatus status;
 
+	private String gtsURI;
 
-	public TrustLevelManager(TrustLevelStatus status, Database db) {
+
+	public TrustLevelManager(String gtsURI, TrustLevelStatus status, Database db) {
 		logger = Logger.getLogger(this.getClass().getName());
 		this.db = db;
 		this.status = status;
+		this.gtsURI = gtsURI;
 	}
 
 
 	public synchronized void addTrustLevel(TrustLevel level) throws GTSInternalFault, IllegalTrustLevelFault {
+		addTrustLevel(level, true);
+	}
+
+
+	public synchronized void addTrustLevel(TrustLevel level, boolean internal) throws GTSInternalFault,
+		IllegalTrustLevelFault {
 		this.buildDatabase();
 		if (Utils.clean(level.getName()) == null) {
 			IllegalTrustLevelFault fault = new IllegalTrustLevelFault();
@@ -61,10 +72,68 @@ public class TrustLevelManager {
 			level.setDescription("");
 		}
 
+		if (internal) {
+			if ((level.getIsAuthority() != null) && (!level.getIsAuthority().booleanValue())) {
+				logger
+					.log(
+						Level.WARNING,
+						"The level "
+							+ level.getName()
+							+ ", specified does not make this Trust Service its authority, this will be ignored since adding a level makes this Trust Service the authority for the level.");
+			}
+
+			if ((level.getAuthorityTrustService() != null) && (!level.getAuthorityTrustService().equals(gtsURI))) {
+				logger
+					.log(
+						Level.WARNING,
+						"The level "
+							+ level.getName()
+							+ ", specified does not make this Trust Service its authority, this will be ignored since adding a level makes this Trust Service the authority for the level.");
+
+			}
+
+			if ((level.getSourceTrustService() != null) && (!level.getSourceTrustService().equals(gtsURI))) {
+				logger
+					.log(
+						Level.WARNING,
+						"The level "
+							+ level.getName()
+							+ ", specified a Source Trust Service, this will be ignored since adding a level makes this Trust Service its source.");
+
+			}
+			level.setIsAuthority(Boolean.TRUE);
+			level.setAuthorityTrustService(gtsURI);
+			level.setSourceTrustService(gtsURI);
+
+		} else {
+			if ((level.getIsAuthority() == null)) {
+				IllegalTrustLevelFault fault = new IllegalTrustLevelFault();
+				fault.setFaultString("The trust level " + level.getName()
+					+ ", cannot be added because it does not specify whether or not this GTS is the authority of it.");
+				throw fault;
+			}
+
+			if (level.getAuthorityTrustService() == null) {
+				IllegalTrustLevelFault fault = new IllegalTrustLevelFault();
+				fault.setFaultString("The trust level " + level.getName()
+					+ ", cannot be added because it does not specify an authority trust service.");
+				throw fault;
+
+			}
+
+			if (level.getSourceTrustService() == null) {
+				IllegalTrustLevelFault fault = new IllegalTrustLevelFault();
+				fault.setFaultString("The trust level " + level.getName()
+					+ ", cannot be added because it does not specify a source trust service.");
+				throw fault;
+			}
+		}
+
 		StringBuffer insert = new StringBuffer();
 		try {
 			insert.append("INSERT INTO " + TRUST_LEVELS + " SET NAME='" + level.getName() + "',DESCRIPTION='"
-				+ level.getDescription() + "'");
+				+ level.getDescription() + "', IS_AUTHORITY='" + level.getIsAuthority() + "', AUTHORITY_GTS='"
+				+ level.getAuthorityTrustService() + "', SOURCE_GTS='" + level.getSourceTrustService() + "'");
 			db.update(insert.toString());
 		} catch (Exception e) {
 			this.logger.log(Level.SEVERE, "Unexpected database error incurred in adding the Trust Level, "
@@ -92,6 +161,9 @@ public class TrustLevelManager {
 				TrustLevel level = new TrustLevel();
 				level.setName(rs.getString("NAME"));
 				level.setDescription(rs.getString("DESCRIPTION"));
+				level.setIsAuthority(new Boolean(rs.getBoolean("IS_AUTHORITY")));
+				level.setAuthorityTrustService(rs.getString("AUTHORITY_GTS"));
+				level.setSourceTrustService(rs.getString("SOURCE_GTS"));
 				levels.add(level);
 			}
 			rs.close();
@@ -127,6 +199,9 @@ public class TrustLevelManager {
 				TrustLevel level = new TrustLevel();
 				level.setName(rs.getString("NAME"));
 				level.setDescription(rs.getString("DESCRIPTION"));
+				level.setIsAuthority(new Boolean(rs.getBoolean("IS_AUTHORITY")));
+				level.setAuthorityTrustService(rs.getString("AUTHORITY_GTS"));
+				level.setSourceTrustService(rs.getString("SOURCE_GTS"));
 				return level;
 			}
 			rs.close();
@@ -146,10 +221,58 @@ public class TrustLevelManager {
 	}
 
 
-	public synchronized void updateTrustLevel(TrustLevel level) throws GTSInternalFault, InvalidTrustLevelFault {
+	public synchronized void updateTrustLevel(TrustLevel level) throws GTSInternalFault, InvalidTrustLevelFault,
+		IllegalTrustLevelFault {
+		updateTrustLevel(level, true);
+	}
+
+
+	public synchronized void updateTrustLevel(TrustLevel level, boolean internal) throws GTSInternalFault,
+		InvalidTrustLevelFault, IllegalTrustLevelFault {
 		TrustLevel curr = this.getTrustLevel(level.getName());
 		StringBuffer sql = new StringBuffer();
 		boolean needsUpdate = false;
+		if (internal) {
+			// TODO: ADD TEST FOR THIS
+			if (!curr.getAuthorityTrustService().equals(gtsURI)) {
+				IllegalTrustLevelFault fault = new IllegalTrustLevelFault();
+				fault.setFaultString("The trust level cannot be updated, this GTS is not its authority!!!");
+				throw fault;
+			}
+
+			if ((Utils.clean(level.getAuthorityTrustService()) != null)
+				&& (!level.getAuthorityTrustService().equals(curr.getAuthorityTrustService()))) {
+				IllegalTrustLevelFault fault = new IllegalTrustLevelFault();
+				fault.setFaultString("The authority trust service for a trust level cannot be changed");
+				throw fault;
+			}
+
+			if ((Utils.clean(level.getSourceTrustService()) != null)
+				&& (!level.getSourceTrustService().equals(curr.getSourceTrustService()))) {
+				IllegalTrustLevelFault fault = new IllegalTrustLevelFault();
+				fault.setFaultString("The source trust service for a trust level cannot be changed");
+				throw fault;
+			}
+
+		} else {
+
+			if (!level.getAuthorityTrustService().equals(level.getAuthorityTrustService())) {
+				buildUpdate(needsUpdate, sql, "AUTHORITY_GTS", level.getAuthorityTrustService());
+				needsUpdate = true;
+			}
+
+			if (!level.getSourceTrustService().equals(level.getSourceTrustService())) {
+				buildUpdate(needsUpdate, sql, "SOURCE_GTS", level.getSourceTrustService());
+				needsUpdate = true;
+			}
+		}
+
+		if ((level.getIsAuthority() != null) && (!level.getIsAuthority().equals(curr.getIsAuthority()))) {
+			IllegalTrustLevelFault fault = new IllegalTrustLevelFault();
+			fault.setFaultString("Whether or not this GTS is the authority for a level cannot be changed!!!");
+			throw fault;
+		}
+
 		if (level.getDescription() != null) {
 			if ((Utils.clean(level.getDescription()) != null)
 				&& (!level.getDescription().equals(curr.getDescription()))) {
@@ -238,20 +361,10 @@ public class TrustLevelManager {
 			db.createDatabaseIfNeeded();
 			if (!this.db.tableExists(TRUST_LEVELS)) {
 				String trust = "CREATE TABLE " + TRUST_LEVELS + " (" + "NAME VARCHAR(255) NOT NULL PRIMARY KEY,"
-					+ "DESCRIPTION TEXT, INDEX document_index (NAME));";
+					+ "DESCRIPTION TEXT, " + "IS_AUTHORITY VARCHAR(5) NOT NULL,"
+					+ "AUTHORITY_GTS VARCHAR(255) NOT NULL,"
+					+ "SOURCE_GTS VARCHAR(255) NOT NULL, INDEX document_index (NAME));";
 				db.update(trust);
-				/*
-				 * try { TrustLevel levelA = new TrustLevel();
-				 * levelA.setName("Level A"); levelA.setDescription("This is
-				 * level A."); this.addTrustLevel(levelA); TrustLevel levelB =
-				 * new TrustLevel(); levelB.setName("Level B");
-				 * levelB.setDescription("This is level B.");
-				 * this.addTrustLevel(levelB); TrustLevel levelC = new
-				 * TrustLevel(); levelC.setName("Level C");
-				 * levelC.setDescription("This is level C.");
-				 * this.addTrustLevel(levelC); } catch (Exception e) {
-				 * e.printStackTrace(); }
-				 */
 			}
 			dbBuilt = true;
 		}

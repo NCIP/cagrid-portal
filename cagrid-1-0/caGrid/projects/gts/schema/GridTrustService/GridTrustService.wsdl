@@ -713,6 +713,8 @@
        				
        		 <fault name="InvalidTrustLevelFault" message="tns:InvalidTrustLevelFaultFaultMessage"/>
        				
+       		 <fault name="IllegalTrustLevelFault" message="tns:IllegalTrustLevelFaultFaultMessage"/>
+       				
        		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
        				
         </operation>

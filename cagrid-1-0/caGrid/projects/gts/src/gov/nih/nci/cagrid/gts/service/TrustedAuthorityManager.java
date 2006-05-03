@@ -114,7 +114,7 @@ public class TrustedAuthorityManager {
 						firstAppended = true;
 						Calendar cal = new GregorianCalendar();
 						long time = cal.getTimeInMillis();
-						sql.append(" (EXPIRES=0 OR EXPIRES>" + time+")");
+						sql.append(" (EXPIRES=0 OR EXPIRES>" + time + ")");
 					} else if (filter.getLifetime().equals(Lifetime.Expired)) {
 						sql = appendWhereOrAnd(firstAppended, sql);
 						firstAppended = true;
@@ -178,7 +178,7 @@ public class TrustedAuthorityManager {
 		StringBuffer sql = new StringBuffer();
 		boolean needsUpdate = false;
 		if (internal) {
-			//TODO:  ADD TEST FOR THIS
+			// TODO: ADD TEST FOR THIS
 			if (!curr.getAuthorityTrustService().equals(gtsURI)) {
 				IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
 				fault.setFaultString("The Trusted Authority cannot be updated, this GTS is not its authority!!!");
@@ -508,10 +508,10 @@ public class TrustedAuthorityManager {
 						Level.WARNING,
 						"The Trusted Authority "
 							+ ta.getTrustedAuthorityName()
-							+ ", specified odes not make the Trust Service the an authority, this will be ignored since adding a Trust Authority makes the Trust Service an authority.");
+							+ ", specified does not make the Trust Service the an authority, this will be ignored since adding a Trust Authority makes the Trust Service an authority.");
 			}
 
-			if (ta.getAuthorityTrustService() != null) {
+			if ((ta.getAuthorityTrustService() != null) && (!ta.getAuthorityTrustService().equals(gtsURI))) {
 				logger
 					.log(
 						Level.WARNING,
@@ -521,13 +521,13 @@ public class TrustedAuthorityManager {
 
 			}
 
-			if (ta.getSourceTrustService() != null) {
+			if ((ta.getSourceTrustService() != null) && (!ta.getSourceTrustService().equals(gtsURI))) {
 				logger
 					.log(
 						Level.WARNING,
 						"The Trusted Authority "
 							+ ta.getTrustedAuthorityName()
-							+ ", specified a Source Trust Service, this will be ignored since adding a Trust Authority makes the Trust Service an authority.");
+							+ ", specified a Source Trust Service, this will be ignored since adding a Trust Authority makes the Trust Service its source.");
 
 			}
 

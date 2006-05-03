@@ -17,15 +17,18 @@ import org.globus.wsrf.Resource;
 import org.globus.wsrf.ResourceContext;
 import org.globus.wsrf.ResourceContextException;
 import org.globus.wsrf.ResourceProperties;
+import org.globus.wsrf.ResourceProperty;
 import org.globus.wsrf.ResourcePropertySet;
 import org.globus.wsrf.config.ContainerConfig;
 import org.globus.wsrf.container.ServiceHost;
+import org.globus.wsrf.impl.SimpleResourceProperty;
 import org.globus.wsrf.impl.SimpleResourcePropertySet;
 import org.globus.wsrf.impl.servicegroup.client.ServiceGroupRegistrationClient;
 import org.globus.wsrf.utils.AddressingUtils;
 
 import commonj.timers.Timer;
 
+import gov.nih.nci.cagrid.common.Utils;
 
 public class BaseResource implements Resource, ResourceProperties {
 
@@ -33,16 +36,18 @@ public class BaseResource implements Resource, ResourceProperties {
 
 	/** Stores the ResourceProperties of this service */
 	private ResourcePropertySet propSet;
-
-	// this can be used to cancel the registration renewal
+	
+	//this can be used to cancel the registration renewal
 	private Timer registrationTimer;
 
 	private MetadataConfiguration configuration;
-
+	
 	private URL baseURL;
 
+	//Define the metadata resource properties
+		
 
-	// Define the metadata resource properties
+
 
 	// initializes the resource
 	public void initialize() throws Exception {
@@ -51,8 +56,9 @@ public class BaseResource implements Resource, ResourceProperties {
 
 		// this loads the metadata from XML files
 		populateMetadata();
+		
+		// now add the metadata as resource properties	
 
-		// now add the metadata as resource properties
 
 		// register the service to the index sevice
 		refreshRegistration(true);
@@ -167,10 +173,13 @@ public class BaseResource implements Resource, ResourceProperties {
 	}
 
 
-	private void populateMetadata() {
 
+	private void populateMetadata() {
+	
 	}
 
+
+			
 
 	public MetadataConfiguration getConfiguration() {
 		if (this.configuration != null) {

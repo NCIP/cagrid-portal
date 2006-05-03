@@ -59,7 +59,7 @@ public class GTS implements TrustLevelStatus, TrustLevelLookup {
 		this.gtsURI = gtsURI;
 		Database db = new Database(this.conf.getConnectionManager(), this.conf.getGTSInternalId());
 		trust = new TrustedAuthorityManager(this.gtsURI, this, db);
-		levels = new TrustLevelManager(this, db);
+		levels = new TrustLevelManager(this.gtsURI, this, db);
 		permissions = new PermissionManager(db);
 		authority = new GTSAuthorityManager(db);
 		logger = Logger.getLogger(this.getClass().getName());
@@ -107,7 +107,7 @@ public class GTS implements TrustLevelStatus, TrustLevelLookup {
 
 
 	public void updateTrustLevel(TrustLevel level, String callerGridIdentity) throws GTSInternalFault,
-		InvalidTrustLevelFault, PermissionDeniedFault {
+		InvalidTrustLevelFault, IllegalTrustLevelFault, PermissionDeniedFault {
 		checkServiceAdministrator(callerGridIdentity);
 		levels.updateTrustLevel(level);
 	}
