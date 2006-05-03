@@ -18,7 +18,6 @@ import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityTimeToLive;
 import gov.nih.nci.cagrid.gts.bean.X509CRL;
 import gov.nih.nci.cagrid.gts.bean.X509Certificate;
 import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
-import gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gts.test.CA;
@@ -1257,8 +1256,19 @@ public class TestGTS extends TestCase {
 			assertEquals(3, gts.getTrustLevels(GTS_URI).length);
 			assertEquals(2, gts.getTrustLevels(auth1.getServiceURI()).length);
 			assertEquals(2, gts.getTrustLevels(auth2.getServiceURI()).length);
+			
+			//Lets add a Trusted Authority and make sure that it is deleted after we sync to nothing
+			TrustedAuthority ta = new TrustedAuthority();
+			CA ca = new CA();
+			ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
+			ta.setStatus(Status.Trusted);
+			ta.setTrustLevel(remote1[1].getName());
+			gts.addTrustedAuthority(ta,ADMIN_USER);
+			assertEquals(1,gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
 
 			gts.synchronizeTrustLevels(auth1.getServiceURI(), null);
+			assertEquals(0,gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
 			assertEquals(3, gts.getTrustLevels(GTS_URI).length);
 			assertEquals(0, gts.getTrustLevels(auth1.getServiceURI()).length);
 			assertEquals(2, gts.getTrustLevels(auth2.getServiceURI()).length);
