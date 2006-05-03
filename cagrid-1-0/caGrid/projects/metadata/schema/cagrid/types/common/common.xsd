@@ -11,7 +11,7 @@
 	<xs:element name="Address" type="Address"/>
 	<xs:complexType name="Address">
 		<xs:sequence>
-			<xs:element name="street1" type="xs:string"/>
+			<xs:element name="street1" type="xs:string" minOccurs="0"/>
 			<xs:element name="street2" type="xs:string" minOccurs="0"/>
 			<xs:element name="locality" type="xs:string" minOccurs="0"/>
 			<xs:element name="stateProvence" type="xs:string" minOccurs="0"/>
