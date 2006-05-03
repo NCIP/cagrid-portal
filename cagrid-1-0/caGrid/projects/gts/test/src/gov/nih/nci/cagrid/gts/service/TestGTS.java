@@ -859,76 +859,6 @@ public class TestGTS extends TestCase {
 	}
 
 
-	public void testSyncTrustedAuthoritiesOverlappingGTSAuthorities() {
-		GTS gts = null;
-		try {
-			GTSConfiguration conf = Utils.getGTSConfiguration();
-			gts = new GTS(conf, GTS_URI);
-			// Make sure we start fresh
-			gts.destroy();
-
-			// Add the admin user
-			PermissionBootstapper pb = new PermissionBootstapper(conf);
-			pb.addAdminUser(ADMIN_USER);
-			addTrustLevels(gts, ADMIN_USER);
-
-			// Create Authorities
-			AuthorityGTS auth1 = getAuthority(GTS_URI + " Authority 1", 1);
-			gts.addAuthority(auth1, ADMIN_USER);
-			AuthorityGTS auth2 = getAuthority(GTS_URI + " Authority 2", 2);
-			gts.addAuthority(auth2, ADMIN_USER);
-			AuthorityGTS[] list = gts.getAuthorities();
-			assertEquals(2, list.length);
-			assertEquals(auth1, list[0]);
-			assertEquals(auth2, list[1]);
-
-			int taCount = 8;
-
-			TrustedAuthority[] ta = new TrustedAuthority[taCount];
-
-			for (int j = 0; j < taCount; j++) {
-				ta[j] = getTrustedAuthority();
-			}
-			// Now Add Trusted Authorities for local GTS
-			TrustedAuthority[] local = new TrustedAuthority[3];
-			TrustedAuthorityFilter f = new TrustedAuthorityFilter();
-
-			local[0] = ta[0];
-			gts.addTrustedAuthority(local[0], ADMIN_USER);
-			f.setTrustedAuthorityName(local[0].getTrustedAuthorityName());
-			assertEquals(1, gts.findTrustAuthorities(f).length);
-			assertEquals(local[0], gts.findTrustAuthorities(f)[0]);
-
-			local[1] = ta[1];
-			gts.addTrustedAuthority(local[1], ADMIN_USER);
-			f.setTrustedAuthorityName(local[1].getTrustedAuthorityName());
-			assertEquals(1, gts.findTrustAuthorities(f).length);
-			assertEquals(local[1], gts.findTrustAuthorities(f)[0]);
-
-			local[2] = ta[2];
-			gts.addTrustedAuthority(local[2], ADMIN_USER);
-			f.setTrustedAuthorityName(local[2].getTrustedAuthorityName());
-			assertEquals(1, gts.findTrustAuthorities(f).length);
-			assertEquals(local[2], gts.findTrustAuthorities(f)[0]);
-
-			assertEquals(3, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
-
-		} catch (Exception e) {
-			FaultUtil.printFault(e);
-			assertTrue(false);
-		} finally {
-			if (gts != null) {
-				try {
-					gts.destroy();
-				} catch (Exception e) {
-					FaultUtil.printFault(e);
-				}
-			}
-		}
-
-	}
-
-
 	public void testSyncTrustedAuthoritiesWithSingleAuthorityGTS() {
 		GTS gts = null;
 		try {
@@ -1042,9 +972,174 @@ public class TestGTS extends TestCase {
 	}
 
 
+	public void testSyncTrustedAuthoritiesOverlappingGTSAuthorities() {
+		GTS gts = null;
+		try {
+			GTSConfiguration conf = Utils.getGTSConfiguration();
+			gts = new GTS(conf, GTS_URI);
+			// Make sure we start fresh
+			gts.destroy();
+
+			// Add the admin user
+			PermissionBootstapper pb = new PermissionBootstapper(conf);
+			pb.addAdminUser(ADMIN_USER);
+			addTrustLevels(gts, ADMIN_USER);
+
+			// Create Authorities
+			AuthorityGTS auth1 = getAuthority(GTS_URI + " Authority 1", 1);
+			gts.addAuthority(auth1, ADMIN_USER);
+			AuthorityGTS auth2 = getAuthority(GTS_URI + " Authority 2", 2);
+			gts.addAuthority(auth2, ADMIN_USER);
+			AuthorityGTS[] list = gts.getAuthorities();
+			assertEquals(2, list.length);
+			assertEquals(auth1, list[0]);
+			assertEquals(auth2, list[1]);
+
+			// Now Add Trusted Authorities for local GTS
+			TrustedAuthority[] local = new TrustedAuthority[3];
+			TrustedAuthorityFilter f = new TrustedAuthorityFilter();
+
+			local[0] = getTrustedAuthority();
+			gts.addTrustedAuthority(local[0], ADMIN_USER);
+			f.setTrustedAuthorityName(local[0].getTrustedAuthorityName());
+			assertEquals(1, gts.findTrustAuthorities(f).length);
+			assertEquals(local[0], gts.findTrustAuthorities(f)[0]);
+
+			local[1] = getTrustedAuthority();
+			gts.addTrustedAuthority(local[1], ADMIN_USER);
+			f.setTrustedAuthorityName(local[1].getTrustedAuthorityName());
+			assertEquals(1, gts.findTrustAuthorities(f).length);
+			assertEquals(local[1], gts.findTrustAuthorities(f)[0]);
+
+			local[2] = getTrustedAuthority();
+			gts.addTrustedAuthority(local[2], ADMIN_USER);
+			f.setTrustedAuthorityName(local[2].getTrustedAuthorityName());
+			assertEquals(1, gts.findTrustAuthorities(f).length);
+			assertEquals(local[2], gts.findTrustAuthorities(f)[0]);
+
+			assertEquals(3, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+
+			TrustedAuthority[] remote1 = new TrustedAuthority[3];
+			remote1[0] = getTrustedAuthority(local[2].getTrustedAuthorityName());
+			remote1[0].setAuthorityTrustService(auth1.getServiceURI());
+			remote1[1] = getTrustedAuthority();
+			remote1[1].setAuthorityTrustService(auth1.getServiceURI());
+			remote1[2] = getTrustedAuthority();
+			remote1[2].setAuthorityTrustService(auth1.getServiceURI());
+
+			TrustedAuthority[] remote2 = new TrustedAuthority[3];
+			remote2[0] = getTrustedAuthority(remote1[2].getTrustedAuthorityName());
+			remote2[0].setAuthorityTrustService(auth2.getServiceURI());
+			remote2[1] = getTrustedAuthority();
+			remote2[1].setAuthorityTrustService(auth2.getServiceURI());
+			remote2[2] = getTrustedAuthority();
+			remote2[2].setAuthorityTrustService(auth2.getServiceURI());
+
+			gts.synchronizeTrustedAuthorities(auth2.getServiceURI(), remote2);
+
+			assertEquals(6, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+
+			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(local[0])).length);
+			assertEquals(local[0], gts.findTrustAuthorities(getFilterForTA(local[0]))[0]);
+			assertEquals(local[0].getSourceTrustService(), gts.findTrustAuthorities(getFilterForTA(local[0]))[0]
+				.getSourceTrustService());
+
+			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(local[1])).length);
+			assertEquals(local[1], gts.findTrustAuthorities(getFilterForTA(local[1]))[0]);
+			assertEquals(local[1].getSourceTrustService(), gts.findTrustAuthorities(getFilterForTA(local[1]))[0]
+				.getSourceTrustService());
+
+			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(local[2])).length);
+			assertEquals(local[2], gts.findTrustAuthorities(getFilterForTA(local[2]))[0]);
+			assertEquals(local[2].getSourceTrustService(), gts.findTrustAuthorities(getFilterForTA(local[2]))[0]
+				.getSourceTrustService());
+
+			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote2[0])).length);
+			assertEquals(remote2[0], gts.findTrustAuthorities(getFilterForTA(remote2[0]))[0]);
+			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[0]))[0]
+				.getSourceTrustService());
+
+			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote2[1])).length);
+			assertEquals(remote2[1], gts.findTrustAuthorities(getFilterForTA(remote2[1]))[0]);
+			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[1]))[0]
+				.getSourceTrustService());
+
+			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote2[2])).length);
+			assertEquals(remote2[2], gts.findTrustAuthorities(getFilterForTA(remote2[2]))[0]);
+			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[2]))[0]
+				.getSourceTrustService());
+
+			gts.synchronizeTrustedAuthorities(auth1.getServiceURI(), remote1);
+
+			assertEquals(7, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+
+			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(local[0])).length);
+			assertEquals(local[0], gts.findTrustAuthorities(getFilterForTA(local[0]))[0]);
+			assertEquals(local[0].getSourceTrustService(), gts.findTrustAuthorities(getFilterForTA(local[0]))[0]
+				.getSourceTrustService());
+
+			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(local[1])).length);
+			assertEquals(local[1], gts.findTrustAuthorities(getFilterForTA(local[1]))[0]);
+			assertEquals(local[1].getSourceTrustService(), gts.findTrustAuthorities(getFilterForTA(local[1]))[0]
+				.getSourceTrustService());
+
+			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(local[2])).length);
+			assertEquals(local[2], gts.findTrustAuthorities(getFilterForTA(local[2]))[0]);
+			assertEquals(local[2].getSourceTrustService(), gts.findTrustAuthorities(getFilterForTA(local[2]))[0]
+				.getSourceTrustService());
+
+			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote1[1])).length);
+			assertEquals(remote1[1], gts.findTrustAuthorities(getFilterForTA(remote1[1]))[0]);
+			assertEquals(auth1.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote1[1]))[0]
+				.getSourceTrustService());
+
+			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote1[2])).length);
+			assertEquals(remote1[2], gts.findTrustAuthorities(getFilterForTA(remote1[2]))[0]);
+			assertEquals(auth1.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote1[2]))[0]
+				.getSourceTrustService());
+
+			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote2[1])).length);
+			assertEquals(remote2[1], gts.findTrustAuthorities(getFilterForTA(remote2[1]))[0]);
+			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[1]))[0]
+				.getSourceTrustService());
+
+			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote2[2])).length);
+			assertEquals(remote2[2], gts.findTrustAuthorities(getFilterForTA(remote2[2]))[0]);
+			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[2]))[0]
+				.getSourceTrustService());
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			if (gts != null) {
+				try {
+					gts.destroy();
+				} catch (Exception e) {
+					FaultUtil.printFault(e);
+				}
+			}
+		}
+
+	}
+
+
+	private TrustedAuthorityFilter getFilterForTA(TrustedAuthority ta) {
+		TrustedAuthorityFilter f = new TrustedAuthorityFilter();
+		f.setStatus(Status.Trusted);
+		f.setLifetime(Lifetime.Valid);
+		f.setTrustedAuthorityName(ta.getTrustedAuthorityName());
+		return f;
+	}
+
+
 	private TrustedAuthority getTrustedAuthority() throws Exception {
 		cacount = cacount + 1;
 		String dn = dnPrefix + cacount;
+		return getTrustedAuthority(dn);
+	}
+
+
+	private TrustedAuthority getTrustedAuthority(String dn) throws Exception {
 		CA ca = new CA(dn);
 		Calendar c = new GregorianCalendar();
 		c.add(Calendar.HOUR, 1);
