@@ -3,9 +3,13 @@
 |             Server               |     
 ====================================
 
-1) Add Last Updated to Trust Levels and Trusted Authorities
+1) Add Last Updated to Trust Levels and Trusted Authorities (DONE)
 2) Add Authority Time To Live Check as compared to sync time
-3) Looked into expires representation
+3) Looked into expires representation (DONE)
+4) Think about timezone issues.
+5) Test Remove
+6) Test with sync gts
+7) Look into Derby
 
 
 transactions are need in mysql.
@@ -21,5 +25,5 @@ transactions are need in mysql.
 ====================================
 
 1) Add Permission listing to TrustedAuthority Viewer.
-2) Push new Trust Level enhancements through Portal
-3) Push new Trusted Authority enhancements through Portal
+2) Push new Trust Level enhancements through Portal (DONE)
+3) Push new Trusted Authority enhancements through Portal (DONE)
