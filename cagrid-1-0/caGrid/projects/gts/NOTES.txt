@@ -3,9 +3,7 @@
 |             Server               |     
 ====================================
 
-1) Add Support for multiple Permission Types
-2) Solidfy Trust Levels
-3) Fix multi trust service support of get rid of it.
+1) Add Last Updated to Trust Levels and Trusted Authorities
 
 
 transactions are need in mysql.
@@ -21,4 +19,5 @@ transactions are need in mysql.
 ====================================
 
 1) Add Permission listing to TrustedAuthority Viewer.
-2) Lock TrustAuthority Viewer Service Selection
+2) Push new Trust Level enhancements through Portal
+3) Push new Trusted Authority enhancements through Portal

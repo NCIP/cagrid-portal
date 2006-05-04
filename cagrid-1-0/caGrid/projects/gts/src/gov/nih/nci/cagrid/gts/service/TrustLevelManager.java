@@ -5,7 +5,6 @@ import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.common.Database;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault;
-import gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidTrustLevelFault;
 
 import java.sql.Connection;
@@ -297,6 +296,7 @@ public class TrustLevelManager {
 				fault.setFaultString("The authority trust service for a trust level cannot be changed");
 				throw fault;
 			}
+		
 
 			if ((Utils.clean(level.getSourceTrustService()) != null)
 				&& (!level.getSourceTrustService().equals(curr.getSourceTrustService()))) {
