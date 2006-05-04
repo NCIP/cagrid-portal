@@ -147,7 +147,7 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 			trust.removeTrustLevel(level.getName());
 			assertEquals(0, trust.getTrustLevels().length);
 			assertEquals(false, trust.doesTrustLevelExist(level.getName()));
-
+			
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
@@ -243,6 +243,20 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 			}
 
 			assertEquals(0, trust.getTrustLevels().length);
+			
+			TrustLevel level2 = new TrustLevel();
+			level2.setName("One");
+			level2.setDescription("Trust Level One");
+			level2.setIsAuthority(Boolean.TRUE);
+			level2.setAuthorityTrustService("someotherhost");
+			level2.setSourceTrustService("someotherhost");
+			try {
+				trust.addTrustLevel(level2,false);
+				fail("Trust Level should not be able to be added without an name!!!");
+			} catch (IllegalTrustLevelFault f) {
+
+			}
+
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -346,10 +360,7 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 			TrustLevel level = new TrustLevel();
 			level.setName("One");
 			level.setDescription("Trust Level One");
-			level.setIsAuthority(Boolean.TRUE);
-			level.setAuthorityTrustService("somehost");
-			level.setSourceTrustService("somehost");
-			trust.addTrustLevel(level, false);
+			trust.addTrustLevel(level);
 			assertEquals(1, trust.getTrustLevels().length);
 			assertEquals(true, trust.doesTrustLevelExist(level.getName()));
 			assertEquals(level, trust.getTrustLevel(level.getName()));
@@ -366,6 +377,18 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 			}
 
 			assertEquals(1, trust.getTrustLevels().length);
+			
+			tl = trust.getTrustLevel(level.getName());
+			try {
+				tl.setAuthorityTrustService("someotherhost");
+				trust.updateTrustLevel(tl, false);
+				fail("Trust Level should not be able to be updated!!!");
+			} catch (IllegalTrustLevelFault f) {
+
+			}
+
+			assertEquals(1, trust.getTrustLevels().length);
+			
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);

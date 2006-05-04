@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.common.Database;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault;
+import gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidTrustLevelFault;
 
 import java.sql.Connection;
@@ -117,6 +118,15 @@ public class TrustLevelManager {
 					+ ", cannot be added because it does not specify an authority trust service.");
 				throw fault;
 
+			}
+
+			if ((level.getIsAuthority().booleanValue()) && (!level.getAuthorityTrustService().equals(gtsURI))) {
+				IllegalTrustLevelFault fault = new IllegalTrustLevelFault();
+				fault.setFaultString("The trust level " + level.getName()
+					+ " cannot be added, a conflict was detected, this gts (" + gtsURI
+					+ ") was specified as its authority, however the URI of another GTS ( "
+					+ level.getAuthorityTrustService() + ") was specified.");
+				throw fault;
 			}
 
 			if (level.getSourceTrustService() == null) {
@@ -295,6 +305,15 @@ public class TrustLevelManager {
 			}
 
 		} else {
+
+			if ((curr.getIsAuthority().booleanValue()) && (!level.getAuthorityTrustService().equals(gtsURI))) {
+				IllegalTrustLevelFault fault = new IllegalTrustLevelFault();
+				fault.setFaultString("The trust level " + level.getName()
+					+ " cannot be updated, a conflict was detected, this gts (" + gtsURI
+					+ ") was specified as its authority, however the URI of another GTS ( "
+					+ level.getAuthorityTrustService() + ") was specified.");
+				throw fault;
+			}
 
 			if (!curr.getAuthorityTrustService().equals(level.getAuthorityTrustService())) {
 				buildUpdate(needsUpdate, sql, "AUTHORITY_GTS", level.getAuthorityTrustService());
