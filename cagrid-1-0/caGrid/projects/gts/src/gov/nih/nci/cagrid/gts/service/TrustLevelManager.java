@@ -274,7 +274,7 @@ public class TrustLevelManager {
 		StringBuffer sql = new StringBuffer();
 		boolean needsUpdate = false;
 		if (internal) {
-			if (!level.getAuthorityTrustService().equals(gtsURI)) {
+			if (!curr.getAuthorityTrustService().equals(gtsURI)) {
 				IllegalTrustLevelFault fault = new IllegalTrustLevelFault();
 				fault.setFaultString("The trust level cannot be updated, this GTS is not its authority!!!");
 				throw fault;
