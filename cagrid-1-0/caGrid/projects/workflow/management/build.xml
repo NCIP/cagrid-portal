@@ -310,6 +310,8 @@
 		<java classname="${package.name}.client.${service.name}Client" fork="yes">
 			<arg value="-url"/>
 			<arg value="service.url"/>
+            <arg value="-file"/>
+            <arg value="AnnualDemoParallel.bpel"/>
 			<classpath refid="service.run.classpath"/>
 		</java>
 	</target>
