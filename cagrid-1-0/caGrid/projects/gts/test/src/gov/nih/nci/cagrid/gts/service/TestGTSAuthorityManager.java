@@ -25,6 +25,7 @@ import junit.framework.TestCase;
 public class TestGTSAuthorityManager extends TestCase {
 
 	private Database db;
+	private final String GTS_URI = "localhost";
 
 
 	public TestGTSAuthorityManager() {
@@ -33,7 +34,7 @@ public class TestGTSAuthorityManager extends TestCase {
 
 
 	public void testCreateAndDestroy() {
-		GTSAuthorityManager am = new GTSAuthorityManager(db);
+		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,db);
 		try {
 			am.buildDatabase();
 			am.destroy();
@@ -51,7 +52,7 @@ public class TestGTSAuthorityManager extends TestCase {
 
 
 	public void testAddInvalidAuthority() {
-		GTSAuthorityManager am = new GTSAuthorityManager(db);
+		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,db);
 		try {
 			TrustedAuthorityTimeToLive ttl = new TrustedAuthorityTimeToLive();
 			ttl.setHours(1);
@@ -157,7 +158,7 @@ public class TestGTSAuthorityManager extends TestCase {
 
 
 	public void testUpdateInvalidAuthority() {
-		GTSAuthorityManager am = new GTSAuthorityManager(db);
+		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,db);
 		try {
 			TrustedAuthorityTimeToLive ttl = new TrustedAuthorityTimeToLive();
 			ttl.setHours(10);
@@ -234,6 +235,16 @@ public class TestGTSAuthorityManager extends TestCase {
 			} catch (IllegalAuthorityFault f) {
 
 			}
+			
+			//Adding Self
+			AuthorityGTS a5 = getAuthority(GTS_URI, 1);
+			a5.setPriority(2);
+			try {
+				am.addAuthority(a5);
+				fail("Should not be able to update authority!!!");
+			} catch (IllegalAuthorityFault f) {
+
+			}
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -249,7 +260,7 @@ public class TestGTSAuthorityManager extends TestCase {
 
 
 	public void testAddAuthority() {
-		GTSAuthorityManager am = new GTSAuthorityManager(db);
+		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,db);
 		try {
 			AuthorityGTS a1 = getAuthority("GTS 1", 1);
 			assertFalse(am.doesAuthorityExist(a1.getServiceURI()));
@@ -272,7 +283,7 @@ public class TestGTSAuthorityManager extends TestCase {
 
 
 	public void testAddUpdateRemoveAuthorities() {
-		GTSAuthorityManager am = new GTSAuthorityManager(db);
+		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,db);
 		int count = 5;
 		AuthorityGTS[] a = new AuthorityGTS[count];
 
@@ -346,7 +357,7 @@ public class TestGTSAuthorityManager extends TestCase {
 
 
 	public void testInvalidUpdatePrioritiesAuthorities() {
-		GTSAuthorityManager am = new GTSAuthorityManager(db);
+		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,db);
 		int count = 5;
 		AuthorityGTS[] a = new AuthorityGTS[count];
 
@@ -434,7 +445,7 @@ public class TestGTSAuthorityManager extends TestCase {
 
 
 	public void testUpdateRollback() {
-		GTSAuthorityManager am = new GTSAuthorityManager(db);
+		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,db);
 		int count = 5;
 		AuthorityGTS[] a = new AuthorityGTS[count];
 		Connection c = null;
@@ -514,7 +525,7 @@ public class TestGTSAuthorityManager extends TestCase {
 
 
 	public void testAddAuthorityOverwritePriority() {
-		GTSAuthorityManager am = new GTSAuthorityManager(db);
+		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,db);
 		try {
 			AuthorityGTS a1 = getAuthority("GTS 1", 1);
 			assertFalse(am.doesAuthorityExist(a1.getServiceURI()));

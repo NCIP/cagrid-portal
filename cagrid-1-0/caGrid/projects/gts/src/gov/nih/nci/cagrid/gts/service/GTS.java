@@ -65,7 +65,7 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 		trust = new TrustedAuthorityManager(this.gtsURI, this, db);
 		trustLevelManager = new TrustLevelManager(this.gtsURI, this, db);
 		permissions = new PermissionManager(db);
-		authority = new GTSAuthorityManager(db);
+		authority = new GTSAuthorityManager(gtsURI,db);
 		if (conf.getAuthoritySyncTime() != null) {
 			this.threadManager = new MobiusPoolManager();
 			MobiusRunnable runner = new MobiusRunnable() {

@@ -41,10 +41,13 @@ public class GTSAuthorityManager {
 
 	private Database db;
 
+	private String gtsURI;
 
-	public GTSAuthorityManager(Database db) {
+
+	public GTSAuthorityManager(String gtsURI, Database db) {
 		logger = Logger.getLogger(this.getClass().getName());
 		this.db = db;
+		this.gtsURI = gtsURI;
 	}
 
 
@@ -377,6 +380,12 @@ public class GTSAuthorityManager {
 		if (Utils.clean(gts.getServiceURI()) == null) {
 			IllegalAuthorityFault fault = new IllegalAuthorityFault();
 			fault.setFaultString("The Authority cannot be added, no service URI specified!!!");
+			throw fault;
+		}
+
+		if (gts.getServiceURI().equals(gtsURI)) {
+			IllegalAuthorityFault fault = new IllegalAuthorityFault();
+			fault.setFaultString("The Authority cannot be added, a GTS cannot be its own authority!!!");
 			throw fault;
 		}
 

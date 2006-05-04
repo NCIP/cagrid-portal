@@ -31,6 +31,8 @@
 		<gts-portal-config>
 		<gts-services>
 			<gts-service>https://localhost:8443/wsrf/services/cagrid/GridTrustService</gts-service>
+			<gts-service>https://192.168.1.102:8443/wsrf/services/cagrid/GridTrustService</gts-service>
+			<gts-service>https://dublin.inventrio.com:8443/wsrf/services/cagrid/GridTrustService</gts-service>
 		</gts-services>
         </gts-portal-config>
 	</resource>
