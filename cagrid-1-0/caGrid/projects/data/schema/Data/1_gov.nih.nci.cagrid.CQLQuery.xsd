@@ -23,13 +23,11 @@
 		<xsd:annotation>
 			<xsd:documentation>Binary joint</xsd:documentation>
 		</xsd:annotation>
-		<xsd:sequence>
-			<xsd:choice minOccurs="2" maxOccurs="unbounded">
-				<xsd:element name="Association" type="cql:Association" maxOccurs="unbounded"/>
-				<xsd:element name="Attribute" type="cql:Attribute" maxOccurs="unbounded"/>
-				<xsd:element name="Group" type="cql:Group" maxOccurs="unbounded"/>
-			</xsd:choice>
-		</xsd:sequence>
+		<xsd:choice minOccurs="2" maxOccurs="unbounded">
+			<xsd:element name="Association" type="cql:Association" maxOccurs="unbounded"/>
+			<xsd:element name="Attribute" type="cql:Attribute" maxOccurs="unbounded"/>
+			<xsd:element name="Group" type="cql:Group" maxOccurs="unbounded"/>
+		</xsd:choice>
 		<xsd:attribute name="logicRelation" type="cql:LogicalOperator" use="required"/>
 	</xsd:complexType>
 	<xsd:simpleType name="Predicate">
