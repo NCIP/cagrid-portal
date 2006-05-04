@@ -43,7 +43,7 @@ public class ServicesPopUpMenu extends JPopupMenu {
 	private JMenuItem getAddResourceMenuItem() {
 		if (addResourceMenuItem == null) {
 			addResourceMenuItem = new JMenuItem();
-			addResourceMenuItem.setText("Add Resource");
+			addResourceMenuItem.setText("Add Service Context");
 			addResourceMenuItem.setIcon(IntroduceLookAndFeel.getCreateIcon());
 			addResourceMenuItem.addMouseListener(new MouseAdapter() {
 			
