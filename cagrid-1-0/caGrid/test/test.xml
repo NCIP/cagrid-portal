@@ -75,6 +75,9 @@
 				<ant inheritall="false" dir="projects/data" antfile="build.xml" target="test">
 					<property name="junit.results.dir" value="${junit.results.dir}"/>
 				</ant>
+				<ant inheritall="false" dir="projects/sdkQuery" antfile="build.xml" target="test">
+					<property name="junit.results.dir" value="${junit.results.dir}"/>
+				</ant>
 			</parallel>
 		</sequential>
 	</target>
