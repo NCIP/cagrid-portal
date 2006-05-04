@@ -370,13 +370,13 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 		for (int i = 0; i < serviceNamespaces.length && !namespaceFound; i++) {
 			NamespaceType ns = serviceNamespaces[i];
 			if (ns.getNamespace().equals(userNamespace.getNamespace())) {
-				System.out.println("Found namespace " + ns.getNamespace() + " and replacing with user's namespace");
+				// System.out.println("Found namespace " + ns.getNamespace() + " and replacing with user's namespace");
 				serviceNamespaces[i] = userNamespace;
 				namespaceFound = true;
 			}
 		}
 		if (!namespaceFound) {
-			System.out.println("Never found namespace (new namespace).  Adding tree's namespace");
+			// System.out.println("Never found namespace (new namespace).  Adding tree's namespace");
 			NamespaceType[] moreNamespaces = new NamespaceType[serviceNamespaces.length + 1];
 			System.arraycopy(serviceNamespaces, 0, moreNamespaces, 0, serviceNamespaces.length);
 			moreNamespaces[moreNamespaces.length - 1] = userNamespace;
