@@ -93,14 +93,16 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		MethodTypeInputsInput queryInput = new MethodTypeInputsInput();
 		queryInput.setName(DataServiceConstants.QUERY_METHOD_PARAMETER_NAME);
 		queryInput.setIsArray(false);
-		QName queryQname = new QName(dsNamespaces[dsNamespaces.length - 2].getNamespace(), dsNamespaces[dsNamespaces.length - 2].getSchemaElement(0).getType());
+		QName queryQname = new QName(dsNamespaces[dsNamespaces.length - 2].getNamespace(), 
+			dsNamespaces[dsNamespaces.length - 2].getSchemaElement(0).getType());
 		queryInput.setQName(queryQname);
 		inputs.setInput(new MethodTypeInputsInput[] {queryInput});
 		queryMethod.setInputs(inputs);
 		// method output
 		MethodTypeOutput output = new MethodTypeOutput();
 		output.setIsArray(false);
-		QName resultSetQName = new QName(dsNamespaces[dsNamespaces.length - 1].getNamespace(), dsNamespaces[dsNamespaces.length - 1].getSchemaElement(0).getType());
+		QName resultSetQName = new QName(dsNamespaces[dsNamespaces.length - 1].getNamespace(),
+			dsNamespaces[dsNamespaces.length - 1].getSchemaElement(0).getType());
 		output.setQName(resultSetQName);
 		queryMethod.setOutput(output);
 		// exceptions on query method
@@ -126,7 +128,8 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 	
 	
 	private String getServiceSchemaDir(Properties props) {
-		return props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "schema" + File.separator + props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
+		return props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator 
+			+ "schema" + File.separator + props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
 	}
 	
 	
