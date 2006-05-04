@@ -286,7 +286,8 @@ public class TrustLevelManager {
 		if (internal) {
 			if (!curr.getAuthorityTrustService().equals(gtsURI)) {
 				IllegalTrustLevelFault fault = new IllegalTrustLevelFault();
-				fault.setFaultString("The trust level cannot be updated, this GTS is not its authority!!!");
+				fault.setFaultString("The trust level cannot be updated, the GTS (" + gtsURI
+					+ ") is not its authority!!!");
 				throw fault;
 			}
 
