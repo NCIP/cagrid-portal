@@ -8,4 +8,4 @@
    	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
    }
 %>
-service.deployment.path=cagrid/<%=serviceName%>
+service.deployment.prefix=cagrid

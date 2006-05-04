@@ -1,12 +1,7 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="ServerConfigTemplate" %>
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="ServerConfigTemplate" imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.service.* gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.* gov.nih.nci.cagrid.introduce.beans.property.*"%>
 <% gov.nih.nci.cagrid.introduce.info.ServiceInformation info = (gov.nih.nci.cagrid.introduce.info.ServiceInformation) argument; 
    String packageName = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.package");
-   String serviceName = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.service.name");
    String namespaceDomain = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.namespace.domain");
-   String modifiedServiceName = serviceName;
-   if(serviceName.endsWith("Service")){
-   	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
-   }
 %>
 <?xml version="1.0" encoding="UTF-8"?>
 <deployment name="defaultServerConfig" 
@@ -15,7 +10,16 @@
     xmlns:java="http://xml.apache.org/axis/wsdd/providers/java" 
     xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
-    <service name="SERVICE-INSTANCE-NAME" provider="Handler" use="literal" style="document">
+<%
+if (info.getServices() != null && info.getServices().getService() != null) {
+	for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
+		ServiceType service = info.getServices().getService(serviceI);
+		String serviceName = service.getName();
+   		if(serviceName.endsWith("Service")){
+   			serviceName = serviceName.substring(0,serviceName.length()-7);
+   		}
+%>
+    <service name="SERVICE-INSTANCE-PREFIX/<%=serviceName %>" provider="Handler" use="literal" style="document">
         <parameter name="className" value="<%=packageName%>.<%=serviceName.toLowerCase()%>.service.globus.<%=serviceName%>ProviderImpl"/>
         <wsdlFile>share/schema/SERVICE-INSTANCE-PATH/<%=serviceName%>_service.wsdl</wsdlFile>
         <parameter name="securityDescriptor" value="ETC-PATH/security-desc.xml"/>
@@ -25,6 +29,11 @@
         <parameter name="providers" value="GetRPProvider GetMRPProvider QueryRPProvider"/>
         <parameter name="loadOnStartup" value="true"/>
     </service>
+<%
+	}
+}
+%>    
+    
     <typeMapping 
         name="AggregatorContent" 
         qname="aggr:AggregatorContent" 

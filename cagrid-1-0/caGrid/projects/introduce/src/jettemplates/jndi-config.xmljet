@@ -17,7 +17,7 @@ if (info.getServices() != null && info.getServices().getService() != null) {
    			modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
    		}
 %>
-	<service name="<%=modifiedServiceName%>">
+	<service name="SERVICE-INSTANCE-PREFIX/<%=modifiedServiceName%>">
 		<resource name="home" type="<%=packageName%>.<%=modifiedServiceName.toLowerCase()%>.service.globus.resource.BaseResourceHome">
 			<resourceParams>
 				<parameter>
