@@ -136,6 +136,7 @@ public class TrustedAuthorityManager {
 				ta.setAuthorityTrustService(rs.getString("AUTHORITY_GTS"));
 				ta.setSourceTrustService(rs.getString("SOURCE_GTS"));
 				ta.setExpires(rs.getLong("EXPIRES"));
+				ta.setLastUpdated(rs.getLong("LAST_UPDATED"));
 				ta.setCertificate(new gov.nih.nci.cagrid.gts.bean.X509Certificate(rs.getString("CERTIFICATE")));
 				String crl = rs.getString("CRL");
 				if ((crl != null) && (crl.trim().length() > 0)) {
@@ -290,6 +291,9 @@ public class TrustedAuthorityManager {
 		try {
 			if (!ta.equals(curr)) {
 				if (needsUpdate) {
+					Calendar c = new GregorianCalendar();
+					ta.setLastUpdated(c.getTimeInMillis());
+					buildUpdate(needsUpdate, sql, "LAST_UPDATED", ta.getLastUpdated());
 					sql.append(" WHERE NAME='" + ta.getTrustedAuthorityName() + "'");
 					db.update(sql.toString());
 				}
@@ -330,7 +334,7 @@ public class TrustedAuthorityManager {
 			sql.append(",").append(field).append("=").append(value).append("");
 		} else {
 			sql.append("UPDATE " + TRUSTED_AUTHORITIES_TABLE + " SET ");
-			sql.append(field).append("='").append(value).append("'");
+			sql.append(field).append("=").append(value);
 		}
 
 	}
@@ -363,6 +367,7 @@ public class TrustedAuthorityManager {
 				ta.setAuthorityTrustService(rs.getString("AUTHORITY_GTS"));
 				ta.setSourceTrustService(rs.getString("SOURCE_GTS"));
 				ta.setExpires(rs.getLong("EXPIRES"));
+				ta.setLastUpdated(rs.getLong("LAST_UPDATED"));
 				ta.setCertificate(new gov.nih.nci.cagrid.gts.bean.X509Certificate(rs.getString("CERTIFICATE")));
 				String crl = rs.getString("CRL");
 				if ((crl != null) && (crl.trim().length() > 0)) {
@@ -457,12 +462,13 @@ public class TrustedAuthorityManager {
 		throws GTSInternalFault {
 		StringBuffer insert = new StringBuffer();
 		try {
-
+			Calendar c = new GregorianCalendar();
+			ta.setLastUpdated(c.getTimeInMillis());
 			insert.append("INSERT INTO " + TRUSTED_AUTHORITIES_TABLE + " SET NAME='" + ta.getTrustedAuthorityName()
 				+ "',CERTIFICATE_DN='" + cert.getSubjectDN().toString() + "',TRUST_LEVEL='" + ta.getTrustLevel()
 				+ "', STATUS='" + ta.getStatus().getValue() + "', IS_AUTHORITY='" + ta.getIsAuthority().booleanValue()
 				+ "',AUTHORITY_GTS='" + ta.getAuthorityTrustService() + "',SOURCE_GTS='" + ta.getSourceTrustService()
-				+ "', EXPIRES=" + ta.getExpires() + ", CERTIFICATE='"
+				+ "', EXPIRES=" + ta.getExpires() + ", LAST_UPDATED=" + ta.getLastUpdated() + ", CERTIFICATE='"
 				+ ta.getCertificate().getCertificateEncodedString() + "'");
 
 			if (crl != null) {
@@ -528,45 +534,6 @@ public class TrustedAuthorityManager {
 			throw fault;
 		}
 		if (internal) {
-			if ((ta.getIsAuthority() != null) && (!ta.getIsAuthority().booleanValue())) {
-				logger
-					.log(
-						Level.WARNING,
-						"The Trusted Authority "
-							+ ta.getTrustedAuthorityName()
-							+ ", specified does not make the Trust Service the an authority, this will be ignored since adding a Trust Authority makes the Trust Service an authority.");
-			}
-
-			if ((ta.getAuthorityTrustService() != null) && (!ta.getAuthorityTrustService().equals(gtsURI))) {
-				logger
-					.log(
-						Level.WARNING,
-						"The Trusted Authority "
-							+ ta.getTrustedAuthorityName()
-							+ ", specified an authority Trust Service, this will be ignored since adding a Trust Authority makes the Trust Service an authority.");
-
-			}
-
-			if ((ta.getSourceTrustService() != null) && (!ta.getSourceTrustService().equals(gtsURI))) {
-				logger
-					.log(
-						Level.WARNING,
-						"The Trusted Authority "
-							+ ta.getTrustedAuthorityName()
-							+ ", specified a Source Trust Service, this will be ignored since adding a Trust Authority makes the Trust Service its source.");
-
-			}
-
-			if (ta.getExpires() != 0) {
-				logger
-					.log(
-						Level.WARNING,
-						"The Trusted Authority "
-							+ ta.getTrustedAuthorityName()
-							+ ", specified an expiration date, this will be ignored since this trust service is its authority.");
-
-			}
-
 			ta.setIsAuthority(Boolean.TRUE);
 			ta.setAuthorityTrustService(gtsURI);
 			ta.setSourceTrustService(gtsURI);
@@ -674,7 +641,8 @@ public class TrustedAuthorityManager {
 					+ "NAME VARCHAR(255) NOT NULL PRIMARY KEY," + "CERTIFICATE_DN VARCHAR(255) NOT NULL,"
 					+ "TRUST_LEVEL VARCHAR(255) NOT NULL," + "STATUS VARCHAR(50) NOT NULL,"
 					+ "IS_AUTHORITY VARCHAR(5) NOT NULL," + "AUTHORITY_GTS VARCHAR(255) NOT NULL,"
-					+ "SOURCE_GTS VARCHAR(255) NOT NULL," + "EXPIRES BIGINT NOT NULL," + "CERTIFICATE TEXT NOT NULL,"
+					+ "SOURCE_GTS VARCHAR(255) NOT NULL," + "EXPIRES BIGINT NOT NULL,"
+					+ "LAST_UPDATED BIGINT NOT NULL," + "CERTIFICATE TEXT NOT NULL,"
 					+ "CRL TEXT, INDEX document_index (NAME));";
 				db.update(trust);
 			}

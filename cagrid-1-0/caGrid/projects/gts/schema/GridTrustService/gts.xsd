@@ -87,6 +87,7 @@
 				<xsd:element name="AuthorityTrustService" minOccurs="0" maxOccurs="1" type="xsd:string"/>
 				<xsd:element name="SourceTrustService" minOccurs="0" maxOccurs="1" type="xsd:string"/>
 				<xsd:element name="Expires" minOccurs="1" maxOccurs="1" type="xsd:long"/>
+				<xsd:element name="LastUpdated" minOccurs="1" maxOccurs="1" type="xsd:long"/>
 				<xsd:element name="Certificate" minOccurs="1" maxOccurs="1" type="gts:X509Certificate"/>
 				<xsd:element name="CRL" minOccurs="0" maxOccurs="1" type="gts:X509CRL"/>
 			</xsd:sequence>
@@ -124,6 +125,7 @@
 				<xsd:element name="IsAuthority" minOccurs="0" maxOccurs="1" type="xsd:boolean"/>
 				<xsd:element name="AuthorityTrustService" minOccurs="0" maxOccurs="1" type="xsd:string"/>
 				<xsd:element name="SourceTrustService" minOccurs="0" maxOccurs="1" type="xsd:string"/>
+				<xsd:element name="LastUpdated" minOccurs="1" maxOccurs="1" type="xsd:long"/>
 			</xsd:sequence>
 		</xsd:complexType>
  		 

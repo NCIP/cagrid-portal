@@ -11,6 +11,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -71,34 +73,6 @@ public class TrustLevelManager {
 		}
 
 		if (internal) {
-			if ((level.getIsAuthority() != null) && (!level.getIsAuthority().booleanValue())) {
-				logger
-					.log(
-						Level.WARNING,
-						"The level "
-							+ level.getName()
-							+ ", specified does not make this Trust Service its authority, this will be ignored since adding a level makes this Trust Service the authority for the level.");
-			}
-
-			if ((level.getAuthorityTrustService() != null) && (!level.getAuthorityTrustService().equals(gtsURI))) {
-				logger
-					.log(
-						Level.WARNING,
-						"The level "
-							+ level.getName()
-							+ ", specified does not make this Trust Service its authority, this will be ignored since adding a level makes this Trust Service the authority for the level.");
-
-			}
-
-			if ((level.getSourceTrustService() != null) && (!level.getSourceTrustService().equals(gtsURI))) {
-				logger
-					.log(
-						Level.WARNING,
-						"The level "
-							+ level.getName()
-							+ ", specified a Source Trust Service, this will be ignored since adding a level makes this Trust Service its source.");
-
-			}
 			level.setIsAuthority(Boolean.TRUE);
 			level.setAuthorityTrustService(gtsURI);
 			level.setSourceTrustService(gtsURI);
@@ -135,12 +109,14 @@ public class TrustLevelManager {
 				throw fault;
 			}
 		}
-
+		Calendar c = new GregorianCalendar();
+		level.setLastUpdated(c.getTimeInMillis());
 		StringBuffer insert = new StringBuffer();
 		try {
 			insert.append("INSERT INTO " + TRUST_LEVELS + " SET NAME='" + level.getName() + "',DESCRIPTION='"
 				+ level.getDescription() + "', IS_AUTHORITY='" + level.getIsAuthority() + "', AUTHORITY_GTS='"
-				+ level.getAuthorityTrustService() + "', SOURCE_GTS='" + level.getSourceTrustService() + "'");
+				+ level.getAuthorityTrustService() + "', SOURCE_GTS='" + level.getSourceTrustService()
+				+ "', LAST_UPDATED=" + level.getLastUpdated());
 			db.update(insert.toString());
 		} catch (Exception e) {
 			this.logger.log(Level.SEVERE, "Unexpected database error incurred in adding the Trust Level, "
@@ -171,6 +147,7 @@ public class TrustLevelManager {
 				level.setIsAuthority(new Boolean(rs.getBoolean("IS_AUTHORITY")));
 				level.setAuthorityTrustService(rs.getString("AUTHORITY_GTS"));
 				level.setSourceTrustService(rs.getString("SOURCE_GTS"));
+				level.setLastUpdated(rs.getLong("LAST_UPDATED"));
 				levels.add(level);
 			}
 			rs.close();
@@ -214,6 +191,7 @@ public class TrustLevelManager {
 				level.setIsAuthority(new Boolean(rs.getBoolean("IS_AUTHORITY")));
 				level.setAuthorityTrustService(rs.getString("AUTHORITY_GTS"));
 				level.setSourceTrustService(rs.getString("SOURCE_GTS"));
+				level.setLastUpdated(rs.getLong("LAST_UPDATED"));
 				levels.add(level);
 			}
 			rs.close();
@@ -252,6 +230,7 @@ public class TrustLevelManager {
 				level.setIsAuthority(new Boolean(rs.getBoolean("IS_AUTHORITY")));
 				level.setAuthorityTrustService(rs.getString("AUTHORITY_GTS"));
 				level.setSourceTrustService(rs.getString("SOURCE_GTS"));
+				level.setLastUpdated(rs.getLong("LAST_UPDATED"));
 				return level;
 			}
 			rs.close();
@@ -296,7 +275,6 @@ public class TrustLevelManager {
 				fault.setFaultString("The authority trust service for a trust level cannot be changed");
 				throw fault;
 			}
-		
 
 			if ((Utils.clean(level.getSourceTrustService()) != null)
 				&& (!level.getSourceTrustService().equals(curr.getSourceTrustService()))) {
@@ -344,6 +322,9 @@ public class TrustLevelManager {
 		try {
 			if (!level.equals(curr)) {
 				if (needsUpdate) {
+					Calendar c = new GregorianCalendar();
+					level.setLastUpdated(c.getTimeInMillis());
+					buildUpdate(needsUpdate, sql, "LAST_UPDATED", level.getLastUpdated());
 					sql.append(" WHERE NAME='" + level.getName() + "'");
 					db.update(sql.toString());
 				}
@@ -417,7 +398,8 @@ public class TrustLevelManager {
 				String trust = "CREATE TABLE " + TRUST_LEVELS + " (" + "NAME VARCHAR(255) NOT NULL PRIMARY KEY,"
 					+ "DESCRIPTION TEXT, " + "IS_AUTHORITY VARCHAR(5) NOT NULL,"
 					+ "AUTHORITY_GTS VARCHAR(255) NOT NULL,"
-					+ "SOURCE_GTS VARCHAR(255) NOT NULL, INDEX document_index (NAME));";
+					+ "SOURCE_GTS VARCHAR(255) NOT NULL, LAST_UPDATED BIGINT NOT NULL,"
+					+ "INDEX document_index (NAME));";
 				db.update(trust);
 			}
 			dbBuilt = true;
@@ -438,6 +420,17 @@ public class TrustLevelManager {
 		} else {
 			sql.append("UPDATE " + TRUST_LEVELS + " SET ");
 			sql.append(field).append("='").append(value).append("'");
+		}
+
+	}
+
+
+	private void buildUpdate(boolean needsUpdate, StringBuffer sql, String field, long value) {
+		if (needsUpdate) {
+			sql.append(",").append(field).append("=").append(value).append("");
+		} else {
+			sql.append("UPDATE " + TRUST_LEVELS + " SET ");
+			sql.append(field).append("=").append(value);
 		}
 
 	}
