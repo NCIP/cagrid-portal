@@ -6,7 +6,6 @@ import javax.swing.JComboBox;
 
 import org.projectmobius.portal.PortalResourceManager;
 
-
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -18,30 +17,47 @@ public class GTSServiceListComboBox extends JComboBox {
 
 	private static String lastSelectedService;
 
+	private static final String ANY = "Any";
 
 	public GTSServiceListComboBox() {
-		GTSPortalConf conf = (GTSPortalConf) PortalResourceManager.getInstance().getResource(GTSPortalConf.RESOURCE);
+		this(false);
+	}
+
+	public GTSServiceListComboBox(boolean any) {
+		if (any) {
+			this.addItem(ANY);
+		}
+		GTSPortalConf conf = (GTSPortalConf) PortalResourceManager
+				.getInstance().getResource(GTSPortalConf.RESOURCE);
 		List services = conf.getGTSServiceList();
 		for (int i = 0; i < services.size(); i++) {
 			this.addItem(services.get(i));
 		}
-		if (lastSelectedService == null) {
-			lastSelectedService = getSelectedService();
-		} else {
-			this.setSelectedItem(lastSelectedService);
+		if (!any) {
+			if (lastSelectedService == null) {
+				lastSelectedService = getSelectedService();
+			} else {
+				this.setSelectedItem(lastSelectedService);
+			}
 		}
 		this.setEditable(true);
 
 		this.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
-				lastSelectedService = getSelectedService();
+				if (getSelectedService() != null) {
+					lastSelectedService = getSelectedService();
+				}
 			}
 		});
 	}
 
-
 	public String getSelectedService() {
-		return (String) getSelectedItem();
+		String s = (String) getSelectedItem();
+		if (s.equals(ANY)) {
+			return null;
+		} else {
+			return s;
+		}
 	}
 
 }

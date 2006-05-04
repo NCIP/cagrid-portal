@@ -102,8 +102,6 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 
 	private JTextField sourceGTS = null;
 
-	private JLabel Expiration = null;
-
 	private JTextField expires = null;
 
 	private JLabel jLabel9 = null;
