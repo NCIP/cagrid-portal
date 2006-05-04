@@ -32,6 +32,40 @@
 	<!-- libraries -->
 	<property name="lib.dir" location="${basedir}/lib"/>
 	<property name="ext.lib.dir" location="${basedir}/ext/lib"/>
+	<property name="ext.test.lib.dir" location="${basedir}/ext/test/lib"/>
+		
+	<!-- testing stuff -->
+	<property name="test.dir" location="${basedir}/test" />
+	<property name="test.src.dir" location="${test.dir}/src/java" />
+	<property name="test.classes.dir" location="${build.dir}/test/classes" />
+	<property name="test.lib.dir" location="${test.dir}/lib" />
+	<property name="test.logs.dir" location="${test.dir}/logs" />
+	<property name="test.project.jar" location="${build.jars.dir}/${project.name}-tests-${project.version}.jar" />
+	<import file="test/test.xml" />
+	
+	<!-- =============================================================== -->
+	<!-- The Test Classpath                                              -->
+	<!-- =============================================================== -->
+	<path id="test.classpath">
+		<pathelement path="${build.utils.dest}" />
+		<pathelement path="${build.extension.dest}"/>
+		<pathelement path="${build.service.dest}"/>
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${ext.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${test.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${ext.test.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${globus.dir}/lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
 	
 	<!-- check for java 1.5 -->
 	<condition property="isJDK1.5">
@@ -50,9 +84,10 @@
         <mkdir dir="${build.dir}" />
     	<mkdir dir="${build.dest}"/>
         <mkdir dir="${build.jars.dir}" />
+    	<mkdir dir="${test.classes.dir}"/>
     </target>
 
-	<!-- compiles the utility source code -->
+	<!-- compiles the query processor source code -->
 	<target name="compile" depends="init, checkJDK">
 		<javac srcdir="${src.dir}" destdir="${build.dest}" debug="${java.debug}">
 			<classpath>
@@ -67,6 +102,27 @@
                 </fileset>
 			</classpath>
 			<include name="**/*.java" />
+		</javac>
+	</target>
+	
+	<!-- compiles the testing source code -->
+	<target name="compileTests" depends="compile">
+		<javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" debug="${java.debug}">
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar"/>
+				</fileset>
+				<fileset dir="${ext.lib.dir}">
+					<include name="*.jar"/>
+				</fileset>
+				<fileset dir="${ext.test.lib.dir}">
+					<include name="*.jar"/>
+				</fileset>
+				<fileset dir="${globus.dir}/lib">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+			<include name="**/*.java"/>
 		</javac>
 	</target>
 	
