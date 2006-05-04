@@ -3,7 +3,7 @@ package gov.nih.nci.cagrid.data.cql.cacore;
 import gov.nih.nci.cabio.domain.Gene;
 import gov.nih.nci.cabio.domain.impl.GeneImpl;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.cqlquery.CQLQueryType;
+import gov.nih.nci.cagrid.cqlquery.Object;
 import gov.nih.nci.cagrid.cqlresultset.CQLObjectResult;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResultsType;
 import gov.nih.nci.cagrid.data.InitializationException;
@@ -44,7 +44,7 @@ public class IgnorantQueryProcessor extends CQLQueryProcessor {
 	}
 
 
-	public CQLQueryResultsType processQuery(CQLQueryType query) throws MalformedQueryException, QueryProcessingException {
+	public CQLQueryResultsType processQuery(Object query) throws MalformedQueryException, QueryProcessingException {
 		Gene gene = new GeneImpl();
 		gene.setSymbol("brca*"); // searching for all genes whose symbol start with brca
 		List resultList = null;

@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.data.common;
 
-import gov.nih.nci.cagrid.cqlquery.CQLQueryType;
-import gov.nih.nci.cagrid.cqlresultset.CQLQueryResultsType;
 
 /** 
  *  DataServiceConstants
@@ -18,8 +16,8 @@ public class DataServiceConstants {
 	public static final String CQL_RESULT_SET_SCHEMA = "3_gov.nih.nci.cagrid.CQLResultSet.xsd";
 	public static final String CQL_QUERY_URI = "http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery";
 	public static final String CQL_RESULT_SET_URI = "http://CQL.caBIG/3/gov.nih.nci.cagrid.CQLResultSet";
-	public static final String CQL_QUERY_TYPE = CQLQueryType.class.getName();
-	public static final String CQL_RESULT_SET_TYPE = CQLQueryResultsType.class.getName();
+	public static final String CQL_QUERY_TYPE = gov.nih.nci.cagrid.cqlquery.Object.class.getName();
+	public static final String CQL_RESULT_SET_TYPE = gov.nih.nci.cagrid.cqlresultset.CQLQueryResultsType.class.getName();
 	public static final String QUERY_PROCESSOR_CLASS_PROPERTY = "QueryProcessorClass";
 	
 	// query method constants
@@ -38,7 +36,6 @@ public class DataServiceConstants {
 		"QueryProcessingException", "MalformedQueryException"
 	};
 	public static final String QUERY_PROCESSOR_ELEMENT_NAME = "queryProcessorClass";
-	public static final String QUERY_PROCESSOR_PLACEHOLDER = "%%processorClass%%";
 
 	private DataServiceConstants() {
 		
