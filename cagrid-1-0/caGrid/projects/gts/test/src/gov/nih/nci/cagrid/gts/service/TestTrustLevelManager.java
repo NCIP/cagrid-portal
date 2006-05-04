@@ -118,9 +118,12 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 			level.setName("One");
 			level.setDescription("Trust Level One");
 			trust.addTrustLevel(level);
+			
 			assertEquals(1, trust.getTrustLevels().length);
 			assertEquals(true, trust.doesTrustLevelExist(level.getName()));
 			assertEquals(level, trust.getTrustLevel(level.getName()));
+			
+			
 			try {
 				trust.addTrustLevel(level);
 				fail("Trust Level should not be able to be added when it already exists!!!");
@@ -261,8 +264,8 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 			level.setName("One");
 			level.setDescription("Trust Level One");
 			level.setIsAuthority(Boolean.TRUE);
-			level.setAuthorityTrustService("somehost");
-			level.setSourceTrustService("somehost");
+			level.setAuthorityTrustService(GTS_URI);
+			level.setSourceTrustService(GTS_URI);
 			trust.addTrustLevel(level, false);
 			assertEquals(1, trust.getTrustLevels().length);
 			assertEquals(true, trust.doesTrustLevelExist(level.getName()));
@@ -283,7 +286,7 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 
 			tl = trust.getTrustLevel(level.getName());
 			try {
-				tl.setAuthorityTrustService("localhost");
+				tl.setAuthorityTrustService("someotherhost");
 				trust.updateTrustLevel(tl);
 				fail("Trust Level should not be able to be updated!!!");
 			} catch (IllegalTrustLevelFault f) {
@@ -294,7 +297,7 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 
 			tl = trust.getTrustLevel(level.getName());
 			try {
-				tl.setSourceTrustService("localhost");
+				tl.setSourceTrustService("someotherhost");
 				trust.updateTrustLevel(tl);
 				fail("Trust Level should not be able to be updated!!!");
 			} catch (IllegalTrustLevelFault f) {
@@ -302,6 +305,27 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 			}
 
 			assertEquals(1, trust.getTrustLevels().length);
+			
+			TrustLevel level2 = new TrustLevel();
+			level2.setName("Two");
+			level2.setDescription("Trust Level Two");
+			level2.setIsAuthority(Boolean.FALSE);
+			level2.setAuthorityTrustService("some other host");
+			level2.setSourceTrustService("some other host");
+			trust.addTrustLevel(level2,false);
+			
+			assertEquals(2, trust.getTrustLevels().length);
+			assertEquals(true, trust.doesTrustLevelExist(level2.getName()));
+			assertEquals(level2, trust.getTrustLevel(level2.getName()));
+			
+			tl = trust.getTrustLevel(level2.getName());
+			try {
+				tl.setDescription("new description");
+				trust.updateTrustLevel(tl);
+				fail("Trust Level should not be able to be updated!!!");
+			} catch (IllegalTrustLevelFault f) {
+
+			}
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);

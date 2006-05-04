@@ -638,6 +638,14 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 			} catch (IllegalTrustedAuthorityFault f) {
 
 			}
+			
+			try {
+				TrustedAuthority u = trust.getTrustedAuthority(ta2.getTrustedAuthorityName());
+				trust.updateTrustedAuthority(u);
+				fail("Should not be able to update a trusted authority!!!");
+			} catch (IllegalTrustedAuthorityFault f) {
+
+			}
 
 			// TEST EXTERNAL UPDATE
 
@@ -646,7 +654,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 			try {
 				TrustedAuthority u = trust.getTrustedAuthority(ta.getTrustedAuthorityName());
 				u.setTrustedAuthorityName(null);
-				trust.updateTrustedAuthority(u);
+				trust.updateTrustedAuthority(u,false);
 				fail("Should not be able to update a trusted authority without specifying a valid name!!!");
 			} catch (InvalidTrustedAuthorityFault f) {
 
@@ -655,7 +663,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 			try {
 				TrustedAuthority u = trust.getTrustedAuthority(ta.getTrustedAuthorityName());
 				u.setTrustedAuthorityName("");
-				trust.updateTrustedAuthority(u);
+				trust.updateTrustedAuthority(u,false);
 				fail("Should not be able to update a trusted authority without specifying a valid name!!!");
 			} catch (InvalidTrustedAuthorityFault f) {
 
@@ -664,7 +672,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 			try {
 				TrustedAuthority u = trust.getTrustedAuthority(ta.getTrustedAuthorityName());
 				u.setTrustedAuthorityName("DOES NOT EXIST");
-				trust.updateTrustedAuthority(u);
+				trust.updateTrustedAuthority(u,false);
 				fail("Should not be able to update a trusted authority without specifying a valid name!!!");
 			} catch (InvalidTrustedAuthorityFault f) {
 
@@ -675,7 +683,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 			try {
 				TrustedAuthority u = trust.getTrustedAuthority(ta.getTrustedAuthorityName());
 				u.setIsAuthority(Boolean.FALSE);
-				trust.updateTrustedAuthority(u);
+				trust.updateTrustedAuthority(u,false);
 				fail("Should not be able to update a trusted authority!!!");
 			} catch (IllegalTrustedAuthorityFault f) {
 
@@ -686,7 +694,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 			try {
 				TrustedAuthority u = trust.getTrustedAuthority(ta.getTrustedAuthorityName());
 				u.setTrustLevel("INVALID");
-				trust.updateTrustedAuthority(u);
+				trust.updateTrustedAuthority(u,false);
 				fail("Should not be able to update a trusted authority!!!");
 			} catch (IllegalTrustedAuthorityFault f) {
 
@@ -697,19 +705,13 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 			try {
 				TrustedAuthority u = trust.getTrustedAuthority(ta.getTrustedAuthorityName());
 				u.setCertificate(ta2.getCertificate());
-				trust.updateTrustedAuthority(u);
+				trust.updateTrustedAuthority(u,false);
 				fail("Should not be able to update a trusted authority!!!");
 			} catch (IllegalTrustedAuthorityFault f) {
 
 			}
 			
-			try {
-				TrustedAuthority u = trust.getTrustedAuthority(ta2.getTrustedAuthorityName());
-				trust.updateTrustedAuthority(u);
-				fail("Should not be able to update a trusted authority!!!");
-			} catch (IllegalTrustedAuthorityFault f) {
-
-			}
+		
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
