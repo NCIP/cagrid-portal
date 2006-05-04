@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.gts.portal;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
+import gov.nih.nci.cagrid.gts.bean.Lifetime;
 import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
@@ -94,6 +95,10 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements Tru
 	private JButton addButton = null;
 
 	private boolean searchDone = false;
+
+	private JLabel jLabel3 = null;
+
+	private LifetimeComboBox lifetime = null;
 
 
 	/**
@@ -321,6 +326,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements Tru
 				.getSelectedTrustedAuthority(), this);
 			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(window);
 		} catch (Exception e) {
+			e.printStackTrace();
 			PortalUtils.showErrorMessage(e);
 		}
 	}
@@ -458,6 +464,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements Tru
 			}
 			filter.setTrustLevel(tl);
 			filter.setStatus(((StatusComboBox) status).getStatus());
+			filter.setLifetime(this.lifetime.getLifetime());
 
 			GTSSearchClient client = new GTSSearchClient(service);
 			int length = 0;
@@ -613,6 +620,24 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements Tru
 	 */
 	private JPanel getFilterPanel() {
 		if (filterPanel == null) {
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints11.gridy = 3;
+			gridBagConstraints11.weightx = 1.0;
+			gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints11.gridx = 1;
+			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+			gridBagConstraints10.gridx = 0;
+			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints10.gridy = 0;
+			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
+			gridBagConstraints9.gridx = 0;
+			gridBagConstraints9.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints9.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints9.gridy = 3;
+			jLabel3 = new JLabel();
+			jLabel3.setText("Lifetime");
 			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 			gridBagConstraints8.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints8.gridy = 2;
@@ -630,12 +655,14 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements Tru
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 			gridBagConstraints6.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints6.gridy = 2;
+			gridBagConstraints6.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints6.gridx = 0;
 			jLabel2 = new JLabel();
 			jLabel2.setText("Status");
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints5.gridy = 1;
+			gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints5.gridx = 0;
 			jLabel1 = new JLabel();
 			jLabel1.setText("Trust Level");
@@ -652,12 +679,14 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements Tru
 			filterPanel.setBorder(BorderFactory.createTitledBorder(null, "Search Criteria",
 				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel
 					.getPanelLabelColor()));
-			filterPanel.add(jLabel, new GridBagConstraints());
+			filterPanel.add(jLabel, gridBagConstraints10);
 			filterPanel.add(getTrustedAuthorityName(), gridBagConstraints3);
 			filterPanel.add(jLabel1, gridBagConstraints5);
 			filterPanel.add(jLabel2, gridBagConstraints6);
 			filterPanel.add(getTrustLevel(), gridBagConstraints7);
 			filterPanel.add(getStatus(), gridBagConstraints8);
+			filterPanel.add(jLabel3, gridBagConstraints9);
+			filterPanel.add(getLifetime(), gridBagConstraints11);
 		}
 		return filterPanel;
 	}
@@ -752,5 +781,18 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements Tru
 			findTrustedAuthorities();
 			enableAllActions();
 		}
+	}
+
+
+	/**
+	 * This method initializes lifetime
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
+	private JComboBox getLifetime() {
+		if (lifetime == null) {
+			lifetime = new LifetimeComboBox();
+		}
+		return lifetime;
 	}
 }

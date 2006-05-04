@@ -3,7 +3,7 @@
 		class="gov.nih.nci.cagrid.gts.service.GTSConfiguration">
 		<gts-config>
 			<gts-internal-id>GTS</gts-internal-id>
-			<sync-authorities hours="0" minutes="5" seconds="0"/>
+			<sync-authorities hours="0" minutes="1" seconds="0"/>
 			<database>
 				<name/>
 				<driver>com.mysql.jdbc.Driver</driver>
@@ -11,7 +11,7 @@
 				<host>localhost</host>
 				<port>3306</port>
 				<username>root</username>
-				<password>gomets123</password>
+				<password></password>
 				<pool>1</pool>
 			</database>
 		</gts-config>

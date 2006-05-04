@@ -18,6 +18,8 @@ import java.awt.GridBagLayout;
 import java.io.File;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -88,6 +90,28 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 
 	private TrustedAuthorityRefresher refresher;
 
+	private JLabel jLabel5 = null;
+
+	private JTextField isAuthority = null;
+
+	private JLabel jLabel6 = null;
+
+	private JTextField authorityGTS = null;
+
+	private JLabel jLabel7 = null;
+
+	private JTextField sourceGTS = null;
+
+	private JLabel Expiration = null;
+
+	private JTextField expires = null;
+
+	private JLabel jLabel9 = null;
+
+	private JLabel jLabel10 = null;
+
+	private JTextField lastUpdated = null;
+
 
 	/**
 	 * This is the default constructor
@@ -112,6 +136,23 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 		this.getTrustedAuthorityName().setText(ta.getTrustedAuthorityName());
 		((StatusComboBox) this.getStatus()).setSelectedItem(ta.getStatus());
 		trustLevel.setSelectedItem(ta.getTrustLevel());
+		this.getIsAuthority().setText(ta.getIsAuthority().toString());
+		this.getAuthorityGTS().setText(ta.getAuthorityTrustService());
+		this.getSourceGTS().setText(ta.getSourceTrustService());
+		if (ta.getExpires() <= 0) {
+			getExpires().setText("Never");
+		} else {
+			Calendar c = new GregorianCalendar();
+			c.setTimeInMillis(ta.getExpires());
+			getExpires().setText(c.getTime().toString());
+		}
+		if (ta.getLastUpdated() <= 0) {
+			getLastUpdated().setText("Unknown");
+		} else {
+			Calendar c = new GregorianCalendar();
+			c.setTimeInMillis(ta.getLastUpdated());
+			getLastUpdated().setText(c.getTime().toString());
+		}
 		this.getCertificatePanel().setCertificate(
 			CertUtil.loadCertificate(ta.getCertificate().getCertificateEncodedString()));
 		if (ta.getCRL() != null) {
@@ -129,7 +170,7 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(600, 400);
+		this.setSize(600, 500);
 		this.setContentPane(getJContentPane());
 		if (!update) {
 			this.setTitle("Add Trusted Authority");
@@ -309,6 +350,81 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 	 */
 	private JPanel getPropertiesPanel() {
 		if (propertiesPanel == null) {
+			GridBagConstraints gridBagConstraints23 = new GridBagConstraints();
+			gridBagConstraints23.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints23.gridy = 7;
+			gridBagConstraints23.weightx = 1.0;
+			gridBagConstraints23.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints23.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints23.gridx = 1;
+			GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
+			gridBagConstraints22.gridx = 0;
+			gridBagConstraints22.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints22.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints22.gridy = 7;
+			jLabel10 = new JLabel();
+			jLabel10.setText("Last Updated");
+			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+			gridBagConstraints20.gridx = 0;
+			gridBagConstraints20.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints20.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints20.gridy = 6;
+			jLabel9 = new JLabel();
+			jLabel9.setText("Expires");
+			jLabel9.setName("Expires");
+			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+			gridBagConstraints21.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints21.gridy = 6;
+			gridBagConstraints21.weightx = 1.0;
+			gridBagConstraints21.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints21.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints21.gridx = 1;
+			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
+			gridBagConstraints19.gridx = 0;
+			gridBagConstraints19.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints19.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints19.gridy = 6;
+			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
+			gridBagConstraints18.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints18.gridy = 5;
+			gridBagConstraints18.weightx = 1.0;
+			gridBagConstraints18.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints18.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints18.gridx = 1;
+			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
+			gridBagConstraints17.gridx = 0;
+			gridBagConstraints17.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints17.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints17.gridy = 5;
+			jLabel7 = new JLabel();
+			jLabel7.setText("Source GTS");
+			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
+			gridBagConstraints16.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints16.gridy = 4;
+			gridBagConstraints16.weightx = 1.0;
+			gridBagConstraints16.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints16.gridx = 1;
+			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
+			gridBagConstraints15.gridx = 0;
+			gridBagConstraints15.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints15.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints15.gridy = 4;
+			jLabel6 = new JLabel();
+			jLabel6.setText("Authority GTS");
+			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
+			gridBagConstraints14.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints14.gridy = 3;
+			gridBagConstraints14.weightx = 1.0;
+			gridBagConstraints14.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints14.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints14.gridx = 1;
+			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
+			gridBagConstraints13.gridx = 0;
+			gridBagConstraints13.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints13.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints13.gridy = 3;
+			jLabel5 = new JLabel();
+			jLabel5.setText("Is Authority");
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints11.gridy = 2;
@@ -357,6 +473,19 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 			propertiesPanel.add(getStatus(), gridBagConstraints9);
 			propertiesPanel.add(jLabel4, gridBagConstraints10);
 			propertiesPanel.add(getTrustLevel(), gridBagConstraints11);
+
+			if (update) {
+				propertiesPanel.add(jLabel5, gridBagConstraints13);
+				propertiesPanel.add(getIsAuthority(), gridBagConstraints14);
+				propertiesPanel.add(jLabel6, gridBagConstraints15);
+				propertiesPanel.add(getAuthorityGTS(), gridBagConstraints16);
+				propertiesPanel.add(jLabel7, gridBagConstraints17);
+				propertiesPanel.add(getSourceGTS(), gridBagConstraints18);
+				propertiesPanel.add(getExpires(), gridBagConstraints21);
+				propertiesPanel.add(jLabel9, gridBagConstraints20);
+				propertiesPanel.add(jLabel10, gridBagConstraints22);
+				propertiesPanel.add(getLastUpdated(), gridBagConstraints23);
+			}
 		}
 		return propertiesPanel;
 	}
@@ -665,6 +794,76 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 			PortalUtils.showErrorMessage(e);
 		}
 
+	}
+
+
+	/**
+	 * This method initializes isAuthority
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getIsAuthority() {
+		if (isAuthority == null) {
+			isAuthority = new JTextField();
+			isAuthority.setEditable(false);
+		}
+		return isAuthority;
+	}
+
+
+	/**
+	 * This method initializes authorityGTS
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getAuthorityGTS() {
+		if (authorityGTS == null) {
+			authorityGTS = new JTextField();
+			authorityGTS.setEditable(false);
+		}
+		return authorityGTS;
+	}
+
+
+	/**
+	 * This method initializes sourceGTS
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getSourceGTS() {
+		if (sourceGTS == null) {
+			sourceGTS = new JTextField();
+			sourceGTS.setEditable(false);
+		}
+		return sourceGTS;
+	}
+
+
+	/**
+	 * This method initializes expires
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getExpires() {
+		if (expires == null) {
+			expires = new JTextField();
+			expires.setEditable(false);
+		}
+		return expires;
+	}
+
+
+	/**
+	 * This method initializes lastUpdated
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getLastUpdated() {
+		if (lastUpdated == null) {
+			lastUpdated = new JTextField();
+			lastUpdated.setEditable(false);
+		}
+		return lastUpdated;
 	}
 
 }

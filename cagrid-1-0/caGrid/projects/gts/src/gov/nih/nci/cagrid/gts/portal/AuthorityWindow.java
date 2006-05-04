@@ -114,7 +114,7 @@ public class AuthorityWindow extends GridPortalComponent {
 		this.proxy.setSelectedItem(new ProxyCaddy(cred));
 		if (auth != null) {
 			this.getGts().setEnabled(false);
-			this.getGtsURI().setEnabled(false);
+			this.getGtsURI().setEditable(false);
 			this.getGtsURI().setText(auth.getServiceURI());
 			this.getPriority().setSelectedItem(new Integer(auth.getPriority()));
 			this.getPriority().setEnabled(false);
