@@ -41,12 +41,13 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *---------------------------------------------------------------------------*/
 
-package gov.nih.nci.cagrid.introduce.portal.modification.resources;
+package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
-import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
-import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodsTypeTreeNode;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertiesTypeTreeNode;
 
 import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -63,37 +64,53 @@ import javax.swing.tree.DefaultTreeModel;
  * @version $Id: MakoGridServiceTreeNode.java,v 1.21 2005/04/20 17:28:54 ervin
  *          Exp $
  */
-public class ResourcePropertyTypeTreeNode extends DefaultMutableTreeNode {
-	private ResourcePropertyPopUpMenu menu;
+public class ServiceTypeTreeNode extends DefaultMutableTreeNode {
+	private ServiceType serviceType;
+	private ServiceInformation info;
+	private ServicePopUpMenu popUpMenu;
+	private ServicesJTree tree;
 
 
-	public ResourcePropertyTypeTreeNode(ResourcePropertyType resourcePropertyType, DefaultTreeModel model) {
+	public ServiceTypeTreeNode(ServiceType serviceType, ServiceInformation info, ServicesJTree tree) {
 		super();
-		this.menu = new ResourcePropertyPopUpMenu(this);
-		this.setUserObject(resourcePropertyType);
+		this.info = info;
+		this.setUserObject(serviceType);
+		this.serviceType = serviceType;
+		this.tree = tree;
+		this.popUpMenu = new ServicePopUpMenu(this);
+		initialize();
+	}
+
+
+	private void initialize() {
+		if (serviceType.getMethods() != null) {
+			MethodsTypeTreeNode newNode = new MethodsTypeTreeNode(serviceType.getMethods(), (DefaultTreeModel)tree.getModel(), info);
+			((DefaultTreeModel)tree.getModel()).insertNodeInto(newNode, this, this.getChildCount());
+		}
+		if (serviceType.getResourcePropertiesList() != null) {
+			ResourcePropertiesTypeTreeNode newNode = new ResourcePropertiesTypeTreeNode(serviceType
+				.getResourcePropertiesList(), (DefaultTreeModel)tree.getModel(), info);
+		((DefaultTreeModel)tree.getModel()).insertNodeInto(newNode, this, this.getChildCount());
+		}
 	}
 
 
 	public ImageIcon getOpenIcon() {
-		return IntroduceLookAndFeel.getResourceIcon();
+		return IntroduceLookAndFeel.getModifyServiceIcon();
 	}
 
 
 	public ImageIcon getClosedIcon() {
-		return IntroduceLookAndFeel.getResourceIcon();
+		return IntroduceLookAndFeel.getModifyServiceIcon();
 	}
 
 
 	public String toString() {
-		if (((ResourcePropertyType) this.getUserObject()).getQName() != null) {
-			return ((ResourcePropertyType) this.getUserObject()).getQName().toString();
-		}
-		return "N/A";
+		return ((ServiceType) this.getUserObject()).getName();
 	}
-
-
-	public ResourcePropertyPopUpMenu getPopUpMenu() {
-		return this.menu;
+	
+	public ServicePopUpMenu getPopUpMenu(){
+		return popUpMenu;
 	}
 
 }

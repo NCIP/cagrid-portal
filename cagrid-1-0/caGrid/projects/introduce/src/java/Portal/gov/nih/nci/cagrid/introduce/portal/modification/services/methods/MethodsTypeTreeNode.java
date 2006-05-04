@@ -41,13 +41,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *---------------------------------------------------------------------------*/
 
-package gov.nih.nci.cagrid.introduce.portal.modification.resources;
+package gov.nih.nci.cagrid.introduce.portal.modification.services.methods;
 
-import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
-import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeTreeNode;
 
-import javax.swing.ImageIcon;
+import javax.swing.JPopupMenu;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -62,53 +63,101 @@ import javax.swing.tree.DefaultTreeModel;
  * @version $Id: MakoGridServiceTreeNode.java,v 1.21 2005/04/20 17:28:54 ervin
  *          Exp $
  */
-public class ResourceTypeTreeNode extends DefaultMutableTreeNode {
-	private ServiceType serviceType;
+public class MethodsTypeTreeNode extends DefaultMutableTreeNode {
+	private MethodsType methods;
+	private DefaultTreeModel model;
+	private MethodsPopUpMenu menu;
 	private ServiceInformation info;
-	private ResourcePopUpMenu popUpMenu;
-	private ResourcesJTree tree;
-
-
-	public ResourceTypeTreeNode(ServiceType serviceType, ServiceInformation info, ResourcesJTree tree) {
+	
+	public MethodsTypeTreeNode(MethodsType methods,DefaultTreeModel model,ServiceInformation info) {
 		super();
+		this.methods = methods;
+		this.setUserObject("Methods");
+		this.model = model;
+		this.menu = new MethodsPopUpMenu(this);
 		this.info = info;
-		this.setUserObject(serviceType);
-		this.serviceType = serviceType;
-		this.tree = tree;
-		this.popUpMenu = new ResourcePopUpMenu(this);
 		initialize();
 	}
-
-
-	private void initialize() {
-		if (serviceType.getMethods() != null) {
-			MethodsTypeTreeNode newNode = new MethodsTypeTreeNode(serviceType.getMethods(), (DefaultTreeModel)tree.getModel(), info);
-			((DefaultTreeModel)tree.getModel()).insertNodeInto(newNode, this, this.getChildCount());
+	
+	private void initialize(){
+		if(methods!=null && methods.getMethod()!=null){
+			for(int i = 0; i < methods.getMethod().length; i++){
+				MethodType method = methods.getMethod(i);
+				MethodTypeTreeNode newNode = new MethodTypeTreeNode(method,model);
+				model.insertNodeInto(newNode,this,this.getChildCount());
+			}
 		}
-		if (serviceType.getResourcePropertiesList() != null) {
-			ResourcePropertiesTypeTreeNode newNode = new ResourcePropertiesTypeTreeNode(serviceType
-				.getResourcePropertiesList(), (DefaultTreeModel)tree.getModel(), info);
-		((DefaultTreeModel)tree.getModel()).insertNodeInto(newNode, this, this.getChildCount());
-		}
-	}
-
-
-	public ImageIcon getOpenIcon() {
-		return IntroduceLookAndFeel.getResourceIcon();
-	}
-
-
-	public ImageIcon getClosedIcon() {
-		return IntroduceLookAndFeel.getResourceIcon();
-	}
-
-
-	public String toString() {
-		return ((ServiceType) this.getUserObject()).getName();
 	}
 	
-	public ResourcePopUpMenu getPopUpMenu(){
-		return popUpMenu;
+	public void addMethod(MethodType method){
+		if(getMethods()==null){
+			System.err.println("ERROR: cannot add new method when the methods container is null.");
+		}
+		//add new method to array in bean
+		//this seems to be a wierd way be adding things....
+		MethodType[] newMethods;
+		int newLength = 0;
+		if (getMethods()!=null && getMethods().getMethod()!=null) {
+			newLength = getMethods().getMethod().length + 1;
+			newMethods = new MethodType[newLength];
+			System.arraycopy(getMethods().getMethod(), 0, newMethods, 0, getMethods().getMethod().length);
+		} else {
+			newLength = 1;
+			newMethods = new MethodType[newLength];
+		}
+		newMethods[newLength - 1] = method;
+		getMethods().setMethod(newMethods);
+		
+		MethodTypeTreeNode newNode = new MethodTypeTreeNode(method,model);
+		model.insertNodeInto(newNode,this,this.getChildCount());
+	}
+	
+	public void removeMethod(MethodTypeTreeNode node){
+		
+		MethodType[] newMethods = new MethodType[getMethods().getMethod().length-1];
+		int newMethodsCount =0;
+		for(int i = 0; i < this.getChildCount(); i++){
+			MethodTypeTreeNode treenode = (MethodTypeTreeNode)this.getChildAt(i);
+			if(!treenode.equals(node)){
+				newMethods[newMethodsCount++] = (MethodType)treenode.getUserObject();
+			} 
+		}
+		
+		getMethods().setMethod(newMethods);
+		
+		model.removeNodeFromParent(node);
+	}
+	
+	public JPopupMenu getPopUpMenu(){
+		return menu;
+	}
+	
+	public String toString(){
+		return this.getUserObject().toString();
+	}
+
+	public MethodsType getMethods() {
+		return methods;
+	}
+
+	public void setMethods(MethodsType methods) {
+		this.methods = methods;
+	}
+
+	public DefaultTreeModel getModel() {
+		return model;
+	}
+
+	public void setModel(DefaultTreeModel model) {
+		this.model = model;
+	}
+
+	public ServiceInformation getInfo() {
+		return info;
+	}
+
+	public void setInfo(ServiceInformation info) {
+		this.info = info;
 	}
 
 }

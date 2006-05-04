@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.portal.modification.resources;
+package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -12,15 +12,15 @@ import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import javax.swing.JPopupMenu;
 import javax.swing.JMenuItem;
 
-public class ResourcesPopUpMenu extends JPopupMenu {
+public class ServicesPopUpMenu extends JPopupMenu {
 
 	private JMenuItem addResourceMenuItem = null;
-	private ResourcesTypeTreeNode node;
+	private ServicesTypeTreeNode node;
 	/**
 	 * This method initializes 
 	 * 
 	 */
-	public ResourcesPopUpMenu(ResourcesTypeTreeNode node) {
+	public ServicesPopUpMenu(ServicesTypeTreeNode node) {
 		super();
 		this.node = node;
 		initialize();
@@ -44,7 +44,7 @@ public class ResourcesPopUpMenu extends JPopupMenu {
 		if (addResourceMenuItem == null) {
 			addResourceMenuItem = new JMenuItem();
 			addResourceMenuItem.setText("Add Resource");
-			addResourceMenuItem.setIcon(IntroduceLookAndFeel.getAddIcon());
+			addResourceMenuItem.setIcon(IntroduceLookAndFeel.getCreateIcon());
 			addResourceMenuItem.addMouseListener(new MouseAdapter() {
 			
 				public void mousePressed(MouseEvent e) {

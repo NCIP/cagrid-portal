@@ -30,8 +30,10 @@ import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
-import gov.nih.nci.cagrid.introduce.portal.modification.resources.ResourcesJTree;
+import gov.nih.nci.cagrid.introduce.portal.modification.methods.MethodViewer;
+import gov.nih.nci.cagrid.introduce.portal.modification.methods.MethodsTable;
 import gov.nih.nci.cagrid.introduce.portal.modification.security.ServiceSecurityPanel;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.ServicesJTree;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeConfigurePanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeTreeNode;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespacesJTree;
@@ -145,7 +147,7 @@ public class NewModificationViewer extends GridPortalComponent {
 	private JPanel resourceesTabbedPanel = null;
 	private JPanel resourcesPanel = null;
 	private JScrollPane resourcesScrollPane = null;
-	private ResourcesJTree resourcesJTree = null;
+	private ServicesJTree resourcesJTree = null;
 
 
 	/**
@@ -1872,9 +1874,9 @@ public class NewModificationViewer extends GridPortalComponent {
 	 * 	
 	 * @return javax.swing.JTree	
 	 */
-	private ResourcesJTree getResourcesJTree() {
+	private ServicesJTree getResourcesJTree() {
 		if (resourcesJTree == null) {
-			resourcesJTree = new ResourcesJTree(info.getServices(),info);
+			resourcesJTree = new ServicesJTree(info.getServices(),info);
 		}
 		return resourcesJTree;
 	}

@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.portal.modification.resources;
+package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
@@ -12,7 +12,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-public class ResourceTypeConfigurePanel extends JPanel{
+public class ServiceTypeConfigurePanel extends JPanel{
 
 	private JLabel namespaceLabel = null;
 	private JLabel packageNameLabel = null;
@@ -26,7 +26,7 @@ public class ResourceTypeConfigurePanel extends JPanel{
 	 * This method initializes 
 	 * 
 	 */
-	public ResourceTypeConfigurePanel() {
+	public ServiceTypeConfigurePanel() {
 		super();
 		initialize();
 	}

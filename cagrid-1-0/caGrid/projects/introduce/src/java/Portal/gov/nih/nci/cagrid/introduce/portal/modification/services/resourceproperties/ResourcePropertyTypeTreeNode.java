@@ -41,14 +41,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *---------------------------------------------------------------------------*/
 
-package gov.nih.nci.cagrid.introduce.portal.modification.resources;
+package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties;
 
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
-import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
-import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeTreeNode;
+import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
-import javax.swing.JPopupMenu;
+import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -63,101 +63,37 @@ import javax.swing.tree.DefaultTreeModel;
  * @version $Id: MakoGridServiceTreeNode.java,v 1.21 2005/04/20 17:28:54 ervin
  *          Exp $
  */
-public class MethodsTypeTreeNode extends DefaultMutableTreeNode {
-	private MethodsType methods;
-	private DefaultTreeModel model;
-	private MethodsPopUpMenu menu;
-	private ServiceInformation info;
-	
-	public MethodsTypeTreeNode(MethodsType methods,DefaultTreeModel model,ServiceInformation info) {
+public class ResourcePropertyTypeTreeNode extends DefaultMutableTreeNode {
+	private ResourcePropertyPopUpMenu menu;
+
+
+	public ResourcePropertyTypeTreeNode(ResourcePropertyType resourcePropertyType, DefaultTreeModel model) {
 		super();
-		this.methods = methods;
-		this.setUserObject("Methods");
-		this.model = model;
-		this.menu = new MethodsPopUpMenu(this);
-		this.info = info;
-		initialize();
+		this.menu = new ResourcePropertyPopUpMenu(this);
+		this.setUserObject(resourcePropertyType);
 	}
-	
-	private void initialize(){
-		if(methods!=null && methods.getMethod()!=null){
-			for(int i = 0; i < methods.getMethod().length; i++){
-				MethodType method = methods.getMethod(i);
-				MethodTypeTreeNode newNode = new MethodTypeTreeNode(method,model);
-				model.insertNodeInto(newNode,this,this.getChildCount());
-			}
+
+
+	public ImageIcon getOpenIcon() {
+		return IntroduceLookAndFeel.getResourceIcon();
+	}
+
+
+	public ImageIcon getClosedIcon() {
+		return IntroduceLookAndFeel.getResourceIcon();
+	}
+
+
+	public String toString() {
+		if (((ResourcePropertyType) this.getUserObject()).getQName() != null) {
+			return ((ResourcePropertyType) this.getUserObject()).getQName().toString();
 		}
-	}
-	
-	public void addMethod(MethodType method){
-		if(getMethods()==null){
-			System.err.println("ERROR: cannot add new method when the methods container is null.");
-		}
-		//add new method to array in bean
-		//this seems to be a wierd way be adding things....
-		MethodType[] newMethods;
-		int newLength = 0;
-		if (getMethods()!=null && getMethods().getMethod()!=null) {
-			newLength = getMethods().getMethod().length + 1;
-			newMethods = new MethodType[newLength];
-			System.arraycopy(getMethods().getMethod(), 0, newMethods, 0, getMethods().getMethod().length);
-		} else {
-			newLength = 1;
-			newMethods = new MethodType[newLength];
-		}
-		newMethods[newLength - 1] = method;
-		getMethods().setMethod(newMethods);
-		
-		MethodTypeTreeNode newNode = new MethodTypeTreeNode(method,model);
-		model.insertNodeInto(newNode,this,this.getChildCount());
-	}
-	
-	public void removeMethod(MethodTypeTreeNode node){
-		
-		MethodType[] newMethods = new MethodType[getMethods().getMethod().length-1];
-		int newMethodsCount =0;
-		for(int i = 0; i < this.getChildCount(); i++){
-			MethodTypeTreeNode treenode = (MethodTypeTreeNode)this.getChildAt(i);
-			if(!treenode.equals(node)){
-				newMethods[newMethodsCount++] = (MethodType)treenode.getUserObject();
-			} 
-		}
-		
-		getMethods().setMethod(newMethods);
-		
-		model.removeNodeFromParent(node);
-	}
-	
-	public JPopupMenu getPopUpMenu(){
-		return menu;
-	}
-	
-	public String toString(){
-		return this.getUserObject().toString();
+		return "N/A";
 	}
 
-	public MethodsType getMethods() {
-		return methods;
-	}
 
-	public void setMethods(MethodsType methods) {
-		this.methods = methods;
-	}
-
-	public DefaultTreeModel getModel() {
-		return model;
-	}
-
-	public void setModel(DefaultTreeModel model) {
-		this.model = model;
-	}
-
-	public ServiceInformation getInfo() {
-		return info;
-	}
-
-	public void setInfo(ServiceInformation info) {
-		this.info = info;
+	public ResourcePropertyPopUpMenu getPopUpMenu() {
+		return this.menu;
 	}
 
 }

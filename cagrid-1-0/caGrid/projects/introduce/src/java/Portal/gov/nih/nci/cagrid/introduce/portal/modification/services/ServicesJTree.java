@@ -1,9 +1,13 @@
-package gov.nih.nci.cagrid.introduce.portal.modification.resources;
+package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodTypeTreeNode;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodsTypeTreeNode;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertiesTypeTreeNode;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertyTypeTreeNode;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -19,23 +23,23 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 
-public class ResourcesJTree extends JTree {
-	private ResourcesTypeTreeNode root;
+public class ServicesJTree extends JTree {
+	private ServicesTypeTreeNode root;
 	private DefaultTreeModel model;
 	private ServicesType services;
 	private ServiceInformation info;
 
 
-	public ResourcesJTree(ServicesType services,ServiceInformation info) {
-		setCellRenderer(new ResourcesTreeRenderer(model));
+	public ServicesJTree(ServicesType services,ServiceInformation info) {
+		setCellRenderer(new ServicesTreeRenderer(model));
 		setServices(services);
 		this.info = info;
 		this.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				super.mouseClicked(e);
-				ResourcesJTree.this.setSelectionRow(ResourcesJTree.this.getRowForLocation(e.getX(), e.getY()));
+				ServicesJTree.this.setSelectionRow(ServicesJTree.this.getRowForLocation(e.getX(), e.getY()));
 				if(SwingUtilities.isRightMouseButton(e)){
-					List nodes = ResourcesJTree.this.getSelectedNodes();
+					List nodes = ServicesJTree.this.getSelectedNodes();
 					if(nodes.size()>=1){
 						if(nodes.get(0) instanceof MethodsTypeTreeNode){
 							((MethodsTypeTreeNode)nodes.get(0)).getPopUpMenu().show(e.getComponent(),e.getX(),e.getY());
@@ -43,12 +47,12 @@ public class ResourcesJTree extends JTree {
 							((MethodTypeTreeNode)nodes.get(0)).getPopUpMenu().show(e.getComponent(),e.getX(),e.getY());
 						} else if(nodes.get(0) instanceof ResourcePropertiesTypeTreeNode){
 							((ResourcePropertiesTypeTreeNode)nodes.get(0)).getPopUpMenu().show(e.getComponent(),e.getX(),e.getY());
-						} else if(nodes.get(0) instanceof ResourcesTypeTreeNode){
-							((ResourcesTypeTreeNode)nodes.get(0)).getPopUpMenu().show(e.getComponent(),e.getX(),e.getY());	
+						} else if(nodes.get(0) instanceof ServicesTypeTreeNode){
+							((ServicesTypeTreeNode)nodes.get(0)).getPopUpMenu().show(e.getComponent(),e.getX(),e.getY());	
 						} else if(nodes.get(0) instanceof ResourcePropertyTypeTreeNode){
 							((ResourcePropertyTypeTreeNode)nodes.get(0)).getPopUpMenu().show(e.getComponent(),e.getX(),e.getY());
-						} else if(nodes.get(0) instanceof ResourceTypeTreeNode){
-							((ResourceTypeTreeNode)nodes.get(0)).getPopUpMenu().show(e.getComponent(),e.getX(),e.getY());
+						} else if(nodes.get(0) instanceof ServiceTypeTreeNode){
+							((ServiceTypeTreeNode)nodes.get(0)).getPopUpMenu().show(e.getComponent(),e.getX(),e.getY());
 						}
 					} 
 				}
@@ -61,7 +65,7 @@ public class ResourcesJTree extends JTree {
 
 
 	public void setServices(ServicesType ns) {
-		this.root = new ResourcesTypeTreeNode(ns,info,this);
+		this.root = new ServicesTypeTreeNode(ns,info,this);
 		this.model = new DefaultTreeModel(root, false);
 		this.services = ns;
 		setModel(model);
@@ -100,7 +104,7 @@ public class ResourcesJTree extends JTree {
 		DefaultMutableTreeNode currentNode = getCurrentNode();
 
 		// keep the services object in sync
-		if (currentNode instanceof ResourceTypeTreeNode) {
+		if (currentNode instanceof ServiceTypeTreeNode) {
 			ServiceType[] namespaceTypes = services.getService();
 			if (namespaceTypes.length > 1) {
 				ServiceType[] newServiceTypes = new ServiceType[namespaceTypes.length - 1];
@@ -179,7 +183,7 @@ public class ResourcesJTree extends JTree {
 		if (node.getChildCount() >= 0) {
 			for (java.util.Enumeration e = node.children(); e.hasMoreElements();) {
 				TreeNode n = (TreeNode) e.nextElement();
-				ResourceTypeTreeNode nsNode = (ResourceTypeTreeNode) n;
+				ServiceTypeTreeNode nsNode = (ServiceTypeTreeNode) n;
 				ServiceType nsType = (ServiceType) nsNode.getUserObject();
 				if (nsType.getName().equals(type.getName())) {
 					return true;

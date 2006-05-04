@@ -1,11 +1,11 @@
-package gov.nih.nci.cagrid.introduce.portal.modification.resources;
+package gov.nih.nci.cagrid.introduce.portal.modification.services.methods;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
-import gov.nih.nci.cagrid.introduce.portal.modification.MethodViewer;
+import gov.nih.nci.cagrid.introduce.portal.modification.methods.MethodViewer;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -17,15 +17,15 @@ import javax.xml.namespace.QName;
 
 import org.projectmobius.portal.PortalResourceManager;
 
-public class ResourcePopUpMenu extends JPopupMenu {
+public class MethodPopUpMenu extends JPopupMenu {
 
 	private JMenuItem removeMethodMenuItem = null;
-	ResourceTypeTreeNode node;
+	MethodTypeTreeNode node;
 	/**
 	 * This method initializes 
 	 * 
 	 */
-	public ResourcePopUpMenu(ResourceTypeTreeNode node) {
+	public MethodPopUpMenu(MethodTypeTreeNode node) {
 		super();
 		this.node = node;
 		initialize();
@@ -52,7 +52,7 @@ public class ResourcePopUpMenu extends JPopupMenu {
 			removeMethodMenuItem.addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {
 					super.mousePressed(e);
-					((ResourcesTypeTreeNode)node.getParent()).removeResource(node);
+					((MethodsTypeTreeNode)node.getParent()).removeMethod(node);
 				}
 			});
 		}

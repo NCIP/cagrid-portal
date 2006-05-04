@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.portal.modification.resources;
+package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

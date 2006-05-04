@@ -41,87 +41,52 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *---------------------------------------------------------------------------*/
 
-package gov.nih.nci.cagrid.introduce.portal.modification.resources;
+package gov.nih.nci.cagrid.introduce.portal.modification.services.methods;
 
-import java.awt.Component;
-import java.awt.Font;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
-import javax.swing.JTree;
-import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.ImageIcon;
+import javax.swing.JPopupMenu;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 
-/** 
- *  Renders the grid service tree
+/**
+ * Node for representing namepspace
  * 
- * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
+ * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
- * 
- * @created Nov 17, 2004 
- * @version $Id$ 
+ * @created Nov 22, 2004
+ * @version $Id: MakoGridServiceTreeNode.java,v 1.21 2005/04/20 17:28:54 ervin
+ *          Exp $
  */
-public class ResourcesTreeRenderer extends DefaultTreeCellRenderer {
-	private DefaultTreeModel model = null;
-	private Font normal = null;
+public class MethodTypeTreeNode extends DefaultMutableTreeNode {
+	private MethodPopUpMenu popUpMenu;
 	
-	public ResourcesTreeRenderer(DefaultTreeModel model) {
+	public MethodTypeTreeNode(MethodType methodType,DefaultTreeModel model) {
 		super();
-		this.model = model;
+		popUpMenu = new MethodPopUpMenu(this);
+		this.setUserObject(methodType);
 	}
 	
+	public ImageIcon getOpenIcon(){
+		return IntroduceLookAndFeel.getResourceIcon();
+	}
 	
-	public Component getTreeCellRendererComponent(
-		JTree tree, Object value, boolean sel, boolean expanded,
-		boolean leaf, int row, boolean localHasFocus) {
-		super.getTreeCellRendererComponent(
-			tree, value, sel, expanded,
-			leaf, row, localHasFocus);
-		if(normal==null){
-			normal = this.getFont();
-		}
-		this.setFont(normal);
-		if (value instanceof ResourceTypeTreeNode) {
-			ResourceTypeTreeNode node = (ResourceTypeTreeNode) value;
-			this.setIcon(node.getOpenIcon());
-			//this.setOpenIcon(node.getOpenIcon());
-			//this.setClosedIcon(node.getClosedIcon());
-			this.setFont(normal.deriveFont(Font.BOLD));
-			this.setText(node.toString());
-		} else if (value instanceof ResourcesTypeTreeNode) {
-			ResourcesTypeTreeNode node = (ResourcesTypeTreeNode) value;
-			this.setOpenIcon(null);
-			this.setClosedIcon(null);
-			this.setText(node.toString());
-			this.setFont(normal.deriveFont(Font.BOLD,12));
-		} else if (value instanceof MethodsTypeTreeNode) {
-			MethodsTypeTreeNode node = (MethodsTypeTreeNode) value;
-			this.setOpenIcon(null);
-			this.setClosedIcon(null);
-			this.setText(node.toString());
-			this.setFont(normal);
-		} else if (value instanceof MethodTypeTreeNode) {
-			MethodTypeTreeNode node = (MethodTypeTreeNode) value;
-			this.setOpenIcon(null);
-			this.setClosedIcon(null);
-			this.setText(node.toString());
-			this.setFont(normal.deriveFont(Font.ITALIC));
-		} else if (value instanceof ResourcePropertiesTypeTreeNode) {
-			ResourcePropertiesTypeTreeNode node = (ResourcePropertiesTypeTreeNode) value;
-			this.setOpenIcon(null);
-			this.setClosedIcon(null);
-			this.setText(node.toString());
-			this.setFont(normal);
-		} 
-		else if (value instanceof ResourcePropertyTypeTreeNode) {
-			ResourcePropertyTypeTreeNode node = (ResourcePropertyTypeTreeNode) value;
-			this.setOpenIcon(null);
-			this.setClosedIcon(null);
-			this.setText(node.toString());
-			this.setFont(normal.deriveFont(Font.ITALIC));
-		} 
-		return this;
+	public ImageIcon getClosedIcon(){
+		return IntroduceLookAndFeel.getResourceIcon();
+	}
+	
+	public String toString(){
+		return CommonTools.methodTypeToString(((MethodType)this.getUserObject()));
+	}
+	
+	public JPopupMenu getPopUpMenu(){
+		return popUpMenu;
 	}
 
 }

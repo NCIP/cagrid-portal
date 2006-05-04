@@ -30,6 +30,8 @@ import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
+import gov.nih.nci.cagrid.introduce.portal.modification.methods.MethodViewer;
+import gov.nih.nci.cagrid.introduce.portal.modification.methods.MethodsTable;
 import gov.nih.nci.cagrid.introduce.portal.modification.security.ServiceSecurityPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeConfigurePanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeTreeNode;
