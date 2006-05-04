@@ -86,8 +86,6 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 
 	private JButton importCRL = null;
 
-	private boolean update = false;
-
 	private TrustedAuthorityRefresher refresher;
 
 	private JLabel jLabel5 = null;
@@ -110,6 +108,12 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 
 	private JTextField lastUpdated = null;
 
+	private final static int ADD = 0;
+	private final static int UPDATE = 1;
+	private final static int VIEW = 2;
+
+	private int state;
+
 
 	/**
 	 * This is the default constructor
@@ -117,6 +121,7 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 	public TrustedAuthorityWindow(TrustedAuthorityRefresher refresher) {
 		super();
 		this.refresher = refresher;
+		this.state = ADD;
 		initialize();
 		this.updateTrustLevels();
 	}
@@ -126,7 +131,11 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 		TrustedAuthorityRefresher refresher) throws Exception {
 		super();
 		this.refresher = refresher;
-		update = true;
+		if (ta.getIsAuthority().equals(Boolean.FALSE)) {
+			state = VIEW;
+		} else {
+			state = UPDATE;
+		}
 		initialize();
 		this.gts.setSelectedItem(service);
 		this.proxy.setSelectedItem(new ProxyCaddy(cred));
@@ -170,11 +179,14 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 	private void initialize() {
 		this.setSize(600, 500);
 		this.setContentPane(getJContentPane());
-		if (!update) {
+		if (state == ADD) {
 			this.setTitle("Add Trusted Authority");
 			this.setFrameIcon(GTSLookAndFeel.getAddTrustedAuthorityIcon());
-		} else {
+		} else if (state == UPDATE) {
 			this.setTitle("View/Modify Trusted Authority");
+			this.setFrameIcon(GTSLookAndFeel.getTrustedAuthorityIcon());
+		} else {
+			this.setTitle("View Trusted Authority");
 			this.setFrameIcon(GTSLookAndFeel.getTrustedAuthorityIcon());
 		}
 	}
@@ -320,7 +332,7 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 					updateTrustLevels();
 				}
 			});
-			if (this.update) {
+			if (state != ADD) {
 				gts.setEnabled(false);
 			}
 		}
@@ -336,6 +348,9 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 	private JComboBox getProxy() {
 		if (proxy == null) {
 			proxy = new ProxyComboBox();
+			if(state == VIEW){
+				proxy.setEnabled(false);
+			}
 		}
 		return proxy;
 	}
@@ -472,7 +487,7 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 			propertiesPanel.add(jLabel4, gridBagConstraints10);
 			propertiesPanel.add(getTrustLevel(), gridBagConstraints11);
 
-			if (update) {
+			if (state != ADD) {
 				propertiesPanel.add(jLabel5, gridBagConstraints13);
 				propertiesPanel.add(getIsAuthority(), gridBagConstraints14);
 				propertiesPanel.add(jLabel6, gridBagConstraints15);
@@ -511,6 +526,9 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 	private JComboBox getStatus() {
 		if (status == null) {
 			status = new StatusComboBox();
+			if(state == VIEW){
+				this.status.setEnabled(false);
+			}
 		}
 		return status;
 	}
@@ -539,6 +557,9 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 	private JComboBox getTrustLevel() {
 		if (trustLevel == null) {
 			trustLevel = new JComboBox();
+			if(state == VIEW){
+				this.trustLevel.setEnabled(false);
+			}
 		}
 		return trustLevel;
 	}
@@ -552,11 +573,13 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
-			if (!update) {
+			if (state == ADD) {
 				buttonPanel.add(getImportCertificate(), null);
 			}
-			buttonPanel.add(getImportCRL(), null);
-			buttonPanel.add(getAddButton(), null);
+			if (state != VIEW) {
+				buttonPanel.add(getImportCRL(), null);
+				buttonPanel.add(getAddButton(), null);
+			}
 			buttonPanel.add(getCancelButton(), null);
 		}
 		return buttonPanel;
@@ -571,7 +594,7 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 	private JButton getAddButton() {
 		if (addButton == null) {
 			addButton = new JButton();
-			if (!update) {
+			if (state == ADD) {
 				addButton.setText("Add Trusted Authority");
 				addButton.setIcon(GTSLookAndFeel.getAddTrustedAuthorityIcon());
 				addButton.addActionListener(new java.awt.event.ActionListener() {

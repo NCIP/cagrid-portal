@@ -114,7 +114,7 @@ public class TrustLevelWindow extends GridPortalComponent {
 		this.proxy.setSelectedItem(new ProxyCaddy(cred));
 		if (level != null) {
 			this.getGts().setEnabled(false);
-			this.getTrustLevelName().setEnabled(false);
+			this.getTrustLevelName().setEditable(false);
 			this.getTrustLevelName().setText(level.getName());
 			this.getDescription().setText(level.getDescription());
 			this.getDescription().setCaretPosition(0);
