@@ -24,7 +24,6 @@
 	<import file="${test.dir}/test.xml" />
 
 
-
 	<!-- =============================================================== -->
 	<!-- Bootstrap the build by setting up the structure and building    -->
 	<!-- our custom ant tasks.                                           -->
@@ -406,6 +405,8 @@
 		<resolveDependencies extdir="${projects.dir}/sdkQuery/ext">
 			<artifact refid="core.jars" />
 			<artifact refid="data.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="test.coverage.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/sdkQuery" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
