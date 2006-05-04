@@ -175,7 +175,14 @@
 			</fileset>
 		</artifact>
 
-		<artifact track="main" type="resources" id="gridca.resources">
+        <artifact track="main" type="jars" id="fqp.jars">
+            <antcall target="build-fqp"/>
+            <fileset dir="${projects.dir}/fqp/build/lib">
+                <include name="*.jar"></include>
+            </fileset>
+        </artifact>
+
+        <artifact track="main" type="resources" id="gridca.resources">
 			<fileset dir="${projects.dir}/gridca/resources">
 				<include name="**" />
 			</fileset>
@@ -411,8 +418,19 @@
 		<ant dir="${projects.dir}/sdkQuery" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
+    <!-- =============================================================== -->
+    <!-- Federated Query Processor:                                      -->
+    <!-- =============================================================== -->
+        <target name="build-fqp" depends="prepare" description="Federated Query Processor">
+            <resolveDependencies extdir="${projects.dir}/fqp/ext">
+                <artifact refid="data.jars" />
+                <artifact refid="common.test.jars" />
+            </resolveDependencies>
+            <ant dir="${projects.dir}/fqp" inheritAll="false" antfile="build.xml" target="all" />
+        </target>
 
-	<!-- =============================================================== -->
+
+    <!-- =============================================================== -->
 	<!-- CAGRID Cql2Xpath:                                             -->
 	<!-- =============================================================== -->
 	<target name="build-cql2xpath" depends="prepare" description="Builds caGrid Cql2Xpath utility">
@@ -471,7 +489,10 @@
 			<delete dir="${projects.dir}/sdkQuery/ext" />
 			<ant dir="${projects.dir}/sdkQuery" inheritAll="false" antfile="build.xml" target="clean" />
 
-			<delete dir="${projects.dir}/cql2xpath/ext" />
+            <delete dir="${projects.dir}/fqp/ext" />
+            <ant dir="${projects.dir}/fqp" inheritAll="false" antfile="build.xml" target="clean" />
+
+            <delete dir="${projects.dir}/cql2xpath/ext" />
 			<ant dir="${projects.dir}/cql2xpath" inheritAll="false" antfile="build.xml" target="clean" />
 			<delete failonerror="false">
 				<fileset dir="${junit.results.dir}">
@@ -490,7 +511,7 @@
 	</condition>
 
 	<target name="all" depends="all_1.5,all_pre_1.5" description="Builds the entire application" />
-	<target name="all_1.5_build" if="isJDK1.5" depends="clean, build-core, build-cadsr, build-gridca, build-opensaml, build-metadata, build-discovery, build-cql2xpath, build-gme, build-gts, build-syncgts, build-introduce, build-dorian, build-data, build-sdkQuery" />
+	<target name="all_1.5_build" if="isJDK1.5" depends="clean, build-core, build-cadsr, build-gridca, build-opensaml, build-metadata, build-discovery, build-cql2xpath, build-gme, build-gts, build-syncgts, build-introduce, build-dorian, build-data, build-sdkQuery,build-fqp" />
 	<target name="all_1.5" if="isJDK1.5">
 		<antcall target="all_1.5_build" />
 		<echo message="Successfully built all projects." />
