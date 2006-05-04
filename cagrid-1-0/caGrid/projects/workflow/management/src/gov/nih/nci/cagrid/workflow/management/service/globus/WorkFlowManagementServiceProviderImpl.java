@@ -20,6 +20,14 @@ public class WorkFlowManagementServiceProviderImpl{
 	}
 	
 
+
+
+
+
+
+
+
+
 	public gov.nih.nci.cagrid.workflow.management.stubs.RunWorkFlowResponse runWorkFlow(gov.nih.nci.cagrid.workflow.management.stubs.RunWorkFlow params) throws RemoteException {
 		gov.nih.nci.cagrid.workflow.management.stubs.RunWorkFlowResponse boxedResult = new gov.nih.nci.cagrid.workflow.management.stubs.RunWorkFlowResponse();
 		boxedResult.setResponse(impl.runWorkFlow(params.getBpelDoc().getProcess()));

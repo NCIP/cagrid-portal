@@ -12,7 +12,11 @@ public interface WorkFlowManagementServiceI {
 
 
 
-	     public java.math.BigInteger runWorkFlow(org.xmlsoap.schemas.ws._2003._03.business_process.TProcess bpelDoc) throws RemoteException ;
+
+
+
+
+     public java.lang.String runWorkFlow(org.xmlsoap.schemas.ws._2003._03.business_process.TProcess bpelDoc) throws RemoteException ;
 
 }
 

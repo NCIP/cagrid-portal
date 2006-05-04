@@ -16,7 +16,7 @@
    <ns3:Inputs>
     <ns3:Input qName="ns4:process" isArray="false" name="bpelDoc" xmlns:ns4="http://schemas.xmlsoap.org/ws/2003/03/business-process/"/>
    </ns3:Inputs>
-   <ns3:Output qName="xsd:integer" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns3:Output qName="xsd:string" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
    <ns3:Exceptions/>
   </ns3:Method>
  </ns3:Methods>
