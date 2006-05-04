@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="http://nci.nih.gov/cagrid/data/FQP" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:fqp="http://nci.nih.gov/cagrid/data/FQP" elementFormDefault="qualified">
+	<xsd:element name="caGridXMLQuery">
+		<xsd:annotation>
+			<xsd:documentation>caGrid XML Query language</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="Object" type="fqp:NestedObjectType"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:complexType name="NestedObjectType">
+		<xsd:annotation>
+			<xsd:documentation>Associated Obects used as search criteria</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="Attribute" type="fqp:AttributeType" minOccurs="0"/>
+			<xsd:element name="Association" type="fqp:AssociationType" minOccurs="0"/>
+            <xsd:element name="ForeignAssociation" type="fqp:ForeignAssociationType" minOccurs="0"/>
+            <xsd:element name="Group" type="fqp:GroupType" minOccurs="0"/>
+		</xsd:choice>
+		<xsd:attribute name="name" type="xsd:string" use="required"/>
+	</xsd:complexType>
+    <xsd:complexType name="ForeignAssociationType">
+		<xsd:annotation>
+			<xsd:documentation>Foreign Association in an external service</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+		<xsd:element name="JoinCondition" type="fqp:JoinConditionType" minOccurs="1" maxOccurs="1"/>
+		<xsd:element name="ForeignObject" type="fqp:NestedObjectType" minOccurs="1" maxOccurs="1"/>
+		</xsd:sequence>
+		<xsd:attribute name="roleName" type="xsd:string" use="optional"/>
+    </xsd:complexType>
+<xsd:complexType name="JoinConditionType">
+		<xsd:annotation>
+		<xsd:documentation>>Join condition specifies join to foreign association</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="LeftJoin" type="xsd:string"></xsd:element>
+			<xsd:element name="RightJoin" type="xsd:string"></xsd:element>
+		</xsd:sequence>
+		</xsd:complexType>
+	    <xsd:complexType name="AssociationType">
+		<xsd:annotation>
+			<xsd:documentation>Object Association</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="Object" type="fqp:NestedObjectType"/>
+		</xsd:sequence>
+		<xsd:attribute name="roleName" type="xsd:string" use="optional"/>
+	</xsd:complexType>
+	<xsd:complexType name="AttributeType">
+		<xsd:annotation>
+			<xsd:documentation>attribute (object property).element used as search criteria</xsd:documentation>
+		</xsd:annotation>
+		<xsd:attribute name="name" type="xsd:string" use="required"/>
+		<xsd:attribute name="predicate" type="fqp:PredicateType" use="optional" default="EQUAL_TO"/>
+		<xsd:attribute name="value" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="GroupType">
+		<xsd:annotation>
+			<xsd:documentation>Binary joint of two conditions</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice minOccurs="2" maxOccurs="unbounded">
+			<xsd:element name="Association" type="fqp:AssociationType"/>
+			<xsd:element name="Attribute" type="fqp:AttributeType"/>
+			<xsd:element name="Group" type="fqp:GroupType"/>
+		</xsd:choice>
+		<xsd:attribute name="logicRelation" type="fqp:LogicalOperatorType" use="required"/>
+	</xsd:complexType>
+	<xsd:simpleType name="PredicateType">
+		<xsd:annotation>
+			<xsd:documentation>Currnetly there are only two kinds, "equal" and "like". It is extensible. </xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="EQUAL_TO" id="equal_to"/>
+			<xsd:enumeration value="NOT_EQUAL_TO" id="not_equal_to"/>
+			<xsd:enumeration value="LIKE" id="like"/>
+			<xsd:enumeration value="ISNULL" id="is_null"/>
+			<xsd:enumeration value="ISNOTNULL" id="is_not_null"/>
+			<xsd:enumeration value="LESS_THAN" id="less_than"/>
+			<xsd:enumeration value="LESS_THAN_EQUAL_TO" id="less_than_equal_to"/>
+			<xsd:enumeration value="GREATER_THAN" id="greater_than"/>
+			<xsd:enumeration value="GREATER_THAN_EQUAL_TO" id="greater_than_equal_to"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="LogicalOperatorType">
+		<xsd:annotation>
+			<xsd:documentation>Logical operators.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="AND"/>
+			<xsd:enumeration value="OR"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>
