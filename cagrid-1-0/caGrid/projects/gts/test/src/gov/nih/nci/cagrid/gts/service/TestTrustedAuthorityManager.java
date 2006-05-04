@@ -437,6 +437,23 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 			} catch (IllegalTrustedAuthorityFault f) {
 
 			}
+			
+//			 EXTERNAL ADD: Conflicting Authority
+			try {
+				TrustedAuthority ta = new TrustedAuthority();
+				ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
+				ta.setStatus(Status.Trusted);
+				ta.setTrustLevel(LEVEL_ONE);
+				ta.setIsAuthority(Boolean.TRUE);
+				ta.setSourceTrustService("Some Source");
+				ta.setAuthorityTrustService("Some Authority");
+				ta.setExpires(1);
+				trust.addTrustedAuthority(ta, false);
+				fail("Did not generate error when an invalid Trusted Authority was provided.");
+			} catch (IllegalTrustedAuthorityFault f) {
+
+			}
 
 			// EXTERNAL ADD: No Authority GTS
 			try {
@@ -683,6 +700,15 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 			try {
 				TrustedAuthority u = trust.getTrustedAuthority(ta.getTrustedAuthorityName());
 				u.setIsAuthority(Boolean.FALSE);
+				trust.updateTrustedAuthority(u,false);
+				fail("Should not be able to update a trusted authority!!!");
+			} catch (IllegalTrustedAuthorityFault f) {
+
+			}
+			//Authority Conflict
+			try {
+				TrustedAuthority u = trust.getTrustedAuthority(ta.getTrustedAuthorityName());
+				u.setAuthorityTrustService("Other");
 				trust.updateTrustedAuthority(u,false);
 				fail("Should not be able to update a trusted authority!!!");
 			} catch (IllegalTrustedAuthorityFault f) {

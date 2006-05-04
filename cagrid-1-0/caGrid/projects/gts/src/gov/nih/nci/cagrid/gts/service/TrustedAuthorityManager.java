@@ -214,6 +214,15 @@ public class TrustedAuthorityManager {
 			}
 		} else {
 
+			if ((curr.getIsAuthority().booleanValue()) && (!ta.getAuthorityTrustService().equals(gtsURI))) {
+				IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
+				fault.setFaultString("The Trusted Authority " + ta.getTrustedAuthorityName()
+					+ " cannot be updated, a conflict was detected, this gts (" + gtsURI
+					+ ") was specified as its authority, however the URI of another GTS ( "
+					+ ta.getAuthorityTrustService() + ") was specified.");
+				throw fault;
+			}
+
 			if (!ta.getAuthorityTrustService().equals(curr.getAuthorityTrustService())) {
 				buildUpdate(needsUpdate, sql, "AUTHORITY_GTS", ta.getAuthorityTrustService());
 				needsUpdate = true;
@@ -244,6 +253,7 @@ public class TrustedAuthorityManager {
 				buildUpdate(needsUpdate, sql, "EXPIRES", ta.getExpires());
 				needsUpdate = true;
 			}
+
 		}
 
 		if ((ta.getIsAuthority() != null) && (!ta.getIsAuthority().equals(curr.getIsAuthority()))) {
@@ -588,6 +598,15 @@ public class TrustedAuthorityManager {
 				IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
 				fault.setFaultString("The Trusted Authority " + ta.getTrustedAuthorityName()
 					+ " cannot be added because it does not specify an expiration.");
+				throw fault;
+			}
+
+			if ((ta.getIsAuthority().booleanValue()) && (!ta.getAuthorityTrustService().equals(gtsURI))) {
+				IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
+				fault.setFaultString("The Trusted Authority " + ta.getTrustedAuthorityName()
+					+ " cannot be added, a conflict was detected, this gts (" + gtsURI
+					+ ") was specified as its authority, however the URI of another GTS ( "
+					+ ta.getAuthorityTrustService() + ") was specified.");
 				throw fault;
 			}
 
