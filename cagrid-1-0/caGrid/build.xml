@@ -421,13 +421,13 @@
     <!-- =============================================================== -->
     <!-- Federated Query Processor:                                      -->
     <!-- =============================================================== -->
-        <target name="build-fqp" depends="prepare" description="Federated Query Processor">
-            <resolveDependencies extdir="${projects.dir}/fqp/ext">
-                <artifact refid="data.jars" />
-                <artifact refid="common.test.jars" />
-            </resolveDependencies>
-            <ant dir="${projects.dir}/fqp" inheritAll="false" antfile="build.xml" target="all" />
-        </target>
+    <target name="build-fqp" depends="prepare" description="Federated Query Processor">
+        <resolveDependencies extdir="${projects.dir}/fqp/ext">
+            <artifact refid="data.jars" />
+            <artifact refid="common.test.jars" />
+        </resolveDependencies>
+        <ant dir="${projects.dir}/fqp" inheritAll="false" antfile="build.xml" target="all" />
+    </target>
 
 
     <!-- =============================================================== -->
@@ -511,7 +511,7 @@
 	</condition>
 
 	<target name="all" depends="all_1.5,all_pre_1.5" description="Builds the entire application" />
-	<target name="all_1.5_build" if="isJDK1.5" depends="clean, build-core, build-cadsr, build-gridca, build-opensaml, build-metadata, build-discovery, build-cql2xpath, build-gme, build-gts, build-syncgts, build-introduce, build-dorian, build-data, build-sdkQuery,build-fqp" />
+	<target name="all_1.5_build" if="isJDK1.5" depends="clean, build-core, build-cadsr, build-gridca, build-opensaml, build-metadata, build-discovery, build-cql2xpath, build-gme, build-gts, build-syncgts, build-introduce, build-dorian, build-data, build-sdkQuery, build-fqp" />
 	<target name="all_1.5" if="isJDK1.5">
 		<antcall target="all_1.5_build" />
 		<echo message="Successfully built all projects." />
