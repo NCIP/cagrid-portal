@@ -64,7 +64,7 @@ public class ProcessorHelper {
 			Junction grouping = handleGroup(objectClass, objectType.getGroup());
 			objectCriteria.add(grouping);
 		}
-		return null;
+		return objectCriteria;
 	}
 	
 	
@@ -121,7 +121,11 @@ public class ProcessorHelper {
 			throw new MalformedQueryException("Predicate " + predicate + " is not valid or has no restriction factory");
 		}
 		try {
-			return (Criterion) factoryMethod.invoke(null, new java.lang.Object[] {name, value});
+			if (factoryMethod.getParameterTypes().length == 2) {
+				return (Criterion) factoryMethod.invoke(null, new java.lang.Object[] {name, value});
+			} else {
+				return (Criterion) factoryMethod.invoke(null, new java.lang.Object[] {name});
+			}
 		} catch (Exception ex) {
 			throw new QueryProcessingException("Error generating criterion for attribute " + name + ":" + ex.getMessage(), ex);
 		}
@@ -133,16 +137,19 @@ public class ProcessorHelper {
 			restrictionFactories = new HashMap();
 			Class restrictionClass = Restrictions.class;
 			try {
-				Class[] paramClasses = {String.class, java.lang.Object.class};
-				restrictionFactories.put(Predicate._EQUAL_TO, restrictionClass.getMethod("eq", paramClasses));
-				restrictionFactories.put(Predicate._GREATER_THAN, restrictionClass.getMethod("gt", paramClasses));
-				restrictionFactories.put(Predicate._GREATER_THAN_EQUAL_TO, restrictionClass.getMethod("ge", paramClasses));
-				restrictionFactories.put(Predicate._ISNOTNULL, restrictionClass.getMethod("isNotNull", paramClasses));
-				restrictionFactories.put(Predicate._ISNULL, restrictionClass.getMethod("isNull", paramClasses));
-				restrictionFactories.put(Predicate._LESS_THAN, restrictionClass.getMethod("lt", paramClasses));
-				restrictionFactories.put(Predicate._LESS_THAN_EQUAL_TO, restrictionClass.getMethod("le", paramClasses));
-				restrictionFactories.put(Predicate._LIKE, restrictionClass.getMethod("like", paramClasses));
-				restrictionFactories.put(Predicate._NOT_EQUAL_TO, restrictionClass.getMethod("ne", paramClasses));
+				// binary restrictions
+				Class[] binaryParams = {String.class, java.lang.Object.class};
+				restrictionFactories.put(Predicate._EQUAL_TO, restrictionClass.getMethod("eq", binaryParams));
+				restrictionFactories.put(Predicate._GREATER_THAN, restrictionClass.getMethod("gt", binaryParams));
+				restrictionFactories.put(Predicate._GREATER_THAN_EQUAL_TO, restrictionClass.getMethod("ge", binaryParams));
+				restrictionFactories.put(Predicate._LESS_THAN, restrictionClass.getMethod("lt", binaryParams));
+				restrictionFactories.put(Predicate._LESS_THAN_EQUAL_TO, restrictionClass.getMethod("le", binaryParams));
+				restrictionFactories.put(Predicate._LIKE, restrictionClass.getMethod("like", binaryParams));
+				restrictionFactories.put(Predicate._NOT_EQUAL_TO, restrictionClass.getMethod("ne", binaryParams));
+				// unary restrictions
+				Class[] unaryParams = {String.class};
+				restrictionFactories.put(Predicate._ISNOTNULL, restrictionClass.getMethod("isNotNull", unaryParams));
+				restrictionFactories.put(Predicate._ISNULL, restrictionClass.getMethod("isNull", unaryParams));
 			} catch (NoSuchMethodException ex) {
 				throw new QueryProcessingException("Error loading restriction factories: " + ex.getMessage(), ex);
 			}

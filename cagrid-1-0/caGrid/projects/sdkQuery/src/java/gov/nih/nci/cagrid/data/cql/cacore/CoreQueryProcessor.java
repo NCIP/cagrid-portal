@@ -7,7 +7,6 @@ import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsUtil;
-import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
 import java.util.List;
@@ -42,7 +41,7 @@ public class CoreQueryProcessor extends CQLQueryProcessor {
 		List targetObjects = null;
 		try {
 			targetObjects = coreService.query(objectCriteria, cqlQuery.getName());
-		} catch (ApplicationException ex) {
+		} catch (Exception ex) {
 			throw new QueryProcessingException("Error invoking core query method: " + ex.getMessage(), ex);
 		}
 		CQLQueryResults results = CQLQueryResultsUtil.createQueryResults(targetObjects);
