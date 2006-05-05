@@ -14,8 +14,9 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -29,7 +30,7 @@ public class PermissionManager {
 
 	private static final String PERMISSIONS_TABLE = "PERMISSIONS";
 
-	private Logger logger;
+	private Log log;
 
 	private boolean dbBuilt = false;
 
@@ -37,7 +38,7 @@ public class PermissionManager {
 
 
 	public PermissionManager(Database db) {
-		logger = Logger.getLogger(this.getClass().getName());
+		log = LogFactory.getLog(this.getClass().getName());
 		this.db = db;
 	}
 
@@ -91,9 +92,8 @@ public class PermissionManager {
 			db.update(insert.toString());
 
 		} catch (Exception e) {
-			this.logger.log(Level.SEVERE, "Unexpected database error incurred in adding the permission "
-				+ formatPermission(p) + ", the following statement generated the error: \n" + insert.toString() + "\n",
-				e);
+			this.log.error("Unexpected database error incurred in adding the permission " + formatPermission(p)
+				+ ", the following statement generated the error: \n" + insert.toString() + "\n", e);
 			GTSInternalFault fault = new GTSInternalFault();
 			fault.setFaultString("Unexpected error adding the permission " + formatPermission(p) + "!!!");
 			throw fault;
@@ -115,7 +115,7 @@ public class PermissionManager {
 			db.update(sql);
 		} catch (Exception e) {
 			String perm = formatPermission(p);
-			this.logger.log(Level.SEVERE, "Unexpected database error incurred in removing the permission " + perm
+			this.log.error("Unexpected database error incurred in removing the permission " + perm
 				+ " exists, the following statement generated the error: \n" + sql + "\n", e);
 			GTSInternalFault fault = new GTSInternalFault();
 			fault.setFaultString("Unexpected error in removing the permission " + perm + " exists.");
@@ -144,7 +144,7 @@ public class PermissionManager {
 			s.close();
 		} catch (Exception e) {
 			String perm = formatPermission(p);
-			this.logger.log(Level.SEVERE, "Unexpected database error incurred in determining if the permission " + perm
+			this.log.error("Unexpected database error incurred in determining if the permission " + perm
 				+ " exists, the following statement generated the error: \n" + sql + "\n", e);
 			GTSInternalFault fault = new GTSInternalFault();
 			fault.setFaultString("Unexpected error in determining if the permission " + perm + " exists.");
@@ -181,8 +181,8 @@ public class PermissionManager {
 			s.close();
 
 		} catch (Exception e) {
-			this.logger.log(Level.SEVERE, "Unexpected database error incurred in determining whether or not the user "
-				+ gridIdentity + "  is a trust service administrator, the following statement generated the error: \n"
+			this.log.error("Unexpected database error incurred in determining whether or not the user " + gridIdentity
+				+ "  is a trust service administrator, the following statement generated the error: \n"
 				+ sql.toString() + "\n", e);
 			GTSInternalFault fault = new GTSInternalFault();
 			fault.setFaultString("Unexpected error occurred in determining whether or not the user " + gridIdentity
@@ -247,7 +247,7 @@ public class PermissionManager {
 			return list;
 
 		} catch (Exception e) {
-			this.logger.log(Level.SEVERE,
+			this.log.error(
 				"Unexpected database error incurred in finding permissions, the following statement generated the error: \n"
 					+ sql.toString() + "\n", e);
 			GTSInternalFault fault = new GTSInternalFault();
@@ -289,22 +289,36 @@ public class PermissionManager {
 
 	public synchronized void buildDatabase() throws GTSInternalFault {
 		if (!dbBuilt) {
-			db.createDatabaseIfNeeded();
-			if (!this.db.tableExists(PERMISSIONS_TABLE)) {
-				String trust = "CREATE TABLE " + PERMISSIONS_TABLE + " (" + "GRID_IDENTITY VARCHAR(255) NOT NULL,"
-					+ "ROLE VARCHAR(50) NOT NULL," + "TRUSTED_AUTHORITY VARCHAR(255) NOT NULL,"
-					+ "INDEX document_index (GRID_IDENTITY));";
-				db.update(trust);
+			try {
+				db.createDatabase();
+				if (!this.db.tableExists(PERMISSIONS_TABLE)) {
+					String trust = "CREATE TABLE " + PERMISSIONS_TABLE + " (" + "GRID_IDENTITY VARCHAR(255) NOT NULL,"
+						+ "ROLE VARCHAR(50) NOT NULL," + "TRUSTED_AUTHORITY VARCHAR(255) NOT NULL,"
+						+ "INDEX document_index (GRID_IDENTITY));";
+					db.update(trust);
+				}
+				dbBuilt = true;
+			} catch (Exception e) {
+				this.log.error("Unexpected error in creating the database.", e);
+				GTSInternalFault fault = new GTSInternalFault();
+				fault.setFaultString("Unexpected error in creating the database.");
+				throw fault;
 			}
-			dbBuilt = true;
 		}
 	}
 
 
 	public void destroy() throws GTSInternalFault {
-		buildDatabase();
-		db.update("DROP TABLE IF EXISTS " + PERMISSIONS_TABLE);
-		dbBuilt = false;
+		try {
+			buildDatabase();
+			db.update("DROP TABLE IF EXISTS " + PERMISSIONS_TABLE);
+			dbBuilt = false;
+		} catch (Exception e) {
+			this.log.error("Unexpected error in removing the database.", e);
+			GTSInternalFault fault = new GTSInternalFault();
+			fault.setFaultString("Unexpected error in removing the database.");
+			throw fault;
+		}
 	}
 
 }

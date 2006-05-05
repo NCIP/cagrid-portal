@@ -88,5 +88,10 @@
 	<classpathentry kind="lib" path="ext/test/lib/cobertura.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/jakarta-oro-2.0.8.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/log4j-1.2.9.jar"/>
+	<classpathentry kind="lib" path="lib/derby.jar"/>
+	<classpathentry kind="lib" path="C:/eclipse/plugins/org.apache.derby.core_10.1.2/derby.jar"/>
+	<classpathentry kind="lib" path="C:/eclipse/plugins/org.apache.derby.core_10.1.2/derbyclient.jar"/>
+	<classpathentry kind="lib" path="C:/eclipse/plugins/org.apache.derby.core_10.1.2/derbytools.jar"/>
+	<classpathentry kind="lib" path="C:/eclipse/plugins/org.apache.derby.core_10.1.2/derbynet.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

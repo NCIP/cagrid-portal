@@ -19,8 +19,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -33,7 +34,7 @@ import java.util.logging.Logger;
 public class TrustedAuthorityManager {
 	private static final String TRUSTED_AUTHORITIES_TABLE = "TRUSTED_AUTHORITIES";
 
-	private Logger logger;
+	private Log log;
 
 	private boolean dbBuilt = false;
 
@@ -45,7 +46,7 @@ public class TrustedAuthorityManager {
 
 
 	public TrustedAuthorityManager(String gtsURI, TrustLevelLookup lookup, Database db) {
-		logger = Logger.getLogger(this.getClass().getName());
+		log = LogFactory.getLog(this.getClass().getName());
 		this.gtsURI = gtsURI;
 		this.db = db;
 		this.lookup = lookup;
@@ -154,7 +155,7 @@ public class TrustedAuthorityManager {
 			return list;
 
 		} catch (Exception e) {
-			this.logger.log(Level.SEVERE,
+			this.log.error(
 				"Unexpected database error incurred in finding trusted authorities, the following statement generated the error: \n"
 					+ sql.toString() + "\n", e);
 			GTSInternalFault fault = new GTSInternalFault();
@@ -186,8 +187,7 @@ public class TrustedAuthorityManager {
 				throw fault;
 			}
 
-			if ((clean(ta.getAuthorityGTS()) != null)
-				&& (!ta.getAuthorityGTS().equals(curr.getAuthorityGTS()))) {
+			if ((clean(ta.getAuthorityGTS()) != null) && (!ta.getAuthorityGTS().equals(curr.getAuthorityGTS()))) {
 				IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
 				fault.setFaultString("The authority trust service for a Trusted Authority cannot be changed");
 				throw fault;
@@ -219,8 +219,8 @@ public class TrustedAuthorityManager {
 				IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
 				fault.setFaultString("The Trusted Authority " + ta.getName()
 					+ " cannot be updated, a conflict was detected, this gts (" + gtsURI
-					+ ") was specified as its authority, however the URI of another GTS ( "
-					+ ta.getAuthorityGTS() + ") was specified.");
+					+ ") was specified as its authority, however the URI of another GTS ( " + ta.getAuthorityGTS()
+					+ ") was specified.");
 				throw fault;
 			}
 
@@ -299,9 +299,8 @@ public class TrustedAuthorityManager {
 				}
 			}
 		} catch (Exception e) {
-			this.logger.log(Level.SEVERE, "Unexpected database error incurred in updating "
-				+ ta.getName() + ", the following statement generated the error: \n" + sql.toString()
-				+ "\n", e);
+			this.log.error("Unexpected database error incurred in updating " + ta.getName()
+				+ ", the following statement generated the error: \n" + sql.toString() + "\n", e);
 			GTSInternalFault fault = new GTSInternalFault();
 			fault.setFaultString("Unexpected error occurred in updating " + ta.getName() + ".");
 			throw fault;
@@ -378,8 +377,8 @@ public class TrustedAuthorityManager {
 			rs.close();
 			s.close();
 		} catch (Exception e) {
-			this.logger.log(Level.SEVERE, "Unexpected database error incurred in obtaining the Trusted Authority, "
-				+ name + ", the following statement generated the error: \n" + sql + "\n", e);
+			this.log.error("Unexpected database error incurred in obtaining the Trusted Authority, " + name
+				+ ", the following statement generated the error: \n" + sql + "\n", e);
 			GTSInternalFault fault = new GTSInternalFault();
 			fault.setFaultString("Unexpected error obtaining the TrustedAuthority " + name);
 			throw fault;
@@ -410,8 +409,8 @@ public class TrustedAuthorityManager {
 			rs.close();
 			s.close();
 		} catch (Exception e) {
-			this.logger.log(Level.SEVERE, "Unexpected database error incurred in odetermining if the TrustedAuthority "
-				+ name + " exists, the following statement generated the error: \n" + sql + "\n", e);
+			this.log.error("Unexpected database error incurred in odetermining if the TrustedAuthority " + name
+				+ " exists, the following statement generated the error: \n" + sql + "\n", e);
 			GTSInternalFault fault = new GTSInternalFault();
 			fault.setFaultString("Unexpected error in determining if the TrustedAuthority " + name + " exists.");
 			throw fault;
@@ -428,8 +427,8 @@ public class TrustedAuthorityManager {
 			try {
 				db.update(sql);
 			} catch (Exception e) {
-				this.logger.log(Level.SEVERE, "Unexpected database error incurred in removing the Trusted Authority, "
-					+ name + ", the following statement generated the error: \n" + sql + "\n", e);
+				this.log.error("Unexpected database error incurred in removing the Trusted Authority, " + name
+					+ ", the following statement generated the error: \n" + sql + "\n", e);
 				GTSInternalFault fault = new GTSInternalFault();
 				fault.setFaultString("Unexpected error removing the TrustedAuthority " + name);
 				throw fault;
@@ -448,7 +447,7 @@ public class TrustedAuthorityManager {
 		try {
 			db.update(sql);
 		} catch (Exception e) {
-			this.logger.log(Level.SEVERE,
+			this.log.error(
 				"Unexpected database error incurred in removing the Trusted Authorities with the trust level, " + level
 					+ ", the following statement generated the error: \n" + sql + "\n", e);
 			GTSInternalFault fault = new GTSInternalFault();
@@ -467,8 +466,8 @@ public class TrustedAuthorityManager {
 			insert.append("INSERT INTO " + TRUSTED_AUTHORITIES_TABLE + " SET NAME='" + ta.getName()
 				+ "',CERTIFICATE_DN='" + cert.getSubjectDN().toString() + "',TRUST_LEVEL='" + ta.getTrustLevel()
 				+ "', STATUS='" + ta.getStatus().getValue() + "', IS_AUTHORITY='" + ta.getIsAuthority().booleanValue()
-				+ "',AUTHORITY_GTS='" + ta.getAuthorityGTS() + "',SOURCE_GTS='" + ta.getSourceGTS()
-				+ "', EXPIRES=" + ta.getExpires() + ", LAST_UPDATED=" + ta.getLastUpdated() + ", CERTIFICATE='"
+				+ "',AUTHORITY_GTS='" + ta.getAuthorityGTS() + "',SOURCE_GTS='" + ta.getSourceGTS() + "', EXPIRES="
+				+ ta.getExpires() + ", LAST_UPDATED=" + ta.getLastUpdated() + ", CERTIFICATE='"
 				+ ta.getCertificate().getCertificateEncodedString() + "'");
 
 			if (crl != null) {
@@ -476,12 +475,10 @@ public class TrustedAuthorityManager {
 			}
 			db.update(insert.toString());
 		} catch (Exception e) {
-			this.logger.log(Level.SEVERE, "Unexpected database error incurred in adding the Trusted Authority, "
-				+ ta.getName() + ", the following statement generated the error: \n"
-				+ insert.toString() + "\n", e);
+			this.log.error("Unexpected database error incurred in adding the Trusted Authority, " + ta.getName()
+				+ ", the following statement generated the error: \n" + insert.toString() + "\n", e);
 			GTSInternalFault fault = new GTSInternalFault();
-			fault.setFaultString("Unexpected error adding the Trusted Authority, " + ta.getName()
-				+ "!!!");
+			fault.setFaultString("Unexpected error adding the Trusted Authority, " + ta.getName() + "!!!");
 			throw fault;
 		}
 	}
@@ -497,8 +494,7 @@ public class TrustedAuthorityManager {
 		throws GTSInternalFault, IllegalTrustedAuthorityFault {
 		this.buildDatabase();
 		X509Certificate cert = checkAndExtractCertificate(ta);
-		if ((ta.getName() != null)
-			&& (!ta.getName().equals(cert.getSubjectDN().toString()))) {
+		if ((ta.getName() != null) && (!ta.getName().equals(cert.getSubjectDN().toString()))) {
 			IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
 			fault
 				.setFaultString("The Trusted Authority Name must match the subject of the Trusted Authority's certificate");
@@ -523,8 +519,8 @@ public class TrustedAuthorityManager {
 
 		if (!lookup.doesTrustLevelExist(ta.getTrustLevel())) {
 			IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
-			fault.setFaultString("The Trusted Authority " + ta.getName()
-				+ " could not be added, the trust level " + ta.getTrustLevel() + " does not exist.");
+			fault.setFaultString("The Trusted Authority " + ta.getName() + " could not be added, the trust level "
+				+ ta.getTrustLevel() + " does not exist.");
 			throw fault;
 		}
 
@@ -572,8 +568,8 @@ public class TrustedAuthorityManager {
 				IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
 				fault.setFaultString("The Trusted Authority " + ta.getName()
 					+ " cannot be added, a conflict was detected, this gts (" + gtsURI
-					+ ") was specified as its authority, however the URI of another GTS ( "
-					+ ta.getAuthorityGTS() + ") was specified.");
+					+ ") was specified as its authority, however the URI of another GTS ( " + ta.getAuthorityGTS()
+					+ ") was specified.");
 				throw fault;
 			}
 
@@ -635,25 +631,39 @@ public class TrustedAuthorityManager {
 
 	public synchronized void buildDatabase() throws GTSInternalFault {
 		if (!dbBuilt) {
-			db.createDatabaseIfNeeded();
-			if (!this.db.tableExists(TRUSTED_AUTHORITIES_TABLE)) {
-				String trust = "CREATE TABLE " + TRUSTED_AUTHORITIES_TABLE + " ("
-					+ "NAME VARCHAR(255) NOT NULL PRIMARY KEY," + "CERTIFICATE_DN VARCHAR(255) NOT NULL,"
-					+ "TRUST_LEVEL VARCHAR(255) NOT NULL," + "STATUS VARCHAR(50) NOT NULL,"
-					+ "IS_AUTHORITY VARCHAR(5) NOT NULL," + "AUTHORITY_GTS VARCHAR(255) NOT NULL,"
-					+ "SOURCE_GTS VARCHAR(255) NOT NULL," + "EXPIRES BIGINT NOT NULL,"
-					+ "LAST_UPDATED BIGINT NOT NULL," + "CERTIFICATE TEXT NOT NULL,"
-					+ "CRL TEXT, INDEX document_index (NAME));";
-				db.update(trust);
+			try {
+				db.createDatabase();
+				if (!this.db.tableExists(TRUSTED_AUTHORITIES_TABLE)) {
+					String trust = "CREATE TABLE " + TRUSTED_AUTHORITIES_TABLE + " ("
+						+ "NAME VARCHAR(255) NOT NULL PRIMARY KEY," + "CERTIFICATE_DN VARCHAR(255) NOT NULL,"
+						+ "TRUST_LEVEL VARCHAR(255) NOT NULL," + "STATUS VARCHAR(50) NOT NULL,"
+						+ "IS_AUTHORITY VARCHAR(5) NOT NULL," + "AUTHORITY_GTS VARCHAR(255) NOT NULL,"
+						+ "SOURCE_GTS VARCHAR(255) NOT NULL," + "EXPIRES BIGINT NOT NULL,"
+						+ "LAST_UPDATED BIGINT NOT NULL," + "CERTIFICATE TEXT NOT NULL,"
+						+ "CRL TEXT, INDEX document_index (NAME));";
+					db.update(trust);
+				}
+				dbBuilt = true;
+			} catch (Exception e) {
+				this.log.error("Unexpected error in creating the database.", e);
+				GTSInternalFault fault = new GTSInternalFault();
+				fault.setFaultString("Unexpected error in creating the database.");
+				throw fault;
 			}
-			dbBuilt = true;
 		}
 	}
 
 
 	public void destroy() throws GTSInternalFault {
-		buildDatabase();
-		db.update("DROP TABLE IF EXISTS " + TRUSTED_AUTHORITIES_TABLE);
-		dbBuilt = false;
+		try {
+			buildDatabase();
+			db.update("DROP TABLE IF EXISTS " + TRUSTED_AUTHORITIES_TABLE);
+			dbBuilt = false;
+		} catch (Exception e) {
+			this.log.error("Unexpected error in removing the database.", e);
+			GTSInternalFault fault = new GTSInternalFault();
+			fault.setFaultString("Unexpected error in removing the database.");
+			throw fault;
+		}
 	}
 }

@@ -5,7 +5,7 @@ import gov.nih.nci.cagrid.common.IOUtils;
 import gov.nih.nci.cagrid.common.SimpleResourceManager;
 import gov.nih.nci.cagrid.gts.bean.Permission;
 import gov.nih.nci.cagrid.gts.bean.Role;
-import gov.nih.nci.cagrid.gts.common.Database;
+import gov.nih.nci.cagrid.gts.common.MySQLDatabase;
 import gov.nih.nci.cagrid.gts.service.GTSConfiguration;
 import gov.nih.nci.cagrid.gts.service.PermissionManager;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
@@ -26,7 +26,7 @@ public class PermissionBootstapper {
 
 
 	public PermissionBootstapper(GTSConfiguration conf) {
-		pm = new PermissionManager(new Database(conf.getConnectionManager(), conf.getGTSInternalId()));
+		pm = new PermissionManager(new MySQLDatabase(conf.getConnectionManager(), conf.getGTSInternalId()));
 	}
 
 
