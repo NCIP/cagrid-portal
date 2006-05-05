@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.fqp.engine;
 
+import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.fqp.exception.FQPException;
-import gov.nih.nci.cagrid.cqlresultset.CQLQueryResultsType;
 
 /**
  * Created by IntelliJ IDEA.
@@ -22,7 +22,7 @@ public class CQLQueryProcessor implements QueryProcessor{
      * @return
      * @throws FQPException
      */
-    public CQLQueryResultsType execute(Object cql) throws FQPException {
+    public CQLQueryResults execute(Object cql) throws FQPException {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

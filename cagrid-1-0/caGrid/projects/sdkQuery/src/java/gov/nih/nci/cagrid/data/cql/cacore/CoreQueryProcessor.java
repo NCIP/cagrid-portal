@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.data.cql.cacore;
 
 import gov.nih.nci.cagrid.cqlquery.Object;
-import gov.nih.nci.cagrid.cqlresultset.CQLQueryResultsType;
+import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.InitializationException;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
@@ -36,7 +36,7 @@ public class CoreQueryProcessor extends CQLQueryProcessor {
 	}
 	
 
-	public CQLQueryResultsType processQuery(Object cqlQuery) 
+	public CQLQueryResults processQuery(Object cqlQuery) 
 		throws MalformedQueryException, QueryProcessingException {
 		DetachedCriteria objectCriteria = ProcessorHelper.createQueryCriteria(cqlQuery);
 		List targetObjects = null;
@@ -45,7 +45,7 @@ public class CoreQueryProcessor extends CQLQueryProcessor {
 		} catch (ApplicationException ex) {
 			throw new QueryProcessingException("Error invoking core query method: " + ex.getMessage(), ex);
 		}
-		CQLQueryResultsType results = CQLQueryResultsUtil.createQueryResults(targetObjects);
+		CQLQueryResults results = CQLQueryResultsUtil.createQueryResults(targetObjects);
 		return results;
 	}
 }

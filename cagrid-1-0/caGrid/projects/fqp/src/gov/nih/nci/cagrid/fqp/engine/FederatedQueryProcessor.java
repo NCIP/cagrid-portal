@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.fqp.engine;
 
-import gov.nih.nci.cagrid.cqlresultset.CQLQueryResultsType;
+import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.fqp.exception.FQPException;
 
 /**
@@ -18,7 +18,7 @@ public class FederatedQueryProcessor implements QueryProcessor {
      * @return
      * @throws FQPException
      */
-    public CQLQueryResultsType execute(Object fqp) throws FQPException {
+    public CQLQueryResults execute(Object fqp) throws FQPException {
         //ToDo implement method
        
         return null;  //To change body of implemented methods use File | Settings | File Templates.

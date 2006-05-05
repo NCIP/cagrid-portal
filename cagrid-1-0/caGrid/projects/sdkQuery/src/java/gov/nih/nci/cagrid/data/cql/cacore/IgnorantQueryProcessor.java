@@ -5,7 +5,7 @@ import gov.nih.nci.cabio.domain.impl.GeneImpl;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.Object;
 import gov.nih.nci.cagrid.cqlresultset.CQLObjectResult;
-import gov.nih.nci.cagrid.cqlresultset.CQLQueryResultsType;
+import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.InitializationException;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
@@ -44,7 +44,7 @@ public class IgnorantQueryProcessor extends CQLQueryProcessor {
 	}
 
 
-	public CQLQueryResultsType processQuery(Object query) throws MalformedQueryException, QueryProcessingException {
+	public CQLQueryResults processQuery(Object query) throws MalformedQueryException, QueryProcessingException {
 		Gene gene = new GeneImpl();
 		gene.setSymbol("brca*"); // searching for all genes whose symbol start with brca
 		List resultList = null;
@@ -53,7 +53,7 @@ public class IgnorantQueryProcessor extends CQLQueryProcessor {
 		} catch (ApplicationException ex) {
 			throw new QueryProcessingException("Error in SDK application service: " + ex.getMessage(), ex);
 		}
-		CQLQueryResultsType results = new CQLQueryResultsType();
+		CQLQueryResults results = new CQLQueryResults();
 		CQLObjectResult[] objectResults = new CQLObjectResult[resultList.size()];
 		for (int i = 0; i < resultList.size(); i++) {
 			Gene returnedGene = (Gene) resultList.get(i);

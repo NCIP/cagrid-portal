@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.fqp.engine;
 
-import gov.nih.nci.cagrid.cqlresultset.CQLQueryResultsType;
+import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.fqp.exception.FQPException;
 
 /**
@@ -12,6 +12,6 @@ import gov.nih.nci.cagrid.fqp.exception.FQPException;
  */
 public interface QueryProcessor {
 
-    public CQLQueryResultsType execute(Object queryObject) throws FQPException;
+    public CQLQueryResults execute(Object queryObject) throws FQPException;
 
 }

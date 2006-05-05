@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2005 rel. 3 U (http://www.altova.com) by David W. Ervin (The Ohio State University / Department of Biomedical Informatics) -->
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:res="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet" targetNamespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet" elementFormDefault="qualified" attributeFormDefault="unqualified">
-	<xsd:complexType name="CQLQueryResultsType">
+	<xsd:complexType name="CQLQueryResults">
 		<xsd:annotation>
 			<xsd:documentation>Results from a CQL query executed against a caGrid data service</xsd:documentation>
 		</xsd:annotation>
@@ -44,7 +44,7 @@
 		<xsd:complexContent>
 			<xsd:extension base="res:CQLResult">
 				<xsd:sequence>
-					<xsd:element name="Identifier" type="res:TBDIdentifierType"/>
+					<xsd:element name="Identifier" type="res:TBDIdentifier"/>
 				</xsd:sequence>
 			</xsd:extension>
 		</xsd:complexContent>
@@ -56,20 +56,20 @@
 		<xsd:complexContent>
 			<xsd:extension base="res:CQLResult">
 				<xsd:sequence>
-					<xsd:element name="Attribute" type="res:TBDAttributeType"/>
+					<xsd:element name="Attribute" type="res:TBDAttribute"/>
 				</xsd:sequence>
 			</xsd:extension>
 		</xsd:complexContent>
 	</xsd:complexType>
-	<xsd:complexType name="TBDIdentifierType">
+	<xsd:complexType name="TBDIdentifier">
 		<xsd:annotation>
 			<xsd:documentation>caGrid identifier, as yet TBD</xsd:documentation>
 		</xsd:annotation>
 	</xsd:complexType>
-	<xsd:complexType name="TBDAttributeType">
+	<xsd:complexType name="TBDAttribute">
 		<xsd:annotation>
 			<xsd:documentation>caGrid object attribute, as yet TBD</xsd:documentation>
 		</xsd:annotation>
 	</xsd:complexType>
-	<xsd:element name="CQLQueryResults" type="res:CQLQueryResultsType"/>
+	<xsd:element name="CQLQueryResults" type="res:CQLQueryResults"/>
 </xsd:schema>

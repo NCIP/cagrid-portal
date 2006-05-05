@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.data.utilities;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlresultset.CQLObjectResult;
-import gov.nih.nci.cagrid.cqlresultset.CQLQueryResultsType;
+import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 
 import java.util.Iterator;
 import java.util.List;
@@ -28,8 +28,8 @@ public class CQLQueryResultsUtil {
 	}
 	
 	
-	public static CQLQueryResultsType createQueryResults(List objects) {
-		CQLQueryResultsType results = new CQLQueryResultsType();
+	public static CQLQueryResults createQueryResults(List objects) {
+		CQLQueryResults results = new CQLQueryResults();
 		CQLObjectResult[] objectResults = new CQLObjectResult[objects.size()];
 		Iterator objectIter = objects.iterator();
 		int index = 0;

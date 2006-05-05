@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.data.utilities;
 
-import gov.nih.nci.cagrid.cqlresultset.CQLQueryResultsType;
+import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -15,11 +15,11 @@ import java.util.NoSuchElementException;
  * @version $Id$ 
  */
 public class CQLQueryResultsIterator implements Iterator {
-	private CQLQueryResultsType results;
+	private CQLQueryResults results;
 	private Iterator resultIterator;
 	private boolean xmlOnly;
 	
-	public CQLQueryResultsIterator(CQLQueryResultsType results) {
+	public CQLQueryResultsIterator(CQLQueryResults results) {
 		this(results, false);
 	}
 	
@@ -30,7 +30,7 @@ public class CQLQueryResultsIterator implements Iterator {
 	 * @param results
 	 * @param xmlOnly
 	 */
-	public CQLQueryResultsIterator(CQLQueryResultsType results, boolean xmlOnly) {
+	public CQLQueryResultsIterator(CQLQueryResults results, boolean xmlOnly) {
 		this.results = results;
 		this.xmlOnly = xmlOnly;
 	}
