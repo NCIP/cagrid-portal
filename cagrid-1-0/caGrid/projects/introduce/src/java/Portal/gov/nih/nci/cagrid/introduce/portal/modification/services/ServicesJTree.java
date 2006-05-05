@@ -8,8 +8,6 @@ import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodT
 import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodsTypeTreeNode;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertiesTypeTreeNode;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertyTypeTreeNode;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.services.ServiceTypeTreeNode;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.services.ServicesTypeTreeNode;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

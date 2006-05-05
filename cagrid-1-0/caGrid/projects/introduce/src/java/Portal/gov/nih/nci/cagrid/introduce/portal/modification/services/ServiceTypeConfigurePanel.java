@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.portal.modification.services.services;
+package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
