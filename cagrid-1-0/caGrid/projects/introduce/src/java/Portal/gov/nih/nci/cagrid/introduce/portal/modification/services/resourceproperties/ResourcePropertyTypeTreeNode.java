@@ -43,9 +43,7 @@
 
 package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties;
 
-import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
-import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
 import javax.swing.ImageIcon;

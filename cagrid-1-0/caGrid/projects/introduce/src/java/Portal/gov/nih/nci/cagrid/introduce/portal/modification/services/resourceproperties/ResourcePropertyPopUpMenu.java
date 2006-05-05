@@ -1,12 +1,12 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties;
 
+import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
-
-import javax.swing.JPopupMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 
 public class ResourcePropertyPopUpMenu extends JPopupMenu {
 

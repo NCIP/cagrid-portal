@@ -1,8 +1,9 @@
-package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties;
+package gov.nih.nci.cagrid.introduce.portal.modification;
 
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ModifyResourcePropertiesPanel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;

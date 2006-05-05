@@ -1,11 +1,12 @@
 
-package gov.nih.nci.cagrid.introduce.portal.modification.services;
+package gov.nih.nci.cagrid.introduce.portal.modification.services.services;
 
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.ServicesJTree;
 
 import javax.swing.JPopupMenu;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -26,13 +27,13 @@ public class ServicesTypeTreeNode extends DefaultMutableTreeNode {
 
 	private ServicesPopUpMenu menu;
 	private ServicesType services;
-	private ServicesJTree tree;
+	private DefaultTreeModel model;
 	private ServiceInformation info;
-	public ServicesTypeTreeNode(ServicesType services, ServiceInformation info, ServicesJTree tree) {
+	public ServicesTypeTreeNode(ServicesType services, ServiceInformation info, DefaultTreeModel model) {
 		super();
 		this.info = info;
 		this.services = services;
-		this.tree = tree;
+		this.model = model;
 		menu = new ServicesPopUpMenu(this);
 		this.setUserObject("Service Contexts");
 		initialize();
@@ -42,12 +43,11 @@ public class ServicesTypeTreeNode extends DefaultMutableTreeNode {
 		if (services.getService() != null) {
 			for (int i = 0; i < services.getService().length; i++) {
 				//if(!services.getService(i).getName().equals(info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME))){
-					ServiceTypeTreeNode newNode = new ServiceTypeTreeNode(services.getService(i),info,tree);
-					((DefaultTreeModel)tree.getModel()).insertNodeInto(newNode, this, this.getChildCount());
+					ServiceTypeTreeNode newNode = new ServiceTypeTreeNode(services.getService(i),info,model);
+					model.insertNodeInto(newNode, this, this.getChildCount());
 				//}
 			}
 		}
-		tree.expandAll(true);
 	}
 	
 	public void removeResource(ServiceTypeTreeNode node){
@@ -62,7 +62,7 @@ public class ServicesTypeTreeNode extends DefaultMutableTreeNode {
 		
 		services.setService(newResourceProperty);
 		
-		((DefaultTreeModel)tree.getModel()).removeNodeFromParent(node);
+		model.removeNodeFromParent(node);
 	}
 	
 	public String toString(){
@@ -70,9 +70,8 @@ public class ServicesTypeTreeNode extends DefaultMutableTreeNode {
 	}
 	
 	public void addService(ServiceType type) {
-			ServiceTypeTreeNode newNode = new ServiceTypeTreeNode(type,info,tree);
-			((DefaultTreeModel)tree.getModel()).insertNodeInto(newNode, this, this.getChildCount());
-			tree.expandPath(new TreePath(((DefaultTreeModel)tree.getModel()).getPathToRoot(newNode)));
+			ServiceTypeTreeNode newNode = new ServiceTypeTreeNode(type,info,model);
+			model.insertNodeInto(newNode, this, this.getChildCount());
 			// keep servicestype consistant
 			int currentLength = 0;
 			if (services.getService() != null) {

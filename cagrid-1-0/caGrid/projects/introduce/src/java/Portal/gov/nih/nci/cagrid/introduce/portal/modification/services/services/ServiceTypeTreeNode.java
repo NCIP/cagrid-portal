@@ -41,11 +41,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *---------------------------------------------------------------------------*/
 
-package gov.nih.nci.cagrid.introduce.portal.modification.services;
+package gov.nih.nci.cagrid.introduce.portal.modification.services.services;
 
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.ServicesJTree;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodsTypeTreeNode;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertiesTypeTreeNode;
 
@@ -68,15 +69,15 @@ public class ServiceTypeTreeNode extends DefaultMutableTreeNode {
 	private ServiceType serviceType;
 	private ServiceInformation info;
 	private ServicePopUpMenu popUpMenu;
-	private ServicesJTree tree;
+	private DefaultTreeModel model;
 
 
-	public ServiceTypeTreeNode(ServiceType serviceType, ServiceInformation info, ServicesJTree tree) {
+	public ServiceTypeTreeNode(ServiceType serviceType, ServiceInformation info, DefaultTreeModel model) {
 		super();
 		this.info = info;
 		this.setUserObject(serviceType);
 		this.serviceType = serviceType;
-		this.tree = tree;
+		this.model = model;
 		this.popUpMenu = new ServicePopUpMenu(this);
 		initialize();
 	}
@@ -84,13 +85,13 @@ public class ServiceTypeTreeNode extends DefaultMutableTreeNode {
 
 	private void initialize() {
 		if (serviceType.getMethods() != null) {
-			MethodsTypeTreeNode newNode = new MethodsTypeTreeNode(serviceType.getMethods(), tree, info);
-			((DefaultTreeModel)tree.getModel()).insertNodeInto(newNode, this, this.getChildCount());
+			MethodsTypeTreeNode newNode = new MethodsTypeTreeNode(serviceType.getMethods(), model, info);
+			model.insertNodeInto(newNode, this, this.getChildCount());
 		}
 		if (serviceType.getResourcePropertiesList() != null) {
 			ResourcePropertiesTypeTreeNode newNode = new ResourcePropertiesTypeTreeNode(serviceType
-				.getResourcePropertiesList(), (DefaultTreeModel)tree.getModel(), info);
-		((DefaultTreeModel)tree.getModel()).insertNodeInto(newNode, this, this.getChildCount());
+				.getResourcePropertiesList(), model, info);
+		model.insertNodeInto(newNode, this, this.getChildCount());
 		}
 	}
 

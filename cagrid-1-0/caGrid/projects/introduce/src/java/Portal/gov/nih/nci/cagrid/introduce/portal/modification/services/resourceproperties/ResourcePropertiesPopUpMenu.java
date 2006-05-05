@@ -1,16 +1,12 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties;
 
+import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
-import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
-import gov.nih.nci.cagrid.introduce.portal.modification.methods.MethodViewer;
-
-import javax.swing.JPopupMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 
 import org.projectmobius.portal.PortalResourceManager;
 

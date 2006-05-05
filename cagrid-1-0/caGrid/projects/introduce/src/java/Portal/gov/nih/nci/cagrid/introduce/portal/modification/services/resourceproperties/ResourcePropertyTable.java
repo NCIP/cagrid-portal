@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.portal.modification;
+package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties;
 
 import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
