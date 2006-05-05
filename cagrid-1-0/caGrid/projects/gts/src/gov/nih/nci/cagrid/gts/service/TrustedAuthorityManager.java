@@ -6,6 +6,8 @@ import gov.nih.nci.cagrid.gts.bean.Status;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
 import gov.nih.nci.cagrid.gts.common.Database;
+import gov.nih.nci.cagrid.gts.service.db.DBManager;
+import gov.nih.nci.cagrid.gts.service.db.TrustedAuthorityTable;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault;
@@ -32,7 +34,6 @@ import org.apache.commons.logging.LogFactory;
  *          Exp $
  */
 public class TrustedAuthorityManager {
-	public static final String TRUSTED_AUTHORITIES_TABLE = "TRUSTED_AUTHORITIES";
 
 	private Log log;
 
@@ -44,11 +45,14 @@ public class TrustedAuthorityManager {
 
 	private TrustLevelLookup lookup;
 
+	private DBManager dbManager;
 
-	public TrustedAuthorityManager(String gtsURI, TrustLevelLookup lookup, Database db) {
+
+	public TrustedAuthorityManager(String gtsURI, TrustLevelLookup lookup, DBManager dbManager) {
 		log = LogFactory.getLog(this.getClass().getName());
 		this.gtsURI = gtsURI;
-		this.db = db;
+		this.dbManager = dbManager;
+		this.db = dbManager.getDatabase();
 		this.lookup = lookup;
 	}
 
@@ -63,50 +67,51 @@ public class TrustedAuthorityManager {
 			c = db.getConnection();
 			Statement s = c.createStatement();
 
-			sql.append("select * from " + TRUSTED_AUTHORITIES_TABLE);
+			sql.append("select * from " + TrustedAuthorityTable.TABLE_NAME);
 			if (filter != null) {
 				boolean firstAppended = false;
 
 				if (filter.getName() != null) {
 					sql = appendWhereOrAnd(firstAppended, sql);
 					firstAppended = true;
-					sql.append(" NAME = '" + filter.getName() + "'");
+					sql.append(" " + TrustedAuthorityTable.NAME + " = '" + filter.getName() + "'");
 				}
 
 				if (filter.getCertificateDN() != null) {
 					sql = appendWhereOrAnd(firstAppended, sql);
 					firstAppended = true;
-					sql.append(" CERTIFICATE_DN = '" + filter.getCertificateDN() + "'");
+					sql.append(" " + TrustedAuthorityTable.CERTIFICATE_DN + " = '" + filter.getCertificateDN() + "'");
 				}
 
 				if (filter.getStatus() != null) {
 					sql = appendWhereOrAnd(firstAppended, sql);
 					firstAppended = true;
-					sql.append(" STATUS='" + filter.getStatus() + "'");
+					sql.append(" " + TrustedAuthorityTable.STATUS + "='" + filter.getStatus() + "'");
 				}
 
 				if (filter.getTrustLevel() != null) {
 					sql = appendWhereOrAnd(firstAppended, sql);
 					firstAppended = true;
-					sql.append(" TRUST_LEVEL='" + filter.getTrustLevel() + "'");
+					sql.append(" " + TrustedAuthorityTable.TRUST_LEVEL + "='" + filter.getTrustLevel() + "'");
 				}
 
 				if (filter.getIsAuthority() != null) {
 					sql = appendWhereOrAnd(firstAppended, sql);
 					firstAppended = true;
-					sql.append(" IS_AUTHORITY='" + filter.getIsAuthority().booleanValue() + "'");
+					sql.append(" " + TrustedAuthorityTable.IS_AUTHORITY + "='" + filter.getIsAuthority().booleanValue()
+						+ "'");
 				}
 
 				if (filter.getAuthorityGTS() != null) {
 					sql = appendWhereOrAnd(firstAppended, sql);
 					firstAppended = true;
-					sql.append(" AUTHORITY_GTS = '" + filter.getAuthorityGTS() + "'");
+					sql.append(" " + TrustedAuthorityTable.AUTHORITY_GTS + " = '" + filter.getAuthorityGTS() + "'");
 				}
 
 				if (filter.getSourceGTS() != null) {
 					sql = appendWhereOrAnd(firstAppended, sql);
 					firstAppended = true;
-					sql.append(" SOURCE_GTS = '" + filter.getSourceGTS() + "'");
+					sql.append(" " + TrustedAuthorityTable.SOURCE_GTS + " = '" + filter.getSourceGTS() + "'");
 				}
 
 				if (filter.getLifetime() != null) {
@@ -115,13 +120,14 @@ public class TrustedAuthorityManager {
 						firstAppended = true;
 						Calendar cal = new GregorianCalendar();
 						long time = cal.getTimeInMillis();
-						sql.append(" (EXPIRES=0 OR EXPIRES>" + time + ")");
+						sql.append(" (" + TrustedAuthorityTable.EXPIRES + "=0 OR " + TrustedAuthorityTable.EXPIRES
+							+ ">" + time + ")");
 					} else if (filter.getLifetime().equals(Lifetime.Expired)) {
 						sql = appendWhereOrAnd(firstAppended, sql);
 						firstAppended = true;
 						Calendar cal = new GregorianCalendar();
 						long time = cal.getTimeInMillis();
-						sql.append(" EXPIRES<" + time);
+						sql.append(" " + TrustedAuthorityTable.EXPIRES + "<" + time);
 					}
 				}
 
@@ -130,16 +136,17 @@ public class TrustedAuthorityManager {
 			ResultSet rs = s.executeQuery(sql.toString());
 			while (rs.next()) {
 				TrustedAuthority ta = new TrustedAuthority();
-				ta.setName(rs.getString("NAME"));
-				ta.setTrustLevel(rs.getString("TRUST_LEVEL"));
-				ta.setStatus(Status.fromValue(rs.getString("STATUS")));
-				ta.setIsAuthority(Boolean.valueOf(rs.getBoolean("IS_AUTHORITY")));
-				ta.setAuthorityGTS(rs.getString("AUTHORITY_GTS"));
-				ta.setSourceGTS(rs.getString("SOURCE_GTS"));
-				ta.setExpires(rs.getLong("EXPIRES"));
-				ta.setLastUpdated(rs.getLong("LAST_UPDATED"));
-				ta.setCertificate(new gov.nih.nci.cagrid.gts.bean.X509Certificate(rs.getString("CERTIFICATE")));
-				String crl = rs.getString("CRL");
+				ta.setName(rs.getString(TrustedAuthorityTable.NAME));
+				ta.setTrustLevel(rs.getString(TrustedAuthorityTable.TRUST_LEVEL));
+				ta.setStatus(Status.fromValue(rs.getString(TrustedAuthorityTable.STATUS)));
+				ta.setIsAuthority(Boolean.valueOf(rs.getBoolean(TrustedAuthorityTable.IS_AUTHORITY)));
+				ta.setAuthorityGTS(rs.getString(TrustedAuthorityTable.AUTHORITY_GTS));
+				ta.setSourceGTS(rs.getString(TrustedAuthorityTable.SOURCE_GTS));
+				ta.setExpires(rs.getLong(TrustedAuthorityTable.EXPIRES));
+				ta.setLastUpdated(rs.getLong(TrustedAuthorityTable.LAST_UPDATED));
+				ta.setCertificate(new gov.nih.nci.cagrid.gts.bean.X509Certificate(rs
+					.getString(TrustedAuthorityTable.CERTIFICATE)));
+				String crl = rs.getString(TrustedAuthorityTable.CRL);
 				if ((crl != null) && (crl.trim().length() > 0)) {
 					ta.setCRL(new gov.nih.nci.cagrid.gts.bean.X509CRL(crl));
 				}
@@ -225,7 +232,7 @@ public class TrustedAuthorityManager {
 			}
 
 			if (!ta.getAuthorityGTS().equals(curr.getAuthorityGTS())) {
-				buildUpdate(needsUpdate, sql, "AUTHORITY_GTS", ta.getAuthorityGTS());
+				buildUpdate(needsUpdate, sql, TrustedAuthorityTable.AUTHORITY_GTS, ta.getAuthorityGTS());
 				needsUpdate = true;
 			}
 
@@ -240,18 +247,19 @@ public class TrustedAuthorityManager {
 						throw fault;
 					}
 
-					buildUpdate(needsUpdate, sql, "CERTIFICATE", ta.getCertificate().getCertificateEncodedString());
+					buildUpdate(needsUpdate, sql, TrustedAuthorityTable.CERTIFICATE, ta.getCertificate()
+						.getCertificateEncodedString());
 					needsUpdate = true;
 				}
 			}
 
 			if (!ta.getSourceGTS().equals(curr.getSourceGTS())) {
-				buildUpdate(needsUpdate, sql, "SOURCE_GTS", ta.getSourceGTS());
+				buildUpdate(needsUpdate, sql, TrustedAuthorityTable.SOURCE_GTS, ta.getSourceGTS());
 				needsUpdate = true;
 			}
 
 			if (ta.getExpires() != curr.getExpires()) {
-				buildUpdate(needsUpdate, sql, "EXPIRES", ta.getExpires());
+				buildUpdate(needsUpdate, sql, TrustedAuthorityTable.EXPIRES, ta.getExpires());
 				needsUpdate = true;
 			}
 
@@ -267,13 +275,13 @@ public class TrustedAuthorityManager {
 			if ((clean(ta.getCRL().getCrlEncodedString()) != null) && (!ta.getCRL().equals(curr.getCRL()))) {
 				X509Certificate cert = checkAndExtractCertificate(ta);
 				checkAndExtractCRL(ta, cert);
-				buildUpdate(needsUpdate, sql, "CRL", ta.getCRL().getCrlEncodedString());
+				buildUpdate(needsUpdate, sql, TrustedAuthorityTable.CRL, ta.getCRL().getCrlEncodedString());
 				needsUpdate = true;
 			}
 		}
 
 		if ((ta.getStatus() != null) && (!ta.getStatus().equals(curr.getStatus()))) {
-			buildUpdate(needsUpdate, sql, "STATUS", ta.getStatus().getValue());
+			buildUpdate(needsUpdate, sql, TrustedAuthorityTable.STATUS, ta.getStatus().getValue());
 			needsUpdate = true;
 		}
 
@@ -284,7 +292,7 @@ public class TrustedAuthorityManager {
 					+ " could not be updated, the trust level " + ta.getTrustLevel() + " does not exist.");
 				throw fault;
 			}
-			buildUpdate(needsUpdate, sql, "TRUST_LEVEL", ta.getTrustLevel());
+			buildUpdate(needsUpdate, sql, TrustedAuthorityTable.TRUST_LEVEL, ta.getTrustLevel());
 			needsUpdate = true;
 		}
 
@@ -293,8 +301,8 @@ public class TrustedAuthorityManager {
 				if (needsUpdate) {
 					Calendar c = new GregorianCalendar();
 					ta.setLastUpdated(c.getTimeInMillis());
-					buildUpdate(needsUpdate, sql, "LAST_UPDATED", ta.getLastUpdated());
-					sql.append(" WHERE NAME='" + ta.getName() + "'");
+					buildUpdate(needsUpdate, sql, TrustedAuthorityTable.LAST_UPDATED, ta.getLastUpdated());
+					sql.append(" WHERE " + TrustedAuthorityTable.NAME + "='" + ta.getName() + "'");
 					db.update(sql.toString());
 				}
 			}
@@ -321,7 +329,7 @@ public class TrustedAuthorityManager {
 		if (needsUpdate) {
 			sql.append(",").append(field).append("='").append(value).append("'");
 		} else {
-			sql.append("UPDATE " + TRUSTED_AUTHORITIES_TABLE + " SET ");
+			sql.append("UPDATE " + TrustedAuthorityTable.TABLE_NAME + " SET ");
 			sql.append(field).append("='").append(value).append("'");
 		}
 
@@ -332,7 +340,7 @@ public class TrustedAuthorityManager {
 		if (needsUpdate) {
 			sql.append(",").append(field).append("=").append(value).append("");
 		} else {
-			sql.append("UPDATE " + TRUSTED_AUTHORITIES_TABLE + " SET ");
+			sql.append("UPDATE " + TrustedAuthorityTable.TABLE_NAME + " SET ");
 			sql.append(field).append("=").append(value);
 		}
 
@@ -351,7 +359,8 @@ public class TrustedAuthorityManager {
 
 	public synchronized TrustedAuthority getTrustedAuthority(String name) throws GTSInternalFault,
 		InvalidTrustedAuthorityFault {
-		String sql = "select * from " + TRUSTED_AUTHORITIES_TABLE + " where NAME='" + name + "'";
+		String sql = "select * from " + TrustedAuthorityTable.TABLE_NAME + " where " + TrustedAuthorityTable.NAME
+			+ "='" + name + "'";
 		Connection c = null;
 		try {
 			c = db.getConnection();
@@ -359,16 +368,17 @@ public class TrustedAuthorityManager {
 			ResultSet rs = s.executeQuery(sql);
 			if (rs.next()) {
 				TrustedAuthority ta = new TrustedAuthority();
-				ta.setName(rs.getString("NAME"));
-				ta.setTrustLevel(rs.getString("TRUST_LEVEL"));
-				ta.setStatus(Status.fromValue(rs.getString("STATUS")));
-				ta.setIsAuthority(Boolean.valueOf(rs.getBoolean("IS_AUTHORITY")));
-				ta.setAuthorityGTS(rs.getString("AUTHORITY_GTS"));
-				ta.setSourceGTS(rs.getString("SOURCE_GTS"));
-				ta.setExpires(rs.getLong("EXPIRES"));
-				ta.setLastUpdated(rs.getLong("LAST_UPDATED"));
-				ta.setCertificate(new gov.nih.nci.cagrid.gts.bean.X509Certificate(rs.getString("CERTIFICATE")));
-				String crl = rs.getString("CRL");
+				ta.setName(rs.getString(TrustedAuthorityTable.NAME));
+				ta.setTrustLevel(rs.getString(TrustedAuthorityTable.TRUST_LEVEL));
+				ta.setStatus(Status.fromValue(rs.getString(TrustedAuthorityTable.STATUS)));
+				ta.setIsAuthority(Boolean.valueOf(rs.getBoolean(TrustedAuthorityTable.IS_AUTHORITY)));
+				ta.setAuthorityGTS(rs.getString(TrustedAuthorityTable.AUTHORITY_GTS));
+				ta.setSourceGTS(rs.getString(TrustedAuthorityTable.SOURCE_GTS));
+				ta.setExpires(rs.getLong(TrustedAuthorityTable.EXPIRES));
+				ta.setLastUpdated(rs.getLong(TrustedAuthorityTable.LAST_UPDATED));
+				ta.setCertificate(new gov.nih.nci.cagrid.gts.bean.X509Certificate(rs
+					.getString(TrustedAuthorityTable.CERTIFICATE)));
+				String crl = rs.getString(TrustedAuthorityTable.CRL);
 				if ((crl != null) && (crl.trim().length() > 0)) {
 					ta.setCRL(new gov.nih.nci.cagrid.gts.bean.X509CRL(crl));
 				}
@@ -393,7 +403,8 @@ public class TrustedAuthorityManager {
 
 	public synchronized boolean doesTrustedAuthorityExist(String name) throws GTSInternalFault {
 		this.buildDatabase();
-		String sql = "select count(*) from " + TRUSTED_AUTHORITIES_TABLE + " where NAME='" + name + "'";
+		String sql = "select count(*) from " + TrustedAuthorityTable.TABLE_NAME + " where "
+			+ TrustedAuthorityTable.NAME + "='" + name + "'";
 		Connection c = null;
 		boolean exists = false;
 		try {
@@ -423,7 +434,8 @@ public class TrustedAuthorityManager {
 
 	public synchronized void removeTrustedAuthority(String name) throws GTSInternalFault, InvalidTrustedAuthorityFault {
 		if (doesTrustedAuthorityExist(name)) {
-			String sql = "delete FROM " + TRUSTED_AUTHORITIES_TABLE + " where NAME='" + name + "'";
+			String sql = "delete FROM " + TrustedAuthorityTable.TABLE_NAME + " where " + TrustedAuthorityTable.NAME
+				+ "='" + name + "'";
 			try {
 				db.update(sql);
 			} catch (Exception e) {
@@ -443,7 +455,8 @@ public class TrustedAuthorityManager {
 
 	public synchronized void removeTrustedAuthoritiesByLevel(String level) throws GTSInternalFault {
 		buildDatabase();
-		String sql = "delete FROM " + TRUSTED_AUTHORITIES_TABLE + " where TRUST_LEVEL='" + level + "'";
+		String sql = "delete FROM " + TrustedAuthorityTable.TABLE_NAME + " where " + TrustedAuthorityTable.TRUST_LEVEL
+			+ "='" + level + "'";
 		try {
 			db.update(sql);
 		} catch (Exception e) {
@@ -463,15 +476,18 @@ public class TrustedAuthorityManager {
 		try {
 			Calendar c = new GregorianCalendar();
 			ta.setLastUpdated(c.getTimeInMillis());
-			insert.append("INSERT INTO " + TRUSTED_AUTHORITIES_TABLE + " SET NAME='" + ta.getName()
-				+ "',CERTIFICATE_DN='" + cert.getSubjectDN().toString() + "',TRUST_LEVEL='" + ta.getTrustLevel()
-				+ "', STATUS='" + ta.getStatus().getValue() + "', IS_AUTHORITY='" + ta.getIsAuthority().booleanValue()
-				+ "',AUTHORITY_GTS='" + ta.getAuthorityGTS() + "',SOURCE_GTS='" + ta.getSourceGTS() + "', EXPIRES="
-				+ ta.getExpires() + ", LAST_UPDATED=" + ta.getLastUpdated() + ", CERTIFICATE='"
-				+ ta.getCertificate().getCertificateEncodedString() + "'");
+			insert.append("INSERT INTO " + TrustedAuthorityTable.TABLE_NAME + " SET " + TrustedAuthorityTable.NAME
+				+ "='" + ta.getName() + "'," + TrustedAuthorityTable.CERTIFICATE_DN + "='"
+				+ cert.getSubjectDN().toString() + "'," + TrustedAuthorityTable.TRUST_LEVEL + "='" + ta.getTrustLevel()
+				+ "', " + TrustedAuthorityTable.STATUS + "='" + ta.getStatus().getValue() + "', "
+				+ TrustedAuthorityTable.IS_AUTHORITY + "='" + ta.getIsAuthority().booleanValue() + "',"
+				+ TrustedAuthorityTable.AUTHORITY_GTS + "='" + ta.getAuthorityGTS() + "',"
+				+ TrustedAuthorityTable.SOURCE_GTS + "='" + ta.getSourceGTS() + "', " + TrustedAuthorityTable.EXPIRES
+				+ "=" + ta.getExpires() + ", " + TrustedAuthorityTable.LAST_UPDATED + "=" + ta.getLastUpdated() + ", "
+				+ TrustedAuthorityTable.CERTIFICATE + "='" + ta.getCertificate().getCertificateEncodedString() + "'");
 
 			if (crl != null) {
-				insert.append(",CRL='" + ta.getCRL().getCrlEncodedString() + "'");
+				insert.append("," + TrustedAuthorityTable.CRL + "='" + ta.getCRL().getCrlEncodedString() + "'");
 			}
 			db.update(insert.toString());
 		} catch (Exception e) {
@@ -633,15 +649,9 @@ public class TrustedAuthorityManager {
 		if (!dbBuilt) {
 			try {
 				db.createDatabase();
-				if (!this.db.tableExists(TRUSTED_AUTHORITIES_TABLE)) {
-					String trust = "CREATE TABLE " + TRUSTED_AUTHORITIES_TABLE + " ("
-						+ "NAME VARCHAR(255) NOT NULL PRIMARY KEY," + "CERTIFICATE_DN VARCHAR(255) NOT NULL,"
-						+ "TRUST_LEVEL VARCHAR(255) NOT NULL," + "STATUS VARCHAR(50) NOT NULL,"
-						+ "IS_AUTHORITY VARCHAR(5) NOT NULL," + "AUTHORITY_GTS VARCHAR(255) NOT NULL,"
-						+ "SOURCE_GTS VARCHAR(255) NOT NULL," + "EXPIRES BIGINT NOT NULL,"
-						+ "LAST_UPDATED BIGINT NOT NULL," + "CERTIFICATE TEXT NOT NULL,"
-						+ "CRL TEXT, INDEX document_index (NAME));";
-					db.update(trust);
+				if (!this.db.tableExists(TrustedAuthorityTable.TABLE_NAME)) {
+					String sql = dbManager.getTrustedAuthorityTable().getCreateTableSQL();
+					db.update(sql);
 				}
 				dbBuilt = true;
 			} catch (Exception e) {
@@ -657,7 +667,7 @@ public class TrustedAuthorityManager {
 	public void destroy() throws GTSInternalFault {
 		try {
 			buildDatabase();
-			db.update("DROP TABLE IF EXISTS " + TRUSTED_AUTHORITIES_TABLE);
+			db.update("DROP TABLE IF EXISTS " + TrustedAuthorityTable.TABLE_NAME);
 			dbBuilt = false;
 		} catch (Exception e) {
 			this.log.error("Unexpected error in removing the database.", e);

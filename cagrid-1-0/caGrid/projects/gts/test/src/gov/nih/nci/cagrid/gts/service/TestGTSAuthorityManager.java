@@ -5,7 +5,8 @@ import gov.nih.nci.cagrid.gts.bean.AuthorityGTS;
 import gov.nih.nci.cagrid.gts.bean.AuthorityPrioritySpecification;
 import gov.nih.nci.cagrid.gts.bean.AuthorityPriorityUpdate;
 import gov.nih.nci.cagrid.gts.bean.TimeToLive;
-import gov.nih.nci.cagrid.gts.common.Database;
+import gov.nih.nci.cagrid.gts.service.db.AuthorityTable;
+import gov.nih.nci.cagrid.gts.service.db.DBManager;
 import gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault;
 import gov.nih.nci.cagrid.gts.test.Utils;
 
@@ -23,7 +24,7 @@ import junit.framework.TestCase;
  */
 public class TestGTSAuthorityManager extends TestCase {
 
-	private Database db;
+	private DBManager db;
 
 	private final String GTS_URI = "localhost";
 
@@ -37,7 +38,7 @@ public class TestGTSAuthorityManager extends TestCase {
 		try {
 			am.destroy();
 			am.buildDatabase();
-			assertTrue(db.tableExists(GTSAuthorityManager.GTS_AUTHORITIES));
+			assertTrue(db.getDatabase().tableExists(AuthorityTable.TABLE_NAME));
 			am.destroy();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -484,7 +485,7 @@ public class TestGTSAuthorityManager extends TestCase {
 					assertEquals(a[j], am.getAuthority(a[j].getServiceURI()));
 				}
 			}
-			c = db.getConnection();
+			c = db.getDatabase().getConnection();
 			c.setAutoCommit(false);
 			for (int i = 0; i < count; i++) {
 				a[i].setPriority(a[i].getPriority() + 1);
@@ -537,7 +538,7 @@ public class TestGTSAuthorityManager extends TestCase {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				db.releaseConnection(c);
+				db.getDatabase().releaseConnection(c);
 			}
 			try {
 				am.destroy();
@@ -614,8 +615,8 @@ public class TestGTSAuthorityManager extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
-			db = Utils.getDB();
-			assertEquals(0, db.getUsedConnectionCount());
+			db = Utils.getDBManager();
+			assertEquals(0, db.getDatabase().getUsedConnectionCount());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -625,8 +626,8 @@ public class TestGTSAuthorityManager extends TestCase {
 	protected void tearDown() throws Exception {
 		super.setUp();
 		try {
-			assertEquals(0, db.getUsedConnectionCount());
-			db.destroyDatabase();
+			assertEquals(0, db.getDatabase().getUsedConnectionCount());
+			db.getDatabase().destroyDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

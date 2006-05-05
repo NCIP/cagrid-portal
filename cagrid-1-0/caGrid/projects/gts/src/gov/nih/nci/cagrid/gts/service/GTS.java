@@ -9,8 +9,9 @@ import gov.nih.nci.cagrid.gts.bean.Status;
 import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
-import gov.nih.nci.cagrid.gts.common.Database;
 import gov.nih.nci.cagrid.gts.common.MySQLDatabase;
+import gov.nih.nci.cagrid.gts.service.db.DBManager;
+import gov.nih.nci.cagrid.gts.service.db.mysql.MySQLManager;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 import gov.nih.nci.cagrid.gts.stubs.GridTrustServicePortType;
 import gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault;
@@ -65,11 +66,12 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 		this.conf = conf;
 		this.gtsURI = gtsURI;
 		log =LogFactory.getLog(this.getClass().getName());
-		Database db = new MySQLDatabase(this.conf.getConnectionManager(), this.conf.getGTSInternalId());
-		trust = new TrustedAuthorityManager(this.gtsURI, this, db);
-		trustLevelManager = new TrustLevelManager(this.gtsURI, this, db);
-		permissions = new PermissionManager(db);
-		authority = new GTSAuthorityManager(gtsURI,conf.getAuthoritySyncTime(),db);
+		 
+		DBManager dbManager = new MySQLManager(new MySQLDatabase(this.conf.getConnectionManager(), this.conf.getGTSInternalId()));
+		trust = new TrustedAuthorityManager(this.gtsURI, this, dbManager);
+		trustLevelManager = new TrustLevelManager(this.gtsURI, this, dbManager);
+		permissions = new PermissionManager(dbManager);
+		authority = new GTSAuthorityManager(gtsURI,conf.getAuthoritySyncTime(),dbManager);
 		if (SYNC_WITH_AUTHORITIES) {
 			this.threadManager = new MobiusPoolManager();
 			MobiusRunnable runner = new MobiusRunnable() {

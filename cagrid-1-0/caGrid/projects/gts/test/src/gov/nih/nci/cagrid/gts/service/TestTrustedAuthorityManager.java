@@ -9,7 +9,8 @@ import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
 import gov.nih.nci.cagrid.gts.bean.X509CRL;
 import gov.nih.nci.cagrid.gts.bean.X509Certificate;
-import gov.nih.nci.cagrid.gts.common.Database;
+import gov.nih.nci.cagrid.gts.service.db.DBManager;
+import gov.nih.nci.cagrid.gts.service.db.TrustedAuthorityTable;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault;
@@ -38,7 +39,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 	private final static String LEVEL_TWO = "TWO";
 	private final static String LEVEL_THREE = "THREE";
 
-	private Database db;
+	private DBManager db;
 
 
 	public void testCreateAndDestroy() {
@@ -46,7 +47,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 			TrustedAuthorityManager trust = new TrustedAuthorityManager("localhost", this, db);
 			trust.destroy();
 			trust.buildDatabase();
-			assertTrue(db.tableExists(TrustedAuthorityManager.TRUSTED_AUTHORITIES_TABLE));
+			assertTrue(db.getDatabase().tableExists(TrustedAuthorityTable.TABLE_NAME));
 			trust.destroy();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -1084,8 +1085,8 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
-			db = Utils.getDB();
-			assertEquals(0, db.getUsedConnectionCount());
+			db = Utils.getDBManager();
+			assertEquals(0, db.getDatabase().getUsedConnectionCount());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -1096,8 +1097,8 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 	protected void tearDown() throws Exception {
 		super.setUp();
 		try {
-			assertEquals(0, db.getUsedConnectionCount());
-			db.destroyDatabase();
+			assertEquals(0, db.getDatabase().getUsedConnectionCount());
+			db.getDatabase().destroyDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

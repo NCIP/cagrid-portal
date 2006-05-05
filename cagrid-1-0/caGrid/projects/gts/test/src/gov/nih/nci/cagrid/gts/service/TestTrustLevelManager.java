@@ -2,7 +2,8 @@ package gov.nih.nci.cagrid.gts.service;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.gts.bean.TrustLevel;
-import gov.nih.nci.cagrid.gts.common.Database;
+import gov.nih.nci.cagrid.gts.service.db.DBManager;
+import gov.nih.nci.cagrid.gts.service.db.TrustLevelTable;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault;
 import gov.nih.nci.cagrid.gts.test.Utils;
@@ -18,7 +19,7 @@ import junit.framework.TestCase;
  */
 public class TestTrustLevelManager extends TestCase implements TrustedAuthorityLevelRemover {
 
-	private Database db;
+	private DBManager db;
 
 	private TrustLevel ref;
 
@@ -36,7 +37,7 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 		try {
 			trust.destroy();
 			trust.buildDatabase();
-			assertTrue(db.tableExists(TrustLevelManager.TRUST_LEVELS));
+			assertTrue(db.getDatabase().tableExists(TrustLevelTable.TABLE_NAME));
 			trust.destroy();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -452,8 +453,8 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
-			db = Utils.getDB();
-			assertEquals(0, db.getUsedConnectionCount());
+			db = Utils.getDBManager();
+			assertEquals(0, db.getDatabase().getUsedConnectionCount());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -464,8 +465,8 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 	protected void tearDown() throws Exception {
 		super.setUp();
 		try {
-			assertEquals(0, db.getUsedConnectionCount());
-			db.destroyDatabase();
+			assertEquals(0, db.getDatabase().getUsedConnectionCount());
+			db.getDatabase().destroyDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

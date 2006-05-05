@@ -4,7 +4,8 @@ import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.gts.bean.Permission;
 import gov.nih.nci.cagrid.gts.bean.PermissionFilter;
 import gov.nih.nci.cagrid.gts.bean.Role;
-import gov.nih.nci.cagrid.gts.common.Database;
+import gov.nih.nci.cagrid.gts.service.db.DBManager;
+import gov.nih.nci.cagrid.gts.service.db.PermissionsTable;
 import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault;
 import gov.nih.nci.cagrid.gts.test.Utils;
@@ -20,7 +21,7 @@ import junit.framework.TestCase;
  */
 public class TestPermissionManager extends TestCase {
 
-	private Database db;
+	private DBManager db;
 
 
 	public void testCreateAndDestroy() {
@@ -28,7 +29,7 @@ public class TestPermissionManager extends TestCase {
 			PermissionManager pm = new PermissionManager(db);
 			pm.destroy();
 			pm.buildDatabase();
-			assertTrue(db.tableExists(PermissionManager.PERMISSIONS_TABLE));
+			assertTrue(db.getDatabase().tableExists(PermissionsTable.TABLE_NAME));
 			pm.destroy();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -287,8 +288,8 @@ public class TestPermissionManager extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
-			db = Utils.getDB();
-			assertEquals(0, db.getUsedConnectionCount());
+			db = Utils.getDBManager();
+			assertEquals(0, db.getDatabase().getUsedConnectionCount());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -299,8 +300,8 @@ public class TestPermissionManager extends TestCase {
 	protected void tearDown() throws Exception {
 		super.setUp();
 		try {
-			assertEquals(0, db.getUsedConnectionCount());
-			db.destroyDatabase();
+			assertEquals(0, db.getDatabase().getUsedConnectionCount());
+			db.getDatabase().destroyDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

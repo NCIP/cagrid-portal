@@ -6,6 +6,8 @@ import gov.nih.nci.cagrid.gts.bean.AuthorityPrioritySpecification;
 import gov.nih.nci.cagrid.gts.bean.AuthorityPriorityUpdate;
 import gov.nih.nci.cagrid.gts.bean.TimeToLive;
 import gov.nih.nci.cagrid.gts.common.Database;
+import gov.nih.nci.cagrid.gts.service.db.AuthorityTable;
+import gov.nih.nci.cagrid.gts.service.db.DBManager;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidAuthorityFault;
@@ -35,23 +37,23 @@ import org.apache.commons.logging.LogFactory;
  */
 
 public class GTSAuthorityManager {
-
-	public static final String GTS_AUTHORITIES = "GTS_AUTHORITIES";
-
 	private Log log;
 
 	private boolean dbBuilt = false;
 
 	private Database db;
 
+	private DBManager dbManager;
+
 	private String gtsURI;
 
 	private AuthoritySyncTime syncTime;
 
 
-	public GTSAuthorityManager(String gtsURI, AuthoritySyncTime syncTime, Database db) {
+	public GTSAuthorityManager(String gtsURI, AuthoritySyncTime syncTime, DBManager dbManager) {
 		log = LogFactory.getLog(this.getClass().getName());
-		this.db = db;
+		this.dbManager = dbManager;
+		this.db = dbManager.getDatabase();
 		this.gtsURI = gtsURI;
 		this.syncTime = syncTime;
 	}
@@ -59,7 +61,8 @@ public class GTSAuthorityManager {
 
 	public synchronized AuthorityGTS getAuthority(String gtsURI) throws GTSInternalFault, InvalidAuthorityFault {
 		this.buildDatabase();
-		String sql = "select * from " + GTS_AUTHORITIES + " where GTS_URI='" + gtsURI + "'";
+		String sql = "select * from " + AuthorityTable.TABLE_NAME + " where " + AuthorityTable.GTS_URI + "='" + gtsURI
+			+ "'";
 		Connection c = null;
 		try {
 			c = db.getConnection();
@@ -67,15 +70,15 @@ public class GTSAuthorityManager {
 			ResultSet rs = s.executeQuery(sql);
 			if (rs.next()) {
 				AuthorityGTS gts = new AuthorityGTS();
-				gts.setServiceURI(rs.getString("GTS_URI"));
-				gts.setPerformAuthorization(rs.getBoolean("PERFORM_AUTH"));
-				gts.setPriority(rs.getInt("PRIORITY"));
-				gts.setServiceIdentity(Utils.clean(rs.getString("GTS_IDENTITY")));
-				gts.setSyncTrustLevels(rs.getBoolean("SYNC_TRUST_LEVELS"));
+				gts.setServiceURI(rs.getString(AuthorityTable.GTS_URI));
+				gts.setPerformAuthorization(rs.getBoolean(AuthorityTable.PERFORM_AUTH));
+				gts.setPriority(rs.getInt(AuthorityTable.PRIORITY));
+				gts.setServiceIdentity(Utils.clean(rs.getString(AuthorityTable.GTS_IDENTITY)));
+				gts.setSyncTrustLevels(rs.getBoolean(AuthorityTable.SYNC_TRUST_LEVELS));
 				TimeToLive ttl = new TimeToLive();
-				ttl.setHours(rs.getInt("TTL_HOURS"));
-				ttl.setMinutes(rs.getInt("TTL_MINUTES"));
-				ttl.setSeconds(rs.getInt("TTL_SECONDS"));
+				ttl.setHours(rs.getInt(AuthorityTable.TTL_HOURS));
+				ttl.setMinutes(rs.getInt(AuthorityTable.TTL_MINUTES));
+				ttl.setSeconds(rs.getInt(AuthorityTable.TTL_SECONDS));
 				gts.setTimeToLive(ttl);
 				return gts;
 			}
@@ -196,8 +199,8 @@ public class GTSAuthorityManager {
 
 		} else {
 			try {
-				PreparedStatement update = c.prepareStatement("UPDATE " + GTS_AUTHORITIES
-					+ " SET PRIORITY = ? WHERE GTS_URI = ?");
+				PreparedStatement update = c.prepareStatement("UPDATE " + AuthorityTable.TABLE_NAME + " SET "
+					+ AuthorityTable.PRIORITY + " = ? WHERE " + AuthorityTable.GTS_URI + " = ?");
 				update.setInt(1, priority);
 				update.setString(2, uri);
 				update.executeUpdate();
@@ -247,10 +250,11 @@ public class GTSAuthorityManager {
 		try {
 			c = db.getConnection();
 			if (!gts.equals(curr)) {
-				PreparedStatement update = c
-					.prepareStatement("UPDATE "
-						+ GTS_AUTHORITIES
-						+ " SET PRIORITY = ?, SYNC_TRUST_LEVELS = ?, TTL_HOURS = ?, TTL_MINUTES = ?, TTL_SECONDS = ?, PERFORM_AUTH = ?, GTS_IDENTITY = ? WHERE GTS_URI = ?");
+				PreparedStatement update = c.prepareStatement("UPDATE " + AuthorityTable.TABLE_NAME + " SET "
+					+ AuthorityTable.PRIORITY + " = ?, " + AuthorityTable.SYNC_TRUST_LEVELS + " = ?, "
+					+ AuthorityTable.TTL_HOURS + " = ?, " + AuthorityTable.TTL_MINUTES + " = ?, "
+					+ AuthorityTable.TTL_SECONDS + " = ?, " + AuthorityTable.PERFORM_AUTH + " = ?, "
+					+ AuthorityTable.GTS_IDENTITY + " = ? WHERE " + AuthorityTable.GTS_URI + " = ?");
 				update.setInt(1, gts.getPriority());
 				update.setString(2, String.valueOf(gts.isSyncTrustLevels()));
 				update.setInt(3, gts.getTimeToLive().getHours());
@@ -288,12 +292,11 @@ public class GTSAuthorityManager {
 		try {
 			c = db.getConnection();
 			Statement s = c.createStatement();
-			sql
-				.append("select GTS_URI from " + GTS_AUTHORITIES + " WHERE PRIORITY>=" + priority
-					+ " ORDER BY PRIORITY");
+			sql.append("select " + AuthorityTable.GTS_URI + " from " + AuthorityTable.TABLE_NAME + " WHERE "
+				+ AuthorityTable.PRIORITY + ">=" + priority + " ORDER BY " + AuthorityTable.PRIORITY + "");
 			ResultSet rs = s.executeQuery(sql.toString());
 			while (rs.next()) {
-				list.add(rs.getString("GTS_URI"));
+				list.add(rs.getString(AuthorityTable.GTS_URI));
 			}
 			rs.close();
 			s.close();
@@ -332,10 +335,11 @@ public class GTSAuthorityManager {
 		try {
 			c = db.getConnection();
 			Statement s = c.createStatement();
-			sql.append("select GTS_URI from " + GTS_AUTHORITIES + " ORDER BY PRIORITY");
+			sql.append("select " + AuthorityTable.GTS_URI + " from " + AuthorityTable.TABLE_NAME + " ORDER BY "
+				+ AuthorityTable.PRIORITY + "");
 			ResultSet rs = s.executeQuery(sql.toString());
 			while (rs.next()) {
-				list.add(rs.getString("GTS_URI"));
+				list.add(rs.getString(AuthorityTable.GTS_URI));
 			}
 			rs.close();
 			s.close();
@@ -372,7 +376,7 @@ public class GTSAuthorityManager {
 		try {
 			c = db.getConnection();
 			Statement s = c.createStatement();
-			sql.append("select COUNT(*) from " + GTS_AUTHORITIES);
+			sql.append("select COUNT(*) from " + AuthorityTable.TABLE_NAME);
 			ResultSet rs = s.executeQuery(sql.toString());
 			int count = 0;
 			if (rs.next()) {
@@ -443,10 +447,11 @@ public class GTSAuthorityManager {
 				this.updateAuthorityPriority(c, list[i].getServiceURI(), (list[i].getPriority() + 1));
 			}
 
-			PreparedStatement insert = c
-				.prepareStatement("INSERT INTO "
-					+ GTS_AUTHORITIES
-					+ " SET GTS_URI = ?, PRIORITY = ?, SYNC_TRUST_LEVELS = ?, TTL_HOURS = ?, TTL_MINUTES = ?, TTL_SECONDS = ?, PERFORM_AUTH = ?, GTS_IDENTITY = ?");
+			PreparedStatement insert = c.prepareStatement("INSERT INTO " + AuthorityTable.TABLE_NAME + " SET "
+				+ AuthorityTable.GTS_URI + " = ?, " + AuthorityTable.PRIORITY + " = ?, "
+				+ AuthorityTable.SYNC_TRUST_LEVELS + " = ?, " + AuthorityTable.TTL_HOURS + " = ?, "
+				+ AuthorityTable.TTL_MINUTES + " = ?, " + AuthorityTable.TTL_SECONDS + " = ?, "
+				+ AuthorityTable.PERFORM_AUTH + " = ?, " + AuthorityTable.GTS_IDENTITY + " = ?");
 			insert.setString(1, gts.getServiceURI());
 			insert.setInt(2, gts.getPriority());
 			insert.setString(3, String.valueOf(gts.isSyncTrustLevels()));
@@ -497,7 +502,8 @@ public class GTSAuthorityManager {
 				this.updateAuthorityPriority(c, list[i].getServiceURI(), (list[i].getPriority() - 1));
 			}
 
-			PreparedStatement ps = c.prepareStatement("DELETE FROM " + GTS_AUTHORITIES + " WHERE GTS_URI = ?");
+			PreparedStatement ps = c.prepareStatement("DELETE FROM " + AuthorityTable.TABLE_NAME + " WHERE "
+				+ AuthorityTable.GTS_URI + " = ?");
 			ps.setString(1, uri);
 			ps.executeUpdate();
 			c.commit();
@@ -529,7 +535,8 @@ public class GTSAuthorityManager {
 
 	public synchronized boolean doesAuthorityExist(String gtsURI) throws GTSInternalFault {
 		this.buildDatabase();
-		String sql = "select count(*) from " + GTS_AUTHORITIES + " where GTS_URI='" + gtsURI + "'";
+		String sql = "select count(*) from " + AuthorityTable.TABLE_NAME + " where " + AuthorityTable.GTS_URI + "='"
+			+ gtsURI + "'";
 		Connection c = null;
 		boolean exists = false;
 		try {
@@ -560,7 +567,7 @@ public class GTSAuthorityManager {
 	public void destroy() throws GTSInternalFault {
 		buildDatabase();
 		try {
-			db.update("DROP TABLE IF EXISTS " + GTS_AUTHORITIES);
+			db.update("DROP TABLE IF EXISTS " + AuthorityTable.TABLE_NAME);
 			dbBuilt = false;
 		} catch (Exception e) {
 			this.log.error("Unexpected error in destroying the database.", e);
@@ -575,13 +582,8 @@ public class GTSAuthorityManager {
 		if (!dbBuilt) {
 			try {
 				db.createDatabase();
-				if (!this.db.tableExists(GTS_AUTHORITIES)) {
-					String trust = "CREATE TABLE " + GTS_AUTHORITIES + " ("
-						+ "GTS_URI VARCHAR(255) NOT NULL PRIMARY KEY,"
-						+ "PRIORITY INT NOT NULL, SYNC_TRUST_LEVELS VARCHAR(5) NOT NULL, "
-						+ "TTL_HOURS INT NOT NULL, TTL_MINUTES INT NOT NULL,TTL_SECONDS INT NOT NULL, "
-						+ "PERFORM_AUTH VARCHAR(5) NOT NULL, GTS_IDENTITY VARCHAR(255),"
-						+ " INDEX document_index (GTS_URI));";
+				if (!this.db.tableExists(AuthorityTable.TABLE_NAME)) {
+					String trust = dbManager.getAuthorityTable().getCreateTableSQL();
 					db.update(trust);
 				}
 				dbBuilt = true;

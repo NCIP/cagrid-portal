@@ -4,6 +4,8 @@ import gov.nih.nci.cagrid.common.SimpleResourceManager;
 import gov.nih.nci.cagrid.gts.common.Database;
 import gov.nih.nci.cagrid.gts.common.MySQLDatabase;
 import gov.nih.nci.cagrid.gts.service.GTSConfiguration;
+import gov.nih.nci.cagrid.gts.service.db.DBManager;
+import gov.nih.nci.cagrid.gts.service.db.mysql.MySQLManager;
 
 import java.io.InputStream;
 
@@ -18,12 +20,21 @@ import org.projectmobius.db.ConnectionManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: Utils.java,v 1.5 2006-05-05 15:24:51 langella Exp $
+ * @version $Id: Utils.java,v 1.6 2006-05-05 18:36:50 langella Exp $
  */
 public class Utils {
 
 	private static final String DB = "TEST_GTS";
 
+	public static DBManager getDBManager() throws Exception {
+		InputStream resource = TestCase.class.getResourceAsStream(GTSConstants.DB_CONFIG);
+		Document doc = XMLUtilities.streamToDocument(resource);
+		ConnectionManager cm = new ConnectionManager(doc.getRootElement());
+		MySQLDatabase db = new MySQLDatabase(cm, DB);
+		db.destroyDatabase();
+		db.createDatabase();
+		return new MySQLManager(db);
+	}
 
 	public static Database getDB() throws Exception {
 		InputStream resource = TestCase.class.getResourceAsStream(GTSConstants.DB_CONFIG);

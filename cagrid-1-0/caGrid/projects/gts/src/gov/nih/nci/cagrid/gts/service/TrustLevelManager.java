@@ -3,6 +3,8 @@ package gov.nih.nci.cagrid.gts.service;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.common.Database;
+import gov.nih.nci.cagrid.gts.service.db.DBManager;
+import gov.nih.nci.cagrid.gts.service.db.TrustLevelTable;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidTrustLevelFault;
@@ -28,8 +30,6 @@ import org.apache.commons.logging.LogFactory;
  */
 public class TrustLevelManager {
 
-	public static final String TRUST_LEVELS = "TRUST_LEVELS";
-
 	private Log log;
 
 	private boolean dbBuilt = false;
@@ -40,10 +40,12 @@ public class TrustLevelManager {
 
 	private String gtsURI;
 
+	private DBManager dbManager;
 
-	public TrustLevelManager(String gtsURI, TrustedAuthorityLevelRemover status, Database db) {
+	public TrustLevelManager(String gtsURI, TrustedAuthorityLevelRemover status, DBManager dbManager) {
 		log = LogFactory.getLog(this.getClass().getName());
-		this.db = db;
+		this.dbManager = dbManager;
+		this.db = dbManager.getDatabase();
 		this.status = status;
 		this.gtsURI = gtsURI;
 	}
@@ -114,10 +116,11 @@ public class TrustLevelManager {
 		level.setLastUpdated(c.getTimeInMillis());
 		StringBuffer insert = new StringBuffer();
 		try {
-			insert.append("INSERT INTO " + TRUST_LEVELS + " SET NAME='" + level.getName() + "',DESCRIPTION='"
-				+ level.getDescription() + "', IS_AUTHORITY='" + level.getIsAuthority() + "', AUTHORITY_GTS='"
-				+ level.getAuthorityGTS() + "', SOURCE_GTS='" + level.getSourceGTS() + "', LAST_UPDATED="
-				+ level.getLastUpdated());
+			insert.append("INSERT INTO " + TrustLevelTable.TABLE_NAME + " SET " + TrustLevelTable.NAME + "='" + level.getName()
+				+ "'," + TrustLevelTable.DESCRIPTION + "='" + level.getDescription() + "', "
+				+ TrustLevelTable.IS_AUTHORITY + "='" + level.getIsAuthority() + "', " + TrustLevelTable.AUTHORITY_GTS
+				+ "='" + level.getAuthorityGTS() + "', " + TrustLevelTable.SOURCE_GTS + "='" + level.getSourceGTS()
+				+ "', " + TrustLevelTable.LAST_UPDATED + "=" + level.getLastUpdated());
 			db.update(insert.toString());
 		} catch (Exception e) {
 			this.log.error("Unexpected database error incurred in adding the Trust Level, " + level.getName()
@@ -138,17 +141,17 @@ public class TrustLevelManager {
 			c = db.getConnection();
 			Statement s = c.createStatement();
 
-			sql.append("select * from " + TRUST_LEVELS);
+			sql.append("select * from " + TrustLevelTable.TABLE_NAME);
 
 			ResultSet rs = s.executeQuery(sql.toString());
 			while (rs.next()) {
 				TrustLevel level = new TrustLevel();
-				level.setName(rs.getString("NAME"));
-				level.setDescription(rs.getString("DESCRIPTION"));
-				level.setIsAuthority(new Boolean(rs.getBoolean("IS_AUTHORITY")));
-				level.setAuthorityGTS(rs.getString("AUTHORITY_GTS"));
-				level.setSourceGTS(rs.getString("SOURCE_GTS"));
-				level.setLastUpdated(rs.getLong("LAST_UPDATED"));
+				level.setName(rs.getString(TrustLevelTable.NAME));
+				level.setDescription(rs.getString(TrustLevelTable.DESCRIPTION));
+				level.setIsAuthority(new Boolean(rs.getBoolean(TrustLevelTable.IS_AUTHORITY)));
+				level.setAuthorityGTS(rs.getString(TrustLevelTable.AUTHORITY_GTS));
+				level.setSourceGTS(rs.getString(TrustLevelTable.SOURCE_GTS));
+				level.setLastUpdated(rs.getLong(TrustLevelTable.LAST_UPDATED));
 				levels.add(level);
 			}
 			rs.close();
@@ -182,17 +185,18 @@ public class TrustLevelManager {
 			c = db.getConnection();
 			Statement s = c.createStatement();
 
-			sql.append("select * from " + TRUST_LEVELS + " WHERE SOURCE_GTS='" + gtsSourceURI + "'");
+			sql.append("select * from " + TrustLevelTable.TABLE_NAME + " WHERE " + TrustLevelTable.SOURCE_GTS + "='" + gtsSourceURI
+				+ "'");
 
 			ResultSet rs = s.executeQuery(sql.toString());
 			while (rs.next()) {
 				TrustLevel level = new TrustLevel();
-				level.setName(rs.getString("NAME"));
-				level.setDescription(rs.getString("DESCRIPTION"));
-				level.setIsAuthority(new Boolean(rs.getBoolean("IS_AUTHORITY")));
-				level.setAuthorityGTS(rs.getString("AUTHORITY_GTS"));
-				level.setSourceGTS(rs.getString("SOURCE_GTS"));
-				level.setLastUpdated(rs.getLong("LAST_UPDATED"));
+				level.setName(rs.getString(TrustLevelTable.NAME));
+				level.setDescription(rs.getString(TrustLevelTable.DESCRIPTION));
+				level.setIsAuthority(new Boolean(rs.getBoolean(TrustLevelTable.IS_AUTHORITY)));
+				level.setAuthorityGTS(rs.getString(TrustLevelTable.AUTHORITY_GTS));
+				level.setSourceGTS(rs.getString(TrustLevelTable.SOURCE_GTS));
+				level.setLastUpdated(rs.getLong(TrustLevelTable.LAST_UPDATED));
 				levels.add(level);
 			}
 			rs.close();
@@ -218,7 +222,7 @@ public class TrustLevelManager {
 
 
 	public synchronized TrustLevel getTrustLevel(String name) throws GTSInternalFault, InvalidTrustLevelFault {
-		String sql = "select * from " + TRUST_LEVELS + " where NAME='" + name + "'";
+		String sql = "select * from " + TrustLevelTable.TABLE_NAME + " where " + TrustLevelTable.NAME + "='" + name + "'";
 		Connection c = null;
 		try {
 			c = db.getConnection();
@@ -226,12 +230,12 @@ public class TrustLevelManager {
 			ResultSet rs = s.executeQuery(sql);
 			if (rs.next()) {
 				TrustLevel level = new TrustLevel();
-				level.setName(rs.getString("NAME"));
-				level.setDescription(rs.getString("DESCRIPTION"));
-				level.setIsAuthority(new Boolean(rs.getBoolean("IS_AUTHORITY")));
-				level.setAuthorityGTS(rs.getString("AUTHORITY_GTS"));
-				level.setSourceGTS(rs.getString("SOURCE_GTS"));
-				level.setLastUpdated(rs.getLong("LAST_UPDATED"));
+				level.setName(rs.getString(TrustLevelTable.NAME));
+				level.setDescription(rs.getString(TrustLevelTable.DESCRIPTION));
+				level.setIsAuthority(new Boolean(rs.getBoolean(TrustLevelTable.IS_AUTHORITY)));
+				level.setAuthorityGTS(rs.getString(TrustLevelTable.AUTHORITY_GTS));
+				level.setSourceGTS(rs.getString(TrustLevelTable.SOURCE_GTS));
+				level.setLastUpdated(rs.getLong(TrustLevelTable.LAST_UPDATED));
 				return level;
 			}
 			rs.close();
@@ -295,12 +299,12 @@ public class TrustLevelManager {
 			}
 
 			if (!curr.getAuthorityGTS().equals(level.getAuthorityGTS())) {
-				buildUpdate(needsUpdate, sql, "AUTHORITY_GTS", level.getAuthorityGTS());
+				buildUpdate(needsUpdate, sql, TrustLevelTable.AUTHORITY_GTS, level.getAuthorityGTS());
 				needsUpdate = true;
 			}
 
 			if (!curr.getSourceGTS().equals(level.getSourceGTS())) {
-				buildUpdate(needsUpdate, sql, "SOURCE_GTS", level.getSourceGTS());
+				buildUpdate(needsUpdate, sql, TrustLevelTable.SOURCE_GTS, level.getSourceGTS());
 				needsUpdate = true;
 			}
 		}
@@ -314,7 +318,7 @@ public class TrustLevelManager {
 		if (level.getDescription() != null) {
 			if ((Utils.clean(level.getDescription()) != null)
 				&& (!level.getDescription().equals(curr.getDescription()))) {
-				buildUpdate(needsUpdate, sql, "DESCRIPTION", level.getDescription());
+				buildUpdate(needsUpdate, sql, TrustLevelTable.DESCRIPTION, level.getDescription());
 				needsUpdate = true;
 			}
 		}
@@ -324,8 +328,8 @@ public class TrustLevelManager {
 				if (needsUpdate) {
 					Calendar c = new GregorianCalendar();
 					level.setLastUpdated(c.getTimeInMillis());
-					buildUpdate(needsUpdate, sql, "LAST_UPDATED", level.getLastUpdated());
-					sql.append(" WHERE NAME='" + level.getName() + "'");
+					buildUpdate(needsUpdate, sql, TrustLevelTable.LAST_UPDATED, level.getLastUpdated());
+					sql.append(" WHERE " + TrustLevelTable.NAME + "='" + level.getName() + "'");
 					db.update(sql.toString());
 				}
 			}
@@ -343,7 +347,7 @@ public class TrustLevelManager {
 		IllegalTrustLevelFault {
 		if (doesTrustLevelExist(name)) {
 			this.status.removeAssociatedTrustedAuthorities(name);
-			String sql = "delete FROM " + TRUST_LEVELS + " where NAME='" + name + "'";
+			String sql = "delete FROM " + TrustLevelTable.TABLE_NAME + " where " + TrustLevelTable.NAME + "='" + name + "'";
 			try {
 				db.update(sql);
 			} catch (Exception e) {
@@ -363,7 +367,7 @@ public class TrustLevelManager {
 
 	public synchronized boolean doesTrustLevelExist(String name) throws GTSInternalFault {
 		this.buildDatabase();
-		String sql = "select count(*) from " + TRUST_LEVELS + " where NAME='" + name + "'";
+		String sql = "select count(*) from " + TrustLevelTable.TABLE_NAME + " where " + TrustLevelTable.NAME + "='" + name + "'";
 		Connection c = null;
 		boolean exists = false;
 		try {
@@ -395,13 +399,9 @@ public class TrustLevelManager {
 		if (!dbBuilt) {
 			try {
 				db.createDatabase();
-				if (!this.db.tableExists(TRUST_LEVELS)) {
-					String trust = "CREATE TABLE " + TRUST_LEVELS + " (" + "NAME VARCHAR(255) NOT NULL PRIMARY KEY,"
-						+ "DESCRIPTION TEXT, " + "IS_AUTHORITY VARCHAR(5) NOT NULL,"
-						+ "AUTHORITY_GTS VARCHAR(255) NOT NULL,"
-						+ "SOURCE_GTS VARCHAR(255) NOT NULL, LAST_UPDATED BIGINT NOT NULL,"
-						+ "INDEX document_index (NAME));";
-					db.update(trust);
+				if (!this.db.tableExists(TrustLevelTable.TABLE_NAME)) {
+					String sql = dbManager.getTrustLevelTable().getCreateTableSQL();
+					db.update(sql);
 				}
 				dbBuilt = true;
 			} catch (Exception e) {
@@ -417,7 +417,7 @@ public class TrustLevelManager {
 	public void destroy() throws GTSInternalFault {
 		try {
 			buildDatabase();
-			db.update("DROP TABLE IF EXISTS " + TRUST_LEVELS);
+			db.update("DROP TABLE IF EXISTS " + TrustLevelTable.TABLE_NAME);
 			dbBuilt = false;
 		} catch (Exception e) {
 			this.log.error("Unexpected error in removing the database.", e);
@@ -432,7 +432,7 @@ public class TrustLevelManager {
 		if (needsUpdate) {
 			sql.append(",").append(field).append("='").append(value).append("'");
 		} else {
-			sql.append("UPDATE " + TRUST_LEVELS + " SET ");
+			sql.append("UPDATE " + TrustLevelTable.TABLE_NAME + " SET ");
 			sql.append(field).append("='").append(value).append("'");
 		}
 
@@ -443,7 +443,7 @@ public class TrustLevelManager {
 		if (needsUpdate) {
 			sql.append(",").append(field).append("=").append(value).append("");
 		} else {
-			sql.append("UPDATE " + TRUST_LEVELS + " SET ");
+			sql.append("UPDATE " + TrustLevelTable.TABLE_NAME + " SET ");
 			sql.append(field).append("=").append(value);
 		}
 
