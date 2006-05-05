@@ -139,16 +139,11 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 	
 	
 	private void copySchema(String schemaName, String outputDir) throws Exception {
-		File schemaFile = new File(getExtensionDirectory() + File.separator + "schema" + File.separator + schemaName);
+		File schemaFile = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data" + File.separator + "schema" + File.separator + schemaName);
 		System.out.println("Loading schema from " + schemaFile.getAbsolutePath());
 		File outputFile = new File(outputDir + File.separator + schemaName);
 		System.out.println("Saving schema to " + outputFile.getAbsolutePath());
-		copyFiles(schemaFile, outputFile);
-	}
-	
-	
-	private String getExtensionDirectory() {
-		return ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data";
+		copyFile(schemaFile, outputFile);
 	}
 	
 	
@@ -158,22 +153,23 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 			directory.mkdirs();
 		}
 		// from the lib directory
-		File libDir = new File(getExtensionDirectory() + File.separator + "lib");
+		File libDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "lib");
 		File[] libs = libDir.listFiles(new FileFilter() {
 			public boolean accept(File pathname) {
-				return pathname.getName().toLowerCase().endsWith(".jar");
+				String name = pathname.getName();
+				return (name.endsWith(".jar") && name.startsWith("caGrid-data-1.0"));
 			}
 		});
 		if (libs != null) {
 			for (int i = 0; i < libs.length; i++) {
 				File outFile = new File(toDir + File.separator + libs[i].getName());
-				copyFiles(libs[i], outFile);
+				copyFile(libs[i], outFile);
 			}
 		}
 	}
 	
 	
-	private void copyFiles(File inputFile, File outputFile) throws FileNotFoundException, IOException {
+	private void copyFile(File inputFile, File outputFile) throws FileNotFoundException, IOException {
 		BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(inputFile));
 		BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(outputFile));
 		byte[] buff = new byte[1024];
