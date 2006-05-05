@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.discovery;
+package gov.nih.nci.cagrid.discovery.examples;
 
 import gov.nih.nci.cagrid.discovery.client.DiscoveryClient;
 
