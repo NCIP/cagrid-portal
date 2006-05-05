@@ -11,10 +11,10 @@ import gov.nih.nci.cagrid.gts.bean.Permission;
 import gov.nih.nci.cagrid.gts.bean.PermissionFilter;
 import gov.nih.nci.cagrid.gts.bean.Role;
 import gov.nih.nci.cagrid.gts.bean.Status;
+import gov.nih.nci.cagrid.gts.bean.TimeToLive;
 import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
-import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityTimeToLive;
 import gov.nih.nci.cagrid.gts.bean.X509CRL;
 import gov.nih.nci.cagrid.gts.bean.X509Certificate;
 import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
@@ -161,7 +161,7 @@ public class TestGTS extends TestCase {
 			addTrustLevels(gts, ADMIN_USER);
 			CA ca = new CA();
 			TrustedAuthority ta = new TrustedAuthority();
-			ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+			ta.setName(ca.getCertificate().getSubjectDN().toString());
 			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 			ta.setStatus(Status.Trusted);
 			ta.setTrustLevel(LEVEL_ONE);
@@ -169,12 +169,12 @@ public class TestGTS extends TestCase {
 			Permission userPerm = new Permission();
 			userPerm.setGridIdentity(user);
 			userPerm.setRole(Role.TrustAuthorityManager);
-			userPerm.setTrustedAuthorityName(ta.getTrustedAuthorityName());
+			userPerm.setTrustedAuthorityName(ta.getName());
 
 			Permission p = new Permission();
 			p.setGridIdentity(user2);
 			p.setRole(Role.TrustAuthorityManager);
-			p.setTrustedAuthorityName(ta.getTrustedAuthorityName());
+			p.setTrustedAuthorityName(ta.getName());
 
 			// Test null
 			try {
@@ -346,7 +346,7 @@ public class TestGTS extends TestCase {
 			CRLEntry entry = new CRLEntry(sn, CRLReason.PRIVILEGE_WITHDRAWN);
 			ca.updateCRL(entry);
 			TrustedAuthority ta = new TrustedAuthority();
-			ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+			ta.setName(ca.getCertificate().getSubjectDN().toString());
 			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 			ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 			ta.setStatus(Status.Trusted);
@@ -394,7 +394,7 @@ public class TestGTS extends TestCase {
 			CRLEntry entry = new CRLEntry(sn, CRLReason.PRIVILEGE_WITHDRAWN);
 			ca.updateCRL(entry);
 			TrustedAuthority ta = new TrustedAuthority();
-			ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+			ta.setName(ca.getCertificate().getSubjectDN().toString());
 			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 			ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 			ta.setStatus(Status.Trusted);
@@ -438,7 +438,7 @@ public class TestGTS extends TestCase {
 			Permission p = new Permission();
 			p.setGridIdentity(user);
 			p.setRole(Role.TrustAuthorityManager);
-			p.setTrustedAuthorityName(ta.getTrustedAuthorityName());
+			p.setTrustedAuthorityName(ta.getName());
 			gts.addPermission(p, ADMIN_USER);
 
 			// Check to make sure the permission was properly added
@@ -449,7 +449,7 @@ public class TestGTS extends TestCase {
 			// Now Create a new Trust Authority
 			CA ca2 = new CA();
 			TrustedAuthority ta2 = new TrustedAuthority();
-			ta2.setTrustedAuthorityName(ca2.getCertificate().getSubjectDN().toString());
+			ta2.setName(ca2.getCertificate().getSubjectDN().toString());
 			ta2.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca2.getCertificate())));
 			ta2.setStatus(Status.Trusted);
 			ta2.setTrustLevel(LEVEL_ONE);
@@ -500,7 +500,7 @@ public class TestGTS extends TestCase {
 			CRLEntry entry = new CRLEntry(sn, CRLReason.PRIVILEGE_WITHDRAWN);
 			ca.updateCRL(entry);
 			TrustedAuthority ta = new TrustedAuthority();
-			ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+			ta.setName(ca.getCertificate().getSubjectDN().toString());
 			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 			ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 			ta.setStatus(Status.Trusted);
@@ -654,7 +654,7 @@ public class TestGTS extends TestCase {
 			CRLEntry entry = new CRLEntry(sn, CRLReason.PRIVILEGE_WITHDRAWN);
 			ca.updateCRL(entry);
 			TrustedAuthority ta = new TrustedAuthority();
-			ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+			ta.setName(ca.getCertificate().getSubjectDN().toString());
 			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 			ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 			ta.setStatus(Status.Trusted);
@@ -704,7 +704,7 @@ public class TestGTS extends TestCase {
 			Permission p = new Permission();
 			p.setGridIdentity(user);
 			p.setRole(Role.TrustAuthorityManager);
-			p.setTrustedAuthorityName(ta.getTrustedAuthorityName());
+			p.setTrustedAuthorityName(ta.getName());
 			gts.addPermission(p, ADMIN_USER);
 
 			// Check to make sure the permission was properly added
@@ -766,7 +766,7 @@ public class TestGTS extends TestCase {
 			CRLEntry entry = new CRLEntry(sn, CRLReason.PRIVILEGE_WITHDRAWN);
 			ca.updateCRL(entry);
 			TrustedAuthority ta = new TrustedAuthority();
-			ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+			ta.setName(ca.getCertificate().getSubjectDN().toString());
 			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 			ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 			ta.setStatus(Status.Trusted);
@@ -777,7 +777,7 @@ public class TestGTS extends TestCase {
 
 			// Test null
 			try {
-				gts.removeTrustedAuthority(ta.getTrustedAuthorityName(), null);
+				gts.removeTrustedAuthority(ta.getName(), null);
 				fail("Non trust service administrators should not be able to remove a trust authority!!!");
 			} catch (PermissionDeniedFault f) {
 
@@ -787,7 +787,7 @@ public class TestGTS extends TestCase {
 
 			// Test Empty String
 			try {
-				gts.removeTrustedAuthority(ta.getTrustedAuthorityName(), "");
+				gts.removeTrustedAuthority(ta.getName(), "");
 				fail("Non trust service administrators should not be able to remove a trust authority!!!");
 			} catch (PermissionDeniedFault f) {
 
@@ -796,7 +796,7 @@ public class TestGTS extends TestCase {
 
 			// Test User without any permissions
 			try {
-				gts.removeTrustedAuthority(ta.getTrustedAuthorityName(), user);
+				gts.removeTrustedAuthority(ta.getName(), user);
 				fail("Non trust service administrators should not be able to remove a trust authority!!!");
 			} catch (PermissionDeniedFault f) {
 
@@ -808,7 +808,7 @@ public class TestGTS extends TestCase {
 			Permission p = new Permission();
 			p.setGridIdentity(user);
 			p.setRole(Role.TrustAuthorityManager);
-			p.setTrustedAuthorityName(ta.getTrustedAuthorityName());
+			p.setTrustedAuthorityName(ta.getName());
 			gts.addPermission(p, ADMIN_USER);
 
 			// Check to make sure the permission was properly added
@@ -817,7 +817,7 @@ public class TestGTS extends TestCase {
 			assertEquals(p, gts.findPermissions(pf, ADMIN_USER)[0]);
 
 			try {
-				gts.removeTrustedAuthority(ta.getTrustedAuthorityName(), user);
+				gts.removeTrustedAuthority(ta.getName(), user);
 				fail("Non trust service administrators should not be able to remove a trust authority!!!");
 			} catch (PermissionDeniedFault f) {
 
@@ -835,7 +835,7 @@ public class TestGTS extends TestCase {
 			assertEquals(admin, gts.findPermissions(permissionToPermissionFilter(admin), ADMIN_USER)[0]);
 
 			// Now that the user is admin try again
-			gts.removeTrustedAuthority(ta.getTrustedAuthorityName(), user);
+			gts.removeTrustedAuthority(ta.getName(), user);
 			assertEquals(0, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -869,7 +869,7 @@ public class TestGTS extends TestCase {
 
 			// Now we add an authority
 			String authName = GTS_URI + " Authority";
-			TrustedAuthorityTimeToLive ttl = new TrustedAuthorityTimeToLive();
+			TimeToLive ttl = new TimeToLive();
 			ttl.setHours(0);
 			ttl.setMinutes(0);
 			ttl.setSeconds(4);
@@ -885,7 +885,7 @@ public class TestGTS extends TestCase {
 				gts.addTrustedAuthority(ta[j], ADMIN_USER);
 				TrustedAuthorityFilter f = new TrustedAuthorityFilter();
 				assertEquals((j + 1), gts.findTrustAuthorities(f).length);
-				f.setTrustedAuthorityName(ta[j].getTrustedAuthorityName());
+				f.setName(ta[j].getName());
 				assertEquals(1, gts.findTrustAuthorities(f).length);
 				assertEquals(ta[j], gts.findTrustAuthorities(f)[0]);
 			}
@@ -895,7 +895,7 @@ public class TestGTS extends TestCase {
 			for (int j = 0; j < remoteTaCount; j++) {
 				remoteta[j] = getTrustedAuthority();
 				remoteta[j].setIsAuthority(Boolean.FALSE);
-				remoteta[j].setAuthorityTrustService(authName);
+				remoteta[j].setAuthorityGTS(authName);
 			}
 
 			gts.synchronizeTrustedAuthorities(authName, remoteta);
@@ -908,11 +908,11 @@ public class TestGTS extends TestCase {
 			f1.setLifetime(Lifetime.Valid);
 			f1.setStatus(Status.Trusted);
 			assertEquals(taCount, gts.findTrustAuthorities(f1).length);
-			f1.setAuthorityTrustService(GTS_URI);
+			f1.setAuthorityGTS(GTS_URI);
 			assertEquals(taCount, gts.findTrustAuthorities(f1).length);
 
 			ttl.setHours(5);
-			auth.setTrustedAuthorityTimeToLive(ttl);
+			auth.setTimeToLive(ttl);
 			gts.updateAuthority(auth, ADMIN_USER);
 
 			gts.synchronizeTrustedAuthorities(authName, remoteta);
@@ -922,11 +922,11 @@ public class TestGTS extends TestCase {
 			f2.setLifetime(Lifetime.Valid);
 			f2.setStatus(Status.Trusted);
 			assertEquals(taCount + remoteTaCount, gts.findTrustAuthorities(f2).length);
-			f2.setAuthorityTrustService(GTS_URI);
+			f2.setAuthorityGTS(GTS_URI);
 			assertEquals(taCount, gts.findTrustAuthorities(f2).length);
-			f2.setAuthorityTrustService(authName);
+			f2.setAuthorityGTS(authName);
 			assertEquals(remoteTaCount, gts.findTrustAuthorities(f2).length);
-			f2.setSourceTrustService(authName);
+			f2.setSourceGTS(authName);
 			assertEquals(remoteTaCount, gts.findTrustAuthorities(f2).length);
 
 			// Test after resync after delete
@@ -944,11 +944,11 @@ public class TestGTS extends TestCase {
 			f3.setLifetime(Lifetime.Valid);
 			f3.setStatus(Status.Trusted);
 			assertEquals(taCount + remoteTaCount2, gts.findTrustAuthorities(f3).length);
-			f3.setAuthorityTrustService(GTS_URI);
+			f3.setAuthorityGTS(GTS_URI);
 			assertEquals(taCount, gts.findTrustAuthorities(f3).length);
-			f3.setAuthorityTrustService(authName);
+			f3.setAuthorityGTS(authName);
 			assertEquals(remoteTaCount2, gts.findTrustAuthorities(f3).length);
-			f3.setSourceTrustService(authName);
+			f3.setSourceGTS(authName);
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -994,39 +994,39 @@ public class TestGTS extends TestCase {
 
 			local[0] = getTrustedAuthority();
 			gts.addTrustedAuthority(local[0], ADMIN_USER);
-			f.setTrustedAuthorityName(local[0].getTrustedAuthorityName());
+			f.setName(local[0].getName());
 			assertEquals(1, gts.findTrustAuthorities(f).length);
 			assertEquals(local[0], gts.findTrustAuthorities(f)[0]);
 
 			local[1] = getTrustedAuthority();
 			gts.addTrustedAuthority(local[1], ADMIN_USER);
-			f.setTrustedAuthorityName(local[1].getTrustedAuthorityName());
+			f.setName(local[1].getName());
 			assertEquals(1, gts.findTrustAuthorities(f).length);
 			assertEquals(local[1], gts.findTrustAuthorities(f)[0]);
 
 			local[2] = getTrustedAuthority();
 			gts.addTrustedAuthority(local[2], ADMIN_USER);
-			f.setTrustedAuthorityName(local[2].getTrustedAuthorityName());
+			f.setName(local[2].getName());
 			assertEquals(1, gts.findTrustAuthorities(f).length);
 			assertEquals(local[2], gts.findTrustAuthorities(f)[0]);
 
 			assertEquals(3, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
 
 			TrustedAuthority[] remote1 = new TrustedAuthority[3];
-			remote1[0] = getTrustedAuthority(local[2].getTrustedAuthorityName());
-			remote1[0].setAuthorityTrustService(auth1.getServiceURI());
+			remote1[0] = getTrustedAuthority(local[2].getName());
+			remote1[0].setAuthorityGTS(auth1.getServiceURI());
 			remote1[1] = getTrustedAuthority();
-			remote1[1].setAuthorityTrustService(auth1.getServiceURI());
+			remote1[1].setAuthorityGTS(auth1.getServiceURI());
 			remote1[2] = getTrustedAuthority();
-			remote1[2].setAuthorityTrustService(auth1.getServiceURI());
+			remote1[2].setAuthorityGTS(auth1.getServiceURI());
 
 			TrustedAuthority[] remote2 = new TrustedAuthority[3];
-			remote2[0] = getTrustedAuthority(remote1[2].getTrustedAuthorityName());
-			remote2[0].setAuthorityTrustService(auth2.getServiceURI());
+			remote2[0] = getTrustedAuthority(remote1[2].getName());
+			remote2[0].setAuthorityGTS(auth2.getServiceURI());
 			remote2[1] = getTrustedAuthority();
-			remote2[1].setAuthorityTrustService(auth2.getServiceURI());
+			remote2[1].setAuthorityGTS(auth2.getServiceURI());
 			remote2[2] = getTrustedAuthority();
-			remote2[2].setAuthorityTrustService(auth2.getServiceURI());
+			remote2[2].setAuthorityGTS(auth2.getServiceURI());
 
 			gts.synchronizeTrustedAuthorities(auth2.getServiceURI(), remote2);
 
@@ -1034,33 +1034,33 @@ public class TestGTS extends TestCase {
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(local[0])).length);
 			assertEquals(local[0], gts.findTrustAuthorities(getFilterForTA(local[0]))[0]);
-			assertEquals(local[0].getSourceTrustService(), gts.findTrustAuthorities(getFilterForTA(local[0]))[0]
-				.getSourceTrustService());
+			assertEquals(local[0].getSourceGTS(), gts.findTrustAuthorities(getFilterForTA(local[0]))[0]
+				.getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(local[1])).length);
 			assertEquals(local[1], gts.findTrustAuthorities(getFilterForTA(local[1]))[0]);
-			assertEquals(local[1].getSourceTrustService(), gts.findTrustAuthorities(getFilterForTA(local[1]))[0]
-				.getSourceTrustService());
+			assertEquals(local[1].getSourceGTS(), gts.findTrustAuthorities(getFilterForTA(local[1]))[0]
+				.getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(local[2])).length);
 			assertEquals(local[2], gts.findTrustAuthorities(getFilterForTA(local[2]))[0]);
-			assertEquals(local[2].getSourceTrustService(), gts.findTrustAuthorities(getFilterForTA(local[2]))[0]
-				.getSourceTrustService());
+			assertEquals(local[2].getSourceGTS(), gts.findTrustAuthorities(getFilterForTA(local[2]))[0]
+				.getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote2[0])).length);
 			assertEquals(remote2[0], gts.findTrustAuthorities(getFilterForTA(remote2[0]))[0]);
 			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[0]))[0]
-				.getSourceTrustService());
+				.getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote2[1])).length);
 			assertEquals(remote2[1], gts.findTrustAuthorities(getFilterForTA(remote2[1]))[0]);
 			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[1]))[0]
-				.getSourceTrustService());
+				.getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote2[2])).length);
 			assertEquals(remote2[2], gts.findTrustAuthorities(getFilterForTA(remote2[2]))[0]);
 			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[2]))[0]
-				.getSourceTrustService());
+				.getSourceGTS());
 
 			gts.synchronizeTrustedAuthorities(auth1.getServiceURI(), remote1);
 
@@ -1068,38 +1068,38 @@ public class TestGTS extends TestCase {
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(local[0])).length);
 			assertEquals(local[0], gts.findTrustAuthorities(getFilterForTA(local[0]))[0]);
-			assertEquals(local[0].getSourceTrustService(), gts.findTrustAuthorities(getFilterForTA(local[0]))[0]
-				.getSourceTrustService());
+			assertEquals(local[0].getSourceGTS(), gts.findTrustAuthorities(getFilterForTA(local[0]))[0]
+				.getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(local[1])).length);
 			assertEquals(local[1], gts.findTrustAuthorities(getFilterForTA(local[1]))[0]);
-			assertEquals(local[1].getSourceTrustService(), gts.findTrustAuthorities(getFilterForTA(local[1]))[0]
-				.getSourceTrustService());
+			assertEquals(local[1].getSourceGTS(), gts.findTrustAuthorities(getFilterForTA(local[1]))[0]
+				.getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(local[2])).length);
 			assertEquals(local[2], gts.findTrustAuthorities(getFilterForTA(local[2]))[0]);
-			assertEquals(local[2].getSourceTrustService(), gts.findTrustAuthorities(getFilterForTA(local[2]))[0]
-				.getSourceTrustService());
+			assertEquals(local[2].getSourceGTS(), gts.findTrustAuthorities(getFilterForTA(local[2]))[0]
+				.getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote1[1])).length);
 			assertEquals(remote1[1], gts.findTrustAuthorities(getFilterForTA(remote1[1]))[0]);
 			assertEquals(auth1.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote1[1]))[0]
-				.getSourceTrustService());
+				.getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote1[2])).length);
 			assertEquals(remote1[2], gts.findTrustAuthorities(getFilterForTA(remote1[2]))[0]);
 			assertEquals(auth1.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote1[2]))[0]
-				.getSourceTrustService());
+				.getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote2[1])).length);
 			assertEquals(remote2[1], gts.findTrustAuthorities(getFilterForTA(remote2[1]))[0]);
 			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[1]))[0]
-				.getSourceTrustService());
+				.getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote2[2])).length);
 			assertEquals(remote2[2], gts.findTrustAuthorities(getFilterForTA(remote2[2]))[0]);
 			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[2]))[0]
-				.getSourceTrustService());
+				.getSourceGTS());
 
 			gts.removeAuthority(auth1.getServiceURI(), ADMIN_USER);
 			assertEquals(5, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
@@ -1109,33 +1109,33 @@ public class TestGTS extends TestCase {
 			assertEquals(6, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(local[0])).length);
 			assertEquals(local[0], gts.findTrustAuthorities(getFilterForTA(local[0]))[0]);
-			assertEquals(local[0].getSourceTrustService(), gts.findTrustAuthorities(getFilterForTA(local[0]))[0]
-				.getSourceTrustService());
+			assertEquals(local[0].getSourceGTS(), gts.findTrustAuthorities(getFilterForTA(local[0]))[0]
+				.getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(local[1])).length);
 			assertEquals(local[1], gts.findTrustAuthorities(getFilterForTA(local[1]))[0]);
-			assertEquals(local[1].getSourceTrustService(), gts.findTrustAuthorities(getFilterForTA(local[1]))[0]
-				.getSourceTrustService());
+			assertEquals(local[1].getSourceGTS(), gts.findTrustAuthorities(getFilterForTA(local[1]))[0]
+				.getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(local[2])).length);
 			assertEquals(local[2], gts.findTrustAuthorities(getFilterForTA(local[2]))[0]);
-			assertEquals(local[2].getSourceTrustService(), gts.findTrustAuthorities(getFilterForTA(local[2]))[0]
-				.getSourceTrustService());
+			assertEquals(local[2].getSourceGTS(), gts.findTrustAuthorities(getFilterForTA(local[2]))[0]
+				.getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote2[0])).length);
 			assertEquals(remote2[0], gts.findTrustAuthorities(getFilterForTA(remote2[0]))[0]);
 			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[0]))[0]
-				.getSourceTrustService());
+				.getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote2[1])).length);
 			assertEquals(remote2[1], gts.findTrustAuthorities(getFilterForTA(remote2[1]))[0]);
 			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[1]))[0]
-				.getSourceTrustService());
+				.getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote2[2])).length);
 			assertEquals(remote2[2], gts.findTrustAuthorities(getFilterForTA(remote2[2]))[0]);
 			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[2]))[0]
-				.getSourceTrustService());
+				.getSourceGTS());
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -1187,19 +1187,19 @@ public class TestGTS extends TestCase {
 
 			TrustLevel[] remote1 = new TrustLevel[3];
 			remote1[0] = getTrustLevel(local[2].getName());
-			remote1[0].setAuthorityTrustService(auth1.getServiceURI());
+			remote1[0].setAuthorityGTS(auth1.getServiceURI());
 			remote1[1] = getTrustLevel();
-			remote1[1].setAuthorityTrustService(auth1.getServiceURI());
+			remote1[1].setAuthorityGTS(auth1.getServiceURI());
 			remote1[2] = getTrustLevel();
-			remote1[2].setAuthorityTrustService(auth1.getServiceURI());
+			remote1[2].setAuthorityGTS(auth1.getServiceURI());
 
 			TrustLevel[] remote2 = new TrustLevel[3];
 			remote2[0] = getTrustLevel(remote1[2].getName());
-			remote2[0].setAuthorityTrustService(auth2.getServiceURI());
+			remote2[0].setAuthorityGTS(auth2.getServiceURI());
 			remote2[1] = getTrustLevel();
-			remote2[1].setAuthorityTrustService(auth2.getServiceURI());
+			remote2[1].setAuthorityGTS(auth2.getServiceURI());
 			remote2[2] = getTrustLevel();
-			remote2[2].setAuthorityTrustService(auth2.getServiceURI());
+			remote2[2].setAuthorityGTS(auth2.getServiceURI());
 
 			gts.synchronizeTrustLevels(auth2.getServiceURI(), remote2);
 
@@ -1211,15 +1211,15 @@ public class TestGTS extends TestCase {
 			for (int i = 0; i < local.length; i++) {
 				assertTrue(gts.doesTrustLevelExist(local[i].getName()));
 				assertEquals(local[i], gts.getTrustLevel(local[i].getName()));
-				assertEquals(local[i].getSourceTrustService(), gts.getTrustLevel(local[i].getName())
-					.getSourceTrustService());
+				assertEquals(local[i].getSourceGTS(), gts.getTrustLevel(local[i].getName())
+					.getSourceGTS());
 			}
 
 			for (int i = 0; i < remote2.length; i++) {
 				assertTrue(gts.doesTrustLevelExist(remote2[i].getName()));
 				assertEquals(remote2[i], gts.getTrustLevel(remote2[i].getName()));
-				assertEquals(remote2[i].getSourceTrustService(), gts.getTrustLevel(remote2[i].getName())
-					.getSourceTrustService());
+				assertEquals(remote2[i].getSourceGTS(), gts.getTrustLevel(remote2[i].getName())
+					.getSourceGTS());
 			}
 
 			gts.synchronizeTrustLevels(auth1.getServiceURI(), remote1);
@@ -1232,23 +1232,23 @@ public class TestGTS extends TestCase {
 			for (int i = 0; i < local.length; i++) {
 				assertTrue(gts.doesTrustLevelExist(local[i].getName()));
 				assertEquals(local[i], gts.getTrustLevel(local[i].getName()));
-				assertEquals(local[i].getSourceTrustService(), gts.getTrustLevel(local[i].getName())
-					.getSourceTrustService());
+				assertEquals(local[i].getSourceGTS(), gts.getTrustLevel(local[i].getName())
+					.getSourceGTS());
 			}
 
 			for (int i = 1; i < remote1.length; i++) {
 				assertTrue(gts.doesTrustLevelExist(remote1[i].getName()));
 				TrustLevel l = gts.getTrustLevel(remote1[i].getName());
 				assertEquals(remote1[i], l);
-				assertEquals(remote1[i].getSourceTrustService(), gts.getTrustLevel(remote1[i].getName())
-					.getSourceTrustService());
+				assertEquals(remote1[i].getSourceGTS(), gts.getTrustLevel(remote1[i].getName())
+					.getSourceGTS());
 			}
 
 			for (int i = 1; i < remote2.length; i++) {
 				assertTrue(gts.doesTrustLevelExist(remote2[i].getName()));
 				assertEquals(remote2[i], gts.getTrustLevel(remote2[i].getName()));
-				assertEquals(remote2[i].getSourceTrustService(), gts.getTrustLevel(remote2[i].getName())
-					.getSourceTrustService());
+				assertEquals(remote2[i].getSourceGTS(), gts.getTrustLevel(remote2[i].getName())
+					.getSourceGTS());
 			}
 
 			gts.removeAuthority(auth1.getServiceURI(), ADMIN_USER);
@@ -1260,7 +1260,7 @@ public class TestGTS extends TestCase {
 			//Lets add a Trusted Authority and make sure that it is deleted after we sync to nothing
 			TrustedAuthority ta = new TrustedAuthority();
 			CA ca = new CA();
-			ta.setTrustedAuthorityName(ca.getCertificate().getSubjectDN().toString());
+			ta.setName(ca.getCertificate().getSubjectDN().toString());
 			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 			ta.setStatus(Status.Trusted);
 			ta.setTrustLevel(remote1[1].getName());
@@ -1280,15 +1280,15 @@ public class TestGTS extends TestCase {
 			for (int i = 0; i < local.length; i++) {
 				assertTrue(gts.doesTrustLevelExist(local[i].getName()));
 				assertEquals(local[i], gts.getTrustLevel(local[i].getName()));
-				assertEquals(local[i].getSourceTrustService(), gts.getTrustLevel(local[i].getName())
-					.getSourceTrustService());
+				assertEquals(local[i].getSourceGTS(), gts.getTrustLevel(local[i].getName())
+					.getSourceGTS());
 			}
 
 			for (int i = 0; i < remote2.length; i++) {
 				assertTrue(gts.doesTrustLevelExist(remote2[i].getName()));
 				assertEquals(remote2[i], gts.getTrustLevel(remote2[i].getName()));
-				assertEquals(remote2[i].getSourceTrustService(), gts.getTrustLevel(remote2[i].getName())
-					.getSourceTrustService());
+				assertEquals(remote2[i].getSourceGTS(), gts.getTrustLevel(remote2[i].getName())
+					.getSourceGTS());
 			}
 
 		} catch (Exception e) {
@@ -1311,7 +1311,7 @@ public class TestGTS extends TestCase {
 		TrustedAuthorityFilter f = new TrustedAuthorityFilter();
 		f.setStatus(Status.Trusted);
 		f.setLifetime(Lifetime.Valid);
-		f.setTrustedAuthorityName(ta.getTrustedAuthorityName());
+		f.setName(ta.getName());
 		return f;
 	}
 
@@ -1332,7 +1332,7 @@ public class TestGTS extends TestCase {
 		CRLEntry entry = new CRLEntry(sn, CRLReason.PRIVILEGE_WITHDRAWN);
 		ca.updateCRL(entry);
 		TrustedAuthority ta = new TrustedAuthority();
-		ta.setTrustedAuthorityName(name);
+		ta.setName(name);
 		ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 		ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 		ta.setStatus(Status.Trusted);
@@ -1377,7 +1377,7 @@ public class TestGTS extends TestCase {
 
 
 	private AuthorityGTS getAuthority(String uri, int priority) {
-		TrustedAuthorityTimeToLive ttl = new TrustedAuthorityTimeToLive();
+		TimeToLive ttl = new TimeToLive();
 		ttl.setHours(1);
 		ttl.setMinutes(1);
 		ttl.setSeconds(1);
@@ -1385,33 +1385,34 @@ public class TestGTS extends TestCase {
 	}
 
 
-	private AuthorityGTS getAuthority(String uri, int priority, TrustedAuthorityTimeToLive ttl) {
+	private AuthorityGTS getAuthority(String uri, int priority, TimeToLive ttl) {
 		AuthorityGTS a1 = new AuthorityGTS();
 		a1.setServiceURI(uri);
 		a1.setPriority(priority);
 		a1.setPerformAuthorization(true);
 		a1.setServiceIdentity(uri);
 		a1.setSyncTrustLevels(true);
-		a1.setTrustedAuthorityTimeToLive(ttl);
+		a1.setTimeToLive(ttl);
 		return a1;
 	}
 
 
 	private void updateAuthority(AuthorityGTS gts) {
-		TrustedAuthorityTimeToLive ttl = new TrustedAuthorityTimeToLive();
-		ttl.setHours(10);
-		ttl.setMinutes(10);
-		ttl.setSeconds(10);
+		TimeToLive ttl = new TimeToLive();
+		ttl.setHours(2);
+		ttl.setMinutes(2);
+		ttl.setSeconds(2);
 		gts.setPerformAuthorization(false);
 		gts.setServiceIdentity(null);
 		gts.setSyncTrustLevels(false);
-		gts.setTrustedAuthorityTimeToLive(ttl);
+		gts.setTimeToLive(ttl);
 	}
 
 
 	protected void setUp() throws Exception {
 		super.setUp();
 		cacount = 0;
+		GTS.SYNC_WITH_AUTHORITIES = false;
 	}
 
 }

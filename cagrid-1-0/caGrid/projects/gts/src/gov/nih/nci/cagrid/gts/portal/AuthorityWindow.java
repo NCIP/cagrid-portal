@@ -4,7 +4,7 @@ import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridca.portal.ProxyCaddy;
 import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
 import gov.nih.nci.cagrid.gts.bean.AuthorityGTS;
-import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityTimeToLive;
+import gov.nih.nci.cagrid.gts.bean.TimeToLive;
 import gov.nih.nci.cagrid.gts.client.GTSAdminClient;
 import gov.nih.nci.cagrid.gts.client.GTSSearchClient;
 
@@ -121,9 +121,9 @@ public class AuthorityWindow extends GridPortalComponent {
 			this.getSynchronizeTrustLevels().setSelectedItem(new Boolean(auth.isSyncTrustLevels()));
 			this.getPerformAuthorization().setSelectedItem(new Boolean(auth.isPerformAuthorization()));
 			this.getAuthorizationIdentity().setText(auth.getServiceIdentity());
-			this.getHours().setSelectedItem(new Integer(auth.getTrustedAuthorityTimeToLive().getHours()));
-			this.getMinutes().setSelectedItem(new Integer(auth.getTrustedAuthorityTimeToLive().getMinutes()));
-			this.getSeconds().setSelectedItem(new Integer(auth.getTrustedAuthorityTimeToLive().getSeconds()));
+			this.getHours().setSelectedItem(new Integer(auth.getTimeToLive().getHours()));
+			this.getMinutes().setSelectedItem(new Integer(auth.getTimeToLive().getMinutes()));
+			this.getSeconds().setSelectedItem(new Integer(auth.getTimeToLive().getSeconds()));
 		}
 	}
 
@@ -361,11 +361,11 @@ public class AuthorityWindow extends GridPortalComponent {
 			if (auth.isPerformAuthorization()) {
 				auth.setServiceIdentity(getAuthorizationIdentity().getText().trim());
 			}
-			TrustedAuthorityTimeToLive ttl = new TrustedAuthorityTimeToLive();
+			TimeToLive ttl = new TimeToLive();
 			ttl.setHours(((Integer) getHours().getSelectedItem()).intValue());
 			ttl.setMinutes(((Integer) getMinutes().getSelectedItem()).intValue());
 			ttl.setSeconds(((Integer) getSeconds().getSelectedItem()).intValue());
-			auth.setTrustedAuthorityTimeToLive(ttl);
+			auth.setTimeToLive(ttl);
 
 			GTSAdminClient client = new GTSAdminClient(service, proxy);
 			if (update) {

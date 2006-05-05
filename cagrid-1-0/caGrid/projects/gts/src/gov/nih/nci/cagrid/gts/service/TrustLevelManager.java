@@ -74,8 +74,8 @@ public class TrustLevelManager {
 
 		if (internal) {
 			level.setIsAuthority(Boolean.TRUE);
-			level.setAuthorityTrustService(gtsURI);
-			level.setSourceTrustService(gtsURI);
+			level.setAuthorityGTS(gtsURI);
+			level.setSourceGTS(gtsURI);
 
 		} else {
 			if ((level.getIsAuthority() == null)) {
@@ -85,7 +85,7 @@ public class TrustLevelManager {
 				throw fault;
 			}
 
-			if (level.getAuthorityTrustService() == null) {
+			if (level.getAuthorityGTS() == null) {
 				IllegalTrustLevelFault fault = new IllegalTrustLevelFault();
 				fault.setFaultString("The trust level " + level.getName()
 					+ ", cannot be added because it does not specify an authority trust service.");
@@ -93,16 +93,16 @@ public class TrustLevelManager {
 
 			}
 
-			if ((level.getIsAuthority().booleanValue()) && (!level.getAuthorityTrustService().equals(gtsURI))) {
+			if ((level.getIsAuthority().booleanValue()) && (!level.getAuthorityGTS().equals(gtsURI))) {
 				IllegalTrustLevelFault fault = new IllegalTrustLevelFault();
 				fault.setFaultString("The trust level " + level.getName()
 					+ " cannot be added, a conflict was detected, this gts (" + gtsURI
 					+ ") was specified as its authority, however the URI of another GTS ( "
-					+ level.getAuthorityTrustService() + ") was specified.");
+					+ level.getAuthorityGTS() + ") was specified.");
 				throw fault;
 			}
 
-			if (level.getSourceTrustService() == null) {
+			if (level.getSourceGTS() == null) {
 				IllegalTrustLevelFault fault = new IllegalTrustLevelFault();
 				fault.setFaultString("The trust level " + level.getName()
 					+ ", cannot be added because it does not specify a source trust service.");
@@ -115,7 +115,7 @@ public class TrustLevelManager {
 		try {
 			insert.append("INSERT INTO " + TRUST_LEVELS + " SET NAME='" + level.getName() + "',DESCRIPTION='"
 				+ level.getDescription() + "', IS_AUTHORITY='" + level.getIsAuthority() + "', AUTHORITY_GTS='"
-				+ level.getAuthorityTrustService() + "', SOURCE_GTS='" + level.getSourceTrustService()
+				+ level.getAuthorityGTS() + "', SOURCE_GTS='" + level.getSourceGTS()
 				+ "', LAST_UPDATED=" + level.getLastUpdated());
 			db.update(insert.toString());
 		} catch (Exception e) {
@@ -145,8 +145,8 @@ public class TrustLevelManager {
 				level.setName(rs.getString("NAME"));
 				level.setDescription(rs.getString("DESCRIPTION"));
 				level.setIsAuthority(new Boolean(rs.getBoolean("IS_AUTHORITY")));
-				level.setAuthorityTrustService(rs.getString("AUTHORITY_GTS"));
-				level.setSourceTrustService(rs.getString("SOURCE_GTS"));
+				level.setAuthorityGTS(rs.getString("AUTHORITY_GTS"));
+				level.setSourceGTS(rs.getString("SOURCE_GTS"));
 				level.setLastUpdated(rs.getLong("LAST_UPDATED"));
 				levels.add(level);
 			}
@@ -189,8 +189,8 @@ public class TrustLevelManager {
 				level.setName(rs.getString("NAME"));
 				level.setDescription(rs.getString("DESCRIPTION"));
 				level.setIsAuthority(new Boolean(rs.getBoolean("IS_AUTHORITY")));
-				level.setAuthorityTrustService(rs.getString("AUTHORITY_GTS"));
-				level.setSourceTrustService(rs.getString("SOURCE_GTS"));
+				level.setAuthorityGTS(rs.getString("AUTHORITY_GTS"));
+				level.setSourceGTS(rs.getString("SOURCE_GTS"));
 				level.setLastUpdated(rs.getLong("LAST_UPDATED"));
 				levels.add(level);
 			}
@@ -228,8 +228,8 @@ public class TrustLevelManager {
 				level.setName(rs.getString("NAME"));
 				level.setDescription(rs.getString("DESCRIPTION"));
 				level.setIsAuthority(new Boolean(rs.getBoolean("IS_AUTHORITY")));
-				level.setAuthorityTrustService(rs.getString("AUTHORITY_GTS"));
-				level.setSourceTrustService(rs.getString("SOURCE_GTS"));
+				level.setAuthorityGTS(rs.getString("AUTHORITY_GTS"));
+				level.setSourceGTS(rs.getString("SOURCE_GTS"));
 				level.setLastUpdated(rs.getLong("LAST_UPDATED"));
 				return level;
 			}
@@ -262,22 +262,22 @@ public class TrustLevelManager {
 		StringBuffer sql = new StringBuffer();
 		boolean needsUpdate = false;
 		if (internal) {
-			if (!curr.getAuthorityTrustService().equals(gtsURI)) {
+			if (!curr.getAuthorityGTS().equals(gtsURI)) {
 				IllegalTrustLevelFault fault = new IllegalTrustLevelFault();
 				fault.setFaultString("The trust level cannot be updated, the GTS (" + gtsURI
 					+ ") is not its authority!!!");
 				throw fault;
 			}
 
-			if ((Utils.clean(level.getAuthorityTrustService()) != null)
-				&& (!level.getAuthorityTrustService().equals(curr.getAuthorityTrustService()))) {
+			if ((Utils.clean(level.getAuthorityGTS()) != null)
+				&& (!level.getAuthorityGTS().equals(curr.getAuthorityGTS()))) {
 				IllegalTrustLevelFault fault = new IllegalTrustLevelFault();
 				fault.setFaultString("The authority trust service for a trust level cannot be changed");
 				throw fault;
 			}
 
-			if ((Utils.clean(level.getSourceTrustService()) != null)
-				&& (!level.getSourceTrustService().equals(curr.getSourceTrustService()))) {
+			if ((Utils.clean(level.getSourceGTS()) != null)
+				&& (!level.getSourceGTS().equals(curr.getSourceGTS()))) {
 				IllegalTrustLevelFault fault = new IllegalTrustLevelFault();
 				fault.setFaultString("The source trust service for a trust level cannot be changed");
 				throw fault;
@@ -285,22 +285,22 @@ public class TrustLevelManager {
 
 		} else {
 
-			if ((curr.getIsAuthority().booleanValue()) && (!level.getAuthorityTrustService().equals(gtsURI))) {
+			if ((curr.getIsAuthority().booleanValue()) && (!level.getAuthorityGTS().equals(gtsURI))) {
 				IllegalTrustLevelFault fault = new IllegalTrustLevelFault();
 				fault.setFaultString("The trust level " + level.getName()
 					+ " cannot be updated, a conflict was detected, this gts (" + gtsURI
 					+ ") was specified as its authority, however the URI of another GTS ( "
-					+ level.getAuthorityTrustService() + ") was specified.");
+					+ level.getAuthorityGTS() + ") was specified.");
 				throw fault;
 			}
 
-			if (!curr.getAuthorityTrustService().equals(level.getAuthorityTrustService())) {
-				buildUpdate(needsUpdate, sql, "AUTHORITY_GTS", level.getAuthorityTrustService());
+			if (!curr.getAuthorityGTS().equals(level.getAuthorityGTS())) {
+				buildUpdate(needsUpdate, sql, "AUTHORITY_GTS", level.getAuthorityGTS());
 				needsUpdate = true;
 			}
 
-			if (!curr.getSourceTrustService().equals(level.getSourceTrustService())) {
-				buildUpdate(needsUpdate, sql, "SOURCE_GTS", level.getSourceTrustService());
+			if (!curr.getSourceGTS().equals(level.getSourceGTS())) {
+				buildUpdate(needsUpdate, sql, "SOURCE_GTS", level.getSourceGTS());
 				needsUpdate = true;
 			}
 		}

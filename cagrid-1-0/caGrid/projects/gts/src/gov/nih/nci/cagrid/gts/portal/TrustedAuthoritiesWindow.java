@@ -470,7 +470,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 					.getSelectedService();
 
 			TrustedAuthorityFilter filter = new TrustedAuthorityFilter();
-			filter.setTrustedAuthorityName(Utils.clean(trustedAuthorityName
+			filter.setName(Utils.clean(trustedAuthorityName
 					.getText()));
 			String tl = (String) trustLevel.getSelectedItem();
 			if (tl.equals(ANY)) {
@@ -480,9 +480,9 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 			filter.setStatus(((StatusComboBox) status).getStatus());
 			filter.setLifetime(this.lifetime.getLifetime());
 			filter.setIsAuthority(this.getIsAuthority().getIsAuthority());
-			filter.setAuthorityTrustService(this.getAuthorityGTS()
+			filter.setAuthorityGTS(this.getAuthorityGTS()
 					.getSelectedService());
-			filter.setSourceTrustService(this.getSourceGTS()
+			filter.setSourceGTS(this.getSourceGTS()
 					.getSelectedService());
 			GTSSearchClient client = new GTSSearchClient(service);
 			int length = 0;
@@ -621,7 +621,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 					.getSelectedProxy();
 			GTSAdminClient client = new GTSAdminClient(service, proxy);
 			client.removeTrustedAuthority(this.getTrustedAuthorityTable()
-					.getSelectedTrustedAuthority().getTrustedAuthorityName());
+					.getSelectedTrustedAuthority().getName());
 			this.getTrustedAuthorityTable().removeSelectedTrustedAuthority();
 			refreshTrustedAuthorities();
 

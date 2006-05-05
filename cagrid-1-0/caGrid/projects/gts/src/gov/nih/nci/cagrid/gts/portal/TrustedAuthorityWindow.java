@@ -140,12 +140,12 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 		this.gts.setSelectedItem(service);
 		this.proxy.setSelectedItem(new ProxyCaddy(cred));
 		this.updateTrustLevels();
-		this.getTrustedAuthorityName().setText(ta.getTrustedAuthorityName());
+		this.getTrustedAuthorityName().setText(ta.getName());
 		((StatusComboBox) this.getStatus()).setSelectedItem(ta.getStatus());
 		trustLevel.setSelectedItem(ta.getTrustLevel());
 		this.getIsAuthority().setText(ta.getIsAuthority().toString());
-		this.getAuthorityGTS().setText(ta.getAuthorityTrustService());
-		this.getSourceGTS().setText(ta.getSourceTrustService());
+		this.getAuthorityGTS().setText(ta.getAuthorityGTS());
+		this.getSourceGTS().setText(ta.getSourceGTS());
 		if (ta.getExpires() <= 0) {
 			getExpires().setText("Never");
 		} else {
@@ -767,7 +767,7 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 
 			}
 			TrustedAuthority ta = new TrustedAuthority();
-			ta.setTrustedAuthorityName(this.trustedAuthorityName.getText());
+			ta.setName(this.trustedAuthorityName.getText());
 			ta.setStatus(((StatusComboBox) getStatus()).getStatus());
 			ta.setTrustLevel((String) trustLevel.getSelectedItem());
 			ta.setCertificate(new gov.nih.nci.cagrid.gts.bean.X509Certificate(CertUtil.writeCertificate(cert)));
@@ -778,7 +778,7 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 			String service = ((GTSServiceListComboBox) getGts()).getSelectedService();
 			GTSAdminClient client = new GTSAdminClient(service, proxy);
 			client.addTrustedAuthority(ta);
-			PortalUtils.showMessage("The Trusted Authority, " + ta.getTrustedAuthorityName()
+			PortalUtils.showMessage("The Trusted Authority, " + ta.getName()
 				+ " was succesfully added!!!");
 			refresher.refreshTrustedAuthorities();
 			dispose();
@@ -795,7 +795,7 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 		try {
 			getAddButton().setEnabled(false);
 			TrustedAuthority ta = new TrustedAuthority();
-			ta.setTrustedAuthorityName(this.trustedAuthorityName.getText());
+			ta.setName(this.trustedAuthorityName.getText());
 			ta.setStatus(((StatusComboBox) getStatus()).getStatus());
 			ta.setTrustLevel((String) trustLevel.getSelectedItem());
 			if (crlPanel.getCRL() != null) {
@@ -805,7 +805,7 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 			String service = ((GTSServiceListComboBox) getGts()).getSelectedService();
 			GTSAdminClient client = new GTSAdminClient(service, proxy);
 			client.updateTrustedAuthority(ta);
-			PortalUtils.showMessage("The Trusted Authority, " + ta.getTrustedAuthorityName()
+			PortalUtils.showMessage("The Trusted Authority, " + ta.getName()
 				+ " was succesfully updated!!!");
 			refresher.refreshTrustedAuthorities();
 			getAddButton().setEnabled(true);

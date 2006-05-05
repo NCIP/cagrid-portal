@@ -82,14 +82,14 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 			level.setName("One");
 			level.setDescription("Trust Level One");
 			level.setIsAuthority(Boolean.FALSE);
-			level.setAuthorityTrustService("somehost");
-			level.setSourceTrustService("somehost");
+			level.setAuthorityGTS("somehost");
+			level.setSourceGTS("somehost");
 			trust.addTrustLevel(level, false);
 			assertEquals(1, trust.getTrustLevels().length);
 			assertEquals(true, trust.doesTrustLevelExist(level.getName()));
 			assertEquals(level, trust.getTrustLevel(level.getName()));
-			level.setAuthorityTrustService("someotherhost");
-			level.setSourceTrustService("someotherhost");
+			level.setAuthorityGTS("someotherhost");
+			level.setSourceGTS("someotherhost");
 			trust.updateTrustLevel(level, false);
 			assertEquals(1, trust.getTrustLevels().length);
 			assertEquals(true, trust.doesTrustLevelExist(level.getName()));
@@ -168,8 +168,8 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 			level.setName("One");
 			level.setDescription("Trust Level One");
 			level.setIsAuthority(Boolean.FALSE);
-			level.setAuthorityTrustService("somehost");
-			level.setSourceTrustService("somehost");
+			level.setAuthorityGTS("somehost");
+			level.setSourceGTS("somehost");
 			trust.addTrustLevel(level, false);
 			assertEquals(1, trust.getTrustLevels().length);
 			assertEquals(true, trust.doesTrustLevelExist(level.getName()));
@@ -202,8 +202,8 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 				TrustLevel tl = new TrustLevel();
 				tl.setName("One");
 				tl.setDescription("Trust Level One");
-				tl.setAuthorityTrustService("somehost");
-				tl.setSourceTrustService("somehost");
+				tl.setAuthorityGTS("somehost");
+				tl.setSourceGTS("somehost");
 				trust.addTrustLevel(tl, false);
 				fail("Trust Level should not be able to be added!!!");
 			} catch (IllegalTrustLevelFault f) {
@@ -219,7 +219,7 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 				tl.setName("One");
 				tl.setDescription("Trust Level One");
 				tl.setIsAuthority(Boolean.FALSE);
-				tl.setSourceTrustService("somehost");
+				tl.setSourceGTS("somehost");
 				trust.addTrustLevel(tl, false);
 				fail("Trust Level should not be able to be added!!!");
 			} catch (IllegalTrustLevelFault f) {
@@ -235,7 +235,7 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 				tl.setName("One");
 				tl.setDescription("Trust Level One");
 				tl.setIsAuthority(Boolean.FALSE);
-				tl.setAuthorityTrustService("somehost");
+				tl.setAuthorityGTS("somehost");
 				trust.addTrustLevel(tl, false);
 				fail("Trust Level should not be able to be added!!!");
 			} catch (IllegalTrustLevelFault f) {
@@ -248,8 +248,8 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 			level2.setName("One");
 			level2.setDescription("Trust Level One");
 			level2.setIsAuthority(Boolean.TRUE);
-			level2.setAuthorityTrustService("someotherhost");
-			level2.setSourceTrustService("someotherhost");
+			level2.setAuthorityGTS("someotherhost");
+			level2.setSourceGTS("someotherhost");
 			try {
 				trust.addTrustLevel(level2,false);
 				fail("Trust Level should not be able to be added without an name!!!");
@@ -278,8 +278,8 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 			level.setName("One");
 			level.setDescription("Trust Level One");
 			level.setIsAuthority(Boolean.TRUE);
-			level.setAuthorityTrustService(GTS_URI);
-			level.setSourceTrustService(GTS_URI);
+			level.setAuthorityGTS(GTS_URI);
+			level.setSourceGTS(GTS_URI);
 			trust.addTrustLevel(level, false);
 			assertEquals(1, trust.getTrustLevels().length);
 			assertEquals(true, trust.doesTrustLevelExist(level.getName()));
@@ -300,7 +300,7 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 
 			tl = trust.getTrustLevel(level.getName());
 			try {
-				tl.setAuthorityTrustService("someotherhost");
+				tl.setAuthorityGTS("someotherhost");
 				trust.updateTrustLevel(tl);
 				fail("Trust Level should not be able to be updated!!!");
 			} catch (IllegalTrustLevelFault f) {
@@ -311,7 +311,7 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 
 			tl = trust.getTrustLevel(level.getName());
 			try {
-				tl.setSourceTrustService("someotherhost");
+				tl.setSourceGTS("someotherhost");
 				trust.updateTrustLevel(tl);
 				fail("Trust Level should not be able to be updated!!!");
 			} catch (IllegalTrustLevelFault f) {
@@ -324,8 +324,8 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 			level2.setName("Two");
 			level2.setDescription("Trust Level Two");
 			level2.setIsAuthority(Boolean.FALSE);
-			level2.setAuthorityTrustService("some other host");
-			level2.setSourceTrustService("some other host");
+			level2.setAuthorityGTS("some other host");
+			level2.setSourceGTS("some other host");
 			trust.addTrustLevel(level2,false);
 			
 			assertEquals(2, trust.getTrustLevels().length);
@@ -380,7 +380,7 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 			
 			tl = trust.getTrustLevel(level.getName());
 			try {
-				tl.setAuthorityTrustService("someotherhost");
+				tl.setAuthorityGTS("someotherhost");
 				trust.updateTrustLevel(tl, false);
 				fail("Trust Level should not be able to be updated!!!");
 			} catch (IllegalTrustLevelFault f) {

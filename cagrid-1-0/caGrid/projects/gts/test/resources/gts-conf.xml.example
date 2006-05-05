@@ -3,6 +3,7 @@
 		class="gov.nih.nci.cagrid.gts.service.GTSConfiguration">
 		<gts-config>
 			<gts-internal-id>GTS_TEST</gts-internal-id>
+			<sync-authorities hours="1" minutes="0" seconds="1"/>
 			<database>
 				<name/>
 				<driver>com.mysql.jdbc.Driver</driver>

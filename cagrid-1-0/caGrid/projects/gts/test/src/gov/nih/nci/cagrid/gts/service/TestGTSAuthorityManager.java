@@ -4,7 +4,7 @@ import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.gts.bean.AuthorityGTS;
 import gov.nih.nci.cagrid.gts.bean.AuthorityPrioritySpecification;
 import gov.nih.nci.cagrid.gts.bean.AuthorityPriorityUpdate;
-import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityTimeToLive;
+import gov.nih.nci.cagrid.gts.bean.TimeToLive;
 import gov.nih.nci.cagrid.gts.common.Database;
 import gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault;
 import gov.nih.nci.cagrid.gts.test.Utils;
@@ -13,7 +13,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 import junit.framework.TestCase;
-
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -25,16 +24,16 @@ import junit.framework.TestCase;
 public class TestGTSAuthorityManager extends TestCase {
 
 	private Database db;
-	private final String GTS_URI = "localhost";
 
+	private final String GTS_URI = "localhost";
 
 	public TestGTSAuthorityManager() {
 
 	}
 
-
 	public void testCreateAndDestroy() {
-		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,db);
+		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,
+				getAuthoritySyncTime(), db);
 		try {
 			am.buildDatabase();
 			am.destroy();
@@ -50,11 +49,11 @@ public class TestGTSAuthorityManager extends TestCase {
 		}
 	}
 
-
 	public void testAddInvalidAuthority() {
-		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,db);
+		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,
+				getAuthoritySyncTime(), db);
 		try {
-			TrustedAuthorityTimeToLive ttl = new TrustedAuthorityTimeToLive();
+			TimeToLive ttl = new TimeToLive();
 			ttl.setHours(1);
 			ttl.setMinutes(1);
 			ttl.setSeconds(1);
@@ -65,7 +64,7 @@ public class TestGTSAuthorityManager extends TestCase {
 			a1.setPerformAuthorization(true);
 			a1.setServiceIdentity("Service");
 			a1.setSyncTrustLevels(true);
-			a1.setTrustedAuthorityTimeToLive(ttl);
+			a1.setTimeToLive(ttl);
 			try {
 				am.addAuthority(a1);
 				fail("Should not be able to add authority!!!");
@@ -93,7 +92,7 @@ public class TestGTSAuthorityManager extends TestCase {
 			a3.setPriority(1);
 			a3.setPerformAuthorization(true);
 			a3.setSyncTrustLevels(true);
-			a3.setTrustedAuthorityTimeToLive(ttl);
+			a3.setTimeToLive(ttl);
 			try {
 				am.addAuthority(a3);
 				fail("Should not be able to add authority!!!");
@@ -123,9 +122,28 @@ public class TestGTSAuthorityManager extends TestCase {
 			a4.setPerformAuthorization(true);
 			a4.setSyncTrustLevels(true);
 			a4.setServiceIdentity("Service");
-			a4.setTrustedAuthorityTimeToLive(ttl);
+			a4.setTimeToLive(ttl);
 			try {
 				am.addAuthority(a4);
+				fail("Should not be able to add authority!!!");
+			} catch (IllegalAuthorityFault f) {
+
+			}
+
+			// Invalid Time To Sync
+			AuthorityGTS a5 = new AuthorityGTS();
+			a5.setServiceURI("Service");
+			a5.setPriority(1);
+			a5.setPerformAuthorization(true);
+			a5.setSyncTrustLevels(true);
+			a5.setServiceIdentity("Service");
+			TimeToLive ttl2 = new TimeToLive();
+			ttl2.setHours(0);
+			ttl2.setMinutes(0);
+			ttl2.setSeconds(1);
+			a5.setTimeToLive(ttl2);
+			try {
+				am.addAuthority(a5);
 				fail("Should not be able to add authority!!!");
 			} catch (IllegalAuthorityFault f) {
 
@@ -156,11 +174,11 @@ public class TestGTSAuthorityManager extends TestCase {
 		}
 	}
 
-
 	public void testUpdateInvalidAuthority() {
-		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,db);
+		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,
+				getAuthoritySyncTime(), db);
 		try {
-			TrustedAuthorityTimeToLive ttl = new TrustedAuthorityTimeToLive();
+			TimeToLive ttl = new TimeToLive();
 			ttl.setHours(10);
 			ttl.setMinutes(10);
 			ttl.setSeconds(10);
@@ -173,7 +191,7 @@ public class TestGTSAuthorityManager extends TestCase {
 
 			// First make sure update works
 
-			a.setTrustedAuthorityTimeToLive(ttl);
+			a.setTimeToLive(ttl);
 			am.updateAuthority(a);
 
 			assertTrue(am.doesAuthorityExist(a.getServiceURI()));
@@ -192,7 +210,7 @@ public class TestGTSAuthorityManager extends TestCase {
 
 			// Add Authority no ttl
 			AuthorityGTS a2 = getAuthority("GTS", 1);
-			a2.setTrustedAuthorityTimeToLive(null);
+			a2.setTimeToLive(null);
 			try {
 				am.addAuthority(a2);
 				fail("Should not be able to update authority!!!");
@@ -235,8 +253,8 @@ public class TestGTSAuthorityManager extends TestCase {
 			} catch (IllegalAuthorityFault f) {
 
 			}
-			
-			//Adding Self
+
+			// Adding Self
 			AuthorityGTS a5 = getAuthority(GTS_URI, 1);
 			a5.setPriority(2);
 			try {
@@ -258,9 +276,9 @@ public class TestGTSAuthorityManager extends TestCase {
 		}
 	}
 
-
 	public void testAddAuthority() {
-		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,db);
+		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,
+				getAuthoritySyncTime(), db);
 		try {
 			AuthorityGTS a1 = getAuthority("GTS 1", 1);
 			assertFalse(am.doesAuthorityExist(a1.getServiceURI()));
@@ -281,9 +299,9 @@ public class TestGTSAuthorityManager extends TestCase {
 		}
 	}
 
-
 	public void testAddUpdateRemoveAuthorities() {
-		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,db);
+		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,
+				getAuthoritySyncTime(), db);
 		int count = 5;
 		AuthorityGTS[] a = new AuthorityGTS[count];
 
@@ -355,9 +373,9 @@ public class TestGTSAuthorityManager extends TestCase {
 		}
 	}
 
-
 	public void testInvalidUpdatePrioritiesAuthorities() {
-		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,db);
+		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,
+				getAuthoritySyncTime(), db);
 		int count = 5;
 		AuthorityGTS[] a = new AuthorityGTS[count];
 
@@ -443,9 +461,9 @@ public class TestGTSAuthorityManager extends TestCase {
 		}
 	}
 
-
 	public void testUpdateRollback() {
-		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,db);
+		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,
+				getAuthoritySyncTime(), db);
 		int count = 5;
 		AuthorityGTS[] a = new AuthorityGTS[count];
 		Connection c = null;
@@ -468,11 +486,13 @@ public class TestGTSAuthorityManager extends TestCase {
 			c.setAutoCommit(false);
 			for (int i = 0; i < count; i++) {
 				a[i].setPriority(a[i].getPriority() + 1);
-				am.updateAuthorityPriority(c, a[i].getServiceURI(), a[i].getPriority());
+				am.updateAuthorityPriority(c, a[i].getServiceURI(), a[i]
+						.getPriority());
 			}
 
 			for (int i = 0; i < count; i++) {
-				assertEquals((a[i].getPriority() - 1), am.getAuthority(a[i].getServiceURI()).getPriority());
+				assertEquals((a[i].getPriority() - 1), am.getAuthority(
+						a[i].getServiceURI()).getPriority());
 			}
 
 			c.commit();
@@ -483,11 +503,13 @@ public class TestGTSAuthorityManager extends TestCase {
 
 			for (int i = 0; i < count; i++) {
 				a[i].setPriority(a[i].getPriority() + 1);
-				am.updateAuthorityPriority(c, a[i].getServiceURI(), a[i].getPriority());
+				am.updateAuthorityPriority(c, a[i].getServiceURI(), a[i]
+						.getPriority());
 			}
 
 			try {
-				PreparedStatement bad = c.prepareStatement("INSERT INTO NOTHING SET VALUES(1,2)");
+				PreparedStatement bad = c
+						.prepareStatement("INSERT INTO NOTHING SET VALUES(1,2)");
 				bad.executeUpdate();
 				try {
 					c.commit();
@@ -523,9 +545,9 @@ public class TestGTSAuthorityManager extends TestCase {
 		}
 	}
 
-
 	public void testAddAuthorityOverwritePriority() {
-		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,db);
+		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,
+				getAuthoritySyncTime(), db);
 		try {
 			AuthorityGTS a1 = getAuthority("GTS 1", 1);
 			assertFalse(am.doesAuthorityExist(a1.getServiceURI()));
@@ -556,9 +578,8 @@ public class TestGTSAuthorityManager extends TestCase {
 		}
 	}
 
-
 	private AuthorityGTS getAuthority(String uri, int priority) {
-		TrustedAuthorityTimeToLive ttl = new TrustedAuthorityTimeToLive();
+		TimeToLive ttl = new TimeToLive();
 		ttl.setHours(1);
 		ttl.setMinutes(1);
 		ttl.setSeconds(1);
@@ -568,22 +589,25 @@ public class TestGTSAuthorityManager extends TestCase {
 		a1.setPerformAuthorization(true);
 		a1.setServiceIdentity(uri);
 		a1.setSyncTrustLevels(true);
-		a1.setTrustedAuthorityTimeToLive(ttl);
+		a1.setTimeToLive(ttl);
 		return a1;
 	}
 
+	private AuthoritySyncTime getAuthoritySyncTime() {
+		AuthoritySyncTime time = new AuthoritySyncTime(0, 0, 2);
+		return time;
+	}
 
 	private void updateAuthority(AuthorityGTS gts) {
-		TrustedAuthorityTimeToLive ttl = new TrustedAuthorityTimeToLive();
+		TimeToLive ttl = new TimeToLive();
 		ttl.setHours(10);
 		ttl.setMinutes(10);
 		ttl.setSeconds(10);
 		gts.setPerformAuthorization(false);
 		gts.setServiceIdentity(null);
 		gts.setSyncTrustLevels(false);
-		gts.setTrustedAuthorityTimeToLive(ttl);
+		gts.setTimeToLive(ttl);
 	}
-
 
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -595,7 +619,6 @@ public class TestGTSAuthorityManager extends TestCase {
 			assertTrue(false);
 		}
 	}
-
 
 	protected void tearDown() throws Exception {
 		super.setUp();

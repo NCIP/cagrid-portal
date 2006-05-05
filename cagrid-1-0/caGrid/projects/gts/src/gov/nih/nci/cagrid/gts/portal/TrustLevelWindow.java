@@ -119,8 +119,8 @@ public class TrustLevelWindow extends GridPortalComponent {
 			this.getDescription().setText(level.getDescription());
 			this.getDescription().setCaretPosition(0);
 			this.getIsAuthority().setText(level.getIsAuthority().toString());
-			this.getAuthorityGTS().setText(level.getAuthorityTrustService());
-			this.getSourceGTS().setText(level.getSourceTrustService());
+			this.getAuthorityGTS().setText(level.getAuthorityGTS());
+			this.getSourceGTS().setText(level.getSourceGTS());
 			if (level.getLastUpdated() <= 0) {
 				this.getLastUpdated().setText("Unknown");
 			} else {

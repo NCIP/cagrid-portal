@@ -64,7 +64,7 @@ public class TrustedAuthorityTable extends PortalBaseTable {
 	public void addTrustedAuthority(final TrustedAuthority ta) {
 		Vector v = new Vector();
 		v.add(ta);
-		v.add(ta.getTrustedAuthorityName());
+		v.add(ta.getName());
 		v.add(ta.getTrustLevel());
 		v.add(ta.getStatus().getValue());
 		addRow(v);
