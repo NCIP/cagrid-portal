@@ -333,6 +333,7 @@
 			<include name="**/*.dtd" />
 			<include name="**/*.properties" />
 			<include name="**/*.xsd" />
+			<include name="**/*.wsdd" />
 			<include name="${package.dir}/**" />
 			<exclude name="${package.dir}/client/**" />
 			<exclude name="${package.dir}/service/**" />

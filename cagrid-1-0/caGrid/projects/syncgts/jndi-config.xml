@@ -7,10 +7,6 @@
 					<name>factory</name>
 					<value>org.globus.wsrf.jndi.BeanFactory</value>
 				</parameter>
-				<parameter>
-					<name>syncDescription</name>
-					<value>ETC-PATH/sync-description.xml</value>
-				</parameter>	
 			</resourceParams>
 		</resource>
 		<resource name="configuration" type="gov.nih.nci.cagrid.syncgts.service.globus.resource.MetadataConfiguration">
@@ -29,6 +25,15 @@
 					<!-- Set this to the relative path (from the container root, e.g GLOBUS_LOCATION for globus container) of the registration parameters template file (ignored if performRegistration is false) -->
 					<value>ETC-PATH/registration.xml</value>
 				</parameter>				
+			</resourceParams>
+		</resource>
+		<resource name="serviceconfiguration" type="gov.nih.nci.cagrid.syncgts.service.globus.ServiceConfiguration">
+			<resourceParams>
+				<parameter>
+					<name>factory</name>
+					<value>org.globus.wsrf.jndi.BeanFactory</value>
+				</parameter>
+						
 			</resourceParams>
 		</resource>
 	</service>

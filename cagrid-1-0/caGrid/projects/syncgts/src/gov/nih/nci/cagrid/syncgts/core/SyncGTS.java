@@ -197,7 +197,7 @@ public class SyncGTS {
 							+ " the search found " + length + " Trusted Authority(s)!!!");
 
 						for (int x = 0; x < length; x++) {
-							taMap.put(tas[x].getTrustedAuthorityName(), tas[x]);
+							taMap.put(tas[x].getName(), tas[x]);
 						}
 
 					} catch (Exception e) {
@@ -216,16 +216,16 @@ public class SyncGTS {
 				while (itr.hasNext()) {
 					TrustedAuthority ta = (TrustedAuthority) itr.next();
 
-					if (master.containsValue(ta.getTrustedAuthorityName())) {
-						TrustedCAListing gta = (TrustedCAListing) master.get(ta.getTrustedAuthorityName());
-						String msg = "Conflict Detected: The Trusted Authority " + ta.getTrustedAuthorityName()
+					if (master.containsValue(ta.getName())) {
+						TrustedCAListing gta = (TrustedCAListing) master.get(ta.getName());
+						String msg = "Conflict Detected: The Trusted Authority " + ta.getName()
 							+ " was determined to be trusted by both " + gta.getService() + " and " + uri + ".";
 						Message mess = new Message();
 						mess.setType(MessageType.Warning);
 						mess.setValue(msg);
 						messages.add(mess);
 					} else {
-						master.put(ta.getTrustedAuthorityName(), new TrustedCAListing(uri, ta));
+						master.put(ta.getName(), new TrustedCAListing(uri, ta));
 					}
 				}
 				this.logger.debug("Done syncing with the GTS " + uri + " " + taMap.size()
@@ -256,14 +256,14 @@ public class SyncGTS {
 					ca.setGts(listing.getService());
 					CertUtil.writeCertificate(cert, caFile);
 					ca.setCertificateFile(caFile.getAbsolutePath());
-					logger.debug("Wrote out the certificate for the Trusted Authority " + ta.getTrustedAuthorityName()
+					logger.debug("Wrote out the certificate for the Trusted Authority " + ta.getName()
 						+ " to the file " + caFile.getAbsolutePath());
 					if (ta.getCRL() != null) {
 						if (ta.getCRL().getCrlEncodedString() != null) {
 							X509CRL crl = CertUtil.loadCRL(ta.getCRL().getCrlEncodedString());
 							CertUtil.writeCRL(crl, crlFile);
 							ca.setCRLFile(crlFile.getAbsolutePath());
-							logger.debug("Wrote out the CRL for the Trusted Authority " + ta.getTrustedAuthorityName()
+							logger.debug("Wrote out the CRL for the Trusted Authority " + ta.getName()
 								+ " to the file " + crlFile.getAbsolutePath());
 						}
 					}
