@@ -1,6 +1,8 @@
 package gov.nih.nci.cagrid.gts.common;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -18,7 +20,7 @@ public abstract class Database {
 
 	public Database(String db) {
 		this.databaseName = db;
-		log =LogFactory.getLog(this.getClass().getName());
+		log = LogFactory.getLog(this.getClass().getName());
 	}
 
 
@@ -29,9 +31,6 @@ public abstract class Database {
 
 
 	public abstract void createDatabase() throws DatabaseException;
-
-
-	public abstract boolean tableExists(String tableName) throws DatabaseException;
 
 
 	public void update(String sql) throws DatabaseException {
@@ -65,6 +64,36 @@ public abstract class Database {
 
 	public int getUsedConnectionCount() throws DatabaseException {
 		return getConnectionManager().getUsedConnectionCount();
+	}
+
+
+	public boolean tableExists(String tableName) throws DatabaseException {
+		boolean exists = false;
+		Connection c = null;
+		try {
+			c = this.getConnectionManager().getConnection();
+			DatabaseMetaData dbMetadata = c.getMetaData();
+			String[] names = {"TABLE"};
+			names[0] = tableName;
+			// ResultSet tables = dbMetadata.getTables(null, "%", tableName,
+			// names);
+			ResultSet tables = dbMetadata.getTables(null, null, tableName, null);
+			if (tables.next()) {
+				exists = true;
+			}
+			tables.close();
+			this.getConnectionManager().releaseConnection(c);
+		} catch (Exception e) {
+			try {
+				this.getConnectionManager().releaseConnection(c);
+			} catch (Exception ex) {
+				log.error(e.getMessage(), ex);
+			}
+			log.error(e.getMessage(), e);
+
+			throw new DatabaseException(e.getMessage());
+		}
+		return exists;
 	}
 
 }

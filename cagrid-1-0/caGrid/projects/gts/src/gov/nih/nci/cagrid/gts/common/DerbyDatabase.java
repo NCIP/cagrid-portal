@@ -1,9 +1,5 @@
 package gov.nih.nci.cagrid.gts.common;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-
 import org.projectmobius.db.ConnectionManager;
 import org.projectmobius.db.DatabaseException;
 
@@ -42,32 +38,7 @@ public class DerbyDatabase extends Database {
 
 	}
 
-
 	public boolean tableExists(String tableName) throws DatabaseException {
-		Connection c = null;
-		boolean exists = false;
-		try {
-			c = this.cm.getConnection();
-			DatabaseMetaData dbMetadata = c.getMetaData();
-			String[] names = {"TABLE"};
-			names[0] = tableName;
-			ResultSet tables = dbMetadata.getTables(null, null, tableName.toUpperCase(), null);
-			if (tables.next()) {
-				exists = true;
-			}
-			tables.close();
-			this.cm.releaseConnection(c);
-
-		} catch (Exception e) {
-			try {
-				this.cm.releaseConnection(c);
-			} catch (Exception ex) {
-				log.error(e.getMessage(), ex);
-			}
-			log.error(e.getMessage(), e);
-
-			throw new DatabaseException(e.getMessage());
-		}
-		return exists;
+		return super.tableExists(tableName.toUpperCase());
 	}
 }

@@ -35,7 +35,9 @@ public class TestGTSAuthorityManager extends TestCase {
 		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,
 				getAuthoritySyncTime(), db);
 		try {
+			am.destroy();
 			am.buildDatabase();
+			assertTrue(db.tableExists(GTSAuthorityManager.GTS_AUTHORITIES));
 			am.destroy();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);

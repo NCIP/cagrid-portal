@@ -34,7 +34,9 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 	public void testCreateAndDestroy() {
 		TrustLevelManager trust = new TrustLevelManager(GTS_URI, this, db);
 		try {
+			trust.destroy();
 			trust.buildDatabase();
+			assertTrue(db.tableExists(TrustLevelManager.TRUST_LEVELS));
 			trust.destroy();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -118,12 +120,11 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 			level.setName("One");
 			level.setDescription("Trust Level One");
 			trust.addTrustLevel(level);
-			
+
 			assertEquals(1, trust.getTrustLevels().length);
 			assertEquals(true, trust.doesTrustLevelExist(level.getName()));
 			assertEquals(level, trust.getTrustLevel(level.getName()));
-			
-			
+
 			try {
 				trust.addTrustLevel(level);
 				fail("Trust Level should not be able to be added when it already exists!!!");
@@ -147,7 +148,7 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 			trust.removeTrustLevel(level.getName());
 			assertEquals(0, trust.getTrustLevels().length);
 			assertEquals(false, trust.doesTrustLevelExist(level.getName()));
-			
+
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
@@ -243,7 +244,7 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 			}
 
 			assertEquals(0, trust.getTrustLevels().length);
-			
+
 			TrustLevel level2 = new TrustLevel();
 			level2.setName("One");
 			level2.setDescription("Trust Level One");
@@ -251,12 +252,11 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 			level2.setAuthorityGTS("someotherhost");
 			level2.setSourceGTS("someotherhost");
 			try {
-				trust.addTrustLevel(level2,false);
+				trust.addTrustLevel(level2, false);
 				fail("Trust Level should not be able to be added without an name!!!");
 			} catch (IllegalTrustLevelFault f) {
 
 			}
-
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -319,19 +319,19 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 			}
 
 			assertEquals(1, trust.getTrustLevels().length);
-			
+
 			TrustLevel level2 = new TrustLevel();
 			level2.setName("Two");
 			level2.setDescription("Trust Level Two");
 			level2.setIsAuthority(Boolean.FALSE);
 			level2.setAuthorityGTS("some other host");
 			level2.setSourceGTS("some other host");
-			trust.addTrustLevel(level2,false);
-			
+			trust.addTrustLevel(level2, false);
+
 			assertEquals(2, trust.getTrustLevels().length);
 			assertEquals(true, trust.doesTrustLevelExist(level2.getName()));
 			assertEquals(level2, trust.getTrustLevel(level2.getName()));
-			
+
 			tl = trust.getTrustLevel(level2.getName());
 			try {
 				tl.setDescription("new description");
@@ -377,7 +377,7 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 			}
 
 			assertEquals(1, trust.getTrustLevels().length);
-			
+
 			tl = trust.getTrustLevel(level.getName());
 			try {
 				tl.setAuthorityGTS("someotherhost");
@@ -388,7 +388,6 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 			}
 
 			assertEquals(1, trust.getTrustLevels().length);
-			
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);

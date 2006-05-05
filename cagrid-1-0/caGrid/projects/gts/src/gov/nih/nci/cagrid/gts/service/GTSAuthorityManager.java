@@ -36,7 +36,7 @@ import org.apache.commons.logging.LogFactory;
 
 public class GTSAuthorityManager {
 
-	private static final String GTS_AUTHORITIES = "GTS_AUTHORITIES";
+	public static final String GTS_AUTHORITIES = "GTS_AUTHORITIES";
 
 	private Log log;
 

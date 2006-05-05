@@ -28,7 +28,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class PermissionManager {
 
-	private static final String PERMISSIONS_TABLE = "PERMISSIONS";
+	public static final String PERMISSIONS_TABLE = "PERMISSIONS";
 
 	private Log log;
 

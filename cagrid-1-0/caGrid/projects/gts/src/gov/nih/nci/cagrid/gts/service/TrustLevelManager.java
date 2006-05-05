@@ -28,7 +28,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class TrustLevelManager {
 
-	private static final String TRUST_LEVELS = "TRUST_LEVELS";
+	public static final String TRUST_LEVELS = "TRUST_LEVELS";
 
 	private Log log;
 

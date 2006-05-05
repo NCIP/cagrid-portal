@@ -96,33 +96,4 @@ public class MySQLDatabase extends Database {
 		this.root.releaseConnection(c);
 		return exists;
 	}
-
-
-	public boolean tableExists(String tableName) throws DatabaseException {
-		boolean exists = false;
-		Connection c = null;
-		try {
-			c = this.dbCM.getConnection();
-			DatabaseMetaData dbMetadata = c.getMetaData();
-			String[] names = {"TABLE"};
-			names[0] = tableName;
-			ResultSet tables = dbMetadata.getTables(null, "%", tableName, names);
-			if (tables.next()) {
-				exists = true;
-			}
-			tables.close();
-			this.dbCM.releaseConnection(c);
-		} catch (Exception e) {
-			try {
-				this.dbCM.releaseConnection(c);
-			} catch (Exception ex) {
-				log.error(e.getMessage(), ex);
-			}
-			log.error(e.getMessage(), e);
-
-			throw new DatabaseException(e.getMessage());
-		}
-		return exists;
-	}
-
 }

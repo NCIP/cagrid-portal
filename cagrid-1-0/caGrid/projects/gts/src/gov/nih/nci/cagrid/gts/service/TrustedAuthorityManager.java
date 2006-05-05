@@ -32,7 +32,7 @@ import org.apache.commons.logging.LogFactory;
  *          Exp $
  */
 public class TrustedAuthorityManager {
-	private static final String TRUSTED_AUTHORITIES_TABLE = "TRUSTED_AUTHORITIES";
+	public static final String TRUSTED_AUTHORITIES_TABLE = "TRUSTED_AUTHORITIES";
 
 	private Log log;
 
