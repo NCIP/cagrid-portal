@@ -17,13 +17,16 @@ import javax.xml.namespace.QName;
 
 import org.projectmobius.portal.PortalResourceManager;
 
+
 public class MethodPopUpMenu extends JPopupMenu {
 
 	private JMenuItem removeMethodMenuItem = null;
 	MethodTypeTreeNode node;
+	private JMenuItem modifyMethodMenuItem = null;
+
+
 	/**
-	 * This method initializes 
-	 * 
+	 * This method initializes
 	 */
 	public MethodPopUpMenu(MethodTypeTreeNode node) {
 		super();
@@ -31,18 +34,20 @@ public class MethodPopUpMenu extends JPopupMenu {
 		initialize();
 	}
 
-	/**
-	 * This method initializes this
-	 * 
-	 */
-	private void initialize() {
-        this.add(getRemoveMethodMenuItem());
-	}
 
 	/**
-	 * This method initializes removeMethodMenuItem	
-	 * 	
-	 * @return javax.swing.JMenuItem	
+	 * This method initializes this
+	 */
+	private void initialize() {
+		this.add(getRemoveMethodMenuItem());
+		this.add(getModifyMethodMenuItem());
+	}
+
+
+	/**
+	 * This method initializes removeMethodMenuItem
+	 * 
+	 * @return javax.swing.JMenuItem
 	 */
 	private JMenuItem getRemoveMethodMenuItem() {
 		if (removeMethodMenuItem == null) {
@@ -52,11 +57,33 @@ public class MethodPopUpMenu extends JPopupMenu {
 			removeMethodMenuItem.addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {
 					super.mousePressed(e);
-					((MethodsTypeTreeNode)node.getParent()).removeMethod(node);
+					((MethodsTypeTreeNode) node.getParent()).removeMethod(node);
 				}
 			});
 		}
 		return removeMethodMenuItem;
+	}
+
+
+	/**
+	 * This method initializes modifyMethodMenuItem
+	 * 
+	 * @return javax.swing.JMenuItem
+	 */
+	private JMenuItem getModifyMethodMenuItem() {
+		if (modifyMethodMenuItem == null) {
+			modifyMethodMenuItem = new JMenuItem();
+			modifyMethodMenuItem.setIcon(IntroduceLookAndFeel.getModifyIcon());
+			modifyMethodMenuItem.addMouseListener(new MouseAdapter() {
+
+				public void mousePressed(MouseEvent e) {
+					super.mousePressed(e);
+					node.modifyMethod();
+				}
+
+			});
+		}
+		return modifyMethodMenuItem;
 	}
 
 }

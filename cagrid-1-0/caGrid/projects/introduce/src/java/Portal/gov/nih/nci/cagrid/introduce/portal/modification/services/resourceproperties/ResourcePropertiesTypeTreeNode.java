@@ -68,6 +68,7 @@ public class ResourcePropertiesTypeTreeNode extends DefaultMutableTreeNode {
 	private DefaultTreeModel model;
 	private ResourcePropertiesPopUpMenu menu;
 	private ServiceInformation info;
+	
 	public ResourcePropertiesTypeTreeNode(ResourcePropertiesListType methods,DefaultTreeModel model,ServiceInformation info) {
 		super();
 		this.resourceProperties = methods;
@@ -131,6 +132,22 @@ public class ResourcePropertiesTypeTreeNode extends DefaultMutableTreeNode {
 	
 	public String toString(){
 		return this.getUserObject().toString();
+	}
+
+	public ServiceInformation getInfo() {
+		return info;
+	}
+
+	public void setInfo(ServiceInformation info) {
+		this.info = info;
+	}
+
+	public ResourcePropertiesListType getResourceProperties() {
+		return resourceProperties;
+	}
+
+	public void setResourceProperties(ResourcePropertiesListType resourceProperties) {
+		this.resourceProperties = resourceProperties;
 	}
 
 }

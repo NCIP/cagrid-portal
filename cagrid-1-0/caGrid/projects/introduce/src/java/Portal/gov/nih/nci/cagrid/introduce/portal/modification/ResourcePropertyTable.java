@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
 import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 
@@ -104,12 +105,22 @@ public class ResourcePropertyTable extends PortalBaseTable {
 		this.getColumn(DATA1).setMaxWidth(0);
 		this.getColumn(DATA1).setMinWidth(0);
 		this.getColumn(DATA1).setPreferredWidth(0);
+		
+		for (int i = this.getRowCount() - 1; i == 0; i--) {
+			this.removeRow(i);
+		}
 
 		if (metadatas !=null && metadatas.getResourceProperty() != null) {
 			for (int i = 0; i < metadatas.getResourceProperty().length; i++) {
 				this.addRow(metadatas.getResourceProperty(i));
 			}
 		}
+	}
+
+	
+	public void setResourceProperties(ResourcePropertiesListType properties){
+		this.metadatas = properties;
+		initialize();
 	}
 
 

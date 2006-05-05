@@ -40,11 +40,20 @@ public class MethodsTable extends PortalBaseTable {
 
 
 	private void initialize() {
-		if (methodsType!= null && methodsType.getMethod() != null) {
+		for (int i = this.getRowCount() - 1; i == 0; i--) {
+			this.removeRow(i);
+		}
+
+		if (methodsType != null && methodsType.getMethod() != null) {
 			for (int i = 0; i < methodsType.getMethod().length; i++) {
 				this.addRow(methodsType.getMethod(i));
 			}
 		}
+	}
+	
+	public void setMethods(MethodsType methods){
+		this.methodsType = methods;
+		initialize();
 	}
 
 

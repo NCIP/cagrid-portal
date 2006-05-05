@@ -46,6 +46,7 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services.methods;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.ServicesJTree;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeTreeNode;
 
 import javax.swing.JPopupMenu;
@@ -65,15 +66,15 @@ import javax.swing.tree.DefaultTreeModel;
  */
 public class MethodsTypeTreeNode extends DefaultMutableTreeNode {
 	private MethodsType methods;
-	private DefaultTreeModel model;
+	private ServicesJTree tree;
 	private MethodsPopUpMenu menu;
 	private ServiceInformation info;
 	
-	public MethodsTypeTreeNode(MethodsType methods,DefaultTreeModel model,ServiceInformation info) {
+	public MethodsTypeTreeNode(MethodsType methods,ServicesJTree tree,ServiceInformation info) {
 		super();
 		this.methods = methods;
 		this.setUserObject("Methods");
-		this.model = model;
+		this.tree = tree;
 		this.menu = new MethodsPopUpMenu(this);
 		this.info = info;
 		initialize();
@@ -83,8 +84,8 @@ public class MethodsTypeTreeNode extends DefaultMutableTreeNode {
 		if(methods!=null && methods.getMethod()!=null){
 			for(int i = 0; i < methods.getMethod().length; i++){
 				MethodType method = methods.getMethod(i);
-				MethodTypeTreeNode newNode = new MethodTypeTreeNode(method,model);
-				model.insertNodeInto(newNode,this,this.getChildCount());
+				MethodTypeTreeNode newNode = new MethodTypeTreeNode(method,tree, info);
+				((DefaultTreeModel)tree.getModel()).insertNodeInto(newNode,this,this.getChildCount());
 			}
 		}
 	}
@@ -108,8 +109,8 @@ public class MethodsTypeTreeNode extends DefaultMutableTreeNode {
 		newMethods[newLength - 1] = method;
 		getMethods().setMethod(newMethods);
 		
-		MethodTypeTreeNode newNode = new MethodTypeTreeNode(method,model);
-		model.insertNodeInto(newNode,this,this.getChildCount());
+		MethodTypeTreeNode newNode = new MethodTypeTreeNode(method,tree,info);
+		((DefaultTreeModel)tree.getModel()).insertNodeInto(newNode,this,this.getChildCount());
 	}
 	
 	public void removeMethod(MethodTypeTreeNode node){
@@ -125,7 +126,7 @@ public class MethodsTypeTreeNode extends DefaultMutableTreeNode {
 		
 		getMethods().setMethod(newMethods);
 		
-		model.removeNodeFromParent(node);
+		((DefaultTreeModel)tree.getModel()).removeNodeFromParent(node);
 	}
 	
 	public JPopupMenu getPopUpMenu(){
@@ -145,11 +146,7 @@ public class MethodsTypeTreeNode extends DefaultMutableTreeNode {
 	}
 
 	public DefaultTreeModel getModel() {
-		return model;
-	}
-
-	public void setModel(DefaultTreeModel model) {
-		this.model = model;
+		return ((DefaultTreeModel)tree.getModel());
 	}
 
 	public ServiceInformation getInfo() {

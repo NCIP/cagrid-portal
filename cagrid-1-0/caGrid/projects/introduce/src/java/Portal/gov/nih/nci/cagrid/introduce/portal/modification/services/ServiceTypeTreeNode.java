@@ -84,7 +84,7 @@ public class ServiceTypeTreeNode extends DefaultMutableTreeNode {
 
 	private void initialize() {
 		if (serviceType.getMethods() != null) {
-			MethodsTypeTreeNode newNode = new MethodsTypeTreeNode(serviceType.getMethods(), (DefaultTreeModel)tree.getModel(), info);
+			MethodsTypeTreeNode newNode = new MethodsTypeTreeNode(serviceType.getMethods(), tree, info);
 			((DefaultTreeModel)tree.getModel()).insertNodeInto(newNode, this, this.getChildCount());
 		}
 		if (serviceType.getResourcePropertiesList() != null) {

@@ -33,6 +33,9 @@ import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeD
 import gov.nih.nci.cagrid.introduce.portal.modification.methods.MethodViewer;
 import gov.nih.nci.cagrid.introduce.portal.modification.methods.MethodsTable;
 import gov.nih.nci.cagrid.introduce.portal.modification.security.ServiceSecurityPanel;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.ServicesJTree;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ModifyResourcePropertiesPanel;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertiesPopUpMenu;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeConfigurePanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeTreeNode;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespacesJTree;
@@ -42,6 +45,8 @@ import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeT
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -63,6 +68,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.JTree;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -98,12 +104,6 @@ public class ModificationViewer extends GridPortalComponent {
 	private JButton undoButton = null;
 	private boolean dirty = false;
 	private JTabbedPane contentTabbedPane = null;
-	private JPanel metadataPanel = null;
-	private JScrollPane metadataScrollPane = null;
-	private ResourcePropertyTable metadataTable = null;
-	private JPanel metadataButtonsPanel = null;
-	private JButton addMetadataButton = null;
-	private JButton removeMetadataButton = null;
 	private ServiceSecurityPanel securityPanel = null;
 	private JLabel serviceNameLabel = null;
 	private JTextField serviceName = null;
@@ -125,9 +125,6 @@ public class ModificationViewer extends GridPortalComponent {
 	private NamespaceTypeConfigurePanel namespaceTypeConfigurationPanel = null;
 	private SchemaElementTypeConfigurePanel schemaElementTypeConfigurationPanel = null;
 	private ServiceInformation info = null;
-	private JPanel metadataNamespaceTypesPanel = null;
-	private JScrollPane metadataNamespaceScrollPane = null;
-	private NamespacesJTree metadataNamespacesJTree = null;
 	private JTabbedPane discoveryTabbedPane = null;
 	private JPanel namespaceConfPanel = null;
 	private JPanel servicePropertiesPanel = null;
@@ -142,6 +139,12 @@ public class ModificationViewer extends GridPortalComponent {
 	private JLabel servicePropertiesKeyLabel = null;
 	private JLabel servicePropertiesValueLabel = null;
 	private JPanel servicePropertiesButtonPanel = null;
+	private JPanel resourceesTabbedPanel = null;
+	private JPanel resourcesPanel = null;
+	private JScrollPane resourcesScrollPane = null;
+	private ServicesJTree resourcesJTree = null;
+	private JPanel resourcePropertiesPanel = null;
+	private ModifyResourcePropertiesPanel rpHolderPanel = null;
 
 
 	/**
@@ -486,7 +489,8 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private MethodsTable getMethodsTable() {
 		if (methodsTable == null) {
-			methodsTable = new MethodsTable(introService.getServices().getService(0).getMethods(), this.methodsDirectory, this.serviceProperties);
+			methodsTable = new MethodsTable(introService.getServices().getService(0).getMethods(),
+				this.methodsDirectory, this.serviceProperties);
 			methodsTable.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					if (e.getClickCount() == 2) {
@@ -536,11 +540,12 @@ public class ModificationViewer extends GridPortalComponent {
 					// this seems to be a wierd way be adding things....
 					MethodType[] newMethods;
 					int newLength = 0;
-					if (introService.getServices().getService(0).getMethods() != null && introService.getServices().getService(0).getMethods().getMethod() != null) {
+					if (introService.getServices().getService(0).getMethods() != null
+						&& introService.getServices().getService(0).getMethods().getMethod() != null) {
 						newLength = introService.getServices().getService(0).getMethods().getMethod().length + 1;
 						newMethods = new MethodType[newLength];
-						System.arraycopy(introService.getServices().getService(0).getMethods().getMethod(), 0, newMethods, 0, introService.getServices().getService(0)
-							.getMethods().getMethod().length);
+						System.arraycopy(introService.getServices().getService(0).getMethods().getMethod(), 0,
+							newMethods, 0, introService.getServices().getService(0).getMethods().getMethod().length);
 					} else {
 						newLength = 1;
 						newMethods = new MethodType[newLength];
@@ -548,7 +553,7 @@ public class ModificationViewer extends GridPortalComponent {
 					newMethods[newLength - 1] = method;
 					MethodsType methodsType = new MethodsType();
 					methodsType.setMethod(newMethods);
-					
+
 					introService.getServices().getService(0).setMethods(methodsType);
 
 					getMethodsTable().addRow(method);
@@ -612,20 +617,6 @@ public class ModificationViewer extends GridPortalComponent {
 			});
 		}
 		return removeButton;
-	}
-
-
-	public void performMetadataModify() {
-
-		int row = getMetadataTable().getSelectedRow();
-		if ((row < 0) || (row >= getMetadataTable().getRowCount())) {
-			PortalUtils.showErrorMessage("Please select a metadata type to modify.");
-			return;
-		}
-
-		Vector v = (Vector) getMetadataTable().getValueAt(getMetadataTable().getSelectedRow(), 9);
-		IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
-			IntroducePortalConf.RESOURCE);
 	}
 
 
@@ -811,16 +802,21 @@ public class ModificationViewer extends GridPortalComponent {
 			contentTabbedPane = new JTabbedPane();
 			contentTabbedPane.addTab("Types", null, getNamespacePanel(), null);
 			contentTabbedPane.addTab("Operations", null, getMethodsPanel(), null);
-			contentTabbedPane.addTab("Metadata", null, getMetadataPanel(), null);
+			contentTabbedPane.addTab("Metadata", null, getResourcePropertiesPanel(), null);
 			contentTabbedPane.addTab("Service Properties", null, getServicePropertiesPanel(), null);
+			contentTabbedPane.addTab("Service Contexts", null, getResourceesTabbedPanel(), null);
 			contentTabbedPane.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent e) {
 					getNamespaceJTree().setNamespaces(info.getNamespaces());
-					getMetadataNamespacesJTree().setNamespaces(info.getNamespaces());
+					getResourcesJTree().setServices(info.getServices());
+					getMethodsTable().setMethods(info.getServices().getService(0).getMethods());
+					getRpHolderPanel().reInitialize(info.getServices().getService(0).getResourcePropertiesList(),info.getNamespaces());
+					
 				}
 			});
 			// diable the metadata tab if they've specified not to sync metadata
-			ResourcePropertiesListType metadataList = this.introService.getServices().getService(0).getResourcePropertiesList();
+			ResourcePropertiesListType metadataList = this.introService.getServices().getService(0)
+				.getResourcePropertiesList();
 			if (metadataList != null && metadataList.getSynchronizeResourceFramework() != null
 				&& !metadataList.getSynchronizeResourceFramework().booleanValue()) {
 				// Disable the tab
@@ -838,8 +834,8 @@ public class ModificationViewer extends GridPortalComponent {
 					try {
 						if (extDtype.getServiceModificationUIPanel() != null
 							&& !extDtype.getServiceModificationUIPanel().equals("")) {
-							ServiceModificationUIPanel extPanel = ExtensionTools.getServiceModificationUIPanel(
-								extDtype.getName(), info);
+							ServiceModificationUIPanel extPanel = ExtensionTools.getServiceModificationUIPanel(extDtype
+								.getName(), info);
 							contentTabbedPane.addTab(extDtype.getDisplayName(), null, extPanel, null);
 						}
 					} catch (Exception e) {
@@ -851,169 +847,6 @@ public class ModificationViewer extends GridPortalComponent {
 			}
 		}
 		return contentTabbedPane;
-	}
-
-
-	/**
-	 * This method initializes metadataPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getMetadataPanel() {
-		if (metadataPanel == null) {
-			GridBagConstraints gridBagConstraints35 = new GridBagConstraints();
-			gridBagConstraints35.gridx = 0;
-			gridBagConstraints35.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints35.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints35.weighty = 1.0D;
-			gridBagConstraints35.weightx = 1.0D;
-			gridBagConstraints35.gridy = 0;
-			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
-			gridBagConstraints12.gridx = 2;
-			gridBagConstraints12.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints12.gridy = 0;
-			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints1.gridx = 1;
-			gridBagConstraints1.gridy = 0;
-			gridBagConstraints1.weightx = 1.0;
-			gridBagConstraints1.weighty = 1.0;
-			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
-			metadataPanel = new JPanel();
-			metadataPanel.setLayout(new GridBagLayout());
-			metadataPanel.add(getMetadataScrollPane(), gridBagConstraints1);
-			metadataPanel.add(getMetadataButtonsPanel(), gridBagConstraints12);
-			metadataPanel.add(getMetadataNamespaceTypesPanel(), gridBagConstraints35);
-		}
-		return metadataPanel;
-	}
-
-
-	/**
-	 * This method initializes metadataScrollPane
-	 * 
-	 * @return javax.swing.JScrollPane
-	 */
-	private JScrollPane getMetadataScrollPane() {
-		if (metadataScrollPane == null) {
-			metadataScrollPane = new JScrollPane();
-			metadataScrollPane.setViewportView(getMetadataTable());
-		}
-		return metadataScrollPane;
-	}
-
-
-	/**
-	 * This method initializes metadataTable
-	 */
-	private ResourcePropertyTable getMetadataTable() {
-		if (metadataTable == null) {
-			metadataTable = new ResourcePropertyTable(introService.getServices().getService(0).getResourcePropertiesList());
-			metadataTable.addMouseListener(new MouseAdapter() {
-				public void mouseClicked(MouseEvent e) {
-					if (e.getClickCount() == 2) {
-						dirty = true;
-						performMetadataModify();
-					}
-				}
-			});
-		}
-		return metadataTable;
-	}
-
-
-	/**
-	 * This method initializes metadataButtonsPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getMetadataButtonsPanel() {
-		if (metadataButtonsPanel == null) {
-			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
-			gridBagConstraints15.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints15.gridy = 0;
-			gridBagConstraints15.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints15.gridx = 0;
-			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
-			gridBagConstraints14.gridx = 0;
-			gridBagConstraints14.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints14.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints14.gridy = 1;
-			metadataButtonsPanel = new JPanel();
-			metadataButtonsPanel.setLayout(new GridBagLayout());
-			metadataButtonsPanel.add(getAddMetadataButton(), gridBagConstraints15);
-			metadataButtonsPanel.add(getRemoveMetadataButton(), gridBagConstraints14);
-		}
-		return metadataButtonsPanel;
-	}
-
-
-	/**
-	 * This method initializes addMetadataButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getAddMetadataButton() {
-		if (addMetadataButton == null) {
-			addMetadataButton = new JButton();
-			addMetadataButton.setText("Add");
-			addMetadataButton.setToolTipText("add service metadata");
-			addMetadataButton.setIcon(IntroduceLookAndFeel.getAddIcon());
-			addMetadataButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					dirty = true;
-					ResourcePropertyType metadata = new ResourcePropertyType();
-
-					// add new metadata to array in bean
-					// this seems to be a wierd way be adding things....
-					ResourcePropertyType[] metadatas;
-					int newLength = 0;
-					if (introService.getServices().getService(0).getResourcePropertiesList() != null) {
-						newLength = introService.getServices().getService(0).getResourcePropertiesList().getResourceProperty().length + 1;
-						metadatas = new ResourcePropertyType[newLength];
-						System.arraycopy(introService.getServices().getService(0).getResourcePropertiesList().getResourceProperty(), 0, metadatas, 0, introService
-							.getServices().getService(0).getResourcePropertiesList().getResourceProperty().length);
-					} else {
-						newLength = 1;
-						metadatas = new ResourcePropertyType[newLength];
-					}
-					metadatas[newLength - 1] = metadata;
-					introService.getServices().getService(0).getResourcePropertiesList().setResourceProperty(metadatas);
-
-					getMetadataTable().addRow(metadata);
-
-					performMetadataModify();
-				}
-			});
-		}
-		return addMetadataButton;
-	}
-
-
-	/**
-	 * This method initializes removeMetadataButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getRemoveMetadataButton() {
-		if (removeMetadataButton == null) {
-			removeMetadataButton = new JButton();
-			removeMetadataButton.setText("Remove");
-			removeMetadataButton.setToolTipText("remove service metadata");
-			removeMetadataButton.setIcon(IntroduceLookAndFeel.getRemoveIcon());
-			removeMetadataButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					dirty = true;
-					int row = getMetadataTable().getSelectedRow();
-					if ((row < 0) || (row >= getMetadataTable().getRowCount())) {
-						PortalUtils.showErrorMessage("Please select a metdata type to remove.");
-						return;
-					}
-					getMetadataTable().removeRow(getMetadataTable().getSelectedRow());
-				}
-			});
-		}
-		return removeMetadataButton;
 	}
 
 
@@ -1372,73 +1205,6 @@ public class ModificationViewer extends GridPortalComponent {
 
 
 	/**
-	 * This method initializes metadataNamespaceTypesPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getMetadataNamespaceTypesPanel() {
-		if (metadataNamespaceTypesPanel == null) {
-			GridBagConstraints gridBagConstraints36 = new GridBagConstraints();
-			gridBagConstraints36.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints36.weighty = 1.0;
-			gridBagConstraints36.gridx = 0;
-			gridBagConstraints36.gridy = 0;
-			gridBagConstraints36.weightx = 1.0;
-			metadataNamespaceTypesPanel = new JPanel();
-			metadataNamespaceTypesPanel.setLayout(new GridBagLayout());
-			metadataNamespaceTypesPanel.add(getMetadataNamespaceScrollPane(), gridBagConstraints36);
-		}
-		return metadataNamespaceTypesPanel;
-	}
-
-
-	/**
-	 * This method initializes metadataNamespaceScrollPane
-	 * 
-	 * @return javax.swing.JScrollPane
-	 */
-	private JScrollPane getMetadataNamespaceScrollPane() {
-		if (metadataNamespaceScrollPane == null) {
-			metadataNamespaceScrollPane = new JScrollPane();
-			metadataNamespaceScrollPane
-				.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-			metadataNamespaceScrollPane.setViewportView(getMetadataNamespacesJTree());
-		}
-		return metadataNamespaceScrollPane;
-	}
-
-
-	/**
-	 * This method initializes metadataNamespacesJTree
-	 * 
-	 * @return javax.swing.JTree
-	 */
-	private NamespacesJTree getMetadataNamespacesJTree() {
-		if (metadataNamespacesJTree == null) {
-			metadataNamespacesJTree = new NamespacesJTree(introService.getNamespaces(), false);
-			metadataNamespacesJTree.addMouseListener(new MouseAdapter() {
-				public void mouseClicked(MouseEvent e) {
-					if (e.getClickCount() == 2) {
-						if (getMetadataNamespacesJTree().getCurrentNode() instanceof SchemaElementTypeTreeNode) {
-							NamespaceType nt = ((NamespaceType) ((NamespaceTypeTreeNode) getMetadataNamespacesJTree()
-								.getCurrentNode().getParent()).getUserObject());
-							SchemaElementType st = ((SchemaElementType) ((SchemaElementTypeTreeNode) getMetadataNamespacesJTree()
-								.getCurrentNode()).getUserObject());
-							ResourcePropertyType metadata = new ResourcePropertyType();
-							metadata.setQName(new QName(nt.getNamespace(), st.getType()));
-							metadata.setPopulateFromFile(false);
-							metadata.setRegister(false);
-							getMetadataTable().addRow(metadata);
-						}
-					}
-				}
-			});
-		}
-		return metadataNamespacesJTree;
-	}
-
-
-	/**
 	 * This method initializes discoveryTabbedPane
 	 * 
 	 * @return javax.swing.JTabbedPane
@@ -1493,14 +1259,6 @@ public class ModificationViewer extends GridPortalComponent {
 						MethodsType methods = new MethodsType();
 						methods.setMethod(methodsArray);
 						introService.getServices().getService(0).setMethods(methods);
-
-						// walk the metadata table and create the
-						// new ServiceMetadataType array
-						ResourcePropertyType[] metadataArray = new ResourcePropertyType[metadataTable.getRowCount()];
-						for (int i = 0; i < metadataArray.length; i++) {
-							ResourcePropertyType metadata = metadataTable.getRowData(i);
-							metadataArray[i] = metadata;
-						}
 
 						introService.setServiceSecurity(securityPanel.getServiceSecurity());
 
@@ -1675,13 +1433,13 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints39.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints39.gridy = 3;
 			gridBagConstraints39.weightx = 1.0;
-			gridBagConstraints39.insets = new java.awt.Insets(2,2,10,10);
+			gridBagConstraints39.insets = new java.awt.Insets(2, 2, 10, 10);
 			gridBagConstraints39.gridx = 0;
 			GridBagConstraints gridBagConstraints38 = new GridBagConstraints();
 			gridBagConstraints38.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints38.gridy = 1;
 			gridBagConstraints38.weightx = 1.0;
-			gridBagConstraints38.insets = new java.awt.Insets(2,2,10,10);
+			gridBagConstraints38.insets = new java.awt.Insets(2, 2, 10, 10);
 			gridBagConstraints38.gridx = 0;
 			servicePropertiesControlPanel = new JPanel();
 			servicePropertiesControlPanel.setLayout(new GridBagLayout());
@@ -1774,19 +1532,19 @@ public class ModificationViewer extends GridPortalComponent {
 
 
 	/**
-	 * This method initializes servicePropertiesButtonPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes servicePropertiesButtonPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getServicePropertiesButtonPanel() {
 		if (servicePropertiesButtonPanel == null) {
 			GridBagConstraints gridBagConstraints37 = new GridBagConstraints();
-			gridBagConstraints37.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints37.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints37.gridy = 0;
 			gridBagConstraints37.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints37.gridx = 0;
 			GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
-			gridBagConstraints32.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints32.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints32.gridy = 1;
 			gridBagConstraints32.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints32.gridx = 0;
@@ -1796,6 +1554,123 @@ public class ModificationViewer extends GridPortalComponent {
 			servicePropertiesButtonPanel.add(getAddServiceProperyButton(), gridBagConstraints37);
 		}
 		return servicePropertiesButtonPanel;
+	}
+
+
+	/**
+	 * This method initializes servicesTabbedPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getResourceesTabbedPanel() {
+		if (resourceesTabbedPanel == null) {
+			GridBagConstraints gridBagConstraints45 = new GridBagConstraints();
+			gridBagConstraints45.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints45.gridy = 0;
+			gridBagConstraints45.weightx = 1.0D;
+			gridBagConstraints45.weighty = 1.0D;
+			gridBagConstraints45.gridx = 1;
+			resourceesTabbedPanel = new JPanel();
+			resourceesTabbedPanel.setLayout(new GridBagLayout());
+			resourceesTabbedPanel.add(getResourcesPanel(), gridBagConstraints45);
+		}
+		return resourceesTabbedPanel;
+	}
+
+
+	/**
+	 * This method initializes resourcesPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getResourcesPanel() {
+		if (resourcesPanel == null) {
+			GridBagConstraints gridBagConstraints46 = new GridBagConstraints();
+			gridBagConstraints46.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints46.gridx = 0;
+			gridBagConstraints46.gridy = 0;
+			gridBagConstraints46.weightx = 1.0;
+			gridBagConstraints46.weighty = 1.0;
+			gridBagConstraints46.insets = new java.awt.Insets(2, 2, 2, 2);
+			resourcesPanel = new JPanel();
+			resourcesPanel.setLayout(new GridBagLayout());
+			resourcesPanel.add(getResourcesScrollPane(), gridBagConstraints46);
+		}
+		return resourcesPanel;
+	}
+
+
+	/**
+	 * This method initializes resourcesScrollPane
+	 * 
+	 * @return javax.swing.JScrollPane
+	 */
+	private JScrollPane getResourcesScrollPane() {
+		if (resourcesScrollPane == null) {
+			resourcesScrollPane = new JScrollPane();
+			resourcesScrollPane.setPreferredSize(new java.awt.Dimension(252, 84));
+			resourcesScrollPane.setViewportView(getResourcesJTree());
+		}
+		return resourcesScrollPane;
+	}
+
+
+	/**
+	 * This method initializes resourcesJTree
+	 * 
+	 * @return javax.swing.JTree
+	 */
+	private ServicesJTree getResourcesJTree() {
+		if (resourcesJTree == null) {
+			resourcesJTree = new ServicesJTree(info.getServices(), info);
+			resourcesJTree.addFocusListener(new FocusAdapter() {
+				public void focusGained(FocusEvent e) {
+					super.focusGained(e);
+					getResourcesJTree().setServices(info.getServices());
+				}
+
+			});
+		}
+		return resourcesJTree;
+	}
+
+
+	/**
+	 * This method initializes resourcePropertiesPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getResourcePropertiesPanel() {
+		if (resourcePropertiesPanel == null) {
+			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+			gridBagConstraints1.gridy = 0;
+			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints1.weightx = 1.0D;
+			gridBagConstraints1.weighty = 1.0D;
+			gridBagConstraints1.gridx = 0;
+			resourcePropertiesPanel = new JPanel();
+			resourcePropertiesPanel.setLayout(new GridBagLayout());
+			resourcePropertiesPanel.add(getRpHolderPanel(), gridBagConstraints1);
+		}
+		return resourcePropertiesPanel;
+	}
+
+
+	/**
+	 * This method initializes rpHolderPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private ModifyResourcePropertiesPanel getRpHolderPanel() {
+		if (rpHolderPanel == null) {
+			if (info.getServices().getService(0).getResourcePropertiesList() == null) {
+				ResourcePropertiesListType properties = new ResourcePropertiesListType();
+				info.getServices().getService(0).setResourcePropertiesList(properties);
+			}
+			rpHolderPanel = new ModifyResourcePropertiesPanel(info.getServices().getService(0)
+				.getResourcePropertiesList(), info.getNamespaces(),false);
+		}
+		return rpHolderPanel;
 	}
 
 } // @jve:decl-index=0:visual-constraint="10,10"

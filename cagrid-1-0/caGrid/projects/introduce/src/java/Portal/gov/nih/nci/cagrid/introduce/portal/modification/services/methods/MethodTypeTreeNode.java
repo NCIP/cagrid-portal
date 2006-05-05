@@ -46,7 +46,9 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services.methods;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.ServicesJTree;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPopupMenu;
@@ -66,10 +68,16 @@ import javax.swing.tree.DefaultTreeModel;
  */
 public class MethodTypeTreeNode extends DefaultMutableTreeNode {
 	private MethodPopUpMenu popUpMenu;
+	private ServiceInformation info;
+	private ServicesJTree tree;
+	MethodType method;
 	
-	public MethodTypeTreeNode(MethodType methodType,DefaultTreeModel model) {
+	public MethodTypeTreeNode(MethodType methodType,ServicesJTree tree,ServiceInformation info) {
 		super();
+		this.info = info;
+		this.tree = tree;
 		popUpMenu = new MethodPopUpMenu(this);
+		this.method = methodType;
 		this.setUserObject(methodType);
 	}
 	
@@ -83,6 +91,11 @@ public class MethodTypeTreeNode extends DefaultMutableTreeNode {
 	
 	public String toString(){
 		return CommonTools.methodTypeToString(((MethodType)this.getUserObject()));
+	}
+	
+	public void modifyMethod(){
+		MethodTypeTreeNode newNode = new MethodTypeTreeNode(method,tree,info);
+		((DefaultTreeModel)tree.getModel()).insertNodeInto(newNode,this,this.getChildCount());
 	}
 	
 	public JPopupMenu getPopUpMenu(){

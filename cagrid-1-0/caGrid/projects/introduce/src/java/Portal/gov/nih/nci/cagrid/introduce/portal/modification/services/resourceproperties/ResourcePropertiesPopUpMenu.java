@@ -2,17 +2,22 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproper
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.modification.methods.MethodViewer;
 
 import javax.swing.JPopupMenu;
 import javax.swing.JMenuItem;
 
+import org.projectmobius.portal.PortalResourceManager;
+
 public class ResourcePropertiesPopUpMenu extends JPopupMenu {
 
-	private JMenuItem addResourcePropertyMenuItem = null;
 	private ResourcePropertiesTypeTreeNode node;
+	private JMenuItem modifyResourcePropetiesMenuItem = null;
 	
 	/**
 	 * This method initializes 
@@ -29,31 +34,30 @@ public class ResourcePropertiesPopUpMenu extends JPopupMenu {
 	 * 
 	 */
 	private void initialize() {
-        this.add(getAddResourcePropertyMenuItem());
+        this.add(getModifyResourcePropetiesMenuItem());
 			
 	}
 
 	/**
-	 * This method initializes addResourcePropertyMenuItem	
+	 * This method initializes modifyResourcePropetiesMenuItem	
 	 * 	
 	 * @return javax.swing.JMenuItem	
 	 */
-	private JMenuItem getAddResourcePropertyMenuItem() {
-		if (addResourcePropertyMenuItem == null) {
-			addResourcePropertyMenuItem = new JMenuItem();
-			addResourcePropertyMenuItem.setText("Add Resource Property");
-			addResourcePropertyMenuItem.setIcon(IntroduceLookAndFeel.getAddIcon());
-			addResourcePropertyMenuItem.addMouseListener(new MouseAdapter() {
-			
+	private JMenuItem getModifyResourcePropetiesMenuItem() {
+		if (modifyResourcePropetiesMenuItem == null) {
+			modifyResourcePropetiesMenuItem = new JMenuItem();
+			modifyResourcePropetiesMenuItem.setText("Modify Properties");
+			modifyResourcePropetiesMenuItem.setIcon(IntroduceLookAndFeel.getModifyIcon());
+			modifyResourcePropetiesMenuItem.addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {
 					super.mousePressed(e);
-					ResourcePropertyType resource = new ResourcePropertyType();
-					node.add(resource);
+					PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+						new ModifyResourcePropertiesComponent(node.getResourceProperties(),node.getInfo().getNamespaces(),true));
 				}
 			
 			});
 		}
-		return addResourcePropertyMenuItem;
+		return modifyResourcePropetiesMenuItem;
 	}
 
 }
