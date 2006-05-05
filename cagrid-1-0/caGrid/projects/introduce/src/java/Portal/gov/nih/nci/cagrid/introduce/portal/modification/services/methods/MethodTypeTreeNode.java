@@ -91,13 +91,16 @@ public class MethodTypeTreeNode extends DefaultMutableTreeNode {
 		return CommonTools.methodTypeToString(((MethodType)this.getUserObject()));
 	}
 	
-	public void modifyMethod(){
-		MethodTypeTreeNode newNode = new MethodTypeTreeNode(method,model,info);
-		model.insertNodeInto(newNode,this,this.getChildCount());
-	}
-	
 	public JPopupMenu getPopUpMenu(){
 		return popUpMenu;
+	}
+
+	public MethodType getMethod() {
+		return method;
+	}
+
+	public ServiceInformation getInfo() {
+		return info;
 	}
 
 }

@@ -48,6 +48,7 @@ import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.Methods
 import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertiesTypeTreeNode;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertyTypeTreeNode;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 
@@ -118,13 +119,13 @@ public class ServicesTreeRenderer extends DefaultTreeCellRenderer {
 			this.setClosedIcon(null);
 			this.setText(node.toString());
 			this.setFont(normal);
-		} 
-		else if (value instanceof ResourcePropertyTypeTreeNode) {
+		} else if (value instanceof ResourcePropertyTypeTreeNode) {
 			ResourcePropertyTypeTreeNode node = (ResourcePropertyTypeTreeNode) value;
 			this.setOpenIcon(null);
 			this.setClosedIcon(null);
 			this.setText(node.toString());
 			this.setFont(normal.deriveFont(Font.ITALIC));
+			this.setForeground(Color.GRAY);
 		} 
 		return this;
 	}

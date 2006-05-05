@@ -93,6 +93,10 @@ public class ServiceTypeTreeNode extends DefaultMutableTreeNode {
 		model.insertNodeInto(newNode, this, this.getChildCount());
 		}
 	}
+	
+	public ServiceType getServiceType(){
+		return this.serviceType;
+	}
 
 
 	public ImageIcon getOpenIcon() {

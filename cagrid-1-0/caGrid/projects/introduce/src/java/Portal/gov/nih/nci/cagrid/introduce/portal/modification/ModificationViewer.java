@@ -681,8 +681,7 @@ public class ModificationViewer extends GridPortalComponent {
 		// TODO: check this.... setting this for now......
 
 		PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-			new MethodViewer(method, info, new File(methodsDirectory.getAbsolutePath() + File.separator + "schema"
-				+ File.separator + serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME))));
+			new MethodViewer(method, info));
 	}
 
 

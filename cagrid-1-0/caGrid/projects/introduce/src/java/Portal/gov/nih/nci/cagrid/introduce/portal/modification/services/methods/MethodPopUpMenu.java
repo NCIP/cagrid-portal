@@ -8,6 +8,8 @@ import java.awt.event.MouseEvent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import org.projectmobius.portal.PortalResourceManager;
+
 
 public class MethodPopUpMenu extends JPopupMenu {
 
@@ -65,13 +67,14 @@ public class MethodPopUpMenu extends JPopupMenu {
 		if (modifyMethodMenuItem == null) {
 			modifyMethodMenuItem = new JMenuItem();
 			modifyMethodMenuItem.setIcon(IntroduceLookAndFeel.getModifyIcon());
+			modifyMethodMenuItem.setText("Modify Method");
 			modifyMethodMenuItem.addMouseListener(new MouseAdapter() {
-
 				public void mousePressed(MouseEvent e) {
 					super.mousePressed(e);
-					node.modifyMethod();
+					PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+						new MethodViewer(node.getMethod(),node.getInfo()));
+					
 				}
-
 			});
 		}
 		return modifyMethodMenuItem;

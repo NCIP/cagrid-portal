@@ -73,8 +73,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JButton addInputParamButton = null;
 
-	private File schemaDir;
-
 	private JPanel namePanel = null;
 
 	private JTextField nameField = null;
@@ -85,9 +83,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JPanel inputButtonPanel = null;
 
-	//private MethodsTable methodsTable;
+	// private MethodsTable methodsTable;
 
-	//private int currentRow;
+	// private int currentRow;
 
 	private JButton cancelButton = null;
 
@@ -154,12 +152,11 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JPanel exceptionsInputButtonPanel = null;
 
 
-	public MethodViewer(MethodType method, ServiceInformation info, File schemaDir) {
+	public MethodViewer(MethodType method, ServiceInformation info) {
 		this.info = info;
 		this.method = method;
-		this.schemaDir = schemaDir;
-		//this.methodsTable = table;
-		//this.currentRow = selectedRow;
+		// this.methodsTable = table;
+		// this.currentRow = selectedRow;
 		this.setTitle("Modify Method");
 		initialize();
 	}
@@ -366,7 +363,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 						method.setMethodSecurity(((MethodSecurityPanel) securityContainerPanel).getMethodSecurity());
 
-						//methodsTable.refreshRowFromMethodType(currentRow);
+						// methodsTable.refreshRowFromMethodType(currentRow);
 
 						// process the inputs
 						MethodTypeInputs inputs = new MethodTypeInputs();
@@ -498,7 +495,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 		if (nameField == null) {
 			nameField = new JTextField();
 			nameField.setText(method.getName());
-			//nameField.setText(methodsTable.getSelectedMethodType().getName());
+			// nameField.setText(methodsTable.getSelectedMethodType().getName());
 		}
 		return nameField;
 	}
@@ -636,7 +633,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.gridx = 0;
 			gridBagConstraints3.anchor = java.awt.GridBagConstraints.SOUTHWEST;
-			gridBagConstraints3.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints3.gridy = 0;
 			faultNameLabel = new JLabel();
 			faultNameLabel.setText("Fault Name:");
@@ -645,7 +642,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			gridBagConstraints15.gridx = 0;
 			gridBagConstraints15.gridy = 1;
 			gridBagConstraints15.weightx = 1.0;
-			gridBagConstraints15.insets = new java.awt.Insets(2,2,2,10);
+			gridBagConstraints15.insets = new java.awt.Insets(2, 2, 2, 10);
 			gridBagConstraints15.gridheight = 1;
 			exceptionInputPanel = new JPanel();
 			exceptionInputPanel.setLayout(new GridBagLayout());
@@ -1016,7 +1013,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 		if (outputTypesTablePanel == null) {
 			GridBagConstraints gridBagConstraints26 = new GridBagConstraints();
 			gridBagConstraints26.gridx = 1;
-			gridBagConstraints26.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints26.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints26.gridy = 0;
 			GridBagConstraints gridBagConstraints23 = new GridBagConstraints();
 			gridBagConstraints23.gridx = 0;
@@ -1172,7 +1169,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 					MethodTypeOutput output = new MethodTypeOutput();
 					output.setQName(new QName("", "void"));
 					try {
-						getOutputTypeTable().modifyRow(0,output);
+						getOutputTypeTable().modifyRow(0, output);
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
@@ -1184,18 +1181,18 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 
 	/**
-	 * This method initializes exceptionsInputButtonPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes exceptionsInputButtonPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getExceptionsInputButtonPanel() {
 		if (exceptionsInputButtonPanel == null) {
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints5.gridy = 0;
 			gridBagConstraints5.gridx = 1;
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-			gridBagConstraints4.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints4.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints4.gridy = 0;
 			gridBagConstraints4.gridx = 0;
 			exceptionsInputButtonPanel = new JPanel();
