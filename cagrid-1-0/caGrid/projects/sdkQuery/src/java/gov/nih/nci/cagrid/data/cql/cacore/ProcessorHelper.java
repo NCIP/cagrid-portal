@@ -11,6 +11,9 @@ import gov.nih.nci.cagrid.data.QueryProcessingException;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,7 +58,7 @@ public class ProcessorHelper {
 		
 		// handle attribute
 		if (objectType.getAttribute() != null) {
-			Criterion attributeCriterion = handleAttribute(objectType.getAttribute());
+			Criterion attributeCriterion = handleAttribute(objectClass, objectType.getAttribute());
 			objectCriteria.add(attributeCriterion);
 		}
 		
@@ -90,7 +93,8 @@ public class ProcessorHelper {
 			throw new MalformedQueryException("Association from " + objectClass.getName() + " to " + associationType + " does not exist.  Use only direct associations");
 		}
 		DetachedCriteria associationCriteria = createQueryCriteria(association.getObject());
-		Criterion criteria = Property.forName(role).eq(associationCriteria);
+		Property roleProperty = Property.forName(role);
+		Criterion criteria = roleProperty.eq(associationCriteria);
 		return criteria;
 	}
 	
@@ -112,7 +116,7 @@ public class ProcessorHelper {
 	}
 	
 	
-	private static Criterion handleAttribute(Attribute attrib) throws MalformedQueryException, QueryProcessingException {
+	private static Criterion handleAttribute(Class objectClass, Attribute attrib) throws MalformedQueryException, QueryProcessingException {
 		String name = attrib.getName();
 		String value = attrib.getValue();
 		String predicate = attrib.getPredicate().getValue();
@@ -122,13 +126,48 @@ public class ProcessorHelper {
 		}
 		try {
 			if (factoryMethod.getParameterTypes().length == 2) {
-				return (Criterion) factoryMethod.invoke(null, new java.lang.Object[] {name, value});
+				java.lang.Object valueObject = convertToObject(name, value, objectClass);
+				return (Criterion) factoryMethod.invoke(null, new java.lang.Object[] {name, valueObject});
 			} else {
 				return (Criterion) factoryMethod.invoke(null, new java.lang.Object[] {name});
 			}
 		} catch (Exception ex) {
 			throw new QueryProcessingException("Error generating criterion for attribute " + name + ":" + ex.getMessage(), ex);
 		}
+	}
+	
+	
+	private static java.lang.Object convertToObject(String property, String value, Class objectType) throws MalformedQueryException, QueryProcessingException {
+		Field field = null;
+		try {
+			 field = objectType.getField(property);
+		} catch (NoSuchFieldException ex) {
+			throw new MalformedQueryException("No property " + property + " was found on type " + objectType.getName());
+		}
+		Class propertyType = field.getType();
+		if (propertyType == String.class) {
+			return value;
+		}
+		if (propertyType == Integer.class) {
+			return Integer.valueOf(value);
+		}
+		if (propertyType == Long.class) {
+			return Long.valueOf(value);
+		}
+		if (propertyType == Date.class) {
+			try {
+				return DateFormat.getInstance().parse(value);
+			} catch (ParseException ex) {
+				throw new QueryProcessingException("Error parsing date: " + ex.getMessage(), ex);
+			}
+		}
+		if (propertyType == Boolean.class) {
+			return Boolean.valueOf(value);
+		}
+		if (propertyType == Character.class) {
+			return Character.valueOf(value.charAt(0));
+		}
+		return null;
 	}
 	
 	
@@ -172,7 +211,7 @@ public class ProcessorHelper {
 		
 		// attributes
 		for (int i = 0; group.getAttribute() != null && i < group.getAttribute().length; i++) {
-			Criterion attribCriterion = handleAttribute(group.getAttribute(i));
+			Criterion attribCriterion = handleAttribute(objectClass, group.getAttribute(i));
 			junction.add(attribCriterion);
 		}
 		// associations
