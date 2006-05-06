@@ -42,44 +42,21 @@
 	<!-- Call test for each project and aggregates the log resutls       -->
 	<!-- =============================================================== -->
 	<target name="test" depends="createDartTestFiles" description="Test all the projects.">
-		<sequential>
-			<!-- Clean out old logs first -->
-			<delete>
-				<fileset dir="${junit.results.dir}">
-					<include name="*"/>
-				</fileset>
-			</delete>
-			<parallel>
-				<!-- Now run all the projects' test, sharing the same log dir -->
-				<ant inheritall="false" dir="projects/dorian" antfile="build.xml" target="test">
+		<!-- Clean out old logs first -->
+		<delete>
+			<fileset dir="${junit.results.dir}">
+				<include name="*"/>
+			</fileset>
+		</delete>
+		<for list="${testable.projects.list}" parallel="true" param="project.name" trim="true">
+			<sequential>
+				<echo message="Testing project @{project.name}."/>
+				<ant inheritall="false" dir="projects/@{project.name}" antfile="build.xml"
+					target="test">
 					<property name="junit.results.dir" value="${junit.results.dir}"/>
 				</ant>
-				<ant inheritall="false" dir="projects/introduce" antfile="build.xml" target="test">
-					<property name="junit.results.dir" value="${junit.results.dir}"/>
-				</ant>
-				<ant inheritall="false" dir="projects/core" antfile="build.xml" target="test">
-					<property name="junit.results.dir" value="${junit.results.dir}"/>
-				</ant>
-				<ant inheritall="false" dir="projects/discovery" antfile="build.xml" target="test">
-					<property name="junit.results.dir" value="${junit.results.dir}"/>
-				</ant>
-				<ant inheritall="false" dir="projects/gridca" antfile="build.xml" target="test">
-					<property name="junit.results.dir" value="${junit.results.dir}"/>
-				</ant>
-				<ant inheritall="false" dir="projects/gts" antfile="build.xml" target="test">
-					<property name="junit.results.dir" value="${junit.results.dir}"/>
-				</ant>
-				<ant inheritall="false" dir="projects/cql2xpath" antfile="build.xml" target="test">
-					<property name="junit.results.dir" value="${junit.results.dir}"/>
-				</ant>
-				<ant inheritall="false" dir="projects/data" antfile="build.xml" target="test">
-					<property name="junit.results.dir" value="${junit.results.dir}"/>
-				</ant>
-				<ant inheritall="false" dir="projects/sdkQuery" antfile="build.xml" target="test">
-					<property name="junit.results.dir" value="${junit.results.dir}"/>
-				</ant>
-			</parallel>
-		</sequential>
+			</sequential>
+		</for>
 	</target>
 	<!-- =============================================================== -->
 	<!-- Set the proxy, and publish the results to dart                  -->
