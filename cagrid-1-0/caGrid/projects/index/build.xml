@@ -38,5 +38,6 @@
 		</ant>
 	</target>
 
+	<target name="clean">
+	</target>
 </project>
-
