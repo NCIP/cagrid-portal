@@ -41,7 +41,7 @@
 	<!-- =============================================================== -->
 	<!-- Call test for each project and aggregates the log resutls       -->
 	<!-- =============================================================== -->
-	<target name="test" depends="createDartTestFiles" description="Test all the projects.">
+	<target name="test" depends="prepare,createDartTestFiles" description="Test all the projects.">
 		<!-- Clean out old logs first -->
 		<delete>
 			<fileset dir="${junit.results.dir}">
