@@ -16,6 +16,8 @@ import org.apache.tools.ant.types.FileSet;
  */
 public class ResolveDependencies extends Task {
 
+	public static final String SKIP_ANTCALLS_PROPERTY = "skip.artifact.antcalls";
+
 	private List artifactList;
 	private File extDir;
 	private File targetDir;
@@ -64,8 +66,12 @@ public class ResolveDependencies extends Task {
 				String calledProperty = this.getProject().getProperty(prop);
 				if (calledProperty != null) {
 					System.out.println("Skipping dependent artifact's ant call, as propery was set:" + prop);
+				} else if (this.getProject().getProperty(SKIP_ANTCALLS_PROPERTY) != null ) {
+					System.out.println("Skipping all artifact ant calls, as global propery was set:"
+						+ SKIP_ANTCALLS_PROPERTY);
 				} else {
-					System.out.println("Calling dependent artifact's ant call for first time; setting property:" + prop);
+					System.out
+						.println("Calling dependent artifact's ant call for first time; setting property:" + prop);
 					this.getProject().setProperty(prop, "true");
 					antCall.setProject(this.getProject());
 					antCall.execute();
