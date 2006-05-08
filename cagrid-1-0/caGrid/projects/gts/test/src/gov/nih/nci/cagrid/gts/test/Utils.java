@@ -20,13 +20,19 @@ import org.projectmobius.db.ConnectionManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: Utils.java,v 1.6 2006-05-05 18:36:50 langella Exp $
+ * @version $Id: Utils.java,v 1.7 2006-05-08 00:43:40 langella Exp $
  */
 public class Utils {
 
 	private static final String DB = "TEST_GTS";
 
+
 	public static DBManager getDBManager() throws Exception {
+		return getMySQLManager();
+	}
+
+
+	public static DBManager getMySQLManager() throws Exception {
 		InputStream resource = TestCase.class.getResourceAsStream(GTSConstants.DB_CONFIG);
 		Document doc = XMLUtilities.streamToDocument(resource);
 		ConnectionManager cm = new ConnectionManager(doc.getRootElement());
@@ -35,6 +41,8 @@ public class Utils {
 		db.createDatabase();
 		return new MySQLManager(db);
 	}
+
+
 
 	public static Database getDB() throws Exception {
 		InputStream resource = TestCase.class.getResourceAsStream(GTSConstants.DB_CONFIG);
