@@ -5,7 +5,7 @@
   <ns1:DiscoveryPanelExtension>gov.nih.nci.cagrid.introduce.portal.modification.discovery.gme.GMETypeSelectionComponent</ns1:DiscoveryPanelExtension>
   <ns1:Properties>
    <property key="GME_URL"
-    value="http://dc01.bmi.ohio-state.edu:8080/wsrf/services/cagrid/GlobalModelExchange"/>
+    value="http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/cagrid/GlobalModelExchange"/>
   </ns1:Properties>
  </ns1:DiscoveryExtensionDescription>
 </ns1:ExtensionDescription>
