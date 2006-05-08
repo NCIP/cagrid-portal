@@ -210,7 +210,7 @@ public class SyncSource {
 		methodString += "public " + returnType + " " + methodName + "(";
 
 		// boxed
-		methodString += this.packageName + "." + service.getName() + TemplateUtils.upperCaseFirstCharacter(methodName) + " params";
+		methodString += this.packageName + "." + service.getName() + TemplateUtils.upperCaseFirstCharacter(methodName) + "Request params";
 
 		methodString += ")";
 		return methodString;
@@ -223,7 +223,7 @@ public class SyncSource {
 		String returnType = "";
 
 		// need to box the output type
-		returnType = this.packageName + "." + getBoxedOutputTypeName(service.getName(), methodName);
+		returnType = this.packageName + "." + getBoxedOutputTypeName(service.getName(), methodName) + "Response";
 
 		methodString += "public " + returnType + " " + methodName + "(";
 		// Parameter[] inputs = method.getParams();
@@ -531,8 +531,8 @@ public class SyncSource {
 		}
 		// always a boxed call now becuase using complex types in the wsdl
 		// create handle for the boxed wrapper
-		methodString += this.packageName + "." + service.getName() + TemplateUtils.upperCaseFirstCharacter(methodName) + " params = new "
-			+ this.packageName + "." + service.getName() + TemplateUtils.upperCaseFirstCharacter(methodName) + "();\n";
+		methodString += this.packageName + "." + service.getName() + TemplateUtils.upperCaseFirstCharacter(methodName) + "Request params = new "
+			+ this.packageName + "." + service.getName() + TemplateUtils.upperCaseFirstCharacter(methodName) + "Request();\n";
 		// set the values fo the boxed wrapper
 		if (method.getInputs() != null && method.getInputs().getInput() != null) {
 			for (int j = 0; j < method.getInputs().getInput().length; j++) {
