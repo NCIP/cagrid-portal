@@ -73,12 +73,12 @@ public class ResourcePropertyTypeTreeNode extends DefaultMutableTreeNode {
 
 
 	public ImageIcon getOpenIcon() {
-		return IntroduceLookAndFeel.getResourceIcon();
+		return IntroduceLookAndFeel.getResourcePropertyIcon();
 	}
 
 
 	public ImageIcon getClosedIcon() {
-		return IntroduceLookAndFeel.getResourceIcon();
+		return IntroduceLookAndFeel.getResourcePropertyIcon();
 	}
 
 

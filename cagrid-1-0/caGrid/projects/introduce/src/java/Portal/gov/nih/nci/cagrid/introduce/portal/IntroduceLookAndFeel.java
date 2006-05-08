@@ -21,15 +21,23 @@ public class IntroduceLookAndFeel extends PortalLookAndFeel {
 		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/view-refresh.png"));
 	}
 
-	public final static ImageIcon getCreateIcon() {
-		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/cog_add.png"));
+	public final static ImageIcon getServiceIcon() {
+		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/cog.png"));
 	}
 	
 	public final static ImageIcon getModifyServiceIcon() {
 		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/cog_edit.png"));
 	}
 	
-	public final static ImageIcon getResourceIcon() {
+	public final static ImageIcon getCreateServiceIcon() {
+		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/cog_add.png"));
+	}
+	
+	public final static ImageIcon getResourcePropertyIcon() {
+		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/cog_add.png"));
+	}
+	
+	public final static ImageIcon getMethodIcon() {
 		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/cog_add.png"));
 	}
 

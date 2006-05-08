@@ -80,11 +80,11 @@ public class MethodTypeTreeNode extends DefaultMutableTreeNode {
 	}
 	
 	public ImageIcon getOpenIcon(){
-		return IntroduceLookAndFeel.getResourceIcon();
+		return IntroduceLookAndFeel.getMethodIcon();
 	}
 	
 	public ImageIcon getClosedIcon(){
-		return IntroduceLookAndFeel.getResourceIcon();
+		return IntroduceLookAndFeel.getMethodIcon();
 	}
 	
 	public String toString(){

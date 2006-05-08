@@ -84,7 +84,7 @@ public class CreationViewer extends GridPortalComponent {
 	 */
 	private void initialize() {
 		this.setContentPane(getMainPanel());
-		this.setFrameIcon(IntroduceLookAndFeel.getCreateIcon());
+		this.setFrameIcon(IntroduceLookAndFeel.getCreateServiceIcon());
 		this.setTitle("Create Grid Service");
 	}
 
@@ -270,7 +270,7 @@ public class CreationViewer extends GridPortalComponent {
 		if (createButton == null) {
 			createButton = new JButton();
 			createButton.setText("Create");
-			createButton.setIcon(IntroduceLookAndFeel.getCreateIcon());
+			createButton.setIcon(IntroduceLookAndFeel.getCreateServiceIcon());
 			createButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					createService();

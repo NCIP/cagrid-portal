@@ -100,12 +100,12 @@ public class ServiceTypeTreeNode extends DefaultMutableTreeNode {
 
 
 	public ImageIcon getOpenIcon() {
-		return IntroduceLookAndFeel.getModifyServiceIcon();
+		return IntroduceLookAndFeel.getServiceIcon();
 	}
 
 
 	public ImageIcon getClosedIcon() {
-		return IntroduceLookAndFeel.getModifyServiceIcon();
+		return IntroduceLookAndFeel.getServiceIcon();
 	}
 
 
