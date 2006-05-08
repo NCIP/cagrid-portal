@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.data.ui.types;
 
 import gov.nih.nci.cadsr.umlproject.domain.Project;
+import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
@@ -15,6 +16,7 @@ import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.ServiceModificationUIPanel;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.metadata.common.UMLClass;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -280,10 +282,17 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					UMLPackageMetadata pack = getDomainBrowserPanel().getSelectedPackage();
 					if (pack != null) {
-						System.out.println("Package selected");
 						NamespaceType nsType = createNamespaceFromUmlPackage(pack);
 						getTypesTree().setNamespace(nsType);
 						addTreeNamespaceToServiceDescription();
+					}
+					UMLClassMetadata[] umlClassMetadata = pack.getUMLClassMetadataCollection();
+					for (int i = 0; i < umlClassMetadata.length; i++) {
+						UMLClassMetadata classMd = umlClassMetadata[i];
+						UMLClass clazz = new UMLClass();
+						clazz.set_package(pack.getName());
+						clazz.setClassname(classMd.getName());
+						clazz.setDescription(classMd.getDescription());
 					}
 				}
 			});
