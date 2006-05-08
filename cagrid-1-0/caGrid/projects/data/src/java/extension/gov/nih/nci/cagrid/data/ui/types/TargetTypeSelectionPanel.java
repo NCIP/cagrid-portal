@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.data.ui.types;
 
 import gov.nih.nci.cadsr.umlproject.domain.Project;
-import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
@@ -16,7 +15,6 @@ import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.ServiceModificationUIPanel;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
-import gov.nih.nci.cagrid.metadata.common.UMLClass;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -286,14 +284,15 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 						getTypesTree().setNamespace(nsType);
 						addTreeNamespaceToServiceDescription();
 					}
+					/*
 					UMLClassMetadata[] umlClassMetadata = pack.getUMLClassMetadataCollection();
 					for (int i = 0; i < umlClassMetadata.length; i++) {
 						UMLClassMetadata classMd = umlClassMetadata[i];
-						UMLClass clazz = new UMLClass();
-						clazz.set_package(pack.getName());
-						clazz.setClassname(classMd.getName());
-						clazz.setDescription(classMd.getDescription());
+						UMLClass clazz = MetadataUtilities.createUmlClass(classMd);
+						// TODO: now what?
 					}
+					*/
+					storeCaDSRInfo();
 				}
 			});
 		}
@@ -532,6 +531,49 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 				MessageElement[] newAnys = new MessageElement[anys.length + 1];
 				System.arraycopy(anys, 0, newAnys, 0, anys.length);
 				newAnys[newAnys.length - 1] = processorElement;
+				anys = newAnys;
+			}
+		}
+		extensionData.set_any(anys);
+	}
+	
+	
+	private void storeCaDSRInfo() {
+		ExtensionTypeExtensionData extensionData = getExtensionData();
+		Element cadsr = new Element(DataServiceConstants.CADSR_ELEMENT_NAME);
+		cadsr.setAttribute(DataServiceConstants.CADSR_URL_ATTRIB,
+			getDomainBrowserPanel().getCadsr().getText());
+		cadsr.setAttribute(DataServiceConstants.CADSR_PROJECT_ATTRIB,
+			getDomainBrowserPanel().getSelectedProject().getLongName());
+		cadsr.setAttribute(DataServiceConstants.CADSR_PACKAGE_ATTRIB,
+			getDomainBrowserPanel().getSelectedPackage().getName());
+		Document doc = new Document();
+		doc.setRootElement(cadsr);
+		org.w3c.dom.Document tempDoc = null;
+		try {
+			tempDoc = new DOMOutputter().output(doc);
+		} catch (JDOMException ex) {
+			ex.printStackTrace();
+		}
+		MessageElement cadsrElement = new MessageElement(tempDoc.getDocumentElement());
+		MessageElement[] anys = extensionData.get_any();
+		if (anys == null) {
+			anys = new MessageElement[1];
+			anys[0] = cadsrElement;
+		} else {
+			// find the cadsr info element, if it exists
+			boolean valueSet = false;
+			for (int i = 0; i < anys.length; i++) {
+				if (anys[i].getName().equals(DataServiceConstants.QUERY_PROCESSOR_ELEMENT_NAME)) {
+					anys[i] = cadsrElement;
+					valueSet = true;
+					break;
+				}
+			}
+			if (!valueSet) {
+				MessageElement[] newAnys = new MessageElement[anys.length + 1];
+				System.arraycopy(anys, 0, newAnys, 0, anys.length);
+				newAnys[newAnys.length - 1] = cadsrElement;
 				anys = newAnys;
 			}
 		}

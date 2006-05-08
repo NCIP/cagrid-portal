@@ -12,6 +12,7 @@ package gov.nih.nci.cagrid.data.common;
  */
 public class DataServiceConstants {
 
+	// query schema constants
 	public static final String CQL_QUERY_SCHEMA = "1_gov.nih.nci.cagrid.CQLQuery.xsd";
 	public static final String CQL_RESULT_SET_SCHEMA = "1_gov.nih.nci.cagrid.CQLResultSet.xsd";
 	public static final String CQL_QUERY_URI = "http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery";
@@ -36,6 +37,12 @@ public class DataServiceConstants {
 		"QueryProcessingException", "MalformedQueryException"
 	};
 	public static final String QUERY_PROCESSOR_ELEMENT_NAME = "queryProcessorClass";
+	
+	// cadsr info constants
+	public static final String CADSR_ELEMENT_NAME = "caDSRInformation";
+	public static final String CADSR_URL_ATTRIB = "url";
+	public static final String CADSR_PROJECT_ATTRIB = "project";
+	public static final String CADSR_PACKAGE_ATTRIB = "package";
 
 	private DataServiceConstants() {
 		

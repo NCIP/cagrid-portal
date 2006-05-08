@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.data.common;
 
-import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLAssociationMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata;
@@ -76,12 +75,12 @@ public class MetadataUtilities {
 	}
 	
 	
-	public static DomainModel createDomainModel(Project proj) {
+	public static DomainModel createDomainModel(UMLPackageMetadata pkg) {
 		DomainModel model = new DomainModel();
-		model.setProjectDescription(proj.getDescription());
-		model.setProjectLongName(proj.getLongName());
-		model.setProjectShortName(proj.getShortName());
-		model.setProjectVersion(proj.getVersion());
+		model.setProjectDescription(pkg.getProject().getDescription());
+		model.setProjectLongName(pkg.getProject().getLongName());
+		model.setProjectShortName(pkg.getProject().getShortName());
+		model.setProjectVersion(pkg.getProject().getVersion());
 		return model;
 	}
 	
