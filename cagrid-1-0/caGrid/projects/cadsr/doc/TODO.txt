@@ -1,6 +1,8 @@
 
 cadsr api bug.. returning too many classes when there are package aliases
 
+caCORE provided XSD's have the wrong namespace (caCORE.cabig instead of caCORE.caBIG), I've corrected them locally... need to rectify
+
 caching using resources?
 
 

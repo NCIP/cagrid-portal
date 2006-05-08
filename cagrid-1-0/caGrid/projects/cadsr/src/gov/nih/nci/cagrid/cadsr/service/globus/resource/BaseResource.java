@@ -45,8 +45,8 @@ public class BaseResource implements Resource, ResourceProperties {
 	private URL baseURL;
 
 	//Define the metadata resource properties
-	private ResourceProperty commonServiceMetadataRP;
-	private gov.nih.nci.cagrid.metadata.common.CommonServiceMetadataType commonServiceMetadataMD;
+	private ResourceProperty serviceMetadataRP;
+	private gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadataMD;
 	
 
 
@@ -60,11 +60,11 @@ public class BaseResource implements Resource, ResourceProperties {
 		populateMetadata();
 		
 		// now add the metadata as resource properties		//init the rp
-		this.commonServiceMetadataRP = new SimpleResourceProperty(ResourceConstants.COMMONSERVICEMETADATA_MD_RP);
+		this.serviceMetadataRP = new SimpleResourceProperty(ResourceConstants.SERVICEMETADATA_MD_RP);
 		//add the value to the rp
-		this.commonServiceMetadataRP.add(this.commonServiceMetadataMD);
+		this.serviceMetadataRP.add(this.serviceMetadataMD);
 		//add the rp to the prop set
-		this.propSet.add(this.commonServiceMetadataRP);
+		this.propSet.add(this.serviceMetadataRP);
 	
 
 
@@ -184,18 +184,18 @@ public class BaseResource implements Resource, ResourceProperties {
 
 	private void populateMetadata() {
 	
-		loadCommonServiceMetadataFromFile();
+		loadServiceMetadataFromFile();
 	
 	}
 
 
 		
-	private void loadCommonServiceMetadataFromFile() {
+	private void loadServiceMetadataFromFile() {
 		try {
 			File dataFile = new File(ContainerConfig.getBaseDirectory() + File.separator
-					+ getConfiguration().getCommonServiceMetadataFile());
-			this.commonServiceMetadataMD = (gov.nih.nci.cagrid.metadata.common.CommonServiceMetadataType) Utils.deserializeDocument(dataFile.getAbsolutePath(),
-				gov.nih.nci.cagrid.metadata.common.CommonServiceMetadataType.class);
+					+ getConfiguration().getServiceMetadataFile());
+			this.serviceMetadataMD = (gov.nih.nci.cagrid.metadata.ServiceMetadata) Utils.deserializeDocument(dataFile.getAbsolutePath(),
+				gov.nih.nci.cagrid.metadata.ServiceMetadata.class);
 		} catch (Exception e) {
 			logger.error("ERROR: problem populating metadata from file: " + e.getMessage(), e);
 		}

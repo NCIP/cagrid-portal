@@ -23,20 +23,20 @@
     <types>
         <schema targetNamespace="http://cadsr.cagrid.nci.nih.gov/CaDSRService"
             xmlns:tns="http://cadsr.cagrid.nci.nih.gov/CaDSRService"
-			xmlns:ns2="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" 
+			xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" 
 			
-			xmlns:ns0="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" 
+			xmlns:ns0="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" 
 			
-			xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" 
+			xmlns:ns1="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" 
 			
             xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
 			<import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd"/>
 		
-			<import namespace="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" schemaLocation="./3.0_gov.nih.nci.cadsr.domain.xsd"/>
+			<import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" schemaLocation="./1.0_gov.nih.nci.cagrid.metadata.xsd"/>
 			   
-			<import namespace="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" schemaLocation="./3.0_gov.nih.nci.cadsr.umlproject.domain.xsd"/>
+			<import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" schemaLocation="./3.0_gov.nih.nci.cadsr.umlproject.domain.xsd"/>
 			   
-			<import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" schemaLocation="./1.0_gov.nih.nci.cagrid.metadata.common.xsd"/>
+			<import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" schemaLocation="./3.0_gov.nih.nci.cadsr.domain.xsd"/>
 			   
       	
       	
@@ -354,7 +354,7 @@
 					<complexType>
 						<sequence>
           		  
-										<element ref="ns2:ValueDomain" minOccurs="1" maxOccurs="1" />
+										<element ref="ns1:ValueDomain" minOccurs="1" maxOccurs="1" />
 			                  		
 						</sequence>
 					</complexType>
@@ -362,7 +362,7 @@
             <element name="CaDSRServiceResourceProperties">
                 <complexType>
                     <sequence>
-						<element ref="ns1:CommonServiceMetadata"/></sequence>
+						<element ref="ns2:ServiceMetadata"/></sequence>
                 </complexType>
             </element>
         </schema>

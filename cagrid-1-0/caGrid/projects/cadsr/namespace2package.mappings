@@ -1,7 +1,10 @@
  http\://cadsr.cagrid.nci.nih.gov/CaDSRService=gov.nih.nci.cagrid.cadsr.stubs
 http\://cadsr.cagrid.nci.nih.gov/CaDSRService/bindings=gov.nih.nci.cagrid.cadsr.stubs.bindings
 http\://cadsr.cagrid.nci.nih.gov/CaDSRService/service=gov.nih.nci.cagrid.cadsr.stubs.service
-gme\://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain=gov.nih.nci.cadsr.domain
-gme\://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain=gov.nih.nci.cadsr.umlproject.domain
-gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common=gov.nih.nci.cagrid.metadata.common
+gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata=gov.nih.nci.cagrid.metadata
+gme\://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain=gov.nih.nci.cadsr.umlproject.domain
+gme\://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain=gov.nih.nci.cadsr.domain
+gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service=gov.nih.nci.cagrid.metadata.service
 
+
+gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common=gov.nih.nci.cagrid.metadata.common

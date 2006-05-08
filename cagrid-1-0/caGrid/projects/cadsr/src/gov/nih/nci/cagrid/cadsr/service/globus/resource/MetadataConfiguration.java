@@ -3,7 +3,7 @@ package gov.nih.nci.cagrid.cadsr.service.globus.resource;
 public class MetadataConfiguration {
 	private String registrationTemplateFile;
 	private boolean performRegistration;
-	private String commonServiceMetadataFile;
+	private String serviceMetadataFile;
 
 
 
@@ -28,13 +28,13 @@ public class MetadataConfiguration {
 	
 	
 	
-	public String getCommonServiceMetadataFile() {
-		return commonServiceMetadataFile;
+	public String getServiceMetadataFile() {
+		return serviceMetadataFile;
 	}
 	
 	
-	public void setCommonServiceMetadataFile(String commonServiceMetadataFile) {
-		this.commonServiceMetadataFile = commonServiceMetadataFile;
+	public void setServiceMetadataFile(String serviceMetadataFile) {
+		this.serviceMetadataFile = serviceMetadataFile;
 	}
 		
 }

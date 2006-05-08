@@ -40,7 +40,7 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 	}
 
 
-	public gov.nih.nci.cadsr.umlproject.domain.Project[] findAllProjects() throws RemoteException {
+	     public gov.nih.nci.cadsr.umlproject.domain.Project[] findAllProjects() throws RemoteException {
 		try {
 			ApplicationService appService = getApplicationService();
 			LOG.debug("Using basic search. Retrieving allprojects");
@@ -70,7 +70,7 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 	}
 
 
-	public gov.nih.nci.cadsr.umlproject.domain.Project[] findProjects(java.lang.String context) throws RemoteException {
+	     public gov.nih.nci.cadsr.umlproject.domain.Project[] findProjects(java.lang.String context) throws RemoteException {
 		try {
 			ApplicationService appService = getApplicationService();
 			LOG.debug("Using basic search. Retrieving all projects under context:" + context);
@@ -106,8 +106,7 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 	}
 
 
-	public gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata[] findPackagesInProject(
-		gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException {
+	     public gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata[] findPackagesInProject(gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException {
 		try {
 			ApplicationService appService = getApplicationService();
 			LOG.debug("Using basic search. Retrieving all packages under project:" + project.getShortName());
@@ -138,8 +137,7 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 	}
 
 
-	public gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] findClassesInProject(
-		gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException {
+	     public gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] findClassesInProject(gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException {
 		try {
 			ApplicationService appService = getApplicationService();
 			LOG.debug("Using basic search. Retrieving all classes under project:" + project.getShortName());
@@ -170,8 +168,7 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 	}
 
 
-	public gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] findClassesInPackage(
-		gov.nih.nci.cadsr.umlproject.domain.Project project, java.lang.String packageName) throws RemoteException {
+	     public gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] findClassesInPackage(gov.nih.nci.cadsr.umlproject.domain.Project project,java.lang.String packageName) throws RemoteException {
 		try {
 			ApplicationService appService = getApplicationService();
 			LOG.debug("Using basic search. Retrieving all classes under package:" + packageName);
@@ -205,9 +202,7 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 	}
 
 
-	public gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata[] findAttributesInClass(
-		gov.nih.nci.cadsr.umlproject.domain.Project project, gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata clazz)
-		throws RemoteException {
+	     public gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata[] findAttributesInClass(gov.nih.nci.cadsr.umlproject.domain.Project project,gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata clazz) throws RemoteException {
 		try {
 			ApplicationService appService = getApplicationService();
 			LOG.debug("Using basic search. Retrieving all attributes under class:" + clazz.getName());
@@ -239,9 +234,7 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 	}
 
 
-	public gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata[] findSemanticMetadataForClass(
-		gov.nih.nci.cadsr.umlproject.domain.Project project, gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata clazz)
-		throws RemoteException {
+	     public gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata[] findSemanticMetadataForClass(gov.nih.nci.cadsr.umlproject.domain.Project project,gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata clazz) throws RemoteException {
 		try {
 			ApplicationService appService = getApplicationService();
 			LOG.debug("Using basic search. Retrieving all semantics for class:" + clazz.getName());
@@ -272,9 +265,7 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 	}
 
 
-	public gov.nih.nci.cadsr.domain.ValueDomain findValueDomainForAttribute(
-		gov.nih.nci.cadsr.umlproject.domain.Project project,
-		gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata attribute) throws RemoteException {
+	     public gov.nih.nci.cadsr.domain.ValueDomain findValueDomainForAttribute(gov.nih.nci.cadsr.umlproject.domain.Project project,gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata attribute) throws RemoteException {
 		try {
 			ApplicationService appService = getApplicationService();
 			LOG.debug("Using basic search. Retrieving value domain for attribute:" + attribute.getName());
@@ -309,22 +300,19 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 	}
 
 
-	public java.lang.String generateMetadataExtractForProject(gov.nih.nci.cadsr.umlproject.domain.Project project)
-		throws RemoteException {
+	     public java.lang.String generateMetadataExtractForProject(gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException {
 		// TODO: Implement this autogenerated method
 		throw new RemoteException("Not yet implemented");
 	}
 
 
-	public java.lang.String generateMetadataExtractForPackages(gov.nih.nci.cadsr.umlproject.domain.Project project,
-		java.lang.String[] packageNames) throws RemoteException {
+	     public java.lang.String generateMetadataExtractForPackages(gov.nih.nci.cadsr.umlproject.domain.Project project,java.lang.String[] packageNames) throws RemoteException {
 		// TODO: Implement this autogenerated method
 		throw new RemoteException("Not yet implemented");
 	}
 
 
-	public java.lang.String generateMetadataExtractForClasses(gov.nih.nci.cadsr.umlproject.domain.Project project,
-		gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] classes) throws RemoteException {
+	     public java.lang.String generateMetadataExtractForClasses(gov.nih.nci.cadsr.umlproject.domain.Project project,gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] classes) throws RemoteException {
 		// TODO: Implement this autogenerated method
 		throw new RemoteException("Not yet implemented");
 	}

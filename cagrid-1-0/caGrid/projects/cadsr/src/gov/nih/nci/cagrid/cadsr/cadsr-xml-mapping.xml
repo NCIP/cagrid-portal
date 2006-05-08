@@ -2,7 +2,7 @@
 <!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN" "http://www.castor.org/mapping.dtd">
 <mapping>
   <class name="gov.nih.nci.cadsr.umlproject.domain.Project">
-    <map-to xml="Project" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+    <map-to xml="Project" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
     <field name="id" type="string">
       <bind-xml name="id" node="attribute"/>
     </field>
@@ -20,7 +20,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.umlproject.domain.SubProject">
-    <map-to xml="SubProject" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+    <map-to xml="SubProject" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
     <field name="id" type="string">
       <bind-xml name="id" node="attribute"/>
     </field>
@@ -33,7 +33,7 @@
   </class>
   <class name="gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata">
     <map-to xml="UMLPackageMetadata"
-      ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+      ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
     <field name="id" type="string">
       <bind-xml name="id" node="attribute"/>
     </field>
@@ -46,7 +46,7 @@
   </class>
   <class name="gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata">
     <map-to xml="UMLClassMetadata"
-      ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+      ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
     <field name="id" type="string">
       <bind-xml name="id" node="attribute"/>
     </field>
@@ -62,7 +62,7 @@
   </class>
   <class name="gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata">
     <map-to xml="UMLAttributeMetadata"
-      ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+      ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
     <field name="id" type="string">
       <bind-xml name="id" node="attribute"/>
     </field>
@@ -78,7 +78,7 @@
   </class>
   <class name="gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata">
     <map-to xml="SemanticMetadata"
-      ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+      ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
     <field name="id" type="string">
       <bind-xml name="id" node="attribute"/>
     </field>
@@ -103,7 +103,7 @@
   </class>
   <class name="gov.nih.nci.cadsr.umlproject.domain.UMLAssociationMetadata">
     <map-to xml="UMLAssociationMetadata"
-      ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+      ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
     <field name="id" type="string">
       <bind-xml name="id" node="attribute"/>
     </field>
@@ -131,14 +131,14 @@
   </class>
   <class name="gov.nih.nci.cadsr.umlproject.domain.UMLGeneralizationMetadata">
     <map-to xml="UMLGeneralizationMetadata"
-      ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+      ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
     <field name="id" type="string">
       <bind-xml name="id" node="attribute"/>
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.umlproject.domain.AttributeTypeMetadata">
     <map-to xml="AttributeTypeMetadata"
-      ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+      ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
     <field name="valueDomainDataType" type="string">
       <bind-xml name="valueDomainDataType" node="attribute"/>
     </field>
@@ -151,7 +151,7 @@
   </class>
   <class name="gov.nih.nci.cadsr.umlproject.domain.TypeEnumerationMetadata">
     <map-to xml="TypeEnumerationMetadata"
-      ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+      ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
     <field name="valueMeaning" type="string">
       <bind-xml name="valueMeaning" node="attribute"/>
     </field>
@@ -163,7 +163,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.AdministeredComponent">
-    <map-to xml="AdministeredComponent" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain"/>
+    <map-to xml="AdministeredComponent" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain"/>
     <field name="id" type="string">
       <bind-xml name="id" node="attribute"/>
     </field>
@@ -227,7 +227,7 @@
   </class>
   <class name="gov.nih.nci.cadsr.domain.ValueDomain"
     extends="gov.nih.nci.cadsr.domain.AdministeredComponent">
-    <map-to xml="ValueDomain" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain"/>
+    <map-to xml="ValueDomain" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain"/>
     <field name="datatypeName" type="string">
       <bind-xml name="datatypeName" node="attribute"/>
     </field>
@@ -258,10 +258,10 @@
   </class>
   <class name="gov.nih.nci.cadsr.domain.NonenumeratedValueDomain"
     extends="gov.nih.nci.cadsr.domain.ValueDomain">
-    <map-to xml="ValueDomain" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain"/>
+    <map-to xml="ValueDomain" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain"/>
   </class>
   <class name="gov.nih.nci.cadsr.domain.EnumeratedValueDomain"
     extends="gov.nih.nci.cadsr.domain.ValueDomain">
-    <map-to xml="ValueDomain" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain"/>
+    <map-to xml="ValueDomain" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain"/>
   </class>
 </mapping>
