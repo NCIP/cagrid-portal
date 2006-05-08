@@ -231,7 +231,7 @@ public class SyncSource {
 		// if (inputs.length > 1 || inputs.length == 0) {
 
 		// boxed
-		methodString += this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + " params";
+		methodString += this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + "Request params";
 
 		methodString += ")";
 		return methodString;
