@@ -38,8 +38,8 @@
 			<xsd:enumeration value="EQUAL_TO" id="equal_to"/>
 			<xsd:enumeration value="NOT_EQUAL_TO" id="not_equal_to"/>
 			<xsd:enumeration value="LIKE" id="like"/>
-			<xsd:enumeration value="ISNULL" id="is_null"/>
-			<xsd:enumeration value="ISNOTNULL" id="is_not_null"/>
+			<xsd:enumeration value="IS_NULL" id="is_null"/>
+			<xsd:enumeration value="IS_NOT_NULL" id="is_not_null"/>
 			<xsd:enumeration value="LESS_THAN" id="less_than"/>
 			<xsd:enumeration value="LESS_THAN_EQUAL_TO" id="less_than_equal_to"/>
 			<xsd:enumeration value="GREATER_THAN" id="greater_than"/>

@@ -187,8 +187,8 @@ public class ProcessorHelper {
 				restrictionFactories.put(Predicate._NOT_EQUAL_TO, restrictionClass.getMethod("ne", binaryParams));
 				// unary restrictions
 				Class[] unaryParams = {String.class};
-				restrictionFactories.put(Predicate._ISNOTNULL, restrictionClass.getMethod("isNotNull", unaryParams));
-				restrictionFactories.put(Predicate._ISNULL, restrictionClass.getMethod("isNull", unaryParams));
+				restrictionFactories.put(Predicate._IS_NOT_NULL, restrictionClass.getMethod("isNotNull", unaryParams));
+				restrictionFactories.put(Predicate._IS_NULL, restrictionClass.getMethod("isNull", unaryParams));
 			} catch (NoSuchMethodException ex) {
 				throw new QueryProcessingException("Error loading restriction factories: " + ex.getMessage(), ex);
 			}
