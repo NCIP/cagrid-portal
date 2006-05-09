@@ -38,17 +38,17 @@ public class SyncToolsTest extends Story {
 		Vector steps = new Vector();
 
 		steps.add(new CreateSkeletonStep(tci1));
-		steps.add(new AddServiceStep(tci2));
-		steps.add(new AddSimpleMethodStep(tci1, "newMethod"));
-		steps.add(new AddSimpleMethodStep(tci2, "newMethod2"));
-		steps.add(new ModifySimpleMethodStep(tci1, "newMethod"));
-		steps.add(new ModifySimpleMethodStep(tci2, "newMethod2"));
-		steps.add(new RemoveMethodStep(tci1, "newMethod"));
-		steps.add(new RemoveMethodStep(tci2, "newMethod2"));
-		steps.add(new AddSimpleMethodWithFaultStep(tci1, "newMethodWithFault"));
-		steps.add(new AddSimpleMethodWithReturnStep(tci1, "newMethodWithReturn"));
-		steps.add(new AddSimpleMethodWithArraysStep(tci1, "newMethodWithArrays"));
-		steps.add(new RollBackStep(tci1));
+//		steps.add(new AddServiceStep(tci2));
+//		steps.add(new AddSimpleMethodStep(tci1, "newMethod"));
+//		steps.add(new AddSimpleMethodStep(tci2, "newMethod2"));
+//		steps.add(new ModifySimpleMethodStep(tci1, "newMethod"));
+//		steps.add(new ModifySimpleMethodStep(tci2, "newMethod2"));
+//		steps.add(new RemoveMethodStep(tci1, "newMethod"));
+//		steps.add(new RemoveMethodStep(tci2, "newMethod2"));
+//		steps.add(new AddSimpleMethodWithFaultStep(tci1, "newMethodWithFault"));
+//		steps.add(new AddSimpleMethodWithReturnStep(tci1, "newMethodWithReturn"));
+//		steps.add(new AddSimpleMethodWithArraysStep(tci1, "newMethodWithArrays"));
+//		steps.add(new RollBackStep(tci1));
 		steps.add(new AddComplexMethodWithFaultStep(tci1, "newComplexMethodWithFault"));
 		steps.add(new AddComplexMethodWithFaulsAndArraysStep(tci1, "newComplexMethodWithFaultStepsAndArrays"));
 		steps.add(new AddMetadataStep(tci1));
@@ -68,7 +68,7 @@ public class SyncToolsTest extends Story {
 
 	protected void storyTearDown() throws Throwable {
 		RemoveSkeletonStep step = new RemoveSkeletonStep(tci1);
-		step.runStep();
+	//	step.runStep();
 	}
 
 
