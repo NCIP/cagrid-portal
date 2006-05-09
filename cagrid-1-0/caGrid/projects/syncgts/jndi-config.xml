@@ -11,6 +11,10 @@
 					<name>syncDescription</name>
 					<value>ETC-PATH/sync-description.xml</value>
 				</parameter>
+				<parameter>
+					<name>performFirstSync</name>
+					<value>false</value>
+				</parameter>
 			</resourceParams>
 		</resource>
 		<resource name="configuration" type="gov.nih.nci.cagrid.syncgts.service.globus.resource.MetadataConfiguration">

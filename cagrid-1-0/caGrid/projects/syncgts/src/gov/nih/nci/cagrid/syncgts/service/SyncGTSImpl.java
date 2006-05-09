@@ -25,7 +25,9 @@ public class SyncGTSImpl implements SyncGTSI {
 			SyncDescription description = SyncGTSDefault.getSyncDescription();
 			try {
 				SyncGTS sync = SyncGTS.getInstance();
-				sync.syncOnce(description);
+				if (home.shouldPerformFirstSync()) {
+					sync.syncOnce(description);
+				}
 				sync.syncAndResyncInBackground(description, true);
 			} catch (Exception e) {
 				e.printStackTrace();
