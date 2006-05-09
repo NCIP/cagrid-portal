@@ -189,7 +189,7 @@ public class SyncTools {
 	private void populateClassnames(ServiceInformation info, SymbolTable table) throws MalformedNamespaceException,
 		SynchronizationException {
 
-		// table.dump(System.out);
+		table.dump(System.out);
 		// get the classnames from the axis symbol table
 		if (info.getNamespaces() != null && info.getNamespaces().getNamespace() != null) {
 			for (int i = 0; i < info.getNamespaces().getNamespace().length; i++) {
@@ -251,8 +251,9 @@ public class SyncTools {
 								IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN)
 								+ "/"
 								+ info.getIntroduceServiceProperties().getProperty(
-									IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME), ">>" + service.getName() + TemplateUtils.upperCaseFirstCharacter(mtype.getName()) + ">"
+									IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME), ">>" + TemplateUtils.upperCaseFirstCharacter(mtype.getName()) + ">"
 								+ inputParam.getName()));
+							
 							inputParam.setContainerClassName(info.getIntroduceServiceProperties().getProperty(
 								"introduce.skeleton.package")
 								+ ".stubs." + getRelativeClassName(type.getName()));
