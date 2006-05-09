@@ -8,7 +8,7 @@
 		<ns1:ServiceModificationUIPanel>gov.nih.nci.cagrid.data.ui.types.TargetTypeSelectionPanel</ns1:ServiceModificationUIPanel>
 		<ns1:Properties>
 			<property key="GME_URL"
-			    value="http://dc01.bmi.ohio-state.edu:8080/wsrf/services/cagrid/GlobalModelExchange">
+			    value="http://cagrid02.bmi.ohio-state.edu:8080/wsrf/services/cagrid/GlobalModelExchange">
 			</property>
 		</ns1:Properties>
 	</ns1:ServiceExtensionDescription>
