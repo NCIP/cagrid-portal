@@ -5,14 +5,17 @@ import gov.nih.nci.cagrid.data.common.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileWriter;
+import java.rmi.RemoteException;
 import java.util.List;
 
 import org.apache.axis.message.MessageElement;
@@ -33,6 +36,28 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 	
 	public void postCodegen(ServiceExtensionDescriptionType desc, ServiceInformation info) throws CodegenExtensionException {
 		modifyQueryMethod(desc, info);
+		MetadataModifier modifier = new MetadataModifier(desc, info);
+		// find the namespace to expose
+		NamespaceType[] namespaces = info.getNamespaces().getNamespace();
+		String targetNamespace = null;
+		for (int i = 0; namespaces != null && i < namespaces.length; i++) {
+			String ns = namespaces[i].getNamespace();
+			if (!(ns.equals(DataServiceConstants.CQL_QUERY_URI)) ||
+				ns.equals(DataServiceConstants.CQL_RESULT_SET_URI) ||
+				ns.equals(IntroduceConstants.W3CNAMESPACE)) {
+				targetNamespace = ns;
+				break;
+			}
+		}
+		if (targetNamespace == null) {
+			throw new CodegenExtensionException("No target namespace found for data service");
+		}
+		try {
+			DomainModel model = modifier.createDomainModel(targetNamespace);
+			// TODO: serialize the model to the file system location for metadata
+		} catch (RemoteException ex) {
+			throw new CodegenExtensionException("Error connecting to caDSR for metadata: " + ex.getMessage(), ex);
+		}
 	}
 	
 	
