@@ -12,6 +12,8 @@
 	<property name="project.name" value="caGrid-metadata" />
 	<property name="project.version" value="1.0" />
 
+	<property name="ext.lib.dir" value="ext/lib" />
+	
 	<property name="build.dir" location="build" />
 	<property name="build.dest" location="build/classes" />
 	<property name="build.jars.dir" location="build/lib" />
@@ -78,6 +80,9 @@
 			<include name="**/*.java" />
 			<classpath>
 				<fileset dir="${globus.dir}/lib">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${ext.lib.dir}">
 					<include name="*.jar" />
 				</fileset>
 			</classpath>
