@@ -77,7 +77,11 @@ public class AddComplexMethodWithFaultStep extends Step {
 		namespaces.setNamespace(newNamespaceTypes);
 		
 		MethodsType methodsType =  CommonTools.getService(introService.getServices(),tci.getName()).getMethods();
-
+		if(methodsType==null){
+			methodsType = new MethodsType();
+			CommonTools.getService(introService.getServices(),tci.getName()).setMethods(methodsType);
+		}
+		
 		MethodType method = new MethodType();
 		method.setName(methodName);
 
