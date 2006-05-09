@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.syncgts.core;
 
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
+import gov.nih.nci.cagrid.gts.bean.Lifetime;
 import gov.nih.nci.cagrid.gts.bean.Status;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
@@ -516,10 +517,11 @@ public class SyncGTS {
 			SyncDescription description = new SyncDescription();
 			SyncDescriptor[] des = new SyncDescriptor[1];
 			des[0] = new SyncDescriptor();
-			des[0].setGtsServiceURI("https://irondale.bmi.ohio-state.edu:8443/wsrf/services/cagrid/GridTrustService");
+			des[0].setGtsServiceURI("https://cagrid01.bmi.ohio-state.edu:8442/wsrf/services/cagrid/GridTrustService");
 			TrustedAuthorityFilter[] taf = new TrustedAuthorityFilter[1];
 			taf[0] = new TrustedAuthorityFilter();
 			taf[0].setStatus(Status.Trusted);
+			taf[0].setLifetime(Lifetime.Valid);
 			des[0].setTrustedAuthorityFilter(taf);
 			description.setSyncDescriptor(des);
 			description.setFilePrefix("gts");
@@ -531,6 +533,5 @@ public class SyncGTS {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 }

@@ -5,8 +5,6 @@ import gov.nih.nci.cagrid.syncgts.bean.SyncDescription;
 
 import java.io.File;
 
-import javax.xml.namespace.QName;
-
 import org.apache.log4j.Logger;
 
 
@@ -20,8 +18,6 @@ import org.apache.log4j.Logger;
 public class SyncGTSDefault {
 
 	public static final String SYNC_GTS_NAMESPACE = "http://cagrid.nci.nih.gov/12/SyncGTS";
-
-	private final static QName syncDescriptionQN = new QName(SyncGTSDefault.SYNC_GTS_NAMESPACE, "SyncDescription");
 
 	private static Logger logger = Logger.getLogger(SyncGTSDefault.class.getName());
 
@@ -48,20 +44,13 @@ public class SyncGTSDefault {
 	public static SyncDescription getSyncDescription() throws Exception {
 		File userHome = getUserHomeSyncDescription();
 		SyncDescription description = null;
-		if (userHome.exists()) {
-			try {
-				Utils.serializeDocument(userHome.getAbsolutePath(), description, syncDescriptionQN);
-				logger.debug("SyncGTS using sync description: " + userHome.getAbsolutePath());
-			} catch (Exception e) {
-				description = null;
-				logger.error(e.getMessage(), e);
-			}
-		}
+
 		if (serviceSyncDescriptionLocation != null) {
 			File serviceLocation = new File(serviceSyncDescriptionLocation);
-			if ((description == null) && (serviceLocation.exists())) {
+			if ((serviceLocation.exists())) {
 				try {
-					description = (SyncDescription)Utils.deserializeDocument(serviceLocation.getAbsolutePath(), SyncDescription.class);
+					description = (SyncDescription) Utils.deserializeDocument(serviceLocation.getAbsolutePath(),
+						SyncDescription.class);
 					logger.debug("SyncGTS using sync description: " + serviceLocation.getAbsolutePath());
 				} catch (Exception e) {
 					description = null;
@@ -69,6 +58,18 @@ public class SyncGTSDefault {
 				}
 			}
 		}
+
+		if ((description == null) && (userHome.exists())) {
+			try {
+				description = (SyncDescription) Utils.deserializeDocument(userHome.getAbsolutePath(),
+					SyncDescription.class);
+				logger.debug("SyncGTS using sync description: " + userHome.getAbsolutePath());
+			} catch (Exception e) {
+				description = null;
+				logger.error(e.getMessage(), e);
+			}
+		}
+
 		if (description == null) {
 			StringBuffer error = new StringBuffer();
 			error
