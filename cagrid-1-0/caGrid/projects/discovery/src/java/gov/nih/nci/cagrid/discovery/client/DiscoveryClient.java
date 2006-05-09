@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.discovery.MetadataUtils;
 import gov.nih.nci.cagrid.discovery.ResourcePropertyHelper;
 import gov.nih.nci.cagrid.discovery.XPathUtils;
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
+import gov.nih.nci.cagrid.metadata.common.PointOfContact;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -85,6 +86,35 @@ public class DiscoveryClient {
 	}
 
 
+	/**
+	 * Searches research center info to find services provided by a given cancer
+	 * center.
+	 * 
+	 * @param centerName
+	 *            research center name
+	 * @return EndpointReferenceType[] matching the search string
+	 */
+	public EndpointReferenceType[] discoverServicesByResearchCenter(String centerName) throws Exception {
+		return discoverByFilter(CONTENT_PATH + "/" + cagrid + ":ServiceMetadata/" + cagrid + ":hostingResearchCenter["
+			+ com + ":displayName='" + centerName + "' or " + com + ":shortName='" + centerName + "']");
+	}
+
+
+	/**
+	 * Searches to find services that have the given point of contact associated
+	 * with them. Any feilds set on the point of contact are checked for a
+	 * match. For example, you can set only the lastName, and only it will be
+	 * checked, or you can specify several feilds and they all must be equal.
+	 * 
+	 * @param contact
+	 *            point of contact
+	 * @return EndpointReferenceType[] matching the search string
+	 */
+	public EndpointReferenceType[] discoverServicesByPointOfContact(PointOfContact contact) throws Exception {
+		return null;
+	}
+
+
 	protected EndpointReferenceType[] discoverByFilter(String xpathPredicate) throws Exception {
 		EndpointReferenceType[] results = null;
 		final String xpath = "/*/" + wssg + ":Entry[" + xpathPredicate + "]/" + wssg + ":MemberServiceEPR";
@@ -107,11 +137,8 @@ public class DiscoveryClient {
 	}
 
 
-	// ----common----
-	// discoverServicesByCancerCenter
-	// discoverServicesByConceptCode
-	// discoverServicesByPointOfContact
 	// ----service----
+	// discoverServicesByConceptCode
 	// discoverServicesByOperationName
 	// discoverServicesByOperationClass
 	// discoverServicesByOperationInputClass

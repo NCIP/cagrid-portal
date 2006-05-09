@@ -90,6 +90,11 @@
 				<include name="*.jar" />
 			</fileset>
 		</artifact>
+		<artifact track="main" type="jars" id="caCORE.jars">
+			<fileset dir="${basedir}/share/lib/caCORE">
+				<include name="*.jar" />
+			</fileset>
+		</artifact>
 		<artifact track="test" type="jars" id="common.test.jars">
 			<fileset dir="${test.lib.dir}">
 				<include name="jdepend*.jar" />
@@ -272,6 +277,7 @@
 	<target name="build-metadata" depends="prepare" description="Builds the common metadata">
 		<resolveDependencies extdir="${projects.dir}/metadata/ext">
 			<artifact refid="core.jars" />
+			<artifact refid="caCORE.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/metadata" inheritAll="false" antfile="build.xml" target="jar" />
 	</target>
@@ -297,6 +303,7 @@
 	<target name="build-cadsr" if="isJDK1.5" depends="prepare" description="Builds the cadsr project">
 		<resolveDependencies extdir="${projects.dir}/cadsr/ext">
 			<artifact refid="core.jars" />
+			<artifact refid="caCORE.jars" />
 			<artifact refid="introduce.jars" />
 			<artifact refid="gme.globus.client.jars" />
 		</resolveDependencies>
@@ -434,6 +441,7 @@
 	<target name="build-sdkQuery" if="isJDK1.5" depends="prepare" description="Builds caGrid SDK Query processor">
 		<resolveDependencies extdir="${projects.dir}/sdkQuery/ext">
 			<artifact refid="core.jars" />
+			<artifact refid="caCORE.jars" />
 			<artifact refid="data.jars" />
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />

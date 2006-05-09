@@ -1,0 +1,15 @@
+
+#MAIN PREDICATE
+/*/wssg:Entry[   ]/wssg:MemberServiceEPR
+
+#searchString
+wssg:Content/agg:AggregatorData//*[contains(text(),'searchString') or contains(@*,'searchString')]
+
+#centerName
+wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata/cagrid:hostingResearchCenter[com:displayName='centerName' or com:shortName='centerName']
+
+#POC
+wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata[cagrid:hostingResearchCenter/com:pointOfContact[] or cagrid:serviceDescription
+
+
+
