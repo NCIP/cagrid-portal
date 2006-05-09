@@ -6,7 +6,6 @@ import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.data.common.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
@@ -284,14 +283,6 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 						getTypesTree().setNamespace(nsType);
 						addTreeNamespaceToServiceDescription();
 					}
-					/*
-					UMLClassMetadata[] umlClassMetadata = pack.getUMLClassMetadataCollection();
-					for (int i = 0; i < umlClassMetadata.length; i++) {
-						UMLClassMetadata classMd = umlClassMetadata[i];
-						UMLClass clazz = MetadataUtilities.createUmlClass(classMd);
-						// TODO: now what?
-					}
-					*/
 					storeCaDSRInfo();
 				}
 			});
@@ -429,13 +420,11 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			queryProcessorTextField = new JTextField();
 			queryProcessorTextField.setToolTipText("Class name of query processor");
 			synchronized (queryProcessorTextField) {
-				ExtensionTypeExtensionData data = getExtensionData();
-				MessageElement[] dataEntries = data.get_any();
-				for (int i = 0; dataEntries != null && i < dataEntries.length; i++) {
-					if (dataEntries[i].getLocalName().equals(DataServiceConstants.QUERY_PROCESSOR_ELEMENT_NAME)) {
-						String queryProcessorClass = dataEntries[i].getValue();
-						queryProcessorTextField.setText(queryProcessorClass);
-					}
+				ExtensionTypeExtensionData data = getExtensionTypeExtensionData();
+				MessageElement qpElement = ExtensionTools.getExtensionDataElement(data, DataServiceConstants.QUERY_PROCESSOR_ELEMENT_NAME);
+				if (qpElement != null) {
+					String queryProcessorClass = qpElement.getValue();
+					queryProcessorTextField.setText(queryProcessorClass);
 				}
 			}
 			queryProcessorTextField.getDocument().addDocumentListener(new DocumentListener() {
@@ -500,7 +489,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	
 	
 	private void setProcessorClass(String className) {
-		ExtensionTypeExtensionData extensionData = getExtensionData();
+		ExtensionTypeExtensionData extensionData = getExtensionTypeExtensionData();
 		Element elem = new Element(DataServiceConstants.QUERY_PROCESSOR_ELEMENT_NAME);
 		elem.setText(className);
 		Document doc = new Document();
@@ -512,34 +501,12 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			ex.printStackTrace();
 		}
 		MessageElement processorElement = new MessageElement(tempDoc.getDocumentElement());
-		
-		MessageElement[] anys = extensionData.get_any();
-		if (anys == null) {
-			anys = new MessageElement[1];
-			anys[0] = processorElement;
-		} else {
-			// find the processor class element, if it exists
-			boolean valueSet = false;
-			for (int i = 0; i < anys.length; i++) {
-				if (anys[i].getName().equals(DataServiceConstants.QUERY_PROCESSOR_ELEMENT_NAME)) {
-					anys[i] = processorElement;
-					valueSet = true;
-					break;
-				}
-			}
-			if (!valueSet) {
-				MessageElement[] newAnys = new MessageElement[anys.length + 1];
-				System.arraycopy(anys, 0, newAnys, 0, anys.length);
-				newAnys[newAnys.length - 1] = processorElement;
-				anys = newAnys;
-			}
-		}
-		extensionData.set_any(anys);
+		ExtensionTools.updateExtensionDataElement(extensionData, processorElement);
 	}
 	
 	
 	private void storeCaDSRInfo() {
-		ExtensionTypeExtensionData extensionData = getExtensionData();
+		ExtensionTypeExtensionData extensionData = getExtensionTypeExtensionData();
 		Element cadsr = new Element(DataServiceConstants.CADSR_ELEMENT_NAME);
 		cadsr.setAttribute(DataServiceConstants.CADSR_URL_ATTRIB,
 			getDomainBrowserPanel().getCadsr().getText());
@@ -556,42 +523,6 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			ex.printStackTrace();
 		}
 		MessageElement cadsrElement = new MessageElement(tempDoc.getDocumentElement());
-		MessageElement[] anys = extensionData.get_any();
-		if (anys == null) {
-			anys = new MessageElement[1];
-			anys[0] = cadsrElement;
-		} else {
-			// find the cadsr info element, if it exists
-			boolean valueSet = false;
-			for (int i = 0; i < anys.length; i++) {
-				if (anys[i].getName().equals(DataServiceConstants.QUERY_PROCESSOR_ELEMENT_NAME)) {
-					anys[i] = cadsrElement;
-					valueSet = true;
-					break;
-				}
-			}
-			if (!valueSet) {
-				MessageElement[] newAnys = new MessageElement[anys.length + 1];
-				System.arraycopy(anys, 0, newAnys, 0, anys.length);
-				newAnys[newAnys.length - 1] = cadsrElement;
-				anys = newAnys;
-			}
-		}
-		extensionData.set_any(anys);
-	}
-	
-	
-	private ExtensionTypeExtensionData getExtensionData() {
-		String extensionName = getExtensionDescription().getName();
-		ExtensionType[] extensions = getServiceInfo().getServiceDescriptor().getExtensions().getExtension();
-		for (int i = 0; extensions != null && i < extensions.length; i++) {
-			if (extensions[i].getName().equals(extensionName)) {
-				if (extensions[i].getExtensionData() == null) {
-					extensions[i].setExtensionData(new ExtensionTypeExtensionData());
-				}
-				return extensions[i].getExtensionData();
-			}
-		}
-		return null;
+		ExtensionTools.updateExtensionDataElement(extensionData, cadsrElement);
 	}
 }

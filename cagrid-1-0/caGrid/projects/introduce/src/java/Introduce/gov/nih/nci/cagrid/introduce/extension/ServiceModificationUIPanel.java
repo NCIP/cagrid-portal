@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.extension;
 
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
@@ -32,5 +33,10 @@ public abstract class ServiceModificationUIPanel extends JPanel {
 
 	protected void setServiceInfo(ServiceInformation serviceInfo) {
 		this.serviceInfo = serviceInfo;
+	}
+	
+	
+	public ExtensionTypeExtensionData getExtensionTypeExtensionData() {
+		return ExtensionTools.getExtensionData(getExtensionDescription(), getServiceInfo());
 	}
 }

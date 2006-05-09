@@ -3,11 +3,11 @@ package gov.nih.nci.cagrid.data.codegen;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.common.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPostProcessor;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.io.File;
@@ -122,28 +122,11 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 	
 	
 	private String getQueryProcesorClass(ServiceExtensionDescriptionType desc, ServiceInformation info) {
-		ExtensionTypeExtensionData data = getExtensionData(desc, info);
-		MessageElement[] dataEntries = data.get_any();
-		for (int i = 0; dataEntries != null && i < dataEntries.length; i++) {
-			if (dataEntries[i].getLocalName().equals(DataServiceConstants.QUERY_PROCESSOR_ELEMENT_NAME)) {
-				String queryProcessorClass = dataEntries[i].getValue();
-				return queryProcessorClass;
-			}
-		}
-		return null;
-	}
-	
-	
-	private ExtensionTypeExtensionData getExtensionData(ServiceExtensionDescriptionType desc, ServiceInformation info) {
-		String extensionName = desc.getName();
-		ExtensionType[] extensions = info.getServiceDescriptor().getExtensions().getExtension();
-		for (int i = 0; extensions != null && i < extensions.length; i++) {
-			if (extensions[i].getName().equals(extensionName)) {
-				if (extensions[i].getExtensionData() == null) {
-					extensions[i].setExtensionData(new ExtensionTypeExtensionData());
-				}
-				return extensions[i].getExtensionData();
-			}
+		ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
+		MessageElement qpEntry = ExtensionTools.getExtensionDataElement(data, DataServiceConstants.QUERY_PROCESSOR_ELEMENT_NAME);
+		if (qpEntry != null) {
+			String queryProcessorClass = qpEntry.getValue();
+			return queryProcessorClass;
 		}
 		return null;
 	}
