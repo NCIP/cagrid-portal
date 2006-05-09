@@ -43,6 +43,9 @@ public class DataServiceConstants {
 	public static final String CADSR_URL_ATTRIB = "url";
 	public static final String CADSR_PROJECT_ATTRIB = "project";
 	public static final String CADSR_PACKAGE_ATTRIB = "package";
+	
+	// target data model
+	public static final String DATA_MODEL_ELEMENT_NAME = "targetDataModel";
 
 	private DataServiceConstants() {
 		
