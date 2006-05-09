@@ -4,6 +4,8 @@ import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.data.common.AxisJdomUtils;
 import gov.nih.nci.cagrid.data.common.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
@@ -33,10 +35,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.apache.axis.message.MessageElement;
-import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
-import org.jdom.output.DOMOutputter;
 import org.projectmobius.client.gme.ImportInfo;
 import org.projectmobius.common.GridServiceResolver;
 import org.projectmobius.common.MobiusException;
@@ -282,6 +282,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 						NamespaceType nsType = createNamespaceFromUmlPackage(pack);
 						getTypesTree().setNamespace(nsType);
 						addTreeNamespaceToServiceDescription();
+						storeTargetModelNamespace(nsType.getNamespace());
 					}
 					storeCaDSRInfo();
 				}
@@ -492,16 +493,14 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 		ExtensionTypeExtensionData extensionData = getExtensionTypeExtensionData();
 		Element elem = new Element(DataServiceConstants.QUERY_PROCESSOR_ELEMENT_NAME);
 		elem.setText(className);
-		Document doc = new Document();
-		doc.setRootElement(elem);
-		org.w3c.dom.Document tempDoc = null;
+		MessageElement processorElement = null;
 		try {
-			tempDoc = new DOMOutputter().output(doc);
+			processorElement = AxisJdomUtils.fromElement(elem);
+			ExtensionTools.updateExtensionDataElement(extensionData, processorElement);
 		} catch (JDOMException ex) {
 			ex.printStackTrace();
-		}
-		MessageElement processorElement = new MessageElement(tempDoc.getDocumentElement());
-		ExtensionTools.updateExtensionDataElement(extensionData, processorElement);
+			PortalUtils.showErrorMessage("Error storing CQL processor class!", ex);
+		}		
 	}
 	
 	
@@ -514,15 +513,29 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			getDomainBrowserPanel().getSelectedProject().getLongName());
 		cadsr.setAttribute(DataServiceConstants.CADSR_PACKAGE_ATTRIB,
 			getDomainBrowserPanel().getSelectedPackage().getName());
-		Document doc = new Document();
-		doc.setRootElement(cadsr);
-		org.w3c.dom.Document tempDoc = null;
+		MessageElement cadsrElement = null;
 		try {
-			tempDoc = new DOMOutputter().output(doc);
+			cadsrElement = AxisJdomUtils.fromElement(cadsr);
+			ExtensionTools.updateExtensionDataElement(extensionData, cadsrElement);
+		} catch (JDOMException ex) {
+			// TODO: probably throw a codegen exception or something reasonable
+			ex.printStackTrace();
+			PortalUtils.showErrorMessage("Error storing caDSR information!", ex);
+		}
+	}
+	
+	
+	private void storeTargetModelNamespace(String namespace) {
+		ExtensionTypeExtensionData data = getExtensionTypeExtensionData();
+		Element target = new Element(DataServiceConstants.DATA_MODEL_ELEMENT_NAME);
+		target.setText(namespace);
+		MessageElement targetElement = null;
+		try {
+			targetElement = AxisJdomUtils.fromElement(target);
+			ExtensionTools.updateExtensionDataElement(data, targetElement);
 		} catch (JDOMException ex) {
 			ex.printStackTrace();
-		}
-		MessageElement cadsrElement = new MessageElement(tempDoc.getDocumentElement());
-		ExtensionTools.updateExtensionDataElement(extensionData, cadsrElement);
+			PortalUtils.showErrorMessage("Error storing target model's namespace", ex);
+		}		
 	}
 }
