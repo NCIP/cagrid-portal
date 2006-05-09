@@ -251,7 +251,7 @@ public class SyncTools {
 								IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN)
 								+ "/"
 								+ info.getIntroduceServiceProperties().getProperty(
-									IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME), ">>" + TemplateUtils.upperCaseFirstCharacter(mtype.getName()) + ">"
+									IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME), ">>" + TemplateUtils.upperCaseFirstCharacter(mtype.getName()) + "Request>"
 								+ inputParam.getName()));
 							
 							inputParam.setContainerClassName(info.getIntroduceServiceProperties().getProperty(
