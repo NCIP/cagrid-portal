@@ -13,7 +13,7 @@
 				</parameter>
 				<parameter>
 					<name>performFirstSync</name>
-					<value>false</value>
+					<value>true</value>
 				</parameter>
 			</resourceParams>
 		</resource>
