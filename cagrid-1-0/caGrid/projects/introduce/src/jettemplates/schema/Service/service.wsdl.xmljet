@@ -69,7 +69,7 @@
 	      		for (int methodsI = 0; methodsI < methods.getMethod().length ; methodsI++) {
 	      			MethodType method = methods.getMethod(methodsI);
 	      			%>
-				<element name="<%=service.getName()+TemplateUtils.upperCaseFirstCharacter(method.getName())%>Request">
+				<element name="<%=TemplateUtils.upperCaseFirstCharacter(method.getName())%>Request">
 					<complexType>
 						<sequence>
           		  <% 
@@ -130,7 +130,7 @@
 	      			</complexType>
 	      		</element>
   		       
-				<element name="<%=service.getName()+TemplateUtils.upperCaseFirstCharacter(method.getName())%>Response">
+				<element name="<%=TemplateUtils.upperCaseFirstCharacter(method.getName())%>Response">
 					<complexType>
 						<sequence>
           		  <%
@@ -228,12 +228,12 @@ if(methods!=null && methods.getMethod()!=null){
 	for (int methodsI = 0; methodsI < methods.getMethod().length ; methodsI++) {
 		MethodType method = methods.getMethod(methodsI);
 %>
-	<message name="<%=service.getName()+TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Request">
-		<part name="parameters" element="tns:<%=service.getName()+TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Request"/>
+	<message name="<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Request">
+		<part name="parameters" element="tns:<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Request"/>
 	</message>
 	
-	<message name="<%=service.getName()+TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Response">
-		<part name="parameters" element="tns:<%=service.getName()+TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Response"/>
+	<message name="<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Response">
+		<part name="parameters" element="tns:<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Response"/>
 	</message>
 <%
 	}
@@ -271,8 +271,8 @@ if(methods!=null && methods.getMethod()!=null){
 		MethodType method = methods.getMethod(methodsI);
 %>
 		<operation name="<%=method.getName() %>">
-            <input message="tns:<%=service.getName()+TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Request"/>
-            <output message="tns:<%=service.getName()+TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Response"/>
+            <input message="tns:<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Request"/>
+            <output message="tns:<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Response"/>
             <%
        		if(method.getExceptions()!=null && method.getExceptions().getException()!=null){
        			for(int faultI = 0; faultI < method.getExceptions().getException().length; faultI++){

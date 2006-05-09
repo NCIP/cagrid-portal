@@ -48,7 +48,7 @@
 			<xs:element ref="security:MethodSecurity" minOccurs="0" maxOccurs="1" />
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="required"/>
-		<xs:attribute name="qName" type="xs:QName" use="required"/>
+		<xs:attribute name="namespace" type="xs:string" use="optional"/>
 		<xs:attribute name="isProvided" type="xs:boolean" use="required"/>
 		<xs:attribute name="providerClass" type="xs:string" use="optional"/>
 	</xs:complexType>

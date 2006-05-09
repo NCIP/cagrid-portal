@@ -194,8 +194,8 @@ public class SyncSource {
 	}
 
 
-	private String getBoxedOutputTypeName(String serviceName, String input) {
-		String returnType = serviceName + TemplateUtils.upperCaseFirstCharacter(input) + "Response";
+	private String getBoxedOutputTypeName( String input) {
+		String returnType = TemplateUtils.upperCaseFirstCharacter(input) + "Response";
 		return returnType;
 	}
 
@@ -205,12 +205,12 @@ public class SyncSource {
 		MethodTypeOutput returnTypeEl = method.getOutput();
 		String methodName = method.getName();
 		String returnType = null;
-		returnType = this.packageName + "." + getBoxedOutputTypeName(service.getName(), methodName);
+		returnType = this.packageName + "." + getBoxedOutputTypeName( methodName);
 
 		methodString += "public " + returnType + " " + methodName + "(";
 
 		// boxed
-		methodString += this.packageName + "." + service.getName() + TemplateUtils.upperCaseFirstCharacter(methodName) + "Request params";
+		methodString += this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + "Request params";
 
 		methodString += ")";
 		return methodString;
@@ -223,7 +223,7 @@ public class SyncSource {
 		String returnType = "";
 
 		// need to box the output type
-		returnType = this.packageName + "." + getBoxedOutputTypeName(service.getName(), methodName);
+		returnType = this.packageName + "." + getBoxedOutputTypeName( methodName);
 
 		methodString += "public " + returnType + " " + methodName + "(";
 		// Parameter[] inputs = method.getParams();
@@ -231,7 +231,7 @@ public class SyncSource {
 		// if (inputs.length > 1 || inputs.length == 0) {
 
 		// boxed
-		methodString += this.packageName + "." + service.getName() + TemplateUtils.upperCaseFirstCharacter(methodName) + "Request params";
+		methodString += this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + "Request params";
 
 		methodString += ")";
 		return methodString;
@@ -531,8 +531,8 @@ public class SyncSource {
 		}
 		// always a boxed call now becuase using complex types in the wsdl
 		// create handle for the boxed wrapper
-		methodString += this.packageName + "." + service.getName() + TemplateUtils.upperCaseFirstCharacter(methodName) + "Request params = new "
-			+ this.packageName + "." + service.getName() + TemplateUtils.upperCaseFirstCharacter(methodName) + "Request();\n";
+		methodString += this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + "Request params = new "
+			+ this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + "Request();\n";
 		// set the values fo the boxed wrapper
 		if (method.getInputs() != null && method.getInputs().getInput() != null) {
 			for (int j = 0; j < method.getInputs().getInput().length; j++) {
@@ -561,7 +561,7 @@ public class SyncSource {
 		methodString += lineStart;
 
 		// always boxed returns now because of complex types in wsdl
-		String returnTypeBoxed = getBoxedOutputTypeName(service.getName(), methodName);
+		String returnTypeBoxed = getBoxedOutputTypeName(methodName);
 		methodString += this.packageName + "." + returnTypeBoxed + " boxedResult = " + var + "." + methodName
 			+ "(params);\n";
 		methodString += lineStart;
@@ -691,7 +691,7 @@ public class SyncSource {
 		}
 
 		// return the boxed type
-		String returnTypeBoxed = getBoxedOutputTypeName(service.getName(), methodName);
+		String returnTypeBoxed = getBoxedOutputTypeName(methodName);
 
 		// need to unbox on the way out
 		methodString += lineStart;
