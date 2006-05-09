@@ -7,7 +7,6 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
-import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeTreeNode;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespacesJTree;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeTreeNode;
@@ -62,11 +61,11 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 		this.add(getMainPanel(), gridBagConstraints11);
 	}
 	
-	public void reInitialize(ResourcePropertiesListType properties, NamespacesType namespaces){
-		this.properties = properties;
-		this.namespaces = namespaces;
-		this.namespacesJTree.setNamespaces(namespaces);
-		this.resourcePropertiesTable.setResourceProperties(properties);
+	public void reInitialize(ResourcePropertiesListType props, NamespacesType ns){
+		this.properties = props;
+		this.namespaces = ns;
+		this.namespacesJTree.setNamespaces(ns);
+		this.resourcePropertiesTable.setResourceProperties(props);
 	}
 
 
@@ -229,8 +228,8 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 			gridBagConstraints.insets = new Insets(2, 2, 2, 2);
 			buttonsPanel = new JPanel();
 			buttonsPanel.setLayout(new GridBagLayout());
-			buttonsPanel.add(getJButton(), gridBagConstraints);
-			buttonsPanel.add(getJButton2(), gridBagConstraints8);
+			buttonsPanel.add(getAddButton(), gridBagConstraints);
+			buttonsPanel.add(getRemoveButton(), gridBagConstraints8);
 		}
 		return buttonsPanel;
 	}
@@ -241,12 +240,12 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getJButton() {
+	private JButton getAddButton() {
 		if (addResourcePropertyButton == null) {
-			addResourcePropertyButton = new JButton(PortalLookAndFeel.getAddIcon());
+			addResourcePropertyButton = new JButton();
 			addResourcePropertyButton.setToolTipText("add new operation");
 			addResourcePropertyButton.setText("Add");
-			addResourcePropertyButton.setIcon(IntroduceLookAndFeel.getAddIcon());
+			addResourcePropertyButton.setIcon(PortalLookAndFeel.getAddIcon());
 			addResourcePropertyButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {	
 					addResourceProperty();		
@@ -293,12 +292,12 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getJButton2() {
+	private JButton getRemoveButton() {
 		if (removeResourcePropertyButton == null) {
-			removeResourcePropertyButton = new JButton(PortalLookAndFeel.getRemoveIcon());
+			removeResourcePropertyButton = new JButton();
 			removeResourcePropertyButton.setToolTipText("remove selected operation");
 			removeResourcePropertyButton.setText("Remove");
-			removeResourcePropertyButton.setIcon(IntroduceLookAndFeel.getRemoveIcon());
+			removeResourcePropertyButton.setIcon(PortalLookAndFeel.getRemoveIcon());
 
 			removeResourcePropertyButton.addActionListener(new java.awt.event.ActionListener() {
 				// remove from table

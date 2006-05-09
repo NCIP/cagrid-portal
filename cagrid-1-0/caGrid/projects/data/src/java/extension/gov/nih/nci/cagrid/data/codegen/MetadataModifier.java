@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.data.codegen;
 
 import gov.nih.nci.cagrid.data.common.DataServiceConstants;
-import gov.nih.nci.cagrid.data.creation.DataServiceCreationDialog;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;

@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.introduce.common;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.introduce.beans.extension.Properties;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;

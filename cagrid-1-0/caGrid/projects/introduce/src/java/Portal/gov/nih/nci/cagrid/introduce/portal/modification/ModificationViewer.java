@@ -19,7 +19,6 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
 import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
-import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
@@ -28,7 +27,6 @@ import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.ServiceModificationUIPanel;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
-import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 import gov.nih.nci.cagrid.introduce.portal.modification.properties.ServicePropertiesTable;
 import gov.nih.nci.cagrid.introduce.portal.modification.security.ServiceSecurityPanel;
@@ -36,7 +34,6 @@ import gov.nih.nci.cagrid.introduce.portal.modification.services.ServicesJTree;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodViewer;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodsTable;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ModifyResourcePropertiesPanel;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertiesPopUpMenu;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeConfigurePanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeTreeNode;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespacesJTree;
@@ -59,7 +56,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-import java.util.Vector;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -69,7 +65,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.JTree;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -1049,7 +1044,7 @@ public class ModificationViewer extends GridPortalComponent {
 		if (namespaceAddButton == null) {
 			namespaceAddButton = new JButton();
 			namespaceAddButton.setText("Add");
-			namespaceAddButton.setIcon(IntroduceLookAndFeel.getAddIcon());
+			namespaceAddButton.setIcon(PortalLookAndFeel.getAddIcon());
 			namespaceAddButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					NamespaceType type = ((NamespaceTypeDiscoveryComponent) getDiscoveryTabbedPane()
@@ -1080,7 +1075,7 @@ public class ModificationViewer extends GridPortalComponent {
 		if (namespaceRemoveButton == null) {
 			namespaceRemoveButton = new JButton();
 			namespaceRemoveButton.setText("Remove");
-			namespaceRemoveButton.setIcon(IntroduceLookAndFeel.getRemoveIcon());
+			namespaceRemoveButton.setIcon(PortalLookAndFeel.getRemoveIcon());
 			namespaceRemoveButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
@@ -1462,7 +1457,7 @@ public class ModificationViewer extends GridPortalComponent {
 		if (addServiceProperyButton == null) {
 			addServiceProperyButton = new JButton();
 			addServiceProperyButton.setText("Add");
-			addServiceProperyButton.setIcon(IntroduceLookAndFeel.getAddIcon());
+			addServiceProperyButton.setIcon(PortalLookAndFeel.getAddIcon());
 			addServiceProperyButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if (getServicePropertyKeyTextField().getText().length() > 0) {
@@ -1490,7 +1485,7 @@ public class ModificationViewer extends GridPortalComponent {
 		if (removeServicePropertyButton == null) {
 			removeServicePropertyButton = new JButton();
 			removeServicePropertyButton.setText("Remove");
-			removeServicePropertyButton.setIcon(IntroduceLookAndFeel.getRemoveIcon());
+			removeServicePropertyButton.setIcon(PortalLookAndFeel.getRemoveIcon());
 			removeServicePropertyButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
@@ -1672,5 +1667,4 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return rpHolderPanel;
 	}
-
-} // @jve:decl-index=0:visual-constraint="10,10"
+}
