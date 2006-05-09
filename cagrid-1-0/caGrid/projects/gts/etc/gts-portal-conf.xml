@@ -32,6 +32,7 @@
 		<gts-services>
 			<gts-service>https://cagrid01.bmi.ohio-state.edu:8442/wsrf/services/cagrid/GridTrustService</gts-service>
 			<gts-service>https://cagrid02.bmi.ohio-state.edu:8442/wsrf/services/cagrid/GridTrustService</gts-service>
+			<gts-service>https://cagrid03.bmi.ohio-state.edu:8442/wsrf/services/cagrid/GridTrustService</gts-service>
 		</gts-services>
         </gts-portal-config>
 	</resource>
