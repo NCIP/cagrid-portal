@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<xs:schema targetNamespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:service="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service" xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" xmlns="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" xmlns:serv="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service" xmlns:cagrid="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 	<xs:import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" schemaLocation="common/common.xsd"/>
 	<xs:import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service" schemaLocation="service/servicemodel.xsd"/>
-	<!-- ================================================= -->
-	<!-- Package: metadata  -->
-	<!-- ================================================= -->
-	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-	<!-- Class: ServiceMetadata  -->
-	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-	<xs:element name="ServiceMetadata" type="ServiceMetadata"/>
+	<xs:element name="ServiceMetadata" type="cagrid:ServiceMetadata"/>
 	<xs:complexType name="ServiceMetadata">
 		<xs:sequence>
-			<xs:element name="hostingResearchCenter" type="com:ResearchCenter" minOccurs="0"/>
-			<xs:element name="serviceDescription" type="service:Service" minOccurs="0"/>
+			<xs:element name="serviceDescription">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="serv:Service" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="hostingResearchCenter">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="com:ResearchCenter" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
 </xs:schema>

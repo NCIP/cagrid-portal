@@ -22,6 +22,30 @@ TODO:
 
 XSD/Bean Generation
 ====================
+UML to XSD:
+http://www.xml.com/lpt/a/2001/08/22/uml.html
+http://www.xml.com/lpt/a/2001/09/19/uml.html
+http://www.xml.com/lpt/a/2001/10/10/uml.html
+In EA:
+http://www.sparxsystems.com.au/resources/xml_schema_generation.html
+
+
+To Use Enterprise Architect (preferred)
+-----------------------------
+1) Model metadata in Enterprise Architect
+2) For each package:
+  2.1) Set tagged values:
+	memberNames = unqualified
+	targetNamespace = <according to caGrid rules>
+	targetNamespacePrefix = <something short and unique in the project>
+  2.2) Right-click, Code Engineering ... Generate XML Schema
+  2.3) Save as appropriate *.xsd
+3) Fix all XSDs by cleaning up xsd:imports
+4) Use XSDs as types in Globus build (generate beans from XSD)
+
+
+To Use hyperModel
+-----------------------------
 1) Model metadata in Enterprise Architect
 2) Export Logical Model Package to XMI 1.0
 3) Open as XMI in hyperModel(http://update.xmlmodeling.com/updates/index.html)
