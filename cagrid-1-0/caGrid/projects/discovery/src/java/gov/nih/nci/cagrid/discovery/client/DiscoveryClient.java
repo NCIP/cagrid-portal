@@ -61,13 +61,19 @@ public class DiscoveryClient {
 	}
 
 
+	/**
+	 * Query the registry for all registered services
+	 * 
+	 * @return EndpointReferenceType[] contain all registered services
+	 */
 	public EndpointReferenceType[] getAllServices() throws Exception {
 		return discoverByFilter("*");
 	}
 
 
 	/**
-	 * Searches ALL metadata to find occurance of the given string.  The search string is case-sensitive.
+	 * Searches ALL metadata to find occurance of the given string. The search
+	 * string is case-sensitive.
 	 * 
 	 * @param searchString
 	 *            the search string.
