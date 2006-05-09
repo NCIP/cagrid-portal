@@ -186,6 +186,9 @@
 			<fileset dir="${projects.dir}/cadsr/lib">
 				<include name="*.jar" />
 			</fileset>
+			<fileset dir="${projects.dir}/cadsr/ext/lib">
+				<include name="*.jar" />
+			</fileset>
 		</artifact>
 
 		<artifact track="main" type="jars" id="data.jars">
@@ -429,7 +432,7 @@
 			<artifact refid="cadsr.jars" />
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />
-			<artifact refid="metadata.jars"/>
+			<artifact refid="metadata.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
