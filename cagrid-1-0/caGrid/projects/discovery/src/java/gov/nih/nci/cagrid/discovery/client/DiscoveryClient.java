@@ -189,7 +189,7 @@ public class DiscoveryClient {
 					ServiceMetadata commonMetadata = MetadataUtils.getServiceMetadata(service);
 					if (commonMetadata != null && commonMetadata.getHostingResearchCenter() != null) {
 						System.out.println("Service is from:"
-							+ commonMetadata.getHostingResearchCenter().getDisplayName());
+							+ commonMetadata.getHostingResearchCenter().getResearchCenter().getDisplayName());
 					}
 				} catch (Exception e) {
 					// e.printStackTrace();
