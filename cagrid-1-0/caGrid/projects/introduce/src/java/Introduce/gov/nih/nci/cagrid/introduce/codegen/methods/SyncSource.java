@@ -223,7 +223,7 @@ public class SyncSource {
 		String returnType = "";
 
 		// need to box the output type
-		returnType = this.packageName + "." + getBoxedOutputTypeName(service.getName(), methodName) + "Response";
+		returnType = this.packageName + "." + getBoxedOutputTypeName(service.getName(), methodName);
 
 		methodString += "public " + returnType + " " + methodName + "(";
 		// Parameter[] inputs = method.getParams();
@@ -231,7 +231,7 @@ public class SyncSource {
 		// if (inputs.length > 1 || inputs.length == 0) {
 
 		// boxed
-		methodString += this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + "Request params";
+		methodString += this.packageName + "." + service.getName() + TemplateUtils.upperCaseFirstCharacter(methodName) + "Request params";
 
 		methodString += ")";
 		return methodString;
