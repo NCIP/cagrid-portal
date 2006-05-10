@@ -49,7 +49,7 @@ public class MetadataBuilder {
 	
 	public MetadataBuilder(String cadsrUrl, String project, String pack, String[] classes) {
 		this.cadsrUrl = cadsrUrl;
-		this.packageName = project;
+		this.projectName = project;
 		this.packageName = pack;
 		this.classNames = classes;
 	}
