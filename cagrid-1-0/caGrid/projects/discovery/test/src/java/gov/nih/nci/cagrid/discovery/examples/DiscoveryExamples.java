@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.discovery.examples;
 
 import gov.nih.nci.cagrid.discovery.client.DiscoveryClient;
+import gov.nih.nci.cagrid.metadata.common.PointOfContact;
 
 import org.apache.axis.message.addressing.EndpointReferenceType;
 
@@ -36,6 +37,13 @@ public class DiscoveryExamples {
 
 			printHeader("Research Center Name [" + center + "]");
 			services = client.discoverServicesByResearchCenter(center);
+			printResults(services);
+
+			PointOfContact poc = new PointOfContact();
+			poc.setFirstName("Scott");
+			poc.setLastName("Oster");
+			printHeader("POC [" + poc + "]");
+			services = client.discoverServicesByPointOfContact(poc);
 			printResults(services);
 
 		} catch (Exception e) {

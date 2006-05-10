@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.discovery.client;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.discovery.MetadataConstants;
 import gov.nih.nci.cagrid.discovery.MetadataUtils;
 import gov.nih.nci.cagrid.discovery.ResourcePropertyHelper;
@@ -95,8 +96,9 @@ public class DiscoveryClient {
 	 * @return EndpointReferenceType[] matching the search string
 	 */
 	public EndpointReferenceType[] discoverServicesByResearchCenter(String centerName) throws Exception {
-		return discoverByFilter(CONTENT_PATH + "/" + cagrid + ":ServiceMetadata/" + cagrid + ":hostingResearchCenter/"+com+":ResearchCenter["
-			+ com + ":displayName='" + centerName + "' or " + com + ":shortName='" + centerName + "']");
+		return discoverByFilter(CONTENT_PATH + "/" + cagrid + ":ServiceMetadata/" + cagrid + ":hostingResearchCenter/"
+			+ com + ":ResearchCenter[" + com + ":displayName='" + centerName + "' or " + com + ":shortName='"
+			+ centerName + "']");
 	}
 
 
@@ -111,7 +113,56 @@ public class DiscoveryClient {
 	 * @return EndpointReferenceType[] matching the search string
 	 */
 	public EndpointReferenceType[] discoverServicesByPointOfContact(PointOfContact contact) throws Exception {
-		return null;
+		String pocPredicate = buildPOCPredicate(contact);
+
+		// wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata[
+		// cagrid:hostingResearchCenter/com:ResearchCenter/com:pointOfContactCollection/com:pointOfContact[pocPredicate]
+		// or
+		// cagrid:serviceDescription/serv:Service/serv:pointOfContactCollection/com:pointOfContact[pocPredicate]]
+		return discoverByFilter(CONTENT_PATH + "/" + cagrid + ":ServiceMetadata[" + cagrid + ":hostingResearchCenter/"
+			+ com + ":ResearchCenter/" + com + ":pointOfContactCollection/" + com + ":PointOfContact[" + pocPredicate
+			+ "] or " + cagrid + ":serviceDescription/" + serv + ":Service/" + serv + ":pointOfContactCollection/"
+			+ com + ":PointOfContact[" + pocPredicate + "]]");
+	}
+
+
+	protected static String buildPOCPredicate(PointOfContact contact) {
+		String pocPredicate = "*";
+
+		if (contact != null) {
+			pocPredicate += addNonNullPredicateFilter(com + ":affiliation", contact.getAffiliation(), false);
+			pocPredicate += addNonNullPredicateFilter(com + ":email", contact.getEmail(), false);
+			pocPredicate += addNonNullPredicateFilter(com + ":firstName", contact.getFirstName(), false);
+			pocPredicate += addNonNullPredicateFilter(com + ":lastName", contact.getLastName(), false);
+			pocPredicate += addNonNullPredicateFilter(com + ":phoneNumber", contact.getPhoneNumber(), false);
+			pocPredicate += addNonNullPredicateFilter(com + ":role", contact.getRole(), false);
+		}
+
+		return pocPredicate;
+
+	}
+
+
+	/**
+	 * 
+	 * @param name
+	 *            the element or attribute name to check
+	 * @param value
+	 *            the value to add the predicate filter against if this is null
+	 *            or whitespace only, no predicated is added.
+	 * @param isAttribute
+	 *            whether or not name represents an attribute or element
+	 * @return "" or the specified predicate (prefixed with " and " )
+	 */
+	protected static String addNonNullPredicateFilter(String name, String value, boolean isAttribute) {
+		if (Utils.clean(value) == null) {
+			return "";
+		}
+		if (isAttribute) {
+			return " and @" + name + "='" + value + "'";
+		} else {
+			return " and " + name + "/text()='" + value + "'";
+		}
 	}
 
 
