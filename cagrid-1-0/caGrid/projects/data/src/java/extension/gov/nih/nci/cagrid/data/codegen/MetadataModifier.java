@@ -41,15 +41,16 @@ public class MetadataModifier {
 	}
 	
 	
-	public DomainModel createDomainModel(String schemaNamespace) throws RemoteException, CodegenExtensionException {
+	public DomainModel createDomainModel(String schemaNamespace) throws RemoteException, CodegenExtensionException {		
 		// get the metadata from the caDSR
+		Project proj = getCadsrProject();
 		UMLPackageMetadata pack = getCadsrPackage();
 		if (pack == null) {
 			throw new CodegenExtensionException("Specified domain package not found in caDSR!");
 		}
 		
 		// create the domain model skeleton
-		DomainModel model = MetadataUtilities.createDomainModel(pack);
+		DomainModel model = MetadataUtilities.createDomainModel(proj);
 		
 		// get the user's model namespace
 		NamespaceType namespace = getDomainNamespace(schemaNamespace);

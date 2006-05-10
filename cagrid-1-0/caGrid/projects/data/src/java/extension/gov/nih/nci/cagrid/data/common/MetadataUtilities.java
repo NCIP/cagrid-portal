@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.data.common;
 
+import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLAssociationMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata;
@@ -33,19 +34,19 @@ import java.util.Set;
  */
 public class MetadataUtilities {
 
-	public static UMLClass createUmlClass(UMLClassMetadata meta) {
+	public static UMLClass createUmlClass(UMLClassMetadata classMd, UMLPackageMetadata pack) {
 		UMLClass clazz = new UMLClass();
-		clazz.set_package(meta.getUMLPackageMetadata().getName());
-		clazz.setClassname(meta.getName());
-		clazz.setDescription(meta.getDescription());
-		clazz.setProjectName(meta.getProject().getLongName());
-		clazz.setProjectVersion(meta.getProject().getVersion());
-		SemanticMetadata[] semanticMetadata = new SemanticMetadata[meta.getSemanticMetadataCollection().size()];
-		meta.getSemanticMetadataCollection().toArray(semanticMetadata);
+		clazz.set_package(pack.getName());
+		clazz.setClassname(classMd.getName());
+		clazz.setDescription(classMd.getDescription());
+		clazz.setProjectName(classMd.getProject().getLongName());
+		clazz.setProjectVersion(classMd.getProject().getVersion());
+		SemanticMetadata[] semanticMetadata = new SemanticMetadata[classMd.getSemanticMetadataCollection().size()];
+		classMd.getSemanticMetadataCollection().toArray(semanticMetadata);
 		clazz.setSemanticMetadataCollection(semanticMetadata);
 		
-		Iterator attribMetaIter = meta.getUMLAttributeMetadataCollection().iterator();
-		UMLAttribute[] attribs = new UMLAttribute[meta.getUMLAttributeMetadataCollection().size()];
+		Iterator attribMetaIter = classMd.getUMLAttributeMetadataCollection().iterator();
+		UMLAttribute[] attribs = new UMLAttribute[classMd.getUMLAttributeMetadataCollection().size()];
 		int i = 0;
 		while (attribMetaIter.hasNext()) {
 			UMLAttributeMetadata attribMeta = (UMLAttributeMetadata) attribMetaIter.next();
@@ -55,6 +56,7 @@ public class MetadataUtilities {
 			SemanticMetadata[] sem = new SemanticMetadata[attribMeta.getSemanticMetadataCollection().size()];
 			attribMeta.getSemanticMetadataCollection().toArray(sem);
 			attribs[i].setSemanticMetadataCollection(sem);
+			i++;
 		}
 		clazz.setUmlAttributeCollection(attribs);
 		
@@ -62,7 +64,7 @@ public class MetadataUtilities {
 	}
 	
 	
-	public static UMLAssociation createUmlAssociation(UMLAssociationMetadata meta) {
+	public static UMLAssociation createUmlAssociation(UMLAssociationMetadata meta, UMLPackageMetadata pack) {
 		UMLAssociation assoc = new UMLAssociation();
 		assoc.setBidirectional(meta.getIsBidirectional().booleanValue());
 		
@@ -72,7 +74,7 @@ public class MetadataUtilities {
 		targetEdge.setMinCardinality(meta.getTargetLowCardinality().intValue());
 		targetEdge.setRoleName(meta.getTargetRoleName());
 		targetEdge.setUmlClass(new UMLAssociationEdgeUmlClass(
-			createUmlClass(meta.getTargetUMLClassMetadata())));
+			createUmlClass(meta.getTargetUMLClassMetadata(), pack)));
 		assoc.setTargetUMLAssociationEdge(new UMLAssociationTargetUMLAssociationEdge(targetEdge));
 		
 		// create source association edge
@@ -81,19 +83,19 @@ public class MetadataUtilities {
 		sourceEdge.setMinCardinality(meta.getSourceLowCardinality().intValue());
 		sourceEdge.setRoleName(meta.getSourceRoleName());
 		sourceEdge.setUmlClass(new UMLAssociationEdgeUmlClass(
-			createUmlClass(meta.getSourceUMLClassMetadata())));
+			createUmlClass(meta.getSourceUMLClassMetadata(), pack)));
 		assoc.setSourceUMLAssociationEdge(new UMLAssociationSourceUMLAssociationEdge(sourceEdge));
 		
 		return assoc;
 	}
 	
 	
-	public static DomainModel createDomainModel(UMLPackageMetadata pkg) {
+	public static DomainModel createDomainModel(Project proj) {
 		DomainModel model = new DomainModel();
-		model.setProjectDescription(pkg.getProject().getDescription());
-		model.setProjectLongName(pkg.getProject().getLongName());
-		model.setProjectShortName(pkg.getProject().getShortName());
-		model.setProjectVersion(pkg.getProject().getVersion());
+		model.setProjectDescription(proj.getDescription());
+		model.setProjectLongName(proj.getLongName());
+		model.setProjectShortName(proj.getShortName());
+		model.setProjectVersion(proj.getVersion());
 		return model;
 	}
 	
@@ -104,12 +106,12 @@ public class MetadataUtilities {
 		Set associationEdges = new HashSet();
 		for (int i = 0; i < classNames.length; i++) {
 			UMLClassMetadata umlClassMd = (UMLClassMetadata) umlClasses.get(classNames[i]);
-			UMLClass umlClass = createUmlClass(umlClassMd);
+			UMLClass umlClass = createUmlClass(umlClassMd, pack);
 			exposedClasses[i] = umlClass;
 			Iterator assocMdIter = umlClassMd.getUMLAssociationMetadataCollection().iterator();
 			while (assocMdIter.hasNext()) {
 				UMLAssociationMetadata assocMd = (UMLAssociationMetadata) assocMdIter.next();
-				UMLAssociation association = createUmlAssociation(assocMd);
+				UMLAssociation association = createUmlAssociation(assocMd, pack);
 				associationEdges.add(association);
 			}
 		}

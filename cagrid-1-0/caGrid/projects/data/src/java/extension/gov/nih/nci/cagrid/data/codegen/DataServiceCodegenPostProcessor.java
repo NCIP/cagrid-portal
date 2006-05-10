@@ -5,7 +5,6 @@ import gov.nih.nci.cagrid.data.common.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
-import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
@@ -36,28 +35,7 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 	
 	public void postCodegen(ServiceExtensionDescriptionType desc, ServiceInformation info) throws CodegenExtensionException {
 		modifyQueryMethod(desc, info);
-		MetadataModifier modifier = new MetadataModifier(desc, info);
-		// find the namespace to expose
-		NamespaceType[] namespaces = info.getNamespaces().getNamespace();
-		String targetNamespace = null;
-		for (int i = 0; namespaces != null && i < namespaces.length; i++) {
-			String ns = namespaces[i].getNamespace();
-			if (!(ns.equals(DataServiceConstants.CQL_QUERY_URI)) ||
-				ns.equals(DataServiceConstants.CQL_RESULT_SET_URI) ||
-				ns.equals(IntroduceConstants.W3CNAMESPACE)) {
-				targetNamespace = ns;
-				break;
-			}
-		}
-		if (targetNamespace == null) {
-			throw new CodegenExtensionException("No target namespace found for data service");
-		}
-		try {
-			DomainModel model = modifier.createDomainModel(targetNamespace);
-			// TODO: serialize the model to the file system location for metadata
-		} catch (RemoteException ex) {
-			throw new CodegenExtensionException("Error connecting to caDSR for metadata: " + ex.getMessage(), ex);
-		}
+		modifyMetadata(desc, info);
 	}
 	
 	
@@ -154,5 +132,29 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 			return queryProcessorClass;
 		}
 		return null;
+	}
+	
+	
+	private void modifyMetadata(ServiceExtensionDescriptionType desc, ServiceInformation info) throws CodegenExtensionException {
+		// verify there's a caDSR element in the extension data bucker
+		ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
+		if (ExtensionTools.getExtensionDataElement(data, DataServiceConstants.CADSR_ELEMENT_NAME) != null) {
+			MetadataModifier modifier = new MetadataModifier(desc, info);
+			// get the target namespace, if specified
+			String targetNamespace = null;			
+			MessageElement targetNsElement = ExtensionTools.getExtensionDataElement(data, DataServiceConstants.DATA_MODEL_ELEMENT_NAME);
+			if (targetNsElement != null) {
+				targetNamespace = targetNsElement.getValue();
+			}
+			if (targetNamespace != null) {
+				try {
+					DomainModel model = modifier.createDomainModel(targetNamespace);
+					System.out.println("Created data service metadata!");
+					// TODO: serialize the model to the file system location for metadata
+				} catch (RemoteException ex) {
+					throw new CodegenExtensionException("Error connecting to caDSR for metadata: " + ex.getMessage(), ex);
+				}
+			}
+		}
 	}
 }
