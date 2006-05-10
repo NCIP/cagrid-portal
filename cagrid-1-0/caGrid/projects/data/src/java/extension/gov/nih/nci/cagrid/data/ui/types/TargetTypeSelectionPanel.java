@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.data.ui.types;
 
 import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
-import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.common.AxisJdomUtils;
@@ -58,7 +57,7 @@ import org.projectmobius.protocol.gme.SchemaNode;
  */
 public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	
-	private CaDSRBrowserPanel domainBrowserPanel = null;
+	private DomainBrowserPanel domainBrowserPanel = null;
 	private TargetTypesTree typesTree = null;
 	private JScrollPane typesTreeScrollPane = null;
 	private DataServiceTypesTable typesTable = null;
@@ -100,9 +99,22 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	}
 	
 	
-	private CaDSRBrowserPanel getDomainBrowserPanel() {
+	private DomainBrowserPanel getDomainBrowserPanel() {
 		if (domainBrowserPanel == null) {
-			domainBrowserPanel = new CaDSRBrowserPanel(true, false);
+			domainBrowserPanel = new DomainBrowserPanel(true, false);
+			// if there's existing caDSR info, set the browser panel to show it
+			MessageElement cadsrElement = ExtensionTools.getExtensionDataElement(
+				getExtensionTypeExtensionData(), DataServiceConstants.CADSR_ELEMENT_NAME);
+			if (cadsrElement != null) {
+				String url = cadsrElement.getAttribute(DataServiceConstants.CADSR_URL_ATTRIB);
+				String project = cadsrElement.getAttribute(DataServiceConstants.CADSR_PROJECT_ATTRIB);
+				String pack = cadsrElement.getAttribute(DataServiceConstants.CADSR_PACKAGE_ATTRIB);
+				domainBrowserPanel.setDefaultCaDSRURL(url);
+				domainBrowserPanel.getCadsr().setText(url);
+				domainBrowserPanel.blockingCadsrRefresh();
+				domainBrowserPanel.setSelectedProject(project);
+				domainBrowserPanel.setSelectedPackage(pack);
+			}
 		}
 		return domainBrowserPanel;
 	}
