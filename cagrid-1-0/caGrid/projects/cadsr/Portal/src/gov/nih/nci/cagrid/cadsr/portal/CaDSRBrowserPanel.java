@@ -99,8 +99,8 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 		gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
 		gridBagConstraints1.weightx = 1.0D;
 		gridBagConstraints1.weighty = 1.0D;
-		this.add(getQueryPanel(), gridBagConstraints1);
 		if (isShowQueryPanel()) {
+			add(getQueryPanel(), gridBagConstraints1);
 		}
 		add(getProjectsPanel(), gridBagConstraints);
 	}
@@ -153,7 +153,6 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 
 
 	public void discoverFromCaDSR() {
-
 		final CaDSRServiceI cadsrService = new CaDSRServiceClient(getCadsr().getText());
 		getProjectComboBox().removeAllItems();
 		makeCombosEnable(false);
@@ -175,7 +174,6 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 			}
 		};
 		t.start();
-
 	}
 
 
@@ -395,7 +393,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	}
 
 
-	class ProjectDisplay {
+	protected class ProjectDisplay {
 		private Project project;
 
 
@@ -421,7 +419,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	}
 
 
-	class PackageDisplay {
+	protected class PackageDisplay {
 		private UMLPackageMetadata pack;
 
 
@@ -447,7 +445,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	}
 
 
-	class ClassDisplay {
+	protected class ClassDisplay {
 		private UMLClassMetadata clazz;
 
 
