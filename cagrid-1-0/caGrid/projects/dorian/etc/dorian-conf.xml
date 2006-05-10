@@ -10,7 +10,7 @@
 				<host>localhost</host>
 				<port>3306</port>
 				<username>root</username>
-				<password>gomets123</password>
+				<password></password>
 				<pool>1</pool>
 			</database>
 			<outgoing-email host="columbus.bmi.ohio-state.edu" port="25" protocol="smtp"/>
