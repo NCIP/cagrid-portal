@@ -6,6 +6,7 @@ import gov.nih.nci.cadsr.umlproject.domain.UMLAssociationMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
+import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
 import gov.nih.nci.cagrid.metadata.common.UMLAttribute;
 import gov.nih.nci.cagrid.metadata.common.UMLClass;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
@@ -17,6 +18,7 @@ import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationEdgeUmlClass;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationSourceUMLAssociationEdge;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationTargetUMLAssociationEdge;
 
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -33,6 +35,18 @@ import java.util.Set;
  * @version $Id$ 
  */
 public class MetadataUtilities {
+	
+	private static CaDSRServiceClient cadsrClient = null;
+	
+	public static CaDSRServiceClient getCadsrClient() {
+		return cadsrClient;
+	}
+	
+	
+	public static void setCadsrClient(CaDSRServiceClient client) {
+		cadsrClient = client;
+	}
+	
 
 	public static UMLClass createUmlClass(UMLClassMetadata classMd, UMLPackageMetadata pack) {
 		UMLClass clazz = new UMLClass();
@@ -100,8 +114,8 @@ public class MetadataUtilities {
 	}
 	
 	
-	public static void setExposedClasses(DomainModel model, UMLPackageMetadata pack, String[] classNames) {
-		Map umlClasses = umlClassMetadataByName(pack);
+	public static void setExposedClasses(DomainModel model, Project proj, UMLPackageMetadata pack, String[] classNames) throws RemoteException {
+		Map umlClasses = umlClassMetadataByName(proj, pack);
 		UMLClass[] exposedClasses = new UMLClass[classNames.length];
 		Set associationEdges = new HashSet();
 		for (int i = 0; i < classNames.length; i++) {
@@ -124,12 +138,11 @@ public class MetadataUtilities {
 	}
 	
 	
-	private static Map umlClassMetadataByName(UMLPackageMetadata pack) {
+	private static Map umlClassMetadataByName(Project proj, UMLPackageMetadata pack) throws RemoteException {
 		Map classMd = new HashMap();
-		Iterator classMdIter = pack.getUMLClassMetadataCollection().iterator();
-		while (classMdIter.hasNext()) {
-			UMLClassMetadata md = (UMLClassMetadata) classMdIter.next();
-			classMd.put(md.getName(), md);
+		UMLClassMetadata[] mdArray = cadsrClient.findClassesInPackage(proj, pack.getName());
+		for (int i = 0; i < mdArray.length; i++) {
+			classMd.put(mdArray[i].getName(), mdArray[i]);
 		}
 		return classMd;
 	}

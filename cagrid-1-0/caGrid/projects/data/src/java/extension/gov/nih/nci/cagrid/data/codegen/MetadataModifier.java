@@ -41,7 +41,8 @@ public class MetadataModifier {
 	}
 	
 	
-	public DomainModel createDomainModel(String schemaNamespace) throws RemoteException, CodegenExtensionException {		
+	public DomainModel createDomainModel(String schemaNamespace) throws RemoteException, CodegenExtensionException {
+		MetadataUtilities.setCadsrClient(getCadsrClient());
 		// get the metadata from the caDSR
 		Project proj = getCadsrProject();
 		UMLPackageMetadata pack = getCadsrPackage();
@@ -67,7 +68,7 @@ public class MetadataModifier {
 			}
 			
 			// add metadata for the selected schema types
-			MetadataUtilities.setExposedClasses(model, pack, classNames);
+			MetadataUtilities.setExposedClasses(model, proj, pack, classNames);
 		}
 		
 		return model;
