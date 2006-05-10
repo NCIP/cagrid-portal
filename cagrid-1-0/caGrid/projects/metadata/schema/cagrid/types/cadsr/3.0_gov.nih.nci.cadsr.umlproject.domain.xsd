@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Scott Oster (BMI) -->
 <xs:schema targetNamespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" xmlns:gov.nih.nci.cadsr.domain="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" elementFormDefault="qualified">
-	<xs:import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" schemaLocation="../cadsr/3.0_gov.nih.nci.cadsr.umlproject.domain.xsd"/>
 	<xs:import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" schemaLocation="3.0_gov.nih.nci.cadsr.domain.xsd"/>
 	<xs:element name="Project" type="Project"/>
 	<xs:complexType name="Project">
