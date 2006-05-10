@@ -5,6 +5,8 @@ import gov.nih.nci.cagrid.data.common.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
@@ -138,17 +140,34 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 	private void modifyMetadata(ServiceExtensionDescriptionType desc, ServiceInformation info) throws CodegenExtensionException {
 		// verify there's a caDSR element in the extension data bucket		
 		ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
-		if (ExtensionTools.getExtensionDataElement(data, DataServiceConstants.CADSR_ELEMENT_NAME) != null) {
-			MetadataModifier modifier = new MetadataModifier(desc, info);
+		MessageElement cadsrElement = ExtensionTools.getExtensionDataElement(data, DataServiceConstants.CADSR_ELEMENT_NAME);
+		if (cadsrElement != null) {
+			String cadsrUrl = cadsrElement.getAttribute(DataServiceConstants.CADSR_URL_ATTRIB);
+			String cadsrProject = cadsrElement.getAttribute(DataServiceConstants.CADSR_PROJECT_ATTRIB);
+			String cadsrPackage = cadsrElement.getAttribute(DataServiceConstants.CADSR_PACKAGE_ATTRIB);
 			// get the target namespace, if specified
-			String targetNamespace = null;			
+			String targetNamespace = null;
 			MessageElement targetNsElement = ExtensionTools.getExtensionDataElement(data, DataServiceConstants.DATA_MODEL_ELEMENT_NAME);
 			if (targetNsElement != null) {
 				targetNamespace = targetNsElement.getValue();
 			}
 			if (targetNamespace != null) {
+				// get the namespace type specified, then list selected classes
+				String[] classNames = null;
+				NamespaceType[] namespaces = info.getNamespaces().getNamespace();
+				for (int i = 0; i < namespaces.length; i++) {
+					if (namespaces[i].getNamespace().equals(targetNamespace)) {
+						SchemaElementType[] types = namespaces[i].getSchemaElement();
+						classNames = new String[types.length];
+						for (int j = 0; j < types.length; j++) {
+							classNames[j] = types[j].getClassName();
+						}
+						break;
+					}
+				}
 				try {
-					DomainModel model = modifier.createDomainModel(targetNamespace);
+					MetadataBuilder builder = new MetadataBuilder(cadsrUrl, cadsrProject, cadsrPackage, classNames);
+					DomainModel model = builder.getDomainModel();
 					System.out.println("Created data service metadata!");
 					// TODO: serialize the model to the file system location for metadata
 				} catch (RemoteException ex) {
