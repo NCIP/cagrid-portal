@@ -136,7 +136,7 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 	
 	
 	private void modifyMetadata(ServiceExtensionDescriptionType desc, ServiceInformation info) throws CodegenExtensionException {
-		// verify there's a caDSR element in the extension data bucker
+		// verify there's a caDSR element in the extension data bucket		
 		ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
 		if (ExtensionTools.getExtensionDataElement(data, DataServiceConstants.CADSR_ELEMENT_NAME) != null) {
 			MetadataModifier modifier = new MetadataModifier(desc, info);
