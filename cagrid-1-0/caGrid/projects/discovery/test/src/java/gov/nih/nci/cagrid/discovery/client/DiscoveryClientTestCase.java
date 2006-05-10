@@ -24,16 +24,16 @@ public class DiscoveryClientTestCase extends TestCase {
 
 
 	public void testPredicateUtilNulls() {
-		assertEquals("", DiscoveryClient.addNonNullPredicateFilter("foo", "", false));
-		assertEquals("", DiscoveryClient.addNonNullPredicateFilter("foo", "  ", false));
-		assertEquals("", DiscoveryClient.addNonNullPredicateFilter("foo", "", true));
-		assertEquals("", DiscoveryClient.addNonNullPredicateFilter("foo", " ", true));
+		assertEquals("", DiscoveryClient.addNonNullPredicate("foo", "", false));
+		assertEquals("", DiscoveryClient.addNonNullPredicate("foo", "  ", false));
+		assertEquals("", DiscoveryClient.addNonNullPredicate("foo", "", true));
+		assertEquals("", DiscoveryClient.addNonNullPredicate("foo", " ", true));
 	}
 
 
 	public void testPredicateUtil() {
-		assertEquals(" and foo/text()='bar'", DiscoveryClient.addNonNullPredicateFilter("foo", "bar", false));
-		assertEquals(" and @foo='bar'", DiscoveryClient.addNonNullPredicateFilter("foo", "bar", true));
+		assertEquals(" and foo/text()='bar'", DiscoveryClient.addNonNullPredicate("foo", "bar", false));
+		assertEquals(" and @foo='bar'", DiscoveryClient.addNonNullPredicate("foo", "bar", true));
 	}
 
 

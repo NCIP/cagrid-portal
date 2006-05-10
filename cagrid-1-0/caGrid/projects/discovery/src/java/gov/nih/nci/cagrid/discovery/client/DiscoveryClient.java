@@ -31,8 +31,10 @@ public class DiscoveryClient {
 	private static final String com = "com";
 	private static final String serv = "serv";
 	private static final String data = "data";
+
 	// some common paths for reuse
 	private static final String CONTENT_PATH = wssg + ":Content/" + agg + ":AggregatorData";
+	private static final String MD_PATH = CONTENT_PATH + "/" + cagrid + ":ServiceMetadata";
 
 	// Map the prefixes to there namepsaces
 	private static Map nsMap = new HashMap();
@@ -46,11 +48,25 @@ public class DiscoveryClient {
 	}
 
 
+	/**
+	 * Uuses the Default Index Service
+	 * 
+	 * @throws MalformedURIException
+	 *             if the Default Index Service is invalid
+	 */
 	public DiscoveryClient() throws MalformedURIException {
 		this(DEFAULT_INDEX_SERVICE_URL);
 	}
 
 
+	/**
+	 * Uses the specified Index Service
+	 * 
+	 * @param indexURL
+	 *            the URL to the Index Service to use
+	 * @throws MalformedURIException
+	 *             if the specified Index Service URL is invalid
+	 */
 	public DiscoveryClient(String indexURL) throws MalformedURIException {
 		this.indexEPR = new EndpointReferenceType();
 		this.indexEPR.setAddress(new Address(indexURL));
@@ -58,6 +74,12 @@ public class DiscoveryClient {
 	}
 
 
+	/**
+	 * Uses the specified Index Service
+	 * 
+	 * @param indexEPR
+	 *            the EPR to the Index Service to use
+	 */
 	public DiscoveryClient(EndpointReferenceType indexEPR) {
 		this.indexEPR = indexEPR;
 	}
@@ -96,9 +118,8 @@ public class DiscoveryClient {
 	 * @return EndpointReferenceType[] matching the search string
 	 */
 	public EndpointReferenceType[] discoverServicesByResearchCenter(String centerName) throws Exception {
-		return discoverByFilter(CONTENT_PATH + "/" + cagrid + ":ServiceMetadata/" + cagrid + ":hostingResearchCenter/"
-			+ com + ":ResearchCenter[" + com + ":displayName='" + centerName + "' or " + com + ":shortName='"
-			+ centerName + "']");
+		return discoverByFilter(MD_PATH + "/" + cagrid + ":hostingResearchCenter/" + com + ":ResearchCenter[" + com
+			+ ":displayName='" + centerName + "' or " + com + ":shortName='" + centerName + "']");
 	}
 
 
@@ -115,27 +136,32 @@ public class DiscoveryClient {
 	public EndpointReferenceType[] discoverServicesByPointOfContact(PointOfContact contact) throws Exception {
 		String pocPredicate = buildPOCPredicate(contact);
 
-		// wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata[
-		// cagrid:hostingResearchCenter/com:ResearchCenter/com:pointOfContactCollection/com:pointOfContact[pocPredicate]
-		// or
-		// cagrid:serviceDescription/serv:Service/serv:pointOfContactCollection/com:pointOfContact[pocPredicate]]
-		return discoverByFilter(CONTENT_PATH + "/" + cagrid + ":ServiceMetadata[" + cagrid + ":hostingResearchCenter/"
-			+ com + ":ResearchCenter/" + com + ":pointOfContactCollection/" + com + ":PointOfContact[" + pocPredicate
-			+ "] or " + cagrid + ":serviceDescription/" + serv + ":Service/" + serv + ":pointOfContactCollection/"
-			+ com + ":PointOfContact[" + pocPredicate + "]]");
+		return discoverByFilter(MD_PATH + "[" + cagrid + ":hostingResearchCenter/" + com + ":ResearchCenter/" + com
+			+ ":pointOfContactCollection/" + com + ":PointOfContact[" + pocPredicate + "] or " + cagrid
+			+ ":serviceDescription/" + serv + ":Service/" + serv + ":pointOfContactCollection/" + com
+			+ ":PointOfContact[" + pocPredicate + "]]");
 	}
 
 
+	/**
+	 * Builds up a predicate for a PointOfContact, based on the prototype passed
+	 * in.
+	 * 
+	 * @param contact
+	 *            the prototype POC
+	 * @return "*" if the prototype has no non-null or non-whitespace values, or
+	 *         the predicate necessary to match all values.
+	 */
 	protected static String buildPOCPredicate(PointOfContact contact) {
 		String pocPredicate = "*";
 
 		if (contact != null) {
-			pocPredicate += addNonNullPredicateFilter(com + ":affiliation", contact.getAffiliation(), false);
-			pocPredicate += addNonNullPredicateFilter(com + ":email", contact.getEmail(), false);
-			pocPredicate += addNonNullPredicateFilter(com + ":firstName", contact.getFirstName(), false);
-			pocPredicate += addNonNullPredicateFilter(com + ":lastName", contact.getLastName(), false);
-			pocPredicate += addNonNullPredicateFilter(com + ":phoneNumber", contact.getPhoneNumber(), false);
-			pocPredicate += addNonNullPredicateFilter(com + ":role", contact.getRole(), false);
+			pocPredicate += addNonNullPredicate(com + ":affiliation", contact.getAffiliation(), false);
+			pocPredicate += addNonNullPredicate(com + ":email", contact.getEmail(), false);
+			pocPredicate += addNonNullPredicate(com + ":firstName", contact.getFirstName(), false);
+			pocPredicate += addNonNullPredicate(com + ":lastName", contact.getLastName(), false);
+			pocPredicate += addNonNullPredicate(com + ":phoneNumber", contact.getPhoneNumber(), false);
+			pocPredicate += addNonNullPredicate(com + ":role", contact.getRole(), false);
 		}
 
 		return pocPredicate;
@@ -154,7 +180,7 @@ public class DiscoveryClient {
 	 *            whether or not name represents an attribute or element
 	 * @return "" or the specified predicate (prefixed with " and " )
 	 */
-	protected static String addNonNullPredicateFilter(String name, String value, boolean isAttribute) {
+	protected static String addNonNullPredicate(String name, String value, boolean isAttribute) {
 		if (Utils.clean(value) == null) {
 			return "";
 		}
@@ -166,6 +192,16 @@ public class DiscoveryClient {
 	}
 
 
+	/**
+	 * Applies the specified predicate to the common path in the Index Service's
+	 * Resource Properties to return registered services' EPRs that match the
+	 * predicate.
+	 * 
+	 * @param xpathPredicate
+	 *            predicate to apply to the "Entry" in Index Service
+	 * @return EndpointReferenceType[] of matching services
+	 * @throws Exception
+	 */
 	protected EndpointReferenceType[] discoverByFilter(String xpathPredicate) throws Exception {
 		EndpointReferenceType[] results = null;
 		final String xpath = "/*/" + wssg + ":Entry[" + xpathPredicate + "]/" + wssg + ":MemberServiceEPR";
@@ -201,16 +237,31 @@ public class DiscoveryClient {
 	// discoverServicesByObjectsAssociatedWithClass???
 	//
 
+	/**
+	 * Gets the EPR of the Index Service being used.
+	 */
 	public EndpointReferenceType getIndexEPR() {
 		return indexEPR;
 	}
 
 
+	/**
+	 * Sets the EPR of the Index Service to use.
+	 * 
+	 * @param indexEPR
+	 *            the EPR of the Index Service to use.
+	 */
 	public void setIndexEPR(EndpointReferenceType indexEPR) {
 		this.indexEPR = indexEPR;
 	}
 
 
+	/**
+	 * testing stub
+	 * 
+	 * @param args
+	 *            optional URL to Index Service to query.
+	 */
 	public static void main(String[] args) {
 		DiscoveryClient client = null;
 		try {
