@@ -123,16 +123,16 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 					addTreeNamespaceToServiceDescription();
 				}
 			});
-			// get any namespace type that's not the CQL or W3C namespace
-			for (int i = 0; i < getServiceInfo().getNamespaces().getNamespace().length; i++) {
-				NamespaceType ns = getServiceInfo().getNamespaces().getNamespace(i);
-				if (!(ns.getNamespace().equals(DataServiceConstants.CQL_QUERY_URI) ||
-					ns.getNamespace().equals(DataServiceConstants.CQL_RESULT_SET_URI) ||
-					ns.getNamespace().equals(IntroduceConstants.W3CNAMESPACE))) {
-					typesTree.setNamespace(ns);
-					// check the schema types on the tree so they end up in
-					// the types table
-					typesTree.checkSchemaNodes();
+			// see if there is already a targeted namespace to display
+			String targetNamespace = getTargetModelNamespace();
+			if (targetNamespace != null) {
+				for (int i = 0; i < getServiceInfo().getNamespaces().getNamespace().length; i++) {
+					NamespaceType ns = getServiceInfo().getNamespaces().getNamespace(i);
+					if (ns.getNamespace().equals(targetNamespace)) {
+						typesTree.setNamespace(ns);
+						typesTree.checkSchemaNodes();
+						break;
+					}
 				}
 			}
 		}
@@ -537,5 +537,17 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			ex.printStackTrace();
 			PortalUtils.showErrorMessage("Error storing target model's namespace", ex);
 		}		
+	}
+	
+	
+	private String getTargetModelNamespace() {
+		ExtensionTypeExtensionData data = getExtensionTypeExtensionData();
+		MessageElement modelElement = ExtensionTools.getExtensionDataElement(data, DataServiceConstants.DATA_MODEL_ELEMENT_NAME);
+		if (modelElement != null) {
+			if (modelElement.getValue() != null && modelElement.getValue().length() != 0) {
+				return modelElement.getValue();
+			}
+		}
+		return null;
 	}
 }
