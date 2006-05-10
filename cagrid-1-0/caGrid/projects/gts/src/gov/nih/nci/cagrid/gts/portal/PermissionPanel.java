@@ -202,7 +202,7 @@ public class PermissionPanel extends JPanel {
 				if (tas != null) {
 					currentLength = tas.length;
 					for (int i = 0; i < tas.length; i++) {
-						this.trustedAuthorities.addItem(tas[0].getName());
+						this.trustedAuthorities.addItem(tas[i].getName());
 					}
 				}
 
