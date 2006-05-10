@@ -95,7 +95,7 @@ public class DiscoveryClient {
 	 * @return EndpointReferenceType[] matching the search string
 	 */
 	public EndpointReferenceType[] discoverServicesByResearchCenter(String centerName) throws Exception {
-		return discoverByFilter(CONTENT_PATH + "/" + cagrid + ":ServiceMetadata/" + cagrid + ":hostingResearchCenter["
+		return discoverByFilter(CONTENT_PATH + "/" + cagrid + ":ServiceMetadata/" + cagrid + ":hostingResearchCenter/"+com+":ResearchCenter["
 			+ com + ":displayName='" + centerName + "' or " + com + ":shortName='" + centerName + "']");
 	}
 

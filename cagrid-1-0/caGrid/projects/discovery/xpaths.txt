@@ -6,10 +6,10 @@
 wssg:Content/agg:AggregatorData//*[contains(text(),'searchString') or contains(@*,'searchString')]
 
 #centerName
-wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata/cagrid:hostingResearchCenter[com:displayName='centerName' or com:shortName='centerName']
+wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata/cagrid:hostingResearchCenter/com:ResearchCenter[com:displayName='centerName' or com:shortName='centerName']
 
 #POC
-wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata[cagrid:hostingResearchCenter/com:pointOfContact[] or cagrid:serviceDescription
+wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata/cagrid:hostingResearchCenter/com:ResearchCenter[com:pointOfContact[] or cagrid:serviceDescription
 
 
 
