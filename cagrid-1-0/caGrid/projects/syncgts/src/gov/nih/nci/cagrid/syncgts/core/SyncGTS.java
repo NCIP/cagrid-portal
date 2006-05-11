@@ -45,7 +45,6 @@ public class SyncGTS {
 	private Map caListings;
 	private Map listingsById;
 	private Logger logger;
-	private int nextFileId = 0;
 	private List messages;
 	private HistoryManager history;
 	private static SyncGTS instance;
@@ -71,23 +70,10 @@ public class SyncGTS {
 	private synchronized void reset() {
 		this.caListings = null;
 		this.listingsById = null;
-		this.nextFileId = 0;
+
 		messages = new ArrayList();
 	}
 
-
-	private synchronized int getNextFileId() {
-		nextFileId = nextFileId + 1;
-		boolean found = true;
-		while (found) {
-			if (!listingsById.containsKey(new Integer(nextFileId))) {
-				found = false;
-			} else {
-				nextFileId = nextFileId + 1;
-			}
-		}
-		return nextFileId;
-	}
 
 
 	private synchronized boolean getLock() {
@@ -243,7 +229,7 @@ public class SyncGTS {
 			List addedList = new ArrayList();
 			while (itr.hasNext()) {
 				taCount = taCount + 1;
-				int fid = this.getNextFileId();
+				int fid =0;
 				String filePrefix = CoGProperties.getDefault().getCaCertLocations() + File.separator
 					+ description.getFilePrefix() + "-" + dt + "-" + taCount;
 				File caFile = new File(filePrefix + "." + fid);
