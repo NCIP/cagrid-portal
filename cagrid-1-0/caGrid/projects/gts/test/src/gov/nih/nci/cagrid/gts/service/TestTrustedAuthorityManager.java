@@ -648,17 +648,6 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 
 			}
 
-			// Test Invalid Expires
-
-			try {
-				TrustedAuthority u = trust.getTrustedAuthority(ta.getName());
-				u.setExpires(2);
-				trust.updateTrustedAuthority(u);
-				fail("Should not be able to update a trusted authority!!!");
-			} catch (IllegalTrustedAuthorityFault f) {
-
-			}
-
 			try {
 				TrustedAuthority u = trust.getTrustedAuthority(ta2.getName());
 				trust.updateTrustedAuthority(u);

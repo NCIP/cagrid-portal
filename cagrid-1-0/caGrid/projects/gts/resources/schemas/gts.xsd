@@ -135,6 +135,8 @@
 			</xsd:sequence>
 		</xsd:complexType>
 		
+		<xsd:element name="X509CRL" minOccurs="0" maxOccurs="1" type="gts:X509CRL"/>
+		
 		<xsd:complexType name="X509CRL">
 			<xsd:sequence>
 				<xsd:element name="crlEncodedString" minOccurs="1" maxOccurs="1" type="xsd:string"/>

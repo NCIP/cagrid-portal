@@ -228,19 +228,14 @@ public class TrustedAuthorityManager {
 				}
 			}
 
-			if (!ta.getSourceGTS().equals(curr.getSourceGTS())) {
+			if ((clean(ta.getSourceGTS()) != null)
+					&& (!ta.getSourceGTS().equals(curr.getSourceGTS()))) {
 				IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
 				fault
 						.setFaultString("The source trust service for a Trusted Authority cannot be changed");
 				throw fault;
 			}
-
-			if (ta.getExpires() != curr.getExpires()) {
-				IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
-				fault
-						.setFaultString("The expiration for a Trusted Authority cannot be changed");
-				throw fault;
-			}
+			
 		} else {
 
 			if ((curr.getIsAuthority().booleanValue())
