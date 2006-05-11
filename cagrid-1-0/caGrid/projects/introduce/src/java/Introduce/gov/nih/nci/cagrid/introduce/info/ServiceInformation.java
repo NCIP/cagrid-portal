@@ -2,12 +2,10 @@ package gov.nih.nci.cagrid.introduce.info;
 
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionsType;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
-import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
 
 import java.io.File;
@@ -28,8 +26,6 @@ public class ServiceInformation {
 	private Properties introduceServiceProperties;
 
 	private File baseDirectory;
-	
-	private ServiceProperties serviceProperties;
 
 
 	public ServiceInformation(ServiceDescription service, Properties properties, File baseDirectory) {
@@ -75,11 +71,6 @@ public class ServiceInformation {
 
 	public void setExtensions(ExtensionsType extensions) {
 		this.introService.setExtensions(extensions);
-	}
-
-
-	public ServiceSecurity getServiceSecurity() {
-		return this.introService.getServiceSecurity();
 	}
 	
 	public ServiceProperties getServiceProperties() {

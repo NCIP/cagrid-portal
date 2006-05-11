@@ -2,7 +2,6 @@
 <xs:schema xmlns="gme://gov.nih.nci.cagrid/1/Introduce"
            xmlns:extension="gme://gov.nih.nci.cagrid.introduce/1/Extension"
            xmlns:service="gme://gov.nih.nci.cagrid.introduce/1/Services"
-           xmlns:security="gme://gov.nih.nci.cagrid.introduce/1/Security"
            xmlns:namespace="gme://gov.nih.nci.cagrid.introduce/1/Namespace"
            xmlns:property="gme://gov.nih.nci.cagrid.introduce/1/Property"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
@@ -12,8 +11,6 @@
                       schemaLocation="./Namespace.xsd"/>
            <xs:import namespace="gme://gov.nih.nci.cagrid.introduce/1/Services"
                       schemaLocation="./Services.xsd"/> 
-           <xs:import namespace="gme://gov.nih.nci.cagrid.introduce/1/Security"
-                      schemaLocation="./Security.xsd"/>
            <xs:import namespace="gme://gov.nih.nci.cagrid.introduce/1/Extension"
                       schemaLocation="./Extension.xsd"/>
            <xs:import namespace="gme://gov.nih.nci.cagrid.introduce/1/Property"
@@ -24,7 +21,6 @@
                                  <xs:sequence>
                                             <xs:element ref="namespace:Namespaces"/>
                                             <xs:element ref="service:Services"/>
-                                            <xs:element ref="security:ServiceSecurity" minOccurs="0" maxOccurs="1"/>
                                             <xs:element ref="extension:Extensions" minOccurs="0" maxOccurs="1"/>
                                             <xs:element ref="property:ServiceProperties" minOccurs="0" maxOccurs="1"/>
                                  </xs:sequence>

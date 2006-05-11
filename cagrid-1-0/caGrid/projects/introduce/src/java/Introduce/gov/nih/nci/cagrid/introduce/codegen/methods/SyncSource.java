@@ -510,7 +510,7 @@ public class SyncSource {
 
 		// TODO: ADD CLIENT SECURITY
 		clientMethod += "\n"
-			+ configureClientSecurity(this.serviceInfo.getServiceSecurity(), method.getMethodSecurity());
+			+ configureClientSecurity(service.getServiceSecurity(), method.getMethodSecurity());
 		// put in the call to the client
 		String var = "port";
 
