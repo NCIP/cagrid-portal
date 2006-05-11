@@ -13,7 +13,7 @@ public class TestCaseInfo1 extends TestCaseInfo {
 	
 	public String packageDir = "org" + File.separator + "test";
 
-	public String namespaceDomain = "test.org";
+	public String namespaceDomain = "test.org/IntroduceTestService";
 
 	public TestCaseInfo1() {
 
@@ -54,7 +54,7 @@ public class TestCaseInfo1 extends TestCaseInfo {
 	/* (non-Javadoc)
 	 * @see gov.nih.nci.cagrid.introduce.TestCaseInfoI#getNamespaceDomain()
 	 */
-	public String getNamespaceDomain() {
+	public String getNamespace() {
 		return namespaceDomain;
 	}
 

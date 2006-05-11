@@ -99,7 +99,7 @@ public class AddMetadatatWithLoadFromFileStep extends Step {
 
 		// look at the interface to make sure method from file exists.......
 		String serviceInterface = pathtobasedir + File.separator + tci.getDir() + File.separator + "src" + File.separator
-			+ tci.getPackageDir() + File.separator + introService.getServices().getService(0).getName().toLowerCase() + File.separator + "service" + File.separator + "globus" + File.separator + "resource"
+			+ tci.getPackageDir() + File.separator + "service" + File.separator + "globus" + File.separator + "resource"
 			+ File.separator + "BaseResource.java";
 		assertTrue("Checking that BaseResource contains the load method", StepTools.methodExists(serviceInterface,
 			"loadCommonServiceMetadataFromFile"));

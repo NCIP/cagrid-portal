@@ -5,7 +5,6 @@ imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codege
 	if(info.getServices() != null && info.getServices().getService() !=null){
 		metadataList = info.getServices().getService(0).getResourcePropertiesList();
 	}	
-	String packageName = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.package");
 	String serviceName = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.service.name");
 	String namespaceDomain = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.namespace.domain");
 	String modifiedServiceName = serviceName;

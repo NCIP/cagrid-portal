@@ -42,7 +42,11 @@ public class AddSimpleMethodWithReturnStep extends Step {
 		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(pathtobasedir + File.separator
 			+ tci.getDir() + File.separator + "introduce.xml", ServiceDescription.class);
 		MethodsType methodsType = CommonTools.getService(introService.getServices(),tci.getName()).getMethods();
-
+		if(methodsType==null){
+			methodsType = new MethodsType();
+			CommonTools.getService(introService.getServices(),tci.getName()).setMethods(methodsType);
+		}
+		
 		MethodType method = new MethodType();
 		method.setName(this.methodName);
 		MethodTypeOutput output = new MethodTypeOutput();
@@ -94,7 +98,7 @@ public class AddSimpleMethodWithReturnStep extends Step {
 		
 		// look at the interface to make sure method exists.......
 		String serviceInterface = pathtobasedir + File.separator + tci.getDir() + File.separator + "src" + File.separator
-			+ tci.getPackageDir()+ File.separator + introService.getServices().getService(0).getName().toLowerCase() + File.separator + "common" + File.separator + tci.getName() + "I.java";
+			+ tci.getPackageDir()+ File.separator + "common" + File.separator + tci.getName() + "I.java";
 		assertTrue(StepTools.methodExists(serviceInterface, methodName));
 
 		String cmd = CommonTools.getAntAllCommand(pathtobasedir + File.separator + tci.getDir());

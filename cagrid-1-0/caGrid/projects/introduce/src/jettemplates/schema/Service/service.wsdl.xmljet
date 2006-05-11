@@ -1,17 +1,14 @@
 <%@ jet package="gov.nih.nci.cagrid.introduce.templates.schema.service" class="ServiceWSDLTemplate"  imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.namespace.* gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.* gov.nih.nci.cagrid.introduce.beans.method.* gov.nih.nci.cagrid.introduce.beans.service.*" %>
-<% gov.nih.nci.cagrid.introduce.info.ServiceInformation info = (gov.nih.nci.cagrid.introduce.info.ServiceInformation) argument; 
-	
-    String packageName = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.package");
-    String serviceName = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.service.name");
-    String namespaceDomain = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.namespace.domain");
-    String modifiedServiceName = serviceName;
-    if(serviceName.endsWith("Service")){
-    	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
+<%  SpecificServiceInformation info = (SpecificServiceInformation) argument; 
+    ServiceType service = info.getService();
+    String modifiedServiceName = service.getName();
+    if(service.getName().endsWith("Service")){
+    	modifiedServiceName = service.getName().substring(0,service.getName().length()-7);
     }
     List faults = new ArrayList();
 %><?xml version="1.0" encoding="UTF-8"?>
-<definitions name="<%=serviceName%>" targetNamespace="<%=namespaceDomain%>/<%=serviceName%>"
-    xmlns:tns="<%=namespaceDomain%>/<%=serviceName%>"
+<definitions name="<%=service.getName()%>" targetNamespace="<%=service.getNamespace()%>"
+    xmlns:tns="<%=service.getNamespace()%>"
     xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd"
     xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl"
     xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor"
@@ -32,21 +29,23 @@
                       
   ============================================================-->
     <types>
-        <schema targetNamespace="<%=namespaceDomain%>/<%=serviceName%>"
-            xmlns:tns="<%=namespaceDomain%>/<%=serviceName%>"
+        <schema targetNamespace="<%=service.getNamespace()%>"
+            xmlns:tns="<%=service.getNamespace()%>"
              <%
-	      		Map prefixmap=TemplateUtils.buildMasterNamespaceInformationMap(info.getServiceDescriptor());
-	      		Iterator iterator = prefixmap.keySet().iterator();
-				while(iterator.hasNext()){
-					String namespace = (String)iterator.next();
-					if(!namespace.equals(IntroduceConstants.W3CNAMESPACE)){
-					NamespaceInformation namespaceInformation=(NamespaceInformation)prefixmap.get(namespace);%>
-			xmlns:<%=namespaceInformation.getPrefix()%>="<%=namespaceInformation.getNamespace().getNamespace()%>" 
-			<%  }}
-      		%>
+	Map prefixmap=TemplateUtils.buildMasterNamespaceInformationMap(info.getServiceDescriptor());
+	Iterator iterator = prefixmap.keySet().iterator();
+		while(iterator.hasNext()){
+			String namespace = (String)iterator.next();
+			if(!namespace.equals(IntroduceConstants.W3CNAMESPACE)){
+				NamespaceInformation namespaceInformation=(NamespaceInformation)prefixmap.get(namespace);%>
+			xmlns:<%=namespaceInformation.getPrefix()%>="<%=namespaceInformation.getNamespace().getNamespace()%>"
+			<%  		
+			}
+		}
+%>
             xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
 			<import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd"/>
-		<%
+<%
 		prefixmap=TemplateUtils.buildMasterNamespaceInformationMap(info.getServiceDescriptor());
   		iterator = prefixmap.keySet().iterator();
 		while(iterator.hasNext()){
@@ -54,15 +53,12 @@
 			if(!namespace.equals(IntroduceConstants.W3CNAMESPACE)){
 			NamespaceInformation namespaceInformation=(NamespaceInformation)prefixmap.get(namespace);%>
 			<import namespace="<%=namespaceInformation.getNamespace().getNamespace()%>" schemaLocation="<%=namespaceInformation.getNamespace().getLocation()%>"/>
-			   <%
-      	}
+			<%
+      		}
       	}%>
       	
       	<%  //walk through each method and create the types for input messages output messages
       		// and fault messages
-      		if (info.getServices() != null && info.getServices().getService() != null) {
-			for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
-			ServiceType service = info.getServices().getService(serviceI);
 			MethodsType methods = service.getMethods();
 			ResourcePropertiesListType metadataList = service.getResourcePropertiesList();	
 			if(methods!=null && methods.getMethod()!=null){
@@ -72,7 +68,7 @@
 				<element name="<%=TemplateUtils.upperCaseFirstCharacter(method.getName())%>Request">
 					<complexType>
 						<sequence>
-          		  <% 
+          		  			<% 
           		  
           		  if(method.getInputs()!=null && method.getInputs().getInput()!=null){
 	      				for(int inputsI = 0; inputsI < method.getInputs().getInput().length; inputsI++){
@@ -80,53 +76,36 @@
 	      					SchemaInformation schemaInformation = info.getSchemaInformation(inputParam.getQName());
 	      					
 	      					if(inputParam.isIsArray()){
-	      		  %>
-	      		  					<%
 									if(schemaInformation.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)){
-									%>
-							<element name="<%=inputParam.getName() %>" type="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType() %>" minOccurs="1" maxOccurs="unbounded" />
-                  				 	<%
+							%><element name="<%=inputParam.getName() %>" type="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType() %>" minOccurs="1" maxOccurs="unbounded" />
+                  			<%
 									} else {
-									%>
-							<element name="<%=inputParam.getName() %>">
+							%><element name="<%=inputParam.getName() %>">
 	      		  				<complexType>
 									<sequence>
 										<element ref="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType() %>" minOccurs="1" maxOccurs="unbounded" />
                   				 	</sequence>
 	      			        	</complexType>
 	      			        </element>
-                  				 	<%
-                  				 	}
-                  				 	%>
-	      		  		
-
-                  				 	
-                  <%
+	      			        <%
+									}
                             } else {
-                  %>
-                  					<%
 									if(schemaInformation.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)){
-									%>
-							<element name="<%=inputParam.getName() %>" type="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType() %>" minOccurs="1" maxOccurs="1" />
-                  				 	<%
+							%><element name="<%=inputParam.getName() %>" type="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType() %>" minOccurs="1" maxOccurs="1" /><%
 									} else {
-									%>
-							<element name="<%=inputParam.getName() %>">
+							%><element name="<%=inputParam.getName() %>">
 	      		  				<complexType>
 									<sequence>
 										<element ref="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType() %>" minOccurs="1" maxOccurs="1" />
                   				 	</sequence>
 	      			        	</complexType>
 	      			        </element>
-                  				 	<%
+	      			        <%
                   				 	}
-                  				 	%>
-                  <%
   		       				}
 	      				}
 	      			}
-	      		%>
-	      				</sequence>
+	      		      %></sequence>
 	      			</complexType>
 	      		</element>
   		       
@@ -142,22 +121,22 @@
 								if(outputParam.isIsArray()){
 				      		 		if(schemaInformation.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)){
 									%>
-										<element name="response" type="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType() %>" minOccurs="1" maxOccurs="unbounded" />
+							<element name="response" type="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType() %>" minOccurs="1" maxOccurs="unbounded" />
 			                  		<%
 									} else {
 									%>
-										<element ref="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType() %>" minOccurs="1" maxOccurs="unbounded" />
+							<element ref="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType() %>" minOccurs="1" maxOccurs="unbounded" />
 			                  		<%
                   				 	}
 				     
 			            		} else {
 			            			if(schemaInformation.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)){
 									%>
-										<element name="response" type="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType() %>" minOccurs="1" maxOccurs="1" />
+							<element name="response" type="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType() %>" minOccurs="1" maxOccurs="1" />
 			                  		<%
 									} else {
 									%>
-										<element ref="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType() %>" minOccurs="1" maxOccurs="1" />
+							<element ref="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType() %>" minOccurs="1" maxOccurs="1" />
 			                  		<%
 			                  		}
 
@@ -168,9 +147,9 @@
           		  %>
 						</sequence>
 					</complexType>
-				</element><%
-	    		}
-      		}
+				</element>
+				<%
+		}
 		
 		if(methods!=null && methods.getMethod()!=null){
       		for (int methodsI = 0; methodsI < methods.getMethod().length ; methodsI++) {
@@ -198,32 +177,30 @@
             <element name="<%=service.getName()%>ResourceProperties">
                 <complexType>
                     <sequence>
-                        <%if(metadataList!=null && metadataList.getResourceProperty()!=null){
-                        	prefixmap=TemplateUtils.buildMasterNamespaceInformationMap(info.getServiceDescriptor());
-                        	for (int i = 0; i < metadataList.getResourceProperty().length; i++) {
-								ResourcePropertyType metadata = metadataList.getResourceProperty(i);
-								SchemaInformation schemaInformation = info.getSchemaInformation(metadata.getQName());%>
-						<element ref="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType()%>"/><%
-							}
-						}
+                        <%
+        if(metadataList!=null && metadataList.getResourceProperty()!=null){
+       	  prefixmap=TemplateUtils.buildMasterNamespaceInformationMap(info.getServiceDescriptor());
+          for (int i = 0; i < metadataList.getResourceProperty().length; i++) {
+            ResourcePropertyType metadata = metadataList.getResourceProperty(i);
+			SchemaInformation schemaInformation = info.getSchemaInformation(metadata.getQName());
+						%><element ref="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType()%>"/><%
+		  }
+		}
+
                     %></sequence>
                 </complexType>
             </element>
-            <%
-            }
-            }
-            %>
-        </schema>
+<%
+		}
+%>
+          </schema>
     </types>
     
     
 <!--  place service messages here -->
 <%  		//walk through each method and create the types for input messages output messages
       		// and fault messages
-      		if (info.getServices() != null && info.getServices().getService() != null) {
-			for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
-			ServiceType service = info.getServices().getService(serviceI);
-			MethodsType methods = service.getMethods();
+			methods = service.getMethods();
 if(methods!=null && methods.getMethod()!=null){
 	for (int methodsI = 0; methodsI < methods.getMethod().length ; methodsI++) {
 		MethodType method = methods.getMethod(methodsI);
@@ -236,8 +213,6 @@ if(methods!=null && methods.getMethod()!=null){
 		<part name="parameters" element="tns:<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Response"/>
 	</message>
 <%
-	}
-	}
 	}
 }
 
@@ -257,15 +232,10 @@ for(int i=0; i < faults.size(); i++){
                        P O R T T Y P E
                       
   ============================================================-->
-<%  if (info.getServices() != null && info.getServices().getService() != null) {
-			for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
-			ServiceType service = info.getServices().getService(serviceI);
-			%>
-    <portType name="<%=service.getName()%>PortType" wsrp:ResourceProperties="tns:<%=service.getName()%>ResourceProperties">
-
+<portType name="<%=service.getName()%>PortType" wsrp:ResourceProperties="tns:<%=service.getName()%>ResourceProperties">
 <%
 //walk through methods and create the operations
-MethodsType methods = service.getMethods();
+methods = service.getMethods();
 if(methods!=null && methods.getMethod()!=null){
 	for (int methodsI = 0; methodsI < methods.getMethod().length ; methodsI++) {
 		MethodType method = methods.getMethod(methodsI);
@@ -324,8 +294,4 @@ if(methods!=null && methods.getMethod()!=null){
             <fault name="QueryEvaluationErrorFault" message="wsrpw:QueryEvaluationErrorFault"/>
         </operation>
     </portType>
-    <%
-    }
-    }
-    %>
 </definitions>

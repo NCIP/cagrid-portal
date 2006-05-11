@@ -2,7 +2,6 @@
 <%  gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation arguments = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument; 
   	Properties properties = arguments.getIntroduceServiceProperties();
 	ResourcePropertiesListType metadataList = arguments.getService().getResourcePropertiesList();
-	String packageName = properties.getProperty("introduce.skeleton.package");
     String serviceName = properties.getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
     String namespaceDomain = properties.getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN);
     String modifiedServiceName = serviceName;
@@ -10,7 +9,7 @@
    		modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
 	}
 %>
-package <%=packageName%>.<%=arguments.getService().getName().toLowerCase()%>.service.globus.resource;
+package <%=arguments.getService().getPackageName()%>.service.globus.resource;
 
 import javax.xml.namespace.QName;
 

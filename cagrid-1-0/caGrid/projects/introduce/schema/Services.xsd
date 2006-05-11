@@ -26,6 +26,9 @@
 			<xs:element ref="resources:ResourcePropertiesList"/>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="namespace" type="xs:string" use="required"/>
+		<xs:attribute name="packageName" type="xs:string" use="required"/>
+		<xs:attribute name="packageDir" type="xs:string" use="required"/>
 		<xs:attribute name="resourceFrameworkType" type="xs:string" use="required"/>
 	</xs:complexType>
 </xs:schema>

@@ -14,8 +14,12 @@ import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.ClientConfigTemplate;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.util.Iterator;
 import java.util.Properties;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.xml.namespace.QName;
@@ -59,6 +63,9 @@ public class SkeletonCreator extends Task {
 		// need to add the base service....
 		ServiceType serviceType = new ServiceType();
 		serviceType.setName(properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
+		serviceType.setNamespace(properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN));
+		serviceType.setPackageDir(properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR));
+		serviceType.setPackageName(properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE));
 		serviceType.setResourceFrameworkType(IntroduceConstants.INTRODUCE_MAIN_RESOURCE);
 
 		// add new service to the services
@@ -131,9 +138,9 @@ public class SkeletonCreator extends Task {
 			if (info.getServices() != null && info.getServices().getService() != null) {
 				for (int i = 0; i < info.getServices().getService().length; i++) {
 					ssc.createSkeleton(baseDirectory, info, info.getServices().getService(i));
+					sscc.createSkeleton(baseDirectory, info, info.getServices().getService(i));
 				}
 			}
-			sscc.createSkeleton(info);
 			sec.createSkeleton(info);
 			sdc.createSkeleton(info);
 		} catch (Exception e) {

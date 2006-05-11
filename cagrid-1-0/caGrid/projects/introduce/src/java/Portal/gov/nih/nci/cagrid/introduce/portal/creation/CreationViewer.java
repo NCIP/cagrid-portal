@@ -52,7 +52,7 @@ public class CreationViewer extends GridPortalComponent {
 
 	private static String DEFAULT_NAME = "HelloWorld";
 	private static String DEFAULT_JAVA_PACKAGE = "gov.nih.nci.cagrid";
-	private static String DEFAULT_NAMESPACE = "http://cagrid.nci.nih.gov";
+	private static String DEFAULT_NAMESPACE = "http://cagrid.nci.nih.gov/Helloworld";
 
 	private JPanel inputPanel = null;
 	private JPanel mainPanel = null;
@@ -83,7 +83,8 @@ public class CreationViewer extends GridPortalComponent {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setContentPane(getMainPanel());
+		        this.setContentPane(getMainPanel());
+this.setContentPane(getMainPanel());
 		this.setFrameIcon(IntroduceLookAndFeel.getCreateServiceIcon());
 		this.setTitle("Create Grid Service");
 	}
@@ -124,7 +125,7 @@ public class CreationViewer extends GridPortalComponent {
 			gridBagConstraints11.insets = new java.awt.Insets(0, 0, 0, 0);
 			gridBagConstraints11.gridx = 0;
 			namespaceLabel = new JLabel();
-			namespaceLabel.setText("Namespace Domain");
+			namespaceLabel.setText("Namespace");
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
 			gridBagConstraints10.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints10.gridy = 3;
@@ -367,7 +368,7 @@ public class CreationViewer extends GridPortalComponent {
 	private JTextField getServicePackage() {
 		if (servicePackage == null) {
 			servicePackage = new JTextField();
-			servicePackage.setText((DEFAULT_JAVA_PACKAGE + "." + DEFAULT_NAME).toLowerCase());
+			servicePackage.setText((DEFAULT_JAVA_PACKAGE).toLowerCase());
 		}
 		return servicePackage;
 	}

@@ -142,7 +142,7 @@ public class AddComplexMethodWithFaultStep extends Step {
 
 		// look at the interface to make sure method exists.......
 		String serviceInterface = pathtobasedir + File.separator + tci.getDir() + File.separator + "src" + File.separator
-			+ tci.getPackageDir() + File.separator + tci.getName().toLowerCase() + File.separator + "common" + File.separator + tci.getName() + "I.java";
+			+ tci.getPackageDir() + File.separator + File.separator + "common" + File.separator + tci.getName() + "I.java";
 		assertTrue(StepTools.methodExists(serviceInterface, methodName));
 
 		String cmd = CommonTools.getAntAllCommand(pathtobasedir + File.separator + tci.getDir());

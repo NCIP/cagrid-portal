@@ -58,10 +58,7 @@ public class SyncResource extends SyncTool {
 					ServiceConfigurationTemplate serviceConfT = new ServiceConfigurationTemplate();
 					String serviceConfS = serviceConfT.generate(new SpecificServiceInformation(getServiceInformation(),
 						service));
-					File serviceConfF = new File(srcDir.getAbsolutePath()
-						+ File.separator
-						+ getServiceInformation().getIntroduceServiceProperties().getProperty(
-							IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + service.getName().toLowerCase()
+					File serviceConfF = new File(srcDir.getAbsolutePath() + File.separator + service.getPackageDir()
 						+ File.separator + "service" + File.separator + "globus" + File.separator
 						+ "ServiceConfiguration.java");
 					FileWriter serviceConfFW = new FileWriter(serviceConfF);
@@ -77,12 +74,9 @@ public class SyncResource extends SyncTool {
 						BaseResourceTemplate baseResourceT = new BaseResourceTemplate();
 						String baseResourceS = baseResourceT.generate(new SpecificServiceInformation(
 							getServiceInformation(), service));
-						File baseResourceF = new File(srcDir.getAbsolutePath()
-							+ File.separator
-							+ getServiceInformation().getIntroduceServiceProperties().getProperty(
-								IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + service.getName().toLowerCase()
-							+ File.separator + "service" + File.separator + "globus" + File.separator + "resource"
-							+ File.separator + "BaseResource.java");
+						File baseResourceF = new File(srcDir.getAbsolutePath() + File.separator
+							+ service.getPackageDir() + File.separator + "service" + File.separator + "globus"
+							+ File.separator + "resource" + File.separator + "BaseResource.java");
 
 						FileWriter baseResourceFW = new FileWriter(baseResourceF);
 						baseResourceFW.write(baseResourceS);
@@ -91,12 +85,9 @@ public class SyncResource extends SyncTool {
 						ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
 						String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(
 							getServiceInformation(), service));
-						File resourceContanstsF = new File(srcDir.getAbsolutePath()
-							+ File.separator
-							+ getServiceInformation().getIntroduceServiceProperties().getProperty(
-								IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + service.getName().toLowerCase()
-							+ File.separator + "service" + File.separator + "globus" + File.separator + "resource"
-							+ File.separator + "ResourceConstants.java");
+						File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
+							+ service.getPackageDir() + File.separator + "service" + File.separator + "globus"
+							+ File.separator + "resource" + File.separator + "ResourceConstants.java");
 
 						FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
 						resourceContanstsFW.write(resourceContanstsS);
@@ -107,12 +98,9 @@ public class SyncResource extends SyncTool {
 						SingletonResourceTemplate baseResourceT = new SingletonResourceTemplate();
 						String baseResourceS = baseResourceT.generate(new SpecificServiceInformation(
 							getServiceInformation(), service));
-						File baseResourceF = new File(srcDir.getAbsolutePath()
-							+ File.separator
-							+ getServiceInformation().getIntroduceServiceProperties().getProperty(
-								IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + service.getName().toLowerCase()
-							+ File.separator + "service" + File.separator + "globus" + File.separator + "resource"
-							+ File.separator + "BaseResource.java");
+						File baseResourceF = new File(srcDir.getAbsolutePath() + File.separator
+							+ service.getPackageDir() + File.separator + "service" + File.separator + "globus"
+							+ File.separator + "resource" + File.separator + "BaseResource.java");
 
 						FileWriter baseResourceFW = new FileWriter(baseResourceF);
 						baseResourceFW.write(baseResourceS);
@@ -121,12 +109,9 @@ public class SyncResource extends SyncTool {
 						SingletonConfigurationTemplate metadataConfigurationT = new SingletonConfigurationTemplate();
 						String metadataConfigurationS = metadataConfigurationT.generate(new SpecificServiceInformation(
 							getServiceInformation(), service));
-						File metadataConfigurationF = new File(srcDir.getAbsolutePath()
-							+ File.separator
-							+ getServiceInformation().getIntroduceServiceProperties().getProperty(
-								IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + service.getName().toLowerCase()
-							+ File.separator + "service" + File.separator + "globus" + File.separator + "resource"
-							+ File.separator + "ResourceConfiguration.java");
+						File metadataConfigurationF = new File(srcDir.getAbsolutePath() + File.separator
+							+ service.getPackageDir() + File.separator + "service" + File.separator + "globus"
+							+ File.separator + "resource" + File.separator + "ResourceConfiguration.java");
 
 						FileWriter metadataConfigurationFW = new FileWriter(metadataConfigurationF);
 						metadataConfigurationFW.write(metadataConfigurationS);
@@ -135,60 +120,47 @@ public class SyncResource extends SyncTool {
 						ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
 						String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(
 							getServiceInformation(), service));
-						File resourceContanstsF = new File(srcDir.getAbsolutePath()
-							+ File.separator
-							+ getServiceInformation().getIntroduceServiceProperties().getProperty(
-								IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + service.getName().toLowerCase()
-							+ File.separator + "service" + File.separator + "globus" + File.separator + "resource"
-							+ File.separator + "ResourceConstants.java");
+						File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
+							+ service.getPackageDir() + File.separator + "service" + File.separator + "globus"
+							+ File.separator + "resource" + File.separator + "ResourceConstants.java");
 
 						FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
 						resourceContanstsFW.write(resourceContanstsS);
 						resourceContanstsFW.close();
 
-					} else if (service.getResourceFrameworkType().equals(
-						IntroduceConstants.INTRODUCE_MAIN_RESOURCE)){
-							MainResourceTemplate baseResourceT = new MainResourceTemplate();
-							String baseResourceS = baseResourceT.generate(new SpecificServiceInformation(
-								getServiceInformation(), service));
-							File baseResourceF = new File(srcDir.getAbsolutePath()
-								+ File.separator
-								+ getServiceInformation().getIntroduceServiceProperties().getProperty(
-									IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + service.getName().toLowerCase()
-								+ File.separator + "service" + File.separator + "globus" + File.separator + "resource"
-								+ File.separator + "BaseResource.java");
+					} else if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_MAIN_RESOURCE)) {
+						MainResourceTemplate baseResourceT = new MainResourceTemplate();
+						String baseResourceS = baseResourceT.generate(new SpecificServiceInformation(
+							getServiceInformation(), service));
+						File baseResourceF = new File(srcDir.getAbsolutePath() + File.separator
+							+ service.getPackageDir() + File.separator + "service" + File.separator + "globus"
+							+ File.separator + "resource" + File.separator + "BaseResource.java");
 
-							FileWriter baseResourceFW = new FileWriter(baseResourceF);
-							baseResourceFW.write(baseResourceS);
-							baseResourceFW.close();
+						FileWriter baseResourceFW = new FileWriter(baseResourceF);
+						baseResourceFW.write(baseResourceS);
+						baseResourceFW.close();
 
-							MainConfigurationTemplate metadataConfigurationT = new MainConfigurationTemplate();
-							String metadataConfigurationS = metadataConfigurationT.generate(new SpecificServiceInformation(
-								getServiceInformation(), service));
-							File metadataConfigurationF = new File(srcDir.getAbsolutePath()
-								+ File.separator
-								+ getServiceInformation().getIntroduceServiceProperties().getProperty(
-									IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + service.getName().toLowerCase()
-								+ File.separator + "service" + File.separator + "globus" + File.separator + "resource"
-								+ File.separator + "ResourceConfiguration.java");
+						MainConfigurationTemplate metadataConfigurationT = new MainConfigurationTemplate();
+						String metadataConfigurationS = metadataConfigurationT.generate(new SpecificServiceInformation(
+							getServiceInformation(), service));
+						File metadataConfigurationF = new File(srcDir.getAbsolutePath() + File.separator
+							+ service.getPackageDir() + File.separator + "service" + File.separator + "globus"
+							+ File.separator + "resource" + File.separator + "ResourceConfiguration.java");
 
-							FileWriter metadataConfigurationFW = new FileWriter(metadataConfigurationF);
-							metadataConfigurationFW.write(metadataConfigurationS);
-							metadataConfigurationFW.close();
+						FileWriter metadataConfigurationFW = new FileWriter(metadataConfigurationF);
+						metadataConfigurationFW.write(metadataConfigurationS);
+						metadataConfigurationFW.close();
 
-							ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
-							String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(
-								getServiceInformation(), service));
-							File resourceContanstsF = new File(srcDir.getAbsolutePath()
-								+ File.separator
-								+ getServiceInformation().getIntroduceServiceProperties().getProperty(
-									IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + service.getName().toLowerCase()
-								+ File.separator + "service" + File.separator + "globus" + File.separator + "resource"
-								+ File.separator + "ResourceConstants.java");
+						ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
+						String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(
+							getServiceInformation(), service));
+						File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
+							+ service.getPackageDir() + File.separator + "service" + File.separator + "globus"
+							+ File.separator + "resource" + File.separator + "ResourceConstants.java");
 
-							FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
-							resourceContanstsFW.write(resourceContanstsS);
-							resourceContanstsFW.close();
+						FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
+						resourceContanstsFW.write(resourceContanstsS);
+						resourceContanstsFW.close();
 					}
 				}
 			}

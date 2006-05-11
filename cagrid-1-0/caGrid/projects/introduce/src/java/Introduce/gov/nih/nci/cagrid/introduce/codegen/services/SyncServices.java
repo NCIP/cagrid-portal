@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.creator.SkeletonSchemaCreator;
 import gov.nih.nci.cagrid.introduce.creator.SkeletonSourceCreator;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
@@ -50,9 +51,11 @@ public class SyncServices extends SyncTool {
 		for (int i = 0; i < newServices.size(); i++) {
 			ServiceType newService = (ServiceType) newServices.get(i);
 			SkeletonSourceCreator ssc = new SkeletonSourceCreator();
+			SkeletonSchemaCreator sschc = new SkeletonSchemaCreator();
 			try {
 				System.out.println("Adding Service for: " + newService.getName());
 				ssc.createSkeleton(getBaseDirectory(), getServiceInformation(), newService);
+				sschc.createSkeleton(getBaseDirectory(), getServiceInformation(), newService);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -86,9 +89,7 @@ public class SyncServices extends SyncTool {
 				File serviceDir = new File(getBaseDirectory()
 					+ File.separator
 					+ "src" + File.separator
-					+ getServiceInformation().getIntroduceServiceProperties().getProperty(
-						IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator
-					+ getServiceInformation().getServices().getService(serviceI).getName().toLowerCase());
+					+  getServiceInformation().getServices().getService(serviceI).getPackageDir());
 				if (!serviceDir.exists()) {
 					newServices.add(getServiceInformation().getServices().getService(serviceI));
 				}

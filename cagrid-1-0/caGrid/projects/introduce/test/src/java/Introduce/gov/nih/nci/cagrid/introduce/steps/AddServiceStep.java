@@ -45,6 +45,9 @@ public class AddServiceStep extends Step {
 
 		ServiceType service = new ServiceType();
 		service.setName(tci.getName());
+		service.setNamespace(tci.getNamespace());
+		service.setPackageDir(tci.getPackageDir());
+		service.setPackageName(tci.getPackageName());
 		service.setResourceFrameworkType(tci.getResourceFrameworkType());
 
 		// add new service to array in bean

@@ -12,6 +12,8 @@ import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 import javax.swing.JPopupMenu;
 import javax.swing.JMenuItem;
 
+import org.projectmobius.portal.PortalResourceManager;
+
 public class ServicesPopUpMenu extends JPopupMenu {
 
 	private JMenuItem addResourceMenuItem = null;
@@ -50,11 +52,13 @@ public class ServicesPopUpMenu extends JPopupMenu {
 				public void mousePressed(MouseEvent e) {
 					super.mousePressed(e);
 					ServiceType service = new ServiceType();
-					service.setName("newService");
+					service.setName("NewService");
 					service.setMethods(new MethodsType());
 					service.setResourcePropertiesList(new ResourcePropertiesListType());
 					service.setResourceFrameworkType(IntroduceConstants.INTRODUCE_BASE_RESOURCE);
 					node.addService(service);
+					PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+						new ModifyService(service));
 					
 				}
 			

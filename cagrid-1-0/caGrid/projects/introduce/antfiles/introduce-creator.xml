@@ -63,10 +63,10 @@
 			comment="Service introdue properties">
 			<entry key="introduce.skeleton.service.name" value="${introduce.skeleton.service.name}"/>
 			<entry key="introduce.skeleton.timestamp" value="0"/>
-			<entry key="introduce.skeleton.package" value="${introduce.skeleton.package}"/>
-			<entry key="introduce.skeleton.package.dir" value="${introduce.skeleton.package.dir}"/>
 			<entry key="introduce.skeleton.namespace.domain"
 				value="${introduce.skeleton.namespace.domain}"/>
+			<entry key="introduce.skeleton.services.list"
+				value="${introduce.skeleton.service.name}"/>
 			<entry key="introduce.skeleton.extensions"
 				value="${introduce.skeleton.extensions}"/>
 		</propertyfile>

@@ -25,6 +25,7 @@ import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.info.SchemaInformation;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.NamespaceMappingsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate;
 
@@ -33,6 +34,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -66,6 +68,85 @@ import org.projectmobius.common.MalformedNamespaceException;
  *          Exp $
  */
 public class SyncTools {
+
+	class MultiServiceSymbolTable {
+		ServiceInformation info;
+		Set excludedSet;
+		List symbolTables;
+
+
+		public MultiServiceSymbolTable(ServiceInformation info, Set excludedSet) throws Exception {
+			this.info = info;
+			this.excludedSet = excludedSet;
+			symbolTables = new ArrayList();
+			generateSymbolTable(info, excludedSet);
+		}
+
+
+		public Element getElement(QName qname) {
+			Element element = null;
+			for (int i = 0; i < symbolTables.size(); i++) {
+
+				element = ((SymbolTable) symbolTables.get(i)).getElement(qname);
+				if (element != null) {
+					break;
+				}
+			}
+			return element;
+		}
+
+
+		public Type getType(QName qname) {
+			Type type = null;
+			for (int i = 0; i < symbolTables.size(); i++) {
+
+				type = ((SymbolTable) symbolTables.get(i)).getType(qname);
+				if (type != null) {
+					break;
+				}
+			}
+			return type;
+		}
+
+
+		public void dump(PrintStream stream) {
+			for (int i = 0; i < symbolTables.size(); i++) {
+				((SymbolTable) symbolTables.get(i)).dump(stream);
+			}
+		}
+
+
+		public void generateSymbolTable(ServiceInformation info, Set excludeSet) throws Exception {
+			if (info.getServices() != null && info.getServices().getService() != null) {
+				for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
+					ServiceType service = info.getServices().getService(serviceI);
+
+					Emitter parser = new Emitter();
+					SymbolTable table = null;
+
+					parser.setQuiet(true);
+					parser.setImports(true);
+
+					List excludeList = new ArrayList();
+					// one hammer(List), one solution
+					excludeList.addAll(excludeSet);
+					parser.setNamespaceExcludes(excludeList);
+
+					parser.setOutputDir(baseDirectory.getAbsolutePath() + File.separator + "tmp");
+					parser.setNStoPkg(baseDirectory.getAbsolutePath() + File.separator
+						+ IntroduceConstants.NAMESPACE2PACKAGE_MAPPINGS_FILE);
+					parser.run(new File(baseDirectory.getAbsolutePath() + File.separator + "build" + File.separator
+						+ "schema" + File.separator
+						+ info.getIntroduceServiceProperties().get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
+						+ File.separator + service.getName() + "_flattened.wsdl").getAbsolutePath());
+					table = parser.getSymbolTable();
+
+					symbolTables.add(table);
+					Utils.deleteDir(new File(baseDirectory.getAbsolutePath() + File.separator + "tmp"));
+				}
+			}
+		}
+	}
 
 	public static final String DIR_OPT = "d";
 
@@ -112,7 +193,8 @@ public class SyncTools {
 		Properties serviceProperties = new Properties();
 		serviceProperties.load(new FileInputStream(servicePropertiesFile));
 		// have to set the service directory in the service properties
-		serviceProperties.setProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR, baseDirectory.getAbsolutePath());
+		serviceProperties.setProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR, baseDirectory
+			.getAbsolutePath());
 		ServiceInformation info = new ServiceInformation(introService, serviceProperties, baseDirectory);
 		File schemaDir = new File(baseDirectory.getAbsolutePath() + File.separator + "schema");
 
@@ -129,6 +211,21 @@ public class SyncTools {
 			excludeLine += " -x " + namespace;
 		}
 		serviceProperties.setProperty("introduce.ns.excludes", excludeLine);
+
+		// write all the services into the services list property
+		String servicesList = "";
+		if (info.getServices() != null && info.getServices().getService() != null) {
+			for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
+				ServiceType service = info.getServices().getService(serviceI);
+				servicesList += service.getName();
+				if (serviceI < info.getServices().getService().length - 1) {
+					servicesList += ",";
+				}
+			}
+		}
+		serviceProperties.setProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICES_LIST, servicesList);
+
+		// store the modified properties back out....
 		serviceProperties.store(new FileOutputStream(servicePropertiesFile), "Introduce Properties");
 
 		System.out.println("Synchronizing with pre processing extensions");
@@ -137,7 +234,8 @@ public class SyncTools {
 			ExtensionType[] extensions = introService.getExtensions().getExtension();
 			for (int i = 0; i < extensions.length; i++) {
 				CodegenExtensionPreProcessor pp = ExtensionTools.getCodegenPreProcessor(extensions[i].getName());
-				ServiceExtensionDescriptionType desc = ExtensionsLoader.getInstance().getServiceExtension(extensions[i].getName());
+				ServiceExtensionDescriptionType desc = ExtensionsLoader.getInstance().getServiceExtension(
+					extensions[i].getName());
 				if (pp != null) {
 					pp.preCodegen(desc, info);
 				}
@@ -148,7 +246,7 @@ public class SyncTools {
 		flattenWSDL(info, schemaDir);
 
 		// STEP 5: run axis to get the symbol table
-		SymbolTable table = generateSymbolTable(info, excludeSet);
+		MultiServiceSymbolTable table = new MultiServiceSymbolTable(info, excludeSet);
 
 		// STEP 6: fill out the object model with the generated classnames where
 		// the user didn't specify them explicitly
@@ -176,7 +274,8 @@ public class SyncTools {
 			ExtensionType[] extensions = introService.getExtensions().getExtension();
 			for (int i = 0; i < extensions.length; i++) {
 				CodegenExtensionPostProcessor pp = ExtensionTools.getCodegenPostProcessor(extensions[i].getName());
-				ServiceExtensionDescriptionType desc = ExtensionsLoader.getInstance().getServiceExtension(extensions[i].getName());
+				ServiceExtensionDescriptionType desc = ExtensionsLoader.getInstance().getServiceExtension(
+					extensions[i].getName());
 				if (pp != null) {
 					pp.postCodegen(desc, info);
 				}
@@ -186,10 +285,10 @@ public class SyncTools {
 	}
 
 
-	private void populateClassnames(ServiceInformation info, SymbolTable table) throws MalformedNamespaceException,
-		SynchronizationException {
+	private void populateClassnames(ServiceInformation info, MultiServiceSymbolTable table)
+		throws MalformedNamespaceException, SynchronizationException {
 
-		//table.dump(System.out);
+		// table.dump(System.out);
 		// get the classnames from the axis symbol table
 		if (info.getNamespaces() != null && info.getNamespaces().getNamespace() != null) {
 			for (int i = 0; i < info.getNamespaces().getNamespace().length; i++) {
@@ -235,35 +334,37 @@ public class SyncTools {
 		}
 
 		// get the classnames from the axis symbol table
-		if(info.getServices().getService()!=null){
-			for(int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++){
+		if (info.getServices().getService() != null) {
+			for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
 				ServiceType service = info.getServices().getService(serviceI);
-				if (service.getMethods()!= null && service.getMethods().getMethod()!=null) {
-			for (int i = 0; i < service.getMethods().getMethod().length; i++) {
-				MethodType mtype = service.getMethods().getMethod(i);
-				// process the inputs
-				if (mtype.getInputs() != null && mtype.getInputs().getInput() != null) {
-					for (int j = 0; j < mtype.getInputs().getInput().length; j++) {
-						MethodTypeInputsInput inputParam = mtype.getInputs().getInput(j);
-						SchemaInformation namespace = info.getSchemaInformation(inputParam.getQName());
-						if (!namespace.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
-							Type type = table.getType(new QName(info.getIntroduceServiceProperties().getProperty(
-								IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN)
-								+ "/"
-								+ info.getIntroduceServiceProperties().getProperty(
-									IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME), ">>" + TemplateUtils.upperCaseFirstCharacter(mtype.getName()) + "Request>"
-								+ inputParam.getName()));
-							
-							inputParam.setContainerClassName(info.getIntroduceServiceProperties().getProperty(
-								"introduce.skeleton.package")
-								+ ".stubs." + getRelativeClassName(type.getName()));
+				if (service.getMethods() != null && service.getMethods().getMethod() != null) {
+					for (int i = 0; i < service.getMethods().getMethod().length; i++) {
+						MethodType mtype = service.getMethods().getMethod(i);
+						// process the inputs
+						if (mtype.getInputs() != null && mtype.getInputs().getInput() != null) {
+							for (int j = 0; j < mtype.getInputs().getInput().length; j++) {
+								MethodTypeInputsInput inputParam = mtype.getInputs().getInput(j);
+								SchemaInformation namespace = info.getSchemaInformation(inputParam.getQName());
+								if (!namespace.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
+									QName qname = new QName(service.getNamespace(), ">>"
+										+ TemplateUtils.upperCaseFirstCharacter(mtype.getName()) + "Request>"
+										+ inputParam.getName());
+									Type type = table.getType(qname);
+									if (type == null) {
+										table.dump(System.err);
+										throw new SynchronizationException(
+											"Unable to find Element in symbol table for: " + qname);
+									}
+
+									inputParam.setContainerClassName(service.getPackageName() + ".stubs."
+										+ getRelativeClassName(type.getName()));
+								}
+
+							}
 						}
 
 					}
 				}
-
-			}
-		}
 			}
 		}
 	}
@@ -318,16 +419,22 @@ public class SyncTools {
 
 
 	private void flattenWSDL(ServiceInformation info, File schemaDir) throws Exception {
-		ServiceWSDLTemplate serviceWSDLT = new ServiceWSDLTemplate();
-		String serviceWSDLS = serviceWSDLT.generate(info);
-		File serviceWSDLF = new File(schemaDir.getAbsolutePath() + File.separator
-			+ info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
-			+ File.separator
-			+ info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
-			+ ".wsdl");
-		FileWriter serviceWSDLFW = new FileWriter(serviceWSDLF);
-		serviceWSDLFW.write(serviceWSDLS);
-		serviceWSDLFW.close();
+		// get the classnames from the axis symbol table
+		if (info.getServices().getService() != null) {
+			for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
+				ServiceType service = info.getServices().getService(serviceI);
+				ServiceWSDLTemplate serviceWSDLT = new ServiceWSDLTemplate();
+				String serviceWSDLS = serviceWSDLT.generate(new SpecificServiceInformation(info, service));
+				File serviceWSDLF = new File(schemaDir.getAbsolutePath()
+					+ File.separator
+					+ info.getIntroduceServiceProperties().getProperty(
+						IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator + service.getName()
+					+ ".wsdl");
+				FileWriter serviceWSDLFW = new FileWriter(serviceWSDLF);
+				serviceWSDLFW.write(serviceWSDLS);
+				serviceWSDLFW.close();
+			}
+		}
 
 		writeNamespaceMappings(info);
 
@@ -337,35 +444,6 @@ public class SyncTools {
 		if (p.exitValue() != 0) {
 			throw new Exception("Service flatten wsdl exited abnormally");
 		}
-	}
-
-
-	private SymbolTable generateSymbolTable(ServiceInformation info, Set excludeSet) throws Exception {
-		Emitter parser = new Emitter();
-		SymbolTable table = null;
-
-		parser.setQuiet(true);
-		parser.setImports(true);
-
-		List excludeList = new ArrayList();
-		// one hammer(List), one solution
-		excludeList.addAll(excludeSet);
-		parser.setNamespaceExcludes(excludeList);
-
-		parser.setOutputDir(baseDirectory.getAbsolutePath() + File.separator + "tmp");
-		parser.setNStoPkg(baseDirectory.getAbsolutePath() + File.separator
-			+ IntroduceConstants.NAMESPACE2PACKAGE_MAPPINGS_FILE);
-		parser.run(new File(baseDirectory.getAbsolutePath() + File.separator + "build" + File.separator + "schema"
-			+ File.separator
-			+ info.getIntroduceServiceProperties().get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
-			+ File.separator
-			+ info.getIntroduceServiceProperties().get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
-			+ "_flattened.wsdl").getAbsolutePath());
-		table = parser.getSymbolTable();
-		Utils.deleteDir(new File(baseDirectory.getAbsolutePath() + File.separator + "tmp"));
-
-		// table.dump(System.out);
-		return table;
 	}
 
 

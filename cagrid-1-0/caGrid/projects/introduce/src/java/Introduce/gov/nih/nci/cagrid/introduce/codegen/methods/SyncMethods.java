@@ -70,8 +70,8 @@ public class SyncMethods extends SyncTool {
 		jp = new JavaParser(jsf);
 
 		serviceInterface = getBaseDirectory().getAbsolutePath() + File.separator + "src" + File.separator
-			+ getServiceInformation().getIntroduceServiceProperties().get(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR)
-			+ File.separator + service.getName().toLowerCase() + File.separator + "common" + File.separator
+			+ service.getPackageDir()
+			+ File.separator + "common" + File.separator
 			+ service.getName() + "I.java";
 
 		try {

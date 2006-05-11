@@ -2,7 +2,6 @@
 imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.service.* gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.* gov.nih.nci.cagrid.introduce.beans.property.*" %>
 <% gov.nih.nci.cagrid.introduce.info.ServiceInformation info = (gov.nih.nci.cagrid.introduce.info.ServiceInformation) argument;
    ServiceProperties properties = info.getServiceProperties();
-   String packageName = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.package");
    String namespaceDomain = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.namespace.domain");
   
 %><?xml version="1.0" encoding="UTF-8"?>
@@ -18,7 +17,7 @@ if (info.getServices() != null && info.getServices().getService() != null) {
    		}
 %>
 	<service name="SERVICE-INSTANCE-PREFIX/<%=modifiedServiceName%>">
-		<resource name="home" type="<%=packageName%>.<%=modifiedServiceName.toLowerCase()%>.service.globus.resource.BaseResourceHome">
+		<resource name="home" type="<%=service.getPackageName()%>.<%=modifiedServiceName.toLowerCase()%>.service.globus.resource.BaseResourceHome">
 			<resourceParams>
 				<parameter>
 					<name>factory</name>
@@ -29,7 +28,7 @@ if (info.getServices() != null && info.getServices().getService() != null) {
 		<%
 		if(service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_MAIN_RESOURCE)){
 		%>
-		<resource name="configuration" type="<%=packageName%>.<%=modifiedServiceName.toLowerCase()%>.service.globus.resource.ResourceConfiguration">
+		<resource name="configuration" type="<%=service.getPackageName()%>.<%=modifiedServiceName.toLowerCase()%>.service.globus.resource.ResourceConfiguration">
 			<resourceParams>
 				<parameter>
 					<name>factory</name>
@@ -68,7 +67,7 @@ if (info.getServices() != null && info.getServices().getService() != null) {
 		<%
 		}
 		%>
-		<resource name="serviceconfiguration" type="<%=packageName%>.<%=modifiedServiceName.toLowerCase()%>.service.globus.ServiceConfiguration">
+		<resource name="serviceconfiguration" type="<%=service.getPackageName()%>.<%=modifiedServiceName.toLowerCase()%>.service.globus.ServiceConfiguration">
 			<resourceParams>
 				<parameter>
 					<name>factory</name>

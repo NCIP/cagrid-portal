@@ -15,10 +15,10 @@ import javax.xml.namespace.QName;
 import com.atomicobject.haste.framework.Step;
 
 
-public class AddSServicePropertiesStep extends Step {
+public class AddServicePropertiesStep extends Step {
 	private TestCaseInfo tci;
 
-	public AddSServicePropertiesStep(TestCaseInfo tci) {
+	public AddServicePropertiesStep(TestCaseInfo tci) {
 		this.tci = tci;
 	}
 

@@ -9,7 +9,7 @@ import gov.nih.nci.cagrid.introduce.steps.AddSimpleMethodStep;
 import gov.nih.nci.cagrid.introduce.steps.AddSimpleMethodWithArraysStep;
 import gov.nih.nci.cagrid.introduce.steps.AddSimpleMethodWithReturnStep;
 import gov.nih.nci.cagrid.introduce.steps.AddSimpleMethodWithFaultStep;
-import gov.nih.nci.cagrid.introduce.steps.AddSServicePropertiesStep;
+import gov.nih.nci.cagrid.introduce.steps.AddServicePropertiesStep;
 import gov.nih.nci.cagrid.introduce.steps.CreateSkeletonStep;
 import gov.nih.nci.cagrid.introduce.steps.ModifySimpleMethodStep;
 import gov.nih.nci.cagrid.introduce.steps.RemoveAllMetadataStep;
@@ -54,9 +54,8 @@ public class SyncToolsTest extends Story {
 		steps.add(new AddMetadataStep(tci1));
 		steps.add(new AddMetadatatWithLoadFromFileStep(tci1));
 		steps.add(new RemoveAllMetadataStep(tci1));
-		steps.add(new AddSServicePropertiesStep(tci1));
+		steps.add(new AddServicePropertiesStep(tci1));
 		steps.add(new RemoveAllServicePropertiesStep(tci1));
-		
 		return steps;
 	}
 

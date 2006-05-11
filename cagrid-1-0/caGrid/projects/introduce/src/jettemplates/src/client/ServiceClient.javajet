@@ -1,6 +1,5 @@
 <%@ jet package="gov.nih.nci.cagrid.introduce.templates.client" class="ServiceClientTemplate" %>
 <% gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation info = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument; 
-   String packageName = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.package");
    String mainServiceName = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.service.name");
    String serviceName = info.getService().getName();
    String namespaceDomain = info.getIntroduceServiceProperties().getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN);
@@ -13,7 +12,7 @@
    	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
    }
 %>
-package <%=packageName%>.<%=info.getService().getName().toLowerCase()%>.client;
+package <%=info.getService().getPackageName()%>.client;
 
 
 import java.net.URL;
@@ -29,9 +28,9 @@ import org.apache.axis.utils.ClassUtils;
 
 import org.globus.gsi.GlobusCredential;
 
-import <%=packageName%>.stubs.<%=serviceName%>PortType;
-import <%=packageName%>.stubs.service.<%=mainModifiedServiceName%>ServiceAddressingLocator;
-import <%=packageName%>.<%=info.getService().getName().toLowerCase()%>.common.<%=serviceName%>I;
+import <%=info.getService().getPackageName()%>.stubs.<%=serviceName%>PortType;
+import <%=info.getService().getPackageName()%>.stubs.service.<%=modifiedServiceName%>ServiceAddressingLocator;
+import <%=info.getService().getPackageName()%>.common.<%=serviceName%>I;
 
 
 /**
@@ -58,7 +57,7 @@ public class <%=info.getService().getName()%>Client implements <%=serviceName%>I
 
 	private <%=info.getService().getName()%>PortType getPortType() throws RemoteException {
 
-		<%=mainModifiedServiceName%>ServiceAddressingLocator locator = new <%=mainModifiedServiceName%>ServiceAddressingLocator();
+		<%=modifiedServiceName%>ServiceAddressingLocator locator = new <%=modifiedServiceName%>ServiceAddressingLocator();
 		// attempt to load our context sensitive wsdd file
 		InputStream resourceAsStream = ClassUtils.getResourceAsStream(getClass(), "client-config.wsdd");
 		if (resourceAsStream != null) {

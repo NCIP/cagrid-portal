@@ -69,22 +69,15 @@ public class SyncSource {
 		this.service = service;
 		this.serviceInfo = info;
 		this.deploymentProperties = this.serviceInfo.getIntroduceServiceProperties();
-		this.packageName = (String) this.deploymentProperties.get("introduce.skeleton.package") + ".stubs";
-		serviceClient = baseDir.getAbsolutePath() + File.separator + "src" + File.separator
-			+ this.deploymentProperties.get(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator
-			+ service.getName().toLowerCase() + File.separator + "client" + File.separator + service.getName()
-			+ "Client.java";
+		this.packageName = service.getPackageName() + ".stubs";
+		serviceClient = baseDir.getAbsolutePath() + File.separator + "src" + File.separator + service.getPackageDir()
+			+ File.separator + "client" + File.separator + service.getName() + "Client.java";
 		serviceInterface = baseDir.getAbsolutePath() + File.separator + "src" + File.separator
-			+ this.deploymentProperties.get(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator
-			+ service.getName().toLowerCase() + File.separator + "common" + File.separator + service.getName()
-			+ "I.java";
-		serviceImpl = baseDir.getAbsolutePath() + File.separator + "src" + File.separator
-			+ this.deploymentProperties.get(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator
-			+ service.getName().toLowerCase() + File.separator + "service" + File.separator + service.getName()
-			+ "Impl.java";
+			+ service.getPackageDir() + File.separator + "common" + File.separator + service.getName() + "I.java";
+		serviceImpl = baseDir.getAbsolutePath() + File.separator + "src" + File.separator + service.getPackageDir()
+			+ File.separator + "service" + File.separator + service.getName() + "Impl.java";
 		serviceProviderImpl = baseDir.getAbsolutePath() + File.separator + "src" + File.separator
-			+ this.deploymentProperties.get(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator
-			+ service.getName().toLowerCase() + File.separator + "service" + File.separator + "globus" + File.separator
+			+ service.getPackageDir() + File.separator + "service" + File.separator + "globus" + File.separator
 			+ service.getName() + "ProviderImpl.java";
 	}
 
@@ -194,7 +187,7 @@ public class SyncSource {
 	}
 
 
-	private String getBoxedOutputTypeName( String input) {
+	private String getBoxedOutputTypeName(String input) {
 		String returnType = TemplateUtils.upperCaseFirstCharacter(input) + "Response";
 		return returnType;
 	}
@@ -205,7 +198,7 @@ public class SyncSource {
 		MethodTypeOutput returnTypeEl = method.getOutput();
 		String methodName = method.getName();
 		String returnType = null;
-		returnType = this.packageName + "." + getBoxedOutputTypeName( methodName);
+		returnType = this.packageName + "." + getBoxedOutputTypeName(methodName);
 
 		methodString += "public " + returnType + " " + methodName + "(";
 
@@ -223,7 +216,7 @@ public class SyncSource {
 		String returnType = "";
 
 		// need to box the output type
-		returnType = this.packageName + "." + getBoxedOutputTypeName( methodName);
+		returnType = this.packageName + "." + getBoxedOutputTypeName(methodName);
 
 		methodString += "public " + returnType + " " + methodName + "(";
 		// Parameter[] inputs = method.getParams();
@@ -286,11 +279,14 @@ public class SyncSource {
 				e1.printStackTrace();
 			}
 
-			// populate the impl method
-			addImpl(method);
-			// populate the provider impl method
-			addProviderImpl(method);
-			// populate the client method
+			if (!method.isIsProvided()) {
+				// populate the impl method
+				addImpl(method);
+				// populate the provider impl method
+				addProviderImpl(method);
+				// populate the client method
+			}
+
 			addClientImpl(method);
 		}
 	}
@@ -507,8 +503,7 @@ public class SyncSource {
 		int endOfClass = fileContent.lastIndexOf("}");
 		String clientMethod = "\n\t" + createUnBoxedSignatureStringFromMethod(method) + " " + createExceptions(method);
 		clientMethod += "{\n" + lineStart;
-		clientMethod += service.getName()
-			+ "PortType port = this.getPortType();\n";
+		clientMethod += service.getName() + "PortType port = this.getPortType();\n";
 
 		clientMethod += lineStart;
 		clientMethod += "org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;\n";
@@ -531,8 +526,9 @@ public class SyncSource {
 		}
 		// always a boxed call now becuase using complex types in the wsdl
 		// create handle for the boxed wrapper
-		methodString += this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + "Request params = new "
-			+ this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + "Request();\n";
+		methodString += this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName)
+			+ "Request params = new " + this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName)
+			+ "Request();\n";
 		// set the values fo the boxed wrapper
 		if (method.getInputs() != null && method.getInputs().getInput() != null) {
 			for (int j = 0; j < method.getInputs().getInput().length; j++) {
@@ -763,10 +759,16 @@ public class SyncSource {
 				e1.printStackTrace();
 			}
 
-			// remove the impl method
-			removeImpl(method);
-			// remove the provider impl method
-			removeProviderImpl(method);
+			// fail silent here in caase the method was not implemented
+			try {
+				// remove the impl method
+				removeImpl(method);
+				// remove the provider impl method
+				removeProviderImpl(method);
+			} catch (Exception e) {
+				System.out.println("WARNING: " + e.getMessage()
+					+ "\n might be due to method implementation provided by another service");
+			}
 			// remove the client method
 			removeClientImpl(method);
 		}

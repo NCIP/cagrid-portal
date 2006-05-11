@@ -12,7 +12,7 @@ public abstract class TestCaseInfo {
 	public abstract String getName();
 
 
-	public abstract String getNamespaceDomain();
+	public abstract String getNamespace();
 
 
 	public abstract String getPackageName();

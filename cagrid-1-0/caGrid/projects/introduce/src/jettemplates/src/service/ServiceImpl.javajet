@@ -1,6 +1,5 @@
 <%@ jet package="gov.nih.nci.cagrid.introduce.templates.service" class="ServiceImplTemplate" %>
 <% gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation info = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument; 
-   String packageName = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.package");
    String serviceName = info.getService().getName();
    String namespaceDomain = info.getIntroduceServiceProperties().getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN);
    String modifiedServiceName = serviceName;
@@ -8,10 +7,10 @@
    	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
    }
 %>
-package <%=packageName%>.<%=info.getService().getName().toLowerCase()%>.service;
+package <%=info.getService().getPackageName()%>.service;
 
-import <%=packageName%>.<%=info.getService().getName().toLowerCase()%>.common.<%=info.getService().getName()%>I;
-import <%=packageName%>.<%=info.getService().getName().toLowerCase()%>.service.globus.ServiceConfiguration;
+import <%=info.getService().getPackageName()%>.common.<%=info.getService().getName()%>I;
+import <%=info.getService().getPackageName()%>.service.globus.ServiceConfiguration;
 
 import java.rmi.RemoteException;
 
@@ -21,7 +20,7 @@ import org.apache.axis.MessageContext;
 import org.globus.wsrf.Constants;
 
 /** 
- *  <%=packageName%>I
+ *  <%=info.getService().getPackageName()%>I
  *  TODO:DOCUMENT ME
  * 
  * @created by Introduce Toolkit version 1.0

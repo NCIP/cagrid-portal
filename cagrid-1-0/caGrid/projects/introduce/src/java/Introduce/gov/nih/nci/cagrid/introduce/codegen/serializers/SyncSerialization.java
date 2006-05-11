@@ -56,8 +56,7 @@ public class SyncSerialization extends SyncTool {
 
 	public SyncSerialization(File baseDirectory, ServiceInformation info) {
 		super(baseDirectory, info);
-		clientWSDD = new File(baseDirectory.getAbsolutePath() + File.separator + "src" + File.separator
-			+ info.getIntroduceServiceProperties().get(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR)
+		clientWSDD = new File(baseDirectory.getAbsolutePath() + File.separator + "src" 
 			+ File.separator + "client-config.wsdd");
 		serverWSDD = new File(getBaseDirectory() + File.separator + "server-config.wsdd");
 	}
