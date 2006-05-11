@@ -5,18 +5,14 @@ import gov.nih.nci.cagrid.data.common.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
-import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
-import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
-import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileWriter;
-import java.rmi.RemoteException;
 import java.util.List;
 
 import org.apache.axis.message.MessageElement;
@@ -37,7 +33,6 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 	
 	public void postCodegen(ServiceExtensionDescriptionType desc, ServiceInformation info) throws CodegenExtensionException {
 		modifyQueryMethod(desc, info);
-		modifyMetadata(desc, info);
 	}
 	
 	
@@ -134,51 +129,5 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 			return queryProcessorClass;
 		}
 		return null;
-	}
-	
-	
-	private void modifyMetadata(ServiceExtensionDescriptionType desc, ServiceInformation info) throws CodegenExtensionException {
-		// verify there's a caDSR element in the extension data bucket		
-		ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
-		MessageElement cadsrElement = ExtensionTools.getExtensionDataElement(data, DataServiceConstants.CADSR_ELEMENT_NAME);
-		if (cadsrElement != null) {
-			String cadsrUrl = cadsrElement.getAttribute(DataServiceConstants.CADSR_URL_ATTRIB);
-			String cadsrProject = cadsrElement.getAttribute(DataServiceConstants.CADSR_PROJECT_ATTRIB);
-			String cadsrPackage = cadsrElement.getAttribute(DataServiceConstants.CADSR_PACKAGE_ATTRIB);
-			// get the target namespace, if specified
-			String targetNamespace = null;
-			MessageElement targetNsElement = ExtensionTools.getExtensionDataElement(data, DataServiceConstants.DATA_MODEL_ELEMENT_NAME);
-			if (targetNsElement != null) {
-				targetNamespace = targetNsElement.getValue();
-			}
-			if (targetNamespace != null) {
-				// get the namespace type specified, then list selected classes
-				String[] classNames = null;
-				NamespaceType[] namespaces = info.getNamespaces().getNamespace();
-				for (int i = 0; i < namespaces.length; i++) {
-					if (namespaces[i].getNamespace().equals(targetNamespace)) {
-						SchemaElementType[] types = namespaces[i].getSchemaElement();
-						classNames = new String[types.length];
-						for (int j = 0; j < types.length; j++) {
-							classNames[j] = types[j].getClassName();
-						}
-						break;
-					}
-				}
-				try {
-					MetadataBuilder builder = new MetadataBuilder(cadsrUrl, cadsrProject, cadsrPackage, classNames);
-					DomainModel model = builder.getDomainModel();
-					System.out.println("Created data service metadata!");
-					// find the service's etc directory and serialize the domain model to it
-					String domainModelFile = info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
-						+ File.separator + "etc" + File.separator + "domainModel.xml";
-					Utils.serializeDocument(domainModelFile, model, DataServiceConstants.DOMAIN_MODEL_QNAME);
-				} catch (RemoteException ex) {
-					throw new CodegenExtensionException("Error connecting to caDSR for metadata: " + ex.getMessage(), ex);
-				} catch (Exception ex) {
-					throw new CodegenExtensionException("Error serializing domain model: " + ex.getMessage(), ex);
-				}
-			}
-		}
 	}
 }
