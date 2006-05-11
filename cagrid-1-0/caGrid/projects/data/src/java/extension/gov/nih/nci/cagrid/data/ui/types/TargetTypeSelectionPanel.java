@@ -292,9 +292,11 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 					UMLPackageMetadata pack = getDomainBrowserPanel().getSelectedPackage();
 					if (pack != null) {
 						NamespaceType nsType = createNamespaceFromUmlPackage(pack);
-						getTypesTree().setNamespace(nsType);
-						addTreeNamespaceToServiceDescription();
-						storeTargetModelNamespace(nsType.getNamespace());
+						if (nsType != null) {
+							getTypesTree().setNamespace(nsType);
+							addTreeNamespaceToServiceDescription();
+							storeTargetModelNamespace(nsType.getNamespace());
+						}
 					}
 					storeCaDSRInfo();
 				}
