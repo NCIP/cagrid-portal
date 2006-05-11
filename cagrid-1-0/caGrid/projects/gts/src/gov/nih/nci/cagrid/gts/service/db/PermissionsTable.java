@@ -9,10 +9,12 @@ package gov.nih.nci.cagrid.gts.service.db;
  */
 public abstract class PermissionsTable {
 	public static final String TABLE_NAME = "PERMISSIONS";
-	public static final String GRID_IDENTITY = "GRID_IDENTITY";
-	public static final String ROLE = "ROLE";
-	public static final String TRUSTED_AUTHORITY = "TRUSTED_AUTHORITY";
 
+	public static final String GRID_IDENTITY = "GRID_IDENTITY";
+
+	public static final String ROLE = "ROLE";
+
+	public static final String TRUSTED_AUTHORITY = "TRUSTED_AUTHORITY";
 
 	public abstract String getCreateTableSQL();
 }

@@ -8,7 +8,6 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
-
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -24,7 +23,6 @@ public class PermissionsTable extends PortalBaseTable {
 	public final static String TRUST_AUTHORITY = "Trusted Authority";
 
 	public final static String ROLE = "Role";
-
 
 	public PermissionsTable() {
 		super(createTableModel());
@@ -46,7 +44,6 @@ public class PermissionsTable extends PortalBaseTable {
 
 	}
 
-
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn(PERMISSION);
@@ -57,7 +54,6 @@ public class PermissionsTable extends PortalBaseTable {
 
 	}
 
-
 	public void addPermission(final Permission perm) {
 		Vector v = new Vector();
 		v.add(perm);
@@ -66,7 +62,6 @@ public class PermissionsTable extends PortalBaseTable {
 		v.add(perm.getRole());
 		addRow(v);
 	}
-
 
 	public synchronized Permission getSelectedPermission() throws Exception {
 		int row = getSelectedRow();
@@ -77,7 +72,6 @@ public class PermissionsTable extends PortalBaseTable {
 		}
 	}
 
-
 	public synchronized void removeSelectedPermission() throws Exception {
 		int row = getSelectedRow();
 		if ((row >= 0) && (row < getRowCount())) {
@@ -86,7 +80,6 @@ public class PermissionsTable extends PortalBaseTable {
 			throw new Exception("Please select a Permission!!!");
 		}
 	}
-
 
 	public void doubleClick() throws Exception {
 		int row = getSelectedRow();
@@ -97,7 +90,6 @@ public class PermissionsTable extends PortalBaseTable {
 		}
 
 	}
-
 
 	public void singleClick() throws Exception {
 		// TODO Auto-generated method stub

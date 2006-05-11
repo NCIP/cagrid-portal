@@ -10,7 +10,6 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
-
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -27,7 +26,6 @@ public class AuthorityTable extends PortalBaseTable {
 
 	private AuthorityManagerWindow window;
 
-
 	public AuthorityTable(AuthorityManagerWindow window) {
 		super(createTableModel());
 		this.window = window;
@@ -43,7 +41,6 @@ public class AuthorityTable extends PortalBaseTable {
 		this.clearTable();
 	}
 
-
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn(AUTHORITY);
@@ -52,7 +49,6 @@ public class AuthorityTable extends PortalBaseTable {
 		return model;
 
 	}
-
 
 	public void addAuthority(final AuthorityGTS gts) {
 		Vector v = new Vector();
@@ -76,7 +72,6 @@ public class AuthorityTable extends PortalBaseTable {
 		}
 	}
 
-
 	public synchronized AuthorityGTS getSelectedAuthority() throws Exception {
 		int row = getSelectedRow();
 		if ((row >= 0) && (row < getRowCount())) {
@@ -85,7 +80,6 @@ public class AuthorityTable extends PortalBaseTable {
 			throw new Exception("Please select an authority!!!");
 		}
 	}
-
 
 	public synchronized void removeSelectedAuthority() throws Exception {
 		int row = getSelectedRow();
@@ -96,7 +90,6 @@ public class AuthorityTable extends PortalBaseTable {
 		}
 	}
 
-
 	public void doubleClick() throws Exception {
 		int row = getSelectedRow();
 		if ((row >= 0) && (row < getRowCount())) {
@@ -106,7 +99,6 @@ public class AuthorityTable extends PortalBaseTable {
 		}
 
 	}
-
 
 	public synchronized void increasePriority() throws Exception {
 		int row = getSelectedRow();
@@ -129,7 +121,6 @@ public class AuthorityTable extends PortalBaseTable {
 			throw new Exception("Please select an authority!!!");
 		}
 	}
-
 
 	public synchronized void decreasePriority() throws Exception {
 		int row = getSelectedRow();
@@ -154,7 +145,6 @@ public class AuthorityTable extends PortalBaseTable {
 		}
 	}
 
-
 	public synchronized AuthorityPriorityUpdate getPriorityUpdate() {
 		AuthorityPriorityUpdate update = new AuthorityPriorityUpdate();
 		AuthorityPrioritySpecification[] specs = new AuthorityPrioritySpecification[getRowCount()];
@@ -167,7 +157,6 @@ public class AuthorityTable extends PortalBaseTable {
 		update.setAuthorityPrioritySpecification(specs);
 		return update;
 	}
-
 
 	public void singleClick() throws Exception {
 		// TODO Auto-generated method stub

@@ -32,35 +32,31 @@ public class BaseResource implements Resource, ResourceProperties {
 
 	/** Stores the ResourceProperties of this service */
 	private ResourcePropertySet propSet;
-	
-	//this can be used to cancel the registration renewal
+
+	// this can be used to cancel the registration renewal
 	private Timer registrationTimer;
 
 	private MetadataConfiguration configuration;
-	
+
 	private URL baseURL;
 
-	//Define the metadata resource properties
-		
-
-
+	// Define the metadata resource properties
 
 	// initializes the resource
 	public void initialize() throws Exception {
 		// create the resource property set
-		this.propSet = new SimpleResourcePropertySet(ResourceConstants.RESOURCE_PROPERY_SET);
+		this.propSet = new SimpleResourcePropertySet(
+				ResourceConstants.RESOURCE_PROPERY_SET);
 
 		// this loads the metadata from XML files
 		populateMetadata();
-		
-		// now add the metadata as resource properties	
 
+		// now add the metadata as resource properties
 
 		// register the service to the index sevice
 		refreshRegistration(true);
 
 	}
-
 
 	/**
 	 * This checks the configuration file, and attempts to register to the
@@ -81,7 +77,8 @@ public class BaseResource implements Resource, ResourceProperties {
 			try {
 				currentContainerURL = ServiceHost.getBaseURL();
 			} catch (IOException e) {
-				logger.error("Unable to determine container's URL!  Skipping registration.");
+				logger
+						.error("Unable to determine container's URL!  Skipping registration.");
 				return;
 			}
 
@@ -90,7 +87,9 @@ public class BaseResource implements Resource, ResourceProperties {
 				// retry)
 				// do a string comparison as we don't want to do DNS lookups
 				// for comparison
-				if (forceRefresh || !this.baseURL.toExternalForm().equals(currentContainerURL.toExternalForm())) {
+				if (forceRefresh
+						|| !this.baseURL.toExternalForm().equals(
+								currentContainerURL.toExternalForm())) {
 					// we've tried to register before, and we have a different
 					// URL now.. so cancel the old registration (if it exists),
 					// and try to redo it.
@@ -100,7 +99,9 @@ public class BaseResource implements Resource, ResourceProperties {
 
 					// save the new value
 					this.baseURL = currentContainerURL;
-					logger.info("Refreshing existing registration [container URL=" + this.baseURL + "].");
+					logger
+							.info("Refreshing existing registration [container URL="
+									+ this.baseURL + "].");
 				} else {
 					// URLs are the same (and we weren't forced), so don't try
 					// to reregister
@@ -111,7 +112,9 @@ public class BaseResource implements Resource, ResourceProperties {
 				// we've never saved the baseURL (and therefore haven't tried to
 				// register)
 				this.baseURL = currentContainerURL;
-				logger.info("Attempting registration for the first time[container URL=" + this.baseURL + "].");
+				logger
+						.info("Attempting registration for the first time[container URL="
+								+ this.baseURL + "].");
 			}
 
 			// register with the index service
@@ -143,14 +146,17 @@ public class BaseResource implements Resource, ResourceProperties {
 			try {
 				// This is how registration parameters are set (read from
 				// template)
-				File registrationFile = new File(ContainerConfig.getBaseDirectory() + File.separator
-					+ getConfiguration().getRegistrationTemplateFile());
+				File registrationFile = new File(ContainerConfig
+						.getBaseDirectory()
+						+ File.separator
+						+ getConfiguration().getRegistrationTemplateFile());
 
 				if (registrationFile.exists() && registrationFile.canRead()) {
-					logger.debug("Loading registration information from:" + registrationFile);
+					logger.debug("Loading registration information from:"
+							+ registrationFile);
 
 					ServiceGroupRegistrationParameters params = ServiceGroupRegistrationClient
-						.readParams(registrationFile.getAbsolutePath());
+							.readParams(registrationFile.getAbsolutePath());
 					// set our service's EPR as the registrant
 					params.setRegistrantEPR(epr);
 
@@ -158,24 +164,21 @@ public class BaseResource implements Resource, ResourceProperties {
 					// apply the registration params to the client
 					registrationTimer = client.register(params);
 				} else {
-					logger.error("Unable to read registration file:" + registrationFile);
+					logger.error("Unable to read registration file:"
+							+ registrationFile);
 				}
 			} catch (Exception e) {
-				logger.error("Exception when trying to register service (" + epr + "): " + e);
+				logger.error("Exception when trying to register service ("
+						+ epr + "): " + e);
 			}
 		} else {
 			logger.info("Skipping registration.");
 		}
 	}
 
-
-
 	private void populateMetadata() {
-	
+
 	}
-
-
-			
 
 	public MetadataConfiguration getConfiguration() {
 		if (this.configuration != null) {
@@ -185,18 +188,20 @@ public class BaseResource implements Resource, ResourceProperties {
 
 		String servicePath = ctx.getTargetService();
 
-		String jndiName = Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/configuration";
+		String jndiName = Constants.JNDI_SERVICES_BASE_NAME + servicePath
+				+ "/configuration";
 		logger.debug("Will read configuration from jndi name: " + jndiName);
 		try {
 			Context initialContext = new InitialContext();
-			this.configuration = (MetadataConfiguration) initialContext.lookup(jndiName);
+			this.configuration = (MetadataConfiguration) initialContext
+					.lookup(jndiName);
 		} catch (Exception e) {
-			logger.error("when performing JNDI lookup for " + jndiName + ": " + e);
+			logger.error("when performing JNDI lookup for " + jndiName + ": "
+					+ e);
 		}
 
 		return this.configuration;
 	}
-
 
 	public ResourcePropertySet getResourcePropertySet() {
 		return propSet;

@@ -12,22 +12,26 @@ import javax.swing.JRadioButton;
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
 
-
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: GTSMenu.java,v 1.9 2006-04-27 02:36:15 langella Exp $
+ * @version $Id: GTSMenu.java,v 1.10 2006-05-11 03:19:51 langella Exp $
  */
 public class GTSMenu extends GridPortalComponent {
 
 	private javax.swing.JPanel jContentPane = null;
 
 	private JPanel mainPanel = null;
+
 	private JPanel menuPanel = null;
+
 	private ButtonGroup group;
+
 	private JPanel buttonPanel = null;
+
 	private JButton perform = null;
+
 	private JButton close = null;
 
 	private JRadioButton manageTrustedAuthorities = null;
@@ -46,12 +50,10 @@ public class GTSMenu extends GridPortalComponent {
 
 	private JLabel jLabel3 = null;
 
-
 	public GTSMenu() {
 		super();
 		initialize();
 	}
-
 
 	/**
 	 * This method initializes this
@@ -64,7 +66,6 @@ public class GTSMenu extends GridPortalComponent {
 		this.setFrameIcon(GTSLookAndFeel.getGTSIcon());
 		this.setTitle("Grid Trust Management");
 	}
-
 
 	/**
 	 * This method initializes jContentPane
@@ -80,7 +81,6 @@ public class GTSMenu extends GridPortalComponent {
 		}
 		return jContentPane;
 	}
-
 
 	/**
 	 * This method initializes jPanel
@@ -107,7 +107,6 @@ public class GTSMenu extends GridPortalComponent {
 		}
 		return mainPanel;
 	}
-
 
 	private JPanel getMenuPanel() {
 		if (menuPanel == null) {
@@ -161,9 +160,11 @@ public class GTSMenu extends GridPortalComponent {
 			gridBagConstraints.gridy = 1;
 			menuPanel = new JPanel();
 			menuPanel.setLayout(new GridBagLayout());
-			menuPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Grid Trust Management Options",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel.getPanelLabelColor()));
+			menuPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+					null, "Grid Trust Management Options",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					GTSLookAndFeel.getPanelLabelColor()));
 			menuPanel.add(getManageTrustedAuthorities(), gridBagConstraints);
 			menuPanel.add(jLabel, gridBagConstraints11);
 
@@ -176,7 +177,6 @@ public class GTSMenu extends GridPortalComponent {
 		}
 		return menuPanel;
 	}
-
 
 	/**
 	 * This method initializes jPanel
@@ -191,7 +191,6 @@ public class GTSMenu extends GridPortalComponent {
 		}
 		return buttonPanel;
 	}
-
 
 	/**
 	 * This method initializes jButton
@@ -212,20 +211,22 @@ public class GTSMenu extends GridPortalComponent {
 		return perform;
 	}
 
-
 	private void perform() {
 		if (manageTrustedAuthorities.isSelected()) {
-			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new TrustedAuthoritiesWindow());
+			PortalResourceManager.getInstance().getGridPortal()
+					.addGridPortalComponent(new TrustedAuthoritiesWindow());
 		} else if (manageAccess.isSelected()) {
-			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new PermissionManagerWindow());
+			PortalResourceManager.getInstance().getGridPortal()
+					.addGridPortalComponent(new PermissionManagerWindow());
 		} else if (manageTrustLevels.isSelected()) {
-			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new TrustLevelManagerWindow());
+			PortalResourceManager.getInstance().getGridPortal()
+					.addGridPortalComponent(new TrustLevelManagerWindow());
 		} else if (manageAuthorities.isSelected()) {
-			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new AuthorityManagerWindow());
+			PortalResourceManager.getInstance().getGridPortal()
+					.addGridPortalComponent(new AuthorityManagerWindow());
 		}
 
 	}
-
 
 	/**
 	 * This method initializes jButton1
@@ -246,7 +247,6 @@ public class GTSMenu extends GridPortalComponent {
 		return close;
 	}
 
-
 	/**
 	 * This method initializes manageTrustedAuthorities
 	 * 
@@ -259,7 +259,6 @@ public class GTSMenu extends GridPortalComponent {
 		}
 		return manageTrustedAuthorities;
 	}
-
 
 	/**
 	 * This method initializes manageAccess
@@ -274,7 +273,6 @@ public class GTSMenu extends GridPortalComponent {
 		return manageAccess;
 	}
 
-
 	/**
 	 * This method initializes manageTrustLevels
 	 * 
@@ -287,7 +285,6 @@ public class GTSMenu extends GridPortalComponent {
 		}
 		return manageTrustLevels;
 	}
-
 
 	/**
 	 * This method initializes manageAuthorities

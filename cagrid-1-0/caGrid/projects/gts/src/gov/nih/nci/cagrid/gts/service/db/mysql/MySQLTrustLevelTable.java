@@ -13,11 +13,13 @@ public class MySQLTrustLevelTable extends TrustLevelTable {
 
 	public String getCreateTableSQL() {
 		String sql = "CREATE TABLE " + TABLE_NAME + " (" + TrustLevelTable.NAME
-		+ " VARCHAR(255) NOT NULL PRIMARY KEY," + TrustLevelTable.DESCRIPTION + " TEXT, "
-		+ TrustLevelTable.IS_AUTHORITY + " VARCHAR(5) NOT NULL," + TrustLevelTable.AUTHORITY_GTS
-		+ " VARCHAR(255) NOT NULL," + TrustLevelTable.SOURCE_GTS + " VARCHAR(255) NOT NULL, "
-		+ TrustLevelTable.LAST_UPDATED + " BIGINT NOT NULL," + "INDEX document_index ("
-		+ TrustLevelTable.NAME + "));";
+				+ " VARCHAR(255) NOT NULL PRIMARY KEY,"
+				+ TrustLevelTable.DESCRIPTION + " TEXT, "
+				+ TrustLevelTable.IS_AUTHORITY + " VARCHAR(5) NOT NULL,"
+				+ TrustLevelTable.AUTHORITY_GTS + " VARCHAR(255) NOT NULL,"
+				+ TrustLevelTable.SOURCE_GTS + " VARCHAR(255) NOT NULL, "
+				+ TrustLevelTable.LAST_UPDATED + " BIGINT NOT NULL,"
+				+ "INDEX document_index (" + TrustLevelTable.NAME + "));";
 		return sql;
 	}
 }

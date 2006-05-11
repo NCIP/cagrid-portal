@@ -8,7 +8,6 @@ import gov.nih.nci.cagrid.gts.service.db.PermissionsTable;
 import gov.nih.nci.cagrid.gts.service.db.TrustLevelTable;
 import gov.nih.nci.cagrid.gts.service.db.TrustedAuthorityTable;
 
-
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -19,11 +18,14 @@ import gov.nih.nci.cagrid.gts.service.db.TrustedAuthorityTable;
 public class MySQLManager implements DBManager {
 
 	private Database db;
-	private AuthorityTable authorityTable;
-	private TrustedAuthorityTable trustedAuthorityTable;
-	private TrustLevelTable trustLevelTable;
-	private PermissionsTable permissionsTable;
 
+	private AuthorityTable authorityTable;
+
+	private TrustedAuthorityTable trustedAuthorityTable;
+
+	private TrustLevelTable trustLevelTable;
+
+	private PermissionsTable permissionsTable;
 
 	public MySQLManager(MySQLDatabase db) {
 		this.db = db;
@@ -33,26 +35,21 @@ public class MySQLManager implements DBManager {
 		permissionsTable = new MySQLPermissionsTable();
 	}
 
-
 	public TrustedAuthorityTable getTrustedAuthorityTable() {
 		return trustedAuthorityTable;
 	}
-
 
 	public AuthorityTable getAuthorityTable() {
 		return authorityTable;
 	}
 
-
 	public TrustLevelTable getTrustLevelTable() {
 		return trustLevelTable;
 	}
 
-
 	public PermissionsTable getPermissionsTable() {
 		return permissionsTable;
 	}
-
 
 	public Database getDatabase() {
 		return db;

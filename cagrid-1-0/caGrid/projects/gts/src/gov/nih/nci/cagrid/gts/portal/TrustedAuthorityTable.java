@@ -8,7 +8,6 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
-
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -26,7 +25,6 @@ public class TrustedAuthorityTable extends PortalBaseTable {
 	public final static String STATUS = "Status";
 
 	TrustedAuthoritiesWindow window;
-
 
 	public TrustedAuthorityTable(TrustedAuthoritiesWindow window) {
 		super(createTableModel());
@@ -49,7 +47,6 @@ public class TrustedAuthorityTable extends PortalBaseTable {
 
 	}
 
-
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn(TRUSTED_AUTHORITY);
@@ -60,7 +57,6 @@ public class TrustedAuthorityTable extends PortalBaseTable {
 
 	}
 
-
 	public void addTrustedAuthority(final TrustedAuthority ta) {
 		Vector v = new Vector();
 		v.add(ta);
@@ -70,8 +66,8 @@ public class TrustedAuthorityTable extends PortalBaseTable {
 		addRow(v);
 	}
 
-
-	public synchronized TrustedAuthority getSelectedTrustedAuthority() throws Exception {
+	public synchronized TrustedAuthority getSelectedTrustedAuthority()
+			throws Exception {
 		int row = getSelectedRow();
 		if ((row >= 0) && (row < getRowCount())) {
 			return (TrustedAuthority) getValueAt(row, 0);
@@ -79,7 +75,6 @@ public class TrustedAuthorityTable extends PortalBaseTable {
 			throw new Exception("Please select a Trusted Authority!!!");
 		}
 	}
-
 
 	public synchronized void removeSelectedTrustedAuthority() throws Exception {
 		int row = getSelectedRow();
@@ -90,7 +85,6 @@ public class TrustedAuthorityTable extends PortalBaseTable {
 		}
 	}
 
-
 	public void doubleClick() throws Exception {
 		int row = getSelectedRow();
 		if ((row >= 0) && (row < getRowCount())) {
@@ -100,7 +94,6 @@ public class TrustedAuthorityTable extends PortalBaseTable {
 		}
 
 	}
-
 
 	public void singleClick() throws Exception {
 		// TODO Auto-generated method stub

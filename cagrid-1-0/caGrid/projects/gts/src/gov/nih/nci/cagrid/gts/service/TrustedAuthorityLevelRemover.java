@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.gts.service;
 
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 
-
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -11,5 +10,6 @@ import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
  *          Exp $
  */
 public interface TrustedAuthorityLevelRemover {
-	public void removeAssociatedTrustedAuthorities(String trustLevel) throws GTSInternalFault;
+	public void removeAssociatedTrustedAuthorities(String trustLevel)
+			throws GTSInternalFault;
 }

@@ -17,7 +17,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -30,15 +29,22 @@ public class PermissionPanel extends JPanel {
 	public final static String ANY = "Any";
 
 	private JLabel jLabel = null;
-	private JTextField gid = null;
-	private JLabel jLabel1 = null;
-	private JComboBox trustedAuthorities = null;
-	private JLabel jLabel2 = null;
-	private JComboBox role = null;
-	private String currentService = null;
-	private int currentLength = 0;
-	private boolean wildcards = false;
 
+	private JTextField gid = null;
+
+	private JLabel jLabel1 = null;
+
+	private JComboBox trustedAuthorities = null;
+
+	private JLabel jLabel2 = null;
+
+	private JComboBox role = null;
+
+	private String currentService = null;
+
+	private int currentLength = 0;
+
+	private boolean wildcards = false;
 
 	/**
 	 * This is the default constructor
@@ -48,7 +54,6 @@ public class PermissionPanel extends JPanel {
 		this.wildcards = useWildcards;
 		initialize();
 	}
-
 
 	/**
 	 * This method initializes this
@@ -108,7 +113,6 @@ public class PermissionPanel extends JPanel {
 		this.add(getRole(), gridBagConstraints5);
 	}
 
-
 	/**
 	 * This method initializes gridIdentity
 	 * 
@@ -122,7 +126,6 @@ public class PermissionPanel extends JPanel {
 		return gid;
 	}
 
-
 	/**
 	 * This method initializes trustedAuthority
 	 * 
@@ -131,15 +134,15 @@ public class PermissionPanel extends JPanel {
 	private JComboBox getTrustedAuthorities() {
 		if (trustedAuthorities == null) {
 			trustedAuthorities = new JComboBox();
-			trustedAuthorities.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					syncRoles();
-				}
-			});
+			trustedAuthorities
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							syncRoles();
+						}
+					});
 		}
 		return trustedAuthorities;
 	}
-
 
 	public PermissionFilter getPermissionFilter() {
 		PermissionFilter f = new PermissionFilter();
@@ -155,7 +158,6 @@ public class PermissionPanel extends JPanel {
 		return f;
 	}
 
-
 	public Permission getPermission() {
 		Permission p = new Permission();
 		p.setGridIdentity(Utils.clean(this.gid.getText()));
@@ -170,7 +172,6 @@ public class PermissionPanel extends JPanel {
 		return p;
 	}
 
-
 	/**
 	 * This method initializes role
 	 * 
@@ -183,7 +184,6 @@ public class PermissionPanel extends JPanel {
 		return role;
 	}
 
-
 	public synchronized int syncWithService(String service) throws Exception {
 		try {
 
@@ -194,10 +194,12 @@ public class PermissionPanel extends JPanel {
 				if (wildcards) {
 					this.trustedAuthorities.addItem(ANY);
 				}
-				this.trustedAuthorities.addItem(Constants.ALL_TRUST_AUTHORITIES);
+				this.trustedAuthorities
+						.addItem(Constants.ALL_TRUST_AUTHORITIES);
 				currentLength = 0;
 				GTSSearchClient client = new GTSSearchClient(service);
-				TrustedAuthority[] tas = client.findTrustedAuthorities(new TrustedAuthorityFilter());
+				TrustedAuthority[] tas = client
+						.findTrustedAuthorities(new TrustedAuthorityFilter());
 
 				if (tas != null) {
 					currentLength = tas.length;
@@ -217,20 +219,17 @@ public class PermissionPanel extends JPanel {
 
 	}
 
-
 	private void disableAll() {
 		this.gid.setEnabled(false);
 		this.trustedAuthorities.setEnabled(false);
 		this.role.setEnabled(false);
 	}
 
-
 	private void enableAll() {
 		this.gid.setEnabled(true);
 		this.trustedAuthorities.setEnabled(true);
 		this.role.setEnabled(true);
 	}
-
 
 	public synchronized void syncRoles() {
 		this.role.removeAllItems();

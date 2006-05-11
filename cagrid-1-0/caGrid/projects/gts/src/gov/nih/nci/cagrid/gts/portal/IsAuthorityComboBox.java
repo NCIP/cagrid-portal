@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.gts.portal;
 
 import javax.swing.JComboBox;
 
-
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -13,14 +12,12 @@ import javax.swing.JComboBox;
 public class IsAuthorityComboBox extends JComboBox {
 	private static final String ANY = "Any";
 
-
 	public IsAuthorityComboBox() {
 		this.addItem(ANY);
 		this.addItem(Boolean.TRUE);
 		this.addItem(Boolean.FALSE);
 		this.setEditable(false);
 	}
-
 
 	public Boolean getIsAuthority() {
 		if (getSelectedItem().equals(ANY)) {

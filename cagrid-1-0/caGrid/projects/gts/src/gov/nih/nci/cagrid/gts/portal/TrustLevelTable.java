@@ -8,7 +8,6 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
-
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -25,7 +24,6 @@ public class TrustLevelTable extends PortalBaseTable {
 
 	private TrustLevelManagerWindow window;
 
-
 	public TrustLevelTable(TrustLevelManagerWindow window) {
 		super(createTableModel());
 		this.window = window;
@@ -41,7 +39,6 @@ public class TrustLevelTable extends PortalBaseTable {
 		this.clearTable();
 	}
 
-
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn(TRUST_LEVEL);
@@ -51,7 +48,6 @@ public class TrustLevelTable extends PortalBaseTable {
 
 	}
 
-
 	public void addTrustLevel(final TrustLevel level) {
 		Vector v = new Vector();
 		v.add(level);
@@ -59,7 +55,6 @@ public class TrustLevelTable extends PortalBaseTable {
 		v.add(level.getDescription());
 		addRow(v);
 	}
-
 
 	public synchronized TrustLevel getSelectedTrustLevel() throws Exception {
 		int row = getSelectedRow();
@@ -70,7 +65,6 @@ public class TrustLevelTable extends PortalBaseTable {
 		}
 	}
 
-
 	public synchronized void removeSelectedTrustLevel() throws Exception {
 		int row = getSelectedRow();
 		if ((row >= 0) && (row < getRowCount())) {
@@ -79,7 +73,6 @@ public class TrustLevelTable extends PortalBaseTable {
 			throw new Exception("Please select a trust level!!!");
 		}
 	}
-
 
 	public void doubleClick() throws Exception {
 		int row = getSelectedRow();
@@ -90,7 +83,6 @@ public class TrustLevelTable extends PortalBaseTable {
 		}
 
 	}
-
 
 	public void singleClick() throws Exception {
 		// TODO Auto-generated method stub

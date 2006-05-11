@@ -470,8 +470,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 					.getSelectedService();
 
 			TrustedAuthorityFilter filter = new TrustedAuthorityFilter();
-			filter.setName(Utils.clean(trustedAuthorityName
-					.getText()));
+			filter.setName(Utils.clean(trustedAuthorityName.getText()));
 			String tl = (String) trustLevel.getSelectedItem();
 			if (tl.equals(ANY)) {
 				tl = null;
@@ -480,10 +479,8 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 			filter.setStatus(((StatusComboBox) status).getStatus());
 			filter.setLifetime(this.lifetime.getLifetime());
 			filter.setIsAuthority(this.getIsAuthority().getIsAuthority());
-			filter.setAuthorityGTS(this.getAuthorityGTS()
-					.getSelectedService());
-			filter.setSourceGTS(this.getSourceGTS()
-					.getSelectedService());
+			filter.setAuthorityGTS(this.getAuthorityGTS().getSelectedService());
+			filter.setSourceGTS(this.getSourceGTS().getSelectedService());
 			GTSSearchClient client = new GTSSearchClient(service);
 			int length = 0;
 			TrustedAuthority[] tas = client.findTrustedAuthorities(filter);

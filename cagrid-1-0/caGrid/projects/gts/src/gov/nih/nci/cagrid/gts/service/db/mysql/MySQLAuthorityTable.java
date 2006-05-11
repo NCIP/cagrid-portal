@@ -12,10 +12,14 @@ import gov.nih.nci.cagrid.gts.service.db.AuthorityTable;
 public class MySQLAuthorityTable extends AuthorityTable {
 
 	public String getCreateTableSQL() {
-		String trust = "CREATE TABLE " + TABLE_NAME + " (" + GTS_URI + " VARCHAR(255) NOT NULL PRIMARY KEY," + PRIORITY
-			+ " INT NOT NULL, " + SYNC_TRUST_LEVELS + " VARCHAR(5) NOT NULL, " + TTL_HOURS + " INT NOT NULL, "
-			+ TTL_MINUTES + " INT NOT NULL," + TTL_SECONDS + " INT NOT NULL, " + PERFORM_AUTH
-			+ " VARCHAR(5) NOT NULL, " + GTS_IDENTITY + " VARCHAR(255)," + " INDEX document_index (" + GTS_URI + "));";
+		String trust = "CREATE TABLE " + TABLE_NAME + " (" + GTS_URI
+				+ " VARCHAR(255) NOT NULL PRIMARY KEY," + PRIORITY
+				+ " INT NOT NULL, " + SYNC_TRUST_LEVELS
+				+ " VARCHAR(5) NOT NULL, " + TTL_HOURS + " INT NOT NULL, "
+				+ TTL_MINUTES + " INT NOT NULL," + TTL_SECONDS
+				+ " INT NOT NULL, " + PERFORM_AUTH + " VARCHAR(5) NOT NULL, "
+				+ GTS_IDENTITY + " VARCHAR(255)," + " INDEX document_index ("
+				+ GTS_URI + "));";
 		return trust;
 	}
 

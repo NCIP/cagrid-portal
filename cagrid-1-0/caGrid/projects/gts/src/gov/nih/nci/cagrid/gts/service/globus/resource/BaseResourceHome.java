@@ -5,7 +5,6 @@ import org.apache.commons.logging.LogFactory;
 import org.globus.wsrf.Resource;
 import org.globus.wsrf.impl.SingletonResourceHome;
 
-
 /**
  * This class implements a resource home
  */
@@ -15,7 +14,6 @@ public class BaseResourceHome extends SingletonResourceHome {
 	static final Log logger = LogFactory.getLog(BaseResourceHome.class);
 
 	private String gtsConfig;
-
 
 	public Resource findSingleton() {
 		logger.info("Creating a single resource.");
@@ -29,11 +27,9 @@ public class BaseResourceHome extends SingletonResourceHome {
 		}
 	}
 
-
 	public String getGtsConfig() {
 		return gtsConfig;
 	}
-
 
 	public void setGtsConfig(String gtsConfig) {
 		this.gtsConfig = gtsConfig;

@@ -9,18 +9,28 @@ package gov.nih.nci.cagrid.gts.service.db;
  */
 public abstract class TrustedAuthorityTable {
 	public static final String TABLE_NAME = "TRUSTED_AUTHORITIES";
-	public static final String NAME = "NAME";
-	public static final String CERTIFICATE_DN = "CERTIFICATE_DN";
-	public static final String TRUST_LEVEL = "TRUST_LEVEL";
-	public static final String STATUS = "STATUS";
-	public static final String IS_AUTHORITY = "IS_AUTHORITY";
-	public static final String AUTHORITY_GTS = "AUTHORITY_GTS";
-	public static final String SOURCE_GTS = "SOURCE_GTS";
-	public static final String EXPIRES = "EXPIRES";
-	public static final String LAST_UPDATED = "LAST_UPDATED";
-	public static final String CERTIFICATE = "CERTIFICATE";
-	public static final String CRL = "CRL";
 
+	public static final String NAME = "NAME";
+
+	public static final String CERTIFICATE_DN = "CERTIFICATE_DN";
+
+	public static final String TRUST_LEVEL = "TRUST_LEVEL";
+
+	public static final String STATUS = "STATUS";
+
+	public static final String IS_AUTHORITY = "IS_AUTHORITY";
+
+	public static final String AUTHORITY_GTS = "AUTHORITY_GTS";
+
+	public static final String SOURCE_GTS = "SOURCE_GTS";
+
+	public static final String EXPIRES = "EXPIRES";
+
+	public static final String LAST_UPDATED = "LAST_UPDATED";
+
+	public static final String CERTIFICATE = "CERTIFICATE";
+
+	public static final String CRL = "CRL";
 
 	public abstract String getCreateTableSQL();
 }

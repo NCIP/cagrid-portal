@@ -10,9 +10,10 @@ package gov.nih.nci.cagrid.gts.service;
 public class AuthoritySyncTime {
 
 	private int hours;
-	private int minutes;
-	private int seconds;
 
+	private int minutes;
+
+	private int seconds;
 
 	public AuthoritySyncTime(int hours, int minutes, int seconds) {
 		this.hours = hours;
@@ -20,16 +21,13 @@ public class AuthoritySyncTime {
 		this.seconds = seconds;
 	}
 
-
 	public int getHours() {
 		return hours;
 	}
 
-
 	public int getMinutes() {
 		return minutes;
 	}
-
 
 	public int getSeconds() {
 		return seconds;

@@ -9,13 +9,18 @@ package gov.nih.nci.cagrid.gts.service.db;
  */
 public abstract class TrustLevelTable {
 	public static final String TABLE_NAME = "TRUST_LEVELS";
-	public static final String NAME = "NAME";
-	public static final String DESCRIPTION = "DESCRIPTION";
-	public static final String IS_AUTHORITY = "IS_AUTHORITY";
-	public static final String AUTHORITY_GTS = "AUTHORITY_GTS";
-	public static final String SOURCE_GTS = "SOURCE_GTS";
-	public static final String LAST_UPDATED = "LAST_UPDATED";
 
+	public static final String NAME = "NAME";
+
+	public static final String DESCRIPTION = "DESCRIPTION";
+
+	public static final String IS_AUTHORITY = "IS_AUTHORITY";
+
+	public static final String AUTHORITY_GTS = "AUTHORITY_GTS";
+
+	public static final String SOURCE_GTS = "SOURCE_GTS";
+
+	public static final String LAST_UPDATED = "LAST_UPDATED";
 
 	public abstract String getCreateTableSQL();
 }

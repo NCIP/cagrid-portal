@@ -4,7 +4,6 @@ import gov.nih.nci.cagrid.gts.bean.Lifetime;
 
 import javax.swing.JComboBox;
 
-
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -15,14 +14,12 @@ import javax.swing.JComboBox;
 public class LifetimeComboBox extends JComboBox {
 	private static final String ANY = "Any";
 
-
 	public LifetimeComboBox() {
 		this.addItem(ANY);
 		this.addItem(Lifetime.Valid);
 		this.addItem(Lifetime.Expired);
 		this.setEditable(false);
 	}
-
 
 	public Lifetime getLifetime() {
 		if (getSelectedItem().equals(ANY)) {

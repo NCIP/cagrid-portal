@@ -8,7 +8,6 @@ import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 
 import java.rmi.RemoteException;
 
-
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -21,23 +20,22 @@ public class GTSSearchClient {
 
 	private GridTrustServiceClient client;
 
-
 	public GTSSearchClient(String url) {
 		this.client = new GridTrustServiceClient(url);
 	}
 
-
-	public TrustedAuthority[] findTrustedAuthorities(TrustedAuthorityFilter f) throws RemoteException, GTSInternalFault {
+	public TrustedAuthority[] findTrustedAuthorities(TrustedAuthorityFilter f)
+			throws RemoteException, GTSInternalFault {
 		return this.client.findTrustedAuthorities(f);
 	}
 
-
-	public TrustLevel[] getTrustLevels() throws RemoteException, GTSInternalFault {
+	public TrustLevel[] getTrustLevels() throws RemoteException,
+			GTSInternalFault {
 		return this.client.getTrustLevels();
 	}
 
-
-	public AuthorityGTS[] getAuthorities() throws RemoteException, GTSInternalFault {
+	public AuthorityGTS[] getAuthorities() throws RemoteException,
+			GTSInternalFault {
 		return this.client.getAuthorities();
 	}
 }

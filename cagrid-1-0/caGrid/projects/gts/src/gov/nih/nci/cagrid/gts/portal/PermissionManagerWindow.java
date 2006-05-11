@@ -25,7 +25,6 @@ import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
 
-
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -33,7 +32,8 @@ import org.projectmobius.portal.PortalResourceManager;
  * @version $Id: TrustedAuthoritiesWindow.java,v 1.2 2006/03/27 19:05:40
  *          langella Exp $
  */
-public class PermissionManagerWindow extends GridPortalBaseFrame implements PermissionRefresher {
+public class PermissionManagerWindow extends GridPortalBaseFrame implements
+		PermissionRefresher {
 
 	private javax.swing.JPanel jContentPane = null;
 
@@ -77,7 +77,6 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 
 	private boolean searchDone = false;
 
-
 	/**
 	 * This is the default constructor
 	 */
@@ -87,7 +86,6 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 		this.setFrameIcon(GTSLookAndFeel.getPermissionIcon());
 		syncServices();
 	}
-
 
 	/**
 	 * This method initializes this
@@ -99,7 +97,6 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 		this.setContentPane(getJContentPane());
 		this.setTitle("GTS Access Management");
 	}
-
 
 	/**
 	 * This method initializes jContentPane
@@ -114,7 +111,6 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 		}
 		return jContentPane;
 	}
-
 
 	/**
 	 * This method initializes jPanel
@@ -169,7 +165,6 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 		return mainPanel;
 	}
 
-
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -180,9 +175,14 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			contentPanel = new JPanel();
 			contentPanel.setLayout(new GridBagLayout());
-			contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Permission(s)",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel.getPanelLabelColor()));
+			contentPanel
+					.setBorder(javax.swing.BorderFactory
+							.createTitledBorder(
+									null,
+									"Permission(s)",
+									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+									javax.swing.border.TitledBorder.DEFAULT_POSITION,
+									null, GTSLookAndFeel.getPanelLabelColor()));
 			gridBagConstraints4.weightx = 1.0;
 			gridBagConstraints4.gridy = 0;
 			gridBagConstraints4.gridx = 0;
@@ -192,7 +192,6 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 		}
 		return contentPanel;
 	}
-
 
 	/**
 	 * This method initializes jPanel
@@ -208,7 +207,6 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 		return buttonPanel;
 	}
 
-
 	/**
 	 * This method initializes jTable
 	 * 
@@ -220,7 +218,6 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 		}
 		return permissionsTable;
 	}
-
 
 	/**
 	 * This method initializes jScrollPane
@@ -235,7 +232,6 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 		return jScrollPane;
 	}
 
-
 	/**
 	 * This method initializes manageUser
 	 * 
@@ -246,40 +242,45 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 			addPermission = new JButton();
 			addPermission.setText("Add Permission");
 			addPermission.setIcon(GTSLookAndFeel.getAddPermissionIcon());
-			addPermission.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
-						public void execute() {
-							disableAllActions();
-							addPermission();
-							enableAllActions();
+			addPermission
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							MobiusRunnable runner = new MobiusRunnable() {
+								public void execute() {
+									disableAllActions();
+									addPermission();
+									enableAllActions();
+								}
+							};
+							try {
+								PortalResourceManager.getInstance()
+										.getThreadManager()
+										.executeInBackground(runner);
+							} catch (Exception t) {
+								t.getMessage();
+							}
 						}
-					};
-					try {
-						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
-					} catch (Exception t) {
-						t.getMessage();
-					}
-				}
 
-			});
+					});
 		}
 
 		return addPermission;
 	}
 
-
 	public void addPermission() {
 		try {
-			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-				new AddPermissionWindow(service, proxy, this), 600, 300);
+			String service = ((GTSServiceListComboBox) getService())
+					.getSelectedService();
+			GlobusCredential proxy = ((ProxyComboBox) getProxy())
+					.getSelectedProxy();
+			PortalResourceManager.getInstance().getGridPortal()
+					.addGridPortalComponent(
+							new AddPermissionWindow(service, proxy, this), 600,
+							300);
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
 		}
 	}
-
 
 	/**
 	 * This method initializes jPanel
@@ -299,7 +300,6 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 		}
 		return jPanel;
 	}
-
 
 	/**
 	 * This method initializes jPanel2
@@ -339,9 +339,11 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 			jLabel14.setText("Service");
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
-			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "GTS/Login Information",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel
-					.getPanelLabelColor()));
+			jPanel2.setBorder(BorderFactory.createTitledBorder(null,
+					"GTS/Login Information",
+					TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel
+							.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints28);
 			jPanel2.add(proxyLabel, gridBagConstraints29);
@@ -349,7 +351,6 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 		}
 		return jPanel2;
 	}
-
 
 	/**
 	 * This method initializes queryPanel
@@ -363,7 +364,6 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 		}
 		return queryPanel;
 	}
-
 
 	/**
 	 * This method initializes query
@@ -385,7 +385,8 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
+						PortalResourceManager.getInstance().getThreadManager()
+								.executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -396,15 +397,16 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 		return query;
 	}
 
-
 	private void findPermissions() {
 
 		this.getPermissionsTable().clearTable();
 		this.updateProgress(true, "Finding Permissions...");
 
 		try {
-			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			String service = ((GTSServiceListComboBox) getService())
+					.getSelectedService();
+			GlobusCredential proxy = ((ProxyComboBox) getProxy())
+					.getSelectedProxy();
 			PermissionFilter f = filterPanel.getPermissionFilter();
 			GTSAdminClient client = new GTSAdminClient(service, proxy);
 			Permission[] perms = client.findPermissions(f);
@@ -416,7 +418,8 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 				}
 			}
 			searchDone = true;
-			this.updateProgress(false, "Completed [Found " + length + " Permission(s)]");
+			this.updateProgress(false, "Completed [Found " + length
+					+ " Permission(s)]");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -425,7 +428,6 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 		}
 
 	}
-
 
 	/**
 	 * This method initializes service
@@ -443,7 +445,8 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
+						PortalResourceManager.getInstance().getThreadManager()
+								.executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -454,7 +457,6 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 		}
 		return service;
 	}
-
 
 	/**
 	 * This method initializes proxy
@@ -467,7 +469,6 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 		}
 		return proxy;
 	}
-
 
 	/**
 	 * This method initializes progressPanel
@@ -489,7 +490,6 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 		return progressPanel;
 	}
 
-
 	/**
 	 * This method initializes progress
 	 * 
@@ -505,7 +505,6 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 		return progress;
 	}
 
-
 	public void updateProgress(final boolean working, final String s) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -516,7 +515,6 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 
 	}
 
-
 	/**
 	 * This method initializes removeUser
 	 * 
@@ -526,41 +524,46 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 		if (removePermissionButton == null) {
 			removePermissionButton = new JButton();
 			removePermissionButton.setText("Remove Permission");
-			removePermissionButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
-						public void execute() {
-							disableAllActions();
-							removePermission();
-							enableAllActions();
+			removePermissionButton
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							MobiusRunnable runner = new MobiusRunnable() {
+								public void execute() {
+									disableAllActions();
+									removePermission();
+									enableAllActions();
+								}
+							};
+							try {
+								PortalResourceManager.getInstance()
+										.getThreadManager()
+										.executeInBackground(runner);
+							} catch (Exception t) {
+								t.getMessage();
+							}
 						}
-					};
-					try {
-						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
-					} catch (Exception t) {
-						t.getMessage();
-					}
-				}
-			});
-			removePermissionButton.setIcon(GTSLookAndFeel.getRevokePermissionIcon());
+					});
+			removePermissionButton.setIcon(GTSLookAndFeel
+					.getRevokePermissionIcon());
 		}
 		return removePermissionButton;
 	}
 
-
 	private void removePermission() {
 		try {
-			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			String service = ((GTSServiceListComboBox) getService())
+					.getSelectedService();
+			GlobusCredential proxy = ((ProxyComboBox) getProxy())
+					.getSelectedProxy();
 			GTSAdminClient client = new GTSAdminClient(service, proxy);
-			client.revokePermission(this.permissionsTable.getSelectedPermission());
+			client.revokePermission(this.permissionsTable
+					.getSelectedPermission());
 			this.refreshPermissions();
 
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
 		}
 	}
-
 
 	/**
 	 * This method initializes filterPanel
@@ -570,22 +573,24 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 	private PermissionPanel getFilterPanel() {
 		if (filterPanel == null) {
 			filterPanel = new PermissionPanel(true);
-			filterPanel.setBorder(BorderFactory.createTitledBorder(null, "Search Criteria",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel
-					.getPanelLabelColor()));
+			filterPanel.setBorder(BorderFactory.createTitledBorder(null,
+					"Search Criteria", TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel
+							.getPanelLabelColor()));
 		}
 		return filterPanel;
 	}
 
-
 	private synchronized void syncServices() {
-		String service = ((GTSServiceListComboBox) getService()).getSelectedService();
+		String service = ((GTSServiceListComboBox) getService())
+				.getSelectedService();
 		if ((currentService == null) || (!currentService.equals(service))) {
 			try {
 				currentService = service;
 				updateProgress(true, "Discovery Trusted Authorities...");
 				int length = filterPanel.syncWithService(service);
-				this.updateProgress(false, "Completed [Found " + length + " Trusted Authority(s)]");
+				this.updateProgress(false, "Completed [Found " + length
+						+ " Trusted Authority(s)]");
 			} catch (Exception e) {
 				e.printStackTrace();
 				PortalUtils.showErrorMessage(e);
@@ -595,20 +600,17 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements Perm
 
 	}
 
-
 	private void disableAllActions() {
 		getQuery().setEnabled(false);
 		getAddPermission().setEnabled(false);
 		getRemovePermissionButton().setEnabled(false);
 	}
 
-
 	private void enableAllActions() {
 		getQuery().setEnabled(true);
 		getAddPermission().setEnabled(true);
 		getRemovePermissionButton().setEnabled(true);
 	}
-
 
 	public void refreshPermissions() {
 		if (searchDone) {

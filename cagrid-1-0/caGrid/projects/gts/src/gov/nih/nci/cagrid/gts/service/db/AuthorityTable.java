@@ -10,15 +10,22 @@ package gov.nih.nci.cagrid.gts.service.db;
 public abstract class AuthorityTable {
 
 	public static final String TABLE_NAME = "GTS_AUTHORITIES";
-	public static final String GTS_URI = "GTS_URI";
-	public static final String SYNC_TRUST_LEVELS = "SYNC_TRUST_LEVELS";
-	public static final String PRIORITY = "PRIORITY";
-	public static final String TTL_HOURS = "TTL_HOURS";
-	public static final String TTL_MINUTES = "TTL_MINUTES";
-	public static final String TTL_SECONDS = "TTL_SECONDS";
-	public static final String PERFORM_AUTH = "PERFORM_AUTH";
-	public static final String GTS_IDENTITY = "GTS_IDENTITY";
 
+	public static final String GTS_URI = "GTS_URI";
+
+	public static final String SYNC_TRUST_LEVELS = "SYNC_TRUST_LEVELS";
+
+	public static final String PRIORITY = "PRIORITY";
+
+	public static final String TTL_HOURS = "TTL_HOURS";
+
+	public static final String TTL_MINUTES = "TTL_MINUTES";
+
+	public static final String TTL_SECONDS = "TTL_SECONDS";
+
+	public static final String PERFORM_AUTH = "PERFORM_AUTH";
+
+	public static final String GTS_IDENTITY = "GTS_IDENTITY";
 
 	public abstract String getCreateTableSQL();
 }

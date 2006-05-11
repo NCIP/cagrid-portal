@@ -25,7 +25,6 @@ import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
 
-
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -33,7 +32,8 @@ import org.projectmobius.portal.PortalResourceManager;
  * @version $Id: TrustedAuthoritiesWindow.java,v 1.2 2006/03/27 19:05:40
  *          langella Exp $
  */
-public class AuthorityManagerWindow extends GridPortalBaseFrame implements AuthorityRefresher {
+public class AuthorityManagerWindow extends GridPortalBaseFrame implements
+		AuthorityRefresher {
 
 	private javax.swing.JPanel jContentPane = null;
 
@@ -83,7 +83,6 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 
 	private boolean searchDone = false;
 
-
 	/**
 	 * This is the default constructor
 	 */
@@ -92,7 +91,6 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 		initialize();
 		this.setFrameIcon(GTSLookAndFeel.getAuthorityIcon());
 	}
-
 
 	/**
 	 * This method initializes this
@@ -104,7 +102,6 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 		this.setContentPane(getJContentPane());
 		this.setTitle("GTS Authority Management");
 	}
-
 
 	/**
 	 * This method initializes jContentPane
@@ -119,7 +116,6 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 		}
 		return jContentPane;
 	}
-
 
 	/**
 	 * This method initializes jPanel
@@ -167,7 +163,6 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 		return mainPanel;
 	}
 
-
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -183,9 +178,14 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			contentPanel = new JPanel();
 			contentPanel.setLayout(new GridBagLayout());
-			contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Authority(s)",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel.getPanelLabelColor()));
+			contentPanel
+					.setBorder(javax.swing.BorderFactory
+							.createTitledBorder(
+									null,
+									"Authority(s)",
+									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+									javax.swing.border.TitledBorder.DEFAULT_POSITION,
+									null, GTSLookAndFeel.getPanelLabelColor()));
 			gridBagConstraints4.weightx = 1.0;
 			gridBagConstraints4.gridy = 0;
 			gridBagConstraints4.gridx = 0;
@@ -196,7 +196,6 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 		}
 		return contentPanel;
 	}
-
 
 	/**
 	 * This method initializes jPanel
@@ -214,7 +213,6 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 		return buttonPanel;
 	}
 
-
 	/**
 	 * This method initializes jTable
 	 * 
@@ -226,7 +224,6 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 		}
 		return authorityTable;
 	}
-
 
 	/**
 	 * This method initializes jScrollPane
@@ -240,7 +237,6 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 		}
 		return jScrollPane;
 	}
-
 
 	/**
 	 * This method initializes manageUser
@@ -262,7 +258,8 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
+						PortalResourceManager.getInstance().getThreadManager()
+								.executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -274,32 +271,39 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 		return addAuthority;
 	}
 
-
 	public void addAuthority() {
 		try {
 
-			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-				new AuthorityWindow(service, proxy, this), 600, 400);
+			String service = ((GTSServiceListComboBox) getService())
+					.getSelectedService();
+			GlobusCredential proxy = ((ProxyComboBox) getProxy())
+					.getSelectedProxy();
+			PortalResourceManager
+					.getInstance()
+					.getGridPortal()
+					.addGridPortalComponent(
+							new AuthorityWindow(service, proxy, this), 600, 400);
 		} catch (Exception e) {
 			e.printStackTrace();
 			PortalUtils.showErrorMessage(e);
 		}
 	}
 
-
 	public void viewModifyAuthority() {
 		try {
-			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-				new AuthorityWindow(service, proxy, getAuthorityTable().getSelectedAuthority(), this), 600, 400);
+			String service = ((GTSServiceListComboBox) getService())
+					.getSelectedService();
+			GlobusCredential proxy = ((ProxyComboBox) getProxy())
+					.getSelectedProxy();
+			PortalResourceManager.getInstance().getGridPortal()
+					.addGridPortalComponent(
+							new AuthorityWindow(service, proxy,
+									getAuthorityTable().getSelectedAuthority(),
+									this), 600, 400);
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
 		}
 	}
-
 
 	/**
 	 * This method initializes jPanel
@@ -319,7 +323,6 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 		}
 		return jPanel;
 	}
-
 
 	/**
 	 * This method initializes jPanel2
@@ -359,9 +362,11 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 			jLabel14.setText("Service");
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
-			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "GTS/Login Information",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel
-					.getPanelLabelColor()));
+			jPanel2.setBorder(BorderFactory.createTitledBorder(null,
+					"GTS/Login Information",
+					TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel
+							.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints28);
 			jPanel2.add(proxyLabel, gridBagConstraints29);
@@ -369,7 +374,6 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 		}
 		return jPanel2;
 	}
-
 
 	/**
 	 * This method initializes queryPanel
@@ -383,7 +387,6 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 		}
 		return queryPanel;
 	}
-
 
 	/**
 	 * This method initializes query
@@ -404,7 +407,8 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
+						PortalResourceManager.getInstance().getThreadManager()
+								.executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -415,14 +419,14 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 		return query;
 	}
 
-
 	private void getAuthorities() {
 
 		this.getAuthorityTable().clearTable();
 		this.updateProgress(true, "Finding Authorities...");
 
 		try {
-			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
+			String service = ((GTSServiceListComboBox) getService())
+					.getSelectedService();
 			GTSSearchClient client = new GTSSearchClient(service);
 			AuthorityGTS[] auth = client.getAuthorities();
 			int length = 0;
@@ -433,7 +437,8 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 				}
 			}
 			searchDone = true;
-			this.updateProgress(false, "Completed [Found " + length + " Authority(s)]");
+			this.updateProgress(false, "Completed [Found " + length
+					+ " Authority(s)]");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -444,7 +449,6 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 		}
 
 	}
-
 
 	/**
 	 * This method initializes service
@@ -458,7 +462,6 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 		return service;
 	}
 
-
 	/**
 	 * This method initializes proxy
 	 * 
@@ -470,7 +473,6 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 		}
 		return proxy;
 	}
-
 
 	/**
 	 * This method initializes progressPanel
@@ -492,7 +494,6 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 		return progressPanel;
 	}
 
-
 	/**
 	 * This method initializes progress
 	 * 
@@ -508,7 +509,6 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 		return progress;
 	}
 
-
 	public void updateProgress(final boolean working, final String s) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -519,7 +519,6 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 
 	}
 
-
 	/**
 	 * This method initializes removeUser
 	 * 
@@ -529,58 +528,65 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 		if (removeAuthority == null) {
 			removeAuthority = new JButton();
 			removeAuthority.setText("Remove Authority");
-			removeAuthority.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					disableAllActions();
-					MobiusRunnable runner = new MobiusRunnable() {
-						public void execute() {
-							removeAuthority();
-							enableAllActions();
+			removeAuthority
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							disableAllActions();
+							MobiusRunnable runner = new MobiusRunnable() {
+								public void execute() {
+									removeAuthority();
+									enableAllActions();
+								}
+							};
+							try {
+								PortalResourceManager.getInstance()
+										.getThreadManager()
+										.executeInBackground(runner);
+							} catch (Exception t) {
+								t.getMessage();
+							}
 						}
-					};
-					try {
-						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
-					} catch (Exception t) {
-						t.getMessage();
-					}
-				}
-			});
+					});
 			removeAuthority.setIcon(GTSLookAndFeel.getAuthorityDeleteIcon());
 		}
 		return removeAuthority;
 	}
 
-
 	private void removeAuthority() {
 		try {
-			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			String service = ((GTSServiceListComboBox) getService())
+					.getSelectedService();
+			GlobusCredential proxy = ((ProxyComboBox) getProxy())
+					.getSelectedProxy();
 			GTSAdminClient client = new GTSAdminClient(service, proxy);
 			AuthorityGTS gts = this.getAuthorityTable().getSelectedAuthority();
 			client.removeAuthority(gts.getServiceURI());
 			getAuthorities();
-			PortalUtils.showMessage("Successfully removed the authority " + gts.getServiceURI() + "!!!");
+			PortalUtils.showMessage("Successfully removed the authority "
+					+ gts.getServiceURI() + "!!!");
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
 		}
 	}
 
-
 	private void updatePriorities() {
 		try {
 			disableAllActions();
-			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			String service = ((GTSServiceListComboBox) getService())
+					.getSelectedService();
+			GlobusCredential proxy = ((ProxyComboBox) getProxy())
+					.getSelectedProxy();
 			GTSAdminClient client = new GTSAdminClient(service, proxy);
-			client.updateAuthorityPriorities(getAuthorityTable().getPriorityUpdate());
-			PortalUtils.showMessage("Successfully updated the authority priorities!!!");
+			client.updateAuthorityPriorities(getAuthorityTable()
+					.getPriorityUpdate());
+			PortalUtils
+					.showMessage("Successfully updated the authority priorities!!!");
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
 		} finally {
 			enableAllActions();
 		}
 	}
-
 
 	private void disableAllActions() {
 		getQuery().setEnabled(false);
@@ -592,7 +598,6 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 		getDecreasePriority().setEnabled(false);
 	}
 
-
 	private void enableAllActions() {
 		getQuery().setEnabled(true);
 		getAddAuthority().setEnabled(true);
@@ -603,7 +608,6 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 		getDecreasePriority().setEnabled(true);
 	}
 
-
 	/**
 	 * This method initializes viewModifyButton
 	 * 
@@ -613,32 +617,34 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 		if (viewModifyButton == null) {
 			viewModifyButton = new JButton();
 			viewModifyButton.setText("View / Modify Authority");
-			viewModifyButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
-						public void execute() {
-							disableAllActions();
+			viewModifyButton
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							MobiusRunnable runner = new MobiusRunnable() {
+								public void execute() {
+									disableAllActions();
+									try {
+										getAuthorityTable().doubleClick();
+									} catch (Exception ex) {
+										PortalUtils.showErrorMessage(ex);
+									}
+									enableAllActions();
+								}
+							};
 							try {
-								getAuthorityTable().doubleClick();
-							} catch (Exception ex) {
-								PortalUtils.showErrorMessage(ex);
+								PortalResourceManager.getInstance()
+										.getThreadManager()
+										.executeInBackground(runner);
+							} catch (Exception t) {
+								t.getMessage();
 							}
-							enableAllActions();
-						}
-					};
-					try {
-						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
-					} catch (Exception t) {
-						t.getMessage();
-					}
 
-				}
-			});
+						}
+					});
 			viewModifyButton.setIcon(GTSLookAndFeel.getAuthorityEditIcon());
 		}
 		return viewModifyButton;
 	}
-
 
 	/**
 	 * This method initializes priorityPanel
@@ -654,7 +660,6 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 		return priorityPanel;
 	}
 
-
 	/**
 	 * This method initializes increasePriority
 	 * 
@@ -665,19 +670,19 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 			increasePriority = new JButton();
 			increasePriority.setText("Increase Priority");
 			increasePriority.setIcon(GTSLookAndFeel.getIncreasePriorityIcon());
-			increasePriority.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					try {
-						getAuthorityTable().increasePriority();
-					} catch (Exception ex) {
-						PortalUtils.showErrorMessage(ex);
-					}
-				}
-			});
+			increasePriority
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							try {
+								getAuthorityTable().increasePriority();
+							} catch (Exception ex) {
+								PortalUtils.showErrorMessage(ex);
+							}
+						}
+					});
 		}
 		return increasePriority;
 	}
-
 
 	/**
 	 * This method initializes decreasePriority
@@ -689,19 +694,19 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 			decreasePriority = new JButton();
 			decreasePriority.setText("Decrease Priority");
 			decreasePriority.setIcon(GTSLookAndFeel.getDecresePriorityIcon());
-			decreasePriority.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					try {
-						getAuthorityTable().decreasePriority();
-					} catch (Exception ex) {
-						PortalUtils.showErrorMessage(ex);
-					}
-				}
-			});
+			decreasePriority
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							try {
+								getAuthorityTable().decreasePriority();
+							} catch (Exception ex) {
+								PortalUtils.showErrorMessage(ex);
+							}
+						}
+					});
 		}
 		return decreasePriority;
 	}
-
 
 	/**
 	 * This method initializes updatePriorities
@@ -712,27 +717,29 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements Autho
 		if (updatePriorities == null) {
 			updatePriorities = new JButton();
 			updatePriorities.setText("Update Priorities");
-			updatePriorities.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					disableAllActions();
-					MobiusRunnable runner = new MobiusRunnable() {
-						public void execute() {
-							updatePriorities();
-							enableAllActions();
+			updatePriorities
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							disableAllActions();
+							MobiusRunnable runner = new MobiusRunnable() {
+								public void execute() {
+									updatePriorities();
+									enableAllActions();
+								}
+							};
+							try {
+								PortalResourceManager.getInstance()
+										.getThreadManager()
+										.executeInBackground(runner);
+							} catch (Exception t) {
+								t.getMessage();
+							}
 						}
-					};
-					try {
-						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
-					} catch (Exception t) {
-						t.getMessage();
-					}
-				}
-			});
+					});
 			updatePriorities.setIcon(GTSLookAndFeel.getAuthorityUpdateIcon());
 		}
 		return updatePriorities;
 	}
-
 
 	public void refeshAuthorities() {
 		if (searchDone) {
