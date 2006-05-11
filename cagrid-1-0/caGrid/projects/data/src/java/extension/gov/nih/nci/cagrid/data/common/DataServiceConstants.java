@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.data.common;
 
+import javax.xml.namespace.QName;
+
 
 /** 
  *  DataServiceConstants
@@ -46,6 +48,9 @@ public class DataServiceConstants {
 	
 	// target data model
 	public static final String DATA_MODEL_ELEMENT_NAME = "targetDataModel";
+	
+	// DomainModel QName
+	public static final QName DOMAIN_MODEL_QNAME = new QName("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice", "DomainModel");
 
 	private DataServiceConstants() {
 		

@@ -169,9 +169,14 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 					MetadataBuilder builder = new MetadataBuilder(cadsrUrl, cadsrProject, cadsrPackage, classNames);
 					DomainModel model = builder.getDomainModel();
 					System.out.println("Created data service metadata!");
-					// TODO: serialize the model to the file system location for metadata
+					// find the service's etc directory and serialize the domain model to it
+					String domainModelFile = info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
+						+ File.separator + "etc" + File.separator + "domainModel.xml";
+					Utils.serializeDocument(domainModelFile, model, DataServiceConstants.DOMAIN_MODEL_QNAME);
 				} catch (RemoteException ex) {
 					throw new CodegenExtensionException("Error connecting to caDSR for metadata: " + ex.getMessage(), ex);
+				} catch (Exception ex) {
+					throw new CodegenExtensionException("Error serializing domain model: " + ex.getMessage(), ex);
 				}
 			}
 		}
