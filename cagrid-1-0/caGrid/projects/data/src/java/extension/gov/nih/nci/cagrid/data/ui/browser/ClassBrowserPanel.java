@@ -6,10 +6,14 @@ import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.jar.JarEntry;
@@ -23,6 +27,9 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /** 
  *  ClassBrowserPanel
@@ -47,7 +54,12 @@ public class ClassBrowserPanel extends JPanel {
 	private JPanel classSelectionPanel = null;
 	private JLabel classSelectionLabel = null;
 	
+	private List classChangeListeners = null;
+	private List additionalJarsListeners = null;
+	
 	public ClassBrowserPanel() {
+		classChangeListeners = new LinkedList();
+		additionalJarsListeners = new LinkedList();
 		initialize();
 	}
 	
@@ -77,6 +89,11 @@ public class ClassBrowserPanel extends JPanel {
 
 	public String getSelectedClassName() {
 		return getClassSelectionComboBox().getSelectedItem().toString();
+	}
+	
+	
+	public void setSelectedClassName(String className) {
+		getClassSelectionComboBox().setSelectedItem(className);
 	}
 	
 	
@@ -142,6 +159,7 @@ public class ClassBrowserPanel extends JPanel {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					browseForJar();
 					populateClassDropdown();
+					fireAdditionalJarsChanged();
 				}
 			});
 		}
@@ -160,7 +178,27 @@ public class ClassBrowserPanel extends JPanel {
 			removeJarsButton.setText("Remove Jars");
 			removeJarsButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+					int[] selected = getAdditionalJarsList().getSelectedIndices();
+					if (selected.length != 0) {
+						JarFile[] currentJars = getAdditionalJars();
+						JarFile[] storedJars = new JarFile[currentJars.length - selected.length];
+						int selectIndex = 0;
+						int storeIndex = 0;
+						for (int i = 0; i < currentJars.length; i++) {
+							JarFile jar = currentJars[i];
+							if (i == selected[selectIndex]) {
+								// skip the selected jar
+								selectIndex++;
+							} else {
+								// add the jar to the new list
+								storedJars[storeIndex] = jar;
+								storeIndex++;
+							}
+						}
+						getAdditionalJarsList().setListData(storedJars);
+						populateClassDropdown();
+						fireAdditionalJarsChanged();
+					}
 				}
 			});
 		}
@@ -227,6 +265,29 @@ public class ClassBrowserPanel extends JPanel {
 		if (classSelectionComboBox == null) {
 			classSelectionComboBox = new JComboBox();
 			classSelectionComboBox.setEditable(true);
+			classSelectionComboBox.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
+					fireClassSelectionChanged();
+				}
+			});
+			Component c = classSelectionComboBox.getEditor().getEditorComponent();
+			if (c instanceof JTextField) {
+				((JTextField) c).getDocument().addDocumentListener(new DocumentListener() {
+					public void insertUpdate(DocumentEvent e) {
+				    	fireClassSelectionChanged();
+				    }
+
+
+				    public void removeUpdate(DocumentEvent e) {
+				    	fireClassSelectionChanged();
+				    }
+
+				    
+				    public void changedUpdate(DocumentEvent e) {
+				    	fireClassSelectionChanged();
+				    }
+				});
+			}
 		}
 		return classSelectionComboBox;
 	}
@@ -315,7 +376,7 @@ public class ClassBrowserPanel extends JPanel {
 				JarEntry entry = (JarEntry) jarEntries.nextElement();
 				if (entry.getName().endsWith(".class")) {
 					String name = entry.getName();
-					classNames.add(name.replaceAll(File.separator, "."));
+					classNames.add(name.replace('/', '.'));
 				}
 			}
 		}
@@ -325,6 +386,50 @@ public class ClassBrowserPanel extends JPanel {
 		Iterator nameIter = classNames.iterator();
 		while (nameIter.hasNext()) {
 			getClassSelectionComboBox().addItem(nameIter.next());
+		}
+	}
+	
+	
+	public void addClassSelectionListener(ClassSelectionListener listener) {
+		this.classChangeListeners.add(listener);
+	}
+	
+	
+	public boolean removeClassSelectionListener(ClassSelectionListener listener) {
+		return this.classChangeListeners.remove(listener);
+	}
+	
+	
+	public void addAdditionalJarsChangeListener(AdditionalJarsChangeListener listener) {
+		this.additionalJarsListeners.add(listener);
+	}
+	
+	
+	public boolean removeAdditionalJarsChangeListener(AdditionalJarsChangeListener listener) {
+		return this.additionalJarsListeners.remove(listener);
+	}
+	
+	
+	protected synchronized void fireClassSelectionChanged() {
+		ClassSelectionEvent event = null;
+		Iterator listenerIter = classChangeListeners.iterator();
+		while (listenerIter.hasNext()) {
+			if (event == null) {
+				event = new ClassSelectionEvent(this);
+			}
+			((ClassSelectionListener) listenerIter.next()).classSelectionChanged(event);
+		}
+	}
+	
+	
+	protected synchronized void fireAdditionalJarsChanged() {
+		AdditionalJarsChangedEvent event = null;
+		Iterator listenerIter = additionalJarsListeners.iterator();
+		while (listenerIter.hasNext()) {
+			if (event == null) {
+				event = new AdditionalJarsChangedEvent(this);
+			}
+			((AdditionalJarsChangeListener) listenerIter.next()).additionalJarsChanged(event);
 		}
 	}
 }

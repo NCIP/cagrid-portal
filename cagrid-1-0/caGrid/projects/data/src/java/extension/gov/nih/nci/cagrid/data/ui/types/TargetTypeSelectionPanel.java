@@ -6,6 +6,11 @@ import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.common.AxisJdomUtils;
 import gov.nih.nci.cagrid.data.common.DataServiceConstants;
+import gov.nih.nci.cagrid.data.ui.browser.AdditionalJarsChangeListener;
+import gov.nih.nci.cagrid.data.ui.browser.AdditionalJarsChangedEvent;
+import gov.nih.nci.cagrid.data.ui.browser.ClassBrowserPanel;
+import gov.nih.nci.cagrid.data.ui.browser.ClassSelectionEvent;
+import gov.nih.nci.cagrid.data.ui.browser.ClassSelectionListener;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
@@ -22,14 +27,10 @@ import java.io.File;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -66,9 +67,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	private JPanel serializationPanel = null;
 	private JPanel typeSelectionPanel = null;
 	private JButton setModelButton = null;
-	private JTextField queryProcessorTextField = null;
-	private JLabel queryProcessorLabel = null;
-	private JPanel queryProcessorPanel = null;
+	private ClassBrowserPanel classBrowserPanel = null;
 	
 	private XMLDataModelService gmeHandle = null;
 	
@@ -190,7 +189,13 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	
 	private TypeSerializationConfigPanel getSerializationConfigPanel() {
 		if (serializationConfigPanel == null) {
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.gridx = 0;
+			gridBagConstraints8.gridwidth = 2;
+			gridBagConstraints8.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints8.gridy = 2;
 			serializationConfigPanel = new TypeSerializationConfigPanel(getTypesTable());
+			serializationConfigPanel.add(getClassBrowserPanel(), gridBagConstraints8);
 		}
 		return serializationConfigPanel;
 	}
@@ -220,10 +225,6 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	 */
 	private JPanel getSerializationPanel() {
 		if (serializationPanel == null) {
-			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
-			gridBagConstraints8.gridx = 0;
-			gridBagConstraints8.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints8.gridy = 2;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.gridx = 0;
 			gridBagConstraints2.weightx = 1.0D;
@@ -240,7 +241,6 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			serializationPanel.setLayout(new GridBagLayout());
 			serializationPanel.add(getTypesTableScrollPane(), gridBagConstraints3);
 			serializationPanel.add(getSerializationConfigPanel(), gridBagConstraints2);
-			serializationPanel.add(getQueryProcessorPanel(), gridBagConstraints8);
 		}
 		return serializationPanel;
 	}
@@ -423,83 +423,37 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
 		return new File(dir);
 	}
-
-
-	/**
-	 * This method initializes jTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */
-	private JTextField getQueryProcessorTextField() {
-		if (queryProcessorTextField == null) {
-			queryProcessorTextField = new JTextField();
-			queryProcessorTextField.setToolTipText("Class name of query processor");
-			synchronized (queryProcessorTextField) {
+	
+	
+	private ClassBrowserPanel getClassBrowserPanel() {
+		if (classBrowserPanel == null) {
+			classBrowserPanel = new ClassBrowserPanel();
+			classBrowserPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+				null, "Query Processor Class Selection", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+			// if there's an existing selected class, set it in the class browser
+			synchronized (classBrowserPanel) {
 				ExtensionTypeExtensionData data = getExtensionTypeExtensionData();
 				MessageElement qpElement = ExtensionTools.getExtensionDataElement(data, DataServiceConstants.QUERY_PROCESSOR_ELEMENT_NAME);
 				if (qpElement != null) {
 					String queryProcessorClass = qpElement.getValue();
-					queryProcessorTextField.setText(queryProcessorClass);
+					classBrowserPanel.setSelectedClassName(queryProcessorClass);
 				}
 			}
-			queryProcessorTextField.getDocument().addDocumentListener(new DocumentListener() {
-				public void insertUpdate(DocumentEvent e) {
-					setProcessorClass(getQueryProcessorTextField().getText());
+			// listen for class selection events
+			classBrowserPanel.addClassSelectionListener(new ClassSelectionListener() {
+				public void classSelectionChanged(ClassSelectionEvent e) {
+					setProcessorClass(classBrowserPanel.getSelectedClassName());
 				}
-				
-				
-				public void removeUpdate(DocumentEvent e) {
-					setProcessorClass(getQueryProcessorTextField().getText());
-				}
-				
-				
-				public void changedUpdate(DocumentEvent e) {
-					setProcessorClass(getQueryProcessorTextField().getText());
+			});
+			// listen for jar addition events
+			classBrowserPanel.addAdditionalJarsChangeListener(new AdditionalJarsChangeListener() {
+				public void additionalJarsChanged(AdditionalJarsChangedEvent e) {
+					// TODO: store this information in the extension data bucket
 				}
 			});
 		}
-		return queryProcessorTextField;
-	}
-
-
-	/**
-	 * This method initializes jLabel	
-	 * 	
-	 * @return javax.swing.JLabel	
-	 */
-	private JLabel getQueryProcessorLabel() {
-		if (queryProcessorLabel == null) {
-			queryProcessorLabel = new JLabel();
-			queryProcessorLabel.setText("Query Processor:");
-		}
-		return queryProcessorLabel;
-	}
-
-
-	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getQueryProcessorPanel() {
-		if (queryProcessorPanel == null) {
-			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-			gridBagConstraints7.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints7.gridy = 0;
-			gridBagConstraints7.weightx = 1.0;
-			gridBagConstraints7.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints7.gridx = 1;
-			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-			gridBagConstraints6.gridx = 0;
-			gridBagConstraints6.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints6.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints6.gridy = 0;
-			queryProcessorPanel = new JPanel();
-			queryProcessorPanel.setLayout(new GridBagLayout());
-			queryProcessorPanel.add(getQueryProcessorLabel(), gridBagConstraints6);
-			queryProcessorPanel.add(getQueryProcessorTextField(), gridBagConstraints7);
-		}
-		return queryProcessorPanel;
+		return classBrowserPanel;
 	}
 	
 	
