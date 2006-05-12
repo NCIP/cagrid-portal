@@ -32,7 +32,7 @@
 	<!--                          DEFINE THE SUB PROJECTS                                 -->
 	<!-- ================================================================================ -->
 	<!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
-	<property name="projects.list" value="cadsr, core, cql2xpath, data, discovery, dorian, fqp, gme, gridca, gts, introduce, metadata, opensaml, sdkQuery, syncgts" />
+	<property name="projects.list" value="cadsr, core, cql2xpath, data, discovery, dorian, fqp, gme, graph, gridca, gts, introduce, metadata, opensaml, sdkQuery, syncgts" />
 	<!-- ================================================================================ -->
 	<!--                  DEFINE THE SUB PROJECTS THAT SUPPORT TESTING                    -->
 	<!-- ================================================================================ -->
@@ -161,6 +161,16 @@
 			</fileset>
 		</artifact>
 
+		<artifact track="main" type="jars" id="graph.jars">
+			<antcall target="build-graph" />
+			<fileset dir="${projects.dir}/graph/build/lib">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${projects.dir}/graph/lib">
+				<include name="*.jar" />
+			</fileset>
+		</artifact>
+
 		<artifact track="main" type="jars" id="gridca.jars">
 			<antcall target="build-gridca" />
 			<fileset dir="${projects.dir}/gridca/build/lib">
@@ -266,6 +276,7 @@
 		<ant dir="${projects.dir}/core" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
+
 	<!-- =============================================================== -->
 	<!-- OPENSAML: This cannot have any dependencies on other projects   -->
 	<!-- =============================================================== -->
@@ -297,6 +308,14 @@
 			<artifact refid="metadata.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/discovery" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+
+	<!-- =============================================================== -->
+	<!-- GRAPH: Graphing/UML diagrams                                    -->
+	<!-- =============================================================== -->
+	<target name="build-graph" depends="prepare" description="Builds graph">
+		<ant dir="${projects.dir}/graph" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
 
