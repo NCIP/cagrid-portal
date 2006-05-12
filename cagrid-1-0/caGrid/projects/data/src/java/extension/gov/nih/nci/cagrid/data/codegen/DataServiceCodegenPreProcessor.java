@@ -121,12 +121,14 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 				// start packing up the resource property info
 				propertyList.setResourceProperty(propertyArray);
 				dataService.setResourcePropertiesList(propertyList);
+				/*
 				for (int i = 0; i < services.length; i++) {
 					if (services[i].getName().equals(dataService.getName())) {
 						services[i] = dataService;
 					}
 				}
 				info.getServices().setService(services);
+				*/
 			}
 		}
 	}
