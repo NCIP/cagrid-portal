@@ -9,6 +9,7 @@ import gov.nih.nci.cagrid.gts.bean.Status;
 import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
+import gov.nih.nci.cagrid.gts.bean.X509CRL;
 import gov.nih.nci.cagrid.gts.common.MySQLDatabase;
 import gov.nih.nci.cagrid.gts.service.db.DBManager;
 import gov.nih.nci.cagrid.gts.service.db.mysql.MySQLManager;
@@ -40,6 +41,7 @@ import org.globus.wsrf.impl.security.authorization.NoAuthorization;
 import org.projectmobius.common.MobiusPoolManager;
 import org.projectmobius.common.MobiusRunnable;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -67,18 +69,18 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 
 	private MobiusPoolManager threadManager;
 
+
 	public GTS(GTSConfiguration conf, String gtsURI) {
 		this.conf = conf;
 		this.gtsURI = gtsURI;
 		log = LogFactory.getLog(this.getClass().getName());
 
-		DBManager dbManager = new MySQLManager(new MySQLDatabase(this.conf
-				.getConnectionManager(), this.conf.getGTSInternalId()));
+		DBManager dbManager = new MySQLManager(new MySQLDatabase(this.conf.getConnectionManager(), this.conf
+			.getGTSInternalId()));
 		trust = new TrustedAuthorityManager(this.gtsURI, this, dbManager);
 		trustLevelManager = new TrustLevelManager(this.gtsURI, this, dbManager);
 		permissions = new PermissionManager(dbManager);
-		authority = new GTSAuthorityManager(gtsURI,
-				conf.getAuthoritySyncTime(), dbManager);
+		authority = new GTSAuthorityManager(gtsURI, conf.getAuthoritySyncTime(), dbManager);
 		if (SYNC_WITH_AUTHORITIES) {
 			this.threadManager = new MobiusPoolManager();
 			MobiusRunnable runner = new MobiusRunnable() {
@@ -94,131 +96,136 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 		}
 	}
 
-	public TrustedAuthority addTrustedAuthority(TrustedAuthority ta,
-			String callerGridIdentity) throws GTSInternalFault,
-			IllegalTrustedAuthorityFault, PermissionDeniedFault {
+
+	public TrustedAuthority addTrustedAuthority(TrustedAuthority ta, String callerGridIdentity)
+		throws GTSInternalFault, IllegalTrustedAuthorityFault, PermissionDeniedFault {
 		checkServiceAdministrator(callerGridIdentity);
 		return trust.addTrustedAuthority(ta);
 	}
 
-	public TrustedAuthority[] findTrustAuthorities(TrustedAuthorityFilter filter)
-			throws GTSInternalFault {
+
+	public TrustedAuthority[] findTrustAuthorities(TrustedAuthorityFilter filter) throws GTSInternalFault {
 		return trust.findTrustAuthorities(filter);
 	}
 
-	public void updateTrustedAuthority(TrustedAuthority ta,
-			String callerGridIdentity) throws GTSInternalFault,
-			IllegalTrustedAuthorityFault, InvalidTrustedAuthorityFault,
-			PermissionDeniedFault {
+
+	public void updateTrustedAuthority(TrustedAuthority ta, String callerGridIdentity) throws GTSInternalFault,
+		IllegalTrustedAuthorityFault, InvalidTrustedAuthorityFault, PermissionDeniedFault {
 		checkServiceAdministrator(callerGridIdentity);
 		trust.updateTrustedAuthority(ta);
 	}
 
-	public void removeTrustedAuthority(String name, String callerGridIdentity)
-			throws GTSInternalFault, InvalidTrustedAuthorityFault,
-			PermissionDeniedFault {
+
+	public void updateCRL(String trustedAuthorityName, X509CRL crl, String callerGridIdentity) throws GTSInternalFault,
+		IllegalTrustedAuthorityFault, InvalidTrustedAuthorityFault, PermissionDeniedFault {
+		this.checkAdministratorOfTrustedAuthority(trustedAuthorityName, callerGridIdentity);
+		TrustedAuthority ta = trust.getTrustedAuthority(trustedAuthorityName);
+		ta.setCRL(crl);
+		trust.updateTrustedAuthority(ta);
+	}
+
+
+	public void removeTrustedAuthority(String name, String callerGridIdentity) throws GTSInternalFault,
+		InvalidTrustedAuthorityFault, PermissionDeniedFault {
 		checkServiceAdministrator(callerGridIdentity);
 		trust.removeTrustedAuthority(name);
 	}
 
-	public void addTrustLevel(TrustLevel level, String callerGridIdentity)
-			throws GTSInternalFault, IllegalTrustLevelFault,
-			PermissionDeniedFault {
+
+	public void addTrustLevel(TrustLevel level, String callerGridIdentity) throws GTSInternalFault,
+		IllegalTrustLevelFault, PermissionDeniedFault {
 		checkServiceAdministrator(callerGridIdentity);
 		trustLevelManager.addTrustLevel(level);
 	}
 
-	public void removeTrustLevel(String name, String callerGridIdentity)
-			throws GTSInternalFault, InvalidTrustLevelFault,
-			IllegalTrustLevelFault, PermissionDeniedFault {
+
+	public void removeTrustLevel(String name, String callerGridIdentity) throws GTSInternalFault,
+		InvalidTrustLevelFault, IllegalTrustLevelFault, PermissionDeniedFault {
 		checkServiceAdministrator(callerGridIdentity);
 		trustLevelManager.removeTrustLevel(name);
 	}
 
-	public void updateTrustLevel(TrustLevel level, String callerGridIdentity)
-			throws GTSInternalFault, InvalidTrustLevelFault,
-			IllegalTrustLevelFault, PermissionDeniedFault {
+
+	public void updateTrustLevel(TrustLevel level, String callerGridIdentity) throws GTSInternalFault,
+		InvalidTrustLevelFault, IllegalTrustLevelFault, PermissionDeniedFault {
 		checkServiceAdministrator(callerGridIdentity);
 		trustLevelManager.updateTrustLevel(level);
 	}
+
 
 	public TrustLevel[] getTrustLevels() throws GTSInternalFault {
 		return trustLevelManager.getTrustLevels();
 	}
 
-	public TrustLevel[] getTrustLevels(String gtsSourceURI)
-			throws GTSInternalFault {
+
+	public TrustLevel[] getTrustLevels(String gtsSourceURI) throws GTSInternalFault {
 		return trustLevelManager.getTrustLevels(gtsSourceURI);
 	}
 
-	public TrustLevel getTrustLevel(String name) throws GTSInternalFault,
-			InvalidTrustLevelFault {
+
+	public TrustLevel getTrustLevel(String name) throws GTSInternalFault, InvalidTrustLevelFault {
 		return trustLevelManager.getTrustLevel(name);
 	}
 
-	public void addPermission(Permission p, String callerGridIdentity)
-			throws GTSInternalFault, IllegalPermissionFault,
-			PermissionDeniedFault {
+
+	public void addPermission(Permission p, String callerGridIdentity) throws GTSInternalFault, IllegalPermissionFault,
+		PermissionDeniedFault {
 		checkServiceAdministrator(callerGridIdentity);
 		if ((p.getTrustedAuthorityName() != null)
-				&& (!p
-						.getTrustedAuthorityName()
-						.equals(
-								gov.nih.nci.cagrid.gts.common.Constants.ALL_TRUST_AUTHORITIES))) {
+			&& (!p.getTrustedAuthorityName().equals(gov.nih.nci.cagrid.gts.common.Constants.ALL_TRUST_AUTHORITIES))) {
 			if (!trust.doesTrustedAuthorityExist(p.getTrustedAuthorityName())) {
 				IllegalPermissionFault fault = new IllegalPermissionFault();
-				fault
-						.setFaultString("Cannot add permission, the Trusted Authority ("
-								+ p.getTrustedAuthorityName()
-								+ ") specified does not exist.");
+				fault.setFaultString("Cannot add permission, the Trusted Authority (" + p.getTrustedAuthorityName()
+					+ ") specified does not exist.");
 				throw fault;
 			}
 		}
 		permissions.addPermission(p);
 	}
 
-	public Permission[] findPermissions(PermissionFilter filter,
-			String callerGridIdentity) throws GTSInternalFault,
-			PermissionDeniedFault {
+
+	public Permission[] findPermissions(PermissionFilter filter, String callerGridIdentity) throws GTSInternalFault,
+		PermissionDeniedFault {
 		checkServiceAdministrator(callerGridIdentity);
 		return permissions.findPermissions(filter);
 	}
 
-	public void revokePermission(Permission p, String callerGridIdentity)
-			throws GTSInternalFault, InvalidPermissionFault,
-			PermissionDeniedFault {
+
+	public void revokePermission(Permission p, String callerGridIdentity) throws GTSInternalFault,
+		InvalidPermissionFault, PermissionDeniedFault {
 		checkServiceAdministrator(callerGridIdentity);
 		permissions.revokePermission(p);
 	}
 
-	public void addAuthority(AuthorityGTS gts, String callerGridIdentity)
-			throws GTSInternalFault, IllegalAuthorityFault,
-			PermissionDeniedFault {
+
+	public void addAuthority(AuthorityGTS gts, String callerGridIdentity) throws GTSInternalFault,
+		IllegalAuthorityFault, PermissionDeniedFault {
 		checkServiceAdministrator(callerGridIdentity);
 		authority.addAuthority(gts);
 	}
 
-	public void updateAuthorityPriorities(AuthorityPriorityUpdate update,
-			String callerGridIdentity) throws GTSInternalFault,
-			IllegalAuthorityFault, PermissionDeniedFault {
+
+	public void updateAuthorityPriorities(AuthorityPriorityUpdate update, String callerGridIdentity)
+		throws GTSInternalFault, IllegalAuthorityFault, PermissionDeniedFault {
 		checkServiceAdministrator(callerGridIdentity);
 		authority.updateAuthorityPriorities(update);
 	}
 
-	public void updateAuthority(AuthorityGTS gts, String callerGridIdentity)
-			throws GTSInternalFault, IllegalAuthorityFault,
-			InvalidAuthorityFault, PermissionDeniedFault {
+
+	public void updateAuthority(AuthorityGTS gts, String callerGridIdentity) throws GTSInternalFault,
+		IllegalAuthorityFault, InvalidAuthorityFault, PermissionDeniedFault {
 		checkServiceAdministrator(callerGridIdentity);
 		authority.updateAuthority(gts);
 	}
+
 
 	public AuthorityGTS[] getAuthorities() throws GTSInternalFault {
 		return authority.getAuthorities();
 	}
 
-	public void removeAuthority(String serviceURI, String callerGridIdentity)
-			throws GTSInternalFault, InvalidAuthorityFault,
-			PermissionDeniedFault {
+
+	public void removeAuthority(String serviceURI, String callerGridIdentity) throws GTSInternalFault,
+		InvalidAuthorityFault, PermissionDeniedFault {
 		checkServiceAdministrator(callerGridIdentity);
 		try {
 			authority.removeAuthority(serviceURI);
@@ -234,8 +241,7 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 					log.error(ex);
 					if (elist == null) {
 						error = true;
-						elist = new StringBuffer(
-								"Unable to remove the trusted authorities:\n");
+						elist = new StringBuffer("Unable to remove the trusted authorities:\n");
 
 					}
 					elist.append(ta[i].getName() + "\n");
@@ -248,22 +254,36 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 		} catch (Exception e) {
 			log.error(e);
 			GTSInternalFault fault = new GTSInternalFault();
-			fault
-					.setFaultString("An following unexpected error occurred removing the authority "
-							+ serviceURI + ": " + e.getMessage());
+			fault.setFaultString("An following unexpected error occurred removing the authority " + serviceURI + ": "
+				+ e.getMessage());
 			throw fault;
 		}
 	}
 
-	private void checkServiceAdministrator(String gridIdentity)
-			throws GTSInternalFault, PermissionDeniedFault {
+
+	private void checkServiceAdministrator(String gridIdentity) throws GTSInternalFault, PermissionDeniedFault {
 		if (!permissions.isUserTrustServiceAdmin(gridIdentity)) {
 			PermissionDeniedFault fault = new PermissionDeniedFault();
-			fault
-					.setFaultString("You are not a trust service administrator!!!");
+			fault.setFaultString("You are not a trust service administrator!!!");
 			throw fault;
 		}
 	}
+
+
+	private void checkAdministratorOfTrustedAuthority(String ta, String gridIdentity) throws GTSInternalFault,
+		PermissionDeniedFault {
+		if (permissions.isUserTrustServiceAdmin(gridIdentity)) {
+			return;
+		}
+
+		if (permissions.isUserTrustedAuthorityAdmin(ta, gridIdentity)) {
+			return;
+		}
+		PermissionDeniedFault fault = new PermissionDeniedFault();
+		fault.setFaultString("You are not an administrator for the trusted authority " + ta + "!!!");
+		throw fault;
+	}
+
 
 	public void destroy() throws GTSInternalFault {
 		trust.destroy();
@@ -271,6 +291,7 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 		trustLevelManager.destroy();
 		authority.destroy();
 	}
+
 
 	public boolean isTrustLevelUsed(String name) throws GTSInternalFault {
 		TrustedAuthorityFilter f = new TrustedAuthorityFilter();
@@ -283,6 +304,7 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 		}
 	}
 
+
 	public boolean doesTrustLevelExist(String name) throws GTSInternalFault {
 		if (trustLevelManager.doesTrustLevelExist(name)) {
 			return true;
@@ -291,13 +313,13 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 		}
 	}
 
-	public void removeAssociatedTrustedAuthorities(String trustLevel)
-			throws GTSInternalFault {
+
+	public void removeAssociatedTrustedAuthorities(String trustLevel) throws GTSInternalFault {
 		this.trust.removeTrustedAuthoritiesByLevel(trustLevel);
 	}
 
-	protected void synchronizeTrustLevels(String authorityServiceURI,
-			TrustLevel[] levels) {
+
+	protected void synchronizeTrustLevels(String authorityServiceURI, TrustLevel[] levels) {
 		// Synchronize the Trust Level
 
 		// We need to get a list of all the Trusted Authorities provided
@@ -307,18 +329,13 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 
 		Map toBeDeleted = new HashMap();
 		try {
-			TrustLevel[] existing = this.trustLevelManager
-					.getTrustLevels(authorityServiceURI);
+			TrustLevel[] existing = this.trustLevelManager.getTrustLevels(authorityServiceURI);
 			for (int i = 0; i < existing.length; i++) {
 				toBeDeleted.put(existing[i].getName(), Boolean.TRUE);
 			}
 		} catch (Exception e) {
-			this.log
-					.error(
-							"Error synchronizing with the authority "
-									+ authorityServiceURI
-									+ "the following error occurred obtaining the existing trust level: "
-									+ e.getMessage(), e);
+			this.log.error("Error synchronizing with the authority " + authorityServiceURI
+				+ "the following error occurred obtaining the existing trust level: " + e.getMessage(), e);
 			return;
 		}
 		if (levels != null) {
@@ -326,57 +343,38 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 				toBeDeleted.remove(levels[j].getName());
 				try {
 
-					if (this.trustLevelManager.doesTrustLevelExist(levels[j]
-							.getName())) {
+					if (this.trustLevelManager.doesTrustLevelExist(levels[j].getName())) {
 						// Perform Update
-						TrustLevel l = this.trustLevelManager
-								.getTrustLevel(levels[j].getName());
-						AuthorityGTS updateAuthority = authority
-								.getAuthority(authorityServiceURI);
+						TrustLevel l = this.trustLevelManager.getTrustLevel(levels[j].getName());
+						AuthorityGTS updateAuthority = authority.getAuthority(authorityServiceURI);
 						// Determine if we should peform update
 						boolean performUpdate = false;
 						// Check to see if this service is the authority
 						if (!l.getAuthorityGTS().equals(gtsURI)) {
-							AuthorityGTS currAuthority = authority
-									.getAuthority(l.getSourceGTS());
+							AuthorityGTS currAuthority = authority.getAuthority(l.getSourceGTS());
 
 							// Check to see if the authority GTS is the same
-							if (currAuthority.getServiceURI().equals(
-									updateAuthority.getServiceURI())) {
+							if (currAuthority.getServiceURI().equals(updateAuthority.getServiceURI())) {
 								performUpdate = true;
-								this.log.debug("The trust level ("
-										+ levels[j].getName()
-										+ ") will be updated!!!");
-							} else if (currAuthority.getPriority() > updateAuthority
-									.getPriority()) {
+								this.log.debug("The trust level (" + levels[j].getName() + ") will be updated!!!");
+							} else if (currAuthority.getPriority() > updateAuthority.getPriority()) {
 								performUpdate = true;
-								this.log
-										.debug("The trust level ("
-												+ levels[j].getName()
-												+ ") will be updated, the authority ("
-												+ updateAuthority
-														.getServiceURI()
-												+ ") has a greater priority then the current source authority ("
-												+ currAuthority.getServiceURI()
-												+ ")!!!");
+								this.log.debug("The trust level (" + levels[j].getName()
+									+ ") will be updated, the authority (" + updateAuthority.getServiceURI()
+									+ ") has a greater priority then the current source authority ("
+									+ currAuthority.getServiceURI() + ")!!!");
 
 							} else {
-								this.log
-										.debug("The trust level("
-												+ levels[j].getName()
-												+ ") will NOT be updated, the current source authority ("
-												+ currAuthority.getServiceURI()
-												+ ") has a greater priority then the source authority ("
-												+ updateAuthority
-														.getServiceURI()
-												+ ")!!!");
+								this.log.debug("The trust level(" + levels[j].getName()
+									+ ") will NOT be updated, the current source authority ("
+									+ currAuthority.getServiceURI()
+									+ ") has a greater priority then the source authority ("
+									+ updateAuthority.getServiceURI() + ")!!!");
 								performUpdate = false;
 							}
 						} else {
-							this.log
-									.debug("The trust level ("
-											+ levels[j].getName()
-											+ ") will NOT be updated, this GTS is its authority !!!");
+							this.log.debug("The trust level (" + levels[j].getName()
+								+ ") will NOT be updated, this GTS is its authority !!!");
 							performUpdate = false;
 						}
 						if (performUpdate) {
@@ -384,46 +382,33 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 							levels[j].setSourceGTS(authorityServiceURI);
 
 							try {
-								this.trustLevelManager.updateTrustLevel(
-										levels[j], false);
+								this.trustLevelManager.updateTrustLevel(levels[j], false);
 							} catch (Exception e) {
-								this.log
-										.error(
-												"Error synchronizing with the authority "
-														+ authorityServiceURI
-														+ ", the following error occcurred when trying to update the authority, "
-														+ levels[j].getName()
-														+ ": " + e.getMessage(),
-												e);
+								this.log.error("Error synchronizing with the authority " + authorityServiceURI
+									+ ", the following error occcurred when trying to update the authority, "
+									+ levels[j].getName() + ": " + e.getMessage(), e);
 								continue;
 							}
 						}
 					} else {
-						this.log.debug("The trusted authority ("
-								+ levels[j].getName()
-								+ ") will be added with the authority ("
-								+ authorityServiceURI + ") as the source!!!");
+						this.log.debug("The trusted authority (" + levels[j].getName()
+							+ ") will be added with the authority (" + authorityServiceURI + ") as the source!!!");
 						levels[j].setIsAuthority(Boolean.FALSE);
 						levels[j].setSourceGTS(authorityServiceURI);
 
 						try {
-							this.trustLevelManager.addTrustLevel(levels[j],
-									false);
+							this.trustLevelManager.addTrustLevel(levels[j], false);
 						} catch (Exception e) {
-							this.log
-									.error(
-											"Error synchronizing with the authority "
-													+ authorityServiceURI
-													+ ", the following error occcurred when trying to add the trust level, "
-													+ levels[j].getName()
-													+ ": " + e.getMessage(), e);
+							this.log.error("Error synchronizing with the authority " + authorityServiceURI
+								+ ", the following error occcurred when trying to add the trust level, "
+								+ levels[j].getName() + ": " + e.getMessage(), e);
 							continue;
 						}
 
 					}
 				} catch (Exception ex) {
-					this.log.error("Error synchronizing with the authority "
-							+ authorityServiceURI + ": " + ex.getMessage(), ex);
+					this.log.error("Error synchronizing with the authority " + authorityServiceURI + ": "
+						+ ex.getMessage(), ex);
 					continue;
 				}
 			}
@@ -433,26 +418,18 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 			String name = (String) itr.next();
 			try {
 				this.trustLevelManager.removeTrustLevel(name);
-				this.log
-						.debug("The trust level ("
-								+ name
-								+ ") was removed because it has been removed from the authority "
-								+ authorityServiceURI + "!!!");
+				this.log.debug("The trust level (" + name
+					+ ") was removed because it has been removed from the authority " + authorityServiceURI + "!!!");
 			} catch (Exception e) {
-				this.log
-						.error(
-								"The trust level ("
-										+ name
-										+ ") should have been removed because it has been removed from the authority "
-										+ authorityServiceURI
-										+ ", however the following error occurred:"
-										+ e.getMessage(), e);
+				this.log.error("The trust level (" + name
+					+ ") should have been removed because it has been removed from the authority "
+					+ authorityServiceURI + ", however the following error occurred:" + e.getMessage(), e);
 			}
 		}
 	}
 
-	protected void synchronizeTrustedAuthorities(String authorityServiceURI,
-			TrustedAuthority[] trusted) {
+
+	protected void synchronizeTrustedAuthorities(String authorityServiceURI, TrustedAuthority[] trusted) {
 		// Synchronize the Trusted Authorities
 		if (trusted != null) {
 			// We need to get a list of all the trust levels provided
@@ -463,137 +440,94 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 			try {
 				TrustedAuthorityFilter f = new TrustedAuthorityFilter();
 				f.setSourceGTS(authorityServiceURI);
-				TrustedAuthority[] existing = this.trust
-						.findTrustAuthorities(f);
+				TrustedAuthority[] existing = this.trust.findTrustAuthorities(f);
 				for (int i = 0; i < existing.length; i++) {
 					toBeDeleted.put(existing[i].getName(), Boolean.TRUE);
 				}
 			} catch (Exception e) {
-				this.log
-						.error(
-								"Error synchronizing with the authority "
-										+ authorityServiceURI
-										+ "the following error occurred obtaining the existing Trusted Authorities: "
-										+ e.getMessage(), e);
+				this.log.error("Error synchronizing with the authority " + authorityServiceURI
+					+ "the following error occurred obtaining the existing Trusted Authorities: " + e.getMessage(), e);
 				return;
 			}
 
 			for (int j = 0; j < trusted.length; j++) {
 				try {
 					toBeDeleted.remove(trusted[j].getName());
-					if (this.trust.doesTrustedAuthorityExist(trusted[j]
-							.getName())) {
+					if (this.trust.doesTrustedAuthorityExist(trusted[j].getName())) {
 						// Perform Update
-						TrustedAuthority ta = this.trust
-								.getTrustedAuthority(trusted[j].getName());
-						AuthorityGTS updateAuthority = authority
-								.getAuthority(authorityServiceURI);
+						TrustedAuthority ta = this.trust.getTrustedAuthority(trusted[j].getName());
+						AuthorityGTS updateAuthority = authority.getAuthority(authorityServiceURI);
 						// Determine if we should peform update
 						boolean performUpdate = false;
 						// Check to see if this service is the authority
 						if (!ta.getAuthorityGTS().equals(gtsURI)) {
-							AuthorityGTS currAuthority = authority
-									.getAuthority(ta.getSourceGTS());
+							AuthorityGTS currAuthority = authority.getAuthority(ta.getSourceGTS());
 
 							// Check to see if the authority GTS is the same
-							if (currAuthority.getServiceURI().equals(
-									updateAuthority.getServiceURI())) {
+							if (currAuthority.getServiceURI().equals(updateAuthority.getServiceURI())) {
 								performUpdate = true;
-								this.log
-										.debug("The trusted authority ("
-												+ ta.getName()
-												+ ") will be updated!!!");
-							} else if (currAuthority.getPriority() > updateAuthority
-									.getPriority()) {
+								this.log.debug("The trusted authority (" + ta.getName() + ") will be updated!!!");
+							} else if (currAuthority.getPriority() > updateAuthority.getPriority()) {
 								performUpdate = true;
-								this.log
-										.debug("The trusted authority ("
-												+ ta.getName()
-												+ ") will be updated, the authority ("
-												+ updateAuthority
-														.getServiceURI()
-												+ ") has a greater priority then the current source authority ("
-												+ currAuthority.getServiceURI()
-												+ ")!!!");
+								this.log.debug("The trusted authority (" + ta.getName()
+									+ ") will be updated, the authority (" + updateAuthority.getServiceURI()
+									+ ") has a greater priority then the current source authority ("
+									+ currAuthority.getServiceURI() + ")!!!");
 
 							} else {
-								this.log
-										.debug("The trusted authority ("
-												+ ta.getName()
-												+ ") will NOT be updated, the current source authority ("
-												+ currAuthority.getServiceURI()
-												+ ") has a greater priority then the source authority ("
-												+ updateAuthority
-														.getServiceURI()
-												+ ")!!!");
+								this.log.debug("The trusted authority (" + ta.getName()
+									+ ") will NOT be updated, the current source authority ("
+									+ currAuthority.getServiceURI()
+									+ ") has a greater priority then the source authority ("
+									+ updateAuthority.getServiceURI() + ")!!!");
 								performUpdate = false;
 							}
 						} else {
-							this.log
-									.debug("The trusted authority ("
-											+ ta.getName()
-											+ ") will NOT be updated, this GTS is its authority !!!");
+							this.log.debug("The trusted authority (" + ta.getName()
+								+ ") will NOT be updated, this GTS is its authority !!!");
 							performUpdate = false;
 						}
 						if (performUpdate) {
 							trusted[j].setIsAuthority(Boolean.FALSE);
 							trusted[j].setSourceGTS(authorityServiceURI);
 							Calendar c = new GregorianCalendar();
-							c.add(Calendar.HOUR, updateAuthority
-									.getTimeToLive().getHours());
-							c.add(Calendar.MINUTE, updateAuthority
-									.getTimeToLive().getMinutes());
-							c.add(Calendar.SECOND, updateAuthority
-									.getTimeToLive().getSeconds());
+							c.add(Calendar.HOUR, updateAuthority.getTimeToLive().getHours());
+							c.add(Calendar.MINUTE, updateAuthority.getTimeToLive().getMinutes());
+							c.add(Calendar.SECOND, updateAuthority.getTimeToLive().getSeconds());
 							trusted[j].setExpires(c.getTimeInMillis());
 							try {
 								trust.updateTrustedAuthority(trusted[j], false);
 							} catch (Exception e) {
-								this.log
-										.error(
-												"Error synchronizing with the authority "
-														+ authorityServiceURI
-														+ ", the following error occcurred when trying to update the authority, "
-														+ trusted[j].getName()
-														+ ": " + e.getMessage(),
-												e);
+								this.log.error("Error synchronizing with the authority " + authorityServiceURI
+									+ ", the following error occcurred when trying to update the authority, "
+									+ trusted[j].getName() + ": " + e.getMessage(), e);
 								continue;
 							}
 						}
 					} else {
-						AuthorityGTS updateAuthority = authority
-								.getAuthority(authorityServiceURI);
-						this.log.debug("The trusted authority ("
-								+ trusted[j].getName()
-								+ ") will be added with the authority ("
-								+ authorityServiceURI + ") as the source!!!");
+						AuthorityGTS updateAuthority = authority.getAuthority(authorityServiceURI);
+						this.log.debug("The trusted authority (" + trusted[j].getName()
+							+ ") will be added with the authority (" + authorityServiceURI + ") as the source!!!");
 						trusted[j].setIsAuthority(Boolean.FALSE);
 						trusted[j].setSourceGTS(authorityServiceURI);
 						Calendar c = new GregorianCalendar();
-						c.add(Calendar.HOUR, updateAuthority.getTimeToLive()
-								.getHours());
-						c.add(Calendar.MINUTE, updateAuthority.getTimeToLive()
-								.getMinutes());
-						c.add(Calendar.SECOND, updateAuthority.getTimeToLive()
-								.getSeconds());
+						c.add(Calendar.HOUR, updateAuthority.getTimeToLive().getHours());
+						c.add(Calendar.MINUTE, updateAuthority.getTimeToLive().getMinutes());
+						c.add(Calendar.SECOND, updateAuthority.getTimeToLive().getSeconds());
 						trusted[j].setExpires(c.getTimeInMillis());
 						try {
 							trust.addTrustedAuthority(trusted[j], false);
 						} catch (Exception e) {
-							this.log
-									.error(
-											"Error synchronizing with the authority "
-													+ authorityServiceURI
-													+ ", the following error occcurred when trying to add the authority, "
-													+ trusted[j].getName()
-													+ ": " + e.getMessage(), e);
+							this.log.error("Error synchronizing with the authority " + authorityServiceURI
+								+ ", the following error occcurred when trying to add the authority, "
+								+ trusted[j].getName() + ": " + e.getMessage(), e);
 							continue;
 						}
 
 					}
 				} catch (Exception ex) {
-					this.log.error("Error synchronizing with the authority "
-							+ authorityServiceURI + ": " + ex.getMessage(), ex);
+					this.log.error("Error synchronizing with the authority " + authorityServiceURI + ": "
+						+ ex.getMessage(), ex);
 					continue;
 				}
 			}
@@ -603,39 +537,32 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 				try {
 					trust.removeTrustedAuthority(name);
 					this.log
-							.debug("The trusted authority ("
-									+ name
-									+ ") was removed because it has been removed from the authority "
-									+ authorityServiceURI + "!!!");
+						.debug("The trusted authority (" + name
+							+ ") was removed because it has been removed from the authority " + authorityServiceURI
+							+ "!!!");
 				} catch (Exception e) {
-					this.log
-							.error(
-									"The trusted authority ("
-											+ name
-											+ ") should have been removed because it has been removed from the authority "
-											+ authorityServiceURI
-											+ ", however the following error occurred:"
-											+ e.getMessage(), e);
+					this.log.error("The trusted authority (" + name
+						+ ") should have been removed because it has been removed from the authority "
+						+ authorityServiceURI + ", however the following error occurred:" + e.getMessage(), e);
 				}
 			}
 
 		}
 	}
 
+
 	private void synchronizeWithAuthorities() {
 		if (conf.getAuthoritySyncTime() != null) {
 			long sleep = (conf.getAuthoritySyncTime().getSeconds() * 1000)
-					+ (conf.getAuthoritySyncTime().getMinutes() * 1000 * 60)
-					+ (conf.getAuthoritySyncTime().getHours() * 1000 * 60 * 60);
+				+ (conf.getAuthoritySyncTime().getMinutes() * 1000 * 60)
+				+ (conf.getAuthoritySyncTime().getHours() * 1000 * 60 * 60);
 			while (true) {
 				AuthorityGTS[] auths = null;
 				try {
 					auths = this.getAuthorities();
 				} catch (Exception ex) {
-					this.log
-							.error(
-									"Error synchronizing with the authorities, could not obtain a list of authorities!!!",
-									ex);
+					this.log.error(
+						"Error synchronizing with the authorities, could not obtain a list of authorities!!!", ex);
 					return;
 				}
 
@@ -649,36 +576,22 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 					try {
 						GridTrustServiceAddressingLocator locator = new GridTrustServiceAddressingLocator();
 						EndpointReferenceType endpoint = new EndpointReferenceType();
-						endpoint.setAddress(new Address(auths[i]
-								.getServiceURI()));
-						GridTrustServicePortType port = locator
-								.getGridTrustServicePortTypePort(endpoint);
+						endpoint.setAddress(new Address(auths[i].getServiceURI()));
+						GridTrustServicePortType port = locator.getGridTrustServicePortTypePort(endpoint);
 						org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
-						stub
-								._setProperty(
-										org.globus.wsrf.security.Constants.GSI_TRANSPORT,
-										org.globus.wsrf.security.Constants.ENCRYPTION);
-						stub
-								._setProperty(
-										org.globus.wsrf.security.Constants.GSI_ANONYMOUS,
-										Boolean.TRUE);
+						stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT,
+							org.globus.wsrf.security.Constants.ENCRYPTION);
+						stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS, Boolean.TRUE);
 						if (auths[i].isPerformAuthorization()) {
-							IdentityAuthorization ia = new IdentityAuthorization(
-									auths[i].getServiceIdentity());
-							stub
-									._setProperty(
-											org.globus.wsrf.security.Constants.AUTHORIZATION,
-											ia);
+							IdentityAuthorization ia = new IdentityAuthorization(auths[i].getServiceIdentity());
+							stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, ia);
 						} else {
-							stub
-									._setProperty(
-											org.globus.wsrf.security.Constants.AUTHORIZATION,
-											NoAuthorization.getInstance());
+							stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, NoAuthorization
+								.getInstance());
 						}
 
 						gov.nih.nci.cagrid.gts.stubs.GetTrustLevels params2 = new gov.nih.nci.cagrid.gts.stubs.GetTrustLevels();
-						gov.nih.nci.cagrid.gts.stubs.GetTrustLevelsResponse boxedResult2 = port
-								.getTrustLevels(params2);
+						gov.nih.nci.cagrid.gts.stubs.GetTrustLevelsResponse boxedResult2 = port.getTrustLevels(params2);
 						levels = boxedResult2.getTrustLevel();
 
 						// Find Trusted Authorities
@@ -687,24 +600,20 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 						fContainer.setTrustedAuthorityFilter(filter);
 						params.setF(fContainer);
 						gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesResponse boxedResult = port
-								.findTrustedAuthorities(params);
+							.findTrustedAuthorities(params);
 						trusted = boxedResult.getTrustedAuthority();
 
 					} catch (Exception ex) {
-						this.log.error(
-								"Error synchronizing with the authority "
-										+ auths[i].getServiceURI() + ": "
-										+ ex.getMessage(), ex);
+						this.log.error("Error synchronizing with the authority " + auths[i].getServiceURI() + ": "
+							+ ex.getMessage(), ex);
 						continue;
 					}
 
 					// Synchronize the Trust Levels
-					this.synchronizeTrustLevels(auths[i].getServiceURI(),
-							levels);
+					this.synchronizeTrustLevels(auths[i].getServiceURI(), levels);
 
 					// Synchronize the Trusted Authorities
-					this.synchronizeTrustedAuthorities(
-							auths[i].getServiceURI(), trusted);
+					this.synchronizeTrustedAuthorities(auths[i].getServiceURI(), trusted);
 				}
 				try {
 					Thread.sleep(sleep);

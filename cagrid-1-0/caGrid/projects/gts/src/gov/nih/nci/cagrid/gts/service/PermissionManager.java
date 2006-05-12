@@ -251,7 +251,7 @@ public class PermissionManager {
 			sql.append("select count(*) from " + PermissionsTable.TABLE_NAME);
 			sql.append(" WHERE " + PermissionsTable.GRID_IDENTITY + " ='"
 					+ gridIdentity + "' AND ");
-			sql.append(PermissionsTable.ROLE + "='" + Role.TrustServiceAdmin
+			sql.append(PermissionsTable.ROLE + "='" + Role.TrustAuthorityManager
 					+ "' AND ");
 			sql.append(PermissionsTable.TRUSTED_AUTHORITY + " = '" + authority
 					+ "'");

@@ -699,6 +699,19 @@ public class TestGTS extends TestCase {
 			}
 			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
 
+			CRLEntry crlE3 = new CRLEntry(new BigInteger(String.valueOf(System.currentTimeMillis())),
+				CRLReason.PRIVILEGE_WITHDRAWN);
+			ca.updateCRL(crlE3);
+			try {
+
+				gts.updateCRL(updated.getName(), new X509CRL(CertUtil.writeCRL(ca.getCRL())), user);
+				fail("Should not be able to update CRL!!!");
+			} catch (PermissionDeniedFault f) {
+
+			}
+			// Check to make sure we can update the CRL as an administrator
+			gts.updateCRL(updated.getName(), new X509CRL(CertUtil.writeCRL(ca.getCRL())), ADMIN_USER);
+
 			// Now create a permission for a user on the previous added trust
 			// authority.
 			Permission p = new Permission();
@@ -718,6 +731,13 @@ public class TestGTS extends TestCase {
 			} catch (PermissionDeniedFault f) {
 
 			}
+
+			// Check to make sure we can update the CRL
+
+			CRLEntry crlE2 = new CRLEntry(new BigInteger(String.valueOf(System.currentTimeMillis())),
+				CRLReason.PRIVILEGE_WITHDRAWN);
+			ca.updateCRL(crlE2);
+			gts.updateCRL(updated.getName(), new X509CRL(CertUtil.writeCRL(ca.getCRL())), user);
 
 			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
 
@@ -1034,33 +1054,27 @@ public class TestGTS extends TestCase {
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(local[0])).length);
 			assertEquals(local[0], gts.findTrustAuthorities(getFilterForTA(local[0]))[0]);
-			assertEquals(local[0].getSourceGTS(), gts.findTrustAuthorities(getFilterForTA(local[0]))[0]
-				.getSourceGTS());
+			assertEquals(local[0].getSourceGTS(), gts.findTrustAuthorities(getFilterForTA(local[0]))[0].getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(local[1])).length);
 			assertEquals(local[1], gts.findTrustAuthorities(getFilterForTA(local[1]))[0]);
-			assertEquals(local[1].getSourceGTS(), gts.findTrustAuthorities(getFilterForTA(local[1]))[0]
-				.getSourceGTS());
+			assertEquals(local[1].getSourceGTS(), gts.findTrustAuthorities(getFilterForTA(local[1]))[0].getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(local[2])).length);
 			assertEquals(local[2], gts.findTrustAuthorities(getFilterForTA(local[2]))[0]);
-			assertEquals(local[2].getSourceGTS(), gts.findTrustAuthorities(getFilterForTA(local[2]))[0]
-				.getSourceGTS());
+			assertEquals(local[2].getSourceGTS(), gts.findTrustAuthorities(getFilterForTA(local[2]))[0].getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote2[0])).length);
 			assertEquals(remote2[0], gts.findTrustAuthorities(getFilterForTA(remote2[0]))[0]);
-			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[0]))[0]
-				.getSourceGTS());
+			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[0]))[0].getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote2[1])).length);
 			assertEquals(remote2[1], gts.findTrustAuthorities(getFilterForTA(remote2[1]))[0]);
-			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[1]))[0]
-				.getSourceGTS());
+			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[1]))[0].getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote2[2])).length);
 			assertEquals(remote2[2], gts.findTrustAuthorities(getFilterForTA(remote2[2]))[0]);
-			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[2]))[0]
-				.getSourceGTS());
+			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[2]))[0].getSourceGTS());
 
 			gts.synchronizeTrustedAuthorities(auth1.getServiceURI(), remote1);
 
@@ -1068,38 +1082,31 @@ public class TestGTS extends TestCase {
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(local[0])).length);
 			assertEquals(local[0], gts.findTrustAuthorities(getFilterForTA(local[0]))[0]);
-			assertEquals(local[0].getSourceGTS(), gts.findTrustAuthorities(getFilterForTA(local[0]))[0]
-				.getSourceGTS());
+			assertEquals(local[0].getSourceGTS(), gts.findTrustAuthorities(getFilterForTA(local[0]))[0].getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(local[1])).length);
 			assertEquals(local[1], gts.findTrustAuthorities(getFilterForTA(local[1]))[0]);
-			assertEquals(local[1].getSourceGTS(), gts.findTrustAuthorities(getFilterForTA(local[1]))[0]
-				.getSourceGTS());
+			assertEquals(local[1].getSourceGTS(), gts.findTrustAuthorities(getFilterForTA(local[1]))[0].getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(local[2])).length);
 			assertEquals(local[2], gts.findTrustAuthorities(getFilterForTA(local[2]))[0]);
-			assertEquals(local[2].getSourceGTS(), gts.findTrustAuthorities(getFilterForTA(local[2]))[0]
-				.getSourceGTS());
+			assertEquals(local[2].getSourceGTS(), gts.findTrustAuthorities(getFilterForTA(local[2]))[0].getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote1[1])).length);
 			assertEquals(remote1[1], gts.findTrustAuthorities(getFilterForTA(remote1[1]))[0]);
-			assertEquals(auth1.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote1[1]))[0]
-				.getSourceGTS());
+			assertEquals(auth1.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote1[1]))[0].getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote1[2])).length);
 			assertEquals(remote1[2], gts.findTrustAuthorities(getFilterForTA(remote1[2]))[0]);
-			assertEquals(auth1.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote1[2]))[0]
-				.getSourceGTS());
+			assertEquals(auth1.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote1[2]))[0].getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote2[1])).length);
 			assertEquals(remote2[1], gts.findTrustAuthorities(getFilterForTA(remote2[1]))[0]);
-			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[1]))[0]
-				.getSourceGTS());
+			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[1]))[0].getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote2[2])).length);
 			assertEquals(remote2[2], gts.findTrustAuthorities(getFilterForTA(remote2[2]))[0]);
-			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[2]))[0]
-				.getSourceGTS());
+			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[2]))[0].getSourceGTS());
 
 			gts.removeAuthority(auth1.getServiceURI(), ADMIN_USER);
 			assertEquals(5, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
@@ -1109,33 +1116,27 @@ public class TestGTS extends TestCase {
 			assertEquals(6, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(local[0])).length);
 			assertEquals(local[0], gts.findTrustAuthorities(getFilterForTA(local[0]))[0]);
-			assertEquals(local[0].getSourceGTS(), gts.findTrustAuthorities(getFilterForTA(local[0]))[0]
-				.getSourceGTS());
+			assertEquals(local[0].getSourceGTS(), gts.findTrustAuthorities(getFilterForTA(local[0]))[0].getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(local[1])).length);
 			assertEquals(local[1], gts.findTrustAuthorities(getFilterForTA(local[1]))[0]);
-			assertEquals(local[1].getSourceGTS(), gts.findTrustAuthorities(getFilterForTA(local[1]))[0]
-				.getSourceGTS());
+			assertEquals(local[1].getSourceGTS(), gts.findTrustAuthorities(getFilterForTA(local[1]))[0].getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(local[2])).length);
 			assertEquals(local[2], gts.findTrustAuthorities(getFilterForTA(local[2]))[0]);
-			assertEquals(local[2].getSourceGTS(), gts.findTrustAuthorities(getFilterForTA(local[2]))[0]
-				.getSourceGTS());
+			assertEquals(local[2].getSourceGTS(), gts.findTrustAuthorities(getFilterForTA(local[2]))[0].getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote2[0])).length);
 			assertEquals(remote2[0], gts.findTrustAuthorities(getFilterForTA(remote2[0]))[0]);
-			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[0]))[0]
-				.getSourceGTS());
+			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[0]))[0].getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote2[1])).length);
 			assertEquals(remote2[1], gts.findTrustAuthorities(getFilterForTA(remote2[1]))[0]);
-			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[1]))[0]
-				.getSourceGTS());
+			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[1]))[0].getSourceGTS());
 
 			assertEquals(1, gts.findTrustAuthorities(getFilterForTA(remote2[2])).length);
 			assertEquals(remote2[2], gts.findTrustAuthorities(getFilterForTA(remote2[2]))[0]);
-			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[2]))[0]
-				.getSourceGTS());
+			assertEquals(auth2.getServiceURI(), gts.findTrustAuthorities(getFilterForTA(remote2[2]))[0].getSourceGTS());
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -1211,15 +1212,13 @@ public class TestGTS extends TestCase {
 			for (int i = 0; i < local.length; i++) {
 				assertTrue(gts.doesTrustLevelExist(local[i].getName()));
 				assertEquals(local[i], gts.getTrustLevel(local[i].getName()));
-				assertEquals(local[i].getSourceGTS(), gts.getTrustLevel(local[i].getName())
-					.getSourceGTS());
+				assertEquals(local[i].getSourceGTS(), gts.getTrustLevel(local[i].getName()).getSourceGTS());
 			}
 
 			for (int i = 0; i < remote2.length; i++) {
 				assertTrue(gts.doesTrustLevelExist(remote2[i].getName()));
 				assertEquals(remote2[i], gts.getTrustLevel(remote2[i].getName()));
-				assertEquals(remote2[i].getSourceGTS(), gts.getTrustLevel(remote2[i].getName())
-					.getSourceGTS());
+				assertEquals(remote2[i].getSourceGTS(), gts.getTrustLevel(remote2[i].getName()).getSourceGTS());
 			}
 
 			gts.synchronizeTrustLevels(auth1.getServiceURI(), remote1);
@@ -1232,23 +1231,20 @@ public class TestGTS extends TestCase {
 			for (int i = 0; i < local.length; i++) {
 				assertTrue(gts.doesTrustLevelExist(local[i].getName()));
 				assertEquals(local[i], gts.getTrustLevel(local[i].getName()));
-				assertEquals(local[i].getSourceGTS(), gts.getTrustLevel(local[i].getName())
-					.getSourceGTS());
+				assertEquals(local[i].getSourceGTS(), gts.getTrustLevel(local[i].getName()).getSourceGTS());
 			}
 
 			for (int i = 1; i < remote1.length; i++) {
 				assertTrue(gts.doesTrustLevelExist(remote1[i].getName()));
 				TrustLevel l = gts.getTrustLevel(remote1[i].getName());
 				assertEquals(remote1[i], l);
-				assertEquals(remote1[i].getSourceGTS(), gts.getTrustLevel(remote1[i].getName())
-					.getSourceGTS());
+				assertEquals(remote1[i].getSourceGTS(), gts.getTrustLevel(remote1[i].getName()).getSourceGTS());
 			}
 
 			for (int i = 1; i < remote2.length; i++) {
 				assertTrue(gts.doesTrustLevelExist(remote2[i].getName()));
 				assertEquals(remote2[i], gts.getTrustLevel(remote2[i].getName()));
-				assertEquals(remote2[i].getSourceGTS(), gts.getTrustLevel(remote2[i].getName())
-					.getSourceGTS());
+				assertEquals(remote2[i].getSourceGTS(), gts.getTrustLevel(remote2[i].getName()).getSourceGTS());
 			}
 
 			gts.removeAuthority(auth1.getServiceURI(), ADMIN_USER);
@@ -1256,19 +1252,20 @@ public class TestGTS extends TestCase {
 			assertEquals(3, gts.getTrustLevels(GTS_URI).length);
 			assertEquals(2, gts.getTrustLevels(auth1.getServiceURI()).length);
 			assertEquals(2, gts.getTrustLevels(auth2.getServiceURI()).length);
-			
-			//Lets add a Trusted Authority and make sure that it is deleted after we sync to nothing
+
+			// Lets add a Trusted Authority and make sure that it is deleted
+			// after we sync to nothing
 			TrustedAuthority ta = new TrustedAuthority();
 			CA ca = new CA();
 			ta.setName(ca.getCertificate().getSubjectDN().toString());
 			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 			ta.setStatus(Status.Trusted);
 			ta.setTrustLevel(remote1[1].getName());
-			gts.addTrustedAuthority(ta,ADMIN_USER);
-			assertEquals(1,gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+			gts.addTrustedAuthority(ta, ADMIN_USER);
+			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
 
 			gts.synchronizeTrustLevels(auth1.getServiceURI(), null);
-			assertEquals(0,gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+			assertEquals(0, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
 			assertEquals(3, gts.getTrustLevels(GTS_URI).length);
 			assertEquals(0, gts.getTrustLevels(auth1.getServiceURI()).length);
 			assertEquals(2, gts.getTrustLevels(auth2.getServiceURI()).length);
@@ -1280,15 +1277,13 @@ public class TestGTS extends TestCase {
 			for (int i = 0; i < local.length; i++) {
 				assertTrue(gts.doesTrustLevelExist(local[i].getName()));
 				assertEquals(local[i], gts.getTrustLevel(local[i].getName()));
-				assertEquals(local[i].getSourceGTS(), gts.getTrustLevel(local[i].getName())
-					.getSourceGTS());
+				assertEquals(local[i].getSourceGTS(), gts.getTrustLevel(local[i].getName()).getSourceGTS());
 			}
 
 			for (int i = 0; i < remote2.length; i++) {
 				assertTrue(gts.doesTrustLevelExist(remote2[i].getName()));
 				assertEquals(remote2[i], gts.getTrustLevel(remote2[i].getName()));
-				assertEquals(remote2[i].getSourceGTS(), gts.getTrustLevel(remote2[i].getName())
-					.getSourceGTS());
+				assertEquals(remote2[i].getSourceGTS(), gts.getTrustLevel(remote2[i].getName()).getSourceGTS());
 			}
 
 		} catch (Exception e) {

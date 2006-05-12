@@ -190,7 +190,7 @@ public class TestPermissionManager extends TestCase {
 	}
 
 
-	public void testFindTrustedAuthorities() {
+	public void testFindPermissions() {
 		try {
 			PermissionManager pm = new PermissionManager(db);
 
@@ -224,6 +224,7 @@ public class TestPermissionManager extends TestCase {
 				perms2[i].setTrustedAuthorityName(ta);
 				pm.addPermission(perms2[i]);
 				assertTrue(pm.doesPermissionExist(perms2[i]));
+				assertTrue(pm.isUserTrustedAuthorityAdmin(ta,dn2));
 
 				PermissionFilter fy = new PermissionFilter();
 				fy.setGridIdentity(perms2[i].getGridIdentity());
