@@ -25,6 +25,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
 import java.util.List;
+import java.util.jar.JarFile;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -449,7 +450,24 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			// listen for jar addition events
 			classBrowserPanel.addAdditionalJarsChangeListener(new AdditionalJarsChangeListener() {
 				public void additionalJarsChanged(AdditionalJarsChangedEvent e) {
-					// TODO: store this information in the extension data bucket
+					// remove any existing qp jars element from the service data
+					ExtensionTypeExtensionData data = getExtensionTypeExtensionData();
+					ExtensionTools.removeExtensionDataElement(data, DataServiceConstants.QUERY_PROCESSOR_ADDITIONAL_JARS_ELEMENT);
+					// create a new qp jars element
+					Element qpJars = new Element(DataServiceConstants.QUERY_PROCESSOR_ADDITIONAL_JARS_ELEMENT);
+					JarFile[] additionalJars = classBrowserPanel.getAdditionalJars();
+					for (int i = 0; i < additionalJars.length; i++) {
+						Element jarElem = new Element(DataServiceConstants.QUERY_PROCESSOR_JAR_ELEMENT);
+						jarElem.setText(additionalJars[i].getName());
+						qpJars.addContent(jarElem);
+					}
+					try {
+						MessageElement qpJarsElement = AxisJdomUtils.fromElement(qpJars);
+						ExtensionTools.updateExtensionDataElement(data, qpJarsElement);
+					} catch (JDOMException ex) {
+						ex.printStackTrace();
+						PortalUtils.showErrorMessage("Error storing query processor jars", ex);
+					}
 				}
 			});
 		}

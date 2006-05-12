@@ -21,13 +21,18 @@ public class DataServiceConstants {
 	public static final String CQL_RESULT_SET_URI = "http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet";
 	public static final String CQL_QUERY_TYPE = gov.nih.nci.cagrid.cqlquery.Object.class.getName();
 	public static final String CQL_RESULT_SET_TYPE = gov.nih.nci.cagrid.cqlresultset.CQLQueryResults.class.getName();
-	public static final String QUERY_PROCESSOR_CLASS_PROPERTY = "QueryProcessorClass";
-	
+		
 	// query method constants
 	public static final String QUERY_METHOD_NAME = "query";
 	public static final String QUERY_METHOD_RETURN_TYPE = CQL_RESULT_SET_TYPE;
 	public static final String QUERY_METHOD_PARAMETER_TYPE = CQL_QUERY_TYPE;
 	public static final String QUERY_METHOD_PARAMETER_NAME = "cqlQuery";
+	
+	// query processor constants
+	public static final String QUERY_PROCESSOR_CLASS_PROPERTY = "QueryProcessorClass";
+	public static final String QUERY_PROCESSOR_ADDITIONAL_JARS_ELEMENT = "QueryProcessorJars";
+	public static final String QUERY_PROCESSOR_JAR_ELEMENT = "Jar";
+	
 	/*
 	public static final String[] QUERY_METHOD_EXCEPTIONS = new String[] {
 		QueryProcessingException.class.getName(), MalformedQueryException.class.getName()
