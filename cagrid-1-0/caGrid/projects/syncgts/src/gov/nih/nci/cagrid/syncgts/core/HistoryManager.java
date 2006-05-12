@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.syncgts.core;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.syncgts.bean.DateFilter;
 import gov.nih.nci.cagrid.syncgts.bean.SyncReport;
 
 import java.io.File;
@@ -27,9 +28,38 @@ public class HistoryManager {
 	}
 
 
+	public SyncReport getReport(String fileName) throws Exception {
+		return (SyncReport) Utils.deserializeDocument(fileName, SyncReport.class);
+	}
+
+
+	public SyncReport[] search(DateFilter start, DateFilter end) throws Exception {
+		File startDir = getDirectory(start);
+		if((startDir.exists())&&(startDir.isDirectory())){
+		
+		}
+		return null;
+	}
+
+
 	private File getFile(String timestamp) {
 		File dir = getDirectory(timestamp);
 		return new File(dir.getAbsolutePath() + File.separator + timestamp + ".xml");
+	}
+
+
+	private File getHistoryDirectory() {
+		File dir = new File(SyncGTSDefault.getSyncGTSUserDir() + File.separator + "history");
+		dir.mkdirs();
+		return dir;
+	}
+
+
+	private File getDirectory(DateFilter f) {
+		File histDir = getHistoryDirectory();
+		File dir = new File(histDir.getAbsolutePath() + File.separator + f.getYear() + File.separator + f.getMonth()
+			+ File.separator + f.getDay());
+		return dir;
 	}
 
 
@@ -37,8 +67,9 @@ public class HistoryManager {
 		String year = timestamp.substring(0, 4);
 		String month = timestamp.substring(4, 6);
 		String days = timestamp.substring(6, 8);
-		File dir = new File(SyncGTSDefault.getSyncGTSUserDir() + File.separator + "history" + File.separator + year
-			+ File.separator + month + File.separator + days);
+		File histDir = getHistoryDirectory();
+		File dir = new File(histDir.getAbsolutePath() + File.separator + year + File.separator + month + File.separator
+			+ days);
 		dir.mkdirs();
 		return dir;
 	}

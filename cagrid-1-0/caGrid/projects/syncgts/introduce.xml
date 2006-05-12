@@ -18,6 +18,7 @@
    <ns2:SchemaElement type="SyncDescription" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="SyncReport" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="TrustedCA" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DateFilter" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
  </ns2:Namespaces>
  <ns3:Methods xsi:type="ns3:MethodsType" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Methods" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
