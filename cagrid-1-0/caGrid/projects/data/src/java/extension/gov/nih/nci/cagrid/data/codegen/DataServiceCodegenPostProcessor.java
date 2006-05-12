@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.data.codegen;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.data.common.AxisJdomUtils;
 import gov.nih.nci.cagrid.data.common.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
@@ -10,12 +11,20 @@ import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.axis.message.MessageElement;
+import org.jdom.Element;
 
 /** 
  *  DataServiceCodegenPostProcessor
@@ -32,6 +41,11 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 		+ DataServiceConstants.QUERY_METHOD_PARAMETER_NAME + ")";
 	
 	public void postCodegen(ServiceExtensionDescriptionType desc, ServiceInformation info) throws CodegenExtensionException {
+		try {
+			copyQueryProcessorLibs(desc, info);
+		} catch (Exception ex) {
+			throw new CodegenExtensionException("Error copying query processor libraries: " + ex.getMessage(), ex);
+		}
 		modifyQueryMethod(desc, info);
 	}
 	
@@ -129,5 +143,37 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 			return queryProcessorClass;
 		}
 		return null;
+	}
+	
+	
+	private void copyQueryProcessorLibs(ServiceExtensionDescriptionType desc, ServiceInformation info) throws FileNotFoundException, IOException {
+		// see if there are any query processor libraries
+		ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
+		MessageElement qpLibsElement = ExtensionTools.getExtensionDataElement(data, DataServiceConstants.QUERY_PROCESSOR_ADDITIONAL_JARS_ELEMENT);
+		if (qpLibsElement != null) {
+			String libOutDir = info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + "lib";
+			Element qpLibs = AxisJdomUtils.fromMessageElement(qpLibsElement);
+			Iterator jarElemIter = qpLibs.getChildren(DataServiceConstants.QUERY_PROCESSOR_JAR_ELEMENT, qpLibs.getNamespace()).iterator();
+			while (jarElemIter.hasNext()) {
+				String jarFilename = ((Element) jarElemIter.next()).getText();
+				File jarFile = new File(jarFilename);
+				File outFile = new File(libOutDir + File.separator + jarFile.getName());
+				copyFile(jarFile, outFile);
+			}
+		}
+	}
+	
+	
+	private void copyFile(File inputFile, File outputFile) throws FileNotFoundException, IOException {
+		BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(inputFile));
+		BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(outputFile));
+		byte[] buff = new byte[1024];
+		int len = -1;
+		while ((len = inputStream.read(buff)) != -1) {
+			outputStream.write(buff, 0, len);
+		}
+		inputStream.close();
+		outputStream.flush();
+		outputStream.close();
 	}
 }
