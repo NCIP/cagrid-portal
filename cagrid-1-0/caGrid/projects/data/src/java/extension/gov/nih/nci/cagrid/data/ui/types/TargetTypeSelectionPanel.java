@@ -193,7 +193,8 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 			gridBagConstraints8.gridx = 0;
 			gridBagConstraints8.gridwidth = 2;
-			gridBagConstraints8.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints8.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints8.weighty = 1.0D;
 			gridBagConstraints8.gridy = 2;
 			serializationConfigPanel = new TypeSerializationConfigPanel(getTypesTable());
 			serializationConfigPanel.add(getClassBrowserPanel(), gridBagConstraints8);
