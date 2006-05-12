@@ -1,0 +1,663 @@
+// Forhad Ahmed
+//
+// JGraph hack that enables
+// scrolling via a 'pager' control
+// in addition to scrollbars =)
+
+
+package gov.nih.nci.cagrid.graph.uml;
+
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionAdapter;
+
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import org.tigris.gef.base.Globals;
+import org.tigris.gef.graph.presentation.JGraph;
+import org.tigris.gef.presentation.FigEdgePoly;
+import org.tigris.gef.presentation.FigNode;
+
+
+class UMLViewer extends JGraph
+{
+     protected UMLDiagram  diagram;
+     protected Pager       pager;
+     protected PagerCaptionBar pagerCaptionBar;
+     protected PagerButton pagerButton;
+
+     public UMLViewer(UMLDiagram d)
+     {
+          super(d.diagram);
+          this.diagram = d;
+          pagerButton = new PagerButton(diagram);
+          this.getScrollPane().setCorner(JScrollPane.LOWER_RIGHT_CORNER, pagerButton);
+
+          // this will make sure that the pager scrolls with the scrollbars
+          this.getScrollPane().getViewport().addChangeListener(new ChangeListener(){
+               public void stateChanged(ChangeEvent e)
+               {
+                    pager.updateScroller();
+                    pager.repaint();
+               }});
+
+          this.addComponentListener(new UMLViewerComponentListener());
+          this.addKeyListener(new UMLViewerKeyListener(this));
+          this.addMouseListener(new UMLViewerMouseListener(this));
+          this.addMouseMotionListener(new UMLViewerMouseMotionListener(this));
+
+
+          this.pager = new Pager(this.diagram);
+          this.pagerCaptionBar = new PagerCaptionBar(this.pager);
+
+          this.setDefaultSize(4000, 4000);
+
+          Globals.setShowFigTips(false);
+
+
+     }
+
+     public void setDiagram(UMLDiagram d)
+     {
+          super.setDiagram(d.diagram);
+          this.diagram = d;
+          this.pager.diagram = this.diagram;
+     }
+
+
+}
+
+class UMLViewerKeyListener extends KeyAdapter
+{
+     protected UMLViewer parent;
+
+     public UMLViewerKeyListener(UMLViewer p)
+     {
+          this.parent = p;
+     }
+
+     public void keyPressed(KeyEvent e)
+     {
+          parent.diagram.repositionLabelsAndArrowHeads();
+     }
+}
+
+class UMLViewerMouseListener extends MouseAdapter
+{
+     protected UMLViewer parent;
+
+     public UMLViewerMouseListener(UMLViewer p)
+     {
+          this.parent = p;
+     }
+
+
+
+     public void mousePressed(MouseEvent e)
+     {
+          parent.diagram.statusBar.setDefaultMsg();
+
+
+
+          for(int k = 0; k < parent.diagram.classes.size(); k++)
+          {
+               XMLClass c = (XMLClass) parent.diagram.classes.get(k);
+               c.setNormal();
+          }
+
+          for(int m = 0; m < parent.diagram.assocs.size();m++)
+          {
+               XMLClassAssociation edge = (XMLClassAssociation) parent.diagram.assocs.get(m);
+               edge.setNormal();
+          }
+
+          parent.diagram.viewer.repaint();
+
+          if(parent.diagram.viewer.selectedFigs().size() == 1)
+          {
+               if(parent.diagram.viewer.selectedFigs().get(0) instanceof XMLClassAssociation)
+               {
+
+                    XMLClassAssociation edge = (XMLClassAssociation) parent.diagram.viewer.selectedFigs().get(0);
+                    edge.highlight(parent.diagram.diagram.getLayer());
+
+                    for (int j = 0; j < parent.diagram.assocs.size(); j++) {
+                         XMLClassAssociation temp = (XMLClassAssociation) parent.diagram.assocs.get(j);
+
+                         if (temp != edge) {
+                              temp.fade();
+                         }
+                    }
+
+
+
+                    for (int k = 0; k < parent.diagram.classes.size(); k++)
+                    {
+                         XMLClass c = (XMLClass) parent.diagram.classes.get(k);
+
+                         c.fade();
+
+                    }
+
+                    XMLClass source = (XMLClass) edge.getSourceFigNode();
+                    XMLClass dest = (XMLClass) edge.getDestFigNode();
+
+                    parent.diagram.statusBar.setMsg("Association: [ " + source.name + " , " + dest.name + " ]");
+               }
+               else if(parent.diagram.viewer.selectedFigs().get(0) instanceof Text)
+               {
+                    Text t = (Text) parent.diagram.viewer.selectedFigs().get(0);
+
+                    t.parent.highlight(parent.diagram.diagram.getLayer());
+
+                    for (int j = 0; j < parent.diagram.assocs.size(); j++) {
+                         XMLClassAssociation temp = (XMLClassAssociation) parent.diagram.assocs.get(j);
+
+                         if (temp != t.parent) {
+                              temp.fade();
+                         }
+                    }
+
+
+
+                    for (int k = 0; k < parent.diagram.classes.size(); k++) {
+                         XMLClass c = (XMLClass) parent.diagram.classes.get(k);
+                         c.fade();
+
+                    }
+
+                    XMLClass source = (XMLClass) t.parent.getSourceFigNode();
+                    XMLClass dest = (XMLClass) t.parent.getDestFigNode();
+
+                    parent.diagram.statusBar.setMsg("Association: [ " + source.name + " , " + dest.name + " ]");
+
+               }
+               else if(parent.diagram.viewer.selectedFigs().get(0) instanceof XMLClass)
+               {
+
+                    XMLClass c = (XMLClass) parent.diagram.viewer.selectedFigs().get(0);
+
+                    c.highlight(parent.diagram.diagram.getLayer());
+
+                    for (int j = 0; j < parent.diagram.assocs.size(); j++) {
+                          XMLClassAssociation temp = (XMLClassAssociation) parent.diagram.assocs.get(j);
+
+                          //temp.fade();
+
+                     }
+
+
+
+                     for (int k = 0; k < parent.diagram.classes.size(); k++) {
+                          XMLClass c2 = (XMLClass) parent.diagram.classes.get(k);
+
+                          if(c != c2)
+                          {
+                               //c2.fade();
+                          }
+
+                    }
+
+                    parent.diagram.statusBar.setMsg("Class: [ " + c.name + " ]");
+
+
+
+
+                    if(e.getClickCount() == 2)
+                    {
+                         parent.diagram.classDoubleClicked(c);
+                    }
+
+
+
+
+               }
+          }
+
+     }
+
+     public void mouseReleased(MouseEvent e)
+     {
+
+     }
+}
+
+class UMLViewerMouseMotionListener extends MouseMotionAdapter
+{
+     protected UMLViewer parent;
+
+     public UMLViewerMouseMotionListener(UMLViewer p)
+     {
+          this.parent = p;
+     }
+     public void mouseDragged(MouseEvent e)
+     {
+          parent.diagram.repositionLabelsAndArrowHeads();
+          parent.diagram.statusBar.setCoords(e.getX(), e.getY());
+     }
+
+     public void mouseMoved(MouseEvent e)
+     {
+          parent.diagram.statusBar.setCoords(e.getX(), e.getY());
+     }
+}
+
+class UMLViewerComponentListener extends ComponentAdapter
+{
+     public void componentResized(ComponentEvent e)
+     {
+
+
+          UMLViewer s = (UMLViewer) e.getSource();
+          JLayeredPane parent = (JLayeredPane) s.diagram.getParent().getParent();
+          s.pager.updateScroller();
+          s.pager.setBounds(parent.getWidth()-200 - s.pagerButton.getWidth()-5, parent.getHeight()-200 - s.pagerButton.getHeight()-s.diagram.statusBar.getHeight()-5, 200, 200);
+          s.pagerCaptionBar.setBounds(parent.getWidth()-200 - s.pagerButton.getWidth() - 5, parent.getHeight()-200-s.pagerButton.getHeight()-s.diagram.statusBar.getHeight()-5-17, 200, 17);
+     }
+}
+
+class PagerButton extends JButton implements MouseListener
+{
+     protected UMLDiagram diagram;
+
+     protected boolean pressed = true;
+
+     public PagerButton(UMLDiagram d)
+     {
+          this.diagram = d;
+          this.addMouseListener(this);
+          this.setBackground(Color.white);
+
+
+
+     }
+
+     public void paint(Graphics g)
+     {
+          super.paint(g);
+
+          // draw the arrow and the light/dark colors
+
+          if(!pressed)
+          {
+               g.setColor(Color.gray);
+               g.fillRect(1, 1, this.getWidth() - 2, this.getHeight() - 2);
+
+               g.setColor(Color.black);
+               g.drawLine(4, 4, 10, 10);
+               g.drawLine(10, 10, 10, 4);
+               g.drawLine(10, 10, 4, 10);
+
+          }
+          else {
+               //g.setColor(Color.black);
+
+
+               g.drawLine(9, 9, 12, 12);
+               g.drawLine(9, 10, 11, 12);
+               g.drawLine(10, 9, 12, 11);
+               g.drawArc(3, 3, 6, 6, 0, 360);
+
+          }
+
+
+     }
+
+     public void mousePressed(MouseEvent e)
+     {
+
+          this.setFocusable(false);
+
+          if(!pressed)
+          {
+               pressed = true;
+               this.diagram.viewer.pager.updateScroller();
+               this.diagram.viewer.pager.setVisible(false);
+              this.diagram.viewer.pagerCaptionBar.setVisible(false);
+          }
+          else
+          {
+               JLayeredPane parent = (JLayeredPane) diagram.getParent().getParent();
+
+               // this is a bad hack but it works... must find underlying problem later
+               this.diagram.viewer.setSize(this.diagram.viewer.getWidth()-1, this.diagram.viewer.getHeight());
+               this.diagram.viewer.setSize(this.diagram.viewer.getWidth()+1, this.diagram.viewer.getHeight());
+               // end of bad hack
+
+               this.diagram.viewer.pager.setBounds(parent.getWidth() - 200 - this.getWidth() - 5,
+                                                   parent.getHeight() - 200 - this.getHeight() - this.diagram.statusBar.getHeight() -5 , 200, 200);
+
+               this.diagram.viewer.pagerCaptionBar.setBounds(parent.getWidth()-200 - this.getWidth() - 5, parent.getHeight()-200-this.getHeight()-5-17- this.diagram.statusBar.getHeight()  , 200, 17);
+
+
+               if (parent.getComponentCount() == 1) {
+                    parent.add(this.diagram.viewer.pager, JLayeredPane.POPUP_LAYER);
+                    parent.add(this.diagram.viewer.pagerCaptionBar, JLayeredPane.POPUP_LAYER);
+               }
+               this.diagram.viewer.pager.updateScroller();
+               this.diagram.viewer.pager.setVisible(true);
+               this.diagram.viewer.pagerCaptionBar.setVisible(true);
+               pressed = false;
+          }
+
+
+
+     }
+
+     public void mouseReleased(MouseEvent e)
+     {
+
+     }
+
+     public void mouseEntered(MouseEvent e)
+     {
+
+     }
+
+     public void mouseExited(MouseEvent e)
+     {
+
+     }
+
+     public void mouseClicked(MouseEvent e)
+     {
+
+     }
+
+}
+
+
+class Pager extends JButton
+{
+     protected UMLDiagram diagram;
+     protected PagerScroller scroller;
+
+     public Pager(UMLDiagram d)
+     {
+          super();
+          this.diagram = d;
+          this.addMouseListener(new PagerMouseListener());
+          this.addMouseMotionListener(new PagerMouseMotionListener());
+          this.scroller = new PagerScroller(diagram, this);
+          this.setDoubleBuffered(true);
+          this.add(scroller);
+
+
+     }
+
+     public void updateScroller()
+     {
+          int canvasWidth = diagram.viewer.getScrollPane().getViewport().getView().getSize().width;
+          int canvasHeight= diagram.viewer.getScrollPane().getViewport().getView().getSize().height;
+
+          int pagerX = -diagram.viewer.getScrollPane().getViewport().getView().getBounds().x;
+          int pagerY = -diagram.viewer.getScrollPane().getViewport().getView().getBounds().y;
+          int pagerW = diagram.viewer.getScrollPane().getViewport().getBounds().width;
+          int pagerH = diagram.viewer.getScrollPane().getViewport().getBounds().height;
+
+          float updatedXs = pagerX * (float) ((float)200/(float)canvasWidth);
+          float updatedYs = pagerY * (float) ( (float) 200 / (float) canvasHeight);
+          float updatedWidths = pagerW * (float) ( (float) 200 / (float) canvasWidth);
+          float updatedHeights = pagerH * (float) ( (float) 200 / (float) canvasHeight);
+
+          scroller.setBounds((int) updatedXs, (int)  updatedYs, (int) updatedWidths, (int) updatedHeights);
+
+     }
+
+     public void paint(Graphics g)
+     {
+          super.paint(g);
+
+          g.setColor(Color.white);
+          g.fillRect(0, 0, this.getWidth(), this.getHeight());
+
+
+          int canvasWidth = diagram.viewer.getScrollPane().getViewport().getView().getSize().width;
+          int canvasHeight= diagram.viewer.getScrollPane().getViewport().getView().getSize().height;
+
+         g.setColor(Color.lightGray);
+
+         for(int i = 0; i < diagram.assocs.size(); i++)
+         {
+              FigEdgePoly edge = (FigEdgePoly) diagram.assocs.elementAt(i);
+
+
+              if(edge.getPoints().length > 1)
+              {
+                   for (int k = 0; k < edge.getPoints().length - 1; k++)
+                   {
+                        int originalX1 = edge.getPoints()[k].x;
+                        int originalY1 = edge.getPoints()[k].y;
+
+                        int originalX2 = edge.getPoints()[k+1].x;
+                        int originalY2 = edge.getPoints()[k+1].y;
+
+                        float updatedX1 = originalX1 * (float) ( (float) 200 / (float) canvasWidth);
+                        float updatedY1 = originalY1 * (float) ( (float) 200 / (float) canvasHeight);
+
+                        float updatedX2 = originalX2 * (float) ( (float) 200 / (float) canvasWidth);
+                        float updatedY2 = originalY2 * (float) ( (float) 200 / (float) canvasHeight);
+
+                        g.drawLine((int) updatedX1,(int)  updatedY1,(int)  updatedX2,(int)  updatedY2);
+
+                   }
+              }
+         }
+
+
+          for(int c = 0; c < diagram.classes.size(); c++)
+          {
+               FigNode f = (FigNode) diagram.classes.elementAt(c);
+
+               int originalX = f.getLocation().x;
+               int originalY = f.getLocation().y;
+               int originalWidth = f.getSize().width;
+               int originalHeight = f.getSize().height;
+
+               float updatedX = originalX * (float) ((float)200/(float)canvasWidth);
+               float updatedY = originalY * (float) ((float)200/(float)canvasHeight);
+               float updatedWidth = originalWidth * (float) ((float)200/(float)canvasWidth);
+               float updatedHeight = originalHeight * (float) ((float)200/(float)canvasHeight);
+
+               g.setColor(Color.white);
+               g.fillRect((int) updatedX,(int)  updatedY,(int)  updatedWidth,(int)  updatedHeight);
+
+
+
+               g.setColor(Color.lightGray);
+               g.drawRect((int) updatedX,(int)  updatedY,(int)  updatedWidth,(int)  updatedHeight);
+
+
+
+          }
+
+
+          g.setColor(Color.black);
+          g.drawRect(0, 0, this.getWidth()-1, this.getHeight()-1);
+
+          g.translate(scroller.getX(), scroller.getY());
+          // draw the pager now
+          this.scroller.paint(g);
+
+
+
+     }
+}
+
+class PagerMouseMotionListener extends MouseMotionAdapter
+{
+     public void mouseDragged(MouseEvent e)
+     {
+
+     }
+
+
+}
+
+class PagerMouseListener extends MouseAdapter
+{
+     public void mouseClicked(MouseEvent e)
+     {
+
+     }
+}
+
+class PagerScroller extends JPanel
+{
+     protected UMLDiagram diagram;
+     protected Pager pager;
+
+     protected Point lastClicked;
+
+     public PagerScroller(UMLDiagram d, Pager p)
+     {
+          super();
+          this.diagram = d;
+          this.pager = p;
+
+          this.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+
+          this.addMouseMotionListener(new PagerScrollerMouseMotionListener());
+          this.addMouseListener(new PagerScrollerMouseListener());
+     }
+
+     public void paint(Graphics g)
+     {
+          g.setColor(Color.black);
+          g.drawRect(0, 0, this.getWidth()-1, this.getHeight()-1);
+     }
+
+
+
+}
+
+
+class PagerScrollerMouseMotionListener extends MouseMotionAdapter
+{
+     public void mouseDragged(MouseEvent e)
+     {
+          PagerScroller s = (PagerScroller) e.getSource();
+
+          // this makes the pager 'drag' with the mouse
+          s.setLocation(s.getX() + e.getX() - s.lastClicked.x, s.getY() + e.getY() - s.lastClicked.y );
+
+
+          // make sure the pager stays within bounds!!
+
+          if(s.getX() < 0 || s.getY() < 0 || s.getX()+s.getWidth() > 200 || s.getY()+s.getHeight() > 200 )
+          {
+               if (s.getX() < 0) s.setLocation(0, s.getY());
+               if (s.getY() < 0) s.setLocation(s.getX(), 0);
+               if (s.getX() + s.getWidth() > 200) s.setLocation(200 - s.getWidth(), s.getY());
+               if (s.getY() + s.getHeight() > 200) s.setLocation(s.getX() , 200 - s.getHeight());
+          }
+
+          int canvasWidth = s.diagram.viewer.getScrollPane().getViewport().getView().getSize().width;
+          int canvasHeight= s.diagram.viewer.getScrollPane().getViewport().getView().getSize().height;
+
+          float scaleFactorX = ((float)canvasWidth/(float)200);
+          float scaleFactorY = ((float)canvasHeight/(float)200);
+
+          // this makes the viewport scroll with the pager
+          s.pager.diagram.viewer.getScrollPane().getViewport().setViewPosition(new Point((int) ((float) s.getX()* scaleFactorX), (int) ((float) s.getY()* scaleFactorY)));
+          s.pager.diagram.viewer.validate();
+          s.pager.repaint();
+
+
+
+
+     }
+}
+
+class PagerScrollerMouseListener extends MouseAdapter
+{
+     public void mousePressed(MouseEvent e)
+     {
+          PagerScroller s = (PagerScroller) e.getSource();
+
+          s.lastClicked = e.getPoint();
+     }
+}
+
+class PagerCaptionBar extends JButton
+{
+     public static Color lightlightgray = new Color(245, 245, 245);
+     public static Font font = new Font("verdana", Font.PLAIN, 10);
+
+     public Pager pager;
+
+     public PagerCaptionBarCloseButton button;
+
+     public PagerCaptionBar(Pager p)
+     {
+          super();
+          this.pager = p;
+          this.button = new PagerCaptionBarCloseButton(this);
+          this.addComponentListener(new PagerCaptionBarComponentListener());
+
+
+     }
+
+     public void paint(Graphics g)
+     {
+          super.paint(g);
+          g.setColor(lightlightgray);
+          g.fillRect(0, 0, this.getWidth(), this.getHeight());
+          g.setColor(Color.gray);
+          g.drawRect(0, 0, this.getWidth()-1, this.getHeight()-1);
+          g.drawLine(this.getWidth()-2, 2, this.getWidth()-2, this.getHeight()-1);
+          g.setFont(font);
+          g.drawString("Overview", 4, 12);
+
+     }
+}
+
+class PagerCaptionBarCloseButton extends JComponent
+{
+     public PagerCaptionBar parentBar;
+
+     public PagerCaptionBarCloseButton(PagerCaptionBar p)
+     {
+          this.parentBar = p;
+     }
+
+     public void paint(Graphics g)
+     {
+          super.paint(g);
+
+          g.setColor(Color.black);
+
+          g.drawLine(2, 2, this.getWidth() - 2 - 1, this.getHeight() - 2 - 1);
+          g.drawLine(2, this.getHeight() - 2 - 1, this.getWidth() - 2 - 1, 2);
+
+     }
+
+
+}
+
+class PagerCaptionBarComponentListener extends ComponentAdapter
+{
+     public void componentResized(ComponentEvent e)
+     {
+          PagerCaptionBar s = (PagerCaptionBar) e.getSource();
+
+          s.button.setBounds(2, 2, s.getHeight()- 2, s.getHeight() - 2);
+
+     }
+}
