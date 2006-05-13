@@ -125,7 +125,7 @@ public class DiscoveryClient {
 
 	/**
 	 * Searches to find services that have the given point of contact associated
-	 * with them. Any feilds set on the point of contact are checked for a
+	 * with them. Any fields set on the point of contact are checked for a
 	 * match. For example, you can set only the lastName, and only it will be
 	 * checked, or you can specify several feilds and they all must be equal.
 	 * 
