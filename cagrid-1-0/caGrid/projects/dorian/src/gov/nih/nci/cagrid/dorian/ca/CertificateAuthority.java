@@ -1,6 +1,9 @@
 package gov.nih.nci.cagrid.dorian.ca;
 
 
+import gov.nih.nci.cagrid.gridca.common.CRLEntry;
+
+import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.util.Date;
 
@@ -17,4 +20,5 @@ public interface CertificateAuthority {
 	public X509Certificate requestCertificate(PKCS10CertificationRequest request, Date startDate, Date expirationDate) throws CertificateAuthorityFault,NoCACredentialsFault;
 	public X509Certificate getCACertificate() throws CertificateAuthorityFault,NoCACredentialsFault;
 	public X509Certificate renewCertifcateAuthorityCredentials(Date expirationDate) throws CertificateAuthorityFault,NoCACredentialsFault;
+	public X509CRL getCRL(CRLEntry[] entries) throws CertificateAuthorityFault,NoCACredentialsFault;
 }

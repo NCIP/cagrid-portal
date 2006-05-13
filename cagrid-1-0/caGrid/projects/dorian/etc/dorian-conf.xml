@@ -39,6 +39,9 @@
 				<policy name="Auto Approval / Auto Renewal"
 					class="gov.nih.nci.cagrid.dorian.ifs.AutoApprovalAutoRenewalPolicy"/>
 			</policies>
+			<gts-services>
+				<gts-service>https://localhost:8443/wsrf/services/cagrid/GridTrustService</gts-service>
+			</gts-services>
 		</ifs-config>
 	</resource>
 	<resource name="DorianCertificateAuthorityConf"

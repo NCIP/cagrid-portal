@@ -20,10 +20,12 @@ import java.security.cert.X509Certificate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import junit.framework.TestCase;
 
 import org.bouncycastle.jce.PKCS10CertificationRequest;
+
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -37,8 +39,8 @@ public class TestUserManager extends TestCase {
 	private static final int MIN_NAME_LENGTH = 4;
 
 	private static final int MAX_NAME_LENGTH = 50;
-	
-	private static final int INIT_USER=1;
+
+	private static final int INIT_USER = 1;
 
 	private Database db;
 
@@ -46,13 +48,14 @@ public class TestUserManager extends TestCase {
 
 	private CertificateAuthority ca;
 
+
 	public void testSingleUser() {
 		try {
 
 			// Test adding user
 
 			IFSUser user = new IFSUser();
-			user.setIdPId(INIT_USER+1);
+			user.setIdPId(INIT_USER + 1);
 			user.setUID("user");
 			user.setEmail("user@user.com");
 			user = um.addUser(user);
@@ -67,11 +70,14 @@ public class TestUserManager extends TestCase {
 			assertEquals(user.getGridId(), UserManager.subjectToIdentity(cert.getSubjectDN().getName()));
 			assertEquals(user, um.getUser(user.getIdPId(), user.getUID()));
 			assertEquals(user, um.getUser(user.getGridId()));
+			assertEquals(1, um.getDisabledUsersSerialIds().size());
+			assertTrue(isUserSerialIdInList(user, um.getDisabledUsersSerialIds()));
+			assertTrue(um.getCRL().isRevoked(CertUtil.loadCertificate(user.getCertificate().getCertificateAsString())));
 
 			// Test Querying for users
 			IFSUserFilter f1 = new IFSUserFilter();
 			IFSUser[] l1 = um.getUsers(f1);
-			assertEquals(1+INIT_USER, l1.length);
+			assertEquals(1 + INIT_USER, l1.length);
 
 			// Test querying by uid
 			IFSUserFilter f2 = new IFSUserFilter();
@@ -159,6 +165,9 @@ public class TestUserManager extends TestCase {
 			u3.setUserStatus(IFSUserStatus.Active);
 			um.updateUser(u3);
 			assertEquals(u3, um.getUser(u3.getGridId()));
+			assertEquals(0, um.getDisabledUsersSerialIds().size());
+			assertFalse(isUserSerialIdInList(user, um.getDisabledUsersSerialIds()));
+			assertFalse(um.getCRL().isRevoked(CertUtil.loadCertificate(user.getCertificate().getCertificateAsString())));
 
 			IFSUser u4 = um.getUser(user.getGridId());
 			u4.setUserRole(IFSUserRole.Non_Administrator);
@@ -188,6 +197,20 @@ public class TestUserManager extends TestCase {
 			assertTrue(false);
 		}
 	}
+
+
+	private boolean isUserSerialIdInList(IFSUser usr, List list) throws Exception {
+		for (int i = 0; i < list.size(); i++) {
+			long sn = ((Long) list.get(i)).longValue();
+			X509Certificate cert = CertUtil.loadCertificate(usr.getCertificate().getCertificateAsString());
+			long certsn = cert.getSerialNumber().longValue();
+			if (sn == certsn) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 
 	public void testMultipleUsers() {
 		try {
@@ -220,6 +243,10 @@ public class TestUserManager extends TestCase {
 				assertEquals(user.getGridId(), UserManager.subjectToIdentity(cert.getSubjectDN().getName()));
 				assertEquals(user, um.getUser(user.getIdPId(), user.getUID()));
 				assertEquals(user, um.getUser(user.getGridId()));
+				assertEquals((i + 1), um.getDisabledUsersSerialIds().size());
+				assertTrue(isUserSerialIdInList(user, um.getDisabledUsersSerialIds()));
+				assertTrue(um.getCRL().isRevoked(
+					CertUtil.loadCertificate(user.getCertificate().getCertificateAsString())));
 
 				// Test Querying for users
 				IFSUserFilter f1 = new IFSUserFilter();
@@ -320,6 +347,17 @@ public class TestUserManager extends TestCase {
 				u3.setUserStatus(IFSUserStatus.Active);
 				um.updateUser(u3);
 				assertEquals(u3, um.getUser(u3.getGridId()));
+				assertEquals(i, um.getDisabledUsersSerialIds().size());
+				assertFalse(isUserSerialIdInList(user, um.getDisabledUsersSerialIds()));
+				assertFalse(um.getCRL().isRevoked(
+					CertUtil.loadCertificate(user.getCertificate().getCertificateAsString())));
+				u3.setUserStatus(IFSUserStatus.Suspended);
+				um.updateUser(u3);
+				assertEquals(u3, um.getUser(u3.getGridId()));
+				assertEquals((i + 1), um.getDisabledUsersSerialIds().size());
+				assertTrue(isUserSerialIdInList(user, um.getDisabledUsersSerialIds()));
+				assertTrue(um.getCRL().isRevoked(
+					CertUtil.loadCertificate(user.getCertificate().getCertificateAsString())));
 
 				IFSUser u4 = um.getUser(user.getGridId());
 				u4.setUserRole(IFSUserRole.Non_Administrator);
@@ -346,12 +384,12 @@ public class TestUserManager extends TestCase {
 
 			// um.removeUser(u5);
 			IFSUser[] list = um.getUsers(new IFSUserFilter());
-			assertEquals(userCount+INIT_USER, list.length);
+			assertEquals(userCount + INIT_USER, list.length);
 			int count = userCount;
 			for (int i = 0; i < list.length; i++) {
 				count = count - 1;
 				um.removeUser(list[i]);
-				assertEquals(count+INIT_USER, um.getUsers(new IFSUserFilter()).length);
+				assertEquals(count + INIT_USER, um.getUsers(new IFSUserFilter()).length);
 			}
 			assertEquals(0, um.getUsers(new IFSUserFilter()).length);
 		} catch (Exception e) {
@@ -359,6 +397,7 @@ public class TestUserManager extends TestCase {
 			assertTrue(false);
 		}
 	}
+
 
 	private IFSConfiguration getOneYearConf() throws Exception {
 		IFSConfiguration conf = new IFSConfiguration();
@@ -374,15 +413,13 @@ public class TestUserManager extends TestCase {
 		TrustedIdP idp = new TrustedIdP();
 		idp.setName("Initial IdP");
 		SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
-		methods[0] = SAMLAuthenticationMethod
-				.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
+		methods[0] = SAMLAuthenticationMethod.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
 		idp.setAuthenticationMethod(methods);
 		idp.setUserPolicyClass(AutoApprovalAutoRenewalPolicy.class.getName());
 
 		KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 		String subject = Utils.CA_SUBJECT_PREFIX + ",CN=" + idp.getName();
-		PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(
-				subject, pair);
+		PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(subject, pair);
 		assertNotNull(req);
 		GregorianCalendar cal = new GregorianCalendar();
 		Date start = cal.getTime();
@@ -403,6 +440,7 @@ public class TestUserManager extends TestCase {
 		return conf;
 	}
 
+
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
@@ -417,6 +455,7 @@ public class TestUserManager extends TestCase {
 			assertTrue(false);
 		}
 	}
+
 
 	protected void tearDown() throws Exception {
 		super.setUp();

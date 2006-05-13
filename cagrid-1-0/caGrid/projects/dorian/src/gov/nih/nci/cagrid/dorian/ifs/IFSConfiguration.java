@@ -47,6 +47,7 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -105,6 +106,10 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 
 	public static final String POLICY_CLASS = "class";
 
+	public static final String GTS_SERVICES = "gts-services";
+
+	public static final String GTS_SERVICE = "gts-service";
+
 	private int minimumIdPNameLength;
 
 	private int maximumIdPNameLength;
@@ -132,6 +137,8 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 	private IFSUser initialUser;
 
 	private IFSUserPolicy[] userPolicies;
+
+	private List gtsServices;
 
 
 	public void setMaximumIdPNameLength(int maximumIdPNameLength) {
@@ -190,7 +197,6 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 
 
 	public void parse(MobiusResourceManager resourceManager, Element config) throws MobiusException {
-
 		Element idpLength = config.getChild(IDP_NAME_LENGTH, config.getNamespace());
 		if (idpLength == null) {
 			throw new MobiusException("Error configuring IFS, no IdP name length specified.");
@@ -223,6 +229,7 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 				}
 
 			}
+
 		}
 
 		Element valid = config.getChild(CREDENTIALS_VALID, config.getNamespace());
@@ -400,6 +407,15 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 
 		}
 
+		gtsServices = new ArrayList();
+		Element gtsList = config.getChild(GTS_SERVICES, config.getNamespace());
+		if (gtsList != null) {
+			List gtsL = gtsList.getChildren(GTS_SERVICE, gtsList.getNamespace());
+			for (int i = 0; i < gtsL.size(); i++) {
+				Element gts = (Element) gtsL.get(i);
+				gtsServices.add(gts.getText());
+			}
+		}
 	}
 
 
@@ -506,6 +522,16 @@ public class IFSConfiguration implements AbstractMobiusConfiguration {
 
 	public void setUserPolicies(IFSUserPolicy[] userPolicies) {
 		this.userPolicies = userPolicies;
+	}
+
+
+	public List getGTSServices() {
+		return gtsServices;
+	}
+
+
+	public void setGTSServices(List gtsServices) {
+		this.gtsServices = gtsServices;
 	}
 
 }

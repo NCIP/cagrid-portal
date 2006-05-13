@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.dorian.ca;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
+import gov.nih.nci.cagrid.gridca.common.CRLEntry;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
@@ -10,6 +11,7 @@ import java.io.ByteArrayInputStream;
 import java.io.StringReader;
 import java.security.KeyPair;
 import java.security.PrivateKey;
+import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -296,8 +298,7 @@ public class DorianCertificateAuthority extends LoggingObject implements Certifi
 			throw fault;
 		}
 		try {
-			return CertUtil.signCertificateRequest(request, startDate,
-				expirationDate, cacert,cakey);
+			return CertUtil.signCertificateRequest(request, startDate, expirationDate, cacert, cakey);
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			CertificateAuthorityFault fault = new CertificateAuthorityFault();
@@ -318,6 +319,21 @@ public class DorianCertificateAuthority extends LoggingObject implements Certifi
 			logError(e.getMessage(), e);
 			CertificateAuthorityFault fault = new CertificateAuthorityFault();
 			fault.setFaultString("Unexpected Error, could not remove the CA credentials from the database.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (CertificateAuthorityFault) helper.getFault();
+			throw fault;
+		}
+	}
+
+
+	public X509CRL getCRL(CRLEntry[] entries) throws CertificateAuthorityFault, NoCACredentialsFault {
+		try {
+			return CertUtil.createCRL(getCACertificate(), getCAPrivateKey(), entries, getCACertificate().getNotAfter());
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			CertificateAuthorityFault fault = new CertificateAuthorityFault();
+			fault.setFaultString("Unexpected Error, could not create the CRL.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (CertificateAuthorityFault) helper.getFault();

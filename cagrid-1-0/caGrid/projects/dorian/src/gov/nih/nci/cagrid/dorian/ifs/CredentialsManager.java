@@ -82,10 +82,11 @@ public class CredentialsManager extends LoggingObject {
 		try {
 
 			if (!hasCredentials(username)) {
+				long serial = cert.getSerialNumber().longValue();
 				String keyStr = KeyUtil.writePrivateKey(key, password);
 				String certStr = CertUtil.writeCertificate(cert);
-				db.update("INSERT INTO " + CREDENTIALS_TABLE + " VALUES('" + username + "','" + certStr + "','"
-					+ keyStr + "')");
+				db.update("INSERT INTO " + CREDENTIALS_TABLE + " VALUES('" + username + "'," + serial + ",'" + certStr
+					+ "','" + keyStr + "')");
 			}
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
@@ -137,7 +138,7 @@ public class CredentialsManager extends LoggingObject {
 			InvalidPasswordFault fault = new InvalidPasswordFault();
 			fault.setFaultString("Invalid Password Specified.");
 			throw fault;
-		} 
+		}
 		return key;
 	}
 
@@ -178,12 +179,48 @@ public class CredentialsManager extends LoggingObject {
 	}
 
 
+	public long getCertificateSerialNumber(String username) throws DorianInternalFault {
+		this.buildDatabase();
+		Connection c = null;
+		long sn = -1;
+		try {
+			c = db.getConnection();
+			Statement s = c.createStatement();
+			ResultSet rs = s.executeQuery("select SERIAL_NUMBER from " + CREDENTIALS_TABLE + " where username='"
+				+ username + "'");
+			if (rs.next()) {
+				sn = rs.getLong("SERIAL_NUMBER");
+			}
+			rs.close();
+			s.close();
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault
+				.setFaultString("Unexpected Database Error, Error obtaining the certificate serial number for the user "
+					+ username + ".");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		} finally {
+			db.releaseConnection(c);
+		}
+		if (sn == -1) {
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("No Certificate exists for the user " + username + ".");
+			throw fault;
+		}
+		return sn;
+	}
+
+
 	private void buildDatabase() throws DorianInternalFault {
 		if (!dbBuilt) {
 			if (!this.db.tableExists(CREDENTIALS_TABLE)) {
 				String users = "CREATE TABLE " + CREDENTIALS_TABLE + " ("
-					+ "USERNAME VARCHAR(255) NOT NULL PRIMARY KEY," + "CERTIFICATE TEXT NOT NULL,"
-					+ "PRIVATE_KEY TEXT NOT NULL," + "INDEX document_index (USERNAME));";
+					+ "USERNAME VARCHAR(255) NOT NULL PRIMARY KEY," + " SERIAL_NUMBER BIGINT NOT NULL,"
+					+ "CERTIFICATE TEXT NOT NULL," + "PRIVATE_KEY TEXT NOT NULL," + "INDEX document_index (USERNAME));";
 				db.update(users);
 			}
 			this.dbBuilt = true;

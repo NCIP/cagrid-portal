@@ -78,5 +78,8 @@
 	<classpathentry kind="lib" path="resources/portal/dorian"/>
 	<classpathentry kind="lib" path="ext/resources/portal/common"/>
 	<classpathentry kind="lib" path="ext/resources/portal/gridca"/>
+	<classpathentry kind="lib" path="ext/lib/GridTrustService_stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/GridTrustService-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/GridTrustService-common.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

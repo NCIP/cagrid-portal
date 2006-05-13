@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.dorian.common;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -12,130 +12,90 @@ import java.util.logging.Logger;
  *          Exp $
  */
 public abstract class LoggingObject {
-	private static final Level DEBUG_LEVEL = Level.FINE;
-	private static final Level INFO_LEVEL = Level.INFO;
-	private static final Level WARN_LEVEL = Level.WARNING;
-	private static final Level ERROR_LEVEL = Level.SEVERE;
-	private static final Level FATAL_LEVEL = Level.SEVERE;
 
-	protected Logger logger;
+	protected Log log;
 	protected boolean loggerLookup = false;
 
 
 	private void initLogger() {
 		if (!loggerLookup) {
-			logger = Logger.getLogger(this.getClass().getName());
+			log = LogFactory.getLog(this.getClass().getName());
 			loggerLookup = true;
 		}
 	}
 
 
-	public boolean isDebugEnabled() {
-		initLogger();
-		if (logger != null) {
-			return logger.isLoggable(DEBUG_LEVEL);
-		}
-		return false;
-	}
-
-
 	public void debug(String s) {
 		initLogger();
-		if (logger != null) {
-			logger.log(DEBUG_LEVEL, s);
+		if (log != null) {
+			log.debug(s);
 		}
-	}
-
-
-	public boolean isInfoEnabled() {
-		initLogger();
-		if (logger != null) {
-			return logger.isLoggable(INFO_LEVEL);
-		}
-		return false;
 	}
 
 
 	public void info(String s) {
 		initLogger();
-		if (logger != null) {
-			logger.log(INFO_LEVEL, s);
+		if (log != null) {
+			log.info(s);
 		}
-	}
-
-
-	public boolean isWarningEnabled() {
-		initLogger();
-		if (logger != null) {
-			return logger.isLoggable(WARN_LEVEL);
-		}
-		return false;
 	}
 
 
 	public void logWarning(String s) {
 		initLogger();
-		if (logger != null) {
-			logger.log(WARN_LEVEL, s);
+		if (log != null) {
+			log.warn(s);
 		}
 	}
 
 
 	public void logWarning(String s, Throwable thrown) {
 		initLogger();
-		if (logger != null) {
-			logger.log(WARN_LEVEL, s, thrown);
+		if (log != null) {
+			log.warn(s, thrown);
 		}
-	}
-
-
-	public boolean isErrorEnabled() {
-		initLogger();
-		if (logger != null) {
-			return logger.isLoggable(ERROR_LEVEL);
-		}
-		return false;
 	}
 
 
 	public void logError(String s) {
 		initLogger();
-		if (logger != null) {
-			logger.log(ERROR_LEVEL, s);
+		if (log != null) {
+			log.error(s);
 		}
 	}
 
 
 	public void logError(String s, Throwable thrown) {
 		initLogger();
-		if (logger != null) {
-			logger.log(ERROR_LEVEL, s, thrown);
+		if (log != null) {
+			log.error(s, thrown);
 		}
 	}
 
 
-	public boolean isFatalErrorEnabled() {
-		initLogger();
-		if (logger != null) {
-			return logger.isLoggable(FATAL_LEVEL);
-		}
-		return false;
-	}
 
 
 	public void logFatalError(String s) {
 		initLogger();
-		if (logger != null) {
-			logger.log(FATAL_LEVEL, s);
+		if (log != null) {
+			log.fatal(s);
 		}
 	}
 
 
 	public void logFatalError(String s, Throwable thrown) {
 		initLogger();
-		if (logger != null) {
-			logger.log(FATAL_LEVEL, s, thrown);
+		if (log != null) {
+			log.fatal(s, thrown);
 		}
 	}
+
+
+	public Log getLog() {
+		initLogger();
+		return log;
+	}
+	
+	
 
 }
