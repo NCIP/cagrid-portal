@@ -361,6 +361,7 @@
 			<artifact refid="mobius.jars" />
 			<artifact refid="opensaml.jars" />
 			<artifact refid="opensaml.endorsed" />
+			<artifact refid="gts.client.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
