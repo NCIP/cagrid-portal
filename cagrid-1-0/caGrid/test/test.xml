@@ -71,7 +71,6 @@
 		<fail unless="dart.logfile" message="Before you attempt to publish to dart, you must set the
 			property [dart.logfile] to the location of the log to be sent to dart." />
 		<java jar="${test.lib.dir}/DartClient-1.0.0.jar" failonerror="true" fork="true">
-			<classpath refid="dart.classpath" />
 			<arg value="--server" />
 			<arg value="${dart.server}" />
 			<arg value="--port" />
