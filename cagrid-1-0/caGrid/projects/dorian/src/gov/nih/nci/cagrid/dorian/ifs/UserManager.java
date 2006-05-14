@@ -703,7 +703,7 @@ public class UserManager extends LoggingObject {
 	}
 
 
-	private void publishCRL() {
+	protected void publishCRL() {
 		List services = conf.getGTSServices();
 		if ((services != null) && (services.size() > 0)) {
 			MobiusRunnable runner = new MobiusRunnable() {
