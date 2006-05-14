@@ -582,6 +582,7 @@ public class PermissionManagerWindow extends GridPortalBaseFrame implements
 	}
 
 	private synchronized void syncServices() {
+		this.getPermissionsTable().clearTable();
 		String service = ((GTSServiceListComboBox) getService())
 				.getSelectedService();
 		if ((currentService == null) || (!currentService.equals(service))) {
