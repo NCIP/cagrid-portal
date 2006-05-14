@@ -60,6 +60,7 @@ public class IFS extends LoggingObject {
 		tm = new TrustedIdPManager(conf, db);
 		um = new UserManager(db, conf, ca, tm);
 		um.buildDatabase();
+		um.publishCRL();
 	}
 
 

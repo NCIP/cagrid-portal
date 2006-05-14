@@ -435,6 +435,10 @@ public class UserManager extends LoggingObject {
 				db.update("INSERT INTO " + USERS_TABLE + " SET IDP_ID='" + user.getIdPId() + "',UID='" + user.getUID()
 					+ "', GID='" + user.getGridId() + "',STATUS='" + user.getUserStatus().toString() + "',ROLE='"
 					+ user.getUserRole().toString() + "',EMAIL='" + user.getEmail() + "'");
+				
+				if (!user.getUserStatus().equals(IFSUserStatus.Active)) {
+					publishCRL();
+				}
 			} catch (InvalidUserFault iuf) {
 				throw iuf;
 			} catch (Exception e) {
@@ -467,9 +471,7 @@ public class UserManager extends LoggingObject {
 			throw fault;
 
 		}
-		if (!user.getUserStatus().equals(IFSUserStatus.Active)) {
-			publishCRL();
-		}
+		
 		return user;
 	}
 
@@ -477,6 +479,7 @@ public class UserManager extends LoggingObject {
 	public synchronized void updateUser(IFSUser u) throws DorianInternalFault, InvalidUserFault {
 		this.buildDatabase();
 		String credId = getCredentialsManagerUID(u.getIdPId(), u.getUID());
+		boolean publishCRL = false;
 		if (determineIfUserExists(u.getIdPId(), u.getUID())) {
 			StringBuffer sb = new StringBuffer();
 			sb.append("update " + USERS_TABLE + " SET ");
@@ -520,9 +523,9 @@ public class UserManager extends LoggingObject {
 					throw fault;
 				}
 				if (curr.getUserStatus().equals(IFSUserStatus.Active)) {
-					publishCRL();
+					publishCRL = true;
 				} else if (u.getUserStatus().equals(IFSUserStatus.Active)) {
-					publishCRL();
+					publishCRL = true;
 				}
 
 				sb.append("STATUS='" + u.getUserStatus().getValue() + "'");
@@ -539,6 +542,9 @@ public class UserManager extends LoggingObject {
 			sb.append(" where IDP_ID=" + u.getIdPId() + " AND UID='" + u.getUID() + "'");
 			if (changes > 0) {
 				db.update(sb.toString());
+			}
+			if(publishCRL){
+				publishCRL();
 			}
 
 		} else {
