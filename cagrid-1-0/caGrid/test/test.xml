@@ -4,23 +4,19 @@
 <project name="caGrid_tests_harness" basedir=".">
 	<property name="test.logs.dir" value="${test.dir}/logs" />
 	<property name="junit.results.dir" value="${test.logs.dir}/junit" />
+	
 	<!-- Get the HOSTNAME in an os independant way -->
 	<property name="env.HOSTNAME" value="${env.COMPUTERNAME}" />
+	
 	<!-- For your dart client -->
 	<property name="dart.buildname" value="${os.name}-${os.arch}-${os.version}-JDK-${java.version}" />
 	<property name="dart.site" value="${env.HOSTNAME}" />
+
 	<!-- For the dart server-->
 	<property name="dart.port" value="8081" />
 	<property name="dart.project" value="caGrid-1.0" />
 	<property name="dart.server" value="vandelay.bmi.ohio-state.edu" />
-	<!-- =============================================================== -->
-	<!-- The Dart Classpath                                              -->
-	<!-- =============================================================== -->
-	<path id="dart.classpath">
-		<fileset dir="${test.lib.dir}">
-			<include name="DartClient-1.0.0.jar" />
-		</fileset>
-	</path>
+
 	<!-- =============================================================== -->
 	<!-- Configure dart                                                  -->
 	<!-- =============================================================== -->
@@ -35,6 +31,8 @@
 		<filter token="Dart.Track" value="Experimental" />
 		<copy file="${test.dir}/BuildNameTemplate.xml" tofile="${test.logs.dir}/BuildNameExperimental.xml" filtering="true" overwrite="true" />
 	</target>
+	
+	
 	<!-- =============================================================== -->
 	<!-- Call test for each project and aggregates the log resutls       -->
 	<!-- =============================================================== -->
@@ -54,6 +52,8 @@
 			</sequential>
 		</for>
 	</target>
+	
+	
 	<!-- =============================================================== -->
 	<!-- Set the proxy, and publish the results to dart                  -->
 	<!-- =============================================================== -->
@@ -70,7 +70,7 @@
 	<target name="publish" depends="setproxy1, setproxy2" description="Call to publish test results to dart, doesn't do any building or testing.">
 		<fail unless="dart.logfile" message="Before you attempt to publish to dart, you must set the
 			property [dart.logfile] to the location of the log to be sent to dart." />
-		<java classname="dart.DartClient" failonerror="true">
+		<java jar="${test.lib.dir}/DartClient-1.0.0.jar" failonerror="true" fork="true">
 			<classpath refid="dart.classpath" />
 			<arg value="--server" />
 			<arg value="${dart.server}" />
@@ -80,6 +80,8 @@
 			<arg value="${dart.logfile}" />
 		</java>
 	</target>
+	
+	
 	<!-- =============================================================== -->
 	<!-- Run a dart experimental (currently only submits test results)   -->
 	<!-- =============================================================== -->
@@ -127,6 +129,8 @@
 			<property name="dart.logfile" value="${dart.experimental.log}" />
 		</ant>
 	</target>
+	
+	
 	<!-- ONLY to be called from cruise control's antpublisher (it passes some properties) -->
 	<target name="ccpublish">
 		<property name="dart.logfile" value="${logdir}/${logfile}" />
