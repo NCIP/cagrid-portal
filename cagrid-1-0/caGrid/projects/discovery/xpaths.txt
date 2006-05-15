@@ -11,4 +11,8 @@ wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata/cagrid:hostingResearchCen
 #POC
 wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata[cagrid:hostingResearchCenter/com:ResearchCenter/com:pointOfContactCollection/com:pointOfContact[POC_CRITERIA] or cagrid:serviceDescription/serv:Service/serv:pointOfContactCollection/com:pointOfContact[POC_CRITERIA]]
 
+#service name
+wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata/cagrid:serviceDescription/serv:Service[serv:name/text()='serviceName']
 
+#operation name
+wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata/cagrid:serviceDescription/serv:Service/serv:serviceContextCollection/serv:ServiceContext/serv:operationCollection/serv:Operation[serv:name/text()='operationName']

@@ -19,6 +19,10 @@ import org.globus.wsrf.WSRFConstants;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 
 
+/**
+ * @author oster
+ * 
+ */
 public class DiscoveryClient {
 
 	private static final String DEFAULT_INDEX_SERVICE_URL = "http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService";
@@ -35,6 +39,9 @@ public class DiscoveryClient {
 	// some common paths for reuse
 	private static final String CONTENT_PATH = wssg + ":Content/" + agg + ":AggregatorData";
 	private static final String MD_PATH = CONTENT_PATH + "/" + cagrid + ":ServiceMetadata";
+	private static final String SERV_PATH = MD_PATH + "/" + cagrid + ":serviceDescription/" + serv + ":Service";
+	private static final String OPER_PATH = SERV_PATH + "/" + serv + ":serviceContextCollection/" + serv
+		+ ":ServiceContext/" + serv + ":operationCollection/" + serv + ":Operation";
 
 	// Map the prefixes to there namepsaces
 	private static Map nsMap = new HashMap();
@@ -101,7 +108,7 @@ public class DiscoveryClient {
 	 * 
 	 * @param searchString
 	 *            the search string.
-	 * @return EndpointReferenceType[] matching the search string
+	 * @return EndpointReferenceType[] matching the criteria
 	 */
 	public EndpointReferenceType[] discoverServicesBySearchString(String searchString) throws Exception {
 		return discoverByFilter(CONTENT_PATH + "//*[contains(text(),'" + searchString + "') or contains(@*,'"
@@ -115,7 +122,7 @@ public class DiscoveryClient {
 	 * 
 	 * @param centerName
 	 *            research center name
-	 * @return EndpointReferenceType[] matching the search string
+	 * @return EndpointReferenceType[] matching the criteria
 	 */
 	public EndpointReferenceType[] discoverServicesByResearchCenter(String centerName) throws Exception {
 		return discoverByFilter(MD_PATH + "/" + cagrid + ":hostingResearchCenter/" + com + ":ResearchCenter[" + com
@@ -131,7 +138,7 @@ public class DiscoveryClient {
 	 * 
 	 * @param contact
 	 *            point of contact
-	 * @return EndpointReferenceType[] matching the search string
+	 * @return EndpointReferenceType[] matching the criteria
 	 */
 	public EndpointReferenceType[] discoverServicesByPointOfContact(PointOfContact contact) throws Exception {
 		String pocPredicate = buildPOCPredicate(contact);
@@ -140,6 +147,31 @@ public class DiscoveryClient {
 			+ ":pointOfContactCollection/" + com + ":PointOfContact[" + pocPredicate + "] or " + cagrid
 			+ ":serviceDescription/" + serv + ":Service/" + serv + ":pointOfContactCollection/" + com
 			+ ":PointOfContact[" + pocPredicate + "]]");
+	}
+
+
+	/**
+	 * Searches to find services that have a given name.
+	 * 
+	 * @param serviceName
+	 *            The service's name
+	 * @return EndpointReferenceType[] matching the criteria
+	 */
+	public EndpointReferenceType[] discoverServicesByName(String serviceName) throws Exception {
+		return discoverByFilter(SERV_PATH + "[" + serv + ":name/text()='" + serviceName + "']");
+	}
+
+
+	/**
+	 * 
+	 * Searches to find services that have a given operation.
+	 * 
+	 * @param operationName
+	 *            The operation's name
+	 * @return EndpointReferenceType[] matching the criteria
+	 */
+	public EndpointReferenceType[] discoverServicesByOperationName(String operationName) throws Exception {
+		return discoverByFilter(OPER_PATH + "[" + serv + ":name/text()='" + operationName + "']");
 	}
 
 
@@ -232,9 +264,10 @@ public class DiscoveryClient {
 	// discoverServicesByOperationOutputClass
 	//
 	// ----data----
-	// discoverServicesByModelName
-	// discoverServicesByClass
-	// discoverServicesByObjectsAssociatedWithClass???
+	// discoverDataServicesByModelName
+	// discoverDataServicesByConceptCode
+	// discoverDataServicesByClass
+	// discoverDataServicesByObjectsAssociatedWithClass???
 	//
 
 	/**

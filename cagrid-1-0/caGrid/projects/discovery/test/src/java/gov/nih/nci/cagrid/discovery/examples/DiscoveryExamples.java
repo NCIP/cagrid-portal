@@ -23,6 +23,8 @@ public class DiscoveryExamples {
 
 		String searchString = "Scott";
 		String center = "OSU";
+		String servName = "CaDSRService";
+		String operName = "findAllProjects";
 
 		try {
 			EndpointReferenceType[] services = null;
@@ -44,6 +46,14 @@ public class DiscoveryExamples {
 			poc.setLastName("Oster");
 			printHeader("POC [" + poc + "]");
 			services = client.discoverServicesByPointOfContact(poc);
+			printResults(services);
+
+			printHeader("Service name [" + servName + "]");
+			services = client.discoverServicesByName(servName);
+			printResults(services);
+
+			printHeader("Operation name [" + operName + "]");
+			services = client.discoverServicesByOperationName(operName);
 			printResults(services);
 
 		} catch (Exception e) {
