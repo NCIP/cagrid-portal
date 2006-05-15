@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.data;
 
 /** 
  *  MalformedQueryException
- *  TODO:DOCUMENT ME
+ *  Exception thrown when a CQL query does not conform to the CQL schema
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
