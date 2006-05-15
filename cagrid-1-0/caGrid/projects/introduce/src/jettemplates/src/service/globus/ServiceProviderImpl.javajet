@@ -9,7 +9,6 @@
 %>
 package <%=info.getService().getPackageName()%>.service.globus;
 
-import <%=info.getService().getPackageName()%>.common.<%=info.getService().getName()%>I;
 import <%=info.getService().getPackageName()%>.service.<%=info.getService().getName()%>Impl;
 
 import java.rmi.RemoteException;
@@ -22,7 +21,7 @@ import java.rmi.RemoteException;
  */
 public class <%=info.getService().getName()%>ProviderImpl{
 	
-	<%=info.getService().getName()%>I impl;
+	<%=info.getService().getName()%>Impl impl;
 	
 	public <%=info.getService().getName()%>ProviderImpl() throws RemoteException {
 		impl = new <%=info.getService().getName()%>Impl();

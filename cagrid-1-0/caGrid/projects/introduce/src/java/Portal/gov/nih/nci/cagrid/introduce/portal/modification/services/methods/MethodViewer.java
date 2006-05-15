@@ -151,6 +151,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JPanel exceptionsInputButtonPanel = null;
 
+	private JPanel importInformationPanel = null;
+
 
 	public MethodViewer(MethodType method, ServiceInformation info) {
 		this.info = info;
@@ -719,6 +721,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			tabbedPanel = new JTabbedPane();
 			tabbedPanel.addTab("Method Signature", null, getMethodPanel(), null);
 			tabbedPanel.addTab("Security", null, getSecurityContainerPanel(), null);
+			tabbedPanel.addTab("Import Information", null, getImportInformationPanel(), null);
 		}
 		return tabbedPanel;
 	}
@@ -1201,6 +1204,19 @@ public class MethodViewer extends GridPortalBaseFrame {
 			exceptionsInputButtonPanel.add(getRemoveExceptionButton(), gridBagConstraints5);
 		}
 		return exceptionsInputButtonPanel;
+	}
+
+
+	/**
+	 * This method initializes importInformationPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getImportInformationPanel() {
+		if (importInformationPanel == null) {
+			importInformationPanel = new JPanel();
+		}
+		return importInformationPanel;
 	}
 
 } // @jve:decl-index=0:visual-constraint="4,12"

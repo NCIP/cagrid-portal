@@ -243,7 +243,7 @@ public class SyncTools {
 		}
 
 		// STEP 4: write out namespace mappings and flatten the wsdl file
-		flattenWSDL(info, schemaDir);
+		syncAndFlattenWSDL(info, schemaDir);
 
 		// STEP 5: run axis to get the symbol table
 		MultiServiceSymbolTable table = new MultiServiceSymbolTable(info, excludeSet);
@@ -418,10 +418,11 @@ public class SyncTools {
 	}
 
 
-	private void flattenWSDL(ServiceInformation info, File schemaDir) throws Exception {
+	private void syncAndFlattenWSDL(ServiceInformation info, File schemaDir) throws Exception {
 		// get the classnames from the axis symbol table
 		if (info.getServices().getService() != null) {
 			for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
+				//rewrite the wsdl for each service....
 				ServiceType service = info.getServices().getService(serviceI);
 				ServiceWSDLTemplate serviceWSDLT = new ServiceWSDLTemplate();
 				String serviceWSDLS = serviceWSDLT.generate(new SpecificServiceInformation(info, service));
@@ -433,6 +434,17 @@ public class SyncTools {
 				FileWriter serviceWSDLFW = new FileWriter(serviceWSDLF);
 				serviceWSDLFW.write(serviceWSDLS);
 				serviceWSDLFW.close();
+				
+				//for each service add any imported operations.....
+				if(service.getMethods()!=null && service.getMethods().getMethod()!=null){
+					for(int methodI = 0 ; methodI < service.getMethods().getMethod().length; methodI++){
+						MethodType method = service.getMethods().getMethod(methodI);
+						if(method.isIsImported()){
+							TemplateUtils.addImportedOperationToService(method,new SpecificServiceInformation(info,service));
+						}
+					}
+				}
+				
 			}
 		}
 

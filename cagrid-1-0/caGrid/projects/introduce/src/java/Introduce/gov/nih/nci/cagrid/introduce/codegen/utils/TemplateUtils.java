@@ -2,18 +2,25 @@ package gov.nih.nci.cagrid.introduce.codegen.utils;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.info.ImportInformation;
 import gov.nih.nci.cagrid.introduce.info.NamespaceInformation;
+import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.jdom.Document;
+import org.jdom.Element;
+import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.XMLUtilities;
 
 
@@ -91,9 +98,71 @@ public class TemplateUtils {
 				// add the ns=>prefix entry
 				if (!map.containsKey(ntype.getNamespace())) {
 					if (ntype.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
-						map.put(ntype.getNamespace(), new NamespaceInformation(ntype, IntroduceConstants.W3CNAMESPACE_PREFIX));
+						map.put(ntype.getNamespace(), new NamespaceInformation(ntype,
+							IntroduceConstants.W3CNAMESPACE_PREFIX));
 					} else {
 						map.put(ntype.getNamespace(), new NamespaceInformation(ntype, "ns" + namespaceCount++));
+					}
+				}
+			}
+		}
+
+		return map;
+	}
+	
+	public static void addImportedOperationToService(MethodType method,SpecificServiceInformation serviceInfo){
+		
+		Map prefixMap = TemplateUtils.buildWSDLImportMap(serviceInfo.getService());
+		
+		//parse the wsdl and get the operation text.....
+		Document fromDoc = null;
+		Document toDoc = null;
+		try {
+			fromDoc = XMLUtilities.fileNameToDocument(serviceInfo.getBaseDirectory().getAbsolutePath() + File.separator + "schema" + serviceInfo.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator + method.getImportInformation().getWsdlFile());
+			toDoc = XMLUtilities.fileNameToDocument(serviceInfo.getBaseDirectory().getAbsolutePath() + File.separator + "schema" + serviceInfo.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator + serviceInfo.getService().getName() + ".wsdl");
+		    List portTypes = fromDoc.getRootElement().getChildren("portType",fromDoc.getRootElement().getNamespace());	
+		    for(int i = 0; i < portTypes.size(); i ++ ){
+		    	Element el = (Element)portTypes.get(i);
+		    	if(el.getAttributeValue("name").equals(method.getImportInformation().getPortTypeName())){
+		    		List operations = el.getChildren("operation",fromDoc.getRootElement().getNamespace());
+		    		for(int j=0; j < operations.size(); j ++){
+		    			Element opEl = (Element)operations.get(j);
+		    			if(opEl.getAttributeValue("name").equals(method.getImportInformation().getOperationName())){
+		    				//need to detach the el and add it to the service which will be using it...
+		    				 List toportTypes = toDoc.getRootElement().getChildren("portType",toDoc.getRootElement().getNamespace());	
+		    				    for(int i2 = 0; i2 < toportTypes.size(); i2 ++ ){
+		    				    	Element el2 = (Element)toportTypes.get(i2);
+		    				    	if(el2.getAttributeValue("name").equals(method.getImportInformation().getPortTypeName())){
+		    				    		//found the right one...  add to here
+		    				    		el2.addContent(opEl.detach());
+		    				    	}
+		    				    }
+		    				break;
+		    			}
+		    		}
+		    	break;
+				}
+		    }
+		    FileWriter fw = new FileWriter(serviceInfo.getBaseDirectory().getAbsolutePath() + File.separator + "schema" + serviceInfo.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator + serviceInfo.getService().getName() + ".wsdl");
+		    fw.write(XMLUtilities.formatXML(XMLUtilities.documentToString(toDoc)));
+		    fw.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+
+	public static Map buildWSDLImportMap(ServiceType service) {
+		Map map = new HashMap();
+		int namespaceCount = 0;
+		if (service.getMethods() != null && service.getMethods().getMethod() != null) {
+			for (int i = 0; i < service.getMethods().getMethod().length; i++) {
+				MethodType method = service.getMethods().getMethod(i);
+				if (method.isIsImported()) {
+					ImportInformation ii = new ImportInformation(method.getImportInformation(),"wns" + namespaceCount++);
+					if (!map.containsKey(method.getImportInformation().getNamespace())) {
+						map.put(method.getImportInformation().getNamespace(), ii);
 					}
 				}
 			}

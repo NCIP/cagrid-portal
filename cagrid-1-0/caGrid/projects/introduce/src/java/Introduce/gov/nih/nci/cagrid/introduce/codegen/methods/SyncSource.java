@@ -27,7 +27,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
-import java.util.Properties;
 import java.util.StringTokenizer;
 
 import org.apache.axis.utils.JavaUtils;
@@ -55,8 +54,6 @@ public class SyncSource {
 
 	private String serviceProviderImpl;
 
-	private Properties deploymentProperties;
-
 	private String packageName;
 
 	private ServiceInformation serviceInfo;
@@ -68,7 +65,6 @@ public class SyncSource {
 		// this.baseDir = baseDir;
 		this.service = service;
 		this.serviceInfo = info;
-		this.deploymentProperties = this.serviceInfo.getIntroduceServiceProperties();
 		this.packageName = service.getPackageName() + ".stubs";
 		serviceClient = baseDir.getAbsolutePath() + File.separator + "src" + File.separator + service.getPackageDir()
 			+ File.separator + "client" + File.separator + service.getName() + "Client.java";
@@ -195,7 +191,7 @@ public class SyncSource {
 
 	private String createBoxedSignatureStringFromMethod(MethodType method) {
 		String methodString = "";
-		MethodTypeOutput returnTypeEl = method.getOutput();
+
 		String methodName = method.getName();
 		String returnType = null;
 		returnType = this.packageName + "." + getBoxedOutputTypeName(methodName);
@@ -231,27 +227,6 @@ public class SyncSource {
 	}
 
 
-	private boolean isPrimitive(String type) {
-		if (type.equals("int") || type.equals("double") || type.equals("float") || type.equals("boolean")
-			|| type.equals("short") || type.equals("byte") || type.equals("char") || type.equals("long")) {
-			return true;
-		}
-		return false;
-	}
-
-
-	private String createPrimitiveReturn(String type) {
-		if (type.equals("int") || type.equals("double") || type.equals("float") || type.equals("short")
-			|| type.equals("byte") || type.equals("char") || type.equals("long")) {
-			return "0";
-		} else if (type.equals("boolean")) {
-			return "false";
-		} else {
-			return "RETURN VALUE";
-		}
-	}
-
-
 	public void addMethods(List additions) {
 		for (int i = 0; i < additions.size(); i++) {
 			// add it to the interface
@@ -279,7 +254,9 @@ public class SyncSource {
 				e1.printStackTrace();
 			}
 
-			if (!method.isIsProvided()) {
+			if (!method.isIsImported()
+				|| (method.isIsImported() && method.getImportInformation() != null && method.getImportInformation()
+					.isIsProvided())) {
 				// populate the impl method
 				addImpl(method);
 				// populate the provider impl method
@@ -509,21 +486,13 @@ public class SyncSource {
 		clientMethod += "org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;\n";
 
 		// TODO: ADD CLIENT SECURITY
-		clientMethod += "\n"
-			+ configureClientSecurity(service.getServiceSecurity(), method.getMethodSecurity());
+		clientMethod += "\n" + configureClientSecurity(service.getServiceSecurity(), method.getMethodSecurity());
 		// put in the call to the client
 		String var = "port";
 
 		String methodString = lineStart;
 		MethodTypeOutput returnTypeEl = method.getOutput();
-		String returnType = null;
-		if (returnTypeEl.getQName().getNamespaceURI().equals("")
-			&& returnTypeEl.getQName().getLocalPart().equals("void")) {
-			returnType = "void";
-		} else {
-			SchemaInformation info = serviceInfo.getSchemaInformation(returnTypeEl.getQName());
-			returnType = info.getType().getClassName();
-		}
+
 		// always a boxed call now becuase using complex types in the wsdl
 		// create handle for the boxed wrapper
 		methodString += this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName)

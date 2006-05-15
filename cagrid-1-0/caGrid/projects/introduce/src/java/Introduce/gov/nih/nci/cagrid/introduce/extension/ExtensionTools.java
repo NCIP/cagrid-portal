@@ -7,8 +7,6 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionT
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.axis.message.MessageElement;
 
@@ -141,21 +139,5 @@ public class ExtensionTools {
 			}
 		}
 		data.set_any(anys);
-	}
-	
-	
-	public static void removeExtensionDataElement(ExtensionTypeExtensionData data, String dataElementName) {
-		MessageElement[] dataEntries = data.get_any();
-		if (dataEntries != null) {
-			List cleanedEntries = new ArrayList(dataEntries.length);
-			for (int i = 0; i < dataEntries.length; i++) {
-				if (!dataEntries[i].getName().equals(dataElementName)) {
-					cleanedEntries.add(dataEntries[i]);
-				}
-			}
-			dataEntries = new MessageElement[cleanedEntries.size()];
-			cleanedEntries.toArray(dataEntries);
-			data.set_any(dataEntries);
-		}
 	}
 }

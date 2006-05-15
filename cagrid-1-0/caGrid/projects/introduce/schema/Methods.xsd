@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns="gme://gov.nih.nci.cagrid.introduce/1/Methods" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:security="gme://gov.nih.nci.cagrid.introduce/1/Security" targetNamespace="gme://gov.nih.nci.cagrid.introduce/1/Methods" elementFormDefault="qualified" attributeFormDefault="unqualified">
-	  <xs:import namespace="gme://gov.nih.nci.cagrid.introduce/1/Security"
-                      schemaLocation="./Security.xsd"/>
+<xs:schema xmlns="gme://gov.nih.nci.cagrid.introduce/1/Methods"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:security="gme://gov.nih.nci.cagrid.introduce/1/Security"
+	targetNamespace="gme://gov.nih.nci.cagrid.introduce/1/Methods" elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+	<xs:import namespace="gme://gov.nih.nci.cagrid.introduce/1/Security"
+		schemaLocation="./Security.xsd"/>
 	<xs:element name="Methods" type="MethodsType">
 		<xs:annotation>
 			<xs:documentation>List of methods for this interface.</xs:documentation>
@@ -22,7 +26,8 @@
 								<xs:attribute name="qName" type="xs:QName" use="required"/>
 								<xs:attribute name="isArray" type="xs:boolean" use="required"/>
 								<xs:attribute name="name" type="xs:string" use="required"/>
-								<xs:attribute name="containerClassName" type="xs:string" use="optional"/>
+								<xs:attribute name="containerClassName" type="xs:string"
+									use="optional"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
@@ -45,11 +50,19 @@
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
-			<xs:element ref="security:MethodSecurity" minOccurs="0" maxOccurs="1" />
+			<xs:element ref="security:MethodSecurity" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ImportInformation" minOccurs="0" maxOccurs="1">
+				<xs:complexType>
+					<xs:attribute name="portTypeName" type="xs:string" use="required"/>
+					<xs:attribute name="operationName" type="xs:string" use="required"/>
+					<xs:attribute name="namespace" type="xs:string" use="required"/>
+					<xs:attribute name="wsdlFile" type="xs:string" use="required"/>
+					<xs:attribute name="isProvided" type="xs:boolean" use="required"/>
+					<xs:attribute name="providerClass" type="xs:string" use="optional"/>
+				</xs:complexType>
+			</xs:element>
 		</xs:sequence>
+		<xs:attribute name="isImported" type="xs:boolean" use="required"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
-		<xs:attribute name="namespace" type="xs:string" use="optional"/>
-		<xs:attribute name="isProvided" type="xs:boolean" use="required"/>
-		<xs:attribute name="providerClass" type="xs:string" use="optional"/>
 	</xs:complexType>
 </xs:schema>

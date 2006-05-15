@@ -9,7 +9,6 @@
 %>
 package <%=info.getService().getPackageName()%>.service;
 
-import <%=info.getService().getPackageName()%>.common.<%=info.getService().getName()%>I;
 import <%=info.getService().getPackageName()%>.service.globus.ServiceConfiguration;
 
 import java.rmi.RemoteException;
@@ -26,7 +25,7 @@ import org.globus.wsrf.Constants;
  * @created by Introduce Toolkit version 1.0
  * 
  */
-public class <%=info.getService().getName()%>Impl implements <%=info.getService().getName()%>I{
+public class <%=info.getService().getName()%>Impl {
     private ServiceConfiguration configuration;
 	
 	public <%=info.getService().getName()%>Impl() throws RemoteException {

@@ -17,12 +17,30 @@
     xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl"
     xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl"
     xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
-    xmlns="http://schemas.xmlsoap.org/wsdl/">
+<%
+	Map imprefixmap=TemplateUtils.buildWSDLImportMap(info.getService());
+	Iterator imiterator = imprefixmap.keySet().iterator();
+		while(imiterator.hasNext()){
+			String namespace = (String)imiterator.next();
+			ImportInformation importInformation=(ImportInformation)imprefixmap.get(namespace);
+%>    xmlns:<%=importInformation.getPrefix()%>="<%=importInformation.getInformation().getNamespace()%>"
+<%  		
+		}
+%>    xmlns="http://schemas.xmlsoap.org/wsdl/">
     <import
         namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
         location="../wsrf/properties/WS-ResourceProperties.wsdl"/>
     <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl"
         location="../wsrf/faults/WS-BaseFaults.wsdl"/>
+<%
+		while(imiterator.hasNext()){
+			String namespace = (String)imiterator.next();
+			ImportInformation importInformation=(ImportInformation)imprefixmap.get(namespace);
+%>    <import namespace="<%=importInformation.getInformation().getNamespace()%>"
+        location="./<%=importInformation.getInformation().getWsdlFile()%>"/>
+<%  		
+		}
+%>
     <!--============================================================
 
                       T Y P E S
@@ -239,6 +257,8 @@ methods = service.getMethods();
 if(methods!=null && methods.getMethod()!=null){
 	for (int methodsI = 0; methodsI < methods.getMethod().length ; methodsI++) {
 		MethodType method = methods.getMethod(methodsI);
+		//if the method is imported dont add it, we will use JDOM to do so
+		if(!method.isIsImported()){
 %>
 		<operation name="<%=method.getName() %>">
             <input message="tns:<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Request"/>
@@ -256,6 +276,7 @@ if(methods!=null && methods.getMethod()!=null){
         </operation>
 <%
 	}
+  }
 }
 %>
         <operation name="GetResourceProperty">
