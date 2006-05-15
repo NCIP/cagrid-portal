@@ -19,6 +19,7 @@ import javax.xml.namespace.QName;
 public class HistoryManager {
 
 	private final static QName reportQN = new QName(SyncGTSDefault.SYNC_GTS_NAMESPACE, "SyncReport");
+	private final static int maxSyncReports = 1000;
 
 
 	public File addReport(SyncReport report) throws Exception {
@@ -34,11 +35,30 @@ public class HistoryManager {
 
 
 	public SyncReport[] search(DateFilter start, DateFilter end) throws Exception {
-		File startDir = getDirectory(start);
-		if((startDir.exists())&&(startDir.isDirectory())){
-		
+		SyncReport[] reports = new SyncReport[maxSyncReports];
+		int checkMax = 0;
+		int iterator = 0;
+		while(!start.equals(end)){
+			File startDir = getDirectory(start);
+			if((startDir.exists())&&(startDir.isDirectory())){
+				String[] fileList = startDir.list();
+				checkMax = checkMax + fileList.length;
+				if(checkMax > maxSyncReports)
+					throw  new Exception();
+				else {
+					for(int i = 0; i < fileList.length; i++)
+					{
+						reports[iterator] = this.getReport(startDir.getAbsolutePath() + File.separator + fileList[i]);
+						iterator++;
+					}
+				}
+			}
+			this.incrementDate(start);
 		}
-		return null;
+		SyncReport[] returnReports = new SyncReport[checkMax];
+		System.arraycopy(reports, 0, returnReports, 0, returnReports.length);
+		
+		return returnReports;
 	}
 
 
@@ -57,8 +77,22 @@ public class HistoryManager {
 
 	private File getDirectory(DateFilter f) {
 		File histDir = getHistoryDirectory();
-		File dir = new File(histDir.getAbsolutePath() + File.separator + f.getYear() + File.separator + f.getMonth()
-			+ File.separator + f.getDay());
+		String month;
+		String day;
+		if(f.getMonth()<10){
+			month = "0" + f.getMonth();
+		}
+		else
+			month = "" + f.getMonth();
+		
+		if(f.getDay()<10){
+			day = "0" + f.getDay();
+		}
+		else
+			day = "" + f.getDay();
+			
+		File dir = new File(histDir.getAbsolutePath() + File.separator + f.getYear() + File.separator + month
+			+ File.separator + day);
 		return dir;
 	}
 
@@ -73,5 +107,22 @@ public class HistoryManager {
 		dir.mkdirs();
 		return dir;
 	}
+	
+	private void incrementDate(DateFilter f){
+		if(f.getDay() >= 31){
+			f.setDay(1);
+			if(f.getMonth() >= 12){
+				f.setMonth(1);
+				f.setYear(f.getYear()+1);
+			}
+			else{
+				f.setMonth(f.getMonth()+1);
+			}
+		}
+		else
+			f.setDay(f.getDay()+1);
+		
+	}
+	
 
 }
