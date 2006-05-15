@@ -453,6 +453,7 @@
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />
 			<artifact refid="metadata.jars" />
+			<artifact refid="metadata.schemas"/>
 		</resolveDependencies>
 		<ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
