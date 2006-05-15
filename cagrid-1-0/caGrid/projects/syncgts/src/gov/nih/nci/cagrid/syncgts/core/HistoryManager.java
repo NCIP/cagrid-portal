@@ -38,6 +38,7 @@ public class HistoryManager {
 		SyncReport[] reports = new SyncReport[maxSyncReports];
 		int checkMax = 0;
 		int iterator = 0;
+		this.incrementDate(end);
 		while(!start.equals(end)){
 			File startDir = getDirectory(start);
 			if((startDir.exists())&&(startDir.isDirectory())){
@@ -124,5 +125,24 @@ public class HistoryManager {
 		
 	}
 	
+	public static void main(String[] args) {
+		HistoryManager hm = new HistoryManager();
+		DateFilter start = new DateFilter();
+		start.setYear(2006);
+		start.setMonth(5);
+		start.setDay(9);
+		DateFilter end = new DateFilter();
+		end.setYear(2006);
+		end.setMonth(5);
+		end.setDay(12);
+		try{
+			SyncReport[] reports = hm.search(start, end);
+			System.out.println(reports.length);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 
+
+
+	}
 }
