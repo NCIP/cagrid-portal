@@ -63,6 +63,10 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		System.out.println("Copying schemas to " + schemaDir);
 		copySchema(DataServiceConstants.CQL_QUERY_SCHEMA, schemaDir);
 		copySchema(DataServiceConstants.CQL_RESULT_SET_SCHEMA, schemaDir);
+		copySchema(DataServiceConstants.COMMON_METADATA_SCHEMA, schemaDir);
+		copySchema(DataServiceConstants.DATA_METADATA_SCHEMA, schemaDir);
+		copySchema(DataServiceConstants.CADSR_DOMAIN_SCHEMA, schemaDir);
+		copySchema(DataServiceConstants.CADSR_UMLPROJECT_SCHEMA, schemaDir);
 		// copy libraries for data services into the new DS's lib directory
 		copyLibraries(getServiceLibDir(props));
 		// namespaces
@@ -71,15 +75,24 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		if (namespaces == null) {
 			namespaces = new NamespacesType();
 		}
-		NamespaceType[] dsNamespaces = new NamespaceType[namespaces.getNamespace().length + 2];
+		// add three namespaces to the service
+		NamespaceType[] dsNamespaces = new NamespaceType[namespaces.getNamespace().length + 3];
 		System.arraycopy(namespaces.getNamespace(), 0, dsNamespaces, 0, namespaces.getNamespace().length);
-		dsNamespaces[dsNamespaces.length - 2] = CommonTools.createNamespaceType(schemaDir + File.separator + DataServiceConstants.CQL_QUERY_SCHEMA);
-		dsNamespaces[dsNamespaces.length - 2].setLocation("." + File.separator + DataServiceConstants.CQL_QUERY_SCHEMA);
-		dsNamespaces[dsNamespaces.length - 1] = CommonTools.createNamespaceType(schemaDir + File.separator + DataServiceConstants.CQL_RESULT_SET_SCHEMA);
-		dsNamespaces[dsNamespaces.length - 1].setLocation("." + File.separator + DataServiceConstants.CQL_RESULT_SET_SCHEMA);
+		// query namespace
+		dsNamespaces[dsNamespaces.length - 3] = CommonTools.createNamespaceType(schemaDir + File.separator + DataServiceConstants.CQL_QUERY_SCHEMA);
+		dsNamespaces[dsNamespaces.length - 3].setLocation("." + File.separator + DataServiceConstants.CQL_QUERY_SCHEMA);
+		// query result namespace
+		dsNamespaces[dsNamespaces.length - 2] = CommonTools.createNamespaceType(schemaDir + File.separator + DataServiceConstants.CQL_RESULT_SET_SCHEMA);
+		dsNamespaces[dsNamespaces.length - 2].setLocation("." + File.separator + DataServiceConstants.CQL_RESULT_SET_SCHEMA);
+		// ds metadata namespace
+		dsNamespaces[dsNamespaces.length - 1] = CommonTools.createNamespaceType(schemaDir + File.separator + DataServiceConstants.DATA_METADATA_SCHEMA);
+		dsNamespaces[dsNamespaces.length - 1].setLocation("." + File.separator + DataServiceConstants.DATA_METADATA_SCHEMA);
 		namespaces.setNamespace(dsNamespaces);
 		description.setNamespaces(namespaces);
-		
+		// add the metadata namespace to the nsexcludes property
+		String excludes = props.getProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES);
+		excludes += " -x " + DataServiceConstants.DATA_METADATA_URI;
+		props.setProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES, excludes);
 		// query method
 		System.out.println("Building query method");
 		MethodsType methods = dataService.getMethods();
@@ -93,16 +106,16 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		MethodTypeInputsInput queryInput = new MethodTypeInputsInput();
 		queryInput.setName(DataServiceConstants.QUERY_METHOD_PARAMETER_NAME);
 		queryInput.setIsArray(false);
-		QName queryQname = new QName(dsNamespaces[dsNamespaces.length - 2].getNamespace(), 
-			dsNamespaces[dsNamespaces.length - 2].getSchemaElement(0).getType());
+		QName queryQname = new QName(dsNamespaces[dsNamespaces.length - 3].getNamespace(), 
+			dsNamespaces[dsNamespaces.length - 3].getSchemaElement(0).getType());
 		queryInput.setQName(queryQname);
 		inputs.setInput(new MethodTypeInputsInput[] {queryInput});
 		queryMethod.setInputs(inputs);
 		// method output
 		MethodTypeOutput output = new MethodTypeOutput();
 		output.setIsArray(false);
-		QName resultSetQName = new QName(dsNamespaces[dsNamespaces.length - 1].getNamespace(),
-			dsNamespaces[dsNamespaces.length - 1].getSchemaElement(0).getType());
+		QName resultSetQName = new QName(dsNamespaces[dsNamespaces.length - 2].getNamespace(),
+			dsNamespaces[dsNamespaces.length - 2].getSchemaElement(0).getType());
 		output.setQName(resultSetQName);
 		queryMethod.setOutput(output);
 		// exceptions on query method
@@ -140,7 +153,7 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 	
 	private void copySchema(String schemaName, String outputDir) throws Exception {
 		File schemaFile = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data" + File.separator + "schema" + File.separator + schemaName);
-		System.out.println("Loading schema from " + schemaFile.getAbsolutePath());
+		System.out.println("Copying schema from " + schemaFile.getAbsolutePath());
 		File outputFile = new File(outputDir + File.separator + schemaName);
 		System.out.println("Saving schema to " + outputFile.getAbsolutePath());
 		copyFile(schemaFile, outputFile);
@@ -170,6 +183,9 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 	
 	
 	private void copyFile(File inputFile, File outputFile) throws FileNotFoundException, IOException {
+		if (!outputFile.getParentFile().exists()) {
+			outputFile.getParentFile().mkdirs();
+		}
 		BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(inputFile));
 		BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(outputFile));
 		byte[] buff = new byte[1024];

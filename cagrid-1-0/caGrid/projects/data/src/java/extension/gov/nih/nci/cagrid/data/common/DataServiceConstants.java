@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.data.common;
 
+import java.io.File;
+
 import javax.xml.namespace.QName;
 
 
@@ -13,6 +15,14 @@ import javax.xml.namespace.QName;
  * @version $Id$ 
  */
 public class DataServiceConstants {
+	// metadata schema constants
+	public static final String METADATA_SCHEMA_LOCATION = "metadata" + File.separator + "cagrid" + File.separator + "types";
+	public static final String CADSR_METADATA_SCHEMA_LOCATION = METADATA_SCHEMA_LOCATION + File.separator + "cadsr";
+	public static final String CADSR_DOMAIN_SCHEMA = CADSR_METADATA_SCHEMA_LOCATION + File.separator + "3.0_gov.nih.nci.cadsr.domain.xsd";
+	public static final String CADSR_UMLPROJECT_SCHEMA = CADSR_METADATA_SCHEMA_LOCATION + File.separator + "3.0_gov.nih.nci.cadsr.umlproject.domain.xsd";
+	public static final String DATA_METADATA_SCHEMA = METADATA_SCHEMA_LOCATION + File.separator + "data" + File.separator + "data.xsd";
+	public static final String COMMON_METADATA_SCHEMA = METADATA_SCHEMA_LOCATION + File.separator + "common" + File.separator + "common.xsd";
+	public static final String DATA_METADATA_URI = "gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice";
 
 	// query schema constants
 	public static final String CQL_QUERY_SCHEMA = "1_gov.nih.nci.cagrid.CQLQuery.xsd";
@@ -21,7 +31,7 @@ public class DataServiceConstants {
 	public static final String CQL_RESULT_SET_URI = "http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet";
 	public static final String CQL_QUERY_TYPE = gov.nih.nci.cagrid.cqlquery.Object.class.getName();
 	public static final String CQL_RESULT_SET_TYPE = gov.nih.nci.cagrid.cqlresultset.CQLQueryResults.class.getName();
-		
+	
 	// query method constants
 	public static final String QUERY_METHOD_NAME = "query";
 	public static final String QUERY_METHOD_RETURN_TYPE = CQL_RESULT_SET_TYPE;

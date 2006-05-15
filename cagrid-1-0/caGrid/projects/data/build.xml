@@ -49,6 +49,7 @@
     <property name="schema.src" location="${globus.dir}/share/schema" />
     <property name="schema.dest" location="${build.dir}/schema" />
     <property name="mapping.src" value="${basedir}/NStoPkg.properties" />
+	<property name="ext.schema.dir" location="${basedir}/ext/schema"/>
 	
 	<!-- source directories -->
 	<property name="src.dir" location="${basedir}/src/java"/>
@@ -310,7 +311,10 @@
 		<delete dir="${introduce.extensions.dir}/data" />
 		<mkdir dir="${introduce.extensions.dir}/data" />
 		<mkdir dir="${introduce.extensions.dir}/data/schema"/>
+		<mkdir dir="${introduce.extensions.dir}/data/schema/metadata"/>
+		<!-- extension description file -->
 		<copy todir="${introduce.extensions.dir}/data" file="${extension.description.file}" />
+		<!-- libraries -->
 		<copy todir="${introduce.extensions.dir}/lib">
 			<fileset dir="${lib.dir}">
 				<include name="*.jar" />
@@ -322,9 +326,16 @@
 				<include name="**/*.jar" />
 			</fileset>
 		</copy>
+		<!-- data service schemas -->
 		<copy todir="${introduce.extensions.dir}/data/schema">
 			<fileset dir="${basedir}/schema/Data/">
-				<include name="*.xsd"/>
+				<include name="**/*.xsd"/>
+			</fileset>
+		</copy>
+		<!-- metadata schemas -->
+		<copy todir="${introduce.extensions.dir}/data/schema/metadata">
+			<fileset dir="${ext.schema.dir}">
+				<include name="**/*.xsd"/>
 			</fileset>
 		</copy>
 	</target>
