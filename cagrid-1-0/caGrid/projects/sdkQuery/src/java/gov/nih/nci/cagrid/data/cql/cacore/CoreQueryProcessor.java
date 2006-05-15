@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.data.cql.cacore;
 
-import gov.nih.nci.cagrid.cqlquery.Object;
+import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.InitializationException;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
@@ -35,12 +35,12 @@ public class CoreQueryProcessor extends CQLQueryProcessor {
 	}
 	
 
-	public CQLQueryResults processQuery(Object cqlQuery) 
+	public CQLQueryResults processQuery(CQLQuery cqlQuery) 
 		throws MalformedQueryException, QueryProcessingException {
-		DetachedCriteria objectCriteria = ProcessorHelper.createQueryCriteria(cqlQuery);
+		DetachedCriteria objectCriteria = ProcessorHelper.createQueryCriteria(cqlQuery.getTarget());
 		List targetObjects = null;
 		try {
-			targetObjects = coreService.query(objectCriteria, cqlQuery.getName());
+			targetObjects = coreService.query(objectCriteria, cqlQuery.getTarget().getName());
 		} catch (Exception ex) {
 			throw new QueryProcessingException("Error invoking core query method: " + ex.getMessage(), ex);
 		}

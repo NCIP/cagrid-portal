@@ -73,7 +73,7 @@ public class ProcessorHelper {
 	
 	private static Criterion handleAssociation(Class objectClass, Association association) throws MalformedQueryException, QueryProcessingException {
 		String role = association.getRoleName();
-		String associationType = association.getObject().getName();
+		String associationType = association.getName();
 		if (role == null) {
 			// determine role based on object's type
 			Field[] objectFields = objectClass.getFields();
@@ -92,7 +92,7 @@ public class ProcessorHelper {
 			// still null?? no association to the object!
 			throw new MalformedQueryException("Association from " + objectClass.getName() + " to " + associationType + " does not exist.  Use only direct associations");
 		}
-		DetachedCriteria associationCriteria = createQueryCriteria(association.getObject());
+		DetachedCriteria associationCriteria = createQueryCriteria(association);
 		Property roleProperty = Property.forName(role);
 		Criterion criteria = roleProperty.eq(associationCriteria);
 		return criteria;

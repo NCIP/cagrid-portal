@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.data.cql;
 
-import gov.nih.nci.cagrid.cqlquery.Object;
+import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.InitializationException;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
@@ -29,6 +29,6 @@ public abstract class CQLQueryProcessor {
 	}
 	
 	
-	public abstract CQLQueryResults processQuery(Object cqlQuery) 
+	public abstract CQLQueryResults processQuery(CQLQuery cqlQuery) 
 		throws MalformedQueryException, QueryProcessingException;
 }
