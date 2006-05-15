@@ -394,8 +394,8 @@ public class SyncTools {
 						if (type.getClassName() != null) {
 							if (ntype.getLocation() != null) {
 								excludeSet.add(ntype.getNamespace());
-								TemplateUtils.walkSchemasGetNamespaces(schemaDir, schemaDir + File.separator
-									+ ntype.getLocation(), excludeSet);
+								TemplateUtils.walkSchemasGetNamespaces(
+									schemaDir + File.separator + ntype.getLocation(), excludeSet);
 							}
 						}
 					}

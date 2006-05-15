@@ -1,5 +1,8 @@
 package gov.nih.nci.cagrid.data.common;
 
+import gov.nih.nci.cagrid.encoding.SDKDeserializerFactory;
+import gov.nih.nci.cagrid.encoding.SDKSerializerFactory;
+
 import java.io.File;
 
 import javax.xml.namespace.QName;
@@ -23,6 +26,10 @@ public class DataServiceConstants {
 	public static final String DATA_METADATA_SCHEMA = METADATA_SCHEMA_LOCATION + File.separator + "data" + File.separator + "data.xsd";
 	public static final String COMMON_METADATA_SCHEMA = METADATA_SCHEMA_LOCATION + File.separator + "common" + File.separator + "common.xsd";
 	public static final String DATA_METADATA_URI = "gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice";
+	
+	// sdk serializer constants
+	public static final String SDK_SERIALIZER = SDKSerializerFactory.class.getName();
+	public static final String SDK_DESERIALIZER = SDKDeserializerFactory.class.getName();
 
 	// query schema constants
 	public static final String CQL_QUERY_SCHEMA = "1_gov.nih.nci.cagrid.CQLQuery.xsd";

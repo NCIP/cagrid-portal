@@ -103,9 +103,17 @@ public class TemplateUtils {
 	}
 
 
-	public static void walkSchemasGetNamespaces(File schemaDir, String fileName, Set namespaces) throws Exception {
-		System.out.println("Looking at schema " + fileName);
-		Document schema = XMLUtilities.fileNameToDocument(fileName);
+	/**
+	 * Walks a schema tree, following imports and placing namespaces in the namespaces set
+	 * @param schemaFile
+	 * 		The <i><b>FULLY QUALIFIED</i></b> file name of an XML schema
+	 * @param namespaces
+	 * 		The set of namespaces to populate
+	 * @throws Exception
+	 */
+	public static void walkSchemasGetNamespaces(String schemaFile, Set namespaces) throws Exception {
+		System.out.println("Looking at schema " + schemaFile);
+		Document schema = XMLUtilities.fileNameToDocument(schemaFile);
 		List importEls = schema.getRootElement().getChildren("import",
 			schema.getRootElement().getNamespace(IntroduceConstants.W3CNAMESPACE));
 		for (int i = 0; i < importEls.size(); i++) {
@@ -115,12 +123,13 @@ public class TemplateUtils {
 				System.out.println("adding namepace " + namespace);
 			}
 			String location = importEl.getAttributeValue("schemaLocation");
-			if (!fileName.equals(schemaDir + File.separator + location)) {
-				walkSchemasGetNamespaces(schemaDir, schemaDir + File.separator + location, namespaces);
+			File currentPath = new File(schemaFile).getCanonicalFile().getParentFile();
+			if (!schemaFile.equals(currentPath.getCanonicalPath() + File.separator + location)) {
+				File importedSchema = new File(currentPath + File.separator + location);
+				walkSchemasGetNamespaces(importedSchema.getCanonicalPath(), namespaces);
 			} else {
-				System.err.println("WARNING: Schema is importing itself. " + fileName);
+				System.err.println("WARNING: Schema is importing itself. " + schemaFile);
 			}
 		}
-
 	}
 }

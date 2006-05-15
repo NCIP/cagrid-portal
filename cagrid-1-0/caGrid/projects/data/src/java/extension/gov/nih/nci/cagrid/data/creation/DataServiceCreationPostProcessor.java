@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.data.creation;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.common.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
@@ -13,6 +14,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionPostProcessor;
@@ -26,9 +28,17 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.xml.namespace.QName;
+
+import org.jdom.Document;
+import org.projectmobius.common.MobiusException;
+import org.projectmobius.common.XMLUtilities;
 
 /** 
  *  DataServiceCreationPostProcessor
@@ -90,8 +100,16 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		namespaces.setNamespace(dsNamespaces);
 		description.setNamespaces(namespaces);
 		// add the metadata namespace to the nsexcludes property
+		System.out.println("Excludig metadata namespace from processing");
 		String excludes = props.getProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES);
-		excludes += " -x " + DataServiceConstants.DATA_METADATA_URI;
+		Set excludeNamespaces = new HashSet();
+		File dataSchemaFile = new File(schemaDir + File.separator + DataServiceConstants.DATA_METADATA_SCHEMA);
+		TemplateUtils.walkSchemasGetNamespaces(dataSchemaFile.getCanonicalPath(), excludeNamespaces);
+		Iterator excludeIter = excludeNamespaces.iterator();
+		while (excludeIter.hasNext()) {
+			String namespace = (String) excludeIter.next();
+			excludes += " -x " + namespace;
+		}
 		props.setProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES, excludes);
 		// query method
 		System.out.println("Building query method");
@@ -196,5 +214,39 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		inputStream.close();
 		outputStream.flush();
 		outputStream.close();
+	}
+	
+	
+	private Set getSchemaNamespaces(File schemaDir) throws CreationExtensionException {
+		Set namespaces = new HashSet();
+		List xsdFiles = Utils.recursiveListFiles(schemaDir, new FileFilter() {
+			public boolean accept(File pathname) {
+				return pathname.getName().endsWith(".xsd");
+			}
+		});
+		Iterator fileIter = xsdFiles.iterator();
+		while (fileIter.hasNext()) {
+			String filename = ((File) fileIter.next()).getAbsolutePath();
+			System.out.println("Looking at schema " + filename);
+			try {
+				Document schema = XMLUtilities.fileNameToDocument(filename);
+				String targetNs = schema.getRootElement().getAttributeValue("targetNamespace");
+				if (namespaces.add(targetNs)) {
+					System.out.println("Adding namespace " + targetNs);
+				}
+				List importEls = schema.getRootElement().getChildren("import",
+					schema.getRootElement().getNamespace(IntroduceConstants.W3CNAMESPACE));
+				for (int i = 0; i < importEls.size(); i++) {
+					org.jdom.Element importEl = (org.jdom.Element) importEls.get(i);
+					String namespace = importEl.getAttributeValue("namespace");
+					if (namespaces.add(namespace)) {
+						System.out.println("Adding namepace " + namespace);
+					}
+				}
+			} catch (MobiusException ex) {
+				throw new CreationExtensionException("Error parsing schema for namespaces: " + ex.getMessage(), ex);
+			}
+		}
+		return namespaces;
 	}
 }
