@@ -271,23 +271,21 @@ public class ClassBrowserPanel extends JPanel {
 				}
 			});
 			Component c = classSelectionComboBox.getEditor().getEditorComponent();
-			if (c instanceof JTextField) {
-				((JTextField) c).getDocument().addDocumentListener(new DocumentListener() {
-					public void insertUpdate(DocumentEvent e) {
-				    	fireClassSelectionChanged();
-				    }
-
-
-				    public void removeUpdate(DocumentEvent e) {
-				    	fireClassSelectionChanged();
-				    }
-
-				    
-				    public void changedUpdate(DocumentEvent e) {
-				    	fireClassSelectionChanged();
-				    }
-				});
-			}
+			((JTextField) c).getDocument().addDocumentListener(new DocumentListener() {
+				public void insertUpdate(DocumentEvent e) {
+					fireClassSelectionChanged();
+				}
+				
+				
+				public void removeUpdate(DocumentEvent e) {
+					fireClassSelectionChanged();
+				}
+				
+				
+				public void changedUpdate(DocumentEvent e) {
+					fireClassSelectionChanged();
+				}
+			});
 		}
 		return classSelectionComboBox;
 	}
