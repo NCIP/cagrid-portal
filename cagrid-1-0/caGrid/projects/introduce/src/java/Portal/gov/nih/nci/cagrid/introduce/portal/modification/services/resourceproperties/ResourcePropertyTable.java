@@ -1,13 +1,14 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties;
 
 import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 
 import java.util.Vector;
 
 import javax.swing.ListSelectionModel;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.xml.namespace.QName;
 
@@ -21,17 +22,11 @@ import javax.xml.namespace.QName;
 public class ResourcePropertyTable extends PortalBaseTable {
 
 	public static String NAMESPACE = "Namespace";
-
 	public static String TYPE = "Type";
-
 	public static String POPULATE_FROM_FILE = "Populate From File";
-
 	public static String REGISTER = "Register";
 
-	public static String DATA1 = "DATA1";
-
 	private ResourcePropertiesListType metadatas;
-
 
 	public ResourcePropertyTable(ResourcePropertiesListType metadatas) {
 		super(createTableModel());
@@ -39,6 +34,31 @@ public class ResourcePropertyTable extends PortalBaseTable {
 		this.setColumnSelectionAllowed(false);
 		this.setRowSelectionAllowed(true);
 		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		getModel().addTableModelListener(new TableModelListener() {
+			public void tableChanged(TableModelEvent e) {
+				if (e.getType() == TableModelEvent.UPDATE) {
+					int row = e.getFirstRow();
+					ResourcePropertyType edit = ResourcePropertyTable.this.metadatas.getResourceProperty(row);
+					String namespace = (String) getValueAt(row, 0);
+					String type = (String) getValueAt(row, 1);
+					Boolean populateFromFile = (Boolean) getValueAt(row, 2);
+					Boolean register = (Boolean) getValueAt(row, 3);
+					
+					switch (e.getColumn()) {
+						case 0:
+						case 1:
+							edit.setQName(new QName(namespace, type));
+							break;
+						case 2:
+							edit.setPopulateFromFile(populateFromFile.booleanValue());
+							break;
+						case 3:
+							edit.setRegister(register.booleanValue());
+							break;
+					}
+				}
+			}
+		});
 		initialize();
 	}
 
@@ -46,6 +66,7 @@ public class ResourcePropertyTable extends PortalBaseTable {
 	public boolean isCellEditable(int row, int column) {
 		return true;
 	}
+	
 	
 	public ResourcePropertyType getRowData(int row) throws Exception {
 		if ((row < 0) || (row >= getRowCount())) {
@@ -73,17 +94,17 @@ public class ResourcePropertyTable extends PortalBaseTable {
 
 
 	public void addRow(ResourcePropertyType metadata) {
-		final Vector v = new Vector();
+		final Vector v = new Vector(4);
 		v.add(metadata.getQName().getNamespaceURI());
 		v.add(metadata.getQName().getLocalPart());
 		v.add(new Boolean(metadata.isPopulateFromFile()));
 		v.add(new Boolean(metadata.isRegister()));
-		v.add(v);
 
 		((DefaultTableModel) this.getModel()).addRow(v);
 		this.setRowSelectionInterval(this.getModel().getRowCount() - 1, this.getModel().getRowCount() - 1);
 		paint(getGraphics());
 	}
+	
 	
 	public void removeSelectedRow() throws Exception {
 		int row = getSelectedRow();
@@ -98,19 +119,16 @@ public class ResourcePropertyTable extends PortalBaseTable {
 		if (getRowCount() > 0) {
 			setRowSelectionInterval(oldSelectedRow - 1, oldSelectedRow - 1);
 		}
-		paint(getGraphics());
+		repaint();
 	}
+	
 
 	private void initialize() {
-		this.getColumn(DATA1).setMaxWidth(0);
-		this.getColumn(DATA1).setMinWidth(0);
-		this.getColumn(DATA1).setPreferredWidth(0);
-		
-		for (int i = this.getRowCount() - 1; i == 0; i--) {
-			this.removeRow(i);
-		}
+		while (getRowCount() != 0) {
+			removeRow(0);
+		}		
 
-		if (metadatas !=null && metadatas.getResourceProperty() != null) {
+		if (metadatas != null && metadatas.getResourceProperty() != null) {
 			for (int i = 0; i < metadatas.getResourceProperty().length; i++) {
 				this.addRow(metadatas.getResourceProperty(i));
 			}
@@ -150,7 +168,6 @@ public class ResourcePropertyTable extends PortalBaseTable {
 			addColumn(TYPE);
 			addColumn(POPULATE_FROM_FILE);
 			addColumn(REGISTER);
-			addColumn(DATA1);
 		}
 
 

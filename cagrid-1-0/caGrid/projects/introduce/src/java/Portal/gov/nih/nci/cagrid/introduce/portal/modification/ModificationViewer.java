@@ -19,7 +19,6 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
 import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
-import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
@@ -28,7 +27,6 @@ import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.ServiceModificationUIPanel;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
-import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 import gov.nih.nci.cagrid.introduce.portal.modification.properties.ServicePropertiesTable;
 import gov.nih.nci.cagrid.introduce.portal.modification.security.ServiceSecurityPanel;
@@ -36,7 +34,6 @@ import gov.nih.nci.cagrid.introduce.portal.modification.services.ServicesJTree;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodViewer;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodsTable;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ModifyResourcePropertiesPanel;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertiesPopUpMenu;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeConfigurePanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeTreeNode;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespacesJTree;
@@ -59,7 +56,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-import java.util.Vector;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -69,7 +65,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.JTree;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -810,8 +805,7 @@ public class ModificationViewer extends GridPortalComponent {
 					getNamespaceJTree().setNamespaces(info.getNamespaces());
 					getResourcesJTree().setServices(info.getServices());
 					getMethodsTable().setMethods(info.getServices().getService(0).getMethods());
-					getRpHolderPanel().reInitialize(info.getServices().getService(0).getResourcePropertiesList(),info.getNamespaces());
-					
+					getRpHolderPanel().reInitialize(info.getServices().getService(0).getResourcePropertiesList(), info.getNamespaces());
 				}
 			});
 			// diable the metadata tab if they've specified not to sync metadata
@@ -1049,7 +1043,7 @@ public class ModificationViewer extends GridPortalComponent {
 		if (namespaceAddButton == null) {
 			namespaceAddButton = new JButton();
 			namespaceAddButton.setText("Add");
-			namespaceAddButton.setIcon(IntroduceLookAndFeel.getAddIcon());
+			namespaceAddButton.setIcon(PortalLookAndFeel.getAddIcon());
 			namespaceAddButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					NamespaceType type = ((NamespaceTypeDiscoveryComponent) getDiscoveryTabbedPane()
@@ -1080,7 +1074,7 @@ public class ModificationViewer extends GridPortalComponent {
 		if (namespaceRemoveButton == null) {
 			namespaceRemoveButton = new JButton();
 			namespaceRemoveButton.setText("Remove");
-			namespaceRemoveButton.setIcon(IntroduceLookAndFeel.getRemoveIcon());
+			namespaceRemoveButton.setIcon(PortalLookAndFeel.getRemoveIcon());
 			namespaceRemoveButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
@@ -1248,9 +1242,9 @@ public class ModificationViewer extends GridPortalComponent {
 			BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance().getGridPortal(), "Save") {
 				public void process() {
 					try {
-						setProgressText("editing service metadata object");
 						// walk the methods table and create the
 						// new MethodsType array
+						setProgressText("editing methods");
 						MethodType[] methodsArray = new MethodType[methodsTable.getRowCount()];
 						for (int i = 0; i < methodsArray.length; i++) {
 							MethodType methodInstance = methodsTable.getMethodType(i);
@@ -1259,18 +1253,26 @@ public class ModificationViewer extends GridPortalComponent {
 						MethodsType methods = new MethodsType();
 						methods.setMethod(methodsArray);
 						introService.getServices().getService(0).setMethods(methods);
-
 						introService.getServices().getService(0).setServiceSecurity(securityPanel.getServiceSecurity());
 
 						// walk the service properties
+						setProgressText("editing service properties");
 						ServiceProperties properties = new ServiceProperties();
-						ServicePropertiesProperty[] propArr = new ServicePropertiesProperty[getServicePropertiesTable()
-							.getRowCount()];
+						ServicePropertiesProperty[] propArr = new ServicePropertiesProperty[getServicePropertiesTable().getRowCount()];
 						for (int i = 0; i < propArr.length; i++) {
 							propArr[i] = getServicePropertiesTable().getRowData(i);
 						}
 						properties.setProperty(propArr);
 						introService.setServiceProperties(properties);
+						
+						// walk the metadata
+						/*
+						setProgressText("editing service metadata object");
+						ResourcePropertyType[] propertyTypes = getRpHolderPanel().getConfiguredResourceProperties();
+						ResourcePropertiesListType propertyList = new ResourcePropertiesListType();
+						propertyList.setResourceProperty(propertyTypes);
+						introService.getServices().getService(0).setResourcePropertiesList(propertyList);
+						*/
 
 						// check the methods to make sure they are valid.......
 
@@ -1279,10 +1281,13 @@ public class ModificationViewer extends GridPortalComponent {
 						setProgressText("writting service document");
 						Utils.serializeDocument(methodsDirectory.getAbsolutePath() + File.separator + "introduce.xml",
 							introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
-						setProgressText("sychronizing skeleton");
+						
 						// call the sync tools
+						setProgressText("sychronizing skeleton");
 						SyncTools sync = new SyncTools(methodsDirectory);
 						sync.sync();
+						
+						// build the synchronized service
 						setProgressText("rebuilding skeleton");
 						String cmd = CommonTools.getAntCommand("clean all", methodsDirectory.getAbsolutePath());
 						Process p = CommonTools.createAndOutputProcess(cmd);
@@ -1462,7 +1467,7 @@ public class ModificationViewer extends GridPortalComponent {
 		if (addServiceProperyButton == null) {
 			addServiceProperyButton = new JButton();
 			addServiceProperyButton.setText("Add");
-			addServiceProperyButton.setIcon(IntroduceLookAndFeel.getAddIcon());
+			addServiceProperyButton.setIcon(PortalLookAndFeel.getAddIcon());
 			addServiceProperyButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if (getServicePropertyKeyTextField().getText().length() > 0) {
@@ -1490,7 +1495,7 @@ public class ModificationViewer extends GridPortalComponent {
 		if (removeServicePropertyButton == null) {
 			removeServicePropertyButton = new JButton();
 			removeServicePropertyButton.setText("Remove");
-			removeServicePropertyButton.setIcon(IntroduceLookAndFeel.getRemoveIcon());
+			removeServicePropertyButton.setIcon(PortalLookAndFeel.getRemoveIcon());
 			removeServicePropertyButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {

@@ -61,11 +61,22 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 		this.add(getMainPanel(), gridBagConstraints11);
 	}
 	
-	public void reInitialize(ResourcePropertiesListType props, NamespacesType ns){
+	
+	public void reInitialize(ResourcePropertiesListType props, NamespacesType ns) {
 		this.properties = props;
 		this.namespaces = ns;
 		this.namespacesJTree.setNamespaces(ns);
 		this.resourcePropertiesTable.setResourceProperties(props);
+	}
+	
+	
+	public ResourcePropertyType[] getConfiguredResourceProperties() throws Exception {
+		int propertyCount = getResourcePropertiesTable().getRowCount();
+		ResourcePropertyType[] configuredProperties = new ResourcePropertyType[propertyCount];
+		for (int i = 0; i < propertyCount; i++) {
+			configuredProperties[i] = getResourcePropertiesTable().getRowData(i);
+		}
+		return configuredProperties;
 	}
 
 
@@ -95,7 +106,7 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 			mainPanel.setLayout(new GridBagLayout());
 			mainPanel.add(getResourcePropertiesPanel(), gridBagConstraints5);
 			mainPanel.add(getNamespacesPanel(), gridBagConstraints6);
-			mainPanel.add(getJPanel(), gridBagConstraints9);
+			mainPanel.add(getButtonsPanel(), gridBagConstraints9);
 		}
 		return mainPanel;
 	}
@@ -214,7 +225,7 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getJPanel() {
+	private JPanel getButtonsPanel() {
 		if (buttonsPanel == null) {
 			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 			gridBagConstraints8.fill = GridBagConstraints.HORIZONTAL;
@@ -254,6 +265,7 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 		}
 		return addResourcePropertyButton;
 	}
+	
 	
 	private void addResourceProperty(){
 		if (getNamespacesJTree().getCurrentNode() instanceof SchemaElementTypeTreeNode) {
@@ -333,5 +345,4 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 		}
 		return removeResourcePropertyButton;
 	}
-
-} // @jve:decl-index=0:visual-constraint="10,10"
+}
