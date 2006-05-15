@@ -288,7 +288,7 @@
 	<!-- =============================================================== -->
 	<!-- METADATA: This may only depend on core                          -->
 	<!-- =============================================================== -->
-	<target name="build-metadata" depends="prepare" description="Builds the common metadata">
+	<target name="build-metadata" if="isJDK1.5" depends="prepare" description="Builds the common metadata">
 		<resolveDependencies extdir="${projects.dir}/metadata/ext">
 			<artifact refid="core.jars" />
 			<artifact refid="caCORE.jars" />
