@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.dorian.gridca.common;
+package gov.nih.nci.cagrid.gridca.common;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.gridca.common.CRLEntry;

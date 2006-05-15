@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.dorian.gridca.common;
+package gov.nih.nci.cagrid.gridca.common;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
@@ -55,7 +55,7 @@ public class TestKeyUtil extends TestCase {
 			assertTrue(false);
 		}	
 	}
-	
+	 /*
 	public void testCreateWriteLoadEncryptedPrivateKeyBadPassword(){
 		try{
 			String keyFile = "test-key.pem";
@@ -74,6 +74,7 @@ public class TestKeyUtil extends TestCase {
 			
 		}	
 	}
+	*/
 	
 	public void testCreateWriteLoadPrivateKey(){
 		try{
