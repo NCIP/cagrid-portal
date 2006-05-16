@@ -19,6 +19,8 @@ import gov.nih.nci.cagrid.introduce.codegen.serializers.SyncSerialization;
 import gov.nih.nci.cagrid.introduce.codegen.services.SyncServices;
 import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.creator.SkeletonSchemaCreator;
+import gov.nih.nci.cagrid.introduce.creator.SkeletonSourceCreator;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPreProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
@@ -241,6 +243,8 @@ public class SyncTools {
 				}
 			}
 		}
+		
+		createNewServices(info);
 
 		// STEP 4: write out namespace mappings and flatten the wsdl file
 		syncAndFlattenWSDL(info, schemaDir);
@@ -360,11 +364,39 @@ public class SyncTools {
 										+ getRelativeClassName(type.getName()));
 								}
 
-							}
+		 					}
 						}
 
 					}
 				}
+			}
+		}
+	}
+	
+	
+	public void createNewServices(ServiceInformation info){
+		List newServices = new ArrayList();
+		if (info.getServices() != null && info.getServices().getService() != null) {
+			for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
+				File serviceDir = new File(info.getBaseDirectory()
+					+ File.separator
+					+ "src" + File.separator
+					+  info.getServices().getService(serviceI).getPackageDir());
+				if (!serviceDir.exists()) {
+					newServices.add(info.getServices().getService(serviceI));
+				}
+			}
+		}
+		for (int i = 0; i < newServices.size(); i++) {
+			ServiceType newService = (ServiceType) newServices.get(i);
+			SkeletonSourceCreator ssc = new SkeletonSourceCreator();
+			SkeletonSchemaCreator sschc = new SkeletonSchemaCreator();
+			try {
+				System.out.println("Adding Service for: " + newService.getName());
+				ssc.createSkeleton(info.getBaseDirectory(), info, newService);
+				sschc.createSkeleton(info.getBaseDirectory(), info, newService);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -422,7 +454,7 @@ public class SyncTools {
 		// get the classnames from the axis symbol table
 		if (info.getServices().getService() != null) {
 			for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
-				//rewrite the wsdl for each service....
+				// rewrite the wsdl for each service....
 				ServiceType service = info.getServices().getService(serviceI);
 				ServiceWSDLTemplate serviceWSDLT = new ServiceWSDLTemplate();
 				String serviceWSDLS = serviceWSDLT.generate(new SpecificServiceInformation(info, service));
@@ -434,17 +466,23 @@ public class SyncTools {
 				FileWriter serviceWSDLFW = new FileWriter(serviceWSDLF);
 				serviceWSDLFW.write(serviceWSDLS);
 				serviceWSDLFW.close();
-				
-				//for each service add any imported operations.....
-				if(service.getMethods()!=null && service.getMethods().getMethod()!=null){
-					for(int methodI = 0 ; methodI < service.getMethods().getMethod().length; methodI++){
+
+			}
+		}
+		if (info.getServices().getService() != null) {
+			for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
+				// rewrite the wsdl for each service....
+				ServiceType service = info.getServices().getService(serviceI);
+				// for each service add any imported operations.....
+				if (service.getMethods() != null && service.getMethods().getMethod() != null) {
+					for (int methodI = 0; methodI < service.getMethods().getMethod().length; methodI++) {
 						MethodType method = service.getMethods().getMethod(methodI);
-						if(method.isIsImported()){
-							TemplateUtils.addImportedOperationToService(method,new SpecificServiceInformation(info,service));
+						if (method.isIsImported()) {
+							TemplateUtils.addImportedOperationToService(method, new SpecificServiceInformation(info,
+								service));
 						}
 					}
 				}
-				
 			}
 		}
 
