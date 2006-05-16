@@ -110,7 +110,7 @@ public class TemplateUtils {
 		return map;
 	}
 	
-	public static void addImportedOperationToService(MethodType method,SpecificServiceInformation serviceInfo){
+	public static void addImportedOperationToService(MethodType method,SpecificServiceInformation serviceInfo) throws Exception {
 		
 		Map prefixMap = TemplateUtils.buildWSDLImportMap(serviceInfo.getService());
 		
@@ -132,7 +132,7 @@ public class TemplateUtils {
 		    				 List toportTypes = toDoc.getRootElement().getChildren("portType",toDoc.getRootElement().getNamespace());	
 		    				    for(int i2 = 0; i2 < toportTypes.size(); i2 ++ ){
 		    				    	Element el2 = (Element)toportTypes.get(i2);
-		    				    	if(el2.getAttributeValue("name").equals(method.getImportInformation().getPortTypeName())){
+		    				    	if(el2.getAttributeValue("name").equals(serviceInfo.getService().getName() + "PortType")){
 		    				    		//found the right one...  add to here
 		    				    		el2.addContent(opEl.detach());
 		    				    	}
