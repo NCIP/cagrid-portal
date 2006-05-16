@@ -42,7 +42,7 @@
     <xsl:template match="build[not(@error)]">
         <xsl:for-each select="target">
             <Test>
-                <Name>.Build.<xsl:value-of select="position()"/></Name>
+                <Name>.Build.<xsl:value-of select="@name"/></Name>
                 <Status>passed</Status>
                 <Measurement name="StageName" type="text/string">
                     <xsl:value-of select="@name"/>
@@ -92,7 +92,7 @@
                     <xsl:if test="failure|error">failed</xsl:if>
                     <xsl:if test="not(failure|error)">passed</xsl:if>
                 </Status>
-                <Measurement name="ElapsedTime" type="numeric/float">
+                <Measurement name="Execution Time" type="numeric/float">
                     <xsl:value-of select="@time"/>
                 </Measurement>
                 <Measurement name="Output" type="text/text">
