@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-    <xsl:output method="xml"/>  
+    <xsl:output method="xml"/>
     <xsl:template match="/cruisecontrol">
         <DartSubmission version="2.0" createdby="CruiseControl">
             <!-- Extract the build info we added -->
@@ -43,7 +43,7 @@
                 <Measurement name="StageName" type="text/string">
                     <xsl:value-of select="@name"/>
                 </Measurement>
-                <!-- TODO: parse the sentenance like time to necessary format  -->
+                <!-- parse the sentenance like time to necessary format  -->
                 <Measurement name="ElapsedTime" type="numeric/float">
                     <xsl:call-template name="duration-string-to-seconds">
                         <xsl:with-param name="durationString" select="@time"/>
@@ -119,9 +119,13 @@
                     <xsl:value-of select="@time"/>
                 </Measurement>
                 <Measurement name="Output" type="text/text">
-                    <xsl:if test="not ($out='')"> SYSTEM OUT><xsl:value-of select="$out"/>
+                    <xsl:if test="not ($out='')"><xsl:text>
+</xsl:text>SYSTEM OUT><xsl:value-of
+                            select="$out"/>
                     </xsl:if>
-                    <xsl:if test="not ($err='')"> SYSTEM ERR><xsl:value-of select="$err"/>
+                    <xsl:if test="not ($err='')">
+                        <xsl:text>
+</xsl:text>SYSTEM ERR><xsl:value-of select="$err"/>
                     </xsl:if>
                     <xsl:if test="failure|error">
                         <xsl:value-of select="failure|error"/>
@@ -130,7 +134,7 @@
             </Test>
         </xsl:for-each>
     </xsl:template>
-    <!-- Ugly code to convert english like durations to numeric values -->
+    <!-- Ugly code to convert english like durations to numeric values (doesn't work with hours, although it could, because if you're build takes hours you have other problems -->
     <xsl:template name="duration-string-to-seconds">
         <xsl:param name="durationString"/>
         <xsl:choose>
