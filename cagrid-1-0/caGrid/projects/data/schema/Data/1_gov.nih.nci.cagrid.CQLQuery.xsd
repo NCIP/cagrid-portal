@@ -7,9 +7,9 @@
 			<xsd:documentation>Associated Obects used as search criteria</xsd:documentation>
 		</xsd:annotation>
 		<xsd:choice>
-			<xsd:element name="Attribute" type="cql:Attribute"/>
-			<xsd:element name="Association" type="cql:Association"/>
-			<xsd:element name="Group" type="cql:Group"/>
+			<xsd:element name="Attribute" type="cql:Attribute" minOccurs="0"/>
+			<xsd:element name="Association" type="cql:Association" minOccurs="0"/>
+			<xsd:element name="Group" type="cql:Group" minOccurs="0"/>
 		</xsd:choice>
 		<xsd:attribute name="name" type="xsd:string" use="required"/>
 	</xsd:complexType>
