@@ -20,6 +20,7 @@ import java.util.Set;
 
 import org.jdom.Document;
 import org.jdom.Element;
+import org.jdom.Namespace;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.XMLUtilities;
 
@@ -109,43 +110,93 @@ public class TemplateUtils {
 
 		return map;
 	}
-	
-	public static void addImportedOperationToService(MethodType method,SpecificServiceInformation serviceInfo) throws Exception {
-		
+
+
+	public static void addImportedOperationToService(MethodType method, SpecificServiceInformation serviceInfo)
+		throws Exception {
+
 		Map prefixMap = TemplateUtils.buildWSDLImportMap(serviceInfo.getService());
-		
-		//parse the wsdl and get the operation text.....
+
+		// parse the wsdl and get the operation text.....
 		Document fromDoc = null;
 		Document toDoc = null;
 		try {
-			fromDoc = XMLUtilities.fileNameToDocument(serviceInfo.getBaseDirectory().getAbsolutePath() + File.separator + "schema" + File.separator + serviceInfo.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator + method.getImportInformation().getWsdlFile());
-			toDoc = XMLUtilities.fileNameToDocument(serviceInfo.getBaseDirectory().getAbsolutePath() + File.separator + "schema" + File.separator + serviceInfo.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator + serviceInfo.getService().getName() + ".wsdl");
-		    List portTypes = fromDoc.getRootElement().getChildren("portType",fromDoc.getRootElement().getNamespace());	
-		    for(int i = 0; i < portTypes.size(); i ++ ){
-		    	Element el = (Element)portTypes.get(i);
-		    	if(el.getAttributeValue("name").equals(method.getImportInformation().getPortTypeName())){
-		    		List operations = el.getChildren("operation",fromDoc.getRootElement().getNamespace());
-		    		for(int j=0; j < operations.size(); j ++){
-		    			Element opEl = (Element)operations.get(j);
-		    			if(opEl.getAttributeValue("name").equals(method.getImportInformation().getOperationName())){
-		    				//need to detach the el and add it to the service which will be using it...
-		    				 List toportTypes = toDoc.getRootElement().getChildren("portType",toDoc.getRootElement().getNamespace());	
-		    				    for(int i2 = 0; i2 < toportTypes.size(); i2 ++ ){
-		    				    	Element el2 = (Element)toportTypes.get(i2);
-		    				    	if(el2.getAttributeValue("name").equals(serviceInfo.getService().getName() + "PortType")){
-		    				    		//found the right one...  add to here
-		    				    		el2.addContent(opEl.detach());
-		    				    	}
-		    				    }
-		    				break;
-		    			}
-		    		}
-		    	break;
+			fromDoc = XMLUtilities.fileNameToDocument(serviceInfo.getBaseDirectory().getAbsolutePath()
+				+ File.separator
+				+ "schema"
+				+ File.separator
+				+ serviceInfo.getIntroduceServiceProperties().getProperty(
+					IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator
+				+ method.getImportInformation().getWsdlFile());
+			toDoc = XMLUtilities.fileNameToDocument(serviceInfo.getBaseDirectory().getAbsolutePath()
+				+ File.separator
+				+ "schema"
+				+ File.separator
+				+ serviceInfo.getIntroduceServiceProperties().getProperty(
+					IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator
+				+ serviceInfo.getService().getName() + ".wsdl");
+			List portTypes = fromDoc.getRootElement().getChildren("portType", fromDoc.getRootElement().getNamespace());
+			for (int i = 0; i < portTypes.size(); i++) {
+				Element el = (Element) portTypes.get(i);
+				if (el.getAttributeValue("name").equals(method.getImportInformation().getPortTypeName())) {
+					List operations = el.getChildren("operation", fromDoc.getRootElement().getNamespace());
+					for (int j = 0; j < operations.size(); j++) {
+						Element opEl = (Element) operations.get(j);
+						if (opEl.getAttributeValue("name").equals(method.getImportInformation().getOperationName())) {
+							// need to detach the el and add it to the service
+							// which will be using it...
+							List toportTypes = toDoc.getRootElement().getChildren("portType",
+								toDoc.getRootElement().getNamespace());
+							for (int i2 = 0; i2 < toportTypes.size(); i2++) {
+								Element el2 = (Element) toportTypes.get(i2);
+								if (el2.getAttributeValue("name").equals(
+									serviceInfo.getService().getName() + "PortType")) {
+									// found the right one... add to here
+									Element copEl = (Element)opEl.clone();
+									List copElChildren = copEl.getChildren();
+									for(int childi = 0; childi < copElChildren.size(); childi++){
+										Element copElChild = (Element)copElChildren.get(childi);
+										String messageString = copElChild.getAttributeValue("message");
+										Namespace ns = null;
+										String prefix = "";
+										String message = "";
+										if(messageString.indexOf(":")>=0){
+											prefix = messageString.substring(0,messageString.indexOf(":"));
+											message = messageString.substring(messageString.indexOf(":")+1);
+											ns = fromDoc.getRootElement().getNamespace(prefix);
+											
+										} else {
+											message = messageString;
+											ns = fromDoc.getRootElement().getNamespace();
+										}
+										List nslist = toDoc.getRootElement().getAdditionalNamespaces();
+										for(int nsli = 0; nsli < nslist.size(); nsli++){
+											Namespace tempns = (Namespace)nslist.get(nsli);
+											System.out.println("Looking at prefix: " + tempns.getURI());
+											if(tempns.getURI().equals(ns.getURI())){
+												copElChild.setAttribute("message",tempns.getPrefix() + ":" + message);
+											}
+										}
+									}
+									el2.addContent(copEl);
+									break;
+								}
+							}
+							break;
+						}
+					}
+					break;
 				}
-		    }
-		    FileWriter fw = new FileWriter(serviceInfo.getBaseDirectory().getAbsolutePath() + File.separator + "schema" + File.separator + serviceInfo.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator + serviceInfo.getService().getName() + ".wsdl");
-		    fw.write(XMLUtilities.formatXML(XMLUtilities.documentToString(toDoc)));
-		    fw.close();
+			}
+			FileWriter fw = new FileWriter(serviceInfo.getBaseDirectory().getAbsolutePath()
+				+ File.separator
+				+ "schema"
+				+ File.separator
+				+ serviceInfo.getIntroduceServiceProperties().getProperty(
+					IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator
+				+ serviceInfo.getService().getName() + ".wsdl");
+			fw.write(XMLUtilities.formatXML(XMLUtilities.documentToString(toDoc)));
+			fw.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -161,7 +212,8 @@ public class TemplateUtils {
 				MethodType method = service.getMethods().getMethod(i);
 				if (method.isIsImported()) {
 					if (!map.containsKey(method.getImportInformation().getNamespace())) {
-						ImportInformation ii = new ImportInformation(method.getImportInformation(),"wns" + namespaceCount++);
+						ImportInformation ii = new ImportInformation(method.getImportInformation(), "wns"
+							+ namespaceCount++);
 						map.put(method.getImportInformation().getNamespace(), ii);
 					}
 				}
@@ -173,11 +225,14 @@ public class TemplateUtils {
 
 
 	/**
-	 * Walks a schema tree, following imports and placing namespaces in the namespaces set
+	 * Walks a schema tree, following imports and placing namespaces in the
+	 * namespaces set
+	 * 
 	 * @param schemaFile
-	 * 		The <i><b>FULLY QUALIFIED</i></b> file name of an XML schema
+	 *            The <i><b>FULLY QUALIFIED</i></b> file name of an XML
+	 *            schema
 	 * @param namespaces
-	 * 		The set of namespaces to populate
+	 *            The set of namespaces to populate
 	 * @throws Exception
 	 */
 	public static void walkSchemasGetNamespaces(String schemaFile, Set namespaces) throws Exception {

@@ -17,6 +17,7 @@ import gov.nih.nci.cagrid.introduce.beans.security.SecureMessage;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 import gov.nih.nci.cagrid.introduce.info.SchemaInformation;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
@@ -31,7 +32,10 @@ import java.util.StringTokenizer;
 
 import org.apache.axis.utils.JavaUtils;
 import org.apache.ws.jaxme.js.JavaMethod;
+import org.apache.ws.jaxme.js.JavaSource;
+import org.apache.ws.jaxme.js.JavaSourceFactory;
 import org.apache.ws.jaxme.js.Parameter;
+import org.apache.ws.jaxme.js.util.JavaParser;
 
 
 /**
@@ -54,7 +58,7 @@ public class SyncSource {
 
 	private String serviceProviderImpl;
 
-	private String packageName;
+	// private String packageName;
 
 	private ServiceInformation serviceInfo;
 
@@ -65,7 +69,7 @@ public class SyncSource {
 		// this.baseDir = baseDir;
 		this.service = service;
 		this.serviceInfo = info;
-		this.packageName = service.getPackageName() + ".stubs";
+		// this.packageName = service.getPackageName() + ".stubs";
 		serviceClient = baseDir.getAbsolutePath() + File.separator + "src" + File.separator + service.getPackageDir()
 			+ File.separator + "client" + File.separator + service.getName() + "Client.java";
 		serviceInterface = baseDir.getAbsolutePath() + File.separator + "src" + File.separator
@@ -82,6 +86,11 @@ public class SyncSource {
 		String exceptions = "";
 		// process the faults for this method...
 		MethodTypeExceptions exceptionsEl = method.getExceptions();
+		String packageName = service.getPackageName() + ".stubs";
+		if (method.isIsImported()) {
+			packageName = serviceInfo.getNamespaceType(method.getImportInformation().getNamespace()).getPackageName()
+				+ ".stubs";
+		}
 		exceptions += "RemoteException";
 		if (exceptionsEl != null && exceptionsEl.getException() != null) {
 			if (exceptionsEl.getException().length > 0) {
@@ -91,7 +100,7 @@ public class SyncSource {
 				MethodTypeExceptionsException fault = exceptionsEl.getException(i);
 				// hack for now, should look at the namespace in the
 				// element.....
-				exceptions += this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(fault.getName());
+				exceptions += packageName + "." + TemplateUtils.upperCaseFirstCharacter(fault.getName());
 				if (i < exceptionsEl.getException().length - 1) {
 					exceptions += ", ";
 				}
@@ -149,7 +158,7 @@ public class SyncSource {
 	}
 
 
-	private String createUnBoxedSignatureStringFromMethod(JavaMethod method) {
+	private String createUnBoxedSignatureStringFromMethod(JavaMethod method) throws Exception {
 		String methodString = "";
 		String methodName = method.getName();
 		String returnType = "";
@@ -189,30 +198,60 @@ public class SyncSource {
 	}
 
 
-	private String createBoxedSignatureStringFromMethod(MethodType method) {
+	private String createBoxedSignatureStringFromMethod(MethodType method) throws Exception {
+		String packageName = service.getPackageName() + ".stubs";
+		if (method.isIsImported()) {
+			packageName = serviceInfo.getNamespaceType(method.getImportInformation().getNamespace()).getPackageName()
+				+ ".stubs";
+		}
+
 		String methodString = "";
 
 		String methodName = method.getName();
 		String returnType = null;
-		returnType = this.packageName + "." + getBoxedOutputTypeName(methodName);
+		returnType = packageName + "." + getBoxedOutputTypeName(methodName);
 
 		methodString += "public " + returnType + " " + methodName + "(";
 
 		// boxed
-		methodString += this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + "Request params";
+		methodString += packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + "Request params";
 
 		methodString += ")";
 		return methodString;
 	}
 
 
-	private String createBoxedSignatureStringFromMethod(JavaMethod method) {
+	private String createBoxedSignatureStringFromMethod(JavaMethod method) throws Exception {
 		String methodString = "";
 		String methodName = method.getName();
 		String returnType = "";
 
+		JavaSource sourceI;
+		JavaSourceFactory jsf;
+		JavaParser jp;
+
+		jsf = new JavaSourceFactory();
+		jp = new JavaParser(jsf);
+
+		jp.parse(new File(serviceProviderImpl));
+		sourceI = (JavaSource) jsf.getJavaSources().next();
+		sourceI.setForcingFullyQualifiedName(true);
+
+		System.out.println(sourceI.getClassName());
+
+		JavaMethod[] methods = sourceI.getMethods();
+
+		String packageName = "";
+		for (int i = 0; i < methods.length; i++) {
+			;
+			if (methods[i].getName().equals(methodName)) {
+				packageName = methods[i].getType().getPackageName();
+				break;
+			}
+		}
+
 		// need to box the output type
-		returnType = this.packageName + "." + getBoxedOutputTypeName(methodName);
+		returnType = packageName + "." + getBoxedOutputTypeName(methodName);
 
 		methodString += "public " + returnType + " " + methodName + "(";
 		// Parameter[] inputs = method.getParams();
@@ -220,14 +259,20 @@ public class SyncSource {
 		// if (inputs.length > 1 || inputs.length == 0) {
 
 		// boxed
-		methodString += this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + "Request params";
+		methodString += packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + "Request params";
 
 		methodString += ")";
+		
+		jsf = null;
+		jp = null;
+		sourceI = null;
+		System.gc();
+		
 		return methodString;
 	}
 
 
-	public void addMethods(List additions) {
+	public void addMethods(List additions)  throws Exception {
 		for (int i = 0; i < additions.size(); i++) {
 			// add it to the interface
 			MethodType method = (MethodType) additions.get(i);
@@ -269,7 +314,7 @@ public class SyncSource {
 	}
 
 
-	public void modifyMethods(List modifiedMethods) {
+	public void modifyMethods(List modifiedMethods) throws Exception {
 		for (int i = 0; i < modifiedMethods.size(); i++) {
 			// add it to the interface
 			Modification mod = (Modification) modifiedMethods.get(i);
@@ -467,6 +512,12 @@ public class SyncSource {
 
 
 	private void addClientImpl(MethodType method) {
+		String packageName = service.getPackageName() + ".stubs";
+		if (method.isIsImported()) {
+			packageName = serviceInfo.getNamespaceType(method.getImportInformation().getNamespace()).getPackageName()
+				+ ".stubs";
+		}
+
 		StringBuffer fileContent = null;
 		String methodName = method.getName();
 		try {
@@ -495,9 +546,8 @@ public class SyncSource {
 
 		// always a boxed call now becuase using complex types in the wsdl
 		// create handle for the boxed wrapper
-		methodString += this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName)
-			+ "Request params = new " + this.packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName)
-			+ "Request();\n";
+		methodString += packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + "Request params = new "
+			+ packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + "Request();\n";
 		// set the values fo the boxed wrapper
 		if (method.getInputs() != null && method.getInputs().getInput() != null) {
 			for (int j = 0; j < method.getInputs().getInput().length; j++) {
@@ -527,7 +577,7 @@ public class SyncSource {
 
 		// always boxed returns now because of complex types in wsdl
 		String returnTypeBoxed = getBoxedOutputTypeName(methodName);
-		methodString += this.packageName + "." + returnTypeBoxed + " boxedResult = " + var + "." + methodName
+		methodString += packageName + "." + returnTypeBoxed + " boxedResult = " + var + "." + methodName
 			+ "(params);\n";
 		methodString += lineStart;
 		if (!returnTypeEl.getQName().getNamespaceURI().equals("")
@@ -589,7 +639,13 @@ public class SyncSource {
 	}
 
 
-	private void addProviderImpl(MethodType method) {
+	private void addProviderImpl(MethodType method) throws Exception {
+		String packageName = service.getPackageName() + ".stubs";
+		if (method.isIsImported()) {
+			packageName = serviceInfo.getNamespaceType(method.getImportInformation().getNamespace()).getPackageName()
+				+ ".stubs";
+		}
+
 		StringBuffer fileContent = null;
 		try {
 			fileContent = Utils.fileToStringBuffer(new File(this.serviceProviderImpl));
@@ -660,7 +716,7 @@ public class SyncSource {
 
 		// need to unbox on the way out
 		methodString += lineStart;
-		methodString += this.packageName + "." + returnTypeBoxed + " boxedResult = new " + this.packageName + "."
+		methodString += packageName + "." + returnTypeBoxed + " boxedResult = new " + packageName + "."
 			+ returnTypeBoxed + "();\n";
 		methodString += lineStart;
 		if (returnTypeEl.getQName().getNamespaceURI().equals("")
@@ -695,7 +751,7 @@ public class SyncSource {
 	}
 
 
-	public void removeMethods(List removals) {
+	public void removeMethods(List removals) throws Exception {
 		for (int i = 0; i < removals.size(); i++) {
 			JavaMethod method = (JavaMethod) removals.get(i);
 
@@ -744,7 +800,7 @@ public class SyncSource {
 	}
 
 
-	private void removeClientImpl(JavaMethod method) {
+	private void removeClientImpl(JavaMethod method) throws Exception {
 		StringBuffer fileContent = null;
 		try {
 			fileContent = Utils.fileToStringBuffer(new File(this.serviceClient));
@@ -774,7 +830,7 @@ public class SyncSource {
 	}
 
 
-	private void removeProviderImpl(JavaMethod method) {
+	private void removeProviderImpl(JavaMethod method) throws Exception {
 		StringBuffer fileContent = null;
 		try {
 			fileContent = Utils.fileToStringBuffer(new File(this.serviceProviderImpl));
@@ -805,7 +861,7 @@ public class SyncSource {
 	}
 
 
-	private void modifyImpl(Modification mod) {
+	private void modifyImpl(Modification mod)  throws Exception {
 		MethodType method = mod.getMethodType();
 		JavaMethod oldMethod = mod.getJavaMethod();
 
@@ -844,7 +900,7 @@ public class SyncSource {
 	}
 
 
-	private void removeImpl(JavaMethod method) {
+	private void removeImpl(JavaMethod method) throws Exception {
 		StringBuffer fileContent = null;
 		try {
 			fileContent = Utils.fileToStringBuffer(new File(this.serviceImpl));

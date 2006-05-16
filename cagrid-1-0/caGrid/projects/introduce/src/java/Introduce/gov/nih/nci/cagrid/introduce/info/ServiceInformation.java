@@ -87,6 +87,19 @@ public class ServiceInformation {
 	public File getBaseDirectory() {
 		return baseDirectory;
 	}
+	
+	public NamespaceType getNamespaceType(String namespaceURI){
+		if (introService.getNamespaces() != null && introService.getNamespaces().getNamespace() != null) {
+			NamespaceType[] namespaces = introService.getNamespaces().getNamespace();
+			for (int i = 0; i < namespaces.length; i++) {
+				NamespaceType namespace = namespaces[i];
+				if (namespace.getNamespace().equals(namespaceURI)) {
+					return namespace;
+				}
+			}
+		}
+		return null;
+	}
 
 
 	public SchemaInformation getSchemaInformation(QName qname) {

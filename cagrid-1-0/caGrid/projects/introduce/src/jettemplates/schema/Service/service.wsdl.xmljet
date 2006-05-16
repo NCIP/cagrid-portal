@@ -34,6 +34,7 @@
     <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl"
         location="../wsrf/faults/WS-BaseFaults.wsdl"/>
 <%
+	imiterator = imprefixmap.keySet().iterator();
 		while(imiterator.hasNext()){
 			String namespace = (String)imiterator.next();
 			ImportInformation importInformation=(ImportInformation)imprefixmap.get(namespace);
