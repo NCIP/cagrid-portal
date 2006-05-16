@@ -48,11 +48,11 @@
                     <xsl:value-of select="@name"/>
                 </Measurement>
                 <!-- TODO: parse the sentenance like time to necessary format  -->
-                <!--
                 <Measurement name="ElapsedTime" type="numeric/float">
-                    <xsl:value-of select="@time"/>
+                    <xsl:call-template name="duration-string-to-seconds">
+                        <xsl:with-param name="durationString" select="@time"/>
+                    </xsl:call-template>
                 </Measurement>
-                -->
                 <Measurement name="Log" type="text/text">
                     <xsl:for-each select=".//message">
                         <xsl:apply-templates select="."/>
@@ -62,7 +62,7 @@
         </xsl:for-each>
     </xsl:template>
     <xsl:template match="message">
-<xsl:text>
+        <xsl:text>
 </xsl:text>
         <xsl:value-of select="."/>
     </xsl:template>
@@ -92,7 +92,7 @@
                     <xsl:if test="failure|error">failed</xsl:if>
                     <xsl:if test="not(failure|error)">passed</xsl:if>
                 </Status>
-                <Measurement name="Time" type="numeric/float">
+                <Measurement name="ElapsedTime" type="numeric/float">
                     <xsl:value-of select="@time"/>
                 </Measurement>
                 <Measurement name="Output" type="text/text">
@@ -106,5 +106,44 @@
                 </Measurement>
             </Test>
         </xsl:for-each>
+    </xsl:template>
+    <!-- Ugly code to convert english like durations to numeric values -->
+    <xsl:template name="duration-string-to-seconds">
+        <xsl:param name="durationString"/>
+        <xsl:choose>
+            <xsl:when test="contains($durationString,'minutes')">
+                <xsl:variable name="num"
+                    select="normalize-space(substring-before($durationString,'minutes'))"/>
+                <xsl:variable name="remaining"
+                    select="normalize-space(substring-after($durationString,'minutes'))"/>
+                <xsl:variable name="minsInSecs">
+                    <xsl:value-of select="60 * $num"/>
+                </xsl:variable>
+                <xsl:variable name="recursion">
+                    <xsl:call-template name="duration-string-to-seconds">
+                        <xsl:with-param name="durationString" select="$remaining"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:value-of select="$minsInSecs + $recursion"/>
+            </xsl:when>
+            <xsl:when test="contains($durationString,'minute')">
+                <xsl:variable name="num"
+                    select="normalize-space(substring-before($durationString,'minute'))"/>
+                <xsl:variable name="remaining"
+                    select="normalize-space(substring-after($durationString,'minute'))"/>
+                <xsl:variable name="minsInSecs">
+                    <xsl:value-of select="60 * $num"/>
+                </xsl:variable>
+                <xsl:variable name="recursion">
+                    <xsl:call-template name="duration-string-to-seconds">
+                        <xsl:with-param name="durationString" select="$remaining"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:value-of select="$minsInSecs + $recursion"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="normalize-space(substring-before($durationString,'second'))"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 </xsl:stylesheet>
