@@ -16,3 +16,12 @@ wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata/cagrid:serviceDescription
 
 #operation name
 wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata/cagrid:serviceDescription/serv:Service/serv:serviceContextCollection/serv:ServiceContext/serv:operationCollection/serv:Operation[serv:name/text()='operationName']
+
+#input
+wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata/cagrid:serviceDescription/serv:Service/serv:serviceContextCollection/serv:ServiceContext/serv:operationCollection/serv:Operation/serv:inputParameterCollection/serv:InputParam/com:UMLClass[UML_CRITERIA]
+
+#output
+wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata/cagrid:serviceDescription/serv:Service/serv:serviceContextCollection/serv:ServiceContext/serv:operationCollection/serv:Operation/serv:output/serv:Output/com:UMLClass[UML_CRITERIA]
+
+#class (input or output)
+wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata/cagrid:serviceDescription/serv:Service/serv:serviceContextCollection/serv:ServiceContext/serv:operationCollection/serv:Operation[serv:output/serv:Output/com:UMLClass[UML_CRITERIA] or serv:inputParameterCollection/serv:InputParam/com:UMLClass[UML_CRITERIA]]

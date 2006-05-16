@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.discovery.ResourcePropertyHelper;
 import gov.nih.nci.cagrid.discovery.XPathUtils;
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 import gov.nih.nci.cagrid.metadata.common.PointOfContact;
+import gov.nih.nci.cagrid.metadata.common.UMLClass;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -176,6 +177,74 @@ public class DiscoveryClient {
 
 
 	/**
+	 * Searches to find services that have an operation defined that takes the
+	 * given UMLClass as input. Any fields set on the UMLClass are checked for a
+	 * match. For example, you can set only the packageName, and only it will be
+	 * checked, or you can specify several feilds and they all must be equal.
+	 * 
+	 * NOTE: Only attributes of the UMLClass are examined (associated objects
+	 * (e.g. UMLAttributeCollection and SemanticMetadataCollection) are
+	 * ignored).
+	 * 
+	 * @param clazzPrototype
+	 *            The protype UMLClass
+	 * @return EndpointReferenceType[] matching the criteria
+	 */
+	public EndpointReferenceType[] discoverServicesByOperationInput(UMLClass clazzPrototype) throws Exception {
+		String umlClassPredicate = buildUMLClassPredicate(clazzPrototype);
+
+		return discoverByFilter(OPER_PATH + "/" + serv + ":inputParameterCollection/" + serv + ":InputParam/" + com
+			+ ":UMLClass[" + umlClassPredicate + "]");
+	}
+
+
+	/**
+	 * Searches to find services that have an operation defined that produces
+	 * the given UMLClass. Any fields set on the UMLClass are checked for a
+	 * match. For example, you can set only the packageName, and only it will be
+	 * checked, or you can specify several feilds and they all must be equal.
+	 * 
+	 * NOTE: Only attributes of the UMLClass are examined (associated objects
+	 * (e.g. UMLAttributeCollection and SemanticMetadataCollection) are
+	 * ignored).
+	 * 
+	 * @param clazzPrototype
+	 *            The protype UMLClass
+	 * @return EndpointReferenceType[] matching the criteria
+	 */
+	public EndpointReferenceType[] discoverServicesByOperationOutput(UMLClass clazzPrototype) throws Exception {
+		String umlClassPredicate = buildUMLClassPredicate(clazzPrototype);
+
+		return discoverByFilter(OPER_PATH + "/" + serv + ":output/" + serv + ":Output/" + com + ":UMLClass["
+			+ umlClassPredicate + "]");
+	}
+
+
+	/**
+	 * Searches to find services that have an operation defined that produces
+	 * the given UMLClass or takes it as input. Any fields set on the UMLClass
+	 * are checked for a match. For example, you can set only the packageName,
+	 * and only it will be checked, or you can specify several feilds and they
+	 * all must be equal.
+	 * 
+	 * NOTE: Only attributes of the UMLClass are examined (associated objects
+	 * (e.g. UMLAttributeCollection and SemanticMetadataCollection) are
+	 * ignored).
+	 * 
+	 * @param clazzPrototype
+	 *            The protype UMLClass
+	 * @return EndpointReferenceType[] matching the criteria
+	 */
+	public EndpointReferenceType[] discoverServicesByOperationClass(UMLClass clazzPrototype) throws Exception {
+		String umlClassPredicate = buildUMLClassPredicate(clazzPrototype);
+
+		return discoverByFilter(OPER_PATH + "[" + serv + ":output/" + serv + ":Output/" + com + ":UMLClass["
+			+ umlClassPredicate + "] or " + serv + ":inputParameterCollection/" + serv + ":InputParam/" + com
+			+ ":UMLClass[" + umlClassPredicate + "]" + "]");
+	}
+
+
+	/**
 	 * Builds up a predicate for a PointOfContact, based on the prototype passed
 	 * in.
 	 * 
@@ -197,7 +266,33 @@ public class DiscoveryClient {
 		}
 
 		return pocPredicate;
+	}
 
+
+	/**
+	 * Builds up a predicate for a UMLClass, based on the prototype passed in.
+	 * 
+	 * NOTE: Only attributes of the UMLClass are examined (associated objects
+	 * (e.g. UMLAttributeCollection and SemanticMetadataCollection) are
+	 * ignored).
+	 * 
+	 * @param clazz
+	 *            the prototype UMLClass
+	 * @return "*" if the prototype has no non-null or non-whitespace values, or
+	 *         the predicate necessary to match all values.
+	 */
+	protected static String buildUMLClassPredicate(UMLClass clazz) {
+		String umlPredicate = "*";
+
+		if (clazz != null) {
+			umlPredicate += addNonNullPredicate(com + ":projectName", clazz.getProjectName(), false);
+			umlPredicate += addNonNullPredicate(com + ":projectVersion", clazz.getProjectVersion(), false);
+			umlPredicate += addNonNullPredicate(com + ":className", clazz.getClassName(), false);
+			umlPredicate += addNonNullPredicate(com + ":packageName", clazz.getPackageName(), false);
+			umlPredicate += addNonNullPredicate(com + ":description", clazz.getDescription(), false);
+		}
+
+		return umlPredicate;
 	}
 
 
@@ -258,11 +353,6 @@ public class DiscoveryClient {
 
 	// ----service----
 	// discoverServicesByConceptCode
-	// discoverServicesByOperationName
-	// discoverServicesByOperationClass
-	// discoverServicesByOperationInputClass
-	// discoverServicesByOperationOutputClass
-	//
 	// ----data----
 	// discoverDataServicesByModelName
 	// discoverDataServicesByConceptCode

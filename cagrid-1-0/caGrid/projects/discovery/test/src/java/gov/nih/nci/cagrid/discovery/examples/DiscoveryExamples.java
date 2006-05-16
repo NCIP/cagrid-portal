@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.discovery.examples;
 
 import gov.nih.nci.cagrid.discovery.client.DiscoveryClient;
 import gov.nih.nci.cagrid.metadata.common.PointOfContact;
+import gov.nih.nci.cagrid.metadata.common.UMLClass;
 
 import org.apache.axis.message.addressing.EndpointReferenceType;
 
@@ -23,8 +24,13 @@ public class DiscoveryExamples {
 
 		String searchString = "Scott";
 		String center = "OSU";
+		PointOfContact poc = new PointOfContact();
+		poc.setFirstName("Scott");
+		poc.setLastName("Oster");
 		String servName = "CaDSRService";
 		String operName = "findAllProjects";
+		UMLClass umlClass = new UMLClass();
+		umlClass.setClassName("Project");
 
 		try {
 			EndpointReferenceType[] services = null;
@@ -41,9 +47,6 @@ public class DiscoveryExamples {
 			services = client.discoverServicesByResearchCenter(center);
 			printResults(services);
 
-			PointOfContact poc = new PointOfContact();
-			poc.setFirstName("Scott");
-			poc.setLastName("Oster");
 			printHeader("POC [" + poc + "]");
 			services = client.discoverServicesByPointOfContact(poc);
 			printResults(services);
@@ -54,6 +57,18 @@ public class DiscoveryExamples {
 
 			printHeader("Operation name [" + operName + "]");
 			services = client.discoverServicesByOperationName(operName);
+			printResults(services);
+
+			printHeader("Operation input [" + umlClass + "]");
+			services = client.discoverServicesByOperationInput(umlClass);
+			printResults(services);
+
+			printHeader("Operation output [" + umlClass + "]");
+			services = client.discoverServicesByOperationOutput(umlClass);
+			printResults(services);
+
+			printHeader("Operation class [" + umlClass + "]");
+			services = client.discoverServicesByOperationClass(umlClass);
 			printResults(services);
 
 		} catch (Exception e) {
