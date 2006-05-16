@@ -1,25 +1,11 @@
 package gov.nih.nci.cagrid.introduce.codegen.services;
 
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
-import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods;
-import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.creator.SkeletonSchemaCreator;
-import gov.nih.nci.cagrid.introduce.creator.SkeletonSourceCreator;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.naming.resources.BaseDirContext;
-import org.apache.ws.jaxme.js.JavaMethod;
-import org.apache.ws.jaxme.js.JavaSource;
-import org.apache.ws.jaxme.js.JavaSourceFactory;
-import org.apache.ws.jaxme.js.util.JavaParser;
 
 
 /**
@@ -33,9 +19,6 @@ import org.apache.ws.jaxme.js.util.JavaParser;
  *          Exp $
  */
 public class SyncServices extends SyncTool {
-
-	private String serviceInterface;
-	
 
 
 	public SyncServices(File baseDirectory, ServiceInformation info) {

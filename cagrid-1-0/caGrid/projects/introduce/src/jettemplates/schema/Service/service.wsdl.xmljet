@@ -27,6 +27,7 @@
 <%  		
 		}
 %>    xmlns="http://schemas.xmlsoap.org/wsdl/">
+ 
     <import
         namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
         location="../wsrf/properties/WS-ResourceProperties.wsdl"/>
@@ -82,6 +83,7 @@
 			if(methods!=null && methods.getMethod()!=null){
 	      		for (int methodsI = 0; methodsI < methods.getMethod().length ; methodsI++) {
 	      			MethodType method = methods.getMethod(methodsI);
+	      			if(!method.isIsImported()){
 	      			%>
 				<element name="<%=TemplateUtils.upperCaseFirstCharacter(method.getName())%>Request">
 					<complexType>
@@ -167,11 +169,13 @@
 					</complexType>
 				</element>
 				<%
+			}
 		}
 		
 		if(methods!=null && methods.getMethod()!=null){
       		for (int methodsI = 0; methodsI < methods.getMethod().length ; methodsI++) {
       			MethodType method = methods.getMethod(methodsI);
+      			if(!method.isIsImported()){
       			if(method.getExceptions()!=null && method.getExceptions().getException()!=null){
       				for(int exceptionI = 0; exceptionI < method.getExceptions().getException().length; exceptionI++){
       					MethodTypeExceptionsException exception = method.getExceptions().getException(exceptionI);
@@ -187,6 +191,7 @@
 				</element>
       					<%
       					}
+      				}
       				}
 				}
     		}
@@ -222,6 +227,7 @@
 if(methods!=null && methods.getMethod()!=null){
 	for (int methodsI = 0; methodsI < methods.getMethod().length ; methodsI++) {
 		MethodType method = methods.getMethod(methodsI);
+		if(!method.isIsImported()){
 %>
 	<message name="<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Request">
 		<part name="parameters" element="tns:<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Request"/>
@@ -231,6 +237,7 @@ if(methods!=null && methods.getMethod()!=null){
 		<part name="parameters" element="tns:<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Response"/>
 	</message>
 <%
+	}
 	}
 }
 

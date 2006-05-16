@@ -118,8 +118,8 @@ public class TemplateUtils {
 		Document fromDoc = null;
 		Document toDoc = null;
 		try {
-			fromDoc = XMLUtilities.fileNameToDocument(serviceInfo.getBaseDirectory().getAbsolutePath() + File.separator + "schema" + serviceInfo.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator + method.getImportInformation().getWsdlFile());
-			toDoc = XMLUtilities.fileNameToDocument(serviceInfo.getBaseDirectory().getAbsolutePath() + File.separator + "schema" + serviceInfo.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator + serviceInfo.getService().getName() + ".wsdl");
+			fromDoc = XMLUtilities.fileNameToDocument(serviceInfo.getBaseDirectory().getAbsolutePath() + File.separator + "schema" + File.separator + serviceInfo.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator + method.getImportInformation().getWsdlFile());
+			toDoc = XMLUtilities.fileNameToDocument(serviceInfo.getBaseDirectory().getAbsolutePath() + File.separator + "schema" + File.separator + serviceInfo.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator + serviceInfo.getService().getName() + ".wsdl");
 		    List portTypes = fromDoc.getRootElement().getChildren("portType",fromDoc.getRootElement().getNamespace());	
 		    for(int i = 0; i < portTypes.size(); i ++ ){
 		    	Element el = (Element)portTypes.get(i);
@@ -143,7 +143,7 @@ public class TemplateUtils {
 		    	break;
 				}
 		    }
-		    FileWriter fw = new FileWriter(serviceInfo.getBaseDirectory().getAbsolutePath() + File.separator + "schema" + serviceInfo.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator + serviceInfo.getService().getName() + ".wsdl");
+		    FileWriter fw = new FileWriter(serviceInfo.getBaseDirectory().getAbsolutePath() + File.separator + "schema" + File.separator + serviceInfo.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator + serviceInfo.getService().getName() + ".wsdl");
 		    fw.write(XMLUtilities.formatXML(XMLUtilities.documentToString(toDoc)));
 		    fw.close();
 		} catch (Exception e) {
@@ -160,8 +160,8 @@ public class TemplateUtils {
 			for (int i = 0; i < service.getMethods().getMethod().length; i++) {
 				MethodType method = service.getMethods().getMethod(i);
 				if (method.isIsImported()) {
-					ImportInformation ii = new ImportInformation(method.getImportInformation(),"wns" + namespaceCount++);
 					if (!map.containsKey(method.getImportInformation().getNamespace())) {
+						ImportInformation ii = new ImportInformation(method.getImportInformation(),"wns" + namespaceCount++);
 						map.put(method.getImportInformation().getNamespace(), ii);
 					}
 				}
