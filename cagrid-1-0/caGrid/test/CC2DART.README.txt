@@ -11,3 +11,7 @@ CC does not provide prior revision for modifications
  	-better than a broken link :)
 
 Not sure what I'm missing for build errors, but they aren't working right. 	
+
+
+TODO:
+parse messages out as warnings?

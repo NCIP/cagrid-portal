@@ -33,6 +33,7 @@
                     <xsl:when test="../../build[@error]">
                         <Name>.Build.<xsl:value-of select="@name"/>.Error</Name>
                         <Status>failed</Status>
+                        <Measurement name="ErrorCount" type="numeric/integer">1</Measurement>
                     </xsl:when>
                     <xsl:otherwise>
                         <Name>.Build.<xsl:value-of select="@name"/></Name>
