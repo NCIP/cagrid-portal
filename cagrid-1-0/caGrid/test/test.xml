@@ -132,7 +132,10 @@
 	
 	<!-- ONLY to be called from cruise control's antpublisher (it passes some properties) -->
 	<target name="ccpublish">
-		<property name="dart.logfile" value="${logdir}/${logfile}" />
+		<property name="cc.logfile" location="${logdir}/${logfile}"/>
+		<echo message="${cc.logfile}"/>
+		<xslt in="${cc.logfile}" out="${test.logs.dir}/DartSubmission.xml" style="${test.dir}/CC2DART.xsl" />
+		<property name="dart.logfile" value="${test.logs.dir}/DartSubmission.xml" />
 		<ant target="publish" />
 	</target>
 </project>

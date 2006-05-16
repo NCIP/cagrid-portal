@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+    <xsl:output method="xml"/>  
     <xsl:template match="/cruisecontrol">
         <DartSubmission version="2.0" createdby="CruiseControl">
             <!-- Extract the build info we added -->
@@ -7,7 +8,7 @@
             <!-- Extract any properties -->
             <xsl:apply-templates select="info/property"/>
             <!-- Extract updates -->
-            <xsl:apply-templates select="modifications/modification"/>
+            <xsl:apply-templates select="modifications"/>
             <!-- Extract Build -->
             <xsl:apply-templates select="build"/>
             <!-- Extract Tests -->
@@ -25,25 +26,19 @@
         </DateTimeStamp>
     </xsl:template>
     <!-- create the build log -->
-    <xsl:template match="build[@error]">
-        <Test>
-            <Name>.Build</Name>
-            <Status>failed</Status>
-            <Measurement name="Text" type="text/string">
-                <xsl:value-of select="stacktrace"/>
-            </Measurement>
-            <Measurement name="Log" type="text/text">
-                <xsl:for-each select=".//message">
-                    <xsl:apply-templates select="."/>
-                </xsl:for-each>
-            </Measurement>
-        </Test>
-    </xsl:template>
-    <xsl:template match="build[not(@error)]">
+    <xsl:template match="build">
         <xsl:for-each select="target">
             <Test>
-                <Name>.Build.<xsl:value-of select="@name"/></Name>
-                <Status>passed</Status>
+                <xsl:choose>
+                    <xsl:when test="../../build[@error]">
+                        <Name>.Build.<xsl:value-of select="@name"/>.Error</Name>
+                        <Status>failed</Status>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <Name>.Build.<xsl:value-of select="@name"/></Name>
+                        <Status>passed</Status>
+                    </xsl:otherwise>
+                </xsl:choose>
                 <Measurement name="StageName" type="text/string">
                     <xsl:value-of select="@name"/>
                 </Measurement>
@@ -66,17 +61,44 @@
 </xsl:text>
         <xsl:value-of select="."/>
     </xsl:template>
-    <xsl:template match="modification">
-        <!-- TODO: what is the Update format? -->
-        <!--<file action="modified">
-            <revision>1.12</revision>
-            <filename>introduceJournal.doc</filename>
-            <project>Documentation/docs/introduce</project>
-        </file>
-        <date>2006-05-16T14:38:07.0-0400</date>
-        <user>kurc</user>
-        <comment>*** empty log message ***</comment>
-        <revision>1.12</revision>-->
+    <xsl:template match="modifications">
+        <Test>
+            <Name>.Update.Update</Name>
+            <Status>passed</Status>
+        </Test>
+        <xsl:for-each select="modification">
+            <Test>
+                <Name>.Update.Update.Update<xsl:value-of select="position()"/></Name>
+                <Status>passed</Status>
+                <Measurement name="File" type="text/string">
+                    <xsl:value-of select="@type"/>
+                </Measurement>
+                <Measurement name="File" type="text/string">
+                    <xsl:value-of select="file/filename"/>
+                </Measurement>
+                <Measurement name="Directory" type="text/string">
+                    <xsl:value-of select="file/project"/>
+                </Measurement>
+                <Measurement name="CheckinDate" type="text/string">
+                    <xsl:value-of select="date"/>
+                </Measurement>
+                <Measurement name="Author" type="text/string">
+                    <xsl:value-of select="user"/>
+                </Measurement>
+                <Measurement name="Revision" type="text/string">
+                    <xsl:value-of select="revision"/>
+                </Measurement>
+                <Measurement name="PriorRevision" type="text/string">
+                    <!-- CruiseControl with CVS doesn't provide prior revision, so lets hack a guess to be previous minor rev (Won't always be right, but better than nothing) -->
+                    <xsl:value-of
+                        select="concat(substring-before(revision,'.'),concat('.',substring-after(revision,'.')
+                        - 1))"/>
+                </Measurement>
+                <Measurement name="Log" type="text/string">
+                    <xsl:value-of select="comment"/>
+                </Measurement>
+            </Test>
+        </xsl:for-each>
     </xsl:template>
     <xsl:template match="testsuite">
         <xsl:variable name="out">
