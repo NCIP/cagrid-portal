@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.gridca.portal;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.security.ProxyUtil;
 
 import java.io.File;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.globus.gsi.GlobusCredential;
-import org.globus.util.ConfigUtil;
+
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -32,11 +33,11 @@ public class ProxyManager {
 
 	private Map proxiesToFile;
 
+
 	private ProxyManager() {
 		this.proxies = new HashMap();
 		this.proxiesToFile = new HashMap();
-		String dir = ConfigUtil.globus_dir + File.separator + "cagrid"
-				+ File.separator + "proxy";
+		String dir = Utils.getCaGridUserHome() + File.separator + File.separator + "proxy";
 		proxyDir = new File(dir);
 		proxyDir.mkdirs();
 		FileFilter ff = new ProxyFilter();
@@ -48,8 +49,7 @@ public class ProxyManager {
 					lastId = fileId;
 				}
 
-				GlobusCredential cred = ProxyUtil.loadProxy(list[i]
-						.getAbsolutePath());
+				GlobusCredential cred = ProxyUtil.loadProxy(list[i].getAbsolutePath());
 				if (cred.getTimeLeft() == 0) {
 					list[i].delete();
 				} else {
@@ -64,12 +64,14 @@ public class ProxyManager {
 		}
 	}
 
+
 	private long getFileId(File f) throws Exception {
 		String name = f.getName();
 		int index = name.indexOf(".proxy");
 		String sid = name.substring(0, index);
 		return Long.valueOf(sid).longValue();
 	}
+
 
 	public class ProxyFilter implements FileFilter {
 
@@ -90,6 +92,7 @@ public class ProxyManager {
 
 	}
 
+
 	public static ProxyManager getInstance() {
 		if (instance == null) {
 			instance = new ProxyManager();
@@ -97,13 +100,15 @@ public class ProxyManager {
 		return instance;
 	}
 
-	public synchronized void addProxy(GlobusCredential cred) throws Exception{
+
+	public synchronized void addProxy(GlobusCredential cred) throws Exception {
 		proxies.put(cred.getIdentity(), cred);
-		lastId = lastId+1;
-	    File f = new File(proxyDir.getAbsolutePath()+File.separator+lastId+".proxy");
-	    ProxyUtil.saveProxy(cred,f.getAbsolutePath());
-	    proxiesToFile.put(cred.getIdentity(),f);
+		lastId = lastId + 1;
+		File f = new File(proxyDir.getAbsolutePath() + File.separator + lastId + ".proxy");
+		ProxyUtil.saveProxy(cred, f.getAbsolutePath());
+		proxiesToFile.put(cred.getIdentity(), f);
 	}
+
 
 	public synchronized void deleteProxy(GlobusCredential cred) {
 		proxies.remove(cred.getIdentity());
@@ -112,15 +117,16 @@ public class ProxyManager {
 		proxiesToFile.remove(cred.getIdentity());
 	}
 
+
 	public synchronized List getProxies() {
 		List l = new ArrayList();
 		Iterator itr = this.proxies.values().iterator();
 		while (itr.hasNext()) {
-			GlobusCredential cred = (GlobusCredential)itr.next();
-			if(cred.getTimeLeft()==0){
+			GlobusCredential cred = (GlobusCredential) itr.next();
+			if (cred.getTimeLeft() == 0) {
 				deleteProxy(cred);
-			}else{
-			l.add(cred);
+			} else {
+				l.add(cred);
 			}
 		}
 		return l;

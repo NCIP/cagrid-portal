@@ -42,12 +42,13 @@ public class CreateManyHostCertificates {
 			X509Certificate cacert = cacert = CertUtil.loadCertificate(new File(cert));
 			
 			List hostList = new ArrayList();
-			hostList.add("cagrid01.bmi.ohio-state.edu");
-			hostList.add("cagrid02.bmi.ohio-state.edu");
-			hostList.add("cagrid03.bmi.ohio-state.edu");
-			hostList.add("cagrid04.bmi.ohio-state.edu");
-			hostList.add("cagrid05.bmi.ohio-state.edu");
-			hostList.add("putty");
+			//hostList.add("cagrid01.bmi.ohio-state.edu");
+			//hostList.add("cagrid02.bmi.ohio-state.edu");
+			//hostList.add("cagrid03.bmi.ohio-state.edu");
+			//hostList.add("cagrid04.bmi.ohio-state.edu");
+			//hostList.add("cagrid05.bmi.ohio-state.edu");
+			hostList.add("gcity");
+			hostList.add("rosco");
 
 			for (int i = 0; i <hostList.size(); i++) {
 				String cn = (String)hostList.get(i);
