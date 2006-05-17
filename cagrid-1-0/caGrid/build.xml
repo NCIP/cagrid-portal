@@ -207,9 +207,15 @@
 				<include name="*.jar" />
 			</fileset>
 		</artifact>
+		
+		<artifact track="main" type="schemas" id="data.cql.schemas">
+			<fileset dir="${projects.dir}/data/schema">
+				<include name="**/*.xsd"/>
+			</fileset>
+		</artifact>
 
 		<artifact track="main" type="jars" id="sdk.query.jars">
-			<antcall target="build-sdkQuery" />
+			<antcall target="build-sdkQuery"/>
 			<fileset dir="${projects.dir}/sdkQuery/build/lib">
 				<include name="*.jar" />
 			</fileset>
@@ -469,6 +475,9 @@
 			<artifact refid="data.jars" />
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />
+		</resolveDependencies>
+		<resolveDependencies extdir="${projects.dir}/sdkQuery/ext">
+			<artifact refid="data.cql.schemas"/>
 		</resolveDependencies>
 		<ant dir="${projects.dir}/sdkQuery" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
