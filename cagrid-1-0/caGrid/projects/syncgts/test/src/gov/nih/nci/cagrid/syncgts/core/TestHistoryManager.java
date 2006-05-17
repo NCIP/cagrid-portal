@@ -23,6 +23,7 @@ public class TestHistoryManager extends TestCase {
 		try {
 			//test multiple months
 			HistoryManager hm = new HistoryManager();
+			hm.maxSyncReports = 150;
 			DateFilter start = new DateFilter();
 			start.setYear(2004);
 			start.setMonth(1);
@@ -32,6 +33,7 @@ public class TestHistoryManager extends TestCase {
 			end.setMonth(12);
 			end.setDay(31);
 			SyncReport[] reports = hm.search(start, end, new File(baseDir + File.separator + "history"));
+			assertEquals(reports.length, 116);
 			System.out.println(reports.length);
 			
 			//test multiple years
@@ -39,6 +41,7 @@ public class TestHistoryManager extends TestCase {
 			end.setMonth(4);
 			end.setDay(1);
 			reports = hm.search(start, end, new File(baseDir + File.separator + "history"));
+			assertEquals(reports.length, 117);
 			System.out.println(reports.length);
 			
 			//test same date
@@ -49,7 +52,20 @@ public class TestHistoryManager extends TestCase {
 			end.setMonth(5);
 			end.setDay(9);
 			reports = hm.search(start, end, new File(baseDir + File.separator + "history"));
+			assertEquals(reports.length, 53);
 			System.out.println(reports.length);
+			
+			//test reports.length == 0
+			start.setYear(1990);
+			start.setMonth(1);
+			start.setDay(1);
+			end.setYear(1992);
+			end.setMonth(12);
+			end.setDay(31);
+			reports = hm.search(start, end, new File(baseDir + File.separator + "history"));
+			assertEquals(reports.length, 0);
+			System.out.println(reports.length);
+			
 			
 			//max should be reached with these dates
 			start.setYear(2004);

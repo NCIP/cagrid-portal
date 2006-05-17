@@ -20,7 +20,7 @@ import javax.xml.namespace.QName;
 public class HistoryManager {
 
 	private final static QName reportQN = new QName(SyncGTSDefault.SYNC_GTS_NAMESPACE, "SyncReport");
-	private final static int maxSyncReports = 150;
+	public static int maxSyncReports = 150;
 
 
 	public File addReport(SyncReport report) throws Exception {
