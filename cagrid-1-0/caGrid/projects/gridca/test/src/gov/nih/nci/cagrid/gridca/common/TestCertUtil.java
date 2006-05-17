@@ -33,7 +33,6 @@ public class TestCertUtil extends TestCase {
 		try {
 			InputStream certLocation = TestCase.class.getResourceAsStream(Constants.SIMPLECA_CACERT);
 			InputStream keyLocation = TestCase.class.getResourceAsStream(Constants.SIMPLECA_CAKEY);
-
 			String keyPassword = "gomets123";
 			X509Certificate[] certs = createCertificateSpecifyRootCA(certLocation, keyLocation, keyPassword, "John Doe");
 			assertEquals(2, certs.length);
