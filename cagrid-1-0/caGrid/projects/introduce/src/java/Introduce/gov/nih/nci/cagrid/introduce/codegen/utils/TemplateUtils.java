@@ -21,7 +21,6 @@ import java.util.Set;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
-import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.XMLUtilities;
 
 

@@ -98,8 +98,8 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 			browseButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
-						currentFile = new File(ResourceManager.promptFile(FileTypesSelectionComponent.this, null, FileFilters.XSD_FILTER))
-							.getAbsolutePath();
+						currentFile = new File(ResourceManager.promptFile(FileTypesSelectionComponent.this, null,
+							FileFilters.XSD_FILTER)).getAbsolutePath();
 						getFilenameText().setText(currentFile);
 						Document doc = XMLUtilities.fileNameToDocument(currentFile);
 						currentNamespace = new Namespace(doc.getRootElement().getAttributeValue("targetNamespace"));
@@ -137,22 +137,23 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 
 
 	public static void copySchemas(String fileName, File copyToDirectory) throws Exception {
+		File schemaFile = new File(fileName);
 		System.out.println("Looking at schema " + fileName);
-		Utils.copyFile(new File(fileName), new File(copyToDirectory.getAbsolutePath() + File.separator
-			+ new File(fileName).getName()));
-		Document schema = XMLUtilities.fileNameToDocument(fileName);
+		Utils.copyFile(schemaFile, new File(copyToDirectory.getAbsolutePath() + File.separator + schemaFile.getName()));
+		Document schema = XMLUtilities.fileNameToDocument(schemaFile.getCanonicalPath());
 		List importEls = schema.getRootElement().getChildren("import",
 			schema.getRootElement().getNamespace(IntroduceConstants.W3CNAMESPACE));
 		if (importEls != null) {
 			for (int i = 0; i < importEls.size(); i++) {
 				org.jdom.Element importEl = (org.jdom.Element) importEls.get(i);
 				String location = importEl.getAttributeValue("schemaLocation");
-				if ((location.indexOf(".\\") == 0) || (location.indexOf("./") == 0) || (location.indexOf("\\") > 0)
-					|| (location.indexOf("/") == 0)) {
-					File file = new File(fileName);
-					copySchemas(file.getParentFile().getAbsolutePath() + File.separator + location, copyToDirectory);
+				File currentPath = schemaFile.getCanonicalFile().getParentFile();
+				if (!schemaFile.equals(new File(currentPath.getCanonicalPath() + File.separator + location))) {
+					File importedSchema = new File(currentPath + File.separator + location);
+					copySchemas(importedSchema.getCanonicalPath(), new File(copyToDirectory.getCanonicalFile()
+						+ File.separator + location).getParentFile());
 				} else {
-					copySchemas(location, copyToDirectory);
+					System.err.println("WARNING: Schema is importing itself. " + schemaFile);
 				}
 			}
 		}

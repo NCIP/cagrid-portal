@@ -93,6 +93,7 @@ public class Utils {
 
 	public static void copyFile(File in, File out) throws Exception {
 		FileInputStream fis = new FileInputStream(in);
+		out.getCanonicalFile().getParentFile().mkdirs();
 		FileOutputStream fos = new FileOutputStream(out);
 		byte[] buf = new byte[1024];
 		int i = 0;
