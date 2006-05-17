@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.dorian.client;
 
-
-
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.Utils;
@@ -15,6 +13,7 @@ import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.dorian.wsrf.DorianPortType;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -22,25 +21,24 @@ import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class IdPAuthenticationClient extends DorianBaseClient implements
-		IdPAuthentication {
+public class IdPAuthenticationClient extends DorianBaseClient implements IdPAuthentication {
 
 	private BasicAuthCredential cred;
 	private CommunicationStyle style;
-	
-	public IdPAuthenticationClient(String serviceURI,CommunicationStyle style, BasicAuthCredential cred) {
+
+
+	public IdPAuthenticationClient(String serviceURI, CommunicationStyle style, BasicAuthCredential cred) {
 		super(serviceURI);
 		this.cred = cred;
 		this.style = style;
 	}
-	
-	
 
-	public SAMLAssertion authenticate() throws DorianFault,DorianInternalFault, PermissionDeniedFault {
+
+	public SAMLAssertion authenticate() throws DorianFault, DorianInternalFault, PermissionDeniedFault {
 		DorianPortType port = null;
 		try {
 			port = this.getPort(style);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			DorianFault fault = new DorianFault();
 			fault.setFaultString(e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
@@ -50,13 +48,13 @@ public class IdPAuthenticationClient extends DorianBaseClient implements
 		}
 		try {
 			String xml = port.authenticateWithIdP(cred).getXml();
-			//System.out.println(XMLUtilities.formatXML(xml));
+			// System.out.println(XMLUtilities.formatXML(xml));
 			return SAMLUtils.stringToSAMLAssertion(xml);
-		}catch(DorianInternalFault gie){
+		} catch (DorianInternalFault gie) {
 			throw gie;
-		}catch (PermissionDeniedFault ilf){
+		} catch (PermissionDeniedFault ilf) {
 			throw ilf;
-		}catch (Exception e) {
+		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			DorianFault fault = new DorianFault();
 			fault.setFaultString(Utils.getExceptionMessage(e));

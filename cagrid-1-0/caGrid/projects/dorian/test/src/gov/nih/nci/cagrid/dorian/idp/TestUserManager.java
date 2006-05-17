@@ -486,6 +486,41 @@ public class TestUserManager extends TestCase {
 	}
 
 
+	public void testForeignUser() {
+		try {
+			UserManager um = new UserManager(db, conf);
+
+			IdPUser u = new IdPUser();
+			u.setUserId("user");
+			u.setEmail("user@mail.com");
+			u.setPassword("password");
+			u.setFirstName("first");
+			u.setLastName("last");
+			u.setAddress("address");
+			u.setAddress2("address2");
+			u.setCity("Somewhere");
+			u.setState(StateCode.Outside_US);
+			u.setZipcode("43210");
+			u.setCountry(CountryCode.US);
+			u.setPhoneNumber("+44 141 330 4359");
+			u.setOrganization("organization");
+			u.setStatus(IdPUserStatus.Active);
+			u.setRole(IdPUserRole.Non_Administrator);
+			um.addUser(u);
+			assertTrue(um.userExists(u.getUserId()));
+
+			IdPUser u2 = um.getUser(u.getUserId());
+			u2.setPassword(Crypt.crypt(u.getPassword()));
+			assertEquals(u, u2);
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+
+	}
+
+
 	private IdPUserFilter getActiveUserFilter() {
 		IdPUserFilter filter = new IdPUserFilter();
 		filter.setStatus(IdPUserStatus.Active);
