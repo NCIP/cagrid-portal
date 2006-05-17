@@ -29,7 +29,6 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.globus.common.CoGProperties;
 import org.projectmobius.common.MobiusDate;
-import org.projectmobius.common.MobiusPoolManager;
 import org.projectmobius.common.MobiusRunnable;
 
 
@@ -49,12 +48,10 @@ public class SyncGTS {
 	private HistoryManager history;
 	private static SyncGTS instance;
 	private boolean lock = false;
-	private MobiusPoolManager threadManager;
-
+	
 
 	private SyncGTS() {
 		this.history = new HistoryManager();
-		this.threadManager = new MobiusPoolManager();
 		logger = Logger.getLogger(this.getClass().getName());
 	}
 
@@ -93,7 +90,7 @@ public class SyncGTS {
 
 	public void syncAndResync(final SyncDescription description, boolean waitFirst) throws Exception {
 		if (getLock()) {
-			threadManager.execute(getRunner(description, waitFirst));
+			getRunner(description, waitFirst).run();
 			releaseLock();
 		} else {
 			throw new Exception("Cannot sync unable to get lock.");
@@ -103,7 +100,9 @@ public class SyncGTS {
 
 	public void syncAndResyncInBackground(final SyncDescription description, boolean waitFirst) throws Exception {
 		if (getLock()) {
-			threadManager.executeInBackground(getRunner(description, waitFirst));
+			Thread t = new Thread(getRunner(description, waitFirst));
+			t.setDaemon(true);
+			t.start();
 			releaseLock();
 		} else {
 			throw new Exception("Cannot sync unable to get lock.");
