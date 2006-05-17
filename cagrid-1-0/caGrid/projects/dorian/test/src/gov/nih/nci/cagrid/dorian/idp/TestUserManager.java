@@ -500,9 +500,9 @@ public class TestUserManager extends TestCase {
 			u.setAddress2("address2");
 			u.setCity("Somewhere");
 			u.setState(StateCode.Outside_US);
-			u.setZipcode("43210");
+			u.setZipcode("G12 8QQ");
 			u.setCountry(CountryCode.US);
-			u.setPhoneNumber("+44 141 330 4359");
+			u.setPhoneNumber("+44 141 330 4119");
 			u.setOrganization("organization");
 			u.setStatus(IdPUserStatus.Active);
 			u.setRole(IdPUserRole.Non_Administrator);
