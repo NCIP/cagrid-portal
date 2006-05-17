@@ -21,6 +21,7 @@ import junit.framework.TestCase;
 import org.bouncycastle.asn1.x509.CRLReason;
 import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
+import org.globus.gsi.proxy.ProxyPathValidator;
 
 
 /**
