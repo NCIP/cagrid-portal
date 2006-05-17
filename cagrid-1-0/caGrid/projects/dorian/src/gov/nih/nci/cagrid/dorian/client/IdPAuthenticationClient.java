@@ -15,8 +15,6 @@ import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.dorian.wsrf.DorianPortType;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
-import org.projectmobius.common.XMLUtilities;
-
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -52,7 +50,7 @@ public class IdPAuthenticationClient extends DorianBaseClient implements
 		}
 		try {
 			String xml = port.authenticateWithIdP(cred).getXml();
-			System.out.println(XMLUtilities.formatXML(xml));
+			//System.out.println(XMLUtilities.formatXML(xml));
 			return SAMLUtils.stringToSAMLAssertion(xml);
 		}catch(DorianInternalFault gie){
 			throw gie;

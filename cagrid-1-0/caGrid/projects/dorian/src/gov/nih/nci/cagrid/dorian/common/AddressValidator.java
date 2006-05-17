@@ -49,7 +49,7 @@ public class AddressValidator {
 		Matcher zipMat = zipPattern.matcher(zip);
 		if (!zipMat.matches()) {
 			throw new IllegalArgumentException(
-					"Invalid phone number, correct format is 55555");
+					"Invalid zip code, correct format is 55555");
 		}
 	}
 }
