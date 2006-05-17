@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.syncgts.bean.DateFilter;
 import gov.nih.nci.cagrid.syncgts.bean.SyncReport;
 
 import java.io.File;
+import java.io.FileReader;
 
 import javax.xml.namespace.QName;
 
@@ -19,7 +20,7 @@ import javax.xml.namespace.QName;
 public class HistoryManager {
 
 	private final static QName reportQN = new QName(SyncGTSDefault.SYNC_GTS_NAMESPACE, "SyncReport");
-	private final static int maxSyncReports = 1000;
+	private final static int maxSyncReports = 150;
 
 
 	public File addReport(SyncReport report) throws Exception {
@@ -34,7 +35,11 @@ public class HistoryManager {
 	}
 
 
-	public SyncReport[] search(DateFilter start, DateFilter end) throws Exception {
+	public SyncReport[] search(DateFilter startDate, DateFilter end) throws Exception {
+		DateFilter start = new DateFilter();
+		start.setDay(startDate.getDay());
+		start.setMonth(startDate.getMonth());
+		start.setYear(startDate.getYear());
 		SyncReport[] reports = new SyncReport[maxSyncReports];
 		int checkMax = 0;
 		int iterator = 0;
@@ -49,8 +54,56 @@ public class HistoryManager {
 				else {
 					for(int i = 0; i < fileList.length; i++)
 					{
-						reports[iterator] = this.getReport(startDir.getAbsolutePath() + File.separator + fileList[i]);
-						iterator++;
+						File inputFile = new File(startDir.getAbsolutePath()+File.separator + fileList[i]);
+						FileReader in = new FileReader(inputFile);
+						if(in.read() != -1)
+						{
+							reports[iterator] = this.getReport(startDir.getAbsolutePath() + File.separator + fileList[i]);
+							iterator++;
+						}
+						else
+							throw new Exception();
+						in.close();
+					}
+				}
+			}
+			this.incrementDate(start);
+		}
+		SyncReport[] returnReports = new SyncReport[checkMax];
+		System.arraycopy(reports, 0, returnReports, 0, returnReports.length);
+		
+		return returnReports;
+	}
+	
+	public SyncReport[] search(DateFilter startDate, DateFilter end, File histDir) throws Exception {
+		DateFilter start = new DateFilter();
+		start.setDay(startDate.getDay());
+		start.setMonth(startDate.getMonth());
+		start.setYear(startDate.getYear());
+		SyncReport[] reports = new SyncReport[maxSyncReports];
+		int checkMax = 0;
+		int iterator = 0;
+		this.incrementDate(end);
+		while(!start.equals(end)){
+			File startDir = getDirectory(start, histDir);
+			if((startDir.exists())&&(startDir.isDirectory())){
+				String[] fileList = startDir.list();
+				checkMax = checkMax + fileList.length;
+				if(checkMax > maxSyncReports)
+					throw  new Exception();
+				else {
+					for(int i = 0; i < fileList.length; i++)
+					{
+						File inputFile = new File(startDir.getAbsolutePath()+File.separator + fileList[i]);
+						FileReader in = new FileReader(inputFile);
+						if(in.read() != -1)
+						{
+							reports[iterator] = this.getReport(startDir.getAbsolutePath() + File.separator + fileList[i]);
+							iterator++;
+						}
+						else
+							throw new Exception();
+						in.close();
 					}
 				}
 			}
@@ -78,6 +131,26 @@ public class HistoryManager {
 
 	private File getDirectory(DateFilter f) {
 		File histDir = getHistoryDirectory();
+		String month;
+		String day;
+		if(f.getMonth()<10){
+			month = "0" + f.getMonth();
+		}
+		else
+			month = "" + f.getMonth();
+		
+		if(f.getDay()<10){
+			day = "0" + f.getDay();
+		}
+		else
+			day = "" + f.getDay();
+			
+		File dir = new File(histDir.getAbsolutePath() + File.separator + f.getYear() + File.separator + month
+			+ File.separator + day);
+		return dir;
+	}
+	
+	private File getDirectory(DateFilter f, File histDir) {
 		String month;
 		String day;
 		if(f.getMonth()<10){
@@ -124,25 +197,5 @@ public class HistoryManager {
 			f.setDay(f.getDay()+1);
 		
 	}
-	
-	public static void main(String[] args) {
-		HistoryManager hm = new HistoryManager();
-		DateFilter start = new DateFilter();
-		start.setYear(2006);
-		start.setMonth(5);
-		start.setDay(9);
-		DateFilter end = new DateFilter();
-		end.setYear(2006);
-		end.setMonth(5);
-		end.setDay(12);
-		try{
-			SyncReport[] reports = hm.search(start, end);
-			System.out.println(reports.length);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
 
-
-
-	}
 }
