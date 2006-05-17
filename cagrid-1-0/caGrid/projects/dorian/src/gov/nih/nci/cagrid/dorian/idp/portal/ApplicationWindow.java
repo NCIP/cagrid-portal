@@ -617,7 +617,6 @@ public class ApplicationWindow extends GridPortalComponent {
 	private JTextField getPhoneNumber() {
 		if (phoneNumber == null) {
 			phoneNumber = new JTextField();
-			phoneNumber.setText("xxx-xxx-xxxx");
 		}
 		return phoneNumber;
 	}
