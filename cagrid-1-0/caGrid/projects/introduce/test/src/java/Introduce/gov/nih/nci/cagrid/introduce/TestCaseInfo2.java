@@ -73,15 +73,8 @@ public class TestCaseInfo2 extends TestCaseInfo {
 		this.packageName = packageName;
 	}
 
-	/* (non-Javadoc)
-	 * @see gov.nih.nci.cagrid.introduce.TestCaseInfoI#getPackageDir()
-	 */
 	public String getPackageDir() {
-		return packageDir;
-	}
-
-	public void setPackageDir(String packageDir) {
-		this.packageDir = packageDir;
+		return getPackageName().replace(".",File.separator);
 	}
 	
 	public String getResourceFrameworkType() {

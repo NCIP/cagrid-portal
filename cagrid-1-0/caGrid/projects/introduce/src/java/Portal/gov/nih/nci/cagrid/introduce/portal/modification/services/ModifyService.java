@@ -30,10 +30,10 @@ public class ModifyService extends GridPortalComponent {
 	private JTextField serviceNameTextField = null;
 	private JLabel resourceFrameworkTypeLabel = null;
 	private JComboBox resourceFrameworkTypeComboBox = null;
-	private JLabel packageNameLabel = null;
-	private JTextField packageNameTextField = null;
 	private JLabel serviceNamespaceLabel = null;
 	private JTextField namespaceTextField = null;
+	private JLabel servicePackageNameLabel = null;
+	private JTextField servicePackageNameTextField = null;
 	/**
 	 * This method initializes
 	 */
@@ -43,7 +43,7 @@ public class ModifyService extends GridPortalComponent {
 		initialize();
 		getServiceNameTextField().setText(service.getName());
 		getNamespaceTextField().setText(service.getNamespace());
-		getPackageNameTextField().setText(service.getPackageName());
+		getServicePackageNameTextField().setText(service.getPackageName());
 		if (service.getResourceFrameworkType() != null
 			&& !service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_MAIN_RESOURCE)) {
 			getResourceFrameworkTypeComboBox().setSelectedItem(service.getResourceFrameworkType());
@@ -131,8 +131,7 @@ public class ModifyService extends GridPortalComponent {
 					super.mouseClicked(e);
 					service.setName(serviceNameTextField.getText());
 					service.setNamespace(namespaceTextField.getText());
-					service.setPackageName(packageNameTextField.getText());
-					service.setPackageDir(packageNameTextField.getText().replace('.', File.separatorChar));
+					service.setPackageName(servicePackageNameTextField.getText());
 					dispose();
 				}
 
@@ -149,34 +148,37 @@ public class ModifyService extends GridPortalComponent {
 	 */
 	private JPanel getContentPanel() {
 		if (contentPanel == null) {
-			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
-			gridBagConstraints10.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints10.gridy = 2;
-			gridBagConstraints10.weightx = 1.0;
-			gridBagConstraints10.gridx = 1;
-			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
-			gridBagConstraints9.gridx = 0;
-			gridBagConstraints9.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints9.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints9.gridy = 2;
-			serviceNamespaceLabel = new JLabel();
-			serviceNamespaceLabel.setText("Namespace");
 			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 			gridBagConstraints8.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints8.gridy = 1;
+			gridBagConstraints8.gridy = 2;
 			gridBagConstraints8.weightx = 1.0;
+			gridBagConstraints8.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints8.gridx = 1;
 			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
 			gridBagConstraints7.gridx = 0;
 			gridBagConstraints7.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints7.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints7.gridy = 1;
-			packageNameLabel = new JLabel();
-			packageNameLabel.setText("Package Name");
+			gridBagConstraints7.gridy = 2;
+			servicePackageNameLabel = new JLabel();
+			servicePackageNameLabel.setText("Package Name");
+			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+			gridBagConstraints10.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints10.gridy = 1;
+			gridBagConstraints10.weightx = 1.0;
+			gridBagConstraints10.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints10.gridx = 1;
+			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
+			gridBagConstraints9.gridx = 0;
+			gridBagConstraints9.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints9.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints9.gridy = 1;
+			serviceNamespaceLabel = new JLabel();
+			serviceNamespaceLabel.setText("Namespace");
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 			gridBagConstraints6.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints6.gridy = 3;
 			gridBagConstraints6.weightx = 1.0;
+			gridBagConstraints6.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints6.gridx = 1;
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.gridx = 0;
@@ -189,6 +191,7 @@ public class ModifyService extends GridPortalComponent {
 			gridBagConstraints4.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints4.gridy = 0;
 			gridBagConstraints4.weightx = 1.0;
+			gridBagConstraints4.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints4.gridx = 1;
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -203,10 +206,10 @@ public class ModifyService extends GridPortalComponent {
 			contentPanel.add(getServiceNameTextField(), gridBagConstraints4);
 			contentPanel.add(resourceFrameworkTypeLabel, gridBagConstraints5);
 			contentPanel.add(getResourceFrameworkTypeComboBox(), gridBagConstraints6);
-			contentPanel.add(packageNameLabel, gridBagConstraints7);
-			contentPanel.add(getPackageNameTextField(), gridBagConstraints8);
 			contentPanel.add(serviceNamespaceLabel, gridBagConstraints9);
 			contentPanel.add(getNamespaceTextField(), gridBagConstraints10);
+			contentPanel.add(servicePackageNameLabel, gridBagConstraints7);
+			contentPanel.add(getServicePackageNameTextField(), gridBagConstraints8);
 		}
 		return contentPanel;
 	}
@@ -241,19 +244,6 @@ public class ModifyService extends GridPortalComponent {
 
 
 	/**
-	 * This method initializes packageNameTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */
-	private JTextField getPackageNameTextField() {
-		if (packageNameTextField == null) {
-			packageNameTextField = new JTextField();
-		}
-		return packageNameTextField;
-	}
-
-
-	/**
 	 * This method initializes namespaceTextField	
 	 * 	
 	 * @return javax.swing.JTextField	
@@ -263,6 +253,19 @@ public class ModifyService extends GridPortalComponent {
 			namespaceTextField = new JTextField();
 		}
 		return namespaceTextField;
+	}
+
+
+	/**
+	 * This method initializes servicePackageNameTextField	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getServicePackageNameTextField() {
+		if (servicePackageNameTextField == null) {
+			servicePackageNameTextField = new JTextField();
+		}
+		return servicePackageNameTextField;
 	}
 
 } // @jve:decl-index=0:visual-constraint="10,10"

@@ -18,12 +18,13 @@ import javax.xml.namespace.QName;
 import com.atomicobject.haste.framework.Step;
 
 
-public class AddSimpleMethodWithArraysStep extends Step {
+public class AddSimpleMethodWithArraysStep extends BaseStep {
 	private TestCaseInfo tci;
 	private String methodName;
 
 
-	public AddSimpleMethodWithArraysStep(TestCaseInfo tci, String methodName) {
+	public AddSimpleMethodWithArraysStep(TestCaseInfo tci, String methodName, boolean build) throws Exception {
+		super(tci.getDir(),build);
 		this.tci = tci;
 		this.methodName = methodName;
 	}
@@ -32,14 +33,7 @@ public class AddSimpleMethodWithArraysStep extends Step {
 	public void runStep() throws Throwable {
 		System.out.println("Adding a simple method.");
 
-		String pathtobasedir = System.getProperty("basedir");
-		System.out.println(pathtobasedir);
-		if (pathtobasedir == null) {
-			System.err.println("basedir system property not set");
-			throw new Exception("basedir system property not set");
-		}
-
-		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(pathtobasedir + File.separator
+		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(getBaseDir() + File.separator
 			+ tci.getDir() + File.separator + "introduce.xml", ServiceDescription.class);
 		MethodsType methodsType = CommonTools.getService(introService.getServices(),tci.getName()).getMethods();
 
@@ -88,11 +82,11 @@ public class AddSimpleMethodWithArraysStep extends Step {
 		newMethods[newLength - 1] = method;
 		methodsType.setMethod(newMethods);
 
-		Utils.serializeDocument(pathtobasedir + File.separator + tci.getDir() + File.separator + "introduce.xml",
+		Utils.serializeDocument(getBaseDir() + File.separator + tci.getDir() + File.separator + "introduce.xml",
 			introService, new QName("gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
 
 		try {
-			SyncTools sync = new SyncTools(new File(pathtobasedir + File.separator + tci.getDir()));
+			SyncTools sync = new SyncTools(new File(getBaseDir() + File.separator + tci.getDir()));
 			sync.sync();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -100,15 +94,11 @@ public class AddSimpleMethodWithArraysStep extends Step {
 		}
 		
 		// look at the interface to make sure method exists.......
-		String serviceInterface = pathtobasedir + File.separator + tci.getDir() + File.separator + "src" + File.separator
+		String serviceInterface = getBaseDir() + File.separator + tci.getDir() + File.separator + "src" + File.separator
 			+ tci.getPackageDir() + File.separator + "common" + File.separator + tci.getName() + "I.java";
 		assertTrue(StepTools.methodExists(serviceInterface, methodName));
 
-		String cmd = CommonTools.getAntAllCommand(pathtobasedir + File.separator + tci.getDir());
-
-		Process p = CommonTools.createAndOutputProcess(cmd);
-		p.waitFor();
-		assertEquals("Checking build status", 0, p.exitValue());
+		buildStep();
 	}
 
 }

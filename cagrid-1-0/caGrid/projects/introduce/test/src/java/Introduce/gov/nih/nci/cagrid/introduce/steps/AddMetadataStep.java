@@ -19,11 +19,12 @@ import javax.xml.namespace.QName;
 import com.atomicobject.haste.framework.Step;
 
 
-public class AddMetadataStep extends Step {
+public class AddMetadataStep extends BaseStep {
 	private TestCaseInfo tci;
 
 
-	public AddMetadataStep(TestCaseInfo tci) {
+	public AddMetadataStep(TestCaseInfo tci, boolean build) throws Exception {
+		super(tci.getDir(),build);
 		this.tci = tci;
 	}
 
@@ -31,19 +32,12 @@ public class AddMetadataStep extends Step {
 	public void runStep() throws Throwable {
 		System.out.println("Adding metadata.");
 
-		String pathtobasedir = System.getProperty("basedir");
-		System.out.println(pathtobasedir);
-		if (pathtobasedir == null) {
-			System.err.println("basedir system property not set");
-			throw new Exception("basedir system property not set");
-		}
-
-		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(pathtobasedir + File.separator
+		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(getBaseDir() + File.separator
 			+ tci.getDir() + File.separator + "introduce.xml", ServiceDescription.class);
 		
 		//		 copy over the bookstore schema to be used with the test
-		Utils.copyFile(new File(pathtobasedir + File.separator + TestCaseInfo.GOLD_SCHEMA_DIR + File.separator
-			+ "caDSRMetadata.xsd"), new File(pathtobasedir + File.separator + tci.getDir() + File.separator + "schema"
+		Utils.copyFile(new File(getBaseDir() + File.separator + TestCaseInfo.GOLD_SCHEMA_DIR + File.separator
+			+ "caDSRMetadata.xsd"), new File(getBaseDir() + File.separator + tci.getDir() + File.separator + "schema"
 			+ File.separator + tci.getName() + File.separator + "caDSRMetadata.xsd"));
 
 		int currentLength = 0;
@@ -91,11 +85,11 @@ public class AddMetadataStep extends Step {
 		rplist.setResourceProperty(newMetadatas);
 		introService.getServices().getService(0).setResourcePropertiesList(rplist);
 
-		Utils.serializeDocument(pathtobasedir + File.separator + tci.getDir() + File.separator + "introduce.xml",
+		Utils.serializeDocument(getBaseDir() + File.separator + tci.getDir() + File.separator + "introduce.xml",
 			introService, new QName("gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
 
 		try {
-			SyncTools sync = new SyncTools(new File(pathtobasedir + File.separator + tci.getDir()));
+			SyncTools sync = new SyncTools(new File(getBaseDir() + File.separator + tci.getDir()));
 			sync.sync();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -104,18 +98,13 @@ public class AddMetadataStep extends Step {
 
 		// look at the interface to make sure method from file does not
 		// exists.......
-		String serviceInterface = pathtobasedir + File.separator + tci.getDir() + File.separator + "src" + File.separator
+		String serviceInterface = getBaseDir() + File.separator + tci.getDir() + File.separator + "src" + File.separator
 			+ tci.getPackageDir() + File.separator  + "service" + File.separator + "globus" + File.separator + "resource"
 			+ File.separator + "BaseResource.java";
 		assertFalse("Checking that BaseResource contains the load method", StepTools.methodExists(serviceInterface,
 			"loadAnalyticalServiceMetadataFromFile"));
 
-		// build the service
-		String cmd = CommonTools.getAntAllCommand(pathtobasedir + File.separator + tci.getDir());
-
-		Process p = CommonTools.createAndOutputProcess(cmd);
-		p.waitFor();
-		assertEquals("Checking build status", 0, p.exitValue());
+		buildStep();
 	}
 
 }

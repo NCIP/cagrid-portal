@@ -64,7 +64,7 @@
 		</xs:attribute>
 		<xs:attribute name="location" type="xs:string" use="optional">
 			<xs:annotation>
-				<xs:documentation>Used to specify the location schema on the local filesystem. If it
+				<xs:documentation>Used to specify the location schema or wsdl on the local filesystem. If it
 					is omitted, it is assumed it can be retrieved from a GME.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>

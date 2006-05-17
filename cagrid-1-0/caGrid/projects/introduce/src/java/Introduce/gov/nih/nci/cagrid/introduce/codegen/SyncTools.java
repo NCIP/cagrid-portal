@@ -381,7 +381,7 @@ public class SyncTools {
 				File serviceDir = new File(info.getBaseDirectory()
 					+ File.separator
 					+ "src" + File.separator
-					+  info.getServices().getService(serviceI).getPackageDir());
+					+  info.getPackageDir(info.getServices().getService(serviceI)));
 				if (!serviceDir.exists()) {
 					newServices.add(info.getServices().getService(serviceI));
 				}

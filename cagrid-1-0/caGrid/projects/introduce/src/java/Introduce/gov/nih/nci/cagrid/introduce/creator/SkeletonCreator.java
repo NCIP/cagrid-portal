@@ -64,7 +64,6 @@ public class SkeletonCreator extends Task {
 		ServiceType serviceType = new ServiceType();
 		serviceType.setName(properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
 		serviceType.setNamespace(properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN));
-		serviceType.setPackageDir(properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR));
 		serviceType.setPackageName(properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE));
 		serviceType.setResourceFrameworkType(IntroduceConstants.INTRODUCE_MAIN_RESOURCE);
 

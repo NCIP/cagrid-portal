@@ -17,31 +17,28 @@ import javax.xml.namespace.QName;
 
 import com.atomicobject.haste.framework.Step;
 
-
-public class AddMetadatatWithLoadFromFileStep extends Step {
+public class AddMetadatatWithLoadFromFileStep extends BaseStep {
 	private TestCaseInfo tci;
 
-
-	public AddMetadatatWithLoadFromFileStep(TestCaseInfo tci) {
+	public AddMetadatatWithLoadFromFileStep(TestCaseInfo tci, boolean build)
+			throws Exception {
+		super(tci.getDir(), build);
 		this.tci = tci;
 	}
-
 
 	public void runStep() throws Throwable {
 		System.out.println("Adding metadata.");
 
-		String pathtobasedir = System.getProperty("basedir");
-		System.out.println(pathtobasedir);
-		if (pathtobasedir == null) {
-			System.err.println("basedir system property not set");
-			throw new Exception("basedir system property not set");
-		}
-
-		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(pathtobasedir + File.separator
-			+ tci.getDir() + File.separator + "introduce.xml", ServiceDescription.class);
-		Utils.copyFile(new File(pathtobasedir + File.separator + TestCaseInfo.GOLD_SCHEMA_DIR + File.separator
-			+ "CommonServiceMetadata.xsd"), new File(pathtobasedir + File.separator + tci.getDir() + File.separator
-			+ "schema" + File.separator + tci.getName() + File.separator + "CommonServiceMetadata.xsd"));
+		ServiceDescription introService = (ServiceDescription) Utils
+				.deserializeDocument(getBaseDir() + File.separator
+						+ tci.getDir() + File.separator + "introduce.xml",
+						ServiceDescription.class);
+		Utils.copyFile(new File(getBaseDir() + File.separator
+				+ TestCaseInfo.GOLD_SCHEMA_DIR + File.separator
+				+ "CommonServiceMetadata.xsd"), new File(getBaseDir()
+				+ File.separator + tci.getDir() + File.separator + "schema"
+				+ File.separator + tci.getName() + File.separator
+				+ "CommonServiceMetadata.xsd"));
 		int currentLength = 0;
 		NamespacesType namespaces = introService.getNamespaces();
 		if (namespaces.getNamespace() != null) {
@@ -49,11 +46,13 @@ public class AddMetadatatWithLoadFromFileStep extends Step {
 		}
 		NamespaceType[] newNamespaceTypes = new NamespaceType[currentLength + 1];
 		if (currentLength > 0) {
-			System.arraycopy(namespaces.getNamespace(), 0, newNamespaceTypes, 0, currentLength);
+			System.arraycopy(namespaces.getNamespace(), 0, newNamespaceTypes,
+					0, currentLength);
 		}
 		NamespaceType type = new NamespaceType();
 		type.setLocation("." + File.separator + "CommonServiceMetadata.xsd");
-		type.setNamespace("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common");
+		type
+				.setNamespace("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common");
 		type.setPackageName("gov.nih.nci.cagrid.metadata.common");
 		SchemaElementType etype = new SchemaElementType();
 		etype.setType("CommonServiceMetadata");
@@ -63,13 +62,16 @@ public class AddMetadatatWithLoadFromFileStep extends Step {
 		newNamespaceTypes[currentLength] = type;
 		namespaces.setNamespace(newNamespaceTypes);
 
-		ResourcePropertiesListType metadatasType = CommonTools.getService(introService.getServices(),tci.getName()).getResourcePropertiesList();
+		ResourcePropertiesListType metadatasType = CommonTools.getService(
+				introService.getServices(), tci.getName())
+				.getResourcePropertiesList();
 
 		ResourcePropertyType metadata = new ResourcePropertyType();
 		metadata.setPopulateFromFile(true);
 		metadata.setRegister(true);
-		metadata.setQName(new QName("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common",
-			"CommonServiceMetadata"));
+		metadata.setQName(new QName(
+				"gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common",
+				"CommonServiceMetadata"));
 
 		// add new metadata to array in bean
 		// this seems to be a wierd way be adding things....
@@ -78,7 +80,10 @@ public class AddMetadatatWithLoadFromFileStep extends Step {
 		if (metadatasType.getResourceProperty() != null) {
 			newLength = metadatasType.getResourceProperty().length + 1;
 			newMetadatas = new ResourcePropertyType[newLength];
-			System.arraycopy(metadatasType.getResourceProperty(), 0, newMetadatas, 0, metadatasType.getResourceProperty().length);
+			System
+					.arraycopy(metadatasType.getResourceProperty(), 0,
+							newMetadatas, 0, metadatasType
+									.getResourceProperty().length);
 		} else {
 			newLength = 1;
 			newMetadatas = new ResourcePropertyType[newLength];
@@ -86,11 +91,13 @@ public class AddMetadatatWithLoadFromFileStep extends Step {
 		newMetadatas[newLength - 1] = metadata;
 		metadatasType.setResourceProperty(newMetadatas);
 
-		Utils.serializeDocument(pathtobasedir + File.separator + tci.getDir() + File.separator + "introduce.xml",
-			introService, new QName("gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
+		Utils.serializeDocument(getBaseDir() + File.separator + tci.getDir()
+				+ File.separator + "introduce.xml", introService, new QName(
+				"gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
 
 		try {
-			SyncTools sync = new SyncTools(new File(pathtobasedir + File.separator + tci.getDir()));
+			SyncTools sync = new SyncTools(new File(getBaseDir()
+					+ File.separator + tci.getDir()));
 			sync.sync();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -98,17 +105,15 @@ public class AddMetadatatWithLoadFromFileStep extends Step {
 		}
 
 		// look at the interface to make sure method from file exists.......
-		String serviceInterface = pathtobasedir + File.separator + tci.getDir() + File.separator + "src" + File.separator
-			+ tci.getPackageDir() + File.separator + "service" + File.separator + "globus" + File.separator + "resource"
-			+ File.separator + "BaseResource.java";
-		assertTrue("Checking that BaseResource contains the load method", StepTools.methodExists(serviceInterface,
-			"loadCommonServiceMetadataFromFile"));
+		String serviceInterface = getBaseDir() + File.separator + tci.getDir()
+				+ File.separator + "src" + File.separator + tci.getPackageDir()
+				+ File.separator + "service" + File.separator + "globus"
+				+ File.separator + "resource" + File.separator
+				+ "BaseResource.java";
+		assertTrue("Checking that BaseResource contains the load method",
+				StepTools.methodExists(serviceInterface,
+						"loadCommonServiceMetadataFromFile"));
 
-		// build the service
-		String cmd = CommonTools.getAntAllCommand(pathtobasedir + File.separator + tci.getDir());
-
-		Process p = CommonTools.createAndOutputProcess(cmd);
-		p.waitFor();
-		assertEquals("Checking build status", 0, p.exitValue());
+		buildStep();
 	}
 }

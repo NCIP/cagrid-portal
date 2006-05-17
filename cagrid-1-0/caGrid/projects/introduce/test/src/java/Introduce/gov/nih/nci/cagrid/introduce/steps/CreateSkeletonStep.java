@@ -11,11 +11,12 @@ import java.io.File;
 import com.atomicobject.haste.framework.Step;
 
 
-public class CreateSkeletonStep extends Step {
+public class CreateSkeletonStep extends BaseStep {
 	private TestCaseInfo tci;
 
 
-	public CreateSkeletonStep(TestCaseInfo tci) {
+	public CreateSkeletonStep(TestCaseInfo tci, boolean build) throws Exception {
+		super(tci.getDir(),build);
 		this.tci = tci;
 	}
 
@@ -23,25 +24,14 @@ public class CreateSkeletonStep extends Step {
 	public void runStep() throws Throwable {
 		System.out.println("Creating the service skeleton");
 
-		String pathtobasedir = System.getProperty("basedir");
-		System.out.println(pathtobasedir);
-		if (pathtobasedir == null) {
-			System.out.println("basedir system property not set");
-			throw new Exception("basedir system property not set");
-		}
-
-		String cmd = CommonTools.getAntSkeletonCreationCommand(pathtobasedir, tci.getName(), tci.getDir(), tci
+		String cmd = CommonTools.getAntSkeletonCreationCommand(getBaseDir(), tci.getName(), tci.getDir(), tci
 			.getPackageName(), tci.getNamespace(),"service_example");
 
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
 		assertEquals("Checking creation status", 0, p.exitValue());
 
-		cmd = CommonTools.getAntAllCommand(pathtobasedir + File.separator + tci.getDir());
-
-		p = CommonTools.createAndOutputProcess(cmd);
-		p.waitFor();
-		assertEquals("Checking build status", 0, p.exitValue());
+		buildStep();
 		
 		//check to see that the extensions ran ok
 		File createFile = new File(tci.getDir() + File.separator + ExampleCreationPostProcessor.class.getName());

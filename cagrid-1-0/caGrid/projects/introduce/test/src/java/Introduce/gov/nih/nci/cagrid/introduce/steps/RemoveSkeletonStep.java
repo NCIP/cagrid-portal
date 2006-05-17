@@ -5,28 +5,19 @@ import gov.nih.nci.cagrid.introduce.TestCaseInfo;
 
 import java.io.File;
 
-import com.atomicobject.haste.framework.Step;
-
-
-public class RemoveSkeletonStep extends Step {
+public class RemoveSkeletonStep extends BaseStep {
 	private TestCaseInfo tci;
 
-
-	public RemoveSkeletonStep(TestCaseInfo tci) {
+	public RemoveSkeletonStep(TestCaseInfo tci) throws Exception {
+		super(tci.getDir(), false);
 		this.tci = tci;
 	}
-
 
 	public void runStep() throws Throwable {
 		System.out.println("Removing the service skeleton");
 
-		String pathtobasedir = System.getProperty("basedir");
-		System.out.println(pathtobasedir);
-		if (pathtobasedir == null) {
-			System.out.println("basedir system property not set");
-			throw new Exception("basedir system property not set");
-		}
-		boolean results = Utils.deleteDir(new File(pathtobasedir + File.separator + tci.getDir()));
+		boolean results = Utils.deleteDir(new File(getBaseDir()
+				+ File.separator + tci.getDir()));
 		assertTrue(results);
 	}
 }

@@ -24,13 +24,14 @@ import javax.xml.namespace.QName;
 import com.atomicobject.haste.framework.Step;
 
 
-public class AddComplexMethodWithFaulsAndArraysStep extends Step {
+public class AddComplexMethodWithFaulsAndArraysStep extends BaseStep {
 	private TestCaseInfo tci;
 
 	private String methodName;
 
 
-	public AddComplexMethodWithFaulsAndArraysStep(TestCaseInfo tci, String methodName) {
+	public AddComplexMethodWithFaulsAndArraysStep(TestCaseInfo tci, String methodName, boolean build) throws Exception{
+		super(tci.getDir(),build);
 		this.tci = tci;
 		this.methodName = methodName;
 	}
@@ -39,19 +40,12 @@ public class AddComplexMethodWithFaulsAndArraysStep extends Step {
 	public void runStep() throws Throwable {
 		System.out.println("Adding a complex method with fault.");
 
-		String pathtobasedir = System.getProperty("basedir");
-		System.out.println(pathtobasedir);
-		if (pathtobasedir == null) {
-			System.err.println("basedir system property not set");
-			throw new Exception("basedir system property not set");
-		}
-
 		// copy over the bookstore schema to be used with the test
-		Utils.copyFile(new File(pathtobasedir + File.separator + TestCaseInfo.GOLD_SCHEMA_DIR + File.separator
-			+ "bookstore.xsd"), new File(pathtobasedir + File.separator + tci.getDir() + File.separator + "schema"
+		Utils.copyFile(new File(getBaseDir() + File.separator + TestCaseInfo.GOLD_SCHEMA_DIR + File.separator
+			+ "bookstore.xsd"), new File(getBaseDir() + File.separator + tci.getDir() + File.separator + "schema"
 			+ File.separator + tci.getName() + File.separator + "bookstore.xsd"));
 
-		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(pathtobasedir + File.separator
+		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(getBaseDir() + File.separator
 			+ tci.getDir() + File.separator + "introduce.xml", ServiceDescription.class);
 		
 		
@@ -126,11 +120,11 @@ public class AddComplexMethodWithFaulsAndArraysStep extends Step {
 		newMethods[newLength - 1] = method;
 		methodsType.setMethod(newMethods);
 
-		Utils.serializeDocument(pathtobasedir + File.separator + tci.getDir() + File.separator + "introduce.xml",
+		Utils.serializeDocument(getBaseDir() + File.separator + tci.getDir() + File.separator + "introduce.xml",
 			introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 		
 		try {
-			SyncTools sync = new SyncTools(new File(pathtobasedir + File.separator + tci.getDir()));
+			SyncTools sync = new SyncTools(new File(getBaseDir()+ File.separator + tci.getDir()));
 			sync.sync();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -138,14 +132,10 @@ public class AddComplexMethodWithFaulsAndArraysStep extends Step {
 		}
 
 		// look at the interface to make sure method exists.......
-		String serviceInterface = pathtobasedir + File.separator + tci.getDir() + File.separator + "src" + File.separator
+		String serviceInterface = getBaseDir() + File.separator + tci.getDir() + File.separator + "src" + File.separator
 			+ tci.getPackageDir()+ File.separator + File.separator + "common" + File.separator + tci.getName() + "I.java";
 		assertTrue(StepTools.methodExists(serviceInterface, methodName));
 
-		String cmd = CommonTools.getAntAllCommand(pathtobasedir + File.separator + tci.getDir());
-
-		Process p = CommonTools.createAndOutputProcess(cmd);
-		p.waitFor();
-		assertEquals("Checking build status", 0, p.exitValue());
+		buildStep();
 	}
 }

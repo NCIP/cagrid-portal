@@ -17,7 +17,6 @@ import gov.nih.nci.cagrid.introduce.beans.security.SecureMessage;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
-import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 import gov.nih.nci.cagrid.introduce.info.SchemaInformation;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
@@ -69,16 +68,19 @@ public class SyncSource {
 		this.serviceInfo = info;
 		// this.packageName = service.getPackageName() + ".stubs";
 		serviceClient = baseDir.getAbsolutePath() + File.separator + "src"
-				+ File.separator + service.getPackageDir() + File.separator
-				+ "client" + File.separator + service.getName() + "Client.java";
+				+ File.separator + serviceInfo.getPackageDir(service)
+				+ File.separator + "client" + File.separator
+				+ service.getName() + "Client.java";
 		serviceInterface = baseDir.getAbsolutePath() + File.separator + "src"
-				+ File.separator + service.getPackageDir() + File.separator
-				+ "common" + File.separator + service.getName() + "I.java";
+				+ File.separator + serviceInfo.getPackageDir(service)
+				+ File.separator + "common" + File.separator
+				+ service.getName() + "I.java";
 		serviceImpl = baseDir.getAbsolutePath() + File.separator + "src"
-				+ File.separator + service.getPackageDir() + File.separator
-				+ "service" + File.separator + service.getName() + "Impl.java";
+				+ File.separator + serviceInfo.getPackageDir(service)
+				+ File.separator + "service" + File.separator
+				+ service.getName() + "Impl.java";
 		serviceProviderImpl = baseDir.getAbsolutePath() + File.separator
-				+ "src" + File.separator + service.getPackageDir()
+				+ "src" + File.separator + serviceInfo.getPackageDir(service)
 				+ File.separator + "service" + File.separator + "globus"
 				+ File.separator + service.getName() + "ProviderImpl.java";
 	}
@@ -89,10 +91,7 @@ public class SyncSource {
 		MethodTypeExceptions exceptionsEl = method.getExceptions();
 		String packageName = service.getPackageName() + ".stubs";
 		if (method.isIsImported()) {
-			packageName = serviceInfo.getNamespaceType(
-					method.getImportInformation().getNamespace())
-					.getPackageName()
-					+ ".stubs";
+			packageName = method.getImportInformation().getPackageName();
 		}
 		exceptions += "RemoteException";
 		if (exceptionsEl != null && exceptionsEl.getException() != null) {
@@ -213,10 +212,7 @@ public class SyncSource {
 			throws Exception {
 		String packageName = service.getPackageName() + ".stubs";
 		if (method.isIsImported()) {
-			packageName = serviceInfo.getNamespaceType(
-					method.getImportInformation().getNamespace())
-					.getPackageName()
-					+ ".stubs";
+			packageName = method.getImportInformation().getPackageName();
 		}
 
 		String methodString = "";
@@ -540,10 +536,7 @@ public class SyncSource {
 	private void addClientImpl(MethodType method) {
 		String packageName = service.getPackageName() + ".stubs";
 		if (method.isIsImported()) {
-			packageName = serviceInfo.getNamespaceType(
-					method.getImportInformation().getNamespace())
-					.getPackageName()
-					+ ".stubs";
+			packageName = method.getImportInformation().getPackageName();
 		}
 
 		StringBuffer fileContent = null;
@@ -690,10 +683,7 @@ public class SyncSource {
 	private void addProviderImpl(MethodType method) throws Exception {
 		String packageName = service.getPackageName() + ".stubs";
 		if (method.isIsImported()) {
-			packageName = serviceInfo.getNamespaceType(
-					method.getImportInformation().getNamespace())
-					.getPackageName()
-					+ ".stubs";
+			packageName = method.getImportInformation().getPackageName();
 		}
 
 		StringBuffer fileContent = null;

@@ -6,24 +6,18 @@ import gov.nih.nci.cagrid.introduce.TestCaseInfo;
 import com.atomicobject.haste.framework.Step;
 
 
-public class RollBackStep extends Step {
+public class RollBackStep extends BaseStep {
 	private TestCaseInfo tci;
 
 
-	public RollBackStep(TestCaseInfo tci) {
+	public RollBackStep(TestCaseInfo tci) throws Exception {
+		super(tci.getDir(),false);
 		this.tci = tci;
 	}
 
 
 	public void runStep() throws Throwable {
 		System.out.println("Rolling back to previous version.");
-
-		String pathtobasedir = System.getProperty("basedir");
-		System.out.println(pathtobasedir);
-		if (pathtobasedir == null) {
-			System.err.println("basedir system property not set");
-			throw new Exception("basedir system property not set");
-		}
 
 		ResourceManager.restoreLatest(String.valueOf(System.currentTimeMillis()), tci.getName(), tci.getDir());
 

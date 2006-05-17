@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
 
 import java.io.File;
@@ -88,6 +89,10 @@ public class ServiceInformation {
 		return baseDirectory;
 	}
 	
+	public String getPackageDir(ServiceType service){
+		return service.getPackageName().replace(".",File.separator);
+	}
+	
 	public NamespaceType getNamespaceType(String namespaceURI){
 		if (introService.getNamespaces() != null && introService.getNamespaces().getNamespace() != null) {
 			NamespaceType[] namespaces = introService.getNamespaces().getNamespace();
@@ -100,7 +105,6 @@ public class ServiceInformation {
 		}
 		return null;
 	}
-
 
 	public SchemaInformation getSchemaInformation(QName qname) {
 		if (introService.getNamespaces() != null && introService.getNamespaces().getNamespace() != null) {
