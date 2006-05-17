@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.dorian.common;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -12,44 +11,10 @@ import java.util.regex.Pattern;
  */
 public class AddressValidator {
 
-	// precompiled patterns
-	// notice double escape of special characters
-	private static Pattern phonePattern = Pattern
-			.compile("\\d\\d\\d-\\d\\d\\d-\\d\\d\\d\\d");
-
-	private static Pattern zipPattern = Pattern.compile("\\d\\d\\d\\d\\d");
-
-	public static void validatePhone(String phone)
-			throws IllegalArgumentException {
-		if (phone == null) {
-			throw new IllegalArgumentException(
-					"No phone number specified, correct format is 555-555-5555");
-		}
-		Matcher phoneMat = phonePattern.matcher(phone);
-		if (!phoneMat.matches()) {
-			throw new IllegalArgumentException(
-					"Invalid phone number, correct format is 555-555-5555");
-		}
-	}
-
-	public static void validateEmail(String email)
-			throws IllegalArgumentException {
+	public static void validateEmail(String email) throws IllegalArgumentException {
 		if (email.indexOf("@") == -1) {
-			throw new IllegalArgumentException(
-					"Invalid email address specified.");
+			throw new IllegalArgumentException("Invalid email address specified.");
 		}
 	}
 
-	public static void validateZipCode(String zip)
-			throws IllegalArgumentException {
-		if (zip == null) {
-			throw new IllegalArgumentException(
-					"No zip code specified, correct format is 55555");
-		}
-		Matcher zipMat = zipPattern.matcher(zip);
-		if (!zipMat.matches()) {
-			throw new IllegalArgumentException(
-					"Invalid zip code, correct format is 55555");
-		}
-	}
 }

@@ -39,14 +39,14 @@ public class UserManager extends LoggingObject {
 
 	private IdPConfiguration conf;
 
-	public UserManager(Database db, IdPConfiguration conf)
-			throws DorianInternalFault {
+
+	public UserManager(Database db, IdPConfiguration conf) throws DorianInternalFault {
 		this.db = db;
 		this.conf = conf;
 	}
 
-	private void validateSpecifiedField(String fieldName, String name)
-			throws InvalidUserPropertyFault {
+
+	private void validateSpecifiedField(String fieldName, String name) throws InvalidUserPropertyFault {
 		if ((name == null) || (name.length() == 0)) {
 			InvalidUserPropertyFault fault = new InvalidUserPropertyFault();
 			fault.setFaultString("No " + fieldName + " specified.");
@@ -54,39 +54,31 @@ public class UserManager extends LoggingObject {
 		}
 	}
 
-	private void validatePassword(IdPUser user) throws
-			InvalidUserPropertyFault {
+
+	private void validatePassword(IdPUser user) throws InvalidUserPropertyFault {
 		String password = user.getPassword();
-		if ((password == null)
-				|| (conf.getMinimumPasswordLength() > password.length())
-				|| (conf.getMaximumPasswordLength() < password.length())) {
+		if ((password == null) || (conf.getMinimumPasswordLength() > password.length())
+			|| (conf.getMaximumPasswordLength() < password.length())) {
 			InvalidUserPropertyFault fault = new InvalidUserPropertyFault();
-			fault
-					.setFaultString("Unacceptable password, the length of the password must be between "
-							+ conf.getMinimumPasswordLength()
-							+ " and "
-							+ conf.getMaximumPasswordLength());
+			fault.setFaultString("Unacceptable password, the length of the password must be between "
+				+ conf.getMinimumPasswordLength() + " and " + conf.getMaximumPasswordLength());
 			throw fault;
 		}
 	}
 
-	private void validateUserId(IdPUser user) throws
-			InvalidUserPropertyFault {
+
+	private void validateUserId(IdPUser user) throws InvalidUserPropertyFault {
 		String uid = user.getUserId();
-		if ((uid == null) || (conf.getMinimumUIDLength() > uid.length())
-				|| (conf.getMaximumUIDLength() < uid.length())) {
+		if ((uid == null) || (conf.getMinimumUIDLength() > uid.length()) || (conf.getMaximumUIDLength() < uid.length())) {
 			InvalidUserPropertyFault fault = new InvalidUserPropertyFault();
-			fault
-					.setFaultString("Unacceptable User ID, the length of the password must be between "
-							+ conf.getMinimumUIDLength()
-							+ " and "
-							+ conf.getMaximumUIDLength());
+			fault.setFaultString("Unacceptable User ID, the length of the password must be between "
+				+ conf.getMinimumUIDLength() + " and " + conf.getMaximumUIDLength());
 			throw fault;
 		}
 	}
 
-	private void validateUser(IdPUser user) throws
-			InvalidUserPropertyFault {
+
+	private void validateUser(IdPUser user) throws InvalidUserPropertyFault {
 		validateUserId(user);
 		validatePassword(user);
 		validateSpecifiedField("First Name", user.getFirstName());
@@ -94,11 +86,11 @@ public class UserManager extends LoggingObject {
 		validateSpecifiedField("Address", user.getAddress());
 		validateSpecifiedField("City", user.getCity());
 		validateSpecifiedField("Organization", user.getOrganization());
+		validateSpecifiedField("Zip Code", user.getZipcode());
+		validateSpecifiedField("Phone", user.getPhoneNumber());
 
 		try {
-			AddressValidator.validatePhone(user.getPhoneNumber());
 			AddressValidator.validateEmail(user.getEmail());
-			AddressValidator.validateZipCode(user.getZipcode());
 		} catch (IllegalArgumentException e) {
 			InvalidUserPropertyFault fault = new InvalidUserPropertyFault();
 			fault.setFaultString(e.getMessage());
@@ -106,37 +98,31 @@ public class UserManager extends LoggingObject {
 		}
 	}
 
-	public synchronized void addUser(IdPUser user) throws DorianInternalFault,
-			InvalidUserPropertyFault {
+
+	public synchronized void addUser(IdPUser user) throws DorianInternalFault, InvalidUserPropertyFault {
 		this.buildDatabase();
 		this.validateUser(user);
 		if (userExists(user.getUserId())) {
 			InvalidUserPropertyFault fault = new InvalidUserPropertyFault();
-			fault.setFaultString("The user " + user.getUserId()
-					+ " already exists.");
+			fault.setFaultString("The user " + user.getUserId() + " already exists.");
 			throw fault;
 		}
-		db.update("INSERT INTO " + IDP_USERS_TABLE + " VALUES('"
-				+ user.getUserId() + "','" + user.getEmail() + "','"
-				+ Crypt.crypt(user.getPassword()) + "','" + user.getFirstName()
-				+ "','" + user.getLastName() + "','" + user.getOrganization()
-				+ "','" + user.getAddress() + "','" + user.getAddress2()
-				+ "','" + user.getCity() + "','" + user.getState().getValue()
-				+ "','" + user.getZipcode() + "','"
-				+ user.getCountry().getValue() + "','" + user.getPhoneNumber()
-				+ "','" + user.getStatus().getValue() + "','"
-				+ user.getRole().getValue() + "')");
+		db.update("INSERT INTO " + IDP_USERS_TABLE + " VALUES('" + user.getUserId() + "','" + user.getEmail() + "','"
+			+ Crypt.crypt(user.getPassword()) + "','" + user.getFirstName() + "','" + user.getLastName() + "','"
+			+ user.getOrganization() + "','" + user.getAddress() + "','" + user.getAddress2() + "','" + user.getCity()
+			+ "','" + user.getState().getValue() + "','" + user.getZipcode() + "','" + user.getCountry().getValue()
+			+ "','" + user.getPhoneNumber() + "','" + user.getStatus().getValue() + "','" + user.getRole().getValue()
+			+ "')");
 	}
+
 
 	public synchronized void removeUser(String uid) throws DorianInternalFault {
 		this.buildDatabase();
-		db
-				.update("DELETE FROM " + IDP_USERS_TABLE + " WHERE UID='" + uid
-						+ "'");
+		db.update("DELETE FROM " + IDP_USERS_TABLE + " WHERE UID='" + uid + "'");
 	}
 
-	private StringBuffer appendWhereOrAnd(boolean firstAppended,
-			StringBuffer sql) {
+
+	private StringBuffer appendWhereOrAnd(boolean firstAppended, StringBuffer sql) {
 		if (firstAppended) {
 			sql.append(" AND ");
 		} else {
@@ -145,12 +131,13 @@ public class UserManager extends LoggingObject {
 		return sql;
 	}
 
+
 	public IdPUser[] getUsers(IdPUserFilter filter) throws DorianInternalFault {
 		return getUsers(filter, true);
 	}
 
-	public IdPUser[] getUsers(IdPUserFilter filter, boolean includePassword)
-			throws DorianInternalFault {
+
+	public IdPUser[] getUsers(IdPUserFilter filter, boolean includePassword) throws DorianInternalFault {
 
 		this.buildDatabase();
 		Connection c = null;
@@ -173,22 +160,19 @@ public class UserManager extends LoggingObject {
 				if (filter.getFirstName() != null) {
 					sql = appendWhereOrAnd(firstAppended, sql);
 					firstAppended = true;
-					sql.append(" FIRST_NAME LIKE '%" + filter.getFirstName()
-							+ "%'");
+					sql.append(" FIRST_NAME LIKE '%" + filter.getFirstName() + "%'");
 				}
 
 				if (filter.getLastName() != null) {
 					sql = appendWhereOrAnd(firstAppended, sql);
 					firstAppended = true;
-					sql.append(" LAST_NAME LIKE '%" + filter.getLastName()
-							+ "%'");
+					sql.append(" LAST_NAME LIKE '%" + filter.getLastName() + "%'");
 				}
 
 				if (filter.getOrganization() != null) {
 					sql = appendWhereOrAnd(firstAppended, sql);
 					firstAppended = true;
-					sql.append(" ORGANIZATION LIKE '%"
-							+ filter.getOrganization() + "%'");
+					sql.append(" ORGANIZATION LIKE '%" + filter.getOrganization() + "%'");
 				}
 
 				if (filter.getAddress() != null) {
@@ -200,8 +184,7 @@ public class UserManager extends LoggingObject {
 				if (filter.getAddress2() != null) {
 					sql = appendWhereOrAnd(firstAppended, sql);
 					firstAppended = true;
-					sql.append(" ADDRESS2 LIKE '%" + filter.getAddress2()
-							+ "%'");
+					sql.append(" ADDRESS2 LIKE '%" + filter.getAddress2() + "%'");
 				}
 
 				if (filter.getCity() != null) {
@@ -213,23 +196,19 @@ public class UserManager extends LoggingObject {
 				if (filter.getState() != null) {
 					sql = appendWhereOrAnd(firstAppended, sql);
 					firstAppended = true;
-					sql.append(" STATE LIKE '%" + filter.getState().getValue()
-							+ "%'");
+					sql.append(" STATE LIKE '%" + filter.getState().getValue() + "%'");
 				}
 
 				if (filter.getCountry() != null) {
 					sql = appendWhereOrAnd(firstAppended, sql);
 					firstAppended = true;
-					sql.append(" COUNTRY LIKE '%"
-							+ filter.getCountry().getValue() + "%'");
+					sql.append(" COUNTRY LIKE '%" + filter.getCountry().getValue() + "%'");
 				}
 
 				if (filter.getZipcode() != null) {
 					sql = appendWhereOrAnd(firstAppended, sql);
 					firstAppended = true;
-					sql
-							.append(" ZIP_CODE LIKE '%" + filter.getZipcode()
-									+ "%'");
+					sql.append(" ZIP_CODE LIKE '%" + filter.getZipcode() + "%'");
 				}
 
 				if (filter.getEmail() != null) {
@@ -241,8 +220,7 @@ public class UserManager extends LoggingObject {
 				if (filter.getPhoneNumber() != null) {
 					sql = appendWhereOrAnd(firstAppended, sql);
 					firstAppended = true;
-					sql.append(" PHONE_NUMBER LIKE '%"
-							+ filter.getPhoneNumber() + "%'");
+					sql.append(" PHONE_NUMBER LIKE '%" + filter.getPhoneNumber() + "%'");
 				}
 
 				if (filter.getStatus() != null) {
@@ -292,8 +270,7 @@ public class UserManager extends LoggingObject {
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
-			fault
-					.setFaultString("Unexpected Error, could not obtain a list of users");
+			fault.setFaultString("Unexpected Error, could not obtain a list of users");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -303,12 +280,13 @@ public class UserManager extends LoggingObject {
 		}
 	}
 
+
 	public IdPUser getUser(String uid) throws DorianInternalFault, NoSuchUserFault {
 		return this.getUser(uid, true);
 	}
 
-	public IdPUser getUser(String uid, boolean includePassword)
-			throws DorianInternalFault, NoSuchUserFault {
+
+	public IdPUser getUser(String uid, boolean includePassword) throws DorianInternalFault, NoSuchUserFault {
 		this.buildDatabase();
 		IdPUser user = new IdPUser();
 		Connection c = null;
@@ -316,8 +294,7 @@ public class UserManager extends LoggingObject {
 		try {
 			c = db.getConnection();
 			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery("select * from " + IDP_USERS_TABLE
-					+ " where UID='" + uid + "'");
+			ResultSet rs = s.executeQuery("select * from " + IDP_USERS_TABLE + " where UID='" + uid + "'");
 			if (rs.next()) {
 				user.setUserId(uid);
 				user.setEmail(rs.getString("EMAIL"));
@@ -350,8 +327,7 @@ public class UserManager extends LoggingObject {
 
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString("Unexpected Error, could not obtain the user "
-					+ uid + ".");
+			fault.setFaultString("Unexpected Error, could not obtain the user " + uid + ".");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -362,39 +338,31 @@ public class UserManager extends LoggingObject {
 		return user;
 	}
 
+
 	private void buildDatabase() throws DorianInternalFault {
 		if (!dbBuilt) {
 			if (!this.db.tableExists(IDP_USERS_TABLE)) {
 				String applications = "CREATE TABLE " + IDP_USERS_TABLE + " ("
-						+ "UID VARCHAR(255) NOT NULL PRIMARY KEY,"
-						+ "EMAIL VARCHAR(255) NOT NULL,"
-						+ "PASSWORD VARCHAR(255) NOT NULL,"
-						+ "FIRST_NAME VARCHAR(255) NOT NULL,"
-						+ "LAST_NAME VARCHAR(255) NOT NULL,"
-						+ "ORGANIZATION VARCHAR(255) NOT NULL,"
-						+ "ADDRESS VARCHAR(255) NOT NULL,"
-						+ "ADDRESS2 VARCHAR(255) NOT NULL,"
-						+ "CITY VARCHAR(255) NOT NULL,"
-						+ "STATE VARCHAR(2) NOT NULL,"
-						+ "ZIP_CODE VARCHAR(20) NOT NULL,"
-						+ "COUNTRY VARCHAR(2) NOT NULL,"
-						+ "PHONE_NUMBER VARCHAR(20) NOT NULL,"
-						+ "STATUS VARCHAR(20) NOT NULL,"
-						+ "ROLE VARCHAR(20) NOT NULL,"
-						+ "INDEX document_index (EMAIL));";
+					+ "UID VARCHAR(255) NOT NULL PRIMARY KEY," + "EMAIL VARCHAR(255) NOT NULL,"
+					+ "PASSWORD VARCHAR(255) NOT NULL," + "FIRST_NAME VARCHAR(255) NOT NULL,"
+					+ "LAST_NAME VARCHAR(255) NOT NULL," + "ORGANIZATION VARCHAR(255) NOT NULL,"
+					+ "ADDRESS VARCHAR(255) NOT NULL," + "ADDRESS2 VARCHAR(255) NOT NULL,"
+					+ "CITY VARCHAR(255) NOT NULL," + "STATE VARCHAR(20) NOT NULL," + "ZIP_CODE VARCHAR(20) NOT NULL,"
+					+ "COUNTRY VARCHAR(2) NOT NULL," + "PHONE_NUMBER VARCHAR(20) NOT NULL,"
+					+ "STATUS VARCHAR(20) NOT NULL," + "ROLE VARCHAR(20) NOT NULL," + "INDEX document_index (EMAIL));";
 				db.update(applications);
 			}
 			this.dbBuilt = true;
 		}
 	}
 
-	public synchronized void updateUser(IdPUser u) throws DorianInternalFault,
-			NoSuchUserFault, InvalidUserPropertyFault {
+
+	public synchronized void updateUser(IdPUser u) throws DorianInternalFault, NoSuchUserFault,
+		InvalidUserPropertyFault {
 		this.buildDatabase();
 		if (u.getUserId() == null) {
 			NoSuchUserFault fault = new NoSuchUserFault();
-			fault.setFaultString("Could not update user, the user "
-					+ u.getUserId() + " does not exist.");
+			fault.setFaultString("Could not update user, the user " + u.getUserId() + " does not exist.");
 			throw fault;
 		} else if (userExists(u.getUserId())) {
 			StringBuffer sb = new StringBuffer();
@@ -413,12 +381,11 @@ public class UserManager extends LoggingObject {
 				}
 			}
 
-			if ((u.getEmail() != null)
-					&& (!u.getEmail().equals(curr.getEmail()))) {
+			if ((u.getEmail() != null) && (!u.getEmail().equals(curr.getEmail()))) {
 				try {
 					AddressValidator.validateEmail(u.getEmail());
 				} catch (IllegalArgumentException e) {
-					DorianInternalFault fault = new DorianInternalFault();
+					InvalidUserPropertyFault fault = new InvalidUserPropertyFault();
 					fault.setFaultString(e.getMessage());
 					throw fault;
 				}
@@ -429,8 +396,7 @@ public class UserManager extends LoggingObject {
 				changes = changes + 1;
 			}
 
-			if ((u.getFirstName() != null)
-					&& (!u.getFirstName().equals(curr.getFirstName()))) {
+			if ((u.getFirstName() != null) && (!u.getFirstName().equals(curr.getFirstName()))) {
 				if (changes > 0) {
 					sb.append(",");
 				}
@@ -439,8 +405,7 @@ public class UserManager extends LoggingObject {
 				changes = changes + 1;
 			}
 
-			if ((u.getLastName() != null)
-					&& (!u.getLastName().equals(curr.getLastName()))) {
+			if ((u.getLastName() != null) && (!u.getLastName().equals(curr.getLastName()))) {
 				if (changes > 0) {
 					sb.append(",");
 				}
@@ -449,8 +414,7 @@ public class UserManager extends LoggingObject {
 				changes = changes + 1;
 			}
 
-			if ((u.getOrganization() != null)
-					&& (!u.getOrganization().equals(curr.getOrganization()))) {
+			if ((u.getOrganization() != null) && (!u.getOrganization().equals(curr.getOrganization()))) {
 				if (changes > 0) {
 					sb.append(",");
 				}
@@ -459,8 +423,7 @@ public class UserManager extends LoggingObject {
 				changes = changes + 1;
 			}
 
-			if ((u.getAddress() != null)
-					&& (!u.getAddress().equals(curr.getAddress()))) {
+			if ((u.getAddress() != null) && (!u.getAddress().equals(curr.getAddress()))) {
 				if (changes > 0) {
 					sb.append(",");
 				}
@@ -469,8 +432,7 @@ public class UserManager extends LoggingObject {
 				changes = changes + 1;
 			}
 
-			if ((u.getAddress2() != null)
-					&& (!u.getAddress2().equals(curr.getAddress2()))) {
+			if ((u.getAddress2() != null) && (!u.getAddress2().equals(curr.getAddress2()))) {
 				if (changes > 0) {
 					sb.append(",");
 				}
@@ -487,8 +449,7 @@ public class UserManager extends LoggingObject {
 				changes = changes + 1;
 			}
 
-			if ((u.getState() != null)
-					&& (!u.getState().equals(curr.getState()))) {
+			if ((u.getState() != null) && (!u.getState().equals(curr.getState()))) {
 				if (changes > 0) {
 					sb.append(",");
 				}
@@ -496,8 +457,7 @@ public class UserManager extends LoggingObject {
 				changes = changes + 1;
 			}
 
-			if ((u.getCountry() != null)
-					&& (!u.getCountry().equals(curr.getCountry()))) {
+			if ((u.getCountry() != null) && (!u.getCountry().equals(curr.getCountry()))) {
 				if (changes > 0) {
 					sb.append(",");
 				}
@@ -505,53 +465,38 @@ public class UserManager extends LoggingObject {
 				changes = changes + 1;
 			}
 
-			if ((u.getZipcode() != null)
-					&& (!u.getZipcode().equals(curr.getZipcode()))) {
+			if ((u.getZipcode() != null) && (!u.getZipcode().equals(curr.getZipcode()))) {
 				if (changes > 0) {
 					sb.append(",");
 				}
-				try {
-					AddressValidator.validateZipCode(u.getZipcode());
-				} catch (IllegalArgumentException e) {
-					DorianInternalFault fault = new DorianInternalFault();
-					fault.setFaultString(e.getMessage());
-					throw fault;
-				}
+
+				validateSpecifiedField("Zip Code", u.getZipcode());
+
 				sb.append("ZIP_CODE='" + u.getZipcode() + "'");
 				changes = changes + 1;
 			}
 
-			if ((u.getPhoneNumber() != null)
-					&& (!u.getPhoneNumber().equals(curr.getPhoneNumber()))) {
+			if ((u.getPhoneNumber() != null) && (!u.getPhoneNumber().equals(curr.getPhoneNumber()))) {
 				if (changes > 0) {
 					sb.append(",");
 				}
-				try {
-					AddressValidator.validatePhone(u.getPhoneNumber());
-				} catch (IllegalArgumentException e) {
-					DorianInternalFault fault = new DorianInternalFault();
-					fault.setFaultString(e.getMessage());
-					throw fault;
-				}
+
+				validateSpecifiedField("Phone Number", u.getPhoneNumber());
+
 				sb.append("PHONE_NUMBER='" + u.getPhoneNumber() + "'");
 				changes = changes + 1;
 			}
 
-			if ((u.getStatus() != null)
-					&& (!u.getStatus().equals(curr.getStatus()))) {
+			if ((u.getStatus() != null) && (!u.getStatus().equals(curr.getStatus()))) {
 				if (changes > 0) {
 					sb.append(",");
 				}
 
-				if (accountCreated(curr.getStatus())
-						&& !accountCreated(u.getStatus())) {
+				if (accountCreated(curr.getStatus()) && !accountCreated(u.getStatus())) {
 					InvalidUserPropertyFault fault = new InvalidUserPropertyFault();
-					fault.setFaultString("Error, cannot change "
-							+ u.getUserId()
-							+ "'s status from a post-created account status ("
-							+ curr.getStatus()
-							+ ") to a pre-created account status ("
-							+ u.getStatus() + ").");
+					fault.setFaultString("Error, cannot change " + u.getUserId()
+						+ "'s status from a post-created account status (" + curr.getStatus()
+						+ ") to a pre-created account status (" + u.getStatus() + ").");
 					throw fault;
 				}
 
@@ -573,11 +518,11 @@ public class UserManager extends LoggingObject {
 
 		} else {
 			NoSuchUserFault fault = new NoSuchUserFault();
-			fault.setFaultString("Could not update user, the user "
-					+ u.getUserId() + " does not exist.");
+			fault.setFaultString("Could not update user, the user " + u.getUserId() + " does not exist.");
 			throw fault;
 		}
 	}
+
 
 	private boolean accountCreated(IdPUserStatus status) {
 		if (status.equals(IdPUserStatus.Suspended)) {
@@ -589,6 +534,7 @@ public class UserManager extends LoggingObject {
 		}
 	}
 
+
 	public boolean userExists(String uid) throws DorianInternalFault {
 		this.buildDatabase();
 		Connection c = null;
@@ -596,8 +542,7 @@ public class UserManager extends LoggingObject {
 		try {
 			c = db.getConnection();
 			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery("select count(*) from "
-					+ IDP_USERS_TABLE + " where UID='" + uid + "'");
+			ResultSet rs = s.executeQuery("select count(*) from " + IDP_USERS_TABLE + " where UID='" + uid + "'");
 			if (rs.next()) {
 				int count = rs.getInt(1);
 				if (count > 0) {
@@ -610,9 +555,7 @@ public class UserManager extends LoggingObject {
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
-			fault
-					.setFaultString("Unexpected Database Error, could not determine if the user "
-							+ uid + " exists.");
+			fault.setFaultString("Unexpected Database Error, could not determine if the user " + uid + " exists.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -622,6 +565,7 @@ public class UserManager extends LoggingObject {
 		}
 		return exists;
 	}
+
 
 	public void destroy() throws DorianInternalFault {
 		db.update("DROP TABLE IF EXISTS " + IDP_USERS_TABLE);

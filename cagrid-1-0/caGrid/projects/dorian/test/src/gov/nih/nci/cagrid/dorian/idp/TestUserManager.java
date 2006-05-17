@@ -501,7 +501,7 @@ public class TestUserManager extends TestCase {
 			u.setCity("Somewhere");
 			u.setState(StateCode.Outside_US);
 			u.setZipcode("G12 8QQ");
-			u.setCountry(CountryCode.US);
+			u.setCountry(CountryCode.AE);
 			u.setPhoneNumber("+44 141 330 4119");
 			u.setOrganization("organization");
 			u.setStatus(IdPUserStatus.Active);
@@ -510,7 +510,7 @@ public class TestUserManager extends TestCase {
 			assertTrue(um.userExists(u.getUserId()));
 
 			IdPUser u2 = um.getUser(u.getUserId());
-			u2.setPassword(Crypt.crypt(u.getPassword()));
+			u.setPassword(Crypt.crypt(u.getPassword()));
 			assertEquals(u, u2);
 
 		} catch (Exception e) {
