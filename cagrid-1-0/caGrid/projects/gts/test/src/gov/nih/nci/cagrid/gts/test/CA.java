@@ -14,6 +14,7 @@ import java.util.GregorianCalendar;
 
 import org.bouncycastle.asn1.x509.X509Name;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -64,6 +65,19 @@ public class CA {
 	}
 
 
+	public Credential createIdentityCertificate(String id) throws Exception {
+		String dn = getCertificate().getSubjectDN().getName();
+		int index = dn.indexOf("CN=");
+		dn = dn.substring(0, index + 3) + id;
+		KeyPair pair = KeyUtil.generateRSAKeyPair512();
+		Date now = new Date();
+		Date end = getCertificate().getNotAfter();
+		return new Credential(CertUtil.generateCertificate(new X509Name(dn), now, end, pair.getPublic(),
+			getCertificate(), getPrivateKey()), pair.getPrivate());
+
+	}
+
+
 	public X509CRL getCRL() {
 		return crl;
 	}
@@ -77,15 +91,14 @@ public class CA {
 	public X509CRL updateCRL(CRLEntry entry) throws Exception {
 		CRLEntry[] entries = new CRLEntry[1];
 		entries[0] = entry;
-		crl=CertUtil.createCRL(cert, key, entries, cert.getNotAfter());
+		crl = CertUtil.createCRL(cert, key, entries, cert.getNotAfter());
 		return crl;
 	}
 
 
 	public X509CRL updateCRL(CRLEntry[] entries) throws Exception {
-		crl=CertUtil.createCRL(cert, key, entries, cert.getNotAfter());
+		crl = CertUtil.createCRL(cert, key, entries, cert.getNotAfter());
 		return crl;
 	}
 
 }
-

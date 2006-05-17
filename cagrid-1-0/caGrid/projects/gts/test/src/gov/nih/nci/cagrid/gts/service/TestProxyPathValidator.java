@@ -23,7 +23,7 @@ import org.globus.gsi.proxy.ProxyPathValidatorException;
  *          Exp $
  */
 
-public class TestProxyValidator extends TestCase {
+public class TestProxyPathValidator extends TestCase {
 
 	public void testProxyValidator() {
 		try {
