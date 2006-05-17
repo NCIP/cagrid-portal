@@ -182,6 +182,7 @@
 				<exclude name="${common.jar.name}" />
 				<exclude name="${client.jar.name}" />
 				<exclude name="${service.jar.name}" />
+				<exclude name="${test.jar.name}" />
 			</fileset>
 
 		</path>
@@ -287,6 +288,7 @@
 					<exclude name="${common.jar.name}" />
 					<exclude name="${client.jar.name}" />
 					<exclude name="${service.jar.name}" />
+					<exclude name="${test.jar.name}" />
 				</fileset>
 			</classpath>
 		</javac>
@@ -311,6 +313,7 @@
 					<exclude name="${common.jar.name}" />
 					<exclude name="${client.jar.name}" />
 					<exclude name="${service.jar.name}" />
+					<exclude name="${test.jar.name}" />
 				</fileset>
 			</classpath>
 		</javac>
