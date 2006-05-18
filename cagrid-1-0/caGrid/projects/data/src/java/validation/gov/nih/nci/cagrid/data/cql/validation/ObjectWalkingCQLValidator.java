@@ -1,9 +1,5 @@
 package gov.nih.nci.cagrid.data.cql.validation;
 
-import gov.nih.nci.cadsr.umlproject.domain.Project;
-import gov.nih.nci.cadsr.umlproject.domain.UMLAssociationMetadata;
-import gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata;
-import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.Association;
 import gov.nih.nci.cagrid.cqlquery.Attribute;
@@ -13,13 +9,16 @@ import gov.nih.nci.cagrid.cqlquery.LogicalOperator;
 import gov.nih.nci.cagrid.cqlquery.Object;
 import gov.nih.nci.cagrid.cqlquery.Predicate;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
+import gov.nih.nci.cagrid.metadata.common.UMLAttribute;
 import gov.nih.nci.cagrid.metadata.common.UMLClass;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
+import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 /** 
@@ -35,13 +34,13 @@ public class ObjectWalkingCQLValidator implements CQLValidator {
 	
 	private static Set predicateValues = null;
 
-	public void validateCql(CQLQuery query, DomainModel model, Project project) throws MalformedQueryException {
+	public void validateCql(CQLQuery query, DomainModel model) throws MalformedQueryException {
 		// start by validating the structure of the query
 		validateStructure(query);
 		
 		// validate the query against the data service's Domain Model
 		validateQueryTarget(query, model);
-		validateObjectModel(query.getTarget(), project);
+		validateObjectModel(query.getTarget(), model);
 	}
 	
 	
@@ -166,9 +165,9 @@ public class ObjectWalkingCQLValidator implements CQLValidator {
 	}
 	
 	
-	private void validateObjectModel(Object obj, Project proj) throws MalformedQueryException {
+	private void validateObjectModel(Object obj, DomainModel model) throws MalformedQueryException {
 		// verify the object exists in the project
-		UMLClassMetadata classMd = getUmlClassMetadata(obj.getName(), proj);
+		UMLClass classMd = getUmlClass(obj.getName(), model);
 		if (classMd == null) {
 			throw new MalformedQueryException("No object " + obj.getName() + " found in the project");
 		}
@@ -179,29 +178,30 @@ public class ObjectWalkingCQLValidator implements CQLValidator {
 		
 		if (obj.getAssociation() != null) {
 			// ensure the association is valid
-			validateAssociationModel(obj, obj.getAssociation(), proj);
+			validateAssociationModel(obj, obj.getAssociation(), model);
 			// step through the association's submodel
-			validateObjectModel(obj.getAssociation(), proj);
+			validateObjectModel(obj.getAssociation(), model);
 		}
 		
 		if (obj.getGroup() != null) {
-			validateGroupModel(obj, obj.getGroup(), proj);
+			validateGroupModel(obj, obj.getGroup(), model);
 		}
 	}
 	
 	
-	private void validateAttributeModel(Attribute attrib, UMLClassMetadata classMd) throws MalformedQueryException {
+	private void validateAttributeModel(Attribute attrib, UMLClass classMd) throws MalformedQueryException {
 		// verify the attribute exists
-		UMLAttributeMetadata attribMd = getUmlAttributeMetadata(attrib.getName(), classMd);
+		UMLAttribute attribMd = getUmlAttribute(attrib.getName(), classMd);
 		if (attribMd == null) {
-			throw new MalformedQueryException("Attribute " + attrib.getName() + " is not defined for the class " + classMd.getFullyQualifiedName());
+			throw new MalformedQueryException("Attribute " + attrib.getName() + " is not defined for the class " + classMd.getClassname());
 		}
 		// if the predicate is a binary operator, verify the value is of the correct type
 		if (attrib.getPredicate() != null && 
 			!(attrib.getPredicate().getValue().equals(Predicate._IS_NOT_NULL) ||
 			attrib.getPredicate().getValue().equals(Predicate._IS_NULL))) {
 			String value = attrib.getValue();
-			String dataType = attribMd.getDataElement().getValueDomain().getLongName();
+			// TODO: evaluate this somehow
+			String dataType = attribMd.getSemanticMetadataCollection(0).getConcept().getLongName();
 			try {
 				if (dataType.equals(Integer.class.getName())) {
 					Integer.valueOf(value);
@@ -225,22 +225,21 @@ public class ObjectWalkingCQLValidator implements CQLValidator {
 	}
 	
 	
-	private void validateAssociationModel(Object current, Association assoc, Project proj) throws MalformedQueryException {
+	private void validateAssociationModel(Object current, Association assoc, DomainModel model) throws MalformedQueryException {
 		// determine if an association exists between the current and association object
-		UMLClassMetadata currentMd = getUmlClassMetadata(current.getName(), proj);
 		String roleName = assoc.getRoleName();
-		Iterator assocMdIter = currentMd.getUMLAssociationMetadataCollection().iterator();
+		UMLAssociation[] associations = getUmlAssociations(current.getName(), model);
 		boolean associationFound = false;
-		while (assocMdIter.hasNext()) {
-			UMLAssociationMetadata assocMd = (UMLAssociationMetadata) assocMdIter.next();
-			UMLClassMetadata targetClassMd = assocMd.getTargetUMLClassMetadata();
-			if (targetClassMd.getFullyQualifiedName().equals(assoc.getName())) {
+		for (int i = 0; i < associations.length; i++) {
+			UMLAssociation assocMd = associations[i];
+			UMLClass targetClassMd = assocMd.getTargetUMLAssociationEdge().getUMLAssociationEdge().getUmlClass().getUMLClass();
+			if (targetClassMd.getClassname().equals(assoc.getName())) {
 				if (associationFound) {
 					// no role name, and already found an association of the same type
 					throw new MalformedQueryException("The association from " + current.getName() + " to " + assoc.getName() + " is ambiguous without a role name");
 				}
 				if (roleName != null) {
-					if (assocMd.getTargetRoleName().equals(roleName)) {
+					if (assocMd.getTargetUMLAssociationEdge().getUMLAssociationEdge().getRoleName().equals(roleName)) {
 						associationFound = true;
 						break;
 					}
@@ -253,9 +252,9 @@ public class ObjectWalkingCQLValidator implements CQLValidator {
 	}
 	
 	
-	private void validateGroupModel(Object current, Group group, Project proj) throws MalformedQueryException {
+	private void validateGroupModel(Object current, Group group, DomainModel model) throws MalformedQueryException {
 		if (group.getAttribute() != null) {
-			UMLClassMetadata classMd = getUmlClassMetadata(current.getName(), proj);
+			UMLClass classMd = getUmlClass(current.getName(), model);
 			for (int i = 0; i < group.getAttribute().length; i++) {
 				validateAttributeModel(group.getAttribute(i), classMd);
 			}
@@ -263,13 +262,13 @@ public class ObjectWalkingCQLValidator implements CQLValidator {
 		
 		if (group.getAssociation() != null) {
 			for (int i = 0; i < group.getAssociation().length; i++) {
-				validateAssociationModel(current, group.getAssociation(i), proj);
+				validateAssociationModel(current, group.getAssociation(i), model);
 			}
 		}
 		
 		if (group.getGroup() != null) {
 			for (int i = 0; i < group.getGroup().length; i++) {
-				validateGroupModel(current, group.getGroup(i), proj);
+				validateGroupModel(current, group.getGroup(i), model);
 			}
 		}
 	}
@@ -285,45 +284,49 @@ public class ObjectWalkingCQLValidator implements CQLValidator {
 	}
 	
 	
-	private UMLClassMetadata getUmlClassMetadata(String className, Project proj) {
-		Iterator classMdIter = proj.getUMLClassMetadataCollection().iterator();
-		while (classMdIter.hasNext()) {
-			UMLClassMetadata md = (UMLClassMetadata) classMdIter.next();
-			if (md.getFullyQualifiedName().equals(className)) {
-				return md;
+	private UMLAttribute getUmlAttribute(String attribName, UMLClass classMd) {
+		UMLAttribute[] attribs = classMd.getUmlAttributeCollection();
+		for (int i = 0; attribs != null && i < attribs.length; i++) {
+			UMLAttribute attrib = attribs[i];
+			if (attrib.getName().equals(attribName)) {
+				return attrib;
 			}
 		}
 		return null;
 	}
 	
 	
-	private UMLAttributeMetadata getUmlAttributeMetadata(String attribName, UMLClassMetadata classMd) {
-		Iterator attribMdIter = classMd.getUMLAttributeMetadataCollection().iterator();
-		while (attribMdIter.hasNext()) {
-			UMLAttributeMetadata attribMd = (UMLAttributeMetadata) attribMdIter.next();
-			if (attribMd.getName().equals(attribName)) {
-				return attribMd;
+	private UMLAssociation[] getUmlAssociations(String sourceClass, DomainModel model) {
+		List associations = new ArrayList();
+		if (model.getExposedUMLAssociationCollection() != null &&
+			model.getExposedUMLAssociationCollection().getUMLAssociation() != null) {
+			for (int i = 0; i < model.getExposedUMLAssociationCollection().getUMLAssociation().length; i++) {
+				UMLAssociation assoc = model.getExposedUMLAssociationCollection().getUMLAssociation(i);
+				if (assoc.getSourceUMLAssociationEdge().getUMLAssociationEdge()
+					.getUmlClass().getUMLClass().getClassname().equals(sourceClass)) {
+					associations.add(assoc);
+				}
 			}
 		}
-		return null;
+		UMLAssociation[] array = new UMLAssociation[associations.size()];
+		associations.toArray(array);
+		return array;
 	}
 
 
 	// main method for testing only
 	public static void main(String[] args) {
-		if (args.length != 3) {
-			System.err.println("usage: " + ObjectWalkingCQLValidator.class.getName() + " <cqlDocumentFilename> <domainModelFilename> <projectFilename>");
+		if (args.length != 2) {
+			System.err.println("usage: " + ObjectWalkingCQLValidator.class.getName() + " <cqlDocumentFilename> <domainModelFilename>");
 			System.exit(1);
 		}
 		ObjectWalkingCQLValidator validator = new ObjectWalkingCQLValidator();
 		String cqlFilename = args[0];
 		String domainModelFilename = args[1];
-		String projectFilename = args[2];
 		try {
 			CQLQuery query = (CQLQuery) Utils.deserializeDocument(cqlFilename, CQLQuery.class);
 			DomainModel model = (DomainModel) Utils.deserializeDocument(domainModelFilename, DomainModel.class);
-			Project project = (Project) Utils.deserializeDocument(projectFilename, Project.class);
-			validator.validateCql(query, model, project);
+			validator.validateCql(query, model);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			System.exit(1);

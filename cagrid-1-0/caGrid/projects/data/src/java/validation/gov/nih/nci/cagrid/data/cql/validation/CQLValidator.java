@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.data.cql.validation;
 
-import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
@@ -18,5 +17,5 @@ import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
  */
 public interface CQLValidator {
 
-	public void validateCql(CQLQuery query, DomainModel model, Project project) throws MalformedQueryException;
+	public void validateCql(CQLQuery query, DomainModel model) throws MalformedQueryException;
 }
