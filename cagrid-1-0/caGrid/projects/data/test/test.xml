@@ -19,7 +19,13 @@
 				<include name="**/*.class"/>
 			</fileset>
 			<fileset dir="${build.service.dest}">
-				<include name="**.*.class"/>
+				<include name="**/*.class"/>
+			</fileset>
+			<fileset dir="${build.common.dest}">
+				<include name="**/*.class"/>
+			</fileset>
+			<fileset dir="${build.validation.dest}">
+				<include name="**/*.class"/>
 			</fileset>
 		</cobertura-instrument>
 	</target>
