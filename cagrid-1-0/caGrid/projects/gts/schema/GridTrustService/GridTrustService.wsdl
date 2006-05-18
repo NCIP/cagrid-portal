@@ -417,6 +417,44 @@
 						</sequence>
 					</complexType>
 				</element>
+				<element name="validate">
+					<complexType>
+						<sequence>
+          		  
+	      		  					
+							<element name="chain">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:X509Certificate" minOccurs="1" maxOccurs="unbounded" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+                  				 	
+	      		  		
+
+                  				 	
+                  					
+							<element name="filter">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:TrustedAuthorityFilter" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+                  				 	
+	      				</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="validateResponse">
+					<complexType>
+						<sequence>
+          		  
+										<element name="response" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
 				<element name="GTSInternalFault" >
 					<complexType>
 						<complexContent>
@@ -490,6 +528,14 @@
 				</element>
       					
 				<element name="InvalidAuthorityFault" >
+					<complexType>
+						<complexContent>
+							<extension base="wsrbf:BaseFaultType"/>
+						</complexContent>
+					</complexType>
+				</element>
+      					
+				<element name="CertificateValidationFault" >
 					<complexType>
 						<complexContent>
 							<extension base="wsrbf:BaseFaultType"/>
@@ -626,6 +672,13 @@
 	<message name="updateCRLOutputMessage">
 		<part name="parameters" element="tns:updateCRLResponse"/>
 	</message>
+	<message name="validateInputMessage">
+		<part name="parameters" element="tns:validate"/>
+	</message>
+	
+	<message name="validateOutputMessage">
+		<part name="parameters" element="tns:validateResponse"/>
+	</message>
 	<message name="GTSInternalFaultFaultMessage">
 		<part name="fault" element="tns:GTSInternalFault"/>
 	</message>
@@ -655,6 +708,9 @@
 	</message>
 	<message name="InvalidAuthorityFaultFaultMessage">
 		<part name="fault" element="tns:InvalidAuthorityFault"/>
+	</message>
+	<message name="CertificateValidationFaultFaultMessage">
+		<part name="fault" element="tns:CertificateValidationFault"/>
 	</message>
     
 <!--============================================================
@@ -828,6 +884,14 @@
        		 <fault name="InvalidTrustedAuthorityFault" message="tns:InvalidTrustedAuthorityFaultFaultMessage"/>
        				
        		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="validate">
+            <input message="tns:validateInputMessage"/>
+            <output message="tns:validateOutputMessage"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+       		 <fault name="CertificateValidationFault" message="tns:CertificateValidationFaultFaultMessage"/>
        				
         </operation>
         <operation name="GetResourceProperty">

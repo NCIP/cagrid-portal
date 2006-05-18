@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.gts.service;
 
+import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gts.bean.AuthorityGTS;
 import gov.nih.nci.cagrid.gts.bean.AuthorityPriorityUpdate;
 import gov.nih.nci.cagrid.gts.bean.Lifetime;
@@ -10,9 +11,11 @@ import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
 import gov.nih.nci.cagrid.gts.bean.X509CRL;
+import gov.nih.nci.cagrid.gts.bean.X509Certificate;
 import gov.nih.nci.cagrid.gts.common.MySQLDatabase;
 import gov.nih.nci.cagrid.gts.service.db.DBManager;
 import gov.nih.nci.cagrid.gts.service.db.mysql.MySQLManager;
+import gov.nih.nci.cagrid.gts.stubs.CertificateValidationFault;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
 import gov.nih.nci.cagrid.gts.stubs.GridTrustServicePortType;
 import gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault;
@@ -26,10 +29,12 @@ import gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gts.stubs.service.GridTrustServiceAddressingLocator;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.axis.message.addressing.Address;
@@ -106,6 +111,72 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 
 	public TrustedAuthority[] findTrustAuthorities(TrustedAuthorityFilter filter) throws GTSInternalFault {
 		return trust.findTrustAuthorities(filter);
+	}
+
+
+	public boolean validate(X509Certificate[] chain, TrustedAuthorityFilter filter) throws GTSInternalFault,
+		CertificateValidationFault {
+		boolean isValidated = false;
+		TrustedAuthority[] list = trust.findTrustAuthorities(filter);
+		ProxyPathValidator validator = new ProxyPathValidator();
+		if ((list == null) || (list.length == 0)) {
+			CertificateValidationFault fault = new CertificateValidationFault();
+			fault.setFaultString("Could not validate chain, no trusted roots found!!!");
+			throw fault;
+		} else {
+			java.security.cert.X509Certificate[] trustedCerts = new java.security.cert.X509Certificate[list.length];
+			List crlList = new ArrayList();
+			for (int i = 0; i < list.length; i++) {
+				try {
+					trustedCerts[i] = CertUtil.loadCertificate(list[i].getCertificate().getCertificateEncodedString());
+				} catch (Exception e) {
+					log.error(e.getMessage(), e);
+					GTSInternalFault fault = new GTSInternalFault();
+					fault.setFaultString("Unexpected Error loading the certificate for the trusted authority "
+						+ list[i].getName() + "!!!");
+					throw fault;
+				}
+
+				try {
+					if (list[i].getCRL() != null) {
+						crlList.add(CertUtil.loadCRL(list[i].getCRL().getCrlEncodedString()));
+					}
+				} catch (Exception e) {
+					log.error(e.getMessage(), e);
+					GTSInternalFault fault = new GTSInternalFault();
+					fault.setFaultString("Unexpected Error loading the CRL for the trusted authority "
+						+ list[i].getName() + "!!!");
+					throw fault;
+				}
+
+			}
+			java.security.cert.X509CRL[] crls = new java.security.cert.X509CRL[crlList.size()];
+			for (int i = 0; i < crlList.size(); i++) {
+				crls[i] = (java.security.cert.X509CRL) crlList.get(i);
+			}
+
+			java.security.cert.X509Certificate[] certChain = new java.security.cert.X509Certificate[chain.length];
+			for (int i = 0; i < crlList.size(); i++) {
+				try {
+					certChain[i] = CertUtil.loadCertificate(chain[i].getCertificateEncodedString());
+				} catch (Exception e) {
+					log.error(e.getMessage(), e);
+					GTSInternalFault fault = new GTSInternalFault();
+					fault.setFaultString("Unexpected Error formatting the certificate chain.!!!");
+					throw fault;
+				}
+			}
+			try {
+				validator.validate(certChain, trustedCerts, CertificateRevocationLists
+					.getCertificateRevocationLists(crls));
+				isValidated = true;
+			} catch (Exception e) {
+				CertificateValidationFault fault = new CertificateValidationFault();
+				fault.setFaultString("Could not validate chain " + e.getMessage());
+				throw fault;
+			}
+		}
+		return isValidated;
 	}
 
 
