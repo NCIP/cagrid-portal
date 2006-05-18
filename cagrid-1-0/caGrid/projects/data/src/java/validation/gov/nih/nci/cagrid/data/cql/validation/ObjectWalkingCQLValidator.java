@@ -1,9 +1,11 @@
 package gov.nih.nci.cagrid.data.cql.validation;
 
 import gov.nih.nci.cadsr.umlproject.domain.Project;
+import gov.nih.nci.cadsr.umlproject.domain.UMLAssociationMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.cqlquery.Association;
 import gov.nih.nci.cagrid.cqlquery.Attribute;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlquery.Group;
@@ -39,7 +41,7 @@ public class ObjectWalkingCQLValidator implements CQLValidator {
 		
 		// validate the query against the data service's Domain Model
 		validateQueryTarget(query, model);
-		validateObjectModel(query.getTarget(), model, project);
+		validateObjectModel(query.getTarget(), project);
 	}
 	
 	
@@ -164,7 +166,7 @@ public class ObjectWalkingCQLValidator implements CQLValidator {
 	}
 	
 	
-	private void validateObjectModel(Object obj, DomainModel model, Project proj) throws MalformedQueryException {
+	private void validateObjectModel(Object obj, Project proj) throws MalformedQueryException {
 		// verify the object exists in the project
 		UMLClassMetadata classMd = getUmlClassMetadata(obj.getName(), proj);
 		if (classMd == null) {
@@ -173,6 +175,17 @@ public class ObjectWalkingCQLValidator implements CQLValidator {
 		
 		if (obj.getAttribute() != null) {
 			validateAttributeModel(obj.getAttribute(), classMd);
+		}
+		
+		if (obj.getAssociation() != null) {
+			// ensure the association is valid
+			validateAssociationModel(obj, obj.getAssociation(), proj);
+			// step through the association's submodel
+			validateObjectModel(obj.getAssociation(), proj);
+		}
+		
+		if (obj.getGroup() != null) {
+			validateGroupModel(obj, obj.getGroup(), proj);
 		}
 	}
 	
@@ -209,6 +222,39 @@ public class ObjectWalkingCQLValidator implements CQLValidator {
 				throw new MalformedQueryException("Attribute " + attrib.getName() + " queried with value " + value + ", but type is " + dataType, ex);
 			}
 		}
+	}
+	
+	
+	private void validateAssociationModel(Object current, Association assoc, Project proj) throws MalformedQueryException {
+		// determine if an association exists between the current and association object
+		UMLClassMetadata currentMd = getUmlClassMetadata(current.getName(), proj);
+		String roleName = assoc.getRoleName();
+		Iterator assocMdIter = currentMd.getUMLAssociationMetadataCollection().iterator();
+		boolean associationFound = false;
+		while (assocMdIter.hasNext()) {
+			UMLAssociationMetadata assocMd = (UMLAssociationMetadata) assocMdIter.next();
+			UMLClassMetadata targetClassMd = assocMd.getTargetUMLClassMetadata();
+			if (targetClassMd.getFullyQualifiedName().equals(assoc.getName())) {
+				if (associationFound) {
+					// no role name, and already found an association of the same type
+					throw new MalformedQueryException("The association from " + current.getName() + " to " + assoc.getName() + " is ambiguous without a role name");
+				}
+				if (roleName != null) {
+					if (assocMd.getTargetRoleName().equals(roleName)) {
+						associationFound = true;
+						break;
+					}
+				}
+			}
+		}
+		if (!associationFound) {
+			throw new MalformedQueryException("No association from " + current.getName() + " to " + assoc.getName() + " with role name " + assoc.getRoleName());
+		}
+	}
+	
+	
+	private void validateGroupModel(Object current, Group group, Project proj) throws MalformedQueryException {
+		
 	}
 	
 	
