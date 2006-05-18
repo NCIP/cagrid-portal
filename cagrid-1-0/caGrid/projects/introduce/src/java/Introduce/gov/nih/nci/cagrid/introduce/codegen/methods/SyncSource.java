@@ -370,12 +370,16 @@ public class SyncSource {
 				e1.printStackTrace();
 			}
 
-			// just clean up the modified impl
-			modifyImpl(mod);
-			// redo the provider impl method
-			removeProviderImpl(mod.getJavaMethod());
-			addProviderImpl(method);
+			//if the method was not provided
+			if (!method.isIsProvided()) {
+				// just clean up the modified impl
+				modifyImpl(mod);
+				// redo the provider impl method
+				removeProviderImpl(mod.getJavaMethod());
+				addProviderImpl(method);
+			}
 			// redo the client method
+
 			removeClientImpl(mod.getJavaMethod());
 			addClientImpl(method);
 		}

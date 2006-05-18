@@ -52,7 +52,7 @@ public class CreationViewer extends GridPortalComponent {
 
 	private static String DEFAULT_NAME = "HelloWorld";
 	private static String DEFAULT_JAVA_PACKAGE = "gov.nih.nci.cagrid";
-	private static String DEFAULT_NAMESPACE = "http://cagrid.nci.nih.gov/Helloworld";
+	private static String DEFAULT_NAMESPACE = "http://cagrid.nci.nih.gov/HelloWorld";
 
 	private JPanel inputPanel = null;
 	private JPanel mainPanel = null;

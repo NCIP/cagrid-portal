@@ -448,8 +448,10 @@ public class MethodViewer extends GridPortalBaseFrame {
 						method.setOutput(output);
 						
 						if(getIsProvidedCheckBox().isSelected()){
+							method.setIsProvided(true);
 							MethodTypeProviderInformation pi = new MethodTypeProviderInformation();
 							pi.setProviderClass(getProviderClassTextField().getText());
+							method.setProviderInformation(pi);
 						} else {
 							method.setIsProvided(false);
 						}

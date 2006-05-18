@@ -11,8 +11,20 @@
 <%=newNamespace%>/service=<%=service.getPackageName()%>.stubs.service
 
 <%
+			if (service.getMethods() != null && service.getMethods().getMethod() != null) {
+				for (int methodIndex = 0; methodIndex < service.getMethods().getMethod().length; methodIndex++) {
+					MethodType mel = service.getMethods().getMethod(methodIndex);
+					if(mel.isIsImported() && mel.getImportInformation()!=null){
+					String newNamespace2 = mel.getImportInformation().getNamespace().replaceFirst(":", "\\\\:");
+        			newNamespace2 = newNamespace2.replaceFirst("\\Q\\\\\\\\:\\E", "\\\\:");
+						%><%=newNamespace2%>=<%=mel.getImportInformation().getPackageName()%>
+
+<%
+					}	
+				}
+			}
+		}
 	}
-}
 
 		Map prefixmap = TemplateUtils.buildMasterNamespaceInformationMap(info.getServiceDescriptor());
 		Set importNamespaces = new HashSet();
