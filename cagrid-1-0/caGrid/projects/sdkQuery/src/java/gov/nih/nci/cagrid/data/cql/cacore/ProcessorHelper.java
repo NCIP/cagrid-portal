@@ -20,8 +20,8 @@ import java.util.Map;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Junction;
-import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.Subqueries;
 
 /** 
  *  ProcessorHelper
@@ -93,9 +93,8 @@ public class ProcessorHelper {
 			throw new MalformedQueryException("Association from " + objectClass.getName() + " to " + associationType + " does not exist.  Use only direct associations");
 		}
 		DetachedCriteria associationCriteria = createQueryCriteria(association);
-		Property roleProperty = Property.forName(role);
-		Criterion criteria = roleProperty.eq(associationCriteria);
-		return criteria;
+		Criterion subquery = Subqueries.propertyIn(role, associationCriteria);
+		return subquery;
 	}
 	
 	
