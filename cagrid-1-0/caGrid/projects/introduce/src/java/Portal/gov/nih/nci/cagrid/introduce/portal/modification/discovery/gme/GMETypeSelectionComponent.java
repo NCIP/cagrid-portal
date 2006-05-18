@@ -1,15 +1,23 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.discovery.gme;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
+import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
 
 import org.projectmobius.client.gme.ImportInfo;
 import org.projectmobius.common.GridServiceResolver;
@@ -113,5 +121,39 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 			ExtensionTools.getProperty(getDescriptor().getProperties(), GMETypeSelectionComponent.GME_URL));
 		handle.cacheSchema(new Namespace(namespace), dir);
 
+	}
+
+
+	public static void main(String[] args) {
+		try {
+			JFrame frame = new JFrame();
+			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+			ExtensionDescription ext = (ExtensionDescription) Utils.deserializeDocument("extensions" + File.separator
+				+ "gme_discovery" + File.separator + "extension.xml", ExtensionDescription.class);
+			final GMETypeSelectionComponent panel = new GMETypeSelectionComponent(ext
+				.getDiscoveryExtensionDescription());
+			frame.getContentPane().setLayout(new BorderLayout());
+			frame.getContentPane().add(panel, BorderLayout.CENTER);
+
+			JButton createButton = new JButton("Test Create");
+			createButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					NamespaceType createdNs = panel.createNamespaceType(new File("."));
+					if (createdNs != null) {
+						System.out.println("Created Namespace:" + createdNs.getNamespace() + " at location:"
+							+ createdNs.getLocation());
+					} else {
+						System.out.println("Problem creating namespace");
+					}
+				}
+			});
+			frame.getContentPane().add(createButton, BorderLayout.SOUTH);
+
+			frame.pack();
+			frame.setVisible(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

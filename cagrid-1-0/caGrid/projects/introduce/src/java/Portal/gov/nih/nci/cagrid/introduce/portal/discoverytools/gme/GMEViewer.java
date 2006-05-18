@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.introduce.portal.discoverytools.gme;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
@@ -11,6 +12,7 @@ import gov.nih.nci.cagrid.introduce.portal.common.jedit.XMLTokenMarker;
 import gov.nih.nci.cagrid.introduce.portal.discoverytools.NamespaceTypeToolsComponent;
 import gov.nih.nci.cagrid.introduce.portal.discoverytools.gme.GMESchemaLocatorPanel.SchemaWrapper;
 
+import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -18,6 +20,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -499,8 +502,21 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 
 
 	public static void main(String[] args) {
-		System.out.println();
+		try {
+			JFrame frame = new JFrame();
+			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+			ExtensionDescription ext = (ExtensionDescription) Utils.deserializeDocument("extensions" + File.separator
+				+ "gme_discovery" + File.separator + "extension.xml", ExtensionDescription.class);
+			final GMEViewer panel = new GMEViewer(ext.getDiscoveryExtensionDescription());
+			frame.getContentPane().setLayout(new BorderLayout());
+			frame.getContentPane().add(panel, BorderLayout.CENTER);
+
+			frame.pack();
+			frame.setVisible(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 } // @jve:decl-index=0:visual-constraint="10,4"
