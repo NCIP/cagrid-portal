@@ -2,8 +2,6 @@
 <!-- caGrid Analytical Utilities build file                                  -->
 <!-- ======================================================================= -->
 <project name="introduce_utilities" basedir="." default="usage">
-	<property name="gme.service.default"
-		value="http://malibu.bmi.ohio-state.edu:8080/wsrf/services/cagrid/GlobalModelExchange"/>
 	<property name="conf.dir" location="conf"/>
 	<property name="introduce.portal.conf"
 		location="${conf.dir}/introduce/introduce-portal-conf.xml"/>

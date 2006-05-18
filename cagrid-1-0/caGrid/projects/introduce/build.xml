@@ -46,9 +46,6 @@
 	<property name="test.project.jar" location="${jars.dir}/${project.name}-tests-${project.version}.jar" />
 	<!-- extensions stuff -->
 	<property name="extensions.lib.dir" location="${basedir}/extensions/lib" />
-	<!-- Load common util path -->
-	<import file="../../antfiles/ant-utilities.xml" />
-	<import file="../../antfiles/test-utilities.xml" />
 	<!-- Load util files -->
 	<property name="antfiles.dir" value="${basedir}/antfiles" />
 	<import file="${antfiles.dir}/build-introduce.xml" />
@@ -64,6 +61,36 @@
 		<delete dir="${templates.created.src.dir}" />
 		<delete dir="${beans.created.src.dir}" />
 	</target>
+	
+	<!-- ============================================================== -->
+	<!-- Globus properties                                              -->
+	<!-- ============================================================== -->
+	<target name="checkGlobus" depends="setGlobus">
+		<condition property="globus.not.found">
+			<or>
+				<not><isset property="ext.globus.dir"/></not>
+				<equals arg1="${ext.globus.dir}" arg2=""/>
+			</or>
+		</condition>
+		<fail message="Globus installation is not set in either GLOBUS_LOCATION or ext.globus.dir" if="globus.not.found"/>
+		<echo message="Globus: ${ext.globus.dir}"/>
+	</target>
+	<target name="setGlobus" if="env.GLOBUS_LOCATION">
+		<property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}"/>
+		<property name="build.stubs" location="${ext.globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
+		<property name="schema.src" location="${ext.globus.dir}/share/schema" />
+	</target>
+	
+	<!-- Allows you define a new property with a value of ${${a}.${b}} which can't be done by the Property task alone.  -->
+	<macrodef name="compose-property">
+		<attribute name="name" />
+		<attribute name="stem" />
+		<attribute name="selector" />
+		<sequential>
+			<property name="@{name}" value="${@{stem}.@{selector}}" />
+		</sequential>
+	</macrodef>
+	
 	<!-- =================================================================== -->
 	<!-- Prepares the build directory and classpaths                         -->
 	<!-- =================================================================== -->
