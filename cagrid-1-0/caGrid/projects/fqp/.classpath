@@ -11,5 +11,7 @@
 	<classpathentry kind="lib" path="ext/test/lib/junit.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/junit-addons-1.4.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/xmlunit1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-data-1.0-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-data-1.0-validation.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
