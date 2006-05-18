@@ -20,6 +20,8 @@
 	<property name="build.utils.dest" location="${build.dir}/utilities/classes"/>
 	<property name="build.extension.dest" location="${build.dir}/extension/classes"/>
 	<property name="build.service.dest" location="${build.dir}/service/classes"/>
+	<property name="build.validation.dest" location="${build.dir}/validation/classes"/>
+	<property name="build.common.dest" location="${build.dir}/common/classes"/>
     <property name="build.jars.dir" location="build/lib" />
 	
 	<!-- jar names -->
@@ -27,11 +29,15 @@
 	<property name="extension.jar.name" value="${project.name}-${project.version}-extension.jar"/>
 	<property name="project.jar.name" value="${project.name}-${project.version}.jar"/>
 	<property name="service.jar.name" value="${project.name}-${project.version}-service.jar"/>
+	<property name="validation.jar.name" value="${project.name}-${project.version}-validation.jar"/>
+	<property name="common.jar.name" value="${project.name}-${project.version}-common.jar"/>
 	
 	<!-- jar files -->
 	<property name="extension.jar.file" value="${build.jars.dir}/${extension.jar.name}"/>
 	<property name="utils.jar.file" value="${build.jars.dir}/${utils.jar.name}"/>
 	<property name="service.jar.file" value="${build.jars.dir}/${service.jar.name}"/>
+	<property name="validation.jar.file" value="${build.jars.dir}/${validation.jar.name}"/>
+	<property name="common.jar.file" value="${build.jars.dir}/${common.jar.name}"/>
 	
 	<!-- extension -->
 	<property name="extension.description.file" value="${basedir}/extension/extension.xml"/>
@@ -56,6 +62,8 @@
 	<property name="utils.src.dir" location="${src.dir}/utilities"/>
 	<property name="extension.src.dir" location="${src.dir}/extension"/>
 	<property name="service.src.dir" location="${src.dir}/service"/>
+	<property name="validation.src.dir" location="${src.dir}/validation"/>
+	<property name="common.src.dir" location="${src.dir}/common"/>
 	
 	<!-- libraries -->
 	<property name="lib.dir" location="${basedir}/lib"/>
@@ -75,9 +83,11 @@
 	<!-- The Test Classpath                                                   -->
 	<!-- =============================================================== -->
 	<path id="test.classpath">
+		<pathelement path="${build.common.dest}"/>
 		<pathelement path="${build.utils.dest}" />
 		<pathelement path="${build.extension.dest}"/>
 		<pathelement path="${build.service.dest}"/>
+		<pathelement path="${build.validation.dest}"/>
 		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
@@ -95,14 +105,17 @@
 		</fileset>
 	</path>
 	
+	
 	<!-- creates output directories -->
     <target name="init">
         <mkdir dir="${build.dir}" />
+    	<mkdir dir="${build.common.dest}"/>
     	<mkdir dir="${build.utils.dest}"/>
     	<mkdir dir="${build.extension.dest}"/>
     	<mkdir dir="${build.service.dest}"/>
-    	<mkdir dir="${test.classes.dir}"/>
+    	<mkdir dir="${build.validation.dest}"/>
         <mkdir dir="${build.jars.dir}" />
+    	<mkdir dir="${test.classes.dir}"/>
         <mkdir dir="${stubs.dir}" />
         <mkdir dir="${stubs.src}" />
         <mkdir dir="${stubs.dest}" />
@@ -152,9 +165,9 @@
     </target>
 	
 	
-	<!-- compiles the utility source code -->
-	<target name="compileUtilsSource" depends="compileStubs">
-		<javac srcdir="${utils.src.dir}" destdir="${build.utils.dest}" debug="${java.debug}">
+	<!-- compiles the common classes for data services -->
+	<target name="compileCommon" depends="compileStubs">
+		<javac srcdir="${common.src.dir}" destdir="${build.common.dest}" debug="${java.debug}">
 			<classpath>
 				<fileset dir="${lib.dir}">
 					<include name="*.jar"/>
@@ -167,13 +180,33 @@
 					<include name="*.jar"/>
 				</fileset>
 			</classpath>
+		</javac>
+	</target>
+	
+	
+	<!-- compiles the utility source code -->
+	<target name="compileUtils" depends="compileStubs, compileCommon">
+		<javac srcdir="${utils.src.dir}" destdir="${build.utils.dest}" debug="${java.debug}">
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar"/>
+				</fileset>
+				<fileset dir="${ext.lib.dir}">
+					<include name="*.jar"/>
+				</fileset>
+				<pathelement location="${stubs.dest}"/>
+				<pathelement location="${build.common.dest}"/>
+				<fileset dir="${globus.dir}/lib">
+					<include name="*.jar"/>
+				</fileset>
+			</classpath>
 			<include name="**/*.java" />
 		</javac>
 	</target>
 	
 	
 	<!-- compiles the extension source code -->
-	<target name="compileExtensionSource" depends="compileStubs, compileService">
+	<target name="compileExtension" depends="compileStubs, compileCommon, compileService">
 		<javac srcdir="${extension.src.dir}" destdir="${build.extension.dest}" debug="${java.debug}">
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -184,6 +217,7 @@
 				</fileset>
 				<pathelement location="${stubs.dest}"/>
 				<pathelement location="${build.service.dest}"/>
+				<pathelement location="${build.common.dest}"/>
 				<fileset dir="${globus.dir}/lib">
 					<include name="*.jar"/>
 				</fileset>
@@ -193,7 +227,7 @@
 	
 	
 	<!-- compiles the service side code -->
-	<target name="compileService" depends="compileStubs, compileUtilsSource">
+	<target name="compileService" depends="compileStubs, compileUtils, compileValidation, compileCommon">
 		<javac srcdir="${service.src.dir}" destdir="${build.service.dest}" debug="${java.debug}">
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -204,6 +238,28 @@
 				</fileset>
 				<pathelement location="${stubs.dest}"/>
 				<pathelement location="${build.utils.dest}"/>
+				<pathelement location="${build.common.dest}"/>
+				<pathelement location="${build.validation.dest}"/>
+				<fileset dir="${globus.dir}/lib">
+					<include name="*.jar"/>
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+	
+	
+	<!-- compiles the validation code -->
+	<target name="compileValidation" depends="compileStubs, compileCommon">
+		<javac srcdir="${validation.src.dir}" destdir="${build.validation.dest}" debug="${java.debug}">
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="**/*.jar"/>
+				</fileset>
+				<fileset dir="${ext.lib.dir}">
+					<include name="*.jar"/>
+				</fileset>
+				<pathelement location="${stubs.dest}"/>
+				<pathelement location="${build.common.dest}"/>
 				<fileset dir="${globus.dir}/lib">
 					<include name="*.jar"/>
 				</fileset>
@@ -213,10 +269,18 @@
 	
 	
 	<!-- compiles the test code -->
-	<target name="compileTests" depends="compileStubs, compileUtilsSource, compileExtensionSource, compileService">
+	<target name="compileTests" depends="compileStubs, compileUtils, compileExtension, compileService">
 		<javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" debug="${java.debug}">
 			<classpath refid="test.classpath"/>
 		</javac>
+	</target>
+	
+	
+	<!-- jars the common classes -->
+	<target name="jarCommon" depends="compileCommon" description="Builds and jars the common classes">
+		<jar destfile="${common.jar.file}">
+			<fileset dir="${build.common.dest}"/>
+		</jar>
 	</target>
 
 	
@@ -230,7 +294,7 @@
 	
 	
 	<!-- jars the utilities -->
-	<target name="jarUtils" depends="compileUtilsSource" description="Builds and jars the whole project">
+	<target name="jarUtils" depends="compileUtils" description="Builds and jars the whole project">
 		<jar destfile="${utils.jar.file}">
 			<fileset dir="${build.utils.dest}">
 				<include name="**/*.class"/>
@@ -240,9 +304,19 @@
 	
 	
 	<!-- jars the extension -->
-	<target name="jarExtension" depends="compileExtensionSource" description="Jars the introduce extension code">
+	<target name="jarExtension" depends="compileExtension" description="Jars the introduce extension code">
 		<jar destfile="${extension.jar.file}">
 			<fileset dir="${build.extension.dest}">
+				<include name="**/*.class"/>
+			</fileset>
+		</jar>
+	</target>
+	
+	
+	<!-- jars the validation -->
+	<target name="jarValidation" depends="compileValidation" description="Jars the validation code">
+		<jar destfile="${validation.jar.file}">
+			<fileset dir="${build.validation.dest}">
 				<include name="**/*.class"/>
 			</fileset>
 		</jar>
@@ -306,6 +380,7 @@
 		</zip>
 	</target>
 	
+	
 	<!-- Build and install extensions for introduce -->
 	<target name="installIntroduceExtensions" depends="all" description="Builds and installs the Data Services extensions into Introduce.">
 		<delete dir="${introduce.extensions.dir}/data" />
@@ -339,7 +414,8 @@
 			</fileset>
 		</copy>
 	</target>
+	
 
 	<!-- build and jar everything -->
-	<target name="all" depends="jarStubs, jarUtils, jarExtension, jarService, compileTests" description="Builds and jars all the classes in the project"/>
+	<target name="all" depends="jarStubs, jarCommon, jarUtils, jarExtension, jarService, jarValidation, compileTests" description="Builds and jars all the classes in the project"/>
 </project>
