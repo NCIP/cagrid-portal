@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<xs:schema targetNamespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" xmlns:data="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" xmlns:cagrid="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:uml="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" xmlns:serv="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service" xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" xmlns:cagrid="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:uml="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" xmlns:serv="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service" xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" schemaLocation="../cadsr/3.0_gov.nih.nci.cadsr.umlproject.domain.xsd"/>
 	<xs:element name="PointOfContact" type="com:PointOfContact"/>
 	<xs:complexType name="PointOfContact">
