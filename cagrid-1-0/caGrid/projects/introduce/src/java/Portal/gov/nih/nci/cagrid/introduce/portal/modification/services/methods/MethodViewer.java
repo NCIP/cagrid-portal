@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeImportInformation;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeProviderInformation;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
@@ -167,17 +168,17 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JCheckBox isImportedCheckBox = null;
 
-	private JLabel isProvidedLabel = null;
+	private JLabel packageNameLabel = null;
+
+	private JTextField packageNameTextField = null;
 
 	private JCheckBox isProvidedCheckBox = null;
+
+	private JPanel providerPanel = null;
 
 	private JLabel providerClassLabel = null;
 
 	private JTextField providerClassTextField = null;
-
-	private JLabel packageNameLabel = null;
-
-	private JTextField packageNameTextField = null;
 
 	public MethodViewer(MethodType method, ServiceInformation info) {
 		this.info = info;
@@ -445,6 +446,13 @@ public class MethodViewer extends GridPortalBaseFrame {
 						MethodTypeOutput output = getOutputTypeTable()
 								.getRowData(0);
 						method.setOutput(output);
+						
+						if(getIsProvidedCheckBox().isSelected()){
+							MethodTypeProviderInformation pi = new MethodTypeProviderInformation();
+							pi.setProviderClass(getProviderClassTextField().getText());
+						} else {
+							method.setIsProvided(false);
+						}
 
 						if (getIsImportedCheckBox().isSelected()) {
 							// process the import information
@@ -464,14 +472,10 @@ public class MethodViewer extends GridPortalBaseFrame {
 												.getText());
 								importInfo.setWsdlFile(getWsdlFileTextField()
 										.getText());
-								importInfo
-										.setIsProvided(getIsProvidedCheckBox()
-												.isSelected());
-								importInfo
-										.setProviderClass(getProviderClassTextField()
-												.getText());
 								method.setImportInformation(importInfo);
 							}
+						} else {
+							method.setIsImported(false);
 						}
 
 					} catch (Exception ex) {
@@ -533,6 +537,10 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getNamePanel() {
 		if (namePanel == null) {
+			GridBagConstraints gridBagConstraints111 = new GridBagConstraints();
+			gridBagConstraints111.gridx = 2;
+			gridBagConstraints111.insets = new java.awt.Insets(0,30,0,0);
+			gridBagConstraints111.gridy = 1;
 			GridBagConstraints gridBagConstraints110 = new GridBagConstraints();
 			gridBagConstraints110.gridx = 2;
 			gridBagConstraints110.insets = new java.awt.Insets(0, 30, 0, 0);
@@ -544,6 +552,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints.gridheight = 2;
 			gridBagConstraints.gridy = 0;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			namePanel = new JPanel();
@@ -554,14 +563,17 @@ public class MethodViewer extends GridPortalBaseFrame {
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
 					IntroduceLookAndFeel.getPanelLabelColor()));
 			gridBagConstraints2.gridx = 1;
+			gridBagConstraints2.gridheight = 2;
+			gridBagConstraints2.gridwidth = 1;
 			gridBagConstraints2.anchor = java.awt.GridBagConstraints.CENTER;
 			gridBagConstraints2.gridy = 0;
 			gridBagConstraints2.weightx = 1.0D;
-			gridBagConstraints2.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
 			namePanel.add(getNameField(), gridBagConstraints2);
 			namePanel.add(methodLabel, gridBagConstraints);
 			namePanel.add(getIsImportedCheckBox(), gridBagConstraints110);
+			namePanel.add(getIsProvidedCheckBox(), gridBagConstraints111);
 		}
 		return namePanel;
 	}
@@ -805,6 +817,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 					.addTab("Method Signature", null, getMethodPanel(), null);
 			tabbedPanel.addTab("Security", null, getSecurityContainerPanel(),
 					null);
+			tabbedPanel.addTab("Provider Information", null, getProviderPanel(), null);
 			tabbedPanel.addTab("Import Information", null,
 					getImportInformationPanel(), null);
 		}
@@ -1335,30 +1348,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 			gridBagConstraints40.gridy = 1;
 			packageNameLabel = new JLabel();
 			packageNameLabel.setText("Package Name");
-			GridBagConstraints gridBagConstraints39 = new GridBagConstraints();
-			gridBagConstraints39.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints39.gridy = 6;
-			gridBagConstraints39.weightx = 1.0;
-			gridBagConstraints39.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints39.gridx = 1;
-			GridBagConstraints gridBagConstraints38 = new GridBagConstraints();
-			gridBagConstraints38.gridx = 0;
-			gridBagConstraints38.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints38.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints38.gridy = 6;
-			providerClassLabel = new JLabel();
-			providerClassLabel.setText("Provider Class");
-			GridBagConstraints gridBagConstraints37 = new GridBagConstraints();
-			gridBagConstraints37.gridx = 1;
-			gridBagConstraints37.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints37.gridy = 5;
-			GridBagConstraints gridBagConstraints36 = new GridBagConstraints();
-			gridBagConstraints36.gridx = 0;
-			gridBagConstraints36.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints36.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints36.gridy = 5;
-			isProvidedLabel = new JLabel();
-			isProvidedLabel.setText("Is Provided");
 			GridBagConstraints gridBagConstraints35 = new GridBagConstraints();
 			gridBagConstraints35.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints35.gridy = 4;
@@ -1426,13 +1415,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 					gridBagConstraints34);
 			importInformationPanel.add(getWsdlFileTextField(),
 					gridBagConstraints35);
-			importInformationPanel.add(isProvidedLabel, gridBagConstraints36);
-			importInformationPanel.add(getIsProvidedCheckBox(),
-					gridBagConstraints37);
-			importInformationPanel
-					.add(providerClassLabel, gridBagConstraints38);
-			importInformationPanel.add(getProviderClassTextField(),
-					gridBagConstraints39);
 			importInformationPanel.add(packageNameLabel, gridBagConstraints40);
 			importInformationPanel.add(getPackageNameTextField(),
 					gridBagConstraints41);
@@ -1519,38 +1501,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 	}
 
 	/**
-	 * This method initializes isProvidedCheckBox
-	 * 
-	 * @return javax.swing.JCheckBox
-	 */
-	private JCheckBox getIsProvidedCheckBox() {
-		if (isProvidedCheckBox == null) {
-			isProvidedCheckBox = new JCheckBox();
-			if (method.getImportInformation() != null) {
-				isProvidedCheckBox.setSelected(method.getImportInformation()
-						.isIsProvided());
-			}
-		}
-		return isProvidedCheckBox;
-	}
-
-	/**
-	 * This method initializes providerClassTextField
-	 * 
-	 * @return javax.swing.JTextField
-	 */
-	private JTextField getProviderClassTextField() {
-		if (providerClassTextField == null) {
-			providerClassTextField = new JTextField();
-			if (method.getImportInformation() != null) {
-				providerClassTextField.setText(method.getImportInformation()
-						.getProviderClass());
-			}
-		}
-		return providerClassTextField;
-	}
-
-	/**
 	 * This method initializes packageNameTextField
 	 * 
 	 * @return javax.swing.JTextField
@@ -1564,6 +1514,62 @@ public class MethodViewer extends GridPortalBaseFrame {
 			}
 		}
 		return packageNameTextField;
+	}
+
+	/**
+	 * This method initializes isProvidedCheckBox	
+	 * 	
+	 * @return javax.swing.JCheckBox	
+	 */
+	private JCheckBox getIsProvidedCheckBox() {
+		if (isProvidedCheckBox == null) {
+			isProvidedCheckBox = new JCheckBox();
+			isProvidedCheckBox.setText("Provided");
+			isProvidedCheckBox.setSelected(method.isIsProvided());
+		}
+		return isProvidedCheckBox;
+	}
+
+	/**
+	 * This method initializes providerPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getProviderPanel() {
+		if (providerPanel == null) {
+			GridBagConstraints gridBagConstraints37 = new GridBagConstraints();
+			gridBagConstraints37.gridx = 0;
+			gridBagConstraints37.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints37.gridy = 0;
+			GridBagConstraints gridBagConstraints36 = new GridBagConstraints();
+			gridBagConstraints36.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints36.gridx = 1;
+			gridBagConstraints36.gridy = 0;
+			gridBagConstraints36.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints36.weightx = 1.0;
+			providerClassLabel = new JLabel();
+			providerClassLabel.setText("Provider Class");
+			providerPanel = new JPanel();
+			providerPanel.setLayout(new GridBagLayout());
+			providerPanel.add(providerClassLabel, gridBagConstraints37);
+			providerPanel.add(getProviderClassTextField(), gridBagConstraints36);
+		}
+		return providerPanel;
+	}
+
+	/**
+	 * This method initializes providerClassTextField	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getProviderClassTextField() {
+		if (providerClassTextField == null) {
+			providerClassTextField = new JTextField();
+			if(method.getProviderInformation()!=null){
+				providerClassTextField.setText(method.getProviderInformation().getProviderClass());
+			}
+		}
+		return providerClassTextField;
 	}
 } // @jve:decl-index=0:visual-constraint="4,12"
 

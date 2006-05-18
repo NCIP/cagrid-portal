@@ -63,7 +63,6 @@ public class AddImportedSimpleMethodStep extends BaseStep {
 		ii.setNamespace(importedTCI.getNamespace());
 		ii.setOperationName(methodName);
 		ii.setPortTypeName(importedTCI.getName() + "PortType");
-		ii.setIsProvided(false);
 		ii.setPackageName(importedTCI.getPackageName() + ".stubs");
 		ii.setWsdlFile(importedTCI.getName() + ".wsdl");
 		method.setImportInformation(ii);

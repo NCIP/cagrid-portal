@@ -314,10 +314,7 @@ public class SyncSource {
 				e1.printStackTrace();
 			}
 
-			if (!method.isIsImported()
-					|| (method.isIsImported()
-							&& method.getImportInformation() != null && !method
-							.getImportInformation().isIsProvided())) {
+			if (!method.isIsProvided()) {
 				// populate the impl method
 				addImpl(method);
 				// populate the provider impl method
