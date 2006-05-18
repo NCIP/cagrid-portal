@@ -254,7 +254,24 @@ public class ObjectWalkingCQLValidator implements CQLValidator {
 	
 	
 	private void validateGroupModel(Object current, Group group, Project proj) throws MalformedQueryException {
+		if (group.getAttribute() != null) {
+			UMLClassMetadata classMd = getUmlClassMetadata(current.getName(), proj);
+			for (int i = 0; i < group.getAttribute().length; i++) {
+				validateAttributeModel(group.getAttribute(i), classMd);
+			}
+		}
 		
+		if (group.getAssociation() != null) {
+			for (int i = 0; i < group.getAssociation().length; i++) {
+				validateAssociationModel(current, group.getAssociation(i), proj);
+			}
+		}
+		
+		if (group.getGroup() != null) {
+			for (int i = 0; i < group.getGroup().length; i++) {
+				validateGroupModel(current, group.getGroup(i), proj);
+			}
+		}
 	}
 	
 	
