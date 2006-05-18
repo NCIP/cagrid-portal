@@ -1,5 +1,8 @@
 package gov.nih.nci.cagrid.data.cql.validation;
 
+import gov.nih.nci.cadsr.umlproject.domain.Project;
+import gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata;
+import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.Attribute;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
@@ -8,9 +11,13 @@ import gov.nih.nci.cagrid.cqlquery.LogicalOperator;
 import gov.nih.nci.cagrid.cqlquery.Object;
 import gov.nih.nci.cagrid.cqlquery.Predicate;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
+import gov.nih.nci.cagrid.metadata.common.UMLClass;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 /** 
@@ -26,11 +33,13 @@ public class ObjectWalkingCQLValidator implements CQLValidator {
 	
 	private static Set predicateValues = null;
 
-	public void validateCql(CQLQuery query, DomainModel model) throws MalformedQueryException {
+	public void validateCql(CQLQuery query, DomainModel model, Project project) throws MalformedQueryException {
 		// start by validating the structure of the query
 		validateStructure(query);
 		
 		// validate the query against the data service's Domain Model
+		validateQueryTarget(query, model);
+		validateObjectModel(query.getTarget(), model, project);
 	}
 	
 	
@@ -145,20 +154,113 @@ public class ObjectWalkingCQLValidator implements CQLValidator {
 			}
 		}
 	}
+	
+	
+	private void validateQueryTarget(CQLQuery query, DomainModel model) throws MalformedQueryException {
+		UMLClass targetClass = getUmlClass(query.getTarget().getName(), model);
+		if (targetClass == null) {
+			throw new MalformedQueryException("Query target " + query.getTarget().getName() + " is not a valid target in the domain model");
+		}
+	}
+	
+	
+	private void validateObjectModel(Object obj, DomainModel model, Project proj) throws MalformedQueryException {
+		// verify the object exists in the project
+		UMLClassMetadata classMd = getUmlClassMetadata(obj.getName(), proj);
+		if (classMd == null) {
+			throw new MalformedQueryException("No object " + obj.getName() + " found in the project");
+		}
+		
+		if (obj.getAttribute() != null) {
+			validateAttributeModel(obj.getAttribute(), classMd);
+		}
+	}
+	
+	
+	private void validateAttributeModel(Attribute attrib, UMLClassMetadata classMd) throws MalformedQueryException {
+		// verify the attribute exists
+		UMLAttributeMetadata attribMd = getUmlAttributeMetadata(attrib.getName(), classMd);
+		if (attribMd == null) {
+			throw new MalformedQueryException("Attribute " + attrib.getName() + " is not defined for the class " + classMd.getFullyQualifiedName());
+		}
+		// if the predicate is a binary operator, verify the value is of the correct type
+		if (attrib.getPredicate() != null && 
+			!(attrib.getPredicate().getValue().equals(Predicate._IS_NOT_NULL) ||
+			attrib.getPredicate().getValue().equals(Predicate._IS_NULL))) {
+			String value = attrib.getValue();
+			String dataType = attribMd.getDataElement().getValueDomain().getLongName();
+			try {
+				if (dataType.equals(Integer.class.getName())) {
+					Integer.valueOf(value);
+					// TODO: max / min permissable values
+				} else if (dataType.equals(Long.class.getName())) {
+					Long.valueOf(value);
+				} else if (dataType.equals(Date.class.getName())) {
+					DateFormat.getInstance().parse(value);
+				} else if (dataType.equals(Boolean.class.getName())) {
+					Boolean.valueOf(value);
+				} else if (dataType.equals(Character.class.getName())) {
+					if (value.length() != 1) {
+						throw new MalformedQueryException("Characters can only be of length 1, not " + value.length());
+					}
+					Character.valueOf(value.charAt(0));
+				}
+			} catch (Exception ex) {
+				throw new MalformedQueryException("Attribute " + attrib.getName() + " queried with value " + value + ", but type is " + dataType, ex);
+			}
+		}
+	}
+	
+	
+	private UMLClass getUmlClass(String className, DomainModel model) {
+		UMLClass[] allClasses = model.getExposedUMLClassCollection().getUMLClass();
+		for (int i = 0; allClasses != null && i < allClasses.length; i++) {
+			if (allClasses[i].getClassname().equals(className));
+			return allClasses[i];
+		}
+		return null;
+	}
+	
+	
+	private UMLClassMetadata getUmlClassMetadata(String className, Project proj) {
+		Iterator classMdIter = proj.getUMLClassMetadataCollection().iterator();
+		while (classMdIter.hasNext()) {
+			UMLClassMetadata md = (UMLClassMetadata) classMdIter.next();
+			if (md.getFullyQualifiedName().equals(className)) {
+				return md;
+			}
+		}
+		return null;
+	}
+	
+	
+	private UMLAttributeMetadata getUmlAttributeMetadata(String attribName, UMLClassMetadata classMd) {
+		Iterator attribMdIter = classMd.getUMLAttributeMetadataCollection().iterator();
+		while (attribMdIter.hasNext()) {
+			UMLAttributeMetadata attribMd = (UMLAttributeMetadata) attribMdIter.next();
+			if (attribMd.getName().equals(attribName)) {
+				return attribMd;
+			}
+		}
+		return null;
+	}
 
 
+	// main method for testing only
 	public static void main(String[] args) {
-		if (args.length != 2) {
-			System.err.println("usage: " + ObjectWalkingCQLValidator.class.getName() + " <cqlDocumentFilename> <domainModelFilename>");
+		if (args.length != 3) {
+			System.err.println("usage: " + ObjectWalkingCQLValidator.class.getName() + " <cqlDocumentFilename> <domainModelFilename> <projectFilename>");
 			System.exit(1);
 		}
 		ObjectWalkingCQLValidator validator = new ObjectWalkingCQLValidator();
 		String cqlFilename = args[0];
 		String domainModelFilename = args[1];
+		String projectFilename = args[2];
 		try {
 			CQLQuery query = (CQLQuery) Utils.deserializeDocument(cqlFilename, CQLQuery.class);
 			DomainModel model = (DomainModel) Utils.deserializeDocument(domainModelFilename, DomainModel.class);
-			validator.validateCql(query, model);
+			Project project = (Project) Utils.deserializeDocument(projectFilename, Project.class);
+			validator.validateCql(query, model, project);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			System.exit(1);
