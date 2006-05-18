@@ -17,7 +17,7 @@ if (info.getServices() != null && info.getServices().getService() != null) {
    		}
 %>
 	<service name="SERVICE-INSTANCE-PREFIX/<%=modifiedServiceName%>">
-		<resource name="home" type="<%=service.getPackageName()%>.<%=modifiedServiceName.toLowerCase()%>.service.globus.resource.BaseResourceHome">
+		<resource name="home" type="<%=service.getPackageName()%>.service.globus.resource.BaseResourceHome">
 			<resourceParams>
 				<parameter>
 					<name>factory</name>
@@ -28,7 +28,7 @@ if (info.getServices() != null && info.getServices().getService() != null) {
 		<%
 		if(service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_MAIN_RESOURCE)){
 		%>
-		<resource name="configuration" type="<%=service.getPackageName()%>.<%=modifiedServiceName.toLowerCase()%>.service.globus.resource.ResourceConfiguration">
+		<resource name="configuration" type="<%=service.getPackageName()%>.service.globus.resource.ResourceConfiguration">
 			<resourceParams>
 				<parameter>
 					<name>factory</name>

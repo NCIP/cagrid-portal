@@ -19,7 +19,7 @@ if (info.getServices() != null && info.getServices().getService() != null) {
    		}
 %>
     <service name="SERVICE-INSTANCE-PREFIX/<%=serviceName %>" provider="Handler" use="literal" style="document">
-        <parameter name="className" value="<%=service.getPackageName()%>.<%=serviceName.toLowerCase()%>.service.globus.<%=serviceName%>ProviderImpl"/>
+        <parameter name="className" value="<%=service.getPackageName()%>.service.globus.<%=serviceName%>ProviderImpl"/>
         <wsdlFile>share/schema/SERVICE-INSTANCE-PATH/<%=service.getName()%>_service.wsdl</wsdlFile>
         <parameter name="securityDescriptor" value="ETC-PATH/<%=service.getName()%>-security-desc.xml"/>
         <parameter name="allowedMethods" value="*"/>
