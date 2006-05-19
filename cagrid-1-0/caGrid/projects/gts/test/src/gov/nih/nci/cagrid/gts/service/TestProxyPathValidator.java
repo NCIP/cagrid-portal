@@ -4,14 +4,12 @@ import gov.nih.nci.cagrid.gridca.common.CRLEntry;
 import gov.nih.nci.cagrid.gts.test.CA;
 import gov.nih.nci.cagrid.gts.test.Credential;
 
+import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
-import java.util.HashMap;
-import java.util.Map;
 
 import junit.framework.TestCase;
 
 import org.bouncycastle.asn1.x509.CRLReason;
-import org.globus.gsi.proxy.ProxyPathValidator;
 import org.globus.gsi.proxy.ProxyPathValidatorException;
 
 
@@ -43,23 +41,27 @@ public class TestProxyPathValidator extends TestCase {
 			X509Certificate[] trusted1 = new X509Certificate[1];
 			trusted1[0] = caX.getCertificate();
 
-			Map crlMap = new HashMap();
-			crlMap.put(caX.getCRL().getIssuerDN().getName(), caX.getCRL());
-			// CertificateRevocationLists crls = new
-			// CertificateRevocationLists();
+			X509CRL[] crls = new X509CRL[1];
+			crls[0] = caX.getCRL();
+			CertificateRevocationLists rev = CertificateRevocationLists.getCertificateRevocationLists(crls);
 
 			X509Certificate[] chainX1 = new X509Certificate[1];
 			chainX1[0] = credX1.getCertificate();
-			valid.validate(chainX1, trusted1);
+			valid.validate(chainX1, trusted1, rev);
 
-			X509Certificate[] chainX2 = new X509Certificate[1];
-			chainX2[0] = credX2.getCertificate();
-			valid.validate(chainX2, trusted1);
+			try {
+				X509Certificate[] chainX2 = new X509Certificate[1];
+				chainX2[0] = credX2.getCertificate();
+				valid.validate(chainX2, trusted1, rev);
+				fail("Should not be able to validate certificate!!!");
+			} catch (ProxyPathValidatorException ex) {
+
+			}
 
 			try {
 				X509Certificate[] chainY1 = new X509Certificate[1];
 				chainY1[0] = credY1.getCertificate();
-				valid.validate(chainY1, trusted1);
+				valid.validate(chainY1, trusted1, rev);
 				fail("Should not be able to validate certificate!!!");
 			} catch (ProxyPathValidatorException ex) {
 
