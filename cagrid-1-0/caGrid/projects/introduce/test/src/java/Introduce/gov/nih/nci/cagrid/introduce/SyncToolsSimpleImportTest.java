@@ -19,7 +19,7 @@ public class SyncToolsSimpleImportTest extends Story {
 	private TestCaseInfo tci3;
 	
 	public SyncToolsSimpleImportTest(){
-		this.setName("Introduce Codegen Import System Test");
+		this.setName("IntroduceCodegenSimpleImportSystemTest");
 	}
 
 	protected Vector steps() {
@@ -47,8 +47,10 @@ public class SyncToolsSimpleImportTest extends Story {
 	}
 
 	protected void storyTearDown() throws Throwable {
-		RemoveSkeletonStep step = new RemoveSkeletonStep(tci1);
-		step.runStep();
+		RemoveSkeletonStep step1 = new RemoveSkeletonStep(tci1);
+		step1.runStep();
+		RemoveSkeletonStep step2 = new RemoveSkeletonStep(tci3);
+		step2.runStep();
 	}
 
 	// used to make sure that if we are going to use a junit testsuite to test

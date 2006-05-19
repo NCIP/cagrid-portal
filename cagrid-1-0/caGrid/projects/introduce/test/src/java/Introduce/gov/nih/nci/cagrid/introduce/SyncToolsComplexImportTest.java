@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce;
 
 import gov.nih.nci.cagrid.introduce.steps.AddComplexMethodWithFaultStep;
 import gov.nih.nci.cagrid.introduce.steps.AddImportedMethodStep;
+import gov.nih.nci.cagrid.introduce.steps.AddSimpleMethodStep;
 import gov.nih.nci.cagrid.introduce.steps.CreateSkeletonStep;
 import gov.nih.nci.cagrid.introduce.steps.RemoveSkeletonStep;
 
@@ -31,6 +32,7 @@ public class SyncToolsComplexImportTest extends Story {
 			steps.add(new CreateSkeletonStep(tci1, true));
 			steps.add(new CreateSkeletonStep(tci3, true));
 
+			steps.add(new AddSimpleMethodStep(tci3, "newSimpleMethod", true));
 			steps.add(new AddComplexMethodWithFaultStep(tci3, "newMethod", true));
 			steps.add(new AddImportedMethodStep(tci1, tci3, "newMethod",
 					true,true));
