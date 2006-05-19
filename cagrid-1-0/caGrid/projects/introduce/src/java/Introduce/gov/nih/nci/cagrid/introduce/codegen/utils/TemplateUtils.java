@@ -141,7 +141,7 @@ public class TemplateUtils {
 					List operations = el.getChildren("operation", fromDoc.getRootElement().getNamespace());
 					for (int j = 0; j < operations.size(); j++) {
 						Element opEl = (Element) operations.get(j);
-						if (opEl.getAttributeValue("name").equals(method.getImportInformation().getOperationName())) {
+						if (opEl.getAttributeValue("name").equals(method.getName())) {
 							// need to detach the el and add it to the service
 							// which will be using it...
 							List toportTypes = toDoc.getRootElement().getChildren("portType",

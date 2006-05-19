@@ -152,8 +152,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JLabel serviceName = null;
 
-	private JLabel operationNameLabel = null;
-
 	private JLabel wsdlFileLabel = null;
 
 	private JLabel namespaceLabel = null;
@@ -161,8 +159,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JTextField namespaceTextField = null;
 
 	private JTextField serviceNameTextField = null;
-
-	private JTextField operationNameTextField = null;
 
 	private JTextField wsdlFileTextField = null;
 
@@ -468,9 +464,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 												.getText());
 								importInfo
 										.setPackageName(getPackageNameTextField()
-												.getText());
-								importInfo
-										.setOperationName(getOperationNameTextField()
 												.getText());
 								importInfo.setWsdlFile(getWsdlFileTextField()
 										.getText());
@@ -1356,12 +1349,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 			gridBagConstraints35.weightx = 1.0;
 			gridBagConstraints35.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints35.gridx = 1;
-			GridBagConstraints gridBagConstraints34 = new GridBagConstraints();
-			gridBagConstraints34.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints34.gridy = 3;
-			gridBagConstraints34.weightx = 1.0;
-			gridBagConstraints34.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints34.gridx = 1;
 			GridBagConstraints gridBagConstraints33 = new GridBagConstraints();
 			gridBagConstraints33.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints33.gridy = 2;
@@ -1388,13 +1375,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 			gridBagConstraints30.gridy = 4;
 			wsdlFileLabel = new JLabel();
 			wsdlFileLabel.setText("WSDL File");
-			GridBagConstraints gridBagConstraints29 = new GridBagConstraints();
-			gridBagConstraints29.gridx = 0;
-			gridBagConstraints29.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints29.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints29.gridy = 3;
-			operationNameLabel = new JLabel();
-			operationNameLabel.setText("Operation");
 			GridBagConstraints gridBagConstraints28 = new GridBagConstraints();
 			gridBagConstraints28.gridx = 0;
 			gridBagConstraints28.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -1405,16 +1385,12 @@ public class MethodViewer extends GridPortalBaseFrame {
 			importInformationPanel = new JPanel();
 			importInformationPanel.setLayout(new GridBagLayout());
 			importInformationPanel.add(serviceName, gridBagConstraints28);
-			importInformationPanel
-					.add(operationNameLabel, gridBagConstraints29);
 			importInformationPanel.add(wsdlFileLabel, gridBagConstraints30);
 			importInformationPanel.add(namespaceLabel, gridBagConstraints31);
 			importInformationPanel.add(getNamespaceTextField(),
 					gridBagConstraints32);
 			importInformationPanel.add(getServiceNameTextField(),
 					gridBagConstraints33);
-			importInformationPanel.add(getOperationNameTextField(),
-					gridBagConstraints34);
 			importInformationPanel.add(getWsdlFileTextField(),
 					gridBagConstraints35);
 			importInformationPanel.add(packageNameLabel, gridBagConstraints40);
@@ -1454,22 +1430,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 			}
 		}
 		return serviceNameTextField;
-	}
-
-	/**
-	 * This method initializes operationNameTextField
-	 * 
-	 * @return javax.swing.JTextField
-	 */
-	private JTextField getOperationNameTextField() {
-		if (operationNameTextField == null) {
-			operationNameTextField = new JTextField();
-		}
-		if (method.getImportInformation() != null) {
-			operationNameTextField.setText(method.getImportInformation()
-					.getOperationName());
-		}
-		return operationNameTextField;
 	}
 
 	/**

@@ -54,7 +54,6 @@
 			<xs:element name="ImportInformation" minOccurs="0" maxOccurs="1">
 				<xs:complexType>
 					<xs:attribute name="portTypeName" type="xs:string" use="required"/>
-					<xs:attribute name="operationName" type="xs:string" use="required"/>
 					<xs:attribute name="namespace" type="xs:string" use="required"/>
 					<xs:attribute name="packageName" type="xs:string" use="required"/>
 					<xs:attribute name="wsdlFile" type="xs:string" use="required"/>

@@ -1,11 +1,15 @@
 package gov.nih.nci.cagrid.introduce.common;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeImportInformation;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
@@ -15,6 +19,8 @@ import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
 import java.io.File;
 import java.util.List;
 import java.util.StringTokenizer;
+
+import javax.xml.namespace.QName;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -262,6 +268,107 @@ public class CommonTools {
 		output += "  " + method.getName() + "(" + input + ")";
 
 		return output;
+	}
+	
+	
+	public static void importMethod(MethodTypeImportInformation importInformation, File fromDir, File toDir, String fromService, String toService, String methodName,boolean copyFiles) throws Exception {
+		ServiceDescription fromintroService = (ServiceDescription) Utils.deserializeDocument(fromDir.getAbsolutePath() + File.separator + "introduce.xml", ServiceDescription.class);
+
+		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(toDir.getAbsolutePath() + File.separator + "introduce.xml", ServiceDescription.class);
+		
+		if(copyFiles){
+
+			String fromwsdl =fromDir.getAbsolutePath()+ File.separator + "schema" + File.separator
+				+ fromService;
+			String towsdl = toDir.getAbsolutePath() + File.separator + "schema" + File.separator
+			+ toService;
+			
+			File[] wsdls = new File(fromwsdl).listFiles();
+			for(int i = 0; i < wsdls.length; i++){
+				Utils.copyFile(wsdls[i].getAbsoluteFile(),new File(towsdl + File.separator + wsdls[i].getName()));
+			}
+			
+			
+			String fromLibDir = fromDir.getAbsolutePath() + File.separator + "lib";
+			String toLibDir = toDir.getAbsolutePath() + File.separator + "lib";
+		
+			File[] libs = new File(fromLibDir).listFiles();
+			for(int i = 0; i < libs.length; i++){
+				Utils.copyFile(libs[i].getAbsoluteFile(),new File(toLibDir + File.separator + libs[i].getName()));
+			}
+		}
+		
+		//copy over the namespaces from the imported service
+		NamespacesType fromNamespaces = fromintroService.getNamespaces();
+		int fromNamespacesLength = 0;
+		if(fromNamespaces!=null && fromNamespaces.getNamespace()!=null){
+			fromNamespacesLength = fromNamespaces.getNamespace().length;
+		}
+		NamespacesType toNamespaces = introService.getNamespaces();
+		int toNamespacesLength = 0;
+		if(toNamespaces!=null && toNamespaces.getNamespace()!=null){
+			toNamespacesLength = toNamespaces.getNamespace().length;
+		}
+		NamespacesType newNamespaces = new NamespacesType();
+		NamespaceType[] newNamespacesArr = new NamespaceType[fromNamespacesLength + toNamespacesLength];
+		int location = 0;
+		for(int i = 0; i < fromNamespacesLength; i ++){
+			newNamespacesArr[location++] = fromNamespaces.getNamespace(i);
+		}
+		for(int i = 0; i < toNamespacesLength; i ++){
+			newNamespacesArr[location++] = toNamespaces.getNamespace(i);
+		}
+		newNamespaces.setNamespace(newNamespacesArr);
+		introService.setNamespaces(newNamespaces);
+		
+		
+		//find the method and add it methods....
+		MethodsType fromMethods = CommonTools.getService(fromintroService.getServices(),fromService).getMethods();
+		MethodType foundMethod = null;
+		if(fromMethods!=null && fromMethods.getMethod()!=null){
+			boolean found = false;
+			for(int i = 0; i < fromMethods.getMethod().length; i ++){
+				foundMethod = fromMethods.getMethod(i);
+				if(foundMethod.getName().equals(methodName)){
+					found = true;
+					break;
+				}
+			}
+			if(found!=true){
+				throw new Exception("Method " + methodName + " was not found in imported service");
+			}
+			
+			
+		} else {
+			throw new Exception("Imported service was supposed to have methods.....");
+		}
+		
+		MethodsType methodsType = CommonTools.getService(introService.getServices(),toService).getMethods();
+
+		
+		foundMethod.setIsImported(true);
+		foundMethod.setImportInformation(importInformation);
+		
+		// add new method to array in bean
+		// this seems to be a wierd way be adding things....
+		MethodType[] newMethods;
+		int newLength = 0;
+		if (methodsType!=null && methodsType.getMethod() != null) {
+			newLength = methodsType.getMethod().length + 1;
+			newMethods = new MethodType[newLength];
+			System.arraycopy(methodsType.getMethod(), 0, newMethods, 0, methodsType.getMethod().length);
+		} else {
+			newLength = 1;
+			newMethods = new MethodType[newLength];
+		}
+		MethodsType newmethodsType = new MethodsType();
+		newMethods[newLength - 1] = foundMethod;
+		newmethodsType.setMethod(newMethods);
+		CommonTools.getService(introService.getServices(),toService).setMethods(newmethodsType);
+
+		Utils.serializeDocument(toDir.getAbsolutePath() + File.separator + "introduce.xml",
+			introService, new QName("gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
+
 	}
 	
 }

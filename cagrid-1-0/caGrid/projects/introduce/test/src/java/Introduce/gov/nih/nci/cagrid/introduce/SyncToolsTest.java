@@ -1,16 +1,16 @@
 package gov.nih.nci.cagrid.introduce;
 
-import gov.nih.nci.cagrid.introduce.steps.AddComplexMethodWithFaultStep;
 import gov.nih.nci.cagrid.introduce.steps.AddComplexMethodWithFaulsAndArraysStep;
-import gov.nih.nci.cagrid.introduce.steps.AddImportedSimpleMethodStep;
+import gov.nih.nci.cagrid.introduce.steps.AddComplexMethodWithFaultStep;
+import gov.nih.nci.cagrid.introduce.steps.AddImportedMethodStep;
 import gov.nih.nci.cagrid.introduce.steps.AddMetadataStep;
 import gov.nih.nci.cagrid.introduce.steps.AddMetadatatWithLoadFromFileStep;
+import gov.nih.nci.cagrid.introduce.steps.AddServicePropertiesStep;
 import gov.nih.nci.cagrid.introduce.steps.AddServiceStep;
 import gov.nih.nci.cagrid.introduce.steps.AddSimpleMethodStep;
 import gov.nih.nci.cagrid.introduce.steps.AddSimpleMethodWithArraysStep;
-import gov.nih.nci.cagrid.introduce.steps.AddSimpleMethodWithReturnStep;
 import gov.nih.nci.cagrid.introduce.steps.AddSimpleMethodWithFaultStep;
-import gov.nih.nci.cagrid.introduce.steps.AddServicePropertiesStep;
+import gov.nih.nci.cagrid.introduce.steps.AddSimpleMethodWithReturnStep;
 import gov.nih.nci.cagrid.introduce.steps.CreateSkeletonStep;
 import gov.nih.nci.cagrid.introduce.steps.ModifySimpleMethodStep;
 import gov.nih.nci.cagrid.introduce.steps.RemoveAllMetadataStep;
@@ -51,8 +51,8 @@ public class SyncToolsTest extends Story {
 			steps.add(new RemoveMethodStep(tci1, "newMethod", false));
 			steps.add(new RemoveMethodStep(tci2, "newMethod2", true));
 			steps.add(new AddSimpleMethodStep(tci2, "newMethod1", true));
-			steps.add(new AddImportedSimpleMethodStep(tci1, tci2, "newMethod1",
-					true));
+			steps.add(new AddImportedMethodStep(tci1, tci2, "newMethod1",
+					true,false));
 			steps.add(new AddSimpleMethodWithFaultStep(tci1,
 					"newMethodWithFault", false));
 			steps.add(new AddSimpleMethodWithReturnStep(tci1,
