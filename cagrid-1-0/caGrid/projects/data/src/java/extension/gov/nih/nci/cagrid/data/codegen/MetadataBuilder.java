@@ -47,11 +47,23 @@ public class MetadataBuilder {
 	private UMLPackageMetadata packageMetadata = null;
 	private UMLClassMetadata[] classMetadata = null;
 	
-	public MetadataBuilder(String cadsrUrl, String project, String pack, String[] classes) {
+	/**
+	 * Initializes the metadata builder
+	 * 
+	 * @param cadsrUrl
+	 * 		The URL at which the caDSR grid service can be found
+	 * @param project
+	 * 		The name of the project to create the domain model from
+	 * @param pack
+	 * 		The name of the package within the project to pull classes from
+	 * @param targetClasses
+	 * 		The class names available as query targets
+	 */
+	public MetadataBuilder(String cadsrUrl, String project, String pack, String[] targetClasses) {
 		this.cadsrUrl = cadsrUrl;
 		this.projectName = project;
 		this.packageName = pack;
-		this.classNames = classes;
+		this.classNames = targetClasses;
 	}
 	
 	
@@ -69,11 +81,25 @@ public class MetadataBuilder {
 	}
 	
 	
+	/**
+	 * Generates the exposed UML associations between classes.
+	 * For now, this will just return ALL associations in the package
+	 * @return
+	 * @throws RemoteException
+	 * @throws CodegenExtensionException
+	 */
 	private DomainModelExposedUMLAssociationCollection getExposedAssociationCollection() throws RemoteException, CodegenExtensionException {
 		DomainModelExposedUMLAssociationCollection exposed = new DomainModelExposedUMLAssociationCollection();
 		Set associations = new HashSet();
+		/*
 		for (int i = 0; i < classNames.length; i++) {
 			Set classAssociations = getUmlAssociations(classNames[i]);
+			associations.addAll(classAssociations);
+		}
+		*/
+		UMLClassMetadata[] classes = getClassMetadata();
+		for (int i =  0; i < classes.length; i++) {
+			Set classAssociations = getUmlAssociations(classes[i]);
 			associations.addAll(classAssociations);
 		}
 		UMLAssociation[] associationArray = new UMLAssociation[associations.size()];
@@ -83,23 +109,12 @@ public class MetadataBuilder {
 	}
 	
 	
-	private Set getUmlAssociations(String className) throws RemoteException, CodegenExtensionException {
+	private Set getUmlAssociations(UMLClassMetadata classMd) throws RemoteException, CodegenExtensionException {
 		Set associations = new HashSet();
-		// find the UMLClassMetadata needed
-		UMLClassMetadata metadata = null;
-		for (int i = 0; i < getClassMetadata().length; i++) {
-			if (getClassMetadata()[i].getFullyQualifiedName().equals(className) || getClassMetadata()[i].getName().equals(className)) {
-				metadata = getClassMetadata()[i];
-				break;
-			}
-		}
-		if (metadata == null) {
-			throw new CodegenExtensionException("No class metadata found for association class " + className);
-		}
-		
+				
 		// association metadata
-		UMLAssociationMetadata[] assocMetadata = new UMLAssociationMetadata[metadata.getUMLAssociationMetadataCollection().size()];
-		metadata.getUMLAssociationMetadataCollection().toArray(assocMetadata);
+		UMLAssociationMetadata[] assocMetadata = new UMLAssociationMetadata[classMd.getUMLAssociationMetadataCollection().size()];
+		classMd.getUMLAssociationMetadataCollection().toArray(assocMetadata);
 		for (int i = 0; i < assocMetadata.length; i++) {
 			UMLAssociation assoc = new UMLAssociation();
 			assoc.setBidirectional(assocMetadata[i].getIsBidirectional().booleanValue());
