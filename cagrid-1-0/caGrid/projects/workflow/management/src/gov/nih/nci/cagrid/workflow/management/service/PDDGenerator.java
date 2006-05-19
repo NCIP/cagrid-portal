@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.workflow.management.service;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import javax.xml.transform.OutputKeys;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.axis.utils.XMLUtils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -40,6 +42,11 @@ public class PDDGenerator
         "http://schemas.xmlsoap.org/ws/2003/03/addressing";
     public static final String WSA_ANONYMOUS =
         "http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous";
+    private Collection wsdlNamespaces;
+    private Collection partnerLinks;
+    private Document bpelDoc;
+    private String pathToPDD;
+    private String pathToBPEL;
 
     public static void main(String[] args) throws Exception {
         File f = new File(args[0]);
@@ -68,7 +75,23 @@ public class PDDGenerator
         bpelDoc = bpel;
         parsePartnerLinks();
     }
-
+    public PDDGenerator(String pathToBPEL, String pathToPDD) {
+    	FileInputStream bpelFile = null;
+    	this.pathToBPEL = pathToBPEL;
+    	this.pathToPDD = pathToPDD;
+    	try {
+    		bpelFile = new FileInputStream(pathToBPEL);
+    		this.bpelDoc = XMLUtils.newDocument(bpelFile);
+    		parsePartnerLinks();
+    	} catch (Exception e){
+    		
+    	}
+    }
+    
+    public String getPDDFile(String pathToBPEL) {
+    	String pathToPDD = null;
+    	return pathToPDD;
+    }
     public Document generate() throws ParserConfigurationException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(true);
@@ -216,8 +239,6 @@ public class PDDGenerator
         public String partnerRole;
     }
 
-    private Collection wsdlNamespaces;
-    private Collection partnerLinks;
-    private Document bpelDoc;
+   
 }
 

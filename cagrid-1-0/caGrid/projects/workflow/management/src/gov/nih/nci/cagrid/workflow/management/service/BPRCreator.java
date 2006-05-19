@@ -4,15 +4,21 @@ import org.activebpel.rt.base64.Base64;
 import org.xmlsoap.schemas.ws._2003._03.business_process.TProcess;
 import java.io.*;
 import java.util.jar.*;
+
+import javax.xml.namespace.QName;
+
 import gov.nih.nci.cagrid.common.Utils;
 
 public class BPRCreator {
 
 	private static int iBaseFolderLength = 0;
 
-	public static JarFile makeBPR(TProcess bpel) {
+	public static void makeBPR(TProcess bpel, String bprPath) throws Exception {
 		JarFile bpr = null;
-		return bpr;
+		QName qname = new QName("http://AnnualDemo");
+		Utils.serializeDocument("c:\\test\\temp.bpel", bpel, qname);
+		String[] fileList = {"c:\\test\\temp.bpel", "c:\\test\\AnnualDemoPDD.pdd"};
+		createBPR(fileList, bprPath);
 	}
 
 	public static void createBPR(String[] fileList, String bprPath)
@@ -20,7 +26,6 @@ public class BPRCreator {
 		FileOutputStream fos = new FileOutputStream(bprPath);
 		Manifest manifest = new Manifest();
 		JarOutputStream jos = new JarOutputStream(fos, manifest);
-
 		try {
 			for (int i = 0; i < fileList.length; i++) {
 				System.out.println(fileList[i]);
