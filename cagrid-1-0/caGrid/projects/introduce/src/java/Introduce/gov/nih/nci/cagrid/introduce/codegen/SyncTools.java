@@ -350,9 +350,17 @@ public class SyncTools {
 								MethodTypeInputsInput inputParam = mtype.getInputs().getInput(j);
 								SchemaInformation namespace = info.getSchemaInformation(inputParam.getQName());
 								if (!namespace.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
-									QName qname = new QName(service.getNamespace(), ">>"
-										+ TemplateUtils.upperCaseFirstCharacter(mtype.getName()) + "Request>"
-										+ inputParam.getName());
+									QName qname = null;
+									if(mtype.isIsImported()){
+										qname = new QName(mtype.getImportInformation().getNamespace(), ">>"
+												+ TemplateUtils.upperCaseFirstCharacter(mtype.getName()) + "Request>"
+												+ inputParam.getName());
+									} else{
+										qname = new QName(service.getNamespace(), ">>"
+												+ TemplateUtils.upperCaseFirstCharacter(mtype.getName()) + "Request>"
+												+ inputParam.getName());
+									}
+									
 									Type type = table.getType(qname);
 									if (type == null) {
 										table.dump(System.err);
@@ -360,8 +368,13 @@ public class SyncTools {
 											"Unable to find Element in symbol table for: " + qname);
 									}
 
-									inputParam.setContainerClassName(service.getPackageName() + ".stubs."
-										+ getRelativeClassName(type.getName()));
+									if(mtype.isIsImported()){
+										inputParam.setContainerClassName(mtype.getImportInformation().getPackageName()
+										+ "." + getRelativeClassName(type.getName()));
+									} else{
+										inputParam.setContainerClassName(service.getPackageName() + ".stubs."
+												+ getRelativeClassName(type.getName()));
+									}
 								}
 
 		 					}

@@ -19,7 +19,7 @@ public class SyncToolsComplexImportTest extends Story {
 	private TestCaseInfo tci3;
 	
 	public SyncToolsComplexImportTest(){
-		this.setName("Introduce Codegen Import System Test");
+		this.setName("IntroduceCodegenComplexImportSystemTest");
 	}
 
 	protected Vector steps() {
@@ -34,7 +34,6 @@ public class SyncToolsComplexImportTest extends Story {
 			steps.add(new AddComplexMethodWithFaultStep(tci3, "newMethod", true));
 			steps.add(new AddImportedMethodStep(tci1, tci3, "newMethod",
 					true,true));
-			steps.add(new RemoveSkeletonStep(tci3));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
@@ -47,8 +46,10 @@ public class SyncToolsComplexImportTest extends Story {
 	}
 
 	protected void storyTearDown() throws Throwable {
-		RemoveSkeletonStep step = new RemoveSkeletonStep(tci1);
-		step.runStep();
+		RemoveSkeletonStep step1 = new RemoveSkeletonStep(tci1);
+		step1.runStep();
+		RemoveSkeletonStep step2 = new RemoveSkeletonStep(tci3);
+		step2.runStep();
 	}
 
 	// used to make sure that if we are going to use a junit testsuite to test
