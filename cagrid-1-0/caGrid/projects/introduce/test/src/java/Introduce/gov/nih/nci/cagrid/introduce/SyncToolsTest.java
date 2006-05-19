@@ -31,6 +31,10 @@ public class SyncToolsTest extends Story {
 	private TestCaseInfo tci1;
 
 	private TestCaseInfo tci2;
+	
+	public SyncToolsTest(){
+		this.setName("Introduce Codegen System Test");
+	}
 
 	protected Vector steps() {
 		this.tci1 = new TestCaseInfo1();
@@ -73,7 +77,7 @@ public class SyncToolsTest extends Story {
 	}
 
 	public String getDescription() {
-		return "Tests the code generation tools";
+		return "Testing the Introduce code generation tools";
 	}
 
 	protected void storyTearDown() throws Throwable {
