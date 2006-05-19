@@ -64,8 +64,6 @@ public class AddImportedMethodStep extends BaseStep {
 			+ tci.getPackageDir() + File.separator + "common" + File.separator + tci.getName() + "I.java";
 		assertTrue(StepTools.methodExists(serviceInterface, methodName));
 
-		String cmd = CommonTools.getAntAllCommand(getBaseDir() + File.separator + tci.getDir());
-
 		buildStep();
 	}
 
