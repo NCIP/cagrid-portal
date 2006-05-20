@@ -34,7 +34,6 @@ public class SyncToolsSimpleImportTest extends Story {
 			steps.add(new AddSimpleMethodStep(tci3, "newMethod", true));
 			steps.add(new AddImportedMethodStep(tci1, tci3, "newMethod",
 					true,true));
-			steps.add(new RemoveSkeletonStep(tci3));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
