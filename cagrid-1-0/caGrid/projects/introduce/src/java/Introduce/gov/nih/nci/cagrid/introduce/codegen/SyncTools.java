@@ -28,6 +28,7 @@ import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.info.SchemaInformation;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
+import gov.nih.nci.cagrid.introduce.templates.ClasspathTemplate;
 import gov.nih.nci.cagrid.introduce.templates.NamespaceMappingsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate;
 
@@ -286,6 +287,13 @@ public class SyncTools {
 			}
 		}
 
+		// STEP 9: Profit!!!  Update the generated .classpath file
+		ClasspathTemplate classpathT = new ClasspathTemplate();
+		String classpathS = classpathT.generate(info);
+		File classpathF = new File(baseDirectory.getAbsolutePath() + File.separator + ".classpath");
+		FileWriter classpathFW = new FileWriter(classpathF);
+		classpathFW.write(classpathS);
+		classpathFW.close();
 	}
 
 

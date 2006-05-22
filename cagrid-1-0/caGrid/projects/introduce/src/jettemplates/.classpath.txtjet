@@ -6,6 +6,22 @@
    if(serviceName.endsWith("Service")){
    	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
    }
+   StringBuffer serviceLibs = new StringBuffer();
+   String libDirName = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.destination.dir") + java.io.File.separator + "lib";
+   java.io.File libDir = new java.io.File(libDirName);
+   if (libDir.exists()) {
+   	System.out.println("Searching for classpath libraries: " + libDirName);
+	String[] libs = libDir.list();
+   	for (int i = 0; i < libs.length; i++) {
+   		if (libs[i].endsWith(".jar")) {
+   			serviceLibs.append("\t<classpathentry kind=\"lib\" path=\"lib\\").append(libs[i]).append("\"/>").append("\n");
+   		}
+   	}
+   } else {
+   	System.out.println("No classpath directory found: " + libDirName);
+   	serviceLibs.append("");
+   }
+   String serviceLibsString = serviceLibs.toString();
 %>
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
@@ -71,10 +87,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
-	<classpathentry kind="lib" path="lib/globus_wsrf_mds_aggregator_stubs.jar"/>
-	<classpathentry kind="lib" path="lib/globus_wsrf_mds_aggregator.jar"/>
-	<classpathentry kind="lib" path="lib/globus_wsrf_servicegroup_stubs.jar"/>
-	<classpathentry kind="lib" path="lib/globus_wsrf_servicegroup.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-core-1.0.jar"/>
+<%=serviceLibsString%>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
