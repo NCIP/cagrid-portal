@@ -1,6 +1,8 @@
 package gov.nih.nci.cagrid.gts.service;
 
 import gov.nih.nci.cagrid.gridca.common.CRLEntry;
+import gov.nih.nci.cagrid.gridca.common.KeyUtil;
+import gov.nih.nci.cagrid.gridca.common.ProxyCreator;
 import gov.nih.nci.cagrid.gts.test.CA;
 import gov.nih.nci.cagrid.gts.test.Credential;
 
@@ -62,6 +64,28 @@ public class TestProxyPathValidator extends TestCase {
 				X509Certificate[] chainY1 = new X509Certificate[1];
 				chainY1[0] = credY1.getCertificate();
 				valid.validate(chainY1, trusted1, rev);
+				fail("Should not be able to validate certificate!!!");
+			} catch (ProxyPathValidatorException ex) {
+
+			}
+
+			X509Certificate[] proxyChainX1 = ProxyCreator.createImpersonationProxyCertificate(credX1.getCertificate(),
+				credX1.getPrivateKey(), KeyUtil.generateRSAKeyPair512().getPublic(), 12, 0, 0);
+			valid.validate(proxyChainX1, trusted1, rev);
+
+			try {
+				X509Certificate[] proxyChainX2 = ProxyCreator.createImpersonationProxyCertificate(credX2
+					.getCertificate(), credX2.getPrivateKey(), KeyUtil.generateRSAKeyPair512().getPublic(), 12, 0, 0);
+				valid.validate(proxyChainX2, trusted1, rev);
+				fail("Should not be able to validate certificate!!!");
+			} catch (ProxyPathValidatorException ex) {
+
+			}
+
+			try {
+				X509Certificate[] proxyChainY1 = ProxyCreator.createImpersonationProxyCertificate(credY1
+					.getCertificate(), credY1.getPrivateKey(), KeyUtil.generateRSAKeyPair512().getPublic(), 12, 0, 0);
+				valid.validate(proxyChainY1, trusted1, rev);
 				fail("Should not be able to validate certificate!!!");
 			} catch (ProxyPathValidatorException ex) {
 
