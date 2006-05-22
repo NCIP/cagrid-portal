@@ -350,7 +350,7 @@ public class IFS extends LoggingObject {
 
 		try {
 			PrivateKey key = um.getUsersPrivateKey(usr);
-			X509Certificate[] certs = ProxyUtil.createProxyCertificate(new X509Certificate[]{cert}, key, publicKey,
+			X509Certificate[] certs = IFSProxyCreator.createImpersonationProxyCertificate(new X509Certificate[]{cert}, key, publicKey,
 				lifetime);
 			return certs;
 		} catch (Exception e) {
