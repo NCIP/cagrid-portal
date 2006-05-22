@@ -2,6 +2,10 @@ package gov.nih.nci.cagrid.data.ui.browser;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.data.common.AxisJdomUtils;
+import gov.nih.nci.cagrid.data.common.DataServiceConstants;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 
 import java.awt.Component;
 import java.awt.GridBagConstraints;
@@ -16,6 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.Vector;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -29,6 +34,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import org.apache.axis.message.MessageElement;
+import org.jdom.Element;
 
 /** 
  *  ClassBrowserPanel
@@ -53,10 +61,18 @@ public class ClassBrowserPanel extends JPanel {
 	private JPanel classSelectionPanel = null;
 	private JLabel classSelectionLabel = null;
 	
+	private ExtensionTypeExtensionData extensionData = null;
+	
 	private List classChangeListeners = null;
 	private List additionalJarsListeners = null;
 	
 	public ClassBrowserPanel() {
+		this(null);
+	}
+	
+	
+	public ClassBrowserPanel(ExtensionTypeExtensionData extensionData) {
+		this.extensionData = extensionData;
 		classChangeListeners = new LinkedList();
 		additionalJarsListeners = new LinkedList();
 		initialize();
@@ -113,18 +129,20 @@ public class ClassBrowserPanel extends JPanel {
 	private JList getAdditionalJarsList() {
 		if (additionalJarsList == null) {
 			additionalJarsList = new JList();
-			/*
-			additionalJarsList.setCellRenderer(new DefaultListCellRenderer() {
-				public Component getListCellRendererComponent(JList list, Object value, int index,
-					boolean isSelected, boolean cellHasFocus) {
-					super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-					if (value instanceof JarFile) {
-						setText(((JarFile) value).getName());
+			// load any previous additional jars information
+			if (extensionData != null) {
+				MessageElement jarsElement = ExtensionTools.getExtensionDataElement(extensionData, DataServiceConstants.QUERY_PROCESSOR_ADDITIONAL_JARS_ELEMENT);
+				if (jarsElement != null) {
+					Element qpLibs = AxisJdomUtils.fromMessageElement(jarsElement);
+					Vector jars = new Vector();
+					Iterator jarElemIter = qpLibs.getChildren(DataServiceConstants.QUERY_PROCESSOR_JAR_ELEMENT, qpLibs.getNamespace()).iterator();
+					while (jarElemIter.hasNext()) {
+						String jarFilename = ((Element) jarElemIter.next()).getText();
+						jars.add(jarFilename);
 					}
-					return this;
+					additionalJarsList.setListData(jars);
 				}
-			});
-			*/
+			}
 		}
 		return additionalJarsList;
 	}
