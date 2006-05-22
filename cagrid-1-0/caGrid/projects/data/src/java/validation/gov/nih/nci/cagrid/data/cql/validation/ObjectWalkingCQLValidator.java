@@ -193,7 +193,7 @@ public class ObjectWalkingCQLValidator implements CQLValidator {
 		// verify the attribute exists
 		UMLAttribute attribMd = getUmlAttribute(attrib.getName(), classMd);
 		if (attribMd == null) {
-			throw new MalformedQueryException("Attribute " + attrib.getName() + " is not defined for the class " + classMd.getClassname());
+			throw new MalformedQueryException("Attribute " + attrib.getName() + " is not defined for the class " + classMd.getClassName());
 		}
 		// if the predicate is a binary operator, verify the value is of the correct type
 		if (attrib.getPredicate() != null && 
@@ -201,7 +201,7 @@ public class ObjectWalkingCQLValidator implements CQLValidator {
 			attrib.getPredicate().getValue().equals(Predicate._IS_NULL))) {
 			String value = attrib.getValue();
 			// TODO: evaluate this somehow
-			String dataType = attribMd.getSemanticMetadataCollection(0).getConcept().getLongName();
+			String dataType = attribMd.getSemanticMetadataCollection().getSemanticMetadata(0).getConcept().getLongName();
 			try {
 				if (dataType.equals(Integer.class.getName())) {
 					Integer.valueOf(value);
@@ -233,7 +233,7 @@ public class ObjectWalkingCQLValidator implements CQLValidator {
 		for (int i = 0; i < associations.length; i++) {
 			UMLAssociation assocMd = associations[i];
 			UMLClass targetClassMd = assocMd.getTargetUMLAssociationEdge().getUMLAssociationEdge().getUmlClass().getUMLClass();
-			if (targetClassMd.getClassname().equals(assoc.getName())) {
+			if (targetClassMd.getClassName().equals(assoc.getName())) {
 				if (associationFound) {
 					// no role name, and already found an association of the same type
 					throw new MalformedQueryException("The association from " + current.getName() + " to " + assoc.getName() + " is ambiguous without a role name");
@@ -277,7 +277,7 @@ public class ObjectWalkingCQLValidator implements CQLValidator {
 	private UMLClass getUmlClass(String className, DomainModel model) {
 		UMLClass[] allClasses = model.getExposedUMLClassCollection().getUMLClass();
 		for (int i = 0; allClasses != null && i < allClasses.length; i++) {
-			if (allClasses[i].getClassname().equals(className));
+			if (allClasses[i].getClassName().equals(className));
 			return allClasses[i];
 		}
 		return null;
@@ -285,7 +285,7 @@ public class ObjectWalkingCQLValidator implements CQLValidator {
 	
 	
 	private UMLAttribute getUmlAttribute(String attribName, UMLClass classMd) {
-		UMLAttribute[] attribs = classMd.getUmlAttributeCollection();
+		UMLAttribute[] attribs = classMd.getUmlAttributeCollection().getUMLAttribute();
 		for (int i = 0; attribs != null && i < attribs.length; i++) {
 			UMLAttribute attrib = attribs[i];
 			if (attrib.getName().equals(attribName)) {
@@ -303,7 +303,7 @@ public class ObjectWalkingCQLValidator implements CQLValidator {
 			for (int i = 0; i < model.getExposedUMLAssociationCollection().getUMLAssociation().length; i++) {
 				UMLAssociation assoc = model.getExposedUMLAssociationCollection().getUMLAssociation(i);
 				if (assoc.getSourceUMLAssociationEdge().getUMLAssociationEdge()
-					.getUmlClass().getUMLClass().getClassname().equals(sourceClass)) {
+					.getUmlClass().getUMLClass().getClassName().equals(sourceClass)) {
 					associations.add(assoc);
 				}
 			}

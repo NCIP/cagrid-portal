@@ -9,7 +9,10 @@ import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
 import gov.nih.nci.cagrid.metadata.common.UMLAttribute;
+import gov.nih.nci.cagrid.metadata.common.UMLAttributeSemanticMetadataCollection;
 import gov.nih.nci.cagrid.metadata.common.UMLClass;
+import gov.nih.nci.cagrid.metadata.common.UMLClassSemanticMetadataCollection;
+import gov.nih.nci.cagrid.metadata.common.UMLClassUmlAttributeCollection;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModelExposedUMLAssociationCollection;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModelExposedUMLClassCollection;
@@ -179,8 +182,8 @@ public class MetadataBuilder {
 			throw new CodegenExtensionException("No class metadata found for class name " + className);
 		}
 		UMLClass umlClass = new UMLClass();
-		umlClass.set_package(getPackageMetadata().getName());
-		umlClass.setClassname(metadata.getFullyQualifiedName());
+		umlClass.setPackageName(getPackageMetadata().getName());
+		umlClass.setClassName(metadata.getFullyQualifiedName());
 		umlClass.setDescription(metadata.getDescription());
 		umlClass.setProjectName(getProject().getLongName());
 		umlClass.setProjectVersion(getProject().getVersion());
@@ -188,11 +191,11 @@ public class MetadataBuilder {
 		// semantic metadata
 		SemanticMetadata[] sem = new SemanticMetadata[metadata.getSemanticMetadataCollection().size()];
 		metadata.getSemanticMetadataCollection().toArray(sem);
-		umlClass.setSemanticMetadataCollection(sem);
+		umlClass.setSemanticMetadataCollection(new UMLClassSemanticMetadataCollection(sem));
 		
 		// UMLAttributes
 		UMLAttribute[] attributes = getUmlAttributes(metadata);
-		umlClass.setUmlAttributeCollection(attributes);
+		umlClass.setUmlAttributeCollection(new UMLClassUmlAttributeCollection(attributes));
 		return umlClass;
 	}
 	
@@ -210,7 +213,7 @@ public class MetadataBuilder {
 			// attribute semantic metadata
 			SemanticMetadata[] attrSemantic = new SemanticMetadata[attribMetadata.getSemanticMetadataCollection().size()];
 			attribMetadata.getSemanticMetadataCollection().toArray(attrSemantic);
-			attrib.setSemanticMetadataCollection(attrSemantic);
+			attrib.setSemanticMetadataCollection(new UMLAttributeSemanticMetadataCollection(attrSemantic));
 			attributes[attrIndex] = attrib;
 			attrIndex++;
 		}

@@ -8,7 +8,10 @@ import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
 import gov.nih.nci.cagrid.metadata.common.UMLAttribute;
+import gov.nih.nci.cagrid.metadata.common.UMLAttributeSemanticMetadataCollection;
 import gov.nih.nci.cagrid.metadata.common.UMLClass;
+import gov.nih.nci.cagrid.metadata.common.UMLClassSemanticMetadataCollection;
+import gov.nih.nci.cagrid.metadata.common.UMLClassUmlAttributeCollection;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModelExposedUMLAssociationCollection;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModelExposedUMLClassCollection;
@@ -50,14 +53,14 @@ public class MetadataUtilities {
 
 	public static UMLClass createUmlClass(UMLClassMetadata classMd, UMLPackageMetadata pack) {
 		UMLClass clazz = new UMLClass();
-		clazz.set_package(pack.getName());
-		clazz.setClassname(classMd.getName());
+		clazz.setPackageName(pack.getName());
+		clazz.setClassName(classMd.getName());
 		clazz.setDescription(classMd.getDescription());
 		clazz.setProjectName(classMd.getProject().getLongName());
 		clazz.setProjectVersion(classMd.getProject().getVersion());
 		SemanticMetadata[] semanticMetadata = new SemanticMetadata[classMd.getSemanticMetadataCollection().size()];
 		classMd.getSemanticMetadataCollection().toArray(semanticMetadata);
-		clazz.setSemanticMetadataCollection(semanticMetadata);
+		clazz.setSemanticMetadataCollection(new UMLClassSemanticMetadataCollection(semanticMetadata));
 		
 		Iterator attribMetaIter = classMd.getUMLAttributeMetadataCollection().iterator();
 		UMLAttribute[] attribs = new UMLAttribute[classMd.getUMLAttributeMetadataCollection().size()];
@@ -69,10 +72,10 @@ public class MetadataUtilities {
 			attribs[i].setName(attribMeta.getName());
 			SemanticMetadata[] sem = new SemanticMetadata[attribMeta.getSemanticMetadataCollection().size()];
 			attribMeta.getSemanticMetadataCollection().toArray(sem);
-			attribs[i].setSemanticMetadataCollection(sem);
+			attribs[i].setSemanticMetadataCollection(new UMLAttributeSemanticMetadataCollection(sem));
 			i++;
 		}
-		clazz.setUmlAttributeCollection(attribs);
+		clazz.setUmlAttributeCollection(new UMLClassUmlAttributeCollection(attribs));
 		
 		return clazz;
 	}

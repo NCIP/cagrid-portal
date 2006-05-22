@@ -372,9 +372,11 @@ public class ClassBrowserPanel extends JPanel {
 			Enumeration jarEntries = jars[i].entries();
 			while (jarEntries.hasMoreElements()) {
 				JarEntry entry = (JarEntry) jarEntries.nextElement();
-				if (entry.getName().endsWith(".class")) {
-					String name = entry.getName();
-					classNames.add(name.replace('/', '.'));
+				String name = entry.getName();
+				if (name.endsWith(".class")) {
+					name = name.replace('/', '.');
+					name = name.substring(0, name.length() - 6);
+					classNames.add(name);
 				}
 			}
 		}
