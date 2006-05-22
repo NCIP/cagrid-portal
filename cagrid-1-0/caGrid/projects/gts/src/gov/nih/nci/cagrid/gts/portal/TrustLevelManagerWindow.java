@@ -4,7 +4,7 @@ import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
 import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.client.GTSAdminClient;
-import gov.nih.nci.cagrid.gts.client.GTSSearchClient;
+import gov.nih.nci.cagrid.gts.client.GTSClient;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -412,7 +412,7 @@ public class TrustLevelManagerWindow extends GridPortalBaseFrame implements
 		try {
 			String service = ((GTSServiceListComboBox) getService())
 					.getSelectedService();
-			GTSSearchClient client = new GTSSearchClient(service);
+			GTSClient client = new GTSClient(service);
 			TrustLevel[] levels = client.getTrustLevels();
 			int length = 0;
 			if (levels != null) {

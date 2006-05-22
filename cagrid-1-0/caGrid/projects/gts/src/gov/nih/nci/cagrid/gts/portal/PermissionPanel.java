@@ -6,7 +6,7 @@ import gov.nih.nci.cagrid.gts.bean.PermissionFilter;
 import gov.nih.nci.cagrid.gts.bean.Role;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
-import gov.nih.nci.cagrid.gts.client.GTSSearchClient;
+import gov.nih.nci.cagrid.gts.client.GTSClient;
 import gov.nih.nci.cagrid.gts.common.Constants;
 
 import java.awt.GridBagConstraints;
@@ -197,7 +197,7 @@ public class PermissionPanel extends JPanel {
 				this.trustedAuthorities
 						.addItem(Constants.ALL_TRUST_AUTHORITIES);
 				currentLength = 0;
-				GTSSearchClient client = new GTSSearchClient(service);
+				GTSClient client = new GTSClient(service);
 				TrustedAuthority[] tas = client
 						.findTrustedAuthorities(new TrustedAuthorityFilter());
 
