@@ -483,11 +483,10 @@ this.setContentPane(getMainPanel());
 							+ File.separator + IntroduceConstants.INTRODUCE_XML_FILE, ServiceDescription.class);
 						ServiceInformation info = new ServiceInformation(introService, properties, new File(getDir()
 							.getText()));
-						ExtensionTools extTools = new ExtensionTools();
 						if (!serviceExtensions.equals("")) {
-							JDialog extDialog = extTools.getCreationUIDialog(serviceExtensions, info);
+							JDialog extDialog = ExtensionTools.getCreationUIDialog(serviceExtensions, info);
 							if (extDialog != null) {
-								extDialog.show();
+								extDialog.setVisible(true);
 							}
 						}
 				
