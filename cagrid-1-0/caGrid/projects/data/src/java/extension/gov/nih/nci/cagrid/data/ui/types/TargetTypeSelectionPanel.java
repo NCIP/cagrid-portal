@@ -25,7 +25,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
 import java.util.List;
-import java.util.jar.JarFile;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -456,10 +455,10 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 					ExtensionTools.removeExtensionDataElement(data, DataServiceConstants.QUERY_PROCESSOR_ADDITIONAL_JARS_ELEMENT);
 					// create a new qp jars element
 					Element qpJars = new Element(DataServiceConstants.QUERY_PROCESSOR_ADDITIONAL_JARS_ELEMENT);
-					JarFile[] additionalJars = classBrowserPanel.getAdditionalJars();
+					String[] additionalJars = classBrowserPanel.getAdditionalJars();
 					for (int i = 0; i < additionalJars.length; i++) {
 						Element jarElem = new Element(DataServiceConstants.QUERY_PROCESSOR_JAR_ELEMENT);
-						jarElem.setText(additionalJars[i].getName());
+						jarElem.setText(additionalJars[i]);
 						qpJars.addContent(jarElem);
 					}
 					try {

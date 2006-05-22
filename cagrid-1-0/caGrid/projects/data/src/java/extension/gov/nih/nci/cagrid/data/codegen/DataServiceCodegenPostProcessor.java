@@ -126,11 +126,16 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 		body.append("\n");
 		body.append("\t\t").append("gov.nih.nci.cagrid.data.cql.CQLQueryProcessor processor = null;").append("\n");
 		body.append("\t\t").append("try {").append("\n");
-		body.append("\t\t\t").append("processor = new ").append(implClassName).append("();").append("\n");
+		body.append("\t\t\t").append("processor = new ").append(implClassName).append("(\"\");").append("\n");
 		body.append("\t\t").append("} catch (gov.nih.nci.cagrid.data.InitializationException ex) {").append("\n");
-		body.append("\t\t\t").append("throw new gov.nih.nci.cagrid.data.QueryProcessingException(\"Error initializing the query processor: \" + ex.getMessage(), ex);").append("\n");
+		// body.append("\t\t\t").append("throw new gov.nih.nci.cagrid.data.QueryProcessingException(\"Error initializing the query processor: \" + ex.getMessage(), ex);").append("\n");
+		body.append("\t\t\t").append("return null;").append("\n");
 		body.append("\t\t").append("}").append("\n");
-		body.append("\t\t").append("return processor.processQuery(cqlQuery);").append("\n");
+		body.append("\t\t").append("try {").append("\n");
+		body.append("\t\t\t").append("return processor.processQuery(cqlQuery);").append("\n");
+		body.append("\t\t").append("} catch (Exception ex) {").append("\n");
+		body.append("\t\t\t").append("return null;").append("\n");
+		body.append("\t\t").append("}").append("\n");
 		implClass.insert(startIndex, body);
 	}
 	
@@ -151,7 +156,7 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 		ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
 		MessageElement qpLibsElement = ExtensionTools.getExtensionDataElement(data, DataServiceConstants.QUERY_PROCESSOR_ADDITIONAL_JARS_ELEMENT);
 		if (qpLibsElement != null) {
-			String libOutDir = info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE_DIR) + File.separator + "lib";
+			String libOutDir = info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "lib";
 			Element qpLibs = AxisJdomUtils.fromMessageElement(qpLibsElement);
 			Iterator jarElemIter = qpLibs.getChildren(DataServiceConstants.QUERY_PROCESSOR_JAR_ELEMENT, qpLibs.getNamespace()).iterator();
 			while (jarElemIter.hasNext()) {

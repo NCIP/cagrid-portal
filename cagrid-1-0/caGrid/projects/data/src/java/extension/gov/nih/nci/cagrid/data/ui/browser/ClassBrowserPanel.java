@@ -19,7 +19,6 @@ import java.util.TreeSet;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -97,10 +96,10 @@ public class ClassBrowserPanel extends JPanel {
 	}
 	
 	
-	public JarFile[] getAdditionalJars() {
-		JarFile[] jars = new JarFile[getAdditionalJarsList().getModel().getSize()];
+	public String[] getAdditionalJars() {
+		String[] jars = new String[getAdditionalJarsList().getModel().getSize()];
 		for (int i = 0; i < getAdditionalJarsList().getModel().getSize(); i++) {
-			jars[i] = (JarFile) getAdditionalJarsList().getModel().getElementAt(i);
+			jars[i] = (String) getAdditionalJarsList().getModel().getElementAt(i);
 		}
 		return jars;
 	}
@@ -114,6 +113,7 @@ public class ClassBrowserPanel extends JPanel {
 	private JList getAdditionalJarsList() {
 		if (additionalJarsList == null) {
 			additionalJarsList = new JList();
+			/*
 			additionalJarsList.setCellRenderer(new DefaultListCellRenderer() {
 				public Component getListCellRendererComponent(JList list, Object value, int index,
 					boolean isSelected, boolean cellHasFocus) {
@@ -124,6 +124,7 @@ public class ClassBrowserPanel extends JPanel {
 					return this;
 				}
 			});
+			*/
 		}
 		return additionalJarsList;
 	}
@@ -180,12 +181,12 @@ public class ClassBrowserPanel extends JPanel {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					int[] selected = getAdditionalJarsList().getSelectedIndices();
 					if (selected.length != 0) {
-						JarFile[] currentJars = getAdditionalJars();
-						JarFile[] storedJars = new JarFile[currentJars.length - selected.length];
+						String[] currentJars = getAdditionalJars();
+						String[] storedJars = new String[currentJars.length - selected.length];
 						int selectIndex = 0;
 						int storeIndex = 0;
 						for (int i = 0; i < currentJars.length; i++) {
-							JarFile jar = currentJars[i];
+							String jar = currentJars[i];
 							if (i == selected[selectIndex]) {
 								// skip the selected jar
 								selectIndex++;
@@ -341,18 +342,18 @@ public class ClassBrowserPanel extends JPanel {
 			File selected = chooser.getSelectedFile();
 			lastDir = selected;
 			try {
-				JarFile jarFile = new JarFile(selected);
+				String jarFile = selected.getCanonicalPath();
 				// only bother adding the jar file to the list if it's not in there yet
 				boolean shouldAdd = true;
-				JarFile[] currentJars = getAdditionalJars();
+				String[] currentJars = getAdditionalJars();
 				for (int i = 0; i < currentJars.length; i++) {
-					if (jarFile.getName().equals(currentJars[i])) {
+					if (jarFile.equals(currentJars[i])) {
 						shouldAdd = false;
 						break;
 					}
 				}
 				if (shouldAdd) {
-					JarFile[] additionalJars = new JarFile[currentJars.length + 1];
+					String[] additionalJars = new String[currentJars.length + 1];
 					System.arraycopy(currentJars, 0, additionalJars, 0, currentJars.length);
 					additionalJars[additionalJars.length - 1] = jarFile;
 					getAdditionalJarsList().setListData(additionalJars);
@@ -367,25 +368,31 @@ public class ClassBrowserPanel extends JPanel {
 	
 	private void populateClassDropdown() {
 		SortedSet classNames = new TreeSet();
-		JarFile[] jars = getAdditionalJars();
-		for (int i = 0; i < jars.length; i++) {
-			Enumeration jarEntries = jars[i].entries();
-			while (jarEntries.hasMoreElements()) {
-				JarEntry entry = (JarEntry) jarEntries.nextElement();
-				String name = entry.getName();
-				if (name.endsWith(".class")) {
-					name = name.replace('/', '.');
-					name = name.substring(0, name.length() - 6);
-					classNames.add(name);
+		String[] jars = getAdditionalJars();
+		try {
+			for (int i = 0; i < jars.length; i++) {
+				JarFile jarFile = new JarFile(jars[i]);
+				Enumeration jarEntries = jarFile.entries();
+				while (jarEntries.hasMoreElements()) {
+					JarEntry entry = (JarEntry) jarEntries.nextElement();
+					String name = entry.getName();
+					if (name.endsWith(".class")) {
+						name = name.replace('/', '.');
+						name = name.substring(0, name.length() - 6);
+						classNames.add(name);
+					}
 				}
 			}
-		}
-		while (getClassSelectionComboBox().getItemCount() != 0) {
-			getClassSelectionComboBox().removeItemAt(0);
-		}
-		Iterator nameIter = classNames.iterator();
-		while (nameIter.hasNext()) {
-			getClassSelectionComboBox().addItem(nameIter.next());
+			while (getClassSelectionComboBox().getItemCount() != 0) {
+				getClassSelectionComboBox().removeItemAt(0);
+			}
+			Iterator nameIter = classNames.iterator();
+			while (nameIter.hasNext()) {
+				getClassSelectionComboBox().addItem(nameIter.next());
+			}
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			PortalUtils.showErrorMessage("Error populating class names " + ex.getMessage(), ex);
 		}
 	}
 	
