@@ -5,8 +5,10 @@ import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods;
 import gov.nih.nci.cagrid.introduce.codegen.resource.SyncResource;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.ClasspathTemplate;
 import gov.nih.nci.cagrid.introduce.templates.ServerConfigTemplate;
+import gov.nih.nci.cagrid.introduce.templates.etc.SecurityDescTemplate;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -43,6 +45,14 @@ public class SyncServices extends SyncTool {
 					.getServices().getService().length; serviceI++) {
 
 				try {
+					SpecificServiceInformation ssi = new SpecificServiceInformation(getServiceInformation(),getServiceInformation().getServices().getService(serviceI));
+					SecurityDescTemplate secDescT = new SecurityDescTemplate();
+					String secDescS = secDescT.generate(ssi);
+					File secDescF = new File(getBaseDirectory() + File.separator + "etc" + File.separator + getServiceInformation().getServices().getService(serviceI).getName() + "-security-desc.xml");
+					FileWriter secDescFW = new FileWriter(secDescF);
+					secDescFW.write(secDescS);
+					secDescFW.close();
+					
 					ServerConfigTemplate serverConfigT = new ServerConfigTemplate();
 					String serverConfigS = serverConfigT
 							.generate(getServiceInformation());

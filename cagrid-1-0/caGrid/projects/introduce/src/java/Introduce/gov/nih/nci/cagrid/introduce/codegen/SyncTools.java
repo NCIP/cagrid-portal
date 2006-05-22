@@ -14,8 +14,6 @@ import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.base.SyncBase;
 import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
-import gov.nih.nci.cagrid.introduce.codegen.resource.SyncResource;
-import gov.nih.nci.cagrid.introduce.codegen.security.SyncSecurity;
 import gov.nih.nci.cagrid.introduce.codegen.serializers.SyncSerialization;
 import gov.nih.nci.cagrid.introduce.codegen.services.SyncServices;
 import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
@@ -29,7 +27,6 @@ import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.info.SchemaInformation;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
-import gov.nih.nci.cagrid.introduce.templates.ClasspathTemplate;
 import gov.nih.nci.cagrid.introduce.templates.NamespaceMappingsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate;
 
@@ -261,15 +258,12 @@ public class SyncTools {
 		// STEP 7: run the code generation tools
 		SyncTool baseS = new SyncBase(baseDirectory,info);
 		SyncTool servicesS = new SyncServices(baseDirectory, info);
-		SyncTool security = new SyncSecurity(baseDirectory, info);
 		SyncTool serializerS = new SyncSerialization(baseDirectory, info);
 
 		System.out.println("Synchronizing the base files");
 		baseS.sync();
 		System.out.println("Synchronizing the services");
 		servicesS.sync();
-		System.out.println("Synchronizing the security");
-		security.sync();
 		System.out.println("Synchronizing the type mappings");
 		serializerS.sync();
 
