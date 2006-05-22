@@ -823,6 +823,8 @@ public class TestGTS extends TestCase {
 			pb.addAdminUser(ADMIN_USER);
 			addTrustLevels(gts, ADMIN_USER);
 			CA ca = new CA();
+			X509Certificate userCert = new X509Certificate(CertUtil.writeCertificate(ca.createIdentityCertificate("User Y").getCertificate()));
+			Thread.sleep(100);
 			BigInteger sn = new BigInteger(String.valueOf(System.currentTimeMillis()));
 			CRLEntry entry = new CRLEntry(sn, CRLReason.PRIVILEGE_WITHDRAWN);
 			ca.updateCRL(entry);
@@ -835,6 +837,7 @@ public class TestGTS extends TestCase {
 
 			ta = gts.addTrustedAuthority(ta, ADMIN_USER);
 			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+			assertTrue(gts.validate(userCert,new TrustedAuthorityFilter()));
 
 			// Test null
 			try {
@@ -845,6 +848,7 @@ public class TestGTS extends TestCase {
 			}
 
 			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+			assertTrue(gts.validate(userCert,new TrustedAuthorityFilter()));
 
 			// Test Empty String
 			try {
@@ -854,6 +858,7 @@ public class TestGTS extends TestCase {
 
 			}
 			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+			assertTrue(gts.validate(userCert,new TrustedAuthorityFilter()));
 
 			// Test User without any permissions
 			try {
@@ -863,6 +868,7 @@ public class TestGTS extends TestCase {
 
 			}
 			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+			assertTrue(gts.validate(userCert,new TrustedAuthorityFilter()));
 
 			// Now create a permission for a user on the previous added trust
 			// authority.
@@ -885,6 +891,7 @@ public class TestGTS extends TestCase {
 			}
 
 			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+			assertTrue(gts.validate(userCert,new TrustedAuthorityFilter()));
 
 			// Now give use Admin rights
 			Permission admin = new Permission();
@@ -898,6 +905,12 @@ public class TestGTS extends TestCase {
 			// Now that the user is admin try again
 			gts.removeTrustedAuthority(ta.getName(), user);
 			assertEquals(0, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+			try {
+				assertFalse(gts.validate(userCert,new TrustedAuthorityFilter()));
+				fail("Should not be able to validate the user ceritifcate!!!");
+			} catch (CertificateValidationFault f) {
+
+			}
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
