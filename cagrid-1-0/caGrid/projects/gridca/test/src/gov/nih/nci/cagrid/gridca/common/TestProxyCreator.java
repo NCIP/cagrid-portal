@@ -19,7 +19,7 @@ import org.globus.gsi.GlobusCredential;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class TestProxyUtil extends TestCase {
+public class TestProxyCreator extends TestCase {
 
 	private String identityToSubject(String identity) {
 		String s = identity.substring(1);
@@ -43,7 +43,7 @@ public class TestProxyUtil extends TestCase {
 			assertNotNull(proxyPublicKey);
 			X509Certificate cert = gridCred.getCertificate();
 			assertNotNull(cert);
-			X509Certificate[] certs = ProxyUtil.createImpersonationProxyCertificate(cert, key, proxyPublicKey, hours, minutes,
+			X509Certificate[] certs = ProxyCreator.createImpersonationProxyCertificate(cert, key, proxyPublicKey, hours, minutes,
 				seconds);
 			assertNotNull(certs);
 			assertEquals(2, certs.length);
@@ -83,7 +83,7 @@ public class TestProxyUtil extends TestCase {
 			assertNotNull(proxyPublicKey);
 			X509Certificate cert = gridCred.getCertificate();
 			assertNotNull(cert);
-			ProxyUtil.createImpersonationProxyCertificate(cert, key, proxyPublicKey, hours, minutes, seconds);
+			ProxyCreator.createImpersonationProxyCertificate(cert, key, proxyPublicKey, hours, minutes, seconds);
 			assertTrue(false);
 		} catch (Exception e) {
 			assertEquals("Cannot create a proxy that expires after issuing certificate.", e.getMessage());
