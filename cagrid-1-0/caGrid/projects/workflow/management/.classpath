@@ -72,6 +72,6 @@
 	<classpathentry kind="var" path="AESAMPLES_LIB/ae_rtbpel.jar"/>
 	<classpathentry kind="lib" path="C:/test/activebpel-2.0.1/dist/ae_rtbpelsvr.jar"/>
 	<classpathentry kind="lib" path="C:/test/activebpel-2.0.1/dist/ae_rt.jar"/>
-	<classpathentry kind="lib" path="C:/test/cagrid-1-0/caGrid/projects/workflow/management/lib/admin.jar"/>
+	<classpathentry kind="lib" path="C:/test/cagrid-1-0/caGrid/projects/workflow/management/lib/abadmin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
