@@ -70,7 +70,7 @@ public class WorkFlowManagementServiceImpl implements
 			System.out.println("Deploying1");
 			mRemote = (RemoteDebugSoapBindingStub) locator
 					.getAeActiveWebflowAdminPort(url);
-			String filePath = "c:\\test\\AnnualDemoParallel.bpr";
+			String filePath = "AnnualDemoParallel.bpr";
 
 			BPRCreator.makeBPR(bpelDoc, filePath);
 
