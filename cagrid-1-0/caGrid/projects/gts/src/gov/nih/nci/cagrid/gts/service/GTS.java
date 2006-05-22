@@ -114,6 +114,14 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 	}
 
 
+	public boolean validate(X509Certificate cert, TrustedAuthorityFilter filter) throws GTSInternalFault,
+		CertificateValidationFault {
+		X509Certificate[] chain = new X509Certificate[1];
+		chain[0] = cert;
+		return this.validate(chain, filter);
+	}
+
+
 	public boolean validate(X509Certificate[] chain, TrustedAuthorityFilter filter) throws GTSInternalFault,
 		CertificateValidationFault {
 		boolean isValidated = false;
