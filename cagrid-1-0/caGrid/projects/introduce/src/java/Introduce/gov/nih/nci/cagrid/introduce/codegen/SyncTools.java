@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.codegen.base.SyncBase;
 import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.codegen.resource.SyncResource;
@@ -258,15 +259,15 @@ public class SyncTools {
 		populateClassnames(info, table);
 
 		// STEP 7: run the code generation tools
+		SyncTool baseS = new SyncBase(baseDirectory,info);
 		SyncTool servicesS = new SyncServices(baseDirectory, info);
-		SyncTool metadata = new SyncResource(baseDirectory, info);
 		SyncTool security = new SyncSecurity(baseDirectory, info);
 		SyncTool serializerS = new SyncSerialization(baseDirectory, info);
 
+		System.out.println("Synchronizing the base files");
+		baseS.sync();
 		System.out.println("Synchronizing the services");
 		servicesS.sync();
-		System.out.println("Synchronizing the metadata");
-		metadata.sync();
 		System.out.println("Synchronizing the security");
 		security.sync();
 		System.out.println("Synchronizing the type mappings");
@@ -287,13 +288,6 @@ public class SyncTools {
 			}
 		}
 
-		// STEP 9: Profit!!!  Update the generated .classpath file
-		ClasspathTemplate classpathT = new ClasspathTemplate();
-		String classpathS = classpathT.generate(info);
-		File classpathF = new File(baseDirectory.getAbsolutePath() + File.separator + ".classpath");
-		FileWriter classpathFW = new FileWriter(classpathF);
-		classpathFW.write(classpathS);
-		classpathFW.close();
 	}
 
 

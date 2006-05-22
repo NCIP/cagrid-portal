@@ -3,7 +3,9 @@ package gov.nih.nci.cagrid.introduce.codegen.services;
 import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods;
+import gov.nih.nci.cagrid.introduce.codegen.resource.SyncResource;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.templates.ClasspathTemplate;
 import gov.nih.nci.cagrid.introduce.templates.ServerConfigTemplate;
 
 import java.io.File;
@@ -26,6 +28,13 @@ public class SyncServices extends SyncTool {
 	}
 
 	public void sync() throws SynchronizationException {
+
+		try {
+
+
+		} catch (Exception e) {
+			throw new SynchronizationException(e.getMessage(), e);
+		}
 
 		// sync each sub service
 		if (getServiceInformation().getServices() != null
@@ -51,6 +60,10 @@ public class SyncServices extends SyncTool {
 						getServiceInformation(), getServiceInformation()
 								.getServices().getService(serviceI));
 				methodSync.sync();
+				SyncResource resourceSync = new SyncResource(getBaseDirectory(),
+						getServiceInformation(), getServiceInformation()
+								.getServices().getService(serviceI));
+				resourceSync.sync();
 			}
 		}
 	}
