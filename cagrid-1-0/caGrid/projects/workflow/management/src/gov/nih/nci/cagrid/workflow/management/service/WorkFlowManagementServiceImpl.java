@@ -12,6 +12,7 @@ import javax.naming.InitialContext;
 import javax.xml.rpc.ServiceException;
 
 import org.activebpel.rt.base64.Base64;
+import org.activebpel.rt.bpel.server.admin.rdebug.server.AeRemoteDebugImpl;
 import org.apache.axis.MessageContext;
 import org.globus.wsrf.Constants;
 import org.w3c.dom.Document;
@@ -65,19 +66,21 @@ public class WorkFlowManagementServiceImpl implements
 			
 			BpelEngineAdminLocator locator = new BpelEngineAdminLocator();
 			URL url = new URL(
-					"http://spirulina.uchicago.edu:8080/active-bpel/services/BpelEngineAdmin");
+					"http://localhost:8080/active-bpel/services/BpelEngineAdmin");
 			System.out.println("Deploying1");
 			mRemote = (RemoteDebugSoapBindingStub) locator
 					.getAeActiveWebflowAdminPort(url);
-			System.out.println("Deploying3");
 			String filePath = "c:\\test\temp.bpr";
 
 			BPRCreator.makeBPR(bpelDoc, filePath);
 
 			String output = mRemote.deployBpr(filePath, BPRCreator
 					.getBase64EncodedBpr(filePath));
-			System.out.println(output);
-
+			String defaultEventLocatorClass = "org.activebpel.rt.axis.bpel.rdebug.client.AeEventHandlerLocator"; //$NON-NLS-1$
+	        String defaultBpLocatorClass = "org.activebpel.rt.axis.bpel.rdebug.client.AeBreakpointHandlerLocator"; //$NON-NLS-1$
+			AeRemoteDebugImpl remoteImpl = new AeRemoteDebugImpl(defaultEventLocatorClass,
+					defaultBpLocatorClass);
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println(e.getMessage());
