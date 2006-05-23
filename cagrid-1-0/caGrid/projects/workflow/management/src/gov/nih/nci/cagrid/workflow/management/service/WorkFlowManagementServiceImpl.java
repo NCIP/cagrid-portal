@@ -65,6 +65,10 @@ public class WorkFlowManagementServiceImpl implements
 		try {
 			
 			BpelEngineAdminLocator locator = new BpelEngineAdminLocator();
+			/*
+			 * Get this URL from the jndi file. Make sure the agila bits
+			 * are separated well from the service impl
+			 */
 			URL url = new URL(
 					"http://localhost:8080/active-bpel/services/BpelEngineAdmin");
 			System.out.println("Deploying1");
@@ -76,10 +80,6 @@ public class WorkFlowManagementServiceImpl implements
 
 			output = mRemote.deployBpr("temp.bpr", BPRCreator
 					.getBase64EncodedBpr(filePath));
-			String defaultEventLocatorClass = "org.activebpel.rt.axis.bpel.rdebug.client.AeEventHandlerLocator"; //$NON-NLS-1$
-	        String defaultBpLocatorClass = "org.activebpel.rt.axis.bpel.rdebug.client.AeBreakpointHandlerLocator"; //$NON-NLS-1$
-			AeRemoteDebugImpl remoteImpl = new AeRemoteDebugImpl(defaultEventLocatorClass,
-					defaultBpLocatorClass);
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
