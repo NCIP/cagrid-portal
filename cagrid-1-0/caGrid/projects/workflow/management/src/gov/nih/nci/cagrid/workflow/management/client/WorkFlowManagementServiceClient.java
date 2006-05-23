@@ -48,6 +48,7 @@ public class WorkFlowManagementServiceClient implements
 		this.url = url;
 		this.fileName = fileName;
 		try {
+            System.out.println( "url: " + this.url);
 			this.bpelProcess =(TProcess) Utils.deserializeDocument(this.fileName, TProcess.class );
 			String returnString = this.runWorkFlow(this.bpelProcess);
 			System.out.println("Got this: " + returnString);

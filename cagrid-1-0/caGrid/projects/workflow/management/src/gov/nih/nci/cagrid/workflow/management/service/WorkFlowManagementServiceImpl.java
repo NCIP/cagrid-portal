@@ -60,8 +60,8 @@ public class WorkFlowManagementServiceImpl implements
 	public java.lang.String runWorkFlow(
 			org.xmlsoap.schemas.ws._2003._03.business_process.TProcess bpelDoc)
 			throws RemoteException {
-		// System.out.println("Sending ");
 		RemoteDebugSoapBindingStub mRemote = null;
+        String output = null;
 		try {
 			
 			BpelEngineAdminLocator locator = new BpelEngineAdminLocator();
@@ -70,11 +70,11 @@ public class WorkFlowManagementServiceImpl implements
 			System.out.println("Deploying1");
 			mRemote = (RemoteDebugSoapBindingStub) locator
 					.getAeActiveWebflowAdminPort(url);
-			String filePath = "AnnualDemoParallel.bpr";
+			String filePath = "/autonfs/home/madduri/globus/temp.bpr";
 
 			BPRCreator.makeBPR(bpelDoc, filePath);
 
-			String output = mRemote.deployBpr(filePath, BPRCreator
+			output = mRemote.deployBpr("temp.bpr", BPRCreator
 					.getBase64EncodedBpr(filePath));
 			String defaultEventLocatorClass = "org.activebpel.rt.axis.bpel.rdebug.client.AeEventHandlerLocator"; //$NON-NLS-1$
 	        String defaultBpLocatorClass = "org.activebpel.rt.axis.bpel.rdebug.client.AeBreakpointHandlerLocator"; //$NON-NLS-1$
@@ -86,7 +86,7 @@ public class WorkFlowManagementServiceImpl implements
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
-		return (bpelDoc.toString());
+		return output;
 
 	}
 
