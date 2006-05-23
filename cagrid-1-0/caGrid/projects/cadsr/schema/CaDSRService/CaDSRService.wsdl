@@ -32,11 +32,11 @@
             xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
 			<import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd"/>
 		
-			<import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" schemaLocation="./1.0_gov.nih.nci.cagrid.metadata.xsd"/>
+			<import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" schemaLocation="../cagrid/types/caGridMetadata.xsd"/>
 			   
-			<import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" schemaLocation="./3.0_gov.nih.nci.cadsr.umlproject.domain.xsd"/>
+			<import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" schemaLocation="../cagrid/types/cadsr/3.0_gov.nih.nci.cadsr.umlproject.domain.xsd"/>
 			   
-			<import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" schemaLocation="./3.0_gov.nih.nci.cadsr.domain.xsd"/>
+			<import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" schemaLocation="../cagrid/types/cadsr/3.0_gov.nih.nci.cadsr.domain.xsd"/>
 			   
       	
       	
