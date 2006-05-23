@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+    targetNamespace="http://workflow.cagrid.nci.nih.gov//WorkFlowManagementService"
+    xmlns:tns="http://workflow.cagrid.nci.nih.gov//WorkFlowManagementService"
+    xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+    attributeFormDefault="qualified"
+    elementFormDefault="qualified"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+     
+    <xsd:import namespace="http://schemas.xmlsoap.org/ws/2003/03/business-process/" schemaLocation="./ws_2003_03_business-process_.xsd"/>
+     
+    <xsd:complexType name="WorkFlowInputType">
+        <xsd:annotation>
+        <xsd:documentation>
+            This type represents the input type for a BPEL workflow
+        </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element ref="bpws:process"
+                        minOccurs="1"
+                        maxOccurs="1"/>
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>

@@ -24,13 +24,13 @@
         <schema targetNamespace="http://workflow.cagrid.nci.nih.gov//WorkFlowManagementService"
             xmlns:tns="http://workflow.cagrid.nci.nih.gov//WorkFlowManagementService"
 			xmlns:ns0="http://schemas.xmlsoap.org/ws/2003/03/business-process/" 
-			
+		    xmlns:types="http://workflow.cagrid.nci.nih.gov//WorkFlowManagementService"	
             xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
 			<import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd"/>
 		
 			<import namespace="http://schemas.xmlsoap.org/ws/2003/03/business-process/" schemaLocation="./ws_2003_03_business-process_.xsd"/>
 			   
-      	
+      	    <import namespace="http://workflow.cagrid.nci.nih.gov//WorkFlowManagementService" schemaLocation="./WorkFlowManagementServiceTypes.xsd"/>
       	
 				<element name="runWorkFlow">
 					<complexType>
