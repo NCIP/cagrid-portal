@@ -40,7 +40,7 @@ public class ServicesTypeTreeNode extends DefaultMutableTreeNode {
 	
 	private void initialize() {
 		if (services.getService() != null) {
-			for (int i = 0; i < services.getService().length; i++) {
+			for (int i = 1; i < services.getService().length; i++) {
 				//if(!services.getService(i).getName().equals(info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME))){
 					ServiceTypeTreeNode newNode = new ServiceTypeTreeNode(services.getService(i),info,model);
 					model.insertNodeInto(newNode, this, this.getChildCount());

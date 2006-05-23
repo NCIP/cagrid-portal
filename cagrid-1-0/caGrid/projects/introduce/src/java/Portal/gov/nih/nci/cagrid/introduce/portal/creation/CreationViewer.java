@@ -3,7 +3,6 @@ package gov.nih.nci.cagrid.introduce.portal.creation;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
@@ -17,9 +16,10 @@ import gov.nih.nci.cagrid.introduce.portal.modification.ModificationViewer;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.util.List;
 import java.util.Properties;
 
@@ -29,11 +29,11 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
-
 
 /**
  * CreationViewer
@@ -48,34 +48,65 @@ import org.projectmobius.portal.PortalResourceManager;
 public class CreationViewer extends GridPortalComponent {
 
 	public static final String ALLOWED_SERVICE_NAME_REGEX = "[A-Z]++[A-Za-z0-9\\_\\$]*";
+
 	public static final String SCHEMA_DIR = "schema";
 
 	private static String DEFAULT_NAME = "HelloWorld";
+
 	private static String DEFAULT_JAVA_PACKAGE = "gov.nih.nci.cagrid";
+
 	private static String DEFAULT_NAMESPACE = "http://cagrid.nci.nih.gov/HelloWorld";
 
 	private JPanel inputPanel = null;
+
 	private JPanel mainPanel = null;
+
 	private JPanel buttonPanel = null;
+
 	private JButton createButton = null;
+
 	private JLabel serviceLabel = null;
+
 	private JTextField service = null;
+
 	private JLabel destinationLabel = null;
+
 	private JTextField dir = null;
+
 	private JButton dirButton = null;
+
 	private JLabel packageLabel = null;
+
 	private JTextField servicePackage = null;
+
 	private JLabel namespaceLabel = null;
+
 	private JTextField namespaceDomain = null;
+
 	private JButton closeButton = null;
-	private JLabel serviceStyleLabel = null;
+
 	private JComboBox serviceStyleSeletor = null;
+
+	private JPanel extensionsPanel = null;
+
+	private JButton addExtensionButton = null;
+
+	private JButton removeExtensionButton = null;
+
+	private JScrollPane extensionsScrollPane = null;
+
+	private ExtensionsTable extensionsTable = null;
+
+	private JPanel extensionsTablePanel = null;
+
+	private JLabel upExtensionLabel = null;
+
+	private JLabel downExtensionLabel = null;
 
 	public CreationViewer() {
 		super();
 		initialize();
 	}
-
 
 	/**
 	 * This method initializes this
@@ -83,33 +114,26 @@ public class CreationViewer extends GridPortalComponent {
 	 * @return void
 	 */
 	private void initialize() {
-		        this.setContentPane(getMainPanel());
-this.setContentPane(getMainPanel());
+		this.setContentPane(getMainPanel());
+		this.setContentPane(getMainPanel());
 		this.setFrameIcon(IntroduceLookAndFeel.getCreateServiceIcon());
 		this.setTitle("Create Grid Service");
 	}
 
-
 	/**
 	 * This method initializes jPanel
-	 * 
-	 * @return javax.swing.JPanel
 	 */
 	private JPanel getInputPanel() {
 		if (inputPanel == null) {
-			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
-			gridBagConstraints16.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints16.gridy = 5;
-			gridBagConstraints16.weightx = 1.0;
-			gridBagConstraints16.gridwidth = 2;
-			gridBagConstraints16.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints16.gridx = 1;
-			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
-			gridBagConstraints13.gridx = 0;
-			gridBagConstraints13.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints13.gridy = 5;
-			serviceStyleLabel = new JLabel();
-			serviceStyleLabel.setText("Service Extension");
+			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
+			gridBagConstraints17.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints17.gridy = 5;
+			gridBagConstraints17.weightx = 0.0;
+			gridBagConstraints17.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints17.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints17.gridwidth = 3;
+			gridBagConstraints17.weighty = 1.0D;
+			gridBagConstraints17.gridx = 0;
 			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
 			gridBagConstraints12.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints12.gridy = 4;
@@ -137,9 +161,11 @@ this.setContentPane(getMainPanel());
 			gridBagConstraints10.gridx = 1;
 			inputPanel = new JPanel();
 			inputPanel.setLayout(new GridBagLayout());
-			inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Create Grid Service",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+			inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+					null, "Create Grid Service",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					PortalLookAndFeel.getPanelLabelColor()));
 			packageLabel = new JLabel();
 			packageLabel.setText("Package");
 			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
@@ -208,13 +234,10 @@ this.setContentPane(getMainPanel());
 			inputPanel.add(getNamespaceDomain(), gridBagConstraints12);
 			inputPanel.add(serviceLabel, gridBagConstraints4);
 			inputPanel.add(namespaceLabel, gridBagConstraints11);
-			inputPanel.add(serviceStyleLabel, gridBagConstraints13);
-			inputPanel.add(getServiceStyleSeletor(), gridBagConstraints16);
-			serviceStyleLabel.setEnabled(true);
+			inputPanel.add(getExtensionsPanel(), gridBagConstraints17);
 		}
 		return inputPanel;
 	}
-
 
 	/**
 	 * This method initializes jPanel
@@ -246,7 +269,6 @@ this.setContentPane(getMainPanel());
 		return mainPanel;
 	}
 
-
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -260,7 +282,6 @@ this.setContentPane(getMainPanel());
 		}
 		return buttonPanel;
 	}
-
 
 	/**
 	 * This method initializes jButton
@@ -282,7 +303,6 @@ this.setContentPane(getMainPanel());
 		return createButton;
 	}
 
-
 	/**
 	 * This method initializes serviceStyleSeletor
 	 * 
@@ -293,15 +313,16 @@ this.setContentPane(getMainPanel());
 			serviceStyleSeletor = new JComboBox();
 			serviceStyleSeletor.addItem("NONE");
 
-			List extensionDescriptors = ExtensionsLoader.getInstance().getServiceExtensions();
+			List extensionDescriptors = ExtensionsLoader.getInstance()
+					.getServiceExtensions();
 			for (int i = 0; i < extensionDescriptors.size(); i++) {
-				ServiceExtensionDescriptionType ex = (ServiceExtensionDescriptionType) extensionDescriptors.get(i);
+				ServiceExtensionDescriptionType ex = (ServiceExtensionDescriptionType) extensionDescriptors
+						.get(i);
 				serviceStyleSeletor.addItem(ex.getDisplayName());
 			}
 		}
 		return serviceStyleSeletor;
 	}
-
 
 	/**
 	 * This method initializes service
@@ -316,7 +337,6 @@ this.setContentPane(getMainPanel());
 		return service;
 	}
 
-
 	/**
 	 * This method initializes jTextField
 	 * 
@@ -329,7 +349,6 @@ this.setContentPane(getMainPanel());
 		}
 		return dir;
 	}
-
 
 	/**
 	 * This method initializes jButton
@@ -344,7 +363,8 @@ this.setContentPane(getMainPanel());
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
 						String previous = getDir().getText();
-						String location = ResourceManager.promptDir(CreationViewer.this, previous);
+						String location = ResourceManager.promptDir(
+								CreationViewer.this, previous);
 						if (location != null && location.length() > 0) {
 							getDir().setText(location);
 						} else {
@@ -359,7 +379,6 @@ this.setContentPane(getMainPanel());
 		return dirButton;
 	}
 
-
 	/**
 	 * This method initializes servicePackage
 	 * 
@@ -373,7 +392,6 @@ this.setContentPane(getMainPanel());
 		return servicePackage;
 	}
 
-
 	/**
 	 * This method initializes namespaceDomain
 	 * 
@@ -386,7 +404,6 @@ this.setContentPane(getMainPanel());
 		}
 		return namespaceDomain;
 	}
-
 
 	/**
 	 * This method initializes closeButton
@@ -407,20 +424,20 @@ this.setContentPane(getMainPanel());
 		return closeButton;
 	}
 
-
 	private void createService() {
 		int doIdeleteResult = JOptionPane.OK_OPTION;
 		final File dirFile = new File(getDir().getText());
 		if (dirFile.exists() && dirFile.list().length != 0) {
-			doIdeleteResult = JOptionPane.showConfirmDialog(this,
-				"The creation directory is not empty.  All information in the directory will be lost.",
-				"Confirm Overwrite", JOptionPane.YES_NO_OPTION);
+			doIdeleteResult = JOptionPane
+					.showConfirmDialog(
+							this,
+							"The creation directory is not empty.  All information in the directory will be lost.",
+							"Confirm Overwrite", JOptionPane.YES_NO_OPTION);
 		}
-		
-		
+
 		if (doIdeleteResult == JOptionPane.OK_OPTION) {
-			BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance().getGridPortal(),
-				"Creating") {
+			BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager
+					.getInstance().getGridPortal(), "Creating") {
 				public void process() {
 					try {
 						if (dirFile.exists()) {
@@ -442,32 +459,41 @@ this.setContentPane(getMainPanel());
 						// String templateFilename =
 						// getMethodsTemplateFile().getText();
 						if (serviceName.length() > 0) {
-							if (serviceName.substring(0, 1).toLowerCase().equals(serviceName.substring(0, 1))) {
+							if (serviceName.substring(0, 1).toLowerCase()
+									.equals(serviceName.substring(0, 1))) {
 								setErrorMessage("Service Name cannnot start with lower case letters.");
 								return;
 							}
-							if (!serviceName.matches(ALLOWED_SERVICE_NAME_REGEX)) {
-								setErrorMessage("Service Name can only contain " + ALLOWED_SERVICE_NAME_REGEX);
+							if (!serviceName
+									.matches(ALLOWED_SERVICE_NAME_REGEX)) {
+								setErrorMessage("Service Name can only contain "
+										+ ALLOWED_SERVICE_NAME_REGEX);
 								return;
-						}
+							}
 						} else {
 							setErrorMessage("Service Name cannot be empty.");
 							return;
 						}
-						
+
 						setProgressText("purging old archives");
 						ResourceManager.purgeArchives(serviceName);
 
 						// only supporting one for now.....
 						String serviceExtensions = "";
-						if (!((String) getServiceStyleSeletor().getSelectedItem()).equals("NONE")) {
-							ServiceExtensionDescriptionType edt = ExtensionsLoader.getInstance()
-								.getServiceExtensionByDisplayName((String) getServiceStyleSeletor().getSelectedItem());
-							serviceExtensions = edt.getName();
+						for (int i = 0; i < getExtensionsTable().getRowCount(); i++) {
+							ServiceExtensionDescriptionType edt = ExtensionsLoader
+									.getInstance()
+									.getServiceExtensionByDisplayName(
+											getExtensionsTable().getRowData(i));
+							serviceExtensions += edt.getName();
+							if (i < getExtensionsTable().getRowCount() - 1) {
+								serviceExtensions += ",";
+							}
 						}
 						setProgressText("creating");
-						String cmd = CommonTools.getAntSkeletonCreationCommand(".", serviceName, dirName, packageName,
-							serviceNsDomain, serviceExtensions);
+						String cmd = CommonTools.getAntSkeletonCreationCommand(
+								".", serviceName, dirName, packageName,
+								serviceNsDomain, serviceExtensions);
 						Process p = CommonTools.createAndOutputProcess(cmd);
 						p.waitFor();
 						if (p.exitValue() != 0) {
@@ -476,32 +502,43 @@ this.setContentPane(getMainPanel());
 
 						setProgressText("running extension viewers");
 						Properties properties = new Properties();
-						properties.load(new FileInputStream(getDir().getText() + File.separator
-							+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE));
-						ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(getDir()
-							.getText()
-							+ File.separator + IntroduceConstants.INTRODUCE_XML_FILE, ServiceDescription.class);
-						ServiceInformation info = new ServiceInformation(introService, properties, new File(getDir()
-							.getText()));
+						properties
+								.load(new FileInputStream(
+										getDir().getText()
+												+ File.separator
+												+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE));
+						ServiceDescription introService = (ServiceDescription) Utils
+								.deserializeDocument(
+										getDir().getText()
+												+ File.separator
+												+ IntroduceConstants.INTRODUCE_XML_FILE,
+										ServiceDescription.class);
+						ServiceInformation info = new ServiceInformation(
+								introService, properties, new File(getDir()
+										.getText()));
 						if (!serviceExtensions.equals("")) {
-							JDialog extDialog = ExtensionTools.getCreationUIDialog(serviceExtensions, info);
+							JDialog extDialog = ExtensionTools
+									.getCreationUIDialog(serviceExtensions,
+											info);
 							if (extDialog != null) {
 								extDialog.setVisible(true);
 							}
 						}
-				
+
 						setProgressText("building");
 						cmd = CommonTools.getAntAllCommand(dirName);
 						p = CommonTools.createAndOutputProcess(cmd);
 						p.waitFor();
 						if (p.exitValue() == 0) {
-							PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-								new ModificationViewer(new File(dirName)));
+							PortalResourceManager.getInstance().getGridPortal()
+									.addGridPortalComponent(
+											new ModificationViewer(new File(
+													dirName)));
 							dispose();
 						} else {
 							setErrorMessage("Error creating new service!");
 						}
-						
+
 					} catch (Exception ex) {
 						ex.printStackTrace();
 						setErrorMessage("Error: " + ex.getMessage());
@@ -511,7 +548,195 @@ this.setContentPane(getMainPanel());
 
 			Thread th = new Thread(r);
 			th.start();
-			
+
 		}
+	}
+
+	/**
+	 * This method initializes extensionsPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getExtensionsPanel() {
+		if (extensionsPanel == null) {
+			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
+			gridBagConstraints13.gridx = 1;
+			gridBagConstraints13.gridy = 0;
+			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+			gridBagConstraints20.gridx = 0;
+			gridBagConstraints20.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints20.gridwidth = 3;
+			gridBagConstraints20.gridy = 1;
+			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
+			gridBagConstraints19.gridx = 0;
+			gridBagConstraints19.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints19.gridheight = 2;
+			gridBagConstraints19.gridy = 2;
+			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
+			gridBagConstraints16.gridx = 2;
+			gridBagConstraints16.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints16.gridy = 0;
+			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
+			gridBagConstraints15.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints15.gridx = 0;
+			gridBagConstraints15.gridy = 0;
+			gridBagConstraints15.weightx = 1.0;
+			gridBagConstraints15.insets = new java.awt.Insets(2, 2, 2, 2);
+			extensionsPanel = new JPanel();
+			extensionsPanel.setLayout(new GridBagLayout());
+			extensionsPanel
+					.setBorder(javax.swing.BorderFactory
+							.createTitledBorder(
+									null,
+									"Service Extensions",
+									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+									javax.swing.border.TitledBorder.DEFAULT_POSITION,
+									null, IntroduceLookAndFeel
+											.getPanelLabelColor()));
+			extensionsPanel.add(getServiceStyleSeletor(), gridBagConstraints15);
+			extensionsPanel.add(getRemoveExtensionButton(),
+					gridBagConstraints16);
+			extensionsPanel.add(getExtensionsTable(), gridBagConstraints19);
+			extensionsPanel.add(getAddExtensionButton(), gridBagConstraints13);
+			extensionsPanel.add(getExtensionsTableionsTablePanel(),
+					gridBagConstraints20);
+		}
+		return extensionsPanel;
+	}
+
+	/**
+	 * This method initializes addExtensionButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getAddExtensionButton() {
+		if (addExtensionButton == null) {
+			addExtensionButton = new JButton();
+			addExtensionButton.setText("Add");
+			addExtensionButton.addMouseListener(new MouseAdapter() {
+
+				public void mouseClicked(MouseEvent e) {
+					super.mouseClicked(e);
+					if (!((String) serviceStyleSeletor.getSelectedItem())
+							.equals("NONE")) {
+						getExtensionsTable().addRow(
+								(String) serviceStyleSeletor.getSelectedItem());
+					}
+				}
+
+			});
+		}
+		return addExtensionButton;
+	}
+
+	/**
+	 * This method initializes removeExtensionButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getRemoveExtensionButton() {
+		if (removeExtensionButton == null) {
+			removeExtensionButton = new JButton();
+			removeExtensionButton.setText("Remove");
+			removeExtensionButton.addMouseListener(new MouseAdapter() {
+
+				public void mouseClicked(MouseEvent e) {
+					super.mouseClicked(e);
+					try {
+						getExtensionsTable().removeSelectedRow();
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+
+			});
+		}
+		return removeExtensionButton;
+	}
+
+	/**
+	 * This method initializes extensionsScrollPane
+	 * 
+	 * @return javax.swing.JScrollPane
+	 */
+	private JScrollPane getExtensionsScrollPane() {
+		if (extensionsScrollPane == null) {
+			extensionsScrollPane = new JScrollPane();
+			extensionsScrollPane.setViewportView(getExtensionsTable());
+		}
+		return extensionsScrollPane;
+	}
+
+	/**
+	 * This method initializes extensionsTable
+	 * 
+	 * @return javax.swing.JTable
+	 */
+	private ExtensionsTable getExtensionsTable() {
+		if (extensionsTable == null) {
+			extensionsTable = new ExtensionsTable();
+			extensionsTable.setPreferredSize(new java.awt.Dimension(100, 80));
+		}
+		return extensionsTable;
+	}
+
+	/**
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getExtensionsTableionsTablePanel() {
+		if (extensionsTablePanel == null) {
+			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+			gridBagConstraints21.gridx = 1;
+			gridBagConstraints21.anchor = java.awt.GridBagConstraints.SOUTHWEST;
+			gridBagConstraints21.fill = java.awt.GridBagConstraints.NONE;
+			gridBagConstraints21.gridy = 0;
+			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
+			gridBagConstraints14.gridx = 1;
+			gridBagConstraints14.anchor = java.awt.GridBagConstraints.NORTHWEST;
+			gridBagConstraints14.gridy = 1;
+			downExtensionLabel = new JLabel();
+			downExtensionLabel.addMouseListener(new MouseAdapter() {
+				public void mouseClicked(MouseEvent e) {
+					super.mouseClicked(e);
+					try {
+						getExtensionsTable().moveSelectedRowDown();
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
+			downExtensionLabel.setIcon(IntroduceLookAndFeel.getDownIcon());
+			upExtensionLabel = new JLabel();
+			upExtensionLabel.addMouseListener(new MouseAdapter() {
+				public void mouseClicked(MouseEvent e) {
+					super.mouseClicked(e);
+					try {
+						getExtensionsTable().moveSelectedRowUp();
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
+			upExtensionLabel.setIcon(IntroduceLookAndFeel.getUpIcon());
+			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
+			gridBagConstraints18.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints18.gridy = 0;
+			gridBagConstraints18.weightx = 1.0;
+			gridBagConstraints18.weighty = 1.0;
+			gridBagConstraints18.gridheight = 2;
+			gridBagConstraints18.gridx = 0;
+			extensionsTablePanel = new JPanel();
+			extensionsTablePanel.setLayout(new GridBagLayout());
+			extensionsTablePanel.add(getExtensionsScrollPane(),
+					gridBagConstraints18);
+			extensionsTablePanel.add(upExtensionLabel, gridBagConstraints21);
+			extensionsTablePanel.add(downExtensionLabel, gridBagConstraints14);
+		}
+		return extensionsTablePanel;
 	}
 }
