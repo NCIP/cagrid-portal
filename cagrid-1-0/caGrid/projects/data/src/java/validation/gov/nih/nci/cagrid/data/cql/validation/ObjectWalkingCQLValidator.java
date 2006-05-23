@@ -44,7 +44,7 @@ public class ObjectWalkingCQLValidator implements CQLValidator {
 	}
 	
 	
-	private void validateStructure(CQLQuery query) throws MalformedQueryException {
+	public void validateStructure(CQLQuery query) throws MalformedQueryException {
 		validateObjectStructure(query.getTarget());
 	}
 	
@@ -165,7 +165,7 @@ public class ObjectWalkingCQLValidator implements CQLValidator {
 	}
 	
 	
-	private void validateQueryTarget(CQLQuery query, DomainModel model) throws MalformedQueryException {
+	public void validateQueryTarget(CQLQuery query, DomainModel model) throws MalformedQueryException {
 		UMLClass targetClass = getUmlClass(query.getTarget().getName(), model);
 		if (targetClass == null) {
 			throw new MalformedQueryException("Query target " + query.getTarget().getName() + " is not a valid target in the domain model");
@@ -173,7 +173,7 @@ public class ObjectWalkingCQLValidator implements CQLValidator {
 	}
 	
 	
-	private void validateObjectModel(Object obj, DomainModel model) throws MalformedQueryException {
+	public void validateObjectModel(Object obj, DomainModel model) throws MalformedQueryException {
 		// verify the object exists in the project
 		UMLClass classMd = getUmlClass(obj.getName(), model);
 		if (classMd == null) {
