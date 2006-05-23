@@ -15,7 +15,7 @@
 	<property name="test.dir" location="${basedir}/test" />
 	<property name="share.dir" location="${cagrid.dir}/share" />
 	<property name="share.lib.dir" location="${share.dir}/lib" />
-	<property name="test.lib.dir" location="${catrid.dir}/test/lib" />
+	<property name="test.lib.dir" location="${cagrid.dir}/test/lib" />
 	<property name="antfiles.dir" location="${cagrid.dir}/antfiles" />
 
 	<!-- IMPORT THE UTILITIES TARGETS -->
@@ -26,7 +26,6 @@
 
 	<!-- IMPORT THE TEST TARGET -->
 	<import file="${test.dir}/test.xml" />
-
 
 
 	<!-- ================================================================================ -->
@@ -43,11 +42,11 @@
 	<!-- =============================================================== -->
 	<!-- NTSEC                                                           -->
 	<!-- =============================================================== -->
-	<target name="build-metadata" if="isJDK1.5" depends="prepare" description="Builds ntsec">
+	<target name="build-ntsec" depends="prepare" description="Builds ntsec">
 		<resolveDependencies extdir="${extensions.projects.dir}/ntsec/ext">
 			<artifact refid="test.coverage.jars" />
 		</resolveDependencies>
-		<ant dir="${projects.dir}/ntsec" inheritAll="false" antfile="build.xml" target="all" />
+		<ant dir="${extensions.projects.dir}/ntsec" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
 
