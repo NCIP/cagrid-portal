@@ -16,7 +16,7 @@ import org.xml.sax.InputSource;
 
 /** 
  *  ValidCqlTestCase
- *  Tests a CQL document for validity with the Object Walking CQL Validator 
+ *  Tests CQL documents for validity with the Object Walking CQL Validator 
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
