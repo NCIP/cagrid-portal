@@ -107,6 +107,7 @@
 			<artifact refid="caCORE.jars" />
 			<artifact refid="introduce.jars" />
 			<artifact refid="metadata.jars"/>
+			<artifact refid="metadata.schemas"/>
 			<artifact refid="gme.globus.client.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/cadsr" inheritAll="false" antfile="build.xml" target="all" />
