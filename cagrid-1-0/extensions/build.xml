@@ -17,6 +17,7 @@
 	<property name="share.lib.dir" location="${share.dir}/lib" />
 	<property name="test.lib.dir" location="${cagrid.dir}/test/lib" />
 	<property name="antfiles.dir" location="${cagrid.dir}/antfiles" />
+	<property name="cagrid.test.dir" location="${cagrid.dir}/test" />
 
 	<!-- IMPORT THE UTILITIES TARGETS -->
 	<import file="${cagrid.dir}/antfiles/artifacts.xml" />
