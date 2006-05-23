@@ -21,15 +21,16 @@
 	<!-- Configure dart                                                  -->
 	<!-- =============================================================== -->
 	<target name="createDartTestFiles">
+		<mkdir dir="${test.logs.dir}"/>
 		<!-- Create the BuildName info, if necessary -->
 		<filter token="Dart.BuildName" value="${dart.buildname}" />
 		<filter token="Dart.Site" value="${dart.site}" />
 		<filter token="Dart.Track" value="Continuous" />
-		<copy file="${test.dir}/BuildNameTemplate.xml" tofile="${test.logs.dir}/BuildNameContinuous.xml" filtering="true" overwrite="true" />
+		<copy file="${cagrid.test.dir}/BuildNameTemplate.xml" tofile="${test.logs.dir}/BuildNameContinuous.xml" filtering="true" overwrite="true" />
 		<filter token="Dart.Track" value="Nightly" />
-		<copy file="${test.dir}/BuildNameTemplate.xml" tofile="${test.logs.dir}/BuildNameNightly.xml" filtering="true" overwrite="true" />
+		<copy file="${cagrid.test.dir}/BuildNameTemplate.xml" tofile="${test.logs.dir}/BuildNameNightly.xml" filtering="true" overwrite="true" />
 		<filter token="Dart.Track" value="Experimental" />
-		<copy file="${test.dir}/BuildNameTemplate.xml" tofile="${test.logs.dir}/BuildNameExperimental.xml" filtering="true" overwrite="true" />
+		<copy file="${cagrid.test.dir}/BuildNameTemplate.xml" tofile="${test.logs.dir}/BuildNameExperimental.xml" filtering="true" overwrite="true" />
 	</target>
 	
 	
@@ -38,11 +39,13 @@
 	<!-- =============================================================== -->
 	<target name="test" depends="prepare,createDartTestFiles" description="Test all the projects.">
 		<!-- Clean out old logs first -->
+		<mkdir dir="${junit.results.dir}"/>
 		<delete>
 			<fileset dir="${junit.results.dir}">
 				<include name="*" />
 			</fileset>
 		</delete>
+		<mkdir dir="${junit.results.dir}"/>
 		<for list="${testable.projects.list}" parallel="true" param="project.name" trim="true">
 			<sequential>
 				<echo message="Testing project @{project.name}." />
