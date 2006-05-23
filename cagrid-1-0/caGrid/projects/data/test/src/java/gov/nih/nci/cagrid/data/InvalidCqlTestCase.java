@@ -67,7 +67,8 @@ public class InvalidCqlTestCase extends TestCase {
 			validator.validateStructure(query);
 			fail("Query should have been invalid, was not");
 		} catch (Exception ex) {
-			assertTrue("Query verified invalid", true);
+			// System.out.println("Query verified invalid: " + ex.getMessage());
+			assertTrue("Query verified invalid: " + ex.getMessage(), true);
 		}
 	}
 	
@@ -94,6 +95,11 @@ public class InvalidCqlTestCase extends TestCase {
 	
 	public void testNoChildrenOnGroup() {
 		checkQuery("noGroupChildren.xml");
+	}
+	
+	
+	public void testGroupWithoutLogic() {
+		checkQuery("groupWithoutLogic.xml");
 	}
 	
 	
