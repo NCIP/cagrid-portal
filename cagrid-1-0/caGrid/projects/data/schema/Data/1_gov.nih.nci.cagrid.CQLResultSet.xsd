@@ -71,5 +71,5 @@
 			<xsd:documentation>caGrid object attribute, as yet TBD</xsd:documentation>
 		</xsd:annotation>
 	</xsd:complexType>
-	<xsd:element name="CQLQueryResults" type="res:CQLQueryResults"/>
+	<xsd:element name="CQLQueryResultCollection" type="res:CQLQueryResults"/>
 </xsd:schema>
