@@ -1,0 +1,1 @@
+The documents in this directory are NOT valid CQL!  They are used for testing the CQL Validator only
