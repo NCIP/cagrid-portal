@@ -11,21 +11,24 @@
 	<!-- Layout info -->
 	<property name="projects.dir" location="${basedir}/projects" />
 	<property name="test.dir" location="${basedir}/test" />
-	<property name="share.lib.dir" location="${basedir}/share/lib" />
+	<property name="share.dir" location="${basedir}/share" />
+	<property name="share.lib.dir" location="${share.dir}/lib" />
 	<property name="test.lib.dir" location="${test.dir}/lib" />
+	<property name="antfiles.dir" location="${basedir}/antfiles" />
 
 	<condition property="isJDK1.5" value="true">
 		<equals arg1="${ant.java.version}" arg2="1.5" />
 	</condition>
 
 	<!-- IMPORT THE UTILITIES TARGETS -->
-	<property name="antfiles.dir" location="${basedir}/antfiles" />
+	<import file="${antfiles.dir}/artifacts.xml" />
 	<import file="${antfiles.dir}/ant-utilities.xml" />
 	<import file="${antfiles.dir}/test-utilities.xml" />
 	<import file="${antfiles.dir}/report-utilities.xml" />
 
 	<!-- IMPORT THE TEST TARGET -->
 	<import file="${test.dir}/test.xml" />
+
 
 
 	<!-- ================================================================================ -->
@@ -38,236 +41,6 @@
 	<!-- ================================================================================ -->
 	<!-- This should be a subset of the projects above -->
 	<property name="testable.projects.list" value="dorian, introduce, core, discovery, gridca, gts, cql2xpath, data, sdkQuery" />
-
-
-	<!-- =============================================================== -->
-	<!-- Bootstrap the build by setting up the structure and building    -->
-	<!-- our custom ant tasks.                                           -->
-	<!-- =============================================================== -->
-	<target name="prepare">
-		<tstamp />
-		<delete dir="${antfiles.dir}/build" />
-		<mkdir dir="${antfiles.dir}/build" />
-		<javac srcdir="${antfiles.dir}/src" destdir="${antfiles.dir}/build" debug="on" deprecation="off" optimize="off">
-			<classpath>
-				<fileset dir="${ant.library.dir}">
-					<include name="ant.jar" />
-				</fileset>
-			</classpath>
-		</javac>
-
-		<typedef name="artifact" classname="gov.nih.nci.cagrid.ant.Artifact" loaderref="artifact">
-			<classpath>
-				<pathelement location="${antfiles.dir}/build" />
-			</classpath>
-		</typedef>
-		<taskdef name="resolveDependencies" classname="gov.nih.nci.cagrid.ant.ResolveDependencies" loaderref="artifact">
-			<classpath>
-				<pathelement location="${antfiles.dir}/build" />
-			</classpath>
-		</taskdef>
-
-		<taskdef resource="net/sf/antcontrib/antlib.xml">
-			<classpath>
-				<pathelement location="${share.lib.dir}/ant-contrib.jar" />
-			</classpath>
-		</taskdef>
-	</target>
-
-
-	<!-- =============================================================== -->
-	<!-- Define the build artifacts (created/used by projects) here      -->
-	<!--                                                                 -->
-	<!-- NOTE:  These should be all of the files necessary to "depend" on-->
-	<!-- the project (not just the built files).  Make a separate        -->
-	<!-- artifact for groups of files that will probably be copied to    -->
-	<!-- separate directoris (e.g. jars and conf files)                  -->
-	<!-- =============================================================== -->
-	<target name="defineArtifacts" depends="prepare">
-		<!-- Common Jar Artifacts -->
-		<artifact track="main" type="jars" id="mobius.jars">
-			<fileset dir="${basedir}/share/lib/mobius">
-				<include name="*.jar" />
-			</fileset>
-		</artifact>
-		<artifact track="main" type="jars" id="caCORE.jars">
-			<fileset dir="${basedir}/share/lib/caCORE">
-				<include name="*.jar" />
-			</fileset>
-		</artifact>
-		<artifact track="test" type="jars" id="common.test.jars">
-			<fileset dir="${test.lib.dir}">
-				<include name="jdepend*.jar" />
-				<include name="junit*.jar" />
-				<include name="xmlunit*.jar" />
-			</fileset>
-		</artifact>
-		<artifact track="test" type="jars" id="test.coverage.jars">
-			<fileset dir="${test.lib.dir}/cobertura">
-				<include name="*.jar" />
-			</fileset>
-		</artifact>
-
-		<!-- Project Created Artifacts -->
-		<artifact track="main" type="jars" id="core.jars">
-			<antcall target="build-core" />
-			<fileset dir="${projects.dir}/core/build/jars">
-				<include name="*.jar" />
-				<exclude name="*test*.jar" />
-			</fileset>
-			<fileset dir="${projects.dir}/core/lib">
-				<include name="*.jar" />
-				<exclude name="*test*.jar" />
-			</fileset>
-			<fileset dir="${projects.dir}/core/ext/lib">
-				<include name="*.jar" />
-				<exclude name="*test*.jar" />
-			</fileset>
-		</artifact>
-		<artifact track="main" type="resources" id="core.resources">
-			<fileset dir="${projects.dir}/core/resources">
-				<include name="**" />
-			</fileset>
-		</artifact>
-
-		<artifact track="main" type="jars" id="metadata.jars">
-			<antcall target="build-metadata" />
-			<fileset dir="${projects.dir}/metadata/build/lib">
-				<include name="*.jar" />
-				<exclude name="*test*.jar" />
-			</fileset>
-		</artifact>
-		<artifact track="main" type="schemas" id="metadata.schemas">
-			<fileset dir="${projects.dir}/metadata/schema">
-				<include name="**/*.xsd" />
-			</fileset>
-		</artifact>
-		<artifact track="main" type="mappings" id="metadata.mappings">
-			<fileset dir="${projects.dir}/metadata">
-				<include name="NStoPkg.properties" />
-			</fileset>
-		</artifact>
-
-		<artifact track="main" type="jars" id="opensaml.jars">
-			<antcall target="build-opensaml" />
-			<fileset dir="${projects.dir}/opensaml/dist">
-				<include name="cagrid-opensaml-1.1.jar" />
-			</fileset>
-		</artifact>
-		<artifact track="endorsed" type="jars" id="opensaml.endorsed">
-			<fileset dir="${projects.dir}/opensaml/endorsed">
-				<include name="xercesImpl.jar" />
-				<include name="xml-apis.jar" />
-			</fileset>
-		</artifact>
-
-		<artifact track="main" type="jars" id="graph.jars">
-			<antcall target="build-graph" />
-			<fileset dir="${projects.dir}/graph/build/lib">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${projects.dir}/graph/lib">
-				<include name="*.jar" />
-			</fileset>
-		</artifact>
-
-		<artifact track="main" type="jars" id="gridca.jars">
-			<antcall target="build-gridca" />
-			<fileset dir="${projects.dir}/gridca/build/lib">
-				<include name="gridca.jar" />
-			</fileset>
-		</artifact>
-
-		<artifact track="main" type="jars" id="gts.client.jars">
-			<antcall target="build-gts" />
-			<fileset dir="${projects.dir}/gts/build/lib">
-				<include name="GridTrustService_stubs.jar" />
-				<include name="GridTrustService-common.jar" />
-				<include name="GridTrustService-client.jar" />
-			</fileset>
-		</artifact>
-
-		<artifact track="main" type="jars" id="cadsr.jars">
-			<antcall target="build-cadsr" />
-			<fileset dir="${projects.dir}/cadsr/build/lib">
-				<include name="*.jar" />
-				<exclude name="*test*.jar" />
-			</fileset>
-			<fileset dir="${projects.dir}/cadsr/lib">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${projects.dir}/cadsr/ext/lib">
-				<include name="*.jar" />
-			</fileset>
-		</artifact>
-
-		<artifact track="main" type="jars" id="data.jars">
-			<antcall target="build-data" />
-			<fileset dir="${projects.dir}/data/build/lib">
-				<include name="*.jar" />
-			</fileset>
-		</artifact>
-		
-		<artifact track="main" type="schemas" id="data.cql.schemas">
-			<fileset dir="${projects.dir}/data/schema">
-				<include name="**/*.xsd"/>
-			</fileset>
-		</artifact>
-
-		<artifact track="main" type="jars" id="sdk.query.jars">
-			<antcall target="build-sdkQuery"/>
-			<fileset dir="${projects.dir}/sdkQuery/build/lib">
-				<include name="*.jar" />
-			</fileset>
-		</artifact>
-
-		<artifact track="main" type="jars" id="fqp.jars">
-			<antcall target="build-fqp" />
-			<fileset dir="${projects.dir}/fqp/build/lib">
-				<include name="*.jar">
-				</include>
-			</fileset>
-		</artifact>
-
-		<artifact track="main" type="resources" id="gridca.resources">
-			<fileset dir="${projects.dir}/gridca/resources">
-				<include name="**" />
-			</fileset>
-		</artifact>
-
-		<artifact track="main" type="jars" id="cql2xpath.jars">
-			<antcall target="build-cql2xpath" />
-			<fileset dir="${projects.dir}/cql2xpath/build/lib">
-				<include name="*.jar" />
-			</fileset>
-		</artifact>
-
-		<artifact track="main" type="jars" id="introduce.jars">
-			<antcall target="build-introduce" />
-			<fileset dir="${projects.dir}/introduce/build/jars">
-				<include name="*.jar" />
-				<exclude name="*tests*.jar" />
-			</fileset>
-		</artifact>
-		<artifact track="main" type="resources" id="introduce.resources">
-			<fileset dir="${projects.dir}/introduce/resources">
-				<include name="**" />
-			</fileset>
-		</artifact>
-
-		<artifact track="main" type="jars" id="gme.globus.client.jars">
-			<antcall target="build-gme" />
-			<fileset dir="${projects.dir}/gme/lib">
-				<include name="GlobalModelExchange.jar" />
-				<include name="jdom-1.0.jar" />
-				<include name="mobius-castor-0.9.4.3-xml.jar" />
-			</fileset>
-			<fileset dir="${projects.dir}/gme/build/lib">
-				<include name="caGrid-GlobalModelExchange.jar" />
-				<include name="caGrid-GlobalModelExchange_stubs.jar" />
-			</fileset>
-		</artifact>
-	</target>
 
 
 	<!-- =============================================================== -->
