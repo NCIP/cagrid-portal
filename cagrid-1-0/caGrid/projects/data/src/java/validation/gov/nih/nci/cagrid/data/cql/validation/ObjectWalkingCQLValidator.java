@@ -50,6 +50,11 @@ public class ObjectWalkingCQLValidator implements CQLValidator {
 	
 	
 	private void validateObjectStructure(Object obj) throws MalformedQueryException {
+		// ensure name exists
+		if (obj.getName() == null) {
+			throw new MalformedQueryException("Object does not have a name!");
+		}
+		
 		// count children
 		int childCount = 0;
 		if (obj.getAssociation() != null) {
@@ -115,6 +120,9 @@ public class ObjectWalkingCQLValidator implements CQLValidator {
 	
 	private void validateGroupStructure(Group group) throws MalformedQueryException {
 		// check the logical operator
+		if (group.getLogicRelation() == null) {
+			throw new MalformedQueryException("Groups must have a logical operator!");
+		}
 		String logic = group.getLogicRelation().getValue();
 		if (!logic.equals(LogicalOperator._AND) && !logic.equals(LogicalOperator._OR)) {
 			throw new MalformedQueryException("Logical operator " + logic + " is not valid");
