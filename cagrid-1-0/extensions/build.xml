@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<!-- ================================================================= -->
+<!-- caGrid Master build file                                          -->
+<!-- ================================================================= -->
+
+<project name="catrid-1.0-extensions" default="all" basedir=".">
+	<!-- Give user the chance to override properties -->
+	<property environment="env" />
+	<property file="build.properties" />
+
+	<!-- Layout info -->
+	<property name="cagrid.dir" location="../caGrid" />
+	<property name="projects.dir" location="${cagrid.dir}/projects" />
+	<property name="extensions.projects.dir" location="${basedir}/projects" />
+	<property name="test.dir" location="${basedir}/test" />
+	<property name="share.dir" location="${cagrid.dir}/share" />
+	<property name="share.lib.dir" location="${share.dir}/lib" />
+	<property name="test.lib.dir" location="${catrid.dir}/test/lib" />
+	<property name="antfiles.dir" location="${cagrid.dir}/antfiles" />
+
+	<!-- IMPORT THE UTILITIES TARGETS -->
+	<import file="${cagrid.dir}/antfiles/artifacts.xml" />
+	<import file="${antfiles.dir}/ant-utilities.xml" />
+	<import file="${antfiles.dir}/test-utilities.xml" />
+	<import file="${antfiles.dir}/report-utilities.xml" />
+
+	<!-- IMPORT THE TEST TARGET -->
+	<import file="${test.dir}/test.xml" />
+
+
+
+	<!-- ================================================================================ -->
+	<!--                          DEFINE THE SUB PROJECTS                                 -->
+	<!-- ================================================================================ -->
+	<!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
+	<property name="projects.list" value="ntsec" />
+	<!-- ================================================================================ -->
+	<!--                  DEFINE THE SUB PROJECTS THAT SUPPORT TESTING                    -->
+	<!-- ================================================================================ -->
+	<!-- This should be a subset of the projects above -->
+	<property name="testable.projects.list" value="ntsec" />
+
+	<!-- =============================================================== -->
+	<!-- NTSEC                                                           -->
+	<!-- =============================================================== -->
+	<target name="build-metadata" if="isJDK1.5" depends="prepare" description="Builds ntsec">
+		<resolveDependencies extdir="${extensions.projects.dir}/ntsec/ext">
+			<artifact refid="test.coverage.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/ntsec" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+
+	<!-- ============================================================== -->
+	<!-- Cleans up generated stuff                                      -->
+	<!-- ============================================================== -->
+	<target name="clean" depends="prepare" description="Cleans all projects.">
+		<for list="${projects.list}" parallel="true" param="project.name" trim="true">
+			<sequential>
+				<echo message="Cleaning project @{project.name}." />
+				<delete dir="${extensions.projects.dir}/@{project.name}/ext" />
+				<ant dir="${extensions.projects.dir}/@{project.name}" inheritAll="false" antfile="build.xml" target="clean" />
+			</sequential>
+		</for>
+
+		<delete failonerror="false">
+			<fileset dir="${junit.results.dir}">
+				<include name="*" />
+			</fileset>
+		</delete>
+	</target>
+
+
+	<!-- ============================================================== -->
+	<!-- Builds from scratch                                            -->
+	<!-- ============================================================== -->
+	<target name="all" depends="prepare, clean" description="Builds the entire application">
+		<for list="${projects.list}" parallel="false" param="project.name" trim="true">
+			<sequential>
+				<echo message="Building project @{project.name}." />
+				<runtarget target="build-@{project.name}" />
+				<echo message="Built project @{project.name}." />
+			</sequential>
+		</for>
+	</target>
+</project>
