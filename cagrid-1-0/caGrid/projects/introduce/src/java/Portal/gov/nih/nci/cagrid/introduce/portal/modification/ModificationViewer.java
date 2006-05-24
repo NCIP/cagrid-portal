@@ -1404,6 +1404,7 @@ public class ModificationViewer extends GridPortalComponent {
 												+ namespace.getNamespace()
 												+ " : "
 												+ namespace.getPackageName());
+	
 										return;
 									}
 								}

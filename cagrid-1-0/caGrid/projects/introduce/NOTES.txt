@@ -1,14 +1,8 @@
 To Do:
 
-
-
 generated client needs to be able to take an EPR in its constructor
 
 clean up and add icons to the service contexts tree
-
-gme://common.example.com/version/2.5 namespace style is causing problems....
-
-make sure to remove dependecies to metadata project...
 
 add support for having EPR type and fault types in the types browser....
 
@@ -28,8 +22,6 @@ add tests to system tests for (coverage report shows no coverage):
 - (DONE) multiple faults on a method
 - (DONE) methods returning arrays
 - (DONE) servicename ending in Service
-
-portal lets you add the same method name several times
 
 introduce created clients should not call getPortType() for each method invocation (its very inefficient), getPortType should be called once in the contructor, and each method should just use it
   - this has security ramifciations as currently security is configured assuming a fresh port type... it needs to set all the options appropriately for each method call
@@ -63,6 +55,12 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+make sure to remove dependecies to metadata project...
+
+portal lets you add the same method name several times
+
+gme://common.example.com/version/2.5 namespace style is causing problems....
+
 adding an inner service with a "-" in the name causes a sync error (HelloWorld-Instance)
 line 11:28: unexpected token: -
 gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException

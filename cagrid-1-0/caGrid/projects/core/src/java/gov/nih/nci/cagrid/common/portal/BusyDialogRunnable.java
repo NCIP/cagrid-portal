@@ -31,7 +31,7 @@ public abstract class BusyDialogRunnable implements Runnable {
 	public void run() {
 		Thread thread = new Thread(new Runnable() {
 			public void run() {
-				dialog.show();
+				dialog.setVisible(true);
 			}
 		});
 		thread.start();
@@ -55,9 +55,11 @@ public abstract class BusyDialogRunnable implements Runnable {
 		setProgressText("");
 		dialog.setVisible(false);
 		
+		
 		if (!valid) {
 			JOptionPane.showMessageDialog(owner, errorMessage);
 		}
+		dialog.dispose();
 	}
 	
 	
