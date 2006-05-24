@@ -100,6 +100,8 @@ follows:
        public void addAttribute(String type, String name);
        public void addMethod(...) // not implemented
 
+
+
 -Putting Classes and Association in the Diagram-------------------
 
 Below is a code snippet that will populate a UMLDiagram object 
@@ -130,21 +132,25 @@ SWING component necessary.
 
 The UMLDiagram class is capable of responding to user events such as a
 mouse-click on a specific class, or a double-click on a specific 
-association.  In order to catch these events, an object implementing the
-UMLDiagramListener interface has to be added to the UMLDiagram object of 
-interest.  Actually,a UMLDiagram object has only one listener so the proper 
-term would be'set' the listener and not 'add' a listener, and this is done 
-using the setDiagramListener() method:
+association.  In order to catch these events, a UMLDiagramListner object
+has to be added to the UMLDiagram object of  interest.  Actually ,a UMLDiagram 
+object has only one listener so the proper term would be'set' the listener and not 
+'add' a listener, and this is done using the setDiagramListener() method:
  
      public void setDiagramListener(UMLDiagramListener listener);
 
 The UMLDiagramListener interface has the following methods:
 
+     public UMLDiagramListener(UMLDiagram d);
      public void ClassClicked(UMLClass c, MouseEvent e);
      public void AssociationClicked(UMLClassAssociation a, MouseEvent e);
 
-(the MouseEvent is added to these methods so that one can check to see if 
-the objects were clicked, doublecliked, rightclicked , etc.
+Notice that the UMLDiagram object of interest must be passed as a parameter
+to the constructor of the listener.  This allows for the diagram to be accessed
+from inside the other listener methods by using [listener.diagram].
+
+The MouseEvent is added to the event handling methods so that one can check 
+to see if the objects were clicked, doublecliked, rightclicked , etc.
 
 -Open Issues----------------------------------------------------------
 
@@ -152,3 +158,5 @@ the objects were clicked, doublecliked, rightclicked , etc.
    -Come up with algorithm that minimizes edge crossings and maximizes
     angles between edges
 
+2) clicking an object highlights that object and fades the rest, but
+   one must DOUBLE-click to get everything back to normal..
