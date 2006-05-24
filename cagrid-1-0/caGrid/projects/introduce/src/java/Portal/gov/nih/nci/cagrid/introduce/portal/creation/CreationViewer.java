@@ -47,8 +47,6 @@ import org.projectmobius.portal.PortalResourceManager;
  */
 public class CreationViewer extends GridPortalComponent {
 
-	public static final String ALLOWED_SERVICE_NAME_REGEX = "[A-Z]++[A-Za-z0-9\\_\\$]*";
-
 	public static final String SCHEMA_DIR = "schema";
 
 	private static String DEFAULT_NAME = "HelloWorld";
@@ -458,20 +456,8 @@ public class CreationViewer extends GridPortalComponent {
 						String serviceNsDomain = getNamespaceDomain().getText();
 						// String templateFilename =
 						// getMethodsTemplateFile().getText();
-						if (serviceName.length() > 0) {
-							if (serviceName.substring(0, 1).toLowerCase()
-									.equals(serviceName.substring(0, 1))) {
-								setErrorMessage("Service Name cannnot start with lower case letters.");
-								return;
-							}
-							if (!serviceName
-									.matches(ALLOWED_SERVICE_NAME_REGEX)) {
-								setErrorMessage("Service Name can only contain "
-										+ ALLOWED_SERVICE_NAME_REGEX);
-								return;
-							}
-						} else {
-							setErrorMessage("Service Name cannot be empty.");
+						if (!CommonTools.isValidServiceName(serviceName)) {
+							setErrorMessage("Service Name is not valid.  Service name must be a java compatible class name. (" + CommonTools.ALLOWED_SERVICE_NAME_REGEX + ")");
 							return;
 						}
 

@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
 import org.projectmobius.portal.GridPortalComponent;
@@ -14,6 +15,7 @@ import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
@@ -129,6 +131,10 @@ public class ModifyService extends GridPortalComponent {
 
 				public void mouseClicked(MouseEvent e) {
 					super.mouseClicked(e);
+					if (!CommonTools.isValidServiceName(serviceNameTextField.getText())) {
+						JOptionPane.showMessageDialog(ModifyService.this,"Service Name is not valid.  Service name must be a java compatible class name. (" + CommonTools.ALLOWED_SERVICE_NAME_REGEX + ")");
+						return;
+					}
 					service.setName(serviceNameTextField.getText());
 					service.setNamespace(namespaceTextField.getText());
 					service.setPackageName(servicePackageNameTextField.getText());

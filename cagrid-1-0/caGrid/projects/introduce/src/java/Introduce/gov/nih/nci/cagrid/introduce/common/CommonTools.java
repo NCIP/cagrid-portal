@@ -35,6 +35,8 @@ import org.projectmobius.common.XMLUtilities;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  */
 public class CommonTools {
+	
+	public static final String ALLOWED_SERVICE_NAME_REGEX = "[A-Z]++[A-Za-z0-9\\_\\$]*";
 
 	public static Process createAndOutputProcess(String cmd) throws Exception {
 		final Process p;
@@ -46,6 +48,21 @@ public class CommonTools {
 		outGobbler.start();
 
 		return p;
+	}
+	
+	public static boolean isValidServiceName(String serviceName){
+		if (serviceName.length() > 0) {
+			if (serviceName.substring(0, 1).toLowerCase()
+					.equals(serviceName.substring(0, 1))) {
+				return false;
+			}
+			if (!serviceName
+					.matches(ALLOWED_SERVICE_NAME_REGEX)) {
+				return false;
+			}
+		} 
+			return true;
+		
 	}
 
 

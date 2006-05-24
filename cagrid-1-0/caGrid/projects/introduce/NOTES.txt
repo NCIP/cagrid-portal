@@ -1,16 +1,6 @@
 To Do:
 
-adding an inner service with a "-" in the name causes a sync error (HelloWorld-Instance)
-line 11:28: unexpected token: -
-gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException
-	at gov.nih.nci.cagrid.introduce.codegen.services.SyncServices.sync(SyncServices.java:83)
-	...
-Caused by: java.util.NoSuchElementException
-	at java.util.HashMap$HashIterator.nextEntry(HashMap.java:790)
-	at java.util.HashMap$ValueIterator.next(HashMap.java:817)
-	at gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods.lookForUpdates(SyncMethods.java:84)
-	at gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods.sync(SyncMethods.java:50)
-	...
+
 
 generated client needs to be able to take an EPR in its constructor
 
@@ -73,7 +63,18 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
-
+adding an inner service with a "-" in the name causes a sync error (HelloWorld-Instance)
+line 11:28: unexpected token: -
+gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException
+	at gov.nih.nci.cagrid.introduce.codegen.services.SyncServices.sync(SyncServices.java:83)
+	...
+Caused by: java.util.NoSuchElementException
+	at java.util.HashMap$HashIterator.nextEntry(HashMap.java:790)
+	at java.util.HashMap$ValueIterator.next(HashMap.java:817)
+	at gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods.lookForUpdates(SyncMethods.java:84)
+	at gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods.sync(SyncMethods.java:50)
+	...
+	
 (Not a big deal as only used as "default" in GUI) Need to fix commontools to read some preference to set the rule to use for namespace mapping, right now its hardcoded as below:
 	//TODO: where should this mapperClassname preference be set
 	String mapperClassname = "gov.nih.nci.cagrid.common.CaBIGNames2paceToPackageMapper";
