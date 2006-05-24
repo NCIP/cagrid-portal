@@ -9,9 +9,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import EDU.oswego.cs.dl.util.concurrent.LinkedQueue;
-import EDU.oswego.cs.dl.util.concurrent.PooledExecutor;
-
 public class ExtensionsLoader {
 
 	private static ExtensionsLoader loader = null;
@@ -48,11 +45,6 @@ public class ExtensionsLoader {
 	}
 
 	private void load() throws Exception {
-		PooledExecutor workerPool = new PooledExecutor();
-
-		// use an unbounded linked Q, with a max of poolsize threads
-		workerPool = new PooledExecutor(new LinkedQueue(), 10);
-		workerPool.createThreads(2);
 
 		if (extensionsDir.isDirectory()) {
 			final File[] dirs = extensionsDir.listFiles();
@@ -61,57 +53,44 @@ public class ExtensionsLoader {
 				if (dirs[i].isDirectory()) {
 					if (new File(dirs[i].getAbsolutePath() + File.separator
 							+ "extension.xml").exists()) {
-						Runnable runner = new Runnable() {
 
-							public void run() {
-								System.out.println("Loading extension: "
-										+ dirs[count].getAbsolutePath()
-										+ File.separator + "extension.xml");
-								ExtensionDescription extDesc = null;
+						System.out.println("Loading extension: "
+								+ dirs[count].getAbsolutePath()
+								+ File.separator + "extension.xml");
+						ExtensionDescription extDesc = null;
 
-								try {
-									extDesc = (ExtensionDescription) Utils
-											.deserializeDocument(new File(
-													dirs[count]
-															.getAbsolutePath()
-															+ File.separator
-															+ "extension.xml")
-													.getAbsolutePath(),
-													ExtensionDescription.class);
+						try {
+							extDesc = (ExtensionDescription) Utils
+									.deserializeDocument(new File(dirs[count]
+											.getAbsolutePath()
+											+ File.separator + "extension.xml")
+											.getAbsolutePath(),
+											ExtensionDescription.class);
 
-									if (extDesc.getExtensionType().equals(
-											DISCOVERY_EXTENSION)) {
-										discoveryExtensionDescriptors
-												.add(extDesc
-														.getDiscoveryExtensionDescription());
-									} else if (extDesc.getExtensionType()
-											.equals(SERVICE_EXTENSION)) {
-										serviceExtensionDescriptors
-												.add(extDesc
-														.getServiceExtensionDescription());
-									} else {
-										System.out
-												.println("Unsupported Extension Type: "
-														+ extDesc
-																.getExtensionType());
-									}// TODO Auto-generated method stub
-								} catch (Exception e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
+							if (extDesc.getExtensionType().equals(
+									DISCOVERY_EXTENSION)) {
+								discoveryExtensionDescriptors.add(extDesc
+										.getDiscoveryExtensionDescription());
+							} else if (extDesc.getExtensionType().equals(
+									SERVICE_EXTENSION)) {
+								serviceExtensionDescriptors.add(extDesc
+										.getServiceExtensionDescription());
+							} else {
+								System.out
+										.println("Unsupported Extension Type: "
+												+ extDesc.getExtensionType());
+							}// TODO Auto-generated method stub
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 
-							}
-
-						};
-
-						workerPool.execute(runner);
 					}
+
 				}
 			}
 		}
 
-		workerPool.shutdownAfterProcessingCurrentlyQueuedTasks();
-		workerPool.awaitTerminationAfterShutdown();
 	}
 
 	public List getServiceExtensions() {

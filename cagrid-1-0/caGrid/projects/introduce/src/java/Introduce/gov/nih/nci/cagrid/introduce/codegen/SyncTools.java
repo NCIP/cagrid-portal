@@ -57,9 +57,6 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.projectmobius.common.MalformedNamespaceException;
 
-import EDU.oswego.cs.dl.util.concurrent.LinkedQueue;
-import EDU.oswego.cs.dl.util.concurrent.PooledExecutor;
-
 /**
  * Top level controller for re-syncing the service.
  * 
