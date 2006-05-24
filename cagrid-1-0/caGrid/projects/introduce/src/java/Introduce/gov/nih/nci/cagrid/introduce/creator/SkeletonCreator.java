@@ -110,14 +110,7 @@ public class SkeletonCreator extends Task {
 		ExtensionsType exts = new ExtensionsType();
 		exts.setExtension(types);
 		introService.setExtensions(exts);
-
-		ServiceInformation info = new ServiceInformation(introService, properties, baseDirectory);
-		SkeletonBaseCreator sbc = new SkeletonBaseCreator();
-		SkeletonSourceCreator ssc = new SkeletonSourceCreator();
-		SkeletonSchemaCreator sscc = new SkeletonSchemaCreator();
-		SkeletonEtcCreator sec = new SkeletonEtcCreator();
-		SkeletonDocsCreator sdc = new SkeletonDocsCreator();
-
+		
 		String service = properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
 		if (!service.matches("[A-Z]++[A-Za-z0-9\\_\\$]*")) {
 			System.err.println("Service Name can only contain [A-Z]++[A-Za-z0-9\\_\\$]*");
@@ -127,9 +120,16 @@ public class SkeletonCreator extends Task {
 			System.err.println("Service Name cannnot start with lower case letters.");
 			return;
 		}
-
+		
 		// create the dirs to the basedir if needed
 		baseDirectory.mkdirs();
+
+		ServiceInformation info = new ServiceInformation(introService, properties, baseDirectory);
+		SkeletonBaseCreator sbc = new SkeletonBaseCreator();
+		SkeletonSourceCreator ssc = new SkeletonSourceCreator();
+		SkeletonSchemaCreator sscc = new SkeletonSchemaCreator();
+		SkeletonEtcCreator sec = new SkeletonEtcCreator();
+		SkeletonDocsCreator sdc = new SkeletonDocsCreator();
 
 		// Generate the source
 		try {

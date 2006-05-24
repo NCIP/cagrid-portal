@@ -9,18 +9,25 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import EDU.oswego.cs.dl.util.concurrent.LinkedQueue;
+import EDU.oswego.cs.dl.util.concurrent.PooledExecutor;
+
 public class ExtensionsLoader {
-	
+
 	private static ExtensionsLoader loader = null;
 
-	public static final String EXTENSIONS_DIRECTORY = "." + File.separator + "extensions";
+	public static final String EXTENSIONS_DIRECTORY = "." + File.separator
+			+ "extensions";
+
 	public static final String DISCOVERY_EXTENSION = "DISCOVERY";
+
 	public static final String SERVICE_EXTENSION = "SERVICE";
 
 	private List serviceExtensionDescriptors;
-	private List discoveryExtensionDescriptors;
-	private File extensionsDir;
 
+	private List discoveryExtensionDescriptors;
+
+	private File extensionsDir;
 
 	private ExtensionsLoader() {
 		this.extensionsDir = new File(EXTENSIONS_DIRECTORY);
@@ -32,48 +39,89 @@ public class ExtensionsLoader {
 			e.printStackTrace();
 		}
 	}
-	
-	public static ExtensionsLoader getInstance(){
-		if(loader==null){
+
+	public static ExtensionsLoader getInstance() {
+		if (loader == null) {
 			loader = new ExtensionsLoader();
 		}
 		return loader;
 	}
 
-
 	private void load() throws Exception {
+		PooledExecutor workerPool = new PooledExecutor();
+
+		// use an unbounded linked Q, with a max of poolsize threads
+		workerPool = new PooledExecutor(new LinkedQueue(), 10);
+		workerPool.createThreads(2);
+
 		if (extensionsDir.isDirectory()) {
-			File[] dirs = extensionsDir.listFiles();
+			final File[] dirs = extensionsDir.listFiles();
 			for (int i = 0; i < dirs.length; i++) {
+				final int count = i;
 				if (dirs[i].isDirectory()) {
-					if (new File(dirs[i].getAbsolutePath() + File.separator + "extension.xml").exists()) {
-						System.out.println("Loading extensions: " + dirs[i].getAbsolutePath() + File.separator
-							+ "extension.xml");
-						ExtensionDescription extDesc = (ExtensionDescription) Utils.deserializeDocument(new File(
-							dirs[i].getAbsolutePath() + File.separator + "extension.xml").getAbsolutePath(),
-							ExtensionDescription.class);
-						if (extDesc.getExtensionType().equals(DISCOVERY_EXTENSION)) {
-							discoveryExtensionDescriptors.add(extDesc.getDiscoveryExtensionDescription());
-						} else if (extDesc.getExtensionType().equals(SERVICE_EXTENSION)) {
-							serviceExtensionDescriptors.add(extDesc.getServiceExtensionDescription());
-						} else {
-							System.out.println("Unsupported Extension Type: " + extDesc.getExtensionType());
-						}
+					if (new File(dirs[i].getAbsolutePath() + File.separator
+							+ "extension.xml").exists()) {
+						Runnable runner = new Runnable() {
+
+							public void run() {
+								System.out.println("Loading extension: "
+										+ dirs[count].getAbsolutePath()
+										+ File.separator + "extension.xml");
+								ExtensionDescription extDesc = null;
+
+								try {
+									extDesc = (ExtensionDescription) Utils
+											.deserializeDocument(new File(
+													dirs[count]
+															.getAbsolutePath()
+															+ File.separator
+															+ "extension.xml")
+													.getAbsolutePath(),
+													ExtensionDescription.class);
+
+									if (extDesc.getExtensionType().equals(
+											DISCOVERY_EXTENSION)) {
+										discoveryExtensionDescriptors
+												.add(extDesc
+														.getDiscoveryExtensionDescription());
+									} else if (extDesc.getExtensionType()
+											.equals(SERVICE_EXTENSION)) {
+										serviceExtensionDescriptors
+												.add(extDesc
+														.getServiceExtensionDescription());
+									} else {
+										System.out
+												.println("Unsupported Extension Type: "
+														+ extDesc
+																.getExtensionType());
+									}// TODO Auto-generated method stub
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+
+							}
+
+						};
+
+						workerPool.execute(runner);
 					}
 				}
 			}
 		}
-	}
 
+		workerPool.shutdownAfterProcessingCurrentlyQueuedTasks();
+		workerPool.awaitTerminationAfterShutdown();
+	}
 
 	public List getServiceExtensions() {
 		return this.serviceExtensionDescriptors;
 	}
 
-
 	public ServiceExtensionDescriptionType getServiceExtension(String name) {
 		for (int i = 0; i < serviceExtensionDescriptors.size(); i++) {
-			ServiceExtensionDescriptionType ex = (ServiceExtensionDescriptionType) serviceExtensionDescriptors.get(i);
+			ServiceExtensionDescriptionType ex = (ServiceExtensionDescriptionType) serviceExtensionDescriptors
+					.get(i);
 			if (ex.getName().equals(name)) {
 				return ex;
 			}
@@ -81,22 +129,22 @@ public class ExtensionsLoader {
 		return null;
 	}
 
-
-	public ServiceExtensionDescriptionType getServiceExtensionByDisplayName(String displayName) {
+	public ServiceExtensionDescriptionType getServiceExtensionByDisplayName(
+			String displayName) {
 		for (int i = 0; i < serviceExtensionDescriptors.size(); i++) {
-			ServiceExtensionDescriptionType ex = (ServiceExtensionDescriptionType) serviceExtensionDescriptors.get(i);
+			ServiceExtensionDescriptionType ex = (ServiceExtensionDescriptionType) serviceExtensionDescriptors
+					.get(i);
 			if (ex.getDisplayName().equals(displayName)) {
 				return ex;
 			}
 		}
 		return null;
 	}
-
 
 	public DiscoveryExtensionDescriptionType getDiscoveryExtension(String name) {
 		for (int i = 0; i < discoveryExtensionDescriptors.size(); i++) {
 			DiscoveryExtensionDescriptionType ex = (DiscoveryExtensionDescriptionType) discoveryExtensionDescriptors
-				.get(i);
+					.get(i);
 			if (ex.getName().equals(name)) {
 				return ex;
 			}
@@ -104,11 +152,11 @@ public class ExtensionsLoader {
 		return null;
 	}
 
-
-	public DiscoveryExtensionDescriptionType getDiscoveryExtensionByDisplayName(String displayName) {
+	public DiscoveryExtensionDescriptionType getDiscoveryExtensionByDisplayName(
+			String displayName) {
 		for (int i = 0; i < serviceExtensionDescriptors.size(); i++) {
 			DiscoveryExtensionDescriptionType ex = (DiscoveryExtensionDescriptionType) discoveryExtensionDescriptors
-				.get(i);
+					.get(i);
 			if (ex.getDisplayName().equals(displayName)) {
 				return ex;
 			}
@@ -116,11 +164,9 @@ public class ExtensionsLoader {
 		return null;
 	}
 
-
 	public List getDiscoveryExtensions() {
 		return this.discoveryExtensionDescriptors;
 	}
-
 
 	public File getExtensionsDir() {
 		return extensionsDir;

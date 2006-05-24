@@ -6,12 +6,14 @@ import gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods;
 import gov.nih.nci.cagrid.introduce.codegen.resource.SyncResource;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
-import gov.nih.nci.cagrid.introduce.templates.ClasspathTemplate;
 import gov.nih.nci.cagrid.introduce.templates.ServerConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.etc.SecurityDescTemplate;
 
 import java.io.File;
 import java.io.FileWriter;
+
+import EDU.oswego.cs.dl.util.concurrent.LinkedQueue;
+import EDU.oswego.cs.dl.util.concurrent.PooledExecutor;
 
 /**
  * SyncMethodsOnDeployment
@@ -31,12 +33,11 @@ public class SyncServices extends SyncTool {
 
 	public void sync() throws SynchronizationException {
 
-		try {
+		PooledExecutor workerPool = new PooledExecutor();
 
-
-		} catch (Exception e) {
-			throw new SynchronizationException(e.getMessage(), e);
-		}
+		// use an unbounded linked Q, with a max of poolsize threads
+		workerPool = new PooledExecutor(new LinkedQueue(), 10);
+		workerPool.createThreads(2);
 
 		// sync each sub service
 		if (getServiceInformation().getServices() != null
@@ -44,37 +45,72 @@ public class SyncServices extends SyncTool {
 			for (int serviceI = 0; serviceI < getServiceInformation()
 					.getServices().getService().length; serviceI++) {
 
+				final int serviceIndex = serviceI;
+				Runnable runner = new Runnable() {
+
+					public void run() {
+						try {
+							SpecificServiceInformation ssi = new SpecificServiceInformation(
+									getServiceInformation(),
+									getServiceInformation().getServices()
+											.getService(serviceIndex));
+							SecurityDescTemplate secDescT = new SecurityDescTemplate();
+							String secDescS = secDescT.generate(ssi);
+							File secDescF = new File(getBaseDirectory()
+									+ File.separator
+									+ "etc"
+									+ File.separator
+									+ getServiceInformation().getServices()
+											.getService(serviceIndex).getName()
+									+ "-security-desc.xml");
+							FileWriter secDescFW = new FileWriter(secDescF);
+							secDescFW.write(secDescS);
+							secDescFW.close();
+
+							ServerConfigTemplate serverConfigT = new ServerConfigTemplate();
+							String serverConfigS = serverConfigT
+									.generate(getServiceInformation());
+							File serverConfigF = new File(getBaseDirectory()
+									.getAbsolutePath()
+									+ File.separator + "server-config.wsdd");
+							FileWriter serverConfigFW = new FileWriter(
+									serverConfigF);
+							serverConfigFW.write(serverConfigS);
+							serverConfigFW.close();
+
+							SyncMethods methodSync = new SyncMethods(
+									getBaseDirectory(),
+									getServiceInformation(),
+									getServiceInformation().getServices()
+											.getService(serviceIndex));
+							methodSync.sync();
+							SyncResource resourceSync = new SyncResource(
+									getBaseDirectory(),
+									getServiceInformation(),
+									getServiceInformation().getServices()
+											.getService(serviceIndex));
+							resourceSync.sync();
+
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+
+					}
+
+				};
 				try {
-					SpecificServiceInformation ssi = new SpecificServiceInformation(getServiceInformation(),getServiceInformation().getServices().getService(serviceI));
-					SecurityDescTemplate secDescT = new SecurityDescTemplate();
-					String secDescS = secDescT.generate(ssi);
-					File secDescF = new File(getBaseDirectory() + File.separator + "etc" + File.separator + getServiceInformation().getServices().getService(serviceI).getName() + "-security-desc.xml");
-					FileWriter secDescFW = new FileWriter(secDescF);
-					secDescFW.write(secDescS);
-					secDescFW.close();
-					
-					ServerConfigTemplate serverConfigT = new ServerConfigTemplate();
-					String serverConfigS = serverConfigT
-							.generate(getServiceInformation());
-					File serverConfigF = new File(getBaseDirectory()
-							.getAbsolutePath()
-							+ File.separator + "server-config.wsdd");
-					FileWriter serverConfigFW = new FileWriter(serverConfigF);
-					serverConfigFW.write(serverConfigS);
-					serverConfigFW.close();
-				} catch (Exception e) {
+					workerPool.execute(runner);
+				} catch (InterruptedException e) {
 					throw new SynchronizationException(e.getMessage(), e);
 				}
 
-				SyncMethods methodSync = new SyncMethods(getBaseDirectory(),
-						getServiceInformation(), getServiceInformation()
-								.getServices().getService(serviceI));
-				methodSync.sync();
-				SyncResource resourceSync = new SyncResource(getBaseDirectory(),
-						getServiceInformation(), getServiceInformation()
-								.getServices().getService(serviceI));
-				resourceSync.sync();
 			}
+		}
+		workerPool.shutdownAfterProcessingCurrentlyQueuedTasks();
+		try {
+			workerPool.awaitTerminationAfterShutdown();
+		} catch (InterruptedException e) {
+			throw new SynchronizationException(e.getMessage(), e);
 		}
 	}
 

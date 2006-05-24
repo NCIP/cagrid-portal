@@ -526,7 +526,7 @@ public class CreationViewer extends GridPortalComponent {
 						}
 
 						setProgressText("building");
-						cmd = CommonTools.getAntAllCommand(dirName);
+						cmd = CommonTools.getAntCompileCommand(dirName);
 						p = CommonTools.createAndOutputProcess(cmd);
 						p.waitFor();
 						if (p.exitValue() == 0) {

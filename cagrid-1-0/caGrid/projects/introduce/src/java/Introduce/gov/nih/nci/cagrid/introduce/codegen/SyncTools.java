@@ -57,6 +57,9 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.projectmobius.common.MalformedNamespaceException;
 
+import EDU.oswego.cs.dl.util.concurrent.LinkedQueue;
+import EDU.oswego.cs.dl.util.concurrent.PooledExecutor;
+
 
 /**
  * Top level controller for re-syncing the service.
@@ -117,35 +120,61 @@ public class SyncTools {
 		}
 
 
-		public void generateSymbolTable(ServiceInformation info, Set excludeSet) throws Exception {
+		public void generateSymbolTable(final ServiceInformation info, final Set excludeSet) throws Exception {
+			PooledExecutor workerPool = new PooledExecutor();
+
+			// use an unbounded linked Q, with a max of poolsize threads
+			//using 1 for now because there is some issue with axis running in parallel...
+			workerPool = new PooledExecutor(new LinkedQueue(),1);
+			workerPool.createThreads(1);
+			
 			if (info.getServices() != null && info.getServices().getService() != null) {
 				for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
-					ServiceType service = info.getServices().getService(serviceI);
+					
+					final ServiceType service = info.getServices().getService(serviceI);
 
-					Emitter parser = new Emitter();
-					SymbolTable table = null;
+					Runnable runner = new Runnable() {
+					
+						public void run() {
+							
+							Emitter parser = new Emitter();
+							SymbolTable table = null;
 
-					parser.setQuiet(true);
-					parser.setImports(true);
+							parser.setQuiet(true);
+							parser.setImports(true);
 
-					List excludeList = new ArrayList();
-					// one hammer(List), one solution
-					excludeList.addAll(excludeSet);
-					parser.setNamespaceExcludes(excludeList);
+							List excludeList = new ArrayList();
+							// one hammer(List), one solution
+							excludeList.addAll(excludeSet);
+							parser.setNamespaceExcludes(excludeList);
 
-					parser.setOutputDir(baseDirectory.getAbsolutePath() + File.separator + "tmp");
-					parser.setNStoPkg(baseDirectory.getAbsolutePath() + File.separator
-						+ IntroduceConstants.NAMESPACE2PACKAGE_MAPPINGS_FILE);
-					parser.run(new File(baseDirectory.getAbsolutePath() + File.separator + "build" + File.separator
-						+ "schema" + File.separator
-						+ info.getIntroduceServiceProperties().get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
-						+ File.separator + service.getName() + "_flattened.wsdl").getAbsolutePath());
-					table = parser.getSymbolTable();
+							parser.setOutputDir(baseDirectory.getAbsolutePath() + File.separator + "tmp");
+							parser.setNStoPkg(baseDirectory.getAbsolutePath() + File.separator
+								+ IntroduceConstants.NAMESPACE2PACKAGE_MAPPINGS_FILE);
+							try {
+								parser.run(new File(baseDirectory.getAbsolutePath() + File.separator + "build" + File.separator
+									+ "schema" + File.separator
+									+ info.getIntroduceServiceProperties().get(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
+									+ File.separator + service.getName() + "_flattened.wsdl").getAbsolutePath());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							table = parser.getSymbolTable();
 
-					symbolTables.add(table);
-					Utils.deleteDir(new File(baseDirectory.getAbsolutePath() + File.separator + "tmp"));
+							symbolTables.add(table);
+						}
+					
+					};
+					
+					workerPool.execute(runner);
+					
 				}
 			}
+			
+			workerPool.shutdownAfterProcessingCurrentlyQueuedTasks();
+			workerPool.awaitTerminationAfterShutdown();
+			Utils.deleteDir(new File(baseDirectory.getAbsolutePath() + File.separator + "tmp"));
 		}
 	}
 
