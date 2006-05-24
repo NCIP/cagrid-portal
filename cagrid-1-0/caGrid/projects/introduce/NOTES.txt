@@ -1,5 +1,9 @@
 To Do:
 
+clean up and add icons to the service contexts tree
+
+gme://common.example.com/version/2.5 namespace style is causing problems....
+
 make sure to remove dependecies to metadata project...
 
 add support for having EPR type and fault types in the types browser....
