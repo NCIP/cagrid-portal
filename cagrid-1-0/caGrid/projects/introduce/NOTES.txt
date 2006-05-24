@@ -12,6 +12,8 @@ Caused by: java.util.NoSuchElementException
 	at gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods.sync(SyncMethods.java:50)
 	...
 
+generated client needs to be able to take an EPR in its constructor
+
 clean up and add icons to the service contexts tree
 
 gme://common.example.com/version/2.5 namespace style is causing problems....
