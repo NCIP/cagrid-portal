@@ -72,7 +72,7 @@ public class TestCaseInfo1 extends TestCaseInfo {
 	}
 
 	public String getPackageDir() {
-		return getPackageName().replace(".",File.separator);
+		return getPackageName().replace('.',File.separatorChar);
 	}
 
 	public String getResourceFrameworkType() {

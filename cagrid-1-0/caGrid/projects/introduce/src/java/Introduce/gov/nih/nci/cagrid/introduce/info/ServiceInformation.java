@@ -90,7 +90,7 @@ public class ServiceInformation {
 	}
 	
 	public String getPackageDir(ServiceType service){
-		return service.getPackageName().replace(".",File.separator);
+		return service.getPackageName().replace('.',File.separatorChar);
 	}
 	
 	public NamespaceType getNamespaceType(String namespaceURI){
