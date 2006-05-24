@@ -121,7 +121,7 @@ public class CommonTools {
 		System.out.println("CREATION: cmd: " + cmd );
 		return cmd;
 	}
-	
+
 	public static String getAntSkeletonPostCreationCommand(String buildFileDir, String name, String dir,
 			String packagename, String namespacedomain, String extensions) throws Exception {
 			// fix dir path if it relative......
@@ -145,7 +145,6 @@ public class CommonTools {
 			System.out.println("CREATION: cmd: " + cmd );
 			return cmd;
 		}
-
 
 	static String getAntCommandCall(String buildFileDir) throws Exception {
 		String os = System.getProperty("os.name");
@@ -271,7 +270,7 @@ public class CommonTools {
 			// use classname if set, else use schema type
 			if (outputType.getQName() != null && outputType.getQName().getLocalPart() != null
 				&& !outputType.getQName().getLocalPart().trim().equals("")) {
-				output = outputType.getQName().getLocalPart();
+				output = org.apache.axis.wsdl.toJava.Utils.xmlNameToJavaClass(outputType.getQName().getLocalPart());
 			}
 
 			// add array notation if its an array
@@ -293,7 +292,7 @@ public class CommonTools {
 						if (!input.equals("")) {
 							input += ", ";
 						}
-						input += inputType.getQName().getLocalPart();
+						input += org.apache.axis.wsdl.toJava.Utils.xmlNameToJavaClass(inputType.getQName().getLocalPart());
 					} else {
 						// why would this be the case?
 						continue;
