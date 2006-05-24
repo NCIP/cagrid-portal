@@ -524,6 +524,16 @@ public class CreationViewer extends GridPortalComponent {
 								extDialog.setVisible(true);
 							}
 						}
+						
+						setProgressText("post creation");
+						cmd = CommonTools.getAntSkeletonPostCreationCommand(
+								".", serviceName, dirName, packageName,
+								serviceNsDomain, serviceExtensions);
+						p = CommonTools.createAndOutputProcess(cmd);
+						p.waitFor();
+						if (p.exitValue() != 0) {
+							setErrorMessage("Error post creating new service!");
+						}
 
 						setProgressText("building");
 						cmd = CommonTools.getAntCompileCommand(dirName);

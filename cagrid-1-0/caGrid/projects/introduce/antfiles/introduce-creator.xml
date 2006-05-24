@@ -13,12 +13,6 @@
 	<property name="introduce.skeleton.package.dir.default" value="gov/nih/nci/cagrid"/>
 	<property name="introduce.skeleton.namespace.domain.default" value="http://cagrid.nci.nih.gov"/>
 	<property name="introduce.skeleton.extensions.default" value=""/>
-	<target name="usage">
-		<echo message="Not to be called directly.  This file contains utilities to be used in other
-			build files."/>
-	</target>
-	<target name="createService" description="Will create an anaytical skeleton deployment"
-		depends=" checkInputProps, copySkeleton, copyCaGridJars, setActivePath"> </target>
 	<taskdef name="createSkeleton" classname="gov.nih.nci.cagrid.introduce.creator.SkeletonCreator">
 		<classpath>
 			<fileset dir="${lib.dir}">
@@ -28,7 +22,7 @@
 				<include name="*.jar"/>
 			</fileset>
 			<fileset dir="${extensions.lib.dir}">
-				<include name="*.jar" />
+				<include name="*.jar"/>
 			</fileset>
 			<fileset dir="${ant.library.dir}">
 				<include name="*.jar"/>
@@ -41,6 +35,38 @@
 			</fileset>
 		</classpath>
 	</taskdef>
+	<taskdef name="postCreateSkeleton"
+		classname="gov.nih.nci.cagrid.introduce.creator.SkeletonPostCreator">
+		<classpath>
+			<fileset dir="${lib.dir}">
+				<include name="*.jar"/>
+			</fileset>
+			<fileset dir="${ext.lib.dir}">
+				<include name="*.jar"/>
+			</fileset>
+			<fileset dir="${extensions.lib.dir}">
+				<include name="*.jar"/>
+			</fileset>
+			<fileset dir="${ant.library.dir}">
+				<include name="*.jar"/>
+			</fileset>
+			<fileset dir="${build.lib.dir}">
+				<include name="*.jar"/>
+			</fileset>
+			<fileset dir="${ext.globus.location}/lib">
+				<include name="*.jar"/>
+			</fileset>
+		</classpath>
+	</taskdef>
+	<target name="usage">
+		<echo message="Not to be called directly.  This file contains utilities to be used in other
+			build files."/>
+	</target>
+	<target name="createService" description="Will create an anaytical skeleton deployment"
+		depends=" checkInputProps, copySkeleton, copyCaGridJars, setActivePath"> </target>
+	<target name="postCreateService" description="Will post create an anaytical skeleton deployment">
+		<postCreateSkeleton/>
+	</target>
 	<target name="setActivePath">
 		<property name="active.skeleton.destination.dir"
 			value="${introduce.skeleton.destination.dir}"/>
@@ -65,10 +91,8 @@
 			<entry key="introduce.skeleton.timestamp" value="0"/>
 			<entry key="introduce.skeleton.namespace.domain"
 				value="${introduce.skeleton.namespace.domain}"/>
-			<entry key="introduce.skeleton.services.list"
-				value="${introduce.skeleton.service.name}"/>
-			<entry key="introduce.skeleton.extensions"
-				value="${introduce.skeleton.extensions}"/>
+			<entry key="introduce.skeleton.services.list" value="${introduce.skeleton.service.name}"/>
+			<entry key="introduce.skeleton.extensions" value="${introduce.skeleton.extensions}"/>
 		</propertyfile>
 	</target>
 	<target name="checkLoadPropertiesFile" if="introduce.properties">
@@ -116,8 +140,7 @@
 			addproperty="introduce.skeleton.namespace.domain"
 			defaultvalue="${introduce.skeleton.namespace.domain.default}"/>
 		<input message="Please enter any service extensions (separate by commas).
-			[${introduce.skeleton.extensions.default}]:"
-			addproperty="introduce.skeleton.extensions"
+			[${introduce.skeleton.extensions.default}]:" addproperty="introduce.skeleton.extensions"
 			defaultvalue="${introduce.skeleton.extensions.default}"/>
 	</target>
 	<target name="copyCaGridJars" depends="prepareSkeleton,copySkeleton">

@@ -104,6 +104,30 @@ public class CommonTools {
 		System.out.println("CREATION: cmd: " + cmd );
 		return cmd;
 	}
+	
+	public static String getAntSkeletonPostCreationCommand(String buildFileDir, String name, String dir,
+			String packagename, String namespacedomain, String extensions) throws Exception {
+			// fix dir path if it relative......
+			System.out.println("CREATION: builddir: " + buildFileDir);
+			System.out.println("CREATION: destdir: " + dir);
+			File dirF = new File(dir);
+			if (!dirF.isAbsolute()) {
+				dir = buildFileDir + File.separator + dir;
+			}
+			String os = System.getProperty("os.name");
+			if ((os.indexOf("Windows") >= 0) || (os.indexOf("windows") >= 0)) {
+				dir = "\"" + dir + "\"";
+			} else {
+				dir = dir.replaceAll(" ", "\\ ");
+			}
+			String cmd = " -Dintroduce.skeleton.destination.dir=" + dir + " -Dintroduce.skeleton.service.name=" + name
+				+ " -Dintroduce.skeleton.package=" + packagename + " -Dintroduce.skeleton.package.dir="
+				+ packagename.replace('.', File.separatorChar) + " -Dintroduce.skeleton.namespace.domain="
+				+ namespacedomain + " -Dintroduce.skeleton.extensions=" + extensions + " postCreateService";
+			cmd = getAntCommandCall(buildFileDir) + cmd;
+			System.out.println("CREATION: cmd: " + cmd );
+			return cmd;
+		}
 
 
 	static String getAntCommandCall(String buildFileDir) throws Exception {
