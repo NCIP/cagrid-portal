@@ -212,9 +212,6 @@
 			<artifact refid="common.test.jars" />
 			<artifact refid="core.resources" />
 			<artifact refid="mobius.jars" />
-			<artifact refid="metadata.jars" />
-			<artifact refid="metadata.schemas" />
-			<artifact refid="metadata.mappings" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/gme" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
