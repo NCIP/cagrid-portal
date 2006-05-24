@@ -192,9 +192,7 @@
 			<artifact refid="core.resources" />
 			<artifact refid="mobius.jars" />
 			<artifact refid="gme.globus.client.jars" />
-			<artifact refid="metadata.jars" />
 			<artifact refid="metadata.schemas" />
-			<artifact refid="metadata.mappings" />
 			<artifact refid="opensaml.jars" />
 			<artifact refid="opensaml.endorsed" />
 			<artifact refid="gridca.jars" />
