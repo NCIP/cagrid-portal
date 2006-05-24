@@ -79,7 +79,7 @@
 	<!-- =============================================================== -->
 	<!-- DISCOVERY:                                                      -->
 	<!-- =============================================================== -->
-	<target name="build-discovery" depends="prepare" description="Builds the common metadata">
+	<target name="build-discovery" if="isJDK1.5" depends="prepare" description="Builds the common metadata">
 		<resolveDependencies extdir="${projects.dir}/discovery/ext">
 			<artifact refid="core.jars" />
 			<artifact refid="common.test.jars" />
