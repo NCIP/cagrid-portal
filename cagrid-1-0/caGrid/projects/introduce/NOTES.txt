@@ -1,5 +1,17 @@
 To Do:
 
+adding an inner service with a "-" in the name causes a sync error (HelloWorld-Instance)
+line 11:28: unexpected token: -
+gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException
+	at gov.nih.nci.cagrid.introduce.codegen.services.SyncServices.sync(SyncServices.java:83)
+	...
+Caused by: java.util.NoSuchElementException
+	at java.util.HashMap$HashIterator.nextEntry(HashMap.java:790)
+	at java.util.HashMap$ValueIterator.next(HashMap.java:817)
+	at gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods.lookForUpdates(SyncMethods.java:84)
+	at gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods.sync(SyncMethods.java:50)
+	...
+
 clean up and add icons to the service contexts tree
 
 gme://common.example.com/version/2.5 namespace style is causing problems....
