@@ -457,7 +457,7 @@ public class CreationViewer extends GridPortalComponent {
 						// String templateFilename =
 						// getMethodsTemplateFile().getText();
 						if (!CommonTools.isValidServiceName(serviceName)) {
-							setErrorMessage("Service Name is not valid.  Service name must be a java compatible class name. (" + CommonTools.ALLOWED_SERVICE_NAME_REGEX + ")");
+							setErrorMessage("Service Name is not valid.  Service name must be a java compatible class name. (" + CommonTools.ALLOWED_JAVA_NAME_REGEX + ")");
 							return;
 						}
 

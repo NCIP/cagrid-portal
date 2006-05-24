@@ -132,7 +132,7 @@ public class ModifyService extends GridPortalComponent {
 				public void mouseClicked(MouseEvent e) {
 					super.mouseClicked(e);
 					if (!CommonTools.isValidServiceName(serviceNameTextField.getText())) {
-						JOptionPane.showMessageDialog(ModifyService.this,"Service Name is not valid.  Service name must be a java compatible class name. (" + CommonTools.ALLOWED_SERVICE_NAME_REGEX + ")");
+						JOptionPane.showMessageDialog(ModifyService.this,"Service Name is not valid.  Service name must be a java compatible class name. (" + CommonTools.ALLOWED_JAVA_NAME_REGEX + ")");
 						return;
 					}
 					service.setName(serviceNameTextField.getText());
