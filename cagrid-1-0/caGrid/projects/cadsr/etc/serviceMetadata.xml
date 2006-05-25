@@ -8,9 +8,11 @@
             <com:shortName>OSU</com:shortName>
             <com:displayName>Ohio State University</com:displayName>
             <com:address>
-                <com:stateProvence>OH</com:stateProvence>
-                <com:postalCode>43210</com:postalCode>
-                <com:country>US</com:country>
+                <com:Address>
+                    <com:stateProvence>OH</com:stateProvence>
+                    <com:postalCode>43210</com:postalCode>
+                    <com:country>US</com:country>
+                </com:Address>
             </com:address>
             <com:researchCenterDescription/>
             <com:pointOfContactCollection>
