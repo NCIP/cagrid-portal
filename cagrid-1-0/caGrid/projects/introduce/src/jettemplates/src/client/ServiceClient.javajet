@@ -15,7 +15,6 @@
 package <%=info.getService().getPackageName()%>.client;
 
 
-import java.net.URL;
 import java.io.InputStream;
 import java.rmi.RemoteException;
 
@@ -24,6 +23,7 @@ import org.apache.axis.client.AxisClient;
 import org.apache.axis.configuration.FileProvider;
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.apache.axis.types.URI.MalformedURIException;
 import org.apache.axis.utils.ClassUtils;
 
 import org.globus.gsi.GlobusCredential;
@@ -40,19 +40,29 @@ import <%=info.getService().getPackageName()%>.common.<%=serviceName%>I;
  */
 public class <%=info.getService().getName()%>Client implements <%=serviceName%>I {	
 	private GlobusCredential proxy;
-	private String url;
+	private EndpointReferenceType epr;
 	
 	static{
 		org.globus.axis.util.Util.registerTransport();
 	}
 	
-	public <%=info.getService().getName()%>Client(String url) {
+	public <%=info.getService().getName()%>Client(String url) throws MalformedURIException {
 		this(url,null);	
 	}
 
-	public <%=info.getService().getName()%>Client(String url, GlobusCredential proxy) {
+	public <%=info.getService().getName()%>Client(String url, GlobusCredential proxy) throws MalformedURIException {
 	   	this.proxy = proxy;
-	   	this.url = url;	
+	   	this.epr = new EndpointReferenceType();
+	   	this.epr.setAddress(new Address(url));
+	}
+	
+	public <%=info.getService().getName()%>Client(EndpointReferenceType epr) throws MalformedURIException {
+	   	this(epr,null);
+	}
+	
+	public <%=info.getService().getName()%>Client(EndpointReferenceType epr, GlobusCredential proxy) throws MalformedURIException {
+	   	this.proxy = proxy;
+	   	this.epr = epr;
 	}
 
 	private <%=info.getService().getName()%>PortType getPortType() throws RemoteException {
@@ -67,10 +77,8 @@ public class <%=info.getService().getName()%>Client implements <%=serviceName%>I
 			locator.setEngine(new AxisClient(engineConfig));
 		}
 		<%=info.getService().getName()%>PortType port = null;
-		EndpointReferenceType endpoint = new EndpointReferenceType();
 		try {
-			endpoint.setAddress(new Address(url));
-			port = locator.get<%=info.getService().getName()%>PortTypePort(endpoint);
+			port = locator.get<%=info.getService().getName()%>PortTypePort(this.epr);
 		} catch (Exception e) {
 			throw new RemoteException("Unable to configured porttype:" + e.getMessage(), e);
 		}
