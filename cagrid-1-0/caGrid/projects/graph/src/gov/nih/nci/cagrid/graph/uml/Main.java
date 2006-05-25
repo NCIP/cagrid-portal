@@ -19,6 +19,10 @@ public class Main {
 		} catch (InstantiationException ex) {
 		} catch (ClassNotFoundException ex) {
 		}
+		
+		
+		
+		
 
 		UMLDiagram diagram = new UMLDiagram();
 
@@ -56,10 +60,12 @@ public class Main {
 		diagram.repositionLabelsAndArrowHeads();
 
 		JFrame f = new JFrame();
-		f.getContentPane().add(diagram);
+		//f.getContentPane().add(diagram);
 		f.setBounds(10, 100, 900, 600);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
+		
+		XMLTreeView x = new XMLTreeView(f);
 
 	}
 }
