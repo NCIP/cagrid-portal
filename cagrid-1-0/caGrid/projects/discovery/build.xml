@@ -19,7 +19,7 @@
 	<property name="classes.dir" value="${build.dir}/classes" />
 	<property name="jar.dir" value="${build.dir}/jars" />
 	<property name="project.jarfile" value="${jar.dir}/${project.name}-${project.version}.jar" />
-	<property name="lib.dir" value="${basedir}/lib" />	
+	<property name="lib.dir" value="${basedir}/lib" />
 	<property name="ext.lib.dir" value="${basedir}/ext/lib" />
 	<property name="ext.test.lib.dir" location="${basedir}/ext/test/lib" />
 
@@ -73,7 +73,8 @@
 	<!-- The Test Classpath                                                   -->
 	<!-- =============================================================== -->
 	<path id="test.classpath">
-		<pathelement path="${classes.dir}" />	
+		<pathelement path="${classes.dir}" />
+		<pathelement path="${test.dir}/resources" />
 		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>

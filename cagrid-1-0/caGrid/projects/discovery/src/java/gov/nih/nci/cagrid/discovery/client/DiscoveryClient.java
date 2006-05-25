@@ -16,6 +16,8 @@ import org.apache.axis.message.MessageElement;
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI.MalformedURIException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.globus.wsrf.WSRFConstants;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 
@@ -54,6 +56,8 @@ public class DiscoveryClient {
 		nsMap.put(serv, MetadataConstants.CAGRID_SERVICE_MD_NAMESPACE);
 		nsMap.put(data, MetadataConstants.CAGRID_DATA_MD_NAMESPACE);
 	}
+
+	protected static Log LOG = LogFactory.getLog(DiscoveryClient.class.getName());
 
 
 	/**
@@ -331,13 +335,10 @@ public class DiscoveryClient {
 	 */
 	protected EndpointReferenceType[] discoverByFilter(String xpathPredicate) throws Exception {
 		EndpointReferenceType[] results = null;
-		final String xpath = "/*/" + wssg + ":Entry[" + xpathPredicate + "]/" + wssg + ":MemberServiceEPR";
-		System.out.println("Querying for: " + xpath);
-		final String translatedxpath = XPathUtils.translateXPath(xpath, nsMap);
-		System.out.println("Issuing actual query: " + translatedxpath);
 
 		// query the service and deser the results
-		MessageElement[] elements = ResourcePropertyHelper.queryResourceProperties(indexEPR, translatedxpath);
+		MessageElement[] elements = ResourcePropertyHelper.queryResourceProperties(indexEPR,
+			translateXPath(xpathPredicate));
 		Object[] objects = ObjectDeserializer.toObject(elements, EndpointReferenceType.class);
 
 		// if we got results, cast them into what we are expected to return
@@ -348,6 +349,17 @@ public class DiscoveryClient {
 
 		return results;
 
+	}
+
+
+	protected String translateXPath(String xpathPredicate) {
+		String xpath = "/*/" + wssg + ":Entry[" + xpathPredicate + "]/" + wssg + ":MemberServiceEPR";
+		LOG.debug("Querying for: " + xpath);
+
+		String translatedxpath = XPathUtils.translateXPath(xpath, nsMap);
+		LOG.debug("Issuing actual query: " + translatedxpath);
+
+		return translatedxpath;
 	}
 
 
