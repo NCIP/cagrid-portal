@@ -1,84 +1,54 @@
 package gov.nih.nci.cagrid.introduce;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.Properties;
-
-import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
-import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
-import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import junit.framework.TestCase;
 
 public class IntroduceToolsTestCase extends TestCase {
 
-	private String baseDirectory;
-
-	private static final String GOLD_RESOURCES = "test" + File.separator
-			+ "resources" + File.separator + "gold";
-
-	private static final String NAMESPACE1 = "gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain";
-
-	private static final String NAMESPACE2 = "http://www.w3.org/2001/XMLSchema";
-
-	private static final String SERVICE1 = "HelloWorld";
-
-	private static final String SERVICE2 = "NewService";
-
-	ServiceInformation info;
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		baseDirectory = System.getProperty("basedir");
-		if (baseDirectory == null) {
-			System.err.println("basedir system property not set");
-			throw new Exception("basedir system property not set");
-		}
-
-		ServiceDescription introService = (ServiceDescription) Utils
-				.deserializeDocument(baseDirectory + File.separator
-						+ GOLD_RESOURCES + File.separator
-						+ "introduceServicesExample.xml",
-						ServiceDescription.class);
-
-		File servicePropertiesFile = new File(baseDirectory + File.separator
-				+ GOLD_RESOURCES + File.separator
-				+ "introduceServicesExample.properties");
-		Properties serviceProperties = new Properties();
-		serviceProperties.load(new FileInputStream(servicePropertiesFile));
-		// have to set the service directory in the service properties
-		serviceProperties.setProperty(
-				IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR,
-				baseDirectory);
-		info = new ServiceInformation(introService, serviceProperties,
-				new File(baseDirectory + File.separator + GOLD_RESOURCES));
-
 	}
 
-	public void testFindNamespace1() {
-		NamespaceType type = CommonTools.getNamespaceType(info.getNamespaces(),NAMESPACE1);
-		assertTrue(type != null);
-		assertTrue(type.getNamespace().equals(NAMESPACE1));
+	
+	public void testIsValidSeviceName(){
+		assertTrue(CommonTools.isValidServiceName("MyService"));
+		assertTrue(CommonTools.isValidServiceName("My123"));
+		assertTrue(CommonTools.isValidServiceName("My123_Service"));
+		assertTrue(CommonTools.isValidServiceName("My123_TestService"));
+		assertTrue(CommonTools.isValidServiceName("M123_TestService23"));
+		assertTrue(CommonTools.isValidServiceName("M123_TestService23$"));
 	}
-
-	public void testFindNamespace2() {
-		NamespaceType type = CommonTools.getNamespaceType(info.getNamespaces(),NAMESPACE2);
-		assertTrue(type != null);
-		assertTrue(type.getNamespace().equals(NAMESPACE2));
+	
+	public void testIsNotValidServiceName(){
+		assertFalse(CommonTools.isValidServiceName("_MyService"));
+		assertFalse(CommonTools.isValidServiceName("My1-23"));
+		assertFalse(CommonTools.isValidServiceName("0My123_Service"));
+		assertFalse(CommonTools.isValidServiceName("_2My123_TestService"));
+		assertFalse(CommonTools.isValidServiceName("*&M123_TestService23"));
+		assertFalse(CommonTools.isValidServiceName("@#M123_TestService23$"));
+		assertFalse(CommonTools.isValidServiceName("M123_TestServ!@ice23$"));
 	}
-
-	public void testFindService1() {
-		ServiceType type = CommonTools.getService(info.getServices(),(SERVICE1));
-		assertTrue(type != null);
-		assertTrue(type.getName().equals(SERVICE1));
+	
+	public void testIsValidPackageName(){
+		assertTrue(CommonTools.isValidPackageName("test.org"));
+		assertTrue(CommonTools.isValidPackageName("sdjr23lkj23lk456jl"));
+		assertTrue(CommonTools.isValidPackageName("a0193"));
+		assertTrue(CommonTools.isValidPackageName("i"));
+		assertTrue(CommonTools.isValidPackageName("is"));
+		assertTrue(CommonTools.isValidPackageName("this.is.a.really.long.package.name.just.to.be.sure.this.is.ok.with.my.package.parser.i.will.even.put.in.some.stupid.characters.like.a0193.and.sdjr23lkj23lk456jl.test.org"));
+		assertTrue(CommonTools.isValidPackageName("_test.org"));
 	}
-
-	public void testFindService2() {
-		ServiceType type = CommonTools.getService(info.getServices(),(SERVICE2));
-		assertTrue(type != null);
-		assertTrue(type.getName().equals(SERVICE2));
+	
+	public void testIsNotValidPackageName(){
+		assertFalse(CommonTools.isValidPackageName("test.1org"));
+		assertFalse(CommonTools.isValidPackageName("sdjr23lkj23%lk456jl"));
+		assertFalse(CommonTools.isValidPackageName("a&0193"));
+		assertFalse(CommonTools.isValidPackageName("1"));
+		assertFalse(CommonTools.isValidPackageName("1s"));
+		assertFalse(CommonTools.isValidPackageName("this.is.a.really.long.package.name.just.to.be.sure.this.is.ok.with.my.package.parser.i.will.even.put.in.some.stupid.characters.like.a0193.and.sdjr23lkj23lk456jl.test.#org"));
+		assertFalse(CommonTools.isValidPackageName("_test.Forg"));
+		assertFalse(CommonTools.isValidPackageName("_tFest.org"));
 	}
 
 	protected void tearDown() throws Exception {

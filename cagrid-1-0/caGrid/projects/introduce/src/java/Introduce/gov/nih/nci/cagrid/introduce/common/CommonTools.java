@@ -38,7 +38,7 @@ public class CommonTools {
 
 	public static final String ALLOWED_JAVA_NAME_REGEX = "[A-Z]++[A-Za-z0-9\\_\\$]*";
 
-	public static final String ALLOWED_JAVA_PACKAGE_NAME_REGEX = "[A-Za-z\\_]++[A-Za-z0-9\\_\\$]*";
+	public static final String ALLOWED_JAVA_PACKAGE_NAME_REGEX = "[a-z\\_]++[a-z0-9\\_\\$]*";
 
 	public static Process createAndOutputProcess(String cmd) throws Exception {
 		final Process p;
