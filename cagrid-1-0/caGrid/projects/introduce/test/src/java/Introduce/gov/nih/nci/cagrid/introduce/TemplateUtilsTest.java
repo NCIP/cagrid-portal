@@ -4,7 +4,7 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
-import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
 import java.io.File;
 import java.util.HashSet;
@@ -47,13 +47,13 @@ public class TemplateUtilsTest extends TestCase {
 
 	public void testGetResourcePropertyVariableName() {
 		// make sure the pattern is right
-		String computedVarName1 = TemplateUtils
+		String computedVarName1 = CommonTools
 				.getResourcePropertyVariableName(metadataList, 0);
 		assertNotNull(computedVarName1);
 		assertTrue(computedVarName1.matches("([a-z])+([a-zA-Z])*"));
 
 		// make sure the name is uniq when only the name space is different
-		String computedVarName2 = TemplateUtils
+		String computedVarName2 = CommonTools
 				.getResourcePropertyVariableName(metadataList, 1);
 		assertNotNull(computedVarName2);
 		assertFalse(computedVarName1.equals(computedVarName2));
@@ -62,7 +62,7 @@ public class TemplateUtilsTest extends TestCase {
 		// store all the names in a set to check for uniqueness
 		Set names = new HashSet();
 		for (int i = 0; i < metadataList.getResourceProperty().length; i++) {
-			names.add(TemplateUtils.getResourcePropertyVariableName(
+			names.add(CommonTools.getResourcePropertyVariableName(
 					metadataList, i));
 		}
 		// makes sure we got a unique name for all items

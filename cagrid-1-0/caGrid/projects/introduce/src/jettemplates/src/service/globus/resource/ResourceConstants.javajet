@@ -1,4 +1,4 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus.resource" class="ResourceConstantsTemplate" imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.*" %>
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus.resource" class="ResourceConstantsTemplate" imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.common.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.*" %>
 <%  gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation arguments = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument; 
   	Properties properties = arguments.getIntroduceServiceProperties();
 	ResourcePropertiesListType metadataList = arguments.getService().getResourcePropertiesList();
@@ -27,7 +27,7 @@ public interface ResourceConstants {
 			ResourcePropertyType metadata = metadataList.getResourceProperty()[i];
 			
 			stringBuffer.append("\tpublic static final QName ");
-			stringBuffer.append(TemplateUtils.getResourcePropertyVariableName(metadataList, i).toUpperCase());
+			stringBuffer.append(CommonTools.getResourcePropertyVariableName(metadataList, i).toUpperCase());
 			stringBuffer.append("_MD_RP = new QName(\"");
 			stringBuffer.append(metadata.getQName().getNamespaceURI()+"\", \""+metadata.getQName().getLocalPart()+"\");\n");
 		}

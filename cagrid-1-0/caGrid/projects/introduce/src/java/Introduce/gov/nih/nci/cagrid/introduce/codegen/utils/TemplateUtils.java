@@ -4,8 +4,6 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
-import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
-import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.info.ImportInformation;
 import gov.nih.nci.cagrid.introduce.info.NamespaceInformation;
@@ -35,35 +33,6 @@ import org.projectmobius.common.XMLUtilities;
  *          Exp $
  */
 public class TemplateUtils {
-
-	/**
-	 * Define a unique name for use as a variable for the metadata at the
-	 * specified index given the scope of the ServiceMetadataListType.
-	 * 
-	 * @param metadataList
-	 *            the list of metadata
-	 * @param index
-	 *            the index into the metadata list of the targeted metadata item
-	 * @return the variable name to use
-	 */
-	public static String getResourcePropertyVariableName(ResourcePropertiesListType metadataList, int index) {
-		String baseName = metadataList.getResourceProperty(index).getQName().getLocalPart();
-
-		int previousNumber = 0;
-		for (int i = 0; (i < index && i < metadataList.getResourceProperty().length); i++) {
-			ResourcePropertyType metadata = metadataList.getResourceProperty()[i];
-			if (metadata.getQName().getLocalPart().equalsIgnoreCase(baseName)) {
-				// the qname local parts are the same for multiple qnames
-				// resolve the issue by appending a number
-				previousNumber++;
-			}
-		}
-
-		// return the orginal name, if it is unique, otherwise append a number
-		return lowerCaseFirstCharacter(baseName + ((previousNumber > 0) ? String.valueOf(previousNumber) : ""));
-
-	}
-
 
 	/**
 	 * Returns the input string with the first character converted to lowercase

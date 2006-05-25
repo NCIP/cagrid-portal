@@ -18,7 +18,7 @@ public class ResourceConfiguration {
 			for (int i = 0; i < metadataList.getResourceProperty().length; i++) {
 				ResourcePropertyType metadata = metadataList.getResourceProperty()[i];
 				if(metadata.isPopulateFromFile()){
-					String name=TemplateUtils.getResourcePropertyVariableName(metadataList, i);
+					String name=CommonTools.getResourcePropertyVariableName(metadataList, i);
 					stringBuffer.append("\tprivate String "+name+"File;\n");
 				}
 			}
@@ -48,7 +48,7 @@ public class ResourceConfiguration {
 			for (int i = 0; i < metadataList.getResourceProperty().length; i++) {
 				ResourcePropertyType metadata = metadataList.getResourceProperty()[i];
 				if(metadata.isPopulateFromFile()){
-					String name=TemplateUtils.getResourcePropertyVariableName(metadataList, i);
+					String name=CommonTools.getResourcePropertyVariableName(metadataList, i);
 					SchemaInformation schemaInformation = CommonTools.getSchemaInformation(arguments.getNamespaces(),metadata.getQName());
 					String className=schemaInformation.getNamespace().getPackageName() + "." + schemaInformation.getType().getClassName();
 		%>
