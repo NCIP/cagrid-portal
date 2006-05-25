@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.data.cql.validation.ObjectWalkingCQLValidator;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 import junit.framework.TestCase;
@@ -25,7 +26,6 @@ import org.xml.sax.InputSource;
  */
 public class ValidCqlTestCase extends TestCase {
 	private ObjectWalkingCQLValidator validator;
-	private Exception exception;
 	private String cqlDocsDir;
 	
 	public ValidCqlTestCase(String name) {
@@ -50,75 +50,60 @@ public class ValidCqlTestCase extends TestCase {
 			InputSource queryInput = new InputSource(new FileReader(filename));
 			CQLQuery query = (CQLQuery) ObjectDeserializer.deserialize(queryInput, CQLQuery.class);
 			return query;
+		} catch (FileNotFoundException ex) {
+			System.out.println("File not found: " + filename);
+			fail(ex.getMessage());
 		} catch (Exception ex) {
-			exception = ex;
+			ex.printStackTrace();
 		}
 		return null;
 	}
 	
 	
-	public void testReturnAllCql() {
-		assertNull(exception);
+	private void checkQuery(String filename) {
+		CQLQuery query = getQuery(cqlDocsDir + File.separator + filename);
 		try {
-			CQLQuery query = getQuery(cqlDocsDir + File.separator + "returnAllOfType.xml");
 			validator.validateStructure(query);
+			assertTrue("Query is valid CQL", true);
 		} catch (Exception ex) {
-			ex.printStackTrace(System.out);
-			ex.printStackTrace();
-			exception = ex;
+			System.out.println("Query is invalid: " + ex.getMessage());
+			fail("Query found to be invalid: " + ex.getMessage());
 		}
+	}
+	
+	
+	public void testReturnAllCql() {
+		checkQuery("returnAllOfType.xml");
 	}
 	
 	
 	public void testObjectWithAttribute() {
-		assertNull(exception);
-		try {
-			CQLQuery query = getQuery(cqlDocsDir + File.separator + "objectWithAttribute.xml");
-			validator.validateStructure(query);
-		} catch (Exception ex) {
-			ex.printStackTrace(System.out);
-			ex.printStackTrace();
-			exception = ex;
-		}
+		checkQuery("objectWithAttribute.xml");
 	}
 	
 	
 	public void testObjectWithAssociation() {
-		assertNull(exception);
-		try {
-			CQLQuery query = getQuery(cqlDocsDir + File.separator + "objectWithAssociation.xml");
-			validator.validateStructure(query);
-		} catch (Exception ex) {
-			ex.printStackTrace(System.out);
-			ex.printStackTrace();
-			exception = ex;
-		}
+		checkQuery("objectWithAssociation.xml");
+	}
+	
+	
+	public void testAttributePredicates() {
+		checkQuery("attributePredicates.xml");
+	}
+	
+	
+	public void testObjectWithAssociationNoRoleName() {
+		checkQuery("objectWithAssociationNoRoleName.xml");
 	}
 	
 	
 	public void testObjectWithGroup() {
-		assertNull(exception);
-		try {
-			CQLQuery query = getQuery(cqlDocsDir + File.separator + "objectWithGroup.xml");
-			validator.validateStructure(query);
-		} catch (Exception ex) {
-			ex.printStackTrace(System.out);
-			ex.printStackTrace();
-			exception = ex;
-		}
+		checkQuery("objectWithGroup.xml");
 	}
 	
 	
 	public void testObjectWithNestedGroup() {
-		assertNull(exception);
-		try {
-			CQLQuery query = getQuery(cqlDocsDir + File.separator + "objectWithNestedGroup.xml");
-			validator.validateStructure(query);
-		} catch (Exception ex) {
-			ex.printStackTrace(System.out);
-			ex.printStackTrace();
-			exception = ex;
-		}
+		checkQuery("objectWithNestedGroup.xml");
 	}
 
 	
