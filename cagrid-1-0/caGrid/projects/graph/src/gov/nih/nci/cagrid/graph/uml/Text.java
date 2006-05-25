@@ -7,9 +7,9 @@ import org.tigris.gef.presentation.FigText;
 
 public class Text extends FigText
 {
-     public XMLClassAssociation parent;
+     public UMLClassAssociation parent;
 
-     public Text(int x, int y, String text, XMLClassAssociation parent)
+     public Text(int x, int y, String text, UMLClassAssociation parent)
      {
           super(0,0,0,0);
           super.setText(text);

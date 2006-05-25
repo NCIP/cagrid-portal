@@ -9,9 +9,11 @@ package gov.nih.nci.cagrid.graph.uml;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
@@ -31,9 +33,18 @@ import javax.swing.event.ChangeListener;
 
 import org.tigris.gef.base.Globals;
 import org.tigris.gef.graph.presentation.JGraph;
+import org.tigris.gef.presentation.Fig;
 import org.tigris.gef.presentation.FigEdgePoly;
 import org.tigris.gef.presentation.FigNode;
 
+import java.util.Iterator;
+
+// The UMLDiagram class is the public class that
+// exposes clients to a UML diagram component. 
+//
+// The UMLViewer class is the internal (non-public)
+// class that implements the core of the UMLDiagram
+// functionality
 
 class UMLViewer extends JGraph
 {
@@ -65,12 +76,41 @@ class UMLViewer extends JGraph
 
           this.pager = new Pager(this.diagram);
           this.pagerCaptionBar = new PagerCaptionBar(this.pager);
+          
+       
 
-          this.setDefaultSize(4000, 4000);
+          this.setDefaultSize(500, 500);
 
           Globals.setShowFigTips(false);
+          
+          
+          
+          
 
-
+     }
+     
+     public void updateDrawingSizeToIncludeAllFigs()
+     {
+    	 Iterator iter = this.diagram.diagram.getLayer().getContents().iterator();
+         if (iter == null) {
+             return;
+         }
+         Dimension drawingSize = new Dimension(10, 10);
+         while (iter.hasNext()) {
+             Fig fig = (Fig) iter.next();
+             Rectangle rect = fig.getBounds();
+             Point point = rect.getLocation();
+             Dimension dim = rect.getSize();
+             if ((point.x + dim.width + 50) > drawingSize.width) {
+                 drawingSize.setSize(point.x + dim.width + 50, drawingSize.height);
+             }
+             if ((point.y + dim.height + 50) > drawingSize.height) {
+                 drawingSize.setSize(drawingSize.width, point.y + dim.height + 50);
+             }
+         }
+         if(drawingSize.width < drawingSize.height) drawingSize.width = drawingSize.height;
+         if(drawingSize.height < drawingSize.width) drawingSize.height = drawingSize.width;
+         setDrawingSize(drawingSize.width, drawingSize.height);
      }
 
      public void setDiagram(UMLDiagram d)
@@ -113,17 +153,18 @@ class UMLViewerMouseListener extends MouseAdapter
      {
           parent.diagram.statusBar.setDefaultMsg();
 
-
+          parent.pager.unhighlightAll();
 
           for(int k = 0; k < parent.diagram.classes.size(); k++)
           {
-               XMLClass c = (XMLClass) parent.diagram.classes.get(k);
+               UMLClass c = (UMLClass) parent.diagram.classes.get(k);
+               parent.diagram.diagram.getLayer().bringToFront(c);
                c.setNormal();
           }
 
           for(int m = 0; m < parent.diagram.assocs.size();m++)
           {
-               XMLClassAssociation edge = (XMLClassAssociation) parent.diagram.assocs.get(m);
+               UMLClassAssociation edge = (UMLClassAssociation) parent.diagram.assocs.get(m);
                edge.setNormal();
           }
 
@@ -131,14 +172,15 @@ class UMLViewerMouseListener extends MouseAdapter
 
           if(parent.diagram.viewer.selectedFigs().size() == 1)
           {
-               if(parent.diagram.viewer.selectedFigs().get(0) instanceof XMLClassAssociation)
+               if(parent.diagram.viewer.selectedFigs().get(0) instanceof UMLClassAssociation)
                {
 
-                    XMLClassAssociation edge = (XMLClassAssociation) parent.diagram.viewer.selectedFigs().get(0);
+                    UMLClassAssociation edge = (UMLClassAssociation) parent.diagram.viewer.selectedFigs().get(0);
                     edge.highlight(parent.diagram.diagram.getLayer());
+                    parent.pager.highlightEdge(edge);
 
                     for (int j = 0; j < parent.diagram.assocs.size(); j++) {
-                         XMLClassAssociation temp = (XMLClassAssociation) parent.diagram.assocs.get(j);
+                         UMLClassAssociation temp = (UMLClassAssociation) parent.diagram.assocs.get(j);
 
                          if (temp != edge) {
                               temp.fade();
@@ -149,14 +191,18 @@ class UMLViewerMouseListener extends MouseAdapter
 
                     for (int k = 0; k < parent.diagram.classes.size(); k++)
                     {
-                         XMLClass c = (XMLClass) parent.diagram.classes.get(k);
-
-                         c.fade();
+                         UMLClass c = (UMLClass) parent.diagram.classes.get(k);
+                         
+                         if(edge.source != c && edge.destination != c)
+                         {
+                   
+                        	 c.fade();
+                         }
 
                     }
 
-                    XMLClass source = (XMLClass) edge.getSourceFigNode();
-                    XMLClass dest = (XMLClass) edge.getDestFigNode();
+                    UMLClass source = (UMLClass) edge.getSourceFigNode();
+                    UMLClass dest = (UMLClass) edge.getDestFigNode();
 
                     parent.diagram.statusBar.setMsg("Association: [ " + source.name + " , " + dest.name + " ]");
                }
@@ -165,51 +211,64 @@ class UMLViewerMouseListener extends MouseAdapter
                     Text t = (Text) parent.diagram.viewer.selectedFigs().get(0);
 
                     t.parent.highlight(parent.diagram.diagram.getLayer());
+                    parent.pager.highlightEdge(t.parent);
 
                     for (int j = 0; j < parent.diagram.assocs.size(); j++) {
-                         XMLClassAssociation temp = (XMLClassAssociation) parent.diagram.assocs.get(j);
-
+                         UMLClassAssociation temp = (UMLClassAssociation) parent.diagram.assocs.get(j);
+                         
                          if (temp != t.parent) {
                               temp.fade();
                          }
+                        
                     }
 
 
-
-                    for (int k = 0; k < parent.diagram.classes.size(); k++) {
-                         XMLClass c = (XMLClass) parent.diagram.classes.get(k);
-                         c.fade();
+                    UMLClassAssociation edge = t.parent;
+                    for (int k = 0; k < parent.diagram.classes.size(); k++)
+                    {
+                         UMLClass c = (UMLClass) parent.diagram.classes.get(k);
+                         
+                         if(edge.source == c || edge.destination == c)
+                         {
+                        	 
+                        	 
+                         }
+                         else
+                         {
+                        	 c.fade();
+                         }
 
                     }
 
-                    XMLClass source = (XMLClass) t.parent.getSourceFigNode();
-                    XMLClass dest = (XMLClass) t.parent.getDestFigNode();
+                    UMLClass source = (UMLClass) t.parent.getSourceFigNode();
+                    UMLClass dest = (UMLClass) t.parent.getDestFigNode();
 
                     parent.diagram.statusBar.setMsg("Association: [ " + source.name + " , " + dest.name + " ]");
 
                }
-               else if(parent.diagram.viewer.selectedFigs().get(0) instanceof XMLClass)
+               else if(parent.diagram.viewer.selectedFigs().get(0) instanceof UMLClass)
                {
 
-                    XMLClass c = (XMLClass) parent.diagram.viewer.selectedFigs().get(0);
+                    UMLClass c = (UMLClass) parent.diagram.viewer.selectedFigs().get(0);
 
                     c.highlight(parent.diagram.diagram.getLayer());
-
+                    parent.pager.highlightClass(c);
+                    
                     for (int j = 0; j < parent.diagram.assocs.size(); j++) {
-                          XMLClassAssociation temp = (XMLClassAssociation) parent.diagram.assocs.get(j);
+                          UMLClassAssociation temp = (UMLClassAssociation) parent.diagram.assocs.get(j);
 
-                          //temp.fade();
+                          temp.fade();
 
                      }
 
 
 
                      for (int k = 0; k < parent.diagram.classes.size(); k++) {
-                          XMLClass c2 = (XMLClass) parent.diagram.classes.get(k);
-
+                          UMLClass c2 = (UMLClass) parent.diagram.classes.get(k);
+                         
                           if(c != c2)
                           {
-                               //c2.fade();
+                               c2.fade();
                           }
 
                     }
@@ -224,11 +283,10 @@ class UMLViewerMouseListener extends MouseAdapter
                          parent.diagram.classDoubleClicked(c);
                     }
 
-
-
-
                }
           }
+          
+          parent.repaint();
 
      }
 
@@ -250,6 +308,8 @@ class UMLViewerMouseMotionListener extends MouseMotionAdapter
      {
           parent.diagram.repositionLabelsAndArrowHeads();
           parent.diagram.statusBar.setCoords(e.getX(), e.getY());
+          parent.diagram.viewer.repaint();
+          parent.updateDrawingSizeToIncludeAllFigs();
      }
 
      public void mouseMoved(MouseEvent e)
@@ -263,11 +323,11 @@ class UMLViewerComponentListener extends ComponentAdapter
      public void componentResized(ComponentEvent e)
      {
 
-
+    	 
           UMLViewer s = (UMLViewer) e.getSource();
           JLayeredPane parent = (JLayeredPane) s.diagram.getParent().getParent();
           s.pager.updateScroller();
-          s.pager.setBounds(parent.getWidth()-200 - s.pagerButton.getWidth()-5, parent.getHeight()-200 - s.pagerButton.getHeight()-s.diagram.statusBar.getHeight()-5, 200, 200);
+          s.pager.setBounds(parent.getWidth()- 200 - s.pagerButton.getWidth()-5, parent.getHeight()-200 - s.pagerButton.getHeight()-s.diagram.statusBar.getHeight()-5, 200, 200);
           s.pagerCaptionBar.setBounds(parent.getWidth()-200 - s.pagerButton.getWidth() - 5, parent.getHeight()-200-s.pagerButton.getHeight()-s.diagram.statusBar.getHeight()-5-17, 200, 17);
      }
 }
@@ -307,7 +367,7 @@ class PagerButton extends JButton implements MouseListener
           }
           else {
                //g.setColor(Color.black);
-
+        	 
 
                g.drawLine(9, 9, 12, 12);
                g.drawLine(9, 10, 11, 12);
@@ -321,41 +381,42 @@ class PagerButton extends JButton implements MouseListener
 
      public void mousePressed(MouseEvent e)
      {
-
-          this.setFocusable(false);
-
-          if(!pressed)
-          {
-               pressed = true;
-               this.diagram.viewer.pager.updateScroller();
-               this.diagram.viewer.pager.setVisible(false);
-              this.diagram.viewer.pagerCaptionBar.setVisible(false);
-          }
-          else
-          {
-               JLayeredPane parent = (JLayeredPane) diagram.getParent().getParent();
-
-               // this is a bad hack but it works... must find underlying problem later
-               this.diagram.viewer.setSize(this.diagram.viewer.getWidth()-1, this.diagram.viewer.getHeight());
-               this.diagram.viewer.setSize(this.diagram.viewer.getWidth()+1, this.diagram.viewer.getHeight());
-               // end of bad hack
-
-               this.diagram.viewer.pager.setBounds(parent.getWidth() - 200 - this.getWidth() - 5,
-                                                   parent.getHeight() - 200 - this.getHeight() - this.diagram.statusBar.getHeight() -5 , 200, 200);
-
-               this.diagram.viewer.pagerCaptionBar.setBounds(parent.getWidth()-200 - this.getWidth() - 5, parent.getHeight()-200-this.getHeight()-5-17- this.diagram.statusBar.getHeight()  , 200, 17);
-
-
-               if (parent.getComponentCount() == 1) {
-                    parent.add(this.diagram.viewer.pager, JLayeredPane.POPUP_LAYER);
-                    parent.add(this.diagram.viewer.pagerCaptionBar, JLayeredPane.POPUP_LAYER);
-               }
-               this.diagram.viewer.pager.updateScroller();
-               this.diagram.viewer.pager.setVisible(true);
-               this.diagram.viewer.pagerCaptionBar.setVisible(true);
-               pressed = false;
-          }
-
+    	  if(e.getButton() == MouseEvent.BUTTON1)
+    	  {
+	          this.setFocusable(false);
+	
+	          if(!pressed)
+	          {
+	               pressed = true;
+	               this.diagram.viewer.pager.updateScroller();
+	               this.diagram.viewer.pager.setVisible(false);
+	              this.diagram.viewer.pagerCaptionBar.setVisible(false);
+	          }
+	          else
+	          {
+	               JLayeredPane parent = (JLayeredPane) diagram.getParent().getParent();
+	
+	               // this is a bad hack but it works... must find underlying problem later
+	               this.diagram.viewer.setSize(this.diagram.viewer.getWidth()-1, this.diagram.viewer.getHeight());
+	               this.diagram.viewer.setSize(this.diagram.viewer.getWidth()+1, this.diagram.viewer.getHeight());
+	               // end of bad hack
+	
+	               this.diagram.viewer.pager.setBounds(parent.getWidth() - 200 - this.getWidth() - 5,
+	                                                   parent.getHeight() - 200 - this.getHeight() - this.diagram.statusBar.getHeight() -5 , 200, 200);
+	
+	               this.diagram.viewer.pagerCaptionBar.setBounds(parent.getWidth()-200 - this.getWidth() - 5, parent.getHeight()-200-this.getHeight()-5-17- this.diagram.statusBar.getHeight()  , 200, 17);
+	
+	
+	               if (parent.getComponentCount() == 1) {
+	                    parent.add(this.diagram.viewer.pager, JLayeredPane.POPUP_LAYER);
+	                    parent.add(this.diagram.viewer.pagerCaptionBar, JLayeredPane.POPUP_LAYER);
+	               }
+	               this.diagram.viewer.pager.updateScroller();
+	               this.diagram.viewer.pager.setVisible(true);
+	               this.diagram.viewer.pagerCaptionBar.setVisible(true);
+	               pressed = false;
+	          }
+    	  }
 
 
      }
@@ -387,6 +448,10 @@ class Pager extends JButton
 {
      protected UMLDiagram diagram;
      protected PagerScroller scroller;
+     
+     protected UMLClassAssociation highlightEdge = null;
+     protected UMLClass highlightClass1 = null;
+     protected UMLClass highlightClass2 = null;
 
      public Pager(UMLDiagram d)
      {
@@ -419,6 +484,25 @@ class Pager extends JButton
           scroller.setBounds((int) updatedXs, (int)  updatedYs, (int) updatedWidths, (int) updatedHeights);
 
      }
+     
+     public void unhighlightAll()
+     {
+    	 this.highlightClass1 = null;
+    	 this.highlightClass2 = null;
+    	 this.highlightEdge = null;
+     }
+     
+     public void highlightEdge(UMLClassAssociation edge)
+     {	
+    	 this.highlightEdge = edge;
+    	 this.highlightClass1 = edge.source;
+    	 this.highlightClass2 = edge.destination;
+     }
+     
+     public void highlightClass(UMLClass c)
+     {
+    	 this.highlightClass1 = c;
+     }
 
      public void paint(Graphics g)
      {
@@ -435,9 +519,9 @@ class Pager extends JButton
 
          for(int i = 0; i < diagram.assocs.size(); i++)
          {
-              FigEdgePoly edge = (FigEdgePoly) diagram.assocs.elementAt(i);
+              UMLClassAssociation edge = (UMLClassAssociation) diagram.assocs.elementAt(i);
 
-
+   
               if(edge.getPoints().length > 1)
               {
                    for (int k = 0; k < edge.getPoints().length - 1; k++)
@@ -459,11 +543,15 @@ class Pager extends JButton
                    }
               }
          }
+         
+
+         
+         
 
 
           for(int c = 0; c < diagram.classes.size(); c++)
           {
-               FigNode f = (FigNode) diagram.classes.elementAt(c);
+               UMLClass f = (UMLClass) diagram.classes.elementAt(c);
 
                int originalX = f.getLocation().x;
                int originalY = f.getLocation().y;
@@ -487,6 +575,84 @@ class Pager extends JButton
 
           }
 
+          
+          
+          
+          UMLClassAssociation edge = this.highlightEdge;
+
+          if(edge != null)
+          {
+        	
+	          g.setColor(Color.red);
+	  
+	          if(edge.getPoints().length > 1)
+	          {
+	               for (int k = 0; k < edge.getPoints().length - 1; k++)
+	               {
+	                    int originalX1 = edge.getPoints()[k].x;
+	                    int originalY1 = edge.getPoints()[k].y;
+	
+	                    int originalX2 = edge.getPoints()[k+1].x;
+	                    int originalY2 = edge.getPoints()[k+1].y;
+	
+	                    float updatedX1 = originalX1 * (float) ( (float) 200 / (float) canvasWidth);
+	                    float updatedY1 = originalY1 * (float) ( (float) 200 / (float) canvasHeight);
+	
+	                    float updatedX2 = originalX2 * (float) ( (float) 200 / (float) canvasWidth);
+	                    float updatedY2 = originalY2 * (float) ( (float) 200 / (float) canvasHeight);
+	
+	                    g.drawLine((int) updatedX1,(int)  updatedY1,(int)  updatedX2,(int)  updatedY2);
+	
+	               }
+	          }
+          }
+          
+          UMLClass f = this.highlightClass1;
+          
+          if(f!=null)
+          {
+	          int originalX = f.getLocation().x;
+	          int originalY = f.getLocation().y;
+	          int originalWidth = f.getSize().width;
+	          int originalHeight = f.getSize().height;
+	
+	          float updatedX = originalX * (float) ((float)200/(float)canvasWidth);
+	          float updatedY = originalY * (float) ((float)200/(float)canvasHeight);
+	          float updatedWidth = originalWidth * (float) ((float)200/(float)canvasWidth);
+	          float updatedHeight = originalHeight * (float) ((float)200/(float)canvasHeight);
+	
+	          g.setColor(Color.white);
+	          g.fillRect((int) updatedX,(int)  updatedY,(int)  updatedWidth,(int)  updatedHeight);
+	
+	
+	
+	          g.setColor(Color.black);
+	          g.drawRect((int) updatedX,(int)  updatedY,(int)  updatedWidth,(int)  updatedHeight);
+          }
+          
+
+          f = this.highlightClass2;
+          
+          if(f!=null)
+          {
+	          int originalX = f.getLocation().x;
+	          int originalY = f.getLocation().y;
+	          int originalWidth = f.getSize().width;
+	          int originalHeight = f.getSize().height;
+	
+	          float updatedX = originalX * (float) ((float)200/(float)canvasWidth);
+	          float updatedY = originalY * (float) ((float)200/(float)canvasHeight);
+	          float updatedWidth = originalWidth * (float) ((float)200/(float)canvasWidth);
+	          float updatedHeight = originalHeight * (float) ((float)200/(float)canvasHeight);
+	
+	          g.setColor(Color.white);
+	          g.fillRect((int) updatedX,(int)  updatedY,(int)  updatedWidth,(int)  updatedHeight);
+	
+	
+	
+	          g.setColor(Color.black);
+	          g.drawRect((int) updatedX,(int)  updatedY,(int)  updatedWidth,(int)  updatedHeight);
+          }
 
           g.setColor(Color.black);
           g.drawRect(0, 0, this.getWidth()-1, this.getHeight()-1);

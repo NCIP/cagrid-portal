@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 
+
 import org.tigris.gef.base.Diagram;
 import org.tigris.gef.presentation.Fig;
 import org.tigris.gef.presentation.FigNode;
@@ -58,8 +59,15 @@ public class UMLDiagram extends JComponent
 
 
      }
+     
+     
+     
+     public void setStatusMessage(String msg)
+     {
+    	 this.statusBar.setMsg(msg);
+     }
 
-     public void addClass(XMLClass gc)
+     public void addClass(UMLClass gc)
      {
 
           this.diagram.add(gc);
@@ -68,9 +76,9 @@ public class UMLDiagram extends JComponent
 
      }
 
-     public void addAssociation(XMLClass gc1, XMLClass gc2, String label1, String label2, String multiplicity1, String multiplicity2)
+     public void addAssociation(UMLClass gc1, UMLClass gc2, String label1, String label2, String multiplicity1, String multiplicity2)
      {
-          XMLClassAssociation edge = new XMLClassAssociation( label1, multiplicity1, label2, multiplicity2 );
+          UMLClassAssociation edge = new UMLClassAssociation( label1, multiplicity1, label2, multiplicity2 );
 
           edge.setSourceFigNode(gc1);
           edge.setSourcePortFig(gc1);
@@ -100,9 +108,9 @@ public class UMLDiagram extends JComponent
 
      }
 
-     public void classDoubleClicked(XMLClass c)
+     public void classDoubleClicked(UMLClass c)
      {
-
+    	 
 
      }
 
@@ -120,27 +128,26 @@ public class UMLDiagram extends JComponent
 
           for(int k = 0; k < this.classes.size(); k++)
           {
-               this.diagram.getLayer().bringToFront((XMLClass)this.classes.elementAt(k));
+               this.diagram.getLayer().bringToFront((UMLClass)this.classes.elementAt(k));
           }
+          
+          this.viewer.updateDrawingSizeToIncludeAllFigs();
 
      }
 
-     public void placeRoute()
+     public void performLayout()
      {
 
-
               layouter.layout();
-
-
      }
 
      protected void repositionLabelsAndArrowHeads()
      {
-          XMLClassAssociation edge = null;
+          UMLClassAssociation edge = null;
 
           for(int c = 0; c < this.assocs.size(); c++)
           {
-               edge = (XMLClassAssociation) this.assocs.elementAt(c);
+               edge = (UMLClassAssociation) this.assocs.elementAt(c);
 
                edge.repositionLabelsAndArrowHeads();
 
@@ -149,112 +156,10 @@ public class UMLDiagram extends JComponent
           }
 
      }
+     
+     
+     
 
-     class PagerButton extends JButton implements MouseListener
-     {
-          protected UMLDiagram diagram;
-
-          protected boolean _pressed = true;
-
-          public PagerButton(UMLDiagram d)
-          {
-               this.diagram = d;
-               this.addMouseListener(this);
-               this.setBackground(Color.white);
-               //this.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
-               this.setFocusable(false);
-
-
-
-          }
-
-          public void paint(Graphics g)
-          {
-               super.paint(g);
-
-               // draw the arrow and the light/dark colors
-
-               if(!_pressed)
-               {
-                    g.setColor(Color.gray);
-                    g.fillRect(1, 1, this.getWidth() - 2, this.getHeight() - 2);
-
-                    g.setColor(Color.black);
-                    g.drawLine(4, 4, 10, 10);
-                    g.drawLine(10, 10, 10, 4);
-                    g.drawLine(10, 10, 4, 10);
-
-               }
-               else {
-                    // draw the little magnifying glass
-
-                    g.drawLine(9, 9, 12, 12);
-                    g.drawLine(10, 9, 12, 11);
-                    g.drawLine(9, 10, 11, 12);
-                    g.drawArc(3, 3, 6, 6, 0, 360);
-
-               }
-
-
-          }
-
-          public void mousePressed(MouseEvent e)
-          {
-
-               if(e.getButton() == e.BUTTON1 || e.getButton() == e.BUTTON2 || e.getButton() == e.BUTTON3)
-               {
-
-                    if (!_pressed) {
-                         _pressed = true;
-                         this.diagram.viewer.pager.updateScroller();
-                         this.diagram.viewer.pager.setVisible(false);
-
-                    }
-                    else {
-                         JLayeredPane parent = (JLayeredPane) diagram.getParent().getParent();
-
-                         // this is a bad hack but it works... must find underlying problem later
-                         this.diagram.viewer.setSize(this.diagram.viewer.getWidth() - 1, this.diagram.viewer.getHeight());
-                         this.diagram.viewer.setSize(this.diagram.viewer.getWidth() + 1, this.diagram.viewer.getHeight());
-                         // end of bad hack
-
-                         this.diagram.viewer.pager.setBounds(parent.getWidth() - 200 - this.getWidth() - 5,
-                                                             parent.getHeight() - 200 - this.getHeight() - 5, 200, 200);
-
-                         if (parent.getComponentCount() == 1) {
-                              parent.add(this.diagram.viewer.pager, JLayeredPane.POPUP_LAYER);
-                         }
-                         this.diagram.viewer.pager.updateScroller();
-                         this.diagram.viewer.pager.setVisible(true);
-                         _pressed = false;
-                    }
-               }
-
-          }
-
-
-
-          public void mouseReleased(MouseEvent e)
-          {
-
-          }
-
-          public void mouseEntered(MouseEvent e)
-          {
-
-          }
-
-          public void mouseExited(MouseEvent e)
-          {
-
-          }
-
-          public void mouseClicked(MouseEvent e)
-          {
-
-          }
-
-     }
 }
 
 class UMLDiagramComponentListener extends ComponentAdapter
@@ -264,8 +169,8 @@ class UMLDiagramComponentListener extends ComponentAdapter
           UMLDiagram s = (UMLDiagram) e.getSource();
 
           s.menubar.setBounds(0, 0, s.getWidth(), 25);
-          s.viewer.setBounds(0, 26, s.getWidth(), s.getHeight()-26-20);
-          s.statusBar.setBounds(0, s.getHeight()-19, s.getWidth(), 20);
+          s.viewer.setBounds(0, 26, s.getWidth(), s.getHeight()-26-22);
+          s.statusBar.setBounds(0, s.getHeight()- 20, s.getWidth(), 20);
           s.validate();
      }
 }

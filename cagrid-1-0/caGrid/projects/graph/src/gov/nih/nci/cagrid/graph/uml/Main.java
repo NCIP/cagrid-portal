@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+// Test Driver for the UMLDiagram class
 
 public class Main {
 
@@ -23,30 +24,35 @@ public class Main {
 
 		Random r = new Random(System.currentTimeMillis());
 
-		XMLClass c1 = new XMLClass("TestClass1");
-		c1.addAttribute(1, "int", "count");
-		c1.refresh();
-
-		XMLClass c2 = new XMLClass("TestClass2");
-		c2.refresh();
-
-		XMLClass c3 = new XMLClass("TestClass3");
-		c3.refresh();
-
-		diagram.addClass(c1);
-		diagram.addClass(c2);
-		diagram.addClass(c3);
-
-		diagram.addAssociation(c1, c2, "c1c2", "c1c2", "1..0", "1..*");
-		diagram.addAssociation(c1, c3, "c1c3", "c1c3", "1..0", "1..*");
-		diagram.addAssociation(c3, c2, "c3c2", "c3c2", "1..0", "1..*");
-		// diagram.addAssociation(c1, c1 , "c1c1", "c1c1", "1..0", "1..*");
-		// diagram.addAssociation(c2, c2 , "c2c2", "c2c2", "1..0", "1..*");
-		// diagram.addAssociation(c3, c3 , "c3c3", "c3c3", "1..0", "1..*");
-
+		int numclasses = 200;
+		int numassocs = 90;
+		
+		for(int k = 0; k < numclasses;  k++)
+		{
+			UMLClass c = new UMLClass("TestClass"+k);
+			c.refresh();
+			
+			diagram.addClass(c);
+		}
+		
+		for(int k = 0; k < numassocs; k++)
+		{
+			int index1 = r.nextInt() % numclasses;
+			int index2 = r.nextInt() % numclasses;
+			
+			if(index1 < 0) index1 = -index1;
+			if(index2 < 0) index2 = -index2;
+			
+			UMLClass c1 = (UMLClass) diagram.classes.get(index1);
+			UMLClass c2 = (UMLClass) diagram.classes.get(index2);
+			
+			diagram.addAssociation(c1, c2, "", "", "1..0", "*..1");
+		}
+		
+		diagram.performLayout();
 		diagram.refresh();
 
-		diagram.placeRoute();
+		
 		diagram.repositionLabelsAndArrowHeads();
 
 		JFrame f = new JFrame();

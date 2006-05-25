@@ -20,7 +20,7 @@ public class UMLStatusBar extends JComponent
           msg = new JTextField();
           msg.setEditable(false);
           coord.setEditable(false);
-          msg.setFont(new Font("verdana", Font.PLAIN, 10));
+          msg.setFont(new Font("verdana", Font.BOLD, 10));
           coord.setFont(new Font("verdana", Font.PLAIN, 10));
 
           this.add(coord);
