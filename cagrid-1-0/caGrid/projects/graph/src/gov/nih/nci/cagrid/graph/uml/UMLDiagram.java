@@ -168,9 +168,12 @@ class UMLDiagramComponentListener extends ComponentAdapter
      {
           UMLDiagram s = (UMLDiagram) e.getSource();
 
-          s.menubar.setBounds(0, 0, s.getWidth(), 25);
-          s.viewer.setBounds(0, 26, s.getWidth(), s.getHeight()-26-22);
-          s.statusBar.setBounds(0, s.getHeight()- 20, s.getWidth(), 20);
+          //s.menubar.setBounds(0, 0, s.getWidth(), 25);
+          //s.viewer.setBounds(0, 26, s.getWidth(), s.getHeight()-26-22);
+          //s.statusBar.setBounds(0, s.getHeight()- 20, s.getWidth(), 20);
+          //s.validate();
+          
+          s.viewer.setBounds(0, 0, s.getWidth(), s.getHeight());
           s.validate();
      }
 }
