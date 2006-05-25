@@ -4,12 +4,10 @@ import gov.nih.nci.cagrid.metadata.common.PointOfContact;
 import gov.nih.nci.cagrid.metadata.common.UMLClass;
 
 import java.io.InputStream;
-import java.util.Arrays;
 
 import junit.framework.TestCase;
 
 import org.apache.axis.message.addressing.EndpointReferenceType;
-import org.apache.axis.utils.XMLUtils;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.globus.wsrf.utils.XmlUtils;
 import org.w3c.dom.Node;
@@ -44,13 +42,13 @@ public class DiscoveryClientTestCase extends TestCase {
 		InputStream is = null;
 
 		is = getClass().getResourceAsStream(SERVICE1_EPR_RESOURCE);
-		doc = XMLUtils.newDocument(is);
+		doc = XmlUtils.newDocument(is);
 		service1EPR = (EndpointReferenceType) ObjectDeserializer.toObject(doc.getDocumentElement(),
 			EndpointReferenceType.class);
 		assertNotNull(service1EPR);
 
 		is = getClass().getResourceAsStream(SERVICE2_EPR_RESOURCE);
-		doc = XMLUtils.newDocument(is);
+		doc = XmlUtils.newDocument(is);
 		service2EPR = (EndpointReferenceType) ObjectDeserializer.toObject(doc.getDocumentElement(),
 			EndpointReferenceType.class);
 		assertNotNull(service1EPR);
