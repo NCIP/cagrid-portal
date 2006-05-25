@@ -161,4 +161,4 @@ to see if the objects were clicked, doublecliked, rightclicked , etc.
     angles between edges
 
 2) clicking an object highlights that object and fades the rest, but
-   one must DOUBLE-click to get everything back to normal..
+   one must double-click to get everything back to normal..
