@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.JNDIConfigTemplate;
@@ -58,8 +59,7 @@ public class SyncResource extends SyncTool {
 					.generate(new SpecificServiceInformation(
 							getServiceInformation(), service));
 			File serviceConfF = new File(srcDir.getAbsolutePath()
-					+ File.separator
-					+ getServiceInformation().getPackageDir(service)
+					+ File.separator + CommonTools.getPackageDir(service)
 					+ File.separator + "service" + File.separator + "globus"
 					+ File.separator + "ServiceConfiguration.java");
 			FileWriter serviceConfFW = new FileWriter(serviceConfF);
@@ -80,8 +80,7 @@ public class SyncResource extends SyncTool {
 						.generate(new SpecificServiceInformation(
 								getServiceInformation(), service));
 				File baseResourceF = new File(srcDir.getAbsolutePath()
-						+ File.separator
-						+ getServiceInformation().getPackageDir(service)
+						+ File.separator + CommonTools.getPackageDir(service)
 						+ File.separator + "service" + File.separator
 						+ "globus" + File.separator + "resource"
 						+ File.separator + "BaseResource.java");
@@ -95,8 +94,7 @@ public class SyncResource extends SyncTool {
 						.generate(new SpecificServiceInformation(
 								getServiceInformation(), service));
 				File resourceContanstsF = new File(srcDir.getAbsolutePath()
-						+ File.separator
-						+ getServiceInformation().getPackageDir(service)
+						+ File.separator + CommonTools.getPackageDir(service)
 						+ File.separator + "service" + File.separator
 						+ "globus" + File.separator + "resource"
 						+ File.separator + "ResourceConstants.java");
@@ -113,8 +111,7 @@ public class SyncResource extends SyncTool {
 						.generate(new SpecificServiceInformation(
 								getServiceInformation(), service));
 				File baseResourceF = new File(srcDir.getAbsolutePath()
-						+ File.separator
-						+ getServiceInformation().getPackageDir(service)
+						+ File.separator + CommonTools.getPackageDir(service)
 						+ File.separator + "service" + File.separator
 						+ "globus" + File.separator + "resource"
 						+ File.separator + "BaseResource.java");
@@ -128,8 +125,7 @@ public class SyncResource extends SyncTool {
 						.generate(new SpecificServiceInformation(
 								getServiceInformation(), service));
 				File metadataConfigurationF = new File(srcDir.getAbsolutePath()
-						+ File.separator
-						+ getServiceInformation().getPackageDir(service)
+						+ File.separator + CommonTools.getPackageDir(service)
 						+ File.separator + "service" + File.separator
 						+ "globus" + File.separator + "resource"
 						+ File.separator + "ResourceConfiguration.java");
@@ -144,8 +140,7 @@ public class SyncResource extends SyncTool {
 						.generate(new SpecificServiceInformation(
 								getServiceInformation(), service));
 				File resourceContanstsF = new File(srcDir.getAbsolutePath()
-						+ File.separator
-						+ getServiceInformation().getPackageDir(service)
+						+ File.separator + CommonTools.getPackageDir(service)
 						+ File.separator + "service" + File.separator
 						+ "globus" + File.separator + "resource"
 						+ File.separator + "ResourceConstants.java");
@@ -162,8 +157,7 @@ public class SyncResource extends SyncTool {
 						.generate(new SpecificServiceInformation(
 								getServiceInformation(), service));
 				File baseResourceF = new File(srcDir.getAbsolutePath()
-						+ File.separator
-						+ getServiceInformation().getPackageDir(service)
+						+ File.separator + CommonTools.getPackageDir(service)
 						+ File.separator + "service" + File.separator
 						+ "globus" + File.separator + "resource"
 						+ File.separator + "BaseResource.java");
@@ -177,8 +171,7 @@ public class SyncResource extends SyncTool {
 						.generate(new SpecificServiceInformation(
 								getServiceInformation(), service));
 				File metadataConfigurationF = new File(srcDir.getAbsolutePath()
-						+ File.separator
-						+ getServiceInformation().getPackageDir(service)
+						+ File.separator + CommonTools.getPackageDir(service)
 						+ File.separator + "service" + File.separator
 						+ "globus" + File.separator + "resource"
 						+ File.separator + "ResourceConfiguration.java");
@@ -193,8 +186,7 @@ public class SyncResource extends SyncTool {
 						.generate(new SpecificServiceInformation(
 								getServiceInformation(), service));
 				File resourceContanstsF = new File(srcDir.getAbsolutePath()
-						+ File.separator
-						+ getServiceInformation().getPackageDir(service)
+						+ File.separator + CommonTools.getPackageDir(service)
 						+ File.separator + "service" + File.separator
 						+ "globus" + File.separator + "resource"
 						+ File.separator + "ResourceConstants.java");

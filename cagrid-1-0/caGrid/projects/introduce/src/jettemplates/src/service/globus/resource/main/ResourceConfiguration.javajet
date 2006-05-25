@@ -1,4 +1,4 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus.resource.main" class="MainConfigurationTemplate" imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.*" %>
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus.resource.main" class="MainConfigurationTemplate" imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.*" %>
 <%  gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation arguments = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument; 
   	Properties properties = arguments.getIntroduceServiceProperties();
 	ResourcePropertiesListType metadataList = arguments.getService().getResourcePropertiesList();
@@ -49,7 +49,7 @@ public class ResourceConfiguration {
 				ResourcePropertyType metadata = metadataList.getResourceProperty()[i];
 				if(metadata.isPopulateFromFile()){
 					String name=TemplateUtils.getResourcePropertyVariableName(metadataList, i);
-					SchemaInformation schemaInformation = arguments.getSchemaInformation(metadata.getQName());
+					SchemaInformation schemaInformation = CommonTools.getSchemaInformation(arguments.getNamespaces(),metadata.getQName());
 					String className=schemaInformation.getNamespace().getPackageName() + "." + schemaInformation.getType().getClassName();
 		%>
 	

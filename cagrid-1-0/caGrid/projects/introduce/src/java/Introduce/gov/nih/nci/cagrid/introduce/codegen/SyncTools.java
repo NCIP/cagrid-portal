@@ -401,8 +401,7 @@ public class SyncTools {
 							for (int j = 0; j < mtype.getInputs().getInput().length; j++) {
 								MethodTypeInputsInput inputParam = mtype
 										.getInputs().getInput(j);
-								SchemaInformation namespace = info
-										.getSchemaInformation(inputParam
+								SchemaInformation namespace = CommonTools.getSchemaInformation(info.getNamespaces(),inputParam
 												.getQName());
 								if (!namespace
 										.getNamespace()
@@ -473,7 +472,7 @@ public class SyncTools {
 						+ File.separator
 						+ "src"
 						+ File.separator
-						+ info.getPackageDir(info.getServices().getService(
+						+ CommonTools.getPackageDir(info.getServices().getService(
 								serviceI)));
 				if (!serviceDir.exists()) {
 					newServices.add(info.getServices().getService(serviceI));

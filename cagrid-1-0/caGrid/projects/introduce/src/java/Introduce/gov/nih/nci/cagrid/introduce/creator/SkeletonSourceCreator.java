@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.creator;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.ClientConfigTemplate;
@@ -43,21 +44,21 @@ public class SkeletonSourceCreator {
 		srcDir.mkdir();
 
 		new File(srcDir.getAbsolutePath() + File.separator
-				+ info.getPackageDir(service)).mkdirs();
+				+ CommonTools.getPackageDir(service)).mkdirs();
 		new File(srcDir.getAbsolutePath() + File.separator
-				+ info.getPackageDir(service) + File.separator + "client")
+				+ CommonTools.getPackageDir(service) + File.separator + "client")
 				.mkdirs();
 		new File(srcDir.getAbsolutePath() + File.separator
-				+ info.getPackageDir(service) + File.separator + "common")
+				+ CommonTools.getPackageDir(service) + File.separator + "common")
 				.mkdirs();
 		new File(srcDir.getAbsolutePath() + File.separator
-				+ info.getPackageDir(service) + File.separator + "service")
+				+ CommonTools.getPackageDir(service) + File.separator + "service")
 				.mkdirs();
 		new File(srcDir.getAbsolutePath() + File.separator
-				+ info.getPackageDir(service) + File.separator + "service"
+				+ CommonTools.getPackageDir(service) + File.separator + "service"
 				+ File.separator + "globus").mkdirs();
 		new File(srcDir.getAbsolutePath() + File.separator
-				+ info.getPackageDir(service) + File.separator + "service"
+				+ CommonTools.getPackageDir(service) + File.separator + "service"
 				+ File.separator + "globus" + File.separator + "resource")
 				.mkdirs();
 
@@ -65,7 +66,7 @@ public class SkeletonSourceCreator {
 		String clientS = clientT.generate(new SpecificServiceInformation(info,
 				service));
 		File clientF = new File(srcDir.getAbsolutePath() + File.separator
-				+ info.getPackageDir(service) + File.separator + "client"
+				+ CommonTools.getPackageDir(service) + File.separator + "client"
 				+ File.separator + service.getName() + "Client.java");
 
 		FileWriter clientFW = new FileWriter(clientF);
@@ -84,7 +85,7 @@ public class SkeletonSourceCreator {
 		ServiceITemplate iT = new ServiceITemplate();
 		String iS = iT.generate(new SpecificServiceInformation(info, service));
 		File iF = new File(srcDir.getAbsolutePath() + File.separator
-				+ info.getPackageDir(service) + File.separator + "common"
+				+ CommonTools.getPackageDir(service) + File.separator + "common"
 				+ File.separator + service.getName() + "I.java");
 
 		FileWriter iFW = new FileWriter(iF);
@@ -95,7 +96,7 @@ public class SkeletonSourceCreator {
 		String implS = implT.generate(new SpecificServiceInformation(info,
 				service));
 		File implF = new File(srcDir.getAbsolutePath() + File.separator
-				+ info.getPackageDir(service) + File.separator + "service"
+				+ CommonTools.getPackageDir(service) + File.separator + "service"
 				+ File.separator + service.getName() + "Impl.java");
 
 		FileWriter implFW = new FileWriter(implF);
@@ -106,7 +107,7 @@ public class SkeletonSourceCreator {
 		String providerImplS = providerImplT
 				.generate(new SpecificServiceInformation(info, service));
 		File providerImplF = new File(srcDir.getAbsolutePath() + File.separator
-				+ info.getPackageDir(service) + File.separator + "service"
+				+ CommonTools.getPackageDir(service) + File.separator + "service"
 				+ File.separator + "globus" + File.separator
 				+ service.getName() + "ProviderImpl.java");
 
@@ -118,7 +119,7 @@ public class SkeletonSourceCreator {
 		String serviceConfS = serviceConfT
 				.generate(new SpecificServiceInformation(info, service));
 		File serviceConfF = new File(srcDir.getAbsolutePath() + File.separator
-				+ info.getPackageDir(service) + File.separator + "service"
+				+ CommonTools.getPackageDir(service) + File.separator + "service"
 				+ File.separator + "globus" + File.separator
 				+ "ServiceConfiguration.java");
 
@@ -130,7 +131,7 @@ public class SkeletonSourceCreator {
 		String resourceContanstsS = resourceContanstsT
 				.generate(new SpecificServiceInformation(info, service));
 		File resourceContanstsF = new File(srcDir.getAbsolutePath()
-				+ File.separator + info.getPackageDir(service) + File.separator
+				+ File.separator + CommonTools.getPackageDir(service) + File.separator
 				+ "service" + File.separator + "globus" + File.separator
 				+ "resource" + File.separator + "ResourceConstants.java");
 
@@ -145,7 +146,7 @@ public class SkeletonSourceCreator {
 			String baseResourceS = baseResourceT
 					.generate(new SpecificServiceInformation(info, service));
 			File baseResourceF = new File(srcDir.getAbsolutePath()
-					+ File.separator + info.getPackageDir(service)
+					+ File.separator + CommonTools.getPackageDir(service)
 					+ File.separator + "service" + File.separator + "globus"
 					+ File.separator + "resource" + File.separator
 					+ "BaseResource.java");
@@ -158,7 +159,7 @@ public class SkeletonSourceCreator {
 			String baseResourceHomeS = baseResourceHomeT
 					.generate(new SpecificServiceInformation(info, service));
 			File baseResourceHomeF = new File(srcDir.getAbsolutePath()
-					+ File.separator + info.getPackageDir(service)
+					+ File.separator + CommonTools.getPackageDir(service)
 					+ File.separator + "service" + File.separator + "globus"
 					+ File.separator + "resource" + File.separator
 					+ "BaseResourceHome.java");
@@ -174,7 +175,7 @@ public class SkeletonSourceCreator {
 			String baseResourceS = baseResourceT
 					.generate(new SpecificServiceInformation(info, service));
 			File baseResourceF = new File(srcDir.getAbsolutePath()
-					+ File.separator + info.getPackageDir(service)
+					+ File.separator + CommonTools.getPackageDir(service)
 					+ File.separator + "service" + File.separator + "globus"
 					+ File.separator + "resource" + File.separator
 					+ "BaseResource.java");
@@ -187,7 +188,7 @@ public class SkeletonSourceCreator {
 			String baseResourceHomeS = baseResourceHomeT
 					.generate(new SpecificServiceInformation(info, service));
 			File baseResourceHomeF = new File(srcDir.getAbsolutePath()
-					+ File.separator + info.getPackageDir(service)
+					+ File.separator + CommonTools.getPackageDir(service)
 					+ File.separator + "service" + File.separator + "globus"
 					+ File.separator + "resource" + File.separator
 					+ "BaseResourceHome.java");
@@ -200,7 +201,7 @@ public class SkeletonSourceCreator {
 			String metadataConfigurationS = metadataConfigurationT
 					.generate(new SpecificServiceInformation(info, service));
 			File metadataConfigurationF = new File(srcDir.getAbsolutePath()
-					+ File.separator + info.getPackageDir(service)
+					+ File.separator + CommonTools.getPackageDir(service)
 					+ File.separator + "service" + File.separator + "globus"
 					+ File.separator + "resource" + File.separator
 					+ "ResourceConfiguration.java");
@@ -217,7 +218,7 @@ public class SkeletonSourceCreator {
 			String baseResourceS = baseResourceT
 					.generate(new SpecificServiceInformation(info, service));
 			File baseResourceF = new File(srcDir.getAbsolutePath()
-					+ File.separator + info.getPackageDir(service)
+					+ File.separator + CommonTools.getPackageDir(service)
 					+ File.separator + "service" + File.separator + "globus"
 					+ File.separator + "resource" + File.separator
 					+ "BaseResource.java");
@@ -230,7 +231,7 @@ public class SkeletonSourceCreator {
 			String baseResourceHomeS = baseResourceHomeT
 					.generate(new SpecificServiceInformation(info, service));
 			File baseResourceHomeF = new File(srcDir.getAbsolutePath()
-					+ File.separator + info.getPackageDir(service)
+					+ File.separator + CommonTools.getPackageDir(service)
 					+ File.separator + "service" + File.separator + "globus"
 					+ File.separator + "resource" + File.separator
 					+ "BaseResourceHome.java");
@@ -243,7 +244,7 @@ public class SkeletonSourceCreator {
 			String metadataConfigurationS = metadataConfigurationT
 					.generate(new SpecificServiceInformation(info, service));
 			File metadataConfigurationF = new File(srcDir.getAbsolutePath()
-					+ File.separator + info.getPackageDir(service)
+					+ File.separator + CommonTools.getPackageDir(service)
 					+ File.separator + "service" + File.separator + "globus"
 					+ File.separator + "resource" + File.separator
 					+ "ResourceConfiguration.java");

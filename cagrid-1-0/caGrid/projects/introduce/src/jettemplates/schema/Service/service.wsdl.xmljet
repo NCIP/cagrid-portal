@@ -1,4 +1,4 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.schema.service" class="ServiceWSDLTemplate"  imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.namespace.* gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.* gov.nih.nci.cagrid.introduce.beans.method.* gov.nih.nci.cagrid.introduce.beans.service.*" %>
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.schema.service" class="ServiceWSDLTemplate"  imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.namespace.* gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.* gov.nih.nci.cagrid.introduce.beans.method.* gov.nih.nci.cagrid.introduce.beans.service.*" %>
 <%  SpecificServiceInformation info = (SpecificServiceInformation) argument; 
     ServiceType service = info.getService();
     String modifiedServiceName = service.getName();
@@ -94,7 +94,7 @@
           		  if(method.getInputs()!=null && method.getInputs().getInput()!=null){
 	      				for(int inputsI = 0; inputsI < method.getInputs().getInput().length; inputsI++){
 	      					MethodTypeInputsInput inputParam = method.getInputs().getInput(inputsI);
-	      					SchemaInformation schemaInformation = info.getSchemaInformation(inputParam.getQName());
+	      					SchemaInformation schemaInformation = CommonTools.getSchemaInformation(info.getNamespaces(), inputParam.getQName());
 	      					
 	      					if(inputParam.isIsArray()){
 									if(schemaInformation.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)){
@@ -136,7 +136,7 @@
           		  <%
 	      			if(method.getOutput()!=null){
 						MethodTypeOutput outputParam = method.getOutput();
-						SchemaInformation schemaInformation = info.getSchemaInformation(outputParam.getQName());
+						SchemaInformation schemaInformation = CommonTools.getSchemaInformation(info.getNamespaces(),outputParam.getQName());
 	      				if(schemaInformation !=null) {
 	      					if(schemaInformation.getType().getClassName()==null || (schemaInformation.getType().getClassName()!=null)){
 								if(outputParam.isIsArray()){
@@ -206,7 +206,7 @@
        	  prefixmap=TemplateUtils.buildMasterNamespaceInformationMap(info.getServiceDescriptor());
           for (int i = 0; i < metadataList.getResourceProperty().length; i++) {
             ResourcePropertyType metadata = metadataList.getResourceProperty(i);
-			SchemaInformation schemaInformation = info.getSchemaInformation(metadata.getQName());
+			SchemaInformation schemaInformation = CommonTools.getSchemaInformation(info.getNamespaces(),metadata.getQName());
 						%><element ref="<%=((NamespaceInformation)prefixmap.get(schemaInformation.getNamespace().getNamespace())).getPrefix()%>:<%=schemaInformation.getType().getType()%>"/><%
 		  }
 		}

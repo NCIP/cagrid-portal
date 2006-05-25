@@ -15,6 +15,7 @@ import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
+import gov.nih.nci.cagrid.introduce.info.SchemaInformation;
 
 import java.io.File;
 import java.util.List;
@@ -36,6 +37,7 @@ import org.projectmobius.common.XMLUtilities;
 public class CommonTools {
 
 	public static final String ALLOWED_JAVA_NAME_REGEX = "[A-Z]++[A-Za-z0-9\\_\\$]*";
+
 	public static final String ALLOWED_JAVA_PACKAGE_NAME_REGEX = "[A-Za-z\\_]++[A-Za-z0-9\\_\\$]*";
 
 	public static Process createAndOutputProcess(String cmd) throws Exception {
@@ -473,6 +475,48 @@ public class CommonTools {
 				+ "introduce.xml", introService, new QName(
 				"gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
 
+	}
+
+	public static String getPackageDir(ServiceType service) {
+		return service.getPackageName().replace('.', File.separatorChar);
+	}
+
+	public static NamespaceType getNamespaceType(NamespacesType namespacesType,
+			String namespaceURI) {
+		if (namespacesType != null && namespacesType.getNamespace() != null) {
+			NamespaceType[] namespaces = namespacesType.getNamespace();
+			for (int i = 0; i < namespaces.length; i++) {
+				NamespaceType namespace = namespaces[i];
+				if (namespace.getNamespace().equals(namespaceURI)) {
+					return namespace;
+				}
+			}
+		}
+		return null;
+	}
+
+	public static SchemaInformation getSchemaInformation(
+			NamespacesType namespacesType, QName qname) {
+		if (namespacesType != null && namespacesType.getNamespace() != null) {
+			NamespaceType[] namespaces = namespacesType.getNamespace();
+			for (int i = 0; i < namespaces.length; i++) {
+				NamespaceType namespace = namespaces[i];
+				if (namespace.getNamespace().equals(qname.getNamespaceURI())) {
+					if (namespace.getSchemaElement() != null) {
+						for (int j = 0; j < namespace.getSchemaElement().length; j++) {
+							SchemaElementType type = namespace
+									.getSchemaElement(j);
+							if (type.getType().equals(qname.getLocalPart())) {
+								SchemaInformation info = new SchemaInformation(
+										namespace, type);
+								return info;
+							}
+						}
+					}
+				}
+			}
+		}
+		return null;
 	}
 
 }

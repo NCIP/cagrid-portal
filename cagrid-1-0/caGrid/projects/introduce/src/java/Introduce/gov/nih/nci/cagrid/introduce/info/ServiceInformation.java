@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
 import java.io.File;
 import java.util.Properties;
@@ -82,51 +83,12 @@ public class ServiceInformation {
 	public void setServiceProperties(ServiceProperties serviceProperties) {
 		this.introService.setServiceProperties(serviceProperties);
 	}
-
-
+	
 
 	public File getBaseDirectory() {
 		return baseDirectory;
 	}
 	
-	public String getPackageDir(ServiceType service){
-		return service.getPackageName().replace('.',File.separatorChar);
-	}
-	
-	public NamespaceType getNamespaceType(String namespaceURI){
-		if (introService.getNamespaces() != null && introService.getNamespaces().getNamespace() != null) {
-			NamespaceType[] namespaces = introService.getNamespaces().getNamespace();
-			for (int i = 0; i < namespaces.length; i++) {
-				NamespaceType namespace = namespaces[i];
-				if (namespace.getNamespace().equals(namespaceURI)) {
-					return namespace;
-				}
-			}
-		}
-		return null;
-	}
-
-	public SchemaInformation getSchemaInformation(QName qname) {
-		if (introService.getNamespaces() != null && introService.getNamespaces().getNamespace() != null) {
-			NamespaceType[] namespaces = introService.getNamespaces().getNamespace();
-			for (int i = 0; i < namespaces.length; i++) {
-				NamespaceType namespace = namespaces[i];
-				if (namespace.getNamespace().equals(qname.getNamespaceURI())) {
-					if (namespace.getSchemaElement() != null) {
-						for (int j = 0; j < namespace.getSchemaElement().length; j++) {
-							SchemaElementType type = namespace.getSchemaElement(j);
-							if (type.getType().equals(qname.getLocalPart())) {
-								SchemaInformation info = new SchemaInformation(namespace, type);
-								return info;
-							}
-						}
-					}
-				}
-			}
-		}
-		return null;
-	}
-
 
 	public ServiceDescription getServiceDescriptor() {
 		return introService;

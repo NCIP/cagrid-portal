@@ -18,6 +18,7 @@ import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.SchemaInformation;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
@@ -68,19 +69,19 @@ public class SyncSource {
 		this.serviceInfo = info;
 		// this.packageName = service.getPackageName() + ".stubs";
 		serviceClient = baseDir.getAbsolutePath() + File.separator + "src"
-				+ File.separator + serviceInfo.getPackageDir(service)
+				+ File.separator + CommonTools.getPackageDir(service)
 				+ File.separator + "client" + File.separator
 				+ service.getName() + "Client.java";
 		serviceInterface = baseDir.getAbsolutePath() + File.separator + "src"
-				+ File.separator + serviceInfo.getPackageDir(service)
+				+ File.separator + CommonTools.getPackageDir(service)
 				+ File.separator + "common" + File.separator
 				+ service.getName() + "I.java";
 		serviceImpl = baseDir.getAbsolutePath() + File.separator + "src"
-				+ File.separator + serviceInfo.getPackageDir(service)
+				+ File.separator + CommonTools.getPackageDir(service)
 				+ File.separator + "service" + File.separator
 				+ service.getName() + "Impl.java";
 		serviceProviderImpl = baseDir.getAbsolutePath() + File.separator
-				+ "src" + File.separator + serviceInfo.getPackageDir(service)
+				+ "src" + File.separator + CommonTools.getPackageDir(service)
 				+ File.separator + "service" + File.separator + "globus"
 				+ File.separator + service.getName() + "ProviderImpl.java";
 	}
@@ -127,8 +128,8 @@ public class SyncSource {
 				&& returnTypeEl.getQName().getLocalPart().equals("void")) {
 			returnType = "void";
 		} else {
-			SchemaInformation info = serviceInfo
-					.getSchemaInformation(returnTypeEl.getQName());
+			SchemaInformation info = CommonTools.getSchemaInformation(
+					serviceInfo.getNamespaces(), returnTypeEl.getQName());
 			returnType = info.getType().getClassName();
 			if (info.getType().getPackageName() != null
 					&& info.getType().getPackageName().length() > 0) {
@@ -141,9 +142,9 @@ public class SyncSource {
 		methodString += "     public " + returnType + " " + methodName + "(";
 		if (method.getInputs() != null && method.getInputs().getInput() != null) {
 			for (int j = 0; j < method.getInputs().getInput().length; j++) {
-				SchemaInformation info = serviceInfo
-						.getSchemaInformation(method.getInputs().getInput(j)
-								.getQName());
+				SchemaInformation info = CommonTools.getSchemaInformation(
+						serviceInfo.getNamespaces(), method.getInputs()
+								.getInput(j).getQName());
 				String packageName = info.getType().getPackageName();
 				String classType = null;
 				if (packageName != null && packageName.length() > 0) {
@@ -370,7 +371,7 @@ public class SyncSource {
 				e1.printStackTrace();
 			}
 
-			//if the method was not provided
+			// if the method was not provided
 			if (!method.isIsProvided()) {
 				// just clean up the modified impl
 				modifyImpl(mod);
@@ -582,9 +583,9 @@ public class SyncSource {
 		// set the values fo the boxed wrapper
 		if (method.getInputs() != null && method.getInputs().getInput() != null) {
 			for (int j = 0; j < method.getInputs().getInput().length; j++) {
-				SchemaInformation inNamespace = serviceInfo
-						.getSchemaInformation(method.getInputs().getInput(j)
-								.getQName());
+				SchemaInformation inNamespace = CommonTools
+						.getSchemaInformation(serviceInfo.getNamespaces(),
+								method.getInputs().getInput(j).getQName());
 				String paramName = method.getInputs().getInput(j).getName();
 				String containerClassName = method.getInputs().getInput(j)
 						.getContainerClassName();
@@ -620,8 +621,8 @@ public class SyncSource {
 		methodString += lineStart;
 		if (!returnTypeEl.getQName().getNamespaceURI().equals("")
 				&& !returnTypeEl.getQName().getLocalPart().equals("void")) {
-			SchemaInformation info = serviceInfo
-					.getSchemaInformation(returnTypeEl.getQName());
+			SchemaInformation info = CommonTools.getSchemaInformation(
+					serviceInfo.getNamespaces(), returnTypeEl.getQName());
 			if (info.getNamespace().getNamespace().equals(
 					IntroduceConstants.W3CNAMESPACE)) {
 				if (info.getType().getType().equals("boolean")
@@ -722,9 +723,9 @@ public class SyncSource {
 			if (method.getInputs().getInput().length >= 1) {
 				// inputs were boxed and need to be unboxed
 				for (int j = 0; j < method.getInputs().getInput().length; j++) {
-					SchemaInformation inNamespace = serviceInfo
-							.getSchemaInformation(method.getInputs()
-									.getInput(j).getQName());
+					SchemaInformation inNamespace = CommonTools
+							.getSchemaInformation(serviceInfo.getNamespaces(),
+									method.getInputs().getInput(j).getQName());
 					String paramName = method.getInputs().getInput(j).getName();
 					if (inNamespace.getNamespace().getNamespace().equals(
 							IntroduceConstants.W3CNAMESPACE)) {
@@ -781,8 +782,9 @@ public class SyncSource {
 			// just call but dont set anything
 			methodString += var + "." + methodName + "(" + params + ");\n";
 		} else {
-			SchemaInformation outputNamespace = serviceInfo
-					.getSchemaInformation(returnTypeEl.getQName());
+			SchemaInformation outputNamespace = CommonTools
+					.getSchemaInformation(serviceInfo.getNamespaces(),
+							returnTypeEl.getQName());
 			if (outputNamespace.getNamespace().getNamespace().equals(
 					IntroduceConstants.W3CNAMESPACE)) {
 				methodString += "boxedResult.setResponse(" + var + "."
