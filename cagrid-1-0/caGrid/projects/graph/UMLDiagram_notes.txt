@@ -107,25 +107,24 @@ follows:
 Below is a code snippet that will populate a UMLDiagram object 
 with the objects as shown in (Figure 1).
 
-    +--------------------------------------------------------------------+
-    |                                                                    |
-    |  UMLDiagram diagram = new UMLDiagram();                            | 
-    |  UMLClass class1 = new UMLClass("Class1");                         |
-    |  UMLClass class2 = new UMLClass("Class2");                         |
-    |  diagram.addClass(class1);                                         | 
-    |  diagram.addClass(class2);                                         |
-    |  diagram.addAssociation(class1, class2, "1..*", "0..*",            |
-    |                         "<<composition>>", "<<aggregation>>",      |
-    |                         true, false);                              |
-    |                                                                    |
-    |  // last but not least, you HAVE to refresh() the diagram          |
-    |  // for all the additions to be made visible, and do layout()      | 
-    |  // to run the poor layout algorithm                               |
-    |  diagram.refresh();                                                |
-    |  diagram.layout();                                                 |
-    +--------------------------------------------------------------------+
+    +----------------------------------------------------------------------+
+    |                                                                      |
+    |  UMLDiagram diagram = new UMLDiagram();                              |   
+    |  UMLClass class1 = new UMLClass("Class1");                           |
+    |  UMLClass class2 = new UMLClass("Class2");                           |
+    |  diagram.addClass(class1);                                           |  
+    |  diagram.addClass(class2);                                           |
+    |  diagram.addAssociation(class1, class2, "1..*", "0..*",              |
+    |                         "<<composition>>", "<<aggregation>>",        |
+    |                         true, false);                                |
+    |                                                                      |
+    |  // last but not least, you have to performLayout() and refresh()    |
+    |  // the diagram to run the poor layout algorithm and refresh changes |
+    |  diagram.performLayout();                                            |
+    |  diagram.refresh();                                                  |
+    +----------------------------------------------------------------------+
 
-After refreshing and layouting, the diagram object can be added to whatever 
+After layouting and refreshing, the diagram object can be added to whatever 
 SWING component necessary.
 
 -Adding an Event Listener to the UMLDiagram class---------------------
@@ -142,8 +141,11 @@ object has only one listener so the proper term would be'set' the listener and n
 The UMLDiagramListener interface has the following methods:
 
      public UMLDiagramListener(UMLDiagram d);
-     public void ClassClicked(UMLClass c, MouseEvent e);
-     public void AssociationClicked(UMLClassAssociation a, MouseEvent e);
+     public void classClicked(UMLClass c, MouseEvent e);
+     public void associationClicked(UMLClassAssociation a, MouseEvent e);
+     public void backgroundClicked(MouseEvent e);
+     public void classKeyPressed(KeyEvent e);
+     public void associationKeyPressed(
 
 Notice that the UMLDiagram object of interest must be passed as a parameter
 to the constructor of the listener.  This allows for the diagram to be accessed
