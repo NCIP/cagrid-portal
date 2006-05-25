@@ -42,12 +42,14 @@ public class DiscoveryClientTestCase extends TestCase {
 		InputStream is = null;
 
 		is = getClass().getResourceAsStream(SERVICE1_EPR_RESOURCE);
+		assertNotNull(is);
 		doc = XmlUtils.newDocument(is);
 		service1EPR = (EndpointReferenceType) ObjectDeserializer.toObject(doc.getDocumentElement(),
 			EndpointReferenceType.class);
 		assertNotNull(service1EPR);
 
 		is = getClass().getResourceAsStream(SERVICE2_EPR_RESOURCE);
+		assertNotNull(is);
 		doc = XmlUtils.newDocument(is);
 		service2EPR = (EndpointReferenceType) ObjectDeserializer.toObject(doc.getDocumentElement(),
 			EndpointReferenceType.class);
