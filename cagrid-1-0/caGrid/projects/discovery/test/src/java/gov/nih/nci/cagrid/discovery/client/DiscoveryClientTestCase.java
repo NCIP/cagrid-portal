@@ -8,6 +8,7 @@ import java.io.InputStream;
 import junit.framework.TestCase;
 
 import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.apache.axis.utils.ClassUtils;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.globus.wsrf.utils.XmlUtils;
 import org.w3c.dom.Node;
@@ -41,14 +42,14 @@ public class DiscoveryClientTestCase extends TestCase {
 		org.w3c.dom.Document doc = null;
 		InputStream is = null;
 
-		is = getClass().getResourceAsStream(SERVICE1_EPR_RESOURCE);
+		is = ClassUtils.getResourceAsStream(DiscoveryClientTestCase.class, SERVICE1_EPR_RESOURCE);
 		assertNotNull(is);
 		doc = XmlUtils.newDocument(is);
 		service1EPR = (EndpointReferenceType) ObjectDeserializer.toObject(doc.getDocumentElement(),
 			EndpointReferenceType.class);
 		assertNotNull(service1EPR);
 
-		is = getClass().getResourceAsStream(SERVICE2_EPR_RESOURCE);
+		is = ClassUtils.getResourceAsStream(DiscoveryClientTestCase.class, SERVICE2_EPR_RESOURCE);
 		assertNotNull(is);
 		doc = XmlUtils.newDocument(is);
 		service2EPR = (EndpointReferenceType) ObjectDeserializer.toObject(doc.getDocumentElement(),
