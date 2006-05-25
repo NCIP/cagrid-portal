@@ -65,9 +65,6 @@ public class MockDiscoveryClient extends DiscoveryClient {
 	}
 
 
-	/**
-	 * @return
-	 */
 	private Node getRootNode() {
 		return xml;
 	}

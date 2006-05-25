@@ -4,205 +4,283 @@ import gov.nih.nci.cagrid.metadata.common.PointOfContact;
 import gov.nih.nci.cagrid.metadata.common.UMLClass;
 
 import java.io.InputStream;
+import java.util.Arrays;
 
 import junit.framework.TestCase;
 
 import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.apache.axis.utils.XMLUtils;
+import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.globus.wsrf.utils.XmlUtils;
 import org.w3c.dom.Node;
 
 
 public class DiscoveryClientTestCase extends TestCase {
 
-	private static final String NO_SERVICES_FILENAME = "noServices.xml";
+	private static final String NO_SERVICES_RESOURCE = "noServices.xml";
+	private static final String TWO_SERVICES_ONE_VALID_RESOURCE = "1valid1Invalid.xml";
+
+	private static final String SERVICE1_EPR_RESOURCE = "EPRS/service1_EPR.xml";
+	private static final String SERVICE2_EPR_RESOURCE = "EPRS/service2_EPR.xml";
+
+	// DEFINE THE DISCOVERY METHODS
+	private static final int ALL_SERVICES = 0;
+	private static final int BY_NAME = 1;
+	private static final int BY_OP_NAME = 2;
+	private static final int BY_OP_INPUT = 3;
+	private static final int BY_OP_OUTPUT = 4;
+	private static final int BY_OP_CLASS = 5;
+	private static final int BY_POC = 6;
+	private static final int BY_CENTER = 7;
+	private static final int BY_STRING = 8;
+
+	private EndpointReferenceType service1EPR = null;
+	private EndpointReferenceType service2EPR = null;
 
 
 	protected void setUp() throws Exception {
 		super.setUp();
+		org.w3c.dom.Document doc = null;
+		InputStream is = null;
 
+		is = getClass().getResourceAsStream(SERVICE1_EPR_RESOURCE);
+		doc = XMLUtils.newDocument(is);
+		service1EPR = (EndpointReferenceType) ObjectDeserializer.toObject(doc.getDocumentElement(),
+			EndpointReferenceType.class);
+		assertNotNull(service1EPR);
+
+		is = getClass().getResourceAsStream(SERVICE2_EPR_RESOURCE);
+		doc = XMLUtils.newDocument(is);
+		service2EPR = (EndpointReferenceType) ObjectDeserializer.toObject(doc.getDocumentElement(),
+			EndpointReferenceType.class);
+		assertNotNull(service1EPR);
 	}
 
 
 	public void testGetAllServices() {
-		DiscoveryClient client = createDiscoveryClient(NO_SERVICES_FILENAME);
-		try {
-			EndpointReferenceType[] allServices = client.getAllServices();
-			assertNotNull(allServices);
-			assertEquals(0, allServices.length);
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+		final int operation = ALL_SERVICES;
+		EndpointReferenceType[] services = null;
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, null);
+		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(TWO_SERVICES_ONE_VALID_RESOURCE, operation, null);
+		assertResultsEqual(new EndpointReferenceType[]{service1EPR, service2EPR}, services);
+
 	}
 
 
 	public void testDiscoverServicesByName() {
-		DiscoveryClient client = createDiscoveryClient(NO_SERVICES_FILENAME);
-		try {
-			EndpointReferenceType[] allServices = client.discoverServicesByName("foo");
-			assertNotNull(allServices);
-			assertEquals(0, allServices.length);
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+		final int operation = BY_NAME;
+		EndpointReferenceType[] services = null;
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, null);
+		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "");
+		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "foo");
+		assertEquals(0, services.length);
 	}
 
 
 	public void testDiscoverServicesByOperationClass() {
-		DiscoveryClient client = createDiscoveryClient(NO_SERVICES_FILENAME);
-		try {
-			EndpointReferenceType[] allServices = client.discoverServicesByOperationClass(null);
-			assertNotNull(allServices);
-			assertEquals(0, allServices.length);
+		final int operation = BY_OP_CLASS;
+		EndpointReferenceType[] services = null;
+		UMLClass clazz = new UMLClass();
 
-			UMLClass clazz = new UMLClass();
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, null);
+		assertEquals(0, services.length);
 
-			allServices = client.discoverServicesByOperationClass(clazz);
-			assertNotNull(allServices);
-			assertEquals(0, allServices.length);
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, clazz);
+		assertEquals(0, services.length);
 
-			clazz.setClassName("foo");
-			allServices = client.discoverServicesByOperationClass(clazz);
-			assertNotNull(allServices);
-			assertEquals(0, allServices.length);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+		clazz.setClassName("non-present class");
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, clazz);
+		assertEquals(0, services.length);
 	}
 
 
 	public void testDiscoverServicesByOperationInput() {
-		DiscoveryClient client = createDiscoveryClient(NO_SERVICES_FILENAME);
-		try {
-			EndpointReferenceType[] allServices = client.discoverServicesByOperationInput(null);
-			assertNotNull(allServices);
-			assertEquals(0, allServices.length);
+		final int operation = BY_OP_INPUT;
+		EndpointReferenceType[] services = null;
+		UMLClass clazz = new UMLClass();
 
-			UMLClass clazz = new UMLClass();
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, null);
+		assertEquals(0, services.length);
 
-			allServices = client.discoverServicesByOperationInput(clazz);
-			assertNotNull(allServices);
-			assertEquals(0, allServices.length);
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, clazz);
+		assertEquals(0, services.length);
 
-			clazz.setClassName("foo");
-			allServices = client.discoverServicesByOperationInput(clazz);
-			assertNotNull(allServices);
-			assertEquals(0, allServices.length);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+		clazz.setClassName("non-present class");
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, clazz);
+		assertEquals(0, services.length);
 	}
 
 
 	public void testDiscoverServicesByOperationOuput() {
-		DiscoveryClient client = createDiscoveryClient(NO_SERVICES_FILENAME);
-		try {
-			EndpointReferenceType[] allServices = client.discoverServicesByOperationOutput(null);
-			assertNotNull(allServices);
-			assertEquals(0, allServices.length);
+		final int operation = BY_OP_OUTPUT;
+		EndpointReferenceType[] services = null;
+		UMLClass clazz = new UMLClass();
 
-			UMLClass clazz = new UMLClass();
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, null);
+		assertEquals(0, services.length);
 
-			allServices = client.discoverServicesByOperationOutput(clazz);
-			assertNotNull(allServices);
-			assertEquals(0, allServices.length);
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, clazz);
+		assertEquals(0, services.length);
 
-			clazz.setClassName("foo");
-			allServices = client.discoverServicesByOperationOutput(clazz);
-			assertNotNull(allServices);
-			assertEquals(0, allServices.length);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+		clazz.setClassName("non-present class");
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, clazz);
+		assertEquals(0, services.length);
 	}
 
 
 	public void testDiscoverServicesByOperationName() {
-		DiscoveryClient client = createDiscoveryClient(NO_SERVICES_FILENAME);
-		try {
-			EndpointReferenceType[] allServices = client.discoverServicesByOperationName(null);
-			assertNotNull(allServices);
-			assertEquals(0, allServices.length);
+		final int operation = BY_OP_NAME;
+		EndpointReferenceType[] services = null;
 
-			allServices = client.discoverServicesByOperationName("foo");
-			assertNotNull(allServices);
-			assertEquals(0, allServices.length);
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, null);
+		assertEquals(0, services.length);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "");
+		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "foo");
+		assertEquals(0, services.length);
 	}
 
 
 	public void testDiscoverServicesByPointOfContact() {
-		DiscoveryClient client = createDiscoveryClient(NO_SERVICES_FILENAME);
-		try {
-			EndpointReferenceType[] allServices = client.discoverServicesByPointOfContact(null);
-			assertNotNull(allServices);
-			assertEquals(0, allServices.length);
+		final int operation = BY_POC;
+		EndpointReferenceType[] services = null;
+		PointOfContact criteria = new PointOfContact();
 
-			PointOfContact poc = new PointOfContact();
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, null);
+		assertEquals(0, services.length);
 
-			allServices = client.discoverServicesByPointOfContact(poc);
-			assertNotNull(allServices);
-			assertEquals(0, allServices.length);
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, criteria);
+		assertEquals(0, services.length);
 
-			poc.setFirstName("foo");
-			allServices = client.discoverServicesByPointOfContact(poc);
-			assertNotNull(allServices);
-			assertEquals(0, allServices.length);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+		criteria.setFirstName("not valid");
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, criteria);
+		assertEquals(0, services.length);
 	}
 
 
 	public void testDiscoverServicesByResearchCenter() {
-		DiscoveryClient client = createDiscoveryClient(NO_SERVICES_FILENAME);
-		try {
-			EndpointReferenceType[] allServices = client.discoverServicesByResearchCenter(null);
-			assertNotNull(allServices);
-			assertEquals(0, allServices.length);
+		final int operation = BY_CENTER;
+		EndpointReferenceType[] services = null;
 
-			allServices = client.discoverServicesByResearchCenter("foo");
-			assertNotNull(allServices);
-			assertEquals(0, allServices.length);
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, null);
+		assertEquals(0, services.length);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "");
+		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "foo");
+		assertEquals(0, services.length);
 	}
 
 
 	public void testDiscoverServicesBySearchString() {
-		DiscoveryClient client = createDiscoveryClient(NO_SERVICES_FILENAME);
-		try {
-			EndpointReferenceType[] allServices = client.discoverServicesBySearchString(null);
-			assertNotNull(allServices);
-			assertEquals(0, allServices.length);
+		final int operation = BY_STRING;
+		EndpointReferenceType[] services = null;
 
-			allServices = client.discoverServicesBySearchString("foo");
-			assertNotNull(allServices);
-			assertEquals(0, allServices.length);
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, null);
+		assertEquals(0, services.length);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "");
+		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "foo");
+		assertEquals(0, services.length);
+	}
+
+
+	private void assertResultsEqual(EndpointReferenceType[] expected, EndpointReferenceType[] received) {
+		// id like to be able to do this:
+		// assertTrue(Arrays.equals(target, services));
+		// but EndpointReferenceType doesn't support equals, so we'll just check
+		// the Address
+
+		assertEquals(expected.length, received.length);
+
+		for (int i = 0; i < expected.length; i++) {
+			assertEquals(expected[i].getAddress(), received[i].getAddress());
 		}
 	}
 
 
+	/**
+	 * Handles basic failures and invokes the discovery type specified againast
+	 * the specified file, using the specified criteria.
+	 * 
+	 * @param xmlFile
+	 *            classpath reference to the XML document to query
+	 * @param method
+	 *            discovery type to perform
+	 * @param criteria
+	 *            the criteria of the discovery type
+	 * @return the discovered services
+	 */
+	private EndpointReferenceType[] invokeDiscoveryMethod(String xmlFile, int method, Object criteria) {
+		EndpointReferenceType[] eprs = null;
+		DiscoveryClient client = createDiscoveryClient(xmlFile);
+
+		try {
+			switch (method) {
+				case ALL_SERVICES :
+					eprs = client.getAllServices();
+					break;
+				case BY_CENTER :
+					eprs = client.discoverServicesByResearchCenter((String) criteria);
+					break;
+				case BY_NAME :
+					eprs = client.discoverServicesByName((String) criteria);
+					break;
+				case BY_OP_CLASS :
+					eprs = client.discoverServicesByOperationClass((UMLClass) criteria);
+					break;
+				case BY_OP_INPUT :
+					eprs = client.discoverServicesByOperationInput((UMLClass) criteria);
+					break;
+				case BY_OP_NAME :
+					eprs = client.discoverServicesByOperationName((String) criteria);
+					break;
+				case BY_OP_OUTPUT :
+					eprs = client.discoverServicesByOperationOutput((UMLClass) criteria);
+					break;
+				case BY_POC :
+					eprs = client.discoverServicesByPointOfContact((PointOfContact) criteria);
+					break;
+				case BY_STRING :
+					eprs = client.discoverServicesBySearchString((String) criteria);
+					break;
+				default :
+					fail("Invalid discovery method");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+
+		// we never return null, at least empty array
+		assertNotNull(eprs);
+		return eprs;
+
+	}
+
+
+	/**
+	 * Constructs a "Mock" DiscoveryClient that extends the regular
+	 * DiscoveryClient and overrides its method that invokes the Index Service,
+	 * by issuing the XPath to a local XML document.
+	 * 
+	 * @param resourcePath
+	 *            classpath reference to the XML document to query
+	 * @return the Mock DiscoveryClient
+	 */
 	private DiscoveryClient createDiscoveryClient(String resourcePath) {
 		DiscoveryClient client = null;
 		InputStream resource = getClass().getResourceAsStream(resourcePath);
