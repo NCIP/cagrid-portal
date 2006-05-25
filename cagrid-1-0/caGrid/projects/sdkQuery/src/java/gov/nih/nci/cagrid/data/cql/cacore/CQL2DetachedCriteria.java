@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.data.cql.cacore;
 
 import gov.nih.nci.cagrid.cqlquery.Association;
 import gov.nih.nci.cagrid.cqlquery.Attribute;
+import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlquery.Group;
 import gov.nih.nci.cagrid.cqlquery.LogicalOperator;
 import gov.nih.nci.cagrid.cqlquery.Object;
@@ -24,36 +25,47 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Subqueries;
 
 /** 
- *  ProcessorHelper
- *  Helper class that encapsulates processing of CQL Query components
+ *  CQL2DetachedCriteria
+ *  Translates a CQLQuery object into a Hibernate DeatchedCriteria object
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created May 2, 2006 
  * @version $Id$ 
  */
-public class ProcessorHelper {
+public class CQL2DetachedCriteria {
 	
 	private static Map restrictionFactories = null;
-
-	public static DetachedCriteria createQueryCriteria(Object objectType) throws MalformedQueryException, QueryProcessingException {
-		// create criteria for the class
-		String objectName = objectType.getName();
+	
+	/**
+	 * Translates a CQLQuery into a Hibernate DetachedCriteria.
+	 * @param query
+	 * 		A fully valid CQL query.
+	 * @return
+	 * @throws MalformedQueryException
+	 * @throws QueryProcessingException
+	 */
+	public static DetachedCriteria translate(CQLQuery query) throws MalformedQueryException, QueryProcessingException {
+		// create root criteria for the target class
+		String objectName = query.getTarget().getName();
 		Class objectClass = null;
 		try {
 			objectClass = Class.forName(objectName);
 		} catch (Exception ex) {
 			throw new QueryProcessingException("Error obtaining nested object class: " + ex.getMessage(), ex);
 		}
-		DetachedCriteria objectCriteria = DetachedCriteria.forClass(objectClass);
+		DetachedCriteria targetCriteria = DetachedCriteria.forClass(objectClass);
 		
-		// nested objects can have EITHER an attribute, group, or associated object
-		validateObjectChildren(objectType);
+		return targetCriteria;
+	}
+	
+
+	private static DetachedCriteria populateObjectCritaria(DetachedCriteria objectCriteria, Object objectType) throws MalformedQueryException, QueryProcessingException {
+		Class objectClass = objectType.getClass();
 		
 		// handle association
 		if (objectType.getAssociation() != null) {
-			Criterion association = handleAssociation(objectClass, objectType.getAssociation());
-			objectCriteria.add(association);
+			handleAssociation(objectCriteria, objectClass, objectType.getAssociation());
 		}
 		
 		// handle attribute
@@ -71,7 +83,7 @@ public class ProcessorHelper {
 	}
 	
 	
-	private static Criterion handleAssociation(Class objectClass, Association association) throws MalformedQueryException, QueryProcessingException {
+	private static void handleAssociation(DetachedCriteria parentObjectCriteria, Class objectClass, Association association) throws MalformedQueryException, QueryProcessingException {
 		String role = association.getRoleName();
 		String associationType = association.getName();
 		if (role == null) {
@@ -92,9 +104,8 @@ public class ProcessorHelper {
 			// still null?? no association to the object!
 			throw new MalformedQueryException("Association from " + objectClass.getName() + " to " + associationType + " does not exist.  Use only direct associations");
 		}
-		DetachedCriteria associationCriteria = createQueryCriteria(association);
-		Criterion subquery = Subqueries.propertyIn(role, associationCriteria);
-		return subquery;
+		DetachedCriteria associationCriteria = parentObjectCriteria.createCriteria(role);
+		populateObjectCritaria(associationCriteria, association);
 	}
 	
 	
@@ -215,8 +226,8 @@ public class ProcessorHelper {
 		}
 		// associations
 		for (int i = 0; group.getAssociation() != null && i < group.getAssociation().length; i++) {
-			Criterion association = handleAssociation(objectClass, group.getAssociation(i));
-			junction.add(association);
+			// Criterion association = handleAssociation(objectClass, group.getAssociation(i));
+			// junction.add(association);
 		}
 		// groups
 		for (int i = 0; group.getGroup() != null && i < group.getGroup().length; i++) {

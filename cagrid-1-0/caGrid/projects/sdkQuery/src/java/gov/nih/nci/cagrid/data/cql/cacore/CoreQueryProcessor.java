@@ -37,7 +37,8 @@ public class CoreQueryProcessor extends CQLQueryProcessor {
 
 	public CQLQueryResults processQuery(CQLQuery cqlQuery) 
 		throws MalformedQueryException, QueryProcessingException {
-		DetachedCriteria objectCriteria = ProcessorHelper.createQueryCriteria(cqlQuery.getTarget());
+		DetachedCriteria objectCriteria = CQL2DetachedCriteria.translate(cqlQuery);
+		
 		List targetObjects = null;
 		try {
 			targetObjects = coreService.query(objectCriteria, cqlQuery.getTarget().getName());

@@ -10,7 +10,7 @@ import gov.nih.nci.cagrid.cqlquery.Group;
 import gov.nih.nci.cagrid.cqlquery.LogicalOperator;
 import java.util.Iterator;
 import java.util.List;
-import gov.nih.nci.cagrid.data.cql.cacore.ProcessorHelper;
+import gov.nih.nci.cagrid.data.cql.cacore.CQL2DetachedCriteria;
 
 
 public class TestClient {
@@ -33,7 +33,7 @@ public class TestClient {
 	public void cql_Grid_Test_one(){
 		try{
 			
-			DetachedCriteria dtc = ProcessorHelper.createQueryCriteria(this.getCqlObject("CQL_Query1.xml"));
+			DetachedCriteria dtc = CQL2DetachedCriteria.createQueryCriteria(this.getCqlObject("CQL_Query1.xml"));
 			List resultList = caBioService.query(dtc, Gene.class.getName());
 			System.out.println("\n Total # of  records = "
 					+ resultList.size());
