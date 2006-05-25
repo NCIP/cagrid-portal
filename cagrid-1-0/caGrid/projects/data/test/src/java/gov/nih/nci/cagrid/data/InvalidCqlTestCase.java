@@ -67,19 +67,24 @@ public class InvalidCqlTestCase extends TestCase {
 			validator.validateStructure(query);
 			fail("Query should have been invalid, was not");
 		} catch (Exception ex) {
-			// System.out.println("Query verified invalid: " + ex.getMessage());
+			System.out.println("Query verified invalid: " + ex.getMessage());
 			assertTrue("Query verified invalid: " + ex.getMessage(), true);
 		}
 	}
 	
 	
-	public void testMalformedTarget() {
-		checkQuery("malformedRoot.xml");
+	public void testTargetWithoutName() {
+		checkQuery("targetWithoutName.xml");
 	}
 	
 	
-	public void testMalformedAttribute() {
-		checkQuery("malformedAttribute.xml");
+	public void testAttributeWithoutValue() {
+		checkQuery("attributeWithoutValue.xml");
+	}
+	
+	
+	public void testAttributeWithoutName() {
+		checkQuery("attributeWithoutName.xml");
 	}
 	
 	
@@ -100,6 +105,16 @@ public class InvalidCqlTestCase extends TestCase {
 	
 	public void testGroupWithoutLogic() {
 		checkQuery("groupWithoutLogic.xml");
+	}
+	
+	
+	public void testAssociationWithoutName() {
+		checkQuery("associationWithoutName.xml");
+	}
+	
+	
+	public void testMultipleChildrenOnAssociation() {
+		checkQuery("associationWithTooManyChildren.xml");
 	}
 	
 	
