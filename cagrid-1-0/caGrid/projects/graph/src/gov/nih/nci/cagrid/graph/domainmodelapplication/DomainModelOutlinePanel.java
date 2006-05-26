@@ -1,5 +1,5 @@
 package gov.nih.nci.cagrid.graph.domainmodelapplication;
 
-public class DomainModelExplorerPanel {
+public class DomainModelOutlinePanel {
 
 }
