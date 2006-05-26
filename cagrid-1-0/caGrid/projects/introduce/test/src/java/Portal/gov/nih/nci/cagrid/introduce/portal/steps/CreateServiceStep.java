@@ -20,7 +20,7 @@ public class CreateServiceStep extends Step {
 	public void runStep() throws Throwable {
 		System.out.println("Creating a service");
 		mainWindow.getMenuBar().getMenu("Tools").getSubMenu(
-				"Create New Service").click();
+				"Create Service").click();
 		Thread.sleep(3000);
 		GridPortal portal = PortalResourceManager.getInstance().getGridPortal();
 		Panel panel = new Panel(portal.getLastComponent());

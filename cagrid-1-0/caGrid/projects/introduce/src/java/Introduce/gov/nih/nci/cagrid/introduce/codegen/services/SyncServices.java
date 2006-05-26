@@ -39,7 +39,7 @@ public class SyncServices extends SyncTool {
 			for (int serviceI = 0; serviceI < getServiceInformation()
 					.getServices().getService().length; serviceI++) {
 
-				final int serviceIndex = serviceI;
+				int serviceIndex = serviceI;
 
 				try {
 					SpecificServiceInformation ssi = new SpecificServiceInformation(

@@ -114,8 +114,8 @@ public class SyncTools {
 			}
 		}
 
-		public void generateSymbolTable(final ServiceInformation info,
-				final Set excludeSet) throws Exception {
+		public void generateSymbolTable(ServiceInformation info,
+				Set excludeSet) throws Exception {
 
 			if (info.getServices() != null
 					&& info.getServices().getService() != null) {
