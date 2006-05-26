@@ -10,6 +10,10 @@ jaxmejs is leaving file handles laying around somewhere.
 
 solve timing problems in the addComplexTypeTest.....
 
+metadata tab should have a "create value" (or something) button for each metadata value that is populateFromFile
+  - should launch a specialized graphical editor (based on QName), or a generic XSD-based editor if no custom renderer is present 
+  - introduce needs a new extension type (metadata populator) to register QName->Classname (of panel editor)
+
 add tests to system tests for (coverage report shows no coverage):
 - (DONE) SystemProperties
 -CustomBeans and Serialization
