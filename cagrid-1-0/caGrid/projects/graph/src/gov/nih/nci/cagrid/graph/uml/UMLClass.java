@@ -109,6 +109,11 @@ public class UMLClass extends FigNode
 	public void setName(java.lang.String name) {
 		this.name = name;
 	}
+	
+	public void setToolTip(String text)
+	{
+		
+	}
 
 
 	public void addAttribute(int access, java.lang.String type, java.lang.String name) {

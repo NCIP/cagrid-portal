@@ -110,6 +110,39 @@ class UMLViewer extends JGraph {
 		this.diagram = d;
 		this.pager.diagram = this.diagram;
 	}
+	
+	public boolean highlightClass(UMLClass c)
+	{
+		if(this.diagram.classes.contains((UMLClass)c ))
+		{
+			c.highlight(diagram.diagram.getLayer());
+			pager.highlightClass(c);
+	
+			for (int j = 0; j < diagram.assocs.size(); j++) {
+				UMLClassAssociation temp = (UMLClassAssociation) diagram.assocs.get(j);
+	
+				temp.fade();
+	
+			}
+	
+			for (int k = 0; k < diagram.classes.size(); k++) {
+				UMLClass c2 = (UMLClass) diagram.classes.get(k);
+	
+				if (c != c2) {
+					c2.fade();
+				}
+	
+			}
+	
+			diagram.statusBar.setMsg("Class: [ " + c.name + " ]");
+			return true;
+		}
+		return false;
+	}
+	
+	
+	
+	
 
 }
 
@@ -219,30 +252,7 @@ class UMLViewerMouseListener extends MouseAdapter {
 
 				UMLClass c = (UMLClass) parent.diagram.viewer.selectedFigs().get(0);
 
-				c.highlight(parent.diagram.diagram.getLayer());
-				parent.pager.highlightClass(c);
-
-				for (int j = 0; j < parent.diagram.assocs.size(); j++) {
-					UMLClassAssociation temp = (UMLClassAssociation) parent.diagram.assocs.get(j);
-
-					temp.fade();
-
-				}
-
-				for (int k = 0; k < parent.diagram.classes.size(); k++) {
-					UMLClass c2 = (UMLClass) parent.diagram.classes.get(k);
-
-					if (c != c2) {
-						c2.fade();
-					}
-
-				}
-
-				parent.diagram.statusBar.setMsg("Class: [ " + c.name + " ]");
-
-				if (e.getClickCount() == 2) {
-					parent.diagram.classDoubleClicked(c);
-				}
+				parent.diagram.viewer.highlightClass(c);
 
 			}
 		}

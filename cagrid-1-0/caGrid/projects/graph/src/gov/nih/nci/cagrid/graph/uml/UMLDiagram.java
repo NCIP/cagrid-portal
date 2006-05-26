@@ -53,16 +53,26 @@ public class UMLDiagram extends JComponent {
 	}
 
 
-	public void addClass(UMLClass gc) {
+	public boolean addClass(UMLClass gc) {
 
+		if(classes.contains((UMLClass) gc) ) return false;
+		
 		this.diagram.add(gc);
 		this.classes.addElement(gc);
 		this.layouter.add(new ClassdiagramNode(gc));
+		return true;
 
+	}
+	
+	public boolean highlightClass(UMLClass c)
+	{
+
+		return this.viewer.highlightClass(c);	
+	
 	}
 
 
-	public void addAssociation(UMLClass gc1, UMLClass gc2, String label1, String label2, String multiplicity1,
+	public boolean addAssociation(UMLClass gc1, UMLClass gc2, String label1, String label2, String multiplicity1,
 		String multiplicity2) {
 		UMLClassAssociation edge = new UMLClassAssociation(label1, multiplicity1, label2, multiplicity2);
 
@@ -85,7 +95,8 @@ public class UMLDiagram extends JComponent {
 		this.assocs.addElement(edge);
 
 		this.layouter.add(new ClassdiagramAssociationEdge(edge));
-
+		
+		return true;
 	}
 
 
