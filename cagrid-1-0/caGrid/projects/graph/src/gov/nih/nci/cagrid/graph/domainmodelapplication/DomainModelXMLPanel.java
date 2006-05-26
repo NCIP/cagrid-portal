@@ -1,5 +1,8 @@
 package gov.nih.nci.cagrid.graph.domainmodelapplication;
 
-public class DomainModelXMLPanel {
+import javax.swing.JComponent;
 
+public class DomainModelXMLPanel extends JComponent
+{
+	
 }
