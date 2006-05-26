@@ -30,6 +30,12 @@ public class ExtensionsTable extends PortalBaseTable {
 
 
 	public void addRow(final String input) {
+		for (int i = 0; i < getRowCount(); i++) {
+			String existing = (String) getValueAt(i, 0);
+			if (existing.equals(input)) {
+				return;
+			}
+		}
 		final Vector v = new Vector();
 		v.add(input);
 		v.add(v);
