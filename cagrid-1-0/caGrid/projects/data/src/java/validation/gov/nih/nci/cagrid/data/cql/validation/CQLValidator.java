@@ -33,8 +33,26 @@ public abstract class CQLValidator {
 	}
 	
 	
+	/**
+	 * Validates the structure of the CQL Query against the CQLQuery schema.  This method
+	 * should throw an exception describing the problem with the query when one is encountered
+	 * @param query
+	 * 		The query to be validated
+	 * @throws MalformedQueryException
+	 */
 	public abstract void validateStructure(CQLQuery query) throws MalformedQueryException;
 	
 	
+	/**
+	 * Validates the query to ensure that it stays within the boundaries of the given
+	 * Domain Model.  The query should already have passed validation against the CQL schema.
+	 * Attempting to validate a query which does not conform to the schema with this method
+	 * has undefined results 
+	 * @param query
+	 * 		The structuraly valid CQL query
+	 * @param model
+	 * 		The domain model to validate the query against
+	 * @throws MalformedQueryException
+	 */
 	public abstract void validateDomain(CQLQuery query, DomainModel model) throws MalformedQueryException;
 }
