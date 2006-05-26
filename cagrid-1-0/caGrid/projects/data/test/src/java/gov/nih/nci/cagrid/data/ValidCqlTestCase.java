@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.data;
 
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
+import gov.nih.nci.cagrid.data.cql.validation.CQLValidator;
 import gov.nih.nci.cagrid.data.cql.validation.ObjectWalkingCQLValidator;
 
 import java.io.File;
@@ -25,7 +26,7 @@ import org.xml.sax.InputSource;
  * @version $Id$ 
  */
 public class ValidCqlTestCase extends TestCase {
-	private ObjectWalkingCQLValidator validator;
+	private CQLValidator validator;
 	private String cqlDocsDir;
 	
 	public ValidCqlTestCase(String name) {

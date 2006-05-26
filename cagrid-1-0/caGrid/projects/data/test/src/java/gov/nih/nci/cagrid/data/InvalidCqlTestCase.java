@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.data;
 
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
+import gov.nih.nci.cagrid.data.cql.validation.CQLValidator;
 import gov.nih.nci.cagrid.data.cql.validation.ObjectWalkingCQLValidator;
 
 import java.io.File;
@@ -26,7 +27,7 @@ import junit.textui.TestRunner;
  * @version $Id$ 
  */
 public class InvalidCqlTestCase extends TestCase {
-	private ObjectWalkingCQLValidator validator;
+	private CQLValidator validator;
 	private String cqlDocsDir;
 	
 	public InvalidCqlTestCase(String name) {

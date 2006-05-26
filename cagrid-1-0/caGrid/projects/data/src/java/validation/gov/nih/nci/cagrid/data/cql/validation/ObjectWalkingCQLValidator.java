@@ -30,22 +30,20 @@ import java.util.Set;
  * @created May 18, 2006 
  * @version $Id$ 
  */
-public class ObjectWalkingCQLValidator implements CQLValidator {
+public class ObjectWalkingCQLValidator extends CQLValidator {
 	
 	private static Set predicateValues = null;
 
-	public void validateCql(CQLQuery query, DomainModel model) throws MalformedQueryException {
-		// start by validating the structure of the query
-		validateStructure(query);
-		
-		// validate the query against the data service's Domain Model
-		validateQueryTarget(query, model);
-		validateObjectModel(query.getTarget(), model);
-	}
-	
 	
 	public void validateStructure(CQLQuery query) throws MalformedQueryException {
 		validateObjectStructure(query.getTarget());
+	}
+	
+	
+	public void validateDomain(CQLQuery query, DomainModel model) throws MalformedQueryException {
+		// validate the query against the data service's Domain Model
+		validateQueryTarget(query, model);
+		validateObjectModel(query.getTarget(), model);
 	}
 	
 	
