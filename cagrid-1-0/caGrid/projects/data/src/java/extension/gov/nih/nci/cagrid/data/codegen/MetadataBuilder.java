@@ -7,9 +7,9 @@ import gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
+import gov.nih.nci.cagrid.data.common.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
 import gov.nih.nci.cagrid.metadata.common.UMLAttribute;
-import gov.nih.nci.cagrid.metadata.common.UMLAttributeSemanticMetadataCollection;
 import gov.nih.nci.cagrid.metadata.common.UMLClass;
 import gov.nih.nci.cagrid.metadata.common.UMLClassSemanticMetadataCollection;
 import gov.nih.nci.cagrid.metadata.common.UMLClassUmlAttributeCollection;
@@ -22,10 +22,12 @@ import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationEdgeUmlClass;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationSourceUMLAssociationEdge;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationTargetUMLAssociationEdge;
 
+import java.io.FileWriter;
 import java.rmi.RemoteException;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
+
+import org.globus.wsrf.encoding.ObjectSerializer;
 
 /** 
  *  MetadataBuilder
@@ -81,6 +83,20 @@ public class MetadataBuilder {
 		
 		model.setExposedUMLAssociationCollection(getExposedAssociationCollection());
 		return model;
+	}
+	
+	
+	public DomainModel getBigDomainModel() throws RemoteException, CodegenExtensionException {
+		DomainModel model = new DomainModel();
+		model.setProjectDescription(getProject().getDescription());
+		model.setProjectLongName(getProject().getLongName());
+		model.setProjectShortName(getProject().getShortName());
+		model.setProjectVersion(getProject().getVersion());
+		
+		model.setExposedUMLClassCollection(getAllClassesCollection());
+		
+		model.setExposedUMLAssociationCollection(getExposedAssociationCollection());
+		return model;		
 	}
 	
 	
@@ -169,6 +185,13 @@ public class MetadataBuilder {
 	}
 	
 	
+	private DomainModelExposedUMLClassCollection getAllClassesCollection() throws RemoteException, CodegenExtensionException {
+		DomainModelExposedUMLClassCollection exposed = new DomainModelExposedUMLClassCollection();
+		exposed.setUMLClass(getAllUmlClasses());
+		return exposed;
+	}
+	
+	
 	private UMLClass getUmlClass(String className) throws RemoteException, CodegenExtensionException {
 		UMLClassMetadata[] metadataArray = getClassMetadata();
 		UMLClassMetadata metadata = null;
@@ -200,22 +223,47 @@ public class MetadataBuilder {
 	}
 	
 	
-	private UMLAttribute[] getUmlAttributes(UMLClassMetadata metadata) {
-		UMLAttribute[] attributes = new UMLAttribute[metadata.getUMLAttributeMetadataCollection().size()];
-		Iterator attribMetaIter = metadata.getUMLAttributeMetadataCollection().iterator();
-		int attrIndex = 0;
-		while (attribMetaIter.hasNext()) {
-			UMLAttributeMetadata attribMetadata = (UMLAttributeMetadata) attribMetaIter.next();
-			UMLAttribute attrib = new UMLAttribute();
-			attrib.setDescription(attribMetadata.getDescription());
-			attrib.setName(attribMetadata.getFullyQualifiedName());
+	private UMLClass[] getAllUmlClasses() throws RemoteException, CodegenExtensionException {
+		UMLClassMetadata[] classMds = getClassMetadata();
+		UMLClass[] classes = new UMLClass[classMds.length];
+		for (int i = 0; i < classMds.length; i++) {
+			UMLClassMetadata metadata = classMds[i];
+			UMLClass umlClass = new UMLClass();
+			umlClass.setPackageName(getPackageMetadata().getName());
+			umlClass.setClassName(metadata.getFullyQualifiedName());
+			umlClass.setDescription(metadata.getDescription());
+			umlClass.setProjectName(getProject().getLongName());
+			umlClass.setProjectVersion(getProject().getVersion());
 			
+			// semantic metadata
+			SemanticMetadata[] sem = new SemanticMetadata[metadata.getSemanticMetadataCollection().size()];
+			metadata.getSemanticMetadataCollection().toArray(sem);
+			umlClass.setSemanticMetadataCollection(new UMLClassSemanticMetadataCollection(sem));
+			
+			// UMLAttributes
+			UMLAttribute[] attributes = getUmlAttributes(metadata);
+			umlClass.setUmlAttributeCollection(new UMLClassUmlAttributeCollection(attributes));
+			classes[i] = umlClass;
+		}
+		return classes;
+	}
+	
+	
+	private UMLAttribute[] getUmlAttributes(UMLClassMetadata metadata) throws RemoteException, CodegenExtensionException {
+		UMLAttributeMetadata[] attribMetadata = getCadsrClient().findAttributesInClass(getProject(), metadata);
+		UMLAttribute[] attributes = new UMLAttribute[attribMetadata.length];		
+		for (int i = 0; i < attribMetadata.length; i++) {
+			UMLAttributeMetadata md = attribMetadata[i];
+			UMLAttribute attrib = new UMLAttribute();
+			attrib.setDescription(md.getDescription());
+			attrib.setName(md.getFullyQualifiedName());
+			/*
 			// attribute semantic metadata
-			SemanticMetadata[] attrSemantic = new SemanticMetadata[attribMetadata.getSemanticMetadataCollection().size()];
-			attribMetadata.getSemanticMetadataCollection().toArray(attrSemantic);
+			SemanticMetadata[] attrSemantic = new SemanticMetadata[md.getSemanticMetadataCollection().size()];
+			md.getSemanticMetadataCollection().toArray(attrSemantic);
 			attrib.setSemanticMetadataCollection(new UMLAttributeSemanticMetadataCollection(attrSemantic));
-			attributes[attrIndex] = attrib;
-			attrIndex++;
+			*/
+			attributes[i] = attrib;
 		}
 		return attributes;
 	}
@@ -266,5 +314,24 @@ public class MetadataBuilder {
 			classMetadata = getCadsrClient().findClassesInPackage(getProject(), getPackageMetadata().getName());
 		}
 		return classMetadata;
+	}
+	
+	
+	public static void main(String[] args) {
+		String url = args[0];
+		String proj = args[1];
+		String pack = args[2];
+		String[] targets = {"this will be ignored anyway"};
+		
+		MetadataBuilder builder = new MetadataBuilder(url, proj, pack, targets);
+		try {
+			DomainModel model = builder.getBigDomainModel();
+			FileWriter objectWriter = new FileWriter("domainModel.xml");
+			ObjectSerializer.serialize(objectWriter, model, DataServiceConstants.DOMAIN_MODEL_QNAME);
+			objectWriter.flush();
+			objectWriter.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 }
