@@ -1,4 +1,4 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="ClientConfigTemplate" %>
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.client" class="ClientConfigTemplate" %>
 <% gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation info = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument;
    String serviceName = info.getService().getName();
    String namespaceDomain = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.namespace.domain");

@@ -176,7 +176,7 @@
 			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/schema/Service/service.wsdl.xmljet" />
 			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/docs/api/doxyfile.txtjet" />
 			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/client/ServiceClient.javajet" />
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/client-config.wsdd.xmljet" />
+			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/client/client-config.wsdd.xmljet" />
 			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/common/ServiceI.javajet" />
 			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/ServiceImpl.javajet" />
 			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/ServiceConfiguration.javajet" />

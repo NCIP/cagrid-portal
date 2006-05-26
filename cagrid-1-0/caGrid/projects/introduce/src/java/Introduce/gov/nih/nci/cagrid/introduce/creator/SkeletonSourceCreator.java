@@ -5,7 +5,7 @@ import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
-import gov.nih.nci.cagrid.introduce.templates.ClientConfigTemplate;
+import gov.nih.nci.cagrid.introduce.templates.client.ClientConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.client.ServiceClientTemplate;
 import gov.nih.nci.cagrid.introduce.templates.common.ServiceITemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.ServiceImplTemplate;
@@ -77,7 +77,8 @@ public class SkeletonSourceCreator {
 		String clientConfigS = clientConfigT
 				.generate(new SpecificServiceInformation(info, service));
 		File clientConfigF = new File(srcDir.getAbsolutePath() + File.separator
-				+ "client-config.wsdd");
+				+ CommonTools.getPackageDir(service) + File.separator + "client"
+				+ File.separator +"client-config.wsdd");
 		FileWriter clientConfigFW = new FileWriter(clientConfigF);
 		clientConfigFW.write(clientConfigS);
 		clientConfigFW.close();

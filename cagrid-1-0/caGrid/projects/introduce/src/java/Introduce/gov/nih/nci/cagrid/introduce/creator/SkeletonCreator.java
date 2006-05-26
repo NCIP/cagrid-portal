@@ -6,20 +6,10 @@ import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionsType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
-import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
-import gov.nih.nci.cagrid.introduce.extension.CreationExtensionPostProcessor;
-import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
-import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
-import gov.nih.nci.cagrid.introduce.templates.ClientConfigTemplate;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.util.Iterator;
 import java.util.Properties;
-import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.xml.namespace.QName;
