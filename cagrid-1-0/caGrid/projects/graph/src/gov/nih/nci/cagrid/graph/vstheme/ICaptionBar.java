@@ -7,14 +7,25 @@
 
 package gov.nih.nci.cagrid.graph.vstheme;
 
-import java.awt.event.*;
-import java.awt.*;
-import javax.swing.*;
-import java.util.*;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.util.Vector;
+
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 
 public class ICaptionBar extends JComponent
 {
     protected String title = "";
+    protected ImageIcon icon = null;
     protected Color  focusColor = new Color(0, 64, 128);
     protected Color  noFocusColor = Color.gray;
 

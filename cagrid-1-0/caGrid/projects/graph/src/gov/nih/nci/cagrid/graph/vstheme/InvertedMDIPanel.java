@@ -4,9 +4,9 @@ import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JLayeredPane;
 
-public class InvertedMDIPanel {
+public class InvertedMDIPanel extends JComponent
+{
 	
 	public Vector pages;
 	public Vector pageIcons;
@@ -21,9 +21,11 @@ public class InvertedMDIPanel {
 		this.pageIcons.add(icon);
 		this.pageTitles.add(title);
 		
-		this.tabs.addTab(component, title);
+		this.tabs.addTab(title, icon);
 		
 		this.setActivePage(pages.size() - 1);
+		
+		
 		
 	}
 	
@@ -31,6 +33,7 @@ public class InvertedMDIPanel {
 	{
 		this.tabs.setActiveTab(i);
 		this.container.showComponent(i);
+
 	}
 	
 	public void setFocus()
@@ -38,14 +41,19 @@ public class InvertedMDIPanel {
 		
 	}
 
-	public void setPage(int i , JComponent component)
+	public void replacePage(int i , JComponent component, ImageIcon icon, String title)
 	{
-		
+		if(i < this.pages.size() && i >= 0)
+		{
+			this.pages.set(i, component);
+			this.pageIcons.set(i, icon);
+			this.pageTitles.set(i, title);
+		}
 	}
 	
 	public int getPageCount()
 	{
-		return 0;
+		return this.pages.size();
 	}
 	
 }
