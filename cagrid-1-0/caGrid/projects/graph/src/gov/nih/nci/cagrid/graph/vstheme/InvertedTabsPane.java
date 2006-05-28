@@ -15,6 +15,7 @@ public class InvertedTabsPane extends JComponent
 {
 	public Vector tabs;
 	public InvertedMDIPanel parentMDIPanel;
+	public int currentActiveTab;
 	
 	public static Color bgColor = new Color(247, 243, 200);
 	public static Color grayColor = new Color(212, 208, 200);
@@ -24,12 +25,18 @@ public class InvertedTabsPane extends JComponent
 	{
 		IInvertedTab tab = new IInvertedTab(tabs.size(), icon , s, this, this.parentMDIPanel);
 		this.tabs.add(tab);
+		this.setActiveTab(tabs.size());
 		
 	}
 	
 	public void setActiveTab(int i)
 	{
-		
+		if(i < this.tabs.size() && i >= 0)
+		{
+			IInvertedTab tab = (IInvertedTab) this.tabs.get(i);
+			
+			tab.activate();
+		}
 	}
 	
 	public void paint(Graphics g)
@@ -55,9 +62,12 @@ class InvertedTabsPaneComponentListener extends ComponentAdapter
 	{
 		InvertedTabsPane s = (InvertedTabsPane) e.getSource();
 		
+		int lastX = 2;
+		
 		for(int k = 0; k < s.tabs.size(); k++)
 		{
-			
+			IInvertedTab tab = (IInvertedTab) s.tabs.get(k);
+			// place according to preferred size
 		}
 	}
 }

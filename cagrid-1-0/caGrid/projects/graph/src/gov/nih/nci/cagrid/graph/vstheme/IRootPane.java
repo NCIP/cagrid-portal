@@ -52,7 +52,7 @@ public class IRootPane extends JComponent
         this.add(contentPane);
 
         this.addComponentListener(new IRootPaneComponentListener());
-
+        
 
 
     }
