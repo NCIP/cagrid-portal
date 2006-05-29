@@ -114,7 +114,8 @@ class IInvertedTabMouseListener extends MouseAdapter
 		
 		IInvertedTab tab = (IInvertedTab) e.getSource();
 		
-		tab.parentTabsPane.setActiveTab(tab.index);
+		tab.parentTabsPane.tabClicked(tab.index);
 		
+	
 	}
 }

@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.graph.uml;
 
-import gov.nih.nci.cagrid.graph.vstheme.InvertedTabsPane;
+import gov.nih.nci.cagrid.graph.domainmodelapplication.DomainModelOutlinePanel;
 
 import java.util.Random;
 
@@ -57,31 +57,25 @@ public class Main {
 		
 		diagram.performLayout();
 		diagram.refresh();
-
-		
 		diagram.repositionLabelsAndArrowHeads();
 		
-		InvertedTabsPane p = new InvertedTabsPane();
-		p.addTab("hey", null);
-		p.addTab("hello worldddddddddddddddd", null);
-		p.addTab("hi there", null);
-		p.addTab("hi there", null);
-		p.addTab("hi there", null);
+
 		
 		
 		
+		DomainModelOutlinePanel p = new DomainModelOutlinePanel();
+		
+
 
 		JFrame f = new JFrame();
 		f.getContentPane().add(p);
 		f.setBounds(10, 100, 900, 600);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.setUndecorated(true);
+		
 		f.setVisible(true);
 		
-		p.setActiveTab(1);
-		Thread.sleep(1000);
-		p.setActiveTab(0);
-		Thread.sleep(1000);
-		p.setActiveTab(2);
+
 	
 	}
 }

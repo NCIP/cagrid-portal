@@ -23,6 +23,18 @@ public class InvertedTabsPane extends JLayeredPane
 	public static int spacerHeight = 2;
 	public static int tabHeight = 21;
 	
+	
+	public InvertedTabsPane()
+	{
+		
+		
+	}
+	
+	public InvertedTabsPane(InvertedMDIPanel parent)
+	{
+		this.parentMDIPanel = parent;
+	}
+	
 	public void addTab(String s, ImageIcon icon)
 	{
 		
@@ -98,6 +110,11 @@ public class InvertedTabsPane extends JLayeredPane
 		
 		resizeTabs();
 	
+	}
+	
+	public void tabClicked(int i)
+	{
+		this.parentMDIPanel.setActivePage(i);
 	}
 	
 	public int getTotalTabsPreferredWidth()

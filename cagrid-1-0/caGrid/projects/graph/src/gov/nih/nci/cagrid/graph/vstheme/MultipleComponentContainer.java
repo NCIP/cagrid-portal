@@ -50,5 +50,7 @@ public class MultipleComponentContainer extends JLayeredPane
 			currentShownComponent = i;			
 		}
 		
+		this.validate();
+		
 	}
 }
