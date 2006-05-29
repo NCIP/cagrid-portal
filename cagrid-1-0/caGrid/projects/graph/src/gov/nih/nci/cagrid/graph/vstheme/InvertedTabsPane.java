@@ -1,47 +1,130 @@
 package gov.nih.nci.cagrid.graph.vstheme;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
+import javax.swing.JLayeredPane;
 
 
 
-public class InvertedTabsPane extends JComponent
+public class InvertedTabsPane extends JLayeredPane
 {
-	public Vector tabs;
+	public Vector tabs = new Vector();
 	public InvertedMDIPanel parentMDIPanel;
-	public int currentActiveTab;
+	public int currentActiveTab = -1;
 	
-	public static Color bgColor = new Color(247, 243, 200);
+	public static Color bgColor = new Color(247, 243, 233);
 	public static Color grayColor = new Color(212, 208, 200);
-	public static int spacerHeight = 3;
+	public static int spacerHeight = 2;
+	public static int tabHeight = 21;
 	
 	public void addTab(String s, ImageIcon icon)
 	{
-		IInvertedTab tab = new IInvertedTab(tabs.size(), icon , s, this, this.parentMDIPanel);
+		
+		IInvertedTab tab = new IInvertedTab(tabs.size(), icon , s, this);
 		this.tabs.add(tab);
+		this.add(tab);
 		this.setActiveTab(tabs.size());
+		
+		this.addComponentListener(new InvertedTabsPaneComponentListener());
 		
 	}
 	
 	public void setActiveTab(int i)
 	{
+		if(currentActiveTab >= 0 && currentActiveTab < this.tabs.size())
+		{
+			IInvertedTab tab = (IInvertedTab) this.tabs.get(currentActiveTab);
+			this.setLayer(tab, JLayeredPane.DEFAULT_LAYER.intValue());
+			tab.deactivate();
+			
+			currentActiveTab = -1;
+		}
+		
 		if(i < this.tabs.size() && i >= 0)
 		{
 			IInvertedTab tab = (IInvertedTab) this.tabs.get(i);
 			
+			this.setLayer(tab, JLayeredPane.MODAL_LAYER.intValue());
 			tab.activate();
+			
+			currentActiveTab = i;
 		}
+		
+		resizeTabs();
+	
+	}
+	
+	public int getTotalTabsPreferredWidth()
+	{
+		int sum = 0;
+		
+		for (int k = 0; k < this.tabs.size(); k++)
+		{
+			IInvertedTab tab = (IInvertedTab) this.tabs.get(k);
+			
+			sum += tab.getPreferredWidth();
+		}
+		
+		return sum;
+	}
+	
+	public void resizeTabs()
+	{
+		int lastX = 4;
+		
+		if(getTotalTabsPreferredWidth() >= getWidth())
+		{
+			int width = getWidth() / tabs.size();
+			
+			for(int k = 0; k < tabs.size(); k++)
+			{
+				
+				IInvertedTab tab = (IInvertedTab) tabs.get(k);
+				
+				if(tab.active)
+				{
+					tab.setBounds(lastX-1, InvertedTabsPane.spacerHeight, width+1, InvertedTabsPane.tabHeight);
+				}
+				else
+				{
+					tab.setBounds(lastX, InvertedTabsPane.spacerHeight+1, width, InvertedTabsPane.tabHeight);
+				}
+				
+				lastX += width;
+			}
+		}
+		else
+		{	
+			for(int k = 0; k < tabs.size(); k++)
+			{
+				IInvertedTab tab = (IInvertedTab) tabs.get(k);
+				int width = tab.getPreferredWidth();
+				
+				if(tab.active)
+				{
+					tab.setBounds(lastX-1, InvertedTabsPane.spacerHeight, width+1, InvertedTabsPane.tabHeight);
+				}
+				else
+				{
+					tab.setBounds(lastX, InvertedTabsPane.spacerHeight+1, width, InvertedTabsPane.tabHeight);
+				}
+				
+				lastX += width;
+			}			
+		}
+		
+		validate();		
 	}
 	
 	public void paint(Graphics g)
 	{
-		super.paint(g);
+		
 		
 		g.setColor(bgColor);
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
@@ -52,6 +135,7 @@ public class InvertedTabsPane extends JComponent
 		g.setColor(Color.black);
 		g.drawLine(0, spacerHeight, this.getWidth(), spacerHeight);
 		
+		super.paint(g);
 	}
 	
 }
@@ -62,13 +146,8 @@ class InvertedTabsPaneComponentListener extends ComponentAdapter
 	{
 		InvertedTabsPane s = (InvertedTabsPane) e.getSource();
 		
-		int lastX = 2;
-		
-		for(int k = 0; k < s.tabs.size(); k++)
-		{
-			IInvertedTab tab = (IInvertedTab) s.tabs.get(k);
-			// place according to preferred size
-		}
+		s.resizeTabs();
+
 	}
 }
  

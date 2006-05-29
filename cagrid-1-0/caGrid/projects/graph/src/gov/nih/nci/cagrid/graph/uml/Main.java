@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.graph.uml;
 
+import gov.nih.nci.cagrid.graph.vstheme.InvertedTabsPane;
+
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -10,7 +12,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 public class Main {
 
-	public static void main(String args[]) {
+	public static void main(String args[]) throws InterruptedException {
 
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -58,12 +60,26 @@ public class Main {
 
 		
 		diagram.repositionLabelsAndArrowHeads();
+		
+		InvertedTabsPane p = new InvertedTabsPane();
+		p.addTab("hey", null);
+		p.addTab("hello worldddddddddddddddd", null);
+		p.addTab("hi there", null);
+
+		
+		
+		
 
 		JFrame f = new JFrame();
-		f.getContentPane().add(diagram);
+		f.getContentPane().add(p);
 		f.setBounds(10, 100, 900, 600);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
 		
+		p.setActiveTab(1);
+		Thread.sleep(1000);
+		p.setActiveTab(0);
+		Thread.sleep(1000);
+		p.setActiveTab(2);
 	}
 }
