@@ -35,6 +35,46 @@ public class InvertedTabsPane extends JLayeredPane
 		
 	}
 	
+	public void removeTab(int i)
+	{
+		if(i >= 0 && i < this.tabs.size())
+		{
+			IInvertedTab tab = (IInvertedTab) this.tabs.get(i);
+			this.tabs.remove(i);
+			this.remove(tab);
+			
+			resyncTabIndices();
+			this.resizeTabs();
+			this.repaint();
+			deactivateAllTabs();
+			setActiveTab(0);
+			
+			
+		}
+	}
+	
+	protected void deactivateAllTabs()
+	{
+		for(int k = 0;  k < this.tabs.size(); k ++)
+		{
+			IInvertedTab t = (IInvertedTab)this.tabs.get(k);
+			t.active = false;
+			t.repaint();
+		}
+		
+		this.currentActiveTab = -1;
+		
+	}
+	
+	public void resyncTabIndices()
+	{
+		for(int k = 0; k < this.tabs.size(); k++)
+		{
+			IInvertedTab tab = (IInvertedTab) this.tabs.get(k);
+			
+			tab.index = k;
+		}
+	}
 	public void setActiveTab(int i)
 	{
 		if(currentActiveTab >= 0 && currentActiveTab < this.tabs.size())
@@ -81,6 +121,7 @@ public class InvertedTabsPane extends JLayeredPane
 		if(getTotalTabsPreferredWidth() >= getWidth())
 		{
 			int width = getWidth() / tabs.size();
+			width--;
 			
 			for(int k = 0; k < tabs.size(); k++)
 			{

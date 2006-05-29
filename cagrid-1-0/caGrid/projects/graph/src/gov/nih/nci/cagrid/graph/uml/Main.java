@@ -65,7 +65,8 @@ public class Main {
 		p.addTab("hey", null);
 		p.addTab("hello worldddddddddddddddd", null);
 		p.addTab("hi there", null);
-
+		p.addTab("hi there", null);
+		p.addTab("hi there", null);
 		
 		
 		
@@ -81,5 +82,6 @@ public class Main {
 		p.setActiveTab(0);
 		Thread.sleep(1000);
 		p.setActiveTab(2);
+	
 	}
 }
