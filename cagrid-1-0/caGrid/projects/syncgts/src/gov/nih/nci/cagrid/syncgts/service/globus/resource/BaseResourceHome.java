@@ -19,8 +19,6 @@ public class BaseResourceHome extends SingletonResourceHome implements Initializ
 
 	private String syncDescription;
 	
-	private boolean performFirstSync;
-	
 	public Resource findSingleton() {
 		logger.info("Creating a single resource.");
 		try {
@@ -33,14 +31,7 @@ public class BaseResourceHome extends SingletonResourceHome implements Initializ
 		}
 	}
 
-   	public boolean shouldPerformFirstSync() {
-		return performFirstSync;
-	}
 
-
-	public void setPerformFirstSync(boolean performRegistration) {
-		this.performFirstSync = performRegistration;
-	}
 
 	public Resource find(ResourceKey key) throws ResourceException {
 		BaseResource resource = (BaseResource) super.find(key);

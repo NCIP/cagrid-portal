@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.syncgts.core.SyncGTSDefault;
 import gov.nih.nci.cagrid.syncgts.service.globus.ServiceConfiguration;
 import gov.nih.nci.cagrid.syncgts.service.globus.resource.BaseResourceHome;
 
+import java.io.File;
 import java.rmi.RemoteException;
 
 import javax.naming.InitialContext;
@@ -13,6 +14,7 @@ import javax.naming.InitialContext;
 import org.apache.axis.MessageContext;
 import org.globus.wsrf.Constants;
 import org.globus.wsrf.ResourceContext;
+import org.globus.wsrf.config.ContainerConfig;
 
 
 /**
@@ -27,11 +29,14 @@ public class SyncGTSImpl {
 	public SyncGTSImpl() throws RemoteException {
 		try {
 			BaseResourceHome home = (BaseResourceHome) ResourceContext.getResourceContext().getResourceHome();
-			SyncGTSDefault.setServiceSyncDescriptionLocation(home.getSyncDescription());
+			SyncGTSDefault.setServiceSyncDescriptionLocation(ContainerConfig.getBaseDirectory() + File.separator
+				+ home.getSyncDescription());
 			SyncDescription description = SyncGTSDefault.getSyncDescription();
 			try {
+				System.out.println(getConfiguration().getPerformFirstSync());
 				SyncGTS sync = SyncGTS.getInstance();
-				if (home.shouldPerformFirstSync()) {
+				if ((getConfiguration().getPerformFirstSync() != null)
+					&& (getConfiguration().getPerformFirstSync().equalsIgnoreCase("true"))) {
 					sync.syncOnce(description);
 				}
 				sync.syncAndResyncInBackground(description, true);

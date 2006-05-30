@@ -7,13 +7,9 @@
 					<name>factory</name>
 					<value>org.globus.wsrf.jndi.BeanFactory</value>
 				</parameter>
-                	<parameter>
+				<parameter>
 					<name>syncDescription</name>
 					<value>ETC-PATH/sync-description.xml</value>
-				</parameter>
-				<parameter>
-					<name>performFirstSync</name>
-					<value>true</value>
 				</parameter>
 			</resourceParams>
 		</resource>
@@ -27,7 +23,7 @@
 				<parameter>
 					<name>performRegistration</name>
 					<!-- Set this to false to skip ServiceGroup registration -->
-					<value>false</value>
+					<value>true</value>
 				</parameter>
 				<parameter>
 					<name>registrationTemplateFile</name>
@@ -37,13 +33,17 @@
 			</resourceParams>
 		</resource>
 		
-		<resource name="serviceconfiguration" type="gov.nih.nci.cagrid.syncgts.syncgts.service.globus.ServiceConfiguration">
+		<resource name="serviceconfiguration" type="gov.nih.nci.cagrid.syncgts.service.globus.ServiceConfiguration">
 			<resourceParams>
 				<parameter>
 					<name>factory</name>
 					<value>org.globus.wsrf.jndi.BeanFactory</value>
 				</parameter>
-						
+				
+					<parameter>
+				<name>performFirstSync</name>
+					<value>@performFirstSync@</value>
+				</parameter>		
 			</resourceParams>
 		</resource>
 	</service>

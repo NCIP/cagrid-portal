@@ -30,5 +30,7 @@
   </ns3:Service>
  </ns3:Services>
  <ns6:Extensions xsi:type="ns6:ExtensionsType" xmlns:ns6="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
- <ns7:ServiceProperties xmlns:ns7="gme://gov.nih.nci.cagrid.introduce/1/Property"/>
+ <ns7:ServiceProperties xmlns:ns7="gme://gov.nih.nci.cagrid.introduce/1/Property">
+  <ns7:Property key="performFirstSync" value="true"/>
+ </ns7:ServiceProperties>
 </ns1:ServiceSkeleton>

@@ -1,6 +1,10 @@
 package gov.nih.nci.cagrid.syncgts.client;
 
 
+import gov.nih.nci.cagrid.syncgts.common.SyncGTSI;
+import gov.nih.nci.cagrid.syncgts.stubs.SyncGTSPortType;
+import gov.nih.nci.cagrid.syncgts.stubs.service.SyncGTSServiceAddressingLocator;
+
 import java.io.InputStream;
 import java.rmi.RemoteException;
 
@@ -11,12 +15,7 @@ import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI.MalformedURIException;
 import org.apache.axis.utils.ClassUtils;
-
 import org.globus.gsi.GlobusCredential;
-
-import gov.nih.nci.cagrid.syncgts.stubs.SyncGTSPortType;
-import gov.nih.nci.cagrid.syncgts.stubs.service.SyncGTSServiceAddressingLocator;
-import gov.nih.nci.cagrid.syncgts.common.SyncGTSI;
 
 
 /**

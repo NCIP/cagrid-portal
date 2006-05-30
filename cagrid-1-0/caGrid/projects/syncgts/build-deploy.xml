@@ -50,7 +50,7 @@
 	</target>
 	
 	<!-- deploy  a gar to tomcat -->
-	<target name="deployTomcat" depends="addFilters, createDeploymentGar" description="Deploys to CATALINA_HOME (to set the services properties file set the ant command line variable -Dservice.properties.file)">
+	<target name="deployTomcat" depends="addFilters, createDeploymentGar,deployTrustedCerts" description="Deploys to CATALINA_HOME (to set the services properties file set the ant command line variable -Dservice.properties.file)">
 		<echo message="Deploying service under Tomcat at ${tomcat.dir}" />
 		
 		<!-- Configure Tomcat destination for skeletons -->
@@ -149,7 +149,7 @@
 	
 	
 	<!-- deploy a gar to globus -->
-	<target name="deployGlobus" depends="checkGlobus, checkTomcat, createDeploymentGar" description="Deploys a gar to GLOBUS_LOCATION (to set the services properties file set the ant command line variable -Dservice.properties.file)">
+	<target name="deployGlobus" depends="addFilters,checkGlobus, checkTomcat, createDeploymentGar,deployTrustedCerts" description="Deploys a gar to GLOBUS_LOCATION (to set the services properties file set the ant command line variable -Dservice.properties.file)">
 		<echo message="Deploying server to Globus Container" />
 		
 		<java classname="org.globus.bootstrap.AntBootstrap" fork="yes" failonerror="true">

@@ -8,6 +8,17 @@ package gov.nih.nci.cagrid.syncgts.service.globus;
  */
 public class ServiceConfiguration {
 	
+	private String performFirstSync;
+	
+
+	
+	public String getPerformFirstSync() {
+		return performFirstSync;
+	}
+	
+	public void setPerformFirstSync(String performFirstSync) {
+		this.performFirstSync = performFirstSync;
+	}
 
 	
 }
