@@ -1,0 +1,1039 @@
+<ns1:DomainModel xsi:type="ns1:DomainModel" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <ns1:projectDescription xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE Description</ns1:projectDescription>
+ <ns1:projectShortName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns1:projectShortName>
+ <ns1:projectLongName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns1:projectLongName>
+ <ns1:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns1:projectVersion>
+ <ns1:exposedUMLAssociationCollection/>
+ <ns1:exposedUMLClassCollection>
+  <ns2:UMLClass xsi:type="ns2:UMLClass" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns2:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns2:projectName>
+   <ns2:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns2:projectVersion>
+   <ns2:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Tissue</ns2:className>
+   <ns2:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns2:packageName>
+   <ns2:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">A group of similar cells united to perform a specific function.</ns2:description>
+   <ns2:umlAttributeCollection>
+    <ns2:UMLAttribute xsi:type="ns2:UMLAttribute">
+     <ns2:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Tissue.Tissue:sex</ns2:name>
+     <ns2:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The sex of the tissue from.</ns2:description>
+     <ns2:semanticMetadataCollection xsi:nil="true"/>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute xsi:type="ns2:UMLAttribute">
+     <ns2:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Tissue.Tissue:cellLine</ns2:name>
+     <ns2:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The cell line of the tissue.</ns2:description>
+     <ns2:semanticMetadataCollection xsi:nil="true"/>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute xsi:type="ns2:UMLAttribute">
+     <ns2:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Tissue.Tissue:supplier</ns2:name>
+     <ns2:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The supplier of the tissue.</ns2:description>
+     <ns2:semanticMetadataCollection xsi:nil="true"/>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute xsi:type="ns2:UMLAttribute">
+     <ns2:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Tissue.Tissue:type</ns2:name>
+     <ns2:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The type of the tissue.</ns2:description>
+     <ns2:semanticMetadataCollection xsi:nil="true"/>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute xsi:type="ns2:UMLAttribute">
+     <ns2:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Tissue.Tissue:histology</ns2:name>
+     <ns2:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">Th ehistology associated with the tissue.</ns2:description>
+     <ns2:semanticMetadataCollection xsi:nil="true"/>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute xsi:type="ns2:UMLAttribute">
+     <ns2:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Tissue.Tissue:cellType</ns2:name>
+     <ns2:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The cell type of the tissue.</ns2:description>
+     <ns2:semanticMetadataCollection xsi:nil="true"/>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute xsi:type="ns2:UMLAttribute">
+     <ns2:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Tissue.Tissue:developmentalStage</ns2:name>
+     <ns2:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The developmental stag of the tissue.</ns2:description>
+     <ns2:semanticMetadataCollection xsi:nil="true"/>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute xsi:type="ns2:UMLAttribute">
+     <ns2:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Tissue.Tissue:description</ns2:name>
+     <ns2:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The description for the tissue object.</ns2:description>
+     <ns2:semanticMetadataCollection xsi:nil="true"/>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute xsi:type="ns2:UMLAttribute">
+     <ns2:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Tissue.Tissue:organ</ns2:name>
+     <ns2:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The organ associated with the tissue.</ns2:description>
+     <ns2:semanticMetadataCollection xsi:nil="true"/>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute xsi:type="ns2:UMLAttribute">
+     <ns2:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Tissue.Tissue:name</ns2:name>
+     <ns2:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The name of the tissue.</ns2:description>
+     <ns2:semanticMetadataCollection xsi:nil="true"/>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute xsi:type="ns2:UMLAttribute">
+     <ns2:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Tissue.Tissue:id</ns2:name>
+     <ns2:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns2:semanticMetadataCollection xsi:nil="true"/>
+    </ns2:UMLAttribute>
+   </ns2:umlAttributeCollection>
+   <ns2:semanticMetadataCollection/>
+  </ns2:UMLClass>
+  <ns3:UMLClass xsi:type="ns3:UMLClass" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns3:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns3:projectName>
+   <ns3:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns3:projectVersion>
+   <ns3:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.SNP</ns3:className>
+   <ns3:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns3:packageName>
+   <ns3:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">An object representing a Single Nucleotide Polymorphism; provides access to the clones and the trace files from which it was identified, the two most common substitutions at that position, the offset of the SNP in the parent sequence, and a confidence sco</ns3:description>
+   <ns3:umlAttributeCollection>
+    <ns3:UMLAttribute xsi:type="ns3:UMLAttribute">
+     <ns3:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.SNP.SNP:alleleB</ns3:name>
+     <ns3:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns3:semanticMetadataCollection xsi:nil="true"/>
+    </ns3:UMLAttribute>
+    <ns3:UMLAttribute xsi:type="ns3:UMLAttribute">
+     <ns3:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.SNP.SNP:alleleA</ns3:name>
+     <ns3:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns3:semanticMetadataCollection xsi:nil="true"/>
+    </ns3:UMLAttribute>
+    <ns3:UMLAttribute xsi:type="ns3:UMLAttribute">
+     <ns3:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.SNP.SNP:validationStatus</ns3:name>
+     <ns3:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns3:semanticMetadataCollection xsi:nil="true"/>
+    </ns3:UMLAttribute>
+    <ns3:UMLAttribute xsi:type="ns3:UMLAttribute">
+     <ns3:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.SNP.SNP:DBSNPID</ns3:name>
+     <ns3:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns3:semanticMetadataCollection xsi:nil="true"/>
+    </ns3:UMLAttribute>
+    <ns3:UMLAttribute xsi:type="ns3:UMLAttribute">
+     <ns3:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.SNP.SNP:id</ns3:name>
+     <ns3:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns3:semanticMetadataCollection xsi:nil="true"/>
+    </ns3:UMLAttribute>
+   </ns3:umlAttributeCollection>
+   <ns3:semanticMetadataCollection/>
+  </ns3:UMLClass>
+  <ns4:UMLClass xsi:type="ns4:UMLClass" xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns4:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns4:projectName>
+   <ns4:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns4:projectVersion>
+   <ns4:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.GeneAlias</ns4:className>
+   <ns4:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns4:packageName>
+   <ns4:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">This object describes the gene alias.</ns4:description>
+   <ns4:umlAttributeCollection>
+    <ns4:UMLAttribute xsi:type="ns4:UMLAttribute">
+     <ns4:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.GeneAlias.GeneAlias:type</ns4:name>
+     <ns4:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The gene alias type.</ns4:description>
+     <ns4:semanticMetadataCollection xsi:nil="true"/>
+    </ns4:UMLAttribute>
+    <ns4:UMLAttribute xsi:type="ns4:UMLAttribute">
+     <ns4:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.GeneAlias.GeneAlias:name</ns4:name>
+     <ns4:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The gene alias name.</ns4:description>
+     <ns4:semanticMetadataCollection xsi:nil="true"/>
+    </ns4:UMLAttribute>
+    <ns4:UMLAttribute xsi:type="ns4:UMLAttribute">
+     <ns4:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.GeneAlias.GeneAlias:id</ns4:name>
+     <ns4:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns4:semanticMetadataCollection xsi:nil="true"/>
+    </ns4:UMLAttribute>
+   </ns4:umlAttributeCollection>
+   <ns4:semanticMetadataCollection/>
+  </ns4:UMLClass>
+  <ns5:UMLClass xsi:type="ns5:UMLClass" xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns5:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns5:projectName>
+   <ns5:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns5:projectVersion>
+   <ns5:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Chromosome</ns5:className>
+   <ns5:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns5:packageName>
+   <ns5:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">An object representing a specific chromosome for a specific taxon; provides access to all known genes contained in the chromosome and to the taxon.</ns5:description>
+   <ns5:umlAttributeCollection>
+    <ns5:UMLAttribute xsi:type="ns5:UMLAttribute">
+     <ns5:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Chromosome.Chromosome:number</ns5:name>
+     <ns5:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The name of the chromosome object.</ns5:description>
+     <ns5:semanticMetadataCollection xsi:nil="true"/>
+    </ns5:UMLAttribute>
+   </ns5:umlAttributeCollection>
+   <ns5:semanticMetadataCollection/>
+  </ns5:UMLClass>
+  <ns6:UMLClass xsi:type="ns6:UMLClass" xmlns:ns6="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns6:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns6:projectName>
+   <ns6:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns6:projectVersion>
+   <ns6:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Clone</ns6:className>
+   <ns6:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns6:packageName>
+   <ns6:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">An object used to hold information pertaining to I.M.A.G.E. clones; provides access to sequence information, associated trace files, and the clone's library.</ns6:description>
+   <ns6:umlAttributeCollection>
+    <ns6:UMLAttribute xsi:type="ns6:UMLAttribute">
+     <ns6:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Clone.Clone:insertSize</ns6:name>
+     <ns6:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The insert size of the clone.</ns6:description>
+     <ns6:semanticMetadataCollection xsi:nil="true"/>
+    </ns6:UMLAttribute>
+    <ns6:UMLAttribute xsi:type="ns6:UMLAttribute">
+     <ns6:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Clone.Clone:name</ns6:name>
+     <ns6:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The name of the clone.</ns6:description>
+     <ns6:semanticMetadataCollection xsi:nil="true"/>
+    </ns6:UMLAttribute>
+    <ns6:UMLAttribute xsi:type="ns6:UMLAttribute">
+     <ns6:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Clone.Clone:type</ns6:name>
+     <ns6:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns6:semanticMetadataCollection xsi:nil="true"/>
+    </ns6:UMLAttribute>
+    <ns6:UMLAttribute xsi:type="ns6:UMLAttribute">
+     <ns6:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Clone.Clone:id</ns6:name>
+     <ns6:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns6:semanticMetadataCollection xsi:nil="true"/>
+    </ns6:UMLAttribute>
+   </ns6:umlAttributeCollection>
+   <ns6:semanticMetadataCollection/>
+  </ns6:UMLClass>
+  <ns7:UMLClass xsi:type="ns7:UMLClass" xmlns:ns7="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns7:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns7:projectName>
+   <ns7:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns7:projectVersion>
+   <ns7:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Taxon</ns7:className>
+   <ns7:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns7:packageName>
+   <ns7:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">An object representing the various names (scientific, common, abbreviated, etc.) for a species associated with a specific instance of a Gene, Chromosome, Pathway, Protein, or Tissue.</ns7:description>
+   <ns7:umlAttributeCollection>
+    <ns7:UMLAttribute xsi:type="ns7:UMLAttribute">
+     <ns7:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Taxon.Taxon:scientificName</ns7:name>
+     <ns7:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The scientific name of the taxon.</ns7:description>
+     <ns7:semanticMetadataCollection xsi:nil="true"/>
+    </ns7:UMLAttribute>
+    <ns7:UMLAttribute xsi:type="ns7:UMLAttribute">
+     <ns7:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Taxon.Taxon:ethnicityStrain</ns7:name>
+     <ns7:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The ethinicity strain of the taxon.</ns7:description>
+     <ns7:semanticMetadataCollection xsi:nil="true"/>
+    </ns7:UMLAttribute>
+    <ns7:UMLAttribute xsi:type="ns7:UMLAttribute">
+     <ns7:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Taxon.Taxon:abbreviation</ns7:name>
+     <ns7:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The abbreviation of the taxon.</ns7:description>
+     <ns7:semanticMetadataCollection xsi:nil="true"/>
+    </ns7:UMLAttribute>
+    <ns7:UMLAttribute xsi:type="ns7:UMLAttribute">
+     <ns7:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Taxon.Taxon:commonName</ns7:name>
+     <ns7:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The common name of the taxon.</ns7:description>
+     <ns7:semanticMetadataCollection xsi:nil="true"/>
+    </ns7:UMLAttribute>
+   </ns7:umlAttributeCollection>
+   <ns7:semanticMetadataCollection/>
+  </ns7:UMLClass>
+  <ns8:UMLClass xsi:type="ns8:UMLClass" xmlns:ns8="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns8:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns8:projectName>
+   <ns8:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns8:projectVersion>
+   <ns8:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Target</ns8:className>
+   <ns8:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns8:packageName>
+   <ns8:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">A gene thought to be at the root of a disease etiology, and which is targeted for therapeutic intervention in a clinical trial.</ns8:description>
+   <ns8:umlAttributeCollection>
+    <ns8:UMLAttribute xsi:type="ns8:UMLAttribute">
+     <ns8:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Target.Target:type</ns8:name>
+     <ns8:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The type of the target.</ns8:description>
+     <ns8:semanticMetadataCollection xsi:nil="true"/>
+    </ns8:UMLAttribute>
+    <ns8:UMLAttribute xsi:type="ns8:UMLAttribute">
+     <ns8:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Target.Target:name</ns8:name>
+     <ns8:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The name of the target.</ns8:description>
+     <ns8:semanticMetadataCollection xsi:nil="true"/>
+    </ns8:UMLAttribute>
+    <ns8:UMLAttribute xsi:type="ns8:UMLAttribute">
+     <ns8:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Target.Target:id</ns8:name>
+     <ns8:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns8:semanticMetadataCollection xsi:nil="true"/>
+    </ns8:UMLAttribute>
+   </ns8:umlAttributeCollection>
+   <ns8:semanticMetadataCollection/>
+  </ns8:UMLClass>
+  <ns9:UMLClass xsi:type="ns9:UMLClass" xmlns:ns9="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns9:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns9:projectName>
+   <ns9:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns9:projectVersion>
+   <ns9:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.NucleicAcidSequence</ns9:className>
+   <ns9:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns9:packageName>
+   <ns9:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">An object representation of a gene sequence; provides access to the clones from which it was derived, the ASCII representation of the residues it contains, and the sequence ID.</ns9:description>
+   <ns9:umlAttributeCollection>
+    <ns9:UMLAttribute xsi:type="ns9:UMLAttribute">
+     <ns9:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.NucleicAcidSequence.NucleicAcidSequence:accessionNumber</ns9:name>
+     <ns9:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The accession number of the sequence.</ns9:description>
+     <ns9:semanticMetadataCollection xsi:nil="true"/>
+    </ns9:UMLAttribute>
+    <ns9:UMLAttribute xsi:type="ns9:UMLAttribute">
+     <ns9:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.NucleicAcidSequence.NucleicAcidSequence:accessionNumberVersion</ns9:name>
+     <ns9:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The version of the sequence's accession number.</ns9:description>
+     <ns9:semanticMetadataCollection xsi:nil="true"/>
+    </ns9:UMLAttribute>
+    <ns9:UMLAttribute xsi:type="ns9:UMLAttribute">
+     <ns9:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.NucleicAcidSequence.NucleicAcidSequence:type</ns9:name>
+     <ns9:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The numeric code for this Sequence's type: 1= EST, 2 = MRNA.</ns9:description>
+     <ns9:semanticMetadataCollection xsi:nil="true"/>
+    </ns9:UMLAttribute>
+    <ns9:UMLAttribute xsi:type="ns9:UMLAttribute">
+     <ns9:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.NucleicAcidSequence.NucleicAcidSequence:length</ns9:name>
+     <ns9:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns9:semanticMetadataCollection xsi:nil="true"/>
+    </ns9:UMLAttribute>
+    <ns9:UMLAttribute xsi:type="ns9:UMLAttribute">
+     <ns9:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.NucleicAcidSequence.NucleicAcidSequence:value</ns9:name>
+     <ns9:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns9:semanticMetadataCollection xsi:nil="true"/>
+    </ns9:UMLAttribute>
+    <ns9:UMLAttribute xsi:type="ns9:UMLAttribute">
+     <ns9:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.NucleicAcidSequence.NucleicAcidSequence:id</ns9:name>
+     <ns9:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns9:semanticMetadataCollection xsi:nil="true"/>
+    </ns9:UMLAttribute>
+   </ns9:umlAttributeCollection>
+   <ns9:semanticMetadataCollection/>
+  </ns9:UMLClass>
+  <ns10:UMLClass xsi:type="ns10:UMLClass" xmlns:ns10="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns10:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns10:projectName>
+   <ns10:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns10:projectVersion>
+   <ns10:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.ProtocolAssociation</ns10:className>
+   <ns10:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns10:packageName>
+   <ns10:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">An association class relating between Clinical Trial Protocols to Diseases.</ns10:description>
+   <ns10:umlAttributeCollection>
+    <ns10:UMLAttribute xsi:type="ns10:UMLAttribute">
+     <ns10:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.ProtocolAssociation.ProtocolAssociation:diseaseSubCategory</ns10:name>
+     <ns10:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">Describes the sub-category of the disease.</ns10:description>
+     <ns10:semanticMetadataCollection xsi:nil="true"/>
+    </ns10:UMLAttribute>
+    <ns10:UMLAttribute xsi:type="ns10:UMLAttribute">
+     <ns10:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.ProtocolAssociation.ProtocolAssociation:CTEPNAME</ns10:name>
+     <ns10:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">Describes the CTEP name of the protocol object.</ns10:description>
+     <ns10:semanticMetadataCollection xsi:nil="true"/>
+    </ns10:UMLAttribute>
+    <ns10:UMLAttribute xsi:type="ns10:UMLAttribute">
+     <ns10:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.ProtocolAssociation.ProtocolAssociation:IMTCODE</ns10:name>
+     <ns10:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">Descibes the IMT code of the protocol object.</ns10:description>
+     <ns10:semanticMetadataCollection xsi:nil="true"/>
+    </ns10:UMLAttribute>
+    <ns10:UMLAttribute xsi:type="ns10:UMLAttribute">
+     <ns10:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.ProtocolAssociation.ProtocolAssociation:diseaseCategory</ns10:name>
+     <ns10:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">Describes the category of the disease.</ns10:description>
+     <ns10:semanticMetadataCollection xsi:nil="true"/>
+    </ns10:UMLAttribute>
+    <ns10:UMLAttribute xsi:type="ns10:UMLAttribute">
+     <ns10:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.ProtocolAssociation.ProtocolAssociation:id</ns10:name>
+     <ns10:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns10:semanticMetadataCollection xsi:nil="true"/>
+    </ns10:UMLAttribute>
+   </ns10:umlAttributeCollection>
+   <ns10:semanticMetadataCollection/>
+  </ns10:UMLClass>
+  <ns11:UMLClass xsi:type="ns11:UMLClass" xmlns:ns11="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns11:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns11:projectName>
+   <ns11:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns11:projectVersion>
+   <ns11:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Protocol</ns11:className>
+   <ns11:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns11:packageName>
+   <ns11:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">An object representation of the protocol used in assembling a clone library.</ns11:description>
+   <ns11:umlAttributeCollection>
+    <ns11:UMLAttribute xsi:type="ns11:UMLAttribute">
+     <ns11:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Protocol.Protocol:type</ns11:name>
+     <ns11:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The type of the protocol.</ns11:description>
+     <ns11:semanticMetadataCollection xsi:nil="true"/>
+    </ns11:UMLAttribute>
+    <ns11:UMLAttribute xsi:type="ns11:UMLAttribute">
+     <ns11:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Protocol.Protocol:description</ns11:name>
+     <ns11:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The description for the protocol.</ns11:description>
+     <ns11:semanticMetadataCollection xsi:nil="true"/>
+    </ns11:UMLAttribute>
+    <ns11:UMLAttribute xsi:type="ns11:UMLAttribute">
+     <ns11:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Protocol.Protocol:name</ns11:name>
+     <ns11:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The name of the protocol.</ns11:description>
+     <ns11:semanticMetadataCollection xsi:nil="true"/>
+    </ns11:UMLAttribute>
+    <ns11:UMLAttribute xsi:type="ns11:UMLAttribute">
+     <ns11:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Protocol.Protocol:id</ns11:name>
+     <ns11:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns11:semanticMetadataCollection xsi:nil="true"/>
+    </ns11:UMLAttribute>
+   </ns11:umlAttributeCollection>
+   <ns11:semanticMetadataCollection/>
+  </ns11:UMLClass>
+  <ns12:UMLClass xsi:type="ns12:UMLClass" xmlns:ns12="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns12:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns12:projectName>
+   <ns12:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns12:projectVersion>
+   <ns12:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Pathway</ns12:className>
+   <ns12:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns12:packageName>
+   <ns12:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">An object representation of a molecular/cellular pathway compiled by BioCarta. Pathways are associated with specific Taxon objects, and contain multiple Gene objects, which may be Targets for treatment.</ns12:description>
+   <ns12:umlAttributeCollection>
+    <ns12:UMLAttribute xsi:type="ns12:UMLAttribute">
+     <ns12:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Pathway.Pathway:diagram</ns12:name>
+     <ns12:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The pathway diagram for the pathway object.</ns12:description>
+     <ns12:semanticMetadataCollection xsi:nil="true"/>
+    </ns12:UMLAttribute>
+    <ns12:UMLAttribute xsi:type="ns12:UMLAttribute">
+     <ns12:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Pathway.Pathway:description</ns12:name>
+     <ns12:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The description of this pathway.</ns12:description>
+     <ns12:semanticMetadataCollection xsi:nil="true"/>
+    </ns12:UMLAttribute>
+    <ns12:UMLAttribute xsi:type="ns12:UMLAttribute">
+     <ns12:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Pathway.Pathway:name</ns12:name>
+     <ns12:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The pathway's name for the pathway object.</ns12:description>
+     <ns12:semanticMetadataCollection xsi:nil="true"/>
+    </ns12:UMLAttribute>
+    <ns12:UMLAttribute xsi:type="ns12:UMLAttribute">
+     <ns12:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Pathway.Pathway:displayValue</ns12:name>
+     <ns12:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The display value for the pathway object.</ns12:description>
+     <ns12:semanticMetadataCollection xsi:nil="true"/>
+    </ns12:UMLAttribute>
+    <ns12:UMLAttribute xsi:type="ns12:UMLAttribute">
+     <ns12:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Pathway.Pathway:id</ns12:name>
+     <ns12:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns12:semanticMetadataCollection xsi:nil="true"/>
+    </ns12:UMLAttribute>
+   </ns12:umlAttributeCollection>
+   <ns12:semanticMetadataCollection/>
+  </ns12:UMLClass>
+  <ns13:UMLClass xsi:type="ns13:UMLClass" xmlns:ns13="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns13:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns13:projectName>
+   <ns13:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns13:projectVersion>
+   <ns13:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.OrganOntologyRelationship</ns13:className>
+   <ns13:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns13:packageName>
+   <ns13:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">Organ relationship object describes relationships among organs.</ns13:description>
+   <ns13:umlAttributeCollection>
+    <ns13:UMLAttribute xsi:type="ns13:UMLAttribute">
+     <ns13:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.OrganOntologyRelationship.OrganOntologyRelationship:type</ns13:name>
+     <ns13:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The organ relationship type.</ns13:description>
+     <ns13:semanticMetadataCollection xsi:nil="true"/>
+    </ns13:UMLAttribute>
+    <ns13:UMLAttribute xsi:type="ns13:UMLAttribute">
+     <ns13:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.OrganOntologyRelationship.OrganOntologyRelationship:id</ns13:name>
+     <ns13:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns13:semanticMetadataCollection xsi:nil="true"/>
+    </ns13:UMLAttribute>
+   </ns13:umlAttributeCollection>
+   <ns13:semanticMetadataCollection/>
+  </ns13:UMLClass>
+  <ns14:UMLClass xsi:type="ns14:UMLClass" xmlns:ns14="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns14:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns14:projectName>
+   <ns14:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns14:projectVersion>
+   <ns14:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.OrganOntology</ns14:className>
+   <ns14:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns14:packageName>
+   <ns14:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">A representation of an organ whose name occurs in a controlled vocabulary; provides access to any Histopathology objects for the organ, and, because it is &quot;ontolog-able,&quot; provides access to its ancestral and descendant terms in the vocabulary.</ns14:description>
+   <ns14:umlAttributeCollection>
+    <ns14:UMLAttribute xsi:type="ns14:UMLAttribute">
+     <ns14:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.OrganOntology.OrganOntology:name</ns14:name>
+     <ns14:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The name of the organ for the organ object.</ns14:description>
+     <ns14:semanticMetadataCollection xsi:nil="true"/>
+    </ns14:UMLAttribute>
+    <ns14:UMLAttribute xsi:type="ns14:UMLAttribute">
+     <ns14:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.OrganOntology.OrganOntology:id</ns14:name>
+     <ns14:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns14:semanticMetadataCollection xsi:nil="true"/>
+    </ns14:UMLAttribute>
+   </ns14:umlAttributeCollection>
+   <ns14:semanticMetadataCollection/>
+  </ns14:UMLClass>
+  <ns15:UMLClass xsi:type="ns15:UMLClass" xmlns:ns15="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns15:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns15:projectName>
+   <ns15:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns15:projectVersion>
+   <ns15:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Library</ns15:className>
+   <ns15:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns15:packageName>
+   <ns15:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">An object representing a CGAP library; provides access to information about: the tissue sample and its method of preparation, the library protocol that was used, the clones contained in the library, and the sequence information derived from the library.</ns15:description>
+   <ns15:umlAttributeCollection>
+    <ns15:UMLAttribute xsi:type="ns15:UMLAttribute">
+     <ns15:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Library.Library:type</ns15:name>
+     <ns15:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The type for the library object.</ns15:description>
+     <ns15:semanticMetadataCollection xsi:nil="true"/>
+    </ns15:UMLAttribute>
+    <ns15:UMLAttribute xsi:type="ns15:UMLAttribute">
+     <ns15:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Library.Library:rsite1</ns15:name>
+     <ns15:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The R Site 1 for the library.</ns15:description>
+     <ns15:semanticMetadataCollection xsi:nil="true"/>
+    </ns15:UMLAttribute>
+    <ns15:UMLAttribute xsi:type="ns15:UMLAttribute">
+     <ns15:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Library.Library:creationDate</ns15:name>
+     <ns15:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The creation date for the library.</ns15:description>
+     <ns15:semanticMetadataCollection xsi:nil="true"/>
+    </ns15:UMLAttribute>
+    <ns15:UMLAttribute xsi:type="ns15:UMLAttribute">
+     <ns15:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Library.Library:labHost</ns15:name>
+     <ns15:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The lab host for the library.</ns15:description>
+     <ns15:semanticMetadataCollection xsi:nil="true"/>
+    </ns15:UMLAttribute>
+    <ns15:UMLAttribute xsi:type="ns15:UMLAttribute">
+     <ns15:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Library.Library:cloneVector</ns15:name>
+     <ns15:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The clone vector for the library.</ns15:description>
+     <ns15:semanticMetadataCollection xsi:nil="true"/>
+    </ns15:UMLAttribute>
+    <ns15:UMLAttribute xsi:type="ns15:UMLAttribute">
+     <ns15:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Library.Library:uniGeneId</ns15:name>
+     <ns15:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The Unigene identification for the library.</ns15:description>
+     <ns15:semanticMetadataCollection xsi:nil="true"/>
+    </ns15:UMLAttribute>
+    <ns15:UMLAttribute xsi:type="ns15:UMLAttribute">
+     <ns15:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Library.Library:clonesToDate</ns15:name>
+     <ns15:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The number of clones for the library object.</ns15:description>
+     <ns15:semanticMetadataCollection xsi:nil="true"/>
+    </ns15:UMLAttribute>
+    <ns15:UMLAttribute xsi:type="ns15:UMLAttribute">
+     <ns15:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Library.Library:sequencesToDate</ns15:name>
+     <ns15:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The number of the sequences associated with the library.</ns15:description>
+     <ns15:semanticMetadataCollection xsi:nil="true"/>
+    </ns15:UMLAttribute>
+    <ns15:UMLAttribute xsi:type="ns15:UMLAttribute">
+     <ns15:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Library.Library:keyword</ns15:name>
+     <ns15:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The keyword for the library.</ns15:description>
+     <ns15:semanticMetadataCollection xsi:nil="true"/>
+    </ns15:UMLAttribute>
+    <ns15:UMLAttribute xsi:type="ns15:UMLAttribute">
+     <ns15:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Library.Library:description</ns15:name>
+     <ns15:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The description for the library.</ns15:description>
+     <ns15:semanticMetadataCollection xsi:nil="true"/>
+    </ns15:UMLAttribute>
+    <ns15:UMLAttribute xsi:type="ns15:UMLAttribute">
+     <ns15:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Library.Library:cloneProducer</ns15:name>
+     <ns15:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The producer of the clone.</ns15:description>
+     <ns15:semanticMetadataCollection xsi:nil="true"/>
+    </ns15:UMLAttribute>
+    <ns15:UMLAttribute xsi:type="ns15:UMLAttribute">
+     <ns15:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Library.Library:cloneVectorType</ns15:name>
+     <ns15:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The type of the clone vector for the library.</ns15:description>
+     <ns15:semanticMetadataCollection xsi:nil="true"/>
+    </ns15:UMLAttribute>
+    <ns15:UMLAttribute xsi:type="ns15:UMLAttribute">
+     <ns15:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Library.Library:name</ns15:name>
+     <ns15:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The library name for the library object.</ns15:description>
+     <ns15:semanticMetadataCollection xsi:nil="true"/>
+    </ns15:UMLAttribute>
+    <ns15:UMLAttribute xsi:type="ns15:UMLAttribute">
+     <ns15:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Library.Library:rsite2</ns15:name>
+     <ns15:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The R Site 2 for the library.</ns15:description>
+     <ns15:semanticMetadataCollection xsi:nil="true"/>
+    </ns15:UMLAttribute>
+    <ns15:UMLAttribute xsi:type="ns15:UMLAttribute">
+     <ns15:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Library.Library:id</ns15:name>
+     <ns15:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns15:semanticMetadataCollection xsi:nil="true"/>
+    </ns15:UMLAttribute>
+   </ns15:umlAttributeCollection>
+   <ns15:semanticMetadataCollection/>
+  </ns15:UMLClass>
+  <ns16:UMLClass xsi:type="ns16:UMLClass" xmlns:ns16="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns16:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns16:projectName>
+   <ns16:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns16:projectVersion>
+   <ns16:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Histopathology</ns16:className>
+   <ns16:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns16:packageName>
+   <ns16:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">An object representing anatomical changes in a diseased tissue sample associated with an expression experiment; captures the relationship between organ and disease.</ns16:description>
+   <ns16:umlAttributeCollection>
+    <ns16:UMLAttribute xsi:type="ns16:UMLAttribute">
+     <ns16:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Histopathology.Histopathology:comments</ns16:name>
+     <ns16:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">Comments for the histopathology object.</ns16:description>
+     <ns16:semanticMetadataCollection xsi:nil="true"/>
+    </ns16:UMLAttribute>
+    <ns16:UMLAttribute xsi:type="ns16:UMLAttribute">
+     <ns16:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Histopathology.Histopathology:grossDescription</ns16:name>
+     <ns16:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">Description of the gross pathology.</ns16:description>
+     <ns16:semanticMetadataCollection xsi:nil="true"/>
+    </ns16:UMLAttribute>
+    <ns16:UMLAttribute xsi:type="ns16:UMLAttribute">
+     <ns16:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Histopathology.Histopathology:relationalOperation</ns16:name>
+     <ns16:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">Relational operation used to describe tumor incidence rate.</ns16:description>
+     <ns16:semanticMetadataCollection xsi:nil="true"/>
+    </ns16:UMLAttribute>
+    <ns16:UMLAttribute xsi:type="ns16:UMLAttribute">
+     <ns16:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Histopathology.Histopathology:tumorIncidenceRate</ns16:name>
+     <ns16:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">Tumor incidence rate in the animal model (percentage diseased animals to healthy animals).</ns16:description>
+     <ns16:semanticMetadataCollection xsi:nil="true"/>
+    </ns16:UMLAttribute>
+    <ns16:UMLAttribute xsi:type="ns16:UMLAttribute">
+     <ns16:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Histopathology.Histopathology:survivalInfo</ns16:name>
+     <ns16:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">Age when animal succumbs to disease or needs to be sacrificed because of tumor burden.</ns16:description>
+     <ns16:semanticMetadataCollection xsi:nil="true"/>
+    </ns16:UMLAttribute>
+    <ns16:UMLAttribute xsi:type="ns16:UMLAttribute">
+     <ns16:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Histopathology.Histopathology:ageOfOnset</ns16:name>
+     <ns16:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">Age of animal at onset of neoplastic lesion.</ns16:description>
+     <ns16:semanticMetadataCollection xsi:nil="true"/>
+    </ns16:UMLAttribute>
+    <ns16:UMLAttribute xsi:type="ns16:UMLAttribute">
+     <ns16:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Histopathology.Histopathology:microscopicDescription</ns16:name>
+     <ns16:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">Description of the pathology found by microscopic examination.</ns16:description>
+     <ns16:semanticMetadataCollection xsi:nil="true"/>
+    </ns16:UMLAttribute>
+    <ns16:UMLAttribute xsi:type="ns16:UMLAttribute">
+     <ns16:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Histopathology.Histopathology:id</ns16:name>
+     <ns16:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns16:semanticMetadataCollection xsi:nil="true"/>
+    </ns16:UMLAttribute>
+   </ns16:umlAttributeCollection>
+   <ns16:semanticMetadataCollection/>
+  </ns16:UMLClass>
+  <ns17:UMLClass xsi:type="ns17:UMLClass" xmlns:ns17="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns17:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns17:projectName>
+   <ns17:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns17:projectVersion>
+   <ns17:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Gene</ns17:className>
+   <ns17:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns17:packageName>
+   <ns17:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">Gene objects are the effective portal to most of the genomic information provided by the caBIO data services; organs, diseases, chromosomes, pathways, sequence data, and expression experiments are among the many objects accessible via a gene.</ns17:description>
+   <ns17:umlAttributeCollection>
+    <ns17:UMLAttribute xsi:type="ns17:UMLAttribute">
+     <ns17:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Gene.Gene:fullName</ns17:name>
+     <ns17:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The title of the gene.</ns17:description>
+     <ns17:semanticMetadataCollection xsi:nil="true"/>
+    </ns17:UMLAttribute>
+    <ns17:UMLAttribute xsi:type="ns17:UMLAttribute">
+     <ns17:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Gene.Gene:clusterId</ns17:name>
+     <ns17:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">HThe cluster identification for the gene.</ns17:description>
+     <ns17:semanticMetadataCollection xsi:nil="true"/>
+    </ns17:UMLAttribute>
+   </ns17:umlAttributeCollection>
+   <ns17:semanticMetadataCollection/>
+  </ns17:UMLClass>
+  <ns18:UMLClass xsi:type="ns18:UMLClass" xmlns:ns18="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns18:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns18:projectName>
+   <ns18:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns18:projectVersion>
+   <ns18:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.GeneOntologyRelationship</ns18:className>
+   <ns18:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns18:packageName>
+   <ns18:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">This object specifies GoOntologyrRelationship.</ns18:description>
+   <ns18:umlAttributeCollection>
+    <ns18:UMLAttribute xsi:type="ns18:UMLAttribute">
+     <ns18:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.GeneOntologyRelationship.GeneOntologyRelationship:relationshipType</ns18:name>
+     <ns18:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The Gene Ontology relationship type.</ns18:description>
+     <ns18:semanticMetadataCollection xsi:nil="true"/>
+    </ns18:UMLAttribute>
+    <ns18:UMLAttribute xsi:type="ns18:UMLAttribute">
+     <ns18:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.GeneOntologyRelationship.GeneOntologyRelationship:id</ns18:name>
+     <ns18:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns18:semanticMetadataCollection xsi:nil="true"/>
+    </ns18:UMLAttribute>
+   </ns18:umlAttributeCollection>
+   <ns18:semanticMetadataCollection/>
+  </ns18:UMLClass>
+  <ns19:UMLClass xsi:type="ns19:UMLClass" xmlns:ns19="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns19:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns19:projectName>
+   <ns19:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns19:projectVersion>
+   <ns19:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.GeneOntology</ns19:className>
+   <ns19:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns19:packageName>
+   <ns19:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">An object providing entry to a Gene object's position in the Gene Ontology Consortium's controlled vocabularies, as recorded by LocusLink; provides access to gene objects corresponding to the ontological term, as well as to ancestor and descendant terms i</ns19:description>
+   <ns19:umlAttributeCollection>
+    <ns19:UMLAttribute xsi:type="ns19:UMLAttribute">
+     <ns19:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.GeneOntology.GeneOntology:name</ns19:name>
+     <ns19:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The name for the Gene Ontology object.</ns19:description>
+     <ns19:semanticMetadataCollection xsi:nil="true"/>
+    </ns19:UMLAttribute>
+    <ns19:UMLAttribute xsi:type="ns19:UMLAttribute">
+     <ns19:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.GeneOntology.GeneOntology:id</ns19:name>
+     <ns19:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns19:semanticMetadataCollection xsi:nil="true"/>
+    </ns19:UMLAttribute>
+   </ns19:umlAttributeCollection>
+   <ns19:semanticMetadataCollection/>
+  </ns19:UMLClass>
+  <ns20:UMLClass xsi:type="ns20:UMLClass" xmlns:ns20="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns20:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns20:projectName>
+   <ns20:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns20:projectVersion>
+   <ns20:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.DiseaseOntologyRelationship</ns20:className>
+   <ns20:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns20:packageName>
+   <ns20:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The diseaser relationship specifies the relationship among diseases.</ns20:description>
+   <ns20:umlAttributeCollection>
+    <ns20:UMLAttribute xsi:type="ns20:UMLAttribute">
+     <ns20:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.DiseaseOntologyRelationship.DiseaseOntologyRelationship:type</ns20:name>
+     <ns20:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The disease relationship type.</ns20:description>
+     <ns20:semanticMetadataCollection xsi:nil="true"/>
+    </ns20:UMLAttribute>
+    <ns20:UMLAttribute xsi:type="ns20:UMLAttribute">
+     <ns20:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.DiseaseOntologyRelationship.DiseaseOntologyRelationship:id</ns20:name>
+     <ns20:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns20:semanticMetadataCollection xsi:nil="true"/>
+    </ns20:UMLAttribute>
+   </ns20:umlAttributeCollection>
+   <ns20:semanticMetadataCollection/>
+  </ns20:UMLClass>
+  <ns21:UMLClass xsi:type="ns21:UMLClass" xmlns:ns21="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns21:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns21:projectName>
+   <ns21:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns21:projectVersion>
+   <ns21:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.ClinicalTrialProtocol</ns21:className>
+   <ns21:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns21:packageName>
+   <ns21:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The protocol associated with a clinical trial; organizes administrative information about the trial such as Organization ID, participants, phase, etc., and provides access to the administered Agents.</ns21:description>
+   <ns21:umlAttributeCollection>
+    <ns21:UMLAttribute xsi:type="ns21:UMLAttribute">
+     <ns21:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.ClinicalTrialProtocol.ClinicalTrialProtocol:currentStatus</ns21:name>
+     <ns21:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The current status of the clinical trial protocol object.</ns21:description>
+     <ns21:semanticMetadataCollection xsi:nil="true"/>
+    </ns21:UMLAttribute>
+    <ns21:UMLAttribute xsi:type="ns21:UMLAttribute">
+     <ns21:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.ClinicalTrialProtocol.ClinicalTrialProtocol:treatmentFlag</ns21:name>
+     <ns21:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The treatment flag is &quot;Yes&quot; or &quot;No&quot; for the clinical trial.</ns21:description>
+     <ns21:semanticMetadataCollection xsi:nil="true"/>
+    </ns21:UMLAttribute>
+    <ns21:UMLAttribute xsi:type="ns21:UMLAttribute">
+     <ns21:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.ClinicalTrialProtocol.ClinicalTrialProtocol:participationType</ns21:name>
+     <ns21:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The participation type of the clinical trial.</ns21:description>
+     <ns21:semanticMetadataCollection xsi:nil="true"/>
+    </ns21:UMLAttribute>
+    <ns21:UMLAttribute xsi:type="ns21:UMLAttribute">
+     <ns21:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.ClinicalTrialProtocol.ClinicalTrialProtocol:leadOrganizationId</ns21:name>
+     <ns21:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The identification code for the organization who lead the clinical trial.</ns21:description>
+     <ns21:semanticMetadataCollection xsi:nil="true"/>
+    </ns21:UMLAttribute>
+    <ns21:UMLAttribute xsi:type="ns21:UMLAttribute">
+     <ns21:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.ClinicalTrialProtocol.ClinicalTrialProtocol:title</ns21:name>
+     <ns21:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The title of the clinical trial.</ns21:description>
+     <ns21:semanticMetadataCollection xsi:nil="true"/>
+    </ns21:UMLAttribute>
+    <ns21:UMLAttribute xsi:type="ns21:UMLAttribute">
+     <ns21:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.ClinicalTrialProtocol.ClinicalTrialProtocol:PIName</ns21:name>
+     <ns21:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The principal investigator's name for the clinical trial.</ns21:description>
+     <ns21:semanticMetadataCollection xsi:nil="true"/>
+    </ns21:UMLAttribute>
+    <ns21:UMLAttribute xsi:type="ns21:UMLAttribute">
+     <ns21:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.ClinicalTrialProtocol.ClinicalTrialProtocol:documentNumber</ns21:name>
+     <ns21:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The NCI's internal document code for the clinical trial protocil object.</ns21:description>
+     <ns21:semanticMetadataCollection xsi:nil="true"/>
+    </ns21:UMLAttribute>
+    <ns21:UMLAttribute xsi:type="ns21:UMLAttribute">
+     <ns21:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.ClinicalTrialProtocol.ClinicalTrialProtocol:NIHAdminCode</ns21:name>
+     <ns21:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The nih administration code for the clinical trial.</ns21:description>
+     <ns21:semanticMetadataCollection xsi:nil="true"/>
+    </ns21:UMLAttribute>
+    <ns21:UMLAttribute xsi:type="ns21:UMLAttribute">
+     <ns21:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.ClinicalTrialProtocol.ClinicalTrialProtocol:leadOrganizationName</ns21:name>
+     <ns21:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The name of the organization who lead the clinical trial.</ns21:description>
+     <ns21:semanticMetadataCollection xsi:nil="true"/>
+    </ns21:UMLAttribute>
+    <ns21:UMLAttribute xsi:type="ns21:UMLAttribute">
+     <ns21:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.ClinicalTrialProtocol.ClinicalTrialProtocol:phase</ns21:name>
+     <ns21:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The phase code for the clinical trial.</ns21:description>
+     <ns21:semanticMetadataCollection xsi:nil="true"/>
+    </ns21:UMLAttribute>
+    <ns21:UMLAttribute xsi:type="ns21:UMLAttribute">
+     <ns21:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.ClinicalTrialProtocol.ClinicalTrialProtocol:PDQIdentifier</ns21:name>
+     <ns21:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The NCI PDQ identification code for the clinical trial.</ns21:description>
+     <ns21:semanticMetadataCollection xsi:nil="true"/>
+    </ns21:UMLAttribute>
+    <ns21:UMLAttribute xsi:type="ns21:UMLAttribute">
+     <ns21:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.ClinicalTrialProtocol.ClinicalTrialProtocol:currentStatusDate</ns21:name>
+     <ns21:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The date of the clinical trial protocol object having the current status.</ns21:description>
+     <ns21:semanticMetadataCollection xsi:nil="true"/>
+    </ns21:UMLAttribute>
+    <ns21:UMLAttribute xsi:type="ns21:UMLAttribute">
+     <ns21:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.ClinicalTrialProtocol.ClinicalTrialProtocol:id</ns21:name>
+     <ns21:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns21:semanticMetadataCollection xsi:nil="true"/>
+    </ns21:UMLAttribute>
+   </ns21:umlAttributeCollection>
+   <ns21:semanticMetadataCollection/>
+  </ns21:UMLClass>
+  <ns22:UMLClass xsi:type="ns22:UMLClass" xmlns:ns22="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns22:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns22:projectName>
+   <ns22:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns22:projectVersion>
+   <ns22:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Anomaly</ns22:className>
+   <ns22:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns22:packageName>
+   <ns22:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">An irregularity in either the expression of a gene or its structure (i.e., a mutation).</ns22:description>
+   <ns22:umlAttributeCollection>
+    <ns22:UMLAttribute xsi:type="ns22:UMLAttribute">
+     <ns22:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Anomaly.Anomaly:description</ns22:name>
+     <ns22:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The description for the anomaly object.</ns22:description>
+     <ns22:semanticMetadataCollection xsi:nil="true"/>
+    </ns22:UMLAttribute>
+   </ns22:umlAttributeCollection>
+   <ns22:semanticMetadataCollection/>
+  </ns22:UMLClass>
+  <ns23:UMLClass xsi:type="ns23:UMLClass" xmlns:ns23="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns23:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns23:projectName>
+   <ns23:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns23:projectVersion>
+   <ns23:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Agent</ns23:className>
+   <ns23:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns23:packageName>
+   <ns23:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">A therapeutic agent (drug, intervention therapy) used in a clinical trail protocol.</ns23:description>
+   <ns23:umlAttributeCollection>
+    <ns23:UMLAttribute xsi:type="ns23:UMLAttribute">
+     <ns23:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Agent.Agent:NSCNumber</ns23:name>
+     <ns23:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The NCI's internal identification number for the object.</ns23:description>
+     <ns23:semanticMetadataCollection xsi:nil="true"/>
+    </ns23:UMLAttribute>
+    <ns23:UMLAttribute xsi:type="ns23:UMLAttribute">
+     <ns23:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Agent.Agent:isCMAPAgent</ns23:name>
+     <ns23:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">If the object is CMAP agent.</ns23:description>
+     <ns23:semanticMetadataCollection xsi:nil="true"/>
+    </ns23:UMLAttribute>
+    <ns23:UMLAttribute xsi:type="ns23:UMLAttribute">
+     <ns23:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Agent.Agent:EVSId</ns23:name>
+     <ns23:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The NCI's Enterprise Vocabulary Services (EVS) identification number.</ns23:description>
+     <ns23:semanticMetadataCollection xsi:nil="true"/>
+    </ns23:UMLAttribute>
+    <ns23:UMLAttribute xsi:type="ns23:UMLAttribute">
+     <ns23:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Agent.Agent:comment</ns23:name>
+     <ns23:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The comment for the agent object.</ns23:description>
+     <ns23:semanticMetadataCollection xsi:nil="true"/>
+    </ns23:UMLAttribute>
+    <ns23:UMLAttribute xsi:type="ns23:UMLAttribute">
+     <ns23:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Agent.Agent:source</ns23:name>
+     <ns23:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The source for the agent.</ns23:description>
+     <ns23:semanticMetadataCollection xsi:nil="true"/>
+    </ns23:UMLAttribute>
+    <ns23:UMLAttribute xsi:type="ns23:UMLAttribute">
+     <ns23:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Agent.Agent:name</ns23:name>
+     <ns23:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The name of the agent object.</ns23:description>
+     <ns23:semanticMetadataCollection xsi:nil="true"/>
+    </ns23:UMLAttribute>
+    <ns23:UMLAttribute xsi:type="ns23:UMLAttribute">
+     <ns23:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Agent.Agent:id</ns23:name>
+     <ns23:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns23:semanticMetadataCollection xsi:nil="true"/>
+    </ns23:UMLAttribute>
+   </ns23:umlAttributeCollection>
+   <ns23:semanticMetadataCollection/>
+  </ns23:UMLClass>
+  <ns24:UMLClass xsi:type="ns24:UMLClass" xmlns:ns24="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns24:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns24:projectName>
+   <ns24:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns24:projectVersion>
+   <ns24:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.GenericReporter</ns24:className>
+   <ns24:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns24:packageName>
+   <ns24:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns24:umlAttributeCollection>
+    <ns24:UMLAttribute xsi:type="ns24:UMLAttribute">
+     <ns24:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.GenericReporter.GenericReporter:type</ns24:name>
+     <ns24:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns24:semanticMetadataCollection xsi:nil="true"/>
+    </ns24:UMLAttribute>
+    <ns24:UMLAttribute xsi:type="ns24:UMLAttribute">
+     <ns24:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.GenericReporter.GenericReporter:name</ns24:name>
+     <ns24:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns24:semanticMetadataCollection xsi:nil="true"/>
+    </ns24:UMLAttribute>
+    <ns24:UMLAttribute xsi:type="ns24:UMLAttribute">
+     <ns24:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.GenericReporter.GenericReporter:id</ns24:name>
+     <ns24:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns24:semanticMetadataCollection xsi:nil="true"/>
+    </ns24:UMLAttribute>
+   </ns24:umlAttributeCollection>
+   <ns24:semanticMetadataCollection/>
+  </ns24:UMLClass>
+  <ns25:UMLClass xsi:type="ns25:UMLClass" xmlns:ns25="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns25:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns25:projectName>
+   <ns25:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns25:projectVersion>
+   <ns25:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.GeneRelativeLocation</ns25:className>
+   <ns25:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns25:packageName>
+   <ns25:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns25:umlAttributeCollection>
+    <ns25:UMLAttribute xsi:type="ns25:UMLAttribute">
+     <ns25:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.GeneRelativeLocation.GeneRelativeLocation:type</ns25:name>
+     <ns25:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns25:semanticMetadataCollection xsi:nil="true"/>
+    </ns25:UMLAttribute>
+    <ns25:UMLAttribute xsi:type="ns25:UMLAttribute">
+     <ns25:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.GeneRelativeLocation.GeneRelativeLocation:id</ns25:name>
+     <ns25:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns25:semanticMetadataCollection xsi:nil="true"/>
+    </ns25:UMLAttribute>
+   </ns25:umlAttributeCollection>
+   <ns25:semanticMetadataCollection/>
+  </ns25:UMLClass>
+  <ns26:UMLClass xsi:type="ns26:UMLClass" xmlns:ns26="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns26:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns26:projectName>
+   <ns26:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns26:projectVersion>
+   <ns26:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.CloneRelativeLocation</ns26:className>
+   <ns26:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns26:packageName>
+   <ns26:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns26:umlAttributeCollection>
+    <ns26:UMLAttribute xsi:type="ns26:UMLAttribute">
+     <ns26:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.CloneRelativeLocation.CloneRelativeLocation:type</ns26:name>
+     <ns26:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns26:semanticMetadataCollection xsi:nil="true"/>
+    </ns26:UMLAttribute>
+    <ns26:UMLAttribute xsi:type="ns26:UMLAttribute">
+     <ns26:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.CloneRelativeLocation.CloneRelativeLocation:id</ns26:name>
+     <ns26:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns26:semanticMetadataCollection xsi:nil="true"/>
+    </ns26:UMLAttribute>
+   </ns26:umlAttributeCollection>
+   <ns26:semanticMetadataCollection/>
+  </ns26:UMLClass>
+  <ns27:UMLClass xsi:type="ns27:UMLClass" xmlns:ns27="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns27:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns27:projectName>
+   <ns27:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns27:projectVersion>
+   <ns27:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.CytogeneticLocation</ns27:className>
+   <ns27:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns27:packageName>
+   <ns27:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns27:umlAttributeCollection>
+    <ns27:UMLAttribute xsi:type="ns27:UMLAttribute">
+     <ns27:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.CytogeneticLocation.CytogeneticLocation:id</ns27:name>
+     <ns27:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns27:semanticMetadataCollection xsi:nil="true"/>
+    </ns27:UMLAttribute>
+   </ns27:umlAttributeCollection>
+   <ns27:semanticMetadataCollection/>
+  </ns27:UMLClass>
+  <ns28:UMLClass xsi:type="ns28:UMLClass" xmlns:ns28="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns28:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns28:projectName>
+   <ns28:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns28:projectVersion>
+   <ns28:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.PhysicalLocation</ns28:className>
+   <ns28:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns28:packageName>
+   <ns28:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns28:umlAttributeCollection>
+    <ns28:UMLAttribute xsi:type="ns28:UMLAttribute">
+     <ns28:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.PhysicalLocation.PhysicalLocation:id</ns28:name>
+     <ns28:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns28:semanticMetadataCollection xsi:nil="true"/>
+    </ns28:UMLAttribute>
+    <ns28:UMLAttribute xsi:type="ns28:UMLAttribute">
+     <ns28:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.PhysicalLocation.PhysicalLocation:chromosomalEndPosition</ns28:name>
+     <ns28:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns28:semanticMetadataCollection xsi:nil="true"/>
+    </ns28:UMLAttribute>
+    <ns28:UMLAttribute xsi:type="ns28:UMLAttribute">
+     <ns28:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.PhysicalLocation.PhysicalLocation:chromosomalStartPosition</ns28:name>
+     <ns28:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns28:semanticMetadataCollection xsi:nil="true"/>
+    </ns28:UMLAttribute>
+   </ns28:umlAttributeCollection>
+   <ns28:semanticMetadataCollection/>
+  </ns28:UMLClass>
+  <ns29:UMLClass xsi:type="ns29:UMLClass" xmlns:ns29="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns29:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns29:projectName>
+   <ns29:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns29:projectVersion>
+   <ns29:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Location</ns29:className>
+   <ns29:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns29:packageName>
+   <ns29:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns29:umlAttributeCollection>
+    <ns29:UMLAttribute xsi:type="ns29:UMLAttribute">
+     <ns29:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Location.Location:id</ns29:name>
+     <ns29:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns29:semanticMetadataCollection xsi:nil="true"/>
+    </ns29:UMLAttribute>
+   </ns29:umlAttributeCollection>
+   <ns29:semanticMetadataCollection/>
+  </ns29:UMLClass>
+  <ns30:UMLClass xsi:type="ns30:UMLClass" xmlns:ns30="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns30:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns30:projectName>
+   <ns30:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns30:projectVersion>
+   <ns30:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Cytoband</ns30:className>
+   <ns30:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns30:packageName>
+   <ns30:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns30:umlAttributeCollection>
+    <ns30:UMLAttribute xsi:type="ns30:UMLAttribute">
+     <ns30:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Cytoband.Cytoband:name</ns30:name>
+     <ns30:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns30:semanticMetadataCollection xsi:nil="true"/>
+    </ns30:UMLAttribute>
+    <ns30:UMLAttribute xsi:type="ns30:UMLAttribute">
+     <ns30:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Cytoband.Cytoband:id</ns30:name>
+     <ns30:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns30:semanticMetadataCollection xsi:nil="true"/>
+    </ns30:UMLAttribute>
+   </ns30:umlAttributeCollection>
+   <ns30:semanticMetadataCollection/>
+  </ns30:UMLClass>
+  <ns31:UMLClass xsi:type="ns31:UMLClass" xmlns:ns31="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns31:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns31:projectName>
+   <ns31:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns31:projectVersion>
+   <ns31:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.HomologousAssociation</ns31:className>
+   <ns31:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns31:packageName>
+   <ns31:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns31:umlAttributeCollection>
+    <ns31:UMLAttribute xsi:type="ns31:UMLAttribute">
+     <ns31:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.HomologousAssociation.HomologousAssociation:homologousId</ns31:name>
+     <ns31:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns31:semanticMetadataCollection xsi:nil="true"/>
+    </ns31:UMLAttribute>
+    <ns31:UMLAttribute xsi:type="ns31:UMLAttribute">
+     <ns31:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.HomologousAssociation.HomologousAssociation:similarityPercentage</ns31:name>
+     <ns31:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns31:semanticMetadataCollection xsi:nil="true"/>
+    </ns31:UMLAttribute>
+    <ns31:UMLAttribute xsi:type="ns31:UMLAttribute">
+     <ns31:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.HomologousAssociation.HomologousAssociation:id</ns31:name>
+     <ns31:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns31:semanticMetadataCollection xsi:nil="true"/>
+    </ns31:UMLAttribute>
+   </ns31:umlAttributeCollection>
+   <ns31:semanticMetadataCollection/>
+  </ns31:UMLClass>
+  <ns32:UMLClass xsi:type="ns32:UMLClass" xmlns:ns32="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns32:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns32:projectName>
+   <ns32:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns32:projectVersion>
+   <ns32:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.ProteinAlias</ns32:className>
+   <ns32:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns32:packageName>
+   <ns32:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns32:umlAttributeCollection>
+    <ns32:UMLAttribute xsi:type="ns32:UMLAttribute">
+     <ns32:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.ProteinAlias.ProteinAlias:name</ns32:name>
+     <ns32:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns32:semanticMetadataCollection xsi:nil="true"/>
+    </ns32:UMLAttribute>
+    <ns32:UMLAttribute xsi:type="ns32:UMLAttribute">
+     <ns32:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.ProteinAlias.ProteinAlias:id</ns32:name>
+     <ns32:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns32:semanticMetadataCollection xsi:nil="true"/>
+    </ns32:UMLAttribute>
+   </ns32:umlAttributeCollection>
+   <ns32:semanticMetadataCollection/>
+  </ns32:UMLClass>
+  <ns33:UMLClass xsi:type="ns33:UMLClass" xmlns:ns33="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns33:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns33:projectName>
+   <ns33:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns33:projectVersion>
+   <ns33:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.PopulationFrequency</ns33:className>
+   <ns33:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns33:packageName>
+   <ns33:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns33:umlAttributeCollection>
+    <ns33:UMLAttribute xsi:type="ns33:UMLAttribute">
+     <ns33:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.PopulationFrequency.PopulationFrequency:minorAllele</ns33:name>
+     <ns33:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns33:semanticMetadataCollection xsi:nil="true"/>
+    </ns33:UMLAttribute>
+    <ns33:UMLAttribute xsi:type="ns33:UMLAttribute">
+     <ns33:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.PopulationFrequency.PopulationFrequency:majorAllele</ns33:name>
+     <ns33:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns33:semanticMetadataCollection xsi:nil="true"/>
+    </ns33:UMLAttribute>
+    <ns33:UMLAttribute xsi:type="ns33:UMLAttribute">
+     <ns33:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.PopulationFrequency.PopulationFrequency:minorFrequency</ns33:name>
+     <ns33:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns33:semanticMetadataCollection xsi:nil="true"/>
+    </ns33:UMLAttribute>
+    <ns33:UMLAttribute xsi:type="ns33:UMLAttribute">
+     <ns33:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.PopulationFrequency.PopulationFrequency:majorFrequency</ns33:name>
+     <ns33:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns33:semanticMetadataCollection xsi:nil="true"/>
+    </ns33:UMLAttribute>
+    <ns33:UMLAttribute xsi:type="ns33:UMLAttribute">
+     <ns33:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.PopulationFrequency.PopulationFrequency:ethnicity</ns33:name>
+     <ns33:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns33:semanticMetadataCollection xsi:nil="true"/>
+    </ns33:UMLAttribute>
+    <ns33:UMLAttribute xsi:type="ns33:UMLAttribute">
+     <ns33:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.PopulationFrequency.PopulationFrequency:type</ns33:name>
+     <ns33:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns33:semanticMetadataCollection xsi:nil="true"/>
+    </ns33:UMLAttribute>
+    <ns33:UMLAttribute xsi:type="ns33:UMLAttribute">
+     <ns33:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.PopulationFrequency.PopulationFrequency:id</ns33:name>
+     <ns33:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns33:semanticMetadataCollection xsi:nil="true"/>
+    </ns33:UMLAttribute>
+   </ns33:umlAttributeCollection>
+   <ns33:semanticMetadataCollection/>
+  </ns33:UMLClass>
+  <ns34:UMLClass xsi:type="ns34:UMLClass" xmlns:ns34="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns34:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns34:projectName>
+   <ns34:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns34:projectVersion>
+   <ns34:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.DiseaseOntology</ns34:className>
+   <ns34:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns34:packageName>
+   <ns34:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns34:umlAttributeCollection>
+    <ns34:UMLAttribute xsi:type="ns34:UMLAttribute">
+     <ns34:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.DiseaseOntology.DiseaseOntology:name</ns34:name>
+     <ns34:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The name of the disease object.</ns34:description>
+     <ns34:semanticMetadataCollection xsi:nil="true"/>
+    </ns34:UMLAttribute>
+    <ns34:UMLAttribute xsi:type="ns34:UMLAttribute">
+     <ns34:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.DiseaseOntology.DiseaseOntology:id</ns34:name>
+     <ns34:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns34:semanticMetadataCollection xsi:nil="true"/>
+    </ns34:UMLAttribute>
+   </ns34:umlAttributeCollection>
+   <ns34:semanticMetadataCollection/>
+  </ns34:UMLClass>
+  <ns35:UMLClass xsi:type="ns35:UMLClass" xmlns:ns35="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns35:projectName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCORE</ns35:projectName>
+   <ns35:projectVersion xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">3</ns35:projectVersion>
+   <ns35:className xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Vocabulary</ns35:className>
+   <ns35:packageName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain</ns35:packageName>
+   <ns35:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns35:umlAttributeCollection>
+    <ns35:UMLAttribute xsi:type="ns35:UMLAttribute">
+     <ns35:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Vocabulary.Vocabulary:coreTerm</ns35:name>
+     <ns35:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The vocabulary core term.</ns35:description>
+     <ns35:semanticMetadataCollection xsi:nil="true"/>
+    </ns35:UMLAttribute>
+    <ns35:UMLAttribute xsi:type="ns35:UMLAttribute">
+     <ns35:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Vocabulary.Vocabulary:generalTerm</ns35:name>
+     <ns35:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The vocabulary general term.</ns35:description>
+     <ns35:semanticMetadataCollection xsi:nil="true"/>
+    </ns35:UMLAttribute>
+    <ns35:UMLAttribute xsi:type="ns35:UMLAttribute">
+     <ns35:name xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">gov.nih.nci.cabio.domain.Vocabulary.Vocabulary:id</ns35:name>
+     <ns35:description xsi:type="xsd:string" xsi:nil="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns35:semanticMetadataCollection xsi:nil="true"/>
+    </ns35:UMLAttribute>
+   </ns35:umlAttributeCollection>
+   <ns35:semanticMetadataCollection/>
+  </ns35:UMLClass>
+ </ns1:exposedUMLClassCollection>
+</ns1:DomainModel>
