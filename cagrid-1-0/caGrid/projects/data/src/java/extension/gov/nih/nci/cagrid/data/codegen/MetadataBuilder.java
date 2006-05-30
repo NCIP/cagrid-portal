@@ -10,6 +10,7 @@ import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
 import gov.nih.nci.cagrid.data.common.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
 import gov.nih.nci.cagrid.metadata.common.UMLAttribute;
+import gov.nih.nci.cagrid.metadata.common.UMLAttributeSemanticMetadataCollection;
 import gov.nih.nci.cagrid.metadata.common.UMLClass;
 import gov.nih.nci.cagrid.metadata.common.UMLClassSemanticMetadataCollection;
 import gov.nih.nci.cagrid.metadata.common.UMLClassUmlAttributeCollection;
@@ -24,7 +25,11 @@ import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationTargetUMLAssociatio
 
 import java.io.FileWriter;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.globus.wsrf.encoding.ObjectSerializer;
@@ -130,15 +135,14 @@ public class MetadataBuilder {
 	
 	private Set getUmlAssociations(UMLClassMetadata classMd) throws RemoteException, CodegenExtensionException {
 		Set associations = new HashSet();
-				
 		// association metadata
-		UMLAssociationMetadata[] assocMetadata = new UMLAssociationMetadata[classMd.getUMLAssociationMetadataCollection().size()];
-		classMd.getUMLAssociationMetadataCollection().toArray(assocMetadata);
-		for (int i = 0; i < assocMetadata.length; i++) {
+		Iterator assocMetadataIter = classMd.getUMLAssociationMetadataCollection().iterator();
+		while (assocMetadataIter.hasNext()) {
+			UMLAssociationMetadata assocMd = (UMLAssociationMetadata) assocMetadataIter.next();
 			UMLAssociation assoc = new UMLAssociation();
-			assoc.setBidirectional(assocMetadata[i].getIsBidirectional().booleanValue());
-			assoc.setTargetUMLAssociationEdge(createTargetAssociationEdge(assocMetadata[i]));
-			assoc.setSourceUMLAssociationEdge(createSourceAssociationEdge(assocMetadata[i]));
+			assoc.setBidirectional(assocMd.getIsBidirectional().booleanValue());
+			assoc.setTargetUMLAssociationEdge(createTargetAssociationEdge(assocMd));
+			assoc.setSourceUMLAssociationEdge(createSourceAssociationEdge(assocMd));
 			associations.add(assoc);
 		}		
 		return associations;
@@ -212,8 +216,7 @@ public class MetadataBuilder {
 		umlClass.setProjectVersion(getProject().getVersion());
 		
 		// semantic metadata
-		SemanticMetadata[] sem = new SemanticMetadata[metadata.getSemanticMetadataCollection().size()];
-		metadata.getSemanticMetadataCollection().toArray(sem);
+		SemanticMetadata[] sem = getSemanticMetadataArray(metadata.getSemanticMetadataCollection());
 		umlClass.setSemanticMetadataCollection(new UMLClassSemanticMetadataCollection(sem));
 		
 		// UMLAttributes
@@ -236,8 +239,7 @@ public class MetadataBuilder {
 			umlClass.setProjectVersion(getProject().getVersion());
 			
 			// semantic metadata
-			SemanticMetadata[] sem = new SemanticMetadata[metadata.getSemanticMetadataCollection().size()];
-			metadata.getSemanticMetadataCollection().toArray(sem);
+			SemanticMetadata[] sem = getSemanticMetadataArray(metadata.getSemanticMetadataCollection());
 			umlClass.setSemanticMetadataCollection(new UMLClassSemanticMetadataCollection(sem));
 			
 			// UMLAttributes
@@ -250,22 +252,32 @@ public class MetadataBuilder {
 	
 	
 	private UMLAttribute[] getUmlAttributes(UMLClassMetadata metadata) throws RemoteException, CodegenExtensionException {
-		UMLAttributeMetadata[] attribMetadata = getCadsrClient().findAttributesInClass(getProject(), metadata);
-		UMLAttribute[] attributes = new UMLAttribute[attribMetadata.length];		
-		for (int i = 0; i < attribMetadata.length; i++) {
-			UMLAttributeMetadata md = attribMetadata[i];
+		Iterator attribMetadata = metadata.getUMLAttributeMetadataCollection().iterator();
+		UMLAttribute[] attributes = new UMLAttribute[metadata.getUMLAttributeMetadataCollection().size()];
+		int i = 0;
+		while (attribMetadata.hasNext()) {
+			UMLAttributeMetadata md = (UMLAttributeMetadata) attribMetadata.next();
 			UMLAttribute attrib = new UMLAttribute();
 			attrib.setDescription(md.getDescription());
 			attrib.setName(md.getFullyQualifiedName());
-			/*
-			// attribute semantic metadata
-			SemanticMetadata[] attrSemantic = new SemanticMetadata[md.getSemanticMetadataCollection().size()];
-			md.getSemanticMetadataCollection().toArray(attrSemantic);
+			SemanticMetadata[] attrSemantic = getSemanticMetadataArray(md.getSemanticMetadataCollection());
 			attrib.setSemanticMetadataCollection(new UMLAttributeSemanticMetadataCollection(attrSemantic));
-			*/
 			attributes[i] = attrib;
+			i++;
 		}
 		return attributes;
+	}
+	
+	
+	private SemanticMetadata[] getSemanticMetadataArray(Collection semanticMetadataCollection) {
+		SemanticMetadata[] array = new SemanticMetadata[semanticMetadataCollection.size()];
+		Iterator semIter = semanticMetadataCollection.iterator();
+		int i = 0;
+		while (semIter.hasNext()) {
+			array[i] = (SemanticMetadata) semIter.next();
+			i++;
+		}
+		return array;
 	}
 	
 	
@@ -312,8 +324,30 @@ public class MetadataBuilder {
 	private UMLClassMetadata[] getClassMetadata() throws RemoteException, CodegenExtensionException {
 		if (classMetadata == null) {
 			classMetadata = getCadsrClient().findClassesInPackage(getProject(), getPackageMetadata().getName());
+			// semantic metadata on each class
+			for (int i = 0; i < classMetadata.length; i++) {
+				SemanticMetadata[] classSemMd = getCadsrClient().findSemanticMetadataForClass(getProject(), classMetadata[i]);
+				List semanticList = toArray(classSemMd);
+				classMetadata[i].setSemanticMetadataCollection(semanticList);
+			}
+			// attributes
+			for (int i = 0; i < classMetadata.length; i++) {
+				UMLAttributeMetadata[] metadataArray = getCadsrClient().findAttributesInClass(getProject(), classMetadata[i]);
+				List attribList = toArray(metadataArray);
+				classMetadata[i].setUMLAttributeMetadataCollection(attribList);
+			}
+			// TODO: associations
 		}
 		return classMetadata;
+	}
+	
+	
+	private List toArray(Object[] objs) {
+		List l = new ArrayList(objs.length);
+		for (int i = 0; i < objs.length; i++) {
+			l.add(objs[i]);
+		}
+		return l;
 	}
 	
 	
