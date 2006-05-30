@@ -123,18 +123,18 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent imp
 						}
 					}
 
-//					UMLAssociation[] assocs = cadsrService.findAssociationsInPackage(getCaDSRPanel()
-//						.getSelectedProject(), pkg.getName());
-//					if (assocs != null) {
-//						for (int i = 0; i < assocs.length; i++) {
-//							UMLAssociation assoc = assocs[i];
-//							// TODO: create and add Assocation to the graph
-//							// need to handle class already being in the graph,
-//							// and not being in the graph
-//							// also need to handle the association linking to
-//							// classes in external packages
-//						}
-//					}
+					UMLAssociation[] assocs = cadsrService.findAssociationsInPackage(getCaDSRPanel()
+						.getSelectedProject(), pkg.getName());
+					if (assocs != null) {
+						for (int i = 0; i < assocs.length; i++) {
+							UMLAssociation assoc = assocs[i];
+							// TODO: create and add Assocation to the graph
+							// need to handle class already being in the graph,
+							// and not being in the graph
+							// also need to handle the association linking to
+							// classes in external packages
+						}
+					}
 
 					getUMLDiagram().performLayout();
 					getUMLDiagram().refresh();
