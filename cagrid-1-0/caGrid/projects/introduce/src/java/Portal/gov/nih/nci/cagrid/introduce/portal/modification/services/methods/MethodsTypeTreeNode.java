@@ -112,6 +112,7 @@ public class MethodsTypeTreeNode extends DefaultMutableTreeNode {
 		
 		MethodTypeTreeNode newNode = new MethodTypeTreeNode(method,model,info);
 		model.insertNodeInto(newNode,this,this.getChildCount());
+		
 	}
 	
 	public void removeMethod(MethodTypeTreeNode node){

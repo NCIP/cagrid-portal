@@ -1,16 +1,12 @@
 
 package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
-import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
-import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
-import javax.swing.JPopupMenu;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
 
 /** 
  *  Node for representing namepspace
@@ -28,17 +24,21 @@ public class ServicesTypeTreeNode extends DefaultMutableTreeNode {
 	private ServicesType services;
 	private DefaultTreeModel model;
 	private ServiceInformation info;
-	public ServicesTypeTreeNode(ServicesType services, ServiceInformation info, DefaultTreeModel model) {
+	public ServicesTypeTreeNode(ServiceInformation info) {
 		super();
 		this.info = info;
-		this.services = services;
-		this.model = model;
 		menu = new ServicesPopUpMenu(this);
 		this.setUserObject("Service Contexts");
-		initialize();
+		
 	}
 	
-	private void initialize() {
+	public void setModel(DefaultTreeModel model){
+		this.model = model;
+	}
+	
+	public void setServices(ServicesType services, DefaultTreeModel model) {
+		this.model = model;
+		this.services = services;
 		if (services.getService() != null) {
 			for (int i = 1; i < services.getService().length; i++) {
 				//if(!services.getService(i).getName().equals(info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME))){

@@ -56,7 +56,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
@@ -1404,7 +1403,7 @@ public class ModificationViewer extends GridPortalComponent {
 												+ namespace.getNamespace()
 												+ " : "
 												+ namespace.getPackageName());
-	
+
 										return;
 									}
 								}
@@ -1453,24 +1452,38 @@ public class ModificationViewer extends GridPortalComponent {
 						 */
 
 						// check the methods to make sure they are valid.......
-						if(introService.getServices()!=null && introService.getServices().getService()!=null){
-							for(int serviceI = 0; serviceI < introService.getServices().getService().length; serviceI++){
-								ServiceType service = introService.getServices().getService(serviceI);
-								if(service.getMethods()!=null && service.getMethods().getMethod()!=null){
+						if (introService.getServices() != null
+								&& introService.getServices().getService() != null) {
+							for (int serviceI = 0; serviceI < introService
+									.getServices().getService().length; serviceI++) {
+								ServiceType service = introService
+										.getServices().getService(serviceI);
+								if (service.getMethods() != null
+										&& service.getMethods().getMethod() != null) {
 									List methodNames = new ArrayList();
-									for(int methodI = 0; methodI < service.getMethods().getMethod().length; methodI++){
-										MethodType method = methods.getMethod(methodI);
-										if(!(methodNames.contains(method.getName()))){
-											methodNames.add(method.getName());
-										} else {
-											setErrorMessage("The service " + service.getName() + " has duplicate methods " + method.getName());
-											return;
+									if (service.getMethods() != null
+											&& service.getMethods().getMethod() != null) {
+										for (int methodI = 0; methodI < service
+												.getMethods().getMethod().length; methodI++) {
+											MethodType method = methods
+													.getMethod(methodI);
+											if (!(methodNames.contains(method
+													.getName()))) {
+												methodNames.add(method
+														.getName());
+											} else {
+												setErrorMessage("The service "
+														+ service.getName()
+														+ " has duplicate methods "
+														+ method.getName());
+												return;
+											}
 										}
 									}
 								}
 							}
 						}
-						
+
 						// save the metadata and methods and then call the
 						// resync and build
 						setProgressText("writting service document");

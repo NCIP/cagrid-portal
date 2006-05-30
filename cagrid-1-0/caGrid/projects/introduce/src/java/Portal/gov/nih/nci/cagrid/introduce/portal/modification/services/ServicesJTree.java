@@ -65,10 +65,12 @@ public class ServicesJTree extends JTree {
 
 
 	public void setServices(ServicesType ns) {
-		this.root = new ServicesTypeTreeNode(ns,info,(DefaultTreeModel)this.getModel());
+		this.root = new ServicesTypeTreeNode(info);
 		this.model = new DefaultTreeModel(root, false);
 		this.services = ns;
+		this.root.setServices(this.services,this.model);
 		setModel(model);
+		expandAll(true);
 	}
 
 
