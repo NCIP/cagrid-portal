@@ -108,7 +108,7 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent imp
 								for (int j = 0; j < atts.length; j++) {
 									UMLAttributeMetadata att = atts[j];
 									//Attribute a = new Attribute(Attribute.PUBLIC, "", att.getName());
-									c.addAttribute("", att.getName());
+									c.addAttribute( /*type*/ "", att.getName());
 									
 								}
 							}
