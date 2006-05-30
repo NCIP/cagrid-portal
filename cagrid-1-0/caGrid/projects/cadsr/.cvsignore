@@ -4,3 +4,5 @@ ext
 bin
 *.log*
 *.tmp
+*.sh
+*.bat
