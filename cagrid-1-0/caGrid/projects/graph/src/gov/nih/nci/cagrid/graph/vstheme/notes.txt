@@ -1,0 +1,5 @@
+Finish by today: 
+
+icons on tabs
+MDI panel
+OutlinePanel
