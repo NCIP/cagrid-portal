@@ -56,82 +56,80 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 
-
-/** 
- *  Renders the grid service tree
+/**
+ * Renders the grid service tree
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * 
- * @created Nov 17, 2004 
- * @version $Id$ 
+ * @created Nov 17, 2004
+ * @version $Id$
  */
 public class ServicesTreeRenderer extends DefaultTreeCellRenderer {
 	private DefaultTreeModel model = null;
+
 	private Font normal = null;
-	
+
 	public ServicesTreeRenderer(DefaultTreeModel model) {
 		super();
 		this.model = model;
 	}
-	
-	
-	public Component getTreeCellRendererComponent(
-		JTree tree, Object value, boolean sel, boolean expanded,
-		boolean leaf, int row, boolean localHasFocus) {
-		super.getTreeCellRendererComponent(
-			tree, value, sel, expanded,
-			leaf, row, localHasFocus);
-		if(normal==null){
+
+	public Component getTreeCellRendererComponent(JTree tree, Object value,
+			boolean sel, boolean expanded, boolean leaf, int row,
+			boolean localHasFocus) {
+		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf,
+				row, localHasFocus);
+		if (normal == null) {
 			normal = this.getFont();
 		}
 		this.setFont(normal);
 		if (value instanceof ServiceTypeTreeNode) {
 			ServiceTypeTreeNode node = (ServiceTypeTreeNode) value;
 			this.setIcon(node.getOpenIcon());
-			//this.setOpenIcon(node.getOpenIcon());
-			//this.setClosedIcon(node.getClosedIcon());
+			this.setOpenIcon(node.getOpenIcon());
+			this.setClosedIcon(node.getClosedIcon());
 			this.setFont(normal.deriveFont(Font.BOLD));
 			this.setText(node.toString());
 		} else if (value instanceof ServicesTypeTreeNode) {
 			ServicesTypeTreeNode node = (ServicesTypeTreeNode) value;
-			//this.setIcon(node.getOpenIcon());
-			//this.setOpenIcon(node.getOpenIcon());
-			//this.setClosedIcon(node.getClosedIcon());
+			this.setIcon(null);
+			this.setOpenIcon(null);
+			this.setClosedIcon(null);
 			this.setText(node.toString());
-			this.setFont(normal.deriveFont(Font.BOLD,12));
+			this.setFont(normal.deriveFont(Font.BOLD, 12));
 		} else if (value instanceof MethodsTypeTreeNode) {
 			MethodsTypeTreeNode node = (MethodsTypeTreeNode) value;
 			this.setIcon(node.getOpenIcon());
-			//this.setOpenIcon(node.getOpenIcon());
-			//this.setClosedIcon(node.getClosedIcon());
+			this.setOpenIcon(node.getOpenIcon());
+			this.setClosedIcon(node.getClosedIcon());
 			this.setText(node.toString());
 			this.setFont(normal);
 		} else if (value instanceof MethodTypeTreeNode) {
 			MethodTypeTreeNode node = (MethodTypeTreeNode) value;
 			this.setIcon(node.getOpenIcon());
-			//this.setOpenIcon(node.getOpenIcon());
-			//this.setClosedIcon(node.getClosedIcon());
+			this.setOpenIcon(node.getOpenIcon());
+			this.setClosedIcon(node.getClosedIcon());
 			this.setText(node.toString());
 			this.setFont(normal.deriveFont(Font.ITALIC));
 		} else if (value instanceof ResourcePropertiesTypeTreeNode) {
 			ResourcePropertiesTypeTreeNode node = (ResourcePropertiesTypeTreeNode) value;
 			this.setIcon(node.getOpenIcon());
-			//this.setOpenIcon(node.getOpenIcon());
-			//this.setClosedIcon(node.getClosedIcon());
+			this.setOpenIcon(node.getOpenIcon());
+			this.setClosedIcon(node.getClosedIcon());
 			this.setText(node.toString());
 			this.setFont(normal);
 		} else if (value instanceof ResourcePropertyTypeTreeNode) {
 			ResourcePropertyTypeTreeNode node = (ResourcePropertyTypeTreeNode) value;
 			this.setIcon(node.getOpenIcon());
-			//this.setOpenIcon(node.getOpenIcon());
-			//this.setClosedIcon(node.getClosedIcon());
+			this.setOpenIcon(node.getOpenIcon());
+			this.setClosedIcon(node.getClosedIcon());
 			this.setText(node.toString());
 			this.setFont(normal.deriveFont(Font.ITALIC));
 			this.setForeground(Color.GRAY);
-		} 
+		}
 		return this;
 	}
 
