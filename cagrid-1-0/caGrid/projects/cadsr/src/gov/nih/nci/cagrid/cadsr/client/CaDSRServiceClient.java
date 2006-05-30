@@ -1,10 +1,10 @@
 package gov.nih.nci.cagrid.cadsr.client;
 
 import gov.nih.nci.cadsr.umlproject.domain.Project;
+import gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.common.CaDSRServiceI;
-import gov.nih.nci.cagrid.cadsr.domain.UMLAssociation;
 import gov.nih.nci.cagrid.cadsr.stubs.CaDSRServicePortType;
 import gov.nih.nci.cagrid.cadsr.stubs.service.CaDSRServiceAddressingLocator;
 
@@ -96,20 +96,34 @@ public class CaDSRServiceClient implements CaDSRServiceI {
 											UMLClassMetadata clazz = classes[k];
 											System.out.println("\t\t-" + clazz.getName());
 
-//											UMLAssociation[] assocs = client.findAssociationsForClass(project, clazz);
-//											if (assocs != null) {
-//												for (int index = 0; index < assocs.length; index++) {
-//													UMLAssociation assoc = assocs[index];
-//
-//													System.out.println("\t\t\t("
-//														+ assoc.getSourceRoleName()
-//														+ ")---> ("
-//														+ assoc.getTargetRoleName()
-//														+ ")"
-//														+ assoc.getTargetUMLClassMetadata().getUMLClassMetadata()
-//															.getFullyQualifiedName());
-//												}
-//											}
+											// UMLAssociation[] assocs =
+											// client.findAssociationsForClass(project,
+											// clazz);
+											// if (assocs != null) {
+											// for (int index = 0; index <
+											// assocs.length; index++) {
+											// UMLAssociation assoc =
+											// assocs[index];
+											//
+											// System.out.println("\t\t\t("
+											// + assoc.getSourceRoleName()
+											// + ")---> ("
+											// + assoc.getTargetRoleName()
+											// + ")"
+											// +
+											// assoc.getTargetUMLClassMetadata().getUMLClassMetadata()
+											// .getFullyQualifiedName());
+											// }
+											// }
+
+											UMLAttributeMetadata[] atts = client.findAttributesInClass(project, clazz);
+											if (atts != null) {
+												for (int l = 0; l < atts.length; l++) {
+													UMLAttributeMetadata att = atts[l];
+													System.out.println("\t\t\t-" + att.getName());
+												}
+											}
+
 										}
 									}
 								}

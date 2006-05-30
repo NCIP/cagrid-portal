@@ -269,7 +269,6 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 		} else {
 			getNsTextField().setText("unavailable");
 		}
-
 	}
 
 }

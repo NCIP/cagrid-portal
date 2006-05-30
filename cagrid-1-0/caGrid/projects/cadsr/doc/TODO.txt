@@ -15,7 +15,7 @@ returning same class for association source and target
 
 unable to populate associations as client calls back to ApplServ even if associations are set
 
-
+attribute name has classname: prefix
 
 
 ==================================================

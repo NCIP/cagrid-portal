@@ -1,7 +1,7 @@
 <ns1:ExtensionDescription xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xmlns:ns1="gme://gov.nih.nci.cagrid.introduce/1/Extension" extensionType="DISCOVERY">
  <ns1:DiscoveryExtensionDescription displayName="caDSR" name="caDSR-discovery">
-  <!--<ns1:DiscoveryToolsPanelExtension>gov.nih.nci.cagrid.cadsr.portal.</ns1:DiscoveryToolsPanelExtension>-->
+  <ns1:DiscoveryToolsPanelExtension>gov.nih.nci.cagrid.cadsr.portal.discovery.CaDSRTypeDiscoveryComponent</ns1:DiscoveryToolsPanelExtension>
   <ns1:DiscoveryPanelExtension>gov.nih.nci.cagrid.cadsr.portal.discovery.CaDSRTypeSelectionComponent</ns1:DiscoveryPanelExtension>
   <ns1:Properties>
    <property key="GME_URL"
