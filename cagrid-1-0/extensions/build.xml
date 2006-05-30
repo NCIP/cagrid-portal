@@ -16,14 +16,15 @@
 	<property name="share.dir" location="${cagrid.dir}/share" />
 	<property name="share.lib.dir" location="${share.dir}/lib" />
 	<property name="test.lib.dir" location="${cagrid.dir}/test/lib" />
-	<property name="antfiles.dir" location="${cagrid.dir}/antfiles" />
+	<property name="cagrid.antfiles.dir" location="${cagrid.dir}/antfiles" />
+	<property name="antfiles.dir" location="${basedir}/antfiles" />
 	<property name="cagrid.test.dir" location="${cagrid.dir}/test" />
 
 	<!-- IMPORT THE UTILITIES TARGETS -->
-	<import file="${cagrid.dir}/antfiles/artifacts.xml" />
-	<import file="${antfiles.dir}/ant-utilities.xml" />
-	<import file="${antfiles.dir}/test-utilities.xml" />
-	<import file="${antfiles.dir}/report-utilities.xml" />
+	<import file="${cagrid.antfiles.dir}/artifacts.xml" />
+	<import file="${cagrid.antfiles.dir}/ant-utilities.xml" />
+	<import file="${cagrid.antfiles.dir}/test-utilities.xml" />
+	<import file="${cagrid.antfiles.dir}/report-utilities.xml" />
 
 	<!-- IMPORT THE TEST TARGET -->
 	<import file="${test.dir}/test.xml" />
@@ -41,10 +42,36 @@
 	<property name="testable.projects.list" value="ntsec" />
 
 	<!-- =============================================================== -->
+	<!-- Bootstrap the build by setting up the structure and building    -->
+	<!-- our custom ant tasks.                                           -->
+	<!-- =============================================================== -->
+	<target name="prepare">
+		<tstamp />
+
+		<typedef name="artifact" classname="gov.nih.nci.cagrid.ant.Artifact" loaderref="artifact">
+			<classpath>
+				<pathelement location="${cagrid.antfiles.dir}/build" />
+			</classpath>
+		</typedef>
+		<taskdef name="resolveDependencies" classname="gov.nih.nci.cagrid.ant.ResolveDependencies" loaderref="artifact">
+			<classpath>
+				<pathelement location="${cagrid.antfiles.dir}/build" />
+			</classpath>
+		</taskdef>
+
+		<taskdef resource="net/sf/antcontrib/antlib.xml">
+			<classpath>
+				<pathelement location="${share.lib.dir}/ant-contrib.jar" />
+			</classpath>
+		</taskdef>
+	</target>
+
+	<!-- =============================================================== -->
 	<!-- NTSEC                                                           -->
 	<!-- =============================================================== -->
 	<target name="build-ntsec" depends="prepare" description="Builds ntsec">
 		<resolveDependencies extdir="${extensions.projects.dir}/ntsec/ext">
+			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />
 		</resolveDependencies>
 		<ant dir="${extensions.projects.dir}/ntsec" inheritAll="false" antfile="build.xml" target="all" />
