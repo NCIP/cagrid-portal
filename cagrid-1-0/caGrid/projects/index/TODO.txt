@@ -1,4 +1,0 @@
-
-index service connecting to secure services (currently complains about communication needed... e.g. GSI Transport (encryption only) authentication required...)
- -look at setAnonymous in QueryAggregatorSource
- -probably have to rewrite code to handle diff communication types
