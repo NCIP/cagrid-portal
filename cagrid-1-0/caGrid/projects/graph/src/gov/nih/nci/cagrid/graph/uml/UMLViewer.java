@@ -299,6 +299,7 @@ class UMLViewerComponentListener extends ComponentAdapter {
 }
 
 class PagerButton extends JButton implements MouseListener {
+	
 	protected UMLDiagram diagram;
 
 	protected boolean pressed = true;
@@ -349,7 +350,8 @@ class PagerButton extends JButton implements MouseListener {
 				this.diagram.viewer.pager.setVisible(false);
 				this.diagram.viewer.pagerCaptionBar.setVisible(false);
 			} else {
-				JLayeredPane parent = (JLayeredPane) diagram.getParent().getParent();
+				
+				JLayeredPane parent = (JLayeredPane) diagram;//.getParent().getParent();
 
 				// this is a bad hack but it works... must find underlying
 				// problem later
@@ -363,8 +365,9 @@ class PagerButton extends JButton implements MouseListener {
 				this.diagram.viewer.pagerCaptionBar.setBounds(parent.getWidth() - 200 - this.getWidth() - 5, parent
 					.getHeight()
 					- 200 - this.getHeight() - 5 - 17 - this.diagram.statusBar.getHeight(), 200, 17);
-
-				if (parent.getComponentCount() == 1) {
+				
+		
+				if (parent.getComponentCount() == 3) {
 					parent.add(this.diagram.viewer.pager, JLayeredPane.POPUP_LAYER);
 					parent.add(this.diagram.viewer.pagerCaptionBar, JLayeredPane.POPUP_LAYER);
 				}

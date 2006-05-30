@@ -30,7 +30,7 @@ public class Main {
 
 		Random r = new Random(System.currentTimeMillis());
 
-		int numclasses = 200;
+		int numclasses = 20;
 		int numassocs = 90;
 		
 		for(int k = 0; k < numclasses;  k++)
@@ -57,7 +57,7 @@ public class Main {
 		
 		diagram.performLayout();
 		diagram.refresh();
-		diagram.repositionLabelsAndArrowHeads();
+		//diagram.repositionLabelsAndArrowHeads();
 		
 
 		
@@ -68,7 +68,7 @@ public class Main {
 
 
 		JFrame f = new JFrame();
-		f.getContentPane().add(p);
+		f.getContentPane().add(diagram);
 		f.setBounds(10, 100, 900, 600);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);

@@ -1,11 +1,12 @@
 package gov.nih.nci.cagrid.graph.uml;
 
+import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
-import javax.swing.JComponent;
+import javax.swing.JLayeredPane;
 
 import org.tigris.gef.base.Diagram;
 import org.tigris.gef.presentation.Fig;
@@ -15,7 +16,7 @@ import uml.classdiagram.ClassdiagramLayouter;
 import uml.classdiagram.ClassdiagramNode;
 
 
-public class UMLDiagram extends JComponent {
+public class UMLDiagram extends JLayeredPane {
 	protected Diagram diagram;
 	protected UMLViewer viewer;
 	protected UMLMenuBar menubar;
@@ -44,6 +45,8 @@ public class UMLDiagram extends JComponent {
 		this.add(statusBar);
 
 		this.addComponentListener(new UMLDiagramComponentListener());
+		
+		this.setPreferredSize(new Dimension(500, 500));
 
 	}
 
@@ -132,6 +135,7 @@ public class UMLDiagram extends JComponent {
 	public void performLayout() {
 
 		layouter.layout();
+	
 	}
 
 
