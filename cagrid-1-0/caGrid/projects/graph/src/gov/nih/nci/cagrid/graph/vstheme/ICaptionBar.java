@@ -174,9 +174,6 @@ class ICaptionBarMouseMotionListener extends MouseMotionAdapter
 
     public void mouseDragged(MouseEvent e)
     {
-        ICaptionBar c = (ICaptionBar) e.getSource();
-        IInternalFrame s = c.getIFrame();
-        //s.setLocation(s.getX() + e.getX() - c.lastClicked.x, s.getY() + e.getY() - c.lastClicked.y );
 
     }
 }
