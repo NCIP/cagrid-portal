@@ -79,9 +79,9 @@
 	<classpathentry kind="lib" path="ext/lib/mobius-castor-0.9.4.3-xml.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-GlobalModelExchange_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-GlobalModelExchange.jar"/>
-	<classpathentry sourcepath="C:/Documents and Settings/oster/Desktop/castor-0.9.9-src.zip" kind="lib" path="ext/lib/castor-0.9.9.jar"/>
+	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
 	<classpathentry kind="lib" path="ext/lib/cglib-full-2.0.1.jar"/>
-	<classpathentry sourcepath="C:/Documents and Settings/oster/Desktop/caCORE Stuff/caCORE3-1_SOURCE" kind="lib" path="ext/lib/client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/hibernate3.jar"/>
 	<classpathentry kind="lib" path="ext/lib/spring.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
