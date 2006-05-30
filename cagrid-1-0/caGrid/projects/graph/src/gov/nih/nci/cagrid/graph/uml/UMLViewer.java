@@ -7,6 +7,7 @@
 package gov.nih.nci.cagrid.graph.uml;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -110,39 +111,34 @@ class UMLViewer extends JGraph {
 		this.diagram = d;
 		this.pager.diagram = this.diagram;
 	}
-	
-	public boolean highlightClass(UMLClass c)
-	{
-		if(this.diagram.classes.contains((UMLClass)c ))
-		{
+
+
+	public boolean highlightClass(UMLClass c) {
+		if (this.diagram.classes.contains((UMLClass) c)) {
 			c.highlight(diagram.diagram.getLayer());
 			pager.highlightClass(c);
-	
+
 			for (int j = 0; j < diagram.assocs.size(); j++) {
 				UMLClassAssociation temp = (UMLClassAssociation) diagram.assocs.get(j);
-	
+
 				temp.fade();
-	
+
 			}
-	
+
 			for (int k = 0; k < diagram.classes.size(); k++) {
 				UMLClass c2 = (UMLClass) diagram.classes.get(k);
-	
+
 				if (c != c2) {
 					c2.fade();
 				}
-	
+
 			}
-	
+
 			diagram.statusBar.setMsg("Class: [ " + c.name + " ]");
 			return true;
 		}
 		return false;
 	}
-	
-	
-	
-	
 
 }
 
@@ -293,7 +289,7 @@ class UMLViewerComponentListener extends ComponentAdapter {
 	public void componentResized(ComponentEvent e) {
 
 		UMLViewer s = (UMLViewer) e.getSource();
-		JLayeredPane parent = (JLayeredPane) s.diagram.getParent().getParent();
+		Container parent = s.diagram.getParent().getParent();
 		s.pager.updateScroller();
 		s.pager.setBounds(parent.getWidth() - 200 - s.pagerButton.getWidth() - 5, parent.getHeight() - 200
 			- s.pagerButton.getHeight() - s.diagram.statusBar.getHeight() - 5, 200, 200);

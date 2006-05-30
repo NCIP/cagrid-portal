@@ -55,20 +55,21 @@ public class UMLDiagram extends JComponent {
 
 	public boolean addClass(UMLClass gc) {
 
-		if(classes.contains((UMLClass) gc) ) return false;
-		
+		if (classes.contains(gc))
+			return false;
+
 		this.diagram.add(gc);
 		this.classes.addElement(gc);
 		this.layouter.add(new ClassdiagramNode(gc));
 		return true;
 
 	}
-	
-	public boolean highlightClass(UMLClass c)
-	{
 
-		return this.viewer.highlightClass(c);	
-	
+
+	public boolean highlightClass(UMLClass c) {
+
+		return this.viewer.highlightClass(c);
+
 	}
 
 
@@ -95,7 +96,7 @@ public class UMLDiagram extends JComponent {
 		this.assocs.addElement(edge);
 
 		this.layouter.add(new ClassdiagramAssociationEdge(edge));
-		
+
 		return true;
 	}
 
