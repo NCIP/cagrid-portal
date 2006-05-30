@@ -126,7 +126,7 @@
 
 		<artifact track="main" type="jars" id="graph.jars">
 			<antcall target="build-graph" />
-			<fileset dir="${projects.dir}/graph/build/lib">
+			<fileset dir="${projects.dir}/graph/build/jars">
 				<include name="*.jar" />
 			</fileset>
 			<fileset dir="${projects.dir}/graph/lib">
