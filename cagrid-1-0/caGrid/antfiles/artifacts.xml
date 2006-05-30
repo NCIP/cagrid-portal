@@ -3,41 +3,6 @@
 <!-- ======================================================================= -->
 <project name="caGrid_artifacts" basedir="." default="usage">
 
-
-	<!-- =============================================================== -->
-	<!-- Bootstrap the build by setting up the structure and building    -->
-	<!-- our custom ant tasks.                                           -->
-	<!-- =============================================================== -->
-	<target name="prepare">
-		<tstamp />
-		<delete dir="${antfiles.dir}/build" />
-		<mkdir dir="${antfiles.dir}/build" />
-		<javac srcdir="${antfiles.dir}/src" destdir="${antfiles.dir}/build" debug="on" deprecation="off" optimize="off">
-			<classpath>
-				<fileset dir="${ant.library.dir}">
-					<include name="ant.jar" />
-				</fileset>
-			</classpath>
-		</javac>
-
-		<typedef name="artifact" classname="gov.nih.nci.cagrid.ant.Artifact" loaderref="artifact">
-			<classpath>
-				<pathelement location="${antfiles.dir}/build" />
-			</classpath>
-		</typedef>
-		<taskdef name="resolveDependencies" classname="gov.nih.nci.cagrid.ant.ResolveDependencies" loaderref="artifact">
-			<classpath>
-				<pathelement location="${antfiles.dir}/build" />
-			</classpath>
-		</taskdef>
-
-		<taskdef resource="net/sf/antcontrib/antlib.xml">
-			<classpath>
-				<pathelement location="${share.lib.dir}/ant-contrib.jar" />
-			</classpath>
-		</taskdef>
-	</target>
-
 	<!-- =============================================================== -->
 	<!-- Define the build artifacts (created/used by projects) here      -->
 	<!--                                                                 -->
