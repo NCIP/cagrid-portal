@@ -67,7 +67,7 @@ if (info.getServices() != null && info.getServices().getService() != null) {
 		<%
 		}
 		%>
-		<resource name="serviceconfiguration" type="<%=service.getPackageName()%>.<%=modifiedServiceName.toLowerCase()%>.service.globus.ServiceConfiguration">
+		<resource name="serviceconfiguration" type="<%=service.getPackageName()%>.service.globus.ServiceConfiguration">
 			<resourceParams>
 				<parameter>
 					<name>factory</name>
