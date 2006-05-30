@@ -22,6 +22,8 @@ import org.globus.wsrf.encoding.ObjectSerializer;
  * @version $Id$ 
  */
 public class JaxPValidator extends CQLValidator {
+	private static DomainModelValidator domainValidator = null;
+	
 	private SchemaValidator validator;
 	
 	public JaxPValidator(String xsdFilename) throws SchemaValidationException {
@@ -47,6 +49,9 @@ public class JaxPValidator extends CQLValidator {
 	
 	
 	public void validateDomain(CQLQuery query, DomainModel model) throws MalformedQueryException {
-		
+		if (domainValidator == null) {
+			domainValidator = new DomainModelValidator();
+		}
+		domainValidator.validateDomain(query, model);
 	}
 }
