@@ -116,8 +116,8 @@ public class UMLClass extends FigNode
 	}
 
 
-	public void addAttribute(int access, java.lang.String type, java.lang.String name) {
-		this.attributes.addElement(new Attribute(access, type, name));
+	public void addAttribute(java.lang.String type, java.lang.String name) {
+		this.attributes.addElement(new Attribute(0, type, name));
 
 	}
 

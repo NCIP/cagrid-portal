@@ -60,6 +60,8 @@ public class UMLDiagram extends JLayeredPane {
 
 		if (classes.contains(gc))
 			return false;
+		
+		gc.refresh();
 
 		this.diagram.add(gc);
 		this.classes.addElement(gc);
