@@ -33,6 +33,7 @@ import javax.swing.JPanel;
  * 
  */
 public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent implements PackageSelectedListener {
+	
 	private String cadsrURL = null;
 	private CaDSRBrowserPanel caDSRPanel = null;
 	private JPanel graphPanel = null;
@@ -106,15 +107,13 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent imp
 							if (atts != null) {
 								for (int j = 0; j < atts.length; j++) {
 									UMLAttributeMetadata att = atts[j];
-									Attribute a = new Attribute(Attribute.PUBLIC, "", att.getName());
-									c.addAttribute(a);
+									//Attribute a = new Attribute(Attribute.PUBLIC, "", att.getName());
+									c.addAttribute("", att.getName());
+									
 								}
 							}
 
-							// TODO: why do I need to do this? (addClass should
-							// probably
-							// do it)
-							c.refresh();
+
 							getUMLDiagram().addClass(c);
 
 							// TODO: this seems to updating the graph live... it
@@ -138,6 +137,7 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent imp
 
 					getUMLDiagram().performLayout();
 					getUMLDiagram().refresh();
+					
 				} catch (RemoteException e) {
 					JOptionPane.showMessageDialog(CaDSRTypeDiscoveryComponent.this,
 						"Error communicating with caDSR; please check the caDSR URL!");
@@ -174,8 +174,6 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent imp
 		if (umlDiagram == null) {
 			umlDiagram = new UMLDiagram();
 
-			// graph needs to handle sizing better
-			umlDiagram.setPreferredSize(new Dimension(500, 300));
 		}
 		return umlDiagram;
 	}
