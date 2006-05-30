@@ -20,6 +20,10 @@ public class IInternalFrame extends JComponent
     protected IRootPane   rootPane;
 
 
+    public void signalClose()
+    {
+    	
+    }
 
     public IInternalFrame()
     {

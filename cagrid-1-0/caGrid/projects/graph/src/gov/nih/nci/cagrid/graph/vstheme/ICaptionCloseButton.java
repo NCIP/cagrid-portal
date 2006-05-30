@@ -37,5 +37,8 @@ class ICaptionCloseButtonMouseListener extends MouseAdapter
     public void mouseClicked(MouseEvent e)
     {
         ICaptionCloseButton s = (ICaptionCloseButton) e.getSource();
+        ICaptionBar bar = (ICaptionBar) s.getParent();
+        
+        bar.signalClose();
     }
 }

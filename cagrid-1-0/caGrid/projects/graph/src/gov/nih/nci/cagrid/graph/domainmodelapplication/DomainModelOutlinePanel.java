@@ -7,14 +7,20 @@ import gov.nih.nci.cagrid.graph.vstheme.InvertedMDIPanel;
 
 public class DomainModelOutlinePanel extends IInternalFrame
 {
+	InvertedMDIPanel mdi = new InvertedMDIPanel();
+	
 	public DomainModelOutlinePanel()
 	{
 		
-		InvertedMDIPanel mdi = new InvertedMDIPanel();
 		mdi.addPage(new JTree(), null, "Outline 1");
 		mdi.addPage(new JTree(), null, "Outline 2");
 		
 		this.setComponent(mdi);
 		
+	}
+	
+	public void signalClose()
+	{
+		mdi.removePage(mdi.currentPage);
 	}
 }

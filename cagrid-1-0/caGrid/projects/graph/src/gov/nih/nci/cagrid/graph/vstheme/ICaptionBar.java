@@ -122,6 +122,14 @@ public class ICaptionBar extends JComponent
 
         super.paint(g);
     }
+    
+    public void signalClose()	
+    {
+    
+    	IInternalFrame f = (IInternalFrame) this.getParent().getParent();
+    	
+    	f.signalClose();
+    }
 
 
 

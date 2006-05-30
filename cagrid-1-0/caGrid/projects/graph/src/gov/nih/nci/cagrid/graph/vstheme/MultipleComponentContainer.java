@@ -30,7 +30,6 @@ public class MultipleComponentContainer extends JLayeredPane
 			
 			this.remove(c);
 			this.components.remove(i);
-		
 		}
 		
 	}
