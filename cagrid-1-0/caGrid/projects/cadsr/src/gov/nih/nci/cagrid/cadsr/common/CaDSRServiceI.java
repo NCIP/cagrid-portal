@@ -28,16 +28,18 @@ public interface CaDSRServiceI {
 		gov.nih.nci.cadsr.umlproject.domain.Project project, java.lang.String packageName) throws RemoteException;
 
 
-	public java.lang.String generateMetadataExtractForProject(gov.nih.nci.cadsr.umlproject.domain.Project project)
-		throws RemoteException;
+	public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForProject(
+		gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException;
 
 
-	public java.lang.String generateMetadataExtractForPackages(gov.nih.nci.cadsr.umlproject.domain.Project project,
-		java.lang.String[] packageNames) throws RemoteException;
+	public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForPackages(
+		gov.nih.nci.cadsr.umlproject.domain.Project project, java.lang.String[] packageNames) throws RemoteException;
 
 
-	public java.lang.String generateMetadataExtractForClasses(gov.nih.nci.cadsr.umlproject.domain.Project project,
-		gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] classes) throws RemoteException;
+	public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClasses(
+		gov.nih.nci.cadsr.umlproject.domain.Project project,
+		gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] classes,
+		gov.nih.nci.cagrid.cadsr.domain.UMLAssociation[] associations) throws RemoteException;
 
 
 	public gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata[] findAttributesInClass(
@@ -53,5 +55,18 @@ public interface CaDSRServiceI {
 	public gov.nih.nci.cadsr.domain.ValueDomain findValueDomainForAttribute(
 		gov.nih.nci.cadsr.umlproject.domain.Project project,
 		gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata attribute) throws RemoteException;
+
+
+	public gov.nih.nci.cagrid.cadsr.domain.UMLAssociation[] findAssociationsForClass(
+		gov.nih.nci.cadsr.umlproject.domain.Project project, gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata clazz)
+		throws RemoteException;
+
+
+	public gov.nih.nci.cagrid.cadsr.domain.UMLAssociation[] findAssociationsInPackage(
+		gov.nih.nci.cadsr.umlproject.domain.Project project, java.lang.String packageName) throws RemoteException;
+
+
+	public gov.nih.nci.cagrid.cadsr.domain.UMLAssociation[] findAssociationsInProject(
+		gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException;
 
 }

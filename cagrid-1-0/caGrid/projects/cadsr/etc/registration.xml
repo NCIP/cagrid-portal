@@ -16,8 +16,10 @@
       <agg:GetMultipleResourcePropertiesPollType
 			xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"
 			xmlns:ns0="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"
+			xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"
 			xmlns:xs="http://www.w3.org/2001/XMLSchema"
-			xmlns:ns1="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain">
+			xmlns:ns1="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain"
+			xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsrservice">
         <!-- Specifies that the index should refresh information
             every 300000 milliseconds (once every 5 minutes) -->
         <agg:PollIntervalMillis>300000</agg:PollIntervalMillis>

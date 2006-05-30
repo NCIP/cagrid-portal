@@ -3,7 +3,9 @@ http\://cadsr.cagrid.nci.nih.gov/CaDSRService/bindings=gov.nih.nci.cagrid.cadsr.
 http\://cadsr.cagrid.nci.nih.gov/CaDSRService/service=gov.nih.nci.cagrid.cadsr.stubs.service
 gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata=gov.nih.nci.cagrid.metadata
 gme\://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain=gov.nih.nci.cadsr.umlproject.domain
+gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice=gov.nih.nci.cagrid.metadata.dataservice
 gme\://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain=gov.nih.nci.cadsr.domain
+gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsrservice=gov.nih.nci.cagrid.cadsr.domain
 gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service=gov.nih.nci.cagrid.metadata.service
 
 

@@ -21,7 +21,6 @@
 	<property name="ext.lib.dir" value="ext/lib" />
 	<property name="etc.dir" value="etc" />
 	<property name="schema.dir" value="schema" />
-	<property name="ext.schema.dir" value="ext/schema"/>
 	<property name="mappings.file" value="${basedir}/namespace2package.mappings" />
 	<property name="common.jar.name" value="${gar.filename}-common.jar" />
 	<property name="client.jar.name" value="${gar.filename}-client.jar" />
@@ -201,9 +200,6 @@
 			</fileset>
 			<fileset dir="${schema.dir}" casesensitive="yes">
 				<include name="**" />
-			</fileset>
-			<fileset dir="${ext.schema.dir}" casesensitive="yes">
-				<include name="**/*.xsd"/>
 			</fileset>
 		</copy>
 

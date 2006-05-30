@@ -53,6 +53,150 @@ public class CaDSRServiceProviderImpl {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	public gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsResponse findAllProjects(gov.nih.nci.cagrid.cadsr.stubs.FindAllProjects params) throws RemoteException {
 		gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsResponse();
 		boxedResult.setProject(impl.findAllProjects());
@@ -83,21 +227,21 @@ public class CaDSRServiceProviderImpl {
 		return boxedResult;
 	}
 
-	public gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForProjectResponse generateMetadataExtractForProject(gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForProject params) throws RemoteException {
-		gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForProjectResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForProjectResponse();
-		boxedResult.setResponse(impl.generateMetadataExtractForProject(params.getProject().getProject()));
+	public gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForProjectResponse generateDomainModelForProject(gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForProject params) throws RemoteException {
+		gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForProjectResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForProjectResponse();
+		boxedResult.setDomainModel(impl.generateDomainModelForProject(params.getProject().getProject()));
 		return boxedResult;
 	}
 
-	public gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForPackagesResponse generateMetadataExtractForPackages(gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForPackages params) throws RemoteException {
-		gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForPackagesResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForPackagesResponse();
-		boxedResult.setResponse(impl.generateMetadataExtractForPackages(params.getProject().getProject(),params.getPackageNames()));
+	public gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForPackagesResponse generateDomainModelForPackages(gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForPackages params) throws RemoteException {
+		gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForPackagesResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForPackagesResponse();
+		boxedResult.setDomainModel(impl.generateDomainModelForPackages(params.getProject().getProject(),params.getPackageNames()));
 		return boxedResult;
 	}
 
-	public gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForClassesResponse generateMetadataExtractForClasses(gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForClasses params) throws RemoteException {
-		gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForClassesResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.GenerateMetadataExtractForClassesResponse();
-		boxedResult.setResponse(impl.generateMetadataExtractForClasses(params.getProject().getProject(),params.getClasses().getUMLClassMetadata()));
+	public gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesResponse generateDomainModelForClasses(gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClasses params) throws RemoteException {
+		gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesResponse();
+		boxedResult.setDomainModel(impl.generateDomainModelForClasses(params.getProject().getProject(),params.getClasses().getUMLClassMetadata(),params.getAssociations().getUMLAssociation()));
 		return boxedResult;
 	}
 
@@ -116,6 +260,24 @@ public class CaDSRServiceProviderImpl {
 	public gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeResponse findValueDomainForAttribute(gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttribute params) throws RemoteException {
 		gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeResponse();
 		boxedResult.setValueDomain(impl.findValueDomainForAttribute(params.getProject().getProject(),params.getAttribute().getUMLAttributeMetadata()));
+		return boxedResult;
+	}
+
+	public gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsForClassResponse findAssociationsForClass(gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsForClass params) throws RemoteException {
+		gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsForClassResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsForClassResponse();
+		boxedResult.setUMLAssociation(impl.findAssociationsForClass(params.getProject().getProject(),params.getClazz().getUMLClassMetadata()));
+		return boxedResult;
+	}
+
+	public gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInPackageResponse findAssociationsInPackage(gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInPackage params) throws RemoteException {
+		gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInPackageResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInPackageResponse();
+		boxedResult.setUMLAssociation(impl.findAssociationsInPackage(params.getProject().getProject(),params.getPackageName()));
+		return boxedResult;
+	}
+
+	public gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInProjectResponse findAssociationsInProject(gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInProject params) throws RemoteException {
+		gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInProjectResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInProjectResponse();
+		boxedResult.setUMLAssociation(impl.findAssociationsInProject(params.getProject().getProject()));
 		return boxedResult;
 	}
 

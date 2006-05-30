@@ -24,7 +24,7 @@
    <ns2:SchemaElement type="DataElement" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ClassificationScheme" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="ValueDomain" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="ValueDomain" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ClassificationSchemeItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="" deserializer="" serializer="" type="ClassificationSchemeItem" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="PermissibleValue" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Context" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ReferenceDocument" xsi:type="ns2:SchemaElementType"/>
@@ -72,6 +72,14 @@
   <ns2:Namespace location="./1.0_gov.nih.nci.cagrid.metadata.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" packageName="gov.nih.nci.cagrid.metadata" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="ServiceMetadata" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
+  <ns2:Namespace location="./1.0_gov.nih.nci.cagrid.metadata.dataservice.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" packageName="gov.nih.nci.cagrid.metadata.dataservice" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="DomainModel" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UMLAssociationEdge" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UMLAssociation" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./1.0_gov.nih.nci.cagrid.cadsrservice.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsrservice" packageName="gov.nih.nci.cagrid.cadsr.domain" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="UMLAssociation" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
  </ns2:Namespaces>
  <ns3:Methods xsi:type="ns3:MethodsType" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Methods" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns3:Method name="findAllProjects" xsi:type="ns3:MethodType">
@@ -108,58 +116,82 @@
    <ns3:Output qName="ns11:UMLClassMetadata" isArray="true" xmlns:ns11="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
    <ns3:Exceptions/>
   </ns3:Method>
-  <ns3:Method name="generateMetadataExtractForProject" xsi:type="ns3:MethodType">
+  <ns3:Method name="generateDomainModelForProject" xsi:type="ns3:MethodType">
    <ns3:Inputs>
     <ns3:Input qName="ns12:Project" isArray="false" name="project" xmlns:ns12="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
    </ns3:Inputs>
-   <ns3:Output qName="xsd:string" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns3:Output qName="ns13:DomainModel" isArray="false" xmlns:ns13="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
    <ns3:Exceptions/>
   </ns3:Method>
-  <ns3:Method name="generateMetadataExtractForPackages" xsi:type="ns3:MethodType">
-   <ns3:Inputs>
-    <ns3:Input qName="ns13:Project" isArray="false" name="project" xmlns:ns13="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
-    <ns3:Input qName="xsd:string" isArray="true" name="packageNames" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-   </ns3:Inputs>
-   <ns3:Output qName="xsd:string" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-   <ns3:Exceptions/>
-  </ns3:Method>
-  <ns3:Method name="generateMetadataExtractForClasses" xsi:type="ns3:MethodType">
+  <ns3:Method name="generateDomainModelForPackages" xsi:type="ns3:MethodType">
    <ns3:Inputs>
     <ns3:Input qName="ns14:Project" isArray="false" name="project" xmlns:ns14="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
-    <ns3:Input qName="ns15:UMLClassMetadata" isArray="true" name="classes" xmlns:ns15="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+    <ns3:Input qName="xsd:string" isArray="true" name="packageNames" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
    </ns3:Inputs>
-   <ns3:Output qName="xsd:string" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns3:Output qName="ns15:DomainModel" isArray="false" xmlns:ns15="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
+   <ns3:Exceptions/>
+  </ns3:Method>
+  <ns3:Method name="generateDomainModelForClasses" xsi:type="ns3:MethodType">
+   <ns3:Inputs>
+    <ns3:Input qName="ns16:Project" isArray="false" name="project" xmlns:ns16="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+    <ns3:Input qName="ns17:UMLClassMetadata" isArray="true" name="classes" xmlns:ns17="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+    <ns3:Input qName="ns18:UMLAssociation" isArray="true" name="associations" xmlns:ns18="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsrservice"/>
+   </ns3:Inputs>
+   <ns3:Output qName="ns19:DomainModel" isArray="false" xmlns:ns19="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
    <ns3:Exceptions/>
   </ns3:Method>
   <ns3:Method name="findAttributesInClass" xsi:type="ns3:MethodType">
    <ns3:Inputs>
-    <ns3:Input qName="ns16:Project" isArray="false" name="project" xmlns:ns16="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
-    <ns3:Input qName="ns17:UMLClassMetadata" isArray="false" name="clazz" xmlns:ns17="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+    <ns3:Input qName="ns20:Project" isArray="false" name="project" xmlns:ns20="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+    <ns3:Input qName="ns21:UMLClassMetadata" isArray="false" name="clazz" xmlns:ns21="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
    </ns3:Inputs>
-   <ns3:Output qName="ns18:UMLAttributeMetadata" isArray="true" xmlns:ns18="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+   <ns3:Output qName="ns22:UMLAttributeMetadata" isArray="true" xmlns:ns22="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
    <ns3:Exceptions/>
   </ns3:Method>
   <ns3:Method name="findSemanticMetadataForClass" xsi:type="ns3:MethodType">
    <ns3:Inputs>
-    <ns3:Input qName="ns19:Project" isArray="false" name="project" xmlns:ns19="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
-    <ns3:Input qName="ns20:UMLClassMetadata" isArray="false" name="clazz" xmlns:ns20="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+    <ns3:Input qName="ns23:Project" isArray="false" name="project" xmlns:ns23="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+    <ns3:Input qName="ns24:UMLClassMetadata" isArray="false" name="clazz" xmlns:ns24="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
    </ns3:Inputs>
-   <ns3:Output qName="ns21:SemanticMetadata" isArray="true" xmlns:ns21="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+   <ns3:Output qName="ns25:SemanticMetadata" isArray="true" xmlns:ns25="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
    <ns3:Exceptions/>
   </ns3:Method>
   <ns3:Method name="findValueDomainForAttribute" xsi:type="ns3:MethodType">
    <ns3:Inputs>
-    <ns3:Input qName="ns22:Project" isArray="false" name="project" xmlns:ns22="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
-    <ns3:Input qName="ns23:UMLAttributeMetadata" isArray="false" name="attribute" xmlns:ns23="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+    <ns3:Input qName="ns26:Project" isArray="false" name="project" xmlns:ns26="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+    <ns3:Input qName="ns27:UMLAttributeMetadata" isArray="false" name="attribute" xmlns:ns27="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
    </ns3:Inputs>
-   <ns3:Output qName="ns24:ValueDomain" isArray="false" xmlns:ns24="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain"/>
+   <ns3:Output qName="ns28:ValueDomain" isArray="false" xmlns:ns28="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain"/>
+   <ns3:Exceptions/>
+  </ns3:Method>
+  <ns3:Method name="findAssociationsForClass" xsi:type="ns3:MethodType">
+   <ns3:Inputs>
+    <ns3:Input qName="ns29:Project" isArray="false" name="project" xmlns:ns29="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+    <ns3:Input qName="ns30:UMLClassMetadata" isArray="false" name="clazz" xmlns:ns30="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+   </ns3:Inputs>
+   <ns3:Output qName="ns31:UMLAssociation" isArray="true" xmlns:ns31="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsrservice"/>
+   <ns3:Exceptions/>
+  </ns3:Method>
+  <ns3:Method name="findAssociationsInPackage" xsi:type="ns3:MethodType">
+   <ns3:Inputs>
+    <ns3:Input qName="ns32:Project" isArray="false" name="project" xmlns:ns32="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+    <ns3:Input qName="xsd:string" isArray="false" name="packageName" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   </ns3:Inputs>
+   <ns3:Output qName="ns33:UMLAssociation" isArray="true" xmlns:ns33="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsrservice"/>
+   <ns3:Exceptions/>
+  </ns3:Method>
+  <ns3:Method name="findAssociationsInProject" xsi:type="ns3:MethodType">
+   <ns3:Inputs>
+    <ns3:Input qName="ns34:Project" isArray="false" name="project" xmlns:ns34="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+   </ns3:Inputs>
+   <ns3:Output qName="ns35:UMLAssociation" isArray="true" xmlns:ns35="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsrservice"/>
    <ns3:Exceptions/>
   </ns3:Method>
  </ns3:Methods>
- <ns25:MetadataList xsi:type="ns25:MetadataListType" xmlns:ns25="gme://gov.nih.nci.cagrid.introduce/1/Metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns25:Metadata qName="ns26:ServiceMetadata" populateFromFile="true" register="true" xsi:type="ns25:MetadataType" xmlns:ns26="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
- </ns25:MetadataList>
- <ns27:ServiceProperties xmlns:ns27="gme://gov.nih.nci.cagrid.introduce/1/Property">
-  <ns27:Property key="caCOREServiceURL" value="http://cabio.nci.nih.gov/cacore31/http/remoteService"/>
- </ns27:ServiceProperties>
+ <ns36:MetadataList xsi:type="ns36:MetadataListType" xmlns:ns36="gme://gov.nih.nci.cagrid.introduce/1/Metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns36:Metadata qName="ns37:ServiceMetadata" populateFromFile="true" register="true" xsi:type="ns36:MetadataType" xmlns:ns37="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+ </ns36:MetadataList>
+ <ns38:ServiceProperties xmlns:ns38="gme://gov.nih.nci.cagrid.introduce/1/Property">
+  <ns38:Property key="caCOREServiceURL" value="http://cabio.nci.nih.gov/cacore31/http/remoteService"/>
+ </ns38:ServiceProperties>
 </ns1:ServiceSkeleton>

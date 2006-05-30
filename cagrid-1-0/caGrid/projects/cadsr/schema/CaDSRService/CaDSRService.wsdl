@@ -27,16 +27,24 @@
 			
 			xmlns:ns0="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" 
 			
+			xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" 
+			
 			xmlns:ns1="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" 
+			
+			xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsrservice" 
 			
             xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
 			<import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd"/>
 		
-			<import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" schemaLocation="../cagrid/types/caGridMetadata.xsd"/>
+			<import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" schemaLocation="./1.0_gov.nih.nci.cagrid.metadata.xsd"/>
 			   
-			<import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" schemaLocation="../cagrid/types/cadsr/3.0_gov.nih.nci.cadsr.umlproject.domain.xsd"/>
+			<import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" schemaLocation="./3.0_gov.nih.nci.cadsr.umlproject.domain.xsd"/>
 			   
-			<import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" schemaLocation="../cagrid/types/cadsr/3.0_gov.nih.nci.cadsr.domain.xsd"/>
+			<import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" schemaLocation="./1.0_gov.nih.nci.cagrid.metadata.dataservice.xsd"/>
+			   
+			<import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" schemaLocation="./3.0_gov.nih.nci.cadsr.domain.xsd"/>
+			   
+			<import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsrservice" schemaLocation="./1.0_gov.nih.nci.cagrid.cadsrservice.xsd"/>
 			   
       	
       	
@@ -158,7 +166,7 @@
 						</sequence>
 					</complexType>
 				</element>
-				<element name="generateMetadataExtractForProject">
+				<element name="generateDomainModelForProject">
 					<complexType>
 						<sequence>
           		  
@@ -175,16 +183,16 @@
 	      			</complexType>
 	      		</element>
   		       
-				<element name="generateMetadataExtractForProjectResponse">
+				<element name="generateDomainModelForProjectResponse">
 					<complexType>
 						<sequence>
           		  
-										<element name="response" type="xs:string" minOccurs="1" maxOccurs="1" />
+										<element ref="ns3:DomainModel" minOccurs="1" maxOccurs="1" />
 			                  		
 						</sequence>
 					</complexType>
 				</element>
-				<element name="generateMetadataExtractForPackages">
+				<element name="generateDomainModelForPackages">
 					<complexType>
 						<sequence>
           		  
@@ -207,16 +215,16 @@
 	      			</complexType>
 	      		</element>
   		       
-				<element name="generateMetadataExtractForPackagesResponse">
+				<element name="generateDomainModelForPackagesResponse">
 					<complexType>
 						<sequence>
           		  
-										<element name="response" type="xs:string" minOccurs="1" maxOccurs="1" />
+										<element ref="ns3:DomainModel" minOccurs="1" maxOccurs="1" />
 			                  		
 						</sequence>
 					</complexType>
 				</element>
-				<element name="generateMetadataExtractForClasses">
+				<element name="generateDomainModelForClasses">
 					<complexType>
 						<sequence>
           		  
@@ -241,15 +249,27 @@
 	      		  		
 
                   				 	
+	      		  					
+							<element name="associations">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns4:UMLAssociation" minOccurs="1" maxOccurs="unbounded" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+                  				 	
+	      		  		
+
+                  				 	
 	      				</sequence>
 	      			</complexType>
 	      		</element>
   		       
-				<element name="generateMetadataExtractForClassesResponse">
+				<element name="generateDomainModelForClassesResponse">
 					<complexType>
 						<sequence>
           		  
-										<element name="response" type="xs:string" minOccurs="1" maxOccurs="1" />
+										<element ref="ns3:DomainModel" minOccurs="1" maxOccurs="1" />
 			                  		
 						</sequence>
 					</complexType>
@@ -359,6 +379,96 @@
 						</sequence>
 					</complexType>
 				</element>
+				<element name="findAssociationsForClass">
+					<complexType>
+						<sequence>
+          		  
+                  					
+							<element name="project">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:Project" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+                  				 	
+                  					
+							<element name="clazz">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:UMLClassMetadata" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+                  				 	
+	      				</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="findAssociationsForClassResponse">
+					<complexType>
+						<sequence>
+          		  
+										<element ref="ns4:UMLAssociation" minOccurs="1" maxOccurs="unbounded" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
+				<element name="findAssociationsInPackage">
+					<complexType>
+						<sequence>
+          		  
+                  					
+							<element name="project">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:Project" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+                  				 	
+                  					
+							<element name="packageName" type="xs:string" minOccurs="1" maxOccurs="1" />
+                  				 	
+	      				</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="findAssociationsInPackageResponse">
+					<complexType>
+						<sequence>
+          		  
+										<element ref="ns4:UMLAssociation" minOccurs="1" maxOccurs="unbounded" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
+				<element name="findAssociationsInProject">
+					<complexType>
+						<sequence>
+          		  
+                  					
+							<element name="project">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:Project" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+                  				 	
+	      				</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="findAssociationsInProjectResponse">
+					<complexType>
+						<sequence>
+          		  
+										<element ref="ns4:UMLAssociation" minOccurs="1" maxOccurs="unbounded" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
             <element name="CaDSRServiceResourceProperties">
                 <complexType>
                     <sequence>
@@ -405,26 +515,26 @@
 	<message name="findClassesInPackageOutputMessage">
 		<part name="parameters" element="tns:findClassesInPackageResponse"/>
 	</message>
-	<message name="generateMetadataExtractForProjectInputMessage">
-		<part name="parameters" element="tns:generateMetadataExtractForProject"/>
+	<message name="generateDomainModelForProjectInputMessage">
+		<part name="parameters" element="tns:generateDomainModelForProject"/>
 	</message>
 	
-	<message name="generateMetadataExtractForProjectOutputMessage">
-		<part name="parameters" element="tns:generateMetadataExtractForProjectResponse"/>
+	<message name="generateDomainModelForProjectOutputMessage">
+		<part name="parameters" element="tns:generateDomainModelForProjectResponse"/>
 	</message>
-	<message name="generateMetadataExtractForPackagesInputMessage">
-		<part name="parameters" element="tns:generateMetadataExtractForPackages"/>
-	</message>
-	
-	<message name="generateMetadataExtractForPackagesOutputMessage">
-		<part name="parameters" element="tns:generateMetadataExtractForPackagesResponse"/>
-	</message>
-	<message name="generateMetadataExtractForClassesInputMessage">
-		<part name="parameters" element="tns:generateMetadataExtractForClasses"/>
+	<message name="generateDomainModelForPackagesInputMessage">
+		<part name="parameters" element="tns:generateDomainModelForPackages"/>
 	</message>
 	
-	<message name="generateMetadataExtractForClassesOutputMessage">
-		<part name="parameters" element="tns:generateMetadataExtractForClassesResponse"/>
+	<message name="generateDomainModelForPackagesOutputMessage">
+		<part name="parameters" element="tns:generateDomainModelForPackagesResponse"/>
+	</message>
+	<message name="generateDomainModelForClassesInputMessage">
+		<part name="parameters" element="tns:generateDomainModelForClasses"/>
+	</message>
+	
+	<message name="generateDomainModelForClassesOutputMessage">
+		<part name="parameters" element="tns:generateDomainModelForClassesResponse"/>
 	</message>
 	<message name="findAttributesInClassInputMessage">
 		<part name="parameters" element="tns:findAttributesInClass"/>
@@ -446,6 +556,27 @@
 	
 	<message name="findValueDomainForAttributeOutputMessage">
 		<part name="parameters" element="tns:findValueDomainForAttributeResponse"/>
+	</message>
+	<message name="findAssociationsForClassInputMessage">
+		<part name="parameters" element="tns:findAssociationsForClass"/>
+	</message>
+	
+	<message name="findAssociationsForClassOutputMessage">
+		<part name="parameters" element="tns:findAssociationsForClassResponse"/>
+	</message>
+	<message name="findAssociationsInPackageInputMessage">
+		<part name="parameters" element="tns:findAssociationsInPackage"/>
+	</message>
+	
+	<message name="findAssociationsInPackageOutputMessage">
+		<part name="parameters" element="tns:findAssociationsInPackageResponse"/>
+	</message>
+	<message name="findAssociationsInProjectInputMessage">
+		<part name="parameters" element="tns:findAssociationsInProject"/>
+	</message>
+	
+	<message name="findAssociationsInProjectOutputMessage">
+		<part name="parameters" element="tns:findAssociationsInProjectResponse"/>
 	</message>
     
 <!--============================================================
@@ -475,17 +606,17 @@
             <input message="tns:findClassesInPackageInputMessage"/>
             <output message="tns:findClassesInPackageOutputMessage"/>
         </operation>
-		<operation name="generateMetadataExtractForProject">
-            <input message="tns:generateMetadataExtractForProjectInputMessage"/>
-            <output message="tns:generateMetadataExtractForProjectOutputMessage"/>
+		<operation name="generateDomainModelForProject">
+            <input message="tns:generateDomainModelForProjectInputMessage"/>
+            <output message="tns:generateDomainModelForProjectOutputMessage"/>
         </operation>
-		<operation name="generateMetadataExtractForPackages">
-            <input message="tns:generateMetadataExtractForPackagesInputMessage"/>
-            <output message="tns:generateMetadataExtractForPackagesOutputMessage"/>
+		<operation name="generateDomainModelForPackages">
+            <input message="tns:generateDomainModelForPackagesInputMessage"/>
+            <output message="tns:generateDomainModelForPackagesOutputMessage"/>
         </operation>
-		<operation name="generateMetadataExtractForClasses">
-            <input message="tns:generateMetadataExtractForClassesInputMessage"/>
-            <output message="tns:generateMetadataExtractForClassesOutputMessage"/>
+		<operation name="generateDomainModelForClasses">
+            <input message="tns:generateDomainModelForClassesInputMessage"/>
+            <output message="tns:generateDomainModelForClassesOutputMessage"/>
         </operation>
 		<operation name="findAttributesInClass">
             <input message="tns:findAttributesInClassInputMessage"/>
@@ -498,6 +629,18 @@
 		<operation name="findValueDomainForAttribute">
             <input message="tns:findValueDomainForAttributeInputMessage"/>
             <output message="tns:findValueDomainForAttributeOutputMessage"/>
+        </operation>
+		<operation name="findAssociationsForClass">
+            <input message="tns:findAssociationsForClassInputMessage"/>
+            <output message="tns:findAssociationsForClassOutputMessage"/>
+        </operation>
+		<operation name="findAssociationsInPackage">
+            <input message="tns:findAssociationsInPackageInputMessage"/>
+            <output message="tns:findAssociationsInPackageOutputMessage"/>
+        </operation>
+		<operation name="findAssociationsInProject">
+            <input message="tns:findAssociationsInProjectInputMessage"/>
+            <output message="tns:findAssociationsInProjectOutputMessage"/>
         </operation>
         <operation name="GetResourceProperty">
             <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest"

@@ -7,7 +7,7 @@
 	<property name="tomcat.deploy.dir" value="${tomcat.dir}/webapps/wsrf/WEB-INF"/>
 	<property name="tomcat.deploy.lib.dir" value="${tomcat.deploy.dir}/lib"/>
 	<property name="tomcat.wsrf.schema.dir" value="${tomcat.dir}/webapps/wsrf/share/schema"/>
-	<property name="gar.name" value="${service.name}.gar"/>
+	<property name="gar.name" value="CaDSRService.gar"/>
 	<!-- Filesets -->
 	<!-- JARs to be included in the GAR file -->
 	<fileset dir="${build.lib.dir}" id="garjars"/>

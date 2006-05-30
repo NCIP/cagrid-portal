@@ -128,6 +128,16 @@
     <field name="isBidirectional" type="boolean">
       <bind-xml name="isBidirectional" node="attribute"/>
     </field>
+    <field name="targetUMLClassMetadata" type="gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata"
+      direct="false">
+      <bind-xml name="uml:targetUMLClassMetadata" node="element" type="uml:UMLClassMetadata"
+        xmlns:uml="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+    </field>
+    <field name="sourceUMLClassMetadata" type="gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata"
+      direct="false">
+      <bind-xml name="uml:sourceUMLClassMetadata" node="element" type="uml:UMLClassMetadata"
+        xmlns:uml="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+    </field>
   </class>
   <class name="gov.nih.nci.cadsr.umlproject.domain.UMLGeneralizationMetadata">
     <map-to xml="UMLGeneralizationMetadata"
