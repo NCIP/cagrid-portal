@@ -23,12 +23,16 @@
     <types>
         <schema targetNamespace="http://cagrid.nci.nih.gov/SyncGTS"
             xmlns:tns="http://cagrid.nci.nih.gov/SyncGTS"
+			xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"
+			
 			xmlns:ns1="http://cagrid.nci.nih.gov/12/SyncGTS"
 			
 			xmlns:ns0="http://cagrid.nci.nih.gov/8/gts"
 			
             xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
 			<import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd"/>
+			<import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" schemaLocation="./1.0_gov.nih.nci.cagrid.metadata.xsd"/>
+			
 			<import namespace="http://cagrid.nci.nih.gov/12/SyncGTS" schemaLocation="./sync-gts.xsd"/>
 			
 			<import namespace="http://cagrid.nci.nih.gov/8/gts" schemaLocation="./gts.xsd"/>

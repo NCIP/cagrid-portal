@@ -17,14 +17,18 @@ import org.globus.wsrf.Resource;
 import org.globus.wsrf.ResourceContext;
 import org.globus.wsrf.ResourceContextException;
 import org.globus.wsrf.ResourceProperties;
+import org.globus.wsrf.ResourceProperty;
 import org.globus.wsrf.ResourcePropertySet;
 import org.globus.wsrf.config.ContainerConfig;
 import org.globus.wsrf.container.ServiceHost;
+import org.globus.wsrf.impl.SimpleResourceProperty;
 import org.globus.wsrf.impl.SimpleResourcePropertySet;
 import org.globus.wsrf.impl.servicegroup.client.ServiceGroupRegistrationClient;
 import org.globus.wsrf.utils.AddressingUtils;
 
 import commonj.timers.Timer;
+
+import gov.nih.nci.cagrid.common.Utils;
 
 public class BaseResource implements Resource, ResourceProperties {
 
@@ -41,7 +45,9 @@ public class BaseResource implements Resource, ResourceProperties {
 	private URL baseURL;
 
 	//Define the metadata resource properties
-		
+	private ResourceProperty serviceMetadataRP;
+	private gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadataMD;
+	
 
 
 
@@ -53,7 +59,13 @@ public class BaseResource implements Resource, ResourceProperties {
 		// this loads the metadata from XML files
 		populateResourceProperty();
 		
-		// now add the metadata as resource properties	
+		// now add the metadata as resource properties		//init the rp
+		this.serviceMetadataRP = new SimpleResourceProperty(ResourceConstants.SERVICEMETADATA_MD_RP);
+		//add the value to the rp
+		this.serviceMetadataRP.add(this.serviceMetadataMD);
+		//add the rp to the prop set
+		this.propSet.add(this.serviceMetadataRP);
+	
 
 
 		// register the service to the index sevice
@@ -172,10 +184,24 @@ public class BaseResource implements Resource, ResourceProperties {
 
 	private void populateResourceProperty() {
 	
+		loadServiceMetadataFromFile();
+	
 	}
 
 
-			
+		
+	private void loadServiceMetadataFromFile() {
+		try {
+			File dataFile = new File(ContainerConfig.getBaseDirectory() + File.separator
+					+ getConfiguration().getServiceMetadataFile());
+			this.serviceMetadataMD = (gov.nih.nci.cagrid.metadata.ServiceMetadata) Utils.deserializeDocument(dataFile.getAbsolutePath(),
+				gov.nih.nci.cagrid.metadata.ServiceMetadata.class);
+		} catch (Exception e) {
+			logger.error("ERROR: problem populating metadata from file: " + e.getMessage(), e);
+		}
+	}		
+	
+		
 
 	public ResourceConfiguration getConfiguration() {
 		if (this.configuration != null) {
