@@ -97,32 +97,37 @@ public class ServicesTreeRenderer extends DefaultTreeCellRenderer {
 			this.setText(node.toString());
 		} else if (value instanceof ServicesTypeTreeNode) {
 			ServicesTypeTreeNode node = (ServicesTypeTreeNode) value;
-			this.setOpenIcon(null);
-			this.setClosedIcon(null);
+			//this.setIcon(node.getOpenIcon());
+			//this.setOpenIcon(node.getOpenIcon());
+			//this.setClosedIcon(node.getClosedIcon());
 			this.setText(node.toString());
 			this.setFont(normal.deriveFont(Font.BOLD,12));
 		} else if (value instanceof MethodsTypeTreeNode) {
 			MethodsTypeTreeNode node = (MethodsTypeTreeNode) value;
-			this.setOpenIcon(null);
-			this.setClosedIcon(null);
+			this.setIcon(node.getOpenIcon());
+			//this.setOpenIcon(node.getOpenIcon());
+			//this.setClosedIcon(node.getClosedIcon());
 			this.setText(node.toString());
 			this.setFont(normal);
 		} else if (value instanceof MethodTypeTreeNode) {
 			MethodTypeTreeNode node = (MethodTypeTreeNode) value;
-			this.setOpenIcon(null);
-			this.setClosedIcon(null);
+			this.setIcon(node.getOpenIcon());
+			//this.setOpenIcon(node.getOpenIcon());
+			//this.setClosedIcon(node.getClosedIcon());
 			this.setText(node.toString());
 			this.setFont(normal.deriveFont(Font.ITALIC));
 		} else if (value instanceof ResourcePropertiesTypeTreeNode) {
 			ResourcePropertiesTypeTreeNode node = (ResourcePropertiesTypeTreeNode) value;
-			this.setOpenIcon(null);
-			this.setClosedIcon(null);
+			this.setIcon(node.getOpenIcon());
+			//this.setOpenIcon(node.getOpenIcon());
+			//this.setClosedIcon(node.getClosedIcon());
 			this.setText(node.toString());
 			this.setFont(normal);
 		} else if (value instanceof ResourcePropertyTypeTreeNode) {
 			ResourcePropertyTypeTreeNode node = (ResourcePropertyTypeTreeNode) value;
-			this.setOpenIcon(null);
-			this.setClosedIcon(null);
+			this.setIcon(node.getOpenIcon());
+			//this.setOpenIcon(node.getOpenIcon());
+			//this.setClosedIcon(node.getClosedIcon());
 			this.setText(node.toString());
 			this.setFont(normal.deriveFont(Font.ITALIC));
 			this.setForeground(Color.GRAY);
