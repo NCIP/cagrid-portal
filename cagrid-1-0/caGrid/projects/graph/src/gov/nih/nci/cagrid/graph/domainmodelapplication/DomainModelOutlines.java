@@ -5,11 +5,11 @@ import javax.swing.JTree;
 import gov.nih.nci.cagrid.graph.vstheme.IInternalFrame;
 import gov.nih.nci.cagrid.graph.vstheme.InvertedMDIPanel;
 
-public class DomainModelOutlinePanel extends IInternalFrame
+public class DomainModelOutlines extends IInternalFrame
 {
 	InvertedMDIPanel mdi = new InvertedMDIPanel();
 	
-	public DomainModelOutlinePanel()
+	public DomainModelOutlines()
 	{
 		
 		mdi.addPage(new JTree(), null, "Outline 1");

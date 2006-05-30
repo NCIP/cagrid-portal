@@ -49,15 +49,14 @@ public class InvertedMDIPanel extends JComponent
 			pages.remove(i);
 			pageIcons.remove(i);
 			pageTitles.remove(i);
-		
+
+
 			container.removeComponent(i);
 			tabs.removeTab(i);
 			
 			
-			if(this.pages.size() > 0)
-			{
-				this.setActivePage(0);
-			}
+			this.setActivePage(0);
+			
 		}
 	}
 	

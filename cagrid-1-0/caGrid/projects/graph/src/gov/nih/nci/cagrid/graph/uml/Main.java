@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.graph.uml;
 
-import gov.nih.nci.cagrid.graph.domainmodelapplication.DomainModelOutlinePanel;
+import gov.nih.nci.cagrid.graph.domainmodelapplication.DomainModelOutlines;
 
 import java.util.Random;
 
@@ -63,7 +63,7 @@ public class Main {
 		
 		
 		
-		DomainModelOutlinePanel p = new DomainModelOutlinePanel();
+		DomainModelOutlines p = new DomainModelOutlines();
 		
 
 

@@ -20,6 +20,9 @@ public class MultipleComponentContainer extends JLayeredPane
 	{
 		this.add(component);
 		this.components.add(component);
+		
+		this.validate();
+		this.repaint();
 	}
 	
 	public void removeComponent(int i)
@@ -30,6 +33,9 @@ public class MultipleComponentContainer extends JLayeredPane
 			
 			this.remove(c);
 			this.components.remove(i);
+			
+			this.validate();
+			this.repaint();
 		}
 		
 	}
@@ -50,6 +56,7 @@ public class MultipleComponentContainer extends JLayeredPane
 		}
 		
 		this.validate();
+		this.repaint();
 		
 	}
 }
