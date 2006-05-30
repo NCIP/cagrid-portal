@@ -114,7 +114,7 @@
 	</target>
 	
 	<!-- make deployment configured gar -->
-	<target name="createDeploymentGar" depends="addFilters, all">
+	<target name="createDeploymentGar" depends="all, addFilters">
 		<copy todir="${build.lib.dir}">
 			<fileset dir="${basedir}/lib">
 				<include name="*.jar" />

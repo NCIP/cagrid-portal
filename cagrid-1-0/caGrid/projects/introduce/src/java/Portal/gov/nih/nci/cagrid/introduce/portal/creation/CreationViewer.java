@@ -672,7 +672,7 @@ public class CreationViewer extends GridPortalComponent {
 	private ExtensionsTable getExtensionsTable() {
 		if (extensionsTable == null) {
 			extensionsTable = new ExtensionsTable();
-			extensionsTable.setPreferredSize(new java.awt.Dimension(100, 80));
+			extensionsTable.setPreferredSize(new java.awt.Dimension(100,150));
 		}
 		return extensionsTable;
 	}

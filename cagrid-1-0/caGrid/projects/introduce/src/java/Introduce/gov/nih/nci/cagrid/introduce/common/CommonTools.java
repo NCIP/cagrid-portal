@@ -114,7 +114,10 @@ public class CommonTools {
 
 	public static String getAntDeployGlobusCommand(String buildFileDir)
 			throws Exception {
-		return getAntCommand("deployGlobus", buildFileDir);
+		String cmd = " -Dservice.properties.file=" + buildFileDir
+				+ File.separator + "service.properties.tmp";
+		cmd = getAntCommand("deployGlobus", buildFileDir) + " " + cmd;
+		return cmd;
 	}
 
 	public static String getAntSkeletonCreationCommand(String buildFileDir,
@@ -532,9 +535,11 @@ public class CommonTools {
 	 *            the index into the metadata list of the targeted metadata item
 	 * @return the variable name to use
 	 */
-	public static String getResourcePropertyVariableName(ResourcePropertiesListType metadataList, int index) {
-		String baseName = metadataList.getResourceProperty(index).getQName().getLocalPart();
-	
+	public static String getResourcePropertyVariableName(
+			ResourcePropertiesListType metadataList, int index) {
+		String baseName = metadataList.getResourceProperty(index).getQName()
+				.getLocalPart();
+
 		int previousNumber = 0;
 		for (int i = 0; (i < index && i < metadataList.getResourceProperty().length); i++) {
 			ResourcePropertyType metadata = metadataList.getResourceProperty()[i];
@@ -544,10 +549,11 @@ public class CommonTools {
 				previousNumber++;
 			}
 		}
-	
+
 		// return the orginal name, if it is unique, otherwise append a number
-		return TemplateUtils.lowerCaseFirstCharacter(baseName + ((previousNumber > 0) ? String.valueOf(previousNumber) : ""));
-	
+		return TemplateUtils.lowerCaseFirstCharacter(baseName
+				+ ((previousNumber > 0) ? String.valueOf(previousNumber) : ""));
+
 	}
 
 }
