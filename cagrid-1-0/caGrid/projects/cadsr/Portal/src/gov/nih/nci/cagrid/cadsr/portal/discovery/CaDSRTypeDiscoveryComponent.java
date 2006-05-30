@@ -9,9 +9,9 @@ import gov.nih.nci.cagrid.cadsr.domain.UMLAssociation;
 import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import gov.nih.nci.cagrid.cadsr.portal.PackageSelectedListener;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.graph.uml.Attribute;
-import gov.nih.nci.cagrid.graph.uml.UMLClass;
-import gov.nih.nci.cagrid.graph.uml.UMLDiagram;
+//import gov.nih.nci.cagrid.graph.uml.Attribute;
+//import gov.nih.nci.cagrid.graph.uml.UMLClass;
+//import gov.nih.nci.cagrid.graph.uml.UMLDiagram;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
@@ -37,7 +37,7 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent imp
 	private String cadsrURL = null;
 	private CaDSRBrowserPanel caDSRPanel = null;
 	private JPanel graphPanel = null;
-	private UMLDiagram umlDiagram;
+	//private UMLDiagram umlDiagram;
 
 
 	/**
@@ -100,7 +100,7 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent imp
 					if (classes != null) {
 						for (int i = 0; i < classes.length; i++) {
 							UMLClassMetadata clazz = classes[i];
-							UMLClass c = new UMLClass(clazz.getName());
+							//UMLClass c = new UMLClass(clazz.getName());
 
 							UMLAttributeMetadata[] atts = cadsrService.findAttributesInClass(getCaDSRPanel()
 								.getSelectedProject(), clazz);
@@ -108,13 +108,13 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent imp
 								for (int j = 0; j < atts.length; j++) {
 									UMLAttributeMetadata att = atts[j];
 									//Attribute a = new Attribute(Attribute.PUBLIC, "", att.getName());
-									c.addAttribute( /*type*/ "", att.getName());
+									//c.addAttribute( /*type*/ "", att.getName());
 									
 								}
 							}
 
 
-							getUMLDiagram().addClass(c);
+							//getUMLDiagram().addClass(c);
 
 							// TODO: this seems to updating the graph live... it
 							// shouldn't until the diagram refresh.. otherwise
@@ -124,7 +124,8 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent imp
 
 					UMLAssociation[] assocs = cadsrService.findAssociationsInPackage(getCaDSRPanel()
 						.getSelectedProject(), pkg.getName());
-					if (assocs != null) {
+					if (assocs != null) 
+					{
 						for (int i = 0; i < assocs.length; i++) {
 							UMLAssociation assoc = assocs[i];
 							// TODO: create and add Assocation to the graph
@@ -135,8 +136,8 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent imp
 						}
 					}
 
-					getUMLDiagram().performLayout();
-					getUMLDiagram().refresh();
+					//getUMLDiagram().performLayout();
+					//getUMLDiagram().refresh();
 					
 				} catch (RemoteException e) {
 					JOptionPane.showMessageDialog(CaDSRTypeDiscoveryComponent.this,
@@ -163,20 +164,20 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent imp
 			gridBagConstraints1.weightx = 1.0D;
 			gridBagConstraints1.weighty = 1.0D;
 			gridBagConstraints1.gridy = 1;
-			graphPanel.add(getUMLDiagram(), gridBagConstraints1);
+			//graphPanel.add(getUMLDiagram(), gridBagConstraints1);
 
 		}
 		return graphPanel;
 	}
 
 
-	private UMLDiagram getUMLDiagram() {
-		if (umlDiagram == null) {
-			umlDiagram = new UMLDiagram();
-
-		}
-		return umlDiagram;
-	}
+	//private UMLDiagram getUMLDiagram() {
+	//	if (umlDiagram == null) {
+	//		umlDiagram = new UMLDiagram();
+//
+//		}
+//		return umlDiagram;
+//	}
 
 
 	public static void main(String[] args) {
