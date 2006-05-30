@@ -68,7 +68,7 @@ public class Main {
 
 
 		JFrame f = new JFrame();
-		f.getContentPane().add(diagram);
+		f.getContentPane().add(p);
 		f.setBounds(10, 100, 900, 600);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);

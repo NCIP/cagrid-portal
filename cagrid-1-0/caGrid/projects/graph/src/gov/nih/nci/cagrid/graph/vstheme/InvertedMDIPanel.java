@@ -64,6 +64,8 @@ public class InvertedMDIPanel extends JComponent
 	
 	public void setActivePage(int i)
 	{
+		
+		
 		if(i < this.pages.size() && i >= 0)
 		{		
 			currentPage = i;

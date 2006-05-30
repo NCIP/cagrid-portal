@@ -14,7 +14,8 @@ public class DomainModelOutlines extends IInternalFrame
 		
 		mdi.addPage(new JTree(), null, "Outline 1");
 		mdi.addPage(new JTree(), null, "Outline 2");
-		
+		mdi.addPage(new JTree(), null, "Outline 3");
+		mdi.addPage(new JTree(), null, "Outline 4");		
 		this.setComponent(mdi);
 		
 	}

@@ -33,6 +33,11 @@ public class MultipleComponentContainer extends JLayeredPane
 			
 			this.remove(c);
 			this.components.remove(i);
+
+			if(i == currentShownComponent)
+			{
+				currentShownComponent = -1;
+			}
 			
 			this.validate();
 			this.repaint();
@@ -42,19 +47,25 @@ public class MultipleComponentContainer extends JLayeredPane
 	
 	public void showComponent(int i)
 	{
+		System.out.println(currentShownComponent);
+		
 		if(currentShownComponent >=0 && currentShownComponent < components.size())
 		{
 			JComponent c = (JComponent) this.components.get(currentShownComponent);
 			this.setLayer(c, JLayeredPane.DEFAULT_LAYER.intValue());
 			currentShownComponent = -1;
+			
+
+		
 		}
 		if(i >= 0 && i < this.components.size())
 		{
 			JComponent c = (JComponent) this.components.get(i);
 			this.setLayer(c, JLayeredPane.MODAL_LAYER.intValue());
-			currentShownComponent = i;			
+			currentShownComponent = i;	
+
 		}
-		
+	
 		this.validate();
 		this.repaint();
 		

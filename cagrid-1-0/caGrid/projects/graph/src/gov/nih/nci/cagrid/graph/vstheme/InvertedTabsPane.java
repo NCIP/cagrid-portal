@@ -59,7 +59,7 @@ public class InvertedTabsPane extends JLayeredPane
 			this.resizeTabs();
 			this.repaint();
 			deactivateAllTabs();
-			setActiveTab(0);
+			//setActiveTab(0);
 			
 			
 		}
