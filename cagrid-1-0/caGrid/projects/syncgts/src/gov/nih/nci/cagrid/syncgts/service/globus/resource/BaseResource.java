@@ -17,14 +17,18 @@ import org.globus.wsrf.Resource;
 import org.globus.wsrf.ResourceContext;
 import org.globus.wsrf.ResourceContextException;
 import org.globus.wsrf.ResourceProperties;
+import org.globus.wsrf.ResourceProperty;
 import org.globus.wsrf.ResourcePropertySet;
 import org.globus.wsrf.config.ContainerConfig;
 import org.globus.wsrf.container.ServiceHost;
+import org.globus.wsrf.impl.SimpleResourceProperty;
 import org.globus.wsrf.impl.SimpleResourcePropertySet;
 import org.globus.wsrf.impl.servicegroup.client.ServiceGroupRegistrationClient;
 import org.globus.wsrf.utils.AddressingUtils;
 
 import commonj.timers.Timer;
+
+import gov.nih.nci.cagrid.common.Utils;
 
 public class BaseResource implements Resource, ResourceProperties {
 
@@ -36,7 +40,7 @@ public class BaseResource implements Resource, ResourceProperties {
 	//this can be used to cancel the registration renewal
 	private Timer registrationTimer;
 
-	private MetadataConfiguration configuration;
+	private ResourceConfiguration configuration;
 	
 	private URL baseURL;
 
@@ -51,7 +55,7 @@ public class BaseResource implements Resource, ResourceProperties {
 		this.propSet = new SimpleResourcePropertySet(ResourceConstants.RESOURCE_PROPERY_SET);
 
 		// this loads the metadata from XML files
-		populateMetadata();
+		populateResourceProperty();
 		
 		// now add the metadata as resource properties	
 
@@ -147,7 +151,7 @@ public class BaseResource implements Resource, ResourceProperties {
 					+ getConfiguration().getRegistrationTemplateFile());
 
 				if (registrationFile.exists() && registrationFile.canRead()) {
-					logger.debug("Loading registration information from:" + registrationFile);
+					logger.debug("Loading registration argumentsrmation from:" + registrationFile);
 
 					ServiceGroupRegistrationParameters params = ServiceGroupRegistrationClient
 						.readParams(registrationFile.getAbsolutePath());
@@ -170,14 +174,14 @@ public class BaseResource implements Resource, ResourceProperties {
 
 
 
-	private void populateMetadata() {
+	private void populateResourceProperty() {
 	
 	}
 
 
 			
 
-	public MetadataConfiguration getConfiguration() {
+	public ResourceConfiguration getConfiguration() {
 		if (this.configuration != null) {
 			return this.configuration;
 		}
@@ -189,7 +193,7 @@ public class BaseResource implements Resource, ResourceProperties {
 		logger.debug("Will read configuration from jndi name: " + jndiName);
 		try {
 			Context initialContext = new InitialContext();
-			this.configuration = (MetadataConfiguration) initialContext.lookup(jndiName);
+			this.configuration = (ResourceConfiguration) initialContext.lookup(jndiName);
 		} catch (Exception e) {
 			logger.error("when performing JNDI lookup for " + jndiName + ": " + e);
 		}

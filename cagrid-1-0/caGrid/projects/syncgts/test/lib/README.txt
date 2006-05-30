@@ -1,1 +1,1 @@
-Add any libraries that are used for testing here.
+Add any jars that are needed for testing only here.

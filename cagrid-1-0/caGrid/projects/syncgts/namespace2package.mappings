@@ -1,5 +1,6 @@
- http\://cagrid.nci.nih.gov/SyncGTS=gov.nih.nci.cagrid.syncgts.stubs
+http\://cagrid.nci.nih.gov/SyncGTS=gov.nih.nci.cagrid.syncgts.stubs
 http\://cagrid.nci.nih.gov/SyncGTS/bindings=gov.nih.nci.cagrid.syncgts.stubs.bindings
 http\://cagrid.nci.nih.gov/SyncGTS/service=gov.nih.nci.cagrid.syncgts.stubs.service
+
 http\://cagrid.nci.nih.gov/12/SyncGTS=gov.nih.nci.cagrid.syncgts.bean
 http\://cagrid.nci.nih.gov/8/gts=gov.nih.nci.cagrid.gts.bean

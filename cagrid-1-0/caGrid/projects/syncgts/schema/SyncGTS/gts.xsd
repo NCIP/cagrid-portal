@@ -128,12 +128,16 @@
 				<xsd:element name="LastUpdated" minOccurs="1" maxOccurs="1" type="xsd:long"/>
 			</xsd:sequence>
 		</xsd:complexType>
+		
+		<xsd:element name="X509Certificate" minOccurs="0" maxOccurs="1" type="gts:X509Certificate"/>
  		 
  		<xsd:complexType name="X509Certificate">
 			<xsd:sequence>
 				<xsd:element name="certificateEncodedString" minOccurs="1" maxOccurs="1" type="xsd:string"/>
 			</xsd:sequence>
 		</xsd:complexType>
+		
+		<xsd:element name="X509CRL" minOccurs="0" maxOccurs="1" type="gts:X509CRL"/>
 		
 		<xsd:complexType name="X509CRL">
 			<xsd:sequence>

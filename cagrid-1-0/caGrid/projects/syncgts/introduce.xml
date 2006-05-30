@@ -1,6 +1,6 @@
-<ns1:ServiceSkeleton introduceVersion="0.95" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
+<ns1:ServiceSkeleton introduceVersion="0.96" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns2:Namespace location="" namespace="http://www.w3.org/2001/XMLSchema" packageName="" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace namespace="http://www.w3.org/2001/XMLSchema" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="string" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="integer" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="boolean" xsi:type="ns2:SchemaElementType"/>
@@ -13,6 +13,8 @@
    <ns2:SchemaElement type="TrustedAuthorityFilter" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="TrustedAuthority" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="TrustLevel" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="X509Certificate" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="X509CRL" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace location="./sync-gts.xsd" namespace="http://cagrid.nci.nih.gov/12/SyncGTS" packageName="gov.nih.nci.cagrid.syncgts.bean" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="SyncDescription" xsi:type="ns2:SchemaElementType"/>
@@ -21,8 +23,12 @@
    <ns2:SchemaElement type="DateFilter" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
  </ns2:Namespaces>
- <ns3:Methods xsi:type="ns3:MethodsType" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Methods" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
- <ns4:MetadataList xsi:type="ns4:MetadataListType" xmlns:ns4="gme://gov.nih.nci.cagrid.introduce/1/Metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
- <ns5:Extensions xsi:type="ns5:ExtensionsType" xmlns:ns5="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
- <ns6:ServiceProperties xmlns:ns6="gme://gov.nih.nci.cagrid.introduce/1/Property"/>
+ <ns3:Services xsi:type="ns3:ServicesType" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns3:Service name="SyncGTS" namespace="http://cagrid.nci.nih.gov/SyncGTS" packageName="gov.nih.nci.cagrid.syncgts" resourceFrameworkType="main" xsi:type="ns3:ServiceType">
+   <ns4:Methods xsi:type="ns4:MethodsType" xmlns:ns4="gme://gov.nih.nci.cagrid.introduce/1/Methods"/>
+   <ns5:ResourcePropertiesList xsi:type="ns5:ResourcePropertiesListType" xmlns:ns5="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
+  </ns3:Service>
+ </ns3:Services>
+ <ns6:Extensions xsi:type="ns6:ExtensionsType" xmlns:ns6="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns7:ServiceProperties xmlns:ns7="gme://gov.nih.nci.cagrid.introduce/1/Property"/>
 </ns1:ServiceSkeleton>
