@@ -229,6 +229,16 @@ public class CaDSRServiceImpl implements CaDSRServiceI {
 				int index = 0;
 				for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
 					UMLAttributeMetadata att = (UMLAttributeMetadata) resultsIterator.next();
+
+					// TODO: remove when this hackaround for cacore bug is not
+					// needed
+					String attName = att.getName();
+					int ind = attName.indexOf(":");
+					if (ind >= 0) {
+						att.setName(attName.substring(ind + 1));
+					}
+					// END HACK
+
 					LOG.debug("attribute name:" + att.getName());
 					arr[index++] = att;
 				}
