@@ -23,19 +23,47 @@ public class Main {
 		}
 		
 		
-		
-		
-
 		UMLDiagram diagram = new UMLDiagram();
 
+	
+		DomainModelOutlines p = new DomainModelOutlines();
+		
+		JFrame f = new JFrame();
+		f.getContentPane().add(diagram);
+		f.setBounds(10, 100, 900, 600);
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.setVisible(true);
+		
+		populateDiagram(diagram);
+		diagram.refresh();
+		Thread.sleep(2000);
+		diagram.clear();
+		populateDiagram(diagram);
+		diagram.refresh();
+		Thread.sleep(2000);
+		diagram.clear();
+		populateDiagram(diagram);
+		diagram.refresh();		
+		
+		
+		
+
+	
+	}
+	
+	
+	public static void populateDiagram(UMLDiagram diagram) throws InterruptedException
+	{
 		Random r = new Random(System.currentTimeMillis());
 
-		int numclasses = 20;
-		int numassocs = 90;
+		int numclasses = 30;
+		int numassocs = 9;
 		
 		for(int k = 0; k < numclasses;  k++)
 		{
 			UMLClass c = new UMLClass("TestClass"+k);
+			Thread.sleep(100);
+			
 			c.refresh();
 			
 			diagram.addClass(c);
@@ -51,29 +79,8 @@ public class Main {
 			
 			UMLClass c1 = (UMLClass) diagram.classes.get(index1);
 			UMLClass c2 = (UMLClass) diagram.classes.get(index2);
-			
+			Thread.sleep(100);
 			diagram.addAssociation(c1, c2, "", "", "1..0", "*..1");
 		}
-		
-		diagram.performLayout();
-		diagram.refresh();
-		//diagram.repositionLabelsAndArrowHeads();
-		
-
-		
-		
-		
-		DomainModelOutlines p = new DomainModelOutlines();
-		
-
-
-		JFrame f = new JFrame();
-		f.getContentPane().add(p);
-		f.setBounds(10, 100, 900, 600);
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setVisible(true);
-		
-
-	
 	}
 }

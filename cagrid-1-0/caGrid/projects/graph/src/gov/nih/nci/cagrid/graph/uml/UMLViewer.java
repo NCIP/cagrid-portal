@@ -74,8 +74,10 @@ class UMLViewer extends JGraph {
 		this.pagerCaptionBar = new PagerCaptionBar(this.pager);
 
 		this.setDefaultSize(500, 500);
-
+		this.setDrawingSize(100, 100);
 		Globals.setShowFigTips(false);
+		
+		
 
 	}
 
@@ -166,95 +168,97 @@ class UMLViewerMouseListener extends MouseAdapter {
 
 
 	public void mousePressed(MouseEvent e) {
-		parent.diagram.statusBar.setDefaultMsg();
-
-		parent.pager.unhighlightAll();
-
-		for (int k = 0; k < parent.diagram.classes.size(); k++) {
-			UMLClass c = (UMLClass) parent.diagram.classes.get(k);
-			parent.diagram.diagram.getLayer().bringToFront(c);
-			c.setNormal();
-		}
-
-		for (int m = 0; m < parent.diagram.assocs.size(); m++) {
-			UMLClassAssociation edge = (UMLClassAssociation) parent.diagram.assocs.get(m);
-			edge.setNormal();
-		}
-
-		parent.diagram.viewer.repaint();
-
-		if (parent.diagram.viewer.selectedFigs().size() == 1) {
-			if (parent.diagram.viewer.selectedFigs().get(0) instanceof UMLClassAssociation) {
-
-				UMLClassAssociation edge = (UMLClassAssociation) parent.diagram.viewer.selectedFigs().get(0);
-				edge.highlight(parent.diagram.diagram.getLayer());
-				parent.pager.highlightEdge(edge);
-
-				for (int j = 0; j < parent.diagram.assocs.size(); j++) {
-					UMLClassAssociation temp = (UMLClassAssociation) parent.diagram.assocs.get(j);
-
-					if (temp != edge) {
-						temp.fade();
-					}
-				}
-
-				for (int k = 0; k < parent.diagram.classes.size(); k++) {
-					UMLClass c = (UMLClass) parent.diagram.classes.get(k);
-
-					if (edge.source != c && edge.destination != c) {
-
-						c.fade();
-					}
-
-				}
-
-				UMLClass source = (UMLClass) edge.getSourceFigNode();
-				UMLClass dest = (UMLClass) edge.getDestFigNode();
-
-				parent.diagram.statusBar.setMsg("Association: [ " + source.name + " , " + dest.name + " ]");
-			} else if (parent.diagram.viewer.selectedFigs().get(0) instanceof Text) {
-				Text t = (Text) parent.diagram.viewer.selectedFigs().get(0);
-
-				t.parent.highlight(parent.diagram.diagram.getLayer());
-				parent.pager.highlightEdge(t.parent);
-
-				for (int j = 0; j < parent.diagram.assocs.size(); j++) {
-					UMLClassAssociation temp = (UMLClassAssociation) parent.diagram.assocs.get(j);
-
-					if (temp != t.parent) {
-						temp.fade();
-					}
-
-				}
-
-				UMLClassAssociation edge = t.parent;
-				for (int k = 0; k < parent.diagram.classes.size(); k++) {
-					UMLClass c = (UMLClass) parent.diagram.classes.get(k);
-
-					if (edge.source == c || edge.destination == c) {
-
-					} else {
-						c.fade();
-					}
-
-				}
-
-				UMLClass source = (UMLClass) t.parent.getSourceFigNode();
-				UMLClass dest = (UMLClass) t.parent.getDestFigNode();
-
-				parent.diagram.statusBar.setMsg("Association: [ " + source.name + " , " + dest.name + " ]");
-
-			} else if (parent.diagram.viewer.selectedFigs().get(0) instanceof UMLClass) {
-
-				UMLClass c = (UMLClass) parent.diagram.viewer.selectedFigs().get(0);
-
-				parent.diagram.viewer.highlightClass(c);
-
+		if(!parent.diagram.inactiveState)
+		{
+			parent.diagram.statusBar.setDefaultMsg();
+	
+			parent.pager.unhighlightAll();
+	
+			for (int k = 0; k < parent.diagram.classes.size(); k++) {
+				UMLClass c = (UMLClass) parent.diagram.classes.get(k);
+				parent.diagram.diagram.getLayer().bringToFront(c);
+				c.setNormal();
 			}
+	
+			for (int m = 0; m < parent.diagram.assocs.size(); m++) {
+				UMLClassAssociation edge = (UMLClassAssociation) parent.diagram.assocs.get(m);
+				edge.setNormal();
+			}
+	
+			parent.diagram.viewer.repaint();
+	
+			if (parent.diagram.viewer.selectedFigs().size() == 1) {
+				if (parent.diagram.viewer.selectedFigs().get(0) instanceof UMLClassAssociation) {
+	
+					UMLClassAssociation edge = (UMLClassAssociation) parent.diagram.viewer.selectedFigs().get(0);
+					edge.highlight(parent.diagram.diagram.getLayer());
+					parent.pager.highlightEdge(edge);
+	
+					for (int j = 0; j < parent.diagram.assocs.size(); j++) {
+						UMLClassAssociation temp = (UMLClassAssociation) parent.diagram.assocs.get(j);
+	
+						if (temp != edge) {
+							temp.fade();
+						}
+					}
+	
+					for (int k = 0; k < parent.diagram.classes.size(); k++) {
+						UMLClass c = (UMLClass) parent.diagram.classes.get(k);
+	
+						if (edge.source != c && edge.destination != c) {
+	
+							c.fade();
+						}
+	
+					}
+	
+					UMLClass source = (UMLClass) edge.getSourceFigNode();
+					UMLClass dest = (UMLClass) edge.getDestFigNode();
+	
+					parent.diagram.statusBar.setMsg("Association: [ " + source.name + " , " + dest.name + " ]");
+				} else if (parent.diagram.viewer.selectedFigs().get(0) instanceof Text) {
+					Text t = (Text) parent.diagram.viewer.selectedFigs().get(0);
+	
+					t.parent.highlight(parent.diagram.diagram.getLayer());
+					parent.pager.highlightEdge(t.parent);
+	
+					for (int j = 0; j < parent.diagram.assocs.size(); j++) {
+						UMLClassAssociation temp = (UMLClassAssociation) parent.diagram.assocs.get(j);
+	
+						if (temp != t.parent) {
+							temp.fade();
+						}
+	
+					}
+	
+					UMLClassAssociation edge = t.parent;
+					for (int k = 0; k < parent.diagram.classes.size(); k++) {
+						UMLClass c = (UMLClass) parent.diagram.classes.get(k);
+	
+						if (edge.source == c || edge.destination == c) {
+	
+						} else {
+							c.fade();
+						}
+	
+					}
+	
+					UMLClass source = (UMLClass) t.parent.getSourceFigNode();
+					UMLClass dest = (UMLClass) t.parent.getDestFigNode();
+	
+					parent.diagram.statusBar.setMsg("Association: [ " + source.name + " , " + dest.name + " ]");
+	
+				} else if (parent.diagram.viewer.selectedFigs().get(0) instanceof UMLClass) {
+	
+					UMLClass c = (UMLClass) parent.diagram.viewer.selectedFigs().get(0);
+	
+					parent.diagram.viewer.highlightClass(c);
+	
+				}
+			}
+	
+			parent.repaint();
 		}
-
-		parent.repaint();
-
 	}
 
 
@@ -273,10 +277,13 @@ class UMLViewerMouseMotionListener extends MouseMotionAdapter {
 
 
 	public void mouseDragged(MouseEvent e) {
-		parent.diagram.repositionLabelsAndArrowHeads();
-		parent.diagram.statusBar.setCoords(e.getX(), e.getY());
-		parent.diagram.viewer.repaint();
-		parent.updateDrawingSizeToIncludeAllFigs();
+		if(!parent.diagram.inactiveState)
+		{
+			parent.diagram.repositionLabelsAndArrowHeads();
+			parent.diagram.statusBar.setCoords(e.getX(), e.getY());
+			parent.diagram.viewer.repaint();
+			parent.updateDrawingSizeToIncludeAllFigs();
+		}
 	}
 
 

@@ -26,6 +26,8 @@ public class UMLDiagram extends JLayeredPane {
 
 	protected Vector classes = new Vector();
 	protected Vector assocs = new Vector();
+	
+	public boolean inactiveState = true;
 
 
 	public UMLDiagram() {
@@ -62,9 +64,11 @@ public class UMLDiagram extends JLayeredPane {
 			return false;
 		
 		gc.refresh();
-		
+		gc.setVisible(false);
 		this.classes.addElement(gc);
-
+		this.diagram.add(gc);
+		this.layouter.add(new ClassdiagramNode(gc));
+		
 
 		return true;
 
@@ -88,8 +92,9 @@ public class UMLDiagram extends JLayeredPane {
 		edge.setDestFigNode(gc2);
 		edge.setDestPortFig(gc2);
 
+		edge.setVisible(false);
+		
 		this.diagram.add(edge);
-
 		this.diagram.add(edge.sourceLabel);
 		this.diagram.add(edge.destinationLabel);
 		this.diagram.add(edge.sourceMultiplicity);
@@ -106,7 +111,8 @@ public class UMLDiagram extends JLayeredPane {
 	}
 
 
-	public void addFig(Fig f) {
+	public void addFig(Fig f) 
+	{
 		this.diagram.add(f);
 
 	}
@@ -117,33 +123,57 @@ public class UMLDiagram extends JLayeredPane {
 	}
 
 
-	public void zoom(int percent) {
+	public void zoom(int percent) 
+	{
 
 	}
 
 
-	public void refresh() {
+	public void refresh() 
+	{
 		this.viewer.setDiagram(this.diagram);
 
 		for (int k = 0; k < this.classes.size(); k++) {
 			UMLClass gc = (UMLClass) this.classes.get(k);
-			this.diagram.add(gc);
-			this.layouter.add(new ClassdiagramNode(gc));
+			gc.setVisible(true);
 			this.diagram.getLayer().bringToFront((UMLClass) this.classes.elementAt(k));
 		}
-
+		
+		
+		performLayout();
+		repositionLabelsAndArrowHeads();
+		
 		this.viewer.updateDrawingSizeToIncludeAllFigs();
-
+		
+		this.inactiveState = false;
+		
 	}
 	
 	public void clear()
 	{
+		this.inactiveState = true;
+		this.layouter = new ClassdiagramLayouter();
+		
 		for(int k = 0; k < this.classes.size(); k++)
 		{
 			UMLClass gc = (UMLClass) this.classes.get(k);
 			this.diagram.remove(gc);
-			//this.layouter.remove();
 		}
+		
+		for(int k = 0; k < this.assocs.size(); k++)
+		{
+			UMLClassAssociation edge = (UMLClassAssociation) this.assocs.get(k);
+			this.diagram.remove(edge);
+			this.diagram.remove(edge.sourceArrow);
+			this.diagram.remove(edge.destinationArrow);
+			this.diagram.remove(edge.sourceLabel);
+			this.diagram.remove(edge.destinationLabel);
+			this.diagram.remove(edge.sourceMultiplicity);
+			this.diagram.remove(edge.destinationMultiplicity);
+		}
+		
+		this.classes = new Vector();
+		this.assocs = new Vector();
 	}
 
 
@@ -155,17 +185,18 @@ public class UMLDiagram extends JLayeredPane {
 
 
 	protected void repositionLabelsAndArrowHeads() {
+		
 		UMLClassAssociation edge = null;
-
+	
 		for (int c = 0; c < this.assocs.size(); c++) {
-			edge = (UMLClassAssociation) this.assocs.elementAt(c);
-
-			edge.repositionLabelsAndArrowHeads();
-
-			this.repaint();
-
+				edge = (UMLClassAssociation) this.assocs.elementAt(c);
+	
+				edge.repositionLabelsAndArrowHeads();
+	
+				this.repaint();
+	
 		}
-
+		
 	}
 
 }

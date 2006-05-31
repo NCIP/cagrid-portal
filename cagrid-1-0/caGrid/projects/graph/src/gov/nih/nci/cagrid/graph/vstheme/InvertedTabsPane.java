@@ -20,7 +20,7 @@ public class InvertedTabsPane extends JLayeredPane
 	
 	public static Color bgColor = new Color(247, 243, 233);
 	public static Color grayColor = new Color(212, 208, 200);
-	public static int spacerHeight = 2;
+	public static int spacerHeight = 3;
 	public static int tabHeight = 21;
 	
 	
