@@ -300,6 +300,7 @@
 			<include name="**/*.xsd" />
 			<include name="**/*.wsdd" />
 	        <include name="**/core/**" />
+			<include name="**/common/**" />
 			<exclude name="**/client/**" />
 			<exclude name="**/service/**" />
 		</jar>

@@ -296,6 +296,7 @@
 			<include name="**/*.dtd" />
 			<include name="**/*.properties" />
 			<include name="**/*.xsd" />
+			<include name="**/common/**" />
 			<include name="**/*.wsdd" />
 			<exclude name="**/client/**" />
 			<exclude name="**/service/**" />
