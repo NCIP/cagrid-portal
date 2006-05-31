@@ -894,6 +894,7 @@ public class ModificationViewer extends GridPortalComponent {
 				public void stateChanged(ChangeEvent e) {
 					getNamespaceJTree().setNamespaces(info.getNamespaces());
 					getResourcesJTree().setServices(info.getServices());
+					getMethodsTable().clearTable();
 					getMethodsTable().setMethods(
 							info.getServices().getService(0).getMethods());
 					getRpHolderPanel().reInitialize(
