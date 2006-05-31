@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.graph.vstheme;
 
-import java.awt.BorderLayout;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.Vector;
 
 import javax.swing.JComponent;
@@ -13,7 +14,8 @@ public class MultipleComponentContainer extends JLayeredPane
 	
 	public MultipleComponentContainer()
 	{
-		this.setLayout(new BorderLayout());
+		//this.setLayout(new BorderLayout());
+		this.addComponentListener(new MultipleComponentContainerComponentListener());
 	}
 	
 	public void addComponent(JComponent component)
@@ -69,5 +71,20 @@ public class MultipleComponentContainer extends JLayeredPane
 		this.validate();
 		this.repaint();
 		
+	}
+}
+
+class MultipleComponentContainerComponentListener extends ComponentAdapter
+{
+	public void componentResized(ComponentEvent e)
+	{
+		MultipleComponentContainer s = (MultipleComponentContainer) e.getSource();
+		
+		for(int k = 0; k < s.components.size(); k++)
+		{
+			JComponent c = (JComponent) s.components.get(k);
+			
+			c.setBounds(0, 0, s.getWidth(), s.getHeight());
+		}
 	}
 }
