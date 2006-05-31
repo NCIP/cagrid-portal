@@ -2,12 +2,12 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="resources/portal/gts"/>
 	<classpathentry kind="src" path="test/resources"/>
-	<classpathentry kind="src" path="test/src"/>
 	<classpathentry kind="src" path="ext/resources/portal/common"/>
 	<classpathentry kind="src" path="ext/resources/portal/gridca"/>
-	<classpathentry kind="src" path="build/stubs-GridTrustService/src"/>
+	<classpathentry kind="src" path="resources/portal/gts"/>
+	<classpathentry kind="src" path="test/src"/>
+	<classpathentry kind="src" path="build/stubs-GTS/src"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
@@ -67,26 +67,21 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
-	<classpathentry kind="lib" path="lib/globus_wsrf_mds_aggregator_stubs.jar"/>
+	<classpathentry kind="lib" path="lib/ant-contrib.jar"/>
+	<classpathentry kind="lib" path="lib/caGrid-core-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/globus_wsrf_mds_aggregator.jar"/>
-	<classpathentry kind="lib" path="lib/globus_wsrf_servicegroup_stubs.jar"/>
+	<classpathentry kind="lib" path="lib/globus_wsrf_mds_aggregator_stubs.jar"/>
 	<classpathentry kind="lib" path="lib/globus_wsrf_servicegroup.jar"/>
-	<classpathentry sourcepath="/caGrid-1.0-core" kind="lib" path="ext/lib/caGrid-core-1.0.jar"/>
-	<classpathentry sourcepath="/caGrid-1.0-gridca" kind="lib" path="ext/lib/gridca.jar"/>
+	<classpathentry kind="lib" path="lib/globus_wsrf_servicegroup_stubs.jar"/>
+	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-core-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
+	<classpathentry kind="lib" path="ext/lib/gridca.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_factories-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/jdepend-2.7-patched.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/junit.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/junit-addons-1.4.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/xmlunit1.0.jar"/>
-	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/asm-2.2.1.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/cobertura.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/jakarta-oro-2.0.8.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/log4j-1.2.9.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

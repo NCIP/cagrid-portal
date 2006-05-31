@@ -1,8 +1,8 @@
 package gov.nih.nci.cagrid.gts.common;
 
-import java.io.File;
-
 import gov.nih.nci.cagrid.common.Utils;
+
+import java.io.File;
 
 public class Constants {
 

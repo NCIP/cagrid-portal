@@ -20,6 +20,7 @@ import gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault;
 
 import java.rmi.RemoteException;
 
+import org.apache.axis.types.URI.MalformedURIException;
 import org.globus.gsi.GlobusCredential;
 
 
@@ -33,11 +34,11 @@ import org.globus.gsi.GlobusCredential;
 
 public class GTSAdminClient {
 
-	private GridTrustServiceClient client;
+	private GTSClient client;
 
 
-	public GTSAdminClient(String url, GlobusCredential proxy) {
-		this.client = new GridTrustServiceClient(url, proxy);
+	public GTSAdminClient(String url, GlobusCredential proxy)throws MalformedURIException {
+		this.client = new GTSClient(url, proxy);
 	}
 
 

@@ -1,0 +1,890 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="GTS" targetNamespace="http://cagrid.nci.nih.gov/GTS"
+    xmlns:tns="http://cagrid.nci.nih.gov/GTS"
+    xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd"
+    xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl"
+    xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor"
+    xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl"
+    xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing"
+    xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl"
+    xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl"
+    xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"    xmlns="http://schemas.xmlsoap.org/wsdl/">
+ 
+    <import
+        namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
+        location="../wsrf/properties/WS-ResourceProperties.wsdl"/>
+    <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl"
+        location="../wsrf/faults/WS-BaseFaults.wsdl"/>
+    <!--============================================================
+
+                      T Y P E S
+                      
+  ============================================================-->
+    <types>
+        <schema targetNamespace="http://cagrid.nci.nih.gov/GTS"
+            xmlns:tns="http://cagrid.nci.nih.gov/GTS"
+			xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"
+			
+			xmlns:ns0="http://cagrid.nci.nih.gov/8/gts"
+			
+            xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
+			<import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd"/>
+			<import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" schemaLocation="./1.0_gov.nih.nci.cagrid.metadata.xsd"/>
+			
+			<import namespace="http://cagrid.nci.nih.gov/8/gts" schemaLocation="./gts.xsd"/>
+			
+      	
+      	
+				<element name="AddTrustedAuthorityRequest">
+					<complexType>
+						<sequence>
+          		  			<element name="ta">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:TrustedAuthority" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+	      			        </sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="AddTrustedAuthorityResponse">
+					<complexType>
+						<sequence>
+          		  
+							<element ref="ns0:TrustedAuthority" minOccurs="1" maxOccurs="1" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="FindTrustedAuthoritiesRequest">
+					<complexType>
+						<sequence>
+          		  			<element name="filter">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:TrustedAuthorityFilter" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+	      			        </sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="FindTrustedAuthoritiesResponse">
+					<complexType>
+						<sequence>
+          		  
+							<element ref="ns0:TrustedAuthority" minOccurs="1" maxOccurs="unbounded" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="RemoveTrustedAuthorityRequest">
+					<complexType>
+						<sequence>
+          		  			<element name="trustedAuthorityName" type="xs:string" minOccurs="1" maxOccurs="1" /></sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="RemoveTrustedAuthorityResponse">
+					<complexType>
+						<sequence>
+          		  
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="AddPermissionRequest">
+					<complexType>
+						<sequence>
+          		  			<element name="permission">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:Permission" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+	      			        </sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="AddPermissionResponse">
+					<complexType>
+						<sequence>
+          		  
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="FindPermissionsRequest">
+					<complexType>
+						<sequence>
+          		  			<element name="filter">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:PermissionFilter" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+	      			        </sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="FindPermissionsResponse">
+					<complexType>
+						<sequence>
+          		  
+							<element ref="ns0:Permission" minOccurs="1" maxOccurs="unbounded" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="RevokePermissionRequest">
+					<complexType>
+						<sequence>
+          		  			<element name="permission">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:Permission" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+	      			        </sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="RevokePermissionResponse">
+					<complexType>
+						<sequence>
+          		  
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="UpdateTrustedAuthorityRequest">
+					<complexType>
+						<sequence>
+          		  			<element name="ta">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:TrustedAuthority" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+	      			        </sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="UpdateTrustedAuthorityResponse">
+					<complexType>
+						<sequence>
+          		  
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="AddTrustLevelRequest">
+					<complexType>
+						<sequence>
+          		  			<element name="trustLevel">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:TrustLevel" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+	      			        </sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="AddTrustLevelResponse">
+					<complexType>
+						<sequence>
+          		  
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="UpdateTrustLevelRequest">
+					<complexType>
+						<sequence>
+          		  			<element name="trustLevel">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:TrustLevel" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+	      			        </sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="UpdateTrustLevelResponse">
+					<complexType>
+						<sequence>
+          		  
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="GetTrustLevelsRequest">
+					<complexType>
+						<sequence>
+          		  			</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="GetTrustLevelsResponse">
+					<complexType>
+						<sequence>
+          		  
+							<element ref="ns0:TrustLevel" minOccurs="1" maxOccurs="unbounded" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="RemoveTrustLevelRequest">
+					<complexType>
+						<sequence>
+          		  			<element name="trustLevelName" type="xs:string" minOccurs="1" maxOccurs="1" /></sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="RemoveTrustLevelResponse">
+					<complexType>
+						<sequence>
+          		  
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="AddAuthorityRequest">
+					<complexType>
+						<sequence>
+          		  			<element name="authorityGTS">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:AuthorityGTS" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+	      			        </sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="AddAuthorityResponse">
+					<complexType>
+						<sequence>
+          		  
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="UpdateAuthorityRequest">
+					<complexType>
+						<sequence>
+          		  			<element name="authorityGTS">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:AuthorityGTS" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+	      			        </sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="UpdateAuthorityResponse">
+					<complexType>
+						<sequence>
+          		  
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="UpdateAuthorityPrioritiesRequest">
+					<complexType>
+						<sequence>
+          		  			<element name="authorityPriorityUpdate">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:AuthorityPriorityUpdate" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+	      			        </sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="UpdateAuthorityPrioritiesResponse">
+					<complexType>
+						<sequence>
+          		  
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="GetAuthoritiesRequest">
+					<complexType>
+						<sequence>
+          		  			</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="GetAuthoritiesResponse">
+					<complexType>
+						<sequence>
+          		  
+							<element ref="ns0:AuthorityGTS" minOccurs="1" maxOccurs="unbounded" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="RemoveAuthorityRequest">
+					<complexType>
+						<sequence>
+          		  			<element name="serviceURI" type="xs:string" minOccurs="1" maxOccurs="1" /></sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="RemoveAuthorityResponse">
+					<complexType>
+						<sequence>
+          		  
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="UpdateCRLRequest">
+					<complexType>
+						<sequence>
+          		  			<element name="trustedAuthorityName" type="xs:string" minOccurs="1" maxOccurs="1" /><element name="crl">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:X509CRL" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+	      			        </sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="UpdateCRLResponse">
+					<complexType>
+						<sequence>
+          		  
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="ValidateRequest">
+					<complexType>
+						<sequence>
+          		  			<element name="chain">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:X509Certificate" minOccurs="1" maxOccurs="unbounded" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+	      			        <element name="filter">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:TrustedAuthorityFilter" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+	      			        </sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="ValidateResponse">
+					<complexType>
+						<sequence>
+          		  
+							<element name="response" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="GTSInternalFault" >
+					<complexType>
+						<complexContent>
+							<extension base="wsrbf:BaseFaultType"/>
+						</complexContent>
+					</complexType>
+				</element>
+      					
+				<element name="IllegalTrustedAuthorityFault" >
+					<complexType>
+						<complexContent>
+							<extension base="wsrbf:BaseFaultType"/>
+						</complexContent>
+					</complexType>
+				</element>
+      					
+				<element name="PermissionDeniedFault" >
+					<complexType>
+						<complexContent>
+							<extension base="wsrbf:BaseFaultType"/>
+						</complexContent>
+					</complexType>
+				</element>
+      					
+				<element name="InvalidTrustedAuthorityFault" >
+					<complexType>
+						<complexContent>
+							<extension base="wsrbf:BaseFaultType"/>
+						</complexContent>
+					</complexType>
+				</element>
+      					
+				<element name="IllegalPermissionFault" >
+					<complexType>
+						<complexContent>
+							<extension base="wsrbf:BaseFaultType"/>
+						</complexContent>
+					</complexType>
+				</element>
+      					
+				<element name="InvalidPermissionFault" >
+					<complexType>
+						<complexContent>
+							<extension base="wsrbf:BaseFaultType"/>
+						</complexContent>
+					</complexType>
+				</element>
+      					
+				<element name="IllegalTrustLevelFault" >
+					<complexType>
+						<complexContent>
+							<extension base="wsrbf:BaseFaultType"/>
+						</complexContent>
+					</complexType>
+				</element>
+      					
+				<element name="InvalidTrustLevelFault" >
+					<complexType>
+						<complexContent>
+							<extension base="wsrbf:BaseFaultType"/>
+						</complexContent>
+					</complexType>
+				</element>
+      					
+				<element name="IllegalAuthorityFault" >
+					<complexType>
+						<complexContent>
+							<extension base="wsrbf:BaseFaultType"/>
+						</complexContent>
+					</complexType>
+				</element>
+      					
+				<element name="InvalidAuthorityFault" >
+					<complexType>
+						<complexContent>
+							<extension base="wsrbf:BaseFaultType"/>
+						</complexContent>
+					</complexType>
+				</element>
+      					
+				<element name="CertificateValidationFault" >
+					<complexType>
+						<complexContent>
+							<extension base="wsrbf:BaseFaultType"/>
+						</complexContent>
+					</complexType>
+				</element>
+      					
+            <element name="GTSResourceProperties">
+                <complexType>
+                    <sequence><element ref="ns1:ServiceMetadata"/></sequence>
+                </complexType>
+            </element>
+          </schema>
+    </types>
+    
+    
+<!--  place service messages here -->
+	<message name="AddTrustedAuthorityRequest">
+		<part name="parameters" element="tns:AddTrustedAuthorityRequest"/>
+	</message>
+	
+	<message name="AddTrustedAuthorityResponse">
+		<part name="parameters" element="tns:AddTrustedAuthorityResponse"/>
+	</message>
+	<message name="FindTrustedAuthoritiesRequest">
+		<part name="parameters" element="tns:FindTrustedAuthoritiesRequest"/>
+	</message>
+	
+	<message name="FindTrustedAuthoritiesResponse">
+		<part name="parameters" element="tns:FindTrustedAuthoritiesResponse"/>
+	</message>
+	<message name="RemoveTrustedAuthorityRequest">
+		<part name="parameters" element="tns:RemoveTrustedAuthorityRequest"/>
+	</message>
+	
+	<message name="RemoveTrustedAuthorityResponse">
+		<part name="parameters" element="tns:RemoveTrustedAuthorityResponse"/>
+	</message>
+	<message name="AddPermissionRequest">
+		<part name="parameters" element="tns:AddPermissionRequest"/>
+	</message>
+	
+	<message name="AddPermissionResponse">
+		<part name="parameters" element="tns:AddPermissionResponse"/>
+	</message>
+	<message name="FindPermissionsRequest">
+		<part name="parameters" element="tns:FindPermissionsRequest"/>
+	</message>
+	
+	<message name="FindPermissionsResponse">
+		<part name="parameters" element="tns:FindPermissionsResponse"/>
+	</message>
+	<message name="RevokePermissionRequest">
+		<part name="parameters" element="tns:RevokePermissionRequest"/>
+	</message>
+	
+	<message name="RevokePermissionResponse">
+		<part name="parameters" element="tns:RevokePermissionResponse"/>
+	</message>
+	<message name="UpdateTrustedAuthorityRequest">
+		<part name="parameters" element="tns:UpdateTrustedAuthorityRequest"/>
+	</message>
+	
+	<message name="UpdateTrustedAuthorityResponse">
+		<part name="parameters" element="tns:UpdateTrustedAuthorityResponse"/>
+	</message>
+	<message name="AddTrustLevelRequest">
+		<part name="parameters" element="tns:AddTrustLevelRequest"/>
+	</message>
+	
+	<message name="AddTrustLevelResponse">
+		<part name="parameters" element="tns:AddTrustLevelResponse"/>
+	</message>
+	<message name="UpdateTrustLevelRequest">
+		<part name="parameters" element="tns:UpdateTrustLevelRequest"/>
+	</message>
+	
+	<message name="UpdateTrustLevelResponse">
+		<part name="parameters" element="tns:UpdateTrustLevelResponse"/>
+	</message>
+	<message name="GetTrustLevelsRequest">
+		<part name="parameters" element="tns:GetTrustLevelsRequest"/>
+	</message>
+	
+	<message name="GetTrustLevelsResponse">
+		<part name="parameters" element="tns:GetTrustLevelsResponse"/>
+	</message>
+	<message name="RemoveTrustLevelRequest">
+		<part name="parameters" element="tns:RemoveTrustLevelRequest"/>
+	</message>
+	
+	<message name="RemoveTrustLevelResponse">
+		<part name="parameters" element="tns:RemoveTrustLevelResponse"/>
+	</message>
+	<message name="AddAuthorityRequest">
+		<part name="parameters" element="tns:AddAuthorityRequest"/>
+	</message>
+	
+	<message name="AddAuthorityResponse">
+		<part name="parameters" element="tns:AddAuthorityResponse"/>
+	</message>
+	<message name="UpdateAuthorityRequest">
+		<part name="parameters" element="tns:UpdateAuthorityRequest"/>
+	</message>
+	
+	<message name="UpdateAuthorityResponse">
+		<part name="parameters" element="tns:UpdateAuthorityResponse"/>
+	</message>
+	<message name="UpdateAuthorityPrioritiesRequest">
+		<part name="parameters" element="tns:UpdateAuthorityPrioritiesRequest"/>
+	</message>
+	
+	<message name="UpdateAuthorityPrioritiesResponse">
+		<part name="parameters" element="tns:UpdateAuthorityPrioritiesResponse"/>
+	</message>
+	<message name="GetAuthoritiesRequest">
+		<part name="parameters" element="tns:GetAuthoritiesRequest"/>
+	</message>
+	
+	<message name="GetAuthoritiesResponse">
+		<part name="parameters" element="tns:GetAuthoritiesResponse"/>
+	</message>
+	<message name="RemoveAuthorityRequest">
+		<part name="parameters" element="tns:RemoveAuthorityRequest"/>
+	</message>
+	
+	<message name="RemoveAuthorityResponse">
+		<part name="parameters" element="tns:RemoveAuthorityResponse"/>
+	</message>
+	<message name="UpdateCRLRequest">
+		<part name="parameters" element="tns:UpdateCRLRequest"/>
+	</message>
+	
+	<message name="UpdateCRLResponse">
+		<part name="parameters" element="tns:UpdateCRLResponse"/>
+	</message>
+	<message name="ValidateRequest">
+		<part name="parameters" element="tns:ValidateRequest"/>
+	</message>
+	
+	<message name="ValidateResponse">
+		<part name="parameters" element="tns:ValidateResponse"/>
+	</message>
+	<message name="GTSInternalFaultFaultMessage">
+		<part name="fault" element="tns:GTSInternalFault"/>
+	</message>
+	<message name="IllegalTrustedAuthorityFaultFaultMessage">
+		<part name="fault" element="tns:IllegalTrustedAuthorityFault"/>
+	</message>
+	<message name="PermissionDeniedFaultFaultMessage">
+		<part name="fault" element="tns:PermissionDeniedFault"/>
+	</message>
+	<message name="InvalidTrustedAuthorityFaultFaultMessage">
+		<part name="fault" element="tns:InvalidTrustedAuthorityFault"/>
+	</message>
+	<message name="IllegalPermissionFaultFaultMessage">
+		<part name="fault" element="tns:IllegalPermissionFault"/>
+	</message>
+	<message name="InvalidPermissionFaultFaultMessage">
+		<part name="fault" element="tns:InvalidPermissionFault"/>
+	</message>
+	<message name="IllegalTrustLevelFaultFaultMessage">
+		<part name="fault" element="tns:IllegalTrustLevelFault"/>
+	</message>
+	<message name="InvalidTrustLevelFaultFaultMessage">
+		<part name="fault" element="tns:InvalidTrustLevelFault"/>
+	</message>
+	<message name="IllegalAuthorityFaultFaultMessage">
+		<part name="fault" element="tns:IllegalAuthorityFault"/>
+	</message>
+	<message name="InvalidAuthorityFaultFaultMessage">
+		<part name="fault" element="tns:InvalidAuthorityFault"/>
+	</message>
+	<message name="CertificateValidationFaultFaultMessage">
+		<part name="fault" element="tns:CertificateValidationFault"/>
+	</message>
+    
+<!--============================================================
+
+                       P O R T T Y P E
+                      
+  ============================================================-->
+<portType name="GTSPortType" wsrp:ResourceProperties="tns:GTSResourceProperties">
+		<operation name="addTrustedAuthority">
+            <input message="tns:AddTrustedAuthorityRequest"/>
+            <output message="tns:AddTrustedAuthorityResponse"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+       		 <fault name="IllegalTrustedAuthorityFault" message="tns:IllegalTrustedAuthorityFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="findTrustedAuthorities">
+            <input message="tns:FindTrustedAuthoritiesRequest"/>
+            <output message="tns:FindTrustedAuthoritiesResponse"/>
+        </operation>
+		<operation name="removeTrustedAuthority">
+            <input message="tns:RemoveTrustedAuthorityRequest"/>
+            <output message="tns:RemoveTrustedAuthorityResponse"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+       		 <fault name="InvalidTrustedAuthorityFault" message="tns:InvalidTrustedAuthorityFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="addPermission">
+            <input message="tns:AddPermissionRequest"/>
+            <output message="tns:AddPermissionResponse"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+       		 <fault name="IllegalPermissionFault" message="tns:IllegalPermissionFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="findPermissions">
+            <input message="tns:FindPermissionsRequest"/>
+            <output message="tns:FindPermissionsResponse"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="revokePermission">
+            <input message="tns:RevokePermissionRequest"/>
+            <output message="tns:RevokePermissionResponse"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+       		 <fault name="InvalidPermissionFault" message="tns:InvalidPermissionFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="updateTrustedAuthority">
+            <input message="tns:UpdateTrustedAuthorityRequest"/>
+            <output message="tns:UpdateTrustedAuthorityResponse"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+       		 <fault name="IllegalTrustedAuthorityFault" message="tns:IllegalTrustedAuthorityFaultFaultMessage"/>
+       				
+       		 <fault name="InvalidTrustedAuthorityFault" message="tns:InvalidTrustedAuthorityFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="addTrustLevel">
+            <input message="tns:AddTrustLevelRequest"/>
+            <output message="tns:AddTrustLevelResponse"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+       		 <fault name="IllegalTrustLevelFault" message="tns:IllegalTrustLevelFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="updateTrustLevel">
+            <input message="tns:UpdateTrustLevelRequest"/>
+            <output message="tns:UpdateTrustLevelResponse"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+       		 <fault name="InvalidTrustLevelFault" message="tns:InvalidTrustLevelFaultFaultMessage"/>
+       				
+       		 <fault name="IllegalTrustLevelFault" message="tns:IllegalTrustLevelFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="getTrustLevels">
+            <input message="tns:GetTrustLevelsRequest"/>
+            <output message="tns:GetTrustLevelsResponse"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="removeTrustLevel">
+            <input message="tns:RemoveTrustLevelRequest"/>
+            <output message="tns:RemoveTrustLevelResponse"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+       		 <fault name="InvalidTrustLevelFault" message="tns:InvalidTrustLevelFaultFaultMessage"/>
+       				
+       		 <fault name="IllegalTrustLevelFault" message="tns:IllegalTrustLevelFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="addAuthority">
+            <input message="tns:AddAuthorityRequest"/>
+            <output message="tns:AddAuthorityResponse"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+       		 <fault name="IllegalAuthorityFault" message="tns:IllegalAuthorityFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="updateAuthority">
+            <input message="tns:UpdateAuthorityRequest"/>
+            <output message="tns:UpdateAuthorityResponse"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+       		 <fault name="IllegalAuthorityFault" message="tns:IllegalAuthorityFaultFaultMessage"/>
+       				
+       		 <fault name="InvalidAuthorityFault" message="tns:InvalidAuthorityFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="updateAuthorityPriorities">
+            <input message="tns:UpdateAuthorityPrioritiesRequest"/>
+            <output message="tns:UpdateAuthorityPrioritiesResponse"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+       		 <fault name="IllegalAuthorityFault" message="tns:IllegalAuthorityFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="getAuthorities">
+            <input message="tns:GetAuthoritiesRequest"/>
+            <output message="tns:GetAuthoritiesResponse"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="removeAuthority">
+            <input message="tns:RemoveAuthorityRequest"/>
+            <output message="tns:RemoveAuthorityResponse"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+       		 <fault name="InvalidAuthorityFault" message="tns:InvalidAuthorityFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="updateCRL">
+            <input message="tns:UpdateCRLRequest"/>
+            <output message="tns:UpdateCRLResponse"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+       		 <fault name="IllegalTrustedAuthorityFault" message="tns:IllegalTrustedAuthorityFaultFaultMessage"/>
+       				
+       		 <fault name="InvalidTrustedAuthorityFault" message="tns:InvalidTrustedAuthorityFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="validate">
+            <input message="tns:ValidateRequest"/>
+            <output message="tns:ValidateResponse"/>
+       		 <fault name="GTSInternalFault" message="tns:GTSInternalFaultFaultMessage"/>
+       				
+       		 <fault name="CertificateValidationFault" message="tns:CertificateValidationFaultFaultMessage"/>
+       				
+        </operation>
+        <operation name="GetResourceProperty">
+            <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest"
+                wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty"/>
+            <output name="GetResourcePropertyResponse" message="wsrpw:GetResourcePropertyResponse"
+                wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourcePropertyResponse"/>
+            <fault name="InvalidResourcePropertyQNameFault"
+                message="wsrpw:InvalidResourcePropertyQNameFault"/>
+            <fault name="ResourceUnknownFault" message="wsrpw:ResourceUnknownFault"/>
+        </operation>
+        <operation name="GetMultipleResourceProperties">
+            <input name="GetMultipleResourcePropertiesRequest"
+                message="wsrpw:GetMultipleResourcePropertiesRequest"
+                wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetMultipleResourceProperties"/>
+            <output name="GetMultipleResourcePropertiesResponse"
+                message="wsrpw:GetMultipleResourcePropertiesResponse"
+                wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetMultipleResourceProperties"/>
+            <fault name="InvalidResourcePropertyQNameFault"
+                message="wsrpw:InvalidResourcePropertyQNameFault"/>
+            <fault name="ResourceUnknownFault" message="wsrpw:ResourceUnknownFault"/>
+        </operation>
+        <operation name="QueryResourceProperties">
+            <input name="QueryResourcePropertiesRequest"
+                message="wsrpw:QueryResourcePropertiesRequest"
+                wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/QueryResourceProperties"/>
+            <output name="QueryResourcePropertiesResponse"
+                message="wsrpw:QueryResourcePropertiesResponse"
+                wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/QueryResourcePropertiesResponse"/>
+            <fault name="ResourceUnknownFault" message="wsrpw:ResourceUnknownFault"/>
+            <fault name="InvalidResourcePropertyQNameFault"
+                message="wsrpw:InvalidResourcePropertyQNameFault"/>
+            <fault name="UnknownQueryExpressionDialectFault"
+                message="wsrpw:UnknownQueryExpressionDialectFault"/>
+            <fault name="InvalidQueryExpressionFault" message="wsrpw:InvalidQueryExpressionFault"/>
+            <fault name="QueryEvaluationErrorFault" message="wsrpw:QueryEvaluationErrorFault"/>
+        </operation>
+    </portType>
+</definitions>

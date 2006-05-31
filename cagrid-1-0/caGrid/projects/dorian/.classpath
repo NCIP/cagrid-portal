@@ -78,8 +78,12 @@
 	<classpathentry kind="lib" path="resources/portal/dorian"/>
 	<classpathentry kind="lib" path="ext/resources/portal/common"/>
 	<classpathentry kind="lib" path="ext/resources/portal/gridca"/>
-	<classpathentry kind="lib" path="ext/lib/GridTrustService_stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/GridTrustService-client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/GridTrustService-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
+	<classpathentry kind="lib" path="ext/lib/GTS_stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/GTS-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/GTS-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_factories-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

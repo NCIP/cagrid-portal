@@ -10,7 +10,7 @@ import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
 import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.client.GTSAdminClient;
-import gov.nih.nci.cagrid.gts.client.GTSClient;
+import gov.nih.nci.cagrid.gts.client.GTSPublicClient;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -197,7 +197,7 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 		String service = Utils.clean((String) getGts().getSelectedItem());
 		if (service != null) {
 			try {
-				GTSClient client = new GTSClient(service);
+				GTSPublicClient client = new GTSPublicClient(service);
 				TrustLevel[] levels = client.getTrustLevels();
 				if (levels != null) {
 					for (int i = 0; i < levels.length; i++) {

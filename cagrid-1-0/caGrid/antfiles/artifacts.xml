@@ -109,9 +109,9 @@
 		<artifact track="main" type="jars" id="gts.client.jars">
 			<antcall target="build-gts" />
 			<fileset dir="${projects.dir}/gts/build/lib">
-				<include name="GridTrustService_stubs.jar" />
-				<include name="GridTrustService-common.jar" />
-				<include name="GridTrustService-client.jar" />
+				<include name="GTS_stubs.jar" />
+				<include name="GTS-common.jar" />
+				<include name="GTS-client.jar" />
 			</fileset>
 		</artifact>
 

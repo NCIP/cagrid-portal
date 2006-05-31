@@ -17,7 +17,8 @@ import gov.nih.nci.cagrid.gts.service.db.DBManager;
 import gov.nih.nci.cagrid.gts.service.db.mysql.MySQLManager;
 import gov.nih.nci.cagrid.gts.stubs.CertificateValidationFault;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
-import gov.nih.nci.cagrid.gts.stubs.GridTrustServicePortType;
+import gov.nih.nci.cagrid.gts.stubs.GTSPortType;
+import gov.nih.nci.cagrid.gts.stubs.GetTrustLevelsRequest;
 import gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault;
@@ -27,7 +28,7 @@ import gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidTrustLevelFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault;
-import gov.nih.nci.cagrid.gts.stubs.service.GridTrustServiceAddressingLocator;
+import gov.nih.nci.cagrid.gts.stubs.service.GTSServiceAddressingLocator;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -653,10 +654,10 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 					TrustLevel[] levels = null;
 					TrustedAuthority[] trusted = null;
 					try {
-						GridTrustServiceAddressingLocator locator = new GridTrustServiceAddressingLocator();
+						GTSServiceAddressingLocator locator = new GTSServiceAddressingLocator();
 						EndpointReferenceType endpoint = new EndpointReferenceType();
 						endpoint.setAddress(new Address(auths[i].getServiceURI()));
-						GridTrustServicePortType port = locator.getGridTrustServicePortTypePort(endpoint);
+						GTSPortType port = locator.getGTSPortTypePort(endpoint);
 						org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
 						stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT,
 							org.globus.wsrf.security.Constants.ENCRYPTION);
@@ -669,15 +670,15 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 								.getInstance());
 						}
 
-						gov.nih.nci.cagrid.gts.stubs.GetTrustLevels params2 = new gov.nih.nci.cagrid.gts.stubs.GetTrustLevels();
+						GetTrustLevelsRequest params2 = new GetTrustLevelsRequest();
 						gov.nih.nci.cagrid.gts.stubs.GetTrustLevelsResponse boxedResult2 = port.getTrustLevels(params2);
 						levels = boxedResult2.getTrustLevel();
 
 						// Find Trusted Authorities
-						gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthorities params = new gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthorities();
-						gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesF fContainer = new gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesF();
-						fContainer.setTrustedAuthorityFilter(filter);
-						params.setF(fContainer);
+						gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesRequest params = new gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesRequest();
+						gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesRequestFilter filterContainer = new gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesRequestFilter();
+						filterContainer.setTrustedAuthorityFilter(filter);
+						params.setFilter(filterContainer);
 						gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesResponse boxedResult = port
 							.findTrustedAuthorities(params);
 						trusted = boxedResult.getTrustedAuthority();

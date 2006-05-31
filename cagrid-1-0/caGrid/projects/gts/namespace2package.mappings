@@ -1,4 +1,10 @@
- http\://cagrid.nci.nih.gov/GridTrustService=gov.nih.nci.cagrid.gts.stubs
-http\://cagrid.nci.nih.gov/GridTrustService/bindings=gov.nih.nci.cagrid.gts.stubs.bindings
-http\://cagrid.nci.nih.gov/GridTrustService/service=gov.nih.nci.cagrid.gts.stubs.service
+http\://cagrid.nci.nih.gov/GTS=gov.nih.nci.cagrid.gts.stubs
+http\://cagrid.nci.nih.gov/GTS/bindings=gov.nih.nci.cagrid.gts.stubs.bindings
+http\://cagrid.nci.nih.gov/GTS/service=gov.nih.nci.cagrid.gts.stubs.service
+
+gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata=gov.nih.nci.cagrid.metadata
 http\://cagrid.nci.nih.gov/8/gts=gov.nih.nci.cagrid.gts.bean
+gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service=gov.nih.nci.cagrid.metadata.service
+gme\://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain=gov.nih.nci.cadsr.umlproject.domain
+gme\://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain=gov.nih.nci.cadsr.domain
+gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common=gov.nih.nci.cagrid.metadata.common

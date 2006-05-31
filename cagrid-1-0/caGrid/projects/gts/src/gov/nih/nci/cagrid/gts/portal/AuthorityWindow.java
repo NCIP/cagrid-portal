@@ -6,7 +6,7 @@ import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
 import gov.nih.nci.cagrid.gts.bean.AuthorityGTS;
 import gov.nih.nci.cagrid.gts.bean.TimeToLive;
 import gov.nih.nci.cagrid.gts.client.GTSAdminClient;
-import gov.nih.nci.cagrid.gts.client.GTSClient;
+import gov.nih.nci.cagrid.gts.client.GTSPublicClient;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -133,7 +133,7 @@ public class AuthorityWindow extends GridPortalComponent {
 
 	private void syncPriorities() {
 		try {
-			GTSClient client = new GTSClient((String) this.getGts()
+			GTSPublicClient client = new GTSPublicClient((String) this.getGts()
 					.getSelectedItem());
 			AuthorityGTS[] auths = client.getAuthorities();
 			int count = 0;

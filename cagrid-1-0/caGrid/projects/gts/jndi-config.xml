@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
-	<service name="SERVICE-INSTANCE-NAME">
+	<service name="SERVICE-INSTANCE-PREFIX/GTS">
 		<resource name="home" type="gov.nih.nci.cagrid.gts.service.globus.resource.BaseResourceHome">
 			<resourceParams>
 				<parameter>
 					<name>factory</name>
 					<value>org.globus.wsrf.jndi.BeanFactory</value>
 				</parameter>
-				<parameter>
-					<name>gtsConfig</name>
-					<value>ETC-PATH/gts-conf.xml</value>
-				</parameter>	
 			</resourceParams>
 		</resource>
-		<resource name="configuration" type="gov.nih.nci.cagrid.gts.service.globus.resource.MetadataConfiguration">
+		
+		<resource name="configuration" type="gov.nih.nci.cagrid.gts.service.globus.resource.ResourceConfiguration">
 			<resourceParams>
 				<parameter>
 					<name>factory</name>
@@ -28,9 +25,15 @@
 					<name>registrationTemplateFile</name>
 					<!-- Set this to the relative path (from the container root, e.g GLOBUS_LOCATION for globus container) of the registration parameters template file (ignored if performRegistration is false) -->
 					<value>ETC-PATH/registration.xml</value>
+				</parameter>
+				<parameter>
+					<name>serviceMetadataFile</name>
+					<!-- Set this to the relative path (from the container root, e.g GLOBUS_LOCATION for globus container) of the serviceMetadata extract -->
+					<value>ETC-PATH/serviceMetadata.xml</value>
 				</parameter>				
 			</resourceParams>
 		</resource>
+		
 		<resource name="serviceconfiguration" type="gov.nih.nci.cagrid.gts.service.globus.ServiceConfiguration">
 			<resourceParams>
 				<parameter>
@@ -41,4 +44,5 @@
 			</resourceParams>
 		</resource>
 	</service>
+	
 </jndiConfig>

@@ -30,7 +30,7 @@
 	<resource name="GTSPortalConf" class="gov.nih.nci.cagrid.gts.portal.GTSPortalConf">
 		<gts-portal-config>
 		<gts-services>
-		    <gts-service>https://localhost:8443/wsrf/services/cagrid/GridTrustService</gts-service>
+		    <gts-service>https://localhost:8443/wsrf/services/cagrid/GTS</gts-service>
 			<gts-service>https://cagrid01.bmi.ohio-state.edu:8442/wsrf/services/cagrid/GridTrustService</gts-service>
 			<gts-service>https://cagrid02.bmi.ohio-state.edu:8442/wsrf/services/cagrid/GridTrustService</gts-service>
 			<gts-service>https://cagrid03.bmi.ohio-state.edu:8442/wsrf/services/cagrid/GridTrustService</gts-service>

@@ -5,7 +5,7 @@ import gov.nih.nci.cagrid.gts.bean.Lifetime;
 import gov.nih.nci.cagrid.gts.bean.Status;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
-import gov.nih.nci.cagrid.gts.client.GTSClient;
+import gov.nih.nci.cagrid.gts.client.GTSPublicClient;
 import gov.nih.nci.cagrid.syncgts.bean.AddedTrustedCAs;
 import gov.nih.nci.cagrid.syncgts.bean.Message;
 import gov.nih.nci.cagrid.syncgts.bean.MessageType;
@@ -164,7 +164,7 @@ public class SyncGTS {
 			for (int i = 0; i < dcount; i++) {
 				String uri = des[i].getGtsServiceURI();
 				this.logger.info("Syncing with the GTS " + uri);
-				GTSClient client = new GTSClient(uri);
+				GTSPublicClient client = new GTSPublicClient(uri);
 				Map taMap = new HashMap();
 				TrustedAuthorityFilter[] f = des[i].getTrustedAuthorityFilter();
 				int fcount = 0;

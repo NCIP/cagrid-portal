@@ -7,7 +7,7 @@ import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
 import gov.nih.nci.cagrid.gts.client.GTSAdminClient;
-import gov.nih.nci.cagrid.gts.client.GTSClient;
+import gov.nih.nci.cagrid.gts.client.GTSPublicClient;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -139,7 +139,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 		String service = Utils.clean((String) getService().getSelectedItem());
 		if (service != null) {
 			try {
-				GTSClient client = new GTSClient(service);
+				GTSPublicClient client = new GTSPublicClient(service);
 				TrustLevel[] levels = client.getTrustLevels();
 				if (levels != null) {
 					for (int i = 0; i < levels.length; i++) {
@@ -481,7 +481,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 			filter.setIsAuthority(this.getIsAuthority().getIsAuthority());
 			filter.setAuthorityGTS(this.getAuthorityGTS().getSelectedService());
 			filter.setSourceGTS(this.getSourceGTS().getSelectedService());
-			GTSClient client = new GTSClient(service);
+			GTSPublicClient client = new GTSPublicClient(service);
 			int length = 0;
 			TrustedAuthority[] tas = client.findTrustedAuthorities(filter);
 			if (tas != null) {

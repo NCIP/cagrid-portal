@@ -4,7 +4,7 @@ import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
 import gov.nih.nci.cagrid.gts.bean.AuthorityGTS;
 import gov.nih.nci.cagrid.gts.client.GTSAdminClient;
-import gov.nih.nci.cagrid.gts.client.GTSClient;
+import gov.nih.nci.cagrid.gts.client.GTSPublicClient;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -427,7 +427,7 @@ public class AuthorityManagerWindow extends GridPortalBaseFrame implements
 		try {
 			String service = ((GTSServiceListComboBox) getService())
 					.getSelectedService();
-			GTSClient client = new GTSClient(service);
+			GTSPublicClient client = new GTSPublicClient(service);
 			AuthorityGTS[] auth = client.getAuthorities();
 			int length = 0;
 			if (auth != null) {
