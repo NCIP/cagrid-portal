@@ -33,7 +33,6 @@ public class SyncGTSImpl {
 				+ home.getSyncDescription());
 			SyncDescription description = SyncGTSDefault.getSyncDescription();
 			try {
-				System.out.println(getConfiguration().getPerformFirstSync());
 				SyncGTS sync = SyncGTS.getInstance();
 				if ((getConfiguration().getPerformFirstSync() != null)
 					&& (getConfiguration().getPerformFirstSync().equalsIgnoreCase("true"))) {
