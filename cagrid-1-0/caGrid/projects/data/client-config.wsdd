@@ -9,7 +9,7 @@
   <parameter name="sendXsiTypes" value="true"/>
   <parameter name="sendMultiRefs" value="true"/>
   <parameter name="sendXMLDeclaration" value="true"/>
-  <parameter name="castorMapping" value="/gov/nih/nci/cagrid/cadsr/cadsr-xml-mapping.xml"/>
+  <parameter name="castorMapping" value="ds-xml-mapping.xml"/>
   
   <requestFlow>
    <handler type="java:org.globus.wsrf.handlers.AddressingHandler"/>
@@ -122,29 +122,6 @@
   xmlns:ns12="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd"/>
   
   <!-- START INTRODUCE TYPEMAPPINGS -->
-  <!--
-<ns3:typeMapping encodingStyle="" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" type="ns1:gov.nih.nci.cadsr.umlproject.domain.Project" qname="ns2:Project" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" xmlns:ns3="http://xml.apache.org/axis/wsdd/"/>
-
-<ns3:typeMapping encodingStyle="" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" type="ns1:gov.nih.nci.cadsr.umlproject.domain.SubProject" qname="ns2:SubProject" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" xmlns:ns3="http://xml.apache.org/axis/wsdd/"/>
-
-<ns3:typeMapping encodingStyle="" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" type="ns1:gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata" qname="ns2:UMLPackageMetadata" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" xmlns:ns3="http://xml.apache.org/axis/wsdd/"/>
-
-<ns3:typeMapping encodingStyle="" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" type="ns1:gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata" qname="ns2:UMLClassMetadata" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" xmlns:ns3="http://xml.apache.org/axis/wsdd/"/>
-
-<ns3:typeMapping encodingStyle="" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" type="ns1:gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata" qname="ns2:UMLAttributeMetadata" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" xmlns:ns3="http://xml.apache.org/axis/wsdd/"/>
--->
 <ns3:typeMapping encodingStyle="" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" type="ns1:gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata" qname="ns2:SemanticMetadata" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" xmlns:ns3="http://xml.apache.org/axis/wsdd/"/>
-<!--
-<ns3:typeMapping encodingStyle="" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" type="ns1:gov.nih.nci.cadsr.umlproject.domain.UMLAssociationMetadata" qname="ns2:UMLAssociationMetadata" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" xmlns:ns3="http://xml.apache.org/axis/wsdd/"/>
-
-<ns3:typeMapping encodingStyle="" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" type="ns1:gov.nih.nci.cadsr.umlproject.domain.UMLGeneralizationMetadata" qname="ns2:UMLGeneralizationMetadata" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" xmlns:ns3="http://xml.apache.org/axis/wsdd/"/>
-
-<ns3:typeMapping encodingStyle="" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" type="ns1:gov.nih.nci.cadsr.umlproject.domain.AttributeTypeMetadata" qname="ns2:AttributeTypeMetadata" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" xmlns:ns3="http://xml.apache.org/axis/wsdd/"/>
-
-<ns3:typeMapping encodingStyle="" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" type="ns1:gov.nih.nci.cadsr.umlproject.domain.TypeEnumerationMetadata" qname="ns2:TypeEnumerationMetadata" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" xmlns:ns3="http://xml.apache.org/axis/wsdd/"/>
-
-<ns3:typeMapping encodingStyle="" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" type="ns1:gov.nih.nci.cadsr.domain.ValueDomain" qname="ns2:ValueDomain" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" xmlns:ns3="http://xml.apache.org/axis/wsdd/"/>
--->
-
 <!-- END INTRODUCE TYPEMAPPINGS -->
 </deployment>
