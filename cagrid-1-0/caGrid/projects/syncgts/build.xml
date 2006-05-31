@@ -288,6 +288,7 @@
 	<target name="jar" depends="compile">
 		<jar jarfile="${build.lib.dir}/${client.jar.name}" basedir="${build.dest}">
 			<include name="**/client/**" />
+			<include name="**/tools/**" />
 		</jar>
 		<jar jarfile="${build.lib.dir}/${service.jar.name}" basedir="${build.dest}">
 			<include name="**/service/**" />
@@ -298,6 +299,7 @@
 			<include name="**/*.properties" />
 			<include name="**/*.xsd" />
 			<include name="**/*.wsdd" />
+	        <include name="**/core/**" />
 			<exclude name="**/client/**" />
 			<exclude name="**/service/**" />
 		</jar>
