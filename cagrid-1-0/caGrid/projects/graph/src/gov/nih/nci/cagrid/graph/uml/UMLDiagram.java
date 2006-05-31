@@ -147,6 +147,7 @@ public class UMLDiagram extends JLayeredPane {
 		
 		this.inactiveState = false;
 		
+		
 	}
 	
 	public void clear()

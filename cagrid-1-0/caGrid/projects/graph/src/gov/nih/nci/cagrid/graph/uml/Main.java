@@ -36,15 +36,15 @@ public class Main {
 		
 		populateDiagram(diagram);
 		diagram.refresh();
-		Thread.sleep(2000);
-		diagram.clear();
-		populateDiagram(diagram);
-		diagram.refresh();
-		Thread.sleep(2000);
-		diagram.clear();
-		populateDiagram(diagram);
-		diagram.refresh();		
-		
+//		Thread.sleep(2000);
+//		diagram.clear();
+//		populateDiagram(diagram);
+//		diagram.refresh();
+//		Thread.sleep(2000);
+//		diagram.clear();
+//		populateDiagram(diagram);
+//		diagram.refresh();		
+//		
 		
 		
 
@@ -62,7 +62,7 @@ public class Main {
 		for(int k = 0; k < numclasses;  k++)
 		{
 			UMLClass c = new UMLClass("TestClass"+k);
-			Thread.sleep(100);
+			//Thread.sleep(100);
 			
 			c.refresh();
 			
@@ -79,7 +79,7 @@ public class Main {
 			
 			UMLClass c1 = (UMLClass) diagram.classes.get(index1);
 			UMLClass c2 = (UMLClass) diagram.classes.get(index2);
-			Thread.sleep(100);
+			//Thread.sleep(100);
 			diagram.addAssociation(c1, c2, "", "", "1..0", "*..1");
 		}
 	}

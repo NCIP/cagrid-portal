@@ -73,7 +73,7 @@ class UMLViewer extends JGraph {
 		this.pager = new Pager(this.diagram);
 		this.pagerCaptionBar = new PagerCaptionBar(this.pager);
 
-		this.setDefaultSize(500, 500);
+		//this.setDefaultSize(500, 500);
 		this.setDrawingSize(100, 100);
 		Globals.setShowFigTips(false);
 		
@@ -298,10 +298,10 @@ class UMLViewerComponentListener extends ComponentAdapter {
 		UMLViewer s = (UMLViewer) e.getSource();
 		Container parent = s.diagram.getParent().getParent();
 		s.pager.updateScroller();
-		s.pager.setBounds(parent.getWidth() - 200 - s.pagerButton.getWidth() - 5, parent.getHeight() - 200
-			- s.pagerButton.getHeight() - s.diagram.statusBar.getHeight() - 5, 200, 200);
-		s.pagerCaptionBar.setBounds(parent.getWidth() - 200 - s.pagerButton.getWidth() - 5, parent.getHeight() - 200
-			- s.pagerButton.getHeight() - s.diagram.statusBar.getHeight() - 5 - 17, 200, 17);
+		//s.pager.setBounds(parent.getWidth() - 200 - s.pagerButton.getWidth() - 5, parent.getHeight() - 200
+		//	- s.pagerButton.getHeight() - s.diagram.statusBar.getHeight() - 5, 200, 200);
+		//s.pagerCaptionBar.setBounds(parent.getWidth() - 200 - s.pagerButton.getWidth() - 5, parent.getHeight() - 200
+		//	- s.pagerButton.getHeight() - s.diagram.statusBar.getHeight() - 5 - 17, 200, 17);
 	}
 }
 
@@ -681,11 +681,13 @@ class PagerScrollerMouseListener extends MouseAdapter {
 	}
 }
 
-class PagerCaptionBar extends JButton {
+class PagerCaptionBar extends JComponent {
 	public static Color lightlightgray = new Color(245, 245, 245);
 	public static Font font = new Font("verdana", Font.PLAIN, 10);
 
 	public Pager pager;
+	
+	public Point lastClicked;
 
 	public PagerCaptionBarCloseButton button;
 
@@ -695,7 +697,9 @@ class PagerCaptionBar extends JButton {
 		this.pager = p;
 		this.button = new PagerCaptionBarCloseButton(this);
 		this.addComponentListener(new PagerCaptionBarComponentListener());
-
+		this.addMouseListener(new PagerCaptionBarMouseListener());
+		this.addMouseMotionListener(new PagerCaptionBarMouseMotionListener());
+		this.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
 	}
 
 
@@ -717,7 +721,10 @@ class PagerCaptionBarCloseButton extends JComponent {
 
 
 	public PagerCaptionBarCloseButton(PagerCaptionBar p) {
+		
 		this.parentBar = p;
+		
+
 	}
 
 
@@ -739,5 +746,25 @@ class PagerCaptionBarComponentListener extends ComponentAdapter {
 
 		s.button.setBounds(2, 2, s.getHeight() - 2, s.getHeight() - 2);
 
+	}
+}
+
+class PagerCaptionBarMouseListener extends MouseAdapter
+{
+	public void mousePressed(MouseEvent e)
+	{
+		PagerCaptionBar s = (PagerCaptionBar) e.getSource();
+
+		s.lastClicked = e.getPoint();		
+	}
+}
+
+class PagerCaptionBarMouseMotionListener extends MouseMotionAdapter
+{
+	public void mouseDragged(MouseEvent e)
+	{
+		PagerCaptionBar s = (PagerCaptionBar) e.getSource();
+		s.setLocation(s.getX() + e.getX() - s.lastClicked.x, s.getY() + e.getY() - s.lastClicked.y);
+		s.pager.setLocation(s.pager.getX() + e.getX() - s.lastClicked.x, s.pager.getY() + e.getY() - s.lastClicked.y);
 	}
 }
