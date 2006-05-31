@@ -27,6 +27,7 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -37,6 +38,7 @@ import java.util.Set;
 import javax.xml.namespace.QName;
 
 import org.jdom.Document;
+import org.jdom.Element;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.XMLUtilities;
 
@@ -78,7 +80,7 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		copySchema(DataServiceConstants.CADSR_DOMAIN_SCHEMA, schemaDir);
 		copySchema(DataServiceConstants.CADSR_UMLPROJECT_SCHEMA, schemaDir);
 		// copy libraries for data services into the new DS's lib directory
-		copyLibraries(getServiceLibDir(props));
+		copyLibraries(props);
 		// namespaces
 		System.out.println("Modifying namespace definitions");
 		NamespacesType namespaces = description.getNamespaces();
@@ -178,7 +180,8 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 	}
 	
 	
-	private void copyLibraries(String toDir) throws Exception {
+	private void copyLibraries(Properties props) throws Exception {
+		String toDir = getServiceLibDir(props);
 		File directory = new File(toDir);
 		if (!directory.exists()) {
 			directory.mkdirs();
@@ -197,6 +200,25 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 				copyFile(libs[i], outFile);
 			}
 		}
+		modifyClasspathFile(libs, props);
+	}
+	
+	
+	private void modifyClasspathFile(File[] libs, Properties props) throws Exception {
+		String classpathFilename = props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + ".classpath";
+		Element cpElement = XMLUtilities.fileNameToDocument(classpathFilename).getRootElement();
+		for (int i = 0; i < libs.length; i++) {
+			Element entryElement = new Element("classpathentry");
+			entryElement.setAttribute("kind", "lib");
+			entryElement.setAttribute("path", "lib" + File.separator + libs[i].getName());
+			cpElement.addContent(entryElement);
+		}
+		// write the classpath back out
+		String classpathText = XMLUtilities.elementToString(cpElement);
+		FileWriter writer = new FileWriter(classpathFilename);
+		writer.write(classpathText);
+		writer.flush();
+		writer.close();
 	}
 	
 	
