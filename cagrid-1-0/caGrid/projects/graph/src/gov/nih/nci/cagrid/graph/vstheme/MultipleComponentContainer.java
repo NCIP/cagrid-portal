@@ -49,7 +49,7 @@ public class MultipleComponentContainer extends JLayeredPane
 	
 	public void showComponent(int i)
 	{
-		System.out.println(currentShownComponent);
+
 		
 		if(currentShownComponent >=0 && currentShownComponent < components.size())
 		{
