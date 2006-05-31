@@ -29,22 +29,12 @@ public class Main {
 		DomainModelOutlines p = new DomainModelOutlines();
 		
 		JFrame f = new JFrame();
-		f.getContentPane().add(diagram);
+		f.getContentPane().add(p);
 		f.setBounds(10, 100, 900, 600);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
 		
-		populateDiagram(diagram);
-		diagram.refresh();
-//		Thread.sleep(2000);
-//		diagram.clear();
-//		populateDiagram(diagram);
-//		diagram.refresh();
-//		Thread.sleep(2000);
-//		diagram.clear();
-//		populateDiagram(diagram);
-//		diagram.refresh();		
-//		
+
 		
 		
 

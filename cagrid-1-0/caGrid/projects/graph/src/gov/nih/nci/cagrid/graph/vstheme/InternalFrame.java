@@ -7,14 +7,19 @@
 
 package gov.nih.nci.cagrid.graph.vstheme;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.border.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
 
 
 
-public class IInternalFrame extends JComponent
+public class InternalFrame extends JComponent
 {
 
     protected IRootPane   rootPane;
@@ -25,13 +30,13 @@ public class IInternalFrame extends JComponent
     	
     }
 
-    public IInternalFrame()
+    public InternalFrame()
     {
         super();
         init("");
     }
 
-    public IInternalFrame(String title)
+    public InternalFrame(String title)
     {
         super();
         init(title);
@@ -167,7 +172,7 @@ class IFrameComponentListener extends ComponentAdapter
 {
     public void componentResized(ComponentEvent e)
     {
-        IInternalFrame s = (IInternalFrame) e.getSource();
+        InternalFrame s = (InternalFrame) e.getSource();
 
         s.rootPane.setBounds(0, 0, s.getWidth(), s.getHeight());
 
@@ -180,11 +185,11 @@ class IFrameMouseMotionListener extends MouseMotionAdapter
 {
     public void mouseMoved(MouseEvent e)
     {
-         IInternalFrame s = (IInternalFrame) e.getSource();
+         InternalFrame s = (InternalFrame) e.getSource();
     }
 
     public void mouseDragged(MouseEvent e)
     {
-         IInternalFrame s = (IInternalFrame) e.getSource();
+         InternalFrame s = (InternalFrame) e.getSource();
     }
 }

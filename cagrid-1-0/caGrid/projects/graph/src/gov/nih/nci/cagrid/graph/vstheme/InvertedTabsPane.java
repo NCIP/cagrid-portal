@@ -38,7 +38,7 @@ public class InvertedTabsPane extends JLayeredPane
 	public void addTab(String s, ImageIcon icon)
 	{
 		
-		IInvertedTab tab = new IInvertedTab(tabs.size(), icon , s, this);
+		InvertedMDITab tab = new InvertedMDITab(tabs.size(), icon , s, this);
 		this.tabs.add(tab);
 		this.add(tab);
 		this.setActiveTab(tabs.size());
@@ -51,7 +51,7 @@ public class InvertedTabsPane extends JLayeredPane
 	{
 		if(i >= 0 && i < this.tabs.size())
 		{
-			IInvertedTab tab = (IInvertedTab) this.tabs.get(i);
+			InvertedMDITab tab = (InvertedMDITab) this.tabs.get(i);
 			this.tabs.remove(i);
 			this.remove(tab);
 			
@@ -69,7 +69,7 @@ public class InvertedTabsPane extends JLayeredPane
 	{
 		for(int k = 0;  k < this.tabs.size(); k ++)
 		{
-			IInvertedTab t = (IInvertedTab)this.tabs.get(k);
+			InvertedMDITab t = (InvertedMDITab)this.tabs.get(k);
 			t.active = false;
 			t.repaint();
 		}
@@ -82,7 +82,7 @@ public class InvertedTabsPane extends JLayeredPane
 	{
 		for(int k = 0; k < this.tabs.size(); k++)
 		{
-			IInvertedTab tab = (IInvertedTab) this.tabs.get(k);
+			InvertedMDITab tab = (InvertedMDITab) this.tabs.get(k);
 			
 			tab.index = k;
 		}
@@ -91,7 +91,7 @@ public class InvertedTabsPane extends JLayeredPane
 	{
 		if(currentActiveTab >= 0 && currentActiveTab < this.tabs.size())
 		{
-			IInvertedTab tab = (IInvertedTab) this.tabs.get(currentActiveTab);
+			InvertedMDITab tab = (InvertedMDITab) this.tabs.get(currentActiveTab);
 			this.setLayer(tab, JLayeredPane.DEFAULT_LAYER.intValue());
 			tab.deactivate();
 			
@@ -100,7 +100,7 @@ public class InvertedTabsPane extends JLayeredPane
 		
 		if(i < this.tabs.size() && i >= 0)
 		{
-			IInvertedTab tab = (IInvertedTab) this.tabs.get(i);
+			InvertedMDITab tab = (InvertedMDITab) this.tabs.get(i);
 			
 			this.setLayer(tab, JLayeredPane.MODAL_LAYER.intValue());
 			tab.activate();
@@ -123,7 +123,7 @@ public class InvertedTabsPane extends JLayeredPane
 		
 		for (int k = 0; k < this.tabs.size(); k++)
 		{
-			IInvertedTab tab = (IInvertedTab) this.tabs.get(k);
+			InvertedMDITab tab = (InvertedMDITab) this.tabs.get(k);
 			
 			sum += tab.getPreferredWidth();
 		}
@@ -143,7 +143,7 @@ public class InvertedTabsPane extends JLayeredPane
 			for(int k = 0; k < tabs.size(); k++)
 			{
 				
-				IInvertedTab tab = (IInvertedTab) tabs.get(k);
+				InvertedMDITab tab = (InvertedMDITab) tabs.get(k);
 				
 				if(tab.active)
 				{
@@ -161,7 +161,7 @@ public class InvertedTabsPane extends JLayeredPane
 		{	
 			for(int k = 0; k < tabs.size(); k++)
 			{
-				IInvertedTab tab = (IInvertedTab) tabs.get(k);
+				InvertedMDITab tab = (InvertedMDITab) tabs.get(k);
 				int width = tab.getPreferredWidth();
 				
 				if(tab.active)

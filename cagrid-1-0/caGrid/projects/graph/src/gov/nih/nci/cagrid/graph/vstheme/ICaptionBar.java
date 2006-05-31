@@ -55,9 +55,9 @@ public class ICaptionBar extends JComponent
 
     }
 
-    public IInternalFrame getIFrame()
+    public InternalFrame getIFrame()
     {
-        IInternalFrame parent = (IInternalFrame) (this.getParent().getParent().getParent().getParent());
+        InternalFrame parent = (InternalFrame) (this.getParent().getParent().getParent().getParent());
 
         return parent;
     }
@@ -126,7 +126,7 @@ public class ICaptionBar extends JComponent
     public void signalClose()	
     {
     
-    	IInternalFrame f = (IInternalFrame) this.getParent().getParent();
+    	InternalFrame f = (InternalFrame) this.getParent().getParent();
     	
     	f.signalClose();
     }

@@ -10,7 +10,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
-public class IInvertedTab extends JComponent
+public class InvertedMDITab extends JComponent
 {
 	public int index;
 	public ImageIcon icon;
@@ -26,7 +26,7 @@ public class IInvertedTab extends JComponent
 	
 	boolean active = false;
 	
-	public IInvertedTab(int i, ImageIcon icon, String title, InvertedTabsPane parentTabsPane)
+	public InvertedMDITab(int i, ImageIcon icon, String title, InvertedTabsPane parentTabsPane)
 	{
 		this.index = i;
 		this.parentTabsPane = parentTabsPane;
@@ -112,7 +112,7 @@ class IInvertedTabMouseListener extends MouseAdapter
 	public void mousePressed(MouseEvent e)
 	{
 		
-		IInvertedTab tab = (IInvertedTab) e.getSource();
+		InvertedMDITab tab = (InvertedMDITab) e.getSource();
 		
 		tab.parentTabsPane.tabClicked(tab.index);
 		

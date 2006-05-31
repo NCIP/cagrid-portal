@@ -57,9 +57,9 @@ public class IRootPane extends JComponent
 
     }
 
-    public IInternalFrame getIFrame()
+    public InternalFrame getIFrame()
     {
-        IInternalFrame parent = (IInternalFrame) (this.getParent().getParent().getParent());
+        InternalFrame parent = (InternalFrame) (this.getParent().getParent().getParent());
 
         return parent;
     }
@@ -119,7 +119,7 @@ class IRootPaneMouseListener extends MouseAdapter
     public void mousePressed(MouseEvent e)
     {
         IRootPane s = (IRootPane) e.getSource();
-        IInternalFrame p = s.getIFrame();
+        InternalFrame p = s.getIFrame();
 
         s.mousePressed = true;
 
@@ -128,7 +128,7 @@ class IRootPaneMouseListener extends MouseAdapter
     public void mouseReleased(MouseEvent e)
     {
         IRootPane s = (IRootPane) e.getSource();
-        IInternalFrame p = s.getIFrame();
+        InternalFrame p = s.getIFrame();
 
         s.mousePressed = false;
 

@@ -2,10 +2,10 @@ package gov.nih.nci.cagrid.graph.domainmodelapplication;
 
 import javax.swing.JTree;
 
-import gov.nih.nci.cagrid.graph.vstheme.IInternalFrame;
+import gov.nih.nci.cagrid.graph.vstheme.InternalFrame;
 import gov.nih.nci.cagrid.graph.vstheme.InvertedMDIPanel;
 
-public class DomainModelOutlines extends IInternalFrame
+public class DomainModelOutlines extends InternalFrame
 {
 	InvertedMDIPanel mdi = new InvertedMDIPanel();
 	
