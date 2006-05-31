@@ -1,8 +1,5 @@
 To Do:
 
-sync should create a properties file for service properties and ant deploy should use it as default
-
-
 add support for having EPR type and fault types in the types browser....
 
 assumption is made that when a method is imported from a wsdl that all the messages for that method are of that wsdl's namespace....
@@ -58,6 +55,9 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+
+sync should create a properties file for service properties and ant deploy should use it as default
+
 clean up and add icons to the service contexts tree
 
 generated client needs to be able to take an EPR in its constructor 
