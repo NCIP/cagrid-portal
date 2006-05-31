@@ -2,8 +2,8 @@ package gov.nih.nci.cagrid.introduce.codegen.services;
 
 import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
-import gov.nih.nci.cagrid.introduce.codegen.methods.SyncMethods;
-import gov.nih.nci.cagrid.introduce.codegen.resource.SyncResource;
+import gov.nih.nci.cagrid.introduce.codegen.services.methods.SyncMethods;
+import gov.nih.nci.cagrid.introduce.codegen.services.resources.SyncResource;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.ServerConfigTemplate;

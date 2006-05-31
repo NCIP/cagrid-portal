@@ -304,7 +304,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 							
 							try {
 								serviceProps.store(new FileOutputStream(new File(serviceDirectory.getAbsolutePath()
-									+ File.separator + "service.properties.tmp")), "service deployment properties");
+									+ File.separator + IntroduceConstants.INTRODUCE_SERVICE_PROPERTIES)), "service deployment properties");
 							} catch (FileNotFoundException ex) {
 								ex.printStackTrace();
 								setErrorMessage("Error: " + ex.getMessage());

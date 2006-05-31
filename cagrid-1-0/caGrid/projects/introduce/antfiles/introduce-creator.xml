@@ -63,7 +63,7 @@
 			build files."/>
 	</target>
 	<target name="createService" description="Will create an anaytical skeleton deployment"
-		depends=" checkInputProps, copySkeleton, copyCaGridJars, setActivePath"> </target>
+		depends=" checkInputProps, copySkeleton, setActivePath"> </target>
 	<target name="postCreateService" description="Will post create an anaytical skeleton deployment">
 		<postCreateSkeleton/>
 	</target>
@@ -75,6 +75,12 @@
 		<copy todir="${introduce.skeleton.destination.dir}">
 			<fileset dir="${introduce.skeleton.dir}">
 				<include name="**\*"/>
+			</fileset>
+		</copy>
+		<copy todir="${introduce.skeleton.destination.dir}/lib" flatten="true"
+			includeemptydirs="false">
+			<fileset dir="${ext.lib.dir}">
+				<include name="*caGrid-core*"/>
 			</fileset>
 		</copy>
 		<!-- call our creation ant task -->
@@ -142,13 +148,5 @@
 		<input message="Please enter any service extensions (separate by commas).
 			[${introduce.skeleton.extensions.default}]:" addproperty="introduce.skeleton.extensions"
 			defaultvalue="${introduce.skeleton.extensions.default}"/>
-	</target>
-	<target name="copyCaGridJars" depends="prepareSkeleton,copySkeleton">
-		<copy todir="${introduce.skeleton.destination.dir}/lib" flatten="true"
-			includeemptydirs="false">
-			<fileset dir="${ext.lib.dir}">
-				<include name="*caGrid-core*"/>
-			</fileset>
-		</copy>
 	</target>
 </project>

@@ -14,6 +14,7 @@ import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.base.SyncBase;
 import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
+import gov.nih.nci.cagrid.introduce.codegen.properties.SyncProperties;
 import gov.nih.nci.cagrid.introduce.codegen.serializers.SyncSerialization;
 import gov.nih.nci.cagrid.introduce.codegen.services.SyncServices;
 import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
@@ -298,6 +299,7 @@ public class SyncTools {
 		SyncTool baseS = new SyncBase(baseDirectory, info);
 		SyncTool servicesS = new SyncServices(baseDirectory, info);
 		SyncTool serializerS = new SyncSerialization(baseDirectory, info);
+		SyncTool propertiesS = new SyncProperties(baseDirectory, info);
 
 		System.out.println("Synchronizing the base files");
 		baseS.sync();
@@ -305,6 +307,8 @@ public class SyncTools {
 		servicesS.sync();
 		System.out.println("Synchronizing the type mappings");
 		serializerS.sync();
+		System.out.println("Synchronizing the service properties");
+		propertiesS.sync();
 
 		// STEP 8: run the extensions
 		System.out.println("Synchronizing with post processing extensions");

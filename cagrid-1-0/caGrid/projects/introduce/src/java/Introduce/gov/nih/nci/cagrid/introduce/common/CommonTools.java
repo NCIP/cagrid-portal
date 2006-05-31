@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.common;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeImportInformation;
@@ -107,7 +108,7 @@ public class CommonTools {
 	public static String getAntDeployTomcatCommand(String buildFileDir)
 			throws Exception {
 		String cmd = " -Dservice.properties.file=" + buildFileDir
-				+ File.separator + "service.properties.tmp";
+				+ File.separator + IntroduceConstants.INTRODUCE_SERVICE_PROPERTIES;
 		cmd = getAntCommand("deployTomcat", buildFileDir) + " " + cmd;
 		return cmd;
 	}
@@ -115,7 +116,7 @@ public class CommonTools {
 	public static String getAntDeployGlobusCommand(String buildFileDir)
 			throws Exception {
 		String cmd = " -Dservice.properties.file=" + buildFileDir
-				+ File.separator + "service.properties.tmp";
+				+ File.separator + IntroduceConstants.INTRODUCE_SERVICE_PROPERTIES;
 		cmd = getAntCommand("deployGlobus", buildFileDir) + " " + cmd;
 		return cmd;
 	}

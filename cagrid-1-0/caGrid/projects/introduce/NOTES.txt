@@ -2,7 +2,6 @@ To Do:
 
 sync should create a properties file for service properties and ant deploy should use it as default
 
-clean up and add icons to the service contexts tree
 
 add support for having EPR type and fault types in the types browser....
 
@@ -59,6 +58,8 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+clean up and add icons to the service contexts tree
+
 generated client needs to be able to take an EPR in its constructor 
  
 make sure to remove dependecies to metadata project...

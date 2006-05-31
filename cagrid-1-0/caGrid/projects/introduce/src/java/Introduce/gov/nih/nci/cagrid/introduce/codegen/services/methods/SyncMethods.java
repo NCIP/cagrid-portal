@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.codegen.methods;
+package gov.nih.nci.cagrid.introduce.codegen.services.methods;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;

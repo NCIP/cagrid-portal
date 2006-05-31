@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.codegen.resource;
+package gov.nih.nci.cagrid.introduce.codegen.services.resources;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;

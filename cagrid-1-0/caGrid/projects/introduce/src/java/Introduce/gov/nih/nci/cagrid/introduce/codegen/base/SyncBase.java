@@ -49,14 +49,6 @@ public class SyncBase extends SyncTool {
 
 	public void sync() throws SynchronizationException {
 		try {
-			ClasspathTemplate classpathT = new ClasspathTemplate();
-			String classpathS = classpathT.generate(getServiceInformation());
-			File classpathF = new File(getBaseDirectory().getAbsolutePath()
-					+ File.separator + ".classpath");
-			FileWriter classpathFW = new FileWriter(classpathF);
-			classpathFW.write(classpathS);
-			classpathFW.close();
-			
 			RegistationTemplate registrationT = new RegistationTemplate();
 			String registrationS = registrationT
 					.generate(getServiceInformation());
