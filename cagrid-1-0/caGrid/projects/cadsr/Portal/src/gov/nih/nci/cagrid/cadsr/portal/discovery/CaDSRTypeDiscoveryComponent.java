@@ -1,5 +1,5 @@
 package gov.nih.nci.cagrid.cadsr.portal.discovery;
- 
+
 import gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
@@ -9,16 +9,14 @@ import gov.nih.nci.cagrid.cadsr.domain.UMLAssociation;
 import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import gov.nih.nci.cagrid.cadsr.portal.PackageSelectedListener;
 import gov.nih.nci.cagrid.common.Utils;
-//import gov.nih.nci.cagrid.graph.uml.Attribute;
-//import gov.nih.nci.cagrid.graph.uml.UMLClass;
-//import gov.nih.nci.cagrid.graph.uml.UMLDiagram;
+import gov.nih.nci.cagrid.graph.uml.UMLClass;
+import gov.nih.nci.cagrid.graph.uml.UMLDiagram;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.portal.discoverytools.NamespaceTypeToolsComponent;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.rmi.RemoteException;
@@ -33,11 +31,11 @@ import javax.swing.JPanel;
  * 
  */
 public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent implements PackageSelectedListener {
-	
+
 	private String cadsrURL = null;
 	private CaDSRBrowserPanel caDSRPanel = null;
 	private JPanel graphPanel = null;
-	//private UMLDiagram umlDiagram;
+	private UMLDiagram umlDiagram;
 
 
 	/**
@@ -100,21 +98,22 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent imp
 					if (classes != null) {
 						for (int i = 0; i < classes.length; i++) {
 							UMLClassMetadata clazz = classes[i];
-							//UMLClass c = new UMLClass(clazz.getName());
+							UMLClass c = new UMLClass(clazz.getName());
 
 							UMLAttributeMetadata[] atts = cadsrService.findAttributesInClass(getCaDSRPanel()
 								.getSelectedProject(), clazz);
 							if (atts != null) {
 								for (int j = 0; j < atts.length; j++) {
 									UMLAttributeMetadata att = atts[j];
-									//Attribute a = new Attribute(Attribute.PUBLIC, "", att.getName());
-									//c.addAttribute( /*type*/ "", att.getName());
-									
+									// Attribute a = new
+									// Attribute(Attribute.PUBLIC, "",
+									// att.getName());
+									c.addAttribute( /* type */"", att.getName());
+
 								}
 							}
 
-
-							//getUMLDiagram().addClass(c);
+							getUMLDiagram().addClass(c);
 
 							// TODO: this seems to updating the graph live... it
 							// shouldn't until the diagram refresh.. otherwise
@@ -124,21 +123,20 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent imp
 
 					UMLAssociation[] assocs = cadsrService.findAssociationsInPackage(getCaDSRPanel()
 						.getSelectedProject(), pkg.getName());
-					if (assocs != null) 
-					{
-						for (int i = 0; i < assocs.length; i++) {
-							UMLAssociation assoc = assocs[i];
-							// TODO: create and add Assocation to the graph
-							// need to handle class already being in the graph,
-							// and not being in the graph
-							// also need to handle the association linking to
-							// classes in external packages
-						}
+					if (assocs != null) {
+						// for (int i = 0; i < assocs.length; i++) {
+						// UMLAssociation assoc = assocs[i];
+						// TODO: create and add Assocation to the graph
+						// need to handle class already being in the graph,
+						// and not being in the graph
+						// also need to handle the association linking to
+						// classes in external packages
+						// }
 					}
 
-					//getUMLDiagram().performLayout();
-					//getUMLDiagram().refresh();
-					
+					getUMLDiagram().performLayout();
+					getUMLDiagram().refresh();
+
 				} catch (RemoteException e) {
 					JOptionPane.showMessageDialog(CaDSRTypeDiscoveryComponent.this,
 						"Error communicating with caDSR; please check the caDSR URL!");
@@ -164,20 +162,20 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent imp
 			gridBagConstraints1.weightx = 1.0D;
 			gridBagConstraints1.weighty = 1.0D;
 			gridBagConstraints1.gridy = 1;
-			//graphPanel.add(getUMLDiagram(), gridBagConstraints1);
+			graphPanel.add(getUMLDiagram(), gridBagConstraints1);
 
 		}
 		return graphPanel;
 	}
 
 
-	//private UMLDiagram getUMLDiagram() {
-	//	if (umlDiagram == null) {
-	//		umlDiagram = new UMLDiagram();
-//
-//		}
-//		return umlDiagram;
-//	}
+	private UMLDiagram getUMLDiagram() {
+		if (umlDiagram == null) {
+			umlDiagram = new UMLDiagram();
+
+		}
+		return umlDiagram;
+	}
 
 
 	public static void main(String[] args) {
