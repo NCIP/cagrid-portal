@@ -62,10 +62,10 @@ public class UMLDiagram extends JLayeredPane {
 			return false;
 		
 		gc.refresh();
-
-		this.diagram.add(gc);
+		
 		this.classes.addElement(gc);
-		this.layouter.add(new ClassdiagramNode(gc));
+
+
 		return true;
 
 	}
@@ -126,11 +126,24 @@ public class UMLDiagram extends JLayeredPane {
 		this.viewer.setDiagram(this.diagram);
 
 		for (int k = 0; k < this.classes.size(); k++) {
+			UMLClass gc = (UMLClass) this.classes.get(k);
+			this.diagram.add(gc);
+			this.layouter.add(new ClassdiagramNode(gc));
 			this.diagram.getLayer().bringToFront((UMLClass) this.classes.elementAt(k));
 		}
 
 		this.viewer.updateDrawingSizeToIncludeAllFigs();
 
+	}
+	
+	public void clear()
+	{
+		for(int k = 0; k < this.classes.size(); k++)
+		{
+			UMLClass gc = (UMLClass) this.classes.get(k);
+			this.diagram.remove(gc);
+			//this.layouter.remove();
+		}
 	}
 
 
