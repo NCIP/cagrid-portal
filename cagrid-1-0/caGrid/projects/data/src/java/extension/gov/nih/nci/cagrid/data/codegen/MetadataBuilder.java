@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.data.codegen;
 
 import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata;
-import gov.nih.nci.cadsr.umlproject.domain.UMLAssociationMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
@@ -23,10 +22,12 @@ import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationEdgeUmlClass;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationSourceUMLAssociationEdge;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationTargetUMLAssociationEdge;
 
+import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -138,9 +139,9 @@ public class MetadataBuilder {
 		// association metadata
 		Iterator assocMetadataIter = classMd.getUMLAssociationMetadataCollection().iterator();
 		while (assocMetadataIter.hasNext()) {
-			UMLAssociationMetadata assocMd = (UMLAssociationMetadata) assocMetadataIter.next();
+			gov.nih.nci.cagrid.cadsr.domain.UMLAssociation assocMd = (gov.nih.nci.cagrid.cadsr.domain.UMLAssociation) assocMetadataIter.next();
 			UMLAssociation assoc = new UMLAssociation();
-			assoc.setBidirectional(assocMd.getIsBidirectional().booleanValue());
+			assoc.setBidirectional(assocMd.isIsBidirectional());
 			assoc.setTargetUMLAssociationEdge(createTargetAssociationEdge(assocMd));
 			assoc.setSourceUMLAssociationEdge(createSourceAssociationEdge(assocMd));
 			associations.add(assoc);
@@ -149,28 +150,28 @@ public class MetadataBuilder {
 	}
 	
 	
-	private UMLAssociationTargetUMLAssociationEdge createTargetAssociationEdge(UMLAssociationMetadata meta) throws RemoteException, CodegenExtensionException {
+	private UMLAssociationTargetUMLAssociationEdge createTargetAssociationEdge(gov.nih.nci.cagrid.cadsr.domain.UMLAssociation meta) throws RemoteException, CodegenExtensionException {
 		UMLAssociationEdge edge = new UMLAssociationEdge();
-		edge.setMaxCardinality(meta.getTargetHighCardinality().intValue());
-		edge.setMinCardinality(meta.getTargetLowCardinality().intValue());
+		edge.setMaxCardinality(meta.getTargetMaxCardinality());
+		edge.setMinCardinality(meta.getTargetMinCardinality());
 		edge.setRoleName(meta.getTargetRoleName());
-		UMLClass targetClass = getUmlClass(meta.getTargetUMLClassMetadata().getFullyQualifiedName());
+		UMLClass targetClass = getUmlClass(meta.getTargetUMLClassMetadata().getUMLClassMetadata().getFullyQualifiedName());
 		if (targetClass == null) {
-			targetClass = getUmlClass(meta.getTargetUMLClassMetadata().getName());
+			targetClass = getUmlClass(meta.getTargetUMLClassMetadata().getUMLClassMetadata().getName());
 		}
 		edge.setUmlClass(new UMLAssociationEdgeUmlClass(targetClass));
 		return new UMLAssociationTargetUMLAssociationEdge(edge);
 	}
 	
 	
-	private UMLAssociationSourceUMLAssociationEdge createSourceAssociationEdge(UMLAssociationMetadata meta) throws RemoteException, CodegenExtensionException {
+	private UMLAssociationSourceUMLAssociationEdge createSourceAssociationEdge(gov.nih.nci.cagrid.cadsr.domain.UMLAssociation meta) throws RemoteException, CodegenExtensionException {
 		UMLAssociationEdge edge = new UMLAssociationEdge();
-		edge.setMaxCardinality(meta.getSourceHighCardinality().intValue());
-		edge.setMaxCardinality(meta.getSourceLowCardinality().intValue());
+		edge.setMaxCardinality(meta.getSourceMaxCardinality());
+		edge.setMaxCardinality(meta.getSourceMinCardinality());
 		edge.setRoleName(meta.getSourceRoleName());
-		UMLClass sourceClass = getUmlClass(meta.getSourceUMLClassMetadata().getFullyQualifiedName());
+		UMLClass sourceClass = getUmlClass(meta.getSourceUMLClassMetadata().getUMLClassMetadata().getFullyQualifiedName());
 		if (sourceClass == null) {
-			sourceClass = getUmlClass(meta.getSourceUMLClassMetadata().getName());
+			sourceClass = getUmlClass(meta.getSourceUMLClassMetadata().getUMLClassMetadata().getName());
 		}
 		edge.setUmlClass(new UMLAssociationEdgeUmlClass(sourceClass));
 		return new UMLAssociationSourceUMLAssociationEdge(edge);
@@ -251,7 +252,7 @@ public class MetadataBuilder {
 	}
 	
 	
-	private UMLAttribute[] getUmlAttributes(UMLClassMetadata metadata) throws RemoteException, CodegenExtensionException {
+	private UMLAttribute[] getUmlAttributes(UMLClassMetadata metadata) throws CodegenExtensionException {
 		Iterator attribMetadata = metadata.getUMLAttributeMetadataCollection().iterator();
 		UMLAttribute[] attributes = new UMLAttribute[metadata.getUMLAttributeMetadataCollection().size()];
 		int i = 0;
@@ -324,30 +325,38 @@ public class MetadataBuilder {
 	private UMLClassMetadata[] getClassMetadata() throws RemoteException, CodegenExtensionException {
 		if (classMetadata == null) {
 			classMetadata = getCadsrClient().findClassesInPackage(getProject(), getPackageMetadata().getName());
+			
 			// semantic metadata on each class
 			for (int i = 0; i < classMetadata.length; i++) {
 				SemanticMetadata[] classSemMd = getCadsrClient().findSemanticMetadataForClass(getProject(), classMetadata[i]);
-				List semanticList = toArray(classSemMd);
+				List semanticList = Collections.EMPTY_LIST;
+				if (classSemMd != null) {
+					semanticList = Arrays.asList(classSemMd);
+				}
 				classMetadata[i].setSemanticMetadataCollection(semanticList);
 			}
+			
 			// attributes
 			for (int i = 0; i < classMetadata.length; i++) {
 				UMLAttributeMetadata[] metadataArray = getCadsrClient().findAttributesInClass(getProject(), classMetadata[i]);
-				List attribList = toArray(metadataArray);
+				List attribList = Collections.EMPTY_LIST;
+				if (metadataArray != null) {
+					attribList = Arrays.asList(metadataArray);
+				}
 				classMetadata[i].setUMLAttributeMetadataCollection(attribList);
 			}
-			// TODO: associations
+			
+			// associations
+			for (int i = 0; i < classMetadata.length; i++) {
+				gov.nih.nci.cagrid.cadsr.domain.UMLAssociation[] associationArray = getCadsrClient().findAssociationsForClass(getProject(), classMetadata[i]);
+				List associationList = Collections.EMPTY_LIST;
+				if (associationArray != null) {
+					associationList = Arrays.asList(associationArray);
+				}
+				classMetadata[i].setUMLAssociationMetadataCollection(associationList);
+			}
 		}
 		return classMetadata;
-	}
-	
-	
-	private List toArray(Object[] objs) {
-		List l = new ArrayList(objs.length);
-		for (int i = 0; i < objs.length; i++) {
-			l.add(objs[i]);
-		}
-		return l;
 	}
 	
 	
@@ -359,8 +368,28 @@ public class MetadataBuilder {
 		
 		MetadataBuilder builder = new MetadataBuilder(url, proj, pack, targets);
 		try {
+			/*
+			System.out.println("axis.ClientConfigFile=" + System.getProperty("axis.ClientConfigFile"));
+			File f = new File("src/java/extension/gov/nih/nci/cagrid/data/codegen/client-config.wsdd");
+			System.setProperty("axis.ClientConfigFile", f.getCanonicalPath());
+			System.out.println("axis.ClientConfigFile=" + System.getProperty("axis.ClientConfigFile"));
+			*/
 			DomainModel model = builder.getBigDomainModel();
-			FileWriter objectWriter = new FileWriter("domainModel.xml");
+			System.out.println("MODEL BUILT!!! WATCH FOR CORRECT CLIENT-CONFIG!");
+			System.out.println("MODEL BUILT!!! WATCH FOR CORRECT CLIENT-CONFIG!");
+			System.out.println("MODEL BUILT!!! WATCH FOR CORRECT CLIENT-CONFIG!");
+			System.out.println("MODEL BUILT!!! WATCH FOR CORRECT CLIENT-CONFIG!");
+			System.out.println("MODEL BUILT!!! WATCH FOR CORRECT CLIENT-CONFIG!");
+			System.in.read();
+			System.setProperty("log4j.debug", "");
+			System.out.println("Serializing.....");
+			System.out.println("Serializing.....");
+			System.out.println("Serializing.....");
+			System.out.println("Serializing.....");
+			System.out.println("Serializing.....");
+			System.out.println("Serializing.....");
+			
+			BufferedWriter objectWriter = new BufferedWriter(new FileWriter("domainModel.xml"));
 			ObjectSerializer.serialize(objectWriter, model, DataServiceConstants.DOMAIN_MODEL_QNAME);
 			objectWriter.flush();
 			objectWriter.close();
