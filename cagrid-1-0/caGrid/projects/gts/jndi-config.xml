@@ -7,10 +7,6 @@
 					<name>factory</name>
 					<value>org.globus.wsrf.jndi.BeanFactory</value>
 				</parameter>
-				<parameter>
-					<name>gtsConfig</name>
-					<value>ETC-PATH/gts-conf.xml</value>
-				</parameter>	
 			</resourceParams>
 		</resource>
 		

@@ -1,0 +1,13 @@
+The extension will add common metadata to the service using the extension.
+
+Extension Functionality:
+====================
+copy metadata and all necessary jars to service
+copy schemas to service
+Add main schema with ServiceMetata element to service's namespaces and set generateStubs=false
+
+Introduce Changes:
+====================
+Introduce Namespace object needs generateStubs boolean
+ - if set to false, add namespace and all imported namespaces to ns exludes list
+

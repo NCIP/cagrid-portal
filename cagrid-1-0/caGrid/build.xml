@@ -131,7 +131,7 @@
 		<resolveDependencies extdir="${projects.dir}/graph/ext">
 			<artifact refid="core.jars" />
 			<artifact refid="caCORE.jars" />
-			<artifact refid="metadata.jars"/>
+			<artifact refid="metadata.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/graph" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
@@ -143,11 +143,16 @@
 	<target name="build-cadsr" if="isJDK1.5" depends="prepare" description="Builds the cadsr project">
 		<resolveDependencies extdir="${projects.dir}/cadsr/ext">
 			<artifact refid="core.jars" />
+			<artifact refid="metadata.jars" />
 			<artifact refid="caCORE.jars" />
 			<artifact refid="introduce.jars" />
 			<artifact refid="graph.jars" />
 			<artifact refid="gme.globus.client.jars" />
 		</resolveDependencies>
+		<resolveDependencies extdir="${projects.dir}/cadsr/schema/CaDSRService">
+			<artifact refid="metadata.schemas" />
+		</resolveDependencies>
+
 		<ant dir="${projects.dir}/cadsr" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
@@ -195,9 +200,13 @@
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />
 			<artifact refid="core.resources" />
+			<artifact refid="metadata.jars" />
 			<artifact refid="gridca.jars" />
 			<artifact refid="gridca.resources" />
 			<artifact refid="mobius.jars" />
+		</resolveDependencies>
+		<resolveDependencies extdir="${projects.dir}/gts/schema/GTS">
+			<artifact refid="metadata.schemas" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/gts" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
@@ -210,9 +219,13 @@
 		<resolveDependencies extdir="${projects.dir}/syncgts/ext">
 			<artifact refid="core.jars" />
 			<artifact refid="common.test.jars" />
+			<artifact refid="metadata.jars" />
 			<artifact refid="gridca.jars" />
 			<artifact refid="mobius.jars" />
 			<artifact refid="gts.client.jars" />
+		</resolveDependencies>
+		<resolveDependencies extdir="${projects.dir}/syncgts/schema/SyncGTS">
+			<artifact refid="metadata.schemas" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/syncgts" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
@@ -267,7 +280,7 @@
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />
 			<artifact refid="metadata.jars" />
-			<artifact refid="metadata.schemas"/>
+			<artifact refid="metadata.schemas" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
@@ -284,9 +297,7 @@
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />
 		</resolveDependencies>
-		<resolveDependencies extdir="${projects.dir}/sdkQuery/ext">
-			<artifact refid="data.cql.schemas"/>
-		</resolveDependencies>
+
 		<ant dir="${projects.dir}/sdkQuery" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 

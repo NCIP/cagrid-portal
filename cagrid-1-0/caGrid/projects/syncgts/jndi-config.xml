@@ -7,10 +7,6 @@
 					<name>factory</name>
 					<value>org.globus.wsrf.jndi.BeanFactory</value>
 				</parameter>
-				<parameter>
-					<name>syncDescription</name>
-					<value>ETC-PATH/sync-description.xml</value>
-				</parameter>
 			</resourceParams>
 		</resource>
 		

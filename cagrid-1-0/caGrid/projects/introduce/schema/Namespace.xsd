@@ -64,8 +64,17 @@
 		</xs:attribute>
 		<xs:attribute name="location" type="xs:string" use="optional">
 			<xs:annotation>
-				<xs:documentation>Used to specify the location schema or wsdl on the local filesystem. If it
-					is omitted, it is assumed it can be retrieved from a GME.</xs:documentation>
+				<xs:documentation>Used to specify the location schema or wsdl on the local
+					filesystem. If it is omitted, it is assumed it can be retrieved from a
+				GME.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="generateStubs" type="xs:boolean" use="optional">
+			<xs:annotation>
+				<xs:documentation>Used to specify whether or not stubs/beans should be generated for
+					the given namespace. If omiited, "true" is assumed. If set to "false" no beans
+					will be created for any of the types defined in the corresponding schema, nor
+					any of the types in any schemas imported by this schema.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>

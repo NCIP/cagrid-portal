@@ -64,6 +64,10 @@
 				<include name="*.jar" />
 				<exclude name="*test*.jar" />
 			</fileset>
+			<fileset dir="${projects.dir}/metadata/ext/lib">
+				<include name="*.jar" />
+				<exclude name="*test*.jar" />
+			</fileset>
 		</artifact>
 		<artifact track="main" type="schemas" id="metadata.schemas">
 			<fileset dir="${projects.dir}/metadata/schema">

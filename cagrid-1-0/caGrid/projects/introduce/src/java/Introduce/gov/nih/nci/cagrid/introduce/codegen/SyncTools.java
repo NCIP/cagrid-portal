@@ -58,6 +58,7 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.projectmobius.common.MalformedNamespaceException;
 
+
 /**
  * Top level controller for re-syncing the service.
  * 
@@ -77,13 +78,14 @@ public class SyncTools {
 
 		List symbolTables;
 
-		public MultiServiceSymbolTable(ServiceInformation info, Set excludedSet)
-				throws Exception {
+
+		public MultiServiceSymbolTable(ServiceInformation info, Set excludedSet) throws Exception {
 			this.info = info;
 			this.excludedSet = excludedSet;
 			symbolTables = new ArrayList();
 			generateSymbolTable(info, excludedSet);
 		}
+
 
 		public Element getElement(QName qname) {
 			Element element = null;
@@ -97,6 +99,7 @@ public class SyncTools {
 			return element;
 		}
 
+
 		public Type getType(QName qname) {
 			Type type = null;
 			for (int i = 0; i < symbolTables.size(); i++) {
@@ -109,22 +112,20 @@ public class SyncTools {
 			return type;
 		}
 
+
 		public void dump(PrintStream stream) {
 			for (int i = 0; i < symbolTables.size(); i++) {
 				((SymbolTable) symbolTables.get(i)).dump(stream);
 			}
 		}
 
-		public void generateSymbolTable(ServiceInformation info,
-				Set excludeSet) throws Exception {
 
-			if (info.getServices() != null
-					&& info.getServices().getService() != null) {
-				for (int serviceI = 0; serviceI < info.getServices()
-						.getService().length; serviceI++) {
+		public void generateSymbolTable(ServiceInformation info, Set excludeSet) throws Exception {
 
-					ServiceType service = info.getServices().getService(
-							serviceI);
+			if (info.getServices() != null && info.getServices().getService() != null) {
+				for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
+
+					ServiceType service = info.getServices().getService(serviceI);
 
 					Emitter parser = new Emitter();
 					SymbolTable table = null;
@@ -137,29 +138,19 @@ public class SyncTools {
 					excludeList.addAll(excludeSet);
 					parser.setNamespaceExcludes(excludeList);
 
-					parser.setOutputDir(baseDirectory.getAbsolutePath()
-							+ File.separator + "tmp");
-					parser
-							.setNStoPkg(baseDirectory.getAbsolutePath()
-									+ File.separator
-									+ IntroduceConstants.NAMESPACE2PACKAGE_MAPPINGS_FILE);
+					parser.setOutputDir(baseDirectory.getAbsolutePath() + File.separator + "tmp");
+					parser.setNStoPkg(baseDirectory.getAbsolutePath() + File.separator
+						+ IntroduceConstants.NAMESPACE2PACKAGE_MAPPINGS_FILE);
 					try {
-						parser
-								.run(new File(
-										baseDirectory.getAbsolutePath()
-												+ File.separator
-												+ "build"
-												+ File.separator
-												+ "schema"
-												+ File.separator
-												+ info
-														.getIntroduceServiceProperties()
-														.get(
-																IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
-												+ File.separator
-												+ service.getName()
-												+ "_flattened.wsdl")
-										.getAbsolutePath());
+						parser.run(new File(baseDirectory.getAbsolutePath()
+							+ File.separator
+							+ "build"
+							+ File.separator
+							+ "schema"
+							+ File.separator
+							+ info.getIntroduceServiceProperties().get(
+								IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator
+							+ service.getName() + "_flattened.wsdl").getAbsolutePath());
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -171,8 +162,7 @@ public class SyncTools {
 
 			}
 
-			Utils.deleteDir(new File(baseDirectory.getAbsolutePath()
-					+ File.separator + "tmp"));
+			Utils.deleteDir(new File(baseDirectory.getAbsolutePath() + File.separator + "tmp"));
 		}
 	}
 
@@ -182,9 +172,11 @@ public class SyncTools {
 
 	public File baseDirectory;
 
+
 	public SyncTools(File directory) {
 		this.baseDirectory = directory;
 	}
+
 
 	private String getRelativeClassName(String fullyQualifiedClassName) {
 		int index = fullyQualifiedClassName.lastIndexOf(".");
@@ -195,6 +187,7 @@ public class SyncTools {
 		}
 	}
 
+
 	private String getPackageName(String fullyQualifiedClassName) {
 		int index = fullyQualifiedClassName.lastIndexOf(".");
 		if (index >= 0) {
@@ -203,32 +196,25 @@ public class SyncTools {
 		return null;
 	}
 
+
 	public void sync() throws Exception {
 		// STEP 1: populate the object model representation of the service
-		ServiceDescription introService = (ServiceDescription) Utils
-				.deserializeDocument(baseDirectory + File.separator
-						+ "introduce.xml", ServiceDescription.class);
+		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(baseDirectory + File.separator
+			+ "introduce.xml", ServiceDescription.class);
 		if (introService.getIntroduceVersion() == null
-				|| !introService.getIntroduceVersion().equals(
-						IntroduceConstants.INTRODUCE_VERSION)) {
-			throw new Exception(
-					"Introduce version in project does not match version provided by Introduce Toolkit ( "
-							+ IntroduceConstants.INTRODUCE_VERSION
-							+ " ): "
-							+ introService.getIntroduceVersion());
+			|| !introService.getIntroduceVersion().equals(IntroduceConstants.INTRODUCE_VERSION)) {
+			throw new Exception("Introduce version in project does not match version provided by Introduce Toolkit ( "
+				+ IntroduceConstants.INTRODUCE_VERSION + " ): " + introService.getIntroduceVersion());
 		}
-		File servicePropertiesFile = new File(baseDirectory.getAbsolutePath()
-				+ File.separator + IntroduceConstants.INTRODUCE_PROPERTIES_FILE);
+		File servicePropertiesFile = new File(baseDirectory.getAbsolutePath() + File.separator
+			+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE);
 		Properties serviceProperties = new Properties();
 		serviceProperties.load(new FileInputStream(servicePropertiesFile));
 		// have to set the service directory in the service properties
-		serviceProperties.setProperty(
-				IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR,
-				baseDirectory.getAbsolutePath());
-		ServiceInformation info = new ServiceInformation(introService,
-				serviceProperties, baseDirectory);
-		File schemaDir = new File(baseDirectory.getAbsolutePath()
-				+ File.separator + "schema");
+		serviceProperties.setProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR, baseDirectory
+			.getAbsolutePath());
+		ServiceInformation info = new ServiceInformation(introService, serviceProperties, baseDirectory);
+		File schemaDir = new File(baseDirectory.getAbsolutePath() + File.separator + "schema");
 
 		// STEP 2: make a backup of the service implementation
 		this.createArchive(info);
@@ -246,8 +232,7 @@ public class SyncTools {
 
 		// write all the services into the services list property
 		String servicesList = "";
-		if (info.getServices() != null
-				&& info.getServices().getService() != null) {
+		if (info.getServices() != null && info.getServices().getService() != null) {
 			for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
 				ServiceType service = info.getServices().getService(serviceI);
 				servicesList += service.getName();
@@ -256,26 +241,19 @@ public class SyncTools {
 				}
 			}
 		}
-		serviceProperties.setProperty(
-				IntroduceConstants.INTRODUCE_SKELETON_SERVICES_LIST,
-				servicesList);
+		serviceProperties.setProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICES_LIST, servicesList);
 
 		// store the modified properties back out....
-		serviceProperties.store(new FileOutputStream(servicePropertiesFile),
-				"Introduce Properties");
+		serviceProperties.store(new FileOutputStream(servicePropertiesFile), "Introduce Properties");
 
 		System.out.println("Synchronizing with pre processing extensions");
 		// run any extensions that need to be ran
-		if (introService.getExtensions() != null
-				&& introService.getExtensions().getExtension() != null) {
-			ExtensionType[] extensions = introService.getExtensions()
-					.getExtension();
+		if (introService.getExtensions() != null && introService.getExtensions().getExtension() != null) {
+			ExtensionType[] extensions = introService.getExtensions().getExtension();
 			for (int i = 0; i < extensions.length; i++) {
-				CodegenExtensionPreProcessor pp = ExtensionTools
-						.getCodegenPreProcessor(extensions[i].getName());
-				ServiceExtensionDescriptionType desc = ExtensionsLoader
-						.getInstance().getServiceExtension(
-								extensions[i].getName());
+				CodegenExtensionPreProcessor pp = ExtensionTools.getCodegenPreProcessor(extensions[i].getName());
+				ServiceExtensionDescriptionType desc = ExtensionsLoader.getInstance().getServiceExtension(
+					extensions[i].getName());
 				if (pp != null) {
 					pp.preCodegen(desc, info);
 				}
@@ -288,8 +266,7 @@ public class SyncTools {
 		syncAndFlattenWSDL(info, schemaDir);
 
 		// STEP 5: run axis to get the symbol table
-		MultiServiceSymbolTable table = new MultiServiceSymbolTable(info,
-				excludeSet);
+		MultiServiceSymbolTable table = new MultiServiceSymbolTable(info, excludeSet);
 
 		// STEP 6: fill out the object model with the generated classnames where
 		// the user didn't specify them explicitly
@@ -313,16 +290,12 @@ public class SyncTools {
 		// STEP 8: run the extensions
 		System.out.println("Synchronizing with post processing extensions");
 		// run any extensions that need to be ran
-		if (introService.getExtensions() != null
-				&& introService.getExtensions().getExtension() != null) {
-			ExtensionType[] extensions = introService.getExtensions()
-					.getExtension();
+		if (introService.getExtensions() != null && introService.getExtensions().getExtension() != null) {
+			ExtensionType[] extensions = introService.getExtensions().getExtension();
 			for (int i = 0; i < extensions.length; i++) {
-				CodegenExtensionPostProcessor pp = ExtensionTools
-						.getCodegenPostProcessor(extensions[i].getName());
-				ServiceExtensionDescriptionType desc = ExtensionsLoader
-						.getInstance().getServiceExtension(
-								extensions[i].getName());
+				CodegenExtensionPostProcessor pp = ExtensionTools.getCodegenPostProcessor(extensions[i].getName());
+				ServiceExtensionDescriptionType desc = ExtensionsLoader.getInstance().getServiceExtension(
+					extensions[i].getName());
 				if (pp != null) {
 					pp.postCodegen(desc, info);
 				}
@@ -331,54 +304,43 @@ public class SyncTools {
 
 	}
 
-	private void populateClassnames(ServiceInformation info,
-			MultiServiceSymbolTable table) throws MalformedNamespaceException,
-			SynchronizationException {
+
+	private void populateClassnames(ServiceInformation info, MultiServiceSymbolTable table)
+		throws MalformedNamespaceException, SynchronizationException {
 
 		// table.dump(System.out);
 		// get the classnames from the axis symbol table
-		if (info.getNamespaces() != null
-				&& info.getNamespaces().getNamespace() != null) {
+		if (info.getNamespaces() != null && info.getNamespaces().getNamespace() != null) {
 			for (int i = 0; i < info.getNamespaces().getNamespace().length; i++) {
 				NamespaceType ntype = info.getNamespaces().getNamespace(i);
 				if (ntype.getSchemaElement() != null) {
 					for (int j = 0; j < ntype.getSchemaElement().length; j++) {
 						SchemaElementType type = ntype.getSchemaElement(j);
 						if (type.getClassName() == null) {
-							if (ntype.getNamespace().equals(
-									IntroduceConstants.W3CNAMESPACE)) {
-								Type symtype = table.getType(new QName(ntype
-										.getNamespace(), type.getType()));
+							if (ntype.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
+								Type symtype = table.getType(new QName(ntype.getNamespace(), type.getType()));
 								// type may not be being used so axis will
 								// ignore it....
 								if (symtype != null) {
-									type
-											.setClassName(getRelativeClassName(symtype
-													.getName()));
-									type.setPackageName(getPackageName(symtype
-											.getName()));
+									type.setClassName(getRelativeClassName(symtype.getName()));
+									type.setPackageName(getPackageName(symtype.getName()));
 								}
 							} else {
-								QName qname = new QName(ntype.getNamespace(),
-										type.getType());
+								QName qname = new QName(ntype.getNamespace(), type.getType());
 								Element element = table.getElement(qname);
 								if (element == null) {
 									table.dump(System.err);
-									throw new SynchronizationException(
-											"Unable to find Element in symbol table for: "
-													+ qname);
+									throw new SynchronizationException("Unable to find Element in symbol table for: "
+										+ qname);
 
 								}
-								type.setClassName(getRelativeClassName(element
-										.getName()));
-								type.setPackageName(getPackageName(element
-										.getName()));
+								type.setClassName(getRelativeClassName(element.getName()));
+								type.setPackageName(getPackageName(element.getName()));
 							}
 						} else {
-							if (type.getSerializer() == null
-									|| type.getDeserializer() == null) {
+							if (type.getSerializer() == null || type.getDeserializer() == null) {
 								throw new SynchronizationException(
-										"When specifying a custom classname, you must also specify both a serializer and deserializer.");
+									"When specifying a custom classname, you must also specify both a serializer and deserializer.");
 							}
 							// it the classname is already set then set the
 							// package name to the predefined
@@ -395,66 +357,40 @@ public class SyncTools {
 		if (info.getServices().getService() != null) {
 			for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
 				ServiceType service = info.getServices().getService(serviceI);
-				if (service.getMethods() != null
-						&& service.getMethods().getMethod() != null) {
+				if (service.getMethods() != null && service.getMethods().getMethod() != null) {
 					for (int i = 0; i < service.getMethods().getMethod().length; i++) {
 						MethodType mtype = service.getMethods().getMethod(i);
 						// process the inputs
-						if (mtype.getInputs() != null
-								&& mtype.getInputs().getInput() != null) {
+						if (mtype.getInputs() != null && mtype.getInputs().getInput() != null) {
 							for (int j = 0; j < mtype.getInputs().getInput().length; j++) {
-								MethodTypeInputsInput inputParam = mtype
-										.getInputs().getInput(j);
-								SchemaInformation namespace = CommonTools.getSchemaInformation(info.getNamespaces(),inputParam
-												.getQName());
-								if (!namespace
-										.getNamespace()
-										.getNamespace()
-										.equals(IntroduceConstants.W3CNAMESPACE)) {
+								MethodTypeInputsInput inputParam = mtype.getInputs().getInput(j);
+								SchemaInformation namespace = CommonTools.getSchemaInformation(info.getNamespaces(),
+									inputParam.getQName());
+								if (!namespace.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
 									QName qname = null;
 									if (mtype.isIsImported()) {
-										qname = new QName(
-												mtype.getImportInformation()
-														.getNamespace(),
-												">>"
-														+ TemplateUtils
-																.upperCaseFirstCharacter(mtype
-																		.getName())
-														+ "Request>"
-														+ inputParam.getName());
+										qname = new QName(mtype.getImportInformation().getNamespace(), ">>"
+											+ TemplateUtils.upperCaseFirstCharacter(mtype.getName()) + "Request>"
+											+ inputParam.getName());
 									} else {
-										qname = new QName(
-												service.getNamespace(),
-												">>"
-														+ TemplateUtils
-																.upperCaseFirstCharacter(mtype
-																		.getName())
-														+ "Request>"
-														+ inputParam.getName());
+										qname = new QName(service.getNamespace(), ">>"
+											+ TemplateUtils.upperCaseFirstCharacter(mtype.getName()) + "Request>"
+											+ inputParam.getName());
 									}
 
 									Type type = table.getType(qname);
 									if (type == null) {
 										table.dump(System.err);
 										throw new SynchronizationException(
-												"Unable to find Element in symbol table for: "
-														+ qname);
+											"Unable to find Element in symbol table for: " + qname);
 									}
 
 									if (mtype.isIsImported()) {
-										inputParam.setContainerClassName(mtype
-												.getImportInformation()
-												.getPackageName()
-												+ "."
-												+ getRelativeClassName(type
-														.getName()));
+										inputParam.setContainerClassName(mtype.getImportInformation().getPackageName()
+											+ "." + getRelativeClassName(type.getName()));
 									} else {
-										inputParam
-												.setContainerClassName(service
-														.getPackageName()
-														+ ".stubs."
-														+ getRelativeClassName(type
-																.getName()));
+										inputParam.setContainerClassName(service.getPackageName() + ".stubs."
+											+ getRelativeClassName(type.getName()));
 									}
 								}
 
@@ -467,17 +403,13 @@ public class SyncTools {
 		}
 	}
 
+
 	public void createNewServices(ServiceInformation info) {
 		List newServices = new ArrayList();
-		if (info.getServices() != null
-				&& info.getServices().getService() != null) {
+		if (info.getServices() != null && info.getServices().getService() != null) {
 			for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
-				File serviceDir = new File(info.getBaseDirectory()
-						+ File.separator
-						+ "src"
-						+ File.separator
-						+ CommonTools.getPackageDir(info.getServices().getService(
-								serviceI)));
+				File serviceDir = new File(info.getBaseDirectory() + File.separator + "src" + File.separator
+					+ CommonTools.getPackageDir(info.getServices().getService(serviceI)));
 				if (!serviceDir.exists()) {
 					newServices.add(info.getServices().getService(serviceI));
 				}
@@ -488,8 +420,7 @@ public class SyncTools {
 			SkeletonSourceCreator ssc = new SkeletonSourceCreator();
 			SkeletonSchemaCreator sschc = new SkeletonSchemaCreator();
 			try {
-				System.out.println("Adding Service for: "
-						+ newService.getName());
+				System.out.println("Adding Service for: " + newService.getName());
 				ssc.createSkeleton(info.getBaseDirectory(), info, newService);
 				sschc.createSkeleton(info.getBaseDirectory(), info, newService);
 			} catch (Exception e) {
@@ -497,6 +428,7 @@ public class SyncTools {
 			}
 		}
 	}
+
 
 	/**
 	 * Walk the model and build up a set of namespaces to not generate classes
@@ -507,31 +439,34 @@ public class SyncTools {
 	 * @param info
 	 * @throws MalformedNamespaceException
 	 */
-	private Set generateNamespaceExcludesSet(ServiceInformation info)
-			throws Exception {
+	private Set generateNamespaceExcludesSet(ServiceInformation info) throws Exception {
 		Set excludeSet = new HashSet();
-		File schemaDir = new File(baseDirectory.getAbsolutePath()
-				+ File.separator
-				+ "schema"
-				+ File.separator
-				+ info.getIntroduceServiceProperties().getProperty(
-						IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
+		File schemaDir = new File(baseDirectory.getAbsolutePath() + File.separator + "schema" + File.separator
+			+ info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
 		// exclude namespaces that have FQN for metadata class
 		// get the classnames from the axis symbol table
-		if (info.getNamespaces() != null
-				&& info.getNamespaces().getNamespace() != null) {
+		if (info.getNamespaces() != null && info.getNamespaces().getNamespace() != null) {
 			for (int i = 0; i < info.getNamespaces().getNamespace().length; i++) {
 				NamespaceType ntype = info.getNamespaces().getNamespace(i);
-				if (ntype.getSchemaElement() != null) {
+
+				if (ntype.getGenerateStubs() != null && !ntype.getGenerateStubs().booleanValue()) {
+					// the model explictly says not to generate stubs
+					excludeSet.add(ntype.getNamespace());
+					TemplateUtils
+						.walkSchemasGetNamespaces(schemaDir + File.separator + ntype.getLocation(), excludeSet);
+				} else if (ntype.getSchemaElement() != null) {
 					for (int j = 0; j < ntype.getSchemaElement().length; j++) {
 						SchemaElementType type = ntype.getSchemaElement(j);
 						if (type.getClassName() != null) {
 							if (ntype.getLocation() != null) {
+								// the namespace contains customly serialized
+								// beans... so don't generate stubs
 								excludeSet.add(ntype.getNamespace());
 								TemplateUtils.walkSchemasGetNamespaces(
-										schemaDir + File.separator
-												+ ntype.getLocation(),
-										excludeSet);
+									schemaDir + File.separator + ntype.getLocation(), excludeSet);
+								// this schema is excluded.. no need to check
+								// the rest of the schemaelements
+								break;
 							}
 						}
 					}
@@ -542,36 +477,31 @@ public class SyncTools {
 		return excludeSet;
 	}
 
-	private void writeNamespaceMappings(ServiceInformation info)
-			throws IOException {
+
+	private void writeNamespaceMappings(ServiceInformation info) throws IOException {
 		NamespaceMappingsTemplate namespaceMappingsT = new NamespaceMappingsTemplate();
 		String namespaceMappingsS = namespaceMappingsT.generate(info);
-		File namespaceMappingsF = new File(baseDirectory.getAbsolutePath()
-				+ File.separator
-				+ IntroduceConstants.NAMESPACE2PACKAGE_MAPPINGS_FILE);
+		File namespaceMappingsF = new File(baseDirectory.getAbsolutePath() + File.separator
+			+ IntroduceConstants.NAMESPACE2PACKAGE_MAPPINGS_FILE);
 		FileWriter namespaceMappingsFW = new FileWriter(namespaceMappingsF);
 		namespaceMappingsFW.write(namespaceMappingsS);
 		namespaceMappingsFW.close();
 	}
 
-	private void syncAndFlattenWSDL(ServiceInformation info, File schemaDir)
-			throws Exception {
+
+	private void syncAndFlattenWSDL(ServiceInformation info, File schemaDir) throws Exception {
 		// get the classnames from the axis symbol table
 		if (info.getServices().getService() != null) {
 			for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
 				// rewrite the wsdl for each service....
 				ServiceType service = info.getServices().getService(serviceI);
 				ServiceWSDLTemplate serviceWSDLT = new ServiceWSDLTemplate();
-				String serviceWSDLS = serviceWSDLT
-						.generate(new SpecificServiceInformation(info, service));
-				File serviceWSDLF = new File(
-						schemaDir.getAbsolutePath()
-								+ File.separator
-								+ info
-										.getIntroduceServiceProperties()
-										.getProperty(
-												IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
-								+ File.separator + service.getName() + ".wsdl");
+				String serviceWSDLS = serviceWSDLT.generate(new SpecificServiceInformation(info, service));
+				File serviceWSDLF = new File(schemaDir.getAbsolutePath()
+					+ File.separator
+					+ info.getIntroduceServiceProperties().getProperty(
+						IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator + service.getName()
+					+ ".wsdl");
 				FileWriter serviceWSDLFW = new FileWriter(serviceWSDLF);
 				serviceWSDLFW.write(serviceWSDLS);
 				serviceWSDLFW.close();
@@ -583,16 +513,12 @@ public class SyncTools {
 				// rewrite the wsdl for each service....
 				ServiceType service = info.getServices().getService(serviceI);
 				// for each service add any imported operations.....
-				if (service.getMethods() != null
-						&& service.getMethods().getMethod() != null) {
-					for (int methodI = 0; methodI < service.getMethods()
-							.getMethod().length; methodI++) {
-						MethodType method = service.getMethods().getMethod(
-								methodI);
+				if (service.getMethods() != null && service.getMethods().getMethod() != null) {
+					for (int methodI = 0; methodI < service.getMethods().getMethod().length; methodI++) {
+						MethodType method = service.getMethods().getMethod(methodI);
 						if (method.isIsImported()) {
-							TemplateUtils.addImportedOperationToService(method,
-									new SpecificServiceInformation(info,
-											service));
+							TemplateUtils.addImportedOperationToService(method, new SpecificServiceInformation(info,
+								service));
 						}
 					}
 				}
@@ -601,8 +527,7 @@ public class SyncTools {
 
 		writeNamespaceMappings(info);
 
-		String cmd = CommonTools.getAntFlattenCommand(baseDirectory
-				.getAbsolutePath());
+		String cmd = CommonTools.getAntFlattenCommand(baseDirectory.getAbsolutePath());
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
 		if (p.exitValue() != 0) {
@@ -610,29 +535,25 @@ public class SyncTools {
 		}
 	}
 
+
 	private void createArchive(ServiceInformation info) throws Exception {
 		// create the archive
 		long id = System.currentTimeMillis();
 
-		info.getIntroduceServiceProperties().setProperty(
-				IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP,
-				String.valueOf(id));
+		info.getIntroduceServiceProperties().setProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP,
+			String.valueOf(id));
 		info.getIntroduceServiceProperties().store(
-				new FileOutputStream(baseDirectory.getAbsolutePath()
-						+ File.separator
-						+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE),
-				"Introduce Properties");
+			new FileOutputStream(baseDirectory.getAbsolutePath() + File.separator
+				+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE), "Introduce Properties");
 
-		ResourceManager.createArchive(String.valueOf(id), info
-				.getIntroduceServiceProperties().getProperty(
-						IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME),
-				baseDirectory.getAbsolutePath());
+		ResourceManager.createArchive(String.valueOf(id), info.getIntroduceServiceProperties().getProperty(
+			IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME), baseDirectory.getAbsolutePath());
 	}
+
 
 	public static void main(String[] args) {
 		Options options = new Options();
-		Option directoryOpt = new Option(DIR_OPT, DIR_OPT_FULL, true,
-				"The include tool directory");
+		Option directoryOpt = new Option(DIR_OPT, DIR_OPT_FULL, true, "The include tool directory");
 		options.addOption(directoryOpt);
 
 		CommandLineParser parser = new PosixParser();

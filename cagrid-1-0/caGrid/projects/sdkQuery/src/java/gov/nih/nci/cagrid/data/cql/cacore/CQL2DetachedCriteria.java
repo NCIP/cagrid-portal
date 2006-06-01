@@ -22,7 +22,6 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.criterion.Subqueries;
 
 /** 
  *  CQL2DetachedCriteria
