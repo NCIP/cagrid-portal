@@ -309,7 +309,7 @@
 	<target name="runClient" depends="all" description="Execute the client: ant -Dservice.url=[service url] runClient">
 		<java classname="${package.name}.client.${service.name}Client" fork="yes">
 			<arg value="-url"/>
-			<arg value="service.url"/>
+			<arg value="http://localhost:9090/wsrf/services/cagrid/SampleService1"/>
 			<classpath refid="service.run.classpath"/>
 		</java>
 	</target>

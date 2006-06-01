@@ -9,7 +9,9 @@
     xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl"
     xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl"
     xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
-    xmlns="http://schemas.xmlsoap.org/wsdl/">
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+    xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
     <import
         namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
         location="../wsrf/properties/WS-ResourceProperties.wsdl"/>
@@ -113,4 +115,10 @@
             <fault name="QueryEvaluationErrorFault" message="wsrpw:QueryEvaluationErrorFault"/>
         </operation>
     </portType>
+<plnk:partnerLinkType name="Sample1PartnerLinkType">
+   <plnk:role name="sample1">
+      <plnk:portType name="tns:SampleService1PortType"/>
+   </plnk:role>
+</plnk:partnerLinkType>
+
 </definitions>

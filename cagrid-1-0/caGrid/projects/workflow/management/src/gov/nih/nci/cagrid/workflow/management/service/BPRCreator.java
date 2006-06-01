@@ -16,8 +16,8 @@ public class BPRCreator {
 	public static void makeBPR(TProcess bpel, String bprPath) throws Exception {
 		JarFile bpr = null;
 		QName qname = new QName("http://AnnualDemo");
-		Utils.serializeDocument("c:\\test\\temp.bpel", bpel, qname);
-		String[] fileList = {"c:\\test\\temp.bpel", "c:\\test\\AnnualDemoPDD.pdd"};
+		Utils.serializeDocument("c:\\test\\AnnualDemoParallel.bpel", bpel, qname);
+		String[] fileList = {"c:\\test\\AnnualDemoParallel.bpel", "c:\\test\\AnnualDemoPDD.pdd"};
 		createBPR(fileList, bprPath);
 	}
 

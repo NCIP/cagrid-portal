@@ -9,11 +9,13 @@ import java.rmi.RemoteException;
 import java.util.jar.JarFile;
 
 import javax.naming.InitialContext;
+import javax.xml.namespace.QName;
 import javax.xml.rpc.ServiceException;
 
 import org.activebpel.rt.base64.Base64;
 import org.activebpel.rt.bpel.server.admin.rdebug.server.AeRemoteDebugImpl;
 import org.apache.axis.MessageContext;
+import org.apache.axis.types.NCName;
 import org.globus.wsrf.Constants;
 import org.w3c.dom.Document;
 import org.xmlsoap.schemas.ws._2003._03.business_process.TProcess;
@@ -71,16 +73,20 @@ public class WorkFlowManagementServiceImpl implements
 			 */
 			URL url = new URL(
 					"http://localhost:8080/active-bpel/services/BpelEngineAdmin");
-			System.out.println("Deploying1");
 			mRemote = (RemoteDebugSoapBindingStub) locator
 					.getAeActiveWebflowAdminPort(url);
-			String filePath = "/autonfs/home/madduri/globus/temp.bpr";
+			String filePath = "c:\\test\\temp.bpr";
 
-			BPRCreator.makeBPR(bpelDoc, filePath);
+			//BPRCreator.makeBPR(bpelDoc, filePath);
 
-			output = mRemote.deployBpr("temp.bpr", BPRCreator
-					.getBase64EncodedBpr(filePath));
-			
+			/*output = mRemote.deployBpr("test.bpr", BPRCreator
+					.getBase64EncodedBpr(filePath));*/
+			String input = "<invoke xmlns=\"http://workflow.cagrid.nci.nih.gov/SampleService1\"><param>Hello</param></invoke>";
+			String result = mRemote.invokeProcess("Sample1PartnerLinkTypeService", 
+					input);
+			System.out.println("Result: " + result);
+			QName serviceName = bpelDoc.getPartnerLinks().getPartnerLink(0).getPartnerLinkType();
+			System.out.println(serviceName.toString());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println(e.getMessage());
