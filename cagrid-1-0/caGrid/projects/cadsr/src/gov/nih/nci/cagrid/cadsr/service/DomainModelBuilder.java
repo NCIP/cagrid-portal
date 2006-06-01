@@ -5,11 +5,11 @@ import gov.nih.nci.cadsr.umlproject.domain.UMLAssociationMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.common.CaDSRUtils;
+import gov.nih.nci.cagrid.cadsr.domain.UMLAssociation;
 import gov.nih.nci.cagrid.metadata.common.UMLClass;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModelExposedUMLAssociationCollection;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModelExposedUMLClassCollection;
-import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationEdge;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationEdgeUmlClass;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationSourceUMLAssociationEdge;
@@ -91,14 +91,17 @@ public class DomainModelBuilder {
 		classes.toArray(classArray);
 		
 		// grab associations for each class
-		List associations = new ArrayList();
+		List associationMetadataList = new ArrayList();
 		for (int i = 0; i < classArray.length; i++) {
 			UMLClassMetadata clazz = classArray[i];
 			UMLAssociationMetadata[] mdArray = getAssociations(clazz);
-			Collections.addAll(associations, mdArray);
+			Collections.addAll(associationMetadataList, mdArray);
 		}
-		UMLAssociationMetadata[] associationArray = new UMLAssociationMetadata[associations.size()];
-		associations.toArray(associationArray);
+		UMLAssociation[] associationArray = new UMLAssociation[associationMetadataList.size()];
+		for (int i = 0; i < associationMetadataList.size(); i++) {
+			UMLAssociationMetadata assocMd = (UMLAssociationMetadata) associationMetadataList.get(i);
+			associationArray[i] = CaDSRUtils.convertAssociation(assocMd);
+		}
 		
 		// hand off
 		return getDomainModel(proj, classArray, associationArray);
@@ -117,7 +120,7 @@ public class DomainModelBuilder {
 	 * @return
 	 * @throws RemoteException
 	 */
-	public DomainModel getDomainModel(Project proj, UMLClassMetadata[] classes, UMLAssociationMetadata[] associations) throws RemoteException {
+	public DomainModel getDomainModel(Project proj, UMLClassMetadata[] classes, UMLAssociation[] associations) throws RemoteException {
 		DomainModel model = new DomainModel();
 		// project
 		model.setProjectDescription(proj.getDescription());
@@ -136,19 +139,25 @@ public class DomainModelBuilder {
 		
 		// associations
 		DomainModelExposedUMLAssociationCollection exposedAssociations = new DomainModelExposedUMLAssociationCollection();
-		UMLAssociation[] umlAssociations = new UMLAssociation[associations.length];
+		gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation[] umlAssociations = 
+			new gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation[associations.length];
 		for (int i = 0; i < associations.length; i++) {
-			gov.nih.nci.cagrid.cadsr.domain.UMLAssociation cadsrAssociation = CaDSRUtils.convertAssociation(associations[i]);
-			umlAssociations[i] = convertAssociation(cadsrAssociation);
+			umlAssociations[i] = convertAssociation(associations[i]);
 		}
-		exposedAssociations.setUMLAssociation(umlAssociations);
+		gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation[] dsAssociations = 
+			new gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation[umlAssociations.length];
+		for (int i = 0; i < umlAssociations.length; i++) {
+			// dsAssociations[i] = convertAssociation(umlAssociations[i]);
+		}
+		exposedAssociations.setUMLAssociation(dsAssociations);
 		model.setExposedUMLAssociationCollection(exposedAssociations);
 		return model;
 	}
 	
 	
-	private UMLAssociation convertAssociation(gov.nih.nci.cagrid.cadsr.domain.UMLAssociation cadsrAssociation) {
-		UMLAssociation converted = new UMLAssociation();
+	private gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation convertAssociation(UMLAssociation cadsrAssociation) {
+		gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation converted = 
+			new gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation();
 		converted.setBidirectional(cadsrAssociation.isIsBidirectional());
 		UMLAssociationSourceUMLAssociationEdge convertedSourceEdge = new UMLAssociationSourceUMLAssociationEdge();
 		UMLAssociationEdge sourceEdge = new UMLAssociationEdge();
