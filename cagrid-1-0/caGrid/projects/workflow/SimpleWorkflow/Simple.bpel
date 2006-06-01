@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BPEL Process Definition
+Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.com)
+-->
+<process name="Simple" suppressJoinFailure="yes" targetNamespace="http://Simple" xmlns="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:ns1="http://workflow.cagrid.nci.nih.gov/SampleService1" xmlns:ns2="http://workflow.cagrid.nci.nih.gov/SampleService2" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <partnerLinks>
+      <partnerLink myRole="sample1" name="Sample1PartnerLinkType" partnerLinkType="ns1:Sample1PartnerLinkType" partnerRole="sample1"/>
+      <partnerLink name="Sample2PartnerLinkType" partnerLinkType="ns2:Sample2PartnerLinkType" partnerRole="sample2"/>
+   </partnerLinks>
+   <variables>
+      <variable messageType="ns1:invokeInputMessage" name="invokeInputMessage"/>
+      <variable messageType="ns1:invokeOutputMessage" name="invokeOutputMessage"/>
+      <variable messageType="ns2:invokeInputMessage" name="invokeInputMessage1"/>
+      <variable messageType="ns2:invokeOutputMessage" name="invokeOutputMessage1"/>
+   </variables>
+   <sequence>
+      <receive createInstance="yes" operation="invoke" partnerLink="Sample1PartnerLinkType" portType="ns1:SampleService1PortType" variable="invokeInputMessage"/>
+      <assign>
+         <copy>
+            <from part="parameters" query="/ns1:invoke/ns1:param" variable="invokeInputMessage"/>
+            <to part="parameters" query="/ns2:invoke/ns2:param" variable="invokeInputMessage1"/>
+         </copy>
+      </assign>
+      <invoke inputVariable="invokeInputMessage1" operation="invoke" outputVariable="invokeOutputMessage1" partnerLink="Sample2PartnerLinkType" portType="ns2:SampleService2PortType"/>
+      <assign>
+         <copy>
+            <from part="parameters" query="/ns2:invokeResponse/ns2:response" variable="invokeOutputMessage1"/>
+            <to part="parameters" query="/ns1:invokeResponse/ns1:response" variable="invokeOutputMessage"/>
+         </copy>
+      </assign>
+      <reply operation="invoke" partnerLink="Sample1PartnerLinkType" portType="ns1:SampleService1PortType" variable="invokeOutputMessage"/>
+   </sequence>
+</process>
