@@ -1,4 +1,4 @@
-import gov.nih.nci.cadsr.umlproject.domain.ws.Project;
+import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
 import java.util.Iterator;
