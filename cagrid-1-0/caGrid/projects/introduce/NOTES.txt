@@ -1,4 +1,5 @@
 To Do:
+add scroll pain in deployer for service properties
 
 add support for having EPR type and fault types in the types browser....
 
