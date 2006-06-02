@@ -10,6 +10,7 @@ import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ItemEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -232,7 +233,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 			projectComboBox = new JComboBox();
 			projectComboBox.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					if (projectComboBox.getSelectedItem() != null) {
+					if (e.getStateChange() == ItemEvent.SELECTED && projectComboBox.getSelectedItem() != null) {
 						Project project = getSelectedProject();
 						for (int i = 0; i < projectSelectionListeners.size(); i++) {
 							ProjectSelectedListener listener = (ProjectSelectedListener) projectSelectionListeners
@@ -257,7 +258,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 			packageComboBox = new JComboBox();
 			packageComboBox.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					if (getPackageComboBox().getSelectedItem() != null) {
+					if (e.getStateChange() == ItemEvent.SELECTED && getPackageComboBox().getSelectedItem() != null) {
 						UMLPackageMetadata pkg = getSelectedPackage();
 						for (int i = 0; i < packageSelectionListeners.size(); i++) {
 							PackageSelectedListener listener = (PackageSelectedListener) packageSelectionListeners
@@ -369,7 +370,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 			classComboBox = new JComboBox();
 			classComboBox.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					if (getClassComboBox().getSelectedItem() != null) {
+					if (e.getStateChange() == ItemEvent.SELECTED && getClassComboBox().getSelectedItem() != null) {
 						UMLClassMetadata clazz = getSelectedClass();
 						for (int i = 0; i < classSelectionListeners.size(); i++) {
 							ClassSelectedListener listener = (ClassSelectedListener) classSelectionListeners.get(i);
@@ -482,6 +483,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 
 
 	public void handleProjectSelection(final Project project) {
+		//System.out.println("Handle Project:" + project.getShortName());
 		getPackageComboBox().removeAllItems();
 		makeCombosEnable(false);
 		Thread t = new Thread() {
@@ -514,6 +516,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 
 
 	public void handlePackageSelection(final UMLPackageMetadata pkg) {
+		//System.out.println("Handle package:" + pkg.getName());
 		if (isShowClassSelection()) {
 			getClassComboBox().removeAllItems();
 			makeCombosEnable(false);
