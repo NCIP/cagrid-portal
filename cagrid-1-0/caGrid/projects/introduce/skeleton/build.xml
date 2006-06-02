@@ -12,7 +12,7 @@
 	<property name="introduce.ns.excludes" value="" />
 	<property name="service.name" value="${introduce.skeleton.service.name}" />
 	<property name="schema.path" value="${introduce.skeleton.service.name}" />
-	
+
 	<!-- Important directories and files -->
 	<property name="src.dir" value="src" />
 	<property name="lib.dir" value="lib" />
@@ -60,7 +60,7 @@
 
 	<!--import deployment ant files -->
 	<import file="build-deploy.xml" />
-	
+
 	<taskdef resource="net/sf/antcontrib/antlib.xml">
 		<classpath>
 			<pathelement location="${lib.dir}/ant-contrib.jar" />
@@ -98,7 +98,7 @@
 	<!-- Sets up the build directory structure -->
 	<target name="init" depends="checkGlobus, defineClasspaths">
 
-		
+
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.dest}" />
 		<mkdir dir="${test.build.dest}" />
@@ -143,18 +143,18 @@
 		</path>
 		<path id="service.run.classpath">
 			<pathelement location="${build.dest}" />
-			<path refid="service.build.classpath" />			
+			<path refid="service.build.classpath" />
 		</path>
 		<path id="test.build.classpath">
 			<fileset dir="${test.lib.dir}">
 				<include name="*.jar" />
 			</fileset>
 			<pathelement location="${build.dest}" />
-			<path refid="service.build.classpath" />			
+			<path refid="service.build.classpath" />
 		</path>
 		<path id="test.run.classpath">
 			<pathelement location="${test.build.dest}" />
-			<path refid="test.build.classpath" />			
+			<path refid="test.build.classpath" />
 		</path>
 	</target>
 
@@ -200,7 +200,7 @@
 			<property name="ns.excludes" value="${GT4.ns.excludes} ${introduce.ns.excludes}" />
 		</ant>
 	</target>
-	
+
 	<!-- "Flattens" the WSDL file. i.e. runs the WSDL Preprocessor and creates a single
 		WSDL file with all the operations and RPs in the portTypes specified in
 		the wsdlpp:extends attribute (plus, of course, those defined in our own WSDL file) -->
@@ -209,26 +209,26 @@
 		<for list="${introduce.skeleton.services.list}" parallel="false" param="service.name" trim="true">
 			<sequential>
 				<echo message="Flattening service: @{service.name}." />
-				<antcall target="serviceFlatten" >
-					<param name="interface.name" value="@{service.name}"/>
+				<antcall target="serviceFlatten">
+					<param name="interface.name" value="@{service.name}" />
 				</antcall>
 			</sequential>
 		</for>
 	</target>
-	
+
 	<!-- Generate the stub source files -->
 	<!-- This is done with a GT4 tool -->
-	<target name="stubs"  depends="init">
+	<target name="stubs" depends="init">
 		<for list="${introduce.skeleton.services.list}" parallel="false" param="service.name" trim="true">
 			<sequential>
 				<echo message="Generating stubs for @{service.name}." />
-				<antcall target="serviceStubs" >
-					<param name="interface.name" value="@{service.name}"/>
+				<antcall target="serviceStubs">
+					<param name="interface.name" value="@{service.name}" />
 				</antcall>
 			</sequential>
 		</for>
 	</target>
-	
+
 
 
 	<!-- Compile the stubs generated in the previous step -->
@@ -254,16 +254,13 @@
 
 	<!-- Compile the implementation classes (service, resource, etc.) -->
 	<target name="compile" depends="compileStubs">
+		<javac srcdir="${src.dir}" classpathref="service.build.classpath" includes="**" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}" />
 
-		<javac srcdir="${src.dir}" classpathref="service.build.classpath" includes="**" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}">
-		</javac>
-		<!--<copy toDir="${build.dest}">
+		<copy toDir="${build.dest}">
 			<fileset dir="${src.dir}">
 				<include name="**/*" />
 			</fileset>
 		</copy>
-		-->
-
 	</target>
 
 	<!-- Compile the test implementation classes (service, resource, etc.) -->
@@ -309,18 +306,18 @@
 
 	<!-- Empty target, in case we simply want to generate the JAR files -->
 	<target name="jars" depends="jarStubs, jar, jarTests" />
-	
-	
+
+
 	<!-- Clean up all the intermediate files -->
 	<target name="clean">
 		<delete dir="tmp" />
 		<delete dir="${build.dir}" />
 		<delete file="${gar.name}" />
 	</target>
-	
+
 	<!-- Default target "all" builds and jars everything, including test....does not make a GAR-->
 	<target name="all" depends="jars" />
-	
+
 
 	<!-- call the test target for each project and aggregates the log resutls  -->
 	<target name="test" depends="checkGlobus">
@@ -330,7 +327,7 @@
 			<sysproperty key="basedir" value="${basedir}" />
 			<jvmarg value="-Dbuild.dir=${build.dir}" />
 			<jvmarg value="-Djava.endorsed.dirs=${ext.endorsed.dir}" />
-			<classpath refid="test.run.classpath"/>
+			<classpath refid="test.run.classpath" />
 			<formatter type="xml" />
 			<batchtest fork="yes" haltonfailure="true" haltonerror="true" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}">
