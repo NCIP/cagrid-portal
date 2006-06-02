@@ -252,6 +252,12 @@
 		<javac srcdir="${src.dir}" classpathref="service.build.classpath" includes="**" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}" />
 
 		<copy toDir="${build.dest}">
+					<fileset dir="${src.dir}">
+						<include name="**/*" />
+					</fileset>
+				</copy>
+
+		<copy toDir="${build.dest}">
 			<fileset dir="${basedir}">
 				<include name="sync-gts-log4j.properties" />
 			</fileset>

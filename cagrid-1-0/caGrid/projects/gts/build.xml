@@ -266,12 +266,11 @@
 
 		<javac srcdir="${src.dir}" classpathref="service.build.classpath" includes="**" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}">
 		</javac>
-		<!--<copy toDir="${build.dest}">
+		<copy toDir="${build.dest}">
 			<fileset dir="${src.dir}">
 				<include name="**/*" />
 			</fileset>
 		</copy>
-		-->
 
 	</target>
 
