@@ -52,8 +52,7 @@ public class ClientDeserializer extends DeserializerImpl implements
 		if (asDOM != null) {
 			try {
 				//reflect load the client handle passing in the EPR into the constructor
-				Class clientClass = Class.forName(xmlType.getLocalPart());
-				Constructor clientConstructor = clientClass
+				Constructor clientConstructor = javaType
 						.getConstructor(new Class[] { EndpointReference.class });
 				EndpointReference ref = (EndpointReference) ObjectDeserializer
 						.toObject(asDOM, EndpointReference.class);
