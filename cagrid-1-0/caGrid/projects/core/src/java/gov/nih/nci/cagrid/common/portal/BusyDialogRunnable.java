@@ -52,8 +52,8 @@ public abstract class BusyDialogRunnable implements Runnable {
 			errorMessage = e.getMessage();
 		}
 		
-		setProgressText("");
-		dialog.setVisible(false);
+		//setProgressText("");
+		//dialog.setVisible(false);
 		
 		
 		if (!valid) {

@@ -46,28 +46,28 @@ public class SkeletonSourceCreator {
 		new File(srcDir.getAbsolutePath() + File.separator
 				+ CommonTools.getPackageDir(service)).mkdirs();
 		new File(srcDir.getAbsolutePath() + File.separator
-				+ CommonTools.getPackageDir(service) + File.separator + "client")
-				.mkdirs();
+				+ CommonTools.getPackageDir(service) + File.separator
+				+ "client").mkdirs();
 		new File(srcDir.getAbsolutePath() + File.separator
-				+ CommonTools.getPackageDir(service) + File.separator + "common")
-				.mkdirs();
+				+ CommonTools.getPackageDir(service) + File.separator
+				+ "common").mkdirs();
 		new File(srcDir.getAbsolutePath() + File.separator
-				+ CommonTools.getPackageDir(service) + File.separator + "service")
-				.mkdirs();
+				+ CommonTools.getPackageDir(service) + File.separator
+				+ "service").mkdirs();
 		new File(srcDir.getAbsolutePath() + File.separator
-				+ CommonTools.getPackageDir(service) + File.separator + "service"
-				+ File.separator + "globus").mkdirs();
+				+ CommonTools.getPackageDir(service) + File.separator
+				+ "service" + File.separator + "globus").mkdirs();
 		new File(srcDir.getAbsolutePath() + File.separator
-				+ CommonTools.getPackageDir(service) + File.separator + "service"
-				+ File.separator + "globus" + File.separator + "resource")
-				.mkdirs();
+				+ CommonTools.getPackageDir(service) + File.separator
+				+ "service" + File.separator + "globus" + File.separator
+				+ "resource").mkdirs();
 
 		ServiceClientTemplate clientT = new ServiceClientTemplate();
 		String clientS = clientT.generate(new SpecificServiceInformation(info,
 				service));
 		File clientF = new File(srcDir.getAbsolutePath() + File.separator
-				+ CommonTools.getPackageDir(service) + File.separator + "client"
-				+ File.separator + service.getName() + "Client.java");
+				+ CommonTools.getPackageDir(service) + File.separator
+				+ "client" + File.separator + service.getName() + "Client.java");
 
 		FileWriter clientFW = new FileWriter(clientF);
 		clientFW.write(clientS);
@@ -77,8 +77,8 @@ public class SkeletonSourceCreator {
 		String clientConfigS = clientConfigT
 				.generate(new SpecificServiceInformation(info, service));
 		File clientConfigF = new File(srcDir.getAbsolutePath() + File.separator
-				+ CommonTools.getPackageDir(service) + File.separator + "client"
-				+ File.separator +"client-config.wsdd");
+				+ CommonTools.getPackageDir(service) + File.separator
+				+ "client" + File.separator + "client-config.wsdd");
 		FileWriter clientConfigFW = new FileWriter(clientConfigF);
 		clientConfigFW.write(clientConfigS);
 		clientConfigFW.close();
@@ -86,8 +86,8 @@ public class SkeletonSourceCreator {
 		ServiceITemplate iT = new ServiceITemplate();
 		String iS = iT.generate(new SpecificServiceInformation(info, service));
 		File iF = new File(srcDir.getAbsolutePath() + File.separator
-				+ CommonTools.getPackageDir(service) + File.separator + "common"
-				+ File.separator + service.getName() + "I.java");
+				+ CommonTools.getPackageDir(service) + File.separator
+				+ "common" + File.separator + service.getName() + "I.java");
 
 		FileWriter iFW = new FileWriter(iF);
 		iFW.write(iS);
@@ -97,8 +97,8 @@ public class SkeletonSourceCreator {
 		String implS = implT.generate(new SpecificServiceInformation(info,
 				service));
 		File implF = new File(srcDir.getAbsolutePath() + File.separator
-				+ CommonTools.getPackageDir(service) + File.separator + "service"
-				+ File.separator + service.getName() + "Impl.java");
+				+ CommonTools.getPackageDir(service) + File.separator
+				+ "service" + File.separator + service.getName() + "Impl.java");
 
 		FileWriter implFW = new FileWriter(implF);
 		implFW.write(implS);
@@ -108,8 +108,8 @@ public class SkeletonSourceCreator {
 		String providerImplS = providerImplT
 				.generate(new SpecificServiceInformation(info, service));
 		File providerImplF = new File(srcDir.getAbsolutePath() + File.separator
-				+ CommonTools.getPackageDir(service) + File.separator + "service"
-				+ File.separator + "globus" + File.separator
+				+ CommonTools.getPackageDir(service) + File.separator
+				+ "service" + File.separator + "globus" + File.separator
 				+ service.getName() + "ProviderImpl.java");
 
 		FileWriter providerImplFW = new FileWriter(providerImplF);
@@ -120,9 +120,8 @@ public class SkeletonSourceCreator {
 		String serviceConfS = serviceConfT
 				.generate(new SpecificServiceInformation(info, service));
 		File serviceConfF = new File(srcDir.getAbsolutePath() + File.separator
-				+ CommonTools.getPackageDir(service) + File.separator + "service"
-				+ File.separator + "globus" + File.separator
-				+ "ServiceConfiguration.java");
+				+ CommonTools.getPackageDir(service) + File.separator
+				+ "service" + File.separator + "ServiceConfiguration.java");
 
 		FileWriter serviceConfFW = new FileWriter(serviceConfF);
 		serviceConfFW.write(serviceConfS);
@@ -132,9 +131,10 @@ public class SkeletonSourceCreator {
 		String resourceContanstsS = resourceContanstsT
 				.generate(new SpecificServiceInformation(info, service));
 		File resourceContanstsF = new File(srcDir.getAbsolutePath()
-				+ File.separator + CommonTools.getPackageDir(service) + File.separator
-				+ "service" + File.separator + "globus" + File.separator
-				+ "resource" + File.separator + "ResourceConstants.java");
+				+ File.separator + CommonTools.getPackageDir(service)
+				+ File.separator + "service" + File.separator + "globus"
+				+ File.separator + "resource" + File.separator
+				+ "ResourceConstants.java");
 
 		FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
 		resourceContanstsFW.write(resourceContanstsS);

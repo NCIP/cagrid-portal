@@ -1,21 +1,10 @@
 package gov.nih.nci.cagrid.introduce.codegen.base;
 
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
-import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
-import gov.nih.nci.cagrid.introduce.templates.ClasspathTemplate;
 import gov.nih.nci.cagrid.introduce.templates.JNDIConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.etc.RegistationTemplate;
-import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceConfigurationTemplate;
-import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceConstantsTemplate;
-import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.base.BaseResourceTemplate;
-import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.main.MainConfigurationTemplate;
-import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.main.MainResourceTemplate;
-import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.singleton.SingletonConfigurationTemplate;
-import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.singleton.SingletonResourceTemplate;
 
 import java.io.File;
 import java.io.FileWriter;

@@ -7,8 +7,6 @@ import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
-import gov.nih.nci.cagrid.introduce.templates.JNDIConfigTemplate;
-import gov.nih.nci.cagrid.introduce.templates.etc.RegistationTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceConfigurationTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceConstantsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.base.BaseResourceTemplate;
@@ -60,8 +58,8 @@ public class SyncResource extends SyncTool {
 							getServiceInformation(), service));
 			File serviceConfF = new File(srcDir.getAbsolutePath()
 					+ File.separator + CommonTools.getPackageDir(service)
-					+ File.separator + "service" + File.separator + "globus"
-					+ File.separator + "ServiceConfiguration.java");
+					+ File.separator + "service" + File.separator
+					+ "ServiceConfiguration.java");
 			FileWriter serviceConfFW = new FileWriter(serviceConfF);
 			serviceConfFW.write(serviceConfS);
 			serviceConfFW.close();
