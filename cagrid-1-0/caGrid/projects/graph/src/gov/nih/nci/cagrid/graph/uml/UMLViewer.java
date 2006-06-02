@@ -44,7 +44,7 @@ import org.tigris.gef.presentation.Fig;
 // class that implements the core of the UMLDiagram
 // functionality
 
-class UMLViewer extends JGraph {
+public class UMLViewer extends JGraph {
 	protected UMLDiagram diagram;
 	protected Pager pager;
 	protected PagerCaptionBar pagerCaptionBar;

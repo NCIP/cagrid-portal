@@ -18,7 +18,7 @@ import uml.classdiagram.ClassdiagramNode;
 
 public class UMLDiagram extends JLayeredPane {
 	protected Diagram diagram;
-	protected UMLViewer viewer;
+	public    UMLViewer viewer;
 	protected UMLMenuBar menubar;
 	protected UMLStatusBar statusBar;
 
@@ -29,6 +29,10 @@ public class UMLDiagram extends JLayeredPane {
 	
 	public boolean inactiveState = true;
 
+	public UMLViewer getViewer()
+	{
+		return this.viewer;
+	}
 
 	public UMLDiagram() {
 		super();
@@ -37,7 +41,7 @@ public class UMLDiagram extends JLayeredPane {
 		viewer = new UMLViewer(this);
 
 		// viewer.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-		viewer.setBorder(BorderFactory.createLoweredBevelBorder());
+		viewer.setBorder(BorderFactory.createEmptyBorder());
 
 		this.menubar = new UMLMenuBar();
 		this.statusBar = new UMLStatusBar();

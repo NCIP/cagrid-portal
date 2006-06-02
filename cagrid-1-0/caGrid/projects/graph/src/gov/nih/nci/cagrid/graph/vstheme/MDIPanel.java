@@ -21,7 +21,7 @@ public class MDIPanel extends JComponent
 	
 	public int currentPage = -1;
 	
-	public static final int tabsHeight = 25;
+	public static final int tabsHeight = 27;
 	
 	public MDIPanel()
 	{
@@ -96,7 +96,7 @@ class MDIPanelComponentListener extends ComponentAdapter
 	{
 		MDIPanel s = (MDIPanel)e.getSource();
 		s.tabs.setBounds(0, 0, s.getWidth(), MDIPanel.tabsHeight);
-		s.container.setBounds(0, MDIPanel.tabsHeight, s.getWidth(), s.getHeight()-MDIPanel.tabsHeight);
+		s.container.setBounds(1, MDIPanel.tabsHeight, s.getWidth()-1, s.getHeight()-MDIPanel.tabsHeight-1);
 		s.validate();
 	}
 }
