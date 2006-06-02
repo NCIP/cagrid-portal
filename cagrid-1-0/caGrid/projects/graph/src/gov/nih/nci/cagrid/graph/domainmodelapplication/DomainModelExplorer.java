@@ -4,6 +4,8 @@ package gov.nih.nci.cagrid.graph.domainmodelapplication;
 
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
+import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -20,25 +22,46 @@ public class DomainModelExplorer extends JComponent
 	
 	public DomainModelOutlines outlineMDI;
 	public DomainModelUMLViews umlMDI;
-	public JPanel              splitter;
+	public JPanel              splitter = new JPanel();
 	
 	public Point splitterLastClicked;
 	
-	public static int preferredOutlinesWidth;
+	public static int preferredOutlinesWidth = 300;
 	
 	public boolean hideOutlines = false;
 	
 	public DomainModelExplorer()
 	{
-		this.add(outlineMDI);
-		this.add(umlMDI);
-		this.add(splitter);
+		this(null);
+	}
+	
+	public DomainModelExplorer(DomainModel model)
+	{
+
+			outlineMDI = new DomainModelOutlines(model);
+			umlMDI = new DomainModelUMLViews();
+			
+			
+			this.add(outlineMDI);
+			this.add(umlMDI);
+			this.add(splitter);
+			
+			this.splitter.setCursor(Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR));
+	
+			
+			this.addComponentListener(new DomainModelExplorerComponentListener());
+			this.splitter.addMouseListener(new DomainModelSplitterMouseListener());
+			this.splitter.addMouseMotionListener(new DomainModelSplitterMouseMotionListener());
+	
+	
 	}
 	
 	public void selectPackage()
 	{
 		
 	}
+	
+	
 	
 	public void selectClass()
 	{
@@ -59,7 +82,7 @@ public class DomainModelExplorer extends JComponent
 		else
 		{
 			this.outlineMDI.setBounds(0, 0, DomainModelExplorer.preferredOutlinesWidth, this.getHeight());
-			this.splitter.setBounds(DomainModelExplorer.preferredOutlinesWidth, 0, 3, this.getHeight());
+			this.splitter.setBounds(DomainModelExplorer.preferredOutlinesWidth, 0, 2, this.getHeight());
 			this.umlMDI.setBounds(DomainModelExplorer.preferredOutlinesWidth + this.splitter.getWidth(), 0, this.getWidth() - DomainModelExplorer.preferredOutlinesWidth - this.splitter.getWidth(), this.getHeight());
 		}
 	}
@@ -91,6 +114,8 @@ class DomainModelSplitterMouseMotionListener extends MouseMotionAdapter
 		JPanel splitter = (JPanel)	e.getSource();
 		DomainModelExplorer parent = (DomainModelExplorer) splitter.getParent();
 		
-		//parent.splitterLastClicked = e.getPoint();
+		splitter.setLocation(splitter.getX() + e.getX() - parent.splitterLastClicked.x, splitter.getY() );
+		parent.outlineMDI.setSize(splitter.getX(), parent.outlineMDI.getHeight());
+		parent.umlMDI.setBounds(splitter.getX() + splitter.getWidth(), 0, parent.getWidth() - parent.outlineMDI.getWidth() - splitter.getWidth(), parent.getHeight());
 	}
 }

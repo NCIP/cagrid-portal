@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JScrollPane;
 
@@ -23,6 +24,7 @@ public class MDIClippedTabsPane extends JScrollPane
 	public MDIClippedTabsPane(MDIPanel parent)
 	{
 		super();
+		this.setBorder(BorderFactory.createEmptyBorder());
 		this.parent = parent;
 		tabsPane = new MDITabsPane(this);
 		closeButton = new MDICloseButton(parent);

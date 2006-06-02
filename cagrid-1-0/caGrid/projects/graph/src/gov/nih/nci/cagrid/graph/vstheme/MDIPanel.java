@@ -25,6 +25,9 @@ public class MDIPanel extends JComponent
 	
 	public MDIPanel()
 	{
+		this.tabs = new MDIClippedTabsPane(this);
+		this.container = new MultipleComponentContainer();
+		
 		this.add(tabs);
 		this.add(container);
 		
@@ -94,5 +97,6 @@ class MDIPanelComponentListener extends ComponentAdapter
 		MDIPanel s = (MDIPanel)e.getSource();
 		s.tabs.setBounds(0, 0, s.getWidth(), MDIPanel.tabsHeight);
 		s.container.setBounds(0, MDIPanel.tabsHeight, s.getWidth(), s.getHeight()-MDIPanel.tabsHeight);
+		s.validate();
 	}
 }

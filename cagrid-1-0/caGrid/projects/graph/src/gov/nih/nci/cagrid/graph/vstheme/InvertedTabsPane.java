@@ -134,51 +134,54 @@ public class InvertedTabsPane extends JLayeredPane
 	
 	public void resizeTabs()
 	{
-		int lastX = 4;
-		
-		if(getTotalTabsPreferredWidth() >= getWidth())
+		if(this.tabs.size() > 0)
 		{
-			int width = getWidth() / tabs.size();
-			width--;
+			int lastX = 4;
 			
-			for(int k = 0; k < tabs.size(); k++)
+			if(getTotalTabsPreferredWidth() >= getWidth())
 			{
+				int width = getWidth() / tabs.size();
+				width--;
 				
-				InvertedMDITab tab = (InvertedMDITab) tabs.get(k);
-				
-				if(tab.active)
+				for(int k = 0; k < tabs.size(); k++)
 				{
-					tab.setBounds(lastX-1, InvertedTabsPane.spacerHeight, width+1, InvertedTabsPane.tabHeight);
+					
+					InvertedMDITab tab = (InvertedMDITab) tabs.get(k);
+					
+					if(tab.active)
+					{
+						tab.setBounds(lastX-1, InvertedTabsPane.spacerHeight, width+1, InvertedTabsPane.tabHeight);
+					}
+					else
+					{
+						tab.setBounds(lastX, InvertedTabsPane.spacerHeight+1, width, InvertedTabsPane.tabHeight);
+					}
+					
+					lastX += width;
 				}
-				else
-				{
-					tab.setBounds(lastX, InvertedTabsPane.spacerHeight+1, width, InvertedTabsPane.tabHeight);
-				}
-				
-				lastX += width;
 			}
-		}
-		else
-		{	
-			for(int k = 0; k < tabs.size(); k++)
-			{
-				InvertedMDITab tab = (InvertedMDITab) tabs.get(k);
-				int width = tab.getPreferredWidth();
-				
-				if(tab.active)
+			else
+			{	
+				for(int k = 0; k < tabs.size(); k++)
 				{
-					tab.setBounds(lastX-1, InvertedTabsPane.spacerHeight, width+1, InvertedTabsPane.tabHeight);
-				}
-				else
-				{
-					tab.setBounds(lastX, InvertedTabsPane.spacerHeight+1, width, InvertedTabsPane.tabHeight);
-				}
-				
-				lastX += width;
-			}			
+					InvertedMDITab tab = (InvertedMDITab) tabs.get(k);
+					int width = tab.getPreferredWidth();
+					
+					if(tab.active)
+					{
+						tab.setBounds(lastX-1, InvertedTabsPane.spacerHeight, width+1, InvertedTabsPane.tabHeight);
+					}
+					else
+					{
+						tab.setBounds(lastX, InvertedTabsPane.spacerHeight+1, width, InvertedTabsPane.tabHeight);
+					}
+					
+					lastX += width;
+				}			
+			}
+			
+			validate();		
 		}
-		
-		validate();		
 	}
 	
 	public void paint(Graphics g)

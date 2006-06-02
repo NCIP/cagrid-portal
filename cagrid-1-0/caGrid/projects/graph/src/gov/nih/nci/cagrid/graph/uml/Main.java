@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.graph.uml;
 
-import gov.nih.nci.cagrid.graph.domainmodelapplication.DomainModelOutlines;
+import gov.nih.nci.cagrid.graph.domainmodelapplication.DomainModelExplorer;
 
 import java.util.Random;
 
@@ -26,10 +26,10 @@ public class Main {
 		UMLDiagram diagram = new UMLDiagram();
 
 	
-		DomainModelOutlines p = new DomainModelOutlines();
+		DomainModelExplorer e = new DomainModelExplorer(null);
 		
 		JFrame f = new JFrame();
-		f.getContentPane().add(p);
+		f.getContentPane().add(e);
 		f.setBounds(10, 100, 900, 600);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
