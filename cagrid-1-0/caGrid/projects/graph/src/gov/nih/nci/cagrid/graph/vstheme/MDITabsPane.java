@@ -172,6 +172,19 @@ public class MDITabsPane extends JLayeredPane
 		super.paint(g);
 	}
 	
+	public int getPreferredWidth()
+	{
+		int sum  = 0;
+		for(int k = 0; k < this.tabs.size(); k++)
+		{
+			MDITab t = (MDITab) this.tabs.get(k);
+			
+			sum += t.getPreferredWidth();
+		}
+		
+		return sum;
+	}
+	
 }
 
 class MDITabsPaneComponentListener extends ComponentAdapter

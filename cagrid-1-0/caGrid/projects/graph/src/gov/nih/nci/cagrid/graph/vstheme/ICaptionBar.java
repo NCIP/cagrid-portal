@@ -118,7 +118,7 @@ public class ICaptionBar extends JComponent
 
         g.setColor(Color.white);
         g.setFont(new Font("Verdana", Font.BOLD, 11));
-        g.drawString(this.title, 6, this.getHeight()-4);
+        g.drawString(this.title, 6, this.getHeight()-5);
 
         super.paint(g);
     }

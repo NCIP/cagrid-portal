@@ -18,7 +18,7 @@ public class IRootPane extends JComponent
     protected Color       color = new Color(240,240,240);
 
     protected ICaptionBar captionBar;
-    protected int         captionBarHeight = 17;
+    protected int         captionBarHeight = 18;
     protected IBorder     border;
     protected int         borderWidth = 1;
 
