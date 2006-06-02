@@ -16,6 +16,14 @@
                     <com:role>Maintainer</com:role>
                 </com:PointOfContact>
             </serv:pointOfContactCollection>
+    	    <serv:serviceContextCollection>
+    	        <serv:ServiceContext>
+    	            <serv:name>Main</serv:name>
+    	            <serv:description></serv:description>
+    	            <serv:operationCollection/>
+    	            <serv:contextPropertyCollection/>
+    	        </serv:ServiceContext>
+    	    </serv:serviceContextCollection>
     	</serv:Service>
      </serviceDescription>
     <hostingResearchCenter>
@@ -24,6 +32,7 @@
             <com:displayName>Ohio State University</com:displayName>
             <com:address>
                 <com:Address>
+                    <com:street1>333 W. 10th Ave.</com:street1>
                     <com:stateProvence>OH</com:stateProvence>
                     <com:postalCode>43210</com:postalCode>
                     <com:country>US</com:country>

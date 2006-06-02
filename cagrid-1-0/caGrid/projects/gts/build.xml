@@ -12,7 +12,7 @@
 	<property name="introduce.ns.excludes" value="" />
 	<property name="service.name" value="${introduce.skeleton.service.name}" />
 	<property name="schema.path" value="${introduce.skeleton.service.name}" />
-	
+
 	<!-- Important directories and files -->
 	<property name="src.dir" value="src" />
 	<property name="lib.dir" value="lib" />
@@ -61,7 +61,7 @@
 
 	<!--import deployment ant files -->
 	<import file="build-deploy.xml" />
-	
+
 	<taskdef resource="net/sf/antcontrib/antlib.xml">
 		<classpath>
 			<pathelement location="${lib.dir}/ant-contrib.jar" />
@@ -92,14 +92,11 @@
 		<property name="build.packages" location="${ext.globus.dir}/share/globus_wsrf_common/build-packages.xml" />
 		<!-- Copied from build.stubs file, as there is no way to "append" to the value in the remote file -->
 		<property name="GT4.ns.excludes" value="-x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl -x http://schemas.xmlsoap.org/ws/2004/04/trust -x http://schemas.xmlsoap.org/ws/2002/12/policy -x http://schemas.xmlsoap.org/ws/2002/07/utility -x http://schemas.xmlsoap.org/ws/2004/04/sc -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd -x http://www.w3.org/2000/09/xmldsig# -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" />
-
 	</target>
 
 
 	<!-- Sets up the build directory structure -->
 	<target name="init" depends="checkGlobus, defineClasspaths">
-
-		
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.dest}" />
 		<mkdir dir="${test.build.dest}" />
@@ -131,7 +128,7 @@
 				<include name="*.jar" />
 			</fileset>
 			<fileset dir="${ext.lib.dir}">
-							<include name="*.jar" />
+				<include name="*.jar" />
 			</fileset>
 			<fileset dir="${ext.globus.dir}/lib">
 				<include name="*.jar" />
@@ -147,19 +144,23 @@
 		</path>
 		<path id="service.run.classpath">
 			<pathelement location="${build.dest}" />
-			<path refid="service.build.classpath" />			
+			<path refid="service.build.classpath" />
 		</path>
 		<path id="test.build.classpath">
 			<fileset dir="${test.lib.dir}">
 				<include name="*.jar" />
 			</fileset>
+			<fileset dir="${ext.test.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+
 			<pathelement location="${build.dest}" />
-			<path refid="service.build.classpath" />			
+			<path refid="service.build.classpath" />
 		</path>
 		<path id="test.run.classpath">
-            <pathelement location="${test.dir}/resources" />
+			<pathelement location="${test.dir}/resources" />
 			<pathelement location="${test.build.dest}" />
-			<path refid="test.build.classpath" />			
+			<path refid="test.build.classpath" />
 		</path>
 	</target>
 
@@ -205,7 +206,7 @@
 			<property name="ns.excludes" value="${GT4.ns.excludes} ${introduce.ns.excludes}" />
 		</ant>
 	</target>
-	
+
 	<!-- "Flattens" the WSDL file. i.e. runs the WSDL Preprocessor and creates a single
 		WSDL file with all the operations and RPs in the portTypes specified in
 		the wsdlpp:extends attribute (plus, of course, those defined in our own WSDL file) -->
@@ -214,26 +215,26 @@
 		<for list="${introduce.skeleton.services.list}" parallel="false" param="service.name" trim="true">
 			<sequential>
 				<echo message="Flattening service: @{service.name}." />
-				<antcall target="serviceFlatten" >
-					<param name="interface.name" value="@{service.name}"/>
+				<antcall target="serviceFlatten">
+					<param name="interface.name" value="@{service.name}" />
 				</antcall>
 			</sequential>
 		</for>
 	</target>
-	
+
 	<!-- Generate the stub source files -->
 	<!-- This is done with a GT4 tool -->
-	<target name="stubs"  depends="init">
+	<target name="stubs" depends="init">
 		<for list="${introduce.skeleton.services.list}" parallel="false" param="service.name" trim="true">
 			<sequential>
 				<echo message="Generating stubs for @{service.name}." />
-				<antcall target="serviceStubs" >
-					<param name="interface.name" value="@{service.name}"/>
+				<antcall target="serviceStubs">
+					<param name="interface.name" value="@{service.name}" />
 				</antcall>
 			</sequential>
 		</for>
 	</target>
-	
+
 
 
 	<!-- Compile the stubs generated in the previous step -->
@@ -246,8 +247,8 @@
 					<include name="*.jar" />
 				</fileset>
 				<fileset dir="${ext.lib.dir}">
-								<include name="*.jar" />
-							</fileset>
+					<include name="*.jar" />
+				</fileset>
 				<fileset dir="${ext.globus.dir}/lib">
 					<include name="*.jar" />
 					<exclude name="${stubs.jar.name}" />
@@ -276,10 +277,7 @@
 
 	<!-- Compile the test implementation classes (service, resource, etc.) -->
 	<target name="compileTests" depends="compile">
-
-		<javac srcdir="${test.src.dir}" classpathref="test.build.classpath" destdir="${test.build.dest}" debug="${java.debug}" deprecation="${deprecation}">
-		</javac>
-
+		<javac srcdir="${test.src.dir}" classpathref="test.build.classpath" destdir="${test.build.dest}" debug="${java.debug}" deprecation="${deprecation}" />
 	</target>
 
 
@@ -318,18 +316,18 @@
 
 	<!-- Empty target, in case we simply want to generate the JAR files -->
 	<target name="jars" depends="jarStubs, jar, jarTests" />
-	
-	
+
+
 	<!-- Clean up all the intermediate files -->
 	<target name="clean">
 		<delete dir="tmp" />
 		<delete dir="${build.dir}" />
 		<delete file="${gar.name}" />
 	</target>
-	
+
 	<!-- Default target "all" builds and jars everything, including test....does not make a GAR-->
 	<target name="all" depends="jars" />
-	
+
 
 	<!-- call the test target for each project and aggregates the log resutls  -->
 	<target name="test" depends="checkGlobus">
@@ -339,7 +337,7 @@
 			<sysproperty key="basedir" value="${basedir}" />
 			<jvmarg value="-Dbuild.dir=${build.dir}" />
 			<jvmarg value="-Djava.endorsed.dirs=${ext.endorsed.dir}" />
-			<classpath refid="test.run.classpath"/>
+			<classpath refid="test.run.classpath" />
 			<formatter type="xml" />
 			<batchtest fork="yes" haltonfailure="true" haltonerror="true" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}">

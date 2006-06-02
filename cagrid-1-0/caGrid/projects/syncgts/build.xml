@@ -100,8 +100,6 @@
 
 	<!-- Sets up the build directory structure -->
 	<target name="init" depends="checkGlobus, defineClasspaths">
-
-
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.dest}" />
 		<mkdir dir="${test.build.dest}" />
@@ -153,6 +151,9 @@
 		</path>
 		<path id="test.build.classpath">
 			<fileset dir="${test.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${ext.test.lib.dir}">
 				<include name="*.jar" />
 			</fileset>
 			<pathelement location="${build.dest}" />
@@ -261,11 +262,7 @@
 
 	<!-- Compile the test implementation classes (service, resource, etc.) -->
 	<target name="compileTests" depends="compile">
-
-		<javac srcdir="${test.src.dir}" classpathref="test.build.classpath" destdir="${test.build.dest}" debug="${java.debug}" deprecation="${deprecation}">
-
-		</javac>
-
+		<javac srcdir="${test.src.dir}" classpathref="test.build.classpath" destdir="${test.build.dest}" debug="${java.debug}" deprecation="${deprecation}" />
 	</target>
 
 
@@ -332,6 +329,7 @@
 			<batchtest fork="yes" haltonfailure="true" haltonerror="true" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}">
 					<include name="**/Test*.java" />
+					<include name="**/*TestCase.java" />
 				</fileset>
 			</batchtest>
 		</junit>

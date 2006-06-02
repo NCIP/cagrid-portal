@@ -2,12 +2,12 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test/src"/>
+	<classpathentry kind="src" path="resources/portal/gts"/>
 	<classpathentry kind="src" path="test/resources"/>
+	<classpathentry kind="src" path="build/stubs-GTS/src"/>
 	<classpathentry kind="src" path="ext/resources/portal/common"/>
 	<classpathentry kind="src" path="ext/resources/portal/gridca"/>
-	<classpathentry kind="src" path="resources/portal/gts"/>
-	<classpathentry kind="src" path="test/src"/>
-	<classpathentry kind="src" path="build/stubs-GTS/src"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
@@ -84,5 +84,6 @@
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/client.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/caGrid-core-tests-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
