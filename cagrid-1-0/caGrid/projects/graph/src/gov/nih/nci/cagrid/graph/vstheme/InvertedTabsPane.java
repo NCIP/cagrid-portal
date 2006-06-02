@@ -25,6 +25,7 @@ public class InvertedTabsPane extends JLayeredPane
 	
 	public InvertedTabsPane()
 	{
+		this.addComponentListener(new InvertedTabsPaneComponentListener());
 		
 		
 	}
@@ -32,6 +33,8 @@ public class InvertedTabsPane extends JLayeredPane
 	public InvertedTabsPane(InvertedMDIPanel parent)
 	{
 		this.parentMDIPanel = parent;
+		this.addComponentListener(new InvertedTabsPaneComponentListener());
+		
 	}
 	
 	public void addTab(String s, ImageIcon icon)
@@ -42,7 +45,6 @@ public class InvertedTabsPane extends JLayeredPane
 		this.add(tab);
 		this.setActiveTab(tabs.size());
 		
-		this.addComponentListener(new InvertedTabsPaneComponentListener());
 		
 	}
 	

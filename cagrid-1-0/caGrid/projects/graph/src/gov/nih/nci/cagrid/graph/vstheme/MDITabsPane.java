@@ -23,11 +23,6 @@ public class MDITabsPane extends JLayeredPane
 	public static int tabHeight = 21;
 	
 	
-	public MDITabsPane()
-	{
-		
-		
-	}
 	
 	public MDITabsPane(MDIClippedTabsPane parent)
 	{
@@ -50,7 +45,7 @@ public class MDITabsPane extends JLayeredPane
 	{
 		if(i >= 0 && i < this.tabs.size())
 		{
-			InvertedMDITab tab = (InvertedMDITab) this.tabs.get(i);
+			MDITab tab = (MDITab) this.tabs.get(i);
 			this.tabs.remove(i);
 			this.remove(tab);
 			
@@ -68,7 +63,7 @@ public class MDITabsPane extends JLayeredPane
 	{
 		for(int k = 0;  k < this.tabs.size(); k ++)
 		{
-			InvertedMDITab t = (InvertedMDITab)this.tabs.get(k);
+			MDITab t = (MDITab)this.tabs.get(k);
 			t.active = false;
 			t.repaint();
 		}
@@ -81,7 +76,7 @@ public class MDITabsPane extends JLayeredPane
 	{
 		for(int k = 0; k < this.tabs.size(); k++)
 		{
-			InvertedMDITab tab = (InvertedMDITab) this.tabs.get(k);
+			MDITab tab = (MDITab) this.tabs.get(k);
 			
 			tab.index = k;
 		}
@@ -90,7 +85,7 @@ public class MDITabsPane extends JLayeredPane
 	{
 		if(currentActiveTab >= 0 && currentActiveTab < this.tabs.size())
 		{
-			InvertedMDITab tab = (InvertedMDITab) this.tabs.get(currentActiveTab);
+			MDITab tab = (MDITab) this.tabs.get(currentActiveTab);
 			this.setLayer(tab, JLayeredPane.DEFAULT_LAYER.intValue());
 			tab.deactivate();
 			
@@ -99,7 +94,7 @@ public class MDITabsPane extends JLayeredPane
 		
 		if(i < this.tabs.size() && i >= 0)
 		{
-			InvertedMDITab tab = (InvertedMDITab) this.tabs.get(i);
+			MDITab tab = (MDITab) this.tabs.get(i);
 			
 			this.setLayer(tab, JLayeredPane.MODAL_LAYER.intValue());
 			tab.activate();
@@ -113,7 +108,7 @@ public class MDITabsPane extends JLayeredPane
 	
 	public void tabClicked(int i)
 	{
-		this.parent.setActivePage(i);
+		this.parent.setActiveTab(i);
 	}
 	
 	public int getTotalTabsPreferredWidth()
@@ -122,7 +117,7 @@ public class MDITabsPane extends JLayeredPane
 		
 		for (int k = 0; k < this.tabs.size(); k++)
 		{
-			InvertedMDITab tab = (InvertedMDITab) this.tabs.get(k);
+			MDITab tab = (MDITab) this.tabs.get(k);
 			
 			sum += tab.getPreferredWidth();
 		}
@@ -137,16 +132,16 @@ public class MDITabsPane extends JLayeredPane
 		{	
 			for(int k = 0; k < tabs.size(); k++)
 			{
-				InvertedMDITab tab = (InvertedMDITab) tabs.get(k);
+				MDITab tab = (MDITab) tabs.get(k);
 				int width = tab.getPreferredWidth();
 				
 				if(tab.active)
 				{
-					tab.setBounds(lastX-1, MDITabsPane.spacerHeight, width+1, MDITabsPane.tabHeight);
+					tab.setBounds(lastX-1, this.getHeight()-MDITabsPane.spacerHeight, width+1, this.getHeight()-MDITabsPane.tabHeight);
 				}
 				else
 				{
-					tab.setBounds(lastX, MDITabsPane.spacerHeight+1, width, MDITabsPane.tabHeight);
+					tab.setBounds(lastX, this.getHeight()-MDITabsPane.spacerHeight+1, width, this.getHeight()-MDITabsPane.tabHeight);
 				}
 				
 				lastX += width;
@@ -161,12 +156,13 @@ public class MDITabsPane extends JLayeredPane
 		
 		
 		g.setColor(bgColor);
-		g.fillRect(0, this.getHeight()-1, this.getWidth(), this.getHeight()-spacerHeight-1);
+		g.fillRect(0, 0, this.getWidth(), this.getHeight());
 		
 		g.setColor(grayColor);
-		g.fillRect(0, 0, this.getWidth(), spacerHeight);
+		g.fillRect(0, this.getHeight()-1, this.getWidth(), this.getHeight()-spacerHeight-1);
+
 		
-		g.setColor(Color.black);
+		g.setColor(Color.white);
 		g.drawLine(0, spacerHeight, this.getWidth(), spacerHeight);
 		
 		super.paint(g);

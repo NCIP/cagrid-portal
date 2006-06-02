@@ -112,7 +112,7 @@ public class InvertedMDITab extends JComponent
 			g.setColor(inactiveColor);
 			g.fillRect(0, 0, this.getWidth(), this.getHeight());
 			g.setColor(Color.gray);
-			g.drawLine(this.getWidth()-1, 5, this.getWidth() - 1, this.getHeight() - 3);
+			g.drawLine(this.getWidth()-1, 4, this.getWidth() - 1, this.getHeight() - 4);
 			g.setColor(Color.black);
 
 			

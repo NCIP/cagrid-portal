@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -27,7 +26,7 @@ public class MDITab extends JComponent
 	
 	boolean active = false;
 	
-	public MDITab(int i, ImageIcon icon, String title, MDITabsPane MDITabsPane)
+	public MDITab(int i, ImageIcon icon, String title, MDITabsPane parentTabsPane)
 	{
 		
 		this.index = i;
@@ -99,10 +98,10 @@ public class MDITab extends JComponent
 			g.setColor(activeColor);
 			g.fillRect(0, 0, this.getWidth(), this.getHeight());
 			g.setColor(Color.white);
-			g.drawLine(0, 0,0, this.getHeight());
+			g.drawLine(0, 0,this.getWidth(), 0);
+			
 			g.setColor(Color.black);
-			g.drawLine(0, this.getHeight() - 1, this.getWidth() - 1, this.getHeight() -1 );
-			g.drawLine(this.getWidth()-1, 0, this.getWidth()-1, this.getHeight()-1);
+			g.drawLine(this.getWidth(), 0, this.getWidth(), this.getHeight());
 			g.setColor(Color.black);
 
 			
