@@ -94,7 +94,6 @@
 	<classpathentry sourcepath="/mobius" kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
 	<classpathentry sourcepath="/mobius" kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/cagrid-opensaml-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/endorsed/lib/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="ext/endorsed/lib/xml-apis.jar"/>
 	<classpathentry kind="lib" path="ext/lib/gridca.jar"/>
