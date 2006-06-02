@@ -144,6 +144,7 @@
 	<target name="build-cadsr" if="isJDK1.5" depends="prepare" description="Builds the cadsr project">
 		<resolveDependencies extdir="${projects.dir}/cadsr/ext">
 			<artifact refid="core.jars" />
+			<artifact refid="common.test.jars" />
 			<artifact refid="core.test.jars" />
 			<artifact refid="metadata.jars" />
 			<artifact refid="caCORE.jars" />
