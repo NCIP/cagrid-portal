@@ -2,7 +2,6 @@
 <!-- caGrid Artifacts build file                                             -->
 <!-- ======================================================================= -->
 <project name="caGrid_artifacts" basedir="." default="usage">
-
 	<!-- =============================================================== -->
 	<!-- Define the build artifacts (created/used by projects) here      -->
 	<!--                                                                 -->
@@ -15,190 +14,179 @@
 		<!-- Common Jar Artifacts -->
 		<artifact track="main" type="jars" id="mobius.jars">
 			<fileset dir="${share.dir}/lib/mobius">
-				<include name="*.jar" />
+				<include name="*.jar"/>
 			</fileset>
 		</artifact>
 		<artifact track="main" type="jars" id="caCORE.jars">
 			<fileset dir="${share.dir}/lib/caCORE">
-				<include name="*.jar" />
+				<include name="*.jar"/>
 			</fileset>
 		</artifact>
 		<artifact track="test" type="jars" id="common.test.jars">
 			<fileset dir="${test.lib.dir}">
-				<include name="jdepend*.jar" />
-				<include name="junit*.jar" />
-				<include name="xmlunit*.jar" />
+				<include name="jdepend*.jar"/>
+				<include name="junit*.jar"/>
+				<include name="xmlunit*.jar"/>
 			</fileset>
 		</artifact>
 		<artifact track="test" type="jars" id="test.coverage.jars">
 			<fileset dir="${test.lib.dir}/cobertura">
-				<include name="*.jar" />
+				<include name="*.jar"/>
 			</fileset>
 		</artifact>
-
 		<!-- Project Created Artifacts -->
 		<artifact track="main" type="jars" id="core.jars">
-			<antcall target="build-core" />
+			<antcall target="build-core"/>
 			<fileset dir="${projects.dir}/core/build/jars">
-				<include name="*.jar" />
-				<exclude name="*test*.jar" />
+				<include name="*.jar"/>
+				<exclude name="*test*.jar"/>
 			</fileset>
 			<fileset dir="${projects.dir}/core/lib">
-				<include name="*.jar" />
-				<exclude name="*test*.jar" />
+				<include name="*.jar"/>
+				<exclude name="*test*.jar"/>
 			</fileset>
 			<fileset dir="${projects.dir}/core/ext/lib">
-				<include name="*.jar" />
-				<exclude name="*test*.jar" />
+				<include name="*.jar"/>
+				<exclude name="*test*.jar"/>
+			</fileset>
+		</artifact>
+		<artifact track="test" type="jars" id="core.test.jars">
+			<antcall target="build-core"/>
+			<fileset dir="${projects.dir}/core/build/jars">
+				<include name="*test*.jar"/>
 			</fileset>
 		</artifact>
 		<artifact track="main" type="resources" id="core.resources">
 			<fileset dir="${projects.dir}/core/resources">
-				<include name="**" />
+				<include name="**"/>
 			</fileset>
 		</artifact>
-
 		<artifact track="main" type="jars" id="metadata.jars">
-			<antcall target="build-metadata" />
+			<antcall target="build-metadata"/>
 			<fileset dir="${projects.dir}/metadata/build/lib">
-				<include name="*.jar" />
-				<exclude name="*test*.jar" />
+				<include name="*.jar"/>
+				<exclude name="*test*.jar"/>
 			</fileset>
 			<fileset dir="${projects.dir}/metadata/ext/lib">
-				<include name="*.jar" />
-				<exclude name="*test*.jar" />
+				<include name="*.jar"/>
+				<exclude name="*test*.jar"/>
 			</fileset>
 		</artifact>
 		<artifact track="main" type="schemas" id="metadata.schemas">
 			<fileset dir="${projects.dir}/metadata/schema">
-				<include name="**/*.xsd" />
+				<include name="**/*.xsd"/>
 			</fileset>
 		</artifact>
 		<artifact track="main" type="mappings" id="metadata.mappings">
 			<fileset dir="${projects.dir}/metadata">
-				<include name="NStoPkg.properties" />
+				<include name="NStoPkg.properties"/>
 			</fileset>
 		</artifact>
-
 		<artifact track="main" type="jars" id="opensaml.jars">
-			<antcall target="build-opensaml" />
+			<antcall target="build-opensaml"/>
 			<fileset dir="${projects.dir}/opensaml/dist">
-				<include name="cagrid-opensaml-1.1.jar" />
+				<include name="cagrid-opensaml-1.1.jar"/>
 			</fileset>
 		</artifact>
 		<artifact track="endorsed" type="jars" id="opensaml.endorsed">
 			<fileset dir="${projects.dir}/opensaml/endorsed">
-				<include name="xercesImpl.jar" />
-				<include name="xml-apis.jar" />
+				<include name="xercesImpl.jar"/>
+				<include name="xml-apis.jar"/>
 			</fileset>
 		</artifact>
-
 		<artifact track="main" type="jars" id="graph.jars">
-			<antcall target="build-graph" />
+			<antcall target="build-graph"/>
 			<fileset dir="${projects.dir}/graph/build/jars">
-				<include name="*.jar" />
+				<include name="*.jar"/>
 			</fileset>
 			<fileset dir="${projects.dir}/graph/lib">
-				<include name="*.jar" />
+				<include name="*.jar"/>
 			</fileset>
 		</artifact>
-
 		<artifact track="main" type="jars" id="gridca.jars">
-			<antcall target="build-gridca" />
+			<antcall target="build-gridca"/>
 			<fileset dir="${projects.dir}/gridca/build/lib">
-				<include name="gridca.jar" />
+				<include name="gridca.jar"/>
 			</fileset>
 		</artifact>
-
 		<artifact track="main" type="jars" id="gts.client.jars">
-			<antcall target="build-gts" />
+			<antcall target="build-gts"/>
 			<fileset dir="${projects.dir}/gts/build/lib">
-				<include name="GTS_stubs.jar" />
-				<include name="GTS-common.jar" />
-				<include name="GTS-client.jar" />
+				<include name="GTS_stubs.jar"/>
+				<include name="GTS-common.jar"/>
+				<include name="GTS-client.jar"/>
 			</fileset>
 		</artifact>
-
 		<artifact track="main" type="jars" id="cadsr.jars">
-			<antcall target="build-cadsr" />
+			<antcall target="build-cadsr"/>
 			<fileset dir="${projects.dir}/cadsr/build/lib">
-				<include name="*.jar" />
-				<exclude name="*test*.jar" />
+				<include name="*.jar"/>
+				<exclude name="*test*.jar"/>
 			</fileset>
 			<fileset dir="${projects.dir}/cadsr/lib">
-				<include name="*.jar" />
+				<include name="*.jar"/>
 			</fileset>
 			<fileset dir="${projects.dir}/cadsr/ext/lib">
-				<include name="*.jar" />
+				<include name="*.jar"/>
 			</fileset>
 		</artifact>
-
 		<artifact track="main" type="jars" id="data.jars">
-			<antcall target="build-data" />
+			<antcall target="build-data"/>
 			<fileset dir="${projects.dir}/data/build/lib">
-				<include name="*.jar" />
+				<include name="*.jar"/>
 			</fileset>
 		</artifact>
-		
 		<artifact track="main" type="schemas" id="data.cql.schemas">
 			<fileset dir="${projects.dir}/data/schema">
 				<include name="**/*.xsd"/>
 			</fileset>
 		</artifact>
-
 		<artifact track="main" type="jars" id="sdk.query.jars">
 			<antcall target="build-sdkQuery"/>
 			<fileset dir="${projects.dir}/sdkQuery/build/lib">
-				<include name="*.jar" />
+				<include name="*.jar"/>
 			</fileset>
 		</artifact>
-
 		<artifact track="main" type="jars" id="fqp.jars">
-			<antcall target="build-fqp" />
+			<antcall target="build-fqp"/>
 			<fileset dir="${projects.dir}/fqp/build/lib">
-				<include name="*.jar">
-				</include>
+				<include name="*.jar"> </include>
 			</fileset>
 		</artifact>
-
 		<artifact track="main" type="resources" id="gridca.resources">
 			<fileset dir="${projects.dir}/gridca/resources">
-				<include name="**" />
+				<include name="**"/>
 			</fileset>
 		</artifact>
-
 		<artifact track="main" type="jars" id="cql2xpath.jars">
-			<antcall target="build-cql2xpath" />
+			<antcall target="build-cql2xpath"/>
 			<fileset dir="${projects.dir}/cql2xpath/build/lib">
-				<include name="*.jar" />
+				<include name="*.jar"/>
 			</fileset>
 		</artifact>
-
 		<artifact track="main" type="jars" id="introduce.jars">
-			<antcall target="build-introduce" />
+			<antcall target="build-introduce"/>
 			<fileset dir="${projects.dir}/introduce/build/jars">
-				<include name="*.jar" />
-				<exclude name="*tests*.jar" />
+				<include name="*.jar"/>
+				<exclude name="*tests*.jar"/>
 			</fileset>
 		</artifact>
 		<artifact track="main" type="resources" id="introduce.resources">
 			<fileset dir="${projects.dir}/introduce/resources">
-				<include name="**" />
+				<include name="**"/>
 			</fileset>
 		</artifact>
-
 		<artifact track="main" type="jars" id="gme.globus.client.jars">
-			<antcall target="build-gme" />
+			<antcall target="build-gme"/>
 			<fileset dir="${projects.dir}/gme/lib">
-				<include name="GlobalModelExchange.jar" />
-				<include name="jdom-1.0.jar" />
-				<include name="mobius-castor-0.9.4.3-xml.jar" />
+				<include name="GlobalModelExchange.jar"/>
+				<include name="jdom-1.0.jar"/>
+				<include name="mobius-castor-0.9.4.3-xml.jar"/>
 			</fileset>
 			<fileset dir="${projects.dir}/gme/build/lib">
-				<include name="caGrid-GlobalModelExchange.jar" />
-				<include name="caGrid-GlobalModelExchange_stubs.jar" />
+				<include name="caGrid-GlobalModelExchange.jar"/>
+				<include name="caGrid-GlobalModelExchange_stubs.jar"/>
 			</fileset>
 		</artifact>
 	</target>
-
 </project>
