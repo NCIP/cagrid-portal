@@ -14,9 +14,6 @@ if (info.getServices() != null && info.getServices().getService() != null) {
 	for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
 		ServiceType service = info.getServices().getService(serviceI);
 		String serviceName = service.getName();
-   		if(serviceName.endsWith("Service")){
-   			serviceName = serviceName.substring(0,serviceName.length()-7);
-   		}
 %>
     <service name="SERVICE-INSTANCE-PREFIX/<%=serviceName %>" provider="Handler" use="literal" style="document">
         <parameter name="className" value="<%=service.getPackageName()%>.service.globus.<%=serviceName%>ProviderImpl"/>
