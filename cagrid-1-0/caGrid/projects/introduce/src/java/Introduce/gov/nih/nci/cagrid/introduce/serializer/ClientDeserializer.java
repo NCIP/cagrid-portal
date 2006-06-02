@@ -1,6 +1,10 @@
 package gov.nih.nci.cagrid.introduce.serializer;
 
+import java.lang.reflect.Constructor;
+
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.encoding.EncodingUtils;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
 import javax.xml.namespace.QName;
 
@@ -8,6 +12,7 @@ import org.apache.axis.encoding.DeserializationContext;
 import org.apache.axis.encoding.Deserializer;
 import org.apache.axis.encoding.DeserializerImpl;
 import org.apache.axis.message.MessageElement;
+import org.apache.axis.message.addressing.EndpointReference;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.exolab.castor.mapping.Mapping;
@@ -15,6 +20,7 @@ import org.exolab.castor.mapping.MappingException;
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.Unmarshaller;
 import org.exolab.castor.xml.ValidationException;
+import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.w3c.dom.Element;
 
 public class ClientDeserializer extends DeserializerImpl implements
@@ -44,8 +50,18 @@ public class ClientDeserializer extends DeserializerImpl implements
 					e);
 		}
 		if (asDOM != null) {
-			value = null;
-
+			try {
+				Class clientClass = Class.forName(xmlType.getLocalPart());
+				Constructor clientConstructor = clientClass
+						.getConstructor(new Class[] { EndpointReference.class });
+				EndpointReference ref = (EndpointReference) ObjectDeserializer
+						.toObject(asDOM, EndpointReference.class);
+				value = clientConstructor.newInstance(new Object[] { ref });
+			} catch (Exception e) {
+				LOG.error("Problem constructing client with message! Result will be null!",
+						e);
+				value = null;
+			}
 		}
 		long duration = System.currentTimeMillis() - startTime;
 		LOG.debug("Total time to deserialize(" + localName + "):" + duration
