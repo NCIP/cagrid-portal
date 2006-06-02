@@ -117,6 +117,7 @@
 		<resolveDependencies extdir="${projects.dir}/discovery/ext">
 			<artifact refid="core.jars" />
 			<artifact refid="common.test.jars" />
+			<artifact refid="core.test.jars" />
 			<artifact refid="test.coverage.jars" />
 			<artifact refid="metadata.jars" />
 		</resolveDependencies>
@@ -241,6 +242,7 @@
 			<artifact refid="core.jars" />
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />
+			<artifact refid="core.test.jars" />
 			<artifact refid="core.resources" />
 			<artifact refid="mobius.jars" />
 			<artifact refid="gme.globus.client.jars" />
@@ -274,6 +276,7 @@
 		<resolveDependencies extdir="${projects.dir}/data/ext">
 			<artifact refid="core.jars" />
 			<artifact refid="introduce.jars" />
+			<artifact refid="core.test.jars" />
 			<artifact refid="gme.globus.client.jars" />
 			<artifact refid="core.resources" />
 			<artifact refid="introduce.resources" />
@@ -294,6 +297,7 @@
 		<resolveDependencies extdir="${projects.dir}/sdkQuery/ext">
 			<artifact refid="core.jars" />
 			<artifact refid="caCORE.jars" />
+			<artifact refid="core.test.jars" />
 			<artifact refid="data.jars" />
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />

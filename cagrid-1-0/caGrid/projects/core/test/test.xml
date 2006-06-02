@@ -32,6 +32,7 @@
 			<batchtest fork="yes" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}">
 					<include name="**/*TestCase.java"/>
+					<exclude name="**/SchemaValidationTestCase.java"/>
 				</fileset>
 			</batchtest>
 		</junit>
