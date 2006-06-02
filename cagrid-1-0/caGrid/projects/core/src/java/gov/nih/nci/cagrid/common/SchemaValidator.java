@@ -35,6 +35,12 @@ public class SchemaValidator {
 	private SAXParser parser;
 	private XMLReader xmlReader;
 	
+	/**
+	 * Initializes the schema validator to perform validation against an XML Schema
+	 * @param schemaFilename
+	 * 		The filename of the schema to use for validation
+	 * @throws SchemaValidationException
+	 */
 	public SchemaValidator(String schemaFilename) throws SchemaValidationException {
 		try {
 			// initialize the sax parser factory
@@ -68,6 +74,12 @@ public class SchemaValidator {
 	}
 	
 	
+	/**
+	 * Validates XML against the schema
+	 * @param xml
+	 * 		The XML text to validate
+	 * @throws SchemaValidationException
+	 */
 	public void validate(String xml) throws SchemaValidationException {
 		InputSource xmlInput = new InputSource(new BufferedReader(new StringReader(xml)));
 		// only one document can be handled by the xml reader at once
@@ -81,6 +93,12 @@ public class SchemaValidator {
 	}
 	
 	
+	/**
+	 * Validates the contents of an XML file against the schema
+	 * @param xmlFile
+	 * 		The file to load XML from for validation
+	 * @throws SchemaValidationException
+	 */
 	public void validate(File xmlFile) throws SchemaValidationException {
 		String xmlText = null;
 		try {
@@ -92,12 +110,28 @@ public class SchemaValidator {
 	}
 	
 	
+	/**
+	 * Validates xml text against an xml schema 
+	 * @param xsdFilename
+	 * 		The filename of the xml schema to validate against
+	 * @param xmlText
+	 * 		The text of an xml document to be validated
+	 * @throws SchemaValidationException
+	 */
 	public static void validate(String xsdFilename, String xmlText) throws SchemaValidationException {
 		SchemaValidator validator = new SchemaValidator(xsdFilename);
 		validator.validate(xmlText);
 	}
 	
 	
+	/**
+	 * Validates the contents of an XML file against an xml schema
+	 * @param xsdFilename
+	 * 		The filename of the xml schema to validate against
+	 * @param xmlFile
+	 * 		The file to load XML from for validation
+	 * @throws SchemaValidationException
+	 */
 	public static void validate(String xsdFilename, File xmlFile) throws SchemaValidationException {
 		String xmlText = null;
 		try {
