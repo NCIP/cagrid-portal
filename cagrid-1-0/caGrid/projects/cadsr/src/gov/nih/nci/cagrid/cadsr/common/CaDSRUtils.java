@@ -13,8 +13,10 @@ import gov.nih.nci.cagrid.metadata.common.UMLClass;
 import gov.nih.nci.cagrid.metadata.common.UMLClassSemanticMetadataCollection;
 import gov.nih.nci.cagrid.metadata.common.UMLClassUmlAttributeCollection;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 
 /**
@@ -71,14 +73,14 @@ public class CaDSRUtils {
 	
 	
 	public static UMLClassUmlAttributeCollection convertAttributeCollection(UMLClassMetadata classMetadata) {
-		UMLAttribute[] attribArray = new UMLAttribute[classMetadata.getUMLAssociationMetadataCollection().size()];
-		int i = 0;
+		List attribList = new ArrayList();
 		Iterator attribIter = classMetadata.getUMLAttributeMetadataCollection().iterator();
 		while (attribIter.hasNext()) {
 			UMLAttributeMetadata attribMetadata = (UMLAttributeMetadata) attribIter.next();
-			attribArray[i] = convertAttribute(attribMetadata);
-			i++;
+			attribList.add(convertAttribute(attribMetadata));
 		}
+		UMLAttribute[] attribArray = new UMLAttribute[attribList.size()];
+		attribList.toArray(attribArray);
 		return new UMLClassUmlAttributeCollection(attribArray);
 	}
 	
@@ -97,13 +99,13 @@ public class CaDSRUtils {
 	
 	
 	public static SemanticMetadata[] convertSemanticMetadataCollection(Collection semanticMetadata) {
-		SemanticMetadata[] smArray = new SemanticMetadata[semanticMetadata.size()];
-		int i = 0;
+		List smList = new ArrayList();
 		Iterator semanticIter = semanticMetadata.iterator();
 		while (semanticIter.hasNext()) {
-			smArray[i] = (SemanticMetadata) semanticIter.next();
-			i++;
+			smList.add(semanticIter.next());
 		}
+		SemanticMetadata[] smArray = new SemanticMetadata[smList.size()];
+		smList.toArray(smArray);
 		return smArray;
 	}
 }

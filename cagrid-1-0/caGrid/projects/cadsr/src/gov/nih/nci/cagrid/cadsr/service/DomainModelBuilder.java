@@ -84,7 +84,7 @@ public class DomainModelBuilder {
 		List classes = new ArrayList();
 		for (int i = 0; i < packageNames.length; i++) {
 			UMLPackageMetadata pack = getPackageMetadata(proj, packageNames[i]);
-			UMLClassMetadata[] mdArray = getClasses(pack);
+			UMLClassMetadata[] mdArray = getClasses(proj, pack);
 			Collections.addAll(classes, mdArray);
 		}
 		UMLClassMetadata[] classArray = new UMLClassMetadata[classes.size()];
@@ -94,7 +94,7 @@ public class DomainModelBuilder {
 		List associationMetadataList = new ArrayList();
 		for (int i = 0; i < classArray.length; i++) {
 			UMLClassMetadata clazz = classArray[i];
-			UMLAssociationMetadata[] mdArray = getAssociations(clazz);
+			UMLAssociationMetadata[] mdArray = getAssociations(proj, clazz);
 			Collections.addAll(associationMetadataList, mdArray);
 		}
 		UMLAssociation[] associationArray = new UMLAssociation[associationMetadataList.size()];
@@ -209,7 +209,7 @@ public class DomainModelBuilder {
 					UMLPackageMetadata pack = (UMLPackageMetadata) packIter.next();
 					umlPackages.put(pack.getName(), pack);
 				}
-				LOG.debug("Added " + packs.size() + " packages to cache for project " + proj.getLongName());
+				LOG.debug("Added " + umlPackages.size() + " packages to cache for project " + proj.getLongName());
 			} catch (ApplicationException ex) {
 				LOG.error("Error searching for packages: " + ex.getMessage());
 				throw new RemoteException("Error searching for packages: " + ex.getMessage(), ex);
@@ -218,7 +218,7 @@ public class DomainModelBuilder {
 	}
 	
 	
-	private UMLClassMetadata[] getClasses(UMLPackageMetadata pack) throws RemoteException {
+	private UMLClassMetadata[] getClasses(Project proj, UMLPackageMetadata pack) throws RemoteException {
 		if (packageClasses == null) {
 			packageClasses = new HashMap();
 		}
@@ -227,14 +227,26 @@ public class DomainModelBuilder {
 			LOG.debug("Classes for package " + pack.getName() + " not yet cached");
 			UMLClassMetadata classPrototype = new UMLClassMetadata();
 			classPrototype.setUMLPackageMetadata(pack);
-			classPrototype.setProject(pack.getProject());
+			classPrototype.setProject(proj);
 			try {
-				List classList = cadsr.search(UMLClassMetadata.class, classPrototype);
-				classes = new UMLClassMetadata[classList.size()];
-				for (int i = 0; i < classList.size(); i++) {
-					classes[i] = (UMLClassMetadata) classList.get(i);
+				Iterator classListIter = cadsr.search(UMLClassMetadata.class, classPrototype).iterator(); 
+				List classList = new ArrayList();
+				while (classListIter.hasNext()) {
+					UMLClassMetadata metadata = (UMLClassMetadata) classListIter.next();
+					// ensure the attributes and semantic metadata are brought back
+					Iterator attribIter = metadata.getUMLAttributeMetadataCollection().iterator();
+					while (attribIter.hasNext()) {
+						attribIter.next();
+					}
+					Iterator smIter = metadata.getSemanticMetadataCollection().iterator();
+					while (smIter.hasNext()) {
+						smIter.next();
+					}
+					classList.add(metadata);
 				}
-				LOG.debug("Added " + classList.size() + " classes to cache for package " + pack.getName());
+				classes = new UMLClassMetadata[classList.size()];
+				classList.toArray(classes);
+				LOG.debug("Added " + classes.length + " classes to cache for package " + pack.getName());
 			} catch (ApplicationException ex) {
 				LOG.error("Error searching for classes in package: " + pack.getName() + ": " + ex.getMessage());
 				throw new RemoteException("Error searching for classes in package: " + pack.getName() + ": " + ex.getMessage(), ex);
@@ -244,7 +256,7 @@ public class DomainModelBuilder {
 	}
 	
 	
-	private UMLAssociationMetadata[] getAssociations(UMLClassMetadata clazz) throws RemoteException {
+	private UMLAssociationMetadata[] getAssociations(Project proj, UMLClassMetadata clazz) throws RemoteException {
 		if (classAssociations == null) {
 			classAssociations = new HashMap();
 		}
@@ -253,13 +265,20 @@ public class DomainModelBuilder {
 			LOG.debug("Associations for class " + clazz.getFullyQualifiedName() + " not yet cached");
 			UMLAssociationMetadata associationPrototype = new UMLAssociationMetadata();
 			associationPrototype.setSourceUMLClassMetadata(clazz);
+			associationPrototype.setProject(proj);
 			try {
-				List associationList = cadsr.search(UMLAssociationMetadata.class, associationPrototype);
-				associations = new UMLAssociationMetadata[associationList.size()];
-				for (int i = 0; i < associationList.size(); i++) {
-					associations[i] = (UMLAssociationMetadata) associationList.get(i);
+				Iterator associationListIter = cadsr.search(UMLAssociationMetadata.class, associationPrototype).iterator();
+				List associationList = new ArrayList();
+				while (associationListIter.hasNext()) {
+					UMLAssociationMetadata metadata = (UMLAssociationMetadata) associationListIter.next();
+					// force population of these fields
+					metadata.getSourceUMLClassMetadata();
+					metadata.getTargetUMLClassMetadata();
+					associationList.add(metadata);
 				}
-				LOG.debug("Added " + associationList.size() + " associations to cache for class " + clazz.getFullyQualifiedName());
+				associations = new UMLAssociationMetadata[associationList.size()];
+				associationList.toArray(associations);
+				LOG.debug("Added " + associations.length + " associations to cache for class " + clazz.getFullyQualifiedName());
 			} catch (ApplicationException ex) {
 				LOG.error("Error searching for associations on class " + clazz.getFullyQualifiedName() + ": " + ex.getMessage());
 				throw new RemoteException("Error searching for associations on class " + clazz.getFullyQualifiedName() + ": " + ex.getMessage(), ex);
