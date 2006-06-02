@@ -202,6 +202,7 @@
 			<artifact refid="core.jars" />
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />
+			<artifact refid="core.test.jars" />
 			<artifact refid="core.resources" />
 			<artifact refid="metadata.jars" />
 			<artifact refid="gridca.jars" />
@@ -222,6 +223,7 @@
 		<resolveDependencies extdir="${projects.dir}/syncgts/ext">
 			<artifact refid="core.jars" />
 			<artifact refid="common.test.jars" />
+			<artifact refid="core.test.jars" />
 			<artifact refid="metadata.jars" />
 			<artifact refid="gridca.jars" />
 			<artifact refid="mobius.jars" />
