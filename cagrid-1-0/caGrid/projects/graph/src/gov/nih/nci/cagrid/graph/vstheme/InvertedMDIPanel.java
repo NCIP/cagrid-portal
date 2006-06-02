@@ -14,14 +14,19 @@ public class InvertedMDIPanel extends JComponent
 	public Vector pages = new Vector();
 	public Vector pageIcons = new Vector();
 	public Vector pageTitles = new Vector();
+
 	
 	public int currentPage = -1;
 	
+	
+	public InternalFrame parent;
 	public MultipleComponentContainer container = new MultipleComponentContainer();
 	public InvertedTabsPane tabs = new InvertedTabsPane(this);
 	
-	public InvertedMDIPanel()
+	public InvertedMDIPanel(InternalFrame parent)
 	{
+		this.parent = parent;
+		
 		this.add(container);
 		this.add(tabs);
 		
@@ -59,6 +64,12 @@ public class InvertedMDIPanel extends JComponent
 			this.setActivePage(0);
 			
 		}
+		
+		if(this.pages.size() == 0)
+		{
+			// fire 0 pages shown
+			this.parent.setTitle("");
+		}
 	}
 	
 
@@ -70,8 +81,10 @@ public class InvertedMDIPanel extends JComponent
 		if(i < this.pages.size() && i >= 0)
 		{		
 			currentPage = i;
+			this.parent.setTitle((String)this.pageTitles.get(i));
 			this.tabs.setActiveTab(i);
 			this.container.showComponent(i);
+			
 		}
 
 	}
