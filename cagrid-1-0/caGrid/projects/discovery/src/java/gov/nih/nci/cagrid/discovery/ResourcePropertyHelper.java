@@ -10,8 +10,6 @@
 
 package gov.nih.nci.cagrid.discovery;
 
-import gov.nih.nci.cagrid.common.security.commstyle.OpenCommunication;
-
 import java.rmi.RemoteException;
 
 import javax.xml.namespace.QName;
@@ -21,8 +19,10 @@ import org.apache.axis.client.Stub;
 import org.apache.axis.message.MessageElement;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI.MalformedURIException;
+import org.globus.axis.gsi.GSIConstants;
 import org.globus.axis.util.Util;
 import org.globus.wsrf.WSRFConstants;
+import org.globus.wsrf.impl.security.authorization.NoAuthorization;
 import org.globus.wsrf.utils.AnyHelper;
 import org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse;
 import org.oasis.wsrf.properties.GetMultipleResourceProperties_Element;
@@ -38,30 +38,7 @@ import org.w3c.dom.Element;
 
 
 public class ResourcePropertyHelper {
-//	static final String RP_NS = new String(
-//		"http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd");
-//	static String GET_RP_STRING = "GetResourceProperty";
-//	static final QName GET_RP_QNAME = new QName(RP_NS, GET_RP_STRING);
-//	static final QName RP_RESPONSE_QNAME = new QName(RP_NS, ">GetResourcePropertyResponse");
-//
-//	static final QName QNAME_QNAME = new QName("http://www.w3.org/2001/XMLSchema", "QName");
-//
-//	static final QName INVALID_RP_QNAME_FAULT_QNAME = new QName(RP_NS, "InvalidResourcePropertyQNameFault");
-//
-//	static final String INVALID_RP_QNAME_FAULT_CLASS_NAME = new String(
-//		"org.oasis.wsrf.properties.InvalidResourcePropertyQNameFaultType");
-//
-//	static final QName INVALID_RP_QNAME_FAULT_TYPE_QNAME = new QName(RP_NS, "InvalidResourcePropertyQNameFaultType");
-//
-//	static final QName RESOURCE_UNKNOWN_FAULT_QNAME = new QName(RP_NS, "ResourceUnknownFault");
-//
-//	static final String RESOURCE_UNKNOWN_FAULT_CLASS_NAME = new String(
-//		"org.oasis.wsrf.properties.ResourceUnknownFaultType");
-//
-//	static final QName RESOURCE_UNKNOWN_FAULT_TYPE_QNAME = new QName(RP_NS, "ResourceUnknownFaultType");
 
-	
-	
 	static {
 		Util.registerTransport();
 	}
@@ -91,8 +68,7 @@ public class ResourcePropertyHelper {
 			throw new Exception(e);
 		}
 
-		OpenCommunication com = new OpenCommunication();
-		com.configure((Stub) port);
+		setAnonymous((Stub) port);
 
 		QueryResourceProperties_Element request = new QueryResourceProperties_Element();
 		request.setQueryExpression(query);
@@ -106,7 +82,6 @@ public class ResourcePropertyHelper {
 		}
 
 		return response.get_any();
-
 
 	}
 
@@ -133,8 +108,7 @@ public class ResourcePropertyHelper {
 			throw new Exception(e);
 		}
 
-		OpenCommunication com = new OpenCommunication();
-		com.configure((Stub) port);
+		setAnonymous((Stub) port);
 
 		QueryResourceProperties_Element request = new QueryResourceProperties_Element();
 		request.setQueryExpression(query);
@@ -171,8 +145,7 @@ public class ResourcePropertyHelper {
 		WSResourcePropertiesServiceAddressingLocator locator = new WSResourcePropertiesServiceAddressingLocator();
 		port = locator.getGetResourcePropertyPort(endpoint);
 
-		OpenCommunication com = new OpenCommunication();
-		com.configure((Stub) port);
+		setAnonymous((Stub) port);
 
 		GetResourcePropertyResponse response;
 
@@ -205,8 +178,7 @@ public class ResourcePropertyHelper {
 		WSResourcePropertiesServiceAddressingLocator locator = new WSResourcePropertiesServiceAddressingLocator();
 		GetMultipleResourceProperties_PortType port = locator.getGetMultipleResourcePropertiesPort(endpoint);
 
-		OpenCommunication com = new OpenCommunication();
-		com.configure((Stub) port);
+		setAnonymous((Stub) port);
 
 		GetMultipleResourceProperties_Element request = new GetMultipleResourceProperties_Element();
 		request.setResourceProperty(rpNames);
@@ -216,5 +188,12 @@ public class ResourcePropertyHelper {
 		System.out.println(AnyHelper.toSingleString(response));
 		return AnyHelper.toElement(response.get_any());
 
+	}
+
+
+	private static void setAnonymous(Stub stub) {
+		stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS, Boolean.TRUE);
+		stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, NoAuthorization.getInstance());
+		stub._setProperty(GSIConstants.GSI_AUTHORIZATION, org.globus.gsi.gssapi.auth.NoAuthorization.getInstance());
 	}
 }
