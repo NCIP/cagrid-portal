@@ -30,6 +30,7 @@ import javax.swing.JPanel;
  * @author oster
  * 
  */
+
 public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent implements PackageSelectedListener {
 
 	private String cadsrURL = null;
@@ -91,7 +92,7 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent imp
 				CaDSRServiceI cadsrService = new CaDSRServiceClient(getCaDSRPanel().getCadsr().getText());
 				try {
 					// TODO: how to clear diagrams contents?
-					// getUMLDiagram().clear() ?
+					getUMLDiagram().clear(); 
 					UMLClassMetadata[] classes = cadsrService.findClassesInPackage(
 						getCaDSRPanel().getSelectedProject(), pkg.getName());
 
@@ -134,7 +135,7 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent imp
 						// }
 					}
 
-					getUMLDiagram().performLayout();
+					
 					getUMLDiagram().refresh();
 
 				} catch (RemoteException e) {
