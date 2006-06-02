@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="gme://service.test.org/NewService" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing"
+	targetNamespace="gme://service.test.org/NewService" elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+	<import namespace="http://schemas.xmlsoap.org/ws/2004/03/addressing"
+		location="../ws/addressing/WS-Addressing.xsd"/>
+	<xs:element name="NewServiceEPR" type="wsa:EndPointReferenceType"> </xs:element>
+</xs:schema>

@@ -61,6 +61,10 @@ public class SkeletonSourceCreator {
 				+ CommonTools.getPackageDir(service) + File.separator
 				+ "service" + File.separator + "globus" + File.separator
 				+ "resource").mkdirs();
+		new File(srcDir.getAbsolutePath() + File.separator
+				+ CommonTools.getPackageDir(service) + File.separator
+				+ "service" + File.separator + "globus" + File.separator
+				+ "resource").mkdirs();
 
 		ServiceClientTemplate clientT = new ServiceClientTemplate();
 		String clientS = clientT.generate(new SpecificServiceInformation(info,
