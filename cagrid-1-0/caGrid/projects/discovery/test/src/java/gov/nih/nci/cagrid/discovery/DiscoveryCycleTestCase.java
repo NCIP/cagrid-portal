@@ -41,87 +41,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *---------------------------------------------------------------------------*/
 
-package gov.nih.nci.cagrid.data;
+package gov.nih.nci.cagrid.discovery;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
-import jdepend.framework.JDepend;
-import jdepend.framework.JavaPackage;
-import junit.framework.TestCase;
+import gov.nih.nci.cagrid.core.CycleTestCase;
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
 
-public class CycleTestCase extends TestCase {
+public class DiscoveryCycleTestCase extends CycleTestCase {
 
-	private JDepend jdepend;
-
-
-	public CycleTestCase(String name) {
+	public DiscoveryCycleTestCase(String name) {
 		super(name);
 	}
 
 
-	protected void setUp() {
-		jdepend = new JDepend();
-		try {
-			String[] dirs= System.getProperty("build.dirs", ".").split(";");
-			for (int i = 0; i < dirs.length; i++) {
-				// System.out.println("Inspecting classes in directory " + dirs[i]);
-				jdepend.addDirectory(dirs[i]);
-			}
-			jdepend.analyzeTestClasses(false);
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-			fail(ioe.getMessage());
-		}
-	}
-
-
-	protected void tearDown() {
-		jdepend = null;
-	}
-
-
-	/**
-	 * Tests that a package dependency cycle does not exist for any of the
-	 * analyzed packages.
-	 */
-	public void testAllPackagesCycle() {
-		int numCycles = 0;
-		Collection packages = jdepend.analyze();
-		if (jdepend.containsCycles()) {
-			Iterator iter = packages.iterator();
-			while (iter.hasNext()) {
-				JavaPackage p = (JavaPackage) iter.next();
-				if (p.containsCycle()) {
-					System.out.println("\nPackage: " + p.getName() + " contains a cycle with:");
-					numCycles++;
-					List list = new ArrayList();
-					p.collectAllCycles(list);
-					for (Iterator iterator = list.iterator(); iterator.hasNext();) {
-						JavaPackage dependsP = (JavaPackage) iterator.next();
-						System.out.println("->" + dependsP.getName());
-
-					}
-				}
-			}
-		}
-		System.out.println("\n===== Found " + numCycles + " cyclic packages. =====\n\n");
-
-		assertEquals("Cycles exist", false, jdepend.containsCycles());
-	}
-
-
 	public static void main(String args[]) {
-
 		TestRunner runner = new TestRunner();
-		TestResult result = runner.doRun(new TestSuite(CycleTestCase.class));
+		TestResult result = runner.doRun(new TestSuite(DiscoveryCycleTestCase.class));
 		System.exit(result.errorCount() + result.failureCount());
 	}
 }

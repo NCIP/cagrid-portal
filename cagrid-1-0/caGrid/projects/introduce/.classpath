@@ -105,5 +105,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-GlobalModelExchange.jar"/>
 	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
 	<classpathentry kind="lib" path="lib/jhall.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/caGrid-core-tests-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

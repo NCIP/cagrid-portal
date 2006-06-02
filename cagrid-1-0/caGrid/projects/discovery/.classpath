@@ -70,5 +70,6 @@
 	<classpathentry kind="lib" path="ext/test/lib/junit-addons-1.4.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/xmlunit1.0.jar"/>
 	<classpathentry kind="lib" path="test/resources"/>
+	<classpathentry kind="lib" path="ext/test/lib/caGrid-core-tests-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
