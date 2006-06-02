@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 
-public class Test {
+public class ApplicationServiceExample {
 
 	public static void main(String[] args) {
 		try {

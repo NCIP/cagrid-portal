@@ -162,6 +162,9 @@
 			<fileset dir="${test.lib.dir}">
 				<include name="*.jar" />
 			</fileset>
+			<fileset dir="${ext.test.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
 			<pathelement location="${service.build.dest}" />
 			<path refid="service.build.classpath" />
 		</path>
@@ -343,7 +346,7 @@
 
 
 	<!-- call the test target for each project and aggregates the log resutls  -->
-	<target name="test" depends="checkGlobus,create_config_files">
+	<target name="test" depends="checkGlobus">
 		<echo message="Test results dir: ${junit.results.dir}" />
 		<mkdir dir="${junit.results.dir}" />
 		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true">
@@ -355,24 +358,10 @@
 			<formatter type="xml" />
 			<batchtest fork="yes" haltonfailure="true" haltonerror="true" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}">
-					<include name="**/Test*.java" />
+					<include name="**/*TestCase.java" />
 				</fileset>
 			</batchtest>
 		</junit>
-	</target>
-
-
-	<!-- ============================================================== -->
-	<!-- Creates conf files from examples                               -->
-	<!-- ============================================================== -->
-	<target name="create_config_files" description="Creates conf files from examples.
-		Set property force.config.replace to true to force replacement.">
-		<copy todir="${test.dir}/resources" overwrite="${force.config.replace}">
-			<fileset dir="${test.dir}/resources">
-				<include name="**/*.example" />
-			</fileset>
-			<mapper type="glob" from="*.example" to="*" />
-		</copy>
 	</target>
 
 

@@ -12,7 +12,6 @@ import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.common.CaDSRServiceI;
 import gov.nih.nci.cagrid.cadsr.common.CaDSRUtils;
 import gov.nih.nci.cagrid.cadsr.domain.UMLAssociation;
-import gov.nih.nci.cagrid.cadsr.service.globus.ServiceConfiguration;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
 import java.rmi.RemoteException;

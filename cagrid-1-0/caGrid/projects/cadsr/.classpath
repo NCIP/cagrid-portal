@@ -96,5 +96,7 @@
 	<classpathentry kind="lib" path="ext/lib/ocl-argo-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/swidgets-0.1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/toolbar-1.1.1.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/caGrid-core-tests-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/jdepend-2.7-patched.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
