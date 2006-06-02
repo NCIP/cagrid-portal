@@ -1,4 +1,8 @@
 To Do:
+
+the generated service's ServiceConfiguration needs to be moved to the service package instead of the service.globus package
+  - it currently creates cyclic packages
+
 add scroll pain in deployer for service properties
 
 add support for having EPR type and fault types in the types browser....
