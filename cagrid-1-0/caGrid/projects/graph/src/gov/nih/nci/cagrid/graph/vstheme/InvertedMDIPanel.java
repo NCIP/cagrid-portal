@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.graph.vstheme;
 
+import java.awt.Image;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.Vector;
