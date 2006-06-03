@@ -1,7 +1,6 @@
 To Do:
 
-the generated service's ServiceConfiguration needs to be moved to the service package instead of the service.globus package
-  - it currently creates cyclic packages
+need to make sure to add ALL the globus used namespaces to the IntroduceConstants
 
 add scroll pain in deployer for service properties
 
@@ -60,7 +59,9 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
-
+the generated service's ServiceConfiguration needs to be moved to the service package instead of the service.globus package
+  - it currently creates cyclic packages
+  
 sync should create a properties file for service properties and ant deploy should use it as default
 
 clean up and add icons to the service contexts tree
