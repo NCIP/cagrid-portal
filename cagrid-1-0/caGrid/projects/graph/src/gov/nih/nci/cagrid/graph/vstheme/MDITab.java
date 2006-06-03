@@ -99,6 +99,7 @@ public class MDITab extends JComponent
 			g.fillRect(0, 0, this.getWidth(), this.getHeight());
 			g.setColor(Color.white);
 			g.drawLine(0, 0,0, this.getHeight());
+			g.drawLine(0, 0, this.getWidth(),  0);
 			
 			g.setColor(Color.black);
 			g.drawLine(this.getWidth()-1, 0, this.getWidth()-1, this.getHeight());
