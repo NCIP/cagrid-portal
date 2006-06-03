@@ -139,7 +139,7 @@ public class SyncTools {
 					parser.setNamespaceExcludes(excludeList);
 
 					parser.setOutputDir(baseDirectory.getAbsolutePath() + File.separator + "tmp");
-					parser.setNStoPkg(baseDirectory.getAbsolutePath() + File.separator
+					parser.setNStoPkg(baseDirectory.getAbsolutePath() + File.separator + "build" + File.separator 
 						+ IntroduceConstants.NAMESPACE2PACKAGE_MAPPINGS_FILE);
 					try {
 						parser.run(new File(baseDirectory.getAbsolutePath()
@@ -262,8 +262,10 @@ public class SyncTools {
 
 		createNewServices(info);
 
-		// STEP 4: write out namespace mappings and flatten the wsdl file
+		// STEP 4: write out namespace mappings and flatten the wsdl file then merge namespace
 		syncAndFlattenWSDL(info, schemaDir);
+		
+		mergeNamespaces();
 
 		// STEP 5: run axis to get the symbol table
 		MultiServiceSymbolTable table = new MultiServiceSymbolTable(info, excludeSet);
@@ -486,6 +488,16 @@ public class SyncTools {
 		FileWriter namespaceMappingsFW = new FileWriter(namespaceMappingsF);
 		namespaceMappingsFW.write(namespaceMappingsS);
 		namespaceMappingsFW.close();
+	}
+	
+	private void mergeNamespaces() throws Exception {
+		String cmd = CommonTools.getAntMergeCommand(baseDirectory
+				.getAbsolutePath());
+		Process p = CommonTools.createAndOutputProcess(cmd);
+		p.waitFor();
+		if (p.exitValue() != 0) {
+			throw new Exception("Service merge exited abnormally");
+		}
 	}
 
 

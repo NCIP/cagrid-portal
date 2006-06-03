@@ -1,5 +1,10 @@
 package gov.nih.nci.cagrid.introduce;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import javax.xml.namespace.QName;
 
 /**
@@ -31,6 +36,7 @@ public class IntroduceConstants {
 	public static final String INTRODUCE_MAIN_RESOURCE = "main";
 	public static final String INTRODUCE_BASE_RESOURCE = "base";
 	
+
 	// deployment properties
 	public static final String DEPLOY_PROPERTIES_FILE = "deploy.properties";
 	
@@ -40,7 +46,11 @@ public class IntroduceConstants {
 	
 	// w3c namespaces
 	public static final String W3CNAMESPACE = "http://www.w3.org/2001/XMLSchema";
+	public static final String ADDRESSINGNAMESPACE = "http://schemas.xmlsoap.org/ws/2004/03/addressing";
 	public static final String W3CNAMESPACE_PREFIX = "xs";
+	
+	public static final List INTRODUCE_EXISTING_NAMESPACES = new ArrayList(Arrays.asList(new String[]{W3CNAMESPACE,ADDRESSINGNAMESPACE}));
+	
 	
 	private IntroduceConstants() {
 		// prevents instantiation

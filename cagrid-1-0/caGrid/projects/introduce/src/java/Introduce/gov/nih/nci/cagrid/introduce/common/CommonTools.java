@@ -105,10 +105,16 @@ public class CommonTools {
 		return getAntCommand("flatten", buildFileDir);
 	}
 
+	public static String getAntMergeCommand(String buildFileDir)
+			throws Exception {
+		return getAntCommand("merge", buildFileDir);
+	}
+
 	public static String getAntDeployTomcatCommand(String buildFileDir)
 			throws Exception {
 		String cmd = " -Dservice.properties.file=" + buildFileDir
-				+ File.separator + IntroduceConstants.INTRODUCE_SERVICE_PROPERTIES;
+				+ File.separator
+				+ IntroduceConstants.INTRODUCE_SERVICE_PROPERTIES;
 		cmd = getAntCommand("deployTomcat", buildFileDir) + " " + cmd;
 		return cmd;
 	}
@@ -116,7 +122,8 @@ public class CommonTools {
 	public static String getAntDeployGlobusCommand(String buildFileDir)
 			throws Exception {
 		String cmd = " -Dservice.properties.file=" + buildFileDir
-				+ File.separator + IntroduceConstants.INTRODUCE_SERVICE_PROPERTIES;
+				+ File.separator
+				+ IntroduceConstants.INTRODUCE_SERVICE_PROPERTIES;
 		cmd = getAntCommand("deployGlobus", buildFileDir) + " " + cmd;
 		return cmd;
 	}
