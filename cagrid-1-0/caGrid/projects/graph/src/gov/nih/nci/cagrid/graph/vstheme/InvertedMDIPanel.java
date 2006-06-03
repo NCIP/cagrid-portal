@@ -120,7 +120,7 @@ class InvertedMDIPanelComponentListener extends ComponentAdapter
 		InvertedMDIPanel s = (InvertedMDIPanel) e.getSource();
 		
 		s.container.setBounds(0, 0, s.getWidth(), s.getHeight() - 27);
-		s.tabs.setBounds(0, s.getHeight() - 26, s.getWidth(), 28);
+		s.tabs.setBounds(0, s.getHeight() - 26, s.getWidth(), 27);
 		
 		s.validate();
 		

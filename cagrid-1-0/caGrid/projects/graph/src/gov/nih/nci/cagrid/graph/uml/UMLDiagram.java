@@ -66,8 +66,9 @@ public class UMLDiagram extends JLayeredPane {
 
 		if (classes.contains(gc))
 			return false;
-		
+
 		gc.refresh();
+		
 		gc.setVisible(false);
 		this.classes.addElement(gc);
 		this.diagram.add(gc);
@@ -139,8 +140,7 @@ public class UMLDiagram extends JLayeredPane {
 
 		for (int k = 0; k < this.classes.size(); k++) {
 			UMLClass gc = (UMLClass) this.classes.get(k);
-			gc.setVisible(true);
-			this.diagram.getLayer().bringToFront((UMLClass) this.classes.elementAt(k));
+
 		}
 		
 		

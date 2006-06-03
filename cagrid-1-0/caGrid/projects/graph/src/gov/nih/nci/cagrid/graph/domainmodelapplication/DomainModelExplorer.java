@@ -13,11 +13,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
-import javax.swing.JComponent;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import javax.swing.JTree;
 
-public class DomainModelExplorer extends JComponent
+public class DomainModelExplorer extends JLayeredPane
 {
 	public DomainModel model;
 	
@@ -26,6 +25,7 @@ public class DomainModelExplorer extends JComponent
 	public JPanel              splitter = new JPanel();
 	
 	public Point splitterLastClicked;
+	public boolean splitterMoving = false;
 	
 	public static int preferredOutlinesWidth = 300;
 	
@@ -46,6 +46,8 @@ public class DomainModelExplorer extends JComponent
 			this.add(outlineMDI);
 			this.add(umlMDI);
 			this.add(splitter);
+			
+			this.setLayer(splitter, JLayeredPane.MODAL_LAYER.intValue());
 			
 			
 			umlMDI.addPage(new UMLDiagram(), null, "HI", "HI");
@@ -110,6 +112,15 @@ class DomainModelSplitterMouseListener extends MouseAdapter
 		JPanel splitter = (JPanel)	e.getSource();
 		DomainModelExplorer parent = (DomainModelExplorer) splitter.getParent();
 		parent.splitterLastClicked = e.getPoint();
+		parent.splitterMoving = true;
+	}
+	
+	public void mouseReleased(MouseEvent e)
+	{
+		JPanel splitter = (JPanel)	e.getSource();
+		DomainModelExplorer parent = (DomainModelExplorer) splitter.getParent();
+		parent.outlineMDI.setSize(splitter.getX(), parent.outlineMDI.getHeight());
+		parent.umlMDI.setBounds(splitter.getX() + splitter.getWidth(), 0, parent.getWidth() - parent.outlineMDI.getWidth() - splitter.getWidth(), parent.getHeight());		
 	}
 }
 
@@ -121,7 +132,7 @@ class DomainModelSplitterMouseMotionListener extends MouseMotionAdapter
 		DomainModelExplorer parent = (DomainModelExplorer) splitter.getParent();
 		
 		splitter.setLocation(splitter.getX() + e.getX() - parent.splitterLastClicked.x, splitter.getY() );
-		parent.outlineMDI.setSize(splitter.getX(), parent.outlineMDI.getHeight());
-		parent.umlMDI.setBounds(splitter.getX() + splitter.getWidth(), 0, parent.getWidth() - parent.outlineMDI.getWidth() - splitter.getWidth(), parent.getHeight());
+		//parent.outlineMDI.setSize(splitter.getX(), parent.outlineMDI.getHeight());
+		//parent.umlMDI.setBounds(splitter.getX() + splitter.getWidth(), 0, parent.getWidth() - parent.outlineMDI.getWidth() - splitter.getWidth(), parent.getHeight());
 	}
 }

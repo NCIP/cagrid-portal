@@ -108,7 +108,7 @@ public class MDITabsPane extends JLayeredPane
 	
 	public void tabClicked(int i)
 	{
-		this.parent.setActiveTab(i);
+		this.parent.tabClicked(i);
 	}
 	
 	public int getTotalTabsPreferredWidth()

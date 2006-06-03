@@ -72,5 +72,6 @@ public class Main {
 			//Thread.sleep(100);
 			diagram.addAssociation(c1, c2, "", "", "1..0", "*..1");
 		}
+
 	}
 }

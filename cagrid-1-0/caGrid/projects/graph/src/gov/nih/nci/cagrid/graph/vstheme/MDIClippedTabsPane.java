@@ -40,6 +40,11 @@ public class MDIClippedTabsPane extends JScrollPane
 		this.tabsPane.addTab(title, icon);	
 	}
 	
+	public void tabClicked(int i)
+	{
+		parent.setActivePage(i);
+	}
+	
 	public void setActiveTab(int i)
 	{
 		this.tabsPane.setActiveTab(i);
