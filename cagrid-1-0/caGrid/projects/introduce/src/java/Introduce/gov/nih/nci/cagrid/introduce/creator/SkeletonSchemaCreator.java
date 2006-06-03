@@ -4,7 +4,6 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
-import gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceSchemaTemplate;
 import gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate;
 
 import java.io.File;
@@ -38,14 +37,6 @@ public class SkeletonSchemaCreator {
 		serviceWSDLFW.write(serviceWSDLS);
 		serviceWSDLFW.close();
 		
-		ServiceSchemaTemplate serviceXSDT = new ServiceSchemaTemplate();
-		String serviceXSDS = serviceXSDT.generate(new SpecificServiceInformation(info,service));
-		File serviceXSDF = new File(schemaDir.getAbsolutePath() + File.separator
-			+ info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator
-			+ service.getName() + "EPR.xsd");
-		FileWriter serviceXSDFW = new FileWriter(serviceXSDF);
-		serviceXSDFW.write(serviceXSDS);
-		serviceXSDFW.close();
 	}
 
 }
