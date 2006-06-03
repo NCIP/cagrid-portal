@@ -98,12 +98,12 @@ public class MDITab extends JComponent
 			g.setColor(activeColor);
 			g.fillRect(0, 0, this.getWidth(), this.getHeight());
 			g.setColor(Color.white);
-			g.drawLine(0, 0,this.getWidth(), 0);
+			g.drawLine(0, 0,0, this.getHeight());
 			
 			g.setColor(Color.black);
-			g.drawLine(this.getWidth(), 0, this.getWidth(), this.getHeight());
+			g.drawLine(this.getWidth()-1, 0, this.getWidth()-1, this.getHeight());
 			g.setColor(Color.black);
-
+			g.drawString(this.title, 10, 15);
 			
 		}
 		else
@@ -111,9 +111,9 @@ public class MDITab extends JComponent
 			g.setColor(inactiveColor);
 			g.fillRect(0, 0, this.getWidth(), this.getHeight());
 			g.setColor(Color.gray);
-			g.drawLine(this.getWidth()-1, 5, this.getWidth() - 1, this.getHeight() - 3);
+			g.drawLine(this.getWidth()-1, 4, this.getWidth() - 1, this.getHeight() - 4);
 			g.setColor(Color.black);
-
+			g.drawString(this.title, 10, 16);
 			
 		}
 		
@@ -122,11 +122,8 @@ public class MDITab extends JComponent
 			g.drawImage(this.icon.getImage(), 1, 1, 20, 20, this);
 			g.drawString(this.title, 22, 15);
 		}
-		else
-		{
-			g.drawString(this.title, 10, 15);
-		}
 	
+		
 	}
 
 }

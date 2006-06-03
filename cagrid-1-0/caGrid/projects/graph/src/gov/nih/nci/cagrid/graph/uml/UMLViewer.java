@@ -74,7 +74,7 @@ public class UMLViewer extends JGraph {
 		this.pagerCaptionBar = new PagerCaptionBar(this.pager);
 
 		//this.setDefaultSize(500, 500);
-		this.setDrawingSize(100, 100);
+		this.setDrawingSize(1000, 1000);
 		Globals.setShowFigTips(false);
 		
 		

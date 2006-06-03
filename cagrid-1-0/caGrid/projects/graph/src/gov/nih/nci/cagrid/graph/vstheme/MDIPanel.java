@@ -38,10 +38,12 @@ public class MDIPanel extends JComponent
 	public void addPage(JComponent component, ImageIcon icon, String title, String id)
 	{
 		this.pages.add(component);
-		this.container.addComponent(component);
 		this.pageIcons.add(icon);
 		this.pageTitles.add(title);
 		this.pageIDs.add(id);
+		
+		
+		this.container.addComponent(component);
 		this.tabs.addTab(title, icon);
 		
 		this.setActivePage(pages.size() - 1);
@@ -96,7 +98,7 @@ class MDIPanelComponentListener extends ComponentAdapter
 	{
 		MDIPanel s = (MDIPanel)e.getSource();
 		s.tabs.setBounds(0, 0, s.getWidth(), MDIPanel.tabsHeight);
-		s.container.setBounds(1, MDIPanel.tabsHeight, s.getWidth()-1, s.getHeight()-MDIPanel.tabsHeight-1);
+		s.container.setBounds(1, MDIPanel.tabsHeight, s.getWidth()-2, s.getHeight()-MDIPanel.tabsHeight-1);
 		s.validate();
 	}
 }

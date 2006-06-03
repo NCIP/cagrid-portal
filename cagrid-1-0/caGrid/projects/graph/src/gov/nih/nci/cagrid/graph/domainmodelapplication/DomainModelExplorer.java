@@ -15,6 +15,7 @@ import java.awt.event.MouseMotionAdapter;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JTree;
 
 public class DomainModelExplorer extends JComponent
 {
@@ -46,10 +47,11 @@ public class DomainModelExplorer extends JComponent
 			this.add(umlMDI);
 			this.add(splitter);
 			
-			UMLDiagram d = new UMLDiagram();
-			d.getViewer().setDrawingSize(1000,1000);
-			umlMDI.addPage(d, null, "HI", "HI");
 			
+			umlMDI.addPage(new UMLDiagram(), null, "HI", "HI");
+			umlMDI.addPage(new UMLDiagram(), null, "hello world", "id");
+			umlMDI.addPage(new UMLDiagram(), null, "hello world", "id");
+				
 			this.splitter.setCursor(Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR));
 	
 			

@@ -13,7 +13,6 @@ public class DomainModelOutlines extends InternalFrame
 	public DomainModelOutlines(DomainModel model)
 	{
 		mdi = new InvertedMDIPanel(this);
-		
 		mdi.addPage(new JTree(), null, "Outline 1");
 		mdi.addPage(new JTree(), null, "Outline 2");
 	

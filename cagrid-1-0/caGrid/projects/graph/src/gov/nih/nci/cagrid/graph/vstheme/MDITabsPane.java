@@ -127,7 +127,7 @@ public class MDITabsPane extends JLayeredPane
 	
 	public void resizeTabs()
 	{
-		int lastX = 4;
+		int lastX = 5;
 		
 		{	
 			for(int k = 0; k < tabs.size(); k++)
@@ -137,11 +137,11 @@ public class MDITabsPane extends JLayeredPane
 				
 				if(tab.active)
 				{
-					tab.setBounds(lastX-1, this.getHeight()-MDITabsPane.spacerHeight, width+1, this.getHeight()-MDITabsPane.tabHeight);
+					tab.setBounds(lastX-1, this.getHeight()-spacerHeight- tabHeight+1, width+1, tabHeight);
 				}
 				else
 				{
-					tab.setBounds(lastX, this.getHeight()-MDITabsPane.spacerHeight+1, width, this.getHeight()-MDITabsPane.tabHeight);
+					tab.setBounds(lastX, this.getHeight()-spacerHeight - tabHeight, width, tabHeight);
 				}
 				
 				lastX += width;
