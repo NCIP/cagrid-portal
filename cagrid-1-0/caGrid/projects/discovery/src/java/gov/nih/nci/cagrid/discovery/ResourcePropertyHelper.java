@@ -192,6 +192,8 @@ public class ResourcePropertyHelper {
 
 
 	private static void setAnonymous(Stub stub) {
+		//stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT,
+		//	org.globus.wsrf.security.Constants.ENCRYPTION);
 		stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS, Boolean.TRUE);
 		stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, NoAuthorization.getInstance());
 		stub._setProperty(GSIConstants.GSI_AUTHORIZATION, org.globus.gsi.gssapi.auth.NoAuthorization.getInstance());
