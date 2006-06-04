@@ -1,5 +1,7 @@
 To Do:
 
+need to set the correct location to globus imported schemas .....
+
 need to make sure to add ALL the globus used namespaces to the IntroduceConstants
 
 add scroll pain in deployer for service properties
