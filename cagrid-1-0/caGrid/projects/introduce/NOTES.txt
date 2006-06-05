@@ -1,4 +1,5 @@
 To Do:
+add automatic client handle generation if a method is returning an EPR
 
 need to add deploy testing
 
