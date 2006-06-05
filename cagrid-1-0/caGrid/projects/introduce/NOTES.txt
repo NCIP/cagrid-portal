@@ -2,8 +2,6 @@ To Do:
 
 need to set the correct location to globus imported schemas .....
 
-need to make sure to add ALL the globus used namespaces to the IntroduceConstants
-
 add scroll pain in deployer for service properties
 
 add support for having EPR type and fault types in the types browser....
@@ -61,6 +59,8 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+need to make sure to add ALL the globus used namespaces to the IntroduceConstants
+
 the generated service's ServiceConfiguration needs to be moved to the service package instead of the service.globus package
   - it currently creates cyclic packages
   
