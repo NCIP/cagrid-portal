@@ -353,7 +353,7 @@ public class ClassBrowserPanel extends JPanel {
 	private void browseForJar() {
 		String jarFile = null;
 		try {
-			jarFile = ResourceManager.promptFile(this, ".", new JarFileFilter());
+			jarFile = ResourceManager.promptFile(this, null, new JarFileFilter());
 			// only bother adding the jar file to the list if it's not in there yet
 			boolean shouldAdd = true;
 			String[] currentJars = getAdditionalJars();
