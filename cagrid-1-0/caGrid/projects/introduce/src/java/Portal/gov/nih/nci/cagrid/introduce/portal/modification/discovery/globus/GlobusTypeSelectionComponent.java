@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.common.GlobusTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
@@ -83,9 +84,19 @@ public class GlobusTypeSelectionComponent extends NamespaceTypeDiscoveryComponen
 			} else {
 				return null;
 			}
+			
+			if (this.globusPanel.currentSchemaFile != null) {
+				
+				int index = globusPanel.currentSchemaFile.getAbsolutePath().indexOf(GlobusTools.getGlobusLocation() + File.separator + "share" + File.separator + "schema" + File.separator) + new String(GlobusTools.getGlobusLocation()+ "share" + File.separator + "schema" + File.separator).length();
+				String location = ".." + File.separator + globusPanel.currentSchemaFile.getAbsolutePath().substring(index + 1,globusPanel.currentSchemaFile.getAbsolutePath().length());
+				input.setLocation(location);
+				gov.nih.nci.cagrid.introduce.portal.ExtensionTools.setSchemaElements(input, XMLUtilities
+						.fileNameToDocument(globusPanel.currentSchemaFile.getAbsolutePath()));
+			} else {
+				return null;
+			}
 
-			gov.nih.nci.cagrid.introduce.portal.ExtensionTools.setSchemaElements(input, XMLUtilities
-				.fileNameToDocument(globusPanel.currentSchemaFile.getAbsolutePath()));
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
