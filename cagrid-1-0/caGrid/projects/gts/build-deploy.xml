@@ -103,6 +103,9 @@
 			<fileset dir="build/lib">
 				<include name="*" />
 			</fileset>
+ <fileset dir="${ext.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
 		</copy>
 		<!--copy over the schema service files-->
 		<copy overwrite="true" toDir="${tomcat.wsrf.schema.dir}/${service.deployment.dir.name}">
