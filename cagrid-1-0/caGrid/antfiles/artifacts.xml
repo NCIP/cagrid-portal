@@ -184,6 +184,13 @@
 				<include name="**"/>
 			</fileset>
 		</artifact>
+		<artifact track="main" type="jars" id="discovery.jars">
+			<antcall target="build-discovery"/>
+			<fileset dir="${projects.dir}/discovery/build/jars">
+				<include name="*.jar"/>
+				<exclude name="*tests*.jar"/>
+			</fileset>
+		</artifact>
 		<artifact track="main" type="jars" id="gme.globus.client.jars">
 			<antcall target="build-gme"/>
 			<fileset dir="${projects.dir}/gme/lib">
