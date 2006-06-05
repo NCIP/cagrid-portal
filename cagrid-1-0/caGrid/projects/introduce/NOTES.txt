@@ -53,8 +53,6 @@ type browser issues:
 -(DONE)it lets you set the class name for XML schema types; does that work?
 -(DONE)does it really support editing the location of a schema? if it does, it needs to move the file that was pulled down from the gme (otherwise it wont exist)
 
-you should be able to open up an empty introduce.xml document (with no elements), currently null pointers happen in methods and types
-
 when modifying a service, conneciton to GME needs to happen in the background, and fail gracefully
 
 secure message privacy does not work (STEVE)
@@ -62,6 +60,8 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+(NO YOU SHOULD NOT) you should be able to open up an empty introduce.xml document (with no elements), currently null pointers happen in methods and types
+
 need to set the correct location to globus imported schemas .....
 
 need to make sure to add ALL the globus used namespaces to the IntroduceConstants

@@ -19,7 +19,16 @@
            <xs:element name="ServiceDescription">
                       <xs:complexType>
                                  <xs:sequence>
+                                            <xs:annotation>
+                                                       Namespaces represent any available type which can be used for any purpose in this service.
+                                                       Services represent any service present in this grid service.  The first service in the list is the primary service.
+                                                                  other services are used to prepresent other resource types this service may be able to create.
+                                                       Extensions describe the extensions that this particular service needs to be executed while creating and/or building this service.
+                                                                  oder matters on the extensions.
+                                                       ServiceProperties are properties which will be configured at deploy time and available to the service implementation to be used for configuration.
+                                            </xs:annotation>
                                             <xs:element ref="namespace:Namespaces"/>
+                        
                                             <xs:element ref="service:Services"/>
                                             <xs:element ref="extension:Extensions" minOccurs="0" maxOccurs="1"/>
                                             <xs:element ref="property:ServiceProperties" minOccurs="0" maxOccurs="1"/>

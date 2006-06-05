@@ -15,7 +15,7 @@
 		schemaLocation="./Security.xsd"/>
 	<xs:element name="Services" type="tns:ServicesType">
 		<xs:annotation>
-			<xs:documentation>List of Services for this Grid Service</xs:documentation>
+			<xs:documentation>List of Services for this Grid Service.  The first service in the list is the primary service for this grid service.  Others represent resource types which can be created by this service.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="ServicesType">
