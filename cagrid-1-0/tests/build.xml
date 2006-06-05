@@ -22,6 +22,7 @@
 
 	<!-- IMPORT THE UTILITIES TARGETS -->
 	<import file="${cagrid.antfiles.dir}/artifacts.xml" />
+	<import file="${antfiles.dir}/artifacts.xml" />
 	<import file="${cagrid.antfiles.dir}/ant-utilities.xml" />
 	<import file="${cagrid.antfiles.dir}/test-utilities.xml" />
 	<import file="${cagrid.antfiles.dir}/report-utilities.xml" />
@@ -34,12 +35,12 @@
 	<!--                          DEFINE THE SUB PROJECTS                                 -->
 	<!-- ================================================================================ -->
 	<!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
-	<property name="projects.list" value="performance" />
+	<property name="projects.list" value="coretests" />
 	<!-- ================================================================================ -->
 	<!--                  DEFINE THE SUB PROJECTS THAT SUPPORT TESTING                    -->
 	<!-- ================================================================================ -->
 	<!-- This should be a subset of the projects above -->
-	<property name="testable.projects.list" value="performance" />
+	<property name="testable.projects.list" value="coretests" />
 
 	<!-- =============================================================== -->
 	<!-- Bootstrap the build by setting up the structure and building    -->
@@ -67,16 +68,29 @@
 	</target>
 
 	<!-- =============================================================== -->
-	<!-- NTSEC                                                           -->
+	<!-- coretests                                                       -->
 	<!-- =============================================================== -->
-	<target name="build-performance" depends="prepare" description="Builds ntsec">
-		<resolveDependencies extdir="${tests.projects.dir}/performance/ext">
+	<target name="build-coretests" depends="prepare" description="Builds ntsec">
+		<resolveDependencies extdir="${tests.projects.dir}/coretests/ext">
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />
+			<artifact refid="BasicAnalyticalService.jars" />
+			<artifact refid="discovery.jars" />
+			<artifact refid="core.jars" />
 		</resolveDependencies>
-		<ant dir="${tests.projects.dir}/performance" inheritAll="false" antfile="build.xml" target="all" />
+		<ant dir="${tests.projects.dir}/coretests" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
+	<!-- =============================================================== -->
+	<!-- cagrid builds                                                   -->
+	<!-- =============================================================== -->
+
+	<target name="build-core">
+		<echo>core must be built in the main caGrid build</echo>
+	</target>
+	<target name="build-discovery">
+		<echo>discovery must be built in the main caGrid build</echo>
+	</target>
 
 	<!-- ============================================================== -->
 	<!-- Cleans up generated stuff                                      -->
