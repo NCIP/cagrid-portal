@@ -107,5 +107,15 @@
 	<classpathentry kind="src" path="src/java/validation"/>
 	<classpathentry kind="src" path="src/java/common"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-core-tests-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/acme.jar"/>
+	<classpathentry kind="lib" path="ext/lib/antlrall-2.7.2.jar"/>
+	<classpathentry kind="lib" path="ext/lib/argouml-layout.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-graph-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/gef_modified.jar"/>
+	<classpathentry kind="lib" path="ext/lib/jmi-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/nsuml-0.4.20_modified.jar"/>
+	<classpathentry kind="lib" path="ext/lib/ocl-argo-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/swidgets-0.1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/toolbar-1.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
