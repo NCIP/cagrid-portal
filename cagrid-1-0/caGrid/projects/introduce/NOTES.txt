@@ -1,4 +1,7 @@
 To Do:
+
+refactor to not be creating hte service.wsdd everytime.....
+
 add automatic client handle generation if a method is returning an EPR
 
 need to add deploy testing
