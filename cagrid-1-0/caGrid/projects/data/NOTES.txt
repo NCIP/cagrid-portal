@@ -8,3 +8,5 @@ TODO:
 	-- Choose query processor jar and it's dependencies at modification
 	-- If on build a NoClassDef error is encountered, be sure to add the appropriate jars and or classes to the build classpath, and try building again
 7 [I]: Build metadata for data service on codegen
+8    : extension.xml needs a property for CADSR_URL
+9    : Type Serialization table needs a column to show/edit classname for type (must NOT be set when using DefaultSerialization, MUST be set when using custom or SDK serialization)
