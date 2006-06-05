@@ -47,7 +47,7 @@ public abstract class BusyDialogRunnable implements Runnable {
 					dialog.getProgress().setIndeterminate(false);
 				}
 			});
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			valid = false;
 			errorMessage = e.getMessage();
 		}
