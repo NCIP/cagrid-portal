@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.discovery.globus;
 
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.GlobusTools;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
@@ -63,13 +64,9 @@ public class GlobiusConfigurationPanel extends JPanel {
 	}
 
 	public void discoverFromGlobus() {
-
-		IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager
-				.getInstance().getResource(IntroducePortalConf.RESOURCE);
 		List namespaces = null;
 
-		namespaces = CommonTools.getProvidedNamespaces(new File(conf
-				.getGlobusLocation()));
+		namespaces = IntroduceConstants.GLOBUS_NAMESPACES;
 
 		getNamespaceComboBox().removeAllItems();
 		for (int i = 0; i < namespaces.size(); i++) {
