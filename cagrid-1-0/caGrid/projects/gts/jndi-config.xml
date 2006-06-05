@@ -38,7 +38,7 @@
 			</resourceParams>
 		</resource>
 		
-		<resource name="serviceconfiguration" type="gov.nih.nci.cagrid.gts.service.globus.ServiceConfiguration">
+		<resource name="serviceconfiguration" type="gov.nih.nci.cagrid.gts.service.ServiceConfiguration">
 			<resourceParams>
 				<parameter>
 					<name>factory</name>

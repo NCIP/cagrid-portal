@@ -15,7 +15,6 @@ import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.X509Credential;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
-import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 
 import org.projectmobius.common.XMLUtilities;
@@ -34,6 +33,25 @@ public class SecurityDescriptor {
 		try {
 			StringBuffer xml = new StringBuffer();
 			xml.append("<securityConfig xmlns=\"http://www.globus.org\">");
+			
+			xml.append("<method name=\"queryResourceProperties\">\n");
+			xml.append("    <auth-method>\n");
+			xml.append("      <none/>\n");
+		    xml.append("    </auth-method>\n");
+		    xml.append("</method>\n");
+		    
+		    xml.append("<method name=\"getMultipleResourceProperties\">\n");
+			xml.append("    <auth-method>\n");
+			xml.append("      <none/>\n");
+		    xml.append("    </auth-method>\n");
+		    xml.append("</method>\n");
+		    
+		    xml.append("<method name=\"getResourceProperty\">\n");
+			xml.append("    <auth-method>\n");
+			xml.append("      <none/>\n");
+		    xml.append("    </auth-method>\n");
+		    xml.append("</method>\n");
+			 
 			xml.append(writeServiceSettings(info.getService().getServiceSecurity()));
 			
 				ServiceType service = info.getService();
