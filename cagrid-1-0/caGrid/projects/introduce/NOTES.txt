@@ -1,5 +1,7 @@
 To Do:
 
+need to add deploy testing
+
 create preferences window to support extension configuration etc.....
 
 add scroll pain in deployer for service properties
