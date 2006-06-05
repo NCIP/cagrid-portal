@@ -13,12 +13,17 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
+import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
+import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
+import gov.nih.nci.cagrid.metadata.ServiceMetadata;
+import gov.nih.nci.cagrid.metadata.ServiceMetadataServiceDescription;
+import gov.nih.nci.cagrid.metadata.service.Service;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -29,6 +34,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -41,6 +48,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.XMLUtilities;
+import org.projectmobius.tools.common.viewer.XSDFileFilter;
 
 /** 
  *  DataServiceCreationPostProcessor
@@ -73,12 +81,22 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		// grab cql query and result set schemas and move them into the service's directory
 		String schemaDir = getServiceSchemaDir(props);
 		System.out.println("Copying schemas to " + schemaDir);
+		File extensionSchemaDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data" + File.separator + "schema"); 
+		List schemaFiles = Utils.recursiveListFiles(extensionSchemaDir, new XSDFileFilter());
+		for (int i = 0; i < schemaFiles.size(); i++) {
+			File schemaFile = (File) schemaFiles.get(i);
+			String subname = schemaFile.getCanonicalPath().substring(extensionSchemaDir.getCanonicalPath().length() + File.separator.length());
+			copySchema(subname, schemaDir);
+		}
+		/*
 		copySchema(DataServiceConstants.CQL_QUERY_SCHEMA, schemaDir);
 		copySchema(DataServiceConstants.CQL_RESULT_SET_SCHEMA, schemaDir);
+		copySchema(DataServiceConstants.CAGRID_METADATA_SCHEMA, schemaDir);
 		copySchema(DataServiceConstants.COMMON_METADATA_SCHEMA, schemaDir);
 		copySchema(DataServiceConstants.DATA_METADATA_SCHEMA, schemaDir);
 		copySchema(DataServiceConstants.CADSR_DOMAIN_SCHEMA, schemaDir);
 		copySchema(DataServiceConstants.CADSR_UMLPROJECT_SCHEMA, schemaDir);
+		*/
 		// copy libraries for data services into the new DS's lib directory
 		copyLibraries(props);
 		// namespaces
@@ -87,22 +105,32 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		if (namespaces == null) {
 			namespaces = new NamespacesType();
 		}
-		// add three namespaces to the service
-		NamespaceType[] dsNamespaces = new NamespaceType[namespaces.getNamespace().length + 3];
-		System.arraycopy(namespaces.getNamespace(), 0, dsNamespaces, 0, namespaces.getNamespace().length);
+		// add some namespaces to the service
+		List dsNamespaces = new ArrayList(Arrays.asList(namespaces.getNamespace()));
 		// query namespace
-		dsNamespaces[dsNamespaces.length - 3] = CommonTools.createNamespaceType(schemaDir + File.separator + DataServiceConstants.CQL_QUERY_SCHEMA);
-		dsNamespaces[dsNamespaces.length - 3].setLocation("." + File.separator + DataServiceConstants.CQL_QUERY_SCHEMA);
+		NamespaceType queryNamespace = CommonTools.createNamespaceType(schemaDir + File.separator + DataServiceConstants.CQL_QUERY_SCHEMA);
+		queryNamespace.setLocation("." + File.separator + DataServiceConstants.CQL_QUERY_SCHEMA);
 		// query result namespace
-		dsNamespaces[dsNamespaces.length - 2] = CommonTools.createNamespaceType(schemaDir + File.separator + DataServiceConstants.CQL_RESULT_SET_SCHEMA);
-		dsNamespaces[dsNamespaces.length - 2].setLocation("." + File.separator + DataServiceConstants.CQL_RESULT_SET_SCHEMA);
+		NamespaceType resultNamespace = CommonTools.createNamespaceType(schemaDir + File.separator + DataServiceConstants.CQL_RESULT_SET_SCHEMA);
+		resultNamespace.setLocation("." + File.separator + DataServiceConstants.CQL_RESULT_SET_SCHEMA);
 		// ds metadata namespace
-		dsNamespaces[dsNamespaces.length - 1] = CommonTools.createNamespaceType(schemaDir + File.separator + DataServiceConstants.DATA_METADATA_SCHEMA);
-		dsNamespaces[dsNamespaces.length - 1].setLocation("." + File.separator + DataServiceConstants.DATA_METADATA_SCHEMA);
-		namespaces.setNamespace(dsNamespaces);
+		NamespaceType dsMetadataNamespace = CommonTools.createNamespaceType(schemaDir + File.separator + DataServiceConstants.DATA_METADATA_SCHEMA);
+		dsMetadataNamespace.setLocation("." + File.separator + DataServiceConstants.DATA_METADATA_SCHEMA);
+		// caGrid metadata namespace
+		NamespaceType cagridMdNamespace = CommonTools.createNamespaceType(schemaDir + File.separator + DataServiceConstants.CAGRID_METADATA_SCHEMA);
+		cagridMdNamespace.setLocation("." + File.separator + DataServiceConstants.CAGRID_METADATA_SCHEMA);
+		cagridMdNamespace.setGenerateStubs(Boolean.FALSE); // prevent these beans from being built!
+		// add those new namespaces to the list of namespace types
+		dsNamespaces.add(queryNamespace);
+		dsNamespaces.add(resultNamespace);
+		dsNamespaces.add(dsMetadataNamespace);
+		dsNamespaces.add(cagridMdNamespace);
+		NamespaceType[] nsArray = new NamespaceType[dsNamespaces.size()];
+		dsNamespaces.toArray(nsArray);
+		namespaces.setNamespace(nsArray);
 		description.setNamespaces(namespaces);
 		// add the metadata namespace to the nsexcludes property
-		System.out.println("Excludig metadata namespace from processing");
+		System.out.println("Excluding metadata namespace from processing");
 		String excludes = props.getProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES);
 		Set excludeNamespaces = new HashSet();
 		File dataSchemaFile = new File(schemaDir + File.separator + DataServiceConstants.DATA_METADATA_SCHEMA);
@@ -126,16 +154,16 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		MethodTypeInputsInput queryInput = new MethodTypeInputsInput();
 		queryInput.setName(DataServiceConstants.QUERY_METHOD_PARAMETER_NAME);
 		queryInput.setIsArray(false);
-		QName queryQname = new QName(dsNamespaces[dsNamespaces.length - 3].getNamespace(), 
-			dsNamespaces[dsNamespaces.length - 3].getSchemaElement(0).getType());
+		QName queryQname = new QName(queryNamespace.getNamespace(), 
+			queryNamespace.getSchemaElement(0).getType());
 		queryInput.setQName(queryQname);
 		inputs.setInput(new MethodTypeInputsInput[] {queryInput});
 		queryMethod.setInputs(inputs);
 		// method output
 		MethodTypeOutput output = new MethodTypeOutput();
 		output.setIsArray(false);
-		QName resultSetQName = new QName(dsNamespaces[dsNamespaces.length - 2].getNamespace(),
-			dsNamespaces[dsNamespaces.length - 2].getSchemaElement(0).getType());
+		QName resultSetQName = new QName(resultNamespace.getNamespace(),
+			resultNamespace.getSchemaElement(0).getType());
 		output.setQName(resultSetQName);
 		queryMethod.setOutput(output);
 		// exceptions on query method
@@ -157,6 +185,37 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		dsMethods[dsMethods.length - 1] = queryMethod;
 		methods.setMethod(dsMethods);
 		dataService.setMethods(methods);
+		
+		// add the service metadata
+		addServiceMetadata(description);
+	}
+	
+	
+	private void addServiceMetadata(ServiceDescription desc) {
+		ResourcePropertyType serviceMetadata = new ResourcePropertyType();
+		serviceMetadata.setPopulateFromFile(true);
+		serviceMetadata.setRegister(true);
+		serviceMetadata.setQName(DataServiceConstants.SERVICE_METADATA_QNAME);
+		ServiceMetadata smd = new ServiceMetadata();
+		ServiceMetadataServiceDescription des = new ServiceMetadataServiceDescription();
+		Service service = new Service();
+		des.setService(service);
+		smd.setServiceDescription(des);
+		ResourcePropertiesListType propsList = desc.getServices().getService()[0].getResourcePropertiesList();
+		if (propsList == null) {
+			propsList = new ResourcePropertiesListType();
+			desc.getServices().getService()[0].setResourcePropertiesList(propsList);
+		}
+		ResourcePropertyType[] metadataArray = propsList.getResourceProperty();
+		if (metadataArray == null || metadataArray.length == 0) {
+			metadataArray = new ResourcePropertyType[] {serviceMetadata};
+		} else {
+			ResourcePropertyType[] tmpArray = new ResourcePropertyType[metadataArray.length + 1];
+			System.arraycopy(metadataArray, 0, tmpArray, 0, metadataArray.length);
+			tmpArray[metadataArray.length] = serviceMetadata;
+			metadataArray = tmpArray;
+		}
+		propsList.setResourceProperty(metadataArray);
 	}
 	
 	
