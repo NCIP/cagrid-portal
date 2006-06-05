@@ -48,6 +48,7 @@ public abstract class BusyDialogRunnable implements Runnable {
 				}
 			});
 		} catch (Throwable e) {
+			e.printStackTrace();
 			valid = false;
 			errorMessage = e.getMessage();
 		}
