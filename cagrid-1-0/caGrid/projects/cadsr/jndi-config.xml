@@ -32,7 +32,7 @@
 				</parameter>				
 			</resourceParams>
 		</resource>
-		<resource name="serviceconfiguration" type="gov.nih.nci.cagrid.cadsr.service.globus.ServiceConfiguration">
+		<resource name="serviceconfiguration" type="gov.nih.nci.cagrid.cadsr.service.ServiceConfiguration">
 			<resourceParams>
 				<parameter>
 					<name>factory</name>
