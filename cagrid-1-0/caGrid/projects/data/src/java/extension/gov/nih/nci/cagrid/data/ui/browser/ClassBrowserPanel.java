@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.common.AxisJdomUtils;
 import gov.nih.nci.cagrid.data.common.DataServiceConstants;
+import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 
@@ -12,7 +13,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -26,7 +26,6 @@ import java.util.jar.JarFile;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -48,8 +47,6 @@ import org.jdom.Element;
  * @version $Id$ 
  */
 public class ClassBrowserPanel extends JPanel {
-
-	private static File lastDir = null;
 		
 	private JList additionalJarsList = null;
 	private JScrollPane additionalJarsScrollPane = null;
@@ -351,35 +348,27 @@ public class ClassBrowserPanel extends JPanel {
 	
 	
 	private void browseForJar() {
-		JFileChooser chooser = new JFileChooser(lastDir);
-		chooser.setFileFilter(new JarFileFilter());
-		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		chooser.setMultiSelectionEnabled(false);
-		int choice = chooser.showDialog(this, "Select");
-		if (choice == JFileChooser.APPROVE_OPTION) {
-			File selected = chooser.getSelectedFile();
-			lastDir = selected;
-			try {
-				String jarFile = selected.getCanonicalPath();
-				// only bother adding the jar file to the list if it's not in there yet
-				boolean shouldAdd = true;
-				String[] currentJars = getAdditionalJars();
-				for (int i = 0; i < currentJars.length; i++) {
-					if (jarFile.equals(currentJars[i])) {
-						shouldAdd = false;
-						break;
-					}
+		String jarFile = null;
+		try {
+			jarFile = ResourceManager.promptFile(this, ".", new JarFileFilter());
+			// only bother adding the jar file to the list if it's not in there yet
+			boolean shouldAdd = true;
+			String[] currentJars = getAdditionalJars();
+			for (int i = 0; i < currentJars.length; i++) {
+				if (jarFile.equals(currentJars[i])) {
+					shouldAdd = false;
+					break;
 				}
-				if (shouldAdd) {
-					String[] additionalJars = new String[currentJars.length + 1];
-					System.arraycopy(currentJars, 0, additionalJars, 0, currentJars.length);
-					additionalJars[additionalJars.length - 1] = jarFile;
-					getAdditionalJarsList().setListData(additionalJars);
-				}
-			} catch (IOException ex) {
-				ex.printStackTrace();
-				PortalUtils.showErrorMessage("Error opening the jar " + selected.getAbsolutePath(), ex);
 			}
+			if (shouldAdd) {
+				String[] additionalJars = new String[currentJars.length + 1];
+				System.arraycopy(currentJars, 0, additionalJars, 0, currentJars.length);
+				additionalJars[additionalJars.length - 1] = jarFile;
+				getAdditionalJarsList().setListData(additionalJars);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			PortalUtils.showErrorMessage("Error opening the jar " + jarFile, ex);
 		}
 	}
 	
