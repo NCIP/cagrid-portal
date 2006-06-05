@@ -1,0 +1,22 @@
+<!-- ======================================================================= -->
+<!-- caGrid Artifacts build file                                             -->
+<!-- ======================================================================= -->
+<project name="caGrid-tests_artifacts" basedir="." default="usage">
+
+	<!-- =============================================================== -->
+	<!-- Define the build artifacts (created/used by projects) here      -->
+	<!--                                                                 -->
+	<!-- NOTE:  These should be all of the files necessary to "depend" on-->
+	<!-- the project (not just the built files).  Make a separate        -->
+	<!-- artifact for groups of files that will probably be copied to    -->
+	<!-- separate directoris (e.g. jars and conf files)                  -->
+	<!-- =============================================================== -->
+	<target name="defineTestsArtifacts" depends="prepare">
+		<artifact track="main" type="jars" id="BasicAnalyticalService.jars">
+			<fileset dir="${tests.projects.dir}/BasicAnalyticalService/build/lib">
+				<include name="*.jar" />
+			</fileset>
+		</artifact>
+	</target>
+
+</project>
