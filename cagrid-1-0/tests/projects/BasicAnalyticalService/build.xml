@@ -289,6 +289,7 @@
 			<include name="**/*.properties" />
 			<include name="**/*.xsd" />
 			<include name="**/*.wsdd" />
+			<include name="**/*.class" />
 			<exclude name="**/client/**" />
 			<exclude name="**/service/**" />
 		</jar>

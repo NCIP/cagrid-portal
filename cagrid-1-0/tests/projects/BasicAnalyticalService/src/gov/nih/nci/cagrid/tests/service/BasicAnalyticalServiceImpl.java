@@ -43,9 +43,7 @@ public class BasicAnalyticalServiceImpl {
 	}
 
 
-	public java.lang.String reverseTranslate(java.lang.String dna) 
-		throws RemoteException 
-	{
+	     public java.lang.String reverseTranslate(java.lang.String dna) throws RemoteException {
 		// reverse
 		StringBuffer dnaBuf = new StringBuffer(dna);
 		dnaBuf.reverse();

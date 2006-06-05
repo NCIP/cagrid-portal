@@ -5,8 +5,8 @@
     xmlns:java="http://xml.apache.org/axis/wsdd/providers/java" 
     xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
-    <service name="SERVICE-INSTANCE-PREFIX/BasicAnalytical" provider="Handler" use="literal" style="document">
-        <parameter name="className" value="gov.nih.nci.cagrid.tests.service.globus.BasicAnalyticalProviderImpl"/>
+    <service name="SERVICE-INSTANCE-PREFIX/BasicAnalyticalService" provider="Handler" use="literal" style="document">
+        <parameter name="className" value="gov.nih.nci.cagrid.tests.service.globus.BasicAnalyticalServiceProviderImpl"/>
         <wsdlFile>share/schema/SERVICE-INSTANCE-PATH/BasicAnalyticalService_service.wsdl</wsdlFile>
         <parameter name="securityDescriptor" value="ETC-PATH/BasicAnalyticalService-security-desc.xml"/>
         <parameter name="allowedMethods" value="*"/>

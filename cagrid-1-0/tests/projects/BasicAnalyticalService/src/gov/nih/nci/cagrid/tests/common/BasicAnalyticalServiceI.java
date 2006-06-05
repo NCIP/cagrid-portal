@@ -13,6 +13,7 @@ public interface BasicAnalyticalServiceI {
 
 
 
+
      public java.lang.String reverseTranslate(java.lang.String dna) throws RemoteException ;
 
 }
