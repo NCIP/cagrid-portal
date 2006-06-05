@@ -1,10 +1,5 @@
 package gov.nih.nci.cagrid.introduce;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import javax.xml.namespace.QName;
 
 /**
@@ -32,11 +27,11 @@ public class IntroduceConstants {
 	public static final String INTRODUCE_NS_EXCLUDES = "introduce.ns.excludes";
 	public static final QName INTRODUCE_SKELETON_QNAME = new QName("gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton");
 	
+	// resource types
 	public static final String INTRODUCE_SINGLETON_RESOURCE = "singleton";
 	public static final String INTRODUCE_MAIN_RESOURCE = "main";
 	public static final String INTRODUCE_BASE_RESOURCE = "base";
 	
-
 	// deployment properties
 	public static final String DEPLOY_PROPERTIES_FILE = "deploy.properties";
 	
@@ -47,6 +42,8 @@ public class IntroduceConstants {
 	// w3c namespaces
 	public static final String W3CNAMESPACE = "http://www.w3.org/2001/XMLSchema";
 	public static final String W3CNAMESPACE_PREFIX = "xs";
+	
+	public static final QName SERVICE_METADATA_QNAME = new QName("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata", "ServiceMetadata");
 
 	private IntroduceConstants() {
 		// prevents instantiation
