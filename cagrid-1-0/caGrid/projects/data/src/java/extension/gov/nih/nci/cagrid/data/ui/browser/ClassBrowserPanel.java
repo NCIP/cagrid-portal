@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.common.AxisJdomUtils;
 import gov.nih.nci.cagrid.data.common.DataServiceConstants;
+import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
@@ -13,7 +14,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.IOException;
+import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -377,6 +380,12 @@ public class ClassBrowserPanel extends JPanel {
 		SortedSet classNames = new TreeSet();
 		String[] jars = getAdditionalJars();
 		try {
+			URL[] urls = new URL[jars.length];
+			for (int i = 0; i < jars.length; i++) {
+				urls[i] = (new File(jars[i])).toURL();
+			}
+			ClassLoader loader = new URLClassLoader(urls, getClass().getClassLoader());
+			Class queryProcessorClass = CQLQueryProcessor.class;
 			for (int i = 0; i < jars.length; i++) {
 				JarFile jarFile = new JarFile(jars[i]);
 				Enumeration jarEntries = jarFile.entries();
@@ -386,7 +395,10 @@ public class ClassBrowserPanel extends JPanel {
 					if (name.endsWith(".class")) {
 						name = name.replace('/', '.');
 						name = name.substring(0, name.length() - 6);
-						classNames.add(name);
+						Class loadedClass = loader.loadClass(name);
+						if (queryProcessorClass.isAssignableFrom(loadedClass)) {
+							classNames.add(name);
+						}
 					}
 				}
 			}
@@ -397,7 +409,7 @@ public class ClassBrowserPanel extends JPanel {
 			while (nameIter.hasNext()) {
 				getClassSelectionComboBox().addItem(nameIter.next());
 			}
-		} catch (IOException ex) {
+		} catch (Exception ex) {
 			ex.printStackTrace();
 			PortalUtils.showErrorMessage("Error populating class names " + ex.getMessage(), ex);
 		}
