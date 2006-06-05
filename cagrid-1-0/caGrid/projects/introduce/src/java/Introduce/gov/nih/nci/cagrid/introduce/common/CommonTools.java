@@ -22,6 +22,7 @@ import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 import gov.nih.nci.cagrid.introduce.info.SchemaInformation;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -54,6 +55,15 @@ public class CommonTools {
 		outGobbler.start();
 
 		return p;
+	}
+	
+	public static List getProvidedNamespaces(File startDir) {
+		List globusNamespaces = new ArrayList();
+		File schemasDir = new File(startDir.getAbsolutePath() + File.separator
+				+ "share" + File.separator + "schema");
+
+		CommonTools.getTargetNamespaces(globusNamespaces, schemasDir);
+		return globusNamespaces;
 	}
 	
 	public static File findSchema(String schemaNamespace, File dir) {

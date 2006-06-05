@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.common.GlobusTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
+import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
 import java.awt.BorderLayout;
@@ -19,6 +20,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import org.projectmobius.common.XMLUtilities;
+import org.projectmobius.portal.PortalResourceManager;
 
 
 /**
@@ -86,8 +88,8 @@ public class GlobusTypeSelectionComponent extends NamespaceTypeDiscoveryComponen
 			}
 			
 			if (this.globusPanel.currentSchemaFile != null) {
-				
-				int index = globusPanel.currentSchemaFile.getAbsolutePath().indexOf(GlobusTools.getGlobusLocation() + File.separator + "share" + File.separator + "schema" + File.separator) + new String(GlobusTools.getGlobusLocation()+ "share" + File.separator + "schema" + File.separator).length();
+				IntroducePortalConf conf = (IntroducePortalConf)PortalResourceManager.getInstance().getResource(IntroducePortalConf.RESOURCE);
+				int index = globusPanel.currentSchemaFile.getAbsolutePath().indexOf(conf.getGlobusLocation() + File.separator + "share" + File.separator + "schema" + File.separator) + new String(conf.getGlobusLocation()+ "share" + File.separator + "schema" + File.separator).length();
 				String location = ".." + File.separator + globusPanel.currentSchemaFile.getAbsolutePath().substring(index + 1,globusPanel.currentSchemaFile.getAbsolutePath().length());
 				input.setLocation(location);
 				gov.nih.nci.cagrid.introduce.portal.ExtensionTools.setSchemaElements(input, XMLUtilities

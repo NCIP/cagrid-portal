@@ -1,28 +1,20 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.discovery.globus;
 
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.GlobusTools;
+import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.ItemSelectable;
 import java.io.File;
 import java.util.List;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import org.jdom.Document;
-import org.projectmobius.common.GridServiceResolver;
-import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.Namespace;
-import org.projectmobius.common.XMLUtilities;
-import org.projectmobius.gme.XMLDataModelService;
-import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
-import org.projectmobius.protocol.gme.SchemaNode;
+import org.projectmobius.portal.PortalResourceManager;
 
 public class GlobiusConfigurationPanel extends JPanel {
 
@@ -72,11 +64,12 @@ public class GlobiusConfigurationPanel extends JPanel {
 
 	public void discoverFromGlobus() {
 
-		GridServiceResolver.getInstance().setDefaultFactory(
-				new GlobusGMEXMLDataModelServiceFactory());
+		IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager
+				.getInstance().getResource(IntroducePortalConf.RESOURCE);
 		List namespaces = null;
 
-		namespaces = GlobusTools.getGlobusProvidedNamespaces();
+		namespaces = CommonTools.getProvidedNamespaces(new File(conf
+				.getGlobusLocation()));
 
 		getNamespaceComboBox().removeAllItems();
 		for (int i = 0; i < namespaces.size(); i++) {
@@ -95,15 +88,20 @@ public class GlobiusConfigurationPanel extends JPanel {
 			namespaceComboBox
 					.addItemListener(new java.awt.event.ItemListener() {
 						public void itemStateChanged(java.awt.event.ItemEvent e) {
-							
+
 							String schemaNamespace = (String) namespaceComboBox
 									.getSelectedItem();
 							currentNamespace = schemaNamespace;
-							File schemasDir = new File(GlobusTools.getGlobusLocation()
-									+ File.separator + "share" + File.separator
+							IntroducePortalConf conf = (IntroducePortalConf)PortalResourceManager.getInstance().getResource(IntroducePortalConf.RESOURCE);
+							File schemasDir = new File(conf
+									.getGlobusLocation()
+									+ File.separator
+									+ "share"
+									+ File.separator
 									+ "schema");
-							File foundSchema = CommonTools.findSchema(schemaNamespace,schemasDir);
-							if(foundSchema!=null){
+							File foundSchema = CommonTools.findSchema(
+									schemaNamespace, schemasDir);
+							if (foundSchema != null) {
 								currentSchemaFile = foundSchema;
 							}
 						}
@@ -111,7 +109,6 @@ public class GlobiusConfigurationPanel extends JPanel {
 		}
 		return namespaceComboBox;
 	}
-
 
 	class SchemaWrapper {
 		Namespace ns;

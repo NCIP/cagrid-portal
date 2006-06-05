@@ -33,7 +33,7 @@
   
 		while(iterator.hasNext()){
 			String namespaceS = (String)iterator.next();
-			if(!IntroduceConstants.W3CNAMESPACE.equals(namespaceS) && !GlobusTools.getGlobusProvidedNamespaces().contains(namespaceS)){
+			if(!IntroduceConstants.W3CNAMESPACE.equals(namespaceS) && !CommonTools.getProvidedNamespaces(new File(GlobusTools.getGlobusLocation())).contains(namespaceS)){
 				NamespaceInformation namespaceInformation=(NamespaceInformation)prefixmap.get(namespaceS);
 				try{ 
 					String newLine = "";
