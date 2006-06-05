@@ -8,7 +8,7 @@
 		schemaLocation="./Security.xsd"/>
 	<xs:element name="Methods" type="MethodsType">
 		<xs:annotation>
-			<xs:documentation>List of methods for this interface.</xs:documentation>
+			<xs:documentation>List of methods for this services interface.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="MethodsType">
