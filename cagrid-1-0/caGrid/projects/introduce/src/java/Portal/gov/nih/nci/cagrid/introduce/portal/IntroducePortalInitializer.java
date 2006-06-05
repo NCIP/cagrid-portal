@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal;
 import java.awt.event.KeyEvent;
 
+import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.portal.help.IntroduceHelp;
 
 import javax.swing.JMenu;
@@ -19,6 +20,9 @@ public class IntroducePortalInitializer implements GridPortalInitializer {
 		helpMenuItem.setMnemonic(KeyEvent.VK_F1);
 		helpMenuItem.addActionListener(help.getFDisplayHelp());
 		helpMenu.insert(helpMenuItem,0);
+		
+		//load in the extensions
+		ExtensionsLoader.getInstance();
 	}
 
 }
