@@ -1,10 +1,7 @@
 package gov.nih.nci.cagrid.data.codegen;
 
-import java.io.File;
-import java.rmi.RemoteException;
-
-import org.apache.axis.message.MessageElement;
-
+import gov.nih.nci.cadsr.umlproject.domain.Project;
+import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.common.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
@@ -20,6 +17,11 @@ import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPreProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
+
+import java.io.File;
+import java.rmi.RemoteException;
+
+import org.apache.axis.message.MessageElement;
 
 /** 
  *  DataServiceCodegenPreProcessor
@@ -85,8 +87,25 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 				// build the domain model
 				DomainModel model = null;
 				try {
+					/*
 					MetadataBuilder builder = new MetadataBuilder(cadsrUrl, cadsrProject, cadsrPackage, typeNames);
 					model = builder.getDomainModel();
+					*/
+					// cadsr can now generate the data service DomainModel
+					CaDSRServiceClient cadsrClient = new CaDSRServiceClient(cadsrUrl);
+					// get the project
+					Project proj = null;
+					Project[] allProjects = cadsrClient.findAllProjects();
+					for (int i = 0; i < allProjects.length; i++) {
+						if (allProjects[i].getLongName().equals(cadsrProject)) {
+							proj = allProjects[i];
+							break;
+						}
+					}
+					if (proj == null) {
+						throw new CodegenExtensionException("caDSR service " + cadsrUrl + " did not find project " + cadsrProject);
+					}
+					model = cadsrClient.generateDomainModelForPackages(proj, new String[] {cadsrPackage});
 					System.out.println("Created data service metadata!");
 				} catch (RemoteException ex) {
 					throw new CodegenExtensionException("Error connecting to caDSR for metadata: " + ex.getMessage(), ex);
