@@ -104,6 +104,21 @@ public class BasicAnalyticalServiceClient implements BasicAnalyticalServiceI {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	     public java.lang.String reverseTranslate(java.lang.String dna) throws RemoteException {
                BasicAnalyticalServicePortType port = this.getPortType();
                org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;

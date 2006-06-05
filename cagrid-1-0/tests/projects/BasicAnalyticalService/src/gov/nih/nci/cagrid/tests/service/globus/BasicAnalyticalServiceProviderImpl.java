@@ -23,6 +23,16 @@ public class BasicAnalyticalServiceProviderImpl{
 
 
 
+
+
+
+
+
+
+
+
+
+
 	public gov.nih.nci.cagrid.tests.stubs.ReverseTranslateResponse reverseTranslate(gov.nih.nci.cagrid.tests.stubs.ReverseTranslateRequest params) throws RemoteException {
 		gov.nih.nci.cagrid.tests.stubs.ReverseTranslateResponse boxedResult = new gov.nih.nci.cagrid.tests.stubs.ReverseTranslateResponse();
 		boxedResult.setResponse(impl.reverseTranslate(params.getDna()));
