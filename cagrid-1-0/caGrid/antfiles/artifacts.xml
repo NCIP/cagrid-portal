@@ -116,6 +116,14 @@
 				<include name="GTS-common.jar"/>
 				<include name="GTS-client.jar"/>
 			</fileset>
+			<fileset dir="${projects.dir}/metadata/build/lib">
+							<include name="*.jar"/>
+							<exclude name="*test*.jar"/>
+		</fileset>
+		<fileset dir="${projects.dir}/metadata/ext/lib">
+							<include name="*.jar"/>
+							<exclude name="*test*.jar"/>
+		</fileset>
 		</artifact>
 		<artifact track="main" type="jars" id="cadsr.jars">
 			<antcall target="build-cadsr"/>
