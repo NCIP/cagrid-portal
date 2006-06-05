@@ -82,5 +82,7 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-discovery-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-core-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
