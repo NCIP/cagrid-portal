@@ -5,7 +5,7 @@
 	<property name="conf.dir" location="conf"/>
 	<property name="introduce.portal.conf"
 		location="${conf.dir}/introduce/introduce-portal-conf.xml"/>
-	<target name="introducePortal" depends="build" description="Execute the Introduce Portal">
+	<target name="introduce" depends="build" description="Execute the Introduce GDE">
 		<runPortal configfile="${introduce.portal.conf}"/>
 	</target>
 	<macrodef name="runPortal">

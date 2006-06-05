@@ -55,7 +55,7 @@
     <property name="schema.src" location="${globus.dir}/share/schema" />
     <property name="schema.dest" location="${build.dir}/schema" />
     <property name="mapping.src" value="${basedir}/NStoPkg.properties" />
-	<property name="ext.schema.dir" location="${basedir}/ext/schema"/>
+	<property name="ext.schema.dir" location="${basedir}/ext/xsd"/>
 	
 	<!-- source directories -->
 	<property name="src.dir" location="${basedir}/src/java"/>
