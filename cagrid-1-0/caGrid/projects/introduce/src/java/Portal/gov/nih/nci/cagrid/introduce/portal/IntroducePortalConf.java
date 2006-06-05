@@ -1,17 +1,11 @@
 package gov.nih.nci.cagrid.introduce.portal;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import javax.swing.ToolTipManager;
 
 import org.jdom.Element;
 import org.projectmobius.common.AbstractMobiusConfiguration;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.MobiusResourceManager;
-
 
 /**
  * @author <A href="mailto:hastings@bmi.osu.edu">Shannon Hastings </A>
@@ -24,13 +18,22 @@ public class IntroducePortalConf implements AbstractMobiusConfiguration {
 
 	public static String RESOURCE = "IntroducePortalConf";
 
+	public static String GLOBUS_LOCATION = "globusLocation";
+
+	public String globusLocation = "";
 
 	public IntroducePortalConf() {
 		ToolTipManager.sharedInstance().setDismissDelay(Integer.MAX_VALUE);
 	}
 
-
-	public void parse(MobiusResourceManager resourceManager, Element config) throws MobiusException {
+	public void parse(MobiusResourceManager resourceManager, Element config)
+			throws MobiusException {
+		Element globusEl = config.getChild(GLOBUS_LOCATION, config
+				.getNamespace());
+		globusLocation = globusEl.getText();
 	}
 
+	public String getGlobusLocation() {
+		return globusLocation;
+	}
 }

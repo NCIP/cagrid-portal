@@ -1,6 +1,8 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.discovery.globus;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.GlobusTools;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -36,14 +38,11 @@ public class GlobiusConfigurationPanel extends JPanel {
 
 	public String filterType = null;
 
-	public String globusLocation;
-
 	/**
 	 * This method initializes
 	 */
-	public GlobiusConfigurationPanel(String globusLocation) {
+	public GlobiusConfigurationPanel() {
 		super();
-		this.globusLocation = globusLocation;
 		initialize();
 	}
 
@@ -77,7 +76,7 @@ public class GlobiusConfigurationPanel extends JPanel {
 				new GlobusGMEXMLDataModelServiceFactory());
 		List namespaces = null;
 
-		namespaces = IntroduceConstants.INTRODUCE_GLOBUS_NAMESPACES;
+		namespaces = GlobusTools.getGlobusProvidedNamespaces();
 
 		getNamespaceComboBox().removeAllItems();
 		for (int i = 0; i < namespaces.size(); i++) {
@@ -100,10 +99,10 @@ public class GlobiusConfigurationPanel extends JPanel {
 							String schemaNamespace = (String) namespaceComboBox
 									.getSelectedItem();
 							currentNamespace = schemaNamespace;
-							File schemasDir = new File(globusLocation
+							File schemasDir = new File(GlobusTools.getGlobusLocation()
 									+ File.separator + "share" + File.separator
 									+ "schema");
-							File foundSchema = findGlobusSchema(schemaNamespace,schemasDir);
+							File foundSchema = CommonTools.findSchema(schemaNamespace,schemasDir);
 							if(foundSchema!=null){
 								currentSchemaFile = foundSchema;
 							}
@@ -113,32 +112,6 @@ public class GlobiusConfigurationPanel extends JPanel {
 		return namespaceComboBox;
 	}
 
-	private File findGlobusSchema(String schemaNamespace, File dir) {
-		File[] files = dir.listFiles();
-		for (int i = 0; i < files.length; i++) {
-			File curFile = files[i];
-			if (curFile.isDirectory()) {
-				File found = findGlobusSchema(schemaNamespace,curFile);
-				if(found!=null){
-					return found;
-				}
-			} else {
-				if(curFile.getAbsolutePath().endsWith(".xsd") || curFile.getAbsolutePath().endsWith(".XSD")){
-					try {
-						Document doc = XMLUtilities.fileNameToDocument(curFile.getAbsolutePath());
-						if(doc.getRootElement().getAttributeValue("targetNamespace").equals(schemaNamespace)){
-							return curFile;
-						}
-					} catch (MobiusException e) {
-						e.printStackTrace();
-					}
-					
-				}
-			}
-
-		}
-		return null;
-	}
 
 	class SchemaWrapper {
 		Namespace ns;

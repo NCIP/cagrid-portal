@@ -37,6 +37,8 @@
 				<xs:complexType>
 					<xs:attribute name="qName" type="xs:QName" use="required"/>
 					<xs:attribute name="isArray" type="xs:boolean" use="required"/>
+					<xs:attribute name="isClientHandle" type="xs:boolean" use="optional"/>
+					<xs:attribute name="clientHandleClass" type="xs:string" use="optional"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="Exceptions" minOccurs="0">

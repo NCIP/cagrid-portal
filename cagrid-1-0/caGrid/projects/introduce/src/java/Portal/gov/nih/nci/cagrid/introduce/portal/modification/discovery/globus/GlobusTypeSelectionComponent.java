@@ -32,7 +32,6 @@ import org.projectmobius.common.XMLUtilities;
  */
 public class GlobusTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 	public static String TYPE = "GLOBUS";
-	public static String GLOBUS_LOCATION = "GLOBUS_LOCATION";
 
 	private GlobiusConfigurationPanel globusPanel = null;
 
@@ -68,8 +67,7 @@ public class GlobusTypeSelectionComponent extends NamespaceTypeDiscoveryComponen
 	 */
 	private GlobiusConfigurationPanel getGmePanel() {
 		if (globusPanel == null) {
-			globusPanel = new GlobiusConfigurationPanel(ExtensionTools.getProperty(getDescriptor().getProperties(),
-				GLOBUS_LOCATION));
+			globusPanel = new GlobiusConfigurationPanel();
 		}
 		return globusPanel;
 	}

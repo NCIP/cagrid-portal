@@ -46,13 +46,8 @@ public class IntroduceConstants {
 	
 	// w3c namespaces
 	public static final String W3CNAMESPACE = "http://www.w3.org/2001/XMLSchema";
-	public static final String ADDRESSINGNAMESPACE = "http://schemas.xmlsoap.org/ws/2004/03/addressing";
 	public static final String W3CNAMESPACE_PREFIX = "xs";
-	
-	public static final List INTRODUCE_EXISTING_NAMESPACES = new ArrayList(Arrays.asList(new String[]{W3CNAMESPACE,ADDRESSINGNAMESPACE}));
-	public static final List INTRODUCE_GLOBUS_NAMESPACES = new ArrayList(Arrays.asList(new String[]{ADDRESSINGNAMESPACE}));
-	
-	
+
 	private IntroduceConstants() {
 		// prevents instantiation
 	}

@@ -4,8 +4,6 @@
   <ns1:DiscoveryToolsPanelExtension></ns1:DiscoveryToolsPanelExtension>
   <ns1:DiscoveryPanelExtension>gov.nih.nci.cagrid.introduce.portal.modification.discovery.globus.GlobusTypeSelectionComponent</ns1:DiscoveryPanelExtension>
   <ns1:Properties>
-   <property key="GLOBUS_LOCATION"
-    value="C:\ext\grid\ws-core-4.0.2-bin\ws-core-4.0.2"/>
   </ns1:Properties>
  </ns1:DiscoveryExtensionDescription>
 </ns1:ExtensionDescription>

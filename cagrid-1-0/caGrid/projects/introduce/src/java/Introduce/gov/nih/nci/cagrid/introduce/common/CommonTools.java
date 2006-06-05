@@ -55,6 +55,57 @@ public class CommonTools {
 
 		return p;
 	}
+	
+	public static File findSchema(String schemaNamespace, File dir) {
+		File[] files = dir.listFiles();
+		for (int i = 0; i < files.length; i++) {
+			File curFile = files[i];
+			if (curFile.isDirectory()) {
+				File found = findSchema(schemaNamespace,curFile);
+				if(found!=null){
+					return found;
+				}
+			} else {
+				if(curFile.getAbsolutePath().endsWith(".xsd") || curFile.getAbsolutePath().endsWith(".XSD")){
+					try {
+						if(getTargetNamespace(curFile).equals(schemaNamespace)){
+							return curFile;
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					
+				}
+			}
+		}
+		return null;
+	}
+	
+	public static void getTargetNamespaces(List namespaces, File dir) {
+		File[] files = dir.listFiles();
+		for (int i = 0; i < files.length; i++) {
+			File curFile = files[i];
+			if (curFile.isDirectory()) {
+				getTargetNamespaces(namespaces,curFile);
+			} else {
+				if(curFile.getAbsolutePath().endsWith(".xsd") || curFile.getAbsolutePath().endsWith(".XSD")){
+					try {
+						namespaces.add(getTargetNamespace(curFile));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					
+				}
+			}
+		}
+	}
+	
+	public static String getTargetNamespace(File file) throws Exception {
+		Document doc = XMLUtilities.fileNameToDocument(file.getAbsolutePath());
+		return doc.getRootElement().getAttributeValue("targetNamespace");
+		
+		
+	}
 
 	public static boolean isValidPackageName(String packageName) {
 		if (packageName.length() > 0) {
