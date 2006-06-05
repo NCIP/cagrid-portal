@@ -232,7 +232,7 @@ public class TypeSerializationConfigPanel extends JPanel {
 					schemaType.setDeserializer(getDeserializerTextField().getText());
 					if (getSerializerTextField().getText().length() != 0 ||
 						getDeserializerTextField().getText().length() != 0) {
-						schemaType.setClassName(schemaType.getPackageName() + "." + schemaType.getType());
+						schemaType.setClassName(schemaType.getType());
 					}
 					// get the table to refresh these fields
 					table.refreshSerialization(schemaType);
