@@ -1,0 +1,6 @@
+http\://cagrid.nci.nih.gov/cagrid/fqp=gov.nih.nci.cagrid.fqp.stubs
+http\://cagrid.nci.nih.gov/cagrid/fqp/bindings=gov.nih.nci.cagrid.fqp.stubs.bindings
+http\://cagrid.nci.nih.gov/cagrid/fqp/service=gov.nih.nci.cagrid.fqp.stubs.service
+
+http\://nci.nih.gov/cagrid/DCQL=dcql
+http\://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet=gov.nih.nci.cagrid.cqlresultset
