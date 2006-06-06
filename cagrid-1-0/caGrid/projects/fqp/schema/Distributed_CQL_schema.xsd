@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:dcql="http://DCQL.caBIG/gov.nih.nci.cagrid.DCQL"
+            targetNamespace="http://DCQL.caBIG/gov.nih.nci.cagrid.DCQL"
+            xmlns:cql="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery"
+            elementFormDefault="qualified">
+    <xsd:import namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery"
+                schemaLocation="./xsd/Data/1_gov.nih.nci.cagrid.CQLQuery.xsd"/>
+    <xsd:element name="DCQLQuery">
+        <xsd:annotation>
+            <xsd:documentation>caGrid Distributed CQL Query</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="TargetObject" type="dcql:Object"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:complexType name="Object">
+        <xsd:complexContent>
+            <xsd:extension base="cql:Object">
+                <xsd:sequence>
+                    <xsd:element name="ForeignAssociation" type="dcql:ForeignAssociation" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="ForeignAssociation">
+        <xsd:annotation>
+            <xsd:documentation>Foreign Association in an external service</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="JoinCondition" type="dcql:JoinCondition"/>
+            <xsd:element name="ForeignObject" type="cql:Object"/>
+        </xsd:sequence>
+        <xsd:attribute name="roleName" type="xsd:string" use="optional"/>
+    </xsd:complexType>
+    <xsd:complexType name="JoinCondition">
+        <xsd:annotation>
+            <xsd:documentation>>Join condition specifies join to foreign association</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="LeftJoin" type="dcql:Join"/>
+            <xsd:element name="RightJoin" type="dcql:Join"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Join">
+        <xsd:annotation>
+            <xsd:documentation>Join type</xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute name="className" type="xsd:string"/>
+        <xsd:attribute name="attributeName" type="xsd:string"/>
+    </xsd:complexType>
+
+
+</xsd:schema>
