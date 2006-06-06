@@ -120,6 +120,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 				if (url != null) {
 					domainBrowserPanel.setDefaultCaDSRURL(url);
 					domainBrowserPanel.getCadsr().setText(url);
+					domainBrowserPanel.blockingCadsrRefresh();
 				}
 			}
 		}
@@ -182,9 +183,9 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			typesTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			typesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 				public void valueChanged(ListSelectionEvent e) {
-					SchemaElementType selected = getTypesTable().getSelectedElementType();
+					SchemaElementType[] selected = getTypesTable().getSelectedElementTypes();
 					if (selected != null) {
-						getSerializationConfigPanel().setSchemaElementType(selected);
+						// getSerializationConfigPanel().setSchemaElementTypes(selected);
 					} else {
 						getSerializationConfigPanel().clear();
 					}
