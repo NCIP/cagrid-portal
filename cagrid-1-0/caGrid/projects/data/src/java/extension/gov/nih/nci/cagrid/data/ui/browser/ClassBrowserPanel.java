@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
+import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 
 import java.awt.Component;
@@ -46,105 +47,119 @@ import javax.swing.event.DocumentListener;
 import org.apache.axis.message.MessageElement;
 import org.jdom.Element;
 
-/** 
- *  ClassBrowserPanel
- *  Panel to enable browsing for a class and building up a list of JARs to look in
+/**
+ * ClassBrowserPanel Panel to enable browsing for a class and building up a list
+ * of JARs to look in
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
- * @created May 11, 2006 
- * @version $Id$ 
+ * @created May 11, 2006
+ * @version $Id$
  */
 public class ClassBrowserPanel extends JPanel {
-		
+
 	private JList additionalJarsList = null;
+
 	private JScrollPane additionalJarsScrollPane = null;
+
 	private JButton addJarButton = null;
+
 	private JButton removeJarsButton = null;
+
 	private JPanel jarButtonsPanel = null;
+
 	private JPanel jarsPanel = null;
+
 	private JComboBox classSelectionComboBox = null;
+
 	private JPanel classSelectionPanel = null;
+
 	private JLabel classSelectionLabel = null;
-	
+
 	private ExtensionTypeExtensionData extensionData = null;
+
 	private Properties serviceProperties = null;
-	
+
 	private List classChangeListeners = null;
+
 	private List additionalJarsListeners = null;
-		
-	public ClassBrowserPanel(ExtensionTypeExtensionData extensionData, Properties serviceProperties) {
+
+	public ClassBrowserPanel(ExtensionTypeExtensionData extensionData,
+			Properties serviceProperties) {
 		this.extensionData = extensionData;
 		this.serviceProperties = serviceProperties;
 		classChangeListeners = new LinkedList();
 		additionalJarsListeners = new LinkedList();
 		initialize();
 	}
-	
-	
+
 	/**
 	 * This method initializes this
 	 * 
 	 */
 	private void initialize() {
-        GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-        gridBagConstraints7.gridx = 0;
-        gridBagConstraints7.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints7.weightx = 1.0D;
-        gridBagConstraints7.weighty = 1.0D;
-        gridBagConstraints7.gridy = 1;
-        GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-        gridBagConstraints6.gridx = 0;
-        gridBagConstraints6.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints6.weightx = 1.0D;
-        gridBagConstraints6.gridy = 0;
-        this.setLayout(new GridBagLayout());
-        this.setSize(new java.awt.Dimension(304,229));
-        this.add(getClassSelectionPanel(), gridBagConstraints6);
-        this.add(getJarsPanel(), gridBagConstraints7);
+		GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+		gridBagConstraints7.gridx = 0;
+		gridBagConstraints7.fill = java.awt.GridBagConstraints.BOTH;
+		gridBagConstraints7.weightx = 1.0D;
+		gridBagConstraints7.weighty = 1.0D;
+		gridBagConstraints7.gridy = 1;
+		GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+		gridBagConstraints6.gridx = 0;
+		gridBagConstraints6.fill = java.awt.GridBagConstraints.HORIZONTAL;
+		gridBagConstraints6.weightx = 1.0D;
+		gridBagConstraints6.gridy = 0;
+		this.setLayout(new GridBagLayout());
+		this.setSize(new java.awt.Dimension(304, 229));
+		this.add(getClassSelectionPanel(), gridBagConstraints6);
+		this.add(getJarsPanel(), gridBagConstraints7);
 	}
-
 
 	public String getSelectedClassName() {
 		Object selected = getClassSelectionComboBox().getSelectedItem();
 		if (selected != null) {
 			return selected.toString();
-		}		 
+		}
 		return null;
 	}
-	
-	
+
 	public void setSelectedClassName(String className) {
 		getClassSelectionComboBox().setSelectedItem(className);
 	}
-	
-	
+
 	public String[] getAdditionalJars() {
 		String[] jars = new String[getAdditionalJarsList().getModel().getSize()];
 		for (int i = 0; i < getAdditionalJarsList().getModel().getSize(); i++) {
-			jars[i] = (String) getAdditionalJarsList().getModel().getElementAt(i);
+			jars[i] = (String) getAdditionalJarsList().getModel().getElementAt(
+					i);
 		}
 		return jars;
 	}
 
-
 	/**
-	 * This method initializes jList	
-	 * 	
-	 * @return javax.swing.JList	
+	 * This method initializes jList
+	 * 
+	 * @return javax.swing.JList
 	 */
 	private JList getAdditionalJarsList() {
 		if (additionalJarsList == null) {
 			additionalJarsList = new JList();
 			// load any previous additional jars information
 			if (extensionData != null) {
-				MessageElement jarsElement = ExtensionTools.getExtensionDataElement(extensionData, DataServiceConstants.QUERY_PROCESSOR_ADDITIONAL_JARS_ELEMENT);
+				MessageElement jarsElement = ExtensionTools
+						.getExtensionDataElement(
+								extensionData,
+								DataServiceConstants.QUERY_PROCESSOR_ADDITIONAL_JARS_ELEMENT);
 				if (jarsElement != null) {
-					Element qpLibs = AxisJdomUtils.fromMessageElement(jarsElement);
+					Element qpLibs = AxisJdomUtils
+							.fromMessageElement(jarsElement);
 					Vector jars = new Vector();
-					Iterator jarElemIter = qpLibs.getChildren(DataServiceConstants.QUERY_PROCESSOR_JAR_ELEMENT, qpLibs.getNamespace()).iterator();
+					Iterator jarElemIter = qpLibs.getChildren(
+							DataServiceConstants.QUERY_PROCESSOR_JAR_ELEMENT,
+							qpLibs.getNamespace()).iterator();
 					while (jarElemIter.hasNext()) {
-						String jarFilename = ((Element) jarElemIter.next()).getText();
+						String jarFilename = ((Element) jarElemIter.next())
+								.getText();
 						jars.add(jarFilename);
 					}
 					additionalJarsList.setListData(jars);
@@ -154,28 +169,32 @@ public class ClassBrowserPanel extends JPanel {
 		return additionalJarsList;
 	}
 
-
 	/**
-	 * This method initializes jScrollPane	
-	 * 	
-	 * @return javax.swing.JScrollPane	
+	 * This method initializes jScrollPane
+	 * 
+	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getAdditionalJarsScrollPane() {
 		if (additionalJarsScrollPane == null) {
 			additionalJarsScrollPane = new JScrollPane();
-			additionalJarsScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(
-				null, "Additional Jars", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, 
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+			additionalJarsScrollPane
+					.setBorder(javax.swing.BorderFactory
+							.createTitledBorder(
+									null,
+									"Additional Jars",
+									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+									javax.swing.border.TitledBorder.DEFAULT_POSITION,
+									null, PortalLookAndFeel
+											.getPanelLabelColor()));
 			additionalJarsScrollPane.setViewportView(getAdditionalJarsList());
 		}
 		return additionalJarsScrollPane;
 	}
 
-
 	/**
-	 * This method initializes jButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes jButton
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getAddJarButton() {
 		if (addJarButton == null) {
@@ -192,69 +211,72 @@ public class ClassBrowserPanel extends JPanel {
 		return addJarButton;
 	}
 
-
 	/**
-	 * This method initializes jButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes jButton
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getRemoveJarsButton() {
 		if (removeJarsButton == null) {
 			removeJarsButton = new JButton();
 			removeJarsButton.setText("Remove Jars");
-			removeJarsButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					int[] selected = getAdditionalJarsList().getSelectedIndices();
-					if (selected.length != 0) {
-						String[] currentJars = getAdditionalJars();
-						String[] storedJars = new String[currentJars.length - selected.length];
-						int selectIndex = 0;
-						int storeIndex = 0;
-						for (int i = 0; i < currentJars.length; i++) {
-							String jar = currentJars[i];
-							if (i == selected[selectIndex]) {
-								// skip the selected jar
-								selectIndex++;
-								// delete the selected jar from the file system
-								deleteAdditionalJar(jar);
-							} else {
-								// add the jar to the new list
-								storedJars[storeIndex] = jar;
-								storeIndex++;
+			removeJarsButton
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							int[] selected = getAdditionalJarsList()
+									.getSelectedIndices();
+							if (selected.length != 0) {
+								String[] currentJars = getAdditionalJars();
+								String[] storedJars = new String[currentJars.length
+										- selected.length];
+								int selectIndex = 0;
+								int storeIndex = 0;
+								for (int i = 0; i < currentJars.length; i++) {
+									String jar = currentJars[i];
+									if (i == selected[selectIndex]) {
+										// skip the selected jar
+										selectIndex++;
+										// delete the selected jar from the file
+										// system
+										deleteAdditionalJar(jar);
+									} else {
+										// add the jar to the new list
+										storedJars[storeIndex] = jar;
+										storeIndex++;
+									}
+								}
+								getAdditionalJarsList().setListData(storedJars);
+								populateClassDropdown();
+								fireAdditionalJarsChanged();
 							}
 						}
-						getAdditionalJarsList().setListData(storedJars);
-						populateClassDropdown();
-						fireAdditionalJarsChanged();
-					}
-				}
-			});
+					});
 		}
 		return removeJarsButton;
 	}
-	
-	
+
 	private void deleteAdditionalJar(String shortJarName) {
-		String libDir = serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "lib";
+		String libDir = serviceProperties
+				.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
+				+ File.separator + "lib";
 		File jarFile = new File(libDir + File.separator + shortJarName);
 		jarFile.deleteOnExit();
 	}
 
-
 	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJarButtonsPanel() {
 		if (jarButtonsPanel == null) {
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.gridx = 1;
-			gridBagConstraints1.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints1.gridy = 0;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
-			gridBagConstraints.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints.gridy = 0;
 			jarButtonsPanel = new JPanel();
 			jarButtonsPanel.setLayout(new GridBagLayout());
@@ -264,11 +286,10 @@ public class ClassBrowserPanel extends JPanel {
 		return jarButtonsPanel;
 	}
 
-
 	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJarsPanel() {
 		if (jarsPanel == null) {
@@ -280,7 +301,7 @@ public class ClassBrowserPanel extends JPanel {
 			gridBagConstraints2.gridy = 0;
 			gridBagConstraints2.weightx = 1.0;
 			gridBagConstraints2.weighty = 1.0D;
-			gridBagConstraints2.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints2.gridx = 0;
 			jarsPanel = new JPanel();
 			jarsPanel.setLayout(new GridBagLayout());
@@ -290,11 +311,10 @@ public class ClassBrowserPanel extends JPanel {
 		return jarsPanel;
 	}
 
-
 	/**
-	 * This method initializes jComboBox	
-	 * 	
-	 * @return javax.swing.JComboBox	
+	 * This method initializes jComboBox
+	 * 
+	 * @return javax.swing.JComboBox
 	 */
 	private JComboBox getClassSelectionComboBox() {
 		if (classSelectionComboBox == null) {
@@ -305,31 +325,30 @@ public class ClassBrowserPanel extends JPanel {
 					fireClassSelectionChanged();
 				}
 			});
-			Component c = classSelectionComboBox.getEditor().getEditorComponent();
-			((JTextField) c).getDocument().addDocumentListener(new DocumentListener() {
-				public void insertUpdate(DocumentEvent e) {
-					fireClassSelectionChanged();
-				}
-				
-				
-				public void removeUpdate(DocumentEvent e) {
-					fireClassSelectionChanged();
-				}
-				
-				
-				public void changedUpdate(DocumentEvent e) {
-					fireClassSelectionChanged();
-				}
-			});
+			Component c = classSelectionComboBox.getEditor()
+					.getEditorComponent();
+			((JTextField) c).getDocument().addDocumentListener(
+					new DocumentListener() {
+						public void insertUpdate(DocumentEvent e) {
+							fireClassSelectionChanged();
+						}
+
+						public void removeUpdate(DocumentEvent e) {
+							fireClassSelectionChanged();
+						}
+
+						public void changedUpdate(DocumentEvent e) {
+							fireClassSelectionChanged();
+						}
+					});
 		}
 		return classSelectionComboBox;
 	}
-	
-	
+
 	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getClassSelectionPanel() {
 		if (classSelectionPanel == null) {
@@ -337,25 +356,26 @@ public class ClassBrowserPanel extends JPanel {
 			gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints5.gridy = 0;
 			gridBagConstraints5.weightx = 1.0;
-			gridBagConstraints5.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints5.gridx = 1;
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			gridBagConstraints4.gridx = 0;
-			gridBagConstraints4.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints4.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints4.gridy = 0;
 			classSelectionPanel = new JPanel();
 			classSelectionPanel.setLayout(new GridBagLayout());
-			classSelectionPanel.add(getClassSelectionLabel(), gridBagConstraints4);
-			classSelectionPanel.add(getClassSelectionComboBox(), gridBagConstraints5);
+			classSelectionPanel.add(getClassSelectionLabel(),
+					gridBagConstraints4);
+			classSelectionPanel.add(getClassSelectionComboBox(),
+					gridBagConstraints5);
 		}
 		return classSelectionPanel;
 	}
-	
-	
+
 	/**
-	 * This method initializes jLabel	
-	 * 	
-	 * @return javax.swing.JLabel	
+	 * This method initializes jLabel
+	 * 
+	 * @return javax.swing.JLabel
 	 */
 	private JLabel getClassSelectionLabel() {
 		if (classSelectionLabel == null) {
@@ -364,13 +384,14 @@ public class ClassBrowserPanel extends JPanel {
 		}
 		return classSelectionLabel;
 	}
-	
-	
+
 	private void browseForJar() {
 		String jarFile = null;
 		try {
-			jarFile = ResourceManager.promptFile(this, null, new JarFileFilter());
-			// only bother adding the jar file to the list if it's not in there yet
+			jarFile = ResourceManager.promptFile(this, null,
+					new FileFilters.JarFileFilter());
+			// only bother adding the jar file to the list if it's not in there
+			// yet
 			final String shortJarName = (new File(jarFile)).getName();
 			boolean shouldAdd = true;
 			String[] currentJars = getAdditionalJars();
@@ -386,22 +407,28 @@ public class ClassBrowserPanel extends JPanel {
 				// add the jar to the extension data's list of additional jars
 				// add the new jar name to the jars list
 				String[] additionalJars = new String[currentJars.length + 1];
-				System.arraycopy(currentJars, 0, additionalJars, 0, currentJars.length);
+				System.arraycopy(currentJars, 0, additionalJars, 0,
+						currentJars.length);
 				additionalJars[additionalJars.length - 1] = shortJarName;
 				getAdditionalJarsList().setListData(additionalJars);
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			PortalUtils.showErrorMessage("Error opening the jar " + jarFile, ex);
+			PortalUtils
+					.showErrorMessage("Error opening the jar " + jarFile, ex);
 		}
 	}
-	
-	
-	private synchronized void copyJarToService(final String jarFile, final String shortJarName) {
-		String libDir = serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "lib";
+
+	private synchronized void copyJarToService(final String jarFile,
+			final String shortJarName) {
+		String libDir = serviceProperties
+				.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
+				+ File.separator + "lib";
 		try {
-			BufferedInputStream input = new BufferedInputStream(new FileInputStream(jarFile));
-			BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(libDir + File.separator + shortJarName));
+			BufferedInputStream input = new BufferedInputStream(
+					new FileInputStream(jarFile));
+			BufferedOutputStream output = new BufferedOutputStream(
+					new FileOutputStream(libDir + File.separator + shortJarName));
 			int len = -1;
 			byte[] buff = new byte[4096];
 			while ((len = input.read(buff)) != -1) {
@@ -412,13 +439,15 @@ public class ClassBrowserPanel extends JPanel {
 			output.close();
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			PortalUtils.showErrorMessage("Error copying the jar " + jarFile, ex);
+			PortalUtils
+					.showErrorMessage("Error copying the jar " + jarFile, ex);
 		}
 	}
-	
-	
+
 	private void populateClassDropdown() {
-		String libDir = serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "lib";
+		String libDir = serviceProperties
+				.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
+				+ File.separator + "lib";
 		SortedSet classNames = new TreeSet();
 		String[] jars = getAdditionalJars();
 		try {
@@ -426,7 +455,8 @@ public class ClassBrowserPanel extends JPanel {
 			for (int i = 0; i < jars.length; i++) {
 				urls[i] = (new File(libDir + File.separator + jars[i])).toURL();
 			}
-			ClassLoader loader = new URLClassLoader(urls, getClass().getClassLoader());
+			ClassLoader loader = new URLClassLoader(urls, getClass()
+					.getClassLoader());
 			Class queryProcessorClass = CQLQueryProcessor.class;
 			for (int i = 0; i < jars.length; i++) {
 				JarFile jarFile = new JarFile(libDir + File.separator + jars[i]);
@@ -455,31 +485,29 @@ public class ClassBrowserPanel extends JPanel {
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			PortalUtils.showErrorMessage("Error populating class names " + ex.getMessage(), ex);
+			PortalUtils.showErrorMessage("Error populating class names "
+					+ ex.getMessage(), ex);
 		}
 	}
-	
-	
+
 	public void addClassSelectionListener(ClassSelectionListener listener) {
 		this.classChangeListeners.add(listener);
 	}
-	
-	
+
 	public boolean removeClassSelectionListener(ClassSelectionListener listener) {
 		return this.classChangeListeners.remove(listener);
 	}
-	
-	
-	public void addAdditionalJarsChangeListener(AdditionalJarsChangeListener listener) {
+
+	public void addAdditionalJarsChangeListener(
+			AdditionalJarsChangeListener listener) {
 		this.additionalJarsListeners.add(listener);
 	}
-	
-	
-	public boolean removeAdditionalJarsChangeListener(AdditionalJarsChangeListener listener) {
+
+	public boolean removeAdditionalJarsChangeListener(
+			AdditionalJarsChangeListener listener) {
 		return this.additionalJarsListeners.remove(listener);
 	}
-	
-	
+
 	protected synchronized void fireClassSelectionChanged() {
 		ClassSelectionEvent event = null;
 		Iterator listenerIter = classChangeListeners.iterator();
@@ -487,11 +515,11 @@ public class ClassBrowserPanel extends JPanel {
 			if (event == null) {
 				event = new ClassSelectionEvent(this);
 			}
-			((ClassSelectionListener) listenerIter.next()).classSelectionChanged(event);
+			((ClassSelectionListener) listenerIter.next())
+					.classSelectionChanged(event);
 		}
 	}
-	
-	
+
 	protected synchronized void fireAdditionalJarsChanged() {
 		AdditionalJarsChangedEvent event = null;
 		Iterator listenerIter = additionalJarsListeners.iterator();
@@ -499,7 +527,8 @@ public class ClassBrowserPanel extends JPanel {
 			if (event == null) {
 				event = new AdditionalJarsChangedEvent(this);
 			}
-			((AdditionalJarsChangeListener) listenerIter.next()).additionalJarsChanged(event);
+			((AdditionalJarsChangeListener) listenerIter.next())
+					.additionalJarsChanged(event);
 		}
 	}
 }
