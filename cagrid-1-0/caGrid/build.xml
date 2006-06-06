@@ -318,7 +318,8 @@
 		<resolveDependencies extdir="${projects.dir}/fqp/ext">
 			<artifact refid="data.jars" />
 			<artifact refid="common.test.jars" />
-		</resolveDependencies>
+            <artifact refid="data.cql.schemas"/>
+        </resolveDependencies>
 		<ant dir="${projects.dir}/fqp" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
