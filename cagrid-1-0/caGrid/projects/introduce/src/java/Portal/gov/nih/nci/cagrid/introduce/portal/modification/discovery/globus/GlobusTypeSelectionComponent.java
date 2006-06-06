@@ -36,7 +36,7 @@ import org.projectmobius.portal.PortalResourceManager;
 public class GlobusTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 	public static String TYPE = "GLOBUS";
 
-	private GlobiusConfigurationPanel globusPanel = null;
+	private GlobusConfigurationPanel globusPanel = null;
 
 
 	public GlobusTypeSelectionComponent(DiscoveryExtensionDescriptionType descriptor) {
@@ -68,9 +68,9 @@ public class GlobusTypeSelectionComponent extends NamespaceTypeDiscoveryComponen
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private GlobiusConfigurationPanel getGmePanel() {
+	private GlobusConfigurationPanel getGmePanel() {
 		if (globusPanel == null) {
-			globusPanel = new GlobiusConfigurationPanel();
+			globusPanel = new GlobusConfigurationPanel();
 		}
 		return globusPanel;
 	}

@@ -54,7 +54,7 @@
 	</resource>
 	<resource name="IntroducePortalConf" class="gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf">
 		<introduce-portal-config>
-			<globusLocation>C:\ext\grid\ws-core-4.0.2-bin\ws-core-4.0.2</globusLocation>
+			<globusLocation></globusLocation>
 		</introduce-portal-config>
 	</resource>
 </grid-portal>

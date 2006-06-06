@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ItemEvent;
 import java.io.File;
 import java.util.List;
 
@@ -25,10 +26,10 @@ import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
 import org.projectmobius.portal.PortalResourceManager;
 import org.projectmobius.protocol.gme.SchemaNode;
 
-
 public class GMESchemaLocatorPanel extends JPanel {
-	
+
 	public static String GME_URL = "GME_URL";
+
 	public static String TYPE = "GME";
 
 	private JPanel mainPanel = null;
@@ -56,9 +57,8 @@ public class GMESchemaLocatorPanel extends JPanel {
 	JLabel nameLabel = null;
 
 	public SchemaNode currentNode = null;
-	
-	public String url;
 
+	public String url;
 
 	/**
 	 * This method initializes
@@ -70,7 +70,6 @@ public class GMESchemaLocatorPanel extends JPanel {
 
 	}
 
-
 	/**
 	 * This method initializes this
 	 */
@@ -78,7 +77,6 @@ public class GMESchemaLocatorPanel extends JPanel {
 		this.add(getMainPanel(), null);
 
 	}
-
 
 	/**
 	 * This method initializes jPanel
@@ -108,7 +106,6 @@ public class GMESchemaLocatorPanel extends JPanel {
 		return mainPanel;
 	}
 
-
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -136,9 +133,11 @@ public class GMESchemaLocatorPanel extends JPanel {
 			gridBagConstraints4.gridx = 0;
 			queryPanel = new JPanel();
 			queryPanel.setLayout(new GridBagLayout());
-			queryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Discover Schemas",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+			queryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+					null, "Discover Schemas",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					IntroduceLookAndFeel.getPanelLabelColor()));
 			queryPanel.add(getQueryButton(), gridBagConstraints4);
 			queryPanel.add(gmeAddressLabel, gridBagConstraints6);
 			queryPanel.add(getGme(), gridBagConstraints5);
@@ -146,13 +145,13 @@ public class GMESchemaLocatorPanel extends JPanel {
 		return queryPanel;
 	}
 
-
 	public void discoverFromGME() {
-		GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
+		GridServiceResolver.getInstance().setDefaultFactory(
+				new GlobusGMEXMLDataModelServiceFactory());
 		List namespaces = null;
 		try {
-			XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance().getGridService(
-				gme.getText());
+			XMLDataModelService handle = (XMLDataModelService) GridServiceResolver
+					.getInstance().getGridService(gme.getText());
 			namespaces = handle.getNamespaceDomainList();
 
 			getNamespaceComboBox().removeAllItems();
@@ -162,11 +161,12 @@ public class GMESchemaLocatorPanel extends JPanel {
 
 		} catch (MobiusException e1) {
 			e1.printStackTrace();
-			JOptionPane.showMessageDialog(me,
-				"Please check the GME URL and make sure that you have the appropriate credentials!");
+			JOptionPane
+					.showMessageDialog(
+							me,
+							"Please check the GME URL and make sure that you have the appropriate credentials!");
 		}
 	}
-
 
 	/**
 	 * This method initializes jButton
@@ -175,7 +175,8 @@ public class GMESchemaLocatorPanel extends JPanel {
 	 */
 	public JButton getQueryButton() {
 		if (queryButton == null) {
-			queryButton = new JButton("Refresh from GME", IntroduceLookAndFeel.getMobiusIcon());
+			queryButton = new JButton("Refresh from GME", IntroduceLookAndFeel
+					.getMobiusIcon());
 			queryButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					discoverFromGME();
@@ -185,7 +186,6 @@ public class GMESchemaLocatorPanel extends JPanel {
 		return queryButton;
 	}
 
-
 	/**
 	 * This method initializes jComboBox
 	 * 
@@ -194,35 +194,51 @@ public class GMESchemaLocatorPanel extends JPanel {
 	public JComboBox getNamespaceComboBox() {
 		if (namespaceComboBox == null) {
 			namespaceComboBox = new JComboBox();
-			namespaceComboBox.addItemListener(new java.awt.event.ItemListener() {
-				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
-					try {
-						if ((String) namespaceComboBox.getSelectedItem() != null
-							&& ((String) namespaceComboBox.getSelectedItem()).length() > 0) {
-							XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
-								.getGridService(gme.getText());
-							List schemas = handle.getSchemaListForNamespaceDomain((String) namespaceComboBox
-								.getSelectedItem());
+			namespaceComboBox
+					.addItemListener(new java.awt.event.ItemListener() {
+						public void itemStateChanged(java.awt.event.ItemEvent e) {
+							if (e.getStateChange() == ItemEvent.SELECTED) {
+								GridServiceResolver
+										.getInstance()
+										.setDefaultFactory(
+												new GlobusGMEXMLDataModelServiceFactory());
+								try {
+									if ((String) namespaceComboBox
+											.getSelectedItem() != null
+											&& ((String) namespaceComboBox
+													.getSelectedItem())
+													.length() > 0) {
+										XMLDataModelService handle = (XMLDataModelService) GridServiceResolver
+												.getInstance().getGridService(
+														gme.getText());
+										List schemas = handle
+												.getSchemaListForNamespaceDomain((String) namespaceComboBox
+														.getSelectedItem());
 
-							getSchemaComboBox().removeAllItems();
-							for (int i = 0; i < schemas.size(); i++) {
-								Namespace schemaNS = (Namespace) schemas.get(i);
-								getSchemaComboBox().addItem(new SchemaWrapper(schemaNS));
+										getSchemaComboBox().removeAllItems();
+										for (int i = 0; i < schemas.size(); i++) {
+											Namespace schemaNS = (Namespace) schemas
+													.get(i);
+											getSchemaComboBox()
+													.addItem(
+															new SchemaWrapper(
+																	schemaNS));
+										}
+									}
+								} catch (MobiusException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+									JOptionPane
+											.showMessageDialog(
+													me,
+													"Please check the GME URL and make sure that you have the appropriate credentials!");
+								}
 							}
 						}
-					} catch (MobiusException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-						JOptionPane.showMessageDialog(me,
-							"Please check the GME URL and make sure that you have the appropriate credentials!");
-					}
-				}
-			});
+					});
 		}
 		return namespaceComboBox;
 	}
-
 
 	/**
 	 * This method initializes jComboBox
@@ -234,25 +250,33 @@ public class GMESchemaLocatorPanel extends JPanel {
 			schemaComboBox = new JComboBox();
 			schemaComboBox.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
-					try {
-						XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
-							.getGridService(gme.getText());
-						if (schemaComboBox.getSelectedItem() != null) {
-							currentNode = handle.getSchema(((SchemaWrapper)schemaComboBox.getSelectedItem()).getNamespace(), false);
+					if (e.getStateChange() == ItemEvent.SELECTED) {
+						GridServiceResolver.getInstance().setDefaultFactory(
+								new GlobusGMEXMLDataModelServiceFactory());
+						try {
+							XMLDataModelService handle = (XMLDataModelService) GridServiceResolver
+									.getInstance()
+									.getGridService(gme.getText());
+							if (schemaComboBox.getSelectedItem() != null) {
+								currentNode = handle.getSchema(
+										((SchemaWrapper) schemaComboBox
+												.getSelectedItem())
+												.getNamespace(), false);
+							}
+						} catch (MobiusException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+							JOptionPane
+									.showMessageDialog(
+											me,
+											"Please check the GME URL and make sure that you have the appropriate credentials!");
 						}
-					} catch (MobiusException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-						JOptionPane.showMessageDialog(me,
-							"Please check the GME URL and make sure that you have the appropriate credentials!");
 					}
 				}
 			});
 		}
 		return schemaComboBox;
 	}
-
 
 	/**
 	 * This method initializes schemaPanel
@@ -294,9 +318,11 @@ public class GMESchemaLocatorPanel extends JPanel {
 			gridBagConstraints7.gridx = 1;
 			schemaPanel = new JPanel();
 			schemaPanel.setLayout(new GridBagLayout());
-			schemaPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Schema",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+			schemaPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+					null, "Select Schema",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					IntroduceLookAndFeel.getPanelLabelColor()));
 			schemaPanel.add(getNamespaceComboBox(), gridBagConstraints7);
 			schemaPanel.add(namespaceLabel, gridBagConstraints9);
 			schemaPanel.add(getSchemaComboBox(), gridBagConstraints8);
@@ -304,7 +330,6 @@ public class GMESchemaLocatorPanel extends JPanel {
 		}
 		return schemaPanel;
 	}
-
 
 	/**
 	 * This method initializes gme
@@ -314,27 +339,23 @@ public class GMESchemaLocatorPanel extends JPanel {
 	public JTextField getGme() {
 		if (gme == null) {
 			gme = new JTextField();
-			IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
-				IntroducePortalConf.RESOURCE);
+			IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager
+					.getInstance().getResource(IntroducePortalConf.RESOURCE);
 			gme.setText(url);
 		}
 		return gme;
 	}
 
-
 	class SchemaWrapper {
 		Namespace ns;
-
 
 		public Namespace getNamespace() {
 			return ns;
 		}
 
-
 		public SchemaWrapper(Namespace ns) {
 			this.ns = ns;
 		}
-
 
 		public String toString() {
 			return ns.getName();
