@@ -1,23 +1,24 @@
-General Tasks
---------------
+  General Tasks
+==================
 
-1) Add utilities for reading private key, cert requests, and certificates. (DONE)
-2) Add utilities for having passphrases on private keys.  (DONE)
-3) Test different security mechanisms in globus 4 (DONE)
-4) Port Proxy Util (DONE)
-5) Fix Certificate Timing Problem (DONE)
-6) Write Test for Proxy Util (DONE)
-7) Explore MD5WithRSAEncryption (DONE)
-8) Cleanup Proxy Util (DONE)
-
-9) Add code for checking IdP Status on all methods. (DONE)
-10) Removing IdP should remove all user accounts. (DONE)
-11) Need to change all propety/config files to be "*.example" files, not check the real ones in, and build should create real ones from examples upon need (DONE)
-12) Add policy chaining
-13) Add support for configuring communication type for the portal
-14) Add support for SSL exception handling
-15) Need a way to query for a retrieve public certificate subjects so introduce can use it to populate grid map files etc.
-
+Add utilities for reading private key, cert requests, and certificates. (DONE)
+Add utilities for having passphrases on private keys.  (DONE)
+Test different security mechanisms in globus 4 (DONE)
+Port Proxy Util (DONE)
+Fix Certificate Timing Problem (DONE)
+Write Test for Proxy Util (DONE)
+Explore MD5WithRSAEncryption (DONE)
+Cleanup Proxy Util (DONE)
+Add code for checking IdP Status on all methods. (DONE)
+Removing IdP should remove all user accounts. (DONE)
+Need to change all propety/config files to be "*.example" files, not check the real ones in, and build should create real ones from examples upon need (DONE)
+Add support for SSL exception handling (DONE)
+Convert to an Introduce Service
+Multiple CA Support
+Move to Support IMF SAML Standard
+Add policy chaining 
+Add Service Metadata
+Add support for copying enforsed libraries to globus
 
 Testing Tasks
 --------------
@@ -97,7 +98,7 @@ Things to Write Tests For
 
 1) Reading Certificates, globus and for steve, others?. (DONE)
 2) Reading Keys, globus and for steve. (DONE)
-3) Write Test for Proxy Util
+3) Write Test for Proxy Util (DONE)
 
 Security Notes
 ---------------

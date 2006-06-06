@@ -3,16 +3,17 @@ package gov.nih.nci.cagrid.dorian.client;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.security.commstyle.CommunicationStyle;
-import gov.nih.nci.cagrid.dorian.IdPAdministration;
-import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
-import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.common.DorianFault;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
-import gov.nih.nci.cagrid.dorian.idp.bean.InvalidUserPropertyFault;
-import gov.nih.nci.cagrid.dorian.idp.bean.NoSuchUserFault;
-import gov.nih.nci.cagrid.dorian.wsrf.DorianPortType;
+import gov.nih.nci.cagrid.dorian.stubs.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.stubs.InvalidUserPropertyFault;
+import gov.nih.nci.cagrid.dorian.stubs.NoSuchUserFault;
+import gov.nih.nci.cagrid.dorian.stubs.PermissionDeniedFault;
+
+import org.apache.axis.types.URI.MalformedURIException;
+import org.globus.gsi.GlobusCredential;
+
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -21,35 +22,29 @@ import gov.nih.nci.cagrid.dorian.wsrf.DorianPortType;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class IdPAdministrationClient extends DorianBaseClient implements
-		IdPAdministration {
+public class IdPAdministrationClient{
 
-	private CommunicationStyle style;
-	public IdPAdministrationClient(String serviceURI, CommunicationStyle style) {
-		super(serviceURI);
-		this.style = style;
+	private DorianClient client;
+
+
+	public IdPAdministrationClient(String serviceURI) throws MalformedURIException {
+		client = new DorianClient(serviceURI);
 	}
 
-	public IdPUser[] findUsers(IdPUserFilter filter) throws DorianFault,
-			DorianInternalFault, PermissionDeniedFault {
-		DorianPortType port = null;
+
+	public IdPAdministrationClient(String serviceURI, GlobusCredential proxy) throws MalformedURIException {
+		client = new DorianClient(serviceURI, proxy);
+	}
+
+
+	public IdPUser[] findUsers(IdPUserFilter filter) throws DorianFault, DorianInternalFault, PermissionDeniedFault {
 		try {
-			port = this.getPort(style);
-		} catch (Exception e) {
-			DorianFault fault = new DorianFault();
-			fault.setFaultString(e.getMessage());
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (DorianFault) helper.getFault();
-			throw fault;
-		}
-		try {
-			return port.findIdPUsers(filter).getIdpUser();
+			return client.findIdPUsers(filter);
 		} catch (DorianInternalFault gie) {
 			throw gie;
 		} catch (PermissionDeniedFault f) {
 			throw f;
-		}catch (Exception e) {
+		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			DorianFault fault = new DorianFault();
 			fault.setFaultString(Utils.getExceptionMessage(e));
@@ -60,26 +55,15 @@ public class IdPAdministrationClient extends DorianBaseClient implements
 		}
 	}
 
-	public void removeUser(String userId) throws DorianFault, DorianInternalFault,
-			PermissionDeniedFault {
-		DorianPortType port = null;
+
+	public void removeUser(String userId) throws DorianFault, DorianInternalFault, PermissionDeniedFault {
 		try {
-			port = this.getPort(style);
-		} catch (Exception e) {
-			DorianFault fault = new DorianFault();
-			fault.setFaultString(e.getMessage());
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (DorianFault) helper.getFault();
-			throw fault;
-		}
-		try {
-			port.removeIdPUser(userId);
+			client.removeIdPUser(userId);
 		} catch (DorianInternalFault gie) {
 			throw gie;
 		} catch (PermissionDeniedFault f) {
 			throw f;
-		}catch (Exception e) {
+		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			DorianFault fault = new DorianFault();
 			fault.setFaultString(Utils.getExceptionMessage(e));
@@ -91,21 +75,12 @@ public class IdPAdministrationClient extends DorianBaseClient implements
 
 	}
 
-	public void updateUser(IdPUser u) throws DorianFault, DorianInternalFault,
-			PermissionDeniedFault, NoSuchUserFault, InvalidUserPropertyFault {
-		DorianPortType port = null;
+
+	public void updateUser(IdPUser u) throws DorianFault, DorianInternalFault, PermissionDeniedFault, NoSuchUserFault,
+		InvalidUserPropertyFault {
+
 		try {
-			port = this.getPort(style);
-		} catch (Exception e) {
-			DorianFault fault = new DorianFault();
-			fault.setFaultString(e.getMessage());
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (DorianFault) helper.getFault();
-			throw fault;
-		}
-		try {
-			port.updateIdPUser(u);
+			client.updateIdPUser(u);
 		} catch (DorianInternalFault gie) {
 			throw gie;
 		} catch (PermissionDeniedFault f) {
@@ -114,7 +89,7 @@ public class IdPAdministrationClient extends DorianBaseClient implements
 			throw f;
 		} catch (InvalidUserPropertyFault f) {
 			throw f;
-		}catch (Exception e) {
+		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			DorianFault fault = new DorianFault();
 			fault.setFaultString(Utils.getExceptionMessage(e));

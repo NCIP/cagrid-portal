@@ -190,6 +190,9 @@
 			<artifact refid="opensaml.endorsed" />
 			<artifact refid="gts.client.jars" />
 		</resolveDependencies>
+		<resolveDependencies extdir="${projects.dir}/dorian/schema/Dorian">
+					<artifact refid="metadata.schemas" />
+		</resolveDependencies>
 		<ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 

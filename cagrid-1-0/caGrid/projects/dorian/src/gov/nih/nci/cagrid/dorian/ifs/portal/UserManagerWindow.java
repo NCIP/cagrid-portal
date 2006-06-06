@@ -1,16 +1,13 @@
 package gov.nih.nci.cagrid.dorian.ifs.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.common.security.commstyle.CommunicationStyle;
-import gov.nih.nci.cagrid.common.security.commstyle.SecureTransportWithEncryption;
-import gov.nih.nci.cagrid.dorian.IFSAdministration;
-import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
 import gov.nih.nci.cagrid.dorian.portal.DorianServiceListComboBox;
+import gov.nih.nci.cagrid.dorian.stubs.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gridca.portal.ProxyCaddy;
 import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
 
@@ -41,7 +38,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.16 2006-04-07 03:52:58 oster Exp $
+ * @version $Id: UserManagerWindow.java,v 1.17 2006-06-06 04:29:18 langella Exp $
  */
 public class UserManagerWindow extends GridPortalBaseFrame {
 
@@ -326,8 +323,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 					String service = ((DorianServiceListComboBox) getService()).getSelectedService();
 
 					GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-					CommunicationStyle style = new SecureTransportWithEncryption(proxy);
-					IFSAdministrationClient client = new IFSAdministrationClient(service, style);
+					IFSAdministrationClient client = new IFSAdministrationClient(service, proxy);
 					TrustedIdP[] idps = client.getTrustedIdPs();
 					TrustedIdP tidp = null;
 					for (int i = 0; i < idps.length; i++) {
@@ -496,17 +492,16 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			f.setUserStatus(((UserStatusComboBox) this.getUserStatus()).getSelectedUserStatus());
 
 			String service = ((DorianServiceListComboBox) getService()).getSelectedService();
-			CommunicationStyle style = new SecureTransportWithEncryption(proxy);
-			IFSAdministration client = new IFSAdministrationClient(service, style);
+			IFSAdministrationClient client = new IFSAdministrationClient(service, proxy);
 			IFSUser[] users = client.findUsers(f);
-			if(users != null){
-			for (int i = 0; i < users.length; i++) {
-				this.getUsersTable().addUser(users[i]);
+			if (users != null) {
+				for (int i = 0; i < users.length; i++) {
+					this.getUsersTable().addUser(users[i]);
+				}
 			}
-			}
-			
-			int length=0;
-			if(users != null){
+
+			int length = 0;
+			if (users != null) {
 				length = users.length;
 			}
 			this.updateProgress(false, "Querying Completed [" + length + " users found]");
@@ -749,8 +744,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		try {
 			this.updateProgress(true, "Seaching for Trusted IdPs");
 			this.getIdp().removeAllItems();
-			CommunicationStyle style = new SecureTransportWithEncryption(cred);
-			IFSAdministrationClient client = new IFSAdministrationClient(service, style);
+			IFSAdministrationClient client = new IFSAdministrationClient(service, cred);
 			TrustedIdP[] idps = client.getTrustedIdPs();
 			this.getIdp().removeAllItems();
 			for (int i = 0; i < idps.length; i++) {
@@ -891,7 +885,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
-							 removeUser();
+							removeUser();
 						}
 					};
 					try {
@@ -911,9 +905,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		String service = ((DorianServiceListComboBox) getService()).getSelectedService();
 		try {
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			CommunicationStyle style = new SecureTransportWithEncryption(proxy);
-			IFSAdministrationClient client = new IFSAdministrationClient(service, style);
-			;
+			IFSAdministrationClient client = new IFSAdministrationClient(service, proxy);
 			IFSUser usr = this.getUsersTable().getSelectedUser();
 			client.removeUser(usr);
 			this.getUsersTable().removeSelectedUser();

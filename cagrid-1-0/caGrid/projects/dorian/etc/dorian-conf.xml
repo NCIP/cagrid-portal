@@ -16,31 +16,31 @@
 			<outgoing-email host="columbus.bmi.ohio-state.edu" port="25" protocol="smtp"/>
 		</dorian-config>
 	</resource>
-	<resource name="IdPConfiguration" class="gov.nih.nci.cagrid.dorian.idp.IdPConfiguration">
+	<resource name="IdPConfiguration" class="gov.nih.nci.cagrid.dorian.service.idp.IdPConfiguration">
 		<idp-config>
 			<uid-length min="4" max="10"/>
 			<password-length min="6" max="10"/>
-			<registration-policy class="gov.nih.nci.cagrid.dorian.idp.ManualRegistrationPolicy"/>
+			<registration-policy class="gov.nih.nci.cagrid.dorian.service.idp.ManualRegistrationPolicy"/>
 			<asserting-credentials auto="true" renew="true" key-password="idpkey"/>
 		</idp-config>
 	</resource>
-	<resource name="IFSConfiguration" class="gov.nih.nci.cagrid.dorian.ifs.IFSConfiguration">
+	<resource name="IFSConfiguration" class="gov.nih.nci.cagrid.dorian.service.ifs.IFSConfiguration">
 		<ifs-config>
 			<idp-name-length min="4" max="255"/>
 			<credentials-valid years="12" months="0" days="0" hours="0" minutes="0" seconds="0"/>
 			<max-proxy-lifetime hours="12" minutes="0" seconds="0"/>
 			<policies>
 				<policy name="Manual Approval / Manual Renewal"
-					class="gov.nih.nci.cagrid.dorian.ifs.ManualApprovalPolicy"/>
+					class="gov.nih.nci.cagrid.dorian.service.ifs.ManualApprovalPolicy"/>
 				<policy name="Manual Approval / Auto Renewal"
-					class="gov.nih.nci.cagrid.dorian.ifs.ManualApprovalAutoRenewalPolicy"/>
+					class="gov.nih.nci.cagrid.dorian.service.ifs.ManualApprovalAutoRenewalPolicy"/>
 				<policy name="Auto Approval / Manual Renewal"
-					class="gov.nih.nci.cagrid.dorian.ifs.AutoApprovalPolicy"/>
+					class="gov.nih.nci.cagrid.dorian.service.ifs.AutoApprovalPolicy"/>
 				<policy name="Auto Approval / Auto Renewal"
-					class="gov.nih.nci.cagrid.dorian.ifs.AutoApprovalAutoRenewalPolicy"/>
+					class="gov.nih.nci.cagrid.dorian.service.ifs.AutoApprovalAutoRenewalPolicy"/>
 			</policies>
 			<gts-services>
-				<gts-service>https://localhost:8443/wsrf/services/cagrid/GTS</gts-service>
+				<!--<gts-service>https://localhost:8443/wsrf/services/cagrid/GTS</gts-service>-->
 			</gts-services>
 		</ifs-config>
 	</resource>

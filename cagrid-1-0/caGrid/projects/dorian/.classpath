@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="test/src"/>
-	<classpathentry excluding="classes/*" kind="src" path="build/stubs-dorian"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test/resources"/>
+	<classpathentry kind="src" path="ext/resources/portal/common"/>
+	<classpathentry kind="src" path="ext/resources/portal/gridca"/>
+	<classpathentry kind="src" path="resources/portal/dorian"/>
+	<classpathentry kind="src" path="test/src"/>
+	<classpathentry kind="src" path="build/stubs-Dorian/src"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
@@ -36,6 +39,7 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/naming-factory.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/naming-java.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/naming-resources.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/opensaml.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/puretls.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/resolver.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/saaj.jar"/>
@@ -50,7 +54,7 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core_samples_mgmt_stubs.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core_samples_mgmt.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core_stubs.jar"/>
-	<classpathentry sourcepath="/GT4_LOCATION/java" kind="var" path="GT4_LOCATION/lib/wsrf_core.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_provider_jce.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_test_interop_stubs.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_test_interop.jar"/>
@@ -60,30 +64,36 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_tools.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wss4j.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xalan.jar"/>
-	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
-	<classpathentry kind="lib" path="lib/ogsadai.jar"/>
-	<classpathentry kind="lib" path="lib/mobius_common_server-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/commons-httpclient-3.0.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
+	<classpathentry kind="lib" path="lib/ant-contrib.jar"/>
+	<classpathentry kind="lib" path="lib/caGrid-core-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/globus_wsrf_mds_aggregator.jar"/>
+	<classpathentry kind="lib" path="lib/globus_wsrf_mds_aggregator_stubs.jar"/>
+	<classpathentry kind="lib" path="lib/globus_wsrf_servicegroup.jar"/>
+	<classpathentry kind="lib" path="lib/globus_wsrf_servicegroup_stubs.jar"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.3.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/opensaml.jar"/>
-	<classpathentry kind="lib" path="ext/endorsed/lib/xercesImpl.jar"/>
-	<classpathentry kind="lib" path="ext/endorsed/lib/xml-apis.jar"/>
-	<classpathentry sourcepath="/caGrid-1.0-core/src/java" kind="lib" path="ext/lib/caGrid-core-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/commons-httpclient-3.0.jar"/>
+	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/mobius_common_server-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-core-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/cagrid-opensaml-1.1.jar"/>
-	<classpathentry sourcepath="/mobius" kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
-	<classpathentry kind="lib" path="test/resources"/>
-	<classpathentry sourcepath="/caGrid-1.0-gridca" kind="lib" path="ext/lib/gridca.jar"/>
-	<classpathentry kind="lib" path="resources/portal/dorian"/>
-	<classpathentry kind="lib" path="ext/resources/portal/common"/>
-	<classpathentry kind="lib" path="ext/resources/portal/gridca"/>
 	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
-	<classpathentry kind="lib" path="ext/lib/GTS_stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/gridca.jar"/>
+	<classpathentry sourcepath="/caGrid-1.0-gts" kind="lib" path="ext/lib/GTS_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/GTS-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/GTS-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_factories-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/cglib-full-2.0.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/hibernate3.jar"/>
+	<classpathentry kind="lib" path="ext/lib/spring.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

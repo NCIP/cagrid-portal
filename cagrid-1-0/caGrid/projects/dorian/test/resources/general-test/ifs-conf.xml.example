@@ -1,14 +1,14 @@
 <dorian>	
-	<resource name="IFSConfiguration" class="gov.nih.nci.cagrid.dorian.ifs.IFSConfiguration">
+	<resource name="IFSConfiguration" class="gov.nih.nci.cagrid.dorian.service.ifs.IFSConfiguration">
 		<ifs-config>
 			<idp-name-length min="1" max="2"/>
 			<credentials-valid years="3" months="4" days="5" hours="6" minutes="7" seconds="8"/>
 			<max-proxy-lifetime hours="9" minutes="10" seconds="11"/>
 			<policies>
-				<policy name="Auto Approval/Auto Renewal" class="gov.nih.nci.cagrid.dorian.ifs.AutoApprovalAutoRenewalPolicy"/>
-				<policy name="Manual Approval/Auto Renewal" class="gov.nih.nci.cagrid.dorian.ifs.ManualApprovalAutoRenewalPolicy"/>
-				<policy name="Manual Approval/Manual Renewal" class="gov.nih.nci.cagrid.dorian.ifs.ManualApprovalPolicy"/>
-				<policy name="Auto Approval/Manual Renewal" class="gov.nih.nci.cagrid.dorian.ifs.AutoApprovalPolicy"/>
+				<policy name="Auto Approval/Auto Renewal" class="gov.nih.nci.cagrid.dorian.service.ifs.AutoApprovalAutoRenewalPolicy"/>
+				<policy name="Manual Approval/Auto Renewal" class="gov.nih.nci.cagrid.dorian.service.ifs.ManualApprovalAutoRenewalPolicy"/>
+				<policy name="Manual Approval/Manual Renewal" class="gov.nih.nci.cagrid.dorian.service.ifs.ManualApprovalPolicy"/>
+				<policy name="Auto Approval/Manual Renewal" class="gov.nih.nci.cagrid.dorian.service.ifs.AutoApprovalPolicy"/>
 			</policies>
 		</ifs-config>
 	</resource>		

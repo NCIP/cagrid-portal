@@ -1,0 +1,129 @@
+<xsd:schema targetNamespace="http://cagrid.nci.nih.gov/1/dorian-ifs"
+	attributeFormDefault="qualified"
+	elementFormDefault="qualified"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	xmlns:dorian="http://cagrid.nci.nih.gov/1/dorian-common"
+	xmlns:ifs="http://cagrid.nci.nih.gov/1/dorian-ifs"
+	xmlns:wsbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd">
+	
+	<xsd:element name="TrustedIdP" minOccurs="0" maxOccurs="1" type="ifs:TrustedIdP"/>
+	  <xsd:complexType name="TrustedIdP">
+			<xsd:sequence>
+			    <xsd:element name="id" type="xsd:long"/>
+			    <xsd:element name="name" type="xsd:string"/>
+			    <xsd:element name="status" type="ifs:TrustedIdPStatus"/>
+				<xsd:element name="UserPolicyClass" type="xsd:string"/>
+				<xsd:element name="IdPCertificate" type="xsd:string"/>
+			    <xsd:element name="AuthenticationMethod" minOccurs="0" maxOccurs="unbounded" type="ifs:SAMLAuthenticationMethod"/>	
+			</xsd:sequence>
+	    </xsd:complexType>
+	    
+	    <xsd:element name="IFSUser" minOccurs="0" maxOccurs="1" type="ifs:IFSUser"/>
+	    <xsd:complexType name="IFSUser">
+			<xsd:sequence>
+			    <xsd:element name="IdPId" type="xsd:long"/>
+			    <xsd:element name="UID" type="xsd:string"/>
+				<xsd:element name="gridId" type="xsd:string"/>
+				<xsd:element name="email" type="xsd:string"/>
+			    <xsd:element name="userStatus" type="ifs:IFSUserStatus"/>
+			    <xsd:element name="userRole" type="ifs:IFSUserRole"/>
+			    <xsd:element name="certificate" type="dorian:X509Certificate"/>	
+			</xsd:sequence>
+	    </xsd:complexType>
+	    
+	    <xsd:element name="IFSUserFilter" minOccurs="0" maxOccurs="1" type="ifs:IFSUserFilter"/>
+	    <xsd:complexType name="IFSUserFilter">
+			<xsd:sequence>
+			    <xsd:element name="IdPId" type="xsd:long"/>
+			    <xsd:element name="UID" type="xsd:string"/>
+				<xsd:element name="gridId" type="xsd:string"/>
+				<xsd:element name="email" type="xsd:string"/>
+			    <xsd:element name="userStatus" type="ifs:IFSUserStatus"/>
+			    <xsd:element name="userRole" type="ifs:IFSUserRole"/>
+			</xsd:sequence>
+	    </xsd:complexType>
+	    
+	     <xsd:element name="ProxyLifetime" minOccurs="0" maxOccurs="1" type="ifs:ProxyLifetime"/>
+	    <xsd:complexType name="ProxyLifetime">
+			<xsd:sequence>
+			    <xsd:element name="hours" type="xsd:int"/>
+			    <xsd:element name="minutes" type="xsd:int"/>
+			    <xsd:element name="seconds" type="xsd:int"/>
+			</xsd:sequence>
+	    </xsd:complexType>
+	    
+	    <xsd:simpleType name="IFSUserRole">
+  			<xsd:restriction base="xsd:string">
+   				<xsd:enumeration value="Administrator"/>
+   				<xsd:enumeration value="Non_Administrator"/>
+  			</xsd:restriction>
+ 		 </xsd:simpleType>
+	    
+	     <xsd:simpleType name="IFSUserStatus">
+  			<xsd:restriction base="xsd:string">
+   				<xsd:enumeration value="Active"/>
+   				<xsd:enumeration value="Suspended"/>
+   				<xsd:enumeration value="Expired"/>
+   				<xsd:enumeration value="Pending"/>
+   				<xsd:enumeration value="Rejected"/>
+  			</xsd:restriction>
+ 		 </xsd:simpleType>
+ 		 
+ 		  <xsd:simpleType name="TrustedIdPStatus">
+  			<xsd:restriction base="xsd:string">
+   				<xsd:enumeration value="Active"/>
+   				<xsd:enumeration value="Suspended"/>
+  			</xsd:restriction>
+ 		 </xsd:simpleType>
+ 		 
+	    
+
+	  <xsd:simpleType name="SAMLAuthenticationMethod">
+  			<xsd:restriction base="xsd:string">
+   				<xsd:enumeration value="urn:oasis:names:tc:SAML:1.0:am:password"/>
+   				<xsd:enumeration value="urn:ietf:rfc:1510"/>
+   				<xsd:enumeration value="urn:ietf:rfc:2945"/>
+   				<xsd:enumeration value="urn:oasis:names:tc:SAML:1.0:am:HardwareToken"/>
+   				<xsd:enumeration value="urn:ietf:rfc:2246"/>
+   				<xsd:enumeration value="urn:oasis:names:tc:SAML:1.0:am:X509-PKI"/>
+   				<xsd:enumeration value="urn:oasis:names:tc:SAML:1.0:am:PGP"/>
+   				<xsd:enumeration value="urn:oasis:names:tc:SAML:1.0:am:SPKI"/>			
+   				<xsd:enumeration value="urn:oasis:names:tc:SAML:1.0:am:XKMS"/>
+   				<xsd:enumeration value="urn:ietf:rfc:3075"/>
+   				<xsd:enumeration value="urn:oasis:names:tc:SAML:1.0:am:unspecified"/>				
+  			</xsd:restriction>
+ 	  </xsd:simpleType>
+ 	  
+ 	  <xsd:element name="PublicKey" minOccurs="0" maxOccurs="1" type="ifs:PublicKey"/>
+ 	  	<xsd:complexType name="PublicKey">
+			<xsd:sequence>
+				<xsd:element name="keyAsString" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	
+	
+	<xsd:element name="IFSUserPolicy" minOccurs="0" maxOccurs="1" type="ifs:IFSUserPolicy"/>
+		<xsd:complexType name="IFSUserPolicy">
+			<xsd:sequence>
+				<xsd:element name="name" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+				<xsd:element name="className" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+			</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:element name="InvalidPasswordFault" minOccurs="0" maxOccurs="1" type="ifs:InvalidPasswordFault"/>
+	
+	 <xsd:complexType name="InvalidPasswordFault">
+				<xsd:complexContent>
+					<xsd:extension base="wsbf:BaseFaultType" />
+				</xsd:complexContent>
+	 </xsd:complexType>
+	 
+	 <xsd:element name="CredentialsFault" minOccurs="0" maxOccurs="1" type="ifs:CredentialsFault"/>
+	 <xsd:complexType name="CredentialsFault">
+				<xsd:complexContent>
+					<xsd:extension base="wsbf:BaseFaultType" />
+				</xsd:complexContent>
+	 </xsd:complexType>
+
+		
+</xsd:schema>

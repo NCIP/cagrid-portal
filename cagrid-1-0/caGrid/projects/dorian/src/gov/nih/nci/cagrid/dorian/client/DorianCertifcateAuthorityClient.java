@@ -3,14 +3,13 @@ package gov.nih.nci.cagrid.dorian.client;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.security.commstyle.CommunicationStyle;
-import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.common.DorianFault;
-import gov.nih.nci.cagrid.dorian.wsrf.DorianPortType;
-import gov.nih.nci.cagrid.dorian.wsrf.IFSGetCACertificate;
+import gov.nih.nci.cagrid.dorian.stubs.DorianInternalFault;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 
 import java.security.cert.X509Certificate;
+
+import org.apache.axis.types.URI.MalformedURIException;
 
 
 /**
@@ -20,31 +19,22 @@ import java.security.cert.X509Certificate;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class DorianCertifcateAuthorityClient extends DorianBaseClient {
+public class DorianCertifcateAuthorityClient {
 
-	private CommunicationStyle style;
-	public DorianCertifcateAuthorityClient(String serviceURI, CommunicationStyle style) {
-		super(serviceURI);
-		this.style = style;
+	private DorianClient client;
+
+
+	public DorianCertifcateAuthorityClient(String serviceURI) throws MalformedURIException {
+		client = new DorianClient(serviceURI);
 	}
 
-	public X509Certificate getCACertificate() throws DorianFault,DorianInternalFault{
-		DorianPortType port = null;
+
+	public X509Certificate getCACertificate() throws DorianFault, DorianInternalFault {
 		try {
-			port = this.getPort(style);
-		}catch (Exception e) {
-			DorianFault fault = new DorianFault();
-			fault.setFaultString(e.getMessage());
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (DorianFault) helper.getFault();
-			throw fault;
-		}
-		try {
-			return CertUtil.loadCertificate(port.getCACertificate(new IFSGetCACertificate()).getCertificateAsString());
-		}catch(DorianInternalFault gie){
+			return CertUtil.loadCertificate(client.getCACertificate().getCertificateAsString());
+		} catch (DorianInternalFault gie) {
 			throw gie;
-		}catch (Exception e) {
+		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			DorianFault fault = new DorianFault();
 			fault.setFaultString(Utils.getExceptionMessage(e));

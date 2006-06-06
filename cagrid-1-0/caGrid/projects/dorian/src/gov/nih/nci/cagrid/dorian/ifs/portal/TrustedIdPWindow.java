@@ -1,13 +1,12 @@
 package gov.nih.nci.cagrid.dorian.ifs.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.common.security.commstyle.SecureTransportWithEncryption;
-import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
+import gov.nih.nci.cagrid.dorian.stubs.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.portal.CertificatePanel;
 import gov.nih.nci.cagrid.gridca.portal.ProxyCaddy;
@@ -40,7 +39,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPWindow.java,v 1.13 2006-04-07 03:52:58 oster Exp $
+ * @version $Id: TrustedIdPWindow.java,v 1.14 2006-06-06 04:29:18 langella Exp $
  */
 public class TrustedIdPWindow extends GridPortalBaseFrame {
 	public static final String PASSWORD = SAMLAuthenticationMethod.value1.getValue();
@@ -320,9 +319,9 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 	private synchronized void updateTrustedIdP() {
 
 		try {
-            if(getCredPanel().getCertificate()!=null){
-            	idp.setIdPCertificate(CertUtil.writeCertificate(getCredPanel().getCertificate()));
-            }
+			if (getCredPanel().getCertificate() != null) {
+				idp.setIdPCertificate(CertUtil.writeCertificate(getCredPanel().getCertificate()));
+			}
 			idp.setName(getIdPName().getText().trim());
 			idp.setStatus(getStatus().getSelectedStatus());
 			idp.setUserPolicyClass(((UserPolicyCaddy) getUserPolicy().getSelectedItem()).getPolicy().getClassName());
@@ -377,8 +376,7 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 
 			String service = getService().getText();
 			GlobusCredential c = ((ProxyCaddy) getProxy().getSelectedItem()).getProxy();
-			IFSAdministrationClient client = new IFSAdministrationClient(service, new SecureTransportWithEncryption(
-				c));
+			IFSAdministrationClient client = new IFSAdministrationClient(service, c);
 			if (newTrustedIdP) {
 				window.addTrustedIdP(client.addTrustedIdP(idp));
 				dispose();
@@ -644,7 +642,7 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 				if (idp.getIdPCertificate() != null) {
 					credPanel.setCertificate(CertUtil.loadCertificate(idp.getIdPCertificate()));
 				}
-				//credPanel.setAllowImport(false);
+				// credPanel.setAllowImport(false);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

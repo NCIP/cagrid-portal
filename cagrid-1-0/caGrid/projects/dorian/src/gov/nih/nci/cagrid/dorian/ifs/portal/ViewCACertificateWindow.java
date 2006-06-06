@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.dorian.ifs.portal;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.common.security.commstyle.AnonymousSecureTransportWithEncryption;
 import gov.nih.nci.cagrid.dorian.client.DorianCertifcateAuthorityClient;
 import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
 import gov.nih.nci.cagrid.dorian.portal.DorianServiceListComboBox;
@@ -193,11 +192,11 @@ public class ViewCACertificateWindow extends GridPortalComponent {
 	private void getCACertificate() {
 		try {
 			getViewCAButton().setEnabled(false);
-			DorianCertifcateAuthorityClient client = new DorianCertifcateAuthorityClient((String) ifs.getSelectedItem(),new AnonymousSecureTransportWithEncryption());
+			DorianCertifcateAuthorityClient client = new DorianCertifcateAuthorityClient((String) ifs.getSelectedItem());
 			X509Certificate cert = client.getCACertificate();
 			dispose();
 			CertificateInformationComponent cic = new CertificateInformationComponent(cert);
-			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(cic,600,425);
+			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(cic, 600, 425);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			PortalUtils.showErrorMessage(e);

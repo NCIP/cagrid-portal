@@ -1,0 +1,814 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="Dorian" targetNamespace="http://cagrid.nci.nih.gov/Dorian"
+    xmlns:tns="http://cagrid.nci.nih.gov/Dorian"
+    xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd"
+    xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl"
+    xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor"
+    xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl"
+    xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing"
+    xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl"
+    xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl"
+    xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"    xmlns="http://schemas.xmlsoap.org/wsdl/">
+ 
+    <import
+        namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
+        location="../wsrf/properties/WS-ResourceProperties.wsdl"/>
+    <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl"
+        location="../wsrf/faults/WS-BaseFaults.wsdl"/>
+    <!--============================================================
+
+                      T Y P E S
+                      
+  ============================================================-->
+    <types>
+        <schema targetNamespace="http://cagrid.nci.nih.gov/Dorian"
+            xmlns:tns="http://cagrid.nci.nih.gov/Dorian"
+			xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"
+			
+			xmlns:ns2="http://cagrid.nci.nih.gov/1/dorian-ifs"
+			
+			xmlns:ns1="http://cagrid.nci.nih.gov/1/dorian-common"
+			
+			xmlns:ns0="http://cagrid.nci.nih.gov/1/dorian-idp"
+			
+            xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
+			<import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd"/>
+			<import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" schemaLocation="./xsd/cagrid/types/caGridMetadata.xsd"/>
+			
+			<import namespace="http://cagrid.nci.nih.gov/1/dorian-ifs" schemaLocation="./dorian-ifs.xsd"/>
+			
+			<import namespace="http://cagrid.nci.nih.gov/1/dorian-common" schemaLocation="./dorian-common.xsd"/>
+			
+			<import namespace="http://cagrid.nci.nih.gov/1/dorian-idp" schemaLocation="./dorian-idp.xsd"/>
+			
+      	
+      	
+				<element name="RegisterWithIdPRequest">
+					<complexType>
+						<sequence>
+          		  			<element name="application">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:Application" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+	      			        </sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="RegisterWithIdPResponse">
+					<complexType>
+						<sequence>
+          		  
+							<element name="response" type="xs:string" minOccurs="1" maxOccurs="1" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="FindIdPUsersRequest">
+					<complexType>
+						<sequence>
+          		  			<element name="filter">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:IdPUserFilter" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+	      			        </sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="FindIdPUsersResponse">
+					<complexType>
+						<sequence>
+          		  
+							<element ref="ns0:IdPUser" minOccurs="1" maxOccurs="unbounded" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="UpdateIdPUserRequest">
+					<complexType>
+						<sequence>
+          		  			<element name="user">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:IdPUser" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+	      			        </sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="UpdateIdPUserResponse">
+					<complexType>
+						<sequence>
+          		  
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="RemoveIdPUserRequest">
+					<complexType>
+						<sequence>
+          		  			<element name="userId" type="xs:string" minOccurs="1" maxOccurs="1" /></sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="RemoveIdPUserResponse">
+					<complexType>
+						<sequence>
+          		  
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="AuthenticateWithIdPRequest">
+					<complexType>
+						<sequence>
+          		  			<element name="cred">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns0:BasicAuthCredential" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+	      			        </sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="AuthenticateWithIdPResponse">
+					<complexType>
+						<sequence>
+          		  
+							<element ref="ns1:SAMLAssertion" minOccurs="1" maxOccurs="1" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="CreateProxyRequest">
+					<complexType>
+						<sequence>
+          		  			<element name="saml">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns1:SAMLAssertion" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+	      			        <element name="publicKey">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns2:PublicKey" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+	      			        <element name="lifetime">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns2:ProxyLifetime" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+	      			        </sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="CreateProxyResponse">
+					<complexType>
+						<sequence>
+          		  
+							<element ref="ns1:X509Certificate" minOccurs="1" maxOccurs="unbounded" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="GetCACertificateRequest">
+					<complexType>
+						<sequence>
+          		  			</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="GetCACertificateResponse">
+					<complexType>
+						<sequence>
+          		  
+							<element ref="ns1:X509Certificate" minOccurs="1" maxOccurs="1" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="GetTrustedIdPsRequest">
+					<complexType>
+						<sequence>
+          		  			</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="GetTrustedIdPsResponse">
+					<complexType>
+						<sequence>
+          		  
+							<element ref="ns2:TrustedIdP" minOccurs="1" maxOccurs="unbounded" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="AddTrustedIdPRequest">
+					<complexType>
+						<sequence>
+          		  			<element name="idp">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns2:TrustedIdP" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+	      			        </sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="AddTrustedIdPResponse">
+					<complexType>
+						<sequence>
+          		  
+							<element ref="ns2:TrustedIdP" minOccurs="1" maxOccurs="1" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="UpdateTrustedIdPRequest">
+					<complexType>
+						<sequence>
+          		  			<element name="trustedIdP">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns2:TrustedIdP" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+	      			        </sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="UpdateTrustedIdPResponse">
+					<complexType>
+						<sequence>
+          		  
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="RemoveTrustedIdPRequest">
+					<complexType>
+						<sequence>
+          		  			<element name="trustedIdP">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns2:TrustedIdP" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+	      			        </sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="RemoveTrustedIdPResponse">
+					<complexType>
+						<sequence>
+          		  
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="FindIFSUsersRequest">
+					<complexType>
+						<sequence>
+          		  			<element name="filter">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns2:IFSUserFilter" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+	      			        </sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="FindIFSUsersResponse">
+					<complexType>
+						<sequence>
+          		  
+							<element ref="ns2:IFSUser" minOccurs="1" maxOccurs="unbounded" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="UpdateIFSUserRequest">
+					<complexType>
+						<sequence>
+          		  			<element name="user">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns2:IFSUser" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+	      			        </sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="UpdateIFSUserResponse">
+					<complexType>
+						<sequence>
+          		  
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="RemoveIFSUserRequest">
+					<complexType>
+						<sequence>
+          		  			<element name="user">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns2:IFSUser" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+	      			        </sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="RemoveIFSUserResponse">
+					<complexType>
+						<sequence>
+          		  
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="RenewIFSUserCredentialsRequest">
+					<complexType>
+						<sequence>
+          		  			<element name="user">
+	      		  				<complexType>
+									<sequence>
+										<element ref="ns2:IFSUser" minOccurs="1" maxOccurs="1" />
+                  				 	</sequence>
+	      			        	</complexType>
+	      			        </element>
+	      			        </sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="RenewIFSUserCredentialsResponse">
+					<complexType>
+						<sequence>
+          		  
+							<element ref="ns2:IFSUser" minOccurs="1" maxOccurs="1" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="GetIFSUserPoliciesRequest">
+					<complexType>
+						<sequence>
+          		  			</sequence>
+	      			</complexType>
+	      		</element>
+  		       
+				<element name="GetIFSUserPoliciesResponse">
+					<complexType>
+						<sequence>
+          		  
+							<element ref="ns2:IFSUserPolicy" minOccurs="1" maxOccurs="unbounded" />
+			                  		
+						</sequence>
+					</complexType>
+				</element>
+				
+				<element name="DorianInternalFault" >
+					<complexType>
+						<complexContent>
+							<extension base="wsrbf:BaseFaultType"/>
+						</complexContent>
+					</complexType>
+				</element>
+      					
+				<element name="InvalidUserPropertyFault" >
+					<complexType>
+						<complexContent>
+							<extension base="wsrbf:BaseFaultType"/>
+						</complexContent>
+					</complexType>
+				</element>
+      					
+				<element name="PermissionDeniedFault" >
+					<complexType>
+						<complexContent>
+							<extension base="wsrbf:BaseFaultType"/>
+						</complexContent>
+					</complexType>
+				</element>
+      					
+				<element name="NoSuchUserFault" >
+					<complexType>
+						<complexContent>
+							<extension base="wsrbf:BaseFaultType"/>
+						</complexContent>
+					</complexType>
+				</element>
+      					
+				<element name="InvalidAssertionFault" >
+					<complexType>
+						<complexContent>
+							<extension base="wsrbf:BaseFaultType"/>
+						</complexContent>
+					</complexType>
+				</element>
+      					
+				<element name="InvalidProxyFault" >
+					<complexType>
+						<complexContent>
+							<extension base="wsrbf:BaseFaultType"/>
+						</complexContent>
+					</complexType>
+				</element>
+      					
+				<element name="UserPolicyFault" >
+					<complexType>
+						<complexContent>
+							<extension base="wsrbf:BaseFaultType"/>
+						</complexContent>
+					</complexType>
+				</element>
+      					
+				<element name="InvalidTrustedIdPFault" >
+					<complexType>
+						<complexContent>
+							<extension base="wsrbf:BaseFaultType"/>
+						</complexContent>
+					</complexType>
+				</element>
+      					
+				<element name="InvalidUserFault" >
+					<complexType>
+						<complexContent>
+							<extension base="wsrbf:BaseFaultType"/>
+						</complexContent>
+					</complexType>
+				</element>
+      					
+            <element name="DorianResourceProperties">
+                <complexType>
+                    <sequence><element ref="ns3:ServiceMetadata"/></sequence>
+                </complexType>
+            </element>
+          </schema>
+    </types>
+    
+    
+<!--  place service messages here -->
+	<message name="RegisterWithIdPRequest">
+		<part name="parameters" element="tns:RegisterWithIdPRequest"/>
+	</message>
+	
+	<message name="RegisterWithIdPResponse">
+		<part name="parameters" element="tns:RegisterWithIdPResponse"/>
+	</message>
+	<message name="FindIdPUsersRequest">
+		<part name="parameters" element="tns:FindIdPUsersRequest"/>
+	</message>
+	
+	<message name="FindIdPUsersResponse">
+		<part name="parameters" element="tns:FindIdPUsersResponse"/>
+	</message>
+	<message name="UpdateIdPUserRequest">
+		<part name="parameters" element="tns:UpdateIdPUserRequest"/>
+	</message>
+	
+	<message name="UpdateIdPUserResponse">
+		<part name="parameters" element="tns:UpdateIdPUserResponse"/>
+	</message>
+	<message name="RemoveIdPUserRequest">
+		<part name="parameters" element="tns:RemoveIdPUserRequest"/>
+	</message>
+	
+	<message name="RemoveIdPUserResponse">
+		<part name="parameters" element="tns:RemoveIdPUserResponse"/>
+	</message>
+	<message name="AuthenticateWithIdPRequest">
+		<part name="parameters" element="tns:AuthenticateWithIdPRequest"/>
+	</message>
+	
+	<message name="AuthenticateWithIdPResponse">
+		<part name="parameters" element="tns:AuthenticateWithIdPResponse"/>
+	</message>
+	<message name="CreateProxyRequest">
+		<part name="parameters" element="tns:CreateProxyRequest"/>
+	</message>
+	
+	<message name="CreateProxyResponse">
+		<part name="parameters" element="tns:CreateProxyResponse"/>
+	</message>
+	<message name="GetCACertificateRequest">
+		<part name="parameters" element="tns:GetCACertificateRequest"/>
+	</message>
+	
+	<message name="GetCACertificateResponse">
+		<part name="parameters" element="tns:GetCACertificateResponse"/>
+	</message>
+	<message name="GetTrustedIdPsRequest">
+		<part name="parameters" element="tns:GetTrustedIdPsRequest"/>
+	</message>
+	
+	<message name="GetTrustedIdPsResponse">
+		<part name="parameters" element="tns:GetTrustedIdPsResponse"/>
+	</message>
+	<message name="AddTrustedIdPRequest">
+		<part name="parameters" element="tns:AddTrustedIdPRequest"/>
+	</message>
+	
+	<message name="AddTrustedIdPResponse">
+		<part name="parameters" element="tns:AddTrustedIdPResponse"/>
+	</message>
+	<message name="UpdateTrustedIdPRequest">
+		<part name="parameters" element="tns:UpdateTrustedIdPRequest"/>
+	</message>
+	
+	<message name="UpdateTrustedIdPResponse">
+		<part name="parameters" element="tns:UpdateTrustedIdPResponse"/>
+	</message>
+	<message name="RemoveTrustedIdPRequest">
+		<part name="parameters" element="tns:RemoveTrustedIdPRequest"/>
+	</message>
+	
+	<message name="RemoveTrustedIdPResponse">
+		<part name="parameters" element="tns:RemoveTrustedIdPResponse"/>
+	</message>
+	<message name="FindIFSUsersRequest">
+		<part name="parameters" element="tns:FindIFSUsersRequest"/>
+	</message>
+	
+	<message name="FindIFSUsersResponse">
+		<part name="parameters" element="tns:FindIFSUsersResponse"/>
+	</message>
+	<message name="UpdateIFSUserRequest">
+		<part name="parameters" element="tns:UpdateIFSUserRequest"/>
+	</message>
+	
+	<message name="UpdateIFSUserResponse">
+		<part name="parameters" element="tns:UpdateIFSUserResponse"/>
+	</message>
+	<message name="RemoveIFSUserRequest">
+		<part name="parameters" element="tns:RemoveIFSUserRequest"/>
+	</message>
+	
+	<message name="RemoveIFSUserResponse">
+		<part name="parameters" element="tns:RemoveIFSUserResponse"/>
+	</message>
+	<message name="RenewIFSUserCredentialsRequest">
+		<part name="parameters" element="tns:RenewIFSUserCredentialsRequest"/>
+	</message>
+	
+	<message name="RenewIFSUserCredentialsResponse">
+		<part name="parameters" element="tns:RenewIFSUserCredentialsResponse"/>
+	</message>
+	<message name="GetIFSUserPoliciesRequest">
+		<part name="parameters" element="tns:GetIFSUserPoliciesRequest"/>
+	</message>
+	
+	<message name="GetIFSUserPoliciesResponse">
+		<part name="parameters" element="tns:GetIFSUserPoliciesResponse"/>
+	</message>
+	<message name="DorianInternalFaultFaultMessage">
+		<part name="fault" element="tns:DorianInternalFault"/>
+	</message>
+	<message name="InvalidUserPropertyFaultFaultMessage">
+		<part name="fault" element="tns:InvalidUserPropertyFault"/>
+	</message>
+	<message name="PermissionDeniedFaultFaultMessage">
+		<part name="fault" element="tns:PermissionDeniedFault"/>
+	</message>
+	<message name="NoSuchUserFaultFaultMessage">
+		<part name="fault" element="tns:NoSuchUserFault"/>
+	</message>
+	<message name="InvalidAssertionFaultFaultMessage">
+		<part name="fault" element="tns:InvalidAssertionFault"/>
+	</message>
+	<message name="InvalidProxyFaultFaultMessage">
+		<part name="fault" element="tns:InvalidProxyFault"/>
+	</message>
+	<message name="UserPolicyFaultFaultMessage">
+		<part name="fault" element="tns:UserPolicyFault"/>
+	</message>
+	<message name="InvalidTrustedIdPFaultFaultMessage">
+		<part name="fault" element="tns:InvalidTrustedIdPFault"/>
+	</message>
+	<message name="InvalidUserFaultFaultMessage">
+		<part name="fault" element="tns:InvalidUserFault"/>
+	</message>
+    
+<!--============================================================
+
+                       P O R T T Y P E
+                      
+  ============================================================-->
+<portType name="DorianPortType" wsrp:ResourceProperties="tns:DorianResourceProperties">
+		<operation name="registerWithIdP">
+            <input message="tns:RegisterWithIdPRequest"/>
+            <output message="tns:RegisterWithIdPResponse"/>
+       		 <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage"/>
+       				
+       		 <fault name="InvalidUserPropertyFault" message="tns:InvalidUserPropertyFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="findIdPUsers">
+            <input message="tns:FindIdPUsersRequest"/>
+            <output message="tns:FindIdPUsersResponse"/>
+       		 <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="updateIdPUser">
+            <input message="tns:UpdateIdPUserRequest"/>
+            <output message="tns:UpdateIdPUserResponse"/>
+       		 <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage"/>
+       				
+       		 <fault name="NoSuchUserFault" message="tns:NoSuchUserFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="removeIdPUser">
+            <input message="tns:RemoveIdPUserRequest"/>
+            <output message="tns:RemoveIdPUserResponse"/>
+       		 <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="authenticateWithIdP">
+            <input message="tns:AuthenticateWithIdPRequest"/>
+            <output message="tns:AuthenticateWithIdPResponse"/>
+       		 <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="createProxy">
+            <input message="tns:CreateProxyRequest"/>
+            <output message="tns:CreateProxyResponse"/>
+       		 <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage"/>
+       				
+       		 <fault name="InvalidAssertionFault" message="tns:InvalidAssertionFaultFaultMessage"/>
+       				
+       		 <fault name="InvalidProxyFault" message="tns:InvalidProxyFaultFaultMessage"/>
+       				
+       		 <fault name="UserPolicyFault" message="tns:UserPolicyFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="getCACertificate">
+            <input message="tns:GetCACertificateRequest"/>
+            <output message="tns:GetCACertificateResponse"/>
+       		 <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="getTrustedIdPs">
+            <input message="tns:GetTrustedIdPsRequest"/>
+            <output message="tns:GetTrustedIdPsResponse"/>
+       		 <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="addTrustedIdP">
+            <input message="tns:AddTrustedIdPRequest"/>
+            <output message="tns:AddTrustedIdPResponse"/>
+       		 <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage"/>
+       				
+       		 <fault name="InvalidTrustedIdPFault" message="tns:InvalidTrustedIdPFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="updateTrustedIdP">
+            <input message="tns:UpdateTrustedIdPRequest"/>
+            <output message="tns:UpdateTrustedIdPResponse"/>
+       		 <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage"/>
+       				
+       		 <fault name="InvalidTrustedIdPFault" message="tns:InvalidTrustedIdPFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="removeTrustedIdP">
+            <input message="tns:RemoveTrustedIdPRequest"/>
+            <output message="tns:RemoveTrustedIdPResponse"/>
+       		 <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage"/>
+       				
+       		 <fault name="InvalidTrustedIdPFault" message="tns:InvalidTrustedIdPFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="findIFSUsers">
+            <input message="tns:FindIFSUsersRequest"/>
+            <output message="tns:FindIFSUsersResponse"/>
+       		 <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="updateIFSUser">
+            <input message="tns:UpdateIFSUserRequest"/>
+            <output message="tns:UpdateIFSUserResponse"/>
+       		 <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage"/>
+       				
+       		 <fault name="InvalidUserFault" message="tns:InvalidUserFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="removeIFSUser">
+            <input message="tns:RemoveIFSUserRequest"/>
+            <output message="tns:RemoveIFSUserResponse"/>
+       		 <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage"/>
+       				
+       		 <fault name="InvalidUserFault" message="tns:InvalidUserFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="renewIFSUserCredentials">
+            <input message="tns:RenewIFSUserCredentialsRequest"/>
+            <output message="tns:RenewIFSUserCredentialsResponse"/>
+       		 <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage"/>
+       				
+       		 <fault name="InvalidUserFault" message="tns:InvalidUserFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+		<operation name="getIFSUserPolicies">
+            <input message="tns:GetIFSUserPoliciesRequest"/>
+            <output message="tns:GetIFSUserPoliciesResponse"/>
+       		 <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage"/>
+       				
+       		 <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage"/>
+       				
+        </operation>
+        <operation name="GetResourceProperty">
+            <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest"
+                wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty"/>
+            <output name="GetResourcePropertyResponse" message="wsrpw:GetResourcePropertyResponse"
+                wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourcePropertyResponse"/>
+            <fault name="InvalidResourcePropertyQNameFault"
+                message="wsrpw:InvalidResourcePropertyQNameFault"/>
+            <fault name="ResourceUnknownFault" message="wsrpw:ResourceUnknownFault"/>
+        </operation>
+        <operation name="GetMultipleResourceProperties">
+            <input name="GetMultipleResourcePropertiesRequest"
+                message="wsrpw:GetMultipleResourcePropertiesRequest"
+                wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetMultipleResourceProperties"/>
+            <output name="GetMultipleResourcePropertiesResponse"
+                message="wsrpw:GetMultipleResourcePropertiesResponse"
+                wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetMultipleResourceProperties"/>
+            <fault name="InvalidResourcePropertyQNameFault"
+                message="wsrpw:InvalidResourcePropertyQNameFault"/>
+            <fault name="ResourceUnknownFault" message="wsrpw:ResourceUnknownFault"/>
+        </operation>
+        <operation name="QueryResourceProperties">
+            <input name="QueryResourcePropertiesRequest"
+                message="wsrpw:QueryResourcePropertiesRequest"
+                wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/QueryResourceProperties"/>
+            <output name="QueryResourcePropertiesResponse"
+                message="wsrpw:QueryResourcePropertiesResponse"
+                wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/QueryResourcePropertiesResponse"/>
+            <fault name="ResourceUnknownFault" message="wsrpw:ResourceUnknownFault"/>
+            <fault name="InvalidResourcePropertyQNameFault"
+                message="wsrpw:InvalidResourcePropertyQNameFault"/>
+            <fault name="UnknownQueryExpressionDialectFault"
+                message="wsrpw:UnknownQueryExpressionDialectFault"/>
+            <fault name="InvalidQueryExpressionFault" message="wsrpw:InvalidQueryExpressionFault"/>
+            <fault name="QueryEvaluationErrorFault" message="wsrpw:QueryEvaluationErrorFault"/>
+        </operation>
+    </portType>
+</definitions>

@@ -4,11 +4,11 @@ import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthority;
 import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthorityConf;
 import gov.nih.nci.cagrid.dorian.common.Database;
-import gov.nih.nci.cagrid.dorian.ifs.AutoApprovalAutoRenewalPolicy;
-import gov.nih.nci.cagrid.dorian.ifs.AutoApprovalPolicy;
-import gov.nih.nci.cagrid.dorian.ifs.ManualApprovalAutoRenewalPolicy;
-import gov.nih.nci.cagrid.dorian.ifs.ManualApprovalPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
+import gov.nih.nci.cagrid.dorian.service.ifs.AutoApprovalAutoRenewalPolicy;
+import gov.nih.nci.cagrid.dorian.service.ifs.AutoApprovalPolicy;
+import gov.nih.nci.cagrid.dorian.service.ifs.ManualApprovalAutoRenewalPolicy;
+import gov.nih.nci.cagrid.dorian.service.ifs.ManualApprovalPolicy;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 

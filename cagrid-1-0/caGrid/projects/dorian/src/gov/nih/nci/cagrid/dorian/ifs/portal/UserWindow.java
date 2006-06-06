@@ -1,12 +1,11 @@
 package gov.nih.nci.cagrid.dorian.ifs.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.common.security.commstyle.SecureTransportWithEncryption;
-import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
+import gov.nih.nci.cagrid.dorian.stubs.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.portal.CertificatePanel;
 import gov.nih.nci.cagrid.gridca.portal.ProxyCaddy;
@@ -37,7 +36,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.15 2006-04-07 03:52:58 oster Exp $
+ * @version $Id: UserWindow.java,v 1.16 2006-06-06 04:29:18 langella Exp $
  */
 public class UserWindow extends GridPortalBaseFrame {
 
@@ -260,8 +259,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		try {
 			String service = getService().getText();
 			GlobusCredential c = ((ProxyCaddy) getProxy().getSelectedItem()).getProxy();
-			IFSAdministrationClient client = new IFSAdministrationClient(service, new SecureTransportWithEncryption(
-				c));
+			IFSAdministrationClient client = new IFSAdministrationClient(service, c);
 			client.updateUser(user);
 
 			PortalUtils.showMessage("User " + user.getGridId() + " update successfully.");
@@ -280,8 +278,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		try {
 			String service = getService().getText();
 			GlobusCredential c = ((ProxyCaddy) getProxy().getSelectedItem()).getProxy();
-			IFSAdministrationClient client = new IFSAdministrationClient(service, new SecureTransportWithEncryption(
-				c));
+			IFSAdministrationClient client = new IFSAdministrationClient(service, c);
 			user = client.renewUserCredentials(user);
 			X509Certificate cert = CertUtil.loadCertificate(user.getCertificate().getCertificateAsString());
 			this.getCredPanel().setCertificate(cert);
@@ -650,17 +647,17 @@ public class UserWindow extends GridPortalBaseFrame {
 
 
 	/**
-	 * This method initializes credPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
-	private CertificatePanel getCredPanel(){
+	 * This method initializes credPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private CertificatePanel getCredPanel() {
 		if (credPanel == null) {
-			try{
-			credPanel = new CertificatePanel(CertUtil.loadCertificate(user.getCertificate()
-				.getCertificateAsString()));
-			credPanel.setAllowImport(false);
-			}catch(Exception e){
+			try {
+				credPanel = new CertificatePanel(CertUtil.loadCertificate(user.getCertificate()
+					.getCertificateAsString()));
+				credPanel.setAllowImport(false);
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}

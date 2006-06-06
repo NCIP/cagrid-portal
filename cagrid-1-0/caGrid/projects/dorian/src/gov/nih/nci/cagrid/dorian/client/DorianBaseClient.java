@@ -1,8 +1,8 @@
 package gov.nih.nci.cagrid.dorian.client;
 
 import gov.nih.nci.cagrid.common.security.commstyle.CommunicationStyle;
-import gov.nih.nci.cagrid.dorian.wsrf.DorianPortType;
-import gov.nih.nci.cagrid.dorian.wsrf.service.DorianServiceAddressingLocator;
+import gov.nih.nci.cagrid.dorian.stubs.DorianPortType;
+import gov.nih.nci.cagrid.dorian.stubs.service.DorianServiceAddressingLocator;
 
 import org.apache.axis.client.Stub;
 import org.apache.axis.message.addressing.Address;

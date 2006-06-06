@@ -1,14 +1,12 @@
 package gov.nih.nci.cagrid.dorian.idp.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.common.security.commstyle.CommunicationStyle;
-import gov.nih.nci.cagrid.common.security.commstyle.SecureTransportWithEncryption;
-import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.client.IdPAdministrationClient;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
 import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
 import gov.nih.nci.cagrid.dorian.portal.DorianServiceListComboBox;
+import gov.nih.nci.cagrid.dorian.stubs.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
 
 import java.awt.GridBagConstraints;
@@ -33,11 +31,12 @@ import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.25 2006-04-07 03:52:58 oster Exp $
+ * @version $Id: UserManagerWindow.java,v 1.26 2006-06-06 04:29:18 langella Exp $
  */
 public class UserManagerWindow extends GridPortalBaseFrame {
 
@@ -151,6 +150,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 
 	private JProgressBar progress = null;
 
+
 	/**
 	 * This is the default constructor
 	 */
@@ -159,6 +159,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		initialize();
 		this.setFrameIcon(DorianLookAndFeel.getUsersIcon());
 	}
+
 
 	/**
 	 * This method initializes this
@@ -170,6 +171,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		this.setTitle("Manage Users");
 
 	}
+
 
 	/**
 	 * This method initializes jContentPane
@@ -185,6 +187,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		return jContentPane;
 	}
 
+
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -195,7 +198,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
 			gridBagConstraints32.gridx = 0;
 			gridBagConstraints32.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints32.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints32.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints32.weightx = 1.0D;
 			gridBagConstraints32.gridy = 2;
 			GridBagConstraints gridBagConstraints33 = new GridBagConstraints();
@@ -231,6 +234,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		return mainPanel;
 	}
 
+
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -241,14 +245,9 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			contentPanel = new JPanel();
 			contentPanel.setLayout(new GridBagLayout());
-			contentPanel
-					.setBorder(javax.swing.BorderFactory
-							.createTitledBorder(
-									null,
-									"Users",
-									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, DorianLookAndFeel.getPanelLabelColor()));
+			contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Users",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel.getPanelLabelColor()));
 			gridBagConstraints4.weightx = 1.0;
 			gridBagConstraints4.weighty = 1.0;
 			gridBagConstraints4.fill = java.awt.GridBagConstraints.BOTH;
@@ -256,6 +255,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		}
 		return contentPanel;
 	}
+
 
 	/**
 	 * This method initializes jPanel
@@ -270,6 +270,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		}
 		return buttonPanel;
 	}
+
 
 	/**
 	 * This method initializes jButton1
@@ -290,6 +291,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		return cancel;
 	}
 
+
 	/**
 	 * This method initializes jTable
 	 * 
@@ -301,6 +303,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		}
 		return usersTable;
 	}
+
 
 	/**
 	 * This method initializes jScrollPane
@@ -314,6 +317,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		}
 		return jScrollPane;
 	}
+
 
 	/**
 	 * This method initializes manageUser
@@ -335,6 +339,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		return manageUser;
 	}
 
+
 	public void showUser() {
 		final int row = getUsersTable().getSelectedRow();
 
@@ -342,32 +347,29 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			MobiusRunnable runner = new MobiusRunnable() {
 				public void execute() {
 					IdPUser user = (IdPUser) getUsersTable().getValueAt(row, 0);
-					String service = ((DorianServiceListComboBox) getService())
-							.getSelectedService();
+					String service = ((DorianServiceListComboBox) getService()).getSelectedService();
 					try {
-						GlobusCredential proxy = ((ProxyComboBox) getProxy())
-								.getSelectedProxy();
+						GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 
-						PortalResourceManager.getInstance().getGridPortal()
-								.addGridPortalComponent(
-										new UserWindow(service, proxy, user));
+						PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+							new UserWindow(service, proxy, user));
 					} catch (Exception e) {
 						PortalUtils.showErrorMessage(e);
 					}
 				}
 			};
 			try {
-				PortalResourceManager.getInstance().getThreadManager()
-						.executeInBackground(runner);
+				PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
 			} catch (Exception t) {
 				t.getMessage();
 			}
 
 		} else {
-			JOptionPane.showMessageDialog(PortalResourceManager.getInstance()
-					.getGridPortal(), "Please select a user to manage!!!");
+			JOptionPane.showMessageDialog(PortalResourceManager.getInstance().getGridPortal(),
+				"Please select a user to manage!!!");
 		}
 	}
+
 
 	/**
 	 * This method initializes jPanel
@@ -395,6 +397,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		return jPanel;
 	}
 
+
 	/**
 	 * This method initializes jTabbedPane
 	 * 
@@ -403,16 +406,16 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 	private JTabbedPane getJTabbedPane() {
 		if (jTabbedPane == null) {
 			jTabbedPane = new JTabbedPane();
-			jTabbedPane.setBorder(BorderFactory.createTitledBorder(null,
-					"Search Criteria", TitledBorder.DEFAULT_JUSTIFICATION,
-					TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
-							.getPanelLabelColor()));
+			jTabbedPane.setBorder(BorderFactory.createTitledBorder(null, "Search Criteria",
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
+					.getPanelLabelColor()));
 			jTabbedPane.addTab(STATUS_PANEL, null, getStatus(), null);
 			jTabbedPane.addTab(INFO_PANEL, null, getJPanel1(), null);
 			jTabbedPane.addTab(ROLE_PANEL, null, getRole(), null);
 		}
 		return jTabbedPane;
 	}
+
 
 	/**
 	 * This method initializes jPanel1
@@ -636,6 +639,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		return jPanel1;
 	}
 
+
 	/**
 	 * This method initializes jTextField
 	 * 
@@ -647,6 +651,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		}
 		return firstName;
 	}
+
 
 	/**
 	 * This method initializes jTextField1
@@ -660,6 +665,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		return lastName;
 	}
 
+
 	/**
 	 * This method initializes jTextField2
 	 * 
@@ -671,6 +677,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		}
 		return organization;
 	}
+
 
 	/**
 	 * This method initializes jTextField3
@@ -684,6 +691,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		return address;
 	}
 
+
 	/**
 	 * This method initializes jTextField4
 	 * 
@@ -695,6 +703,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		}
 		return address2;
 	}
+
 
 	/**
 	 * This method initializes jTextField5
@@ -716,6 +725,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		return state;
 	}
 
+
 	/**
 	 * This method initializes jTextField6
 	 * 
@@ -728,6 +738,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		return zipcode;
 	}
 
+
 	/**
 	 * This method initializes jTextField7
 	 * 
@@ -739,6 +750,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		}
 		return phoneNumber;
 	}
+
 
 	/**
 	 * This method initializes jTextField8
@@ -760,6 +772,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		return country;
 	}
 
+
 	/**
 	 * This method initializes jTextField9
 	 * 
@@ -771,6 +784,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		}
 		return username;
 	}
+
 
 	/**
 	 * This method initializes jPanel2
@@ -810,10 +824,9 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			jLabel14.setText("Service");
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
-			jPanel2.setBorder(BorderFactory.createTitledBorder(null,
-					"Login Information", TitledBorder.DEFAULT_JUSTIFICATION,
-					TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
-							.getPanelLabelColor()));
+			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "Login Information",
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
+					.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints28);
 			jPanel2.add(proxyLabel, gridBagConstraints29);
@@ -821,6 +834,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		}
 		return jPanel2;
 	}
+
 
 	/**
 	 * This method initializes queryPanel
@@ -834,6 +848,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		}
 		return queryPanel;
 	}
+
 
 	/**
 	 * This method initializes query
@@ -853,8 +868,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager()
-								.executeInBackground(runner);
+						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -865,73 +879,70 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		return query;
 	}
 
+
 	private void findUsers() {
 
 		synchronized (mutex) {
 			if (isQuerying) {
-				PortalUtils
-						.showErrorMessage("Query Already in Progress",
-								"Please wait until the current query is finished before executing another.");
+				PortalUtils.showErrorMessage("Query Already in Progress",
+					"Please wait until the current query is finished before executing another.");
 				return;
 			} else {
 				isQuerying = true;
 			}
 		}
-		
+
 		this.getUsersTable().clearTable();
-		this.updateProgress(true,"Querying...");
+		this.updateProgress(true, "Querying...");
 
 		try {
-		GlobusCredential proxy = ((ProxyComboBox) getProxy())
-				.getSelectedProxy();
-		IdPUserFilter f = new IdPUserFilter();
-		JPanel panel = (JPanel) this.getJTabbedPane().getSelectedComponent();
-		if (panel.getName().equals(ROLE_PANEL)) {
-			f.setRole(this.getUserRole().getSelectedUserRole());
-		} else if (panel.getName().equals(STATUS_PANEL)) {
-			f.setStatus(this.getUserStatus().getSelectedUserStatus());
-		} else if (panel.getName().equals(INFO_PANEL)) {
-			f.setUserId(format(getUsername().getText()));
-			f.setFirstName(format(getFirstName().getText()));
-			f.setLastName(format(getLastName().getText()));
-			f.setOrganization(format(getOrganization().getText()));
-			f.setAddress(format(getAddress().getText()));
-			f.setAddress2(format(getAddress2().getText()));
-			f.setCity(format(getCity().getText()));
-			f.setState(getState().getSelectedState());
-			f.setZipcode(format(getZipcode().getText()));
-			f.setCountry(getCountry().getSelectedCountry());
-			f.setPhoneNumber(format(getPhoneNumber().getText()));
-			f.setEmail(format(getEmail().getText()));
-		}
+			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			IdPUserFilter f = new IdPUserFilter();
+			JPanel panel = (JPanel) this.getJTabbedPane().getSelectedComponent();
+			if (panel.getName().equals(ROLE_PANEL)) {
+				f.setRole(this.getUserRole().getSelectedUserRole());
+			} else if (panel.getName().equals(STATUS_PANEL)) {
+				f.setStatus(this.getUserStatus().getSelectedUserStatus());
+			} else if (panel.getName().equals(INFO_PANEL)) {
+				f.setUserId(format(getUsername().getText()));
+				f.setFirstName(format(getFirstName().getText()));
+				f.setLastName(format(getLastName().getText()));
+				f.setOrganization(format(getOrganization().getText()));
+				f.setAddress(format(getAddress().getText()));
+				f.setAddress2(format(getAddress2().getText()));
+				f.setCity(format(getCity().getText()));
+				f.setState(getState().getSelectedState());
+				f.setZipcode(format(getZipcode().getText()));
+				f.setCountry(getCountry().getSelectedCountry());
+				f.setPhoneNumber(format(getPhoneNumber().getText()));
+				f.setEmail(format(getEmail().getText()));
+			}
 
-			String service = ((DorianServiceListComboBox) getService())
-					.getSelectedService();
-			CommunicationStyle style = new SecureTransportWithEncryption(
-					proxy);
-			IdPAdministrationClient client = new IdPAdministrationClient(
-					service, style);
+			String service = ((DorianServiceListComboBox) getService()).getSelectedService();
+
+			IdPAdministrationClient client = new IdPAdministrationClient(service, proxy);
 			IdPUser[] users = client.findUsers(f);
 			if (users != null) {
 				for (int i = 0; i < users.length; i++) {
 					this.getUsersTable().addUser(users[i]);
 				}
 			}
-			int length=0;
-			if(users != null){
+			int length = 0;
+			if (users != null) {
 				length = users.length;
 			}
-			this.updateProgress(false,"Querying Completed ["+length+" users found]");
+			this.updateProgress(false, "Querying Completed [" + length + " users found]");
 		} catch (PermissionDeniedFault pdf) {
 			PortalUtils.showErrorMessage(pdf);
-			this.updateProgress(false,"Error");
+			this.updateProgress(false, "Error");
 		} catch (Exception e) {
 			e.printStackTrace();
 			PortalUtils.showErrorMessage(e);
-			this.updateProgress(false,"Error");
+			this.updateProgress(false, "Error");
 		}
 		isQuerying = false;
 	}
+
 
 	private String format(String s) {
 		if ((s == null) || (s.trim().length() == 0)) {
@@ -940,6 +951,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			return s;
 		}
 	}
+
 
 	/**
 	 * This method initializes allUsers
@@ -958,6 +970,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		return role;
 	}
 
+
 	/**
 	 * This method initializes userRole
 	 * 
@@ -969,6 +982,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		}
 		return userRole;
 	}
+
 
 	/**
 	 * This method initializes status
@@ -987,6 +1001,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		return status;
 	}
 
+
 	/**
 	 * This method initializes userStatus
 	 * 
@@ -998,6 +1013,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		}
 		return userStatus;
 	}
+
 
 	/**
 	 * This method initializes service
@@ -1011,6 +1027,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		return service;
 	}
 
+
 	/**
 	 * This method initializes proxy
 	 * 
@@ -1023,15 +1040,16 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		return proxy;
 	}
 
+
 	/**
-	 * This method initializes progressPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes progressPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private JPanel getProgressPanel() {
 		if (progressPanel == null) {
 			GridBagConstraints gridBagConstraints36 = new GridBagConstraints();
-			gridBagConstraints36.insets = new java.awt.Insets(2,20,2,20);
+			gridBagConstraints36.insets = new java.awt.Insets(2, 20, 2, 20);
 			gridBagConstraints36.gridy = 0;
 			gridBagConstraints36.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints36.weightx = 1.0D;
@@ -1043,21 +1061,23 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		return progressPanel;
 	}
 
+
 	/**
-	 * This method initializes progress	
-	 * 	
-	 * @return javax.swing.JProgressBar	
-	 */    
+	 * This method initializes progress
+	 * 
+	 * @return javax.swing.JProgressBar
+	 */
 	private JProgressBar getProgress() {
 		if (progress == null) {
 			progress = new JProgressBar();
-			 progress.setForeground(DorianLookAndFeel.getPanelLabelColor());
-	         progress.setString("");
-	         progress.setStringPainted(true);
+			progress.setForeground(DorianLookAndFeel.getPanelLabelColor());
+			progress.setString("");
+			progress.setStringPainted(true);
 		}
 		return progress;
 	}
-	
+
+
 	public void updateProgress(final boolean working, final String s) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {

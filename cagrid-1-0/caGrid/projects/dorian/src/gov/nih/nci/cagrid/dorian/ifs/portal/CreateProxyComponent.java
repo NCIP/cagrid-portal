@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.dorian.ifs.portal;
 
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.common.security.commstyle.AnonymousSecureTransportWithEncryption;
 import gov.nih.nci.cagrid.dorian.client.IFSUserClient;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
@@ -340,7 +339,7 @@ public class CreateProxyComponent extends GridPortalComponent {
 	    
 	    	SAMLAssertion saml = panel.authenticate();
 	    	this.updateProgress(true,"Creating Proxy...");
-	    	IFSUserClient c2 = new IFSUserClient(ifsService, new AnonymousSecureTransportWithEncryption());
+	    	IFSUserClient c2 = new IFSUserClient(ifsService);
 			ProxyLifetime lifetime = new ProxyLifetime();
 			lifetime.setHours(Integer.valueOf((String)getHours().getSelectedItem()).intValue());
 			lifetime.setMinutes(Integer.valueOf((String)getMinutes().getSelectedItem()).intValue());

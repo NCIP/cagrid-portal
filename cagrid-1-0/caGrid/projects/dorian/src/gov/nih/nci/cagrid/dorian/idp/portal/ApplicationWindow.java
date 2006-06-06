@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.dorian.idp.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.common.security.commstyle.AnonymousSecureTransportWithEncryption;
 import gov.nih.nci.cagrid.dorian.client.IdPRegistrationClient;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
@@ -21,6 +20,7 @@ import javax.swing.JTextField;
 import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
+
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -107,6 +107,7 @@ public class ApplicationWindow extends GridPortalComponent {
 
 	private boolean applied = false;
 
+
 	/**
 	 * This is the default constructor
 	 */
@@ -114,6 +115,7 @@ public class ApplicationWindow extends GridPortalComponent {
 		super();
 		initialize();
 	}
+
 
 	/**
 	 * This method initializes this
@@ -125,6 +127,7 @@ public class ApplicationWindow extends GridPortalComponent {
 		this.setTitle("IdP User Application");
 		this.setFrameIcon(DorianLookAndFeel.getApplicationIcon());
 	}
+
 
 	/**
 	 * This method initializes jContentPane
@@ -139,6 +142,7 @@ public class ApplicationWindow extends GridPortalComponent {
 		}
 		return jContentPane;
 	}
+
 
 	/**
 	 * This method initializes jPanel
@@ -176,6 +180,7 @@ public class ApplicationWindow extends GridPortalComponent {
 		}
 		return mainPanel;
 	}
+
 
 	/**
 	 * This method initializes jPanel
@@ -243,11 +248,9 @@ public class ApplicationWindow extends GridPortalComponent {
 			serviceLabel.setText("Service");
 			authPanel = new JPanel();
 			authPanel.setLayout(new GridBagLayout());
-			authPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, "Login Information",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					DorianLookAndFeel.getPanelLabelColor()));
+			authPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Login Information",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel.getPanelLabelColor()));
 			authPanel.add(serviceLabel, gridBagConstraints3);
 			authPanel.add(getService(), gridBagConstraints4);
 			authPanel.add(usernameLabel, gridBagConstraints5);
@@ -259,6 +262,7 @@ public class ApplicationWindow extends GridPortalComponent {
 		}
 		return authPanel;
 	}
+
 
 	/**
 	 * This method initializes infoPanel
@@ -420,11 +424,9 @@ public class ApplicationWindow extends GridPortalComponent {
 			infoPanel = new JPanel();
 			infoPanel.setLayout(new GridBagLayout());
 
-			infoPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, "Personal Information",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					DorianLookAndFeel.getPanelLabelColor()));
+			infoPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Personal Information",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel.getPanelLabelColor()));
 			infoPanel.add(firstNameLabel, gridBagConstraints11);
 			infoPanel.add(getFirstName(), gridBagConstraints12);
 			infoPanel.add(lastNameLabel, gridBagConstraints13);
@@ -451,6 +453,7 @@ public class ApplicationWindow extends GridPortalComponent {
 		return infoPanel;
 	}
 
+
 	/**
 	 * This method initializes buttonPanel
 	 * 
@@ -465,6 +468,7 @@ public class ApplicationWindow extends GridPortalComponent {
 		return buttonPanel;
 	}
 
+
 	/**
 	 * This method initializes service
 	 * 
@@ -476,6 +480,7 @@ public class ApplicationWindow extends GridPortalComponent {
 		}
 		return service;
 	}
+
 
 	/**
 	 * This method initializes username
@@ -489,6 +494,7 @@ public class ApplicationWindow extends GridPortalComponent {
 		return username;
 	}
 
+
 	/**
 	 * This method initializes password
 	 * 
@@ -500,6 +506,7 @@ public class ApplicationWindow extends GridPortalComponent {
 		}
 		return password;
 	}
+
 
 	/**
 	 * This method initializes verify
@@ -513,6 +520,7 @@ public class ApplicationWindow extends GridPortalComponent {
 		return verify;
 	}
 
+
 	/**
 	 * This method initializes firstName
 	 * 
@@ -524,6 +532,7 @@ public class ApplicationWindow extends GridPortalComponent {
 		}
 		return firstName;
 	}
+
 
 	/**
 	 * This method initializes lastName
@@ -537,6 +546,7 @@ public class ApplicationWindow extends GridPortalComponent {
 		return lastName;
 	}
 
+
 	/**
 	 * This method initializes organization
 	 * 
@@ -548,6 +558,7 @@ public class ApplicationWindow extends GridPortalComponent {
 		}
 		return organization;
 	}
+
 
 	/**
 	 * This method initializes address
@@ -561,6 +572,7 @@ public class ApplicationWindow extends GridPortalComponent {
 		return address;
 	}
 
+
 	/**
 	 * This method initializes address2
 	 * 
@@ -572,6 +584,7 @@ public class ApplicationWindow extends GridPortalComponent {
 		}
 		return address2;
 	}
+
 
 	/**
 	 * This method initializes city
@@ -585,6 +598,7 @@ public class ApplicationWindow extends GridPortalComponent {
 		return city;
 	}
 
+
 	/**
 	 * This method initializes state
 	 * 
@@ -596,6 +610,7 @@ public class ApplicationWindow extends GridPortalComponent {
 		}
 		return state;
 	}
+
 
 	/**
 	 * This method initializes zipcode
@@ -609,6 +624,7 @@ public class ApplicationWindow extends GridPortalComponent {
 		return zipcode;
 	}
 
+
 	/**
 	 * This method initializes phoneNumber
 	 * 
@@ -621,6 +637,7 @@ public class ApplicationWindow extends GridPortalComponent {
 		return phoneNumber;
 	}
 
+
 	/**
 	 * This method initializes email
 	 * 
@@ -632,6 +649,7 @@ public class ApplicationWindow extends GridPortalComponent {
 		}
 		return email;
 	}
+
 
 	/**
 	 * This method initializes applyButton
@@ -653,6 +671,7 @@ public class ApplicationWindow extends GridPortalComponent {
 		return apply;
 	}
 
+
 	/**
 	 * This method initializes cancel
 	 * 
@@ -662,8 +681,8 @@ public class ApplicationWindow extends GridPortalComponent {
 		if (cancel == null) {
 			cancel = new JButton();
 			cancel.setText("Cancel");
-			cancel.addActionListener(new java.awt.event.ActionListener() { 
-				public void actionPerformed(java.awt.event.ActionEvent e) {    
+			cancel.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();
 				}
 			});
@@ -671,6 +690,7 @@ public class ApplicationWindow extends GridPortalComponent {
 		}
 		return cancel;
 	}
+
 
 	/**
 	 * This method initializes country
@@ -684,14 +704,14 @@ public class ApplicationWindow extends GridPortalComponent {
 		return country;
 	}
 
+
 	public synchronized void apply() {
 		if (!applied) {
 			applied = true;
 			String pass = new String(this.getPassword().getPassword());
 			String vpass = new String(this.getPassword().getPassword());
 			if (!pass.equals(vpass)) {
-				PortalUtils.showErrorMessage("Registration Error",
-						"Password don't match!!!");
+				PortalUtils.showErrorMessage("Registration Error", "Password don't match!!!");
 				applied = false;
 			}
 
@@ -704,22 +724,17 @@ public class ApplicationWindow extends GridPortalComponent {
 			a.setAddress(this.getAddress().getText());
 			a.setAddress2(this.getAddress2().getText());
 			a.setCity(this.getCity().getText());
-			a
-					.setState(((StateListComboBox) this.getState())
-							.getSelectedState());
+			a.setState(((StateListComboBox) this.getState()).getSelectedState());
 			a.setZipcode(this.getZipcode().getText());
-			a.setCountry(((CountryListComboBox) this.getCountry())
-					.getSelectedCountry());
+			a.setCountry(((CountryListComboBox) this.getCountry()).getSelectedCountry());
 			a.setPhoneNumber(this.getPhoneNumber().getText());
 			a.setEmail(this.getEmail().getText());
-			final String service = ((DorianServiceListComboBox) this.getService())
-					.getSelectedService();
+			final String service = ((DorianServiceListComboBox) this.getService()).getSelectedService();
 
 			MobiusRunnable runner = new MobiusRunnable() {
 				public void execute() {
 					try {
-						IdPRegistrationClient client = new IdPRegistrationClient(
-								service,new AnonymousSecureTransportWithEncryption());
+						IdPRegistrationClient client = new IdPRegistrationClient(service);
 						PortalUtils.showMessage(client.register(a));
 						dispose();
 					} catch (Exception e) {
@@ -731,15 +746,12 @@ public class ApplicationWindow extends GridPortalComponent {
 				}
 			};
 			try {
-				PortalResourceManager.getInstance().getThreadManager()
-						.executeInBackground(runner);
+				PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
 			} catch (Exception t) {
 				t.getMessage();
 			}
 		} else {
-			PortalUtils
-					.showErrorMessage("Application already sent, currently awaiting response.");
+			PortalUtils.showErrorMessage("Application already sent, currently awaiting response.");
 		}
 	}
-
 }

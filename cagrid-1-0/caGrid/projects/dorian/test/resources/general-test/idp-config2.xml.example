@@ -1,9 +1,9 @@
 <idp>
-	<resource name="IdPConfiguration" class="gov.nih.nci.cagrid.dorian.idp.IdPConfiguration">
+	<resource name="IdPConfiguration" class="gov.nih.nci.cagrid.dorian.service.idp.IdPConfiguration">
 		<idp-config>
 			<uid-length min="4" max="10"/>
 		    <password-length min="6" max="10"/>
-		    <registration-policy class="gov.nih.nci.cagrid.dorian.idp.ManualRegistrationPolicy"/>
+		    <registration-policy class="gov.nih.nci.cagrid.dorian.service.idp.ManualRegistrationPolicy"/>
             <asserting-credentials auto="false" renew="false" cert="test/resources/ca-test/dorian-cert.pem" key="test/resources/ca-test/dorian-key.pem"/>
 		</idp-config>
 	</resource>	

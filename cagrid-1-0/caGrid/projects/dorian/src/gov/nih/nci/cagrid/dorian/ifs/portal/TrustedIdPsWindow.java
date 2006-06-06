@@ -1,15 +1,12 @@
 package gov.nih.nci.cagrid.dorian.ifs.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.common.security.commstyle.CommunicationStyle;
-import gov.nih.nci.cagrid.common.security.commstyle.SecureTransportWithEncryption;
-import gov.nih.nci.cagrid.dorian.IFSAdministration;
-import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
 import gov.nih.nci.cagrid.dorian.portal.DorianServiceListComboBox;
+import gov.nih.nci.cagrid.dorian.stubs.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
 
 import java.awt.GridBagConstraints;
@@ -36,7 +33,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPsWindow.java,v 1.13 2006-04-07 03:52:58 oster Exp $
+ * @version $Id: TrustedIdPsWindow.java,v 1.14 2006-06-06 04:29:18 langella Exp $
  */
 public class TrustedIdPsWindow extends GridPortalBaseFrame {
 
@@ -427,13 +424,11 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 		try {
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			String service = ((DorianServiceListComboBox) getService()).getSelectedService();
-			CommunicationStyle style = new SecureTransportWithEncryption(proxy);
-
-			IFSAdministration client = new IFSAdministrationClient(service, style);
+			IFSAdministrationClient client = new IFSAdministrationClient(service, proxy);
 			TrustedIdP[] idps = client.getTrustedIdPs();
-			
-			int length=0;
-			if(idps != null){
+
+			int length = 0;
+			if (idps != null) {
 				length = idps.length;
 				for (int i = 0; i < idps.length; i++) {
 					this.getTrustedIdPTable().addTrustedIdP(idps[i]);
@@ -457,8 +452,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 	private IFSUserPolicy[] getUserPolicies() throws Exception {
 		GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 		String service = ((DorianServiceListComboBox) getService()).getSelectedService();
-		CommunicationStyle style = new SecureTransportWithEncryption(proxy);
-		IFSAdministration client = new IFSAdministrationClient(service, style);
+		IFSAdministrationClient client = new IFSAdministrationClient(service, proxy);
 		return client.getUserPolicies();
 	}
 
@@ -570,9 +564,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 		try {
 			String service = ((DorianServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			CommunicationStyle style = new SecureTransportWithEncryption(proxy);
-
-			IFSAdministration client = new IFSAdministrationClient(service, style);
+			IFSAdministrationClient client = new IFSAdministrationClient(service, proxy);
 			client.removeTrustedIdP(getTrustedIdPTable().getSelectedTrustedIdP());
 			getTrustedIdPTable().removeSelectedTrustedIdP();
 		} catch (Exception e) {

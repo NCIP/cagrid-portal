@@ -3,13 +3,12 @@ package gov.nih.nci.cagrid.dorian.client;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.security.commstyle.CommunicationStyle;
-import gov.nih.nci.cagrid.dorian.IdPRegistration;
-import gov.nih.nci.cagrid.dorian.bean.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.common.DorianFault;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
-import gov.nih.nci.cagrid.dorian.idp.bean.InvalidUserPropertyFault;
-import gov.nih.nci.cagrid.dorian.wsrf.DorianPortType;
+import gov.nih.nci.cagrid.dorian.stubs.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.stubs.InvalidUserPropertyFault;
+
+import org.apache.axis.types.URI.MalformedURIException;
 
 
 /**
@@ -19,35 +18,24 @@ import gov.nih.nci.cagrid.dorian.wsrf.DorianPortType;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class IdPRegistrationClient extends DorianBaseClient implements
-		IdPRegistration {
-	
-	private CommunicationStyle style;
+public class IdPRegistrationClient{
 
-	public IdPRegistrationClient(String serviceURI,CommunicationStyle style) {
-		super(serviceURI);
-		this.style = style;
+	private DorianClient client;
+
+
+	public IdPRegistrationClient(String serviceURI) throws MalformedURIException {
+		client = new DorianClient(serviceURI);
 	}
 
-	public String register(Application a) throws DorianFault,DorianInternalFault,InvalidUserPropertyFault{
-		DorianPortType port = null;
+
+	public String register(Application a) throws DorianFault, DorianInternalFault, InvalidUserPropertyFault {
 		try {
-			port = this.getPort(style);
-		}catch (Exception e) {
-			DorianFault fault = new DorianFault();
-			fault.setFaultString(e.getMessage());
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (DorianFault) helper.getFault();
-			throw fault;
-		}
-		try {
-			return port.registerWithIdP(a);
-		}catch(DorianInternalFault gie){
+			return client.registerWithIdP(a);
+		} catch (DorianInternalFault gie) {
 			throw gie;
-		}catch(InvalidUserPropertyFault f){
+		} catch (InvalidUserPropertyFault f) {
 			throw f;
-		}catch (Exception e) {
+		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			DorianFault fault = new DorianFault();
 			fault.setFaultString(Utils.getExceptionMessage(e));

@@ -1,11 +1,10 @@
 package gov.nih.nci.cagrid.dorian.idp.portal;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.common.security.commstyle.SecureTransportWithEncryption;
-import gov.nih.nci.cagrid.dorian.bean.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.client.IdPAdministrationClient;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
 import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
+import gov.nih.nci.cagrid.dorian.stubs.PermissionDeniedFault;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -27,11 +26,12 @@ import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.15 2006-04-07 03:52:57 oster Exp $
+ * @version $Id: UserWindow.java,v 1.16 2006-06-06 04:29:18 langella Exp $
  */
 public class UserWindow extends GridPortalBaseFrame {
 
@@ -134,8 +134,9 @@ public class UserWindow extends GridPortalBaseFrame {
 	private JPasswordField password = null;
 
 	private JPasswordField verifyPassword = null;
-	
+
 	private GlobusCredential proxy;
+
 
 	/**
 	 * This is the default constructor
@@ -149,6 +150,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		this.setFrameIcon(DorianLookAndFeel.getUserBrowse());
 	}
 
+
 	/**
 	 * This method initializes this
 	 * 
@@ -159,6 +161,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		this.setTitle("Manage User [" + user.getUserId() + "]");
 
 	}
+
 
 	/**
 	 * This method initializes jContentPane
@@ -173,6 +176,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		}
 		return jContentPane;
 	}
+
 
 	/**
 	 * This method initializes jPanel
@@ -208,6 +212,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		return mainPanel;
 	}
 
+
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -221,6 +226,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		}
 		return buttonPanel;
 	}
+
 
 	/**
 	 * This method initializes jButton1
@@ -241,6 +247,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		return cancel;
 	}
 
+
 	/**
 	 * This method initializes manageUser
 	 * 
@@ -258,8 +265,7 @@ public class UserWindow extends GridPortalBaseFrame {
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager()
-								.executeInBackground(runner);
+						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -270,6 +276,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		}
 		return updateUser;
 	}
+
 
 	private String format(char[] array) {
 		if (array == null) {
@@ -284,6 +291,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		}
 	}
 
+
 	private synchronized void updateUser() {
 
 		String pass = format(this.getPassword().getPassword());
@@ -293,15 +301,12 @@ public class UserWindow extends GridPortalBaseFrame {
 			if (pass.equals(verify)) {
 				user.setPassword(pass);
 			} else {
-				PortalUtils.showErrorMessage("Cannot update the user "
-						+ user.getUserId() + ", password don't match.");
+				PortalUtils.showErrorMessage("Cannot update the user " + user.getUserId() + ", password don't match.");
 			}
 		}
 
-		user.setRole(((UserRolesComboBox) this.getUserRole())
-				.getSelectedUserRole());
-		user.setStatus(((UserStatusComboBox) this.getUserStatus())
-				.getSelectedUserStatus());
+		user.setRole(((UserRolesComboBox) this.getUserRole()).getSelectedUserRole());
+		user.setStatus(((UserStatusComboBox) this.getUserStatus()).getSelectedUserStatus());
 
 		user.setUserId(getUsername().getText());
 		user.setFirstName(getFirstName().getText());
@@ -318,13 +323,11 @@ public class UserWindow extends GridPortalBaseFrame {
 
 		try {
 			String service = getService().getText();
- 
-			IdPAdministrationClient client = new IdPAdministrationClient(
-					service, new SecureTransportWithEncryption(proxy));
+
+			IdPAdministrationClient client = new IdPAdministrationClient(service, proxy);
 			client.updateUser(user);
 
-			PortalUtils.showMessage("User " + user.getUserId()
-					+ " update successfully.");
+			PortalUtils.showMessage("User " + user.getUserId() + " update successfully.");
 
 		} catch (PermissionDeniedFault pdf) {
 			PortalUtils.showErrorMessage(pdf);
@@ -334,6 +337,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		}
 	}
 
+
 	/**
 	 * This method initializes jTabbedPane
 	 * 
@@ -342,16 +346,16 @@ public class UserWindow extends GridPortalBaseFrame {
 	private JTabbedPane getJTabbedPane() {
 		if (jTabbedPane == null) {
 			jTabbedPane = new JTabbedPane();
-			jTabbedPane.setBorder(BorderFactory.createTitledBorder(null,
-					"Information", TitledBorder.DEFAULT_JUSTIFICATION,
-					TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
-							.getPanelLabelColor()));
+			jTabbedPane.setBorder(BorderFactory.createTitledBorder(null, "Information",
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
+					.getPanelLabelColor()));
 			jTabbedPane.addTab(INFO_PANEL, null, getInfoPanel(), null);
 			jTabbedPane.addTab(ACCOUNT_PANEL, null, getAccountPanel(), null);
 			jTabbedPane.addTab(PASSWORD_PANEL, null, getPasswordPanel(), null);
 		}
 		return jTabbedPane;
 	}
+
 
 	/**
 	 * This method initializes jPanel1
@@ -575,6 +579,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		return jPanel1;
 	}
 
+
 	/**
 	 * This method initializes jTextField
 	 * 
@@ -587,6 +592,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		}
 		return firstName;
 	}
+
 
 	/**
 	 * This method initializes jTextField1
@@ -601,6 +607,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		return lastName;
 	}
 
+
 	/**
 	 * This method initializes jTextField2
 	 * 
@@ -613,6 +620,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		}
 		return organization;
 	}
+
 
 	/**
 	 * This method initializes jTextField3
@@ -627,6 +635,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		return address;
 	}
 
+
 	/**
 	 * This method initializes jTextField4
 	 * 
@@ -639,6 +648,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		}
 		return address2;
 	}
+
 
 	/**
 	 * This method initializes jTextField5
@@ -671,6 +681,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		return zipcode;
 	}
 
+
 	/**
 	 * This method initializes jTextField7
 	 * 
@@ -683,6 +694,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		}
 		return phoneNumber;
 	}
+
 
 	/**
 	 * This method initializes jTextField8
@@ -697,7 +709,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		return email;
 	}
 
-	
+
 	private CountryListComboBox getCountry() {
 		if (country == null) {
 			country = new CountryListComboBox(false);
@@ -705,6 +717,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		}
 		return country;
 	}
+
 
 	/**
 	 * This method initializes jTextField9
@@ -719,6 +732,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		}
 		return username;
 	}
+
 
 	/**
 	 * This method initializes jPanel2
@@ -747,15 +761,15 @@ public class UserWindow extends GridPortalBaseFrame {
 			jLabel14.setText("Service");
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
-			jPanel2.setBorder(BorderFactory.createTitledBorder(null,
-					"Login Information", TitledBorder.DEFAULT_JUSTIFICATION,
-					TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
-							.getPanelLabelColor()));
+			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "Login Information",
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
+					.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints27);
 		}
 		return jPanel2;
 	}
+
 
 	/**
 	 * This method initializes service1
@@ -771,6 +785,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		return service;
 	}
 
+
 	/**
 	 * This method initializes infoPanel
 	 * 
@@ -784,6 +799,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		}
 		return infoPanel;
 	}
+
 
 	/**
 	 * This method initializes accountPanel
@@ -830,6 +846,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		return accountPanel;
 	}
 
+
 	/**
 	 * This method initializes userStatus
 	 * 
@@ -843,6 +860,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		return userStatus;
 	}
 
+
 	/**
 	 * This method initializes userRole
 	 * 
@@ -855,6 +873,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		}
 		return userRole;
 	}
+
 
 	/**
 	 * This method initializes passwordPanel
@@ -901,6 +920,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		return passwordPanel;
 	}
 
+
 	/**
 	 * This method initializes password
 	 * 
@@ -912,6 +932,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		}
 		return password;
 	}
+
 
 	/**
 	 * This method initializes verifyPassword
