@@ -16,7 +16,7 @@ import org.globus.wsrf.jndi.Initializable;
 public class BaseResourceHome extends SingletonResourceHome implements Initializable {
 
 	static final Log logger = LogFactory.getLog(BaseResourceHome.class);
-private String gtsConfig;
+
 
 	public Resource findSingleton() {
 		logger.info("Creating a single resource.");
@@ -52,11 +52,5 @@ private String gtsConfig;
 			logger.info("Successfully initialized resource.");
 		}
 	}
-		public String getGtsConfig() {
-		return gtsConfig;
-	}
 
-	public void setGtsConfig(String gtsConfig) {
-		this.gtsConfig = gtsConfig;
-	}
 }
