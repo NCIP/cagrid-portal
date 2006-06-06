@@ -14,6 +14,7 @@
         <parameter name="scope" value="Application"/>
         <parameter name="providers" value="GetRPProvider GetMRPProvider QueryRPProvider"/>
         <parameter name="loadOnStartup" value="true"/>
+        <parameter name="syncDescription" value="ETC-PATH/sync-description.xml"/>
     </service>    
     
     <typeMapping 

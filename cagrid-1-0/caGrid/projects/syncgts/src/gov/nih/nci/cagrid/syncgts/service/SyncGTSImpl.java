@@ -3,8 +3,6 @@ package gov.nih.nci.cagrid.syncgts.service;
 import gov.nih.nci.cagrid.syncgts.bean.SyncDescription;
 import gov.nih.nci.cagrid.syncgts.core.SyncGTS;
 import gov.nih.nci.cagrid.syncgts.core.SyncGTSDefault;
-import gov.nih.nci.cagrid.syncgts.service.globus.ServiceConfiguration;
-import gov.nih.nci.cagrid.syncgts.service.globus.resource.BaseResourceHome;
 
 import java.io.File;
 import java.rmi.RemoteException;
@@ -13,7 +11,6 @@ import javax.naming.InitialContext;
 
 import org.apache.axis.MessageContext;
 import org.globus.wsrf.Constants;
-import org.globus.wsrf.ResourceContext;
 import org.globus.wsrf.config.ContainerConfig;
 
 
@@ -23,14 +20,15 @@ import org.globus.wsrf.config.ContainerConfig;
  * @created by Introduce Toolkit version 1.0
  */
 public class SyncGTSImpl {
+	private static final String SYNC_DESCRIPTION = "syncDescription";
 	private ServiceConfiguration configuration;
 
 
 	public SyncGTSImpl() throws RemoteException {
 		try {
-			BaseResourceHome home = (BaseResourceHome) ResourceContext.getResourceContext().getResourceHome();
-			SyncGTSDefault.setServiceSyncDescriptionLocation(ContainerConfig.getBaseDirectory() + File.separator
-				+ home.getSyncDescription());
+			String configFileEnd = (String) MessageContext.getCurrentContext().getProperty(SYNC_DESCRIPTION);
+			String configFile = ContainerConfig.getBaseDirectory() + File.separator + configFileEnd;
+			SyncGTSDefault.setServiceSyncDescriptionLocation(configFile);
 			SyncDescription description = SyncGTSDefault.getSyncDescription();
 			try {
 				SyncGTS sync = SyncGTS.getInstance();
@@ -63,6 +61,7 @@ public class SyncGTSImpl {
 			javax.naming.Context initialContext = new InitialContext();
 			this.configuration = (ServiceConfiguration) initialContext.lookup(jndiName);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new Exception("Unable to instantiate service configuration.", e);
 		}
 

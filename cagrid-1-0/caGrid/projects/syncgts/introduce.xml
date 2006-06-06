@@ -30,7 +30,7 @@
   <ns3:Service name="SyncGTS" namespace="http://cagrid.nci.nih.gov/SyncGTS" packageName="gov.nih.nci.cagrid.syncgts" resourceFrameworkType="main" xsi:type="ns3:ServiceType">
    <ns4:Methods xsi:type="ns4:MethodsType" xmlns:ns4="gme://gov.nih.nci.cagrid.introduce/1/Methods"/>
    <ns5:ResourcePropertiesList xsi:type="ns5:ResourcePropertiesListType" xmlns:ns5="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns5:ResourceProperty qName="ns6:ServiceMetadata" populateFromFile="true" register="true" xsi:type="ns5:ResourcePropertyType" xmlns:ns6="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+    <ns5:ResourceProperty qName="ns6:ServiceMetadata" populateFromFile="true" register="false" xsi:type="ns5:ResourcePropertyType" xmlns:ns6="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
    </ns5:ResourcePropertiesList>
   </ns3:Service>
  </ns3:Services>

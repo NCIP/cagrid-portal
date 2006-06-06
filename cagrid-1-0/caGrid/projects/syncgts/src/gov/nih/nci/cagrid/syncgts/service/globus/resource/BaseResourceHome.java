@@ -17,8 +17,7 @@ public class BaseResourceHome extends SingletonResourceHome implements Initializ
 
 	static final Log logger = LogFactory.getLog(BaseResourceHome.class);
 
-	private String syncDescription;
-	
+
 	public Resource findSingleton() {
 		logger.info("Creating a single resource.");
 		try {
@@ -32,7 +31,6 @@ public class BaseResourceHome extends SingletonResourceHome implements Initializ
 	}
 
 
-
 	public Resource find(ResourceKey key) throws ResourceException {
 		BaseResource resource = (BaseResource) super.find(key);
 		// each time the resource is looked up, do a lazy refreash of
@@ -41,14 +39,7 @@ public class BaseResourceHome extends SingletonResourceHome implements Initializ
 		return resource;
 	}
 
-	public String getSyncDescription() {
-		return syncDescription;
-	}
 
-
-	public void setSyncDescription(String syncDescription) {
-		this.syncDescription = syncDescription;
-	}
 	/**
 	 * Initialze the singleton resource, when the home is initialized.
 	 */
