@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src/java/extension"/>
 	<classpathentry kind="src" path="ext/resources/portal/introduce"/>
 	<classpathentry kind="src" path="ext/resources/portal/common"/>
 	<classpathentry kind="src" path="build/stubs/src"/>
 	<classpathentry kind="src" path="src/java/service"/>
 	<classpathentry kind="src" path="src/java/utilities"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.5"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
