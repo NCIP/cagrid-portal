@@ -135,8 +135,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JPanel inputTypesTablePanel = null;
 
-	private JButton setOutputButton = null;
-
 	private JPanel inputTableControlsPanel = null;
 
 	private JLabel upButtonLabel = null;
@@ -1029,12 +1027,13 @@ public class MethodViewer extends GridPortalBaseFrame {
 			gridBagConstraints29.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints29.weighty = 1.0;
 			gridBagConstraints29.gridx = 0;
-			gridBagConstraints29.gridy = 1;
+			gridBagConstraints29.gridy = 3;
 			gridBagConstraints29.weightx = 1.0;
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 			gridBagConstraints6.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints6.gridy = 0;
 			gridBagConstraints6.gridx = 0;
+			gridBagConstraints6.gridheight = 3;
 			gridBagConstraints6.weighty = 1.0;
 			gridBagConstraints6.weightx = 1.0;
 			outputNamespacePanel = new JPanel();
@@ -1127,13 +1126,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JPanel getOutputTypesTablePanel() {
 		if (outputTypesTablePanel == null) {
 			GridBagConstraints gridBagConstraints26 = new GridBagConstraints();
-			gridBagConstraints26.gridx = 1;
+			gridBagConstraints26.gridx = 0;
 			gridBagConstraints26.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints26.gridy = 0;
-			GridBagConstraints gridBagConstraints23 = new GridBagConstraints();
-			gridBagConstraints23.gridx = 0;
-			gridBagConstraints23.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints23.gridy = 0;
 			GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
 			gridBagConstraints22.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints22.gridx = 0;
@@ -1146,8 +1141,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 			outputTypesTablePanel.setLayout(new GridBagLayout());
 			outputTypesTablePanel.add(getOutputTypejScrollPane(),
 					gridBagConstraints22);
-			outputTypesTablePanel.add(getSetOutputButton(),
-					gridBagConstraints23);
 			outputTypesTablePanel.add(getClearOutputTypeButton(),
 					gridBagConstraints26);
 		}
@@ -1190,40 +1183,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 					gridBagConstraints18);
 		}
 		return inputTypesTablePanel;
-	}
-
-	/**
-	 * This method initializes setOutputButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getSetOutputButton() {
-		if (setOutputButton == null) {
-			setOutputButton = new JButton();
-			setOutputButton.setText("Set Output Type");
-			setOutputButton
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							if (getOutputNamespacesJTree().getCurrentNode() instanceof SchemaElementTypeTreeNode) {
-								NamespaceType nt = ((NamespaceType) ((NamespaceTypeTreeNode) getOutputNamespacesJTree()
-										.getCurrentNode().getParent())
-										.getUserObject());
-								SchemaElementType st = ((SchemaElementType) ((SchemaElementTypeTreeNode) getOutputNamespacesJTree()
-										.getCurrentNode()).getUserObject());
-								MethodTypeOutput output = new MethodTypeOutput();
-								output.setQName(new QName(nt.getNamespace(), st
-										.getType()));
-								output.setIsArray(false);
-								try {
-									getOutputTypeTable().modifyRow(0, output);
-								} catch (Exception ex) {
-									ex.printStackTrace();
-								}
-							}
-						}
-					});
-		}
-		return setOutputButton;
 	}
 
 	/**
