@@ -1,1 +1,2 @@
 1) Add Ignore Remove if cannot connect to the service.
+2) Fix Introduce Service Properties

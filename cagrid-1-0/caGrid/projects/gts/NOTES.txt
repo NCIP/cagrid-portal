@@ -11,7 +11,8 @@ Test with sync gts (DONE)
 Fix Metadata Access Problem
 Support Multiple Trust Levels for a Given CA
 Support Querying of Multiple Trust Levels.
-Think about timezone issues.
+Add Ant Utility for Admin Bootstrapping
+Add Ant Utility for Portal
 
 
 transactions are need in mysql.
