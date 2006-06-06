@@ -28,6 +28,8 @@ public class CoreQueryProcessor extends CQLQueryProcessor {
 	public CoreQueryProcessor(String initString) throws InitializationException {
 		super(initString);
 		if (initString == null || initString.length() == 0) {
+			// TODO: change this... you don't have the configuration file that locates
+			// the default remote application service on cabio
 			coreService = ApplicationService.getRemoteInstance();
 		} else {
 			coreService = ApplicationService.getRemoteInstance(initString);

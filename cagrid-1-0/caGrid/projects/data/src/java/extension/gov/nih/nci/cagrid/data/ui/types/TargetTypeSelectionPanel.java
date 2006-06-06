@@ -101,11 +101,12 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	private DomainBrowserPanel getDomainBrowserPanel() {
 		if (domainBrowserPanel == null) {
 			domainBrowserPanel = new DomainBrowserPanel(true, false);
-			// if there's existing caDSR info, set the browser panel to show it
+			String url = null;
 			MessageElement cadsrElement = ExtensionTools.getExtensionDataElement(
 				getExtensionTypeExtensionData(), DataServiceConstants.CADSR_ELEMENT_NAME);
 			if (cadsrElement != null) {
-				String url = cadsrElement.getAttribute(DataServiceConstants.CADSR_URL_ATTRIB);
+				// if there's existing caDSR info in the data service, set the browser panel to show it
+				url = cadsrElement.getAttribute(DataServiceConstants.CADSR_URL_ATTRIB);
 				String project = cadsrElement.getAttribute(DataServiceConstants.CADSR_PROJECT_ATTRIB);
 				String pack = cadsrElement.getAttribute(DataServiceConstants.CADSR_PACKAGE_ATTRIB);
 				domainBrowserPanel.setDefaultCaDSRURL(url);
@@ -113,6 +114,13 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 				domainBrowserPanel.blockingCadsrRefresh();
 				domainBrowserPanel.setSelectedProject(project);
 				domainBrowserPanel.setSelectedPackage(pack);
+			} else {
+				// get the default caDSR url out of the extension config
+				url = ExtensionTools.getProperty(getExtensionDescription().getProperties(), "CADSR_URL");
+				if (url != null) {
+					domainBrowserPanel.setDefaultCaDSRURL(url);
+					domainBrowserPanel.getCadsr().setText(url);
+				}
 			}
 		}
 		return domainBrowserPanel;
