@@ -80,7 +80,7 @@ public class DataServiceTypesTable extends PortalBaseTable {
 	private static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel() {
 			public boolean isCellEditable(int row, int column) {
-				return false; // not really... see what happens on double click
+				return false;
 			}
 		};
 		model.addColumn("Namespace");

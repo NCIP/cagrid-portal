@@ -230,9 +230,10 @@ public class TypeSerializationConfigPanel extends JPanel {
 					// set values into the mapping
 					schemaType.setSerializer(getSerializerTextField().getText());
 					schemaType.setDeserializer(getDeserializerTextField().getText());
-					if (getSerializerTextField().getText().length() != 0 ||
-						getDeserializerTextField().getText().length() != 0) {
+					if (!isDefaultSerialization()) {
 						schemaType.setClassName(schemaType.getType());
+					} else {
+						schemaType.setClassName("");
 					}
 					// get the table to refresh these fields
 					table.refreshSerialization(schemaType);
