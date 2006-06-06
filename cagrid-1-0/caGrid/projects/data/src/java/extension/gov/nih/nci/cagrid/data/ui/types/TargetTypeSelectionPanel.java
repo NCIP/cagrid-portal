@@ -436,14 +436,14 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	
 	private ClassBrowserPanel getClassBrowserPanel() {
 		if (classBrowserPanel == null) {
-			classBrowserPanel = new ClassBrowserPanel(getExtensionTypeExtensionData());
+			classBrowserPanel = new ClassBrowserPanel(getExtensionTypeExtensionData(), getServiceInfo().getIntroduceServiceProperties());
 			classBrowserPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
 				null, "Query Processor Class Selection", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			// if there's an existing selected class, set it in the class browser
 			synchronized (classBrowserPanel) {
 				ExtensionTypeExtensionData data = getExtensionTypeExtensionData();
-				MessageElement qpElement = ExtensionTools.getExtensionDataElement(data, DataServiceConstants.QUERY_PROCESSOR_ELEMENT_NAME);
+				MessageElement qpElement = ExtensionTools.getExtensionDataElement(data, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
 				if (qpElement != null) {
 					String queryProcessorClass = qpElement.getValue();
 					classBrowserPanel.setSelectedClassName(queryProcessorClass);
@@ -484,17 +484,21 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	
 	
 	private void setProcessorClass(String className) {
-		ExtensionTypeExtensionData extensionData = getExtensionTypeExtensionData();
-		Element elem = new Element(DataServiceConstants.QUERY_PROCESSOR_ELEMENT_NAME);
-		elem.setText(className);
-		MessageElement processorElement = null;
-		try {
-			processorElement = AxisJdomUtils.fromElement(elem);
-			ExtensionTools.updateExtensionDataElement(extensionData, processorElement);
-		} catch (JDOMException ex) {
-			ex.printStackTrace();
-			PortalUtils.showErrorMessage("Error storing CQL processor class!", ex);
-		}		
+		if (className != null) {
+			ExtensionTypeExtensionData extensionData = getExtensionTypeExtensionData();
+			Element elem = new Element(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
+			elem.setText(className);
+			MessageElement processorElement = null;
+			try {
+				processorElement = AxisJdomUtils.fromElement(elem);
+				ExtensionTools.updateExtensionDataElement(extensionData, processorElement);
+			} catch (JDOMException ex) {
+				ex.printStackTrace();
+				PortalUtils.showErrorMessage("Error storing CQL processor class!", ex);
+			}
+		} else {
+			ExtensionTools.removeExtensionDataElement(getExtensionTypeExtensionData(), DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
+		}
 	}
 	
 	

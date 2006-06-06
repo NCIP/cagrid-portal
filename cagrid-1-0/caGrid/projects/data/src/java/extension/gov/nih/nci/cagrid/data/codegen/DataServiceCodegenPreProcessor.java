@@ -70,6 +70,7 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 					throw new CodegenExtensionException("No data service found in service information");
 				}
 				
+				// FIXME: this blows up if no types are selected
 				// get the namespace type specified, then list selected schema element types
 				String[] typeNames = null;
 				NamespaceType[] namespaces = info.getNamespaces().getNamespace();

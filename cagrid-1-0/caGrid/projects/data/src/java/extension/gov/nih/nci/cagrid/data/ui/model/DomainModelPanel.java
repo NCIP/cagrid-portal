@@ -5,8 +5,6 @@ import gov.nih.nci.cagrid.graph.uml.UMLDiagram;
 import gov.nih.nci.cagrid.metadata.common.UMLAttribute;
 import gov.nih.nci.cagrid.metadata.common.UMLClass;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
-import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation;
-import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationEdge;
 
 import java.util.HashMap;
 import java.util.Map;

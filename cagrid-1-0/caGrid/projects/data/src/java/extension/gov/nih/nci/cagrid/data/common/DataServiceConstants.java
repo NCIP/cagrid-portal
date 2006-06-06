@@ -61,7 +61,6 @@ public class DataServiceConstants {
 	public static final String[] QUERY_METHOD_EXCEPTIONS = new String[] {
 		"QueryProcessingException", "MalformedQueryException"
 	};
-	public static final String QUERY_PROCESSOR_ELEMENT_NAME = "queryProcessorClass";
 	
 	// cadsr info constants
 	public static final String CADSR_ELEMENT_NAME = "caDSRInformation";

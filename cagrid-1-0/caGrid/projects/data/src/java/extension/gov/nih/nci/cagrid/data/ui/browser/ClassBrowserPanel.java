@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.common.AxisJdomUtils;
 import gov.nih.nci.cagrid.data.common.DataServiceConstants;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
@@ -14,13 +15,18 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -62,17 +68,14 @@ public class ClassBrowserPanel extends JPanel {
 	private JLabel classSelectionLabel = null;
 	
 	private ExtensionTypeExtensionData extensionData = null;
+	private Properties serviceProperties = null;
 	
 	private List classChangeListeners = null;
 	private List additionalJarsListeners = null;
-	
-	public ClassBrowserPanel() {
-		this(null);
-	}
-	
-	
-	public ClassBrowserPanel(ExtensionTypeExtensionData extensionData) {
+		
+	public ClassBrowserPanel(ExtensionTypeExtensionData extensionData, Properties serviceProperties) {
 		this.extensionData = extensionData;
+		this.serviceProperties = serviceProperties;
 		classChangeListeners = new LinkedList();
 		additionalJarsListeners = new LinkedList();
 		initialize();
@@ -103,7 +106,11 @@ public class ClassBrowserPanel extends JPanel {
 
 
 	public String getSelectedClassName() {
-		return getClassSelectionComboBox().getSelectedItem().toString();
+		Object selected = getClassSelectionComboBox().getSelectedItem();
+		if (selected != null) {
+			return selected.toString();
+		}		 
+		return null;
 	}
 	
 	
@@ -208,6 +215,8 @@ public class ClassBrowserPanel extends JPanel {
 							if (i == selected[selectIndex]) {
 								// skip the selected jar
 								selectIndex++;
+								// delete the selected jar from the file system
+								deleteAdditionalJar(jar);
 							} else {
 								// add the jar to the new list
 								storedJars[storeIndex] = jar;
@@ -222,6 +231,13 @@ public class ClassBrowserPanel extends JPanel {
 			});
 		}
 		return removeJarsButton;
+	}
+	
+	
+	private void deleteAdditionalJar(String shortJarName) {
+		String libDir = serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "lib";
+		File jarFile = new File(libDir + File.separator + shortJarName);
+		jarFile.deleteOnExit();
 	}
 
 
@@ -355,18 +371,23 @@ public class ClassBrowserPanel extends JPanel {
 		try {
 			jarFile = ResourceManager.promptFile(this, null, new JarFileFilter());
 			// only bother adding the jar file to the list if it's not in there yet
+			final String shortJarName = (new File(jarFile)).getName();
 			boolean shouldAdd = true;
 			String[] currentJars = getAdditionalJars();
 			for (int i = 0; i < currentJars.length; i++) {
-				if (jarFile.equals(currentJars[i])) {
+				if (shortJarName.equals(currentJars[i])) {
 					shouldAdd = false;
 					break;
 				}
 			}
 			if (shouldAdd) {
+				// copy the jar to the service's lib directory
+				copyJarToService(jarFile, shortJarName);
+				// add the jar to the extension data's list of additional jars
+				// add the new jar name to the jars list
 				String[] additionalJars = new String[currentJars.length + 1];
 				System.arraycopy(currentJars, 0, additionalJars, 0, currentJars.length);
-				additionalJars[additionalJars.length - 1] = jarFile;
+				additionalJars[additionalJars.length - 1] = shortJarName;
 				getAdditionalJarsList().setListData(additionalJars);
 			}
 		} catch (Exception ex) {
@@ -376,18 +397,39 @@ public class ClassBrowserPanel extends JPanel {
 	}
 	
 	
+	private synchronized void copyJarToService(final String jarFile, final String shortJarName) {
+		String libDir = serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "lib";
+		try {
+			BufferedInputStream input = new BufferedInputStream(new FileInputStream(jarFile));
+			BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(libDir + File.separator + shortJarName));
+			int len = -1;
+			byte[] buff = new byte[4096];
+			while ((len = input.read(buff)) != -1) {
+				output.write(buff, 0, len);
+			}
+			input.close();
+			output.flush();
+			output.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			PortalUtils.showErrorMessage("Error copying the jar " + jarFile, ex);
+		}
+	}
+	
+	
 	private void populateClassDropdown() {
+		String libDir = serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "lib";
 		SortedSet classNames = new TreeSet();
 		String[] jars = getAdditionalJars();
 		try {
 			URL[] urls = new URL[jars.length];
 			for (int i = 0; i < jars.length; i++) {
-				urls[i] = (new File(jars[i])).toURL();
+				urls[i] = (new File(libDir + File.separator + jars[i])).toURL();
 			}
 			ClassLoader loader = new URLClassLoader(urls, getClass().getClassLoader());
 			Class queryProcessorClass = CQLQueryProcessor.class;
 			for (int i = 0; i < jars.length; i++) {
-				JarFile jarFile = new JarFile(jars[i]);
+				JarFile jarFile = new JarFile(libDir + File.separator + jars[i]);
 				Enumeration jarEntries = jarFile.entries();
 				while (jarEntries.hasMoreElements()) {
 					JarEntry entry = (JarEntry) jarEntries.nextElement();
@@ -401,7 +443,9 @@ public class ClassBrowserPanel extends JPanel {
 						}
 					}
 				}
+				jarFile.close();
 			}
+			loader = null;
 			while (getClassSelectionComboBox().getItemCount() != 0) {
 				getClassSelectionComboBox().removeItemAt(0);
 			}

@@ -142,7 +142,7 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 	
 	private String getQueryProcesorClass(ServiceExtensionDescriptionType desc, ServiceInformation info) {
 		ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
-		MessageElement qpEntry = ExtensionTools.getExtensionDataElement(data, DataServiceConstants.QUERY_PROCESSOR_ELEMENT_NAME);
+		MessageElement qpEntry = ExtensionTools.getExtensionDataElement(data, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
 		if (qpEntry != null) {
 			String queryProcessorClass = qpEntry.getValue();
 			return queryProcessorClass;
