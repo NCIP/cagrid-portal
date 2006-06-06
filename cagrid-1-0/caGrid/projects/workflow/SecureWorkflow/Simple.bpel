@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BPEL Process Definition
+Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.com)
+-->
+<process name="Simple" suppressJoinFailure="yes" targetNamespace="http://Simple" xmlns="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:ns1="http://workflow.cagrid.nci.nih.gov/SampleService1" xmlns:ns2="http://cagrid.nci.nih.gov/SecureSample" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <partnerLinks>
+      <partnerLink myRole="sample1" name="Sample1PartnerLinkType" partnerLinkType="ns1:Sample1PartnerLinkType" partnerRole="sample1"/>
+      <partnerLink name="SecureSamplePartnerLinkType" partnerLinkType="ns2:SecureSamplePartnerLinkType" partnerRole="secure"/>
+   </partnerLinks>
+   <variables>
+      <variable messageType="ns1:invokeInputMessage" name="invokeInputMessage"/>
+      <variable messageType="ns1:invokeOutputMessage" name="invokeOutputMessage"/>
+      <variable messageType="ns2:InvokeRequest" name="InvokeRequest"/>
+      <variable messageType="ns2:InvokeResponse" name="InvokeResponse"/>
+   </variables>
+   <sequence>
+      <receive createInstance="yes" operation="invoke" partnerLink="Sample1PartnerLinkType" portType="ns1:SampleService1PortType" variable="invokeInputMessage"/>
+      <invoke inputVariable="invokeInputMessage" operation="invoke" outputVariable="invokeOutputMessage" partnerLink="Sample1PartnerLinkType" portType="ns1:SampleService1PortType"/>
+      <assign>
+         <copy>
+            <from part="parameters" query="/ns1:invokeResponse/ns1:response" variable="invokeOutputMessage"/>
+            <to part="parameters" query="/ns2:InvokeRequest/ns2:string" variable="InvokeRequest"/>
+         </copy>
+      </assign>
+      <invoke inputVariable="InvokeRequest" operation="invoke" outputVariable="InvokeResponse" partnerLink="SecureSamplePartnerLinkType" portType="ns2:SecureSamplePortType"/>
+      <reply operation="invoke" partnerLink="Sample1PartnerLinkType" portType="ns1:SampleService1PortType" variable="invokeOutputMessage"/>
+   </sequence>
+</process>
