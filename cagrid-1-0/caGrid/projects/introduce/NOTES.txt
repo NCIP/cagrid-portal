@@ -1,5 +1,7 @@
 To Do:
 
+make sure that there is a passive fail for globus discovery tool
+
 refactor to not be creating hte service.wsdd everytime.....
 
 add automatic client handle generation if a method is returning an EPR
