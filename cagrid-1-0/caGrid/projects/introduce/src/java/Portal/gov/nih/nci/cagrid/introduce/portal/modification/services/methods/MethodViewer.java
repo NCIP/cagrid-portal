@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services.methods;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
@@ -11,8 +12,10 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeProviderInformation;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.modification.security.MethodSecurityPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeTreeNode;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespacesJTree;
@@ -25,6 +28,7 @@ import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +45,10 @@ import javax.swing.border.TitledBorder;
 import javax.xml.namespace.QName;
 
 import org.apache.axis.utils.JavaUtils;
+import org.projectmobius.common.MobiusException;
+import org.projectmobius.common.XMLUtilities;
 import org.projectmobius.portal.GridPortalBaseFrame;
+import org.projectmobius.portal.PortalResourceManager;
 
 /**
  * MethodViewer
@@ -175,6 +182,10 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JLabel providerClassLabel = null;
 
 	private JTextField providerClassTextField = null;
+
+	private JScrollPane servicesTypeScrollPane = null;
+
+	private ServicesTable servicesTypeTable = null;
 
 	public MethodViewer(MethodType method, ServiceInformation info) {
 		this.info = info;
@@ -442,11 +453,12 @@ public class MethodViewer extends GridPortalBaseFrame {
 						MethodTypeOutput output = getOutputTypeTable()
 								.getRowData(0);
 						method.setOutput(output);
-						
-						if(getIsProvidedCheckBox().isSelected()){
+
+						if (getIsProvidedCheckBox().isSelected()) {
 							method.setIsProvided(true);
 							MethodTypeProviderInformation pi = new MethodTypeProviderInformation();
-							pi.setProviderClass(getProviderClassTextField().getText());
+							pi.setProviderClass(getProviderClassTextField()
+									.getText());
 							method.setProviderInformation(pi);
 						} else {
 							method.setIsProvided(false);
@@ -534,7 +546,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 		if (namePanel == null) {
 			GridBagConstraints gridBagConstraints111 = new GridBagConstraints();
 			gridBagConstraints111.gridx = 2;
-			gridBagConstraints111.insets = new java.awt.Insets(0,30,0,0);
+			gridBagConstraints111.insets = new java.awt.Insets(0, 30, 0, 0);
 			gridBagConstraints111.gridy = 1;
 			GridBagConstraints gridBagConstraints110 = new GridBagConstraints();
 			gridBagConstraints110.gridx = 2;
@@ -812,7 +824,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 					.addTab("Method Signature", null, getMethodPanel(), null);
 			tabbedPanel.addTab("Security", null, getSecurityContainerPanel(),
 					null);
-			tabbedPanel.addTab("Provider Information", null, getProviderPanel(), null);
+			tabbedPanel.addTab("Provider Information", null,
+					getProviderPanel(), null);
 			tabbedPanel.addTab("Import Information", null,
 					getImportInformationPanel(), null);
 		}
@@ -1012,6 +1025,12 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getOutputNamespacePanel() {
 		if (outputNamespacePanel == null) {
+			GridBagConstraints gridBagConstraints29 = new GridBagConstraints();
+			gridBagConstraints29.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints29.weighty = 1.0;
+			gridBagConstraints29.gridx = 0;
+			gridBagConstraints29.gridy = 1;
+			gridBagConstraints29.weightx = 1.0;
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 			gridBagConstraints6.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints6.gridy = 0;
@@ -1022,6 +1041,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 			outputNamespacePanel.setLayout(new GridBagLayout());
 			outputNamespacePanel.add(getOutputNamespacesTypeScrollPane(),
 					gridBagConstraints6);
+			outputNamespacePanel.add(getServicesTypeScrollPane(),
+					gridBagConstraints29);
 		}
 		return outputNamespacePanel;
 	}
@@ -1479,9 +1500,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 	}
 
 	/**
-	 * This method initializes isProvidedCheckBox	
-	 * 	
-	 * @return javax.swing.JCheckBox	
+	 * This method initializes isProvidedCheckBox
+	 * 
+	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getIsProvidedCheckBox() {
 		if (isProvidedCheckBox == null) {
@@ -1493,45 +1514,141 @@ public class MethodViewer extends GridPortalBaseFrame {
 	}
 
 	/**
-	 * This method initializes providerPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes providerPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getProviderPanel() {
 		if (providerPanel == null) {
 			GridBagConstraints gridBagConstraints37 = new GridBagConstraints();
 			gridBagConstraints37.gridx = 0;
-			gridBagConstraints37.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints37.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints37.gridy = 0;
 			GridBagConstraints gridBagConstraints36 = new GridBagConstraints();
 			gridBagConstraints36.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints36.gridx = 1;
 			gridBagConstraints36.gridy = 0;
-			gridBagConstraints36.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints36.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints36.weightx = 1.0;
 			providerClassLabel = new JLabel();
 			providerClassLabel.setText("Provider Class");
 			providerPanel = new JPanel();
 			providerPanel.setLayout(new GridBagLayout());
 			providerPanel.add(providerClassLabel, gridBagConstraints37);
-			providerPanel.add(getProviderClassTextField(), gridBagConstraints36);
+			providerPanel
+					.add(getProviderClassTextField(), gridBagConstraints36);
 		}
 		return providerPanel;
 	}
 
 	/**
-	 * This method initializes providerClassTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes providerClassTextField
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getProviderClassTextField() {
 		if (providerClassTextField == null) {
 			providerClassTextField = new JTextField();
-			if(method.getProviderInformation()!=null){
-				providerClassTextField.setText(method.getProviderInformation().getProviderClass());
+			if (method.getProviderInformation() != null) {
+				providerClassTextField.setText(method.getProviderInformation()
+						.getProviderClass());
 			}
 		}
 		return providerClassTextField;
+	}
+
+	/**
+	 * This method initializes servicesTypeScrollPane
+	 * 
+	 * @return javax.swing.JScrollPane
+	 */
+	private JScrollPane getServicesTypeScrollPane() {
+		if (servicesTypeScrollPane == null) {
+			servicesTypeScrollPane = new JScrollPane();
+			servicesTypeScrollPane.setViewportView(getServicesTypeTable());
+		}
+		return servicesTypeScrollPane;
+	}
+
+	/**
+	 * This method initializes servicesTypeTable
+	 * 
+	 * @return javax.swing.JTable
+	 */
+	private ServicesTable getServicesTypeTable() {
+		if (servicesTypeTable == null) {
+			servicesTypeTable = new ServicesTable(info.getServices());
+			servicesTypeTable.addMouseListener(new MouseAdapter() {
+				public void mouseClicked(MouseEvent e) {
+					super.mouseClicked(e);
+					if (e.getClickCount() == 2) {
+						// make sure the EPR namespace is in the nstypes list
+						// if not add it
+						if (CommonTools.getNamespaceType(info.getNamespaces(),
+								IntroduceConstants.WSADDRESING_NAMESPACE) == null) {
+							// add the addressing schema and it's schema
+							// elements.....
+							IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager
+									.getInstance().getResource(
+											IntroducePortalConf.RESOURCE);
+							NamespaceType outputType = new NamespaceType();
+							outputType
+									.setNamespace(IntroduceConstants.WSADDRESING_NAMESPACE);
+							outputType
+									.setLocation(IntroduceConstants.WSADDRESING_LOCATION);
+
+							File schemasDir = new File(conf.getGlobusLocation()
+									+ File.separator + "share" + File.separator
+									+ "schema");
+							File foundSchema = CommonTools.findSchema(
+									IntroduceConstants.WSADDRESING_NAMESPACE,
+									schemasDir);
+							try {
+								gov.nih.nci.cagrid.introduce.portal.ExtensionTools
+										.setSchemaElements(outputType, XMLUtilities
+												.fileNameToDocument(foundSchema
+														.getAbsolutePath()));
+							} catch (MobiusException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							} catch (Exception e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							int currentLength = 0;
+							if (info.getNamespaces() != null && info.getNamespaces().getNamespace()!=null) {
+								currentLength = info.getNamespaces().getNamespace().length;
+							}
+							NamespaceType[] newNamespaceTypes = new NamespaceType[currentLength + 1];
+							if (currentLength > 0) {
+								System.arraycopy(info.getNamespaces().getNamespace(), 0, newNamespaceTypes, 0, currentLength);
+							}
+							newNamespaceTypes[currentLength] = outputType;
+							info.getNamespaces().setNamespace(newNamespaceTypes);
+						}
+
+						// set the epr type as this outputType
+						MethodTypeOutput output = new MethodTypeOutput();
+						output.setQName(new QName(IntroduceConstants.WSADDRESING_NAMESPACE,IntroduceConstants.WSADDRESING_EPR_TYPE ));
+						output.setIsArray(false);
+						output.setIsClientHandle(new Boolean(true));
+						try {
+							output.setClientHandleClass(getServicesTypeTable().getSelectedRowData().getPackageName() + "." + "client" + getServicesTypeTable().getSelectedRowData().getName() + "Client");
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						try {
+							getOutputTypeTable().modifyRow(0, output);
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+					}
+				}
+
+			});
+		}
+		return servicesTypeTable;
 	}
 } // @jve:decl-index=0:visual-constraint="4,12"
 
