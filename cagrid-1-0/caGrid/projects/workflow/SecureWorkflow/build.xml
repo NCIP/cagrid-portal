@@ -1,4 +1,4 @@
-<project name="SimpleWorkFlow" default="runClient" basedir=".">
+<project name="SimpleSecureWorkFlow" default="runClient" basedir=".">
 
 <description>
   See doc/index.html.
@@ -26,7 +26,7 @@
 <property name="bpr.dest" value="${webservice.dest}/bpr"/>
 
 
-<property name="bpel.archive" value="Simple.bpr"/>
+<property name="bpel.archive" value="SimpleSecure.bpr"/>
 <property name="dist" location="."/>
 
 <!-- Initialization -->
