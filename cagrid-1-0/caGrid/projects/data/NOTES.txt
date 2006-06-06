@@ -15,3 +15,9 @@ TODO:
 12[D]: .classpath should add in jars that "add jar" copy in, as well those it copies in on creation (metadata stuff, etc)
 13[ ]: Need a simplified "SDK Backed" data service option (should set serializers, cql processor, add jars, etc automatically)
 14[ ]: Type serialization table need to enable multi-select for setting serialization option
+
+
+BUGS:
+Eclipse classpath is incorrect (duplicate entries for cagrid core)
+Type Serialization Table sizing is screwed up
+Need a "None" option for query processor... theres no way to not select an impl found in a jar
