@@ -184,7 +184,7 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 	
 	private void addServiceMetadata(ServiceDescription desc) {
 		ResourcePropertyType serviceMetadata = new ResourcePropertyType();
-		serviceMetadata.setPopulateFromFile(true);
+		serviceMetadata.setPopulateFromFile(false); // no metadata file yet...
 		serviceMetadata.setRegister(true);
 		serviceMetadata.setQName(DataServiceConstants.SERVICE_METADATA_QNAME);
 		ServiceMetadata smd = new ServiceMetadata();
