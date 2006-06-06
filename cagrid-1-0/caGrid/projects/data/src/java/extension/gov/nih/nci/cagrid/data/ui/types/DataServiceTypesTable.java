@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.data.ui.types;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 
+import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -15,50 +16,53 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
-/** 
- *  DataServiceTypesTable
- *  Table to maintain what types are available targets for a data service
+/**
+ * DataServiceTypesTable Table to maintain what types are available targets for
+ * a data service
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
- * @created Apr 5, 2006 
- * @version $Id$ 
+ * @created Apr 5, 2006
+ * @version $Id$
  */
 public class DataServiceTypesTable extends JTable {
 	private List schemaElementTypes;
-	
+
 	public DataServiceTypesTable() {
 		super(createTableModel());
 		DefaultListSelectionModel listSelection = new DefaultListSelectionModel();
-		listSelection.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		listSelection
+				.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		setSelectionModel(listSelection);
 		setRowSelectionAllowed(true);
 		schemaElementTypes = new ArrayList();
 		addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				if (e.isPopupTrigger() && getSelectedRows().length != 0) {
-					SerializationPopupMenu pop = new SerializationPopupMenu(DataServiceTypesTable.this);
+					SerializationPopupMenu pop = new SerializationPopupMenu(
+							DataServiceTypesTable.this);
 					SchemaElementType[] selection = getSelectedElementTypes();
 					if (selection != null) {
-						pop.show(DataServiceTypesTable.this, e.getX(), e.getY(), getSelectedElementTypes());
+						pop.show(DataServiceTypesTable.this, e.getX(),
+								e.getY(), getSelectedElementTypes());
 					}
 				}
 			}
-			
-			
+
 			public void mouseReleased(MouseEvent e) {
 				if (e.isPopupTrigger() && getSelectedRows().length != 0) {
-					SerializationPopupMenu pop = new SerializationPopupMenu(DataServiceTypesTable.this);
+					SerializationPopupMenu pop = new SerializationPopupMenu(
+							DataServiceTypesTable.this);
 					SchemaElementType[] selection = getSelectedElementTypes();
 					if (selection != null) {
-						pop.show(DataServiceTypesTable.this, e.getX(), e.getY(), getSelectedElementTypes());
+						pop.show(DataServiceTypesTable.this, e.getX(),
+								e.getY(), getSelectedElementTypes());
 					}
 				}
 			}
 		});
 	}
-	
-	
+
 	public void addType(NamespaceType namespace, SchemaElementType type) {
 		Vector v = new Vector(5);
 		v.add(namespace.getNamespace());
@@ -69,32 +73,29 @@ public class DataServiceTypesTable extends JTable {
 		((DefaultTableModel) getModel()).addRow(v);
 		schemaElementTypes.add(type);
 	}
-	
-	
+
 	public SchemaElementType[] getSelectedElementTypes() {
 		int[] selectedRows = getSelectedRows();
 		if (selectedRows.length != 0) {
 			SchemaElementType[] selected = new SchemaElementType[selectedRows.length];
 			for (int i = 0; i < selectedRows.length; i++) {
-				selected[i] = (SchemaElementType) schemaElementTypes.get(selectedRows[i]);
+				selected[i] = (SchemaElementType) schemaElementTypes
+						.get(selectedRows[i]);
 			}
 			return selected;
 		}
 		return null;
 	}
-	
-	
+
 	public List getAllSchemaElementTypes() {
 		return schemaElementTypes;
 	}
-	
-	
+
 	public void removeSchemaElementType(int i) {
 		((DefaultTableModel) getModel()).removeRow(i);
 		schemaElementTypes.remove(i);
 	}
-	
-	
+
 	public void removeSchemaElementType(SchemaElementType type) {
 		int index = schemaElementTypes.indexOf(type);
 		if (index == -1) {
@@ -102,16 +103,20 @@ public class DataServiceTypesTable extends JTable {
 		}
 		removeSchemaElementType(index);
 	}
-	
-	
+
 	public void refreshSerialization(SchemaElementType elementType) {
 		int index = schemaElementTypes.indexOf(elementType);
 		schemaElementTypes.set(index, elementType);
-		((DefaultTableModel) getModel()).setValueAt(elementType.getSerializer(), index, 3);
-		((DefaultTableModel) getModel()).setValueAt(elementType.getDeserializer(), index, 4);
+		((DefaultTableModel) getModel()).setValueAt(
+				elementType.getSerializer(), index, 3);
+		((DefaultTableModel) getModel()).setValueAt(elementType
+				.getDeserializer(), index, 4);
 	}
-	
-	
+
+	public Dimension getPreferredScrollableViewportSize() {
+		return getPreferredSize();
+	}
+
 	private static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel() {
 			public boolean isCellEditable(int row, int column) {
