@@ -40,7 +40,7 @@
 					class="gov.nih.nci.cagrid.dorian.service.ifs.AutoApprovalAutoRenewalPolicy"/>
 			</policies>
 			<gts-services>
-				<gts-service>https://cagrid01.bmi.ohio-state.edu:8442/wsrf/services/cagrid/GTS</gts-service>
+				<!--<gts-service>https://cagrid01.bmi.ohio-state.edu:8442/wsrf/services/cagrid/GTS</gts-service>-->
 			</gts-services>
 		</ifs-config>
 	</resource>

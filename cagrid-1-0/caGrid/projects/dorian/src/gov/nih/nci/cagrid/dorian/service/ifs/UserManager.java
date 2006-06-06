@@ -148,8 +148,7 @@ public class UserManager extends LoggingObject {
 			throw gif;
 		}
 		try {
-			user
-				.setCertificate(new gov.nih.nci.cagrid.dorian.bean.X509Certificate(CertUtil.writeCertificate(cert)));
+			user.setCertificate(new gov.nih.nci.cagrid.dorian.bean.X509Certificate(CertUtil.writeCertificate(cert)));
 		} catch (IOException ioe) {
 			this.credentialsManager.deleteCredentials(getCredentialsManagerUID(user.getIdPId(), user.getUID()));
 			DorianInternalFault fault = new DorianInternalFault();
@@ -237,8 +236,8 @@ public class UserManager extends LoggingObject {
 				user.setUserRole(IFSUserRole.fromValue(role));
 				X509Certificate cert = credentialsManager.getCertificate(getCredentialsManagerUID(user.getIdPId(), user
 					.getUID()));
-				user.setCertificate(new gov.nih.nci.cagrid.dorian.bean.X509Certificate(CertUtil
-					.writeCertificate(cert)));
+				user
+					.setCertificate(new gov.nih.nci.cagrid.dorian.bean.X509Certificate(CertUtil.writeCertificate(cert)));
 			} else {
 				InvalidUserFault fault = new InvalidUserFault();
 				fault.setFaultString("No such user " + getCredentialsManagerUID(user.getIdPId(), user.getUID()));
@@ -289,8 +288,8 @@ public class UserManager extends LoggingObject {
 				user.setUserRole(IFSUserRole.fromValue(role));
 				X509Certificate cert = credentialsManager.getCertificate(getCredentialsManagerUID(user.getIdPId(), user
 					.getUID()));
-				user.setCertificate(new gov.nih.nci.cagrid.dorian.bean.X509Certificate(CertUtil
-					.writeCertificate(cert)));
+				user
+					.setCertificate(new gov.nih.nci.cagrid.dorian.bean.X509Certificate(CertUtil.writeCertificate(cert)));
 			} else {
 				InvalidUserFault fault = new InvalidUserFault();
 				fault.setFaultString("No such user " + gridId);
@@ -382,8 +381,8 @@ public class UserManager extends LoggingObject {
 				user.setUserRole(IFSUserRole.fromValue(role));
 				X509Certificate cert = credentialsManager.getCertificate(getCredentialsManagerUID(user.getIdPId(), user
 					.getUID()));
-				user.setCertificate(new gov.nih.nci.cagrid.dorian.bean.X509Certificate(CertUtil
-					.writeCertificate(cert)));
+				user
+					.setCertificate(new gov.nih.nci.cagrid.dorian.bean.X509Certificate(CertUtil.writeCertificate(cert)));
 				users.add(user);
 			}
 			rs.close();
@@ -415,8 +414,8 @@ public class UserManager extends LoggingObject {
 			X509Certificate cert = createUserCredentials(user.getIdPId(), user.getUID());
 			try {
 				// Write method for creating and setting a users credentials
-				user.setCertificate(new gov.nih.nci.cagrid.dorian.bean.X509Certificate(CertUtil
-					.writeCertificate(cert)));
+				user
+					.setCertificate(new gov.nih.nci.cagrid.dorian.bean.X509Certificate(CertUtil.writeCertificate(cert)));
 				user.setGridId(subjectToIdentity(cert.getSubjectDN().toString()));
 				user.setUserRole(IFSUserRole.Non_Administrator);
 				user.setUserStatus(IFSUserStatus.Pending);
@@ -435,7 +434,7 @@ public class UserManager extends LoggingObject {
 				db.update("INSERT INTO " + USERS_TABLE + " SET IDP_ID='" + user.getIdPId() + "',UID='" + user.getUID()
 					+ "', GID='" + user.getGridId() + "',STATUS='" + user.getUserStatus().toString() + "',ROLE='"
 					+ user.getUserRole().toString() + "',EMAIL='" + user.getEmail() + "'");
-				
+
 				if (!user.getUserStatus().equals(IFSUserStatus.Active)) {
 					publishCRL();
 				}
@@ -471,7 +470,7 @@ public class UserManager extends LoggingObject {
 			throw fault;
 
 		}
-		
+
 		return user;
 	}
 
@@ -543,7 +542,7 @@ public class UserManager extends LoggingObject {
 			if (changes > 0) {
 				db.update(sb.toString());
 			}
-			if(publishCRL){
+			if (publishCRL) {
 				publishCRL();
 			}
 
@@ -597,6 +596,7 @@ public class UserManager extends LoggingObject {
 		Connection c = null;
 		List sn = new ArrayList();
 		try {
+			// First get all the users who's accounts are disabled.
 			c = db.getConnection();
 			Statement s = c.createStatement();
 
@@ -612,6 +612,22 @@ public class UserManager extends LoggingObject {
 			rs.close();
 			s.close();
 
+			// Now get all the IdPs who are suspended.
+			TrustedIdP[] idp = this.tm.getSuspendedTrustedIdPs();
+			if (idp != null) {
+				for (int i = 0; i < idp.length; i++) {
+					Statement stmt = c.createStatement();
+					StringBuffer sb = new StringBuffer();
+					sb.append("select IDP_ID,UID from " + USERS_TABLE + " WHERE IDP_ID=" + idp[i].getId());
+					ResultSet result = stmt.executeQuery(sb.toString());
+					while (result.next()) {
+						String id = getCredentialsManagerUID(result.getLong("IDP_ID"), result.getString("UID"));
+						sn.add(new Long(credentialsManager.getCertificateSerialNumber(id)));
+					}
+					stmt.close();
+					result.close();
+				}
+			}
 			return sn;
 
 		} catch (Exception e) {

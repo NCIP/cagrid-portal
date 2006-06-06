@@ -15,11 +15,12 @@ Need to change all propety/config files to be "*.example" files, not check the r
 Add support for SSL exception handling (DONE)
 Convert to an Introduce Service (DONE)
 Add Service Metadata (DONE)
-Add support for copying endorsed libraries to globus (DONE
+Add support for copying endorsed libraries to globus (DONE)
+Update CRL for Suspended IdP (DONE)
 Multiple CA Support
 Move to Support IMF SAML Standard
 Add policy chaining 
-Update CRL for Suspended IdP
+
 
 
 Testing Tasks

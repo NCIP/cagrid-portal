@@ -64,8 +64,7 @@ public class IFS extends LoggingObject {
 	}
 
 
-	public IFSUserPolicy[] getUserPolicies(String callerGridIdentity) throws DorianInternalFault,
-		PermissionDeniedFault {
+	public IFSUserPolicy[] getUserPolicies(String callerGridIdentity) throws DorianInternalFault, PermissionDeniedFault {
 		IFSUser caller = getUser(callerGridIdentity);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
@@ -105,7 +104,15 @@ public class IFS extends LoggingObject {
 		IFSUser caller = getUser(callerGridIdentity);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
+		TrustedIdP curr = tm.getTrustedIdPById(idp.getId());
+		boolean statusChanged = false;
+		if ((idp.getStatus() != null) && (!idp.getStatus().equals(curr.getStatus()))) {
+			statusChanged = true;
+		}
 		tm.updateIdP(idp);
+		if (statusChanged) {
+			um.publishCRL();
+		}
 	}
 
 

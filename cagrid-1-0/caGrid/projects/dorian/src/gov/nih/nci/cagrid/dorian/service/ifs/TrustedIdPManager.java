@@ -31,7 +31,6 @@ import java.util.List;
  *          Exp $
  */
 public class TrustedIdPManager extends LoggingObject {
-	
 
 	private Database db;
 
@@ -60,9 +59,8 @@ public class TrustedIdPManager extends LoggingObject {
 					+ "INDEX document_index (NAME));";
 				db.update(trust);
 
-				String methods = "CREATE TABLE " + AUTH_METHODS_TABLE + " (" +
-				"ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
-				+ "IDP_ID INT NOT NULL,"
+				String methods = "CREATE TABLE " + AUTH_METHODS_TABLE + " ("
+					+ "ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY," + "IDP_ID INT NOT NULL,"
 					+ "METHOD VARCHAR(255) NOT NULL," + "INDEX document_index (ID));";
 				db.update(methods);
 			}
@@ -90,7 +88,8 @@ public class TrustedIdPManager extends LoggingObject {
 		try {
 			c = db.getConnection();
 			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery("select * from " + AUTH_METHODS_TABLE + " where IDP_ID=" + id +" ORDER BY ID");
+			ResultSet rs = s.executeQuery("select * from " + AUTH_METHODS_TABLE + " where IDP_ID=" + id
+				+ " ORDER BY ID");
 			List methods = new ArrayList();
 			while (rs.next()) {
 				SAMLAuthenticationMethod method = SAMLAuthenticationMethod.fromString(rs.getString("METHOD"));
@@ -229,6 +228,48 @@ public class TrustedIdPManager extends LoggingObject {
 			c = db.getConnection();
 			Statement s = c.createStatement();
 			ResultSet rs = s.executeQuery("select * from " + TRUST_MANAGER_TABLE);
+			List idps = new ArrayList();
+			while (rs.next()) {
+				TrustedIdP idp = new TrustedIdP();
+				idp.setId(rs.getLong("ID"));
+				idp.setName(rs.getString("NAME"));
+				idp.setStatus(TrustedIdPStatus.fromValue(rs.getString("STATUS")));
+				idp.setIdPCertificate(rs.getString("IDP_CERTIFICATE"));
+				idp.setUserPolicyClass(rs.getString("POLICY_CLASS"));
+				idps.add(idp);
+			}
+			rs.close();
+			s.close();
+
+			TrustedIdP[] list = new TrustedIdP[idps.size()];
+			for (int i = 0; i < idps.size(); i++) {
+				list[i] = (TrustedIdP) idps.get(i);
+				list[i].setAuthenticationMethod(getAuthenticationMethods(list[i].getId()));
+			}
+			return list;
+
+		} catch (Exception e) {
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("Error obtaining a list of trusted IdPs, unexpected database error");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		} finally {
+			db.releaseConnection(c);
+		}
+
+	}
+
+
+	public synchronized TrustedIdP[] getSuspendedTrustedIdPs() throws DorianInternalFault {
+		buildDatabase();
+		Connection c = null;
+		try {
+			c = db.getConnection();
+			Statement s = c.createStatement();
+			ResultSet rs = s.executeQuery("select * from " + TRUST_MANAGER_TABLE + " where STATUS='"
+				+ TrustedIdPStatus.Suspended + "'");
 			List idps = new ArrayList();
 			while (rs.next()) {
 				TrustedIdP idp = new TrustedIdP();
@@ -409,9 +450,10 @@ public class TrustedIdPManager extends LoggingObject {
 	}
 
 
-	private X509Certificate validateAndGetCertificate(TrustedIdP idp) throws DorianInternalFault, InvalidTrustedIdPFault {
-  
-		if(idp.getIdPCertificate() == null){
+	private X509Certificate validateAndGetCertificate(TrustedIdP idp) throws DorianInternalFault,
+		InvalidTrustedIdPFault {
+
+		if (idp.getIdPCertificate() == null) {
 			InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
 			fault.setFaultString("Invalid Trusted IdP, no IdP certificate specified.");
 			throw fault;
