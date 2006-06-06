@@ -88,15 +88,6 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 			String subname = schemaFile.getCanonicalPath().substring(extensionSchemaDir.getCanonicalPath().length() + File.separator.length());
 			copySchema(subname, schemaDir);
 		}
-		/*
-		copySchema(DataServiceConstants.CQL_QUERY_SCHEMA, schemaDir);
-		copySchema(DataServiceConstants.CQL_RESULT_SET_SCHEMA, schemaDir);
-		copySchema(DataServiceConstants.CAGRID_METADATA_SCHEMA, schemaDir);
-		copySchema(DataServiceConstants.COMMON_METADATA_SCHEMA, schemaDir);
-		copySchema(DataServiceConstants.DATA_METADATA_SCHEMA, schemaDir);
-		copySchema(DataServiceConstants.CADSR_DOMAIN_SCHEMA, schemaDir);
-		copySchema(DataServiceConstants.CADSR_UMLPROJECT_SCHEMA, schemaDir);
-		*/
 		// copy libraries for data services into the new DS's lib directory
 		copyLibraries(props);
 		// namespaces
@@ -273,7 +264,7 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 			cpElement.addContent(entryElement);
 		}
 		// write the classpath back out
-		String classpathText = XMLUtilities.elementToString(cpElement);
+		String classpathText = XMLUtilities.formatXML(XMLUtilities.elementToString(cpElement));
 		FileWriter writer = new FileWriter(classpathFilename);
 		writer.write(classpathText);
 		writer.flush();
