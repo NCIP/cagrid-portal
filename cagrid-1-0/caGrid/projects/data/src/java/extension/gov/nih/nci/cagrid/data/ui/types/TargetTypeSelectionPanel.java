@@ -15,7 +15,6 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
-import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.ServiceModificationUIPanel;
@@ -30,9 +29,6 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import org.apache.axis.message.MessageElement;
 import org.jdom.Element;
@@ -62,9 +58,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	private TargetTypesTree typesTree = null;
 	private JScrollPane typesTreeScrollPane = null;
 	private DataServiceTypesTable typesTable = null;
-	private TypeSerializationConfigPanel serializationConfigPanel = null;
 	private JScrollPane typesTableScrollPane = null;
-	private JPanel serializationPanel = null;
 	private JPanel typeSelectionPanel = null;
 	private JButton setModelButton = null;
 	private ClassBrowserPanel classBrowserPanel = null;
@@ -78,11 +72,15 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	
 	
 	private void initialize() {
+		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+		gridBagConstraints2.gridx = 1;
+		gridBagConstraints2.fill = java.awt.GridBagConstraints.BOTH;
+		gridBagConstraints2.gridy = 1;
 		GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 		gridBagConstraints5.gridx = 1;
 		gridBagConstraints5.fill = java.awt.GridBagConstraints.BOTH;
 		gridBagConstraints5.weightx = 1.0D;
-		gridBagConstraints5.weighty = 1.0D;
+		gridBagConstraints5.weighty = 0.0D;
 		gridBagConstraints5.gridy = 0;
 		GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 		gridBagConstraints4.gridx = 0;
@@ -90,11 +88,13 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 		gridBagConstraints4.weighty = 1.0D;
 		gridBagConstraints4.weightx = 1.0D;
 		gridBagConstraints4.anchor = java.awt.GridBagConstraints.NORTH;
+		gridBagConstraints4.gridheight = 2;
 		gridBagConstraints4.gridy = 0;
 		this.setLayout(new GridBagLayout());
 		this.setSize(new java.awt.Dimension(1017,548));
 		this.add(getTypeSelectionPanel(), gridBagConstraints4);
-		this.add(getSerializationPanel(), gridBagConstraints5);	
+		this.add(getTypesTableScrollPane(), gridBagConstraints5);
+		this.add(getClassBrowserPanel(), gridBagConstraints2);
 	}
 	
 	
@@ -180,34 +180,8 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	private DataServiceTypesTable getTypesTable() {
 		if (typesTable == null) {
 			typesTable = new DataServiceTypesTable();
-			typesTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			typesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-				public void valueChanged(ListSelectionEvent e) {
-					SchemaElementType[] selected = getTypesTable().getSelectedElementTypes();
-					if (selected != null) {
-						// getSerializationConfigPanel().setSchemaElementTypes(selected);
-					} else {
-						getSerializationConfigPanel().clear();
-					}
-				}
-			});
 		}
 		return typesTable;
-	}
-	
-	
-	private TypeSerializationConfigPanel getSerializationConfigPanel() {
-		if (serializationConfigPanel == null) {
-			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
-			gridBagConstraints8.gridx = 0;
-			gridBagConstraints8.gridwidth = 2;
-			gridBagConstraints8.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints8.weighty = 1.0D;
-			gridBagConstraints8.gridy = 2;
-			serializationConfigPanel = new TypeSerializationConfigPanel(getTypesTable());
-			serializationConfigPanel.add(getClassBrowserPanel(), gridBagConstraints8);
-		}
-		return serializationConfigPanel;
 	}
 	
 	
@@ -225,34 +199,6 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 		}
 		return typesTableScrollPane;
-	}
-	
-	
-	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getSerializationPanel() {
-		if (serializationPanel == null) {
-			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-			gridBagConstraints2.gridx = 0;
-			gridBagConstraints2.weightx = 1.0D;
-			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints2.gridy = 1;
-			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints3.gridy = 0;
-			gridBagConstraints3.weightx = 1.0;
-			gridBagConstraints3.weighty = 1.0D;
-			gridBagConstraints3.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints3.gridx = 0;
-			serializationPanel = new JPanel();
-			serializationPanel.setLayout(new GridBagLayout());
-			serializationPanel.add(getTypesTableScrollPane(), gridBagConstraints3);
-			serializationPanel.add(getSerializationConfigPanel(), gridBagConstraints2);
-		}
-		return serializationPanel;
 	}
 	
 	

@@ -1,11 +1,8 @@
 package gov.nih.nci.cagrid.data.ui.types;
 
-import gov.nih.nci.cagrid.data.common.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -14,9 +11,6 @@ import java.util.NoSuchElementException;
 import java.util.Vector;
 
 import javax.swing.DefaultListSelectionModel;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
@@ -38,6 +32,7 @@ public class DataServiceTypesTable extends JTable {
 		DefaultListSelectionModel listSelection = new DefaultListSelectionModel();
 		listSelection.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		setSelectionModel(listSelection);
+		setRowSelectionAllowed(true);
 		schemaElementTypes = new ArrayList();
 		addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
