@@ -5,9 +5,10 @@
 		<ns1:CodegenPostProcessor>gov.nih.nci.cagrid.data.codegen.DataServiceCodegenPostProcessor</ns1:CodegenPostProcessor>
 		<ns1:ServiceModificationUIPanel>gov.nih.nci.cagrid.data.ui.types.TargetTypeSelectionPanel</ns1:ServiceModificationUIPanel>
 		<ns1:Properties>
-			<property key="GME_URL"
-			    value="http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/cagrid/GlobalModelExchange">
-			</property>
+			<ns1:property key="GME_URL"
+			    value="http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/cagrid/GlobalModelExchange"/>
+			<ns1:property key="CADSR_URL"
+				value="http://cagrid05.bmi.ohio-state.edu:8080/wsrf/services/cagrid/CaDSRService"/>
 		</ns1:Properties>
 	</ns1:ServiceExtensionDescription>
 </ns1:ExtensionDescription>
