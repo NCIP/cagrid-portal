@@ -88,7 +88,10 @@ public class OutputTypeTable extends PortalBaseTable {
 
 
 	public MethodTypeOutput getRowData(int row) throws Exception {
-		return ((MethodTypeOutput) getValueAt(row, 3));
+		MethodTypeOutput output = ((MethodTypeOutput) getValueAt(row, 3));
+		boolean isArray = ((Boolean) getValueAt(row, 0)).booleanValue();
+		output.setIsArray(isArray);
+		return output;
 	}
 
 

@@ -261,13 +261,15 @@ public class SyncSource {
 
 		return methodString;
 	}
-	
-	private List buildServicesClientHandleClassNameList(){
+
+	private List buildServicesClientHandleClassNameList() {
 		List list = new ArrayList();
-		if(serviceInfo.getServices()!=null && serviceInfo.getServices().getService()!=null){
-			for(int i =0; i < serviceInfo.getServices().getService().length; i++){
+		if (serviceInfo.getServices() != null
+				&& serviceInfo.getServices().getService() != null) {
+			for (int i = 0; i < serviceInfo.getServices().getService().length; i++) {
 				ServiceType service = serviceInfo.getServices().getService(i);
-				list.add(service.getPackageName() + ".client." + service.getName() + "Client");
+				list.add(service.getPackageName() + ".client."
+						+ service.getName() + "Client");
 			}
 		}
 		return list;
@@ -278,7 +280,9 @@ public class SyncSource {
 		String methodString = "";
 		String methodName = method.getName();
 		String returnType = "";
-		if (buildServicesClientHandleClassNameList().contains(method.getType().getPackageName() + "." + method.getType().getClassName())){
+		if (buildServicesClientHandleClassNameList().contains(
+				method.getType().getPackageName() + "."
+						+ method.getType().getClassName())) {
 			returnType += IntroduceConstants.WSADDRESSING_EPR_CLASSNAME;
 		} else {
 			if (method.getType().getPackageName().length() > 0) {
@@ -780,12 +784,25 @@ public class SyncSource {
 						&& returnTypeEl.getIsClientHandle().booleanValue()) {
 					// create the client handle and put the EPR in it
 					// then return the client handle...
-					methodString += "EndpointReferenceType ref = boxedResult.get";
-					methodString += TemplateUtils.upperCaseFirstCharacter(info
-							.getType().getType())
-							+ "();\n";
-					methodString += lineStart + "return new "
-							+ returnTypeEl.getClientHandleClass() + "(ref);\n";
+					if (returnTypeEl.isIsArray()) {
+						methodString += returnTypeEl.getClientHandleClass() + "[] clientArray = null;\n";
+						methodString += lineStart + "if(boxedResult.getEndpointReference()!=null){\n";
+						methodString += lineStart + "  clientArray = new " + returnTypeEl.getClientHandleClass() + "[boxedResult.getEndpointReference().length];\n";
+						methodString += lineStart + "  for(int i = 0; i < boxedResult.getEndpointReference().length; i++){\n";
+						methodString += lineStart +	"	   clientArray[i] = new " + returnTypeEl.getClientHandleClass() + "(boxedResult.getEndpointReference(i));\n";
+						methodString += lineStart +	"  }\n";
+						methodString += lineStart + "}\n";
+						methodString += lineStart +  "return clientArray;\n";
+					} else {
+						methodString += "EndpointReferenceType ref = boxedResult.get";
+						methodString += TemplateUtils
+								.upperCaseFirstCharacter(info.getType()
+										.getType())
+								+ "();\n";
+						methodString += lineStart + "return new "
+								+ returnTypeEl.getClientHandleClass()
+								+ "(ref);\n";
+					}
 				} else {
 					methodString += "return boxedResult.get"
 							+ TemplateUtils.upperCaseFirstCharacter(info
