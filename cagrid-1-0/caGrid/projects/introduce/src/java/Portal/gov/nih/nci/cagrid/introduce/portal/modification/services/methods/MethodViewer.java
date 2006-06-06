@@ -1592,7 +1592,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 						output.setIsArray(false);
 						output.setIsClientHandle(new Boolean(true));
 						try {
-							output.setClientHandleClass(getServicesTypeTable().getSelectedRowData().getPackageName() + "." + "client" + getServicesTypeTable().getSelectedRowData().getName() + "Client");
+							output.setClientHandleClass(getServicesTypeTable().getSelectedRowData().getPackageName() + "." + "client" + "." + getServicesTypeTable().getSelectedRowData().getName() + "Client");
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();

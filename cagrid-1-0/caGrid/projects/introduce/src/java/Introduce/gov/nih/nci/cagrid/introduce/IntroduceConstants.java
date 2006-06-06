@@ -67,6 +67,7 @@ public class IntroduceConstants {
 
 	public static final String WSADDRESING_NAMESPACE = "http://schemas.xmlsoap.org/ws/2004/03/addressing";
 	public static final String WSADDRESING_EPR_TYPE = "EndpointReference";
+	public static final String WSADDRESSING_EPR_CLASSNAME = "org.apache.axis.message.addressing.EndpointReferenceType";
 
 	public static final String WSADDRESING_LOCATION = ".." + File.separator + "ws" + File.separator + "addressing" + File.separator + "WS-Addressing.xsd";
 

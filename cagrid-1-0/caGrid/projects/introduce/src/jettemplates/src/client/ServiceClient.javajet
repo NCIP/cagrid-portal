@@ -64,6 +64,10 @@ public class <%=info.getService().getName()%>Client implements <%=serviceName%>I
 	   	this.proxy = proxy;
 	   	this.epr = epr;
 	}
+	
+	public EndpointReferenceType getEndpointReference(){
+		return this.epr;
+	}
 
 	private <%=info.getService().getName()%>PortType getPortType() throws RemoteException {
 

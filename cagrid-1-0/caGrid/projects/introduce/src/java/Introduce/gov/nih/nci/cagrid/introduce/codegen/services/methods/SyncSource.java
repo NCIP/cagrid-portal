@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -86,6 +87,43 @@ public class SyncSource {
 				+ File.separator + service.getName() + "ProviderImpl.java";
 	}
 
+	private String createClientExceptions(MethodType method) {
+		String exceptions = "";
+		// process the faults for this method...
+		MethodTypeExceptions exceptionsEl = method.getExceptions();
+		String packageName = service.getPackageName() + ".stubs";
+		if (method.isIsImported()) {
+			packageName = method.getImportInformation().getPackageName();
+		}
+		exceptions += "RemoteException";
+		if (method.getOutput().getIsClientHandle() != null
+				&& method.getOutput().getIsClientHandle().booleanValue()) {
+			exceptions += ",org.apache.axis.types.URI.MalformedURIException";
+		}
+		if (exceptionsEl != null && exceptionsEl.getException() != null) {
+			if (exceptionsEl.getException().length > 0) {
+				exceptions += ", ";
+			}
+			for (int i = 0; i < exceptionsEl.getException().length; i++) {
+				MethodTypeExceptionsException fault = exceptionsEl
+						.getException(i);
+				// hack for now, should look at the namespace in the
+				// element.....
+				exceptions += packageName
+						+ "."
+						+ TemplateUtils
+								.upperCaseFirstCharacter(fault.getName());
+				if (i < exceptionsEl.getException().length - 1) {
+					exceptions += ", ";
+				}
+			}
+		}
+		if (exceptions.length() > 0) {
+			exceptions = "throws " + exceptions + " ";
+		}
+		return exceptions;
+	}
+
 	private String createExceptions(MethodType method) {
 		String exceptions = "";
 		// process the faults for this method...
@@ -117,6 +155,62 @@ public class SyncSource {
 			exceptions = "throws " + exceptions + " ";
 		}
 		return exceptions;
+	}
+
+	private String createClientUnBoxedSignatureStringFromMethod(
+			MethodType method) {
+		String methodString = "";
+		MethodTypeOutput returnTypeEl = method.getOutput();
+		String methodName = method.getName();
+		String returnType = null;
+		if (returnTypeEl.getQName().getNamespaceURI().equals("")
+				&& returnTypeEl.getQName().getLocalPart().equals("void")) {
+			returnType = "void";
+		} else {
+			SchemaInformation info = CommonTools.getSchemaInformation(
+					serviceInfo.getNamespaces(), returnTypeEl.getQName());
+			returnType = info.getType().getClassName();
+			if (info.getType().getPackageName() != null
+					&& info.getType().getPackageName().length() > 0) {
+				if (returnTypeEl.getIsClientHandle() != null
+						&& returnTypeEl.getIsClientHandle().booleanValue()) {
+					returnType = returnTypeEl.getClientHandleClass();
+				} else {
+					returnType = info.getType().getPackageName() + "."
+							+ returnType;
+				}
+			}
+			if (returnTypeEl.isIsArray()) {
+				returnType += "[]";
+			}
+		}
+		methodString += "     public " + returnType + " " + methodName + "(";
+		if (method.getInputs() != null && method.getInputs().getInput() != null) {
+			for (int j = 0; j < method.getInputs().getInput().length; j++) {
+				SchemaInformation info = CommonTools.getSchemaInformation(
+						serviceInfo.getNamespaces(), method.getInputs()
+								.getInput(j).getQName());
+				String packageName = info.getType().getPackageName();
+				String classType = null;
+				if (packageName != null && packageName.length() > 0) {
+					classType = packageName + "."
+							+ info.getType().getClassName();
+				} else {
+					classType = info.getType().getClassName();
+				}
+				if (method.getInputs().getInput(j).isIsArray()) {
+					classType += "[]";
+				}
+				String paramName = method.getInputs().getInput(j).getName();
+				methodString += classType + " " + paramName;
+				if (j < method.getInputs().getInput().length - 1) {
+					methodString += ",";
+				}
+			}
+		}
+		methodString += ")";
+
+		return methodString;
 	}
 
 	private String createUnBoxedSignatureStringFromMethod(MethodType method) {
@@ -167,9 +261,59 @@ public class SyncSource {
 
 		return methodString;
 	}
+	
+	private List buildServicesClientHandleClassNameList(){
+		List list = new ArrayList();
+		if(serviceInfo.getServices()!=null && serviceInfo.getServices().getService()!=null){
+			for(int i =0; i < serviceInfo.getServices().getService().length; i++){
+				ServiceType service = serviceInfo.getServices().getService(i);
+				list.add(service.getPackageName() + ".client." + service.getName() + "Client");
+			}
+		}
+		return list;
+	}
 
 	private String createUnBoxedSignatureStringFromMethod(JavaMethod method)
 			throws Exception {
+		String methodString = "";
+		String methodName = method.getName();
+		String returnType = "";
+		if (buildServicesClientHandleClassNameList().contains(method.getType().getPackageName() + "." + method.getType().getClassName())){
+			returnType += IntroduceConstants.WSADDRESSING_EPR_CLASSNAME;
+		} else {
+			if (method.getType().getPackageName().length() > 0) {
+				returnType += method.getType().getPackageName() + ".";
+			}
+			returnType += method.getType().getClassName();
+		}
+		if (method.getType().isArray()) {
+			returnType += "[]";
+		}
+		methodString += "     public " + returnType + " " + methodName + "(";
+		Parameter[] inputs = method.getParams();
+		for (int j = 0; j < inputs.length; j++) {
+			String classType = null;
+			if (inputs[j].getType().getPackageName().length() > 0) {
+				classType = inputs[j].getType().getPackageName() + "."
+						+ inputs[j].getType().getClassName();
+			} else {
+				classType = inputs[j].getType().getClassName();
+			}
+			if (inputs[j].getType().isArray()) {
+				classType += "[]";
+			}
+			String paramName = inputs[j].getName();
+			methodString += classType + " " + paramName;
+			if (j < inputs.length - 1) {
+				methodString += ",";
+			}
+		}
+		methodString += ")";
+		return methodString;
+	}
+
+	private String createClientUnBoxedSignatureStringFromMethod(
+			JavaMethod method) throws Exception {
 		String methodString = "";
 		String methodName = method.getName();
 		String returnType = "";
@@ -302,8 +446,8 @@ public class SyncSource {
 			// insert the new client method
 			int endOfClass = fileContent.lastIndexOf("}");
 			String clientMethod = "\n\t"
-					+ createUnBoxedSignatureStringFromMethod(method) + " "
-					+ createExceptions(method);
+					+ createClientUnBoxedSignatureStringFromMethod(method)
+					+ " " + createClientExceptions(method);
 			clientMethod += ";\n";
 
 			fileContent.insert(endOfClass - 1, clientMethod);
@@ -342,7 +486,7 @@ public class SyncSource {
 			}
 
 			// remove the old interface method
-			String clientMethod = createUnBoxedSignatureStringFromMethod(mod
+			String clientMethod = createClientUnBoxedSignatureStringFromMethod(mod
 					.getJavaMethod());
 			int startOfMethod = startOfSignature(fileContent, clientMethod);
 			String restOfFile = fileContent.substring(startOfMethod);
@@ -554,8 +698,8 @@ public class SyncSource {
 		// insert the new client method
 		int endOfClass = fileContent.lastIndexOf("}");
 		String clientMethod = "\n\t"
-				+ createUnBoxedSignatureStringFromMethod(method) + " "
-				+ createExceptions(method);
+				+ createClientUnBoxedSignatureStringFromMethod(method) + " "
+				+ createClientExceptions(method);
 		clientMethod += "{\n" + lineStart;
 		clientMethod += service.getName()
 				+ "PortType port = this.getPortType();\n";
@@ -632,9 +776,21 @@ public class SyncSource {
 					methodString += "return boxedResult.getResponse();\n";
 				}
 			} else {
-				methodString += "return boxedResult.get"
-						+ TemplateUtils.upperCaseFirstCharacter(info.getType()
-								.getType()) + "();\n";
+				if (returnTypeEl.getIsClientHandle() != null
+						&& returnTypeEl.getIsClientHandle().booleanValue()) {
+					// create the client handle and put the EPR in it
+					// then return the client handle...
+					methodString += "EndpointReferenceType ref = boxedResult.get";
+					methodString += TemplateUtils.upperCaseFirstCharacter(info
+							.getType().getType())
+							+ "();\n";
+					methodString += lineStart + "return new "
+							+ returnTypeEl.getClientHandleClass() + "(ref);\n";
+				} else {
+					methodString += "return boxedResult.get"
+							+ TemplateUtils.upperCaseFirstCharacter(info
+									.getType().getType()) + "();\n";
+				}
 			}
 		}
 
@@ -826,7 +982,7 @@ public class SyncSource {
 			}
 
 			// remove the method
-			String clientMethod = createUnBoxedSignatureStringFromMethod(method);
+			String clientMethod = createClientUnBoxedSignatureStringFromMethod(method);
 			System.err.println("Looking to remove method: |" + clientMethod
 					+ "|");
 			int startOfMethod = startOfSignature(fileContent, clientMethod);
@@ -876,7 +1032,7 @@ public class SyncSource {
 		}
 
 		// remove the method
-		String clientMethod = createUnBoxedSignatureStringFromMethod(method);
+		String clientMethod = createClientUnBoxedSignatureStringFromMethod(method);
 		int startOfMethod = startOfSignature(fileContent, clientMethod);
 		int endOfMethod = bracketMatch(fileContent, startOfMethod);
 
