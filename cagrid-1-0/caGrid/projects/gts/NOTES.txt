@@ -3,13 +3,15 @@
 |             Server               |     
 ====================================
 
-1) Add Last Updated to Trust Levels and Trusted Authorities (DONE)
-2) Add Authority Time To Live Check as compared to sync time (DONE)
-3) Looked into expires representation (DONE)
-4) Think about timezone issues.
-5) Test Remove
-6) Test with sync gts
-7) Look into Derby
+Add Last Updated to Trust Levels and Trusted Authorities (DONE)
+Add Authority Time To Live Check as compared to sync time (DONE)
+Looked into expires representation (DONE)
+Test Remove   (DONE)
+Test with sync gts (DONE)
+Fix Metadata Access Problem
+Support Multiple Trust Levels for a Given CA
+Support Querying of Multiple Trust Levels.
+Think about timezone issues.
 
 
 transactions are need in mysql.
