@@ -1039,10 +1039,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 			gridBagConstraints6.weightx = 1.0;
 			outputNamespacePanel = new JPanel();
 			outputNamespacePanel.setLayout(new GridBagLayout());
-			outputNamespacePanel.add(getOutputNamespacesTypeScrollPane(),
-					gridBagConstraints6);
-			outputNamespacePanel.add(getServicesTypeScrollPane(),
-					gridBagConstraints29);
+			outputNamespacePanel.add(getOutputNamespacesTypeScrollPane(), gridBagConstraints6);
+			outputNamespacePanel.add(getServicesTypeScrollPane(), gridBagConstraints29);
 		}
 		return outputNamespacePanel;
 	}
@@ -1055,6 +1053,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JScrollPane getOutputNamespacesTypeScrollPane() {
 		if (outputNamespacesTypeScrollPane == null) {
 			outputNamespacesTypeScrollPane = new JScrollPane();
+			outputNamespacesTypeScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Data Types", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
 			outputNamespacesTypeScrollPane
 					.setViewportView(getOutputNamespacesJTree());
 		}
@@ -1565,6 +1564,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JScrollPane getServicesTypeScrollPane() {
 		if (servicesTypeScrollPane == null) {
 			servicesTypeScrollPane = new JScrollPane();
+			servicesTypeScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Client Handle Types", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
 			servicesTypeScrollPane.setViewportView(getServicesTypeTable());
 		}
 		return servicesTypeScrollPane;
