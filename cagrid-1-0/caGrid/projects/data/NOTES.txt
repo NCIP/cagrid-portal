@@ -10,3 +10,8 @@ TODO:
 7 [I]: Build metadata for data service on codegen
 8 [D]: extension.xml needs a property for CADSR_URL
 9 [D]: Type Serialization table needs a column to show/edit classname for type (must NOT be set when using DefaultSerialization, MUST be set when using custom or SDK serialization)
+10   : Adding metadata needs to add the metadata jars and their dependencies (caCORE, etc) 
+11   : Using add jar should do the "copy" right away in the GUI and the extension data should store the local path
+12   : .classpath should add in jars that "add jar" copy in, as well those it copies in on creation (metadata stuff, etc)
+13   : Need a simplified "SDK Backed" data service option (should set serializers, cql processor, add jars, etc automatically)
+14   : Type serialization table need to enable multi-select for setting serialization option
