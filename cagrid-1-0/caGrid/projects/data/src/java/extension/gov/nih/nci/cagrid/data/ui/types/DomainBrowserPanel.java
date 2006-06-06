@@ -5,8 +5,11 @@ import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
 import gov.nih.nci.cagrid.cadsr.common.CaDSRServiceI;
 import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
+import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
 
 import javax.swing.JOptionPane;
+
+import org.projectmobius.portal.PortalResourceManager;
 
 /** 
  *  DomainBrowserPanel
@@ -63,20 +66,26 @@ public class DomainBrowserPanel extends CaDSRBrowserPanel {
 	
 	public synchronized void blockingCadsrRefresh() {
 		System.out.println("Refreshing from caDSR, please wait...");
-		final CaDSRServiceI cadsrService = new CaDSRServiceClient(getCadsr().getText());
-		getProjectComboBox().removeAllItems();
-		try {
-			Project[] projects = cadsrService.findAllProjects();
-			if (projects != null) {
-				for (int i = 0; i < projects.length; i++) {
-					getProjectComboBox().addItem(new ProjectDisplay(projects[i]));
+		BusyDialogRunnable refresher = new BusyDialogRunnable(PortalResourceManager.getInstance().getGridPortal(), "Loading caDSR information") {
+			public void process() {
+				setProgressText("Refreshing information from caDSR . . .");
+				final CaDSRServiceI cadsrService = new CaDSRServiceClient(getCadsr().getText());				
+				getProjectComboBox().removeAllItems();
+				try {
+					Project[] projects = cadsrService.findAllProjects();
+					if (projects != null) {
+						for (int i = 0; i < projects.length; i++) {
+							getProjectComboBox().addItem(new ProjectDisplay(projects[i]));
+						}
+					}
+				} catch (Exception e1) {
+					e1.printStackTrace();
+					JOptionPane.showMessageDialog(DomainBrowserPanel.this,
+					"Error communicating with caDSR; please check the caDSR URL!");
 				}
 			}
-		} catch (Exception e1) {
-			e1.printStackTrace();
-			JOptionPane.showMessageDialog(DomainBrowserPanel.this,
-			"Error communicating with caDSR; please check the caDSR URL!");
-		}
+		};
+		refresher.run();
 		System.out.println("Done refreshing from caDSR");
 	}
 	
