@@ -159,6 +159,9 @@
 			<fileset dir="${test.lib.dir}">
 				<include name="*.jar" />
 			</fileset>
+			<fileset dir="${ext.test.lib.dir}">
+							<include name="*.jar" />
+						</fileset>
 			<pathelement location="${build.dest}" />
 			<path refid="service.build.classpath" />			
 		</path>
@@ -347,15 +350,13 @@
 	<!-- Default target "all" builds and jars everything, including test....does not make a GAR-->
 	<target name="all" depends="jars" />
 	
-
-	<!-- call the test target for each project and aggregates the log resutls  -->
+	<!-- Post Introduce Edit-->
+     <!--
 	<target name="test" depends="checkGlobus">
 		<echo message="Test results dir: ${junit.results.dir}" />
 		<mkdir dir="${junit.results.dir}" />
 		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true">
 			<sysproperty key="basedir" value="${basedir}" />
-			<jvmarg value="-Dbuild.dir=${build.dir}" />
-			<!-- Post Introduce Edit-->
 			<jvmarg value="-Djava.endorsed.dirs=${ext.endorsed.dir}" />
 			<classpath refid="test.run.classpath"/>
 			<formatter type="xml" />
@@ -366,6 +367,10 @@
 			</batchtest>
 		</junit>
 	</target>
+	-->
+	<!-- Post Introduce Edit-->
+	<!-- Load test files -->
+		<import file="test/test.xml" />
 	
 	<!-- Post Introduce Edit-->
 	<target name="portal" description="Run the dorian portal" depends="checkGlobus">

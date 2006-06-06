@@ -13,12 +13,14 @@ Add code for checking IdP Status on all methods. (DONE)
 Removing IdP should remove all user accounts. (DONE)
 Need to change all propety/config files to be "*.example" files, not check the real ones in, and build should create real ones from examples upon need (DONE)
 Add support for SSL exception handling (DONE)
-Convert to an Introduce Service
+Convert to an Introduce Service (DONE)
+Add Service Metadata (DONE)
+Add support for copying endorsed libraries to globus (DONE
 Multiple CA Support
 Move to Support IMF SAML Standard
 Add policy chaining 
-Add Service Metadata
-Add support for copying enforsed libraries to globus
+Update CRL for Suspended IdP
+
 
 Testing Tasks
 --------------
