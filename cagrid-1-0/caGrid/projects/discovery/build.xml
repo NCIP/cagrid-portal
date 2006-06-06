@@ -58,6 +58,7 @@
 	<!-- The Run Classpath                                                   -->
 	<!-- =============================================================== -->
 	<path id="run.classpath">
+		<pathelement location="${classes.dir}"/>
 		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
@@ -66,7 +67,7 @@
 		</fileset>
 		<fileset dir="${globus.dir}/lib">
 			<include name="**/*.jar" />
-		</fileset>
+		</fileset>		
 	</path>
 
 	<!-- =============================================================== -->
@@ -154,6 +155,15 @@
 				<attribute name="Built-By" value="${user.name}" />
 			</manifest>
 		</jar>
+	</target>
+
+	<!-- ============================================================== -->
+	<!-- Runs the Discovery Client                                      -->
+	<!-- ============================================================== -->
+	<target name="runClient" depends="checkGlobus" description="Run the sample Discovery Client">
+		<java classname="gov.nih.nci.cagrid.discovery.client.DiscoveryClient" classpathref="run.classpath" fork="yes">
+			<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
+		</java>
 	</target>
 
 
