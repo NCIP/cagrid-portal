@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<securityConfig xmlns="http://www.globus.org">
+  <authz value="none" />
+  <auth-method>
+    <GSITransport>
+      <protection-level>
+        <privacy />
+      </protection-level>
+    </GSITransport>
+  </auth-method>
+  <run-as>
+    <system-identity />
+  </run-as>
+</securityConfig>
+
+
