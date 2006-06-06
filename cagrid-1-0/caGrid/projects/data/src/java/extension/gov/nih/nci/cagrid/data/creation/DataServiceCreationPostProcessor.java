@@ -241,7 +241,7 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		File[] libs = libDir.listFiles(new FileFilter() {
 			public boolean accept(File pathname) {
 				String name = pathname.getName();
-				return (name.endsWith(".jar") && name.startsWith("caGrid-data-1.0"));
+				return (name.endsWith(".jar") && (name.startsWith("caGrid-data-1.0") || name.startsWith("castor")));
 			}
 		});
 		if (libs != null) {
