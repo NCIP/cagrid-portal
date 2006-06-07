@@ -87,7 +87,6 @@
 	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/acme.jar"/>
-	<classpathentry kind="lib" path="ext/lib/antlrall-2.7.2.jar"/>
 	<classpathentry kind="lib" path="ext/lib/argouml-layout.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-graph-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/gef_modified.jar"/>
