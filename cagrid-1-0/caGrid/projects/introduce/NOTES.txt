@@ -1,10 +1,6 @@
 To Do:
 
-make sure that there is a passive fail for globus discovery tool
-
 refactor to not be creating hte service.wsdd everytime.....
-
-add automatic client handle generation if a method is returning an EPR
 
 need to add deploy testing
 
@@ -65,7 +61,11 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
-(NO YOU SHOULD NOT) you should be able to open up an empty introduce.xml document (with no elements), currently null pointers happen in methods and types
+add automatic client handle generation if a method is returning an EPR
+
+(make sure that there is a passive fail for globus discovery tool
+
+NO YOU SHOULD NOT) you should be able to open up an empty introduce.xml document (with no elements), currently null pointers happen in methods and types
 
 need to set the correct location to globus imported schemas .....
 
