@@ -12,7 +12,7 @@
 		<attribute name="configFile"/>
 		<sequential>
 			<echo message="Running portal with @{configFile}"/>
-			<java classname="org.projectmobius.portal.GridPortal" fork="yes">
+			<java classname="gov.nih.nci.cagrid.introduce.portal.Introduce" fork="yes">
 				<arg value="@{configFile}"/>
 				<classpath refid="Portal.run.classpath"/>
 			</java>
