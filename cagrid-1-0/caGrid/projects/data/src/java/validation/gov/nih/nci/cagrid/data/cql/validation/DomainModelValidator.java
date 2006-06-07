@@ -77,12 +77,6 @@ public class DomainModelValidator {
 		if (attribMd == null) {
 			throw new MalformedQueryException("Attribute '" + attrib.getName() + "' is not defined for the class " + classMd.getClassName());
 		}
-		/*
-		 * FIXME: Data type validation is not yet performed because the UMLAttribute has a null collection
-		 * of semantic metadata, so there's no way to determine what data type it should be.  The
-		 * Query Processor will fail anyway trying to convert invalid data types into the correct
-		 * ones when a query is submitted.
-		 */
 		// validateAttributeDataType(attrib, attribMd);
 	}	
 	
