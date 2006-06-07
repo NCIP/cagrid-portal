@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.data.common;
+package gov.nih.nci.cagrid.data;
 
 import gov.nih.nci.cagrid.encoding.SDKDeserializerFactory;
 import gov.nih.nci.cagrid.encoding.SDKSerializerFactory;

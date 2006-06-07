@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.data.ui.types;
 
-import gov.nih.nci.cagrid.data.common.DataServiceConstants;
+import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 
 import java.awt.Component;
