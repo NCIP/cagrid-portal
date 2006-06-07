@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <securityConfig xmlns="http://www.globus.org">
+  <proxy-file value="C:/certificates/x509up_u_madduri" />
   <authz value="none" />
   <auth-method>
     <GSITransport>
       <protection-level>
         <privacy />
+        <integrity />
       </protection-level>
     </GSITransport>
   </auth-method>

@@ -91,6 +91,12 @@ public class SecureSampleClient implements SecureSampleI {
 	}
 	
 
+
+
+
+
+
+
 	     public java.lang.String invoke(java.lang.String string) throws RemoteException {
                SecureSamplePortType port = this.getPortType();
                org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
