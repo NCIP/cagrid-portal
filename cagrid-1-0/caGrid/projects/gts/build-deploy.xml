@@ -2,6 +2,7 @@
 <project name="build-deploy file" basedir="." default="deploy">
 	<property file="deploy.properties" />
 	<property name="service.deployment.path" value="${service.deployment.prefix}/${introduce.skeleton.service.name}" />
+	<property name="service.properties.file" value="service.properties"/>
 	<!-- Tomcat Properties -->
 	<property name="tomcat.dir" value="${env.CATALINA_HOME}" />
 	<property name="tomcat.common.lib.dir" value="${tomcat.dir}/common/lib" />
