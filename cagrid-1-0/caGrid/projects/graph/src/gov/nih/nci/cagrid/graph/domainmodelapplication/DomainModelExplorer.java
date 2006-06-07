@@ -70,6 +70,11 @@ public class DomainModelExplorer extends JLayeredPane
 	
 	public void setDomainModel(DomainModel model)
 	{
+		initModel(model);
+	}
+	
+	public void initModel(DomainModel model)
+	{
 		
 	}
 	

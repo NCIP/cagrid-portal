@@ -97,7 +97,7 @@ class MDIPanelComponentListener extends ComponentAdapter
 	public void componentResized(ComponentEvent e)
 	{
 		MDIPanel s = (MDIPanel)e.getSource();
-		s.tabs.setBounds(0, 0, s.getWidth(), MDIPanel.tabsHeight);
+		s.tabs.setBounds(1, 0, s.getWidth()-2, MDIPanel.tabsHeight);
 		s.container.setBounds(1, MDIPanel.tabsHeight, s.getWidth()-2, s.getHeight()-MDIPanel.tabsHeight-1);
 		s.validate();
 	}
