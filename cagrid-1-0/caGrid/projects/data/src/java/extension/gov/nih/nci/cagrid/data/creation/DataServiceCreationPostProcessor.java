@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.data.creation;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.data.common.ExtensionUtilities;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -32,7 +33,6 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,10 +44,6 @@ import java.util.Set;
 
 import javax.xml.namespace.QName;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.projectmobius.common.MobiusException;
-import org.projectmobius.common.XMLUtilities;
 import org.projectmobius.tools.common.viewer.XSDFileFilter;
 
 /** 
@@ -247,31 +243,22 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 					name.startsWith("caGrid-metadata") || name.startsWith("caGrid-core")));
 			}
 		});
+		File[] copiedLibs = new File[libs.length];
 		if (libs != null) {
 			for (int i = 0; i < libs.length; i++) {
 				File outFile = new File(toDir + File.separator + libs[i].getName());
+				copiedLibs[i] = outFile;
 				copyFile(libs[i], outFile);
 			}
 		}
-		modifyClasspathFile(libs, props);
+		modifyClasspathFile(copiedLibs, props);
 	}
 	
 	
 	private void modifyClasspathFile(File[] libs, Properties props) throws Exception {
-		String classpathFilename = props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + ".classpath";
-		Element cpElement = XMLUtilities.fileNameToDocument(classpathFilename).getRootElement();
-		for (int i = 0; i < libs.length; i++) {
-			Element entryElement = new Element("classpathentry");
-			entryElement.setAttribute("kind", "lib");
-			entryElement.setAttribute("path", "lib" + File.separator + libs[i].getName());
-			cpElement.addContent(entryElement);
-		}
-		// write the classpath back out
-		String classpathText = XMLUtilities.formatXML(XMLUtilities.elementToString(cpElement));
-		FileWriter writer = new FileWriter(classpathFilename);
-		writer.write(classpathText);
-		writer.flush();
-		writer.close();
+		File classpathFile = new File(props.getProperty(
+			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + ".classpath");
+		ExtensionUtilities.syncEclipseClasspath(classpathFile, libs);
 	}
 	
 	
@@ -289,39 +276,5 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		inputStream.close();
 		outputStream.flush();
 		outputStream.close();
-	}
-	
-	
-	private Set getSchemaNamespaces(File schemaDir) throws CreationExtensionException {
-		Set namespaces = new HashSet();
-		List xsdFiles = Utils.recursiveListFiles(schemaDir, new FileFilter() {
-			public boolean accept(File pathname) {
-				return pathname.getName().endsWith(".xsd");
-			}
-		});
-		Iterator fileIter = xsdFiles.iterator();
-		while (fileIter.hasNext()) {
-			String filename = ((File) fileIter.next()).getAbsolutePath();
-			System.out.println("Looking at schema " + filename);
-			try {
-				Document schema = XMLUtilities.fileNameToDocument(filename);
-				String targetNs = schema.getRootElement().getAttributeValue("targetNamespace");
-				if (namespaces.add(targetNs)) {
-					System.out.println("Adding namespace " + targetNs);
-				}
-				List importEls = schema.getRootElement().getChildren("import",
-					schema.getRootElement().getNamespace(IntroduceConstants.W3CNAMESPACE));
-				for (int i = 0; i < importEls.size(); i++) {
-					org.jdom.Element importEl = (org.jdom.Element) importEls.get(i);
-					String namespace = importEl.getAttributeValue("namespace");
-					if (namespaces.add(namespace)) {
-						System.out.println("Adding namepace " + namespace);
-					}
-				}
-			} catch (MobiusException ex) {
-				throw new CreationExtensionException("Error parsing schema for namespaces: " + ex.getMessage(), ex);
-			}
-		}
-		return namespaces;
 	}
 }

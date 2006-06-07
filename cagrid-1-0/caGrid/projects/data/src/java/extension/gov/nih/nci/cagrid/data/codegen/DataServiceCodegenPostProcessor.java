@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.data.codegen;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.common.AxisJdomUtils;
+import gov.nih.nci.cagrid.data.common.ExtensionUtilities;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
@@ -11,15 +12,9 @@ import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -27,9 +22,6 @@ import java.util.Set;
 
 import org.apache.axis.message.MessageElement;
 import org.jdom.Element;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
-import org.projectmobius.common.XMLUtilities;
 
 /** 
  *  DataServiceCodegenPostProcessor
@@ -47,7 +39,23 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 	
 	public void postCodegen(ServiceExtensionDescriptionType desc, ServiceInformation info) throws CodegenExtensionException {
 		try {
-			syncEclipseClasspath(desc, info);
+			String serviceDir = info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR);
+			// get the eclipse classpath document
+			File classpathFile = new File(serviceDir + File.separator + ".classpath");
+			Set libs = new HashSet();
+			ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
+			MessageElement qpLibsElement = ExtensionTools.getExtensionDataElement(data, DataServiceConstants.QUERY_PROCESSOR_ADDITIONAL_JARS_ELEMENT);
+			if (qpLibsElement != null) {
+				Element qpLibs = AxisJdomUtils.fromMessageElement(qpLibsElement);
+				Iterator jarElemIter = qpLibs.getChildren(DataServiceConstants.QUERY_PROCESSOR_JAR_ELEMENT, qpLibs.getNamespace()).iterator();
+				while (jarElemIter.hasNext()) {
+					String jarFilename = ((Element) jarElemIter.next()).getText();
+					libs.add(new File(serviceDir + File.separator + "lib" + File.separator + jarFilename));
+				}
+			}
+			File[] libFiles = new File[libs.size()];
+			libs.toArray(libFiles);
+			ExtensionUtilities.syncEclipseClasspath(classpathFile, libFiles);
 		} catch (Exception ex) {
 			throw new CodegenExtensionException("Error syncing eclipse .classpath file: " + ex.getMessage(), ex);
 		}
@@ -153,66 +161,5 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 			return queryProcessorClass;
 		}
 		return null;
-	}
-	
-	
-	private void syncEclipseClasspath(ServiceExtensionDescriptionType desc, ServiceInformation info) throws Exception {
-		String serviceDir = info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR);
-		// get the eclipse classpath document
-		File classpathFile = new File(serviceDir + File.separator + ".classpath");
-		Element classpathElement = XMLUtilities.fileNameToDocument(classpathFile.getAbsolutePath()).getRootElement();
-		
-		// get the list of additional libraries for the query processor
-		Set libNames = new HashSet();
-		ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
-		MessageElement qpLibsElement = ExtensionTools.getExtensionDataElement(data, DataServiceConstants.QUERY_PROCESSOR_ADDITIONAL_JARS_ELEMENT);
-		if (qpLibsElement != null) {
-			Element qpLibs = AxisJdomUtils.fromMessageElement(qpLibsElement);
-			Iterator jarElemIter = qpLibs.getChildren(DataServiceConstants.QUERY_PROCESSOR_JAR_ELEMENT, qpLibs.getNamespace()).iterator();
-			while (jarElemIter.hasNext()) {
-				String jarFilename = ((Element) jarElemIter.next()).getText();
-				libNames.add("lib\\" + jarFilename); // hardcoded slash because thats what eclipse does
-			}
-		}
-		
-		// find out which libs are NOT yet in the classpath
-		Iterator classpathEntryIter = classpathElement.getChildren("classpathentry").iterator();
-		while (classpathEntryIter.hasNext()) {
-			Element entry = (Element) classpathEntryIter.next();
-			if (entry.getAttribute("kind").equals("lib")) {
-				libNames.remove(entry.getAttribute("path"));
-			}
-		}
-		
-		// anything left over now has to be added to the classpath
-		Iterator additionalLibIter = libNames.iterator();
-		while (additionalLibIter.hasNext()) {
-			String libName = (String) additionalLibIter.next();
-			Element entryElement = new Element("classpathentry");
-			entryElement.setAttribute("kind", "lib");
-			entryElement.setAttribute("path", libName);
-			classpathElement.addContent(entryElement);
-		}
-		
-		// write the .classpath file back out to disk
-		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
-		FileWriter writer = new FileWriter(classpathFile);
-		outputter.output(classpathElement, writer);
-		writer.flush();
-		writer.close();
-	}
-	
-	
-	private void copyFile(File inputFile, File outputFile) throws FileNotFoundException, IOException {
-		BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(inputFile));
-		BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(outputFile));
-		byte[] buff = new byte[1024];
-		int len = -1;
-		while ((len = inputStream.read(buff)) != -1) {
-			outputStream.write(buff, 0, len);
-		}
-		inputStream.close();
-		outputStream.flush();
-		outputStream.close();
 	}
 }
