@@ -67,9 +67,9 @@
 <target name="create-bpr" depends="timestamp">
   <jar destfile="${dist}/${bpel.archive}">
      <!-- PDD Files. -->
-     <zipfileset file="${dist}/Simple.pdd" fullpath="Simple.pdd" />
+     <zipfileset file="${dist}/SimpleSecure.pdd" fullpath="SimpleSecure.pdd" />
      <!-- BPEL Files. -->
-     <zipfileset file="${dist}/Simple.bpel" fullpath="Simple.bpel" />
+     <zipfileset file="${dist}/SimpleSecure.bpel" fullpath="SimpleSecure.bpel" />
      <!-- WSDL Files. -->
      <!-- WSDL Catalog. -->
   </jar>
@@ -86,22 +86,5 @@
     <delete file="${bpr.dest}/${bpel.archive}"/>
 </target>
 
-
-<target name="runClient" depends="jar">
-    <java fork="yes" classname="gov.nci.nih.cagrid.workflow.SimpleWorkflow.client.SimpleWorkflowClient">
-    <arg value="http://localhost:9090/active-bpel/services/Sample1PartnerLinkTypeService"/>
-    <arg value="TEST"/>
-        <classpath>
-            <fileset dir="${deploy.dir}/lib">
-                <include name="common/*.jar"/>
-                <include name="*.jar"/>
-            </fileset>
-            <fileset dir="${build.lib.dir}">
-                <include name="*.jar"/>
-            </fileset>
-        </classpath>
-    </java>
-
-    </target>
 
 </project>
