@@ -196,7 +196,7 @@ public class ClassBrowserPanel extends JPanel {
 			addJarButton.setText("Add Jar");
 			addJarButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					browseForJar();
+					browseForJars();
 					populateClassDropdown();
 					fireAdditionalJarsChanged();
 				}
@@ -381,37 +381,41 @@ public class ClassBrowserPanel extends JPanel {
 	}
 
 
-	private void browseForJar() {
-		String jarFile = null;
+	private void browseForJars() {
+		String[] jarFiles = null;
 		try {
-			jarFile = ResourceManager.promptFile(this, null, new FileFilters.JarFileFilter());
-			// only bother adding the jar file to the list if it's not in there
-			// yet
-			final String shortJarName = (new File(jarFile)).getName();
-			boolean shouldAdd = true;
-			String[] currentJars = getAdditionalJars();
-			for (int i = 0; i < currentJars.length; i++) {
-				if (shortJarName.equals(currentJars[i])) {
-					shouldAdd = false;
-					break;
-				}
-			}
-			if (shouldAdd) {
-				// copy the jar to the service's lib directory
-				copyJarToService(jarFile, shortJarName);
-				// add the jar to the extension data's list of additional jars
-				// add the new jar name to the jars list
-				String[] additionalJars = new String[currentJars.length + 1];
-				System.arraycopy(currentJars, 0, additionalJars, 0, currentJars.length);
-				additionalJars[additionalJars.length - 1] = shortJarName;
-				getAdditionalJarsList().setListData(additionalJars);
-			}
+			jarFiles = ResourceManager.promptMultiFiles(this, null, new FileFilters.JarFileFilter());
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			PortalUtils.showErrorMessage("Error opening the jar " + jarFile, ex);
+			PortalUtils.showErrorMessage("Error selecting files: " + ex.getMessage(), ex);
+		}
+		if (jarFiles != null) {
+			// only bother adding the jar file to the list if it's not in there yet
+			for (int i = 0; i < jarFiles.length; i++) {
+				String jarFile = jarFiles[i];
+				final String shortJarName = (new File(jarFile)).getName();
+				boolean shouldAdd = true;
+				String[] currentJars = getAdditionalJars();
+				for (int j = 0; j < currentJars.length; j++) {
+					if (shortJarName.equals(currentJars[j])) {
+						shouldAdd = false;
+						break;
+					}
+				}
+				if (shouldAdd) {
+					// copy the jar to the service's lib directory
+					copyJarToService(jarFile, shortJarName);
+					// add the jar to the extension data's list of additional jars
+					// add the new jar name to the jars list
+					String[] additionalJars = new String[currentJars.length + 1];
+					System.arraycopy(currentJars, 0, additionalJars, 0, currentJars.length);
+					additionalJars[additionalJars.length - 1] = shortJarName;
+					getAdditionalJarsList().setListData(additionalJars);
+				}
+			}
 		}
 	}
-
+	
 
 	private synchronized void copyJarToService(final String jarFile, final String shortJarName) {
 		String libDir = serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
