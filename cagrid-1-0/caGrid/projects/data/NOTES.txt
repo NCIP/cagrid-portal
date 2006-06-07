@@ -22,5 +22,6 @@ BUGS:
 Eclipse classpath is incorrect (duplicate entries for cagrid core)
 	-- Fixed 2006-06-07
 Type Serialization Table sizing is screwed up
+	-- Fixed 2006-06-07
 Need a "None" option for query processor... theres no way to not select an impl found in a jar
 	-- Not a bug, you can edit the query processor class selection manually, including blanking it out

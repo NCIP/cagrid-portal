@@ -64,6 +64,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	private ClassBrowserPanel classBrowserPanel = null;
 	
 	private XMLDataModelService gmeHandle = null;
+	private JPanel configurationPanel = null;  //  @jve:decl-index=0:visual-constraint="1048,144"
 	
 	public TargetTypeSelectionPanel(ServiceExtensionDescriptionType desc, ServiceInformation serviceInfo) {
 		super(desc, serviceInfo);
@@ -72,29 +73,24 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	
 	
 	private void initialize() {
-		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-		gridBagConstraints2.gridx = 1;
-		gridBagConstraints2.fill = java.awt.GridBagConstraints.BOTH;
-		gridBagConstraints2.gridy = 1;
-		GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-		gridBagConstraints5.gridx = 1;
-		gridBagConstraints5.fill = java.awt.GridBagConstraints.BOTH;
-		gridBagConstraints5.weightx = 1.0D;
-		gridBagConstraints5.weighty = 0.0D;
-		gridBagConstraints5.gridy = 0;
 		GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 		gridBagConstraints4.gridx = 0;
+		gridBagConstraints4.gridy = 0;
 		gridBagConstraints4.fill = java.awt.GridBagConstraints.BOTH;
 		gridBagConstraints4.weighty = 1.0D;
 		gridBagConstraints4.weightx = 1.0D;
-		gridBagConstraints4.anchor = java.awt.GridBagConstraints.NORTH;
-		gridBagConstraints4.gridheight = 2;
-		gridBagConstraints4.gridy = 0;
+				
+		GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+		gridBagConstraints5.gridx = 1;
+		gridBagConstraints5.gridy = 0;
+		gridBagConstraints5.fill = GridBagConstraints.BOTH;
+		gridBagConstraints5.weightx = 1.0D;
+		gridBagConstraints5.weighty = 1.0D;
+		
 		this.setLayout(new GridBagLayout());
 		this.setSize(new java.awt.Dimension(1017,548));
 		this.add(getTypeSelectionPanel(), gridBagConstraints4);
-		this.add(getTypesTableScrollPane(), gridBagConstraints5);
-		this.add(getClassBrowserPanel(), gridBagConstraints2);
+		this.add(getConfigurationPanel(), gridBagConstraints5);
 	}
 	
 	
@@ -384,6 +380,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	private ClassBrowserPanel getClassBrowserPanel() {
 		if (classBrowserPanel == null) {
 			classBrowserPanel = new ClassBrowserPanel(getExtensionTypeExtensionData(), getServiceInfo().getIntroduceServiceProperties());
+			// classBrowserPanel = new ClassBrowserPanel(null, null);
 			classBrowserPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
 				null, "Query Processor Class Selection", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
@@ -494,5 +491,32 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			}
 		}
 		return null;
+	}
+
+
+	/**
+	 * This method initializes jPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getConfigurationPanel() {
+		if (configurationPanel == null) {
+			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints2.gridy = 1;
+			gridBagConstraints2.ipady = 80;
+			gridBagConstraints2.gridx = 0;
+			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.fill = GridBagConstraints.BOTH;
+			gridBagConstraints3.gridy = 0;
+			gridBagConstraints3.weightx = 1.0D;
+			gridBagConstraints3.weighty = 1.0D;
+			gridBagConstraints3.gridx = 0;
+			configurationPanel = new JPanel();
+			configurationPanel.setLayout(new GridBagLayout());
+			configurationPanel.add(getTypesTableScrollPane(), gridBagConstraints3);
+			configurationPanel.add(getClassBrowserPanel(), gridBagConstraints2);
+		}
+		return configurationPanel;
 	}
 }
