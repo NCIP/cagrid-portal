@@ -22,4 +22,4 @@ BUGS:
 Eclipse classpath is incorrect (duplicate entries for cagrid core)
 Type Serialization Table sizing is screwed up
 Need a "None" option for query processor... theres no way to not select an impl found in a jar
-CoreQueryProcessor is only successfully serializing/returning the first result
+	-- Not a bug, you can edit the query processor class selection manually, including blanking it out
