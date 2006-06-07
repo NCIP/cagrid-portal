@@ -31,10 +31,14 @@ public class DomainModelExplorer extends JLayeredPane
 	
 	public boolean hideOutlines = false;
 	
+	public boolean resizedOnce = false;
+	
 	public DomainModelExplorer()
 	{
 		this(null);
 	}
+	
+	
 	
 	public DomainModelExplorer(DomainModel model)
 	{
@@ -64,6 +68,17 @@ public class DomainModelExplorer extends JLayeredPane
 	
 	}
 	
+	public void setDomainModel(DomainModel model)
+	{
+		
+	}
+	
+	public void clear()
+	{
+		
+		
+	}
+	
 	public void selectPackage()
 	{
 		
@@ -89,10 +104,41 @@ public class DomainModelExplorer extends JLayeredPane
 		}
 		else
 		{
-			this.outlineMDI.setBounds(0, 0, DomainModelExplorer.preferredOutlinesWidth, this.getHeight());
-			this.splitter.setBounds(DomainModelExplorer.preferredOutlinesWidth, 0, 3, this.getHeight());
-			this.umlMDI.setBounds(DomainModelExplorer.preferredOutlinesWidth + this.splitter.getWidth(), 0, this.getWidth() - DomainModelExplorer.preferredOutlinesWidth - this.splitter.getWidth(), this.getHeight());
+			if(!this.resizedOnce)
+			{
+				this.outlineMDI.setBounds(0, 0, DomainModelExplorer.preferredOutlinesWidth, this.getHeight());
+				this.splitter.setBounds(DomainModelExplorer.preferredOutlinesWidth, 0, 3, this.getHeight());
+				this.umlMDI.setBounds(DomainModelExplorer.preferredOutlinesWidth + this.splitter.getWidth(), 0, this.getWidth() - DomainModelExplorer.preferredOutlinesWidth - this.splitter.getWidth(), this.getHeight());
+				this.resizedOnce = true;
+			}
+			else
+			{
+				this.outlineMDI.setBounds(0, 0, outlineMDI.getWidth(), this.getHeight());
+				this.splitter.setBounds(outlineMDI.getWidth(), 0, 3, this.getHeight());
+				this.umlMDI.setBounds(outlineMDI.getWidth() + this.splitter.getWidth(), 0, this.getWidth() - outlineMDI.getWidth() - this.splitter.getWidth(), this.getHeight());			
+			}
 		}
+	}
+	
+	protected void requestSplitterMove(int x)
+	{
+		// if *PROJECTED/anticipated* move violates bounds THEN disallow move, otherwise grant
+		
+		if(splitter.getLocation().getX()+x-splitterLastClicked.x >= 100)
+		{
+			splitter.setLocation(splitter.getX() + x  - splitterLastClicked.x + 1, splitter.getY() );		
+		}
+		else
+		{
+			splitter.setLocation(100, splitter.getY());
+		}
+	}
+	
+	protected void splitterMoved()
+	{
+		outlineMDI.setSize(splitter.getX(), outlineMDI.getHeight());
+		umlMDI.setBounds(splitter.getX() + splitter.getWidth(), 0, getWidth() - outlineMDI.getWidth() - splitter.getWidth(), getHeight());		
+			
 	}
 }
 
@@ -119,8 +165,8 @@ class DomainModelSplitterMouseListener extends MouseAdapter
 	{
 		JPanel splitter = (JPanel)	e.getSource();
 		DomainModelExplorer parent = (DomainModelExplorer) splitter.getParent();
-		parent.outlineMDI.setSize(splitter.getX(), parent.outlineMDI.getHeight());
-		parent.umlMDI.setBounds(splitter.getX() + splitter.getWidth(), 0, parent.getWidth() - parent.outlineMDI.getWidth() - splitter.getWidth(), parent.getHeight());		
+		
+		parent.splitterMoved();
 	}
 }
 
@@ -131,8 +177,8 @@ class DomainModelSplitterMouseMotionListener extends MouseMotionAdapter
 		JPanel splitter = (JPanel)	e.getSource();
 		DomainModelExplorer parent = (DomainModelExplorer) splitter.getParent();
 		
-		splitter.setLocation(splitter.getX() + e.getX() - parent.splitterLastClicked.x, splitter.getY() );
-		//parent.outlineMDI.setSize(splitter.getX(), parent.outlineMDI.getHeight());
-		//parent.umlMDI.setBounds(splitter.getX() + splitter.getWidth(), 0, parent.getWidth() - parent.outlineMDI.getWidth() - splitter.getWidth(), parent.getHeight());
+		parent.requestSplitterMove(e.getX());
+		
+	
 	}
 }
