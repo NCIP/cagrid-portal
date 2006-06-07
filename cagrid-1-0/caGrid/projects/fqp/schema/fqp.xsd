@@ -1,0 +1,20 @@
+<xsd:schema targetNamespace="http://cagrid.nci.nih.gov/FQP"
+	attributeFormDefault="qualified"
+	elementFormDefault="qualified"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	xmlns:fqp="http://cagrid.nci.nih.gov/fqp"
+	xmlns:wsbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd">
+	
+	<xsd:element name="InvalidDCQLFault" minOccurs="0" maxOccurs="1" type="dcql:InvalidDCQLFaultType"/>
+	
+	 <xsd:complexType name="InvalidDCQLFaultType">
+				<xsd:complexContent>
+					<xsd:extension base="wsbf:BaseFaultType" />
+				</xsd:complexContent>
+	 </xsd:complexType>
+	 
+
+</xsd:schema>	 
+	 
+	
+	
