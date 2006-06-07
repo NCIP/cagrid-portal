@@ -23,6 +23,10 @@ public class SecureSampleProviderImpl{
 
 
 
+
+
+
+
 	public gov.nih.nci.cagrid.workflow.samples.secure.stubs.InvokeResponse invoke(gov.nih.nci.cagrid.workflow.samples.secure.stubs.InvokeRequest params) throws RemoteException {
 		gov.nih.nci.cagrid.workflow.samples.secure.stubs.InvokeResponse boxedResult = new gov.nih.nci.cagrid.workflow.samples.secure.stubs.InvokeResponse();
 		boxedResult.setResponse(impl.invoke(params.getString()));

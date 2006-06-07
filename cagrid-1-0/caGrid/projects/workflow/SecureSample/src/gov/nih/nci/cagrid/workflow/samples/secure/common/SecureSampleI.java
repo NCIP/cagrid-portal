@@ -14,6 +14,8 @@ public interface SecureSampleI {
 
 
 
+
+
      public java.lang.String invoke(java.lang.String string) throws RemoteException ;
 
 }

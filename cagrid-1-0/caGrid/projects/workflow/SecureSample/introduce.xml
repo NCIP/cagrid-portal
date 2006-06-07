@@ -23,9 +23,15 @@
     <ns6:TransportLevelSecurity xsi:type="ns6:TransportLevelSecurity">
      <ns6:CommunicationMethod xsi:type="ns6:CommunicationMethod">Integrity_Or_Privacy</ns6:CommunicationMethod>
     </ns6:TransportLevelSecurity>
+    <ns6:SecureConversation xsi:type="ns6:SecureConversation">
+     <ns6:CommunicationMethod xsi:type="ns6:CommunicationMethod">Integrity_Or_Privacy</ns6:CommunicationMethod>
+    </ns6:SecureConversation>
+    <ns6:SecureMessage xsi:type="ns6:SecureMessage">
+     <ns6:CommunicationMethod xsi:type="ns6:CommunicationMethod">Integrity_Or_Privacy</ns6:CommunicationMethod>
+    </ns6:SecureMessage>
     <ns6:ClientCommunication xsi:type="ns6:ClientCommunication">Transport_Layer_Security</ns6:ClientCommunication>
     <ns6:ClientAuthorization xsi:type="ns6:ClientAuthorization">
-     <ns6:NoAuthorization xsi:type="ns6:NoAuthorization"/>
+     <ns6:SelfAuthorization xsi:type="ns6:SelfAuthorization"/>
     </ns6:ClientAuthorization>
     <ns6:RunAsMode xsi:type="ns6:RunAsMode">System</ns6:RunAsMode>
     <ns6:DelegationMode xsi:type="ns6:DelegationMode">None</ns6:DelegationMode>
@@ -36,7 +42,9 @@
      </ns6:ProxyCredential>
     </ns6:ServiceCredentials>
     <ns6:ServiceAuthorization xsi:type="ns6:ServiceAuthorization">
-     <ns6:NoAuthorization xsi:type="ns6:NoAuthorization"/>
+     <ns6:GridMapAuthorization xsi:type="ns6:GridMapAuthorization">
+      <ns6:GridMapFileLocation xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">C:\Documents and Settings\madduri\My Documents\gridmap</ns6:GridMapFileLocation>
+     </ns6:GridMapAuthorization>
     </ns6:ServiceAuthorization>
    </ns6:ServiceSecurity>
   </ns3:Service>

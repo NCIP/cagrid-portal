@@ -97,6 +97,12 @@ public class SecureSampleClient implements SecureSampleI {
 
 
 
+
+
+
+
+
+
 	     public java.lang.String invoke(java.lang.String string) throws RemoteException {
                SecureSamplePortType port = this.getPortType();
                org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
@@ -110,7 +116,7 @@ try{
 throw new RemoteException(ex.getMessage());
 }
 }
-stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());
+stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.SelfAuthorization.getInstance());
                gov.nih.nci.cagrid.workflow.samples.secure.stubs.InvokeRequest params = new gov.nih.nci.cagrid.workflow.samples.secure.stubs.InvokeRequest();
                params.setString(string);
                gov.nih.nci.cagrid.workflow.samples.secure.stubs.InvokeResponse boxedResult = port.invoke(params);
