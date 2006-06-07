@@ -24,7 +24,8 @@
                 buildfile="build-caGrid-1.0-continuous.xml"
                 target="test"
                 uselogger="true"
-                usedebug="false"/> 
+                usedebug="false"
+                timeout="2000"/> 
         </schedule>
         
         <!-- directory to write build logs to --> 
@@ -78,7 +79,8 @@
                 target="test"
                 uselogger="true"
                 usedebug="false"
-                time="0400"/> 
+                time="0400"
+                timeout="2000"/> 
         </schedule>
         
         <!-- directory to write build logs to --> 
