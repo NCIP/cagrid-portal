@@ -31,6 +31,7 @@ public class PreferencesJTree extends JTree {
 		this.setModel(model);
 		root.setModel(model);
 		this.setCellRenderer(new PreferencesTreeRenderer(model));
+		this.setRootVisible(false);
 		expandAll(true);
 	}
 

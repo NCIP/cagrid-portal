@@ -148,6 +148,8 @@ public class PreferencesDialog extends JDialog {
 	private JScrollPane getPrefencesScrollPane() {
 		if (prefencesScrollPane == null) {
 			prefencesScrollPane = new JScrollPane();
+			prefencesScrollPane.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			prefencesScrollPane.setPreferredSize(new java.awt.Dimension(0,0));
 			prefencesScrollPane.setViewportView(getPreferencesTree());
 		}
 		return prefencesScrollPane;
@@ -176,6 +178,8 @@ public class PreferencesDialog extends JDialog {
 	private PreferencesJTree getPreferencesTree() {
 		if (preferencesTree == null) {
 			preferencesTree = new PreferencesJTree();
+			preferencesTree.setSize(new java.awt.Dimension(0,0));
+			preferencesTree.setPreferredSize(new java.awt.Dimension(0,0));
 			preferencesTree.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					super.mouseClicked(e);
@@ -219,7 +223,7 @@ public class PreferencesDialog extends JDialog {
 		if (preferneceConfigViewPanel == null) {
 			preferneceConfigViewPanel = new JPanel(new CardLayout());
 			preferneceConfigViewPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
-				"Preference Configureation", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				"Preference Configuration", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
 			addTreePanels((PreferencesTypeTreeNode) preferencesTree.getModel().getRoot());
 		}

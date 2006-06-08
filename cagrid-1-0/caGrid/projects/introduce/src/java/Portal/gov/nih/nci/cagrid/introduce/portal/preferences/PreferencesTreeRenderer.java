@@ -83,10 +83,16 @@ public class PreferencesTreeRenderer extends DefaultTreeCellRenderer {
 		this.setFont(normal);
 		if (value instanceof PreferencesTypeTreeNode) {
 			PreferencesTypeTreeNode node = (PreferencesTypeTreeNode) value;
+			this.setFont(normal.deriveFont(Font.BOLD, 12));
+			if(node.getPath().length>1){
+				this.setFont(normal.deriveFont(Font.PLAIN, 12));
+				if(node.getPath().length>1){
+					this.setFont(normal.deriveFont(Font.ITALIC, 12));
+				}
+			}
 			this.setOpenIcon(null);
 			this.setClosedIcon(null);
 			this.setText(node.toString());
-			this.setFont(normal.deriveFont(Font.BOLD, 15));
 		}
 		return this;
 	}

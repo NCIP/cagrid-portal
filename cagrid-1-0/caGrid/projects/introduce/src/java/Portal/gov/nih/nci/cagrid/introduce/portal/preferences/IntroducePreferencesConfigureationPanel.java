@@ -6,6 +6,8 @@ import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import org.projectmobius.portal.PortalResourceManager;
+
 public class IntroducePreferencesConfigureationPanel extends
 		BasePreferenceConfigurationPanel {
 	
@@ -42,8 +44,6 @@ public class IntroducePreferencesConfigureationPanel extends
 	}
 
 	public void apply() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	/**

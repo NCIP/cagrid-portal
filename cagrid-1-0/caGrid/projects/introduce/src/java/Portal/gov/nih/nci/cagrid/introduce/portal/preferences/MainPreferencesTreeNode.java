@@ -11,7 +11,7 @@ public class MainPreferencesTreeNode extends PreferencesTypeTreeNode {
 
 	public PreferenceConfigurationContainerPanel getConfigurationPanel() {
 		return new PreferenceConfigurationContainerPanel(
-				new PreferencesConfigureationPanelAdapter());
+				new PreferencesConfigurationPanelAdapter());
 	}
 
 	public void initialize() {

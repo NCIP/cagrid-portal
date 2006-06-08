@@ -2,12 +2,12 @@ package gov.nih.nci.cagrid.introduce.portal.preferences;
 
 import javax.swing.JLabel;
 
-public class PreferencesConfigureationPanelAdapter extends
+public class PreferencesConfigurationPanelAdapter extends
 		BasePreferenceConfigurationPanel {
 	
 	private JLabel prefsLabel = null;
 
-	public PreferencesConfigureationPanelAdapter(){
+	public PreferencesConfigurationPanelAdapter(){
 		super();
 		initialize();
 	}
