@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.data.common;
+package gov.nih.nci.cagrid.introduce.extension.utils;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -23,7 +23,7 @@ import org.projectmobius.common.XMLUtilities;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Jun 7, 2006 
- * @version $Id$ 
+ * @version $Id: ExtensionUtilities.java,v 1.1 2006-06-08 20:07:46 oster Exp $ 
  */
 public class ExtensionUtilities {
 

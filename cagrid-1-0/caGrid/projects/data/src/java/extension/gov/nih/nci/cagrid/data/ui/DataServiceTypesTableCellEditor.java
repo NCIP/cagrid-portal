@@ -16,32 +16,33 @@ import javax.swing.table.TableCellEditor;
 
 import org.projectmobius.portal.PortalResourceManager;
 
-/** 
- *  DataServiceTypesTableCellEditor
- *  Cell editor for the data service types table
+
+/**
+ * DataServiceTypesTableCellEditor Cell editor for the data service types table
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
- * @created Apr 7, 2006 
- * @version $Id$ 
+ * @created Apr 7, 2006
+ * @version $Id$
  */
 public class DataServiceTypesTableCellEditor implements TableCellEditor {
 	private List editorListeners = null;
 	private TypeSerializationConfigDialog dialog = null;
 	private ChangeEvent changeEvent = null;
-	
+
+
 	public DataServiceTypesTableCellEditor() {
 		changeEvent = new ChangeEvent(this);
 		editorListeners = new LinkedList();
 	}
-	
+
 
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 		// TODO: make the constructor take the right serialization mapping
 		DataServiceTypesTable typesTable = (DataServiceTypesTable) table;
-		SerializationMapping mapping = (SerializationMapping) typesTable.getSerializationMappings().get(typesTable.getSelectedRow());
-		PortalResourceManager.getInstance().getGridPortal()
-			.addGridPortalComponent(new TypeSerializationConfigDialog(typesTable, mapping));
+		SerializationMapping mapping = (SerializationMapping) typesTable.getSerializationMappings().get(
+			typesTable.getSelectedRow());
+		PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+			new TypeSerializationConfigDialog(typesTable, mapping));
 		return (Component) value;
 	}
 
@@ -79,12 +80,13 @@ public class DataServiceTypesTableCellEditor implements TableCellEditor {
 		if (anEvent instanceof MouseEvent) {
 			MouseEvent mouseEvent = (MouseEvent) anEvent;
 			if (SwingUtilities.isLeftMouseButton(mouseEvent)) {
-				Component potentialButton = SwingUtilities.getDeepestComponentAt(
-					(Component) anEvent.getSource(), mouseEvent.getX(), mouseEvent.getY());
+				Component potentialButton = SwingUtilities.getDeepestComponentAt((Component) anEvent.getSource(),
+					mouseEvent.getX(), mouseEvent.getY());
 				if (potentialButton != null && potentialButton instanceof JButton) {
 					JButton button = (JButton) potentialButton;
 					DataServiceTypesTable table = (DataServiceTypesTable) anEvent.getSource();
-					dialog = new TypeSerializationConfigDialog(table, (SerializationMapping) table.getSerializationMappings().get(table.getSelectedRow()));;
+					dialog = new TypeSerializationConfigDialog(table, (SerializationMapping) table
+						.getSerializationMappings().get(table.getSelectedRow()));
 				}
 			}
 		}
@@ -100,16 +102,16 @@ public class DataServiceTypesTableCellEditor implements TableCellEditor {
 	public void removeCellEditorListener(CellEditorListener l) {
 		editorListeners.remove(l);
 	}
-	
-	
+
+
 	protected synchronized void fireEditingCanceled() {
 		Iterator iter = editorListeners.iterator();
 		while (iter.hasNext()) {
 			((CellEditorListener) iter.next()).editingCanceled(changeEvent);
 		}
 	}
-	
-	
+
+
 	protected synchronized void fireEditingStopped() {
 		Iterator iter = editorListeners.iterator();
 		while (iter.hasNext()) {

@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.data.common;
+package gov.nih.nci.cagrid.introduce.extension.utils;
 
 import org.apache.axis.message.MessageElement;
 import org.jdom.Document;
@@ -14,7 +14,7 @@ import org.jdom.output.DOMOutputter;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created May 9, 2006 
- * @version $Id$ 
+ * @version $Id: AxisJdomUtils.java,v 1.1 2006-06-08 20:07:46 oster Exp $ 
  */
 public class AxisJdomUtils {
 

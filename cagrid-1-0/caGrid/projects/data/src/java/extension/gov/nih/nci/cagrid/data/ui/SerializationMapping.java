@@ -1,9 +1,9 @@
 package gov.nih.nci.cagrid.data.ui;
 
-import java.util.Vector;
-
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
+
+import java.util.Vector;
 
 /** 
  *  SerializationMapping
