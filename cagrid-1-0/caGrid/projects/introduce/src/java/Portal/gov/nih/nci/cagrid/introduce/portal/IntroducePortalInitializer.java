@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.portal.help.IntroduceHelp;
+import gov.nih.nci.cagrid.introduce.portal.preferences.PreferencesDialog;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -33,9 +34,11 @@ public class IntroducePortalInitializer implements GridPortalInitializer {
 		JMenu configMenu = PortalResourceManager.getInstance().getGridPortal()
 				.getJMenuBar().getMenu(CONFIG_MENU);
 		JMenuItem configMenuItem = new JMenuItem("Preferences");
+		final PreferencesDialog preferences = new PreferencesDialog();
 		configMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// user want to configure preferences....
+				preferences.setVisible(true);
 			}
 
 		});
