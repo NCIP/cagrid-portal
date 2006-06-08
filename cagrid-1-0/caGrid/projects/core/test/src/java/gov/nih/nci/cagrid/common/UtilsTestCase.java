@@ -3,7 +3,7 @@ package gov.nih.nci.cagrid.common;
 import junit.framework.TestCase;
 
 
-public class UtilsTest extends TestCase {
+public class UtilsTestCase extends TestCase {
 
 	String a1 = "a";
 	String a2 = "a";
