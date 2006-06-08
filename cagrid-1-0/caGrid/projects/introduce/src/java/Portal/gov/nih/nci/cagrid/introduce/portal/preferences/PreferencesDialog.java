@@ -184,7 +184,6 @@ public class PreferencesDialog extends JDialog {
 					if (nodes.size() >= 1) {
 						((CardLayout) getPreferneceConfigViewPanel().getLayout()).show(getPreferneceConfigViewPanel(),
 							((PreferencesTypeTreeNode) nodes.get(0)).getName());
-						System.out.println("Showing : " + ((PreferencesTypeTreeNode) nodes.get(0)).getName());
 					}
 				}
 			});
