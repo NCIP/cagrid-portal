@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.data.ui.types;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
-import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import java.awt.Component;
 import java.awt.Container;
