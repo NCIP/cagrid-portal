@@ -25,14 +25,8 @@ import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 import gov.nih.nci.cagrid.metadata.ServiceMetadataServiceDescription;
 import gov.nih.nci.cagrid.metadata.service.Service;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -42,18 +36,18 @@ import javax.xml.namespace.QName;
 
 import org.projectmobius.tools.common.viewer.XSDFileFilter;
 
-/** 
- *  DataServiceCreationPostProcessor
- *  Creation post-processor for data services
+
+/**
+ * DataServiceCreationPostProcessor Creation post-processor for data services
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
- * @created Mar 29, 2006 
- * @version $Id$ 
+ * @created Mar 29, 2006
+ * @version $Id$
  */
 public class DataServiceCreationPostProcessor implements CreationExtensionPostProcessor {
-	
-	public void postCreate(ServiceDescription serviceDescription, Properties serviceProperties) throws CreationExtensionException {
+
+	public void postCreate(ServiceDescription serviceDescription, Properties serviceProperties)
+		throws CreationExtensionException {
 		// apply data service requirements to it
 		try {
 			System.out.println("Adding data service components to template");
@@ -63,21 +57,24 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 			throw new CreationExtensionException("Error adding data service components to template!", ex);
 		}
 	}
-	
-	
+
+
 	private void makeDataService(ServiceDescription description, Properties props) throws Exception {
 		// get the data service itself
 		String serviceName = props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
 		ServiceType dataService = CommonTools.getService(description.getServices(), serviceName);
-		
-		// grab cql query and result set schemas and move them into the service's directory
+
+		// grab cql query and result set schemas and move them into the
+		// service's directory
 		String schemaDir = getServiceSchemaDir(props);
 		System.out.println("Copying schemas to " + schemaDir);
-		File extensionSchemaDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data" + File.separator + "schema"); 
+		File extensionSchemaDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data"
+			+ File.separator + "schema");
 		List schemaFiles = Utils.recursiveListFiles(extensionSchemaDir, new XSDFileFilter());
 		for (int i = 0; i < schemaFiles.size(); i++) {
 			File schemaFile = (File) schemaFiles.get(i);
-			String subname = schemaFile.getCanonicalPath().substring(extensionSchemaDir.getCanonicalPath().length() + File.separator.length());
+			String subname = schemaFile.getCanonicalPath().substring(
+				extensionSchemaDir.getCanonicalPath().length() + File.separator.length());
 			copySchema(subname, schemaDir);
 		}
 		// copy libraries for data services into the new DS's lib directory
@@ -91,18 +88,24 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		// add some namespaces to the service
 		List dsNamespaces = new ArrayList(Arrays.asList(namespaces.getNamespace()));
 		// query namespace
-		NamespaceType queryNamespace = CommonTools.createNamespaceType(schemaDir + File.separator + DataServiceConstants.CQL_QUERY_SCHEMA);
+		NamespaceType queryNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
+			+ DataServiceConstants.CQL_QUERY_SCHEMA);
 		queryNamespace.setLocation("." + File.separator + DataServiceConstants.CQL_QUERY_SCHEMA);
 		// query result namespace
-		NamespaceType resultNamespace = CommonTools.createNamespaceType(schemaDir + File.separator + DataServiceConstants.CQL_RESULT_SET_SCHEMA);
+		NamespaceType resultNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
+			+ DataServiceConstants.CQL_RESULT_SET_SCHEMA);
 		resultNamespace.setLocation("." + File.separator + DataServiceConstants.CQL_RESULT_SET_SCHEMA);
 		// ds metadata namespace
-		NamespaceType dsMetadataNamespace = CommonTools.createNamespaceType(schemaDir + File.separator + DataServiceConstants.DATA_METADATA_SCHEMA);
+		NamespaceType dsMetadataNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
+			+ DataServiceConstants.DATA_METADATA_SCHEMA);
 		dsMetadataNamespace.setLocation("." + File.separator + DataServiceConstants.DATA_METADATA_SCHEMA);
 		// caGrid metadata namespace
-		NamespaceType cagridMdNamespace = CommonTools.createNamespaceType(schemaDir + File.separator + DataServiceConstants.CAGRID_METADATA_SCHEMA);
+		NamespaceType cagridMdNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
+			+ DataServiceConstants.CAGRID_METADATA_SCHEMA);
 		cagridMdNamespace.setLocation("." + File.separator + DataServiceConstants.CAGRID_METADATA_SCHEMA);
-		cagridMdNamespace.setGenerateStubs(Boolean.FALSE); // prevent these beans from being built!
+		cagridMdNamespace.setGenerateStubs(Boolean.FALSE); // prevent these
+		// beans from being
+		// built!
 		// add those new namespaces to the list of namespace types
 		dsNamespaces.add(queryNamespace);
 		dsNamespaces.add(resultNamespace);
@@ -125,24 +128,21 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		MethodTypeInputsInput queryInput = new MethodTypeInputsInput();
 		queryInput.setName(DataServiceConstants.QUERY_METHOD_PARAMETER_NAME);
 		queryInput.setIsArray(false);
-		QName queryQname = new QName(queryNamespace.getNamespace(), 
-			queryNamespace.getSchemaElement(0).getType());
+		QName queryQname = new QName(queryNamespace.getNamespace(), queryNamespace.getSchemaElement(0).getType());
 		queryInput.setQName(queryQname);
-		inputs.setInput(new MethodTypeInputsInput[] {queryInput});
+		inputs.setInput(new MethodTypeInputsInput[]{queryInput});
 		queryMethod.setInputs(inputs);
 		// method output
 		MethodTypeOutput output = new MethodTypeOutput();
 		output.setIsArray(false);
-		QName resultSetQName = new QName(resultNamespace.getNamespace(),
-			resultNamespace.getSchemaElement(0).getType());
+		QName resultSetQName = new QName(resultNamespace.getNamespace(), resultNamespace.getSchemaElement(0).getType());
 		output.setQName(resultSetQName);
 		queryMethod.setOutput(output);
 		// exceptions on query method
 		MethodTypeExceptions queryExceptions = new MethodTypeExceptions();
 		MethodTypeExceptionsException[] exceptions = {
-			new MethodTypeExceptionsException(DataServiceConstants.QUERY_METHOD_EXCEPTIONS[0]),
-			new MethodTypeExceptionsException(DataServiceConstants.QUERY_METHOD_EXCEPTIONS[1])
-		};
+				new MethodTypeExceptionsException(DataServiceConstants.QUERY_METHOD_EXCEPTIONS[0]),
+				new MethodTypeExceptionsException(DataServiceConstants.QUERY_METHOD_EXCEPTIONS[1])};
 		queryExceptions.setException(exceptions);
 		queryMethod.setExceptions(queryExceptions);
 		// add query method to methods array
@@ -156,12 +156,12 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		dsMethods[dsMethods.length - 1] = queryMethod;
 		methods.setMethod(dsMethods);
 		dataService.setMethods(methods);
-		
+
 		// add the service metadata
 		addServiceMetadata(description);
 	}
-	
-	
+
+
 	private void addServiceMetadata(ServiceDescription desc) {
 		ResourcePropertyType serviceMetadata = new ResourcePropertyType();
 		serviceMetadata.setPopulateFromFile(false); // no metadata file yet...
@@ -179,7 +179,7 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		}
 		ResourcePropertyType[] metadataArray = propsList.getResourceProperty();
 		if (metadataArray == null || metadataArray.length == 0) {
-			metadataArray = new ResourcePropertyType[] {serviceMetadata};
+			metadataArray = new ResourcePropertyType[]{serviceMetadata};
 		} else {
 			ResourcePropertyType[] tmpArray = new ResourcePropertyType[metadataArray.length + 1];
 			System.arraycopy(metadataArray, 0, tmpArray, 0, metadataArray.length);
@@ -188,28 +188,29 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		}
 		propsList.setResourceProperty(metadataArray);
 	}
-	
-	
+
+
 	private String getServiceSchemaDir(Properties props) {
-		return props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator 
-			+ "schema" + File.separator + props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
+		return props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "schema"
+			+ File.separator + props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
 	}
-	
-	
+
+
 	private String getServiceLibDir(Properties props) {
 		return props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "lib";
 	}
-	
-	
+
+
 	private void copySchema(String schemaName, String outputDir) throws Exception {
-		File schemaFile = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data" + File.separator + "schema" + File.separator + schemaName);
+		File schemaFile = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data" + File.separator
+			+ "schema" + File.separator + schemaName);
 		System.out.println("Copying schema from " + schemaFile.getAbsolutePath());
 		File outputFile = new File(outputDir + File.separator + schemaName);
 		System.out.println("Saving schema to " + outputFile.getAbsolutePath());
-		copyFile(schemaFile, outputFile);
+		Utils.copyFile(schemaFile, outputFile);
 	}
-	
-	
+
+
 	private void copyLibraries(Properties props) throws Exception {
 		String toDir = getServiceLibDir(props);
 		File directory = new File(toDir);
@@ -221,10 +222,9 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		File[] libs = libDir.listFiles(new FileFilter() {
 			public boolean accept(File pathname) {
 				String name = pathname.getName();
-				return (name.endsWith(".jar") && (
-					name.startsWith("caGrid-data-1.0") || name.startsWith("castor") ||
-					name.startsWith("client") || name.startsWith("caGrid-caDSR") ||
-					name.startsWith("caGrid-metadata") || name.startsWith("caGrid-core")));
+				return (name.endsWith(".jar") && (name.startsWith("caGrid-data-1.0") || name.startsWith("castor")
+					|| name.startsWith("client") || name.startsWith("caGrid-caDSR")
+					|| name.startsWith("caGrid-metadata") || name.startsWith("caGrid-core")));
 			}
 		});
 		File[] copiedLibs = new File[libs.length];
@@ -232,33 +232,16 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 			for (int i = 0; i < libs.length; i++) {
 				File outFile = new File(toDir + File.separator + libs[i].getName());
 				copiedLibs[i] = outFile;
-				copyFile(libs[i], outFile);
+				Utils.copyFile(libs[i], outFile);
 			}
 		}
 		modifyClasspathFile(copiedLibs, props);
 	}
-	
-	
+
+
 	private void modifyClasspathFile(File[] libs, Properties props) throws Exception {
-		File classpathFile = new File(props.getProperty(
-			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + ".classpath");
+		File classpathFile = new File(props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
+			+ File.separator + ".classpath");
 		ExtensionUtilities.syncEclipseClasspath(classpathFile, libs);
-	}
-	
-	
-	private void copyFile(File inputFile, File outputFile) throws FileNotFoundException, IOException {
-		if (!outputFile.getParentFile().exists()) {
-			outputFile.getParentFile().mkdirs();
-		}
-		BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(inputFile));
-		BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(outputFile));
-		byte[] buff = new byte[1024];
-		int len = -1;
-		while ((len = inputStream.read(buff)) != -1) {
-			outputStream.write(buff, 0, len);
-		}
-		inputStream.close();
-		outputStream.flush();
-		outputStream.close();
 	}
 }
