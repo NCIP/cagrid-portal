@@ -53,13 +53,25 @@ public class MDIPanel extends JComponent
 	
 	public void removePage(int i)
 	{
-		
+		if(i < this.pages.size() && i >= 0)
+		{	
+					
+			this.pages.remove(i);
+			this.pageIcons.remove(i);
+			this.pageTitles.remove(i);
+			this.pageIDs.remove(i);
+			
+			this.tabs.tabsPane.removeTab(i);
+			this.container.removeComponent(i);
+			
+			this.setActivePage(0);
+		}
 	}
 	
 	public void removeCurrentPage()
 	{
-		
-		
+		System.out.println(currentPage);
+		removePage(currentPage);
 	}
 	
 	public void setActivePage(int i)
@@ -71,6 +83,8 @@ public class MDIPanel extends JComponent
 			this.tabs.setActiveTab(i);
 			this.container.showComponent(i);
 		}
+		
+		tabs.scrollToPosition(10);
 		
 	}
 	

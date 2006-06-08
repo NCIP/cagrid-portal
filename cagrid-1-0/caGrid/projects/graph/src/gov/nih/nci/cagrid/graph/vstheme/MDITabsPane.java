@@ -76,9 +76,11 @@ public class MDITabsPane extends JLayeredPane
 	{
 		for(int k = 0; k < this.tabs.size(); k++)
 		{
+			
 			MDITab tab = (MDITab) this.tabs.get(k);
 			
 			tab.index = k;
+			
 		}
 	}
 	public void setActiveTab(int i)
