@@ -487,6 +487,7 @@ public class CreationViewer extends GridPortalComponent {
 						p.waitFor();
 						if (p.exitValue() != 0) {
 							setErrorMessage("Error creating new service!");
+							return;
 						}
 
 						setProgressText("Invoking extension viewers...");
@@ -505,6 +506,7 @@ public class CreationViewer extends GridPortalComponent {
 							JDialog extDialog = ExtensionTools.getCreationUIDialog(edt.getName(), info);
 							if (extDialog != null) {
 								extDialog.setVisible(true);
+								return;
 							}
 						}
 
@@ -515,6 +517,7 @@ public class CreationViewer extends GridPortalComponent {
 						p.waitFor();
 						if (p.exitValue() != 0) {
 							setErrorMessage("Error during service post creations!");
+							return;
 						}
 
 						setProgressText("Building created service...");
@@ -528,10 +531,12 @@ public class CreationViewer extends GridPortalComponent {
 								new ModificationViewer(new File(dirName)));
 						} else {
 							setErrorMessage("Error creating new service!");
+							return;
 						}
 					} catch (Exception ex) {
 						ex.printStackTrace();
 						setErrorMessage("Error: " + ex.getMessage());
+						return;
 					}
 				}
 			};
