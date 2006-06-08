@@ -17,7 +17,6 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
-import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionPostProcessor;
@@ -36,11 +35,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 
 import javax.xml.namespace.QName;
 
@@ -116,18 +112,6 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		dsNamespaces.toArray(nsArray);
 		namespaces.setNamespace(nsArray);
 		description.setNamespaces(namespaces);
-		// add the metadata namespace to the nsexcludes property
-		System.out.println("Excluding metadata namespace from processing");
-		String excludes = props.getProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES);
-		Set excludeNamespaces = new HashSet();
-		File dataSchemaFile = new File(schemaDir + File.separator + DataServiceConstants.DATA_METADATA_SCHEMA);
-		TemplateUtils.walkSchemasGetNamespaces(dataSchemaFile.getCanonicalPath(), excludeNamespaces);
-		Iterator excludeIter = excludeNamespaces.iterator();
-		while (excludeIter.hasNext()) {
-			String namespace = (String) excludeIter.next();
-			excludes += " -x " + namespace;
-		}
-		props.setProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES, excludes);
 		// query method
 		System.out.println("Building query method");
 		MethodsType methods = dataService.getMethods();
