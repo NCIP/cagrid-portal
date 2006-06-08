@@ -35,6 +35,7 @@ import javax.swing.JTextField;
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
 
+
 /**
  * CreationViewer
  * 
@@ -101,10 +102,12 @@ public class CreationViewer extends GridPortalComponent {
 
 	private JLabel downExtensionLabel = null;
 
+
 	public CreationViewer() {
 		super();
 		initialize();
 	}
+
 
 	/**
 	 * This method initializes this
@@ -117,6 +120,7 @@ public class CreationViewer extends GridPortalComponent {
 		this.setFrameIcon(IntroduceLookAndFeel.getCreateServiceIcon());
 		this.setTitle("Create Grid Service");
 	}
+
 
 	/**
 	 * This method initializes jPanel
@@ -159,11 +163,9 @@ public class CreationViewer extends GridPortalComponent {
 			gridBagConstraints10.gridx = 1;
 			inputPanel = new JPanel();
 			inputPanel.setLayout(new GridBagLayout());
-			inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, "Create Grid Service",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					PortalLookAndFeel.getPanelLabelColor()));
+			inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Create Grid Service",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			packageLabel = new JLabel();
 			packageLabel.setText("Package");
 			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
@@ -237,6 +239,7 @@ public class CreationViewer extends GridPortalComponent {
 		return inputPanel;
 	}
 
+
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -267,6 +270,7 @@ public class CreationViewer extends GridPortalComponent {
 		return mainPanel;
 	}
 
+
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -280,6 +284,7 @@ public class CreationViewer extends GridPortalComponent {
 		}
 		return buttonPanel;
 	}
+
 
 	/**
 	 * This method initializes jButton
@@ -301,6 +306,7 @@ public class CreationViewer extends GridPortalComponent {
 		return createButton;
 	}
 
+
 	/**
 	 * This method initializes serviceStyleSeletor
 	 * 
@@ -311,16 +317,15 @@ public class CreationViewer extends GridPortalComponent {
 			serviceStyleSeletor = new JComboBox();
 			serviceStyleSeletor.addItem("NONE");
 
-			List extensionDescriptors = ExtensionsLoader.getInstance()
-					.getServiceExtensions();
+			List extensionDescriptors = ExtensionsLoader.getInstance().getServiceExtensions();
 			for (int i = 0; i < extensionDescriptors.size(); i++) {
-				ServiceExtensionDescriptionType ex = (ServiceExtensionDescriptionType) extensionDescriptors
-						.get(i);
+				ServiceExtensionDescriptionType ex = (ServiceExtensionDescriptionType) extensionDescriptors.get(i);
 				serviceStyleSeletor.addItem(ex.getDisplayName());
 			}
 		}
 		return serviceStyleSeletor;
 	}
+
 
 	/**
 	 * This method initializes service
@@ -335,6 +340,7 @@ public class CreationViewer extends GridPortalComponent {
 		return service;
 	}
 
+
 	/**
 	 * This method initializes jTextField
 	 * 
@@ -347,6 +353,7 @@ public class CreationViewer extends GridPortalComponent {
 		}
 		return dir;
 	}
+
 
 	/**
 	 * This method initializes jButton
@@ -361,8 +368,7 @@ public class CreationViewer extends GridPortalComponent {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
 						String previous = getDir().getText();
-						String location = ResourceManager.promptDir(
-								CreationViewer.this, previous);
+						String location = ResourceManager.promptDir(CreationViewer.this, previous);
 						if (location != null && location.length() > 0) {
 							getDir().setText(location);
 						} else {
@@ -377,6 +383,7 @@ public class CreationViewer extends GridPortalComponent {
 		return dirButton;
 	}
 
+
 	/**
 	 * This method initializes servicePackage
 	 * 
@@ -390,6 +397,7 @@ public class CreationViewer extends GridPortalComponent {
 		return servicePackage;
 	}
 
+
 	/**
 	 * This method initializes namespaceDomain
 	 * 
@@ -402,6 +410,7 @@ public class CreationViewer extends GridPortalComponent {
 		}
 		return namespaceDomain;
 	}
+
 
 	/**
 	 * This method initializes closeButton
@@ -422,24 +431,23 @@ public class CreationViewer extends GridPortalComponent {
 		return closeButton;
 	}
 
+
 	private void createService() {
 		int doIdeleteResult = JOptionPane.OK_OPTION;
 		final File dirFile = new File(getDir().getText());
 		if (dirFile.exists() && dirFile.list().length != 0) {
-			doIdeleteResult = JOptionPane
-					.showConfirmDialog(
-							this,
-							"The creation directory is not empty.  All information in the directory will be lost.",
-							"Confirm Overwrite", JOptionPane.YES_NO_OPTION);
+			doIdeleteResult = JOptionPane.showConfirmDialog(this, "The creation directory ("
+				+ dirFile.getAbsolutePath() + ") is not empty.  All information in the directory will be lost.",
+				"Confirm Overwrite", JOptionPane.YES_NO_OPTION);
 		}
 
 		if (doIdeleteResult == JOptionPane.OK_OPTION) {
-			BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager
-					.getInstance().getGridPortal(), "Creating") {
+			BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance().getGridPortal(),
+				"Creating") {
 				public void process() {
 					try {
 						if (dirFile.exists()) {
-							setProgressText("deleting existing directory");
+							setProgressText("Deleting existing directory...");
 							boolean deleted = Utils.deleteDir(dirFile);
 							if (!deleted) {
 								setErrorMessage("Unable to delete creation directory");
@@ -447,9 +455,7 @@ public class CreationViewer extends GridPortalComponent {
 							}
 						}
 
-						setProgressText("caching directory location");
-
-						setProgressText("validating");
+						setProgressText("Validating service name...");
 						String serviceName = getService().getText();
 						String dirName = getDir().getText();
 						String packageName = getServicePackage().getText();
@@ -457,84 +463,72 @@ public class CreationViewer extends GridPortalComponent {
 						// String templateFilename =
 						// getMethodsTemplateFile().getText();
 						if (!CommonTools.isValidServiceName(serviceName)) {
-							setErrorMessage("Service Name is not valid.  Service name must be a java compatible class name. (" + CommonTools.ALLOWED_JAVA_NAME_REGEX + ")");
+							setErrorMessage("Service Name is not valid.  Service name must be a java compatible class name. ("
+								+ CommonTools.ALLOWED_JAVA_NAME_REGEX + ")");
 							return;
 						}
 
-						setProgressText("purging old archives");
+						setProgressText("Purging old archives...");
 						ResourceManager.purgeArchives(serviceName);
 
-						// only supporting one for now.....
 						String serviceExtensions = "";
 						for (int i = 0; i < getExtensionsTable().getRowCount(); i++) {
-							ServiceExtensionDescriptionType edt = ExtensionsLoader
-									.getInstance()
-									.getServiceExtensionByDisplayName(
-											getExtensionsTable().getRowData(i));
+							ServiceExtensionDescriptionType edt = ExtensionsLoader.getInstance()
+								.getServiceExtensionByDisplayName(getExtensionsTable().getRowData(i));
 							serviceExtensions += edt.getName();
 							if (i < getExtensionsTable().getRowCount() - 1) {
 								serviceExtensions += ",";
 							}
 						}
-						setProgressText("creating");
-						String cmd = CommonTools.getAntSkeletonCreationCommand(
-								".", serviceName, dirName, packageName,
-								serviceNsDomain, serviceExtensions);
+						setProgressText("Creating service...");
+						String cmd = CommonTools.getAntSkeletonCreationCommand(".", serviceName, dirName, packageName,
+							serviceNsDomain, serviceExtensions);
 						Process p = CommonTools.createAndOutputProcess(cmd);
 						p.waitFor();
 						if (p.exitValue() != 0) {
 							setErrorMessage("Error creating new service!");
 						}
 
-						setProgressText("running extension viewers");
+						setProgressText("Invoking extension viewers...");
 						Properties properties = new Properties();
-						properties
-								.load(new FileInputStream(
-										getDir().getText()
-												+ File.separator
-												+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE));
-						ServiceDescription introService = (ServiceDescription) Utils
-								.deserializeDocument(
-										getDir().getText()
-												+ File.separator
-												+ IntroduceConstants.INTRODUCE_XML_FILE,
-										ServiceDescription.class);
-						ServiceInformation info = new ServiceInformation(
-								introService, properties, new File(getDir()
-										.getText()));
-						if (!serviceExtensions.equals("")) {
-							JDialog extDialog = ExtensionTools
-									.getCreationUIDialog(serviceExtensions,
-											info);
+						properties.load(new FileInputStream(getDir().getText() + File.separator
+							+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE));
+						ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(getDir()
+							.getText()
+							+ File.separator + IntroduceConstants.INTRODUCE_XML_FILE, ServiceDescription.class);
+						ServiceInformation info = new ServiceInformation(introService, properties, new File(getDir()
+							.getText()));
+
+						for (int i = 0; i < getExtensionsTable().getRowCount(); i++) {
+							ServiceExtensionDescriptionType edt = ExtensionsLoader.getInstance()
+								.getServiceExtensionByDisplayName(getExtensionsTable().getRowData(i));
+							JDialog extDialog = ExtensionTools.getCreationUIDialog(edt.getName(), info);
 							if (extDialog != null) {
 								extDialog.setVisible(true);
 							}
 						}
-						
-						setProgressText("post creation");
-						cmd = CommonTools.getAntSkeletonPostCreationCommand(
-								".", serviceName, dirName, packageName,
-								serviceNsDomain, serviceExtensions);
+
+						setProgressText("Invoking post creation processes...");
+						cmd = CommonTools.getAntSkeletonPostCreationCommand(".", serviceName, dirName, packageName,
+							serviceNsDomain, serviceExtensions);
 						p = CommonTools.createAndOutputProcess(cmd);
 						p.waitFor();
 						if (p.exitValue() != 0) {
-							setErrorMessage("Error post creating new service!");
+							setErrorMessage("Error during service post creations!");
 						}
 
-						setProgressText("building");
+						setProgressText("Building created service...");
 						cmd = CommonTools.getAntCompileCommand(dirName);
 						p = CommonTools.createAndOutputProcess(cmd);
 						p.waitFor();
 						if (p.exitValue() == 0) {
-							PortalResourceManager.getInstance().getGridPortal()
-									.addGridPortalComponent(
-											new ModificationViewer(new File(
-													dirName)));
+							setProgressText("Launching modification viewer...");
 							dispose();
+							PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+								new ModificationViewer(new File(dirName)));
 						} else {
 							setErrorMessage("Error creating new service!");
 						}
-
 					} catch (Exception ex) {
 						ex.printStackTrace();
 						setErrorMessage("Error: " + ex.getMessage());
@@ -547,6 +541,7 @@ public class CreationViewer extends GridPortalComponent {
 
 		}
 	}
+
 
 	/**
 	 * This method initializes extensionsPanel
@@ -580,25 +575,18 @@ public class CreationViewer extends GridPortalComponent {
 			gridBagConstraints15.insets = new java.awt.Insets(2, 2, 2, 2);
 			extensionsPanel = new JPanel();
 			extensionsPanel.setLayout(new GridBagLayout());
-			extensionsPanel
-					.setBorder(javax.swing.BorderFactory
-							.createTitledBorder(
-									null,
-									"Service Extensions",
-									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, IntroduceLookAndFeel
-											.getPanelLabelColor()));
+			extensionsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service Extensions",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
 			extensionsPanel.add(getServiceStyleSeletor(), gridBagConstraints15);
-			extensionsPanel.add(getRemoveExtensionButton(),
-					gridBagConstraints16);
+			extensionsPanel.add(getRemoveExtensionButton(), gridBagConstraints16);
 			extensionsPanel.add(getExtensionsTable(), gridBagConstraints19);
 			extensionsPanel.add(getAddExtensionButton(), gridBagConstraints13);
-			extensionsPanel.add(getExtensionsTableionsTablePanel(),
-					gridBagConstraints20);
+			extensionsPanel.add(getExtensionsTableionsTablePanel(), gridBagConstraints20);
 		}
 		return extensionsPanel;
 	}
+
 
 	/**
 	 * This method initializes addExtensionButton
@@ -613,10 +601,8 @@ public class CreationViewer extends GridPortalComponent {
 
 				public void mouseClicked(MouseEvent e) {
 					super.mouseClicked(e);
-					if (!((String) serviceStyleSeletor.getSelectedItem())
-							.equals("NONE")) {
-						getExtensionsTable().addRow(
-								(String) serviceStyleSeletor.getSelectedItem());
+					if (!((String) serviceStyleSeletor.getSelectedItem()).equals("NONE")) {
+						getExtensionsTable().addRow((String) serviceStyleSeletor.getSelectedItem());
 					}
 				}
 
@@ -624,6 +610,7 @@ public class CreationViewer extends GridPortalComponent {
 		}
 		return addExtensionButton;
 	}
+
 
 	/**
 	 * This method initializes removeExtensionButton
@@ -651,6 +638,7 @@ public class CreationViewer extends GridPortalComponent {
 		return removeExtensionButton;
 	}
 
+
 	/**
 	 * This method initializes extensionsScrollPane
 	 * 
@@ -664,6 +652,7 @@ public class CreationViewer extends GridPortalComponent {
 		return extensionsScrollPane;
 	}
 
+
 	/**
 	 * This method initializes extensionsTable
 	 * 
@@ -672,10 +661,11 @@ public class CreationViewer extends GridPortalComponent {
 	private ExtensionsTable getExtensionsTable() {
 		if (extensionsTable == null) {
 			extensionsTable = new ExtensionsTable();
-			extensionsTable.setPreferredSize(new java.awt.Dimension(100,150));
+			extensionsTable.setPreferredSize(new java.awt.Dimension(100, 150));
 		}
 		return extensionsTable;
 	}
+
 
 	/**
 	 * This method initializes jPanel
@@ -728,8 +718,7 @@ public class CreationViewer extends GridPortalComponent {
 			gridBagConstraints18.gridx = 0;
 			extensionsTablePanel = new JPanel();
 			extensionsTablePanel.setLayout(new GridBagLayout());
-			extensionsTablePanel.add(getExtensionsScrollPane(),
-					gridBagConstraints18);
+			extensionsTablePanel.add(getExtensionsScrollPane(), gridBagConstraints18);
 			extensionsTablePanel.add(upExtensionLabel, gridBagConstraints21);
 			extensionsTablePanel.add(downExtensionLabel, gridBagConstraints14);
 		}
