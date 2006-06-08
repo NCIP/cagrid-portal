@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.types;
 
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
-import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;

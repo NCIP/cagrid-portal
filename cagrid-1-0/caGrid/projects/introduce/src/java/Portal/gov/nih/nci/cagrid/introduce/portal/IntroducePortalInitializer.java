@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 
 import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
+import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.help.IntroduceHelp;
 import gov.nih.nci.cagrid.introduce.portal.preferences.PreferencesDialog;
 

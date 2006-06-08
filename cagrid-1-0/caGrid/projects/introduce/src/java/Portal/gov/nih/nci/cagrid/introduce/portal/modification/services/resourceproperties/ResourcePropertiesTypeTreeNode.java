@@ -46,7 +46,7 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproper
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
-import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPopupMenu;

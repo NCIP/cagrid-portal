@@ -6,8 +6,6 @@ import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import org.projectmobius.portal.PortalResourceManager;
-
 public class IntroducePreferencesConfigureationPanel extends
 		BasePreferenceConfigurationPanel {
 	

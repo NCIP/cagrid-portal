@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.preferences;
 
-import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import java.awt.CardLayout;
 import java.awt.Frame;

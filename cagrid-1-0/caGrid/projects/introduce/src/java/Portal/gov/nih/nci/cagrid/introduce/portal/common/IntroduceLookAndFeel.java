@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.portal;
+package gov.nih.nci.cagrid.introduce.portal.common;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 
