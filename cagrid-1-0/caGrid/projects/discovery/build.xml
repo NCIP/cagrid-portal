@@ -4,172 +4,168 @@
 <!-- ================================================================= -->
 
 <project name="core" default="compile" basedir=".">
-	<!-- Environment -->
-	<property environment="env" />
-	<property file="${basedir}/build.properties" />
-	<property file="${user.dir}/build.properties" />
-	<property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
+    <!-- Environment -->
+    <property environment="env" />
+    <property file="${basedir}/build.properties" />
+    <property file="${user.dir}/build.properties" />
+    <property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
 
-	<!-- Information -->
-	<property name="project.name" value="caGrid-discovery" />
-	<property name="project.version" value="1.0" />
+    <!-- Information -->
+    <property name="project.name" value="caGrid-discovery" />
+    <property name="project.version" value="1.0" />
 
-	<property name="src.dir" value="${basedir}/src/java" />
-	<property name="build.dir" value="${basedir}/build" />
-	<property name="classes.dir" value="${build.dir}/classes" />
-	<property name="jar.dir" value="${build.dir}/jars" />
-	<property name="project.jarfile" value="${jar.dir}/${project.name}-${project.version}.jar" />
-	<property name="lib.dir" value="${basedir}/lib" />
-	<property name="ext.lib.dir" value="${basedir}/ext/lib" />
-	<property name="ext.test.lib.dir" location="${basedir}/ext/test/lib" />
+    <property name="src.dir" value="${basedir}/src/java" />
+    <property name="build.dir" value="${basedir}/build" />
+    <property name="classes.dir" value="${build.dir}/classes" />
+    <property name="jar.dir" value="${build.dir}/jars" />
+    <property name="project.jarfile" value="${jar.dir}/${project.name}-${project.version}.jar" />
+    <property name="lib.dir" value="${basedir}/lib" />
+    <property name="ext.lib.dir" value="${basedir}/ext/lib" />
+    <property name="ext.test.lib.dir" location="${basedir}/ext/test/lib" />
 
-	<!-- testing stuff -->
-	<property name="test.dir" location="${basedir}/test" />
-	<property name="test.src.dir" location="${test.dir}/src/java" />
-	<property name="test.classes.dir" location="${classes.dir}/test" />
-	<property name="test.lib.dir" location="${test.dir}/lib" />
-	<property name="test.logs.dir" location="${test.dir}/logs" />
-	<property name="test.project.jar" location="${jar.dir}/${project.name}-tests-${project.version}.jar" />
+    <!-- testing stuff -->
+    <property name="test.dir" location="${basedir}/test" />
+    <property name="test.src.dir" location="${test.dir}/src/java" />
+    <property name="test.classes.dir" location="${classes.dir}/test" />
+    <property name="test.lib.dir" location="${test.dir}/lib" />
+    <property name="test.logs.dir" location="${test.dir}/logs" />
+    <property name="test.project.jar" location="${jar.dir}/${project.name}-tests-${project.version}.jar" />
 
-	<!-- Load common util path -->
-	<import file="../../antfiles/ant-utilities.xml" />
-	<import file="../../antfiles/test-utilities.xml" />
+    <!-- Load common util path -->
+    <import file="../../antfiles/ant-utilities.xml" />
+    <import file="../../antfiles/test-utilities.xml" />
 
-	<import file="test/test.xml" />
-
-
-	<!-- =============================================================== -->
-	<!-- The Build Classpath                                             -->
-	<!-- =============================================================== -->
-	<path id="build.classpath">
-		<fileset dir="${lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-		<fileset dir="${ext.lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-		<fileset dir="${globus.dir}/lib">
-			<include name="**/*.jar" />
-		</fileset>
-	</path>
+    <import file="test/test.xml" />
 
 
-	<!-- =============================================================== -->
-	<!-- The Run Classpath                                                   -->
-	<!-- =============================================================== -->
-	<path id="run.classpath">
-		<pathelement location="${classes.dir}"/>
-		<fileset dir="${lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-		<fileset dir="${ext.lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-		<fileset dir="${globus.dir}/lib">
-			<include name="**/*.jar" />
-		</fileset>		
-	</path>
+    <!-- =============================================================== -->
+    <!-- Define the Classpaths                                           -->
+    <!-- =============================================================== -->
+    <target name="defineClasspaths" depends="checkGlobus">
+        <path id="build.classpath">
+            <fileset dir="${lib.dir}">
+                <include name="**/*.jar" />
+            </fileset>
+            <fileset dir="${ext.lib.dir}">
+                <include name="**/*.jar" />
+            </fileset>
+            <fileset dir="${globus.dir}/lib">
+                <include name="**/*.jar" />
+            </fileset>
+        </path>
 
-	<!-- =============================================================== -->
-	<!-- The Test Classpath                                                   -->
-	<!-- =============================================================== -->
-	<path id="test.classpath">
-		<pathelement path="${classes.dir}" />
-		<pathelement path="${test.dir}/resources" />
-		<fileset dir="${lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-		<fileset dir="${ext.lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-		<fileset dir="${test.lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-		<fileset dir="${ext.test.lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-		<fileset dir="${globus.dir}/lib">
-			<include name="**/*.jar" />
-		</fileset>
-	</path>
+        <path id="run.classpath">
+            <pathelement location="${classes.dir}" />
+            <fileset dir="${lib.dir}">
+                <include name="**/*.jar" />
+            </fileset>
+            <fileset dir="${ext.lib.dir}">
+                <include name="**/*.jar" />
+            </fileset>
+            <fileset dir="${globus.dir}/lib">
+                <include name="**/*.jar" />
+            </fileset>
+            <pathelement location="${ext.globus.dir}" />
+        </path>
 
-
-	<!-- =============================================================== -->
-	<!-- Prepares the build directory                                    -->
-	<!-- =============================================================== -->
-	<target name="prepare">
-		<tstamp />
-		<mkdir dir="${build.dir}" />
-	</target>
-
-
-	<!-- =============================================================== -->
-	<!-- Compiles the source code                                        -->
-	<!-- =============================================================== -->
-	<target name="compile" depends="prepare" description="compiles.">
-		<mkdir dir="${classes.dir}" />
-		<javac srcdir="${src.dir}" destdir="${classes.dir}" source="1.3" target="1.1" debug="on" deprecation="off" optimize="off">
-			<classpath refid="build.classpath" />
-		</javac>
-	</target>
-
-	<!-- =============================================================== -->
-	<!-- Compiles the test source code                                        -->
-	<!-- =============================================================== -->
-	<target name="compile-tests" depends="prepare" description="compiles.">
-		<mkdir dir="${test.classes.dir}" />
-		<javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" source="1.3" target="1.1" debug="on" deprecation="off" optimize="off">
-			<classpath refid="test.classpath" />
-		</javac>
-	</target>
+        <path id="test.classpath">
+            <pathelement path="${classes.dir}" />
+            <pathelement path="${test.dir}/resources" />
+            <fileset dir="${lib.dir}">
+                <include name="**/*.jar" />
+            </fileset>
+            <fileset dir="${ext.lib.dir}">
+                <include name="**/*.jar" />
+            </fileset>
+            <fileset dir="${test.lib.dir}">
+                <include name="**/*.jar" />
+            </fileset>
+            <fileset dir="${ext.test.lib.dir}">
+                <include name="**/*.jar" />
+            </fileset>
+            <fileset dir="${globus.dir}/lib">
+                <include name="**/*.jar" />
+            </fileset>
+        </path>
+    </target>
 
 
-	<!-- ============================================================== -->
-	<!-- Cleans up generated stuff                                      -->
-	<!-- ============================================================== -->
-	<target name="clean" depends="" description="Removes generated files.">
-		<delete dir="${build.dir}" />
-	</target>
+    <!-- =============================================================== -->
+    <!-- Prepares the build directory                                    -->
+    <!-- =============================================================== -->
+    <target name="prepare" depends="defineClasspaths">
+        <tstamp />
+        <mkdir dir="${build.dir}" />
+    </target>
 
 
-	<!-- ============================================================== -->
-	<!-- Creates the test jar files                                          -->
-	<!-- ============================================================== -->
-	<target name="jar" depends="compile" description="Builds the Jar Files">
-		<mkdir dir="${jar.dir}" />
-		<jar jarfile="${project.jarfile}" basedir="${classes.dir}">
-			<manifest>
-				<attribute name="Built-By" value="${user.name}" />
-				<attribute name="Main-Class" value="${main.class}" />
-			</manifest>
-		</jar>
-	</target>
+    <!-- =============================================================== -->
+    <!-- Compiles the source code                                        -->
+    <!-- =============================================================== -->
+    <target name="compile" depends="prepare" description="compiles.">
+        <mkdir dir="${classes.dir}" />
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" source="1.3" target="1.1" debug="on" deprecation="off" optimize="off">
+            <classpath refid="build.classpath" />
+        </javac>
+    </target>
 
-	<!-- ============================================================== -->
-	<!-- Creates the jar files                                          -->
-	<!-- ============================================================== -->
-	<target name="jar-tests" depends="compile-tests" description="Builds the Jar Files">
-		<mkdir dir="${jar.dir}" />
-		<jar jarfile="${test.project.jar}" basedir="${test.classes.dir}">
-			<manifest>
-				<attribute name="Built-By" value="${user.name}" />
-			</manifest>
-		</jar>
-	</target>
-
-	<!-- ============================================================== -->
-	<!-- Runs the Discovery Client                                      -->
-	<!-- ============================================================== -->
-	<target name="runClient" depends="checkGlobus" description="Run the sample Discovery Client">
-		<java classname="gov.nih.nci.cagrid.discovery.client.DiscoveryClient" classpathref="run.classpath" fork="yes">
-			<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
-		</java>
-	</target>
+    <!-- =============================================================== -->
+    <!-- Compiles the test source code                                        -->
+    <!-- =============================================================== -->
+    <target name="compile-tests" depends="prepare" description="compiles.">
+        <mkdir dir="${test.classes.dir}" />
+        <javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" source="1.3" target="1.1" debug="on" deprecation="off" optimize="off">
+            <classpath refid="test.classpath" />
+        </javac>
+    </target>
 
 
-	<!-- ============================================================== -->
-	<!-- Builds from scratch                                                -->
-	<!-- ============================================================== -->
-	<target name="all" description="Builds the entire application" depends="jar,jar-tests" />
+    <!-- ============================================================== -->
+    <!-- Cleans up generated stuff                                      -->
+    <!-- ============================================================== -->
+    <target name="clean" depends="" description="Removes generated files.">
+        <delete dir="${build.dir}" />
+    </target>
+
+
+    <!-- ============================================================== -->
+    <!-- Creates the test jar files                                          -->
+    <!-- ============================================================== -->
+    <target name="jar" depends="compile" description="Builds the Jar Files">
+        <mkdir dir="${jar.dir}" />
+        <jar jarfile="${project.jarfile}" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Built-By" value="${user.name}" />
+                <attribute name="Main-Class" value="${main.class}" />
+            </manifest>
+        </jar>
+    </target>
+
+    <!-- ============================================================== -->
+    <!-- Creates the jar files                                          -->
+    <!-- ============================================================== -->
+    <target name="jar-tests" depends="compile-tests" description="Builds the Jar Files">
+        <mkdir dir="${jar.dir}" />
+        <jar jarfile="${test.project.jar}" basedir="${test.classes.dir}">
+            <manifest>
+                <attribute name="Built-By" value="${user.name}" />
+            </manifest>
+        </jar>
+    </target>
+
+    <!-- ============================================================== -->
+    <!-- Runs the Discovery Client                                      -->
+    <!-- ============================================================== -->
+    <target name="runClient" depends="defineClasspaths" description="Run the sample Discovery Client">
+        <java classname="gov.nih.nci.cagrid.discovery.client.DiscoveryClient" classpathref="run.classpath" fork="yes">
+            <jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
+        </java>
+    </target>
+
+
+    <!-- ============================================================== -->
+    <!-- Builds from scratch                                                -->
+    <!-- ============================================================== -->
+    <target name="all" description="Builds the entire application" depends="jar,jar-tests" />
 </project>
 
