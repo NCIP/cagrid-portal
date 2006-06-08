@@ -1,8 +1,9 @@
 package gov.nih.nci.cagrid.introduce.portal.preferences;
 
-import java.awt.GridBagLayout;
-import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 public class IntroducePreferencesConfigureationPanel extends

@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.portal.preferences;
 
-import javax.swing.JPanel;
 import javax.swing.tree.DefaultTreeModel;
 
 public class ExtensionPreferencesTreeNode extends PreferencesTypeTreeNode {

@@ -1,33 +1,20 @@
 package gov.nih.nci.cagrid.introduce.portal.preferences;
 
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.ServiceTypeTreeNode;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.ServicesJTree;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.ServicesTypeTreeNode;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodTypeTreeNode;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodsTypeTreeNode;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertiesTypeTreeNode;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertyTypeTreeNode;
 
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
 import java.awt.CardLayout;
-import javax.swing.JScrollPane;
-import javax.swing.JTree;
-import java.awt.GridLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Enumeration;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.tree.TreePath;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
-import sun.security.krb5.internal.r;
 
 public class PreferencesDialog extends JDialog {
 
@@ -47,9 +34,9 @@ public class PreferencesDialog extends JDialog {
 
 	private JButton okButton = null;
 
+
 	/**
 	 * This method initializes
-	 * 
 	 */
 	public PreferencesDialog() {
 		super();
@@ -57,9 +44,9 @@ public class PreferencesDialog extends JDialog {
 		initialize();
 	}
 
+
 	/**
 	 * This method initializes this
-	 * 
 	 */
 	private void initialize() {
 		this.setSize(new java.awt.Dimension(347, 290));
@@ -67,6 +54,7 @@ public class PreferencesDialog extends JDialog {
 		this.setTitle("Preferences");
 
 	}
+
 
 	/**
 	 * This method initializes mainPanel
@@ -91,11 +79,11 @@ public class PreferencesDialog extends JDialog {
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
 			mainPanel.add(getPreferenceNavigationPanel(), gridBagConstraints);
-			mainPanel.add(getPreferenceConfigurationPanel(),
-					gridBagConstraints1);
+			mainPanel.add(getPreferenceConfigurationPanel(), gridBagConstraints1);
 		}
 		return mainPanel;
 	}
+
 
 	/**
 	 * This method initializes preferenceNavigationPanel
@@ -112,20 +100,14 @@ public class PreferencesDialog extends JDialog {
 			gridBagConstraints2.gridx = 0;
 			preferenceNavigationPanel = new JPanel();
 			preferenceNavigationPanel.setLayout(new GridBagLayout());
-			preferenceNavigationPanel
-					.setBorder(javax.swing.BorderFactory
-							.createTitledBorder(
-									null,
-									"Preferences",
-									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, IntroduceLookAndFeel
-											.getPanelLabelColor()));
-			preferenceNavigationPanel.add(getPrefencesScrollPane(),
-					gridBagConstraints2);
+			preferenceNavigationPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Preferences",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+			preferenceNavigationPanel.add(getPrefencesScrollPane(), gridBagConstraints2);
 		}
 		return preferenceNavigationPanel;
 	}
+
 
 	/**
 	 * This method initializes preferenceConfigurationPanel
@@ -150,13 +132,12 @@ public class PreferencesDialog extends JDialog {
 			gridBagConstraints3.gridy = 1;
 			preferenceConfigurationPanel = new JPanel();
 			preferenceConfigurationPanel.setLayout(new GridBagLayout());
-			preferenceConfigurationPanel.add(getButtonPanel(),
-					gridBagConstraints3);
-			preferenceConfigurationPanel.add(getPreferneceConfigViewPanel(),
-					gridBagConstraints4);
+			preferenceConfigurationPanel.add(getButtonPanel(), gridBagConstraints3);
+			preferenceConfigurationPanel.add(getPreferneceConfigViewPanel(), gridBagConstraints4);
 		}
 		return preferenceConfigurationPanel;
 	}
+
 
 	/**
 	 * This method initializes prefencesScrollPane
@@ -171,21 +152,20 @@ public class PreferencesDialog extends JDialog {
 		return prefencesScrollPane;
 	}
 
+
 	private void addTreePanels(PreferencesTypeTreeNode node) {
 		// Add node to list
-		((CardLayout) getPreferneceConfigViewPanel().getLayout())
-				.addLayoutComponent(node.getConfigurationPanel(), node
-						.getName());
+		getPreferneceConfigViewPanel().add(node.getConfigurationPanel(), node.getName());
 		// Create paths for all children
 		if (node.getChildCount() >= 0) {
 			for (Enumeration e = node.children(); e.hasMoreElements();) {
-				PreferencesTypeTreeNode n = (PreferencesTypeTreeNode) e
-						.nextElement();
+				PreferencesTypeTreeNode n = (PreferencesTypeTreeNode) e.nextElement();
 				addTreePanels(n);
 			}
 		}
 
 	}
+
 
 	/**
 	 * This method initializes preferencesTree
@@ -198,22 +178,19 @@ public class PreferencesDialog extends JDialog {
 			preferencesTree.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					super.mouseClicked(e);
-					preferencesTree.setSelectionRow(preferencesTree
-							.getRowForLocation(e.getX(), e.getY()));
-						List nodes = preferencesTree.getSelectedNodes();
-						if (nodes.size() >= 1) {
-							((CardLayout) getPreferneceConfigViewPanel()
-									.getLayout()).show(getPreferneceConfigViewPanel(),
-									((PreferencesTypeTreeNode) nodes.get(0))
-											.getName());
-							System.out.println("Showing : "  + ((PreferencesTypeTreeNode) nodes.get(0))
-											.getName());
-						}
+					preferencesTree.setSelectionRow(preferencesTree.getRowForLocation(e.getX(), e.getY()));
+					List nodes = preferencesTree.getSelectedNodes();
+					if (nodes.size() >= 1) {
+						((CardLayout) getPreferneceConfigViewPanel().getLayout()).show(getPreferneceConfigViewPanel(),
+							((PreferencesTypeTreeNode) nodes.get(0)).getName());
+						System.out.println("Showing : " + ((PreferencesTypeTreeNode) nodes.get(0)).getName());
 					}
+				}
 			});
 		}
 		return preferencesTree;
 	}
+
 
 	/**
 	 * This method initializes buttonPanel
@@ -232,6 +209,7 @@ public class PreferencesDialog extends JDialog {
 		return buttonPanel;
 	}
 
+
 	/**
 	 * This method initializes preferneceConfigViewPanel
 	 * 
@@ -240,20 +218,14 @@ public class PreferencesDialog extends JDialog {
 	private JPanel getPreferneceConfigViewPanel() {
 		if (preferneceConfigViewPanel == null) {
 			preferneceConfigViewPanel = new JPanel(new CardLayout());
-			preferneceConfigViewPanel
-					.setBorder(javax.swing.BorderFactory
-							.createTitledBorder(
-									null,
-									"Preference Configureation",
-									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, IntroduceLookAndFeel
-											.getPanelLabelColor()));
-			addTreePanels((PreferencesTypeTreeNode) preferencesTree.getModel()
-					.getRoot());
+			preferneceConfigViewPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+				"Preference Configureation", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+			addTreePanels((PreferencesTypeTreeNode) preferencesTree.getModel().getRoot());
 		}
 		return preferneceConfigViewPanel;
 	}
+
 
 	/**
 	 * This method initializes okButton

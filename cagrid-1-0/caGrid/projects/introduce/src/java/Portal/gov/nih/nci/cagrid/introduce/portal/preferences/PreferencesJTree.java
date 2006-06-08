@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.introduce.portal.preferences;
 
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 
 import java.util.LinkedList;

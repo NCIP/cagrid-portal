@@ -1,12 +1,12 @@
 package gov.nih.nci.cagrid.introduce.portal.preferences;
 
-import javax.swing.JPanel;
-import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JPanel;
 
 public class PreferenceConfigurationContainerPanel extends JPanel {
 
