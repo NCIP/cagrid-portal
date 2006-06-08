@@ -4,6 +4,8 @@ import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.data.common.AxisJdomUtils;
+import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
@@ -19,9 +21,19 @@ import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.rmi.RemoteException;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 import org.apache.axis.message.MessageElement;
+import org.jdom.Element;
 
 /** 
  *  DataServiceCodegenPreProcessor
@@ -36,6 +48,11 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 
 	public void preCodegen(ServiceExtensionDescriptionType desc, ServiceInformation info)
 		throws CodegenExtensionException {
+		try {
+			modifyDeployProperties(desc, info);
+		} catch (Exception ex) {
+			throw new CodegenExtensionException("Error modifying deployment properties: " + ex.getMessage(), ex);
+		}
 		modifyMetadata(desc, info);
 	}
 	
@@ -143,5 +160,63 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 				dataService.setResourcePropertiesList(propertyList);
 			}
 		}
+	}
+	
+	
+	private void modifyDeployProperties(ServiceExtensionDescriptionType desc, ServiceInformation info) throws Exception {
+		String qpClassname = getQueryProcesorClass(desc, info);
+		if (qpClassname != null) {
+			// find the QP class
+			String serviceDir = info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR);
+			// get the eclipse classpath document
+			Set libs = new HashSet();
+			ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
+			MessageElement qpLibsElement = ExtensionTools.getExtensionDataElement(data, DataServiceConstants.QUERY_PROCESSOR_ADDITIONAL_JARS_ELEMENT);
+			if (qpLibsElement != null) {
+				Element qpLibs = AxisJdomUtils.fromMessageElement(qpLibsElement);
+				Iterator jarElemIter = qpLibs.getChildren(DataServiceConstants.QUERY_PROCESSOR_JAR_ELEMENT, qpLibs.getNamespace()).iterator();
+				while (jarElemIter.hasNext()) {
+					String jarFilename = ((Element) jarElemIter.next()).getText();
+					libs.add(new File(serviceDir + File.separator + "lib" + File.separator + jarFilename));
+				}
+			}
+			// load the class from the additional libraries and current classpath
+			URL[] libUrls = new URL[libs.size()];
+			Iterator libIter = libs.iterator();
+			int i = 0;
+			while (libIter.hasNext()) {
+				libUrls[i] = ((File) libIter.next()).toURL();
+			}
+			ClassLoader qpLoader = new URLClassLoader(libUrls, getClass().getClassLoader());
+			Class qpClass = qpLoader.loadClass(qpClassname);
+			CQLQueryProcessor processor = (CQLQueryProcessor) qpClass.newInstance();
+			// get the map of required deploy properties
+			Map params = processor.getRequiredParameters();
+			if (params != null) {
+				// load what deploy properties exist presently
+				Properties deployProps = new Properties();
+				FileInputStream propsInput = new FileInputStream(serviceDir + File.separator + IntroduceConstants.DEPLOY_PROPERTIES_FILE); 
+				deployProps.load(propsInput);
+				propsInput.close();
+				// add the parameters
+				deployProps.putAll(params);
+				// write them all back to disk
+				FileOutputStream propsOutput = new FileOutputStream(serviceDir + File.separator + IntroduceConstants.DEPLOY_PROPERTIES_FILE);
+				deployProps.store(propsOutput, "deployment properties for query processor class " + qpClassname);
+				propsOutput.flush();
+				propsOutput.close();
+			}
+		}
+	}
+	
+	
+	private String getQueryProcesorClass(ServiceExtensionDescriptionType desc, ServiceInformation info) {
+		ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
+		MessageElement qpEntry = ExtensionTools.getExtensionDataElement(data, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
+		if (qpEntry != null) {
+			String queryProcessorClass = qpEntry.getValue();
+			return queryProcessorClass;
+		}
+		return null;
 	}
 }

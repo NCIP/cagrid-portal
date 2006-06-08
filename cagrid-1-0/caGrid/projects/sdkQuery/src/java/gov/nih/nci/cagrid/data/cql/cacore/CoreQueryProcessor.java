@@ -31,7 +31,6 @@ public class CoreQueryProcessor extends CQLQueryProcessor {
 	
 	public CoreQueryProcessor() {
 		super();
-		
 	}
 	
 	
@@ -64,7 +63,7 @@ public class CoreQueryProcessor extends CQLQueryProcessor {
 	
 	public Map getRequiredParameters() {
 		Map params = new HashMap();
-		params.put(APPLICATION_SERVICE_URL, null);
+		params.put(APPLICATION_SERVICE_URL, "http://localhost:8080/cacore31/server/HTTPServer");
 		return params;
 	}
 }
