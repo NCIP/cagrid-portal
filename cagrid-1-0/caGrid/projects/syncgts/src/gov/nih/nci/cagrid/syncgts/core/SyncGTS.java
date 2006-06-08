@@ -5,7 +5,10 @@ import gov.nih.nci.cagrid.gts.bean.Lifetime;
 import gov.nih.nci.cagrid.gts.bean.Status;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
+import gov.nih.nci.cagrid.gts.client.GTSClient;
 import gov.nih.nci.cagrid.gts.client.GTSPublicClient;
+import gov.nih.nci.cagrid.gts.stubs.GTSPortType;
+import gov.nih.nci.cagrid.gts.stubs.service.GTSServiceAddressingLocator;
 import gov.nih.nci.cagrid.syncgts.bean.AddedTrustedCAs;
 import gov.nih.nci.cagrid.syncgts.bean.Message;
 import gov.nih.nci.cagrid.syncgts.bean.MessageType;
@@ -17,6 +20,7 @@ import gov.nih.nci.cagrid.syncgts.bean.SyncReport;
 import gov.nih.nci.cagrid.syncgts.bean.TrustedCA;
 
 import java.io.File;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
@@ -26,8 +30,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.axis.EngineConfiguration;
+import org.apache.axis.client.AxisClient;
+import org.apache.axis.configuration.FileProvider;
+import org.apache.axis.message.addressing.Address;
+import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.apache.axis.utils.ClassUtils;
 import org.apache.log4j.Logger;
 import org.globus.common.CoGProperties;
+import org.globus.wsrf.impl.security.authorization.IdentityAuthorization;
+import org.globus.wsrf.impl.security.authorization.NoAuthorization;
 import org.projectmobius.common.MobiusDate;
 import org.projectmobius.common.MobiusRunnable;
 
@@ -174,7 +186,36 @@ public class SyncGTS {
 				for (int j = 0; j < fcount; j++) {
 					int filter = j + 1;
 					try {
-						TrustedAuthority[] tas = client.findTrustedAuthorities(f[j]);
+						GTSServiceAddressingLocator locator = new GTSServiceAddressingLocator();
+						// attempt to load our context sensitive wsdd file
+						InputStream resourceAsStream = ClassUtils.getResourceAsStream(GTSClient.class, "client-config.wsdd");
+						if (resourceAsStream != null) {
+							// we found it, so tell axis to configure an engine to use it
+							EngineConfiguration engineConfig = new FileProvider(resourceAsStream);
+							// set the engine of the locator
+							locator.setEngine(new AxisClient(engineConfig));
+						}
+				
+						EndpointReferenceType endpoint = new EndpointReferenceType();
+						endpoint.setAddress(new Address(des[i].getGtsServiceURI()));
+						GTSPortType port = locator.getGTSPortTypePort(endpoint);
+						org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
+						stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT,
+							org.globus.wsrf.security.Constants.ENCRYPTION);
+						stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS, Boolean.TRUE);
+						if (description.isPerformAuthorization()) {
+							IdentityAuthorization ia = new IdentityAuthorization(description.getHostIdentity());
+							stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, ia);
+						} else {
+							stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, NoAuthorization
+								.getInstance());
+						}
+			               gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesRequest params = new gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesRequest();
+			               gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesRequestFilter filterContainer = new gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesRequestFilter();
+			               filterContainer.setTrustedAuthorityFilter(f[j]);
+			               params.setFilter(filterContainer);
+			               gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesResponse boxedResult = port.findTrustedAuthorities(params);
+						TrustedAuthority[] tas = boxedResult.getTrustedAuthority();
 						int length = 0;
 						if (tas != null) {
 							length = tas.length;

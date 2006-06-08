@@ -14,6 +14,8 @@
 				<xsd:element name="DeleteExistingTrustedRoots" minOccurs="1" maxOccurs="1" type="xsd:boolean"/>
 				<xsd:element name="FilePrefix" minOccurs="1" maxOccurs="1" type="xsd:string"/>
 				<xsd:element name="NextSync" minOccurs="1" maxOccurs="1" type="xsd:integer"/>
+				<xsd:element name="PerformAuthorization" minOccurs="1" maxOccurs="1" type="xsd:boolean"/>
+				<xsd:element name="HostIdentity" minOccurs="0" maxOccurs="1" type="xsd:string"/>
 			</xsd:sequence>
 		</xsd:complexType>
 		

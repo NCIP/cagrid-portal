@@ -10,4 +10,6 @@
 	<ns1:DeleteExistingTrustedRoots>false</ns1:DeleteExistingTrustedRoots>
 	<ns1:FilePrefix>gts</ns1:FilePrefix>
 	<ns1:NextSync>120</ns1:NextSync>
+	<ns1:PerformAuthorization>true</ns1:PerformAuthorization>
+	<ns1:HostIdentity>/O=OSU/OU=BMI/OU=caGrid/OU=Trust Fabric/CN=host/cagrid02.bmi.ohio-state.edu</ns1:HostIdentity>
 </ns1:SyncDescription>

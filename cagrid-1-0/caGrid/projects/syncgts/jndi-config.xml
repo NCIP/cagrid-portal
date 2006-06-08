@@ -19,7 +19,7 @@
 				<parameter>
 					<name>performRegistration</name>
 					<!-- Set this to false to skip ServiceGroup registration -->
-					<value>false</value>
+					<value>true</value>
 				</parameter>
 				<parameter>
 					<name>registrationTemplateFile</name>

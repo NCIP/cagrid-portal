@@ -23,9 +23,9 @@
     <types>
         <schema targetNamespace="http://cagrid.nci.nih.gov/SyncGTS"
             xmlns:tns="http://cagrid.nci.nih.gov/SyncGTS"
-			xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"
+			xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"
 			
-			xmlns:ns1="http://cagrid.nci.nih.gov/12/SyncGTS"
+			xmlns:ns2="http://cagrid.nci.nih.gov/12/SyncGTS"
 			
 			xmlns:ns0="http://cagrid.nci.nih.gov/8/gts"
 			
