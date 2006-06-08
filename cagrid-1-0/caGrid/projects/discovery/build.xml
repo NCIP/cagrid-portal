@@ -86,6 +86,7 @@
             <fileset dir="${globus.dir}/lib">
                 <include name="**/*.jar" />
             </fileset>
+            <pathelement location="${ext.globus.dir}" />
         </path>
     </target>
 
