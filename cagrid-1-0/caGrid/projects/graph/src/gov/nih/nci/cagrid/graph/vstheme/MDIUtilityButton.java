@@ -16,7 +16,7 @@ public class MDIUtilityButton extends JComponent
     public Color borderLightColor = Color.lightGray;
     public Color borderDarkColor = Color.gray;
     
-    public boolean enabled = false;
+    public boolean enabled = true;
 
     public MDIUtilityButton(MDIPanel parent)
     {
@@ -38,16 +38,26 @@ public class MDIUtilityButton extends JComponent
     
     public void disable()
     {
-    	this.enabled= false;
-    	this.borderLightColor = getCurrentParentColor();
-    	this.borderDarkColor = getCurrentParentColor();
+    	if(enabled)
+    	{
+	    	this.enabled= false;
+	    	this.borderLightColor = getCurrentParentColor();
+	    	this.borderDarkColor = getCurrentParentColor();
+	    	
+	    	this.repaint();
+    	}
     }
     
     public void enable()
     {
-    	this.enabled = true;
-    	borderLightColor = Color.lightGray;
-        borderDarkColor = Color.gray;    	
+    	if(!enabled)
+    	{
+	    	this.enabled = true;
+	    	borderLightColor = Color.lightGray;
+	        borderDarkColor = Color.gray;   
+	        
+	        this.repaint();
+    	}
     }
 
     protected Color getCurrentParentColor()
@@ -106,8 +116,9 @@ public class MDIUtilityButton extends JComponent
 
     protected void drawBordersForMousePress()
     {
+    	
         Graphics g = this.getGraphics();
-        if(enabled) g.copyArea(1, 1, this.getWidth() , this.getHeight() , 1, 1);
+        g.copyArea(1, 1, this.getWidth() , this.getHeight() , 1, 1);
 
         g.setColor(borderDarkColor);
         g.drawLine(0, 0, 0, this.getHeight()-1);
@@ -123,7 +134,7 @@ public class MDIUtilityButton extends JComponent
     protected void drawBordersForMouseRelease()
     {
         Graphics g = this.getGraphics();
-        if(enabled) g.copyArea(1, 1, this.getWidth() , this.getHeight() , -1, -1);
+        g.copyArea(1, 1, this.getWidth() , this.getHeight() , -1, -1);
         this.drawBordersForMouseExit();
         this.isPressed = false;
         this.repaint();

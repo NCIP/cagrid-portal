@@ -8,6 +8,7 @@ import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLayeredPane;
+import javax.swing.JScrollBar;
 
 
 
@@ -73,7 +74,7 @@ public class MDITabsPane extends JLayeredPane
 	}
 	
 	public void resyncTabIndices()
-	{
+	{	
 		for(int k = 0; k < this.tabs.size(); k++)
 		{
 			
@@ -180,7 +181,7 @@ public class MDITabsPane extends JLayeredPane
 			sum += t.getPreferredWidth();
 		}
 		
-		return sum;
+		return sum + 10;
 	}
 	
 }

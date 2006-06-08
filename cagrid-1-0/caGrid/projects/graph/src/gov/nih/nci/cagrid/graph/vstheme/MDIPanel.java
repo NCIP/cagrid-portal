@@ -84,7 +84,6 @@ public class MDIPanel extends JComponent
 			this.container.showComponent(i);
 		}
 		
-		tabs.scrollToPosition(10);
 		
 	}
 	

@@ -85,9 +85,11 @@ public class MDIClippedTabsPane extends JLayeredPane
 	
 	public void scrollToPosition(int x)
 	{
-		if(this.tabsPane.getPreferredWidth() < this.getMWidth())
+	
+		
+		if(this.tabsPane.getPreferredWidth() > this.getMWidth())
 		{
-			
+
 			if(x >= 0 && x < this.tabsPane.getWidth() - this.getMWidth())
 			{
 				this.current = x; 
@@ -116,7 +118,7 @@ public class MDIClippedTabsPane extends JLayeredPane
 	
 	public void scrollHorizontally(int x)
 	{
-		
+		scrollToPosition(current + x);
 	}
 	
 	public int getMWidth()
@@ -145,21 +147,43 @@ public class MDIClippedTabsPane extends JLayeredPane
 		
 		if(s.tabsPane.getPreferredWidth() < s.getMWidth())
 		{
-			s.tabsPane.setBounds(-s.current, 0, s.getMWidth(), s.getHeight());
+			
+			s.tabsPane.setBounds(0, 0, s.getMWidth(), s.getHeight());
 			s.disableScrolling();
 		}
 		else
 		{	
-			s.tabsPane.setBounds(-s.current, 0, s.tabsPane.getPreferredWidth(), s.getHeight());
-			
-			if(s.current == 0)
+			if(getMWidth() <= tabsPane.getPreferredWidth() - current)
 			{
-				s.enableScrolling();
-				s.scrollLeftButton.disable();
-			}
-			else if(true)
-			{
+				s.tabsPane.setBounds(-s.current, 0, s.tabsPane.getPreferredWidth(), s.getHeight());
 				
+				s.enableScrolling();
+				
+				if(s.current == 0)
+				{
+					s.scrollLeftButton.disable();
+				}
+				
+				if(getMWidth() >= tabsPane.getPreferredWidth() - current	)
+				{
+					s.scrollRightButton.disable();
+				}
+			}
+			else
+			{
+				this.scrollToPosition(s.tabsPane.getPreferredWidth() - this.getMWidth());
+				
+				s.enableScrolling();
+				
+				if(s.current == 0)
+				{
+					s.scrollLeftButton.disable();
+				}
+				
+				if(getMWidth() >= tabsPane.getPreferredWidth() - current	)
+				{
+					s.scrollRightButton.disable();
+				}				
 			}
 		}
 		
