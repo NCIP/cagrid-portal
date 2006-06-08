@@ -34,7 +34,7 @@ public class IntroducePortalInitializer implements GridPortalInitializer {
 		JMenu configMenu = PortalResourceManager.getInstance().getGridPortal()
 				.getJMenuBar().getMenu(CONFIG_MENU);
 		JMenuItem configMenuItem = new JMenuItem("Preferences");
-		final PreferencesDialog preferences = new PreferencesDialog();
+		final PreferencesDialog preferences = new PreferencesDialog(PortalResourceManager.getInstance().getGridPortal());
 		configMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// user want to configure preferences....

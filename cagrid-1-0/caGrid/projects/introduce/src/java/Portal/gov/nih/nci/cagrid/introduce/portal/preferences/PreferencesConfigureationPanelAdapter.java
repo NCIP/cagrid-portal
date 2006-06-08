@@ -16,12 +16,7 @@ public class PreferencesConfigureationPanelAdapter extends
 	 * This method initializes this
 	 * 
 	 */
-	private void initialize() {
-        prefsLabel = new JLabel();
-        prefsLabel.setText("Introduce Preferences");
-        this.setSize(new java.awt.Dimension(261,171));
-        this.add(prefsLabel, null);
-			
+	private void initialize() {	
 	}
 
 	public void apply() {

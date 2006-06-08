@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.introduce.portal.preferences;
 import gov.nih.nci.cagrid.introduce.portal.IntroduceLookAndFeel;
 
 import java.awt.CardLayout;
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
@@ -38,8 +39,8 @@ public class PreferencesDialog extends JDialog {
 	/**
 	 * This method initializes
 	 */
-	public PreferencesDialog() {
-		super();
+	public PreferencesDialog(Frame owner) {
+		super(owner);
 		setModal(true);
 		initialize();
 	}
