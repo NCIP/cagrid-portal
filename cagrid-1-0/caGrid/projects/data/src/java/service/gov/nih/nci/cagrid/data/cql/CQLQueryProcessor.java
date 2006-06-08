@@ -19,16 +19,19 @@ import java.util.Map;
  * @version $Id$ 
  */
 public abstract class CQLQueryProcessor {
-	private Map properties = null;
-
-	public CQLQueryProcessor(Map properties) throws InitializationException {
-		this.properties = properties;
+	
+	public CQLQueryProcessor() {
+	
 	}
 	
 	
-	protected Map getProperties() {
-		return this.properties;
-	}
+	/**
+	 * Initialize the query processor with the properties it requires as specified
+	 * in the map provided by getRequiredParameters()
+	 * @param configuration
+	 * @throws InitializationException
+	 */
+	public abstract void initialize(Map configuration) throws InitializationException;
 	
 	
 	/**

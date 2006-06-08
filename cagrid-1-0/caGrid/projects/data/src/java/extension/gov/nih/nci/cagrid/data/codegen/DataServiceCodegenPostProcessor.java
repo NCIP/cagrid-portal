@@ -140,7 +140,8 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 		body.append("\n");
 		body.append("\t\t").append("gov.nih.nci.cagrid.data.cql.CQLQueryProcessor processor = null;").append("\n");
 		body.append("\t\t").append("try {").append("\n");
-		body.append("\t\t\t").append("processor = new ").append(implClassName).append("(configurationToMap());").append("\n");
+		body.append("\t\t\t").append("processor = new ").append(implClassName).append("();").append("\n");
+		body.append("\t\t\t").append("processor.initialize(configurationToMap());").append("\n");
 		body.append("\t\t").append("} catch (Exception ex) {").append("\n");
 		// body.append("\t\t\t").append("throw new gov.nih.nci.cagrid.data.QueryProcessingException(\"Error initializing the query processor: \" + ex.getMessage(), ex);").append("\n");
 		body.append("\t\t\t").append("return null;").append("\n");

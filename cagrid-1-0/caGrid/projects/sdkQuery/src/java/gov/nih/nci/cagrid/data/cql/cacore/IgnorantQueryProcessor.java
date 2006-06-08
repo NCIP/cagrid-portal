@@ -35,9 +35,13 @@ public class IgnorantQueryProcessor extends CQLQueryProcessor {
 	
 	private ApplicationService coreService = null;
 	
-	public IgnorantQueryProcessor(Map parameters) throws InitializationException {
-		super(parameters);
-		String serviceUrl = (String) getProperties().get(APPLICATION_SERVICE_URL);
+	public IgnorantQueryProcessor() {
+		super();
+	}
+	
+	
+	public void initialize(Map properties) throws InitializationException {
+		String serviceUrl = (String) properties.get(APPLICATION_SERVICE_URL);
 		
 		if (serviceUrl == null || serviceUrl.length() == 0) {
 			serviceUrl = "http://kramer.bmi.ohio-state.edu:8080/cacore31/server/HTTPServer";

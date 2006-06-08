@@ -29,9 +29,14 @@ public class CoreQueryProcessor extends CQLQueryProcessor {
 	
 	private ApplicationService coreService;
 	
-	public CoreQueryProcessor(Map properties) throws InitializationException {
-		super(properties);
-		String url = (String) getProperties().get(APPLICATION_SERVICE_URL);
+	public CoreQueryProcessor() {
+		super();
+		
+	}
+	
+	
+	public void initialize(Map properties) throws InitializationException {
+		String url = (String) properties.get(APPLICATION_SERVICE_URL);
 		if (url == null || url.length() == 0) {
 			// TODO: change this... you don't have the configuration file that locates
 			// the default remote application service on cabio
