@@ -259,7 +259,7 @@ public class CommonTools {
 					+ "\"" + buildFileDir + File.separator + "build.xml\""
 					+ cmd;
 			cmd = "java.exe " + cmd;
-		} else if ((os.indexOf("Linux") >= 0) || (os.indexOf("linux") >= 0)) {
+		} else {
 			// escape out the spaces.....
 			buildFileDir = buildFileDir.replaceAll("\\s", "\\ ");
 			cmd = "-classpath "
@@ -269,11 +269,7 @@ public class CommonTools {
 					+ System.getProperty("java.class.path") + " -buildfile "
 					+ buildFileDir + File.separator + "build.xml" + cmd;
 			cmd = "java " + cmd;
-		} else {
-			throw new Exception(
-					"Cannot create grid service, your operatingsystem, " + os
-							+ " is not supported.");
-		}
+		} 
 		return cmd;
 	}
 
