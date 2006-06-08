@@ -12,7 +12,9 @@ import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.namespace.QName;
 
@@ -29,17 +31,20 @@ import org.apache.axis.message.MessageElement;
  * @version $Id$ 
  */
 public class IgnorantQueryProcessor extends CQLQueryProcessor {
+	public static final String APPLICATION_SERVICE_URL = "appservice.url";
 	
 	private ApplicationService coreService = null;
 	
-	public IgnorantQueryProcessor(String initString) throws InitializationException {
-		super(initString);
-		if (initString.length() == 0) {
-			initString = "http://kramer.bmi.ohio-state.edu:8080/cacore31/server/HTTPServer";
+	public IgnorantQueryProcessor(Map parameters) throws InitializationException {
+		super(parameters);
+		String serviceUrl = (String) getProperties().get(APPLICATION_SERVICE_URL);
+		
+		if (serviceUrl == null || serviceUrl.length() == 0) {
+			serviceUrl = "http://kramer.bmi.ohio-state.edu:8080/cacore31/server/HTTPServer";
 		}
 		System.out.println("Data Service connecting out to core service:");
-		System.out.println("\t" + initString);
-		coreService = ApplicationService.getRemoteInstance(initString);
+		System.out.println("\t" + serviceUrl);
+		coreService = ApplicationService.getRemoteInstance(serviceUrl);
 	}
 
 
@@ -68,5 +73,12 @@ public class IgnorantQueryProcessor extends CQLQueryProcessor {
 		}
 		results.setObjectResult(objectResults);
 		return results;
+	}
+	
+	
+	public Map getRequiredParameters() {
+		Map params = new HashMap();
+		params.put(APPLICATION_SERVICE_URL, "http://kramer.bmi.ohio-state.edu:8080/cacore31/server/HTTPServer");
+		return params;
 	}
 }

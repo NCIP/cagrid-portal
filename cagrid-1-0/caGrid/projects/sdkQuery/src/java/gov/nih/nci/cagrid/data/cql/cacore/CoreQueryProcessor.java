@@ -9,7 +9,9 @@ import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsUtil;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.criterion.DetachedCriteria;
 
@@ -23,16 +25,19 @@ import org.hibernate.criterion.DetachedCriteria;
  * @version $Id$ 
  */
 public class CoreQueryProcessor extends CQLQueryProcessor {
+	public static final String APPLICATION_SERVICE_URL = "appservice.url";
+	
 	private ApplicationService coreService;
 	
-	public CoreQueryProcessor(String initString) throws InitializationException {
-		super(initString);
-		if (initString == null || initString.length() == 0) {
+	public CoreQueryProcessor(Map properties) throws InitializationException {
+		super(properties);
+		String url = (String) getProperties().get(APPLICATION_SERVICE_URL);
+		if (url == null || url.length() == 0) {
 			// TODO: change this... you don't have the configuration file that locates
 			// the default remote application service on cabio
 			coreService = ApplicationService.getRemoteInstance();
 		} else {
-			coreService = ApplicationService.getRemoteInstance(initString);
+			coreService = ApplicationService.getRemoteInstance(url);
 		}
 	}
 	
@@ -49,5 +54,12 @@ public class CoreQueryProcessor extends CQLQueryProcessor {
 		}
 		CQLQueryResults results = CQLQueryResultsUtil.createQueryResults(targetObjects);
 		return results;
+	}
+	
+	
+	public Map getRequiredParameters() {
+		Map params = new HashMap();
+		params.put(APPLICATION_SERVICE_URL, null);
+		return params;
 	}
 }

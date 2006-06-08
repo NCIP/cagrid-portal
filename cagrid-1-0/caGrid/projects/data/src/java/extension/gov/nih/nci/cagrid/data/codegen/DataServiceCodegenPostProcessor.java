@@ -15,9 +15,11 @@ import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileWriter;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.axis.message.MessageElement;
@@ -131,7 +133,6 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 			}
 			endIndex++;
 		}
-		endIndex--; // get off the last bracket
 		// trim out the existing method body
 		implClass.delete(startIndex, endIndex);
 		// insert the new method body
@@ -139,8 +140,8 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 		body.append("\n");
 		body.append("\t\t").append("gov.nih.nci.cagrid.data.cql.CQLQueryProcessor processor = null;").append("\n");
 		body.append("\t\t").append("try {").append("\n");
-		body.append("\t\t\t").append("processor = new ").append(implClassName).append("(\"\");").append("\n");
-		body.append("\t\t").append("} catch (gov.nih.nci.cagrid.data.InitializationException ex) {").append("\n");
+		body.append("\t\t\t").append("processor = new ").append(implClassName).append("(configurationToMap());").append("\n");
+		body.append("\t\t").append("} catch (Exception ex) {").append("\n");
 		// body.append("\t\t\t").append("throw new gov.nih.nci.cagrid.data.QueryProcessingException(\"Error initializing the query processor: \" + ex.getMessage(), ex);").append("\n");
 		body.append("\t\t\t").append("return null;").append("\n");
 		body.append("\t\t").append("}").append("\n");
@@ -149,7 +150,39 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 		body.append("\t\t").append("} catch (Exception ex) {").append("\n");
 		body.append("\t\t\t").append("return null;").append("\n");
 		body.append("\t\t").append("}").append("\n");
+		body.append("\t}\n\n\n");
+		body.append(getMapperFunction());
 		implClass.insert(startIndex, body);
+	}
+	
+	
+	private String getMapperFunction() {
+		StringBuffer func = new StringBuffer();
+		/*
+		 * private java.util.Map configurationToMap() throws Exception {
+	    	 java.util.Map map = new java.util.HashMap();
+	    	 Class configClass = getConfiguration().getClass();
+	    	 for (int i = 0; i < configClass.getMethods().length; i++) {
+	    		 if (configClass.getMethods()[i].getName().startsWith("get")) {
+	    			 String value = (String) configClass.getMethods()[i].invoke(getConfiguration(), null);
+	    			 map.put(configClass.getMethods()[i].getName().substring(3), value);
+	    		 }
+	    	 }
+	    	 return map;
+	     }
+		 */
+		func.append("\t\t").append("private ").append(Map.class.getName()).append(" configurationToMap() throws Exception {").append("\n");
+		func.append("\t\t\t").append(Map.class.getName()).append(" map = new ").append(HashMap.class.getName()).append("();").append("\n");
+		func.append("\t\t\t").append(Class.class.getName()).append(" configClass = getConfiguration().getClass();").append("\n");
+		func.append("\t\t\t").append("for (int i = 0; i < configClass.getMethods().length; i++) {").append("\n");
+		func.append("\t\t\t\t").append("if (configClass.getMethods()[i].getName().startsWith(\"get\")) {").append("\n");
+		func.append("\t\t\t\t\t").append("String value = (String) configClass.getMethods()[i].invoke(getConfiguration(), null);").append("\n");
+		func.append("\t\t\t\t\t").append("map.put(configClass.getMethods()[i].getName().substring(3), value);").append("\n");
+		func.append("\t\t\t\t").append("}\n");
+		func.append("\t\t\t").append("}\n");
+		func.append("return map;").append("\n");
+		func.append("}\n");
+		return func.toString();
 	}
 	
 	
