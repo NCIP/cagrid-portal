@@ -1,16 +1,55 @@
 package gov.nih.nci.cagrid.graph.domainmodelapplication;
 
+import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
+
 import java.awt.Color;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 import javax.swing.JPanel;
 
 public class DomainModelXMLOutline extends JPanel
 {
-	public DomainModelXMLOutline()
+	public DomainModelXMLOutlineToolBar toolBar;
+	public DomainModelXMLOutlineClippedTreePane    treePane;
+	public DomainModelXMLOutlineTree				tree;
+	
+	public static int toolBarHeight = 30;
+	
+	public DomainModelXMLOutline(DomainModel model)
 	{
-		super();
+	
+		this.setLayout(null);
+	
+		tree = new DomainModelXMLOutlineTree();
+		treePane = new DomainModelXMLOutlineClippedTreePane();
+		treePane.setViewportView(tree);
+		toolBar = new DomainModelXMLOutlineToolBar();
 		
-		this.setBackground(Color.white);
+		this.add(treePane);
+		this.add(toolBar);
+		
+		
+		
+		this.addComponentListener(new DomainModelXMLOutlineComponentListener());
 	}
 	
+	public void resizeChildren()
+	{
+		toolBar.setBounds(0, 0, getWidth(), toolBarHeight);
+		treePane.setBounds(0, toolBarHeight + 1, getWidth(), getHeight() - toolBarHeight - 1);
+		this.validate();
+	}
+	
+	
+}
+
+class DomainModelXMLOutlineComponentListener extends ComponentAdapter
+{
+	public void componentResized(ComponentEvent e)
+	{
+		DomainModelXMLOutline s = (DomainModelXMLOutline) e.getSource();
+		
+		s.resizeChildren();
+	}
 }
