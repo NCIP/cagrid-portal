@@ -13,7 +13,7 @@ public class DomainModelOutline extends JPanel
 	public DomainModelOutlineClippedTreePane    treePane;
 	public DomainModelOutlineTree				tree;
 	
-	public static int toolBarHeight = 30;
+	public static int toolBarHeight = 28;
 	
 	public DomainModelOutline()
 	{
