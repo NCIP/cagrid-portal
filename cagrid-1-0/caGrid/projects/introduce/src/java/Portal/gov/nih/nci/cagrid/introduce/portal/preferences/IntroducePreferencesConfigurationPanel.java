@@ -6,13 +6,13 @@ import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-public class IntroducePreferencesConfigureationPanel extends
+public class IntroducePreferencesConfigurationPanel extends
 		BasePreferenceConfigurationPanel {
 	
 	private JLabel globusLocationLabel = null;
 	private JTextField globusLocationTextField = null;
 
-	public IntroducePreferencesConfigureationPanel(){
+	public IntroducePreferencesConfigurationPanel(){
 		super();
 		initialize();
 	}

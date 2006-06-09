@@ -10,7 +10,7 @@ public class IntroducePreferencesTreeNode extends PreferencesTypeTreeNode {
 	}
 
 	public PreferenceConfigurationContainerPanel getConfigurationPanel() {
-		return new PreferenceConfigurationContainerPanel(new IntroducePreferencesConfigureationPanel());
+		return new PreferenceConfigurationContainerPanel(new IntroducePreferencesConfigurationPanel());
 	}
 
 	public void initialize() {
