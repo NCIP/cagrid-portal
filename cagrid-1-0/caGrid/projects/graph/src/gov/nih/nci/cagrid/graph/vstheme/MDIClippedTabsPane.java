@@ -85,36 +85,38 @@ public class MDIClippedTabsPane extends JLayeredPane
 	
 	public void scrollToPosition(int x)
 	{
-	
-		
+
 		if(this.tabsPane.getPreferredWidth() > this.getMWidth())
 		{
-
-			if(x >= 0 && x < this.tabsPane.getWidth() - this.getMWidth())
+		
+			if(x >= 0 && x < this.tabsPane.getPreferredWidth() - this.getMWidth())
 			{
 				this.current = x; 
-				this.repositionAndResize();
+		
 			}
 			else
 			{
-				if(x < this.tabsPane.getWidth() - this.getMWidth() && x < 0)
+				
+				if(x < this.tabsPane.getPreferredWidth() - this.getMWidth() && x < 0)
 				{
 					this.current = 0; 
-					this.repositionAndResize();
-						
 				}
-				else if(x >= this.tabsPane.getWidth() - this.getMWidth() && x >= 0)
+				else if(x >= this.tabsPane.getPreferredWidth() - this.getMWidth() && x >= 0)
 				{
-					this.current = this.tabsPane.getWidth() - this.getMWidth(); 
-					this.repositionAndResize();		
+					this.current = this.tabsPane.getPreferredWidth() - this.getMWidth(); 
+				
 				}
 				else
 				{
 					System.out.println("MDIClippedTabsPane: should not be here");
 				}
 			}
+			System.out.println(current);
+			this.repositionAndResize();
 		}
 	}
+	
+	
 	
 	public void scrollHorizontally(int x)
 	{
@@ -149,52 +151,48 @@ public class MDIClippedTabsPane extends JLayeredPane
 		{
 			
 			s.tabsPane.setBounds(0, 0, s.getMWidth(), s.getHeight());
-			s.disableScrolling();
+			this.disableScrolling();
 		}
 		else
 		{	
-			if(getMWidth() <= tabsPane.getPreferredWidth() - current)
+			if(current == 0)
+			{
+				s.tabsPane.setBounds(0, 0, s.getMWidth(), s.getHeight());
+				
+				s.scrollLeftButton.disable();
+				s.scrollRightButton.enable();
+				
+			}
+			
+			else if(getMWidth() <= tabsPane.getPreferredWidth() - current)
 			{
 				s.tabsPane.setBounds(-s.current, 0, s.tabsPane.getPreferredWidth(), s.getHeight());
 				
-				s.enableScrolling();
-				
-				if(s.current == 0)
-				{
-					s.scrollLeftButton.disable();
-				}
-				
-				if(getMWidth() >= tabsPane.getPreferredWidth() - current	)
-				{
-					s.scrollRightButton.disable();
-				}
+				this.scrollLeftButton.enable();
+				this.scrollRightButton.enable();
+			
 			}
 			else
 			{
 				this.scrollToPosition(s.tabsPane.getPreferredWidth() - this.getMWidth());
 				
-				s.enableScrolling();
-				
-				if(s.current == 0)
-				{
-					s.scrollLeftButton.disable();
-				}
-				
-				if(getMWidth() >= tabsPane.getPreferredWidth() - current	)
-				{
-					s.scrollRightButton.disable();
-				}				
+				this.scrollLeftButton.enable();
+				this.scrollRightButton.disable();
 			}
 		}
+	
+		s.validate();		
+	}
+	
+	public void repositionInit()
+	{
+		MDIClippedTabsPane s = this;
 		
 		s.utilityBox.setBounds(this.getWidth()- utilityBoxWidth, 0, utilityBoxWidth, this.getHeight());
 		
 		s.closeButton.setBounds(this.getWidth()- 19, 5, 15, 15);
 		s.scrollRightButton.setBounds(this.getWidth()- 35, 5, 15, 15);
 		s.scrollLeftButton.setBounds(this.getWidth() - 50, 5, 15, 15);
-		
-		
-		s.validate();		
 	}
 }
 
@@ -205,6 +203,9 @@ class MDIClippedTabsPaneComponentListener extends ComponentAdapter
 		MDIClippedTabsPane s = (MDIClippedTabsPane) e.getSource();
 		
 		s.repositionAndResize();
+		
+		s.repositionInit();
+		
 	
 	}
 }

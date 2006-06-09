@@ -71,6 +71,8 @@ public class MultipleComponentContainer extends JLayeredPane
 		this.validate();
 		this.repaint();
 		
+		System.out.println(currentShownComponent);
+		
 	}
 }
 
@@ -86,5 +88,7 @@ class MultipleComponentContainerComponentListener extends ComponentAdapter
 			
 			c.setBounds(0, 0, s.getWidth(), s.getHeight());
 		}
+		
+		s.validate();
 	}
 }

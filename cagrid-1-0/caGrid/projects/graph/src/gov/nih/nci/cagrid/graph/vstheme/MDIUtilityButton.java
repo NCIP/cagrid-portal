@@ -118,7 +118,7 @@ public class MDIUtilityButton extends JComponent
     {
     	
         Graphics g = this.getGraphics();
-        g.copyArea(1, 1, this.getWidth() , this.getHeight() , 1, 1);
+        if(enabled) g.copyArea(1, 1, this.getWidth() , this.getHeight() , 1, 1);
 
         g.setColor(borderDarkColor);
         g.drawLine(0, 0, 0, this.getHeight()-1);
@@ -134,7 +134,7 @@ public class MDIUtilityButton extends JComponent
     protected void drawBordersForMouseRelease()
     {
         Graphics g = this.getGraphics();
-        g.copyArea(1, 1, this.getWidth() , this.getHeight() , -1, -1);
+        if(enabled) g.copyArea(1, 1, this.getWidth() , this.getHeight() , -1, -1);
         this.drawBordersForMouseExit();
         this.isPressed = false;
         this.repaint();

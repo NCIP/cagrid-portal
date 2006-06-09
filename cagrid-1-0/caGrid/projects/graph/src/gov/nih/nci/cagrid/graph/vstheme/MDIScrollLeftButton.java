@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.graph.vstheme;
 
 import java.awt.Color;
+import java.awt.Event;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -41,14 +42,18 @@ public class MDIScrollLeftButton extends MDIUtilityButton
 
 class MDIScrollLeftButtonMouseListener extends MouseAdapter
 {
-	public void mousePressed(MouseEvent e)
+	public void mousePressed(MouseEvent e) 
 	{
 		MDIScrollLeftButton s = (MDIScrollLeftButton) e.getSource();
 		
 		if(s.enabled)
 		{
-			s.parent.tabs.scrollHorizontally(-15);
+			s.parent.tabs.scrollHorizontally(-25);
+			
+			
 		}
+		
+		
 		
 		
 	}

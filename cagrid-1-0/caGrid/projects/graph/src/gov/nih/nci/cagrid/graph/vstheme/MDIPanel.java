@@ -62,6 +62,7 @@ public class MDIPanel extends JComponent
 			this.pageIDs.remove(i);
 			
 			this.tabs.tabsPane.removeTab(i);
+			this.tabs.repositionAndResize();
 			this.container.removeComponent(i);
 			
 			this.setActivePage(0);
