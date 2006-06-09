@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.graph.uml;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -34,13 +35,14 @@ public class UMLDiagram extends JLayeredPane {
 		return this.viewer;
 	}
 
-	public UMLDiagram() {
+	public UMLDiagram() 
+	{
 		super();
 
 		diagram = new Diagram();
 		viewer = new UMLViewer(this);
 
-		// viewer.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+		viewer.setBorder(BorderFactory.createLineBorder(Color.lightGray, 1));
 		viewer.setBorder(BorderFactory.createEmptyBorder());
 
 		this.menubar = new UMLMenuBar();
@@ -113,6 +115,11 @@ public class UMLDiagram extends JLayeredPane {
 		this.layouter.add(new ClassdiagramAssociationEdge(edge));
 
 		return true;
+	}
+	
+	public void scrollToShowClass(String name)
+	{
+		//
 	}
 
 

@@ -2,8 +2,10 @@ package gov.nih.nci.cagrid.graph.domainmodelapplication;
 
 
 
+import gov.nih.nci.cagrid.graph.uml.UMLDiagram;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.event.ComponentAdapter;
@@ -41,11 +43,9 @@ public class DomainModelExplorer extends JLayeredPane
 	
 	public DomainModelExplorer()
 	{
-
-			outlineMDI = new DomainModelOutlines();
-			umlMDI = new DomainModelUMLViews();
-			
-			
+			outlineMDI = new DomainModelOutlines(this);
+			umlMDI = new DomainModelUMLViews(this);
+					
 			this.add(outlineMDI);
 			this.add(umlMDI);
 			this.add(splitter);
@@ -65,17 +65,49 @@ public class DomainModelExplorer extends JLayeredPane
 	
 	public void showPage(DomainModelTreeNode node, String pageId)
 	{
-		if(cache.containsKey(pageId))
+		if(cache.containsValue(pageId))
 		{
+			if(node.type == DomainModelTreeNode.CLASS)
+			{
+				UMLDiagram diagram = (UMLDiagram) this.umlMDI.getPageById(node.name);
+				
+				if(diagram != null)
+				{
+					diagram.scrollToShowClass(node.name);
+				}
+			}
+			
 			this.umlMDI.setActivePageByID(pageId);
 		}
 		else
 		{
-			
+			if(node.type == DomainModelTreeNode.CLASS)
+			{
+				UMLDiagram d = new UMLDiagram();
+				initializeUMLDiagram(d, model, node.name);
+				d.scrollToShowClass(node.name);
+				this.umlMDI.addPage(d, null, node.name, node.name);
+				this.cache.put(node, pageId);
+			}
+			else if(node.type == DomainModelTreeNode.PACKAGE)
+			{
+				UMLDiagram d = new UMLDiagram();
+				initializeUMLDiagram(d, model, node.name);
+				this.umlMDI.addPage(d, null, node.name, node.name);
+				this.cache.put(node, pageId);
+			}
+			else if(node.type == DomainModelTreeNode.DOMAIN)
+			{
+				DomainModelOverview o = new DomainModelOverview(model);
+				this.umlMDI.addPage(o, null, node.name, node.name);
+			}
 		}
 	}
 	
-	
+	public void initializeUMLDiagram(UMLDiagram d, DomainModel m, String name)
+	{
+		
+	}
 	
 	public void setDomainModel(DomainModel model)
 	{
@@ -101,11 +133,9 @@ public class DomainModelExplorer extends JLayeredPane
 			{
 				String packageName = c.getPackageName();
 				String className = c.getClassName();
-				
 			}
-			
-		
 		}
+		
 		
 		
 	}
@@ -164,7 +194,7 @@ public class DomainModelExplorer extends JLayeredPane
 	protected void requestSplitterMove(int x)
 	{
 		// if *PROJECTED/anticipated* move violates bounds THEN disallow move, otherwise grant
-		
+		splitter.setBackground(Color.gray);
 		if(splitter.getLocation().getX()+x-splitterLastClicked.x >= 100)
 		{
 			splitter.setLocation(splitter.getX() + x  - splitterLastClicked.x + 1, splitter.getY() );		
@@ -181,6 +211,13 @@ public class DomainModelExplorer extends JLayeredPane
 		umlMDI.setBounds(splitter.getX() + splitter.getWidth(), 0, getWidth() - outlineMDI.getWidth() - splitter.getWidth(), getHeight());		
 			
 	}
+}
+
+class MultiMapElement 
+{
+	public String head;
+	public Vector list;
+	
 }
 
 class DomainModelExplorerComponentListener extends ComponentAdapter
@@ -200,6 +237,7 @@ class DomainModelSplitterMouseListener extends MouseAdapter
 		DomainModelExplorer parent = (DomainModelExplorer) splitter.getParent();
 		parent.splitterLastClicked = e.getPoint();
 		parent.splitterMoving = true;
+		
 	}
 	
 	public void mouseReleased(MouseEvent e)
@@ -208,6 +246,7 @@ class DomainModelSplitterMouseListener extends MouseAdapter
 		DomainModelExplorer parent = (DomainModelExplorer) splitter.getParent();
 		
 		parent.splitterMoved();
+		parent.splitter.setBackground(Color.lightGray);
 	}
 }
 

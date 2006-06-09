@@ -71,7 +71,7 @@ public class MDIPanel extends JComponent
 	
 	public void removeCurrentPage()
 	{
-		System.out.println(currentPage);
+	
 		removePage(currentPage);
 	}
 	
@@ -90,13 +90,45 @@ public class MDIPanel extends JComponent
 	
 	public void setActivePageByID(String id)
 	{
+		// NOTE: if there are more than one instances
+		// of the same page shown in the MDI, this
+		// will activate the last one.
 		
-
+		for(int k = 0; k < this.pages.size(); k++)
+		{
+			if(pageIDs.get(k).equals(id))
+			{
+				setActivePage(k);
+			}
+		}
+	}
+	
+	public JComponent getPageById(String id)
+	{
+		JComponent rval = null;
+		for(int k = 0; k < this.pages.size(); k++)
+		{
+			if(pageIDs.get(k).equals(id))
+			{
+				rval= (JComponent) pages.elementAt(k);
+			}
+		}
+		return rval;
 	}
 	
 	public void setActivePageByTitle(String title)
 	{
+		// NOTE: if there are more than one instances
+		// of the same page shown in the MDI, this
+		// will activate the last one.
 		
+		for(int k = 0; k < this.pages.size(); k++)
+		{
+			if(pageTitles.get(k).equals(title))
+			{
+				setActivePage(k);
+			}
+		}		
 	}
 	
 	public int getPageCount()

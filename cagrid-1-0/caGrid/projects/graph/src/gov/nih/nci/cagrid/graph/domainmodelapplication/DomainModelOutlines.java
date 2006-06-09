@@ -11,10 +11,12 @@ import javax.swing.JTree;
 
 public class DomainModelOutlines extends InternalFrame
 {
+	public DomainModelExplorer parent;
 	public InvertedMDIPanel mdi;
 	
-	public DomainModelOutlines()
+	public DomainModelOutlines(DomainModelExplorer parent)
 	{
+		this.parent = parent;
 		mdi = new InvertedMDIPanel(this);
 		
 		mdi.addPage(new DomainModelOutline(), null, "Domain Model");

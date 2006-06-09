@@ -7,6 +7,13 @@ import java.awt.Graphics;
 
 public class DomainModelUMLViews extends MDIPanel
 {
+	public DomainModelExplorer parent;
+	
+	public DomainModelUMLViews(DomainModelExplorer parent)
+	{
+		this.parent = parent;
+	}
+	
 	public void paint(Graphics g)
 	{
 		super.paint(g);
