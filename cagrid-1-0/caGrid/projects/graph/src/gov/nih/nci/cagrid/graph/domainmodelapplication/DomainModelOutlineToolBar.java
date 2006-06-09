@@ -4,7 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.io.File;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -13,6 +14,8 @@ import javax.swing.JPanel;
 
 public class DomainModelOutlineToolBar extends JPanel
 {
+	
+	public DomainModelOutline parent;
 
 	public JButton expandCollapseButton = new JButton(new ImageIcon(System.getProperty("user.dir") + "\\resource\\expandcollapse.png"));
 	public JButton sortButton = new JButton(new ImageIcon(System.getProperty("user.dir") + "\\resource\\sort.png"));
@@ -21,11 +24,13 @@ public class DomainModelOutlineToolBar extends JPanel
 	
 	public int inset = 4;
 	
-	public DomainModelOutlineToolBar()
+	public DomainModelOutlineToolBar(DomainModelOutline parent)
 	{
+	
 		
 		super();
 		
+		this.parent  = parent;
 
 		this.setLayout(null);
 		this.setBackground(new Color(219, 216, 209));
@@ -52,6 +57,8 @@ public class DomainModelOutlineToolBar extends JPanel
 		this.add(refreshButton);
 		this.add(searchButton);
 		
+		this.expandCollapseButton.addMouseListener(new ExpandCollapseButtonMouseListener(parent));
+		
 		expandCollapseButton.setToolTipText("Expand/Collapse Tree");
 		sortButton.setToolTipText("Sort Tree");
 		refreshButton.setToolTipText("Refresh Tree");
@@ -60,11 +67,26 @@ public class DomainModelOutlineToolBar extends JPanel
 		this.addComponentListener(new DomainModelOutlineToolbarComponentListener());
 	}
 	
+	
 	public void paint(Graphics g)
 	{
 		super.paint(g);
 		g.setColor(Color.lightGray);
 		g.drawLine(0, this.getHeight(), this.getWidth(), this.getHeight() );
+	}
+}
+
+class ExpandCollapseButtonMouseListener extends MouseAdapter
+{
+	public DomainModelOutline parent;
+	
+	public ExpandCollapseButtonMouseListener(DomainModelOutline parent)
+	{
+		this.parent = parent;
+	}
+	public void mouseClicked(MouseEvent e)
+	{
+		parent.tree.toggleExpansion();
 	}
 }
 

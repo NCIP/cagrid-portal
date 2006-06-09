@@ -23,7 +23,7 @@ public class DomainModelOutline extends JPanel
 		tree = new DomainModelOutlineTree();
 		treePane = new DomainModelOutlineClippedTreePane();
 		treePane.setViewportView(tree);
-		toolBar = new DomainModelOutlineToolBar();
+		toolBar = new DomainModelOutlineToolBar(this);
 		
 		this.add(treePane);
 		this.add(toolBar);
