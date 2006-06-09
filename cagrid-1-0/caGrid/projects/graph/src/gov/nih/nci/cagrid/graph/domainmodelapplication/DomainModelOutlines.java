@@ -18,7 +18,7 @@ public class DomainModelOutlines extends InternalFrame
 		mdi = new InvertedMDIPanel(this);
 		
 		mdi.addPage(new DomainModelOutline(), null, "Domain Model");
-		mdi.addPage(new DomainModelXMLOutline(), null, "XML Outline");
+		//mdi.addPage(new DomainModelXMLOutline(), null, "XML Outline");
 		
 		this.setComponent(mdi);
 		

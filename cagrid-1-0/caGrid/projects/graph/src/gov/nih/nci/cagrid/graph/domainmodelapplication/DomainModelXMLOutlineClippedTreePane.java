@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.graph.domainmodelapplication;
 
+import java.awt.Color;
+
 import javax.swing.BorderFactory;
 import javax.swing.JScrollPane;
 
@@ -9,6 +11,6 @@ public class DomainModelXMLOutlineClippedTreePane extends JScrollPane
 	{
 		super();
 		
-		this.setBorder(BorderFactory.createEmptyBorder());
+		this.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
 	}
 }

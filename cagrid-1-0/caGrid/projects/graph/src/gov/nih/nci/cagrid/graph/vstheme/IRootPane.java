@@ -20,7 +20,7 @@ public class IRootPane extends JComponent
     protected ICaptionBar captionBar;
     protected int         captionBarHeight = 18;
     protected IBorder     border;
-    protected int         borderWidth = 1;
+    protected int         borderWidth = 0;
 
     protected IContentPane contentPane;
     protected int          contentInset = 0;
