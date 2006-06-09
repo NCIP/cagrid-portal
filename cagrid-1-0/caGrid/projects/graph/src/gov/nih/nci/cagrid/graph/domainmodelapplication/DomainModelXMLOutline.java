@@ -1,8 +1,16 @@
 package gov.nih.nci.cagrid.graph.domainmodelapplication;
 
-import javax.swing.JComponent;
+import java.awt.Color;
 
-public class DomainModelXMLOutline extends JComponent
+import javax.swing.JPanel;
+
+public class DomainModelXMLOutline extends JPanel
 {
+	public DomainModelXMLOutline()
+	{
+		super();
+		
+		this.setBackground(Color.white);
+	}
 	
 }

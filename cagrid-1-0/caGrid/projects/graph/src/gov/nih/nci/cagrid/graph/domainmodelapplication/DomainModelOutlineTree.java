@@ -2,9 +2,9 @@ package gov.nih.nci.cagrid.graph.domainmodelapplication;
 
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
-import javax.swing.JComponent;
+import javax.swing.JPanel;
 
-public class DomainModelOutlineTree extends JComponent
+public class DomainModelOutlineTree extends JPanel
 {
 	
 	

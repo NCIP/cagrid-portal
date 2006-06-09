@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.graph.vstheme;
 
+import java.awt.BorderLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.Vector;
@@ -57,9 +58,12 @@ public class MultipleComponentContainer extends JLayeredPane
 			this.setLayer(c, JLayeredPane.DEFAULT_LAYER.intValue());
 			currentShownComponent = -1;
 			
-
+			System.out.println("tucked");
 		
 		}
+		
+
+		
 		if(i >= 0 && i < this.components.size())
 		{
 			JComponent c = (JComponent) this.components.get(i);

@@ -5,9 +5,9 @@ import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
-import javax.swing.JComponent;
+import javax.swing.JPanel;
 
-public class DomainModelOutline extends JComponent
+public class DomainModelOutline extends JPanel
 {
 	public DomainModelOutlineToolBar toolBar;
 	public DomainModelOutlineTree    tree;
@@ -16,6 +16,8 @@ public class DomainModelOutline extends JComponent
 	
 	public DomainModelOutline(DomainModel exp)
 	{
+	
+		this.setLayout(null);
 	
 		tree = new DomainModelOutlineTree();
 		toolBar = new DomainModelOutlineToolBar();
@@ -32,6 +34,7 @@ public class DomainModelOutline extends JComponent
 	{
 		toolBar.setBounds(0, 0, getWidth(), toolBarHeight);
 		tree.setBounds(0, toolBarHeight + 1, getWidth(), getHeight() - toolBarHeight - 1);
+		this.validate();
 	}
 	
 	
