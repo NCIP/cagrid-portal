@@ -15,7 +15,6 @@ public class MultipleComponentContainer extends JLayeredPane
 	
 	public MultipleComponentContainer()
 	{
-		//this.setLayout(new BorderLayout());
 		this.addComponentListener(new MultipleComponentContainerComponentListener());
 	}
 	

@@ -10,22 +10,25 @@ import javax.swing.JPanel;
 public class DomainModelOutline extends JPanel
 {
 	public DomainModelOutlineToolBar toolBar;
-	public DomainModelOutlineTree    tree;
+	public DomainModelOutlineClippedTreePane    treePane;
+	public DomainModelOutlineTree				tree;
 	
 	public static int toolBarHeight = 30;
 	
-	public DomainModelOutline(DomainModel exp)
+	public DomainModelOutline(DomainModel model)
 	{
 	
 		this.setLayout(null);
 	
 		tree = new DomainModelOutlineTree();
+		treePane = new DomainModelOutlineClippedTreePane();
+		treePane.setViewportView(tree);
 		toolBar = new DomainModelOutlineToolBar();
 		
-		this.add(tree);
+		this.add(treePane);
 		this.add(toolBar);
 		
-		tree.setDomainModel(exp);
+		
 		
 		this.addComponentListener(new DomainModelOutlineComponentListener());
 	}
@@ -33,7 +36,7 @@ public class DomainModelOutline extends JPanel
 	public void resizeChildren()
 	{
 		toolBar.setBounds(0, 0, getWidth(), toolBarHeight);
-		tree.setBounds(0, toolBarHeight + 1, getWidth(), getHeight() - toolBarHeight - 1);
+		treePane.setBounds(0, toolBarHeight + 1, getWidth(), getHeight() - toolBarHeight - 1);
 		this.validate();
 	}
 	

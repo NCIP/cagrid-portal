@@ -6,9 +6,10 @@ import javax.swing.JPanel;
 
 public class DomainModelOutlineToolBar extends JPanel
 {
+	
 	public DomainModelOutlineToolBar()
 	{
 		super();
-		this.setBackground(Color.gray);
+	
 	}
 }
