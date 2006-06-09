@@ -11,6 +11,8 @@ From BMI Tutorial:
 5) Service Contexts.. create Service Context needs defaults for the values (namespace, package, etc..)
 6) Adding a resource property to a service context, doesn't refresh the JTree
 7) Right-clicking the modify service context, removed the service and through a NPE
+8) when we write the .classpath, we should "hard code" globus location instead of using the classpath variable
+  - core cagrid services using introduce can search and replace the hard code with the variable before commiting to CVS
 
 
 Introduce Portal (or something it uses) is leaving file handles open
