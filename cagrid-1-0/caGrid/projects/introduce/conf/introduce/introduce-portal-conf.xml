@@ -1,60 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <grid-portal>
-	<resource name="GridPortalConfig" class="org.projectmobius.portal.GridPortalConfig">
-		<grid-portal-config>
-			<application>
-				<name>Introduce: Grid Service Authoring Toolkit</name>
-				<icon>/applications-internet.png</icon>
-				<logo-bar-image>/caBIGLogo.jpg</logo-bar-image>
-				<initializer>gov.nih.nci.cagrid.introduce.portal.IntroducePortalInitializer</initializer>
-				<about><![CDATA[<html><h2>Introduce Grid Service Authoring Toolkit</h2><h3>Authors:</h3><a href="mailto:hastings@bmi.osu.edu">Shannon Hastings</a> and <a href="mailto:langella@bmi.osu.edu">Stephen Langella</a> and <a href="mailto:oster@bmi.osu.edu">Scott Oster</a>]]></about>
-				<dimensions>
-					<width>1000</width>
-					<height>900</height>
-				</dimensions>
-			</application>
-			<components>
-				<component>
-					<title>Create Service</title>
-					<description>Create Service Skeleton</description>
-					<class>gov.nih.nci.cagrid.introduce.portal.creation.CreationViewer</class>
-					<icon>/cog_add.png</icon>
-					<dimensions>
-						<width>500</width>
-						<height>300</height>
-					</dimensions>
-				</component>	
-				<component>
-					<title>Modify Service</title>
-					<description>Modify Service Skeleton</description>
-					<class>gov.nih.nci.cagrid.introduce.portal.modification.ModificationViewer</class>
-					<icon>/cog_edit.png</icon>
-					<dimensions>
-						<width>0</width>
-						<height>0</height>
-					</dimensions>
-				</component>
-				<component>
-					<title>Deploy Service</title>
-					<description>Deploy Grid Service</description>
-					<class>gov.nih.nci.cagrid.introduce.portal.deployment.DeploymentViewer</class>
-					<icon>/cog_go.png</icon>
-					<dimensions>
-						<width>0</width>
-						<height>0</height>
-					</dimensions>
-				</component>
-				<component>
-					<title>Types Management Tools</title>
-					<description>Types Management Tools</description>
-					<class>gov.nih.nci.cagrid.introduce.portal.discoverytools.core.TypesToolsComponent</class>
-					<icon>/system-search.png</icon>
-				</component>
-			</components>
-		</grid-portal-config>
-	</resource>
-	<resource name="IntroducePortalConf" class="gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf">
-		<introduce-portal-config>
-			<globusLocation></globusLocation>
-		</introduce-portal-config>
-	</resource>
+  <resource name="GridPortalConfig" class="org.projectmobius.portal.GridPortalConfig">
+    <grid-portal-config>
+      <application>
+        <name>Introduce: Grid Service Authoring Toolkit</name>
+        <icon>/applications-internet.png</icon>
+        <logo-bar-image>/caBIGLogo.jpg</logo-bar-image>
+        <initializer>gov.nih.nci.cagrid.introduce.portal.IntroducePortalInitializer</initializer>
+        <about><![CDATA[<html><h2>Introduce Grid Service Authoring Toolkit</h2><h3>Authors:</h3><a href="mailto:hastings@bmi.osu.edu">Shannon Hastings</a> and <a href="mailto:langella@bmi.osu.edu">Stephen Langella</a> and <a href="mailto:oster@bmi.osu.edu">Scott Oster</a>]]></about>
+        <dimensions>
+          <width>1000</width>
+          <height>900</height>
+        </dimensions>
+      </application>
+      <components>
+        <component>
+          <title>Create Service</title>
+          <description>Create Service Skeleton</description>
+          <class>gov.nih.nci.cagrid.introduce.portal.creation.CreationViewer</class>
+          <icon>/cog_add.png</icon>
+          <dimensions>
+            <width>500</width>
+            <height>300</height>
+          </dimensions>
+        </component>
+        <component>
+          <title>Modify Service</title>
+          <description>Modify Service Skeleton</description>
+          <class>gov.nih.nci.cagrid.introduce.portal.modification.ModificationViewer</class>
+          <icon>/cog_edit.png</icon>
+          <dimensions>
+            <width>0</width>
+            <height>0</height>
+          </dimensions>
+        </component>
+        <component>
+          <title>Deploy Service</title>
+          <description>Deploy Grid Service</description>
+          <class>gov.nih.nci.cagrid.introduce.portal.deployment.DeploymentViewer</class>
+          <icon>/cog_go.png</icon>
+          <dimensions>
+            <width>0</width>
+            <height>0</height>
+          </dimensions>
+        </component>
+        <component>
+          <title>Types Management Tools</title>
+          <description>Types Management Tools</description>
+          <class>gov.nih.nci.cagrid.introduce.portal.discoverytools.core.TypesToolsComponent</class>
+          <icon>/system-search.png</icon>
+        </component>
+      </components>
+    </grid-portal-config>
+  </resource>
+  <resource name="IntroducePortalConf" class="gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf">
+    <introduce-portal-config>
+      <globusLocation>test</globusLocation>
+    </introduce-portal-config>
+  </resource>
 </grid-portal>
+

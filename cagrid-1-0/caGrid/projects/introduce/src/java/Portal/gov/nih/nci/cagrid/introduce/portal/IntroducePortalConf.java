@@ -36,4 +36,8 @@ public class IntroducePortalConf implements AbstractMobiusConfiguration {
 	public String getGlobusLocation() {
 		return globusLocation;
 	}
+	
+	public void setGlobusLocation(String globusLocation) {
+		this.globusLocation = globusLocation;
+	}
 }

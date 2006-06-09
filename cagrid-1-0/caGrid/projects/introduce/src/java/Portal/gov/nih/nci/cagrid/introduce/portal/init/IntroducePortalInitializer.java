@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.portal;
+package gov.nih.nci.cagrid.introduce.portal.init;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
