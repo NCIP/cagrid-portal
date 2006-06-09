@@ -101,7 +101,7 @@ public class PreferencesDialog extends JDialog {
 			gridBagConstraints2.gridx = 0;
 			preferenceNavigationPanel = new JPanel();
 			preferenceNavigationPanel.setLayout(new GridBagLayout());
-			preferenceNavigationPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Preferences",
+			preferenceNavigationPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Topics",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
 			preferenceNavigationPanel.add(getPrefencesScrollPane(), gridBagConstraints2);
@@ -223,7 +223,7 @@ public class PreferencesDialog extends JDialog {
 		if (preferneceConfigViewPanel == null) {
 			preferneceConfigViewPanel = new JPanel(new CardLayout());
 			preferneceConfigViewPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
-				"Preference Configuration", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				"Configuration", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
 			addTreePanels((PreferencesTypeTreeNode) preferencesTree.getModel().getRoot());
 		}
