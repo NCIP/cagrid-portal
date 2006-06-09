@@ -30,6 +30,13 @@ public class DomainModelOutlineToolBar extends JPanel
 		this.setLayout(null);
 		this.setBackground(new Color(219, 216, 209));
 		
+		
+		expandCollapseButton.setRolloverIcon(new ImageIcon(System.getProperty("user.dir") + "\\resource\\expandcollapse_.png"));
+		sortButton.setRolloverIcon(new ImageIcon(System.getProperty("user.dir") + "\\resource\\sort_.png"));
+		refreshButton.setRolloverIcon(new ImageIcon(System.getProperty("user.dir") + "\\resource\\refresh_.png"));
+		searchButton.setRolloverIcon(new ImageIcon(System.getProperty("user.dir") + "\\resource\\search_.png"));
+		
+		
 		this.expandCollapseButton.setBorder(BorderFactory.createEmptyBorder());
 		this.sortButton.setBorder(BorderFactory.createEmptyBorder());
 		this.refreshButton.setBorder(BorderFactory.createEmptyBorder());
@@ -44,6 +51,11 @@ public class DomainModelOutlineToolBar extends JPanel
 		this.add(sortButton);
 		this.add(refreshButton);
 		this.add(searchButton);
+		
+		expandCollapseButton.setToolTipText("Expand/Collapse Tree");
+		sortButton.setToolTipText("Sort Tree");
+		refreshButton.setToolTipText("Refresh Tree");
+		searchButton.setToolTipText("Specify Search Filter");
 		
 		this.addComponentListener(new DomainModelOutlineToolbarComponentListener());
 	}
