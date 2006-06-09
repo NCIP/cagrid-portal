@@ -14,12 +14,15 @@ import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import org.apache.axis.message.MessageElement;
@@ -66,19 +69,16 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 		} catch (Exception ex) {
 			throw new CodegenExtensionException("Error syncing eclipse .classpath file: " + ex.getMessage(), ex);
 		}
-		modifyQueryMethod(desc, info);
+		modifyQueryMethod(info);
+		try {
+			modifyDeployProperties(desc, info);
+		} catch (Exception ex) {
+			throw new CodegenExtensionException("Error modifying deploy properties: " + ex.getMessage(), ex);
+		}
 	}
 
 
-	private void modifyQueryMethod(ServiceExtensionDescriptionType desc, ServiceInformation info)
-		throws CodegenExtensionException {
-		// get the processor implementation out of the service properties
-		String implementationClassName = getQueryProcesorClass(desc, info);
-		if (implementationClassName == null || implementationClassName.length() == 0) {
-			System.out.println("No CQL Processor implementation specified");
-			return;
-		}
-
+	private void modifyQueryMethod(ServiceInformation info) throws CodegenExtensionException {
 		// Find the service implementation file
 		File serviceSrcDir = new File(info.getIntroduceServiceProperties().getProperty(
 			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
@@ -111,7 +111,7 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 		}
 
 		// put the implementation in the class
-		dropInImplementation(implementation, implementationClassName);
+		dropInImplementation(implementation);
 
 		// save the source file.
 		try {
@@ -126,7 +126,7 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 	}
 
 
-	private void dropInImplementation(StringBuffer implClass, String implClassName) {
+	private void dropInImplementation(StringBuffer implClass) {
 		int startIndex = implClass.indexOf(METHOD_START);
 		// move to the end of the signature
 		startIndex = implClass.indexOf("{", startIndex);
@@ -152,7 +152,8 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 		body.append("\n");
 		body.append("\t\t").append("gov.nih.nci.cagrid.data.cql.CQLQueryProcessor processor = null;").append("\n");
 		body.append("\t\t").append("try {").append("\n");
-		body.append("\t\t\t").append("processor = new ").append(implClassName).append("();").append("\n");
+		body.append("\t\t\t").append("Class qpClass = Class.forName(getConfiguration().get").append(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY).append("());").append("\n");
+		body.append("\t\t\t").append("processor = qpClass.newInstance();").append("\n");
 		body.append("\t\t\t").append("processor.initialize(configurationToMap());").append("\n");
 		body.append("\t\t").append("} catch (Exception ex) {").append("\n");
 		// body.append("\t\t\t").append("throw new
@@ -166,7 +167,11 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 		body.append("\t\t\t").append("return null;").append("\n");
 		body.append("\t\t").append("}").append("\n");
 		body.append("\t}\n\n\n");
-		body.append(getMapperFunction());
+		// do we need to add the getMapperFunction() ?
+		String mapperFunc = getMapperFunction();
+		if (body.indexOf(mapperFunc) != -1) {
+			body.append(mapperFunc);
+		}
 		implClass.insert(startIndex, body);
 	}
 
@@ -201,6 +206,28 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 		func.append("return map;").append("\n");
 		func.append("}\n");
 		return func.toString();
+	}
+	
+	
+	private void modifyDeployProperties(
+		ServiceExtensionDescriptionType desc, ServiceInformation info) throws Exception {
+		// get the processor implementation out of the service properties
+		String implementationClassName = getQueryProcesorClass(desc, info);
+		if (implementationClassName == null || implementationClassName.length() == 0) {
+			System.out.println("No CQL Processor implementation specified");
+			return;
+		}
+		File deployPropertiesFile = new File(info.getIntroduceServiceProperties().getProperty(
+			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + IntroduceConstants.DEPLOY_PROPERTIES_FILE);
+		FileInputStream propsInput = new FileInputStream(deployPropertiesFile);
+		Properties deployProps = new Properties();
+		deployProps.load(propsInput);
+		propsInput.close();
+		deployProps.setProperty(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, implementationClassName);
+		FileOutputStream propsOutput = new FileOutputStream(deployPropertiesFile);
+		deployProps.store(propsOutput, "Modified by " + DataServiceCodegenPostProcessor.class.getName());
+		propsOutput.flush();
+		propsOutput.close();
 	}
 
 
