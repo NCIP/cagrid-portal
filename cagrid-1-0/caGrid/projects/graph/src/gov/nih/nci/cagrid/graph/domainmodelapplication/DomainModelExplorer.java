@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.graph.domainmodelapplication;
 
 
 
-import gov.nih.nci.cagrid.graph.uml.UMLDiagram;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
 import java.awt.Cursor;
@@ -12,6 +11,8 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.HashMap;
+import java.util.Vector;
 
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
@@ -33,17 +34,15 @@ public class DomainModelExplorer extends JLayeredPane
 	
 	public boolean resizedOnce = false;
 	
+	public HashMap cache = new HashMap();
+	
+
+	
+	
 	public DomainModelExplorer()
 	{
-		this(null);
-	}
-	
-	
-	
-	public DomainModelExplorer(DomainModel model)
-	{
 
-			outlineMDI = new DomainModelOutlines(model);
+			outlineMDI = new DomainModelOutlines();
 			umlMDI = new DomainModelUMLViews();
 			
 			
@@ -53,10 +52,6 @@ public class DomainModelExplorer extends JLayeredPane
 			
 			this.setLayer(splitter, JLayeredPane.MODAL_LAYER.intValue());
 			
-			
-			umlMDI.addPage(new UMLDiagram(), null, "HI", "HI");
-			umlMDI.addPage(new UMLDiagram(), null, "hello world", "id");
-			umlMDI.addPage(new UMLDiagram(), null, "hello world", "id");
 				
 			this.splitter.setCursor(Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR));
 	
@@ -68,18 +63,59 @@ public class DomainModelExplorer extends JLayeredPane
 	
 	}
 	
+	public void showPage(DomainModelTreeNode node, String pageId)
+	{
+		if(cache.containsKey(pageId))
+		{
+			this.umlMDI.setActivePageByID(pageId);
+		}
+		else
+		{
+			
+		}
+	}
+	
+	
+	
 	public void setDomainModel(DomainModel model)
 	{
-		initModel(model);
+		clear();
+		
+		if(model != null)
+		{
+			initModel(model);
+		}
 	}
 	
 	public void initModel(DomainModel model)
 	{
+		this.model = model;
+		
+		Vector packages = new Vector();
+		
+		for(int k = 0; k < model.getExposedUMLClassCollection().getUMLClass().length; k++)
+		{
+			gov.nih.nci.cagrid.metadata.common.UMLClass c =  model.getExposedUMLClassCollection().getUMLClass()[k];
+			
+			if(c != null)
+			{
+				String packageName = c.getPackageName();
+				String className = c.getClassName();
+				
+			}
+			
+		
+		}
+		
 		
 	}
 	
 	public void clear()
 	{
+		this.model = null;
+		
+		this.outlineMDI.clear();
+		this.umlMDI.clear();
 		
 		
 	}

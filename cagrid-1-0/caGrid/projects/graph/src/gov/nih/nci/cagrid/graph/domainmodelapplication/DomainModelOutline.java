@@ -15,7 +15,7 @@ public class DomainModelOutline extends JPanel
 	
 	public static int toolBarHeight = 30;
 	
-	public DomainModelOutline(DomainModel model)
+	public DomainModelOutline()
 	{
 	
 		this.setLayout(null);

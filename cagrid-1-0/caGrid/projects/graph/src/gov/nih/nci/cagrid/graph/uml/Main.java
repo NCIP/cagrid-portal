@@ -26,7 +26,7 @@ public class Main {
 		UMLDiagram diagram = new UMLDiagram();
 
 	
-		DomainModelExplorer e = new DomainModelExplorer(null);
+		DomainModelExplorer e = new DomainModelExplorer();
 		
 		JFrame f = new JFrame();
 		f.getContentPane().add(e);

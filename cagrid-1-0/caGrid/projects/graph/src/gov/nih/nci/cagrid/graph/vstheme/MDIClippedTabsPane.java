@@ -111,7 +111,7 @@ public class MDIClippedTabsPane extends JLayeredPane
 					System.out.println("MDIClippedTabsPane: should not be here");
 				}
 			}
-			System.out.println(current);
+			
 			this.repositionAndResize();
 		}
 	}

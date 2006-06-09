@@ -16,7 +16,7 @@ public class DomainModelXMLOutline extends JPanel
 	
 	public static int toolBarHeight = 30;
 	
-	public DomainModelXMLOutline(DomainModel model)
+	public DomainModelXMLOutline()
 	{
 	
 		this.setLayout(null);

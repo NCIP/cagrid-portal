@@ -56,8 +56,6 @@ public class MultipleComponentContainer extends JLayeredPane
 			JComponent c = (JComponent) this.components.get(currentShownComponent);
 			this.setLayer(c, JLayeredPane.DEFAULT_LAYER.intValue());
 			currentShownComponent = -1;
-			
-			System.out.println("tucked");
 		
 		}
 		
@@ -74,7 +72,7 @@ public class MultipleComponentContainer extends JLayeredPane
 		this.validate();
 		this.repaint();
 		
-		System.out.println(currentShownComponent);
+	
 		
 	}
 }

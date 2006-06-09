@@ -13,12 +13,12 @@ public class DomainModelOutlines extends InternalFrame
 {
 	public InvertedMDIPanel mdi;
 	
-	public DomainModelOutlines(DomainModel model)
+	public DomainModelOutlines()
 	{
 		mdi = new InvertedMDIPanel(this);
 		
-		mdi.addPage(new DomainModelOutline(model), null, "Domain Model");
-		mdi.addPage(new DomainModelXMLOutline(model), null, "XML Outline");
+		mdi.addPage(new DomainModelOutline(), null, "Domain Model");
+		mdi.addPage(new DomainModelXMLOutline(), null, "XML Outline");
 		
 		this.setComponent(mdi);
 		
@@ -29,7 +29,20 @@ public class DomainModelOutlines extends InternalFrame
 	{
 		mdi.removePage(mdi.currentPage);
 	}
+	
+	public void setModel(DomainModel model)
+	{
+		
+	}
+	
+	public void clear()
+	{
+		
+	}
+	
+	
 }
+
 
 
 class DomainModelOutlinesFocusListener extends FocusAdapter
