@@ -1,6 +1,17 @@
 To Do:
 
-Creating a new service with Introduce Portal pops up an empty dialog box with no text once it is done building the service.
+
+From BMI Tutorial:
+0) needs handouts for people to follow along
+1) Add Fault needs to check the fault name is is valid java identifier
+  - if you put spaces or something in it, it completely screws up the service (because sync source can't read the created file)
+2) Generated fault doesn't appear to take a message
+3) We should genterate a client launcher
+4) Service Property key needs to make sure its a valid java identifier
+5) Service Contexts.. create Service Context needs defaults for the values (namespace, package, etc..)
+6) Adding a resource property to a service context, doesn't refresh the JTree
+7) Right-clicking the modify service context, removed the service and through a NPE
+
 
 Introduce Portal (or something it uses) is leaving file handles open
   - when i create a service, then close the mod viewer, and try to create it again, it can't delete the creation dir
