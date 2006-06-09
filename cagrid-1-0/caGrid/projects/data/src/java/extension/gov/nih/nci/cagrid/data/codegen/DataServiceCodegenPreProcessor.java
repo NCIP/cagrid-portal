@@ -200,6 +200,8 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 				propsInput.close();
 				// add the parameters
 				deployProps.putAll(params);
+				// add the query processor class name to the properties
+				deployProps.put(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, qpClassname);
 				// write them all back to disk
 				FileOutputStream propsOutput = new FileOutputStream(serviceDir + File.separator + IntroduceConstants.DEPLOY_PROPERTIES_FILE);
 				deployProps.store(propsOutput, "deployment properties for query processor class " + qpClassname);

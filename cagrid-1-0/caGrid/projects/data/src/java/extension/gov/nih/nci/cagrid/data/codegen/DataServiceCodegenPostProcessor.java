@@ -14,15 +14,12 @@ import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import org.apache.axis.message.MessageElement;
@@ -70,11 +67,6 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 			throw new CodegenExtensionException("Error syncing eclipse .classpath file: " + ex.getMessage(), ex);
 		}
 		modifyQueryMethod(info);
-		try {
-			modifyDeployProperties(desc, info);
-		} catch (Exception ex) {
-			throw new CodegenExtensionException("Error modifying deploy properties: " + ex.getMessage(), ex);
-		}
 	}
 
 
@@ -206,39 +198,5 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 		func.append("return map;").append("\n");
 		func.append("}\n");
 		return func.toString();
-	}
-	
-	
-	private void modifyDeployProperties(
-		ServiceExtensionDescriptionType desc, ServiceInformation info) throws Exception {
-		// get the processor implementation out of the service properties
-		String implementationClassName = getQueryProcesorClass(desc, info);
-		if (implementationClassName == null || implementationClassName.length() == 0) {
-			System.out.println("No CQL Processor implementation specified");
-			return;
-		}
-		File deployPropertiesFile = new File(info.getIntroduceServiceProperties().getProperty(
-			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + IntroduceConstants.DEPLOY_PROPERTIES_FILE);
-		FileInputStream propsInput = new FileInputStream(deployPropertiesFile);
-		Properties deployProps = new Properties();
-		deployProps.load(propsInput);
-		propsInput.close();
-		deployProps.setProperty(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, implementationClassName);
-		FileOutputStream propsOutput = new FileOutputStream(deployPropertiesFile);
-		deployProps.store(propsOutput, "Modified by " + DataServiceCodegenPostProcessor.class.getName());
-		propsOutput.flush();
-		propsOutput.close();
-	}
-
-
-	private String getQueryProcesorClass(ServiceExtensionDescriptionType desc, ServiceInformation info) {
-		ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
-		MessageElement qpEntry = ExtensionTools.getExtensionDataElement(data,
-			DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
-		if (qpEntry != null) {
-			String queryProcessorClass = qpEntry.getValue();
-			return queryProcessorClass;
-		}
-		return null;
 	}
 }

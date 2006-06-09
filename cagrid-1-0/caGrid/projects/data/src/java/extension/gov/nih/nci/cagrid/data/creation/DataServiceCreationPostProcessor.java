@@ -27,6 +27,8 @@ import gov.nih.nci.cagrid.metadata.service.Service;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -54,7 +56,15 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 			makeDataService(serviceDescription, serviceProperties);
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			throw new CreationExtensionException("Error adding data service components to template!", ex);
+			throw new CreationExtensionException("Error adding data service components to template! " + ex.getMessage(), ex);
+		}
+		// add the proper deployment properties
+		try {
+			System.out.println("Adding deploy property for query processor class");
+			modifyDeployProperties(serviceProperties);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new CreationExtensionException("Error adding query processor parameter to service! " + ex.getMessage(), ex);
 		}
 	}
 
@@ -243,5 +253,22 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		File classpathFile = new File(props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
 			+ File.separator + ".classpath");
 		ExtensionUtilities.syncEclipseClasspath(classpathFile, libs);
+	}
+	
+	
+	private void modifyDeployProperties(Properties info) throws Exception {
+		String serviceDir = info.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR);
+		File deployPropertiesFile = new File(serviceDir + File.separator + IntroduceConstants.DEPLOY_PROPERTIES_FILE);
+		Properties props = new Properties();
+		FileInputStream propsInput = new FileInputStream(deployPropertiesFile);
+		props.load(propsInput);
+		propsInput.close();
+		if (!props.containsKey(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY)) {
+			props.put(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, "");
+		}
+		FileOutputStream propsOutput = new FileOutputStream(deployPropertiesFile);
+		props.store(propsOutput, "Properties modified by " + DataServiceCreationPostProcessor.class.getName());
+		propsOutput.flush();
+		propsOutput.close();
 	}
 }
