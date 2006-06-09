@@ -87,7 +87,7 @@ public class SyncSource {
 				+ File.separator + service.getName() + "ProviderImpl.java";
 	}
 
-	private String createClientExceptions(MethodType method) {
+	public String createClientExceptions(MethodType method) {
 		String exceptions = "";
 		// process the faults for this method...
 		MethodTypeExceptions exceptionsEl = method.getExceptions();
@@ -124,7 +124,7 @@ public class SyncSource {
 		return exceptions;
 	}
 
-	private String createExceptions(MethodType method) {
+	public String createExceptions(MethodType method) {
 		String exceptions = "";
 		// process the faults for this method...
 		MethodTypeExceptions exceptionsEl = method.getExceptions();
@@ -157,7 +157,7 @@ public class SyncSource {
 		return exceptions;
 	}
 
-	private String createClientUnBoxedSignatureStringFromMethod(
+	public String createClientUnBoxedSignatureStringFromMethod(
 			MethodType method) {
 		String methodString = "";
 		MethodTypeOutput returnTypeEl = method.getOutput();
@@ -213,7 +213,7 @@ public class SyncSource {
 		return methodString;
 	}
 
-	private String createUnBoxedSignatureStringFromMethod(MethodType method) {
+	public String createUnBoxedSignatureStringFromMethod(MethodType method) {
 		String methodString = "";
 		MethodTypeOutput returnTypeEl = method.getOutput();
 		String methodName = method.getName();
@@ -262,7 +262,7 @@ public class SyncSource {
 		return methodString;
 	}
 
-	private List buildServicesClientHandleClassNameList() {
+	public List buildServicesClientHandleClassNameList() {
 		List list = new ArrayList();
 		if (serviceInfo.getServices() != null
 				&& serviceInfo.getServices().getService() != null) {
@@ -275,7 +275,7 @@ public class SyncSource {
 		return list;
 	}
 
-	private String createUnBoxedSignatureStringFromMethod(JavaMethod method)
+	public String createUnBoxedSignatureStringFromMethod(JavaMethod method)
 			throws Exception {
 		String methodString = "";
 		String methodName = method.getName();
@@ -316,7 +316,7 @@ public class SyncSource {
 		return methodString;
 	}
 
-	private String createClientUnBoxedSignatureStringFromMethod(
+	public String createClientUnBoxedSignatureStringFromMethod(
 			JavaMethod method) throws Exception {
 		String methodString = "";
 		String methodName = method.getName();
@@ -351,13 +351,13 @@ public class SyncSource {
 		return methodString;
 	}
 
-	private String getBoxedOutputTypeName(String input) {
+	public String getBoxedOutputTypeName(String input) {
 		String returnType = TemplateUtils.upperCaseFirstCharacter(input)
 				+ "Response";
 		return returnType;
 	}
 
-	private String createBoxedSignatureStringFromMethod(MethodType method)
+	public String createBoxedSignatureStringFromMethod(MethodType method)
 			throws Exception {
 		String packageName = service.getPackageName() + ".stubs";
 		if (method.isIsImported()) {
@@ -381,7 +381,7 @@ public class SyncSource {
 		return methodString;
 	}
 
-	private String createBoxedSignatureStringFromMethod(JavaMethod method)
+	public String createBoxedSignatureStringFromMethod(JavaMethod method)
 			throws Exception {
 		String methodString = "";
 		String methodName = method.getName();
@@ -534,7 +534,7 @@ public class SyncSource {
 		}
 	}
 
-	private String configureClientSecurity(ServiceSecurity ss, MethodSecurity ms) {
+	public String configureClientSecurity(ServiceSecurity ss, MethodSecurity ms) {
 		if ((ss == null) && (ms == null)) {
 			return "";
 		}
@@ -610,7 +610,7 @@ public class SyncSource {
 		return sec.toString();
 	}
 
-	private String configureAnonymousCommunication(AnonymousCommunication anon) {
+	public String configureAnonymousCommunication(AnonymousCommunication anon) {
 		StringBuffer sec = new StringBuffer();
 		if (anon.equals(AnonymousCommunication.Yes)) {
 			sec
@@ -622,7 +622,7 @@ public class SyncSource {
 		return sec.toString();
 	}
 
-	private String configureProxyIfSupplied() {
+	public String configureProxyIfSupplied() {
 		StringBuffer sec = new StringBuffer();
 		sec.append("	if (proxy != null) {\n");
 		sec.append("try{\n");
@@ -637,7 +637,7 @@ public class SyncSource {
 		return sec.toString();
 	}
 
-	private String configureClientDelegation(DelegationMode del) {
+	public String configureClientDelegation(DelegationMode del) {
 		StringBuffer sec = new StringBuffer();
 		if (del != null) {
 			if (del.equals(DelegationMode.Limited)) {
@@ -651,7 +651,7 @@ public class SyncSource {
 		return sec.toString();
 	}
 
-	private String configureClientAuthorization(ClientAuthorization auth) {
+	public String configureClientAuthorization(ClientAuthorization auth) {
 		StringBuffer sec = new StringBuffer();
 		if (auth != null) {
 			if (auth.getNoAuthorization() != null) {
@@ -683,7 +683,7 @@ public class SyncSource {
 		return sec.toString();
 	}
 
-	private void addClientImpl(MethodType method) {
+	public void addClientImpl(MethodType method) {
 		String packageName = service.getPackageName() + ".stubs";
 		if (method.isIsImported()) {
 			packageName = method.getImportInformation().getPackageName();
@@ -826,7 +826,7 @@ public class SyncSource {
 
 	}
 
-	private void addImpl(MethodType method) {
+	public void addImpl(MethodType method) {
 		StringBuffer fileContent = null;
 		try {
 			fileContent = Utils.fileToStringBuffer(new File(this.serviceImpl));
@@ -855,7 +855,7 @@ public class SyncSource {
 		}
 	}
 
-	private void addProviderImpl(MethodType method) throws Exception {
+	public void addProviderImpl(MethodType method) throws Exception {
 		String packageName = service.getPackageName() + ".stubs";
 		if (method.isIsImported()) {
 			packageName = method.getImportInformation().getPackageName();
@@ -1039,7 +1039,7 @@ public class SyncSource {
 		}
 	}
 
-	private void removeClientImpl(JavaMethod method) throws Exception {
+	public void removeClientImpl(JavaMethod method) throws Exception {
 		StringBuffer fileContent = null;
 		try {
 			fileContent = Utils
@@ -1071,7 +1071,7 @@ public class SyncSource {
 		}
 	}
 
-	private void removeProviderImpl(JavaMethod method) throws Exception {
+	public void removeProviderImpl(JavaMethod method) throws Exception {
 		StringBuffer fileContent = null;
 		try {
 			fileContent = Utils.fileToStringBuffer(new File(
@@ -1104,7 +1104,7 @@ public class SyncSource {
 
 	}
 
-	private void modifyImpl(Modification mod) throws Exception {
+	public void modifyImpl(Modification mod) throws Exception {
 		MethodType method = mod.getMethodType();
 		JavaMethod oldMethod = mod.getJavaMethod();
 
@@ -1144,7 +1144,7 @@ public class SyncSource {
 
 	}
 
-	private void removeImpl(JavaMethod method) throws Exception {
+	public void removeImpl(JavaMethod method) throws Exception {
 		StringBuffer fileContent = null;
 		try {
 			fileContent = Utils.fileToStringBuffer(new File(this.serviceImpl));
@@ -1175,7 +1175,7 @@ public class SyncSource {
 
 	}
 
-	private int bracketMatch(StringBuffer sb, int startingIndex) {
+	public int bracketMatch(StringBuffer sb, int startingIndex) {
 		// System.out.println("Starting to look for brackets on this string:");
 		// System.out.println(sb.toString().substring(startingIndex));
 		int parenCount = 0;
@@ -1206,7 +1206,7 @@ public class SyncSource {
 		return index;
 	}
 
-	private int endOfSignature(StringBuffer sb, int startingIndex) {
+	public int endOfSignature(StringBuffer sb, int startingIndex) {
 		int index = startingIndex;
 		if (index < 0) {
 			return index;
@@ -1222,7 +1222,7 @@ public class SyncSource {
 		return index;
 	}
 
-	private int startOfSignature(StringBuffer sb, String searchString) {
+	public int startOfSignature(StringBuffer sb, String searchString) {
 		BufferedReader br = new BufferedReader(new StringReader(sb.toString()));
 		// tokenizer to compress all parts, then start matching the parts
 		int charsRead = 0;
@@ -1314,5 +1314,53 @@ public class SyncSource {
 			e.printStackTrace();
 		}
 		return -1;
+	}
+
+	public ServiceType getService() {
+		return service;
+	}
+
+	public void setService(ServiceType service) {
+		this.service = service;
+	}
+
+	public String getServiceClient() {
+		return serviceClient;
+	}
+
+	public void setServiceClient(String serviceClient) {
+		this.serviceClient = serviceClient;
+	}
+
+	public String getServiceImpl() {
+		return serviceImpl;
+	}
+
+	public void setServiceImpl(String serviceImpl) {
+		this.serviceImpl = serviceImpl;
+	}
+
+	public ServiceInformation getServiceInfo() {
+		return serviceInfo;
+	}
+
+	public void setServiceInfo(ServiceInformation serviceInfo) {
+		this.serviceInfo = serviceInfo;
+	}
+
+	public String getServiceInterface() {
+		return serviceInterface;
+	}
+
+	public void setServiceInterface(String serviceInterface) {
+		this.serviceInterface = serviceInterface;
+	}
+
+	public String getServiceProviderImpl() {
+		return serviceProviderImpl;
+	}
+
+	public void setServiceProviderImpl(String serviceProviderImpl) {
+		this.serviceProviderImpl = serviceProviderImpl;
 	}
 }
