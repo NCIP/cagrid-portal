@@ -5,7 +5,6 @@ package gov.nih.nci.cagrid.graph.domainmodelapplication;
 import gov.nih.nci.cagrid.graph.uml.UMLDiagram;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.event.ComponentAdapter;
@@ -22,6 +21,8 @@ import javax.swing.JPanel;
 public class DomainModelExplorer extends JLayeredPane
 {
 	public DomainModel model;
+	
+	public Vector packages;
 	
 	public DomainModelOutlines outlineMDI;
 	public DomainModelUMLViews umlMDI;
@@ -87,27 +88,50 @@ public class DomainModelExplorer extends JLayeredPane
 				initializeUMLDiagram(d, model, node.name);
 				d.scrollToShowClass(node.name);
 				this.umlMDI.addPage(d, null, node.name, node.name);
-				this.cache.put(node, pageId);
+			
 			}
 			else if(node.type == DomainModelTreeNode.PACKAGE)
 			{
 				UMLDiagram d = new UMLDiagram();
 				initializeUMLDiagram(d, model, node.name);
 				this.umlMDI.addPage(d, null, node.name, node.name);
-				this.cache.put(node, pageId);
+				
 			}
 			else if(node.type == DomainModelTreeNode.DOMAIN)
 			{
 				DomainModelOverview o = new DomainModelOverview(model);
 				this.umlMDI.addPage(o, null, node.name, node.name);
+			
 			}
 		}
 	}
 	
+	
 	public void initializeUMLDiagram(UMLDiagram d, DomainModel m, String name)
 	{
+		d.clear();
 		
+		// add classes 
+		for(int k = 0 ; k < this.model.getExposedUMLClassCollection().getUMLClass().length; k++)
+		{
+			gov.nih.nci.cagrid.metadata.common.UMLClass c =  model.getExposedUMLClassCollection().getUMLClass()[k];
+			
+			if(c.getPackageName().equals(name))
+			{
+				if(c != null)
+				{
+					gov.nih.nci.cagrid.graph.uml.UMLClass C = new gov.nih.nci.cagrid.graph.uml.UMLClass(c.getClassName());
+					
+					d.addClass(C);
+				}
+			}
+		}
+		
+		// add assocs
+		
+		d.refresh();
 	}
+	
 	
 	public void setDomainModel(DomainModel model)
 	{
@@ -119,11 +143,16 @@ public class DomainModelExplorer extends JLayeredPane
 		}
 	}
 	
+	
+	
 	public void initModel(DomainModel model)
 	{
 		this.model = model;
 		
-		Vector packages = new Vector();
+		packages = new Vector();
+		
+		// uses O(n^2) algorithm to make a list of classes in each package in the
+		// domain model... could be left for improvement later.
 		
 		for(int k = 0; k < model.getExposedUMLClassCollection().getUMLClass().length; k++)
 		{
@@ -133,16 +162,51 @@ public class DomainModelExplorer extends JLayeredPane
 			{
 				String packageName = c.getPackageName();
 				String className = c.getClassName();
+				
+				int found = -1;
+				
+				for(int j = 0; j < packages.size() && found != -1; j++)
+				{
+					MultiMapElement e = (MultiMapElement) packages.get(j);
+					
+					if(packageName.equals(e.head))
+					{
+						found = j;
+					}
+				}
+				
+				if(found == -1)
+				{
+					MultiMapElement e = new MultiMapElement();
+					e.head = packageName;
+					e.list.add(className);
+					
+					packages.add(e);
+				}
+				else
+				{
+					MultiMapElement e = (MultiMapElement) packages.get(found);
+					e.list.add(className);
+					packages.remove(found);
+					packages.add(found, e);
+				}
 			}
 		}
+		
+		
+		// 'packages' is now a "multimap" of package-class[] elements;
 		
 		
 		
 	}
 	
+	
+	
 	public void clear()
 	{
 		this.model = null;
+		this.packages.clear();
+		this.packages = null;
 		
 		this.outlineMDI.clear();
 		this.umlMDI.clear();
@@ -194,7 +258,7 @@ public class DomainModelExplorer extends JLayeredPane
 	protected void requestSplitterMove(int x)
 	{
 		// if *PROJECTED/anticipated* move violates bounds THEN disallow move, otherwise grant
-		splitter.setBackground(Color.gray);
+		//splitter.setBackground(Color.gray);
 		if(splitter.getLocation().getX()+x-splitterLastClicked.x >= 100)
 		{
 			splitter.setLocation(splitter.getX() + x  - splitterLastClicked.x + 1, splitter.getY() );		
@@ -246,7 +310,7 @@ class DomainModelSplitterMouseListener extends MouseAdapter
 		DomainModelExplorer parent = (DomainModelExplorer) splitter.getParent();
 		
 		parent.splitterMoved();
-		parent.splitter.setBackground(Color.lightGray);
+		//parent.splitter.setBackground(Color.lightGray);
 	}
 }
 

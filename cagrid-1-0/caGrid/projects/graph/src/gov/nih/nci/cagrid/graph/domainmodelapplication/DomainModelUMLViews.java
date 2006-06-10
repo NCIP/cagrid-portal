@@ -5,6 +5,9 @@ import gov.nih.nci.cagrid.graph.vstheme.MDIPanel;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+
 public class DomainModelUMLViews extends MDIPanel
 {
 	public DomainModelExplorer parent;
@@ -28,4 +31,5 @@ public class DomainModelUMLViews extends MDIPanel
 			this.removePage(k);
 		}
 	}
+	
 }

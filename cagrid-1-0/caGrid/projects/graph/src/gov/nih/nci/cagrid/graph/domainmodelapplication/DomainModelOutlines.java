@@ -7,7 +7,7 @@ import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
-import javax.swing.JTree;
+import javax.swing.ImageIcon;
 
 public class DomainModelOutlines extends InternalFrame
 {
@@ -19,7 +19,8 @@ public class DomainModelOutlines extends InternalFrame
 		this.parent = parent;
 		mdi = new InvertedMDIPanel(this);
 		
-		mdi.addPage(new DomainModelOutline(), null, "Domain Model");
+		ImageIcon domainModelImage = new ImageIcon(System.getProperty("user.dir") + "\\resource\\domainmodel.png");
+		mdi.addPage(new DomainModelOutline(), domainModelImage, "Domain Model");
 		//mdi.addPage(new DomainModelXMLOutline(), null, "XML Outline");
 		
 		this.setComponent(mdi);

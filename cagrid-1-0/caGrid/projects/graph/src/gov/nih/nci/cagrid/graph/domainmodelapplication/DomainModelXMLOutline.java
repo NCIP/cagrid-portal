@@ -14,7 +14,7 @@ public class DomainModelXMLOutline extends JPanel
 	public DomainModelXMLOutlineClippedTreePane    treePane;
 	public DomainModelXMLOutlineTree				tree;
 	
-	public static int toolBarHeight = 30;
+	public static int toolBarHeight = 28;
 	
 	public DomainModelXMLOutline()
 	{

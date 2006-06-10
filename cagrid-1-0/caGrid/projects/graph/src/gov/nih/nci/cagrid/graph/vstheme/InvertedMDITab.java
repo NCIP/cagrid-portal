@@ -120,8 +120,8 @@ public class InvertedMDITab extends JComponent
 		
 		if(this.icon != null)
 		{
-			g.drawImage(this.icon.getImage(), 1, 1, 20, 20, this);
-			g.drawString(this.title, 22, 15);
+			g.drawImage(this.icon.getImage(), 5, 3, 16, 16, this);
+			g.drawString(this.title, 28, 15);
 		}
 		else
 		{
