@@ -75,7 +75,6 @@ public class InvertedMDITab extends JComponent
 		this.title = title;
 	}
 	
-	
 	public void activate()
 	{
 		this.active = true;
@@ -121,11 +120,11 @@ public class InvertedMDITab extends JComponent
 		if(this.icon != null)
 		{
 			g.drawImage(this.icon.getImage(), 5, 3, 16, 16, this);
-			g.drawString(this.title, 28, 15);
+			g.drawString(this.title, 27, 14);
 		}
 		else
 		{
-			g.drawString(this.title, 10, 15);
+			g.drawString(this.title, 10, 14);
 		}
 	
 	}
