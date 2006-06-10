@@ -19,7 +19,10 @@ public class DomainModelTreeNode extends DefaultMutableTreeNode
 	public DomainModelTreeNode(DomainModel model)
 	{
 		this.parentModel = model;
+		
+		
 	}
+	
 	
 	
 

@@ -259,13 +259,13 @@ public class DomainModelExplorer extends JLayeredPane
 	{
 		// if *PROJECTED/anticipated* move violates bounds THEN disallow move, otherwise grant
 		//splitter.setBackground(Color.gray);
-		if(splitter.getLocation().getX()+x-splitterLastClicked.x >= 100)
+		if(splitter.getLocation().getX()+x-splitterLastClicked.x >= 200)
 		{
 			splitter.setLocation(splitter.getX() + x  - splitterLastClicked.x + 1, splitter.getY() );		
 		}
 		else
 		{
-			splitter.setLocation(100, splitter.getY());
+			splitter.setLocation(200, splitter.getY());
 		}
 	}
 	

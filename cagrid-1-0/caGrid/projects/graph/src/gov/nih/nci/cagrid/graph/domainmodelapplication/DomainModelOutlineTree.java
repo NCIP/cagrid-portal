@@ -2,10 +2,14 @@ package gov.nih.nci.cagrid.graph.domainmodelapplication;
 
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
+import java.awt.Component;
+import java.awt.Font;
 import java.util.Enumeration;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JTree;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
@@ -17,7 +21,12 @@ public class DomainModelOutlineTree extends JTree
 	{
 		super();
 		
-		this.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+		this.setBorder(BorderFactory.createEmptyBorder(2, 4, 4, 4));
+		
+		this.setCellRenderer(new DomainModelTreeRenderer());
+		
+		
+	
 		
 
 	}
@@ -77,7 +86,49 @@ public class DomainModelOutlineTree extends JTree
             tree.expandPath(parent);
         } else {
             tree.collapsePath(parent);
+          
         }
     }
 
+}
+
+class DomainModelTreeRenderer extends DefaultTreeCellRenderer {
+    
+	public ImageIcon classIcon = new ImageIcon(System.getProperty("user.dir") + "\\resource\\classes1.png");
+	public ImageIcon packageIcon = new ImageIcon(System.getProperty("user.dir") + "\\resource\\package.png");
+	public ImageIcon rootIcon = new ImageIcon(System.getProperty("user.dir") + "\\resource\\package.png");
+
+    public Component getTreeCellRendererComponent(
+                        JTree tree,
+                        Object value,
+                        boolean sel,
+                        boolean expanded,
+                        boolean leaf,
+                        int row,
+                        boolean hasFocus) {
+
+        super.getTreeCellRendererComponent(
+                        tree, value, sel,
+                        expanded, leaf, row,
+                        hasFocus);
+        if (leaf) {
+        	this.setFont(new Font("verdana", Font.PLAIN, 11));
+            setIcon(classIcon);
+            setToolTipText(null);
+        } 
+        else if(!leaf && row == 0)
+        {
+            setIcon(rootIcon);
+            this.setFont(new Font("verdana", Font.BOLD, 11));
+        } 
+        else
+        {
+        	this.setFont(new Font("verdana", Font.PLAIN, 11));
+        	setIcon(packageIcon);
+        }
+
+        return this;
+    }
+
+   
 }
