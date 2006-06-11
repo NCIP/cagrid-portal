@@ -21,8 +21,9 @@ import javax.swing.JPanel;
 public class DomainModelExplorer extends JLayeredPane
 {
 	public DomainModel model;
-	
 	public Vector packages;
+	
+	public DomainModelOutline domainModelOutline;
 	
 	public DomainModelOutlines outlineMDI;
 	public DomainModelUMLViews umlMDI;
@@ -44,8 +45,12 @@ public class DomainModelExplorer extends JLayeredPane
 	
 	public DomainModelExplorer()
 	{
+			domainModelOutline = new DomainModelOutline(this);
+		
 			outlineMDI = new DomainModelOutlines(this);
 			umlMDI = new DomainModelUMLViews(this);
+			
+			
 					
 			this.add(outlineMDI);
 			this.add(umlMDI);
@@ -60,7 +65,8 @@ public class DomainModelExplorer extends JLayeredPane
 			this.addComponentListener(new DomainModelExplorerComponentListener());
 			this.splitter.addMouseListener(new DomainModelSplitterMouseListener());
 			this.splitter.addMouseMotionListener(new DomainModelSplitterMouseMotionListener());
-	
+		
+			setDomainModel(null);
 	
 	}
 	
@@ -140,6 +146,7 @@ public class DomainModelExplorer extends JLayeredPane
 		if(model != null)
 		{
 			initModel(model);
+			this.domainModelOutline.setDomainModel(this.model, this.packages);
 		}
 	}
 	
@@ -148,7 +155,6 @@ public class DomainModelExplorer extends JLayeredPane
 	public void initModel(DomainModel model)
 	{
 		this.model = model;
-		
 		packages = new Vector();
 		
 		// uses O(n^2) algorithm to make a list of classes in each package in the
@@ -205,11 +211,12 @@ public class DomainModelExplorer extends JLayeredPane
 	public void clear()
 	{
 		this.model = null;
-		this.packages.clear();
 		this.packages = null;
 		
 		this.outlineMDI.clear();
 		this.umlMDI.clear();
+		
+		this.domainModelOutline.setDomainModel(model, packages);
 		
 		
 	}
@@ -277,12 +284,7 @@ public class DomainModelExplorer extends JLayeredPane
 	}
 }
 
-class MultiMapElement 
-{
-	public String head;
-	public Vector list;
-	
-}
+
 
 class DomainModelExplorerComponentListener extends ComponentAdapter
 {

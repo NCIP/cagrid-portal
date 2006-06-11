@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import java.awt.Component;
 import java.awt.Font;
 import java.util.Enumeration;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -15,11 +16,18 @@ import javax.swing.tree.TreePath;
 
 public class DomainModelOutlineTree extends JTree
 {
+	
+	
+	public DomainModelOutline parent;
+	
 	public boolean expanded = false;
 	
-	public DomainModelOutlineTree()
+	
+	public DomainModelOutlineTree(DomainModelOutline p)
 	{
 		super();
+		
+		this.parent = p;
 		
 		this.setBorder(BorderFactory.createEmptyBorder(2, 4, 4, 4));
 		
@@ -31,10 +39,9 @@ public class DomainModelOutlineTree extends JTree
 
 	}
 	
-	public void setDomainModel(DomainModel model)
-	{
-		
-	}
+
+	
+	
 	
 	public void toggleExpansion()
 	{

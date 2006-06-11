@@ -20,7 +20,7 @@ public class DomainModelOutlines extends InternalFrame
 		mdi = new InvertedMDIPanel(this);
 		
 		ImageIcon domainModelImage = new ImageIcon(System.getProperty("user.dir") + "\\resource\\domainmodel.png");
-		mdi.addPage(new DomainModelOutline(), domainModelImage, "Domain Model");
+		mdi.addPage(parent.domainModelOutline, domainModelImage, "Domain Model");
 		//mdi.addPage(new DomainModelXMLOutline(), null, "XML Outline");
 		
 		this.setComponent(mdi);
