@@ -17,4 +17,12 @@ public class ReflectionUtils
 		}
 		return methodList.toArray(new Method[0]);
 	}
+	
+	public static String getClassShortName(Class cl)
+	{
+		String name = cl.getName();
+		int index = name.lastIndexOf('.');
+		if (index == -1 || index == name.length()-1) return name;
+		return name.substring(index+1);
+	}
 }
