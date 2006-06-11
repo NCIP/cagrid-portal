@@ -209,6 +209,11 @@ public class GlobusHelper
 		if (tmpGlobusLocation != null) FileUtils.deleteRecursive(tmpGlobusLocation);
 	}
 	
+	public File getTempGlobusLocation()
+	{
+		return tmpGlobusLocation;
+	}
+	
 	private static void sleep(long ms)
 	{
 		Object sleep = new Object();
