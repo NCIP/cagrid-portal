@@ -95,6 +95,9 @@
 	<target name="build-introduce">
 		<echo>introduce must be built in the main caGrid build</echo>
 	</target>
+	<target name="build-cadsr">
+		<echo>cadsr must be built in the main caGrid build</echo>
+	</target>
 
 	<!-- ============================================================== -->
 	<!-- Cleans up generated stuff                                      -->
