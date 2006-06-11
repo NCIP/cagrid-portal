@@ -74,7 +74,7 @@
 		<resolveDependencies extdir="${tests.projects.dir}/coretests/ext">
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />
-			<artifact refid="BasicAnalyticalService.jars" />
+			<artifact refid="cadsr.jars" />
 			<artifact refid="discovery.jars" />
 			<artifact refid="core.jars" />
 			<artifact refid="introduce.jars" />
