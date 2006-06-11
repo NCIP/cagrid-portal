@@ -3,6 +3,7 @@
  */
 package gov.nci.nih.cagrid.tests.core.steps;
 
+import java.io.File;
 import java.rmi.RemoteException;
 
 import javax.xml.rpc.ServiceException;
@@ -44,7 +45,9 @@ public class CheckGlobusStep
 	{
 		CounterServiceAddressingLocator locator = new CounterServiceAddressingLocator();
 		// we found it, so tell axis to configure an engine to use it
-		EngineConfiguration engineConfig = new FileProvider("C:\\Globus4.0.2\\client-config.wsdd");
+		EngineConfiguration engineConfig = new FileProvider(
+			System.getenv("GLOBUS_LOCATION") + File.separator + "client-config.wsdd"
+		);
 		// set the engine of the locator
 		locator.setEngine(new AxisClient(engineConfig));
 		
