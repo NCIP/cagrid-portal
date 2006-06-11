@@ -44,7 +44,7 @@ public class IntroduceServiceInfoTest
 	public static void main(String[] args) throws Exception
 	{
 		TestRunner runner = new TestRunner();
-		TestResult result = runner.doRun(new TestSuite(SourceUtilsTest.class));
+		TestResult result = runner.doRun(new TestSuite(IntroduceServiceInfoTest.class));
 		System.exit(result.errorCount() + result.failureCount());
 	}
 }
