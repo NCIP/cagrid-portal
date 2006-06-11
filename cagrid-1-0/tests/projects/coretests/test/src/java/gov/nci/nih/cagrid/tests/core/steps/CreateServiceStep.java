@@ -17,7 +17,10 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
+import com.atomicobject.haste.framework.Step;
+
 public class CreateServiceStep
+	extends Step
 {
 	private File introduceDir;
 	private File serviceDir;
