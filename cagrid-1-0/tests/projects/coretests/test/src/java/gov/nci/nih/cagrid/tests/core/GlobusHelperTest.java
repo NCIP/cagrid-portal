@@ -9,7 +9,6 @@ import gov.nci.nih.cagrid.tests.core.steps.CreateTempGlobusStep;
 import gov.nci.nih.cagrid.tests.core.steps.StartGlobusStep;
 import gov.nci.nih.cagrid.tests.core.steps.StopGlobusStep;
 
-import java.io.File;
 import java.util.Vector;
 
 import junit.framework.TestResult;
@@ -24,7 +23,6 @@ public class GlobusHelperTest
 	extends Story
 {
 	private GlobusHelper globus;
-	private File serviceDir;
 	private int port;
 	
 	public GlobusHelperTest()
