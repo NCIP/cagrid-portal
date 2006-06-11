@@ -52,21 +52,31 @@ public class CreateServiceStep
 		this.serviceDir.mkdirs();
 		
 		// set schemas
-		this.schemas = new File(testDir, "schema").listFiles(new FileFilter() {
-			public boolean accept(File file) {
-				return file.getName().endsWith(".xsd");
-			}
-		});
+		File schemaDir = new File(testDir, "schema");
+		if (schemaDir.exists()) {
+			this.schemas = schemaDir.listFiles(new FileFilter() {
+				public boolean accept(File file) {
+					return file.getName().endsWith(".xsd");
+				}
+			});
+		} else {
+			this.schemas = new File[0];
+		}
 		
 		// set implFile
 		this.implFile = new File(testDir, "src" + File.separator + serviceName + "Impl.java");
 		
 		// set libJars
-		this.jars = new File(testDir, "lib").listFiles(new FileFilter() {
-			public boolean accept(File file) {
-				return file.getName().endsWith(".jar");
-			}
-		});		
+		File libDir = new File(testDir, "lib");
+		if (libDir.exists()) {
+			this.jars = libDir.listFiles(new FileFilter() {
+				public boolean accept(File file) {
+					return file.getName().endsWith(".jar");
+				}
+			});
+		} else {
+			this.jars = new File[0];
+		}
 	}
 	
 	public CreateServiceStep(
