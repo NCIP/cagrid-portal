@@ -37,6 +37,9 @@ public class CreateServiceStep
 	{
 		super();
 		
+		// set introduceDir
+		this.introduceDir = introduceDir;
+		
 		// set serviceXmlDescriptor, serviceName, pkg, and namespace
 		this.serviceXmlDescriptor = new File(testDir, IntroduceServiceInfo.INTRODUCE_SERVICEXML_FILENAME);
 		IntroduceServiceInfo serviceInfo = new IntroduceServiceInfo(this.serviceXmlDescriptor);
@@ -56,7 +59,7 @@ public class CreateServiceStep
 		});
 		
 		// set implFile
-		this.implFile = new File(testDir, "src" + File.separator + serviceName + "Impl");
+		this.implFile = new File(testDir, "src" + File.separator + serviceName + "Impl.java");
 		
 		// set libJars
 		this.jars = new File(testDir, "lib").listFiles(new FileFilter() {
@@ -119,8 +122,8 @@ public class CreateServiceStep
 	private void addImplementation() 
 		throws ParserConfigurationException, SAXException, IOException
 	{
-		String targetPath = pkg.replace('.', File.pathSeparatorChar);		
-		File targetJava = new File(serviceDir, "src" + targetPath + "service" + serviceName + "Impl.java");
+		String targetPath = pkg.replace('.', File.separatorChar);		
+		File targetJava = new File(serviceDir, "src" + File.separator + targetPath + File.separator + "service" + File.separator + serviceName + "Impl.java");
 		
 		// add method impl
 		IntroduceServiceInfo info = new IntroduceServiceInfo(serviceXmlDescriptor);
@@ -167,7 +170,7 @@ public class CreateServiceStep
 		throws IOException, InterruptedException
 	{
 		// invoke ant
-		AntUtils.runAnt(serviceDir, null, null, null, null);
+		AntUtils.runAnt(serviceDir, null, "all", null, null);
 	}
 
 	public File getServiceDir()
