@@ -6,12 +6,15 @@ package gov.nci.nih.cagrid.tests.core.util;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * @author MCCON012
@@ -171,5 +174,32 @@ public class FileUtils
 		temp.delete();
 		temp.mkdir();
 		return temp;
+	}
+
+	public static void replace(File file, String search, String replace) 
+		throws IOException
+	{
+		File tmpFile = File.createTempFile("FileUtils.replace", ".txt");
+		tmpFile.deleteOnExit();
+		
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(tmpFile)));
+		
+		String line = null;
+		int index = -1;
+		while ((line = br.readLine()) != null) {
+			if ((index = line.indexOf(search)) != -1) {
+				line = line.substring(0, index) + replace + line.substring(index+search.length());
+			}
+			out.println(line);
+		}
+		
+		out.flush();
+		out.close();
+		br.close();
+		
+		FileUtils.copy(tmpFile, file);
+		
+		tmpFile.delete();		
 	}
 }
