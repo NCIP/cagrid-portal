@@ -91,7 +91,7 @@ public class GlobusHelper
 	public void startGlobus(int port) 
 		throws IOException
 	{
-		this.p = runGlobusCommand("org.globus.wsrf.container.ServiceContainer");
+		this.p = runGlobusCommand("org.globus.wsrf.container.ServiceContainer", new Integer(port));
 		
 		// make sure it is running
 		sleep(2000);
@@ -102,7 +102,7 @@ public class GlobusHelper
 		throw new IOException("could not start Globus");
 	}
 	
-	private Process runGlobusCommand(String clName) 
+	private Process runGlobusCommand(String clName, Integer port) 
 		throws IOException
 	{
 		// create globus startup params
@@ -128,8 +128,10 @@ public class GlobusHelper
 		cmd.add(classpath);
 		cmd.add("org.globus.bootstrap.Bootstrap");
 		cmd.add(clName);
-		//cmd.add("-p");
-		//cmd.add(String.valueOf(port));
+		if (port != null) {
+			cmd.add("-p");
+			cmd.add(String.valueOf(port));
+		}
 		if (! secure) cmd.add("-nosec");
 
 		// build environment
@@ -163,7 +165,7 @@ public class GlobusHelper
 	{
 		if (p == null) return;
 		
-		runGlobusCommand("org.globus.wsrf.container.ShutdownClient");
+		runGlobusCommand("org.globus.wsrf.container.ShutdownClient", null);
 		sleep(2000);
 
 		p.destroy();
