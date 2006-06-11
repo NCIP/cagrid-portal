@@ -51,30 +51,16 @@ public class GlobusHelperTest
 	protected Vector steps()		
 	{
 		globus = new GlobusHelper();
-//		serviceDir = new File(System.getProperty("test.service.dir", ".." + File.separator + "BasicAnalyticalService"));
 		port = Integer.parseInt(System.getProperty("test.globus.port", "8080"));
-
-//		EndpointReferenceType endpoint;
-//		try {
-//			endpoint = new EndpointReferenceType(new Address("http://localhost:" + port + "/wsrf/services/cagrid/BasicAnalyticalService"));
-//		} catch (MalformedURIException e) {
-//			throw new IllegalArgumentException("endpoint badly formed", e);
-//		}
-//		File metadataFile = new File(System.getProperty("GlobusHelperTest.file", 
-//			"test" + File.separator + "data" + File.separator + "serviceMetadata.xml"
-//		));
 
 		Vector steps = new Vector();
 		steps.add(new CreateTempGlobusStep(globus));
-//		steps.add(new DeployGlobusServiceStep(globus, serviceDir));
 		steps.add(new StartGlobusStep(globus, port));
-//		steps.add(new InvokeTestGridServiceStep(port));
 		try {
 			steps.add(new CheckGlobusStep(port));
 		} catch (MalformedURIException e) {
 			throw new IllegalArgumentException("endpoint badly formed", e);
 		}
-		//steps.add(new CheckServiceMetadataStep(endpoint, metadataFile));
 		steps.add(new StopGlobusStep(globus, port));
 		steps.add(new CleanupTempGlobusStep(globus));
 		return steps;
