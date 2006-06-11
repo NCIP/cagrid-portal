@@ -5,6 +5,7 @@ package gov.nci.nih.cagrid.tests.core.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 
 public class IOThread
@@ -12,26 +13,33 @@ public class IOThread
 {
 	private InputStream is;
 	private PrintStream out;
+	private StringBuffer sb;
 	private Exception exception;
 	
-	public IOThread(InputStream is, PrintStream out)
+	public IOThread(InputStream is, PrintStream out, StringBuffer sb)
 	{
 		super();
 		
 		this.is = is;
 		this.out = out;
+		this.sb = sb;
 	}
 	
 	public void run()
 	{
 		this.exception = null;
 		try {
+			InputStreamReader in = new InputStreamReader(is);
+			
 			int len = -1;
-			byte[] buf = new byte[1024];
-			while ((len = is.read(buf)) != -1) out.write(buf, 0, len);
+			char[] buf = new char[1024];
+			while ((len = in.read(buf)) != -1) {
+				if (out != null) out.print(new String(buf, 0, len));
+				if (sb != null) sb.append(buf, 0, len);
+			}
 			
 			out.flush();
-			out.close();
+			in.close();
 			is.close();
 		} catch (IOException e) {
 			this.exception = e;
