@@ -206,7 +206,7 @@ public class GlobusHelper
 	
 	public void cleanupTempGlobus()
 	{
-		FileUtils.deleteRecursive(tmpGlobusLocation);
+		if (tmpGlobusLocation != null) FileUtils.deleteRecursive(tmpGlobusLocation);
 	}
 	
 	private static void sleep(long ms)
