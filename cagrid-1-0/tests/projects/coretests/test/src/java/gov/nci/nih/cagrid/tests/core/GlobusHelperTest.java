@@ -3,24 +3,20 @@
  */
 package gov.nci.nih.cagrid.tests.core;
 
-import gov.nci.nih.cagrid.tests.core.steps.CheckServiceMetadataStep;
+import gov.nci.nih.cagrid.tests.core.steps.CheckGlobusStep;
 import gov.nci.nih.cagrid.tests.core.steps.CleanupTempGlobusStep;
 import gov.nci.nih.cagrid.tests.core.steps.CreateTempGlobusStep;
-import gov.nci.nih.cagrid.tests.core.steps.DeployGlobusServiceStep;
-import gov.nci.nih.cagrid.tests.core.steps.InvokeTestGridServiceStep;
 import gov.nci.nih.cagrid.tests.core.steps.StartGlobusStep;
 import gov.nci.nih.cagrid.tests.core.steps.StopGlobusStep;
 
 import java.io.File;
 import java.util.Vector;
 
-import org.apache.axis.message.addressing.Address;
-import org.apache.axis.message.addressing.EndpointReferenceType;
-import org.apache.axis.types.URI.MalformedURIException;
-
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
+
+import org.apache.axis.types.URI.MalformedURIException;
 
 import com.atomicobject.haste.framework.Story;
 
@@ -55,25 +51,30 @@ public class GlobusHelperTest
 	protected Vector steps()		
 	{
 		globus = new GlobusHelper();
-		serviceDir = new File(System.getProperty("test.service.dir", ".." + File.separator + "BasicAnalyticalService"));
+//		serviceDir = new File(System.getProperty("test.service.dir", ".." + File.separator + "BasicAnalyticalService"));
 		port = Integer.parseInt(System.getProperty("test.globus.port", "8080"));
 
-		EndpointReferenceType endpoint;
-		try {
-			endpoint = new EndpointReferenceType(new Address("http://localhost:" + port + "/wsrf/services/cagrid/BasicAnalyticalService"));
-		} catch (MalformedURIException e) {
-			throw new IllegalArgumentException("endpoint badly formed");
-		}
-		File metadataFile = new File(System.getProperty("GlobusHelperTest.file", 
-			"test" + File.separator + "data" + File.separator + "serviceMetadata.xml"
-		));
+//		EndpointReferenceType endpoint;
+//		try {
+//			endpoint = new EndpointReferenceType(new Address("http://localhost:" + port + "/wsrf/services/cagrid/BasicAnalyticalService"));
+//		} catch (MalformedURIException e) {
+//			throw new IllegalArgumentException("endpoint badly formed", e);
+//		}
+//		File metadataFile = new File(System.getProperty("GlobusHelperTest.file", 
+//			"test" + File.separator + "data" + File.separator + "serviceMetadata.xml"
+//		));
 
 		Vector steps = new Vector();
 		steps.add(new CreateTempGlobusStep(globus));
-		steps.add(new DeployGlobusServiceStep(globus, serviceDir));
+//		steps.add(new DeployGlobusServiceStep(globus, serviceDir));
 		steps.add(new StartGlobusStep(globus, port));
-		steps.add(new InvokeTestGridServiceStep(port));
-		steps.add(new CheckServiceMetadataStep(endpoint, metadataFile));
+//		steps.add(new InvokeTestGridServiceStep(port));
+		try {
+			steps.add(new CheckGlobusStep(port));
+		} catch (MalformedURIException e) {
+			throw new IllegalArgumentException("endpoint badly formed", e);
+		}
+		//steps.add(new CheckServiceMetadataStep(endpoint, metadataFile));
 		steps.add(new StopGlobusStep(globus, port));
 		steps.add(new CleanupTempGlobusStep(globus));
 		return steps;
