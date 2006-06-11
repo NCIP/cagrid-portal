@@ -10,7 +10,9 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.discovery.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 
+import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.apache.axis.types.URI.MalformedURIException;
 
 import com.atomicobject.haste.framework.Step;
 
@@ -38,6 +40,23 @@ public class CheckServiceMetadataStep
 		);
 		
 		new BeanComparator(this).assertEquals(localMetadata, serviceMetadata);
+	}
+	
+	public static void main(String[] args) throws Throwable
+	{
+		int port = Integer.parseInt(System.getProperty("test.globus.port", "8080"));
+
+		EndpointReferenceType endpoint;
+		try {
+			endpoint = new EndpointReferenceType(new Address("http://localhost:" + port + "/wsrf/services/cagrid/BasicAnalyticalService"));
+		} catch (MalformedURIException e) {
+			throw new IllegalArgumentException("endpoint badly formed");
+		}
+		File metadataFile = new File(System.getProperty("GlobusHelperTest.file", 
+			"test" + File.separator + "data" + File.separator + "serviceMetadata.xml"
+		));
+		CheckServiceMetadataStep step = new CheckServiceMetadataStep(endpoint, metadataFile);
+		step.runStep();
 	}
 
 }
