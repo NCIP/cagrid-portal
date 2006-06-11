@@ -93,7 +93,7 @@ public class BasicAnalyticalServiceTest
 		} catch (MalformedURIException e) {
 			throw new IllegalArgumentException("endpoint badly formed");
 		}
-		File metadataFile = new File(testDir, "serviceMetadata.xml");
+		File metadataFile = new File(testDir, "etc" + File.separator + "serviceMetadata.xml");
 
 		Vector steps = new Vector();
 		steps.add(createServiceStep);
