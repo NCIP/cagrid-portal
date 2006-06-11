@@ -68,7 +68,7 @@ public class SourceUtilsTest
 		
 		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(outFile)));
 		out.println("public class Test {\r\n" + 
-				"	public void myOtherMethod {\r\n" + 
+				"	public void myOtherMethod() {\r\n" + 
 				"		System.out.println(\"my other method\");\r\n" + 
 				"		helloWorld();\r\n" +
 				"	}\r\n" + 
