@@ -48,7 +48,7 @@ public class FileUtils
 			file.delete();
 		} else {
 			File[] files = file.listFiles();
-			for (int i = 0; i < files.length; i++) {
+			for (int i = 0; files != null && i < files.length; i++) {
 				deleteRecursive(files[i]);
 			}
 			file.delete();
