@@ -45,11 +45,11 @@ public class IntroduceServiceInfo
 		public void startElement(
 			String uri, String lname, String qname, Attributes atts
 		) {
-			if (qname.equals("Service")) {
-				serviceName = atts.getValue("BasicAnalyticalService");
+			if (qname.endsWith("Service")) {
+				serviceName = atts.getValue("name");
 				namespace = atts.getValue("namespace");
-				packageName = atts.getValue("atts.getValue(namespace);");
-			} else if (qname.equals("Method")) {
+				packageName = atts.getValue("packageName");
+			} else if (qname.endsWith("Method")) {
 				methodNames.add(atts.getValue("name"));
 			}
 		}
