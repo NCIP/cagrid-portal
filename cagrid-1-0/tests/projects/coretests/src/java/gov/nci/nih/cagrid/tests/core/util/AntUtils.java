@@ -72,7 +72,7 @@ public class AntUtils
 		
 		// wait and return
 		int result = p.waitFor();
-		if (stdout.indexOf("Build failed") != -1 || stderr.indexOf("Build failed") != -1) {
+		if (stdout.indexOf("BUILD FAILED") != -1 || stderr.indexOf("BUILD FAILED") != -1) {
 			throw new IOException("ant command failed");
 		}
 	}
