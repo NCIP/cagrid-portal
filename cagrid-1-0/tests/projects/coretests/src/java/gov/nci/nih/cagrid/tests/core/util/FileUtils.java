@@ -164,4 +164,14 @@ public class FileUtils
 		temp.mkdir();
 		return temp;
 	}
+	
+	public static File createTempDir(String prefix, String suffix, File dir) 
+		throws IOException
+	{
+		if (dir == null) return createTempDir(prefix, suffix);
+		File temp = File.createTempFile(prefix, suffix, dir);
+		temp.delete();
+		temp.mkdir();
+		return temp;
+	}
 }
