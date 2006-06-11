@@ -3,14 +3,14 @@
  */
 package gov.nci.nih.cagrid.tests.core;
 
+import gov.nci.nih.cagrid.tests.core.util.EnvUtils;
+import gov.nci.nih.cagrid.tests.core.util.FileUtils;
+import gov.nci.nih.cagrid.tests.core.util.StdIOThread;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
-
-import gov.nci.nih.cagrid.tests.core.util.EnvUtils;
-import gov.nci.nih.cagrid.tests.core.util.FileUtils;
-import gov.nci.nih.cagrid.tests.core.util.StdIOThread;
 
 public class GlobusHelper
 {
@@ -128,7 +128,7 @@ public class GlobusHelper
 		cmd.add(classpath);
 		cmd.add("org.globus.bootstrap.Bootstrap");
 		cmd.add(clName);
-		cmd.add("-p");
+		//cmd.add("-p");
 		//cmd.add(String.valueOf(port));
 		if (! secure) cmd.add("-nosec");
 
