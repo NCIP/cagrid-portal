@@ -31,7 +31,10 @@ public class InvokeServiceStep
 	private File serviceDir;
 	private String className;
 	private String methodName;
+
 	private Object[] params;
+	private File methodDir;
+	
 	private File resultsFile;
 	private String url;
 	private GlobusCredential proxy;
@@ -58,8 +61,10 @@ public class InvokeServiceStep
 		
 		// set cl, params, and resultsFile
 		//File methodDir = new File(testDir + "test" + File.separator + "resources" + File.separator + methodName);
-		this.cl = loadClass();
-		params = parseParams(methodDir);
+		//this.cl = loadClass();
+		//params = parseParams(methodDir);
+		this.params = null;
+		this.methodDir = methodDir;
 		this.resultsFile = getResultsFile(methodDir);
 		
 		// TODO set proxy
@@ -76,6 +81,7 @@ public class InvokeServiceStep
 		this.className = className;
 		this.methodName = methodName;
 		this.params = params;
+		this.methodDir = null;
 		this.url = url;
 		this.proxy = proxy;
 		this.resultsFile = resultsFile;
@@ -85,6 +91,7 @@ public class InvokeServiceStep
 		throws Throwable
 	{
 		if (this.cl == null) cl = loadClass();
+		if (params == null) params = parseParams(methodDir);
 		
 		// find method
 		Method[] methods = ReflectionUtils.getMethodsByName(cl, methodName);
