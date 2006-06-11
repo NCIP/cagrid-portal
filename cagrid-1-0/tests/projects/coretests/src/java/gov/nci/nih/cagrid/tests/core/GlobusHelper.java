@@ -6,6 +6,7 @@ package gov.nci.nih.cagrid.tests.core;
 import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import gov.nci.nih.cagrid.tests.core.util.EnvUtils;
 import gov.nci.nih.cagrid.tests.core.util.FileUtils;
@@ -13,12 +14,32 @@ import gov.nci.nih.cagrid.tests.core.util.StdIOThread;
 
 public class GlobusHelper
 {
+	private File tmpDir;
+	private boolean secure;
 	private File tmpGlobusLocation;
 	private Process p;
 	
 	public GlobusHelper() 
 	{
+		this(false, null);
+	}
+	
+	public GlobusHelper(File tmpDir) 
+	{
+		this(false, tmpDir);
+	}
+	
+	public GlobusHelper(boolean secure) 
+	{
+		this(secure, null);
+	}
+	
+	public GlobusHelper(boolean secure, File tmpDir) 
+	{
 		super();
+		
+		this.secure = secure;
+		this.tmpDir = tmpDir;
 	}
 	
 	public void createTempGlobus() 
@@ -31,10 +52,8 @@ public class GlobusHelper
 		}
 		
 		// create tmp globus location
-		File tmpGlobusLocation = File.createTempFile("Globus", "dir");
-		tmpGlobusLocation.delete();
-		tmpGlobusLocation.mkdir();
-		this.tmpGlobusLocation = tmpGlobusLocation;
+		this.tmpGlobusLocation = FileUtils.createTempDir("Globus", "dir", tmpDir);
+		
 		// copy globus to tmp location
 		FileUtils.copyRecursive(new File(globusLocation), tmpGlobusLocation, null);
 	}
@@ -98,18 +117,22 @@ public class GlobusHelper
 		String classpath = lib + File.separator + "bootstrap.jar";
 		classpath += File.pathSeparator + lib + File.separator + "cog-url.jar";
 		classpath += File.pathSeparator + lib + File.separator + "axis-url.jar";
-		String[] cmd = new String[] {
-			java.toString(),
-			"-Dlog4j.configuration=container-log4j.properties",
-			"-DGLOBUS_LOCATION=" + tmpGlobusLocation,
-			"-Djava.endorsed.dirs=" + tmpGlobusLocation + File.separator + "endorsed",
-			"-classpath", classpath,
-			"org.globus.bootstrap.Bootstrap",
-			clName,
-			//"-p", String.valueOf(port),
-			"-nosec",
-			//"-p", String.valueOf(port),
-		};
+		
+		// build command
+		ArrayList<String> cmd = new ArrayList<String>();
+		cmd.add(java.toString());
+		cmd.add("-Dlog4j.configuration=container-log4j.properties");
+		cmd.add("-DGLOBUS_LOCATION=" + tmpGlobusLocation);
+		cmd.add("-Djava.endorsed.dirs=" + tmpGlobusLocation + File.separator + "endorsed");
+		cmd.add("-classpath");
+		cmd.add(classpath);
+		cmd.add("org.globus.bootstrap.Bootstrap");
+		cmd.add(clName);
+		cmd.add("-p");
+		//cmd.add(String.valueOf(port));
+		if (! secure) cmd.add("-nosec");
+
+		// build environment
 		String[] envp = new String[] {
 			//"ANT_HOME", System.getenv("ANT_HOME"),
 			//"JAVA_HOME", System.getProperty("java.home"),
@@ -118,7 +141,7 @@ public class GlobusHelper
 		envp = EnvUtils.overrideEnv(envp);
 		
 		// start globus
-		Process p = Runtime.getRuntime().exec(cmd, envp, tmpGlobusLocation);
+		Process p = Runtime.getRuntime().exec(cmd.toArray(new String[0]), envp, tmpGlobusLocation);
 		new StdIOThread(p.getInputStream()).start();
 		new StdIOThread(p.getErrorStream()).start();
 		return p;
