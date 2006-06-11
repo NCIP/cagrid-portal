@@ -47,7 +47,7 @@ public class AntUtils
 			while (keys.hasMoreElements()) {
 				String name = (String) keys.nextElement();
 				String value = (String) sysProps.getProperty(name);
-				cmd.add("-D" + name + "=" + value);
+				cmd.add("\"-D" + name + "=" + value + "\"");
 			}
 		}
 		
@@ -64,11 +64,16 @@ public class AntUtils
 		Process p = Runtime.getRuntime().exec(
 			cmd.toArray(new String[0]), envp, dir
 		);
-		new IOThread(p.getInputStream(), System.out).start();
-		new IOThread(p.getErrorStream(), System.err).start();
+		// track stdout and stderr
+		StringBuffer stdout = new StringBuffer();
+		StringBuffer stderr = new StringBuffer();
+		new IOThread(p.getInputStream(), System.out, stdout).start();
+		new IOThread(p.getErrorStream(), System.err, stderr).start();
 		
 		// wait and return
 		int result = p.waitFor();
-		if (result != 0) throw new IOException("ant command failed");
+		if (stdout.indexOf("Build failed") != -1 || stderr.indexOf("Build failed") != -1) {
+			throw new IOException("ant command failed");
+		}
 	}
 }
