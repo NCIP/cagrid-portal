@@ -168,6 +168,9 @@ public class MDITabsPane extends JLayeredPane
 		g.setColor(Color.white);
 		g.drawLine(0, this.getHeight() - spacerHeight, this.getWidth(), this.getHeight() - spacerHeight);
 		
+		g.setColor(Color.gray);
+		g.drawLine(0, this.getHeight()-1, this.getWidth(), this.getHeight()-1);
+		
 		super.paint(g);
 	}
 	

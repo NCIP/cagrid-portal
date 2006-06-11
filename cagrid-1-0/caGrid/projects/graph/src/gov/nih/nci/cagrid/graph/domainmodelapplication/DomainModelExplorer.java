@@ -15,8 +15,10 @@ import java.awt.event.MouseMotionAdapter;
 import java.util.HashMap;
 import java.util.Vector;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 public class DomainModelExplorer extends JLayeredPane
 {
@@ -67,12 +69,16 @@ public class DomainModelExplorer extends JLayeredPane
 			this.splitter.addMouseMotionListener(new DomainModelSplitterMouseMotionListener());
 		
 			setDomainModel(null);
+			
+			JScrollPane p = new JScrollPane(new DomainModelOverview(null));
+			p.setBorder(BorderFactory.createEmptyBorder());
+			umlMDI.addPage(p, null, "Overview", "Overview");
 	
 	}
 	
 	public void showPage(DomainModelTreeNode node, String pageId)
 	{
-		if(cache.containsValue(pageId))
+		if(this.umlMDI.pageIDs.contains(pageId))
 		{
 			if(node.type == DomainModelTreeNode.CLASS)
 			{
@@ -107,7 +113,6 @@ public class DomainModelExplorer extends JLayeredPane
 			{
 				DomainModelOverview o = new DomainModelOverview(model);
 				this.umlMDI.addPage(o, null, node.name, node.name);
-			
 			}
 		}
 	}
@@ -142,11 +147,14 @@ public class DomainModelExplorer extends JLayeredPane
 	public void setDomainModel(DomainModel model)
 	{
 		clear();
+		this.domainModelOutline.setDomainModel(model, packages);
 		
 		if(model != null)
 		{
 			initModel(model);
 			this.domainModelOutline.setDomainModel(this.model, this.packages);
+			
+			this.showPage((DomainModelTreeNode)this.domainModelOutline.tree.getModel().getRoot(), "");
 		}
 	}
 	
@@ -216,7 +224,7 @@ public class DomainModelExplorer extends JLayeredPane
 		this.outlineMDI.clear();
 		this.umlMDI.clear();
 		
-		this.domainModelOutline.setDomainModel(model, packages);
+		
 		
 		
 	}

@@ -147,7 +147,8 @@ public class UMLDiagram extends JLayeredPane {
 
 		for (int k = 0; k < this.classes.size(); k++) {
 			UMLClass gc = (UMLClass) this.classes.get(k);
-
+			gc.setVisible(true);
+			viewer.diagram.diagram.getLayer().bringToFront(gc);
 		}
 		
 		

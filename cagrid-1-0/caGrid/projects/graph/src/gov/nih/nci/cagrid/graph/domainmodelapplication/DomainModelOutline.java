@@ -48,18 +48,48 @@ public class DomainModelOutline extends JPanel
 		{
 			hasNullDomainModel = false;
 			
+			this.tree.setDefaultRenderer();
+			
 			this.tree.removeAll();
+			
+			DomainModelTreeNode root = new DomainModelTreeNode(model);
+			root.name = model.getProjectLongName() + " " + model.getProjectVersion();
+			root.type = DomainModelTreeNode.DOMAIN;
+			root.setUserObject(root.name);
 			
 			for(int k = 0; k < multiMap.size(); k++	 )
 			{
-				// TODO: add initialization code for tree.
+				DomainModelTreeNode pkg = new DomainModelTreeNode(model);
+				MultiMapElement e = (MultiMapElement) multiMap.get(k);
+				
+				pkg.name = e.head;
+				pkg.type = DomainModelTreeNode.PACKAGE;
+				pkg.setUserObject(pkg.name);
+				
+				root.add(pkg);
+				
+				for(int j = 0; j < e.list.size(); j++)
+				{
+					DomainModelTreeNode cls = new DomainModelTreeNode(model);
+					String cname = (String) e.list.get(j);
+					
+					cls.name = cname;
+					pkg.type = DomainModelTreeNode.CLASS;
+					pkg.setUserObject(cname);
+					
+					pkg.add(cls);
+				}
 			}
+			
+			DefaultTreeModel tmodel = (DefaultTreeModel) this.tree.getModel();
+			tmodel.setRoot(root);
 		}
 		else
 		{
+			this.tree.setNullRenderer();
 			hasNullDomainModel = true;
 			
-			DefaultMutableTreeNode n = new DefaultMutableTreeNode("no Domain Model selected");
+			DefaultMutableTreeNode n = new DefaultMutableTreeNode("  No Domain Model selected");
 			DefaultTreeModel treeModel = (DefaultTreeModel) tree.getModel();
 			treeModel.setRoot(n);
 		}

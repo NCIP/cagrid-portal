@@ -1,11 +1,9 @@
 package gov.nih.nci.cagrid.graph.domainmodelapplication;
 
-import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
-
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.util.Enumeration;
-import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -21,6 +19,9 @@ public class DomainModelOutlineTree extends JTree
 	public DomainModelOutline parent;
 	
 	public boolean expanded = false;
+	
+	public DomainModelTreeRenderer defaultRenderer = new DomainModelTreeRenderer();
+	public NullRenderer nullRenderer = new NullRenderer();
 	
 	
 	public DomainModelOutlineTree(DomainModelOutline p)
@@ -40,7 +41,15 @@ public class DomainModelOutlineTree extends JTree
 	}
 	
 
+	public void setNullRenderer()
+	{
+		this.setCellRenderer(this.nullRenderer);
+	}
 	
+	public void setDefaultRenderer()
+	{
+		this.setCellRenderer(this.defaultRenderer);
+	}
 	
 	
 	public void toggleExpansion()
@@ -97,6 +106,28 @@ public class DomainModelOutlineTree extends JTree
         }
     }
 
+}
+
+class NullRenderer extends DefaultTreeCellRenderer
+{
+    public Component getTreeCellRendererComponent(
+            JTree tree,
+            Object value,
+            boolean sel,
+            boolean expanded,
+            boolean leaf,
+            int row,
+            boolean hasFocus) {
+
+super.getTreeCellRendererComponent(
+            tree, value, sel,
+            expanded, leaf, row,
+            hasFocus);
+
+	setIcon(null);
+	
+	return this;
+    }
 }
 
 class DomainModelTreeRenderer extends DefaultTreeCellRenderer {

@@ -23,8 +23,8 @@ public class Main {
 		}
 		
 		
-		UMLDiagram diagram = new UMLDiagram();
-
+		UMLDiagram d = new UMLDiagram();
+		
 	
 		DomainModelExplorer e = new DomainModelExplorer();
 		
@@ -34,7 +34,6 @@ public class Main {
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
 		
-
 		
 		
 
