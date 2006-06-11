@@ -6,6 +6,7 @@ package gov.nci.nih.cagrid.tests.core.steps;
 import gov.nci.nih.cagrid.tests.core.util.AntUtils;
 import gov.nci.nih.cagrid.tests.core.util.FileUtils;
 import gov.nci.nih.cagrid.tests.core.util.IntroduceServiceInfo;
+import gov.nci.nih.cagrid.tests.core.util.SourceUtils;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -52,7 +53,7 @@ public class CreateServiceStep
 		});
 		
 		// set implFile
-		this.implFile = new File(testDir, serviceName + "Impl");
+		this.implFile = new File(testDir, "src" + File.separator + serviceName + "Impl");
 		
 		// set libJars
 		this.jars = new File(testDir, "lib").listFiles(new FileFilter() {
@@ -80,7 +81,7 @@ public class CreateServiceStep
 	}
 	
 	public void runStep() 
-		throws IOException, InterruptedException
+		throws IOException, InterruptedException, ParserConfigurationException, SAXException
 	{
 		// create skeleton
 		createSkeleton();
@@ -112,8 +113,20 @@ public class CreateServiceStep
 		buildSkeleton();
 	}
 	
-	private void addImplementation()
+	private void addImplementation() 
+		throws ParserConfigurationException, SAXException, IOException
 	{
+		String targetPath = pkg.replace('.', File.pathSeparatorChar);		
+		File targetJava = new File(serviceDir, "src" + targetPath + "service" + serviceName + "Impl.java");
+		
+		// add method impl
+		IntroduceServiceInfo info = new IntroduceServiceInfo(serviceXmlDescriptor);
+		for (String methodName : info.getMethodNames()) {
+			SourceUtils.modifyImpl(implFile, targetJava, methodName);
+		}
+		
+		// add constructor impl
+		SourceUtils.modifyImpl(implFile, targetJava, serviceName);
 	}
 	
 	private void createSkeleton() 
