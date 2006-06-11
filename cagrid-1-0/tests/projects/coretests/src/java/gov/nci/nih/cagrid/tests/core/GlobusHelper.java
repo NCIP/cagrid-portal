@@ -9,8 +9,21 @@ import gov.nci.nih.cagrid.tests.core.util.StdIOThread;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.Socket;
 import java.util.ArrayList;
+
+import javax.xml.rpc.ServiceException;
+
+import org.apache.axis.EngineConfiguration;
+import org.apache.axis.client.AxisClient;
+import org.apache.axis.configuration.FileProvider;
+import org.apache.axis.message.addressing.Address;
+import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.oasis.wsrf.lifetime.Destroy;
+
+import com.counter.CounterPortType;
+import com.counter.CreateCounter;
+import com.counter.CreateCounterResponse;
+import com.counter.service.CounterServiceAddressingLocator;
 
 public class GlobusHelper
 {
@@ -152,10 +165,29 @@ public class GlobusHelper
 	public boolean isGlobusRunning(int port)
 	{
 		try {
-			Socket socket = new Socket("127.0.0.1", port);
-			socket.close();
+//			Socket socket = new Socket("127.0.0.1", port);
+//			socket.close();
+//			return true;
+			
+			CounterServiceAddressingLocator locator = new CounterServiceAddressingLocator();
+			EngineConfiguration engineConfig = new FileProvider(
+				System.getenv("GLOBUS_LOCATION") + File.separator + "client-config.wsdd"
+			);
+			locator.setEngine(new AxisClient(engineConfig));
+			
+			CounterPortType counter = locator.getCounterPortTypePort(new EndpointReferenceType(new Address(
+				"http://localhost:" + port + "/wsrf/services/CounterService"
+			)));
+			CreateCounterResponse response = counter.createCounter(new CreateCounter());	
+			EndpointReferenceType endpoint = response.getEndpointReference();
+			//endpoint.getProperties().get_any()[0].getValue();
+			counter = locator.getCounterPortTypePort(endpoint); 			
+			counter.add(0);
+			counter.destroy(new Destroy());
 			return true;
 		} catch (IOException e) {
+			return false;
+		} catch (ServiceException e) {
 			return false;
 		}
 	}
@@ -165,7 +197,7 @@ public class GlobusHelper
 	{
 		if (p == null) return;
 		
-		runGlobusCommand("org.globus.wsrf.container.ShutdownClient", null);
+		runGlobusCommand("org.globus.wsrf.container.ShutdownClient", port);
 		sleep(2000);
 
 		p.destroy();
