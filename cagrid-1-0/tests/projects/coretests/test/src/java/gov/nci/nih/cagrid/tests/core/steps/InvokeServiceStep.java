@@ -186,7 +186,7 @@ public class InvokeServiceStep
 		// get files
 		File[] files = dir.listFiles(new FileFilter() {
 			public boolean accept(File file) {
-				return ! file.getName().startsWith("out.");
+				return ! file.getName().startsWith("out.") && file.isFile();
 			}
 		});
 		
