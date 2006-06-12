@@ -3,7 +3,7 @@ package gov.nih.nci.cagrid.introduce.creator;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
-import gov.nih.nci.cagrid.introduce.templates.etc.RegistationTemplate;
+import gov.nih.nci.cagrid.introduce.templates.etc.RegistrationTemplate;
 import gov.nih.nci.cagrid.introduce.templates.etc.SecurityDescTemplate;
 
 import java.io.File;
@@ -28,7 +28,7 @@ public class SkeletonEtcCreator {
 		File etcDir = new File(baseDirectory.getAbsolutePath() + File.separator + "etc");
 		etcDir.mkdir();
 
-		RegistationTemplate registrationT = new RegistationTemplate();
+		RegistrationTemplate registrationT = new RegistrationTemplate();
 		String registrationS = registrationT.generate(info);
 		File registrationF = new File(etcDir.getAbsolutePath() + File.separator + "registration.xml");
 		FileWriter registrationFW = new FileWriter(registrationF);

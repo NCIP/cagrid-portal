@@ -4,7 +4,7 @@ import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.JNDIConfigTemplate;
-import gov.nih.nci.cagrid.introduce.templates.etc.RegistationTemplate;
+import gov.nih.nci.cagrid.introduce.templates.etc.RegistrationTemplate;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -38,7 +38,7 @@ public class SyncBase extends SyncTool {
 
 	public void sync() throws SynchronizationException {
 		try {
-			RegistationTemplate registrationT = new RegistationTemplate();
+			RegistrationTemplate registrationT = new RegistrationTemplate();
 			String registrationS = registrationT
 					.generate(getServiceInformation());
 			File registrationF = new File(etcDir.getAbsolutePath()
