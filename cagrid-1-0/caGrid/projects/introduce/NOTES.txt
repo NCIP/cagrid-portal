@@ -14,6 +14,7 @@ From BMI Tutorial:
 8) when we write the .classpath, we should "hard code" globus location instead of using the classpath variable
   - core cagrid services using introduce can search and replace the hard code with the variable before commiting to CVS
 
+metadata code doesn't compile if you select an element that is xsd:type an XML schema type (e.g. string)
 
 Introduce Portal (or something it uses) is leaving file handles open
   - when i create a service, then close the mod viewer, and try to create it again, it can't delete the creation dir
