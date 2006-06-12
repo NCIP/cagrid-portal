@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.cqlresultset.CQLObjectResult;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.axis.message.MessageElement;
@@ -29,13 +30,22 @@ public class CQLQueryResultsUtil {
 	
 	
 	public static CQLQueryResults createQueryResults(List objects) {
+		return createQueryResults(objects.iterator());
+	}
+	
+	
+	public static CQLQueryResults createQueryResults(Iterator resultIter) {
 		CQLQueryResults results = new CQLQueryResults();
-		CQLObjectResult[] objectResults = new CQLObjectResult[objects.size()];
-		Iterator objectIter = objects.iterator();
-		int index = 0;
-		while (objectIter.hasNext()) {
-			objectResults[index] = createObjectResult(objectIter.next());
+		String type = null;
+		LinkedList objects = new LinkedList();
+		while (resultIter.hasNext()) {
+			objects.add(resultIter.next());
+			if (type == null) {
+				type = objects.getFirst().getClass().getName();
+			}
 		}
+		CQLObjectResult[] objectResults = new CQLObjectResult[objects.size()];
+		objects.toArray(objectResults);
 		results.setObjectResult(objectResults);
 		return results;
 	}
