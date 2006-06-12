@@ -1,5 +1,5 @@
 To Do:
-
+need to make introduce-portal-config.xml.example and generate the real one from the example
 
 From BMI Tutorial:
 0) needs handouts for people to follow along
