@@ -70,9 +70,8 @@ public class DomainModelExplorer extends JLayeredPane
 		
 			setDomainModel(null);
 			
-			JScrollPane p = new JScrollPane(new DomainModelOverview(null));
-			p.setBorder(BorderFactory.createEmptyBorder());
-			umlMDI.addPage(p, null, "Overview", "Overview");
+			this.umlMDI.addPage(new DomainModelOverview(this.model), null, "Overview", "Overview");
+			this.umlMDI.addPage(new UMLDiagram(), null, "gov.nci.nih.domain", "gov.nci.nih.domain");
 	
 	}
 	
@@ -112,7 +111,9 @@ public class DomainModelExplorer extends JLayeredPane
 			else if(node.type == DomainModelTreeNode.DOMAIN)
 			{
 				DomainModelOverview o = new DomainModelOverview(model);
-				this.umlMDI.addPage(o, null, node.name, node.name);
+				JScrollPane p = new JScrollPane(o);
+				
+				this.umlMDI.addPage(p, null, node.name, node.name);
 			}
 		}
 	}
@@ -229,16 +230,18 @@ public class DomainModelExplorer extends JLayeredPane
 		
 	}
 	
-	public void selectPackage()
+	public void hideOutlines()
 	{
-		
+		this.hideOutlines = true;
+		this.resizeComponents();
 	}
 	
 	
 	
-	public void selectClass()
+	public void showOutlines()
 	{
-		
+		this.hideOutlines = false;
+		this.resizeComponents();
 	}
 	
 	public void selectDomainModel()
@@ -250,10 +253,16 @@ public class DomainModelExplorer extends JLayeredPane
 	{
 		if(this.hideOutlines)
 		{
+			this.outlineMDI.setVisible(false);
+			this.splitter.setVisible(false);
+			this.outlineMDI.setBounds(0, 0, 0, 0);
+			this.splitter.setBounds(0, 0, 0, 0);
 			this.umlMDI.setBounds(0, 0, this.getWidth(), this.getHeight());
 		}
 		else
 		{
+			this.outlineMDI.setVisible(true);
+			this.splitter.setVisible(true);
 			if(!this.resizedOnce)
 			{
 				this.outlineMDI.setBounds(0, 0, DomainModelExplorer.preferredOutlinesWidth, this.getHeight());

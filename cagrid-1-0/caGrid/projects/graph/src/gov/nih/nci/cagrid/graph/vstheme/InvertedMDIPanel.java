@@ -14,6 +14,8 @@ public class InvertedMDIPanel extends JComponent
 	public Vector pages = new Vector();
 	public Vector pageIcons = new Vector();
 	public Vector pageTitles = new Vector();
+	
+	public PageClosedListener pageClosedListener = null;
 
 	
 	public int currentPage = -1;
@@ -48,11 +50,18 @@ public class InvertedMDIPanel extends JComponent
 		
 	}
 	
+	
+	public void setPageClosedListener(PageClosedListener list)
+	{
+		this.pageClosedListener = list;
+		
+	}
+	
 	public void removePage(int i)
 	{
 		if(i < this.pages.size() && i >= 0)
 		{
-			pages.remove(i);
+			JComponent removedPage = (JComponent) pages.remove(i);
 			pageIcons.remove(i);
 			pageTitles.remove(i);
 
@@ -63,6 +72,11 @@ public class InvertedMDIPanel extends JComponent
 			
 			this.setActivePage(0);
 			
+			if(this.pageClosedListener != null)
+			{
+				this.pageClosedListener.pageClosed(this, removedPage, this.pages.size());
+			}
+			
 		}
 		
 		if(this.pages.size() == 0)
@@ -70,6 +84,8 @@ public class InvertedMDIPanel extends JComponent
 			// fire 0 pages shown
 			this.parent.setTitle("");
 		}
+		
+		
 	}
 	
 
