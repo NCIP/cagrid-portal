@@ -6,7 +6,7 @@ package gov.nci.nih.cagrid.tests.core;
 import gov.nci.nih.cagrid.tests.core.steps.CreateServiceStep;
 import gov.nci.nih.cagrid.tests.core.steps.InvokeServiceStep;
 import gov.nci.nih.cagrid.tests.core.util.FileUtils;
-import gov.nci.nih.cagrid.tests.core.util.ReflectionUtils;
+import gov.nci.nih.cagrid.tests.core.util.IntroduceServiceInfo;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -47,7 +47,11 @@ public abstract class AbstractServiceTest
 		
 		// create temp dir
 		try {
-			tempDir = FileUtils.createTempDir(ReflectionUtils.getClassShortName(getClass()), "dir");
+			String tempRoot = System.getProperty("temp.dir");
+			tempDir = FileUtils.createTempDir(
+				//ReflectionUtils.getClassShortName(getClass()), "dir", tempRoot == null ? null : new File(tempRoot) 
+				"Service", "dir", tempRoot == null ? null : new File(tempRoot)
+			);
 		} catch (IOException e) {
 			throw new IllegalArgumentException("could not create temp dir", e);
 		}
@@ -62,6 +66,7 @@ public abstract class AbstractServiceTest
 		} catch (Exception e) {
 			throw new IllegalArgumentException("could not instantiate CreateServiceStep", e);
 		}
+		serviceDir = createServiceStep.getServiceDir();
 
 		// set endpoint
 		try {
@@ -71,7 +76,7 @@ public abstract class AbstractServiceTest
 		}
 		
 		// set metadataFile
-		metadataFile = new File(testDir, "etc" + File.separator + "serviceMetadata.xml");		
+		metadataFile = new File(testDir, "etc" + File.separator + IntroduceServiceInfo.INTRODUCE_SERVICEMETADATA_FILENAME);		
 	}
 	
 	@SuppressWarnings("unchecked")
