@@ -1,39 +1,62 @@
-<?xml version="1.0"?>
-<xs:schema targetNamespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:data="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"
-    xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"
-    elementFormDefault="qualified">
-
-    <xs:import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" schemaLocation="../common/common.xsd"/>
-    <xs:element name="DomainModel" type="data:DomainModel" />
-    <xs:complexType name="DomainModel">
-        <xs:sequence>
-            <xs:element name="projectDescription" type="xs:string" />
-            <xs:element name="projectLongName" type="xs:string" />
-            <xs:element name="projectShortName" type="xs:string" />
-            <xs:element name="projectVersion" type="xs:string" />
-            <xs:element name="exposedUMLAssociationCollection" type="data:UMLAssociation"
-                minOccurs="0" maxOccurs="unbounded" />
-            <xs:element name="exposedUMLClassCollection" type="com:UMLClass" minOccurs="0"
-                maxOccurs="unbounded" />
-        </xs:sequence>
-    </xs:complexType>
-    <xs:element name="UMLAssociationEdge" type="data:UMLAssociationEdge" />
-    <xs:complexType name="UMLAssociationEdge">
-        <xs:sequence>
-            <xs:element name="maxCardinality" type="xs:int" />
-            <xs:element name="minCardinality" type="xs:int" />
-            <xs:element name="roleName" type="xs:string" />
-            <xs:element name="umlClass" type="com:UMLClass" />
-        </xs:sequence>
-    </xs:complexType>
-    <xs:element name="UMLAssociation" type="data:UMLAssociation" />
-    <xs:complexType name="UMLAssociation">
-        <xs:sequence>
-            <xs:element name="bidirectional" type="xs:boolean" />
-            <xs:element name="targetUMLAssociationEdge" type="data:UMLAssociationEdge" />
-            <xs:element name="sourceUMLAssociationEdge" type="data:UMLAssociationEdge" />
-        </xs:sequence>
-    </xs:complexType>
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xs:schema targetNamespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:data="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" schemaLocation="../common/common.xsd"/>
+	<xs:element name="DomainModel" type="data:DomainModel"/>
+	<xs:complexType name="DomainModel">
+		<xs:sequence>
+			<xs:element name="projectDescription" type="xs:string"/>
+			<xs:element name="projectShortName" type="xs:string"/>
+			<xs:element name="projectLongName" type="xs:string"/>
+			<xs:element name="projectVersion" type="xs:string"/>
+			<xs:element name="exposedUMLAssociationCollection">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="data:UMLAssociation" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="exposedUMLClassCollection">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="com:UMLClass" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="UMLAssociationEdge" type="data:UMLAssociationEdge"/>
+	<xs:complexType name="UMLAssociationEdge">
+		<xs:sequence>
+			<xs:element name="minCardinality" type="xs:int"/>
+			<xs:element name="maxCardinality" type="xs:int"/>
+			<xs:element name="roleName" type="xs:string"/>
+			<xs:element name="umlClass">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="com:UMLClass"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="UMLAssociation" type="data:UMLAssociation"/>
+	<xs:complexType name="UMLAssociation">
+		<xs:sequence>
+			<xs:element name="bidirectional" type="xs:boolean"/>
+			<xs:element name="targetUMLAssociationEdge">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="data:UMLAssociationEdge"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="sourceUMLAssociationEdge">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="data:UMLAssociationEdge"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
 </xs:schema>
