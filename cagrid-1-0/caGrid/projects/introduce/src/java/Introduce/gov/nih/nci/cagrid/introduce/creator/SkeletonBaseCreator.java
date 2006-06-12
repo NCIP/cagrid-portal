@@ -42,7 +42,7 @@ public class SkeletonBaseCreator {
 		serverConfigFW.close();
 
 		JNDIConfigTemplate jndiConfigT = new JNDIConfigTemplate();
-		String jndiConfigS = jndiConfigT.generate(info);
+		String jndiConfigS = jndiConfigT.generate(new SpecificServiceInformation(info,info.getServices().getService(0)));
 		File jndiConfigF = new File(baseDirectory.getAbsolutePath() + File.separator + "jndi-config.xml");
 		FileWriter jndiConfigFW = new FileWriter(jndiConfigF);
 		jndiConfigFW.write(jndiConfigS);

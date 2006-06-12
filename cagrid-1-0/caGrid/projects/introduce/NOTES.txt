@@ -1,25 +1,15 @@
 To Do:
+
 need to make introduce-portal-config.xml.example and generate the real one from the example
 
 From BMI Tutorial:
 0) needs handouts for people to follow along
-1) (DONE) Add Fault needs to check the fault name is is valid java identifier
-  - if you put spaces or something in it, it completely screws up the service (because sync source can't read the created file)
-2) (DONE this is fine) Generated fault doesn't appear to take a message
-3) (DONE) We should genterate a client launcher
-4) (DONE) Service Property key needs to make sure its a valid java identifier
-5) Service Contexts.. create Service Context needs defaults for the values (namespace, package, etc..)
 6) Adding a resource property to a service context, doesn't refresh the JTree
-7) Right-clicking the modify service context, removed the service and through a NPE
-8) when we write the .classpath, we should "hard code" globus location instead of using the classpath variable
-  - core cagrid services using introduce can search and replace the hard code with the variable before commiting to CVS
 
 metadata code doesn't compile if you select an element that is xsd:type an XML schema type (e.g. string)
 
 Introduce Portal (or something it uses) is leaving file handles open
   - when i create a service, then close the mod viewer, and try to create it again, it can't delete the creation dir
-
-refactor to not be creating hte service.wsdd everytime.....
 
 need to add deploy testing
 
@@ -80,6 +70,20 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+
+refactor to not be creating hte service.wsdd everytime.....
+
+From BMI Tutorial
+1) (DONE) Add Fault needs to check the fault name is is valid java identifier
+  - if you put spaces or something in it, it completely screws up the service (because sync source can't read the created file)
+2) (DONE this is fine) Generated fault doesn't appear to take a message
+3) (DONE) We should genterate a client launcher
+4) (DONE) Service Property key needs to make sure its a valid java identifier
+5) (DONE) Service Contexts.. create Service Context needs defaults for the values (namespace, package, etc..)
+7) (DONE) Right-clicking the modify service context, removed the service and through a NPE
+8) (DONE) when we write the .classpath, we should "hard code" globus location instead of using the classpath variable
+  - core cagrid services using introduce can search and replace the hard code with the variable before commiting to CVS
+
 add automatic client handle generation if a method is returning an EPR
 
 (make sure that there is a passive fail for globus discovery tool

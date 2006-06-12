@@ -28,8 +28,10 @@ import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.info.SchemaInformation;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
+import gov.nih.nci.cagrid.introduce.templates.JNDIConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.NamespaceMappingsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.NewServerConfigTemplate;
+import gov.nih.nci.cagrid.introduce.templates.NewServiceJNDIConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate;
 
 import java.io.File;
@@ -509,6 +511,18 @@ public class SyncTools {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		
+		File jndiConfigF = new File(info.getBaseDirectory().getAbsolutePath()
+				+ File.separator + "jndi-config.xml");
+		
+		Document serverConfigJNDIDoc = null;
+		try {
+			serverConfigJNDIDoc = XMLUtilities.fileNameToDocument(jndiConfigF
+					.getAbsolutePath());
+		} catch (MobiusException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		for (int i = 0; i < newServices.size(); i++) {
 			ServiceType newService = (ServiceType) newServices.get(i);
@@ -521,7 +535,7 @@ public class SyncTools {
 				sschc.createSkeleton(info.getBaseDirectory(), info, newService);
 
 				// if this is a new service we need to add it's new "service"
-				// element
+				// element to the WSDD
 
 				NewServerConfigTemplate newServerConfigT = new NewServerConfigTemplate();
 				String newServerConfigS = newServerConfigT
@@ -531,18 +545,32 @@ public class SyncTools {
 						.stringToDocument(newServerConfigS).getRootElement();
 				serverConfigDoc.getRootElement().addContent(0,
 						newServiceElement.detach());
+				
+				
+				//if this is a new service we need to add it's new "service" element to the JNDI
+				NewServiceJNDIConfigTemplate jndiConfigT = new NewServiceJNDIConfigTemplate();
+				org.jdom.Element newServiceJNDIElement = XMLUtilities.stringToDocument(jndiConfigT.generate(new SpecificServiceInformation(info,newService))).getRootElement();
+				serverConfigJNDIDoc.getRootElement().addContent(0,
+						newServiceJNDIElement.detach());
 
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 		String serverConfigS;
+		String serverConfigJNDIS;
 		try {
 			serverConfigS = XMLUtilities.formatXML(XMLUtilities
 					.documentToString(serverConfigDoc));
 			FileWriter serverConfigFW = new FileWriter(serverConfigF);
 			serverConfigFW.write(serverConfigS);
 			serverConfigFW.close();
+			
+			serverConfigJNDIS = XMLUtilities.formatXML(XMLUtilities
+					.documentToString(serverConfigJNDIDoc));
+			FileWriter jndiConfigFW = new FileWriter(jndiConfigF);
+			jndiConfigFW.write(serverConfigJNDIS);
+			jndiConfigFW.close();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

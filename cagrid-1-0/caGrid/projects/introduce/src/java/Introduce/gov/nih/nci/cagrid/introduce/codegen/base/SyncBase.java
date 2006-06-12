@@ -3,7 +3,6 @@ package gov.nih.nci.cagrid.introduce.codegen.base;
 import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
-import gov.nih.nci.cagrid.introduce.templates.JNDIConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.etc.RegistrationTemplate;
 
 import java.io.File;
@@ -46,14 +45,6 @@ public class SyncBase extends SyncTool {
 			FileWriter registrationFW = new FileWriter(registrationF);
 			registrationFW.write(registrationS);
 			registrationFW.close();
-
-			JNDIConfigTemplate jndiConfigT = new JNDIConfigTemplate();
-			String jndiConfigS = jndiConfigT.generate(getServiceInformation());
-			File jndiConfigF = new File(getBaseDirectory().getAbsolutePath()
-					+ File.separator + "jndi-config.xml");
-			FileWriter jndiConfigFW = new FileWriter(jndiConfigF);
-			jndiConfigFW.write(jndiConfigS);
-			jndiConfigFW.close();
 
 		} catch (IOException e) {
 			throw new SynchronizationException("Error writing file:"
