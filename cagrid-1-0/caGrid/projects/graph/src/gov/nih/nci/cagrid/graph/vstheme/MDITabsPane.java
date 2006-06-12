@@ -8,7 +8,6 @@ import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLayeredPane;
-import javax.swing.JScrollBar;
 
 
 

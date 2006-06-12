@@ -1,8 +1,5 @@
 package gov.nih.nci.cagrid.graph.domainmodelapplication;
 
-import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
-
-import java.awt.Color;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 

@@ -7,9 +7,10 @@
 
 package gov.nih.nci.cagrid.graph.vstheme;
 
-import java.awt.event.*;
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class ICaptionCloseButton extends ICaptionButton
 {

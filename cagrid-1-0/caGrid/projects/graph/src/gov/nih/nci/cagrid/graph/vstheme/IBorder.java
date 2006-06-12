@@ -7,9 +7,11 @@
 
 package gov.nih.nci.cagrid.graph.vstheme;
 
-import java.awt.event.*;
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
+
+import javax.swing.JComponent;
 
 
 public class IBorder
