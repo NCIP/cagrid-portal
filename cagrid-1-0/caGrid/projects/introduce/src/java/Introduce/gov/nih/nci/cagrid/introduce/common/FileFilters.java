@@ -9,6 +9,8 @@ public interface FileFilters {
 	public static final FileFilter XSD_FILTER = new XSDFileFilter();
 
 	public static final FileFilter XML_FILTER = new XMLFileFilter();
+	
+	public static final FileFilter JAR_FILTER = new JarFileFilter();
 
 	public class XSDFileFilter extends javax.swing.filechooser.FileFilter {
 		public boolean accept(File file) {

@@ -1,4 +1,14 @@
 
+
+design "official index service" that uses 3rd party secure registration
+  - no services should directly register to it
+  - 3rd party should manually/programatically add "compliant services" to it
+  - could also publish public certificate of the service credentials
+    - client could perform client side authz matching service certificate with published certificate
+  - could use resource-centric IndexService to create multiple service groups (gold-compliant, etc, )
+
+================================================================================
+
 We are currently using the DefaultIndexService which doesn't use Resources.
 This essentially makes the service single purpose, grouping all services into a single service group.
 
