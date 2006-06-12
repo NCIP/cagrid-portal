@@ -1,13 +1,11 @@
 package gov.nih.nci.cagrid.introduce.portal;
 
 import gov.nih.nci.cagrid.introduce.portal.discoverytools.NamespaceTypeToolsComponent;
-import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
 import java.util.List;
 import java.util.Properties;
 
 import org.jdom.Element;
-import org.projectmobius.portal.GridPortalComponent;
 
 public class NamespaceTypeToolDescriptor {
 	private static final String PROPERTIES = "properties";
