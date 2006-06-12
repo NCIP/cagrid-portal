@@ -79,8 +79,8 @@
 	<classpathentry kind="lib" path="ext/lib/GTS_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/GTS-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/GTS-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/client.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-core-tests-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-common-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
