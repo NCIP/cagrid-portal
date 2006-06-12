@@ -36,13 +36,10 @@ public class CQLQueryResultsUtil {
 	
 	public static CQLQueryResults createQueryResults(Iterator resultIter) {
 		CQLQueryResults results = new CQLQueryResults();
-		String type = null;
 		LinkedList objects = new LinkedList();
 		while (resultIter.hasNext()) {
-			objects.add(resultIter.next());
-			if (type == null) {
-				type = objects.getFirst().getClass().getName();
-			}
+			Object obj = resultIter.next();
+			objects.add(createObjectResult(obj));
 		}
 		CQLObjectResult[] objectResults = new CQLObjectResult[objects.size()];
 		objects.toArray(objectResults);
