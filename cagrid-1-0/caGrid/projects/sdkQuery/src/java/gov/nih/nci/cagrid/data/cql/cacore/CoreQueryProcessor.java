@@ -5,11 +5,12 @@ import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.InitializationException;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
-import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
+import gov.nih.nci.cagrid.data.cql.LazyCQLQueryProcessor;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsUtil;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +25,7 @@ import org.hibernate.criterion.DetachedCriteria;
  * @created May 2, 2006 
  * @version $Id$ 
  */
-public class CoreQueryProcessor extends CQLQueryProcessor {
+public class CoreQueryProcessor extends LazyCQLQueryProcessor {
 	public static final String APPLICATION_SERVICE_URL = "appservice.url";
 	
 	private ApplicationService coreService;
@@ -48,16 +49,29 @@ public class CoreQueryProcessor extends CQLQueryProcessor {
 
 	public CQLQueryResults processQuery(CQLQuery cqlQuery) 
 		throws MalformedQueryException, QueryProcessingException {
-		DetachedCriteria objectCriteria = CQL2DetachedCriteria.translate(cqlQuery);
-		
+		List coreResultsList = queryCoreService(cqlQuery);		
+		CQLQueryResults results = CQLQueryResultsUtil.createQueryResults(coreResultsList);
+		return results;
+	}
+	
+	
+	public Iterator processQueryLazy(CQLQuery cqlQuery) 
+		throws MalformedQueryException, QueryProcessingException {
+		List coreResultsList = queryCoreService(cqlQuery);
+		return coreResultsList.iterator();
+	}
+	
+	
+	private List queryCoreService(CQLQuery query) 
+		throws MalformedQueryException, QueryProcessingException {
+		DetachedCriteria objectCriteria = CQL2DetachedCriteria.translate(query);
 		List targetObjects = null;
 		try {
-			targetObjects = coreService.query(objectCriteria, cqlQuery.getTarget().getName());
+			targetObjects = coreService.query(objectCriteria, query.getTarget().getName());
 		} catch (Exception ex) {
 			throw new QueryProcessingException("Error invoking core query method: " + ex.getMessage(), ex);
 		}
-		CQLQueryResults results = CQLQueryResultsUtil.createQueryResults(targetObjects);
-		return results;
+		return targetObjects;
 	}
 	
 	
