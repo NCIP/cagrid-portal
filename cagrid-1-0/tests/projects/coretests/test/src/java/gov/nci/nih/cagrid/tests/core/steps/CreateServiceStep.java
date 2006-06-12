@@ -31,6 +31,7 @@ public class CreateServiceStep
 	private File[] schemas;
 	private File implFile;
 	private File[] jars;
+	private File metadataFile;
 	
 	public CreateServiceStep(File introduceDir, File testDir, File tmpDir) 
 		throws ParserConfigurationException, SAXException, IOException
@@ -77,11 +78,14 @@ public class CreateServiceStep
 		} else {
 			this.jars = new File[0];
 		}
+		
+		// set metadata file
+		this.metadataFile = new File(testDir, "etc" + File.separator + IntroduceServiceInfo.INTRODUCE_SERVICEMETADATA_FILENAME);
 	}
 	
 	public CreateServiceStep(
 		File introduceDir, File serviceDir, String serviceName, String pkg, String namespace, 
-		File serviceXmlDescriptor, File[] schemas, File implFile, File[] jars
+		File serviceXmlDescriptor, File[] schemas, File implFile, File[] jars, File metadataFile
 	) {
 		super();
 		
@@ -94,6 +98,7 @@ public class CreateServiceStep
 		this.schemas = schemas;
 		this.implFile = implFile;
 		this.jars = jars;
+		this.metadataFile = metadataFile;
 	}
 	
 	public void runStep() 
@@ -117,6 +122,12 @@ public class CreateServiceStep
 		libDir.mkdirs();
 		for (File jar : jars) {
 			FileUtils.copy(jar, new File(libDir, jar.getName()));
+		}
+		
+		// copy metadata
+		if (metadataFile.exists()) {
+			File etcDir = new File(serviceDir, "etc");
+			FileUtils.copy(metadataFile, new File(etcDir, metadataFile.getName()));
 		}
 
 		// synchronize
