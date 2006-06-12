@@ -99,10 +99,10 @@ public class GlobusConfigurationPanel extends JPanel {
 											+ File.separator
 											+ "share"
 											+ File.separator + "schema");
-									File foundSchema;
 									try {
-										foundSchema = CommonTools.findSchema(
+										currentSchemaFile = CommonTools.findSchema(
 												schemaNamespace, schemasDir);
+										
 									} catch (Exception ex) {
 										PortalUtils
 												.showErrorMessage("Globus Location seems to be wrong or corrupted:  Please check setting in the Preferences Menu!");
