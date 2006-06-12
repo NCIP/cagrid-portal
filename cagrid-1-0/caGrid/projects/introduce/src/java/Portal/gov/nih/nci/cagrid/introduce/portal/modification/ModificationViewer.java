@@ -1692,7 +1692,7 @@ public class ModificationViewer extends GridPortalComponent {
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
 							if (getServicePropertyKeyTextField().getText()
-									.length() > 0) {
+									.length() > 0 && CommonTools.isValidPackageName(getServicePropertyKeyTextField().getText())) {
 								ServicePropertiesProperty prop = new ServicePropertiesProperty();
 								prop.setKey(getServicePropertyKeyTextField()
 										.getText());
@@ -1704,7 +1704,7 @@ public class ModificationViewer extends GridPortalComponent {
 								JOptionPane
 										.showMessageDialog(
 												ModificationViewer.this,
-												"You must at least enter a key name for the property");
+												"Service Property key must be a valid java identifier");
 							}
 						}
 					});

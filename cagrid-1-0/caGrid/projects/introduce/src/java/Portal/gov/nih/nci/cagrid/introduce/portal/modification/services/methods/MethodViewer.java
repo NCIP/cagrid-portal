@@ -777,8 +777,16 @@ public class MethodViewer extends GridPortalBaseFrame {
 			addExceptionButton
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
-							getExceptionsTable().addRow(
-									getExceptionEditText().getText());
+							if (CommonTools
+									.isValidServiceName(getExceptionEditText()
+											.getText())) {
+								getExceptionsTable().addRow(
+										getExceptionEditText().getText());
+							} else {
+								JOptionPane
+										.showMessageDialog(MethodViewer.this,
+												"Invalid Exception Name:  Exception must be a valid java indentifier.");
+							}
 						}
 					});
 		}
@@ -1038,8 +1046,10 @@ public class MethodViewer extends GridPortalBaseFrame {
 			gridBagConstraints6.weightx = 1.0;
 			outputNamespacePanel = new JPanel();
 			outputNamespacePanel.setLayout(new GridBagLayout());
-			outputNamespacePanel.add(getOutputNamespacesTypeScrollPane(), gridBagConstraints6);
-			outputNamespacePanel.add(getServicesTypeScrollPane(), gridBagConstraints29);
+			outputNamespacePanel.add(getOutputNamespacesTypeScrollPane(),
+					gridBagConstraints6);
+			outputNamespacePanel.add(getServicesTypeScrollPane(),
+					gridBagConstraints29);
 		}
 		return outputNamespacePanel;
 	}
@@ -1052,7 +1062,15 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JScrollPane getOutputNamespacesTypeScrollPane() {
 		if (outputNamespacesTypeScrollPane == null) {
 			outputNamespacesTypeScrollPane = new JScrollPane();
-			outputNamespacesTypeScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Data Types", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+			outputNamespacesTypeScrollPane
+					.setBorder(javax.swing.BorderFactory
+							.createTitledBorder(
+									null,
+									"Data Types",
+									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+									javax.swing.border.TitledBorder.DEFAULT_POSITION,
+									null, IntroduceLookAndFeel
+											.getPanelLabelColor()));
 			outputNamespacesTypeScrollPane
 					.setViewportView(getOutputNamespacesJTree());
 		}
@@ -1523,7 +1541,15 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JScrollPane getServicesTypeScrollPane() {
 		if (servicesTypeScrollPane == null) {
 			servicesTypeScrollPane = new JScrollPane();
-			servicesTypeScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Client Handle Types", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+			servicesTypeScrollPane
+					.setBorder(javax.swing.BorderFactory
+							.createTitledBorder(
+									null,
+									"Client Handle Types",
+									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+									javax.swing.border.TitledBorder.DEFAULT_POSITION,
+									null, IntroduceLookAndFeel
+											.getPanelLabelColor()));
 			servicesTypeScrollPane.setViewportView(getServicesTypeTable());
 		}
 		return servicesTypeScrollPane;
@@ -1559,14 +1585,25 @@ public class MethodViewer extends GridPortalBaseFrame {
 							File schemasDir = new File(conf.getGlobusLocation()
 									+ File.separator + "share" + File.separator
 									+ "schema");
-							File foundSchema = CommonTools.findSchema(
-									IntroduceConstants.WSADDRESING_NAMESPACE,
-									schemasDir);
+							File foundSchema;
+							try {
+								foundSchema = CommonTools
+										.findSchema(
+												IntroduceConstants.WSADDRESING_NAMESPACE,
+												schemasDir);
+							} catch (Exception ex) {
+								JOptionPane
+										.showMessageDialog(MethodViewer.this,
+												"Error: Please verify you Globus Location in the Preferences");
+								return;
+							}
 							try {
 								gov.nih.nci.cagrid.introduce.portal.ExtensionTools
-										.setSchemaElements(outputType, XMLUtilities
-												.fileNameToDocument(foundSchema
-														.getAbsolutePath()));
+										.setSchemaElements(
+												outputType,
+												XMLUtilities
+														.fileNameToDocument(foundSchema
+																.getAbsolutePath()));
 							} catch (MobiusException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
@@ -1575,24 +1612,38 @@ public class MethodViewer extends GridPortalBaseFrame {
 								e1.printStackTrace();
 							}
 							int currentLength = 0;
-							if (info.getNamespaces() != null && info.getNamespaces().getNamespace()!=null) {
-								currentLength = info.getNamespaces().getNamespace().length;
+							if (info.getNamespaces() != null
+									&& info.getNamespaces().getNamespace() != null) {
+								currentLength = info.getNamespaces()
+										.getNamespace().length;
 							}
 							NamespaceType[] newNamespaceTypes = new NamespaceType[currentLength + 1];
 							if (currentLength > 0) {
-								System.arraycopy(info.getNamespaces().getNamespace(), 0, newNamespaceTypes, 0, currentLength);
+								System.arraycopy(info.getNamespaces()
+										.getNamespace(), 0, newNamespaceTypes,
+										0, currentLength);
 							}
 							newNamespaceTypes[currentLength] = outputType;
-							info.getNamespaces().setNamespace(newNamespaceTypes);
+							info.getNamespaces()
+									.setNamespace(newNamespaceTypes);
 						}
 
 						// set the epr type as this outputType
 						MethodTypeOutput output = new MethodTypeOutput();
-						output.setQName(new QName(IntroduceConstants.WSADDRESING_NAMESPACE,IntroduceConstants.WSADDRESING_EPR_TYPE ));
+						output.setQName(new QName(
+								IntroduceConstants.WSADDRESING_NAMESPACE,
+								IntroduceConstants.WSADDRESING_EPR_TYPE));
 						output.setIsArray(false);
 						output.setIsClientHandle(new Boolean(true));
 						try {
-							output.setClientHandleClass(getServicesTypeTable().getSelectedRowData().getPackageName() + "." + "client" + "." + getServicesTypeTable().getSelectedRowData().getName() + "Client");
+							output.setClientHandleClass(getServicesTypeTable()
+									.getSelectedRowData().getPackageName()
+									+ "."
+									+ "client"
+									+ "."
+									+ getServicesTypeTable()
+											.getSelectedRowData().getName()
+									+ "Client");
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();

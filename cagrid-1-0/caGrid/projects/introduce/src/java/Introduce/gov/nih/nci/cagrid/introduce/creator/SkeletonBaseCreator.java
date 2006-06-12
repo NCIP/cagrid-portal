@@ -2,12 +2,14 @@ package gov.nih.nci.cagrid.introduce.creator;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.ClasspathTemplate;
 import gov.nih.nci.cagrid.introduce.templates.DeployPropertiesTemplate;
 import gov.nih.nci.cagrid.introduce.templates.JNDIConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.NamespaceMappingsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.ProjectTemplate;
 import gov.nih.nci.cagrid.introduce.templates.ServerConfigTemplate;
+import gov.nih.nci.cagrid.introduce.templates.ServiceClientLaunchTemplate;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -28,6 +30,9 @@ public class SkeletonBaseCreator {
 	public void createSkeleton(ServiceInformation info) throws Exception {
 		File baseDirectory = new File(info.getIntroduceServiceProperties().getProperty(
 			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
+		
+		String serviceName =info.getIntroduceServiceProperties().getProperty(
+				IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
 
 		ServerConfigTemplate serverConfigT = new ServerConfigTemplate();
 		String serverConfigS = serverConfigT.generate(info);
@@ -57,6 +62,13 @@ public class SkeletonBaseCreator {
 		FileWriter namespaceMappingsFW = new FileWriter(namespaceMappingsF);
 		namespaceMappingsFW.write(namespaceMappingsS);
 		namespaceMappingsFW.close();
+		
+		ServiceClientLaunchTemplate clientLaunchT = new ServiceClientLaunchTemplate();
+		String clientLaunchS = clientLaunchT.generate(new SpecificServiceInformation(info,info.getServices().getService(0)));
+		File clientLaunchF = new File(baseDirectory.getAbsolutePath() + File.separator + serviceName + "Client.launch");
+		FileWriter clientLaunchFW = new FileWriter(clientLaunchF);
+		clientLaunchFW.write(clientLaunchS);
+		clientLaunchFW.close();
 
 		ClasspathTemplate classpathT = new ClasspathTemplate();
 		String classpathS = classpathT.generate(info);

@@ -171,6 +171,7 @@
 			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/namespace2package.mappings.txtjet" />
 			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/.classpath.txtjet" />
 			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/.project.xmljet" />
+			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/client.launch.xmljet" />
 			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/etc/registration.xmljet" />
 			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/etc/security-desc.xmljet" />
 			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/schema/Service/service.wsdl.xmljet" />
