@@ -141,7 +141,7 @@ public class DomainModelExplorer extends JLayeredPane
 	public void setDomainModel(DomainModel model)
 	{
 		clear();
-		//this.domainModelOutline.setDomainModel(model, packages);
+		this.domainModelOutline.setDomainModel(model, packages);
 		
 		if(model != null)
 		{

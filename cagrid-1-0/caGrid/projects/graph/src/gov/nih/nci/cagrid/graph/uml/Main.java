@@ -21,10 +21,7 @@ public class Main {
 		}
 		
 		
-		UMLDiagram d = new UMLDiagram();
-		
 	
-		
 		
 
 		DomainModelExplorer e = new DomainModelExplorer();

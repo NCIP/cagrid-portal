@@ -94,6 +94,7 @@ public class DomainModelOutline extends JPanel
 		}
 		else
 		{
+			hasNullDomainModel = true;
 			setNullTree();
 		}
 	}
@@ -103,6 +104,7 @@ public class DomainModelOutline extends JPanel
 	{
 		if(model != null)
 		{
+			
 			this.tree.setDefaultRenderer();
 			this.tree.removeAll();
 			
@@ -171,7 +173,7 @@ public class DomainModelOutline extends JPanel
 		this.tree.setNullRenderer();
 		hasNullDomainModel = true;
 		
-		DefaultMutableTreeNode n = new DefaultMutableTreeNode("  No Domain Model selected");
+		DefaultMutableTreeNode n = new DefaultMutableTreeNode("  No Domain Model specified");
 		DefaultTreeModel treeModel = (DefaultTreeModel) tree.getModel();
 		treeModel.setRoot(n);
 	}
@@ -274,7 +276,6 @@ public class DomainModelOutline extends JPanel
 			else
 			{
 				rval.insert(0, ch);
-				
 				i--;
 			}
 			

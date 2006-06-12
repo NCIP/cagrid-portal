@@ -138,10 +138,15 @@ class DomainModelTreeSelectionListener implements TreeSelectionListener
 {
 	public void valueChanged(TreeSelectionEvent e)
 	{
-		DomainModelOutlineTree tree = (DomainModelOutlineTree) e.getSource();
-		DomainModelTreeNode node = (DomainModelTreeNode) tree.getLastSelectedPathComponent();
 		
-		tree.parent.parent.showPage(node, node.name);
+		DomainModelOutlineTree tree = (DomainModelOutlineTree) e.getSource();
+	
+		if(!tree.parent.hasNullDomainModel)
+		{
+			DomainModelTreeNode node = (DomainModelTreeNode) tree.getLastSelectedPathComponent();
+			
+			tree.parent.parent.showPage(node, node.name);
+		}
 		
 	}
 }
