@@ -15,10 +15,8 @@ import java.awt.event.MouseMotionAdapter;
 import java.util.HashMap;
 import java.util.Vector;
 
-import javax.swing.BorderFactory;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
 public class DomainModelExplorer extends JLayeredPane
 {
@@ -51,8 +49,6 @@ public class DomainModelExplorer extends JLayeredPane
 		
 			outlineMDI = new DomainModelOutlines(this);
 			umlMDI = new DomainModelUMLViews(this);
-			
-			
 					
 			this.add(outlineMDI);
 			this.add(umlMDI);
@@ -69,10 +65,7 @@ public class DomainModelExplorer extends JLayeredPane
 			this.splitter.addMouseMotionListener(new DomainModelSplitterMouseMotionListener());
 		
 			setDomainModel(null);
-			
-			this.umlMDI.addPage(new DomainModelOverview(this.model), null, "Overview", "Overview");
-			this.umlMDI.addPage(new UMLDiagram(), null, "gov.nci.nih.domain", "gov.nci.nih.domain");
-	
+		
 	}
 	
 	public void showPage(DomainModelTreeNode node, String pageId)
@@ -95,10 +88,11 @@ public class DomainModelExplorer extends JLayeredPane
 		{
 			if(node.type == DomainModelTreeNode.CLASS)
 			{
-				UMLDiagram d = new UMLDiagram();
-				initializeUMLDiagram(d, model, node.name);
-				d.scrollToShowClass(node.name);
-				this.umlMDI.addPage(d, null, node.name, node.name);
+				//UMLDiagram d = new UMLDiagram();
+				//initializeUMLDiagram(d, model, node.name);
+				//d.scrollToShowClass(node.name);
+				//this.umlMDI.addPage(d, null, node.name, node.name);
+				
 			
 			}
 			else if(node.type == DomainModelTreeNode.PACKAGE)
@@ -110,10 +104,9 @@ public class DomainModelExplorer extends JLayeredPane
 			}
 			else if(node.type == DomainModelTreeNode.DOMAIN)
 			{
-				DomainModelOverview o = new DomainModelOverview(model);
-				JScrollPane p = new JScrollPane(o);
+				DomainModelOverview o = new DomainModelOverview(model, packages);
 				
-				this.umlMDI.addPage(p, null, node.name, node.name);
+				this.umlMDI.addPage(o, null, node.name , node.name);
 			}
 		}
 	}
@@ -132,7 +125,7 @@ public class DomainModelExplorer extends JLayeredPane
 			{
 				if(c != null)
 				{
-					gov.nih.nci.cagrid.graph.uml.UMLClass C = new gov.nih.nci.cagrid.graph.uml.UMLClass(c.getClassName());
+					gov.nih.nci.cagrid.graph.uml.UMLClass C = new gov.nih.nci.cagrid.graph.uml.UMLClass(DomainModelOutline.trimClassName(c.getClassName()));
 					
 					d.addClass(C);
 				}
@@ -148,7 +141,7 @@ public class DomainModelExplorer extends JLayeredPane
 	public void setDomainModel(DomainModel model)
 	{
 		clear();
-		this.domainModelOutline.setDomainModel(model, packages);
+		//this.domainModelOutline.setDomainModel(model, packages);
 		
 		if(model != null)
 		{
@@ -157,6 +150,8 @@ public class DomainModelExplorer extends JLayeredPane
 			
 			this.showPage((DomainModelTreeNode)this.domainModelOutline.tree.getModel().getRoot(), "");
 		}
+		
+		this.domainModelOutline.tree.expandAll();
 	}
 	
 	
@@ -180,9 +175,11 @@ public class DomainModelExplorer extends JLayeredPane
 				
 				int found = -1;
 				
-				for(int j = 0; j < packages.size() && found != -1; j++)
+				for(int j = 0; j < packages.size() ; j++)
 				{
 					MultiMapElement e = (MultiMapElement) packages.get(j);
+					
+					//System.out.println(packageName + " . " + e.head);
 					
 					if(packageName.equals(e.head))
 					{
@@ -204,13 +201,24 @@ public class DomainModelExplorer extends JLayeredPane
 					e.list.add(className);
 					packages.remove(found);
 					packages.add(found, e);
+					
+				
 				}
 			}
 		}
 		
 		
-		// 'packages' is now a "multimap" of package-class[] elements;
-		
+//		// 'packages' is now a "multimap" of package-class[] elements;
+//		for(int z = 0; z < packages.size(); z++)
+//		{
+//			MultiMapElement e = (MultiMapElement) packages.get(z);
+//			System.out.println(e.head);
+//			
+//			for(int u = 0 ; u < e.list.size(); u++)
+//			{
+//				System.out.println("        "  + (String)e.list.get(u));
+//			}
+//		}
 		
 		
 	}
@@ -220,7 +228,15 @@ public class DomainModelExplorer extends JLayeredPane
 	public void clear()
 	{
 		this.model = null;
-		this.packages = null;
+		if(packages == null)
+		{
+			this.packages = new Vector();
+		}
+		else
+		{
+			this.packages.clear();
+		}
+		
 		
 		this.outlineMDI.clear();
 		this.umlMDI.clear();

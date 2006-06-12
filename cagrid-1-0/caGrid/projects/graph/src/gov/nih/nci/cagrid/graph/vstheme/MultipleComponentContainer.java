@@ -49,17 +49,14 @@ public class MultipleComponentContainer extends JLayeredPane
 	
 	public void showComponent(int i)
 	{
-
 		
 		if(currentShownComponent >=0 && currentShownComponent < components.size())
 		{
 			JComponent c = (JComponent) this.components.get(currentShownComponent);
 			this.setLayer(c, JLayeredPane.DEFAULT_LAYER.intValue());
-			currentShownComponent = -1;
+			//currentShownComponent = -1;
 		
 		}
-		
-
 		
 		if(i >= 0 && i < this.components.size())
 		{
@@ -68,12 +65,20 @@ public class MultipleComponentContainer extends JLayeredPane
 			currentShownComponent = i;	
 
 		}
+		
+
 	
 		this.validate();
 		this.repaint();
 		
-	
+		this.fireResize();
 		
+	}
+	
+	public void fireResize()
+	{
+		this.setSize(this.getWidth() , this.getHeight() - 1);
+		this.setSize(this.getWidth() , this.getHeight() + 1);
 	}
 }
 

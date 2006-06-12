@@ -26,6 +26,8 @@ public class DomainModelOutline extends JPanel
 	public static int DESCENDING = 1;
 	public static int NONE = 2;
 	
+	public int currentOrder = NONE;
+	
 	public DomainModelOutline(DomainModelExplorer parent)
 	{
 	
@@ -56,7 +58,7 @@ public class DomainModelOutline extends JPanel
 			this.tree.removeAll();
 			
 			DomainModelTreeNode root = new DomainModelTreeNode(model);
-			root.name = model.getProjectLongName() + " " + model.getProjectVersion();
+			root.name = model.getProjectLongName() + "  v. " + model.getProjectVersion();
 			root.type = DomainModelTreeNode.DOMAIN;
 			root.setUserObject(root.name);
 			
@@ -76,9 +78,11 @@ public class DomainModelOutline extends JPanel
 					DomainModelTreeNode cls = new DomainModelTreeNode(model);
 					String cname = (String) e.list.get(j);
 					
+					cname = trimClassName(cname);
+					
 					cls.name = cname;
-					pkg.type = DomainModelTreeNode.CLASS;
-					pkg.setUserObject(cname);
+					cls.type = DomainModelTreeNode.CLASS;
+					cls.setUserObject(cname);
 					
 					pkg.add(cls);
 				}
@@ -86,6 +90,7 @@ public class DomainModelOutline extends JPanel
 			
 			DefaultTreeModel tmodel = (DefaultTreeModel) this.tree.getModel();
 			tmodel.setRoot(root);
+			this.tree.expandAll();
 		}
 		else
 		{
@@ -102,7 +107,7 @@ public class DomainModelOutline extends JPanel
 			this.tree.removeAll();
 			
 			DomainModelTreeNode root = new DomainModelTreeNode(model);
-			root.name = model.getProjectLongName() + " " + model.getProjectVersion();
+			root.name = model.getProjectLongName() + "  v. " + model.getProjectVersion();
 			root.type = DomainModelTreeNode.DOMAIN;
 			root.setUserObject(root.name);
 			
@@ -122,14 +127,25 @@ public class DomainModelOutline extends JPanel
 					DomainModelTreeNode cls = new DomainModelTreeNode(model);
 					String cname = (String) e.list.get(j);
 					
-					cls.name = cname;
-					pkg.type = DomainModelTreeNode.CLASS;
-					pkg.setUserObject(cname);
+					String tcname = trimClassName(cname);
 					
-					if(cname.trim().toUpperCase().equals(filter.trim().toUpperCase()))
+					cls.name = tcname;
+					cls.type = DomainModelTreeNode.CLASS;
+					cls.setUserObject(tcname);
+					
+					// 'all' filters nothing?
+					if(filter != null && filter.trim().toUpperCase() != "ALL")
 					{
-						pkg.add(cls);
+						if(cname.trim().toUpperCase().contains(filter.trim().toUpperCase()))
+						{
+							pkg.add(cls);
+							atLeastOne = true;
+						}
+					}
+					else
+					{
 						atLeastOne = true;
+						pkg.add(cls);
 					}
 				
 				}
@@ -142,6 +158,7 @@ public class DomainModelOutline extends JPanel
 			
 			DefaultTreeModel tmodel = (DefaultTreeModel) this.tree.getModel();
 			tmodel.setRoot(root);
+			this.tree.expandAll();
 		}
 		else
 		{
@@ -161,6 +178,8 @@ public class DomainModelOutline extends JPanel
 	
 	public void setOrdering(int ordering, DomainModel model, Vector packages)
 	{
+		this.currentOrder = ordering;
+		
 		if(model != null)
 		{
 			Vector sortedPackages = insertionSortOnHead(packages);
@@ -177,6 +196,22 @@ public class DomainModelOutline extends JPanel
 		else
 		{
 			setNullTree();
+		}
+	}
+	
+	public void toggleOrdering(DomainModel model, Vector packages)
+	{
+		if(currentOrder == NONE)
+		{
+			this.setOrdering(ASCENDING, model, packages );
+		}
+		else if(currentOrder == ASCENDING)
+		{
+			this.setOrdering(DESCENDING, model, packages);
+		}
+		else if(currentOrder == DESCENDING)
+		{
+			this.setOrdering(NONE, model, packages);
 		}
 	}
 	
@@ -222,6 +257,30 @@ public class DomainModelOutline extends JPanel
 
 		}
 		return v;
+	}
+	
+	public static String trimClassName(String s)
+	{
+		StringBuffer rval = new StringBuffer("");
+		boolean foundFirstDot = false;
+		int i = s.length()-1;
+		while(!foundFirstDot && i >= 0)
+		{
+			char ch = s.charAt(i);
+			if(ch == '.')
+			{
+				foundFirstDot = true;
+			}
+			else
+			{
+				rval.insert(0, ch);
+				
+				i--;
+			}
+			
+		}
+		
+		return rval.toString();
 	}
 }
 

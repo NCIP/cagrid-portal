@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -25,7 +26,7 @@ public class DomainModelOverview extends JPanel
 	
 	public JTextArea text = new JTextArea();
 	
-	public DomainModelOverview(DomainModel m)
+	public DomainModelOverview(DomainModel m, Vector packages)
 	{
 		super();
 		
@@ -42,13 +43,15 @@ public class DomainModelOverview extends JPanel
 		
 		this.addComponentListener(new DomainModelOverviewComponentListener());
 		
-		//if(m != null)
+		if(m != null)
 		{
-			this.text.append("Project Name: " + "\n");
-			this.text.append("Total Packages: " + "\n");
-			this.text.append("Total Classes: " + "\n");
+			this.text.append("Project Name: " + m.getProjectLongName() + "\n");
+			this.text.append("Project Version: " + m.getProjectVersion() + "\n");
+			this.text.append("Total Packages: " + packages.size() + "\n");
+			
+			this.text.append("Total Classes: " + m.getExposedUMLClassCollection().getUMLClass().length + "\n");
 			this.text.append("______________________________________________________________\n\n");
-			this.text.append("Project Description: " + "\n");
+			this.text.append("Project Description: " + m.getProjectDescription() + "\n");
 			
 		}
 	}

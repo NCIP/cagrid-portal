@@ -1,18 +1,25 @@
 package gov.nih.nci.cagrid.graph.uml;
 
 import gov.nih.nci.cagrid.graph.domainmodelapplication.DomainModelExplorer;
+import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
-import java.util.Random;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import org.globus.wsrf.encoding.DeserializationException;
+import org.globus.wsrf.encoding.ObjectDeserializer;
+import org.xml.sax.InputSource;
+
 // Test Driver for the UMLDiagram class
 
 public class Main {
 
-	public static void main(String args[]) throws InterruptedException {
+	public static void main(String args[]) throws InterruptedException, FileNotFoundException, DeserializationException {
 
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -26,7 +33,19 @@ public class Main {
 		UMLDiagram d = new UMLDiagram();
 		
 	
+		
+		
+		FileInputStream fis = new FileInputStream(new File(System.getProperty("user.dir") + "\\domainmodel.xml"));
+		
+		InputSource is = new InputSource(fis);
+		
+		DomainModel model = (DomainModel) ObjectDeserializer.deserialize(is, DomainModel.class);
+		
 		DomainModelExplorer e = new DomainModelExplorer();
+		
+		e.setDomainModel(model);
+		
+		
 		
 		JFrame f = new JFrame();
 		f.getContentPane().add(e);
@@ -35,42 +54,7 @@ public class Main {
 		f.setVisible(true);
 		
 		
-		
-
-	
-	}
-	
-	
-	public static void populateDiagram(UMLDiagram diagram) throws InterruptedException
-	{
-		Random r = new Random(System.currentTimeMillis());
-
-		int numclasses = 30;
-		int numassocs = 9;
-		
-		for(int k = 0; k < numclasses;  k++)
-		{
-			UMLClass c = new UMLClass("TestClass"+k);
-			//Thread.sleep(100);
-			
-			c.refresh();
-			
-			diagram.addClass(c);
-		}
-		
-		for(int k = 0; k < numassocs; k++)
-		{
-			int index1 = r.nextInt() % numclasses;
-			int index2 = r.nextInt() % numclasses;
-			
-			if(index1 < 0) index1 = -index1;
-			if(index2 < 0) index2 = -index2;
-			
-			UMLClass c1 = (UMLClass) diagram.classes.get(index1);
-			UMLClass c2 = (UMLClass) diagram.classes.get(index2);
-			//Thread.sleep(100);
-			diagram.addAssociation(c1, c2, "", "", "1..0", "*..1");
-		}
-
 	}
 }
+	
+	

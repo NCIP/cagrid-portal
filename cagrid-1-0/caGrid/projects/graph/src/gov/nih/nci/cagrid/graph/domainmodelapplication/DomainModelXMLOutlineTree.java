@@ -22,3 +22,4 @@ public class DomainModelXMLOutlineTree extends JTree
 	}
 
 }
+

@@ -2,9 +2,10 @@ package gov.nih.nci.cagrid.graph.domainmodelapplication;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Insets;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -77,6 +78,8 @@ public class DomainModelOutlineToolBar extends JPanel
 		searchButton.setToolTipText("Specify Search Filter");
 		
 		this.addComponentListener(new DomainModelOutlineToolbarComponentListener());
+		
+		searchBox.addKeyListener(new SearchBoxKeyListener(this.parent));
 	}
 	
 	
@@ -117,11 +120,46 @@ class SearchButtonMouseListener extends MouseAdapter
 		if(parent.toolBar.searchBox.isVisible())
 		{
 			parent.toolBar.searchBox.setVisible(false);
+			parent.setFilter(null, parent.parent.model, parent.parent.packages);
 		}
 		else
 		{
 			parent.toolBar.searchBox.setVisible(true);
+			parent.toolBar.searchBox.requestFocus();
+			parent.toolBar.searchBox.selectAll();
+			
 		}
+	}
+}
+
+class SortButtonMouseListener extends MouseAdapter
+{
+	DomainModelOutline parent ;
+	
+	public SortButtonMouseListener(DomainModelOutline p)
+	{
+		parent = p;
+	}
+	public void mousePressed(MouseEvent e)
+	{
+		parent.toggleOrdering(parent.parent.model, parent.parent.packages);
+	}
+}
+
+class SearchBoxKeyListener extends KeyAdapter
+{
+	public DomainModelOutline parent;
+	
+	public SearchBoxKeyListener(DomainModelOutline p)
+	{
+		this.parent = p;
+	}
+	public void keyReleased(KeyEvent e)
+	{
+		
+		JTextField text = (JTextField) e.getSource();
+		parent.setFilter(text.getText(), parent.parent.model, parent.parent.packages);
+		parent.tree.expandAll();
 	}
 }
 

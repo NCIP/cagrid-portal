@@ -4,7 +4,7 @@ import java.util.Vector;
 public class MultiMapElement implements Comparable
 {
 	public String head;
-	public Vector list;
+	public Vector list = new Vector();
 	
 	public int compareTo(Object e)
 	{

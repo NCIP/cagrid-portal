@@ -47,6 +47,9 @@ public class MDIPanel extends JComponent
 		this.tabs.addTab(title, icon);
 		
 		this.setActivePage(pages.size() - 1);
+		
+		
+		
 	}
 		
 		
@@ -85,6 +88,7 @@ public class MDIPanel extends JComponent
 			this.container.showComponent(i);
 		}
 		
+		this.fireResize();
 		
 	}
 	
@@ -135,6 +139,20 @@ public class MDIPanel extends JComponent
 	{
 		return this.pages.size();
 	}
+	
+	public void fireResize()
+	{
+		this.setSize(this.getWidth() , this.getHeight() - 1);
+		this.setSize(this.getWidth() , this.getHeight() + 1);
+	}
+	
+	public void resizeChildren()
+	{
+		MDIPanel s = this;
+		s.tabs.setBounds(1, 0, s.getWidth()-2, MDIPanel.tabsHeight);
+		s.container.setBounds(1, MDIPanel.tabsHeight, s.getWidth()-2, s.getHeight()-MDIPanel.tabsHeight-1);
+		s.validate();		
+	}
 
 }
 
@@ -143,8 +161,7 @@ class MDIPanelComponentListener extends ComponentAdapter
 	public void componentResized(ComponentEvent e)
 	{
 		MDIPanel s = (MDIPanel)e.getSource();
-		s.tabs.setBounds(1, 0, s.getWidth()-2, MDIPanel.tabsHeight);
-		s.container.setBounds(1, MDIPanel.tabsHeight, s.getWidth()-2, s.getHeight()-MDIPanel.tabsHeight-1);
-		s.validate();
+		s.resizeChildren();
+		s.tabs.repositionAndResize();
 	}
 }

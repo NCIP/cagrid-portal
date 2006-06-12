@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.graph.domainmodelapplication;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.util.Enumeration;
@@ -8,6 +7,9 @@ import java.util.Enumeration;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JTree;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
@@ -30,13 +32,13 @@ public class DomainModelOutlineTree extends JTree
 		
 		this.parent = p;
 		
-		this.setBorder(BorderFactory.createEmptyBorder(2, 4, 4, 4));
+		this.setBorder(BorderFactory.createEmptyBorder(2, 2, 4, 4));
 		
 		this.setCellRenderer(new DomainModelTreeRenderer());
 		
-		
+		this.addTreeSelectionListener(new DomainModelTreeSelectionListener());
 	
-		
+		this.setShowsRootHandles(true);
 
 	}
 	
@@ -68,11 +70,13 @@ public class DomainModelOutlineTree extends JTree
 	
 	public void expandAll()
 	{
+		this.expanded = true;
 		expandAll(this, true);
 	}
 	
 	public void collapseAll()
 	{
+		this.expanded = false;
 		expandAll(this, false);
 		this.expandPath(new TreePath(this.getModel().getRoot()));
 	}
@@ -130,11 +134,23 @@ super.getTreeCellRendererComponent(
     }
 }
 
+class DomainModelTreeSelectionListener implements TreeSelectionListener
+{
+	public void valueChanged(TreeSelectionEvent e)
+	{
+		DomainModelOutlineTree tree = (DomainModelOutlineTree) e.getSource();
+		DomainModelTreeNode node = (DomainModelTreeNode) tree.getLastSelectedPathComponent();
+		
+		tree.parent.parent.showPage(node, node.name);
+		
+	}
+}
+
 class DomainModelTreeRenderer extends DefaultTreeCellRenderer {
     
 	public ImageIcon classIcon = new ImageIcon(System.getProperty("user.dir") + "\\resource\\classes1.png");
 	public ImageIcon packageIcon = new ImageIcon(System.getProperty("user.dir") + "\\resource\\package.png");
-	public ImageIcon rootIcon = new ImageIcon(System.getProperty("user.dir") + "\\resource\\package.png");
+	public ImageIcon rootIcon = null; //new ImageIcon(System.getProperty("user.dir") + "\\resource\\package.png");
 
     public Component getTreeCellRendererComponent(
                         JTree tree,
@@ -167,6 +183,4 @@ class DomainModelTreeRenderer extends DefaultTreeCellRenderer {
 
         return this;
     }
-
-   
 }
