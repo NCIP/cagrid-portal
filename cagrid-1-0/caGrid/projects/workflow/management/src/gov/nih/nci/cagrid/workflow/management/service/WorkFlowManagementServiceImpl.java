@@ -2,11 +2,13 @@ package gov.nih.nci.cagrid.workflow.management.service;
 
 import gov.nih.nci.cagrid.workflow.management.common.WorkFlowManagementServiceI;
 import gov.nih.nci.cagrid.workflow.management.service.globus.ServiceConfiguration;
+import gov.nih.nci.cagrid.workflow.stubs.Invoke;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.jar.JarFile;
+import gov.nih.nci.cagrid.common.Utils;
 
 import javax.naming.InitialContext;
 import javax.xml.namespace.QName;
@@ -17,7 +19,9 @@ import org.activebpel.rt.bpel.server.admin.rdebug.server.AeRemoteDebugImpl;
 import org.apache.axis.MessageContext;
 import org.apache.axis.types.NCName;
 import org.globus.wsrf.Constants;
+import org.globus.wsrf.encoding.ObjectSerializer;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.xmlsoap.schemas.ws._2003._03.business_process.TProcess;
 
 import AeAdminServices.BpelEngineAdminLocator;
@@ -76,17 +80,16 @@ public class WorkFlowManagementServiceImpl implements
 			mRemote = (RemoteDebugSoapBindingStub) locator
 					.getAeActiveWebflowAdminPort(url);
 			String filePath = "c:\\test\\temp.bpr";
-
+			QName qname = new QName("http://workflow.cagrid.nci.nih.gov/SampleService1", "invoke");
+			Invoke invoke = new Invoke("Hello");
+			
 			//BPRCreator.makeBPR(bpelDoc, filePath);
 
 			/*output = mRemote.deployBpr("test.bpr", BPRCreator
 					.getBase64EncodedBpr(filePath));*/
-			String input = "<invoke xmlns=\"http://workflow.cagrid.nci.nih.gov/SampleService1\"><param>Hello</param></invoke>";
-			String result = mRemote.invokeProcess("Sample1PartnerLinkTypeService", 
-					input);
-			System.out.println("Result: " + result);
-			QName serviceName = bpelDoc.getPartnerLinks().getPartnerLink(0).getPartnerLinkType();
-			System.out.println(serviceName.toString());
+			output = mRemote.invokeProcess("Sample1PartnerLinkTypeService", 
+					ObjectSerializer.toString(invoke, qname));
+			System.out.println("Result: " + output);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println(e.getMessage());
