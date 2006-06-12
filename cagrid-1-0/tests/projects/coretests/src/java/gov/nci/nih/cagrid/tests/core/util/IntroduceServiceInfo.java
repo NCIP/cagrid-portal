@@ -20,6 +20,7 @@ public class IntroduceServiceInfo
 	public static final String INTRODUCE_CREATESERVICE_TASK = "createService";
 	public static final String INTRODUCE_RESYNCSERVICE_TASK = "resyncService";
 	public static final String INTRODUCE_SERVICEXML_FILENAME = "introduce.xml";
+	public static final String INTRODUCE_SERVICEMETADATA_FILENAME = "serviceMetadata.xml";
 
 	private String serviceName;
 	private String namespace;
