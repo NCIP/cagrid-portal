@@ -1,16 +1,26 @@
 package gov.nih.nci.cagrid.introduce.codegen.services;
 
+import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.codegen.services.methods.SyncMethods;
 import gov.nih.nci.cagrid.introduce.codegen.services.resources.SyncResource;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
+import gov.nih.nci.cagrid.introduce.templates.NewServerConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.ServerConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.etc.SecurityDescTemplate;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
+import org.jdom.Document;
+import org.jdom.Element;
+import org.projectmobius.common.XMLUtilities;
 
 import EDU.oswego.cs.dl.util.concurrent.LinkedQueue;
 import EDU.oswego.cs.dl.util.concurrent.PooledExecutor;
@@ -42,9 +52,11 @@ public class SyncServices extends SyncTool {
 				int serviceIndex = serviceI;
 
 				try {
+
 					SpecificServiceInformation ssi = new SpecificServiceInformation(
 							getServiceInformation(), getServiceInformation()
 									.getServices().getService(serviceIndex));
+					
 					SecurityDescTemplate secDescT = new SecurityDescTemplate();
 					String secDescS = secDescT.generate(ssi);
 					File secDescF = new File(getBaseDirectory()
@@ -57,16 +69,6 @@ public class SyncServices extends SyncTool {
 					FileWriter secDescFW = new FileWriter(secDescF);
 					secDescFW.write(secDescS);
 					secDescFW.close();
-
-					ServerConfigTemplate serverConfigT = new ServerConfigTemplate();
-					String serverConfigS = serverConfigT
-							.generate(getServiceInformation());
-					File serverConfigF = new File(getBaseDirectory()
-							.getAbsolutePath()
-							+ File.separator + "server-config.wsdd");
-					FileWriter serverConfigFW = new FileWriter(serverConfigF);
-					serverConfigFW.write(serverConfigS);
-					serverConfigFW.close();
 
 					SyncMethods methodSync = new SyncMethods(
 							getBaseDirectory(), getServiceInformation(),
@@ -86,5 +88,5 @@ public class SyncServices extends SyncTool {
 			}
 		}
 	}
-
+	
 }

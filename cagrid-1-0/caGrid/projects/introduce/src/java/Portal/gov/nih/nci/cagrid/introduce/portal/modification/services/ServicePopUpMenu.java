@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ModifyResourcePropertiesComponent;
 
@@ -74,7 +75,7 @@ private JMenuItem getModificationMenuItem() {
 				public void mousePressed(MouseEvent e) {
 					super.mousePressed(e);
 					PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-						new ModifyService(node.getServiceType()));
+						new ModifyService(new SpecificServiceInformation(node.getInfo(),node.getServiceType())));
 				}
 			
 			});

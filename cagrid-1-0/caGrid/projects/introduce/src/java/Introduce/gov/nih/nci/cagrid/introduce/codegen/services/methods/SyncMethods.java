@@ -7,15 +7,22 @@ import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
+import gov.nih.nci.cagrid.introduce.templates.NewServerConfigTemplate;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.apache.ws.jaxme.js.JavaMethod;
 import org.apache.ws.jaxme.js.JavaSource;
 import org.apache.ws.jaxme.js.JavaSourceFactory;
 import org.apache.ws.jaxme.js.util.JavaParser;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.projectmobius.common.XMLUtilities;
 
 
 /**
@@ -47,6 +54,15 @@ public class SyncMethods extends SyncTool {
 
 
 	public void sync() throws SynchronizationException {
+		
+		//	sync up the service.wsdd with respect to this particular service....
+		try {
+			syncServiceDeploymentDescriptor(new SpecificServiceInformation(getServiceInformation(),service));
+		} catch (Exception e1) {
+			throw new SynchronizationException(e1.getMessage(),e1);
+		}
+
+		
 		this.lookForUpdates();
 
 		// sync the methods fiels
@@ -127,5 +143,83 @@ public class SyncMethods extends SyncTool {
 			}
 		}
 	}
+	
+	private void syncServiceDeploymentDescriptor(SpecificServiceInformation ssi) throws Exception{
+		
+		// need to add in any new services into the service.wsdd
+		File serverConfigF = new File(getBaseDirectory()
+				.getAbsolutePath()
+				+ File.separator + "server-config.wsdd");
+		
+		NewServerConfigTemplate newServerConfigT = new NewServerConfigTemplate();
+		String newServerConfigS = newServerConfigT.generate(ssi);
+
+		Document serverConfigDoc = XMLUtilities
+				.fileNameToDocument(serverConfigF.getAbsolutePath());
+		
+		
+		//we need to now find the "service" element so that we can update any parameters we need to update
+		List serviceEls = serverConfigDoc.getRootElement().getChildren("service",serverConfigDoc.getRootElement().getNamespace());
+		Element serviceConfigEl = null;
+		for(int serviceElI = 0; serviceElI < serviceEls.size();serviceElI++){
+			Element serviceEl = (Element)serviceEls.get(serviceElI);
+			if(serviceEl.getAttributeValue("name").endsWith("/"+ssi.getService().getName())){
+				serviceConfigEl = serviceEl;
+				break;
+			}
+		}
+		
+		Element parameterEl = null;
+		if(serviceConfigEl!=null){
+			List parameters = serviceConfigEl.getChildren("parameter",serviceConfigEl.getNamespace());
+			for(int parameterI = 0; parameterI < parameters.size(); parameterI++){
+				Element tparameterEl  =  (Element)parameters.get(parameterI);
+				if(tparameterEl.getAttributeValue("name").equals("providers")){
+					parameterEl = tparameterEl;
+					break;
+				}
+			}
+		} else {
+			throw new Exception("could not find the \"service\" element in the service.wsdd for the service: " + ssi.getService().getName());
+		}
+		
+		String providerParamString = "";
+		if(parameterEl!=null){
+			providerParamString = parameterEl.getAttributeValue("value");
+			StringTokenizer strtok = new StringTokenizer(providerParamString," ",false);
+			List providers = new ArrayList();
+			while (strtok.hasMoreTokens()){
+				providers.add(strtok.nextToken());
+			}
+			
+			//walk the methods and add any providers that need to be added.....
+			if(ssi.getService().getMethods()!=null && ssi.getService().getMethods().getMethod()!=null){
+				for(int methodI= 0; methodI < ssi.getService().getMethods().getMethod().length; methodI++){
+					MethodType method = ssi.getService().getMethods().getMethod(methodI);
+					if(method.isIsProvided() && method.getProviderInformation()!=null){
+						if(!providers.contains(method.getProviderInformation().getProviderClass())){
+							providers.add(method.getProviderInformation().getProviderClass());
+							providerParamString += " " + method.getProviderInformation().getProviderClass();
+						}
+						
+					}
+				}
+			}
+			
+			parameterEl.setAttribute("value",providerParamString);
+			
+		} else {
+			throw new Exception("could not find the \"providers\" parameter in the service.wsdd for the service: " + ssi.getService().getName());
+		}
+		
+
+		String serverConfigS = XMLUtilities.formatXML(XMLUtilities
+				.documentToString(serverConfigDoc));
+		FileWriter serverConfigFW = new FileWriter(serverConfigF);
+		serverConfigFW.write(serverConfigS);
+		serverConfigFW.close();
+		
+	}
+
 
 }

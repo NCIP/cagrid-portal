@@ -80,6 +80,10 @@ public class ServiceTypeTreeNode extends DefaultMutableTreeNode {
 		this.popUpMenu = new ServicePopUpMenu(this);
 		initialize();
 	}
+	
+	public ServiceInformation getInfo(){
+		return this.info;
+	}
 
 
 	private void initialize() {

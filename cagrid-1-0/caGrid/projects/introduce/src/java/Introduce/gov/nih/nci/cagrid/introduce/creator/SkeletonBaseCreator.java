@@ -35,7 +35,7 @@ public class SkeletonBaseCreator {
 				IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
 
 		ServerConfigTemplate serverConfigT = new ServerConfigTemplate();
-		String serverConfigS = serverConfigT.generate(info);
+		String serverConfigS = serverConfigT.generate(new SpecificServiceInformation(info,info.getServices().getService(0)));
 		File serverConfigF = new File(baseDirectory.getAbsolutePath() + File.separator + "server-config.wsdd");
 		FileWriter serverConfigFW = new FileWriter(serverConfigF);
 		serverConfigFW.write(serverConfigS);

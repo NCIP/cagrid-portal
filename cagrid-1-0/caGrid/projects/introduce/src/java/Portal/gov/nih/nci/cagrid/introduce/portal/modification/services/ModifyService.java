@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import org.projectmobius.portal.GridPortalComponent;
@@ -20,45 +21,93 @@ import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
 
-
 public class ModifyService extends GridPortalComponent {
 
-	private ServiceType service;
+	private SpecificServiceInformation service;
+
 	private JPanel mainPanel = null;
+
 	private JPanel buttonPanel = null;
+
 	private JButton doneButton = null;
+
 	private JPanel contentPanel = null;
+
 	private JLabel serviceNameLabel = null;
+
 	private JTextField serviceNameTextField = null;
+
 	private JLabel resourceFrameworkTypeLabel = null;
+
 	private JComboBox resourceFrameworkTypeComboBox = null;
+
 	private JLabel serviceNamespaceLabel = null;
+
 	private JTextField namespaceTextField = null;
+
 	private JLabel servicePackageNameLabel = null;
+
 	private JTextField servicePackageNameTextField = null;
+
 	/**
 	 * This method initializes
 	 */
-	public ModifyService(ServiceType service) {
+	public ModifyService(SpecificServiceInformation service) {
 		super();
 		this.service = service;
 		initialize();
-		getServiceNameTextField().setText(service.getName());
-		getNamespaceTextField().setText(service.getNamespace());
-		getServicePackageNameTextField().setText(service.getPackageName());
-		if (service.getResourceFrameworkType() != null
-			&& !service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_MAIN_RESOURCE)) {
-			getResourceFrameworkTypeComboBox().setSelectedItem(service.getResourceFrameworkType());
-		} else if (service.getResourceFrameworkType() != null
-			&& service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_MAIN_RESOURCE)) {
-			getResourceFrameworkTypeComboBox().addItem(IntroduceConstants.INTRODUCE_MAIN_RESOURCE);
+		if (service.getService().getName() != null
+				&& service.getService().getName().length() > 0) {
+			getServiceNameTextField().setText(service.getService().getName());
+		} else {
+			getServiceNameTextField().setText(
+					service.getIntroduceServiceProperties().getProperty(
+							IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
+							+ "Context");
+		}
+		if (service.getService().getNamespace() != null
+				&& service.getService().getNamespace().length() > 0) {
+			getNamespaceTextField()
+					.setText(service.getService().getNamespace());
+		} else {
+			getNamespaceTextField()
+					.setText(
+							service
+									.getIntroduceServiceProperties()
+									.getProperty(
+											IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN)
+									+ "/"
+									+ service
+											.getIntroduceServiceProperties()
+											.getProperty(
+													IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
+									+ "Context");
+		}
+		if (service.getService().getPackageName() != null
+				&& service.getService().getPackageName().length() > 0) {
+			getServicePackageNameTextField().setText(
+					service.getService().getPackageName());
+		} else {
+			getServicePackageNameTextField().setText(
+					service.getServices().getService(0).getPackageName() + ".context");
+		}
+		if (service.getService().getResourceFrameworkType() != null
+				&& !service.getService().getResourceFrameworkType().equals(
+						IntroduceConstants.INTRODUCE_MAIN_RESOURCE)) {
+			getResourceFrameworkTypeComboBox().setSelectedItem(
+					service.getService().getResourceFrameworkType());
+		} else if (service.getService().getResourceFrameworkType() != null
+				&& service.getService().getResourceFrameworkType().equals(
+						IntroduceConstants.INTRODUCE_MAIN_RESOURCE)) {
+			getResourceFrameworkTypeComboBox().addItem(
+					IntroduceConstants.INTRODUCE_MAIN_RESOURCE);
 
-			getResourceFrameworkTypeComboBox().setSelectedItem(IntroduceConstants.INTRODUCE_MAIN_RESOURCE);
+			getResourceFrameworkTypeComboBox().setSelectedItem(
+					IntroduceConstants.INTRODUCE_MAIN_RESOURCE);
 		} else {
 			getResourceFrameworkTypeComboBox().setSelectedIndex(-1);
 		}
 	}
-
 
 	/**
 	 * This method initializes this
@@ -69,7 +118,6 @@ public class ModifyService extends GridPortalComponent {
 		this.setTitle("Modify Service");
 
 	}
-
 
 	/**
 	 * This method initializes mainPanel
@@ -97,7 +145,6 @@ public class ModifyService extends GridPortalComponent {
 		return mainPanel;
 	}
 
-
 	/**
 	 * This method initializes buttonPanel
 	 * 
@@ -116,7 +163,6 @@ public class ModifyService extends GridPortalComponent {
 		return buttonPanel;
 	}
 
-
 	/**
 	 * This method initializes doneButton
 	 * 
@@ -131,13 +177,22 @@ public class ModifyService extends GridPortalComponent {
 
 				public void mouseClicked(MouseEvent e) {
 					super.mouseClicked(e);
-					if (!CommonTools.isValidServiceName(serviceNameTextField.getText())) {
-						JOptionPane.showMessageDialog(ModifyService.this,"Service Name is not valid.  Service name must be a java compatible class name. (" + CommonTools.ALLOWED_JAVA_NAME_REGEX + ")");
+					if (!CommonTools.isValidServiceName(serviceNameTextField
+							.getText())) {
+						JOptionPane
+								.showMessageDialog(
+										ModifyService.this,
+										"Service Name is not valid.  Service name must be a java compatible class name. ("
+												+ CommonTools.ALLOWED_JAVA_NAME_REGEX
+												+ ")");
 						return;
 					}
-					service.setName(serviceNameTextField.getText());
-					service.setNamespace(namespaceTextField.getText());
-					service.setPackageName(servicePackageNameTextField.getText());
+					service.getService()
+							.setName(serviceNameTextField.getText());
+					service.getService().setNamespace(
+							namespaceTextField.getText());
+					service.getService().setPackageName(
+							servicePackageNameTextField.getText());
 					dispose();
 				}
 
@@ -145,7 +200,6 @@ public class ModifyService extends GridPortalComponent {
 		}
 		return doneButton;
 	}
-
 
 	/**
 	 * This method initializes contentPanel
@@ -158,12 +212,12 @@ public class ModifyService extends GridPortalComponent {
 			gridBagConstraints8.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints8.gridy = 2;
 			gridBagConstraints8.weightx = 1.0;
-			gridBagConstraints8.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints8.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints8.gridx = 1;
 			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
 			gridBagConstraints7.gridx = 0;
 			gridBagConstraints7.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints7.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints7.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints7.gridy = 2;
 			servicePackageNameLabel = new JLabel();
 			servicePackageNameLabel.setText("Package Name");
@@ -171,11 +225,11 @@ public class ModifyService extends GridPortalComponent {
 			gridBagConstraints10.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints10.gridy = 1;
 			gridBagConstraints10.weightx = 1.0;
-			gridBagConstraints10.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints10.gridx = 1;
 			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
 			gridBagConstraints9.gridx = 0;
-			gridBagConstraints9.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints9.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints9.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints9.gridy = 1;
 			serviceNamespaceLabel = new JLabel();
@@ -184,7 +238,7 @@ public class ModifyService extends GridPortalComponent {
 			gridBagConstraints6.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints6.gridy = 3;
 			gridBagConstraints6.weightx = 1.0;
-			gridBagConstraints6.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints6.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints6.gridx = 1;
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.gridx = 0;
@@ -197,7 +251,7 @@ public class ModifyService extends GridPortalComponent {
 			gridBagConstraints4.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints4.gridy = 0;
 			gridBagConstraints4.weightx = 1.0;
-			gridBagConstraints4.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints4.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints4.gridx = 1;
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -211,15 +265,16 @@ public class ModifyService extends GridPortalComponent {
 			contentPanel.add(serviceNameLabel, gridBagConstraints3);
 			contentPanel.add(getServiceNameTextField(), gridBagConstraints4);
 			contentPanel.add(resourceFrameworkTypeLabel, gridBagConstraints5);
-			contentPanel.add(getResourceFrameworkTypeComboBox(), gridBagConstraints6);
+			contentPanel.add(getResourceFrameworkTypeComboBox(),
+					gridBagConstraints6);
 			contentPanel.add(serviceNamespaceLabel, gridBagConstraints9);
 			contentPanel.add(getNamespaceTextField(), gridBagConstraints10);
 			contentPanel.add(servicePackageNameLabel, gridBagConstraints7);
-			contentPanel.add(getServicePackageNameTextField(), gridBagConstraints8);
+			contentPanel.add(getServicePackageNameTextField(),
+					gridBagConstraints8);
 		}
 		return contentPanel;
 	}
-
 
 	/**
 	 * This method initializes serviceNameTextField
@@ -233,7 +288,6 @@ public class ModifyService extends GridPortalComponent {
 		return serviceNameTextField;
 	}
 
-
 	/**
 	 * This method initializes resourceFrameworkTypeComboBox
 	 * 
@@ -242,17 +296,18 @@ public class ModifyService extends GridPortalComponent {
 	private JComboBox getResourceFrameworkTypeComboBox() {
 		if (resourceFrameworkTypeComboBox == null) {
 			resourceFrameworkTypeComboBox = new JComboBox();
-			resourceFrameworkTypeComboBox.addItem(IntroduceConstants.INTRODUCE_BASE_RESOURCE);
-			resourceFrameworkTypeComboBox.addItem(IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE);
+			resourceFrameworkTypeComboBox
+					.addItem(IntroduceConstants.INTRODUCE_BASE_RESOURCE);
+			resourceFrameworkTypeComboBox
+					.addItem(IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE);
 		}
 		return resourceFrameworkTypeComboBox;
 	}
 
-
 	/**
-	 * This method initializes namespaceTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes namespaceTextField
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getNamespaceTextField() {
 		if (namespaceTextField == null) {
@@ -261,11 +316,10 @@ public class ModifyService extends GridPortalComponent {
 		return namespaceTextField;
 	}
 
-
 	/**
-	 * This method initializes servicePackageNameTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes servicePackageNameTextField
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getServicePackageNameTextField() {
 		if (servicePackageNameTextField == null) {

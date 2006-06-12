@@ -36,6 +36,10 @@ public class ServicesTypeTreeNode extends DefaultMutableTreeNode {
 		this.model = model;
 	}
 	
+	public ServiceInformation getInfo(){
+		return this.info;
+	}
+	
 	public void setServices(ServicesType services, DefaultTreeModel model) {
 		this.model = model;
 		this.services = services;
