@@ -22,6 +22,10 @@ public class DomainModelOutline extends JPanel
 	
 	public static int toolBarHeight = 28;
 	
+	public static int ASCENDING = 0;
+	public static int DESCENDING = 1;
+	public static int NONE = 2;
+	
 	public DomainModelOutline(DomainModelExplorer parent)
 	{
 	
@@ -49,7 +53,6 @@ public class DomainModelOutline extends JPanel
 			hasNullDomainModel = false;
 			
 			this.tree.setDefaultRenderer();
-			
 			this.tree.removeAll();
 			
 			DomainModelTreeNode root = new DomainModelTreeNode(model);
@@ -86,12 +89,94 @@ public class DomainModelOutline extends JPanel
 		}
 		else
 		{
-			this.tree.setNullRenderer();
-			hasNullDomainModel = true;
+			setNullTree();
+		}
+	}
+	
+	
+	public void setFilter(String filter, DomainModel model,  Vector packages)
+	{
+		if(model != null)
+		{
+			this.tree.setDefaultRenderer();
+			this.tree.removeAll();
 			
-			DefaultMutableTreeNode n = new DefaultMutableTreeNode("  No Domain Model selected");
-			DefaultTreeModel treeModel = (DefaultTreeModel) tree.getModel();
-			treeModel.setRoot(n);
+			DomainModelTreeNode root = new DomainModelTreeNode(model);
+			root.name = model.getProjectLongName() + " " + model.getProjectVersion();
+			root.type = DomainModelTreeNode.DOMAIN;
+			root.setUserObject(root.name);
+			
+			for(int k = 0; k < packages.size(); k ++)
+			{
+				DomainModelTreeNode pkg = new DomainModelTreeNode(model);
+				MultiMapElement e = (MultiMapElement) packages.get(k);
+				
+				pkg.name = e.head;
+				pkg.type = DomainModelTreeNode.PACKAGE;
+				pkg.setUserObject(pkg.name);
+				
+				boolean atLeastOne = false;
+				
+				for(int j = 0; j < e.list.size(); j++)
+				{
+					DomainModelTreeNode cls = new DomainModelTreeNode(model);
+					String cname = (String) e.list.get(j);
+					
+					cls.name = cname;
+					pkg.type = DomainModelTreeNode.CLASS;
+					pkg.setUserObject(cname);
+					
+					if(cname.trim().toUpperCase().equals(filter.trim().toUpperCase()))
+					{
+						pkg.add(cls);
+						atLeastOne = true;
+					}
+				
+				}
+				
+				if(atLeastOne)
+				{
+					root.add(pkg);
+				}
+			}
+			
+			DefaultTreeModel tmodel = (DefaultTreeModel) this.tree.getModel();
+			tmodel.setRoot(root);
+		}
+		else
+		{
+			setNullTree();
+		}
+	}
+	
+	private void setNullTree()
+	{
+		this.tree.setNullRenderer();
+		hasNullDomainModel = true;
+		
+		DefaultMutableTreeNode n = new DefaultMutableTreeNode("  No Domain Model selected");
+		DefaultTreeModel treeModel = (DefaultTreeModel) tree.getModel();
+		treeModel.setRoot(n);
+	}
+	
+	public void setOrdering(int ordering, DomainModel model, Vector packages)
+	{
+		if(model != null)
+		{
+			Vector sortedPackages = insertionSortOnHead(packages);
+			
+			for(int k = 0; k < sortedPackages.size(); k ++)
+			{
+				MultiMapElement e = (MultiMapElement) sortedPackages.get(k);
+				e.list = insertionSort(e.list);
+			}
+	
+			setDomainModel(model, sortedPackages);
+			
+		}
+		else
+		{
+			setNullTree();
 		}
 	}
 	
@@ -102,7 +187,42 @@ public class DomainModelOutline extends JPanel
 		this.validate();
 	}
 	
+	public static Vector insertionSort(Vector v)
+	{
+		int count2;
+		
+		for(int count1 = 1; count1 < v.size(); count1++)
+		{
+			String tmp = (String) v.elementAt(count1);
+
+			for(count2 = count1; count2 > 0 && ( ((String)v.elementAt(count2 - 1)).compareTo(tmp) > 0); count2-- )
+		    {	
+	               v.setElementAt(v.elementAt(count2 - 1), count2); 
+
+			}
+			v.setElementAt(tmp, count2); 
+
+		}
+		return v;
+	}
 	
+	public static Vector insertionSortOnHead(Vector v)
+	{
+		int count2;
+		
+		for(int count1 = 1; count1 < v.size(); count1++)
+		{
+			MultiMapElement tmp = (MultiMapElement) v.elementAt(count1);
+			
+			for(count2 = count1; count2 > 0 && ( ((MultiMapElement)v.elementAt(count2 - 1)).compareTo(tmp) > 0); count2-- )
+		    {	
+	               v.setElementAt(v.elementAt(count2 - 1), count2); 
+			}
+			v.setElementAt(tmp, count2); 
+
+		}
+		return v;
+	}
 }
 
 class DomainModelOutlineComponentListener extends ComponentAdapter
