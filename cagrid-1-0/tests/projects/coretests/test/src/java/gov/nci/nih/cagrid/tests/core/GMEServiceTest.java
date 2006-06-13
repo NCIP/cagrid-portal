@@ -59,7 +59,7 @@ public class GMEServiceTest
 	{
 		globus = new GlobusHelper();
 		port = Integer.parseInt(System.getProperty("test.globus.port", "8080"));
-		serviceDir = new File(System.getProperty("cadsr.dir",
+		serviceDir = new File(System.getProperty("gme.dir",
 			".." + File.separator + ".." + File.separator + ".." + File.separator + 
 			"caGrid" + File.separator + "projects" + File.separator + "gme"
 		));
