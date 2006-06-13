@@ -74,6 +74,12 @@ public class GlobusHelper
 	public void deployService(File serviceDir) 
 		throws IOException, InterruptedException
 	{
+		deployService(serviceDir, "deployGlobus");
+	}
+	
+	public void deployService(File serviceDir, String target) 
+		throws IOException, InterruptedException
+	{
 		String antHome = System.getenv("ANT_HOME");
 		if (antHome == null || antHome.equals("")) {
 			throw new IllegalArgumentException("ANT_HOME not set");
@@ -83,7 +89,7 @@ public class GlobusHelper
 		String[] cmd = new String[] { ant.toString(), "deployGlobus" };
 		if (System.getProperty("os.name").toLowerCase().contains("win")) {
 			cmd = new String[] {
-				"cmd", "/c", ant + ".bat", "deployGlobus",
+				"cmd", "/c", ant + ".bat", target,
 			};
 		}
 		String[] envp = new String[] {
