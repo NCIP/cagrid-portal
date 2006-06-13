@@ -152,7 +152,7 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 			input.setLocation("./" + ii.getFileName());
 
 			// popualte the schema elements
-			gov.nih.nci.cagrid.introduce.portal.ExtensionTools.setSchemaElements(input, XMLUtilities
+			gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.setSchemaElements(input, XMLUtilities
 				.stringToDocument(schemaContents));
 			// write the schema and its imports to the filesystem
 			getGME().cacheSchema(namespace, schemaDestinationDir);
