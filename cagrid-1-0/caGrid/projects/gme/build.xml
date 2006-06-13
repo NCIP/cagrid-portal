@@ -43,7 +43,7 @@
 
 
 	<!-- Name of the GAR file that will be generated -->
-	<property name="gar.filename" value="caGrid-${project.name}" />
+	<property name="gar.filename" value="${project.name}" />
 	<property name="gar.name" value="${gar.filename}.gar" />
 
 
