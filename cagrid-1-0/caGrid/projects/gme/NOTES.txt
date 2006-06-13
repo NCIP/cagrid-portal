@@ -1,7 +1,5 @@
 Need to add the metadata required.
 
-Need to add support for external schemas.
-
 The configureation 
 
 cache schema needs to use the entire namespace to determine filename, it currently is overwriting files it shouldn't.
