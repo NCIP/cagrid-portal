@@ -316,7 +316,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 				nsType.setLocation("./" + ii.getFileName());
 				
 				// popualte the schema elements
-				gov.nih.nci.cagrid.introduce.portal.ExtensionTools.setSchemaElements(
+				gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.setSchemaElements(
 					nsType, XMLUtilities.stringToDocument(schemaContents));
 				// write the schema and its imports to the filesystem
 				getGME().cacheSchema(namespace, getSchemaDir());
