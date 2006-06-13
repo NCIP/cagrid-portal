@@ -22,6 +22,7 @@ public class IntroducePortalInitializer implements GridPortalInitializer {
 	private static final int CONFIG_MENU = 3;
 
 	public void intialize() throws Exception {
+		ExtensionsLoader.getInstance();
 
 		IntroduceHelp help = new IntroduceHelp();
 		JMenu helpMenu = PortalResourceManager.getInstance().getGridPortal()
@@ -44,9 +45,7 @@ public class IntroducePortalInitializer implements GridPortalInitializer {
 
 		});
 		configMenu.insert(configMenuItem, 0);
-
-		ExtensionsLoader.getInstance();
-
+		
 	}
 
 }

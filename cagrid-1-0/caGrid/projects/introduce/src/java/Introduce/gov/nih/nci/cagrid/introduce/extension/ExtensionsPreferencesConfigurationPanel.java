@@ -1,13 +1,20 @@
 package gov.nih.nci.cagrid.introduce.extension;
 
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.portal.preferences.BasePreferenceConfigurationPanel;
 
 public abstract class ExtensionsPreferencesConfigurationPanel extends
 		BasePreferenceConfigurationPanel {
+	ExtensionDescription ext;
 	
-	public ExtensionsPreferencesConfigurationPanel(){
+	public ExtensionsPreferencesConfigurationPanel(ExtensionDescription ext){
 		super();
+		this.ext = ext;
 		initialize();
+	}
+	
+	public ExtensionDescription getExtensionDescription(){
+		return this.ext;
 	}
 	
 	public abstract void initialize();
