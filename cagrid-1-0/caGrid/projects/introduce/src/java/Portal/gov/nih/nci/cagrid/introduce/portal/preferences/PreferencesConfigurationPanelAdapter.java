@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.preferences;
 
+import gov.nih.nci.cagrid.introduce.common.BasePreferenceConfigurationPanel;
+
 import javax.swing.JLabel;
 
 public class PreferencesConfigurationPanelAdapter extends

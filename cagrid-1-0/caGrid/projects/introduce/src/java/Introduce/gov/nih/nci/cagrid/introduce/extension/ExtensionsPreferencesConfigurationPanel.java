@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.introduce.extension;
 
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
-import gov.nih.nci.cagrid.introduce.portal.preferences.BasePreferenceConfigurationPanel;
+import gov.nih.nci.cagrid.introduce.common.BasePreferenceConfigurationPanel;
 
 public abstract class ExtensionsPreferencesConfigurationPanel extends
 		BasePreferenceConfigurationPanel {

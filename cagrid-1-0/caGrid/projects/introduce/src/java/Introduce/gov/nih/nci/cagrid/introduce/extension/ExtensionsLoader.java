@@ -24,12 +24,15 @@ public class ExtensionsLoader {
 
 	private List discoveryExtensionDescriptors;
 
+	private List extensions;
+
 	private File extensionsDir;
 
 	private ExtensionsLoader() {
 		this.extensionsDir = new File(EXTENSIONS_DIRECTORY);
 		serviceExtensionDescriptors = new ArrayList();
 		discoveryExtensionDescriptors = new ArrayList();
+		extensions = new ArrayList();
 		try {
 			this.load();
 		} catch (Exception e) {
@@ -67,6 +70,8 @@ public class ExtensionsLoader {
 											.getAbsolutePath(),
 											ExtensionDescription.class);
 
+							extensions.add(extDesc);
+
 							if (extDesc.getExtensionType().equals(
 									DISCOVERY_EXTENSION)) {
 								discoveryExtensionDescriptors.add(extDesc
@@ -95,6 +100,22 @@ public class ExtensionsLoader {
 
 	public List getServiceExtensions() {
 		return this.serviceExtensionDescriptors;
+	}
+
+	public ExtensionDescription getExtension(String name) {
+		for (int i = 0; i < extensions.size(); i++) {
+			ExtensionDescription ex = (ExtensionDescription) extensions.get(i);
+			if (ex.getDiscoveryExtensionDescription() != null
+					&& ex.getDiscoveryExtensionDescription().getName().equals(
+							name)) {
+				return ex;
+			} else if (ex.getServiceExtensionDescription() != null
+					&& ex.getServiceExtensionDescription().getName().equals(
+							name)) {
+				return ex;
+			}
+		}
+		return null;
 	}
 
 	public ServiceExtensionDescriptionType getServiceExtension(String name) {

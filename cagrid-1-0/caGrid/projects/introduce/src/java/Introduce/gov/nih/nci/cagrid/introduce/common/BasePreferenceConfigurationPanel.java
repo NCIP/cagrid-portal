@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.portal.preferences;
+package gov.nih.nci.cagrid.introduce.common;
 
 import javax.swing.JPanel;
 
