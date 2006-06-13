@@ -3,10 +3,8 @@
  */
 package gov.nci.nih.cagrid.tests.core;
 
-import gov.nci.nih.cagrid.tests.core.steps.CheckCaDSRServiceStep;
 import gov.nci.nih.cagrid.tests.core.steps.CleanupGMEStep;
 import gov.nci.nih.cagrid.tests.core.steps.CleanupTempGlobusStep;
-import gov.nci.nih.cagrid.tests.core.steps.ConfigureCaDSRServiceStep;
 import gov.nci.nih.cagrid.tests.core.steps.CreateTempGlobusStep;
 import gov.nci.nih.cagrid.tests.core.steps.DeployGlobusServiceStep;
 import gov.nci.nih.cagrid.tests.core.steps.GetSchemaListStep;
@@ -16,6 +14,7 @@ import gov.nci.nih.cagrid.tests.core.steps.StartGlobusStep;
 import gov.nci.nih.cagrid.tests.core.steps.StopGlobusStep;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.util.Vector;
 
 import junit.framework.TestResult;
@@ -65,15 +64,38 @@ public class GMEServiceTest
 			"caGrid" + File.separator + "projects" + File.separator + "gme"
 		));
 			
-		
+		File schemaRoot = new File("test", 
+			"resources" + File.separator + "GMEServiceTest" + File.separator + "schema"
+		);
+			
 		Vector steps = new Vector();
 		steps.add(new CreateTempGlobusStep(globus));
 		steps.add(new DeployGlobusServiceStep(globus, serviceDir));
 		steps.add(new StartGlobusStep(globus, port));
 		try {
-			steps.add(new PublishSchemaStep(port, null));
-			steps.add(new GetSchemaStep(port, null));
-			steps.add(new GetSchemaListStep(port, null, null));
+			File[] schemaDirs = schemaRoot.listFiles(new FileFilter() {
+				public boolean accept(File file) {
+					return file.isDirectory() && ! file.getName().equals("CVS");
+				}
+			});
+
+			for (File schemaDir : schemaDirs) {
+				File[] schemaFiles = schemaDir.listFiles(new FileFilter() {
+					public boolean accept(File file) {
+						return file.getName().endsWith(".xsd");
+					}
+				});
+				
+				for (File schemaFile : schemaFiles) {
+					steps.add(new PublishSchemaStep(port, schemaFile));
+				}
+				for (File schemaFile : schemaFiles) {
+					steps.add(new GetSchemaStep(port, schemaFile));
+				}
+				for (File schemaFile : schemaFiles) {
+					steps.add(new GetSchemaListStep(port, schemaFile));
+				}
+			}
 		} catch (MalformedURIException e) {
 			throw new IllegalArgumentException("unable to instantiate CheckCaDSRStep", e);
 		}

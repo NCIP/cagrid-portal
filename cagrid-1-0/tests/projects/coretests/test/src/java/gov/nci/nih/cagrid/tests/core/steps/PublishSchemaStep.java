@@ -10,6 +10,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import org.projectmobius.common.GridServiceResolver;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.Namespace;
 import org.projectmobius.common.gme.NamespaceExistsException;
+import org.projectmobius.common.gme.NoSuchNamespaceException;
 import org.projectmobius.common.gme.NotSubNamespaceException;
 import org.projectmobius.common.gme.NotifyAuthorityException;
 import org.projectmobius.gme.XMLDataModelService;
@@ -56,7 +58,6 @@ public class PublishSchemaStep
 		throws Throwable
 	{
 		GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
-
 		XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance().getGridService(endpoint.getAddress().toString());
 		publishSchema(handle, schemaFile);
 	}
@@ -74,7 +75,12 @@ public class PublishSchemaStep
 
 		// check for schema
 		boolean found = false;
-		List namespaces = handle.getSchemaListForNamespaceDomain(schemaTargetNamespace.getDomain());
+		List namespaces = null;
+		try {
+			namespaces = handle.getSchemaListForNamespaceDomain(schemaTargetNamespace.getDomain());
+		} catch (NoSuchNamespaceException ex) {
+			namespaces = new ArrayList(0);
+		}
 		for (int i = 0; i < namespaces.size(); i++) {
 			Namespace namespace = (Namespace) namespaces.get(i);
 			
@@ -101,7 +107,7 @@ public class PublishSchemaStep
 			handle.addNamespaceDomain(schemaTargetNamespace.getDomain());
 		} catch (NamespaceExistsException ex) {
 			// should be ok here do nothing.........
-			ex.printStackTrace();
+			//ex.printStackTrace();
 		}
 		
 		// add schema
