@@ -1,7 +1,5 @@
 To Do:
 
-I had to move a gui base componenet for preferences to extensions.  need to look into moving this back to portal.
-
 on deployment i have seen unable to delete namespace2package.mappings.
 
 From BMI Tutorial:
@@ -68,6 +66,8 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+
+I had to move a gui base componenet for preferences to extensions.  need to look into moving this back to portal.
 
 Need to make Configuration Menu work... should be able to set appropriate services URLs, etc
 

@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.introduce.portal.preferences;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import java.awt.CardLayout;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -67,8 +68,6 @@ public class PreferencesDialog extends JDialog {
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.gridx = 1;
 			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints1.weightx = 2.0D;
-			gridBagConstraints1.weighty = 1.0D;
 			gridBagConstraints1.gridwidth = 2;
 			gridBagConstraints1.gridy = 0;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
@@ -96,8 +95,8 @@ public class PreferencesDialog extends JDialog {
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints2.gridy = 0;
-			gridBagConstraints2.weightx = 1.0;
-			gridBagConstraints2.weighty = 1.0;
+			gridBagConstraints2.weightx = 1.0D;
+			gridBagConstraints2.weighty = 1.0D;
 			gridBagConstraints2.gridx = 0;
 			preferenceNavigationPanel = new JPanel();
 			preferenceNavigationPanel.setLayout(new GridBagLayout());
@@ -129,7 +128,6 @@ public class PreferencesDialog extends JDialog {
 			gridBagConstraints3.ipady = 0;
 			gridBagConstraints3.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints3.weightx = 1.0D;
-			gridBagConstraints3.weighty = 0.0D;
 			gridBagConstraints3.gridy = 1;
 			preferenceConfigurationPanel = new JPanel();
 			preferenceConfigurationPanel.setLayout(new GridBagLayout());
@@ -191,6 +189,7 @@ public class PreferencesDialog extends JDialog {
 					}
 				}
 			});
+			preferencesTree.setVisibleRowCount(20);
 		}
 		return preferencesTree;
 	}
