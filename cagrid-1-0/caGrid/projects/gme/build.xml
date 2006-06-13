@@ -49,8 +49,8 @@
 
 
 	<!-- Name of the JAR files to be generated -->
-	<property name="jar.name" value="${gar.filename}.jar" />
-	<property name="stubs.jar.name" value="${gar.filename}_stubs.jar" />
+	<property name="jar.name" value="caGrid-${gar.filename}.jar" />
+	<property name="stubs.jar.name" value="caGrid-${gar.filename}_stubs.jar" />
 
 
 
