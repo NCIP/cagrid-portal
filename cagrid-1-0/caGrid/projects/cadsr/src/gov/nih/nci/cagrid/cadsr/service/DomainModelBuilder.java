@@ -144,12 +144,7 @@ public class DomainModelBuilder {
 		for (int i = 0; i < associations.length; i++) {
 			umlAssociations[i] = convertAssociation(associations[i]);
 		}
-		gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation[] dsAssociations = 
-			new gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation[umlAssociations.length];
-		for (int i = 0; i < umlAssociations.length; i++) {
-			// dsAssociations[i] = convertAssociation(umlAssociations[i]);
-		}
-		exposedAssociations.setUMLAssociation(dsAssociations);
+		exposedAssociations.setUMLAssociation(umlAssociations);
 		model.setExposedUMLAssociationCollection(exposedAssociations);
 		return model;
 	}
