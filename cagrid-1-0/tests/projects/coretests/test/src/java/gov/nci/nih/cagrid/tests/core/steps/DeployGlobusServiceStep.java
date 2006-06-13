@@ -14,17 +14,25 @@ public class DeployGlobusServiceStep
 {
 	private GlobusHelper globus;
 	private File serviceDir;
+	private String target;
 	
 	public DeployGlobusServiceStep(GlobusHelper globus, File serviceDir)
+	{
+		this(globus, serviceDir, null);
+	}
+	
+	public DeployGlobusServiceStep(GlobusHelper globus, File serviceDir, String target)
 	{
 		super();
 		
 		this.globus = globus;
 		this.serviceDir = serviceDir;
+		this.target = target;
 	}
 	
 	public void runStep() throws Throwable
 	{
-		globus.deployService(serviceDir);
+		if (target == null) globus.deployService(serviceDir);
+		else globus.deployService(serviceDir, target);
 	}
 }
