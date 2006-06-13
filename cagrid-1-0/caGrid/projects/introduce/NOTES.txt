@@ -1,6 +1,5 @@
 To Do:
 
-need to make introduce-portal-config.xml.example and generate the real one from the example
 
 From BMI Tutorial:
 0) needs handouts for people to follow along
@@ -70,6 +69,7 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+need to make introduce-portal-config.xml.example and generate the real one from the example
 
 refactor to not be creating hte service.wsdd everytime.....
 
