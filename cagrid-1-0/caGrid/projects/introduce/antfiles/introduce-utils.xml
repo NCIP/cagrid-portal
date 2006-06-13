@@ -26,7 +26,7 @@
 			<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}"/>
 			<arg value="org.projectmobius.tools.gme.viewer.GMEView"/>
 			<arg value="-config"/>
-			<arg value="${conf.dir}/gme-view-globus-config.xml"/>
+			<arg value="${conf.dir}/gme/gme-view-globus-config.xml"/>
 			<classpath>
 				<fileset dir="${jars.dir}">
 					<include name="*.jar"/>
