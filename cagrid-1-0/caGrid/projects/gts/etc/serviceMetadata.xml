@@ -29,28 +29,29 @@
             </serv:serviceContextCollection>
             <serv:caDSRRegistration />
         </serv:Service>
-        <hostingResearchCenter>
-            <com:ResearchCenter>
-                <com:displayName>Ohio State University</com:displayName>
-                <com:shortName>OSU</com:shortName>
-                <com:address>
-                    <com:Address>
-                        <com:country>US</com:country>
-                        <com:postalCode>43210</com:postalCode>
-                        <com:stateProvence>OH</com:stateProvence>
-                        <com:street1>333 W. 10th Ave.</com:street1>
-                    </com:Address>
-                </com:address>
-                <com:researchCenterDescription />
-                <com:pointOfContactCollection>
-                    <com:PointOfContact>
-                        <com:affiliation>OSU</com:affiliation>
-                        <com:email>langella@bmi.osu.edu</com:email>
-                        <com:firstName>Stephen</com:firstName>
-                        <com:lastName>Langella</com:lastName>
-                        <com:role>Maintainer</com:role>
-                    </com:PointOfContact>
-                </com:pointOfContactCollection>
-            </com:ResearchCenter>
-        </hostingResearchCenter>
+    </serviceDescription>
+    <hostingResearchCenter>
+        <com:ResearchCenter>
+            <com:displayName>Ohio State University</com:displayName>
+            <com:shortName>OSU</com:shortName>
+            <com:address>
+                <com:Address>
+                    <com:country>US</com:country>
+                    <com:postalCode>43210</com:postalCode>
+                    <com:stateProvence>OH</com:stateProvence>
+                    <com:street1>333 W. 10th Ave.</com:street1>
+                </com:Address>
+            </com:address>
+            <com:researchCenterDescription />
+            <com:pointOfContactCollection>
+                <com:PointOfContact>
+                    <com:affiliation>OSU</com:affiliation>
+                    <com:email>langella@bmi.osu.edu</com:email>
+                    <com:firstName>Stephen</com:firstName>
+                    <com:lastName>Langella</com:lastName>
+                    <com:role>Maintainer</com:role>
+                </com:PointOfContact>
+            </com:pointOfContactCollection>
+        </com:ResearchCenter>
+    </hostingResearchCenter>
 </ServiceMetadata>
