@@ -108,12 +108,6 @@
 	</fileset>
 	<property name="garschema.id" value="garschema" />
 
-	<!-- Configuration files (security, etc.) to be included in the GAR file -->
-	<property name="garetc.id" value="garetc" />
-	<fileset dir="${etc.dir}" id="garetc" />
-
-
-
 	<!-- Miscellaneous properties -->
 
 	<!-- This property is defined simply so we can write ${sep} instead of

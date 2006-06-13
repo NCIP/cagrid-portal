@@ -15,6 +15,9 @@
 	<property name="gt.lib.dir" value="${gt.dir}/lib"/>
 	<property name="service.path" value="mobius/mako"/>
 	<property name="service.deployment.descriptor" value="${basedir}/server-config.wsdd"/>
+	<!-- Configuration files (security, etc.) to be included in the GAR file -->
+	<property name="garetc.id" value="garetc" />
+	<fileset dir="tmp/etc" id="garetc" />
 	<target name="deployTomcat" description="Deploys to CATALINA_HOME">
 		<echo message="Deploying service under Tomcat at ${tomcat.dir}"/>
 		<!-- Configure Tomcat destination for skeletons -->
@@ -134,12 +137,16 @@
 			token="SERVICE-INSTANCE-NAME"/>
 		<replace file="tmp/jndi-config.xml" value="etc/${service.deployment.dir.name}"
 			token="ETC-PATH"/>
-		<copy overwrite="true" todir="tmp" file="etc/gme-globus-config.xml"/>
-		<replace file="tmp/gme-globus-config.xml" value="${service.deployment.dir.name}"
+		<copy overwrite="true" todir="tmp/etc" >
+			<fileset dir="${basedir}/etc">
+				<include name="**/*"/>
+			</fileset>
+		</copy>
+		<replace file="tmp/etc/gme-globus-config.xml" value="${service.deployment.dir.name}"
 			token="SERVICE-INSTANCE-PATH"/>
-		<replace file="tmp/gme-globus-config.xml" value="${service.deployment.path}"
+		<replace file="tmp/etc/gme-globus-config.xml" value="${service.deployment.path}"
 			token="SERVICE-INSTANCE-NAME"/>
-		<replace file="tmp/gme-globus-config.xml" value="etc/${service.deployment.dir.name}"
+		<replace file="tmp/etc/gme-globus-config.xml" value="etc/${service.deployment.dir.name}"
 			token="ETC-PATH"/>
 		<!-- make the gar file -->
 		<ant antfile="${build.packages}" target="makeGar">
