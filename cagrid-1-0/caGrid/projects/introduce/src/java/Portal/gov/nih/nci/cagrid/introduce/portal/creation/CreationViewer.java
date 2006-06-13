@@ -138,7 +138,7 @@ public class CreationViewer extends GridPortalComponent {
 			gridBagConstraints17.gridx = 0;
 			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
 			gridBagConstraints12.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints12.gridy = 4;
+			gridBagConstraints12.gridy = 3;
 			gridBagConstraints12.weightx = 1.0;
 			gridBagConstraints12.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints12.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -147,7 +147,7 @@ public class CreationViewer extends GridPortalComponent {
 			gridBagConstraints12.gridx = 1;
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints11.gridy = 4;
+			gridBagConstraints11.gridy = 3;
 			gridBagConstraints11.insets = new java.awt.Insets(0, 0, 0, 0);
 			gridBagConstraints11.gridx = 0;
 			namespaceLabel = new JLabel();
