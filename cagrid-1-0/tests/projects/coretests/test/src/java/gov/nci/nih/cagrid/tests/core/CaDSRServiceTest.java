@@ -66,7 +66,7 @@ public class CaDSRServiceTest
 		steps.add(new ConfigureCaDSRServiceStep(globus));
 		steps.add(new StartGlobusStep(globus, port));
 		try {
-			steps.add(new CheckCaDSRServiceStep(port));
+			steps.add(new CheckCaDSRServiceStep(port, null));
 		} catch (MalformedURIException e) {
 			throw new IllegalArgumentException("unable to instantiate CheckCaDSRStep", e);
 		}
