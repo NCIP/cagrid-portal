@@ -2,49 +2,53 @@
 <ServiceMetadata xmlns="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"
     xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"
     xmlns:serv="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
-   <serviceDescription>
-    	<serv:Service>
-    		<serv:name>SyncGTS</serv:name>
-    		<serv:version>0.75a</serv:version>
-    		<serv:description>This service syncs the a containers trusted CA directory with the current Grid Trust Fabric maintained by the Grid Trust Service(GTS).</serv:description>
-    		<serv:pointOfContactCollection>
+    <serviceDescription>
+        <serv:Service>
+            <serv:description>
+                This service syncs the a containers trusted CA directory with the current Grid Trust
+                Fabric maintained by the Grid Trust Service(GTS).
+            </serv:description>
+            <serv:name>SyncGTS</serv:name>
+            <serv:version>0.75a</serv:version>
+            <serv:pointOfContactCollection>
                 <com:PointOfContact>
+                    <com:affiliation>OSU</com:affiliation>
+                    <com:email>langella@bmi.osu.edu</com:email>
                     <com:firstName>Stephen</com:firstName>
                     <com:lastName>Langella</com:lastName>
-                    <com:email>langella@bmi.osu.edu</com:email>
-                    <com:affiliation>OSU</com:affiliation>
                     <com:role>Maintainer</com:role>
                 </com:PointOfContact>
             </serv:pointOfContactCollection>
-    	    <serv:serviceContextCollection>
-    	        <serv:ServiceContext>
-    	            <serv:name>Main</serv:name>
-    	            <serv:description></serv:description>
-    	            <serv:operationCollection/>
-    	            <serv:contextPropertyCollection/>
-    	        </serv:ServiceContext>
-    	    </serv:serviceContextCollection>
-    	</serv:Service>
-     </serviceDescription>
+            <serv:serviceContextCollection>
+                <serv:ServiceContext>
+                    <serv:description></serv:description>
+                    <serv:name>Main</serv:name>
+                    <serv:operationCollection />
+                    <serv:contextPropertyCollection />
+                </serv:ServiceContext>
+            </serv:serviceContextCollection>
+            <serv:caDSRRegistration />
+        </serv:Service>
+    </serviceDescription>
     <hostingResearchCenter>
         <com:ResearchCenter>
-            <com:shortName>OSU</com:shortName>
             <com:displayName>Ohio State University</com:displayName>
+            <com:shortName>OSU</com:shortName>
             <com:address>
                 <com:Address>
-                    <com:street1>333 W. 10th Ave.</com:street1>
-                    <com:stateProvence>OH</com:stateProvence>
-                    <com:postalCode>43210</com:postalCode>
                     <com:country>US</com:country>
+                    <com:postalCode>43210</com:postalCode>
+                    <com:stateProvence>OH</com:stateProvence>
+                    <com:street1>333 W. 10th Ave.</com:street1>
                 </com:Address>
             </com:address>
-            <com:researchCenterDescription/>
+            <com:researchCenterDescription />
             <com:pointOfContactCollection>
                 <com:PointOfContact>
+                    <com:affiliation>OSU</com:affiliation>
+                    <com:email>langella@bmi.osu.edu</com:email>
                     <com:firstName>Stephen</com:firstName>
                     <com:lastName>Langella</com:lastName>
-                    <com:email>langella@bmi.osu.edu</com:email>
-                    <com:affiliation>OSU</com:affiliation>
                     <com:role>Maintainer</com:role>
                 </com:PointOfContact>
             </com:pointOfContactCollection>
