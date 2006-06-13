@@ -193,7 +193,6 @@ public class DomainModelBuilder {
 			LOG.debug("Project " + proj.getLongName() + " not yet cached");
 			// project not yet in the cache
 			umlPackages = new HashMap();
-			projectUmlPackages.put(proj, umlPackages);
 			// get packages for project from cadsr application service
 			UMLPackageMetadata packagePrototype = new UMLPackageMetadata();
 			packagePrototype.setProject(proj);
@@ -204,6 +203,8 @@ public class DomainModelBuilder {
 					UMLPackageMetadata pack = (UMLPackageMetadata) packIter.next();
 					umlPackages.put(pack.getName(), pack);
 				}
+				// put the packages in the project -> package mapping cache
+				projectUmlPackages.put(proj, umlPackages);
 				LOG.debug("Added " + umlPackages.size() + " packages to cache for project " + proj.getLongName());
 			} catch (ApplicationException ex) {
 				LOG.error("Error searching for packages: " + ex.getMessage());
@@ -241,6 +242,8 @@ public class DomainModelBuilder {
 				}
 				classes = new UMLClassMetadata[classList.size()];
 				classList.toArray(classes);
+				// cache the classes array
+				packageClasses.put(pack, classes);
 				LOG.debug("Added " + classes.length + " classes to cache for package " + pack.getName());
 			} catch (ApplicationException ex) {
 				LOG.error("Error searching for classes in package: " + pack.getName() + ": " + ex.getMessage());
@@ -273,6 +276,8 @@ public class DomainModelBuilder {
 				}
 				associations = new UMLAssociationMetadata[associationList.size()];
 				associationList.toArray(associations);
+				// cache the associations
+				classAssociations.put(clazz, associations);
 				LOG.debug("Added " + associations.length + " associations to cache for class " + clazz.getFullyQualifiedName());
 			} catch (ApplicationException ex) {
 				LOG.error("Error searching for associations on class " + clazz.getFullyQualifiedName() + ": " + ex.getMessage());
