@@ -37,6 +37,39 @@
 			<property name="gar.name" value="globus_wsrf_servicegroup_schema" />
 		</ant>
 	</target>
+	
+	<!-- =============================================================== -->
+	<!-- Deploy the Index Service                                        -->
+	<!-- =============================================================== -->
+	<target name="deployIndexGlobus">
+		<ant dir="gars" antfile="../deploy-utilities.xml" target="deployGlobus">
+			<property name="gar.name" value="globus_wsrf_aggregator_schema.gar" />
+		</ant>
+		<ant dir="gars" antfile="../deploy-utilities.xml" target="deployGlobus">
+			<property name="gar.name" value="globus_wsrf_mds_aggregator.gar" />
+		</ant>
+		<ant dir="gars" antfile="../deploy-utilities.xml" target="deployGlobus">
+			<property name="gar.name" value="globus_wsrf_mds_index.gar" />
+		</ant>
+		<ant dir="gars" antfile="../deploy-utilities.xml" target="deployGlobus">
+			<property name="gar.name" value="globus_wsrf_mds_index_schema.gar" />
+		</ant>
+		<ant dir="gars" antfile="../deploy-utilities.xml" target="deployGlobus">
+			<property name="gar.name" value="globus_wsrf_mds_trigger.gar" />
+		</ant>
+		<ant dir="gars" antfile="../deploy-utilities.xml" target="deployGlobus">
+			<property name="gar.name" value="globus_wsrf_mds_usefulrp.gar" />
+		</ant>
+		<ant dir="gars" antfile="../deploy-utilities.xml" target="deployGlobus">
+			<property name="gar.name" value="globus_wsrf_mds_usefulrp_schema.gar" />
+		</ant>
+		<ant dir="gars" antfile="../deploy-utilities.xml" target="deployGlobus">
+			<property name="gar.name" value="globus_wsrf_servicegroup.gar" />
+		</ant>
+		<ant dir="gars" antfile="../deploy-utilities.xml" target="deployGlobus">
+			<property name="gar.name" value="globus_wsrf_servicegroup_schema.gar" />
+		</ant>
+	</target>
 
 	<target name="clean">
 	</target>
