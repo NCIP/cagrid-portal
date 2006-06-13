@@ -59,10 +59,10 @@ public class CaDSRUtils {
 		UMLClass converted = null;
 		if (classMetadata != null) {
 			converted = new UMLClass();
-			converted.setClassName(classMetadata.getFullyQualifiedName());
+			converted.setClassName(classMetadata.getName());
 			converted.setDescription(classMetadata.getDescription());
 			converted.setPackageName(classMetadata.getUMLPackageMetadata().getName());
-			converted.setProjectName(classMetadata.getProject().getLongName());
+			converted.setProjectName(classMetadata.getProject().getShortName());
 			converted.setUmlAttributeCollection(convertAttributeCollection(classMetadata));
 			SemanticMetadata[] smArray = convertSemanticMetadataCollection(
 				classMetadata.getSemanticMetadataCollection()); 
