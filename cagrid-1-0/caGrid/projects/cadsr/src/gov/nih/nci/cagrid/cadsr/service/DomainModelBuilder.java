@@ -11,9 +11,10 @@ import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModelExposedUMLAssociationCollection;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModelExposedUMLClassCollection;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationEdge;
-import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationEdgeUmlClass;
+import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationEdgeUmlClassReference;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationSourceUMLAssociationEdge;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationTargetUMLAssociationEdge;
+import gov.nih.nci.cagrid.metadata.dataservice.UMLClassReference;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
@@ -29,53 +30,56 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 
-/** 
- *  DomainModelBuilder
- *  Builds a DomainModel
+/**
+ * DomainModelBuilder Builds a DomainModel
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
- * @created Jun 1, 2006 
- * @version $Id$ 
+ * @created Jun 1, 2006
+ * @version $Id$
  */
 public class DomainModelBuilder {
 	protected static Log LOG = LogFactory.getLog(DomainModelBuilder.class.getName());
-	
+
 	// Project -> (packageName, UMLPackageMetadata)
-	private static Map projectUmlPackages = null; 
+	private static Map projectUmlPackages = null;
 	// UMLPackageMetadata -> Set(UMLClassMetadata)
 	private static Map packageClasses = null;
 	// UMLClassMetadata -> Set(UMLAssociationMetadata)
 	private static Map classAssociations = null;
-	
+
 	private ApplicationService cadsr = null;
+
 
 	public DomainModelBuilder(ApplicationService cadsr) {
 		this.cadsr = cadsr;
 	}
-	
-	
+
+
 	/**
 	 * Gets a DomainModel that represents the entire project
+	 * 
 	 * @param proj
 	 * @return
 	 */
 	public DomainModel getDomainModel(Project proj) throws RemoteException {
-		// find all packages in the project and hand off to getDomainModel(Package, String[]);
+		// find all packages in the project and hand off to
+		// getDomainModel(Package, String[]);
 		cachePackages(proj);
 		Map umlPackages = (Map) projectUmlPackages.get(proj);
 		String[] packageNames = new String[umlPackages.keySet().size()];
 		umlPackages.keySet().toArray(packageNames);
 		return getDomainModel(proj, packageNames);
 	}
-	
-	
+
+
 	/**
 	 * Gets a DomainModel that represents the project and packages
+	 * 
 	 * @param proj
-	 * 		The project to build a domain model for
+	 *            The project to build a domain model for
 	 * @param packageNames
-	 * 		The names of packages to include in the domain model
+	 *            The names of packages to include in the domain model
 	 * @return
 	 * @throws RemoteException
 	 */
@@ -89,7 +93,7 @@ public class DomainModelBuilder {
 		}
 		UMLClassMetadata[] classArray = new UMLClassMetadata[classes.size()];
 		classes.toArray(classArray);
-		
+
 		// grab associations for each class
 		List associationMetadataList = new ArrayList();
 		for (int i = 0; i < classArray.length; i++) {
@@ -102,32 +106,34 @@ public class DomainModelBuilder {
 			UMLAssociationMetadata assocMd = (UMLAssociationMetadata) associationMetadataList.get(i);
 			associationArray[i] = CaDSRUtils.convertAssociation(assocMd);
 		}
-		
+
 		// hand off
 		return getDomainModel(proj, classArray, associationArray);
 	}
-	
-	
+
+
 	/**
-	 * Generates a DomainModel that represents the project and the given subset of 
-	 * classes and associations
+	 * Generates a DomainModel that represents the project and the given subset
+	 * of classes and associations
+	 * 
 	 * @param proj
-	 * 		The project to build a domain model for
+	 *            The project to build a domain model for
 	 * @param classes
-	 * 		The classes to include in the domain model
+	 *            The classes to include in the domain model
 	 * @param associations
-	 * 		The asociations to include in the domain model
+	 *            The asociations to include in the domain model
 	 * @return
 	 * @throws RemoteException
 	 */
-	public DomainModel getDomainModel(Project proj, UMLClassMetadata[] classes, UMLAssociation[] associations) throws RemoteException {
+	public DomainModel getDomainModel(Project proj, UMLClassMetadata[] classes, UMLAssociation[] associations)
+		throws RemoteException {
 		DomainModel model = new DomainModel();
 		// project
 		model.setProjectDescription(proj.getDescription());
 		model.setProjectLongName(proj.getLongName());
 		model.setProjectShortName(proj.getShortName());
 		model.setProjectVersion(proj.getVersion());
-		
+
 		// classes
 		DomainModelExposedUMLClassCollection exposedClasses = new DomainModelExposedUMLClassCollection();
 		UMLClass[] umlClasses = new UMLClass[classes.length];
@@ -136,11 +142,10 @@ public class DomainModelBuilder {
 		}
 		exposedClasses.setUMLClass(umlClasses);
 		model.setExposedUMLClassCollection(exposedClasses);
-		
+
 		// associations
 		DomainModelExposedUMLAssociationCollection exposedAssociations = new DomainModelExposedUMLAssociationCollection();
-		gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation[] umlAssociations = 
-			new gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation[associations.length];
+		gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation[] umlAssociations = new gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation[associations.length];
 		for (int i = 0; i < associations.length; i++) {
 			umlAssociations[i] = convertAssociation(associations[i]);
 		}
@@ -148,19 +153,18 @@ public class DomainModelBuilder {
 		model.setExposedUMLAssociationCollection(exposedAssociations);
 		return model;
 	}
-	
-	
+
+
 	private gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation convertAssociation(UMLAssociation cadsrAssociation) {
-		gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation converted = 
-			new gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation();
+		gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation converted = new gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation();
 		converted.setBidirectional(cadsrAssociation.isIsBidirectional());
 		UMLAssociationSourceUMLAssociationEdge convertedSourceEdge = new UMLAssociationSourceUMLAssociationEdge();
 		UMLAssociationEdge sourceEdge = new UMLAssociationEdge();
 		sourceEdge.setMaxCardinality(cadsrAssociation.getSourceMaxCardinality());
 		sourceEdge.setMinCardinality(cadsrAssociation.getSourceMinCardinality());
 		sourceEdge.setRoleName(cadsrAssociation.getSourceRoleName());
-		sourceEdge.setUmlClass(new UMLAssociationEdgeUmlClass(CaDSRUtils.convertClass(
-			cadsrAssociation.getSourceUMLClassMetadata().getUMLClassMetadata())));
+		sourceEdge.setUmlClassReference(new UMLAssociationEdgeUmlClassReference(new UMLClassReference(cadsrAssociation
+			.getSourceUMLClassMetadata().getUMLClassMetadata().getId())));
 		convertedSourceEdge.setUMLAssociationEdge(sourceEdge);
 		converted.setSourceUMLAssociationEdge(convertedSourceEdge);
 		UMLAssociationTargetUMLAssociationEdge convertedTargetEdge = new UMLAssociationTargetUMLAssociationEdge();
@@ -168,22 +172,22 @@ public class DomainModelBuilder {
 		targetEdge.setMaxCardinality(cadsrAssociation.getTargetMaxCardinality());
 		targetEdge.setMinCardinality(cadsrAssociation.getTargetMinCardinality());
 		targetEdge.setRoleName(cadsrAssociation.getTargetRoleName());
-		targetEdge.setUmlClass(new UMLAssociationEdgeUmlClass(CaDSRUtils.convertClass(
-			cadsrAssociation.getTargetUMLClassMetadata().getUMLClassMetadata())));
+		targetEdge.setUmlClassReference(new UMLAssociationEdgeUmlClassReference(new UMLClassReference(cadsrAssociation
+			.getTargetUMLClassMetadata().getUMLClassMetadata().getId())));
 		convertedTargetEdge.setUMLAssociationEdge(targetEdge);
 		converted.setTargetUMLAssociationEdge(convertedTargetEdge);
 		return converted;
 	}
-	
-	
+
+
 	private UMLPackageMetadata getPackageMetadata(Project proj, String packageName) throws RemoteException {
 		cachePackages(proj);
 		Map umlPackages = (Map) projectUmlPackages.get(proj);
 		UMLPackageMetadata pack = (UMLPackageMetadata) umlPackages.get(packageName);
 		return pack;
 	}
-	
-	
+
+
 	private void cachePackages(Project proj) throws RemoteException {
 		if (projectUmlPackages == null) {
 			projectUmlPackages = new HashMap();
@@ -212,8 +216,8 @@ public class DomainModelBuilder {
 			}
 		}
 	}
-	
-	
+
+
 	private UMLClassMetadata[] getClasses(Project proj, UMLPackageMetadata pack) throws RemoteException {
 		if (packageClasses == null) {
 			packageClasses = new HashMap();
@@ -225,11 +229,12 @@ public class DomainModelBuilder {
 			classPrototype.setUMLPackageMetadata(pack);
 			classPrototype.setProject(proj);
 			try {
-				Iterator classListIter = cadsr.search(UMLClassMetadata.class, classPrototype).iterator(); 
+				Iterator classListIter = cadsr.search(UMLClassMetadata.class, classPrototype).iterator();
 				List classList = new ArrayList();
 				while (classListIter.hasNext()) {
 					UMLClassMetadata metadata = (UMLClassMetadata) classListIter.next();
-					// ensure the attributes and semantic metadata are brought back
+					// ensure the attributes and semantic metadata are brought
+					// back
 					Iterator attribIter = metadata.getUMLAttributeMetadataCollection().iterator();
 					while (attribIter.hasNext()) {
 						attribIter.next();
@@ -247,13 +252,14 @@ public class DomainModelBuilder {
 				LOG.debug("Added " + classes.length + " classes to cache for package " + pack.getName());
 			} catch (ApplicationException ex) {
 				LOG.error("Error searching for classes in package: " + pack.getName() + ": " + ex.getMessage());
-				throw new RemoteException("Error searching for classes in package: " + pack.getName() + ": " + ex.getMessage(), ex);
+				throw new RemoteException("Error searching for classes in package: " + pack.getName() + ": "
+					+ ex.getMessage(), ex);
 			}
 		}
 		return classes;
 	}
-	
-	
+
+
 	private UMLAssociationMetadata[] getAssociations(Project proj, UMLClassMetadata clazz) throws RemoteException {
 		if (classAssociations == null) {
 			classAssociations = new HashMap();
@@ -265,7 +271,8 @@ public class DomainModelBuilder {
 			associationPrototype.setSourceUMLClassMetadata(clazz);
 			associationPrototype.setProject(proj);
 			try {
-				Iterator associationListIter = cadsr.search(UMLAssociationMetadata.class, associationPrototype).iterator();
+				Iterator associationListIter = cadsr.search(UMLAssociationMetadata.class, associationPrototype)
+					.iterator();
 				List associationList = new ArrayList();
 				while (associationListIter.hasNext()) {
 					UMLAssociationMetadata metadata = (UMLAssociationMetadata) associationListIter.next();
@@ -278,10 +285,13 @@ public class DomainModelBuilder {
 				associationList.toArray(associations);
 				// cache the associations
 				classAssociations.put(clazz, associations);
-				LOG.debug("Added " + associations.length + " associations to cache for class " + clazz.getFullyQualifiedName());
+				LOG.debug("Added " + associations.length + " associations to cache for class "
+					+ clazz.getFullyQualifiedName());
 			} catch (ApplicationException ex) {
-				LOG.error("Error searching for associations on class " + clazz.getFullyQualifiedName() + ": " + ex.getMessage());
-				throw new RemoteException("Error searching for associations on class " + clazz.getFullyQualifiedName() + ": " + ex.getMessage(), ex);
+				LOG.error("Error searching for associations on class " + clazz.getFullyQualifiedName() + ": "
+					+ ex.getMessage());
+				throw new RemoteException("Error searching for associations on class " + clazz.getFullyQualifiedName()
+					+ ": " + ex.getMessage(), ex);
 			}
 		}
 		return associations;

@@ -5,11 +5,16 @@ import gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.common.CaDSRServiceI;
+import gov.nih.nci.cagrid.cadsr.domain.UMLAssociation;
 import gov.nih.nci.cagrid.cadsr.stubs.CaDSRServicePortType;
 import gov.nih.nci.cagrid.cadsr.stubs.service.CaDSRServiceAddressingLocator;
+import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
+import java.io.FileWriter;
 import java.io.InputStream;
 import java.rmi.RemoteException;
+
+import javax.xml.namespace.QName;
 
 import org.apache.axis.EngineConfiguration;
 import org.apache.axis.client.AxisClient;
@@ -18,6 +23,7 @@ import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.utils.ClassUtils;
 import org.globus.gsi.GlobusCredential;
+import org.globus.wsrf.encoding.ObjectSerializer;
 
 
 /**
@@ -79,6 +85,40 @@ public class CaDSRServiceClient implements CaDSRServiceI {
 					// place client calls here if you want to use this main as a
 					// test....
 
+					Project caCoreProj = null;
+					Project[] allProjects = client.findAllProjects();
+					for (int i = 0; i < allProjects.length; i++) {
+						if (allProjects[i].getLongName().indexOf("caCORE") != -1) {
+							caCoreProj = allProjects[i];
+							System.out.println("Located project: " + caCoreProj.getLongName());
+							break;
+						}
+					}
+
+					String cabioPackageName = null;
+					UMLPackageMetadata[] packages = client.findPackagesInProject(caCoreProj);
+					for (int i = 0; i < packages.length; i++) {
+						if (packages[i].getName().indexOf("cabio") != -1) {
+							cabioPackageName = packages[i].getName();
+							System.out.println("Located package: " + cabioPackageName);
+							break;
+						}
+					}
+
+					System.out.println("Building domain model");
+					long start = System.currentTimeMillis();
+					DomainModel model = client.generateDomainModelForPackages(caCoreProj,
+						new String[]{cabioPackageName});
+					System.out.println("Model retrieved in " + (System.currentTimeMillis() - start) + "ms");
+					System.out.println("Serializing to domainModel.xml");
+					start = System.currentTimeMillis();
+					FileWriter writer = new FileWriter("domainModel.xml");
+					ObjectSerializer.serialize(writer, model, new QName(
+						"gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice", "DomainModel"));
+					writer.flush();
+					writer.close();
+					System.out.println("Model serialized in " + (System.currentTimeMillis() - start) + "ms");
+
 					Project[] projs = client.findAllProjects();
 					if (projs != null) {
 						for (int i = 0; i < projs.length; i++) {
@@ -94,27 +134,21 @@ public class CaDSRServiceClient implements CaDSRServiceI {
 									if (classes != null) {
 										for (int k = 0; k < classes.length; k++) {
 											UMLClassMetadata clazz = classes[k];
-											System.out.println("\t\t-" + clazz.getName());
-
-											// UMLAssociation[] assocs =
-											// client.findAssociationsForClass(project,
-											// clazz);
-											// if (assocs != null) {
-											// for (int index = 0; index <
-											// assocs.length; index++) {
-											// UMLAssociation assoc =
-											// assocs[index];
-											//
-											// System.out.println("\t\t\t("
-											// + assoc.getSourceRoleName()
-											// + ")---> ("
-											// + assoc.getTargetRoleName()
-											// + ")"
-											// +
-											// assoc.getTargetUMLClassMetadata().getUMLClassMetadata()
-											// .getFullyQualifiedName());
-											// }
-											// }
+											System.out.println("\t\t-" + clazz.getName() + " (id=" + clazz.getId()
+												+ ")");
+											UMLAssociation[] assocs = client.findAssociationsForClass(project, clazz);
+											if (assocs != null) {
+												for (int index = 0; index < assocs.length; index++) {
+													UMLAssociation assoc = assocs[index];
+													System.out.println("\t\t\t("
+														+ assoc.getSourceRoleName()
+														+ ")---> ("
+														+ assoc.getTargetRoleName()
+														+ ")"
+														+ assoc.getTargetUMLClassMetadata().getUMLClassMetadata()
+															.getFullyQualifiedName());
+												}
+											}
 
 											UMLAttributeMetadata[] atts = client.findAttributesInClass(project, clazz);
 											if (atts != null) {
@@ -123,13 +157,13 @@ public class CaDSRServiceClient implements CaDSRServiceI {
 													System.out.println("\t\t\t-" + att.getName());
 												}
 											}
-
 										}
 									}
 								}
 							}
 						}
 					}
+
 				} else {
 					usage();
 					System.exit(1);

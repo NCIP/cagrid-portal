@@ -53,25 +53,26 @@ public class CaDSRUtils {
 
 		return converted;
 	}
-	
-	
+
+
 	public static UMLClass convertClass(UMLClassMetadata classMetadata) {
 		UMLClass converted = null;
 		if (classMetadata != null) {
 			converted = new UMLClass();
 			converted.setClassName(classMetadata.getName());
 			converted.setDescription(classMetadata.getDescription());
+			converted.setId(classMetadata.getId());
 			converted.setPackageName(classMetadata.getUMLPackageMetadata().getName());
-			converted.setProjectName(classMetadata.getProject().getShortName());
+			converted.setProjectName(classMetadata.getProject().getLongName());
 			converted.setUmlAttributeCollection(convertAttributeCollection(classMetadata));
-			SemanticMetadata[] smArray = convertSemanticMetadataCollection(
-				classMetadata.getSemanticMetadataCollection()); 
+			SemanticMetadata[] smArray = convertSemanticMetadataCollection(classMetadata
+				.getSemanticMetadataCollection());
 			converted.setSemanticMetadataCollection(new UMLClassSemanticMetadataCollection(smArray));
 		}
 		return converted;
 	}
-	
-	
+
+
 	public static UMLClassUmlAttributeCollection convertAttributeCollection(UMLClassMetadata classMetadata) {
 		List attribList = new ArrayList();
 		Iterator attribIter = classMetadata.getUMLAttributeMetadataCollection().iterator();
@@ -83,21 +84,22 @@ public class CaDSRUtils {
 		attribList.toArray(attribArray);
 		return new UMLClassUmlAttributeCollection(attribArray);
 	}
-	
-	
+
+
 	public static UMLAttribute convertAttribute(UMLAttributeMetadata attribMetadata) {
 		UMLAttribute converted = null;
 		if (attribMetadata != null) {
 			converted = new UMLAttribute();
 			converted.setDescription(attribMetadata.getDescription());
 			converted.setName(attribMetadata.getName());
-			SemanticMetadata[] smArray = convertSemanticMetadataCollection(attribMetadata.getSemanticMetadataCollection());
+			SemanticMetadata[] smArray = convertSemanticMetadataCollection(attribMetadata
+				.getSemanticMetadataCollection());
 			converted.setSemanticMetadataCollection(new UMLAttributeSemanticMetadataCollection(smArray));
 		}
 		return converted;
 	}
-	
-	
+
+
 	public static SemanticMetadata[] convertSemanticMetadataCollection(Collection semanticMetadata) {
 		List smList = new ArrayList();
 		Iterator semanticIter = semanticMetadata.iterator();
