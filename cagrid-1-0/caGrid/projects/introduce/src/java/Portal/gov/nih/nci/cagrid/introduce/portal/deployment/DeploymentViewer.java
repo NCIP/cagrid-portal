@@ -27,6 +27,7 @@ import javax.swing.JPanel;
 
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
+import javax.swing.JScrollPane;
 
 
 /**
@@ -64,6 +65,8 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 	private JComboBox deploymentTypeSelector = null;
 
 	private JPanel servicePropertiesPanel = null;
+
+	private JScrollPane servicePropertiesScrollPane = null;
 
 	/**
 	 * This method initializes
@@ -145,6 +148,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 		
 		//load up the deploy properties;
 		Enumeration keys = deployProperties.keys();
+			this.setSize(new java.awt.Dimension(298,280));
 		int i = 0;
 		while (keys.hasMoreElements()) {
 			String key = (String) keys.nextElement();
@@ -204,10 +208,12 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
-			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
-			gridBagConstraints12.gridx = 0;
-			gridBagConstraints12.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints12.gridy = 2;
+			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
+			gridBagConstraints13.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints13.weighty = 1.0;
+			gridBagConstraints13.gridx = 0;
+			gridBagConstraints13.gridy = 2;
+			gridBagConstraints13.weightx = 1.0;
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			gridBagConstraints11.gridx = 0;
 			gridBagConstraints11.fill = java.awt.GridBagConstraints.BOTH;
@@ -234,8 +240,8 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 			mainPanel.setLayout(new GridBagLayout());
 			mainPanel.add(getDeployPropertiesPanel(), gridBagConstraints);
 			mainPanel.add(getButtonPanel(), gridBagConstraints1);
-			mainPanel.add(getServicePropertiesPanel(), gridBagConstraints12);
 			mainPanel.add(getDeploymentTypePanel(), gridBagConstraints11);
+			mainPanel.add(getServicePropertiesScrollPane(), gridBagConstraints13);
 		}
 		return mainPanel;
 	}
@@ -391,8 +397,23 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 		if (servicePropertiesPanel == null) {
 			servicePropertiesPanel = new JPanel();
 			servicePropertiesPanel.setLayout(new GridBagLayout());
-			servicePropertiesPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service Properties", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
 		}
 		return servicePropertiesPanel;
 	}
-}
+
+
+	/**
+	 * This method initializes servicePropertiesScrollPane	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getServicePropertiesScrollPane() {
+		if (servicePropertiesScrollPane == null) {
+			servicePropertiesScrollPane = new JScrollPane();
+			servicePropertiesScrollPane.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			servicePropertiesScrollPane.setViewportView(getServicePropertiesPanel());
+			servicePropertiesScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service Properties", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+		}
+		return servicePropertiesScrollPane;
+	}
+}  //  @jve:decl-index=0:visual-constraint="10,10"
