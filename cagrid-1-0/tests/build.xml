@@ -78,6 +78,7 @@
 			<artifact refid="discovery.jars" />
 			<artifact refid="core.jars" />
 			<artifact refid="introduce.jars" />
+			<artifact refid="gme.globus.client.jars" />
 		</resolveDependencies>
 		<ant dir="${tests.projects.dir}/coretests" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
@@ -97,6 +98,9 @@
 	</target>
 	<target name="build-cadsr">
 		<echo>cadsr must be built in the main caGrid build</echo>
+	</target>
+	<target name="build-gme">
+		<echo>gme must be built in the main caGrid build</echo>
 	</target>
 
 	<!-- ============================================================== -->
