@@ -503,7 +503,7 @@ public class CreationViewer extends GridPortalComponent {
 						for (int i = 0; i < getExtensionsTable().getRowCount(); i++) {
 							ServiceExtensionDescriptionType edt = ExtensionsLoader.getInstance()
 								.getServiceExtensionByDisplayName(getExtensionsTable().getRowData(i));
-							JDialog extDialog = ExtensionTools.getCreationUIDialog(edt.getName(), info);
+							JDialog extDialog = gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.getCreationUIDialog(edt.getName(), info);
 							if (extDialog != null) {
 								extDialog.setVisible(true);
 								return;

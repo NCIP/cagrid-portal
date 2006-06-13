@@ -1,7 +1,7 @@
-package gov.nih.nci.cagrid.introduce.extension.example;
+package gov.nih.nci.cagrid.introduce.portal.extension.example;
 
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
-import gov.nih.nci.cagrid.introduce.extension.ExtensionsPreferencesConfigurationPanel;
+import gov.nih.nci.cagrid.introduce.portal.extension.ExtensionsPreferencesConfigurationPanel;
 
 import javax.swing.JLabel;
 

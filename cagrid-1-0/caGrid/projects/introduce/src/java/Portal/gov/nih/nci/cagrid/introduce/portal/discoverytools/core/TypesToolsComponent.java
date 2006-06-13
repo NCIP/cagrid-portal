@@ -74,7 +74,7 @@ public class TypesToolsComponent extends GridPortalComponent {
 			for (int i = 0; i < tools.size(); i++) {
 				DiscoveryExtensionDescriptionType desc = (DiscoveryExtensionDescriptionType) tools.get(i);
 				try {
-					NamespaceTypeToolsComponent comp = gov.nih.nci.cagrid.introduce.portal.ExtensionTools
+					NamespaceTypeToolsComponent comp = gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools
 						.getNamespaceTypeToolsComponent(desc.getName());
 					if (comp != null) {
 						contentTabbedPane.addTab(desc.getDisplayName(), comp);

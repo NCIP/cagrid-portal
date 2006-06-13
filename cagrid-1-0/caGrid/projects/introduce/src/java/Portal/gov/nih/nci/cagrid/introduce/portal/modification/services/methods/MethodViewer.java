@@ -1598,7 +1598,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 								return;
 							}
 							try {
-								gov.nih.nci.cagrid.introduce.portal.ExtensionTools
+								gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools
 										.setSchemaElements(
 												outputType,
 												XMLUtilities

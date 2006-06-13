@@ -26,9 +26,9 @@ import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
-import gov.nih.nci.cagrid.introduce.extension.ServiceModificationUIPanel;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.extension.ServiceModificationUIPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 import gov.nih.nci.cagrid.introduce.portal.modification.properties.ServicePropertiesTable;
 import gov.nih.nci.cagrid.introduce.portal.modification.security.ServiceSecurityPanel;
@@ -929,7 +929,7 @@ public class ModificationViewer extends GridPortalComponent {
 						if (extDtype.getServiceModificationUIPanel() != null
 								&& !extDtype.getServiceModificationUIPanel()
 										.equals("")) {
-							ServiceModificationUIPanel extPanel = ExtensionTools
+							ServiceModificationUIPanel extPanel = gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools
 									.getServiceModificationUIPanel(extDtype
 											.getName(), info);
 							contentTabbedPane.addTab(extDtype.getDisplayName(),
@@ -1352,7 +1352,7 @@ public class ModificationViewer extends GridPortalComponent {
 					DiscoveryExtensionDescriptionType dd = (DiscoveryExtensionDescriptionType) discoveryTypes
 							.get(i);
 					try {
-						NamespaceTypeDiscoveryComponent comp = gov.nih.nci.cagrid.introduce.portal.ExtensionTools
+						NamespaceTypeDiscoveryComponent comp = gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools
 								.getNamespaceTypeDiscoveryComponent(dd
 										.getName());
 						if (comp != null) {

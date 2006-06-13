@@ -92,7 +92,7 @@ public class GlobusTypeSelectionComponent extends NamespaceTypeDiscoveryComponen
 				int index = globusPanel.currentSchemaFile.getAbsolutePath().indexOf(conf.getGlobusLocation() + File.separator + "share" + File.separator + "schema" + File.separator) + new String(conf.getGlobusLocation()+ "share" + File.separator + "schema" + File.separator).length();
 				String location = ".." + File.separator + globusPanel.currentSchemaFile.getAbsolutePath().substring(index + 1,globusPanel.currentSchemaFile.getAbsolutePath().length());
 				input.setLocation(location);
-				gov.nih.nci.cagrid.introduce.portal.ExtensionTools.setSchemaElements(input, XMLUtilities
+				gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.setSchemaElements(input, XMLUtilities
 						.fileNameToDocument(globusPanel.currentSchemaFile.getAbsolutePath()));
 			} else {
 				return null;

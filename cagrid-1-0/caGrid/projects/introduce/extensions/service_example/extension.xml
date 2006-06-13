@@ -1,5 +1,5 @@
 <ns1:ExtensionDescription xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xmlns:ns1="gme://gov.nih.nci.cagrid.introduce/1/Extension" extensionType="SERVICE">
+ xmlns:ns1="gme://gov.nih.nci.cagrid.introduce/1/Extension" extensionType="SERVICE" extensionPreferencesPanel="gov.nih.nci.cagrid.introduce.portal.extension.example.ExampleExtensionPreferencesConfigurationPanel">
  <ns1:ServiceExtensionDescription displayName="Example Extension" name="service_example">
   <ns1:CreationPostProcessor>gov.nih.nci.cagrid.introduce.extension.example.ExampleCreationPostProcessor</ns1:CreationPostProcessor>
   <ns1:CreationUIDialog>gov.nih.nci.cagrid.introduce.extension.example.ExampleCreationDialog</ns1:CreationUIDialog>

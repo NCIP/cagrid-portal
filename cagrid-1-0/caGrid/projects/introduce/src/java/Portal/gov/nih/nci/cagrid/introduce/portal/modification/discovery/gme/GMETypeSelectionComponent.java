@@ -97,7 +97,7 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 				return null;
 			}
 
-			gov.nih.nci.cagrid.introduce.portal.ExtensionTools.setSchemaElements(input, XMLUtilities
+			gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.setSchemaElements(input, XMLUtilities
 				.stringToDocument(gmePanel.currentNode.getSchemaContents()));
 			cacheSchema(schemaDestinationDir, input.getNamespace());
 		} catch (Exception e) {

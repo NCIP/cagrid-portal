@@ -1,7 +1,8 @@
-package gov.nih.nci.cagrid.introduce.extension;
+package gov.nih.nci.cagrid.introduce.portal.extension;
 
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import javax.swing.JPanel;
