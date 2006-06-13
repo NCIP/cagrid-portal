@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.portal.preferences.extensions;
+package gov.nih.nci.cagrid.introduce.extension;
 
 import gov.nih.nci.cagrid.introduce.portal.preferences.BasePreferenceConfigurationPanel;
 

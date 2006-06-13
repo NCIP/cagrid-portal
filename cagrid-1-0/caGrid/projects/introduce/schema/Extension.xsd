@@ -13,7 +13,7 @@
 	<xs:element name="ExtensionDescription">
 		<xs:annotation>The extension type states whether or not this is a discovery
 		type or service type extension.  The extension preferencesPanel is a java classname
-		which extends the ExtensionPreferenceConfigurationPanel</xs:annotation>
+		which extends the ExtensionPreferencesConfigurationPanel</xs:annotation>
 		<xs:complexType>
 			<xs:choice>
 				<xs:element ref="DiscoveryExtensionDescription"></xs:element>
