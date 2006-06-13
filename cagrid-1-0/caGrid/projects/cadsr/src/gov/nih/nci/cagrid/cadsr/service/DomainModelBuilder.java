@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.cadsr.service;
 
 import gov.nih.nci.cadsr.umlproject.domain.Project;
+import gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLAssociationMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
@@ -241,7 +242,8 @@ public class DomainModelBuilder {
 					}
 					Iterator smIter = metadata.getSemanticMetadataCollection().iterator();
 					while (smIter.hasNext()) {
-						smIter.next();
+						SemanticMetadata sm = (SemanticMetadata) smIter.next();
+						LOG.debug(sm.getConceptCode());
 					}
 					classList.add(metadata);
 				}

@@ -12,7 +12,7 @@
 	<classpathentry kind="lib" path="lib/globus_wsrf_servicegroup_stubs.jar"/>
 	<classpathentry kind="lib" path="lib/globus_wsrf_servicegroup.jar"/>
 	<classpathentry sourcepath="/GT4_LOCATION" kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
-	<classpathentry sourcepath="/GT4_LOCATION/axis-src-1_2_1.zip" kind="var" path="GT4_LOCATION/lib/axis.jar"/>
+	<classpathentry sourcepath="/GT4_LOCATION/ws-axis/java/src" kind="var" path="GT4_LOCATION/lib/axis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
 	<classpathentry sourcepath="/GT4_LOCATION" kind="var" path="GT4_LOCATION/lib/bootstrap.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-axis.jar"/>

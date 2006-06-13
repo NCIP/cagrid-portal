@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.cadsr.client;
 
 import gov.nih.nci.cadsr.umlproject.domain.Project;
+import gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
@@ -69,112 +70,6 @@ public class CaDSRServiceClient implements CaDSRServiceI {
 		}
 
 		return port;
-	}
-
-
-	public static void usage() {
-		System.out.println(CaDSRServiceClient.class.getName() + " -url <service's url>");
-	}
-
-
-	public static void main(String[] args) {
-		try {
-			if (!(args.length < 2)) {
-				if (args[0].equals("-url")) {
-					CaDSRServiceClient client = new CaDSRServiceClient(args[1]);
-					// place client calls here if you want to use this main as a
-					// test....
-
-					Project caCoreProj = null;
-					Project[] allProjects = client.findAllProjects();
-					for (int i = 0; i < allProjects.length; i++) {
-						if (allProjects[i].getLongName().indexOf("caCORE") != -1) {
-							caCoreProj = allProjects[i];
-							System.out.println("Located project: " + caCoreProj.getLongName());
-							break;
-						}
-					}
-
-					String cabioPackageName = null;
-					UMLPackageMetadata[] packages = client.findPackagesInProject(caCoreProj);
-					for (int i = 0; i < packages.length; i++) {
-						if (packages[i].getName().indexOf("cabio") != -1) {
-							cabioPackageName = packages[i].getName();
-							System.out.println("Located package: " + cabioPackageName);
-							break;
-						}
-					}
-
-					System.out.println("Building domain model");
-					long start = System.currentTimeMillis();
-					DomainModel model = client.generateDomainModelForPackages(caCoreProj,
-						new String[]{cabioPackageName});
-					System.out.println("Model retrieved in " + (System.currentTimeMillis() - start) + "ms");
-					System.out.println("Serializing to domainModel.xml");
-					start = System.currentTimeMillis();
-					FileWriter writer = new FileWriter("domainModel.xml");
-					ObjectSerializer.serialize(writer, model, new QName(
-						"gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice", "DomainModel"));
-					writer.flush();
-					writer.close();
-					System.out.println("Model serialized in " + (System.currentTimeMillis() - start) + "ms");
-
-					Project[] projs = client.findAllProjects();
-					if (projs != null) {
-						for (int i = 0; i < projs.length; i++) {
-							Project project = projs[i];
-							System.out.println("\n" + project.getShortName());
-							UMLPackageMetadata[] packs = client.findPackagesInProject(project);
-							if (packs != null) {
-								for (int j = 0; j < packs.length; j++) {
-									UMLPackageMetadata pack = packs[j];
-									System.out.println("\t-" + pack.getName());
-
-									UMLClassMetadata[] classes = client.findClassesInPackage(project, pack.getName());
-									if (classes != null) {
-										for (int k = 0; k < classes.length; k++) {
-											UMLClassMetadata clazz = classes[k];
-											System.out.println("\t\t-" + clazz.getName() + " (id=" + clazz.getId()
-												+ ")");
-											UMLAssociation[] assocs = client.findAssociationsForClass(project, clazz);
-											if (assocs != null) {
-												for (int index = 0; index < assocs.length; index++) {
-													UMLAssociation assoc = assocs[index];
-													System.out.println("\t\t\t("
-														+ assoc.getSourceRoleName()
-														+ ")---> ("
-														+ assoc.getTargetRoleName()
-														+ ")"
-														+ assoc.getTargetUMLClassMetadata().getUMLClassMetadata()
-															.getFullyQualifiedName());
-												}
-											}
-
-											UMLAttributeMetadata[] atts = client.findAttributesInClass(project, clazz);
-											if (atts != null) {
-												for (int l = 0; l < atts.length; l++) {
-													UMLAttributeMetadata att = atts[l];
-													System.out.println("\t\t\t-" + att.getName());
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-
-				} else {
-					usage();
-					System.exit(1);
-				}
-			} else {
-				usage();
-				System.exit(1);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 
@@ -415,4 +310,119 @@ public class CaDSRServiceClient implements CaDSRServiceI {
 
 	}
 
+
+	public static void usage() {
+		System.out.println(CaDSRServiceClient.class.getName() + " -url <service's url>");
+	}
+
+
+	public static void main(String[] args) {
+		try {
+			if (!(args.length < 2)) {
+				if (args[0].equals("-url")) {
+					CaDSRServiceClient client = new CaDSRServiceClient(args[1]);
+					// place client calls here if you want to use this main as a
+					// test....
+
+					Project caCoreProj = null;
+					Project[] allProjects = client.findAllProjects();
+					for (int i = 0; i < allProjects.length; i++) {
+						if (allProjects[i].getLongName().indexOf("caCORE") != -1) {
+							caCoreProj = allProjects[i];
+							System.out.println("Located project: " + caCoreProj.getLongName());
+							break;
+						}
+					}
+
+					String cabioPackageName = null;
+					UMLPackageMetadata[] packages = client.findPackagesInProject(caCoreProj);
+					for (int i = 0; i < packages.length; i++) {
+						if (packages[i].getName().indexOf("cabio") != -1) {
+							cabioPackageName = packages[i].getName();
+							System.out.println("Located package: " + cabioPackageName);
+							break;
+						}
+					}
+
+					System.out.println("Building domain model (this might take a while)...");
+					long start = System.currentTimeMillis();
+					DomainModel model = client.generateDomainModelForPackages(caCoreProj,
+						new String[]{cabioPackageName});
+					System.out.println("Model retrieved in " + (System.currentTimeMillis() - start) + "ms");
+					System.out.println("Serializing to domainModel.xml");
+					start = System.currentTimeMillis();
+					FileWriter writer = new FileWriter("domainModel.xml");
+					ObjectSerializer.serialize(writer, model, new QName(
+						"gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice", "DomainModel"));
+					writer.flush();
+					writer.close();
+					System.out.println("Model serialized in " + (System.currentTimeMillis() - start) + "ms");
+
+					Project[] projs = client.findAllProjects();
+					if (projs != null) {
+						for (int i = 0; i < projs.length; i++) {
+							Project project = projs[i];
+							System.out.println("\n" + project.getShortName());
+							UMLPackageMetadata[] packs = client.findPackagesInProject(project);
+							if (packs != null) {
+								for (int j = 0; j < packs.length; j++) {
+									UMLPackageMetadata pack = packs[j];
+									System.out.println("\t-" + pack.getName());
+
+									UMLClassMetadata[] classes = client.findClassesInPackage(project, pack.getName());
+									if (classes != null) {
+										for (int k = 0; k < classes.length; k++) {
+											UMLClassMetadata clazz = classes[k];
+											System.out.println("\t\t-" + clazz.getName());
+											UMLAttributeMetadata[] atts = client.findAttributesInClass(project, clazz);
+											if (atts != null) {
+												for (int l = 0; l < atts.length; l++) {
+													UMLAttributeMetadata att = atts[l];
+													System.out.println("\t\t\t-" + att.getName());
+												}
+											}
+
+											UMLAssociation[] assocs = client.findAssociationsForClass(project, clazz);
+											if (assocs != null) {
+												for (int index = 0; index < assocs.length; index++) {
+													UMLAssociation assoc = assocs[index];
+													System.out.println("\t\t\t("
+														+ assoc.getSourceRoleName()
+														+ ")---> ("
+														+ assoc.getTargetRoleName()
+														+ ")"
+														+ assoc.getTargetUMLClassMetadata().getUMLClassMetadata()
+															.getFullyQualifiedName());
+												}
+											}
+
+											SemanticMetadata[] semantics = client.findSemanticMetadataForClass(project,
+												clazz);
+											if (assocs != null) {
+												for (int index = 0; index < semantics.length; index++) {
+													SemanticMetadata semantic = semantics[index];
+													System.out.println("\t\t\t(concept code " + semantic.getOrder()
+														+ "):" + semantic.getConceptCode());
+												}
+											}
+
+										}
+									}
+								}
+							}
+						}
+					}
+
+				} else {
+					usage();
+					System.exit(1);
+				}
+			} else {
+				usage();
+				System.exit(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

@@ -6,3 +6,4 @@ bin
 *.tmp
 *.sh
 *.bat
+domainModel.xml

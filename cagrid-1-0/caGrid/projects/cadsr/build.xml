@@ -138,7 +138,7 @@
 		<property name="GT4.ns.excludes" value="-x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl -x http://schemas.xmlsoap.org/ws/2004/04/trust -x http://schemas.xmlsoap.org/ws/2002/12/policy -x http://schemas.xmlsoap.org/ws/2002/07/utility -x http://schemas.xmlsoap.org/ws/2004/04/sc -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd -x http://www.w3.org/2000/09/xmldsig# -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" />
 	</target>
 
-	<target name="defineClasspaths">
+	<target name="defineClasspaths" depends="checkGlobus">
 		<path id="base.classpath">
 			<fileset dir="${lib.dir}">
 				<include name="*.jar" />
@@ -173,6 +173,10 @@
 			<path refid="test.build.classpath" />
 		</path>
 		<path id="portal.build.classpath">
+			<pathelement location="${service.build.dest}" />
+			<path refid="service.build.classpath" />
+		</path>
+		<path id="run.classpath">
 			<pathelement location="${service.build.dest}" />
 			<path refid="service.build.classpath" />
 		</path>
@@ -370,6 +374,18 @@
 		<delete dir="tmp" />
 		<delete dir="${build.dir}" />
 		<delete file="${gar.name}" />
+	</target>
+
+	<target name="runClient" depends="defineClasspaths" description="Run the sample Discovery Client">
+		<property name="cadsr.service.url" value="http://localhost:8080/wsrf/services/cagrid/CaDSRService" />
+		<echo message="Connecting to service: ${cadsr.service.url}" />
+		<java classname="gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient" classpathref="run.classpath" fork="no">
+			<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
+			<sysproperty key="axis.ClientConfigFile" value="${service.src.dir}/gov/nih/nci/cagrid/cadsr/client/client-config.wsdd" />
+			<jvmarg value="-Daxis.ClientConfigFile=${service.src.dir}/gov/nih/nci/cagrid/cadsr/client/client-config.wsdd" />
+			<arg value="-url" />
+			<arg value="${cadsr.service.url}" />
+		</java>
 	</target>
 
 
