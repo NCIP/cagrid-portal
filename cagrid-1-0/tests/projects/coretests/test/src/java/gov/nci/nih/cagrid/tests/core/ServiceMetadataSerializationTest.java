@@ -5,7 +5,7 @@ package gov.nci.nih.cagrid.tests.core;
 
 import java.io.File;
 
-import gov.nci.nih.cagrid.tests.core.util.BeanComparator;
+import gov.nci.nih.cagrid.tests.core.compare.BeanComparator;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 import junit.framework.TestCase;

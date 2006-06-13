@@ -3,7 +3,7 @@
  */
 package gov.nci.nih.cagrid.tests.core.steps;
 
-import gov.nci.nih.cagrid.tests.core.util.BeanComparator;
+import gov.nci.nih.cagrid.tests.core.compare.BeanComparator;
 import gov.nci.nih.cagrid.tests.core.util.FileUtils;
 import gov.nci.nih.cagrid.tests.core.util.IntroduceServiceInfo;
 import gov.nci.nih.cagrid.tests.core.util.ReflectionUtils;

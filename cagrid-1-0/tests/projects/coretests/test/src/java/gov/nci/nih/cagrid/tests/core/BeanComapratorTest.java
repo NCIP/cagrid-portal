@@ -3,7 +3,7 @@
  */
 package gov.nci.nih.cagrid.tests.core;
 
-import gov.nci.nih.cagrid.tests.core.util.BeanComparator;
+import gov.nci.nih.cagrid.tests.core.compare.BeanComparator;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
