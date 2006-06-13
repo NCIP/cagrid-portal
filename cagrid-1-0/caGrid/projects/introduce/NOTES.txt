@@ -1,5 +1,7 @@
 To Do:
 
+I had to move a gui base componenet for preferences to extensions.  need to look into moving this back to portal.
+
 on deployment i have seen unable to delete namespace2package.mappings.
 
 From BMI Tutorial:
