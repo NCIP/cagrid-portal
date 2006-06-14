@@ -23,9 +23,11 @@ import org.projectmobius.common.XMLUtilities;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Jun 7, 2006 
- * @version $Id: ExtensionUtilities.java,v 1.1 2006-06-08 20:07:46 oster Exp $ 
+ * @version $Id: ExtensionUtilities.java,v 1.2 2006-06-14 19:22:39 dervin Exp $ 
  */
 public class ExtensionUtilities {
+	public static final String CLASSPATHENTRY_ELEMENT = "classpathentry";
+
 
 	/**
 	 * Adds libraries to an eclipse .classpath file
@@ -48,7 +50,8 @@ public class ExtensionUtilities {
 		}
 		
 		// find out which libs are NOT yet in the classpath
-		Iterator classpathEntryIter = classpathElement.getChildren("classpathentry").iterator();
+		Iterator classpathEntryIter = classpathElement.getChildren(
+			CLASSPATHENTRY_ELEMENT, classpathElement.getNamespace()).iterator();
 		while (classpathEntryIter.hasNext()) {
 			Element entry = (Element) classpathEntryIter.next();
 			if (entry.getAttributeValue("kind").equals("lib")) {
@@ -60,7 +63,7 @@ public class ExtensionUtilities {
 		Iterator additionalLibIter = libNames.iterator();
 		while (additionalLibIter.hasNext()) {
 			String libName = (String) additionalLibIter.next();
-			Element entryElement = new Element("classpathentry");
+			Element entryElement = new Element(CLASSPATHENTRY_ELEMENT);
 			entryElement.setAttribute("kind", "lib");
 			entryElement.setAttribute("path", libName);
 			classpathElement.addContent(entryElement);
