@@ -1,7 +1,7 @@
 
 caching using resources?
 
- 
+discovery panel needs a progress bar 
 
 
 

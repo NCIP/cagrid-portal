@@ -1,5 +1,7 @@
 To Do:
 
+duce gui needs to rember last selection for deploy (GT or tomcat)
+
 on deployment i have seen unable to delete namespace2package.mappings.
 
 From BMI Tutorial:

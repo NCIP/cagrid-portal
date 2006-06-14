@@ -1,5 +1,5 @@
 - clean up exception handling
-- design if there will be one client or several as previously
+- add Data service discovery
 - add xpath tests against xml with actual results
 
 
