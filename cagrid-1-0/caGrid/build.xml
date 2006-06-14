@@ -273,6 +273,7 @@
             <artifact refid="metadata.schemas" />
             <artifact refid="gridca.jars" />
             <artifact refid="gridca.resources" />
+        	<artifact refid="security.metadata.jars" />
         </resolveDependencies>
         <ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="all" />
     </target>
