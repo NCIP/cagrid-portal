@@ -2,4 +2,4 @@
 <% 
    gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation info = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument; 
 %>
-<%=gov.nih.nci.cagrid.introduce.codegen.security.descriptor.SecurityDescriptor.writeSecurityDescriptor(info)%>
+<%=gov.nih.nci.cagrid.introduce.codegen.security.SecurityDescriptorGenerator.getSecurityDescriptor(info)%>

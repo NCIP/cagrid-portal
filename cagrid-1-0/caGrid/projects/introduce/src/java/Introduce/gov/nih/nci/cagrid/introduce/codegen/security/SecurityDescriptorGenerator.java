@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.codegen.security.descriptor;
+package gov.nih.nci.cagrid.introduce.codegen.security;
 
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
@@ -28,8 +28,8 @@ import org.projectmobius.common.XMLUtilities;
  * @version $Id: mobiusEclipseCodeTemplates.xml,v 1.2 2005/04/19 14:58:02 oster
  *          Exp $
  */
-public class SecurityDescriptor {
-	public static String writeSecurityDescriptor(SpecificServiceInformation info) {
+public class SecurityDescriptorGenerator {
+	public static String getSecurityDescriptor(SpecificServiceInformation info) {
 		try {
 			StringBuffer xml = new StringBuffer();
 			xml.append("<securityConfig xmlns=\"http://www.globus.org\">");
