@@ -35,7 +35,13 @@ public class ModifySimpleMethodStep extends BaseStep {
 		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(getBaseDir() + File.separator
 			+ tci.getDir() + File.separator + "introduce.xml", ServiceDescription.class);
 		MethodsType methodsType = CommonTools.getService(introService.getServices(),tci.getName()).getMethods();
-		MethodType method = methodsType.getMethod(0);
+		MethodType method = null;
+		for (int i = 0; i < methodsType.getMethod().length; i++) {
+			MethodType methodt = methodsType.getMethod(i);
+			if (!methodt.getName().equals(methodName)) {
+				method = methodt;
+			}
+		}
 
 		// create a new input param
 		MethodTypeInputsInput input = new MethodTypeInputsInput();
