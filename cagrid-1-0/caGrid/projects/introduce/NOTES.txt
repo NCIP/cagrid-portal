@@ -1,5 +1,7 @@
 To Do:
 
+Service properties with a key but no value causes NPE on ServicePropertiesTable when rendering.
+
 IMPORTANT: introduce needs to handle globus schemas being in the GME
   (they can't just be imported from the Globus browser, as anyone wanting to make
    XSDs that import Globus schemas need them there so they can upload theres)   
