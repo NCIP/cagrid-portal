@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<xs:schema targetNamespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:sec="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"
+    elementFormDefault="qualified">
+    
+    <xs:element name="ServiceSecurityMetadata" type="sec:ServiceSecurityMetadata" />
+    <xs:complexType name="ServiceSecurityMetadata">
+        <xs:sequence>
+            <xs:element name="defaultCommunicationMechanism">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element ref="sec:CommunicationMechanism" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="operations">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element ref="sec:Operation" minOccurs="0" maxOccurs="unbounded" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="CommunicationMechanism" type="sec:CommunicationMechanism" />
+    <xs:complexType name="CommunicationMechanism">
+        <xs:sequence>
+            <xs:element name="anonymousPermitted" type="xs:boolean" />
+            <xs:element name="allowableCommunicationStyles">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element ref="sec:CommunicationStyle" maxOccurs="unbounded" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="Operation" type="sec:Operation" />
+    <xs:complexType name="Operation">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string" />
+            <xs:element name="requiredCommunicationMechanism">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element ref="sec:CommunicationMechanism" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="CommunicationStyle" type="sec:CommunicationStyle" />
+    <xs:complexType name="CommunicationStyle">
+        <xs:sequence>
+            <xs:element name="protectionLevel" type="sec:protectionLevelType">
+                <xs:annotation>
+                    <xs:documentation>
+                        Describes data protection level (integrity, privacy, either, none)
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="type" type="sec:communicationType">
+                <xs:annotation>
+                    <xs:documentation>
+                        The type of communication (TLS, message, converstation)
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="protectionLevelType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="integrity" />
+            <xs:enumeration value="privacy" />
+            <xs:enumeration value="either" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="communicationType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="GSISecureMessage" />
+            <xs:enumeration value="GSISecureConversation" />
+            <xs:enumeration value="GSITransport" />
+            <xs:enumeration value="none" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>
