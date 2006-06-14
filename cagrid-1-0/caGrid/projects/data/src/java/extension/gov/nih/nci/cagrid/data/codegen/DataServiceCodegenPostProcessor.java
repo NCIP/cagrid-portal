@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.axis.message.MessageElement;
+import org.apache.log4j.Logger;
 import org.jdom.Element;
 
 
@@ -38,15 +39,22 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 	public static final String METHOD_START = "public " + DataServiceConstants.QUERY_METHOD_RETURN_TYPE + " "
 		+ DataServiceConstants.QUERY_METHOD_NAME + "(" + DataServiceConstants.QUERY_METHOD_PARAMETER_TYPE + " "
 		+ DataServiceConstants.QUERY_METHOD_PARAMETER_NAME + ")";
-
+	
+	private static Logger logger = Logger.getLogger(DataServiceCodegenPostProcessor.class);
 
 	public void postCodegen(ServiceExtensionDescriptionType desc, ServiceInformation info)
 		throws CodegenExtensionException {
-		try {
-			String serviceDir = info.getIntroduceServiceProperties().getProperty(
-				IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR);
-			// get the eclipse classpath document
-			File classpathFile = new File(serviceDir + File.separator + ".classpath");
+		modifyEclipseClasspath(desc, info);
+		modifyQueryMethod(info);
+	}
+	
+	
+	private void modifyEclipseClasspath(ServiceExtensionDescriptionType desc, ServiceInformation info) throws CodegenExtensionException {
+		String serviceDir = info.getIntroduceServiceProperties().getProperty(
+			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR);
+		// get the eclipse classpath document
+		File classpathFile = new File(serviceDir + File.separator + ".classpath");
+		if (classpathFile.exists()) {
 			Set libs = new HashSet();
 			ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
 			MessageElement qpLibsElement = ExtensionTools.getExtensionDataElement(data,
@@ -62,11 +70,14 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 			}
 			File[] libFiles = new File[libs.size()];
 			libs.toArray(libFiles);
-			ExtensionUtilities.syncEclipseClasspath(classpathFile, libFiles);
-		} catch (Exception ex) {
-			throw new CodegenExtensionException("Error syncing eclipse .classpath file: " + ex.getMessage(), ex);
+			try {
+				ExtensionUtilities.syncEclipseClasspath(classpathFile, libFiles);
+			} catch (Exception ex) {
+				throw new CodegenExtensionException("Error modifying Eclipse .classpath file: " + ex.getMessage(), ex);
+			}
+		} else {
+			logger.warn("Eclipse .classpath file " + classpathFile.getAbsolutePath() + " not found!");
 		}
-		modifyQueryMethod(info);
 	}
 
 
