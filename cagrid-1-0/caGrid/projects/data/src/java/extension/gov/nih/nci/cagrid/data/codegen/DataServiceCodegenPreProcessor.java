@@ -210,15 +210,17 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 				// add the parameters
 				Iterator paramKeyIter = params.keySet().iterator();
 				while (paramKeyIter.hasNext()) {
-					ServicePropertiesProperty prop = new ServicePropertiesProperty();
 					String key = (String) paramKeyIter.next();
-					String value = (String) params.get(key);
-					if (value == null) {
-						value = "";
-					}
-					prop.setKey(key);
-					prop.setValue(value);
-					qpProperties.add(prop);
+					if (!hasProperty(props, key)) {
+						ServicePropertiesProperty prop = new ServicePropertiesProperty();					
+						String value = (String) params.get(key);
+						if (value == null) {
+							value = "";
+						}
+						prop.setKey(key);
+						prop.setValue(value);
+						qpProperties.add(prop);
+					}					
 				}
 				// add the query processor class name to the properties
 				for (int p = 0; p < props.getProperty().length; p++) {
@@ -233,6 +235,16 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 				props.setProperty(allProperties);
 			}
 		}
+	}
+	
+	
+	private boolean hasProperty(ServiceProperties props, String key) {
+		for (int i = 0; i < props.getProperty().length; i++) {
+			if (props.getProperty(i).getKey().equals(key)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 
