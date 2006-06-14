@@ -129,12 +129,11 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 					model = cadsrClient.generateDomainModelForPackages(proj, new String[]{cadsrPackage});
 					System.out.println("Created data service metadata!");
 				} catch (RemoteException ex) {
-					throw new CodegenExtensionException("Error connecting to caDSR for metadata: " + ex.getMessage(),
-						ex);
+					throw new CodegenExtensionException("Error connecting to caDSR for metadata: " 
+						+ ex.getMessage(), ex);
 				}
 
-				// find the service's etc directory and serialize the domain
-				// model to it
+				// find the service's etc directory and serialize the domain model to it
 				String domainModelFile = info.getIntroduceServiceProperties().getProperty(
 					IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
 					+ File.separator + "etc" + File.separator + "domainModel.xml";
@@ -212,7 +211,15 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 				deployProps.load(propsInput);
 				propsInput.close();
 				// add the parameters
-				deployProps.putAll(params);
+				Iterator paramKeyIter = params.keySet().iterator();
+				while (paramKeyIter.hasNext()) {
+					String key = (String) paramKeyIter.next();
+					String value = (String) params.get(key);
+					if (value == null) {
+						value = "";
+					}
+					deployProps.put(key, value);
+				}
 				// add the query processor class name to the properties
 				deployProps.put(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, qpClassname);
 				// write them all back to disk
