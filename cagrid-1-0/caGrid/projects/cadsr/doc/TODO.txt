@@ -1,14 +1,14 @@
 
-caCORE provided XSD's have the wrong namespace (caCORE.cabig instead of caCORE.caBIG), I've corrected them locally... need to rectify
-
 caching using resources?
 
-generate DomainModel metadata extracts 
+ 
 
 
 
 caCORE BUGS:
 ==================================================
+caCORE provided XSD's have the wrong namespace (caCORE.cabig instead of caCORE.caBIG), I've corrected them locally... need to rectify
+
 returning too many classes when there are package aliases
 
 returning same class for association source and target
@@ -19,6 +19,8 @@ attribute name has classname: prefix
 
 
 ==================================================
+
+(DONE) generate DomainModel metadata extracts
 
 (DONE) added association support
 
