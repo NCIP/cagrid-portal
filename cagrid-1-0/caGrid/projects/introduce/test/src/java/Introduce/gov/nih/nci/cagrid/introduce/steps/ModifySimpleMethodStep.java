@@ -38,7 +38,7 @@ public class ModifySimpleMethodStep extends BaseStep {
 		MethodType method = null;
 		for (int i = 0; i < methodsType.getMethod().length; i++) {
 			MethodType methodt = methodsType.getMethod(i);
-			if (!methodt.getName().equals(methodName)) {
+			if (methodt.getName().equals(methodName)) {
 				method = methodt;
 			}
 		}
