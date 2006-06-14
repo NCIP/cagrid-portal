@@ -10,6 +10,8 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
+import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
+import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
@@ -21,15 +23,15 @@ import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import org.apache.axis.message.MessageElement;
@@ -37,8 +39,8 @@ import org.jdom.Element;
 
 
 /**
- * DataServiceCodegenPreProcessor Preprocessor for data service codegen
- * operations.
+ * DataServiceCodegenPreProcessor 
+ * Preprocessor for data service codegen operations.
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
@@ -50,7 +52,7 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 	public void preCodegen(ServiceExtensionDescriptionType desc, ServiceInformation info)
 		throws CodegenExtensionException {
 		try {
-			modifyDeployProperties(desc, info);
+			modifyServiceProperties(desc, info);
 		} catch (Exception ex) {
 			throw new CodegenExtensionException("Error modifying deployment properties: " + ex.getMessage(), ex);
 		}
@@ -170,7 +172,8 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 	}
 
 
-	private void modifyDeployProperties(ServiceExtensionDescriptionType desc, ServiceInformation info) throws Exception {
+	private void modifyServiceProperties(ServiceExtensionDescriptionType desc, ServiceInformation info) throws Exception {
+		ServiceProperties props = info.getServiceProperties();
 		String qpClassname = getQueryProcesorClass(desc, info);
 		if (qpClassname != null) {
 			// find the QP class
@@ -190,8 +193,7 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 					libs.add(new File(serviceDir + File.separator + "lib" + File.separator + jarFilename));
 				}
 			}
-			// load the class from the additional libraries and current
-			// classpath
+			// load the class from the additional libraries and current classpath
 			URL[] libUrls = new URL[libs.size()];
 			Iterator libIter = libs.iterator();
 			int i = 0;
@@ -203,31 +205,32 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 			CQLQueryProcessor processor = (CQLQueryProcessor) qpClass.newInstance();
 			// get the map of required deploy properties
 			Map params = processor.getRequiredParameters();
+			List qpProperties = new ArrayList();
 			if (params != null) {
-				// load what deploy properties exist presently
-				Properties deployProps = new Properties();
-				FileInputStream propsInput = new FileInputStream(serviceDir + File.separator
-					+ IntroduceConstants.DEPLOY_PROPERTIES_FILE);
-				deployProps.load(propsInput);
-				propsInput.close();
 				// add the parameters
 				Iterator paramKeyIter = params.keySet().iterator();
 				while (paramKeyIter.hasNext()) {
+					ServicePropertiesProperty prop = new ServicePropertiesProperty();
 					String key = (String) paramKeyIter.next();
 					String value = (String) params.get(key);
 					if (value == null) {
 						value = "";
 					}
-					deployProps.put(key, value);
+					prop.setKey(key);
+					prop.setValue(value);
+					qpProperties.add(prop);
 				}
 				// add the query processor class name to the properties
-				deployProps.put(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, qpClassname);
-				// write them all back to disk
-				FileOutputStream propsOutput = new FileOutputStream(serviceDir + File.separator
-					+ IntroduceConstants.DEPLOY_PROPERTIES_FILE);
-				deployProps.store(propsOutput, "deployment properties for query processor class " + qpClassname);
-				propsOutput.flush();
-				propsOutput.close();
+				for (int p = 0; p < props.getProperty().length; p++) {
+					if (props.getProperty(p).getKey().equals(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY)) {
+						props.getProperty(p).setValue(qpClassname);
+					}
+				}
+				// write all the properties back into the service properties bean
+				qpProperties.addAll(Arrays.asList(props.getProperty()));
+				ServicePropertiesProperty[] allProperties = new ServicePropertiesProperty[qpProperties.size()];
+				qpProperties.toArray(allProperties);
+				props.setProperty(allProperties);
 			}
 		}
 	}

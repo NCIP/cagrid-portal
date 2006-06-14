@@ -13,6 +13,8 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
+import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
+import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
@@ -27,8 +29,6 @@ import gov.nih.nci.cagrid.metadata.service.Service;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -61,7 +61,7 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		// add the proper deployment properties
 		try {
 			System.out.println("Adding deploy property for query processor class");
-			modifyDeployProperties(serviceProperties);
+			modifyServiceProperties(serviceDescription);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new CreationExtensionException("Error adding query processor parameter to service! " + ex.getMessage(), ex);
@@ -256,19 +256,22 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 	}
 	
 	
-	private void modifyDeployProperties(Properties info) throws Exception {
-		String serviceDir = info.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR);
-		File deployPropertiesFile = new File(serviceDir + File.separator + IntroduceConstants.DEPLOY_PROPERTIES_FILE);
-		Properties props = new Properties();
-		FileInputStream propsInput = new FileInputStream(deployPropertiesFile);
-		props.load(propsInput);
-		propsInput.close();
-		if (!props.containsKey(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY)) {
-			props.put(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, "");
+	private void modifyServiceProperties(ServiceDescription desc) throws Exception {
+		ServicePropertiesProperty prop = new ServicePropertiesProperty();
+		prop.setKey(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
+		ServiceProperties serviceProperties = desc.getServiceProperties();
+		if (serviceProperties == null) {
+			serviceProperties = new ServiceProperties();
+		}		
+		ServicePropertiesProperty[] allProps = serviceProperties.getProperty();
+		if (allProps != null) {
+			ServicePropertiesProperty[] tmpProps = new ServicePropertiesProperty[allProps.length + 1];
+			System.arraycopy(allProps, 0, tmpProps, 0, allProps.length);
+			tmpProps[tmpProps.length - 1] = prop;
+		} else {
+			allProps = new ServicePropertiesProperty[] {prop};
 		}
-		FileOutputStream propsOutput = new FileOutputStream(deployPropertiesFile);
-		props.store(propsOutput, "Properties modified by " + DataServiceCreationPostProcessor.class.getName());
-		propsOutput.flush();
-		propsOutput.close();
+		serviceProperties.setProperty(allProps);
+		desc.setServiceProperties(serviceProperties);
 	}
 }

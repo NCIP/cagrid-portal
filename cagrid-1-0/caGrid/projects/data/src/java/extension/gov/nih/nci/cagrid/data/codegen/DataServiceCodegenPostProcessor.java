@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.data.codegen;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
@@ -28,8 +29,8 @@ import org.jdom.Element;
 
 
 /**
- * DataServiceCodegenPostProcessor Post-processor for dataservice code
- * generation
+ * DataServiceCodegenPostProcessor 
+ * Post-processor for dataservice code generation
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Mar 29, 2006
@@ -45,7 +46,23 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 	public void postCodegen(ServiceExtensionDescriptionType desc, ServiceInformation info)
 		throws CodegenExtensionException {
 		modifyEclipseClasspath(desc, info);
-		modifyQueryMethod(info);
+		// see if the query method has already been implemented
+		ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
+		MessageElement implAddedElement = ExtensionTools.getExtensionDataElement(data, DataServiceConstants.QUERY_IMPLEMENTATION_ADDED);
+		if (implAddedElement == null || implAddedElement.getValue() == null 
+			|| implAddedElement.getValue().equals(String.valueOf(false))) {
+			logger.info("Adding query method implementation");
+			implementQueryMethod(info);
+			logger.info("Updating extension data");
+			Element implElement = new Element(DataServiceConstants.QUERY_IMPLEMENTATION_ADDED);
+			implElement.setText(String.valueOf(true));
+			try {
+				implAddedElement = AxisJdomUtils.fromElement(implElement);
+				ExtensionTools.updateExtensionDataElement(data, implAddedElement);
+			} catch (Exception ex) {
+				throw new CodegenExtensionException(ex.getMessage(), ex);
+			}			
+		}
 	}
 	
 	
@@ -55,6 +72,7 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 		// get the eclipse classpath document
 		File classpathFile = new File(serviceDir + File.separator + ".classpath");
 		if (classpathFile.exists()) {
+			logger.info("Modifying eclipse .classpath file");
 			Set libs = new HashSet();
 			ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
 			MessageElement qpLibsElement = ExtensionTools.getExtensionDataElement(data,
@@ -71,6 +89,10 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 			File[] libFiles = new File[libs.size()];
 			libs.toArray(libFiles);
 			try {
+				logger.info("Adding libraries to classpath file:");
+				for (int i = 0; i < libFiles.length; i++) {
+					logger.info("\t" + libFiles[i].getAbsolutePath());
+				}
 				ExtensionUtilities.syncEclipseClasspath(classpathFile, libFiles);
 			} catch (Exception ex) {
 				throw new CodegenExtensionException("Error modifying Eclipse .classpath file: " + ex.getMessage(), ex);
@@ -81,8 +103,9 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 	}
 
 
-	private void modifyQueryMethod(ServiceInformation info) throws CodegenExtensionException {
+	private void implementQueryMethod(ServiceInformation info) throws CodegenExtensionException {
 		// Find the service implementation file
+		logger.debug("Looking for service implementation file");
 		File serviceSrcDir = new File(info.getIntroduceServiceProperties().getProperty(
 			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
 			+ File.separator + "src");
@@ -99,6 +122,7 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 		File implFile = null;
 		if (implFiles.length != 0) {
 			implFile = implFiles[0];
+			logger.info("Modifying service implementation in " + implFile.getAbsolutePath());
 		} else {
 			// no impl file found
 			throw new CodegenExtensionException("No service implementation found: " + implFileName + " in "
@@ -153,10 +177,10 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 		// insert the new method body
 		StringBuffer body = new StringBuffer();
 		body.append("\n");
-		body.append("\t\t").append("gov.nih.nci.cagrid.data.cql.CQLQueryProcessor processor = null;").append("\n");
+		body.append("\t\t").append(CQLQueryProcessor.class.getName()).append(" processor = null;").append("\n");
 		body.append("\t\t").append("try {").append("\n");
 		body.append("\t\t\t").append("Class qpClass = Class.forName(getConfiguration().get").append(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY).append("());").append("\n");
-		body.append("\t\t\t").append("processor = qpClass.newInstance();").append("\n");
+		body.append("\t\t\t").append("processor = (").append(CQLQueryProcessor.class.getName()).append(") qpClass.newInstance();").append("\n");
 		body.append("\t\t\t").append("processor.initialize(configurationToMap());").append("\n");
 		body.append("\t\t").append("} catch (Exception ex) {").append("\n");
 		// body.append("\t\t\t").append("throw new
@@ -170,11 +194,9 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 		body.append("\t\t\t").append("return null;").append("\n");
 		body.append("\t\t").append("}").append("\n");
 		body.append("\t}\n\n\n");
-		// do we need to add the getMapperFunction() ?
+		// add the mapper function
 		String mapperFunc = getMapperFunction();
-		if (body.indexOf(mapperFunc) != -1) {
-			body.append(mapperFunc);
-		}
+		body.append(mapperFunc);
 		implClass.insert(startIndex, body);
 	}
 
@@ -201,7 +223,7 @@ public class DataServiceCodegenPostProcessor implements CodegenExtensionPostProc
 		func.append("\t\t\t").append("for (int i = 0; i < configClass.getMethods().length; i++) {").append("\n");
 		func.append("\t\t\t\t").append("if (configClass.getMethods()[i].getName().startsWith(\"get\")) {").append("\n");
 		func.append("\t\t\t\t\t").append(
-			"String value = (String) configClass.getMethods()[i].invoke(getConfiguration(), null);").append("\n");
+			"String value = (String) configClass.getMethods()[i].invoke(getConfiguration(), new Object[] {});").append("\n");
 		func.append("\t\t\t\t\t").append("map.put(configClass.getMethods()[i].getName().substring(3), value);").append(
 			"\n");
 		func.append("\t\t\t\t").append("}\n");

@@ -45,6 +45,7 @@ public class DataServiceConstants {
 	public static final String QUERY_METHOD_RETURN_TYPE = CQL_RESULT_SET_TYPE;
 	public static final String QUERY_METHOD_PARAMETER_TYPE = CQL_QUERY_TYPE;
 	public static final String QUERY_METHOD_PARAMETER_NAME = "cqlQuery";
+	public static final String QUERY_IMPLEMENTATION_ADDED = "queryImplAdded";
 	
 	// query processor constants
 	public static final String QUERY_PROCESSOR_CLASS_PROPERTY = "QueryProcessorClass";
