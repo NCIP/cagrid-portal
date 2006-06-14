@@ -44,7 +44,7 @@ public class CaDSRExtractUtils
 		throws Exception
 	{
 		CaDSRServiceI cadsr = new CaDSRServiceClient(url);
-		return findExtract(cadsr, url);
+		return findExtract(cadsr, projectName);
 	}
 	
 	public static void writeExtract(DomainModel extract, File file)
