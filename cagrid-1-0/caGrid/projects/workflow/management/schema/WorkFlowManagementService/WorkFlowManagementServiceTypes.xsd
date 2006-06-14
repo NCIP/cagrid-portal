@@ -9,6 +9,9 @@
      
     <xsd:import namespace="http://schemas.xmlsoap.org/ws/2003/03/business-process/" schemaLocation="./ws_2003_03_business-process_.xsd"/>
      
+    <xsd:element name="WorkFlowInputElement" type="tns:WorkFlowInputType"/>
+    <xsd:element name="WorkFlowOutputElement" type="tns:WorkFlowOutputType"/>
+
     <xsd:complexType name="WorkFlowInputType">
         <xsd:annotation>
         <xsd:documentation>
