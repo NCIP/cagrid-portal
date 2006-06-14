@@ -1,5 +1,9 @@
 To Do:
 
+IMPORTANT: introduce needs to handle globus schemas being in the GME
+  (they can't just be imported from the Globus browser, as anyone wanting to make
+   XSDs that import Globus schemas need them there so they can upload theres)   
+
 duce gui needs to rember last selection for deploy (GT or tomcat)
 
 on deployment i have seen unable to delete namespace2package.mappings.
