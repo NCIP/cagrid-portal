@@ -25,6 +25,7 @@ import com.atomicobject.haste.framework.Story;
 public abstract class AbstractServiceTest
 	extends Story
 {
+	protected String serviceName;
 	protected File testDir;
 	protected File introduceDir;
 	protected File tempDir;
@@ -37,6 +38,9 @@ public abstract class AbstractServiceTest
 
 	protected void init(String serviceName)
 	{
+		// service name
+		this.serviceName = serviceName;
+		
 		// test dir (home of the service test)
 		testDir = new File("test" + File.separator + "resources" + File.separator + "services" + File.separator + serviceName);
 		// introduce dir
