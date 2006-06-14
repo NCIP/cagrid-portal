@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionsType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 
 import java.io.File;
 import java.util.Properties;
@@ -120,6 +121,7 @@ public class SkeletonCreator extends Task {
 		SkeletonSchemaCreator sscc = new SkeletonSchemaCreator();
 		SkeletonEtcCreator sec = new SkeletonEtcCreator();
 		SkeletonDocsCreator sdc = new SkeletonDocsCreator();
+		SkeletonSecurityOperationProviderCreator ssopc = new SkeletonSecurityOperationProviderCreator();
 
 		// Generate the source
 		try {
@@ -128,6 +130,7 @@ public class SkeletonCreator extends Task {
 				for (int i = 0; i < info.getServices().getService().length; i++) {
 					ssc.createSkeleton(baseDirectory, info, info.getServices().getService(i));
 					sscc.createSkeleton(baseDirectory, info, info.getServices().getService(i));
+					ssopc.createSkeleton(new SpecificServiceInformation(info,info.getServices().getService(i)));
 				}
 			}
 			sec.createSkeleton(info);

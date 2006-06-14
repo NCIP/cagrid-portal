@@ -56,7 +56,7 @@ public class CommonTools {
 
 		return p;
 	}
-	
+
 	public static List getProvidedNamespaces(File startDir) {
 		List globusNamespaces = new ArrayList();
 		File schemasDir = new File(startDir.getAbsolutePath() + File.separator
@@ -65,56 +65,57 @@ public class CommonTools {
 		CommonTools.getTargetNamespaces(globusNamespaces, schemasDir);
 		return globusNamespaces;
 	}
-	
+
 	public static File findSchema(String schemaNamespace, File dir) {
 		File[] files = dir.listFiles();
 		for (int i = 0; i < files.length; i++) {
 			File curFile = files[i];
 			if (curFile.isDirectory()) {
-				File found = findSchema(schemaNamespace,curFile);
-				if(found!=null){
+				File found = findSchema(schemaNamespace, curFile);
+				if (found != null) {
 					return found;
 				}
 			} else {
-				if(curFile.getAbsolutePath().endsWith(".xsd") || curFile.getAbsolutePath().endsWith(".XSD")){
+				if (curFile.getAbsolutePath().endsWith(".xsd")
+						|| curFile.getAbsolutePath().endsWith(".XSD")) {
 					try {
-						if(getTargetNamespace(curFile).equals(schemaNamespace)){
+						if (getTargetNamespace(curFile).equals(schemaNamespace)) {
 							return curFile;
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-					
+
 				}
 			}
 		}
 		return null;
 	}
-	
+
 	public static void getTargetNamespaces(List namespaces, File dir) {
 		File[] files = dir.listFiles();
 		for (int i = 0; i < files.length; i++) {
 			File curFile = files[i];
 			if (curFile.isDirectory()) {
-				getTargetNamespaces(namespaces,curFile);
+				getTargetNamespaces(namespaces, curFile);
 			} else {
-				if(curFile.getAbsolutePath().endsWith(".xsd") || curFile.getAbsolutePath().endsWith(".XSD")){
+				if (curFile.getAbsolutePath().endsWith(".xsd")
+						|| curFile.getAbsolutePath().endsWith(".XSD")) {
 					try {
 						namespaces.add(getTargetNamespace(curFile));
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-					
+
 				}
 			}
 		}
 	}
-	
+
 	public static String getTargetNamespace(File file) throws Exception {
 		Document doc = XMLUtilities.fileNameToDocument(file.getAbsolutePath());
 		return doc.getRootElement().getAttributeValue("targetNamespace");
-		
-		
+
 	}
 
 	public static boolean isValidPackageName(String packageName) {
@@ -269,7 +270,7 @@ public class CommonTools {
 					+ System.getProperty("java.class.path") + " -buildfile "
 					+ buildFileDir + File.separator + "build.xml" + cmd;
 			cmd = "java " + cmd;
-		} 
+		}
 		return cmd;
 	}
 
@@ -588,6 +589,57 @@ public class CommonTools {
 			}
 		}
 		return null;
+	}
+
+	public static void addMethod(ServiceType service, MethodType method) {
+		MethodType[] methodsArray = null;
+		int length = 0;
+		if (service.getMethods() != null
+				&& service.getMethods().getMethod() != null) {
+			length = service.getMethods().getMethod().length + 1;
+		} else {
+			length = 1;
+		}
+		methodsArray = new MethodType[length];
+		if (length > 1) {
+			System.arraycopy(service.getMethods().getMethod(), 0, methodsArray,
+					0, length - 1);
+		}
+		methodsArray[length - 1] = method;
+		MethodsType methods = null;
+		if (service.getMethods() == null) {
+			methods = new MethodsType();
+			service.setMethods(methods);
+		} else {
+			methods = service.getMethods();
+		}
+		methods.setMethod(methodsArray);
+	}
+
+	public static void addNamespace(ServiceDescription serviceD,
+			NamespaceType nsType) {
+		NamespaceType[] namespacesArray = null;
+		int length = 0;
+		if (serviceD.getNamespaces() != null
+				&& serviceD.getNamespaces().getNamespace() != null) {
+			length = serviceD.getNamespaces().getNamespace().length + 1;
+		} else {
+			length = 1;
+		}
+		namespacesArray = new NamespaceType[length];
+		if (length > 1) {
+			System.arraycopy(serviceD.getNamespaces().getNamespace(), 0,
+					namespacesArray, 0, length - 1);
+		}
+		namespacesArray[length - 1] = nsType;
+		NamespacesType namespaces = null;
+		if (serviceD.getNamespaces() == null) {
+			namespaces = new NamespacesType();
+			serviceD.setNamespaces(namespaces);
+		} else {
+			namespaces = serviceD.getNamespaces();
+		}
+		namespaces.setNamespace(namespacesArray);
 	}
 
 	/**
