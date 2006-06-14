@@ -128,6 +128,7 @@ super.getTreeCellRendererComponent(
             hasFocus);
 
 	setIcon(null);
+	setFont(new Font("verdana", Font.BOLD, 11));
 	
 	return this;
     }
@@ -144,9 +145,18 @@ class DomainModelTreeSelectionListener implements TreeSelectionListener
 		{
 			DomainModelTreeNode node = (DomainModelTreeNode) tree.getLastSelectedPathComponent();
 			
-			tree.parent.parent.showPage(node, node.name);
+			if(node != null)
+			{
+				if(node.type == DomainModelTreeNode.CLASS)
+				{
+					tree.parent.parent.showPage(node, node.pkgName);
+				}
+				else
+				{
+					tree.parent.parent.showPage(node, node.name);
+				}
+			}
 		}
-		
 	}
 }
 

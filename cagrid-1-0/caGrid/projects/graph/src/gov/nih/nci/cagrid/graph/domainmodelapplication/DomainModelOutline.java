@@ -81,6 +81,7 @@ public class DomainModelOutline extends JPanel
 					cname = trimClassName(cname);
 					
 					cls.name = cname;
+					cls.pkgName = pkg.name;
 					cls.type = DomainModelTreeNode.CLASS;
 					cls.setUserObject(cname);
 					
@@ -113,6 +114,8 @@ public class DomainModelOutline extends JPanel
 			root.type = DomainModelTreeNode.DOMAIN;
 			root.setUserObject(root.name);
 			
+			boolean atLeastOnePackage = false;
+			
 			for(int k = 0; k < packages.size(); k ++)
 			{
 				DomainModelTreeNode pkg = new DomainModelTreeNode(model);
@@ -122,7 +125,7 @@ public class DomainModelOutline extends JPanel
 				pkg.type = DomainModelTreeNode.PACKAGE;
 				pkg.setUserObject(pkg.name);
 				
-				boolean atLeastOne = false;
+				boolean atLeastOneClass = false;
 				
 				for(int j = 0; j < e.list.size(); j++)
 				{
@@ -132,6 +135,7 @@ public class DomainModelOutline extends JPanel
 					String tcname = trimClassName(cname);
 					
 					cls.name = tcname;
+					cls.pkgName = pkg.name;
 					cls.type = DomainModelTreeNode.CLASS;
 					cls.setUserObject(tcname);
 					
@@ -141,21 +145,28 @@ public class DomainModelOutline extends JPanel
 						if(cname.trim().toUpperCase().contains(filter.trim().toUpperCase()))
 						{
 							pkg.add(cls);
-							atLeastOne = true;
+							atLeastOneClass = true;
 						}
 					}
 					else
 					{
-						atLeastOne = true;
+						atLeastOneClass = true;
 						pkg.add(cls);
 					}
 				
 				}
 				
-				if(atLeastOne)
+				
+				if(atLeastOneClass)
 				{
 					root.add(pkg);
+					atLeastOnePackage = true;
 				}
+			}
+			
+			if(!atLeastOnePackage)
+			{
+				tree.setNullRenderer();
 			}
 			
 			DefaultTreeModel tmodel = (DefaultTreeModel) this.tree.getModel();
@@ -166,6 +177,11 @@ public class DomainModelOutline extends JPanel
 		{
 			setNullTree();
 		}
+	}
+	
+	public void clear()
+	{
+		setNullTree();
 	}
 	
 	private void setNullTree()
@@ -180,16 +196,17 @@ public class DomainModelOutline extends JPanel
 	
 	public void setOrdering(int ordering, DomainModel model, Vector packages)
 	{
+	
 		this.currentOrder = ordering;
 		
 		if(model != null)
 		{
-			Vector sortedPackages = insertionSortOnHead(packages);
+			Vector sortedPackages = insertionSortOnHead(ordering, packages);
 			
 			for(int k = 0; k < sortedPackages.size(); k ++)
 			{
 				MultiMapElement e = (MultiMapElement) sortedPackages.get(k);
-				e.list = insertionSort(e.list);
+				e.list = insertionSort(ordering, e.list);
 			}
 	
 			setDomainModel(model, sortedPackages);
@@ -213,7 +230,7 @@ public class DomainModelOutline extends JPanel
 		}
 		else if(currentOrder == DESCENDING)
 		{
-			this.setOrdering(NONE, model, packages);
+			this.setOrdering(ASCENDING, model, packages);
 		}
 	}
 	
@@ -224,26 +241,40 @@ public class DomainModelOutline extends JPanel
 		this.validate();
 	}
 	
-	public static Vector insertionSort(Vector v)
+	public static Vector insertionSort(int ordering, Vector v)
 	{
+		
 		int count2;
 		
 		for(int count1 = 1; count1 < v.size(); count1++)
 		{
 			String tmp = (String) v.elementAt(count1);
-
-			for(count2 = count1; count2 > 0 && ( ((String)v.elementAt(count2 - 1)).compareTo(tmp) > 0); count2-- )
-		    {	
-	               v.setElementAt(v.elementAt(count2 - 1), count2); 
-
+			
+			if(ordering == DomainModelOutline.ASCENDING)
+			{
+				for(count2 = count1; count2 > 0 && ( ((String)v.elementAt(count2 - 1)).compareTo(tmp) > 0); count2-- )
+			    {	
+		               v.setElementAt(v.elementAt(count2 - 1), count2); 
+	
+				}
+				v.setElementAt(tmp, count2);
 			}
-			v.setElementAt(tmp, count2); 
+			else if(ordering == DomainModelOutline.DESCENDING)
+			{
+				for(count2 = count1; count2 > 0 && ( ((String)v.elementAt(count2 - 1)).compareTo(tmp) <= 0); count2-- )
+			    {	
+		               v.setElementAt(v.elementAt(count2 - 1), count2); 
+	
+				}
+				v.setElementAt(tmp, count2);
+			}
+			 
 
 		}
 		return v;
 	}
 	
-	public static Vector insertionSortOnHead(Vector v)
+	public static Vector insertionSortOnHead(int ordering, Vector v)
 	{
 		int count2;
 		
@@ -251,11 +282,23 @@ public class DomainModelOutline extends JPanel
 		{
 			MultiMapElement tmp = (MultiMapElement) v.elementAt(count1);
 			
-			for(count2 = count1; count2 > 0 && ( ((MultiMapElement)v.elementAt(count2 - 1)).compareTo(tmp) > 0); count2-- )
-		    {	
-	               v.setElementAt(v.elementAt(count2 - 1), count2); 
+			if(ordering == DomainModelOutline.ASCENDING)
+			{
+				for(count2 = count1; count2 > 0 && ( ((MultiMapElement)v.elementAt(count2 - 1)).compareTo(tmp) > 0); count2-- )
+			    {	
+		               v.setElementAt(v.elementAt(count2 - 1), count2); 
+				}
+				v.setElementAt(tmp, count2); 
 			}
-			v.setElementAt(tmp, count2); 
+			else if(ordering == DomainModelOutline.DESCENDING)
+			{
+				for(count2 = count1; count2 > 0 && ( ((MultiMapElement)v.elementAt(count2 - 1)).compareTo(tmp) <= 0); count2-- )
+			    {	
+		               v.setElementAt(v.elementAt(count2 - 1), count2); 
+				}
+				v.setElementAt(tmp, count2); 
+			}
+
 
 		}
 		return v;

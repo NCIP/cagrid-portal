@@ -73,13 +73,27 @@ public class MDIClippedTabsPane extends JLayeredPane
 	
 	public void scrollToShowTab(int i)
 	{
+		
 		if(i < this.tabsPane.tabs.size() && i >= 0)
 		{
-			// if tab is not present in the current view, scroll
-			// the view to show tab
+			MDITab t = (MDITab) this.tabsPane.tabs.get(i);
+			int x = t.getX();
 			
-			// if tab is present in current view
-			// then do nothing
+			
+			if((x-current) >= 10 && (x-current)< this.getMWidth() && (x + t.getPreferredWidth() - current) < this.getMWidth()  )
+			{
+				
+			}
+			else if((x-current) < 0)
+			{
+				this.scrollToPosition(x-20);
+			}
+			else if((x + t.getPreferredWidth() - current) >= this.getMWidth())
+			{
+				// TODO: review this
+				
+				this.scrollToPosition(x + 30);
+			}
 		}
 	}
 	

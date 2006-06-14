@@ -71,6 +71,7 @@ public class DomainModelOutlineToolBar extends JPanel
 		
 		this.expandCollapseButton.addMouseListener(new ExpandCollapseButtonMouseListener(parent));
 		this.searchButton.addMouseListener(new SearchButtonMouseListener(parent));
+		this.sortButton.addMouseListener(new SortButtonMouseListener(parent));
 		
 		expandCollapseButton.setToolTipText("Expand/Collapse Tree");
 		sortButton.setToolTipText("Sort Tree");

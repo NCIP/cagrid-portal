@@ -88,6 +88,11 @@ public class UMLDiagram extends JLayeredPane {
 
 	}
 
+	
+	public void unHighlightAll()
+	{
+		this.viewer.unHighlightAll();
+	}
 
 	public boolean addAssociation(UMLClass gc1, UMLClass gc2, String label1, String label2, String multiplicity1,
 		String multiplicity2) {
@@ -119,7 +124,18 @@ public class UMLDiagram extends JLayeredPane {
 	
 	public void scrollToShowClass(String name)
 	{
-		//
+		for(int k = 0; k < this.classes.size(); k++)
+		{
+			UMLClass c = (UMLClass) classes.get(k);
+			
+			if(c.name.equals(name))
+			{
+				this.viewer.getScrollPane().getViewport().setViewPosition(c.getLocation());
+				this.highlightClass(c);
+				return;
+			}
+		}
+		
 	}
 
 

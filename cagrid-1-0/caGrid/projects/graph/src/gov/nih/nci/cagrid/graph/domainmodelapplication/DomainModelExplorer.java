@@ -72,26 +72,31 @@ public class DomainModelExplorer extends JLayeredPane
 	{
 		if(this.umlMDI.pageIDs.contains(pageId))
 		{
+			UMLDiagram diagram = (UMLDiagram) this.umlMDI.getPageById(node.pkgName);
+		
 			if(node.type == DomainModelTreeNode.CLASS)
-			{
-				UMLDiagram diagram = (UMLDiagram) this.umlMDI.getPageById(node.name);
-				
+			{		
 				if(diagram != null)
 				{
 					diagram.scrollToShowClass(node.name);
 				}
 			}
+			else
+			{
+				if(diagram != null) diagram.unHighlightAll();	
+			}
 			
 			this.umlMDI.setActivePageByID(pageId);
+			
 		}
 		else
 		{
 			if(node.type == DomainModelTreeNode.CLASS)
 			{
-				//UMLDiagram d = new UMLDiagram();
-				//initializeUMLDiagram(d, model, node.name);
-				//d.scrollToShowClass(node.name);
-				//this.umlMDI.addPage(d, null, node.name, node.name);
+				UMLDiagram d = new UMLDiagram();
+				initializeUMLDiagram(d, model, node.pkgName);
+				d.scrollToShowClass(node.name);
+				this.umlMDI.addPage(d, null, node.pkgName, node.pkgName);
 				
 			
 			}
@@ -100,6 +105,7 @@ public class DomainModelExplorer extends JLayeredPane
 				UMLDiagram d = new UMLDiagram();
 				initializeUMLDiagram(d, model, node.name);
 				this.umlMDI.addPage(d, null, node.name, node.name);
+				
 				
 			}
 			else if(node.type == DomainModelTreeNode.DOMAIN)
@@ -111,11 +117,9 @@ public class DomainModelExplorer extends JLayeredPane
 		}
 	}
 	
-	
 	public void initializeUMLDiagram(UMLDiagram d, DomainModel m, String name)
 	{
 		d.clear();
-		
 		// add classes 
 		for(int k = 0 ; k < this.model.getExposedUMLClassCollection().getUMLClass().length; k++)
 		{
@@ -127,6 +131,17 @@ public class DomainModelExplorer extends JLayeredPane
 				{
 					gov.nih.nci.cagrid.graph.uml.UMLClass C = new gov.nih.nci.cagrid.graph.uml.UMLClass(DomainModelOutline.trimClassName(c.getClassName()));
 					
+					if(c.getUmlAttributeCollection() != null)
+					{
+						if(c.getUmlAttributeCollection().getClass() != null)
+						{
+							for(int j = 0; j < c.getUmlAttributeCollection().getUMLAttribute().length; j++)
+							{
+								C.addAttribute(c.getUmlAttributeCollection().getUMLAttribute()[j].getName(), " ");
+							}	
+						}
+					}
+
 					d.addClass(C);
 				}
 			}
@@ -141,6 +156,7 @@ public class DomainModelExplorer extends JLayeredPane
 	public void setDomainModel(DomainModel model)
 	{
 		clear();
+		
 		this.domainModelOutline.setDomainModel(model, packages);
 		
 		if(model != null)
@@ -153,7 +169,6 @@ public class DomainModelExplorer extends JLayeredPane
 		
 		this.domainModelOutline.tree.expandAll();
 	}
-	
 	
 	
 	public void initModel(DomainModel model)
@@ -220,7 +235,6 @@ public class DomainModelExplorer extends JLayeredPane
 //			}
 //		}
 		
-		
 	}
 	
 	
@@ -238,8 +252,9 @@ public class DomainModelExplorer extends JLayeredPane
 		}
 		
 		
-		this.outlineMDI.clear();
+	
 		this.umlMDI.clear();
+		this.domainModelOutline.clear();
 		
 		
 		
@@ -358,6 +373,5 @@ class DomainModelSplitterMouseMotionListener extends MouseMotionAdapter
 		
 		parent.requestSplitterMove(e.getX());
 		
-	
 	}
 }

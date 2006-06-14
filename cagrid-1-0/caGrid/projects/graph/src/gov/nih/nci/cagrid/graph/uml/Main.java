@@ -10,8 +10,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 public class Main {
 
-	public static void main(String args[]) {
-
+	public static void main(String args[]) 
+	{
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch (UnsupportedLookAndFeelException ex) {
@@ -21,14 +21,9 @@ public class Main {
 		}
 		
 		
-	
-		
-
 		DomainModelExplorer e = new DomainModelExplorer();
 		
 
-		
-		
 		
 		JFrame f = new JFrame();
 		f.getContentPane().add(e);
@@ -36,6 +31,9 @@ public class Main {
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
 		
+	
+		
+
 		
 	}
 }

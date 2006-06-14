@@ -53,8 +53,8 @@ public class MDITabsPane extends JLayeredPane
 			this.resizeTabs();
 			this.repaint();
 			deactivateAllTabs();
-			//setActiveTab(0);
 			
+			setActiveTab(0);
 			
 		}
 	}
@@ -65,9 +65,10 @@ public class MDITabsPane extends JLayeredPane
 		{
 			MDITab t = (MDITab)this.tabs.get(k);
 			t.active = false;
+			t.deactivate();
 			t.repaint();
 		}
-		
+		resizeTabs();
 		this.currentActiveTab = -1;
 		
 	}

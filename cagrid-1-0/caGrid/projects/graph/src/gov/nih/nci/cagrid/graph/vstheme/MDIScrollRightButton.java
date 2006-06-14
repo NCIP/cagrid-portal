@@ -47,7 +47,7 @@ class MDIScrollRightButtonMouseListener extends MouseAdapter
 		
 		if(s.enabled)
 		{
-			s.parent.tabs.scrollHorizontally(45);
+			s.parent.tabs.scrollHorizontally(75);
 		}
 		
 		

@@ -56,21 +56,34 @@ public class MDIPanel extends JComponent
 	
 	public void removePage(int i)
 	{
+		
 		if(i < this.pages.size() && i >= 0)
 		{	
-					
 			this.pages.remove(i);
 			this.pageIcons.remove(i);
 			this.pageTitles.remove(i);
 			this.pageIDs.remove(i);
 			
+		
 			this.tabs.tabsPane.removeTab(i);
 			this.tabs.repositionAndResize();
 			this.container.removeComponent(i);
 			
-			this.setActivePage(0);
+			this.validate();
+			
+			this.setActivePage(i-1);
 		}
 	}
+	
+	public void clear()
+	{
+	
+		while(this.pages.size() > 0)
+		{
+			this.removePage(0);
+		}
+	}
+	
 	
 	public void removeCurrentPage()
 	{

@@ -10,6 +10,7 @@ public class DomainModelTreeNode extends DefaultMutableTreeNode
 	
 	public int type = 0;
 	public String name;
+	public String pkgName;
 	
 	public static int DOMAIN = 1;
 	public static int PACKAGE = 2;

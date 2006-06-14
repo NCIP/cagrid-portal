@@ -81,6 +81,24 @@ public class UMLViewer extends JGraph {
 
 	}
 
+	public void unHighlightAll()
+	{
+		for (int k = 0; k < diagram.classes.size(); k++) {
+			UMLClass c = (UMLClass) diagram.classes.get(k);
+			diagram.diagram.getLayer().bringToFront(c);
+			c.setNormal();
+		}
+
+		for (int m = 0; m < diagram.assocs.size(); m++) {
+			UMLClassAssociation edge = (UMLClassAssociation) diagram.assocs.get(m);
+			edge.setNormal();
+		}		
+		
+		diagram.viewer.repaint();
+		repaint();
+
+	}
+	
 
 	public void updateDrawingSizeToIncludeAllFigs() {
 		Iterator iter = this.diagram.diagram.getLayer().getContents().iterator();
@@ -167,6 +185,8 @@ class UMLViewerMouseListener extends MouseAdapter {
 	}
 
 
+
+	
 	public void mousePressed(MouseEvent e) {
 		if(!parent.diagram.inactiveState)
 		{
