@@ -6,16 +6,6 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
-import gov.nih.nci.cagrid.introduce.beans.security.AnonymousCommunication;
-import gov.nih.nci.cagrid.introduce.beans.security.ClientAuthorization;
-import gov.nih.nci.cagrid.introduce.beans.security.ClientCommunication;
-import gov.nih.nci.cagrid.introduce.beans.security.CommunicationMethod;
-import gov.nih.nci.cagrid.introduce.beans.security.DelegationMode;
-import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurity;
-import gov.nih.nci.cagrid.introduce.beans.security.SecureConversation;
-import gov.nih.nci.cagrid.introduce.beans.security.SecureMessage;
-import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
-import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
@@ -157,8 +147,7 @@ public class SyncSource {
 		return exceptions;
 	}
 
-	public String createClientUnBoxedSignatureStringFromMethod(
-			MethodType method) {
+	public String createClientUnBoxedSignatureStringFromMethod(MethodType method) {
 		String methodString = "";
 		MethodTypeOutput returnTypeEl = method.getOutput();
 		String methodName = method.getName();
@@ -316,8 +305,8 @@ public class SyncSource {
 		return methodString;
 	}
 
-	public String createClientUnBoxedSignatureStringFromMethod(
-			JavaMethod method) throws Exception {
+	public String createClientUnBoxedSignatureStringFromMethod(JavaMethod method)
+			throws Exception {
 		String methodString = "";
 		String methodName = method.getName();
 		String returnType = "";
@@ -534,155 +523,6 @@ public class SyncSource {
 		}
 	}
 
-	public String configureClientSecurity(ServiceSecurity ss, MethodSecurity ms) {
-		if ((ss == null) && (ms == null)) {
-			return "";
-		}
-		ClientAuthorization auth = null;
-		AnonymousCommunication anon = null;
-		ClientCommunication comm = null;
-		DelegationMode delegation = null;
-		TransportLevelSecurity tls = null;
-		SecureConversation sc = null;
-		SecureMessage sm = null;
-		if (ms == null) {
-			auth = ss.getClientAuthorization();
-			anon = ss.getAnonymousClients();
-			delegation = ss.getDelegationMode();
-			comm = ss.getClientCommunication();
-			tls = ss.getTransportLevelSecurity();
-			sc = ss.getSecureConversation();
-			sm = ss.getSecureMessage();
-		} else {
-			auth = ms.getClientAuthorization();
-			anon = ms.getAnonymousClients();
-			delegation = ms.getDelegationMode();
-			comm = ms.getClientCommunication();
-			tls = ms.getTransportLevelSecurity();
-			sc = ms.getSecureConversation();
-			sm = ms.getSecureMessage();
-		}
-
-		StringBuffer sec = new StringBuffer();
-		if ((comm == null) || (comm.equals(ClientCommunication.No_Security))) {
-			// do nothing
-		} else if (comm.equals(ClientCommunication.Transport_Layer_Security)) {
-
-			if (tls.getCommunicationMethod().equals(
-					CommunicationMethod.Integrity)) {
-				sec
-						.append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT, org.globus.wsrf.security.Constants.SIGNATURE);\n");
-			} else {
-				sec
-						.append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT, org.globus.wsrf.security.Constants.ENCRYPTION);\n");
-			}
-			sec.append(configureAnonymousCommunication(anon));
-			sec.append(configureClientAuthorization(auth));
-			sec.append(configureClientDelegation(delegation));
-		} else if (comm.equals(ClientCommunication.Secure_Conversation)) {
-			if (sc.getCommunicationMethod().equals(
-					CommunicationMethod.Integrity)) {
-				sec
-						.append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_CONV, org.globus.wsrf.security.Constants.SIGNATURE);\n");
-			} else {
-				sec
-						.append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_CONV, org.globus.wsrf.security.Constants.ENCRYPTION);\n");
-			}
-			sec.append(configureAnonymousCommunication(anon));
-			sec.append(configureClientAuthorization(auth));
-			sec.append(configureClientDelegation(delegation));
-
-		} else if (comm.equals(ClientCommunication.Secure_Message)) {
-			if (sm.getCommunicationMethod().equals(
-					CommunicationMethod.Integrity)) {
-				sec
-						.append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_MSG, org.globus.wsrf.security.Constants.SIGNATURE);\n");
-			} else {
-				sec
-						.append("stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_MSG, org.globus.wsrf.security.Constants.ENCRYPTION);\n");
-			}
-			sec.append(configureAnonymousCommunication(anon));
-			sec.append(configureClientAuthorization(auth));
-			sec.append(configureClientDelegation(delegation));
-
-		}
-
-		return sec.toString();
-	}
-
-	public String configureAnonymousCommunication(AnonymousCommunication anon) {
-		StringBuffer sec = new StringBuffer();
-		if (anon.equals(AnonymousCommunication.Yes)) {
-			sec
-					.append("	stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS,Boolean.TRUE);\n");
-		} else {
-			sec.append(configureProxyIfSupplied());
-		}
-
-		return sec.toString();
-	}
-
-	public String configureProxyIfSupplied() {
-		StringBuffer sec = new StringBuffer();
-		sec.append("	if (proxy != null) {\n");
-		sec.append("try{\n");
-		sec
-				.append("		org.ietf.jgss.GSSCredential gss = new org.globus.gsi.gssapi.GlobusGSSCredentialImpl(proxy,org.ietf.jgss.GSSCredential.INITIATE_AND_ACCEPT);\n");
-		sec
-				.append("		stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_CREDENTIALS, gss);\n");
-		sec.append("}catch(org.ietf.jgss.GSSException ex){\n");
-		sec.append("throw new RemoteException(ex.getMessage());\n");
-		sec.append("}\n");
-		sec.append("}\n");
-		return sec.toString();
-	}
-
-	public String configureClientDelegation(DelegationMode del) {
-		StringBuffer sec = new StringBuffer();
-		if (del != null) {
-			if (del.equals(DelegationMode.Limited)) {
-				sec
-						.append("stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_MODE, org.globus.axis.gsi.GSIConstants.GSI_MODE_LIMITED_DELEG);\n");
-			} else if (del.equals(DelegationMode.Full)) {
-				sec
-						.append("stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_MODE, org.globus.axis.gsi.GSIConstants.GSI_MODE_FULL_DELEG);\n");
-			}
-		}
-		return sec.toString();
-	}
-
-	public String configureClientAuthorization(ClientAuthorization auth) {
-		StringBuffer sec = new StringBuffer();
-		if (auth != null) {
-			if (auth.getNoAuthorization() != null) {
-				sec
-						.append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());\n");
-			} else if (auth.getHostAuthorization() != null) {
-				sec
-						.append("org.globus.wsrf.impl.security.authorization.HostAuthorization host = new org.globus.wsrf.impl.security.authorization.HostAuthorization(\""
-								+ auth.getHostAuthorization().getHostname()
-								+ "\");\n");
-				sec
-						.append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, host);\n");
-			} else if (auth.getIdentityAuthorization() != null) {
-				sec
-						.append("org.globus.wsrf.impl.security.authorization.IdentityAuthorization iden = new org.globus.wsrf.impl.security.authorization.IdentityAuthorization(\""
-								+ auth.getIdentityAuthorization().getIdentity()
-								+ "\");\n");
-				sec
-						.append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, iden);\n");
-			} else if (auth.getSelfAuthorization() != null) {
-				sec
-						.append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.SelfAuthorization.getInstance());\n");
-			}
-
-		} else {
-			sec
-					.append("stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());\n");
-		}
-		return sec.toString();
-	}
-
 	public void addClientImpl(MethodType method) {
 		String packageName = service.getPackageName() + ".stubs";
 		if (method.isIsImported()) {
@@ -704,19 +544,14 @@ public class SyncSource {
 		String clientMethod = "\n\t"
 				+ createClientUnBoxedSignatureStringFromMethod(method) + " "
 				+ createClientExceptions(method);
-		clientMethod += "{\n" + lineStart;
-		clientMethod += service.getName()
-				+ "PortType port = this.getPortType();\n";
+		clientMethod += "{\n";
+		if (!method.getName().equals("getServiceSecurityMetadata")) {
+			clientMethod += lineStart + "ServiceSecurityClient.configurePortType(this.securityMetadata,(org.apache.axis.client.Stub)this.portType,\""
+					+ method.getName() + "\");\n";
+		}
 
-		clientMethod += lineStart;
-		clientMethod += "org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;\n";
-
-		// TODO: ADD CLIENT SECURITY
-		clientMethod += "\n"
-				+ configureClientSecurity(service.getServiceSecurity(), method
-						.getMethodSecurity());
 		// put in the call to the client
-		String var = "port";
+		String var = "portType";
 
 		String methodString = lineStart;
 		MethodTypeOutput returnTypeEl = method.getOutput();
@@ -785,14 +620,22 @@ public class SyncSource {
 					// create the client handle and put the EPR in it
 					// then return the client handle...
 					if (returnTypeEl.isIsArray()) {
-						methodString += returnTypeEl.getClientHandleClass() + "[] clientArray = null;\n";
-						methodString += lineStart + "if(boxedResult.getEndpointReference()!=null){\n";
-						methodString += lineStart + "  clientArray = new " + returnTypeEl.getClientHandleClass() + "[boxedResult.getEndpointReference().length];\n";
-						methodString += lineStart + "  for(int i = 0; i < boxedResult.getEndpointReference().length; i++){\n";
-						methodString += lineStart +	"	   clientArray[i] = new " + returnTypeEl.getClientHandleClass() + "(boxedResult.getEndpointReference(i));\n";
-						methodString += lineStart +	"  }\n";
+						methodString += returnTypeEl.getClientHandleClass()
+								+ "[] clientArray = null;\n";
+						methodString += lineStart
+								+ "if(boxedResult.getEndpointReference()!=null){\n";
+						methodString += lineStart
+								+ "  clientArray = new "
+								+ returnTypeEl.getClientHandleClass()
+								+ "[boxedResult.getEndpointReference().length];\n";
+						methodString += lineStart
+								+ "  for(int i = 0; i < boxedResult.getEndpointReference().length; i++){\n";
+						methodString += lineStart + "	   clientArray[i] = new "
+								+ returnTypeEl.getClientHandleClass()
+								+ "(boxedResult.getEndpointReference(i));\n";
+						methodString += lineStart + "  }\n";
 						methodString += lineStart + "}\n";
-						methodString += lineStart +  "return clientArray;\n";
+						methodString += lineStart + "return clientArray;\n";
 					} else {
 						methodString += "EndpointReferenceType ref = boxedResult.get";
 						methodString += TemplateUtils

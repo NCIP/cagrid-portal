@@ -27,6 +27,8 @@ import org.apache.axis.types.URI.MalformedURIException;
 import org.apache.axis.utils.ClassUtils;
 
 import org.globus.gsi.GlobusCredential;
+import gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata;
+import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
 
 import <%=info.getService().getPackageName()%>.stubs.<%=serviceName%>PortType;
 import <%=info.getService().getPackageName()%>.stubs.service.<%=modifiedServiceName%>ServiceAddressingLocator;
@@ -41,35 +43,44 @@ import <%=info.getService().getPackageName()%>.common.<%=serviceName%>I;
 public class <%=info.getService().getName()%>Client implements <%=serviceName%>I {	
 	private GlobusCredential proxy;
 	private EndpointReferenceType epr;
+	private <%=info.getService().getName()%>PortType portType;
+	private ServiceSecurityMetadata securityMetadata;
 	
 	static{
 		org.globus.axis.util.Util.registerTransport();
 	}
 	
-	public <%=info.getService().getName()%>Client(String url) throws MalformedURIException {
+	public <%=info.getService().getName()%>Client(String url) throws MalformedURIException, RemoteException {
 		this(url,null);	
 	}
 
-	public <%=info.getService().getName()%>Client(String url, GlobusCredential proxy) throws MalformedURIException {
+	public <%=info.getService().getName()%>Client(String url, GlobusCredential proxy) throws MalformedURIException, RemoteException {
 	   	this.proxy = proxy;
 	   	this.epr = new EndpointReferenceType();
 	   	this.epr.setAddress(new Address(url));
+	   	initialize();
 	}
 	
-	public <%=info.getService().getName()%>Client(EndpointReferenceType epr) throws MalformedURIException {
+	public <%=info.getService().getName()%>Client(EndpointReferenceType epr) throws MalformedURIException, RemoteException {
 	   	this(epr,null);
 	}
 	
-	public <%=info.getService().getName()%>Client(EndpointReferenceType epr, GlobusCredential proxy) throws MalformedURIException {
+	public <%=info.getService().getName()%>Client(EndpointReferenceType epr, GlobusCredential proxy) throws MalformedURIException, RemoteException {
 	   	this.proxy = proxy;
 	   	this.epr = epr;
+		initialize();
+	}
+	
+	private void initialize() throws RemoteException {
+		this.portType = createPortType();
+	   	this.securityMetadata = getServiceSecurityMetadata();
 	}
 	
 	public EndpointReferenceType getEndpointReference(){
 		return this.epr;
 	}
 
-	private <%=info.getService().getName()%>PortType getPortType() throws RemoteException {
+	private <%=info.getService().getName()%>PortType createPortType() throws RemoteException {
 
 		<%=modifiedServiceName%>ServiceAddressingLocator locator = new <%=modifiedServiceName%>ServiceAddressingLocator();
 		// attempt to load our context sensitive wsdd file
@@ -84,7 +95,7 @@ public class <%=info.getService().getName()%>Client implements <%=serviceName%>I
 		try {
 			port = locator.get<%=info.getService().getName()%>PortTypePort(this.epr);
 		} catch (Exception e) {
-			throw new RemoteException("Unable to configured porttype:" + e.getMessage(), e);
+			throw new RemoteException("Unable to locate portType:" + e.getMessage(), e);
 		}
 
 		return port;
