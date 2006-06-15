@@ -33,38 +33,38 @@ public class SecurityDescriptorGenerator {
 		try {
 			StringBuffer xml = new StringBuffer();
 			xml.append("<securityConfig xmlns=\"http://www.globus.org\">");
-			
+
 			xml.append("<method name=\"queryResourceProperties\">\n");
 			xml.append("    <auth-method>\n");
 			xml.append("      <none/>\n");
-		    xml.append("    </auth-method>\n");
-		    xml.append("</method>\n");
-		    
-		    xml.append("<method name=\"getMultipleResourceProperties\">\n");
+			xml.append("    </auth-method>\n");
+			xml.append("</method>\n");
+
+			xml.append("<method name=\"getMultipleResourceProperties\">\n");
 			xml.append("    <auth-method>\n");
 			xml.append("      <none/>\n");
-		    xml.append("    </auth-method>\n");
-		    xml.append("</method>\n");
-		    
-		    xml.append("<method name=\"getResourceProperty\">\n");
+			xml.append("    </auth-method>\n");
+			xml.append("</method>\n");
+
+			xml.append("<method name=\"getResourceProperty\">\n");
 			xml.append("    <auth-method>\n");
 			xml.append("      <none/>\n");
-		    xml.append("    </auth-method>\n");
-		    xml.append("</method>\n");
-			 
+			xml.append("    </auth-method>\n");
+			xml.append("</method>\n");
+
 			xml.append(writeServiceSettings(info.getService().getServiceSecurity()));
-			
-				ServiceType service = info.getService();
-				MethodsType methods = service.getMethods();
-				if (methods != null) {
-					MethodType[] method = methods.getMethod();
-					if (method != null) {
-						for (int i = 0; i < method.length; i++) {
-							xml.append(writeMethodSettings(info.getService().getServiceSecurity(), method[i]));
-						}
+
+			ServiceType service = info.getService();
+			MethodsType methods = service.getMethods();
+			if (methods != null) {
+				MethodType[] method = methods.getMethod();
+				if (method != null) {
+					for (int i = 0; i < method.length; i++) {
+						xml.append(writeMethodSettings(info.getService().getServiceSecurity(), method[i]));
 					}
 				}
-			
+			}
+
 			xml.append("</securityConfig>");
 			try {
 				return XMLUtilities.formatXML(xml.toString());
@@ -128,7 +128,11 @@ public class SecurityDescriptorGenerator {
 
 			return xml.toString();
 		} else {
-			return "";
+			xml.append("<auth-method>");
+			xml.append("<none/>");
+			xml.append("</auth-method>");
+			xml.append("<authz value=\"none\"/>");
+			return xml.toString();
 		}
 	}
 
