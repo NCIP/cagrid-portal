@@ -10,6 +10,7 @@ import gov.nci.nih.cagrid.tests.core.steps.CreateTempGlobusStep;
 import gov.nci.nih.cagrid.tests.core.steps.DeployGlobusServiceStep;
 import gov.nci.nih.cagrid.tests.core.steps.StartGlobusStep;
 import gov.nci.nih.cagrid.tests.core.steps.StopGlobusStep;
+import gov.nci.nih.cagrid.tests.core.util.CaDSRExtractUtils;
 
 import java.io.File;
 import java.util.Vector;
@@ -43,6 +44,8 @@ public class CaDSRServiceTest
 	protected void storyTearDown() 
 		throws Throwable
 	{
+		CaDSRExtractUtils.setAxisConfig(null);
+		
 		if (globus != null) {
 			globus.stopGlobus(port);
 			globus.cleanupTempGlobus();
@@ -58,7 +61,7 @@ public class CaDSRServiceTest
 			".." + File.separator + ".." + File.separator + ".." + File.separator + 
 			"caGrid" + File.separator + "projects" + File.separator + "cadsr"
 		));
-			
+		CaDSRExtractUtils.setAxisConfig(new File("etc", "client-config.wsdd"));
 		
 		Vector steps = new Vector();
 		steps.add(new CreateTempGlobusStep(globus));
