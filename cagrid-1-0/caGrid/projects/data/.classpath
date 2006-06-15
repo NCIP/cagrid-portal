@@ -115,5 +115,6 @@
 	<classpathentry kind="lib" path="ext/lib/ocl-argo-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/swidgets-0.1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/toolbar-1.1.1.jar"/>
+	<classpathentry kind="src" path="src/java/cql"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

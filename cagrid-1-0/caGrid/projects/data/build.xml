@@ -7,6 +7,8 @@
     <property file="${basedir}/build.properties" />
     <property file="${user.dir}/build.properties" />
     <property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
+	<property file="introduce.properties" />
+	<property name="introduce.ns.excludes" value="" />
 	
 	<!-- build with debugging information -->
 	<property name="java.debug" value="on" />
@@ -53,6 +55,8 @@
     <property name="stubs.jar.name" value="${project.name}-${project.version}_Stubs.jar" />
 	<property name="stubs.jar.file" value="${build.jars.dir}/${stubs.jar.name}"/>
     <property name="ant.build.stubs" location="${globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />    
+	<property name="interface.name" value="DataService"/>
+	
 
 	<!-- schemas and namespace mappings -->
     <property name="schema.src" location="${globus.dir}/share/schema" />
@@ -112,6 +116,18 @@
 	</path>
 	
 	
+	<!-- sets up GT4 related variables -->
+	<target name="setGlobus" if="env.GLOBUS_LOCATION">
+        <!-- GT4 build files and directories-->
+		<property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
+	    <property name="build.stubs" location="${ext.globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
+	    <property name="schema.src" location="${ext.globus.dir}/share/schema" />
+	    <property name="build.packages" location="${ext.globus.dir}/share/globus_wsrf_common/build-packages.xml" />
+	    <!-- Copied from build.stubs file, as there is no way to "append" to the value in the remote file -->
+	    <property name="GT4.ns.excludes" value="-x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl -x http://schemas.xmlsoap.org/ws/2004/04/trust -x http://schemas.xmlsoap.org/ws/2002/12/policy -x http://schemas.xmlsoap.org/ws/2002/07/utility -x http://schemas.xmlsoap.org/ws/2004/04/sc -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd -x http://www.w3.org/2000/09/xmldsig# -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" />
+	</target>
+	
+	
 	<!-- creates output directories -->
     <target name="init">
         <mkdir dir="${build.dir}" />
@@ -134,12 +150,46 @@
                 <include name="Data/**/*.wsdl" />
             </fileset>
         </copy>
+    	<mkdir dir="${schema.dest}/Data/metadata"/>
+    	<copy todir="${schema.dest}/Data/metadata">
+    		<fileset dir="${ext.schema.dir}">
+    			<include name="cagrid/**/*.xsd"/>
+    		</fileset>
+    	</copy>
         <available property="stubs.present" type="dir" file="${stubs.dest}/gov/nih/nci/cagrid" />
     </target>
+	
+	<!-- runs Globus' flatten WSDL -->
+	<target name="serviceFlatten" depends="init">
+		<!-- copy the globus schemas in to the build dir -->
+		<copy toDir="${schema.dest}">
+			<fileset dir="${schema.src}" casesensitive="yes">
+		    	<include name="wsrf/**/*" />
+		    	<include name="ws/**/*" />
+		    </fileset>
+		</copy>
+		<!-- build the service stubs -->
+	    <ant antfile="${build.stubs}" target="flatten">
+	    	<property name="source.flatten.dir" location="${schema.dest}/Data" />
+	        <property name="target.flatten.dir" location="${schema.dest}/Data" />
+	        <property name="wsdl.source" value="${interface.name}.wsdl" />
+	        <property name="wsdl.target" value="${interface.name}_flattened.wsdl" />
+	        <property name="wsdl.porttype" value="${interface.name}PortType" />
+	    </ant>
+	</target>
+	
 
+	<!-- merge namespace mappings with globus -->
+	<target name="mergeNsMappings" depends="init">
+		<ant antfile="${build.stubs}" target="mergePackageMapping">
+			<property name="mapping.src" location="NStoPkg.properties" />
+	        <property name="mapping.dst" location="${build.dir}/NStoPkg.properties" />
+	    </ant>
+	</target>
+	
 
 	<!-- generates source stubs for the schema defined types -->
-    <target name="stubs" unless="stubs.present" depends="init">
+    <target name="stubs" unless="stubs.present" depends="init, setGlobus, serviceFlatten, mergeNsMappings">
         <property name="mapping.dst" value="${build.dir}/NStoPkg.properties" />
         <ant antfile="${ant.build.stubs}" target="mergePackageMapping" />
         <property name="mapping.file" value="${mapping.dst}" />
@@ -155,6 +205,21 @@
             <property name="wsdl.file" value="Response.wsdl" />
             <property name="target.stubs.dir" location="${stubs.src}" />
         </ant>
+    	<!-- generate bindings for globus -->
+    	<ant antfile="${ant.build.stubs}" target="generateBinding">
+			<property name="source.binding.dir" value="${schema.dest}/Data" />
+    	   	<property name="target.binding.dir" value="${schema.dest}/Data" />
+    		<property name="porttype.wsdl" value="${interface.name}_flattened.wsdl" />
+    		<property name="binding.root" value="${interface.name}" />
+    	</ant>
+    	<!-- Invoke the stub generator -->
+    	<ant antfile="${ant.build.stubs}" target="generateStubs">
+    		<property name="mapping.file" location="${build.dir}/NStoPkg.properties" />
+    		<property name="source.stubs.dir" location="${schema.dest}/Data" />
+    		<property name="target.stubs.dir" location="${stubs.src}" />
+    		<property name="wsdl.file" value="${interface.name}_service.wsdl" />
+    		<property name="ns.excludes" value="${GT4.ns.excludes} ${introduce.ns.excludes}" />
+    	</ant>
     </target>
 	
 	
@@ -164,6 +229,12 @@
         <javac srcdir="${stubs.src}" destdir="${stubs.dest}" debug="${java.debug}">
             <include name="**/*.java" />
             <classpath>
+            	<fileset dir="${lib.dir}">
+            		<include name="*.jar"/>
+            	</fileset>
+            	<fileset dir="${ext.lib.dir}">
+            		<include name="*.jar"/>
+            	</fileset>
                 <fileset dir="${globus.dir}/lib">
                     <include name="*.jar" />
                 </fileset>
@@ -316,8 +387,12 @@
 	<!-- jars the stubs -->
     <target name="jarStubs" depends="compileStubs" description="Builds and jars just the stubs and beans">
         <jar destfile="${stubs.jar.file}">
-            <fileset dir="${stubs.dest}" />
-            <fileset dir="${stubs.src}" />
+            <fileset dir="${stubs.dest}">
+            	<include name="**/*.class"/>
+            </fileset>
+            <fileset dir="${stubs.src}">
+            	<include name="**/*.java"/>
+    		</fileset>
         </jar>
     </target>
 	
@@ -327,6 +402,9 @@
 		<jar destfile="${utils.jar.file}">
 			<fileset dir="${build.utils.dest}">
 				<include name="**/*.class"/>
+			</fileset>
+			<fileset dir="${utils.src.dir}">
+				<include name="**/*.java"/>
 			</fileset>
 		</jar>
 	</target>
@@ -338,6 +416,9 @@
 			<fileset dir="${build.extension.dest}">
 				<include name="**/*.class"/>
 			</fileset>
+			<fileset dir="${extension.src.dir}">
+				<include name="**/*.java"/>
+			</fileset>
 		</jar>
 	</target>
 	
@@ -346,6 +427,9 @@
 	<target name="jarValidation" depends="compileValidation" description="Jars the validation code">
 		<jar destfile="${validation.jar.file}">
 			<fileset dir="${build.validation.dest}">
+				<include name="**/*.class"/>
+			</fileset>
+			<fileset dir="${validation.src.dir}">
 				<include name="**/*.class"/>
 			</fileset>
 		</jar>
@@ -358,6 +442,9 @@
 			<fileset dir="${build.service.dest}">
 				<include name="**/*.class"/>
 			</fileset>
+			<fileset dir="${service.src.dir}">
+				<include name="**/*.java"/>
+			</fileset>
 		</jar>
 	</target>
 	
@@ -366,6 +453,9 @@
 	<target name="jarCql" depends="compileCql" description="Jars the CQL Query Processor code">
 		<jar destfile="${cql.jar.file}">
 			<fileset dir="${build.cql.dest}">
+				<include name="**/*.class"/>
+			</fileset>
+			<fileset dir="${cql.src.dir}">
 				<include name="**/*.class"/>
 			</fileset>
 		</jar>
@@ -382,7 +472,7 @@
 	
 	
 	<!-- removes build output related to stubs and beans -->
-	<target name="cleanBeans">
+	<target name="cleanStubs" description="Cleans the source generated for beans and stubs">
 		<delete dir="${stubs.src}"/>
 		<delete dir="${stubs.dest}"/>
 	</target>
