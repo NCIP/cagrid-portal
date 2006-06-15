@@ -24,7 +24,6 @@ import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
@@ -502,6 +501,7 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints20.gridy = 0;
 			gridBagConstraints20.weightx = 1.0;
 			gridBagConstraints20.gridx = 3;
+			gridBagConstraints20.insets = new java.awt.Insets(2, 2, 2, 2);
 			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
 			gridBagConstraints19.gridx = 2;
 			gridBagConstraints19.anchor = java.awt.GridBagConstraints.WEST;
@@ -992,9 +992,9 @@ public class ModificationViewer extends GridPortalComponent {
 		if (packageName == null) {
 			packageName = new JTextField();
 			packageName.setText(serviceProperties
-					.getProperty("introduce.skeleton.package"));
+				.getProperty(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE));
 			packageName.setFont(new java.awt.Font("Dialog",
-					java.awt.Font.ITALIC, 12));
+				java.awt.Font.ITALIC, 12));
 			packageName.setEditable(false);
 		}
 		return packageName;
