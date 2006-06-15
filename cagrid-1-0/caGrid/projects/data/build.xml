@@ -22,6 +22,7 @@
 	<property name="build.service.dest" location="${build.dir}/service/classes"/>
 	<property name="build.validation.dest" location="${build.dir}/validation/classes"/>
 	<property name="build.common.dest" location="${build.dir}/common/classes"/>
+	<property name="build.cql.dest" location="${build.dir}/cql/classes"/>
     <property name="build.jars.dir" location="build/lib" />
 	
 	<!-- jar names -->
@@ -31,6 +32,7 @@
 	<property name="service.jar.name" value="${project.name}-${project.version}-service.jar"/>
 	<property name="validation.jar.name" value="${project.name}-${project.version}-validation.jar"/>
 	<property name="common.jar.name" value="${project.name}-${project.version}-common.jar"/>
+	<property name="cql.jar.name" value="${project.name}-${project.version}-cql.jar"/>
 	
 	<!-- jar files -->
 	<property name="extension.jar.file" value="${build.jars.dir}/${extension.jar.name}"/>
@@ -38,6 +40,7 @@
 	<property name="service.jar.file" value="${build.jars.dir}/${service.jar.name}"/>
 	<property name="validation.jar.file" value="${build.jars.dir}/${validation.jar.name}"/>
 	<property name="common.jar.file" value="${build.jars.dir}/${common.jar.name}"/>
+	<property name="cql.jar.file" value="${build.jars.dir}/${cql.jar.name}"/>
 	
 	<!-- extension -->
 	<property name="extension.description.file" value="${basedir}/extension/extension.xml"/>
@@ -64,6 +67,7 @@
 	<property name="service.src.dir" location="${src.dir}/service"/>
 	<property name="validation.src.dir" location="${src.dir}/validation"/>
 	<property name="common.src.dir" location="${src.dir}/common"/>
+	<property name="cql.src.dir" location="${src.dir}/cql"/>
 	
 	<!-- libraries -->
 	<property name="lib.dir" location="${basedir}/lib"/>
@@ -89,6 +93,7 @@
 		<pathelement path="${build.extension.dest}"/>
 		<pathelement path="${build.service.dest}"/>
 		<pathelement path="${build.validation.dest}"/>
+		<pathelement path="${build.cql.dest}"/>
 		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
@@ -115,6 +120,7 @@
     	<mkdir dir="${build.extension.dest}"/>
     	<mkdir dir="${build.service.dest}"/>
     	<mkdir dir="${build.validation.dest}"/>
+    	<mkdir dir="${build.cql.dest}"/>
         <mkdir dir="${build.jars.dir}" />
     	<mkdir dir="${test.classes.dir}"/>
         <mkdir dir="${stubs.dir}" />
@@ -207,7 +213,7 @@
 	
 	
 	<!-- compiles the extension source code -->
-	<target name="compileExtension" depends="compileStubs, compileCommon, compileService">
+	<target name="compileExtension" depends="compileStubs, compileCommon, compileService, compileCql">
 		<javac srcdir="${extension.src.dir}" destdir="${build.extension.dest}" debug="${java.debug}">
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -219,6 +225,7 @@
 				<pathelement location="${stubs.dest}"/>
 				<pathelement location="${build.service.dest}"/>
 				<pathelement location="${build.common.dest}"/>
+				<pathelement location="${build.cql.dest}"/>
 				<fileset dir="${globus.dir}/lib">
 					<include name="*.jar"/>
 				</fileset>
@@ -228,7 +235,7 @@
 	
 	
 	<!-- compiles the service side code -->
-	<target name="compileService" depends="compileStubs, compileUtils, compileValidation, compileCommon">
+	<target name="compileService" depends="compileStubs, compileUtils, compileValidation, compileCommon, compileCql">
 		<javac srcdir="${service.src.dir}" destdir="${build.service.dest}" debug="${java.debug}">
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -241,6 +248,7 @@
 				<pathelement location="${build.utils.dest}"/>
 				<pathelement location="${build.common.dest}"/>
 				<pathelement location="${build.validation.dest}"/>
+				<pathelement location="${build.cql.dest}"/>
 				<fileset dir="${globus.dir}/lib">
 					<include name="*.jar"/>
 				</fileset>
@@ -267,6 +275,26 @@
 			</classpath>
 		</javac>
 	</target>
+	
+	
+	<!-- compiles the CQL Query Processor code -->
+	<target name="compileCql" depends="compileStubs, compileCommon">
+		<javac srcdir="${cql.src.dir}" destdir="${build.cql.dest}" debug="${java.debug}">
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="**/*.jar"/>
+				</fileset>
+				<fileset dir="${ext.lib.dir}">
+					<include name="*.jar"/>
+				</fileset>
+				<pathelement location="${stubs.dest}"/>
+				<pathelement location="${build.common.dest}"/>
+				<fileset dir="${globus.dir}/lib">
+					<include name="*.jar"/>
+				</fileset>
+			</classpath>
+		</javac>
+	</target>	
 	
 	
 	<!-- compiles the test code -->
@@ -332,6 +360,16 @@
 			</fileset>
 		</jar>
 	</target>
+	
+	
+	<!-- jars the cql query processor stuff -->
+	<target name="jarCql" depends="compileCql" description="Jars the CQL Query Processor code">
+		<jar destfile="${cql.jar.file}">
+			<fileset dir="${build.cql.dest}">
+				<include name="**/*.class"/>
+			</fileset>
+		</jar>
+	</target>
     
 	
 	<!-- removes all build output -->
@@ -351,7 +389,7 @@
 	
 	
 	<!-- builds the Introduce extension package -->
-	<target name="buildExtension" description="Builds and packages the introduce extension" depends="clean, jarStubs, jarExtension, jarService">
+	<target name="buildExtension" description="Builds and packages the introduce extension" depends="clean, jarStubs, jarExtension, jarService, jarCql">
 		<mkdir dir="${extension.out.dir}"/>
 		<mkdir dir="${extension.out.dir}/lib"/>
 		<mkdir dir="${extension.out.dir}/schema"/>
@@ -359,9 +397,11 @@
 		<copy file="${stubs.jar.file}" todir="${extension.out.dir}/lib"/>
 		<copy file="${extension.jar.file}" todir="${extension.out.dir}/lib"/>
 		<copy file="${service.jar.file}" todir="${extension.out.dir}/lib"/>
+		<copy file="${cql.jar.file}" todir="${extension.out.dir}/lib"/>
 		<copy toDir="${extension.out.dir}/schema">
             <fileset dir="schema/Data" casesensitive="yes">
-                <include name="**/*.xsd" />
+                <include name="**/*.xsd"/>
+            	<include name="**/*.wsdl"/>
             </fileset>
         </copy>
 		<copy toDir="${extension.out.dir}/lib">
@@ -418,5 +458,5 @@
 	
 
 	<!-- build and jar everything -->
-	<target name="all" depends="jarStubs, jarCommon, jarUtils, jarExtension, jarService, jarValidation, compileTests" description="Builds and jars all the classes in the project"/>
+	<target name="all" depends="jarStubs, jarCommon, jarUtils, jarExtension, jarService, jarValidation, jarCql, compileTests" description="Builds and jars all the classes in the project"/>
 </project>
