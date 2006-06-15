@@ -12,7 +12,7 @@ public interface FileFilters {
 	
 	public static final FileFilter JAR_FILTER = new JarFileFilter();
 
-	public class XSDFileFilter extends javax.swing.filechooser.FileFilter {
+	public class XSDFileFilter extends javax.swing.filechooser.FileFilter implements java.io.FileFilter {
 		public boolean accept(File file) {
 			String filename = file.getName();
 			return file.isDirectory() || filename.endsWith(".xsd");
@@ -23,7 +23,7 @@ public interface FileFilters {
 		}
 	}
 
-	public class XMLFileFilter extends javax.swing.filechooser.FileFilter {
+	public class XMLFileFilter extends javax.swing.filechooser.FileFilter implements java.io.FileFilter {
 		public boolean accept(File file) {
 			String filename = file.getName();
 			return file.isDirectory() || filename.endsWith(".xml");
@@ -34,7 +34,7 @@ public interface FileFilters {
 		}
 	}
 
-	public class JarFileFilter extends FileFilter implements java.io.FileFilter {
+	public class JarFileFilter extends javax.swing.filechooser.FileFilter implements java.io.FileFilter {
 
 		public boolean accept(File f) {
 			return f.isDirectory() || f.getName().endsWith(".jar");
