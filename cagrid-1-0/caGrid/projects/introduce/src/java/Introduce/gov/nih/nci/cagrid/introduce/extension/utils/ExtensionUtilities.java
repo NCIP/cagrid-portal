@@ -23,7 +23,7 @@ import org.projectmobius.common.XMLUtilities;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Jun 7, 2006 
- * @version $Id: ExtensionUtilities.java,v 1.2 2006-06-14 19:22:39 dervin Exp $ 
+ * @version $Id: ExtensionUtilities.java,v 1.3 2006-06-15 16:21:10 dervin Exp $ 
  */
 public class ExtensionUtilities {
 	public static final String CLASSPATHENTRY_ELEMENT = "classpathentry";
@@ -46,6 +46,7 @@ public class ExtensionUtilities {
 		Set libNames = new HashSet();
 		for (int i = 0; i < additionalLibs.length; i++) {
 			String relativeLibName = getRelativePath(classpathFile, additionalLibs[i]);
+			relativeLibName = convertToUnixStylePath(relativeLibName);
 			libNames.add(relativeLibName);
 		}
 		
@@ -162,6 +163,11 @@ public class ExtensionUtilities {
 			count++;
 		}
 		return count;
+	}
+	
+	
+	private static String convertToUnixStylePath(String pathname) {
+		return pathname.replace('\\', '/');
 	}
 	
 	
