@@ -1,7 +1,5 @@
 To Do:
 
-Service properties with a key but no value causes NPE on ServicePropertiesTable when rendering.
-
 IMPORTANT: introduce needs to handle globus schemas being in the GME
   (they can't just be imported from the Globus browser, as anyone wanting to make
    XSDs that import Globus schemas need them there so they can upload theres)   
@@ -74,6 +72,9 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+
+(DONE it is required to have both) Service properties with a key but no value causes NPE on ServicePropertiesTable when rendering.
+
 
 I had to move a gui base componenet for preferences to extensions.  need to look into moving this back to portal.
 
