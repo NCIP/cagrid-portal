@@ -133,8 +133,9 @@ public class TrustedAuthorityManager {
 						firstAppended = true;
 						Calendar cal = new GregorianCalendar();
 						long time = cal.getTimeInMillis();
-						sql.append(" " + TrustedAuthorityTable.EXPIRES + "<"
-								+ time);
+						sql.append(" (" + TrustedAuthorityTable.EXPIRES
+							+ "<>0 AND " + TrustedAuthorityTable.EXPIRES
+							+ "<" + time + ")");
 					}
 				}
 
