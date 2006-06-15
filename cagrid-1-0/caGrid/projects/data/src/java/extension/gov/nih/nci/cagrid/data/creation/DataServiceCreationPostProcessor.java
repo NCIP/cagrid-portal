@@ -40,7 +40,8 @@ import org.projectmobius.tools.common.viewer.XSDFileFilter;
 
 
 /**
- * DataServiceCreationPostProcessor Creation post-processor for data services
+ * DataServiceCreationPostProcessor
+ * Creation post-processor for data services
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Mar 29, 2006
@@ -74,12 +75,11 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		String serviceName = props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
 		ServiceType dataService = CommonTools.getService(description.getServices(), serviceName);
 
-		// grab cql query and result set schemas and move them into the
-		// service's directory
+		// grab cql query and result set schemas and move them into the service's directory
 		String schemaDir = getServiceSchemaDir(props);
 		System.out.println("Copying schemas to " + schemaDir);
-		File extensionSchemaDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data"
-			+ File.separator + "schema");
+		File extensionSchemaDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator 
+			+ "data" + File.separator + "schema");
 		List schemaFiles = Utils.recursiveListFiles(extensionSchemaDir, new XSDFileFilter());
 		for (int i = 0; i < schemaFiles.size(); i++) {
 			File schemaFile = (File) schemaFiles.get(i);
@@ -113,9 +113,8 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		NamespaceType cagridMdNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 			+ DataServiceConstants.CAGRID_METADATA_SCHEMA);
 		cagridMdNamespace.setLocation("." + File.separator + DataServiceConstants.CAGRID_METADATA_SCHEMA);
-		cagridMdNamespace.setGenerateStubs(Boolean.FALSE); // prevent these
-		// beans from being
-		// built!
+		// prevent metadata beans from being built
+		cagridMdNamespace.setGenerateStubs(Boolean.FALSE);
 		// add those new namespaces to the list of namespace types
 		dsNamespaces.add(queryNamespace);
 		dsNamespaces.add(resultNamespace);
@@ -151,8 +150,8 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		// exceptions on query method
 		MethodTypeExceptions queryExceptions = new MethodTypeExceptions();
 		MethodTypeExceptionsException[] exceptions = {
-				new MethodTypeExceptionsException(DataServiceConstants.QUERY_METHOD_EXCEPTIONS[0]),
-				new MethodTypeExceptionsException(DataServiceConstants.QUERY_METHOD_EXCEPTIONS[1])};
+			new MethodTypeExceptionsException(DataServiceConstants.QUERY_METHOD_EXCEPTIONS[0]),
+			new MethodTypeExceptionsException(DataServiceConstants.QUERY_METHOD_EXCEPTIONS[1])};
 		queryExceptions.setException(exceptions);
 		queryMethod.setExceptions(queryExceptions);
 		// add query method to methods array
@@ -259,10 +258,11 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 	private void modifyServiceProperties(ServiceDescription desc) throws Exception {
 		ServicePropertiesProperty prop = new ServicePropertiesProperty();
 		prop.setKey(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
+		prop.setValue(""); // empty value to be populated later
 		ServiceProperties serviceProperties = desc.getServiceProperties();
 		if (serviceProperties == null) {
 			serviceProperties = new ServiceProperties();
-		}		
+		}
 		ServicePropertiesProperty[] allProps = serviceProperties.getProperty();
 		if (allProps != null) {
 			ServicePropertiesProperty[] tmpProps = new ServicePropertiesProperty[allProps.length + 1];
