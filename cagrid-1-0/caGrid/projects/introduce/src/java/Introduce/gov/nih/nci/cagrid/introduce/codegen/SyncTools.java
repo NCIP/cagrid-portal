@@ -20,6 +20,7 @@ import gov.nih.nci.cagrid.introduce.codegen.services.SyncServices;
 import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.creator.SkeletonSchemaCreator;
+import gov.nih.nci.cagrid.introduce.creator.SkeletonSecurityOperationProviderCreator;
 import gov.nih.nci.cagrid.introduce.creator.SkeletonSourceCreator;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPreProcessor;
@@ -60,6 +61,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
+import org.apache.tools.ant.BuildException;
 import org.jdom.Document;
 import org.projectmobius.common.MalformedNamespaceException;
 import org.projectmobius.common.MobiusException;
@@ -272,6 +274,10 @@ public class SyncTools {
 		// store the modified properties back out....
 		serviceProperties.store(new FileOutputStream(servicePropertiesFile),
 				"Introduce Properties");
+		
+		
+		createNewServices(info);
+		
 
 		System.out.println("Synchronizing with pre processing extensions");
 		// run any extensions that need to be ran
@@ -290,8 +296,6 @@ public class SyncTools {
 				}
 			}
 		}
-
-		createNewServices(info);
 
 		// STEP 4: write out namespace mappings and flatten the wsdl file then
 		// merge namespace
@@ -340,7 +344,7 @@ public class SyncTools {
 				}
 			}
 		}
-
+		
 	}
 
 	private void populateClassnames(ServiceInformation info,
@@ -528,11 +532,13 @@ public class SyncTools {
 			ServiceType newService = (ServiceType) newServices.get(i);
 			SkeletonSourceCreator ssc = new SkeletonSourceCreator();
 			SkeletonSchemaCreator sschc = new SkeletonSchemaCreator();
+			SkeletonSecurityOperationProviderCreator ssopc = new SkeletonSecurityOperationProviderCreator();
 			try {
 				System.out.println("Adding Service for: "
 						+ newService.getName());
 				ssc.createSkeleton(info.getBaseDirectory(), info, newService);
 				sschc.createSkeleton(info.getBaseDirectory(), info, newService);
+				ssopc.createSkeleton(new SpecificServiceInformation(info, newService));
 
 				// if this is a new service we need to add it's new "service"
 				// element to the WSDD
@@ -575,7 +581,6 @@ public class SyncTools {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
 	/**
@@ -608,7 +613,7 @@ public class SyncTools {
 					// the model explictly says not to generate stubs
 					excludeSet.add(ntype.getNamespace());
 					TemplateUtils.walkSchemasGetNamespaces(schemaDir
-							+ File.separator + ntype.getLocation(), excludeSet);
+							+ File.separator + ntype.getLocation(), excludeSet, new HashSet());
 				} else if (ntype.getSchemaElement() != null) {
 					for (int j = 0; j < ntype.getSchemaElement().length; j++) {
 						SchemaElementType type = ntype.getSchemaElement(j);
@@ -616,11 +621,12 @@ public class SyncTools {
 							if (ntype.getLocation() != null) {
 								// the namespace contains customly serialized
 								// beans... so don't generate stubs
+								
 								excludeSet.add(ntype.getNamespace());
 								TemplateUtils.walkSchemasGetNamespaces(
 										schemaDir + File.separator
 												+ ntype.getLocation(),
-										excludeSet);
+										excludeSet, new HashSet());
 								// this schema is excluded.. no need to check
 								// the rest of the schemaelements
 								break;

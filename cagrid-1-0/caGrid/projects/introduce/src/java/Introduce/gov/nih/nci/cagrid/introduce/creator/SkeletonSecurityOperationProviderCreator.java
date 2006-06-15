@@ -16,6 +16,8 @@ import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 
 import javax.xml.namespace.QName;
 
+import org.apache.tools.ant.BuildException;
+
 /**
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -85,6 +87,18 @@ public class SkeletonSecurityOperationProviderCreator {
 			nsType.setSchemaElement(schemaElements);
 
 			CommonTools.addNamespace(info.getServiceDescriptor(), nsType);
+			
+			
+			// write the modified document back out....
+			try {
+				Utils.serializeDocument(info.getBaseDirectory()+ File.separator + "introduce.xml", info.getServiceDescriptor(), new QName(
+					"gme://gov.nih.nci.cagrid/1/Introduce", "ServiceDescription"));
+			} catch (Exception e1) {
+				BuildException be = new BuildException(e1.getMessage());
+				be.setStackTrace(e1.getStackTrace());
+				be.printStackTrace();
+				throw be;
+			}
 
 			// copy over the wsdl file and the required schema
 			Utils.copyFile(new File("operationProviders" + File.separator

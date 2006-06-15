@@ -49,7 +49,7 @@
 			
 					//get all the imports if there are any for this schema and write there namespace to package maps down		
 					TemplateUtils.walkSchemasGetNamespaces(info.getBaseDirectory().getAbsolutePath() + File.separator + "schema" + File.separator + serviceName + 
-						File.separator + namespaceInformation.getNamespace().getLocation(), importNamespaces );
+						File.separator + namespaceInformation.getNamespace().getLocation(), importNamespaces , new HashSet(IntroduceConstants.GLOBUS_NAMESPACES));
 	
 %>
 <%=newnewLine %><%		
