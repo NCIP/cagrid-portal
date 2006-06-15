@@ -20,6 +20,7 @@
         <parameter name="scope" value="Application"/>
         <parameter name="providers" value="GetRPProvider GetMRPProvider QueryRPProvider"/>
         <parameter name="loadOnStartup" value="true"/>
+        <parameter name="securityMetadata" value="ETC-PATH/<%=service.getName()%>-security-metadata.xml"/>
     </service> 
     
     <typeMapping 

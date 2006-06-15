@@ -29,7 +29,6 @@ import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.info.SchemaInformation;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
-import gov.nih.nci.cagrid.introduce.templates.JNDIConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.NamespaceMappingsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.NewServerConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.NewServiceJNDIConfigTemplate;
@@ -47,7 +46,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import javax.xml.namespace.QName;
 
@@ -61,7 +59,6 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
-import org.apache.tools.ant.BuildException;
 import org.jdom.Document;
 import org.projectmobius.common.MalformedNamespaceException;
 import org.projectmobius.common.MobiusException;
