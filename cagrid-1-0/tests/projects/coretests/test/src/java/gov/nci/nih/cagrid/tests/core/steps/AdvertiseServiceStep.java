@@ -15,13 +15,13 @@ public class AdvertiseServiceStep
 	private File serviceDir;
 	private String indexServiceURL;
 	
-	public AdvertiseServiceStep(File serviceDir, int port) 
+	public AdvertiseServiceStep(int port, File serviceDir) 
 		throws MalformedURIException
 	{
-		this(serviceDir, "http://localhost:" + port + "/wsrf/services/DefaultIndexService");
+		this("http://localhost:" + port + "/wsrf/services/DefaultIndexService", serviceDir);
 	}
 
-	public AdvertiseServiceStep(File serviceDir, String indexServiceURL)
+	public AdvertiseServiceStep(String indexServiceURL, File serviceDir)
 	{
 		super();
 		
