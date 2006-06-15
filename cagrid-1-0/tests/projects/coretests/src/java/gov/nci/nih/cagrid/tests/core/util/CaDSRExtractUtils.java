@@ -22,6 +22,11 @@ import org.xml.sax.InputSource;
 
 public class CaDSRExtractUtils
 {
+	public static void setAxisConfig(File clientConfigWsdd)
+	{
+		System.setProperty("axis.ClientConfigFile", clientConfigWsdd.toString());	
+	}
+	
 	public static DomainModel findExtract(CaDSRServiceI cadsr, String projectName) 
 		throws Exception
 	{
