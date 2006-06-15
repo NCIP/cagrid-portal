@@ -88,17 +88,6 @@ public class SkeletonSecurityOperationProviderCreator {
 
 			CommonTools.addNamespace(info.getServiceDescriptor(), nsType);
 			
-			
-			// write the modified document back out....
-			try {
-				Utils.serializeDocument(info.getBaseDirectory()+ File.separator + "introduce.xml", info.getServiceDescriptor(), new QName(
-					"gme://gov.nih.nci.cagrid/1/Introduce", "ServiceDescription"));
-			} catch (Exception e1) {
-				BuildException be = new BuildException(e1.getMessage());
-				be.setStackTrace(e1.getStackTrace());
-				be.printStackTrace();
-				throw be;
-			}
 
 			// copy over the wsdl file and the required schema
 			Utils.copyFile(new File("operationProviders" + File.separator
@@ -158,6 +147,16 @@ public class SkeletonSecurityOperationProviderCreator {
 					+ "lib"
 					+ File.separator + "ServiceSecurity-service.jar"));
 			
+		}
+		// write the modified document back out....
+		try {
+			Utils.serializeDocument(info.getBaseDirectory()+ File.separator + "introduce.xml", info.getServiceDescriptor(), new QName(
+				"gme://gov.nih.nci.cagrid/1/Introduce", "ServiceDescription"));
+		} catch (Exception e1) {
+			BuildException be = new BuildException(e1.getMessage());
+			be.setStackTrace(e1.getStackTrace());
+			be.printStackTrace();
+			throw be;
 		}
 	}
 
