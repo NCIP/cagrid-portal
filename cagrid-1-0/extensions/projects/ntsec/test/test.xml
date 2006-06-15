@@ -28,6 +28,7 @@
 			<sysproperty key="basedir" value="${basedir}" />
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
 			
+			<jvmarg value="-Xrunhprof:heap=dump,cpu=times,interval=200,file=${junit.results.dir}/hprof.txt"/>
 			<jvmarg value="-Xmx512M" />
 			<jvmarg value="-Dbuild.dir=${build.dir}" />
 			<jvmarg value="-Djava.endorsed.dirs=${ext.endorsed.dir}" />
