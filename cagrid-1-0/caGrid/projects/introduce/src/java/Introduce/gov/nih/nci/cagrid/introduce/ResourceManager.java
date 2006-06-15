@@ -38,6 +38,8 @@ public class ResourceManager {
 	
 	public final static String LAST_DIRECTORY = "introduce.lastdir";
 	
+	public final static String LAST_DEPLOYMENT = "introduce.lastdeployment";
+	
 	public final static String LAST_FILE = "introduce.lastfile";
 	
 	public static String getResourcePath() {

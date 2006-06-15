@@ -277,7 +277,14 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 						"Deployment") {
 
 						public void process() {
-							setProgressText("validating environment variables");
+							setProgressText("setting introduce resource properties...");
+							
+							try {
+								ResourceManager.setProperty(ResourceManager.LAST_DEPLOYMENT,(String)deploymentTypeSelector.getSelectedItem());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 
 							setProgressText("writing deployment property file");
 
@@ -340,6 +347,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 								ex.printStackTrace();
 							}
 							dispose();
+						
 						}
 					};
 					Thread th = new Thread(r);
@@ -383,6 +391,14 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 			deploymentTypeSelector = new JComboBox();
 			deploymentTypeSelector.addItem(TOMCAT);
 			deploymentTypeSelector.addItem(GLOBUS);
+			try {
+				if(ResourceManager.getProperty(ResourceManager.LAST_DEPLOYMENT)!=null){
+					deploymentTypeSelector.setSelectedItem(ResourceManager.getProperty(ResourceManager.LAST_DEPLOYMENT));
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return deploymentTypeSelector;
 	}
