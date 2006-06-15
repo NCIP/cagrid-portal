@@ -1,13 +1,18 @@
 package gov.nih.nci.cagrid.introduce.creator;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.codegen.security.SecurityMetadataGenerator;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.etc.RegistrationTemplate;
 import gov.nih.nci.cagrid.introduce.templates.etc.SecurityDescTemplate;
+import gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata;
 
 import java.io.File;
 import java.io.FileWriter;
+
+import javax.xml.namespace.QName;
 
 
 /**
@@ -37,14 +42,22 @@ public class SkeletonEtcCreator {
 
 		if (info.getServices() != null && info.getServices().getService() != null) {
 			for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
+				SpecificServiceInformation ssi = new SpecificServiceInformation(info, info.getServices().getService(
+					serviceI));
 				SecurityDescTemplate securityDescT = new SecurityDescTemplate();
-				String securityDescS = securityDescT.generate(new SpecificServiceInformation(info,info.getServices().getService(serviceI) ));
-				File securityDescF = new File(etcDir.getAbsolutePath() + File.separator + info.getServices().getService(serviceI).getName() + "-security-desc.xml");
+				String securityDescS = securityDescT.generate(ssi);
+				File securityDescF = new File(etcDir.getAbsolutePath() + File.separator
+					+ info.getServices().getService(serviceI).getName() + "-security-desc.xml");
 				FileWriter securityDescFW = new FileWriter(securityDescF);
 				securityDescFW.write(securityDescS);
 				securityDescFW.close();
+				ServiceSecurityMetadata metadata = SecurityMetadataGenerator.getSecurityMetadata(ssi);
+				File meta = new File(etcDir.getAbsolutePath() + File.separator
+					+ info.getServices().getService(serviceI).getName() + "-security-metadata.xml");
+				QName qn = new QName("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security",
+					"ServiceSecurityMetadata");
+				Utils.serializeDocument(meta.getAbsolutePath(), metadata, qn);
 			}
 		}
 	}
-
 }

@@ -33,11 +33,16 @@ import java.util.List;
  * @created Jun 22, 2005 Exp $
  */
 public class SecurityMetadataGenerator {
-	public static ServiceSecurityMetadata getSecurityMetadata(SpecificServiceInformation info) {
+	public static ServiceSecurityMetadata getSecurityMetadata(SpecificServiceInformation info) throws Exception {
 		ServiceSecurityMetadata metadata = new ServiceSecurityMetadata();
-		try {
-			CommunicationMechanism mechanism = new CommunicationMechanism();
-			ServiceSecurity ss = info.getService().getServiceSecurity();
+		CommunicationMechanism mechanism = new CommunicationMechanism();
+		ServiceSecurity ss = info.getService().getServiceSecurity();
+
+		if (ss == null) {
+			mechanism.setAnonymousPermitted(true);
+			mechanism.setNone(new None());
+		} else {
+
 			if ((ss.getAnonymousClients() != null) && (ss.getAnonymousClients().equals(AnonymousCommunication.No))) {
 				mechanism.setAnonymousPermitted(false);
 			} else {
@@ -51,17 +56,21 @@ public class SecurityMetadataGenerator {
 			} else {
 				mechanism.setNone(new None());
 			}
-
-			metadata.setDefaultCommunicationMechanism(mechanism);
-			ServiceType service = info.getService();
-			MethodsType methods = service.getMethods();
-			if (methods != null) {
-				MethodType[] method = methods.getMethod();
-				if (method != null) {
-					List operations = new ArrayList();
-					for (int i = 0; i < method.length; i++) {
-						operations.add(getOperation(info.getService().getServiceSecurity(), method[i]));
+		}
+		metadata.setDefaultCommunicationMechanism(mechanism);
+		ServiceType service = info.getService();
+		MethodsType methods = service.getMethods();
+		if (methods != null) {
+			MethodType[] method = methods.getMethod();
+			if (method != null) {
+				List operations = new ArrayList();
+				for (int i = 0; i < method.length; i++) {
+					Operation o = getOperation(info.getService().getServiceSecurity(), method[i]);
+					if (o != null) {
+						operations.add(o);
 					}
+				}
+				if (operations.size() > 0) {
 					Operation[] ops = new Operation[operations.size()];
 					for (int i = 0; i < operations.size(); i++) {
 						ops[i] = (Operation) operations.get(i);
@@ -71,11 +80,7 @@ public class SecurityMetadataGenerator {
 					metadata.setOperations(ssmo);
 				}
 			}
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
 		}
-
 		return metadata;
 	}
 
