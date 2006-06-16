@@ -26,7 +26,7 @@ import org.hibernate.criterion.DetachedCriteria;
  * @version $Id$ 
  */
 public class CoreQueryProcessor extends LazyCQLQueryProcessor {
-	public static final String APPLICATION_SERVICE_URL = "appservice.url";
+	public static final String APPLICATION_SERVICE_URL = "AppserviceUrl";
 	
 	private ApplicationService coreService;
 	
