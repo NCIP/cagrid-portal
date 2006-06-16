@@ -24,6 +24,9 @@ public class UMLClassAssociation extends FigEdgePoly
 
      public UMLClassAssociationArrowHead sourceArrow;
      public UMLClassAssociationArrowHead destinationArrow;
+     
+     public boolean showSourceArrow = true;
+     public boolean showDestinationArrow = true;
 
      // arrays to store label placement metrics
      protected float labelToLabelOverlaps[] = new float[10];
@@ -46,6 +49,34 @@ public class UMLClassAssociation extends FigEdgePoly
           this.sourceArrow = new UMLClassAssociationArrowHead();
           this.destinationArrow = new UMLClassAssociationArrowHead();
 
+     }
+     
+     
+     public void setSourceArrowVisible(boolean show	)
+     { 
+    	 if(show)
+    	 {
+    		 this.showSourceArrow = true;
+    		 
+    	 }
+    	 else
+    	 {
+    		 this.showSourceArrow = false;
+    	 }
+     }
+     
+     
+     public void setDestinationArrowVisible(boolean show	)
+     { 
+    	 if(show)
+    	 {
+    		 this.showDestinationArrow = true;
+    		 
+    	 }
+    	 else
+    	 {
+    		 this.showDestinationArrow = false;
+    	 }
      }
 
      public void highlight(Layer layer)
@@ -160,7 +191,7 @@ public class UMLClassAssociation extends FigEdgePoly
                else away = s_edge.p2;
 
                this.sourceArrow.setDirection(away,   s_top.getIntersection(s_edge).getPoint());
-               this.sourceArrow.redraw();
+               if(showSourceArrow) this.sourceArrow.redraw();
 
 
           }
@@ -175,7 +206,7 @@ public class UMLClassAssociation extends FigEdgePoly
                else away = s_edge.p2;
 
                this.sourceArrow.setDirection( away ,  s_left.getIntersection(s_edge).getPoint());
-               this.sourceArrow.redraw();
+               if(showSourceArrow)this.sourceArrow.redraw();
 
 
 
@@ -191,7 +222,7 @@ public class UMLClassAssociation extends FigEdgePoly
                else away = s_edge.p2;
 
                this.sourceArrow.setDirection( away,  s_rite.getIntersection(s_edge).getPoint());
-               this.sourceArrow.redraw();
+               if(showSourceArrow)this.sourceArrow.redraw();
 
 
 
@@ -209,7 +240,7 @@ public class UMLClassAssociation extends FigEdgePoly
                else away = s_edge.p2;
 
                this.sourceArrow.setDirection( away,  s_bot.getIntersection(s_edge).getPoint());
-               this.sourceArrow.redraw();
+               if(showSourceArrow)this.sourceArrow.redraw();
           }
           else
           {
@@ -231,7 +262,7 @@ public class UMLClassAssociation extends FigEdgePoly
                else away = d_edge.p2;
 
                this.destinationArrow.setDirection(away,   d_top.getIntersection(d_edge).getPoint());
-               this.destinationArrow.redraw();
+               if(showDestinationArrow) this.destinationArrow.redraw();
 
 
           }
@@ -246,7 +277,7 @@ public class UMLClassAssociation extends FigEdgePoly
                else away = d_edge.p2;
 
                this.destinationArrow.setDirection( away ,  d_left.getIntersection(d_edge).getPoint());
-               this.destinationArrow.redraw();
+               if(showDestinationArrow) this.destinationArrow.redraw();
 
 
 
@@ -262,7 +293,7 @@ public class UMLClassAssociation extends FigEdgePoly
                else away = d_edge.p2;
 
                this.destinationArrow.setDirection( away,  d_rite.getIntersection(d_edge).getPoint());
-               this.destinationArrow.redraw();
+               if(showDestinationArrow) this.destinationArrow.redraw();
 
 
 
@@ -280,7 +311,7 @@ public class UMLClassAssociation extends FigEdgePoly
                else away = d_edge.p2;
 
                this.destinationArrow.setDirection( away,  d_bot.getIntersection(d_edge).getPoint());
-               this.destinationArrow.redraw();
+               if(showDestinationArrow) this.destinationArrow.redraw();
           }
           else
           {
@@ -297,8 +328,8 @@ public class UMLClassAssociation extends FigEdgePoly
       public void paint(Graphics g)
       {
     	  super.paint(g);
-    	  this.sourceArrow.paint(g);
-    	  this.destinationArrow.paint(g);
+    	  if(showSourceArrow) this.sourceArrow.paint(g);
+    	  if(showDestinationArrow) this.destinationArrow.paint(g);
       }
 
       public float intersectsRectangle(Rectangle r)

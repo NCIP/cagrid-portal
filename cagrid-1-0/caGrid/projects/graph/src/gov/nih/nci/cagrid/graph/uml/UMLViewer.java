@@ -73,8 +73,8 @@ public class UMLViewer extends JGraph {
 		this.pager = new Pager(this.diagram);
 		this.pagerCaptionBar = new PagerCaptionBar(this.pager);
 
-		//this.setDefaultSize(500, 500);
-		this.setDrawingSize(1000, 1000);
+		
+		this.setDrawingSize(1500, 1000);
 		Globals.setShowFigTips(false);
 		
 		
@@ -118,10 +118,10 @@ public class UMLViewer extends JGraph {
 				drawingSize.setSize(drawingSize.width, point.y + dim.height + 50);
 			}
 		}
-		if (drawingSize.width < drawingSize.height)
-			drawingSize.width = drawingSize.height;
-		if (drawingSize.height < drawingSize.width)
-			drawingSize.height = drawingSize.width;
+		//if (drawingSize.width < drawingSize.height)
+		//	drawingSize.width = drawingSize.height;
+		//if (drawingSize.height < drawingSize.width)
+		//	drawingSize.height = drawingSize.width;
 		setDrawingSize(drawingSize.width, drawingSize.height);
 	}
 
@@ -197,7 +197,14 @@ class UMLViewerMouseListener extends MouseAdapter {
 			for (int k = 0; k < parent.diagram.classes.size(); k++) {
 				UMLClass c = (UMLClass) parent.diagram.classes.get(k);
 				parent.diagram.diagram.getLayer().bringToFront(c);
-				c.setNormal();
+				if(c.defaultRendering == UMLClass.NORMAL)
+				{
+					c.setNormal();
+				}
+				else
+				{
+					c.fade();
+				}
 			}
 	
 			for (int m = 0; m < parent.diagram.assocs.size(); m++) {
@@ -404,7 +411,6 @@ class PagerButton extends JButton implements MouseListener {
 				pressed = false;
 			}
 		}
-
 	}
 
 
@@ -432,11 +438,15 @@ class PagerButton extends JButton implements MouseListener {
 class Pager extends JButton {
 	protected UMLDiagram diagram;
 	protected PagerScroller scroller;
+	
+	public Color superLightGray = new Color(235, 235, 235);
 
 	protected UMLClassAssociation highlightEdge = null;
 	protected UMLClass highlightClass1 = null;
 	protected UMLClass highlightClass2 = null;
 
+	int pagerVirtualWidth;
+	int pagerVirtualHeight;
 
 	public Pager(UMLDiagram d) {
 		super();
@@ -446,23 +456,48 @@ class Pager extends JButton {
 		this.scroller = new PagerScroller(diagram, this);
 		this.setDoubleBuffered(true);
 		this.add(scroller);
+		this.setLayout(null);
 
 	}
 
 
 	public void updateScroller() {
+		
+	
+		
 		int canvasWidth = diagram.viewer.getScrollPane().getViewport().getView().getSize().width;
 		int canvasHeight = diagram.viewer.getScrollPane().getViewport().getView().getSize().height;
 
+		pagerVirtualWidth = 200;
+		pagerVirtualHeight = 200;
+		
+		if(canvasWidth > canvasHeight)
+		{
+			pagerVirtualWidth = 200;
+			pagerVirtualHeight = (int)((float)(canvasHeight/(float)canvasWidth) * (float)200);
+
+						
+		
+
+		}
+		else if(canvasWidth <= canvasHeight) 
+		{
+			pagerVirtualHeight = 200;
+			pagerVirtualWidth = (int)((float)(canvasWidth/(float)canvasHeight) * (float)200);
+
+
+		}
+	
+		
 		int pagerX = -diagram.viewer.getScrollPane().getViewport().getView().getBounds().x;
 		int pagerY = -diagram.viewer.getScrollPane().getViewport().getView().getBounds().y;
 		int pagerW = diagram.viewer.getScrollPane().getViewport().getBounds().width;
 		int pagerH = diagram.viewer.getScrollPane().getViewport().getBounds().height;
 
-		float updatedXs = pagerX * (float) ((float) 200 / (float) canvasWidth);
-		float updatedYs = pagerY * (float) ((float) 200 / (float) canvasHeight);
-		float updatedWidths = pagerW * (float) ((float) 200 / (float) canvasWidth);
-		float updatedHeights = pagerH * (float) ((float) 200 / (float) canvasHeight);
+		float updatedXs = pagerX * (float) ((float) pagerVirtualWidth / (float) canvasWidth);
+		float updatedYs = pagerY * (float) ((float) pagerVirtualHeight / (float) canvasHeight);
+		float updatedWidths = pagerW * (float) ((float) pagerVirtualWidth / (float) canvasWidth);
+		float updatedHeights = pagerH * (float) ((float) pagerVirtualHeight / (float) canvasHeight);
 
 		scroller.setBounds((int) updatedXs, (int) updatedYs, (int) updatedWidths, (int) updatedHeights);
 
@@ -493,129 +528,156 @@ class Pager extends JButton {
 
 		g.setColor(Color.white);
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
+		
+		
 
 		int canvasWidth = diagram.viewer.getScrollPane().getViewport().getView().getSize().width;
 		int canvasHeight = diagram.viewer.getScrollPane().getViewport().getView().getSize().height;
 
-		g.setColor(Color.lightGray);
+		
+		if(canvasWidth > canvasHeight)
+		{
+			pagerVirtualWidth = 200;
+			pagerVirtualHeight = (int)((float)(canvasHeight/(float)canvasWidth) * (float)200);
 
-		for (int i = 0; i < diagram.assocs.size(); i++) {
-			UMLClassAssociation edge = (UMLClassAssociation) diagram.assocs.elementAt(i);
+						
+			g.setColor(superLightGray);
+			g.fillRect(0, pagerVirtualHeight, 200, 200);
 
-			if (edge.getPoints().length > 1) {
-				for (int k = 0; k < edge.getPoints().length - 1; k++) {
-					int originalX1 = edge.getPoints()[k].x;
-					int originalY1 = edge.getPoints()[k].y;
-
-					int originalX2 = edge.getPoints()[k + 1].x;
-					int originalY2 = edge.getPoints()[k + 1].y;
-
-					float updatedX1 = originalX1 * (float) ((float) 200 / (float) canvasWidth);
-					float updatedY1 = originalY1 * (float) ((float) 200 / (float) canvasHeight);
-
-					float updatedX2 = originalX2 * (float) ((float) 200 / (float) canvasWidth);
-					float updatedY2 = originalY2 * (float) ((float) 200 / (float) canvasHeight);
-
-					g.drawLine((int) updatedX1, (int) updatedY1, (int) updatedX2, (int) updatedY2);
-
-				}
-			}
 		}
+		else if(canvasWidth <= canvasHeight) 
+		{
+			pagerVirtualHeight = 200;
+			pagerVirtualWidth = (int)((float)(canvasWidth/(float)canvasHeight) * (float)200);
 
-		for (int c = 0; c < diagram.classes.size(); c++) {
-			UMLClass f = (UMLClass) diagram.classes.elementAt(c);
+			
+			g.setColor(superLightGray);
+			g.fillRect(pagerVirtualWidth , 0, 200, 200 );
+		}
+		
 
-			int originalX = f.getLocation().x;
-			int originalY = f.getLocation().y;
-			int originalWidth = f.getSize().width;
-			int originalHeight = f.getSize().height;
-
-			float updatedX = originalX * (float) ((float) 200 / (float) canvasWidth);
-			float updatedY = originalY * (float) ((float) 200 / (float) canvasHeight);
-			float updatedWidth = originalWidth * (float) ((float) 200 / (float) canvasWidth);
-			float updatedHeight = originalHeight * (float) ((float) 200 / (float) canvasHeight);
-
-			g.setColor(Color.white);
-			g.fillRect((int) updatedX, (int) updatedY, (int) updatedWidth, (int) updatedHeight);
-
+		if(!this.diagram.inactiveState)
+		{
 			g.setColor(Color.lightGray);
-			g.drawRect((int) updatedX, (int) updatedY, (int) updatedWidth, (int) updatedHeight);
-
-		}
-
-		UMLClassAssociation edge = this.highlightEdge;
-
-		if (edge != null) {
-
-			g.setColor(Color.red);
-
-			if (edge.getPoints().length > 1) {
-				for (int k = 0; k < edge.getPoints().length - 1; k++) {
-					int originalX1 = edge.getPoints()[k].x;
-					int originalY1 = edge.getPoints()[k].y;
-
-					int originalX2 = edge.getPoints()[k + 1].x;
-					int originalY2 = edge.getPoints()[k + 1].y;
-
-					float updatedX1 = originalX1 * (float) ((float) 200 / (float) canvasWidth);
-					float updatedY1 = originalY1 * (float) ((float) 200 / (float) canvasHeight);
-
-					float updatedX2 = originalX2 * (float) ((float) 200 / (float) canvasWidth);
-					float updatedY2 = originalY2 * (float) ((float) 200 / (float) canvasHeight);
-
-					g.drawLine((int) updatedX1, (int) updatedY1, (int) updatedX2, (int) updatedY2);
-
+	
+			for (int i = 0; i < diagram.assocs.size(); i++) {
+				UMLClassAssociation edge = (UMLClassAssociation) diagram.assocs.elementAt(i);
+	
+				if (edge.getPoints().length > 1) {
+					for (int k = 0; k < edge.getPoints().length - 1; k++) {
+						int originalX1 = edge.getPoints()[k].x;
+						int originalY1 = edge.getPoints()[k].y;
+	
+						int originalX2 = edge.getPoints()[k + 1].x;
+						int originalY2 = edge.getPoints()[k + 1].y;
+	
+						float updatedX1 = originalX1 * (float) ((float) pagerVirtualWidth / (float) canvasWidth);
+						float updatedY1 = originalY1 * (float) ((float) pagerVirtualHeight / (float) canvasHeight);
+	
+						float updatedX2 = originalX2 * (float) ((float) pagerVirtualWidth/ (float) canvasWidth);
+						float updatedY2 = originalY2 * (float) ((float)pagerVirtualHeight / (float) canvasHeight);
+	
+						g.drawLine((int) updatedX1, (int) updatedY1, (int) updatedX2, (int) updatedY2);
+	
+					}
 				}
 			}
+	
+			for (int c = 0; c < diagram.classes.size(); c++) {
+				UMLClass f = (UMLClass) diagram.classes.elementAt(c);
+	
+				int originalX = f.getLocation().x;
+				int originalY = f.getLocation().y;
+				int originalWidth = f.getSize().width;
+				int originalHeight = f.getSize().height;
+	
+				float updatedX = originalX * (float) ((float) pagerVirtualWidth / (float) canvasWidth);
+				float updatedY = originalY * (float) ((float) pagerVirtualHeight / (float) canvasHeight);
+				float updatedWidth = originalWidth * (float) ((float) pagerVirtualWidth/ (float) canvasWidth);
+				float updatedHeight = originalHeight * (float) ((float) pagerVirtualHeight / (float) canvasHeight);
+	
+				g.setColor(Color.white);
+				g.fillRect((int) updatedX, (int) updatedY, (int) updatedWidth, (int) updatedHeight);
+	
+				g.setColor(Color.lightGray);
+				g.drawRect((int) updatedX, (int) updatedY, (int) updatedWidth, (int) updatedHeight);
+	
+			}
+	
+			UMLClassAssociation edge = this.highlightEdge;
+	
+			if (edge != null) {
+	
+				g.setColor(Color.red);
+	
+				if (edge.getPoints().length > 1) {
+					for (int k = 0; k < edge.getPoints().length - 1; k++) {
+						int originalX1 = edge.getPoints()[k].x;
+						int originalY1 = edge.getPoints()[k].y;
+	
+						int originalX2 = edge.getPoints()[k + 1].x;
+						int originalY2 = edge.getPoints()[k + 1].y;
+	
+						float updatedX1 = originalX1 * (float) ((float) pagerVirtualWidth / (float) canvasWidth);
+						float updatedY1 = originalY1 * (float) ((float) pagerVirtualHeight/ (float) canvasHeight);
+	
+						float updatedX2 = originalX2 * (float) ((float) pagerVirtualWidth / (float) canvasWidth);
+						float updatedY2 = originalY2 * (float) ((float) pagerVirtualHeight / (float) canvasHeight);
+	
+						g.drawLine((int) updatedX1, (int) updatedY1, (int) updatedX2, (int) updatedY2);
+	
+					}
+				}
+			}
+	
+			UMLClass f = this.highlightClass1;
+	
+			if (f != null) {
+				int originalX = f.getLocation().x;
+				int originalY = f.getLocation().y;
+				int originalWidth = f.getSize().width;
+				int originalHeight = f.getSize().height;
+	
+				float updatedX = originalX * (float) ((float) pagerVirtualWidth / (float) canvasWidth);
+				float updatedY = originalY * (float) ((float) pagerVirtualHeight / (float) canvasHeight);
+				float updatedWidth = originalWidth * (float) ((float) pagerVirtualWidth / (float) canvasWidth);
+				float updatedHeight = originalHeight * (float) ((float) pagerVirtualHeight / (float) canvasHeight);
+	
+				g.setColor(Color.white);
+				g.fillRect((int) updatedX, (int) updatedY, (int) updatedWidth, (int) updatedHeight);
+	
+				g.setColor(Color.black);
+				g.drawRect((int) updatedX, (int) updatedY, (int) updatedWidth, (int) updatedHeight);
+			}
+	
+			f = this.highlightClass2;
+	
+			if (f != null) {
+				int originalX = f.getLocation().x;
+				int originalY = f.getLocation().y;
+				int originalWidth = f.getSize().width;
+				int originalHeight = f.getSize().height;
+	
+				float updatedX = originalX * (float) ((float) pagerVirtualWidth / (float) canvasWidth);
+				float updatedY = originalY * (float) ((float) pagerVirtualHeight / (float) canvasHeight);
+				float updatedWidth = originalWidth * (float) ((float) pagerVirtualWidth / (float) canvasWidth);
+				float updatedHeight = originalHeight * (float) ((float) pagerVirtualHeight / (float) canvasHeight);
+	
+				g.setColor(Color.white);
+				g.fillRect((int) updatedX, (int) updatedY, (int) updatedWidth, (int) updatedHeight);
+	
+				g.setColor(Color.black);
+				g.drawRect((int) updatedX, (int) updatedY, (int) updatedWidth, (int) updatedHeight);
+			}
+	
 		}
-
-		UMLClass f = this.highlightClass1;
-
-		if (f != null) {
-			int originalX = f.getLocation().x;
-			int originalY = f.getLocation().y;
-			int originalWidth = f.getSize().width;
-			int originalHeight = f.getSize().height;
-
-			float updatedX = originalX * (float) ((float) 200 / (float) canvasWidth);
-			float updatedY = originalY * (float) ((float) 200 / (float) canvasHeight);
-			float updatedWidth = originalWidth * (float) ((float) 200 / (float) canvasWidth);
-			float updatedHeight = originalHeight * (float) ((float) 200 / (float) canvasHeight);
-
-			g.setColor(Color.white);
-			g.fillRect((int) updatedX, (int) updatedY, (int) updatedWidth, (int) updatedHeight);
-
-			g.setColor(Color.black);
-			g.drawRect((int) updatedX, (int) updatedY, (int) updatedWidth, (int) updatedHeight);
-		}
-
-		f = this.highlightClass2;
-
-		if (f != null) {
-			int originalX = f.getLocation().x;
-			int originalY = f.getLocation().y;
-			int originalWidth = f.getSize().width;
-			int originalHeight = f.getSize().height;
-
-			float updatedX = originalX * (float) ((float) 200 / (float) canvasWidth);
-			float updatedY = originalY * (float) ((float) 200 / (float) canvasHeight);
-			float updatedWidth = originalWidth * (float) ((float) 200 / (float) canvasWidth);
-			float updatedHeight = originalHeight * (float) ((float) 200 / (float) canvasHeight);
-
-			g.setColor(Color.white);
-			g.fillRect((int) updatedX, (int) updatedY, (int) updatedWidth, (int) updatedHeight);
-
-			g.setColor(Color.black);
-			g.drawRect((int) updatedX, (int) updatedY, (int) updatedWidth, (int) updatedHeight);
-		}
-
+		
 		g.setColor(Color.black);
 		g.drawRect(0, 0, this.getWidth() - 1, this.getHeight() - 1);
 
 		g.translate(scroller.getX(), scroller.getY());
 		// draw the pager now
 		this.scroller.paint(g);
-
 	}
 }
 
@@ -672,17 +734,17 @@ class PagerScrollerMouseMotionListener extends MouseMotionAdapter {
 				s.setLocation(0, s.getY());
 			if (s.getY() < 0)
 				s.setLocation(s.getX(), 0);
-			if (s.getX() + s.getWidth() > 200)
-				s.setLocation(200 - s.getWidth(), s.getY());
-			if (s.getY() + s.getHeight() > 200)
-				s.setLocation(s.getX(), 200 - s.getHeight());
+			if (s.getX() + s.getWidth() > s.pager.pagerVirtualWidth)
+				s.setLocation(s.pager.pagerVirtualWidth - s.getWidth(), s.getY());
+			if (s.getY() + s.getHeight() > s.pager.pagerVirtualHeight)
+				s.setLocation(s.getX(), s.pager.pagerVirtualHeight - s.getHeight());
 		}
 
 		int canvasWidth = s.diagram.viewer.getScrollPane().getViewport().getView().getSize().width;
 		int canvasHeight = s.diagram.viewer.getScrollPane().getViewport().getView().getSize().height;
 
-		float scaleFactorX = ((float) canvasWidth / (float) 200);
-		float scaleFactorY = ((float) canvasHeight / (float) 200);
+		float scaleFactorX = ((float) canvasWidth / (float) s.pager.pagerVirtualWidth);
+		float scaleFactorY = ((float) canvasHeight / (float) s.pager.pagerVirtualHeight);
 
 		// this makes the viewport scroll with the pager
 		s.pager.diagram.viewer.getScrollPane().getViewport().setViewPosition(

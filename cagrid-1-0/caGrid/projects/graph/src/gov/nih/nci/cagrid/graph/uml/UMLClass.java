@@ -23,6 +23,9 @@ public class UMLClass extends FigNode
 	protected FigText attribs;
 	protected FigText opers;
 
+	public static int NORMAL = 4;
+	public static int FADED = 5;
+	public int defaultRendering = NORMAL;
 
 	public UMLClass(java.lang.String name) {
 		// start out with a default size
@@ -40,6 +43,13 @@ public class UMLClass extends FigNode
 
 	}
 
+	public void setDefaultRendering(int rendering)
+	{
+		if(rendering == NORMAL || rendering == FADED)
+		{
+			this.defaultRendering = rendering;
+		}
+	}
 
 	public void highlight(Layer layer) {
 		layer.bringToFront(this);
