@@ -46,6 +46,7 @@
 	
 	<!-- extension -->
 	<property name="extension.description.file" value="${basedir}/extension/extension.xml"/>
+	<property name="from.scratch.extension.description.file" value="${basedir}/extension/fromScratchExtension.xml"/>
 	<property name="introduce.extensions.dir" location="../introduce/extensions"/>
 
 	<!-- stubs -->
@@ -513,6 +514,8 @@
 	
 	
 	<!-- Build and install extensions for introduce -->
+	<!-- this target installs the default introduce extension, which adds an operation provider to a service
+	which MAKES it a data service -->
 	<target name="installIntroduceExtensions" depends="all" description="Builds and installs the Data Services extensions into Introduce.">
 		<delete dir="${introduce.extensions.dir}/data" />
 		<mkdir dir="${introduce.extensions.dir}/data" />
@@ -541,6 +544,41 @@
 		</copy>
 		<!-- metadata schemas -->
 		<copy todir="${introduce.extensions.dir}/data/schema/metadata">
+			<fileset dir="${ext.schema.dir}">
+				<include name="**/*.xsd"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	
+	<!-- Build and install the data service 'from scratch' extension for introduce -->
+	<target name="installFromScratchIntroduceExtension" depends="all" description="Builds and installs the Data Service from scratch extensions to Introduce.">
+		<delete dir="${introduce.extensions.dir}/dataFS" />
+		<mkdir dir="${introduce.extensions.dir}/dataFS" />
+		<mkdir dir="${introduce.extensions.dir}/dataFS/schema"/>
+		<mkdir dir="${introduce.extensions.dir}/dataFS/schema/metadata"/>
+		<!-- extension description file -->
+		<copy tofile="${introduce.extensions.dir}/dataFS/extension.xml" file="${from.scratch.extension.description.file}"/>
+		<!-- libraries -->
+		<copy todir="${introduce.extensions.dir}/lib">
+			<fileset dir="${lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${ext.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${build.jars.dir}">
+				<include name="**/*.jar" />
+			</fileset>
+		</copy>
+		<!-- data service schemas -->
+		<copy todir="${introduce.extensions.dir}/dataFS/schema">
+			<fileset dir="${basedir}/schema/Data/">
+				<include name="**/*.xsd"/>
+			</fileset>
+		</copy>
+		<!-- metadata schemas -->
+		<copy todir="${introduce.extensions.dir}/dataFS/schema/metadata">
 			<fileset dir="${ext.schema.dir}">
 				<include name="**/*.xsd"/>
 			</fileset>

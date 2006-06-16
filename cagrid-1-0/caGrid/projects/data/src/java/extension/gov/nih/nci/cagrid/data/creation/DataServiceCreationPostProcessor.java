@@ -79,7 +79,7 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		String schemaDir = getServiceSchemaDir(props);
 		System.out.println("Copying schemas to " + schemaDir);
 		File extensionSchemaDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator 
-			+ "data" + File.separator + "schema");
+			+ "dataFS" + File.separator + "schema");
 		List schemaFiles = Utils.recursiveListFiles(extensionSchemaDir, new XSDFileFilter());
 		for (int i = 0; i < schemaFiles.size(); i++) {
 			File schemaFile = (File) schemaFiles.get(i);
@@ -211,7 +211,7 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 
 
 	private void copySchema(String schemaName, String outputDir) throws Exception {
-		File schemaFile = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data" + File.separator
+		File schemaFile = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "dataFS" + File.separator
 			+ "schema" + File.separator + schemaName);
 		System.out.println("Copying schema from " + schemaFile.getAbsolutePath());
 		File outputFile = new File(outputDir + File.separator + schemaName);
