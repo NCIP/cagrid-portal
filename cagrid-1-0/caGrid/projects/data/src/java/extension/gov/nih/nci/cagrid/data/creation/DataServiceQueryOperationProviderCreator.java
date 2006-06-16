@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.data.creation;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
-import gov.nih.nci.cagrid.data.service.DataServiceImpl;
+import gov.nih.nci.cagrid.data.service.globus.DataServiceProviderImpl;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -173,7 +173,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		queryMethod.setImportInformation(importInfo);
 		// query method is provided
 		MethodTypeProviderInformation providerInfo = new MethodTypeProviderInformation();
-		providerInfo.setProviderClass(DataServiceImpl.class.getName());
+		providerInfo.setProviderClass(DataServiceProviderImpl.class.getName());
 		queryMethod.setProviderInformation(providerInfo);
 		queryMethod.setIsProvided(true);
 		// add the query method to the service
