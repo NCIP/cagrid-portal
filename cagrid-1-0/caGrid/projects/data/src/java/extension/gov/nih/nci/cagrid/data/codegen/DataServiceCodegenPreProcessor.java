@@ -220,7 +220,7 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 						prop.setKey(key);
 						prop.setValue(value);
 						qpProperties.add(prop);
-					}					
+					}	
 				}
 				// add the query processor class name to the properties
 				for (int p = 0; p < props.getProperty().length; p++) {

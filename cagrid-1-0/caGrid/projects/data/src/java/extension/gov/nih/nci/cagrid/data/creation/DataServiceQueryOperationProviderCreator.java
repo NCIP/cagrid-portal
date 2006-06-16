@@ -59,7 +59,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		copyDataServiceSchemas(serviceProperties);
 		copyDataServiceLibraries(serviceProperties);
 		addDataServiceNamespaces(serviceDescription, serviceProperties);
-		addQueryMethod(serviceDescription, serviceProperties, mainService);
+		addQueryMethod(serviceDescription, mainService);
 	}
 	
 	
@@ -133,7 +133,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 	}
 	
 	
-	private void addQueryMethod(ServiceDescription description, Properties props, ServiceType service) throws CreationExtensionException {
+	private void addQueryMethod(ServiceDescription description, ServiceType service) throws CreationExtensionException {
 		MethodType queryMethod = new MethodType();
 		queryMethod.setName(DataServiceConstants.QUERY_METHOD_NAME);
 		// get namespaces needed out of the service description
