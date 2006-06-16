@@ -269,14 +269,14 @@ if(methods!=null && methods.getMethod()!=null){
 		if(!method.isIsImported()){
 %>
 		<operation name="<%=method.getName() %>">
-            <input message="tns:<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Request"/>
-            <output message="tns:<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Response"/>
+            <input message="tns:<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Request" wsa:Action="<%=service.getNamespace()%>/<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Request"/>
+            <output message="tns:<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Response" wsa:Action="<%=service.getNamespace()%>/<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Response"/>
             <%
        		if(method.getExceptions()!=null && method.getExceptions().getException()!=null){
        			for(int faultI = 0; faultI < method.getExceptions().getException().length; faultI++){
        				MethodTypeExceptionsException exception = (MethodTypeExceptionsException)method.getExceptions().getException(faultI);
        				%>
-       		 <fault name="<%=exception.getName() %>" message="tns:<%=exception.getName() %>FaultMessage"/>
+       		 <fault name="<%=exception.getName() %>" message="tns:<%=exception.getName() %>FaultMessage" wsa:Action="<%=service.getNamespace()%>/<%=exception.getName() %>FaultMessage"/>
        				<%
        			}
        		}

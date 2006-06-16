@@ -73,8 +73,8 @@
   ============================================================-->
 <portType name="ServiceSecurityPortType" wsrp:ResourceProperties="tns:ServiceSecurityResourceProperties">
 		<operation name="getServiceSecurityMetadata">
-            <input message="tns:GetServiceSecurityMetadataRequest"/>
-            <output message="tns:GetServiceSecurityMetadataResponse"/>
+		    <input message="tns:GetServiceSecurityMetadataRequest" wsa:Action="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity/GetServiceSecurityMetadataRequest"/>
+		    <output message="tns:GetServiceSecurityMetadataResponse" wsa:Action="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity/GetServiceSecurityMetadataResponse"/>
         </operation>
         <operation name="GetResourceProperty">
             <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest"
