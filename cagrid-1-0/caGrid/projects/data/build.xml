@@ -536,6 +536,7 @@
 		<copy todir="${introduce.extensions.dir}/data/schema">
 			<fileset dir="${basedir}/schema/Data/">
 				<include name="**/*.xsd"/>
+				<include name="DataService.wsdl"/>
 			</fileset>
 		</copy>
 		<!-- metadata schemas -->
