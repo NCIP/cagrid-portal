@@ -13,7 +13,6 @@ import java.util.Map;
  * 
  */
 public class DataServiceImpl {
-	private ServiceConfiguration configuration;
 	
 	public DataServiceImpl() throws RemoteException {
 		
