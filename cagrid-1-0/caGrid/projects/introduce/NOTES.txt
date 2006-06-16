@@ -2,6 +2,8 @@ To Do:
 
 on deployment i have seen unable to delete namespace2package.mappings.
 
+eclipse launch files dont need to be in the top directory to work... move them somewhere else so they don't clutter the services root dir
+
 From BMI Tutorial:
 0) needs handouts for people to follow along
 6) Adding a resource property to a service context, doesn't refresh the JTree
