@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.data.creation;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.data.service.DataServiceImpl;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -70,12 +71,13 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 			+ File.separator + "schema");
 		List schemaFiles = Utils.recursiveListFiles(extensionSchemaDir, new FileFilters.XSDFileFilter());
 		// also copy the WSDL for data services
-		schemaFiles.add(new File(getWsdlFileName(props)));
+		// schemaFiles.add(new File(getWsdlFileName(props)));
+		schemaFiles.add(new File(extensionSchemaDir + File.separator + "DataService.wsdl"));
 		try {
 			for (int i = 0; i < schemaFiles.size(); i++) {
 				File schemaFile = (File) schemaFiles.get(i);
-				String subname = schemaFile.getCanonicalPath().substring(
-					extensionSchemaDir.getCanonicalPath().length() + File.separator.length());
+				String subname = schemaFile.getAbsolutePath().substring(
+					extensionSchemaDir.getAbsolutePath().length() + File.separator.length());
 				copySchema(subname, schemaDir);
 			}
 		} catch (Exception ex) {
@@ -166,12 +168,12 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		importInfo.setNamespace(DataServiceConstants.DATA_SERVICE_NAMESPACE);
 		importInfo.setPackageName(DataServiceConstants.DATA_SERVICE_PACKAGE);
 		importInfo.setPortTypeName(DataServiceConstants.DATA_SERVICE_PORT_TYPE_NAME);
-		importInfo.setWsdlFile(getWsdlFileName(props));
+		importInfo.setWsdlFile("DataService.wsdl");
 		queryMethod.setIsImported(true);
 		queryMethod.setImportInformation(importInfo);
 		// query method is provided
 		MethodTypeProviderInformation providerInfo = new MethodTypeProviderInformation();
-		providerInfo.setProviderClass("temp"); // TODO: set this correctly
+		providerInfo.setProviderClass(DataServiceImpl.class.getName());
 		queryMethod.setProviderInformation(providerInfo);
 		queryMethod.setIsProvided(true);
 		// add the query method to the service
@@ -240,6 +242,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 	}
 	
 	
+	/*
 	private String getWsdlFileName(Properties properties) {
 		String schemaDir = getServiceSchemaDir(properties);
 		File[] wsdlFiles = new File(schemaDir).listFiles(new FileFilter() {
@@ -247,8 +250,9 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 				return file.getName().endsWith(".wsdl");
 			}
 		});
-		return wsdlFiles[0].getName();
+		return wsdlFiles[0].getAbsolutePath();
 	}
+	*/
 
 
 	private String getServiceLibDir(Properties props) {
