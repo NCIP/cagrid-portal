@@ -15,6 +15,8 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeProviderInformation;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
+import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
+import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
@@ -59,6 +61,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		copyDataServiceSchemas(serviceProperties);
 		copyDataServiceLibraries(serviceProperties);
 		addDataServiceNamespaces(serviceDescription, serviceProperties);
+		modifyServiceProperties(serviceDescription);
 		addQueryMethod(serviceDescription, mainService);
 	}
 	
@@ -241,19 +244,6 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 			+ File.separator + props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
 	}
 	
-	
-	/*
-	private String getWsdlFileName(Properties properties) {
-		String schemaDir = getServiceSchemaDir(properties);
-		File[] wsdlFiles = new File(schemaDir).listFiles(new FileFilter() {
-			public boolean accept(File file) {
-				return file.getName().endsWith(".wsdl");
-			}
-		});
-		return wsdlFiles[0].getAbsolutePath();
-	}
-	*/
-
 
 	private String getServiceLibDir(Properties props) {
 		return props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "lib";
@@ -268,6 +258,27 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		} else {
 			log.warn("The eclipse classpath file " + classpathFile.getAbsolutePath() + " was not found.  Was it deleted?");
 		}
+	}
+	
+	
+	private void modifyServiceProperties(ServiceDescription desc) throws CreationExtensionException {
+		ServicePropertiesProperty prop = new ServicePropertiesProperty();
+		prop.setKey(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
+		prop.setValue(""); // empty value to be populated later
+		ServiceProperties serviceProperties = desc.getServiceProperties();
+		if (serviceProperties == null) {
+			serviceProperties = new ServiceProperties();
+		}
+		ServicePropertiesProperty[] allProps = serviceProperties.getProperty();
+		if (allProps != null) {
+			ServicePropertiesProperty[] tmpProps = new ServicePropertiesProperty[allProps.length + 1];
+			System.arraycopy(allProps, 0, tmpProps, 0, allProps.length);
+			tmpProps[tmpProps.length - 1] = prop;
+		} else {
+			allProps = new ServicePropertiesProperty[] {prop};
+		}
+		serviceProperties.setProperty(allProps);
+		desc.setServiceProperties(serviceProperties);
 	}
 	
 	
