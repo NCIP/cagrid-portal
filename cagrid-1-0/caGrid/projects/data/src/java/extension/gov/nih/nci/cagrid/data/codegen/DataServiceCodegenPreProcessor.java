@@ -174,6 +174,12 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 
 	private void modifyServiceProperties(ServiceExtensionDescriptionType desc, ServiceInformation info) throws Exception {
 		ServiceProperties props = info.getServiceProperties();
+		if (props == null) {
+			props = new ServiceProperties();
+		}
+		if (props.getProperty() == null) {
+			props.setProperty(new ServicePropertiesProperty[] {});
+		}
 		String qpClassname = getQueryProcesorClass(desc, info);
 		if (qpClassname != null) {
 			// find the QP class
@@ -233,15 +239,18 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 				ServicePropertiesProperty[] allProperties = new ServicePropertiesProperty[qpProperties.size()];
 				qpProperties.toArray(allProperties);
 				props.setProperty(allProperties);
+				info.setServiceProperties(props);
 			}
 		}
 	}
 	
 	
 	private boolean hasProperty(ServiceProperties props, String key) {
-		for (int i = 0; i < props.getProperty().length; i++) {
-			if (props.getProperty(i).getKey().equals(key)) {
-				return true;
+		if (props != null && props.getProperty() != null) {
+			for (int i = 0; i < props.getProperty().length; i++) {
+				if (props.getProperty(i).getKey().equals(key)) {
+					return true;
+				}
 			}
 		}
 		return false;
