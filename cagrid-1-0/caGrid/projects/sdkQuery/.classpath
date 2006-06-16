@@ -92,5 +92,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-data-1.0-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-data-1.0-validation.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-core-tests-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-data-1.0-cql.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
