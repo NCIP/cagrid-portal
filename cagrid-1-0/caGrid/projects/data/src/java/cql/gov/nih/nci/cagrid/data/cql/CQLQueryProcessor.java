@@ -53,7 +53,8 @@ public abstract class CQLQueryProcessor {
 	/**
 	 * Get a Map of parameters the query processor will require on startup.
 	 * The keys are the parameters required, the values are defaults, or NULL
-	 * if the parameter is not required but optional.
+	 * if the parameter is not required but optional.  The keys MUST start with 
+	 * a capital letter, and must NOT contain spaces or punctuation
 	 * @return
 	 */
 	public abstract Map getRequiredParameters();
