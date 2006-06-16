@@ -18,6 +18,7 @@ import javax.xml.namespace.QName;
 
 import org.apache.tools.ant.BuildException;
 
+
 /**
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -29,8 +30,8 @@ public class SkeletonSecurityOperationProviderCreator {
 	public SkeletonSecurityOperationProviderCreator() {
 	}
 
-	public void createSkeleton(SpecificServiceInformation info)
-			throws Exception {
+
+	public void createSkeleton(SpecificServiceInformation info) throws Exception {
 		ServiceType service = info.getService();
 
 		// add in the method
@@ -38,16 +39,14 @@ public class SkeletonSecurityOperationProviderCreator {
 		method.setName("getServiceSecurityMetadata");
 
 		MethodTypeOutput output = new MethodTypeOutput();
-		output.setQName(new QName(
-				"gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security",
-				"ServiceSecurityMetadata"));
+		output.setQName(new QName("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security",
+			"ServiceSecurityMetadata"));
 		output.setIsArray(false);
 		output.setIsClientHandle(new Boolean(false));
 		method.setOutput(output);
 
 		MethodTypeImportInformation ii = new MethodTypeImportInformation();
-		ii
-				.setNamespace("http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity");
+		ii.setNamespace("http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity");
 		ii.setPackageName("gov.nih.nci.cagrid.introduce.security");
 		ii.setPortTypeName("ServiceSecurityPortType");
 		ii.setWsdlFile("ServiceSecurity.wsdl");
@@ -55,21 +54,19 @@ public class SkeletonSecurityOperationProviderCreator {
 		method.setImportInformation(ii);
 
 		MethodTypeProviderInformation pi = new MethodTypeProviderInformation();
-		pi
-				.setProviderClass("gov.nih.nci.cagrid.introduce.security.service.ServiceSecurityImpl");
+		pi.setProviderClass("gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl");
 		method.setIsProvided(true);
 		method.setProviderInformation(pi);
 
 		CommonTools.addMethod(info.getService(), method);
 
 		if (CommonTools.getNamespaceType(info.getNamespaces(),
-				"gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security") == null) {
+			"gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security") == null) {
 			// add in the namespace type
 			NamespaceType nsType = new NamespaceType();
 			nsType.setGenerateStubs(new Boolean(false));
 			nsType.setLocation("./ServiceSecurity.xsd");
-			nsType
-					.setNamespace("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security");
+			nsType.setNamespace("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security");
 			nsType.setPackageName("gov.nih.nci.cagrid.metadata.security");
 			SchemaElementType[] schemaElements = new SchemaElementType[4];
 			SchemaElementType one = new SchemaElementType();
@@ -87,71 +84,48 @@ public class SkeletonSecurityOperationProviderCreator {
 			nsType.setSchemaElement(schemaElements);
 
 			CommonTools.addNamespace(info.getServiceDescriptor(), nsType);
-			
 
 			// copy over the wsdl file and the required schema
-			Utils.copyFile(new File("operationProviders" + File.separator
-					+ "ServiceSecurity" + File.separator + "schema"
-					+ File.separator + "ServiceSecurity" + File.separator
-					+ "ServiceSecurity.wsdl"), new File(info.getBaseDirectory()
-					.getAbsolutePath()
+			Utils.copyFile(new File("operationProviders" + File.separator + "ServiceSecurity" + File.separator
+				+ "schema" + File.separator + "ServiceSecurity" + File.separator + "ServiceSecurity.wsdl"), new File(
+				info.getBaseDirectory().getAbsolutePath()
 					+ File.separator
 					+ "schema"
 					+ File.separator
 					+ info.getIntroduceServiceProperties().getProperty(
-							IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
-					+ File.separator + "ServiceSecurity.wsdl"));
-			Utils.copyFile(new File("operationProviders" + File.separator
-					+ "ServiceSecurity" + File.separator + "schema"
-					+ File.separator + "ServiceSecurity" + File.separator
-					+ "ServiceSecurity.xsd"), new File(info.getBaseDirectory()
-					.getAbsolutePath()
+						IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator + "ServiceSecurity.wsdl"));
+			Utils.copyFile(new File("operationProviders" + File.separator + "ServiceSecurity" + File.separator
+				+ "schema" + File.separator + "ServiceSecurity" + File.separator + "ServiceSecurity.xsd"), new File(
+				info.getBaseDirectory().getAbsolutePath()
 					+ File.separator
 					+ "schema"
 					+ File.separator
 					+ info.getIntroduceServiceProperties().getProperty(
-							IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
-					+ File.separator + "ServiceSecurity.xsd"));
+						IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator + "ServiceSecurity.xsd"));
 
 			// copy over the jars which contain the stubs and the service impl
-			Utils.copyFile(new File("operationProviders" + File.separator
-					+ "ServiceSecurity" + File.separator + "build"
-					+ File.separator + "lib" + File.separator
-					+ "ServiceSecurity_stubs.jar"), new File(info.getBaseDirectory()
-					.getAbsolutePath()
-					+ File.separator
-					+ "lib"
-					+ File.separator + "ServiceSecurity_stubs.jar"));
-			Utils.copyFile(new File("operationProviders" + File.separator
-					+ "ServiceSecurity" + File.separator + "build"
-					+ File.separator + "lib" + File.separator
-					+ "ServiceSecurity-common.jar"), new File(info.getBaseDirectory()
-					.getAbsolutePath()
-					+ File.separator
-					+ "lib"
-					+ File.separator + "ServiceSecurity-common.jar"));
-			Utils.copyFile(new File("operationProviders" + File.separator
-					+ "ServiceSecurity" + File.separator + "build"
-					+ File.separator + "lib" + File.separator
-					+ "ServiceSecurity-client.jar"), new File(info.getBaseDirectory()
-					.getAbsolutePath()
-					+ File.separator
-					+ "lib"
-					+ File.separator + "ServiceSecurity-client.jar"));
-			Utils.copyFile(new File("operationProviders" + File.separator
-					+ "ServiceSecurity" + File.separator + "build"
-					+ File.separator + "lib" + File.separator
-					+ "ServiceSecurity-service.jar"), new File(info.getBaseDirectory()
-					.getAbsolutePath()
-					+ File.separator
-					+ "lib"
-					+ File.separator + "ServiceSecurity-service.jar"));
-			
+			Utils.copyFile(new File("operationProviders" + File.separator + "ServiceSecurity" + File.separator
+				+ "build" + File.separator + "lib" + File.separator + "ServiceSecurity_stubs.jar"), new File(info
+				.getBaseDirectory().getAbsolutePath()
+				+ File.separator + "lib" + File.separator + "ServiceSecurity_stubs.jar"));
+			Utils.copyFile(new File("operationProviders" + File.separator + "ServiceSecurity" + File.separator
+				+ "build" + File.separator + "lib" + File.separator + "ServiceSecurity-common.jar"), new File(info
+				.getBaseDirectory().getAbsolutePath()
+				+ File.separator + "lib" + File.separator + "ServiceSecurity-common.jar"));
+			Utils.copyFile(new File("operationProviders" + File.separator + "ServiceSecurity" + File.separator
+				+ "build" + File.separator + "lib" + File.separator + "ServiceSecurity-client.jar"), new File(info
+				.getBaseDirectory().getAbsolutePath()
+				+ File.separator + "lib" + File.separator + "ServiceSecurity-client.jar"));
+			Utils.copyFile(new File("operationProviders" + File.separator + "ServiceSecurity" + File.separator
+				+ "build" + File.separator + "lib" + File.separator + "ServiceSecurity-service.jar"), new File(info
+				.getBaseDirectory().getAbsolutePath()
+				+ File.separator + "lib" + File.separator + "ServiceSecurity-service.jar"));
+
 		}
 		// write the modified document back out....
 		try {
-			Utils.serializeDocument(info.getBaseDirectory()+ File.separator + "introduce.xml", info.getServiceDescriptor(), new QName(
-				"gme://gov.nih.nci.cagrid/1/Introduce", "ServiceDescription"));
+			Utils.serializeDocument(info.getBaseDirectory() + File.separator + "introduce.xml", info
+				.getServiceDescriptor(), new QName("gme://gov.nih.nci.cagrid/1/Introduce", "ServiceDescription"));
 		} catch (Exception e1) {
 			BuildException be = new BuildException(e1.getMessage());
 			be.setStackTrace(e1.getStackTrace());

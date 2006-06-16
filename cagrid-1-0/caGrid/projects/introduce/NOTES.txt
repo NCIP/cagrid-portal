@@ -6,6 +6,7 @@ eclipse launch files dont need to be in the top directory to work... move them s
 
 From BMI Tutorial:
 0) needs handouts for people to follow along
+4) (DONE--dave says is still broken... he added appservice.url and it died) Service Property key needs to make sure its a valid java identifier
 6) Adding a resource property to a service context, doesn't refresh the JTree
 
 metadata code doesn't compile if you select an element that is xsd:type an XML schema type (e.g. string)
@@ -93,7 +94,7 @@ From BMI Tutorial
   - if you put spaces or something in it, it completely screws up the service (because sync source can't read the created file)
 2) (DONE this is fine) Generated fault doesn't appear to take a message
 3) (DONE) We should genterate a client launcher
-4) (DONE) Service Property key needs to make sure its a valid java identifier
+
 5) (DONE) Service Contexts.. create Service Context needs defaults for the values (namespace, package, etc..)
 7) (DONE) Right-clicking the modify service context, removed the service and through a NPE
 8) (DONE) when we write the .classpath, we should "hard code" globus location instead of using the classpath variable
