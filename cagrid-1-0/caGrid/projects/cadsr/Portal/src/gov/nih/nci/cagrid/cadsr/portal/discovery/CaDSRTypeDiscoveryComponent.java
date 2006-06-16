@@ -91,7 +91,7 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent imp
 			public void run() {
 				CaDSRServiceI cadsrService = new CaDSRServiceClient(getCaDSRPanel().getCadsr().getText());
 				try {
-					// TODO: how to clear diagrams contents?
+			
 					getUMLDiagram().clear(); 
 					UMLClassMetadata[] classes = cadsrService.findClassesInPackage(
 						getCaDSRPanel().getSelectedProject(), pkg.getName());
@@ -116,9 +116,7 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent imp
 
 							getUMLDiagram().addClass(c);
 
-							// TODO: this seems to updating the graph live... it
-							// shouldn't until the diagram refresh.. otherwise
-							// get rid of the diagram refresh
+
 						}
 					}
 
