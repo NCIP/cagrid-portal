@@ -1,3 +1,10 @@
+NOTE: the readme's in the graph project and the actual implementation of the
+graph project are a little out of sync. Im still working on the implementation
+so please hold on from actually using anything from here as all the API's , etc.
+have not been polished. 
+
+-forhad
+
 the graph project currently holds several disparate sub-projects that should
 be moved to their own places.  There are dependencies amongst them however.  
 
