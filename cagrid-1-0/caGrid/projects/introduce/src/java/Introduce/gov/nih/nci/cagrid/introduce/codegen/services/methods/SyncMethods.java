@@ -149,9 +149,6 @@ public class SyncMethods extends SyncTool {
 		// need to add in any new services into the service.wsdd
 		File serverConfigF = new File(getBaseDirectory().getAbsolutePath() + File.separator + "server-config.wsdd");
 
-		NewServerConfigTemplate newServerConfigT = new NewServerConfigTemplate();
-		String newServerConfigS = newServerConfigT.generate(ssi);
-
 		Document serverConfigDoc = XMLUtilities.fileNameToDocument(serverConfigF.getAbsolutePath());
 
 		// we need to now find the "service" element so that we can update any
