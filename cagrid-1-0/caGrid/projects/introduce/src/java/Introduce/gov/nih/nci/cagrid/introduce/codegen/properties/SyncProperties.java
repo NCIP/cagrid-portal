@@ -25,7 +25,7 @@ import org.projectmobius.common.XMLUtilities;
 
 
 /**
- * Create INTRODUCE_SERVICE_PROPERTIES file
+ * Keep the JNDI file in sync.....
  * 
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
