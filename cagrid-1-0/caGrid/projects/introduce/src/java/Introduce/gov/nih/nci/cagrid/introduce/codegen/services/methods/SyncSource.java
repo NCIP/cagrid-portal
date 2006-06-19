@@ -163,7 +163,9 @@ public class SyncSource {
 				returnType += "[]";
 			}
 		}
-		methodString += "     public " + returnType + " " + methodName + "(";
+	
+			methodString += "     public " + returnType + " " + methodName + "(";
+		
 		if (method.getInputs() != null && method.getInputs().getInput() != null) {
 			for (int j = 0; j < method.getInputs().getInput().length; j++) {
 				SchemaInformation info = CommonTools.getSchemaInformation(serviceInfo.getNamespaces(), method
@@ -518,11 +520,9 @@ public class SyncSource {
 		String clientMethod = "\n\t" + createClientUnBoxedSignatureStringFromMethod(method) + " "
 			+ createClientExceptions(method);
 		clientMethod += "{\n";
-		if (!method.getName().equals("getServiceSecurityMetadata")) {
-			clientMethod += lineStart
-				+ "ServiceSecurityClient.configurePortType(this.securityMetadata,(org.apache.axis.client.Stub)this.portType,\""
-				+ method.getName() + "\");\n";
-		}
+		clientMethod += lineStart+"synchronized (this) {\n";
+		clientMethod += lineStart
+			+ "configureStubSecurity(\""+ method.getName() +"\");\n";
 
 		// put in the call to the client
 		String var = "portType";
@@ -605,7 +605,7 @@ public class SyncSource {
 		}
 
 		clientMethod += methodString;
-
+		clientMethod += lineStart+"}\n";
 		clientMethod += "\n\t}\n\n";
 
 		fileContent.insert(endOfClass - 1, clientMethod);

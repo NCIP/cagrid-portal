@@ -52,6 +52,14 @@ public class SecurityDescriptorGenerator {
 			xml.append("    </auth-method>\n");
 			xml.append("</method>\n");
 
+			// Sloppy Jalopy, need to have this accomplished when adding as
+			// provider
+			xml.append("<method name=\"getServiceSecurityMetadata\">\n");
+			xml.append("    <auth-method>\n");
+			xml.append("      <none/>\n");
+			xml.append("    </auth-method>\n");
+			xml.append("</method>\n");
+
 			xml.append(writeServiceSettings(info.getService().getServiceSecurity()));
 
 			ServiceType service = info.getService();
@@ -60,7 +68,9 @@ public class SecurityDescriptorGenerator {
 				MethodType[] method = methods.getMethod();
 				if (method != null) {
 					for (int i = 0; i < method.length; i++) {
-						xml.append(writeMethodSettings(info.getService().getServiceSecurity(), method[i]));
+						if (!method[i].getName().equals("getServiceSecurityMetadata")) {
+							xml.append(writeMethodSettings(info.getService().getServiceSecurity(), method[i]));
+						}
 					}
 				}
 			}
