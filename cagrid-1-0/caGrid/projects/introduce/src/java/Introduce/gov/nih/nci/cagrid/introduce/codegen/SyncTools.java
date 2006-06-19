@@ -88,7 +88,7 @@ public class SyncTools {
 			this.info = info;
 			this.excludedSet = excludedSet;
 			symbolTables = new ArrayList();
-			generateSymbolTable(info, excludedSet);
+			generateSymbolTable(excludedSet);
 		}
 
 		public Element getElement(QName qname) {
@@ -121,7 +121,7 @@ public class SyncTools {
 			}
 		}
 
-		public void generateSymbolTable(ServiceInformation info, Set excludeSet)
+		public void generateSymbolTable(Set excludeSet)
 				throws Exception {
 
 			if (info.getServices() != null

@@ -21,16 +21,10 @@ import java.io.IOException;
  */
 public class SyncBase extends SyncTool {
 
-	private File srcDir;
-
 	private File etcDir;
 
 	public SyncBase(File baseDirectory, ServiceInformation info) {
 		super(baseDirectory, info);
-		srcDir = new File(baseDirectory.getAbsolutePath() + File.separator
-				+ "src");
-		// schemaDir = new File(baseDirectory.getAbsolutePath() + File.separator
-		// + "schema");
 		etcDir = new File(baseDirectory.getAbsolutePath() + File.separator
 				+ "etc");
 	}

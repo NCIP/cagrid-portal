@@ -9,7 +9,6 @@ import java.util.StringTokenizer;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
-import org.apache.tools.ant.taskdefs.Filter;
 import org.jdom.Document;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.XMLUtilities;

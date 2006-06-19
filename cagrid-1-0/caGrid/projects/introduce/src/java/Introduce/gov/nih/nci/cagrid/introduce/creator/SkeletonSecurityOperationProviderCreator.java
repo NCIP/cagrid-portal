@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.introduce.creator;
 
-import java.io.File;
-
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -10,9 +8,10 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeProviderInformation;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
-import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
+
+import java.io.File;
 
 import javax.xml.namespace.QName;
 
@@ -32,7 +31,6 @@ public class SkeletonSecurityOperationProviderCreator {
 
 
 	public void createSkeleton(SpecificServiceInformation info) throws Exception {
-		ServiceType service = info.getService();
 
 		// add in the method
 		MethodType method = new MethodType();

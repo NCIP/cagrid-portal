@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.apache.axis.client.Stub;
 import org.apache.axis.utils.JavaUtils;
 import org.apache.ws.jaxme.js.JavaMethod;
 import org.apache.ws.jaxme.js.JavaSource;
@@ -244,8 +243,8 @@ public class SyncSource {
 		List list = new ArrayList();
 		if (serviceInfo.getServices() != null && serviceInfo.getServices().getService() != null) {
 			for (int i = 0; i < serviceInfo.getServices().getService().length; i++) {
-				ServiceType service = serviceInfo.getServices().getService(i);
-				list.add(service.getPackageName() + ".client." + service.getName() + "Client");
+				ServiceType thisservice = serviceInfo.getServices().getService(i);
+				list.add(thisservice.getPackageName() + ".client." + thisservice.getName() + "Client");
 			}
 		}
 		return list;
@@ -375,7 +374,6 @@ public class SyncSource {
 
 		String packageName = "";
 		for (int i = 0; i < methods.length; i++) {
-			;
 			if (methods[i].getName().equals(methodName)) {
 				packageName = methods[i].getType().getPackageName();
 				break;

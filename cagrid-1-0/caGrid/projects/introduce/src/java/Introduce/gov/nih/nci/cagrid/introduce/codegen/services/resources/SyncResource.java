@@ -33,8 +33,6 @@ public class SyncResource extends SyncTool {
 
 	private File srcDir;
 
-	private File etcDir;
-
 	private ServiceType service;
 
 	public SyncResource(File baseDirectory, ServiceInformation info,
@@ -42,10 +40,6 @@ public class SyncResource extends SyncTool {
 		super(baseDirectory, info);
 		srcDir = new File(baseDirectory.getAbsolutePath() + File.separator
 				+ "src");
-		// schemaDir = new File(baseDirectory.getAbsolutePath() + File.separator
-		// + "schema");
-		etcDir = new File(baseDirectory.getAbsolutePath() + File.separator
-				+ "etc");
 		this.service = service;
 	}
 

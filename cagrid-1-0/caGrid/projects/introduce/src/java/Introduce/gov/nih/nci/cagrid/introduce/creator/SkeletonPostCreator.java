@@ -48,14 +48,13 @@ public class SkeletonPostCreator extends Task {
 		}
 
 
-		ExtensionTools tools = new ExtensionTools();
 		// run any extensions that need to be ran
 		if (introService.getExtensions() != null && introService.getExtensions().getExtension() != null) {
 			ExtensionType[] extensions = introService.getExtensions().getExtension();
 			for (int i = 0; i < extensions.length; i++) {
 				CreationExtensionPostProcessor pp = null;
 				try {
-					pp = tools.getCreationPostProcessor(extensions[i].getName());
+					pp = ExtensionTools.getCreationPostProcessor(extensions[i].getName());
 				} catch (Exception e1) {
 					BuildException be = new BuildException(e1.getMessage());
 					be.setStackTrace(e1.getStackTrace());
