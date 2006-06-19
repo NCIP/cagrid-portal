@@ -268,17 +268,6 @@ public class SecurityDescriptorGenerator {
 				return true;
 			}
 
-			if (!objectEquals(service.getClientAuthorization(), method.getClientAuthorization())) {
-				return true;
-			}
-
-			if (!objectEquals(service.getClientCommunication(), method.getClientCommunication())) {
-				return true;
-			}
-
-			if (!objectEquals(service.getDelegationMode(), method.getDelegationMode())) {
-				return true;
-			}
 			if (!objectEquals(service.getRunAsMode(), method.getRunAsMode())) {
 				return true;
 			}

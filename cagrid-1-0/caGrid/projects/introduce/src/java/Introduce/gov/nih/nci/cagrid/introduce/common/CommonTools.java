@@ -314,15 +314,6 @@ public class CommonTools {
 		} else if (!Utils.equals(ss.getAnonymousClients(), ms
 				.getAnonymousClients())) {
 			return false;
-		} else if (!Utils.equals(ss.getClientAuthorization(), ms
-				.getClientAuthorization())) {
-			return false;
-		} else if (!Utils.equals(ss.getClientCommunication(), ms
-				.getClientCommunication())) {
-			return false;
-		} else if (!Utils
-				.equals(ss.getDelegationMode(), ms.getDelegationMode())) {
-			return false;
 		} else if (!Utils.equals(ss.getSecureConversation(), ms
 				.getSecureConversation())) {
 			return false;

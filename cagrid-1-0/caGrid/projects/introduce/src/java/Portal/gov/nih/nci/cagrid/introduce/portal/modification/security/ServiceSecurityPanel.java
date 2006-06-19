@@ -6,9 +6,6 @@ import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.portal.CertificatePanel;
 import gov.nih.nci.cagrid.gridca.portal.ProxyPanel;
 import gov.nih.nci.cagrid.introduce.beans.security.AnonymousCommunication;
-import gov.nih.nci.cagrid.introduce.beans.security.ClientAuthorization;
-import gov.nih.nci.cagrid.introduce.beans.security.ClientCommunication;
-import gov.nih.nci.cagrid.introduce.beans.security.DelegationMode;
 import gov.nih.nci.cagrid.introduce.beans.security.GridMapAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.NoAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.ProxyCredential;
@@ -16,7 +13,6 @@ import gov.nih.nci.cagrid.introduce.beans.security.RunAsMode;
 import gov.nih.nci.cagrid.introduce.beans.security.SecureConversation;
 import gov.nih.nci.cagrid.introduce.beans.security.SecureMessage;
 import gov.nih.nci.cagrid.introduce.beans.security.SecuritySetting;
-import gov.nih.nci.cagrid.introduce.beans.security.SelfAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceCredential;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
@@ -29,7 +25,6 @@ import java.awt.CardLayout;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.io.File;
 
 import javax.swing.ButtonGroup;
@@ -88,39 +83,15 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
 	private SecureMessagePanel secureMessagePanel = null;
 
-	private JComboBox clientCommunication = null;
-
 	private JComboBox runAsMode = null;
-
-	private JComboBox delegationMode = null;
-
-	private boolean syncingComm = false;
 
 	private JComboBox anonymousCommunication = null;
 
 	private JTabbedPane transportPanel = null;
 
-	private JPanel clientAuthorization = null;
-
-	private HostAuthorizationPanel hostAuthorization = null;
-
-	private CardLayout clientAuthLayout = new CardLayout();
-
-	private IdentityAuthorizationPanel identityAuthorization = null;
-
-	private JPanel blankPanel = null;
-
-	private JComboBox clientAuth = null;
-
 	private boolean isInited = false;
 
 	private final static String NO_AUTHORIZATION = "No Authorization";
-
-	private final static String HOST_AUTHORIZATION = "Host Authorization";
-
-	private final static String IDENTITY_AUTHORIZATION = "Identity Authorization";
-
-	private final static String SELF_AUTHORIZATION = "Self Authorization";
 
 	private final static String GRID_MAP_AUTHORIZATION = "Gridmap";
 
@@ -135,16 +106,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private final static String N0_CRED_PANEL = "No Cred Panel";
 
 	private JPanel communicationPanel = null;
-
-	private JPanel clientPanel = null;
-
-	private JLabel jLabel9 = null;
-
-	private JLabel jLabel5 = null;
-
-	private JLabel dele = null;
-
-	private JLabel jLabel7 = null;
 
 	private JPanel generalSecurity = null;
 
@@ -180,8 +141,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
 	private JPanel authorizationTypePanel = null;
 
-	private JLabel authLabel = null;
-
 	private JComboBox authorizationMechanism = null;
 
 	private CardLayout authLayout;
@@ -195,6 +154,12 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JPanel jPanel = null;
 
 	private JLabel jLabel6 = null;
+
+	private JPanel jPanel1 = null;
+
+	private JLabel credentialsRequired = null;
+
+	private JLabel authLabel = null;
 
 
 	public ServiceSecurityPanel() {
@@ -353,38 +318,16 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			if (secureMessageButton.isSelected()) {
 				ss.setSecureMessage(this.secureMessagePanel.getSecureMessage());
 			}
-			if (clientCommunication.isEnabled()) {
-				ss.setClientCommunication((ClientCommunication) clientCommunication.getSelectedItem());
-			}
 			if (runAsMode.isEnabled()) {
 				ss.setRunAsMode((RunAsMode) runAsMode.getSelectedItem());
 			}
-			if (delegationMode.isEnabled()) {
-				ss.setDelegationMode((DelegationMode) delegationMode.getSelectedItem());
-			} else {
-				ss.setDelegationMode(DelegationMode.None);
-			}
+
 			if (anonymousCommunication.isEnabled()) {
 				ss.setAnonymousClients((AnonymousCommunication) anonymousCommunication.getSelectedItem());
 			} else {
 				ss.setAnonymousClients(AnonymousCommunication.No);
 			}
 
-			ClientAuthorization cli = new ClientAuthorization();
-			if (clientAuth.isEnabled()) {
-				if (this.clientAuth.getSelectedItem().equals(HOST_AUTHORIZATION)) {
-					cli.setHostAuthorization(hostAuthorization.getHostAuthorization());
-				} else if (this.clientAuth.getSelectedItem().equals(IDENTITY_AUTHORIZATION)) {
-					cli.setIdentityAuthorization(identityAuthorization.getIdentitytAuthorization());
-				} else if (this.clientAuth.getSelectedItem().equals(SELF_AUTHORIZATION)) {
-					cli.setSelfAuthorization(new SelfAuthorization());
-				} else {
-					cli.setNoAuthorization(new NoAuthorization());
-				}
-			} else {
-				cli.setNoAuthorization(new NoAuthorization());
-			}
-			ss.setClientAuthorization(cli);
 			if ((this.certificateLocation != null) && (this.privateKeyLocation != null)) {
 				ServiceCredential cred = new ServiceCredential();
 				X509Credential x509 = new X509Credential();
@@ -440,44 +383,17 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 					secureMessageButton.setSelected(true);
 					this.secureMessagePanel.setSecureMessage(sm);
 				}
-				this.synchClientCommunication();
-				ClientCommunication cc = ss.getClientCommunication();
-				if (cc != null) {
-					clientCommunication.setSelectedItem(cc);
-				}
+
 				RunAsMode runas = ss.getRunAsMode();
 				if (runas != null) {
 					this.runAsMode.setSelectedItem(runas);
 				}
 
-				DelegationMode dm = ss.getDelegationMode();
-				if (delegationMode != null) {
-					this.delegationMode.setSelectedItem(dm);
-				}
 				AnonymousCommunication anon = ss.getAnonymousClients();
 				if (anon != null) {
 					anonymousCommunication.setSelectedItem(anon);
 				}
 
-				if (ss.getClientAuthorization() != null) {
-					ClientAuthorization cli = ss.getClientAuthorization();
-					if (cli.getNoAuthorization() != null) {
-						this.clientAuth.setSelectedItem(NO_AUTHORIZATION);
-					}
-
-					if (cli.getSelfAuthorization() != null) {
-						this.clientAuth.setSelectedItem(SELF_AUTHORIZATION);
-					}
-					if (cli.getHostAuthorization() != null) {
-						this.clientAuth.setSelectedItem(HOST_AUTHORIZATION);
-						hostAuthorization.setHostAuthorization(cli.getHostAuthorization());
-					}
-
-					if (cli.getIdentityAuthorization() != null) {
-						this.clientAuth.setSelectedItem(IDENTITY_AUTHORIZATION);
-						identityAuthorization.setIdentityAuthorization(cli.getIdentityAuthorization());
-					}
-				}
 				ServiceCredential scred = ss.getServiceCredentials();
 				if (scred != null) {
 					this.setCredentials(scred.getX509Credential());
@@ -524,29 +440,12 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 				secureMessagePanel.enablePanel();
 			}
 
-			synchClientCommunication();
-			if (isSecure()) {
-				clientCommunication.setEnabled(true);
-			}
-			if (isSecure()) {
-				delegationMode.setEnabled(true);
-				if ((usesTransportSecurity()) || (usesSecureMessage())) {
-					delegationMode.setEnabled(false);
-				}
-			}
-
 			synchRunAsMode();
 			if (isSecure()) {
 				runAsMode.setEnabled(true);
 			}
-
 			this.syncServiceCredentials();
 
-			if (isSecure()) {
-				clientAuth.setEnabled(true);
-				hostAuthorization.enablePanel();
-				identityAuthorization.enablePanel();
-			}
 			this.syncAuthorization();
 			this.syncAnonymousCommunication();
 
@@ -555,30 +454,16 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
 
 	private void syncAnonymousCommunication() {
-		if (isSecure()) {
-			ClientCommunication comm = (ClientCommunication) clientCommunication.getSelectedItem();
-			if (determineCommOk(comm)) {
-				if ((this.getAuthorizationMechanism().isEnabled())
-					&& (!this.getAuthorizationMechanism().getSelectedItem().equals(NO_AUTHORIZATION))) {
-					anonymousCommunication.setEnabled(false);
-				} else {
-					anonymousCommunication.setEnabled(true);
-				}
-			}
-		}
-	}
 
-
-	private boolean determineCommOk(ClientCommunication comm) {
-		boolean commOk = false;
-		if (comm != null) {
-			if (comm.equals(ClientCommunication.Secure_Conversation)) {
-				commOk = true;
-			} else if (comm.equals(ClientCommunication.Transport_Layer_Security)) {
-				commOk = true;
+		if (usesTransportSecurity() || usesSecureConversation()) {
+			if (getAuthorizationMechanism().getSelectedItem().equals(NO_AUTHORIZATION)) {
+				anonymousCommunication.setEnabled(true);
+			} else {
+				anonymousCommunication.setEnabled(false);
 			}
+		} else {
+			anonymousCommunication.setEnabled(false);
 		}
-		return commOk;
 	}
 
 
@@ -589,13 +474,8 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		secureMessageButton.setEnabled(false);
 		secureConversationPanel.disablePanel();
 		secureMessagePanel.disablePanel();
-		clientCommunication.setEnabled(false);
 		runAsMode.setEnabled(false);
-		delegationMode.setEnabled(false);
 		anonymousCommunication.setEnabled(false);
-		clientAuth.setEnabled(false);
-		hostAuthorization.disablePanel();
-		identityAuthorization.disablePanel();
 		credentialLoadMethod.setEnabled(false);
 		loadCredentialsButton.setEnabled(false);
 		credentialPanelLayout.show(credentialsPanel, N0_CRED_PANEL);
@@ -648,16 +528,11 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 				if (hasServiceCredentials()) {
 					this.runAsMode.addItem(RunAsMode.Service);
 				}
-				if (this.getDelegationMode().isEnabled()) {
-					if ((this.getDelegationMode().getSelectedItem().equals(DelegationMode.Limited))
-						|| (this.getDelegationMode().getSelectedItem().equals(DelegationMode.Full))) {
 
-						if (!getAnonymousCommunication().isEnabled()) {
-							this.runAsMode.addItem(RunAsMode.Caller);
-						} else if (getAnonymousCommunication().getSelectedItem().equals(AnonymousCommunication.No)) {
-							this.runAsMode.addItem(RunAsMode.Caller);
-						}
-					}
+				if (!getAnonymousCommunication().isEnabled()) {
+					this.runAsMode.addItem(RunAsMode.Caller);
+				} else if (getAnonymousCommunication().getSelectedItem().equals(AnonymousCommunication.No)) {
+					this.runAsMode.addItem(RunAsMode.Caller);
 				}
 
 			}
@@ -674,33 +549,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			return true;
 		} else {
 			return false;
-		}
-	}
-
-
-	private synchronized void synchClientCommunication() {
-		if (!syncingComm) {
-			syncingComm = true;
-			Object obj = clientCommunication.getSelectedItem();
-			clientCommunication.removeAllItems();
-			if (isSecure()) {
-				clientCommunication.setEnabled(true);
-
-				if (tlsButton.isSelected()) {
-					clientCommunication.addItem(ClientCommunication.Transport_Layer_Security);
-				}
-				if (secureConversationButton.isSelected()) {
-					clientCommunication.addItem(ClientCommunication.Secure_Conversation);
-				}
-				if (secureMessageButton.isSelected()) {
-					clientCommunication.addItem(ClientCommunication.Secure_Message);
-				}
-
-				if (obj != null) {
-					clientCommunication.setSelectedItem(obj);
-				}
-			}
-			syncingComm = false;
 		}
 	}
 
@@ -846,24 +694,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
 
 	/**
-	 * This method initializes clientCommunication
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getClientCommunication() {
-		if (clientCommunication == null) {
-			clientCommunication = new JComboBox();
-			clientCommunication.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					synchronize();
-				}
-			});
-		}
-		return clientCommunication;
-	}
-
-
-	/**
 	 * This method initializes runAsMode
 	 * 
 	 * @return javax.swing.JComboBox
@@ -873,29 +703,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			runAsMode = new JComboBox();
 		}
 		return runAsMode;
-	}
-
-
-	/**
-	 * This method initializes delegationMode
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getDelegationMode() {
-		if (delegationMode == null) {
-			delegationMode = new JComboBox();
-			delegationMode.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if (isInited) {
-						synchronize();
-					}
-				}
-			});
-			delegationMode.addItem(DelegationMode.None);
-			delegationMode.addItem(DelegationMode.Limited);
-			delegationMode.addItem(DelegationMode.Full);
-		}
-		return delegationMode;
 	}
 
 
@@ -931,103 +738,9 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			transportPanel = new JTabbedPane();
 			transportPanel.addTab("Secure Communication", null, getCommunicationPanel(), null);
 			transportPanel.addTab("Authorization", null, getAuthorizationPanel(), null);
-			transportPanel.addTab("Client", null, getClientPanel(), null);
 			transportPanel.addTab("Service Credentials", null, getServiceCredentials(), null);
 		}
 		return transportPanel;
-	}
-
-
-	/**
-	 * This method initializes clientAuthorization
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getClientAuthorization() {
-		if (clientAuthorization == null) {
-			clientAuthorization = new JPanel();
-			clientAuthorization.setLayout(clientAuthLayout);
-			clientAuthorization.add(getHostAuthorization(), getHostAuthorization().getName());
-			clientAuthorization.add(getIdentityAuthorization(), getIdentityAuthorization().getName());
-			clientAuthorization.add(getBlankPanel(), getBlankPanel().getName());
-		}
-		return clientAuthorization;
-	}
-
-
-	/**
-	 * This method initializes hostAuthorization
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getHostAuthorization() {
-		if (hostAuthorization == null) {
-			hostAuthorization = new HostAuthorizationPanel();
-			hostAuthorization.setName(HOST_AUTHORIZATION);
-		}
-		return hostAuthorization;
-	}
-
-
-	/**
-	 * This method initializes identityAuthorization
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getIdentityAuthorization() {
-		if (identityAuthorization == null) {
-			identityAuthorization = new IdentityAuthorizationPanel();
-			identityAuthorization.setName(IDENTITY_AUTHORIZATION);
-		}
-		return identityAuthorization;
-	}
-
-
-	/**
-	 * This method initializes blankPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getBlankPanel() {
-		if (blankPanel == null) {
-			blankPanel = new JPanel();
-			blankPanel.setName(NO_AUTHORIZATION);
-		}
-		return blankPanel;
-	}
-
-
-	/**
-	 * This method initializes clientAuth
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getClientAuth() {
-		if (clientAuth == null) {
-			clientAuth = new JComboBox();
-			clientAuth.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if (clientAuth.getSelectedItem().equals(NO_AUTHORIZATION)) {
-						clientAuthLayout.show(clientAuthorization, NO_AUTHORIZATION);
-					}
-
-					if (clientAuth.getSelectedItem().equals(SELF_AUTHORIZATION)) {
-						clientAuthLayout.show(clientAuthorization, NO_AUTHORIZATION);
-					}
-					if (clientAuth.getSelectedItem().equals(HOST_AUTHORIZATION)) {
-						clientAuthLayout.show(clientAuthorization, HOST_AUTHORIZATION);
-					}
-					if (clientAuth.getSelectedItem().equals(IDENTITY_AUTHORIZATION)) {
-						clientAuthLayout.show(clientAuthorization, IDENTITY_AUTHORIZATION);
-					}
-				}
-			});
-			clientAuth.addItem(NO_AUTHORIZATION);
-			clientAuth.addItem(HOST_AUTHORIZATION);
-			clientAuth.addItem(IDENTITY_AUTHORIZATION);
-			clientAuth.addItem(SELF_AUTHORIZATION);
-		}
-		return clientAuth;
 	}
 
 
@@ -1073,93 +786,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			communicationPanel.add(getSecureMessagePanel(), gridBagConstraints11);
 		}
 		return communicationPanel;
-	}
-
-
-	/**
-	 * This method initializes clientPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getClientPanel() {
-		if (clientPanel == null) {
-			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
-			gridBagConstraints18.insets = new java.awt.Insets(10, 10, 10, 10);
-			gridBagConstraints18.weightx = 1.0D;
-			gridBagConstraints18.weighty = 1.0D;
-			gridBagConstraints18.gridwidth = 2;
-			gridBagConstraints18.gridx = 0;
-			gridBagConstraints18.gridy = 4;
-			gridBagConstraints18.fill = java.awt.GridBagConstraints.BOTH;
-			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
-			gridBagConstraints19.anchor = GridBagConstraints.WEST;
-			gridBagConstraints19.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints19.gridx = 1;
-			gridBagConstraints19.gridy = 3;
-			gridBagConstraints19.weightx = 1.0;
-			gridBagConstraints19.fill = GridBagConstraints.HORIZONTAL;
-			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
-			gridBagConstraints13.gridx = 0;
-			gridBagConstraints13.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints13.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints13.gridy = 3;
-			jLabel7 = new JLabel();
-			jLabel7.setText("Client Authorization");
-			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
-			gridBagConstraints14.anchor = GridBagConstraints.WEST;
-			gridBagConstraints14.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints14.gridx = 1;
-			gridBagConstraints14.gridy = 2;
-			gridBagConstraints14.weightx = 1.0;
-			gridBagConstraints14.fill = GridBagConstraints.HORIZONTAL;
-			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
-			gridBagConstraints15.gridx = 0;
-			gridBagConstraints15.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints15.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints15.gridy = 2;
-			dele = new JLabel();
-			dele.setText("Delegation Mode");
-			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
-			gridBagConstraints16.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints16.gridx = 1;
-			gridBagConstraints16.gridy = 1;
-			gridBagConstraints16.weightx = 1.0;
-			gridBagConstraints16.insets = new Insets(2, 2, 2, 2);
-			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
-			gridBagConstraints8.gridx = 0;
-			gridBagConstraints8.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints8.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints8.gridy = 1;
-			jLabel5 = new JLabel();
-			jLabel5.setText("Anonymous Communication");
-			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
-			gridBagConstraints20.gridx = 0;
-			gridBagConstraints20.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints20.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints20.gridy = 0;
-			jLabel9 = new JLabel();
-			jLabel9.setText("Client Communication");
-			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
-			gridBagConstraints9.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints9.gridx = 1;
-			gridBagConstraints9.gridy = 0;
-			gridBagConstraints9.weightx = 1.0;
-			gridBagConstraints9.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints9.insets = new Insets(2, 2, 2, 2);
-			clientPanel = new JPanel();
-			clientPanel.setLayout(new GridBagLayout());
-			clientPanel.add(getClientCommunication(), gridBagConstraints9);
-			clientPanel.add(jLabel9, gridBagConstraints20);
-			clientPanel.add(jLabel5, gridBagConstraints8);
-			clientPanel.add(getAnonymousCommunication(), gridBagConstraints16);
-			clientPanel.add(dele, gridBagConstraints15);
-			clientPanel.add(getDelegationMode(), gridBagConstraints14);
-			clientPanel.add(jLabel7, gridBagConstraints13);
-
-			clientPanel.add(getClientAuthorization(), gridBagConstraints18);
-			clientPanel.add(getClientAuth(), gridBagConstraints19);
-		}
-		return clientPanel;
 	}
 
 
@@ -1416,14 +1042,9 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	 */
 	private JPanel getAuthorizationTypePanel() {
 		if (authorizationTypePanel == null) {
-			authLabel = new JLabel();
-			authLabel.setText("Authorization Mechanism");
-			authLabel.setForeground(IntroduceLookAndFeel.getPanelLabelColor());
-			authLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 14));
 			authorizationTypePanel = new JPanel();
 			authorizationTypePanel.setLayout(new FlowLayout());
-			authorizationTypePanel.add(authLabel, null);
-			authorizationTypePanel.add(getAuthorizationMechanism(), null);
+			authorizationTypePanel.add(getJPanel1(), null);
 		}
 		return authorizationTypePanel;
 	}
@@ -1521,6 +1142,53 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			jPanel.add(getGeneralSecurity(), gridBagConstraints);
 		}
 		return jPanel;
+	}
+
+
+	/**
+	 * This method initializes jPanel1
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getJPanel1() {
+		if (jPanel1 == null) {
+			credentialsRequired = new JLabel();
+			credentialsRequired.setText("Anonymous Clients");
+			credentialsRequired.setForeground(IntroduceLookAndFeel.getPanelLabelColor());
+			credentialsRequired.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 14));
+			authLabel = new JLabel();
+			authLabel.setText("Authorization Mechanism");
+			authLabel.setForeground(IntroduceLookAndFeel.getPanelLabelColor());
+			authLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 14));
+
+			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+			gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints5.gridx = 1;
+			gridBagConstraints5.gridy = 1;
+			gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints5.weightx = 1.0;
+			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.gridx = 0;
+			gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints3.gridy = 1;
+			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints2.gridx = 1;
+			gridBagConstraints2.gridy = 0;
+			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints2.weightx = 1.0;
+			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+			gridBagConstraints1.gridx = 0;
+			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints1.gridy = 0;
+			jPanel1 = new JPanel();
+			jPanel1.setLayout(new GridBagLayout());
+			jPanel1.add(credentialsRequired, gridBagConstraints1);
+			jPanel1.add(getAnonymousCommunication(), gridBagConstraints2);
+			jPanel1.add(authLabel, gridBagConstraints3);
+			jPanel1.add(getAuthorizationMechanism(), gridBagConstraints5);
+		}
+		return jPanel1;
 	}
 
 }

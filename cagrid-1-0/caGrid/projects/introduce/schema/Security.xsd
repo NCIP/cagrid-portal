@@ -7,10 +7,7 @@
 			<xs:element name="TransportLevelSecurity" minOccurs="0" maxOccurs="1" type="TransportLevelSecurity"/>
 			<xs:element name="SecureConversation" minOccurs="0" maxOccurs="1" type="SecureConversation"/>
 			<xs:element name="SecureMessage" minOccurs="0" maxOccurs="1" type="SecureMessage"/>
-			<xs:element name="ClientCommunication" minOccurs="0" maxOccurs="1" type="ClientCommunication"/>
-			<xs:element name="ClientAuthorization" minOccurs="0" maxOccurs="1" type="ClientAuthorization"/>
 			<xs:element name="RunAsMode" minOccurs="0" maxOccurs="1" type="RunAsMode"/>
-			<xs:element name="DelegationMode" minOccurs="0" maxOccurs="1" type="DelegationMode"/>
 			<xs:element name="AnonymousClients" minOccurs="0" maxOccurs="1" type="AnonymousCommunication"/>
 			<xs:element name="ServiceCredentials" minOccurs="0" maxOccurs="1" type="ServiceCredential"/>
 			<xs:element name="ServiceAuthorization" minOccurs="0" maxOccurs="1" type="ServiceAuthorization"/>
@@ -24,10 +21,7 @@
 			<xs:element name="TransportLevelSecurity" minOccurs="0" maxOccurs="1" type="TransportLevelSecurity"/>
 			<xs:element name="SecureConversation" minOccurs="0" maxOccurs="1" type="SecureConversation"/>
 			<xs:element name="SecureMessage" minOccurs="0" maxOccurs="1" type="SecureMessage"/>
-			<xs:element name="ClientCommunication" minOccurs="0" maxOccurs="1" type="ClientCommunication"/>
-			<xs:element name="ClientAuthorization" minOccurs="0" maxOccurs="1" type="ClientAuthorization"/>
 			<xs:element name="RunAsMode" minOccurs="0" maxOccurs="1" type="RunAsMode"/>
-			<xs:element name="DelegationMode" minOccurs="0" maxOccurs="1" type="DelegationMode"/>
 			<xs:element name="AnonymousClients" minOccurs="0" maxOccurs="1" type="AnonymousCommunication"/>
 		</xs:sequence>
 	</xs:complexType>
@@ -39,30 +33,8 @@
 		</xs:choice>
 	</xs:complexType>
 	
-	<xs:complexType name="ClientAuthorization">
-		<xs:choice>
-			<xs:element name="NoAuthorization" minOccurs="1" maxOccurs="1" type="NoAuthorization"/>
-			<xs:element name="SelfAuthorization" minOccurs="1" maxOccurs="1" type="SelfAuthorization"/>
-			<xs:element name="HostAuthorization" minOccurs="1" maxOccurs="1" type="HostAuthorization"/>
-			<xs:element name="IdentityAuthorization" minOccurs="1" maxOccurs="1" type="IdentityAuthorization"/>
-		</xs:choice>
-	</xs:complexType>
 	
 	<xs:complexType name="NoAuthorization"/>
-	
-	<xs:complexType name="SelfAuthorization"/>
-	
-	<xs:complexType name="HostAuthorization">
-		<xs:sequence>
-			<xs:element name="hostname" minOccurs="1" maxOccurs="1" type="xs:string"/>
-		</xs:sequence>
-	</xs:complexType>
-	
-	<xs:complexType name="IdentityAuthorization">
-		<xs:sequence>
-			<xs:element name="identity" minOccurs="1" maxOccurs="1" type="xs:string"/>
-		</xs:sequence>
-	</xs:complexType>
 	
 	<xs:complexType name="GridMapAuthorization">
 		<xs:sequence>
@@ -132,27 +104,12 @@
 		</xs:restriction>
 	</xs:simpleType>
 	
-	<xs:simpleType name="DelegationMode">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="None"/>
-			<xs:enumeration value="Limited"/>
-			<xs:enumeration value="Full"/>
-		</xs:restriction>
-	</xs:simpleType>
 	
 	<xs:simpleType name="CommunicationMethod">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="Integrity"/>
 			<xs:enumeration value="Privacy"/>
 			<xs:enumeration value="Integrity_Or_Privacy"/>
-		</xs:restriction>
-	</xs:simpleType>
-	<xs:simpleType name="ClientCommunication">
-		<xs:restriction base="xs:string">
-		    <xs:enumeration value="No_Security"/>
-			<xs:enumeration value="Transport_Layer_Security"/>
-			<xs:enumeration value="Secure_Conversation"/>
-			<xs:enumeration value="Secure_Message"/>
 		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>
