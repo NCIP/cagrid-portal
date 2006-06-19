@@ -109,7 +109,7 @@ public class ClassBrowserPanel extends JPanel {
 
 	public String getSelectedClassName() {
 		Object selected = getClassSelectionComboBox().getSelectedItem();
-		if (selected != null) {
+		if (selected != null && selected.toString().length() != 0) {
 			return selected.toString();
 		}
 		return null;
@@ -120,12 +120,6 @@ public class ClassBrowserPanel extends JPanel {
 		getClassSelectionComboBox().setSelectedItem(className);
 	}
 	
-	
-	public Map getSelectedClassConfiguration() {
-		// TODO: implement this
-		return null;
-	}
-
 
 	public String[] getAdditionalJars() {
 		String[] jars = new String[getAdditionalJarsList().getModel().getSize()];
