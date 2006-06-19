@@ -379,8 +379,8 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	
 	private ClassBrowserPanel getClassBrowserPanel() {
 		if (classBrowserPanel == null) {
-			classBrowserPanel = new ClassBrowserPanel(getExtensionTypeExtensionData(), getServiceInfo().getIntroduceServiceProperties());
-			// classBrowserPanel = new ClassBrowserPanel(null, null);
+			classBrowserPanel = new ClassBrowserPanel(getExtensionTypeExtensionData(), getServiceInfo());
+			// classBrowserPanel = new ClassBrowserPanel(null, null); // uncomment this line to edit in VE
 			classBrowserPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
 				null, "Query Processor Class Selection", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));

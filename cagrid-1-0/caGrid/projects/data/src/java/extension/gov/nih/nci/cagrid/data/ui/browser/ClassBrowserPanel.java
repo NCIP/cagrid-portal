@@ -10,6 +10,7 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
+import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.awt.Component;
 import java.awt.GridBagConstraints;
@@ -27,7 +28,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -49,7 +50,8 @@ import org.jdom.Element;
 
 
 /**
- * ClassBrowserPanel Panel to enable browsing for a class and building up a list
+ * ClassBrowserPanel 
+ * Panel to enable browsing for a class and building up a list
  * of JARs to look in
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
@@ -59,36 +61,25 @@ import org.jdom.Element;
 public class ClassBrowserPanel extends JPanel {
 
 	private JList additionalJarsList = null;
-
 	private JScrollPane additionalJarsScrollPane = null;
-
 	private JButton addJarButton = null;
-
 	private JButton removeJarsButton = null;
-
 	private JPanel jarButtonsPanel = null;
-
 	private JPanel jarsPanel = null;
-
 	private JComboBox classSelectionComboBox = null;
-
 	private JPanel classSelectionPanel = null;
-
 	private JLabel classSelectionLabel = null;
-
-	private ExtensionTypeExtensionData extensionData = null;
-
-	private Properties serviceProperties = null;
-
-	private List classChangeListeners = null;
-
+	
+	private List classSelectionListeners = null;
 	private List additionalJarsListeners = null;
+	
+	private ExtensionTypeExtensionData extensionData = null;
+	private ServiceInformation serviceInfo = null;
 
-
-	public ClassBrowserPanel(ExtensionTypeExtensionData extensionData, Properties serviceProperties) {
+	public ClassBrowserPanel(ExtensionTypeExtensionData extensionData, ServiceInformation serviceInfo) {
 		this.extensionData = extensionData;
-		this.serviceProperties = serviceProperties;
-		classChangeListeners = new LinkedList();
+		this.serviceInfo = serviceInfo;
+		classSelectionListeners = new LinkedList();
 		additionalJarsListeners = new LinkedList();
 		initialize();
 	}
@@ -127,6 +118,12 @@ public class ClassBrowserPanel extends JPanel {
 
 	public void setSelectedClassName(String className) {
 		getClassSelectionComboBox().setSelectedItem(className);
+	}
+	
+	
+	public Map getSelectedClassConfiguration() {
+		// TODO: implement this
+		return null;
 	}
 
 
@@ -249,7 +246,8 @@ public class ClassBrowserPanel extends JPanel {
 
 
 	private void deleteAdditionalJar(String shortJarName) {
-		String libDir = serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
+		String libDir = serviceInfo.getIntroduceServiceProperties()
+			.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
 			+ File.separator + "lib";
 		File jarFile = new File(libDir + File.separator + shortJarName);
 		jarFile.deleteOnExit();
@@ -418,7 +416,8 @@ public class ClassBrowserPanel extends JPanel {
 	
 
 	private synchronized void copyJarToService(final String jarFile, final String shortJarName) {
-		String libDir = serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
+		String libDir = serviceInfo.getIntroduceServiceProperties()
+			.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
 			+ File.separator + "lib";
 		try {
 			BufferedInputStream input = new BufferedInputStream(new FileInputStream(jarFile));
@@ -440,7 +439,8 @@ public class ClassBrowserPanel extends JPanel {
 
 
 	private void populateClassDropdown() {
-		String libDir = serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
+		String libDir = serviceInfo.getIntroduceServiceProperties()
+			.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
 			+ File.separator + "lib";
 		SortedSet classNames = new TreeSet();
 		String[] jars = getAdditionalJars();
@@ -491,17 +491,33 @@ public class ClassBrowserPanel extends JPanel {
 
 
 	public void addClassSelectionListener(ClassSelectionListener listener) {
-		this.classChangeListeners.add(listener);
+		this.classSelectionListeners.add(listener);
+	}
+	
+	
+	public ClassSelectionListener[] getClassSelectionListeners() {
+		ClassSelectionListener[] listeners = 
+			new ClassSelectionListener[this.classSelectionListeners.size()];
+		this.classSelectionListeners.toArray(listeners);
+		return listeners;
 	}
 
 
 	public boolean removeClassSelectionListener(ClassSelectionListener listener) {
-		return this.classChangeListeners.remove(listener);
+		return this.classSelectionListeners.remove(listener);
 	}
 
 
 	public void addAdditionalJarsChangeListener(AdditionalJarsChangeListener listener) {
 		this.additionalJarsListeners.add(listener);
+	}
+	
+	
+	public AdditionalJarsChangeListener[] getAdditionalJarsChangeListeners() {
+		AdditionalJarsChangeListener[] listeners = 
+			new AdditionalJarsChangeListener[this.additionalJarsListeners.size()];
+		this.additionalJarsListeners.toArray(listeners);
+		return listeners;
 	}
 
 
@@ -512,7 +528,7 @@ public class ClassBrowserPanel extends JPanel {
 
 	protected synchronized void fireClassSelectionChanged() {
 		ClassSelectionEvent event = null;
-		Iterator listenerIter = classChangeListeners.iterator();
+		Iterator listenerIter = classSelectionListeners.iterator();
 		while (listenerIter.hasNext()) {
 			if (event == null) {
 				event = new ClassSelectionEvent(this);
