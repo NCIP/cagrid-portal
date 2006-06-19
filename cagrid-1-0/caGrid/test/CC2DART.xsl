@@ -6,7 +6,7 @@
             <!-- Extract the build info we added -->
             <xsl:apply-templates select="BuildInfo"/>
             <!-- Extract any properties -->
-            <xsl:apply-templates select="info/property"/>
+            <xsl:apply-templates select="info"/>
             <!-- Extract updates -->
             <xsl:apply-templates select="modifications"/>
             <!-- Extract Build -->
@@ -20,10 +20,24 @@
         <xsl:copy-of select="*"/>
     </xsl:template>
     <!-- Extract the build date -->
-    <xsl:template match="property[@name='builddate']">
-        <DateTimeStamp>
-            <xsl:value-of select="@value"/>
-        </DateTimeStamp>
+    <xsl:template match="info">
+        <xsl:for-each select="property">
+            <xsl:choose>
+                <xsl:when test="@name='builddate'">
+                    <DateTimeStamp>
+                        <xsl:value-of select="@value"/>
+                    </DateTimeStamp>
+                </xsl:when>
+                <xsl:when test="@name='label'">
+                    <Test>
+                        <Name>.Note.Note</Name>
+                        <Status>passed</Status>
+                        <Measurement name="Name" type="text/string">CC Build Label</Measurement>
+                        <Measurement name="Note" type="text/text"><xsl:value-of select="@value"/></Measurement>
+                    </Test>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:for-each>
     </xsl:template>
     <!-- create the build log -->
     <xsl:template match="build">
