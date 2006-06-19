@@ -38,6 +38,7 @@
                     <xsl:otherwise>
                         <Name>.Build.<xsl:value-of select="@name"/></Name>
                         <Status>passed</Status>
+                        <Measurement name="ErrorCount" type="numeric/integer">0</Measurement>
                     </xsl:otherwise>
                 </xsl:choose>
                 <Measurement name="StageName" type="text/string">
