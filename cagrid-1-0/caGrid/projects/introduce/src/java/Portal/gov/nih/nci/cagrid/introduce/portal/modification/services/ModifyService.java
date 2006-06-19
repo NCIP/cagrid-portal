@@ -183,7 +183,7 @@ public class ModifyService extends GridPortalComponent {
 								.showMessageDialog(
 										ModifyService.this,
 										"Service Name is not valid.  Service name must be a java compatible class name. ("
-												+ CommonTools.ALLOWED_JAVA_NAME_REGEX
+												+ CommonTools.ALLOWED_JAVA_CLASS_REGEX
 												+ ")");
 						return;
 					}

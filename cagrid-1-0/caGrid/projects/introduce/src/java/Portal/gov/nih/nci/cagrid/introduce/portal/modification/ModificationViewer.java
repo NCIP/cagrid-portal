@@ -1692,7 +1692,7 @@ public class ModificationViewer extends GridPortalComponent {
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
 							if (getServicePropertyKeyTextField().getText()
-									.length() > 0 && CommonTools.isValidPackageName(getServicePropertyKeyTextField().getText())) {
+									.length() > 0 && CommonTools.isValidJavaField(getServicePropertyKeyTextField().getText())) {
 								ServicePropertiesProperty prop = new ServicePropertiesProperty();
 								prop.setKey(getServicePropertyKeyTextField()
 										.getText());

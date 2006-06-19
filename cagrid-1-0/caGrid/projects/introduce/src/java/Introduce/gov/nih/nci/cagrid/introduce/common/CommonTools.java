@@ -41,9 +41,9 @@ import org.projectmobius.common.XMLUtilities;
  */
 public class CommonTools {
 
-	public static final String ALLOWED_JAVA_NAME_REGEX = "[A-Z]++[A-Za-z0-9\\_\\$]*";
+	public static final String ALLOWED_JAVA_CLASS_REGEX = "[A-Z]++[A-Za-z0-9\\_\\$]*";
 
-	public static final String ALLOWED_JAVA_PACKAGE_NAME_REGEX = "[a-z\\_]++[a-z0-9\\_\\$]*";
+	public static final String ALLOWED_JAVA_FIELD_REGEX = "[a-z\\_]++[A-Za-z0-9\\_\\$]*";
 
 	public static Process createAndOutputProcess(String cmd) throws Exception {
 		final Process p;
@@ -124,7 +124,7 @@ public class CommonTools {
 					false);
 			while (strtok.hasMoreElements()) {
 				String packageItem = strtok.nextToken();
-				if (!packageItem.matches(ALLOWED_JAVA_PACKAGE_NAME_REGEX)) {
+				if (!packageItem.matches(ALLOWED_JAVA_FIELD_REGEX)) {
 					return false;
 				}
 			}
@@ -138,12 +138,21 @@ public class CommonTools {
 					serviceName.substring(0, 1))) {
 				return false;
 			}
-			if (!serviceName.matches(ALLOWED_JAVA_NAME_REGEX)) {
+			if (!serviceName.matches(ALLOWED_JAVA_CLASS_REGEX)) {
 				return false;
 			}
 		}
 		return true;
 
+	}
+	
+	public static boolean isValidJavaField(String serviceName) {
+		if (serviceName.length() > 0) {
+			if (!serviceName.matches(ALLOWED_JAVA_FIELD_REGEX)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public static String getAntCommand(String antCommand, String buildFileDir)
