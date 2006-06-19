@@ -30,7 +30,7 @@
         <xsl:for-each select="target">
             <Test>
                 <xsl:choose>
-                    <xsl:when test="../../build[@error]">
+                    <xsl:when test="../../build[@error] and position()=last()">
                         <Name>.Build.<xsl:value-of select="@name"/>.Error</Name>
                         <Status>failed</Status>
                         <Measurement name="ErrorCount" type="numeric/integer">1</Measurement>
@@ -38,7 +38,6 @@
                     <xsl:otherwise>
                         <Name>.Build.<xsl:value-of select="@name"/></Name>
                         <Status>passed</Status>
-                        <Measurement name="ErrorCount" type="numeric/integer">0</Measurement>
                     </xsl:otherwise>
                 </xsl:choose>
                 <Measurement name="StageName" type="text/string">
@@ -72,9 +71,11 @@
             <Test>
                 <Name>.Update.Update.Update<xsl:value-of select="position()"/></Name>
                 <Status>passed</Status>
-                <Measurement name="File" type="text/string">
+                <!--
+                <Measurement name="Type" type="text/string">
                     <xsl:value-of select="@type"/>
                 </Measurement>
+                -->
                 <Measurement name="File" type="text/string">
                     <xsl:value-of select="file/filename"/>
                 </Measurement>
