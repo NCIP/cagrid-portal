@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.portal.domain;
 
 /**
  * @version 1.0
- * @created 19-Jun-2006 3:48:26 PM
+ * @created 19-Jun-2006 4:05:30 PM
  */
 public class Operation {
 
@@ -36,12 +36,12 @@ public class Operation {
 		return name;
 	}
 
-	public java.lang.String getOutput(){
+	public OperationOutput getOutput(){
 		return output;
 	}
 
 	/**
-	 * 
+	 *
 	 * @param newVal
 	 */
 	public void setDescription(java.lang.String newVal){
@@ -49,7 +49,7 @@ public class Operation {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param newVal
 	 */
 	public void setFaults(java.util.Collection newVal){
@@ -57,7 +57,7 @@ public class Operation {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param newVal
 	 */
 	public void setInputParamters(java.util.Collection newVal){
@@ -65,7 +65,7 @@ public class Operation {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param newVal
 	 */
 	public void setName(java.lang.String newVal){
@@ -73,11 +73,11 @@ public class Operation {
 	}
 
 	/**
-	 * 
-	 * @param newVal
+	 *
+	 * @param output
 	 */
-	public void setOutput(java.lang.String newVal){
-		output = newVal;
+	public void setOutput(OperationOutput output){
+		output = output;
 	}
 
 }

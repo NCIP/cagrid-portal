@@ -14,6 +14,22 @@ public class OperationInput implements Parameter {
 
 	}
 
+	/**
+	 *
+	 * @param class
+	 */
+	public void setUMLClass(UMLClass umlClass){
+
+	}
+
+	/**
+	 *
+	 * @param dimesionality
+	 */
+	public void setDimensionality(int dimesionality){
+
+	}
+
 	public int getDimensionality(){
 		return 0;
 	}

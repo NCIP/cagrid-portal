@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.portal.domain;
 
 /**
  * @version 1.0
- * @created 19-Jun-2006 3:48:25 PM
+ * @created 19-Jun-2006 4:08:50 PM
  */
 public class EPRImpl implements EPR {
 

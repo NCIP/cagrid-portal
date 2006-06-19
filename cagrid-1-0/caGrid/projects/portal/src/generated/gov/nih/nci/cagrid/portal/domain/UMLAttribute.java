@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.portal.domain;
 
 /**
  * @version 1.0
- * @created 19-Jun-2006 3:48:26 PM
+ * @created 19-Jun-2006 4:08:50 PM
  */
 public class UMLAttribute {
 
@@ -56,4 +56,19 @@ public class UMLAttribute {
 		name = newVal;
 	}
 
+    public UMLClass getUmlClass() {
+        return umlClass;
+    }
+
+    public void setUmlClass(UMLClass umlClass) {
+        this.umlClass = umlClass;
+    }
+
+    public SemanticMetadata getSemanticMetadataCollection() {
+        return semanticMetadataCollection;
+    }
+
+    public void setSemanticMetadataCollection(SemanticMetadata semanticMetadataCollection) {
+        this.semanticMetadataCollection = semanticMetadataCollection;
+    }
 }

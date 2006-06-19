@@ -5,7 +5,7 @@ import java.util.Collection;
 /**
  * Represents a Index Service Instance
  * @version 1.0
- * @created 19-Jun-2006 3:47:13 PM
+ * @created 19-Jun-2006 4:08:50 PM
  */
 public class IndexService implements GridService {
 
@@ -75,5 +75,4 @@ public class IndexService implements GridService {
     public void setRegisteredServicesCollection(Collection registeredServicesCollection) {
         this.registeredServicesCollection = registeredServicesCollection;
     }
-
 }
