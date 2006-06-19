@@ -77,7 +77,15 @@ public class SyncProperties extends SyncTool {
 				String serviceName = serviceEl.getAttributeValue("name");
 				int startOfServiceName = serviceName.lastIndexOf("/");
 				serviceName = serviceName.substring(startOfServiceName + 1);
+
 				ServiceType service = CommonTools.getService(getServiceInformation().getServices(), serviceName);
+
+				if (service == null) {
+					service = CommonTools.getService(getServiceInformation().getServices(), serviceName + "Service");
+					if (service == null) {
+						throw new SynchronizationException("Could not find service in JNDI: " + serviceName);
+					}
+				}
 
 				List resourceEls = serviceEl.getChildren("resource", serviceEl.getNamespace());
 				for (int resourceI = 0; resourceI < resourceEls.size(); resourceI++) {
