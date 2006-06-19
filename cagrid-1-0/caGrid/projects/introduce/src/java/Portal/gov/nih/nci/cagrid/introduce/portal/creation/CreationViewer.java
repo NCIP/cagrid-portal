@@ -446,15 +446,7 @@ public class CreationViewer extends GridPortalComponent {
 				"Creating") {
 				public void process() {
 					try {
-						if (dirFile.exists()) {
-							setProgressText("Deleting existing directory...");
-							boolean deleted = Utils.deleteDir(dirFile);
-							if (!deleted) {
-								setErrorMessage("Unable to delete creation directory");
-								return;
-							}
-						}
-
+						
 						setProgressText("Validating service name...");
 						String serviceName = getService().getText();
 						String dirName = getDir().getText();
@@ -466,6 +458,20 @@ public class CreationViewer extends GridPortalComponent {
 							setErrorMessage("Service Name is not valid.  Service name must be a java compatible class name. ("
 								+ CommonTools.ALLOWED_JAVA_CLASS_REGEX + ")");
 							return;
+						}
+						if (!CommonTools.isValidPackageName(packageName)) {
+							setErrorMessage("Package Name is not valid.  Service name must have a valid java Package Name");
+							return;
+						}
+						
+						
+						if (dirFile.exists()) {
+							setProgressText("Deleting existing directory...");
+							boolean deleted = Utils.deleteDir(dirFile);
+							if (!deleted) {
+								setErrorMessage("Unable to delete creation directory");
+								return;
+							}
 						}
 
 						setProgressText("Purging old archives...");
