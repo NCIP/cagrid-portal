@@ -1,29 +1,15 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="JNDIConfigTemplate" 
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="JNDIConfigServiceResourcePropertiesTemplate" 
 imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.service.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.* gov.nih.nci.cagrid.introduce.beans.property.*" %>
 <% gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation info = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument;
    ServiceProperties properties = info.getServiceProperties();
    String namespaceDomain = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.namespace.domain");
-  	ServiceType service = info.getService();
+ 	ServiceType service = info.getService();
 	String serviceName = service.getName();
 	String modifiedServiceName = serviceName;
    	if(serviceName.endsWith("Service")){
    		modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
-   	}
-%><?xml version="1.0" encoding="UTF-8"?>
-<jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
-	<service name="SERVICE-INSTANCE-PREFIX/<%=modifiedServiceName%>">
-		<resource name="home" type="<%=service.getPackageName()%>.service.globus.resource.BaseResourceHome">
-			<resourceParams>
-				<parameter>
-					<name>factory</name>
-					<value>org.globus.wsrf.jndi.BeanFactory</value>
-				</parameter>
-			</resourceParams>
-		</resource>
-		<%
-		if(service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_MAIN_RESOURCE)){
-		%>
-		<resource name="configuration" type="<%=service.getPackageName()%>.service.globus.resource.ResourceConfiguration">
+   	} 
+%><resource xmlns="http://wsrf.globus.org/jndi/config" name="configuration" type="<%=service.getPackageName()%>.service.globus.resource.ResourceConfiguration">
 			<resourceParams>
 				<parameter>
 					<name>factory</name>
@@ -38,19 +24,24 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
 					<name>registrationTemplateFile</name>
 					<!-- Set this to the relative path (from the container root, e.g GLOBUS_LOCATION for globus container) of the registration parameters template file (ignored if performRegistration is false) -->
 					<value>ETC-PATH/registration.xml</value>
-				</parameter>			
-			</resourceParams>
-		</resource>
-		<%
-		}
-		%>
-		<resource name="serviceconfiguration" type="<%=service.getPackageName()%>.service.ServiceConfiguration">
-			<resourceParams>
-				<parameter>
-					<name>factory</name>
-					<value>org.globus.wsrf.jndi.BeanFactory</value>
 				</parameter>
-			</resourceParams>
-		</resource>
-	</service>
-</jndiConfig>
+<%	if(info.getServices() !=null && info.getServices().getService() !=null){
+		ResourcePropertiesListType metadataList = service.getResourcePropertiesList();
+		if(metadataList!=null && metadataList.getResourceProperty()!=null){
+			for (int i = 0; i < metadataList.getResourceProperty().length; i++) {
+				ResourcePropertyType metadata = metadataList.getResourceProperty(i);
+				if(metadata.isPopulateFromFile()){
+					String name=CommonTools.getResourcePropertyVariableName(metadataList, i);
+					SchemaInformation schemaInformation = CommonTools.getSchemaInformation(info.getNamespaces(),metadata.getQName());
+					String className=schemaInformation.getNamespace().getPackageName() + "." + schemaInformation.getType().getClassName();%>
+				<parameter>
+					<name><%=name%>File</name>
+					<!-- Set this to the relative path (from the container root, e.g GLOBUS_LOCATION for globus container) of the <%=name%> extract -->
+					<value>ETC-PATH/<%=name%>.xml</value>
+				</parameter><%
+				}
+			}
+		}
+	}%>				
+	</resourceParams>
+</resource>
