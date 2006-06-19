@@ -132,7 +132,7 @@ public class TargetTypesTree extends JTree {
 	}
 	
 	
-	private class CellRenderer extends DefaultTreeCellRenderer {
+	private static class CellRenderer extends DefaultTreeCellRenderer {
 		
 		public CellRenderer() {
 			
@@ -154,7 +154,7 @@ public class TargetTypesTree extends JTree {
 	}
 	
 	
-	private class CellEditor extends DefaultCellEditor {
+	private static class CellEditor extends DefaultCellEditor {
 		private JCheckBox check;
 		
 		public CellEditor() {

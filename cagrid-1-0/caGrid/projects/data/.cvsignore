@@ -3,3 +3,4 @@ bin
 ext
 junit*.properties
 log4j.properties
+.fbwarnings

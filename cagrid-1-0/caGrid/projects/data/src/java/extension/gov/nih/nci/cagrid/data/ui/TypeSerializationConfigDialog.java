@@ -47,7 +47,7 @@ public class TypeSerializationConfigDialog extends GridPortalComponent {
 	private JLabel deserializerLabel = null;
 	
 	private DataServiceTypesTable table;
-	private SerializationMapping mapping;
+	private transient SerializationMapping mapping;
 	
 	public TypeSerializationConfigDialog(DataServiceTypesTable table, SerializationMapping mapping) {
 		super();

@@ -67,7 +67,7 @@ public class CQLQueryResultsIterator implements Iterator {
 	}
 	
 	
-	private class NullIterator implements Iterator {
+	private static class NullIterator implements Iterator {
 		public void remove() {
 			throw new UnsupportedOperationException("remove() is not supported by " + getClass().getName());
 		}
