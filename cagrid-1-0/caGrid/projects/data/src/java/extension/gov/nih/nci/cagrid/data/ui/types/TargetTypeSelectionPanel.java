@@ -10,6 +10,7 @@ import gov.nih.nci.cagrid.data.ui.browser.AdditionalJarsChangedEvent;
 import gov.nih.nci.cagrid.data.ui.browser.ClassBrowserPanel;
 import gov.nih.nci.cagrid.data.ui.browser.ClassSelectionEvent;
 import gov.nih.nci.cagrid.data.ui.browser.ClassSelectionListener;
+import gov.nih.nci.cagrid.data.ui.browser.QueryProcessorClassConfigDialog;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
@@ -62,9 +63,10 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	private JPanel typeSelectionPanel = null;
 	private JButton setModelButton = null;
 	private ClassBrowserPanel classBrowserPanel = null;
+	private JPanel configurationPanel = null;
+	private JButton configureButton = null;
 	
 	private XMLDataModelService gmeHandle = null;
-	private JPanel configurationPanel = null;  //  @jve:decl-index=0:visual-constraint="1048,144"
 	
 	public TargetTypeSelectionPanel(ServiceExtensionDescriptionType desc, ServiceInformation serviceInfo) {
 		super(desc, serviceInfo);
@@ -78,15 +80,13 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 		gridBagConstraints4.gridy = 0;
 		gridBagConstraints4.fill = java.awt.GridBagConstraints.BOTH;
 		gridBagConstraints4.weighty = 1.0D;
-		gridBagConstraints4.weightx = 1.0D;
-				
+		gridBagConstraints4.weightx = 1.0D;				
 		GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 		gridBagConstraints5.gridx = 1;
 		gridBagConstraints5.gridy = 0;
 		gridBagConstraints5.fill = GridBagConstraints.BOTH;
 		gridBagConstraints5.weightx = 1.0D;
 		gridBagConstraints5.weighty = 1.0D;
-		
 		this.setLayout(new GridBagLayout());
 		this.setSize(new java.awt.Dimension(1017,548));
 		this.add(getTypeSelectionPanel(), gridBagConstraints4);
@@ -501,6 +501,10 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	 */
 	private JPanel getConfigurationPanel() {
 		if (configurationPanel == null) {
+			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+			gridBagConstraints4.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints4.gridy = 2;
+			gridBagConstraints4.gridx = 0;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints2.gridy = 1;
@@ -514,9 +518,32 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			gridBagConstraints3.gridx = 0;
 			configurationPanel = new JPanel();
 			configurationPanel.setLayout(new GridBagLayout());
+			configurationPanel.add(getConfigureButton(), gridBagConstraints4);
 			configurationPanel.add(getTypesTableScrollPane(), gridBagConstraints3);
 			configurationPanel.add(getClassBrowserPanel(), gridBagConstraints2);
 		}
 		return configurationPanel;
+	}
+
+
+	/**
+	 * This method initializes jButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getConfigureButton() {
+		if (configureButton == null) {
+			configureButton = new JButton();
+			configureButton.setText("Configure Selected Query Processor");
+			configureButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if (getClassBrowserPanel().getSelectedClassName() != null) {
+						new QueryProcessorClassConfigDialog(
+							getExtensionTypeExtensionData(), getServiceInfo());
+					}
+				}
+			});
+		}
+		return configureButton;
 	}
 }
