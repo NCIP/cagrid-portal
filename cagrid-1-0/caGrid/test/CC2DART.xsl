@@ -115,7 +115,7 @@
                     <xsl:if test="failure|error">failed</xsl:if>
                     <xsl:if test="not(failure|error)">passed</xsl:if>
                 </Status>
-                <Measurement name="Execution Time" type="numeric/float">
+                <Measurement name="Execution Time" type="numeric/double">
                     <xsl:value-of select="@time"/>
                 </Measurement>
                 <Measurement name="Output" type="text/text">
