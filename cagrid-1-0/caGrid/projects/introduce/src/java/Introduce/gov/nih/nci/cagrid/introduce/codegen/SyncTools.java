@@ -272,7 +272,8 @@ public class SyncTools {
 		serviceProperties.store(new FileOutputStream(servicePropertiesFile),
 				"Introduce Properties");
 		
-		
+		//before we actually process anything we must create the code and conf
+		//required for any new services which were added.....
 		createNewServices(info);
 		
 

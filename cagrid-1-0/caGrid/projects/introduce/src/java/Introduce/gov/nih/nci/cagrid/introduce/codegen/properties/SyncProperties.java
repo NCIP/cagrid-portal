@@ -2,13 +2,25 @@ package gov.nih.nci.cagrid.introduce.codegen.properties;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
+import gov.nih.nci.cagrid.introduce.templates.JNDIConfigServicePropertiesTemplate;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
+
+import org.jdom.Document;
+import org.jdom.Element;
+import org.projectmobius.common.MobiusException;
+import org.projectmobius.common.XMLUtilities;
 
 /**
  * Create INTRODUCE_SERVICE_PROPERTIES file
@@ -28,26 +40,81 @@ public class SyncProperties extends SyncTool {
 
 	public void sync() throws SynchronizationException {
 
-		
 		Properties serviceProps = new Properties();
-		//	load up the service properties
-		if(getServiceInformation().getServiceProperties()!=null&&getServiceInformation().getServiceProperties().getProperty()!=null){
-			for(int i =0;i < getServiceInformation().getServiceProperties().getProperty().length; i++){
-				ServicePropertiesProperty prop = getServiceInformation().getServiceProperties().getProperty(i);
-				if(prop.getValue()==null){
-					serviceProps.put(prop.getKey(),"");
+		// load up the service properties
+		if (getServiceInformation().getServiceProperties() != null
+				&& getServiceInformation().getServiceProperties().getProperty() != null) {
+			for (int i = 0; i < getServiceInformation().getServiceProperties()
+					.getProperty().length; i++) {
+				ServicePropertiesProperty prop = getServiceInformation()
+						.getServiceProperties().getProperty(i);
+				if (prop.getValue() == null) {
+					serviceProps.put(prop.getKey(), "");
 				} else {
-					serviceProps.put(prop.getKey(),prop.getValue());
+					serviceProps.put(prop.getKey(), prop.getValue());
 				}
 			}
 		}
-		
-		//write the service propertis out
+
+		// write the service propertis out
 		try {
-			serviceProps.store(new FileOutputStream(new File(getBaseDirectory().getAbsolutePath()
-				+ File.separator + IntroduceConstants.INTRODUCE_SERVICE_PROPERTIES)), "service deployment properties");
+			serviceProps.store(new FileOutputStream(new File(getBaseDirectory()
+					.getAbsolutePath()
+					+ File.separator
+					+ IntroduceConstants.INTRODUCE_SERVICE_PROPERTIES)),
+					"service deployment properties");
 		} catch (Exception ex) {
-			throw new SynchronizationException(ex.getMessage(),ex);
+			throw new SynchronizationException(ex.getMessage(), ex);
+		}
+
+		// update the JNDI file to have all the right properties and thier
+		// values....
+		File jndiConfigF = new File(getBaseDirectory().getAbsolutePath()
+				+ File.separator + "jndi-config.xml");
+		try {
+			Document doc = XMLUtilities.fileNameToDocument(jndiConfigF
+					.getAbsolutePath());
+			List serviceEls = doc.getRootElement().getChildren("service",
+					doc.getRootElement().getNamespace());
+			for (int serviceI = 0; serviceI < serviceEls.size(); serviceI++) {
+				Element serviceEl = (Element) serviceEls.get(serviceI);
+				List resourceEls = serviceEl.getChildren("resource", serviceEl
+						.getNamespace());
+				for (int resourceI = 0; resourceI < resourceEls.size(); resourceI++) {
+					Element resourceEl = (Element) resourceEls.get(resourceI);
+					if (resourceEl.getAttributeValue("name").equals(
+							"serviceconfiguration")) {
+						// located a serviceconfiguration element, need to
+						// populate it's attributes now...
+						String serviceName = serviceEl.getAttributeValue("name");
+						int startOfServiceName = serviceName.lastIndexOf("/");
+						serviceName = serviceName.substring(startOfServiceName + 1);
+						ServiceType service = CommonTools.getService(
+								getServiceInformation().getServices(),
+								serviceName);
+
+						JNDIConfigServicePropertiesTemplate serviceConfTemp = new JNDIConfigServicePropertiesTemplate();
+						String confXMLString = serviceConfTemp
+								.generate(new SpecificServiceInformation(
+										getServiceInformation(), service));
+						Element newResourceEl = XMLUtilities.stringToDocument(
+								confXMLString).getRootElement();
+						serviceEl.removeContent(resourceEl);
+						serviceEl.addContent(newResourceEl.detach());
+					}
+				}
+			}
+			
+			try {
+				FileWriter fw = new FileWriter(jndiConfigF);
+				fw.write(XMLUtilities.formatXML(XMLUtilities.documentToString(doc)));
+				fw.close();
+			} catch (IOException e) {
+				throw new SynchronizationException(e.getMessage(),e);
+			}
+			
+		} catch (MobiusException e) {
+			throw new SynchronizationException(e.getMessage(), e);
 		}
 
 	}
