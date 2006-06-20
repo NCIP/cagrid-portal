@@ -66,7 +66,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	private JPanel configurationPanel = null;
 	private JButton configureButton = null;
 	
-	private XMLDataModelService gmeHandle = null;
+	private transient XMLDataModelService gmeHandle = null;
 	
 	public TargetTypeSelectionPanel(ServiceExtensionDescriptionType desc, ServiceInformation serviceInfo) {
 		super(desc, serviceInfo);
@@ -385,13 +385,11 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 				null, "Query Processor Class Selection", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			// if there's an existing selected class, set it in the class browser
-			synchronized (classBrowserPanel) {
-				ExtensionTypeExtensionData data = getExtensionTypeExtensionData();
-				MessageElement qpElement = ExtensionTools.getExtensionDataElement(data, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
-				if (qpElement != null) {
-					String queryProcessorClass = qpElement.getValue();
-					classBrowserPanel.setSelectedClassName(queryProcessorClass);
-				}
+			MessageElement qpElement = ExtensionTools.getExtensionDataElement(
+				getExtensionTypeExtensionData(), DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
+			if (qpElement != null) {
+				String queryProcessorClass = qpElement.getValue();
+				classBrowserPanel.setSelectedClassName(queryProcessorClass);
 			}
 			// listen for class selection events
 			classBrowserPanel.addClassSelectionListener(new ClassSelectionListener() {
@@ -403,8 +401,8 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			classBrowserPanel.addAdditionalJarsChangeListener(new AdditionalJarsChangeListener() {
 				public void additionalJarsChanged(AdditionalJarsChangedEvent e) {
 					// remove any existing qp jars element from the service data
-					ExtensionTypeExtensionData data = getExtensionTypeExtensionData();
-					ExtensionTools.removeExtensionDataElement(data, DataServiceConstants.QUERY_PROCESSOR_ADDITIONAL_JARS_ELEMENT);
+					ExtensionTools.removeExtensionDataElement(
+						getExtensionTypeExtensionData(), DataServiceConstants.QUERY_PROCESSOR_ADDITIONAL_JARS_ELEMENT);
 					// create a new qp jars element
 					Element qpJars = new Element(DataServiceConstants.QUERY_PROCESSOR_ADDITIONAL_JARS_ELEMENT);
 					String[] additionalJars = classBrowserPanel.getAdditionalJars();
@@ -415,7 +413,8 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 					}
 					try {
 						MessageElement qpJarsElement = AxisJdomUtils.fromElement(qpJars);
-						ExtensionTools.updateExtensionDataElement(data, qpJarsElement);
+						ExtensionTools.updateExtensionDataElement(
+							getExtensionTypeExtensionData(), qpJarsElement);
 					} catch (JDOMException ex) {
 						ex.printStackTrace();
 						PortalUtils.showErrorMessage("Error storing query processor jars", ex);
