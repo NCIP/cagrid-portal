@@ -23,8 +23,8 @@ import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI.MalformedURIException;
 import org.apache.axis.utils.ClassUtils;
 import org.globus.gsi.GlobusCredential;
-import org.globus.gsi.gssapi.auth.Authorization;
-import org.globus.gsi.gssapi.auth.NoAuthorization;
+import org.globus.wsrf.impl.security.authorization.Authorization;
+import org.globus.wsrf.impl.security.authorization.NoAuthorization;
 
 
 /**

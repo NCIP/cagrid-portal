@@ -162,9 +162,9 @@ public class SyncSource {
 				returnType += "[]";
 			}
 		}
-	
-			methodString += "     public " + returnType + " " + methodName + "(";
-		
+
+		methodString += "public " + returnType + " " + methodName + "(";
+
 		if (method.getInputs() != null && method.getInputs().getInput() != null) {
 			for (int j = 0; j < method.getInputs().getInput().length; j++) {
 				SchemaInformation info = CommonTools.getSchemaInformation(serviceInfo.getNamespaces(), method
@@ -192,6 +192,23 @@ public class SyncSource {
 	}
 
 
+	private String removeMultiNewLines(String string) {
+		String newString = "";
+		for (int i = 0; i < string.length(); i++) {
+			if (i + 2 < string.length()) {
+				if (string.charAt(i) == '\n' && string.charAt(i + 1) == '\n' && string.charAt(i + 2) == '\n') {
+					// do nothing here becuase want to skip this \n
+				} else {
+					newString += string.charAt(i);
+				}
+			} else {
+				newString += string.charAt(i);
+			}
+		}
+		return newString;
+	}
+
+
 	public String createUnBoxedSignatureStringFromMethod(MethodType method) {
 		String methodString = "";
 		MethodTypeOutput returnTypeEl = method.getOutput();
@@ -211,7 +228,7 @@ public class SyncSource {
 				returnType += "[]";
 			}
 		}
-		methodString += "     public " + returnType + " " + methodName + "(";
+		methodString += "public " + returnType + " " + methodName + "(";
 		if (method.getInputs() != null && method.getInputs().getInput() != null) {
 			for (int j = 0; j < method.getInputs().getInput().length; j++) {
 				SchemaInformation info = CommonTools.getSchemaInformation(serviceInfo.getNamespaces(), method
@@ -267,7 +284,7 @@ public class SyncSource {
 		if (method.getType().isArray()) {
 			returnType += "[]";
 		}
-		methodString += "     public " + returnType + " " + methodName + "(";
+		methodString += "public " + returnType + " " + methodName + "(";
 		Parameter[] inputs = method.getParams();
 		for (int j = 0; j < inputs.length; j++) {
 			String classType = null;
@@ -301,7 +318,7 @@ public class SyncSource {
 		if (method.getType().isArray()) {
 			returnType += "[]";
 		}
-		methodString += "     public " + returnType + " " + methodName + "(";
+		methodString += "public " + returnType + " " + methodName + "(";
 		Parameter[] inputs = method.getParams();
 		for (int j = 0; j < inputs.length; j++) {
 			String classType = null;
@@ -476,7 +493,7 @@ public class SyncSource {
 			fileContent.insert(endOfClass - 1, clientMethod);
 			try {
 				FileWriter fw = new FileWriter(new File(this.serviceInterface));
-				fw.write(fileContent.toString());
+				fw.write(removeMultiNewLines(fileContent.toString()));
 				fw.close();
 			} catch (IOException e1) {
 				e1.printStackTrace();
@@ -511,16 +528,16 @@ public class SyncSource {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		String lineStart = "               ";
+		String lineStart = "      ";
 
 		// insert the new client method
 		int endOfClass = fileContent.lastIndexOf("}");
-		String clientMethod = "\n\t" + createClientUnBoxedSignatureStringFromMethod(method) + " "
+		String clientMethod = "\n    " + createClientUnBoxedSignatureStringFromMethod(method) + " "
 			+ createClientExceptions(method);
 		clientMethod += "{\n";
-		clientMethod += lineStart+"synchronized (portType) {\n";
-		clientMethod += lineStart
-			+ "configureStubSecurity((Stub)portType,\""+ method.getName() +"\");\n";
+		clientMethod += lineStart + "synchronized(portTypeMutex){\n";
+		lineStart += "  ";
+		clientMethod += lineStart + "configureStubSecurity((Stub)portType,\"" + method.getName() + "\");\n";
 
 		// put in the call to the client
 		String var = "portType";
@@ -563,9 +580,10 @@ public class SyncSource {
 		String returnTypeBoxed = getBoxedOutputTypeName(methodName);
 		methodString += packageName + "." + returnTypeBoxed + " boxedResult = " + var + "." + methodName
 			+ "(params);\n";
-		methodString += lineStart;
+
 		if (!returnTypeEl.getQName().getNamespaceURI().equals("")
 			&& !returnTypeEl.getQName().getLocalPart().equals("void")) {
+			methodString += lineStart;
 			SchemaInformation info = CommonTools.getSchemaInformation(serviceInfo.getNamespaces(), returnTypeEl
 				.getQName());
 			if (info.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
@@ -603,13 +621,13 @@ public class SyncSource {
 		}
 
 		clientMethod += methodString;
-		clientMethod += lineStart+"}\n";
-		clientMethod += "\n\t}\n\n";
+		clientMethod += "      }\n";
+		clientMethod += "    }\n";
 
-		fileContent.insert(endOfClass - 1, clientMethod);
+		fileContent.insert(endOfClass - 2, clientMethod);
 		try {
-			FileWriter fw = new FileWriter(new File(this.serviceClient));
-			fw.write(fileContent.toString());
+			FileWriter fw = new FileWriter(new File(removeMultiNewLines(this.serviceClient)));
+			fw.write(removeMultiNewLines(fileContent.toString()));
 			fw.close();
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -637,8 +655,9 @@ public class SyncSource {
 
 		fileContent.insert(endOfClass - 1, clientMethod);
 		try {
+			String fileContentString = fileContent.toString();
 			FileWriter fw = new FileWriter(new File(this.serviceImpl));
-			fw.write(fileContent.toString());
+			fw.write(fileContentString);
 			fw.close();
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -749,7 +768,7 @@ public class SyncSource {
 
 		try {
 			FileWriter fw = new FileWriter(new File(this.serviceProviderImpl));
-			fw.write(fileContent.toString());
+			fw.write(removeMultiNewLines(fileContent.toString()));
 			fw.close();
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -785,7 +804,7 @@ public class SyncSource {
 
 			try {
 				FileWriter fw = new FileWriter(new File(this.serviceInterface));
-				fw.write(fileContent.toString());
+				fw.write(removeMultiNewLines(fileContent.toString()));
 				fw.close();
 			} catch (IOException e1) {
 				e1.printStackTrace();
@@ -829,7 +848,7 @@ public class SyncSource {
 
 		try {
 			FileWriter fw = new FileWriter(new File(this.serviceClient));
-			fw.write(fileContent.toString());
+			fw.write(removeMultiNewLines(fileContent.toString()));
 			fw.close();
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -859,7 +878,7 @@ public class SyncSource {
 
 		try {
 			FileWriter fw = new FileWriter(new File(this.serviceProviderImpl));
-			fw.write(fileContent.toString());
+			fw.write(removeMultiNewLines(fileContent.toString()));
 			fw.close();
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -898,7 +917,7 @@ public class SyncSource {
 
 		try {
 			FileWriter fw = new FileWriter(new File(this.serviceImpl));
-			fw.write(fileContent.toString());
+			fw.write(removeMultiNewLines(fileContent.toString()));
 			fw.close();
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -929,7 +948,7 @@ public class SyncSource {
 
 		try {
 			FileWriter fw = new FileWriter(new File(this.serviceImpl));
-			fw.write(fileContent.toString());
+			fw.write(removeMultiNewLines(fileContent.toString()));
 			fw.close();
 		} catch (IOException e1) {
 			e1.printStackTrace();
