@@ -692,7 +692,7 @@ public class CommonTools {
 	 *            The property to check for
 	 * @return True if a property with the key name is found, false otherwise
 	 */
-	public boolean servicePropertyExists(ServiceInformation info, String key) {
+	public static boolean servicePropertyExists(ServiceInformation info, String key) {
 		if (info.getServiceProperties() != null && info.getServiceProperties().getProperty() != null) {
 			ServicePropertiesProperty[] props = info.getServiceProperties().getProperty();
 			for (int i = 0; i < props.length; i++) {
