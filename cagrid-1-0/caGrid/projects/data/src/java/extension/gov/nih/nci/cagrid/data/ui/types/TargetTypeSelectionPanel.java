@@ -428,19 +428,8 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	
 	private void setProcessorClass(String className) {
 		if (className != null) {
-			ExtensionTypeExtensionData extensionData = getExtensionTypeExtensionData();
-			Element elem = new Element(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
-			elem.setText(className);
-			MessageElement processorElement = null;
-			try {
-				processorElement = AxisJdomUtils.fromElement(elem);
-				ExtensionTools.updateExtensionDataElement(extensionData, processorElement);
-			} catch (JDOMException ex) {
-				ex.printStackTrace();
-				PortalUtils.showErrorMessage("Error storing CQL processor class!", ex);
-			}
-		} else {
-			ExtensionTools.removeExtensionDataElement(getExtensionTypeExtensionData(), DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
+			CommonTools.setServiceProperty(
+				getServiceInfo(), DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, className);
 		}
 	}
 	

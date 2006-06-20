@@ -6,8 +6,8 @@ import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
-import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
 import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
@@ -313,43 +313,11 @@ public class QueryProcessorClassConfigDialog extends JDialog {
 		for (int i = 0; i < getPropertiesPanel().getComponentCount(); i++) {
 			PropertyRow row = (PropertyRow) getPropertiesPanel().getComponent(i);
 			if (row.isDirty()) {
-				setServiceProperty(row.getPropertyName(), row.getValue());
+				CommonTools.setServiceProperty(
+					serviceInfo, row.getPropertyName(), row.getValue());
 			}
 		}
 		dispose();
-	}
-	
-	
-	private void setServiceProperty(String key, String value) {
-		ServicePropertiesProperty prop = new ServicePropertiesProperty(key, value);
-		ServiceProperties properties = serviceInfo.getServiceProperties();
-		if (properties == null) {
-			properties = new ServiceProperties();
-		}
-		ServicePropertiesProperty[] allProperties = properties.getProperty();
-		if (allProperties == null) {
-			allProperties = new ServicePropertiesProperty[] {prop};
-		} else {
-			// attempt to find a property with the key name
-			boolean found = false;
-			for (int i = 0; i < allProperties.length; i++) {
-				if (allProperties[i].getKey().equals(key)) {
-					allProperties[i] = prop;
-					found = true;
-					break;
-				}
-			}
-			if (!found) {
-				// add the property to the list
-				ServicePropertiesProperty[] tmpProperties = 
-					new ServicePropertiesProperty[allProperties.length + 1];
-				System.arraycopy(allProperties, 0, tmpProperties, 0, allProperties.length);
-				tmpProperties[tmpProperties.length - 1] = prop;
-				allProperties = tmpProperties;
-			}
-		}
-		properties.setProperty(allProperties);
-		serviceInfo.setServiceProperties(properties);
 	}
 	
 	
