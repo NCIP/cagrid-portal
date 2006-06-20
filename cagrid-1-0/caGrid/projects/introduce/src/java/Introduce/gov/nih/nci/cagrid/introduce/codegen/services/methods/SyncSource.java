@@ -518,9 +518,9 @@ public class SyncSource {
 		String clientMethod = "\n\t" + createClientUnBoxedSignatureStringFromMethod(method) + " "
 			+ createClientExceptions(method);
 		clientMethod += "{\n";
-		clientMethod += lineStart+"synchronized (this) {\n";
+		clientMethod += lineStart+"synchronized (portType) {\n";
 		clientMethod += lineStart
-			+ "configureStubSecurity(\""+ method.getName() +"\");\n";
+			+ "configureStubSecurity((Stub)portType,\""+ method.getName() +"\");\n";
 
 		// put in the call to the client
 		String var = "portType";
