@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
@@ -80,7 +81,66 @@ public class ClassBrowserPanel extends JPanel {
 		this.serviceInfo = serviceInfo;
 		classSelectionListeners = new LinkedList();
 		additionalJarsListeners = new LinkedList();
+		populateFields();
 		initialize();
+	}
+	
+	
+	private void populateFields() {
+		// get the additional jars
+		MessageElement el = ExtensionTools.getExtensionDataElement(
+			extensionData, DataServiceConstants.QUERY_PROCESSOR_ADDITIONAL_JARS_ELEMENT);
+		if (el != null) {
+			Element jarsElement = AxisJdomUtils.fromMessageElement(el);
+			List jarElementList = jarsElement.getChildren(
+				DataServiceConstants.QUERY_PROCESSOR_JAR_ELEMENT);
+			String[] jarNames = new String[jarElementList.size()]; 
+			for (int i = 0; i < jarElementList.size(); i++) {
+				Element jarNameElement = (Element) jarElementList.get(i);
+				jarNames[i] = jarNameElement.getText();
+			}
+			addJars(jarNames);
+		}
+		// populate available classes from the jars
+		populateClassDropdown();
+		// set the selected query processor class
+		if (CommonTools.servicePropertyExists(
+			serviceInfo, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY)) {
+			try {
+				String qpClassname = CommonTools.getServicePropertyValue(
+					serviceInfo, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
+				getClassSelectionComboBox().setSelectedItem(qpClassname);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+	}
+	
+	
+	private void addJars(String[] jarFiles) {
+		// only bother adding the jar file to the list if it's not in there yet
+		for (int i = 0; i < jarFiles.length; i++) {
+			String jarFile = jarFiles[i];
+			final String shortJarName = (new File(jarFile)).getName();
+			boolean shouldAdd = true;
+			String[] currentJars = getAdditionalJars();
+			for (int j = 0; j < currentJars.length; j++) {
+				if (shortJarName.equals(currentJars[j])) {
+					shouldAdd = false;
+					break;
+				}
+			}
+			if (shouldAdd) {
+				// copy the jar to the service's lib directory
+				copyJarToService(jarFile, shortJarName);
+				// add the jar to the extension data's list of additional jars
+				// add the new jar name to the jars list
+				String[] additionalJars = new String[currentJars.length + 1];
+				System.arraycopy(currentJars, 0, additionalJars, 0, currentJars.length);
+				additionalJars[additionalJars.length - 1] = shortJarName;
+				getAdditionalJarsList().setListData(additionalJars);
+			}
+		}
 	}
 
 
@@ -112,11 +172,6 @@ public class ClassBrowserPanel extends JPanel {
 			return selected.toString();
 		}
 		return null;
-	}
-
-
-	public void setSelectedClassName(String className) {
-		getClassSelectionComboBox().setSelectedItem(className);
 	}
 	
 
@@ -381,29 +436,7 @@ public class ClassBrowserPanel extends JPanel {
 			PortalUtils.showErrorMessage("Error selecting files: " + ex.getMessage(), ex);
 		}
 		if (jarFiles != null) {
-			// only bother adding the jar file to the list if it's not in there yet
-			for (int i = 0; i < jarFiles.length; i++) {
-				String jarFile = jarFiles[i];
-				final String shortJarName = (new File(jarFile)).getName();
-				boolean shouldAdd = true;
-				String[] currentJars = getAdditionalJars();
-				for (int j = 0; j < currentJars.length; j++) {
-					if (shortJarName.equals(currentJars[j])) {
-						shouldAdd = false;
-						break;
-					}
-				}
-				if (shouldAdd) {
-					// copy the jar to the service's lib directory
-					copyJarToService(jarFile, shortJarName);
-					// add the jar to the extension data's list of additional jars
-					// add the new jar name to the jars list
-					String[] additionalJars = new String[currentJars.length + 1];
-					System.arraycopy(currentJars, 0, additionalJars, 0, currentJars.length);
-					additionalJars[additionalJars.length - 1] = shortJarName;
-					getAdditionalJarsList().setListData(additionalJars);
-				}
-			}
+			addJars(jarFiles);
 		}
 	}
 	

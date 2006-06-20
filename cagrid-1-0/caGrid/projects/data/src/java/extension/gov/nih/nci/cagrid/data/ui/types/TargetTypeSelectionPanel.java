@@ -384,13 +384,6 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			classBrowserPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
 				null, "Query Processor Class Selection", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
-			// if there's an existing selected class, set it in the class browser
-			MessageElement qpElement = ExtensionTools.getExtensionDataElement(
-				getExtensionTypeExtensionData(), DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
-			if (qpElement != null) {
-				String queryProcessorClass = qpElement.getValue();
-				classBrowserPanel.setSelectedClassName(queryProcessorClass);
-			}
 			// listen for class selection events
 			classBrowserPanel.addClassSelectionListener(new ClassSelectionListener() {
 				public void classSelectionChanged(ClassSelectionEvent e) {
