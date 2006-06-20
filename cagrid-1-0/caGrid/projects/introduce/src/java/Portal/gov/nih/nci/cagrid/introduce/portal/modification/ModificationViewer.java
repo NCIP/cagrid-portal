@@ -17,7 +17,6 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
-import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
@@ -1571,7 +1570,7 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private ServicePropertiesTable getServicePropertiesTable() {
 		if (servicePropertiesTable == null) {
-			servicePropertiesTable = new ServicePropertiesTable(info.getServiceProperties());
+			servicePropertiesTable = new ServicePropertiesTable(info);
 		}
 		return servicePropertiesTable;
 	}
@@ -1644,19 +1643,13 @@ public class ModificationViewer extends GridPortalComponent {
 			addServiceProperyButton
 			.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if (getServicePropertyKeyTextField().getText()
-						.length() > 0 && CommonTools.isValidJavaField(getServicePropertyKeyTextField().getText())) {
-						ServicePropertiesProperty prop = new ServicePropertiesProperty();
-						prop.setKey(getServicePropertyKeyTextField()
-							.getText());
-						prop
-						.setValue(getServicePropertyValueTextField()
-							.getText());
-						getServicePropertiesTable().addRow(prop);
+					if (getServicePropertyKeyTextField().getText().length() > 0 
+						&& CommonTools.isValidJavaField(getServicePropertyKeyTextField().getText())) {
+						String key = getServicePropertyKeyTextField().getText();
+						String value = getServicePropertyValueTextField().getText();
+						getServicePropertiesTable().addRow(key, value);
 					} else {
-						JOptionPane
-						.showMessageDialog(
-							ModificationViewer.this,
+						JOptionPane.showMessageDialog(ModificationViewer.this,
 						"Service Property key must be a valid java identifier");
 					}
 				}
