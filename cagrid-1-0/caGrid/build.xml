@@ -35,7 +35,7 @@
     <!--                          DEFINE THE SUB PROJECTS                                 -->
     <!-- ================================================================================ -->
     <!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
-    <property name="projects.list" value="cabigextensions, cadsr, core, cql2xpath, data, discovery, dorian, fqp, gme, graph, gridca, gts, introduce, metadata, opensaml, sdkQuery, syncgts" />
+    <property name="projects.list" value="cabigextensions, cadsr, core, cql2xpath, data, discovery, portal, dorian, fqp, gme, graph, gridca, gts, introduce, metadata, opensaml, sdkQuery, syncgts" />
     <!-- ================================================================================ -->
     <!--                  DEFINE THE SUB PROJECTS THAT SUPPORT TESTING                    -->
     <!-- ================================================================================ -->
@@ -123,6 +123,23 @@
             <artifact refid="data.metadata.jars" />
         </resolveDependencies>
         <ant dir="${projects.dir}/discovery" inheritAll="false" antfile="build.xml" target="all" />
+    </target>
+
+
+    <!-- =============================================================== -->
+    <!-- PORTAL:                                                      -->
+    <!-- =============================================================== -->
+    <target name="build-portal" if="isJDK1.5" depends="prepare" description="Builds the portal project">
+        <resolveDependencies extdir="${projects.dir}/portal/ext">
+            <artifact refid="core.jars" />
+            <artifact refid="common.test.jars" />
+            <artifact refid="core.test.jars" />
+            <artifact refid="test.coverage.jars" />
+            <artifact refid="common.metadata.jars" />
+            <artifact refid="data.metadata.jars" />
+            <artifact refid="discovery.jars"/>
+        </resolveDependencies>
+        <ant dir="${projects.dir}/portal" inheritAll="false" antfile="build.xml" target="all" />
     </target>
 
 

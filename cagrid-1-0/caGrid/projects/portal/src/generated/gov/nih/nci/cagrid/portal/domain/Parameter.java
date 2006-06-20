@@ -6,8 +6,6 @@ package gov.nih.nci.cagrid.portal.domain;
  */
 public interface Parameter {
 
-	public UMLClass umlClass;
-
 	public abstract int getDimensionality();
 
 	public abstract UMLClass getUMLClass();

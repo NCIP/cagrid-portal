@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<project name="portal" default="all" basedir=".">
+
+    <property name="webapp.name" value="cagrid-portal"/>
+
+    <!-- Local Environment -->
+    <property file="${user.name}-portal-build.properties" />
+    <property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
+
+
+    <property name="lib.dir" value="lib"/>
+    <property name="ext.lib.dir" value="ext/lib"/>
+    <property name='src.dir' value='src/java'/>
+    <property name='generated.src.dir' value='src/generated'/>
+    <property name="webcontent.dir" value="webcontent"/>
+    <property name='webinf.dir' value='${webcontent.dir}/WEB-INF'/>
+    <property name='build.dest' value='${webinf.dir}/classes'/>
+    <property name="lib.dest" value="${webinf.dir}/lib"/>
+
+
+    <path id="portal.classpath">
+        <pathelement path="${lib.dir}"/>
+        <pathelement path="${ext.lib.dir}"/>
+    </path>
+
+    <!-- ============================================================== -->
+    <!-- Initialize build environment                                   -->
+    <!-- ============================================================== -->
+    <target name="init">
+        <mkdir dir="${build.dest}" />
+        <mkdir dir="${lib.dest}"/>
+    </target>
+
+    <!-- ============================================================== -->
+    <!-- Cleans up generated stuff                                      -->
+    <!-- Not to be called directly                                      -->
+    <!-- ============================================================== -->
+    <target name="clean" depends="" description="Removes generated files.">
+        <delete dir="${build.dest}" />
+        <delete dir="${lib.dest}"/>
+    </target>
+
+    <!-- ============================================================== -->
+    <!-- Compile up generated stuff                                      -->
+    <!-- ============================================================== -->
+    <target name="compile" depends="init">
+        <javac destdir="${build.dest}" classpathref="portal.classpath">
+            <src>
+                <pathelement path="${src.dir}"/>
+                <pathelement path="${generated.src.dir}"/>
+            </src>
+        </javac>
+    </target>
+
+    <target name="copyResources">
+        <!--Copy libraries-->
+        <copy todir="${lib.dest}">
+            <fileset dir="${lib.dir}">
+                <include name="*.jar"/>
+            </fileset>
+            <fileset dir="${ext.lib.dir}">
+                <include name="*.jar"/>
+            </fileset>
+        </copy>
+
+        <!--ToDo copy GLOBUS libs -->
+    </target>
+
+
+    <!-- ============================================================== -->
+    <!-- Create war for deployment                                      -->
+    <!-- ============================================================== -->
+    <target name="war" depends="compile,copyResources">
+        <!--Create war
+
+        -->
+    </target>
+
+    <!-- ============================================================== -->
+    <!-- Builds from scratch                                                -->
+    <!-- ============================================================== -->
+    <target name="all" depends="war" description="Builds the entire application" />
+
+</project>
