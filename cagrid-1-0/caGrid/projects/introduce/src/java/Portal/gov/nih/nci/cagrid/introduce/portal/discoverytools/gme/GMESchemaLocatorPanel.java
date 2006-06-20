@@ -30,7 +30,7 @@ public class GMESchemaLocatorPanel extends JPanel {
 
 	public static String GME_URL = "GME_URL";
 
-	public static String TYPE = "GME";
+	public static String TYPE = "gme_discovery";
 
 	private JPanel mainPanel = null;
 

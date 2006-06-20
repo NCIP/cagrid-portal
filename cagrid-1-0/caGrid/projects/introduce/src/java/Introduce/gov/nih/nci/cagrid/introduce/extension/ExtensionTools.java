@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.introduce.extension;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.Properties;
+import gov.nih.nci.cagrid.introduce.beans.extension.PropertiesProperty;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
@@ -68,6 +69,20 @@ public class ExtensionTools {
 
 		return value;
 	}
+	
+	public static PropertiesProperty getPropertyObject(Properties properties, String key) {
+		if (properties != null && properties.getProperty() != null) {
+			for (int i = 0; i < properties.getProperty().length; i++) {
+				if (properties.getProperty(i).getKey().equals(key)) {
+					return properties.getProperty(i);
+				}
+			}
+		}
+
+		return null;
+	}
+	
+
 
 	public static ExtensionTypeExtensionData getExtensionData(
 			ServiceExtensionDescriptionType desc, ServiceInformation info) {

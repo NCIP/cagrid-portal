@@ -10,12 +10,9 @@ public abstract class ExtensionsPreferencesConfigurationPanel extends
 	public ExtensionsPreferencesConfigurationPanel(ExtensionDescription ext){
 		super();
 		this.ext = ext;
-		initialize();
 	}
 	
 	public ExtensionDescription getExtensionDescription(){
 		return this.ext;
 	}
-	
-	public abstract void initialize();
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+}

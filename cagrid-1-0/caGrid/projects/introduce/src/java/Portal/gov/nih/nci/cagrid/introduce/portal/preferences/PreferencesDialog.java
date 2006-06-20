@@ -69,6 +69,8 @@ public class PreferencesDialog extends JDialog {
 			gridBagConstraints1.gridx = 1;
 			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints1.gridwidth = 2;
+			gridBagConstraints1.weightx = 1.0D;
+			gridBagConstraints1.weighty = 1.0D;
 			gridBagConstraints1.gridy = 0;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
