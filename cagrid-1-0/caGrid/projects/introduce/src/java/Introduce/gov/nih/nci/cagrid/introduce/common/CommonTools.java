@@ -12,6 +12,8 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
+import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
+import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurity;
@@ -20,6 +22,7 @@ import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
 import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 import gov.nih.nci.cagrid.introduce.info.SchemaInformation;
+import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -665,7 +668,97 @@ public class CommonTools {
 		// return the orginal name, if it is unique, otherwise append a number
 		return TemplateUtils.lowerCaseFirstCharacter(baseName
 				+ ((previousNumber > 0) ? String.valueOf(previousNumber) : ""));
-
 	}
-
+	
+	
+	/**
+	 * Sets a service property on the service information.  If no service properties
+	 * are found, a new array of properties is created and initialized with a single
+	 * property containing the key and value specified.  If the property is found
+	 * to exist in the service, it's value is changed to the one specified.
+	 * @param info
+	 * 		The service information to set a property on
+	 * @param key
+	 * 		The key of the service property to set
+	 * @param value
+	 * 		The value to associate with the property key
+	 */
+	public static void setServiceProperty(ServiceInformation info, String key, String value) {
+		ServiceProperties props = info.getServiceProperties();
+		if (props == null) {
+			props = new ServiceProperties();
+			info.setServiceProperties(props);
+		}
+		ServicePropertiesProperty[] allProperties = props.getProperty(); 
+		if (allProperties == null) {
+			allProperties = new ServicePropertiesProperty[] {
+				new ServicePropertiesProperty(key, value)
+			};
+		} else {
+			boolean found = false;
+			for (int i = 0; i < allProperties.length; i++) {
+				if (allProperties[i].getKey().equals(key)) {
+					allProperties[i].setValue(value);
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				ServicePropertiesProperty[] tmpProperties = 
+					new ServicePropertiesProperty[allProperties.length + 1];
+				System.arraycopy(allProperties, 0, tmpProperties, 0, allProperties.length);
+				tmpProperties[tmpProperties.length - 1] = new ServicePropertiesProperty(key, value);
+				allProperties = tmpProperties;
+			}
+		}
+		props.setProperty(allProperties);
+	}
+	
+	
+	/**
+	 * Determines if a service information object contains the specified
+	 * service property
+	 * @param info
+	 * 		The service information
+	 * @param key
+	 * 		The property to check for
+	 * @return
+	 * 		True if a property with the key name is found, false otherwise
+	 */
+	public boolean servicePropertyExists(ServiceInformation info, String key) {
+		if (info.getServiceProperties() != null  && info.getServiceProperties().getProperty() != null) {
+			ServicePropertiesProperty[] props = info.getServiceProperties().getProperty();
+			for (int i = 0; i < props.length; i++) {
+				if (props[i].getKey().equals(key)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	
+	/**
+	 * Gets the value of a service property from service information
+	 * @param info
+	 * 		The service information to pull a property value from
+	 * @param key
+	 * 		The key of the property value to find
+	 * @return
+	 * 		The value of the property
+	 * @throws Exception
+	 * 		If no property with the specified key is found
+	 */
+	public static String getServicePropertyValue(ServiceInformation info, String key) 
+		throws Exception {
+		if (info.getServiceProperties() != null  && info.getServiceProperties().getProperty() != null) {
+			ServicePropertiesProperty[] props = info.getServiceProperties().getProperty();
+			for (int i = 0; i < props.length; i++) {
+				if (props[i].getKey().equals(key)) {
+					return props[i].getValue();
+				}
+			}
+		}
+		throw new Exception("No such property: " + key);
+	}
 }
