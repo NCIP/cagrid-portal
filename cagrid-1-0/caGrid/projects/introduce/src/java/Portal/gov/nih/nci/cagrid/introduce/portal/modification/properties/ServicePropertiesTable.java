@@ -6,10 +6,16 @@ import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 
 import java.util.Vector;
 
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 
 /**
+ * ServicePropertiesTable
+ * Table to render and allow modification of service properties
+ * as contained in an introduce service model.
+ * 
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
@@ -22,9 +28,8 @@ public class ServicePropertiesTable extends PortalBaseTable {
 
 	private ServiceProperties properties;
 
-
 	public ServicePropertiesTable(ServiceProperties properties) {
-		super(createTableModel());
+		super(new MyDefaultTableModel());
 		this.properties = properties;
 		initialize();
 	}
@@ -33,68 +38,103 @@ public class ServicePropertiesTable extends PortalBaseTable {
 	public boolean isCellEditable(int row, int column) {
 		return true;
 	}
+	
+	
+	public void refreshView() {
+		// clean out old data
+		while (getRowCount() != 0) {
+			((DefaultTableModel) getModel()).removeRow(0);
+		}
+		// add new data
+		ServicePropertiesProperty[] allProperties = properties.getProperty();
+		if (allProperties != null && allProperties.length != 0) {
+			for (int i = 0; i < allProperties.length; i++) {
+				Vector v = new Vector(3);
+				v.add(allProperties[i].getKey());
+				v.add(allProperties[i].getValue());
+				v.add(v);
+				((DefaultTableModel) this.getModel()).addRow(v);
+			}
+		}
+		repaint();
+	}
+	
+	
+	private void setSelectedRow(int row) {
+		setRowSelectionInterval(row, row);
+	}
 
 
 	public void addRow(final ServicePropertiesProperty property) {
-		final Vector v = new Vector();
-		v.add(property.getKey());
-		v.add(property.getValue());
-		v.add(v);
-
-		((DefaultTableModel) this.getModel()).addRow(v);
-		this.setRowSelectionInterval(this.getModel().getRowCount() - 1, this.getModel().getRowCount() - 1);
-	}
-
-
-	public void modifyRow(final ServicePropertiesProperty property, int row) throws Exception {
-		if ((row < 0) || (row >= getRowCount())) {
-			throw new Exception("invalid row");
+		// add the property to the service model
+		ServicePropertiesProperty[] allProperties = properties.getProperty();
+		if (allProperties == null || allProperties.length == 0) {
+			allProperties = new ServicePropertiesProperty[] {property};
+		} else {
+			ServicePropertiesProperty[] tmpProperties = 
+				new ServicePropertiesProperty[allProperties.length + 1];
+			System.arraycopy(allProperties, 0, tmpProperties, 0, allProperties.length);
+			tmpProperties[tmpProperties.length - 1] = property;
+			allProperties = tmpProperties;
 		}
-		Vector v = (Vector) getValueAt(row, 2);
-		v.set(0, property.getKey());
-		v.set(1, property.getValue());
-		v.set(2, v);
+		properties.setProperty(allProperties);
+		
+		// add the row to the GUI
+		refreshView();
+		
+		// select the newly added row
+		setSelectedRow(allProperties.length - 1);
 	}
 
 
-	public void modifySelectedRow(final ServicePropertiesProperty property) throws Exception {
-		modifyRow(property,getSelectedRow());
+	public void modifyRow(final ServicePropertiesProperty property, int row) 
+		throws IndexOutOfBoundsException {
+		if ((row < 0) || (row >= getRowCount())) {
+			throw new IndexOutOfBoundsException("invalid row: " + row);
+		}
+		// modify the property in the service model
+		properties.setProperty(row, property);
+		
+		// update the gui
+		refreshView();
 	}
 
-	public void removeSelectedRow() throws Exception {
+
+	public void modifySelectedRow(final ServicePropertiesProperty property) 
+		throws IndexOutOfBoundsException {
+		modifyRow(property, getSelectedRow());
+	}
+	
+
+	public void removeSelectedRow() throws IndexOutOfBoundsException {
 		int row = getSelectedRow();
 		if ((row < 0) || (row >= getRowCount())) {
-			throw new Exception("invalid row");
+			throw new IndexOutOfBoundsException("invalid row: " + row);
 		}
 		int oldSelectedRow = getSelectedRow();
-		((DefaultTableModel) getModel()).removeRow(oldSelectedRow);
-		if (oldSelectedRow == 0) {
-			oldSelectedRow++;
+		// remove the row from the model
+		ServicePropertiesProperty[] newProperties = 
+			new ServicePropertiesProperty[properties.getProperty().length - 1];
+		int newIndex = 0;
+		for (int i = 0; i < properties.getProperty().length; i++) {
+			if (i != row) {
+				newProperties[newIndex] = properties.getProperty(i);
+				newIndex++;
+			}
 		}
+		properties.setProperty(newProperties);
+		
+		// update GUI
+		refreshView();
+		
+		// change row selection
 		if (getRowCount() > 0) {
-			setRowSelectionInterval(oldSelectedRow - 1, oldSelectedRow - 1);
+			if (oldSelectedRow == 0) {
+				setSelectedRow(0);
+			} else {
+				setSelectedRow(oldSelectedRow - 1);
+			}
 		}
-	}
-
-
-	public ServicePropertiesProperty getRowData(int row) throws Exception {
-		if ((row < 0) || (row >= getRowCount())) {
-			throw new Exception("invalid row");
-		}
-		ServicePropertiesProperty property = new ServicePropertiesProperty();
-
-		String key = ((String) getValueAt(row, 0));
-		String value = ((String) getValueAt(row, 1));
-
-		property.setKey(key);
-		property.setValue(value);
-
-		return property;
-	}
-
-
-	public ServicePropertiesProperty getSelectedRowData() throws Exception {
-		return getRowData(getSelectedRow());
 	}
 
 
@@ -102,29 +142,29 @@ public class ServicePropertiesTable extends PortalBaseTable {
 		this.getColumn(DATA1).setMaxWidth(0);
 		this.getColumn(DATA1).setMinWidth(0);
 		this.getColumn(DATA1).setPreferredWidth(0);
-		if (this.properties != null && this.properties.getProperty() != null) {
-			for (int i = 0; i < this.properties.getProperty().length; i++) {
-				addRow(this.properties.getProperty(i));
+		refreshView();
+		// handle modifications to the table model
+		((DefaultTableModel) getModel()).addTableModelListener(new TableModelListener() {
+			public void tableChanged(TableModelEvent e) {
+				if (e.getType() == TableModelEvent.UPDATE) {
+					int row = e.getFirstRow();
+					String key = (String) getValueAt(row, 0);
+					String val = (String) getValueAt(row, 1);
+					ServicePropertiesProperty modified = new ServicePropertiesProperty(key, val);
+					modifyRow(modified, row);
+				}
 			}
-		}
-	}
-
-
-	public static MyDefaultTableModel createTableModel() {
-		MyDefaultTableModel model = new MyDefaultTableModel();
-		return model;
+		});
 	}
 
 
 	public void singleClick() throws Exception {
 		// TODO Auto-generated method stub
-
 	}
 
 
 	public void doubleClick() throws Exception {
 		// TODO Auto-generated method stub
-
 	}
 
 
