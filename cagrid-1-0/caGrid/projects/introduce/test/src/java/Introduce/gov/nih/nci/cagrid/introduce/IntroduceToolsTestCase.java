@@ -48,7 +48,6 @@ public class IntroduceToolsTestCase extends TestCase {
 		assertFalse(CommonTools.isValidPackageName("1s"));
 		assertFalse(CommonTools.isValidPackageName("this.is.a.really.long.package.name.just.to.be.sure.this.is.ok.with.my.package.parser.i.will.even.put.in.some.stupid.characters.like.a0193.and.sdjr23lkj23lk456jl.test.#org"));
 		assertFalse(CommonTools.isValidPackageName("_test.Forg"));
-		assertFalse(CommonTools.isValidPackageName("_tFest.org"));
 	}
 
 	protected void tearDown() throws Exception {
