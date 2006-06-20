@@ -1,5 +1,7 @@
 To Do:
 
+Modification Viewer's Methods table needs to manage the backend model, not create new Method objects 
+
 on deployment i have seen unable to delete namespace2package.mappings.
 
 eclipse launch files dont need to be in the top directory to work... move them somewhere else so they don't clutter the services root dir
