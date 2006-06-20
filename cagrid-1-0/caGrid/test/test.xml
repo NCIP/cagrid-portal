@@ -16,6 +16,8 @@
 	<property name="dart.port" value="8081" />
 	<property name="dart.project" value="caGrid-1.0" />
 	<property name="dart.server" value="vandelay.bmi.ohio-state.edu" />
+	<property name="dart.client.jar" value="${test.lib.dir}/DartClient-1.0.7.jar" />
+	
 
 	<!-- =============================================================== -->
 	<!-- Configure dart                                                  -->
@@ -70,7 +72,7 @@
 	<target name="publish" depends="setproxy1, setproxy2" description="Call to publish test results to dart, doesn't do any building or testing.">
 		<fail unless="dart.logfile" message="Before you attempt to publish to dart, you must set the
 			property [dart.logfile] to the location of the log to be sent to dart." />
-		<java jar="${test.lib.dir}/DartClient-1.0.0.jar" failonerror="true" fork="true">
+		<java jar="${dart.client.jar}" failonerror="true" fork="true">
 			<arg value="--server" />
 			<arg value="${dart.server}" />
 			<arg value="--port" />
