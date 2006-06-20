@@ -96,6 +96,16 @@ public class ServiceSecurityClient implements ServiceSecurityI {
 	}
 
 
+	public GlobusCredential getProxy() {
+		return proxy;
+	}
+
+
+	public void setProxy(GlobusCredential proxy) {
+		this.proxy = proxy;
+	}
+
+
 	private void init() throws RemoteException {
 
 		operations = new HashMap();
@@ -305,5 +315,4 @@ public class ServiceSecurityClient implements ServiceSecurityI {
 		return boxedResult.getServiceSecurityMetadata();
 
 	}
-
 }
