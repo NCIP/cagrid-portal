@@ -78,12 +78,13 @@ public class QueryProcessorClassConfigDialog extends JDialog {
 	
 	
 	private String getQpClassname() {
-		MessageElement qpClassnameElement = ExtensionTools.getExtensionDataElement(
-			extensionData, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
-		if (qpClassnameElement != null) {
-			return qpClassnameElement.getValue();
+		String classname = null;
+		try {
+			classname = CommonTools.getServicePropertyValue(serviceInfo, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
-		return null;
+		return classname;
 	}
 	
 	
