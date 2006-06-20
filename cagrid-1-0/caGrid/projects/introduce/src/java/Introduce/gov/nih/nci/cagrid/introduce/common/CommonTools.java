@@ -761,4 +761,31 @@ public class CommonTools {
 		}
 		throw new Exception("No such property: " + key);
 	}
+	
+	
+	/**
+	 * Removes a service property from service information
+	 * @param info
+	 * 		The service information to remove a property from
+	 * @param key
+	 * 		The key name of the property to remove
+	 * @return
+	 * 		True if the property existed and was removed, false otherwise
+	 */
+	public static boolean removeServiceProperty(ServiceInformation info, String key) {
+		ServicePropertiesProperty[] newProperties = 
+			new ServicePropertiesProperty[info.getServiceProperties().getProperty().length];
+		int newIndex = 0;
+		boolean removed = false;
+		for (int i = 0; i < info.getServiceProperties().getProperty().length; i++) {
+			ServicePropertiesProperty current = info.getServiceProperties().getProperty(i);
+			if (!current.getKey().equals(key)) {
+				newProperties[newIndex] = current;
+				newIndex++;
+			} else {
+				removed = true;
+			}
+		}
+		return removed;
+	}
 }
