@@ -155,7 +155,7 @@ public class ServiceSecurityClient implements ServiceSecurityI {
 
 
 	public void configureStubSecurity(Stub stub, String method) throws RemoteException {
-		resetStub(stub);
+		
 		boolean https = false;	
 		if (epr.getAddress().getScheme().equals("https")) {
 			https = true;
@@ -163,6 +163,7 @@ public class ServiceSecurityClient implements ServiceSecurityI {
 		
 		if (method.equals("getServiceSecurityMetadata")) {
 			if (https) {
+				resetStub(stub);
 				stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT,
 					org.globus.wsrf.security.Constants.SIGNATURE);
 				stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS, Boolean.TRUE);
@@ -187,11 +188,7 @@ public class ServiceSecurityClient implements ServiceSecurityI {
 			}
 			
 		}
-		
-
-		
-
-		
+		resetStub(stub);
 
 		CommunicationMechanism serviceDefault = securityMetadata.getDefaultCommunicationMechanism();
 
