@@ -6,9 +6,9 @@ import javax.xml.namespace.QName;
 
 
 public interface MetadataConstants {
-	
-	public static final String EXTENSION_NAME="cagrid_metadata";
-	
+
+	public static final String EXTENSION_NAME = "cagrid_metadata";
+
 	// metadata schema constants
 	public static final String METADATA_SCHEMA_LOCATION = "metadata" + File.separator + "cagrid" + File.separator
 		+ "types";
@@ -27,4 +27,7 @@ public interface MetadataConstants {
 	// service metadata QName
 	public static final QName SERVICE_METADATA_QNAME = new QName("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata",
 		"ServiceMetadata");
+
+	public static final QName SERVICE_QNAME = new QName("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service",
+		"Service");
 }

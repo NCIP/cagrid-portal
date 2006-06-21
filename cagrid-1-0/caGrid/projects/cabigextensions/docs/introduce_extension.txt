@@ -16,7 +16,9 @@ read the service description, add service contexts and populate operations
 (?)query caDSR to populate necessary aspects
 	-how will we know what types are being used?
 	-should it only do this if the caDSR was used for discovery?
+	-ideally would call into caDSR grid service to lookup caDSR/XML mapping
 	-could have another tab to associate Elements to caDSR classes
+	  -should probably have the extension store the mapping in extension data
 
 
 

@@ -136,8 +136,8 @@ public class ServiceMetadataCreationPostProcessor implements CreationExtensionPo
 
 
 	private void copySchema(String schemaName, String outputDir) throws Exception {
-		File schemaFile = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data" + File.separator
-			+ "schema" + File.separator + schemaName);
+		File schemaFile = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator
+			+ MetadataConstants.EXTENSION_NAME + File.separator + "schema" + File.separator + schemaName);
 		System.out.println("Copying schema from " + schemaFile.getAbsolutePath());
 		File outputFile = new File(outputDir + File.separator + schemaName);
 		System.out.println("Saving schema to " + outputFile.getAbsolutePath());

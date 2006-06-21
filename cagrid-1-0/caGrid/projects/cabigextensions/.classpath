@@ -63,7 +63,7 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-core-1.0.jar"/>
+	<classpathentry sourcepath="/caGrid-1.0-core" kind="lib" path="ext/lib/caGrid-core-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-core-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-portal-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
