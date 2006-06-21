@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
 import java.io.File;
@@ -23,12 +24,12 @@ import javax.swing.table.DefaultTableModel;
  */
 public class MethodsTable extends PortalBaseTable {
 	public static final String OPERATION = "Operation";
-	private MethodsType methodsType;
+	private ServiceType serviceType;
 
 
-	public MethodsTable(MethodsType methodsType, File methodsDirectory, Properties serviceProperties) {
+	public MethodsTable(ServiceType service, File methodsDirectory, Properties serviceProperties) {
 		super(createTableModel());
-		this.methodsType = methodsType;
+		this.serviceType = service;
 		this.setRowSelectionAllowed(true);
 		initialize();
 	}
@@ -44,15 +45,19 @@ public class MethodsTable extends PortalBaseTable {
 			this.removeRow(i);
 		}
 
-		if (methodsType != null && methodsType.getMethod() != null) {
-			for (int i = 0; i < methodsType.getMethod().length; i++) {
-				this.addRow(methodsType.getMethod(i));
+		if (serviceType!=null && serviceType.getMethods() != null && serviceType.getMethods().getMethod() != null) {
+			for (int i = 0; i < serviceType.getMethods().getMethod().length; i++) {
+				final Vector v = new Vector();
+				v.add(new MethodTypeContainer(serviceType.getMethods().getMethod(i)));
+
+				((DefaultTableModel) this.getModel()).addRow(v);
+				this.setRowSelectionInterval(this.getModel().getRowCount() - 1, this.getModel().getRowCount() - 1);
 			}
 		}
 	}
 	
-	public void setMethods(MethodsType methods){
-		this.methodsType = methods;
+	public void setMethods(ServiceType service){
+		this.serviceType = service;
 		initialize();
 	}
 
@@ -62,6 +67,8 @@ public class MethodsTable extends PortalBaseTable {
 		if ((row < 0) || (row >= getRowCount())) {
 			throw new Exception("invalid row");
 		}
+		MethodType method = getMethodType(getSelectedRow());
+		CommonTools.removeMethod(serviceType.getMethods(),method);
 		int oldSelectedRow = getSelectedRow();
 		((DefaultTableModel) getModel()).removeRow(oldSelectedRow);
 		if (oldSelectedRow == 0) {
@@ -99,7 +106,7 @@ public class MethodsTable extends PortalBaseTable {
 
 		((DefaultTableModel) this.getModel()).addRow(v);
 		this.setRowSelectionInterval(this.getModel().getRowCount() - 1, this.getModel().getRowCount() - 1);
-
+		CommonTools.addMethod(serviceType,method);
 	}
 
 

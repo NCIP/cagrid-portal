@@ -586,6 +586,20 @@ public class CommonTools {
 	}
 
 
+	public static void removeMethod(MethodsType methodsType, MethodType method) {
+		MethodType[] newMethods = new MethodType[methodsType.getMethod().length - 1];
+		int newMethodsI = 0;
+		for (int i = 0; i < methodsType.getMethod().length; i++) {
+			MethodType tmethod = methodsType.getMethod(i);
+			if (!(tmethod == method)) {
+				newMethods[newMethodsI] = tmethod;
+				newMethodsI++;
+			}
+		}
+		methodsType.setMethod(newMethods);
+	}
+
+
 	public static void addNamespace(ServiceDescription serviceD, NamespaceType nsType) {
 		NamespaceType[] namespacesArray = null;
 		int length = 0;

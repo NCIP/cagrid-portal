@@ -3,8 +3,6 @@ To Do:
 security operationprovider needs to be hooked into build properly...
  - have copies of schema and jars... needs to get from artifacts
 
-Modification Viewer's Methods table needs to manage the backend model, not create new Method objects 
-
 on deployment i have seen unable to delete namespace2package.mappings.
 
 eclipse launch files dont need to be in the top directory to work... move them somewhere else so they don't clutter the services root dir
@@ -43,9 +41,6 @@ add tests to system tests for (coverage report shows no coverage):
 - (DONE) methods returning arrays
 - (DONE) servicename ending in Service
 
-introduce created clients should not call getPortType() for each method invocation (its very inefficient), getPortType should be called once in the contructor, and each method should just use it
-  - this has security ramifciations as currently security is configured assuming a fresh port type... it needs to set all the options appropriately for each method call
-
 (steve)
 Open a service with no security. Go to service security, click custom, check all the options for secure communication.  Go to authz tab, select grid map.
 Now click back on the Operations tab, and click modify to modify a method.
@@ -71,6 +66,11 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+Modification Viewer's Methods table needs to manage the backend model, not create new Method objects 
+
+introduce created clients should not call getPortType() for each method invocation (its very inefficient), getPortType should be called once in the contructor, and each method should just use it
+  - this has security ramifciations as currently security is configured assuming a fresh port type... it needs to set all the options appropriately for each method call
+
 create preferences window to support extension configuration etc.....
 
 duce gui needs to rember last selection for deploy (GT or tomcat)
