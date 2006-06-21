@@ -181,8 +181,14 @@ public class DomainModelValidator {
 
 	private UMLClass getUmlClass(String className, DomainModel model) {
 		UMLClass[] allClasses = model.getExposedUMLClassCollection().getUMLClass();
+
 		for (int i = 0; allClasses != null && i < allClasses.length; i++) {
-			if (allClasses[i].getClassName().equals(className)) {
+			String fqn = allClasses[i].getPackageName().trim();
+			if (!fqn.equals("")) {
+				fqn += "." + allClasses[i].getClassName();
+			}
+
+			if (fqn.equals(className)) {
 				return allClasses[i];
 			}
 		}
