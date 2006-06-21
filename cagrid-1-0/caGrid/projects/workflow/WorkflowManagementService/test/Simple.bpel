@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BPEL Process Definition
+Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.com)
+-->
+<bpel:process name="Simple" suppressJoinFailure="yes" targetNamespace="http://Simple" xmlns:bpel="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:simple="http://workflow.cagrid.nci.nih.gov/SampleService1" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <bpel:partnerLinks>
+      <bpel:partnerLink myRole="sample1" name="Sample1PartnerLinkType" partnerLinkType="simple:Sample1PartnerLinkType" partnerRole="sample1"/>
+   </bpel:partnerLinks>
+   <bpel:variables>
+      <bpel:variable messageType="simple:invokeInputMessage" name="invokeInputMessage"/>
+      <bpel:variable messageType="simple:invokeOutputMessage" name="invokeOutputMessage"/>
+   </bpel:variables>
+   <bpel:sequence>
+      <bpel:receive createInstance="yes" operation="invoke" partnerLink="Sample1PartnerLinkType" portType="simple:SampleService1PortType" variable="invokeInputMessage"/>
+      <bpel:invoke inputVariable="invokeInputMessage" operation="invoke" outputVariable="invokeOutputMessage" partnerLink="Sample1PartnerLinkType" portType="simple:SampleService1PortType"/>
+      <bpel:reply operation="invoke" partnerLink="Sample1PartnerLinkType" portType="simple:SampleService1PortType" variable="invokeOutputMessage"/>
+   </bpel:sequence>
+</bpel:process>

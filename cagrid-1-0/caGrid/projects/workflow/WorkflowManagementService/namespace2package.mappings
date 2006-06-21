@@ -1,0 +1,8 @@
+http\://workflow.cagrid.nci.nih.gov/wms=gov.nih.nci.cagrid.workflow.wms.stubs
+http\://workflow.cagrid.nci.nih.gov/wms/bindings=gov.nih.nci.cagrid.workflow.wms.stubs.bindings
+http\://workflow.cagrid.nci.nih.gov/wms/service=gov.nih.nci.cagrid.workflow.wms.stubs.service
+
+
+http\://workflow.cagrid.nci.nih.gov//WorkFlowManagementService=gov.nih.nci.cagrid.workflow.wms.stubs.service
+
+
