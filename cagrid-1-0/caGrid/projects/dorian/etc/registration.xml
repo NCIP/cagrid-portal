@@ -17,6 +17,7 @@
 			xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"
 			xmlns:ns2="http://cagrid.nci.nih.gov/1/dorian-ifs"
 			xmlns:xs="http://www.w3.org/2001/XMLSchema"
+			xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"
 			xmlns:ns1="http://cagrid.nci.nih.gov/1/dorian-common"
 			xmlns:ns0="http://cagrid.nci.nih.gov/1/dorian-idp">
         <!-- Specifies that the index should refresh information

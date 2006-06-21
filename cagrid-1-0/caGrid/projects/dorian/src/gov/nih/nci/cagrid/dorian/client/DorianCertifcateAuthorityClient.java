@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.dorian.common.DorianFault;
 import gov.nih.nci.cagrid.dorian.stubs.DorianInternalFault;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 
+import java.rmi.RemoteException;
 import java.security.cert.X509Certificate;
 
 import org.apache.axis.types.URI.MalformedURIException;
@@ -24,7 +25,7 @@ public class DorianCertifcateAuthorityClient {
 	private DorianClient client;
 
 
-	public DorianCertifcateAuthorityClient(String serviceURI) throws MalformedURIException {
+	public DorianCertifcateAuthorityClient(String serviceURI) throws MalformedURIException, RemoteException {
 		client = new DorianClient(serviceURI);
 	}
 

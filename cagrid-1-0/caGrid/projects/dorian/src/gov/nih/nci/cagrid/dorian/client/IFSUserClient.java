@@ -15,6 +15,7 @@ import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
+import java.rmi.RemoteException;
 import java.security.KeyPair;
 import java.security.cert.X509Certificate;
 
@@ -27,7 +28,7 @@ public class IFSUserClient{
 	private DorianClient client;
 
 
-	public IFSUserClient(String serviceURI) throws MalformedURIException {
+	public IFSUserClient(String serviceURI) throws MalformedURIException, RemoteException {
 		client = new DorianClient(serviceURI);
 	}
 

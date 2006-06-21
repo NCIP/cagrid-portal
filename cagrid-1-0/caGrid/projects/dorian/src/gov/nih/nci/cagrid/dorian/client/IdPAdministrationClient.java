@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.dorian.client;
 
+import java.rmi.RemoteException;
+
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.Utils;
@@ -27,12 +29,12 @@ public class IdPAdministrationClient{
 	private DorianClient client;
 
 
-	public IdPAdministrationClient(String serviceURI) throws MalformedURIException {
+	public IdPAdministrationClient(String serviceURI) throws MalformedURIException, RemoteException {
 		client = new DorianClient(serviceURI);
 	}
 
 
-	public IdPAdministrationClient(String serviceURI, GlobusCredential proxy) throws MalformedURIException {
+	public IdPAdministrationClient(String serviceURI, GlobusCredential proxy) throws MalformedURIException, RemoteException {
 		client = new DorianClient(serviceURI, proxy);
 	}
 

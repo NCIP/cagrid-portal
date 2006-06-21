@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.dorian.client;
 
+import java.rmi.RemoteException;
+
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.Utils;
@@ -28,7 +30,7 @@ public class IdPAuthenticationClient{
 	private DorianClient client;
 
 
-	public IdPAuthenticationClient(String serviceURI, BasicAuthCredential cred) throws MalformedURIException {
+	public IdPAuthenticationClient(String serviceURI, BasicAuthCredential cred) throws MalformedURIException, RemoteException {
 		client = new DorianClient(serviceURI);
 		this.cred = cred;
 	}

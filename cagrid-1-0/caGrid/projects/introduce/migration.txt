@@ -1,3 +1,7 @@
 Migration to Security Metadata
 
 1) Remove no longer valid security configuration from introduce.xml (ClientCommunication, ClientAuthorization, and Delegation).
+2) Copy ServiceSecurity jars into project lib directory
+3) Copy ServiceSecurity schema and wsdl to project schema directory
+4) Modify client to correspond to the Jet client.
+5) Add securityMetadata entry to wsdd (<parameter name="securityMetadata" value="ETC-PATH/HelloWorld-security-metadata.xml" />)
