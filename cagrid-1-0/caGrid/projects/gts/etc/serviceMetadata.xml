@@ -3,54 +3,27 @@
     xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"
     xmlns:serv="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
     <serviceDescription>
-        <serv:Service>
-            <serv:description>
-                The Grid Trust Service (GTS) is a federated solution for managing the trust fabric
-                in the grid.
-            </serv:description>
-            <serv:name>GTS</serv:name>
-            <serv:version>0.75a</serv:version>
+        <serv:Service description="The Grid Trust Service (GTS) is a federated solution for managing
+            the trust fabric in the grid." name="GTS" version="1.0">
             <serv:pointOfContactCollection>
-                <com:PointOfContact>
-                    <com:affiliation>OSU</com:affiliation>
-                    <com:email>langella@bmi.osu.edu</com:email>
-                    <com:firstName>Stephen</com:firstName>
-                    <com:lastName>Langella</com:lastName>
-                    <com:role>Maintainer</com:role>
-                </com:PointOfContact>
+                <com:PointOfContact affiliation="OSU" email="langella@bmi.osu.edu"
+                    firstName="Stephen" lastName="Langella" role="Maintainer"/>
             </serv:pointOfContactCollection>
             <serv:serviceContextCollection>
-                <serv:ServiceContext>
-                    <serv:description></serv:description>
-                    <serv:name>Main</serv:name>
-                    <serv:operationCollection />
-                    <serv:contextPropertyCollection />
+                <serv:ServiceContext description="The main service context." name="Main">
+                    <serv:operationCollection/>
+                    <serv:contextPropertyCollection/>
                 </serv:ServiceContext>
             </serv:serviceContextCollection>
-            <serv:caDSRRegistration />
         </serv:Service>
     </serviceDescription>
     <hostingResearchCenter>
-        <com:ResearchCenter>
-            <com:displayName>Ohio State University</com:displayName>
-            <com:shortName>OSU</com:shortName>
-            <com:address>
-                <com:Address>
-                    <com:country>US</com:country>
-                    <com:postalCode>43210</com:postalCode>
-                    <com:stateProvence>OH</com:stateProvence>
-                    <com:street1>333 W. 10th Ave.</com:street1>
-                </com:Address>
-            </com:address>
-            <com:researchCenterDescription />
+        <com:ResearchCenter displayName="Ohio State University" shortName="OSU">
+            <com:Address country="US" postalCode="43210" stateProvence="OH" street1="333 W. 10th
+                Ave."/>
             <com:pointOfContactCollection>
-                <com:PointOfContact>
-                    <com:affiliation>OSU</com:affiliation>
-                    <com:email>langella@bmi.osu.edu</com:email>
-                    <com:firstName>Stephen</com:firstName>
-                    <com:lastName>Langella</com:lastName>
-                    <com:role>Maintainer</com:role>
-                </com:PointOfContact>
+                <com:PointOfContact affiliation="OSU" email="langella@bmi.osu.edu"
+                    firstName="Stephen" lastName="Langella" role="Maintainer"/>
             </com:pointOfContactCollection>
         </com:ResearchCenter>
     </hostingResearchCenter>

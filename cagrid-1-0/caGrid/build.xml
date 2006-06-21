@@ -217,6 +217,7 @@
             <artifact refid="core.jars" />
             <artifact refid="common.test.jars" />
             <artifact refid="test.coverage.jars" />
+        	<artifact refid="core.test.jars" />
             <artifact refid="core.resources" />
             <artifact refid="gridca.jars" />
             <artifact refid="gridca.resources" />

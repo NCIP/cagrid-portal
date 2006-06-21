@@ -12,7 +12,6 @@ import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModelExposedUMLAssociationCollection;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModelExposedUMLClassCollection;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationEdge;
-import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationEdgeUmlClassReference;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationSourceUMLAssociationEdge;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationTargetUMLAssociationEdge;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLClassReference;
@@ -164,8 +163,8 @@ public class DomainModelBuilder {
 		sourceEdge.setMaxCardinality(cadsrAssociation.getSourceMaxCardinality());
 		sourceEdge.setMinCardinality(cadsrAssociation.getSourceMinCardinality());
 		sourceEdge.setRoleName(cadsrAssociation.getSourceRoleName());
-		sourceEdge.setUmlClassReference(new UMLAssociationEdgeUmlClassReference(new UMLClassReference(cadsrAssociation
-			.getSourceUMLClassMetadata().getUMLClassMetadata().getId())));
+		sourceEdge.setUMLClassReference(new UMLClassReference(cadsrAssociation.getSourceUMLClassMetadata()
+			.getUMLClassMetadata().getId()));
 		convertedSourceEdge.setUMLAssociationEdge(sourceEdge);
 		converted.setSourceUMLAssociationEdge(convertedSourceEdge);
 		UMLAssociationTargetUMLAssociationEdge convertedTargetEdge = new UMLAssociationTargetUMLAssociationEdge();
@@ -173,8 +172,8 @@ public class DomainModelBuilder {
 		targetEdge.setMaxCardinality(cadsrAssociation.getTargetMaxCardinality());
 		targetEdge.setMinCardinality(cadsrAssociation.getTargetMinCardinality());
 		targetEdge.setRoleName(cadsrAssociation.getTargetRoleName());
-		targetEdge.setUmlClassReference(new UMLAssociationEdgeUmlClassReference(new UMLClassReference(cadsrAssociation
-			.getTargetUMLClassMetadata().getUMLClassMetadata().getId())));
+		targetEdge.setUMLClassReference(new UMLClassReference(cadsrAssociation.getTargetUMLClassMetadata()
+			.getUMLClassMetadata().getId()));
 		convertedTargetEdge.setUMLAssociationEdge(targetEdge);
 		converted.setTargetUMLAssociationEdge(convertedTargetEdge);
 		return converted;

@@ -14,14 +14,13 @@
 				e.g. not system support staff) The "role" attribute should probably be an
 				enumeration of known types</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="affiliation" type="xs:string" minOccurs="0"/>
-			<xs:element name="email" type="xs:string"/>
-			<xs:element name="firstName" type="xs:string"/>
-			<xs:element name="lastName" type="xs:string"/>
-			<xs:element name="phoneNumber" type="xs:string" minOccurs="0"/>
-			<xs:element name="role" type="xs:string"/>
-		</xs:sequence>
+		<xs:sequence/>
+		<xs:attribute name="affiliation" use="required" type="xs:string"/>
+		<xs:attribute name="email" use="required" type="xs:string"/>
+		<xs:attribute name="firstName" use="required" type="xs:string"/>
+		<xs:attribute name="lastName" use="required" type="xs:string"/>
+		<xs:attribute name="phoneNumber" use="optional" type="xs:string"/>
+		<xs:attribute name="role" use="required" type="xs:string"/>
 	</xs:complexType>
 	<xs:element name="UMLClass" type="com:UMLClass"/>
 	<xs:complexType name="UMLClass">
@@ -30,18 +29,6 @@
 			output.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="className" type="xs:string"/>
-			<xs:element name="description" type="xs:string"/>
-			<xs:element name="id" type="xs:string">
-				<xs:annotation>
-					<xs:documentation>This is used soley for the purposes of referencing this class
-						in associations. It does not represent any caDSR
-					identifier.</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="packageName" type="xs:string"/>
-			<xs:element name="projectName" type="xs:string"/>
-			<xs:element name="projectVersion" type="xs:string"/>
 			<xs:element name="umlAttributeCollection">
 				<xs:complexType>
 					<xs:sequence>
@@ -57,6 +44,17 @@
 				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
+		<xs:attribute name="className" use="required" type="xs:string"/>
+		<xs:attribute name="description" use="required" type="xs:string"/>
+		<xs:attribute name="id" use="required" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>This is used soley for the purposes of referencing this class in
+					associations. It does not represent any caDSR identifier.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="packageName" use="required" type="xs:string"/>
+		<xs:attribute name="projectName" use="required" type="xs:string"/>
+		<xs:attribute name="projectVersion" use="required" type="xs:string"/>
 	</xs:complexType>
 	<xs:element name="UMLAttribute" type="com:UMLAttribute"/>
 	<xs:complexType name="UMLAttribute">
@@ -66,8 +64,6 @@
 				existence of this attribute.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="description" type="xs:string"/>
-			<xs:element name="name" type="xs:string"/>
 			<xs:element name="semanticMetadataCollection">
 				<xs:complexType>
 					<xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -76,26 +72,14 @@
 				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
+		<xs:attribute name="description" use="required" type="xs:string"/>
+		<xs:attribute name="name" use="required" type="xs:string"/>
 	</xs:complexType>
 	<xs:element name="ResearchCenter" type="com:ResearchCenter"/>
 	<xs:complexType name="ResearchCenter">
 		<xs:sequence>
-			<xs:element name="displayName" type="xs:string"/>
-			<xs:element name="shortName" type="xs:string"/>
-			<xs:element name="address">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element ref="com:Address" minOccurs="0"/>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="researchCenterDescription">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element ref="com:ResearchCenterDescription" minOccurs="0"/>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
+			<xs:element ref="com:Address" minOccurs="0"/>
+			<xs:element ref="com:ResearchCenterDescription" minOccurs="0"/>
 			<xs:element name="pointOfContactCollection">
 				<xs:complexType>
 					<xs:sequence>
@@ -104,25 +88,25 @@
 				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
+		<xs:attribute name="displayName" use="required" type="xs:string"/>
+		<xs:attribute name="shortName" use="required" type="xs:string"/>
 	</xs:complexType>
 	<xs:element name="Address" type="com:Address"/>
 	<xs:complexType name="Address">
-		<xs:sequence>
-			<xs:element name="country" type="xs:string"/>
-			<xs:element name="locality" type="xs:string" minOccurs="0"/>
-			<xs:element name="postalCode" type="xs:string" minOccurs="0"/>
-			<xs:element name="stateProvence" type="xs:string" minOccurs="0"/>
-			<xs:element name="street1" type="xs:string"/>
-			<xs:element name="street2" type="xs:string" minOccurs="0"/>
-		</xs:sequence>
+		<xs:sequence/>
+		<xs:attribute name="country" use="required" type="xs:string"/>
+		<xs:attribute name="locality" use="optional" type="xs:string"/>
+		<xs:attribute name="postalCode" use="optional" type="xs:string"/>
+		<xs:attribute name="stateProvence" use="optional" type="xs:string"/>
+		<xs:attribute name="street1" use="required" type="xs:string"/>
+		<xs:attribute name="street2" use="optional" type="xs:string"/>
 	</xs:complexType>
 	<xs:element name="ResearchCenterDescription" type="com:ResearchCenterDescription"/>
 	<xs:complexType name="ResearchCenterDescription">
-		<xs:sequence>
-			<xs:element name="description" type="xs:string"/>
-			<xs:element name="homepageURL" type="xs:string"/>
-			<xs:element name="imageURL" type="xs:string" minOccurs="0"/>
-			<xs:element name="rssNewsURL" type="xs:string" minOccurs="0"/>
-		</xs:sequence>
+		<xs:sequence/>
+		<xs:attribute name="description" use="required" type="xs:string"/>
+		<xs:attribute name="homepageURL" use="required" type="xs:string"/>
+		<xs:attribute name="imageURL" use="optional" type="xs:string"/>
+		<xs:attribute name="rssNewsURL" use="optional" type="xs:string"/>
 	</xs:complexType>
 </xs:schema>
