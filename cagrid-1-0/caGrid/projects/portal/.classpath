@@ -26,21 +26,6 @@
 	<classpathentry kind="lib" path="ext/test/lib/log4j-1.2.9.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/xmlunit1.0.jar"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java-3.1.13-bin.jar"/>
-	<classpathentry kind="lib" path="webcontent/WEB-INF/lib/caGrid-core-1.0.jar"/>
-	<classpathentry kind="lib" path="webcontent/WEB-INF/lib/caGrid-discovery-1.0.jar"/>
-	<classpathentry kind="lib" path="webcontent/WEB-INF/lib/caGrid-metadata-common-1.0.jar"/>
-	<classpathentry kind="lib" path="webcontent/WEB-INF/lib/caGrid-metadata-data-1.0.jar"/>
-	<classpathentry kind="lib" path="webcontent/WEB-INF/lib/castor-0.9.9.jar"/>
-	<classpathentry kind="lib" path="webcontent/WEB-INF/lib/cglib-full-2.0.1.jar"/>
-	<classpathentry kind="lib" path="webcontent/WEB-INF/lib/client.jar"/>
-	<classpathentry kind="lib" path="webcontent/WEB-INF/lib/hibernate3.jar"/>
-	<classpathentry kind="lib" path="webcontent/WEB-INF/lib/mobius_common_client-1.1.jar"/>
-	<classpathentry kind="lib" path="webcontent/WEB-INF/lib/mobius_factories-1.1.jar"/>
-	<classpathentry kind="lib" path="webcontent/WEB-INF/lib/mobius_gme_client-1.1.jar"/>
-	<classpathentry kind="lib" path="webcontent/WEB-INF/lib/mobius_mako_client-1.1.jar"/>
-	<classpathentry kind="lib" path="webcontent/WEB-INF/lib/mobius_tools-1.1.jar"/>
-	<classpathentry kind="lib" path="webcontent/WEB-INF/lib/mysql-connector-java-3.1.13-bin.jar"/>
-	<classpathentry kind="lib" path="webcontent/WEB-INF/lib/spring.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
