@@ -10,9 +10,12 @@ import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 import gov.nih.nci.cagrid.metadata.ServiceMetadataServiceDescription;
 import gov.nih.nci.cagrid.metadata.service.Service;
+import gov.nih.nci.cagrid.metadata.service.ServiceContext;
 import gov.nih.nci.cagrid.metadata.service.ServiceServiceContextCollection;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -45,9 +48,9 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 		File mdFile = new File(filename);
 		if (mdFile.exists() && mdFile.canRead()) {
 			try {
-				metadata = (ServiceMetadata) Utils.deserializeDocument(filename, metadata.getClass());
+				metadata = (ServiceMetadata) Utils.deserializeDocument(filename, ServiceMetadata.class);
 			} catch (Exception e) {
-				LOG.error("Failed to deserialize existing metadata document!  A new one will be created.");
+				LOG.error("Failed to deserialize existing metadata document!  A new one will be created.", e);
 			}
 		}
 
@@ -75,30 +78,72 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 	 * 
 	 * @param metadata
 	 * @param info
+	 * @throws CodegenExtensionException
 	 */
-	private void populateService(Service service, ServiceInformation info) {
+	private void populateService(Service service, ServiceInformation info) throws CodegenExtensionException {
 		ServiceType services[] = info.getServiceDescriptor().getServices().getService();
 
-		// find the main service, and set the name to its name, and generate a
-		// description if need be
+		ServiceContext[] newServContexts = new ServiceContext[services.length];
+
+		// build a map based on context names (only for lookup)
+		Map contextMap = new HashMap();
+		ServiceContext[] existingServiceContexts = service.getServiceContextCollection().getServiceContext();
+		if (existingServiceContexts != null) {
+			for (int i = 0; i < existingServiceContexts.length; i++) {
+				ServiceContext context = existingServiceContexts[i];
+				contextMap.put(context.getName(), context);
+			}
+		}
+
+		// create/edit a service context for each service
 		for (int i = 0; i < services.length; i++) {
 			ServiceType serv = services[i];
+
+			// find the existing context
+			ServiceContext currContext = (ServiceContext) contextMap.get(serv.getName());
+			// create a new one if necessary
+			if (currContext == null) {
+				currContext = new ServiceContext();
+			}
+
+			// now edit it
+			editServiceContextForService(serv, currContext);
+			newServContexts[i] = currContext;
+
+			// use the main service to set some higher level items
 			if (serv.getResourceFrameworkType().equals(MAIN_RF_TYPE)) {
 				service.setName(serv.getName());
 
+				// set a description
 				if (service.getDescription() == null || service.getDescription().trim().equals("")) {
 					service.setDescription("The " + service.getName()
 						+ " grid service, created with caGrid Introduce, version:"
 						+ info.getServiceDescriptor().getIntroduceVersion() + ".");
 				}
 
+				// set a version
 				if (service.getVersion() == null || service.getVersion().trim().equals("")) {
 					// version is introduce's version... should be set elsewhere
 					service.setVersion(info.getServiceDescriptor().getIntroduceVersion());
 				}
-				break;
 			}
 		}
+
+		// replace the old with the new
+		service.getServiceContextCollection().setServiceContext(newServContexts);
+	}
+
+
+	/**
+	 * 
+	 * @param serv
+	 * @param currContext
+	 */
+	private void editServiceContextForService(ServiceType service, ServiceContext serviceContext) {
+		serviceContext.setName(service.getName());
+		// TODO: make context properties for RPs
+
+		// TODO: make operations
 
 	}
 
