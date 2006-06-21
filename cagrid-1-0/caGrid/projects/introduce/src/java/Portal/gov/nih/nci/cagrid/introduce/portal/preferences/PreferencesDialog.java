@@ -3,7 +3,6 @@ package gov.nih.nci.cagrid.introduce.portal.preferences;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import java.awt.CardLayout;
-import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -34,7 +33,7 @@ public class PreferencesDialog extends JDialog {
 
 	private JPanel preferneceConfigViewPanel = null;
 
-	private JButton okButton = null;
+	private JButton doneButton = null;
 
 
 	/**
@@ -44,6 +43,7 @@ public class PreferencesDialog extends JDialog {
 		super(owner);
 		setModal(true);
 		initialize();
+		pack();
 	}
 
 
@@ -51,7 +51,6 @@ public class PreferencesDialog extends JDialog {
 	 * This method initializes this
 	 */
 	private void initialize() {
-		this.setSize(new java.awt.Dimension(347, 290));
 		this.setContentPane(getMainPanel());
 		this.setTitle("Preferences");
 
@@ -68,15 +67,15 @@ public class PreferencesDialog extends JDialog {
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.gridx = 1;
 			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints1.gridwidth = 2;
+			gridBagConstraints1.gridwidth = 1;
 			gridBagConstraints1.weightx = 1.0D;
 			gridBagConstraints1.weighty = 1.0D;
 			gridBagConstraints1.gridy = 0;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints.weightx = 1.0D;
-			gridBagConstraints.weighty = 1.0D;
+			gridBagConstraints.weightx = 0.0D;
+			gridBagConstraints.weighty = 0.0D;
 			gridBagConstraints.gridy = 0;
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
@@ -148,8 +147,6 @@ public class PreferencesDialog extends JDialog {
 	private JScrollPane getPrefencesScrollPane() {
 		if (prefencesScrollPane == null) {
 			prefencesScrollPane = new JScrollPane();
-			prefencesScrollPane.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-			prefencesScrollPane.setPreferredSize(new java.awt.Dimension(0,0));
 			prefencesScrollPane.setViewportView(getPreferencesTree());
 		}
 		return prefencesScrollPane;
@@ -178,8 +175,6 @@ public class PreferencesDialog extends JDialog {
 	private PreferencesJTree getPreferencesTree() {
 		if (preferencesTree == null) {
 			preferencesTree = new PreferencesJTree();
-			preferencesTree.setSize(new java.awt.Dimension(0,0));
-			preferencesTree.setPreferredSize(new java.awt.Dimension(0,0));
 			preferencesTree.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					super.mouseClicked(e);
@@ -209,7 +204,7 @@ public class PreferencesDialog extends JDialog {
 			gridBagConstraints5.gridy = 0;
 			buttonPanel = new JPanel();
 			buttonPanel.setLayout(new GridBagLayout());
-			buttonPanel.add(getOkButton(), gridBagConstraints5);
+			buttonPanel.add(getDoneButton(), gridBagConstraints5);
 		}
 		return buttonPanel;
 	}
@@ -223,8 +218,8 @@ public class PreferencesDialog extends JDialog {
 	private JPanel getPreferneceConfigViewPanel() {
 		if (preferneceConfigViewPanel == null) {
 			preferneceConfigViewPanel = new JPanel(new CardLayout());
-			preferneceConfigViewPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
-				"Configuration", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+			preferneceConfigViewPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Configuration",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
 			addTreePanels((PreferencesTypeTreeNode) preferencesTree.getModel().getRoot());
 		}
@@ -237,17 +232,17 @@ public class PreferencesDialog extends JDialog {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getOkButton() {
-		if (okButton == null) {
-			okButton = new JButton();
-			okButton.setText("Ok");
-			okButton.addActionListener(new java.awt.event.ActionListener() {
+	private JButton getDoneButton() {
+		if (doneButton == null) {
+			doneButton = new JButton();
+			doneButton.setText("Done");
+			doneButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					PreferencesDialog.this.setVisible(false);
 				}
 			});
 		}
-		return okButton;
+		return doneButton;
 	}
 
 } // @jve:decl-index=0:visual-constraint="10,10"
