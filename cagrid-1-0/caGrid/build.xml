@@ -24,6 +24,7 @@
     <import file="${antfiles.dir}/artifacts.xml" />
     <import file="${antfiles.dir}/ant-utilities.xml" />
     <import file="${antfiles.dir}/test-utilities.xml" />
+    <import file="${antfiles.dir}/run-utilities.xml" />
     <import file="${antfiles.dir}/report-utilities.xml" />
 
     <!-- IMPORT THE TEST TARGET -->
