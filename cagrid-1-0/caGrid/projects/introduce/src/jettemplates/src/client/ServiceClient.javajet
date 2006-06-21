@@ -65,6 +65,7 @@ public class <%=info.getService().getName()%>Client extends ServiceSecurityClien
 	}
 	
 	private void initialize() throws RemoteException {
+	    this.portTypeMutex = new Object();
 		this.portType = createPortType();
 	}
 

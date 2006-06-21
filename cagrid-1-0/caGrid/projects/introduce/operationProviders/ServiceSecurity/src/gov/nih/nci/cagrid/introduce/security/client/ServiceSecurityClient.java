@@ -54,7 +54,6 @@ public class ServiceSecurityClient implements ServiceSecurityI {
 		this.proxy = proxy;
 		this.epr = new EndpointReferenceType();
 		this.epr.setAddress(new Address(url));
-		init();
 	}
 
 
@@ -67,7 +66,6 @@ public class ServiceSecurityClient implements ServiceSecurityI {
 		RemoteException {
 		this.proxy = proxy;
 		this.epr = epr;
-		init();
 	}
 
 
@@ -105,22 +103,6 @@ public class ServiceSecurityClient implements ServiceSecurityI {
 		this.proxy = proxy;
 	}
 
-
-	private void init() throws RemoteException {
-
-		operations = new HashMap();
-		this.authorization = NoAuthorization.getInstance();
-		this.securityMetadata = getServiceSecurityMetadata();
-		ServiceSecurityMetadataOperations ssmo = securityMetadata.getOperations();
-		if (ssmo != null) {
-			Operation[] ops = ssmo.getOperation();
-			if (ops != null) {
-				for (int i = 0; i < ops.length; i++) {
-					operations.put(ops[i].getName(), ops[i]);
-				}
-			}
-		}
-	}
 
 
 	private ServiceSecurityPortType getPortType() throws RemoteException {
@@ -174,12 +156,11 @@ public class ServiceSecurityClient implements ServiceSecurityI {
 
 	public void configureStubSecurity(Stub stub, String method) throws RemoteException {
 		resetStub(stub);
-
-		boolean https = false;
+		boolean https = false;	
 		if (epr.getAddress().getScheme().equals("https")) {
 			https = true;
 		}
-
+		
 		if (method.equals("getServiceSecurityMetadata")) {
 			if (https) {
 				stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT,
@@ -190,6 +171,27 @@ public class ServiceSecurityClient implements ServiceSecurityI {
 			}
 			return;
 		}
+		
+		if(this.securityMetadata == null){
+			operations = new HashMap();
+			this.authorization = NoAuthorization.getInstance();
+			this.securityMetadata = getServiceSecurityMetadata();
+			ServiceSecurityMetadataOperations ssmo = securityMetadata.getOperations();
+			if (ssmo != null) {
+				Operation[] ops = ssmo.getOperation();
+				if (ops != null) {
+					for (int i = 0; i < ops.length; i++) {
+						operations.put(ops[i].getName(), ops[i]);
+					}
+				}
+			}
+			
+		}
+		
+
+		
+
+		
 
 		CommunicationMechanism serviceDefault = securityMetadata.getDefaultCommunicationMechanism();
 

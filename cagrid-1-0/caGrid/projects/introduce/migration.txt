@@ -1,0 +1,3 @@
+Migration to Security Metadata
+
+1) Remove no longer valid security configuration from introduce.xml (ClientCommunication, ClientAuthorization, and Delegation).
