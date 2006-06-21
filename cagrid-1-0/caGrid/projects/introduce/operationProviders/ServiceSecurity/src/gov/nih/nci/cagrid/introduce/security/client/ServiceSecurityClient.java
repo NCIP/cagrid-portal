@@ -309,7 +309,7 @@ public class ServiceSecurityClient implements ServiceSecurityI {
 	public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata()
 		throws RemoteException {
 		ServiceSecurityPortType port = this.getPortType();
-		this.configureStubSecurity(port,"getServiceSecurityMetadata");
+		this.configureStubSecurity((Stub)port,"getServiceSecurityMetadata");
 		gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest params = new gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest();
 		gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataResponse boxedResult = port
 			.getServiceSecurityMetadata(params);
