@@ -31,7 +31,7 @@ import org.apache.axis.message.MessageElement;
  * @version $Id$ 
  */
 public class IgnorantQueryProcessor extends CQLQueryProcessor {
-	public static final String APPLICATION_SERVICE_URL = "AppserviceUrl";
+	public static final String APPLICATION_SERVICE_URL = "appserviceUrl";
 	
 	private ApplicationService coreService = null;
 	
