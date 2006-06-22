@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.xml.namespace.QName;
+
 import org.apache.axis.message.MessageElement;
 
 /** 
@@ -23,7 +25,12 @@ public class CQLQueryResultsUtil {
 	public static CQLObjectResult createObjectResult(Object obj) {
 		CQLObjectResult objectResult = new CQLObjectResult();
 		objectResult.setType(obj.getClass().getName());
-		MessageElement anyElement = new MessageElement(Utils.getRegisteredQName(obj.getClass()), obj);
+		QName objectQname = Utils.getRegisteredQName(obj.getClass());
+		if (objectQname == null) {
+			throw new NullPointerException("No qname found for class " + obj.getClass().getName() 
+				+ ". Check your client or server-config.wsdd");
+		}
+		MessageElement anyElement = new MessageElement(objectQname, obj);
 		objectResult.set_any(new MessageElement[] {anyElement});
 		return objectResult;
 	}
