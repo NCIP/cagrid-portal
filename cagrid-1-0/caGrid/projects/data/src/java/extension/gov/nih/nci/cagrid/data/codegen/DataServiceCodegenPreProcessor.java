@@ -15,6 +15,7 @@ import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPreProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
@@ -217,6 +218,11 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 				Iterator paramKeyIter = params.keySet().iterator();
 				while (paramKeyIter.hasNext()) {
 					String key = (String) paramKeyIter.next();
+					// verify the keys of the required params list are valid Java identifiers
+					if (!CommonTools.isValidJavaField(key)) {
+						throw new CodegenExtensionException(
+							"The query processor's required parameter " + key + " is not a valid Java field name.");
+					}
 					if (!hasProperty(props, key)) {
 						ServicePropertiesProperty prop = new ServicePropertiesProperty();					
 						String value = (String) params.get(key);
