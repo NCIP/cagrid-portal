@@ -40,6 +40,8 @@ public class ServiceConfigUtil {
 					&& Modifier.isPublic(current.getModifiers())) {
 					String value = (String) current.invoke(serviceConfig, new Object[] {});
 					String key = current.getName().substring(3);
+					// lowercase first character
+					key = String.valueOf(Character.toLowerCase(key.charAt(0))) + key.substring(1); 
 					configMap.put(key, value);
 				}
 			}
