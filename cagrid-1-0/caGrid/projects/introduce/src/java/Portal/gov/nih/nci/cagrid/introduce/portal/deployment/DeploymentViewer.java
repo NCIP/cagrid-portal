@@ -24,6 +24,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.ScrollPaneConstants;
 
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
@@ -55,7 +56,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 	private JButton deployButton = null;
 
 	private File serviceDirectory;
-	
+
 	private ServiceDescription introService;
 
 	Properties deployProperties;
@@ -67,6 +68,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 	private JPanel servicePropertiesPanel = null;
 
 	private JScrollPane servicePropertiesScrollPane = null;
+
 
 	/**
 	 * This method initializes
@@ -92,9 +94,10 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 				}
 				if (serviceDirectory.exists() && serviceDirectory.canRead()) {
 					try {
-					initialize();
-					} catch (Exception e){
-						JOptionPane.showMessageDialog(DeploymentViewer.this, "Error initializing the deployment: " + e.getMessage());
+						initialize();
+					} catch (Exception e) {
+						JOptionPane.showMessageDialog(DeploymentViewer.this, "Error initializing the deployment: "
+							+ e.getMessage());
 						DeploymentViewer.this.dispose();
 					}
 				} else {
@@ -136,35 +139,33 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		this.introService = (ServiceDescription) Utils.deserializeDocument(this.serviceDirectory.getAbsolutePath()
 			+ File.separator + "introduce.xml", ServiceDescription.class);
 		if (introService.getIntroduceVersion() == null
 			|| !introService.getIntroduceVersion().equals(IntroduceConstants.INTRODUCE_VERSION)) {
-			throw new Exception(
-				"Introduce version in project does not match version provided by Introduce Toolkit ( "
-					+ IntroduceConstants.INTRODUCE_VERSION + " ): " + introService.getIntroduceVersion());
+			throw new Exception("Introduce version in project does not match version provided by Introduce Toolkit ( "
+				+ IntroduceConstants.INTRODUCE_VERSION + " ): " + introService.getIntroduceVersion());
 		}
-		
-		//load up the deploy properties;
+
+		// load up the deploy properties;
 		Enumeration keys = deployProperties.keys();
-			this.setSize(new java.awt.Dimension(298,280));
+		this.setSize(new java.awt.Dimension(298, 280));
 		int i = 0;
 		while (keys.hasMoreElements()) {
 			String key = (String) keys.nextElement();
 			this.addTextField(this.getDeployPropertiesPanel(), key, deployProperties.getProperty(key), i++, true);
 		}
-		
-		//load up the service properties
-		if(introService.getServiceProperties()!=null&&introService.getServiceProperties().getProperty()!=null){
-			for(i =0;i < introService.getServiceProperties().getProperty().length; i++){
+
+		// load up the service properties
+		if (introService.getServiceProperties() != null && introService.getServiceProperties().getProperty() != null) {
+			for (i = 0; i < introService.getServiceProperties().getProperty().length; i++) {
 				ServicePropertiesProperty prop = introService.getServiceProperties().getProperty(i);
 				this.addTextField(this.getServicePropertiesPanel(), prop.getKey(), prop.getValue(), i, true);
-				
+
 			}
 		}
-		
-		
+
 		pack();
 
 	}
@@ -278,12 +279,12 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 
 						public void process() {
 							setProgressText("setting introduce resource properties...");
-							
+
 							try {
-								ResourceManager.setProperty(ResourceManager.LAST_DEPLOYMENT,(String)deploymentTypeSelector.getSelectedItem());
-							} catch (Exception e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+								ResourceManager.setProperty(ResourceManager.LAST_DEPLOYMENT,
+									(String) deploymentTypeSelector.getSelectedItem());
+							} catch (Exception e1) {
+								e1.printStackTrace();
 							}
 
 							setProgressText("writing deployment property file");
@@ -294,10 +295,12 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 								String value = getTextFieldValue(key);
 								deployProperties.setProperty(key, value);
 							}
-							
+
 							try {
-								deployProperties.store(new FileOutputStream(new File(serviceDirectory.getAbsolutePath()
-									+ File.separator + "deploy.properties")), "introduce service deployment properties");
+								deployProperties
+									.store(new FileOutputStream(new File(serviceDirectory.getAbsolutePath()
+										+ File.separator + "deploy.properties")),
+										"introduce service deployment properties");
 							} catch (FileNotFoundException ex) {
 								ex.printStackTrace();
 								setErrorMessage("Error: " + ex.getMessage());
@@ -305,19 +308,21 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 								ex.printStackTrace();
 								setErrorMessage("Error: " + ex.getMessage());
 							}
-							
+
 							Properties serviceProps = new Properties();
-							//	load up the service properties
-							if(introService.getServiceProperties()!=null&&introService.getServiceProperties().getProperty()!=null){
-								for(int i =0;i < introService.getServiceProperties().getProperty().length; i++){
+							// load up the service properties
+							if (introService.getServiceProperties() != null
+								&& introService.getServiceProperties().getProperty() != null) {
+								for (int i = 0; i < introService.getServiceProperties().getProperty().length; i++) {
 									ServicePropertiesProperty prop = introService.getServiceProperties().getProperty(i);
-									serviceProps.put(prop.getKey(),getTextFieldValue(prop.getKey()));
+									serviceProps.put(prop.getKey(), getTextFieldValue(prop.getKey()));
 								}
 							}
-							
+
 							try {
 								serviceProps.store(new FileOutputStream(new File(serviceDirectory.getAbsolutePath()
-									+ File.separator + IntroduceConstants.INTRODUCE_SERVICE_PROPERTIES)), "service deployment properties");
+									+ File.separator + IntroduceConstants.INTRODUCE_SERVICE_PROPERTIES)),
+									"service deployment properties");
 							} catch (FileNotFoundException ex) {
 								ex.printStackTrace();
 								setErrorMessage("Error: " + ex.getMessage());
@@ -325,11 +330,9 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 								ex.printStackTrace();
 								setErrorMessage("Error: " + ex.getMessage());
 							}
-							
-							
-							
+
 							setProgressText("deploying");
-							
+
 							try {
 								String cmd = "";
 								if (((String) getDeploymentTypeSelector().getSelectedItem()).equals(GLOBUS)) {
@@ -341,13 +344,13 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 								p.waitFor();
 								if (p.exitValue() != 0) {
 									setErrorMessage("Error deploying service!");
-								} 
+								}
 							} catch (Exception ex) {
 								setErrorMessage("Error deploying service! " + ex.getMessage());
 								ex.printStackTrace();
 							}
 							dispose();
-						
+
 						}
 					};
 					Thread th = new Thread(r);
@@ -392,8 +395,9 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 			deploymentTypeSelector.addItem(TOMCAT);
 			deploymentTypeSelector.addItem(GLOBUS);
 			try {
-				if(ResourceManager.getProperty(ResourceManager.LAST_DEPLOYMENT)!=null){
-					deploymentTypeSelector.setSelectedItem(ResourceManager.getProperty(ResourceManager.LAST_DEPLOYMENT));
+				if (ResourceManager.getProperty(ResourceManager.LAST_DEPLOYMENT) != null) {
+					deploymentTypeSelector
+						.setSelectedItem(ResourceManager.getProperty(ResourceManager.LAST_DEPLOYMENT));
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -405,9 +409,9 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 
 
 	/**
-	 * This method initializes servicePropertiesPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes servicePropertiesPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getServicePropertiesPanel() {
 		if (servicePropertiesPanel == null) {
@@ -419,17 +423,19 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 
 
 	/**
-	 * This method initializes servicePropertiesScrollPane	
-	 * 	
-	 * @return javax.swing.JScrollPane	
+	 * This method initializes servicePropertiesScrollPane
+	 * 
+	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getServicePropertiesScrollPane() {
 		if (servicePropertiesScrollPane == null) {
 			servicePropertiesScrollPane = new JScrollPane();
-			servicePropertiesScrollPane.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			servicePropertiesScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 			servicePropertiesScrollPane.setViewportView(getServicePropertiesPanel());
-			servicePropertiesScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service Properties", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+			servicePropertiesScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+				"Service Properties", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 		}
 		return servicePropertiesScrollPane;
 	}
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"

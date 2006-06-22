@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.discoverytools.gme;
 
-import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import java.awt.GridBagConstraints;
@@ -23,7 +23,6 @@ import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.Namespace;
 import org.projectmobius.gme.XMLDataModelService;
 import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
-import org.projectmobius.portal.PortalResourceManager;
 import org.projectmobius.protocol.gme.SchemaNode;
 
 
@@ -89,7 +88,6 @@ public class GMESchemaLocatorPanel extends JPanel {
 	 * @return javax.swing.JPanel
 	 */
 	public JPanel getMainPanel() {
-		;
 		if (mainPanel == null) {
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
@@ -106,9 +104,9 @@ public class GMESchemaLocatorPanel extends JPanel {
 			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints1.weightx = 0.0D;
 			gridBagConstraints1.weighty = 0.0D;
-			JPanel queryPanel = getQueryPanel();
+			JPanel qPanel = getQueryPanel();
 			if (this.showGMESelection) {
-				mainPanel.add(queryPanel, gridBagConstraints1);
+				mainPanel.add(qPanel, gridBagConstraints1);
 			}
 			mainPanel.add(getSchemaPanel(), gridBagConstraints);
 		}
@@ -145,7 +143,7 @@ public class GMESchemaLocatorPanel extends JPanel {
 			queryPanel.setLayout(new GridBagLayout());
 			queryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Discover Schemas",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			queryPanel.add(getQueryButton(), gridBagConstraints4);
 			queryPanel.add(gmeAddressLabel, gridBagConstraints6);
 			queryPanel.add(getGme(), gridBagConstraints5);
@@ -324,7 +322,7 @@ public class GMESchemaLocatorPanel extends JPanel {
 			schemaPanel.setLayout(new GridBagLayout());
 			schemaPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Schema",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			schemaPanel.add(getNamespaceComboBox(), gridBagConstraints7);
 			schemaPanel.add(namespaceLabel, gridBagConstraints9);
 			schemaPanel.add(getSchemaComboBox(), gridBagConstraints8);
@@ -342,8 +340,6 @@ public class GMESchemaLocatorPanel extends JPanel {
 	public JTextField getGme() {
 		if (gme == null) {
 			gme = new JTextField();
-			IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
-				IntroducePortalConf.RESOURCE);
 			gme.setText(url);
 		}
 		return gme;

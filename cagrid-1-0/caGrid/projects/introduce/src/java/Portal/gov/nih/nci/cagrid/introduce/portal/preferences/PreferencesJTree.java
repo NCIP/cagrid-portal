@@ -11,6 +11,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
+
 public class PreferencesJTree extends JTree {
 
 	DefaultTreeModel model;
@@ -21,9 +22,11 @@ public class PreferencesJTree extends JTree {
 
 	private MainPreferencesTreeNode root;
 
+
 	public PreferencesJTree() {
 		initialize();
 	}
+
 
 	private void initialize() {
 		root = new MainPreferencesTreeNode("Preferences", model);
@@ -35,11 +38,11 @@ public class PreferencesJTree extends JTree {
 		expandAll(true);
 	}
 
+
 	public DefaultMutableTreeNode getCurrentNode() {
 		TreePath currentSelection = this.getSelectionPath();
 		if (currentSelection != null) {
-			DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) currentSelection
-					.getLastPathComponent();
+			DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) currentSelection.getLastPathComponent();
 			if (currentNode != this.root) {
 				return currentNode;
 			}
@@ -47,19 +50,20 @@ public class PreferencesJTree extends JTree {
 		return null;
 	}
 
+
 	public List getSelectedNodes() {
 		List selected = new LinkedList();
 		TreePath[] currentSelection = this.getSelectionPaths();
 		if (currentSelection != null) {
 			for (int i = 0; i < currentSelection.length; i++) {
 				TreePath path = currentSelection[i];
-				DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) path
-						.getLastPathComponent();
+				DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) path.getLastPathComponent();
 				selected.add(currentNode);
 			}
 		}
 		return selected;
 	}
+
 
 	public void removeSelectedNode() {
 		DefaultMutableTreeNode currentNode = getCurrentNode();
@@ -68,15 +72,17 @@ public class PreferencesJTree extends JTree {
 		}
 	}
 
+
 	// If expand is true, expands all nodes in the tree.
 	// Otherwise, collapses all nodes in the tree.
 	public void expandAll(boolean expand) {
 		JTree tree = this;
-		TreeNode root = (TreeNode) tree.getModel().getRoot();
+		TreeNode currRoot = (TreeNode) tree.getModel().getRoot();
 
 		// Traverse tree from root
-		expandAll(new TreePath(root), expand);
+		expandAll(new TreePath(currRoot), expand);
 	}
+
 
 	private void expandAll(TreePath parent, boolean expand) {
 		JTree tree = this;
@@ -98,6 +104,7 @@ public class PreferencesJTree extends JTree {
 		}
 	}
 
+
 	protected void setExpandedState(TreePath path, boolean state) {
 		// Ignore all collapse requests; collapse events will not be fired
 		if (path.getLastPathComponent() != root) {
@@ -106,6 +113,7 @@ public class PreferencesJTree extends JTree {
 			super.setExpandedState(path, state);
 		}
 	}
+
 
 	/**
 	 * @param args

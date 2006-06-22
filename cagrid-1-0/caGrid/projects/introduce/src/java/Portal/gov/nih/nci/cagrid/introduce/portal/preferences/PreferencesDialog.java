@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.preferences;
 
-import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 
 import java.awt.CardLayout;
 import java.awt.Frame;
@@ -103,7 +103,7 @@ public class PreferencesDialog extends JDialog {
 			preferenceNavigationPanel.setLayout(new GridBagLayout());
 			preferenceNavigationPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Topics",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			preferenceNavigationPanel.add(getPrefencesScrollPane(), gridBagConstraints2);
 		}
 		return preferenceNavigationPanel;
@@ -220,7 +220,7 @@ public class PreferencesDialog extends JDialog {
 			preferneceConfigViewPanel = new JPanel(new CardLayout());
 			preferneceConfigViewPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Configuration",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			addTreePanels((PreferencesTypeTreeNode) preferencesTree.getModel().getRoot());
 		}
 		return preferneceConfigViewPanel;
