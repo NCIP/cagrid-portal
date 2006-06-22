@@ -1,5 +1,7 @@
 To Do:
 
+I was adding faults to a method, and when I hit done, an error dialog poped up with method "java.util.Vector" and removed my faults
+
 security operationprovider needs to be hooked into build properly...
  - have copies of schema and jars... needs to get from artifacts
 
