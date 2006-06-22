@@ -12,6 +12,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.rmi.RemoteException;
 
+import javax.xml.namespace.QName;
+
 import org.apache.axis.EngineConfiguration;
 import org.apache.axis.client.AxisClient;
 import org.apache.axis.configuration.FileProvider;
@@ -19,6 +21,7 @@ import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.utils.ClassUtils;
 import org.globus.gsi.GlobusCredential;
+import org.globus.wsrf.encoding.ObjectSerializer;
 import org.globus.wsrf.test.GridTestCase;
 import org.globus.wsrf.utils.AnyHelper;
 
@@ -32,14 +35,19 @@ public class WMSTest extends GridTestCase {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void test() throws Exception {
+	public void testBasic() throws Exception {
 		assertTrue(TEST_CONTAINER != null);
 		String serviceUrl = "https://localhost:8443/wsrf/services/cagrid/WorkflowManagementService";
 		System.out.println("ServiceURL: " + serviceUrl);
 		this.epr = new EndpointReferenceType();
 		this.epr.setAddress(new Address(serviceUrl));
-		WMSInputType input =createInput("Simple.bpel");
+		Invoke invoke = new Invoke("Test");
+		QName qname = new QName("http://workflow.cagrid.nci.nih.gov/SampleService1", "invoke");
+		WMSInputType input =createInput("Simple.bpel", qname, (Object)invoke);
 		WMSOutputType output = runWorkflow(input);
+		String outputString = output.getOutputType().getOutputAsXMLString();
+		System.out.println("Output " +  outputString);
+		assertTrue(outputString != null);
 		assertTrue(output!=null);
 	}
 
@@ -98,14 +106,13 @@ public class WMSTest extends GridTestCase {
 
 	}
 	
-	public static WMSInputType createInput(String bpelFile) throws Exception {
+	public static WMSInputType createInput(String bpelFile, QName inputQName, Object inputObject) throws Exception {
 		WMSInputType input = new WMSInputType();
-		
 		String bpelProcess = Utils.fileToStringBuffer(new File(bpelFile)).toString();
 		
 		WorkflowInputType inputArgs = new WorkflowInputType();
-		Invoke invoke = new Invoke("Hello");
-		inputArgs.set_any(AnyHelper.toAnyArray(invoke));
+		
+		inputArgs.setInputAsXMLString(ObjectSerializer.toString(inputObject, inputQName));
 		input.setBpelDoc(bpelProcess);
 		input.setInputArgs(inputArgs);
 		input.setWorkflowName("Simple");

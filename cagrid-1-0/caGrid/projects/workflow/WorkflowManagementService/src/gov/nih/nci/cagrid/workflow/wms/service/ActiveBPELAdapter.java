@@ -12,9 +12,9 @@ public class ActiveBPELAdapter {
 	protected static final String abAdminUrl = "http://localhost:8080/active-bpel/services/BpelEngineAdmin";
 	
 	
-	public static String deployBpr(String bpelFileName, String pddFileName, String workflowName) throws Exception {
+	public static String deployBpr(String bpelFileName, String workflowName) throws Exception {
 		String returnString = "success";
-		String bprFileName = BPRCreator.makeBpr(bpelFileName, pddFileName, workflowName);
+		String bprFileName = BPRCreator.makeBpr(bpelFileName,workflowName);
 		BpelEngineAdminLocator locator = new BpelEngineAdminLocator();
 		URL url = new URL(abAdminUrl);
 		RemoteDebugSoapBindingStub mRemote = (RemoteDebugSoapBindingStub) locator

@@ -16,14 +16,17 @@
 
   <xsd:complexType name="WorkflowInputType">
     <xsd:sequence>
+     <xsd:element name="inputAsXMLString" type="xsd:string"/>
       <xsd:any maxOccurs="unbounded" />
     </xsd:sequence>
   </xsd:complexType>
   <xsd:complexType name="WorkflowOuputType">
     <xsd:sequence>
+      <xsd:element name="outputAsXMLString" type="xsd:string"/>
       <xsd:any maxOccurs="unbounded" />
     </xsd:sequence>
   </xsd:complexType>
+
   <xsd:complexType name="WMSOutputType">
     <xsd:annotation>
       <xsd:documentation>This type represents the output from a workflow</xsd:documentation>

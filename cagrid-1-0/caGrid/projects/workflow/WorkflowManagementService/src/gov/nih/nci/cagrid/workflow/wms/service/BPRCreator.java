@@ -12,19 +12,20 @@ import java.util.jar.Manifest;
 
 public class BPRCreator {
 
-	public static String makeBpr(String bpelFileName, String pddFileName, String workflowName) throws Exception {
+	public static String makeBpr(String bpelFileName, String workflowName) throws Exception {
 		String bprName = System.getProperty("java.io.tmpdir")+ workflowName + ".bpr";
 		File bprFile = new File(bprName);
 		bprFile.deleteOnExit();
 		String bprFileName = bprFile.getAbsolutePath();
-		pddFileName = createPDD(bpelFileName, workflowName);
+		String serviceName = workflowName + "Service";
+		String pddFileName = createPDD(bpelFileName, workflowName, serviceName);
 		String[] fileList = {bpelFileName, pddFileName};
 		createBPR(fileList, bprFileName);
 		return bprFileName;
 	}
 	
-	public static String createPDD(String bpelFileName, String workflowName) throws Exception {
-		return PDDGenerator.createPDD(workflowName, bpelFileName);
+	public static String createPDD(String bpelFileName, String workflowName, String serviceName) throws Exception {
+		return PDDGenerator.createPDD(workflowName, bpelFileName, serviceName);
 	}
 	public static void createBPR(String[] fileList, String bprPath)
 			throws IOException {

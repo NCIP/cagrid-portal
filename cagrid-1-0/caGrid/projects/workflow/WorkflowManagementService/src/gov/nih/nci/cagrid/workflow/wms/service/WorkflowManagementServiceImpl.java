@@ -7,7 +7,6 @@ import gov.nih.nci.cagrid.workflow.wms.stubs.service.WMSOutputType;
 import gov.nih.nci.cagrid.workflow.wms.stubs.service.WorkflowOuputType;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.rmi.RemoteException;
 
 import javax.naming.InitialContext;
@@ -18,8 +17,6 @@ import org.globus.wsrf.Constants;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.globus.wsrf.encoding.ObjectSerializer;
 import org.globus.wsrf.utils.AnyHelper;
-import org.globus.wsrf.utils.XmlUtils;
-import org.w3c.dom.Document;
 
 /**
  * gov.nih.nci.cagrid.workflow.wmsI TODO:DOCUMENT ME
@@ -60,8 +57,8 @@ public class WorkflowManagementServiceImpl {
 		return this.configuration;
 	}
 
-	private String deploy(String bpelFileName, String pddFileName, String workflowName) throws Exception {
-		return ActiveBPELAdapter.deployBpr(bpelFileName, pddFileName, workflowName);
+	private String deploy(String bpelFileName, String workflowName) throws Exception {
+		return ActiveBPELAdapter.deployBpr(bpelFileName ,workflowName);
 	}
 	
 	private String invokeProcess(String partnerLinkName, String message) throws Exception {
@@ -72,6 +69,7 @@ public class WorkflowManagementServiceImpl {
 			throws RemoteException {
 		String workflowName = wmsInput.getWorkflowName();
 		String bpelProcess = wmsInput.getBpelDoc();
+		String resultAsString = null;
 		File bpelFile = null;
 		try {
 			String bpelFileName = System.getProperty("java.io.tmpdir") + workflowName + ".bpel";
@@ -79,28 +77,24 @@ public class WorkflowManagementServiceImpl {
 			bpelFile.deleteOnExit();
 			Utils.stringBufferToFile(new StringBuffer(bpelProcess),
 					bpelFileName);
-			String pathtoPDD = "c:\\Simple.pdd";
-			System.out.println(bpelFileName + " " + pathtoPDD + " " + workflowName);
-			deploy(bpelFileName, pathtoPDD, workflowName);
+			deploy(bpelFileName, workflowName);
 		} catch (Exception e){
 			throw new RemoteException ("Exception deploying workflow:"+ workflowName ,e );
 		}
 		try {
-			Document doc = XmlUtils.newDocument(new FileInputStream(bpelFile));
-			Invoke invoke = (Invoke) ObjectDeserializer.toObject(wmsInput
-					.getInputArgs().get_any()[0], Invoke.class);
-			QName qname = new QName("http://workflow.cagrid.nci.nih.gov/SampleService1", "invoke");
-			
-			String output = invokeProcess("Sample1PartnerLinkTypeService", 
-					ObjectSerializer.toString(invoke, qname));
-			System.out.println("Result: " + output);
+			String serviceName = workflowName + "Service";
+			resultAsString = invokeProcess(serviceName, 
+					wmsInput.getInputArgs().getInputAsXMLString());
+					
+			System.out.println("Result: " + resultAsString);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RemoteException("Exception running the workflow:" + workflowName, e);
 		}
 		WMSOutputType output = new WMSOutputType();
 		WorkflowOuputType wOutput = new WorkflowOuputType();
-		wOutput.set_any(AnyHelper.toAnyArray(output));
+		wOutput.setOutputAsXMLString(resultAsString);
+		output.setOutputType(wOutput);
 		return output;
 	}
 
