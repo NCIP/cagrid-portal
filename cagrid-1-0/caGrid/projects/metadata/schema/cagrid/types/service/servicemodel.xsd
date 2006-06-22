@@ -70,7 +70,7 @@
 				operation response in the grid.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element ref="com:UMLClass"/>
+			<xs:element ref="com:UMLClass" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="dimentionality" use="required" type="xs:int">
 			<xs:annotation>
@@ -79,6 +79,7 @@
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="isArray" use="required" type="xs:boolean"/>
+		<xs:attribute name="qName" use="required" type="xs:QName"/>
 	</xs:complexType>
 	<xs:element name="InputParameter" type="serv:InputParameter"/>
 	<xs:complexType name="InputParameter">
@@ -87,7 +88,7 @@
 				parameter of a service request in the grid.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element ref="com:UMLClass"/>
+			<xs:element ref="com:UMLClass" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="dimentionality" use="required" type="xs:int">
 			<xs:annotation>
@@ -109,6 +110,7 @@
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="name" use="required" type="xs:string"/>
+		<xs:attribute name="qName" use="required" type="xs:QName"/>
 	</xs:complexType>
 	<xs:element name="Fault" type="serv:Fault"/>
 	<xs:complexType name="Fault">
